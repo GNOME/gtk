@@ -758,13 +758,16 @@ void
 _gdk_win32_print_event (GdkEvent *event)
 {
   const char *kvname;
+  double x, y;
+  GdkCrossingMode mode;
+  GdkNotifyType detail;
+  GdkScrollDirection direction;
 
   g_print ("%s%*s===> ", (debug_indent > 0 ? "\n" : ""), debug_indent, "");
-  switch (event->any.type)
+  switch (gdk_event_get_event_type (event))
     {
 #define CASE(x) case x: g_print (#x); break;
     CASE (GDK_DELETE);
-    CASE (GDK_DESTROY);
     CASE (GDK_MOTION_NOTIFY);
     CASE (GDK_BUTTON_PRESS);
     CASE (GDK_BUTTON_RELEASE);
@@ -786,81 +789,72 @@ _gdk_win32_print_event (GdkEvent *event)
     }
 
   g_print (" %p @ %ums ",
-           event->any.surface ? GDK_SURFACE_HWND (event->any.surface) : NULL,
+           GDK_SURFACE_HWND (gdk_event_get_surface (event)),
            gdk_event_get_time (event));
 
-  switch (event->any.type)
+  switch (gdk_event_get_event_type (event))
     {
     case GDK_MOTION_NOTIFY:
-      g_print ("(%.4g,%.4g) (%.4g,%.4g)",
-	       event->motion.x, event->motion.y,
-	       event->motion.x_root, event->motion.y_root);
-      print_event_state (event->motion.state);
+      gdk_event_get_position (event, &x, &y);
+      g_print ("(%.4g,%.4g) ", x, y);
+      print_event_state (gdk_event_get_modifier_state (event));
       break;
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
-      g_print ("%d (%.4g,%.4g) (%.4g,%.4g) ",
-	       event->button.button,
-	       event->button.x, event->button.y,
-	       event->button.x_root, event->button.y_root);
-      print_event_state (event->button.state);
+      gdk_event_get_position (event, &x, &y);
+      g_print ("%d (%.4g,%.4g) ", gdk_button_event_get_button (event), x, y);
+      print_event_state (gdk_event_get_modifier_state (event));
       break;
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
-      kvname = gdk_keyval_name (event->key.keyval);
+      kvname = gdk_keyval_name (gdk_key_event_get_keyval (event));
       g_print ("%#.02x group:%d %s",
-	       event->key.hardware_keycode, event->key.group,
+               gdk_key_event_get_keycode (event),
+               gdk_key_event_get_group (event),
 	       (kvname ? kvname : "??"));
-      print_event_state (event->key.state);
+      print_event_state (gdk_event_get_modifier_state (event));
       break;
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
-      g_print ("%p (%.4g,%.4g) (%.4g,%.4g) %s %s%s",
-	       event->crossing.child_surface == NULL ? NULL : GDK_SURFACE_HWND (event->crossing.child_surface),
-	       event->crossing.x, event->crossing.y,
-	       event->crossing.x_root, event->crossing.y_root,
-	       (event->crossing.mode == GDK_CROSSING_NORMAL ? "NORMAL" :
-		(event->crossing.mode == GDK_CROSSING_GRAB ? "GRAB" :
-		 (event->crossing.mode == GDK_CROSSING_UNGRAB ? "UNGRAB" :
+      gdk_event_get_position (event, &x, &y);
+      mode = gdk_crossing_event_get_mode (event);
+      detail = gdk_crossing_event_get_detail (event);
+      g_print ("(%.4g,%.4g) %s %s",
+	       x, y,
+	       (mode == GDK_CROSSING_NORMAL ? "NORMAL" :
+		(mode == GDK_CROSSING_GRAB ? "GRAB" :
+		 (mode == GDK_CROSSING_UNGRAB ? "UNGRAB" :
 		  "???"))),
-	       (event->crossing.detail == GDK_NOTIFY_ANCESTOR ? "ANCESTOR" :
-		(event->crossing.detail == GDK_NOTIFY_VIRTUAL ? "VIRTUAL" :
-		 (event->crossing.detail == GDK_NOTIFY_INFERIOR ? "INFERIOR" :
-		  (event->crossing.detail == GDK_NOTIFY_NONLINEAR ? "NONLINEAR" :
-		   (event->crossing.detail == GDK_NOTIFY_NONLINEAR_VIRTUAL ? "NONLINEAR_VIRTUAL" :
-		    (event->crossing.detail == GDK_NOTIFY_UNKNOWN ? "UNKNOWN" :
-		     "???")))))),
-	       event->crossing.focus ? " FOCUS" : "");
-      print_event_state (event->crossing.state);
+	       (detail == GDK_NOTIFY_ANCESTOR ? "ANCESTOR" :
+		(detail == GDK_NOTIFY_VIRTUAL ? "VIRTUAL" :
+		 (detail == GDK_NOTIFY_INFERIOR ? "INFERIOR" :
+		  (detail == GDK_NOTIFY_NONLINEAR ? "NONLINEAR" :
+		   (detail == GDK_NOTIFY_NONLINEAR_VIRTUAL ? "NONLINEAR_VIRTUAL" :
+		    (detail == GDK_NOTIFY_UNKNOWN ? "UNKNOWN" :
+		     "???")))))));
+      print_event_state (gdk_event_get_modifier_state (event));
       break;
     case GDK_FOCUS_CHANGE:
-      g_print ("%s", (event->focus_change.in ? "IN" : "OUT"));
+      g_print ("%s", (gdk_focus_event_get_in (event) ? "IN" : "OUT"));
       break;
     case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
-      if (event->dnd.drop != NULL)
-	g_print ("ctx:%p: %s",
-		 event->dnd.drop,
-		 _gdk_win32_drag_protocol_to_string (GDK_WIN32_DRAG (event->dnd.drop)->protocol));
+      g_print ("DND");
       break;
     case GDK_SCROLL:
-      g_print ("(%.4g,%.4g) (%.4g,%.4g) %s ",
-	       event->scroll.x, event->scroll.y,
-	       event->scroll.x_root, event->scroll.y_root,
-	       (event->scroll.direction == GDK_SCROLL_UP ? "UP" :
-		(event->scroll.direction == GDK_SCROLL_DOWN ? "DOWN" :
-		 (event->scroll.direction == GDK_SCROLL_LEFT ? "LEFT" :
-		  (event->scroll.direction == GDK_SCROLL_RIGHT ? "RIGHT" :
+      direction = gdk_scroll_event_get_direction (event);
+      g_print (" %s ",
+	       (direction == GDK_SCROLL_UP ? "UP" :
+		(direction == GDK_SCROLL_DOWN ? "DOWN" :
+		 (direction == GDK_SCROLL_LEFT ? "LEFT" :
+		  (direction == GDK_SCROLL_RIGHT ? "RIGHT" :
 		   "???")))));
-      print_event_state (event->scroll.state);
+      print_event_state (gdk_event_get_modifier_state (event));
       break;
     case GDK_GRAB_BROKEN:
-      g_print ("%s %s %p",
-	       (event->grab_broken.keyboard ? "KEYBOARD" : "POINTER"),
-	       (event->grab_broken.implicit ? "IMPLICIT" : "EXPLICIT"),
-	       (event->grab_broken.grab_surface ? GDK_SURFACE_HWND (event->grab_broken.grab_surface) : 0));
+      g_print ("Grab broken");
     default:
       /* Nothing */
       break;

@@ -353,13 +353,14 @@ gtk_im_multicontext_filter_keypress (GtkIMContext *context,
     {
       return gtk_im_context_filter_keypress (slave, event);
     }
-  else if (gdk_event_get_keyval ((GdkEvent *) event, &keyval) &&
-           gdk_event_get_state ((GdkEvent *) event, &state))
+  else
     {
       GdkDisplay *display;
       GdkModifierType no_text_input_mask;
 
-      display = gdk_surface_get_display (gdk_event_get_surface ((GdkEvent *) event));
+      keyval = gdk_key_event_get_keyval ((GdkEvent *) event);
+      state = gdk_event_get_modifier_state ((GdkEvent *) event);
+      display = gdk_event_get_display ((GdkEvent *) event);
 
       no_text_input_mask =
         gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),

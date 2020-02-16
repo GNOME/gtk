@@ -240,7 +240,7 @@ gtk_pad_controller_handle_event (GtkEventController *controller,
   guint index, mode, group;
   gdouble value = 0;
 
-  gdk_event_get_pad_group_mode (event, &group, &mode);
+  gdk_pad_event_get_group_mode (event, &group, &mode);
   if (event_type == GDK_PAD_GROUP_MODE)
     {
       gtk_pad_controller_handle_mode_switch (pad_controller,
@@ -254,13 +254,13 @@ gtk_pad_controller_handle_event (GtkEventController *controller,
     {
     case GDK_PAD_BUTTON_PRESS:
       type = GTK_PAD_ACTION_BUTTON;
-      gdk_event_get_pad_button (event, &index);
+      index = gdk_pad_button_event_get_button (event);
       break;
     case GDK_PAD_RING:
     case GDK_PAD_STRIP:
       type = event_type == GDK_PAD_RING ?
         GTK_PAD_ACTION_RING : GTK_PAD_ACTION_STRIP;
-      gdk_event_get_pad_axis_value (event, &index, &value);
+      gdk_pad_axis_event_get_value (event, &index, &value);
       break;
     default:
       return GDK_EVENT_PROPAGATE;

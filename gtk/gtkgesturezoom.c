@@ -94,7 +94,7 @@ _gtk_gesture_zoom_get_distance (GtkGestureZoom *zoom,
     goto out;
 
   last_event = gtk_gesture_get_last_event (gesture, sequences->data);
-  gdk_event_get_touchpad_gesture_phase (last_event, &phase);
+  phase = gdk_touchpad_event_get_gesture_phase (last_event);
 
   if (gdk_event_get_event_type (last_event) == GDK_TOUCHPAD_PINCH &&
       (phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN ||
@@ -104,7 +104,7 @@ _gtk_gesture_zoom_get_distance (GtkGestureZoom *zoom,
       double scale;
       /* Touchpad pinch */
 
-      gdk_event_get_touchpad_scale (last_event, &scale);
+      scale = gdk_touchpad_pinch_event_get_scale (last_event);
       *distance = scale;
     }
   else
@@ -156,7 +156,7 @@ gtk_gesture_zoom_filter_event (GtkEventController *controller,
     {
       guint n_fingers;
 
-      gdk_event_get_touchpad_gesture_n_fingers (event, &n_fingers);
+      n_fingers = gdk_touchpad_event_get_n_fingers (event);
 
       if (n_fingers == 2)
         return FALSE;

@@ -521,55 +521,9 @@ struct _GdkEventPadGroupMode {
 
 /*
  * GdkEvent:
- * @type: the #GdkEventType
- * @any: a #GdkEventAny
- * @motion: a #GdkEventMotion
- * @button: a #GdkEventButton
- * @touch: a #GdkEventTouch
- * @scroll: a #GdkEventScroll
- * @key: a #GdkEventKey
- * @crossing: a #GdkEventCrossing
- * @focus_change: a #GdkEventFocus
- * @configure: a #GdkEventConfigure
- * @proximity: a #GdkEventProximity
- * @dnd: a #GdkEventDND
- * @grab_broken: a #GdkEventGrabBroken
- * @touchpad_swipe: a #GdkEventTouchpadSwipe
- * @touchpad_pinch: a #GdkEventTouchpadPinch
- * @pad_button: a #GdkEventPadButton
- * @pad_axis: a #GdkEventPadAxis
- * @pad_group_mode: a #GdkEventPadGroupMode
  *
- * A #GdkEvent contains a union of all of the event types,
- * and allows access to the data fields in a number of ways.
- *
- * The event type is always the first field in all of the event types, and
- * can always be accessed with the following code, no matter what type of
- * event it is:
- * |[<!-- language="C" -->
- *   GdkEvent *event;
- *   GdkEventType type;
- *
- *   type = event->type;
- * ]|
- *
- * To access other fields of the event, the pointer to the event
- * can be cast to the appropriate event type, or the union member
- * name can be used. For example if the event type is %GDK_BUTTON_PRESS
- * then the x coordinate of the button press can be accessed with:
- * |[<!-- language="C" -->
- *   GdkEvent *event;
- *   gdouble x;
- *
- *   x = ((GdkEventButton*)event)->x;
- * ]|
- * or:
- * |[<!-- language="C" -->
- *   GdkEvent *event;
- *   gdouble x;
- *
- *   x = event->button.x;
- * ]|
+ * The GdkEvent struct is private and should only be accessed
+ * using the accessor functions.
  */
 union _GdkEvent
 {

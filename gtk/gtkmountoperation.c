@@ -1424,12 +1424,12 @@ do_popup_menu_for_process_tree_view (GtkWidget         *widget,
                     op);
   gtk_container_add (GTK_CONTAINER (menu), item);
 
-  if (event && gdk_event_triggers_context_menu (event) &&
-      gdk_event_get_coords (event, &x, &y))
+  if (event && gdk_event_triggers_context_menu (event))
     {
       GtkTreePath *path;
       GtkTreeSelection *selection;
 
+      gdk_event_get_position (event, &x, &y);
       if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (op->priv->process_tree_view),
                                          (gint) x,
                                          (gint) y,
