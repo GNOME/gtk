@@ -1712,8 +1712,8 @@ gtk_main_do_event (GdkEvent *event)
 
     case GDK_FOCUS_CHANGE:
     case GDK_GRAB_BROKEN:
-      if (!_gtk_widget_captured_event (target_widget, event))
-        gtk_widget_event (target_widget, event);
+      if (!_gtk_widget_captured_event (target_widget, event, target_widget))
+        gtk_widget_event (target_widget, event, target_widget);
       break;
 
     case GDK_KEY_PRESS:
@@ -2218,6 +2218,7 @@ propagate_event_up (GtkWidget *widget,
                     GtkWidget *topmost)
 {
   gboolean handled_event = FALSE;
+  GtkWidget *target = widget;
 
   /* Propagate event up the widget tree so that
    * parents can see the button and motion
@@ -2237,7 +2238,7 @@ propagate_event_up (GtkWidget *widget,
       if (!gtk_widget_is_sensitive (widget))
         handled_event = event->any.type != GDK_SCROLL;
       else if (gtk_widget_get_realized (widget))
-        handled_event = gtk_widget_event (widget, event);
+        handled_event = gtk_widget_event (widget, event, target);
 
       handled_event |= !gtk_widget_get_realized (widget);
 
@@ -2264,6 +2265,7 @@ propagate_event_down (GtkWidget *widget,
   gint handled_event = FALSE;
   GList *widgets = NULL;
   GList *l;
+  GtkWidget *target = widget;
 
   widgets = g_list_prepend (widgets, g_object_ref (widget));
   while (widget && widget != topmost)
@@ -2293,7 +2295,7 @@ propagate_event_down (GtkWidget *widget,
             handled_event = TRUE;
         }
       else if (gtk_widget_get_realized (widget))
-        handled_event = _gtk_widget_captured_event (widget, event);
+        handled_event = _gtk_widget_captured_event (widget, event, target);
 
       handled_event |= !gtk_widget_get_realized (widget);
     }
