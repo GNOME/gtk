@@ -186,17 +186,22 @@ focus_change (GtkEventController   *controller,
 }
 
 static void
-leave_cb (GtkEventController *controller,
-          GdkCrossingMode     mode,
-          GdkNotifyType       type,
-          gpointer            data)
+pointer_cb (GtkEventController   *controller,
+            GtkCrossingDirection  direction,
+            double                x,
+            double                y,
+            GdkCrossingMode       mode,
+            gpointer              data)
 {
   GtkWidget *target;
 
-  target = gtk_event_controller_get_widget (controller);
+  if (direction == GTK_CROSSING_OUT)
+    {
+      target = gtk_event_controller_get_widget (controller);
 
-  if (!gtk_event_controller_motion_contains_pointer (GTK_EVENT_CONTROLLER_MOTION (controller)))
-    gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (target), NULL);
+      if (!gtk_event_controller_motion_contains_pointer (GTK_EVENT_CONTROLLER_MOTION (controller)))
+        gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (target), NULL);
+    }
 }
 
 static void
@@ -220,7 +225,7 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
   gtk_widget_add_controller (GTK_WIDGET (popover), controller);
 
   controller = gtk_event_controller_motion_new ();
-  g_signal_connect (controller, "leave", G_CALLBACK (leave_cb), popover);
+  g_signal_connect (controller, "pointer-change", G_CALLBACK (pointer_cb), popover);
   gtk_widget_add_controller (GTK_WIDGET (popover), controller);
 }
 

@@ -1311,26 +1311,32 @@ stop_open (GtkModelButton *button)
 }
 
 static void
-enter_cb (GtkEventController *controller,
-          double              x,
-          double              y,
-          GdkCrossingMode     mode,
-          GdkNotifyType       type,
-          gpointer            data)
+pointer_change_cb (GtkEventController   *controller,
+                   GtkCrossingDirection  direction,
+                   double                x,
+                   double                y,
+                   GdkCrossingMode       mode,
+                   gpointer              data)
 {
+  GtkModelButton *button = data;
   GtkWidget *target;
   GtkWidget *popover;
 
-  target = gtk_event_controller_get_widget (controller);
-  popover = gtk_widget_get_ancestor (target, GTK_TYPE_POPOVER_MENU);
-
-  if (popover && gtk_event_controller_motion_contains_pointer (GTK_EVENT_CONTROLLER_MOTION (controller)))
+  if (direction == GTK_CROSSING_IN)
     {
-      if (gtk_popover_menu_get_open_submenu (GTK_POPOVER_MENU (popover)) != NULL)
-        start_open (GTK_MODEL_BUTTON (target));
-      else
-        open_submenu (target);
+      target = gtk_event_controller_get_widget (controller);
+      popover = gtk_widget_get_ancestor (target, GTK_TYPE_POPOVER_MENU);
+
+      if (popover && gtk_event_controller_motion_contains_pointer (GTK_EVENT_CONTROLLER_MOTION (controller)))
+        {
+          if (gtk_popover_menu_get_open_submenu (GTK_POPOVER_MENU (popover)) != NULL)
+            start_open (GTK_MODEL_BUTTON (target));
+          else
+            open_submenu (target);
+        }
     }
+  else
+    stop_open (button);
 }
 
 static void
@@ -1340,22 +1346,6 @@ motion_cb (GtkEventController *controller,
            gpointer            data)
 {
   start_open (GTK_MODEL_BUTTON (data));
-}
-
-static void
-leave_cb (GtkEventController *controller,
-          GdkCrossingMode     mode,
-          GdkNotifyType       type,
-          gpointer            data)
-{
-  GtkPopoverMenu *popover;
-
-  popover = (GtkPopoverMenu*)gtk_widget_get_ancestor (GTK_WIDGET (data), GTK_TYPE_POPOVER_MENU);
-
-  stop_open (GTK_MODEL_BUTTON (data));
-
-  if (popover)
-    gtk_popover_menu_set_active_item (popover, NULL);
 }
 
 static void
@@ -1396,9 +1386,8 @@ gtk_model_button_init (GtkModelButton *self)
   gtk_widget_add_css_class (GTK_WIDGET (self), "flat");
 
   controller = gtk_event_controller_motion_new ();
-  g_signal_connect (controller, "enter", G_CALLBACK (enter_cb), self);
+  g_signal_connect (controller, "pointer-change", G_CALLBACK (pointer_change_cb), self);
   g_signal_connect (controller, "motion", G_CALLBACK (motion_cb), self);
-  g_signal_connect (controller, "leave", G_CALLBACK (leave_cb), self);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   controller = gtk_event_controller_key_new ();
