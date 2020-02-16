@@ -106,8 +106,7 @@ gtk_event_controller_filter_event_default (GtkEventController *self,
 
   if (priv->limit == GTK_LIMIT_SAME_NATIVE)
     {
-      if (same_native (priv->widget, GTK_WIDGET (gdk_event_get_target (event))) &&
-          same_native (priv->widget, GTK_WIDGET (gdk_event_get_related_target (event))))
+      if (same_native (priv->widget, GTK_WIDGET (gdk_event_get_target (event))))
         return FALSE;
 
       return TRUE;
