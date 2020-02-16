@@ -138,23 +138,18 @@ drag_begin (GtkDragSource *source,
     }
 }
 
-static void
-get_texture (GValue   *value,
-             gpointer  data)
-{
-  GdkPaintable *paintable = get_image_paintable (GTK_IMAGE (data));
-
-  if (GDK_IS_TEXTURE (paintable))
-    g_value_set_object (value, paintable);
-}
-
 static GdkContentProvider *
 prepare_drag (GtkDragSource *source,
               double         x,
               double         y,
               GtkWidget     *image)
 {
-  return gdk_content_provider_new_with_callback (GDK_TYPE_TEXTURE, get_texture, image, NULL);
+  GdkPaintable *paintable = get_image_paintable (GTK_IMAGE (image));
+
+  if (!GDK_IS_TEXTURE (paintable))
+    return NULL;
+
+  return gdk_content_provider_new_typed (GDK_TYPE_TEXTURE, paintable);
 }
 
 static void

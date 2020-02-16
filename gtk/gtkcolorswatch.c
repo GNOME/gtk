@@ -578,12 +578,15 @@ static const char *dnd_targets[] = {
   "application/x-color"
 };
 
-static void
-get_rgba_value (GValue   *value,
-                gpointer  data)
+static GdkContentProvider *
+gtk_color_swatch_drag_prepare (GtkDragSource  *source,
+                               double          x,
+                               double          y,
+                               GtkColorSwatch *swatch)
 {
-  GtkColorSwatchPrivate *priv = gtk_color_swatch_get_instance_private (GTK_COLOR_SWATCH (data));
-  g_value_set_boxed (value, &priv->color);
+  GtkColorSwatchPrivate *priv = gtk_color_swatch_get_instance_private (swatch);
+
+  return gdk_content_provider_new_typed (GDK_TYPE_RGBA, &priv->color);
 }
 
 void
@@ -594,13 +597,10 @@ gtk_color_swatch_set_rgba (GtkColorSwatch *swatch,
 
   if (!priv->has_color)
     {
-      GdkContentProvider *content;
       GtkDragSource *source;
 
       source = gtk_drag_source_new ();
-      content = gdk_content_provider_new_with_callback (GDK_TYPE_RGBA, get_rgba_value, swatch, NULL);
-      gtk_drag_source_set_content (source, content);
-      g_object_unref (content);
+      g_signal_connect (source, "prepare", G_CALLBACK (gtk_color_swatch_drag_prepare), swatch);
       g_signal_connect (source, "drag-begin", G_CALLBACK (gtk_color_swatch_drag_begin), swatch);
 
       gtk_widget_add_controller (GTK_WIDGET (swatch), GTK_EVENT_CONTROLLER (source));

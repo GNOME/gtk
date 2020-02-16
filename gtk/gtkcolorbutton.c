@@ -285,12 +285,15 @@ gtk_color_button_drag_begin (GtkDragSource  *source,
   g_object_unref (paintable);
 }
 
-static void
-get_rgba_value (GValue   *value,
-                gpointer  data)
+static GdkContentProvider *
+gtk_color_button_drag_prepare (GtkDragSource  *source,
+                               double          x,
+                               double          y,
+                               GtkColorButton *button)
 {
-  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (GTK_COLOR_BUTTON (data));
-  g_value_set_boxed (value, &priv->rgba);
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
+
+  return gdk_content_provider_new_typed (GDK_TYPE_RGBA, &priv->rgba);
 }
 
 static void
@@ -300,7 +303,6 @@ gtk_color_button_init (GtkColorButton *button)
   PangoLayout *layout;
   PangoRectangle rect;
   GdkContentFormats *targets;
-  GdkContentProvider *content;
   GtkDragSource *source;
   GtkDropTarget *dest;
 
@@ -333,9 +335,7 @@ gtk_color_button_init (GtkColorButton *button)
   gdk_content_formats_unref (targets);
 
   source = gtk_drag_source_new ();
-  content = gdk_content_provider_new_with_callback (GDK_TYPE_RGBA, get_rgba_value, button, NULL);
-  gtk_drag_source_set_content (source, content);
-  g_object_unref (content);
+  g_signal_connect (source, "prepare", G_CALLBACK (gtk_color_button_drag_prepare), button);
   g_signal_connect (source, "drag-begin", G_CALLBACK (gtk_color_button_drag_begin), button);
   gtk_widget_add_controller (priv->button, GTK_EVENT_CONTROLLER (source));
 
