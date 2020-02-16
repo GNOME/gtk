@@ -69,6 +69,7 @@ GDK_AVAILABLE_IN_ALL
 const GdkEvent *
             gtk_gesture_get_last_event       (GtkGesture       *gesture,
                                               GdkEventSequence *sequence);
+
 GDK_AVAILABLE_IN_ALL
 gboolean    gtk_gesture_get_point            (GtkGesture       *gesture,
                                               GdkEventSequence *sequence,
