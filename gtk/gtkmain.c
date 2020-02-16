@@ -2351,47 +2351,6 @@ gtk_get_event_widget (const GdkEvent *event)
   return widget;
 }
 
-/**
- * gtk_get_event_target:
- * @event: a #GdkEvent
- *
- * If @event is %NULL or the event was not associated with any widget,
- * returns %NULL, otherwise returns the widget that is the deepmost
- * receiver of the event.
- *
- * Returns: (transfer none) (nullable): the target widget, or %NULL
- */
-GtkWidget *
-gtk_get_event_target (const GdkEvent *event)
-{
-  return GTK_WIDGET (gdk_event_get_target (event));
-}
-
-/**
- * gtk_get_event_target_with_type:
- * @event: a #GdkEvent
- * @type: the type to look for
- *
- * If @event is %NULL or the event was not associated with any widget,
- * returns %NULL, otherwise returns first widget found from the event
- * target to the toplevel that matches @type.
- *
- * Returns: (transfer none) (nullable): the widget in the target stack
- * with the given type, or %NULL
- */
-GtkWidget *
-gtk_get_event_target_with_type (GdkEvent *event,
-                                GType     type)
-{
-  GtkWidget *target;
-
-  target = gtk_get_event_target (event);
-  while (target && !g_type_is_a (G_OBJECT_TYPE (target), type))
-    target = gtk_widget_get_parent (target);
-
-  return target;
-}
-
 static gboolean
 propagate_event_up (GtkWidget *widget,
                     GdkEvent  *event,
