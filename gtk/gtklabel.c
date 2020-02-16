@@ -4456,7 +4456,7 @@ gtk_label_click_gesture_pressed (GtkGestureClick *gesture,
   GtkLabelSelectionInfo *info = priv->select_info;
   GtkWidget *widget = GTK_WIDGET (label);
   GdkEventSequence *sequence;
-  const GdkEvent *event;
+  GdkEvent *event;
   guint button;
 
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
@@ -4633,7 +4633,7 @@ gtk_label_drag_gesture_begin (GtkGestureDrag *gesture,
   GtkLabelSelectionInfo *info = priv->select_info;
   GdkModifierType state_mask;
   GdkEventSequence *sequence;
-  const GdkEvent *event;
+  GdkEvent *event;
   gint min, max, index;
 
   if (!info || !info->selectable)

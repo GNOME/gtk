@@ -745,7 +745,7 @@ gesture_drag_begin_cb (GtkGestureDrag *gesture,
   GtkPanedPrivate *priv = gtk_paned_get_instance_private (paned);
   GdkEventSequence *sequence;
   graphene_rect_t handle_area;
-  const GdkEvent *event;
+  GdkEvent *event;
   GdkDevice *device;
   gboolean is_touch;
 

@@ -992,7 +992,7 @@ scrolled_window_long_press_cancelled_cb (GtkScrolledWindow *scrolled_window,
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
   GdkEventSequence *sequence;
-  const GdkEvent *event;
+  GdkEvent *event;
   GdkEventType event_type;
 
   sequence = gtk_gesture_get_last_updated_sequence (gesture);

@@ -143,7 +143,7 @@ void    _gdk_event_queue_flush                     (GdkDisplay       *display);
 void   _gdk_event_button_generate    (GdkDisplay *display,
                                       GdkEvent   *event);
 
-void _gdk_windowing_event_data_copy (const GdkEvent *src,
+void _gdk_windowing_event_data_copy (GdkEvent       *src,
                                      GdkEvent       *dst);
 void _gdk_windowing_event_data_free (GdkEvent       *event);
 
@@ -266,7 +266,7 @@ GdkGrabStatus  gdk_seat_grab             (GdkSeat                *seat,
                                           GdkSeatCapabilities     capabilities,
                                           gboolean                owner_events,
                                           GdkCursor              *cursor,
-                                          const GdkEvent         *event,
+                                          GdkEvent               *event,
                                           GdkSeatGrabPrepareFunc  prepare_func,
                                           gpointer                prepare_func_data);
 void           gdk_seat_ungrab           (GdkSeat                *seat);

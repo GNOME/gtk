@@ -2554,7 +2554,7 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
   GtkWidget *widget = GTK_WIDGET (self);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   GdkEventSequence *current;
-  const GdkEvent *event;
+  GdkEvent *event;
   int x, y, sel_start, sel_end;
   guint button;
   int tmp_pos;
@@ -2817,7 +2817,7 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
   GtkWidget *widget = GTK_WIDGET (self);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   GdkEventSequence *sequence;
-  const GdkEvent *event;
+  GdkEvent *event;
   int x, y;
 
   gtk_text_selection_bubble_popup_unset (self);
@@ -2971,7 +2971,7 @@ gtk_text_drag_gesture_end (GtkGestureDrag *gesture,
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   gboolean in_drag, is_touchscreen;
   GdkEventSequence *sequence;
-  const GdkEvent *event;
+  GdkEvent *event;
   GdkDevice *source;
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));

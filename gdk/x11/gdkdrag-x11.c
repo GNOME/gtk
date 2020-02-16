@@ -171,7 +171,7 @@ static GdkSurfaceCache *gdk_surface_cache_ref   (GdkSurfaceCache *cache);
 static void            gdk_surface_cache_unref (GdkSurfaceCache *cache);
 
 gboolean gdk_x11_drag_handle_event   (GdkDrag        *drag,
-                                      const GdkEvent *event);
+                                      GdkEvent       *event);
 
 static GList *drags;
 static GSList *window_caches;
@@ -2242,7 +2242,7 @@ gdk_drag_update (GdkDrag         *drag,
 
 static gboolean
 gdk_dnd_handle_motion_event (GdkDrag        *drag,
-                             const GdkEvent *event)
+                             GdkEvent       *event)
 {
   GdkModifierType state;
   int x_root, y_root;
@@ -2259,7 +2259,7 @@ gdk_dnd_handle_motion_event (GdkDrag        *drag,
 
 static gboolean
 gdk_dnd_handle_key_event (GdkDrag           *drag,
-                          const GdkEventKey *event)
+                          GdkEventKey       *event)
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
   GdkModifierType state;
@@ -2352,7 +2352,7 @@ gdk_dnd_handle_key_event (GdkDrag           *drag,
 
 static gboolean
 gdk_dnd_handle_grab_broken_event (GdkDrag                  *drag,
-                                  const GdkEventGrabBroken *event)
+                                  GdkEventGrabBroken       *event)
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
 
@@ -2375,7 +2375,7 @@ gdk_dnd_handle_grab_broken_event (GdkDrag                  *drag,
 
 static gboolean
 gdk_dnd_handle_button_event (GdkDrag              *drag,
-                             const GdkEventButton *event)
+                             GdkEventButton       *event)
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
 
@@ -2398,7 +2398,7 @@ gdk_dnd_handle_button_event (GdkDrag              *drag,
 
 gboolean
 gdk_x11_drag_handle_event (GdkDrag        *drag,
-                           const GdkEvent *event)
+                           GdkEvent       *event)
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
 
