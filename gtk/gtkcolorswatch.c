@@ -159,13 +159,8 @@ swatch_drag_drop (GtkDropTarget  *dest,
                   int             y,
                   GtkColorSwatch *swatch)
 {
-  if (gdk_drop_has_value (drop, GDK_TYPE_RGBA))
-    {
-      gdk_drop_read_value_async (drop, GDK_TYPE_RGBA, G_PRIORITY_DEFAULT, NULL, got_color, swatch);
-      return TRUE;
-    }
-
-  return FALSE;
+  gdk_drop_read_value_async (drop, GDK_TYPE_RGBA, G_PRIORITY_DEFAULT, NULL, got_color, swatch);
+  return TRUE;
 }
 
 static void
@@ -574,10 +569,6 @@ gtk_color_swatch_new (void)
   return (GtkWidget *) g_object_new (GTK_TYPE_COLOR_SWATCH, NULL);
 }
 
-static const char *dnd_targets[] = {
-  "application/x-color"
-};
-
 static GdkContentProvider *
 gtk_color_swatch_drag_prepare (GtkDragSource  *source,
                                double          x,
@@ -670,13 +661,12 @@ gtk_color_swatch_set_can_drop (GtkColorSwatch *swatch,
 
   if (can_drop && !priv->dest)
     {
-      GdkContentFormats *targets;
+      GdkContentFormats *formats;
 
-      targets = gdk_content_formats_new (dnd_targets, G_N_ELEMENTS (dnd_targets));
-      priv->dest = gtk_drop_target_new (targets, GDK_ACTION_COPY);
+      formats = gdk_content_formats_new_for_gtype (GDK_TYPE_RGBA);
+      priv->dest = gtk_drop_target_new (formats, GDK_ACTION_COPY);
       g_signal_connect (priv->dest, "drag-drop", G_CALLBACK (swatch_drag_drop), swatch);
       gtk_widget_add_controller (GTK_WIDGET (swatch), GTK_EVENT_CONTROLLER (priv->dest));
-      gdk_content_formats_unref (targets);
     }
   if (!can_drop && priv->dest)
     {
