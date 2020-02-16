@@ -56,4 +56,6 @@ struct _GtkEventControllerClass
   gpointer padding[10];
 };
 
+GtkWidget *gtk_event_controller_get_target (GtkEventController *controller);
+
 #endif /* __GTK_EVENT_CONTROLLER_PRIVATE_H__ */

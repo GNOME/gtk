@@ -58,6 +58,7 @@ struct _GtkEventControllerPrivate
   GtkPropagationPhase phase;
   GtkPropagationLimit limit;
   char *name;
+  GtkWidget *target;
 };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkEventController, gtk_event_controller, G_TYPE_OBJECT)
@@ -323,7 +324,10 @@ gtk_event_controller_handle_event (GtkEventController *controller,
                                    double              y)
 {
   GtkEventControllerClass *controller_class;
+  GtkEventControllerPrivate *priv;
   gboolean retval = FALSE;
+
+  priv = gtk_event_controller_get_instance_private (controller);
 
   g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER (controller), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
@@ -333,9 +337,13 @@ gtk_event_controller_handle_event (GtkEventController *controller,
 
   controller_class = GTK_EVENT_CONTROLLER_GET_CLASS (controller);
 
+  priv->target = target;
+
   g_object_ref (controller);
   retval = controller_class->handle_event (controller, event, x, y);
   g_object_unref (controller);
+
+  priv->target = NULL;
 
   return retval;
 }
@@ -514,6 +522,14 @@ gtk_event_controller_set_name (GtkEventController *controller,
 
   g_free (priv->name);
   priv->name = g_strdup (name);
+}
+
+GtkWidget *
+gtk_event_controller_get_target (GtkEventController *controller)
+{
+  GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (controller);
+
+  return priv->target;
 }
 
 static GtkCrossingData *
