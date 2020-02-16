@@ -72,7 +72,7 @@ GDK_AVAILABLE_IN_ALL
 GdkEvent* gdk_display_peek_event (GdkDisplay     *display);
 GDK_AVAILABLE_IN_ALL
 void      gdk_display_put_event  (GdkDisplay     *display,
-                                  const GdkEvent *event);
+                                  GdkEvent       *event);
 GDK_AVAILABLE_IN_ALL
 gboolean  gdk_display_has_pending (GdkDisplay  *display);
 

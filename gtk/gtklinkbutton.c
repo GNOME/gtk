@@ -451,7 +451,7 @@ gtk_link_button_pressed_cb (GtkGestureClick *gesture,
   GtkLinkButton *link_button = user_data;
   GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (link_button);
   GdkEventSequence *sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-  const GdkEvent *event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+  GdkEvent *event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
 
   if (!gtk_widget_has_focus (GTK_WIDGET (link_button)))
     gtk_widget_grab_focus (GTK_WIDGET (link_button));

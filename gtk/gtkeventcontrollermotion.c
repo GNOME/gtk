@@ -41,7 +41,7 @@ struct _GtkEventControllerMotion
 {
   GtkEventController parent_instance;
 
-  const GdkEvent *current_event;
+  GdkEvent *current_event;
   const GtkCrossingData *current_crossing;
 
   guint is_pointer             : 1;
@@ -73,7 +73,7 @@ G_DEFINE_TYPE (GtkEventControllerMotion, gtk_event_controller_motion, GTK_TYPE_E
 
 static gboolean
 gtk_event_controller_motion_handle_event (GtkEventController *controller,
-                                          const GdkEvent     *event,
+                                          GdkEvent           *event,
                                           double              x,
                                           double              y)
 {

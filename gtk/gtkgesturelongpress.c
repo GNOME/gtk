@@ -116,7 +116,7 @@ gtk_gesture_long_press_begin (GtkGesture       *gesture,
                               GdkEventSequence *sequence)
 {
   GtkGestureLongPressPrivate *priv;
-  const GdkEvent *event;
+  GdkEvent *event;
   GdkEventType event_type;
   GtkWidget *widget;
   gint delay;

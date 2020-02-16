@@ -35,7 +35,7 @@ struct _GtkEventControllerClass
                              GtkWidget          *widget);
   void     (* unset_widget) (GtkEventController *controller);
   gboolean (* handle_event) (GtkEventController *controller,
-                             const GdkEvent     *event,
+                             GdkEvent            *event,
                              double              x,
                              double              y);
   void     (* reset)        (GtkEventController *controller);
@@ -51,7 +51,7 @@ struct _GtkEventControllerClass
    * the event unseen by the handle_event vfunc.
    */
   gboolean (* filter_event) (GtkEventController *controller,
-                             const GdkEvent     *event);
+                             GdkEvent           *event);
 
   gpointer padding[10];
 };

@@ -131,7 +131,7 @@ gtk_gesture_single_cancel (GtkGesture       *gesture,
 
 static gboolean
 gtk_gesture_single_handle_event (GtkEventController *controller,
-                                 const GdkEvent     *event,
+                                 GdkEvent           *event,
                                  double              x,
                                  double              y)
 {
