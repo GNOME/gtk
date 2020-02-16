@@ -4589,8 +4589,6 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
   if (!gdk_surface_is_visible (surface))
     {
       gdk_wayland_seat_set_grab_surface (wayland_seat, NULL);
-      g_critical ("Surface %p has not been made visible in GdkSeatGrabPrepareFunc",
-                  surface);
       return GDK_GRAB_NOT_VIEWABLE;
     }
 
