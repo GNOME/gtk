@@ -2356,42 +2356,7 @@ should_be_mapped (GdkSurface *surface)
 static gboolean
 should_map_as_popup (GdkSurface *surface)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-
-  if (GDK_SURFACE_TYPE (surface) == GDK_SURFACE_POPUP)
-    return TRUE;
-
-  /* Ideally, popup would be temp surfaces with a parent and grab */
-  if (GDK_SURFACE_TYPE (surface) == GDK_SURFACE_TEMP)
-    {
-      /* If a temp surface has a parent and a grab, we can use a popup */
-      if (impl->transient_for)
-        {
-          if (impl->grab_input_seat)
-            return TRUE;
-        }
-      else
-        g_message ("Surface %p is a temporary surface without parent, "
-                   "application will not be able to position it on screen.",
-                   surface);
-    }
-
-  /* Yet we need to keep the surface type hint tests for compatibility */
-  switch ((guint) impl->hint)
-    {
-    case GDK_SURFACE_TYPE_HINT_POPUP_MENU:
-    case GDK_SURFACE_TYPE_HINT_DROPDOWN_MENU:
-    case GDK_SURFACE_TYPE_HINT_COMBO:
-      return TRUE;
-
-    default:
-      break;
-    }
-
-  if (impl->has_layout_data)
-    return TRUE;
-
-  return FALSE;
+  return GDK_SURFACE_TYPE (surface) == GDK_SURFACE_POPUP;
 }
 
 static void
