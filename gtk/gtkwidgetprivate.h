@@ -262,7 +262,7 @@ GList *           _gtk_widget_list_devices                 (GtkWidget *widget);
 void              gtk_synthesize_crossing_events           (GtkRoot         *toplevel,
                                                             GtkWidget       *from,
                                                             GtkWidget       *to,
-                                                            GdkEvent        *event,
+                                                            GdkEvent        *source,
                                                             GdkCrossingMode  mode);
 
 void              _gtk_widget_synthesize_crossing          (GtkWidget       *from,
