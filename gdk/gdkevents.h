@@ -353,10 +353,6 @@ gboolean  gdk_event_get_coords		(const GdkEvent  *event,
 					 gdouble	 *x_win,
 					 gdouble	 *y_win);
 GDK_AVAILABLE_IN_ALL
-void      gdk_event_set_coords          (GdkEvent *event,
-                                         gdouble   x,
-                                         gdouble   y);
-GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_button          (const GdkEvent *event,
                                          guint          *button);
 GDK_AVAILABLE_IN_ALL
@@ -365,10 +361,6 @@ gboolean  gdk_event_get_click_count     (const GdkEvent *event,
 GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_keyval          (const GdkEvent *event,
                                          guint          *keyval);
-
-GDK_AVAILABLE_IN_ALL
-void      gdk_event_set_keyval          (GdkEvent *event,
-                                         guint     keyval);
 
 GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_keycode         (const GdkEvent *event,
@@ -396,13 +388,7 @@ gboolean  gdk_event_get_axis            (const GdkEvent  *event,
                                          GdkAxisUse       axis_use,
                                          gdouble         *value);
 GDK_AVAILABLE_IN_ALL
-void       gdk_event_set_device         (GdkEvent        *event,
-                                         GdkDevice       *device);
-GDK_AVAILABLE_IN_ALL
 GdkDevice* gdk_event_get_device         (const GdkEvent  *event);
-GDK_AVAILABLE_IN_ALL
-void       gdk_event_set_source_device  (GdkEvent        *event,
-                                         GdkDevice       *device);
 GDK_AVAILABLE_IN_ALL
 GdkDevice* gdk_event_get_source_device  (const GdkEvent  *event);
 GDK_AVAILABLE_IN_ALL
@@ -421,10 +407,6 @@ gboolean  gdk_events_get_center         (GdkEvent        *event1,
                                          GdkEvent        *event2,
                                          gdouble         *x,
                                          gdouble         *y);
-
-GDK_AVAILABLE_IN_ALL
-void       gdk_event_set_display        (GdkEvent        *event,
-                                         GdkDisplay      *display);
 GDK_AVAILABLE_IN_ALL
 GdkDisplay *gdk_event_get_display       (const GdkEvent  *event);
 
@@ -444,10 +426,6 @@ gboolean  gdk_get_show_events		(void);
 
 GDK_AVAILABLE_IN_ALL
 GdkDeviceTool *gdk_event_get_device_tool (const GdkEvent *event);
-
-GDK_AVAILABLE_IN_ALL
-void           gdk_event_set_device_tool (GdkEvent       *event,
-                                          GdkDeviceTool  *tool);
 
 GDK_AVAILABLE_IN_ALL
 int            gdk_event_get_scancode    (GdkEvent *event);

@@ -380,16 +380,6 @@ gdk_event_unref (GdkEvent *event)
     gdk_event_free (event);
 }
 
-void
-gdk_event_set_pointer_emulated (GdkEvent *event,
-                                gboolean  emulated)
-{
-  if (emulated)
-    event->any.flags |= GDK_EVENT_POINTER_EMULATED;
-  else
-    event->any.flags &= ~(GDK_EVENT_POINTER_EMULATED);
-}
-
 /**
  * gdk_event_get_pointer_emulated:
  * @event: a #GdkEvent
@@ -707,64 +697,6 @@ gdk_event_get_coords (const GdkEvent *event,
   return fetched;
 }
 
-void
-gdk_event_set_coords (GdkEvent *event,
-                      gdouble   x,
-                      gdouble   y)
-{
-  g_return_if_fail (event != NULL);
-
-  switch ((guint) event->any.type)
-    {
-    case GDK_CONFIGURE:
-      event->configure.x = x;
-      event->configure.y = y;
-      break;
-    case GDK_ENTER_NOTIFY:
-    case GDK_LEAVE_NOTIFY:
-      event->crossing.x = x;
-      event->crossing.y = y;
-      break;
-    case GDK_SCROLL:
-      event->scroll.x = x;
-      event->scroll.y = y;
-      break;
-    case GDK_BUTTON_PRESS:
-    case GDK_BUTTON_RELEASE:
-      event->button.x = x;
-      event->button.y = y;
-      break;
-    case GDK_TOUCH_BEGIN:
-    case GDK_TOUCH_UPDATE:
-    case GDK_TOUCH_END:
-    case GDK_TOUCH_CANCEL:
-      event->touch.x = x;
-      event->touch.y = y;
-      break;
-    case GDK_MOTION_NOTIFY:
-      event->motion.x = x;
-      event->motion.y = y;
-      break;
-    case GDK_TOUCHPAD_SWIPE:
-      event->touchpad_swipe.x = x;
-      event->touchpad_swipe.y = y;
-      break;
-    case GDK_TOUCHPAD_PINCH:
-      event->touchpad_pinch.x = x;
-      event->touchpad_pinch.y = y;
-      break;
-    case GDK_DRAG_ENTER:
-    case GDK_DRAG_LEAVE:
-    case GDK_DRAG_MOTION:
-    case GDK_DROP_START:
-      event->dnd.x = x;
-      event->dnd.y = y;
-      break;
-    default:
-      break;
-    }
-}
-
 /**
  * gdk_event_get_button:
  * @event: a #GdkEvent
@@ -870,15 +802,6 @@ gdk_event_get_keyval (const GdkEvent *event,
     *keyval = number;
 
   return fetched;
-}
-
-void
-gdk_event_set_keyval (GdkEvent *event,
-                      guint     keyval)
-{
-  if (event->any.type == GDK_KEY_PRESS ||
-      event->any.type == GDK_KEY_RELEASE)
-    event->key.keyval = keyval;
 }
 
 /**
@@ -1161,22 +1084,6 @@ gdk_event_get_axis (const GdkEvent *event,
 }
 
 /**
- * gdk_event_set_device:
- * @event: a #GdkEvent
- * @device: a #GdkDevice
- *
- * Sets the device for @event to @device. The event must
- * have been allocated by GTK+, for instance, by
- * gdk_event_copy().
- **/
-void
-gdk_event_set_device (GdkEvent  *event,
-                      GdkDevice *device)
-{
-  g_set_object (&event->any.device, device);
-}
-
-/**
  * gdk_event_get_device:
  * @event: a #GdkEvent.
  *
@@ -1191,23 +1098,6 @@ gdk_event_get_device (const GdkEvent *event)
   g_return_val_if_fail (event != NULL, NULL);
 
   return event->any.device;
-}
-
-/**
- * gdk_event_set_source_device:
- * @event: a #GdkEvent
- * @device: a #GdkDevice
- *
- * Sets the slave device for @event to @device.
- *
- * The event must have been allocated by GTK+,
- * for instance by gdk_event_copy().
- **/
-void
-gdk_event_set_source_device (GdkEvent  *event,
-                             GdkDevice *device)
-{
-  g_set_object (&event->any.source_device, device);
 }
 
 /**
@@ -1412,20 +1302,6 @@ gdk_events_get_center (GdkEvent *event1,
 }
 
 /**
- * gdk_event_set_display:
- * @event: a #GdkEvent
- * @display: a #GdkDisplay
- *
- * Sets the display that an event is associated with.
- */
-void
-gdk_event_set_display (GdkEvent   *event,
-                       GdkDisplay *display)
-{
-  event->any.display = display;
-}
-
-/**
  * gdk_event_get_display:
  * @event: a #GdkEvent
  *
@@ -1581,38 +1457,6 @@ gdk_event_get_device_tool (const GdkEvent *event)
     return event->scroll.tool;
 
   return NULL;
-}
-
-/**
- * gdk_event_set_device_tool:
- * @event: a #GdkEvent
- * @tool: (nullable): tool to set on the event, or %NULL
- *
- * Sets the device tool for this event, should be rarely used.
- **/
-void
-gdk_event_set_device_tool (GdkEvent      *event,
-                           GdkDeviceTool *tool)
-{
-  if (event->any.type == GDK_BUTTON_PRESS ||
-      event->any.type == GDK_BUTTON_RELEASE)
-    g_set_object (&event->button.tool, tool);
-  else if (event->any.type == GDK_MOTION_NOTIFY)
-    g_set_object (&event->motion.tool, tool);
-  else if (event->any.type == GDK_PROXIMITY_IN ||
-           event->any.type == GDK_PROXIMITY_OUT)
-    g_set_object (&event->proximity.tool, tool);
-  else if (event->any.type == GDK_SCROLL)
-    g_set_object (&event->scroll.tool, tool);
-}
-
-void
-gdk_event_set_scancode (GdkEvent *event,
-                        guint16 scancode)
-{
-  if (event->any.type == GDK_KEY_PRESS ||
-      event->any.type == GDK_KEY_RELEASE)
-    event->key.key_scancode = scancode;
 }
 
 /**
