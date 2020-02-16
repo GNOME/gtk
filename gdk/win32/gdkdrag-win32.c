@@ -2332,7 +2332,7 @@ gdk_local_drag_update (GdkDrag *drag,
 
 static gboolean
 gdk_dnd_handle_motion_event (GdkDrag              *drag,
-                             const GdkEventMotion *event)
+                             GdkEventMotion *event)
 {
   GdkModifierType state;
   GdkWin32Drag *drag_win32 = GDK_WIN32_DRAG (drag);
@@ -2375,7 +2375,7 @@ gdk_dnd_handle_motion_event (GdkDrag              *drag,
 
 static gboolean
 gdk_dnd_handle_key_event (GdkDrag           *drag,
-                          const GdkEventKey *event)
+                          GdkEventKey *event)
 {
   GdkWin32Drag *drag_win32 = GDK_WIN32_DRAG (drag);
   GdkModifierType state;
@@ -2460,7 +2460,7 @@ gdk_dnd_handle_key_event (GdkDrag           *drag,
 
 static gboolean
 gdk_dnd_handle_grab_broken_event (GdkDrag                  *drag,
-                                  const GdkEventGrabBroken *event)
+                                  GdkEventGrabBroken *event)
 {
   GdkWin32Drag *drag_win32 = GDK_WIN32_DRAG (drag);
 
@@ -2486,7 +2486,7 @@ gdk_dnd_handle_grab_broken_event (GdkDrag                  *drag,
 
 static gboolean
 gdk_dnd_handle_button_event (GdkDrag              *drag,
-                             const GdkEventButton *event)
+                             GdkEventButton *event)
 {
   GDK_NOTE (DND, g_print ("gdk_dnd_handle_button_event: 0x%p\n",
                           drag));
@@ -2510,7 +2510,7 @@ gdk_dnd_handle_button_event (GdkDrag              *drag,
 
 gboolean
 gdk_win32_drag_handle_event (GdkDrag        *drag,
-                             const GdkEvent *event)
+                             GdkEvent *event)
 {
   GdkWin32Drag *drag_win32 = GDK_WIN32_DRAG (drag);
 

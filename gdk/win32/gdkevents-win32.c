@@ -755,7 +755,7 @@ print_event_state (guint state)
 }
 
 void
-_gdk_win32_print_event (const GdkEvent *event)
+_gdk_win32_print_event (GdkEvent *event)
 {
   const char *kvname;
 

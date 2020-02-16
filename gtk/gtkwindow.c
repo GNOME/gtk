@@ -1273,7 +1273,7 @@ popover_destroy (GtkWindowPopover *popover)
 
 static gboolean
 gtk_window_titlebar_action (GtkWindow      *window,
-                            const GdkEvent *event,
+                            GdkEvent       *event,
                             guint           button,
                             gint            n_press)
 {
@@ -1343,7 +1343,7 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
   GtkWidget *event_widget, *widget;
   GdkEventSequence *sequence;
   GtkWindowRegion region;
-  const GdkEvent *event;
+  GdkEvent *event;
   guint button;
   gboolean window_drag = FALSE;
 

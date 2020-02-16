@@ -2806,7 +2806,7 @@ gtk_tree_view_click_gesture_pressed (GtkGestureClick *gesture,
   GtkTreeViewColumn *column = NULL;
   GdkEventSequence *sequence;
   GdkModifierType modifiers;
-  const GdkEvent *event;
+  GdkEvent *event;
   gint new_y, y_offset;
   gint bin_x, bin_y;
   GtkTreePath *path;
@@ -13644,7 +13644,7 @@ gtk_tree_view_search_pressed_cb (GtkGesture  *gesture,
 {
   GdkDevice *keyb_device;
   GdkEventSequence *sequence;
-  const GdkEvent *event;
+  GdkEvent *event;
 
   sequence = gtk_gesture_get_last_updated_sequence (gesture);
   event = gtk_gesture_get_last_event (gesture, sequence);

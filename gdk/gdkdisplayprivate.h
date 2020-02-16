@@ -136,7 +136,7 @@ struct _GdkDisplayClass
   const gchar *              (*get_startup_notification_id) (GdkDisplay  *display);
 
   void                       (*event_data_copy) (GdkDisplay     *display,
-                                                 const GdkEvent *event,
+                                                 GdkEvent       *event,
                                                  GdkEvent       *new_event);
   void                       (*event_data_free) (GdkDisplay     *display,
                                                  GdkEvent       *event);
@@ -191,7 +191,7 @@ typedef void (* GdkDisplayPointerInfoForeach) (GdkDisplay           *display,
                                                gpointer              user_data);
 
 void                _gdk_display_update_last_event    (GdkDisplay     *display,
-                                                       const GdkEvent *event);
+                                                       GdkEvent       *event);
 void                _gdk_display_device_grab_update   (GdkDisplay *display,
                                                        GdkDevice  *device,
                                                        GdkDevice  *source_device,
@@ -227,7 +227,7 @@ gulong              _gdk_display_get_next_serial      (GdkDisplay       *display
 void                _gdk_display_pause_events         (GdkDisplay       *display);
 void                _gdk_display_unpause_events       (GdkDisplay       *display);
 void                _gdk_display_event_data_copy      (GdkDisplay       *display,
-                                                       const GdkEvent   *event,
+                                                       GdkEvent         *event,
                                                        GdkEvent         *new_event);
 void                _gdk_display_event_data_free      (GdkDisplay       *display,
                                                        GdkEvent         *event);

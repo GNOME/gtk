@@ -265,7 +265,7 @@ _gdk_event_unqueue (GdkDisplay *display)
 
 static void
 gdk_event_push_history (GdkEvent       *event,
-                        const GdkEvent *history_event)
+                        GdkEvent       *history_event)
 {
   GdkTimeCoord *hist;
   GdkDevice *device;
@@ -468,7 +468,7 @@ gdk_event_free (GdkEvent *event)
  * Returns: (transfer none): The #GdkSurface associated with the event
  */
 GdkSurface *
-gdk_event_get_surface (const GdkEvent *event)
+gdk_event_get_surface (GdkEvent       *event)
 {
   g_return_val_if_fail (event != NULL, NULL);
 
@@ -485,7 +485,7 @@ gdk_event_get_surface (const GdkEvent *event)
  * Returns: time stamp field from @event
  **/
 guint32
-gdk_event_get_time (const GdkEvent *event)
+gdk_event_get_time (GdkEvent       *event)
 {
   if (event)
     switch (event->any.type)
@@ -555,7 +555,7 @@ gdk_event_get_time (const GdkEvent *event)
  * Returns: %TRUE if there was a state field in the event
  **/
 gboolean
-gdk_event_get_state (const GdkEvent  *event,
+gdk_event_get_state (GdkEvent        *event,
                      GdkModifierType *state)
 {
   g_return_val_if_fail (state != NULL, FALSE);
@@ -629,7 +629,7 @@ gdk_event_get_state (const GdkEvent  *event,
  * Returns: %TRUE if the event delivered event surface coordinates
  **/
 gboolean
-gdk_event_get_coords (const GdkEvent *event,
+gdk_event_get_coords (GdkEvent       *event,
 		      gdouble        *x_win,
 		      gdouble        *y_win)
 {
@@ -707,7 +707,7 @@ gdk_event_get_coords (const GdkEvent *event,
  * Returns: %TRUE if the event delivered a button number
  **/
 gboolean
-gdk_event_get_button (const GdkEvent *event,
+gdk_event_get_button (GdkEvent       *event,
                       guint *button)
 {
   gboolean fetched = TRUE;
@@ -746,7 +746,7 @@ gdk_event_get_button (const GdkEvent *event,
  * Returns: %TRUE if the event delivered a click count
  */
 gboolean
-gdk_event_get_click_count (const GdkEvent *event,
+gdk_event_get_click_count (GdkEvent       *event,
                            guint *click_count)
 {
   gboolean fetched = TRUE;
@@ -781,7 +781,7 @@ gdk_event_get_click_count (const GdkEvent *event,
  * Returns: %TRUE if the event delivered a key symbol
  */
 gboolean
-gdk_event_get_keyval (const GdkEvent *event,
+gdk_event_get_keyval (GdkEvent       *event,
                       guint *keyval)
 {
   gboolean fetched = TRUE;
@@ -816,7 +816,7 @@ gdk_event_get_keyval (const GdkEvent *event,
  * Returns: %TRUE if the event delivered a hardware keycode
  */
 gboolean
-gdk_event_get_keycode (const GdkEvent *event,
+gdk_event_get_keycode (GdkEvent       *event,
                        guint16 *keycode)
 {
   gboolean fetched = TRUE;
@@ -849,7 +849,7 @@ gdk_event_get_keycode (const GdkEvent *event,
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
-gdk_event_get_key_group (const GdkEvent *event,
+gdk_event_get_key_group (GdkEvent       *event,
                          guint          *group)
 {
   gboolean fetched = TRUE;
@@ -880,7 +880,7 @@ gdk_event_get_key_group (const GdkEvent *event,
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
-gdk_event_get_key_is_modifier (const GdkEvent *event,
+gdk_event_get_key_is_modifier (GdkEvent       *event,
                                gboolean       *is_modifier)
 {
   gboolean fetched = TRUE;
@@ -910,7 +910,7 @@ gdk_event_get_key_is_modifier (const GdkEvent *event,
  * Returns: %TRUE if the event delivered a scroll direction
  */
 gboolean
-gdk_event_get_scroll_direction (const GdkEvent *event,
+gdk_event_get_scroll_direction (GdkEvent       *event,
                                 GdkScrollDirection *direction)
 {
   gboolean fetched = TRUE;
@@ -946,7 +946,7 @@ gdk_event_get_scroll_direction (const GdkEvent *event,
  * Returns: %TRUE if the event contains smooth scroll information
  **/
 gboolean
-gdk_event_get_scroll_deltas (const GdkEvent *event,
+gdk_event_get_scroll_deltas (GdkEvent       *event,
                              gdouble        *delta_x,
                              gdouble        *delta_y)
 {
@@ -994,7 +994,7 @@ gdk_event_get_scroll_deltas (const GdkEvent *event,
  * Returns: %TRUE if the event is a scroll stop event
  */
 gboolean
-gdk_event_is_scroll_stop_event (const GdkEvent *event)
+gdk_event_is_scroll_stop_event (GdkEvent       *event)
 {
   return event->scroll.is_stop;
 }
@@ -1011,7 +1011,7 @@ gdk_event_is_scroll_stop_event (const GdkEvent *event)
  * Returns: %TRUE if the specified axis was found, otherwise %FALSE
  **/
 gboolean
-gdk_event_get_axis (const GdkEvent *event,
+gdk_event_get_axis (GdkEvent       *event,
 		    GdkAxisUse      axis_use,
 		    gdouble        *value)
 {
@@ -1093,7 +1093,7 @@ gdk_event_get_axis (const GdkEvent *event,
  * Returns: (nullable) (transfer none): a #GdkDevice, or %NULL.
  **/
 GdkDevice *
-gdk_event_get_device (const GdkEvent *event)
+gdk_event_get_device (GdkEvent       *event)
 {
   g_return_val_if_fail (event != NULL, NULL);
 
@@ -1117,7 +1117,7 @@ gdk_event_get_device (const GdkEvent *event)
  * Returns: (nullable) (transfer none): a #GdkDevice, or %NULL.
  **/
 GdkDevice *
-gdk_event_get_source_device (const GdkEvent *event)
+gdk_event_get_source_device (GdkEvent       *event)
 {
   g_return_val_if_fail (event != NULL, NULL);
 
@@ -1145,13 +1145,13 @@ gdk_event_get_source_device (const GdkEvent *event)
  * Returns: %TRUE if the event should trigger a context menu.
  **/
 gboolean
-gdk_event_triggers_context_menu (const GdkEvent *event)
+gdk_event_triggers_context_menu (GdkEvent       *event)
 {
   g_return_val_if_fail (event != NULL, FALSE);
 
   if (event->any.type == GDK_BUTTON_PRESS)
     {
-      const GdkEventButton *bevent = (const GdkEventButton *) event;
+      GdkEventButton *bevent = (GdkEventButton *) event;
       GdkDisplay *display;
       GdkModifierType modifier;
 
@@ -1310,7 +1310,7 @@ gdk_events_get_center (GdkEvent *event1,
  * Returns: (transfer none) (nullable): a #GdkDisplay
  */
 GdkDisplay *
-gdk_event_get_display (const GdkEvent *event)
+gdk_event_get_display (GdkEvent       *event)
 {
   if (event->any.display)
     return event->any.display;
@@ -1332,7 +1332,7 @@ gdk_event_get_display (const GdkEvent *event)
  * Returns: (transfer none): the event sequence that the event belongs to
  */
 GdkEventSequence *
-gdk_event_get_event_sequence (const GdkEvent *event)
+gdk_event_get_event_sequence (GdkEvent       *event)
 {
   if (!event)
     return NULL;
@@ -1402,7 +1402,7 @@ G_DEFINE_BOXED_TYPE (GdkEventSequence, gdk_event_sequence,
  * Returns: a #GdkEventType
  */
 GdkEventType
-gdk_event_get_event_type (const GdkEvent *event)
+gdk_event_get_event_type (GdkEvent       *event)
 {
   g_return_val_if_fail (event != NULL, 0);
 
@@ -1418,7 +1418,7 @@ gdk_event_get_event_type (const GdkEvent *event)
  * Returns: (transfer none): The #GdkSeat of this event
  **/
 GdkSeat *
-gdk_event_get_seat (const GdkEvent *event)
+gdk_event_get_seat (GdkEvent       *event)
 {
   GdkDevice *device;
 
@@ -1443,7 +1443,7 @@ gdk_event_get_seat (const GdkEvent *event)
  * Returns: (transfer none): The current device tool, or %NULL
  **/
 GdkDeviceTool *
-gdk_event_get_device_tool (const GdkEvent *event)
+gdk_event_get_device_tool (GdkEvent       *event)
 {
   if (event->any.type == GDK_BUTTON_PRESS ||
       event->any.type == GDK_BUTTON_RELEASE)
@@ -1490,7 +1490,7 @@ gdk_event_get_scancode (GdkEvent *event)
  * Returns: %TRUE if the event was sent explicitly
  */
 gboolean
-gdk_event_is_sent (const GdkEvent *event)
+gdk_event_is_sent (GdkEvent       *event)
 {
   if (!event)
     return FALSE;
@@ -1507,7 +1507,7 @@ gdk_event_is_sent (const GdkEvent *event)
  * Returns: (transfer none) (nullable): the drop
  **/
 GdkDrop *
-gdk_event_get_drop (const GdkEvent *event)
+gdk_event_get_drop (GdkEvent       *event)
 {
   if (!event)
     return FALSE;
@@ -1533,7 +1533,7 @@ gdk_event_get_drop (const GdkEvent *event)
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
-gdk_event_get_crossing_mode (const GdkEvent  *event,
+gdk_event_get_crossing_mode (GdkEvent        *event,
                              GdkCrossingMode *mode)
 {
   if (!event)
@@ -1564,7 +1564,7 @@ gdk_event_get_crossing_mode (const GdkEvent  *event,
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
-gdk_event_get_crossing_detail (const GdkEvent *event,
+gdk_event_get_crossing_detail (GdkEvent       *event,
                                GdkNotifyType  *detail)
 {
   if (!event)
@@ -1595,7 +1595,7 @@ gdk_event_get_crossing_detail (const GdkEvent *event,
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
-gdk_event_get_touchpad_gesture_phase (const GdkEvent          *event,
+gdk_event_get_touchpad_gesture_phase (GdkEvent                *event,
                                       GdkTouchpadGesturePhase *phase)
 {
   if (!event)
@@ -1625,7 +1625,7 @@ gdk_event_get_touchpad_gesture_phase (const GdkEvent          *event,
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
-gdk_event_get_touchpad_gesture_n_fingers (const GdkEvent *event,
+gdk_event_get_touchpad_gesture_n_fingers (GdkEvent       *event,
                                           guint          *n_fingers)
 {
   if (!event)
@@ -1656,7 +1656,7 @@ gdk_event_get_touchpad_gesture_n_fingers (const GdkEvent *event,
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
-gdk_event_get_touchpad_deltas (const GdkEvent *event,
+gdk_event_get_touchpad_deltas (GdkEvent       *event,
                                double         *dx,
                                double         *dy)
 {
@@ -1689,7 +1689,7 @@ gdk_event_get_touchpad_deltas (const GdkEvent *event,
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
-gdk_event_get_touchpad_angle_delta (const GdkEvent *event,
+gdk_event_get_touchpad_angle_delta (GdkEvent       *event,
                                     double         *delta)
 {
   if (!event)
@@ -1714,7 +1714,7 @@ gdk_event_get_touchpad_angle_delta (const GdkEvent *event,
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
-gdk_event_get_touchpad_scale (const GdkEvent *event,
+gdk_event_get_touchpad_scale (GdkEvent       *event,
                               double         *scale)
 {
   if (!event)
@@ -1739,7 +1739,7 @@ gdk_event_get_touchpad_scale (const GdkEvent *event,
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
-gdk_event_get_touch_emulating_pointer (const GdkEvent *event,
+gdk_event_get_touch_emulating_pointer (GdkEvent       *event,
                                        gboolean       *emulating)
 {
   if (!event)
@@ -1766,7 +1766,7 @@ gdk_event_get_touch_emulating_pointer (const GdkEvent *event,
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
-gdk_event_get_grab_surface (const GdkEvent  *event,
+gdk_event_get_grab_surface (GdkEvent        *event,
                             GdkSurface     **surface)
 {
   if (!event)
@@ -1791,7 +1791,7 @@ gdk_event_get_grab_surface (const GdkEvent  *event,
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
-gdk_event_get_focus_in (const GdkEvent *event,
+gdk_event_get_focus_in (GdkEvent       *event,
                         gboolean       *focus_in)
 {
   if (!event)
@@ -1817,7 +1817,7 @@ gdk_event_get_focus_in (const GdkEvent *event,
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
-gdk_event_get_pad_group_mode (const GdkEvent *event,
+gdk_event_get_pad_group_mode (GdkEvent       *event,
                               guint          *group,
                               guint          *mode)
 {
@@ -1859,7 +1859,7 @@ gdk_event_get_pad_group_mode (const GdkEvent *event,
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
-gdk_event_get_pad_button (const GdkEvent *event,
+gdk_event_get_pad_button (GdkEvent       *event,
                           guint          *button)
 {
   if (!event)
@@ -1886,7 +1886,7 @@ gdk_event_get_pad_button (const GdkEvent *event,
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
-gdk_event_get_pad_axis_value (const GdkEvent *event,
+gdk_event_get_pad_axis_value (GdkEvent       *event,
                               guint          *index,
                               gdouble        *value)
 {
@@ -1957,7 +1957,7 @@ gdk_event_get_axes (GdkEvent  *event,
  *   of time and coordinates
  */
 GList *
-gdk_event_get_motion_history (const GdkEvent *event)
+gdk_event_get_motion_history (GdkEvent       *event)
 {
   if (event->any.type != GDK_MOTION_NOTIFY)
     return NULL;

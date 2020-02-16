@@ -50,7 +50,7 @@ struct _GtkEventControllerKey
 
   GdkModifierType state;
 
-  const GdkEvent *current_event;
+  GdkEvent *current_event;
   const GtkCrossingData *current_crossing;
 
   guint is_focus       : 1;
@@ -97,7 +97,7 @@ gtk_event_controller_key_finalize (GObject *object)
 
 static gboolean
 gtk_event_controller_key_handle_event (GtkEventController *controller,
-                                       const GdkEvent     *event,
+                                       GdkEvent           *event,
                                        double              x,
                                        double              y)
 {

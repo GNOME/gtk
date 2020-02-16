@@ -480,7 +480,7 @@ static void     gtk_text_view_start_selection_drag   (GtkTextView          *text
 static gboolean gtk_text_view_end_selection_drag     (GtkTextView        *text_view);
 static void     gtk_text_view_start_selection_dnd    (GtkTextView        *text_view,
                                                       const GtkTextIter  *iter,
-                                                      const GdkEvent     *event,
+                                                      GdkEvent           *event,
                                                       gint                x,
                                                       gint                y);
 static void     gtk_text_view_check_cursor_blink     (GtkTextView        *text_view);
@@ -528,7 +528,7 @@ static void gtk_text_view_set_virtual_cursor_pos (GtkTextView       *text_view,
                                                   gint               y);
 
 static void gtk_text_view_do_popup               (GtkTextView       *text_view,
-						  const GdkEvent    *event);
+						  GdkEvent          *event);
 
 static void cancel_pending_scroll                (GtkTextView   *text_view);
 static void gtk_text_view_queue_scroll           (GtkTextView   *text_view,
@@ -5158,7 +5158,7 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
 {
   GdkEventSequence *sequence;
   GtkTextViewPrivate *priv;
-  const GdkEvent *event;
+  GdkEvent *event;
   gboolean is_touchscreen;
   GdkDevice *device;
   GtkTextIter iter;
@@ -7137,7 +7137,7 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
   gint start_x, start_y, x, y;
   GdkEventSequence *sequence;
   gboolean is_touchscreen;
-  const GdkEvent *event;
+  GdkEvent *event;
   SelectionData *data;
   GdkDevice *device;
   GtkTextIter cursor;
@@ -7256,7 +7256,7 @@ gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
   gint start_x, start_y, x, y;
   GdkEventSequence *sequence;
   GtkTextViewPrivate *priv;
-  const GdkEvent *event;
+  GdkEvent *event;
   GdkDevice *device;
 
   priv = text_view->priv;
@@ -7698,7 +7698,7 @@ dnd_finished_cb (GdkDrag     *drag,
 static void
 gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
                                    const GtkTextIter *iter,
-                                   const GdkEvent    *event,
+                                   GdkEvent          *event,
                                    gint               x,
                                    gint               y)
 {
@@ -8617,7 +8617,7 @@ gtk_text_view_get_menu_model (GtkTextView *text_view)
 
 static void
 gtk_text_view_do_popup (GtkTextView    *text_view,
-                        const GdkEvent *event)
+                        GdkEvent       *event)
 {
   GtkTextViewPrivate *priv = text_view->priv;
   GdkEvent *trigger_event;

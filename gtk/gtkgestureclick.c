@@ -197,7 +197,7 @@ gtk_gesture_click_begin (GtkGesture       *gesture,
   GtkGestureClickPrivate *priv;
   guint n_presses, button = 1;
   GdkEventSequence *current;
-  const GdkEvent *event;
+  GdkEvent *event;
   GdkEventType event_type;
   GdkDevice *device;
   gdouble x, y;
@@ -307,7 +307,7 @@ gtk_gesture_click_reset (GtkEventController *controller)
 
 static gboolean
 gtk_gesture_click_handle_event (GtkEventController *controller,
-                                const GdkEvent     *event,
+                                GdkEvent           *event,
                                 double              x,
                                 double              y)
 {

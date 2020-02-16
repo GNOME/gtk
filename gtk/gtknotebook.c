@@ -2541,7 +2541,7 @@ gtk_notebook_gesture_pressed (GtkGestureClick *gesture,
   GdkEventSequence *sequence;
   GtkNotebookArrow arrow;
   GtkNotebookPage *page;
-  const GdkEvent *event;
+  GdkEvent *event;
   guint button;
   GList *tab;
 
@@ -2800,7 +2800,7 @@ gtk_notebook_gesture_released (GtkGestureClick *gesture,
   GtkNotebook *notebook = user_data;
   GtkNotebookPrivate *priv = notebook->priv;
   GdkEventSequence *sequence;
-  const GdkEvent *event;
+  GdkEvent *event;
   guint button;
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));

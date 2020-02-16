@@ -78,7 +78,7 @@ _gtk_gesture_rotate_get_angle (GtkGestureRotate *rotate,
                                gdouble          *angle)
 {
   GtkGestureRotatePrivate *priv;
-  const GdkEvent *last_event;
+  GdkEvent *last_event;
   gdouble x1, y1, x2, y2;
   GtkGesture *gesture;
   gdouble dx, dy;
@@ -172,7 +172,7 @@ gtk_gesture_rotate_update (GtkGesture       *gesture,
 
 static gboolean
 gtk_gesture_rotate_filter_event (GtkEventController *controller,
-                                 const GdkEvent     *event)
+                                 GdkEvent           *event)
 {
   /* Let 2-finger touchpad pinch events go through */
   if (gdk_event_get_event_type (event) == GDK_TOUCHPAD_PINCH)
@@ -192,7 +192,7 @@ gtk_gesture_rotate_filter_event (GtkEventController *controller,
 
 static gboolean
 gtk_gesture_rotate_handle_event (GtkEventController *controller,
-                                 const GdkEvent     *event,
+                                 GdkEvent           *event,
                                  double              x,
                                  double              y)
 {

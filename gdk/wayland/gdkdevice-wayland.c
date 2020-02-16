@@ -4467,7 +4467,7 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
                        GdkSeatCapabilities     capabilities,
                        gboolean                owner_events,
                        GdkCursor              *cursor,
-                       const GdkEvent         *event,
+                       GdkEvent               *event,
                        GdkSeatGrabPrepareFunc  prepare_func,
                        gpointer                prepare_func_data)
 {
@@ -4836,7 +4836,7 @@ _gdk_wayland_display_remove_seat (GdkWaylandDisplay *display_wayland,
 
 uint32_t
 _gdk_wayland_device_get_implicit_grab_serial (GdkWaylandDevice *device,
-                                              const GdkEvent   *event)
+                                              GdkEvent         *event)
 {
   GdkSeat *seat = gdk_device_get_seat (GDK_DEVICE (device));
   GdkEventSequence *sequence = NULL;
