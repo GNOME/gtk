@@ -80,12 +80,6 @@ check_event_sanity (GdkEvent *event)
   surface = gdk_event_get_surface (event);
   device = gdk_event_get_device (event);
 
-  if (gdk_event_get_event_type (event) == GDK_NOTHING)
-    {
-      g_warning ("Ignoring GDK_NOTHING events; they're good for nothing");
-      return FALSE;
-    }
-
   if (surface && display != gdk_surface_get_display (surface))
     {
       char *type = g_enum_to_string (GDK_TYPE_EVENT_TYPE, event->any.type);
@@ -552,7 +546,6 @@ gdk_event_get_time (const GdkEvent *event)
         return event->pad_group_mode.time;
       case GDK_CONFIGURE:
       case GDK_FOCUS_CHANGE:
-      case GDK_NOTHING:
       case GDK_DELETE:
       case GDK_GRAB_BROKEN:
       case GDK_EVENT_LAST:
@@ -624,7 +617,6 @@ gdk_event_get_state (const GdkEvent  *event,
       case GDK_DRAG_LEAVE:
       case GDK_DRAG_MOTION:
       case GDK_DROP_START:
-      case GDK_NOTHING:
       case GDK_DELETE:
       case GDK_GRAB_BROKEN:
       case GDK_PAD_BUTTON_PRESS:
@@ -1542,7 +1534,7 @@ G_DEFINE_BOXED_TYPE (GdkEventSequence, gdk_event_sequence,
 GdkEventType
 gdk_event_get_event_type (const GdkEvent *event)
 {
-  g_return_val_if_fail (event != NULL, GDK_NOTHING);
+  g_return_val_if_fail (event != NULL, 0);
 
   return event->any.type;
 }
