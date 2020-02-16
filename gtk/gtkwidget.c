@@ -1332,9 +1332,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * A list of css classes applied to this widget.
    */
   widget_props[PROP_CSS_CLASSES] =
-      g_param_spec_boxed ("classes",
-                          P_("Style Classes"),
-                          P_("List of classes"),
+      g_param_spec_boxed ("css-classes",
+                          P_("CSS Style Classes"),
+                          P_("List of CSS classes"),
                           G_TYPE_STRV,
                           GTK_PARAM_READWRITE);
 
@@ -13230,7 +13230,7 @@ gtk_widget_has_css_class (GtkWidget  *widget,
  *
  * Returns: (transfer full): a %NULL-terminated list of
  *   css classes currently applied to @widget. The returned
- *   list can be freed using g_strfreev.
+ *   list can be freed using g_strfreev().
  */
 char **
 gtk_widget_get_css_classes (GtkWidget *widget)
