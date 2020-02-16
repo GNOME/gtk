@@ -118,9 +118,9 @@ atk_key_event_from_gdk_event_key (GdkEventKey       *key,
   guint16 keycode;
 
   type = gdk_event_get_event_type ((GdkEvent *)key);
-  gdk_event_get_state ((GdkEvent *)key, &state);
-  gdk_event_get_keyval ((GdkEvent *)key, &keyval);
-  gdk_event_get_keycode ((GdkEvent *)key, &keycode);
+  state = gdk_event_get_modifier_state ((GdkEvent *)key);
+  keyval = gdk_key_event_get_keyval ((GdkEvent *)key);
+  keycode = gdk_key_event_get_keycode ((GdkEvent *)key);
 
   if (type == GDK_KEY_PRESS)
     event->type = ATK_KEY_EVENT_PRESS;
