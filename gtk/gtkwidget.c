@@ -2050,7 +2050,7 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
   gdouble x, y;
   graphene_point_t p;
 
-  event_widget = gtk_get_event_target ((GdkEvent *) event);
+  event_widget = GTK_WIDGET (gdk_event_get_target (event));
 
   if (event_widget == widget)
     return;
@@ -4947,7 +4947,7 @@ gtk_widget_event_internal (GtkWidget *widget,
   x = y = 0;
   translate_event_coordinates (event, &x, &y, widget);
 
-  if (widget == gtk_get_event_target (event))
+  if (widget == GTK_WIDGET (gdk_event_get_target (event)))
     return_val |= gtk_widget_run_controllers (widget, event, x, y, GTK_PHASE_TARGET);
 
   if (return_val == FALSE)
@@ -11920,7 +11920,7 @@ gtk_widget_cancel_event_sequence (GtkWidget             *widget,
   if (!event)
     return;
 
-  event_widget = gtk_get_event_target ((GdkEvent *) event);
+  event_widget = GTK_WIDGET (gdk_event_get_target (event));
 
   while (event_widget)
     {
