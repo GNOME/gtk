@@ -2851,7 +2851,6 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
           GdkDrag *drag;
           GdkPaintable *paintable;
           GdkContentProvider *content;
-          GValue value = G_VALUE_INIT;
 
           text = _gtk_text_get_selected_text (self);
           gtk_text_get_pixel_ranges (self, &ranges, &n_ranges);
@@ -2861,10 +2860,7 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
           else
             actions = GDK_ACTION_COPY;
 
-          g_value_init (&value, G_TYPE_STRING);
-          g_value_set_string (&value, text);
-          content = gdk_content_provider_new_for_value (&value);
-          g_value_unset (&value);
+          content = gdk_content_provider_new_typed (G_TYPE_STRING, text);
 
           drag = gdk_drag_begin (gdk_event_get_surface ((GdkEvent*) event),
                                  gdk_event_get_device ((GdkEvent*) event),

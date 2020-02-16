@@ -605,7 +605,6 @@ main (int argc, char **argv)
   GdkPixbuf *drag_icon;
   GdkTexture *texture;
   GdkContentProvider *content;
-  GValue value = G_VALUE_INIT;
   GtkDragSource *source;
   GdkContentFormats *targets;
   GtkDropTarget *dest;
@@ -673,10 +672,7 @@ main (int argc, char **argv)
   button = gtk_label_new ("Drag Here\n");
 
   source = gtk_drag_source_new ();
-  g_value_init (&value, G_TYPE_STRING);
-  g_value_set_string (&value, "I'm data!");
-  content = gdk_content_provider_new_for_value (&value);
-  g_value_unset (&value);
+  content = gdk_content_provider_new_typed (G_TYPE_STRING, "I'm data!");
   gtk_drag_source_set_content (source, content);
   g_object_unref (content);
   gtk_drag_source_set_actions (source, GDK_ACTION_COPY|GDK_ACTION_MOVE);

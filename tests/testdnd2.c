@@ -439,21 +439,17 @@ make_spinner (void)
   GtkWidget *spinner;
   GtkDragSource *source;
   GdkContentProvider *content;
-  GValue value = G_VALUE_INIT;
 
   spinner = gtk_spinner_new ();
   gtk_spinner_start (GTK_SPINNER (spinner));
 
-  g_value_init (&value, G_TYPE_STRING);
-  g_value_set_string (&value, "ACTIVE");
-  content = gdk_content_provider_new_for_value (&value);
+  content = gdk_content_provider_new_typed (G_TYPE_STRING, "ACTIVE");
   source = gtk_drag_source_new ();
   gtk_drag_source_set_content (source, content);
   g_signal_connect (source, "drag-begin", G_CALLBACK (spinner_drag_begin), spinner);
   gtk_widget_add_controller (spinner, GTK_EVENT_CONTROLLER (source));
 
   g_object_unref (content);
-  g_value_unset (&value);
 
   return spinner;
 }

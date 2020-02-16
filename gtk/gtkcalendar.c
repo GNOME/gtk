@@ -1166,8 +1166,6 @@ get_calendar_content (GtkCalendar *calendar)
   GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
   GDate *date;
   gchar str[128];
-  GValue value = G_VALUE_INIT;
-  GdkContentProvider *content;
 
   date = g_date_new_dmy (g_date_time_get_day_of_month (priv->date),
                          g_date_time_get_month (priv->date),
@@ -1175,12 +1173,7 @@ get_calendar_content (GtkCalendar *calendar)
   g_date_strftime (str, 127, "%x", date);
   g_free (date);
 
-  g_value_init (&value, G_TYPE_STRING);
-  g_value_set_string (&value, str);
-  content = gdk_content_provider_new_for_value (&value);
-  g_value_unset (&value);
-
-  return content;
+  return gdk_content_provider_new_typed (G_TYPE_STRING, str);
 }
 
 static void

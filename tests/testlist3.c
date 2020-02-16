@@ -6,15 +6,7 @@ prepare (GtkDragSource *source,
          double         y,
          GtkWidget     *row)
 {
-  GdkContentProvider *content;
-  GValue value = G_VALUE_INIT;
-
-  g_value_init (&value, GTK_TYPE_LIST_BOX_ROW);
-  g_value_set_object (&value, row);
-  content = gdk_content_provider_new_for_value (&value);
-  g_value_unset (&value);
-
-  return content;
+  return gdk_content_provider_new_typed (GTK_TYPE_LIST_BOX_ROW, row);
 }
 
 static void

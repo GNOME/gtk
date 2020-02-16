@@ -344,13 +344,10 @@ get_button_list (GdkClipboard *clipboard,
                        "GdkPixbuf");
   g_value_unset (&value);
 
-  g_value_init (&value, G_TYPE_STRING);
-  g_value_set_string (&value, "Hello Clipboard ☺");
   add_provider_button (box,
-                       gdk_content_provider_new_for_value (&value),
+                       gdk_content_provider_new_typed (G_TYPE_STRING, "Hello Clipboard ☺"),
                        clipboard,
                        "gchararry");
-  g_value_unset (&value);
 
   add_provider_button (box,
                        gdk_content_provider_new_for_bytes ("text/plain;charset=utf-8",

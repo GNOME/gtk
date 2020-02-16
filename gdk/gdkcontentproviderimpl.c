@@ -20,6 +20,8 @@
 
 #include "gdkcontentprovider.h"
 
+#include <gobject/gvaluecollector.h>
+
 #include "gdkcontentformats.h"
 #include "gdkcontentserializer.h"
 #include "gdkintl.h"
@@ -121,6 +123,44 @@ gdk_content_provider_new_for_value (const GValue *value)
   g_value_init (&content->value, G_VALUE_TYPE (value));
   g_value_copy (value, &content->value);
   
+  return GDK_CONTENT_PROVIDER (content);
+}
+
+/**
+ * gdk_content_provider_new_typed:
+ * @type: Type of value to follow
+ * ...: value
+ *
+ * Create a content provider that provides the value of the given
+ * @type.
+ *
+ * The value is provided using G_VALUE_COLLECT(), so the same rules
+ * apply as when calling g_object_new() or g_object_set().
+ *
+ * Returns: a new #GdkContentProvider
+ **/
+GdkContentProvider *
+gdk_content_provider_new_typed (GType type,
+                                ...)
+{
+  GdkContentProviderValue *content;
+  va_list args;
+  char *error;
+
+  content = g_object_new (GDK_TYPE_CONTENT_PROVIDER_VALUE, NULL);
+
+  va_start (args, type);
+  G_VALUE_COLLECT_INIT (&content->value, type, args, 0, &error);
+  if (error)
+    {
+      g_warning ("%s: %s", G_STRLOC, error);
+      g_free (error);
+      /* we purposely leak the value here, it might not be
+       * in a sane state if an error condition occoured
+       */
+    }
+  va_end (args);
+
   return GDK_CONTENT_PROVIDER (content);
 }
 
