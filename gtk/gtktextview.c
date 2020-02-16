@@ -7781,7 +7781,6 @@ gtk_text_view_drag_motion (GtkDropTarget *dest,
   GtkTextIter end;
   GdkRectangle target_rect;
   gint bx, by;
-  GdkAtom target;
   gboolean can_accept = FALSE;
 
   target_rect = priv->text_window->allocation;
@@ -7801,16 +7800,10 @@ gtk_text_view_drag_motion (GtkDropTarget *dest,
                                      &newplace,
                                      bx, by);  
 
-  target = gtk_drop_target_find_mimetype (dest);
-
-  if (target == NULL)
-    {
-      /* can't accept any of the offered targets */
-    }                                 
-  else if (gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
-                                                 &start, &end) &&
-           gtk_text_iter_compare (&newplace, &start) >= 0 &&
-           gtk_text_iter_compare (&newplace, &end) <= 0)
+  if (gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
+                                            &start, &end) &&
+      gtk_text_iter_compare (&newplace, &start) >= 0 &&
+      gtk_text_iter_compare (&newplace, &end) <= 0)
     {
       /* We're inside the selection. */
     }

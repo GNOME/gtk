@@ -213,26 +213,8 @@ item_drag_drop (GtkDropTarget *dest,
                int            x,
                int            y)
 {
-  if (gtk_drop_target_find_mimetype (dest))
-    {
-      gdk_drop_read_value_async (drop, GDK_TYPE_RGBA, G_PRIORITY_DEFAULT, NULL, got_color, dest);
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gboolean
-item_drag_motion (GtkDropTarget *dest,
-                  GdkDrop       *drop)
-{
-  if (gtk_drop_target_find_mimetype (dest) != NULL)
-    {
-      gdk_drop_status (drop, GDK_ACTION_COPY);
-      return TRUE;
-    }
-
-  return FALSE;
+  gdk_drop_read_value_async (drop, GDK_TYPE_RGBA, G_PRIORITY_DEFAULT, NULL, got_color, dest);
+  return TRUE;
 }
 
 static void
@@ -307,7 +289,6 @@ canvas_item_new (int i,
   formats = gdk_content_formats_new_for_gtype (GDK_TYPE_RGBA);
   dest = gtk_drop_target_new (formats, GDK_ACTION_COPY);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (item_drag_drop), NULL);
-  g_signal_connect (dest, "accept", G_CALLBACK (item_drag_motion), NULL);
   gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (dest));
   gdk_content_formats_unref (formats);
 
