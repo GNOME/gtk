@@ -45,6 +45,11 @@
 /* Forward declarations */
 static void        gdk_broadway_surface_finalize   (GObject            *object);
 
+static void        gdk_broadway_surface_layout_popup (GdkSurface     *surface,
+                                                      int             width,
+                                                      int             height,
+                                                      GdkPopupLayout *layout);
+
 #define SURFACE_IS_TOPLEVEL(surface)  TRUE
 
 G_DEFINE_TYPE (GdkBroadwaySurface, gdk_broadway_surface, GDK_TYPE_SURFACE)
@@ -455,51 +460,34 @@ gdk_broadway_surface_move (GdkSurface *surface,
 }
 
 static void
-gdk_broadway_surface_moved_to_rect (GdkSurface   *surface,
-                                    GdkRectangle  final_rect)
+gdk_broadway_surface_show_popup (GdkSurface     *surface,
+                                 int             width,
+                                 int             height,
+                                 GdkPopupLayout *layout)
 {
-  GdkSurface *toplevel;
-  int x, y;
-
-  if (surface->surface_type == GDK_SURFACE_POPUP)
-    toplevel = surface->parent;
-  else
-    toplevel = surface->transient_for;
-
-  gdk_surface_get_origin (toplevel, &x, &y);
-  x += final_rect.x;
-  y += final_rect.y;
-
-  if (final_rect.width != surface->width ||
-      final_rect.height != surface->height)
-    {
-      gdk_broadway_surface_move_resize (surface,
-                                        x, y,
-                                        final_rect.width, final_rect.height);
-    }
-  else
-    {
-      gdk_broadway_surface_move (surface, x, y);
-    }
+  gdk_broadway_surface_layout_popup (surface, width, height, layout);
+  gdk_surface_show (surface);
 }
 
 static void
-gdk_broadway_surface_move_to_rect (GdkSurface         *surface,
-                                   const GdkRectangle *rect,
-                                   GdkGravity          rect_anchor,
-                                   GdkGravity          surface_anchor,
-                                   GdkAnchorHints      anchor_hints,
-                                   gint                rect_anchor_dx,
-                                   gint                rect_anchor_dy)
+gdk_broadway_surface_layout_popup (GdkSurface     *surface,
+                                   int             width,
+                                   int             height,
+                                   GdkPopupLayout *layout)
 {
-  gdk_surface_move_to_rect_helper (surface,
-                                   rect,
-                                   rect_anchor,
-                                   surface_anchor,
-                                   anchor_hints,
-                                   rect_anchor_dx,
-                                   rect_anchor_dy,
-                                   gdk_broadway_surface_moved_to_rect);
+  GdkRectangle final_rect;
+
+  gdk_surface_layout_popup_helper (surface,
+                                   width,
+                                   height,
+                                   layout,
+                                   &final_rect);
+
+  gdk_broadway_surface_move_resize (surface,
+                                    final_rect.x,
+                                    final_rect.y,
+                                    final_rect.width,
+                                    final_rect.height);
 }
 
 static void
@@ -1393,7 +1381,8 @@ gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
   impl_class->lower = gdk_broadway_surface_lower;
   impl_class->restack_toplevel = gdk_broadway_surface_restack_toplevel;
   impl_class->toplevel_resize = gdk_broadway_surface_toplevel_resize;
-  impl_class->move_to_rect = gdk_broadway_surface_move_to_rect;
+  impl_class->show_popup = gdk_broadway_surface_show_popup;
+  impl_class->layout_popup = gdk_broadway_surface_layout_popup;
   impl_class->get_geometry = gdk_broadway_surface_get_geometry;
   impl_class->get_root_coords = gdk_broadway_surface_get_root_coords;
   impl_class->get_device_state = gdk_broadway_surface_get_device_state;
