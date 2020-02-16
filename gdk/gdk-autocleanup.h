@@ -35,6 +35,7 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkGLContext, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkKeymap, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkMonitor, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkSeat, g_object_unref)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkPopupLayout, gdk_popup_layout_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkVulkanContext, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkSurface, g_object_unref)
 

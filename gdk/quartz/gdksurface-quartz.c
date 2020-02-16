@@ -1245,18 +1245,21 @@ gdk_surface_quartz_toplevel_resize (GdkSurface *surface,
 }
 
 static void
-gdk_quartz_surface_moved_to_rect (GdkSurface   *surface,
-                                  GdkRectangle  final_rect)
+gdk_quartz_surface_layout_popup (GdkSurface     *surface,
+                                 int             width,
+                                 int             height,
+                                 GdkPopupLayout *layout)
 {
-  GdkSurface *toplevel;
+  GdkRectangle final_rect;
   int x, y;
 
-  if (surface->surface_type == GDK_SURFACE_POPUP)
-    toplevel = surface->parent;
-  else
-    toplevel = surface->transient_for;
+  gdk_surface_layout_popup_helper (surface,
+                                   width,
+                                   height,
+                                   layout,
+                                   &final_rect);
 
-  gdk_surface_get_origin (toplevel, &x, &y);
+  gdk_surface_get_origin (surface->parent, &x, &y);
   x += final_rect.x;
   y += final_rect.y;
 
@@ -1264,32 +1267,42 @@ gdk_quartz_surface_moved_to_rect (GdkSurface   *surface,
       final_rect.height != surface->height)
     {
       window_quartz_move_resize (surface,
-                                 x, y,
-                                 final_rect.width, final_rect.height);
+                                 x,
+                                 y,
+                                 final_rect.width,
+                                 final_rect.height);
     }
   else
     {
-      window_quartz_resize (surface, final_rect.width, final_rect.height);
+      window_quartz_move_resize (surface, x, y);
     }
 }
 
 static void
-gdk_quartz_surface_move_to_rect (GdkSurface         *surface,
-                                 const GdkRectangle *rect,
-                                 GdkGravity          rect_anchor,
-                                 GdkGravity          surface_anchor,
-                                 GdkAnchorHints      anchor_hints,
-                                 gint                rect_anchor_dx,
-                                 gint                rect_anchor_dy)
+gdk_quartz_surface_show_popup (GdkSurface     *surface,
+                               int             width,
+                               int             height,
+                               GdkPopupLayout *layout)
 {
-  gdk_surface_move_to_rect_helper (surface,
-                                   rect,
-                                   rect_anchor,
-                                   surface_anchor,
-                                   anchor_hints,
-                                   rect_anchor_dx,
-                                   rect_anchor_dy,
-                                   gdk_quartz_surface_moved_to_rect);
+  gboolean was_mapped;
+  gboolean did_show;
+
+  was_mapped = GDK_SURFACE_IS_MAPPED (surface);
+
+  gdk_quartz_surface_layout_popup (surface, width, height, layout);
+  gdk_surface_raise (surface);
+
+  if (!was_mapped)
+    gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
+
+  did_show = _gdk_surface_update_viewable (surface);
+  gdk_quartz_surface_show (surface, !did_show ? was_mapped : TRUE);
+
+  if (!was_mapped)
+    {
+      if (gdk_surface_is_viewable (surface))
+        gdk_surface_invalidate_rect (surface, NULL);
+    }
 }
 
 /* Get the toplevel ordering from NSApp and update our own list. We do
@@ -2675,7 +2688,8 @@ gdk_surface_impl_quartz_class_init (GdkSurfaceImplQuartzClass *klass)
   impl_class->lower = gdk_surface_quartz_lower;
   impl_class->restack_toplevel = gdk_surface_quartz_restack_toplevel;
   impl_class->toplevel_resize = gdk_surface_quartz_toplevel_resize;
-  impl_class->move_to_rect = gdk_surface_quartz_move_to_rect;
+  impl_class->queue_relayout = gdk_surface_quartz_queue_relayout;
+  impl_class->finish_relayout = gdk_surface_quartz_finish_relayout;
   impl_class->get_geometry = gdk_surface_quartz_get_geometry;
   impl_class->get_root_coords = gdk_surface_quartz_get_root_coords;
   impl_class->get_device_state = gdk_surface_quartz_get_device_state;
