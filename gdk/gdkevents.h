@@ -124,7 +124,6 @@ typedef union  _GdkEvent	    GdkEvent;
 
 /**
  * GdkEventType:
- * @GDK_NOTHING: a special code to indicate a null event.
  * @GDK_DELETE: the window manager has requested that the toplevel surface be
  *   hidden or destroyed, usually when the user clicks on a special icon in the
  *   title bar.
@@ -181,7 +180,6 @@ typedef union  _GdkEvent	    GdkEvent;
  */
 typedef enum
 {
-  GDK_NOTHING,
   GDK_DELETE,
   GDK_MOTION_NOTIFY,
   GDK_BUTTON_PRESS,

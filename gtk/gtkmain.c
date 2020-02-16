@@ -1834,9 +1834,6 @@ gtk_main_do_event (GdkEvent *event)
    */
   switch ((guint)event->any.type)
     {
-    case GDK_NOTHING:
-      break;
-
     case GDK_DELETE:
       g_object_ref (target_widget);
       if (!gtk_window_group_get_current_grab (window_group) ||
