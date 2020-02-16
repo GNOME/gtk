@@ -69,7 +69,7 @@
  */
 
 enum {
-  MOVED_TO_RECT,
+  POPUP_LAYOUT_CHANGED,
   SIZE_CHANGED,
   RENDER,
   EVENT,
@@ -247,36 +247,30 @@ maybe_flip_position (gint      bounds_pos,
 }
 
 void
-gdk_surface_move_to_rect_helper (GdkSurface            *surface,
-                                 const GdkRectangle    *rect,
-                                 GdkGravity             rect_anchor,
-                                 GdkGravity             surface_anchor,
-                                 GdkAnchorHints         anchor_hints,
-                                 gint                   rect_anchor_dx,
-                                 gint                   rect_anchor_dy,
-                                 GdkSurfaceMovedToRect  moved_to_rect)
+gdk_surface_layout_popup_helper (GdkSurface     *surface,
+                                 int             width,
+                                 int             height,
+                                 GdkPopupLayout *layout,
+                                 GdkRectangle   *out_final_rect)
 {
-  GdkSurface *toplevel;
   GdkDisplay *display;
   GdkMonitor *monitor;
   GdkRectangle bounds;
-  GdkRectangle root_rect = *rect;
-  GdkRectangle flipped_rect;
+  GdkRectangle root_rect;
+  GdkGravity rect_anchor;
+  GdkGravity surface_anchor;
+  int rect_anchor_dx;
+  int rect_anchor_dy;
+  GdkAnchorHints anchor_hints;
   GdkRectangle final_rect;
   gboolean flipped_x;
   gboolean flipped_y;
   int x, y;
 
-  /* This implementation only works for backends that
-   * can provide root coordinates via get_root_coords.
-   * Other backends need to implement move_to_rect.
-   */
-  if (surface->surface_type == GDK_SURFACE_POPUP)
-    toplevel = surface->parent;
-  else
-    toplevel = surface->transient_for;
+  g_return_if_fail (surface->surface_type == GDK_SURFACE_POPUP);
 
-  gdk_surface_get_root_coords (toplevel,
+  root_rect = *gdk_popup_layout_get_anchor_rect (layout);
+  gdk_surface_get_root_coords (surface->parent,
                                root_rect.x,
                                root_rect.y,
                                &root_rect.x,
@@ -286,30 +280,33 @@ gdk_surface_move_to_rect_helper (GdkSurface            *surface,
   monitor = get_monitor_for_rect (display, &root_rect);
   gdk_monitor_get_workarea (monitor, &bounds);
 
-  flipped_rect.width = surface->width - surface->shadow_left - surface->shadow_right;
-  flipped_rect.height = surface->height - surface->shadow_top - surface->shadow_bottom;
-  flipped_rect.x = maybe_flip_position (bounds.x,
-                                        bounds.width,
-                                        root_rect.x,
-                                        root_rect.width,
-                                        flipped_rect.width,
-                                        get_anchor_x_sign (rect_anchor),
-                                        get_anchor_x_sign (surface_anchor),
-                                        rect_anchor_dx,
-                                        anchor_hints & GDK_ANCHOR_FLIP_X,
-                                        &flipped_x);
-  flipped_rect.y = maybe_flip_position (bounds.y,
-                                        bounds.height,
-                                        root_rect.y,
-                                        root_rect.height,
-                                        flipped_rect.height,
-                                        get_anchor_y_sign (rect_anchor),
-                                        get_anchor_y_sign (surface_anchor),
-                                        rect_anchor_dy,
-                                        anchor_hints & GDK_ANCHOR_FLIP_Y,
-                                        &flipped_y);
+  rect_anchor = gdk_popup_layout_get_rect_anchor (layout);
+  surface_anchor = gdk_popup_layout_get_surface_anchor (layout);
+  gdk_popup_layout_get_offset (layout, &rect_anchor_dx, &rect_anchor_dy);
+  anchor_hints = gdk_popup_layout_get_anchor_hints (layout);
 
-  final_rect = flipped_rect;
+  final_rect.width = width - surface->shadow_left - surface->shadow_right;
+  final_rect.height = height - surface->shadow_top - surface->shadow_bottom;
+  final_rect.x = maybe_flip_position (bounds.x,
+                                      bounds.width,
+                                      root_rect.x,
+                                      root_rect.width,
+                                      final_rect.width,
+                                      get_anchor_x_sign (rect_anchor),
+                                      get_anchor_x_sign (surface_anchor),
+                                      rect_anchor_dx,
+                                      anchor_hints & GDK_ANCHOR_FLIP_X,
+                                      &flipped_x);
+  final_rect.y = maybe_flip_position (bounds.y,
+                                      bounds.height,
+                                      root_rect.y,
+                                      root_rect.height,
+                                      final_rect.height,
+                                      get_anchor_y_sign (rect_anchor),
+                                      get_anchor_y_sign (surface_anchor),
+                                      rect_anchor_dy,
+                                      anchor_hints & GDK_ANCHOR_FLIP_Y,
+                                      &flipped_y);
 
   if (anchor_hints & GDK_ANCHOR_SLIDE_X)
     {
@@ -353,30 +350,30 @@ gdk_surface_move_to_rect_helper (GdkSurface            *surface,
         final_rect.height = bounds.y + bounds.height - final_rect.y;
     }
 
-  flipped_rect.x -= surface->shadow_left;
-  flipped_rect.y -= surface->shadow_top;
-  flipped_rect.width += surface->shadow_left + surface->shadow_right;
-  flipped_rect.height += surface->shadow_top + surface->shadow_bottom;
-
   final_rect.x -= surface->shadow_left;
   final_rect.y -= surface->shadow_top;
   final_rect.width += surface->shadow_left + surface->shadow_right;
   final_rect.height += surface->shadow_top + surface->shadow_bottom;
 
-  gdk_surface_get_origin (toplevel, &x, &y);
+  gdk_surface_get_origin (surface->parent, &x, &y);
   final_rect.x -= x;
   final_rect.y -= y;
-  flipped_rect.x -= x;
-  flipped_rect.y -= y;
 
-  moved_to_rect (surface, final_rect);
+  if (flipped_x)
+    {
+      rect_anchor = gdk_gravity_flip_horizontally (rect_anchor);
+      surface_anchor = gdk_gravity_flip_horizontally (surface_anchor);
+    }
+  if (flipped_y)
+    {
+      rect_anchor = gdk_gravity_flip_vertically (rect_anchor);
+      surface_anchor = gdk_gravity_flip_vertically (surface_anchor);
+    }
 
-  g_signal_emit_by_name (surface,
-                         "moved-to-rect",
-                         &flipped_rect,
-                         &final_rect,
-                         flipped_x,
-                         flipped_y);
+  surface->popup.rect_anchor = rect_anchor;
+  surface->popup.surface_anchor = surface_anchor;
+
+  *out_final_rect = final_rect;
 }
 
 static void
@@ -481,42 +478,24 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   /**
-   * GdkSurface::moved-to-rect:
-   * @surface: the #GdkSurface that moved
-   * @flipped_rect: (nullable): the position of @surface after any possible
-   *                flipping or %NULL if the backend can't obtain it
-   * @final_rect: (nullable): the final position of @surface or %NULL if the
-   *              backend can't obtain it
-   * @flipped_x: %TRUE if the anchors were flipped horizontally
-   * @flipped_y: %TRUE if the anchors were flipped vertically
+   * GdkSurface::popup-layout-changed
+   * @surface: the #GdkSurface that was laid out
    *
-   * Emitted when the position of @surface is finalized after being moved to a
-   * destination rectangle.
+   * Emitted when the layout of a popup @surface has changed, e.g. if the popup
+   * layout was reactive and after the parent moved causing the popover to end
+   * up partially off-screen.
    *
-   * @surface might be flipped over the destination rectangle in order to keep
-   * it on-screen, in which case @flipped_x and @flipped_y will be set to %TRUE
-   * accordingly.
-   *
-   * @flipped_rect is the ideal position of @surface after any possible
-   * flipping, but before any possible sliding. @final_rect is @flipped_rect,
-   * but possibly translated in the case that flipping is still ineffective in
-   * keeping @surface on-screen.
-   * Stability: Private
    */
-  signals[MOVED_TO_RECT] =
-    g_signal_new (g_intern_static_string ("moved-to-rect"),
+  signals[POPUP_LAYOUT_CHANGED] =
+    g_signal_new (g_intern_static_string ("popup-layout-changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_FIRST,
                   0,
                   NULL,
                   NULL,
-                  _gdk_marshal_VOID__POINTER_POINTER_BOOLEAN_BOOLEAN,
+                  NULL,
                   G_TYPE_NONE,
-                  4,
-                  G_TYPE_POINTER,
-                  G_TYPE_POINTER,
-                  G_TYPE_BOOLEAN,
-                  G_TYPE_BOOLEAN);
+                  0);
 
   /**
    * GdkSurface::size-changed:
@@ -805,9 +784,8 @@ gdk_surface_new_temp (GdkDisplay         *display,
  *
  * Create a new popup surface.
  *
- * The surface will be attached to @parent and can
- * be positioned relative to it using
- * gdk_surface_move_to_rect().
+ * The surface will be attached to @parent and can be positioned relative to it
+ * using gdk_surface_show_popup() or later using gdk_surface_layout_popup().
  *
  * Returns: (transfer full): a new #GdkSurface
  */
@@ -1985,14 +1963,6 @@ gdk_surface_restack (GdkSurface     *surface,
   GDK_SURFACE_GET_CLASS (surface)->restack_toplevel (surface, sibling, above);
 }
 
-static void
-grab_prepare_func (GdkSeat    *seat,
-                   GdkSurface *surface,
-                   gpointer    data)
-{
-  gdk_surface_show_internal (surface, TRUE);
-}
-
 /**
  * gdk_surface_show:
  * @surface: a #GdkSurface
@@ -2004,25 +1974,18 @@ grab_prepare_func (GdkSeat    *seat,
  * This function maps a surface so it’s visible onscreen. Its opposite
  * is gdk_surface_hide().
  *
+ * This function may not be used on a #GdkSurface with the surface type
+ * GTK_SURFACE_POPUP.
+ *
  * When implementing a #GtkWidget, you should call this function on the widget's
  * #GdkSurface as part of the “map” method.
  */
 void
 gdk_surface_show (GdkSurface *surface)
 {
-  if (surface->autohide)
-    {
-      gdk_seat_grab (gdk_display_get_default_seat (surface->display),
-                     surface,
-                     GDK_SEAT_CAPABILITY_ALL,
-                     TRUE,
-                     NULL, NULL,
-                     grab_prepare_func, NULL);
-    }
-  else
-    {
-      gdk_surface_show_internal (surface, TRUE);
-    }
+  g_return_if_fail (surface->surface_type != GDK_SURFACE_POPUP);
+
+  gdk_surface_show_internal (surface, TRUE);
 }
 
 /**
@@ -2084,6 +2047,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   GDK_SURFACE_GET_CLASS (surface)->hide (surface);
 
+  surface->popup.rect_anchor = 0;
+  surface->popup.surface_anchor = 0;
   surface->x = 0;
   surface->y = 0;
 }
@@ -2109,52 +2074,70 @@ gdk_surface_resize (GdkSurface *surface,
 }
 
 /**
- * gdk_surface_move_to_rect:
- * @surface: the #GdkSurface to move
- * @rect: (not nullable): the destination #GdkRectangle to align @surface with
- * @rect_anchor: the point on @rect to align with @surface's anchor point
- * @surface_anchor: the point on @surface to align with @rect's anchor point
- * @anchor_hints: positioning hints to use when limited on space
- * @rect_anchor_dx: horizontal offset to shift @surface, i.e. @rect's anchor
- *                  point
- * @rect_anchor_dy: vertical offset to shift @surface, i.e. @rect's anchor point
+ * gdk_surface_present_popup:
+ * @surface: the popup #GdkSurface to show
+ * @width: the unconstrained popup width to layout
+ * @height: the unconstrained popup height to layout
+ * @layout: the #GdkPopupLayout object used to layout
  *
- * Moves @surface to @rect, aligning their anchor points.
+ * Present @surface after having processed the #GdkPopupLayout rules. If the
+ * popup was previously now showing, it will be showed, otherwise it will
+ * change position according to @layout.
  *
- * @rect is relative to the top-left corner of the surface that @surface is
- * transient for. @rect_anchor and @surface_anchor determine anchor points on
- * @rect and @surface to pin together. @rect's anchor point can optionally be
- * offset by @rect_anchor_dx and @rect_anchor_dy, which is equivalent to
- * offsetting the position of @surface.
+ * After calling this function, the result of the layout can be queried
+ * using gdk_surface_get_position(), gdk_surface_get_width(),
+ * gdk_surface_get_height(), gdk_surface_get_popup_rect_anchor() and
+ * gdk_surface_get_popup_surface_anchor().
  *
- * @anchor_hints determines how @surface will be moved if the anchor points cause
- * it to move off-screen. For example, %GDK_ANCHOR_FLIP_X will replace
- * %GDK_GRAVITY_NORTH_WEST with %GDK_GRAVITY_NORTH_EAST and vice versa if
- * @surface extends beyond the left or right edges of the monitor.
+ * Presenting may have fail, for example if it was immediately hidden if the
+ * @surface was set to autohide.
  *
- * Connect to the #GdkSurface::moved-to-rect signal to find out how it was
- * actually positioned.
+ * Returns: %FALSE if it failed to be presented, otherwise %TRUE.
  */
-void
-gdk_surface_move_to_rect (GdkSurface          *surface,
-                          const GdkRectangle *rect,
-                          GdkGravity          rect_anchor,
-                          GdkGravity          surface_anchor,
-                          GdkAnchorHints      anchor_hints,
-                          gint                rect_anchor_dx,
-                          gint                rect_anchor_dy)
+gboolean
+gdk_surface_present_popup (GdkSurface     *surface,
+                           int             width,
+                           int             height,
+                           GdkPopupLayout *layout)
 {
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-  g_return_if_fail (surface->parent || surface->transient_for);
-  g_return_if_fail (rect);
+  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
+  g_return_val_if_fail (surface->parent, FALSE);
+  g_return_val_if_fail (layout, FALSE);
+  g_return_val_if_fail (!GDK_SURFACE_DESTROYED (surface), FALSE);
+  g_return_val_if_fail (width > 0 && height > 0, FALSE);
 
-  GDK_SURFACE_GET_CLASS (surface)->move_to_rect (surface,
-                                                 rect,
-                                                 rect_anchor,
-                                                 surface_anchor,
-                                                 anchor_hints,
-                                                 rect_anchor_dx,
-                                                 rect_anchor_dy);
+  return GDK_SURFACE_GET_CLASS (surface)->present_popup (surface,
+                                                         width,
+                                                         height,
+                                                         layout);
+}
+
+/**
+ * gdk_surface_get_popup_surface_anchor:
+ * @surface: a #GdkSurface
+ *
+ * Get the current popup surface anchor. The value returned may chage after
+ * calling gdk_surface_show_popup(), gdk_surface_layout_popup() or after the
+ * "popup-layout-changed" is emitted.
+ */
+GdkGravity
+gdk_surface_get_popup_surface_anchor (GdkSurface *surface)
+{
+  return surface->popup.surface_anchor;
+}
+
+/**
+ * gdk_surface_get_popup_rect_anchor:
+ * @surface: a #GdkSurface
+ *
+ * Get the current popup anchor rectangle anchor. The value
+ * returned may chage after calling gdk_surface_show_popup(),
+ * gdk_surface_layout_popup() or after the "popup-layout-changed" is emitted.
+ */
+GdkGravity
+gdk_surface_get_popup_rect_anchor (GdkSurface *surface)
+{
+  return surface->popup.rect_anchor;
 }
 
 static void
