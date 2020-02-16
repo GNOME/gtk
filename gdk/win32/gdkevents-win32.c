@@ -763,7 +763,6 @@ _gdk_win32_print_event (const GdkEvent *event)
   switch (event->any.type)
     {
 #define CASE(x) case x: g_print (#x); break;
-    CASE (GDK_NOTHING);
     CASE (GDK_DELETE);
     CASE (GDK_DESTROY);
     CASE (GDK_MOTION_NOTIFY);
