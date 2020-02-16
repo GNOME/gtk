@@ -126,8 +126,6 @@ static void gtk_color_button_clicked       (GtkButton        *button,
 
 static guint color_button_signals[LAST_SIGNAL] = { 0 };
 
-static const char *drop_types[] = { "application/x-color" };
-
 static void gtk_color_button_iface_init (GtkColorChooserInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkColorButton, gtk_color_button, GTK_TYPE_WIDGET,
@@ -258,13 +256,8 @@ gtk_color_button_drag_drop (GtkDropTarget  *dest,
                             int             y,
                             GtkColorButton *button)
 {
-  if (gdk_drop_has_value (drop, GDK_TYPE_RGBA))
-    {
-      gdk_drop_read_value_async (drop, GDK_TYPE_RGBA, G_PRIORITY_DEFAULT, NULL, got_color, button);
-      return TRUE;
-    }
-
-  return FALSE;
+  gdk_drop_read_value_async (drop, GDK_TYPE_RGBA, G_PRIORITY_DEFAULT, NULL, got_color, button);
+  return TRUE;
 }
 
 static void
@@ -302,7 +295,7 @@ gtk_color_button_init (GtkColorButton *button)
   GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
   PangoLayout *layout;
   PangoRectangle rect;
-  GdkContentFormats *targets;
+  GdkContentFormats *formats;
   GtkDragSource *source;
   GtkDropTarget *dest;
 
@@ -328,11 +321,11 @@ gtk_color_button_init (GtkColorButton *button)
   priv->rgba.alpha = 1;
   priv->use_alpha = FALSE;
 
-  targets = gdk_content_formats_new (drop_types, G_N_ELEMENTS (drop_types));
-  dest = gtk_drop_target_new (targets, GDK_ACTION_COPY);
+  formats = gdk_content_formats_new_for_gtype (GDK_TYPE_RGBA);
+  dest = gtk_drop_target_new (formats, GDK_ACTION_COPY);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_color_button_drag_drop), button);
   gtk_widget_add_controller (GTK_WIDGET (button), GTK_EVENT_CONTROLLER (dest));
-  gdk_content_formats_unref (targets);
+  gdk_content_formats_unref (formats);
 
   source = gtk_drag_source_new ();
   g_signal_connect (source, "prepare", G_CALLBACK (gtk_color_button_drag_prepare), button);
