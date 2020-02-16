@@ -105,6 +105,7 @@ gtk_event_controller_filter_event_default (GtkEventController *self,
         }
 
       target = GTK_WIDGET (gdk_event_get_related_target (event));
+
       if (target)
         {
           native2 = GTK_WIDGET (gtk_widget_get_native (target));
@@ -320,8 +321,8 @@ gtk_event_controller_handle_event (GtkEventController *controller,
  * gtk_event_controller_handle_crossing:
  * @controller: a #GtkEventController
  * @crossing: a #GtkCrossingData
- * @x: event position in widget coordinates
- * @y: event position in widget coordinates
+ * @x: translated event coordinates
+ * @y: translated event coordinates
  *
  * Feeds a crossing event into @controller, so it can be interpreted
  * and the controller actions triggered.
