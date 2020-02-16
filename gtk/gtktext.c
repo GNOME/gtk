@@ -6229,21 +6229,14 @@ gtk_text_drag_accept (GtkDropTarget *dest,
                       GtkText       *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GdkDragAction suggested_action;
 
-  if (priv->editable &&
-      gtk_drop_target_find_mimetype (dest) != NULL)
-    {
-      suggested_action = GDK_ACTION_COPY | GDK_ACTION_MOVE;
-    }
-  else
-    {
-      /* Entry not editable, or no text */
-      suggested_action = 0;
-    }
+  if (!priv->editable)
+    return FALSE;
 
-  gdk_drop_status (drop, suggested_action);
-  return suggested_action != 0;
+  if ((gdk_drop_get_actions (drop) & gtk_drop_target_get_actions (dest)) == 0)
+    return FALSE;
+
+  return gdk_content_formats_match (gtk_drop_target_get_formats (dest), gdk_drop_get_formats (drop));
 }
 
 static void
@@ -6259,8 +6252,7 @@ gtk_text_drag_motion (GtkDropTarget *dest,
   old_position = priv->dnd_position;
   new_position = gtk_text_find_position (self, x + priv->scroll_offset);
 
-  if (priv->editable &&
-      gtk_drop_target_find_mimetype (dest) != NULL)
+  if (priv->editable)
     {
       if (priv->selection_bound == priv->current_pos ||
           new_position < priv->selection_bound ||
