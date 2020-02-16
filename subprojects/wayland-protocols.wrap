@@ -1,0 +1,4 @@
+[wrap-git]
+directory=wayland-protocols
+url=https://gitlab.freedesktop.org/jadahl/wayland-protocols.git
+revision=wip/meson
