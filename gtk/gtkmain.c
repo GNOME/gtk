@@ -1651,8 +1651,6 @@ gtk_main_do_event (GdkEvent *event)
   if (!target_widget)
     goto cleanup;
 
-  gdk_event_set_target (event, G_OBJECT (target_widget));
-
   window_group = gtk_main_get_window_group (target_widget);
   device = gdk_event_get_device (event);
 
