@@ -80,59 +80,9 @@ gtk_event_controller_unset_widget (GtkEventController *self)
 }
 
 static gboolean
-same_native (GtkWidget *widget,
-             GtkWidget *target)
-{
-  GtkWidget *native;
-  GtkWidget *native2;
-
-  if (!widget || !target)
-    return TRUE;
-
-  native = GTK_WIDGET (gtk_widget_get_native (widget));
-  native2 = GTK_WIDGET (gtk_widget_get_native (widget));
-
-  return native == native2;
-}
-
-static gboolean
 gtk_event_controller_filter_event_default (GtkEventController *self,
                                            const GdkEvent     *event)
 {
-  GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (self);
-
-  if (priv->widget && !gtk_widget_is_sensitive (priv->widget))
-    return TRUE;
-
-  if (priv->limit == GTK_LIMIT_SAME_NATIVE)
-    {
-      if (same_native (priv->widget, GTK_WIDGET (gdk_event_get_target (event))))
-        return FALSE;
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gboolean
-gtk_event_controller_filter_crossing_default (GtkEventController    *self,
-                                              const GtkCrossingData *crossing)
-{
-  GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (self);
-
-  if (priv->widget && !gtk_widget_is_sensitive (priv->widget))
-    return TRUE;
-
-  if (priv->limit == GTK_LIMIT_SAME_NATIVE)
-    {
-      if (same_native (priv->widget, crossing->old_target) &&
-          same_native (priv->widget, crossing->new_target))
-        return FALSE;
-
-      return TRUE;
-    }
-
   return FALSE;
 }
 
@@ -229,7 +179,6 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
   klass->set_widget = gtk_event_controller_set_widget;
   klass->unset_widget = gtk_event_controller_unset_widget;
   klass->filter_event = gtk_event_controller_filter_event_default;
-  klass->filter_crossing = gtk_event_controller_filter_crossing_default;
   klass->handle_event = gtk_event_controller_handle_event_default;
   klass->handle_crossing = gtk_event_controller_handle_crossing_default;
 
@@ -295,10 +244,68 @@ gtk_event_controller_init (GtkEventController *controller)
   priv->limit = GTK_LIMIT_SAME_NATIVE;
 }
 
+static gboolean
+same_native (GtkWidget *widget,
+             GtkWidget *target)
+{
+  GtkWidget *native;
+  GtkWidget *native2;
+
+  if (!widget || !target)
+    return TRUE;
+
+  native = GTK_WIDGET (gtk_widget_get_native (widget));
+  native2 = GTK_WIDGET (gtk_widget_get_native (widget));
+
+  return native == native2;
+}
+
+static gboolean
+gtk_event_controller_filter_event (GtkEventController *controller,
+                                   const GdkEvent     *event,
+                                   GtkWidget          *target)
+{
+  GtkEventControllerPrivate *priv;
+  GtkEventControllerClass *controller_class;
+
+  priv = gtk_event_controller_get_instance_private (controller);
+
+  if (priv->widget && !gtk_widget_is_sensitive (priv->widget))
+    return TRUE;
+
+  if (priv->limit == GTK_LIMIT_SAME_NATIVE &&
+      !same_native (priv->widget, target))
+    return TRUE;
+
+  controller_class = GTK_EVENT_CONTROLLER_GET_CLASS (controller);
+
+  return controller_class->filter_event (controller, event);
+}
+
+static gboolean
+gtk_event_controller_filter_crossing (GtkEventController    *controller,
+                                      const GtkCrossingData *data)
+{
+  GtkEventControllerPrivate *priv;
+
+  priv = gtk_event_controller_get_instance_private (controller);
+
+  if (priv->widget && !gtk_widget_is_sensitive (priv->widget))
+    return TRUE;
+
+  if (priv->limit == GTK_LIMIT_SAME_NATIVE &&
+      (!same_native (priv->widget, data->old_target) ||
+       !same_native (priv->widget, data->new_target)))
+    return TRUE;
+
+  return FALSE;
+}
+
 /**
  * gtk_event_controller_handle_event:
  * @controller: a #GtkEventController
  * @event: a #GdkEvent
+ * @target: the target widget
  * @x: event position in widget coordinates, or 0 if not a pointer event
  * @y: event position in widget coordinates, or 0 if not a pointer event
  *
@@ -311,6 +318,7 @@ gtk_event_controller_init (GtkEventController *controller)
 gboolean
 gtk_event_controller_handle_event (GtkEventController *controller,
                                    const GdkEvent     *event,
+                                   GtkWidget          *target,
                                    double              x,
                                    double              y)
 {
@@ -320,17 +328,14 @@ gtk_event_controller_handle_event (GtkEventController *controller,
   g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER (controller), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  controller_class = GTK_EVENT_CONTROLLER_GET_CLASS (controller);
-
-  if (controller_class->filter_event (controller, event))
+  if (gtk_event_controller_filter_event (controller, event, target))
     return retval;
 
-  if (controller_class->handle_event)
-    {
-      g_object_ref (controller);
-      retval = controller_class->handle_event (controller, event, x, y);
-      g_object_unref (controller);
-    }
+  controller_class = GTK_EVENT_CONTROLLER_GET_CLASS (controller);
+
+  g_object_ref (controller);
+  retval = controller_class->handle_event (controller, event, x, y);
+  g_object_unref (controller);
 
   return retval;
 }
@@ -356,10 +361,10 @@ gtk_event_controller_handle_crossing (GtkEventController    *controller,
   g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
   g_return_if_fail (crossing != NULL);
 
-  controller_class = GTK_EVENT_CONTROLLER_GET_CLASS (controller);
-
-  if (controller_class->filter_crossing (controller, crossing))
+  if (gtk_event_controller_filter_crossing (controller, crossing))
     return;
+
+  controller_class = GTK_EVENT_CONTROLLER_GET_CLASS (controller);
 
   g_object_ref (controller);
   controller_class->handle_crossing (controller, crossing, x, y);

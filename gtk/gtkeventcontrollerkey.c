@@ -474,13 +474,13 @@ gtk_event_controller_key_forward (GtkEventControllerKey *controller,
   if (!gtk_widget_get_realized (widget))
     gtk_widget_realize (widget);
 
-  if (gtk_widget_run_controllers (widget, controller->current_event, 0, 0,
+  if (gtk_widget_run_controllers (widget, controller->current_event, widget, 0, 0,
                                   GTK_PHASE_CAPTURE))
     return TRUE;
-  if (gtk_widget_run_controllers (widget, controller->current_event, 0, 0,
+  if (gtk_widget_run_controllers (widget, controller->current_event, widget, 0, 0,
                                   GTK_PHASE_TARGET))
     return TRUE;
-  if (gtk_widget_run_controllers (widget, controller->current_event, 0, 0,
+  if (gtk_widget_run_controllers (widget, controller->current_event, widget, 0, 0,
                                   GTK_PHASE_BUBBLE))
     return TRUE;
 
