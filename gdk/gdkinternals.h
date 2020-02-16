@@ -124,12 +124,6 @@ extern gint       _gdk_screen_number;
 
 GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
 
-void     gdk_event_set_pointer_emulated (GdkEvent *event,
-                                         gboolean  emulated);
-
-void     gdk_event_set_scancode        (GdkEvent *event,
-                                        guint16 scancode);
-
 void   _gdk_event_emit               (GdkEvent   *event);
 GList* _gdk_event_queue_find_first   (GdkDisplay *display);
 void   _gdk_event_queue_remove_link  (GdkDisplay *display,
