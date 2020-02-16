@@ -6012,7 +6012,7 @@ gtk_window_propagate_key_event (GtkWindow        *window,
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   gboolean handled = FALSE;
-  GtkWidget *widget, *focus;
+  GtkWidget *widget, *focus, *target;
 
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
@@ -6022,6 +6022,8 @@ gtk_window_propagate_key_event (GtkWindow        *window,
   if (focus)
     g_object_ref (focus);
   
+  target = focus;
+
   while (!handled &&
          focus && focus != widget &&
          gtk_widget_get_root (focus) == GTK_ROOT (widget))
@@ -6030,7 +6032,7 @@ gtk_window_propagate_key_event (GtkWindow        *window,
       
       if (gtk_widget_is_sensitive (focus))
         {
-          handled = gtk_widget_event (focus, (GdkEvent *)event);
+          handled = gtk_widget_event (focus, (GdkEvent *)event, target);
           if (handled)
             break;
         }

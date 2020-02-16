@@ -276,7 +276,8 @@ void              _gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
 GtkStyleContext * _gtk_widget_peek_style_context           (GtkWidget *widget);
 
 gboolean          _gtk_widget_captured_event               (GtkWidget *widget,
-                                                            GdkEvent  *event);
+                                                            GdkEvent  *event,
+                                                            GtkWidget *target);
 
 void              gtk_widget_css_changed                   (GtkWidget           *widget,
                                                             GtkCssStyleChange   *change);
@@ -344,6 +345,7 @@ void              gtk_widget_cancel_event_sequence         (GtkWidget           
 
 gboolean          gtk_widget_run_controllers               (GtkWidget           *widget,
                                                             const GdkEvent      *event,
+                                                            GtkWidget           *target,
                                                             double               x,
                                                             double               y,
                                                             GtkPropagationPhase  phase);

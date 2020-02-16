@@ -53,9 +53,6 @@ struct _GtkEventControllerClass
   gboolean (* filter_event) (GtkEventController *controller,
                              const GdkEvent     *event);
 
-  gboolean (* filter_crossing) (GtkEventController    *controller,
-                                const GtkCrossingData *crossing);
-
   gpointer padding[10];
 };
 

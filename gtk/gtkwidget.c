@@ -635,7 +635,8 @@ static void             gtk_widget_propagate_state              (GtkWidget      
 static void             gtk_widget_update_alpha                 (GtkWidget        *widget);
 
 static gboolean         gtk_widget_event_internal               (GtkWidget        *widget,
-                                                                 GdkEvent         *event);
+                                                                 GdkEvent         *event,
+                                                                 GtkWidget        *target);
 static gboolean		gtk_widget_real_mnemonic_activate	(GtkWidget	  *widget,
 								 gboolean	   group_cycling);
 static void             gtk_widget_real_measure                 (GtkWidget        *widget,
@@ -4783,17 +4784,19 @@ gtk_widget_real_mnemonic_activate (GtkWidget *widget,
  **/
 gboolean
 gtk_widget_event (GtkWidget *widget,
-                  GdkEvent  *event)
+                  GdkEvent  *event,
+                  GtkWidget *target)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
   g_return_val_if_fail (WIDGET_REALIZED_FOR_EVENT (widget, event), TRUE);
 
-  return gtk_widget_event_internal (widget, event);
+  return gtk_widget_event_internal (widget, event, target);
 }
 
 gboolean
 gtk_widget_run_controllers (GtkWidget           *widget,
                             const GdkEvent      *event,
+                            GtkWidget           *target,
                             double               x,
                             double               y,
 			    GtkPropagationPhase  phase)
@@ -4831,7 +4834,7 @@ gtk_widget_run_controllers (GtkWidget           *widget,
               gboolean is_gesture;
 
               is_gesture = GTK_IS_GESTURE (controller);
-              this_handled = gtk_event_controller_handle_event (controller, event, x, y);
+              this_handled = gtk_event_controller_handle_event (controller, event, target, x, y);
 
               handled |= this_handled;
 
@@ -4881,7 +4884,8 @@ translate_event_coordinates (GdkEvent  *event,
 
 gboolean
 _gtk_widget_captured_event (GtkWidget *widget,
-                            GdkEvent  *event)
+                            GdkEvent  *event,
+                            GtkWidget *target)
 {
   gboolean return_val = FALSE;
   double x, y;
@@ -4894,7 +4898,7 @@ _gtk_widget_captured_event (GtkWidget *widget,
 
   translate_event_coordinates (event, &x, &y, widget);
 
-  return_val = gtk_widget_run_controllers (widget, event, x, y, GTK_PHASE_CAPTURE);
+  return_val = gtk_widget_run_controllers (widget, event, target, x, y, GTK_PHASE_CAPTURE);
   return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event);
 
   return return_val;
@@ -4968,7 +4972,8 @@ translate_event_coordinates (GdkEvent  *event,
 
 static gboolean
 gtk_widget_event_internal (GtkWidget *widget,
-                           GdkEvent  *event)
+                           GdkEvent  *event,
+                           GtkWidget *target)
 {
   gboolean return_val = FALSE;
   double x, y;
@@ -4986,11 +4991,11 @@ gtk_widget_event_internal (GtkWidget *widget,
 
   translate_event_coordinates (event, &x, &y, widget);
 
-  if (widget == GTK_WIDGET (gdk_event_get_target (event)))
-    return_val |= gtk_widget_run_controllers (widget, event, x, y, GTK_PHASE_TARGET);
+  if (widget == target)
+    return_val |= gtk_widget_run_controllers (widget, event, target, x, y, GTK_PHASE_TARGET);
 
   if (return_val == FALSE)
-    return_val |= gtk_widget_run_controllers (widget, event, x, y, GTK_PHASE_BUBBLE);
+    return_val |= gtk_widget_run_controllers (widget, event, target, x, y, GTK_PHASE_BUBBLE);
 
   if (return_val == FALSE &&
       (event->any.type == GDK_KEY_PRESS ||
