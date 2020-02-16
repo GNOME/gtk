@@ -4097,7 +4097,6 @@ add_event_mark (GdkEvent *event,
     case GDK_FOCUS_CHANGE:
     case GDK_PROXIMITY_IN:
     case GDK_PROXIMITY_OUT:
-    case GDK_NOTHING:
     case GDK_EVENT_LAST:
     default:
       break;
