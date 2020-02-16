@@ -1199,9 +1199,7 @@ captured_motion (GtkScrolledWindow *sw,
 
   gdk_event_get_state (event, &state);
 
-  target = GTK_WIDGET (gdk_event_get_target (event));
-  while (target && !GTK_IS_SCROLLBAR (target))
-    target = gtk_widget_get_parent (target);
+  target = gtk_widget_pick (GTK_WIDGET (sw), x, y, GTK_PICK_DEFAULT);
 
   if (!target &&
       (state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK)) != 0)
