@@ -55,6 +55,7 @@ static guint signals[LAST_SIGNAL];
 typedef enum _PopupState
 {
   POPUP_STATE_IDLE,
+  POPUP_STATE_WAITING_FOR_REPOSITIONED,
   POPUP_STATE_WAITING_FOR_CONFIGURE,
   POPUP_STATE_WAITING_FOR_FRAME,
 } PopupState;
@@ -89,6 +90,9 @@ struct _GdkWaylandSurface
 
   EGLSurface egl_surface;
   EGLSurface dummy_egl_surface;
+
+  uint32_t reposition_token;
+  uint32_t received_reposition_token;
 
   PopupState popup_state;
 
@@ -162,11 +166,17 @@ struct _GdkWaylandSurface
       int y;
       int width;
       int height;
+      uint32_t repositioned_token;
+      gboolean has_repositioned_token;
     } popup;
+
+    gboolean is_initial_configure;
 
     uint32_t serial;
     gboolean is_dirty;
   } pending;
+
+  uint32_t last_configure_serial;
 
   int state_freeze_count;
 
@@ -436,6 +446,7 @@ frame_callback (void               *data,
   switch (impl->popup_state)
     {
     case POPUP_STATE_IDLE:
+    case POPUP_STATE_WAITING_FOR_REPOSITIONED:
     case POPUP_STATE_WAITING_FOR_CONFIGURE:
       break;
     case POPUP_STATE_WAITING_FOR_FRAME:
@@ -1294,8 +1305,17 @@ gdk_wayland_surface_configure_popup (GdkSurface *surface)
                                      impl->pending.serial);
     }
 
+  if (impl->pending.popup.has_repositioned_token)
+    impl->received_reposition_token = impl->pending.popup.repositioned_token;
+
   switch (impl->popup_state)
     {
+    case POPUP_STATE_WAITING_FOR_REPOSITIONED:
+      if (impl->received_reposition_token != impl->reposition_token)
+        return;
+      else
+        gdk_surface_thaw_updates (surface);
+      G_GNUC_FALLTHROUGH;
     case POPUP_STATE_WAITING_FOR_CONFIGURE:
       impl->popup_state = POPUP_STATE_WAITING_FOR_FRAME;
       break;
@@ -1318,6 +1338,10 @@ gdk_wayland_surface_configure_popup (GdkSurface *surface)
                              width, height,
                              impl->popup.layout);
 
+  if (!impl->pending.popup.has_repositioned_token &&
+      !impl->pending.is_initial_configure)
+    g_signal_emit_by_name (surface, "popup-layout-changed");
+
   gdk_surface_invalidate_rect (surface, NULL);
 }
 
@@ -1330,6 +1354,7 @@ gdk_wayland_surface_configure (GdkSurface *surface)
     {
       gdk_surface_thaw_updates (surface);
       impl->initial_configure_received = TRUE;
+      impl->pending.is_initial_configure = TRUE;
     }
 
   if (is_realized_popup (surface))
@@ -1338,6 +1363,8 @@ gdk_wayland_surface_configure (GdkSurface *surface)
     gdk_wayland_surface_configure_toplevel (surface);
   else
     g_warn_if_reached ();
+
+  impl->last_configure_serial = impl->pending.serial;
 
   memset (&impl->pending, 0, sizeof (impl->pending));
 }
@@ -1680,9 +1707,32 @@ xdg_popup_done (void             *data,
   gdk_surface_hide (surface);
 }
 
+static void
+xdg_popup_repositioned (void             *data,
+                        struct xdg_popup *xdg_popup,
+                        uint32_t          token)
+{
+  GdkSurface *surface = GDK_SURFACE (data);
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  GDK_DISPLAY_NOTE (gdk_surface_get_display (surface), EVENTS,
+                    g_message ("repositioned %p", surface));
+
+  if (surface->surface_type != GDK_SURFACE_POPUP ||
+      impl->popup_state != POPUP_STATE_WAITING_FOR_REPOSITIONED)
+    {
+      g_warning ("Unexpected xdg_popup.repositioned event, probably buggy compositor");
+      return;
+    }
+
+  impl->pending.popup.repositioned_token = token;
+  impl->pending.popup.has_repositioned_token = TRUE;
+}
+
 static const struct xdg_popup_listener xdg_popup_listener = {
   xdg_popup_configure,
   xdg_popup_done,
+  xdg_popup_repositioned,
 };
 
 static void
@@ -2069,7 +2119,8 @@ static gpointer
 create_dynamic_positioner (GdkSurface     *surface,
                            int             width,
                            int             height,
-                           GdkPopupLayout *layout)
+                           GdkPopupLayout *layout,
+                           gboolean        ack_parent_configure)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkSurface *parent = surface->parent;
@@ -2145,6 +2196,29 @@ create_dynamic_positioner (GdkSurface     *surface,
           constraint_adjustment |= XDG_POSITIONER_CONSTRAINT_ADJUSTMENT_RESIZE_Y;
         xdg_positioner_set_constraint_adjustment (positioner,
                                                   constraint_adjustment);
+
+        if (xdg_positioner_get_version (positioner) >=
+            XDG_POSITIONER_SET_REACTIVE_SINCE_VERSION)
+          xdg_positioner_set_reactive (positioner);
+
+        if (ack_parent_configure &&
+            xdg_positioner_get_version (positioner) >=
+            XDG_POSITIONER_SET_ACK_PARENT_CONFIGURE_SINCE_VERSION)
+          {
+            GdkWaylandSurface *parent_impl = GDK_WAYLAND_SURFACE (parent);
+            int parent_width;
+            int parent_height;
+
+            parent_width = parent->width - (parent_impl->margin_left +
+                                            parent_impl->margin_right);
+            parent_height = parent->height - (parent_impl->margin_top +
+                                              parent_impl->margin_bottom);
+
+            xdg_positioner_set_ack_parent_configure (positioner,
+                                                     parent_impl->last_configure_serial,
+                                                     parent_width,
+                                                     parent_height);
+          }
 
         return positioner;
       }
@@ -2250,7 +2324,7 @@ gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
 
   gdk_surface_freeze_updates (surface);
 
-  positioner = create_dynamic_positioner (surface, width, height, layout);
+  positioner = create_dynamic_positioner (surface, width, height, layout, FALSE);
 
   switch (display->shell_variant)
     {
@@ -2526,6 +2600,9 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
         {
           switch (impl->popup_state)
             {
+            case POPUP_STATE_WAITING_FOR_REPOSITIONED:
+              gdk_surface_thaw_updates (surface);
+              G_GNUC_FALLTHROUGH;
             case POPUP_STATE_WAITING_FOR_CONFIGURE:
             case POPUP_STATE_WAITING_FOR_FRAME:
               thaw_popup_toplevel_state (surface);
@@ -2669,6 +2746,9 @@ do_queue_relayout (GdkSurface     *surface,
                    GdkPopupLayout *layout)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkSurface *parent;
+  GdkWaylandSurface *parent_impl;
+  struct xdg_positioner *positioner;
 
   g_assert (is_realized_popup (surface));
   g_assert (impl->popup_state == POPUP_STATE_IDLE ||
@@ -2679,7 +2759,46 @@ do_queue_relayout (GdkSurface     *surface,
   impl->popup.unconstrained_width = width;
   impl->popup.unconstrained_height = height;
 
-  queue_relayout_fallback (surface, layout);
+  if (!impl->display_server.xdg_popup ||
+      xdg_popup_get_version (impl->display_server.xdg_popup) <
+      XDG_POPUP_REPOSITION_SINCE_VERSION)
+    {
+      g_warning_once ("Compositor doesn't support moving popups, "
+                      "relying on remapping");
+      queue_relayout_fallback (surface, layout);
+
+      return;
+    }
+
+  parent = surface->parent;
+  positioner = create_dynamic_positioner (surface,
+                                          width, height, layout,
+                                          TRUE);
+  xdg_popup_reposition (impl->display_server.xdg_popup,
+                        positioner,
+                        ++impl->reposition_token);
+  xdg_positioner_destroy (positioner);
+
+  gdk_surface_freeze_updates (surface);
+
+  switch (impl->popup_state)
+    {
+    case POPUP_STATE_IDLE:
+      freeze_popup_toplevel_state (surface);
+      break;
+    case POPUP_STATE_WAITING_FOR_FRAME:
+      break;
+    case POPUP_STATE_WAITING_FOR_CONFIGURE:
+    case POPUP_STATE_WAITING_FOR_REPOSITIONED:
+    default:
+      g_assert_not_reached ();
+    }
+
+  parent_impl = GDK_WAYLAND_SURFACE (parent);
+  xdg_surface_sync_with (parent_impl->display_server.xdg_surface,
+                         impl->display_server.xdg_surface);
+
+  impl->popup_state = POPUP_STATE_WAITING_FOR_REPOSITIONED;
 }
 
 static gboolean
@@ -2688,6 +2807,9 @@ is_relayout_finished (GdkSurface *surface)
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
   if (!impl->initial_configure_received)
+    return FALSE;
+
+  if (impl->reposition_token != impl->received_reposition_token)
     return FALSE;
 
   return TRUE;
@@ -2796,6 +2918,7 @@ gdk_wayland_surface_layout_popup (GdkSurface     *surface,
         case POPUP_STATE_WAITING_FOR_FRAME:
           do_queue_relayout (surface, width, height, layout);
           break;
+        case POPUP_STATE_WAITING_FOR_REPOSITIONED:
         case POPUP_STATE_WAITING_FOR_CONFIGURE:
           g_warn_if_reached ();
           break;
