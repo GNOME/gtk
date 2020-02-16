@@ -619,28 +619,21 @@ item_activated_cb (GtkGesture     *gesture,
 }
 
 static void
-enter_cb (GtkEventController *controller,
-          double              x,
-          double              y,
-          GdkCrossingMode     mode,
-          GdkNotifyType       type,
-          GtkTreePopover     *popover)
+pointer_change_cb (GtkEventController   *controller,
+                   GtkCrossingDirection  direction,
+                   double                x,
+                   double                y,
+                   GdkCrossingMode       mode,
+                   GtkTreePopover       *popover)
 {
   GtkWidget *item;
   item = gtk_event_controller_get_widget (controller);
 
-  if (gtk_event_controller_motion_contains_pointer (GTK_EVENT_CONTROLLER_MOTION (controller)))
+  if (direction == GTK_CROSSING_IN)
     {
-      gtk_tree_popover_set_active_item (popover, item);
+      if (gtk_event_controller_motion_contains_pointer (GTK_EVENT_CONTROLLER_MOTION (controller)))
+        gtk_tree_popover_set_active_item (popover, item);
     }
-}
-
-static void
-leave_cb (GtkEventController *controller,
-          GdkCrossingMode     mode,
-          GdkNotifyType       type,
-          GtkTreePopover     *popover)
-{
 }
 
 static GtkWidget *
@@ -700,8 +693,7 @@ gtk_tree_popover_create_item (GtkTreePopover *popover,
       gtk_widget_add_controller (item, GTK_EVENT_CONTROLLER (controller));
 
       controller = gtk_event_controller_motion_new ();
-      g_signal_connect (controller, "enter", G_CALLBACK (enter_cb), popover);
-      g_signal_connect (controller, "leave", G_CALLBACK (leave_cb), popover);
+      g_signal_connect (controller, "pointer-change", G_CALLBACK (pointer_change_cb), popover);
       gtk_widget_add_controller (item, controller);
 
       g_object_set_data (G_OBJECT (item), "is-header", GINT_TO_POINTER (header_item));

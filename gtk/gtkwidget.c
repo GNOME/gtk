@@ -4774,7 +4774,7 @@ gtk_widget_event (GtkWidget *widget,
 
 gboolean
 gtk_widget_run_controllers (GtkWidget           *widget,
-			    const GdkEvent      *event,
+                            const GdkEvent      *event,
                             double               x,
                             double               y,
 			    GtkPropagationPhase  phase)
@@ -4859,6 +4859,7 @@ translate_event_coordinates (GdkEvent  *event,
                              double    *x,
                              double    *y,
                              GtkWidget *widget);
+
 gboolean
 _gtk_widget_captured_event (GtkWidget *widget,
                             GdkEvent  *event)
@@ -4872,7 +4873,6 @@ _gtk_widget_captured_event (GtkWidget *widget,
   if (!event_surface_is_still_viewable (event))
     return TRUE;
 
-  x = y = 0;
   translate_event_coordinates (event, &x, &y, widget);
 
   return_val = gtk_widget_run_controllers (widget, event, x, y, GTK_PHASE_CAPTURE);
@@ -4965,7 +4965,6 @@ gtk_widget_event_internal (GtkWidget *widget,
   if (!_gtk_widget_get_mapped (widget))
     return FALSE;
 
-  x = y = 0;
   translate_event_coordinates (event, &x, &y, widget);
 
   if (widget == GTK_WIDGET (gdk_event_get_target (event)))
@@ -7949,38 +7948,6 @@ _gtk_widget_list_devices (GtkWidget *widget)
   return result;
 }
 
-static void
-synth_crossing (GtkWidget       *widget,
-                GdkEventType     type,
-                GdkSurface       *surface,
-                GdkDevice       *device,
-                GdkCrossingMode  mode,
-                GdkNotifyType    detail)
-{
-  GdkEvent *event;
-  double x, y;
-  GdkModifierType state;
-
-  gdk_surface_get_device_position (surface, device, &x, &y, &state);
-  event = gdk_event_crossing_new (type,
-                                  surface,
-                                  device,
-                                  device,
-                                  GDK_CURRENT_TIME,
-                                  state,
-                                  x, y, 
-                                  mode,
-                                  detail);
-
-  if (!widget)
-    widget = gtk_get_event_widget (event);
-
-  if (widget)
-    gtk_widget_event_internal (widget, event);
-
-  gdk_event_unref (event);
-}
-
 /*
  * _gtk_widget_synthesize_crossing:
  * @from: the #GtkWidget the virtual pointer is leaving.
@@ -7996,46 +7963,37 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
 				 GdkCrossingMode  mode)
 {
   GdkSurface *from_surface = NULL, *to_surface = NULL;
+  GtkCrossingData crossing;
+  double x, y;
 
   g_return_if_fail (from != NULL || to != NULL);
 
-  if (from != NULL)
-    {
-      from_surface = _gtk_widget_get_device_surface (from, device);
+  crossing.type = GTK_CROSSING_POINTER;
+  crossing.old_target = from;
+  crossing.new_target = to;
+  crossing.mode = mode;
 
+  if (from)
+    {
+      crossing.direction = GTK_CROSSING_OUT;
+
+      from_surface = _gtk_widget_get_device_surface (from, device);
       if (!from_surface)
         from_surface = from->priv->surface;
+
+      gdk_surface_get_device_position (from_surface, device, &x, &y, NULL);
+      gtk_widget_handle_crossing (from, &crossing, x, y);
     }
 
-  if (to != NULL)
+  if (to)
     {
       to_surface = _gtk_widget_get_device_surface (to, device);
-
       if (!to_surface)
         to_surface = to->priv->surface;
-    }
 
-  if (from_surface == NULL && to_surface == NULL)
-    ;
-  else if (from_surface != NULL && to_surface == NULL)
-    {
-      synth_crossing (from, GDK_LEAVE_NOTIFY, from_surface,
-		      device, mode, GDK_NOTIFY_ANCESTOR);
-    }
-  else if (from_surface == NULL && to_surface != NULL)
-    {
-      synth_crossing (to, GDK_ENTER_NOTIFY, to_surface,
-		      device, mode, GDK_NOTIFY_ANCESTOR);
-    }
-  else if (from_surface == to_surface)
-    ;
-  else
-    {
-      synth_crossing (from, GDK_LEAVE_NOTIFY, from_surface,
-                      device, mode, GDK_NOTIFY_NONLINEAR);
-
-      synth_crossing (to, GDK_ENTER_NOTIFY, to_surface,
-                      device, mode, GDK_NOTIFY_NONLINEAR);
+      crossing.direction = GTK_CROSSING_IN;
+      gdk_surface_get_device_position (to_surface, device, &x, &y, NULL);
+      gtk_widget_handle_crossing (to, &crossing, x, y);
     }
 }
 

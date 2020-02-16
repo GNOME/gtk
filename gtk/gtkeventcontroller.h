@@ -64,8 +64,6 @@ struct _GtkCrossingData {
   GtkWidget *new_target;
 };
 
-#define GTK_TYPE_CROSSING_DATA (gtk_crossing_data_get_type ())
-
 GDK_AVAILABLE_IN_ALL
 GType               gtk_crossing_data_get_type (void) G_GNUC_CONST;
 

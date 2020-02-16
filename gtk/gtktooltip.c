@@ -874,10 +874,10 @@ tooltips_enabled (GdkEvent *event)
 }
 
 void
-_gtk_tooltip_handle_event (GdkEvent *event)
+_gtk_tooltip_handle_event (GtkWidget *target,
+                           GdkEvent  *event)
 {
   GdkEventType event_type;
-  GtkWidget *target;
   GdkSurface *surface;
   gdouble dx, dy;
 
@@ -887,7 +887,6 @@ _gtk_tooltip_handle_event (GdkEvent *event)
   event_type = gdk_event_get_event_type (event);
   surface = gdk_event_get_surface (event);
   gdk_event_get_coords (event, &dx, &dy);
-  target = gtk_get_event_target (event);
 
   gtk_tooltip_handle_event_internal (event_type, surface, target, dx, dy);
 }

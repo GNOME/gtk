@@ -444,17 +444,22 @@ add_tab_bindings (GtkBindingSet    *binding_set,
 }
 
 static void
-motion_controller_leave (GtkEventController *controller,
-                         GdkCrossingMode     mode,
-                         GdkNotifyType       detail,
-                         GtkScrolledWindow  *scrolled_window)
+motion_controller_pointer (GtkEventController   *controller,
+                           GtkCrossingDirection  direction,
+                           double                x,
+                           double                y,
+                           GdkCrossingMode       mode,
+                           GtkScrolledWindow    *scrolled_window)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
 
-  if (priv->use_indicators)
+  if (direction == GTK_CROSSING_OUT)
     {
-      indicator_set_over (&priv->hindicator, FALSE);
-      indicator_set_over (&priv->vindicator, FALSE);
+      if (priv->use_indicators)
+        {
+          indicator_set_over (&priv->hindicator, FALSE);
+          indicator_set_over (&priv->vindicator, FALSE);
+        }
     }
 }
 
@@ -2020,8 +2025,8 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   gtk_widget_add_controller (widget, controller);
 
   controller = gtk_event_controller_motion_new ();
-  g_signal_connect (controller, "leave",
-                    G_CALLBACK (motion_controller_leave), scrolled_window);
+  g_signal_connect (controller, "pointer-change",
+                    G_CALLBACK (motion_controller_pointer), scrolled_window);
   gtk_widget_add_controller (widget, controller);
 }
 
