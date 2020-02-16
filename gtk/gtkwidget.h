@@ -399,7 +399,8 @@ gboolean   gtk_widget_mnemonic_activate   (GtkWidget           *widget,
                                            gboolean             group_cycling);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_event               (GtkWidget           *widget,
-                                           GdkEvent            *event);
+                                           GdkEvent            *event,
+                                           GtkWidget           *target);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_activate               (GtkWidget        *widget);
 
