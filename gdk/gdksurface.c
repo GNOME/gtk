@@ -3983,12 +3983,13 @@ check_autohide (GdkEvent *event)
 }
 
 static gboolean
-is_key_event (GdkEvent *event)
+is_keyboard_event (GdkEvent *event)
 {
   switch ((guint) gdk_event_get_event_type (event))
     {
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
+    case GDK_FOCUS_CHANGE:
       return TRUE;
     default:;
     }
@@ -4008,17 +4009,23 @@ rewrite_event_for_toplevel (GdkEvent *event)
   while (surface->parent)
     surface = surface->parent;
 
-  return gdk_event_key_new (gdk_event_get_event_type (event),
-                            surface,
-                            gdk_event_get_device (event),
-                            gdk_event_get_source_device (event),
-                            gdk_event_get_time (event),
-                            gdk_event_get_modifier_state (event),
-                            gdk_key_event_get_keyval (event),
-                            gdk_key_event_get_keycode (event),
-                            gdk_key_event_get_scancode (event),
-                            gdk_key_event_get_group (event),
-                            gdk_key_event_is_modifier (event));
+  if (gdk_event_get_event_type (event) == GDK_FOCUS_CHANGE)
+    return gdk_event_focus_new (surface,
+                                gdk_event_get_device (event),
+                                gdk_event_get_source_device (event),
+                                gdk_focus_event_get_in (event));
+  else
+    return gdk_event_key_new (gdk_event_get_event_type (event),
+                              surface,
+                              gdk_event_get_device (event),
+                              gdk_event_get_source_device (event),
+                              gdk_event_get_time (event),
+                              gdk_event_get_modifier_state (event),
+                              gdk_key_event_get_keyval (event),
+                              gdk_key_event_get_keycode (event),
+                              gdk_key_event_get_scancode (event),
+                              gdk_key_event_get_group (event),
+                              gdk_key_event_is_modifier (event));
 }
 
 static void
@@ -4138,7 +4145,7 @@ gdk_surface_handle_event (GdkEvent *event)
     {
       GdkEvent *emitted;
 
-      if (is_key_event (event))
+      if (is_keyboard_event (event))
         emitted = rewrite_event_for_toplevel (event);
       else
         emitted = gdk_event_ref (event);
