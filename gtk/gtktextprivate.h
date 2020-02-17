@@ -92,7 +92,6 @@ struct _GtkTextClass
 char *              gtk_text_get_display_text   (GtkText    *entry,
                                                  int         start_pos,
                                                  int         end_pos);
-GtkIMContext *      gtk_text_get_im_context     (GtkText    *entry);
 void                gtk_text_enter_text         (GtkText    *entry,
                                                  const char *text);
 void                gtk_text_set_positions      (GtkText    *entry,

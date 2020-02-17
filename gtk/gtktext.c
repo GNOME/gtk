@@ -4677,14 +4677,6 @@ gtk_text_reset_im_context (GtkText *self)
     }
 }
 
-GtkIMContext *
-gtk_text_get_im_context (GtkText *self)
-{
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-
-  return priv->im_context;
-}
-
 static int
 gtk_text_find_position (GtkText *self,
                         int      x)
