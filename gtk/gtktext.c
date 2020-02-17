@@ -6779,20 +6779,23 @@ emoji_picked (GtkEmojiChooser *chooser,
               const char      *text,
               GtkText         *self)
 {
-  int current_pos;
-  int selection_bound;
+  int pos;
 
-  current_pos = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (chooser), "current-pos"));
-  selection_bound = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (chooser), "selection-bound"));
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
-  gtk_text_set_positions (self, current_pos, selection_bound);
-  gtk_text_enter_text (self, text);
+  begin_change (self);
+  if (priv->selection_bound != priv->current_pos)
+    gtk_text_delete_selection (self);
+
+  pos = priv->current_pos;
+  gtk_text_insert_text (self, text, -1, &pos);
+  gtk_text_set_selection_bounds (self, pos, pos);
+  end_change (self);
 }
 
 static void
 gtk_text_insert_emoji (GtkText *self)
 {
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   GtkWidget *chooser;
 
   if (gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_EMOJI_CHOOSER) != NULL)
@@ -6807,9 +6810,6 @@ gtk_text_insert_emoji (GtkText *self)
       gtk_popover_set_relative_to (GTK_POPOVER (chooser), GTK_WIDGET (self));
       g_signal_connect (chooser, "emoji-picked", G_CALLBACK (emoji_picked), self);
     }
-
-  g_object_set_data (G_OBJECT (chooser), "current-pos", GINT_TO_POINTER (priv->current_pos));
-  g_object_set_data (G_OBJECT (chooser), "selection-bound", GINT_TO_POINTER (priv->selection_bound));
 
   gtk_popover_popup (GTK_POPOVER (chooser));
 }
