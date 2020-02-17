@@ -70,6 +70,27 @@ typedef enum
 } GdkAnchorHints;
 
 /**
+ * GdkPopupLayoutPolicy:
+ * GDK_POPUP_LAYOUT_POLICY_POSITION_ONCE: position the popup once
+ * GDK_POPUP_LAYOUT_POLICY_AUTO_REPOSITION: reposition the popup automatically
+ *
+ * This determines the policy of how a popup is positioned now and in the
+ * future. It can either be positioned once
+ * (%GDK_POPUP_LAYOUT_POLICY_POSITION_ONCE), then not again until explicitly
+ * repositioned again using gdk_popup_present(), or be repositioned
+ * automatically (%GDK_POPUP_LAYOUT_POLICY_AUTO_REPOSITION) by for example the
+ * parent surface moving in a way causing the popup to end up partially off
+ * screen.
+ *
+ * The default is %GDK_POPUP_LAYOUT_POLICY_POSITION_ONCE.
+ */
+typedef enum
+{
+  GDK_POPUP_LAYOUT_POLICY_POSITION_ONCE,
+  GDK_POPUP_LAYOUT_POLICY_AUTO_REPOSITION,
+} GdkPopupLayoutPolicy;
+
+/**
  * GdkPopupLayout:
  */
 typedef struct _GdkPopupLayout GdkPopupLayout;
