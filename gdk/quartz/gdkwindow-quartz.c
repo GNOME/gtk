@@ -191,8 +191,11 @@ static void
 gdk_window_impl_quartz_release_context (GdkWindowImplQuartz *window_impl,
                                         CGContextRef         cg_context)
 {
-  CGContextRestoreGState (cg_context);
-  CGContextSetAllowsAntialiasing (cg_context, TRUE);
+  if (cg_context)
+    {
+      CGContextRestoreGState (cg_context);
+      CGContextSetAllowsAntialiasing (cg_context, TRUE);
+    }
 
   /* See comment in gdk_quartz_window_get_context(). */
   if (window_impl->in_paint_rect_count == 0)
