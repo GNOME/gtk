@@ -635,9 +635,6 @@ static void             gtk_widget_propagate_state              (GtkWidget      
                                                                  const GtkStateData *data);
 static void             gtk_widget_update_alpha                 (GtkWidget        *widget);
 
-static gboolean         gtk_widget_event_internal               (GtkWidget        *widget,
-                                                                 GdkEvent         *event,
-                                                                 GtkWidget        *target);
 static gboolean		gtk_widget_real_mnemonic_activate	(GtkWidget	  *widget,
 								 gboolean	   group_cycling);
 static void             gtk_widget_real_measure                 (GtkWidget        *widget,
@@ -4787,32 +4784,6 @@ gtk_widget_real_mnemonic_activate (GtkWidget *widget,
 #define WIDGET_REALIZED_FOR_EVENT(widget, event) \
      (gdk_event_get_event_type (event) == GDK_FOCUS_CHANGE || _gtk_widget_get_realized (widget))
 
-/**
- * gtk_widget_event:
- * @widget: a #GtkWidget
- * @event: a #GdkEvent
- *
- * Rarely-used function. This function is used to emit
- * the event signals on a widget (those signals should never
- * be emitted without using this function to do so).
- * If you want to synthesize an event though, don’t use this function;
- * instead, use gtk_main_do_event() so the event will behave as if
- * it were in the event queue.
- *
- * Returns: return from the event signal emission (%TRUE if
- *               the event was handled)
- **/
-gboolean
-gtk_widget_event (GtkWidget *widget,
-                  GdkEvent  *event,
-                  GtkWidget *target)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
-  g_return_val_if_fail (WIDGET_REALIZED_FOR_EVENT (widget, event), TRUE);
-
-  return gtk_widget_event_internal (widget, event, target);
-}
-
 gboolean
 gtk_widget_run_controllers (GtkWidget           *widget,
                             GdkEvent            *event,
@@ -4990,10 +4961,10 @@ translate_event_coordinates (GdkEvent  *event,
   return TRUE;
 }
 
-static gboolean
-gtk_widget_event_internal (GtkWidget *widget,
-                           GdkEvent  *event,
-                           GtkWidget *target)
+gboolean
+gtk_widget_event (GtkWidget *widget,
+                  GdkEvent  *event,
+                  GtkWidget *target)
 {
   gboolean return_val = FALSE;
   double x, y;
