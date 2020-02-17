@@ -448,7 +448,9 @@ gtk_drop_target_set_formats (GtkDropTarget     *dest,
  *
  * Gets the data formats that this drop target accepts.
  *
- * Returns: the supported data formats
+ * If the result is %NULL, all formats are expected to be supported.
+ *
+ * Returns: (nullable): the supported data formats
  */
 GdkContentFormats *
 gtk_drop_target_get_formats (GtkDropTarget *dest)
@@ -563,6 +565,9 @@ gtk_drop_target_find_mimetype (GtkDropTarget *dest)
   if (!dest->drop)
     return NULL;
 
+  if (dest->formats == NULL)
+    return NULL;
+
   return gtk_drop_target_match (dest, dest->drop);
 }
 
@@ -572,6 +577,9 @@ gtk_drop_target_accept (GtkDropTarget *dest,
 {
   if ((gdk_drop_get_actions (drop) & gtk_drop_target_get_actions (dest)) == 0)
     return FALSE;
+
+  if (dest->formats == NULL)
+    return TRUE;
 
   return gdk_content_formats_match (dest->formats, gdk_drop_get_formats (drop));
 }
