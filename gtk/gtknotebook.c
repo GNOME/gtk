@@ -3001,6 +3001,36 @@ gtk_notebook_state_flags_changed (GtkWidget     *widget,
 }
 
 static void
+gtk_notebook_arrow_drag_enter (GtkDropTarget *target,
+                               GdkDrop       *drop,
+                               GtkNotebook   *notebook)
+{
+  GtkNotebookPrivate *priv = notebook->priv;
+  GtkWidget *arrow_widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (target));
+  guint arrow;
+
+  for (arrow = 0; arrow < 4; arrow++)
+    {
+      if (priv->arrow_widget[arrow] == arrow_widget)
+        break;
+    }
+
+  g_assert (arrow != ARROW_NONE);
+
+  priv->click_child = arrow;
+  gtk_notebook_set_scroll_timer (notebook);
+  gdk_drop_status (drop, 0);
+}
+
+static void
+gtk_notebook_arrow_drag_leave (GtkDropTarget *target,
+                               GdkDrop       *drop,
+                               GtkNotebook   *notebook)
+{
+  stop_scrolling (notebook);
+}
+
+static void
 update_arrow_nodes (GtkNotebook *notebook)
 {
   GtkNotebookPrivate *priv = notebook->priv;
@@ -3038,6 +3068,7 @@ update_arrow_nodes (GtkNotebook *notebook)
           if (priv->arrow_widget[i] == NULL)
             {
               GtkWidget *next_widget;
+              GtkEventController *controller;
 
               switch (i)
                 {
@@ -3081,6 +3112,10 @@ update_arrow_nodes (GtkNotebook *notebook)
               priv->arrow_widget[i] = g_object_new (GTK_TYPE_BUTTON,
                                                     "css-name", "arrow",
                                                     NULL);
+              controller = GTK_EVENT_CONTROLLER (gtk_drop_target_new (NULL, GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK |  GDK_ACTION_ASK));
+              g_signal_connect (controller, "drag-enter", G_CALLBACK (gtk_notebook_arrow_drag_enter), notebook);
+              g_signal_connect (controller, "drag-leave", G_CALLBACK (gtk_notebook_arrow_drag_leave), notebook);
+              gtk_widget_add_controller (priv->arrow_widget[i], controller);
 
               if (i == ARROW_LEFT_BEFORE || i == ARROW_LEFT_AFTER)
                 {
@@ -3206,21 +3241,9 @@ gtk_notebook_drag_motion (GtkDropTarget *dest,
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
   graphene_rect_t position;
-  GtkNotebookArrow arrow;
   GdkAtom target, tab_target;
   GList *tab;
 
-  arrow = gtk_notebook_get_arrow (notebook, x, y);
-  if (arrow != ARROW_NONE)
-    {
-      priv->click_child = arrow;
-      gtk_notebook_set_scroll_timer (notebook);
-      gdk_drop_status (drop, 0);
-
-      goto out;
-    }
-
-  stop_scrolling (notebook);
   target = gtk_drop_target_find_mimetype (dest);
   tab_target = g_intern_static_string ("GTK_NOTEBOOK_TAB");
 
@@ -3294,7 +3317,6 @@ gtk_notebook_drag_leave (GtkDropTarget *dest)
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
 
   remove_switch_tab_timer (notebook);
-  stop_scrolling (notebook);
 }
 
 static void
