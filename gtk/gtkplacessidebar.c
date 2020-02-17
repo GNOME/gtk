@@ -4090,7 +4090,6 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 
   builder = gdk_content_formats_builder_new ();
   gdk_content_formats_builder_add_mime_type (builder, "DND_GTK_SIDEBAR_ROW");
-  gdk_content_formats_builder_add_gtype (builder, G_TYPE_STRING);
   sidebar->source_targets = gdk_content_formats_builder_free_to_formats (builder);
 
   sidebar->drag_row = NULL;
