@@ -1,3 +1,71 @@
+Overview of Changes in GTK+ 3.24.14
+===================================
+
+* Fix the opaque region for windows on X11
+
+* theme:
+ - Fix flat buttons in backdrop
+ - Make popovers look more similar to menus
+ - Tweak checkbox & radiobutton appearance
+ - Add general typography classes (heading, title-1, etc)
+
+* language bindings:
+ - Fix annotations for gtk_tree_model_sort_new_with_model
+
+* switch: Fix touch support
+
+* infobar: Make clickable for default action
+
+* emojichooser:
+ - respect a no-emoji input hint
+
+* fontchooser:
+ - Fix an oversight with hiding the size label
+
+* filechooser:
+ - Disable recursive search without a system indexer
+
+* modelbutton:
+ - Fix a11y support to reflect button state
+
+* input:
+ - Fix touchpad gesture center calculation
+
+* x11:
+ - Fix root window scaling
+ - Support _GTK_WORKAREAS_Dn property
+
+* wayland:
+ - Support a terminal purpose in input methods
+ - Fix preedit cursor positioning
+ - Fix enabling/disabling of text inputs
+ - Support simultaneous selection requests
+ - Require Wayland 1.14.91
+
+* OS X:
+ - Fix fullscreen state
+ - Fix an Inkscape crash at startup
+ - Fix OpenGL extension detection
+
+* Printing:
+ - Fix a crash with Avahi
+
+* Translation updates:
+ Basque
+ British English
+ Catalan
+ Finnish
+ French 
+ Galician
+ Japanese
+ Kurdish Sorani
+ Malay
+ Russian
+ Slovak
+ Spanish
+ Turkish
+
+
 Overview of Changes in GTK+ 3.24.13
 ===================================
 
