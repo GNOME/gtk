@@ -342,7 +342,9 @@ void              gtk_widget_cancel_event_sequence         (GtkWidget           
                                                             GtkGesture            *gesture,
                                                             GdkEventSequence      *sequence,
                                                             GtkEventSequenceState  state);
-
+gboolean          gtk_widget_event                         (GtkWidget           *widget,
+                                                            GdkEvent            *event,
+                                                            GtkWidget           *target);
 gboolean          gtk_widget_run_controllers               (GtkWidget           *widget,
                                                             GdkEvent            *event,
                                                             GtkWidget           *target,
