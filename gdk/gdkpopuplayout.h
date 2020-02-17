@@ -67,6 +67,7 @@ typedef enum
   GDK_ANCHOR_FLIP     = GDK_ANCHOR_FLIP_X | GDK_ANCHOR_FLIP_Y,
   GDK_ANCHOR_SLIDE    = GDK_ANCHOR_SLIDE_X | GDK_ANCHOR_SLIDE_Y,
   GDK_ANCHOR_RESIZE   = GDK_ANCHOR_RESIZE_X | GDK_ANCHOR_RESIZE_Y,
+  GDK_ANCHOR_STATIC   = 1 << 6,
 } GdkAnchorHints;
 
 /**
@@ -134,6 +135,13 @@ GDK_AVAILABLE_IN_ALL
 void                    gdk_popup_layout_get_offset             (GdkPopupLayout         *layout,
                                                                  int                    *dx,
                                                                  int                    *dy);
+
+GDK_AVAILABLE_IN_ALL
+void                    gdk_popup_layout_set_reactive           (GdkPopupLayout         *layout,
+                                                                 gboolean                is_recative);
+
+GDK_AVAILABLE_IN_ALL
+gboolean                gdk_popup_layout_is_reactive            (GdkPopupLayout         *layout);
 
 G_END_DECLS
 

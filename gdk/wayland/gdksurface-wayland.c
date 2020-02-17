@@ -2179,7 +2179,8 @@ create_dynamic_positioner (GdkSurface     *surface,
         xdg_positioner_set_constraint_adjustment (positioner,
                                                   constraint_adjustment);
 
-        if (xdg_positioner_get_version (positioner) >=
+        if (gdk_popup_layout_is_reactive (layout) &&
+            xdg_positioner_get_version (positioner) >=
             XDG_POSITIONER_SET_REACTIVE_SINCE_VERSION)
           xdg_positioner_set_reactive (positioner);
 

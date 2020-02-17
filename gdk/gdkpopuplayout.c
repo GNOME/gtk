@@ -43,6 +43,7 @@ struct _GdkPopupLayout
   GdkAnchorHints anchor_hints;
   int dx;
   int dy;
+  gboolean is_reactive;
 };
 
 G_DEFINE_BOXED_TYPE (GdkPopupLayout, gdk_popup_layout,
@@ -81,6 +82,7 @@ gdk_popup_layout_new (const GdkRectangle *anchor_rect,
   layout->anchor_rect = *anchor_rect;
   layout->rect_anchor = rect_anchor;
   layout->surface_anchor = surface_anchor;
+  layout->is_reactive = TRUE;
 
   return layout;
 }
@@ -315,4 +317,36 @@ gdk_popup_layout_get_offset (GdkPopupLayout *layout,
     *dx = layout->dx;
   if (dy)
     *dy = layout->dy;
+}
+
+/**
+ * gdk_popup_layout_set_reactive:
+ * @layout: a #GdkPopupLayout
+ * @is_reactive: whether the layout is reactive
+ *
+ * Configure the popup layout to make the relative popup position reactive to
+ * environmental changes or not. Being reactive means that the relative
+ * position may change without a call to gdk_popup_present() being called, for
+ * example if the parent surface moves in a way that makes the relative
+ * position changes due to constraints.
+ *
+ * The default is %TRUE.
+ */
+void
+gdk_popup_layout_set_reactive (GdkPopupLayout *layout,
+                               gboolean        is_reactive)
+{
+  layout->is_reactive = is_reactive;
+}
+
+/**
+ * gdk_popup_layout_get_reactive:
+ * @layout: a #GdkPopupLayout
+ *
+ * Returns: %TRUE if the layout is set to be reactive, otherwise %FALSE.
+ */
+gboolean
+gdk_popup_layout_is_reactive (GdkPopupLayout *layout)
+{
+  return layout->is_reactive;
 }
