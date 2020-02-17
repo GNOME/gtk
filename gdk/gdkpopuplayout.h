@@ -39,6 +39,7 @@ G_BEGIN_DECLS
  * @GDK_ANCHOR_FLIP: allow flipping anchors on both axes
  * @GDK_ANCHOR_SLIDE: allow sliding surface on both axes
  * @GDK_ANCHOR_RESIZE: allow resizing surface on both axes
+ * @GDK_ANCHOR_STATIC: don't reposition automatically
  *
  * Positioning hints for aligning a surface relative to a rectangle.
  *
@@ -52,6 +53,9 @@ G_BEGIN_DECLS
  * If %GDK_ANCHOR_SLIDE_X is set, the surface can be shifted horizontally to fit
  * on-screen. If %GDK_ANCHOR_RESIZE_X is set, the surface can be shrunken
  * horizontally to fit.
+ *
+ * If @GDK_ANCHOR_STATIC is set, the surface will not change its position if the
+ * conditions used for constraining change, e.g. if the parent window moved.
  *
  * In general, when multiple flags are set, flipping should take precedence over
  * sliding, which should take precedence over resizing.
@@ -67,6 +71,7 @@ typedef enum
   GDK_ANCHOR_FLIP     = GDK_ANCHOR_FLIP_X | GDK_ANCHOR_FLIP_Y,
   GDK_ANCHOR_SLIDE    = GDK_ANCHOR_SLIDE_X | GDK_ANCHOR_SLIDE_Y,
   GDK_ANCHOR_RESIZE   = GDK_ANCHOR_RESIZE_X | GDK_ANCHOR_RESIZE_Y,
+  GDK_ANCHOR_STATIC   = 1 << 6,
 } GdkAnchorHints;
 
 /**
