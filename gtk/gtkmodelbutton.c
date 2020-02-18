@@ -1348,7 +1348,14 @@ leave_cb (GtkEventController *controller,
           GdkNotifyType       type,
           gpointer            data)
 {
+  GtkPopoverMenu *popover;
+
+  popover = (GtkPopoverMenu*)gtk_widget_get_ancestor (GTK_WIDGET (data), GTK_TYPE_POPOVER_MENU);
+
   stop_open (GTK_MODEL_BUTTON (data));
+
+  if (popover)
+    gtk_popover_menu_set_active_item (popover, NULL);
 }
 
 static void
