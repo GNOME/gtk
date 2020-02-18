@@ -886,7 +886,6 @@ gdk_input_other_event (GdkDisplay *display,
   GdkEvent *event;
 
   PACKET packet;
-  gint root_x, root_y;
   gint num_axes;
   double x, y;
   guint translated_buttons, button_diff, button_mask;
@@ -1028,7 +1027,7 @@ gdk_input_other_event (GdkDisplay *display,
           event_button = 1;
 
           for (button_mask = 1; button_mask != 0x80000000;
-               button_mask <<= 1, event->button.button++)
+               button_mask <<= 1, event_button++)
             {
               if (button_diff & button_mask)
                 {
@@ -1073,7 +1072,7 @@ gdk_input_other_event (GdkDisplay *display,
           event = gdk_event_button_new (event_type,
                                         window,
                                         device_manager->core_pointer,
-                                        source_device,
+                                        GDK_DEVICE (source_device),
                                         NULL,
                                         _gdk_win32_get_next_tick (msg->time),
                                         event_state,
@@ -1106,7 +1105,7 @@ gdk_input_other_event (GdkDisplay *display,
 
           event = gdk_event_motion_new (window,
                                         device_manager->core_pointer,
-                                        source_device,
+                                        GDK_DEVICE (source_device),
                                         NULL,
                                         _gdk_win32_get_next_tick (msg->time),
                                         event_state,

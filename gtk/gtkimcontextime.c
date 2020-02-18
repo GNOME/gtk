@@ -359,7 +359,7 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
   if (gdk_event_get_event_type ((GdkEvent *) event) == GDK_KEY_RELEASE)
     return FALSE;
 
-  gdk_event_get_state ((GdkEvent *) event, &state);
+  state = gdk_event_get_modifier_state ((GdkEvent *) event);
 
   if (state & GDK_CONTROL_MASK)
     return FALSE;
@@ -372,7 +372,7 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
   if (!GDK_IS_SURFACE (context_ime->client_surface))
     return FALSE;
 
-  gdk_event_get_keyval ((GdkEvent *) event, &keyval);
+  keyval = gdk_key_event_get_keyval ((GdkEvent *) event);
 
   if (keyval == GDK_KEY_space &&
       context_ime->priv->dead_key_keyval != 0)
