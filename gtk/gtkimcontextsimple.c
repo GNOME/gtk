@@ -893,7 +893,7 @@ beep_surface (GdkSurface *surface)
 static gboolean
 no_sequence_matches (GtkIMContextSimple *context_simple,
                      gint                n_compose,
-                     GdkEventKey        *event)
+                     GdkEvent           *event)
 {
   GtkIMContextSimplePrivate *priv = context_simple->priv;
   GtkIMContext *context;
@@ -917,11 +917,11 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
 	{
           guint tmp_keyval = priv->compose_buffer[len + i];
           GdkEvent *tmp_event = gdk_event_key_new (GDK_KEY_PRESS,
-                                                   event->any.surface,
-                                                   event->any.device,
-                                                   event->any.source_device,
-                                                   event->time,
-                                                   event->state,
+                                                   gdk_event_get_surface (event),
+                                                   gdk_event_get_device (event),
+                                                   gdk_event_get_source_device (event),
+                                                   gdk_event_get_time (event),
+                                                   gdk_event_get_modifier_state (event),
                                                    tmp_keyval,
                                                    tmp_keyval,
                                                    tmp_keyval,
@@ -932,14 +932,16 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
 	  g_object_unref (tmp_event);
 	}
 
-      return gtk_im_context_filter_keypress (context, event);
+      return gtk_im_context_filter_keypress (context, (GdkEventKey *)event);
     }
-  else if (gdk_event_get_keyval ((GdkEvent *) event, &keyval))
+  else
     {
+      keyval = gdk_key_event_get_keyval (event);
+
       priv->compose_buffer[0] = 0;
       if (n_compose > 1)		/* Invalid sequence */
 	{
-	  beep_surface (gdk_event_get_surface ((GdkEvent *) event));
+	  beep_surface (gdk_event_get_surface (event));
 	  return TRUE;
 	}
   
@@ -952,8 +954,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
       else
 	return FALSE;
     }
-  else
-    return FALSE;
+  return FALSE;
 }
 
 static gboolean
@@ -974,8 +975,7 @@ canonical_hex_keyval (GdkEventKey *event)
   gint n_vals = 0;
   gint i;
 
-  if (!gdk_event_get_keyval ((GdkEvent *) event, &event_keyval))
-    return 0;
+  event_keyval = gdk_key_event_get_keyval ((GdkEvent *)event);
 
   /* See if the keyval is already a hex digit */
   if (is_hex_keyval (event_keyval))
@@ -985,7 +985,7 @@ canonical_hex_keyval (GdkEventKey *event)
    * any other state, and return that hex keyval if so
    */
   gdk_keymap_get_entries_for_keycode (keymap,
-                                      gdk_event_get_scancode ((GdkEvent *) event),
+                                      gdk_key_event_get_scancode ((GdkEvent *) event),
 				      NULL,
 				      &keyvals, &n_vals);
 
@@ -1039,9 +1039,8 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   while (priv->compose_buffer[n_compose] != 0)
     n_compose++;
 
-  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval) ||
-      !gdk_event_get_state ((GdkEvent *) event, &state))
-    return GDK_EVENT_PROPAGATE;
+  keyval = gdk_key_event_get_keyval ((GdkEvent *)event);
+  state = gdk_event_get_modifier_state ((GdkEvent *)event);
 
   if (gdk_event_get_event_type ((GdkEvent *) event) == GDK_KEY_RELEASE)
     {
@@ -1355,7 +1354,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     }
   
   /* The current compose_buffer doesn't match anything */
-  return no_sequence_matches (context_simple, n_compose, event);
+  return no_sequence_matches (context_simple, n_compose, (GdkEvent *)event);
 }
 
 static void

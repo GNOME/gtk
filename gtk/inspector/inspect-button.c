@@ -135,7 +135,7 @@ handle_event (GtkInspectorWindow *iw, GdkEvent *event)
       {
         guint keyval = 0;
 
-        gdk_event_get_keyval (event, &keyval);
+        keyval = gdk_key_event_get_keyval (event);
         if (keyval == GDK_KEY_Escape)
           {
             g_signal_handlers_disconnect_by_func (iw, handle_event, NULL);
