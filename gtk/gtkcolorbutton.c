@@ -328,6 +328,7 @@ gtk_color_button_init (GtkColorButton *button)
   source = gtk_drag_source_new ();
   g_signal_connect (source, "prepare", G_CALLBACK (gtk_color_button_drag_prepare), button);
   g_signal_connect (source, "drag-begin", G_CALLBACK (gtk_color_button_drag_begin), button);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (source), GTK_PHASE_CAPTURE);
   gtk_widget_add_controller (priv->button, GTK_EVENT_CONTROLLER (source));
 
   gtk_widget_add_css_class (priv->button, "color");
