@@ -156,7 +156,7 @@ gtk_css_icon_theme_value_parse (GtkCssParser *parser)
     return NULL;
 
   icontheme = gtk_icon_theme_new ();
-  gtk_icon_theme_set_custom_theme (icontheme, s);
+  gtk_icon_theme_set_theme_name (icontheme, s);
 
   result = gtk_css_icon_theme_value_new (icontheme);
 

@@ -8,7 +8,7 @@ static GtkIconTheme *
 get_test_icontheme (gboolean force_reload)
 {
   static GtkIconTheme *icon_theme = NULL;
-  const char *current_dir;
+  const char *current_dir[2];
 
   if (force_reload)
     g_clear_object (&icon_theme);
@@ -17,10 +17,10 @@ get_test_icontheme (gboolean force_reload)
     return icon_theme;
 
   icon_theme = gtk_icon_theme_new ();
-  gtk_icon_theme_set_custom_theme (icon_theme, "icons");
-  gtk_icon_theme_set_display (icon_theme, gdk_display_get_default ());
-  current_dir = g_test_get_dir (G_TEST_DIST);
-  gtk_icon_theme_set_search_path (icon_theme, &current_dir, 1);
+  gtk_icon_theme_set_theme_name (icon_theme, "icons");
+  current_dir[0] = g_test_get_dir (G_TEST_DIST);
+  current_dir[1] = NULL;
+  gtk_icon_theme_set_search_path (icon_theme, current_dir);
 
   return icon_theme;
 }
@@ -656,23 +656,23 @@ static void
 test_list (void)
 {
   GtkIconTheme *theme;
-  GList *icons;
+  char **icons;
 
   theme = get_test_icontheme (TRUE);
-  icons = gtk_icon_theme_list_icons (theme);
+  icons = gtk_icon_theme_get_icon_names (theme);
 
-  g_assert (g_list_find_custom (icons, "size-test", (GCompareFunc)g_strcmp0));
-  g_assert (g_list_find_custom (icons, "simple", (GCompareFunc)g_strcmp0));
-  g_assert (g_list_find_custom (icons, "twosize-fixed", (GCompareFunc)g_strcmp0));
-  g_assert (g_list_find_custom (icons, "twosize", (GCompareFunc)g_strcmp0));
-  g_assert (g_list_find_custom (icons, "only32-symbolic", (GCompareFunc)g_strcmp0));
-  g_assert (g_list_find_custom (icons, "everything", (GCompareFunc)g_strcmp0));
-  g_assert (g_list_find_custom (icons, "everything-rtl", (GCompareFunc)g_strcmp0));
-  g_assert (g_list_find_custom (icons, "everything-symbolic", (GCompareFunc)g_strcmp0));
-  g_assert (g_list_find_custom (icons, "everything-justregular", (GCompareFunc)g_strcmp0));
-  g_assert (g_list_find_custom (icons, "everything-justrtl-rtl", (GCompareFunc)g_strcmp0));
-  g_assert (g_list_find_custom (icons, "everything-symbolic-rtl", (GCompareFunc)g_strcmp0));
-  g_assert (g_list_find_custom (icons, "everything-justsymbolic-symbolic", (GCompareFunc)g_strcmp0));
+  g_assert (g_strv_contains ((const char * const *)icons, "size-test"));
+  g_assert (g_strv_contains ((const char * const *)icons, "simple"));
+  g_assert (g_strv_contains ((const char * const *)icons, "twosize-fixed"));
+  g_assert (g_strv_contains ((const char * const *)icons, "twosize"));
+  g_assert (g_strv_contains ((const char * const *)icons, "only32-symbolic"));
+  g_assert (g_strv_contains ((const char * const *)icons, "everything"));
+  g_assert (g_strv_contains ((const char * const *)icons, "everything-rtl"));
+  g_assert (g_strv_contains ((const char * const *)icons, "everything-symbolic"));
+  g_assert (g_strv_contains ((const char * const *)icons, "everything-justregular"));
+  g_assert (g_strv_contains ((const char * const *)icons, "everything-justrtl-rtl"));
+  g_assert (g_strv_contains ((const char * const *)icons, "everything-symbolic-rtl"));
+  g_assert (g_strv_contains ((const char * const *)icons, "everything-justsymbolic-symbolic"));
 
   g_assert (gtk_icon_theme_has_icon (theme, "size-test"));
   g_assert (gtk_icon_theme_has_icon (theme, "simple"));
@@ -687,7 +687,7 @@ test_list (void)
   g_assert (gtk_icon_theme_has_icon (theme, "everything-symbolic-rtl"));
   g_assert (gtk_icon_theme_has_icon (theme, "everything-justsymbolic-symbolic"));
 
-  g_list_free_full (icons, g_free);
+  g_strfreev (icons);
 }
 
 static void
