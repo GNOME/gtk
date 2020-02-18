@@ -383,9 +383,9 @@ static void         gtk_tree_model_sort_unref_node         (GtkTreeModel        
 /* TreeDragSource interface */
 static gboolean     gtk_tree_model_sort_row_draggable         (GtkTreeDragSource      *drag_source,
                                                                GtkTreePath            *path);
-static gboolean     gtk_tree_model_sort_drag_data_get         (GtkTreeDragSource      *drag_source,
-                                                               GtkTreePath            *path,
-							       GtkSelectionData       *selection_data);
+static GdkContentProvider *
+                    gtk_tree_model_sort_drag_data_get         (GtkTreeDragSource      *drag_source,
+                                                               GtkTreePath            *path);
 static gboolean     gtk_tree_model_sort_drag_data_delete      (GtkTreeDragSource      *drag_source,
                                                                GtkTreePath            *path);
 
@@ -1780,17 +1780,16 @@ gtk_tree_model_sort_row_draggable (GtkTreeDragSource *drag_source,
   return draggable;
 }
 
-static gboolean
+static GdkContentProvider *
 gtk_tree_model_sort_drag_data_get (GtkTreeDragSource *drag_source,
-                                   GtkTreePath       *path,
-                                   GtkSelectionData  *selection_data)
+                                   GtkTreePath       *path)
 {
   GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *)drag_source;
   GtkTreePath *child_path;
-  gboolean gotten;
+  GdkContentProvider *gotten;
 
   child_path = gtk_tree_model_sort_convert_path_to_child_path (tree_model_sort, path);
-  gotten = gtk_tree_drag_source_drag_data_get (GTK_TREE_DRAG_SOURCE (tree_model_sort->priv->child_model), child_path, selection_data);
+  gotten = gtk_tree_drag_source_drag_data_get (GTK_TREE_DRAG_SOURCE (tree_model_sort->priv->child_model), child_path);
   gtk_tree_path_free (child_path);
 
   return gotten;
