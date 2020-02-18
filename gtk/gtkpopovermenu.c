@@ -64,8 +64,8 @@
  *
  * #GtkPopoverMenu is just a subclass of #GtkPopover that adds
  * custom content to it, therefore it has the same CSS nodes.
- * It is one of the cases that add a .menu style class to the
- * popover's contents node.
+ * It is one of the cases that add a .menu style class to
+ * the popover's main node.
  */
 
 typedef struct _GtkPopoverMenuClass GtkPopoverMenuClass;
