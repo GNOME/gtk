@@ -322,7 +322,7 @@ touch_release_in_button (GtkButton *button)
       return FALSE;
     }
 
-  gdk_event_get_coords (event, &x, &y);
+  gdk_event_get_position (event, &x, &y);
 
   gdk_event_unref (event);
 

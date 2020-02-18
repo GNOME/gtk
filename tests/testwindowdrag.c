@@ -20,7 +20,10 @@ start_resize (GtkGestureClick *gesture,
 
   surface = gtk_native_get_surface (gtk_widget_get_native (widget));
   event = gtk_get_current_event ();
-  gdk_event_get_button (event, &button);  
+  if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
+    button = gdk_button_event_get_button (event);  
+  else
+    button = 0;
   timestamp = gdk_event_get_time (event);
 
   gtk_widget_translate_coordinates (widget, GTK_WIDGET (gtk_widget_get_root (widget)),
@@ -65,7 +68,10 @@ start_move (GtkGestureClick *gesture,
 
   surface = gtk_native_get_surface (gtk_widget_get_native (widget));
   event = gtk_get_current_event ();
-  gdk_event_get_button (event, &button);  
+  if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
+    button = gdk_button_event_get_button (event);  
+  else
+    button = 0;
   timestamp = gdk_event_get_time (event);
 
   gtk_widget_translate_coordinates (widget, GTK_WIDGET (gtk_widget_get_root (widget)),

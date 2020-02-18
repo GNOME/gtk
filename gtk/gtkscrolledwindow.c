@@ -1200,7 +1200,7 @@ captured_motion (GtkScrolledWindow *sw,
   if (priv->vscrollbar_visible)
     indicator_start_fade (&priv->vindicator, 1.0);
 
-  gdk_event_get_state (event, &state);
+  state = gdk_event_get_modifier_state (event);
 
   target = gtk_widget_pick (GTK_WIDGET (sw), x, y, GTK_PICK_DEFAULT);
 

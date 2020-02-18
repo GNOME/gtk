@@ -69,7 +69,7 @@ gtk_gesture_drag_filter_event (GtkEventController *controller,
       guint n_fingers;
 
       g_object_get (G_OBJECT (controller), "n-points", &n_points, NULL);
-      gdk_event_get_touchpad_gesture_n_fingers (event, &n_fingers);
+      n_fingers = gdk_touchpad_event_get_n_fingers (event);
 
       if (n_fingers == n_points)
         return FALSE;

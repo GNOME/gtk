@@ -3775,7 +3775,7 @@ gdk_wayland_surface_show_window_menu (GdkSurface *surface,
 
   device = GDK_WAYLAND_DEVICE (gdk_event_get_device (event));
   seat = gdk_wayland_device_get_wl_seat (GDK_DEVICE (device));
-  gdk_event_get_coords (event, &x, &y);
+  gdk_event_get_position (event, &x, &y);
 
   serial = _gdk_wayland_device_get_implicit_grab_serial (device, event);
 
