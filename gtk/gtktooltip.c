@@ -36,6 +36,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkaccessible.h"
 #include "gtknative.h"
+#include "gdk/gdkeventsprivate.h"
 
 /**
  * SECTION:gtktooltip
@@ -887,7 +888,7 @@ _gtk_tooltip_handle_event (GdkEvent *event)
   event_type = gdk_event_get_event_type (event);
   surface = gdk_event_get_surface (event);
   gdk_event_get_coords (event, &dx, &dy);
-  target = gtk_get_event_target (event);
+  target = GTK_WIDGET (gdk_event_get_target (event));
 
   gtk_tooltip_handle_event_internal (event_type, surface, target, dx, dy);
 }
