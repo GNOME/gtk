@@ -39,6 +39,14 @@
  * not have TrackMouseEvent at all (?) --hb
  */
 
+/* Windows 8 level declarations. Needed
+   for Windows Pointer Input Stack API. */
+#undef _WIN32_WINNT
+#undef WINVER
+#define _WIN32_WINNT 0x602
+#define WINVER 0x602
+#include <windows.h>
+
 #include "config.h"
 
 #include "gdkprivate-win32.h"
@@ -112,6 +120,8 @@ static GList *client_filters;	/* Filters for client messages */
 extern gint       _gdk_input_ignore_core;
 
 GdkCursor *_gdk_win32_grab_cursor;
+
+extern GdkWin32TabletAPI _gdk_win32_tablet_api;
 
 typedef struct
 {
@@ -3955,13 +3965,16 @@ gdk_event_translate (MSG  *msg,
       else
 	gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FOCUSED);
 
-      /* Bring any tablet contexts to the top of the overlap order when
-       * one of our windows is activated.
-       * NOTE: It doesn't seem to work well if it is done in WM_ACTIVATEAPP
-       * instead
-       */
-      if (LOWORD(msg->wParam) != WA_INACTIVE)
-	_gdk_input_set_tablet_active ();
+      if (_gdk_win32_tablet_api == GDK_WIN32_TABLET_API_WINTAB)
+        {
+          /* Bring any tablet contexts to the top of the overlap order when
+           * one of our windows is activated.
+           * NOTE: It doesn't seem to work well if it is done in WM_ACTIVATEAPP
+           * instead
+           */
+          if (LOWORD(msg->wParam) != WA_INACTIVE)
+            _gdk_input_wintab_set_tablet_active ();
+        }
       break;
 
     case WM_ACTIVATEAPP:
@@ -3976,6 +3989,24 @@ gdk_event_translate (MSG  *msg,
       return_val = handle_nchittest (msg->hwnd, window,
                                      GET_X_LPARAM (msg->lParam),
                                      GET_Y_LPARAM (msg->lParam), ret_valp);
+      break;
+
+    case WM_POINTERENTER:
+    case WM_POINTERLEAVE:
+    case WM_POINTERDOWN:
+    case WM_POINTERUP:
+    case WM_POINTERUPDATE:
+      if (_gdk_win32_tablet_api == GDK_WIN32_TABLET_API_WINPOINTER ||
+          _gdk_win32_tablet_api == GDK_WIN32_TABLET_API_WINPOINTER_PLAIN)
+        {
+          gdk_input_winpointer_event (display, msg, window);
+          return_val = TRUE;
+        }
+      else
+        {
+          /* call DefWindowProcW, so the system generates mouse messages */
+          return_val = FALSE;
+        }
       break;
 
       /* Handle WINTAB events here, as we know that the device manager will
@@ -4000,15 +4031,17 @@ gdk_event_translate (MSG  *msg,
       /* Fall through */
     wintab:
 
-      event = gdk_event_new (GDK_NOTHING);
-      event->any.window = window;
-      g_object_ref (window);
+      if (_gdk_win32_tablet_api == GDK_WIN32_TABLET_API_WINTAB)
+        {
+          event = gdk_event_new (GDK_NOTHING);
+          event->any.window = window;
+          g_object_ref (window);
 
-      if (gdk_input_other_event (display, event, msg, window))
-	_gdk_win32_append_event (event);
-      else
-	gdk_event_free (event);
-
+          if (gdk_input_wintab_event (display, event, msg, window))
+            _gdk_win32_append_event (event);
+          else
+            gdk_event_free (event);
+        }
       break;
     }
 
