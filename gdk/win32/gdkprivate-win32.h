@@ -163,6 +163,13 @@ struct _GdkColormapPrivateWin32
   GdkColorInfo *info;
 };
 
+typedef enum {
+  GDK_WIN32_TABLET_API_NONE = 1,
+  GDK_WIN32_TABLET_API_WINTAB,
+  GDK_WIN32_TABLET_API_WINPOINTER,
+  GDK_WIN32_TABLET_API_WINPOINTER_PLAIN
+} GdkWin32TabletAPI;
+
 GType _gdk_gc_win32_get_type (void);
 
 gulong _gdk_win32_get_next_tick (gulong suggested_tick);
@@ -262,6 +269,15 @@ void    _gdk_other_api_failed        (const gchar *where,
 #define WIN32_GDI_FAILED(api) WIN32_API_FAILED (api)
 #define OTHER_API_FAILED(api) _gdk_other_api_failed (G_STRLOC, api)
 
+#ifdef HAVE_G_WARNING_ONCE
+/*TODO*/
+#define WIN32_API_FAILED_LOG_ONCE WIN32_API_FAILED
+#define G_WARNING_ONCE g_warning_once
+#else
+#define WIN32_API_FAILED_LOG_ONCE WIN32_API_FAILED
+#define G_WARNING_ONCE
+#endif
+
 /* These two macros call a GDI or other Win32 API and if the return
  * value is zero or NULL, print a warning message. The majority of GDI
  * calls return zero or NULL on failure. The value of the macros is nonzero
@@ -326,7 +342,6 @@ void  _gdk_win32_end_modal_call (GdkWin32ModalOpKind kind);
 
 
 /* Options */
-extern gboolean		 _gdk_input_ignore_wintab;
 extern gint		 _gdk_max_colors;
 
 #define GDK_WIN32_COLORMAP_DATA(cmap) ((GdkColormapPrivateWin32 *) GDK_COLORMAP (cmap)->windowing_data)

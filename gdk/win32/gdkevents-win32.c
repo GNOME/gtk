@@ -39,6 +39,14 @@
  * not have TrackMouseEvent at all (?) --hb
  */
 
+/* Windows 8 level declarations. Needed
+   for Windows Pointer Input Stack API. */
+#undef _WIN32_WINNT
+#undef WINVER
+#define _WIN32_WINNT 0x0602
+#define WINVER 0x0602
+#include <windows.h>
+
 #include "config.h"
 
 #include "gdkprivate-win32.h"
@@ -112,6 +120,8 @@ static GList *client_filters;	/* Filters for client messages */
 extern gint       _gdk_input_ignore_core;
 
 GdkCursor *_gdk_win32_grab_cursor;
+
+extern GdkWin32TabletAPI _gdk_win32_tablet_api;
 
 typedef struct
 {
@@ -628,6 +638,51 @@ find_window_for_mouse_event (GdkWindow* reported_window,
   msg->lParam = MAKELPARAM (pt.x, pt.y);
 
   return event_window;
+}
+
+static GdkWindow *
+find_window_for_pointer_event (GdkWindow* reported_window,
+                               MSG *msg,
+                               GdkDeviceGrabInfo *pointer_grab)
+{
+  GdkWindow *target_window = NULL;
+
+  if (pointer_grab == NULL)
+    target_window = reported_window;
+  else
+    {
+      POINT pt = msg->pt;
+
+      if (!pointer_grab->owner_events)
+        target_window = pointer_grab->native_window;
+      else
+        {
+          HWND hwnd;
+          RECT rect;
+
+          hwnd = WindowFromPoint (pt);
+          if (hwnd != NULL)
+            {
+              POINT client_pt = pt;
+
+              ScreenToClient (hwnd, &client_pt);
+              GetClientRect (hwnd, &rect);
+              if (PtInRect (&rect, client_pt))
+                target_window = gdk_win32_handle_table_lookup (hwnd);
+            }
+
+          if (target_window == NULL)
+            target_window = pointer_grab->native_window;
+        }
+
+      /* need to also adjust the coordinates to the new window */
+      ScreenToClient (GDK_WINDOW_HWND (target_window), &pt);
+
+      /* ATTENTION: need to update client coords */
+      msg->lParam = MAKELPARAM (pt.x, pt.y);
+    }
+
+  return target_window;
 }
 
 static void
@@ -3053,6 +3108,78 @@ gdk_event_translate (MSG  *msg,
       return_val = TRUE;
       break;
 
+    case WM_POINTERENTER:
+    case WM_POINTERLEAVE:
+    case WM_POINTERDOWN:
+    case WM_POINTERUP:
+    case WM_POINTERUPDATE:
+      if (_gdk_win32_tablet_api == GDK_WIN32_TABLET_API_WINPOINTER ||
+          _gdk_win32_tablet_api == GDK_WIN32_TABLET_API_WINPOINTER_PLAIN)
+        {
+          g_set_object (&window, find_window_for_pointer_event (window, msg, pointer_grab));
+
+          switch (msg->message)
+            {
+            case WM_POINTERENTER:
+            case WM_POINTERLEAVE:
+              gdk_input_winpointer_event (display, msg, window);
+            break;
+            case WM_POINTERDOWN:
+              if (GDK_WINDOW_DESTROYED (window))
+                break;
+              gdk_input_winpointer_event (display, msg, window);
+            break;
+            case WM_POINTERUP:
+              /*TODO*/
+              gdk_input_winpointer_event (display, msg, window);
+              impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+              /* End a drag op when the same button that started it is released */
+              if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE &&
+                  1/*impl->drag_move_resize_context.button == last_evt_button*/)
+                {
+                  gdk_win32_window_end_move_resize_drag (window);
+                }
+            break;
+            case WM_POINTERUPDATE:
+              {
+                GdkWindow *new_window = window;
+
+                if (mouse_window != new_window)
+                  {
+                    synthesize_crossing_events (display,
+                                                mouse_window, new_window,
+                                                GDK_CROSSING_NORMAL,
+                                                &msg->pt,
+                                                0, /* TODO: Set right mask */
+                                                msg->time,
+                                                FALSE);
+                    g_set_object (&mouse_window, new_window);
+                  }
+
+                impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+                if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
+                  {
+                    impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+                    gint current_root_x = (msg->pt.x + _gdk_offset_x) / impl->window_scale;
+                    gint current_root_y = (msg->pt.y + _gdk_offset_y) / impl->window_scale;
+                    gdk_win32_window_do_move_resize_drag (window, current_root_x, current_root_y);
+                  }
+                else
+                  gdk_input_winpointer_event (display, msg, window);
+              }
+            break;
+            }
+          /*TODO: WM_MOUSELEAVE */
+
+          return_val = TRUE;
+        }
+      else
+        {
+          /* call DefWindowProcW, so the system generates mouse messages */
+          return_val = FALSE;
+        }
+      break;
+
     case WM_MOUSEWHEEL:
     case WM_MOUSEHWHEEL:
       GDK_NOTE (EVENTS, g_print (" %d", (short) HIWORD (msg->wParam)));
@@ -3955,13 +4082,16 @@ gdk_event_translate (MSG  *msg,
       else
 	gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FOCUSED);
 
-      /* Bring any tablet contexts to the top of the overlap order when
-       * one of our windows is activated.
-       * NOTE: It doesn't seem to work well if it is done in WM_ACTIVATEAPP
-       * instead
-       */
-      if (LOWORD(msg->wParam) != WA_INACTIVE)
-	_gdk_input_set_tablet_active ();
+      if (_gdk_win32_tablet_api == GDK_WIN32_TABLET_API_WINTAB)
+        {
+          /* Bring any tablet contexts to the top of the overlap order when
+           * one of our windows is activated.
+           * NOTE: It doesn't seem to work well if it is done in WM_ACTIVATEAPP
+           * instead
+           */
+          if (LOWORD(msg->wParam) != WA_INACTIVE)
+            _gdk_input_wintab_set_tablet_active ();
+        }
       break;
 
     case WM_ACTIVATEAPP:
@@ -4000,15 +4130,17 @@ gdk_event_translate (MSG  *msg,
       /* Fall through */
     wintab:
 
-      event = gdk_event_new (GDK_NOTHING);
-      event->any.window = window;
-      g_object_ref (window);
+      if (_gdk_win32_tablet_api == GDK_WIN32_TABLET_API_WINTAB)
+        {
+          event = gdk_event_new (GDK_NOTHING);
+          event->any.window = window;
+          g_object_ref (window);
 
-      if (gdk_input_other_event (display, event, msg, window))
-	_gdk_win32_append_event (event);
-      else
-	gdk_event_free (event);
-
+          if (gdk_input_wintab_event (display, event, msg, window))
+            _gdk_win32_append_event (event);
+          else
+            gdk_event_free (event);
+        }
       break;
     }
 

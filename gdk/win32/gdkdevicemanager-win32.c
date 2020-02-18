@@ -17,6 +17,14 @@
 
 #include "config.h"
 
+/* Windows 8 level declarations. Needed
+   for Windows Pointer Input Stack API. */
+#undef _WIN32_WINNT
+#undef WINVER
+#define _WIN32_WINNT 0x0602
+#define WINVER 0x0602
+#include <windows.h>
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
@@ -29,8 +37,74 @@
 #include "gdkdevice-win32.h"
 #include "gdkdevice-virtual.h"
 #include "gdkdevice-wintab.h"
+#include "gdkdevice-winpointer.h"
 #include "gdkdisplayprivate.h"
 #include "gdkseatdefaultprivate.h"
+
+typedef BOOL
+(WINAPI *t_RegisterPointerDeviceNotifications) (HWND window,
+                                                BOOL notifyRange);
+typedef BOOL
+(WINAPI *t_GetPointerDevices) (UINT32 *deviceCount,
+                               POINTER_DEVICE_INFO *pointerDevices);
+typedef BOOL
+(WINAPI *t_GetPointerDeviceCursors) (HANDLE device,
+                                     UINT32 *cursorCount,
+                                     POINTER_DEVICE_CURSOR_INFO *deviceCursors);
+typedef BOOL
+(WINAPI *t_GetPointerDeviceRects) (HANDLE device,
+                                   RECT *pointerDeviceRect,
+                                   RECT *displayRect);
+typedef BOOL
+(WINAPI *t_GetPointerCursorId) (UINT32 pointerId,
+                                UINT32 *cursorId);
+typedef BOOL
+(WINAPI *t_GetPointerType) (UINT32 pointerId,
+                            POINTER_INPUT_TYPE *pointerType);
+typedef BOOL
+(WINAPI *t_GetPointerFramePenInfoHistory) (UINT32 pointerId,
+                                           UINT32 *entriesCount,
+                                           UINT32 *pointerCount,
+                                           POINTER_PEN_INFO *penInfo);
+typedef BOOL
+(WINAPI *t_GetPointerFrameTouchInfoHistory) (UINT32 pointerId,
+                                             UINT32 *entriesCount,
+                                             UINT32 *pointerCount,
+                                             POINTER_TOUCH_INFO *touchInfo);
+typedef BOOL
+(WINAPI *t_GetPointerDeviceProperties) (HANDLE device,
+                                        UINT32 *propertyCount,
+                                        POINTER_DEVICE_PROPERTY *pointerProperties);
+typedef BOOL
+(WINAPI *t_GetRawPointerDeviceData) (UINT32 pointerId,
+                                     UINT32 historyCount,
+                                     UINT32 propertiesCount,
+                                     POINTER_DEVICE_PROPERTY *pProperties,
+                                     LONG *pValues);
+typedef BOOL
+(WINAPI *t_SkipPointerFrameMessages) (UINT32 pointerId);
+
+static t_RegisterPointerDeviceNotifications p_RegisterPointerDeviceNotifications;
+static t_GetPointerDevices p_GetPointerDevices;
+static t_GetPointerDeviceCursors p_GetPointerDeviceCursors;
+static t_GetPointerDeviceRects p_GetPointerDeviceRects;
+static t_GetPointerCursorId p_GetPointerCursorId;
+static t_GetPointerType p_GetPointerType;
+static t_GetPointerFramePenInfoHistory p_GetPointerFramePenInfoHistory;
+static t_GetPointerFrameTouchInfoHistory p_GetPointerFrameTouchInfoHistory;
+static t_GetPointerDeviceProperties p_GetPointerDeviceProperties;
+static t_GetRawPointerDeviceData p_GetRawPointerDeviceData;
+static t_SkipPointerFrameMessages p_SkipPointerFrameMessages;
+
+#define HID_DIGITIZER_PRESSURE 0x30
+#define HID_DIGITIZER_XTILT 0x3D
+#define HID_DIGITIZER_YTILT 0x3E
+#define HID_DIGITIZER_ROTATION 0x41
+
+static ATOM winpointer_notif_window_class;
+static HWND winpointer_notif_window_handle;
+
+extern GdkWin32TabletAPI _gdk_win32_tablet_api;
 
 #define WINTAB32_DLL "Wintab32.dll"
 
@@ -349,6 +423,1038 @@ print_cursor (int index)
 }
 #endif
 
+static GdkDeviceWinpointer*
+gdk_device_manager_find_winpointer_device (GdkDeviceManagerWin32 *device_manager,
+                                           HANDLE device_handle,
+                                           UINT32 cursor_id,
+                                           GdkInputSource input_source)
+{
+  GList *l;
+
+  for (l = device_manager->winpointer_devices; l; l = l->next)
+    {
+      GdkDeviceWinpointer *device = GDK_DEVICE_WINPOINTER (l->data);
+      GdkInputSource device_input_source = gdk_device_get_source (GDK_DEVICE (device));
+
+      if (device->device_handle == device_handle &&
+          device->start_cursor_id <= cursor_id &&
+          device->end_cursor_id >= cursor_id &&
+          (input_source < 0 || device_input_source == input_source))
+        {
+          return device;
+        }
+    }
+
+  return NULL;
+}
+
+static gboolean
+winpointer_is_eraser (POINTER_PEN_INFO *pen_info)
+{
+  const PEN_FLAGS flags = PEN_FLAG_INVERTED | PEN_FLAG_ERASER;
+  return (pen_info->penFlags & flags) ? TRUE : FALSE;
+}
+
+static GdkEvent*
+winpointer_alloc_event (MSG *msg,
+                        POINTER_INFO *info)
+{
+  switch (msg->message)
+    {
+    case WM_POINTERENTER:
+      return gdk_event_new (GDK_PROXIMITY_IN);
+    case WM_POINTERLEAVE:
+      return gdk_event_new (GDK_PROXIMITY_OUT);
+    }
+
+  if (info->pointerType == PT_PEN)
+    {
+      switch (msg->message)
+        {
+        case WM_POINTERDOWN:
+          return gdk_event_new (GDK_BUTTON_PRESS);
+        case WM_POINTERUPDATE:
+          return gdk_event_new (GDK_MOTION_NOTIFY);
+        case WM_POINTERUP:
+          return gdk_event_new (GDK_BUTTON_RELEASE);
+        }
+    }
+  else if (info->pointerType == PT_TOUCH)
+    {
+      if (info->pointerFlags & POINTER_FLAG_CANCELED)
+        return gdk_event_new (GDK_TOUCH_CANCEL);
+
+      switch (msg->message)
+        {
+        case WM_POINTERDOWN:
+          return gdk_event_new (GDK_TOUCH_BEGIN);
+        case WM_POINTERUPDATE:
+          return gdk_event_new (GDK_TOUCH_UPDATE);
+        case WM_POINTERUP:
+          return gdk_event_new (GDK_TOUCH_END);
+        }
+    }
+
+  return NULL;
+}
+
+static void
+winpointer_make_event (GdkDeviceManagerWin32 *device_manager,
+                       GdkDeviceWinpointer *device,
+                       GdkWindow *target_window,
+                       MSG *msg,
+                       POINTER_INFO *info)
+{
+  guint32 time = 0;
+  gdouble x_root = 0.0;
+  gdouble y_root = 0.0;
+  gdouble x = 0.0;
+  gdouble y = 0.0;
+  guint state = 0;
+  gdouble *axes = NULL;
+  guint button = 0;
+  GdkEventSequence *sequence = NULL;
+  gboolean emulating_pointer = FALSE;
+  GdkEvent *evt = NULL;
+  POINT client_area_screen_coordinates;
+  GdkWindowImplWin32 *impl = NULL;
+
+  /*TODO: could we also use PerformanceCount? */
+  time = info->dwTime;
+  if (time == 0)
+    time = _gdk_win32_get_next_tick (msg->time);
+
+  /*TODO: consider using predicted coordinates (only applies to touch, not pen) */
+  x_root = info->ptHimetricLocationRaw.x * device->scale_x;
+  y_root = info->ptHimetricLocationRaw.y * device->scale_y;
+
+  client_area_screen_coordinates.x = 0;
+  client_area_screen_coordinates.y = 0;
+  ClientToScreen (GDK_WINDOW_HWND (target_window),
+                  &client_area_screen_coordinates);
+  x = x_root - client_area_screen_coordinates.x;
+  y = y_root - client_area_screen_coordinates.y;
+
+  /* Handle DPI scaling */
+  impl = GDK_WINDOW_IMPL_WIN32 (target_window->impl);
+  x_root /= impl->window_scale;
+  y_root /= impl->window_scale;
+  x /= impl->window_scale;
+  y /= impl->window_scale;
+
+  state = 0;
+  if (info->dwKeyStates & POINTER_MOD_CTRL)
+    state |= GDK_CONTROL_MASK;
+  if (info->dwKeyStates & POINTER_MOD_SHIFT)
+    state |= GDK_SHIFT_MASK;
+  if (GetKeyState (VK_MENU) < 0)
+    state |= GDK_MOD1_MASK;
+  if (GetKeyState (VK_CAPITAL) & 0x1)
+    state |= GDK_LOCK_MASK;
+
+  axes = g_new0 (gdouble, device->num_axes);
+  if (info->pointerType == PT_PEN)
+    {
+      POINTER_PEN_INFO *pen_info = (POINTER_PEN_INFO*) info;
+      if (device->index_axis_pressure >= 0)
+        {
+           if (pen_info->penMask & PEN_MASK_PRESSURE)
+             axes[device->index_axis_pressure] = pen_info->pressure;
+           else
+             axes[device->index_axis_pressure] = 512.0;
+        }
+      if (device->index_axis_xtilt >= 0)
+        {
+           if (pen_info->penMask & PEN_MASK_TILT_X)
+             axes[device->index_axis_xtilt] = pen_info->tiltX;
+           else
+             axes[device->index_axis_xtilt] = 0.0;
+        }
+      if (device->index_axis_ytilt >= 0)
+        {
+           if (pen_info->penMask & PEN_MASK_TILT_Y)
+             axes[device->index_axis_ytilt] = pen_info->tiltY;
+           else
+             axes[device->index_axis_ytilt] = 0.0;
+        }
+      if (device->index_axis_rotation >= 0)
+        {
+           if (pen_info->penMask & PEN_MASK_ROTATION)
+             axes[device->index_axis_rotation] = pen_info->rotation;
+           else
+             axes[device->index_axis_rotation] = 0.0;
+        }
+    }
+  else if (info->pointerType == PT_TOUCH)
+    {
+      POINTER_TOUCH_INFO *touch_info = (POINTER_TOUCH_INFO*) info;
+      if (device->index_axis_pressure >= 0)
+        {
+           if (touch_info->touchMask & TOUCH_MASK_PRESSURE)
+             axes[device->index_axis_pressure] = touch_info->pressure;
+           else
+             axes[device->index_axis_pressure] = 512.0;
+        }
+      if (device->index_axis_rotation >= 0)
+        {
+           if (touch_info->touchMask & TOUCH_MASK_ORIENTATION)
+             axes[device->index_axis_rotation] = touch_info->orientation;
+           else
+             axes[device->index_axis_rotation] = 0.0;
+        }
+    }
+
+  sequence = (GdkEventSequence*) GUINT_TO_POINTER (info->pointerId);
+  emulating_pointer = (info->pointerFlags & POINTER_FLAG_PRIMARY) ? TRUE : FALSE;
+
+  button = /*(info.pointerFlags & POINTER_FLAG_SECONDBUTTON) ? 3 :*/ 1;
+
+  evt = winpointer_alloc_event (msg, info);
+  switch (evt->any.type)
+    {
+    case GDK_PROXIMITY_IN:
+    case GDK_PROXIMITY_OUT:
+      evt->proximity.time = time;
+    break;
+    case GDK_BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+      evt->button.time = time;
+      evt->button.x_root = x_root;
+      evt->button.y_root = y_root;
+      evt->button.x = x;
+      evt->button.y = y;
+      evt->button.state = state;
+      evt->button.axes = axes;
+      evt->button.button = button;
+    break;
+    case GDK_MOTION_NOTIFY:
+      evt->motion.time = time;
+      evt->motion.x_root = x_root;
+      evt->motion.y_root = y_root;
+      evt->motion.x = x;
+      evt->motion.y = y;
+      evt->motion.state = state;
+      evt->motion.axes = axes;
+    break;
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_CANCEL:
+    case GDK_TOUCH_END:
+      evt->touch.time = time;
+      evt->touch.x_root = x_root;
+      evt->touch.y_root = y_root;
+      evt->touch.x = x;
+      evt->touch.y = y;
+      evt->touch.state = state;
+      evt->touch.axes = axes;
+      evt->touch.sequence = sequence;
+      evt->touch.emulating_pointer = emulating_pointer;
+    break;
+    }
+
+  evt->any.window = g_object_ref (target_window);
+  gdk_event_set_device (evt, device_manager->core_pointer);
+  gdk_event_set_source_device (evt, GDK_DEVICE (device));
+  gdk_event_set_seat (evt, gdk_device_get_seat (device_manager->core_pointer));
+  /*TODO: better move to gdkevents-win32.c? */
+  _gdk_win32_append_event (evt);
+}
+
+static GdkWindow*
+winpointer_find_target_window (GdkWindow *window,
+                               GdkDevice *device,
+                               GdkEventMask mask)
+{
+  GdkWindow *target_window = window;
+
+  while (TRUE)
+    {
+      GdkEventMask device_mask = gdk_window_get_device_events (target_window, device);
+      GdkEventMask common_mask = gdk_window_get_events (target_window);
+
+      if ((device_mask & mask) != 0 ||
+          (common_mask & mask) != 0)
+        {
+          return target_window;
+        }
+
+      target_window = target_window->parent;
+
+      if (target_window == gdk_get_default_root_window () ||
+          target_window == NULL)
+        {
+          return NULL;
+        }
+    }
+
+  return NULL;
+}
+
+static GdkEventMask
+winpointer_get_test_mask (MSG *msg,
+                          POINTER_INFO *info)
+{
+  if (msg->message == WM_POINTERENTER)
+    return GDK_PROXIMITY_IN_MASK;
+  else if (msg->message == WM_POINTERLEAVE)
+    return GDK_PROXIMITY_OUT_MASK;
+
+  if (info->pointerType == PT_TOUCH)
+    return GDK_TOUCH_MASK;
+
+  if (info->pointerType == PT_PEN)
+    {
+      switch (msg->message)
+        {
+        case WM_POINTERDOWN:
+          return GDK_BUTTON_PRESS_MASK;
+        case WM_POINTERUP:
+          return GDK_BUTTON_RELEASE_MASK;
+        case WM_POINTERUPDATE:
+          {
+            GdkEventMask mask = GDK_POINTER_MOTION_MASK;
+            if (info->pointerFlags & POINTER_FLAG_FIRSTBUTTON)
+              mask |= GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK;
+            if (info->pointerFlags & POINTER_FLAG_SECONDBUTTON)
+              mask |= GDK_BUTTON_MOTION_MASK | GDK_BUTTON2_MOTION_MASK;
+            return mask;
+          }
+        }
+    }
+
+  return 0;
+}
+
+void
+gdk_input_winpointer_event (GdkDisplay *display,
+                            MSG        *msg,
+                            GdkWindow  *window)
+{
+  GdkDeviceManagerWin32 *device_manager = NULL;
+  UINT32 pointer_id = GET_POINTERID_WPARAM (msg->wParam);
+  UINT32 cursor_id = 0;
+  POINTER_INPUT_TYPE type = PT_POINTER;
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  device_manager = GDK_DEVICE_MANAGER_WIN32 (gdk_display_get_device_manager (display));
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
+  if (!p_GetPointerType (pointer_id, &type))
+    {
+      WIN32_API_FAILED_LOG_ONCE ("GetPointerType");
+      return;
+    }
+
+  if (!p_GetPointerCursorId (pointer_id, &cursor_id))
+    {
+      WIN32_API_FAILED_LOG_ONCE ("GetPointerCursorId");
+      return;
+    }
+
+  if (type == PT_PEN)
+    {
+      GdkDeviceWinpointer *device_tip = NULL;
+      GdkDeviceWinpointer *device_eraser = NULL;
+      POINTER_PEN_INFO *infos = NULL;
+      UINT32 history_count = 0;
+      UINT32 cursor_count = 0;
+      UINT32 i = 0;
+      UINT32 j = 0;
+
+      /*TODO*/
+      do {
+        infos = g_new0 (POINTER_PEN_INFO, history_count * cursor_count);
+        if (!p_GetPointerFramePenInfoHistory (pointer_id, &history_count, &cursor_count, infos))
+          {
+            WIN32_API_FAILED_LOG_ONCE ("GetPointerFramePenInfoHistory");
+            g_free (infos);
+            return;
+          }
+      } while (!infos && history_count > 0 && cursor_count > 0);
+
+      /*TODO*/
+      if (!infos || history_count == 0 || cursor_count == 0)
+        {
+          G_WARNING_ONCE ("Empty WM_POINTER frame history"); /*TODO: format*/
+          g_free (infos);
+          return;
+        }
+
+      device_tip = gdk_device_manager_find_winpointer_device (device_manager,
+                                                              infos->pointerInfo.sourceDevice,
+                                                              cursor_id,
+                                                              GDK_SOURCE_PEN);
+      device_eraser = gdk_device_manager_find_winpointer_device (device_manager,
+                                                                 infos->pointerInfo.sourceDevice,
+                                                                 cursor_id,
+                                                                 GDK_SOURCE_ERASER);
+      if (!device_tip || !device_eraser)
+        {
+          g_free (infos);
+          return;
+        }
+
+      if (device_tip->frame_id == infos->pointerInfo.frameId)
+        {
+          G_WARNING_ONCE ("Encountered same WM_POINTER device input frame ID");
+          return;
+        }
+      device_tip->frame_id = infos->pointerInfo.frameId;
+      device_eraser->frame_id = infos->pointerInfo.frameId;
+
+      /* Infos array contains infos in reverse chronological order. Why?
+         That way, if the infos are passed to a function that only wants
+         the last data, instead of the entire history, it will still work.
+         Directly dereferencing infos will give the last data. */
+      for (i = history_count; i > 0; i--)
+        {
+          for (j = cursor_count; j > 0; j--)
+            {
+              POINTER_PEN_INFO *info = &infos[(i - 1) * cursor_count + (j - 1)];
+
+              GdkEventMask test_mask = winpointer_get_test_mask (msg, &info->pointerInfo);
+              GdkDeviceWinpointer *device = winpointer_is_eraser (info) ? device_eraser
+                                                                        : device_tip;
+              GdkWindow *target_window = winpointer_find_target_window (window,
+                                                                        GDK_DEVICE (device),
+                                                                        test_mask);
+
+              if (!target_window)
+                continue; /* Could not find any GdkWindow interested in this event */
+
+              winpointer_make_event (device_manager, device, target_window, msg, (POINTER_INFO*)info);
+            }
+        }
+
+      /* Drop subsequent messages that would give us the same input we just processed,
+         since we are using the franme-based API. */
+      p_SkipPointerFrameMessages (pointer_id);
+
+      g_free (infos);
+    }
+  else if (type == PT_TOUCH)
+    {
+      GdkDeviceWinpointer *device = NULL;
+      POINTER_TOUCH_INFO *infos = NULL;
+      UINT32 history_count = 0;
+      UINT32 cursor_count = 0;
+      UINT32 i = 0;
+      UINT32 j = 0;
+
+      /*TODO*/
+      do {
+        infos = g_new0 (POINTER_TOUCH_INFO, history_count * cursor_count);
+        if (!p_GetPointerFrameTouchInfoHistory (pointer_id, &history_count, &cursor_count, infos))
+          {
+            WIN32_API_FAILED_LOG_ONCE ("GetPointerFrameTouchInfoHistory");
+            g_free (infos);
+            return;
+          }
+      } while (!infos && history_count > 0 && cursor_count > 0);
+
+      /*TODO*/
+      if (!infos || history_count == 0 || cursor_count == 0)
+        {
+          G_WARNING_ONCE ("Empty WM_POINTER frame history"); /*TODO: format*/
+          g_free (infos);
+          return;
+        }
+
+      device = gdk_device_manager_find_winpointer_device (device_manager,
+                                                          infos->pointerInfo.sourceDevice,
+                                                          cursor_id,
+                                                          GDK_SOURCE_TOUCHSCREEN);
+      if (!device)
+        {
+          g_free (infos);
+          return;
+        }
+
+      if (device->frame_id == infos->pointerInfo.frameId)
+        {
+          G_WARNING_ONCE ("Encountered same WM_POINTER device input frame ID");
+          return;
+        }
+      device->frame_id = infos->pointerInfo.frameId;
+
+      for (i = history_count; i > 0; i--)
+        {
+          for (j = cursor_count; j > 0; j--)
+            {
+              POINTER_TOUCH_INFO *info = &infos[(i - 1) * cursor_count + (j - 1)];
+              GdkEventMask test_mask = winpointer_get_test_mask (msg, &info->pointerInfo);
+              GdkWindow *target_window = winpointer_find_target_window (window,
+                                                                        GDK_DEVICE (device),
+                                                                        test_mask);
+
+              if (!target_window)
+                continue; /* Could not find any GdkWindow interested in this event */
+
+              winpointer_make_event (device_manager, device, target_window, msg, (POINTER_INFO*)info);
+            }
+        }
+
+      p_SkipPointerFrameMessages (pointer_id);
+
+      g_free (infos);
+    }
+}
+
+static gboolean
+winpointer_device_update_scale_factors (GdkDeviceWinpointer *device)
+{
+  RECT device_rect;
+  RECT display_rect;
+  LONG device_width;
+  LONG device_height;
+  LONG display_width;
+  LONG display_height;
+
+  if (!p_GetPointerDeviceRects (device->device_handle,
+                                &device_rect,
+                                &display_rect))
+    {
+      WIN32_API_FAILED ("GetPointerDeviceRects");
+      return FALSE;
+    }
+
+  device_width = device_rect.right - device_rect.left;
+  device_height = device_rect.bottom - device_rect.top;
+  display_width = display_rect.right - display_rect.left;
+  display_height = display_rect.bottom - display_rect.top;
+
+  if (device_width == 0 ||
+      device_height == 0 ||
+      display_width == 0 ||
+      display_height == 0)
+    {
+      g_warning ("Invalid coordinates from GetPointerDeviceRects");
+      return FALSE;
+    }
+
+  device->scale_x = ((gdouble) display_width) / ((gdouble) device_width);
+  device->scale_y = ((gdouble) display_height) / ((gdouble) device_height);
+
+  return TRUE;
+}
+
+static gboolean
+winpointer_find_device_in_infos (GdkDeviceWinpointer *device,
+                                 POINTER_DEVICE_INFO *infos,
+                                 UINT32 infos_count)
+{
+  UINT32 i = 0;
+
+  for (i = 0; i < infos_count; i++)
+    {
+      if (device->device_handle == infos[i].device &&
+          device->start_cursor_id == infos[i].startingCursorId)
+        {
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static gboolean
+winpointer_supports_hid_usage (GArray *hid_props,
+                               USHORT page,
+                               USHORT usage,
+                               double *min_val,
+                               double *max_val,
+                               double *res_val)
+{
+  POINTER_DEVICE_PROPERTY *prop = NULL;
+  UINT32 i = 0;
+
+  for (i = 0; i < hid_props->len; i++)
+    {
+      prop = &g_array_index (hid_props, POINTER_DEVICE_PROPERTY, i);
+
+      if (prop->usagePageId == page && prop->usageId == usage)
+        {
+          if (prop->logicalMin != prop->logicalMax)
+            {
+              *min_val = prop->logicalMin;
+              *max_val = prop->logicalMax;
+              *res_val = 1.0; /*TODO*/
+              return TRUE;
+            }
+        }
+    }
+
+  return FALSE;
+}
+
+static void
+winpointer_hid_check_properties ()
+{
+}
+
+static gboolean
+winpointer_hid_supports_eraser (GArray *hid_props)
+{
+  /*TODO: stub */
+  return TRUE;
+}
+
+static GdkAxisFlags
+winpointer_plain_get_supported_axis_flags (GArray *hid_props)
+{
+  GdkAxisFlags flags = GDK_AXIS_FLAG_X | GDK_AXIS_FLAG_Y;
+  guint i = 0;
+
+  for (i = 0; i < hid_props->len; i++)
+    {
+      POINTER_DEVICE_PROPERTY *prop;
+      prop = &g_array_index (hid_props, POINTER_DEVICE_PROPERTY, i);
+
+      if (prop->usagePageId == 0x0D)
+        {
+          if (prop->logicalMin != prop->logicalMax && prop->unit != 0) /*TODO*/
+            {
+              switch (prop->usageId)
+                {
+                case HID_DIGITIZER_PRESSURE:
+                  flags |= GDK_AXIS_FLAG_PRESSURE;
+                break;
+                case HID_DIGITIZER_XTILT:
+                  flags |= GDK_AXIS_FLAG_XTILT;
+                break;
+                case HID_DIGITIZER_YTILT:
+                  flags |= GDK_AXIS_FLAG_YTILT;
+                break;
+                case HID_DIGITIZER_ROTATION:
+                  flags |= GDK_AXIS_FLAG_ROTATION;
+                break;
+                }
+            }
+        }
+    }
+
+  return flags;
+}
+
+static GdkDeviceWinpointer*
+winpointer_create_device_inner (GdkDeviceManagerWin32 *device_manager,
+                                GdkInputSource source,
+                                POINTER_DEVICE_INFO *info,
+                                GArray *hid_props)
+{
+  GdkDisplay *display = NULL;
+  GdkDeviceWinpointer *device = NULL;
+  gchar *base_name = NULL;
+  gchar *name = NULL;
+  gdouble min_val = 0.0;
+  gdouble max_val = 0.0;
+  gdouble res_val = 0.0;
+  guint num_touches = 0;
+  UINT32 num_cursors = 0;
+
+  g_object_get (device_manager, "display", &display, NULL);
+
+  if (info->productString != NULL && info->productString[0] != 0)
+    base_name = g_utf16_to_utf8 (info->productString, -1, NULL, NULL, NULL);
+  if (!base_name)
+    base_name = g_strdup ("Unnamed");
+
+  if (source == GDK_SOURCE_PEN)
+    name = g_strconcat (base_name, " Pen", NULL);
+  else if (source == GDK_SOURCE_ERASER)
+    name = g_strconcat (base_name, " Eraser", NULL);
+  else if (source == GDK_SOURCE_TOUCHSCREEN)
+    {
+      name = g_strconcat (base_name, " TouchScreen", NULL);
+      num_touches = info->maxActiveContacts;
+    }
+
+  device = g_object_new (GDK_TYPE_DEVICE_WINPOINTER,
+                         "name", name,
+                         "type", GDK_DEVICE_TYPE_SLAVE, /*TODO*/
+                         "input-source", source,
+                         "input-mode", GDK_MODE_SCREEN,
+                         "has-cursor", TRUE,
+                         "display", display,
+                         "device-manager", device_manager,
+                         "num-touches", num_touches,
+                         NULL);
+
+  /* No need to add axis for X, Y. */
+
+  if (source == GDK_SOURCE_PEN || source == GDK_SOURCE_ERASER)
+    {
+      if (_gdk_win32_tablet_api == GDK_WIN32_TABLET_API_WINPOINTER_PLAIN)
+        {
+          GdkAxisFlags axis_flags = winpointer_plain_get_supported_axis_flags (hid_props);
+          if (axis_flags & GDK_AXIS_FLAG_PRESSURE)
+            {
+              _gdk_device_add_axis (GDK_DEVICE (device), GDK_NONE, GDK_AXIS_PRESSURE, 0.0, 1024.0, 1.0);
+              device->index_axis_pressure = device->num_axes++;
+            }
+          if (axis_flags & GDK_AXIS_FLAG_XTILT)
+            {
+              _gdk_device_add_axis (GDK_DEVICE (device), GDK_NONE, GDK_AXIS_XTILT, -90.0, 90.0, 1.0);
+              device->index_axis_xtilt = device->num_axes++;
+            }
+          if (axis_flags & GDK_AXIS_FLAG_YTILT)
+            {
+              _gdk_device_add_axis (GDK_DEVICE (device), GDK_NONE, GDK_AXIS_YTILT, -90.0, 90.0, 1.0);
+              device->index_axis_ytilt = device->num_axes++;
+            }
+          if (axis_flags & GDK_AXIS_FLAG_ROTATION)
+            {
+              _gdk_device_add_axis (GDK_DEVICE (device), GDK_NONE, GDK_AXIS_ROTATION, 0.0, 359.0, 1.0);
+              device->index_axis_rotation = device->num_axes++;
+            }
+        }
+      else /* GDK_WIN32_TABLET_API_WINPOINTER */
+        {
+          if (winpointer_supports_hid_usage (hid_props, 0x0D, HID_DIGITIZER_PRESSURE, &min_val, &max_val, &res_val))
+            {
+              _gdk_device_add_axis (GDK_DEVICE (device), GDK_NONE, GDK_AXIS_PRESSURE, min_val, max_val, res_val);
+              device->index_axis_pressure = device->num_axes++;
+            }
+          if (winpointer_supports_hid_usage (hid_props, 0x0D, HID_DIGITIZER_XTILT, &min_val, &max_val, &res_val))
+            {
+              _gdk_device_add_axis (GDK_DEVICE (device), GDK_NONE, GDK_AXIS_XTILT, min_val, max_val, res_val);
+              device->index_axis_xtilt = device->num_axes++;
+            }
+          if (winpointer_supports_hid_usage (hid_props, 0x0D, HID_DIGITIZER_YTILT, &min_val, &max_val, &res_val))
+            {
+              _gdk_device_add_axis (GDK_DEVICE (device), GDK_NONE, GDK_AXIS_YTILT, min_val, max_val, res_val);
+              device->index_axis_ytilt = device->num_axes++;
+            }
+          if (winpointer_supports_hid_usage (hid_props, 0x0D, HID_DIGITIZER_ROTATION, &min_val, &max_val, &res_val))
+            {
+              _gdk_device_add_axis (GDK_DEVICE (device), GDK_NONE, GDK_AXIS_ROTATION, min_val, max_val, res_val);
+              device->index_axis_rotation = device->num_axes++;
+            }
+        }
+    }
+  else if (source == GDK_SOURCE_TOUCHSCREEN)
+    {
+      /*TODO: add diameter informations? */
+      GdkAxisFlags axis_flags = winpointer_plain_get_supported_axis_flags (hid_props);
+      if (axis_flags & GDK_AXIS_FLAG_PRESSURE)
+        {
+          _gdk_device_add_axis (GDK_DEVICE (device), GDK_NONE, GDK_AXIS_PRESSURE, 0.0, 1024.0, 1.0);
+          device->index_axis_pressure = device->num_axes++;
+        }
+      /*TODO*/
+      if (axis_flags & GDK_AXIS_FLAG_ROTATION)
+        {
+          _gdk_device_add_axis (GDK_DEVICE (device), GDK_NONE, GDK_AXIS_ROTATION, 0.0, 359.0, 1.0);
+          device->index_axis_rotation = device->num_axes++;
+        }
+    }
+
+  if (!p_GetPointerDeviceCursors (info->device, &num_cursors, NULL))
+    {
+      WIN32_API_FAILED ("GetPointerDeviceCursors");
+      g_clear_pointer (&device, g_object_unref);
+      goto cleanup;
+    }
+
+  if (num_cursors == 0)
+    {
+      g_clear_pointer (&device, g_object_unref);
+      goto cleanup;
+    }
+
+  device->device_handle = info->device;
+  device->start_cursor_id = info->startingCursorId;
+  device->end_cursor_id = info->startingCursorId + num_cursors - 1;
+  device->hid_props = g_array_ref (hid_props);
+
+  if (!winpointer_device_update_scale_factors (device))
+    {
+      g_clear_pointer (&device, g_object_unref);
+      goto cleanup;
+    }
+
+  /*TODO: is it ok for touchscreen devices? */
+  _gdk_device_set_associated_device (device_manager->system_pointer, GDK_DEVICE (device));
+  _gdk_device_add_slave (device_manager->core_pointer, GDK_DEVICE (device));
+
+  device_manager->winpointer_devices = g_list_append (
+                                         device_manager->winpointer_devices,
+                                         device);
+
+  g_signal_emit_by_name (device_manager, "device-added", device, NULL);
+
+cleanup:
+  g_free (name);
+  g_free (base_name);
+
+  return device;
+}
+
+static void
+winpointer_create_devices (GdkDeviceManagerWin32 *device_manager,
+                           POINTER_DEVICE_INFO *info)
+{
+  HANDLE device_handle = info->device;
+  POINTER_DEVICE_PROPERTY *properties = NULL;
+  UINT32 properties_count = 0;
+  GArray *hid_props = NULL;
+
+  if (!p_GetPointerDeviceProperties (device_handle, &properties_count, NULL))
+    {
+      WIN32_API_FAILED ("GetPointerDeviceProperties");
+      return;
+    }
+  properties = g_new0 (POINTER_DEVICE_PROPERTY, properties_count);
+  if (!p_GetPointerDeviceProperties (device_handle, &properties_count, properties))
+    {
+      WIN32_API_FAILED ("GetPointerDeviceProperties");
+      g_free (properties);
+      return;
+    }
+
+  hid_props = g_array_new (FALSE, TRUE, sizeof (POINTER_DEVICE_PROPERTY));
+  g_array_set_size (hid_props, properties_count);
+  memcpy (hid_props->data,
+          properties,
+          sizeof (POINTER_DEVICE_PROPERTY) * properties_count);
+
+  if (info->pointerDeviceType == POINTER_DEVICE_TYPE_INTEGRATED_PEN ||
+      info->pointerDeviceType == POINTER_DEVICE_TYPE_EXTERNAL_PEN)
+    {
+      winpointer_create_device_inner (device_manager,
+                                      GDK_SOURCE_PEN,
+                                      info,
+                                      hid_props);
+
+      if (winpointer_hid_supports_eraser (hid_props))
+        {
+          winpointer_create_device_inner (device_manager,
+                                          GDK_SOURCE_ERASER,
+                                          info,
+                                          hid_props);
+        }
+    }
+  else if (info->pointerDeviceType == POINTER_DEVICE_TYPE_TOUCH)
+    {
+      winpointer_create_device_inner (device_manager,
+                                      GDK_SOURCE_TOUCHSCREEN,
+                                      info->device,
+                                      hid_props);
+    }
+
+  g_array_unref (hid_props);
+  g_free (properties);
+}
+
+static void
+winpointer_remove_device (GdkDeviceManagerWin32 *device_manager,
+                          GdkDeviceWinpointer *device)
+{
+  g_signal_emit_by_name (device_manager, "device-removed", device, NULL);
+
+  /* TODO: does set_associated_devices take a ref? */
+  g_object_run_dispose (G_OBJECT (device));
+  device_manager->winpointer_devices = g_list_remove (device_manager->winpointer_devices,
+                                                      device);
+  g_object_unref (device);
+}
+
+static void
+winpointer_enumerate_devices (GdkDeviceManagerWin32 *device_manager)
+{
+  POINTER_DEVICE_INFO *infos = NULL;
+  UINT32 infos_count = 0;
+  GList *l = NULL;
+  UINT32 i = 0;
+
+  if (!p_GetPointerDevices (&infos_count, NULL))
+    {
+      WIN32_API_FAILED ("GetPointerDevices");
+      return;
+    }
+  infos = g_new0 (POINTER_DEVICE_INFO, infos_count);
+  if (!p_GetPointerDevices (&infos_count, infos))
+    {
+      WIN32_API_FAILED ("GetPointerDevices");
+      g_free (infos);
+      return;
+    }
+
+  for (l = device_manager->winpointer_devices; l; l = l->next)
+    {
+      GdkDeviceWinpointer *device = GDK_DEVICE_WINPOINTER (l->data);
+
+      if (winpointer_find_device_in_infos (device, infos, infos_count))
+        {
+          winpointer_device_update_scale_factors (device);
+        }
+      else
+        {
+          winpointer_remove_device (device_manager, device);
+        }
+    }
+
+  for (i = 0; i < infos_count; i++)
+    {
+      POINTER_DEVICE_INFO *info = &infos[i];
+
+      if (!gdk_device_manager_find_winpointer_device (device_manager,
+                                                      info->device,
+                                                      info->startingCursorId,
+                                                      -1))
+        {
+          winpointer_create_devices (device_manager, info);
+        }
+    }
+
+  g_free (infos);
+}
+
+static LRESULT CALLBACK
+winpointer_notif_window_proc (HWND hwnd,
+                              UINT msg,
+                              WPARAM wParam,
+                              LPARAM lParam)
+{
+  if (msg == WM_POINTERDEVICECHANGE)
+    {
+      LONG_PTR data = GetWindowLongPtrW (hwnd, GWLP_USERDATA);
+      GdkDeviceManagerWin32 *device_manager = GDK_DEVICE_MANAGER_WIN32 (data);
+
+      winpointer_enumerate_devices (device_manager);
+      return 0;
+    }
+
+  return DefWindowProc (hwnd, msg, wParam, lParam);
+}
+
+static gboolean
+winpointer_notif_window_create ()
+{
+  WNDCLASSEXW wndclass;
+
+  memset (&wndclass, 0, sizeof (wndclass));
+  wndclass.cbSize = sizeof (wndclass);
+  wndclass.lpszClassName = L"GdkWin32WinPointerNotificationsWindowClass";
+  wndclass.lpfnWndProc = winpointer_notif_window_proc;
+  wndclass.hInstance = _gdk_dll_hinstance; /*TODO*/
+
+  if ((winpointer_notif_window_class = RegisterClassExW (&wndclass)) == 0)
+    {
+      g_warning ("Could not register window class for WinPointer device notifications");
+      return FALSE;
+    }
+
+  if ((winpointer_notif_window_handle = CreateWindowExW (
+                                          0,
+                                          (LPCWSTR) winpointer_notif_window_class,
+                                          L"GdkWin32 WinPointer Notifications",
+                                          0,
+                                          0, 0, 0, 0,
+                                          HWND_MESSAGE,
+                                          NULL,
+                                          _gdk_dll_hinstance,
+                                          NULL)) == NULL)
+    {
+      g_warning ("Could not create window for WinPointer device notifications");
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static gboolean
+winpointer_ensure_procedures ()
+{
+    /*TODO use g_once_init_enter/leave? */
+  static HMODULE user32_dll = NULL;
+
+  if (!user32_dll)
+    {
+      user32_dll = LoadLibraryW (L"user32.dll");
+      if (!user32_dll)
+        {
+          g_warning ("Failed to load user32.dll"); /*TODO*/
+          return FALSE;
+        }
+
+      p_RegisterPointerDeviceNotifications = (t_RegisterPointerDeviceNotifications)
+        GetProcAddress (user32_dll, "RegisterPointerDeviceNotifications");
+
+      p_GetPointerDevices = (t_GetPointerDevices)
+        GetProcAddress (user32_dll, "GetPointerDevices");
+
+      p_GetPointerDeviceCursors = (t_GetPointerDeviceCursors)
+        GetProcAddress (user32_dll, "GetPointerDeviceCursors");
+
+      p_GetPointerDeviceRects = (t_GetPointerDeviceRects)
+        GetProcAddress (user32_dll, "GetPointerDeviceRects");
+
+      p_GetPointerCursorId = (t_GetPointerCursorId)
+        GetProcAddress (user32_dll, "GetPointerCursorId");
+
+      p_GetPointerType = (t_GetPointerType)
+        GetProcAddress (user32_dll, "GetPointerType");
+
+      p_GetPointerFramePenInfoHistory = (t_GetPointerFramePenInfoHistory)
+        GetProcAddress (user32_dll, "GetPointerFramePenInfoHistory");
+
+      p_GetPointerFrameTouchInfoHistory = (t_GetPointerFrameTouchInfoHistory)
+        GetProcAddress (user32_dll, "GetPointerFrameTouchInfoHistory");
+
+      p_GetPointerDeviceProperties = (t_GetPointerDeviceProperties)
+        GetProcAddress (user32_dll, "GetPointerDeviceProperties");
+
+      p_GetRawPointerDeviceData = (t_GetRawPointerDeviceData)
+        GetProcAddress (user32_dll, "GetRawPointerDeviceData");
+
+      p_SkipPointerFrameMessages = (t_SkipPointerFrameMessages)
+        GetProcAddress (user32_dll, "SkipPointerFrameMessages");
+    }
+
+  return (p_RegisterPointerDeviceNotifications &&
+          p_GetPointerDevices &&
+          p_GetPointerDeviceCursors &&
+          p_GetPointerDeviceRects &&
+          p_GetPointerCursorId &&
+          p_GetPointerType &&
+          p_GetPointerFramePenInfoHistory &&
+          p_GetPointerFrameTouchInfoHistory &&
+          p_GetPointerDeviceProperties &&
+          p_GetRawPointerDeviceData &&
+          p_SkipPointerFrameMessages);
+}
+
+static gboolean
+winpointer_initialize (GdkDeviceManagerWin32 *device_manager)
+{
+  if (!winpointer_ensure_procedures ())
+    return FALSE;
+
+  if (!winpointer_notif_window_create ())
+    return FALSE;
+
+  SetLastError(0);
+  if ((!SetWindowLongPtrW (winpointer_notif_window_handle,
+                          GWLP_USERDATA,
+                          (LONG_PTR) device_manager))
+      && GetLastError() > 0)
+    {
+      WIN32_API_FAILED ("SetWindowLongPtrW");
+      return FALSE;
+    }
+
+  if (!p_RegisterPointerDeviceNotifications (winpointer_notif_window_handle, FALSE))
+    {
+      WIN32_API_FAILED ("RegisterPointerDeviceNotifications");
+      return FALSE;
+    }
+
+  winpointer_enumerate_devices (device_manager);
+
+  return TRUE;
+}
+
 static void
 wintab_init_check (GdkDeviceManagerWin32 *device_manager)
 {
@@ -379,9 +1485,6 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
   wintab_initialized = TRUE;
 
   wintab_contexts = NULL;
-
-  if (_gdk_input_ignore_wintab)
-    return;
 
   n = GetSystemDirectory (&dummy, 0);
 
@@ -755,18 +1858,36 @@ gdk_device_manager_win32_constructed (GObject *object)
   gdk_seat_default_add_slave (GDK_SEAT_DEFAULT (seat), device_manager->system_keyboard);
   g_object_unref (seat);
 
-  /* Only call Wintab init stuff after the default display
-   * is globally known and accessible through the display manager
-   * singleton. Approach lifted from gtkmodules.c.
-   */
-  display_manager = gdk_display_manager_get();
-  g_assert (display_manager != NULL);
-  default_display = gdk_display_manager_get_default_display (display_manager);
-  g_assert (default_display == NULL);
+  if (_gdk_win32_tablet_api == GDK_WIN32_TABLET_API_WINPOINTER ||
+      _gdk_win32_tablet_api == GDK_WIN32_TABLET_API_WINPOINTER_PLAIN)
+    {
+      /*TODO*/
+      if (!g_win32_check_windows_version (6, 2, 0, G_WIN32_OS_ANY))
+        {
+          g_warning ("WinPointer tablet input API is not available on this system. Switching to WinTab.");
+          _gdk_win32_tablet_api = GDK_WIN32_TABLET_API_WINTAB;
+        }
+      if (!winpointer_initialize (device_manager))
+        {
+          g_warning ("Could not initialize WinPointer tablet input API. Switching to WinTab.");
+          _gdk_win32_tablet_api = GDK_WIN32_TABLET_API_WINTAB;
+        }
+    }
+  if (_gdk_win32_tablet_api == GDK_WIN32_TABLET_API_WINTAB)
+    {
+      /* Only call Wintab init stuff after the default display
+       * is globally known and accessible through the display manager
+       * singleton. Approach lifted from gtkmodules.c.
+       */
+      display_manager = gdk_display_manager_get();
+      g_assert (display_manager != NULL);
+      default_display = gdk_display_manager_get_default_display (display_manager);
+      g_assert (default_display == NULL);
 
-  g_signal_connect (display_manager, "notify::default-display",
-                    G_CALLBACK (wintab_default_display_notify_cb),
-                    NULL);
+      g_signal_connect (display_manager, "notify::default-display",
+                        G_CALLBACK (wintab_default_display_notify_cb),
+                        NULL);
+    }
 }
 
 static GList *
@@ -789,6 +1910,8 @@ gdk_device_manager_win32_list_devices (GdkDeviceManager *device_manager,
 	{
 	  devices = g_list_prepend (devices, device_manager_win32->system_keyboard);
 	  devices = g_list_prepend (devices, device_manager_win32->system_pointer);
+          for (l = device_manager_win32->winpointer_devices; l != NULL; l = l->next)
+            devices = g_list_prepend (devices, l->data);
 	}
 
       for (l = device_manager_win32->wintab_devices; l != NULL; l = l->next)
@@ -825,7 +1948,7 @@ gdk_device_manager_win32_class_init (GdkDeviceManagerWin32Class *klass)
 }
 
 void
-_gdk_input_set_tablet_active (void)
+_gdk_input_wintab_set_tablet_active (void)
 {
   GList *tmp_list;
   HCTX *hctx;
@@ -836,7 +1959,7 @@ _gdk_input_set_tablet_active (void)
   if (!wintab_contexts)
     return; /* No tablet devices found, or Wintab not initialized yet */
 
-  GDK_NOTE (INPUT, g_print ("_gdk_input_set_tablet_active: "
+  GDK_NOTE (INPUT, g_print ("_gdk_input_wintab_set_tablet_active: "
                             "Bringing Wintab contexts to the top of the overlap order\n"));
 
   tmp_list = wintab_contexts;
@@ -939,10 +2062,10 @@ gdk_device_manager_find_wintab_device (GdkDeviceManagerWin32 *device_manager,
 }
 
 gboolean
-gdk_input_other_event (GdkDisplay *display,
-                       GdkEvent   *event,
-                       MSG        *msg,
-                       GdkWindow  *window)
+gdk_input_wintab_event (GdkDisplay *display,
+                        GdkEvent   *event,
+                        MSG        *msg,
+                        GdkWindow  *window)
 {
   GdkDeviceManagerWin32 *device_manager;
   GdkDeviceWintab *source_device = NULL;
@@ -964,7 +2087,7 @@ gdk_input_other_event (GdkDisplay *display,
 
   if (event->any.window != wintab_window)
     {
-      g_warning ("gdk_input_other_event: not wintab_window?");
+      g_warning ("gdk_input_wintab_event: not wintab_window?");
       return FALSE;
     }
 
@@ -978,7 +2101,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
   g_object_ref (window);
 
   GDK_NOTE (EVENTS_OR_INPUT,
-	    g_print ("gdk_input_other_event: window=%p %+d%+d\n",
+	    g_print ("gdk_input_wintab_event: window=%p %+d%+d\n",
                GDK_WINDOW_HWND (window), x, y));
 
   if (msg->message == WT_PACKET || msg->message == WT_CSRCHANGE)
