@@ -8,7 +8,7 @@ static GtkIconTheme *
 get_test_icontheme (gboolean force_reload)
 {
   static GtkIconTheme *icon_theme = NULL;
-  const char *current_dir;
+  const char *current_dir[2];
 
   if (force_reload)
     g_clear_object (&icon_theme);
@@ -17,10 +17,11 @@ get_test_icontheme (gboolean force_reload)
     return icon_theme;
 
   icon_theme = gtk_icon_theme_new ();
-  gtk_icon_theme_set_custom_theme (icon_theme, "icons");
+  gtk_icon_theme_set_theme_name (icon_theme, "icons");
   gtk_icon_theme_set_display (icon_theme, gdk_display_get_default ());
-  current_dir = g_test_get_dir (G_TEST_DIST);
-  gtk_icon_theme_set_search_path (icon_theme, &current_dir, 1);
+  current_dir[0] = g_test_get_dir (G_TEST_DIST);
+  current_dir[1] = NULL;
+  gtk_icon_theme_set_search_path (icon_theme, current_dir);
 
   return icon_theme;
 }
