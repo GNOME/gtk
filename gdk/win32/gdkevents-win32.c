@@ -892,7 +892,6 @@ fixup_event (GdkEvent *event)
        (event->any.type == GDK_LEAVE_NOTIFY)) &&
       (event->crossing.child_surface != NULL))
     g_object_ref (event->crossing.child_surface);
-  event->any.send_event = InSendMessage ();
 }
 
 void
@@ -1086,7 +1085,7 @@ send_crossing_event (GdkDisplay                 *display,
                                   window,
                                   device_manager->core_pointer,
                                   device_manager->system_pointer,
-                                  _gdk_win32_next_tick (time_),
+                                  _gdk_win32_get_next_tick (time_),
                                   mask,
                                   pt.x / impl->surface_scale,
                                   pt.y / impl->surface_scale,
@@ -2794,14 +2793,14 @@ gdk_event_translate (MSG  *msg,
                       ? GDK_SCROLL_RIGHT
                       : GDK_SCROLL_LEFT;
 
-      event = gdk_event_scroll_new (window,
-                                    device_manager_win32->core_pointer,
-                                    device_manager_win32->system_pointer,
-                                    NULL,
-                                    _gdk_win32_get_next_tick (msg->time),
-                                    build_pointer_event_state (msg),
-                                    direction,
-                                    TRUE);
+      event = gdk_event_discrete_scroll_new (window,
+                                             device_manager_win32->core_pointer,
+                                             device_manager_win32->system_pointer,
+                                             NULL,
+                                             _gdk_win32_get_next_tick (msg->time),
+                                             build_pointer_event_state (msg),
+                                             direction,
+                                             TRUE);
 
       _gdk_win32_append_event (event);
 
