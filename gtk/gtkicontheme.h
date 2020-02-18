@@ -91,26 +91,27 @@ void             gtk_icon_theme_set_display          (GtkIconTheme              
 
 GDK_AVAILABLE_IN_ALL
 void             gtk_icon_theme_set_search_path      (GtkIconTheme                *self,
-                                                      const gchar                 *path[],
-                                                      gint                         n_elements);
+                                                      const char * const          *path);
 GDK_AVAILABLE_IN_ALL
-void             gtk_icon_theme_get_search_path      (GtkIconTheme                *self,
-                                                      gchar                      **path[],
-                                                      gint                        *n_elements);
+char **          gtk_icon_theme_get_search_path      (GtkIconTheme                *self);
 GDK_AVAILABLE_IN_ALL
-void             gtk_icon_theme_append_search_path   (GtkIconTheme                *self,
-                                                      const gchar                 *path);
-GDK_AVAILABLE_IN_ALL
-void             gtk_icon_theme_prepend_search_path  (GtkIconTheme                *self,
-                                                      const gchar                 *path);
+void             gtk_icon_theme_add_search_path      (GtkIconTheme                *self,
+                                                      const char                  *path);
 
+GDK_AVAILABLE_IN_ALL
+void             gtk_icon_theme_set_resource_path    (GtkIconTheme                *self,
+                                                      const char * const          *path);
+GDK_AVAILABLE_IN_ALL
+char **          gtk_icon_theme_get_resource_path    (GtkIconTheme                *self);
 GDK_AVAILABLE_IN_ALL
 void             gtk_icon_theme_add_resource_path    (GtkIconTheme                *self,
-                                                      const gchar                 *path);
+                                                      const char                  *path);
 
 GDK_AVAILABLE_IN_ALL
-void             gtk_icon_theme_set_custom_theme     (GtkIconTheme                *self,
-                                                      const gchar                 *theme_name);
+void             gtk_icon_theme_set_theme_name       (GtkIconTheme                *self,
+                                                      const char                  *theme_name);
+GDK_AVAILABLE_IN_ALL
+char *           gtk_icon_theme_get_theme_name       (GtkIconTheme                *self);
 
 GDK_AVAILABLE_IN_ALL
 gboolean         gtk_icon_theme_has_icon             (GtkIconTheme                *self,

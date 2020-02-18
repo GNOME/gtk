@@ -75,7 +75,7 @@ main (int argc, char *argv[])
   
   icon_theme = gtk_icon_theme_new ();
   
-  gtk_icon_theme_set_custom_theme (icon_theme, themename);
+  gtk_icon_theme_set_theme_name (icon_theme, themename);
 
   if (strcmp (argv[1], "display") == 0)
     {
