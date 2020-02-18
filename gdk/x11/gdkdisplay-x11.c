@@ -715,11 +715,10 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 
     case Expose:
       GDK_DISPLAY_NOTE (display, EVENTS,
-		g_message ("expose:\t\twindow: %ld  %d	x,y: %d %d  w,h: %d %d%s",
+		g_message ("expose:\t\twindow: %ld  %d	x,y: %d %d  w,h: %d %d",
 			   xevent->xexpose.window, xevent->xexpose.count,
 			   xevent->xexpose.x, xevent->xexpose.y,
-			   xevent->xexpose.width, xevent->xexpose.height,
-			   event->any.send_event ? " (send)" : ""));
+			   xevent->xexpose.width, xevent->xexpose.height));
 
       if (surface == NULL)
         break;
