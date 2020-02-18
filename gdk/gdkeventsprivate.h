@@ -46,10 +46,8 @@ struct _GdkEventAny
   GdkEventType type;
   GdkSurface *surface;
   guint16 flags;
-  gint8 send_event;
   GdkDevice *device;
   GdkDevice *source_device;
-  GdkDisplay *display;
 };
 
 /*
@@ -75,10 +73,10 @@ struct _GdkEventMotion
 {
   GdkEventAny any;
   guint32 time;
-  gdouble x;
-  gdouble y;
-  gdouble *axes;
-  guint state;
+  double x;
+  double y;
+  double *axes;
+  GdkModifierType state;
   GdkDeviceTool *tool;
   GList *history;
 };
@@ -111,10 +109,10 @@ struct _GdkEventButton
 {
   GdkEventAny any;
   guint32 time;
-  gdouble x;
-  gdouble y;
-  gdouble *axes;
-  guint state;
+  double x;
+  double y;
+  double *axes;
+  GdkModifierType state;
   guint button;
   GdkDeviceTool *tool;
 };
@@ -155,10 +153,10 @@ struct _GdkEventTouch
 {
   GdkEventAny any;
   guint32 time;
-  gdouble x;
-  gdouble y;
-  gdouble *axes;
-  guint state;
+  double x;
+  double y;
+  double *axes;
+  GdkModifierType state;
   GdkEventSequence *sequence;
   gboolean emulating_pointer;
 };
@@ -195,12 +193,12 @@ struct _GdkEventScroll
 {
   GdkEventAny any;
   guint32 time;
-  gdouble x;
-  gdouble y;
-  guint state;
+  double x;
+  double y;
+  GdkModifierType state;
   GdkScrollDirection direction;
-  gdouble delta_x;
-  gdouble delta_y;
+  double delta_x;
+  double delta_y;
   guint is_stop : 1;
   GdkDeviceTool *tool;
 };
@@ -228,7 +226,7 @@ struct _GdkEventKey
 {
   GdkEventAny any;
   guint32 time;
-  guint state;
+  GdkModifierType state;
   guint keyval;
   guint16 hardware_keycode;
   guint16 key_scancode;
@@ -265,12 +263,12 @@ struct _GdkEventCrossing
   GdkEventAny any;
   GdkSurface *child_surface;
   guint32 time;
-  gdouble x;
-  gdouble y;
+  double x;
+  double y;
   GdkCrossingMode mode;
   GdkNotifyType detail;
   gboolean focus;
-  guint state;
+  GdkModifierType state;
 };
 
 /*
@@ -308,9 +306,10 @@ struct _GdkEventFocus
 struct _GdkEventConfigure
 {
   GdkEventAny any;
-  gint x, y;
-  gint width;
-  gint height;
+  int x;
+  int y;
+  int width;
+  int height;
 };
 
 /*
@@ -379,7 +378,6 @@ struct _GdkEventGrabBroken {
 struct _GdkEventDND {
   GdkEventAny any;
   GdkDrop *drop;
-
   guint32 time;
   double x;
   double y;
@@ -408,11 +406,11 @@ struct _GdkEventTouchpadSwipe {
   gint8 phase;
   gint8 n_fingers;
   guint32 time;
-  gdouble x;
-  gdouble y;
-  gdouble dx;
-  gdouble dy;
-  guint state;
+  double x;
+  double y;
+  double dx;
+  double dy;
+  GdkModifierType state;
 };
 
 /*
@@ -442,13 +440,13 @@ struct _GdkEventTouchpadPinch {
   gint8 phase;
   gint8 n_fingers;
   guint32 time;
-  gdouble x;
-  gdouble y;
-  gdouble dx;
-  gdouble dy;
-  gdouble angle_delta;
-  gdouble scale;
-  guint state;
+  double x;
+  double y;
+  double dx;
+  double dy;
+  double angle_delta;
+  double scale;
+  GdkModifierType state;
 };
 
 /*
@@ -495,7 +493,7 @@ struct _GdkEventPadAxis {
   guint group;
   guint index;
   guint mode;
-  gdouble value;
+  double value;
 };
 
 /*
