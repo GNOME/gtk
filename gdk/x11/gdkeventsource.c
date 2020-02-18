@@ -135,8 +135,8 @@ create_synth_crossing_event (GdkEventType     evtype,
 
   g_assert (evtype == GDK_ENTER_NOTIFY || evtype == GDK_LEAVE_NOTIFY);
 
-  gdk_event_get_state (real_event, &state);
-  gdk_event_get_coords (real_event, &x, &y);
+  state = gdk_event_get_modifier_state (real_event);
+  gdk_event_get_position (real_event, &x, &y);
   event = gdk_event_crossing_new (evtype,
                                   real_event->any.surface,
                                   gdk_event_get_device (real_event),

@@ -2244,16 +2244,15 @@ static gboolean
 gdk_dnd_handle_motion_event (GdkDrag        *drag,
                              GdkEvent       *event)
 {
-  GdkModifierType state;
+  double x, y;
   int x_root, y_root;
 
-  if (!gdk_event_get_state ((GdkEvent *) event, &state))
-    return FALSE;
-
-  x_root = event->any.surface->x + event->motion.x;
-  y_root = event->any.surface->y + event->motion.y;
-  gdk_drag_update (drag, x_root, y_root, state,
-                   gdk_event_get_time ((GdkEvent *) event));
+  gdk_event_get_position (event, &x, &y);
+  x_root = event->any.surface->x + x;
+  y_root = event->any.surface->y + y;
+  gdk_drag_update (drag, x_root, y_root,
+                   gdk_event_get_modifier_state (event),
+                   gdk_event_get_time (event));
   return TRUE;
 }
 
