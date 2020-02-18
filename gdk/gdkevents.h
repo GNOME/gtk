@@ -135,7 +135,7 @@ typedef union  _GdkEvent	    GdkEvent;
  * @GDK_ENTER_NOTIFY: the pointer has entered the surface.
  * @GDK_LEAVE_NOTIFY: the pointer has left the surface.
  * @GDK_FOCUS_CHANGE: the keyboard focus has entered or left the surface.
- * @GDK_CONFIGURE: the size, position or stacking order of the surface has changed.
+ * @GDK_CONFIGURE: the size of the surface has changed.
  * @GDK_PROXIMITY_IN: an input device has moved into contact with a sensing
  *   surface (e.g. a touchscreen or graphics tablet).
  * @GDK_PROXIMITY_OUT: an input device has moved out of contact with a sensing
@@ -146,37 +146,23 @@ typedef union  _GdkEvent	    GdkEvent;
  *   progress.
  * @GDK_DROP_START: a drop operation onto the surface has started.
  * @GDK_SCROLL: the scroll wheel was turned
- * @GDK_GRAB_BROKEN: a pointer or keyboard grab was broken. This event type
- *   was added in 2.8.
- * @GDK_TOUCH_BEGIN: A new touch event sequence has just started. This event
- *   type was added in 3.4.
- * @GDK_TOUCH_UPDATE: A touch event sequence has been updated. This event type
- *   was added in 3.4.
- * @GDK_TOUCH_END: A touch event sequence has finished. This event type
- *   was added in 3.4.
- * @GDK_TOUCH_CANCEL: A touch event sequence has been canceled. This event type
- *   was added in 3.4.
+ * @GDK_GRAB_BROKEN: a pointer or keyboard grab was broken.
+ * @GDK_TOUCH_BEGIN: A new touch event sequence has just started.
+ * @GDK_TOUCH_UPDATE: A touch event sequence has been updated.
+ * @GDK_TOUCH_END: A touch event sequence has finished.
+ * @GDK_TOUCH_CANCEL: A touch event sequence has been canceled.
  * @GDK_TOUCHPAD_SWIPE: A touchpad swipe gesture event, the current state
- *   is determined by its phase field. This event type was added in 3.18.
+ *   is determined by its phase field.
  * @GDK_TOUCHPAD_PINCH: A touchpad pinch gesture event, the current state
- *   is determined by its phase field. This event type was added in 3.18.
- * @GDK_PAD_BUTTON_PRESS: A tablet pad button press event. This event type
- *   was added in 3.22.
- * @GDK_PAD_BUTTON_RELEASE: A tablet pad button release event. This event type
- *   was added in 3.22.
- * @GDK_PAD_RING: A tablet pad axis event from a "ring". This event type was
- *   added in 3.22.
- * @GDK_PAD_STRIP: A tablet pad axis event from a "strip". This event type was
- *   added in 3.22.
- * @GDK_PAD_GROUP_MODE: A tablet pad group mode change. This event type was
- *   added in 3.22.
- * @GDK_EVENT_LAST: marks the end of the GdkEventType enumeration. Added in 2.18
+ *   is determined by its phase field.
+ * @GDK_PAD_BUTTON_PRESS: A tablet pad button press event.
+ * @GDK_PAD_BUTTON_RELEASE: A tablet pad button release event.
+ * @GDK_PAD_RING: A tablet pad axis event from a "ring".
+ * @GDK_PAD_STRIP: A tablet pad axis event from a "strip".
+ * @GDK_PAD_GROUP_MODE: A tablet pad group mode change.
+ * @GDK_EVENT_LAST: marks the end of the GdkEventType enumeration.
  *
  * Specifies the type of the event.
- *
- * Do not confuse these events with the signals that GTK+ widgets emit.
- * Although many of these events result in corresponding signals being emitted,
- * the events are often transformed or filtered along the way.
  */
 typedef enum
 {
