@@ -5,7 +5,7 @@ window1
   toolkit: gtk
   window-type: normal
   <AtkComponent>
-  layer: window
+  layer: widget
   alpha: 1
   unnamed-GtkContainerAccessible-0
     "panel"

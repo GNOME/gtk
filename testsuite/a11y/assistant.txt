@@ -1,12 +1,12 @@
 window1
-  "frame"
+  "panel"
   index: 0
   name: Page 1
   state: enabled resizable sensitive showing visible
   toolkit: gtk
   window-type: normal
   <AtkComponent>
-  layer: window
+  layer: widget
   alpha: 1
   button1
     "push button"
