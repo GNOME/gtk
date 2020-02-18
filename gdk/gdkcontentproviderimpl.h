@@ -41,14 +41,6 @@ GDK_AVAILABLE_IN_ALL
 GdkContentProvider *    gdk_content_provider_new_for_bytes              (const char             *mime_type,
                                                                          GBytes                 *bytes);
 
-typedef GBytes * (*GdkContentProviderGetBytesFunc) (const char *mime_type,
-                                                    gpointer    data);
-
-GDK_AVAILABLE_IN_ALL
-GdkContentProvider *    gdk_content_provider_new_with_formats  (GdkContentFormats              *formats,
-                                                                GdkContentProviderGetBytesFunc  func,
-                                                                gpointer                        data,
-                                                                GDestroyNotify                  notify);
 
 G_END_DECLS
 
