@@ -40,6 +40,8 @@ libgdk_win32_la_SOURCES = \
 	gdkdevice-virtual.h \
 	gdkdevice-win32.c \
 	gdkdevice-win32.h \
+	gdkdevice-winpointer.c \
+	gdkdevice-winpointer.h \
 	gdkdevice-wintab.c \
 	gdkdevice-wintab.h \
 	gdkdisplay-win32.c \
