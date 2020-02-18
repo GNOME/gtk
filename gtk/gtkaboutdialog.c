@@ -199,7 +199,7 @@ typedef struct
   GtkWidget *license_view;
   GtkWidget *system_view;
 
-  GSList *visited_links;
+  GPtrArray *visited_links;
 
   GtkLicense license_type;
 
@@ -773,6 +773,8 @@ gtk_about_dialog_init (GtkAboutDialog *about)
 
   priv->license_type = GTK_LICENSE_UNKNOWN;
 
+  priv->visited_links = g_ptr_array_new_with_free_func (g_free);
+
   gtk_dialog_set_default_response (GTK_DIALOG (about), GTK_RESPONSE_CANCEL);
 
   gtk_widget_init_template (GTK_WIDGET (about));
@@ -818,7 +820,7 @@ gtk_about_dialog_finalize (GObject *object)
   g_strfreev (priv->artists);
 
   g_slist_free_full (priv->credit_sections, destroy_credit_section);
-  g_slist_free_full (priv->visited_links, g_free);
+  g_ptr_array_unref (priv->visited_links);
 
   G_OBJECT_CLASS (gtk_about_dialog_parent_class)->finalize (object);
 }
@@ -1881,7 +1883,7 @@ follow_if_link (GtkAboutDialog *about,
       if (uri)
         emit_activate_link (about, uri);
 
-      if (uri && !g_slist_find_custom (priv->visited_links, uri, (GCompareFunc)strcmp))
+      if (uri && !g_ptr_array_find_with_equal_func (priv->visited_links, uri, (GCompareFunc)strcmp, NULL))
         {
           GdkRGBA visited_link_color;
           GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET (about));
@@ -1892,7 +1894,7 @@ follow_if_link (GtkAboutDialog *about,
 
           g_object_set (G_OBJECT (tag), "foreground-rgba", &visited_link_color, NULL);
 
-          priv->visited_links = g_slist_prepend (priv->visited_links, g_strdup (uri));
+          g_ptr_array_add (priv->visited_links, g_strdup (uri));
         }
     }
 
@@ -2094,7 +2096,7 @@ text_buffer_new (GtkAboutDialog  *about,
 
               link = g_strndup (q1, q2 - q1);
 
-              if (g_slist_find_custom (priv->visited_links, link, (GCompareFunc)strcmp))
+              if (g_ptr_array_find_with_equal_func (priv->visited_links, link, (GCompareFunc)strcmp, NULL))
                 color = visited_link_color;
               else
                 color = link_color;
