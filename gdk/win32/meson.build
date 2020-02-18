@@ -3,6 +3,7 @@ gdk_win32_sources = files(
   'gdkdevicemanager-win32.c',
   'gdkdevice-virtual.c',
   'gdkdevice-win32.c',
+  'gdkdevice-winpointer.c',
   'gdkdevice-wintab.c',
   'gdkdisplay-win32.c',
   'gdkdisplaymanager-win32.c',

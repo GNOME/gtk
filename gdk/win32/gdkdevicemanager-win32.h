@@ -41,7 +41,9 @@ struct _GdkDeviceManagerWin32
   /* Fake slave devices */
   GdkDevice *system_pointer;
   GdkDevice *system_keyboard;
+
   GList *wintab_devices;
+  GList *winpointer_devices;
 
   /* Bumped up every time a wintab device enters the proximity
    * of our context (WT_PROXIMITY). Bumped down when we either
@@ -57,11 +59,13 @@ struct _GdkDeviceManagerWin32Class
 
 GType gdk_device_manager_win32_get_type (void) G_GNUC_CONST;
 
-void     _gdk_input_set_tablet_active (void);
-gboolean gdk_input_other_event        (GdkDisplay *display,
-                                       GdkEvent   *event,
-                                       MSG        *msg,
-                                       GdkWindow  *window);
+void     _gdk_input_wintab_set_tablet_active (void);
+gboolean gdk_input_wintab_event        (GdkDisplay *display,
+                                        GdkEvent   *event,
+                                        MSG        *msg,
+                                        GdkWindow  *window);
+void     gdk_input_winpointer_event    (MSG        *msg,
+                                        GdkWindow  *window);
 
 G_END_DECLS
 
