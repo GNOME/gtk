@@ -2133,12 +2133,12 @@ gtk_icon_view_button_press (GtkGestureClick *gesture,
   if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
 
-  if (button == GDK_BUTTON_PRIMARY &&
-      gdk_event_get_state ((GdkEvent *) event, &state))
+  if (button == GDK_BUTTON_PRIMARY)
     {
       GdkModifierType extend_mod_mask;
       GdkModifierType modify_mod_mask;
 
+      state = gdk_event_get_modifier_state ((GdkEvent *)event);
       extend_mod_mask =
         gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_EXTEND_SELECTION);
 
@@ -2279,7 +2279,7 @@ button_event_modifies_selection (GdkEventButton *event)
 {
   guint state;
 
-  gdk_event_get_state ((GdkEvent *) event, &state);
+  state = gdk_event_get_modifier_state ((GdkEvent *) event);
   return (state & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) != 0;
 }
 

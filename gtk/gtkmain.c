@@ -1081,75 +1081,92 @@ static GdkEvent *
 rewrite_event_for_surface (GdkEvent  *event,
 			   GdkSurface *new_surface)
 {
+  GdkEventType type;
   double x, y;
+  double dx, dy;
 
-  if (!gdk_event_get_coords (event, &x, &y) ||
-      !gdk_surface_translate_coordinates (event->any.surface, new_surface, &x, &y))
-    {
-      x = y = 0;
-    }
+  type = gdk_event_get_event_type (event);
 
-  switch ((guint) event->any.type)
+  switch ((guint) type)
     {
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
-      return gdk_event_button_new (event->any.type,
+    case GDK_MOTION_NOTIFY:
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
+    case GDK_TOUCHPAD_SWIPE:
+    case GDK_TOUCHPAD_PINCH:
+      gdk_event_get_position (event, &x, &y);
+      gdk_surface_translate_coordinates (gdk_event_get_surface (event), new_surface, &x, &y);
+      break;
+    default:
+      x = y = 0;
+      break;
+    }
+
+  switch ((guint) type)
+    {
+    case GDK_BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+      return gdk_event_button_new (type,
                                    new_surface,
-                                   event->any.device,
-                                   event->any.source_device,
-                                   event->button.tool,
-                                   event->button.time,
-                                   event->button.state,
-                                   event->button.button,
+                                   gdk_event_get_device (event),
+                                   gdk_event_get_source_device (event),
+                                   gdk_event_get_device_tool (event),
+                                   gdk_event_get_time (event),
+                                   gdk_event_get_modifier_state (event),
+                                   gdk_button_event_get_button (event),
                                    x, y,
                                    NULL); // FIXME copy axes
     case GDK_MOTION_NOTIFY:
       return gdk_event_motion_new (new_surface,
-                                   event->any.device,
-                                   event->any.source_device,
-                                   event->motion.tool,
-                                   event->motion.time,
-                                   event->motion.state,
+                                   gdk_event_get_device (event),
+                                   gdk_event_get_source_device (event),
+                                   gdk_event_get_device_tool (event),
+                                   gdk_event_get_time (event),
+                                   gdk_event_get_modifier_state (event),
                                    x, y,
                                    NULL); // FIXME copy axes
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_UPDATE:
     case GDK_TOUCH_END:
     case GDK_TOUCH_CANCEL:
-      return gdk_event_touch_new (event->any.type,
-                                  event->touch.sequence,
+      return gdk_event_touch_new (type,
+                                  gdk_event_get_event_sequence (event),
                                   new_surface,
-                                  event->any.device,
-                                  event->any.source_device,
-                                  event->touch.time,
-                                  event->touch.state,
+                                  gdk_event_get_device (event),
+                                  gdk_event_get_source_device (event),
+                                  gdk_event_get_time (event),
+                                  gdk_event_get_modifier_state (event),
                                   x, y,
                                   NULL, // FIXME copy axes
-                                  event->touch.emulating_pointer);
+                                  gdk_touch_event_get_emulating_pointer (event));
     case GDK_TOUCHPAD_SWIPE:
+      gdk_touchpad_event_get_deltas (event, &dx, &dy);
       return gdk_event_touchpad_swipe_new (new_surface,
-                                           event->any.device,
-                                           event->any.source_device,
-                                           event->touchpad_swipe.time,
-                                           event->touchpad_swipe.state,
-                                           event->touchpad_swipe.phase,
+                                           gdk_event_get_device (event),
+                                           gdk_event_get_source_device (event),
+                                           gdk_event_get_time (event),
+                                           gdk_event_get_modifier_state (event),
+                                           gdk_touchpad_event_get_gesture_phase (event),
                                            x, y,
-                                           event->touchpad_swipe.n_fingers,
-                                           event->touchpad_swipe.dx,
-                                           event->touchpad_swipe.dy);
+                                           gdk_touchpad_event_get_n_fingers (event),
+                                           dx, dy);
     case GDK_TOUCHPAD_PINCH:
+      gdk_touchpad_event_get_deltas (event, &dx, &dy);
       return gdk_event_touchpad_pinch_new (new_surface,
-                                           event->any.device,
-                                           event->any.source_device,
-                                           event->touchpad_pinch.time,
-                                           event->touchpad_pinch.state,
-                                           event->touchpad_pinch.phase,
+                                           gdk_event_get_device (event),
+                                           gdk_event_get_source_device (event),
+                                           gdk_event_get_time (event),
+                                           gdk_event_get_modifier_state (event),
+                                           gdk_touchpad_event_get_gesture_phase (event),
                                            x, y,
-                                           event->touchpad_pinch.n_fingers,
-                                           event->touchpad_pinch.dx,
-                                           event->touchpad_pinch.dy,
-                                           event->touchpad_pinch.scale,
-                                           event->touchpad_pinch.angle_delta);
+                                           gdk_touchpad_event_get_n_fingers (event),
+                                           dx, dy,
+                                           gdk_touchpad_pinch_event_get_scale (event),
+                                           gdk_touchpad_pinch_event_get_angle_delta (event));
     default:
       break;
     }
@@ -1173,7 +1190,7 @@ rewrite_event_for_grabs (GdkEvent *event)
   GdkDisplay *display;
   GdkDevice *device;
 
-  switch ((guint) event->any.type)
+  switch ((guint) gdk_event_get_event_type (event))
     {
     case GDK_SCROLL:
     case GDK_BUTTON_PRESS:
@@ -1189,7 +1206,7 @@ rewrite_event_for_grabs (GdkEvent *event)
     case GDK_TOUCH_CANCEL:
     case GDK_TOUCHPAD_SWIPE:
     case GDK_TOUCHPAD_PINCH:
-      display = gdk_surface_get_display (event->any.surface);
+      display = gdk_event_get_display (event);
       device = gdk_event_get_device (event);
 
       if (!gdk_device_grab_info (display, device, &grab_surface, &owner_events) ||
@@ -1270,7 +1287,7 @@ translate_event_coordinates (GdkEvent  *event,
 
   *x = *y = 0;
 
-  if (!gdk_event_get_coords (event, &event_x, &event_y))
+  if (!gdk_event_get_position (event, &event_x, &event_y))
     return FALSE;
 
   event_widget = gtk_get_event_widget (event);
@@ -1352,7 +1369,7 @@ update_pointer_focus_state (GtkWindow *toplevel,
   if (old_target == new_target)
     return old_target;
 
-  gdk_event_get_coords (event, &x, &y);
+  gdk_event_get_position (event, &x, &y);
   gtk_window_update_pointer_focus (toplevel, device, sequence,
                                    new_target, x, y);
 
@@ -1362,7 +1379,7 @@ update_pointer_focus_state (GtkWindow *toplevel,
 static gboolean
 is_pointing_event (GdkEvent *event)
 {
-  switch ((guint) event->any.type)
+  switch ((guint) gdk_event_get_event_type (event))
     {
     case GDK_MOTION_NOTIFY:
     case GDK_ENTER_NOTIFY:
@@ -1386,7 +1403,7 @@ is_pointing_event (GdkEvent *event)
 static gboolean
 is_key_event (GdkEvent *event)
 {
-  switch ((guint) event->any.type)
+  switch ((guint) gdk_event_get_event_type (event))
     {
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
@@ -1400,7 +1417,7 @@ is_key_event (GdkEvent *event)
 static gboolean
 is_focus_event (GdkEvent *event)
 {
-  switch ((guint) event->any.type)
+  switch ((guint) gdk_event_get_event_type (event))
     {
     case GDK_FOCUS_CHANGE:
       return TRUE;
@@ -1413,7 +1430,7 @@ is_focus_event (GdkEvent *event)
 static gboolean
 is_dnd_event (GdkEvent *event)
 {
-  switch ((guint) event->any.type)
+  switch ((guint) gdk_event_get_event_type (event))
     {
     case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:
@@ -1452,21 +1469,22 @@ handle_pointing_event (GdkEvent *event)
   GdkDevice *device;
   gdouble x, y;
   GtkWidget *native;
+  GdkEventType type;
 
   event_widget = gtk_get_event_widget (event);
   device = gdk_event_get_device (event);
-  if (!device || !gdk_event_get_coords (event, &x, &y))
-    return event_widget;
+  gdk_event_get_position (event, &x, &y);
 
   toplevel = GTK_WINDOW (gtk_widget_get_root (event_widget));
   native = GTK_WIDGET (gtk_widget_get_native (event_widget));
 
+  type = gdk_event_get_event_type (event);
   sequence = gdk_event_get_event_sequence (event);
 
-  switch ((guint) event->any.type)
+  switch ((guint) type)
     {
     case GDK_LEAVE_NOTIFY:
-      if (event->crossing.mode == GDK_CROSSING_NORMAL &&
+      if (gdk_crossing_event_get_mode (event) == GDK_CROSSING_NORMAL &&
           gtk_window_lookup_pointer_focus_implicit_grab (toplevel, device, NULL))
         {
           /* We have an implicit grab, wait for the corresponding
@@ -1478,14 +1496,13 @@ handle_pointing_event (GdkEvent *event)
     case GDK_TOUCH_END:
     case GDK_TOUCH_CANCEL:
       old_target = update_pointer_focus_state (toplevel, event, NULL);
-
-      if (event->any.type == GDK_LEAVE_NOTIFY)
+      if (type == GDK_LEAVE_NOTIFY)
         gtk_synthesize_crossing_events (GTK_ROOT (toplevel), old_target, NULL,
-                                        event, event->crossing.mode);
+                                        event, gdk_crossing_event_get_mode (event));
       break;
     case GDK_ENTER_NOTIFY:
-      if (event->crossing.mode == GDK_CROSSING_GRAB ||
-          event->crossing.mode == GDK_CROSSING_UNGRAB)
+      if (gdk_crossing_event_get_mode (event) == GDK_CROSSING_GRAB ||
+          gdk_crossing_event_get_mode (event) == GDK_CROSSING_UNGRAB)
         break;
       G_GNUC_FALLTHROUGH;
     case GDK_TOUCH_BEGIN:
@@ -1501,7 +1518,7 @@ handle_pointing_event (GdkEvent *event)
 
       old_target = update_pointer_focus_state (toplevel, event, target);
 
-      if (event->any.type == GDK_MOTION_NOTIFY || event->any.type == GDK_ENTER_NOTIFY)
+      if (type == GDK_MOTION_NOTIFY || type == GDK_ENTER_NOTIFY)
         {
           if (!gtk_window_lookup_pointer_focus_implicit_grab (toplevel, device,
                                                               sequence))
@@ -1513,7 +1530,7 @@ handle_pointing_event (GdkEvent *event)
           gtk_window_maybe_update_cursor (toplevel, NULL, device);
         }
 
-      if (event->any.type == GDK_TOUCH_BEGIN)
+      if (type == GDK_TOUCH_BEGIN)
         gtk_window_set_pointer_focus_grab (toplevel, device, sequence, target);
 
       /* Let it take the effective pointer focus anyway, as it may change due
@@ -1527,10 +1544,10 @@ handle_pointing_event (GdkEvent *event)
                                                                  device,
                                                                  sequence);
       gtk_window_set_pointer_focus_grab (toplevel, device, sequence,
-                                         event->any.type == GDK_BUTTON_PRESS ?
+                                         type == GDK_BUTTON_PRESS ?
                                          target : NULL);
 
-      if (event->any.type == GDK_BUTTON_RELEASE)
+      if (type == GDK_BUTTON_RELEASE)
         {
           GtkWidget *new_target;
           new_target = gtk_widget_pick (GTK_WIDGET (native), x, y, GTK_PICK_DEFAULT);
@@ -1541,7 +1558,7 @@ handle_pointing_event (GdkEvent *event)
           gtk_window_maybe_update_cursor (toplevel, NULL, device);
         }
 
-      set_widget_active_state (target, event->any.type == GDK_BUTTON_RELEASE);
+      set_widget_active_state (target, type == GDK_BUTTON_RELEASE);
 
       break;
     case GDK_SCROLL:
@@ -1581,9 +1598,7 @@ handle_dnd_event (GdkEvent *event)
 
   event_widget = gtk_get_event_widget (event);
 
-  if (!gdk_event_get_coords (event, &x, &y))
-    return event_widget;
-
+  gdk_event_get_position (event, &x, &y);
   native = GTK_WIDGET (gtk_widget_get_native (event_widget));
   target = gtk_widget_pick (native, x, y, GTK_PICK_DEFAULT);
 
@@ -1633,9 +1648,9 @@ gtk_main_do_event (GdkEvent *event)
     target_widget = handle_pointing_event (event);
   else if (is_key_event (event))
     {
-      if (event->any.type == GDK_KEY_PRESS &&
+      if (gdk_event_get_event_type (event) == GDK_KEY_PRESS &&
           GTK_IS_WINDOW (target_widget) &&
-          gtk_window_activate_key (GTK_WINDOW (target_widget), (GdkEventKey *) event))
+          gtk_window_activate_key (GTK_WINDOW (target_widget), event))
         goto cleanup;
 
       target_widget = handle_key_event (event);
@@ -1669,7 +1684,7 @@ gtk_main_do_event (GdkEvent *event)
    * This is the key to implementing modality.
    */
   if (!grab_widget ||
-      ((gtk_widget_is_sensitive (target_widget) || event->any.type == GDK_SCROLL) &&
+      ((gtk_widget_is_sensitive (target_widget) || gdk_event_get_event_type (event) == GDK_SCROLL) &&
        gtk_widget_is_ancestor (target_widget, grab_widget)))
     grab_widget = target_widget;
 
@@ -1698,7 +1713,7 @@ gtk_main_do_event (GdkEvent *event)
    * Drag events are also not redirected, since it isn't
    * clear what the semantics of that would be.
    */
-  switch ((guint)event->any.type)
+  switch ((guint)gdk_event_get_event_type (event))
     {
     case GDK_DELETE:
       g_object_ref (target_widget);
@@ -2165,7 +2180,10 @@ gtk_get_current_event_state (GdkModifierType *state)
   g_return_val_if_fail (state != NULL, FALSE);
 
   if (current_events)
-    return gdk_event_get_state (current_events->data, state);
+    {
+      *state = gdk_event_get_modifier_state (current_events->data);
+      return TRUE;
+    }
   else
     {
       *state = 0;
@@ -2201,17 +2219,16 @@ gtk_get_current_event_device (void)
  * Returns: (transfer none) (nullable): the widget that originally
  *     received @event, or %NULL
  */
-GtkWidget*
+GtkWidget *
 gtk_get_event_widget (GdkEvent *event)
 {
-  GtkWidget *widget;
+  GdkSurface *surface;
 
-  widget = NULL;
-  if (event && event->any.surface &&
-      (!gdk_surface_is_destroyed (event->any.surface)))
-    widget = gtk_native_get_for_surface (event->any.surface);
+  surface = gdk_event_get_surface (event);
+  if (surface && !gdk_surface_is_destroyed (surface))
+    return gtk_native_get_for_surface (surface);
 
-  return widget;
+  return NULL;
 }
 
 static gboolean
@@ -2238,7 +2255,7 @@ propagate_event_up (GtkWidget *widget,
        * event
        */
       if (!gtk_widget_is_sensitive (widget))
-        handled_event = event->any.type != GDK_SCROLL;
+        handled_event = gdk_event_get_event_type (event) != GDK_SCROLL;
       else if (gtk_widget_get_realized (widget))
         handled_event = gtk_widget_event (widget, event, target);
 
@@ -2291,7 +2308,7 @@ propagate_event_down (GtkWidget *widget,
           /* stop propagating on SCROLL, but don't handle the event, so it
            * can propagate up again and reach its handling widget
            */
-          if (event->any.type == GDK_SCROLL)
+          if (gdk_event_get_event_type (event) == GDK_SCROLL)
             break;
           else
             handled_event = TRUE;

@@ -2075,70 +2075,84 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
   if (event_widget == widget)
     return;
 
-  gdk_event_get_coords (event, &x, &y);
-  if (!gtk_widget_compute_point (event_widget,
-                                 GTK_WIDGET (gtk_widget_get_root (event_widget)),
-                                 &GRAPHENE_POINT_INIT (x, y),
-                                 &p))
-      return;
-
-  if (event->any.type == GDK_TOUCH_BEGIN ||
-      event->any.type == GDK_TOUCH_UPDATE ||
-      event->any.type == GDK_TOUCH_END)
+  switch ((guint) gdk_event_get_event_type (event))
     {
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
+    case GDK_BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+    case GDK_MOTION_NOTIFY:
+      gdk_event_get_position (event, &x, &y);
+      if (!gtk_widget_compute_point (event_widget,
+                                     GTK_WIDGET (gtk_widget_get_root (event_widget)),
+                                     &GRAPHENE_POINT_INIT (x, y),
+                                     &p))
+        return;
+      break;
+    default:
+      return;
+    }
+
+  switch ((guint) gdk_event_get_event_type (event))
+    {
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
       press = gdk_event_touch_new (GDK_TOUCH_BEGIN,
-                                   event->touch.sequence,
-                                   event->any.surface,
-                                   event->any.device,
-                                   event->any.source_device,
-                                   event->touch.time,
-                                   event->touch.state,
+                                   gdk_event_get_event_sequence (event),
+                                   gdk_event_get_surface (event),
+                                   gdk_event_get_device (event),
+                                   gdk_event_get_source_device (event),
+                                   gdk_event_get_time (event),
+                                   gdk_event_get_modifier_state (event),
                                    p.x, p.y,
                                    NULL,
-                                   event->touch.emulating_pointer);
-    }
-  else if (event->any.type == GDK_BUTTON_PRESS ||
-           event->any.type == GDK_BUTTON_RELEASE)
-    {
+                                   gdk_touch_event_get_emulating_pointer (event));
+      break;
+    case GDK_BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
       press = gdk_event_button_new (GDK_BUTTON_PRESS,
-                                    event->any.surface,
-                                    event->any.device,
-                                    event->any.source_device,
-                                    event->button.tool,
-                                    event->button.time,
-                                    event->button.state,
-                                    event->button.button,
+                                    gdk_event_get_surface (event),
+                                    gdk_event_get_device (event),
+                                    gdk_event_get_source_device (event),
+                                    gdk_event_get_device_tool (event),
+                                    gdk_event_get_time (event),
+                                    gdk_event_get_modifier_state (event),
+                                    gdk_button_event_get_button (event),
                                     p.x, p.y,
                                     NULL);
-    }
-  else if (event->any.type == GDK_MOTION_NOTIFY)
-    {
-      int button;
-      if (event->motion.state & GDK_BUTTON3_MASK)
-        button = 3;
-      else if (event->motion.state & GDK_BUTTON2_MASK)
-        button = 2;
-      else
-        {
-          if ((event->motion.state & GDK_BUTTON1_MASK) == 0)
-            g_critical ("Guessing button number 1 on generated button press event");
+      break;
+    case GDK_MOTION_NOTIFY:
+      {
+        GdkModifierType state = gdk_event_get_modifier_state (event);
+        int button;
+        if (state & GDK_BUTTON3_MASK)
+          button = 3;
+        else if (state & GDK_BUTTON2_MASK)
+          button = 2;
+        else
+          {
+            if ((state & GDK_BUTTON1_MASK) == 0)
+              g_critical ("Guessing button number 1 on generated button press event");
+            button = 1;
+          }
 
-          button = 1;
-        }
-
-      press = gdk_event_button_new (GDK_BUTTON_PRESS,
-                                    event->any.surface,
-                                    event->any.device,
-                                    event->any.source_device,
-                                    NULL,
-                                    event->motion.time,
-                                    event->motion.state,
-                                    button,
-                                    p.x, p.y,
-                                    NULL);
+        press = gdk_event_button_new (GDK_BUTTON_PRESS,
+                                      gdk_event_get_surface (event),
+                                      gdk_event_get_device (event),
+                                      gdk_event_get_source_device (event),
+                                      gdk_event_get_device_tool (event),
+                                      gdk_event_get_time (event),
+                                      gdk_event_get_modifier_state (event),
+                                      button,
+                                      p.x, p.y,
+                                      NULL);
+      }
+      break;
+    default:
+      g_assert_not_reached ();
     }
-  else
-    return;
 
   next_child = event_widget;
   parent = _gtk_widget_get_parent (next_child);
@@ -2201,10 +2215,10 @@ _gtk_widget_get_emulating_sequence (GtkWidget         *widget,
       last_event = _gtk_widget_get_last_event (widget, sequence, &target);
 
       if (last_event &&
-          (last_event->any.type == GDK_TOUCH_BEGIN ||
-           last_event->any.type == GDK_TOUCH_UPDATE ||
-           last_event->any.type == GDK_TOUCH_END) &&
-          last_event->touch.emulating_pointer)
+          (gdk_event_get_event_type (last_event) == GDK_TOUCH_BEGIN ||
+           gdk_event_get_event_type (last_event) == GDK_TOUCH_UPDATE ||
+           gdk_event_get_event_type (last_event) == GDK_TOUCH_END) &&
+           gdk_touch_event_get_emulating_pointer (last_event))
         return TRUE;
     }
   else
@@ -4771,7 +4785,7 @@ gtk_widget_real_mnemonic_activate (GtkWidget *widget,
 }
 
 #define WIDGET_REALIZED_FOR_EVENT(widget, event) \
-     (event->any.type == GDK_FOCUS_CHANGE || _gtk_widget_get_realized(widget))
+     (gdk_event_get_event_type (event) == GDK_FOCUS_CHANGE || _gtk_widget_get_realized (widget))
 
 /**
  * gtk_widget_event:
@@ -4918,7 +4932,7 @@ event_surface_is_still_viewable (GdkEvent *event)
    * at the last moment, since the event may have been queued
    * up behind other events, held over a recursive main loop, etc.
    */
-  switch ((guint) event->any.type)
+  switch ((guint) gdk_event_get_event_type (event))
     {
     case GDK_MOTION_NOTIFY:
     case GDK_BUTTON_PRESS:
@@ -4926,7 +4940,7 @@ event_surface_is_still_viewable (GdkEvent *event)
     case GDK_ENTER_NOTIFY:
     case GDK_PROXIMITY_IN:
     case GDK_SCROLL:
-      return event->any.surface && gdk_surface_is_viewable (event->any.surface);
+      return gdk_surface_is_viewable (gdk_event_get_surface (event));
 
 #if 0
     /* The following events are the second half of paired events;
@@ -4959,7 +4973,7 @@ translate_event_coordinates (GdkEvent  *event,
 
   *x = *y = 0;
 
-  if (!gdk_event_get_coords (event, &event_x, &event_y))
+  if (!gdk_event_get_position (event, &event_x, &event_y))
     return FALSE;
 
   event_widget = gtk_get_event_widget (event);
@@ -5004,8 +5018,8 @@ gtk_widget_event_internal (GtkWidget *widget,
     return_val |= gtk_widget_run_controllers (widget, event, target, x, y, GTK_PHASE_BUBBLE);
 
   if (return_val == FALSE &&
-      (event->any.type == GDK_KEY_PRESS ||
-       event->any.type == GDK_KEY_RELEASE))
+      (gdk_event_get_event_type (event) == GDK_KEY_PRESS ||
+       gdk_event_get_event_type (event) == GDK_KEY_RELEASE))
     return_val |= gtk_bindings_activate_event (G_OBJECT (widget), (GdkEventKey *) event);
 
   return return_val;

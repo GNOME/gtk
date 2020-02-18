@@ -5175,14 +5175,6 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
                                   GTK_EVENT_SEQUENCE_CLAIMED);
   gtk_text_view_reset_blink_time (text_view);
 
-#if 0
-  /* debug hack */
-  if (event->button == GDK_BUTTON_SECONDARY && (event->state & GDK_CONTROL_MASK) != 0)
-    _gtk_text_buffer_spew (GTK_TEXT_VIEW (widget)->buffer);
-  else if (event->button == GDK_BUTTON_SECONDARY)
-    gtk_text_layout_spew (GTK_TEXT_VIEW (widget)->layout);
-#endif
-
   device = gdk_event_get_source_device ((GdkEvent *) event);
   is_touchscreen = gtk_simulate_touchscreen () ||
                    gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
@@ -5215,7 +5207,7 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
       gboolean extends = FALSE;
       GdkModifierType state;
 
-      gdk_event_get_state (event, &state);
+      state = gdk_event_get_modifier_state (event);
 
       if (state &
           gtk_widget_get_modifier_mask (GTK_WIDGET (text_view),

@@ -4969,7 +4969,7 @@ gdk_win32_surface_show_window_menu (GdkSurface *window,
       return FALSE;
     }
 
-  gdk_event_get_coords (event, &event_x, &event_y);
+  gdk_event_get_position (event, &event_x, &event_y);
   x = round (event_x);
   y = round (event_y);
 

@@ -2622,7 +2622,7 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
       priv->select_words = FALSE;
       priv->select_lines = FALSE;
 
-      gdk_event_get_state (event, &state);
+      state = gdk_event_get_modifier_state (event);
 
       extend_selection =
         (state &

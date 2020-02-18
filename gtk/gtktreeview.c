@@ -2947,7 +2947,7 @@ gtk_tree_view_click_gesture_pressed (GtkGestureClick *gesture,
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-  gdk_event_get_state (event, &modifiers);
+  modifiers = gdk_event_get_modifier_state (event);
 
   /* decide if we edit */
   if (button == GDK_BUTTON_PRIMARY &&
