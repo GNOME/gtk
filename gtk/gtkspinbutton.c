@@ -833,8 +833,6 @@ start_spinning (GtkSpinButton *spin,
       g_source_set_name_by_id (priv->timer, "[gtk] gtk_spin_button_timer");
     }
   gtk_spin_button_real_spin (spin, click_child == priv->up_button ? step : -step);
-
-  gtk_widget_queue_draw (GTK_WIDGET (spin));
 }
 
 static void
@@ -1185,10 +1183,7 @@ gtk_spin_button_grab_notify (GtkWidget *widget,
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->grab_notify (widget, was_grabbed);
 
   if (!was_grabbed)
-    {
-      if (gtk_spin_button_stop_spinning (spin))
-        gtk_widget_queue_draw (GTK_WIDGET (spin));
-    }
+    gtk_spin_button_stop_spinning (spin);
 }
 
 static void
@@ -1198,10 +1193,7 @@ gtk_spin_button_state_flags_changed (GtkWidget     *widget,
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
 
   if (!gtk_widget_is_sensitive (widget))
-    {
-      if (gtk_spin_button_stop_spinning (spin))
-        gtk_widget_queue_draw (GTK_WIDGET (spin));
-    }
+    gtk_spin_button_stop_spinning (spin);
 
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->state_flags_changed (widget, previous_state);
 }
@@ -1263,7 +1255,6 @@ gtk_spin_button_value_changed (GtkAdjustment *adjustment,
   g_signal_emit (spin_button, spinbutton_signals[VALUE_CHANGED], 0);
 
   update_buttons_sensitivity (spin_button);
-  gtk_widget_queue_draw (GTK_WIDGET (spin_button));
 
   g_object_notify_by_pspec (G_OBJECT (spin_button), spinbutton_props[PROP_VALUE]);
 }
