@@ -403,9 +403,9 @@ static void         gtk_tree_model_filter_unref_node                      (GtkTr
 /* TreeDragSource interface */
 static gboolean    gtk_tree_model_filter_row_draggable                    (GtkTreeDragSource      *drag_source,
                                                                            GtkTreePath            *path);
-static gboolean    gtk_tree_model_filter_drag_data_get                    (GtkTreeDragSource      *drag_source,
-                                                                           GtkTreePath            *path,
-                                                                           GtkSelectionData       *selection_data);
+static GdkContentProvider *
+                   gtk_tree_model_filter_drag_data_get                    (GtkTreeDragSource      *drag_source,
+                                                                           GtkTreePath            *path);
 static gboolean    gtk_tree_model_filter_drag_data_delete                 (GtkTreeDragSource      *drag_source,
                                                                            GtkTreePath            *path);
 
@@ -3589,20 +3589,19 @@ gtk_tree_model_filter_row_draggable (GtkTreeDragSource *drag_source,
   return draggable;
 }
 
-static gboolean
+static GdkContentProvider *
 gtk_tree_model_filter_drag_data_get (GtkTreeDragSource *drag_source,
-                                     GtkTreePath       *path,
-                                     GtkSelectionData  *selection_data)
+                                     GtkTreePath       *path)
 {
   GtkTreeModelFilter *tree_model_filter = (GtkTreeModelFilter *)drag_source;
   GtkTreePath *child_path;
-  gboolean gotten;
+  GdkContentProvider *gotten;
 
-  g_return_val_if_fail (GTK_IS_TREE_MODEL_FILTER (drag_source), FALSE);
-  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_TREE_MODEL_FILTER (drag_source), NULL);
+  g_return_val_if_fail (path != NULL, NULL);
 
   child_path = gtk_tree_model_filter_convert_path_to_child_path (tree_model_filter, path);
-  gotten = gtk_tree_drag_source_drag_data_get (GTK_TREE_DRAG_SOURCE (tree_model_filter->priv->child_model), child_path, selection_data);
+  gotten = gtk_tree_drag_source_drag_data_get (GTK_TREE_DRAG_SOURCE (tree_model_filter->priv->child_model), child_path);
   gtk_tree_path_free (child_path);
 
   return gotten;

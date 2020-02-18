@@ -43,7 +43,6 @@
  * #GtkTreeDragSource and #GtkTreeDragDest interfaces.
  */
 
-
 GType
 gtk_tree_drag_source_get_type (void)
 {
@@ -157,38 +156,34 @@ gtk_tree_drag_source_drag_data_delete (GtkTreeDragSource *drag_source,
  * gtk_tree_drag_source_drag_data_get:
  * @drag_source: a #GtkTreeDragSource
  * @path: row that was dragged
- * @selection_data: a #GtkSelectionData to fill with data
- *                  from the dragged row
  * 
- * Asks the #GtkTreeDragSource to fill in @selection_data with a
- * representation of the row at @path. @selection_data->target gives
- * the required type of the data.  Should robustly handle a @path no
+ * Asks the #GtkTreeDragSource to return a #GdkContentProvider representing
+ * the row at @path. Should robustly handle a @path no
  * longer found in the model!
  * 
- * Returns: %TRUE if data of the required type was provided 
+ * Returns: (nullable) (transfer full): a #GdkContentProvider for the
+ *    given @path or %NULL if none exists
  **/
-gboolean
-gtk_tree_drag_source_drag_data_get    (GtkTreeDragSource *drag_source,
-                                       GtkTreePath       *path,
-                                       GtkSelectionData  *selection_data)
+GdkContentProvider *
+gtk_tree_drag_source_drag_data_get (GtkTreeDragSource *drag_source,
+                                    GtkTreePath       *path)
 {
   GtkTreeDragSourceIface *iface = GTK_TREE_DRAG_SOURCE_GET_IFACE (drag_source);
 
   g_return_val_if_fail (iface->drag_data_get != NULL, FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
-  g_return_val_if_fail (selection_data != NULL, FALSE);
 
-  return (* iface->drag_data_get) (drag_source, path, selection_data);
+  return (* iface->drag_data_get) (drag_source, path);
 }
 
 /**
  * gtk_tree_drag_dest_drag_data_received:
  * @drag_dest: a #GtkTreeDragDest
  * @dest: row to drop in front of
- * @selection_data: data to drop
+ * @value: data to drop
  * 
  * Asks the #GtkTreeDragDest to insert a row before the path @dest,
- * deriving the contents of the row from @selection_data. If @dest is
+ * deriving the contents of the row from @value. If @dest is
  * outside the tree so that inserting before it is impossible, %FALSE
  * will be returned. Also, %FALSE may be returned if the new row is
  * not created for some model-specific reason.  Should robustly handle
@@ -199,15 +194,15 @@ gtk_tree_drag_source_drag_data_get    (GtkTreeDragSource *drag_source,
 gboolean
 gtk_tree_drag_dest_drag_data_received (GtkTreeDragDest  *drag_dest,
                                        GtkTreePath      *dest,
-                                       GtkSelectionData *selection_data)
+                                       const GValue     *value)
 {
   GtkTreeDragDestIface *iface = GTK_TREE_DRAG_DEST_GET_IFACE (drag_dest);
 
   g_return_val_if_fail (iface->drag_data_received != NULL, FALSE);
   g_return_val_if_fail (dest != NULL, FALSE);
-  g_return_val_if_fail (selection_data != NULL, FALSE);
+  g_return_val_if_fail (value != NULL, FALSE);
 
-  return (* iface->drag_data_received) (drag_dest, dest, selection_data);
+  return (* iface->drag_data_received) (drag_dest, dest, value);
 }
 
 
@@ -215,11 +210,11 @@ gtk_tree_drag_dest_drag_data_received (GtkTreeDragDest  *drag_dest,
  * gtk_tree_drag_dest_row_drop_possible:
  * @drag_dest: a #GtkTreeDragDest
  * @dest_path: destination row
- * @selection_data: the data being dragged
+ * @value: the data being dropped
  * 
  * Determines whether a drop is possible before the given @dest_path,
  * at the same depth as @dest_path. i.e., can we drop the data in
- * @selection_data at that location. @dest_path does not have to
+ * @value at that location. @dest_path does not have to
  * exist; the return value will almost certainly be %FALSE if the
  * parent of @dest_path doesn’t exist, though.
  * 
@@ -228,15 +223,15 @@ gtk_tree_drag_dest_drag_data_received (GtkTreeDragDest  *drag_dest,
 gboolean
 gtk_tree_drag_dest_row_drop_possible (GtkTreeDragDest   *drag_dest,
                                       GtkTreePath       *dest_path,
-				      GtkSelectionData  *selection_data)
+				      const GValue      *value)
 {
   GtkTreeDragDestIface *iface = GTK_TREE_DRAG_DEST_GET_IFACE (drag_dest);
 
   g_return_val_if_fail (iface->row_drop_possible != NULL, FALSE);
-  g_return_val_if_fail (selection_data != NULL, FALSE);
   g_return_val_if_fail (dest_path != NULL, FALSE);
+  g_return_val_if_fail (value != NULL, FALSE);
 
-  return (* iface->row_drop_possible) (drag_dest, dest_path, selection_data);
+  return (* iface->row_drop_possible) (drag_dest, dest_path, value);
 }
 
 typedef struct _TreeRowData TreeRowData;
@@ -247,34 +242,39 @@ struct _TreeRowData
   gchar path[4];
 };
 
+static TreeRowData *
+gtk_tree_row_data_copy (TreeRowData *src)
+{
+  return g_memdup (src, sizeof (TreeRowData) + strlen (src->path) + 1 -
+    (sizeof (TreeRowData) - G_STRUCT_OFFSET (TreeRowData, path)));
+}
+
+G_DEFINE_BOXED_TYPE (TreeRowData, gtk_tree_row_data,
+                     gtk_tree_row_data_copy,
+                     g_free)
+
 /**
- * gtk_tree_set_row_drag_data:
- * @selection_data: some #GtkSelectionData
+ * gtk_tree_create_row_drag_content:
  * @tree_model: a #GtkTreeModel
  * @path: a row in @tree_model
  * 
- * Sets selection data of target type %GTK_TREE_MODEL_ROW. Normally used
- * in a drag_data_get handler.
+ * Creates a content provider for dragging @path from @tree_model.
  * 
- * Returns: %TRUE if the #GtkSelectionData had the proper target type to allow us to set a tree row
+ * Returns: a new #GdkContentProvider
  **/
-gboolean
-gtk_tree_set_row_drag_data (GtkSelectionData *selection_data,
-			    GtkTreeModel     *tree_model,
-			    GtkTreePath      *path)
+GdkContentProvider *
+gtk_tree_create_row_drag_content (GtkTreeModel *tree_model,
+			          GtkTreePath  *path)
 {
+  GdkContentProvider *content;
   TreeRowData *trd;
   gchar *path_str;
   gint len;
   gint struct_size;
   
-  g_return_val_if_fail (selection_data != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
 
-  if (gtk_selection_data_get_target (selection_data) != g_intern_static_string ("GTK_TREE_MODEL_ROW"))
-    return FALSE;
-  
   path_str = gtk_tree_path_to_string (path);
 
   len = strlen (path_str);
@@ -291,44 +291,35 @@ gtk_tree_set_row_drag_data (GtkSelectionData *selection_data,
   
   trd->model = tree_model;
   
-  gtk_selection_data_set (selection_data,
-                          g_intern_static_string ("GTK_TREE_MODEL_ROW"),
-                          8, /* bytes */
-                          (void*)trd,
-                          struct_size);
+  content = gdk_content_provider_new_typed (GTK_TYPE_TREE_ROW_DATA, trd);
 
   g_free (trd);
   
-  return TRUE;
+  return content;
 }
 
 /**
  * gtk_tree_get_row_drag_data:
- * @selection_data: a #GtkSelectionData
+ * @value: a #GValue
  * @tree_model: (nullable) (optional) (transfer none) (out): a #GtkTreeModel
  * @path: (nullable) (optional) (out): row in @tree_model
  * 
- * Obtains a @tree_model and @path from selection data of target type
- * %GTK_TREE_MODEL_ROW. Normally called from a drag_data_received handler.
- * This function can only be used if @selection_data originates from the same
- * process that’s calling this function, because a pointer to the tree model
- * is being passed around. If you aren’t in the same process, then you'll
- * get memory corruption. In the #GtkTreeDragDest drag_data_received handler,
- * you can assume that selection data of type %GTK_TREE_MODEL_ROW is
- * in from the current process. The returned path must be freed with
- * gtk_tree_path_free().
+ * Obtains a @tree_model and @path from value of target type
+ * %GTK_TYPE_TREE_ROW_DATA.
+ *
+ * The returned path must be freed with gtk_tree_path_free().
  * 
- * Returns: %TRUE if @selection_data had target type %GTK_TREE_MODEL_ROW and
+ * Returns: %TRUE if @selection_data had target type %GTK_TYPE_TREE_ROW_DATA
  *  is otherwise valid
  **/
 gboolean
-gtk_tree_get_row_drag_data (GtkSelectionData  *selection_data,
-			    GtkTreeModel     **tree_model,
-			    GtkTreePath      **path)
+gtk_tree_get_row_drag_data (const GValue  *value,
+			    GtkTreeModel **tree_model,
+			    GtkTreePath  **path)
 {
   TreeRowData *trd;
   
-  g_return_val_if_fail (selection_data != NULL, FALSE);  
+  g_return_val_if_fail (value != NULL, FALSE);  
 
   if (tree_model)
     *tree_model = NULL;
@@ -336,13 +327,12 @@ gtk_tree_get_row_drag_data (GtkSelectionData  *selection_data,
   if (path)
     *path = NULL;
 
-  if (gtk_selection_data_get_target (selection_data) != g_intern_static_string ("GTK_TREE_MODEL_ROW"))
+  if (!G_VALUE_HOLDS (value, GTK_TYPE_TREE_ROW_DATA))
     return FALSE;
 
-  if (gtk_selection_data_get_length (selection_data) < 0)
+  trd = g_value_get_boxed (value);
+  if (trd == NULL)
     return FALSE;
-
-  trd = (void*) gtk_selection_data_get_data (selection_data);
 
   if (tree_model)
     *tree_model = trd->model;

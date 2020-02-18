@@ -135,15 +135,15 @@ static gboolean real_gtk_tree_store_row_draggable   (GtkTreeDragSource *drag_sou
 						   GtkTreePath       *path);
 static gboolean gtk_tree_store_drag_data_delete   (GtkTreeDragSource *drag_source,
 						   GtkTreePath       *path);
-static gboolean gtk_tree_store_drag_data_get      (GtkTreeDragSource *drag_source,
-						   GtkTreePath       *path,
-						   GtkSelectionData  *selection_data);
+static GdkContentProvider *
+                gtk_tree_store_drag_data_get      (GtkTreeDragSource *drag_source,
+						   GtkTreePath       *path);
 static gboolean gtk_tree_store_drag_data_received (GtkTreeDragDest   *drag_dest,
 						   GtkTreePath       *dest,
-						   GtkSelectionData  *selection_data);
+						   const GValue      *value);
 static gboolean gtk_tree_store_row_drop_possible  (GtkTreeDragDest   *drag_dest,
 						   GtkTreePath       *dest_path,
-						   GtkSelectionData  *selection_data);
+						   const GValue      *value);
 
 /* Sortable Interfaces */
 
@@ -1956,29 +1956,16 @@ gtk_tree_store_drag_data_delete (GtkTreeDragSource *drag_source,
     }
 }
 
-static gboolean
+static GdkContentProvider *
 gtk_tree_store_drag_data_get (GtkTreeDragSource *drag_source,
-                              GtkTreePath       *path,
-                              GtkSelectionData  *selection_data)
+                              GtkTreePath       *path)
 {
   /* Note that we don't need to handle the GTK_TREE_MODEL_ROW
    * target, because the default handler does it for us, but
    * we do anyway for the convenience of someone maybe overriding the
    * default handler.
    */
-
-  if (gtk_tree_set_row_drag_data (selection_data,
-				  GTK_TREE_MODEL (drag_source),
-				  path))
-    {
-      return TRUE;
-    }
-  else
-    {
-      /* FIXME handle text targets at least. */
-    }
-
-  return FALSE;
+  return gtk_tree_create_row_drag_content (GTK_TREE_MODEL (drag_source), path);
 }
 
 static void
@@ -2052,9 +2039,9 @@ recursive_node_copy (GtkTreeStore *tree_store,
 }
 
 static gboolean
-gtk_tree_store_drag_data_received (GtkTreeDragDest   *drag_dest,
-                                   GtkTreePath       *dest,
-                                   GtkSelectionData  *selection_data)
+gtk_tree_store_drag_data_received (GtkTreeDragDest *drag_dest,
+                                   GtkTreePath     *dest,
+                                   const GValue    *value)
 {
   GtkTreeModel *tree_model;
   GtkTreeStore *tree_store;
@@ -2067,7 +2054,7 @@ gtk_tree_store_drag_data_received (GtkTreeDragDest   *drag_dest,
 
   validate_tree (tree_store);
 
-  if (gtk_tree_get_row_drag_data (selection_data,
+  if (gtk_tree_get_row_drag_data (value,
 				  &src_model,
 				  &src_path) &&
       src_model == tree_model)
@@ -2160,9 +2147,9 @@ gtk_tree_store_drag_data_received (GtkTreeDragDest   *drag_dest,
 }
 
 static gboolean
-gtk_tree_store_row_drop_possible (GtkTreeDragDest  *drag_dest,
-                                  GtkTreePath      *dest_path,
-				  GtkSelectionData *selection_data)
+gtk_tree_store_row_drop_possible (GtkTreeDragDest *drag_dest,
+                                  GtkTreePath     *dest_path,
+				  const GValue    *value)
 {
   GtkTreeModel *src_model = NULL;
   GtkTreePath *src_path = NULL;
@@ -2173,7 +2160,7 @@ gtk_tree_store_row_drop_possible (GtkTreeDragDest  *drag_dest,
   if (GTK_TREE_STORE_IS_SORTED (drag_dest))
     return FALSE;
 
-  if (!gtk_tree_get_row_drag_data (selection_data,
+  if (!gtk_tree_get_row_drag_data (value,
 				   &src_model,
 				   &src_path))
     goto out;
