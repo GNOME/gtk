@@ -120,7 +120,7 @@ gtk_event_controller_key_handle_event (GtkEventController *controller,
 
   key->current_event = event;
 
-  gdk_event_get_state (event, &state);
+  state = gdk_event_get_modifier_state (event);
   if (key->state != state)
     {
       gboolean unused;
@@ -129,8 +129,8 @@ gtk_event_controller_key_handle_event (GtkEventController *controller,
       g_signal_emit (controller, signals[MODIFIERS], 0, state, &unused);
     }
 
-  gdk_event_get_keycode (event, &keycode);
-  gdk_event_get_keyval (event, &keyval);
+  keycode = gdk_key_event_get_keycode (event);
+  keyval = gdk_key_event_get_keyval (event);
 
   if (event_type == GDK_KEY_PRESS)
     {
@@ -495,21 +495,17 @@ gtk_event_controller_key_forward (GtkEventControllerKey *controller,
  * @controller: a #GtkEventControllerKey
  *
  * Gets the key group of the current event of this @controller.
- * See gdk_event_get_key_group().
+ * See gdk_key_event_get_group().
  *
  * Returns: the key group
  **/
 guint
 gtk_event_controller_key_get_group (GtkEventControllerKey *controller)
 {
-  guint group;
-
   g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER_KEY (controller), FALSE);
   g_return_val_if_fail (controller->current_event != NULL, FALSE);
 
-  gdk_event_get_key_group (controller->current_event, &group);
-
-  return group;
+  return gdk_key_event_get_group (controller->current_event);
 }
 
 /**

@@ -4648,7 +4648,7 @@ gtk_label_drag_gesture_begin (GtkGestureDrag *gesture,
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-  gdk_event_get_state (event, &state_mask);
+  state_mask = gdk_event_get_modifier_state (event);
 
   if ((info->selection_anchor != info->selection_end) &&
       (state_mask & GDK_SHIFT_MASK))

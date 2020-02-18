@@ -559,11 +559,14 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * |[<!-- language="C" -->
  * // We want to ignore irrelevant modifiers like ScrollLock
  * #define ALL_ACCELS_MASK (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK)
- * gdk_keymap_translate_keyboard_state (keymap, event->hardware_keycode,
- *                                      event->state, event->group,
+ * state = gdk_event_get_modifier_state (event);
+ * gdk_keymap_translate_keyboard_state (keymap,
+ *                                      gdk_key_event_get_keycode (event),
+ *                                      state,
+ *                                      gdk_key_event_get_group (event),
  *                                      &keyval, NULL, NULL, &consumed);
  * if (keyval == GDK_PLUS &&
- *     (event->state & ~consumed & ALL_ACCELS_MASK) == GDK_CONTROL_MASK)
+ *     (state & ~consumed & ALL_ACCELS_MASK) == GDK_CONTROL_MASK)
  *   // Control was pressed
  * ]|
  * 
@@ -574,7 +577,7 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * |[<!-- language="C" -->
  * // XXX Don’t do this XXX
  * if (keyval == accel_keyval &&
- *     (event->state & ~consumed & ALL_ACCELS_MASK) == (accel_mods & ~consumed))
+ *     (state & ~consumed & ALL_ACCELS_MASK) == (accel_mods & ~consumed))
  *   // Accelerator was pressed
  * ]|
  *

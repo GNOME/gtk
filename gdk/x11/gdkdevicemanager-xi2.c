@@ -1183,7 +1183,7 @@ set_user_time (GdkEvent *event)
   GdkSurface *surface;
   guint32 time;
 
-  surface = event->any.surface;
+  surface = gdk_event_get_surface (event);
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   time = gdk_event_get_time (event);
@@ -1656,16 +1656,16 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                                  GUINT_TO_POINTER (xev->sourceid));
 
             axes = translate_axes (device,
-                                   event->button.x,
-                                   event->button.y,
-                                   event->any.surface,
+                                   (double) xev->event_x / scale,
+                                   (double) xev->event_y / scale,
+                                   surface,
                                    &xev->valuators);
 
             if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
               {
                 /* Update event coordinates from axes */
-                gdk_device_get_axis (device, event->button.axes, GDK_AXIS_X, &x);
-                gdk_device_get_axis (device, event->button.axes, GDK_AXIS_Y, &y);
+                gdk_device_get_axis (device, axes, GDK_AXIS_X, &x);
+                gdk_device_get_axis (device, axes, GDK_AXIS_Y, &y);
               }
             else
               {
@@ -1741,16 +1741,16 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
           }
 
         axes = translate_axes (device,
-                               event->motion.x,
-                               event->motion.y,
-                               event->any.surface,
+                               (double) xev->event_x / scale,
+                               (double) xev->event_y / scale,
+                               surface,
                                &xev->valuators);
 
         if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
           {
             /* Update event coordinates from axes */
-            gdk_device_get_axis (device, event->motion.axes, GDK_AXIS_X, &x);
-            gdk_device_get_axis (device, event->motion.axes, GDK_AXIS_Y, &y);
+            gdk_device_get_axis (device, axes, GDK_AXIS_X, &x);
+            gdk_device_get_axis (device, axes, GDK_AXIS_Y, &y);
           }
         else
           {
@@ -1798,16 +1798,16 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
           state |= GDK_BUTTON1_MASK;
 
         axes = translate_axes (device,
-                               event->touch.x,
-                               event->touch.y,
-                               event->any.surface,
+                               (double) xev->event_x / scale,
+                               (double) xev->event_y / scale,
+                               surface,
                                &xev->valuators);
 
         if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
           {
             /* Update event coordinates from axes */
-            gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_X, &x);
-            gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_Y, &y);
+            gdk_device_get_axis (device, axes, GDK_AXIS_X, &x);
+            gdk_device_get_axis (device, axes, GDK_AXIS_Y, &y);
           }
         else
           {
@@ -1856,16 +1856,16 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         state |= GDK_BUTTON1_MASK;
 
         axes = translate_axes (device,
-                               event->touch.x,
-                               event->touch.y,
-                               event->any.surface,
+                               (double) xev->event_x / scale,
+                               (double) xev->event_y / scale,
+                               surface,
                                &xev->valuators);
 
         if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
           {
             /* Update event coordinates from axes */
-            gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_X, &x);
-            gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_Y, &y);
+            gdk_device_get_axis (device, axes, GDK_AXIS_X, &x);
+            gdk_device_get_axis (device, axes, GDK_AXIS_Y, &y);
           }
         else
           {
