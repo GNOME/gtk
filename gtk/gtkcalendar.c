@@ -536,7 +536,6 @@ gtk_calendar_init (GtkCalendar *calendar)
 #else
   gchar *week_start;
 #endif
-  GdkContentFormats *formats;
   GtkDropTarget *dest;
   int min_year_width;
   GDateTime *now;
@@ -718,9 +717,8 @@ gtk_calendar_init (GtkCalendar *calendar)
 
   priv->in_drag = 0;
 
-  formats = gdk_content_formats_new_for_gtype (G_TYPE_STRING);
-  dest = gtk_drop_target_new (formats, GDK_ACTION_COPY);
-  gdk_content_formats_unref (formats);
+  dest = gtk_drop_target_new (gdk_content_formats_new_for_gtype (G_TYPE_STRING),
+                              GDK_ACTION_COPY);
 
   g_signal_connect (dest, "accept", G_CALLBACK (gtk_calendar_drag_accept), calendar);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_calendar_drag_leave), calendar);
@@ -1166,8 +1164,6 @@ get_calendar_content (GtkCalendar *calendar)
   GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
   GDate *date;
   gchar str[128];
-  GValue value = G_VALUE_INIT;
-  GdkContentProvider *content;
 
   date = g_date_new_dmy (g_date_time_get_day_of_month (priv->date),
                          g_date_time_get_month (priv->date),
@@ -1175,12 +1171,7 @@ get_calendar_content (GtkCalendar *calendar)
   g_date_strftime (str, 127, "%x", date);
   g_free (date);
 
-  g_value_init (&value, G_TYPE_STRING);
-  g_value_set_string (&value, str);
-  content = gdk_content_provider_new_for_value (&value);
-  g_value_unset (&value);
-
-  return content;
+  return gdk_content_provider_new_typed (G_TYPE_STRING, str);
 }
 
 static void

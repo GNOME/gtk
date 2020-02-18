@@ -100,7 +100,6 @@ main (int argc, char **argv)
   GtkWidget *button4;
   GIcon *icon;
   GdkContentProvider *content;
-  GValue value = G_VALUE_INIT;
   gboolean done = FALSE;
 
   gtk_init ();
@@ -165,10 +164,7 @@ main (int argc, char **argv)
 				   GTK_ENTRY_ICON_PRIMARY,
 				   "Save a file");
  
-  g_value_init (&value, G_TYPE_STRING);
-  g_value_set_string (&value, "Amazing");
-  content = gdk_content_provider_new_for_value (&value);
-  g_value_unset (&value);
+  content = gdk_content_provider_new_typed (G_TYPE_STRING, "Amazing");
   gtk_entry_set_icon_drag_source (GTK_ENTRY (entry),
                                   GTK_ENTRY_ICON_PRIMARY,
                                   content, GDK_ACTION_COPY); 

@@ -1,6 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  *
- * Copyright (C) 2017 Benjamin Otte <otte@gnome.org>
+ * Copyright (C) 2017,2020 Benjamin Otte <otte@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,7 +18,9 @@
 
 #include "config.h"
 
-#include "gdkcontentprovider.h"
+#include "gdkcontentproviderprivate.h"
+
+#include <gobject/gvaluecollector.h>
 
 #include "gdkcontentformats.h"
 #include "gdkcontentserializer.h"
@@ -122,6 +124,318 @@ gdk_content_provider_new_for_value (const GValue *value)
   g_value_copy (value, &content->value);
   
   return GDK_CONTENT_PROVIDER (content);
+}
+
+/**
+ * gdk_content_provider_new_typed:
+ * @type: Type of value to follow
+ * ...: value
+ *
+ * Create a content provider that provides the value of the given
+ * @type.
+ *
+ * The value is provided using G_VALUE_COLLECT(), so the same rules
+ * apply as when calling g_object_new() or g_object_set().
+ *
+ * Returns: a new #GdkContentProvider
+ **/
+GdkContentProvider *
+gdk_content_provider_new_typed (GType type,
+                                ...)
+{
+  GdkContentProviderValue *content;
+  va_list args;
+  char *error;
+
+  content = g_object_new (GDK_TYPE_CONTENT_PROVIDER_VALUE, NULL);
+
+  va_start (args, type);
+  G_VALUE_COLLECT_INIT (&content->value, type, args, 0, &error);
+  if (error)
+    {
+      g_warning ("%s: %s", G_STRLOC, error);
+      g_free (error);
+      /* we purposely leak the value here, it might not be
+       * in a sane state if an error condition occoured
+       */
+    }
+  va_end (args);
+
+  return GDK_CONTENT_PROVIDER (content);
+}
+
+#define GDK_TYPE_CONTENT_PROVIDER_UNION            (gdk_content_provider_union_get_type ())
+#define GDK_CONTENT_PROVIDER_UNION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_CONTENT_PROVIDER_UNION, GdkContentProviderUnion))
+#define GDK_IS_CONTENT_PROVIDER_UNION(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_CONTENT_PROVIDER_UNION))
+#define GDK_CONTENT_PROVIDER_UNION_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_CONTENT_PROVIDER_UNION, GdkContentProviderUnionClass))
+#define GDK_IS_CONTENT_PROVIDER_UNION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_CONTENT_PROVIDER_UNION))
+#define GDK_CONTENT_PROVIDER_UNION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_CONTENT_PROVIDER_UNION, GdkContentProviderUnionClass))
+
+typedef struct _GdkContentProviderUnion GdkContentProviderUnion;
+typedef struct _GdkContentProviderUnionClass GdkContentProviderUnionClass;
+
+struct _GdkContentProviderUnion
+{
+  GdkContentProvider parent;
+
+  GdkContentProvider **providers;
+  gsize n_providers;
+};
+
+struct _GdkContentProviderUnionClass
+{
+  GdkContentProviderClass parent_class;
+};
+
+GType gdk_content_provider_union_get_type (void) G_GNUC_CONST;
+
+G_DEFINE_TYPE (GdkContentProviderUnion, gdk_content_provider_union, GDK_TYPE_CONTENT_PROVIDER)
+
+static void
+gdk_content_provider_union_attach_clipboard (GdkContentProvider *provider,
+                                             GdkClipboard       *clipboard)
+{
+  GdkContentProviderUnion *self = GDK_CONTENT_PROVIDER_UNION (provider);
+  gsize i;
+
+  for (i = 0; i < self->n_providers; i++)
+    gdk_content_provider_attach_clipboard (self->providers[i], clipboard);
+}
+
+static void
+gdk_content_provider_union_detach_clipboard (GdkContentProvider *provider,
+                                             GdkClipboard       *clipboard)
+{
+  GdkContentProviderUnion *self = GDK_CONTENT_PROVIDER_UNION (provider);
+  gsize i;
+
+  for (i = 0; i < self->n_providers; i++)
+    gdk_content_provider_detach_clipboard (self->providers[i], clipboard);
+}
+
+static GdkContentFormats *
+gdk_content_provider_union_ref_formats (GdkContentProvider *provider)
+{
+  GdkContentProviderUnion *self = GDK_CONTENT_PROVIDER_UNION (provider);
+  GdkContentFormatsBuilder *builder;
+  gsize i;
+
+  builder = gdk_content_formats_builder_new ();
+
+  for (i = 0; i < self->n_providers; i++)
+    {
+      GdkContentFormats *formats = gdk_content_provider_ref_formats (self->providers[i]);
+      gdk_content_formats_builder_add_formats (builder, formats);
+      gdk_content_formats_unref (formats);
+    }
+
+  return gdk_content_formats_builder_free_to_formats (builder);
+}
+
+static GdkContentFormats *
+gdk_content_provider_union_ref_storable_formats (GdkContentProvider *provider)
+{
+  GdkContentProviderUnion *self = GDK_CONTENT_PROVIDER_UNION (provider);
+  GdkContentFormatsBuilder *builder;
+  gsize i;
+
+  builder = gdk_content_formats_builder_new ();
+
+  for (i = 0; i < self->n_providers; i++)
+    {
+      GdkContentFormats *formats = gdk_content_provider_ref_storable_formats (self->providers[i]);
+      gdk_content_formats_builder_add_formats (builder, formats);
+      gdk_content_formats_unref (formats);
+    }
+
+  return gdk_content_formats_builder_free_to_formats (builder);
+}
+
+static void
+gdk_content_provider_union_write_mime_type_done (GObject      *source_object,
+                                                 GAsyncResult *res,
+                                                 gpointer      data)
+{
+  GTask *task = data;
+  GError *error = NULL;
+
+  if (!gdk_content_provider_write_mime_type_finish (GDK_CONTENT_PROVIDER (source_object), res, &error))
+    {
+      g_task_return_error (task, error);
+    }
+  else
+    {
+      g_task_return_boolean (task, TRUE);
+    }
+
+  g_object_unref (task);
+}
+
+static void
+gdk_content_provider_union_write_mime_type_async (GdkContentProvider     *provider,
+                                                  const char             *mime_type,
+                                                  GOutputStream          *stream,
+                                                  int                     io_priority,
+                                                  GCancellable           *cancellable,
+                                                  GAsyncReadyCallback     callback,
+                                                  gpointer                user_data)
+{
+  GdkContentProviderUnion *self = GDK_CONTENT_PROVIDER_UNION (provider);
+  GTask *task;
+  gsize i;
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_priority (task, io_priority);
+  g_task_set_source_tag (task, gdk_content_provider_union_write_mime_type_async);
+
+  for (i = 0; i < self->n_providers; i++)
+    {
+      GdkContentFormats *formats = gdk_content_provider_ref_formats (self->providers[i]);
+
+      if (gdk_content_formats_contain_mime_type (formats, mime_type))
+        {
+          gdk_content_provider_write_mime_type_async (self->providers[i],
+                                                      mime_type,
+                                                      stream,
+                                                      io_priority,
+                                                      cancellable,
+                                                      gdk_content_provider_union_write_mime_type_done,
+                                                      task);
+          gdk_content_formats_unref (formats);
+        }
+      gdk_content_formats_unref (formats);
+    }
+
+  g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                           _("Cannot provide contents as “%s”"), mime_type);
+  g_object_unref (task);
+}
+
+static gboolean
+gdk_content_provider_union_write_mime_type_finish (GdkContentProvider  *provider,
+                                                   GAsyncResult        *result,
+                                                   GError             **error)
+{
+  g_return_val_if_fail (g_task_is_valid (result, provider), FALSE);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gdk_content_provider_union_write_mime_type_async, FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+static gboolean
+gdk_content_provider_union_get_value (GdkContentProvider  *provider,
+                                      GValue              *value,
+                                      GError             **error)
+{
+  GdkContentProviderUnion *self = GDK_CONTENT_PROVIDER_UNION (provider);
+  gsize i;
+
+  for (i = 0; i < self->n_providers; i++)
+    {
+      GError *provider_error = NULL;
+
+      if (gdk_content_provider_get_value (self->providers[i], value, &provider_error))
+        return TRUE;
+
+      if (!g_error_matches (provider_error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
+        {
+          g_propagate_error (error, provider_error);
+          return FALSE;
+        }
+
+      g_clear_error (&provider_error);
+    }
+
+  return FALSE;
+}
+
+static void
+gdk_content_provider_union_finalize (GObject *object)
+{
+  GdkContentProviderUnion *self = GDK_CONTENT_PROVIDER_UNION (object);
+  gsize i;
+
+  for (i = 0; i < self->n_providers; i++)
+    {
+      g_signal_handlers_disconnect_by_func (self->providers[i], gdk_content_provider_content_changed, self);
+      g_object_unref (self->providers[i]);
+    }
+
+  g_free (self->providers);
+
+  G_OBJECT_CLASS (gdk_content_provider_union_parent_class)->finalize (object);
+}
+
+static void
+gdk_content_provider_union_class_init (GdkContentProviderUnionClass *class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+  GdkContentProviderClass *provider_class = GDK_CONTENT_PROVIDER_CLASS (class);
+
+  object_class->finalize = gdk_content_provider_union_finalize;
+
+  provider_class->attach_clipboard = gdk_content_provider_union_attach_clipboard;
+  provider_class->detach_clipboard = gdk_content_provider_union_detach_clipboard;
+  provider_class->ref_formats = gdk_content_provider_union_ref_formats;
+  provider_class->ref_storable_formats = gdk_content_provider_union_ref_storable_formats;
+  provider_class->write_mime_type_async = gdk_content_provider_union_write_mime_type_async;
+  provider_class->write_mime_type_finish = gdk_content_provider_union_write_mime_type_finish;
+  provider_class->get_value = gdk_content_provider_union_get_value;
+}
+
+static void
+gdk_content_provider_union_init (GdkContentProviderUnion *self)
+{
+}
+
+/**
+ * gdk_content_provider_new_union:
+ * @providers: (nullable) (array length=n_providers) [transfer elements]:
+ *     The #GdkContentProviders to present the union of
+ * @n_providers: the number of providers
+ *
+ * Creates a content provider that represents all the given @providers.
+ *
+ * Whenever data needs to be written, the union provider will try the given
+ * @providers in the given order and the first one supporting a format will
+ * be chosen to provide it.
+ *
+ * This allows an easy way to support providing data in different formats.
+ * For example, an image may be provided by its file and by the iamge
+ * contents with a call such as
+ * |[<!-- language="C" -->
+ * gdk_content_provider_new_union ((GdkContentProvider *[2]) {
+ *                                   gdk_content_provider_new_typed (G_TYPE_FILE, file),
+ *                                   gdk_content_provider_new_typed (G_TYPE_TEXTURE, texture)
+ *                                 }, 2);
+ * ]|
+ *
+ *
+ * Returns: a new #GdkContentProvider
+ **/
+GdkContentProvider *
+gdk_content_provider_new_union (GdkContentProvider **providers,
+                                gsize                n_providers)
+{
+  GdkContentProviderUnion *result;
+  gsize i;
+
+  g_return_val_if_fail (providers != NULL || n_providers == 0, NULL);
+
+  result = g_object_new (GDK_TYPE_CONTENT_PROVIDER_UNION, NULL);
+
+  result->n_providers = n_providers;
+  result->providers = g_memdup (providers, sizeof (GdkContentProvider *) * n_providers);
+
+  for (i = 0; i < n_providers; i++)
+    {
+      g_signal_connect_swapped (result->providers[i],
+                                "content-changed",
+                                G_CALLBACK (gdk_content_provider_content_changed),
+                                result);
+    }
+
+  return GDK_CONTENT_PROVIDER (result);
 }
 
 #define GDK_TYPE_CONTENT_PROVIDER_BYTES            (gdk_content_provider_bytes_get_type ())
@@ -282,279 +596,3 @@ gdk_content_provider_new_for_bytes (const char *mime_type,
   return GDK_CONTENT_PROVIDER (content);
 }
 
-#define GDK_TYPE_CONTENT_PROVIDER_CALLBACK            (gdk_content_provider_callback_get_type ())
-#define GDK_CONTENT_PROVIDER_CALLBACK(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_CONTENT_PROVIDER_CALLBACK, GdkContentProviderCallback))
-
-typedef struct _GdkContentProviderCallback GdkContentProviderCallback;
-typedef struct _GdkContentProviderCallbackClass GdkContentProviderCallbackClass;
-
-struct _GdkContentProviderCallback
-{
-  GdkContentProvider parent;
-
-  GType type;
-  GdkContentProviderGetValueFunc func;
-  gpointer data;
-  GDestroyNotify notify;
-};
-
-struct _GdkContentProviderCallbackClass
-{
-  GdkContentProviderClass parent_class;
-};
-
-GType gdk_content_provider_callback_get_type (void) G_GNUC_CONST;
-
-G_DEFINE_TYPE (GdkContentProviderCallback, gdk_content_provider_callback, GDK_TYPE_CONTENT_PROVIDER)
-
-static GdkContentFormats *
-gdk_content_provider_callback_ref_formats (GdkContentProvider *provider)
-{
-  GdkContentProviderCallback *callback = GDK_CONTENT_PROVIDER_CALLBACK (provider);
-
-  return gdk_content_formats_new_for_gtype (callback->type);
-}
-
-static gboolean
-gdk_content_provider_callback_get_value (GdkContentProvider  *provider,
-                                         GValue              *value,
-                                         GError             **error)
-{
-  GdkContentProviderCallback *callback = GDK_CONTENT_PROVIDER_CALLBACK (provider);
-
-  if (G_VALUE_HOLDS (value, callback->type) && callback->func != NULL)
-    {
-      callback->func (value, callback->data);
-      return TRUE;
-    }
-
-  return GDK_CONTENT_PROVIDER_CLASS (gdk_content_provider_callback_parent_class)->get_value (provider, value, error);
-}
-
-static void
-gdk_content_provider_callback_dispose (GObject *gobject)
-{
-  GdkContentProviderCallback *self = GDK_CONTENT_PROVIDER_CALLBACK (gobject);
-
-  if (self->notify != NULL)
-    self->notify (self->data);
-
-  self->func = NULL;
-  self->data = NULL;
-  self->notify = NULL;
-
-  G_OBJECT_CLASS (gdk_content_provider_callback_parent_class)->dispose (gobject);
-}
-
-static void
-gdk_content_provider_callback_class_init (GdkContentProviderCallbackClass *class)
-{
-  GdkContentProviderClass *provider_class = GDK_CONTENT_PROVIDER_CLASS (class);
-  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-
-  gobject_class->dispose = gdk_content_provider_callback_dispose;
-
-  provider_class->ref_formats = gdk_content_provider_callback_ref_formats;
-  provider_class->get_value = gdk_content_provider_callback_get_value;
-}
-
-static void
-gdk_content_provider_callback_init (GdkContentProviderCallback *content)
-{
-}
-
-/**
- * gdk_content_provider_new_for_callback: (constructor)
- * @type: the type that the callback provides
- * @func: (not nullable): callback to populate a #GValue
- * @data: (closure): data that gets passed to @func
- * @notify: a function to be called to free @data when the content provider
- *   goes away
- *
- * Create a content provider that provides data that is provided via a callback.
- *
- * Returns: a new #GdkContentProvider
- **/
-GdkContentProvider *
-gdk_content_provider_new_with_callback (GType                          type,
-                                        GdkContentProviderGetValueFunc func,
-                                        gpointer                       data,
-                                        GDestroyNotify                 notify)
-{
-  GdkContentProviderCallback *content;
-
-  g_return_val_if_fail (func != NULL, NULL);
-
-  content = g_object_new (GDK_TYPE_CONTENT_PROVIDER_CALLBACK, NULL);
-  content->type = type;
-  content->func = func;
-  content->data = data;
-  content->notify = notify;
-  
-  return GDK_CONTENT_PROVIDER (content);
-}
-
-#define GDK_TYPE_CONTENT_PROVIDER_CALLBACK2            (gdk_content_provider_callback2_get_type ())
-#define GDK_CONTENT_PROVIDER_CALLBACK2(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_CONTENT_PROVIDER_CALLBACK2, GdkContentProviderCallback2))
-
-typedef struct _GdkContentProviderCallback2 GdkContentProviderCallback2;
-typedef struct _GdkContentProviderCallback2Class GdkContentProviderCallback2Class;
-
-struct _GdkContentProviderCallback2
-{
-  GdkContentProvider parent;
-
-  GdkContentFormats *formats;
-  GdkContentProviderGetBytesFunc func;
-  gpointer data;
-  GDestroyNotify notify;
-};
-
-struct _GdkContentProviderCallback2Class
-{
-  GdkContentProviderClass parent_class;
-};
-
-GType gdk_content_provider_callback2_get_type (void) G_GNUC_CONST;
-
-G_DEFINE_TYPE (GdkContentProviderCallback2, gdk_content_provider_callback2, GDK_TYPE_CONTENT_PROVIDER)
-
-static GdkContentFormats *
-gdk_content_provider_callback2_ref_formats (GdkContentProvider *provider)
-{
-  GdkContentProviderCallback2 *callback = GDK_CONTENT_PROVIDER_CALLBACK2 (provider);
-
-  return gdk_content_formats_ref (callback->formats);
-}
-
-static void
-gdk_content_provider_callback2_write_mime_type_done (GObject      *stream,
-                                                     GAsyncResult *result,
-                                                     gpointer      task)
-{
-  GError *error = NULL;
-
-  if (!g_output_stream_write_all_finish (G_OUTPUT_STREAM (stream), result, NULL, &error))
-    g_task_return_error (task, error);
-  else
-    g_task_return_boolean (task, TRUE);
-
-  g_object_unref (task);
-}
-
-static void
-gdk_content_provider_callback2_write_mime_type_async (GdkContentProvider     *provider,
-                                                      const char             *mime_type,
-                                                      GOutputStream          *stream,
-                                                      int                     io_priority,
-                                                      GCancellable           *cancellable,
-                                                      GAsyncReadyCallback     callback,
-                                                      gpointer                user_data)
-{
-  GdkContentProviderCallback2 *content = GDK_CONTENT_PROVIDER_CALLBACK2 (provider);
-  GTask *task;
-  GBytes *bytes;
-
-  task = g_task_new (content, cancellable, callback, user_data);
-  g_task_set_priority (task, io_priority);
-  g_task_set_source_tag (task, gdk_content_provider_callback2_write_mime_type_async);
-
-  if (!gdk_content_formats_contain_mime_type (content->formats, mime_type))
-    {
-      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
-                               _("Cannot provide contents as “%s”"), mime_type);
-      g_object_unref (task);
-      return;
-    }
-
-  bytes = content->func (mime_type, content->data);
-  if (!bytes)
-    {
-      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
-                               _("Failed to get contents as “%s”"), mime_type);
-      g_object_unref (task);
-      return;
-    }
-
-  g_object_set_data_full (G_OBJECT (task), "bytes", bytes, (GDestroyNotify)g_bytes_unref);
-
-  g_output_stream_write_all_async (stream,
-                                   g_bytes_get_data (bytes, NULL),
-                                   g_bytes_get_size (bytes),
-                                   io_priority,
-                                   cancellable,
-                                   gdk_content_provider_callback2_write_mime_type_done,
-                                   task);
-}
-
-static gboolean
-gdk_content_provider_callback2_write_mime_type_finish (GdkContentProvider *provider,
-                                                       GAsyncResult       *result,
-                                                       GError            **error)
-{
-  g_return_val_if_fail (g_task_is_valid (result, provider), FALSE);
-  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gdk_content_provider_callback2_write_mime_type_async, FALSE);
-
-  return g_task_propagate_boolean (G_TASK (result), error);
-}
-
-static void
-gdk_content_provider_callback2_dispose (GObject *gobject)
-{
-  GdkContentProviderCallback2 *self = GDK_CONTENT_PROVIDER_CALLBACK2 (gobject);
-
-  if (self->notify != NULL)
-    self->notify (self->data);
-
-  self->notify = NULL;
-  self->data = NULL;
-  self->func = NULL;
-
-  G_OBJECT_CLASS (gdk_content_provider_callback2_parent_class)->dispose (gobject);
-}
-
-static void
-gdk_content_provider_callback2_class_init (GdkContentProviderCallback2Class *class)
-{
-  GdkContentProviderClass *provider_class = GDK_CONTENT_PROVIDER_CLASS (class);
-  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-
-  gobject_class->dispose = gdk_content_provider_callback2_dispose;
-
-  provider_class->ref_formats = gdk_content_provider_callback2_ref_formats;
-  provider_class->write_mime_type_async = gdk_content_provider_callback2_write_mime_type_async;
-  provider_class->write_mime_type_finish = gdk_content_provider_callback2_write_mime_type_finish;
-}
-
-static void
-gdk_content_provider_callback2_init (GdkContentProviderCallback2 *content)
-{
-}
-
-/**
- * gdk_content_provider_new_with_formats:
- * @formats: formats to advertise
- * @func: callback to populate a #GValue
- * @data: (closure func): data that gets passed to @func
- * @notify: a function called to free @data when the content provider
- *   goes away
- *
- * Create a content provider that provides data that is provided via a callback.
- *
- * Returns: a new #GdkContentProvider
- **/
-GdkContentProvider *
-gdk_content_provider_new_with_formats (GdkContentFormats              *formats,
-                                       GdkContentProviderGetBytesFunc  func,
-                                       gpointer                        data,
-                                       GDestroyNotify                  notify)
-{
-  GdkContentProviderCallback2 *content;
-  content = g_object_new (GDK_TYPE_CONTENT_PROVIDER_CALLBACK2, NULL);
-  content->formats = gdk_content_formats_union_serialize_mime_types (gdk_content_formats_ref (formats));
-  content->func = func;
-  content->data = data;
-  content->notify = notify;
-  
-  return GDK_CONTENT_PROVIDER (content);
-}

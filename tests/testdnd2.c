@@ -54,8 +54,7 @@ render_paintable_to_texture (GdkPaintable *paintable)
 }
 
 static GdkTexture *
-get_image_texture (GtkImage *image,
-                   int      *out_size)
+get_image_texture (GtkImage *image)
 {
   GtkIconTheme *icon_theme;
   const char *icon_name;
@@ -98,39 +97,6 @@ enum {
   CENTER,
   BOTTOM_RIGHT
 };
-
-void
-image_drag_data_get (GtkWidget        *widget,
-                     GdkDrag          *drag,
-                     GtkSelectionData *selection_data,
-                     gpointer          data)
-{
-  GdkTexture *texture;
-  const gchar *name;
-  int size;
-
-  if (gtk_selection_data_targets_include_image (selection_data, TRUE))
-    {
-      texture = get_image_texture (GTK_IMAGE (data), &size);
-      if (texture)
-        {
-          gtk_selection_data_set_texture (selection_data, texture);
-          g_object_unref (texture);
-        }
-    }
-  else if (gtk_selection_data_targets_include_text (selection_data))
-    {
-      if (gtk_image_get_storage_type (GTK_IMAGE (data)) == GTK_IMAGE_ICON_NAME)
-        name = gtk_image_get_icon_name (GTK_IMAGE (data));
-      else
-        name = "Boo!";
-      gtk_selection_data_set_text (selection_data, name, -1);
-    }
-  else
-    {
-      g_assert_not_reached ();
-    }
-}
 
 static void
 got_texture (GObject *source,
@@ -313,51 +279,28 @@ update_source_icon (GtkDragSource *source,
   g_object_unref (icon);
 }
 
-static GBytes *
-get_data (const char *mimetype,
-          gpointer    data)
+static GdkContentProvider *
+drag_prepare (GtkDragSource *source,
+              double         x,
+              double         y)
 {
-  GtkWidget *image = data;
-  GdkContentFormats *formats;
-  gboolean want_text;
+  GtkImage *image = GTK_IMAGE (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source)));
+  GdkTexture *texture;
+  GdkContentProvider *content;
 
-  formats = gdk_content_formats_new_for_gtype (G_TYPE_STRING);
-  formats = gdk_content_formats_union_serialize_mime_types (formats);
-  want_text = gdk_content_formats_contain_mime_type (formats, mimetype);
-  gdk_content_formats_unref (formats);
+  content = gdk_content_provider_new_typed (G_TYPE_STRING, gtk_image_get_icon_name (GTK_IMAGE (image)));
 
-  if (want_text)
+  texture = get_image_texture (image);
+  if (texture)
     {
-      const char *text = gtk_image_get_icon_name (GTK_IMAGE (image));
-
-      return g_bytes_new (text, strlen (text) + 1);
+      content = gdk_content_provider_new_union ((GdkContentProvider *[2]) {
+                                                  gdk_content_provider_new_typed (GDK_TYPE_TEXTURE, texture),
+                                                  content,
+                                                }, 2);
+      g_object_unref (texture);
     }
-  else if (strcmp (mimetype, "image/png") == 0)
-    {
-      int size;
-      GdkTexture *texture = get_image_texture (GTK_IMAGE (image), &size);
-      if (texture)
-        {
-          char *name = g_strdup ("drag-data-XXXXXX");
-          int fd;
-          char *data;
-          gsize size;
 
-          // FIXME: this is horrible
-
-          fd = g_mkstemp (name);
-          close (fd);
-
-          gdk_texture_save_to_png (texture, name);
-          g_object_unref (texture);
-
-          g_file_get_contents (name, &data, &size, NULL);
-          g_free (name);
-
-          return g_bytes_new_take (data, size);
-        }
-    }
-  return NULL;
+  return content;
 }
 
 static void
@@ -389,7 +332,6 @@ make_image (const gchar *icon_name, int hotspot)
   GtkDropTarget *dest;
   GdkContentFormats *formats;
   GdkContentFormatsBuilder *builder;
-  GdkContentProvider *content;
 
   image = gtk_image_new_from_icon_name (icon_name);
   gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
@@ -399,13 +341,11 @@ make_image (const gchar *icon_name, int hotspot)
   gdk_content_formats_builder_add_gtype (builder, G_TYPE_STRING);
   formats = gdk_content_formats_builder_free_to_formats (builder);
 
-  content = gdk_content_provider_new_with_formats (formats, get_data, image, NULL);
   source = gtk_drag_source_new ();
-  gtk_drag_source_set_content (source, content);
   gtk_drag_source_set_actions (source, GDK_ACTION_COPY|GDK_ACTION_MOVE|GDK_ACTION_ASK);
-  g_object_unref (content);
   update_source_icon (source, icon_name, hotspot);
 
+  g_signal_connect (source, "prepare", G_CALLBACK (drag_prepare), NULL);
   g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), NULL);
   g_signal_connect (source, "drag-end", G_CALLBACK (drag_end), NULL);
   g_signal_connect (source, "drag-cancel", G_CALLBACK (drag_cancel), NULL);
@@ -415,8 +355,6 @@ make_image (const gchar *icon_name, int hotspot)
   g_signal_connect (dest, "accept", G_CALLBACK (image_drag_motion), image);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (image_drag_drop), image);
   gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (dest));
-
-  gdk_content_formats_unref (formats);
 
   return image;
 }
@@ -439,21 +377,17 @@ make_spinner (void)
   GtkWidget *spinner;
   GtkDragSource *source;
   GdkContentProvider *content;
-  GValue value = G_VALUE_INIT;
 
   spinner = gtk_spinner_new ();
   gtk_spinner_start (GTK_SPINNER (spinner));
 
-  g_value_init (&value, G_TYPE_STRING);
-  g_value_set_string (&value, "ACTIVE");
-  content = gdk_content_provider_new_for_value (&value);
+  content = gdk_content_provider_new_typed (G_TYPE_STRING, "ACTIVE");
   source = gtk_drag_source_new ();
   gtk_drag_source_set_content (source, content);
   g_signal_connect (source, "drag-begin", G_CALLBACK (spinner_drag_begin), spinner);
   gtk_widget_add_controller (spinner, GTK_EVENT_CONTROLLER (source));
 
   g_object_unref (content);
-  g_value_unset (&value);
 
   return spinner;
 }

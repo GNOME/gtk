@@ -50,7 +50,6 @@
 #include "gtkdragsource.h"
 #include "gtkdragdest.h"
 #include "gtkdragicon.h"
-#include "gtkselectionprivate.h"
 #include "gtknative.h"
 
 #include "a11y/gtkiconviewaccessibleprivate.h"
@@ -285,8 +284,8 @@ static void                 update_pixbuf_cell                           (GtkIco
 /* Source side drag signals */
 static void     gtk_icon_view_dnd_finished_cb   (GdkDrag         *drag,
                                                  GtkWidget       *widget);
-static GBytes * gtk_icon_view_drag_data_get     (const char      *mime_type,
-                                                 gpointer         data);
+static GdkContentProvider * gtk_icon_view_drag_data_get                  (GtkIconView            *icon_view,
+                                                                          GtkTreePath            *source_row);
 
 /* Target side drag signals */
 static void     gtk_icon_view_drag_leave         (GtkDropTarget    *dest,
@@ -5861,19 +5860,20 @@ set_destination (GtkIconView    *icon_view,
 		 gint            x,
 		 gint            y,
 		 GdkDragAction  *suggested_action,
-		 GdkAtom        *target)
+		 GType          *target)
 {
   GtkWidget *widget;
   GtkTreePath *path = NULL;
   GtkIconViewDropPosition pos;
   GtkIconViewDropPosition old_pos;
   GtkTreePath *old_dest_path = NULL;
+  GdkContentFormats *formats;
   gboolean can_drop = FALSE;
 
   widget = GTK_WIDGET (icon_view);
 
   *suggested_action = 0;
-  *target = NULL;
+  *target = G_TYPE_INVALID;
 
   if (!icon_view->priv->dest_set)
     {
@@ -5890,8 +5890,9 @@ set_destination (GtkIconView    *icon_view,
       return FALSE; /* no longer a drop site */
     }
 
-  *target = gtk_drop_target_find_mimetype (dest);
-  if (*target == NULL)
+  formats = gtk_drop_target_get_formats (dest);
+  *target = gdk_content_formats_match_gtype (formats, formats);
+  if (*target == G_TYPE_INVALID)
     return FALSE;
 
   if (!gtk_icon_view_get_dest_item_at_pos (icon_view, x, y, &path, &pos)) 
@@ -6053,10 +6054,9 @@ gtk_icon_view_maybe_begin_drag (GtkIconView *icon_view,
 
   surface = gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (icon_view)));
 
-  content = gdk_content_provider_new_with_formats (icon_view->priv->source_formats,
-                                                   gtk_icon_view_drag_data_get,
-                                                   icon_view,
-                                                   NULL);
+  content = gtk_icon_view_drag_data_get (icon_view, path);
+  if (content == NULL)
+    goto out;
 
   drag = gdk_drag_begin (surface,
                          device,
@@ -6090,16 +6090,12 @@ gtk_icon_view_maybe_begin_drag (GtkIconView *icon_view,
 }
 
 /* Source side drag signals */
-static GBytes *
-gtk_icon_view_drag_data_get (const char *mime_type,
-                             gpointer    data)
+static GdkContentProvider *
+gtk_icon_view_drag_data_get (GtkIconView *icon_view,
+                             GtkTreePath *source_row)
 {
-  GtkIconView *icon_view = data;
+  GdkContentProvider *content;
   GtkTreeModel *model;
-  GtkTreePath *source_row;
-  GtkSelectionData sdata = { 0, };
-
-  sdata.target = g_intern_string (mime_type);
 
   model = gtk_icon_view_get_model (icon_view);
 
@@ -6109,28 +6105,21 @@ gtk_icon_view_drag_data_get (const char *mime_type,
   if (!icon_view->priv->source_set)
     return NULL;
 
-  source_row = gtk_tree_row_reference_get_path (icon_view->priv->source_item);
-  if (source_row == NULL)
-    return NULL;
-
   /* We can implement the GTK_TREE_MODEL_ROW target generically for
    * any model; for DragSource models there are some other formats
    * we also support.
    */
 
-  if (GTK_IS_TREE_DRAG_SOURCE (model) &&
-      gtk_tree_drag_source_drag_data_get (GTK_TREE_DRAG_SOURCE (model), source_row, &sdata))
-    goto done;
+  if (GTK_IS_TREE_DRAG_SOURCE (model))
+    content = gtk_tree_drag_source_drag_data_get (GTK_TREE_DRAG_SOURCE (model), source_row);
+  else
+    content = NULL;
 
   /* If drag_data_get does nothing, try providing row data. */
-  if (gtk_selection_data_get_target (&sdata) == g_intern_static_string ("GTK_TREE_MODEL_ROW"))
-    gtk_tree_set_row_drag_data (&sdata, model, source_row);
+  if (content == NULL)
+    content = gtk_tree_create_row_drag_content (model, source_row);
 
- done:
-  gtk_tree_path_free (source_row);
-
-  return g_bytes_new_take ((gpointer)gtk_selection_data_get_data (&sdata),
-                           gtk_selection_data_get_length (&sdata));
+  return content;
 }
 
 static void 
@@ -6189,7 +6178,7 @@ gtk_icon_view_drag_motion (GtkDropTarget *dest,
   GtkTreePath *path = NULL;
   GtkIconViewDropPosition pos;
   GdkDragAction suggested_action = 0;
-  GdkAtom target;
+  GType target;
   gboolean empty;
 
   if (!set_destination (icon_view, dest, x, y, &suggested_action, &target))
@@ -6216,13 +6205,13 @@ gtk_icon_view_drag_motion (GtkDropTarget *dest,
 	  g_source_set_name_by_id (icon_view->priv->scroll_timeout_id, "[gtk] drag_scroll_timeout");
 	}
 
-      if (target == g_intern_static_string ("GTK_TREE_MODEL_ROW"))
+      if (target == GTK_TYPE_TREE_ROW_DATA)
         {
           /* Request data so we can use the source row when
            * determining whether to accept the drop
            */
           set_status_pending (drop, suggested_action);
-          gtk_drop_target_read_selection (dest, target, NULL, gtk_icon_view_drag_data_received, icon_view);
+          gdk_drop_read_value_async (drop, target, G_PRIORITY_DEFAULT, NULL, gtk_icon_view_drag_data_received, icon_view);
         }
       else
         {
@@ -6244,7 +6233,7 @@ gtk_icon_view_drag_drop (GtkDropTarget *dest,
 {
   GtkTreePath *path;
   GdkDragAction suggested_action = 0;
-  GdkAtom target = NULL;
+  GType target = G_TYPE_INVALID;
   GtkTreeModel *model;
   gboolean drop_append_mode;
 
@@ -6263,7 +6252,7 @@ gtk_icon_view_drag_drop (GtkDropTarget *dest,
   
   path = get_logical_destination (icon_view, &drop_append_mode);
 
-  if (target != NULL && path != NULL)
+  if (target != G_TYPE_INVALID && path != NULL)
     {
       /* in case a motion had requested drag data, change things so we
        * treat drag data receives as a drop.
@@ -6279,9 +6268,9 @@ gtk_icon_view_drag_drop (GtkDropTarget *dest,
   /* Unset this thing */
   gtk_icon_view_set_drag_dest_item (icon_view, NULL, GTK_ICON_VIEW_DROP_LEFT);
 
-  if (target != NULL)
+  if (target != G_TYPE_INVALID)
     {
-      gtk_drop_target_read_selection (dest, target, NULL, gtk_icon_view_drag_data_received, icon_view);
+      gdk_drop_read_value_async (drop, target, G_PRIORITY_DEFAULT, NULL, gtk_icon_view_drag_data_received, icon_view);
       return TRUE;
     }
   else
@@ -6319,27 +6308,26 @@ gtk_icon_view_drag_data_received (GObject *source,
                                   GAsyncResult *result,
                                   gpointer data)
 {
-  GtkDropTarget *dest = GTK_DROP_TARGET (source);
   GtkIconView *icon_view = data;
-  GdkDrop *drop = gtk_drop_target_get_drop (dest);
+  GdkDrop *drop = GDK_DROP (source);
   GtkTreePath *path;
   GtkTreeModel *model;
   GtkTreePath *dest_row;
   GdkDragAction suggested_action;
   gboolean drop_append_mode;
-  GtkSelectionData *selection_data;
+  const GValue *value;
 
-  selection_data = gtk_drop_target_read_selection_finish (dest, result, NULL);
-  if (!selection_data)
+  value = gdk_drop_read_value_finish (drop, result, NULL);
+  if (!value)
     return;
 
   model = gtk_icon_view_get_model (icon_view);
 
   if (!check_model_dnd (model, GTK_TYPE_TREE_DRAG_DEST, "drag-data-received"))
-    goto out;
+    return;
 
   if (!icon_view->priv->dest_set)
-    goto out;
+    return;
 
   suggested_action = get_status_pending (drop);
 
@@ -6359,7 +6347,7 @@ gtk_icon_view_drag_data_received (GObject *source,
         {
 	  if (!gtk_tree_drag_dest_row_drop_possible (GTK_TREE_DRAG_DEST (model),
 						     path,
-						     selection_data))
+						     value))
 	    suggested_action = 0;
         }
 
@@ -6373,25 +6361,22 @@ gtk_icon_view_drag_data_received (GObject *source,
         gtk_icon_view_set_drag_dest_item (icon_view,
 					  NULL,
 					  GTK_ICON_VIEW_DROP_LEFT);
-      goto out;
+      return;
     }
   
 
   dest_row = get_dest_row (drop);
 
   if (dest_row == NULL)
-    goto out;
+    return;
 
-  if (gtk_selection_data_get_length (selection_data) >= 0)
-    {
-      suggested_action = gtk_icon_view_get_action (GTK_WIDGET (icon_view), drop);
+  suggested_action = gtk_icon_view_get_action (GTK_WIDGET (icon_view), drop);
 
-      if (suggested_action &&
-          !gtk_tree_drag_dest_drag_data_received (GTK_TREE_DRAG_DEST (model),
-                                                  dest_row,
-                                                  selection_data))
-        suggested_action = 0;
-    }
+  if (suggested_action &&
+      !gtk_tree_drag_dest_drag_data_received (GTK_TREE_DRAG_DEST (model),
+                                              dest_row,
+                                              value))
+    suggested_action = 0;
 
   gdk_drop_finish (drop, suggested_action);
 
@@ -6399,9 +6384,6 @@ gtk_icon_view_drag_data_received (GObject *source,
 
   /* drop dest_row */
   set_dest_row (drop, NULL, NULL, FALSE, FALSE);
-
-out:
-  gtk_selection_data_free (selection_data);
 }
 
 /* Drag-and-Drop support */
@@ -6453,7 +6435,7 @@ gtk_icon_view_enable_model_drag_dest (GtkIconView       *icon_view,
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), NULL);
   GtkCssNode *widget_node;
 
-  icon_view->priv->dest = gtk_drop_target_new (formats, actions);
+  icon_view->priv->dest = gtk_drop_target_new (gdk_content_formats_ref (formats), actions);
   g_signal_connect (icon_view->priv->dest, "drag-leave", G_CALLBACK (gtk_icon_view_drag_leave), icon_view);
   g_signal_connect (icon_view->priv->dest, "drag-motion", G_CALLBACK (gtk_icon_view_drag_motion), icon_view);
   g_signal_connect (icon_view->priv->dest, "drag-drop", G_CALLBACK (gtk_icon_view_drag_drop), icon_view);
@@ -6736,11 +6718,6 @@ gtk_icon_view_get_reorderable (GtkIconView *icon_view)
   return icon_view->priv->reorderable;
 }
 
-static const char *item_formats[] = {
-  "GTK_TREE_MODEL_ROW" 
-};
-
-
 /**
  * gtk_icon_view_set_reorderable:
  * @icon_view: A #GtkIconView.
@@ -6772,7 +6749,7 @@ gtk_icon_view_set_reorderable (GtkIconView *icon_view,
 
   if (reorderable)
     {
-      GdkContentFormats *formats = gdk_content_formats_new (item_formats, G_N_ELEMENTS (item_formats));
+      GdkContentFormats *formats = gdk_content_formats_new_for_gtype (GTK_TYPE_TREE_ROW_DATA);
       gtk_icon_view_enable_model_drag_source (icon_view,
 					      GDK_BUTTON1_MASK,
 					      formats,

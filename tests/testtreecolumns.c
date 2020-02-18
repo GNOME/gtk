@@ -268,17 +268,11 @@ view_column_model_tree_model_init (GtkTreeModelIface *iface)
   iface->iter_parent = view_column_model_iter_parent;
 }
 
-static gboolean
-view_column_model_drag_data_get (GtkTreeDragSource   *drag_source,
-				 GtkTreePath         *path,
-				 GtkSelectionData    *selection_data)
+static GdkContentProvider *
+view_column_model_drag_data_get (GtkTreeDragSource *drag_source,
+				 GtkTreePath       *path)
 {
-  if (gtk_tree_set_row_drag_data (selection_data,
-				  GTK_TREE_MODEL (drag_source),
-				  path))
-    return TRUE;
-  else
-    return FALSE;
+  return gtk_tree_create_row_drag_content (GTK_TREE_MODEL (drag_source), path);
 }
 
 static gboolean
@@ -291,13 +285,13 @@ view_column_model_drag_data_delete (GtkTreeDragSource *drag_source,
 }
 
 static gboolean
-view_column_model_row_drop_possible (GtkTreeDragDest   *drag_dest,
-				     GtkTreePath       *dest_path,
-				     GtkSelectionData  *selection_data)
+view_column_model_row_drop_possible (GtkTreeDragDest *drag_dest,
+				     GtkTreePath     *dest_path,
+				     const GValue    *value)
 {
   GtkTreeModel *src_model;
   
-  if (gtk_tree_get_row_drag_data (selection_data,
+  if (gtk_tree_get_row_drag_data (value,
 				  &src_model,
 				  NULL))
     {
@@ -311,15 +305,15 @@ view_column_model_row_drop_possible (GtkTreeDragDest   *drag_dest,
 }
 
 static gboolean
-view_column_model_drag_data_received (GtkTreeDragDest   *drag_dest,
-				      GtkTreePath       *dest,
-				      GtkSelectionData  *selection_data)
+view_column_model_drag_data_received (GtkTreeDragDest *drag_dest,
+				      GtkTreePath     *dest,
+				      const GValue    *value)
 {
   GtkTreeModel *src_model;
   GtkTreePath *src_path = NULL;
   gboolean retval = FALSE;
   
-  if (gtk_tree_get_row_drag_data (selection_data,
+  if (gtk_tree_get_row_drag_data (value,
 				  &src_model,
 				  &src_path))
     {
@@ -703,10 +697,6 @@ selection_changed (GtkTreeSelection *selection, GtkWidget *button)
     gtk_widget_set_sensitive (button, FALSE);
 }
 
-static const char *row_targets[] = {
-  "GTK_TREE_MODEL_ROW"
-};
-
 static void
 quit_cb (GtkWidget *widget,
          gpointer   data)
@@ -874,7 +864,7 @@ main (int argc, char *argv[])
 
 
   /* Drag and Drop */
-  targets = gdk_content_formats_new (row_targets, G_N_ELEMENTS (row_targets));
+  targets = gdk_content_formats_new_for_gtype (GTK_TYPE_TREE_ROW_DATA);
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (left_tree_view),
 					  GDK_BUTTON1_MASK,
                                           targets,

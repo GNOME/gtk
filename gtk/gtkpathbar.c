@@ -1196,7 +1196,6 @@ make_directory_button (GtkPathBar  *path_bar,
   AtkObject *atk_obj;
   GtkWidget *child = NULL;
   ButtonData *button_data;
-  GValue value = G_VALUE_INIT;
   GdkContentProvider *content;
   GtkDragSource *source;
 
@@ -1245,14 +1244,11 @@ make_directory_button (GtkPathBar  *path_bar,
   g_object_weak_ref (G_OBJECT (button_data->button),
 		     (GWeakNotify) button_data_free, button_data);
 
-  g_value_init (&value, G_TYPE_FILE);
-  g_value_set_object (&value, button_data->file);
   source = gtk_drag_source_new ();
-  content = gdk_content_provider_new_for_value (&value);
+  content = gdk_content_provider_new_typed (G_TYPE_FILE, button_data->file);
   gtk_drag_source_set_content (source, content);
   g_object_unref (content);
   gtk_widget_add_controller (button_data->button, GTK_EVENT_CONTROLLER (source));
-  g_value_unset (&value);
 
   return button_data;
 }

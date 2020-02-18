@@ -6,15 +6,7 @@ prepare (GtkDragSource *source,
          double         y,
          GtkWidget     *row)
 {
-  GdkContentProvider *content;
-  GValue value = G_VALUE_INIT;
-
-  g_value_init (&value, GTK_TYPE_LIST_BOX_ROW);
-  g_value_set_object (&value, row);
-  content = gdk_content_provider_new_for_value (&value);
-  g_value_unset (&value);
-
-  return content;
+  return gdk_content_provider_new_typed (GTK_TYPE_LIST_BOX_ROW, row);
 }
 
 static void
@@ -85,7 +77,6 @@ static GtkWidget *
 create_row (const gchar *text)
 {
   GtkWidget *row, *box, *label, *image;
-  GdkContentFormats *targets;
   GtkDragSource *source;
   GtkDropTarget *dest;
 
@@ -105,12 +96,9 @@ create_row (const gchar *text)
   g_signal_connect (source, "prepare", G_CALLBACK (prepare), row);
   gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
 
-  targets = gdk_content_formats_new_for_gtype (GTK_TYPE_LIST_BOX_ROW);
-  dest = gtk_drop_target_new (targets, GDK_ACTION_MOVE);
+  dest = gtk_drop_target_new (gdk_content_formats_new_for_gtype (GTK_TYPE_LIST_BOX_ROW), GDK_ACTION_MOVE);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop), row);
   gtk_widget_add_controller (GTK_WIDGET (row), GTK_EVENT_CONTROLLER (dest));
-
-  gdk_content_formats_unref (targets);
 
   return row;
 }

@@ -22,20 +22,20 @@ my_model_init (MyModel *object)
   gtk_list_store_set_column_types (GTK_LIST_STORE (object), G_N_ELEMENTS (types), types);
 }
 
-static gboolean
+static GdkContentProvider *
 my_model_drag_data_get (GtkTreeDragSource *source,
-                        GtkTreePath       *path,
-                        GtkSelectionData  *data)
+                        GtkTreePath       *path)
 {
+  GdkContentProvider *content;
   GtkTreeIter iter;
   gchar *text;
 
   gtk_tree_model_get_iter (GTK_TREE_MODEL (source), &iter, path);
   gtk_tree_model_get (GTK_TREE_MODEL (source), &iter, 0, &text, -1);
-  gtk_selection_data_set_text (data, text, -1);
+  content = gdk_content_provider_new_typed (G_TYPE_STRING, text);
   g_free (text);
 
-  return TRUE;
+  return content;
 }
 
 static void
@@ -63,10 +63,6 @@ get_model (void)
   return GTK_TREE_MODEL (model);
 }
 
-static const char *entries[] = {
-  "text/plain"
-};
-
 static GtkWidget *
 get_dragsource (void)
 {
@@ -81,7 +77,7 @@ get_dragsource (void)
   gtk_tree_view_append_column (tv, column);
 
   gtk_tree_view_set_model (tv, get_model ());
-  targets = gdk_content_formats_new (entries, G_N_ELEMENTS (entries));
+  targets = gdk_content_formats_new_for_gtype (G_TYPE_STRING);
   gtk_tree_view_enable_model_drag_source (tv, GDK_BUTTON1_MASK, targets, GDK_ACTION_COPY);
   gdk_content_formats_unref (targets);
 
@@ -93,18 +89,15 @@ got_text (GObject      *source,
           GAsyncResult *result,
           gpointer      data)
 {
-  GtkDropTarget *dest = GTK_DROP_TARGET (source);
-  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
-  gchar *text;
-  GtkSelectionData *selda;
+  GdkDrop *drop = GDK_DROP (source);
+  GtkWidget *widget = data;
+  const GValue *value;
 
-  selda = gtk_drop_target_read_selection_finish (dest, result, NULL);
+  value = gdk_drop_read_value_finish (drop, result, NULL);
+  if (value == NULL)
+    return;
   
-  text = (gchar*) gtk_selection_data_get_text (selda);
-  gtk_label_set_label (GTK_LABEL (widget), text);
-  g_free (text);
-
-  gtk_selection_data_free (selda);
+  gtk_label_set_label (GTK_LABEL (widget), g_value_get_string (value));
 }
 
 static void
@@ -114,22 +107,21 @@ drag_drop (GtkDropTarget *dest,
            int            y,
            gpointer       dada)
 {
-  gtk_drop_target_read_selection (dest, "text/plain",  NULL, got_text, dada);
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
+
+  gdk_drop_read_value_async (drop, G_TYPE_STRING, G_PRIORITY_DEFAULT, NULL, got_text, widget);
 }
 
 static GtkWidget *
 get_droptarget (void)
 {
   GtkWidget *label;
-  GdkContentFormats *targets;
   GtkDropTarget *dest;
 
   label = gtk_label_new ("Drop here");
-  targets = gdk_content_formats_new (entries, G_N_ELEMENTS (entries));
-  dest = gtk_drop_target_new (targets, GDK_ACTION_COPY);
+  dest = gtk_drop_target_new (gdk_content_formats_new_for_gtype (G_TYPE_STRING), GDK_ACTION_COPY);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop), NULL);
   gtk_widget_add_controller (label, GTK_EVENT_CONTROLLER (dest));
-  gdk_content_formats_unref (targets);
 
   return label;
 }

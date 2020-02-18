@@ -22,10 +22,21 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkselection.h>
 #include <gtk/gtktreemodel.h>
 
 G_BEGIN_DECLS
+
+/**
+ * GTK_TYPE_TREE_ROW_DATA:
+ * Magic #GType to use when dragging rows in a #GtkTreeModel.
+ *
+ * Data in this format will be provided by gtk_tree_create_row_drag_content()
+ * and can be consumed via gtk_tree_get_row_drag_data().
+ */
+#define GTK_TYPE_TREE_ROW_DATA (gtk_tree_row_data_get_type ())
+GDK_AVAILABLE_IN_ALL
+GType             gtk_tree_row_data_get_type (void) G_GNUC_CONST;
+
 
 #define GTK_TYPE_TREE_DRAG_SOURCE            (gtk_tree_drag_source_get_type ())
 #define GTK_TREE_DRAG_SOURCE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TREE_DRAG_SOURCE, GtkTreeDragSource))
@@ -56,9 +67,8 @@ struct _GtkTreeDragSourceIface
   gboolean     (* row_draggable)        (GtkTreeDragSource   *drag_source,
                                          GtkTreePath         *path);
 
-  gboolean     (* drag_data_get)        (GtkTreeDragSource   *drag_source,
-                                         GtkTreePath         *path,
-                                         GtkSelectionData    *selection_data);
+  GdkContentProvider * (* drag_data_get)(GtkTreeDragSource   *drag_source,
+                                         GtkTreePath         *path);
 
   gboolean     (* drag_data_delete)     (GtkTreeDragSource *drag_source,
                                          GtkTreePath       *path);
@@ -81,9 +91,9 @@ gboolean gtk_tree_drag_source_drag_data_delete (GtkTreeDragSource *drag_source,
  * the row denoted by path, returns TRUE if it does anything
  */
 GDK_AVAILABLE_IN_ALL
-gboolean gtk_tree_drag_source_drag_data_get    (GtkTreeDragSource *drag_source,
-                                                GtkTreePath       *path,
-                                                GtkSelectionData  *selection_data);
+GdkContentProvider *
+         gtk_tree_drag_source_drag_data_get    (GtkTreeDragSource *drag_source,
+                                                GtkTreePath       *path);
 
 #define GTK_TYPE_TREE_DRAG_DEST            (gtk_tree_drag_dest_get_type ())
 #define GTK_TREE_DRAG_DEST(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TREE_DRAG_DEST, GtkTreeDragDest))
@@ -112,11 +122,11 @@ struct _GtkTreeDragDestIface
 
   gboolean     (* drag_data_received) (GtkTreeDragDest   *drag_dest,
                                        GtkTreePath       *dest,
-                                       GtkSelectionData  *selection_data);
+                                       const GValue      *value);
 
   gboolean     (* row_drop_possible)  (GtkTreeDragDest   *drag_dest,
                                        GtkTreePath       *dest_path,
-				       GtkSelectionData  *selection_data);
+                                       const GValue      *value);
 };
 
 GDK_AVAILABLE_IN_ALL
@@ -128,25 +138,25 @@ GType           gtk_tree_drag_dest_get_type   (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_tree_drag_dest_drag_data_received (GtkTreeDragDest   *drag_dest,
 						GtkTreePath       *dest,
-						GtkSelectionData  *selection_data);
+						const GValue      *value);
 
 
 /* Returns TRUE if we can drop before path; path may not exist. */
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_tree_drag_dest_row_drop_possible  (GtkTreeDragDest   *drag_dest,
 						GtkTreePath       *dest_path,
-						GtkSelectionData  *selection_data);
+						const GValue      *value);
 
 
 /* The selection data would normally have target type GTK_TREE_MODEL_ROW in this
  * case. If the target is wrong these functions return FALSE.
  */
 GDK_AVAILABLE_IN_ALL
-gboolean gtk_tree_set_row_drag_data            (GtkSelectionData  *selection_data,
-						GtkTreeModel      *tree_model,
+GdkContentProvider * 
+         gtk_tree_create_row_drag_content      (GtkTreeModel      *tree_model,
 						GtkTreePath       *path);
 GDK_AVAILABLE_IN_ALL
-gboolean gtk_tree_get_row_drag_data            (GtkSelectionData  *selection_data,
+gboolean gtk_tree_get_row_drag_data            (const GValue      *value,
 						GtkTreeModel     **tree_model,
 						GtkTreePath      **path);
 

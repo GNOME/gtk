@@ -53,26 +53,26 @@ drag_data_delete (GtkTreeDragSource *drag_source,
   return FALSE;
 }
 
-static gboolean
+static GdkContentProvider *
 drag_data_get (GtkTreeDragSource *drag_source,
-               GtkTreePath       *path,
-               GtkSelectionData  *selection)
+               GtkTreePath       *path)
 {
+  GdkContentProvider *content;
   GtkTreeIter iter;
   gchar *text;
 
   if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (drag_source), &iter, path))
-    return FALSE;
+    return NULL;
 
   gtk_tree_model_get (GTK_TREE_MODEL (drag_source), &iter,
                       ICON_STORE (drag_source)->text_column, &text,
                       -1);
 
-  gtk_selection_data_set_text (selection, text, -1);
+  content = gdk_content_provider_new_typed (G_TYPE_STRING, text);
 
   g_free (text);
 
-  return TRUE;
+  return content;
 }
 
 

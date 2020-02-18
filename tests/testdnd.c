@@ -605,7 +605,6 @@ main (int argc, char **argv)
   GdkPixbuf *drag_icon;
   GdkTexture *texture;
   GdkContentProvider *content;
-  GValue value = G_VALUE_INIT;
   GtkDragSource *source;
   GdkContentFormats *targets;
   GtkDropTarget *dest;
@@ -632,7 +631,7 @@ main (int argc, char **argv)
   label = gtk_label_new ("Drop Here\n");
 
   targets = gdk_content_formats_new (target_table, n_targets - 1); /* no rootwin */
-  dest = gtk_drop_target_new (targets, GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  dest = gtk_drop_target_new (gdk_content_formats_ref (targets), GDK_ACTION_COPY | GDK_ACTION_MOVE);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (label_drag_drop), NULL);
   gtk_widget_add_controller (label, GTK_EVENT_CONTROLLER (dest));
 
@@ -652,16 +651,12 @@ main (int argc, char **argv)
   gtk_widget_set_vexpand (label, TRUE);
   gtk_grid_attach (GTK_GRID (grid), label, 1, 1, 1, 1);
 
-  gdk_content_formats_unref (targets);
-  
   pixmap = gtk_image_new_from_pixbuf (trashcan_closed);
-  targets = gdk_content_formats_new (NULL, 0);
-  dest = gtk_drop_target_new (targets, 0);
+  dest = gtk_drop_target_new (NULL, 0);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (target_drag_leave), pixmap);
   g_signal_connect (dest, "accept", G_CALLBACK (target_drag_motion), pixmap);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (target_drag_drop), pixmap);
   gtk_widget_add_controller (pixmap, GTK_EVENT_CONTROLLER (dest));
-  gdk_content_formats_unref (targets);
 
   gtk_widget_set_hexpand (pixmap, TRUE);
   gtk_widget_set_vexpand (pixmap, TRUE);
@@ -673,10 +668,7 @@ main (int argc, char **argv)
   button = gtk_label_new ("Drag Here\n");
 
   source = gtk_drag_source_new ();
-  g_value_init (&value, G_TYPE_STRING);
-  g_value_set_string (&value, "I'm data!");
-  content = gdk_content_provider_new_for_value (&value);
-  g_value_unset (&value);
+  content = gdk_content_provider_new_typed (G_TYPE_STRING, "I'm data!");
   gtk_drag_source_set_content (source, content);
   g_object_unref (content);
   gtk_drag_source_set_actions (source, GDK_ACTION_COPY|GDK_ACTION_MOVE);
