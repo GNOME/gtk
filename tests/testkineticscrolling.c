@@ -1,10 +1,5 @@
 #include <gtk/gtk.h>
 
-static const char *row_targets[] =
-{
-  "GTK_TREE_MODEL_ROW"
-};
-
 static void
 on_button_clicked (GtkWidget *widget, gpointer data)
 {
@@ -83,7 +78,7 @@ kinetic_scrolling (void)
   gtk_widget_show (swindow);
 
   treeview = gtk_tree_view_new ();
-  targets = gdk_content_formats_new (row_targets, G_N_ELEMENTS (row_targets));
+  targets = gdk_content_formats_new_for_gtype (GTK_TYPE_TREE_ROW_DATA);
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (treeview),
                                           GDK_BUTTON1_MASK,
                                           targets,

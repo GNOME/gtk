@@ -32,26 +32,15 @@ G_BEGIN_DECLS
 GDK_AVAILABLE_IN_ALL
 GdkContentProvider *    gdk_content_provider_new_for_value              (const GValue           *value);
 GDK_AVAILABLE_IN_ALL
+GdkContentProvider *    gdk_content_provider_new_typed                  (GType                   type,
+                                                                         ...);
+GDK_AVAILABLE_IN_ALL
+GdkContentProvider *    gdk_content_provider_new_union                  (GdkContentProvider    **providers,
+                                                                         gsize                   n_providers);
+GDK_AVAILABLE_IN_ALL
 GdkContentProvider *    gdk_content_provider_new_for_bytes              (const char             *mime_type,
                                                                          GBytes                 *bytes);
 
-typedef void (*GdkContentProviderGetValueFunc) (GValue   *value,
-                                                gpointer  data);
-
-GDK_AVAILABLE_IN_ALL
-GdkContentProvider *    gdk_content_provider_new_with_callback (GType                           type,
-                                                                GdkContentProviderGetValueFunc  func,
-                                                                gpointer                        data,
-                                                                GDestroyNotify                  notify);
-
-typedef GBytes * (*GdkContentProviderGetBytesFunc) (const char *mime_type,
-                                                    gpointer    data);
-
-GDK_AVAILABLE_IN_ALL
-GdkContentProvider *    gdk_content_provider_new_with_formats  (GdkContentFormats              *formats,
-                                                                GdkContentProviderGetBytesFunc  func,
-                                                                gpointer                        data,
-                                                                GDestroyNotify                  notify);
 
 G_END_DECLS
 

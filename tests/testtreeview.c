@@ -641,10 +641,6 @@ on_row_activated (GtkTreeView       *tree_view,
   g_print ("Row activated\n");
 }
 
-static const char *row_targets[] = {
-  "GTK_TREE_MODEL_ROW"
-};
-
 static void
 quit_cb (GtkWidget *widget,
          gpointer   data)
@@ -709,7 +705,7 @@ main (int    argc,
   tv = gtk_tree_view_new_with_model (models[0]);
   g_signal_connect (tv, "row-activated", G_CALLBACK (on_row_activated), NULL);
 
-  targets = gdk_content_formats_new (row_targets, G_N_ELEMENTS (row_targets));
+  targets = gdk_content_formats_new_for_gtype (GTK_TYPE_TREE_ROW_DATA);
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (tv),
 					  GDK_BUTTON1_MASK,
                                           targets,

@@ -177,6 +177,8 @@ gdk_wayland_drop_finish (GdkDrop       *drop,
           WL_DATA_OFFER_FINISH_SINCE_VERSION)
         wl_data_offer_finish (wayland_drop->offer);
     }
+
+  g_clear_pointer (&wayland_drop->offer, wl_data_offer_destroy);
 }
 
 static void

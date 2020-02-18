@@ -965,29 +965,22 @@ drag_source_row_draggable (GtkTreeDragSource *drag_source,
   return ITER_INDEX (&iter) != 0;
 }
 
-static gboolean
+static GdkContentProvider *
 drag_source_drag_data_get (GtkTreeDragSource *drag_source,
-			   GtkTreePath       *path,
-			   GtkSelectionData  *selection_data)
+			   GtkTreePath       *path)
 {
   GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (drag_source);
   FileModelNode *node;
   GtkTreeIter iter;
-  char *uris[2]; 
 
   if (!gtk_file_system_model_get_iter (GTK_TREE_MODEL (model), &iter, path))
-    return FALSE;
+    return NULL;
 
   node = get_node (model, ITER_INDEX (&iter));
   if (node->file == NULL)
     return FALSE;
 
-  uris[0] = g_file_get_uri (node->file);
-  uris[1] = NULL;
-  gtk_selection_data_set_uris (selection_data, uris);
-  g_free (uris[0]);
-
-  return TRUE;
+  return gdk_content_provider_new_typed (G_TYPE_FILE, node->file);
 }
 
 static void

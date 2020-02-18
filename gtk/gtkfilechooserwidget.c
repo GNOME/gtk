@@ -8362,24 +8362,22 @@ post_process_ui (GtkFileChooserWidget *impl)
   GList            *cells;
   GFile            *file;
   GtkDropTarget *dest;
-  GdkContentFormats *formats;
 
   /* Setup file list treeview */
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->browse_files_tree_view));
   gtk_tree_selection_set_select_function (selection,
                                           list_select_func,
                                           impl, NULL);
-  formats = gdk_content_formats_new_for_gtype (GDK_TYPE_FILE_LIST);
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (priv->browse_files_tree_view),
                                           GDK_BUTTON1_MASK,
-                                          formats,
+                                          gdk_content_formats_new_for_gtype (GDK_TYPE_FILE_LIST),
                                           GDK_ACTION_COPY | GDK_ACTION_MOVE);
   
-  dest = gtk_drop_target_new (formats, GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  dest = gtk_drop_target_new (gdk_content_formats_new_for_gtype (GDK_TYPE_FILE_LIST),
+                              GDK_ACTION_COPY | GDK_ACTION_MOVE);
   g_signal_connect (dest, "accept", G_CALLBACK (file_list_drag_accept_cb), impl);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (file_list_drag_drop_cb), impl);
   gtk_widget_add_controller (priv->browse_files_tree_view, GTK_EVENT_CONTROLLER (dest));
-  gdk_content_formats_unref (formats);
 
   /* File browser treemodel columns are shared between GtkFileChooser implementations,
    * so we don't set cell renderer attributes in GtkBuilder, but rather keep that

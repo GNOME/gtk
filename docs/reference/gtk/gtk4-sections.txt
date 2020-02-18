@@ -3271,7 +3271,8 @@ GtkTreeDragDest
 GtkTreeDragDestIface
 gtk_tree_drag_dest_drag_data_received
 gtk_tree_drag_dest_row_drop_possible
-gtk_tree_set_row_drag_data
+GTK_TYPE_TREE_ROW_DATA
+gtk_tree_create_row_drag_content
 gtk_tree_get_row_drag_data
 <SUBSECTION Standard>
 GTK_TYPE_TREE_DRAG_DEST
@@ -3283,6 +3284,7 @@ GTK_IS_TREE_DRAG_SOURCE
 GTK_TYPE_TREE_DRAG_SOURCE
 GTK_TREE_DRAG_SOURCE_GET_IFACE
 <SUBSECTION Private>
+gtk_tree_row_data_get_type
 gtk_tree_drag_source_get_type
 gtk_tree_drag_dest_get_type
 </SECTION>

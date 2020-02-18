@@ -138,23 +138,18 @@ drag_begin (GtkDragSource *source,
     }
 }
 
-static void
-get_texture (GValue   *value,
-             gpointer  data)
-{
-  GdkPaintable *paintable = get_image_paintable (GTK_IMAGE (data));
-
-  if (GDK_IS_TEXTURE (paintable))
-    g_value_set_object (value, paintable);
-}
-
 static GdkContentProvider *
 prepare_drag (GtkDragSource *source,
               double         x,
               double         y,
               GtkWidget     *image)
 {
-  return gdk_content_provider_new_with_callback (GDK_TYPE_TEXTURE, get_texture, image, NULL);
+  GdkPaintable *paintable = get_image_paintable (GTK_IMAGE (image));
+
+  if (!GDK_IS_TEXTURE (paintable))
+    return NULL;
+
+  return gdk_content_provider_new_typed (GDK_TYPE_TEXTURE, paintable);
 }
 
 static void
@@ -278,7 +273,6 @@ do_clipboard (GtkWidget *do_widget)
       GActionGroup *actions;
       GtkDragSource *source;
       GtkDropTarget *dest;
-      GdkContentFormats *formats;
 
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
@@ -347,9 +341,7 @@ do_clipboard (GtkWidget *do_widget)
       gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
 
       /* accept drops on image */
-      formats = gdk_content_formats_new_for_gtype (GDK_TYPE_TEXTURE);
-      dest = gtk_drop_target_new (formats, GDK_ACTION_COPY);
-      gdk_content_formats_unref (formats);
+      dest = gtk_drop_target_new (gdk_content_formats_new_for_gtype (GDK_TYPE_TEXTURE), GDK_ACTION_COPY);
       g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop), image);
       gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (dest));
 
@@ -378,9 +370,7 @@ do_clipboard (GtkWidget *do_widget)
       gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
 
       /* accept drops on image */
-      formats = gdk_content_formats_new_for_gtype (GDK_TYPE_TEXTURE);
-      dest = gtk_drop_target_new (formats, GDK_ACTION_COPY);
-      gdk_content_formats_unref (formats);
+      dest = gtk_drop_target_new (gdk_content_formats_new_for_gtype (GDK_TYPE_TEXTURE), GDK_ACTION_COPY);
       g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop), image);
       gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (dest));
 

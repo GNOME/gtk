@@ -348,7 +348,6 @@ gtk_expander_init (GtkExpander *expander)
   GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
   GtkGesture *gesture;
   GtkDropTarget *dest;
-  GdkContentFormats *formats;
 
   gtk_widget_set_can_focus (GTK_WIDGET (expander), TRUE);
 
@@ -373,9 +372,7 @@ gtk_expander_init (GtkExpander *expander)
   gtk_widget_add_css_class (priv->arrow_widget, GTK_STYLE_CLASS_HORIZONTAL);
   gtk_container_add (GTK_CONTAINER (priv->title_widget), priv->arrow_widget);
 
-  formats = gdk_content_formats_new (NULL, 0);
-  dest = gtk_drop_target_new (formats, 0);
-  gdk_content_formats_unref (formats);
+  dest = gtk_drop_target_new (NULL, 0);
   g_signal_connect (dest, "accept", G_CALLBACK (gtk_expander_drag_accept), expander);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_expander_drag_leave), expander);
   gtk_widget_add_controller (GTK_WIDGET (expander), GTK_EVENT_CONTROLLER (dest));

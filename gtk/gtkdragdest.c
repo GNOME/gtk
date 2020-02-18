@@ -392,7 +392,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
 
 /**
  * gtk_drop_target_new:
- * @formats: (nullable): the supported data formats
+ * @formats: (nullable) (transfer full): the supported data formats
  * @actions: the supported actions
  *
  * Creates a new #GtkDropTarget object.
@@ -403,10 +403,16 @@ GtkDropTarget *
 gtk_drop_target_new (GdkContentFormats *formats,
                      GdkDragAction      actions)
 {
-  return g_object_new (GTK_TYPE_DROP_TARGET,
-                       "formats", formats,
-                       "actions", actions,
-                       NULL);
+  GtkDropTarget *result;
+
+  result = g_object_new (GTK_TYPE_DROP_TARGET,
+                         "formats", formats,
+                         "actions", actions,
+                         NULL);
+
+  g_clear_pointer (&formats, gdk_content_formats_unref);
+
+  return result;
 }
 
 /**
@@ -442,7 +448,9 @@ gtk_drop_target_set_formats (GtkDropTarget     *dest,
  *
  * Gets the data formats that this drop target accepts.
  *
- * Returns: the supported data formats
+ * If the result is %NULL, all formats are expected to be supported.
+ *
+ * Returns: (nullable): the supported data formats
  */
 GdkContentFormats *
 gtk_drop_target_get_formats (GtkDropTarget *dest)
@@ -557,6 +565,9 @@ gtk_drop_target_find_mimetype (GtkDropTarget *dest)
   if (!dest->drop)
     return NULL;
 
+  if (dest->formats == NULL)
+    return NULL;
+
   return gtk_drop_target_match (dest, dest->drop);
 }
 
@@ -564,14 +575,13 @@ static gboolean
 gtk_drop_target_accept (GtkDropTarget *dest,
                         GdkDrop       *drop)
 {
-  GdkDragAction dest_actions;
-  GdkDragAction actions;
+  if ((gdk_drop_get_actions (drop) & gtk_drop_target_get_actions (dest)) == 0)
+    return FALSE;
 
-  dest_actions = gtk_drop_target_get_actions (dest);
+  if (dest->formats == NULL)
+    return TRUE;
 
-  actions = dest_actions & gdk_drop_get_actions (drop);
-
-  return actions && gdk_content_formats_match (dest->formats, gdk_drop_get_formats (drop));
+  return gdk_content_formats_match (dest->formats, gdk_drop_get_formats (drop));
 }
 
 static void
