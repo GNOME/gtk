@@ -420,11 +420,6 @@ GDK_AVAILABLE_IN_ALL
 GdkSeat  *gdk_event_get_seat            (GdkEvent       *event);
 
 GDK_AVAILABLE_IN_ALL
-void	  gdk_set_show_events		(gboolean	 show_events);
-GDK_AVAILABLE_IN_ALL
-gboolean  gdk_get_show_events		(void);
-
-GDK_AVAILABLE_IN_ALL
 GdkDeviceTool *gdk_event_get_device_tool (GdkEvent       *event);
 
 GDK_AVAILABLE_IN_ALL
