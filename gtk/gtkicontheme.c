@@ -2462,32 +2462,25 @@ add_key_to_hash (gpointer key,
   g_hash_table_insert (hash, key, key);
 }
 
-static void
-add_key_to_list (gpointer key,
-                 gpointer value,
-                 gpointer user_data)
-{
-  GList **list = user_data;
-
-  *list = g_list_prepend (*list, g_strdup (key));
-}
-
 /**
  * gtk_icon_theme_list_icons:
  * @self: a #GtkIconTheme
  *
  * Lists the icons in the current icon theme.
  *
- * Returns: (element-type utf8) (transfer full): a #GList list
+ * Returns: (element-type utf8) (transfer full): a string array
  *     holding the names of all the icons in the theme. You must
- *     first free each element in the list with g_free(), then
- *     free the list itself with g_list_free().
+ *     first the array using g_strfreev().
  */
-GList *
+char **
 gtk_icon_theme_list_icons (GtkIconTheme *self)
 {
   GHashTable *icons;
-  GList *list, *l;
+  GHashTableIter iter;
+  char **names;
+  char *key;
+  int i;
+  GList *l;
 
   gtk_icon_theme_lock (self);
 
@@ -2507,17 +2500,20 @@ gtk_icon_theme_list_icons (GtkIconTheme *self)
                         add_key_to_hash,
                         icons);
 
-  list = NULL;
+  names = g_new (char *, g_hash_table_size (icons) + 1);
 
-  g_hash_table_foreach (icons,
-                        add_key_to_list,
-                        &list);
+  i = 0;
+  g_hash_table_iter_init (&iter, icons);
+  while (g_hash_table_iter_next (&iter, (gpointer *)&key, NULL))
+    names[i++] = g_strdup (key);
+
+  names[i] = NULL;
 
   g_hash_table_destroy (icons);
 
   gtk_icon_theme_unlock (self);
 
-  return list;
+  return names;
 }
 
 static gboolean

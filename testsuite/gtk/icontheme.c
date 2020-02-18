@@ -656,23 +656,23 @@ static void
 test_list (void)
 {
   GtkIconTheme *theme;
-  GList *icons;
+  char **icons;
 
   theme = get_test_icontheme (TRUE);
   icons = gtk_icon_theme_list_icons (theme);
 
-  g_assert (g_list_find_custom (icons, "size-test", (GCompareFunc)g_strcmp0));
-  g_assert (g_list_find_custom (icons, "simple", (GCompareFunc)g_strcmp0));
-  g_assert (g_list_find_custom (icons, "twosize-fixed", (GCompareFunc)g_strcmp0));
-  g_assert (g_list_find_custom (icons, "twosize", (GCompareFunc)g_strcmp0));
-  g_assert (g_list_find_custom (icons, "only32-symbolic", (GCompareFunc)g_strcmp0));
-  g_assert (g_list_find_custom (icons, "everything", (GCompareFunc)g_strcmp0));
-  g_assert (g_list_find_custom (icons, "everything-rtl", (GCompareFunc)g_strcmp0));
-  g_assert (g_list_find_custom (icons, "everything-symbolic", (GCompareFunc)g_strcmp0));
-  g_assert (g_list_find_custom (icons, "everything-justregular", (GCompareFunc)g_strcmp0));
-  g_assert (g_list_find_custom (icons, "everything-justrtl-rtl", (GCompareFunc)g_strcmp0));
-  g_assert (g_list_find_custom (icons, "everything-symbolic-rtl", (GCompareFunc)g_strcmp0));
-  g_assert (g_list_find_custom (icons, "everything-justsymbolic-symbolic", (GCompareFunc)g_strcmp0));
+  g_assert (g_strv_contains ((const char * const *)icons, "size-test"));
+  g_assert (g_strv_contains ((const char * const *)icons, "simple"));
+  g_assert (g_strv_contains ((const char * const *)icons, "twosize-fixed"));
+  g_assert (g_strv_contains ((const char * const *)icons, "twosize"));
+  g_assert (g_strv_contains ((const char * const *)icons, "only32-symbolic"));
+  g_assert (g_strv_contains ((const char * const *)icons, "everything"));
+  g_assert (g_strv_contains ((const char * const *)icons, "everything-rtl"));
+  g_assert (g_strv_contains ((const char * const *)icons, "everything-symbolic"));
+  g_assert (g_strv_contains ((const char * const *)icons, "everything-justregular"));
+  g_assert (g_strv_contains ((const char * const *)icons, "everything-justrtl-rtl"));
+  g_assert (g_strv_contains ((const char * const *)icons, "everything-symbolic-rtl"));
+  g_assert (g_strv_contains ((const char * const *)icons, "everything-justsymbolic-symbolic"));
 
   g_assert (gtk_icon_theme_has_icon (theme, "size-test"));
   g_assert (gtk_icon_theme_has_icon (theme, "simple"));
@@ -687,7 +687,7 @@ test_list (void)
   g_assert (gtk_icon_theme_has_icon (theme, "everything-symbolic-rtl"));
   g_assert (gtk_icon_theme_has_icon (theme, "everything-justsymbolic-symbolic"));
 
-  g_list_free_full (icons, g_free);
+  g_strfreev (icons);
 }
 
 static void

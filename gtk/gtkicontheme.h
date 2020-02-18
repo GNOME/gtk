@@ -138,7 +138,7 @@ GtkIconPaintable *gtk_icon_paintable_new_for_file    (GFile                     
                                                       gint                         size,
                                                       gint                         scale);
 GDK_AVAILABLE_IN_ALL
-GList *       gtk_icon_theme_list_icons              (GtkIconTheme                *self);
+char **       gtk_icon_theme_list_icons              (GtkIconTheme                *self);
 
 GDK_AVAILABLE_IN_ALL
 GType                 gtk_icon_paintable_get_type         (void) G_GNUC_CONST;

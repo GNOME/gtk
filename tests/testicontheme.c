@@ -49,7 +49,6 @@ main (int argc, char *argv[])
   GtkIconTheme *icon_theme;
   GtkIconPaintable *icon;
   char *themename;
-  GList *list;
   int size = 48;
   int scale = 1;
   GtkIconLookupFlags flags;
@@ -117,13 +116,13 @@ main (int argc, char *argv[])
     }
   else if (strcmp (argv[1], "list") == 0)
     {
-      list = gtk_icon_theme_list_icons (icon_theme);
-      
-      while (list)
-	{
-	  g_print ("%s\n", (char *)list->data);
-	  list = list->next;
-	}
+      char **icons;
+      int i;
+
+      icons = gtk_icon_theme_list_icons (icon_theme);
+      for (i = 0; icons[i]; i++)
+	g_print ("%s\n", icons[i]);
+      g_strfreev (icons);
     }
   else if (strcmp (argv[1], "lookup") == 0)
     {
