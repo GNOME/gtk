@@ -22,29 +22,11 @@ gsize n_icon_names = 0;
 static void
 init_icon_names (GtkIconTheme *theme)
 {
-  GPtrArray *icons;
-  GList *l, *icon_list;
-
   if (icon_names)
     return;
 
-  icon_list = gtk_icon_theme_list_icons (theme);
-  icons = g_ptr_array_new ();
-
-  for (l = icon_list; l; l = l->next)
-    {
-      if (g_str_has_suffix (l->data, "symbolic"))
-        continue;
-
-      g_ptr_array_add (icons, g_strdup (l->data));
-    }
-
-  n_icon_names = icons->len;
-  g_ptr_array_add (icons, NULL); /* NULL-terminate the array */
-  icon_names = (char **) g_ptr_array_free (icons, FALSE);
-
-  /* don't free strings, we assigned them to the array */
-  g_list_free_full (icon_list, g_free);
+  icon_names = gtk_icon_theme_get_icon_names (theme);
+  n_icon_names = g_strv_length (icon_names);
 }
 
 static const char *

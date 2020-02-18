@@ -392,6 +392,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           strcmp (pspec->name, "adjustment") == 0)
         continue;
 
+      /* All the icontheme properties depend on the environment */
+      if (g_type_is_a (type, GTK_TYPE_ICON_THEME))
+        continue;
+
       if (g_test_verbose ())
         {
           g_print ("Property %s:%s\n",
