@@ -87,25 +87,25 @@ gdk_event_source_get_filter_surface (GdkEventSource      *event_source,
 }
 
 static void
-handle_focus_change (GdkEventCrossing *event)
+handle_focus_change (GdkEvent *event)
 {
   GdkToplevelX11 *toplevel;
   GdkX11Screen *x11_screen;
   gboolean focus_in, had_focus;
 
-  toplevel = _gdk_x11_surface_get_toplevel (event->any.surface);
-  x11_screen = GDK_X11_SCREEN (GDK_SURFACE_SCREEN (event->any.surface));
-  focus_in = (event->any.type == GDK_ENTER_NOTIFY);
+  toplevel = _gdk_x11_surface_get_toplevel (gdk_event_get_surface (event));
+  x11_screen = GDK_X11_SCREEN (GDK_SURFACE_SCREEN (gdk_event_get_surface (event)));
+  focus_in = (gdk_event_get_event_type (event) == GDK_ENTER_NOTIFY);
 
   if (x11_screen->wmspec_check_window)
     return;
 
-  if (!toplevel || event->detail == GDK_NOTIFY_INFERIOR)
+  if (!toplevel || gdk_crossing_event_get_detail (event) == GDK_NOTIFY_INFERIOR)
     return;
 
   toplevel->has_pointer = focus_in;
 
-  if (!event->focus || toplevel->has_focus_window)
+  if (!event->crossing.focus || toplevel->has_focus_window)
     return;
 
   had_focus = HAS_FOCUS (toplevel);
@@ -115,11 +115,11 @@ handle_focus_change (GdkEventCrossing *event)
     {
       GdkEvent *focus_event;
 
-      focus_event = gdk_event_focus_new (event->any.surface,
-                                         gdk_event_get_device ((GdkEvent *)event),
-                                         gdk_event_get_source_device ((GdkEvent *)event),
+      focus_event = gdk_event_focus_new (gdk_event_get_surface (event),
+                                         gdk_event_get_device (event),
+                                         gdk_event_get_source_device (event),
                                          focus_in);
-      gdk_display_put_event (gdk_surface_get_display (event->any.surface), focus_event);
+      gdk_display_put_event (gdk_event_get_display (event), focus_event);
       g_object_unref (focus_event);
     }
 }
@@ -131,18 +131,16 @@ create_synth_crossing_event (GdkEventType     evtype,
 {
   GdkEvent *event;
   gdouble x, y;
-  GdkModifierType state;
 
   g_assert (evtype == GDK_ENTER_NOTIFY || evtype == GDK_LEAVE_NOTIFY);
 
-  state = gdk_event_get_modifier_state (real_event);
   gdk_event_get_position (real_event, &x, &y);
   event = gdk_event_crossing_new (evtype,
-                                  real_event->any.surface,
+                                  gdk_event_get_surface (real_event),
                                   gdk_event_get_device (real_event),
                                   gdk_event_get_source_device (real_event),
                                   gdk_event_get_time (real_event),
-                                  state,
+                                  gdk_event_get_modifier_state (real_event),
                                   x, y,
                                   mode,
                                   GDK_NOTIFY_ANCESTOR);
@@ -259,7 +257,7 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
     result = _gdk_wm_protocols_filter (xevent, filter_surface, &event, NULL);
 
   if (result == GDK_FILTER_CONTINUE &&
-      gdk_x11_drop_filter (event->any.surface, xevent))
+      gdk_x11_drop_filter (gdk_event_get_surface (event), xevent))
     result = GDK_FILTER_REMOVE;
 
   if (result != GDK_FILTER_CONTINUE)
@@ -292,23 +290,26 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
         }
     }
 
-  if (event &&
-      (event->any.type == GDK_ENTER_NOTIFY ||
-       event->any.type == GDK_LEAVE_NOTIFY) &&
-      event->any.surface != NULL)
+  if (event)
     {
-      /* Handle focusing (in the case where no window manager is running */
-      handle_focus_change (&event->crossing);
-    }
+      GdkEventType evtype = gdk_event_get_event_type (event);
+  
+      if ((evtype == GDK_ENTER_NOTIFY ||
+           evtype == GDK_LEAVE_NOTIFY) &&
+          gdk_event_get_surface (event) != NULL)
+        {
+          /* Handle focusing (in the case where no window manager is running */
+          handle_focus_change (event);
+        }
 
-  if (event &&
-      (event->any.type == GDK_TOUCH_BEGIN ||
-       event->any.type == GDK_TOUCH_END ||
-       event->any.type == GDK_MOTION_NOTIFY ||
-       event->any.type == GDK_ENTER_NOTIFY ||
-       event->any.type == GDK_LEAVE_NOTIFY))
-    {
-      handle_touch_synthetic_crossing (event);
+      if (evtype == GDK_TOUCH_BEGIN ||
+          evtype == GDK_TOUCH_END ||
+          evtype == GDK_MOTION_NOTIFY ||
+          evtype == GDK_ENTER_NOTIFY ||
+          evtype == GDK_LEAVE_NOTIFY)
+        {
+          handle_touch_synthetic_crossing (event);
+        }
     }
 
   return event;
