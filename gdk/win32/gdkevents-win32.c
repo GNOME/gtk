@@ -3960,8 +3960,9 @@ gdk_event_translate (MSG  *msg,
        * NOTE: It doesn't seem to work well if it is done in WM_ACTIVATEAPP
        * instead
        */
-      if (LOWORD(msg->wParam) != WA_INACTIVE)
-	_gdk_input_set_tablet_active ();
+      if (_gdk_win32_tablet_api == GDK_WIN32_TABLET_API_WINTAB)
+        if (LOWORD(msg->wParam) != WA_INACTIVE)
+          _gdk_input_wintab_set_tablet_active ();
       break;
 
     case WM_ACTIVATEAPP:
@@ -3976,6 +3977,25 @@ gdk_event_translate (MSG  *msg,
       return_val = handle_nchittest (msg->hwnd, window,
                                      GET_X_LPARAM (msg->lParam),
                                      GET_Y_LPARAM (msg->lParam), ret_valp);
+      break;
+
+    case WM_POINTERENTER:
+    case WM_POINTERLEAVE:
+    case WM_POINTERDOWN:
+    case WM_POINTERUP:
+    case WM_POINTERUPDATE:
+    case WM_POINTERCAPTURECHANGED:
+      {
+        gboolean handled = FALSE;
+        if (_gdk_win32_tablet_api == GDK_WIN32_TABLET_API_WINPOINTER_PLAIN ||
+            _gdk_win32_tablet_api == GDK_WIN32_TABLET_API_WINPOINTER_ADVANCED)
+          {
+            handled = gdk_winpointer_input_event (display, msg, window);
+          }
+        if (!handled)
+          /* call DefWindowProcW, so the system generates mouse messages */
+          return_val = FALSE;
+      }
       break;
 
       /* Handle WINTAB events here, as we know that the device manager will
@@ -4000,15 +4020,17 @@ gdk_event_translate (MSG  *msg,
       /* Fall through */
     wintab:
 
-      event = gdk_event_new (GDK_NOTHING);
-      event->any.window = window;
-      g_object_ref (window);
+      if (_gdk_win32_tablet_api == GDK_WIN32_TABLET_API_WINTAB)
+        {
+          event = gdk_event_new (GDK_NOTHING);
+          event->any.window = window;
+          g_object_ref (window);
 
-      if (gdk_input_other_event (display, event, msg, window))
-	_gdk_win32_append_event (event);
-      else
-	gdk_event_free (event);
-
+          if (gdk_input_wintab_event (display, event, msg, window))
+            _gdk_win32_append_event (event);
+          else
+            gdk_event_free (event);
+        }
       break;
     }
 

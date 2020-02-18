@@ -37,11 +37,13 @@ HINSTANCE	  _gdk_app_hmodule;
 
 gint		  _gdk_input_ignore_core;
 
+gchar *_gdk_arg_tablet_api;
+GdkWin32TabletAPI _gdk_win32_tablet_api;
+
 HKL		  _gdk_input_locale;
 gboolean	  _gdk_input_locale_is_ime = FALSE;
 UINT		  _gdk_input_codepage;
 
-gint		  _gdk_input_ignore_wintab = FALSE;
 gint		  _gdk_max_colors = 0;
 
 GdkWin32ModalOpKind	  _modal_operation_in_progress = GDK_WIN32_MODAL_OP_NONE;

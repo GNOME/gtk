@@ -163,6 +163,13 @@ struct _GdkColormapPrivateWin32
   GdkColorInfo *info;
 };
 
+typedef enum {
+  GDK_WIN32_TABLET_API_NONE,
+  GDK_WIN32_TABLET_API_WINTAB,
+  GDK_WIN32_TABLET_API_WINPOINTER_PLAIN,
+  GDK_WIN32_TABLET_API_WINPOINTER_ADVANCED
+} GdkWin32TabletAPI
+
 GType _gdk_gc_win32_get_type (void);
 
 gulong _gdk_win32_get_next_tick (gulong suggested_tick);
@@ -326,7 +333,6 @@ void  _gdk_win32_end_modal_call (GdkWin32ModalOpKind kind);
 
 
 /* Options */
-extern gboolean		 _gdk_input_ignore_wintab;
 extern gint		 _gdk_max_colors;
 
 #define GDK_WIN32_COLORMAP_DATA(cmap) ((GdkColormapPrivateWin32 *) GDK_COLORMAP (cmap)->windowing_data)
