@@ -102,12 +102,6 @@ typedef enum
    */
   GDK_EVENT_PENDING = 1 << 0,
 
-  /* The following flag is set for:
-   * 1) touch events emulating pointer events
-   * 2) pointer events being emulated by a touch sequence.
-   */
-  GDK_EVENT_POINTER_EMULATED = 1 << 1,
-
   /* When we are ready to draw a frame, we pause event delivery,
    * mark all events in the queue with this flag, and deliver
    * only those events until we finish the frame.
