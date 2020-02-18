@@ -72,6 +72,13 @@ typedef enum {
 
 GDK_AVAILABLE_IN_ALL
 GType                  gtk_stack_page_get_type           (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
+GtkWidget *            gtk_stack_page_get_child          (GtkStackPage           *page);
+GDK_AVAILABLE_IN_ALL
+gboolean               gtk_stack_page_get_visible        (GtkStackPage           *page);
+GDK_AVAILABLE_IN_ALL
+void                   gtk_stack_page_set_visible        (GtkStackPage           *page,
+                                                          gboolean                visible);
 
 GDK_AVAILABLE_IN_ALL
 GType                  gtk_stack_get_type                (void) G_GNUC_CONST;
@@ -91,9 +98,6 @@ GtkStackPage *         gtk_stack_add_titled              (GtkStack              
 GDK_AVAILABLE_IN_ALL
 GtkStackPage *         gtk_stack_get_page                (GtkStack               *stack,
                                                           GtkWidget              *child);
-GDK_AVAILABLE_IN_ALL
-GtkWidget *            gtk_stack_page_get_child          (GtkStackPage           *page);
-
 GDK_AVAILABLE_IN_ALL
 GtkWidget *            gtk_stack_get_child_by_name       (GtkStack               *stack,
                                                           const gchar            *name);
