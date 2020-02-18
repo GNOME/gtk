@@ -1731,7 +1731,9 @@ gtk_about_dialog_set_translator_credits (GtkAboutDialog *about,
  *
  * Returns the paintable displayed as logo in the about dialog.
  *
- * Returns: (transfer none): the paintable displayed as logo. The
+ * Returns: (transfer none) (nullable): the paintable displayed as
+ *   logo or %NULL if the logo is unset or has been set via
+ *   gtk_about_dialog_set_logo_icon_name(). The
  *   paintable is owned by the about dialog. If you want to keep a
  *   reference to it, you have to call g_object_ref() on it.
  */
@@ -1753,9 +1755,7 @@ gtk_about_dialog_get_logo (GtkAboutDialog *about)
  * @about: a #GtkAboutDialog
  * @logo: (allow-none): a #GdkPaintable, or %NULL
  *
- * Sets the surface to be displayed as logo in the about dialog.
- * If it is %NULL, the default window icon set with
- * gtk_window_set_default_icon() will be used.
+ * Sets the logo in the about dialog.
  */
 void
 gtk_about_dialog_set_logo (GtkAboutDialog *about,
@@ -1764,15 +1764,14 @@ gtk_about_dialog_set_logo (GtkAboutDialog *about,
   GtkAboutDialogPrivate *priv = gtk_about_dialog_get_instance_private (about);
 
   g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
-  g_return_if_fail (logo == NULL || GDK_IS_TEXTURE (logo));
+  g_return_if_fail (logo == NULL || GDK_IS_PAINTABLE (logo));
 
   g_object_freeze_notify (G_OBJECT (about));
 
   if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_ICON_NAME)
     g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LOGO_ICON_NAME]);
 
-  if (logo != NULL)
-    gtk_image_set_from_paintable (GTK_IMAGE (priv->logo_image), logo);
+  gtk_image_set_from_paintable (GTK_IMAGE (priv->logo_image), logo);
 
   g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LOGO]);
 
@@ -1785,8 +1784,9 @@ gtk_about_dialog_set_logo (GtkAboutDialog *about,
  *
  * Returns the icon name displayed as logo in the about dialog.
  *
- * Returns: the icon name displayed as logo. The string is
- *   owned by the dialog. If you want to keep a reference
+ * Returns: (transfer none) (nullable): the icon name displayed as logo or %NULL
+ *   if the logo has been set via gtk_about_dialog_set_logo().
+ *   The string is owned by the dialog. If you want to keep a reference
  *   to it, you have to call g_strdup() on it.
  */
 const gchar *
@@ -1807,9 +1807,7 @@ gtk_about_dialog_get_logo_icon_name (GtkAboutDialog *about)
  * @about: a #GtkAboutDialog
  * @icon_name: (allow-none): an icon name, or %NULL
  *
- * Sets the surface to be displayed as logo in the about dialog.
- * If it is %NULL, the default window icon set with
- * gtk_window_set_default_icon() will be used.
+ * Sets the icon name to be displayed as logo in the about dialog.
  */
 void
 gtk_about_dialog_set_logo_icon_name (GtkAboutDialog *about,
