@@ -1346,37 +1346,6 @@ gdk_event_get_event_sequence (GdkEvent       *event)
   return NULL;
 }
 
-/**
- * gdk_set_show_events:
- * @show_events:  %TRUE to output event debugging information.
- * 
- * Sets whether a trace of received events is output.
- * Note that GTK+ must be compiled with debugging (that is,
- * configured using the `--enable-debug` option)
- * to use this option.
- **/
-void
-gdk_set_show_events (gboolean show_events)
-{
-  if (show_events)
-    _gdk_debug_flags |= GDK_DEBUG_EVENTS;
-  else
-    _gdk_debug_flags &= ~GDK_DEBUG_EVENTS;
-}
-
-/**
- * gdk_get_show_events:
- * 
- * Gets whether event debugging output is enabled.
- * 
- * Returns: %TRUE if event debugging output is enabled.
- **/
-gboolean
-gdk_get_show_events (void)
-{
-  return (_gdk_debug_flags & GDK_DEBUG_EVENTS) != 0;
-}
-
 static GdkEventSequence *
 gdk_event_sequence_copy (GdkEventSequence *sequence)
 {
