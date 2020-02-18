@@ -1575,7 +1575,7 @@ gtk_dialog_get_action_area (GtkDialog *dialog)
  * headerbar is only used by the dialog if the
  * #GtkDialog:use-header-bar property is %TRUE.
  *
- * Returns: (transfer none): the header bar
+ * Returns: (type Gtk.HeaderBar) (transfer none): the header bar
  */
 GtkWidget *
 gtk_dialog_get_header_bar (GtkDialog *dialog)
