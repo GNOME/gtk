@@ -3518,13 +3518,12 @@ tablet_tool_handle_motion (void                      *data,
 {
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
-  GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (tool->seat);
   GdkEvent *event;
 
   tablet->pointer_info.surface_x = wl_fixed_to_double (sx);
   tablet->pointer_info.surface_y = wl_fixed_to_double (sy);
 
-  GDK_SEAT_NOTE (seat, EVENTS,
+  GDK_SEAT_NOTE (tool->seat, EVENTS,
             g_message ("tablet motion %f %f",
                        tablet->pointer_info.surface_x,
                        tablet->pointer_info.surface_y));
