@@ -189,19 +189,22 @@ enum
   LAST_CHILD_PROP
 };
 
-struct _GtkStackPage {
-  GObject instance;
+struct _GtkStackPage
+{
+  GObject parent_instance;
+
   GtkWidget *widget;
-  gchar *name;
-  gchar *title;
-  gchar *icon_name;
+  char *name;
+  char *title;
+  char *icon_name;
   gboolean needs_attention;
   gboolean visible;
   GtkWidget *last_focus;
 };
 
 typedef struct _GtkStackPageClass GtkStackPageClass;
-struct _GtkStackPageClass {
+struct _GtkStackPageClass
+{
   GObjectClass parent_class;
 };
 
@@ -2591,4 +2594,44 @@ gtk_stack_get_pages (GtkStack *stack)
   g_object_add_weak_pointer (G_OBJECT (priv->pages), (gpointer *)&priv->pages);
 
   return priv->pages;
+}
+
+/**
+ * gtk_stack_page_get_visible:
+ * @page: a #GtkStackPage
+ *
+ * Returns whether @page is visible in its #GtkStack.
+ * This is independent from the #GtkWidget:visible value of its
+ * #GtkWidget.
+ */
+gboolean
+gtk_stack_page_get_visible (GtkStackPage *page)
+{
+  g_return_val_if_fail (GTK_IS_STACK_PAGE (page), FALSE);
+
+  return page->visible;
+}
+
+/**
+ * gtk_stack_page_set_visible:
+ * @page: a #GtkStackPage
+ * @visible: The new property value
+ *
+ * Sets the new value of the #GtkStackPage:visible property
+ * to @visible.
+ */
+void
+gtk_stack_page_set_visible (GtkStackPage *page,
+                            gboolean      visible)
+{
+  g_return_if_fail (GTK_IS_STACK_PAGE (page));
+
+  visible = !!visible;
+
+  if (visible != page->visible)
+    {
+      page->visible = visible;
+
+      g_object_notify_by_pspec (G_OBJECT (page), stack_child_props[CHILD_PROP_VISIBLE]);
+    }
 }
