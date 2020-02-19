@@ -902,6 +902,20 @@ is_external_volume (GVolume *volume)
   return is_external;
 }
 
+static gboolean
+is_local (GFile *file)
+{
+  gchar *path;
+
+  path = g_file_get_path (file);
+  if (path == NULL)
+    return FALSE;
+
+  g_free (path);
+
+  return TRUE;
+}
+
 static void
 update_trash_icon (GtkPlacesSidebar *sidebar)
 {
@@ -1410,7 +1424,7 @@ update_places (GtkPlacesSidebar *sidebar)
       if (_gtk_bookmarks_manager_get_is_builtin (sidebar->bookmarks_manager, root))
         continue;
 
-      if (sidebar->local_only && !is_native)
+      if (sidebar->local_only && !is_native && !is_local (root))
         continue;
 
       clos = g_slice_new (BookmarkQueryClosure);
@@ -1467,28 +1481,35 @@ update_places (GtkPlacesSidebar *sidebar)
               g_free (tooltip);
             }
         }
+    }
 
-      network_mounts = g_list_reverse (network_mounts);
-      for (l = network_mounts; l != NULL; l = l->next)
+  network_mounts = g_list_reverse (network_mounts);
+  for (l = network_mounts; l != NULL; l = l->next)
+    {
+      char *mount_uri;
+
+      mount = l->data;
+      root = g_mount_get_default_location (mount);
+
+      if (sidebar->local_only && !is_local (root))
         {
-          char *mount_uri;
-
-          mount = l->data;
-          root = g_mount_get_default_location (mount);
-          start_icon = g_mount_get_symbolic_icon (mount);
-          mount_uri = g_file_get_uri (root);
-          name = g_mount_get_name (mount);
-          tooltip = g_file_get_parse_name (root);
-          add_place (sidebar, PLACES_MOUNTED_VOLUME,
-                     SECTION_MOUNTS,
-                     name, start_icon, NULL, mount_uri,
-                     NULL, NULL, mount, NULL, 0, tooltip);
           g_object_unref (root);
-          g_object_unref (start_icon);
-          g_free (name);
-          g_free (mount_uri);
-          g_free (tooltip);
+          continue;
         }
+
+      start_icon = g_mount_get_symbolic_icon (mount);
+      mount_uri = g_file_get_uri (root);
+      name = g_mount_get_name (mount);
+      tooltip = g_file_get_parse_name (root);
+      add_place (sidebar, PLACES_MOUNTED_VOLUME,
+                 SECTION_MOUNTS,
+                 name, start_icon, NULL, mount_uri,
+                 NULL, NULL, mount, NULL, 0, tooltip);
+      g_object_unref (root);
+      g_object_unref (start_icon);
+      g_free (name);
+      g_free (mount_uri);
+      g_free (tooltip);
     }
 
   g_list_free_full (network_volumes, g_object_unref);
