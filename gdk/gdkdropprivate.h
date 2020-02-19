@@ -61,6 +61,8 @@ void                    gdk_drop_set_actions                    (GdkDrop        
 
 void                    gdk_drop_emit_enter_event               (GdkDrop                *self,
                                                                  gboolean                dont_queue,
+                                                                 double                  x,
+                                                                 double                  y,
                                                                  guint32                 time);
 void                    gdk_drop_emit_motion_event              (GdkDrop                *self,
                                                                  gboolean                dont_queue,
