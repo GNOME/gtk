@@ -962,6 +962,8 @@ gdk_drop_do_emit_event (GdkEvent *event,
 void
 gdk_drop_emit_enter_event (GdkDrop  *self,
                            gboolean  dont_queue,
+                           double    x,
+                           double    y,
                            guint32   time)
 {
   GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
