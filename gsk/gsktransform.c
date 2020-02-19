@@ -1619,6 +1619,12 @@ GskTransform *
 gsk_transform_transform (GskTransform *next,
                          GskTransform *other)
 {
+  if (gsk_transform_is_identity (next))
+    {
+      gsk_transform_unref (next);
+      return gsk_transform_ref (other);
+    }
+
   if (other == NULL)
     return next;
 
