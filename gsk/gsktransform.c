@@ -1622,6 +1622,12 @@ gsk_transform_transform (GskTransform *next,
   if (other == NULL)
     return next;
 
+  if (gsk_transform_is_identity (next))
+    {
+      gsk_transform_unref (next);
+      return gsk_transform_ref (other);
+    }
+
   next = gsk_transform_transform (next, other->next);
   return other->transform_class->apply (other, next);
 }
