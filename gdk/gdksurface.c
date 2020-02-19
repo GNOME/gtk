@@ -2083,6 +2083,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     }
 
   GDK_SURFACE_GET_CLASS (surface)->hide (surface);
+
+  surface->x = 0;
+  surface->y = 0;
 }
 
 /**
