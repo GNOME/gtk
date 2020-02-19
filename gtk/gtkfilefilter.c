@@ -50,6 +50,7 @@
  * rules:
  * |[
  * <object class="GtkFileFilter">
+ *   <property name="name" translatable="yes">Text and Images</property>
  *   <mime-types>
  *     <mime-type>text/plain</mime-type>
  *     <mime-type>image/ *</mime-type>
@@ -119,13 +120,29 @@ struct _FilterRule
   } u;
 };
 
+enum {
+  PROP_0,
+  PROP_NAME,
+  NUM_PROPERTIES
+};
+
+static GParamSpec *props[NUM_PROPERTIES] = { NULL, };
+
+
+static void gtk_file_filter_set_property (GObject            *object,
+                                          guint               prop_id,
+                                          const GValue       *value,
+                                          GParamSpec         *pspec);
+static void gtk_file_filter_get_property (GObject            *object,
+                                          guint               prop_id,
+                                          GValue             *value,
+                                          GParamSpec         *pspec);
+
+
 static void gtk_file_filter_finalize   (GObject            *object);
 
 
 static void         gtk_file_filter_buildable_init             (GtkBuildableIface  *iface);
-static void         gtk_file_filter_buildable_set_name         (GtkBuildable       *buildable,
-                                                                const gchar        *name);
-static const gchar* gtk_file_filter_buildable_get_name         (GtkBuildable       *buildable);
 
 static gboolean     gtk_file_filter_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                                 GtkBuilder         *builder,
@@ -138,7 +155,6 @@ static void         gtk_file_filter_buildable_custom_tag_end   (GtkBuildable    
                                                                 GObject            *child,
                                                                 const gchar        *tagname,
                                                                 gpointer            data);
-
 
 G_DEFINE_TYPE_WITH_CODE (GtkFileFilter, gtk_file_filter, G_TYPE_INITIALLY_UNOWNED,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
@@ -154,7 +170,26 @@ gtk_file_filter_class_init (GtkFileFilterClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
 
+  gobject_class->set_property = gtk_file_filter_set_property;
+  gobject_class->get_property = gtk_file_filter_get_property;
   gobject_class->finalize = gtk_file_filter_finalize;
+
+  /**
+   * GtkFileFilter:name:
+   *
+   * The human-readable name of the filter.
+   *
+   * This is the string that will be displayed in the file selector user
+   * interface if there is a selectable list of filters.
+   */
+  props[PROP_NAME] =
+      g_param_spec_string ("name",
+                           P_("Name"),
+                           P_("The human-readable name for this filter"),
+                           NULL,
+                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, NUM_PROPERTIES, props);
 }
 
 static void
@@ -183,6 +218,44 @@ filter_rule_free (FilterRule *rule)
 }
 
 static void
+gtk_file_filter_set_property (GObject      *object,
+                              guint         prop_id,
+                              const GValue *value,
+                              GParamSpec   *pspec)
+{
+  GtkFileFilter *filter = GTK_FILE_FILTER (object);
+
+  switch (prop_id)
+    {
+    case PROP_NAME:
+      gtk_file_filter_set_name (filter, g_value_get_string (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_file_filter_get_property (GObject    *object,
+                              guint       prop_id,
+                              GValue     *value,
+                              GParamSpec *pspec)
+{
+  GtkFileFilter *filter = GTK_FILE_FILTER (object);
+
+  switch (prop_id)
+    {
+    case PROP_NAME:
+      g_value_set_string (value, filter->name);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_file_filter_finalize (GObject  *object)
 {
   GtkFileFilter *filter = GTK_FILE_FILTER (object);
@@ -202,21 +275,6 @@ gtk_file_filter_buildable_init (GtkBuildableIface *iface)
 {
   iface->custom_tag_start = gtk_file_filter_buildable_custom_tag_start;
   iface->custom_tag_end = gtk_file_filter_buildable_custom_tag_end;
-  iface->set_name = gtk_file_filter_buildable_set_name;
-  iface->get_name = gtk_file_filter_buildable_get_name;
-}
-
-static void
-gtk_file_filter_buildable_set_name (GtkBuildable *buildable,
-                                    const gchar  *name)
-{
-  gtk_file_filter_set_name (GTK_FILE_FILTER (buildable), name);
-}
-
-static const gchar *
-gtk_file_filter_buildable_get_name (GtkBuildable *buildable)
-{
-  return gtk_file_filter_get_name (GTK_FILE_FILTER (buildable));
 }
 
 typedef enum {
@@ -416,10 +474,14 @@ gtk_file_filter_set_name (GtkFileFilter *filter,
 			  const gchar   *name)
 {
   g_return_if_fail (GTK_IS_FILE_FILTER (filter));
-  
-  g_free (filter->name);
 
+  if (g_strcmp0 (filter->name, name) == 0)
+    return;
+
+  g_free (filter->name);
   filter->name = g_strdup (name);
+
+  g_object_notify_by_pspec (G_OBJECT (filter), props[PROP_NAME]);
 }
 
 /**
