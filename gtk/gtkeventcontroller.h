@@ -48,10 +48,15 @@ typedef struct _GtkCrossingData GtkCrossingData;
  * @direction: whether this is a focus-in or focus-out event
  * @mode: the crossing mode
  * @old_target: the old target
+ * @old_descendent: the direct child of the receiving widget that
+ *     is an ancestor of @old_target, or %NULL if @old_target is not
+ *     a descendent of the receiving widget
  * @new_target: the new target
+ * @new_descendent: the direct child of the receiving widget that
+ *     is an ancestor of @new_target, or %NULL if @new_target is not
+ *     a descendent of the receiving widget
  *
- * The struct that is passed to gtk_event_controller_handle_crossing()
- * and is also passed to #GtkEventControllerKey::focus-change.
+ * The struct that is passed to gtk_event_controller_handle_crossing().
  *
  * The @old_target and @new_target fields are set to the old or new
  * focus or hover location.
@@ -61,7 +66,9 @@ struct _GtkCrossingData {
   GtkCrossingDirection direction;
   GdkCrossingMode mode;
   GtkWidget *old_target;
+  GtkWidget *old_descendent;
   GtkWidget *new_target;
+  GtkWidget *new_descendent;
 };
 
 GDK_AVAILABLE_IN_ALL

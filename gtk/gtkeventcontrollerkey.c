@@ -548,6 +548,24 @@ gtk_event_controller_key_get_focus_target (GtkEventControllerKey *controller)
   return controller->current_crossing->new_target;
 }
 
+GtkWidget *
+gtk_event_controller_key_get_old_focus_child (GtkEventControllerKey *controller)
+{
+  g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER_KEY (controller), NULL);
+  g_return_val_if_fail (controller->current_crossing != NULL, NULL);
+
+  return controller->current_crossing->old_descendent;
+}
+
+GtkWidget *
+gtk_event_controller_key_get_new_focus_child (GtkEventControllerKey *controller)
+{
+  g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER_KEY (controller), NULL);
+  g_return_val_if_fail (controller->current_crossing != NULL, NULL);
+
+  return controller->current_crossing->new_descendent;
+}
+
 /**
  * gtk_event_controller_key_contains_focus:
  * @self: a #GtkEventControllerKey
