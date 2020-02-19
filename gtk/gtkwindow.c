@@ -6350,14 +6350,48 @@ gtk_window_move_focus (GtkWidget        *widget,
 }
 
 static void
+check_crossing_invariants (GtkWidget *widget,
+                           GtkCrossingData *crossing)
+{
+  if (crossing->old_target == NULL)
+    g_assert (crossing->old_descendent == NULL);
+  else if (crossing->old_descendent == NULL)
+    g_assert (crossing->old_target == widget || !gtk_widget_is_ancestor (crossing->old_target, widget));
+  else
+    {
+      g_assert (gtk_widget_get_parent (crossing->old_descendent) == widget);
+      g_assert (gtk_widget_is_ancestor (crossing->old_descendent, widget));
+      g_assert (crossing->old_target == crossing->old_descendent || gtk_widget_is_ancestor (crossing->old_target, crossing->old_descendent));
+    }
+  if (crossing->new_target == NULL)
+    g_assert (crossing->new_descendent == NULL);
+  else if (crossing->new_descendent == NULL)
+    g_assert (crossing->new_target == widget || !gtk_widget_is_ancestor (crossing->new_target, widget));
+  else
+    {
+      g_assert (gtk_widget_get_parent (crossing->new_descendent) == widget);
+      g_assert (gtk_widget_is_ancestor (crossing->new_descendent, widget));
+      g_assert (crossing->new_target == crossing->new_descendent || gtk_widget_is_ancestor (crossing->new_target, crossing->new_descendent));
+    }
+}
+
+static void
 synthesize_focus_change_events (GtkWindow *window,
                                 GtkWidget *old_focus,
                                 GtkWidget *new_focus)
 {
   GtkCrossingData crossing;
+  GtkWidget *ancestor;
   GtkWidget *widget, *focus_child;
   GList *list, *l;
   GtkStateFlags flags;
+  GtkWidget *prev;
+  gboolean seen_ancestor;
+
+  if (old_focus && new_focus)
+    ancestor = gtk_widget_common_ancestor (old_focus, new_focus);
+  else
+    ancestor = NULL;
 
   flags = GTK_STATE_FLAG_FOCUSED;
   if (gtk_window_get_focus_visible (GTK_WINDOW (window)))
@@ -6366,29 +6400,52 @@ synthesize_focus_change_events (GtkWindow *window,
   crossing.type = GTK_CROSSING_FOCUS;
   crossing.mode = GDK_CROSSING_NORMAL;
   crossing.old_target = old_focus;
+  crossing.old_descendent = NULL;
   crossing.new_target = new_focus;
+  crossing.new_descendent = NULL;
 
   crossing.direction = GTK_CROSSING_OUT;
 
+  prev = NULL;
+  seen_ancestor = FALSE;
   widget = old_focus;
   while (widget)
     {
+      crossing.old_descendent = prev;
+      if (seen_ancestor)
+        {
+          crossing.new_descendent = new_focus ? prev : NULL;
+        }
+      else if (widget == ancestor)
+        {
+          GtkWidget *w;
+
+          crossing.new_descendent = NULL;
+          for (w = new_focus; w != ancestor; w = gtk_widget_get_parent (w))
+            crossing.new_descendent = w;
+
+          seen_ancestor = TRUE;
+        }
+      else
+        {
+          crossing.new_descendent = NULL;
+        }
+      
+      check_crossing_invariants (widget, &crossing);
       gtk_widget_handle_crossing (widget, &crossing, 0, 0);
       gtk_widget_unset_state_flags (widget, flags);
       gtk_widget_set_focus_child (widget, NULL);
+      prev = widget;
       widget = gtk_widget_get_parent (widget);
     }
 
   list = NULL;
-  widget = new_focus;
-  while (widget)
-    {
-      list = g_list_prepend (list, widget);
-      widget = gtk_widget_get_parent (widget);
-    }
+  for (widget = new_focus; widget; widget = gtk_widget_get_parent (widget))
+    list = g_list_prepend (list, widget);
 
   crossing.direction = GTK_CROSSING_IN;
 
+  seen_ancestor = FALSE;
   for (l = list; l; l = l->next)
     {
       widget = l->data;
@@ -6396,6 +6453,29 @@ synthesize_focus_change_events (GtkWindow *window,
         focus_child = l->next->data;
       else
         focus_child = NULL;
+
+      crossing.new_descendent = focus_child;
+      if (seen_ancestor)
+        {
+          crossing.old_descendent = NULL;
+        }
+      else if (widget == ancestor)
+        {
+          GtkWidget *w;
+
+          crossing.old_descendent = NULL;
+          for (w = old_focus; w != ancestor; w = gtk_widget_get_parent (w))
+            {
+              crossing.old_descendent = w;
+            }
+
+          seen_ancestor = TRUE;
+        }
+      else
+        {
+          crossing.old_descendent = old_focus ? focus_child : NULL;
+        }
+      check_crossing_invariants (widget, &crossing);
       gtk_widget_handle_crossing (widget, &crossing, 0, 0);
       gtk_widget_set_state_flags (widget, flags, FALSE);
       gtk_widget_set_focus_child (widget, focus_child);
