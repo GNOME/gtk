@@ -2104,19 +2104,6 @@ static GActionEntry entries[] = {
 };
 
 static void
-add_actions (GtkFileChooserWidget *impl)
-{
-  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-
-  priv->item_actions = G_ACTION_GROUP (g_simple_action_group_new ());
-  g_action_map_add_action_entries (G_ACTION_MAP (priv->item_actions),
-                                   entries, G_N_ELEMENTS (entries),
-                                   impl);
-  gtk_widget_insert_action_group (GTK_WIDGET (priv->browse_files_tree_view), "item",
-                                  priv->item_actions);
-}
-
-static void
 file_list_build_popover (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
@@ -8410,7 +8397,12 @@ post_process_ui (GtkFileChooserWidget *impl)
   gtk_popover_set_default_widget (GTK_POPOVER (priv->rename_file_popover), priv->rename_file_rename_button);
   gtk_popover_set_relative_to (GTK_POPOVER (priv->rename_file_popover), priv->browse_files_tree_view);
 
-  add_actions (impl);
+  priv->item_actions = G_ACTION_GROUP (g_simple_action_group_new ());
+  g_action_map_add_action_entries (G_ACTION_MAP (priv->item_actions),
+                                   entries, G_N_ELEMENTS (entries),
+                                   impl);
+  gtk_widget_insert_action_group (GTK_WIDGET (priv->browse_files_tree_view), "item",
+                                  priv->item_actions);
 
   gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (priv->search_entry), priv->search_entry);
 }
