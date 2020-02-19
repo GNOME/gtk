@@ -8,6 +8,7 @@ builddir=flatpak_app
 repodir=repo
 
 flatpak-builder \
+        --user --disable-rofiles-fuse \
         --stop-at=gtk \
         ${builddir} \
         build-aux/flatpak/${appid}.json
