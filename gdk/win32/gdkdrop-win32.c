@@ -558,8 +558,7 @@ idroptarget_dragenter (LPDROPTARGET This,
   set_data_object (&ctx->data_object, pDataObj);
   pt_x = pt.x / drop_win32->scale + _gdk_offset_x;
   pt_y = pt.y / drop_win32->scale + _gdk_offset_y;
-  gdk_drop_emit_enter_event (drop, TRUE, GDK_CURRENT_TIME);
-  gdk_drop_emit_motion_event (drop, TRUE, pt_x, pt_y, GDK_CURRENT_TIME);
+  gdk_drop_emit_enter_event (drop, TRUE, pt_x, pt_y, GDK_CURRENT_TIME);
   drop_win32->last_key_state = grfKeyState;
   drop_win32->last_x = pt_x;
   drop_win32->last_y = pt_y;
