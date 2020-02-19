@@ -49,6 +49,7 @@ typedef struct _GtkCrossingData GtkCrossingData;
  * @mode: the crossing mode
  * @old_target: the old target
  * @new_target: the new target
+ * @drop: the #GdkDrop if this is info for a drop operation
  *
  * The struct that is passed to gtk_event_controller_handle_crossing()
  * and is also passed to #GtkEventControllerKey::focus-change.
@@ -62,6 +63,7 @@ struct _GtkCrossingData {
   GdkCrossingMode mode;
   GtkWidget *old_target;
   GtkWidget *new_target;
+  GdkDrop *drop;
 };
 
 GDK_AVAILABLE_IN_ALL

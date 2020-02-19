@@ -1304,22 +1304,25 @@ translate_event_coordinates (GdkEvent  *event,
   return TRUE;
 }
 
-void
+static void
 gtk_synthesize_crossing_events (GtkRoot         *toplevel,
+                                GtkCrossingType  crossing_type,
                                 GtkWidget       *old_target,
                                 GtkWidget       *new_target,
                                 GdkEvent        *event,
-                                GdkCrossingMode  mode)
+                                GdkCrossingMode  mode,
+                                GdkDrop         *drop)
 {
   GtkCrossingData crossing;
   GtkWidget *widget;
   GList *list, *l;
   double x, y;
 
-  crossing.type = GTK_CROSSING_POINTER;
+  crossing.type = crossing_type;
   crossing.mode = mode;
   crossing.old_target = old_target;
   crossing.new_target = new_target;
+  crossing.drop = drop;
 
   crossing.direction = GTK_CROSSING_OUT;
 
@@ -1328,7 +1331,8 @@ gtk_synthesize_crossing_events (GtkRoot         *toplevel,
     {
       translate_event_coordinates (event, &x, &y, widget);
       gtk_widget_handle_crossing (widget, &crossing, x, y);
-      gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
+      if (crossing_type == GTK_CROSSING_POINTER)
+        gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
       widget = gtk_widget_get_parent (widget);
     }
 
@@ -1347,7 +1351,8 @@ gtk_synthesize_crossing_events (GtkRoot         *toplevel,
       widget = l->data;
       translate_event_coordinates (event, &x, &y, widget);
       gtk_widget_handle_crossing (widget, &crossing, x, y);
-      gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
+      if (crossing_type == GTK_CROSSING_POINTER)
+        gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
     }
 
   g_list_free (list);
@@ -1393,8 +1398,12 @@ is_pointing_event (GdkEvent *event)
     case GDK_TOUCH_CANCEL:
     case GDK_TOUCHPAD_PINCH:
     case GDK_TOUCHPAD_SWIPE:
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DROP_START:
       return TRUE;
-      break;
+
     default:
       return FALSE;
     }
@@ -1422,21 +1431,6 @@ is_focus_event (GdkEvent *event)
     case GDK_FOCUS_CHANGE:
       return TRUE;
       break;
-    default:
-      return FALSE;
-    }
-}
-
-static gboolean
-is_dnd_event (GdkEvent *event)
-{
-  switch ((guint) gdk_event_get_event_type (event))
-    {
-    case GDK_DRAG_ENTER:
-    case GDK_DRAG_LEAVE:
-    case GDK_DRAG_MOTION:
-    case GDK_DROP_START:
-      return TRUE;
     default:
       return FALSE;
     }
@@ -1497,14 +1491,22 @@ handle_pointing_event (GdkEvent *event)
     case GDK_TOUCH_CANCEL:
       old_target = update_pointer_focus_state (toplevel, event, NULL);
       if (type == GDK_LEAVE_NOTIFY)
-        gtk_synthesize_crossing_events (GTK_ROOT (toplevel), old_target, NULL,
-                                        event, gdk_crossing_event_get_mode (event));
+        gtk_synthesize_crossing_events (GTK_ROOT (toplevel), GTK_CROSSING_POINTER, old_target, NULL,
+                                        event, gdk_crossing_event_get_mode (event), NULL);
+      break;
+    case GDK_DRAG_LEAVE:
+      old_target = update_pointer_focus_state (toplevel, event, NULL);
+      gtk_synthesize_crossing_events (GTK_ROOT (toplevel), GTK_CROSSING_DROP, old_target, NULL,
+                                      event, GDK_CROSSING_NORMAL, gdk_drag_event_get_drop (event));
       break;
     case GDK_ENTER_NOTIFY:
       if (gdk_crossing_event_get_mode (event) == GDK_CROSSING_GRAB ||
           gdk_crossing_event_get_mode (event) == GDK_CROSSING_UNGRAB)
         break;
       G_GNUC_FALLTHROUGH;
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_MOTION:
+    case GDK_DROP_START:
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_UPDATE:
     case GDK_MOTION_NOTIFY:
@@ -1523,14 +1525,18 @@ handle_pointing_event (GdkEvent *event)
           if (!gtk_window_lookup_pointer_focus_implicit_grab (toplevel, device,
                                                               sequence))
             {
-              gtk_synthesize_crossing_events (GTK_ROOT (toplevel), old_target, target,
-                                              event, GDK_CROSSING_NORMAL);
+              gtk_synthesize_crossing_events (GTK_ROOT (toplevel), GTK_CROSSING_POINTER, old_target, target,
+                                              event, GDK_CROSSING_NORMAL, NULL);
             }
 
           gtk_window_maybe_update_cursor (toplevel, NULL, device);
         }
-
-      if (type == GDK_TOUCH_BEGIN)
+      else if (type == GDK_DRAG_ENTER || type == GDK_DRAG_MOTION || type == GDK_DROP_START)
+        {
+          gtk_synthesize_crossing_events (GTK_ROOT (toplevel), GTK_CROSSING_DROP, old_target, target,
+                                          event, GDK_CROSSING_NORMAL, gdk_drag_event_get_drop (event));
+        }
+      else if (type == GDK_TOUCH_BEGIN)
         gtk_window_set_pointer_focus_grab (toplevel, device, sequence, target);
 
       /* Let it take the effective pointer focus anyway, as it may change due
@@ -1553,8 +1559,8 @@ handle_pointing_event (GdkEvent *event)
           new_target = gtk_widget_pick (GTK_WIDGET (native), x, y, GTK_PICK_DEFAULT);
           if (new_target == NULL)
             new_target = GTK_WIDGET (toplevel);
-          gtk_synthesize_crossing_events (GTK_ROOT (toplevel), target, new_target,
-                                          event, GDK_CROSSING_UNGRAB);
+          gtk_synthesize_crossing_events (GTK_ROOT (toplevel), GTK_CROSSING_POINTER, target, new_target,
+                                          event, GDK_CROSSING_UNGRAB, NULL);
           gtk_window_maybe_update_cursor (toplevel, NULL, device);
         }
 
@@ -1586,23 +1592,6 @@ handle_key_event (GdkEvent *event)
 
   focus_widget = gtk_root_get_focus (gtk_widget_get_root (event_widget));
   return focus_widget ? focus_widget : event_widget;
-}
-
-static GtkWidget *
-handle_dnd_event (GdkEvent *event)
-{
-  GtkWidget *event_widget;
-  GtkWidget *target;
-  gdouble x, y;
-  GtkWidget *native;
-
-  event_widget = gtk_get_event_widget (event);
-
-  gdk_event_get_position (event, &x, &y);
-  native = GTK_WIDGET (gtk_widget_get_native (event_widget));
-  target = gtk_widget_pick (native, x, y, GTK_PICK_DEFAULT);
-
-  return target;
 }
 
 void
@@ -1663,8 +1652,6 @@ gtk_main_do_event (GdkEvent *event)
           goto cleanup;
         }
     }
-  else if (is_dnd_event (event))
-    target_widget = handle_dnd_event (event);
 
   if (!target_widget)
     goto cleanup;
@@ -1760,14 +1747,15 @@ gtk_main_do_event (GdkEvent *event)
       /* Crossing event propagation happens during picking */
       break;
 
-    case GDK_DRAG_ENTER:
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
       if (gtk_propagate_event (target_widget, event))
         break;
       G_GNUC_FALLTHROUGH;
 
+    case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:
+      /* Crossing event propagation happens during picking */
       gtk_drag_dest_handle_event (target_widget, event);
       break;
 

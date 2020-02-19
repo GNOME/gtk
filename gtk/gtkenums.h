@@ -956,7 +956,8 @@ typedef enum
 
 typedef enum {
   GTK_CROSSING_FOCUS,
-  GTK_CROSSING_POINTER
+  GTK_CROSSING_POINTER,
+  GTK_CROSSING_DROP
 } GtkCrossingType;
 
 typedef enum {
