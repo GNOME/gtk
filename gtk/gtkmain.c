@@ -687,6 +687,9 @@ gtk_get_display_debug_flags (GdkDisplay *display)
 {
   gint i;
 
+  if (display == NULL)
+    display = gdk_display_get_default ();
+
   for (i = 0; i < N_DEBUG_DISPLAYS; i++)
     {
       if (debug_flags[i].display == display)
