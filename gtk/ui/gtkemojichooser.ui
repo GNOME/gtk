@@ -197,6 +197,9 @@
                     </child>
                     <child>
                       <object class="GtkBox">
+                        <style>
+                          <class name="emoji-toolbar" />
+                        </style>
                         <child>
                           <object class="GtkButton" id="recent.button">
                             <property name="relief">none</property>
