@@ -2650,12 +2650,11 @@ location_switch_to_filename_entry (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
 
-  /* when in search or recent files mode, we are not showing the
+  /* when in search mode, we are not showing the
    * browse_header_box container, so there's no point in switching
    * to it.
    */
-  if (priv->operation_mode == OPERATION_MODE_SEARCH ||
-      priv->operation_mode == OPERATION_MODE_RECENT)
+  if (priv->operation_mode == OPERATION_MODE_SEARCH)
     return;
 
   gtk_revealer_set_reveal_child (GTK_REVEALER (priv->browse_header_revealer), TRUE);
