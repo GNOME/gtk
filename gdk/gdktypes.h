@@ -135,11 +135,51 @@ typedef struct _GdkAppLaunchContext   GdkAppLaunchContext;
 typedef struct _GdkSeat               GdkSeat;
 typedef struct _GdkSnapshot           GdkSnapshot;
 
+typedef struct _GdkGeometry           GdkGeometry;
+
 typedef struct _GdkDrawingContext     GdkDrawingContext;
 typedef struct _GdkDrawContext        GdkDrawContext;
 typedef struct _GdkCairoContext       GdkCairoContext;
 typedef struct _GdkGLContext          GdkGLContext;
 typedef struct _GdkVulkanContext      GdkVulkanContext;
+
+/* Currently, these are the same values numerically as in the
+ * X protocol. If you change that, gdksurface-x11.c/gdk_surface_set_geometry_hints()
+ * will need fixing.
+ */
+/**
+ * GdkGravity:
+ * @GDK_GRAVITY_NORTH_WEST: the reference point is at the top left corner.
+ * @GDK_GRAVITY_NORTH: the reference point is in the middle of the top edge.
+ * @GDK_GRAVITY_NORTH_EAST: the reference point is at the top right corner.
+ * @GDK_GRAVITY_WEST: the reference point is at the middle of the left edge.
+ * @GDK_GRAVITY_CENTER: the reference point is at the center of the surface.
+ * @GDK_GRAVITY_EAST: the reference point is at the middle of the right edge.
+ * @GDK_GRAVITY_SOUTH_WEST: the reference point is at the lower left corner.
+ * @GDK_GRAVITY_SOUTH: the reference point is at the middle of the lower edge.
+ * @GDK_GRAVITY_SOUTH_EAST: the reference point is at the lower right corner.
+ * @GDK_GRAVITY_STATIC: the reference point is at the top left corner of the
+ *  surface itself, ignoring window manager decorations.
+ *
+ * Defines the reference point of a surface and the meaning of coordinates
+ * passed to gtk_window_move(). See gtk_window_move() and the "implementation
+ * notes" section of the
+ * [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec)
+ * specification for more details.
+ */
+typedef enum
+{
+  GDK_GRAVITY_NORTH_WEST = 1,
+  GDK_GRAVITY_NORTH,
+  GDK_GRAVITY_NORTH_EAST,
+  GDK_GRAVITY_WEST,
+  GDK_GRAVITY_CENTER,
+  GDK_GRAVITY_EAST,
+  GDK_GRAVITY_SOUTH_WEST,
+  GDK_GRAVITY_SOUTH,
+  GDK_GRAVITY_SOUTH_EAST,
+  GDK_GRAVITY_STATIC
+} GdkGravity;
 
 /**
  * GdkByteOrder:

@@ -205,7 +205,9 @@ gdk_surface_set_keep_above
 gdk_surface_set_keep_below
 gdk_surface_set_opacity
 gdk_surface_resize
-gdk_surface_move_to_rect
+gdk_surface_present_popup
+gdk_surface_get_popup_rect_anchor
+gdk_surface_get_popup_surface_anchor
 gdk_surface_raise
 gdk_surface_lower
 gdk_surface_restack
