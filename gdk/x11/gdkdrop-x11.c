@@ -503,7 +503,12 @@ xdnd_enter_filter (GdkSurface   *surface,
       return TRUE;
     }
 
-  g_clear_object (&display_x11->current_drop);
+  if (display_x11->current_drop)
+    {
+      if (GDK_X11_DROP (display_x11->current_drop)->enter_emitted)
+        gdk_drop_emit_leave_event (display_x11->current_drop, FALSE, GDK_CURRENT_TIME);
+      g_clear_object (&display_x11->current_drop);
+    }
 
   seat = gdk_display_get_default_seat (display);
 
