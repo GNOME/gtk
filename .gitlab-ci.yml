@@ -116,6 +116,8 @@ msys2-mingw32:
   image: registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master
   stage: flatpak
   allow_failure: true
+  tags:
+    - flatpak
   artifacts:
     paths:
       - "${APPID}-dev.flatpak"

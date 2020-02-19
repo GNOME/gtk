@@ -8,6 +8,7 @@ builddir=flatpak_app
 repodir=repo
 
 flatpak-builder \
+        --user --disable-rofiles-fuse \
         --stop-at=gtk \
         ${builddir} \
         build-aux/flatpak/${appid}.json
@@ -23,11 +24,12 @@ flatpak build ${builddir} meson \
                 -Dbuild-examples=false \
                 -Dintrospection=false \
                 -Ddemos=true \
-                _build .
+                _flatpak_build
 
-flatpak build ${builddir} ninja -C _build install
+flatpak build ${builddir} ninja -C _flatpak_build install
 
 flatpak-builder \
+        --user --disable-rofiles-fuse \
         --finish-only \
         --repo=${repodir} \
         ${builddir} \
