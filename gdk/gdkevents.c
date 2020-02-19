@@ -1486,13 +1486,23 @@ gdk_event_get_display (GdkEvent *event)
 GdkEventSequence *
 gdk_event_get_event_sequence (GdkEvent *event)
 {
-  if (event->any.type == GDK_TOUCH_BEGIN ||
-      event->any.type == GDK_TOUCH_UPDATE ||
-      event->any.type == GDK_TOUCH_END ||
-      event->any.type == GDK_TOUCH_CANCEL)
-    return event->touch.sequence;
+  switch ((int) event->any.type)
+    {
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
+      return event->touch.sequence;
 
-  return NULL;
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DROP_START:
+      return (GdkEventSequence *) event->dnd.drop;
+
+    default:
+      return NULL;
+    }
 }
 
 /**
