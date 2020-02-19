@@ -38,9 +38,8 @@ export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
 ccache --zero-stats
 ccache --show-stats
 
-# man disabled due to https://github.com/msys2/MINGW-packages/issues/6194
 meson \
-    -Dman=false \
+    -Dman=true \
     -Dbroadway_backend=true \
     _build
 
