@@ -1852,7 +1852,7 @@ gtk_range_click_gesture_pressed (GtkGestureClick *gesture,
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
   GdkDevice *source_device;
   GdkEventSequence *sequence;
-  const GdkEvent *event;
+  GdkEvent *event;
   GdkInputSource source;
   gboolean primary_warps;
   gboolean shift_pressed;
@@ -1866,7 +1866,7 @@ gtk_range_click_gesture_pressed (GtkGestureClick *gesture,
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-  gdk_event_get_state (event, &state_mask);
+  state_mask = gdk_event_get_modifier_state (event);
   shift_pressed = (state_mask & GDK_SHIFT_MASK) != 0;
 
   source_device = gdk_event_get_source_device ((GdkEvent *) event);

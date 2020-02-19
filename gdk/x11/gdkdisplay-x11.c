@@ -106,10 +106,9 @@ static void   gdk_x11_display_finalize           (GObject            *object);
 
 static void     gdk_x11_display_event_translator_init (GdkEventTranslatorIface *iface);
 
-static gboolean gdk_x11_display_translate_event (GdkEventTranslator *translator,
-                                                 GdkDisplay         *display,
-                                                 GdkEvent           *event,
-                                                 const XEvent       *xevent);
+static GdkEvent * gdk_x11_display_translate_event (GdkEventTranslator *translator,
+                                                   GdkDisplay         *display,
+                                                   const XEvent       *xevent);
 
 static void gdk_internal_connection_watch (Display  *display,
 					   XPointer  arg,
@@ -630,10 +629,9 @@ get_event_xwindow (const XEvent *xevent)
   return xwindow;
 }
 
-static gboolean
+static GdkEvent *
 gdk_x11_display_translate_event (GdkEventTranslator *translator,
                                  GdkDisplay         *display,
-                                 GdkEvent           *event,
                                  const XEvent       *xevent)
 {
   Window xwindow;
@@ -643,7 +641,9 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
   GdkX11Screen *x11_screen = NULL;
   GdkToplevelX11 *toplevel = NULL;
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
-  gboolean return_val;
+  GdkEvent *event;
+
+  event = NULL;
 
   /* Find the GdkSurface that this event relates to. If that's
    * not the same as the surface that the event was sent to,
@@ -665,7 +665,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
        * and ShmCompletion for pixmaps
        */
       if (!GDK_IS_SURFACE (surface))
-        return FALSE;
+        return NULL;
 
       x11_screen = GDK_SURFACE_SCREEN (surface);
       toplevel = _gdk_x11_surface_get_toplevel (surface);
@@ -674,16 +674,10 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       g_object_ref (surface);
     }
 
-  event->any.surface = surface;
-  event->any.send_event = xevent->xany.send_event ? TRUE : FALSE;
-
   if (surface && GDK_SURFACE_DESTROYED (surface))
     {
       if (xevent->type != DestroyNotify)
-	{
-	  return_val = FALSE;
-	  goto done;
-	}
+        goto done;
     }
 
   if (xevent->type == DestroyNotify && !is_substructure)
@@ -700,7 +694,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
           /* careful, reentrancy */
           _gdk_x11_screen_window_manager_changed (x11_screen);
 
-          return_val = FALSE;
           goto done;
         }
     }
@@ -712,30 +705,23 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
    *  received.
    */
 
-  return_val = TRUE;
-
   switch (xevent->type)
     {
     case KeymapNotify:
       GDK_DISPLAY_NOTE (display, EVENTS, g_message ("keymap notify"));
 
       /* Not currently handled */
-      return_val = FALSE;
       break;
 
     case Expose:
       GDK_DISPLAY_NOTE (display, EVENTS,
-		g_message ("expose:\t\twindow: %ld  %d	x,y: %d %d  w,h: %d %d%s",
+		g_message ("expose:\t\twindow: %ld  %d	x,y: %d %d  w,h: %d %d",
 			   xevent->xexpose.window, xevent->xexpose.count,
 			   xevent->xexpose.x, xevent->xexpose.y,
-			   xevent->xexpose.width, xevent->xexpose.height,
-			   event->any.send_event ? " (send)" : ""));
+			   xevent->xexpose.width, xevent->xexpose.height));
 
       if (surface == NULL)
-        {
-          return_val = FALSE;
-          break;
-        }
+        break;
 
       {
 	GdkRectangle expose_rect;
@@ -751,7 +737,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
         expose_rect.height = y2 - expose_rect.y;
 
         gdk_surface_invalidate_rect (surface, &expose_rect);
-        return_val = FALSE;
       }
 
       break;
@@ -766,10 +751,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 			     xevent->xgraphicsexpose.drawable));
 
         if (surface == NULL)
-          {
-            return_val = FALSE;
-            break;
-          }
+          break;
 
         expose_rect.x = xevent->xgraphicsexpose.x / surface_impl->surface_scale;
         expose_rect.y = xevent->xgraphicsexpose.y / surface_impl->surface_scale;
@@ -781,7 +763,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
         expose_rect.height = y2 - expose_rect.y;
 
         gdk_surface_invalidate_rect (surface, &expose_rect);
-        return_val = FALSE;
       }
       break;
 
@@ -807,7 +788,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	  }
 #endif /* G_ENABLE_DEBUG */
       /* not handled */
-      return_val = FALSE;
       break;
 
     case CreateNotify:
@@ -831,16 +811,11 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 
       if (!is_substructure)
 	{
-	  event->any.type = GDK_DESTROY;
-	  event->any.surface = surface;
-
-	  return_val = surface && !GDK_SURFACE_DESTROYED (surface);
+          event = gdk_event_delete_new (surface);
 
 	  if (surface && GDK_SURFACE_XID (surface) != x11_screen->xroot_window)
 	    gdk_surface_destroy_notify (surface);
 	}
-      else
-	return_val = FALSE;
 
       break;
 
@@ -886,8 +861,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
             gdk_profiler_add_markf (g_get_monotonic_time (), 0, "unmapped window", "0x%lx", GDK_SURFACE_XID (surface));
         }
 
-      return_val = FALSE;
-
       break;
 
     case MapNotify:
@@ -913,8 +886,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
             }
 	}
 
-      return_val = FALSE;
-
       break;
 
     case ReparentNotify:
@@ -927,7 +898,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 			   xevent->xreparent.override_redirect));
 
       /* Not currently handled */
-      return_val = FALSE;
       break;
 
     case ConfigureNotify:
@@ -956,15 +926,14 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	}
 #endif
 
-    if (!surface ||
-	  xevent->xconfigure.event != xevent->xconfigure.window)
-	return_val = FALSE;
-      else
-	{
-	  event->any.type = GDK_CONFIGURE;
-	  event->any.surface = surface;
-	  event->configure.width = (xevent->xconfigure.width + surface_impl->surface_scale - 1) / surface_impl->surface_scale;
-	  event->configure.height = (xevent->xconfigure.height + surface_impl->surface_scale - 1) / surface_impl->surface_scale;
+    if (surface && 
+	xevent->xconfigure.event == xevent->xconfigure.window)
+        {
+          int x, y;
+
+          event = gdk_event_configure_new (surface,
+	                                   (xevent->xconfigure.width + surface_impl->surface_scale - 1) / surface_impl->surface_scale,
+	                                   (xevent->xconfigure.height + surface_impl->surface_scale - 1) / surface_impl->surface_scale);
 
 	  if (!xevent->xconfigure.send_event &&
 	      !xevent->xconfigure.override_redirect &&
@@ -974,6 +943,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	      gint ty = 0;
 	      Window child_window = 0;
 
+              x = y = 0;
 	      gdk_x11_display_error_trap_push (display);
 	      if (XTranslateCoordinates (GDK_SURFACE_XDISPLAY (surface),
 					 GDK_SURFACE_XID (surface),
@@ -982,23 +952,22 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 					 &tx, &ty,
 					 &child_window))
 		{
-		  event->configure.x = tx / surface_impl->surface_scale;
-		  event->configure.y = ty / surface_impl->surface_scale;
+		  x = tx / surface_impl->surface_scale;
+		  y = ty / surface_impl->surface_scale;
 		}
 	      gdk_x11_display_error_trap_pop_ignored (display);
 	    }
 	  else
 	    {
-	      event->configure.x = xevent->xconfigure.x / surface_impl->surface_scale;
-	      event->configure.y = xevent->xconfigure.y / surface_impl->surface_scale;
+	      x = xevent->xconfigure.x / surface_impl->surface_scale;
+	      y = xevent->xconfigure.y / surface_impl->surface_scale;
 	    }
 	  if (!is_substructure)
 	    {
-              if (surface->x != event->configure.x ||
-                  surface->y != event->configure.y)
+              if (surface->x != x || surface->y != y)
                 {
-                  surface->x = event->configure.x;
-                  surface->y = event->configure.y;
+                  surface->x = x;
+                  surface->y = y;
                 }
 
               if (surface_impl->unscaled_width != xevent->xconfigure.width ||
@@ -1036,10 +1005,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 			   "\""));
 
       if (surface == NULL)
-        {
-	  return_val = FALSE;
-          break;
-        }
+        break;
 
       /* We compare with the serial of the last time we mapped the
        * window to avoid refetching properties that we set ourselves
@@ -1056,8 +1022,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	  if (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "_GTK_EDGE_CONSTRAINTS"))
 	    gdk_check_edge_constraints_changed (surface);
 	}
-
-      return_val = FALSE;
       break;
 
     case ColormapNotify:
@@ -1066,7 +1030,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 			   xevent->xcolormap.window));
 
       /* Not currently handled */
-      return_val = FALSE;
       break;
 
     case ClientMessage:
@@ -1075,7 +1038,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
                            xevent->xclient.window));
 
       /* Not currently handled */
-      return_val = FALSE;
       break;
 
     case MappingNotify:
@@ -1086,7 +1048,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
        */
       XRefreshKeyboardMapping ((XMappingEvent *) xevent);
       _gdk_x11_keymap_keys_changed (display);
-      return_val = FALSE;
       break;
 
     default:
@@ -1109,8 +1070,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	    case XkbNewKeyboardNotify:
 	    case XkbMapNotify:
 	      _gdk_x11_keymap_keys_changed (display);
-
-	      return_val = FALSE;
 	      break;
 
 	    case XkbStateNotify:
@@ -1120,28 +1079,14 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
               break;
 	    }
 	}
-      else
 #endif
-        return_val = FALSE;
     }
 
  done:
-  if (return_val)
-    {
-      if (event->any.surface)
-	g_object_ref (event->any.surface);
-    }
-  else
-    {
-      /* Mark this event as having no resources to be freed */
-      event->any.surface = NULL;
-      event->any.type = GDK_NOTHING;
-    }
-
   if (surface)
     g_object_unref (surface);
 
-  return return_val;
+  return event;
 }
 
 static GdkFrameTimings *
@@ -1205,11 +1150,11 @@ server_time_to_monotonic_time (GdkX11Display *display_x11,
 }
 
 GdkFilterReturn
-_gdk_wm_protocols_filter (const XEvent *xevent,
-			  GdkEvent     *event,
-			  gpointer      data)
+_gdk_wm_protocols_filter (const XEvent  *xevent,
+                          GdkSurface    *win,
+                          GdkEvent     **event,
+                          gpointer       data)
 {
-  GdkSurface *win = event->any.surface;
   GdkDisplay *display;
   Atom atom;
 
@@ -1247,7 +1192,7 @@ _gdk_wm_protocols_filter (const XEvent *xevent,
           if (surface_impl->toplevel->frame_pending)
             {
               surface_impl->toplevel->frame_pending = FALSE;
-              gdk_surface_thaw_updates (event->any.surface);
+              gdk_surface_thaw_updates (win);
             }
 
           gdk_frame_clock_get_refresh_info (clock,
@@ -1319,7 +1264,7 @@ _gdk_wm_protocols_filter (const XEvent *xevent,
 		g_message ("delete window:\t\twindow: %ld",
 			   xevent->xclient.window));
 
-      event->any.type = GDK_DELETE;
+      *event = gdk_event_delete_new (win);
 
       gdk_x11_surface_set_user_time (win, xevent->xclient.data.l[1]);
 

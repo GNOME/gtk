@@ -49,17 +49,16 @@ static guint signals[N_SIGNALS] = { 0, };
 
 static gboolean
 gtk_gesture_stylus_handle_event (GtkEventController *controller,
-                                 const GdkEvent     *event)
+                                 GdkEvent           *event,
+                                 double              x,
+                                 double              y)
 {
   GdkModifierType modifiers;
   guint n_signal;
-  gdouble x, y;
 
-  GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_stylus_parent_class)->handle_event (controller, event);
+  GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_stylus_parent_class)->handle_event (controller, event, x, y);
 
   if (!gdk_event_get_device_tool (event))
-    return FALSE;
-  if (!gdk_event_get_coords (event, &x, &y))
     return FALSE;
 
   switch ((guint) gdk_event_get_event_type (event))
@@ -71,7 +70,7 @@ gtk_gesture_stylus_handle_event (GtkEventController *controller,
       n_signal = UP;
       break;
     case GDK_MOTION_NOTIFY:
-      gdk_event_get_state (event, &modifiers);
+      modifiers = gdk_event_get_modifier_state (event);
 
       if (modifiers & GDK_BUTTON1_MASK)
         n_signal = MOTION;
@@ -163,7 +162,7 @@ gtk_gesture_stylus_new (void)
                        NULL);
 }
 
-static const GdkEvent *
+static GdkEvent *
 gesture_get_current_event (GtkGestureStylus *gesture)
 {
   GdkEventSequence *sequence;
@@ -191,7 +190,7 @@ gtk_gesture_stylus_get_axis (GtkGestureStylus *gesture,
 			     GdkAxisUse        axis,
 			     gdouble          *value)
 {
-  const GdkEvent *event;
+  GdkEvent *event;
 
   g_return_val_if_fail (GTK_IS_GESTURE_STYLUS (gesture), FALSE);
   g_return_val_if_fail (axis < GDK_AXIS_LAST, FALSE);
@@ -222,7 +221,7 @@ gtk_gesture_stylus_get_axes (GtkGestureStylus  *gesture,
 			     GdkAxisUse         axes[],
 			     gdouble          **values)
 {
-  const GdkEvent *event;
+  GdkEvent *event;
   GArray *array;
   gint i = 0;
 
@@ -282,7 +281,7 @@ gtk_gesture_stylus_get_backlog (GtkGestureStylus  *gesture,
 				GdkTimeCoord     **backlog,
 				guint             *n_elems)
 {
-  const GdkEvent *event;
+  GdkEvent *event;
   GArray *backlog_array;
   GList *history = NULL, *l;
 
@@ -340,7 +339,7 @@ gtk_gesture_stylus_get_backlog (GtkGestureStylus  *gesture,
 GdkDeviceTool *
 gtk_gesture_stylus_get_device_tool (GtkGestureStylus *gesture)
 {
-  const GdkEvent *event;
+  GdkEvent *event;
 
   g_return_val_if_fail (GTK_IS_GESTURE_STYLUS (gesture), FALSE);
 

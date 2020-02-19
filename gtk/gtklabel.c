@@ -448,9 +448,11 @@ static void gtk_label_motion            (GtkEventControllerMotion *controller,
                                          double                    x,
                                          double                    y,
                                          gpointer                  data);
-static void gtk_label_leave             (GtkEventControllerMotion *controller,
+static void gtk_label_pointer           (GtkEventControllerMotion *controller,
+                                         GtkCrossingDirection      direction,
+                                         double                    x,
+                                         double                    y,
                                          GdkCrossingMode           mode,
-                                         GdkNotifyType             detail,
                                          gpointer                  data);
 
 static gboolean gtk_label_grab_focus        (GtkWidget        *widget);
@@ -4454,7 +4456,7 @@ gtk_label_click_gesture_pressed (GtkGestureClick *gesture,
   GtkLabelSelectionInfo *info = priv->select_info;
   GtkWidget *widget = GTK_WIDGET (label);
   GdkEventSequence *sequence;
-  const GdkEvent *event;
+  GdkEvent *event;
   guint button;
 
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
@@ -4631,7 +4633,7 @@ gtk_label_drag_gesture_begin (GtkGestureDrag *gesture,
   GtkLabelSelectionInfo *info = priv->select_info;
   GdkModifierType state_mask;
   GdkEventSequence *sequence;
-  const GdkEvent *event;
+  GdkEvent *event;
   gint min, max, index;
 
   if (!info || !info->selectable)
@@ -4646,7 +4648,7 @@ gtk_label_drag_gesture_begin (GtkGestureDrag *gesture,
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-  gdk_event_get_state (event, &state_mask);
+  state_mask = gdk_event_get_modifier_state (event);
 
   if ((info->selection_anchor != info->selection_end) &&
       (state_mask & GDK_SHIFT_MASK))
@@ -4857,19 +4859,24 @@ gtk_label_motion (GtkEventControllerMotion *controller,
 }
 
 static void
-gtk_label_leave (GtkEventControllerMotion *controller,
-                 GdkCrossingMode           mode,
-                 GdkNotifyType             detail,
-                 gpointer                  data)
+gtk_label_pointer (GtkEventControllerMotion *controller,
+                   GtkCrossingDirection      direction,
+                   double                    x,
+                   double                    y,
+                   GdkCrossingMode           mode,
+                   gpointer                  data)
 {
   GtkLabel *label = GTK_LABEL (data);
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
 
-  if (priv->select_info)
+  if (direction == GTK_CROSSING_OUT)
     {
-      priv->select_info->active_link = NULL;
-      gtk_label_update_cursor (label);
-      gtk_widget_queue_draw (GTK_WIDGET (label));
+      if (priv->select_info)
+        {
+          priv->select_info->active_link = NULL;
+          gtk_label_update_cursor (label);
+          gtk_widget_queue_draw (GTK_WIDGET (label));
+        }
     }
 }
 
@@ -5015,8 +5022,8 @@ gtk_label_ensure_select_info (GtkLabel *label)
       priv->select_info->motion_controller = gtk_event_controller_motion_new ();
       g_signal_connect (priv->select_info->motion_controller, "motion",
                         G_CALLBACK (gtk_label_motion), label);
-      g_signal_connect (priv->select_info->motion_controller, "leave",
-                        G_CALLBACK (gtk_label_leave), label);
+      g_signal_connect (priv->select_info->motion_controller, "pointer-change",
+                        G_CALLBACK (gtk_label_pointer), label);
       gtk_widget_add_controller (GTK_WIDGET (label), priv->select_info->motion_controller);
 
       priv->select_info->provider = g_object_new (GTK_TYPE_LABEL_CONTENT, NULL);

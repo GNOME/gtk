@@ -667,10 +667,9 @@ static void     gtk_tree_view_key_controller_key_released (GtkEventControllerKey
                                                            guint                  keycode,
                                                            GdkModifierType        state,
                                                            GtkTreeView           *tree_view);
-static void     gtk_tree_view_key_controller_focus_out    (GtkEventControllerKey *key,
-                                                           GdkCrossingMode        mode,
-                                                           GdkNotifyType          detail,
-                                                           GtkTreeView           *tree_view);
+static void     gtk_tree_view_key_controller_focus_change (GtkEventController     *key,
+                                                           GtkCrossingDirection    direction,
+                                                           GtkTreeView            *tree_view);
 
 static gint     gtk_tree_view_focus                (GtkWidget        *widget,
 						    GtkDirectionType  direction);
@@ -971,15 +970,11 @@ static void gtk_tree_view_drag_gesture_end                  (GtkGestureDrag *ges
                                                              gdouble         offset_x,
                                                              gdouble         offset_y,
                                                              GtkTreeView    *tree_view);
-static void gtk_tree_view_motion_controller_enter           (GtkEventControllerMotion *controller,
+static void gtk_tree_view_motion_controller_pointer         (GtkEventControllerMotion *controller,
+                                                             GtkCrossingDirection      direction,
                                                              double                    x,
                                                              double                    y,
                                                              GdkCrossingMode           mode,
-                                                             GdkNotifyType             detail,
-                                                             GtkTreeView              *tree_view);
-static void gtk_tree_view_motion_controller_leave           (GtkEventControllerMotion *controller,
-                                                             GdkCrossingMode           mode,
-                                                             GdkNotifyType             detail,
                                                              GtkTreeView              *tree_view);
 static void gtk_tree_view_motion_controller_motion          (GtkEventControllerMotion *controller,
                                                              double                    x,
@@ -1826,10 +1821,8 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   gtk_widget_add_controller (GTK_WIDGET (tree_view), GTK_EVENT_CONTROLLER (tree_view->column_drag_gesture));
 
   controller = gtk_event_controller_motion_new ();
-  g_signal_connect (controller, "enter",
-                    G_CALLBACK (gtk_tree_view_motion_controller_enter), tree_view);
-  g_signal_connect (controller, "leave",
-                    G_CALLBACK (gtk_tree_view_motion_controller_leave), tree_view);
+  g_signal_connect (controller, "pointer-change",
+                    G_CALLBACK (gtk_tree_view_motion_controller_pointer), tree_view);
   g_signal_connect (controller, "motion",
                     G_CALLBACK (gtk_tree_view_motion_controller_motion), tree_view);
   gtk_widget_add_controller (GTK_WIDGET (tree_view), controller);
@@ -1839,8 +1832,8 @@ gtk_tree_view_init (GtkTreeView *tree_view)
                     G_CALLBACK (gtk_tree_view_key_controller_key_pressed), tree_view);
   g_signal_connect (controller, "key-released",
                     G_CALLBACK (gtk_tree_view_key_controller_key_released), tree_view);
-  g_signal_connect (controller, "focus-out",
-                    G_CALLBACK (gtk_tree_view_key_controller_focus_out), tree_view);
+  g_signal_connect (controller, "focus-change",
+                    G_CALLBACK (gtk_tree_view_key_controller_focus_change), tree_view);
   gtk_widget_add_controller (GTK_WIDGET (tree_view), controller);
 }
 
@@ -2813,7 +2806,7 @@ gtk_tree_view_click_gesture_pressed (GtkGestureClick *gesture,
   GtkTreeViewColumn *column = NULL;
   GdkEventSequence *sequence;
   GdkModifierType modifiers;
-  const GdkEvent *event;
+  GdkEvent *event;
   gint new_y, y_offset;
   gint bin_x, bin_y;
   GtkTreePath *path;
@@ -2954,7 +2947,7 @@ gtk_tree_view_click_gesture_pressed (GtkGestureClick *gesture,
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-  gdk_event_get_state (event, &modifiers);
+  modifiers = gdk_event_get_modifier_state (event);
 
   /* decide if we edit */
   if (button == GDK_BUTTON_PRIMARY &&
@@ -5438,11 +5431,11 @@ gtk_tree_view_key_controller_key_pressed (GtkEventControllerKey *key,
   event = gtk_get_current_event ();
   if (gtk_bindings_activate_event (G_OBJECT (widget), (GdkEventKey *)event))
     {
-      g_object_unref (event);
+      gdk_event_unref (event);
       return TRUE;
     }
 
-  g_object_unref (event);
+  gdk_event_unref (event);
 
   if (tree_view->search_entry_avoid_unhandled_binding)
     {
@@ -5497,72 +5490,66 @@ gtk_tree_view_key_controller_key_released (GtkEventControllerKey *key,
   /* Handle the keybindings. */
   event = gtk_get_current_event ();
   gtk_bindings_activate_event (G_OBJECT (tree_view), (GdkEventKey *)event);
-  g_object_unref (event);
+  gdk_event_unref (event);
 }
 
 static void
-gtk_tree_view_motion_controller_enter (GtkEventControllerMotion *controller,
-                                       double                    x,
-                                       double                    y,
-                                       GdkCrossingMode           mode,
-                                       GdkNotifyType             detail,
-                                       GtkTreeView              *tree_view)
+gtk_tree_view_motion_controller_pointer (GtkEventControllerMotion *controller,
+                                         GtkCrossingDirection      direction,
+                                         double                    x,
+                                         double                    y,
+                                         GdkCrossingMode           mode,
+                                         GtkTreeView              *tree_view)
 {
   GtkTreeRBTree *tree;
   GtkTreeRBNode *node;
   gint new_y;
+ 
+  if (direction == GTK_CROSSING_IN)
+    {
+      if (tree_view->tree == NULL)
+        return;
 
-  if (tree_view->tree == NULL)
-    return;
+      /* find the node internally */
+      new_y = TREE_WINDOW_Y_TO_RBTREE_Y(tree_view, y);
+      if (new_y < 0)
+        new_y = 0;
+      gtk_tree_rbtree_find_offset (tree_view->tree, new_y, &tree, &node);
 
-  /* find the node internally */
-  new_y = TREE_WINDOW_Y_TO_RBTREE_Y(tree_view, y);
-  if (new_y < 0)
-    new_y = 0;
-  gtk_tree_rbtree_find_offset (tree_view->tree, new_y, &tree, &node);
+      tree_view->event_last_x = x;
+      tree_view->event_last_y = y;
 
-  tree_view->event_last_x = x;
-  tree_view->event_last_y = y;
+      if ((tree_view->button_pressed_node == NULL) ||
+          (tree_view->button_pressed_node == node))
+        prelight_or_select (tree_view, tree, node, x, y);
+    }
+  else
+    {
+      if (tree_view->prelight_node)
+        gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 
-  if ((tree_view->button_pressed_node == NULL) ||
-      (tree_view->button_pressed_node == node))
-    prelight_or_select (tree_view, tree, node, x, y);
+      tree_view->event_last_x = -10000;
+      tree_view->event_last_y = -10000;
+
+      if (!gtk_event_controller_motion_contains_pointer (GTK_EVENT_CONTROLLER_MOTION (controller)))
+        prelight_or_select (tree_view, NULL, NULL, -1000, -1000); /* not possibly over an arrow */
+    }
 }
 
 static void
-gtk_tree_view_motion_controller_leave (GtkEventControllerMotion *controller,
-                                       GdkCrossingMode           mode,
-                                       GdkNotifyType             detail,
-                                       GtkTreeView              *tree_view)
+gtk_tree_view_key_controller_focus_change (GtkEventController   *key,
+                                           GtkCrossingDirection  direction,
+                                           GtkTreeView          *tree_view)
 {
-  if (tree_view->prelight_node)
-    gtk_widget_queue_draw (GTK_WIDGET (tree_view));
+  if (direction == GTK_CROSSING_OUT)
+    {
+      gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 
-  tree_view->event_last_x = -10000;
-  tree_view->event_last_y = -10000;
-
-  if (!gtk_event_controller_motion_contains_pointer (GTK_EVENT_CONTROLLER_MOTION (controller)))
-    prelight_or_select (tree_view, NULL, NULL, -1000, -1000); /* not possibly over an arrow */
-}
-
-static void
-gtk_tree_view_key_controller_focus_out (GtkEventControllerKey *key,
-                                        GdkCrossingMode        mode,
-                                        GdkNotifyType          detail,
-                                        GtkTreeView           *tree_view)
-{
-  gboolean is_focus, contains_focus;
-
-  gtk_widget_queue_draw (GTK_WIDGET (tree_view));
-
-  g_object_get (key,
-                "is-focus", &is_focus,
-                "contains-focus", &contains_focus,
-                NULL);
-
-  if (tree_view->search_popover && !gtk_event_controller_key_contains_focus (key))
-    gtk_tree_view_search_popover_hide (tree_view->search_popover, tree_view,
-                                       gtk_get_current_event_device ());
+      if (tree_view->search_popover &&
+          !gtk_event_controller_key_contains_focus (GTK_EVENT_CONTROLLER_KEY (key)))
+        gtk_tree_view_search_popover_hide (tree_view->search_popover, tree_view,
+                                           gtk_get_current_event_device ());
+    }
 }
 
 /* Incremental Reflow
@@ -13657,7 +13644,7 @@ gtk_tree_view_search_pressed_cb (GtkGesture  *gesture,
 {
   GdkDevice *keyb_device;
   GdkEventSequence *sequence;
-  const GdkEvent *event;
+  GdkEvent *event;
 
   sequence = gtk_gesture_get_last_updated_sequence (gesture);
   event = gtk_gesture_get_last_event (gesture, sequence);

@@ -286,7 +286,7 @@ gdk_seat_grab (GdkSeat                *seat,
                GdkSeatCapabilities     capabilities,
                gboolean                owner_events,
                GdkCursor              *cursor,
-               const GdkEvent         *event,
+               GdkEvent               *event,
                GdkSeatGrabPrepareFunc  prepare_func,
                gpointer                prepare_func_data)
 {

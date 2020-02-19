@@ -89,8 +89,6 @@ enum {
 
 static void gdk_display_dispose     (GObject         *object);
 static void gdk_display_finalize    (GObject         *object);
-static void gdk_display_put_event_nocopy (GdkDisplay *display,
-                                          GdkEvent   *event);
 
 
 static GdkAppLaunchContext *gdk_display_real_get_app_launch_context (GdkDisplay *display);
@@ -135,7 +133,7 @@ gdk_display_real_opened (GdkDisplay *display)
 
 static void
 gdk_display_real_event_data_copy (GdkDisplay     *display,
-                                  const GdkEvent *src,
+                                  GdkEvent       *src,
                                   GdkEvent       *dst)
 {
 }
@@ -471,34 +469,27 @@ gdk_display_peek_event (GdkDisplay *display)
   tmp_list = _gdk_event_queue_find_first (display);
   
   if (tmp_list != NULL)
-    return g_object_ref (tmp_list->data);
+    return gdk_event_ref (tmp_list->data);
 
   return NULL;
-}
-
-static void
-gdk_display_put_event_nocopy (GdkDisplay *display,
-                              GdkEvent   *event)
-{
-  _gdk_event_queue_append (display, event);
 }
 
 /**
  * gdk_display_put_event:
  * @display: a #GdkDisplay
- * @event: a #GdkEvent.
+ * @event (transfer none): a #GdkEvent.
  *
- * Appends a copy of the given event onto the front of the event
+ * Appends the given event onto the front of the event
  * queue for @display.
  **/
 void
 gdk_display_put_event (GdkDisplay     *display,
-		       const GdkEvent *event)
+		       GdkEvent       *event)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
   g_return_if_fail (event != NULL);
 
-  gdk_display_put_event_nocopy (display, gdk_event_copy (event));
+  _gdk_event_queue_append (display, gdk_event_ref ((GdkEvent *)event));
 }
 
 static void
@@ -514,15 +505,13 @@ generate_grab_broken_event (GdkDisplay *display,
     {
       GdkEvent *event;
 
-      event = gdk_event_new (GDK_GRAB_BROKEN);
-      event->any.surface = g_object_ref (surface);
-      event->any.send_event = FALSE;
-      event->grab_broken.implicit = implicit;
-      event->grab_broken.grab_surface = grab_surface;
-      gdk_event_set_device (event, device);
-      event->grab_broken.keyboard = (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD) ? TRUE : FALSE;
+      event = gdk_event_grab_broken_new (surface,
+                                         device,
+                                         device,
+                                         grab_surface,
+                                         implicit);
 
-      gdk_display_put_event_nocopy (display, event);
+      _gdk_event_queue_append (display, event);
     }
 }
 
@@ -699,7 +688,7 @@ switch_to_pointer_grab (GdkDisplay        *display,
 
 void
 _gdk_display_update_last_event (GdkDisplay     *display,
-                                const GdkEvent *event)
+                                GdkEvent       *event)
 {
   if (gdk_event_get_time (event) != GDK_CURRENT_TIME)
     display->last_event_time = gdk_event_get_time (event);
@@ -1301,7 +1290,7 @@ _gdk_display_unpause_events (GdkDisplay *display)
 
 void
 _gdk_display_event_data_copy (GdkDisplay     *display,
-                              const GdkEvent *event,
+                              GdkEvent       *event,
                               GdkEvent       *new_event)
 {
   GDK_DISPLAY_GET_CLASS (display)->event_data_copy (display, event, new_event);

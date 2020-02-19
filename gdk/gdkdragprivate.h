@@ -49,7 +49,7 @@ struct _GdkDragClass {
   void        (*dnd_finished)   (GdkDrag  *drag);
 
   gboolean    (*handle_event)   (GdkDrag  *drag,
-                                 const GdkEvent  *event);
+                                 GdkEvent  *event);
 };
 
 struct _GdkDrag {

@@ -634,8 +634,6 @@ static void             gtk_widget_propagate_state              (GtkWidget      
                                                                  const GtkStateData *data);
 static void             gtk_widget_update_alpha                 (GtkWidget        *widget);
 
-static gboolean         gtk_widget_event_internal               (GtkWidget        *widget,
-                                                                 GdkEvent         *event);
 static gboolean		gtk_widget_real_mnemonic_activate	(GtkWidget	  *widget,
 								 gboolean	   group_cycling);
 static void             gtk_widget_real_measure                 (GtkWidget        *widget,
@@ -688,7 +686,7 @@ static void gtk_widget_set_usize_internal (GtkWidget          *widget,
 					   gint                width,
 					   gint                height);
 
-static gboolean event_surface_is_still_viewable (const GdkEvent *event);
+static gboolean event_surface_is_still_viewable (GdkEvent *event);
 
 static void gtk_widget_update_input_shape (GtkWidget *widget);
 
@@ -2062,70 +2060,96 @@ gtk_widget_get_property (GObject         *object,
 
 static void
 _gtk_widget_emulate_press (GtkWidget      *widget,
-                           const GdkEvent *event)
+                           GdkEvent       *event,
+                           GtkWidget      *event_widget)
 {
-  GtkWidget *event_widget, *next_child, *parent;
+  GtkWidget *next_child, *parent;
   GdkEvent *press;
   gdouble x, y;
   graphene_point_t p;
 
-  event_widget = gtk_get_event_target ((GdkEvent *) event);
-
   if (event_widget == widget)
     return;
 
-  gdk_event_get_coords (event, &x, &y);
-  if (!gtk_widget_compute_point (event_widget,
-                                 GTK_WIDGET (gtk_widget_get_root (event_widget)),
-                                 &GRAPHENE_POINT_INIT (x, y),
-                                 &p))
+  switch ((guint) gdk_event_get_event_type (event))
+    {
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
+    case GDK_BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+    case GDK_MOTION_NOTIFY:
+      gdk_event_get_position (event, &x, &y);
+      if (!gtk_widget_compute_point (event_widget,
+                                     GTK_WIDGET (gtk_widget_get_root (event_widget)),
+                                     &GRAPHENE_POINT_INIT (x, y),
+                                     &p))
+        return;
+      break;
+    default:
       return;
-
-  if (event->any.type == GDK_TOUCH_BEGIN ||
-      event->any.type == GDK_TOUCH_UPDATE ||
-      event->any.type == GDK_TOUCH_END)
-    {
-      press = gdk_event_copy (event);
-      press->any.type = GDK_TOUCH_BEGIN;
     }
-  else if (event->any.type == GDK_BUTTON_PRESS ||
-           event->any.type == GDK_BUTTON_RELEASE)
+
+  switch ((guint) gdk_event_get_event_type (event))
     {
-      press = gdk_event_copy (event);
-      press->any.type = GDK_BUTTON_PRESS;
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
+      press = gdk_event_touch_new (GDK_TOUCH_BEGIN,
+                                   gdk_event_get_event_sequence (event),
+                                   gdk_event_get_surface (event),
+                                   gdk_event_get_device (event),
+                                   gdk_event_get_source_device (event),
+                                   gdk_event_get_time (event),
+                                   gdk_event_get_modifier_state (event),
+                                   p.x, p.y,
+                                   NULL,
+                                   gdk_touch_event_get_emulating_pointer (event));
+      break;
+    case GDK_BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+      press = gdk_event_button_new (GDK_BUTTON_PRESS,
+                                    gdk_event_get_surface (event),
+                                    gdk_event_get_device (event),
+                                    gdk_event_get_source_device (event),
+                                    gdk_event_get_device_tool (event),
+                                    gdk_event_get_time (event),
+                                    gdk_event_get_modifier_state (event),
+                                    gdk_button_event_get_button (event),
+                                    p.x, p.y,
+                                    NULL);
+      break;
+    case GDK_MOTION_NOTIFY:
+      {
+        GdkModifierType state = gdk_event_get_modifier_state (event);
+        int button;
+        if (state & GDK_BUTTON3_MASK)
+          button = 3;
+        else if (state & GDK_BUTTON2_MASK)
+          button = 2;
+        else
+          {
+            if ((state & GDK_BUTTON1_MASK) == 0)
+              g_critical ("Guessing button number 1 on generated button press event");
+            button = 1;
+          }
+
+        press = gdk_event_button_new (GDK_BUTTON_PRESS,
+                                      gdk_event_get_surface (event),
+                                      gdk_event_get_device (event),
+                                      gdk_event_get_source_device (event),
+                                      gdk_event_get_device_tool (event),
+                                      gdk_event_get_time (event),
+                                      gdk_event_get_modifier_state (event),
+                                      button,
+                                      p.x, p.y,
+                                      NULL);
+      }
+      break;
+    default:
+      g_assert_not_reached ();
     }
-  else if (event->any.type == GDK_MOTION_NOTIFY)
-    {
-      press = gdk_event_new (GDK_BUTTON_PRESS);
-      press->any.surface = g_object_ref (event->any.surface);
-      press->button.time = event->motion.time;
-      press->button.state = event->motion.state;
 
-      press->button.axes = g_memdup (event->motion.axes,
-                                     sizeof (gdouble) *
-                                     gdk_device_get_n_axes (event->any.device));
-
-      if (event->motion.state & GDK_BUTTON3_MASK)
-        press->button.button = 3;
-      else if (event->motion.state & GDK_BUTTON2_MASK)
-        press->button.button = 2;
-      else
-        {
-          if ((event->motion.state & GDK_BUTTON1_MASK) == 0)
-            g_critical ("Guessing button number 1 on generated button press event");
-
-          press->button.button = 1;
-        }
-
-      gdk_event_set_device (press, gdk_event_get_device (event));
-      gdk_event_set_source_device (press, gdk_event_get_source_device (event));
-    }
-  else
-    return;
-
-  gdk_event_set_coords (press, p.x, p.y);
-
-  press->any.send_event = TRUE;
   next_child = event_widget;
   parent = _gtk_widget_get_parent (next_child);
 
@@ -2140,13 +2164,14 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
   g_object_unref (press);
 }
 
-static const GdkEvent *
-_gtk_widget_get_last_event (GtkWidget        *widget,
-                            GdkEventSequence *sequence)
+static GdkEvent *
+_gtk_widget_get_last_event (GtkWidget         *widget,
+                            GdkEventSequence  *sequence,
+                            GtkWidget        **target)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkEventController *controller;
-  const GdkEvent *event;
+  GdkEvent *event;
   GList *l;
 
   for (l = priv->event_controllers; l; l = l->next)
@@ -2156,12 +2181,15 @@ _gtk_widget_get_last_event (GtkWidget        *widget,
       if (!GTK_IS_GESTURE (controller))
         continue;
 
-      event = gtk_gesture_get_last_event (GTK_GESTURE (controller),
-                                          sequence);
+      event = gtk_gesture_get_last_event (GTK_GESTURE (controller), sequence);
       if (event)
-        return event;
+        {
+          *target = gtk_gesture_get_last_target (GTK_GESTURE (controller), sequence);
+          return event;
+        }
     }
 
+  *target = NULL;
   return NULL;
 }
 
@@ -2177,15 +2205,16 @@ _gtk_widget_get_emulating_sequence (GtkWidget         *widget,
 
   if (sequence)
     {
-      const GdkEvent *last_event;
+      GdkEvent *last_event;
+      GtkWidget *target;
 
-      last_event = _gtk_widget_get_last_event (widget, sequence);
+      last_event = _gtk_widget_get_last_event (widget, sequence, &target);
 
       if (last_event &&
-          (last_event->any.type == GDK_TOUCH_BEGIN ||
-           last_event->any.type == GDK_TOUCH_UPDATE ||
-           last_event->any.type == GDK_TOUCH_END) &&
-          last_event->touch.emulating_pointer)
+          (gdk_event_get_event_type (last_event) == GDK_TOUCH_BEGIN ||
+           gdk_event_get_event_type (last_event) == GDK_TOUCH_UPDATE ||
+           gdk_event_get_event_type (last_event) == GDK_TOUCH_END) &&
+           gdk_touch_event_get_emulating_pointer (last_event))
         return TRUE;
     }
   else
@@ -2248,7 +2277,8 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   gboolean emulates_pointer, sequence_handled = FALSE;
-  const GdkEvent *mimic_event;
+  GdkEvent *mimic_event;
+  GtkWidget *target;
   GList *group = NULL, *l;
   GdkEventSequence *seq;
   gint n_handled = 0;
@@ -2260,7 +2290,7 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
     group = gtk_gesture_get_group (emitter);
 
   emulates_pointer = _gtk_widget_get_emulating_sequence (widget, sequence, &seq);
-  mimic_event = _gtk_widget_get_last_event (widget, seq);
+  mimic_event = _gtk_widget_get_last_event (widget, seq, &target);
 
   for (l = priv->event_controllers; l; l = l->next)
     {
@@ -2323,7 +2353,7 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
   if (n_handled > 0 && sequence_handled &&
       state == GTK_EVENT_SEQUENCE_DENIED &&
       gtk_widget_needs_press_emulation (widget, sequence))
-    _gtk_widget_emulate_press (widget, mimic_event);
+    _gtk_widget_emulate_press (widget, mimic_event, target);
 
   g_list_free (group);
 
@@ -4751,36 +4781,14 @@ gtk_widget_real_mnemonic_activate (GtkWidget *widget,
 }
 
 #define WIDGET_REALIZED_FOR_EVENT(widget, event) \
-     (event->any.type == GDK_FOCUS_CHANGE || _gtk_widget_get_realized(widget))
-
-/**
- * gtk_widget_event:
- * @widget: a #GtkWidget
- * @event: a #GdkEvent
- *
- * Rarely-used function. This function is used to emit
- * the event signals on a widget (those signals should never
- * be emitted without using this function to do so).
- * If you want to synthesize an event though, don’t use this function;
- * instead, use gtk_main_do_event() so the event will behave as if
- * it were in the event queue.
- *
- * Returns: return from the event signal emission (%TRUE if
- *               the event was handled)
- **/
-gboolean
-gtk_widget_event (GtkWidget *widget,
-                  GdkEvent  *event)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
-  g_return_val_if_fail (WIDGET_REALIZED_FOR_EVENT (widget, event), TRUE);
-
-  return gtk_widget_event_internal (widget, event);
-}
+     (gdk_event_get_event_type (event) == GDK_FOCUS_CHANGE || _gtk_widget_get_realized (widget))
 
 gboolean
 gtk_widget_run_controllers (GtkWidget           *widget,
-			    const GdkEvent      *event,
+                            GdkEvent            *event,
+                            GtkWidget           *target,
+                            double               x,
+                            double               y,
 			    GtkPropagationPhase  phase)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
@@ -4816,7 +4824,7 @@ gtk_widget_run_controllers (GtkWidget           *widget,
               gboolean is_gesture;
 
               is_gesture = GTK_IS_GESTURE (controller);
-              this_handled = gtk_event_controller_handle_event (controller, event);
+              this_handled = gtk_event_controller_handle_event (controller, event, target, x, y);
 
               handled |= this_handled;
 
@@ -4837,18 +4845,40 @@ gtk_widget_run_controllers (GtkWidget           *widget,
   return handled;
 }
 
+void
+gtk_widget_handle_crossing (GtkWidget             *widget,
+                            const GtkCrossingData *crossing,
+                            double                 x,
+                            double                 y)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GList *l;
+
+  g_object_ref (widget);
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      GtkEventController *controller = l->data;
+
+      gtk_event_controller_handle_crossing (controller, crossing, x, y);
+    }
+
+  g_object_unref (widget);
+}
+
 static gboolean
 translate_event_coordinates (GdkEvent  *event,
-                             double     event_x,
-                             double     event_y,
+                             double    *x,
+                             double    *y,
                              GtkWidget *widget);
+
 gboolean
 _gtk_widget_captured_event (GtkWidget *widget,
-                            GdkEvent  *event)
+                            GdkEvent  *event,
+                            GtkWidget *target)
 {
   gboolean return_val = FALSE;
-  double old_x, old_y;
-  gboolean reset_event = FALSE;
+  double x, y;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
   g_return_val_if_fail (WIDGET_REALIZED_FOR_EVENT (widget, event), TRUE);
@@ -4856,30 +4886,23 @@ _gtk_widget_captured_event (GtkWidget *widget,
   if (!event_surface_is_still_viewable (event))
     return TRUE;
 
-  if (gdk_event_get_coords (event, &old_x, &old_y))
-    {
-      reset_event = TRUE;
-      translate_event_coordinates (event, old_x, old_y, widget);
-    }
+  translate_event_coordinates (event, &x, &y, widget);
 
-  return_val = gtk_widget_run_controllers (widget, event, GTK_PHASE_CAPTURE);
+  return_val = gtk_widget_run_controllers (widget, event, target, x, y, GTK_PHASE_CAPTURE);
   return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event);
-
-  if (reset_event)
-    gdk_event_set_coords (event, old_x, old_y);
 
   return return_val;
 }
 
 static gboolean
-event_surface_is_still_viewable (const GdkEvent *event)
+event_surface_is_still_viewable (GdkEvent *event)
 {
   /* Check that we think the event's window is viewable before
    * delivering the event, to prevent surprises. We do this here
    * at the last moment, since the event may have been queued
    * up behind other events, held over a recursive main loop, etc.
    */
-  switch ((guint) event->any.type)
+  switch ((guint) gdk_event_get_event_type (event))
     {
     case GDK_MOTION_NOTIFY:
     case GDK_BUTTON_PRESS:
@@ -4887,7 +4910,7 @@ event_surface_is_still_viewable (const GdkEvent *event)
     case GDK_ENTER_NOTIFY:
     case GDK_PROXIMITY_IN:
     case GDK_SCROLL:
-      return event->any.surface && gdk_surface_is_viewable (event->any.surface);
+      return gdk_surface_is_viewable (gdk_event_get_surface (event));
 
 #if 0
     /* The following events are the second half of paired events;
@@ -4910,12 +4933,18 @@ event_surface_is_still_viewable (const GdkEvent *event)
 
 static gboolean
 translate_event_coordinates (GdkEvent  *event,
-                             double     event_x,
-                             double     event_y,
+                             double    *x,
+                             double    *y,
                              GtkWidget *widget)
 {
   GtkWidget *event_widget;
   graphene_point_t p;
+  double event_x, event_y;
+
+  *x = *y = 0;
+
+  if (!gdk_event_get_position (event, &event_x, &event_y))
+    return FALSE;
 
   event_widget = gtk_get_event_widget (event);
 
@@ -4925,18 +4954,19 @@ translate_event_coordinates (GdkEvent  *event,
                                  &p))
     return FALSE;
 
-  gdk_event_set_coords (event, p.x, p.y);
+  *x = p.x;
+  *y = p.y;
 
   return TRUE;
 }
 
-static gboolean
-gtk_widget_event_internal (GtkWidget *widget,
-                           GdkEvent  *event)
+gboolean
+gtk_widget_event (GtkWidget *widget,
+                  GdkEvent  *event,
+                  GtkWidget *target)
 {
   gboolean return_val = FALSE;
-  gboolean reset_event = FALSE;
-  double old_x, old_y;
+  double x, y;
 
   /* We check only once for is-still-visible; if someone
    * hides the window in on of the signals on the widget,
@@ -4949,25 +4979,18 @@ gtk_widget_event_internal (GtkWidget *widget,
   if (!_gtk_widget_get_mapped (widget))
     return FALSE;
 
-  if (gdk_event_get_coords (event, &old_x, &old_y))
-    {
-      reset_event = TRUE;
-      translate_event_coordinates (event, old_x, old_y, widget);
-    }
+  translate_event_coordinates (event, &x, &y, widget);
 
-  if (widget == gtk_get_event_target (event))
-    return_val |= gtk_widget_run_controllers (widget, event, GTK_PHASE_TARGET);
+  if (widget == target)
+    return_val |= gtk_widget_run_controllers (widget, event, target, x, y, GTK_PHASE_TARGET);
 
   if (return_val == FALSE)
-    return_val |= gtk_widget_run_controllers (widget, event, GTK_PHASE_BUBBLE);
+    return_val |= gtk_widget_run_controllers (widget, event, target, x, y, GTK_PHASE_BUBBLE);
 
   if (return_val == FALSE &&
-      (event->any.type == GDK_KEY_PRESS ||
-       event->any.type == GDK_KEY_RELEASE))
+      (gdk_event_get_event_type (event) == GDK_KEY_PRESS ||
+       gdk_event_get_event_type (event) == GDK_KEY_RELEASE))
     return_val |= gtk_bindings_activate_event (G_OBJECT (widget), (GdkEventKey *) event);
-
-  if (reset_event)
-    gdk_event_set_coords (event, old_x, old_y);
 
   return return_val;
 }
@@ -7939,42 +7962,6 @@ _gtk_widget_list_devices (GtkWidget *widget)
   return result;
 }
 
-static void
-synth_crossing (GtkWidget       *widget,
-                GdkEventType     type,
-                GdkSurface       *surface,
-                GdkDevice       *device,
-                GdkCrossingMode  mode,
-                GdkNotifyType    detail)
-{
-  GdkEvent *event;
-
-  event = gdk_event_new (type);
-
-  event->any.surface = g_object_ref (surface);
-  event->any.send_event = TRUE;
-  event->crossing.child_surface = g_object_ref (surface);
-  event->crossing.time = GDK_CURRENT_TIME;
-  gdk_surface_get_device_position (surface,
-                                   device,
-                                   &event->crossing.x,
-                                   &event->crossing.y,
-                                   NULL);
-  event->crossing.mode = mode;
-  event->crossing.detail = detail;
-  event->crossing.focus = FALSE;
-  event->crossing.state = 0;
-  gdk_event_set_device (event, device);
-
-  if (!widget)
-    widget = gtk_get_event_widget (event);
-
-  if (widget)
-    gtk_widget_event_internal (widget, event);
-
-  g_object_unref (event);
-}
-
 /*
  * _gtk_widget_synthesize_crossing:
  * @from: the #GtkWidget the virtual pointer is leaving.
@@ -7990,46 +7977,37 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
 				 GdkCrossingMode  mode)
 {
   GdkSurface *from_surface = NULL, *to_surface = NULL;
+  GtkCrossingData crossing;
+  double x, y;
 
   g_return_if_fail (from != NULL || to != NULL);
 
-  if (from != NULL)
-    {
-      from_surface = _gtk_widget_get_device_surface (from, device);
+  crossing.type = GTK_CROSSING_POINTER;
+  crossing.old_target = from;
+  crossing.new_target = to;
+  crossing.mode = mode;
 
+  if (from)
+    {
+      crossing.direction = GTK_CROSSING_OUT;
+
+      from_surface = _gtk_widget_get_device_surface (from, device);
       if (!from_surface)
         from_surface = from->priv->surface;
+
+      gdk_surface_get_device_position (from_surface, device, &x, &y, NULL);
+      gtk_widget_handle_crossing (from, &crossing, x, y);
     }
 
-  if (to != NULL)
+  if (to)
     {
       to_surface = _gtk_widget_get_device_surface (to, device);
-
       if (!to_surface)
         to_surface = to->priv->surface;
-    }
 
-  if (from_surface == NULL && to_surface == NULL)
-    ;
-  else if (from_surface != NULL && to_surface == NULL)
-    {
-      synth_crossing (from, GDK_LEAVE_NOTIFY, from_surface,
-		      device, mode, GDK_NOTIFY_ANCESTOR);
-    }
-  else if (from_surface == NULL && to_surface != NULL)
-    {
-      synth_crossing (to, GDK_ENTER_NOTIFY, to_surface,
-		      device, mode, GDK_NOTIFY_ANCESTOR);
-    }
-  else if (from_surface == to_surface)
-    ;
-  else
-    {
-      synth_crossing (from, GDK_LEAVE_NOTIFY, from_surface,
-                      device, mode, GDK_NOTIFY_NONLINEAR);
-
-      synth_crossing (to, GDK_ENTER_NOTIFY, to_surface,
-                      device, mode, GDK_NOTIFY_NONLINEAR);
+      crossing.direction = GTK_CROSSING_IN;
+      gdk_surface_get_device_position (to_surface, device, &x, &y, NULL);
+      gtk_widget_handle_crossing (to, &crossing, x, y);
     }
 }
 
@@ -11922,7 +11900,7 @@ gtk_widget_cancel_event_sequence (GtkWidget             *widget,
   gboolean handled = FALSE;
   GtkWidget *event_widget;
   gboolean cancel = TRUE;
-  const GdkEvent *event;
+  GdkEvent *event;
 
   handled = _gtk_widget_set_sequence_state_internal (widget, sequence,
                                                      state, gesture);
@@ -11930,12 +11908,10 @@ gtk_widget_cancel_event_sequence (GtkWidget             *widget,
   if (!handled || state != GTK_EVENT_SEQUENCE_CLAIMED)
     return;
 
-  event = _gtk_widget_get_last_event (widget, sequence);
+  event = _gtk_widget_get_last_event (widget, sequence, &event_widget);
 
   if (!event)
     return;
-
-  event_widget = gtk_get_event_target ((GdkEvent *) event);
 
   while (event_widget)
     {

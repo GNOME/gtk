@@ -105,7 +105,7 @@ day_selected_cb (GtkCalendar *calendar,
   if (gdk_event_get_event_type (event) != GDK_BUTTON_PRESS)
     return;
 
-  gdk_event_get_coords (event, &x, &y);
+  gdk_event_get_position (event, &x, &y);
   gtk_widget_translate_coordinates (gtk_get_event_widget (event),
                                     GTK_WIDGET (calendar),
                                     x, y,
@@ -119,7 +119,7 @@ day_selected_cb (GtkCalendar *calendar,
 
   gtk_widget_show (popover);
 
-  g_object_unref (event);
+  gdk_event_unref (event);
 }
 
 GtkWidget *

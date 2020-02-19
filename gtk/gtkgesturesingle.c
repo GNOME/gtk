@@ -131,7 +131,9 @@ gtk_gesture_single_cancel (GtkGesture       *gesture,
 
 static gboolean
 gtk_gesture_single_handle_event (GtkEventController *controller,
-                                 const GdkEvent     *event)
+                                 GdkEvent           *event,
+                                 double              x,
+                                 double              y)
 {
   GdkEventSequence *sequence = NULL;
   GtkGestureSinglePrivate *priv;
@@ -140,7 +142,6 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
   guint button = 0, state, i;
   gboolean retval, test_touchscreen = FALSE;
   GdkEventType event_type;
-  gboolean emulating;
 
   source_device = gdk_event_get_source_device (event);
 
@@ -160,8 +161,7 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_END:
     case GDK_TOUCH_UPDATE:
-      gdk_event_get_touch_emulating_pointer (event, &emulating);
-      if (priv->exclusive && !emulating)
+      if (priv->exclusive && !gdk_touch_event_get_emulating_pointer (event))
         return FALSE;
 
       sequence = gdk_event_get_event_sequence (event);
@@ -172,15 +172,14 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
       if (priv->touch_only && !test_touchscreen && source != GDK_SOURCE_TOUCHSCREEN)
         return FALSE;
 
-      gdk_event_get_button (event, &button);
+      button = gdk_button_event_get_button (event);
       break;
     case GDK_MOTION_NOTIFY:
       if (!gtk_gesture_handles_sequence (GTK_GESTURE (controller), sequence))
         return FALSE;
       if (priv->touch_only && !test_touchscreen && source != GDK_SOURCE_TOUCHSCREEN)
         return FALSE;
-      if (!gdk_event_get_state (event, &state))
-        return FALSE;
+      state = gdk_event_get_modifier_state (event);
 
       if (priv->current_button > 0 && priv->current_button <= 5 &&
           (state & (GDK_BUTTON1_MASK << (priv->current_button - 1))))
@@ -201,8 +200,7 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
     case GDK_TOUCH_CANCEL:
     case GDK_GRAB_BROKEN:
     case GDK_TOUCHPAD_SWIPE:
-      return GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_single_parent_class)->handle_event (controller,
-                                                                                         event);
+      return GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_single_parent_class)->handle_event (controller, event, x, y);
       break;
     default:
       return FALSE;
@@ -226,7 +224,7 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
       priv->current_button = button;
     }
 
-  retval = GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_single_parent_class)->handle_event (controller, event);
+  retval = GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_single_parent_class)->handle_event (controller, event, x, y);
 
   if (sequence == priv->current_sequence &&
       (event_type == GDK_BUTTON_RELEASE || event_type == GDK_TOUCH_END))

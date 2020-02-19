@@ -579,13 +579,13 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                   0,
                   g_signal_accumulator_true_handled,
                   NULL,
-                  _gdk_marshal_BOOLEAN__OBJECT,
+                  _gdk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN,
                   1,
                   GDK_TYPE_EVENT);
   g_signal_set_va_marshaller (signals[EVENT],
                               G_OBJECT_CLASS_TYPE (object_class),
-                              _gdk_marshal_BOOLEAN__OBJECTv);
+                              _gdk_marshal_BOOLEAN__BOXEDv);
 }
 
 static void
@@ -2689,6 +2689,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
   GdkDeviceGrabInfo *button_release_grab;
   GdkPointerSurfaceInfo *pointer_info = NULL;
   GdkDevice *device, *source_device;
+  GdkEventType type;
 
   _gdk_display_update_last_event (display, event);
 
@@ -2722,21 +2723,21 @@ _gdk_windowing_got_event (GdkDisplay *display,
         }
     }
 
-  event_surface = event->any.surface;
+  event_surface = gdk_event_get_surface (event);
   if (!event_surface)
     goto out;
 
-  if (event->any.type == GDK_ENTER_NOTIFY)
+  type = gdk_event_get_event_type (event);
+  if (type == GDK_ENTER_NOTIFY)
     _gdk_display_set_surface_under_pointer (display, device, event_surface);
-  else if (event->any.type == GDK_LEAVE_NOTIFY)
+  else if (type == GDK_LEAVE_NOTIFY)
     _gdk_display_set_surface_under_pointer (display, device, NULL);
 
-  if ((event->any.type == GDK_BUTTON_RELEASE ||
-       event->any.type == GDK_TOUCH_CANCEL ||
-       event->any.type == GDK_TOUCH_END) &&
-      !event->any.send_event)
+  if (type == GDK_BUTTON_RELEASE ||
+      type == GDK_TOUCH_CANCEL ||
+      type == GDK_TOUCH_END)
     {
-      if (event->any.type == GDK_BUTTON_RELEASE ||
+      if (type == GDK_BUTTON_RELEASE ||
           gdk_event_get_pointer_emulated (event))
         {
           button_release_grab =
@@ -2744,7 +2745,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
 
           if (button_release_grab &&
               button_release_grab->implicit &&
-              (event->button.state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (event->button.button - 1))) == 0)
+              (gdk_event_get_modifier_state (event) & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (gdk_button_event_get_button (event) - 1))) == 0)
             {
               button_release_grab->serial_end = serial;
               button_release_grab->implicit_ungrab = FALSE;
@@ -2758,7 +2759,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
     {
       _gdk_event_queue_remove_link (display, event_link);
       g_list_free_1 (event_link);
-      g_object_unref (event);
+      gdk_event_unref (event);
     }
 
   /* This does two things - first it sees if there are motions at the
@@ -3996,12 +3997,13 @@ check_autohide (GdkEvent *event)
 }
 
 static gboolean
-is_key_event (GdkEvent *event)
+is_keyboard_event (GdkEvent *event)
 {
   switch ((guint) gdk_event_get_event_type (event))
     {
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
+    case GDK_FOCUS_CHANGE:
       return TRUE;
     default:;
     }
@@ -4009,16 +4011,35 @@ is_key_event (GdkEvent *event)
   return FALSE;
 }
 
-static void
+static GdkEvent *
 rewrite_event_for_toplevel (GdkEvent *event)
 {
   GdkSurface *surface;
 
   surface = gdk_event_get_surface (event);
+  if (!surface->parent)
+    return gdk_event_ref (event);
+
   while (surface->parent)
     surface = surface->parent;
 
-  g_set_object (&event->any.surface, surface);
+  if (gdk_event_get_event_type (event) == GDK_FOCUS_CHANGE)
+    return gdk_event_focus_new (surface,
+                                gdk_event_get_device (event),
+                                gdk_event_get_source_device (event),
+                                gdk_focus_event_get_in (event));
+  else
+    return gdk_event_key_new (gdk_event_get_event_type (event),
+                              surface,
+                              gdk_event_get_device (event),
+                              gdk_event_get_source_device (event),
+                              gdk_event_get_time (event),
+                              gdk_event_get_modifier_state (event),
+                              gdk_key_event_get_keyval (event),
+                              gdk_key_event_get_keycode (event),
+                              gdk_key_event_get_scancode (event),
+                              gdk_key_event_get_group (event),
+                              gdk_key_event_is_modifier (event));
 }
 
 static void
@@ -4039,49 +4060,44 @@ add_event_mark (GdkEvent *event,
     {
     case GDK_MOTION_NOTIFY:
       {
-        GdkEventMotion *motion = (GdkEventMotion *)event;
+        double x, y;
+        gdk_event_get_position (event, &x, &y);
         message = g_strdup_printf ("{x=%lf, y=%lf, state=0x%x}",
-                                   motion->x, motion->y, motion->state);
+                                   x, y,
+                                   gdk_event_get_modifier_state (event));
         break;
       }
 
     case GDK_BUTTON_PRESS:
-      {
-        GdkEventButton *button = (GdkEventButton *)event;
-        message = g_strdup_printf ("{button=%u, x=%lf, y=%lf, state=0x%x}",
-                                   button->button, button->x, button->y, button->state);
-        break;
-      }
-
     case GDK_BUTTON_RELEASE:
       {
-        GdkEventButton *button = (GdkEventButton *)event;
+        double x, y;
+        gdk_event_get_position (event, &x, &y);
         message = g_strdup_printf ("{button=%u, x=%lf, y=%lf, state=0x%x}",
-                                   button->button, button->x, button->y, button->state);
+                                   gdk_button_event_get_button (event),
+                                   x, y,
+                                   gdk_event_get_modifier_state (event));
         break;
       }
 
     case GDK_KEY_PRESS:
-      {
-        GdkEventKey *key = (GdkEventKey *)event;
-        message = g_strdup_printf ("{keyval=%u, state=0x%x, hardware_keycode=%u key_scancode=%u group=%u is_modifier=%u}",
-                                   key->keyval, key->state, key->hardware_keycode, key->key_scancode, key->group, key->is_modifier);
-        break;
-      }
-
     case GDK_KEY_RELEASE:
       {
-        GdkEventKey *key = (GdkEventKey *)event;
         message = g_strdup_printf ("{keyval=%u, state=0x%x, hardware_keycode=%u key_scancode=%u group=%u is_modifier=%u}",
-                                   key->keyval, key->state, key->hardware_keycode, key->key_scancode, key->group, key->is_modifier);
+                                   gdk_key_event_get_keyval (event),
+                                   gdk_event_get_modifier_state (event),
+                                   gdk_key_event_get_keycode (event),
+                                   gdk_key_event_get_scancode (event),
+                                   gdk_key_event_get_group (event),
+                                   gdk_key_event_is_modifier (event));
         break;
       }
 
     case GDK_CONFIGURE:
       {
-        GdkEventConfigure *config = (GdkEventConfigure *)event;
-        message = g_strdup_printf ("{x=%d, y=%d, width=%d, height=%d}",
-                                   config->x, config->y, config->width, config->height);
+        int width, height;
+        gdk_configure_event_get_size (event, &width, &height);
+        message = g_strdup_printf ("{width=%d, height=%d}", width, height);
         break;
       }
 
@@ -4108,11 +4124,9 @@ add_event_mark (GdkEvent *event,
     case GDK_PAD_GROUP_MODE:
     case GDK_GRAB_BROKEN:
     case GDK_DELETE:
-    case GDK_DESTROY:
     case GDK_FOCUS_CHANGE:
     case GDK_PROXIMITY_IN:
     case GDK_PROXIMITY_OUT:
-    case GDK_NOTHING:
     case GDK_EVENT_LAST:
     default:
       break;
@@ -4143,9 +4157,15 @@ gdk_surface_handle_event (GdkEvent *event)
     }
   else
     {
-      if (is_key_event (event))
-        rewrite_event_for_toplevel (event);
-      g_signal_emit (gdk_event_get_surface (event), signals[EVENT], 0, event, &handled);
+      GdkEvent *emitted;
+
+      if (is_keyboard_event (event))
+        emitted = rewrite_event_for_toplevel (event);
+      else
+        emitted = gdk_event_ref (event);
+
+      g_signal_emit (gdk_event_get_surface (emitted), signals[EVENT], 0, emitted, &handled);
+      gdk_event_unref (emitted);
     }
 
   if (GDK_PROFILER_IS_RUNNING)

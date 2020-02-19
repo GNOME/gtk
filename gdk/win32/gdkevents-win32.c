@@ -205,11 +205,7 @@ generate_focus_event (GdkDeviceManagerWin32 *device_manager,
   device = GDK_DEVICE_MANAGER_WIN32 (device_manager)->core_keyboard;
   source_device = GDK_DEVICE_MANAGER_WIN32 (device_manager)->system_keyboard;
 
-  event = gdk_event_new (GDK_FOCUS_CHANGE);
-  event->any.surface = window;
-  event->focus_change.in = in;
-  gdk_event_set_device (event, device);
-  gdk_event_set_source_device (event, source_device);
+  event = gdk_event_focus_new (window, device, source_device, in);
 
   _gdk_win32_append_event (event);
 }
@@ -220,28 +216,26 @@ generate_grab_broken_event (GdkDeviceManagerWin32 *device_manager,
                             gboolean          keyboard,
                             GdkSurface        *grab_window)
 {
-  GdkEvent *event = gdk_event_new (GDK_GRAB_BROKEN);
+  GdkEvent *event;
   GdkDevice *device;
   GdkDevice *source_device;
 
   if (keyboard)
     {
-      device = GDK_DEVICE_MANAGER_WIN32 (device_manager)->core_keyboard;
-      source_device = GDK_DEVICE_MANAGER_WIN32 (device_manager)->system_keyboard;
+      device = device_manager->core_keyboard;
+      source_device = device_manager->system_keyboard;
     }
   else
     {
-      device = GDK_DEVICE_MANAGER_WIN32 (device_manager)->core_pointer;
-      source_device = GDK_DEVICE_MANAGER_WIN32 (device_manager)->system_pointer;
+      device = device_manager->core_pointer;
+      source_device = device_manager->system_pointer;
     }
 
-  event->any.surface = window;
-  event->any.send_event = 0;
-  event->grab_broken.keyboard = keyboard;
-  event->grab_broken.implicit = FALSE;
-  event->grab_broken.grab_surface = grab_window;
-  gdk_event_set_device (event, device);
-  gdk_event_set_source_device (event, source_device);
+  event = gdk_event_grab_broken_new (window,
+                                     device,
+                                     source_device,
+                                     grab_window,
+                                     FALSE);
 
   _gdk_win32_append_event (event);
 }
@@ -633,51 +627,62 @@ find_window_for_mouse_event (GdkSurface* reported_window,
   return event_surface;
 }
 
-static void
-build_key_event_state (GdkEvent *event,
-		       BYTE     *key_state)
+static GdkModifierType
+build_key_event_state (BYTE *key_state)
 {
+  GdkModifierType state;
   GdkWin32Keymap *keymap;
 
-  event->key.state = 0;
+  state = 0;
 
   if (key_state[VK_SHIFT] & 0x80)
-    event->key.state |= GDK_SHIFT_MASK;
+    state |= GDK_SHIFT_MASK;
 
   if (key_state[VK_CAPITAL] & 0x01)
-    event->key.state |= GDK_LOCK_MASK;
+    state |= GDK_LOCK_MASK;
 
   if (key_state[VK_LBUTTON] & 0x80)
-    event->key.state |= GDK_BUTTON1_MASK;
+    state |= GDK_BUTTON1_MASK;
   if (key_state[VK_MBUTTON] & 0x80)
-    event->key.state |= GDK_BUTTON2_MASK;
+    state |= GDK_BUTTON2_MASK;
   if (key_state[VK_RBUTTON] & 0x80)
-    event->key.state |= GDK_BUTTON3_MASK;
+    state |= GDK_BUTTON3_MASK;
   if (key_state[VK_XBUTTON1] & 0x80)
-    event->key.state |= GDK_BUTTON4_MASK;
+    state |= GDK_BUTTON4_MASK;
   if (key_state[VK_XBUTTON2] & 0x80)
-    event->key.state |= GDK_BUTTON5_MASK;
+    state |= GDK_BUTTON5_MASK;
 
   keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display));
-  event->key.group = _gdk_win32_keymap_get_active_group (keymap);
 
   if (_gdk_win32_keymap_has_altgr (keymap) &&
       (key_state[VK_LCONTROL] & 0x80) &&
       (key_state[VK_RMENU] & 0x80))
     {
-      event->key.state |= GDK_MOD2_MASK;
+      state |= GDK_MOD2_MASK;
       if (key_state[VK_RCONTROL] & 0x80)
-	event->key.state |= GDK_CONTROL_MASK;
+	state |= GDK_CONTROL_MASK;
       if (key_state[VK_LMENU] & 0x80)
-	event->key.state |= GDK_MOD1_MASK;
+	state |= GDK_MOD1_MASK;
     }
   else
     {
       if (key_state[VK_CONTROL] & 0x80)
-	event->key.state |= GDK_CONTROL_MASK;
+	state |= GDK_CONTROL_MASK;
       if (key_state[VK_MENU] & 0x80)
-	event->key.state |= GDK_MOD1_MASK;
+	state |= GDK_MOD1_MASK;
     }
+
+  return state;
+}
+
+static guint8
+get_active_group (void)
+{
+  GdkWin32Keymap *keymap;
+
+  keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display));
+
+  return _gdk_win32_keymap_get_active_group (keymap);
 }
 
 static gint
@@ -727,20 +732,6 @@ build_pointer_event_state (MSG *msg)
   return state;
 }
 
-static void
-build_wm_ime_composition_event (GdkEvent *event,
-				MSG      *msg,
-				wchar_t   wc,
-				BYTE     *key_state)
-{
-  event->key.time = _gdk_win32_get_next_tick (msg->time);
-
-  build_key_event_state (event, key_state);
-
-  event->key.hardware_keycode = 0; /* FIXME: What should it be? */
-  event->key.keyval = gdk_unicode_to_keyval (wc);
-}
-
 #ifdef G_ENABLE_DEBUG
 
 static void
@@ -764,17 +755,19 @@ print_event_state (guint state)
 }
 
 void
-_gdk_win32_print_event (const GdkEvent *event)
+_gdk_win32_print_event (GdkEvent *event)
 {
   const char *kvname;
+  double x, y;
+  GdkCrossingMode mode;
+  GdkNotifyType detail;
+  GdkScrollDirection direction;
 
   g_print ("%s%*s===> ", (debug_indent > 0 ? "\n" : ""), debug_indent, "");
-  switch (event->any.type)
+  switch (gdk_event_get_event_type (event))
     {
 #define CASE(x) case x: g_print (#x); break;
-    CASE (GDK_NOTHING);
     CASE (GDK_DELETE);
-    CASE (GDK_DESTROY);
     CASE (GDK_MOTION_NOTIFY);
     CASE (GDK_BUTTON_PRESS);
     CASE (GDK_BUTTON_RELEASE);
@@ -796,81 +789,72 @@ _gdk_win32_print_event (const GdkEvent *event)
     }
 
   g_print (" %p @ %ums ",
-           event->any.surface ? GDK_SURFACE_HWND (event->any.surface) : NULL,
+           GDK_SURFACE_HWND (gdk_event_get_surface (event)),
            gdk_event_get_time (event));
 
-  switch (event->any.type)
+  switch (gdk_event_get_event_type (event))
     {
     case GDK_MOTION_NOTIFY:
-      g_print ("(%.4g,%.4g) (%.4g,%.4g)",
-	       event->motion.x, event->motion.y,
-	       event->motion.x_root, event->motion.y_root);
-      print_event_state (event->motion.state);
+      gdk_event_get_position (event, &x, &y);
+      g_print ("(%.4g,%.4g) ", x, y);
+      print_event_state (gdk_event_get_modifier_state (event));
       break;
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
-      g_print ("%d (%.4g,%.4g) (%.4g,%.4g) ",
-	       event->button.button,
-	       event->button.x, event->button.y,
-	       event->button.x_root, event->button.y_root);
-      print_event_state (event->button.state);
+      gdk_event_get_position (event, &x, &y);
+      g_print ("%d (%.4g,%.4g) ", gdk_button_event_get_button (event), x, y);
+      print_event_state (gdk_event_get_modifier_state (event));
       break;
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
-      kvname = gdk_keyval_name (event->key.keyval);
+      kvname = gdk_keyval_name (gdk_key_event_get_keyval (event));
       g_print ("%#.02x group:%d %s",
-	       event->key.hardware_keycode, event->key.group,
+               gdk_key_event_get_keycode (event),
+               gdk_key_event_get_group (event),
 	       (kvname ? kvname : "??"));
-      print_event_state (event->key.state);
+      print_event_state (gdk_event_get_modifier_state (event));
       break;
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
-      g_print ("%p (%.4g,%.4g) (%.4g,%.4g) %s %s%s",
-	       event->crossing.child_surface == NULL ? NULL : GDK_SURFACE_HWND (event->crossing.child_surface),
-	       event->crossing.x, event->crossing.y,
-	       event->crossing.x_root, event->crossing.y_root,
-	       (event->crossing.mode == GDK_CROSSING_NORMAL ? "NORMAL" :
-		(event->crossing.mode == GDK_CROSSING_GRAB ? "GRAB" :
-		 (event->crossing.mode == GDK_CROSSING_UNGRAB ? "UNGRAB" :
+      gdk_event_get_position (event, &x, &y);
+      mode = gdk_crossing_event_get_mode (event);
+      detail = gdk_crossing_event_get_detail (event);
+      g_print ("(%.4g,%.4g) %s %s",
+	       x, y,
+	       (mode == GDK_CROSSING_NORMAL ? "NORMAL" :
+		(mode == GDK_CROSSING_GRAB ? "GRAB" :
+		 (mode == GDK_CROSSING_UNGRAB ? "UNGRAB" :
 		  "???"))),
-	       (event->crossing.detail == GDK_NOTIFY_ANCESTOR ? "ANCESTOR" :
-		(event->crossing.detail == GDK_NOTIFY_VIRTUAL ? "VIRTUAL" :
-		 (event->crossing.detail == GDK_NOTIFY_INFERIOR ? "INFERIOR" :
-		  (event->crossing.detail == GDK_NOTIFY_NONLINEAR ? "NONLINEAR" :
-		   (event->crossing.detail == GDK_NOTIFY_NONLINEAR_VIRTUAL ? "NONLINEAR_VIRTUAL" :
-		    (event->crossing.detail == GDK_NOTIFY_UNKNOWN ? "UNKNOWN" :
-		     "???")))))),
-	       event->crossing.focus ? " FOCUS" : "");
-      print_event_state (event->crossing.state);
+	       (detail == GDK_NOTIFY_ANCESTOR ? "ANCESTOR" :
+		(detail == GDK_NOTIFY_VIRTUAL ? "VIRTUAL" :
+		 (detail == GDK_NOTIFY_INFERIOR ? "INFERIOR" :
+		  (detail == GDK_NOTIFY_NONLINEAR ? "NONLINEAR" :
+		   (detail == GDK_NOTIFY_NONLINEAR_VIRTUAL ? "NONLINEAR_VIRTUAL" :
+		    (detail == GDK_NOTIFY_UNKNOWN ? "UNKNOWN" :
+		     "???")))))));
+      print_event_state (gdk_event_get_modifier_state (event));
       break;
     case GDK_FOCUS_CHANGE:
-      g_print ("%s", (event->focus_change.in ? "IN" : "OUT"));
+      g_print ("%s", (gdk_focus_event_get_in (event) ? "IN" : "OUT"));
       break;
     case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
-      if (event->dnd.drop != NULL)
-	g_print ("ctx:%p: %s",
-		 event->dnd.drop,
-		 _gdk_win32_drag_protocol_to_string (GDK_WIN32_DRAG (event->dnd.drop)->protocol));
+      g_print ("DND");
       break;
     case GDK_SCROLL:
-      g_print ("(%.4g,%.4g) (%.4g,%.4g) %s ",
-	       event->scroll.x, event->scroll.y,
-	       event->scroll.x_root, event->scroll.y_root,
-	       (event->scroll.direction == GDK_SCROLL_UP ? "UP" :
-		(event->scroll.direction == GDK_SCROLL_DOWN ? "DOWN" :
-		 (event->scroll.direction == GDK_SCROLL_LEFT ? "LEFT" :
-		  (event->scroll.direction == GDK_SCROLL_RIGHT ? "RIGHT" :
+      direction = gdk_scroll_event_get_direction (event);
+      g_print (" %s ",
+	       (direction == GDK_SCROLL_UP ? "UP" :
+		(direction == GDK_SCROLL_DOWN ? "DOWN" :
+		 (direction == GDK_SCROLL_LEFT ? "LEFT" :
+		  (direction == GDK_SCROLL_RIGHT ? "RIGHT" :
 		   "???")))));
-      print_event_state (event->scroll.state);
+      print_event_state (gdk_event_get_modifier_state (event));
       break;
     case GDK_GRAB_BROKEN:
-      g_print ("%s %s %p",
-	       (event->grab_broken.keyboard ? "KEYBOARD" : "POINTER"),
-	       (event->grab_broken.implicit ? "IMPLICIT" : "EXPLICIT"),
-	       (event->grab_broken.grab_surface ? GDK_SURFACE_HWND (event->grab_broken.grab_surface) : 0));
+      g_print ("Grab broken");
     default:
       /* Nothing */
       break;
@@ -908,7 +892,6 @@ fixup_event (GdkEvent *event)
        (event->any.type == GDK_LEAVE_NOTIFY)) &&
       (event->crossing.child_surface != NULL))
     g_object_ref (event->crossing.child_surface);
-  event->any.send_event = InSendMessage ();
 }
 
 void
@@ -1098,23 +1081,17 @@ send_crossing_event (GdkDisplay                 *display,
   pt = *screen_pt;
   ScreenToClient (GDK_SURFACE_HWND (window), &pt);
 
-  event = gdk_event_new (type);
-  event->any.surface = window;
-  event->crossing.child_surface = subwindow;
-  event->crossing.time = _gdk_win32_get_next_tick (time_);
-  event->crossing.x = pt.x / impl->surface_scale;
-  event->crossing.y = pt.y / impl->surface_scale;
-  event->crossing.x_root = (screen_pt->x + _gdk_offset_x) / impl->surface_scale;
-  event->crossing.y_root = (screen_pt->y + _gdk_offset_y) / impl->surface_scale;
-  event->crossing.mode = mode;
-  event->crossing.detail = notify_type;
-  event->crossing.mode = mode;
-  event->crossing.detail = notify_type;
-  event->crossing.focus = FALSE;
-  event->crossing.state = mask;
-  gdk_event_set_device (event, device_manager->core_pointer);
-  gdk_event_set_source_device (event, device_manager->system_pointer);
-
+  event = gdk_event_crossing_new (type,
+                                  window,
+                                  device_manager->core_pointer,
+                                  device_manager->system_pointer,
+                                  _gdk_win32_get_next_tick (time_),
+                                  mask,
+                                  pt.x / impl->surface_scale,
+                                  pt.y / impl->surface_scale,
+                                  mode,
+                                  notify_type);
+          
   _gdk_win32_append_event (event);
 }
 
@@ -1601,7 +1578,7 @@ generate_button_event (GdkEventType      type,
                        GdkSurface        *window,
                        MSG              *msg)
 {
-  GdkEvent *event = gdk_event_new (type);
+  GdkEvent *event;
   GdkDeviceManagerWin32 *device_manager;
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
 
@@ -1610,18 +1587,21 @@ generate_button_event (GdkEventType      type,
 
   device_manager = GDK_DEVICE_MANAGER_WIN32 (_gdk_device_manager);
 
-  event->any.surface = window;
-  event->button.time = _gdk_win32_get_next_tick (msg->time);
-  event->button.x = current_x = (gint16) GET_X_LPARAM (msg->lParam) / impl->surface_scale;
-  event->button.y = current_y = (gint16) GET_Y_LPARAM (msg->lParam) / impl->surface_scale;
-  event->button.x_root = (msg->pt.x + _gdk_offset_x) / impl->surface_scale;
-  event->button.y_root = (msg->pt.y + _gdk_offset_y) / impl->surface_scale;
-  event->button.axes = NULL;
-  event->button.state = build_pointer_event_state (msg);
-  event->button.button = button;
-  gdk_event_set_device (event, device_manager->core_pointer);
-  gdk_event_set_source_device (event, device_manager->system_pointer);
+  current_x = (gint16) GET_X_LPARAM (msg->lParam) / impl->surface_scale;
+  current_y = (gint16) GET_Y_LPARAM (msg->lParam) / impl->surface_scale;
 
+  event = gdk_event_button_new (type,
+                                window,
+                                device_manager->core_pointer,
+                                device_manager->system_pointer,
+                                NULL,
+                                _gdk_win32_get_next_tick (msg->time),
+                                build_pointer_event_state (msg),
+                                button,
+                                current_x,
+                                current_y,
+                                NULL);
+                                
   _gdk_win32_append_event (event);
 }
 
@@ -2078,6 +2058,16 @@ gdk_event_translate (MSG  *msg,
 
   int i;
 
+  GdkModifierType state;
+  guint keyval;
+  guint16 keycode;
+  guint16 scancode;
+  guint8 group;
+  gboolean is_modifier;
+
+  double delta_x, delta_y;
+  GdkScrollDirection direction;
+
   display = gdk_display_get_default ();
   win32_display = GDK_WIN32_DISPLAY (display);
 
@@ -2150,17 +2140,17 @@ gdk_event_translate (MSG  *msg,
       gdk_display_setting_changed (display, "gtk-im-module");
 
       /* Generate a dummy key event to "nudge" IMContext */
-      event = gdk_event_new (GDK_KEY_PRESS);
-      event->any.surface = window;
-      event->key.time = _gdk_win32_get_next_tick (msg->time);
-      event->key.keyval = GDK_KEY_VoidSymbol;
-      event->key.hardware_keycode = 0;
-      event->key.group = 0;
-      gdk_event_set_scancode (event, 0);
-      gdk_event_set_device (event, device_manager_win32->core_keyboard);
-      gdk_event_set_source_device (event, device_manager_win32->system_keyboard);
-      event->key.is_modifier = FALSE;
-      event->key.state = 0;
+      event = gdk_event_key_new (GDK_KEY_PRESS,
+                                 window,
+                                 device_manager_win32->core_keyboard,
+                                 device_manager_win32->system_keyboard,
+                                 _gdk_win32_get_next_tick (msg->time),
+                                 0,
+                                 GDK_KEY_VoidSymbol,
+                                 0,
+                                 0,
+                                 0,
+                                 FALSE);
       _gdk_win32_append_event (event);
       break;
 
@@ -2244,44 +2234,38 @@ gdk_event_translate (MSG  *msg,
 	    }
 	}
 
-      event = gdk_event_new ((msg->message == WM_KEYDOWN ||
-			      msg->message == WM_SYSKEYDOWN) ?
-			     GDK_KEY_PRESS : GDK_KEY_RELEASE);
-      event->any.surface = window;
-      event->key.time = _gdk_win32_get_next_tick (msg->time);
-      event->key.keyval = GDK_KEY_VoidSymbol;
-      event->key.hardware_keycode = msg->wParam;
-      /* save original scancode */
-      gdk_event_set_scancode (event, msg->lParam >> 16);
-      gdk_event_set_device (event, device_manager_win32->core_keyboard);
-      gdk_event_set_source_device (event, device_manager_win32->system_keyboard);
+      keyval = GDK_KEY_VoidSymbol;
+      keycode = msg->wParam;
+      scancode = msg->lParam >> 16;
+
       if (HIWORD (msg->lParam) & KF_EXTENDED)
 	{
 	  switch (msg->wParam)
 	    {
 	    case VK_CONTROL:
-	      event->key.hardware_keycode = VK_RCONTROL;
+	      keycode = VK_RCONTROL;
 	      break;
 	    case VK_SHIFT:	/* Actually, KF_EXTENDED is not set
 				 * for the right shift key.
 				 */
-	      event->key.hardware_keycode = VK_RSHIFT;
+	      keycode = VK_RSHIFT;
 	      break;
 	    case VK_MENU:
-	      event->key.hardware_keycode = VK_RMENU;
+	      keycode = VK_RMENU;
 	      break;
 	    }
 	}
       else if (msg->wParam == VK_SHIFT &&
 	       LOBYTE (HIWORD (msg->lParam)) == _gdk_win32_keymap_get_rshift_scancode (GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display))))
-	event->key.hardware_keycode = VK_RSHIFT;
+	keycode = VK_RSHIFT;
 
-      event->key.is_modifier = (msg->wParam == VK_CONTROL ||
-                                msg->wParam == VK_SHIFT ||
-                                msg->wParam == VK_MENU);
+      is_modifier = (msg->wParam == VK_CONTROL ||
+                     msg->wParam == VK_SHIFT ||
+                     msg->wParam == VK_MENU);
       /* g_print ("ctrl:%02x lctrl:%02x rctrl:%02x alt:%02x lalt:%02x ralt:%02x\n", key_state[VK_CONTROL], key_state[VK_LCONTROL], key_state[VK_RCONTROL], key_state[VK_MENU], key_state[VK_LMENU], key_state[VK_RMENU]); */
 
-      build_key_event_state (event, key_state);
+      state = build_key_event_state (key_state);
+      group = get_active_group ();
 
       if (msg->wParam == VK_PACKET && ccount == 1)
 	{
@@ -2298,20 +2282,20 @@ gdk_event_translate (MSG  *msg,
 	      else
 		leading = impl->leading_surrogate_keyup;
 
-	      event->key.keyval = gdk_unicode_to_keyval ((leading - 0xD800) * 0x400 + wbuf[0] - 0xDC00 + 0x10000);
+	      keyval = gdk_unicode_to_keyval ((leading - 0xD800) * 0x400 + wbuf[0] - 0xDC00 + 0x10000);
 	    }
 	  else
 	    {
-	      event->key.keyval = gdk_unicode_to_keyval (wbuf[0]);
+	      keyval = gdk_unicode_to_keyval (wbuf[0]);
 	    }
 	}
       else
 	{
 	  gdk_keymap_translate_keyboard_state (_gdk_win32_display_get_keymap (display),
-					       event->key.hardware_keycode,
-					       event->key.state,
-					       event->key.group,
-					       &event->key.keyval,
+					       keycode,
+					       state,
+					       group,
+					       &keyval,
 					       NULL, NULL, NULL);
 	}
 
@@ -2354,7 +2338,21 @@ gdk_event_translate (MSG  *msg,
 
       /* Reset MOD1_MASK if it is the Alt key itself */
       if (msg->wParam == VK_MENU)
-	event->key.state &= ~GDK_MOD1_MASK;
+	state &= ~GDK_MOD1_MASK;
+
+      event = gdk_event_key_new ((msg->message == WM_KEYDOWN || msg->message == WM_SYSKEYDOWN)
+                                   ? GDK_KEY_PRESS
+                                   : GDK_KEY_RELEASE,
+                                 window,
+                                 device_manager_win32->core_keyboard,
+                                 device_manager_win32->system_keyboard,
+                                 _gdk_win32_get_next_tick (msg->time),
+                                 state,
+                                 keyval,
+                                 keycode,
+                                 scancode,
+                                 group,
+                                 is_modifier);
 
       _gdk_win32_append_event (event);
 
@@ -2416,20 +2414,32 @@ gdk_event_translate (MSG  *msg,
       for (i = 0; i < ccount; i++)
 	{
           /* Build a key press event */
-          event = gdk_event_new (GDK_KEY_PRESS);
-          event->any.surface = window;
-          gdk_event_set_device (event, device_manager_win32->core_keyboard);
-          gdk_event_set_source_device (event, device_manager_win32->system_keyboard);
-          build_wm_ime_composition_event (event, msg, wbuf[i], key_state);
+          event = gdk_event_key_new (GDK_KEY_PRESS,
+                                     window,
+                                     device_manager_win32->core_keyboard,
+                                     device_manager_win32->system_keyboard,
+                                     _gdk_win32_get_next_tick (msg->time),
+                                     build_key_event_state (key_state),
+                                     gdk_unicode_to_keyval (wbuf[i]),               
+                                     0,
+                                     0,
+                                     get_active_group (),
+                                     FALSE);
 
           _gdk_win32_append_event (event);
 
           /* Build a key release event.  */
-          event = gdk_event_new (GDK_KEY_RELEASE);
-          event->any.surface = window;
-          gdk_event_set_device (event, device_manager_win32->core_keyboard);
-          gdk_event_set_source_device (event, device_manager_win32->system_keyboard);
-          build_wm_ime_composition_event (event, msg, wbuf[i], key_state);
+          event = gdk_event_key_new (GDK_KEY_RELEASE,
+                                     window,
+                                     device_manager_win32->core_keyboard,
+                                     device_manager_win32->system_keyboard,
+                                     _gdk_win32_get_next_tick (msg->time),
+                                     build_key_event_state (key_state),
+                                     gdk_unicode_to_keyval (wbuf[i]),               
+                                     0,
+                                     0,
+                                     get_active_group (),
+                                     FALSE);
 
           _gdk_win32_append_event (event);
 	}
@@ -2631,17 +2641,18 @@ gdk_event_translate (MSG  *msg,
         }
       else if (_gdk_input_ignore_core == 0)
 	{
-	  event = gdk_event_new (GDK_MOTION_NOTIFY);
-	  event->any.surface = window;
-	  event->motion.time = _gdk_win32_get_next_tick (msg->time);
-	  event->motion.x = current_x = (gint16) GET_X_LPARAM (msg->lParam) / impl->surface_scale;
-	  event->motion.y = current_y = (gint16) GET_Y_LPARAM (msg->lParam) / impl->surface_scale;
-	  event->motion.x_root = current_root_x;
-	  event->motion.y_root = current_root_y;
-	  event->motion.axes = NULL;
-	  event->motion.state = build_pointer_event_state (msg);
-	  gdk_event_set_device (event, device_manager_win32->core_pointer);
-	  gdk_event_set_source_device (event, device_manager_win32->system_pointer);
+	  current_x = (gint16) GET_X_LPARAM (msg->lParam) / impl->surface_scale;
+	  current_y = (gint16) GET_Y_LPARAM (msg->lParam) / impl->surface_scale;
+
+	  event = gdk_event_motion_new (window,
+	                                device_manager_win32->core_pointer,
+	                                device_manager_win32->system_pointer,
+                                        NULL,
+                                        _gdk_win32_get_next_tick (msg->time),
+	                                build_pointer_event_state (msg),
+                                        current_x,
+                                        current_y,
+                                        NULL);
 
 	  _gdk_win32_append_event (event);
 	}
@@ -2748,44 +2759,48 @@ gdk_event_translate (MSG  *msg,
       impl = GDK_WIN32_SURFACE (window);
       ScreenToClient (msg->hwnd, &point);
 
-      event = gdk_event_new (GDK_SCROLL);
-      event->any.surface = window;
-      event->scroll.direction = GDK_SCROLL_SMOOTH;
+      delta_x = delta_y = 0.0;
 
       if (msg->message == WM_MOUSEWHEEL)
-        {
-          event->scroll.delta_y = (gdouble) GET_WHEEL_DELTA_WPARAM (msg->wParam) / (gdouble) WHEEL_DELTA;
-        }
+        delta_y = (double) GET_WHEEL_DELTA_WPARAM (msg->wParam) / (gdouble) WHEEL_DELTA;
       else if (msg->message == WM_MOUSEHWHEEL)
-        {
-          event->scroll.delta_x = (gdouble) GET_WHEEL_DELTA_WPARAM (msg->wParam) / (gdouble) WHEEL_DELTA;
-        }
+        delta_x = (double) GET_WHEEL_DELTA_WPARAM (msg->wParam) / (gdouble) WHEEL_DELTA;
       /* Positive delta scrolls up, not down,
          see API documentation for WM_MOUSEWHEEL message.
        */
-      event->scroll.delta_y *= -1.0;
-      event->scroll.time = _gdk_win32_get_next_tick (msg->time);
-      event->scroll.x = (gint16) point.x / impl->surface_scale;
-      event->scroll.y = (gint16) point.y / impl->surface_scale;
-      event->scroll.x_root = ((gint16) GET_X_LPARAM (msg->lParam) + _gdk_offset_x) / impl->surface_scale;
-      event->scroll.y_root = ((gint16) GET_Y_LPARAM (msg->lParam) + _gdk_offset_y) / impl->surface_scale;
-      event->scroll.state = build_pointer_event_state (msg);
-      gdk_event_set_device (event, device_manager_win32->core_pointer);
-      gdk_event_set_source_device (event, device_manager_win32->system_pointer);
-      gdk_event_set_pointer_emulated (event, FALSE);
+      delta_y *= -1.0;
 
-      _gdk_win32_append_event (gdk_event_copy (event));
+      event = gdk_event_scroll_new (window,
+                                    device_manager_win32->core_pointer,
+                                    device_manager_win32->system_pointer,
+                                    NULL,
+                                    _gdk_win32_get_next_tick (msg->time),
+                                    build_pointer_event_state (msg),
+                                    delta_x,
+                                    delta_y,
+                                    FALSE);
+
+      _gdk_win32_append_event (event);
 
       /* Append the discrete version too */
+      direction = 0;
       if (msg->message == WM_MOUSEWHEEL)
-	event->scroll.direction = (((short) HIWORD (msg->wParam)) > 0) ?
-	  GDK_SCROLL_UP : GDK_SCROLL_DOWN;
+	direction = (((short) HIWORD (msg->wParam)) > 0)
+	              ? GDK_SCROLL_UP
+                      : GDK_SCROLL_DOWN;
       else if (msg->message == WM_MOUSEHWHEEL)
-	event->scroll.direction = (((short) HIWORD (msg->wParam)) > 0) ?
-	  GDK_SCROLL_RIGHT : GDK_SCROLL_LEFT;
-      event->scroll.delta_x = 0;
-      event->scroll.delta_y = 0;
-      gdk_event_set_pointer_emulated (event, TRUE);
+	direction = (((short) HIWORD (msg->wParam)) > 0)
+                      ? GDK_SCROLL_RIGHT
+                      : GDK_SCROLL_LEFT;
+
+      event = gdk_event_discrete_scroll_new (window,
+                                             device_manager_win32->core_pointer,
+                                             device_manager_win32->system_pointer,
+                                             NULL,
+                                             _gdk_win32_get_next_tick (msg->time),
+                                             build_pointer_event_state (msg),
+                                             direction,
+                                             TRUE);
 
       _gdk_win32_append_event (event);
 
@@ -3414,8 +3429,7 @@ gdk_event_translate (MSG  *msg,
       if (GDK_SURFACE_DESTROYED (window))
 	break;
 
-      event = gdk_event_new (GDK_DELETE);
-      event->any.surface = window;
+      event = gdk_event_delete_new (window);
 
       _gdk_win32_append_event (event);
 
@@ -3449,8 +3463,7 @@ gdk_event_translate (MSG  *msg,
       if (window == NULL || GDK_SURFACE_DESTROYED (window))
 	break;
 
-      event = gdk_event_new (GDK_DESTROY);
-      event->any.surface = window;
+      event = gdk_event_delete_new (window);
 
       _gdk_win32_append_event (event);
 
@@ -3563,14 +3576,12 @@ gdk_event_translate (MSG  *msg,
       /* Fall through */
     wintab:
 
-      event = gdk_event_new (GDK_NOTHING);
-      event->any.surface = window;
-      g_object_ref (window);
-
-      if (gdk_input_other_event (display, event, msg, window))
-	_gdk_win32_append_event (event);
-      else
-	g_object_unref (event);
+      event = gdk_input_other_event (display, msg, window);
+      if (event)
+        {
+          _gdk_win32_append_event (event);
+	  gdk_event_unref (event);
+        }
 
       break;
     }
@@ -3651,7 +3662,7 @@ gdk_event_dispatch (GSource     *source,
     {
       _gdk_event_emit (event);
 
-      g_object_unref (event);
+      gdk_event_unref (event);
     }
 
   return TRUE;

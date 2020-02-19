@@ -5,7 +5,7 @@ window1
   toolkit: gtk
   window-type: normal
   <AtkComponent>
-  layer: window
+  layer: widget
   alpha: 1
   unnamed-GtkContainerAccessible-0
     "panel"
@@ -26,8 +26,8 @@ window1
     alpha: 1
     <AtkValue>
     minimum value: 0.000000
-    maximum value: 239.000000
-    current value: 24.000000
+    maximum value: 219.000000
+    current value: 26.000000
     label1
       "label"
       parent: paned1

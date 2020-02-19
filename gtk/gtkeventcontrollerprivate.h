@@ -35,8 +35,15 @@ struct _GtkEventControllerClass
                              GtkWidget          *widget);
   void     (* unset_widget) (GtkEventController *controller);
   gboolean (* handle_event) (GtkEventController *controller,
-                             const GdkEvent     *event);
+                             GdkEvent            *event,
+                             double              x,
+                             double              y);
   void     (* reset)        (GtkEventController *controller);
+
+  void     (* handle_crossing) (GtkEventController    *controller,
+                                const GtkCrossingData *crossing,
+                                double                 x,
+                                double                 y);
 
   /*<private>*/
 
@@ -44,8 +51,11 @@ struct _GtkEventControllerClass
    * the event unseen by the handle_event vfunc.
    */
   gboolean (* filter_event) (GtkEventController *controller,
-                             const GdkEvent     *event);
+                             GdkEvent           *event);
+
   gpointer padding[10];
 };
+
+GtkWidget *gtk_event_controller_get_target (GtkEventController *controller);
 
 #endif /* __GTK_EVENT_CONTROLLER_PRIVATE_H__ */

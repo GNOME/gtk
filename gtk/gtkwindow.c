@@ -394,8 +394,8 @@ static void gtk_window_size_allocate      (GtkWidget         *widget,
                                            int                height,
                                            int                  baseline);
 static gboolean gtk_window_close_request  (GtkWindow         *window);
-static void gtk_window_focus_in           (GtkWidget         *widget);
-static void gtk_window_focus_out          (GtkWidget         *widget);
+static void gtk_window_focus_change       (GtkWidget            *widget,
+                                           GtkCrossingDirection  direction);
 static gboolean gtk_window_key_pressed    (GtkWidget         *widget,
                                            guint              keyval,
                                            guint              keycode,
@@ -1273,7 +1273,7 @@ popover_destroy (GtkWindowPopover *popover)
 
 static gboolean
 gtk_window_titlebar_action (GtkWindow      *window,
-                            const GdkEvent *event,
+                            GdkEvent       *event,
                             guint           button,
                             gint            n_press)
 {
@@ -1343,7 +1343,7 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
   GtkWidget *event_widget, *widget;
   GdkEventSequence *sequence;
   GtkWindowRegion region;
-  const GdkEvent *event;
+  GdkEvent *event;
   guint button;
   gboolean window_drag = FALSE;
 
@@ -1430,7 +1430,7 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
           double tx, ty;
           gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
-          gdk_event_get_coords (event, &tx, &ty);
+          gdk_event_get_position (event, &tx, &ty);
           gdk_surface_begin_resize_drag_for_device (priv->surface,
 						    (GdkSurfaceEdge) region,
 						    gdk_event_get_device ((GdkEvent *) event),
@@ -1508,8 +1508,7 @@ drag_gesture_update_cb (GtkGestureDrag *gesture,
 
       if (gtk_event_controller_get_propagation_phase (GTK_EVENT_CONTROLLER (gesture)) == GTK_PHASE_CAPTURE)
         {
-          const GdkEvent *event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-          GtkWidget *event_widget = gtk_get_event_target (event);
+          GtkWidget *event_widget = gtk_gesture_get_last_target (GTK_GESTURE (gesture), sequence);
 
           /* Check whether the target widget should be left alone at handling
            * the sequence, this is better done late to give room for gestures
@@ -1844,10 +1843,8 @@ gtk_window_init (GtkWindow *window)
 
   priv->key_controller = gtk_event_controller_key_new ();
   gtk_event_controller_set_propagation_phase (priv->key_controller, GTK_PHASE_CAPTURE);
-  g_signal_connect_swapped (priv->key_controller, "focus-in",
-                            G_CALLBACK (gtk_window_focus_in), window);
-  g_signal_connect_swapped (priv->key_controller, "focus-out",
-                            G_CALLBACK (gtk_window_focus_out), window);
+  g_signal_connect_swapped (priv->key_controller, "focus-change",
+                            G_CALLBACK (gtk_window_focus_change), window);
   g_signal_connect_swapped (priv->key_controller, "key-pressed",
                             G_CALLBACK (gtk_window_key_pressed), window);
   g_signal_connect_swapped (priv->key_controller, "key-released",
@@ -5997,7 +5994,7 @@ _gtk_window_query_nonaccels (GtkWindow      *window,
 /**
  * gtk_window_propagate_key_event:
  * @window:  a #GtkWindow
- * @event:   a #GdkEventKey
+ * @event:   a #GdkEvent
  *
  * Propagate a key press or release event to the focus widget and
  * up the focus container chain until a widget handles @event.
@@ -6009,12 +6006,12 @@ _gtk_window_query_nonaccels (GtkWindow      *window,
  * Returns: %TRUE if a widget in the focus chain handled the event.
  */
 gboolean
-gtk_window_propagate_key_event (GtkWindow        *window,
-                                GdkEventKey      *event)
+gtk_window_propagate_key_event (GtkWindow *window,
+                                GdkEvent  *event)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   gboolean handled = FALSE;
-  GtkWidget *widget, *focus;
+  GtkWidget *widget, *focus, *target;
 
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
@@ -6024,6 +6021,8 @@ gtk_window_propagate_key_event (GtkWindow        *window,
   if (focus)
     g_object_ref (focus);
   
+  target = focus;
+
   while (!handled &&
          focus && focus != widget &&
          gtk_widget_get_root (focus) == GTK_ROOT (widget))
@@ -6032,7 +6031,7 @@ gtk_window_propagate_key_event (GtkWindow        *window,
       
       if (gtk_widget_is_sensitive (focus))
         {
-          handled = gtk_widget_event (focus, (GdkEvent*) event);
+          handled = gtk_widget_event (focus, (GdkEvent *)event, target);
           if (handled)
             break;
         }
@@ -6121,33 +6120,33 @@ gtk_window_has_mnemonic_modifier_pressed (GtkWindow *window)
 }
 
 static void
-gtk_window_focus_in (GtkWidget *widget)
+gtk_window_focus_change (GtkWidget            *widget,
+                         GtkCrossingDirection  direction)
 {
   GtkWindow *window = GTK_WINDOW (widget);
 
-  /* It appears spurious focus in events can occur when
-   *  the window is hidden. So we'll just check to see if
-   *  the window is visible before actually handling the
-   *  event
-   */
-  if (gtk_widget_get_visible (widget))
+  if (direction == GTK_CROSSING_IN)
     {
-      _gtk_window_set_is_active (window, TRUE);
+      /* It appears spurious focus in events can occur when
+       * the window is hidden. So we'll just check to see if
+       * the window is visible before actually handling the
+       * event
+       */
+      if (gtk_widget_get_visible (widget))
+        {
+          _gtk_window_set_is_active (window, TRUE);
 
-      if (gtk_window_has_mnemonic_modifier_pressed (window))
-        _gtk_window_schedule_mnemonics_visible (window);
+          if (gtk_window_has_mnemonic_modifier_pressed (window))
+            _gtk_window_schedule_mnemonics_visible (window);
+        }
     }
-}
+  else
+    {
+      _gtk_window_set_is_active (window, FALSE);
 
-static void
-gtk_window_focus_out (GtkWidget *widget)
-{
-  GtkWindow *window = GTK_WINDOW (widget);
-
-  _gtk_window_set_is_active (window, FALSE);
-
-  /* set the mnemonic-visible property to false */
-  gtk_window_set_mnemonics_visible (window, FALSE);
+      /* set the mnemonic-visible property to false */
+      gtk_window_set_mnemonics_visible (window, FALSE);
+    }
 }
 
 static void
@@ -6347,6 +6346,61 @@ gtk_window_move_focus (GtkWidget        *widget,
     gtk_window_set_focus (GTK_WINDOW (widget), NULL);
 }
 
+static void
+synthesize_focus_change_events (GtkWindow *window,
+                                GtkWidget *old_focus,
+                                GtkWidget *new_focus)
+{
+  GtkCrossingData crossing;
+  GtkWidget *widget, *focus_child;
+  GList *list, *l;
+  GtkStateFlags flags;
+
+  flags = GTK_STATE_FLAG_FOCUSED;
+  if (gtk_window_get_focus_visible (GTK_WINDOW (window)))
+    flags |= GTK_STATE_FLAG_FOCUS_VISIBLE;
+
+  crossing.type = GTK_CROSSING_FOCUS;
+  crossing.mode = GDK_CROSSING_NORMAL;
+  crossing.old_target = old_focus;
+  crossing.new_target = new_focus;
+
+  crossing.direction = GTK_CROSSING_OUT;
+
+  widget = old_focus;
+  while (widget)
+    {
+      gtk_widget_handle_crossing (widget, &crossing, 0, 0);
+      gtk_widget_unset_state_flags (widget, flags);
+      gtk_widget_set_focus_child (widget, NULL);
+      widget = gtk_widget_get_parent (widget);
+    }
+
+  list = NULL;
+  widget = new_focus;
+  while (widget)
+    {
+      list = g_list_prepend (list, widget);
+      widget = gtk_widget_get_parent (widget);
+    }
+
+  crossing.direction = GTK_CROSSING_IN;
+
+  for (l = list; l; l = l->next)
+    {
+      widget = l->data;
+      if (l->next)
+        focus_child = l->next->data;
+      else
+        focus_child = NULL;
+      gtk_widget_handle_crossing (widget, &crossing, 0, 0);
+      gtk_widget_set_state_flags (widget, flags, FALSE);
+      gtk_widget_set_focus_child (widget, focus_child);
+    }
+
+  g_list_free (list);
+}
+
 /**
  * gtk_window_set_focus:
  * @window: a #GtkWindow
@@ -6365,9 +6419,6 @@ gtk_window_set_focus (GtkWindow *window,
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *old_focus = NULL;
-  GdkSeat *seat;
-  GdkDevice *device;
-  GdkEvent *event;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
@@ -6381,19 +6432,13 @@ gtk_window_set_focus (GtkWindow *window,
     old_focus = g_object_ref (priv->focus_widget);
   g_set_object (&priv->focus_widget, NULL);
 
-  seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (window)));
-  device = gdk_seat_get_keyboard (seat);
+  if (old_focus)
+    gtk_widget_set_has_focus (old_focus, FALSE);
 
-  event = gdk_event_new (GDK_FOCUS_CHANGE);
-  gdk_event_set_display (event, gtk_widget_get_display (GTK_WIDGET (window)));
-  gdk_event_set_device (event, device);
-  event->any.surface = priv->surface;
-  if (event->any.surface)
-    g_object_ref (event->any.surface);
+  synthesize_focus_change_events (window, old_focus, focus);
 
-  gtk_synthesize_crossing_events (GTK_ROOT (window), old_focus, focus, event, GDK_CROSSING_NORMAL);
-
-  g_object_unref (event);
+  if (focus)
+    gtk_widget_set_has_focus (focus, TRUE);
 
   g_set_object (&priv->focus_widget, focus);
 
@@ -8139,8 +8184,8 @@ _gtk_window_set_window_group (GtkWindow      *window,
 }
 
 static gboolean
-gtk_window_activate_menubar (GtkWindow   *window,
-                             GdkEventKey *event)
+gtk_window_activate_menubar (GtkWindow *window,
+                             GdkEvent  *event)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   guint keyval = 0;
@@ -8154,12 +8199,16 @@ gtk_window_activate_menubar (GtkWindow   *window,
       return FALSE;
     }
 
+  if (!(gdk_event_get_event_type (event) == GDK_KEY_PRESS ||
+        gdk_event_get_event_type (event) == GDK_KEY_RELEASE))
+    return FALSE;
+
   /* FIXME this is wrong, needs to be in the global accel resolution
    * thing, to properly consider i18n etc., but that probably requires
    * AccelGroup changes etc.
    */
-  if (event->keyval == keyval &&
-      ((event->state & gtk_accelerator_get_default_mod_mask ()) ==
+  if (gdk_key_event_get_keyval (event) == keyval &&
+      ((gdk_event_get_modifier_state (event) & gtk_accelerator_get_default_mod_mask ()) ==
        (mods & gtk_accelerator_get_default_mod_mask ())))
     {
       GList *tmp_menubars, *l;
@@ -8343,7 +8392,7 @@ gtk_window_free_key_hash (GtkWindow *window)
 /**
  * gtk_window_activate_key:
  * @window:  a #GtkWindow
- * @event:   a #GdkEventKey
+ * @event:   a #GdkEvent
  *
  * Activates mnemonics and accelerators for this #GtkWindow. This is normally
  * called by the default ::key_press_event handler for toplevel windows,
@@ -8353,8 +8402,8 @@ gtk_window_free_key_hash (GtkWindow *window)
  * Returns: %TRUE if a mnemonic or accelerator was found and activated.
  */
 gboolean
-gtk_window_activate_key (GtkWindow   *window,
-			 GdkEventKey *event)
+gtk_window_activate_key (GtkWindow *window,
+			 GdkEvent  *event)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkKeyHash *key_hash;
@@ -8364,16 +8413,20 @@ gtk_window_activate_key (GtkWindow   *window,
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
+  if (!(gdk_event_get_event_type (event) == GDK_KEY_PRESS ||
+        gdk_event_get_event_type (event) == GDK_KEY_RELEASE))
+    return FALSE;
+
   key_hash = gtk_window_get_key_hash (window);
 
   if (key_hash)
     {
       GSList *tmp_list;
       GSList *entries = _gtk_key_hash_lookup (key_hash,
-					      event->hardware_keycode,
-					      event->state,
+					      gdk_key_event_get_keycode (event),
+                                              gdk_event_get_modifier_state (event),
 					      gtk_accelerator_get_default_mod_mask (),
-					      event->group);
+					      gdk_key_event_get_group (event));
 
       g_object_get (gtk_widget_get_settings (GTK_WIDGET (window)),
                     "gtk-enable-accels", &enable_accels,

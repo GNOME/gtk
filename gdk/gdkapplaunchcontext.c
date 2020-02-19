@@ -43,7 +43,7 @@
  * context = gdk_display_get_app_launch_context (display);
  *
  * gdk_app_launch_context_set_display (display);
- * gdk_app_launch_context_set_timestamp (event->time);
+ * gdk_app_launch_context_set_timestamp (gdk_event_get_time (event));
  *
  * if (!g_app_info_launch_default_for_uri ("http://www.gtk.org", context, &error))
  *   g_warning ("Launching failed: %s\n", error->message);

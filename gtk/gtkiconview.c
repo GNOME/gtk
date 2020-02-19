@@ -166,10 +166,12 @@ static void             gtk_icon_view_motion                    (GtkEventControl
                                                                  double              x,
                                                                  double              y,
                                                                  gpointer            user_data);
-static void             gtk_icon_view_leave                     (GtkEventController *controller,
-                                                                 GdkCrossingMode     mode,
-                                                                 GdkNotifyType       detail,
-                                                                 gpointer            user_data);
+static void             gtk_icon_view_pointer                   (GtkEventController   *controller,
+                                                                 GtkCrossingDirection  direction,
+                                                                 double                x,
+                                                                 double                y,
+                                                                 GdkCrossingMode       mode,
+                                                                 gpointer              user_data);
 static void             gtk_icon_view_button_press              (GtkGestureClick *gesture,
                                                                  int                   n_press,
                                                                  double                x,
@@ -965,7 +967,7 @@ gtk_icon_view_init (GtkIconView *icon_view)
   gtk_widget_add_controller (GTK_WIDGET (icon_view), GTK_EVENT_CONTROLLER (gesture));
 
   controller = gtk_event_controller_motion_new ();
-  g_signal_connect (controller, "leave", G_CALLBACK (gtk_icon_view_leave),
+  g_signal_connect (controller, "pointer-change", G_CALLBACK (gtk_icon_view_pointer),
                     icon_view);
   g_signal_connect (controller, "motion", G_CALLBACK (gtk_icon_view_motion),
                     icon_view);
@@ -1881,21 +1883,26 @@ gtk_icon_view_motion (GtkEventController *controller,
 }
 
 static void
-gtk_icon_view_leave (GtkEventController *controller,
-                     GdkCrossingMode     mode,
-                     GdkNotifyType       detail,
-                     gpointer            user_data)
+gtk_icon_view_pointer (GtkEventController   *controller,
+                       GtkCrossingDirection  direction,
+                       double                x,
+                       double                y,
+                       GdkCrossingMode       mode,
+                       gpointer              user_data)
 {
   GtkIconView *icon_view;
   GtkIconViewPrivate *priv;
 
-  icon_view = GTK_ICON_VIEW (user_data);
-  priv = icon_view->priv;
-
-  if (priv->last_prelight)
+  if (direction == GTK_CROSSING_OUT)
     {
-      gtk_icon_view_queue_draw_item (icon_view, priv->last_prelight);
-      priv->last_prelight = NULL;
+      icon_view = GTK_ICON_VIEW (user_data);
+      priv = icon_view->priv;
+
+      if (priv->last_prelight)
+        {
+          gtk_icon_view_queue_draw_item (icon_view, priv->last_prelight);
+          priv->last_prelight = NULL;
+        }
     }
 }
 
@@ -2120,18 +2127,18 @@ gtk_icon_view_button_press (GtkGestureClick *gesture,
   GtkCellRenderer *cell = NULL, *cursor_cell = NULL;
   int button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
   GdkEventSequence *sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-  const GdkEventButton *event = (const GdkEventButton *)gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+  GdkEventButton *event = (GdkEventButton *)gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
   GdkModifierType state;
 
   if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
 
-  if (button == GDK_BUTTON_PRIMARY &&
-      gdk_event_get_state ((GdkEvent *) event, &state))
+  if (button == GDK_BUTTON_PRIMARY)
     {
       GdkModifierType extend_mod_mask;
       GdkModifierType modify_mod_mask;
 
+      state = gdk_event_get_modifier_state ((GdkEvent *)event);
       extend_mod_mask =
         gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_EXTEND_SELECTION);
 
@@ -2268,11 +2275,11 @@ gtk_icon_view_button_press (GtkGestureClick *gesture,
 }
 
 static gboolean
-button_event_modifies_selection (const GdkEventButton *event)
+button_event_modifies_selection (GdkEventButton *event)
 {
   guint state;
 
-  gdk_event_get_state ((GdkEvent *) event, &state);
+  state = gdk_event_get_modifier_state ((GdkEvent *) event);
   return (state & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) != 0;
 }
 
@@ -2286,7 +2293,7 @@ gtk_icon_view_button_release (GtkGestureClick *gesture,
   GtkIconView *icon_view = user_data;
   int button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
   GdkEventSequence *sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-  const GdkEventButton *event = (const GdkEventButton *)gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+  GdkEventButton *event = (GdkEventButton *)gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
 
   if (icon_view->priv->pressed_button == button)
     icon_view->priv->pressed_button = -1;
