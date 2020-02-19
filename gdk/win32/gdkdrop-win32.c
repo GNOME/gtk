@@ -487,8 +487,7 @@ _gdk_win32_local_drop_target_dragenter (GdkDrag        *drag,
 
   source_actions = set_source_actions_helper (drop, *actions, grfKeyState);
 
-  gdk_drop_emit_enter_event (drop, TRUE, time_);
-  gdk_drop_emit_motion_event (drop, TRUE, x_root, y_root, time_);
+  gdk_drop_emit_enter_event (drop, TRUE, x_root, y_root, time_);
   drop_win32->last_key_state = grfKeyState;
   drop_win32->last_x = x_root;
   drop_win32->last_y = y_root;
