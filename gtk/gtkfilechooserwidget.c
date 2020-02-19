@@ -458,10 +458,6 @@ enum {
 
 #define ICON_SIZE 16
 
-#define PREVIEW_HBOX_SPACING 12
-#define NUM_LINES 45
-#define NUM_CHARS 60
-
 static void gtk_file_chooser_widget_iface_init       (GtkFileChooserIface        *iface);
 static void gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface   *iface);
 
