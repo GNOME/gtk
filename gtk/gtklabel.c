@@ -448,10 +448,7 @@ static void gtk_label_motion            (GtkEventControllerMotion *controller,
                                          double                    x,
                                          double                    y,
                                          gpointer                  data);
-static void gtk_label_pointer           (GtkEventControllerMotion *controller,
-                                         GtkCrossingDirection      direction,
-                                         double                    x,
-                                         double                    y,
+static void gtk_label_leave             (GtkEventControllerMotion *controller,
                                          GdkCrossingMode           mode,
                                          gpointer                  data);
 
@@ -4859,24 +4856,18 @@ gtk_label_motion (GtkEventControllerMotion *controller,
 }
 
 static void
-gtk_label_pointer (GtkEventControllerMotion *controller,
-                   GtkCrossingDirection      direction,
-                   double                    x,
-                   double                    y,
-                   GdkCrossingMode           mode,
-                   gpointer                  data)
+gtk_label_leave (GtkEventControllerMotion *controller,
+                 GdkCrossingMode           mode,
+                 gpointer                  data)
 {
   GtkLabel *label = GTK_LABEL (data);
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
 
-  if (direction == GTK_CROSSING_OUT)
+  if (priv->select_info)
     {
-      if (priv->select_info)
-        {
-          priv->select_info->active_link = NULL;
-          gtk_label_update_cursor (label);
-          gtk_widget_queue_draw (GTK_WIDGET (label));
-        }
+      priv->select_info->active_link = NULL;
+      gtk_label_update_cursor (label);
+      gtk_widget_queue_draw (GTK_WIDGET (label));
     }
 }
 
@@ -5022,8 +5013,8 @@ gtk_label_ensure_select_info (GtkLabel *label)
       priv->select_info->motion_controller = gtk_event_controller_motion_new ();
       g_signal_connect (priv->select_info->motion_controller, "motion",
                         G_CALLBACK (gtk_label_motion), label);
-      g_signal_connect (priv->select_info->motion_controller, "pointer-change",
-                        G_CALLBACK (gtk_label_pointer), label);
+      g_signal_connect (priv->select_info->motion_controller, "leave",
+                        G_CALLBACK (gtk_label_leave), label);
       gtk_widget_add_controller (GTK_WIDGET (label), priv->select_info->motion_controller);
 
       priv->select_info->provider = g_object_new (GTK_TYPE_LABEL_CONTENT, NULL);

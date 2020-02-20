@@ -1312,23 +1312,23 @@ stop_open (GtkModelButton *button)
 }
 
 static void
-pointer_change_cb (GtkEventController   *controller,
-                   GtkCrossingDirection  direction,
-                   double                x,
-                   double                y,
-                   GdkCrossingMode       mode,
-                   gpointer              data)
+pointer_cb (GObject    *object,
+            GParamSpec *pspec,
+            gpointer    data)
 {
-  GtkModelButton *button = data;
-  GtkWidget *target;
-  GtkWidget *popover;
+  gboolean contains;
 
-  if (direction == GTK_CROSSING_IN)
+  contains = gtk_event_controller_motion_contains_pointer (GTK_EVENT_CONTROLLER_MOTION (object));
+
+  if (contains)
     {
-      target = gtk_event_controller_get_widget (controller);
+      GtkWidget *target;
+      GtkWidget *popover;
+
+      target = GTK_WIDGET (data);
       popover = gtk_widget_get_ancestor (target, GTK_TYPE_POPOVER_MENU);
 
-      if (popover && gtk_event_controller_motion_contains_pointer (GTK_EVENT_CONTROLLER_MOTION (controller)))
+      if (popover)
         {
           if (gtk_popover_menu_get_open_submenu (GTK_POPOVER_MENU (popover)) != NULL)
             start_open (GTK_MODEL_BUTTON (target));
@@ -1337,7 +1337,11 @@ pointer_change_cb (GtkEventController   *controller,
         }
     }
   else
-    stop_open (button);
+    {
+      GtkModelButton *button = data;
+
+      stop_open (button);
+    }
 }
 
 static void
@@ -1383,7 +1387,7 @@ gtk_model_button_init (GtkModelButton *self)
   gtk_widget_add_css_class (GTK_WIDGET (self), "flat");
 
   controller = gtk_event_controller_motion_new ();
-  g_signal_connect (controller, "pointer-change", G_CALLBACK (pointer_change_cb), self);
+  g_signal_connect (controller, "notify::contains-pointer", G_CALLBACK (pointer_cb), self);
   g_signal_connect (controller, "motion", G_CALLBACK (motion_cb), self);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 

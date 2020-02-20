@@ -24,7 +24,7 @@
  * @See_also: #GtkEventController
  *
  * #GtkEventControllerFocus is an event controller meant for situations
- * where you need to know where the focusboard focus is.
+ * where you need to know where the focus is.
  **/
 
 #include "config.h"
@@ -97,18 +97,28 @@ update_focus (GtkEventController    *controller,
 
   if (crossing->direction == GTK_CROSSING_IN)
     {
+      if (crossing->new_descendent != NULL)
+        {
+          contains_focus = TRUE;
+        }
       if (crossing->new_target == widget)
-        is_focus = TRUE;
-      if (crossing->new_target != NULL)
+        {
+          contains_focus = TRUE;
+          is_focus = TRUE;
+        }
+    }
+  else
+    {
+      if (crossing->new_descendent != NULL ||
+          crossing->new_target == widget)
         contains_focus = TRUE;
+      is_focus = FALSE;
     }
 
   if (focus->contains_focus != contains_focus)
     {
-      if (contains_focus)
-        enter = TRUE;
-      else
-        leave = TRUE;
+      enter = contains_focus;
+      leave = !contains_focus;
     }
 
   if (leave)
@@ -227,6 +237,13 @@ gtk_event_controller_focus_class_init (GtkEventControllerFocusClass *klass)
    *
    * This signal is emitted whenever the focus enters into the
    * widget or one of its descendents.
+   *
+   * Note that this means you may not get an ::enter signal
+   * even though the widget becomes the focus location, in
+   * certain cases (such as when the focus moves from a descendent
+   * of the widget to the widget itself). If you are interested
+   * in these cases, you can monitor the #GtkEventControllerFocus:is-focus
+   * property for changes.
    */
   signals[ENTER] =
     g_signal_new (I_("enter"),
@@ -240,8 +257,16 @@ gtk_event_controller_focus_class_init (GtkEventControllerFocusClass *klass)
    * GtkEventControllerFocus::leave:
    * @controller: the object which received the signal
    *
-   * This signal is emitted whenever the focus leaves from 
-   * the widget or one of its descendents.
+   * This signal is emitted whenever the focus leaves the
+   * widget hierarchy that is rooted at the widget that the
+   * controller is attached to.
+   *
+   * Note that this means you may not get a ::leave signal
+   * even though the focus moves away from the widget, in
+   * certain cases (such as when the focus moves from the widget
+   * to a descendent). If you are interested in these cases, you
+   * can monitor the #GtkEventControllerFocus:is-focus property
+   * for changes.
    */
   signals[LEAVE] =
     g_signal_new (I_("leave"),
