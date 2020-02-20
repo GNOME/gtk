@@ -30,7 +30,7 @@
 #include "gtkactionmuxerprivate.h"
 #include "gtkcontainer.h"
 #include "gtkcsstypesprivate.h"
-#include "gtkeventcontroller.h"
+#include "gtkeventcontrollerprivate.h"
 #include "gtklistlistmodelprivate.h"
 #include "gtkrootprivate.h"
 #include "gtksizerequestcacheprivate.h"
