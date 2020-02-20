@@ -734,13 +734,14 @@ async_write_data_cb (GObject      *object,
                                                 res, &error);
   if (error)
     {
-      if (error->domain != G_IO_ERROR ||
-          error->code != G_IO_ERROR_CANCELLED)
-        g_warning ("Error writing selection data: %s", error->message);
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        {
+          g_warning ("Error writing selection data: %s", error->message);
+          g_ptr_array_remove_fast (write_data->stored_selection->pending_writes,
+                                   write_data);
+        }
 
       g_error_free (error);
-      g_ptr_array_remove_fast (write_data->stored_selection->pending_writes,
-                               write_data);
       return;
     }
 
@@ -859,7 +860,14 @@ gdk_wayland_selection_store (GdkWindow    *window,
     }
 
   stored_selection_add_data (stored_selection, mode, data, len);
-  stored_selection_notify_write (stored_selection);
+
+  if (stored_selection->data)
+    stored_selection_notify_write (stored_selection);
+  else
+    {
+      g_ptr_array_remove_fast (selection->stored_selections,
+                               stored_selection);
+    }
 
   /* Handle the next GDK_SELECTION_REQUEST / store, if any */
   selection->current_request_selection = GDK_NONE;
