@@ -1011,6 +1011,7 @@ update_places (GtkPlacesSidebar *sidebar)
   gchar *tooltip;
   GList *network_mounts, *network_volumes;
   GIcon *new_bookmark_icon;
+  GList *children;
 #ifdef HAVE_CLOUDPROVIDERS
   GList *cloud_providers;
   GList *cloud_providers_accounts;
@@ -1033,9 +1034,10 @@ update_places (GtkPlacesSidebar *sidebar)
   /* Reset drag state, just in case we update the places while dragging or
    * ending a drag */
   stop_drop_feedback (sidebar);
-  gtk_container_foreach (GTK_CONTAINER (sidebar->list_box),
-                         (GtkCallback) gtk_widget_destroy,
-                         NULL);
+  children = gtk_container_get_children (GTK_CONTAINER (sidebar->list_box));
+  for (l = children; l; l = l->next)
+    gtk_container_remove (GTK_CONTAINER (sidebar->list_box), l->data);
+  g_list_free (children);
 
   network_mounts = network_volumes = NULL;
 
@@ -1708,7 +1710,8 @@ stop_drop_feedback (GtkPlacesSidebar *sidebar)
 
   if (sidebar->row_placeholder != NULL)
     {
-      gtk_widget_destroy (sidebar->row_placeholder);
+      if (gtk_widget_get_parent (sidebar->row_placeholder) != NULL)
+        gtk_container_remove (GTK_CONTAINER (sidebar), sidebar->row_placeholder);
       sidebar->row_placeholder = NULL;
     }
 
@@ -3493,7 +3496,7 @@ build_popup_menu_using_gmenu (GtkSidebarRow *row)
         }
       add_actions (sidebar);
       if (sidebar->popover)
-        gtk_widget_destroy (sidebar->popover);
+        gtk_widget_unparent (sidebar->popver);
 
       sidebar->popover = gtk_popover_new_from_model (GTK_WIDGET (sidebar),
                                                      G_MENU_MODEL (menu));
@@ -3706,7 +3709,7 @@ on_row_dragged (GtkGestureDrag *gesture,
       sidebar->dragging_over = TRUE;
 
       content = gdk_content_provider_new_typed (GTK_TYPE_SIDEBAR_ROW, sidebar->drag_row);
- 
+
       surface = gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (sidebar)));
       device = gtk_gesture_get_device (GTK_GESTURE (gesture));
 
@@ -3720,6 +3723,7 @@ on_row_dragged (GtkGestureDrag *gesture,
       gtk_widget_hide (sidebar->drag_row);
 
       drag_widget = GTK_WIDGET (gtk_sidebar_row_clone (GTK_SIDEBAR_ROW (sidebar->drag_row)));
+      g_object_ref_sink (drag_widget);
       sidebar->drag_row_height = allocation.height;
       gtk_widget_set_size_request (drag_widget, allocation.width, allocation.height);
 
@@ -3729,7 +3733,7 @@ on_row_dragged (GtkGestureDrag *gesture,
       gtk_drag_icon_set_from_paintable (drag, paintable, sidebar->drag_row_x, sidebar->drag_row_y);
       g_object_unref (paintable);
 
-      g_object_set_data_full (G_OBJECT (drag), "row-widget", drag_widget, (GDestroyNotify)gtk_widget_destroy);
+      g_object_set_data_full (G_OBJECT (drag), "row-widget", drag_widget, (GDestroyNotify)g_object_unref);
 
       g_object_unref (drag);
     }
@@ -4205,15 +4209,11 @@ gtk_places_sidebar_dispose (GObject *object)
       sidebar->bookmarks_manager = NULL;
     }
 
-  if (sidebar->popover)
-    {
-      gtk_widget_destroy (sidebar->popover);
-      sidebar->popover = NULL;
-    }
+  g_clear_pointer (&sidebar->popover, gtk_widget_unparent);
 
   if (sidebar->rename_popover)
     {
-      gtk_widget_destroy (sidebar->rename_popover);
+      gtk_widget_unparent (sidebar->rename_popover);
       sidebar->rename_popover = NULL;
       sidebar->rename_entry = NULL;
       sidebar->rename_button = NULL;
