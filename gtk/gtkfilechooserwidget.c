@@ -7201,7 +7201,8 @@ list_selection_changed (GtkTreeSelection     *selection,
   if (gtk_tree_view_get_model (GTK_TREE_VIEW (priv->browse_files_tree_view)) == NULL)
     return;
 
-  if (priv->location_entry)
+  if (priv->location_entry &&
+      priv->browse_files_model)
     update_chooser_entry (impl);
 
   location_bar_update (impl);
