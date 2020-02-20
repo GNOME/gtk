@@ -35,6 +35,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkgesturedrag.h"
+#include "gtkeventcontrollerfocus.h"
 #include "gtkeventcontrollerkey.h"
 
 #include "a11y/gtktreeviewaccessibleprivate.h"
@@ -831,11 +832,9 @@ gtk_tree_view_column_cell_layout_get_area (GtkCellLayout   *cell_layout)
 
 static void
 focus_in (GtkEventControllerKey *controller,
-          GtkCrossingDirection   direction,
           GtkTreeViewColumn     *column)
 {
-  if (direction == GTK_CROSSING_IN)
-    _gtk_tree_view_set_focus_column (GTK_TREE_VIEW (column->priv->tree_view), column);
+  _gtk_tree_view_set_focus_column (GTK_TREE_VIEW (column->priv->tree_view), column);
 }
 
 /* Button handling code
@@ -865,8 +864,8 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
   gtk_widget_add_controller (priv->button, controller);
 
-  controller = gtk_event_controller_key_new ();
-  g_signal_connect (controller, "focus-change", G_CALLBACK (focus_in), tree_column);
+  controller = gtk_event_controller_focus_new ();
+  g_signal_connect (controller, "enter", G_CALLBACK (focus_in), tree_column);
   gtk_widget_add_controller (priv->button, controller);
 
   priv->frame = gtk_frame_new (NULL);

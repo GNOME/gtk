@@ -218,6 +218,7 @@ gtk_public_sources = files([
   'gtkentrybuffer.c',
   'gtkentrycompletion.c',
   'gtkeventcontroller.c',
+  'gtkeventcontrollerfocus.c',
   'gtkeventcontrollerkey.c',
   'gtkeventcontrollerlegacy.c',
   'gtkeventcontrollermotion.c',

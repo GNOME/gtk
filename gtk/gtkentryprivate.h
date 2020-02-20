@@ -78,6 +78,7 @@ struct _GtkEntryCompletionPrivate
   gchar *case_normalized_key;
 
   GtkEventController *entry_key_controller;
+  GtkEventController *entry_focus_controller;
 
   /* only used by GtkEntry when attached: */
   GtkWidget *popup_window;
