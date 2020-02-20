@@ -15,7 +15,7 @@ widget_name (GtkWidget *widget)
 
 static void
 focus_in (GtkEventControllerFocus *key,
-          GString               *s)
+          GString                 *s)
 {
   GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (key));
 
@@ -27,7 +27,7 @@ focus_in (GtkEventControllerFocus *key,
 
 static void
 focus_out (GtkEventControllerFocus *key,
-          GString               *s)
+           GString                 *s)
 {
   GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (key));
 
@@ -46,6 +46,15 @@ add_controller (GtkWidget *widget, GString *s)
   g_signal_connect (controller, "enter", G_CALLBACK (focus_in), s);
   g_signal_connect (controller, "leave", G_CALLBACK (focus_out), s);
   gtk_widget_add_controller (widget, controller);
+}
+
+static void
+assert_result (const char *s, const char *expected)
+{
+  if (strcmp (s, expected) != 0 && g_test_verbose ())
+    g_print ("Expected:\n%s", expected);
+
+  g_assert_cmpstr (s, ==, expected);
 }
 
 static void
@@ -117,10 +126,8 @@ test_window_focus (void)
   if (g_test_verbose ())
     g_print ("-> box\n%s\n", s->str);
 
-  g_assert_cmpstr (s->str, ==,
-"window: focus-in is-focus: 0 contains-focus: 1\n"
-"box: focus-in is-focus: 1 contains-focus: 1\n"
-                  );
+  assert_result (s->str, "window: focus-in is-focus: 0 contains-focus: 1\n"
+"box: focus-in is-focus: 1 contains-focus: 1\n");
   g_string_truncate (s, 0);
 
   gtk_widget_grab_focus (entry1);
@@ -128,14 +135,9 @@ test_window_focus (void)
   if (g_test_verbose ())
     g_print ("box -> entry1\n%s\n", s->str);
 
-  g_assert_cmpstr (s->str, ==,
-"box: focus-out is-focus: 0 contains-focus: 0\n"
-"window: focus-out is-focus: 0 contains-focus: 0\n"
-"window: focus-in is-focus: 0 contains-focus: 1\n"
-"box: focus-in is-focus: 0 contains-focus: 1\n"
+  assert_result (s->str,
 "box1: focus-in is-focus: 0 contains-focus: 1\n"
-"entry1: focus-in is-focus: 1 contains-focus: 1\n"
-                  );
+"entry1: focus-in is-focus: 1 contains-focus: 1\n");
 
   g_string_truncate (s, 0);
 
@@ -146,16 +148,11 @@ test_window_focus (void)
   if (g_test_verbose ())
     g_print ("entry1 -> entry2\n%s\n", s->str);
 
-  g_assert_cmpstr (s->str, ==,
-"entry1: focus-out is-focus: 0 contains-focus: 0\n"
-"box1: focus-out is-focus: 0 contains-focus: 0\n"
-"box: focus-out is-focus: 0 contains-focus: 0\n"
-"window: focus-out is-focus: 0 contains-focus: 0\n"
-"window: focus-in is-focus: 0 contains-focus: 1\n"
-"box: focus-in is-focus: 0 contains-focus: 1\n"
+  assert_result (s->str,
+"entry1: focus-out is-focus: 1 contains-focus: 1\n"
+"box1: focus-out is-focus: 0 contains-focus: 1\n"
 "box2: focus-in is-focus: 0 contains-focus: 1\n"
-"entry2: focus-in is-focus: 1 contains-focus: 1\n"
-                  );
+"entry2: focus-in is-focus: 1 contains-focus: 1\n");
 
   g_string_truncate (s, 0);
 
@@ -166,14 +163,10 @@ test_window_focus (void)
   if (g_test_verbose ())
     g_print ("entry2 -> box\n%s", s->str);
 
-  g_assert_cmpstr (s->str, ==,
-"entry2: focus-out is-focus: 0 contains-focus: 0\n"
-"box2: focus-out is-focus: 0 contains-focus: 0\n"
-"box: focus-out is-focus: 0 contains-focus: 0\n"
-"window: focus-out is-focus: 0 contains-focus: 0\n"
-"window: focus-in is-focus: 0 contains-focus: 1\n"
-"box: focus-in is-focus: 1 contains-focus: 1\n"
-                  );
+  assert_result (s->str,
+"entry2: focus-out is-focus: 1 contains-focus: 1\n"
+"box2: focus-out is-focus: 0 contains-focus: 1\n"
+                );
 
   g_string_truncate (s, 0);
 
