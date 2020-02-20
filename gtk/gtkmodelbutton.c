@@ -44,6 +44,7 @@
 #include "gtkactionable.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtkeventcontrollerfocus.h"
 #include "gtknative.h"
 
 /**
@@ -1349,21 +1350,17 @@ motion_cb (GtkEventController *controller,
 }
 
 static void
-focus_change_cb (GtkEventController   *controller,
-                 GtkCrossingDirection  direction,
-                 gpointer              data)
+focus_in_cb (GtkEventController   *controller,
+             gpointer              data)
 {
   GtkWidget *target;
   GtkWidget *popover;
 
-  if (direction == GTK_CROSSING_IN)
-    {
-      target = gtk_event_controller_get_widget (controller);
-      popover = gtk_widget_get_ancestor (target, GTK_TYPE_POPOVER_MENU);
+  target = gtk_event_controller_get_widget (controller);
+  popover = gtk_widget_get_ancestor (target, GTK_TYPE_POPOVER_MENU);
 
-      if (popover)
-        gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (popover), target);
-    }
+  if (popover)
+    gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (popover), target);
 }
 
 static void
@@ -1390,8 +1387,8 @@ gtk_model_button_init (GtkModelButton *self)
   g_signal_connect (controller, "motion", G_CALLBACK (motion_cb), self);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
-  controller = gtk_event_controller_key_new ();
-  g_signal_connect (controller, "focus-change", G_CALLBACK (focus_change_cb), NULL);
+  controller = gtk_event_controller_focus_new ();
+  g_signal_connect (controller, "enter", G_CALLBACK (focus_in_cb), NULL);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   gesture = gtk_gesture_click_new ();

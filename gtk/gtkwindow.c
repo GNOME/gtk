@@ -41,6 +41,7 @@
 #include "gtkcssshadowvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkdragdest.h"
+#include "gtkeventcontrollerfocus.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkgesturedrag.h"
@@ -394,8 +395,8 @@ static void gtk_window_size_allocate      (GtkWidget         *widget,
                                            int                height,
                                            int                  baseline);
 static gboolean gtk_window_close_request  (GtkWindow         *window);
-static void gtk_window_focus_change       (GtkWidget            *widget,
-                                           GtkCrossingDirection  direction);
+static void gtk_window_focus_in           (GtkWidget         *widget);
+static void gtk_window_focus_out          (GtkWidget         *widget);
 static gboolean gtk_window_key_pressed    (GtkWidget         *widget,
                                            guint              keyval,
                                            guint              keycode,
@@ -1772,6 +1773,7 @@ gtk_window_init (GtkWindow *window)
   GtkCssNode *widget_node;
   GdkSeat *seat;
   GtkEventController *motion_controller;
+  GtkEventController *controller;
 #ifdef GDK_WINDOWING_X11
   GtkDropTarget *dest;
 #endif
@@ -1843,13 +1845,17 @@ gtk_window_init (GtkWindow *window)
 
   priv->key_controller = gtk_event_controller_key_new ();
   gtk_event_controller_set_propagation_phase (priv->key_controller, GTK_PHASE_CAPTURE);
-  g_signal_connect_swapped (priv->key_controller, "focus-change",
-                            G_CALLBACK (gtk_window_focus_change), window);
   g_signal_connect_swapped (priv->key_controller, "key-pressed",
                             G_CALLBACK (gtk_window_key_pressed), window);
   g_signal_connect_swapped (priv->key_controller, "key-released",
                             G_CALLBACK (gtk_window_key_released), window);
   gtk_widget_add_controller (widget, priv->key_controller);
+  controller = gtk_event_controller_focus_new ();
+  g_signal_connect_swapped (controller, "enter",
+                            G_CALLBACK (gtk_window_focus_in), window);
+  g_signal_connect_swapped (controller, "leave",
+                            G_CALLBACK (gtk_window_focus_out), window);
+  gtk_widget_add_controller (widget, controller);
 
   /* Shared constraint solver */
   priv->constraint_solver = gtk_constraint_solver_new ();
@@ -6120,33 +6126,33 @@ gtk_window_has_mnemonic_modifier_pressed (GtkWindow *window)
 }
 
 static void
-gtk_window_focus_change (GtkWidget            *widget,
-                         GtkCrossingDirection  direction)
+gtk_window_focus_in (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
 
-  if (direction == GTK_CROSSING_IN)
+  /* It appears spurious focus in events can occur when
+   * the window is hidden. So we'll just check to see if
+   * the window is visible before actually handling the
+   * event
+   */
+  if (gtk_widget_get_visible (widget))
     {
-      /* It appears spurious focus in events can occur when
-       * the window is hidden. So we'll just check to see if
-       * the window is visible before actually handling the
-       * event
-       */
-      if (gtk_widget_get_visible (widget))
-        {
-          _gtk_window_set_is_active (window, TRUE);
+      _gtk_window_set_is_active (window, TRUE);
 
-          if (gtk_window_has_mnemonic_modifier_pressed (window))
-            _gtk_window_schedule_mnemonics_visible (window);
-        }
+      if (gtk_window_has_mnemonic_modifier_pressed (window))
+        _gtk_window_schedule_mnemonics_visible (window);
     }
-  else
-    {
-      _gtk_window_set_is_active (window, FALSE);
+}
 
-      /* set the mnemonic-visible property to false */
-      gtk_window_set_mnemonics_visible (window, FALSE);
-    }
+static void
+gtk_window_focus_out (GtkWidget *widget)
+{
+  GtkWindow *window = GTK_WINDOW (widget);
+
+  _gtk_window_set_is_active (window, FALSE);
+
+  /* set the mnemonic-visible property to false */
+  gtk_window_set_mnemonics_visible (window, FALSE);
 }
 
 static void

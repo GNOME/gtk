@@ -39,6 +39,7 @@
 #include "gtkimage.h"
 #include "gtktext.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtkeventcontrollerfocus.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerscroll.h"
 #include "gtkgestureclick.h"
@@ -917,14 +918,12 @@ key_controller_key_released (GtkEventControllerKey *key,
 }
 
 static void
-key_controller_focus_change (GtkEventController   *controller,
-                             GtkCrossingDirection  direction,
-                             GtkSpinButton        *spin_button)
+key_controller_focus_out (GtkEventController   *controller,
+                          GtkSpinButton        *spin_button)
 {
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
 
-  if (direction == GTK_CROSSING_OUT &&
-      gtk_editable_get_editable (GTK_EDITABLE (priv->entry)))
+  if (gtk_editable_get_editable (GTK_EDITABLE (priv->entry)))
     gtk_spin_button_update (spin_button);
 }
 
@@ -1012,8 +1011,10 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "key-released",
                     G_CALLBACK (key_controller_key_released), spin_button);
-  g_signal_connect (controller, "focus-change",
-                    G_CALLBACK (key_controller_focus_change), spin_button);
+  gtk_widget_add_controller (GTK_WIDGET (spin_button), controller);
+  controller = gtk_event_controller_focus_new ();
+  g_signal_connect (controller, "leave",
+                    G_CALLBACK (key_controller_focus_out), spin_button);
   gtk_widget_add_controller (GTK_WIDGET (spin_button), controller);
 }
 

@@ -404,8 +404,8 @@ static gboolean gtk_text_view_key_controller_key_pressed  (GtkEventControllerKey
 static void     gtk_text_view_key_controller_im_update    (GtkEventControllerKey *controller,
                                                            GtkTextView           *text_view);
 
-static void gtk_text_view_focus_change         (GtkWidget            *widget,
-                                                GtkCrossingDirection  direction);
+static void gtk_text_view_focus_in             (GtkWidget            *widget);
+static void gtk_text_view_focus_out            (GtkWidget            *widget);
 static void gtk_text_view_motion               (GtkEventController *controller,
                                                 double              x,
                                                 double              y,
@@ -1695,12 +1695,15 @@ gtk_text_view_init (GtkTextView *text_view)
   g_signal_connect (priv->key_controller, "im-update",
                     G_CALLBACK (gtk_text_view_key_controller_im_update),
                     widget);
-  g_signal_connect_swapped (priv->key_controller, "focus-change",
-                            G_CALLBACK (gtk_text_view_focus_change),
-                            widget);
   gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (priv->key_controller),
                                            priv->im_context);
   gtk_widget_add_controller (widget, priv->key_controller);
+  controller = gtk_event_controller_focus_new ();
+  g_signal_connect_swapped (controller, "enter",
+                            G_CALLBACK (gtk_text_view_focus_in), widget);
+  g_signal_connect_swapped (controller, "leave",
+                            G_CALLBACK (gtk_text_view_focus_out), widget);
+  gtk_widget_add_controller (widget, controller);
 
   priv->selection_node = gtk_css_node_new ();
   gtk_css_node_set_name (priv->selection_node, g_quark_from_static_string ("selection"));
@@ -5307,65 +5310,66 @@ keymap_direction_changed (GdkKeymap   *keymap,
 }
 
 static void
-gtk_text_view_focus_change (GtkWidget             *widget,
-                            GtkCrossingDirection   direction)
+gtk_text_view_focus_in (GtkWidget *widget)
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
   GtkTextViewPrivate *priv = text_view->priv;
 
-  if (direction == GTK_CROSSING_IN)
+  gtk_widget_queue_draw (widget);
+
+  DV(g_print (G_STRLOC": focus_in\n"));
+
+  gtk_text_view_reset_blink_time (text_view);
+
+  if (cursor_visible (text_view) && priv->layout)
     {
-      gtk_widget_queue_draw (widget);
-
-      DV(g_print (G_STRLOC": focus_in\n"));
-
-      gtk_text_view_reset_blink_time (text_view);
-
-      if (cursor_visible (text_view) && priv->layout)
-        {
-          gtk_text_layout_set_cursor_visible (priv->layout, TRUE);
-          gtk_text_view_check_cursor_blink (text_view);
-        }
-
-      g_signal_connect (gdk_display_get_keymap (gtk_widget_get_display (widget)),
-                        "direction-changed",
-                        G_CALLBACK (keymap_direction_changed), text_view);
-      gtk_text_view_check_keymap_direction (text_view);
-
-      if (priv->editable)
-        {
-          priv->need_im_reset = TRUE;
-          gtk_im_context_focus_in (priv->im_context);
-        }
+      gtk_text_layout_set_cursor_visible (priv->layout, TRUE);
+      gtk_text_view_check_cursor_blink (text_view);
     }
-  else
-    { 
-      gtk_text_view_end_selection_drag (text_view);
 
-      gtk_widget_queue_draw (widget);
+  g_signal_connect (gdk_display_get_keymap (gtk_widget_get_display (widget)),
+                    "direction-changed",
+                    G_CALLBACK (keymap_direction_changed), text_view);
+  gtk_text_view_check_keymap_direction (text_view);
 
-      DV(g_print (G_STRLOC": focus_out\n"));
+  if (priv->editable)
+    {
+      priv->need_im_reset = TRUE;
+      gtk_im_context_focus_in (priv->im_context);
+    }
+}
 
-      if (cursor_visible (text_view) && priv->layout)
-        {
-          gtk_text_view_check_cursor_blink (text_view);
-          gtk_text_layout_set_cursor_visible (priv->layout, FALSE);
-        }
+static void
+gtk_text_view_focus_out (GtkWidget *widget)
+{
+  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+  GtkTextViewPrivate *priv = text_view->priv;
 
-      g_signal_handlers_disconnect_by_func (gdk_display_get_keymap (gtk_widget_get_display (widget)),
-                                            keymap_direction_changed,
-                                            text_view);
-      gtk_text_view_selection_bubble_popup_unset (text_view);
+  gtk_text_view_end_selection_drag (text_view);
 
-      if (priv->text_handle)
-        _gtk_text_handle_set_mode (priv->text_handle,
-                                   GTK_TEXT_HANDLE_MODE_NONE);
+  gtk_widget_queue_draw (widget);
 
-      if (priv->editable)
-        {
-          priv->need_im_reset = TRUE;
-          gtk_im_context_focus_out (priv->im_context);
-        }
+  DV(g_print (G_STRLOC": focus_out\n"));
+
+  if (cursor_visible (text_view) && priv->layout)
+    {
+      gtk_text_view_check_cursor_blink (text_view);
+      gtk_text_layout_set_cursor_visible (priv->layout, FALSE);
+    }
+
+  g_signal_handlers_disconnect_by_func (gdk_display_get_keymap (gtk_widget_get_display (widget)),
+                                        keymap_direction_changed,
+                                        text_view);
+  gtk_text_view_selection_bubble_popup_unset (text_view);
+
+  if (priv->text_handle)
+    _gtk_text_handle_set_mode (priv->text_handle,
+                               GTK_TEXT_HANDLE_MODE_NONE);
+
+  if (priv->editable)
+    {
+      priv->need_im_reset = TRUE;
+      gtk_im_context_focus_out (priv->im_context);
     }
 }
 
