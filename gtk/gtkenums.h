@@ -954,16 +954,6 @@ typedef enum
   GTK_EVENT_SEQUENCE_DENIED
 } GtkEventSequenceState;
 
-typedef enum {
-  GTK_CROSSING_FOCUS,
-  GTK_CROSSING_POINTER
-} GtkCrossingType;
-
-typedef enum {
-  GTK_CROSSING_IN,
-  GTK_CROSSING_OUT
-} GtkCrossingDirection;
-
 /**
  * GtkPanDirection:
  * @GTK_PAN_DIRECTION_LEFT: panned towards the left

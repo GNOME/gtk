@@ -304,48 +304,6 @@ gtk_event_controller_motion_new (void)
 }
 
 /**
- * gtk_event_controller_motion_get_pointer_origin:
- * @controller: a #GtkEventControllerMotion
- *
- * Returns the widget that contained the pointer before.
- *
- * This function can only be used in handlers for the
- * #GtkEventControllerMotion::enter or
- * #GtkEventControllerMotion::leave signals.
- *
- * Returns: (transfer none): the previous pointer focus
- */
-GtkWidget *
-gtk_event_controller_motion_get_pointer_origin (GtkEventControllerMotion *controller)
-{
-  g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER_MOTION (controller), NULL);
-  g_return_val_if_fail (controller->current_crossing != NULL, NULL);
-
-  return controller->current_crossing->old_target;
-}
-
-/**
- * gtk_event_controller_motion_get_pointer_target:
- * @controller: a #GtkEventControllerMotion
- *
- * Returns the widget that will contain the pointer afterwards.
- *
- * This function can only be used in handlers for the
- * #GtkEventControllerMotion::enter or
- * #GtkEventControllerMotion::leave signals.
- *
- * Returns: (transfer none): the next pointer focus
- */
-GtkWidget *
-gtk_event_controller_motion_get_pointer_target (GtkEventControllerMotion *controller)
-{
-  g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER_MOTION (controller), NULL);
-  g_return_val_if_fail (controller->current_crossing != NULL, NULL);
-
-  return controller->current_crossing->new_target;
-}
-
-/**
  * gtk_event_controller_motion_contains_pointer:
  * @self: a #GtkEventControllerMotion
  *

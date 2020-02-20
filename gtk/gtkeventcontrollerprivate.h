@@ -22,6 +22,47 @@
 
 #include "gtkeventcontroller.h"
 
+typedef enum {
+  GTK_CROSSING_FOCUS,
+  GTK_CROSSING_POINTER
+} GtkCrossingType;
+
+typedef enum {
+  GTK_CROSSING_IN,
+  GTK_CROSSING_OUT
+} GtkCrossingDirection;
+
+typedef struct _GtkCrossingData GtkCrossingData;
+
+/**
+ * GtkCrossingData:
+ * @type: the type of crossing event
+ * @direction: whether this is a focus-in or focus-out event
+ * @mode: the crossing mode
+ * @old_target: the old target
+ * @old_descendent: the direct child of the receiving widget that
+ *     is an ancestor of @old_target, or %NULL if @old_target is not
+ *     a descendent of the receiving widget
+ * @new_target: the new target
+ * @new_descendent: the direct child of the receiving widget that
+ *     is an ancestor of @new_target, or %NULL if @new_target is not
+ *     a descendent of the receiving widget
+ *
+ * The struct that is passed to gtk_event_controller_handle_crossing().
+ *
+ * The @old_target and @new_target fields are set to the old or new
+ * focus or hover location.
+ */
+struct _GtkCrossingData {
+  GtkCrossingType type;
+  GtkCrossingDirection direction;
+  GdkCrossingMode mode;
+  GtkWidget *old_target;
+  GtkWidget *old_descendent;
+  GtkWidget *new_target;
+  GtkWidget *new_descendent;
+};
+
 struct _GtkEventController
 {
   GObject parent_instance;
@@ -57,5 +98,15 @@ struct _GtkEventControllerClass
 };
 
 GtkWidget *gtk_event_controller_get_target (GtkEventController *controller);
+
+gboolean   gtk_event_controller_handle_event   (GtkEventController *controller,
+                                                GdkEvent           *event,
+                                                GtkWidget          *target,
+                                                double              x,
+                                                double              y);
+void       gtk_event_controller_handle_crossing (GtkEventController    *controller,
+                                                 const GtkCrossingData *crossing,
+                                                 double                 x,
+                                                 double                 y);
 
 #endif /* __GTK_EVENT_CONTROLLER_PRIVATE_H__ */

@@ -47,15 +47,6 @@ GDK_AVAILABLE_IN_ALL
 GtkEventController *gtk_event_controller_focus_new (void);
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget *         gtk_event_controller_focus_get_focus_origin   (GtkEventControllerFocus  *controller);
-GDK_AVAILABLE_IN_ALL
-GtkWidget *         gtk_event_controller_focus_get_focus_target   (GtkEventControllerFocus  *controller);
-GDK_AVAILABLE_IN_ALL
-GtkWidget *         gtk_event_controller_focus_get_old_focus_child (GtkEventControllerFocus  *controller);
-GDK_AVAILABLE_IN_ALL
-GtkWidget *         gtk_event_controller_focus_get_new_focus_child (GtkEventControllerFocus  *controller);
-
-GDK_AVAILABLE_IN_ALL
 gboolean            gtk_event_controller_focus_contains_focus     (GtkEventControllerFocus  *self);
 GDK_AVAILABLE_IN_ALL
 gboolean            gtk_event_controller_focus_is_focus           (GtkEventControllerFocus  *self);
