@@ -781,20 +781,16 @@ add_custom_color (GtkColorChooserWidget *cc,
                   const GdkRGBA         *color)
 {
   GtkColorChooserWidgetPrivate *priv = gtk_color_chooser_widget_get_instance_private (cc);
-  GtkWidget *last;
   GtkWidget *p;
   GList *children;
 
   children = gtk_container_get_children (GTK_CONTAINER (priv->custom));
   if (g_list_length (children) >= 9)
     {
-      last = g_list_last (children)->data;
-      if (last == GTK_WIDGET (priv->current))
-        priv->current = NULL;
+      GtkWidget *last = gtk_widget_get_last_child (priv->custom);
 
-      gtk_widget_destroy (last);
+      gtk_container_remove (GTK_CONTAINER (priv->custom), last);
     }
-
   g_list_free (children);
 
   p = gtk_color_swatch_new ();
