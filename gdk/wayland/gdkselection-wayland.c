@@ -734,13 +734,14 @@ async_write_data_cb (GObject      *object,
                                                 res, &error);
   if (error)
     {
-      if (error->domain != G_IO_ERROR ||
-          error->code != G_IO_ERROR_CANCELLED)
-        g_warning ("Error writing selection data: %s", error->message);
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        {
+          g_warning ("Error writing selection data: %s", error->message);
+          g_ptr_array_remove_fast (write_data->stored_selection->pending_writes,
+                                   write_data);
+        }
 
       g_error_free (error);
-      g_ptr_array_remove_fast (write_data->stored_selection->pending_writes,
-                               write_data);
       return;
     }
 
