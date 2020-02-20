@@ -534,8 +534,6 @@ union _GdkEvent
   GdkEventPadGroupMode      pad_group_mode;
 };
 
-gboolean       check_event_sanity (GdkEvent *event);
-
 GdkEvent * gdk_event_button_new         (GdkEventType     type,
                                          GdkSurface      *surface,
                                          GdkDevice       *device,
