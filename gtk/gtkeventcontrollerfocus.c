@@ -296,64 +296,6 @@ gtk_event_controller_focus_new (void)
 }
 
 /**
- * gtk_event_controller_focus_get_focus_origin:
- * @controller: a #GtkEventControllerFocus
- *
- * Returns the widget that was holding focus before.
- *
- * This function can only be used in handlers for the
- * #GtkEventControllerFocus::focus-in and #GtkEventControllerFocus::focus-out signals.
- *
- * Returns: (transfer none): the previous focus
- */
-GtkWidget *
-gtk_event_controller_focus_get_focus_origin (GtkEventControllerFocus *controller)
-{
-  g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER_FOCUS (controller), NULL);
-  g_return_val_if_fail (controller->current_crossing != NULL, NULL);
-
-  return controller->current_crossing->old_target;
-}
-
-/**
- * gtk_event_controller_focus_get_focus_target:
- * @controller: a #GtkEventControllerFocus
- *
- * Returns the widget that will be holding focus afterwards.
- *
- * This function can only be used in handlers for the
- * #GtkEventControllerFocus::focus-in and #GtkEventControllerFocus::focus-out signals.
- *
- * Returns: (transfer none): the next focus
- */
-GtkWidget *
-gtk_event_controller_focus_get_focus_target (GtkEventControllerFocus *controller)
-{
-  g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER_FOCUS (controller), NULL);
-  g_return_val_if_fail (controller->current_crossing != NULL, NULL);
-
-  return controller->current_crossing->new_target;
-}
-
-GtkWidget *
-gtk_event_controller_focus_get_old_focus_child (GtkEventControllerFocus *controller)
-{
-  g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER_FOCUS (controller), NULL);
-  g_return_val_if_fail (controller->current_crossing != NULL, NULL);
-
-  return controller->current_crossing->old_descendent;
-}
-
-GtkWidget *
-gtk_event_controller_focus_get_new_focus_child (GtkEventControllerFocus *controller)
-{
-  g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER_FOCUS (controller), NULL);
-  g_return_val_if_fail (controller->current_crossing != NULL, NULL);
-
-  return controller->current_crossing->new_descendent;
-}
-
-/**
  * gtk_event_controller_focus_contains_focus:
  * @self: a #GtkEventControllerFocus
  *
