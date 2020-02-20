@@ -802,7 +802,7 @@ gtk_header_bar_dispose (GObject *object)
 
   if (priv->label_sizing_box)
     {
-      gtk_widget_destroy (priv->label_sizing_box);
+      g_object_ref_sink (priv->label_sizing_box);
       g_clear_object (&priv->label_sizing_box);
     }
 
