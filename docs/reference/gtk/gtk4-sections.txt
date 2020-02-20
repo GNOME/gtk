@@ -6170,10 +6170,6 @@ gtk_event_controller_key_set_im_context
 gtk_event_controller_key_get_im_context
 gtk_event_controller_key_forward
 gtk_event_controller_key_get_group
-gtk_event_controller_key_get_focus_origin
-gtk_event_controller_key_get_focus_target
-gtk_event_controller_key_contains_focus
-gtk_event_controller_key_is_focus
 
 <SUBSECTION Standard>
 GTK_TYPE_EVENT_CONTROLLER_KEY
@@ -6185,6 +6181,28 @@ GTK_EVENT_CONTROLLER_KEY_GET_CLASS
 
 <SUBSECTION Private>
 gtk_event_controller_key_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkeventcontrollerfocus</FILE>
+<TITLE>GtkEventControllerFocus</TITLE>
+GtkEventControllerFocus
+gtk_event_controller_focus_new
+gtk_event_controller_focus_get_focus_origin
+gtk_event_controller_focus_get_focus_target
+gtk_event_controller_focus_contains_focus
+gtk_event_controller_focus_is_focus
+
+<SUBSECTION Standard>
+GTK_TYPE_EVENT_CONTROLLER_FOCUS
+GTK_EVENT_CONTROLLER_FOCUS
+GTK_EVENT_CONTROLLER_FOCUS_CLASS
+GTK_IS_EVENT_CONTROLL_FOCUS
+GTK_IS_EVENT_CONTROLLER_FOCUS_CLASS
+GTK_EVENT_CONTROLLER_FOCUS_GET_CLASS
+
+<SUBSECTION Private>
+gtk_event_controller_focus_get_type
 </SECTION>
 
 <SECTION>

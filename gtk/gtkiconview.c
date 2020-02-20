@@ -166,10 +166,7 @@ static void             gtk_icon_view_motion                    (GtkEventControl
                                                                  double              x,
                                                                  double              y,
                                                                  gpointer            user_data);
-static void             gtk_icon_view_pointer                   (GtkEventController   *controller,
-                                                                 GtkCrossingDirection  direction,
-                                                                 double                x,
-                                                                 double                y,
+static void             gtk_icon_view_leave                     (GtkEventController   *controller,
                                                                  GdkCrossingMode       mode,
                                                                  gpointer              user_data);
 static void             gtk_icon_view_button_press              (GtkGestureClick *gesture,
@@ -967,10 +964,8 @@ gtk_icon_view_init (GtkIconView *icon_view)
   gtk_widget_add_controller (GTK_WIDGET (icon_view), GTK_EVENT_CONTROLLER (gesture));
 
   controller = gtk_event_controller_motion_new ();
-  g_signal_connect (controller, "pointer-change", G_CALLBACK (gtk_icon_view_pointer),
-                    icon_view);
-  g_signal_connect (controller, "motion", G_CALLBACK (gtk_icon_view_motion),
-                    icon_view);
+  g_signal_connect (controller, "leave", G_CALLBACK (gtk_icon_view_leave), icon_view);
+  g_signal_connect (controller, "motion", G_CALLBACK (gtk_icon_view_motion), icon_view);
   gtk_widget_add_controller (GTK_WIDGET (icon_view), controller);
 
   controller = gtk_event_controller_key_new ();
@@ -1883,26 +1878,20 @@ gtk_icon_view_motion (GtkEventController *controller,
 }
 
 static void
-gtk_icon_view_pointer (GtkEventController   *controller,
-                       GtkCrossingDirection  direction,
-                       double                x,
-                       double                y,
-                       GdkCrossingMode       mode,
-                       gpointer              user_data)
+gtk_icon_view_leave(GtkEventController   *controller,
+                    GdkCrossingMode       mode,
+                    gpointer              user_data)
 {
   GtkIconView *icon_view;
   GtkIconViewPrivate *priv;
 
-  if (direction == GTK_CROSSING_OUT)
-    {
-      icon_view = GTK_ICON_VIEW (user_data);
-      priv = icon_view->priv;
+  icon_view = GTK_ICON_VIEW (user_data);
+  priv = icon_view->priv;
 
-      if (priv->last_prelight)
-        {
-          gtk_icon_view_queue_draw_item (icon_view, priv->last_prelight);
-          priv->last_prelight = NULL;
-        }
+  if (priv->last_prelight)
+    {
+      gtk_icon_view_queue_draw_item (icon_view, priv->last_prelight);
+      priv->last_prelight = NULL;
     }
 }
 
