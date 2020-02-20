@@ -54,8 +54,9 @@ struct _GtkEventControllerMotionClass
 };
 
 enum {
+  ENTER,
+  LEAVE,
   MOTION,
-  POINTER_CHANGE,
   N_SIGNALS
 };
 
@@ -91,12 +92,16 @@ gtk_event_controller_motion_handle_event (GtkEventController *controller,
 
 static void
 update_pointer_focus (GtkEventController    *controller,
-                      const GtkCrossingData *crossing)
+                      const GtkCrossingData *crossing,
+                      double                 x,
+                      double                 y)
 {
   GtkEventControllerMotion *motion = GTK_EVENT_CONTROLLER_MOTION (controller);
   GtkWidget *widget = gtk_event_controller_get_widget (controller);
   gboolean is_pointer = FALSE;
   gboolean contains_pointer = FALSE;
+  gboolean enter = FALSE;
+  gboolean leave = FALSE;
 
   if (crossing->direction == GTK_CROSSING_IN)
     {
@@ -105,6 +110,17 @@ update_pointer_focus (GtkEventController    *controller,
       if (crossing->new_target != NULL)
         contains_pointer = TRUE;
     }
+
+  if (motion->contains_pointer != contains_pointer)
+    {
+      if (contains_pointer)
+        enter = TRUE;
+      else
+        leave = TRUE;
+    }
+
+  if (enter)
+    g_signal_emit (controller, signals[ENTER], 0, x, y, crossing->mode);
 
   g_object_freeze_notify (G_OBJECT (motion));
   if (motion->is_pointer != is_pointer)
@@ -118,6 +134,9 @@ update_pointer_focus (GtkEventController    *controller,
       g_object_notify (G_OBJECT (motion), "contains-pointer");
     }
   g_object_thaw_notify (G_OBJECT (motion));
+
+  if (leave)
+    g_signal_emit (controller, signals[LEAVE], 0, crossing->mode);
 }
 
 static void
@@ -133,13 +152,7 @@ gtk_event_controller_motion_handle_crossing (GtkEventController    *controller,
 
   motion->current_crossing = crossing;
 
-  update_pointer_focus (controller, crossing);
-
-  g_signal_emit (controller, signals[POINTER_CHANGE], 0,
-                 crossing->direction,
-                 x,
-                 y,
-                 crossing->mode);
+  update_pointer_focus (controller, crossing, x, y);
 
   motion->current_crossing = NULL;
 }
@@ -216,32 +229,39 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
 
   /**
-   * GtkEventControllerMotion::pointer-change:
+   * GtkEventControllerMotion::enter:
    * @controller: the object which received the signal
-   * @direction: the direction of this crossing event
    * @x: coordinates of pointer location
    * @y: coordinates of pointer location
    * @mode: crossing mode
    *
-   * This signal is emitted whenever the pointer focus changes
-   * from or to a widget that is a descendant of the widget to
-   * which @controller is attached.
-   *
-   * Handlers for this signal can use
-   * gtk_event_controller_motion_get_pointer_origin() and
-   * gtk_event_controller_motion_get_pointer_target() to find
-   * the old and new pointer locations.
+   * Signals that the pointer has entered the widget.
    */
-  signals[POINTER_CHANGE] =
-    g_signal_new (I_("pointer-change"),
+  signals[ENTER] =
+    g_signal_new (I_("enter"),
                   GTK_TYPE_EVENT_CONTROLLER_MOTION,
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
                   NULL,
-                  G_TYPE_NONE, 4,
-                  GTK_TYPE_CROSSING_DIRECTION,
+                  G_TYPE_NONE, 3,
                   G_TYPE_DOUBLE,
                   G_TYPE_DOUBLE,
+                  GDK_TYPE_CROSSING_MODE);
+
+  /**
+   * GtkEventControllerMotion::leave:
+   * @controller: the object which received the signal
+   * @mode: crossing mode
+   *
+   * Signals that the pointer has left the widget.
+   */
+  signals[LEAVE] =
+    g_signal_new (I_("leave"),
+                  GTK_TYPE_EVENT_CONTROLLER_MOTION,
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 1,
                   GDK_TYPE_CROSSING_MODE);
 
   /**
@@ -290,7 +310,8 @@ gtk_event_controller_motion_new (void)
  * Returns the widget that contained the pointer before.
  *
  * This function can only be used in handlers for the
- * #GtkEventControllerMotion::pointer-change signal.
+ * #GtkEventControllerMotion::enter or
+ * #GtkEventControllerMotion::leave signals.
  *
  * Returns: (transfer none): the previous pointer focus
  */
@@ -310,7 +331,8 @@ gtk_event_controller_motion_get_pointer_origin (GtkEventControllerMotion *contro
  * Returns the widget that will contain the pointer afterwards.
  *
  * This function can only be used in handlers for the
- * #GtkEventControllerMotion::pointer-change signal.
+ * #GtkEventControllerMotion::enter or
+ * #GtkEventControllerMotion::leave signals.
  *
  * Returns: (transfer none): the next pointer focus
  */
