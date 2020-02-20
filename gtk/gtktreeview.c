@@ -37,6 +37,7 @@
 #include "gtkentryprivate.h"
 #include "gtksearchentryprivate.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtkeventcontrollerfocus.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerscroll.h"
 #include "gtkframe.h"
@@ -667,8 +668,7 @@ static void     gtk_tree_view_key_controller_key_released (GtkEventControllerKey
                                                            guint                  keycode,
                                                            GdkModifierType        state,
                                                            GtkTreeView           *tree_view);
-static void     gtk_tree_view_key_controller_focus_change (GtkEventController     *key,
-                                                           GtkCrossingDirection    direction,
+static void     gtk_tree_view_focus_controller_focus_out  (GtkEventController   *focus,
                                                            GtkTreeView            *tree_view);
 
 static gint     gtk_tree_view_focus                (GtkWidget        *widget,
@@ -1832,8 +1832,11 @@ gtk_tree_view_init (GtkTreeView *tree_view)
                     G_CALLBACK (gtk_tree_view_key_controller_key_pressed), tree_view);
   g_signal_connect (controller, "key-released",
                     G_CALLBACK (gtk_tree_view_key_controller_key_released), tree_view);
-  g_signal_connect (controller, "focus-change",
-                    G_CALLBACK (gtk_tree_view_key_controller_focus_change), tree_view);
+  gtk_widget_add_controller (GTK_WIDGET (tree_view), controller);
+
+  controller = gtk_event_controller_focus_new ();
+  g_signal_connect (controller, "leave",
+                    G_CALLBACK (gtk_tree_view_focus_controller_focus_out), tree_view);
   gtk_widget_add_controller (GTK_WIDGET (tree_view), controller);
 }
 
@@ -5537,19 +5540,15 @@ gtk_tree_view_motion_controller_pointer (GtkEventControllerMotion *controller,
 }
 
 static void
-gtk_tree_view_key_controller_focus_change (GtkEventController   *key,
-                                           GtkCrossingDirection  direction,
-                                           GtkTreeView          *tree_view)
+gtk_tree_view_focus_controller_focus_out (GtkEventController   *focus,
+                                          GtkTreeView          *tree_view)
 {
-  if (direction == GTK_CROSSING_OUT)
-    {
-      gtk_widget_queue_draw (GTK_WIDGET (tree_view));
+  gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 
-      if (tree_view->search_popover &&
-          !gtk_event_controller_key_contains_focus (GTK_EVENT_CONTROLLER_KEY (key)))
-        gtk_tree_view_search_popover_hide (tree_view->search_popover, tree_view,
-                                           gtk_get_current_event_device ());
-    }
+  if (tree_view->search_popover &&
+      !gtk_event_controller_focus_contains_focus (GTK_EVENT_CONTROLLER_FOCUS (focus)))
+    gtk_tree_view_search_popover_hide (tree_view->search_popover, tree_view,
+                                       gtk_get_current_event_device ());
 }
 
 /* Incremental Reflow

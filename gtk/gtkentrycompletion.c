@@ -83,6 +83,7 @@
 #include "gtkentry.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
+#include "gtkeventcontrollerfocus.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkgestureclick.h"
 
@@ -2308,11 +2309,9 @@ accept_completion_callback (GtkEntryCompletion *completion)
 }
 
 static void
-text_focus_change (GtkEntryCompletion   *completion,
-                   GtkCrossingDirection  direction) 
+text_focus_out (GtkEntryCompletion *completion)
 {
-  if (direction == GTK_CROSSING_OUT &&
-      !gtk_widget_get_mapped (completion->priv->popup_window))
+  if (!gtk_widget_get_mapped (completion->priv->popup_window))
     accept_completion_callback (completion);
 }
 
@@ -2349,7 +2348,9 @@ connect_completion_signals (GtkEntryCompletion *completion)
   controller = priv->entry_key_controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (gtk_entry_completion_key_pressed), completion);
-  g_signal_connect_swapped (controller, "focus-change", G_CALLBACK (text_focus_change), completion);
+  gtk_widget_add_controller (GTK_WIDGET (text), controller);
+  controller = priv->entry_focus_controller = gtk_event_controller_focus_new ();
+  g_signal_connect_swapped (controller, "leave", G_CALLBACK (text_focus_out), completion);
   gtk_widget_add_controller (GTK_WIDGET (text), controller);
 
   completion->priv->changed_id =
@@ -2397,6 +2398,7 @@ disconnect_completion_signals (GtkEntryCompletion *completion)
   GtkText *text = gtk_entry_get_text_widget (GTK_ENTRY (completion->priv->entry));
 
   gtk_widget_remove_controller (GTK_WIDGET (text), completion->priv->entry_key_controller);
+  gtk_widget_remove_controller (GTK_WIDGET (text), completion->priv->entry_focus_controller);
 
   if (completion->priv->changed_id > 0 &&
       g_signal_handler_is_connected (text, completion->priv->changed_id))
