@@ -33,6 +33,7 @@
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkfilefilterprivate.h"
+#include "gtkeventcontrollerfocus.h"
 
 typedef struct _GtkFileChooserEntryClass GtkFileChooserEntryClass;
 
@@ -259,12 +260,10 @@ match_func (GtkEntryCompletion *compl,
 }
 
 static void
-chooser_entry_focus_change (GtkEventController   *controller,
-                            GtkCrossingDirection  direction,
-                            GtkFileChooserEntry  *chooser_entry)
+chooser_entry_focus_out (GtkEventController   *controller,
+                         GtkFileChooserEntry  *chooser_entry)
 {
-  if (direction == GTK_CROSSING_OUT)
-    set_complete_on_load (chooser_entry, FALSE);
+  set_complete_on_load (chooser_entry, FALSE);
 }
 
 static void
@@ -311,8 +310,10 @@ _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
                     "key-pressed",
                     G_CALLBACK (gtk_file_chooser_entry_tab_handler),
                     chooser_entry);
+  gtk_widget_add_controller (GTK_WIDGET (chooser_entry), controller);
+  controller = gtk_event_controller_focus_new ();
   g_signal_connect (controller,
-		    "focus-change", G_CALLBACK (chooser_entry_focus_change),
+		    "leave", G_CALLBACK (chooser_entry_focus_out),
 		    chooser_entry);
   gtk_widget_add_controller (GTK_WIDGET (chooser_entry), controller);
 
