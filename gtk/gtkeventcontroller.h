@@ -40,37 +40,6 @@ G_BEGIN_DECLS
 #define GTK_EVENT_CONTROLLER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_EVENT_CONTROLLER, GtkEventControllerClass))
 
 
-typedef struct _GtkCrossingData GtkCrossingData;
-
-/**
- * GtkCrossingData:
- * @type: the type of crossing event
- * @direction: whether this is a focus-in or focus-out event
- * @mode: the crossing mode
- * @old_target: the old target
- * @old_descendent: the direct child of the receiving widget that
- *     is an ancestor of @old_target, or %NULL if @old_target is not
- *     a descendent of the receiving widget
- * @new_target: the new target
- * @new_descendent: the direct child of the receiving widget that
- *     is an ancestor of @new_target, or %NULL if @new_target is not
- *     a descendent of the receiving widget
- *
- * The struct that is passed to gtk_event_controller_handle_crossing().
- *
- * The @old_target and @new_target fields are set to the old or new
- * focus or hover location.
- */
-struct _GtkCrossingData {
-  GtkCrossingType type;
-  GtkCrossingDirection direction;
-  GdkCrossingMode mode;
-  GtkWidget *old_target;
-  GtkWidget *old_descendent;
-  GtkWidget *new_target;
-  GtkWidget *new_descendent;
-};
-
 GDK_AVAILABLE_IN_ALL
 GType               gtk_crossing_data_get_type (void) G_GNUC_CONST;
 
@@ -81,17 +50,6 @@ GType        gtk_event_controller_get_type       (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget  * gtk_event_controller_get_widget     (GtkEventController *controller);
 
-GDK_AVAILABLE_IN_ALL
-gboolean     gtk_event_controller_handle_event   (GtkEventController *controller,
-                                                  GdkEvent           *event,
-                                                  GtkWidget          *target,
-                                                  double              x,
-                                                  double              y);
-GDK_AVAILABLE_IN_ALL
-void         gtk_event_controller_handle_crossing (GtkEventController    *controller,
-                                                   const GtkCrossingData *crossing,
-                                                   double                 x,
-                                                   double                 y);
 GDK_AVAILABLE_IN_ALL
 void         gtk_event_controller_reset          (GtkEventController *controller);
 
