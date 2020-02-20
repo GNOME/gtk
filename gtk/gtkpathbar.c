@@ -1360,7 +1360,7 @@ gtk_path_bar_set_file_finish (struct SetFileInfo *info,
 	  ButtonData *button_data;
 
 	  button_data = BUTTON_DATA (l->data);
-	  gtk_widget_destroy (button_data->button);
+          gtk_container_remove (GTK_CONTAINER (info->path_bar), button_data->button);
 	}
 
       g_list_free (info->new_buttons);
