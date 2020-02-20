@@ -1066,20 +1066,17 @@ update_value_position (GtkScale *scale)
  * gtk_scale_set_draw_value:
  * @scale: a #GtkScale
  * @draw_value: %TRUE to draw the value
- * 
+ *
  * Specifies whether the current value is displayed as a string next 
  * to the slider.
  */
 void
 gtk_scale_set_draw_value (GtkScale *scale,
-			  gboolean  draw_value)
+                          gboolean  draw_value)
 {
   GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
-  GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
-
-  widget = GTK_WIDGET (scale);
 
   draw_value = draw_value != FALSE;
 
@@ -1101,9 +1098,9 @@ gtk_scale_set_draw_value (GtkScale *scale,
           g_free (txt);
 
           if (priv->value_pos == GTK_POS_TOP || priv->value_pos == GTK_POS_LEFT)
-            gtk_widget_insert_after (priv->value_widget, widget, NULL);
+            gtk_widget_insert_after (priv->value_widget, GTK_WIDGET (scale), NULL);
           else
-            gtk_widget_insert_before (priv->value_widget, widget, NULL);
+            gtk_widget_insert_before (priv->value_widget, GTK_WIDGET (scale), NULL);
 
           gtk_range_set_round_digits (GTK_RANGE (scale), priv->digits);
           update_value_position (scale);
