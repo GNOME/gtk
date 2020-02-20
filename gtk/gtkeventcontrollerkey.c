@@ -52,8 +52,7 @@ struct _GtkEventControllerKey
 
   GdkEvent *current_event;
 
-  guint is_focus       : 1;
-  guint contains_focus : 1;
+  gboolean is_focus;
 };
 
 struct _GtkEventControllerKeyClass
@@ -146,6 +145,44 @@ gtk_event_controller_key_handle_event (GtkEventController *controller,
 }
 
 static void
+gtk_event_controller_key_handle_crossing (GtkEventController    *controller,
+                                          const GtkCrossingData *crossing,
+                                          double                 x,
+                                          double                 y)
+{
+  GtkEventControllerKey *key = GTK_EVENT_CONTROLLER_KEY (controller);
+  GtkWidget *widget = gtk_event_controller_get_widget (controller);
+  gboolean start_crossing, end_crossing;
+  gboolean is_focus;
+
+  if (crossing->type != GTK_CROSSING_FOCUS)
+    return;
+
+  start_crossing = crossing->direction == GTK_CROSSING_OUT &&
+                   widget == crossing->old_target;
+  end_crossing = crossing->direction == GTK_CROSSING_IN &&
+                 widget == crossing->new_target;
+
+  if (!start_crossing && !end_crossing)
+    return;
+
+  is_focus = end_crossing;
+
+  if (key->is_focus != is_focus)
+    {
+      key->is_focus = is_focus;
+
+      if (key->im_context)
+        {
+          if (is_focus)
+            gtk_im_context_focus_in (key->im_context);
+          else
+            gtk_im_context_focus_out (key->im_context);
+        }
+    }
+}
+
+static void
 gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
 {
   GtkEventControllerClass *controller_class = GTK_EVENT_CONTROLLER_CLASS (klass);
@@ -153,6 +190,7 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
 
   object_class->finalize = gtk_event_controller_key_finalize;
   controller_class->handle_event = gtk_event_controller_key_handle_event;
+  controller_class->handle_crossing = gtk_event_controller_key_handle_crossing;
 
   /**
    * GtkEventControllerKey::key-pressed:
