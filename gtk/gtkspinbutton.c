@@ -210,7 +210,6 @@ struct _GtkSpinButtonPrivate
 {
   GtkAdjustment *adjustment;
 
-  GtkWidget     *box;
   GtkWidget     *entry;
 
   GtkWidget     *up_button;
