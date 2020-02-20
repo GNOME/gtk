@@ -68,29 +68,23 @@ G_DEFINE_BOXED_TYPE (GdkEvent, gdk_event,
                      gdk_event_ref,
                      gdk_event_unref)
 
-gboolean
+static gboolean
 check_event_sanity (GdkEvent *event)
 {
-  GdkDisplay *display;
-  GdkSurface *surface;
-  GdkDevice *device;
-
-  display = gdk_event_get_display (event);
-  surface = gdk_event_get_surface (event);
-  device = gdk_event_get_device (event);
-
-  if (surface && display != gdk_surface_get_display (surface))
+  if (event->any.device != NULL &&
+      gdk_surface_get_display (event->any.surface) != gdk_device_get_display (event->any.device))
     {
       char *type = g_enum_to_string (GDK_TYPE_EVENT_TYPE, event->any.type);
-      g_warning ("Event of type %s with mismatched surface display", type);
+      g_warning ("Event of type %s with mismatched device display", type);
       g_free (type);
       return FALSE;
     }
 
-  if (device && display != gdk_device_get_display (device))
+  if (event->any.source_device != NULL &&
+      gdk_surface_get_display (event->any.surface) != gdk_device_get_display (event->any.source_device))
     {
       char *type = g_enum_to_string (GDK_TYPE_EVENT_TYPE, event->any.type);
-      g_warning ("Event of type %s with mismatched device display", type);
+      g_warning ("Event of type %s with mismatched source device display", type);
       g_free (type);
       return FALSE;
     }

@@ -170,9 +170,6 @@ _gdk_wayland_display_deliver_event (GdkDisplay *display,
 {
   GList *node;
 
-  if (!check_event_sanity (event))
-    g_warning ("Snap! delivering insane events\n");
-
   node = _gdk_event_queue_append (display, event);
   _gdk_windowing_got_event (display, node, event,
                             _gdk_display_get_next_serial (display));
