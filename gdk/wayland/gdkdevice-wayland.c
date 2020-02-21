@@ -1201,6 +1201,7 @@ data_device_enter (void                  *data,
   GdkWaylandSeat *seat = data;
   GdkSurface *dest_surface;
   GdkContentFormats *formats;
+  int origin_x, origin_y;
   GdkDevice *device;
 
   dest_surface = wl_surface_get_user_data (surface);
@@ -1245,8 +1246,12 @@ data_device_enter (void                  *data,
 
   gdk_wayland_seat_discard_pending_offer (seat);
 
+  gdk_surface_get_origin (gdk_drop_get_surface (seat->drop), &origin_x, &origin_y);
+
   gdk_drop_emit_enter_event (seat->drop,
                              FALSE,
+                             origin_x + seat->pointer_info.surface_x,
+                             origin_y + seat->pointer_info.surface_y,
                              GDK_CURRENT_TIME);
 }
 

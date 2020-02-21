@@ -70,6 +70,7 @@ struct _GdkX11Drop
 
   guint xdnd_targets_set  : 1; /* Whether we've already set XdndTypeList */
   guint xdnd_have_actions : 1; /* Whether an XdndActionList was provided */
+  guint enter_emitted     : 1; /* Set after gdk_drop_emit_enter() */
 };
 
 struct _GdkX11DropClass
@@ -502,7 +503,12 @@ xdnd_enter_filter (GdkSurface   *surface,
       return TRUE;
     }
 
-  g_clear_object (&display_x11->current_drop);
+  if (display_x11->current_drop)
+    {
+      if (GDK_X11_DROP (display_x11->current_drop)->enter_emitted)
+        gdk_drop_emit_leave_event (display_x11->current_drop, FALSE, GDK_CURRENT_TIME);
+      g_clear_object (&display_x11->current_drop);
+    }
 
   seat = gdk_display_get_default_seat (display);
 
@@ -582,8 +588,6 @@ xdnd_enter_filter (GdkSurface   *surface,
 
   display_x11->current_drop = drop;
 
-  gdk_drop_emit_enter_event (drop, FALSE, GDK_CURRENT_TIME);
-
   gdk_content_formats_unref (content_formats);
 
   return TRUE;
@@ -609,7 +613,8 @@ xdnd_leave_filter (GdkSurface   *surface,
   if ((display_x11->current_drop != NULL) &&
       (GDK_X11_DROP (display_x11->current_drop)->source_window == source_window))
     {
-      gdk_drop_emit_leave_event (display_x11->current_drop, FALSE, GDK_CURRENT_TIME);
+      if (GDK_X11_DROP (display_x11->current_drop)->enter_emitted)
+        gdk_drop_emit_leave_event (display_x11->current_drop, FALSE, GDK_CURRENT_TIME);
 
       g_clear_object (&display_x11->current_drop);
     }
@@ -656,7 +661,15 @@ xdnd_position_filter (GdkSurface   *surface,
       drop_x11->last_x = x_root / impl->surface_scale;
       drop_x11->last_y = y_root / impl->surface_scale;
 
-      gdk_drop_emit_motion_event (drop, FALSE, drop_x11->last_x - surface->x, drop_x11->last_y - surface->y, time);
+      if (drop_x11->enter_emitted)
+        {
+          gdk_drop_emit_motion_event (drop, FALSE, drop_x11->last_x - surface->x, drop_x11->last_y - surface->y, time);
+        }
+      else
+        {
+          gdk_drop_emit_enter_event (drop, FALSE, drop_x11->last_x - surface->x, drop_x11->last_y - surface->y, time);
+          drop_x11->enter_emitted = TRUE;
+        }
     }
 
   return TRUE;

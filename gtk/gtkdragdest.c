@@ -822,13 +822,11 @@ gtk_drag_dest_handle_event (GtkWidget *toplevel,
 
   switch ((guint) event_type)
     {
-    case GDK_DRAG_ENTER:
-      break;
-
     case GDK_DRAG_LEAVE:
       gtk_drop_set_current_dest (drop, NULL);
       break;
 
+    case GDK_DRAG_ENTER:
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
       gtk_drop_set_current_dest (drop, NULL);

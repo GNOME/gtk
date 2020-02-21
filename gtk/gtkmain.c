@@ -1812,13 +1812,13 @@ gtk_main_do_event (GdkEvent *event)
       /* Crossing event propagation happens during picking */
       break;
 
+    case GDK_DRAG_ENTER:
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
       if (gtk_propagate_event (target_widget, event))
         break;
       G_GNUC_FALLTHROUGH;
 
-    case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:
       gtk_drag_dest_handle_event (target_widget, event);
       break;
