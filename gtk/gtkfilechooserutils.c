@@ -101,9 +101,6 @@ _gtk_file_chooser_install_properties (GObjectClass *klass)
 				    GTK_FILE_CHOOSER_PROP_FILTER,
 				    "filter");
   g_object_class_override_property (klass,
-				    GTK_FILE_CHOOSER_PROP_LOCAL_ONLY,
-				    "local-only");
-  g_object_class_override_property (klass,
 				    GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET,
 				    "preview-widget");
   g_object_class_override_property (klass,

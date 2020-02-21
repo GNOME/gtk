@@ -359,7 +359,6 @@ struct _GtkFileChooserWidgetPrivate {
 
   /* Flags */
 
-  guint local_only : 1;
   guint preview_widget_active : 1;
   guint use_preview_label : 1;
   guint select_multiple : 1;
@@ -2480,7 +2479,7 @@ location_entry_setup (GtkFileChooserWidget *impl)
   g_signal_connect_swapped (priv->location_entry, "hide-entry",
                             G_CALLBACK (location_entry_close_clicked), impl);
 
-  _gtk_file_chooser_entry_set_local_only (GTK_FILE_CHOOSER_ENTRY (priv->location_entry), priv->local_only);
+  _gtk_file_chooser_entry_set_local_only (GTK_FILE_CHOOSER_ENTRY (priv->location_entry), FALSE);
   _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (priv->location_entry), priv->action);
   _gtk_file_chooser_entry_set_file_filter (GTK_FILE_CHOOSER_ENTRY (priv->location_entry),
                                            priv->current_filter);
@@ -2835,33 +2834,6 @@ switch_to_home_dir (GtkFileChooserWidget *impl)
   g_object_unref (home_file);
 }
 
-static void
-set_local_only (GtkFileChooserWidget *impl,
-                gboolean               local_only)
-{
-  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-
-  if (local_only != priv->local_only)
-    {
-      priv->local_only = local_only;
-
-      if (priv->location_entry)
-        _gtk_file_chooser_entry_set_local_only (GTK_FILE_CHOOSER_ENTRY (priv->location_entry), local_only);
-
-      gtk_places_sidebar_set_local_only (GTK_PLACES_SIDEBAR (priv->places_sidebar), local_only);
-
-      if (local_only && priv->current_folder &&
-           !_gtk_file_has_native_path (priv->current_folder))
-        {
-          /* If we are pointing to a non-local folder, make an effort to change
-           * back to a local folder, but it's really up to the app to not cause
-           * such a situation, so we ignore errors.
-           */
-          switch_to_home_dir (impl);
-        }
-    }
-}
-
 /* Sets the file chooser to multiple selection mode */
 static void
 set_select_multiple (GtkFileChooserWidget *impl,
@@ -3209,10 +3181,7 @@ gtk_file_chooser_widget_get_subtitle (GtkFileChooserWidget *impl)
            (priv->operation_mode == OPERATION_MODE_BROWSE &&
             priv->location_mode == LOCATION_MODE_FILENAME_ENTRY))
     {
-      if (priv->local_only)
-        subtitle = g_strdup (_("Enter location"));
-      else
-        subtitle = g_strdup (_("Enter location or URL"));
+      subtitle = g_strdup (_("Enter location or URL"));
     }
 
   return subtitle;
@@ -3295,10 +3264,6 @@ gtk_file_chooser_widget_set_property (GObject      *object,
       set_current_filter (impl, g_value_get_object (value));
       break;
 
-    case GTK_FILE_CHOOSER_PROP_LOCAL_ONLY:
-      set_local_only (impl, g_value_get_boolean (value));
-      break;
-
     case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET:
       set_preview_widget (impl, g_value_get_object (value));
       break;
@@ -3369,10 +3334,6 @@ gtk_file_chooser_widget_get_property (GObject    *object,
 
     case GTK_FILE_CHOOSER_PROP_FILTER:
       g_value_set_object (value, priv->current_filter);
-      break;
-
-    case GTK_FILE_CHOOSER_PROP_LOCAL_ONLY:
-      g_value_set_boolean (value, priv->local_only);
       break;
 
     case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET:
@@ -5476,18 +5437,6 @@ gtk_file_chooser_widget_update_current_folder (GtkFileChooser  *chooser,
   g_object_ref (file);
 
   operation_mode_set (impl, OPERATION_MODE_BROWSE);
-
-  if (priv->local_only && !_gtk_file_has_native_path (file))
-    {
-      g_set_error_literal (error,
-                           GTK_FILE_CHOOSER_ERROR,
-                           GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
-                           _("Cannot change to folder because it is not local"));
-
-      g_object_unref (file);
-      profile_end ("end - not local", NULL);
-      return FALSE;
-    }
 
   if (priv->update_current_folder_cancellable)
     g_cancellable_cancel (priv->update_current_folder_cancellable);
@@ -8392,7 +8341,6 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
   access ("MARK: *** CREATE FILE CHOOSER", F_OK);
 #endif
 
-  priv->local_only = FALSE;
   priv->preview_widget_active = TRUE;
   priv->use_preview_label = TRUE;
   priv->select_multiple = FALSE;
