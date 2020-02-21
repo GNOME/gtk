@@ -132,22 +132,6 @@
 typedef GtkFileChooserIface GtkFileChooserInterface;
 G_DEFINE_INTERFACE (GtkFileChooser, gtk_file_chooser, G_TYPE_OBJECT);
 
-static gboolean
-confirm_overwrite_accumulator (GSignalInvocationHint *ihint,
-                               GValue                *return_accu,
-                               const GValue          *handler_return,
-                               gpointer               dummy)
-{
-  gboolean continue_emission;
-  GtkFileChooserConfirmation conf;
-
-  conf = g_value_get_enum (handler_return);
-  g_value_set_enum (return_accu, conf);
-  continue_emission = (conf == GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM);
-
-  return continue_emission;
-}
-
 static void
 gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
 {
@@ -253,84 +237,6 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
                 NULL,
                 G_TYPE_NONE, 0);
 
-  /**
-   * GtkFileChooser::confirm-overwrite:
-   * @chooser: the object which received the signal.
-   *
-   * This signal gets emitted whenever it is appropriate to present a
-   * confirmation dialog when the user has selected a file name that
-   * already exists.  The signal only gets emitted when the file
-   * chooser is in %GTK_FILE_CHOOSER_ACTION_SAVE mode.
-   *
-   * Most applications just need to turn on the
-   * #GtkFileChooser:do-overwrite-confirmation property (or call the
-   * gtk_file_chooser_set_do_overwrite_confirmation() function), and
-   * they will automatically get a standard confirmation dialog.
-   * Applications which need to customize this behavior should do
-   * that, and also connect to the #GtkFileChooser::confirm-overwrite
-   * signal.
-   *
-   * A signal handler for this signal must return a
-   * #GtkFileChooserConfirmation value, which indicates the action to
-   * take.  If the handler determines that the user wants to select a
-   * different filename, it should return
-   * %GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN.  If it determines
-   * that the user is satisfied with his choice of file name, it
-   * should return %GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME.
-   * On the other hand, if it determines that the standard confirmation
-   * dialog should be used, it should return
-   * %GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM. The following example
-   * illustrates this.
-   *
-   * ## Custom confirmation ## {#gtkfilechooser-confirmation}
-   *
-   * |[<!-- language="C" -->
-   * static GtkFileChooserConfirmation
-   * confirm_overwrite_callback (GtkFileChooser *chooser, gpointer data)
-   * {
-   *   g_autoptr(GFile) file = gtk_file_chooser_get_file (chooser);
-   *
-   *   // file_is_read_only() is defined elsewhere
-   *   if (file_is_read_only (file))
-   *     {
-   *       // user_wants_to_replace_read_only_file() is defined elsewhere
-   *       if (user_wants_to_replace_read_only_file (file))
-   *         return GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME;
-   *       else
-   *         return GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN;
-   *     }
-   *   else
-   *     {
-   *       // fall back to the default dialog
-   *       return GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM;
-   *     }
-   * }
-   *
-   * ...
-   *
-   * chooser = gtk_file_chooser_dialog_new (...);
-   *
-   * gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
-   * g_signal_connect (chooser, "confirm-overwrite",
-   *                   G_CALLBACK (confirm_overwrite_callback), NULL);
-   *
-   * if (gtk_dialog_run (chooser) == GTK_RESPONSE_ACCEPT)
-   *   save_to_file (gtk_file_chooser_get_file (GTK_FILE_CHOOSER (chooser));
-   *
-   * gtk_widget_destroy (chooser);
-   * ]|
-   *
-   * Returns: a #GtkFileChooserConfirmation value that indicates which
-   *  action to take after emitting the signal.
-   */
-  g_signal_new (I_("confirm-overwrite"),
-                iface_type,
-                G_SIGNAL_RUN_LAST,
-                G_STRUCT_OFFSET (GtkFileChooserIface, confirm_overwrite),
-                confirm_overwrite_accumulator, NULL,
-                _gtk_marshal_ENUM__VOID,
-                GTK_TYPE_FILE_CHOOSER_CONFIRMATION, 0);
-  
   g_object_interface_install_property (iface,
                                        g_param_spec_enum ("action",
                                                           P_("Action"),
@@ -382,21 +288,6 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
                                                              FALSE,
                                                              GTK_PARAM_READWRITE));
 
-  /**
-   * GtkFileChooser:do-overwrite-confirmation:
-   * 
-   * Whether a file chooser in %GTK_FILE_CHOOSER_ACTION_SAVE mode
-   * will present an overwrite confirmation dialog if the user
-   * selects a file name that already exists.
-   */
-  g_object_interface_install_property (iface,
-                                       g_param_spec_boolean ("do-overwrite-confirmation",
-                                                             P_("Do overwrite confirmation"),
-                                                             P_("Whether a file chooser in save mode "
-                                                                "will present an overwrite confirmation dialog "
-                                                                "if necessary."),
-                                                             FALSE,
-                                                             GTK_PARAM_READWRITE));
 
   /**
    * GtkFileChooser:create-folders:
@@ -1239,54 +1130,6 @@ gtk_file_chooser_get_show_hidden (GtkFileChooser *chooser)
   g_object_get (chooser, "show-hidden", &show_hidden, NULL);
 
   return show_hidden;
-}
-
-/**
- * gtk_file_chooser_set_do_overwrite_confirmation:
- * @chooser: a #GtkFileChooser
- * @do_overwrite_confirmation: whether to confirm overwriting in save mode
- * 
- * Sets whether a file chooser in %GTK_FILE_CHOOSER_ACTION_SAVE mode will present
- * a confirmation dialog if the user types a file name that already exists.  This
- * is %FALSE by default.
- *
- * If set to %TRUE, the @chooser will emit the
- * #GtkFileChooser::confirm-overwrite signal when appropriate.
- *
- * If all you need is the standard confirmation dialog, set this property to %TRUE.
- * You can override the way confirmation is done by actually handling the
- * #GtkFileChooser::confirm-overwrite signal; please refer to its documentation
- * for the details.
- **/
-void
-gtk_file_chooser_set_do_overwrite_confirmation (GtkFileChooser *chooser,
-                                                gboolean        do_overwrite_confirmation)
-{
-  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
-
-  g_object_set (chooser, "do-overwrite-confirmation", do_overwrite_confirmation, NULL);
-}
-
-/**
- * gtk_file_chooser_get_do_overwrite_confirmation:
- * @chooser: a #GtkFileChooser
- * 
- * Queries whether a file chooser is set to confirm for overwriting when the user
- * types a file name that already exists.
- * 
- * Returns: %TRUE if the file chooser will present a confirmation dialog;
- * %FALSE otherwise.
- **/
-gboolean
-gtk_file_chooser_get_do_overwrite_confirmation (GtkFileChooser *chooser)
-{
-  gboolean do_overwrite_confirmation;
-
-  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
-
-  g_object_get (chooser, "do-overwrite-confirmation", &do_overwrite_confirmation, NULL);
-
-  return do_overwrite_confirmation;
 }
 
 /**

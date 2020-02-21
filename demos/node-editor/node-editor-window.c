@@ -461,7 +461,6 @@ save_cb (GtkWidget        *button,
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
 
   GFile *cwd = g_file_new_for_path (".");
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), cwd, NULL);
@@ -583,7 +582,6 @@ export_image_cb (GtkWidget        *button,
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
   g_signal_connect (dialog, "response", G_CALLBACK (export_image_response_cb), texture);
   gtk_widget_show (dialog);
 }

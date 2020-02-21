@@ -54,7 +54,6 @@ typedef struct {
   gboolean folder;
   gboolean create_folders;
   gboolean modal;
-  gboolean overwrite_confirmation;
   gboolean select_multiple;
   gboolean show_hidden;
   gboolean running;
@@ -506,10 +505,6 @@ gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self)
        action == GTK_FILE_CHOOSER_ACTION_OPEN) &&
       gtk_file_chooser_get_select_multiple (GTK_FILE_CHOOSER (self->dialog)))
     data->select_multiple = TRUE;
-
-  // overwrite confirmation appears to be always on
-  if (gtk_file_chooser_get_do_overwrite_confirmation (GTK_FILE_CHOOSER (self->dialog)))
-    data->overwrite_confirmation = TRUE;
 
   if (gtk_file_chooser_get_show_hidden (GTK_FILE_CHOOSER (self->dialog)))
     data->show_hidden = TRUE;
