@@ -386,7 +386,8 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
 
                   if (!_gtk_header_bar_update_window_icon (bar, window))
                     {
-                      gtk_widget_destroy (button);
+                      g_object_ref_sink (button);
+                      g_object_unref (button);
                       priv->titlebar_icon = NULL;
                       button = NULL;
                     }
