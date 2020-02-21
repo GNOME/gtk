@@ -51,6 +51,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkviewport.h"
 #include "gtkwidgetprivate.h"
+#include "gtknative.h"
 
 #include "a11y/gtkscrolledwindowaccessible.h"
 
@@ -3470,8 +3471,21 @@ gtk_scrolled_window_adjustment_value_changed (GtkAdjustment *adjustment,
 {
   GtkScrolledWindow *scrolled_window = user_data;
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
+  GtkNative *native;
+  GdkSurface *surface;
 
   maybe_emit_edge_reached (scrolled_window, adjustment);
+
+  native = gtk_widget_get_native (GTK_WIDGET (scrolled_window));
+  if (native)
+    {
+      surface = gtk_native_get_surface (native);
+      if (surface)
+        {
+          g_print ("adjustment value changed\n");
+          //gdk_surface_ensure_motion (surface);
+        }
+    }
 
   /* Allow overshooting for kinetic scrolling operations */
   if (priv->deceleration_id)
