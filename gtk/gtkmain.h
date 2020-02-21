@@ -131,8 +131,6 @@ gboolean   gtk_get_current_event_state  (GdkModifierType *state);
 GDK_AVAILABLE_IN_ALL
 GdkDevice *gtk_get_current_event_device (void);
 
-GDK_AVAILABLE_IN_ALL
-GtkWidget *gtk_get_event_widget         (GdkEvent  *event);
 
 G_END_DECLS
 
