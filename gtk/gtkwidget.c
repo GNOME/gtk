@@ -4167,8 +4167,35 @@ gtk_widget_allocate (GtkWidget    *widget,
                      border.bottom + padding.bottom;
   if (baseline >= 0)
     baseline -= margin.top + border.top + padding.top;
+
   if (adjusted.x || adjusted.y)
-    transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (adjusted.x, adjusted.y));
+    {
+      if (css_transform)
+        {
+          transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (adjusted.x, adjusted.y));
+        }
+      else
+        {
+          if (gsk_transform_get_category (priv->transform) == GSK_TRANSFORM_CATEGORY_2D_TRANSLATE &&
+              gsk_transform_get_category (transform) == GSK_TRANSFORM_CATEGORY_2D_TRANSLATE)
+            {
+              float old_x, old_y;
+              float new_x, new_y;
+
+              gsk_transform_to_translate (priv->transform, &old_x, &old_y);
+              gsk_transform_to_translate (transform, &new_x, &new_y);
+
+              if (old_x == new_x + adjusted.x && old_y == new_y + adjusted.y)
+                transform = gsk_transform_ref (priv->transform);
+              else
+                transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (adjusted.x, adjusted.y));
+            }
+          else
+            {
+              transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (adjusted.x, adjusted.y));
+            }
+        }
+    }
 
   gsk_transform_unref (priv->transform);
   priv->transform = transform;
