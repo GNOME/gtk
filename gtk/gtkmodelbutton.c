@@ -59,7 +59,7 @@
  * radio button.
  *
  * Model buttons are used when popovers from a menu model with
- * gtk_popover_new_from_model(); they can also be used manually in
+ * gtk_popover_menu_new_from_model(); they can also be used manually in
  * a #GtkPopoverMenu.
  *
  * When the action is specified via the #GtkActionable:action-name
