@@ -614,6 +614,9 @@ GdkVulkanContext *
                gdk_surface_create_vulkan_context(GdkSurface     *surface,
                                                  GError        **error);
 
+GDK_AVAILABLE_IN_ALL
+void           gdk_surface_ensure_motion (GdkSurface *surface);
+
 G_END_DECLS
 
 #endif /* __GDK_SURFACE_H__ */

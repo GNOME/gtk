@@ -515,6 +515,54 @@ generate_grab_broken_event (GdkDisplay *display,
     }
 }
 
+void
+gdk_surface_ensure_motion (GdkSurface *surface)
+{
+  GList *list, *l;
+  GdkDisplay *display;
+  GdkSeat *seat;
+  GdkDevice *device;
+  GdkEvent *event;
+  GdkFrameClock *frame_clock;
+
+  display = gdk_surface_get_display (surface);
+
+  for (l = g_queue_peek_head_link (&display->queued_events); l; l = l->next)
+    {
+      event = l->data;
+
+      if (event->any.type == GDK_MOTION_NOTIFY)
+        return;
+  }
+
+  seat = gdk_display_get_default_seat (display);
+  device = gdk_seat_get_pointer (seat);
+  list = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_POINTER);
+  for (l = list; l; l = l->next)
+    {
+      GdkDevice *source_device = l->data;
+      double x, y;
+      GdkModifierType state;
+
+      gdk_surface_get_device_position (surface, device, &x, &y, &state);
+      event = gdk_event_motion_new (surface,
+                                    device,
+                                    source_device,
+                                    NULL,
+                                    GDK_CURRENT_TIME,
+                                    state,
+                                    x, y,
+                                    NULL);
+      _gdk_event_queue_append (display, event);
+    }
+
+  g_list_free (list);
+
+  frame_clock = gdk_surface_get_frame_clock (surface);
+  if (frame_clock)
+    gdk_frame_clock_request_phase (frame_clock, GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS);
+}
+
 GdkDeviceGrabInfo *
 _gdk_display_get_last_device_grab (GdkDisplay *display,
                                    GdkDevice  *device)
