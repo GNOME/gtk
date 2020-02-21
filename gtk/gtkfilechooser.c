@@ -251,12 +251,6 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
                                                             GTK_TYPE_FILE_FILTER,
                                                             GTK_PARAM_READWRITE));
   g_object_interface_install_property (iface,
-                                       g_param_spec_boolean ("local-only",
-                                                             P_("Local Only"),
-                                                             P_("Whether the selected file(s) should be limited to local file: URLs"),
-                                                             FALSE,
-                                                             GTK_PARAM_READWRITE));
-  g_object_interface_install_property (iface,
                                        g_param_spec_object ("preview-widget",
                                                             P_("Preview widget"),
                                                             P_("Application supplied widget for custom previews."),
@@ -348,53 +342,6 @@ gtk_file_chooser_get_action (GtkFileChooser *chooser)
   g_object_get (chooser, "action", &action, NULL);
 
   return action;
-}
-
-/**
- * gtk_file_chooser_set_local_only:
- * @chooser: a #GtkFileChooser
- * @local_only: %TRUE if only local files can be selected
- * 
- * Sets whether only local files can be selected in the
- * file selector. If @local_only is %TRUE (the default is %FALSE),
- * then the selected file or files are guaranteed to be
- * accessible through the operating system’s native file
- * system and therefore the application only
- * needs to worry about the filename functions in
- * #GtkFileChooser, like gtk_file_chooser_get_file().
- *
- * On some systems non-native files may still be
- * available using the native filesystem via a userspace
- * filesystem (FUSE).
- **/
-void
-gtk_file_chooser_set_local_only (GtkFileChooser *chooser,
-                                 gboolean        local_only)
-{
-  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
-
-  g_object_set (chooser, "local-only", local_only, NULL);
-}
-
-/**
- * gtk_file_chooser_get_local_only:
- * @chooser: a #GtkFileChooser
- * 
- * Gets whether only local files can be selected in the
- * file selector. See gtk_file_chooser_set_local_only()
- * 
- * Returns: %TRUE if only local files can be selected.
- **/
-gboolean
-gtk_file_chooser_get_local_only (GtkFileChooser *chooser)
-{
-  gboolean local_only;
-  
-  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
-
-  g_object_get (chooser, "local-only", &local_only, NULL);
-
-  return local_only;
 }
 
 /**

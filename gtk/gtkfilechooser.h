@@ -99,11 +99,6 @@ void                 gtk_file_chooser_set_action          (GtkFileChooser       
 GDK_AVAILABLE_IN_ALL
 GtkFileChooserAction gtk_file_chooser_get_action          (GtkFileChooser       *chooser);
 GDK_AVAILABLE_IN_ALL
-void                 gtk_file_chooser_set_local_only      (GtkFileChooser       *chooser,
-							   gboolean              local_only);
-GDK_AVAILABLE_IN_ALL
-gboolean             gtk_file_chooser_get_local_only      (GtkFileChooser       *chooser);
-GDK_AVAILABLE_IN_ALL
 void                 gtk_file_chooser_set_select_multiple (GtkFileChooser       *chooser,
 							   gboolean              select_multiple);
 GDK_AVAILABLE_IN_ALL

@@ -81,9 +81,6 @@ list_ignore_properties (gboolean buglist)
   static const IgnoreProperty bug_properties[] = {
     { "GtkComboBox",            "active",               (void*) MATCH_ANY_VALUE },      /* FIXME: triggers NULL model bug */
     { "GtkCTree",               "spacing",              (void*) MATCH_ANY_VALUE },      /* FIXME: triggers signedness bug */
-    { "GtkFileChooserButton",   "local-only",           (void*) MATCH_ANY_VALUE },      /* FIXME: triggers NULL path assertion */
-    { "GtkFileChooserDialog",   "local-only",           (void*) MATCH_ANY_VALUE },      /* FIXME: triggers NULL path assertion */
-    { "GtkFileChooserWidget",   "local-only",           (void*) MATCH_ANY_VALUE },      /* FIXME: triggers NULL path assertion */
     { "GtkText",                "text-position",        (void*) MATCH_ANY_VALUE },      /* FIXME: segfaults, fix property minimum/maximum */
     { NULL, NULL, NULL }
   };

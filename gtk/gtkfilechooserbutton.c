@@ -334,9 +334,6 @@ static void     button_clicked_cb                (GtkButton      *real_button,
 
 static void     chooser_update_preview_cb        (GtkFileChooser *dialog,
 						  gpointer        user_data);
-static void     chooser_notify_cb                (GObject        *dialog,
-						  GParamSpec     *pspec,
-						  gpointer        user_data);
 static void     dialog_response_cb               (GtkDialog      *dialog,
 						  gint            response,
 						  gpointer        user_data);
@@ -811,9 +808,6 @@ gtk_file_chooser_button_constructed (GObject *object)
                                  (gpointer) (&priv->dialog));
     }
 
-  g_signal_connect (priv->chooser, "notify",
-                    G_CALLBACK (chooser_notify_cb), object);
-
   /* This is used, instead of the standard delegate, to ensure that signals are only
    * delegated when the OK button is pressed. */
   g_object_set_qdata (object, GTK_FILE_CHOOSER_DELEGATE_QUARK, priv->chooser);
@@ -929,12 +923,6 @@ gtk_file_chooser_button_set_property (GObject      *object,
       g_object_set_property (G_OBJECT (priv->chooser), pspec->name, value);
       break;
 
-    case GTK_FILE_CHOOSER_PROP_LOCAL_ONLY:
-      g_object_set_property (G_OBJECT (priv->chooser), pspec->name, value);
-      fs_volumes_changed_cb (priv->fs, button);
-      bookmarks_changed_cb (button);
-      break;
-
     case GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE:
       g_warning ("%s: Choosers of type '%s' do not support selecting multiple files.",
 		 G_STRFUNC, G_OBJECT_TYPE_NAME (object));
@@ -964,7 +952,6 @@ gtk_file_chooser_button_get_property (GObject    *object,
     case PROP_TITLE:
     case GTK_FILE_CHOOSER_PROP_ACTION:
     case GTK_FILE_CHOOSER_PROP_FILTER:
-    case GTK_FILE_CHOOSER_PROP_LOCAL_ONLY:
     case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET:
     case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET_ACTIVE:
     case GTK_FILE_CHOOSER_PROP_USE_PREVIEW_LABEL:
@@ -1828,7 +1815,6 @@ model_add_volumes (GtkFileChooserButton *button,
   GtkFileChooserButtonPrivate *priv = gtk_file_chooser_button_get_instance_private (button);
   GtkListStore *store;
   gint pos;
-  gboolean local_only;
   GSList *l;
 
   if (!volumes)
@@ -1836,7 +1822,6 @@ model_add_volumes (GtkFileChooserButton *button,
 
   store = GTK_LIST_STORE (priv->model);
   pos = model_get_type_position (button, ROW_TYPE_VOLUME);
-  local_only = gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (priv->chooser));
 
   for (l = volumes; l; l = l->next)
     {
@@ -1846,27 +1831,6 @@ model_add_volumes (GtkFileChooserButton *button,
       gchar *display_name;
 
       volume = l->data;
-
-      if (local_only)
-        {
-          if (_gtk_file_system_volume_is_mounted (volume))
-            {
-              GFile *base_file;
-
-              base_file = _gtk_file_system_volume_get_root (volume);
-              if (base_file != NULL)
-                {
-                  if (!_gtk_file_has_native_path (base_file))
-                    {
-                      g_object_unref (base_file);
-                      continue;
-                    }
-                  else
-                    g_object_unref (base_file);
-                }
-            }
-        }
-
       icon = _gtk_file_system_volume_get_icon (volume);
       display_name = _gtk_file_system_volume_get_display_name (volume);
 
@@ -1896,7 +1860,6 @@ model_add_bookmarks (GtkFileChooserButton *button,
   GtkListStore *store;
   GtkTreeIter iter;
   gint pos;
-  gboolean local_only;
   GSList *l;
 
   if (!bookmarks)
@@ -1904,7 +1867,6 @@ model_add_bookmarks (GtkFileChooserButton *button,
 
   store = GTK_LIST_STORE (priv->model);
   pos = model_get_type_position (button, ROW_TYPE_BOOKMARK);
-  local_only = gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (priv->chooser));
 
   for (l = bookmarks; l; l = l->next)
     {
@@ -1928,9 +1890,6 @@ model_add_bookmarks (GtkFileChooserButton *button,
 	{
 	  gchar *label;
 	  GIcon *icon;
-
-	  if (local_only)
-	    continue;
 
 	  /* Don't call get_info for remote paths to avoid latency and
 	   * auth dialogs.
@@ -2129,13 +2088,9 @@ model_remove_rows (GtkFileChooserButton *button,
 static gboolean
 test_if_file_is_visible (GtkFileSystem *fs,
 			 GFile         *file,
-			 gboolean       local_only,
 			 gboolean       is_folder)
 {
   if (!file)
-    return FALSE;
-
-  if (local_only && !_gtk_file_has_native_path (file))
     return FALSE;
 
   if (!is_folder)
@@ -2153,11 +2108,10 @@ filter_model_visible_func (GtkTreeModel *model,
   GtkFileChooserButtonPrivate *priv = gtk_file_chooser_button_get_instance_private (button);
   gchar type;
   gpointer data;
-  gboolean local_only, retval, is_folder;
+  gboolean retval, is_folder;
 
   type = ROW_TYPE_INVALID;
   data = NULL;
-  local_only = gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (priv->chooser));
 
   gtk_tree_model_get (model, iter,
 		      TYPE_COLUMN, &type,
@@ -2173,30 +2127,10 @@ filter_model_visible_func (GtkTreeModel *model,
     case ROW_TYPE_SPECIAL:
     case ROW_TYPE_SHORTCUT:
     case ROW_TYPE_BOOKMARK:
-      retval = test_if_file_is_visible (priv->fs, data, local_only, is_folder);
+      retval = test_if_file_is_visible (priv->fs, data, is_folder);
       break;
     case ROW_TYPE_VOLUME:
-      {
-	retval = TRUE;
-	if (local_only)
-	  {
-	    if (_gtk_file_system_volume_is_mounted (data))
-	      {
-		GFile *base_file;
-
-		base_file = _gtk_file_system_volume_get_root (data);
-
-		if (base_file)
-		  {
-		    if (!_gtk_file_has_native_path (base_file))
-		      retval = FALSE;
-                    g_object_unref (base_file);
-		  }
-		else
-		  retval = FALSE;
-	      }
-	  }
-      }
+      retval = TRUE;
       break;
     default:
       retval = TRUE;
@@ -2708,51 +2642,6 @@ chooser_update_preview_cb (GtkFileChooser *dialog,
                            gpointer        user_data)
 {
   g_signal_emit_by_name (user_data, "update-preview");
-}
-
-static void
-chooser_notify_cb (GObject    *dialog,
-                   GParamSpec *pspec,
-                   gpointer    user_data)
-{
-  gpointer iface;
-
-  iface = g_type_interface_peek (g_type_class_peek (G_OBJECT_TYPE (dialog)),
-				 GTK_TYPE_FILE_CHOOSER);
-  if (g_object_interface_find_property (iface, pspec->name))
-    g_object_notify (user_data, pspec->name);
-
-  if (g_ascii_strcasecmp (pspec->name, "local-only") == 0)
-    {
-      GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (user_data);
-      GtkFileChooserButtonPrivate *priv = gtk_file_chooser_button_get_instance_private (button);
-
-      if (priv->has_current_folder)
-	{
-	  GtkTreeIter iter;
-	  gint pos;
-	  gpointer data;
-
-	  pos = model_get_type_position (user_data,
-					 ROW_TYPE_CURRENT_FOLDER);
-	  gtk_tree_model_iter_nth_child (priv->model, &iter, NULL, pos);
-
-	  data = NULL;
-	  gtk_tree_model_get (priv->model, &iter, DATA_COLUMN, &data, -1);
-
-	  /* If the path isn't local but we're in local-only mode now, remove
-	   * the custom-folder row */
-	  if (data && _gtk_file_has_native_path (G_FILE (data)) &&
-	      gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (priv->chooser)))
-	    {
-	      pos--;
-	      model_remove_rows (user_data, pos, 2);
-	    }
-	}
-
-      gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
-      update_combo_box (user_data);
-    }
 }
 
 static void
