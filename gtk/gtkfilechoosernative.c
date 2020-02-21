@@ -165,8 +165,6 @@
  * used. It supports many of the features that #GtkFileChooserDialog
  * does, but there are some things it does not handle:
  *
- * * Extra widgets added with gtk_file_chooser_set_extra_widget().
- *
  * * Use of custom previews by connecting to #GtkFileChooser::update-preview.
  *
  * * Any #GtkFileFilter added using a mimetype or custom filter.
@@ -182,8 +180,6 @@
  * be a GTK+ file chooser. In this situation, the following things are not
  * supported and will be silently ignored:
  *
- * * Extra widgets added with gtk_file_chooser_set_extra_widget().
- *
  * * Use of custom previews by connecting to #GtkFileChooser::update-preview.
  *
  * * Any #GtkFileFilter added with a custom filter.
@@ -193,10 +189,6 @@
  * On macOS the NSSavePanel and NSOpenPanel classes are used to provide native
  * file chooser dialogs. Some features provided by #GtkFileChooserDialog are
  * not supported:
- *
- * * Extra widgets added with gtk_file_chooser_set_extra_widget(), unless the
- *   widget is an instance of GtkLabel, in which case the label text will be used
- *   to set the NSSavePanel message instance property.
  *
  * * Use of custom previews by connecting to #GtkFileChooser::update-preview.
  *

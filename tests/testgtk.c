@@ -5787,25 +5787,6 @@ native_overwrite_confirmation_toggle (GtkWidget *checkbutton,
 }
 
 static void
-native_extra_widget_toggle (GtkWidget *checkbutton,
-                            GtkFileChooserNative *native)
-{
-  gboolean extra_widget = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(checkbutton));
-
-  if (extra_widget)
-    {
-      GtkWidget *extra = gtk_check_button_new_with_label ("Extra toggle");
-      gtk_widget_show (extra);
-      gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (native), extra);
-    }
-  else
-    {
-      gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (native), NULL);
-    }
-}
-
-
-static void
 native_visible_notify_show (GObject	*object,
                             GParamSpec	*pspec,
                             GtkWidget   *show_button)
@@ -6026,11 +6007,6 @@ create_native_dialogs (GtkWidget *widget)
       check_button = gtk_check_button_new_with_label ("Confirm overwrite");
       g_signal_connect (check_button, "toggled",
                         G_CALLBACK (native_overwrite_confirmation_toggle), native);
-      gtk_container_add (GTK_CONTAINER (box), check_button);
-
-      check_button = gtk_check_button_new_with_label ("Extra widget");
-      g_signal_connect (check_button, "toggled",
-                        G_CALLBACK (native_extra_widget_toggle), native);
       gtk_container_add (GTK_CONTAINER (box), check_button);
 
       show_button = gtk_button_new_with_label ("Show");

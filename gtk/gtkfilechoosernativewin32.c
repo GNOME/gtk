@@ -877,10 +877,6 @@ gtk_file_chooser_native_win32_show (GtkFileChooserNative *self)
   GSList *filters, *l;
   int n_filters, i;
 
-  if (gtk_file_chooser_get_extra_widget (GTK_FILE_CHOOSER (self)) != NULL &&
-      self->choices == NULL)
-    return FALSE;
-
   update_preview_signal = g_signal_lookup ("update-preview", GTK_TYPE_FILE_CHOOSER);
   if (g_signal_has_handler_pending (self, update_preview_signal, 0, TRUE))
     return FALSE;
