@@ -67,7 +67,7 @@ gboolean       gtk_bindings_activate         (GObject             *object,
                                               GdkModifierType      modifiers);
 GDK_AVAILABLE_IN_ALL
 gboolean       gtk_bindings_activate_event   (GObject             *object,
-                                              GdkEventKey         *event);
+                                              GdkEvent            *event);
 GDK_AVAILABLE_IN_ALL
 gboolean       gtk_binding_set_activate      (GtkBindingSet       *binding_set,
                                               guint                keyval,

@@ -7647,8 +7647,8 @@ gtk_text_view_reset_im_context (GtkTextView *text_view)
  *
  * |[<!-- language="C" -->
  * static gboolean
- * gtk_foo_bar_key_press_event (GtkWidget   *widget,
- *                              GdkEventKey *event)
+ * gtk_foo_bar_key_press_event (GtkWidget *widget,
+ *                              GdkEvent  *event)
  * {
  *   guint keyval;
  *   
@@ -7669,8 +7669,8 @@ gtk_text_view_reset_im_context (GtkTextView *text_view)
  * Returns: %TRUE if the input method handled the key event.
  */
 gboolean
-gtk_text_view_im_context_filter_keypress (GtkTextView  *text_view,
-                                          GdkEventKey  *event)
+gtk_text_view_im_context_filter_keypress (GtkTextView *text_view,
+                                          GdkEvent    *event)
 {
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
 

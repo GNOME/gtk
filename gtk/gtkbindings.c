@@ -1756,7 +1756,7 @@ gtk_bindings_activate (GObject         *object,
 /**
  * gtk_bindings_activate_event:
  * @object: a #GObject (generally must be a widget)
- * @event: a #GdkEventKey
+ * @event: a key event
  *
  * Looks up key bindings for @object to find one matching
  * @event, and if one was found, activate it.
@@ -1764,8 +1764,8 @@ gtk_bindings_activate (GObject         *object,
  * Returns: %TRUE if a matching key binding was found
  */
 gboolean
-gtk_bindings_activate_event (GObject     *object,
-                             GdkEventKey *event)
+gtk_bindings_activate_event (GObject  *object,
+                             GdkEvent *event)
 {
   GSList *entries = NULL;
   GdkDisplay *display;
@@ -1779,13 +1779,13 @@ gtk_bindings_activate_event (GObject     *object,
   key_hash = binding_key_hash_for_keymap (gdk_display_get_keymap (display));
 
   entries = _gtk_key_hash_lookup (key_hash,
-                                  gdk_key_event_get_keycode ((GdkEvent *)event),
-                                  gdk_event_get_modifier_state ((GdkEvent *)event),
+                                  gdk_key_event_get_keycode (event),
+                                  gdk_event_get_modifier_state (event),
                                   BINDING_MOD_MASK () & ~GDK_RELEASE_MASK,
-                                  gdk_key_event_get_group((GdkEvent *)event));
+                                  gdk_key_event_get_group(event));
 
   handled = gtk_bindings_activate_list (object, entries,
-                                        gdk_event_get_event_type ((GdkEvent *) event) == GDK_KEY_RELEASE);
+                                        gdk_event_get_event_type (event) == GDK_KEY_RELEASE);
 
   g_slist_free (entries);
 

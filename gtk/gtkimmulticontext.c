@@ -66,7 +66,7 @@ static void     gtk_im_multicontext_get_preedit_string (GtkIMContext            
 							PangoAttrList          **attrs,
 							gint                   *cursor_pos);
 static gboolean gtk_im_multicontext_filter_keypress    (GtkIMContext            *context,
-							GdkEventKey             *event);
+							GdkEvent                *event);
 static void     gtk_im_multicontext_focus_in           (GtkIMContext            *context);
 static void     gtk_im_multicontext_focus_out          (GtkIMContext            *context);
 static void     gtk_im_multicontext_reset              (GtkIMContext            *context);
@@ -343,7 +343,7 @@ gtk_im_multicontext_get_preedit_string (GtkIMContext   *context,
 
 static gboolean
 gtk_im_multicontext_filter_keypress (GtkIMContext *context,
-				     GdkEventKey  *event)
+				     GdkEvent     *event)
 {
   GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
   GtkIMContext *slave = gtk_im_multicontext_get_slave (multicontext);
@@ -358,15 +358,15 @@ gtk_im_multicontext_filter_keypress (GtkIMContext *context,
       GdkDisplay *display;
       GdkModifierType no_text_input_mask;
 
-      keyval = gdk_key_event_get_keyval ((GdkEvent *) event);
-      state = gdk_event_get_modifier_state ((GdkEvent *) event);
-      display = gdk_event_get_display ((GdkEvent *) event);
+      keyval = gdk_key_event_get_keyval (event);
+      state = gdk_event_get_modifier_state (event);
+      display = gdk_event_get_display (event);
 
       no_text_input_mask =
         gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
                                       GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
 
-      if (gdk_event_get_event_type ((GdkEvent *) event) == GDK_KEY_PRESS &&
+      if (gdk_event_get_event_type (event) == GDK_KEY_PRESS &&
           (state & no_text_input_mask) == 0)
         {
           gunichar ch;
