@@ -230,7 +230,7 @@ _gtk_color_chooser_snapshot_checkered_pattern (GtkSnapshot *snapshot,
                                                int          height)
 {
   const GdkRGBA color1 = GDK_RGBA("A8A8A8");
-  const GdkRGBA color2 = GDK_RGBA("545445");
+  const GdkRGBA color2 = GDK_RGBA("545454");
 
   gtk_snapshot_push_repeat (snapshot, &GRAPHENE_RECT_INIT (0, 0, width, height), NULL);
   gtk_snapshot_append_color (snapshot, &color1, &GRAPHENE_RECT_INIT (0,  0,  10, 10));
