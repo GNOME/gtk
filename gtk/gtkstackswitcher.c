@@ -158,7 +158,7 @@ rebuild_child (GtkWidget   *self,
 
   button_child = gtk_bin_get_child (GTK_BIN (self));
   if (button_child != NULL)
-    gtk_widget_destroy (button_child);
+    gtk_container_remove (GTK_CONTAINER (self), button_child);
 
   button_child = NULL;
 
