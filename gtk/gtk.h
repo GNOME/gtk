@@ -94,6 +94,7 @@
 #include <gtk/gtkdragicon.h>
 #include <gtk/gtkdragsource.h>
 #include <gtk/gtkdrawingarea.h>
+#include <gtk/gtkdropcontrollermotion.h>
 #include <gtk/gtkeditable.h>
 #include <gtk/gtkemojichooser.h>
 #include <gtk/gtkentry.h>
