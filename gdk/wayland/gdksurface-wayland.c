@@ -2819,6 +2819,11 @@ gdk_wayland_surface_present_popup (GdkSurface     *surface,
     }
   else
     {
+      if (impl->popup.unconstrained_width == width &&
+          impl->popup.unconstrained_height == height &&
+          gdk_popup_layout_equal (impl->popup.layout, layout))
+        return TRUE;
+
       reposition_popup (surface, width, height, layout);
     }
 

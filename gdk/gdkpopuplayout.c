@@ -130,6 +130,31 @@ gdk_popup_layout_copy (GdkPopupLayout *layout)
 }
 
 /**
+ * gdk_popup_layout_equal:
+ * @layout: a #GdkPopupLayout
+ * @other: another #GdkPopupLayout
+ *
+ * Check whether @layout and @other has identical layout properties.
+ *
+ * Returns: %TRUE if @layout and @other have identical layout properties,
+ * otherwise %FALSE.
+ */
+gboolean
+gdk_popup_layout_equal (GdkPopupLayout *layout,
+                        GdkPopupLayout *other)
+{
+  g_return_if_fail (layout);
+  g_return_if_fail (other);
+
+  return (gdk_rectangle_equal (&layout->anchor_rect, &other->anchor_rect) &&
+          layout->rect_anchor == other->rect_anchor &&
+          layout->surface_anchor == other->surface_anchor &&
+          layout->anchor_hints == other->anchor_hints &&
+          layout->dx == other->dx &&
+          layout->dy == other->dy);
+}
+
+/**
  * gdk_popup_layout_set_anchor_rect:
  * @layout: a #GdkPopupLayout
  * @anchor_rect: the new anchor rectangle
