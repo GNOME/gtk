@@ -615,7 +615,7 @@ gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
 
 static gboolean
 gtk_im_context_wayland_filter_keypress (GtkIMContext *context,
-                                        GdkEventKey  *key)
+                                        GdkEvent     *key)
 {
   /* This is done by the compositor */
   return GTK_IM_CONTEXT_CLASS (gtk_im_context_wayland_parent_class)->filter_keypress (context, key);

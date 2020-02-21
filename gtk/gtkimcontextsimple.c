@@ -114,7 +114,7 @@ static const guint16 gtk_compose_ignore[] = {
 
 static void     gtk_im_context_simple_finalize           (GObject                  *obj);
 static gboolean gtk_im_context_simple_filter_keypress    (GtkIMContext             *context,
-							  GdkEventKey              *key);
+							  GdkEvent                 *key);
 static void     gtk_im_context_simple_reset              (GtkIMContext             *context);
 static void     gtk_im_context_simple_get_preedit_string (GtkIMContext             *context,
 							  gchar                   **str,
@@ -928,11 +928,11 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
                                                    0,
                                                    0);
 	  
-	  gtk_im_context_filter_keypress (context, (GdkEventKey *)tmp_event);
+	  gtk_im_context_filter_keypress (context, tmp_event);
 	  g_object_unref (tmp_event);
 	}
 
-      return gtk_im_context_filter_keypress (context, (GdkEventKey *)event);
+      return gtk_im_context_filter_keypress (context, event);
     }
   else
     {
@@ -966,7 +966,7 @@ is_hex_keyval (guint keyval)
 }
 
 static guint
-canonical_hex_keyval (GdkEventKey *event)
+canonical_hex_keyval (GdkEvent *event)
 {
   GdkSurface *surface = gdk_event_get_surface ((GdkEvent *) event);
   GdkKeymap *keymap = gdk_display_get_keymap (gdk_surface_get_display (surface));
@@ -1014,7 +1014,7 @@ canonical_hex_keyval (GdkEventKey *event)
 
 static gboolean
 gtk_im_context_simple_filter_keypress (GtkIMContext *context,
-				       GdkEventKey  *event)
+				       GdkEvent     *event)
 {
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
   GtkIMContextSimplePrivate *priv = context_simple->priv;
