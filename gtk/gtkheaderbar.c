@@ -383,7 +383,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   priv->titlebar_icon = button;
                   gtk_widget_add_css_class (button, "titlebutton");
                   gtk_widget_add_css_class (button, "icon");
-                  gtk_widget_set_size_request (button, 20, 20);
 
                   if (!_gtk_header_bar_update_window_icon (bar, window))
                     {
