@@ -3315,10 +3315,6 @@ gtk_file_chooser_widget_set_property (GObject      *object,
       update_preview_widget_visibility (impl);
       break;
 
-    case GTK_FILE_CHOOSER_PROP_EXTRA_WIDGET:
-      set_extra_widget (impl, g_value_get_object (value));
-      break;
-
     case GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE:
       {
         gboolean select_multiple = g_value_get_boolean (value);
@@ -3403,10 +3399,6 @@ gtk_file_chooser_widget_get_property (GObject    *object,
 
     case GTK_FILE_CHOOSER_PROP_USE_PREVIEW_LABEL:
       g_value_set_boolean (value, priv->use_preview_label);
-      break;
-
-    case GTK_FILE_CHOOSER_PROP_EXTRA_WIDGET:
-      g_value_set_object (value, priv->extra_widget);
       break;
 
     case GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE:
