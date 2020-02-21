@@ -30,6 +30,26 @@
 #include <gdk/gdkdevice.h>
 #include <gdk/gdkdevicetool.h>
 
+
+typedef struct _GdkEventAny         GdkEventAny;
+typedef struct _GdkEventMotion      GdkEventMotion;
+typedef struct _GdkEventButton      GdkEventButton;
+typedef struct _GdkEventTouch       GdkEventTouch;
+typedef struct _GdkEventScroll      GdkEventScroll;
+typedef struct _GdkEventKey         GdkEventKey;
+typedef struct _GdkEventFocus       GdkEventFocus;
+typedef struct _GdkEventCrossing    GdkEventCrossing;
+typedef struct _GdkEventConfigure   GdkEventConfigure;
+typedef struct _GdkEventProximity   GdkEventProximity;
+typedef struct _GdkEventDND         GdkEventDND;
+typedef struct _GdkEventSetting     GdkEventSetting;
+typedef struct _GdkEventGrabBroken  GdkEventGrabBroken;
+typedef struct _GdkEventTouchpadSwipe GdkEventTouchpadSwipe;
+typedef struct _GdkEventTouchpadPinch GdkEventTouchpadPinch;
+typedef struct _GdkEventPadButton   GdkEventPadButton;
+typedef struct _GdkEventPadAxis     GdkEventPadAxis;
+typedef struct _GdkEventPadGroupMode GdkEventPadGroupMode;
+
 /*
  * GdkEventAny:
  * @type: the type of the event.
