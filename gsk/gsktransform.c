@@ -1683,8 +1683,11 @@ gsk_transform_equal (GskTransform *first,
   if (first == second)
     return TRUE;
 
-  if (first == NULL || second == NULL)
-    return FALSE;
+  if (first == NULL)
+    return gsk_transform_is_identity (second);
+
+  if (second == NULL)
+    return gsk_transform_is_identity (first);
 
   if (first->transform_class != second->transform_class)
     return FALSE;

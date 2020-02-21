@@ -333,6 +333,19 @@ test_identity (void)
 }
 
 static void
+test_identity_equal (void)
+{
+  GskTransform *id = gsk_transform_new ();
+
+  g_assert_true (gsk_transform_equal (NULL, NULL));
+  g_assert_true (gsk_transform_equal (id, NULL));
+  g_assert_true (gsk_transform_equal (NULL, id));
+  g_assert_true (gsk_transform_equal (id, id));
+
+  gsk_transform_unref (id);
+}
+
+static void
 test_print_parse (void)
 {
   GskTransform *transform, *parsed;
