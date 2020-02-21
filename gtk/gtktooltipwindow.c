@@ -229,13 +229,10 @@ static void
 gtk_tooltip_window_realize (GtkWidget *widget)
 {
   GtkTooltipWindow *window = GTK_TOOLTIP_WINDOW (widget);
-  GdkDisplay *display;
   GdkSurface *parent;
 
-  display = gtk_widget_get_display (window->relative_to);
-
   parent = gtk_native_get_surface (gtk_widget_get_native (window->relative_to));
-  window->surface = gdk_surface_new_popup (display, parent, FALSE);
+  window->surface = gdk_surface_new_popup (parent, FALSE);
 
   gdk_surface_set_widget (window->surface, widget);
 
