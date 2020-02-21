@@ -97,6 +97,8 @@ gboolean   gtk_propagate_event          (GtkWidget       *widget,
                                          GdkEvent        *event);
 void       gtk_main_do_event       (GdkEvent           *event);
 
+GtkWidget *gtk_get_event_widget         (GdkEvent  *event);
+
 gdouble _gtk_get_slowdown (void);
 void    _gtk_set_slowdown (gdouble slowdown_factor);
 
