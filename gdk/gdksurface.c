@@ -4035,11 +4035,14 @@ add_event_mark (GdkEvent *event,
 {
   gchar *message = NULL;
   const gchar *kind;
+  GEnumClass *class;
   GEnumValue *value;
   GdkEventType event_type;
 
   event_type = gdk_event_get_event_type (event);
-  value = g_enum_get_value (g_type_class_peek_static (GDK_TYPE_EVENT_TYPE), event_type);
+  class = g_type_class_ref (GDK_TYPE_EVENT_TYPE);
+  value = g_enum_get_value (class, event_type);
+  g_type_class_unref (class);
   kind = value ? value->value_nick : NULL;
 
   switch (event_type)
