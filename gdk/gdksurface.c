@@ -4043,7 +4043,7 @@ add_event_mark (GdkEvent *event,
   class = g_type_class_ref (GDK_TYPE_EVENT_TYPE);
   value = g_enum_get_value (class, event_type);
   g_type_class_unref (class);
-  kind = value ? value->value_nick : NULL;
+  kind = value ? value->value_nick : "event";
 
   switch (event_type)
     {
@@ -4051,7 +4051,8 @@ add_event_mark (GdkEvent *event,
       {
         double x, y;
         gdk_event_get_position (event, &x, &y);
-        message = g_strdup_printf ("{x=%lf, y=%lf, state=0x%x}",
+        message = g_strdup_printf ("%s {x=%lf, y=%lf, state=0x%x}",
+                                   kind,
                                    x, y,
                                    gdk_event_get_modifier_state (event));
         break;
@@ -4062,7 +4063,8 @@ add_event_mark (GdkEvent *event,
       {
         double x, y;
         gdk_event_get_position (event, &x, &y);
-        message = g_strdup_printf ("{button=%u, x=%lf, y=%lf, state=0x%x}",
+        message = g_strdup_printf ("%s {button=%u, x=%lf, y=%lf, state=0x%x}",
+                                   kind,
                                    gdk_button_event_get_button (event),
                                    x, y,
                                    gdk_event_get_modifier_state (event));
@@ -4072,7 +4074,8 @@ add_event_mark (GdkEvent *event,
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
       {
-        message = g_strdup_printf ("{keyval=%u, state=0x%x, hardware_keycode=%u key_scancode=%u group=%u is_modifier=%u}",
+        message = g_strdup_printf ("%s {keyval=%u, state=0x%x, hardware_keycode=%u key_scancode=%u group=%u is_modifier=%u}",
+                                   kind,
                                    gdk_key_event_get_keyval (event),
                                    gdk_event_get_modifier_state (event),
                                    gdk_key_event_get_keycode (event),
@@ -4086,15 +4089,12 @@ add_event_mark (GdkEvent *event,
       {
         int width, height;
         gdk_configure_event_get_size (event, &width, &height);
-        message = g_strdup_printf ("{width=%d, height=%d}", width, height);
+        message = g_strdup_printf ("%s {width=%d, height=%d}", kind, width, height);
         break;
       }
 
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
-        message = g_strdup ("");
-        break;
-
     case GDK_TOUCHPAD_SWIPE:
     case GDK_TOUCHPAD_PINCH:
     case GDK_SCROLL:
@@ -4121,10 +4121,7 @@ add_event_mark (GdkEvent *event,
       break;
     }
 
-  if (kind != NULL && message != NULL)
-    gdk_profiler_add_markf (time, duration, "event", "%s %s", kind, message);
-  else
-    gdk_profiler_add_mark (time, duration, "event", message ? message : kind);
+  gdk_profiler_add_mark (time, duration, "event", message ? message : kind);
 
   g_free (message);
 }
