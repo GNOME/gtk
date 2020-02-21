@@ -33,8 +33,6 @@ struct _GdkPopupLayout
   GdkAnchorHints anchor_hints;
   int dx;
   int dy;
-
-  gboolean is_sealed;
 };
 
 G_DEFINE_BOXED_TYPE (GdkPopupLayout, gdk_popup_layout,
