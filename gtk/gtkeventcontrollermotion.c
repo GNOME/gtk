@@ -41,9 +41,6 @@ struct _GtkEventControllerMotion
 {
   GtkEventController parent_instance;
 
-  GdkEvent *current_event;
-  const GtkCrossingData *current_crossing;
-
   guint is_pointer             : 1;
   guint contains_pointer       : 1;
 };
@@ -105,18 +102,28 @@ update_pointer_focus (GtkEventController    *controller,
 
   if (crossing->direction == GTK_CROSSING_IN)
     {
+     if (crossing->new_descendent != NULL)
+        {
+          contains_pointer = TRUE;
+        }
       if (crossing->new_target == widget)
-        is_pointer = TRUE;
-      if (crossing->new_target != NULL)
+        {
+          contains_pointer = TRUE;
+          is_pointer = TRUE;
+        }
+    }
+  else
+    {
+      if (crossing->new_descendent != NULL ||
+          crossing->new_target == widget)
         contains_pointer = TRUE;
+      is_pointer = FALSE;
     }
 
   if (motion->contains_pointer != contains_pointer)
     {
-      if (contains_pointer)
-        enter = TRUE;
-      else
-        leave = TRUE;
+      enter = contains_pointer;
+      leave = !contains_pointer;
     }
 
   if (leave)
@@ -150,11 +157,7 @@ gtk_event_controller_motion_handle_crossing (GtkEventController    *controller,
   if (crossing->type != GTK_CROSSING_POINTER)
     return;
 
-  motion->current_crossing = crossing;
-
   update_pointer_focus (controller, crossing, x, y);
-
-  motion->current_crossing = NULL;
 }
 
 static void
