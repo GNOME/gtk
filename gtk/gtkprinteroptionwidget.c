@@ -68,7 +68,7 @@ struct GtkPrinterOptionWidgetPrivate
   GtkWidget *button;
 
   /* the last location for save to file, that the user selected */
-  gchar *last_location;
+  GFile *last_location;
 };
 
 enum {
@@ -485,42 +485,49 @@ dialog_response_callback (GtkDialog              *dialog,
                           GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
-  gchar *uri = NULL;
-  gchar *new_location = NULL;
+  GFile *new_location = NULL;
+  char *uri = NULL;
 
   if (response_id == GTK_RESPONSE_ACCEPT)
     {
-      gchar *filename;
-      gchar *filename_utf8;
-      gchar *filename_short;
+      GFileInfo *info;
 
-      new_location = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
+      new_location = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+      info = g_file_query_info (new_location,
+                                "standard::display-name",
+                                0,
+                                NULL,
+                                NULL);
+      if (info != NULL)
+        {
+          const char *filename_utf8 = g_file_info_get_display_name (info);
 
-      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-      filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
-      filename_short = trim_long_filename (filename_utf8);
-      gtk_button_set_label (GTK_BUTTON (priv->button), filename_short);
-      g_free (filename_short);
-      g_free (filename_utf8);
-      g_free (filename);
+          char *filename_short = trim_long_filename (filename_utf8);
+          gtk_button_set_label (GTK_BUTTON (priv->button), filename_short);
+
+          g_free (filename_short);
+          g_object_unref (info);
+        }
+
+      g_object_unref (new_location);
     }
 
   gtk_widget_destroy (GTK_WIDGET (dialog));
 
   if (new_location)
-    uri = new_location;
+    uri = g_file_get_uri (new_location);
   else
-    uri = priv->last_location;
+    uri = g_file_get_uri (priv->last_location);
 
-  if (uri)
+  if (uri != NULL)
     {
       gtk_printer_option_set (priv->source, uri);
       emit_changed (widget);
+      g_free (uri);
     }
 
-  g_free (new_location);
-  g_free (priv->last_location);
-  priv->last_location = NULL;
+  g_object_unref (new_location);
+  g_clear_object (&priv->last_location);
 
   /* unblock the handler which was blocked in the filesave_choose_cb function */
   g_signal_handler_unblock (priv->source, priv->source_changed_handler);
@@ -531,7 +538,6 @@ filesave_choose_cb (GtkWidget              *button,
                     GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
-  gchar *last_location = NULL;
   GtkWidget *dialog;
   GtkWindow *toplevel;
 
@@ -550,23 +556,21 @@ filesave_choose_cb (GtkWidget              *button,
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), FALSE);
 
   /* select the current filename in the dialog */
-  if (priv->source != NULL)
+  if (priv->source != NULL && priv->source->value != NULL)
     {
-      priv->last_location = last_location = g_strdup (priv->source->value);
-      if (last_location)
+      priv->last_location = g_file_new_for_uri (priv->source->value);
+      if (priv->last_location)
         {
-          GFile *file;
-          gchar *basename;
-          gchar *basename_utf8;
+          char *basename;
+          char *basename_utf8;
 
-          gtk_file_chooser_select_uri (GTK_FILE_CHOOSER (dialog), last_location);
-          file = g_file_new_for_uri (last_location);
-          basename = g_file_get_basename (file);
+          gtk_file_chooser_select_file (GTK_FILE_CHOOSER (dialog), priv->last_location, NULL);
+
+          basename = g_file_get_basename (priv->last_location);
           basename_utf8 = g_filename_to_utf8 (basename, -1, NULL, NULL, NULL);
           gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), basename_utf8);
           g_free (basename_utf8);
           g_free (basename);
-          g_object_unref (file);
         }
     }
 

@@ -185,14 +185,22 @@ get_current_text (GtkTextBuffer *buffer)
 
 static void
 save_to_file (GtkInspectorCssEditor *ce,
-              const gchar           *filename)
+              GFile                 *file)
 {
-  gchar *text;
   GError *error = NULL;
+  char *text;
 
   text = get_current_text (ce->priv->text);
 
-  if (!g_file_set_contents (filename, text, -1, &error))
+  g_file_replace_contents (file, text, -1,
+                           NULL,
+                           FALSE,
+                           G_FILE_CREATE_NONE,
+                           NULL,
+                           NULL,
+                           &error);
+
+  if (error != NULL)
     {
       GtkWidget *dialog;
 
@@ -220,11 +228,9 @@ save_response (GtkWidget             *dialog,
 
   if (response == GTK_RESPONSE_ACCEPT)
     {
-      gchar *filename;
-
-      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-      save_to_file (ce, filename);
-      g_free (filename);
+      GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+      save_to_file (ce, file);
+      g_object_unref (file);
     }
 
   gtk_widget_destroy (dialog);

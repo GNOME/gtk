@@ -913,7 +913,7 @@ change_folder_and_display_error (GtkFileChooserWidget *impl,
    * list_row_activated()
    *   fetches path from model; path belongs to the model (*)
    *   calls change_folder_and_display_error()
-   *     calls gtk_file_chooser_set_current_folder_file()
+   *     calls gtk_file_chooser_set_current_folder()
    *       changing folders fails, sets model to NULL, thus freeing the path in (*)
    */
 
@@ -2832,7 +2832,7 @@ switch_to_home_dir (GtkFileChooserWidget *impl)
 
   home_file = g_file_new_for_path (home);
 
-  gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (impl), home_file, NULL); /* NULL-GError */
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (impl), home_file, NULL); /* NULL-GError */
 
   g_object_unref (home_file);
 }
@@ -3734,10 +3734,12 @@ settings_save (GtkFileChooserWidget *impl)
 static void
 switch_to_cwd (GtkFileChooserWidget *impl)
 {
-  char *current_working_dir;
+  char *current_working_dir = g_get_current_dir ();
+  GFile *cwd = g_file_new_for_path (current_working_dir);
 
-  current_working_dir = g_get_current_dir ();
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (impl), current_working_dir);
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (impl), cwd, NULL);
+
+  g_object_unref (cwd);
   g_free (current_working_dir);
 }
 
@@ -5599,7 +5601,7 @@ gtk_file_chooser_widget_select_file (GtkFileChooser  *chooser,
   parent_file = g_file_get_parent (file);
 
   if (!parent_file)
-    return gtk_file_chooser_set_current_folder_file (chooser, file, error);
+    return gtk_file_chooser_set_current_folder (chooser, file, error);
 
   fsmodel = GTK_FILE_SYSTEM_MODEL (gtk_tree_view_get_model (GTK_TREE_VIEW (priv->browse_files_tree_view)));
 
@@ -5639,7 +5641,7 @@ gtk_file_chooser_widget_select_file (GtkFileChooser  *chooser,
     {
       gboolean result;
 
-      result = gtk_file_chooser_set_current_folder_file (chooser, parent_file, error);
+      result = gtk_file_chooser_set_current_folder (chooser, parent_file, error);
       g_object_unref (parent_file);
       return result;
     }
@@ -5948,7 +5950,7 @@ gtk_file_chooser_widget_get_files (GtkFileChooser *chooser)
     {
       GFile *current_folder;
 
-      current_folder = gtk_file_chooser_get_current_folder_file (chooser);
+      current_folder = gtk_file_chooser_get_current_folder (chooser);
 
       if (current_folder)
         info.result = g_slist_prepend (info.result, current_folder);
@@ -7801,6 +7803,7 @@ static void
 desktop_folder_handler (GtkFileChooserWidget *impl)
 {
   const char *name;
+  GFile *file;
 
   /* "To disable a directory, point it to the homedir."
    * See http://freedesktop.org/wiki/Software/xdg-user-dirs
@@ -7809,7 +7812,9 @@ desktop_folder_handler (GtkFileChooserWidget *impl)
   if (!g_strcmp0 (name, g_get_home_dir ()))
     return;
 
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (impl), name);
+  file = g_file_new_for_path (name);
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (impl), file, NULL);
+  g_object_unref (file);
 }
 
 /* Handler for the "search-shortcut" keybinding signal */

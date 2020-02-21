@@ -644,8 +644,8 @@ gtk_file_chooser_native_set_current_folder (GtkFileChooser    *chooser,
   GtkFileChooserNative *self = GTK_FILE_CHOOSER_NATIVE (chooser);
   gboolean res;
 
-  res = gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (self->dialog),
-                                                  file, error);
+  res = gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (self->dialog),
+                                             file, error);
 
 
   if (res)
