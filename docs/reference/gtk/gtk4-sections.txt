@@ -6910,6 +6910,27 @@ gtk_drop_target_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkdropcontrollermotion</FILE>
+<TITLE>GtkDropControllerMotion</TITLE>
+GtkDropControllerMotion
+gtk_drop_controller_motion_new
+gtk_drop_controller_motion_contains_pointer
+gtk_drop_controller_motion_is_pointer
+gtk_drop_controller_motion_get_drop
+
+<SUBSECTION Standard>
+GTK_TYPE_DROP_CONTROLLER_MOTION
+GTK_DROP_CONTROLLER_MOTION
+GTK_DROP_CONTROLLER_MOTION_CLASS
+GTK_IS_DROP_CONTROLLER_MOTION
+GTK_IS_DROP_CONTROLLER_MOTION_CLASS
+GTK_DROP_CONTROLLER_MOTION_GET_CLASS
+
+<SUBSECTION Private>
+gtk_drop_controller_motion_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkdragicon</FILE>
 GtkDragIcon
 gtk_drag_icon_new_for_drag
