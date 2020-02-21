@@ -143,10 +143,10 @@ static void gtk_path_bar_forall                   (GtkContainer     *container,
 static void gtk_path_bar_scroll_up                (GtkPathBar       *path_bar);
 static void gtk_path_bar_scroll_down              (GtkPathBar       *path_bar);
 static gboolean gtk_path_bar_slider_up_defocus    (GtkWidget        *widget,
-						   GdkEventButton   *event,
+						   GdkEvent         *event,
 						   GtkPathBar       *path_bar);
 static gboolean gtk_path_bar_slider_down_defocus  (GtkWidget        *widget,
-						   GdkEventButton   *event,
+						   GdkEvent         *event,
 						   GtkPathBar       *path_bar);
 static void gtk_path_bar_update_button_appearance (GtkPathBar       *path_bar,
 						   ButtonData       *button_data,
@@ -864,15 +864,15 @@ gtk_path_bar_scroll_up (GtkPathBar *path_bar)
 }
 
 static gboolean
-gtk_path_bar_slider_up_defocus (GtkWidget      *widget,
-                                GdkEventButton *event,
-                                GtkPathBar     *path_bar)
+gtk_path_bar_slider_up_defocus (GtkWidget  *widget,
+                                GdkEvent   *event,
+                                GtkPathBar *path_bar)
 {
   GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (path_bar);
   GList *list;
   GList *up_button = NULL;
 
-  if (gdk_event_get_event_type ((GdkEvent *) event) != GDK_FOCUS_CHANGE)
+  if (gdk_event_get_event_type (event) != GDK_FOCUS_CHANGE)
     return FALSE;
 
   for (list = g_list_last (priv->button_list); list; list = list->prev)
@@ -893,15 +893,15 @@ gtk_path_bar_slider_up_defocus (GtkWidget      *widget,
 }
 
 static gboolean
-gtk_path_bar_slider_down_defocus (GtkWidget      *widget,
-                                  GdkEventButton *event,
-                                  GtkPathBar     *path_bar)
+gtk_path_bar_slider_down_defocus (GtkWidget  *widget,
+                                  GdkEvent   *event,
+                                  GtkPathBar *path_bar)
 {
   GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (path_bar);
   GList *list;
   GList *down_button = NULL;
 
-  if (gdk_event_get_event_type ((GdkEvent *) event) != GDK_FOCUS_CHANGE)
+  if (gdk_event_get_event_type (event) != GDK_FOCUS_CHANGE)
     return FALSE;
 
   for (list = priv->button_list; list; list = list->next)
