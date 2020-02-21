@@ -55,7 +55,6 @@ typedef struct {
   gboolean create_folders;
   gboolean modal;
   gboolean select_multiple;
-  gboolean show_hidden;
   gboolean running;
 
   char *accept_label;
@@ -264,11 +263,6 @@ filechooser_quartz_launch (FileChooserQuartzData *data)
   }
 
   [data->panel setReleasedWhenClosed:YES];
-
-  if (data->show_hidden)
-    {
-      [data->panel setShowsHiddenFiles:YES];
-    }
 
   if (data->accept_label)
     [data->panel setPrompt:[NSString stringWithUTF8String:data->accept_label]];
@@ -505,9 +499,6 @@ gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self)
        action == GTK_FILE_CHOOSER_ACTION_OPEN) &&
       gtk_file_chooser_get_select_multiple (GTK_FILE_CHOOSER (self->dialog)))
     data->select_multiple = TRUE;
-
-  if (gtk_file_chooser_get_show_hidden (GTK_FILE_CHOOSER (self->dialog)))
-    data->show_hidden = TRUE;
 
   transient_for = gtk_native_dialog_get_transient_for (GTK_NATIVE_DIALOG (self));
   if (transient_for)

@@ -116,9 +116,6 @@ _gtk_file_chooser_install_properties (GObjectClass *klass)
 				    GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE,
 				    "select-multiple");
   g_object_class_override_property (klass,
-				    GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN,
-				    "show-hidden");
-  g_object_class_override_property (klass,
 				    GTK_FILE_CHOOSER_PROP_CREATE_FOLDERS,
 				    "create-folders");
 }
