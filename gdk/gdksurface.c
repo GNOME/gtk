@@ -778,7 +778,6 @@ gdk_surface_new_temp (GdkDisplay         *display,
 
 /**
  * gdk_surface_new_popup: (constructor)
- * @display: the display to create the surface on
  * @parent: the parent surface to attach the surface to
  * @autohide: whether to hide the surface on outside clicks
  *
@@ -790,16 +789,14 @@ gdk_surface_new_temp (GdkDisplay         *display,
  * Returns: (transfer full): a new #GdkSurface
  */
 GdkSurface *
-gdk_surface_new_popup (GdkDisplay *display,
-                       GdkSurface *parent,
+gdk_surface_new_popup (GdkSurface *parent,
                        gboolean    autohide)
 {
   GdkSurface *surface;
 
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (GDK_IS_SURFACE (parent), NULL);
 
-  surface = gdk_surface_new (display, GDK_SURFACE_POPUP,
+  surface = gdk_surface_new (parent->display, GDK_SURFACE_POPUP,
                              parent, 0, 0, 100, 100);
 
   surface->autohide = autohide;
