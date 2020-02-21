@@ -552,9 +552,6 @@ filesave_choose_cb (GtkWidget              *button,
                                         _("_Select"), GTK_RESPONSE_ACCEPT,
                                         NULL);
 
-  /* The confirmation dialog will appear, when the user clicks print */
-  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), FALSE);
-
   /* select the current filename in the dialog */
   if (priv->source != NULL && priv->source->value != NULL)
     {

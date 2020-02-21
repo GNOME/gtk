@@ -367,7 +367,6 @@ struct _GtkFileChooserWidgetPrivate {
   guint show_hidden_set : 1;
   guint sort_directories_first : 1;
   guint show_time : 1;
-  guint do_overwrite_confirmation : 1;
   guint list_sort_ascending : 1;
   guint shortcuts_current_folder_active : 1;
   guint show_size_column : 1;
@@ -3337,13 +3336,6 @@ gtk_file_chooser_widget_set_property (GObject      *object,
       set_show_hidden (impl, g_value_get_boolean (value));
       break;
 
-    case GTK_FILE_CHOOSER_PROP_DO_OVERWRITE_CONFIRMATION:
-      {
-        gboolean do_overwrite_confirmation = g_value_get_boolean (value);
-        priv->do_overwrite_confirmation = do_overwrite_confirmation;
-      }
-      break;
-
     case GTK_FILE_CHOOSER_PROP_CREATE_FOLDERS:
       {
         gboolean create_folders = g_value_get_boolean (value);
@@ -3407,10 +3399,6 @@ gtk_file_chooser_widget_get_property (GObject    *object,
 
     case GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN:
       g_value_set_boolean (value, priv->show_hidden);
-      break;
-
-    case GTK_FILE_CHOOSER_PROP_DO_OVERWRITE_CONFIRMATION:
-      g_value_set_boolean (value, priv->do_overwrite_confirmation);
       break;
 
     case GTK_FILE_CHOOSER_PROP_CREATE_FOLDERS:
@@ -6296,49 +6284,24 @@ should_respond_after_confirm_overwrite (GtkFileChooserWidget *impl,
                                         GFile                *parent_file)
 {
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-  GtkFileChooserConfirmation conf;
+  struct GetDisplayNameData *data;
 
-  if (!priv->do_overwrite_confirmation)
-    return TRUE;
+  g_assert (file_part != NULL);
 
-  conf = GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM;
+  data = g_new0 (struct GetDisplayNameData, 1);
+  data->impl = g_object_ref (impl);
+  data->file_part = g_strdup (file_part);
 
-  g_signal_emit_by_name (impl, "confirm-overwrite", &conf);
+  if (priv->should_respond_get_info_cancellable)
+    g_cancellable_cancel (priv->should_respond_get_info_cancellable);
 
-  switch (conf)
-    {
-    case GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM:
-      {
-        struct GetDisplayNameData *data;
-
-        g_assert (file_part != NULL);
-
-        data = g_new0 (struct GetDisplayNameData, 1);
-        data->impl = g_object_ref (impl);
-        data->file_part = g_strdup (file_part);
-
-        if (priv->should_respond_get_info_cancellable)
-          g_cancellable_cancel (priv->should_respond_get_info_cancellable);
-
-        priv->should_respond_get_info_cancellable =
-          _gtk_file_system_get_info (priv->file_system, parent_file,
-                                     "standard::display-name",
-                                     confirmation_confirm_get_info_cb,
-                                     data);
-        set_busy_cursor (data->impl, TRUE);
-        return FALSE;
-      }
-
-    case GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME:
-      return TRUE;
-
-    case GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN:
-      return FALSE;
-
-    default:
-      g_assert_not_reached ();
-      return FALSE;
-    }
+  priv->should_respond_get_info_cancellable =
+    _gtk_file_system_get_info (priv->file_system, parent_file,
+                               "standard::display-name",
+                               confirmation_confirm_get_info_cb,
+                               data);
+  set_busy_cursor (data->impl, TRUE);
+  return FALSE;
 }
 
 static void

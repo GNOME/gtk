@@ -59,28 +59,6 @@ typedef enum
   GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER
 } GtkFileChooserAction;
 
-/**
- * GtkFileChooserConfirmation:
- * @GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM: The file chooser will present
- *  its stock dialog to confirm about overwriting an existing file.
- * @GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME: The file chooser will
- *  terminate and accept the user’s choice of a file name.
- * @GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN: The file chooser will
- *  continue running, so as to let the user select another file name.
- *
- * Used as a return value of handlers for the
- * #GtkFileChooser::confirm-overwrite signal of a #GtkFileChooser. This
- * value determines whether the file chooser will present the stock
- * confirmation dialog, accept the user’s choice of a filename, or
- * let the user choose another filename.
- */
-typedef enum
-{
-  GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM,
-  GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME,
-  GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN
-} GtkFileChooserConfirmation;
-
 GDK_AVAILABLE_IN_ALL
 GType gtk_file_chooser_get_type (void) G_GNUC_CONST;
 
@@ -135,12 +113,6 @@ void                 gtk_file_chooser_set_show_hidden     (GtkFileChooser       
 							   gboolean              show_hidden);
 GDK_AVAILABLE_IN_ALL
 gboolean             gtk_file_chooser_get_show_hidden     (GtkFileChooser       *chooser);
-
-GDK_AVAILABLE_IN_ALL
-void                 gtk_file_chooser_set_do_overwrite_confirmation (GtkFileChooser *chooser,
-								     gboolean        do_overwrite_confirmation);
-GDK_AVAILABLE_IN_ALL
-gboolean             gtk_file_chooser_get_do_overwrite_confirmation (GtkFileChooser *chooser);
 
 GDK_AVAILABLE_IN_ALL
 void                 gtk_file_chooser_set_create_folders  (GtkFileChooser       *chooser,

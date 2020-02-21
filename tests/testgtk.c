@@ -5779,14 +5779,6 @@ native_multi_select_toggle (GtkWidget *checkbutton,
 }
 
 static void
-native_overwrite_confirmation_toggle (GtkWidget *checkbutton,
-                                      GtkFileChooserNative *native)
-{
-  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (native),
-                                                  gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(checkbutton)));
-}
-
-static void
 native_visible_notify_show (GObject	*object,
                             GParamSpec	*pspec,
                             GtkWidget   *show_button)
@@ -6002,11 +5994,6 @@ create_native_dialogs (GtkWidget *widget)
       check_button = gtk_check_button_new_with_label ("Multiple select");
       g_signal_connect (check_button, "toggled",
                         G_CALLBACK (native_multi_select_toggle), native);
-      gtk_container_add (GTK_CONTAINER (box), check_button);
-
-      check_button = gtk_check_button_new_with_label ("Confirm overwrite");
-      g_signal_connect (check_button, "toggled",
-                        G_CALLBACK (native_overwrite_confirmation_toggle), native);
       gtk_container_add (GTK_CONTAINER (box), check_button);
 
       show_button = gtk_button_new_with_label ("Show");

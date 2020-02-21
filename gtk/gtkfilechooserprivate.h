@@ -94,7 +94,6 @@ struct _GtkFileChooserIface
   void (*selection_changed)      (GtkFileChooser *chooser);
   void (*update_preview)         (GtkFileChooser *chooser);
   void (*file_activated)         (GtkFileChooser *chooser);
-  GtkFileChooserConfirmation (*confirm_overwrite) (GtkFileChooser *chooser);
 
   /* 3.22 additions */
   void           (*add_choice)    (GtkFileChooser *chooser,

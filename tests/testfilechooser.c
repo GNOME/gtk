@@ -490,55 +490,6 @@ notify_multiple_cb (GtkWidget  *dialog,
   gtk_widget_set_sensitive (button, multiple);
 }
 
-static GtkFileChooserConfirmation
-confirm_overwrite_cb (GtkFileChooser *chooser,
-		      gpointer        data)
-{
-  GtkWidget *dialog;
-  GtkWidget *button;
-  int response;
-  GtkFileChooserConfirmation conf;
-
-  dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (chooser))),
-				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-				   GTK_MESSAGE_QUESTION,
-				   GTK_BUTTONS_NONE,
-				   "What do you want to do?");
-
-  button = gtk_button_new_with_label ("Use the stock confirmation dialog");
-  gtk_widget_show (button);
-  gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, 1);
-
-  button = gtk_button_new_with_label ("Type a new file name");
-  gtk_widget_show (button);
-  gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, 2);
-
-  button = gtk_button_new_with_label ("Accept the file name");
-  gtk_widget_show (button);
-  gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, 3);
-
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-
-  switch (response)
-    {
-    case 1:
-      conf = GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM;
-      break;
-
-    case 3:
-      conf = GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME;
-      break;
-
-    default:
-      conf = GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN;
-      break;
-    }
-
-  gtk_widget_destroy (dialog);
-
-  return conf;
-}
-
 int
 main (int argc, char **argv)
 {
@@ -642,8 +593,6 @@ main (int argc, char **argv)
 		    G_CALLBACK (print_current_folder), NULL);
   g_signal_connect (dialog, "response",
 		    G_CALLBACK (response_cb), &done);
-  g_signal_connect (dialog, "confirm-overwrite",
-		    G_CALLBACK (confirm_overwrite_cb), NULL);
 
   /* Filters */
   filter = gtk_file_filter_new ();

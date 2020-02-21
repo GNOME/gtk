@@ -926,7 +926,6 @@ gtk_file_chooser_button_set_property (GObject      *object,
     case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET_ACTIVE:
     case GTK_FILE_CHOOSER_PROP_USE_PREVIEW_LABEL:
     case GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN:
-    case GTK_FILE_CHOOSER_PROP_DO_OVERWRITE_CONFIRMATION:
     case GTK_FILE_CHOOSER_PROP_CREATE_FOLDERS:
       g_object_set_property (G_OBJECT (priv->chooser), pspec->name, value);
       break;
@@ -972,7 +971,6 @@ gtk_file_chooser_button_get_property (GObject    *object,
     case GTK_FILE_CHOOSER_PROP_USE_PREVIEW_LABEL:
     case GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE:
     case GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN:
-    case GTK_FILE_CHOOSER_PROP_DO_OVERWRITE_CONFIRMATION:
     case GTK_FILE_CHOOSER_PROP_CREATE_FOLDERS:
       g_object_get_property (G_OBJECT (priv->chooser), pspec->name, value);
       break;

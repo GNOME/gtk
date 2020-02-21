@@ -105,8 +105,6 @@
  *                                       "_Cancel");
  * chooser = GTK_FILE_CHOOSER (native);
  *
- * gtk_file_chooser_set_do_overwrite_confirmation (chooser, TRUE);
- *
  * if (user_edited_a_new_document)
  *   gtk_file_chooser_set_current_name (chooser,
  *                                      _("Untitled document"));
@@ -147,7 +145,6 @@
  * * #GtkFileChooser::current-folder-changed
  * * #GtkFileChooser::selection-changed
  * * #GtkFileChooser::file-activated
- * * #GtkFileChooser::confirm-overwrite
  *
  * You can also not use the methods that directly control user navigation:
  * * gtk_file_chooser_unselect_filename()

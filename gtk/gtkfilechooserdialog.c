@@ -111,8 +111,6 @@
  *                                       NULL);
  * chooser = GTK_FILE_CHOOSER (dialog);
  *
- * gtk_file_chooser_set_do_overwrite_confirmation (chooser, TRUE);
- *
  * if (user_edited_a_new_document)
  *   gtk_file_chooser_set_current_name (chooser, _("Untitled document"));
  * else

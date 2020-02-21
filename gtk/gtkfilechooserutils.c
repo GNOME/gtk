@@ -66,8 +66,6 @@ static void           delegate_update_preview         (GtkFileChooser    *choose
 static void           delegate_file_activated         (GtkFileChooser    *chooser,
 						       gpointer           data);
 
-static GtkFileChooserConfirmation delegate_confirm_overwrite (GtkFileChooser    *chooser,
-							      gpointer           data);
 static void           delegate_add_choice             (GtkFileChooser  *chooser,
                                                        const char      *id,
                                                        const char      *label,
@@ -120,9 +118,6 @@ _gtk_file_chooser_install_properties (GObjectClass *klass)
   g_object_class_override_property (klass,
 				    GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN,
 				    "show-hidden");
-  g_object_class_override_property (klass,
-				    GTK_FILE_CHOOSER_PROP_DO_OVERWRITE_CONFIRMATION,
-				    "do-overwrite-confirmation");
   g_object_class_override_property (klass,
 				    GTK_FILE_CHOOSER_PROP_CREATE_FOLDERS,
 				    "create-folders");
@@ -194,8 +189,6 @@ _gtk_file_chooser_set_delegate (GtkFileChooser *receiver,
 		    G_CALLBACK (delegate_update_preview), receiver);
   g_signal_connect (delegate, "file-activated",
 		    G_CALLBACK (delegate_file_activated), receiver);
-  g_signal_connect (delegate, "confirm-overwrite",
-		    G_CALLBACK (delegate_confirm_overwrite), receiver);
 }
 
 GQuark
@@ -369,16 +362,6 @@ delegate_file_activated (GtkFileChooser    *chooser,
 			 gpointer           data)
 {
   g_signal_emit_by_name (data, "file-activated");
-}
-
-static GtkFileChooserConfirmation
-delegate_confirm_overwrite (GtkFileChooser    *chooser,
-			    gpointer           data)
-{
-  GtkFileChooserConfirmation conf;
-
-  g_signal_emit_by_name (data, "confirm-overwrite", &conf);
-  return conf;
 }
 
 GSettings *

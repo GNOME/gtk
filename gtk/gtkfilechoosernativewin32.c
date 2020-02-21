@@ -61,7 +61,6 @@ typedef struct {
   gboolean save;
   gboolean folder;
   gboolean modal;
-  gboolean overwrite_confirmation;
   gboolean select_multiple;
   gboolean show_hidden;
 
@@ -500,10 +499,7 @@ filechooser_win32_thread (gpointer _data)
   if (data->show_hidden)
     flags |= FOS_FORCESHOWHIDDEN;
 
-  if (data->overwrite_confirmation)
-    flags |= FOS_OVERWRITEPROMPT;
-  else
-    flags &= ~(FOS_OVERWRITEPROMPT);
+  flags |= FOS_OVERWRITEPROMPT;
 
   hr = IFileDialog_SetOptions (pfd, flags);
   if (FAILED (hr))
@@ -926,9 +922,6 @@ gtk_file_chooser_native_win32_show (GtkFileChooserNative *self)
        action == GTK_FILE_CHOOSER_ACTION_OPEN) &&
       gtk_file_chooser_get_select_multiple (GTK_FILE_CHOOSER (self->dialog)))
     data->select_multiple = TRUE;
-
-  if (gtk_file_chooser_get_do_overwrite_confirmation (GTK_FILE_CHOOSER (self->dialog)))
-    data->overwrite_confirmation = TRUE;
 
   if (gtk_file_chooser_get_show_hidden (GTK_FILE_CHOOSER (self->dialog)))
     data->show_hidden = TRUE;
