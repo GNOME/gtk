@@ -333,6 +333,37 @@ test_identity (void)
 }
 
 static void
+test_identity_equal (void)
+{
+  GskTransform *id = gsk_transform_new ();
+  GskTransform *t;
+
+  g_assert_true (gsk_transform_equal (NULL, NULL));
+  g_assert_true (gsk_transform_equal (id, NULL));
+  g_assert_true (gsk_transform_equal (NULL, id));
+  g_assert_true (gsk_transform_equal (id, id));
+
+  t = gsk_transform_transform (NULL, NULL);
+  g_assert_true (gsk_transform_equal (t, NULL));
+  gsk_transform_unref (t);
+  t = gsk_transform_transform (gsk_transform_new (), NULL);
+  g_assert_true (gsk_transform_equal (t, NULL));
+  gsk_transform_unref (t);
+  t = gsk_transform_transform (NULL, id);
+  g_assert_true (gsk_transform_equal (t, NULL));
+  gsk_transform_unref (t);
+  t = gsk_transform_transform (gsk_transform_new (), id);
+  g_assert_true (gsk_transform_equal (t, NULL));
+  gsk_transform_unref (t);
+  t = gsk_transform_new ();
+  t = gsk_transform_transform (t, t);
+  g_assert_true (gsk_transform_equal (t, NULL));
+  gsk_transform_unref (t);
+
+  gsk_transform_unref (id);
+}
+
+static void
 test_print_parse (void)
 {
   GskTransform *transform, *parsed;
@@ -381,6 +412,7 @@ main (int   argc,
   g_test_add_func ("/transform/conversions/simple", test_conversions_simple);
   g_test_add_func ("/transform/conversions/transformed", test_conversions_transformed);
   g_test_add_func ("/transform/identity", test_identity);
+  g_test_add_func ("/transform/identity-equal", test_identity_equal);
   g_test_add_func ("/transform/invert", test_invert);
   g_test_add_func ("/transform/print-parse", test_print_parse);
 

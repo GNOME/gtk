@@ -1622,6 +1622,14 @@ gsk_transform_transform (GskTransform *next,
   if (other == NULL)
     return next;
 
+  if (gsk_transform_is_identity (next))
+    {
+      /* ref before unref to avoid catastrophe when other == next */
+      other = gsk_transform_ref (other);
+      gsk_transform_unref (next);
+      return other;
+    }
+
   next = gsk_transform_transform (next, other->next);
   return other->transform_class->apply (other, next);
 }
@@ -1677,8 +1685,11 @@ gsk_transform_equal (GskTransform *first,
   if (first == second)
     return TRUE;
 
-  if (first == NULL || second == NULL)
-    return FALSE;
+  if (first == NULL)
+    return gsk_transform_is_identity (second);
+
+  if (second == NULL)
+    return gsk_transform_is_identity (first);
 
   if (first->transform_class != second->transform_class)
     return FALSE;
