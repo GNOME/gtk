@@ -68,7 +68,7 @@ struct _GtkIMContextClass
 				   PangoAttrList **attrs,
 				   gint           *cursor_pos);
   gboolean (*filter_keypress)     (GtkIMContext   *context,
-			           GdkEventKey    *event);
+			           GdkEvent       *event);
   void     (*focus_in)            (GtkIMContext   *context);
   void     (*focus_out)           (GtkIMContext   *context);
   void     (*reset)               (GtkIMContext   *context);
@@ -106,7 +106,7 @@ void     gtk_im_context_get_preedit_string  (GtkIMContext       *context,
 					     gint               *cursor_pos);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_im_context_filter_keypress     (GtkIMContext       *context,
-					     GdkEventKey        *event);
+					     GdkEvent           *event);
 GDK_AVAILABLE_IN_ALL
 void     gtk_im_context_focus_in            (GtkIMContext       *context);
 GDK_AVAILABLE_IN_ALL
