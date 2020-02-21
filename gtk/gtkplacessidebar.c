@@ -45,7 +45,7 @@
 #include "gtksettings.h"
 #include "gtktrashmonitor.h"
 #include "gtktypebuiltins.h"
-#include "gtkpopover.h"
+#include "gtkpopovermenu.h"
 #include "gtkgrid.h"
 #include "gtklabel.h"
 #include "gtkbutton.h"
@@ -2091,150 +2091,6 @@ check_unmount_and_eject (GMount   *mount,
 }
 
 static void
-check_visibility (GMount   *mount,
-                  GVolume  *volume,
-                  GDrive   *drive,
-                  gboolean *show_mount,
-                  gboolean *show_unmount,
-                  gboolean *show_eject,
-                  gboolean *show_rescan,
-                  gboolean *show_start,
-                  gboolean *show_stop)
-{
-  *show_mount = FALSE;
-  *show_rescan = FALSE;
-  *show_start = FALSE;
-  *show_stop = FALSE;
-
-  check_unmount_and_eject (mount, volume, drive, show_unmount, show_eject);
-
-  if (drive != NULL)
-    {
-      if (g_drive_is_media_removable (drive) &&
-          !g_drive_is_media_check_automatic (drive) &&
-          g_drive_can_poll_for_media (drive))
-        *show_rescan = TRUE;
-
-      *show_start = g_drive_can_start (drive) || g_drive_can_start_degraded (drive);
-      *show_stop  = g_drive_can_stop (drive);
-
-      if (*show_stop)
-        *show_unmount = FALSE;
-    }
-
-  if (volume != NULL)
-    {
-      if (mount == NULL)
-        *show_mount = g_volume_can_mount (volume);
-    }
-}
-
-typedef struct {
-  GtkWidget *add_shortcut_item;
-  GtkWidget *remove_item;
-  GtkWidget *rename_item;
-  GtkWidget *separator_item;
-  GtkWidget *mount_item;
-  GtkWidget *unmount_item;
-  GtkWidget *eject_item;
-  GtkWidget *rescan_item;
-  GtkWidget *start_item;
-  GtkWidget *stop_item;
-} PopoverData;
-
-static void
-check_popover_sensitivity (GtkSidebarRow *row,
-                           PopoverData   *data)
-{
-  gboolean show_mount;
-  gboolean show_unmount;
-  gboolean show_eject;
-  gboolean show_rescan;
-  gboolean show_start;
-  gboolean show_stop;
-  GtkPlacesSidebarPlaceType type;
-  GDrive *drive;
-  GVolume *volume;
-  GMount *mount;
-  GtkPlacesSidebar *sidebar;
-  GAction *action;
-
-  g_object_get (row,
-                "sidebar", &sidebar,
-                "place-type", &type,
-                "drive", &drive,
-                "volume", &volume,
-                "mount", &mount,
-                NULL);
-
-  gtk_widget_set_visible (data->add_shortcut_item, (type == PLACES_MOUNTED_VOLUME));
-
-  action = g_action_map_lookup_action (G_ACTION_MAP (sidebar->row_actions), "remove");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (type == PLACES_BOOKMARK));
-  action = g_action_map_lookup_action (G_ACTION_MAP (sidebar->row_actions), "rename");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (type == PLACES_BOOKMARK ||
-                                                          type == PLACES_XDG_DIR));
-  action = g_action_map_lookup_action (G_ACTION_MAP (sidebar->row_actions), "open");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !gtk_list_box_row_is_selected (GTK_LIST_BOX_ROW (row)));
-
-  check_visibility (mount, volume, drive,
-                    &show_mount, &show_unmount, &show_eject, &show_rescan, &show_start, &show_stop);
-
-  gtk_widget_set_visible (data->separator_item, show_mount || show_unmount || show_eject);
-  gtk_widget_set_visible (data->mount_item, show_mount);
-  gtk_widget_set_visible (data->unmount_item, show_unmount);
-  gtk_widget_set_visible (data->eject_item, show_eject);
-  gtk_widget_set_visible (data->rescan_item, show_rescan);
-  gtk_widget_set_visible (data->start_item, show_start);
-  gtk_widget_set_visible (data->stop_item, show_stop);
-
-  /* Adjust start/stop items to reflect the type of the drive */
-  g_object_set (data->start_item, "text", _("_Start"), NULL);
-  g_object_set (data->stop_item, "text", _("_Stop"), NULL);
-  if ((show_start || show_stop) && drive != NULL)
-    {
-      switch (g_drive_get_start_stop_type (drive))
-        {
-        case G_DRIVE_START_STOP_TYPE_SHUTDOWN:
-          /* start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used */
-          g_object_set (data->start_item, "text", _("_Power On"), NULL);
-          g_object_set (data->stop_item, "text", _("_Safely Remove Drive"), NULL);
-          break;
-
-        case G_DRIVE_START_STOP_TYPE_NETWORK:
-          g_object_set (data->start_item, "text", _("_Connect Drive"), NULL);
-          g_object_set (data->stop_item, "text", _("_Disconnect Drive"), NULL);
-          break;
-
-        case G_DRIVE_START_STOP_TYPE_MULTIDISK:
-          g_object_set (data->start_item, "text", _("_Start Multi-disk Device"), NULL);
-          g_object_set (data->stop_item, "text", _("_Stop Multi-disk Device"), NULL);
-          break;
-
-        case G_DRIVE_START_STOP_TYPE_PASSWORD:
-          /* stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used */
-          g_object_set (data->start_item, "text", _("_Unlock Device"), NULL);
-          g_object_set (data->stop_item, "text", _("_Lock Device"), NULL);
-          break;
-
-        default:
-        case G_DRIVE_START_STOP_TYPE_UNKNOWN:
-          /* uses defaults set above */
-          break;
-        }
-    }
-
-  if (drive)
-    g_object_unref (drive);
-  if (volume)
-    g_object_unref (volume);
-  if (mount)
-    g_object_unref (mount);
-
-  g_object_unref (sidebar);
-}
-
-static void
 drive_start_from_bookmark_cb (GObject      *source_object,
                               GAsyncResult *res,
                               gpointer      user_data)
@@ -3382,67 +3238,6 @@ static GActionEntry entries[] = {
 };
 
 static void
-add_actions (GtkPlacesSidebar *sidebar)
-{
-  sidebar->row_actions = G_ACTION_GROUP (g_simple_action_group_new ());
-  g_action_map_add_action_entries (G_ACTION_MAP (sidebar->row_actions),
-                                   entries, G_N_ELEMENTS (entries),
-                                   sidebar);
-  gtk_widget_insert_action_group (GTK_WIDGET (sidebar), "row", sidebar->row_actions);
-}
-
-static GtkWidget *
-append_separator (GtkWidget *box)
-{
-  GtkWidget *separator;
-
-  separator = g_object_new (GTK_TYPE_SEPARATOR,
-                            "orientation", GTK_ORIENTATION_HORIZONTAL,
-                            "visible", TRUE,
-                            "margin-top", 6,
-                            "margin-bottom", 6,
-                            NULL);
-  gtk_container_add (GTK_CONTAINER (box), separator);
-
-  return separator;
-}
-
-static GtkWidget *
-add_button (GtkWidget   *box,
-            const gchar *label,
-            const gchar *action)
-{
-  GtkWidget *item;
-
-  item = g_object_new (GTK_TYPE_MODEL_BUTTON,
-                       "visible", TRUE,
-                       "action-name", action,
-                       "text", label,
-                       NULL);
-  gtk_container_add (GTK_CONTAINER (box), item);
-
-  return item;
-}
-
-static GtkWidget *
-add_open_button (GtkWidget          *box,
-                 const gchar        *label,
-                 GtkPlacesOpenFlags  flags)
-{
-  GtkWidget *item;
-
-  item = g_object_new (GTK_TYPE_MODEL_BUTTON,
-                       "visible", TRUE,
-                       "action-name", flags == GTK_PLACES_OPEN_NORMAL ? "row.open" : "row.open-other",
-                       "action-target", g_variant_new_int32 (flags),
-                       "text", label,
-                       NULL);
-  gtk_container_add (GTK_CONTAINER (box), item);
-
-  return item;
-}
-
-static void
 on_row_popover_destroy (GtkWidget        *row_popover,
                         GtkPlacesSidebar *sidebar)
 {
@@ -3487,16 +3282,15 @@ build_popup_menu_using_gmenu (GtkSidebarRow *row)
         }
       cloud_provider_menu = cloud_providers_account_get_menu_model (cloud_provider_account);
       cloud_provider_action_group = cloud_providers_account_get_action_group (cloud_provider_account);
-      if (cloud_provider_menu != NULL && cloud_provider_action_group != NULL)
+      if (cloud_provider_menu != NULL && cloud_p:laurovider_action_group != NULL)
         {
           g_menu_append_section (menu, NULL, cloud_provider_menu);
           gtk_widget_insert_action_group (GTK_WIDGET (sidebar),
                                           "cloudprovider",
                                           G_ACTION_GROUP (cloud_provider_action_group));
         }
-      add_actions (sidebar);
       if (sidebar->popover)
-        gtk_widget_unparent (sidebar->popver);
+        gtk_widget_unparent (sidebar->popover);
 
       sidebar->popover = gtk_popover_new_from_model (GTK_WIDGET (sidebar),
                                                      G_MENU_MODEL (menu));
@@ -3513,8 +3307,24 @@ static void
 create_row_popover (GtkPlacesSidebar *sidebar,
                     GtkSidebarRow    *row)
 {
-  PopoverData data;
-  GtkWidget *box;
+  GtkPlacesSidebarPlaceType type;
+  GMenu *menu, *section;
+  GMenuItem *item;
+  GMount *mount;
+  GVolume *volume;
+  GDrive *drive;
+  GAction *action;
+  gboolean show_unmount, show_eject;
+  gboolean show_stop;
+
+  g_object_get (row,
+                "place-type", &type,
+                "drive", &drive,
+                "volume", &volume,
+                "mount", &mount,
+                NULL);
+
+  check_unmount_and_eject (mount, volume, drive, &show_unmount, &show_eject);
 
 #ifdef HAVE_CLOUDPROVIDERS
   CloudProvidersAccount *cloud_provider_account;
@@ -3528,41 +3338,136 @@ create_row_popover (GtkPlacesSidebar *sidebar,
     }
 #endif
 
-  sidebar->popover = gtk_popover_new (GTK_WIDGET (sidebar));
-  /* Clean sidebar pointer when its destroyed, most of the times due to its
-   * relative_to associated row being destroyed */
-  g_signal_connect (sidebar->popover, "destroy", G_CALLBACK (on_row_popover_destroy), sidebar);
-  setup_popover_shadowing (sidebar->popover);
-  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  g_object_set (box, "margin", 10, NULL);
-  gtk_widget_show (box);
-  gtk_container_add (GTK_CONTAINER (sidebar->popover), box);
+  action = g_action_map_lookup_action (G_ACTION_MAP (sidebar->row_actions), "remove");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (type == PLACES_BOOKMARK));
+  action = g_action_map_lookup_action (G_ACTION_MAP (sidebar->row_actions), "rename");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (type == PLACES_BOOKMARK ||
+                                                          type == PLACES_XDG_DIR));
+  action = g_action_map_lookup_action (G_ACTION_MAP (sidebar->row_actions), "open");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !gtk_list_box_row_is_selected (GTK_LIST_BOX_ROW (row)));
 
-  add_open_button (box, _("_Open"), GTK_PLACES_OPEN_NORMAL);
+  menu = g_menu_new ();
+  section = g_menu_new ();
+
+  item = g_menu_item_new (_("_Open"), "row.open");
+  g_menu_item_set_action_and_target_value (item, "row.open",
+                                           g_variant_new_int32 (GTK_PLACES_OPEN_NORMAL));
+  g_menu_append_item (section, item);
+  g_object_unref (item);
 
   if (sidebar->open_flags & GTK_PLACES_OPEN_NEW_TAB)
-    add_open_button (box, _("Open in New _Tab"), GTK_PLACES_OPEN_NEW_TAB);
+    {
+      item = g_menu_item_new (_("_Open in New _Tab"), "row.open");
+      g_menu_item_set_action_and_target_value (item, "row.open",
+                                               g_variant_new_int32 (GTK_PLACES_OPEN_NEW_TAB));
+      g_menu_append_item (section, item);
+      g_object_unref (item);
+    }
 
   if (sidebar->open_flags & GTK_PLACES_OPEN_NEW_WINDOW)
-    add_open_button (box, _("Open in New _Window"), GTK_PLACES_OPEN_NEW_WINDOW);
+    {
+      item = g_menu_item_new (_("_Open in New _Tab"), "row.open");
+      g_menu_item_set_action_and_target_value (item, "row.open",
+                                               g_variant_new_int32 (GTK_PLACES_OPEN_NEW_WINDOW));
+      g_menu_append_item (section, item);
+      g_object_unref (item);
+    }
 
-  append_separator (box);
+  g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
+  g_object_unref (section);
 
-  data.add_shortcut_item = add_button (box, _("_Add Bookmark"), "row.bookmark");
-  data.remove_item = add_button (box, _("_Remove"), "row.remove");
-  data.rename_item = add_button (box, _("Rename…"), "row.rename");
+  section = g_menu_new ();
+  item = g_menu_item_new (_("_Add Bookmark"), "row.add-bookmark");
+  g_menu_append_item (section, item);
+  g_object_unref (item);
 
-  data.separator_item = append_separator (box);
+  item = g_menu_item_new (_("_Remove"), "row.remove");
+  g_menu_append_item (section, item);
+  g_object_unref (item);
 
-  data.mount_item = add_button (box, _("_Mount"), "row.mount");
-  data.unmount_item = add_button (box, _("_Unmount"), "row.unmount");
-  data.eject_item = add_button (box, _("_Eject"), "row.eject");
-  data.rescan_item = add_button (box, _("_Detect Media"), "row.rescan");
-  data.start_item = add_button (box, _("_Start"), "row.start");
-  data.stop_item = add_button (box, _("_Stop"), "row.stop");
+  item = g_menu_item_new (_("_Rename"), "row.rename");
+  g_menu_append_item (section, item);
+  g_object_unref (item);
 
-  /* Update everything! */
-  check_popover_sensitivity (row, &data);
+  g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
+  g_object_unref (section);
+
+  section = g_menu_new ();
+
+  if (volume != NULL && mount == NULL &&
+      g_volume_can_mount (volume))
+    {
+      item = g_menu_item_new (_("_Mount"), "row.mount");
+      g_menu_append_item (section, item);
+      g_object_unref (item);
+    }
+
+  show_stop = (drive != NULL && g_drive_can_stop (drive));
+
+  if (show_unmount && !show_stop)
+    {
+      item = g_menu_item_new (_("_Unmount"), "row.unmount");
+      g_menu_append_item (section, item);
+      g_object_unref (item);
+    }
+
+  if (show_eject)
+    {
+      item = g_menu_item_new (_("_Eject"), "row.eject");
+      g_menu_append_item (section, item);
+      g_object_unref (item);
+    }
+
+  if (drive != NULL &&
+      g_drive_is_media_removable (drive) &&
+      !g_drive_is_media_check_automatic (drive) &&
+      g_drive_can_poll_for_media (drive))
+    {
+      item = g_menu_item_new (_("_Detect Media"), "row.rescan");
+      g_menu_append_item (section, item);
+      g_object_unref (item);
+    }
+
+  if (drive != NULL &&
+      (g_drive_can_start (drive) || g_drive_can_start_degraded (drive)))
+    {
+      const guint ss_type = g_drive_get_start_stop_type (drive);
+      const char *start_label = _("_Start");
+
+      if (ss_type == G_DRIVE_START_STOP_TYPE_SHUTDOWN) start_label = _("_Power On");
+      else if (ss_type == G_DRIVE_START_STOP_TYPE_NETWORK) start_label = _("_Connect Drive");
+      else if (ss_type == G_DRIVE_START_STOP_TYPE_MULTIDISK) start_label = _("_Start Multi-disk Device");
+      else if (ss_type == G_DRIVE_START_STOP_TYPE_PASSWORD) start_label = _("_Unlock Device");
+
+      item = g_menu_item_new (start_label, "row.start");
+      g_menu_append_item (section, item);
+      g_object_unref (item);
+    }
+
+  if (show_stop && !show_unmount)
+    {
+      const guint ss_type = g_drive_get_start_stop_type (drive);
+      const char *stop_label = _("_Stop");
+
+      if (ss_type == G_DRIVE_START_STOP_TYPE_SHUTDOWN) stop_label = _("_Safely Remove Drive");
+      else if (ss_type == G_DRIVE_START_STOP_TYPE_NETWORK) stop_label = _("_Disconnect Drive");
+      else if (ss_type == G_DRIVE_START_STOP_TYPE_MULTIDISK) stop_label = _("Stop Multi-disk Device");
+      else if (ss_type == G_DRIVE_START_STOP_TYPE_PASSWORD) stop_label = _("_Lock Device");
+
+      item = g_menu_item_new (stop_label, "row.stop");
+      g_menu_append_item (section, item);
+      g_object_unref (item);
+    }
+
+  g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
+  g_object_unref (section);
+
+  sidebar->popover = gtk_popover_menu_new_from_model (GTK_WIDGET (sidebar),
+                                                      G_MENU_MODEL (menu));
+  g_object_unref (menu);
+  g_signal_connect (sidebar->popover, "destroy", G_CALLBACK (on_row_popover_destroy), sidebar);
+
+  setup_popover_shadowing (sidebar->popover);
 }
 
 static void
@@ -4077,7 +3982,11 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   /* populate the sidebar */
   update_places (sidebar);
 
-  add_actions (sidebar);
+  sidebar->row_actions = G_ACTION_GROUP (g_simple_action_group_new ());
+  g_action_map_add_action_entries (G_ACTION_MAP (sidebar->row_actions),
+                                   entries, G_N_ELEMENTS (entries),
+                                   sidebar);
+  gtk_widget_insert_action_group (GTK_WIDGET (sidebar), "row", sidebar->row_actions);
 }
 
 static void
