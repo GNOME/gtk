@@ -2339,12 +2339,47 @@ gdk_drag_begin (GdkSurface          *surface,
 }
 
 static void
+gdk_surface_ensure_motion (GdkSurface *surface)
+{
+  GdkDisplay *display;
+  GdkSeat *seat;
+  GdkDevice *device;
+  GdkEvent *event;
+  double x, y;
+  GdkModifierType state;
+
+  if (!surface->request_motion)
+    return;
+
+  surface->request_motion = FALSE;
+
+  display = gdk_surface_get_display (surface);
+  seat = gdk_display_get_default_seat (display);
+  device = gdk_seat_get_pointer (seat);
+
+  if (!gdk_surface_get_device_position (surface, device, &x, &y, &state))
+    return;
+
+  event = gdk_motion_event_new (surface,
+                                device,
+                                NULL,
+                                GDK_CURRENT_TIME,
+                                state,
+                                x, y,
+                                NULL);
+
+  gdk_surface_handle_event (event);
+  gdk_event_unref (event);
+}
+
+static void
 gdk_surface_flush_events (GdkFrameClock *clock,
                           void          *data)
 {
   GdkSurface *surface = GDK_SURFACE (data);
 
   _gdk_event_queue_flush (surface->display);
+  gdk_surface_ensure_motion (surface);
   _gdk_display_pause_events (surface->display);
 
   gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS);
@@ -2806,13 +2841,30 @@ gdk_surface_handle_event (GdkEvent *event)
     }
   else
     {
-      g_signal_emit (gdk_event_get_surface (event), signals[EVENT], 0, event, &handled);
+      GdkSurface *surface = gdk_event_get_surface (event);
+
+      if (gdk_event_get_event_type (event) == GDK_MOTION_NOTIFY)
+        surface->request_motion = FALSE;
+
+      g_signal_emit (surface, signals[EVENT], 0, event, &handled);
     }
 
   if (GDK_PROFILER_IS_RUNNING)
     add_event_mark (event, begin_time, GDK_PROFILER_CURRENT_TIME);
 
   return handled;
+}
+
+void
+gdk_surface_request_motion (GdkSurface *surface)
+{
+  GdkFrameClock *frame_clock;
+
+  surface->request_motion = TRUE;
+
+  frame_clock = gdk_surface_get_frame_clock (surface);
+  if (frame_clock)
+    gdk_frame_clock_request_phase (frame_clock, GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS);
 }
 
 /**
