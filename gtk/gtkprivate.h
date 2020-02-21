@@ -31,7 +31,7 @@
 
 #include "gtkcsstypesprivate.h"
 #include "gtktexthandleprivate.h"
-#include "gtkeventcontrollerprivate.h"
+#include "gtkeventcontrollert private.h"
 
 G_BEGIN_DECLS
 
