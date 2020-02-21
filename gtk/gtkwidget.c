@@ -4990,7 +4990,7 @@ gtk_widget_event (GtkWidget *widget,
   if (return_val == FALSE &&
       (gdk_event_get_event_type (event) == GDK_KEY_PRESS ||
        gdk_event_get_event_type (event) == GDK_KEY_RELEASE))
-    return_val |= gtk_bindings_activate_event (G_OBJECT (widget), (GdkEventKey *) event);
+    return_val |= gtk_bindings_activate_event (G_OBJECT (widget), event);
 
   return return_val;
 }

@@ -1795,7 +1795,7 @@ gtk_combo_box_menu_key (GtkEventControllerKey *key,
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (key));
   event = gtk_get_current_event ();
 
-  if (!gtk_bindings_activate_event (G_OBJECT (widget), (GdkEventKey *)event))
+  if (!gtk_bindings_activate_event (G_OBJECT (widget), event))
     {
       gtk_event_controller_key_forward (key, GTK_WIDGET (combo_box));
     }

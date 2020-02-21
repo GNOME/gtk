@@ -101,7 +101,7 @@ gtk_event_controller_key_handle_event (GtkEventController *controller,
     return FALSE;
 
   if (key->im_context &&
-      gtk_im_context_filter_keypress (key->im_context, (GdkEventKey *) event))
+      gtk_im_context_filter_keypress (key->im_context, event))
     {
       g_signal_emit (controller, signals[IM_UPDATE], 0);
       return TRUE;
@@ -368,7 +368,7 @@ gtk_event_controller_key_forward (GtkEventControllerKey *controller,
                                   GTK_PHASE_BUBBLE))
     return TRUE;
 
-  if (gtk_bindings_activate_event (G_OBJECT (widget), (GdkEventKey *)controller->current_event))
+  if (gtk_bindings_activate_event (G_OBJECT (widget), controller->current_event))
     return TRUE;
 
   return FALSE;

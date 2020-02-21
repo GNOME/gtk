@@ -98,7 +98,7 @@ static void gtk_im_context_ime_get_property (GObject      *object,
 static void gtk_im_context_ime_set_client_widget   (GtkIMContext *context,
                                                     GtkWidget    *widget);
 static gboolean gtk_im_context_ime_filter_keypress (GtkIMContext   *context,
-                                                    GdkEventKey    *event);
+                                                    GdkEvent       *event);
 static void gtk_im_context_ime_reset               (GtkIMContext   *context);
 static void gtk_im_context_ime_get_preedit_string  (GtkIMContext   *context,
                                                     gchar         **str,
@@ -345,7 +345,7 @@ _gtk_im_context_ime_commit_unichar (GtkIMContextIME *context_ime,
 
 static gboolean
 gtk_im_context_ime_filter_keypress (GtkIMContext *context,
-                                    GdkEventKey  *event)
+                                    GdkEvent     *event)
 {
   GtkIMContextIME *context_ime;
   gboolean retval = FALSE;
