@@ -69,7 +69,7 @@ typedef struct {
   char *cancel_label;
   char *title;
 
-  GSList *shortcut_uris;
+  GSList *shortcut_files;
   GArray *choices_selections;
 
   GFile *current_folder;
@@ -331,7 +331,7 @@ filechooser_win32_thread_data_free (FilechooserWin32ThreadData *data)
       g_array_free (data->choices_selections, TRUE);
       data->choices_selections = NULL;
     }
-  g_slist_free_full (data->shortcut_uris, g_free);
+  g_slist_free_full (data->shortcut_files, g_object_unref);
   g_slist_free_full (data->files, g_object_unref);
   if (data->self)
     g_object_unref (data->self);
@@ -538,9 +538,9 @@ filechooser_win32_thread (gpointer _data)
       g_free (label);
     }
 
-  for (l = data->shortcut_uris; l != NULL; l = l->next)
+  for (l = data->shortcut_files; l != NULL; l = l->next)
     {
-      IShellItem *item = get_shell_item_for_uri (l->data);
+      IShellItem *item = get_shell_item_for_file (l->data);
       if (item)
         {
           hr = IFileDialog_AddPlace (pfd, item, FDAP_BOTTOM);
@@ -911,8 +911,8 @@ gtk_file_chooser_native_win32_show (GtkFileChooserNative *self)
   self->mode_data = data;
   data->self = g_object_ref (self);
 
-  data->shortcut_uris =
-    gtk_file_chooser_list_shortcut_folder_uris (GTK_FILE_CHOOSER (self->dialog));
+  data->shortcut_files =
+    gtk_file_chooser_list_shortcut_folders (GTK_FILE_CHOOSER (self->dialog));
 
   data->accept_label = translate_mnemonics (self->accept_label);
   data->cancel_label = translate_mnemonics (self->cancel_label);

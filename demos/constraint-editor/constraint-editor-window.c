@@ -221,9 +221,12 @@ open_cb (GtkWidget              *button,
                                         GTK_FILE_CHOOSER_ACTION_OPEN,
                                         "_Load",
                                         "_Cancel");
-
   gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (dialog), TRUE);
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), ".");
+
+  GFile *cwd = g_file_new_for_path (".");
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), cwd, NULL);
+  g_object_unref (cwd);
+
   g_signal_connect (dialog, "response", G_CALLBACK (open_response_cb), self);
   gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
 }
@@ -290,14 +293,20 @@ save_response_cb (GtkNativeDialog        *dialog,
   if (response == GTK_RESPONSE_ACCEPT)
     {
       GListModel *model;
-      char *text, *filename;
+      GFile *file;
+      char *text;
       GError *error = NULL;
 
       model = constraint_view_get_model (CONSTRAINT_VIEW (self->view));
       text = serialize_model (model);
-
-      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-      if (!g_file_set_contents (filename, text, -1, &error))
+      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+      g_file_replace_contents (file, text, -1,
+                               NULL, FALSE,
+                               G_FILE_CREATE_NONE,
+                               NULL,
+                               NULL,
+                               &error);
+      if (error != NULL)
         {
           GtkWidget *dialog;
 
@@ -312,7 +321,9 @@ save_response_cb (GtkNativeDialog        *dialog,
           gtk_widget_show (dialog);
           g_error_free (error);
         }
-      g_free (filename);
+
+      g_free (text);
+      g_object_unref (file);
     }
 
   gtk_native_dialog_destroy (dialog);
@@ -329,9 +340,12 @@ save_cb (GtkWidget              *button,
                                         GTK_FILE_CHOOSER_ACTION_SAVE,
                                         "_Save",
                                         "_Cancel");
-
   gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (dialog), TRUE);
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), ".");
+
+  GFile *cwd = g_file_new_for_path (".");
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), cwd, NULL);
+  g_object_unref (cwd);
+
   g_signal_connect (dialog, "response", G_CALLBACK (save_response_cb), self);
   gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
 }

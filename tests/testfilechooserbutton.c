@@ -45,23 +45,31 @@ static void
 print_selected_path_clicked_cb (GtkWidget *button,
 				gpointer   user_data)
 {
-  gchar *folder, *filename;
+  GFile *folder, *filename;
+  char *folder_uri, *filename_uri;
 
   folder = gtk_file_chooser_get_current_folder (user_data);
-  filename = gtk_file_chooser_get_filename (user_data);
+  filename = gtk_file_chooser_get_file (user_data);
+
+  folder_uri = g_file_get_uri (folder);
+  filename_uri = g_file_get_uri (filename);
   g_message ("Currently Selected:\n\tFolder: `%s'\n\tFilename: `%s'\nDone.\n",
-	     folder, filename);
-  g_free (folder);
-  g_free (filename);
+	     folder_uri, filename_uri);
+  g_free (folder_uri);
+  g_free (filename_uri);
+
+  g_object_unref (folder);
+  g_object_unref (filename);
 }
 
 static void
 add_pwds_parent_as_shortcut_clicked_cb (GtkWidget *button,
 					gpointer   user_data)
 {
+  GFile *path = g_file_new_for_path (gtk_src_dir);
   GError *err = NULL;
 
-  if (!gtk_file_chooser_add_shortcut_folder (user_data, gtk_src_dir, &err))
+  if (!gtk_file_chooser_add_shortcut_folder (user_data, path, &err))
     {
       g_message ("Couldn't add `%s' as shortcut folder: %s", gtk_src_dir,
 		 err->message);
@@ -71,15 +79,18 @@ add_pwds_parent_as_shortcut_clicked_cb (GtkWidget *button,
     {
       g_message ("Added `%s' as shortcut folder.", gtk_src_dir);
     }
+
+  g_object_unref (path);
 }
 
 static void
 del_pwds_parent_as_shortcut_clicked_cb (GtkWidget *button,
 					gpointer   user_data)
 {
+  GFile *path = g_file_new_for_path (gtk_src_dir);
   GError *err = NULL;
 
-  if (!gtk_file_chooser_remove_shortcut_folder (user_data, gtk_src_dir, &err))
+  if (!gtk_file_chooser_remove_shortcut_folder (user_data, path, &err))
     {
       g_message ("Couldn't remove `%s' as shortcut folder: %s", gtk_src_dir,
 		 err->message);
@@ -89,6 +100,8 @@ del_pwds_parent_as_shortcut_clicked_cb (GtkWidget *button,
     {
       g_message ("Removed `%s' as shortcut folder.", gtk_src_dir);
     }
+
+  g_object_unref (path);
 }
 
 static void
@@ -155,54 +168,76 @@ static void
 chooser_current_folder_changed_cb (GtkFileChooser *chooser,
 				   gpointer        user_data)
 {
-  gchar *folder, *filename;
+  GFile *folder, *filename;
+  char *folder_uri, *filename_uri;
 
-  folder = gtk_file_chooser_get_current_folder_uri (chooser);
-  filename = gtk_file_chooser_get_uri (chooser);
+  folder = gtk_file_chooser_get_current_folder (chooser);
+  filename = gtk_file_chooser_get_file (chooser);
+
+  folder_uri = g_file_get_uri (folder);
+  filename_uri = g_file_get_uri (filename);
   g_message ("%s::current-folder-changed\n\tFolder: `%s'\n\tFilename: `%s'\nDone.\n",
-	     G_OBJECT_TYPE_NAME (chooser), folder, filename);
-  g_free (folder);
-  g_free (filename);
+	     G_OBJECT_TYPE_NAME (chooser), folder_uri, filename_uri);
+  g_free (folder_uri);
+  g_free (filename_uri);
+
+  g_object_unref (folder);
+  g_object_unref (filename);
 }
 
 static void
 chooser_selection_changed_cb (GtkFileChooser *chooser,
 			      gpointer        user_data)
 {
-  gchar *filename;
+  GFile *filename;
+  char *uri;
 
-  filename = gtk_file_chooser_get_uri (chooser);
+  filename = gtk_file_chooser_get_file (chooser);
+
+  uri = g_file_get_uri (filename);
   g_message ("%s::selection-changed\n\tSelection:`%s'\nDone.\n",
-	     G_OBJECT_TYPE_NAME (chooser), filename);
-  g_free (filename);
+	     G_OBJECT_TYPE_NAME (chooser), uri);
+  g_free (uri);
+
+  g_object_unref (filename);
 }
 
 static void
 chooser_file_activated_cb (GtkFileChooser *chooser,
 			   gpointer        user_data)
 {
-  gchar *folder, *filename;
+  GFile *folder, *filename;
+  char *folder_uri, *filename_uri;
 
-  folder = gtk_file_chooser_get_current_folder_uri (chooser);
-  filename = gtk_file_chooser_get_uri (chooser);
+  folder = gtk_file_chooser_get_current_folder (chooser);
+  filename = gtk_file_chooser_get_file (chooser);
+
+  folder_uri = g_file_get_uri (folder);
+  filename_uri = g_file_get_uri (filename);
   g_message ("%s::file-activated\n\tFolder: `%s'\n\tFilename: `%s'\nDone.\n",
-	     G_OBJECT_TYPE_NAME (chooser), folder, filename);
-  g_free (folder);
-  g_free (filename);
+	     G_OBJECT_TYPE_NAME (chooser), folder_uri, filename_uri);
+  g_free (folder_uri);
+  g_free (filename_uri);
+
+  g_object_unref (folder);
+  g_object_unref (filename);
 }
 
 static void
 chooser_update_preview_cb (GtkFileChooser *chooser,
 			   gpointer        user_data)
 {
-  gchar *filename;
+  GFile *filename;
 
-  filename = gtk_file_chooser_get_preview_uri (chooser);
+  filename = gtk_file_chooser_get_preview_file (chooser);
   if (filename != NULL)
     {
+      char *uri = g_file_get_uri (filename);
       g_message ("%s::update-preview\n\tPreview Filename: `%s'\nDone.\n",
-		 G_OBJECT_TYPE_NAME (chooser), filename);
-      g_free (filename);
+		 G_OBJECT_TYPE_NAME (chooser), uri);
+      g_free (uri);
+
+      g_object_unref (filename);
     }
 }
 
@@ -214,6 +249,7 @@ add_new_filechooser_button (const gchar          *mnemonic,
                             GtkSizeGroup         *label_group)
 {
   GtkWidget *hbox, *label, *chooser, *button;
+  GFile *path;
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   gtk_container_add (GTK_CONTAINER (group_box), hbox);
@@ -227,8 +263,12 @@ add_new_filechooser_button (const gchar          *mnemonic,
                                                      " - testfilechooserbutton", NULL),
                                          action);
   gtk_widget_set_hexpand (chooser, TRUE);
-  gtk_file_chooser_add_shortcut_folder (GTK_FILE_CHOOSER (chooser), gtk_src_dir, NULL);
-  gtk_file_chooser_remove_shortcut_folder (GTK_FILE_CHOOSER (chooser), gtk_src_dir, NULL);
+
+  path = g_file_new_for_path (gtk_src_dir);
+  gtk_file_chooser_add_shortcut_folder (GTK_FILE_CHOOSER (chooser), path, NULL);
+  gtk_file_chooser_remove_shortcut_folder (GTK_FILE_CHOOSER (chooser), path, NULL);
+  g_object_unref (path);
+
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), chooser);
   g_signal_connect (chooser, "current-folder-changed",
 		    G_CALLBACK (chooser_current_folder_changed_cb), NULL);

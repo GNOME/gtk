@@ -112,14 +112,6 @@ struct _GtkFileChooserIface
 };
 
 GtkFileSystem *_gtk_file_chooser_get_file_system         (GtkFileChooser    *chooser);
-gboolean       _gtk_file_chooser_add_shortcut_folder     (GtkFileChooser    *chooser,
-							  GFile             *folder,
-							  GError           **error);
-gboolean       _gtk_file_chooser_remove_shortcut_folder  (GtkFileChooser    *chooser,
-							  GFile             *folder,
-							  GError           **error);
-GSList *       _gtk_file_chooser_list_shortcut_folder_files (GtkFileChooser *chooser);
-
 
 G_END_DECLS
 
