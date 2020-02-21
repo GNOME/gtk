@@ -131,6 +131,7 @@ gtk/gtkentrybuffer.c
 gtk/gtkentry.c
 gtk/gtkentrycompletion.c
 gtk/gtkeventcontroller.c
+gtk/gtkeventcontrollerfocus.c
 gtk/gtkeventcontrollerkey.c
 gtk/gtkeventcontrollerlegacy.c
 gtk/gtkeventcontrollermotion.c
