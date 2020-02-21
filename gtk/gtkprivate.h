@@ -31,6 +31,7 @@
 
 #include "gtkcsstypesprivate.h"
 #include "gtktexthandleprivate.h"
+#include "gtkeventcontrollerprivate.h"
 
 G_BEGIN_DECLS
 
@@ -96,6 +97,11 @@ gboolean         gtk_propagate_event_internal  (GtkWidget       *widget,
 gboolean   gtk_propagate_event          (GtkWidget       *widget,
                                          GdkEvent        *event);
 void       gtk_main_do_event       (GdkEvent           *event);
+
+GtkWidget *gtk_get_event_widget         (GdkEvent  *event);
+
+void check_crossing_invariants (GtkWidget       *widget,
+                                GtkCrossingData *crossing);
 
 gdouble _gtk_get_slowdown (void);
 void    _gtk_set_slowdown (gdouble slowdown_factor);
