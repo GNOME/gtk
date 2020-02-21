@@ -4433,9 +4433,6 @@ gtk_get_current_event
 gtk_get_current_event_time
 gtk_get_current_event_state
 gtk_get_current_event_device
-gtk_get_event_widget
-gtk_get_event_target
-gtk_get_event_target_with_type
 
 <SUBSECTION Private>
 gtk_init_abi_check
