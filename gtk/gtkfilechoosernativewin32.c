@@ -62,7 +62,6 @@ typedef struct {
   gboolean folder;
   gboolean modal;
   gboolean select_multiple;
-  gboolean show_hidden;
 
   char *accept_label;
   char *cancel_label;
@@ -496,9 +495,6 @@ filechooser_win32_thread (gpointer _data)
   if (data->select_multiple)
     flags |= FOS_ALLOWMULTISELECT;
 
-  if (data->show_hidden)
-    flags |= FOS_FORCESHOWHIDDEN;
-
   flags |= FOS_OVERWRITEPROMPT;
 
   hr = IFileDialog_SetOptions (pfd, flags);
@@ -922,9 +918,6 @@ gtk_file_chooser_native_win32_show (GtkFileChooserNative *self)
        action == GTK_FILE_CHOOSER_ACTION_OPEN) &&
       gtk_file_chooser_get_select_multiple (GTK_FILE_CHOOSER (self->dialog)))
     data->select_multiple = TRUE;
-
-  if (gtk_file_chooser_get_show_hidden (GTK_FILE_CHOOSER (self->dialog)))
-    data->show_hidden = TRUE;
 
   transient_for = gtk_native_dialog_get_transient_for (GTK_NATIVE_DIALOG (self));
   if (transient_for)

@@ -364,7 +364,6 @@ struct _GtkFileChooserWidgetPrivate {
   guint use_preview_label : 1;
   guint select_multiple : 1;
   guint show_hidden : 1;
-  guint show_hidden_set : 1;
   guint sort_directories_first : 1;
   guint show_time : 1;
   guint list_sort_ascending : 1;
@@ -3331,11 +3330,6 @@ gtk_file_chooser_widget_set_property (GObject      *object,
       }
       break;
 
-    case GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN:
-      priv->show_hidden_set = TRUE;
-      set_show_hidden (impl, g_value_get_boolean (value));
-      break;
-
     case GTK_FILE_CHOOSER_PROP_CREATE_FOLDERS:
       {
         gboolean create_folders = g_value_get_boolean (value);
@@ -3395,10 +3389,6 @@ gtk_file_chooser_widget_get_property (GObject    *object,
 
     case GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE:
       g_value_set_boolean (value, priv->select_multiple);
-      break;
-
-    case GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN:
-      g_value_set_boolean (value, priv->show_hidden);
       break;
 
     case GTK_FILE_CHOOSER_PROP_CREATE_FOLDERS:
@@ -3651,8 +3641,8 @@ settings_load (GtkFileChooserWidget *impl)
   date_format = g_settings_get_enum (settings, SETTINGS_KEY_DATE_FORMAT);
   type_format = g_settings_get_enum (settings, SETTINGS_KEY_TYPE_FORMAT);
 
-  if (!priv->show_hidden_set)
-    set_show_hidden (impl, show_hidden);
+  set_show_hidden (impl, show_hidden);
+
   priv->show_size_column = show_size_column;
   gtk_tree_view_column_set_visible (priv->list_size_column, show_size_column);
   priv->show_type_column = show_type_column;
@@ -3694,8 +3684,7 @@ settings_save (GtkFileChooserWidget *impl)
   /* All the other state */
 
   g_settings_set_enum (settings, SETTINGS_KEY_LOCATION_MODE, priv->location_mode);
-  g_settings_set_boolean (settings, SETTINGS_KEY_SHOW_HIDDEN,
-                          gtk_file_chooser_get_show_hidden (GTK_FILE_CHOOSER (impl)));
+  g_settings_set_boolean (settings, SETTINGS_KEY_SHOW_HIDDEN, priv->show_hidden);
   g_settings_set_boolean (settings, SETTINGS_KEY_SHOW_SIZE_COLUMN, priv->show_size_column);
   g_settings_set_boolean (settings, SETTINGS_KEY_SHOW_TYPE_COLUMN, priv->show_type_column);
   g_settings_set_boolean (settings, SETTINGS_KEY_SORT_DIRECTORIES_FIRST, priv->sort_directories_first);

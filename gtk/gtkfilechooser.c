@@ -281,14 +281,6 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
                                                              FALSE,
                                                              GTK_PARAM_READWRITE));
 
-  g_object_interface_install_property (iface,
-                                       g_param_spec_boolean ("show-hidden",
-                                                             P_("Show Hidden"),
-                                                             P_("Whether the hidden files and folders should be displayed"),
-                                                             FALSE,
-                                                             GTK_PARAM_READWRITE));
-
-
   /**
    * GtkFileChooser:create-folders:
    * 
@@ -1093,43 +1085,6 @@ gtk_file_chooser_list_shortcut_folders (GtkFileChooser *chooser)
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
   return GTK_FILE_CHOOSER_GET_IFACE (chooser)->list_shortcut_folders (chooser);
-}
-
-/**
- * gtk_file_chooser_set_show_hidden:
- * @chooser: a #GtkFileChooser
- * @show_hidden: %TRUE if hidden files and folders should be displayed.
- * 
- * Sets whether hidden files and folders are displayed in the file selector.  
- **/
-void
-gtk_file_chooser_set_show_hidden (GtkFileChooser *chooser,
-                                  gboolean        show_hidden)
-{
-  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
-
-  g_object_set (chooser, "show-hidden", show_hidden, NULL);
-}
-
-/**
- * gtk_file_chooser_get_show_hidden:
- * @chooser: a #GtkFileChooser
- * 
- * Gets whether hidden files and folders are displayed in the file selector.   
- * See gtk_file_chooser_set_show_hidden().
- * 
- * Returns: %TRUE if hidden files and folders are displayed.
- **/
-gboolean
-gtk_file_chooser_get_show_hidden (GtkFileChooser *chooser)
-{
-  gboolean show_hidden;
-  
-  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
-
-  g_object_get (chooser, "show-hidden", &show_hidden, NULL);
-
-  return show_hidden;
 }
 
 /**

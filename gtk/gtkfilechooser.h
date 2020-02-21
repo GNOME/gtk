@@ -109,12 +109,6 @@ void                 gtk_file_chooser_set_select_multiple (GtkFileChooser       
 GDK_AVAILABLE_IN_ALL
 gboolean             gtk_file_chooser_get_select_multiple (GtkFileChooser       *chooser);
 GDK_AVAILABLE_IN_ALL
-void                 gtk_file_chooser_set_show_hidden     (GtkFileChooser       *chooser,
-							   gboolean              show_hidden);
-GDK_AVAILABLE_IN_ALL
-gboolean             gtk_file_chooser_get_show_hidden     (GtkFileChooser       *chooser);
-
-GDK_AVAILABLE_IN_ALL
 void                 gtk_file_chooser_set_create_folders  (GtkFileChooser       *chooser,
 							  gboolean               create_folders);
 GDK_AVAILABLE_IN_ALL
