@@ -198,8 +198,8 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
    * #GtkEventControllerMotion:contains-pointer.
    *
    * When handling crossing events, this property is updated
-   * before #GtkEventControllerMotion::enter or
-   * #GtkEventControllerMotion::leave are emitted.
+   * before #GtkEventControllerMotion::enter but after
+   * #GtkEventControllerMotion::leave is emitted.
    */
   props[PROP_IS_POINTER] =
       g_param_spec_boolean ("is-pointer",
@@ -215,8 +215,8 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
    * See also #GtkEventControllerMotion:is-pointer.
    *
    * When handling crossing events, this property is updated
-   * before #GtkEventControllerMotion::enter or
-   * #GtkEventControllerMotion::leave are emitted.
+   * before #GtkEventControllerMotion::enter but after
+   * #GtkEventControllerMotion::leave is emitted.
    */
   props[PROP_CONTAINS_POINTER] =
       g_param_spec_boolean ("contains-pointer",
@@ -320,7 +320,7 @@ gtk_event_controller_motion_contains_pointer (GtkEventControllerMotion *self)
 
 /**
  * gtk_event_controller_motion_is_pointer:
- * @self: a #GtkEventControllerKey
+ * @self: a #GtkEventControllerMotion
  *
  * Returns the value of the GtkEventControllerMotion:is-pointer property.
  *
