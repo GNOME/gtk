@@ -3865,9 +3865,29 @@ gtk_widget_size_allocate (GtkWidget           *widget,
   GskTransform *transform;
 
   if (allocation->x || allocation->y)
-    transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (allocation->x, allocation->y));
+    {
+      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+      if (gsk_transform_get_category (priv->allocated_transform) == GSK_TRANSFORM_CATEGORY_2D_TRANSLATE)
+        {
+          float x, y;
+
+          gsk_transform_to_translate (priv->allocated_transform, &x, &y);
+
+          if (x == allocation->x && y == allocation->y) {
+            transform = gsk_transform_ref (priv->allocated_transform);
+          } else
+            transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (allocation->x, allocation->y));
+        }
+      else
+        {
+          transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (allocation->x, allocation->y));
+        }
+    }
   else
-    transform = NULL;
+    {
+      transform = NULL;
+    }
 
   gtk_widget_allocate (widget,
                        allocation->width,
