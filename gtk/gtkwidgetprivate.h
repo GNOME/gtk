@@ -30,7 +30,7 @@
 #include "gtkactionmuxerprivate.h"
 #include "gtkcontainer.h"
 #include "gtkcsstypesprivate.h"
-#include "gtkeventcontroller.h"
+#include "gtkeventcontrollerprivate.h"
 #include "gtklistlistmodelprivate.h"
 #include "gtkrootprivate.h"
 #include "gtksizerequestcacheprivate.h"
@@ -262,7 +262,7 @@ GList *           _gtk_widget_list_devices                 (GtkWidget *widget);
 void              gtk_synthesize_crossing_events           (GtkRoot         *toplevel,
                                                             GtkWidget       *from,
                                                             GtkWidget       *to,
-                                                            GdkEvent        *event,
+                                                            GdkEvent        *source,
                                                             GdkCrossingMode  mode);
 
 void              _gtk_widget_synthesize_crossing          (GtkWidget       *from,
@@ -276,7 +276,8 @@ void              _gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
 GtkStyleContext * _gtk_widget_peek_style_context           (GtkWidget *widget);
 
 gboolean          _gtk_widget_captured_event               (GtkWidget *widget,
-                                                            GdkEvent  *event);
+                                                            GdkEvent  *event,
+                                                            GtkWidget *target);
 
 void              gtk_widget_css_changed                   (GtkWidget           *widget,
                                                             GtkCssStyleChange   *change);
@@ -341,10 +342,19 @@ void              gtk_widget_cancel_event_sequence         (GtkWidget           
                                                             GtkGesture            *gesture,
                                                             GdkEventSequence      *sequence,
                                                             GtkEventSequenceState  state);
-
+gboolean          gtk_widget_event                         (GtkWidget           *widget,
+                                                            GdkEvent            *event,
+                                                            GtkWidget           *target);
 gboolean          gtk_widget_run_controllers               (GtkWidget           *widget,
-                                                            const GdkEvent      *event,
+                                                            GdkEvent            *event,
+                                                            GtkWidget           *target,
+                                                            double               x,
+                                                            double               y,
                                                             GtkPropagationPhase  phase);
+void              gtk_widget_handle_crossing               (GtkWidget             *widget,
+                                                            const GtkCrossingData *crossing,
+                                                            double                 x,
+                                                            double                 y);
 
 
 guint             gtk_widget_add_surface_transform_changed_callback (GtkWidget                          *widget,

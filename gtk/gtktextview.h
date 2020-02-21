@@ -299,10 +299,10 @@ gboolean gtk_text_view_move_visually                  (GtkTextView       *text_v
                                                        gint               count);
 
 GDK_AVAILABLE_IN_ALL
-gboolean        gtk_text_view_im_context_filter_keypress        (GtkTextView       *text_view,
-                                                                 GdkEventKey       *event);
+gboolean        gtk_text_view_im_context_filter_keypress (GtkTextView    *text_view,
+                                                          GdkEvent       *event);
 GDK_AVAILABLE_IN_ALL
-void            gtk_text_view_reset_im_context                  (GtkTextView       *text_view);
+void            gtk_text_view_reset_im_context           (GtkTextView    *text_view);
 
 /* Adding child widgets */
 GDK_AVAILABLE_IN_ALL

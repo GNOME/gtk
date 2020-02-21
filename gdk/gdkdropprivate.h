@@ -64,16 +64,16 @@ void                    gdk_drop_emit_enter_event               (GdkDrop        
                                                                  guint32                 time);
 void                    gdk_drop_emit_motion_event              (GdkDrop                *self,
                                                                  gboolean                dont_queue,
-                                                                 double                  x_root,
-                                                                 double                  y_root,
+                                                                 double                  x,
+                                                                 double                  y,
                                                                  guint32                 time);
 void                    gdk_drop_emit_leave_event               (GdkDrop                *self,
                                                                  gboolean                dont_queue,
                                                                  guint32                 time);
 void                    gdk_drop_emit_drop_event                (GdkDrop                *self,
                                                                  gboolean                dont_queue,
-                                                                 double                  x_root,
-                                                                 double                  y_root,
+                                                                 double                  x,
+                                                                 double                  y,
                                                                  guint32                 time);
 
 G_END_DECLS

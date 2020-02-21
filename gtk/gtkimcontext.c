@@ -127,7 +127,7 @@ static void     gtk_im_context_real_get_preedit_string (GtkIMContext   *context,
 							PangoAttrList **attrs,
 							gint           *cursor_pos);
 static gboolean gtk_im_context_real_filter_keypress    (GtkIMContext   *context,
-							GdkEventKey    *event);
+							GdkEvent       *event);
 static gboolean gtk_im_context_real_get_surrounding    (GtkIMContext   *context,
 							gchar         **text,
 							gint           *cursor_index);
@@ -371,8 +371,8 @@ gtk_im_context_real_get_preedit_string (GtkIMContext       *context,
 }
 
 static gboolean
-gtk_im_context_real_filter_keypress (GtkIMContext       *context,
-				     GdkEventKey        *event)
+gtk_im_context_real_filter_keypress (GtkIMContext *context,
+				     GdkEvent     *event)
 {
   return FALSE;
 }
@@ -511,7 +511,7 @@ gtk_im_context_get_preedit_string (GtkIMContext   *context,
  **/
 gboolean
 gtk_im_context_filter_keypress (GtkIMContext *context,
-				GdkEventKey  *key)
+				GdkEvent     *key)
 {
   GtkIMContextClass *klass;
   

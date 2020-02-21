@@ -230,10 +230,10 @@ GdkModifierType gtk_window_get_mnemonic_modifier (GtkWindow *window);
 
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_window_activate_key          (GtkWindow        *window,
-					   GdkEventKey      *event);
+					   GdkEvent         *event);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_window_propagate_key_event   (GtkWindow        *window,
-					   GdkEventKey      *event);
+					   GdkEvent         *event);
 
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_present            (GtkWindow *window);

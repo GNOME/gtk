@@ -41,14 +41,15 @@ G_BEGIN_DECLS
 
 
 GDK_AVAILABLE_IN_ALL
+GType               gtk_crossing_data_get_type (void) G_GNUC_CONST;
+
+
+GDK_AVAILABLE_IN_ALL
 GType        gtk_event_controller_get_type       (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
 GtkWidget  * gtk_event_controller_get_widget     (GtkEventController *controller);
 
-GDK_AVAILABLE_IN_ALL
-gboolean     gtk_event_controller_handle_event   (GtkEventController *controller,
-                                                  const GdkEvent     *event);
 GDK_AVAILABLE_IN_ALL
 void         gtk_event_controller_reset          (GtkEventController *controller);
 

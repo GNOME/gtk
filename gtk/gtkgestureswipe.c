@@ -82,7 +82,7 @@ gtk_gesture_swipe_finalize (GObject *object)
 
 static gboolean
 gtk_gesture_swipe_filter_event (GtkEventController *controller,
-                                const GdkEvent     *event)
+                                GdkEvent           *event)
 {
   /* Let touchpad swipe events go through, only if they match n-points  */
   if (gdk_event_get_event_type (event) == GDK_TOUCHPAD_SWIPE)
@@ -92,7 +92,7 @@ gtk_gesture_swipe_filter_event (GtkEventController *controller,
 
       g_object_get (G_OBJECT (controller), "n-points", &n_points, NULL);
 
-      gdk_event_get_touchpad_gesture_n_fingers (event, &n_fingers);
+      n_fingers = gdk_touchpad_event_get_n_fingers (event);
 
       if (n_fingers == n_points)
         return FALSE;

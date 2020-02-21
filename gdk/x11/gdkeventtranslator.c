@@ -36,7 +36,6 @@ _gdk_x11_event_translator_translate (GdkEventTranslator *translator,
                                      const XEvent       *xevent)
 {
   GdkEventTranslatorIface *iface;
-  GdkEvent *event;
 
   g_return_val_if_fail (GDK_IS_EVENT_TRANSLATOR (translator), NULL);
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
@@ -46,14 +45,7 @@ _gdk_x11_event_translator_translate (GdkEventTranslator *translator,
   if (!iface->translate_event)
     return NULL;
 
-  event = gdk_event_new (GDK_NOTHING);
-
-  if ((iface->translate_event) (translator, display, event, xevent))
-    return event;
-
-  g_object_unref (event);
-
-  return NULL;
+  return (iface->translate_event) (translator, display, xevent);
 }
 
 GdkEventMask

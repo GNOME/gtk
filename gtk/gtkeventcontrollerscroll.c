@@ -238,7 +238,9 @@ gtk_event_controller_scroll_get_property (GObject    *object,
 
 static gboolean
 gtk_event_controller_scroll_handle_event (GtkEventController *controller,
-                                          const GdkEvent     *event)
+                                          GdkEvent           *event,
+                                          double              x,
+                                          double              y)
 {
   GtkEventControllerScroll *scroll = GTK_EVENT_CONTROLLER_SCROLL (controller);
   GdkScrollDirection direction = GDK_SCROLL_SMOOTH;
@@ -247,16 +249,19 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
 
   if (gdk_event_get_event_type (event) != GDK_SCROLL)
     return FALSE;
+
   if ((scroll->flags & (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL |
                         GTK_EVENT_CONTROLLER_SCROLL_HORIZONTAL)) == 0)
     return FALSE;
 
   /* FIXME: Handle device changes */
-
-  if (gdk_event_get_scroll_deltas (event, &dx, &dy))
+  direction = gdk_scroll_event_get_direction (event);
+  if (direction == GDK_SCROLL_SMOOTH)
     {
       GdkDevice *device = gdk_event_get_source_device (event);
       GdkInputSource input_source = gdk_device_get_source (device);
+
+      gdk_scroll_event_get_deltas (event, &dx, &dy);
 
       if (!scroll->active &&
           (input_source == GDK_SOURCE_TRACKPOINT ||
@@ -295,7 +300,7 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
             }
         }
     }
-  else if (gdk_event_get_scroll_direction (event, &direction))
+  else
     {
       switch (direction)
         {
@@ -331,7 +336,7 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
         scroll_history_push (scroll, dx, dy, gdk_event_get_time (event));
     }
 
-  if (scroll->active && gdk_event_is_scroll_stop_event (event))
+  if (scroll->active && gdk_scroll_event_is_stop (event))
     {
       g_signal_emit (controller, signals[SCROLL_END], 0);
       scroll->active = FALSE;

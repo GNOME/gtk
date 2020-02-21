@@ -140,7 +140,7 @@ gdk_event_source_dispatch (GSource     *base,
     {
       _gdk_event_emit (event);
 
-      g_object_unref (event);
+      gdk_event_unref (event);
     }
 
   return TRUE;
@@ -169,9 +169,6 @@ _gdk_wayland_display_deliver_event (GdkDisplay *display,
                                     GdkEvent   *event)
 {
   GList *node;
-
-  if (!check_event_sanity (event))
-    g_warning ("Snap! delivering insane events\n");
 
   node = _gdk_event_queue_append (display, event);
   _gdk_windowing_got_event (display, node, event,

@@ -6,7 +6,7 @@ window1
   toolkit: gtk
   window-type: dialog
   <AtkComponent>
-  layer: window
+  layer: widget
   alpha: 1
   unnamed-GtkContainerAccessible-0
     "filler"

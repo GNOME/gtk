@@ -212,11 +212,9 @@ gdk_surface_cache_get (GdkDisplay *display);
 
 GdkFilterReturn
 gdk_surface_cache_filter (const XEvent *xevent,
-                          GdkEvent     *event,
                           gpointer      data);
 GdkFilterReturn
 gdk_surface_cache_shape_filter (const XEvent *xevent,
-                                GdkEvent     *event,
                                 gpointer      data);
 
 void _gdk_x11_cursor_display_finalize (GdkDisplay *display);
