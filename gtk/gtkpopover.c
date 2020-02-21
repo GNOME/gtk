@@ -743,13 +743,10 @@ gtk_popover_realize (GtkWidget *widget)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GdkDisplay *display;
   GdkSurface *parent;
 
-  display = gtk_widget_get_display (priv->relative_to);
-
   parent = gtk_native_get_surface (gtk_widget_get_native (priv->relative_to));
-  priv->surface = gdk_surface_new_popup (display, parent, priv->autohide);
+  priv->surface = gdk_surface_new_popup (parent, priv->autohide);
 
   gdk_surface_set_widget (priv->surface, widget);
 
