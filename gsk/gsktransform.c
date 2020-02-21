@@ -1624,8 +1624,10 @@ gsk_transform_transform (GskTransform *next,
 
   if (gsk_transform_is_identity (next))
     {
+      /* ref before unref to avoid catastrophe when other == next */
+      other = gsk_transform_ref (other);
       gsk_transform_unref (next);
-      return gsk_transform_ref (other);
+      return other;
     }
 
   next = gsk_transform_transform (next, other->next);
