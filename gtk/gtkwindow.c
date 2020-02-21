@@ -6352,10 +6352,11 @@ gtk_window_move_focus (GtkWidget        *widget,
     gtk_window_set_focus (GTK_WINDOW (widget), NULL);
 }
 
-static void
+void
 check_crossing_invariants (GtkWidget *widget,
                            GtkCrossingData *crossing)
 {
+#ifdef G_ENBABLE_DEBUG
   if (crossing->old_target == NULL)
     g_assert (crossing->old_descendent == NULL);
   else if (crossing->old_descendent == NULL)
@@ -6376,6 +6377,7 @@ check_crossing_invariants (GtkWidget *widget,
       g_assert (gtk_widget_is_ancestor (crossing->new_descendent, widget));
       g_assert (crossing->new_target == crossing->new_descendent || gtk_widget_is_ancestor (crossing->new_target, crossing->new_descendent));
     }
+#endif
 }
 
 static void

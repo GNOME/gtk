@@ -1312,20 +1312,52 @@ gtk_synthesize_crossing_events (GtkRoot         *toplevel,
                                 GdkCrossingMode  mode)
 {
   GtkCrossingData crossing;
+  GtkWidget *ancestor;
   GtkWidget *widget;
   GList *list, *l;
   double x, y;
+  GtkWidget *prev;
+  gboolean seen_ancestor;
+
+  if (old_target && new_target)
+    ancestor = gtk_widget_common_ancestor (old_target, new_target);
+  else
+    ancestor = NULL;
 
   crossing.type = GTK_CROSSING_POINTER;
   crossing.mode = mode;
   crossing.old_target = old_target;
+  crossing.old_descendent = NULL;
   crossing.new_target = new_target;
+  crossing.new_descendent = NULL;
 
   crossing.direction = GTK_CROSSING_OUT;
 
+  prev = NULL;
+  seen_ancestor = FALSE;
   widget = old_target;
   while (widget)
     {
+      crossing.old_descendent = prev;
+      if (seen_ancestor)
+        {
+          crossing.new_descendent = new_target ? prev : NULL;
+        }
+      else if (widget == ancestor)
+        {
+          GtkWidget *w;
+
+          crossing.new_descendent = NULL;
+          for (w = new_target; w != ancestor; w = gtk_widget_get_parent (w))
+            crossing.new_descendent = w;
+
+          seen_ancestor = TRUE;
+        }
+      else
+        {
+          crossing.new_descendent = NULL;
+        }
+      check_crossing_invariants (widget, &crossing);
       translate_event_coordinates (event, &x, &y, widget);
       gtk_widget_handle_crossing (widget, &crossing, x, y);
       gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
@@ -1333,18 +1365,38 @@ gtk_synthesize_crossing_events (GtkRoot         *toplevel,
     }
 
   list = NULL;
-  widget = new_target;
-  while (widget)
-    {
-      list = g_list_prepend (list, widget);
-      widget = gtk_widget_get_parent (widget);
-    }
+  for (widget = new_target; widget; widget = gtk_widget_get_parent (widget))
+    list = g_list_prepend (list, widget);
 
   crossing.direction = GTK_CROSSING_IN;
 
+  seen_ancestor = FALSE;
   for (l = list; l; l = l->next)
     {
       widget = l->data;
+      if (l->next)
+        crossing.new_descendent = l->next->data;
+      else
+        crossing.new_descendent = NULL;
+      if (seen_ancestor)
+        {
+          crossing.old_descendent = NULL;
+        }
+      else if (widget == ancestor)
+        {
+          GtkWidget *w;
+
+          crossing.old_descendent = NULL;
+          for (w = old_target; w != ancestor; w = gtk_widget_get_parent (w))
+            crossing.old_descendent = w;
+
+          seen_ancestor = TRUE;
+        }
+      else
+        {
+          crossing.old_descendent = old_target ? crossing.new_descendent : NULL;
+        }
+
       translate_event_coordinates (event, &x, &y, widget);
       gtk_widget_handle_crossing (widget, &crossing, x, y);
       gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
