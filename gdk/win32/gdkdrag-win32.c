@@ -2331,28 +2331,32 @@ gdk_local_drag_update (GdkDrag *drag,
 }
 
 static gboolean
-gdk_dnd_handle_motion_event (GdkDrag              *drag,
-                             const GdkEventMotion *event)
+gdk_dnd_handle_motion_event (GdkDrag  *drag,
+                             GdkEvent *event)
 {
   GdkModifierType state;
   GdkWin32Drag *drag_win32 = GDK_WIN32_DRAG (drag);
   DWORD key_state;
+  double x, y;
+  double x_root, y_root;
 
-  if (!gdk_event_get_state ((GdkEvent *) event, &state))
-    return FALSE;
+  GDK_NOTE (DND, g_print ("gdk_dnd_handle_motion_event: 0x%p\n", drag));
 
-  GDK_NOTE (DND, g_print ("gdk_dnd_handle_motion_event: 0x%p\n",
-                          drag));
+  state = gdk_event_get_modifier_state (event);
+  gdk_event_get_position (event, &x, &y);
+
+  x_root = x + _gdk_offset_x;
+  y_root = y + _gdk_offset_y;
 
   if (drag_win32->drag_surface)
-    move_drag_surface (drag, event->x_root, event->y_root);
+    move_drag_surface (drag, x_root, y_root);
 
   key_state = manufacture_keystate_from_GMT (state);
 
   if (drag_win32->protocol == GDK_DRAG_PROTO_LOCAL)
     {
-      gdk_local_drag_update (drag, event->x_root, event->y_root, key_state,
-                             gdk_event_get_time ((GdkEvent *) event));
+      gdk_local_drag_update (drag, x_root, y_root, key_state,
+                             gdk_event_get_time (event));
     }
   else if (drag_win32->protocol == GDK_DRAG_PROTO_OLE2)
     {
@@ -2360,40 +2364,38 @@ gdk_dnd_handle_motion_event (GdkDrag              *drag,
 
       GDK_NOTE (DND, g_print ("Post WM_MOUSEMOVE keystate=%lu\n", key_state));
 
-      drag_win32->util_data.last_x = event->x_root;
-      drag_win32->util_data.last_y = event->y_root;
+      drag_win32->util_data.last_x = x_root;
+      drag_win32->util_data.last_y = y_root;
 
       API_CALL (PostThreadMessage, (clipdrop->dnd_thread_id,
                                     WM_MOUSEMOVE,
                                     key_state,
-                                    MAKELPARAM ((event->x_root - _gdk_offset_x) * drag_win32->scale,
-                                                (event->y_root - _gdk_offset_y) * drag_win32->scale)));
+                                    MAKELPARAM (x * drag_win32->scale,
+                                                y * drag_win32->scale)));
     }
 
   return TRUE;
 }
 
 static gboolean
-gdk_dnd_handle_key_event (GdkDrag           *drag,
-                          const GdkEventKey *event)
+gdk_dnd_handle_key_event (GdkDrag  *drag,
+                          GdkEvent *event)
 {
   GdkWin32Drag *drag_win32 = GDK_WIN32_DRAG (drag);
   GdkModifierType state;
   GdkDevice *pointer;
   gint dx, dy;
 
-  if (!gdk_event_get_state ((GdkEvent *) event, &state))
-    return FALSE;
+  GDK_NOTE (DND, g_print ("gdk_dnd_handle_key_event: 0x%p\n", drag));
 
-  GDK_NOTE (DND, g_print ("gdk_dnd_handle_key_event: 0x%p\n",
-                          drag));
+  state = gdk_event_get_modifier_state (event);
 
   dx = dy = 0;
-  pointer = gdk_device_get_associated_device (gdk_event_get_device ((GdkEvent *) event));
+  pointer = gdk_device_get_associated_device (gdk_event_get_device (event));
 
-  if (event->any.type == GDK_KEY_PRESS)
+  if (gdk_event_get_event_type (event) == GDK_KEY_PRESS)
     {
-      switch (event->keyval)
+      switch (gdk_key_event_get_keyval (event))
         {
         case GDK_KEY_Escape:
           gdk_drag_cancel (drag, GDK_DRAG_CANCEL_USER_CANCELLED);
@@ -2453,31 +2455,29 @@ gdk_dnd_handle_key_event (GdkDrag           *drag,
   if (drag_win32->protocol == GDK_DRAG_PROTO_LOCAL)
     gdk_local_drag_update (drag, drag_win32->util_data.last_x, drag_win32->util_data.last_y,
                            manufacture_keystate_from_GMT (state),
-                           gdk_event_get_time ((GdkEvent *) event));
+                           gdk_event_get_time (event));
 
   return TRUE;
 }
 
 static gboolean
-gdk_dnd_handle_grab_broken_event (GdkDrag                  *drag,
-                                  const GdkEventGrabBroken *event)
+gdk_dnd_handle_grab_broken_event (GdkDrag  *drag,
+                                  GdkEvent *event)
 {
   GdkWin32Drag *drag_win32 = GDK_WIN32_DRAG (drag);
 
-  GDK_NOTE (DND, g_print ("gdk_dnd_handle_grab_broken_event: 0x%p\n",
-                          drag));
+  GDK_NOTE (DND, g_print ("gdk_dnd_handle_grab_broken_event: 0x%p\n", drag));
 
   /* Don't cancel if we break the implicit grab from the initial button_press.
    * Also, don't cancel if we re-grab on the widget or on our grab window, for
    * example, when changing the drag cursor.
    */
-  if (event->implicit ||
-      event->grab_surface == drag_win32->drag_surface ||
-      event->grab_surface == drag_win32->grab_surface)
+  if (/* FIXME: event->implicit || */
+      gdk_grab_broken_event_get_grab_surface (event) == drag_win32->drag_surface ||
+      gdk_grab_broken_event_get_grab_surface (event) == drag_win32->grab_surface)
     return FALSE;
 
-  if (gdk_event_get_device ((GdkEvent *) event) !=
-      gdk_drag_get_device (drag))
+  if (gdk_event_get_device (event) != gdk_drag_get_device (drag))
     return FALSE;
 
   gdk_drag_cancel (drag, GDK_DRAG_CANCEL_ERROR);
@@ -2485,11 +2485,10 @@ gdk_dnd_handle_grab_broken_event (GdkDrag                  *drag,
 }
 
 static gboolean
-gdk_dnd_handle_button_event (GdkDrag              *drag,
-                             const GdkEventButton *event)
+gdk_dnd_handle_button_event (GdkDrag  *drag,
+                             GdkEvent *event)
 {
-  GDK_NOTE (DND, g_print ("gdk_dnd_handle_button_event: 0x%p\n",
-                          drag));
+  GDK_NOTE (DND, g_print ("gdk_dnd_handle_button_event: 0x%p\n", drag));
 
 #if 0
   /* FIXME: Check the button matches */
@@ -2509,8 +2508,8 @@ gdk_dnd_handle_button_event (GdkDrag              *drag,
 }
 
 gboolean
-gdk_win32_drag_handle_event (GdkDrag        *drag,
-                             const GdkEvent *event)
+gdk_win32_drag_handle_event (GdkDrag  *drag,
+                             GdkEvent *event)
 {
   GdkWin32Drag *drag_win32 = GDK_WIN32_DRAG (drag);
 
@@ -2523,17 +2522,17 @@ gdk_win32_drag_handle_event (GdkDrag        *drag,
       return FALSE;
     }
 
-  switch (event->any.type)
+  switch (gdk_event_get_event_type (event))
     {
     case GDK_MOTION_NOTIFY:
-      return gdk_dnd_handle_motion_event (drag, &event->motion);
+      return gdk_dnd_handle_motion_event (drag, event);
     case GDK_BUTTON_RELEASE:
-      return gdk_dnd_handle_button_event (drag, &event->button);
+      return gdk_dnd_handle_button_event (drag, event);
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
-      return gdk_dnd_handle_key_event (drag, &event->key);
+      return gdk_dnd_handle_key_event (drag, event);
     case GDK_GRAB_BROKEN:
-      return gdk_dnd_handle_grab_broken_event (drag, &event->grab_broken);
+      return gdk_dnd_handle_grab_broken_event (drag, event);
     default:
       break;
     }

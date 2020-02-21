@@ -31,10 +31,8 @@ void _gdk_x11_xsettings_finish          (GdkX11Screen        *x11_screen);
 void _gdk_x11_settings_force_reread     (GdkX11Screen        *x11_screen);
 
 GdkFilterReturn gdk_xsettings_root_window_filter    (const XEvent *xevent,
-                                                     GdkEvent     *event,
                                                      gpointer      data);
 GdkFilterReturn gdk_xsettings_manager_window_filter (const XEvent *xevent,
-                                                     GdkEvent     *event,
                                                      gpointer      data);
 
 

@@ -171,7 +171,7 @@ static GdkSurfaceCache *gdk_surface_cache_ref   (GdkSurfaceCache *cache);
 static void            gdk_surface_cache_unref (GdkSurfaceCache *cache);
 
 gboolean gdk_x11_drag_handle_event   (GdkDrag        *drag,
-                                      const GdkEvent *event);
+                                      GdkEvent       *event);
 
 static GList *drags;
 static GSList *window_caches;
@@ -354,7 +354,6 @@ gdk_surface_cache_add (GdkSurfaceCache *cache,
 
 GdkFilterReturn
 gdk_surface_cache_shape_filter (const XEvent *xevent,
-                                GdkEvent     *event,
                                 gpointer      data)
 {
   GdkSurfaceCache *cache = data;
@@ -388,7 +387,6 @@ gdk_surface_cache_shape_filter (const XEvent *xevent,
 
 GdkFilterReturn
 gdk_surface_cache_filter (const XEvent *xevent,
-                          GdkEvent     *event,
                           gpointer      data)
 {
   GdkSurfaceCache *cache = data;
@@ -2243,22 +2241,24 @@ gdk_drag_update (GdkDrag         *drag,
 }
 
 static gboolean
-gdk_dnd_handle_motion_event (GdkDrag              *drag,
-                             const GdkEventMotion *event)
+gdk_dnd_handle_motion_event (GdkDrag        *drag,
+                             GdkEvent       *event)
 {
-  GdkModifierType state;
+  double x, y;
+  int x_root, y_root;
 
-  if (!gdk_event_get_state ((GdkEvent *) event, &state))
-    return FALSE;
-
-  gdk_drag_update (drag, event->x_root, event->y_root, state,
-                   gdk_event_get_time ((GdkEvent *) event));
+  gdk_event_get_position (event, &x, &y);
+  x_root = event->any.surface->x + x;
+  y_root = event->any.surface->y + y;
+  gdk_drag_update (drag, x_root, y_root,
+                   gdk_event_get_modifier_state (event),
+                   gdk_event_get_time (event));
   return TRUE;
 }
 
 static gboolean
 gdk_dnd_handle_key_event (GdkDrag           *drag,
-                          const GdkEventKey *event)
+                          GdkEventKey       *event)
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
   GdkModifierType state;
@@ -2351,7 +2351,7 @@ gdk_dnd_handle_key_event (GdkDrag           *drag,
 
 static gboolean
 gdk_dnd_handle_grab_broken_event (GdkDrag                  *drag,
-                                  const GdkEventGrabBroken *event)
+                                  GdkEventGrabBroken       *event)
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
 
@@ -2374,7 +2374,7 @@ gdk_dnd_handle_grab_broken_event (GdkDrag                  *drag,
 
 static gboolean
 gdk_dnd_handle_button_event (GdkDrag              *drag,
-                             const GdkEventButton *event)
+                             GdkEventButton       *event)
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
 
@@ -2397,7 +2397,7 @@ gdk_dnd_handle_button_event (GdkDrag              *drag,
 
 gboolean
 gdk_x11_drag_handle_event (GdkDrag        *drag,
-                           const GdkEvent *event)
+                           GdkEvent       *event)
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
 
@@ -2407,7 +2407,7 @@ gdk_x11_drag_handle_event (GdkDrag        *drag,
   switch ((guint) event->any.type)
     {
     case GDK_MOTION_NOTIFY:
-      return gdk_dnd_handle_motion_event (drag, &event->motion);
+      return gdk_dnd_handle_motion_event (drag, event);
     case GDK_BUTTON_RELEASE:
       return gdk_dnd_handle_button_event (drag, &event->button);
     case GDK_KEY_PRESS:

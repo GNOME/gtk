@@ -197,7 +197,7 @@ gtk_gesture_click_begin (GtkGesture       *gesture,
   GtkGestureClickPrivate *priv;
   guint n_presses, button = 1;
   GdkEventSequence *current;
-  const GdkEvent *event;
+  GdkEvent *event;
   GdkEventType event_type;
   GdkDevice *device;
   gdouble x, y;
@@ -213,7 +213,7 @@ gtk_gesture_click_begin (GtkGesture       *gesture,
   event_type = gdk_event_get_event_type (event);
 
   if (event_type == GDK_BUTTON_PRESS)
-    gdk_event_get_button (event, &button);
+    button = gdk_button_event_get_button (event);
   else if (event_type == GDK_TOUCH_BEGIN)
     button = 1;
   else
@@ -307,13 +307,14 @@ gtk_gesture_click_reset (GtkEventController *controller)
 
 static gboolean
 gtk_gesture_click_handle_event (GtkEventController *controller,
-                                const GdkEvent     *event)
+                                GdkEvent           *event,
+                                double              x,
+                                double              y)
 {
   GtkEventControllerClass *parent_controller;
   GtkGestureClickPrivate *priv;
   GdkEventSequence *sequence;
   guint button;
-  gdouble x, y;
 
   priv = gtk_gesture_click_get_instance_private (GTK_GESTURE_CLICK (controller));
   parent_controller = GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_click_parent_class);
@@ -324,14 +325,15 @@ gtk_gesture_click_handle_event (GtkEventController *controller,
       (gdk_event_get_event_type (event) == GDK_BUTTON_RELEASE ||
        gdk_event_get_event_type (event) == GDK_TOUCH_END))
     {
-      if (!gdk_event_get_button (event, &button))
+      if (gdk_event_get_event_type (event) == GDK_BUTTON_RELEASE)
+        button = gdk_button_event_get_button (event);
+      else
         button = 0;
-      gdk_event_get_coords (event, &x, &y);
       g_signal_emit (controller, signals[UNPAIRED_RELEASE], 0,
                      x, y, button, sequence);
     }
 
-  return parent_controller->handle_event (controller, event);
+  return parent_controller->handle_event (controller, event, x, y);
 }
 
 static void

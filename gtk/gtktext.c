@@ -34,6 +34,7 @@
 #include "gtkemojichooser.h"
 #include "gtkemojicompletion.h"
 #include "gtkentrybuffer.h"
+#include "gtkeventcontrollerfocus.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkgesturedrag.h"
@@ -323,8 +324,8 @@ static void   gtk_text_size_allocate        (GtkWidget        *widget,
                                              int               baseline);
 static void   gtk_text_snapshot             (GtkWidget        *widget,
                                              GtkSnapshot      *snapshot);
-static void   gtk_text_focus_in             (GtkWidget        *widget);
-static void   gtk_text_focus_out            (GtkWidget        *widget);
+static void   gtk_text_focus_in             (GtkWidget            *widget);
+static void   gtk_text_focus_out            (GtkWidget            *widget);
 static gboolean gtk_text_grab_focus         (GtkWidget        *widget);
 static void   gtk_text_css_changed          (GtkWidget        *widget,
                                              GtkCssStyleChange *change);
@@ -1781,13 +1782,15 @@ gtk_text_init (GtkText *self)
                     G_CALLBACK (gtk_text_key_controller_key_pressed), self);
   g_signal_connect_swapped (priv->key_controller, "im-update",
                             G_CALLBACK (gtk_text_schedule_im_reset), self);
-  g_signal_connect_swapped (priv->key_controller, "focus-in",
-                            G_CALLBACK (gtk_text_focus_in), self);
-  g_signal_connect_swapped (priv->key_controller, "focus-out",
-                            G_CALLBACK (gtk_text_focus_out), self);
   gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (priv->key_controller),
                                            priv->im_context);
   gtk_widget_add_controller (GTK_WIDGET (self), priv->key_controller);
+  controller = gtk_event_controller_focus_new ();
+  g_signal_connect_swapped (controller, "enter",
+                            G_CALLBACK (gtk_text_focus_in), self);
+  g_signal_connect_swapped (controller, "leave",
+                            G_CALLBACK (gtk_text_focus_out), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (self));
   for (i = 0; i < 2; i++)
@@ -2554,7 +2557,7 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
   GtkWidget *widget = GTK_WIDGET (self);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   GdkEventSequence *current;
-  const GdkEvent *event;
+  GdkEvent *event;
   int x, y, sel_start, sel_end;
   guint button;
   int tmp_pos;
@@ -2624,7 +2627,7 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
       priv->select_words = FALSE;
       priv->select_lines = FALSE;
 
-      gdk_event_get_state (event, &state);
+      state = gdk_event_get_modifier_state (event);
 
       extend_selection =
         (state &
@@ -2817,7 +2820,7 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
   GtkWidget *widget = GTK_WIDGET (self);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   GdkEventSequence *sequence;
-  const GdkEvent *event;
+  GdkEvent *event;
   int x, y;
 
   gtk_text_selection_bubble_popup_unset (self);
@@ -2967,7 +2970,7 @@ gtk_text_drag_gesture_end (GtkGestureDrag *gesture,
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   gboolean in_drag, is_touchscreen;
   GdkEventSequence *sequence;
-  const GdkEvent *event;
+  GdkEvent *event;
   GdkDevice *source;
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));

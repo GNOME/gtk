@@ -36,6 +36,7 @@
 #include "gtkgesturepan.h"
 #include "gtkgesturesingle.h"
 #include "gtkgestureswipe.h"
+#include "gtkgestureprivate.h"
 #include "gtkintl.h"
 #include "gtkkineticscrollingprivate.h"
 #include "gtkmain.h"
@@ -444,10 +445,9 @@ add_tab_bindings (GtkBindingSet    *binding_set,
 }
 
 static void
-motion_controller_leave (GtkEventController *controller,
-                         GdkCrossingMode     mode,
-                         GdkNotifyType       detail,
-                         GtkScrolledWindow  *scrolled_window)
+motion_controller_leave (GtkEventController   *controller,
+                         GdkCrossingMode       mode,
+                         GtkScrolledWindow    *scrolled_window)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
 
@@ -845,15 +845,13 @@ scrolled_window_drag_begin_cb (GtkScrolledWindow *scrolled_window,
   GtkEventSequenceState state;
   GdkEventSequence *sequence;
   GtkWidget *event_widget;
-  const GdkEvent *event;
 
   priv->in_drag = FALSE;
   priv->drag_start_x = priv->unclamped_hadj_value;
   priv->drag_start_y = priv->unclamped_vadj_value;
   gtk_scrolled_window_cancel_deceleration (scrolled_window);
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-  event = gtk_gesture_get_last_event (gesture, sequence);
-  event_widget = gtk_get_event_target ((GdkEvent *) event);
+  event_widget = gtk_gesture_get_last_target (gesture, sequence);
 
   if (event_widget == priv->vscrollbar || event_widget == priv->hscrollbar ||
       (!may_hscroll (scrolled_window) && !may_vscroll (scrolled_window)))
@@ -988,7 +986,7 @@ scrolled_window_long_press_cancelled_cb (GtkScrolledWindow *scrolled_window,
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
   GdkEventSequence *sequence;
-  const GdkEvent *event;
+  GdkEvent *event;
   GdkEventType event_type;
 
   sequence = gtk_gesture_get_last_updated_sequence (gesture);
@@ -1183,6 +1181,7 @@ captured_motion (GtkScrolledWindow *sw,
   GdkInputSource input_source;
   GdkModifierType state;
   GdkEvent *event;
+  GtkWidget *target;
 
   if (!priv->use_indicators)
     return;
@@ -1196,9 +1195,11 @@ captured_motion (GtkScrolledWindow *sw,
   if (priv->vscrollbar_visible)
     indicator_start_fade (&priv->vindicator, 1.0);
 
-  gdk_event_get_state (event, &state);
+  state = gdk_event_get_modifier_state (event);
 
-  if (!gtk_get_event_target_with_type (event, GTK_TYPE_SCROLLBAR) &&
+  target = gtk_widget_pick (GTK_WIDGET (sw), x, y, GTK_PICK_DEFAULT);
+
+  if (!target &&
       (state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK)) != 0)
     {
       indicator_set_over (&priv->hindicator, FALSE);
@@ -1213,17 +1214,13 @@ captured_motion (GtkScrolledWindow *sw,
     }
   else
     {
-      GtkWidget *target;
-
-      target = gtk_get_event_target_with_type (event, GTK_TYPE_SCROLLBAR);
-
       if (!check_update_scrollbar_proximity (sw, &priv->vindicator, target, x, y))
         check_update_scrollbar_proximity (sw, &priv->hindicator, target, x, y);
       else
         indicator_set_over (&priv->hindicator, FALSE);
     }
 
-  g_object_unref (event);
+  gdk_event_unref (event);
 }
 
 static gboolean

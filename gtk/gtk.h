@@ -101,6 +101,7 @@
 #include <gtk/gtkentrycompletion.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtkeventcontroller.h>
+#include <gtk/gtkeventcontrollerfocus.h>
 #include <gtk/gtkeventcontrollerkey.h>
 #include <gtk/gtkeventcontrollerlegacy.h>
 #include <gtk/gtkeventcontrollermotion.h>

@@ -114,10 +114,9 @@ static void    gdk_x11_device_manager_xi2_get_property (GObject      *object,
                                                         GValue       *value,
                                                         GParamSpec   *pspec);
 
-static gboolean gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
-                                                            GdkDisplay         *display,
-                                                            GdkEvent           *event,
-                                                            const XEvent       *xevent);
+static GdkEvent * gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
+                                                               GdkDisplay         *display,
+                                                               const XEvent       *xevent);
 static GdkEventMask gdk_x11_device_manager_xi2_get_handled_events   (GdkEventTranslator *translator);
 static void         gdk_x11_device_manager_xi2_select_surface_events (GdkEventTranslator *translator,
                                                                      Window              window,
@@ -1184,7 +1183,7 @@ set_user_time (GdkEvent *event)
   GdkSurface *surface;
   guint32 time;
 
-  surface = event->any.surface;
+  surface = gdk_event_get_surface (event);
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   time = gdk_event_get_time (event);
@@ -1457,51 +1456,45 @@ _gdk_device_manager_xi2_handle_focus (GdkSurface *surface,
     {
       GdkEvent *event;
 
-      event = gdk_event_new (GDK_FOCUS_CHANGE);
-      event->any.surface = g_object_ref (surface);
-      event->any.send_event = FALSE;
-      event->focus_change.in = focus_in;
-      gdk_event_set_device (event, device);
-      if (source_device)
-        gdk_event_set_source_device (event, source_device);
-
+      event = gdk_event_focus_new (surface, device, source_device, focus_in);
       gdk_display_put_event (gdk_surface_get_display (surface), event);
-      g_object_unref (event);
+      gdk_event_unref (event);
     }
 }
 
-static gboolean
+static GdkEvent *
 gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                             GdkDisplay         *display,
-                                            GdkEvent           *event,
                                             const XEvent       *xevent)
 {
   GdkX11DeviceManagerXI2 *device_manager;
   const XGenericEventCookie *cookie;
   GdkDevice *device, *source_device;
-  gboolean return_val = TRUE;
   GdkSurface *surface;
   GdkX11Surface *impl;
   int scale;
   XIEvent *ev;
+  GdkEvent *event;
+
+  event = NULL;
 
   device_manager = (GdkX11DeviceManagerXI2 *) translator;
   cookie = &xevent->xcookie;
 
   if (xevent->type != GenericEvent ||
       cookie->extension != device_manager->opcode)
-    return FALSE;
+    return event;
 
   ev = (XIEvent *) cookie->data;
 
   if (!ev)
-    return FALSE;
+    return NULL;
 
   if (!get_event_surface (translator, ev, &surface))
-    return FALSE;
+    return NULL;
 
   if (surface && GDK_SURFACE_DESTROYED (surface))
-    return FALSE;
+    return NULL;
 
   scale = 1;
   if (surface)
@@ -1514,7 +1507,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
       ev->evtype == XI_ButtonRelease)
     {
       if (_gdk_x11_moveresize_handle_event (xevent))
-        return FALSE;
+        return NULL;
     }
 
   switch (ev->evtype)
@@ -1522,17 +1515,14 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
     case XI_HierarchyChanged:
       handle_hierarchy_changed (device_manager,
                                 (XIHierarchyEvent *) ev);
-      return_val = FALSE;
       break;
     case XI_DeviceChanged:
       handle_device_changed (device_manager,
                              (XIDeviceChangedEvent *) ev);
-      return_val = FALSE;
       break;
     case XI_PropertyEvent:
       handle_property_change (device_manager,
                               (XIPropertyEvent *) ev);
-      return_val = FALSE;
       break;
     case XI_KeyPress:
     case XI_KeyRelease:
@@ -1540,6 +1530,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
         GdkKeymap *keymap = gdk_display_get_keymap (display);
         GdkModifierType consumed, state;
+        guint keyval;
 
         GDK_DISPLAY_NOTE (display, EVENTS,
                   g_message ("key %s:\twindow %ld\n"
@@ -1552,38 +1543,39 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                              xev->sourceid,
                              xev->detail));
 
-        event->any.type = xev->evtype == XI_KeyPress ? GDK_KEY_PRESS : GDK_KEY_RELEASE;
-
-        event->any.surface = surface;
-
-        event->key.time = xev->time;
-        event->key.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
-        event->key.group = xev->group.effective;
-
-        event->key.hardware_keycode = xev->detail;
-        gdk_event_set_scancode (event, xev->detail);
-        event->key.is_modifier = gdk_x11_keymap_key_is_modifier (keymap, event->key.hardware_keycode);
+        state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
 
         device = g_hash_table_lookup (device_manager->id_table,
                                       GUINT_TO_POINTER (xev->deviceid));
-        gdk_event_set_device (event, device);
 
         source_device = g_hash_table_lookup (device_manager->id_table,
                                              GUINT_TO_POINTER (xev->sourceid));
-        gdk_event_set_source_device (event, source_device);
 
-        event->key.keyval = GDK_KEY_VoidSymbol;
+        keyval = GDK_KEY_VoidSymbol;
 
         gdk_keymap_translate_keyboard_state (keymap,
-                                             event->key.hardware_keycode,
-                                             event->key.state,
-                                             event->key.group,
-                                             &event->key.keyval,
+                                             xev->detail,
+                                             state,
+                                             xev->group.effective,
+                                             &keyval,
                                              NULL, NULL, &consumed);
 
-        state = event->key.state & ~consumed;
+        state &= ~consumed;
         _gdk_x11_keymap_add_virt_mods (keymap, &state);
-        event->key.state |= state;
+
+        event = gdk_event_key_new (xev->evtype == XI_KeyPress
+                                     ? GDK_KEY_PRESS
+                                     : GDK_KEY_RELEASE,
+                                   surface,
+                                   device,
+                                   source_device,
+                                   xev->time,
+                                   state,
+                                   keyval,
+                                   xev->detail,
+                                   xev->detail,
+                                   xev->group.effective,
+                                   gdk_x11_keymap_key_is_modifier (keymap, xev->detail));
 
         if (ev->evtype == XI_KeyPress)
           set_user_time (event);
@@ -1623,79 +1615,77 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         else if (ev->evtype == XI_ButtonPress &&
                  (xev->detail >= 4 && xev->detail <= 7))
           {
+            GdkScrollDirection direction;
+
             /* Button presses of button 4-7 are scroll events */
-            event->any.type = GDK_SCROLL;
 
             if (xev->detail == 4)
-              event->scroll.direction = GDK_SCROLL_UP;
+              direction = GDK_SCROLL_UP;
             else if (xev->detail == 5)
-              event->scroll.direction = GDK_SCROLL_DOWN;
+              direction = GDK_SCROLL_DOWN;
             else if (xev->detail == 6)
-              event->scroll.direction = GDK_SCROLL_LEFT;
+              direction = GDK_SCROLL_LEFT;
             else
-              event->scroll.direction = GDK_SCROLL_RIGHT;
-
-            event->any.surface = surface;
-            event->scroll.time = xev->time;
-            event->scroll.x = (gdouble) xev->event_x / scale;
-            event->scroll.y = (gdouble) xev->event_y / scale;
-            event->scroll.x_root = (gdouble) xev->root_x / scale;
-            event->scroll.y_root = (gdouble) xev->root_y / scale;
-            event->scroll.delta_x = 0;
-            event->scroll.delta_y = 0;
+              direction = GDK_SCROLL_RIGHT;
 
             device = g_hash_table_lookup (device_manager->id_table,
                                           GUINT_TO_POINTER (xev->deviceid));
-            gdk_event_set_device (event, device);
 
             source_device = g_hash_table_lookup (device_manager->id_table,
                                                  GUINT_TO_POINTER (xev->sourceid));
-            gdk_event_set_source_device (event, source_device);
 
-            event->scroll.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
+            event = gdk_event_discrete_scroll_new (surface,
+                                                   device,
+                                                   source_device,
+                                                   NULL,
+                                                   xev->time,
+                                                   _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group),
+                                                   direction,
+                                                   FALSE);
+                                                   
           }
         else
           {
-            event->any.type = (ev->evtype == XI_ButtonPress) ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE;
-
-            event->any.surface = surface;
-            event->button.time = xev->time;
-            event->button.x = (gdouble) xev->event_x / scale;
-            event->button.y = (gdouble) xev->event_y / scale;
-            event->button.x_root = (gdouble) xev->root_x / scale;
-            event->button.y_root = (gdouble) xev->root_y / scale;
+            double x, y;
+            double *axes;
 
             device = g_hash_table_lookup (device_manager->id_table,
                                           GUINT_TO_POINTER (xev->deviceid));
-            gdk_event_set_device (event, device);
 
             source_device = g_hash_table_lookup (device_manager->id_table,
                                                  GUINT_TO_POINTER (xev->sourceid));
-            gdk_event_set_source_device (event, source_device);
-            gdk_event_set_device_tool (event, source_device->last_tool);
 
-            event->button.axes = translate_axes (device,
-                                                 event->button.x,
-                                                 event->button.y,
-                                                 event->any.surface,
-                                                 &xev->valuators);
+            axes = translate_axes (device,
+                                   (double) xev->event_x / scale,
+                                   (double) xev->event_y / scale,
+                                   surface,
+                                   &xev->valuators);
 
             if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
               {
                 /* Update event coordinates from axes */
-                gdk_device_get_axis (device, event->button.axes, GDK_AXIS_X, &event->button.x);
-                gdk_device_get_axis (device, event->button.axes, GDK_AXIS_Y, &event->button.y);
+                gdk_device_get_axis (device, axes, GDK_AXIS_X, &x);
+                gdk_device_get_axis (device, axes, GDK_AXIS_Y, &y);
+              }
+            else
+              {
+                x = (double) xev->event_x / scale;
+                y = (double) xev->event_y / scale;
               }
 
-            event->button.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
-
-            event->button.button = xev->detail;
+            event = gdk_event_button_new (ev->evtype == XI_ButtonPress
+                                            ? GDK_BUTTON_PRESS
+                                            : GDK_BUTTON_RELEASE,
+                                          surface,
+                                          device,
+                                          source_device,
+                                          source_device->last_tool,
+                                          xev->time,
+                                          _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group),
+                                          xev->detail,
+                                          x, y,
+                                          axes);
           }
-
-        if (return_val == FALSE)
-          break;
-
-        gdk_event_set_display (event, display);
 
         if (ev->evtype == XI_ButtonPress)
 	  set_user_time (event);
@@ -1707,6 +1697,9 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
         gdouble delta_x, delta_y;
+
+        double x, y;
+        double *axes;
 
 #ifdef XINPUT_2_2
         if (xev->flags & XIPointerEmulated)
@@ -1730,60 +1723,50 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             scroll_valuators_changed (GDK_X11_DEVICE_XI2 (source_device),
                                       &xev->valuators, &delta_x, &delta_y))
           {
-            event->any.type = GDK_SCROLL;
-            event->scroll.direction = GDK_SCROLL_SMOOTH;
-
-            if (delta_x == 0.0 && delta_y == 0.0)
-              event->scroll.is_stop = TRUE;
-
             GDK_DISPLAY_NOTE (display, EVENTS,
                      g_message ("smooth scroll: \n\tdevice: %u\n\tsource device: %u\n\twindow %ld\n\tdeltas: %f %f",
                                 xev->deviceid, xev->sourceid,
                                 xev->event, delta_x, delta_y));
 
-
-            event->any.surface = surface;
-            event->scroll.time = xev->time;
-            event->scroll.x = (gdouble) xev->event_x / scale;
-            event->scroll.y = (gdouble) xev->event_y / scale;
-            event->scroll.x_root = (gdouble) xev->root_x / scale;
-            event->scroll.y_root = (gdouble) xev->root_y / scale;
-            event->scroll.delta_x = delta_x;
-            event->scroll.delta_y = delta_y;
-
-            gdk_event_set_device (event, device);
-            gdk_event_set_source_device (event, source_device);
-
-            event->scroll.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
+            event = gdk_event_scroll_new (surface,
+                                          device,
+                                          source_device,
+                                          NULL,
+                                          xev->time,
+                                          _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group),
+                                          delta_x,
+                                          delta_y,
+                                          delta_x == 0.0 && delta_y == 0.0);
             break;
           }
 
-        event->any.type = GDK_MOTION_NOTIFY;
-        event->any.surface = surface;
-        event->motion.time = xev->time;
-        event->motion.x = (gdouble) xev->event_x / scale;
-        event->motion.y = (gdouble) xev->event_y / scale;
-        event->motion.x_root = (gdouble) xev->root_x / scale;
-        event->motion.y_root = (gdouble) xev->root_y / scale;
-
-        gdk_event_set_device (event, device);
-        gdk_event_set_source_device (event, source_device);
-        gdk_event_set_device_tool (event, source_device->last_tool);
-
-        event->motion.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
-
-        event->motion.axes = translate_axes (device,
-                                             event->motion.x,
-                                             event->motion.y,
-                                             event->any.surface,
-                                             &xev->valuators);
+        axes = translate_axes (device,
+                               (double) xev->event_x / scale,
+                               (double) xev->event_y / scale,
+                               surface,
+                               &xev->valuators);
 
         if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
           {
             /* Update event coordinates from axes */
-            gdk_device_get_axis (device, event->motion.axes, GDK_AXIS_X, &event->motion.x);
-            gdk_device_get_axis (device, event->motion.axes, GDK_AXIS_Y, &event->motion.y);
+            gdk_device_get_axis (device, axes, GDK_AXIS_X, &x);
+            gdk_device_get_axis (device, axes, GDK_AXIS_Y, &y);
           }
+        else
+          {
+            x = (double) xev->event_x / scale;
+            y = (double) xev->event_y / scale;
+          }
+
+        event = gdk_event_motion_new (surface,
+                                      device,
+                                      source_device,
+                                      source_device->last_tool,
+                                      xev->time,
+                                      _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group),
+                                      x, y,
+                                      axes);
+                                       
       }
       break;
 
@@ -1792,6 +1775,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
     case XI_TouchEnd:
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
+        GdkModifierType state;
+
+        double x, y;
+        double *axes;
 
         GDK_DISPLAY_NOTE (display, EVENTS,
                  g_message ("touch %s:\twindow %ld\n\ttouch id: %u\n\tpointer emulating: %s",
@@ -1800,56 +1787,45 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                             xev->detail,
                             xev->flags & XITouchEmulatingPointer ? "true" : "false"));
 
-        if (ev->evtype == XI_TouchBegin)
-          event->any.type = GDK_TOUCH_BEGIN;
-        else if (ev->evtype == XI_TouchEnd)
-          event->any.type = GDK_TOUCH_END;
-
-        event->any.surface = surface;
-        event->touch.time = xev->time;
-        event->touch.x = (gdouble) xev->event_x / scale;
-        event->touch.y = (gdouble) xev->event_y / scale;
-        event->touch.x_root = (gdouble) xev->root_x / scale;
-        event->touch.y_root = (gdouble) xev->root_y / scale;
-
         device = g_hash_table_lookup (device_manager->id_table,
                                       GUINT_TO_POINTER (xev->deviceid));
-        gdk_event_set_device (event, device);
 
         source_device = g_hash_table_lookup (device_manager->id_table,
                                              GUINT_TO_POINTER (xev->sourceid));
-        gdk_event_set_source_device (event, source_device);
 
-        event->touch.axes = translate_axes (device,
-                                            event->touch.x,
-                                            event->touch.y,
-                                            event->any.surface,
-                                            &xev->valuators);
+        state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
+        if (ev->evtype == XI_TouchBegin)
+          state |= GDK_BUTTON1_MASK;
+
+        axes = translate_axes (device,
+                               (double) xev->event_x / scale,
+                               (double) xev->event_y / scale,
+                               surface,
+                               &xev->valuators);
 
         if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
           {
             /* Update event coordinates from axes */
-            gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_X, &event->touch.x);
-            gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_Y, &event->touch.y);
+            gdk_device_get_axis (device, axes, GDK_AXIS_X, &x);
+            gdk_device_get_axis (device, axes, GDK_AXIS_Y, &y);
           }
-
-        event->touch.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
-
-        if (ev->evtype == XI_TouchBegin)
-          event->touch.state |= GDK_BUTTON1_MASK;
-
-        event->touch.sequence = GUINT_TO_POINTER (xev->detail);
-
-        if (xev->flags & XITouchEmulatingPointer)
+        else
           {
-            event->touch.emulating_pointer = TRUE;
-            gdk_event_set_pointer_emulated (event, TRUE);
+            x = (double) xev->event_x / scale;
+            y = (double) xev->event_y / scale;
           }
-
-        if (return_val == FALSE)
-          break;
-
-        gdk_event_set_display (event, display);
+        event = gdk_event_touch_new (ev->evtype == XI_TouchBegin
+                                       ? GDK_TOUCH_BEGIN
+                                       : GDK_TOUCH_END,
+                                     GUINT_TO_POINTER (xev->detail),
+                                     surface,
+                                     device,
+                                     source_device,
+                                     xev->time,
+                                     state,
+                                     x, y,
+                                     axes,
+                                     xev->flags & XITouchEmulatingPointer);
 
         if (ev->evtype == XI_TouchBegin)
           set_user_time (event);
@@ -1859,6 +1835,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
     case XI_TouchUpdate:
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
+        GdkModifierType state;
+
+        double x, y;
+        double *axes;
 
         GDK_DISPLAY_NOTE (display, EVENTS,
                  g_message ("touch update:\twindow %ld\n\ttouch id: %u\n\tpointer emulating: %s",
@@ -1866,45 +1846,43 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                             xev->detail,
                             xev->flags & XITouchEmulatingPointer ? "true" : "false"));
 
-        event->any.surface = surface;
-        event->touch.sequence = GUINT_TO_POINTER (xev->detail);
-        event->any.type = GDK_TOUCH_UPDATE;
-        event->touch.time = xev->time;
-        event->touch.x = (gdouble) xev->event_x / scale;
-        event->touch.y = (gdouble) xev->event_y / scale;
-        event->touch.x_root = (gdouble) xev->root_x / scale;
-        event->touch.y_root = (gdouble) xev->root_y / scale;
-
         device = g_hash_table_lookup (device_manager->id_table,
                                       GINT_TO_POINTER (xev->deviceid));
-        gdk_event_set_device (event, device);
 
         source_device = g_hash_table_lookup (device_manager->id_table,
                                              GUINT_TO_POINTER (xev->sourceid));
-        gdk_event_set_source_device (event, source_device);
 
-        event->touch.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
+        state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
+        state |= GDK_BUTTON1_MASK;
 
-        event->touch.state |= GDK_BUTTON1_MASK;
-
-        if (xev->flags & XITouchEmulatingPointer)
-          {
-            event->touch.emulating_pointer = TRUE;
-            gdk_event_set_pointer_emulated (event, TRUE);
-          }
-
-        event->touch.axes = translate_axes (device,
-                                            event->touch.x,
-                                            event->touch.y,
-                                            event->any.surface,
-                                            &xev->valuators);
+        axes = translate_axes (device,
+                               (double) xev->event_x / scale,
+                               (double) xev->event_y / scale,
+                               surface,
+                               &xev->valuators);
 
         if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
           {
             /* Update event coordinates from axes */
-            gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_X, &event->touch.x);
-            gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_Y, &event->touch.y);
+            gdk_device_get_axis (device, axes, GDK_AXIS_X, &x);
+            gdk_device_get_axis (device, axes, GDK_AXIS_Y, &y);
           }
+        else
+          {
+            x = (double) xev->event_x / scale;
+            y = (double) xev->event_y / scale;
+          }
+
+        event = gdk_event_touch_new (GDK_TOUCH_UPDATE,
+                                     GUINT_TO_POINTER (xev->detail),
+                                     surface,
+                                     device,
+                                     source_device,
+                                     xev->time,
+                                     state,
+                                     x, y,
+                                     axes,
+                                     xev->flags & XITouchEmulatingPointer);
       }
       break;
 #endif  /* XINPUT_2_2 */
@@ -1923,25 +1901,11 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                              xev->deviceid, xev->sourceid,
                              xev->detail, xev->mode));
 
-        event->any.type = (ev->evtype == XI_Enter) ? GDK_ENTER_NOTIFY : GDK_LEAVE_NOTIFY;
-
-        event->crossing.x = (gdouble) xev->event_x / scale;
-        event->crossing.y = (gdouble) xev->event_y / scale;
-        event->crossing.x_root = (gdouble) xev->root_x / scale;
-        event->crossing.y_root = (gdouble) xev->root_y / scale;
-        event->crossing.time = xev->time;
-        event->crossing.focus = xev->focus;
-
-        event->any.surface = surface;
-        event->crossing.child_surface = gdk_x11_surface_lookup_for_display (display, xev->child);
-
         device = g_hash_table_lookup (device_manager->id_table,
                                       GINT_TO_POINTER (xev->deviceid));
-        gdk_event_set_device (event, device);
 
         source_device = g_hash_table_lookup (device_manager->id_table,
                                              GUINT_TO_POINTER (xev->sourceid));
-        gdk_event_set_source_device (event, source_device);
 
         if (ev->evtype == XI_Enter &&
             xev->detail != XINotifyInferior && xev->mode != XINotifyPassiveUngrab &&
@@ -1962,9 +1926,19 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
               }
           }
 
-        event->crossing.mode = translate_crossing_mode (xev->mode);
-        event->crossing.detail = translate_notify_type (xev->detail);
-        event->crossing.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
+        event = gdk_event_crossing_new (ev->evtype == XI_Enter
+                                          ? GDK_ENTER_NOTIFY
+                                          : GDK_LEAVE_NOTIFY,
+                                        surface,
+                                        device,
+                                        source_device,
+                                        xev->time,
+                                        _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group),
+                                        (double) xev->event_x / scale,
+                                        (double) xev->event_y / scale,
+                                        translate_crossing_mode (xev->mode),
+                                        translate_notify_type (xev->detail));
+           
       }
       break;
     case XI_FocusIn:
@@ -1988,35 +1962,13 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                                   xev->detail,
                                                   xev->mode);
           }
-
-        return_val = FALSE;
       }
       break;
     default:
-      return_val = FALSE;
       break;
     }
 
-  event->any.send_event = cookie->send_event;
-
-  if (return_val)
-    {
-      if (event->any.surface)
-        g_object_ref (event->any.surface);
-
-      if (((event->any.type == GDK_ENTER_NOTIFY) ||
-           (event->any.type == GDK_LEAVE_NOTIFY)) &&
-          (event->crossing.child_surface != NULL))
-        g_object_ref (event->crossing.child_surface);
-    }
-  else
-    {
-      /* Mark this event as having no resources to be freed */
-      event->any.surface = NULL;
-      event->any.type = GDK_NOTHING;
-    }
-
-  return return_val;
+  return event;
 }
 
 static GdkEventMask

@@ -28,7 +28,7 @@
 #include "gtkmenutrackerprivate.h"
 #include "gtkpopoverprivate.h"
 #include "gtkwidgetprivate.h"
-#include "gtkeventcontrollerkey.h"
+#include "gtkeventcontrollerfocus.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkmain.h"
 #include "gtktypebuiltins.h"
@@ -168,14 +168,12 @@ visible_submenu_changed (GObject        *object,
 }
 
 static void
-focus_out (GtkEventControllerKey *controller,
-           GdkCrossingMode        mode,
-           GdkNotifyType          detail,
-           GtkPopoverMenu        *menu)
+focus_out (GtkEventController   *controller,
+           GtkPopoverMenu       *menu)
 {
   GtkWidget *new_focus = gtk_root_get_focus (gtk_widget_get_root (GTK_WIDGET (menu)));
 
-  if (!gtk_event_controller_key_contains_focus (controller) &&
+  if (!gtk_event_controller_focus_contains_focus (GTK_EVENT_CONTROLLER_FOCUS (controller)) &&
       new_focus != NULL)
     {
       if (menu->parent_menu &&
@@ -186,17 +184,15 @@ focus_out (GtkEventControllerKey *controller,
 }
 
 static void
-leave_cb (GtkEventController *controller,
-          GdkCrossingMode     mode,
-          GdkNotifyType       type,
-          gpointer            data)
+leave_cb (GtkEventController   *controller,
+          GdkCrossingMode       mode,
+          gpointer              data)
 {
   GtkWidget *target;
 
   target = gtk_event_controller_get_widget (controller);
 
-  if (!gtk_event_controller_motion_contains_pointer (GTK_EVENT_CONTROLLER_MOTION (controller)))
-    gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (target), NULL);
+  gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (target), NULL);
 }
 
 static void
@@ -215,8 +211,8 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
 
   gtk_widget_add_css_class (GTK_WIDGET (popover), "menu");
 
-  controller = gtk_event_controller_key_new ();
-  g_signal_connect (controller, "focus-out", G_CALLBACK (focus_out), popover);
+  controller = gtk_event_controller_focus_new ();
+  g_signal_connect (controller, "leave", G_CALLBACK (focus_out), popover);
   gtk_widget_add_controller (GTK_WIDGET (popover), controller);
 
   controller = gtk_event_controller_motion_new ();
