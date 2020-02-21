@@ -163,7 +163,7 @@ output_result (GtkIMContext *context,
 
 static gboolean
 quartz_filter_keypress (GtkIMContext *context,
-                        GdkEventKey *event)
+                        GdkEvent     *event)
 {
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
   gboolean retval;

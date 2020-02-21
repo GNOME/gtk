@@ -355,11 +355,11 @@ keyval_in_group (GdkKeymap  *keymap,
 /**
  * _gtk_key_hash_lookup:
  * @key_hash: a #GtkKeyHash
- * @hardware_keycode: hardware keycode field from a #GdkEventKey
- * @state: state field from a #GdkEventKey
+ * @hardware_keycode: hardware keycode field from a #GdkEvent
+ * @state: state field from a #GdkEvent
  * @mask: mask of modifiers to consider when matching against the
  *        modifiers in entries.
- * @group: group field from a #GdkEventKey
+ * @group: group field from a #GdkEvent
  * 
  * Looks up the best matching entry or entries in the hash table for
  * a given event. The results are sorted so that entries with less
@@ -530,7 +530,7 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
  * 
  * Looks up the best matching entry or entries in the hash table for a
  * given keyval/modifiers pair. It’s better to use
- * _gtk_key_hash_lookup() if you have the original #GdkEventKey
+ * _gtk_key_hash_lookup() if you have the original #GdkEvent
  * available.  The results are sorted so that entries with less
  * modifiers come before entries with more modifiers.
  * 
