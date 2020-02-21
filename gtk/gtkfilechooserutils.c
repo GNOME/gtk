@@ -289,7 +289,7 @@ delegate_add_shortcut_folder (GtkFileChooser  *chooser,
 			      GFile           *file,
 			      GError         **error)
 {
-  return _gtk_file_chooser_add_shortcut_folder (get_delegate (chooser), file, error);
+  return gtk_file_chooser_add_shortcut_folder (get_delegate (chooser), file, error);
 }
 
 static gboolean
@@ -297,13 +297,13 @@ delegate_remove_shortcut_folder (GtkFileChooser  *chooser,
 				 GFile           *file,
 				 GError         **error)
 {
-  return _gtk_file_chooser_remove_shortcut_folder (get_delegate (chooser), file, error);
+  return gtk_file_chooser_remove_shortcut_folder (get_delegate (chooser), file, error);
 }
 
 static GSList *
 delegate_list_shortcut_folders (GtkFileChooser *chooser)
 {
-  return _gtk_file_chooser_list_shortcut_folder_files (get_delegate (chooser));
+  return gtk_file_chooser_list_shortcut_folders (get_delegate (chooser));
 }
 
 static gboolean
@@ -311,13 +311,13 @@ delegate_set_current_folder (GtkFileChooser  *chooser,
 			     GFile           *file,
 			     GError         **error)
 {
-  return gtk_file_chooser_set_current_folder_file (get_delegate (chooser), file, error);
+  return gtk_file_chooser_set_current_folder (get_delegate (chooser), file, error);
 }
 
 static GFile *
 delegate_get_current_folder (GtkFileChooser *chooser)
 {
-  return gtk_file_chooser_get_current_folder_file (get_delegate (chooser));
+  return gtk_file_chooser_get_current_folder (get_delegate (chooser));
 }
 
 static void

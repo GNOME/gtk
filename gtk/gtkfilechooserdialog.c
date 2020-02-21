@@ -85,11 +85,9 @@
  * res = gtk_dialog_run (GTK_DIALOG (dialog));
  * if (res == GTK_RESPONSE_ACCEPT)
  *   {
- *     char *filename;
  *     GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialog);
- *     filename = gtk_file_chooser_get_filename (chooser);
- *     open_file (filename);
- *     g_free (filename);
+ *     g_autoptr(GFile) filen = gtk_file_chooser_get_file (chooser);
+ *     open_file (file);
  *   }
  *
  * gtk_widget_destroy (dialog);
@@ -116,20 +114,15 @@
  * gtk_file_chooser_set_do_overwrite_confirmation (chooser, TRUE);
  *
  * if (user_edited_a_new_document)
- *   gtk_file_chooser_set_current_name (chooser,
- *                                      _("Untitled document"));
+ *   gtk_file_chooser_set_current_name (chooser, _("Untitled document"));
  * else
- *   gtk_file_chooser_set_filename (chooser,
- *                                  existing_filename);
+ *   gtk_file_chooser_set_file (chooser, existing_filename);
  *
  * res = gtk_dialog_run (GTK_DIALOG (dialog));
  * if (res == GTK_RESPONSE_ACCEPT)
  *   {
- *     char *filename;
- *
- *     filename = gtk_file_chooser_get_filename (chooser);
- *     save_to_file (filename);
- *     g_free (filename);
+ *     g_autoptr(GFile) file = gtk_file_chooser_get_file (chooser);
+ *     save_to_file (file);
  *   }
  *
  * gtk_widget_destroy (dialog);
@@ -145,7 +138,7 @@
  *   and suggest a name such as “Untitled” with gtk_file_chooser_set_current_name().
  *
  * - To save a file under a different name. Use #GTK_FILE_CHOOSER_ACTION_SAVE,
- *   and set the existing filename with gtk_file_chooser_set_filename().
+ *   and set the existing file with gtk_file_chooser_set_file().
  *
  * - To choose a folder instead of a file. Use #GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER.
  *
@@ -156,7 +149,7 @@
  * considered to be a good policy, as now the file chooser is
  * able to make good suggestions on its own.  In general, you
  * should only cause the file chooser to show a specific folder
- * when it is appropriate to use gtk_file_chooser_set_filename(),
+ * when it is appropriate to use gtk_file_chooser_set_file(),
  * i.e. when you are doing a Save As command and you already
  * have a file saved somewhere.
 
@@ -362,18 +355,18 @@ file_chooser_widget_selection_changed (GtkWidget            *widget,
 {
   GtkFileChooserDialogPrivate *priv = gtk_file_chooser_dialog_get_instance_private (dialog);
   GtkWidget *button;
-  GSList *uris;
+  GSList *files;
   gboolean sensitive;
 
   button = get_accept_action_widget (GTK_DIALOG (dialog), FALSE);
   if (button == NULL)
     return;
 
-  uris = gtk_file_chooser_get_uris (GTK_FILE_CHOOSER (priv->widget));
-  sensitive = (uris != NULL);
+  files = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (priv->widget));
+  sensitive = (files != NULL);
   gtk_widget_set_sensitive (button, sensitive);
 
-  g_slist_free_full (uris, g_free);
+  g_slist_free_full (files, g_object_unref);
 }
 
 static void

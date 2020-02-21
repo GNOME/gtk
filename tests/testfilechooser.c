@@ -44,28 +44,38 @@ static GtkFileChooserAction action;
 static void
 print_current_folder (GtkFileChooser *chooser)
 {
-  gchar *uri;
+  GFile *cwd;
 
-  uri = gtk_file_chooser_get_current_folder_uri (chooser);
-  g_print ("Current folder changed :\n  %s\n", uri ? uri : "(null)");
-  g_free (uri);
+  cwd = gtk_file_chooser_get_current_folder (chooser);
+  if (cwd != NULL)
+    {
+      char *uri = g_file_get_uri (cwd);
+      g_print ("Current folder changed :\n  %s\n", uri ? uri : "(null)");
+      g_free (uri);
+      g_object_unref (cwd);
+    }
+  else
+    {
+      g_print ("Current folder changed :\n  none\n");
+    }
 }
 
 static void
 print_selected (GtkFileChooser *chooser)
 {
-  GSList *uris = gtk_file_chooser_get_uris (chooser);
+  GSList *uris = gtk_file_chooser_get_files (chooser);
   GSList *tmp_list;
 
   g_print ("Selection changed :\n");
   for (tmp_list = uris; tmp_list; tmp_list = tmp_list->next)
     {
-      gchar *uri = tmp_list->data;
-      g_print ("  %s\n", uri);
+      GFile *file = tmp_list->data;
+      char *uri = g_file_get_uri (file);
+      g_print ("  %s\n", uri ? uri : "(null)");
       g_free (uri);
     }
   g_print ("\n");
-  g_slist_free (uris);
+  g_slist_free_full (uris, g_object_unref);
 }
 
 static void
@@ -79,7 +89,7 @@ response_cb (GtkDialog *dialog,
     {
       GSList *list;
 
-      list = gtk_file_chooser_get_uris (GTK_FILE_CHOOSER (dialog));
+      list = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (dialog));
 
       if (list)
 	{
@@ -89,11 +99,13 @@ response_cb (GtkDialog *dialog,
 
 	  for (l = list; l; l = l->next)
 	    {
-	      g_print ("%s\n", (char *) l->data);
-	      g_free (l->data);
+              GFile *file = l->data;
+              char *uri = g_file_get_uri (file);
+	      g_print ("  %s\n", uri ? uri : "(null)");
+	      g_free (uri);
 	    }
 
-	  g_slist_free (list);
+	  g_slist_free_full (list, g_object_unref);
 	}
       else
 	g_print ("No selected files\n");
@@ -341,7 +353,8 @@ static void
 set_current_folder (GtkFileChooser *chooser,
 		    const char     *name)
 {
-  if (!gtk_file_chooser_set_current_folder (chooser, name))
+  GFile *file = g_file_new_for_path (name);
+  if (!gtk_file_chooser_set_current_folder (chooser, file, NULL))
     {
       GtkWidget *dialog;
 
@@ -354,6 +367,7 @@ set_current_folder (GtkFileChooser *chooser,
       gtk_dialog_run (GTK_DIALOG (dialog));
       gtk_widget_destroy (dialog);
     }
+  g_object_unref (file);
 }
 
 static void
@@ -374,7 +388,8 @@ static void
 set_filename (GtkFileChooser *chooser,
 	      const char     *name)
 {
-  if (!gtk_file_chooser_set_filename (chooser, name))
+  GFile *file = g_file_new_for_path (name);
+  if (!gtk_file_chooser_set_file (chooser, file, NULL))
     {
       GtkWidget *dialog;
 
@@ -387,6 +402,7 @@ set_filename (GtkFileChooser *chooser,
       gtk_dialog_run (GTK_DIALOG (dialog));
       gtk_widget_destroy (dialog);
     }
+  g_object_unref (file);
 }
 
 static void
@@ -409,7 +425,7 @@ get_selection_cb (GtkButton      *button,
 {
   GSList *selection;
 
-  selection = gtk_file_chooser_get_uris (chooser);
+  selection = gtk_file_chooser_get_files (chooser);
 
   g_print ("Selection: ");
 
@@ -421,16 +437,19 @@ get_selection_cb (GtkButton      *button,
       
       for (l = selection; l; l = l->next)
 	{
-	  char *uri = l->data;
+          GFile *file = l->data;
+	  char *uri = g_file_get_uri (file);
 
 	  g_print ("%s\n", uri);
+
+          g_free (uri);
 
 	  if (l->next)
 	    g_print ("           ");
 	}
     }
 
-  g_slist_free_full (selection, g_free);
+  g_slist_free_full (selection, g_object_unref);
 }
 
 static void
@@ -534,6 +553,7 @@ main (int argc, char **argv)
   char *action_arg = NULL;
   char *initial_filename = NULL;
   char *initial_folder = NULL;
+  GFile *file;
   GError *error = NULL;
   GOptionEntry options[] = {
     { "action", 'a', 0, G_OPTION_ARG_STRING, &action_arg, "Filechooser action", "ACTION" },
@@ -680,7 +700,7 @@ main (int argc, char **argv)
 		    G_CALLBACK (update_preview_cb), NULL);
 #endif
 
-  /* Extra widget */
+  /* Choices */
 
   gtk_file_chooser_add_choice (GTK_FILE_CHOOSER (dialog), "choice1",
                                "Choose one:",
@@ -690,12 +710,13 @@ main (int argc, char **argv)
 
   /* Shortcuts */
 
-  gtk_file_chooser_add_shortcut_folder_uri (GTK_FILE_CHOOSER (dialog),
-					    "file:///usr/share/pixmaps",
-					    NULL);
-  gtk_file_chooser_add_shortcut_folder (GTK_FILE_CHOOSER (dialog),
-					g_get_user_special_dir (G_USER_DIRECTORY_MUSIC),
-					NULL);
+  file = g_file_new_for_uri ("file:///usr/share/pixmaps");
+  gtk_file_chooser_add_shortcut_folder (GTK_FILE_CHOOSER (dialog), file, NULL);
+  g_object_unref (file);
+
+  file = g_file_new_for_path (g_get_user_special_dir (G_USER_DIRECTORY_MUSIC));
+  gtk_file_chooser_add_shortcut_folder (GTK_FILE_CHOOSER (dialog), file, NULL);
+  g_object_unref (file);
 
   /* Initial filename or folder */
 
