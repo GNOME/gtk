@@ -205,14 +205,6 @@ gboolean   gtk_file_chooser_get_use_preview_label     (GtkFileChooser *chooser);
 GDK_AVAILABLE_IN_ALL
 GFile *gtk_file_chooser_get_preview_file     (GtkFileChooser *chooser);
 
-/* Extra widget
- */
-GDK_AVAILABLE_IN_ALL
-void       gtk_file_chooser_set_extra_widget (GtkFileChooser *chooser,
-					      GtkWidget      *extra_widget);
-GDK_AVAILABLE_IN_ALL
-GtkWidget *gtk_file_chooser_get_extra_widget (GtkFileChooser *chooser);
-
 /* List of user selectable filters
  */
 GDK_AVAILABLE_IN_ALL

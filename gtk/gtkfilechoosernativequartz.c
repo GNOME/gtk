@@ -448,18 +448,7 @@ gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self)
   guint update_preview_signal;
   GSList *filters, *l;
   int n_filters, i;
-  GtkWidget *extra_widget = NULL;
   char *message = NULL;
-
-  extra_widget = gtk_file_chooser_get_extra_widget (GTK_FILE_CHOOSER (self));
-  // if the extra_widget is a GtkLabel, then use its text to set the dialog message
-  if (extra_widget != NULL)
-    {
-      if (!GTK_IS_LABEL (extra_widget))
-        return FALSE;
-      else
-        message = g_strdup (gtk_label_get_text (GTK_LABEL (extra_widget)));
-    }
 
   update_preview_signal = g_signal_lookup ("update-preview", GTK_TYPE_FILE_CHOOSER);
   if (g_signal_has_handler_pending (self, update_preview_signal, 0, TRUE))

@@ -117,32 +117,15 @@
  * }
  * ]|
  *
- * # Adding Extra Widgets
+ * # Adding options 
  *
  * You can add extra widgets to a file chooser to provide options
- * that are not present in the default design.  For example, you
- * can add a toggle button to give the user the option to open a
- * file in read-only mode.  You can use
- * gtk_file_chooser_set_extra_widget() to insert additional
- * widgets in a file chooser.
- *
- * An example for adding extra widgets:
- * |[<!-- language="C" -->
- *
- *   GtkWidget *toggle;
- *
- *   ...
- *
- *   toggle = gtk_check_button_new_with_label ("Open file read-only");
- *   gtk_widget_show (toggle);
- *   gtk_file_chooser_set_extra_widget (my_file_chooser, toggle);
- * }
- * ]|
- *
- * If you want to set more than one extra widget in the file
- * chooser, you can a container such as a #GtkBox or a #GtkGrid
- * and include your widgets in it.  Then, set the container as
- * the whole extra widget.
+ * that are not present in the default design, by using
+ * gtk_file_chooser_add_choice(). Each choice has an identifier and
+ * a user visible label; additionally, each choice can have multiple
+ * options. If a choice has no option, it will be rendered as a
+ * check button with the given label; if a choice has options, it will
+ * be rendered as a combo box.
  */
 
 
@@ -385,12 +368,6 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
                                                              P_("Whether to display a label with the name of the previewed file."),
                                                              TRUE,
                                                              GTK_PARAM_READWRITE));
-  g_object_interface_install_property (iface,
-                                       g_param_spec_object ("extra-widget",
-                                                            P_("Extra widget"),
-                                                            P_("Application supplied widget for extra options."),
-                                                            GTK_TYPE_WIDGET,
-                                                            GTK_PARAM_READWRITE));
   g_object_interface_install_property (iface,
                                        g_param_spec_boolean ("select-multiple",
                                                              P_("Select Multiple"),
@@ -650,10 +627,7 @@ gtk_file_chooser_set_current_name  (GtkFileChooser *chooser,
  * text entry for “Name”.
  *
  * This is meant to be used in save dialogs, to get the currently typed filename
- * when the file itself does not exist yet.  For example, an application that
- * adds a custom extra widget to the file chooser for “file format” may want to
- * change the extension of the typed filename based on the chosen format, say,
- * from “.jpg” to “.png”.
+ * when the file itself does not exist yet.
  *
  * Returns: The raw text from the file chooser’s “Name” entry.  Free this with
  * g_free().  Note that this string is not a full pathname or URI; it is
@@ -1108,50 +1082,6 @@ gtk_file_chooser_remove_shortcut_folder (GtkFileChooser  *chooser,
 }
 
 /**
- * gtk_file_chooser_set_extra_widget:
- * @chooser: a #GtkFileChooser
- * @extra_widget: widget for extra options
- * 
- * Sets an application-supplied widget to provide extra options to the user.
- **/
-void
-gtk_file_chooser_set_extra_widget (GtkFileChooser *chooser,
-                                   GtkWidget      *extra_widget)
-{
-  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
-
-  g_object_set (chooser, "extra-widget", extra_widget, NULL);
-}
-
-/**
- * gtk_file_chooser_get_extra_widget:
- * @chooser: a #GtkFileChooser
- *
- * Gets the current extra widget; see
- * gtk_file_chooser_set_extra_widget().
- *
- * Returns: (nullable) (transfer none): the current extra widget, or %NULL
- **/
-GtkWidget *
-gtk_file_chooser_get_extra_widget (GtkFileChooser *chooser)
-{
-  GtkWidget *extra_widget;
-  
-  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
-
-  g_object_get (chooser, "extra-widget", &extra_widget, NULL);
-  
-  /* Horrid hack; g_object_get() refs returned objects but
-   * that contradicts the memory management conventions
-   * for accessors.
-   */
-  if (extra_widget)
-    g_object_unref (extra_widget);
-
-  return extra_widget;
-}
-
-/**
  * gtk_file_chooser_add_filter:
  * @chooser: a #GtkFileChooser
  * @filter: (transfer full): a #GtkFileFilter
@@ -1372,8 +1302,6 @@ gtk_file_chooser_get_do_overwrite_confirmation (GtkFileChooser *chooser)
  * a value using gtk_file_chooser_set_choice() before the dialog is shown,
  * and you can obtain the user-selected value in the ::response signal handler
  * using gtk_file_chooser_get_choice().
- *
- * Compare gtk_file_chooser_set_extra_widget().
  */
 void
 gtk_file_chooser_add_choice (GtkFileChooser  *chooser,
