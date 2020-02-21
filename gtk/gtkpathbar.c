@@ -118,7 +118,7 @@ struct _ButtonData
  */
 #define BUTTON_IS_FAKE_ROOT(button) ((button)->type == HOME_BUTTON)
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkPathBar, gtk_path_bar, GTK_TYPE_CONTAINER)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkPathBar, gtk_path_bar, GTK_TYPE_WIDGET)
 
 static void gtk_path_bar_finalize                 (GObject          *object);
 static void gtk_path_bar_dispose                  (GObject          *object);
@@ -133,21 +133,8 @@ static void gtk_path_bar_size_allocate            (GtkWidget           *widget,
                                                    int                  width,
                                                    int                  height,
                                                    int                  baseline);
-static void gtk_path_bar_add                      (GtkContainer     *container,
-						   GtkWidget        *widget);
-static void gtk_path_bar_remove                   (GtkContainer     *container,
-						   GtkWidget        *widget);
-static void gtk_path_bar_forall                   (GtkContainer     *container,
-						   GtkCallback       callback,
-						   gpointer          callback_data);
 static void gtk_path_bar_scroll_up                (GtkPathBar       *path_bar);
 static void gtk_path_bar_scroll_down              (GtkPathBar       *path_bar);
-static gboolean gtk_path_bar_slider_up_defocus    (GtkWidget        *widget,
-						   GdkEvent         *event,
-						   GtkPathBar       *path_bar);
-static gboolean gtk_path_bar_slider_down_defocus  (GtkWidget        *widget,
-						   GdkEvent         *event,
-						   GtkPathBar       *path_bar);
 static void gtk_path_bar_update_button_appearance (GtkPathBar       *path_bar,
 						   ButtonData       *button_data,
 						   gboolean          current_dir);
@@ -216,13 +203,11 @@ gtk_path_bar_init (GtkPathBar *path_bar)
 
   priv = gtk_path_bar_get_instance_private (path_bar);
 
-  gtk_widget_init_template (GTK_WIDGET (path_bar));
+  priv->up_slider_button = gtk_button_new_from_icon_name ("pan-start-symbolic");
+  gtk_widget_set_parent (priv->up_slider_button, GTK_WIDGET (path_bar));
 
-  /* Add the children manually because GtkPathBar derives from an abstract class,
-   * Glade cannot edit a <template> in gtkpathbar.ui if it's only a GtkContainer.
-   */
-  gtk_container_add (GTK_CONTAINER (path_bar), priv->up_slider_button);
-  gtk_container_add (GTK_CONTAINER (path_bar), priv->down_slider_button);
+  priv->down_slider_button = gtk_button_new_from_icon_name ("pan-end-symbolic");
+  gtk_widget_set_parent (priv->down_slider_button, GTK_WIDGET (path_bar));
 
   /* GtkBuilder wont let us connect 'swapped' without specifying the signal's
    * user data in the .ui file
@@ -250,23 +235,15 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
 {
   GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
-  GtkContainerClass *container_class;
 
   gobject_class = (GObjectClass *) path_bar_class;
   widget_class = (GtkWidgetClass *) path_bar_class;
-  container_class = (GtkContainerClass *) path_bar_class;
 
   gobject_class->finalize = gtk_path_bar_finalize;
   gobject_class->dispose = gtk_path_bar_dispose;
 
   widget_class->measure = gtk_path_bar_measure;
   widget_class->size_allocate = gtk_path_bar_size_allocate;
-
-  container_class->add = gtk_path_bar_add;
-  container_class->forall = gtk_path_bar_forall;
-  container_class->remove = gtk_path_bar_remove;
-  /* FIXME: */
-  /*  container_class->child_type = gtk_path_bar_child_type;*/
 
   path_bar_signals [PATH_CLICKED] =
     g_signal_new (I_("path-clicked"),
@@ -280,22 +257,8 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
 		  G_TYPE_POINTER,
 		  G_TYPE_BOOLEAN);
 
-  /* Bind class to template
-   */
-  gtk_widget_class_set_template_from_resource (widget_class,
-					       "/org/gtk/libgtk/ui/gtkpathbar.ui");
-
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPathBar, up_slider_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPathBar, down_slider_button);
-
-  gtk_widget_class_bind_template_callback (widget_class, gtk_path_bar_slider_up_defocus);
-  gtk_widget_class_bind_template_callback (widget_class, gtk_path_bar_slider_down_defocus);
-  gtk_widget_class_bind_template_callback (widget_class, gtk_path_bar_scroll_up);
-  gtk_widget_class_bind_template_callback (widget_class, gtk_path_bar_scroll_down);
-
   gtk_widget_class_set_css_name (widget_class, "pathbar");
 }
-
 
 static void
 gtk_path_bar_finalize (GObject *object)
@@ -324,18 +287,16 @@ gtk_path_bar_dispose (GObject *object)
 {
   GtkPathBar *path_bar = GTK_PATH_BAR (object);
   GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (path_bar);
+  GtkWidget *w;
+
+  while ((w = gtk_widget_get_first_child (GTK_WIDGET (path_bar))) != NULL)
+    gtk_widget_unparent (w);
 
   priv->get_info_cancellable = NULL;
   cancel_all_cancellables (path_bar);
 
   G_OBJECT_CLASS (gtk_path_bar_parent_class)->dispose (object);
 }
-
-/* Size requisition:
- * 
- * Ideally, our size is determined by another widget, and we are just filling
- * available space.
- */
 
 static void
 gtk_path_bar_measure (GtkWidget *widget,
@@ -356,7 +317,6 @@ gtk_path_bar_measure (GtkWidget *widget,
 
   *minimum = 0;
   *natural = 0;
-
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -704,89 +664,6 @@ gtk_path_bar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
 }
 
 static void
-gtk_path_bar_add (GtkContainer *container,
-		  GtkWidget    *widget)
-
-{
-  gtk_widget_set_parent (widget, GTK_WIDGET (container));
-}
-
-static void
-gtk_path_bar_remove_1 (GtkContainer *container,
-		       GtkWidget    *widget)
-{
-  gboolean was_visible = gtk_widget_get_visible (widget);
-  gtk_widget_unparent (widget);
-  if (was_visible)
-    gtk_widget_queue_resize (GTK_WIDGET (container));
-}
-
-static void
-gtk_path_bar_remove (GtkContainer *container,
-		     GtkWidget    *widget)
-{
-  GtkPathBar *path_bar = GTK_PATH_BAR (container);
-  GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (path_bar);
-  GList *children;
-
-  if (widget == priv->up_slider_button)
-    {
-      gtk_path_bar_remove_1 (container, widget);
-      priv->up_slider_button = NULL;
-      return;
-    }
-
-  if (widget == priv->down_slider_button)
-    {
-      gtk_path_bar_remove_1 (container, widget);
-      priv->down_slider_button = NULL;
-      return;
-    }
-
-  children = priv->button_list;
-  while (children)
-    {
-      if (widget == BUTTON_DATA (children->data)->button)
-	{
-	  gtk_path_bar_remove_1 (container, widget);
-	  priv->button_list = g_list_remove_link (priv->button_list, children);
-	  g_list_free (children);
-	  return;
-	}
-      
-      children = children->next;
-    }
-}
-
-static void
-gtk_path_bar_forall (GtkContainer *container,
-		     GtkCallback   callback,
-		     gpointer      callback_data)
-{
-  GtkPathBar *path_bar = GTK_PATH_BAR (container);
-  GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (path_bar);
-  GList *children;
-
-  g_return_if_fail (callback != NULL);
-
-  children = priv->button_list;
-  while (children)
-    {
-      GtkWidget *child;
-      child = BUTTON_DATA (children->data)->button;
-      children = children->next;
-
-      (* callback) (child, callback_data);
-    }
-
-  if (priv->up_slider_button)
-    (* callback) (priv->up_slider_button, callback_data);
-
-  if (priv->down_slider_button)
-    (* callback) (priv->down_slider_button, callback_data);
-}
-
-static void
 gtk_path_bar_scroll_down (GtkPathBar *path_bar)
 {
   GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (path_bar);
@@ -863,74 +740,25 @@ gtk_path_bar_scroll_up (GtkPathBar *path_bar)
     }
 }
 
-static gboolean
-gtk_path_bar_slider_up_defocus (GtkWidget  *widget,
-                                GdkEvent   *event,
-                                GtkPathBar *path_bar)
-{
-  GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (path_bar);
-  GList *list;
-  GList *up_button = NULL;
-
-  if (gdk_event_get_event_type (event) != GDK_FOCUS_CHANGE)
-    return FALSE;
-
-  for (list = g_list_last (priv->button_list); list; list = list->prev)
-    {
-      if (gtk_widget_get_child_visible (BUTTON_DATA (list->data)->button))
-        {
-          up_button = list;
-          break;
-        }
-    }
-
-  /* don't let the focus vanish */
-  if ((!gtk_widget_is_sensitive (priv->up_slider_button)) ||
-      (!gtk_widget_get_child_visible (priv->up_slider_button)))
-    gtk_widget_grab_focus (BUTTON_DATA (up_button->data)->button);
-
-  return FALSE;
-}
-
-static gboolean
-gtk_path_bar_slider_down_defocus (GtkWidget  *widget,
-                                  GdkEvent   *event,
-                                  GtkPathBar *path_bar)
-{
-  GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (path_bar);
-  GList *list;
-  GList *down_button = NULL;
-
-  if (gdk_event_get_event_type (event) != GDK_FOCUS_CHANGE)
-    return FALSE;
-
-  for (list = priv->button_list; list; list = list->next)
-    {
-      if (gtk_widget_get_child_visible (BUTTON_DATA (list->data)->button))
-        {
-          down_button = list;
-          break;
-        }
-    }
-
-  /* don't let the focus vanish */
-  if ((!gtk_widget_is_sensitive (priv->down_slider_button)) ||
-      (!gtk_widget_get_child_visible (priv->down_slider_button)))
-    gtk_widget_grab_focus (BUTTON_DATA (down_button->data)->button);
-
-  return FALSE;
-}
-
-/* Public functions and their helpers */
 static void
-gtk_path_bar_clear_buttons (GtkPathBar *path_bar)
+gtk_path_bar_clear_buttons (GtkPathBar *self)
 {
-  GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (path_bar);
+  GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (self);
+  GtkWidget *w;
 
-  while (priv->button_list != NULL)
+  w = gtk_widget_get_first_child (GTK_WIDGET (self));
+  while (w)
     {
-      gtk_container_remove (GTK_CONTAINER (path_bar), BUTTON_DATA (priv->button_list->data)->button);
+      GtkWidget *next = gtk_widget_get_next_sibling (w);
+
+      if (w != priv->up_slider_button && w != priv->down_slider_button)
+        {
+          gtk_widget_unparent (w);
+        }
+
+      w = next;
     }
+
   priv->first_scrolled_button = NULL;
   priv->fake_root = NULL;
 }
@@ -1332,23 +1160,16 @@ gtk_path_bar_set_file_finish (struct SetFileInfo *info,
   if (result)
     {
       GList *l;
-      GtkCssNode *prev;
 
       gtk_path_bar_clear_buttons (info->path_bar);
       priv->button_list = g_list_reverse (info->new_buttons);
       priv->fake_root = info->fake_root;
-      prev = gtk_widget_get_css_node (priv->down_slider_button);
 
       for (l = priv->button_list; l; l = l->next)
 	{
 	  GtkWidget *button = BUTTON_DATA (l->data)->button;
-          GtkCssNode *node = gtk_widget_get_css_node (button);
 
-          gtk_css_node_insert_before (gtk_widget_get_css_node (GTK_WIDGET (info->path_bar)),
-                                      node,
-                                      prev);
-	  gtk_container_add (GTK_CONTAINER (info->path_bar), button);
-          prev = node;
+          gtk_widget_insert_after (button, GTK_WIDGET (info->path_bar), priv->up_slider_button);
 	}
     }
   else
@@ -1356,12 +1177,11 @@ gtk_path_bar_set_file_finish (struct SetFileInfo *info,
       GList *l;
 
       for (l = info->new_buttons; l; l = l->next)
-	{
-	  ButtonData *button_data;
+        {
+          ButtonData *button_data = BUTTON_DATA (l->data);
 
-	  button_data = BUTTON_DATA (l->data);
-          gtk_container_remove (GTK_CONTAINER (info->path_bar), button_data->button);
-	}
+          gtk_widget_unparent (button_data->button);
+        }
 
       g_list_free (info->new_buttons);
     }
