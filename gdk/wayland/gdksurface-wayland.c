@@ -2697,12 +2697,6 @@ gdk_wayland_surface_map_popup (GdkSurface     *surface,
   GdkSurface *parent;
   GdkWaylandSeat *grab_input_seat;
 
-  if (!should_be_mapped (surface))
-    return;
-
-  if (impl->mapped)
-    return;
-
   parent = surface->parent;
   if (!parent)
     {
