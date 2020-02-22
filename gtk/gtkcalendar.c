@@ -1514,7 +1514,7 @@ gtk_calendar_drag_accept (GtkDropTarget *dest,
                           GdkDrop       *drop,
                           GtkCalendar   *calendar)
 {
-  GdkAtom target;
+  const char *target;
 
   target = gtk_drop_target_find_mimetype (dest);
   if (!target || gdk_drop_get_actions (drop) == 0)
@@ -1537,7 +1537,7 @@ gtk_calendar_drag_drop (GtkDropTarget  *dest,
                         int             y,
                         GtkCalendar    *calendar)
 {
-  GdkAtom target;
+  const char *target;
 
   target = gtk_drop_target_find_mimetype (dest);
   if (target != NULL)

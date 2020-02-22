@@ -188,7 +188,7 @@ GList *  gdk_device_list_axes      (GdkDevice       *device);
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_device_get_axis_value (GdkDevice       *device,
                                     gdouble         *axes,
-                                    GdkAtom          axis_label,
+                                    const char      *axis_label,
                                     gdouble         *value);
 
 GDK_AVAILABLE_IN_ALL
