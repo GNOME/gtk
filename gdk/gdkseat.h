@@ -59,21 +59,6 @@ typedef enum {
   GDK_SEAT_CAPABILITY_ALL           = (GDK_SEAT_CAPABILITY_ALL_POINTING | GDK_SEAT_CAPABILITY_KEYBOARD)
 } GdkSeatCapabilities;
 
-/**
- * GdkSeatGrabPrepareFunc:
- * @seat: the #GdkSeat being grabbed
- * @surface: the #GdkSurface being grabbed
- * @user_data: user data passed in gdk_seat_grab()
- *
- * Type of the callback used to set up @surface so it can be
- * grabbed. A typical action would be ensuring the surface is
- * visible, although there's room for other initialization
- * actions.
- */
-typedef void (* GdkSeatGrabPrepareFunc) (GdkSeat   *seat,
-                                         GdkSurface *surface,
-                                         gpointer   user_data);
-
 struct _GdkSeat
 {
   GObject parent_instance;

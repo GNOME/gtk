@@ -255,6 +255,21 @@ void gdk_surface_get_geometry (GdkSurface *surface,
 
 GdkGLContext *gdk_surface_get_shared_data_gl_context (GdkSurface *surface);
 
+/*
+ * GdkSeatGrabPrepareFunc:
+ * @seat: the #GdkSeat being grabbed
+ * @surface: the #GdkSurface being grabbed
+ * @user_data: user data passed in gdk_seat_grab()
+ *
+ * Type of the callback used to set up @surface so it can be
+ * grabbed. A typical action would be ensuring the surface is
+ * visible, although there's room for other initialization
+ * actions.
+ */
+typedef void (* GdkSeatGrabPrepareFunc) (GdkSeat   *seat,
+                                         GdkSurface *surface,
+                                         gpointer   user_data);
+
 GdkGrabStatus  gdk_seat_grab             (GdkSeat                *seat,
                                           GdkSurface              *surface,
                                           GdkSeatCapabilities     capabilities,
