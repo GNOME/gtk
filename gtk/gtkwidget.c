@@ -4046,12 +4046,6 @@ gtk_widget_allocate (GtkWidget    *widget,
       adjusted.height = 0;
     }
 
-  if (G_UNLIKELY (GTK_IS_NATIVE (widget)))
-    {
-      adjusted.width = MAX (1, adjusted.width);
-      adjusted.height = MAX (1, adjusted.height);
-    }
-
   style = gtk_css_node_get_style (priv->cssnode);
   get_box_margin (style, &margin);
   get_box_border (style, &border);
