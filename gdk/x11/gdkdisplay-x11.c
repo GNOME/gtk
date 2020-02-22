@@ -849,7 +849,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
               surface_impl->toplevel->frame_pending)
             {
               surface_impl->toplevel->frame_pending = FALSE;
-              gdk_surface_thaw_updates (event->any.surface);
+              gdk_surface_thaw_updates (surface);
             }
 
 	  if (toplevel)
