@@ -263,7 +263,6 @@
                                 <property name="name">other_locations</property>
                                 <property name="child">
                                   <object class="GtkPlacesView" id="places_view">
-                                    <property name="local-only">0</property>
                                     <signal name="open-location" handler="places_sidebar_open_location_cb" swapped="no"/>
                                     <signal name="show-error-message" handler="places_sidebar_show_error_message_cb" swapped="no"/>
                                   </object>
