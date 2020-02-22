@@ -94,6 +94,10 @@ GDK_AVAILABLE_IN_ALL
 GdkPopupLayout *        gdk_popup_layout_copy                   (GdkPopupLayout         *layout);
 
 GDK_AVAILABLE_IN_ALL
+gboolean                gdk_popup_layout_equal                  (GdkPopupLayout         *layout,
+                                                                 GdkPopupLayout         *other);
+
+GDK_AVAILABLE_IN_ALL
 void                    gdk_popup_layout_set_anchor_rect        (GdkPopupLayout         *layout,
                                                                  const GdkRectangle     *anchor_rect);
 
