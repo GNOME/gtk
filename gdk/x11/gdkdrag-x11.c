@@ -181,7 +181,7 @@ G_DEFINE_TYPE (GdkX11Drag, gdk_x11_drag, GDK_TYPE_DRAG)
 static void
 gdk_x11_drag_init (GdkX11Drag *drag)
 {
-  drags = g_list_prepend (drags, drag);
+  drags = g_list_prepend (drags, g_object_ref (drag));
 }
 
 static void        gdk_x11_drag_finalize     (GObject          *object);
@@ -900,16 +900,12 @@ gdk_x11_drag_handle_finished (GdkDisplay   *display,
 
   if (drag)
     {
-      g_object_ref (drag);
-
       drag_x11 = GDK_X11_DRAG (drag);
       if (drag_x11->version == 5)
         drag_x11->drop_failed = xevent->xclient.data.l[1] == 0;
 
       g_signal_emit_by_name (drag, "dnd-finished");
       gdk_drag_drop_done (drag, !drag_x11->drop_failed);
-
-      g_object_unref (drag);
     }
 }
 
@@ -1896,6 +1892,7 @@ gdk_x11_drag_drop_done (GdkDrag  *drag,
   if (success)
     {
       gdk_surface_hide (x11_drag->drag_surface);
+      g_object_unref (drag);
       return;
     }
 
@@ -1928,6 +1925,7 @@ gdk_x11_drag_drop_done (GdkDrag  *drag,
                            gdk_drag_anim_timeout, anim,
                            (GDestroyNotify) gdk_drag_anim_destroy);
   g_source_set_name_by_id (id, "[gtk] gdk_drag_anim_timeout");
+  g_object_unref (drag);
 }
 
 static gboolean
