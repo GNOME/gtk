@@ -115,6 +115,7 @@ select_swatch (GtkColorChooserWidget *cc,
 {
   GtkColorChooserWidgetPrivate *priv = gtk_color_chooser_widget_get_instance_private (cc);
   GdkRGBA color;
+  double red, green, blue, alpha;
 
   if (priv->current == swatch)
     return;
@@ -127,8 +128,12 @@ select_swatch (GtkColorChooserWidget *cc,
 
   gtk_color_swatch_get_rgba (swatch, &color);
 
+  red = color.red;
+  green = color.green;
+  blue = color.blue;
+  alpha = color.alpha;
   g_settings_set (priv->settings, "selected-color", "(bdddd)",
-                  TRUE, color.red, color.green, color.blue, color.alpha);
+                  TRUE, red, green, blue, alpha);
 
   if (gtk_widget_get_visible (GTK_WIDGET (priv->editor)))
     gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (priv->editor), &color);
@@ -180,8 +185,15 @@ save_custom_colors (GtkColorChooserWidget *cc)
     {
       child = l->data;
       if (gtk_color_swatch_get_rgba (GTK_COLOR_SWATCH (child), &color))
-        g_variant_builder_add (&builder, "(dddd)",
-                               color.red, color.green, color.blue, color.alpha);
+        {
+          double red, green, blue, alpha;
+
+          red = color.red;
+          green = color.green;
+          blue = color.blue;
+          alpha = color.alpha;
+          g_variant_builder_add (&builder, "(dddd)", red, green, blue, alpha);
+        }
     }
 
   variant = g_variant_builder_end (&builder);
@@ -499,9 +511,14 @@ gtk_color_chooser_widget_activate_color_customize (GtkWidget  *widget,
 {
   GtkColorChooserWidget *cc = GTK_COLOR_CHOOSER_WIDGET (widget);
   GtkColorChooserWidgetPrivate *priv = gtk_color_chooser_widget_get_instance_private (cc);
+  double red, green, blue, alpha;
   GdkRGBA color;
 
-  g_variant_get (parameter, "(dddd)", &color.red, &color.green, &color.blue, &color.alpha);
+  g_variant_get (parameter, "(dddd)", &red, &green, &blue, &alpha);
+  color.red = red;
+  color.green = green;
+  color.blue = blue;
+  color.alpha = alpha;
 
   gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (priv->editor), &color);
 
@@ -517,8 +534,13 @@ gtk_color_chooser_widget_activate_color_select (GtkWidget  *widget,
 {
   GtkColorChooserWidget *cc = GTK_COLOR_CHOOSER_WIDGET (widget);
   GdkRGBA color;
+  double red, green, blue, alpha;
 
-  g_variant_get (parameter, "(dddd)", &color.red, &color.green, &color.blue, &color.alpha);
+  g_variant_get (parameter, "(dddd)", &red, &green, &blue, &alpha);
+  color.red = red;
+  color.green = green;
+  color.blue = blue;
+  color.alpha = alpha;
 
   _gtk_color_chooser_color_activated (GTK_COLOR_CHOOSER (cc), &color);
 }

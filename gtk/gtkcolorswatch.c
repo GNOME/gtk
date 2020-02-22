@@ -167,24 +167,30 @@ static void
 activate_color (GtkColorSwatch *swatch)
 {
   GtkColorSwatchPrivate *priv = gtk_color_swatch_get_instance_private (swatch);
+  double red, green, blue, alpha;
+
+  red = priv->color.red;
+  green = priv->color.green;
+  blue = priv->color.blue;
+  alpha = priv->color.alpha;
+
   gtk_widget_activate_action (GTK_WIDGET (swatch),
-                              "color.select", "(dddd)",
-                              priv->color.red,
-                              priv->color.green,
-                              priv->color.blue,
-                              priv->color.alpha);
+                              "color.select", "(dddd)", red, green, blue, alpha);
 }
 
 static void
 customize_color (GtkColorSwatch *swatch)
 {
   GtkColorSwatchPrivate *priv = gtk_color_swatch_get_instance_private (swatch);
+  double red, green, blue, alpha;
+
+  red = priv->color.red;
+  green = priv->color.green;
+  blue = priv->color.blue;
+  alpha = priv->color.alpha;
+
   gtk_widget_activate_action (GTK_WIDGET (swatch),
-                              "color.customize", "(dddd)",
-                              priv->color.red,
-                              priv->color.green,
-                              priv->color.blue,
-                              priv->color.alpha);
+                              "color.customize", "(dddd)", red, green, blue, alpha);
 }
 
 static gboolean
@@ -222,17 +228,19 @@ gtk_color_swatch_get_menu_model (GtkColorSwatch *swatch)
   GtkColorSwatchPrivate *priv = gtk_color_swatch_get_instance_private (swatch);
   GMenu *menu, *section;
   GMenuItem *item;
+  double red, green, blue, alpha;
 
   menu = g_menu_new ();
+
+  red = priv->color.red;
+  green = priv->color.green;
+  blue = priv->color.blue;
+  alpha = priv->color.alpha;
 
   section = g_menu_new ();
   item = g_menu_item_new (_("Customize"), NULL);
   g_menu_item_set_action_and_target_value (item, "color.customize",
-                                           g_variant_new ("(dddd)",
-                                                          priv->color.red,
-                                                          priv->color.green,
-                                                          priv->color.blue,
-                                                          priv->color.alpha));
+                                           g_variant_new ("(dddd)", red, green, blue, alpha));
 
   g_menu_append_item (section, item);
   g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
