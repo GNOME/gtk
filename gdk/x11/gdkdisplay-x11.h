@@ -124,9 +124,6 @@ struct _GdkX11Display
   gulong user_time;
 
   /* Sets of atoms for DND */
-  guint base_dnd_atoms_precached : 1;
-  guint xdnd_atoms_precached : 1;
-  guint motif_atoms_precached : 1;
   guint use_sync : 1;
 
   guint have_shapes : 1;

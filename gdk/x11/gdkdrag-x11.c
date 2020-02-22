@@ -1246,59 +1246,6 @@ xdnd_check_dest (GdkDisplay *display,
   return retval ? (proxy ? proxy : win) : None;
 }
 
-/* Target side */
-
-static void
-base_precache_atoms (GdkDisplay *display)
-{
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
-
-  if (!display_x11->base_dnd_atoms_precached)
-    {
-      static const char *const precache_atoms[] = {
-        "WM_STATE",
-        "XdndAware",
-        "XdndProxy"
-      };
-
-      _gdk_x11_precache_atoms (display,
-                               precache_atoms, G_N_ELEMENTS (precache_atoms));
-
-      display_x11->base_dnd_atoms_precached = TRUE;
-    }
-}
-
-static void
-xdnd_precache_atoms (GdkDisplay *display)
-{
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
-
-  if (!display_x11->xdnd_atoms_precached)
-    {
-      static const gchar *const precache_atoms[] = {
-        "XdndActionAsk",
-        "XdndActionCopy",
-        "XdndActionLink",
-        "XdndActionList",
-        "XdndActionMove",
-        "XdndActionPrivate",
-        "XdndDrop",
-        "XdndEnter",
-        "XdndFinished",
-        "XdndLeave",
-        "XdndPosition",
-        "XdndSelection",
-        "XdndStatus",
-        "XdndTypeList"
-      };
-
-      _gdk_x11_precache_atoms (display,
-                               precache_atoms, G_N_ELEMENTS (precache_atoms));
-
-      display_x11->xdnd_atoms_precached = TRUE;
-    }
-}
-
 /* Source side */
 
 static void
@@ -1343,8 +1290,6 @@ _gdk_x11_display_get_drag_protocol (GdkDisplay      *display,
   GdkSurface *surface;
   Window retval;
 
-  base_precache_atoms (display);
-
   /* Check for a local drag */
   surface = gdk_x11_surface_lookup_for_display (display, xid);
   if (surface)
@@ -1353,7 +1298,6 @@ _gdk_x11_display_get_drag_protocol (GdkDisplay      *display,
         {
           *protocol = GDK_DRAG_PROTO_XDND;
           *version = 5;
-          xdnd_precache_atoms (display);
           GDK_DISPLAY_NOTE (display, DND, g_message ("Entering local Xdnd window %#x\n", (guint) xid));
           return xid;
         }
@@ -1367,7 +1311,6 @@ _gdk_x11_display_get_drag_protocol (GdkDisplay      *display,
   else if ((retval = xdnd_check_dest (display, xid, version)))
     {
       *protocol = GDK_DRAG_PROTO_XDND;
-      xdnd_precache_atoms (display);
       GDK_DISPLAY_NOTE (display, DND, g_message ("Entering Xdnd window %#x\n", (guint) xid));
       return retval;
     }
@@ -1642,8 +1585,6 @@ _gdk_x11_surface_register_dnd (GdkSurface *surface)
   GdkDisplay *display = gdk_surface_get_display (surface);
 
   g_return_if_fail (surface != NULL);
-
-  base_precache_atoms (display);
 
   if (g_object_get_data (G_OBJECT (surface), "gdk-dnd-registered") != NULL)
     return;

@@ -138,6 +138,7 @@ static const char *const precache_atoms[] = {
   "WM_PROTOCOLS",
   "WM_TAKE_FOCUS",
   "WM_WINDOW_ROLE",
+  "WM_STATE",
   "_NET_ACTIVE_WINDOW",
   "_NET_CURRENT_DESKTOP",
   "_NET_FRAME_EXTENTS",
@@ -177,7 +178,23 @@ static const char *const precache_atoms[] = {
   "_NET_VIRTUAL_ROOTS",
   "GDK_SELECTION",
   "_NET_WM_STATE_FOCUSED",
-  "GDK_VISUALS"
+  "GDK_VISUALS",
+  "XdndAware",
+  "XdndProxy",
+  "XdndActionAsk",
+  "XdndActionCopy",
+  "XdndActionLink",
+  "XdndActionList",
+  "XdndActionMove",
+  "XdndActionPrivate",
+  "XdndDrop",
+  "XdndEnter",
+  "XdndFinished",
+  "XdndLeave",
+  "XdndPosition",
+  "XdndSelection",
+  "XdndStatus",
+  "XdndTypeList"
 };
 
 static char *gdk_sm_client_id;
