@@ -182,23 +182,6 @@ static gint64
 gdk_frame_clock_idle_get_frame_time (GdkFrameClock *clock)
 {
   GdkFrameClockIdlePrivate *priv = GDK_FRAME_CLOCK_IDLE (clock)->priv;
-  gint64 computed_frame_time;
-
-  /* can't change frame time during a paint */
-  if (priv->phase != GDK_FRAME_CLOCK_PHASE_NONE &&
-      priv->phase != GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS)
-    return priv->frame_time;
-
-  /* Outside a paint, pick something close to "now" */
-  computed_frame_time = compute_frame_time (GDK_FRAME_CLOCK_IDLE (clock));
-
-  /* 16ms is 60fps. We only update frame time that often because we'd
-   * like to try to keep animations on the same start times.
-   * get_frame_time() would normally be used outside of a paint to
-   * record an animation start time for example.
-   */
-  if ((computed_frame_time - priv->frame_time) > FRAME_INTERVAL)
-    priv->frame_time = computed_frame_time;
 
   return priv->frame_time;
 }
