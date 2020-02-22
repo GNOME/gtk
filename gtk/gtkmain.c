@@ -1321,6 +1321,9 @@ gtk_synthesize_crossing_events (GtkRoot         *toplevel,
   GtkWidget *prev;
   gboolean seen_ancestor;
 
+  if (old_target == new_target)
+    return;
+
   if (old_target && new_target)
     ancestor = gtk_widget_common_ancestor (old_target, new_target);
   else
