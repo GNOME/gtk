@@ -104,16 +104,6 @@ _gdk_broadway_surface_drag_begin (GdkSurface         *surface,
   return new_context;
 }
 
-void
-_gdk_broadway_surface_register_dnd (GdkSurface      *surface)
-{
-}
-
-void
-_gdk_broadway_display_init_dnd (GdkDisplay *display)
-{
-}
-
 static void
 gdk_broadway_drag_class_init (GdkBroadwayDragClass *klass)
 {

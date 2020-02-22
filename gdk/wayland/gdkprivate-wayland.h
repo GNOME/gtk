@@ -99,7 +99,6 @@ void            gdk_wayland_surface_attach_image           (GdkSurface          
                                                             cairo_surface_t      *cairo_surface,
                                                             const cairo_region_t *damage);
 
-void            _gdk_wayland_surface_register_dnd          (GdkSurface *surface);
 GdkDrag        *_gdk_wayland_surface_drag_begin            (GdkSurface *surface,
                                                             GdkDevice *device,
                                                             GdkContentProvider *content,
