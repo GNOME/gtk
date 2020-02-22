@@ -2527,9 +2527,6 @@ gtk_range_scroll (GtkRange     *range,
       break;
 
     case GTK_SCROLL_JUMP:
-      /* Used by CList, range doesn't use it. */
-      break;
-
     case GTK_SCROLL_NONE:
     default:
       break;
