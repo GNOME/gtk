@@ -43,9 +43,6 @@ gint   gdk_text_property_to_utf8_list_for_display (GdkDisplay     *display,
                                                    gint            length,
                                                    gchar        ***list);
 
-GDK_AVAILABLE_IN_ALL
-gchar *gdk_utf8_to_string_target                  (const gchar    *str);
-
 G_END_DECLS
 
 #endif /* __GDK_PROPERTY_H__ */

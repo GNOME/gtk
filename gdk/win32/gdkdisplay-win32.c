@@ -1119,7 +1119,6 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
 
   display_class->get_keymap = _gdk_win32_display_get_keymap;
   display_class->text_property_to_utf8_list = _gdk_win32_display_text_property_to_utf8_list;
-  display_class->utf8_to_string_target = _gdk_win32_display_utf8_to_string_target;
   display_class->make_gl_context_current = _gdk_win32_display_make_gl_context_current;
 
   display_class->get_n_monitors = gdk_win32_display_get_n_monitors;

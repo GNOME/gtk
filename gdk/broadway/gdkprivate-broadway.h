@@ -119,8 +119,6 @@ gint _gdk_broadway_display_text_property_to_utf8_list (GdkDisplay    *display,
                                                        const guchar  *text,
                                                        gint           length,
                                                        gchar       ***list);
-gchar *_gdk_broadway_display_utf8_to_string_target (GdkDisplay  *display,
-                                                    const gchar *str);
 GdkKeymap* _gdk_broadway_display_get_keymap (GdkDisplay *display);
 void _gdk_broadway_display_consume_all_input (GdkDisplay *display);
 BroadwayInputMsg * _gdk_broadway_display_block_for_input (GdkDisplay *display,

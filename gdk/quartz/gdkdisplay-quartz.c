@@ -231,7 +231,6 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->create_surface_impl = _gdk_quartz_display_create_surface_impl;
   display_class->get_keymap = _gdk_quartz_display_get_keymap;
   display_class->text_property_to_utf8_list = _gdk_quartz_display_text_property_to_utf8_list;
-  display_class->utf8_to_string_target = _gdk_quartz_display_utf8_to_string_target;
   display_class->get_n_monitors = gdk_quartz_display_get_n_monitors;
   display_class->get_monitor = gdk_quartz_display_get_monitor;
   display_class->get_setting = gdk_quartz_display_get_setting;

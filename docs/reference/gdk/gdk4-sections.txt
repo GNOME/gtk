@@ -352,7 +352,6 @@ gdk_content_formats_builder_get_type
 <FILE>properties</FILE>
 GdkAtom
 gdk_text_property_to_utf8_list_for_display
-gdk_utf8_to_string_target
 </SECTION>
 
 <SECTION>
