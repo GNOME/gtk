@@ -88,11 +88,6 @@ gboolean           gtk_places_sidebar_get_show_enter_location    (GtkPlacesSideb
 void               gtk_places_sidebar_set_show_enter_location    (GtkPlacesSidebar   *sidebar,
                                                                   gboolean            show_enter_location);
 
-void                 gtk_places_sidebar_set_local_only           (GtkPlacesSidebar   *sidebar,
-                                                                  gboolean            local_only);
-gboolean             gtk_places_sidebar_get_local_only           (GtkPlacesSidebar   *sidebar);
-
-
 void               gtk_places_sidebar_add_shortcut               (GtkPlacesSidebar   *sidebar,
                                                                   GFile              *location);
 void               gtk_places_sidebar_remove_shortcut            (GtkPlacesSidebar   *sidebar,
