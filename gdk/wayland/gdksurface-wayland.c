@@ -2799,18 +2799,28 @@ gdk_wayland_surface_present_popup (GdkSurface     *surface,
       if (surface->autohide)
         {
           GrabPrepareData data;
+          GdkGrabStatus result;
 
           data = (GrabPrepareData) {
             .width = width,
             .height = height,
             .layout = layout,
           };
-          gdk_seat_grab (gdk_display_get_default_seat (surface->display),
-                         surface,
-                         GDK_SEAT_CAPABILITY_ALL,
-                         TRUE,
-                         NULL, NULL,
-                         show_grabbing_popup, &data);
+
+          result = gdk_seat_grab (gdk_display_get_default_seat (surface->display),
+                                  surface,
+                                  GDK_SEAT_CAPABILITY_ALL,
+                                  TRUE,
+                                  NULL, NULL,
+                                  show_grabbing_popup, &data);
+          if (result != GDK_GRAB_SUCCESS)
+            {
+              const char *grab_status[] = {
+                "success", "already grabbed", "invalid time",
+                "not viewable", "frozen", "failed"
+              };
+              g_warning ("Grab failed: %s", grab_status[result]);
+            }
         }
       else
         {
