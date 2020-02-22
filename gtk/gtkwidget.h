@@ -706,12 +706,6 @@ void             gtk_widget_set_default_direction (GtkTextDirection  dir);
 GDK_AVAILABLE_IN_ALL
 GtkTextDirection gtk_widget_get_default_direction (void);
 
-/* Counterpart to gdk_surface_input_shape_combine_region.
- */
-GDK_AVAILABLE_IN_ALL
-void         gtk_widget_input_shape_combine_region (GtkWidget *widget,
-                                                    cairo_region_t *region);
-
 GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_set_cursor                   (GtkWidget              *widget,
                                                                  GdkCursor              *cursor);
