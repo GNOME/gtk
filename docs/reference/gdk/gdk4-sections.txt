@@ -651,6 +651,17 @@ gdk_paintable_get_intrinsic_height
 gdk_paintable_get_intrinsic_aspect_ratio
 gdk_paintable_compute_concrete_size
 
+<SUBSECTION>
+gdk_paintable_invalidate_contents
+gdk_paintable_invalidate_size
+gdk_paintable_new_empty
+
+<SUBSECTION Private>
+GDK_TYPE_PAINTABLE
+gdk_paintable_get_type
+</SECTION>
+
+
 <SECTION>
 <FILE>gdkpopuplayout</FILE>
 <TITLE>GdkPopupLayout</TITLE>
@@ -673,16 +684,6 @@ gdk_popup_layout_set_anchor_hints
 gdk_popup_layout_get_anchor_hints
 gdk_popup_layout_set_offset
 gdk_popup_layout_get_offset
-</SECTION>
-
-<SUBSECTION>
-gdk_paintable_invalidate_contents
-gdk_paintable_invalidate_size
-gdk_paintable_new_empty
-
-<SUBSECTION Private>
-GDK_TYPE_PAINTABLE
-gdk_paintable_get_type
 </SECTION>
 
 <SECTION>
