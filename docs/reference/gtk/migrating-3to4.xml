@@ -946,7 +946,40 @@
         as gdk_drop_read_value_async() or gdk_drop_read_text_async().
       </para>
     </section>
+
+    <section>
+      <title>Update to GtkFileChooser API changes</title>
+      <para>
+        GtkFileChooser moved to a GFile-based API. If you need to convert a
+        path or a URI, use g_file_new_for_path(), g_file_new_for_commandline_arg(),
+        or g_file_new_for_uri(); similarly, if you need to get a path or a URI
+        from a GFile, use g_file_get_path(), or g_file_get_uri(). With the
+        removal or path and URI-based functions, the "local-only" property has
+        been removed; GFile can be used to access non-local as well as local
+        resources.
+      </para>
+      <para>
+        The GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER action has been removed. Use
+        %GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, instead. If a new folder is needed,
+        the user can create one.
+      </para>
+      <para>
+        The "confirm-overwrite" signal, and the "do-overwrite-confirmation"
+        property have been removed from GtkFileChooser. The file chooser widgets
+        will automatically handle the confirmation of overwriting a file when
+        using GTK_FILE_CHOOSER_ACTION_SAVE.
+      </para>
+      <para>
+        GtkFileChooser does not support a custom extra widget any more. If you
+        need to add extra widgets, use gtk_file_chooser_add_choice() instead.
+      </para>
+      <para>
+        GtkFileChooser does not support a custom preview widget any more. If
+        you need to show a custom preview, you can create your own GtkDialog
+        with a GtkFileChooserWidget and your own preview widget that you
+        update whenever the #GtkFileChooser::selection-changed signal is
+        emitted.
+      </para>
+    </section>
   </section>
-
 </chapter>
-
