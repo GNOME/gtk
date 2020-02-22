@@ -161,6 +161,9 @@ GtkWidget *      gtk_window_pick_popover (GtkWindow   *window,
                                           double       y,
                                           GtkPickFlags flags);
 
+void             gtk_window_set_extra_input_region (GtkWindow      *window,
+                                                    cairo_region_t *region);
+
 G_END_DECLS
 
 #endif /* __GTK_WINDOW_PRIVATE_H__ */
