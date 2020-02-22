@@ -256,7 +256,7 @@ same_native (GtkWidget *widget,
     return TRUE;
 
   native = GTK_WIDGET (gtk_widget_get_native (widget));
-  native2 = GTK_WIDGET (gtk_widget_get_native (widget));
+  native2 = GTK_WIDGET (gtk_widget_get_native (target));
 
   return native == native2;
 }
