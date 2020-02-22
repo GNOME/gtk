@@ -6893,8 +6893,6 @@ gtk_drop_target_set_actions
 gtk_drop_target_get_actions
 gtk_drop_target_get_drop
 gtk_drop_target_find_mimetype
-gtk_drop_target_read_selection
-gtk_drop_target_read_selection_finish
 gtk_drag_highlight
 gtk_drag_unhighlight
 
