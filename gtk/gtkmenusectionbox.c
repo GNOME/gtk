@@ -222,7 +222,8 @@ gtk_menu_section_box_remove_func (gint     position,
         gtk_container_remove (GTK_CONTAINER (stack), subbox);
     }
 
-  gtk_widget_destroy (g_list_nth_data (children, position));
+  gtk_container_remove (GTK_CONTAINER (box->item_box),
+                        g_list_nth_data (children, position));
   g_list_free (children);
 
   gtk_menu_section_box_schedule_separator_sync (box);
