@@ -180,12 +180,6 @@ struct _GtkWidgetPrivate
 
   GSList *paintables;
 
-  /* The widget's surface or its parent surface if it does
-   * not have a surface. (Which will be indicated by the
-   * no_surface field being set).
-   */
-  GdkSurface *surface;
-
   GList *event_controllers;
 
   AtkObject *accessible;
