@@ -35,6 +35,7 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkdragdest.h"
 #include "gtkdragicon.h"
+#include "gtkdropcontrollermotion.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkgestureclick.h"
 #include "gtkgizmoprivate.h"
@@ -3081,12 +3082,13 @@ gtk_notebook_state_flags_changed (GtkWidget     *widget,
 }
 
 static void
-gtk_notebook_arrow_drag_enter (GtkDropTarget *target,
-                               GdkDrop       *drop,
-                               GtkNotebook   *notebook)
+gtk_notebook_arrow_drag_enter (GtkDropControllerMotion *motion,
+                               double                   x,
+                               double                   y,
+                               GtkNotebook             *notebook)
 {
   GtkNotebookPrivate *priv = notebook->priv;
-  GtkWidget *arrow_widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (target));
+  GtkWidget *arrow_widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (motion));
   guint arrow;
 
   for (arrow = 0; arrow < 4; arrow++)
@@ -3099,7 +3101,6 @@ gtk_notebook_arrow_drag_enter (GtkDropTarget *target,
 
   priv->click_child = arrow;
   gtk_notebook_set_scroll_timer (notebook);
-  gdk_drop_status (drop, 0);
 }
 
 static void
@@ -3192,9 +3193,9 @@ update_arrow_nodes (GtkNotebook *notebook)
               priv->arrow_widget[i] = g_object_new (GTK_TYPE_BUTTON,
                                                     "css-name", "arrow",
                                                     NULL);
-              controller = GTK_EVENT_CONTROLLER (gtk_drop_target_new (NULL, GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK |  GDK_ACTION_ASK));
-              g_signal_connect (controller, "drag-enter", G_CALLBACK (gtk_notebook_arrow_drag_enter), notebook);
-              g_signal_connect (controller, "drag-leave", G_CALLBACK (gtk_notebook_arrow_drag_leave), notebook);
+              controller = gtk_drop_controller_motion_new ();
+              g_signal_connect (controller, "enter", G_CALLBACK (gtk_notebook_arrow_drag_enter), notebook);
+              g_signal_connect (controller, "leave", G_CALLBACK (gtk_notebook_arrow_drag_leave), notebook);
               gtk_widget_add_controller (priv->arrow_widget[i], controller);
 
               if (i == ARROW_LEFT_BEFORE || i == ARROW_LEFT_AFTER)
