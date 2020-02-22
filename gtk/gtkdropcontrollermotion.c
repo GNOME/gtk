@@ -304,7 +304,7 @@ gtk_drop_controller_motion_class_init (GtkDropControllerMotionClass *klass)
                   G_TYPE_NONE, 0);
 
   /**
-   * GtkDropControllerMotion::self:
+   * GtkDropControllerMotion::motion:
    * @self: The object that received the signal
    * @x: the x coordinate
    * @y: the y coordinate
@@ -312,7 +312,7 @@ gtk_drop_controller_motion_class_init (GtkDropControllerMotionClass *klass)
    * Emitted when the pointer moves inside the widget.
    */
   signals[MOTION] =
-    g_signal_new (I_("self"),
+    g_signal_new (I_("motion"),
                   GTK_TYPE_DROP_CONTROLLER_MOTION,
                   G_SIGNAL_RUN_FIRST,
                   0, NULL, NULL,
