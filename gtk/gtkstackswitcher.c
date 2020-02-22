@@ -22,7 +22,7 @@
 #include "gtkstackswitcher.h"
 
 #include "gtkboxlayout.h"
-#include "gtkdragdest.h"
+#include "gtkdropcontrollermotion.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
@@ -85,8 +85,6 @@ struct _GtkStackSwitcherPrivate
   GtkStack *stack;
   GtkSelectionModel *pages;
   GHashTable *buttons;
-  GtkWidget *switch_button;
-  guint switch_timer;
 };
 
 enum {
@@ -94,36 +92,16 @@ enum {
   PROP_STACK
 };
 
-static void     gtk_stack_switcher_drag_leave  (GtkDropTarget    *dest,
-                                                GdkDrop          *drop,
-                                                GtkStackSwitcher *self);
-static gboolean gtk_stack_switcher_drag_accept (GtkDropTarget    *dest,
-                                                GdkDrop          *drop,
-                                                GtkStackSwitcher *self);
-static void     gtk_stack_switcher_drag_motion (GtkDropTarget    *dest,
-                                                GdkDrop          *drop,
-                                                int               x,
-                                                int               y,
-                                                GtkStackSwitcher *self);
-
-
 G_DEFINE_TYPE_WITH_PRIVATE (GtkStackSwitcher, gtk_stack_switcher, GTK_TYPE_WIDGET)
 
 static void
 gtk_stack_switcher_init (GtkStackSwitcher *switcher)
 {
   GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (switcher);
-  GtkDropTarget *dest;
 
   priv->buttons = g_hash_table_new_full (g_direct_hash, g_direct_equal, g_object_unref, NULL);
 
   gtk_widget_add_css_class (GTK_WIDGET (switcher), "linked");
-
-  dest = gtk_drop_target_new (NULL, 0);
-  g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_stack_switcher_drag_leave), switcher);
-  g_signal_connect (dest, "accept", G_CALLBACK (gtk_stack_switcher_drag_accept), switcher);
-  g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_stack_switcher_drag_motion), switcher);
-  gtk_widget_add_controller (GTK_WIDGET (switcher), GTK_EVENT_CONTROLLER (dest));
 }
 
 static void
@@ -230,29 +208,12 @@ on_page_updated (GtkStackPage     *page,
   update_button (self, page, button);
 }
 
-static void
-remove_switch_timer (GtkStackSwitcher *self)
-{
-  GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (self);
-
-  if (priv->switch_timer)
-    {
-      g_source_remove (priv->switch_timer);
-      priv->switch_timer = 0;
-    }
-}
-
 static gboolean
 gtk_stack_switcher_switch_timeout (gpointer data)
 {
-  GtkStackSwitcher *self = data;
-  GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (self);
-  GtkWidget *button;
+  GtkWidget *button = data;
 
-  priv->switch_timer = 0;
-
-  button = priv->switch_button;
-  priv->switch_button = NULL;
+  g_object_steal_data (G_OBJECT (button), "-gtk-switch-timer");
 
   if (button)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
@@ -260,59 +221,34 @@ gtk_stack_switcher_switch_timeout (gpointer data)
   return G_SOURCE_REMOVE;
 }
 
-static gboolean
-gtk_stack_switcher_drag_accept (GtkDropTarget    *dest,
-                                GdkDrop          *drop,
-                                GtkStackSwitcher *self)
-{
-  return TRUE;
-}
-
 static void 
-gtk_stack_switcher_drag_motion (GtkDropTarget    *dest,
-                                GdkDrop          *drop,
-                                int               x,
-                                int               y,
-                                GtkStackSwitcher *self)
+gtk_stack_switcher_drag_enter (GtkDropControllerMotion *motion,
+                               double                   x,
+                               double                   y,
+                               gpointer                 unused)
 {
-  GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (self);
-  GtkWidget *button;
-  GHashTableIter iter;
-  gpointer value;
+  GtkWidget *button = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (motion));
 
-  button = NULL;
-  g_hash_table_iter_init (&iter, priv->buttons);
-  while (g_hash_table_iter_next (&iter, NULL, &value))
+  if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
     {
-      int cx, cy;
-      gtk_widget_translate_coordinates (GTK_WIDGET (self), value, x, y, &cx, &cy);
-      if (gtk_widget_contains (GTK_WIDGET (value), cx, cy))
-        {
-          button = GTK_WIDGET (value);
-          break;
-        }
-    }
-
-  if (button != priv->switch_button)
-    remove_switch_timer (self);
-
-  priv->switch_button = button;
-
-  if (button && !priv->switch_timer)
-    {
-      priv->switch_timer = g_timeout_add (TIMEOUT_EXPAND,
+      guint switch_timer = g_timeout_add (TIMEOUT_EXPAND,
                                           gtk_stack_switcher_switch_timeout,
-                                          self);
-      g_source_set_name_by_id (priv->switch_timer, "[gtk] gtk_stack_switcher_switch_timeout");
+                                          button);
+      g_source_set_name_by_id (switch_timer, "[gtk] gtk_stack_switcher_switch_timeout");
+      g_object_set_data (G_OBJECT (button), "-gtk-switch-timer", GUINT_TO_POINTER (switch_timer));
     }
 }
 
 static void
-gtk_stack_switcher_drag_leave (GtkDropTarget    *dest,
-                               GdkDrop          *drop,
-                               GtkStackSwitcher *self)
+gtk_stack_switcher_drag_leave (GtkDropControllerMotion *motion,
+                               gpointer                 unused)
 {
-  remove_switch_timer (self);
+  GtkWidget *button = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (motion));
+  guint switch_timer;
+
+  switch_timer = GPOINTER_TO_UINT (g_object_steal_data (G_OBJECT (button), "-gtk-switch-timer"));
+  if (switch_timer)
+    g_source_remove (switch_timer);
 }
 
 static void
@@ -323,9 +259,15 @@ add_child (guint             position,
   GtkWidget *button;
   gboolean selected;
   GtkStackPage *page;
+  GtkEventController *controller;
 
   button = gtk_toggle_button_new ();
   gtk_widget_set_focus_on_click (button, FALSE);
+
+  controller = gtk_drop_controller_motion_new ();
+  g_signal_connect (controller, "enter", G_CALLBACK (gtk_stack_switcher_drag_enter), NULL);
+  g_signal_connect (controller, "leave", G_CALLBACK (gtk_stack_switcher_drag_leave), NULL);
+  gtk_widget_add_controller (button, controller);
 
   page = g_list_model_get_item (G_LIST_MODEL (priv->pages), position);
   update_button (self, page, button);
@@ -549,7 +491,6 @@ gtk_stack_switcher_dispose (GObject *object)
 {
   GtkStackSwitcher *switcher = GTK_STACK_SWITCHER (object);
 
-  remove_switch_timer (switcher);
   unset_stack (switcher);
 
   G_OBJECT_CLASS (gtk_stack_switcher_parent_class)->dispose (object);
