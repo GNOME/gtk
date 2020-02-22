@@ -541,15 +541,10 @@ gdk_device_get_position (GdkDevice *device,
                          double    *x,
                          double    *y)
 {
-  GdkDisplay *display;
-
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
-
-  display = gdk_device_get_display (device);
-
   g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
-                    gdk_display_device_is_grabbed (display, device));
+                    gdk_display_device_is_grabbed (gdk_device_get_display (device), device));
 
   _gdk_device_query_state (device, NULL, NULL, x, y, NULL, NULL, NULL);
 }

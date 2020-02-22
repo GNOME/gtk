@@ -4688,30 +4688,19 @@ gtk_icon_view_set_model (GtkIconView *icon_view,
 
   if (model)
     {
-      GType column_type;
-
       if (icon_view->priv->pixbuf_column != -1)
 	{
-	  column_type = gtk_tree_model_get_column_type (model,
-							icon_view->priv->pixbuf_column);	  
-
-	  g_return_if_fail (column_type == GDK_TYPE_PIXBUF);
+	  g_return_if_fail (gtk_tree_model_get_column_type (model, icon_view->priv->pixbuf_column) == GDK_TYPE_PIXBUF);
 	}
 
       if (icon_view->priv->text_column != -1)
 	{
-	  column_type = gtk_tree_model_get_column_type (model,
-							icon_view->priv->text_column);	  
-
-	  g_return_if_fail (column_type == G_TYPE_STRING);
+	  g_return_if_fail (gtk_tree_model_get_column_type (model, icon_view->priv->text_column) == G_TYPE_STRING);
 	}
 
       if (icon_view->priv->markup_column != -1)
 	{
-	  column_type = gtk_tree_model_get_column_type (model,
-							icon_view->priv->markup_column);	  
-
-	  g_return_if_fail (column_type == G_TYPE_STRING);
+	  g_return_if_fail (gtk_tree_model_get_column_type (model, icon_view->priv->markup_column) == G_TYPE_STRING);
 	}
       
     }
@@ -4911,11 +4900,7 @@ gtk_icon_view_set_text_column (GtkIconView *icon_view,
     {
       if (icon_view->priv->model != NULL)
 	{
-	  GType column_type;
-	  
-	  column_type = gtk_tree_model_get_column_type (icon_view->priv->model, column);
-
-	  g_return_if_fail (column_type == G_TYPE_STRING);
+	  g_return_if_fail (gtk_tree_model_get_column_type (icon_view->priv->model, column) == G_TYPE_STRING);
 	}
       
       icon_view->priv->text_column = column;
@@ -4970,11 +4955,7 @@ gtk_icon_view_set_markup_column (GtkIconView *icon_view,
     {
       if (icon_view->priv->model != NULL)
 	{
-	  GType column_type;
-	  
-	  column_type = gtk_tree_model_get_column_type (icon_view->priv->model, column);
-
-	  g_return_if_fail (column_type == G_TYPE_STRING);
+	  g_return_if_fail (gtk_tree_model_get_column_type (icon_view->priv->model, column) == G_TYPE_STRING);
 	}
       
       icon_view->priv->markup_column = column;
@@ -5027,11 +5008,7 @@ gtk_icon_view_set_pixbuf_column (GtkIconView *icon_view,
     {
       if (icon_view->priv->model != NULL)
 	{
-	  GType column_type;
-	  
-	  column_type = gtk_tree_model_get_column_type (icon_view->priv->model, column);
-
-	  g_return_if_fail (column_type == GDK_TYPE_PIXBUF);
+	  g_return_if_fail (gtk_tree_model_get_column_type (icon_view->priv->model, column) == GDK_TYPE_PIXBUF);
 	}
       
       icon_view->priv->pixbuf_column = column;

@@ -1298,11 +1298,9 @@ gtk_tree_view_column_remove_editable_callback (GtkCellArea     *area,
 void
 _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
 {
-  GtkTreeViewColumnPrivate *priv = column->priv;
-
-  g_return_if_fail (GTK_IS_TREE_VIEW (priv->tree_view));
-  g_return_if_fail (gtk_widget_get_realized (priv->tree_view));
-  g_return_if_fail (priv->button != NULL);
+  g_return_if_fail (GTK_IS_TREE_VIEW (column->priv->tree_view));
+  g_return_if_fail (gtk_widget_get_realized (column->priv->tree_view));
+  g_return_if_fail (column->priv->button != NULL);
 
   gtk_tree_view_column_update_button (column);
 }

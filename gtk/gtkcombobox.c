@@ -2706,14 +2706,10 @@ gtk_combo_box_set_entry_text_column (GtkComboBox *combo_box,
                                      gint         text_column)
 {
   GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
-  GtkTreeModel *model;
 
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
-
-  model = gtk_combo_box_get_model (combo_box);
-
   g_return_if_fail (text_column >= 0);
-  g_return_if_fail (model == NULL || text_column < gtk_tree_model_get_n_columns (model));
+  g_return_if_fail (priv->model == NULL || text_column < gtk_tree_model_get_n_columns (priv->model));
 
   if (priv->text_column != text_column)
     {
@@ -2815,17 +2811,13 @@ gtk_combo_box_set_id_column (GtkComboBox *combo_box,
                              gint         id_column)
 {
   GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
-  GtkTreeModel *model;
 
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
 
   if (id_column != priv->id_column)
     {
-      model = gtk_combo_box_get_model (combo_box);
-
       g_return_if_fail (id_column >= 0);
-      g_return_if_fail (model == NULL ||
-                        id_column < gtk_tree_model_get_n_columns (model));
+      g_return_if_fail (priv->model == NULL || id_column < gtk_tree_model_get_n_columns (priv->model));
 
       priv->id_column = id_column;
 

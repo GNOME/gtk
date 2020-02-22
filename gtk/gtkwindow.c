@@ -5484,8 +5484,8 @@ gtk_window_realize (GtkWidget *widget)
   gtk_widget_get_allocation (widget, &allocation);
 
   surface = gdk_surface_new_toplevel (gtk_widget_get_display (widget),
-                                      allocation.width,
-                                      allocation.height);
+                                      MAX (1, allocation.width),
+                                      MAX (1, allocation.height));
   priv->surface = surface;
   gdk_surface_set_widget (surface, widget);
 

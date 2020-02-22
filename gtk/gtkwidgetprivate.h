@@ -259,12 +259,6 @@ GdkSurface *       _gtk_widget_get_device_surface          (GtkWidget *widget,
                                                             GdkDevice *device);
 GList *           _gtk_widget_list_devices                 (GtkWidget *widget);
 
-void              gtk_synthesize_crossing_events           (GtkRoot         *toplevel,
-                                                            GtkWidget       *from,
-                                                            GtkWidget       *to,
-                                                            GdkEvent        *source,
-                                                            GdkCrossingMode  mode);
-
 void              _gtk_widget_synthesize_crossing          (GtkWidget       *from,
                                                             GtkWidget       *to,
                                                             GdkDevice       *device,
@@ -310,12 +304,6 @@ void              gtk_widget_adjust_size_request           (GtkWidget      *widg
                                                             GtkOrientation  orientation,
                                                             gint           *minimum_size,
                                                             gint           *natural_size);
-void              gtk_widget_adjust_size_allocation        (GtkWidget         *widget,
-                                                            GtkOrientation     orientation,
-                                                            gint              *minimum_size,
-                                                            gint              *natural_size,
-                                                            gint              *allocated_pos,
-                                                            gint              *allocated_size);
 void              gtk_widget_adjust_baseline_request       (GtkWidget *widget,
                                                             gint      *minimum_baseline,
                                                             gint      *natural_baseline);
