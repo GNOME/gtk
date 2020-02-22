@@ -2369,12 +2369,6 @@ should_be_mapped (GdkSurface *surface)
   return TRUE;
 }
 
-static gboolean
-should_map_as_popup (GdkSurface *surface)
-{
-  return GDK_SURFACE_TYPE (surface) == GDK_SURFACE_POPUP;
-}
-
 static void
 gdk_wayland_surface_map_toplevel (GdkSurface *surface)
 {
@@ -2397,7 +2391,7 @@ gdk_wayland_surface_show (GdkSurface *surface,
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  g_return_if_fail (!should_map_as_popup (surface));
+  g_return_if_fail (GDK_SURFACE_TYPE (surface) != GDK_SURFACE_POPUP);
 
   if (!impl->display_server.wl_surface)
     gdk_wayland_surface_create_surface (surface);
@@ -2790,7 +2784,7 @@ gdk_wayland_surface_present_popup (GdkSurface     *surface,
     GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   GdkWaylandSurface *impl;
 
-  g_return_val_if_fail (should_map_as_popup (surface), FALSE);
+  g_return_val_if_fail (GDK_SURFACE_TYPE (surface) == GDK_SURFACE_POPUP, FALSE);
 
   impl = GDK_WAYLAND_SURFACE (surface);
 
@@ -4319,7 +4313,7 @@ gdk_wayland_surface_set_transient_for_exported (GdkSurface *surface,
 
   g_return_val_if_fail (GDK_IS_WAYLAND_SURFACE (surface), FALSE);
   g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY (display), FALSE);
-  g_return_val_if_fail (!should_map_as_popup (surface), FALSE);
+  g_return_val_if_fail (GDK_SURFACE_TYPE (surface) != GDK_SURFACE_POPUP, FALSE);
 
   impl = GDK_WAYLAND_SURFACE (surface);
   display_wayland = GDK_WAYLAND_DISPLAY (display);
