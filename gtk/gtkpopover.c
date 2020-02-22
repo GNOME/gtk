@@ -1198,6 +1198,8 @@ get_minimal_size (GtkPopover     *popover,
       (orientation == GTK_ORIENTATION_VERTICAL && !POS_IS_VERTICAL (pos)))
     minimal_size += tail_gap_width;
 
+  minimal_size = MAX (minimal_size, 1);
+
   return minimal_size;
 }
 

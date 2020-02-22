@@ -716,6 +716,9 @@ gtk_window_measure (GtkWidget      *widget,
       *minimum = title_min_size + child_min_size + window_border.top + window_border.bottom;
       *natural = title_nat_size + child_nat_size + window_border.top + window_border.bottom;
     }
+
+  *minimum = MAX (*minimum, 1);
+  *natural = MAX (*natural, 1);
 }
 
 static void

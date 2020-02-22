@@ -246,6 +246,9 @@ gtk_drag_icon_measure (GtkWidget      *widget,
                         orientation, for_size,
                         minimum, natural,
                         minimum_baseline, natural_baseline);
+
+  *minimum = MAX (*minimum, 1);
+  *natural = MAX (*natural, 1);
 }
 
 static void
