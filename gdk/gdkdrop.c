@@ -561,7 +561,9 @@ void
 gdk_drop_status (GdkDrop       *self,
                  GdkDragAction  actions)
 {
+#ifndef G_DISABLE_CHECKS
   GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
+#endif
 
   g_return_if_fail (GDK_IS_DROP (self));
   g_return_if_fail (priv->state != GDK_DROP_STATE_FINISHED);
