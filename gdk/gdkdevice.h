@@ -184,7 +184,7 @@ void     gdk_device_free_history (GdkTimeCoord     **events,
 GDK_AVAILABLE_IN_ALL
 gint     gdk_device_get_n_axes     (GdkDevice       *device);
 GDK_AVAILABLE_IN_ALL
-GList *  gdk_device_list_axes      (GdkDevice       *device);
+char **  gdk_device_get_axis_names (GdkDevice       *device);
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_device_get_axis_value (GdkDevice       *device,
                                     gdouble         *axes,
