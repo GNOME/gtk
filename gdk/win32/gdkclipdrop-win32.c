@@ -273,7 +273,6 @@ Otherwise it's similar to how the clipboard works. Only the DnD server
 /* for CIDA */
 #include <shlobj.h>
 
-#include "gdkproperty.h"
 #include "gdkdisplay.h"
 #include "gdkprivate-win32.h"
 #include "gdkclipboardprivate.h"
@@ -2679,107 +2678,6 @@ _gdk_win32_transmute_contentformat (const gchar   *from_contentformat,
     }
 
   return TRUE;
-}
-
-static gint
-make_list (const gchar  *text,
-	   gint          length,
-	   gboolean      latin1,
-	   gchar      ***list)
-{
-  GSList *strings = NULL;
-  gint n_strings = 0;
-  gint i;
-  const gchar *p = text;
-  const gchar *q;
-  GSList *tmp_list;
-  GError *error = NULL;
-
-  while (p < text + length)
-    {
-      gchar *str;
-
-      q = p;
-      while (*q && q < text + length)
-	q++;
-
-      if (latin1)
-	{
-	  str = g_convert (p, q - p,
-			   "UTF-8", "ISO-8859-1",
-			   NULL, NULL, &error);
-
-	  if (!str)
-	    {
-	      g_warning ("Error converting selection from STRING: %s",
-			 error->message);
-	      g_error_free (error);
-	    }
-	}
-      else
-	str = g_strndup (p, q - p);
-
-      if (str)
-	{
-	  strings = g_slist_prepend (strings, str);
-	  n_strings++;
-	}
-
-      p = q + 1;
-    }
-
-  if (list)
-    *list = g_new (gchar *, n_strings + 1);
-
-  (*list)[n_strings] = NULL;
-
-  i = n_strings;
-  tmp_list = strings;
-  while (tmp_list)
-    {
-      if (list)
-	(*list)[--i] = tmp_list->data;
-      else
-	g_free (tmp_list->data);
-
-      tmp_list = tmp_list->next;
-    }
-
-  g_slist_free (strings);
-
-  return n_strings;
-}
-
-gint
-_gdk_win32_display_text_property_to_utf8_list (GdkDisplay    *display,
-					       GdkAtom        encoding,
-					       gint           format,
-					       const guchar  *text,
-					       gint           length,
-					       gchar       ***list)
-{
-  g_return_val_if_fail (text != NULL, 0);
-  g_return_val_if_fail (length >= 0, 0);
-
-  if (encoding == g_intern_static_string ("STRING"))
-    {
-      return make_list ((gchar *)text, length, TRUE, list);
-    }
-  else if (encoding == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_TEXT_PLAIN_UTF8))
-    {
-      return make_list ((gchar *)text, length, FALSE, list);
-    }
-  else
-    {
-      const char *enc_name = (const char *)encoding;
-
-      g_warning ("gdk_text_property_to_utf8_list_for_display: encoding %s not handled\n", enc_name);
-
-      if (list)
-	*list = NULL;
-
-      return 0;
-    }
 }
 
 gint

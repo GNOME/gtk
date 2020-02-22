@@ -395,12 +395,6 @@ void      _gdk_win32_display_convert_selection (GdkDisplay *display,
                                                 GdkAtom    selection,
                                                 GdkAtom    target,
                                                 guint32    time);
-gint      _gdk_win32_display_text_property_to_utf8_list (GdkDisplay    *display,
-                                                         GdkAtom        encoding,
-                                                         gint           format,
-                                                         const guchar  *text,
-                                                         gint           length,
-                                                         gchar       ***list);
 
 gboolean   _gdk_win32_keymap_has_altgr           (GdkWin32Keymap *keymap);
 guint8     _gdk_win32_keymap_get_active_group    (GdkWin32Keymap *keymap);

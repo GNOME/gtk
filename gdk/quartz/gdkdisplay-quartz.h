@@ -70,12 +70,6 @@ void       _gdk_quartz_display_create_surface_impl (GdkDisplay    *display,
 /* Display methods - keymap */
 GdkKeymap * _gdk_quartz_display_get_keymap (GdkDisplay *display);
 
-gint        _gdk_quartz_display_text_property_to_utf8_list (GdkDisplay     *display,
-                                                            GdkAtom         encoding,
-                                                            gint            format,
-                                                            const guchar   *text,
-                                                            gint            length,
-                                                            gchar        ***list);
 
 G_END_DECLS
 

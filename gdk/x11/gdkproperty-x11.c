@@ -24,7 +24,6 @@
 
 #include "config.h"
 
-#include "gdkproperty.h"
 #include "gdkinternals.h"
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"

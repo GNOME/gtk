@@ -127,13 +127,6 @@ GdkSurface * _gdk_wayland_display_create_surface (GdkDisplay *display,
                                                   int         width,
                                                   int         height);
 
-gint        _gdk_wayland_display_text_property_to_utf8_list (GdkDisplay    *display,
-                                                             GdkAtom        encoding,
-                                                             gint           format,
-                                                             const guchar  *text,
-                                                             gint           length,
-                                                             gchar       ***list);
-
 void        _gdk_wayland_display_create_seat    (GdkWaylandDisplay *display,
                                                  guint32                  id,
                                                  struct wl_seat          *seat);

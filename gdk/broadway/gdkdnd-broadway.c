@@ -27,7 +27,6 @@
 #include "gdkdragprivate.h"
 
 #include "gdksurfaceprivate.h"
-#include "gdkproperty.h"
 #include "gdkprivate-broadway.h"
 #include "gdkinternals.h"
 #include "gdkdisplay-broadway.h"

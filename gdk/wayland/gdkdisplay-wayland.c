@@ -1030,7 +1030,6 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   display_class->notify_startup_complete = gdk_wayland_display_notify_startup_complete;
   display_class->create_surface = _gdk_wayland_display_create_surface;
   display_class->get_keymap = _gdk_wayland_display_get_keymap;
-  display_class->text_property_to_utf8_list = _gdk_wayland_display_text_property_to_utf8_list;
 
   display_class->make_gl_context_current = gdk_wayland_display_make_gl_context_current;
 

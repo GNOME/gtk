@@ -348,13 +348,6 @@ gdk_content_formats_builder_get_type
 </SECTION>
 
 <SECTION>
-<TITLE>Properties and Atoms</TITLE>
-<FILE>properties</FILE>
-GdkAtom
-gdk_text_property_to_utf8_list_for_display
-</SECTION>
-
-<SECTION>
 <TITLE>Pango Interaction</TITLE>
 <FILE>pango_interaction</FILE>
 gdk_pango_layout_get_clip_region

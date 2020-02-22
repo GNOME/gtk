@@ -113,12 +113,6 @@ GdkSurface * _gdk_broadway_display_create_surface (GdkDisplay     *display,
                                                    int             y,
                                                    int             width,
                                                    int             height);
-gint _gdk_broadway_display_text_property_to_utf8_list (GdkDisplay    *display,
-                                                       GdkAtom        encoding,
-                                                       gint           format,
-                                                       const guchar  *text,
-                                                       gint           length,
-                                                       gchar       ***list);
 GdkKeymap* _gdk_broadway_display_get_keymap (GdkDisplay *display);
 void _gdk_broadway_display_consume_all_input (GdkDisplay *display);
 BroadwayInputMsg * _gdk_broadway_display_block_for_input (GdkDisplay *display,

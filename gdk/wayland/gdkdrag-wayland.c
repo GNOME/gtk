@@ -20,7 +20,6 @@
 #include "gdkdragprivate.h"
 
 #include "gdkinternals.h"
-#include "gdkproperty.h"
 #include "gdkprivate-wayland.h"
 #include "gdkcontentformats.h"
 #include "gdkdisplay-wayland.h"

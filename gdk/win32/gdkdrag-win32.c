@@ -197,7 +197,6 @@
 #define COBJMACROS
 
 #include "gdkdrag.h"
-#include "gdkproperty.h"
 #include "gdkinternals.h"
 #include "gdkprivate-win32.h"
 #include "gdkwin32.h"
