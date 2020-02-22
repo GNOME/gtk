@@ -487,12 +487,10 @@ gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self)
 
   action = gtk_file_chooser_get_action (GTK_FILE_CHOOSER (self->dialog));
 
-  if (action == GTK_FILE_CHOOSER_ACTION_SAVE ||
-      action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+  if (action == GTK_FILE_CHOOSER_ACTION_SAVE)
     data->save = TRUE;
 
-  if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-      action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+  if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     data->folder = TRUE;
 
   if ((action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
@@ -522,8 +520,7 @@ gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self)
       if (self->current_folder)
         data->current_folder = g_object_ref (self->current_folder);
 
-      if (action == GTK_FILE_CHOOSER_ACTION_SAVE ||
-          action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+      if (action == GTK_FILE_CHOOSER_ACTION_SAVE)
         data->current_name = g_strdup (self->current_name);
     }
 

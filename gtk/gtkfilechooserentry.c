@@ -573,7 +573,6 @@ update_inline_completion (GtkFileChooserEntry *chooser_entry)
       gtk_entry_completion_set_inline_completion (completion, TRUE);
       break;
     case GTK_FILE_CHOOSER_ACTION_SAVE:
-    case GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER:
     default:
       gtk_entry_completion_set_inline_completion (completion, FALSE);
       break;
@@ -985,7 +984,6 @@ _gtk_file_chooser_entry_set_action (GtkFileChooserEntry *chooser_entry,
 	  gtk_entry_completion_set_popup_single_match (comp, FALSE);
 	  break;
 	case GTK_FILE_CHOOSER_ACTION_SAVE:
-	case GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER:
 	  gtk_entry_completion_set_popup_single_match (comp, TRUE);
 	  break;
 	}

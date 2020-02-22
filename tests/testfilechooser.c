@@ -547,11 +547,9 @@ main (int argc, char **argv)
 	action = GTK_FILE_CHOOSER_ACTION_SAVE;
       else if (! strcmp ("select_folder", action_arg))
 	action = GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
-      else if (! strcmp ("create_folder", action_arg))
-	action = GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER;
       else
 	{
-	  g_print ("--action must be one of \"open\", \"save\", \"select_folder\", \"create_folder\"\n");
+	  g_print ("--action must be one of \"open\", \"save\", \"select_folder\"\n");
 	  return 1;
 	}
 
@@ -574,7 +572,6 @@ main (int argc, char **argv)
 			      NULL);
       break;
     case GTK_FILE_CHOOSER_ACTION_SAVE:
-    case GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER:
       gtk_window_set_title (GTK_WINDOW (dialog), "Save a file");
       gtk_dialog_add_buttons (GTK_DIALOG (dialog),
 			      _("_Cancel"), GTK_RESPONSE_CANCEL,

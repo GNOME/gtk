@@ -44,9 +44,6 @@ typedef struct _GtkFileChooser      GtkFileChooser;
  * @GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER: Indicates an Open mode for
  *  selecting folders.  The file chooser will let the user pick an
  *  existing folder.
- * @GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER: Indicates a mode for creating a
- *  new folder.  The file chooser will let the user name an existing or
- *  new folder.
  *
  * Describes whether a #GtkFileChooser is being used to open existing files
  * or to save to a possibly new file.
@@ -55,8 +52,7 @@ typedef enum
 {
   GTK_FILE_CHOOSER_ACTION_OPEN,
   GTK_FILE_CHOOSER_ACTION_SAVE,
-  GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-  GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER
+  GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
 } GtkFileChooserAction;
 
 GDK_AVAILABLE_IN_ALL
