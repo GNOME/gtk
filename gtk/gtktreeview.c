@@ -7623,9 +7623,7 @@ gtk_tree_view_set_fixed_height_mode (GtkTreeView *tree_view,
       /* make sure all columns are of type FIXED */
       for (l = tree_view->columns; l; l = l->next)
 	{
-	  GtkTreeViewColumn *c = l->data;
-	  
-	  g_return_if_fail (gtk_tree_view_column_get_sizing (c) == GTK_TREE_VIEW_COLUMN_FIXED);
+	  g_return_if_fail (gtk_tree_view_column_get_sizing (l->data) == GTK_TREE_VIEW_COLUMN_FIXED);
 	}
       
       /* yes, we really have to do this is in a separate loop */
@@ -12073,6 +12071,7 @@ gtk_tree_view_set_cursor_on_cell (GtkTreeView       *tree_view,
   if (focus_column &&
       gtk_tree_view_column_get_visible (focus_column))
     {
+#ifndef G_DISABLE_CHECKS
       GList *list;
       gboolean column_in_tree = FALSE;
 
@@ -12083,6 +12082,7 @@ gtk_tree_view_set_cursor_on_cell (GtkTreeView       *tree_view,
 	    break;
 	  }
       g_return_if_fail (column_in_tree);
+#endif
       _gtk_tree_view_set_focus_column (tree_view, focus_column);
       if (focus_cell)
 	gtk_tree_view_column_focus_cell (focus_column, focus_cell);
