@@ -1145,11 +1145,9 @@ static void
 gtk_popover_update_shape (GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GtkWidget *widget = GTK_WIDGET (popover);
 
   if (priv->has_arrow)
     {
-
       cairo_surface_t *cairo_surface;
       cairo_region_t *region;
       cairo_t *cr;
@@ -1167,11 +1165,11 @@ gtk_popover_update_shape (GtkPopover *popover)
       region = gdk_cairo_region_create_from_surface (cairo_surface);
       cairo_surface_destroy (cairo_surface);
 
-      gtk_widget_input_shape_combine_region (widget, region);
+      gdk_surface_input_shape_combine_region (priv->surface, region, 0, 0);
       cairo_region_destroy (region);
     }
   else
-    gtk_widget_input_shape_combine_region (widget, NULL);
+    gdk_surface_input_shape_combine_region (priv->surface, NULL, 0, 0);
 }
 
 static gint
