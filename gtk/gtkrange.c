@@ -204,7 +204,6 @@ static void          gtk_range_compute_slider_position  (GtkRange      *range,
                                                          GdkRectangle  *slider_rect);
 static gboolean      gtk_range_scroll                   (GtkRange      *range,
                                                          GtkScrollType  scroll);
-static void          gtk_range_calc_slider              (GtkRange      *range);
 static void          gtk_range_calc_marks               (GtkRange      *range);
 static void          gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
                                                          gpointer       data);
@@ -2299,11 +2298,18 @@ gtk_range_drag_gesture_begin (GtkGestureDrag *gesture,
 
 static void
 gtk_range_adjustment_changed (GtkAdjustment *adjustment,
-			      gpointer       data)
+                              gpointer       data)
 {
   GtkRange *range = GTK_RANGE (data);
+  GtkRangePrivate *priv = gtk_range_get_instance_private (range);
 
-  gtk_range_calc_slider (range);
+  if (gtk_adjustment_get_upper (priv->adjustment) == gtk_adjustment_get_lower (priv->adjustment) &&
+      GTK_IS_SCALE (range))
+    gtk_widget_hide (priv->slider_widget);
+  else
+    gtk_widget_show (priv->slider_widget);
+
+  gtk_widget_queue_allocate (priv->trough_widget);
 
   /* Note that we don't round off to priv->round_digits here.
    * that's because it's really broken to change a value
@@ -2634,23 +2640,6 @@ gtk_range_compute_slider_position (GtkRange     *range,
       slider_rect->x = x;
       slider_rect->width = width;
     }
-}
-
-static void
-gtk_range_calc_slider (GtkRange *range)
-{
-  GtkRangePrivate *priv = gtk_range_get_instance_private (range);
-  gboolean visible;
-
-  if (GTK_IS_SCALE (range) &&
-      gtk_adjustment_get_upper (priv->adjustment) == gtk_adjustment_get_lower (priv->adjustment))
-    visible = FALSE;
-  else
-    visible = TRUE;
-
-  gtk_widget_set_visible (priv->slider_widget, visible);
-
-  gtk_widget_queue_allocate (priv->trough_widget);
 }
 
 static void
