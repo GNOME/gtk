@@ -182,6 +182,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
       int css_min_for_size;
       int css_extra_for_size;
       int css_extra_size;
+      int widget_margins;
 
       style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
       get_box_margin (style, &margin);
@@ -196,6 +197,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
           css_extra_for_size = margin.top + margin.bottom + border.top + border.bottom + padding.top + padding.bottom;
           css_min_size = get_number_ceil (style->size->min_width);
           css_min_for_size = get_number_ceil (style->size->min_height);
+          widget_margins = widget->priv->margin.top + widget->priv->margin.bottom;
         }
       else
         {
@@ -203,6 +205,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
           css_extra_for_size = margin.left + margin.right + border.left + border.right + padding.left + padding.right;
           css_min_size = get_number_ceil (style->size->min_height);
           css_min_for_size = get_number_ceil (style->size->min_width);
+          widget_margins = widget->priv->margin.top + widget->priv->margin.bottom;
         }
 
       GtkLayoutManager *layout_manager = gtk_widget_get_layout_manager (widget);
@@ -223,7 +226,6 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
               int adjusted_for_size;
               int minimum_for_size = 0;
               int natural_for_size = 0;
-              int dummy = 0;
 
               /* Pull the minimum for_size from the cache as it's needed to adjust
                * the proposed 'for_size' */
@@ -235,10 +237,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
               if (for_size < MAX (minimum_for_size, css_min_for_size))
                 for_size = MAX (minimum_for_size, css_min_for_size);
 
-              adjusted_for_size = for_size;
-              gtk_widget_adjust_size_allocation (widget, OPPOSITE_ORIENTATION (orientation),
-                                                 &for_size, &natural_for_size,
-                                                 &dummy, &adjusted_for_size);
+              adjusted_for_size = for_size - widget_margins;
               adjusted_for_size -= css_extra_for_size;
               if (adjusted_for_size < 0)
                 adjusted_for_size = MAX (minimum_for_size, css_min_for_size);
@@ -267,7 +266,6 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
               int adjusted_for_size;
               int minimum_for_size = 0;
               int natural_for_size = 0;
-              int dummy = 0;
 
               /* Pull the minimum for_size from the cache as it's needed to adjust
                * the proposed 'for_size' */
@@ -278,10 +276,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
               if (for_size < MAX (minimum_for_size, css_min_for_size))
                 for_size = MAX (minimum_for_size, css_min_for_size);
 
-              adjusted_for_size = for_size;
-              gtk_widget_adjust_size_allocation (widget, OPPOSITE_ORIENTATION (orientation),
-                                                 &for_size, &natural_for_size,
-                                                 &dummy, &adjusted_for_size);
+              adjusted_for_size = for_size - widget_margins;
 
               adjusted_for_size -= css_extra_for_size;
 
