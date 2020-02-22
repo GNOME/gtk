@@ -156,8 +156,6 @@ struct _GdkDisplayClass
                                                         const guchar   *text,
                                                         gint            length,
                                                         gchar        ***list);
-  gchar *                (*utf8_to_string_target)      (GdkDisplay     *display,
-                                                        const gchar    *text);
 
   gboolean               (*make_gl_context_current)    (GdkDisplay        *display,
                                                         GdkGLContext      *context);

@@ -2782,13 +2782,6 @@ _gdk_win32_display_text_property_to_utf8_list (GdkDisplay    *display,
     }
 }
 
-gchar *
-_gdk_win32_display_utf8_to_string_target (GdkDisplay *display,
-					  const gchar *str)
-{
-  return g_strdup (str);
-}
-
 gint
 _gdk_win32_add_contentformat_to_pairs (const gchar *contentformat,
                                        GArray      *array)

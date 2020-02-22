@@ -133,8 +133,6 @@ gint        _gdk_wayland_display_text_property_to_utf8_list (GdkDisplay    *disp
                                                              const guchar  *text,
                                                              gint           length,
                                                              gchar       ***list);
-gchar *     _gdk_wayland_display_utf8_to_string_target (GdkDisplay  *display,
-                                                        const gchar *str);
 
 void        _gdk_wayland_display_create_seat    (GdkWaylandDisplay *display,
                                                  guint32                  id,

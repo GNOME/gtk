@@ -429,7 +429,6 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   display_class->create_surface = _gdk_broadway_display_create_surface;
   display_class->get_keymap = _gdk_broadway_display_get_keymap;
   display_class->text_property_to_utf8_list = _gdk_broadway_display_text_property_to_utf8_list;
-  display_class->utf8_to_string_target = _gdk_broadway_display_utf8_to_string_target;
 
   display_class->get_n_monitors = gdk_broadway_display_get_n_monitors;
   display_class->get_monitor = gdk_broadway_display_get_monitor;

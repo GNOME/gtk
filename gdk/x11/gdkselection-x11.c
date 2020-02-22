@@ -325,70 +325,6 @@ gdk_x11_display_string_to_compound_text (GdkDisplay  *display,
   return res;
 }
 
-/* The specifications for COMPOUND_TEXT and STRING specify that C0 and
- * C1 are not allowed except for \n and \t, however the X conversions
- * routines for COMPOUND_TEXT only enforce this in one direction,
- * causing cut-and-paste of \r and \r\n separated text to fail.
- * This routine strips out all non-allowed C0 and C1 characters
- * from the input string and also canonicalizes \r, and \r\n to \n
- */
-static gchar *
-sanitize_utf8 (const gchar *src,
-               gboolean return_latin1)
-{
-  gint len = strlen (src);
-  GString *result = g_string_sized_new (len);
-  const gchar *p = src;
-
-  while (*p)
-    {
-      if (*p == '\r')
-        {
-          p++;
-          if (*p == '\n')
-            p++;
-
-          g_string_append_c (result, '\n');
-        }
-      else
-        {
-          gunichar ch = g_utf8_get_char (p);
-
-          if (!((ch < 0x20 && ch != '\t' && ch != '\n') || (ch >= 0x7f && ch < 0xa0)))
-            {
-              if (return_latin1)
-                {
-                  if (ch <= 0xff)
-                    g_string_append_c (result, ch);
-                  else
-                    g_string_append_printf (result,
-                                            ch < 0x10000 ? "\\u%04x" : "\\U%08x",
-                                            ch);
-                }
-              else
-                {
-                  char buf[7];
-                  gint buflen;
-
-                  buflen = g_unichar_to_utf8 (ch, buf);
-                  g_string_append_len (result, buf, buflen);
-                }
-            }
-
-          p = g_utf8_next_char (p);
-        }
-    }
-
-  return g_string_free (result, FALSE);
-}
-
-gchar *
-_gdk_x11_display_utf8_to_string_target (GdkDisplay  *display,
-                                        const gchar *str)
-{
-  return sanitize_utf8 (str, TRUE);
-}
-
 /**
  * gdk_x11_display_utf8_to_compound_text:
  * @display: (type GdkX11Display): a #GdkDisplay
@@ -423,7 +359,7 @@ gdk_x11_display_utf8_to_compound_text (GdkDisplay  *display,
 
   need_conversion = !g_get_charset (&charset);
 
-  tmp_str = sanitize_utf8 (str, FALSE);
+  tmp_str = gdk_x11_utf8_to_string_target (str, FALSE);
 
   if (need_conversion)
     {

@@ -23,14 +23,6 @@
 #include "gdkproperty.h"
 #include "gdkquartz.h"
 
-gchar *
-_gdk_quartz_display_utf8_to_string_target (GdkDisplay  *display,
-                                           const gchar *str)
-{
-  /* FIXME: Implement */
-  return NULL;
-}
-
 static gint
 make_list (const gchar  *text,
 	   gint          length,

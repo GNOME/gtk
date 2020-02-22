@@ -76,8 +76,6 @@ gint        _gdk_quartz_display_text_property_to_utf8_list (GdkDisplay     *disp
                                                             const guchar   *text,
                                                             gint            length,
                                                             gchar        ***list);
-gchar *     _gdk_quartz_display_utf8_to_string_target      (GdkDisplay     *displayt,
-                                                            const gchar    *str);
 
 G_END_DECLS
 

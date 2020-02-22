@@ -61,25 +61,3 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay     *display,
            ->text_property_to_utf8_list (display, encoding, format, text, length, list);
 }
 
-/**
- * gdk_utf8_to_string_target:
- * @str: a UTF-8 string
- *
- * Converts a UTF-8 string into the best possible representation
- * as a STRING. The representation of characters not in STRING
- * is not specified; it may be as pseudo-escape sequences
- * \x{ABCD}, or it may be in some other form of approximation.
- *
- * Returns: (nullable): the newly-allocated string, or %NULL if the
- *          conversion failed. (It should not fail for any properly
- *          formed UTF-8 string unless system limits like memory or
- *          file descriptors are exceeded.)
- **/
-gchar *
-gdk_utf8_to_string_target (const gchar *str)
-{
-  GdkDisplay *display = gdk_display_get_default ();
-
-  return GDK_DISPLAY_GET_CLASS (display)->utf8_to_string_target (display, str);
-}
-

@@ -135,9 +135,3 @@ _gdk_broadway_display_text_property_to_utf8_list (GdkDisplay    *display,
   return 0;
 }
 
-gchar *
-_gdk_broadway_display_utf8_to_string_target (GdkDisplay  *display,
-					     const gchar *str)
-{
-  return g_strdup (str);
-}

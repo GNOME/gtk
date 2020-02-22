@@ -2235,7 +2235,7 @@ set_text_property (GdkDisplay  *display,
   if (utf8_is_latin1 (utf8_str))
     {
       prop_type = XA_STRING;
-      prop_text = _gdk_x11_display_utf8_to_string_target (display, utf8_str);
+      prop_text = gdk_x11_utf8_to_string_target (utf8_str, TRUE);
       prop_length = prop_text ? strlen (prop_text) : 0;
       prop_format = 8;
       is_compound_text = FALSE;

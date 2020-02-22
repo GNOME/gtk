@@ -125,8 +125,8 @@ gint        _gdk_x11_display_text_property_to_utf8_list (GdkDisplay     *display
                                                          const guchar   *text,
                                                          gint            length,
                                                          gchar        ***list);
-gchar *     _gdk_x11_display_utf8_to_string_target      (GdkDisplay     *displayt,
-                                                         const gchar    *str);
+char *      gdk_x11_utf8_to_string_target               (const char     *utf8_str,
+                                                         gboolean        return_latin1);
 
 void _gdk_x11_device_check_extension_events   (GdkDevice  *device);
 

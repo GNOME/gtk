@@ -401,7 +401,6 @@ gint      _gdk_win32_display_text_property_to_utf8_list (GdkDisplay    *display,
                                                          const guchar  *text,
                                                          gint           length,
                                                          gchar       ***list);
-gchar     *_gdk_win32_display_utf8_to_string_target (GdkDisplay *display, const gchar *str);
 
 gboolean   _gdk_win32_keymap_has_altgr           (GdkWin32Keymap *keymap);
 guint8     _gdk_win32_keymap_get_active_group    (GdkWin32Keymap *keymap);
