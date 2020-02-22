@@ -64,7 +64,6 @@ struct _GtkFileChooserEntry
   guint complete_on_load : 1;
   guint eat_tabs       : 1;
   guint eat_escape     : 1;
-  guint local_only     : 1;
 };
 
 enum
@@ -272,8 +271,6 @@ _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
   GtkEventController *controller;
   GtkEntryCompletion *comp;
   GtkCellRenderer *cell;
-
-  chooser_entry->local_only = FALSE;
 
   g_object_set (chooser_entry, "truncate-multiline", TRUE, NULL);
 
@@ -692,11 +689,6 @@ set_completion_folder (GtkFileChooserEntry *chooser_entry,
                        GFile               *folder_file,
 		       char                *dir_part)
 {
-  if (folder_file &&
-      chooser_entry->local_only
-      && !_gtk_file_has_native_path (folder_file))
-    folder_file = NULL;
-
   if (((chooser_entry->current_folder_file
 	&& folder_file
 	&& g_file_equal (folder_file, chooser_entry->current_folder_file))
@@ -1057,20 +1049,6 @@ _gtk_file_chooser_entry_select_filename (GtkFileChooserEntry *chooser_entry)
     }
 
   gtk_editable_select_region (GTK_EDITABLE (chooser_entry), 0, (gint) len);
-}
-
-void
-_gtk_file_chooser_entry_set_local_only (GtkFileChooserEntry *chooser_entry,
-                                        gboolean             local_only)
-{
-  chooser_entry->local_only = local_only;
-  refresh_current_folder_and_file_part (chooser_entry);
-}
-
-gboolean
-_gtk_file_chooser_entry_get_local_only (GtkFileChooserEntry *chooser_entry)
-{
-  return chooser_entry->local_only;
 }
 
 void

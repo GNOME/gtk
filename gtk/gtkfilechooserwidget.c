@@ -2461,7 +2461,6 @@ location_entry_setup (GtkFileChooserWidget *impl)
   g_signal_connect_swapped (priv->location_entry, "hide-entry",
                             G_CALLBACK (location_entry_close_clicked), impl);
 
-  _gtk_file_chooser_entry_set_local_only (GTK_FILE_CHOOSER_ENTRY (priv->location_entry), FALSE);
   _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (priv->location_entry), priv->action);
   _gtk_file_chooser_entry_set_file_filter (GTK_FILE_CHOOSER_ENTRY (priv->location_entry),
                                            priv->current_filter);
