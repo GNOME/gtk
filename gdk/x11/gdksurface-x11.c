@@ -923,6 +923,8 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
                                       GDK_SURFACE_XID (surface), GDK_ALL_EVENTS_MASK,
                                       StructureNotifyMask | PropertyChangeMask);
 
+  _gdk_x11_surface_register_dnd (surface);
+
   connect_frame_clock (surface);
 
   gdk_surface_freeze_updates (surface);
@@ -4730,7 +4732,6 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->begin_move_drag = gdk_x11_surface_begin_move_drag;
   impl_class->set_opacity = gdk_x11_surface_set_opacity;
   impl_class->destroy_notify = gdk_x11_surface_destroy_notify;
-  impl_class->register_dnd = _gdk_x11_surface_register_dnd;
   impl_class->drag_begin = _gdk_x11_surface_drag_begin;
   impl_class->get_scale_factor = gdk_x11_surface_get_scale_factor;
   impl_class->set_opaque_region = gdk_x11_surface_set_opaque_region;

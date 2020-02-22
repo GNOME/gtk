@@ -122,9 +122,6 @@ static gboolean gtk_drop_target_handle_event (GtkEventController *controller,
                                               double              y);
 static gboolean gtk_drop_target_filter_event (GtkEventController *controller,
                                               GdkEvent           *event);
-static void     gtk_drop_target_set_widget   (GtkEventController *controller,
-                                              GtkWidget          *widget);
-static void     gtk_drop_target_unset_widget (GtkEventController *controller);
 
 static gboolean gtk_drop_target_get_contains (GtkDropTarget *dest);
 static void     gtk_drop_target_set_contains (GtkDropTarget *dest,
@@ -221,8 +218,6 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
 
   controller_class->handle_event = gtk_drop_target_handle_event;
   controller_class->filter_event = gtk_drop_target_filter_event;
-  controller_class->set_widget = gtk_drop_target_set_widget;
-  controller_class->unset_widget = gtk_drop_target_unset_widget;
 
   class->accept = gtk_drop_target_accept;
 
@@ -497,25 +492,6 @@ gtk_drop_target_get_actions (GtkDropTarget *dest)
   g_return_val_if_fail (GTK_IS_DROP_TARGET (dest), 0);
 
   return dest->actions;
-}
-
-static void
-gtk_drag_dest_realized (GtkWidget *widget)
-{
-  GtkNative *native = gtk_widget_get_native (widget);
-
-  gdk_surface_register_dnd (gtk_native_get_surface (native));
-}
-
-static void
-gtk_drag_dest_hierarchy_changed (GtkWidget  *widget,
-                                 GParamSpec *pspec,
-                                 gpointer    data)
-{
-  GtkNative *native = gtk_widget_get_native (widget);
-
-  if (native && gtk_widget_get_realized (GTK_WIDGET (native)))
-    gdk_surface_register_dnd (gtk_native_get_surface (native));
 }
 
 /**
@@ -836,34 +812,6 @@ gtk_drag_dest_handle_event (GtkWidget *toplevel,
     default:
       g_assert_not_reached ();
     }
-}
-
-static void
-gtk_drop_target_set_widget (GtkEventController *controller,
-                            GtkWidget          *widget)
-{
-  GtkDropTarget *dest = GTK_DROP_TARGET (controller);
-
-  GTK_EVENT_CONTROLLER_CLASS (gtk_drop_target_parent_class)->set_widget (controller, widget);
-
-  if (gtk_widget_get_realized (widget))
-    gtk_drag_dest_realized (widget);
-
-  g_signal_connect (widget, "realize", G_CALLBACK (gtk_drag_dest_realized), dest);
-  g_signal_connect (widget, "notify::root", G_CALLBACK (gtk_drag_dest_hierarchy_changed), dest);
-}
-
-static void
-gtk_drop_target_unset_widget (GtkEventController *controller)
-{
-  GtkWidget *widget;
-
-  widget = gtk_event_controller_get_widget (controller);
-
-  g_signal_handlers_disconnect_by_func (widget, gtk_drag_dest_realized, controller);
-  g_signal_handlers_disconnect_by_func (widget, gtk_drag_dest_hierarchy_changed, controller);
-
-  GTK_EVENT_CONTROLLER_CLASS (gtk_drop_target_parent_class)->unset_widget (controller);
 }
 
 static void

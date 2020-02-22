@@ -2747,7 +2747,6 @@ gdk_surface_impl_quartz_class_init (GdkSurfaceImplQuartzClass *klass)
   impl_class->set_opacity = gdk_quartz_surface_set_opacity;
   impl_class->set_shadow_width = gdk_quartz_surface_set_shadow_width;
   impl_class->destroy_notify = gdk_quartz_surface_destroy_notify;
-  impl_class->register_dnd = _gdk_quartz_surface_register_dnd;
   impl_class->drag_begin = _gdk_quartz_surface_drag_begin;
   impl_class->process_updates_recurse = _gdk_quartz_surface_process_updates_recurse;
 

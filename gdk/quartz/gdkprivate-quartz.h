@@ -76,7 +76,6 @@ gboolean     _gdk_quartz_keys_is_modifier (guint      keycode);
 void         _gdk_quartz_synthesize_null_key_event (GdkSurface *window);
 
 /* Drag and Drop */
-void        _gdk_quartz_surface_register_dnd      (GdkSurface   *window);
 GdkDragContext * _gdk_quartz_surface_drag_begin   (GdkSurface   *window,
                                                    GdkDevice   *device,
                                                    GList       *targets,

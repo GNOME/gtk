@@ -47,7 +47,6 @@ void gdk_broadway_surface_set_nodes (GdkSurface *surface,
                                      GArray *nodes,
                                      GPtrArray *node_textures);
 
-void     _gdk_broadway_surface_register_dnd       (GdkSurface      *surface);
 GdkDrag * _gdk_broadway_surface_drag_begin        (GdkSurface          *surface,
                                                    GdkDevice          *device,
                                                    GdkContentProvider *content,
@@ -91,7 +90,6 @@ void _gdk_broadway_events_got_input      (GdkDisplay *display,
                                           BroadwayInputMsg *message);
 
 void _gdk_broadway_display_init_root_window (GdkDisplay *display);
-void _gdk_broadway_display_init_dnd (GdkDisplay *display);
 GdkDisplay * _gdk_broadway_display_open (const gchar *display_name);
 void _gdk_broadway_display_queue_events (GdkDisplay *display);
 GdkCursor*_gdk_broadway_display_get_cursor_for_name (GdkDisplay  *display,

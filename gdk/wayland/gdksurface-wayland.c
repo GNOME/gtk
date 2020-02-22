@@ -3928,7 +3928,6 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   impl_class->begin_move_drag = gdk_wayland_surface_begin_move_drag;
   impl_class->set_opacity = gdk_wayland_surface_set_opacity;
   impl_class->destroy_notify = gdk_wayland_surface_destroy_notify;
-  impl_class->register_dnd = _gdk_wayland_surface_register_dnd;
   impl_class->drag_begin = _gdk_wayland_surface_drag_begin;
   impl_class->get_scale_factor = gdk_wayland_surface_get_scale_factor;
   impl_class->set_opaque_region = gdk_wayland_surface_set_opaque_region;
