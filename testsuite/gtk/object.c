@@ -69,7 +69,6 @@ list_ignore_properties (gboolean buglist)
     { "GtkColorSelection",      "current-color",        (void*) NULL, },                /* not a valid boxed color */
     { "GtkFileChooserButton",   "select-multiple",      (void*) MATCH_ANY_VALUE },      /* property disabled */
     { "GtkFileChooserButton",   "action",               (void*) GTK_FILE_CHOOSER_ACTION_SAVE },
-    { "GtkFileChooserButton",   "action",               (void*) GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER },
     { "GtkFileChooserWidget",   "select-multiple",      (void*) 0x1 },                  /* property conflicts */
     { "GtkFileChooserDialog",   "select-multiple",      (void*) MATCH_ANY_VALUE },      /* property disabled */
     { "GtkTextView",            "overwrite",            (void*) MATCH_ANY_VALUE },      /* needs text buffer */

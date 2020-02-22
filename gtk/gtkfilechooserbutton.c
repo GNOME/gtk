@@ -874,7 +874,6 @@ gtk_file_chooser_button_set_property (GObject      *object,
     case GTK_FILE_CHOOSER_PROP_ACTION:
       switch (g_value_get_enum (value))
 	{
-	case GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER:
 	case GTK_FILE_CHOOSER_ACTION_SAVE:
 	  {
 	    GEnumClass *eclass;
@@ -1267,7 +1266,6 @@ gtk_file_chooser_button_mnemonic_activate (GtkWidget *widget,
       return gtk_widget_mnemonic_activate (priv->combo_box, group_cycling);
       break;
     case GTK_FILE_CHOOSER_ACTION_SAVE:
-    case GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER:
     default:
       g_assert_not_reached ();
       break;

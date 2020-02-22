@@ -486,8 +486,7 @@ setup_save_entry (GtkFileChooserDialog *dialog)
 
   header = gtk_dialog_get_header_bar (GTK_DIALOG (dialog));
 
-  need_entry = action == GTK_FILE_CHOOSER_ACTION_SAVE ||
-               action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER;
+  need_entry = action == GTK_FILE_CHOOSER_ACTION_SAVE;
 
   if (need_entry && !priv->has_entry)
     {

@@ -5852,8 +5852,7 @@ native_action_changed (GtkWidget *combo,
                                (GtkFileChooserAction) i);
 
 
-  if (i == GTK_FILE_CHOOSER_ACTION_SAVE ||
-      i == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+  if (i == GTK_FILE_CHOOSER_ACTION_SAVE)
     {
       if (save_as)
         {
