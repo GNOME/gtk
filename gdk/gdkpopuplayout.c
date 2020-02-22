@@ -33,8 +33,6 @@ struct _GdkPopupLayout
   GdkAnchorHints anchor_hints;
   int dx;
   int dy;
-
-  gboolean is_sealed;
 };
 
 G_DEFINE_BOXED_TYPE (GdkPopupLayout, gdk_popup_layout,
@@ -129,6 +127,31 @@ gdk_popup_layout_copy (GdkPopupLayout *layout)
   new_layout->dy = layout->dy;
 
   return new_layout;
+}
+
+/**
+ * gdk_popup_layout_equal:
+ * @layout: a #GdkPopupLayout
+ * @other: another #GdkPopupLayout
+ *
+ * Check whether @layout and @other has identical layout properties.
+ *
+ * Returns: %TRUE if @layout and @other have identical layout properties,
+ * otherwise %FALSE.
+ */
+gboolean
+gdk_popup_layout_equal (GdkPopupLayout *layout,
+                        GdkPopupLayout *other)
+{
+  g_return_val_if_fail (layout, FALSE);
+  g_return_val_if_fail (other, FALSE);
+
+  return (gdk_rectangle_equal (&layout->anchor_rect, &other->anchor_rect) &&
+          layout->rect_anchor == other->rect_anchor &&
+          layout->surface_anchor == other->surface_anchor &&
+          layout->anchor_hints == other->anchor_hints &&
+          layout->dx == other->dx &&
+          layout->dy == other->dy);
 }
 
 /**
