@@ -279,9 +279,6 @@ gboolean          _gtk_widget_consumes_motion              (GtkWidget           
 
 gboolean          gtk_widget_has_tick_callback             (GtkWidget *widget);
 
-void              gtk_widget_set_csd_input_shape           (GtkWidget            *widget,
-                                                            const cairo_region_t *region);
-
 gboolean          gtk_widget_has_size_request              (GtkWidget *widget);
 
 void              gtk_widget_reset_controllers             (GtkWidget *widget);
