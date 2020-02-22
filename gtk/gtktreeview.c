@@ -65,7 +65,6 @@
 #include "gtkwindowgroup.h"
 #include "gtknative.h"
 #include "gtkpopover.h"
-#include "gtkselectionprivate.h"
 
 #include "a11y/gtktreeviewaccessibleprivate.h"
 

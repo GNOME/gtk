@@ -44,7 +44,6 @@ typedef struct _GtkLayoutManager       GtkLayoutManager;
 typedef struct _GtkNative              GtkNative;
 typedef struct _GtkRequisition	       GtkRequisition;
 typedef struct _GtkRoot  	       GtkRoot;
-typedef struct _GtkSelectionData       GtkSelectionData;
 typedef struct _GtkSettings            GtkSettings;
 typedef GdkSnapshot                    GtkSnapshot;
 typedef struct _GtkStyleContext        GtkStyleContext;
