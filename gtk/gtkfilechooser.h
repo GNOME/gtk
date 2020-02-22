@@ -141,27 +141,6 @@ gboolean gtk_file_chooser_set_current_folder      (GtkFileChooser  *chooser,
 GDK_AVAILABLE_IN_ALL
 GFile *  gtk_file_chooser_get_current_folder      (GtkFileChooser  *chooser);
 
-/* Preview widget
- */
-GDK_AVAILABLE_IN_ALL
-void       gtk_file_chooser_set_preview_widget        (GtkFileChooser *chooser,
-						       GtkWidget      *preview_widget);
-GDK_AVAILABLE_IN_ALL
-GtkWidget *gtk_file_chooser_get_preview_widget        (GtkFileChooser *chooser);
-GDK_AVAILABLE_IN_ALL
-void       gtk_file_chooser_set_preview_widget_active (GtkFileChooser *chooser,
-						       gboolean        active);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_file_chooser_get_preview_widget_active (GtkFileChooser *chooser);
-GDK_AVAILABLE_IN_ALL
-void       gtk_file_chooser_set_use_preview_label     (GtkFileChooser *chooser,
-						       gboolean        use_label);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_file_chooser_get_use_preview_label     (GtkFileChooser *chooser);
-
-GDK_AVAILABLE_IN_ALL
-GFile *gtk_file_chooser_get_preview_file     (GtkFileChooser *chooser);
-
 /* List of user selectable filters
  */
 GDK_AVAILABLE_IN_ALL

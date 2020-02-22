@@ -162,8 +162,6 @@
  * used. It supports many of the features that #GtkFileChooserDialog
  * does, but there are some things it does not handle:
  *
- * * Use of custom previews by connecting to #GtkFileChooser::update-preview.
- *
  * * Any #GtkFileFilter added using a mimetype or custom filter.
  *
  * If any of these features are used the regular #GtkFileChooserDialog
@@ -177,8 +175,6 @@
  * be a GTK+ file chooser. In this situation, the following things are not
  * supported and will be silently ignored:
  *
- * * Use of custom previews by connecting to #GtkFileChooser::update-preview.
- *
  * * Any #GtkFileFilter added with a custom filter.
  *
  * ## macOS details ## {#gtkfilechooserdialognative-macos}
@@ -186,8 +182,6 @@
  * On macOS the NSSavePanel and NSOpenPanel classes are used to provide native
  * file chooser dialogs. Some features provided by #GtkFileChooserDialog are
  * not supported:
- *
- * * Use of custom previews by connecting to #GtkFileChooser::update-preview.
  *
  * * Any #GtkFileFilter added with a custom filter.
  *
@@ -567,13 +561,6 @@ dialog_response_cb (GtkDialog *dialog,
 }
 
 static void
-dialog_update_preview_cb (GtkFileChooser *file_chooser,
-                          gpointer data)
-{
-  g_signal_emit_by_name (data, "update-preview");
-}
-
-static void
 show_dialog (GtkFileChooserNative *self)
 {
   GtkFileChooserAction action;
@@ -607,11 +594,6 @@ show_dialog (GtkFileChooserNative *self)
                     G_CALLBACK (dialog_response_cb),
                     self);
 
-  g_signal_connect (self->dialog,
-                    "update-preview",
-                    G_CALLBACK (dialog_update_preview_cb),
-                    self);
-
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_window_present (GTK_WINDOW (self->dialog));
   G_GNUC_END_IGNORE_DEPRECATIONS
@@ -621,7 +603,6 @@ static void
 hide_dialog (GtkFileChooserNative *self)
 {
   g_signal_handlers_disconnect_by_func (self->dialog, dialog_response_cb, self);
-  g_signal_handlers_disconnect_by_func (self->dialog, dialog_update_preview_cb, self);
   gtk_widget_hide (self->dialog);
 }
 

@@ -224,24 +224,6 @@ chooser_file_activated_cb (GtkFileChooser *chooser,
 }
 
 static void
-chooser_update_preview_cb (GtkFileChooser *chooser,
-			   gpointer        user_data)
-{
-  GFile *filename;
-
-  filename = gtk_file_chooser_get_preview_file (chooser);
-  if (filename != NULL)
-    {
-      char *uri = g_file_get_uri (filename);
-      g_message ("%s::update-preview\n\tPreview Filename: `%s'\nDone.\n",
-		 G_OBJECT_TYPE_NAME (chooser), uri);
-      g_free (uri);
-
-      g_object_unref (filename);
-    }
-}
-
-static void
 add_new_filechooser_button (const gchar          *mnemonic,
                             const gchar          *chooser_title,
                             GtkFileChooserAction  action,
@@ -274,7 +256,6 @@ add_new_filechooser_button (const gchar          *mnemonic,
 		    G_CALLBACK (chooser_current_folder_changed_cb), NULL);
   g_signal_connect (chooser, "selection-changed", G_CALLBACK (chooser_selection_changed_cb), NULL);
   g_signal_connect (chooser, "file-activated", G_CALLBACK (chooser_file_activated_cb), NULL);
-  g_signal_connect (chooser, "update-preview", G_CALLBACK (chooser_update_preview_cb), NULL);
   gtk_container_add (GTK_CONTAINER (hbox), chooser);
 
   button = gtk_button_new_with_label ("Tests");

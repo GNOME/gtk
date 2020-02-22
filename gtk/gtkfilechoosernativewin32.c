@@ -865,13 +865,8 @@ gtk_file_chooser_native_win32_show (GtkFileChooserNative *self)
   FilechooserWin32ThreadData *data;
   GtkWindow *transient_for;
   GtkFileChooserAction action;
-  guint update_preview_signal;
   GSList *filters, *l;
   int n_filters, i;
-
-  update_preview_signal = g_signal_lookup ("update-preview", GTK_TYPE_FILE_CHOOSER);
-  if (g_signal_has_handler_pending (self, update_preview_signal, 0, TRUE))
-    return FALSE;
 
   data = g_new0 (FilechooserWin32ThreadData, 1);
 

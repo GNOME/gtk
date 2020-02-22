@@ -332,8 +332,6 @@ static void     combo_box_changed_cb             (GtkComboBox    *combo_box,
 static void     button_clicked_cb                (GtkButton      *real_button,
 						  gpointer        user_data);
 
-static void     chooser_update_preview_cb        (GtkFileChooser *dialog,
-						  gpointer        user_data);
 static void     dialog_response_cb               (GtkDialog      *dialog,
 						  gint            response,
 						  gpointer        user_data);
@@ -915,9 +913,6 @@ gtk_file_chooser_button_set_property (GObject      *object,
 
     case PROP_TITLE:
     case GTK_FILE_CHOOSER_PROP_FILTER:
-    case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET:
-    case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET_ACTIVE:
-    case GTK_FILE_CHOOSER_PROP_USE_PREVIEW_LABEL:
     case GTK_FILE_CHOOSER_PROP_CREATE_FOLDERS:
       g_object_set_property (G_OBJECT (priv->chooser), pspec->name, value);
       break;
@@ -951,9 +946,6 @@ gtk_file_chooser_button_get_property (GObject    *object,
     case PROP_TITLE:
     case GTK_FILE_CHOOSER_PROP_ACTION:
     case GTK_FILE_CHOOSER_PROP_FILTER:
-    case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET:
-    case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET_ACTIVE:
-    case GTK_FILE_CHOOSER_PROP_USE_PREVIEW_LABEL:
     case GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE:
     case GTK_FILE_CHOOSER_PROP_CREATE_FOLDERS:
       g_object_get_property (G_OBJECT (priv->chooser), pspec->name, value);
@@ -2541,15 +2533,6 @@ open_dialog (GtkFileChooserButton *button)
     {
       restore_inactive_state (button);
       priv->active = TRUE;
-
-      /* Only handle update-preview handler if it is handled on the button */
-      if (g_signal_has_handler_pending (button,
-                                        g_signal_lookup ("update-preview", GTK_TYPE_FILE_CHOOSER),
-                                        0, TRUE))
-        {
-          g_signal_connect (priv->chooser, "update-preview",
-                            G_CALLBACK (chooser_update_preview_cb), button);
-        }
     }
 
   gtk_widget_set_sensitive (priv->combo_box, FALSE);
@@ -2636,13 +2619,6 @@ button_clicked_cb (GtkButton *real_button,
 /* Dialog */
 
 static void
-chooser_update_preview_cb (GtkFileChooser *dialog,
-                           gpointer        user_data)
-{
-  g_signal_emit_by_name (user_data, "update-preview");
-}
-
-static void
 common_response_cb (GtkFileChooserButton *button,
 		    gint       response)
 {
@@ -2662,11 +2638,7 @@ common_response_cb (GtkFileChooserButton *button,
     }
 
   if (priv->active)
-    {
-      priv->active = FALSE;
-
-      g_signal_handlers_disconnect_by_func (priv->chooser, chooser_update_preview_cb, button);
-    }
+    priv->active = FALSE;
 
   update_label_and_image (button);
   update_combo_box (button);

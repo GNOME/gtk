@@ -40,7 +40,6 @@ static void           delegate_unselect_file          (GtkFileChooser    *choose
 static void           delegate_select_all             (GtkFileChooser    *chooser);
 static void           delegate_unselect_all           (GtkFileChooser    *chooser);
 static GSList *       delegate_get_files              (GtkFileChooser    *chooser);
-static GFile *        delegate_get_preview_file       (GtkFileChooser    *chooser);
 static GtkFileSystem *delegate_get_file_system        (GtkFileChooser    *chooser);
 static void           delegate_add_filter             (GtkFileChooser    *chooser,
 						       GtkFileFilter     *filter);
@@ -60,8 +59,6 @@ static void           delegate_notify                 (GObject           *object
 static void           delegate_current_folder_changed (GtkFileChooser    *chooser,
 						       gpointer           data);
 static void           delegate_selection_changed      (GtkFileChooser    *chooser,
-						       gpointer           data);
-static void           delegate_update_preview         (GtkFileChooser    *chooser,
 						       gpointer           data);
 static void           delegate_file_activated         (GtkFileChooser    *chooser,
 						       gpointer           data);
@@ -101,15 +98,6 @@ _gtk_file_chooser_install_properties (GObjectClass *klass)
 				    GTK_FILE_CHOOSER_PROP_FILTER,
 				    "filter");
   g_object_class_override_property (klass,
-				    GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET,
-				    "preview-widget");
-  g_object_class_override_property (klass,
-				    GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET_ACTIVE,
-				    "preview-widget-active");
-  g_object_class_override_property (klass,
-				    GTK_FILE_CHOOSER_PROP_USE_PREVIEW_LABEL,
-				    "use-preview-label");
-  g_object_class_override_property (klass,
 				    GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE,
 				    "select-multiple");
   g_object_class_override_property (klass,
@@ -140,7 +128,6 @@ _gtk_file_chooser_delegate_iface_init (GtkFileChooserIface *iface)
   iface->select_all = delegate_select_all;
   iface->unselect_all = delegate_unselect_all;
   iface->get_files = delegate_get_files;
-  iface->get_preview_file = delegate_get_preview_file;
   iface->get_file_system = delegate_get_file_system;
   iface->add_filter = delegate_add_filter;
   iface->remove_filter = delegate_remove_filter;
@@ -179,8 +166,6 @@ _gtk_file_chooser_set_delegate (GtkFileChooser *receiver,
 		    G_CALLBACK (delegate_current_folder_changed), receiver);
   g_signal_connect (delegate, "selection-changed",
 		    G_CALLBACK (delegate_selection_changed), receiver);
-  g_signal_connect (delegate, "update-preview",
-		    G_CALLBACK (delegate_update_preview), receiver);
   g_signal_connect (delegate, "file-activated",
 		    G_CALLBACK (delegate_file_activated), receiver);
 }
@@ -234,12 +219,6 @@ static GSList *
 delegate_get_files (GtkFileChooser *chooser)
 {
   return gtk_file_chooser_get_files (get_delegate (chooser));
-}
-
-static GFile *
-delegate_get_preview_file (GtkFileChooser *chooser)
-{
-  return gtk_file_chooser_get_preview_file (get_delegate (chooser));
 }
 
 static GtkFileSystem *
@@ -342,13 +321,6 @@ delegate_current_folder_changed (GtkFileChooser *chooser,
 				 gpointer        data)
 {
   g_signal_emit_by_name (data, "current-folder-changed");
-}
-
-static void
-delegate_update_preview (GtkFileChooser    *chooser,
-			 gpointer           data)
-{
-  g_signal_emit_by_name (data, "update-preview");
 }
 
 static void

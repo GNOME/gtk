@@ -73,7 +73,6 @@ struct _GtkFileChooserIface
   void           (*select_all)         	   (GtkFileChooser    *chooser);
   void           (*unselect_all)       	   (GtkFileChooser    *chooser);
   GSList *       (*get_files)          	   (GtkFileChooser    *chooser);
-  GFile *        (*get_preview_file)   	   (GtkFileChooser    *chooser);
   GtkFileSystem *(*get_file_system)    	   (GtkFileChooser    *chooser);
   void           (*add_filter)         	   (GtkFileChooser    *chooser,
 					    GtkFileFilter     *filter);

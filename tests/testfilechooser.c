@@ -258,97 +258,6 @@ my_new_from_file_at_size (const char *filename,
 	return pixbuf;
 }
 
-#if 0
-static char *
-format_time (time_t t)
-{
-  gchar buf[128];
-  struct tm tm_buf;
-  time_t now = time (NULL);
-  const char *format;
-
-  if (abs (now - t) < 24*60*60)
-    format = "%X";
-  else
-    format = "%x";
-
-  localtime_r (&t, &tm_buf);
-  if (strftime (buf, sizeof (buf), format, &tm_buf) == 0)
-    return g_strdup ("<unknown>");
-  else
-    return g_strdup (buf);
-}
-
-static char *
-format_size (gint64 size)
-{
-  if (size < (gint64)1024)
-    return g_strdup_printf ("%d bytes", (gint)size);
-  else if (size < (gint64)1024*1024)
-    return g_strdup_printf ("%.1f K", size / (1024.));
-  else if (size < (gint64)1024*1024*1024)
-    return g_strdup_printf ("%.1f M", size / (1024.*1024.));
-  else
-    return g_strdup_printf ("%.1f G", size / (1024.*1024.*1024.));
-}
-
-static void
-update_preview_cb (GtkFileChooser *chooser)
-{
-  gchar *filename = gtk_file_chooser_get_preview_filename (chooser);
-  gboolean have_preview = FALSE;
-
-  if (filename)
-    {
-      GdkPixbuf *pixbuf;
-      GError *error = NULL;
-
-      pixbuf = my_new_from_file_at_size (filename, 128, 128, &error);
-      if (pixbuf)
-	{
-	  gtk_image_set_from_pixbuf (GTK_IMAGE (preview_image), pixbuf);
-	  g_object_unref (pixbuf);
-	  gtk_widget_show (preview_image);
-	  gtk_widget_hide (preview_label);
-	  have_preview = TRUE;
-	}
-      else
-	{
-	  struct stat buf;
-	  if (stat (filename, &buf) == 0)
-	    {
-	      gchar *preview_text;
-	      gchar *size_str;
-	      gchar *modified_time;
-
-	      size_str = format_size (buf.st_size);
-	      modified_time = format_time (buf.st_mtime);
-
-	      preview_text = g_strdup_printf ("<i>Modified:</i>\t%s\n"
-					      "<i>Size:</i>\t%s\n",
-					      modified_time,
-					      size_str);
-	      gtk_label_set_markup (GTK_LABEL (preview_label), preview_text);
-	      g_free (modified_time);
-	      g_free (size_str);
-	      g_free (preview_text);
-
-	      gtk_widget_hide (preview_image);
-	      gtk_widget_show (preview_label);
-	      have_preview = TRUE;
-	    }
-	}
-
-      g_free (filename);
-
-      if (error)
-	g_error_free (error);
-    }
-
-  gtk_file_chooser_set_preview_widget_active (chooser, have_preview);
-}
-#endif
-
 static void
 set_current_folder (GtkFileChooser *chooser,
 		    const char     *name)
@@ -622,26 +531,6 @@ main (int argc, char **argv)
   gtk_file_filter_set_name (filter, "Images");
   gtk_file_filter_add_pixbuf_formats (filter);
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
-
-#if 0
-  /* Preview widget */
-  /* THIS IS A TERRIBLE PREVIEW WIDGET, AND SHOULD NOT BE COPIED AT ALL.
-   */
-  preview_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_file_chooser_set_preview_widget (GTK_FILE_CHOOSER (dialog), preview_vbox);
-
-  preview_label = gtk_label_new (NULL);
-  gtk_container_add (GTK_CONTAINER (preview_vbox), preview_label, TRUE, TRUE, 0);
-  g_object_set (preview_label, "margin", 6, NULL);
-
-  preview_image = gtk_image_new ();
-  gtk_container_add (GTK_CONTAINER (preview_vbox), preview_image, TRUE, TRUE, 0);
-  g_object_set (preview_image, "margin", 6, NULL);
-
-  update_preview_cb (GTK_FILE_CHOOSER (dialog));
-  g_signal_connect (dialog, "update-preview",
-		    G_CALLBACK (update_preview_cb), NULL);
-#endif
 
   /* Choices */
 
