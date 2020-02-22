@@ -3587,6 +3587,10 @@ gdk_surface_register_dnd (GdkSurface *surface)
  * probably want to set up the drag icon using the surface returned
  * by gdk_drag_get_drag_surface().
  *
+ * This function returns a reference to the GdkDrag object, but GTK
+ * keeps its own reference as well, as long as the DND operation is
+ * going on.
+ *
  * Note: if @actions include %GDK_ACTION_MOVE, you need to listen for
  * the #GdkDrag::dnd-finished signal and delete the data at the source
  * if gdk_drag_get_selected_action() returns %GDK_ACTION_MOVE.
