@@ -2073,8 +2073,12 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
   precache_target_list (drag);
 
   gdk_device_get_position (device, &px, &py);
-  x_root = round (px) + dx;
-  y_root = round (py) + dy;
+
+  gdk_surface_get_root_coords (surface,
+                               round (px) + dx,
+                               round (py) + dy,
+                               &x_root,
+                               &y_root);
 
   x11_drag->start_x = x_root;
   x11_drag->start_y = y_root;
