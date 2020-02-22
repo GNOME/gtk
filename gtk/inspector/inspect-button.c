@@ -35,6 +35,7 @@
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtknative.h"
+#include "gtkwindowprivate.h"
 
 static GtkWidget *
 find_widget_at_pointer (GdkDevice *device)
@@ -116,8 +117,10 @@ reemphasize_window (GtkWidget *window)
   display = gtk_widget_get_display (window);
   if (gdk_display_is_composited (display))
     {
+      GtkInspectorWindow *iw = GTK_INSPECTOR_WINDOW (window);
+
       gtk_widget_set_opacity (window, 1.0);
-      gtk_widget_input_shape_combine_region (window, NULL);
+      gtk_window_set_extra_input_region (GTK_WINDOW (iw), NULL);
     }
   else
     gdk_surface_raise (gtk_native_get_surface (GTK_NATIVE (window)));
@@ -200,7 +203,7 @@ gtk_inspector_on_inspect (GtkWidget          *button,
       gtk_widget_set_opacity (GTK_WIDGET (iw), 0.3);
       rect.x = rect.y = rect.width = rect.height = 0;
       region = cairo_region_create_rectangle (&rect);
-      gtk_widget_input_shape_combine_region (GTK_WIDGET (iw), region);
+      gtk_window_set_extra_input_region (GTK_WINDOW (iw), region);
       cairo_region_destroy (region);
     }
   else
