@@ -2691,12 +2691,6 @@ gdk_wayland_surface_map_popup (GdkSurface     *surface,
   GdkSurface *parent;
   GdkWaylandSeat *grab_input_seat;
 
-  if (!should_be_mapped (surface))
-    return;
-
-  if (impl->mapped)
-    return;
-
   parent = surface->parent;
   if (!parent)
     {
@@ -2719,6 +2713,8 @@ gdk_wayland_surface_map_popup (GdkSurface     *surface,
   impl->popup.unconstrained_width = width;
   impl->popup.unconstrained_height = height;
   impl->mapped = TRUE;
+
+  gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
 }
 
 static void
@@ -2836,7 +2832,6 @@ gdk_wayland_surface_present_popup (GdkSurface     *surface,
 
   if (impl->display_server.xdg_popup)
     {
-      gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
       gdk_surface_invalidate_rect (surface, NULL);
       return TRUE;
     }
