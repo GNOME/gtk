@@ -867,6 +867,7 @@ gtk_file_system_model_set_sort_column_id (GtkTreeSortable  *sortable,
     {
       if (sort_column_id != GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
 	{
+#ifndef G_DISABLE_CHECKS
 	  GtkTreeDataSortHeader *header = NULL;
 
 	  header = _gtk_tree_data_list_get_header (model->sort_list, 
@@ -875,6 +876,7 @@ gtk_file_system_model_set_sort_column_id (GtkTreeSortable  *sortable,
 	  /* We want to make sure that we have a function */
 	  g_return_if_fail (header != NULL);
 	  g_return_if_fail (header->func != NULL);
+#endif
 	}
       else
 	{

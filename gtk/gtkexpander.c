@@ -115,7 +115,7 @@
 #include "gtkbox.h"
 #include "gtkbuildable.h"
 #include "gtkcontainerprivate.h"
-#include "gtkdragdest.h"
+#include "gtkdropcontrollermotion.h"
 #include "gtkbuiltiniconprivate.h"
 #include "gtkgestureclick.h"
 #include "gtkgesturesingle.h"
@@ -192,12 +192,6 @@ static void     gtk_expander_size_allocate  (GtkWidget        *widget,
                                              int               baseline);
 static gboolean gtk_expander_focus          (GtkWidget        *widget,
                                              GtkDirectionType  direction);
-static gboolean gtk_expander_drag_accept    (GtkDropTarget    *dest,
-                                             GdkDrop          *drop,
-                                             GtkExpander      *expander);
-static void     gtk_expander_drag_leave     (GtkDropTarget    *dest,
-                                             GdkDrop          *drop,
-                                             GtkExpander      *expander);
 
 static void gtk_expander_add    (GtkContainer *container,
                                  GtkWidget    *widget);
@@ -235,6 +229,48 @@ G_DEFINE_TYPE_WITH_CODE (GtkExpander, gtk_expander, GTK_TYPE_CONTAINER,
                          G_ADD_PRIVATE (GtkExpander)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_expander_buildable_init))
+
+static gboolean
+expand_timeout (gpointer data)
+{
+  GtkExpander *expander = GTK_EXPANDER (data);
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+
+  priv->expand_timer = 0;
+  gtk_expander_set_expanded (expander, TRUE);
+
+  return FALSE;
+}
+
+static gboolean
+gtk_expander_drag_enter (GtkDropControllerMotion *motion,
+                         double                   x,
+                         double                   y,
+                         GtkExpander             *expander)
+{
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+
+  if (!priv->expanded && !priv->expand_timer)
+    {
+      priv->expand_timer = g_timeout_add (TIMEOUT_EXPAND, (GSourceFunc) expand_timeout, expander);
+      g_source_set_name_by_id (priv->expand_timer, "[gtk] expand_timeout");
+    }
+
+  return TRUE;
+}
+
+static void
+gtk_expander_drag_leave (GtkDropControllerMotion *motion,
+                         GtkExpander             *expander)
+{
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+
+  if (priv->expand_timer)
+    {
+      g_source_remove (priv->expand_timer);
+      priv->expand_timer = 0;
+    }
+}
 
 static void
 gtk_expander_forall (GtkContainer *container,
@@ -347,7 +383,7 @@ gtk_expander_init (GtkExpander *expander)
 {
   GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
   GtkGesture *gesture;
-  GtkDropTarget *dest;
+  GtkEventController *controller;
 
   gtk_widget_set_can_focus (GTK_WIDGET (expander), TRUE);
 
@@ -372,10 +408,10 @@ gtk_expander_init (GtkExpander *expander)
   gtk_widget_add_css_class (priv->arrow_widget, GTK_STYLE_CLASS_HORIZONTAL);
   gtk_container_add (GTK_CONTAINER (priv->title_widget), priv->arrow_widget);
 
-  dest = gtk_drop_target_new (NULL, 0);
-  g_signal_connect (dest, "accept", G_CALLBACK (gtk_expander_drag_accept), expander);
-  g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_expander_drag_leave), expander);
-  gtk_widget_add_controller (GTK_WIDGET (expander), GTK_EVENT_CONTROLLER (dest));
+  controller = gtk_drop_controller_motion_new ();
+  g_signal_connect (controller, "enter", G_CALLBACK (gtk_expander_drag_enter), expander);
+  g_signal_connect (controller, "leave", G_CALLBACK (gtk_expander_drag_leave), expander);
+  gtk_widget_add_controller (GTK_WIDGET (expander), controller);
 
   gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture),
@@ -528,48 +564,6 @@ gesture_click_released_cb (GtkGestureClick *gesture,
                            GtkExpander     *expander)
 {
   gtk_widget_activate (GTK_WIDGET (expander));
-}
-
-static gboolean
-expand_timeout (gpointer data)
-{
-  GtkExpander *expander = GTK_EXPANDER (data);
-  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
-
-  priv->expand_timer = 0;
-  gtk_expander_set_expanded (expander, TRUE);
-
-  return FALSE;
-}
-
-static gboolean
-gtk_expander_drag_accept (GtkDropTarget *dest,
-                          GdkDrop       *drop,
-                          GtkExpander   *expander)
-{
-  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
-
-  if (!priv->expanded && !priv->expand_timer)
-    {
-      priv->expand_timer = g_timeout_add (TIMEOUT_EXPAND, (GSourceFunc) expand_timeout, expander);
-      g_source_set_name_by_id (priv->expand_timer, "[gtk] expand_timeout");
-    }
-
-  return TRUE;
-}
-
-static void
-gtk_expander_drag_leave (GtkDropTarget *dest,
-                         GdkDrop       *drop,
-                         GtkExpander   *expander)
-{
-  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
-
-  if (priv->expand_timer)
-    {
-      g_source_remove (priv->expand_timer);
-      priv->expand_timer = 0;
-    }
 }
 
 typedef enum

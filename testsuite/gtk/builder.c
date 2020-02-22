@@ -1541,15 +1541,15 @@ test_widget (void)
 
   accessible = gtk_widget_get_accessible (GTK_WIDGET (label1));
   relation_set = atk_object_ref_relation_set (accessible);
-  g_return_if_fail (atk_relation_set_get_n_relations (relation_set) == 1);
+  g_assert_cmpint (atk_relation_set_get_n_relations (relation_set), ==, 1);
   relation = atk_relation_set_get_relation (relation_set, 0);
-  g_return_if_fail (relation != NULL);
-  g_return_if_fail (ATK_IS_RELATION (relation));
-  g_return_if_fail (atk_relation_get_relation_type (relation) != ATK_RELATION_LABELLED_BY);
+  g_assert (relation != NULL);
+  g_assert_true (ATK_IS_RELATION (relation));
+  g_assert_cmpint (atk_relation_get_relation_type (relation), !=, ATK_RELATION_LABELLED_BY);
   g_object_unref (relation_set);
 
   g_object_get (G_OBJECT (accessible), "accessible-name", &name, NULL);
-  g_return_if_fail (strcmp (name, "A Label") == 0);
+  g_assert_cmpstr (name, ==, "A Label");
   g_free (name);
   
   gtk_widget_destroy (GTK_WIDGET (window1));

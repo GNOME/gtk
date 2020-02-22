@@ -157,11 +157,13 @@ view_column_model_get_value (GtkTreeModel *tree_model,
 			     gint          column,
 			     GValue       *value)
 {
+#ifndef G_DISABLE_CHECKS
   ViewColumnModel *view_model = (ViewColumnModel *)tree_model;
 
   g_return_if_fail (column < 2);
   g_return_if_fail (view_model->stamp == iter->stamp);
   g_return_if_fail (iter->user_data != NULL);
+#endif
 
   if (column == 0)
     {
@@ -179,10 +181,12 @@ static gboolean
 view_column_model_iter_next (GtkTreeModel  *tree_model,
 			     GtkTreeIter   *iter)
 {
+#ifndef G_DISABLE_CHECKS
   ViewColumnModel *view_model = (ViewColumnModel *)tree_model;
 
   g_return_val_if_fail (view_model->stamp == iter->stamp, FALSE);
   g_return_val_if_fail (iter->user_data != NULL, FALSE);
+#endif
 
   iter->user_data = ((GList *)iter->user_data)->next;
   return iter->user_data != NULL;

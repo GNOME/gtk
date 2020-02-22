@@ -125,33 +125,22 @@ create_popup_layout (GtkTooltipWindow *window)
 }
 
 static void
-relayout_popup (GtkTooltipWindow *window)
-{
-  GdkPopupLayout *layout;
-
-  if (!gtk_widget_get_visible (GTK_WIDGET (window)))
-    return;
-
-  layout = create_popup_layout (window);
-  gdk_surface_present_popup (window->surface,
-                             gdk_surface_get_width (window->surface),
-                             gdk_surface_get_height (window->surface),
-                             layout);
-  gdk_popup_layout_unref (layout);
-}
-
-static void
-gtk_tooltip_window_move_resize (GtkTooltipWindow *window)
+gtk_tooltip_window_relayout (GtkTooltipWindow *window)
 {
   GtkRequisition req;
+  GdkPopupLayout *layout;
 
-  if (window->surface)
-    {
-      gtk_widget_get_preferred_size (GTK_WIDGET (window), NULL, &req);
-      gdk_surface_resize (window->surface, req.width, req.height);
+  if (!gtk_widget_get_visible (GTK_WIDGET (window)) ||
+      window->surface == NULL)
+    return;
 
-      relayout_popup (window);
-    }
+  gtk_widget_get_preferred_size (GTK_WIDGET (window), NULL, &req);
+  layout = create_popup_layout (window);
+  gdk_surface_present_popup (window->surface,
+                             MAX (req.width, 1),
+                             MAX (req.height, 1),
+                             layout);
+  gdk_popup_layout_unref (layout);
 }
 
 static void
@@ -164,7 +153,7 @@ gtk_tooltip_window_native_check_resize (GtkNative *native)
     gtk_widget_ensure_allocate (widget);
   else if (gtk_widget_get_visible (widget))
     {
-      gtk_tooltip_window_move_resize (window);
+      gtk_tooltip_window_relayout (window);
       if (window->surface)
         gtk_widget_allocate (GTK_WIDGET (window),
                              gdk_surface_get_width (window->surface),
@@ -281,7 +270,7 @@ surface_transform_changed_cb (GtkWidget               *widget,
 {
   GtkTooltipWindow *window = GTK_TOOLTIP_WINDOW (widget);
 
-  relayout_popup (window);
+  gtk_tooltip_window_relayout (window);
 
   return G_SOURCE_CONTINUE;
 }
@@ -360,8 +349,6 @@ gtk_tooltip_window_size_allocate (GtkWidget *widget,
 {
   GtkTooltipWindow *window = GTK_TOOLTIP_WINDOW (widget);
   GtkWidget *child;
-
-  gtk_tooltip_window_move_resize (window);
 
   child = gtk_bin_get_child (GTK_BIN (window));
 
@@ -608,6 +595,6 @@ gtk_tooltip_window_position (GtkTooltipWindow *window,
   window->dx = dx;
   window->dy = dy;
 
-  relayout_popup (window);
+  gtk_tooltip_window_relayout (window);
 }
 

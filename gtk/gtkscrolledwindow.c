@@ -3491,12 +3491,11 @@ gtk_scrolled_window_add (GtkContainer *container,
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (container);
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
   GtkBin *bin;
-  GtkWidget *child_widget, *scrollable_child;
+  GtkWidget *scrollable_child;
   GtkAdjustment *hadj, *vadj;
 
   bin = GTK_BIN (container);
-  child_widget = gtk_bin_get_child (bin);
-  g_return_if_fail (child_widget == NULL);
+  g_return_if_fail (gtk_bin_get_child (GTK_BIN (scrolled_window)) == NULL);
 
   /* gtk_scrolled_window_set_[hv]adjustment have the side-effect
    * of creating the scrollbars

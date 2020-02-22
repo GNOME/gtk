@@ -276,6 +276,7 @@ gtk_level_bar_ensure_offset (GtkLevelBar *self,
   return TRUE;
 }
 
+#ifndef G_DISABLE_CHECKS
 static gboolean
 gtk_level_bar_value_in_interval (GtkLevelBar *self,
                                  gdouble      value)
@@ -285,6 +286,7 @@ gtk_level_bar_value_in_interval (GtkLevelBar *self,
   return ((value >= priv->min_value) &&
           (value <= priv->max_value));
 }
+#endif
 
 static gint
 gtk_level_bar_get_num_blocks (GtkLevelBar *self)
