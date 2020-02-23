@@ -3486,7 +3486,7 @@ gtk_scrolled_window_add (GtkContainer *container,
   GtkAdjustment *hadj, *vadj;
 
   bin = GTK_BIN (container);
-  g_return_if_fail (gtk_bin_get_child (GTK_BIN (scrolled_window)) == NULL);
+  g_return_if_fail (gtk_bin_get_child (bin) == NULL);
 
   /* gtk_scrolled_window_set_[hv]adjustment have the side-effect
    * of creating the scrollbars
