@@ -45,8 +45,6 @@
 /* Forward declarations */
 static void        gdk_broadway_surface_finalize   (GObject            *object);
 
-#define SURFACE_IS_TOPLEVEL(surface)  TRUE
-
 G_DEFINE_TYPE (GdkBroadwaySurface, gdk_broadway_surface, GDK_TYPE_SURFACE)
 
 /* We need to flush in an idle rather than AFTER_PAINT, as the clock
@@ -733,8 +731,7 @@ static void
 gdk_broadway_surface_set_icon_name (GdkSurface   *surface,
                                    const gchar *name)
 {
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   g_object_set_qdata (G_OBJECT (surface), g_quark_from_static_string ("gdk-icon-name-set"),
@@ -744,24 +741,21 @@ gdk_broadway_surface_set_icon_name (GdkSurface   *surface,
 static void
 gdk_broadway_surface_minimize (GdkSurface *surface)
 {
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 }
 
 static void
 gdk_broadway_surface_unminimize (GdkSurface *surface)
 {
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 }
 
 static void
 gdk_broadway_surface_stick (GdkSurface *surface)
 {
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
 }
@@ -769,8 +763,7 @@ gdk_broadway_surface_stick (GdkSurface *surface)
 static void
 gdk_broadway_surface_unstick (GdkSurface *surface)
 {
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
 }
@@ -783,8 +776,7 @@ gdk_broadway_surface_maximize (GdkSurface *surface)
   GdkMonitor *monitor;
   GdkRectangle geom;
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   impl = GDK_BROADWAY_SURFACE (surface);
@@ -815,8 +807,7 @@ gdk_broadway_surface_unmaximize (GdkSurface *surface)
 {
   GdkBroadwaySurface *impl;
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   impl = GDK_BROADWAY_SURFACE (surface);
@@ -838,8 +829,7 @@ gdk_broadway_surface_unmaximize (GdkSurface *surface)
 static void
 gdk_broadway_surface_fullscreen (GdkSurface *surface)
 {
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
 }
@@ -847,8 +837,7 @@ gdk_broadway_surface_fullscreen (GdkSurface *surface)
 static void
 gdk_broadway_surface_unfullscreen (GdkSurface *surface)
 {
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
 }
@@ -859,8 +848,7 @@ gdk_broadway_surface_set_keep_above (GdkSurface *surface,
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
 }
@@ -870,8 +858,7 @@ gdk_broadway_surface_set_keep_below (GdkSurface *surface, gboolean setting)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
 }
@@ -880,8 +867,7 @@ static void
 gdk_broadway_surface_set_decorations (GdkSurface      *surface,
                                       GdkWMDecoration decorations)
 {
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
 }
@@ -892,8 +878,7 @@ gdk_broadway_surface_get_decorations (GdkSurface       *surface,
 {
   gboolean result = FALSE;
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return FALSE;
 
   return result;
@@ -905,8 +890,7 @@ gdk_broadway_surface_set_functions (GdkSurface    *surface,
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 }
 
@@ -1306,8 +1290,7 @@ gdk_broadway_surface_begin_resize_drag (GdkSurface     *surface,
 
   impl = GDK_BROADWAY_SURFACE (surface);
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   if (impl->maximized)
@@ -1349,8 +1332,7 @@ gdk_broadway_surface_begin_move_drag (GdkSurface *surface,
 
   impl = GDK_BROADWAY_SURFACE (surface);
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   if (impl->maximized)
@@ -1390,8 +1372,7 @@ gdk_broadway_surface_set_opacity (GdkSurface *surface,
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   if (opacity < 0)
