@@ -2402,7 +2402,7 @@ gdk_x11_surface_get_geometry (GdkSurface *surface,
     }
 }
 
-static void
+void
 gdk_x11_surface_get_root_coords (GdkSurface *surface,
 				gint       x,
 				gint       y,

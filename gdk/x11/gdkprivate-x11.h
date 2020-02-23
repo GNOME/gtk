@@ -230,6 +230,12 @@ GdkDrag        * _gdk_x11_surface_drag_begin (GdkSurface          *window,
                                               gint                dx,
                                               gint                dy);
 
+void gdk_x11_surface_get_root_coords (GdkSurface *surface,
+                                      gint        x,
+                                      gint        y,
+                                      gint       *root_x,
+                                      gint       *root_y);
+
 GdkGrabStatus _gdk_x11_convert_grab_status (gint status);
 
 cairo_surface_t * _gdk_x11_display_create_bitmap_surface (GdkDisplay *display,
