@@ -1539,7 +1539,7 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   win32_clipdrop->GetUpdatedClipboardFormats = GetProcAddress (user32, "GetUpdatedClipboardFormats");
   FreeLibrary (user32);
 
-  atoms = g_array_sized_new (FALSE, TRUE, sizeof (GdkAtom), GDK_WIN32_ATOM_INDEX_LAST);
+  atoms = g_array_sized_new (FALSE, TRUE, sizeof (const char *), GDK_WIN32_ATOM_INDEX_LAST);
   g_array_set_size (atoms, GDK_WIN32_ATOM_INDEX_LAST);
   cfs = g_array_sized_new (FALSE, TRUE, sizeof (UINT), GDK_WIN32_CF_INDEX_LAST);
   g_array_set_size (cfs, GDK_WIN32_CF_INDEX_LAST);
@@ -2681,8 +2681,8 @@ _gdk_win32_transmute_contentformat (const gchar   *from_contentformat,
 }
 
 gint
-_gdk_win32_add_contentformat_to_pairs (const gchar *contentformat,
-                                       GArray      *array)
+_gdk_win32_add_contentformat_to_pairs (const char *contentformat,
+                                       GArray     *array)
 {
   gint added_count = 0;
   wchar_t *contentformat_w;
