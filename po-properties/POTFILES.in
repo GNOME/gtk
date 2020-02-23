@@ -124,6 +124,7 @@ gtk/gtkdialog.c
 gtk/gtkdragdest.c
 gtk/gtkdragsource.c
 gtk/gtkdrawingarea.c
+gtk/gtkdropcontrollermotion.c
 gtk/gtkeditable.c
 gtk/gtkentrybuffer.c
 gtk/gtkentry.c
@@ -248,7 +249,6 @@ gtk/gtkscrolledwindow.c
 gtk/gtksearchbar.c
 gtk/gtksearchengine.c
 gtk/gtksearchentry.c
-gtk/gtkselection.c
 gtk/gtkseparator.c
 gtk/gtksettings.c
 gtk/gtkshortcutlabel.c
