@@ -108,14 +108,6 @@ typedef struct _GdkRectangle          GdkRectangle;
 typedef cairo_rectangle_int_t         GdkRectangle;
 #endif
 
-/**
- * GdkAtom:
- *
- * An opaque type representing a string as an index into a table
- * of strings on the X server.
- */
-typedef const char                   *GdkAtom;
-
 /* Forward declarations of commonly used types */
 typedef struct _GdkRGBA               GdkRGBA;
 typedef struct _GdkContentFormats     GdkContentFormats;

@@ -13,7 +13,7 @@ test_to_text_list (void)
 
   if (GDK_IS_X11_DISPLAY (display))
     {
-      GdkAtom encoding;
+      const char *encoding;
       gint format;
       const guchar *text;
       gint length;
