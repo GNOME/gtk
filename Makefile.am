@@ -28,7 +28,9 @@ EXTRA_DIST +=			\
 	po/meson.build	\
 	po-properties/meson.build	\
 	build-aux/meson/post-install.py	\
-	config.h.meson
+	config.h.meson		\
+	gtk.supp		\
+	gtk64.supp
 
 MAINTAINERCLEANFILES = \
 	$(GITIGNORE_MAINTAINERCLEANFILES_TOPLEVEL) \
@@ -40,6 +42,10 @@ MAINTAINERCLEANFILES = \
 	$(srcdir)/gtk-doc.make \
 	$(srcdir)/ChangeLog
 
+if OS_UNIX
+valgrinddir = $(datadir)/gtk-3.0/valgrind
+valgrind_DATA = gtk.supp gtk64.supp
+endif
 
 ## Copy .pc files to target-specific names
 gtk+-x11-3.0.pc gtk+-win32-3.0.pc gtk+-quartz-3.0.pc gtk+-broadway-3.0.pc gtk+-wayland-3.0.pc: gtk+-3.0.pc
