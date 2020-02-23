@@ -35,8 +35,8 @@
 /**
  * gdk_x11_display_text_property_to_text_list:
  * @display: (type GdkX11Display): The #GdkDisplay where the encoding is defined
- * @encoding: an atom representing the encoding. The most
- *    common values for this are STRING, or COMPOUND_TEXT.
+ * @encoding: a string representing the encoding. The most
+ *    common values for this are "STRING", or "COMPOUND_TEXT".
  *    This is value used as the type for the property
  * @format: the format of the property
  * @text: The text data
@@ -55,7 +55,7 @@
  */
 gint
 gdk_x11_display_text_property_to_text_list (GdkDisplay   *display,
-                                            GdkAtom       encoding,
+                                            const char   *encoding,
                                             gint          format,
                                             const guchar *text,
                                             gint          length,
@@ -74,7 +74,7 @@ gdk_x11_display_text_property_to_text_list (GdkDisplay   *display,
     return 0;
 
   property.value = (guchar *)text;
-  property.encoding = gdk_x11_atom_to_xatom_for_display (display, encoding);
+  property.encoding = gdk_x11_get_xatom_by_name_for_display (display, encoding);
   property.format = format;
   property.nitems = length;
   res = XmbTextPropertyToTextList (GDK_DISPLAY_XDISPLAY (display), &property,
@@ -188,17 +188,17 @@ make_list (const gchar  *text,
 
 gint
 _gdk_x11_display_text_property_to_utf8_list (GdkDisplay    *display,
-                                             GdkAtom        encoding,
+                                             const char    *encoding,
                                              gint           format,
                                              const guchar  *text,
                                              gint           length,
                                              gchar       ***list)
 {
-  if (encoding == g_intern_static_string ("STRING"))
+  if (g_str_equal (encoding, "STRING"))
     {
       return make_list ((gchar *)text, length, TRUE, list);
     }
-  else if (encoding == g_intern_static_string ("UTF8_STRING"))
+  else if (g_str_equal (encoding, "UTF8_STRING"))
     {
       return make_list ((gchar *)text, length, FALSE, list);
     }
@@ -273,7 +273,7 @@ _gdk_x11_display_text_property_to_utf8_list (GdkDisplay    *display,
  * gdk_x11_display_string_to_compound_text:
  * @display: (type GdkX11Display): the #GdkDisplay where the encoding is defined
  * @str: a nul-terminated string
- * @encoding: (out) (transfer none): location to store the encoding atom
+ * @encoding: (out) (transfer none): location to store the encoding
  *     (to be used as the type for the property)
  * @format: (out): location to store the format of the property
  * @ctext: (out) (array length=length): location to store newly
@@ -287,8 +287,8 @@ _gdk_x11_display_text_property_to_utf8_list (GdkDisplay    *display,
  */
 gint
 gdk_x11_display_string_to_compound_text (GdkDisplay  *display,
-                                         const gchar *str,
-                                         GdkAtom     *encoding,
+                                         const char  *str,
+                                         const char **encoding,
                                          gint        *format,
                                          guchar     **ctext,
                                          gint        *length)
@@ -313,7 +313,7 @@ gdk_x11_display_string_to_compound_text (GdkDisplay  *display,
     }
 
   if (encoding)
-    *encoding = gdk_x11_xatom_to_atom_for_display (display, property.encoding);
+    *encoding = gdk_x11_get_xatom_name_for_display (display, property.encoding);
   if (format)
     *format = property.format;
   if (ctext)
@@ -328,7 +328,7 @@ gdk_x11_display_string_to_compound_text (GdkDisplay  *display,
  * gdk_x11_display_utf8_to_compound_text:
  * @display: (type GdkX11Display): a #GdkDisplay
  * @str: a UTF-8 string
- * @encoding: (out): location to store resulting encoding
+ * @encoding: (out) (transfer none): location to store resulting encoding
  * @format: (out): location to store format of the result
  * @ctext: (out) (array length=length): location to store the data of the result
  * @length: location to store the length of the data
@@ -341,8 +341,8 @@ gdk_x11_display_string_to_compound_text (GdkDisplay  *display,
  */
 gboolean
 gdk_x11_display_utf8_to_compound_text (GdkDisplay  *display,
-                                       const gchar *str,
-                                       GdkAtom     *encoding,
+                                       const char  *str,
+                                       const char **encoding,
                                        gint        *format,
                                        guchar     **ctext,
                                        gint        *length)
@@ -377,7 +377,7 @@ gdk_x11_display_utf8_to_compound_text (GdkDisplay  *display,
           g_error_free (error);
 
           if (encoding)
-            *encoding = None;
+            *encoding = NULL;
           if (format)
             *format = None;
           if (ctext)

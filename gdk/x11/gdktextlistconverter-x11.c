@@ -222,7 +222,7 @@ gdk_x11_text_list_converter_encode (GdkX11TextListConverter *conv,
     {
       GConverterResult result;
       guchar *text;
-      GdkAtom encoding;
+      const char *encoding;
       gint format;
       gint new_length;
       char *tmp;
@@ -231,7 +231,7 @@ gdk_x11_text_list_converter_encode (GdkX11TextListConverter *conv,
       if (gdk_x11_display_utf8_to_compound_text (conv->display, tmp,
                                                  &encoding, &format, &text, &new_length))
         {
-          if (encoding == g_intern_string (conv->encoding) &&
+          if (g_str_equal (encoding, conv->encoding) &&
               format == conv->format)
             {
               result = write_output (outbuf, outbuf_size, bytes_written, text, new_length, error);

@@ -90,8 +90,8 @@ struct _GdkX11Display
   GdkDrop *current_drop;
 
   /* Mapping to/from virtual atoms */
-  GHashTable *atom_from_virtual;
-  GHashTable *atom_to_virtual;
+  GHashTable *atom_from_string;
+  GHashTable *atom_to_string;
 
   /* Session Management leader window see ICCCM */
   char *program_class;

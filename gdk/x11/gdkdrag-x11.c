@@ -1055,8 +1055,8 @@ xdnd_send_enter (GdkX11Drag *drag_x11)
   GdkDrag *drag = GDK_DRAG (drag_x11);
   GdkDisplay *display = gdk_drag_get_display (drag);
   GdkContentFormats *formats;
-  const char * const *atoms;
-  gsize i, n_atoms;
+  const char * const *mime_types;
+  gsize i, n_mime_types;
   XEvent xev;
 
   xev.xclient.type = ClientMessage;
@@ -1077,9 +1077,9 @@ xdnd_send_enter (GdkX11Drag *drag_x11)
   formats = gdk_content_formats_ref (gdk_drag_get_formats (drag));
   formats = gdk_content_formats_union_serialize_mime_types (formats);
 
-  atoms = gdk_content_formats_get_mime_types (formats, &n_atoms);
+  mime_types = gdk_content_formats_get_mime_types (formats, &n_mime_types);
 
-  if (n_atoms > 3)
+  if (n_mime_types > 3)
     {
       if (!drag_x11->xdnd_targets_set)
         xdnd_set_targets (drag_x11);
@@ -1087,9 +1087,9 @@ xdnd_send_enter (GdkX11Drag *drag_x11)
     }
   else
     {
-      for (i = 0; i < n_atoms; i++)
+      for (i = 0; i < n_mime_types; i++)
         {
-          xev.xclient.data.l[i + 2] = gdk_x11_atom_to_xatom_for_display (display, atoms[i]);
+          xev.xclient.data.l[i + 2] = gdk_x11_get_xatom_by_name_for_display (display, mime_types[i]);
         }
     }
 

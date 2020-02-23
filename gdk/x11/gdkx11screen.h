@@ -59,7 +59,7 @@ const char* gdk_x11_screen_get_window_manager_name (GdkX11Screen *screen);
 
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_x11_screen_supports_net_wm_hint (GdkX11Screen *screen,
-                                              GdkAtom       property);
+                                              const char   *property_name);
 
 GDK_AVAILABLE_IN_ALL
 XID      gdk_x11_screen_get_monitor_output   (GdkX11Screen *screen,

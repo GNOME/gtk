@@ -120,7 +120,7 @@ void _gdk_x11_display_queue_events            (GdkDisplay *display);
 GdkAppLaunchContext *_gdk_x11_display_get_app_launch_context (GdkDisplay *display);
 
 gint        _gdk_x11_display_text_property_to_utf8_list (GdkDisplay     *display,
-                                                         GdkAtom         encoding,
+                                                         const char     *encoding,
                                                          gint            format,
                                                          const guchar   *text,
                                                          gint            length,
@@ -161,12 +161,6 @@ gdouble  gdk_x11_device_xi2_get_last_axis_value (GdkX11DeviceXI2 *device,
 void     gdk_x11_device_xi2_store_axes          (GdkX11DeviceXI2 *device,
                                                  gdouble         *axes,
                                                  gint             n_axes);
-
-GdkAtom _gdk_x11_display_manager_atom_intern   (GdkDisplayManager *manager,
-                                                const gchar       *atom_name,
-                                                gboolean           copy_name);
-gchar * _gdk_x11_display_manager_get_atom_name (GdkDisplayManager *manager,
-                                                GdkAtom            atom);
 
 gboolean   _gdk_x11_display_supports_cursor_alpha   (GdkDisplay    *display);
 gboolean   _gdk_x11_display_supports_cursor_color   (GdkDisplay    *display);

@@ -605,12 +605,6 @@ gdk_check_edge_constraints_changed (GdkSurface *surface)
   do_net_wm_state_changes (surface);
 }
 
-static Atom
-get_cm_atom (GdkDisplay *display)
-{
-  return _gdk_x11_get_xatom_for_display_printf (display, "_NET_WM_CM_S%d", DefaultScreen (GDK_DISPLAY_XDISPLAY (display)));
-}
-
 static Window
 get_event_xwindow (const XEvent *xevent)
 {
@@ -1417,10 +1411,10 @@ gdk_x11_display_open (const gchar *display_name)
   GdkX11Display *display_x11;
   gint argc;
   gchar *argv[1];
-
   XClassHint *class_hint;
   gint ignore;
   gint maj, min;
+  char *cm_name;
 
   XInitThreads ();
 
@@ -1663,10 +1657,12 @@ gdk_x11_display_open (const gchar *display_name)
    * notification, and then setup the initial state of
    * is_composited to avoid a race condition here.
    */
-  gdk_x11_display_request_selection_notification (display,
-                                                  gdk_x11_xatom_to_atom_for_display (display, get_cm_atom (display)));
+  cm_name = g_strdup_printf ("_NET_WM_CM_S%d", DefaultScreen (GDK_DISPLAY_XDISPLAY (display)));
+  gdk_x11_display_request_selection_notification (display, cm_name);
   gdk_display_set_composited (GDK_DISPLAY (display),
-                              XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display), get_cm_atom (display)) != None);
+                              XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display),
+                                                  gdk_x11_get_xatom_by_name_for_display (display, cm_name)) != None);
+  g_free (cm_name);
 
   gdk_display_emit_opened (display);
 
@@ -1961,8 +1957,8 @@ gdk_x11_display_finalize (GObject *object)
   g_slist_free_full (display_x11->streams, g_object_unref);
 
   /* Atom Hashtable */
-  g_hash_table_destroy (display_x11->atom_from_virtual);
-  g_hash_table_destroy (display_x11->atom_to_virtual);
+  g_hash_table_destroy (display_x11->atom_from_string);
+  g_hash_table_destroy (display_x11->atom_to_string);
 
   /* Leader Window */
   XDestroyWindow (display_x11->xdisplay, display_x11->leader_window);
