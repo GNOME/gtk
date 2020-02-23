@@ -62,9 +62,6 @@ GDK_AVAILABLE_IN_ALL
 void       gtk_statusbar_remove_all    	(GtkStatusbar *statusbar,
 					 guint	       context_id);
 
-GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_statusbar_get_message_area  (GtkStatusbar *statusbar);
-
 G_END_DECLS
 
 #endif /* __GTK_STATUSBAR_H__ */
