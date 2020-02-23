@@ -19,6 +19,7 @@
 
 #include <string.h>
 #include <gtk/gtk.h>
+#include "gtkstatusbarprivate.h"
 #include "gtkstatusbaraccessible.h"
 
 
@@ -51,50 +52,11 @@ gtk_statusbar_accessible_initialize (AtkObject *obj,
   obj->role = ATK_ROLE_STATUSBAR;
 }
 
-static GtkWidget *
-find_label_child (GtkContainer *container)
-{
-  GList *children, *tmp_list;
-  GtkWidget *child;
-
-  children = gtk_container_get_children (container);
-
-  child = NULL;
-  for (tmp_list = children; tmp_list != NULL; tmp_list = tmp_list->next)
-    {
-      if (GTK_IS_LABEL (tmp_list->data))
-        {
-          child = GTK_WIDGET (tmp_list->data);
-          break;
-        }
-      else if (GTK_IS_CONTAINER (tmp_list->data))
-        {
-          child = find_label_child (GTK_CONTAINER (tmp_list->data));
-          if (child)
-            break;
-        }
-    }
-  g_list_free (children);
-
-  return child;
-}
-
-static GtkWidget *
-get_label_from_statusbar (GtkStatusbar *statusbar)
-{
-  GtkWidget *box;
-
-  box = gtk_statusbar_get_message_area (statusbar);
-
-  return find_label_child (GTK_CONTAINER (box));
-}
-
 static const gchar *
 gtk_statusbar_accessible_get_name (AtkObject *obj)
 {
   const gchar *name;
   GtkWidget *widget;
-  GtkWidget *label;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
@@ -104,11 +66,7 @@ gtk_statusbar_accessible_get_name (AtkObject *obj)
   if (name != NULL)
     return name;
 
-  label = get_label_from_statusbar (GTK_STATUSBAR (widget));
-  if (GTK_IS_LABEL (label))
-    return gtk_label_get_label (GTK_LABEL (label));
-
-  return NULL;
+  return gtk_statusbar_get_message (GTK_STATUSBAR (widget));
 }
 
 static gint
