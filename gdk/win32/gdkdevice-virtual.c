@@ -36,7 +36,7 @@ _gdk_device_virtual_set_active (GdkDevice *device,
 {
   GdkDeviceVirtual *virtual = GDK_DEVICE_VIRTUAL (device);
   int n_axes, i;
-  GdkAtom label_atom;
+  const char *label_atom;
   GdkAxisUse use;
   gdouble min_value, max_value, resolution;
 

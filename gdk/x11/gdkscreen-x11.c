@@ -1208,7 +1208,7 @@ fetch_net_wm_check_window (GdkX11Screen *x11_screen)
 /**
  * gdk_x11_screen_supports_net_wm_hint:
  * @screen: the relevant #GdkX11Screen.
- * @property: a property atom.
+ * @property_name: name of the WM property
  *
  * This function is specific to the X11 backend of GDK, and indicates
  * whether the window manager supports a certain hint from the
@@ -1227,7 +1227,7 @@ fetch_net_wm_check_window (GdkX11Screen *x11_screen)
  **/
 gboolean
 gdk_x11_screen_supports_net_wm_hint (GdkX11Screen *x11_screen,
-				     GdkAtom    property)
+				     const char   *property_name)
 {
   gulong i;
   NetWmSupportedAtoms *supported_atoms;
@@ -1281,7 +1281,7 @@ gdk_x11_screen_supports_net_wm_hint (GdkX11Screen *x11_screen,
   if (supported_atoms->atoms == NULL)
     return FALSE;
 
-  atom = gdk_x11_atom_to_xatom_for_display (display, property);
+  atom = gdk_x11_get_xatom_by_name_for_display (display, property_name);
 
   for (i = 0; i < supported_atoms->n_atoms; i++)
     {
@@ -1382,7 +1382,6 @@ static guint32
 get_netwm_cardinal_property (GdkX11Screen *x11_screen,
                              const gchar  *name)
 {
-  GdkAtom atom;
   guint32 prop = 0;
   Atom type;
   gint format;
@@ -1390,9 +1389,7 @@ get_netwm_cardinal_property (GdkX11Screen *x11_screen,
   gulong bytes_after;
   guchar *data;
 
-  atom = g_intern_static_string (name);
-
-  if (!gdk_x11_screen_supports_net_wm_hint (x11_screen, atom))
+  if (!gdk_x11_screen_supports_net_wm_hint (x11_screen, name))
     return 0;
 
   XGetWindowProperty (x11_screen->xdisplay,

@@ -27,7 +27,6 @@
 #include "gdkdragprivate.h"
 
 #include "gdksurfaceprivate.h"
-#include "gdkproperty.h"
 #include "gdkprivate-broadway.h"
 #include "gdkinternals.h"
 #include "gdkdisplay-broadway.h"
@@ -102,16 +101,6 @@ _gdk_broadway_surface_drag_begin (GdkSurface         *surface,
                               NULL);
 
   return new_context;
-}
-
-void
-_gdk_broadway_surface_register_dnd (GdkSurface      *surface)
-{
-}
-
-void
-_gdk_broadway_display_init_dnd (GdkDisplay *display)
-{
 }
 
 static void

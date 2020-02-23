@@ -50,7 +50,6 @@
 #include "gtklabel.h"
 #include "gtkbutton.h"
 #include "gtklistbox.h"
-#include "gtkselection.h"
 #include "gtkdragdest.h"
 #include "gtkseparator.h"
 #include "gtkentry.h"
@@ -65,7 +64,6 @@
 #include "gtkdragsource.h"
 #include "gtkdragicon.h"
 #include "gtkwidgetpaintable.h"
-#include "gtkselectionprivate.h"
 #include "gtkstylecontext.h"
 
 /*< private >

@@ -650,6 +650,7 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
     }
 
   _gdk_win32_surface_enable_transparency (surface);
+  _gdk_win32_surface_register_dnd (surface);
 
   g_signal_connect (frame_clock,
                     "after-paint",
@@ -5236,7 +5237,6 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
   impl_class->begin_move_drag = gdk_win32_surface_begin_move_drag;
   impl_class->set_opacity = gdk_win32_surface_set_opacity;
   impl_class->destroy_notify = gdk_win32_surface_destroy_notify;
-  impl_class->register_dnd = _gdk_win32_surface_register_dnd;
   impl_class->drag_begin = _gdk_win32_surface_drag_begin;
   impl_class->create_gl_context = _gdk_win32_surface_create_gl_context;
   impl_class->get_scale_factor = _gdk_win32_surface_get_scale_factor;

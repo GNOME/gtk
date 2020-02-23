@@ -35,7 +35,6 @@
 #include "gdkdragprivate.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
-#include "gdkproperty.h"
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
 #include "gdkselectioninputstream-x11.h"
@@ -430,37 +429,6 @@ xdnd_source_surface_filter (GdkDisplay   *display,
   return FALSE;
 }
 
-static void
-xdnd_precache_atoms (GdkDisplay *display)
-{
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
-
-  if (!display_x11->xdnd_atoms_precached)
-    {
-      static const gchar *const precache_atoms[] = {
-        "XdndActionAsk",
-        "XdndActionCopy",
-        "XdndActionLink",
-        "XdndActionList",
-        "XdndActionMove",
-        "XdndActionPrivate",
-        "XdndDrop",
-        "XdndEnter",
-        "XdndFinished",
-        "XdndLeave",
-        "XdndPosition",
-        "XdndSelection",
-        "XdndStatus",
-        "XdndTypeList"
-      };
-
-      _gdk_x11_precache_atoms (display,
-                               precache_atoms, G_N_ELEMENTS (precache_atoms));
-
-      display_x11->xdnd_atoms_precached = TRUE;
-    }
-}
-
 static gboolean
 xdnd_enter_filter (GdkSurface   *surface,
                    const XEvent *xevent)
@@ -489,8 +457,6 @@ xdnd_enter_filter (GdkSurface   *surface,
 
   display = gdk_surface_get_display (surface);
   display_x11 = GDK_X11_DISPLAY (display);
-
-  xdnd_precache_atoms (display);
 
   GDK_DISPLAY_NOTE (display, DND,
             g_message ("XdndEnter: source_window: %#lx, version: %#x",
@@ -608,8 +574,6 @@ xdnd_leave_filter (GdkSurface   *surface,
             g_message ("XdndLeave: source_window: %#lx",
                        source_window));
 
-  xdnd_precache_atoms (display);
-
   if ((display_x11->current_drop != NULL) &&
       (GDK_X11_DROP (display_x11->current_drop)->source_window == source_window))
     {
@@ -643,8 +607,6 @@ xdnd_position_filter (GdkSurface   *surface,
   GDK_DISPLAY_NOTE (display, DND,
             g_message ("XdndPosition: source_window: %#lx position: (%d, %d)  time: %d  action: %ld",
                        source_window, x_root, y_root, time, action));
-
-  xdnd_precache_atoms (display);
 
   drop = display_x11->current_drop;
   drop_x11 = GDK_X11_DROP (drop);
@@ -692,8 +654,6 @@ xdnd_drop_filter (GdkSurface   *surface,
   GDK_DISPLAY_NOTE (display, DND,
             g_message ("XdndDrop: source_window: %#lx  time: %d",
                        source_window, time));
-
-  xdnd_precache_atoms (display);
 
   drop = display_x11->current_drop;
   drop_x11 = GDK_X11_DROP (drop);

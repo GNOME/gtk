@@ -54,7 +54,6 @@
 #include "gtkwidgetprivate.h"
 #include "gtkdragsource.h"
 #include "gtkwidgetpaintable.h"
-#include "gtkselectionprivate.h"
 #include "gtknative.h"
 
 #include "a11y/gtknotebookaccessible.h"

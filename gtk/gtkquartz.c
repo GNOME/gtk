@@ -19,7 +19,6 @@
 #include "config.h"
 
 #include "gtkquartz.h"
-#include "gtkselectionprivate.h"
 #include <gdk/quartz/gdkquartz.h>
 
 

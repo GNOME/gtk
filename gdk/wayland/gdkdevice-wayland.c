@@ -3347,7 +3347,7 @@ gdk_wayland_mimic_device_axes (GdkDevice *master,
                                GdkDevice *slave)
 {
   gdouble axis_min, axis_max, axis_resolution;
-  GdkAtom axis_label;
+  const char *axis_label;
   GdkAxisUse axis_use;
   gint axis_count;
   gint i;

@@ -225,7 +225,6 @@ struct _GdkSurfaceClass
   void         (* set_opacity)          (GdkSurface *surface,
                                          gdouble    opacity);
   void         (* destroy_notify)       (GdkSurface *surface);
-  void         (* register_dnd)         (GdkSurface *surface);
   GdkDrag * (*drag_begin)               (GdkSurface        *surface,
                                          GdkDevice        *device,
                                          GdkContentProvider*content,
