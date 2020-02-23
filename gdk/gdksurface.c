@@ -3561,18 +3561,6 @@ gdk_surface_destroy_notify (GdkSurface *surface)
 }
 
 /**
- * gdk_surface_register_dnd:
- * @surface: a #GdkSurface.
- *
- * Registers a surface as a potential drop destination.
- */
-void
-gdk_surface_register_dnd (GdkSurface *surface)
-{
-  GDK_SURFACE_GET_CLASS (surface)->register_dnd (surface);
-}
-
-/**
  * gdk_drag_begin:
  * @surface: the source surface for this drag
  * @device: the device that controls this drag

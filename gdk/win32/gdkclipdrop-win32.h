@@ -24,7 +24,7 @@
 G_BEGIN_DECLS
 
 #define _gdk_win32_clipdrop_get() (_win32_clipdrop)
-#define _gdk_atom_array_index(a, i) (g_array_index (a, GdkAtom, i))
+#define _gdk_atom_array_index(a, i) (g_array_index (a, const char *, i))
 #define _gdk_win32_clipdrop_atom(i) (_gdk_atom_array_index (_gdk_win32_clipdrop_get ()->known_atoms, i))
 #define _gdk_cf_array_index(a, i) (g_array_index (a, UINT, i))
 #define _gdk_win32_clipdrop_cf(i) (_gdk_cf_array_index (_gdk_win32_clipdrop_get ()->known_clipboard_formats, i))
@@ -53,7 +53,7 @@ typedef enum {
 
 enum _GdkWin32AtomIndex
 {
-/* GdkAtoms: properties, targets and types */
+/* atoms: properties, targets and types */
   GDK_WIN32_ATOM_INDEX_GDK_SELECTION = 0,
   GDK_WIN32_ATOM_INDEX_CLIPBOARD_MANAGER,
   GDK_WIN32_ATOM_INDEX_WM_TRANSIENT_FOR,
@@ -243,7 +243,7 @@ gchar  * _gdk_win32_get_clipboard_format_name                      (UINT        
 void     _gdk_win32_add_w32format_to_pairs                         (UINT                         format,
                                                                     GArray                      *array,
                                                                     GdkContentFormatsBuilder    *builder);
-gint     _gdk_win32_add_contentformat_to_pairs                     (GdkAtom                      target,
+gint     _gdk_win32_add_contentformat_to_pairs                     (const char                  *target,
                                                                     GArray                      *array);
 
 void     _gdk_win32_clipboard_default_output_done                  (GObject                     *clipboard,

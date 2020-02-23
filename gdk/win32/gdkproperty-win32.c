@@ -29,7 +29,6 @@
 #include <glib/gprintf.h>
 #include <pango/pangowin32.h>
 
-#include "gdkproperty.h"
 #include "gdkdisplayprivate.h"
 #include "gdkprivate-win32.h"
 #include "gdkwin32.h"

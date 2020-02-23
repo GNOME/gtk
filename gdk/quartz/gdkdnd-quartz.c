@@ -69,12 +69,6 @@ gdk_quartz_drag_context_drag_abort (GdkDragContext *context,
   /* FIXME: Implement */
 }
 
-void
-_gdk_quartz_surface_register_dnd (GdkSurface *window)
-{
-  /* FIXME: Implement */
-}
-
 id
 gdk_quartz_drag_context_get_dragging_info_libgtk_only (GdkDragContext *context)
 {

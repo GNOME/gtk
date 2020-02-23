@@ -60,7 +60,6 @@
 #include <gdk/gdkpaintable.h>
 #include <gdk/gdkpango.h>
 #include <gdk/gdkpixbuf.h>
-#include <gdk/gdkproperty.h>
 #include <gdk/gdkrectangle.h>
 #include <gdk/gdkrgba.h>
 #include <gdk/gdkseat.h>

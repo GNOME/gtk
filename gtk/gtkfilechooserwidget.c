@@ -1854,35 +1854,28 @@ error_selecting_dragged_file_dialog (GtkFileChooserWidget *impl,
 }
 
 static void
-file_list_drag_data_select_uris (GtkFileChooserWidget  *impl,
-                                 gchar                 **uris)
+file_list_drag_data_select_files (GtkFileChooserWidget  *impl,
+                                  GSList                *files)
 {
-  int i;
-  char *uri;
   GtkFileChooser *chooser = GTK_FILE_CHOOSER (impl);
+  GSList *l;
 
-  for (i = 1; uris[i]; i++)
+  for (l = files; l; l = l->next)
     {
-      GFile *file;
+      GFile *file = l->data;
       GError *error = NULL;
-
-      uri = uris[i];
-      file = g_file_new_for_uri (uri);
 
       gtk_file_chooser_widget_select_file (chooser, file, &error);
       if (error)
         error_selecting_dragged_file_dialog (impl, file, error);
-
-      g_object_unref (file);
     }
 }
 
-struct FileListDragData
+typedef struct
 {
   GtkFileChooserWidget *impl;
-  gchar **uris;
-  GFile *file;
-};
+  GSList *files;
+} FileListDragData;
 
 static void
 file_list_drag_data_received_get_info_cb (GCancellable *cancellable,
@@ -1891,7 +1884,7 @@ file_list_drag_data_received_get_info_cb (GCancellable *cancellable,
                                           gpointer      user_data)
 {
   gboolean cancelled = g_cancellable_is_cancelled (cancellable);
-  struct FileListDragData *data = user_data;
+  FileListDragData *data = user_data;
   GtkFileChooser *chooser = GTK_FILE_CHOOSER (data->impl);
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (data->impl);
 
@@ -1905,27 +1898,26 @@ file_list_drag_data_received_get_info_cb (GCancellable *cancellable,
 
   if ((priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
        priv->action == GTK_FILE_CHOOSER_ACTION_SAVE) &&
-      data->uris[1] == 0 && !error && _gtk_file_info_consider_as_directory (info))
-    change_folder_and_display_error (data->impl, data->file, FALSE);
+      data->files->next == NULL && !error && _gtk_file_info_consider_as_directory (info))
+    change_folder_and_display_error (data->impl, data->files->data, FALSE);
   else
     {
       GError *local_error = NULL;
 
       gtk_file_chooser_widget_unselect_all (chooser);
-      gtk_file_chooser_widget_select_file (chooser, data->file, &local_error);
+      gtk_file_chooser_widget_select_file (chooser, data->files->data, &local_error);
       if (local_error)
-        error_selecting_dragged_file_dialog (data->impl, data->file, local_error);
+        error_selecting_dragged_file_dialog (data->impl, data->files->data, local_error);
       else
         browse_files_center_selected_row (data->impl);
     }
 
   if (priv->select_multiple)
-    file_list_drag_data_select_uris (data->impl, data->uris);
+    file_list_drag_data_select_files (data->impl, data->files->next);
 
 out:
   g_object_unref (data->impl);
-  g_strfreev (data->uris);
-  g_object_unref (data->file);
+  g_slist_free_full (data->files, g_object_unref);
   g_free (data);
 
   g_object_unref (cancellable);
@@ -1938,44 +1930,34 @@ file_list_drag_data_received_cb (GObject      *source,
 {
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (user_data);
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-  GtkDropTarget *dest = GTK_DROP_TARGET (source);
-  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
-  GdkDrop *drop = gtk_drop_target_get_drop (dest);
-  GdkDrag *drag = gdk_drop_get_drag (drop);
-  gchar **uris;
-  char *uri;
-  GFile *file;
-  GtkSelectionData *selection_data;
+  GdkDrop *drop = GDK_DROP (source);
+  GSList *files;
+  const GValue *value;
+  FileListDragData *data;
 
-  selection_data = gtk_drop_target_read_selection_finish (dest, result, NULL);
-
-  /* Allow only drags from other widgets; see bug #533891. */
-  if (drag && gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (drag)) == widget)
-    return;
-
-  /* Parse the text/uri-list string, navigate to the first one */
-  uris = gtk_selection_data_get_uris (selection_data);
-  if (uris && uris[0])
+  value = gdk_drop_read_value_finish (drop, result, NULL);
+  if (value == NULL)
     {
-      struct FileListDragData *data;
-
-      uri = uris[0];
-      file = g_file_new_for_uri (uri);
-
-      data = g_new0 (struct FileListDragData, 1);
-      data->impl = g_object_ref (impl);
-      data->uris = uris;
-      data->file = file;
-
-      if (priv->file_list_drag_data_received_cancellable)
-        g_cancellable_cancel (priv->file_list_drag_data_received_cancellable);
-
-      priv->file_list_drag_data_received_cancellable =
-        _gtk_file_system_get_info (priv->file_system, file,
-                                   "standard::type",
-                                   file_list_drag_data_received_get_info_cb,
-                                   data);
+      gdk_drop_finish (drop, 0);
+      return;
     }
+
+  files = g_value_get_boxed (value);
+
+  data = g_new0 (FileListDragData, 1);
+  data->impl = g_object_ref (impl);
+  data->files = g_slist_copy_deep (files, (GCopyFunc) g_object_ref, NULL);
+
+  if (priv->file_list_drag_data_received_cancellable)
+    g_cancellable_cancel (priv->file_list_drag_data_received_cancellable);
+
+  priv->file_list_drag_data_received_cancellable =
+    _gtk_file_system_get_info (priv->file_system, data->files->data,
+                               "standard::type",
+                               file_list_drag_data_received_get_info_cb,
+                                   data);
+
+  gdk_drop_finish (drop, gdk_drop_get_actions (drop));
 }
 
 /* Don't do anything with the drag_drop signal */
@@ -1986,9 +1968,7 @@ file_list_drag_drop_cb (GtkDropTarget        *dest,
                         int                   y,
                         GtkFileChooserWidget *impl)
 {
-  const char *target = g_intern_static_string ("text/uri-list");
-
-  gtk_drop_target_read_selection (dest, target, NULL, file_list_drag_data_received_cb, impl);
+  gdk_drop_read_value_async (drop, GDK_TYPE_FILE_LIST, G_PRIORITY_DEFAULT, NULL, file_list_drag_data_received_cb, impl);
 
   return TRUE;
 }

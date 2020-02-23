@@ -1,10 +1,4 @@
 
-# GdkAtom is an opaque typedef
-<TYPEDEF>
-<NAME>GdkAtom</NAME>
-typedef struct _GdkAtom *GdkAtom;
-</TYPEDEF>
-
 <MACRO>
 <NAME>GDK_WINDOWING_X11</NAME>
 #define GDK_WINDOWING_X11

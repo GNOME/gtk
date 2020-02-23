@@ -31,7 +31,6 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkselection.h>
 #include <gtk/gtkwidget.h>
 
 
@@ -73,18 +72,6 @@ GdkDrop           *gtk_drop_target_get_drop         (GtkDropTarget     *dest);
 
 GDK_AVAILABLE_IN_ALL
 const char        *gtk_drop_target_find_mimetype    (GtkDropTarget     *dest);
-
-GDK_AVAILABLE_IN_ALL
-void               gtk_drop_target_read_selection  (GtkDropTarget       *dest,
-                                                    GdkAtom              target,
-                                                    GCancellable        *cancellable,
-                                                    GAsyncReadyCallback  callback,
-                                                    gpointer             user_data);
-GDK_AVAILABLE_IN_ALL
-GtkSelectionData *gtk_drop_target_read_selection_finish
-                                                   (GtkDropTarget       *dest,
-                                                    GAsyncResult        *result,
-                                                    GError             **error);
 
 GDK_AVAILABLE_IN_ALL
 void                gtk_drop_target_deny_drop      (GtkDropTarget       *dest,

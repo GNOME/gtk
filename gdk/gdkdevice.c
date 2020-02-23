@@ -1081,33 +1081,41 @@ gdk_device_get_n_axes (GdkDevice *device)
 }
 
 /**
- * gdk_device_list_axes:
- * @device: a pointer #GdkDevice
+ * gdk_device_get_axis_names:
+ * @device: a #GdkDevice
  *
- * Returns a #GList of #GdkAtoms, containing the labels for
+ * Returns a null-terminated array of strings, containing the labels for
  * the axes that @device currently has.
+ * If the device has no axes, %NULL is returned.
  *
- * Returns: (transfer container) (element-type GdkAtom):
- *     A #GList of strings, free with g_list_free().
+ * Returns: (nullable) (transfer full): A null-terminated string array,
+ *     free with g_strfreev().
  **/
-GList *
-gdk_device_list_axes (GdkDevice *device)
+char **
+gdk_device_get_axis_names (GdkDevice *device)
 {
-  GList *axes = NULL;
+  GPtrArray *axes;
   gint i;
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
   g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
+
+  if (device->axes->len == 0)
+    return NULL;
+
+  axes = g_ptr_array_new ();
 
   for (i = 0; i < device->axes->len; i++)
     {
       GdkAxisInfo axis_info;
 
       axis_info = g_array_index (device->axes, GdkAxisInfo, i);
-      axes = g_list_prepend (axes, axis_info.label);
+      g_ptr_array_add (axes, g_strdup (axis_info.label));
     }
 
-  return g_list_reverse (axes);
+  g_ptr_array_add (axes, NULL);
+
+  return (char **) g_ptr_array_free (axes, FALSE);
 }
 
 /**
@@ -1119,7 +1127,7 @@ gdk_device_list_axes (GdkDevice *device)
  *
  * Interprets an array of double as axis values for a given device,
  * and locates the value in the array for a given axis label, as returned
- * by gdk_device_list_axes()
+ * by gdk_device_get_axes()
  *
  * Returns: %TRUE if the given axis use was found, otherwise %FALSE.
  **/

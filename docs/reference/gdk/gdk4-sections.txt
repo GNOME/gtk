@@ -348,14 +348,6 @@ gdk_content_formats_builder_get_type
 </SECTION>
 
 <SECTION>
-<TITLE>Properties and Atoms</TITLE>
-<FILE>properties</FILE>
-GdkAtom
-gdk_text_property_to_utf8_list_for_display
-gdk_utf8_to_string_target
-</SECTION>
-
-<SECTION>
 <TITLE>Pango Interaction</TITLE>
 <FILE>pango_interaction</FILE>
 gdk_pango_layout_get_clip_region
@@ -479,7 +471,7 @@ gdk_device_get_history
 gdk_device_free_history
 GdkTimeCoord
 gdk_device_get_axis
-gdk_device_list_axes
+gdk_device_get_axis_names
 gdk_device_get_axis_value
 gdk_device_get_last_event_surface
 
@@ -850,8 +842,6 @@ gdk_x11_surface_set_frame_sync_enabled
 gdk_x11_keymap_get_group_for_state
 gdk_x11_keymap_key_is_modifier
 gdk_x11_visual_get_xvisual
-gdk_x11_atom_to_xatom_for_display
-gdk_x11_xatom_to_atom_for_display
 gdk_x11_get_xatom_by_name_for_display
 gdk_x11_get_xatom_name_for_display
 gdk_x11_set_sm_client_id

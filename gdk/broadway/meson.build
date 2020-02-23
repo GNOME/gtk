@@ -13,7 +13,6 @@ gdk_broadway_sources = files([
   'gdkglobals-broadway.c',
   'gdkkeys-broadway.c',
   'gdkmonitor-broadway.c',
-  'gdkselection-broadway.c',
   'gdksurface-broadway.c',
 ])
 

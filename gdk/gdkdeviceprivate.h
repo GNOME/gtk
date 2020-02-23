@@ -116,14 +116,14 @@ void  _gdk_device_set_associated_device (GdkDevice *device,
 
 void  _gdk_device_reset_axes (GdkDevice   *device);
 guint _gdk_device_add_axis   (GdkDevice   *device,
-                              GdkAtom      label_atom,
+                              const char  *label_atom,
                               GdkAxisUse   use,
                               gdouble      min_value,
                               gdouble      max_value,
                               gdouble      resolution);
 void _gdk_device_get_axis_info (GdkDevice  *device,
 				guint       index,
-				GdkAtom    *label_atom,
+				const char**label_atom,
 				GdkAxisUse *use,
 				gdouble    *min_value,
 				gdouble    *max_value,

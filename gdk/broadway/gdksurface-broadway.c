@@ -1462,6 +1462,5 @@ gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
   impl_class->begin_move_drag = gdk_broadway_surface_begin_move_drag;
   impl_class->set_opacity = gdk_broadway_surface_set_opacity;
   impl_class->destroy_notify = gdk_broadway_surface_destroy_notify;
-  impl_class->register_dnd = _gdk_broadway_surface_register_dnd;
   impl_class->drag_begin = _gdk_broadway_surface_drag_begin;
 }

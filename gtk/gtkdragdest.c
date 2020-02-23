@@ -32,7 +32,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkeventcontrollerprivate.h"
 #include "gtkmarshalers.h"
-#include "gtkselectionprivate.h"
 
 
 /**
@@ -122,9 +121,6 @@ static gboolean gtk_drop_target_handle_event (GtkEventController *controller,
                                               double              y);
 static gboolean gtk_drop_target_filter_event (GtkEventController *controller,
                                               GdkEvent           *event);
-static void     gtk_drop_target_set_widget   (GtkEventController *controller,
-                                              GtkWidget          *widget);
-static void     gtk_drop_target_unset_widget (GtkEventController *controller);
 
 static gboolean gtk_drop_target_get_contains (GtkDropTarget *dest);
 static void     gtk_drop_target_set_contains (GtkDropTarget *dest,
@@ -221,8 +217,6 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
 
   controller_class->handle_event = gtk_drop_target_handle_event;
   controller_class->filter_event = gtk_drop_target_filter_event;
-  controller_class->set_widget = gtk_drop_target_set_widget;
-  controller_class->unset_widget = gtk_drop_target_unset_widget;
 
   class->accept = gtk_drop_target_accept;
 
@@ -370,7 +364,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    *
    * To receive the data, use one of the read functions provides by #GtkDrop
    * and #GtkDragDest: gdk_drop_read_async(), gdk_drop_read_value_async(),
-   * gdk_drop_read_text_async(), gtk_drop_target_read_selection().
+   * gdk_drop_read_text_async().
    *
    * You can use gtk_drop_target_get_drop() to obtain the #GtkDrop object
    * for the ongoing operation in your signal handler. If you call one of the
@@ -497,25 +491,6 @@ gtk_drop_target_get_actions (GtkDropTarget *dest)
   g_return_val_if_fail (GTK_IS_DROP_TARGET (dest), 0);
 
   return dest->actions;
-}
-
-static void
-gtk_drag_dest_realized (GtkWidget *widget)
-{
-  GtkNative *native = gtk_widget_get_native (widget);
-
-  gdk_surface_register_dnd (gtk_native_get_surface (native));
-}
-
-static void
-gtk_drag_dest_hierarchy_changed (GtkWidget  *widget,
-                                 GParamSpec *pspec,
-                                 gpointer    data)
-{
-  GtkNative *native = gtk_widget_get_native (widget);
-
-  if (native && gtk_widget_get_realized (GTK_WIDGET (native)))
-    gdk_surface_register_dnd (gtk_native_get_surface (native));
 }
 
 /**
@@ -836,177 +811,6 @@ gtk_drag_dest_handle_event (GtkWidget *toplevel,
     default:
       g_assert_not_reached ();
     }
-}
-
-static void
-gtk_drop_target_set_widget (GtkEventController *controller,
-                            GtkWidget          *widget)
-{
-  GtkDropTarget *dest = GTK_DROP_TARGET (controller);
-
-  GTK_EVENT_CONTROLLER_CLASS (gtk_drop_target_parent_class)->set_widget (controller, widget);
-
-  if (gtk_widget_get_realized (widget))
-    gtk_drag_dest_realized (widget);
-
-  g_signal_connect (widget, "realize", G_CALLBACK (gtk_drag_dest_realized), dest);
-  g_signal_connect (widget, "notify::root", G_CALLBACK (gtk_drag_dest_hierarchy_changed), dest);
-}
-
-static void
-gtk_drop_target_unset_widget (GtkEventController *controller)
-{
-  GtkWidget *widget;
-
-  widget = gtk_event_controller_get_widget (controller);
-
-  g_signal_handlers_disconnect_by_func (widget, gtk_drag_dest_realized, controller);
-  g_signal_handlers_disconnect_by_func (widget, gtk_drag_dest_hierarchy_changed, controller);
-
-  GTK_EVENT_CONTROLLER_CLASS (gtk_drop_target_parent_class)->unset_widget (controller);
-}
-
-static void
-gtk_drag_get_data_got_data (GObject      *source,
-                            GAsyncResult *result,
-                            gpointer      data)
-{
-  GTask *task = data;
-  gssize written;
-  GError *error = NULL;
-  guchar *bytes;
-  gsize size;
-  GtkSelectionData *sdata;
-  GtkDropTarget *dest;
-  GdkDrop *drop;
-  GdkDisplay *display;
-
-  written = g_output_stream_splice_finish (G_OUTPUT_STREAM (source), result, &error);
-  if (written < 0)
-    {
-      g_task_return_error (task, error);
-      g_object_unref (task);
-      return;
-    }
-
-  bytes = g_memory_output_stream_steal_data (G_MEMORY_OUTPUT_STREAM (source));
-  size = g_memory_output_stream_get_data_size (G_MEMORY_OUTPUT_STREAM (source));
-
-  dest = GTK_DROP_TARGET (g_task_get_source_object (task));
-  drop = GDK_DROP (g_object_get_data (G_OBJECT (task), "drop"));
-  display = GDK_DISPLAY (g_object_get_data (G_OBJECT (task), "display"));
-
-  sdata = g_slice_new0 (GtkSelectionData);
-  sdata->target = g_task_get_task_data (task);
-  sdata->type = g_task_get_task_data (task);
-  sdata->format = 8;
-  sdata->length = size;
-  sdata->data = bytes ? bytes : (guchar *)g_strdup ("");
-  sdata->display = display;
-
-  set_drop (dest, drop);
-  g_task_return_pointer (task, sdata, NULL);
-  set_drop (dest, NULL);
-
-  g_object_unref (task);
-}
-
-static void
-gtk_drag_get_data_got_stream (GObject      *source,
-                              GAsyncResult *result,
-                              gpointer      data)
-{
-  GTask *task = data;
-  GInputStream *input_stream;
-  GOutputStream *output_stream;
-  GError *error = NULL;
-  const char *mime_type;
-
-  input_stream = gdk_drop_read_finish (GDK_DROP (source), result, &mime_type, &error);
-  if (input_stream == NULL)
-    {
-      g_task_return_error (task, error);
-      g_object_unref (task);
-      return;
-    }
-
-  g_task_set_task_data (task, (gpointer)g_intern_string (mime_type), NULL);
-
-  output_stream = g_memory_output_stream_new_resizable ();
-  g_output_stream_splice_async (output_stream,
-                                input_stream,
-                                G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE | G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
-                                G_PRIORITY_DEFAULT,
-                                NULL,
-                                gtk_drag_get_data_got_data,
-                                task);
-  g_object_unref (output_stream);
-  g_object_unref (input_stream);
-}
-
-/**
- * gtk_drop_target_read_selection:
- * @dest: a #GtkDropTarget
- * @target: the data format to read
- * @cancellable: (nullable): a cancellable
- * @callback: callback to call on completion
- * @user_data: data to pass to @callback
- *
- * Asynchronously reads the dropped data from an ongoing
- * drag on a #GtkDropTarget, and returns the data in a 
- * #GtkSelectionData object.
- *
- * This function is meant for cases where a #GtkSelectionData
- * object is needed, such as when using the #GtkTreeModel DND
- * support. In most other cases, the #GdkDrop async read
- * APIs that return in input stream or #GValue are more
- * convenient and should be preferred.
- */
-void
-gtk_drop_target_read_selection (GtkDropTarget       *dest,
-                                GdkAtom              target,
-                                GCancellable        *cancellable,
-                                GAsyncReadyCallback  callback,
-                                gpointer             user_data)
-{
-  GTask *task;
-  GtkWidget *widget;
-
-  g_return_if_fail (GTK_IS_DROP_TARGET (dest));
-
-  task = g_task_new (dest, NULL, callback, user_data);
-  g_object_set_data_full (G_OBJECT (task), "drop", g_object_ref (dest->drop), g_object_unref);
-
-  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
-  if (widget)
-    g_object_set_data (G_OBJECT (task), "display", gtk_widget_get_display (widget));
-
-  gdk_drop_read_async (dest->drop,
-                       (const char *[2]) { target, NULL },
-                       G_PRIORITY_DEFAULT,
-                       NULL,
-                       gtk_drag_get_data_got_stream,
-                       task);
-}
-
-/**
- * gtk_drop_target_read_selection_finish:
- * @dest: a #GtkDropTarget
- * @result: a #GAsyncResult
- * @error: (allow-none): location to store error information on failure, or %NULL
- *
- * Finishes an async drop read operation, see gtk_drop_target_read_selection().
- *
- * Returns: (nullable) (transfer full): the #GtkSelectionData, or %NULL
- */
-GtkSelectionData *
-gtk_drop_target_read_selection_finish (GtkDropTarget  *dest,
-                                       GAsyncResult   *result,
-                                       GError        **error)
-{
-  g_return_val_if_fail (GTK_IS_DROP_TARGET (dest), NULL);
-
-  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static GtkDropStatus

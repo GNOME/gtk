@@ -44,7 +44,6 @@
     <xi:include href="xml/gdkcontentprovider.xml" />
     <xi:include href="xml/gdkcontentserializer.xml" />
     <xi:include href="xml/gdkcontentdeserializer.xml" />
-    <xi:include href="xml/properties.xml" />
     <xi:include href="xml/gdkapplaunchcontext.xml" />
     <xi:include href="xml/pixbufs.xml" />
     <xi:include href="xml/pango_interaction.xml" />

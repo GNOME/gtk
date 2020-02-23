@@ -532,8 +532,6 @@ void          gdk_surface_set_keep_below  (GdkSurface       *surface,
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_opacity     (GdkSurface       *surface,
                                            gdouble          opacity);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_register_dnd    (GdkSurface       *surface);
 
 GDK_AVAILABLE_IN_ALL
 void gdk_surface_begin_resize_drag            (GdkSurface     *surface,

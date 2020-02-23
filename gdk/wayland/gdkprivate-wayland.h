@@ -99,7 +99,6 @@ void            gdk_wayland_surface_attach_image           (GdkSurface          
                                                             cairo_surface_t      *cairo_surface,
                                                             const cairo_region_t *damage);
 
-void            _gdk_wayland_surface_register_dnd          (GdkSurface *surface);
 GdkDrag        *_gdk_wayland_surface_drag_begin            (GdkSurface *surface,
                                                             GdkDevice *device,
                                                             GdkContentProvider *content,
@@ -127,15 +126,6 @@ GdkSurface * _gdk_wayland_display_create_surface (GdkDisplay *display,
                                                   int         y,
                                                   int         width,
                                                   int         height);
-
-gint        _gdk_wayland_display_text_property_to_utf8_list (GdkDisplay    *display,
-                                                             GdkAtom        encoding,
-                                                             gint           format,
-                                                             const guchar  *text,
-                                                             gint           length,
-                                                             gchar       ***list);
-gchar *     _gdk_wayland_display_utf8_to_string_target (GdkDisplay  *display,
-                                                        const gchar *str);
 
 void        _gdk_wayland_display_create_seat    (GdkWaylandDisplay *display,
                                                  guint32                  id,

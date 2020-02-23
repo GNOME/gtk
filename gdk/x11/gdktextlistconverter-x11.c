@@ -121,6 +121,63 @@ gdk_x11_text_list_converter_decode (GdkX11TextListConverter *conv,
     }
 }
 
+/* The specifications for COMPOUND_TEXT and STRING specify that C0 and
+ * C1 are not allowed except for \n and \t, however the X conversions
+ * routines for COMPOUND_TEXT only enforce this in one direction,
+ * causing cut-and-paste of \r and \r\n separated text to fail.
+ * This routine strips out all non-allowed C0 and C1 characters
+ * from the input string and also canonicalizes \r, and \r\n to \n
+ */
+char *
+gdk_x11_utf8_to_string_target (const char *utf8_str,
+                               gboolean    return_latin1)
+{
+  gint len = strlen (utf8_str);
+  GString *result = g_string_sized_new (len);
+  const gchar *p = utf8_str;
+
+  while (*p)
+    {
+      if (*p == '\r')
+        {
+          p++;
+          if (*p == '\n')
+            p++;
+
+          g_string_append_c (result, '\n');
+        }
+      else
+        {
+          gunichar ch = g_utf8_get_char (p);
+
+          if (!((ch < 0x20 && ch != '\t' && ch != '\n') || (ch >= 0x7f && ch < 0xa0)))
+            {
+              if (return_latin1)
+                {
+                  if (ch <= 0xff)
+                    g_string_append_c (result, ch);
+                  else
+                    g_string_append_printf (result,
+                                            ch < 0x10000 ? "\\u%04x" : "\\U%08x",
+                                            ch);
+                }
+              else
+                {
+                  char buf[7];
+                  gint buflen;
+
+                  buflen = g_unichar_to_utf8 (ch, buf);
+                  g_string_append_len (result, buf, buflen);
+                }
+            }
+
+          p = g_utf8_next_char (p);
+        }
+    }
+
+  return g_string_free (result, FALSE);
+}
+
 static GConverterResult
 gdk_x11_text_list_converter_encode (GdkX11TextListConverter *conv,
                                     const void              *inbuf,
@@ -146,7 +203,7 @@ gdk_x11_text_list_converter_encode (GdkX11TextListConverter *conv,
       gchar *tmp, *latin1;
 
       tmp = g_strndup (inbuf, inbuf_size);
-      latin1 = gdk_utf8_to_string_target (tmp);
+      latin1 = gdk_x11_utf8_to_string_target (tmp, TRUE);
       g_free (tmp);
       if (latin1)
         {
@@ -165,7 +222,7 @@ gdk_x11_text_list_converter_encode (GdkX11TextListConverter *conv,
     {
       GConverterResult result;
       guchar *text;
-      GdkAtom encoding;
+      const char *encoding;
       gint format;
       gint new_length;
       char *tmp;
@@ -174,7 +231,7 @@ gdk_x11_text_list_converter_encode (GdkX11TextListConverter *conv,
       if (gdk_x11_display_utf8_to_compound_text (conv->display, tmp,
                                                  &encoding, &format, &text, &new_length))
         {
-          if (encoding == g_intern_string (conv->encoding) &&
+          if (g_str_equal (encoding, conv->encoding) &&
               format == conv->format)
             {
               result = write_output (outbuf, outbuf_size, bytes_written, text, new_length, error);

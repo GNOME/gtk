@@ -150,15 +150,6 @@ struct _GdkDisplayClass
 
   GdkKeymap *                (*get_keymap)         (GdkDisplay    *display);
 
-  gint                   (*text_property_to_utf8_list) (GdkDisplay     *display,
-                                                        GdkAtom         encoding,
-                                                        gint            format,
-                                                        const guchar   *text,
-                                                        gint            length,
-                                                        gchar        ***list);
-  gchar *                (*utf8_to_string_target)      (GdkDisplay     *display,
-                                                        const gchar    *text);
-
   gboolean               (*make_gl_context_current)    (GdkDisplay        *display,
                                                         GdkGLContext      *context);
 

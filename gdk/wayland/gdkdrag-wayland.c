@@ -20,7 +20,6 @@
 #include "gdkdragprivate.h"
 
 #include "gdkinternals.h"
-#include "gdkproperty.h"
 #include "gdkprivate-wayland.h"
 #include "gdkcontentformats.h"
 #include "gdkdisplay-wayland.h"
@@ -196,11 +195,6 @@ gdk_wayland_drag_class_init (GdkWaylandDragClass *klass)
   drag_class->set_cursor = gdk_wayland_drag_set_cursor;
   drag_class->drop_performed = gdk_wayland_drag_drop_performed;
   drag_class->cancel = gdk_wayland_drag_cancel;
-}
-
-void
-_gdk_wayland_surface_register_dnd (GdkSurface *surface)
-{
 }
 
 static GdkSurface *
