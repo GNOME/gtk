@@ -16,7 +16,6 @@
                 <property name="vexpand">1</property>
                 <child>
                   <object class="GtkPlacesSidebar" id="places_sidebar">
-                    <property name="local-only">1</property>
                     <property name="show-other-locations">1</property>
                     <style>
                       <class name="sidebar"/>
@@ -110,7 +109,7 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkBox" id="list_and_preview_box">
+                      <object class="GtkBox" id="list_box">
                         <property name="spacing">12</property>
                         <property name="vexpand">1</property>
                         <child>
@@ -159,7 +158,6 @@
                                             <signal name="popup-menu" handler="list_popup_menu_cb" swapped="no"/>
                                             <signal name="query-tooltip" handler="file_list_query_tooltip_cb" swapped="no"/>
                                             <signal name="row-activated" handler="list_row_activated" swapped="no"/>
-                                            <signal name="cursor-changed" handler="list_cursor_changed" swapped="no"/>
                                             <signal name="keynav-failed" handler="browse_files_tree_view_keynav_failed_cb"/>
                                             <child internal-child="selection">
                                               <object class="GtkTreeSelection" id="treeview-selection2">
@@ -263,7 +261,6 @@
                                 <property name="name">other_locations</property>
                                 <property name="child">
                                   <object class="GtkPlacesView" id="places_view">
-                                    <property name="local-only" bind-source="GtkFileChooserWidget" bind-property="local-only" bind-flags="default|sync-create"/>
                                     <signal name="open-location" handler="places_sidebar_open_location_cb" swapped="no"/>
                                     <signal name="show-error-message" handler="places_sidebar_show_error_message_cb" swapped="no"/>
                                   </object>
@@ -325,13 +322,6 @@
                                 </property>
                               </object>
                             </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkBox" id="preview_box">
-                            <property name="visible">0</property>
-                            <property name="orientation">vertical</property>
-                            <property name="spacing">12</property>
                           </object>
                         </child>
                       </object>

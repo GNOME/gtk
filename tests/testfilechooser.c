@@ -44,28 +44,38 @@ static GtkFileChooserAction action;
 static void
 print_current_folder (GtkFileChooser *chooser)
 {
-  gchar *uri;
+  GFile *cwd;
 
-  uri = gtk_file_chooser_get_current_folder_uri (chooser);
-  g_print ("Current folder changed :\n  %s\n", uri ? uri : "(null)");
-  g_free (uri);
+  cwd = gtk_file_chooser_get_current_folder (chooser);
+  if (cwd != NULL)
+    {
+      char *uri = g_file_get_uri (cwd);
+      g_print ("Current folder changed :\n  %s\n", uri ? uri : "(null)");
+      g_free (uri);
+      g_object_unref (cwd);
+    }
+  else
+    {
+      g_print ("Current folder changed :\n  none\n");
+    }
 }
 
 static void
 print_selected (GtkFileChooser *chooser)
 {
-  GSList *uris = gtk_file_chooser_get_uris (chooser);
+  GSList *uris = gtk_file_chooser_get_files (chooser);
   GSList *tmp_list;
 
   g_print ("Selection changed :\n");
   for (tmp_list = uris; tmp_list; tmp_list = tmp_list->next)
     {
-      gchar *uri = tmp_list->data;
-      g_print ("  %s\n", uri);
+      GFile *file = tmp_list->data;
+      char *uri = g_file_get_uri (file);
+      g_print ("  %s\n", uri ? uri : "(null)");
       g_free (uri);
     }
   g_print ("\n");
-  g_slist_free (uris);
+  g_slist_free_full (uris, g_object_unref);
 }
 
 static void
@@ -79,7 +89,7 @@ response_cb (GtkDialog *dialog,
     {
       GSList *list;
 
-      list = gtk_file_chooser_get_uris (GTK_FILE_CHOOSER (dialog));
+      list = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (dialog));
 
       if (list)
 	{
@@ -89,11 +99,13 @@ response_cb (GtkDialog *dialog,
 
 	  for (l = list; l; l = l->next)
 	    {
-	      g_print ("%s\n", (char *) l->data);
-	      g_free (l->data);
+              GFile *file = l->data;
+              char *uri = g_file_get_uri (file);
+	      g_print ("  %s\n", uri ? uri : "(null)");
+	      g_free (uri);
 	    }
 
-	  g_slist_free (list);
+	  g_slist_free_full (list, g_object_unref);
 	}
       else
 	g_print ("No selected files\n");
@@ -246,102 +258,12 @@ my_new_from_file_at_size (const char *filename,
 	return pixbuf;
 }
 
-#if 0
-static char *
-format_time (time_t t)
-{
-  gchar buf[128];
-  struct tm tm_buf;
-  time_t now = time (NULL);
-  const char *format;
-
-  if (abs (now - t) < 24*60*60)
-    format = "%X";
-  else
-    format = "%x";
-
-  localtime_r (&t, &tm_buf);
-  if (strftime (buf, sizeof (buf), format, &tm_buf) == 0)
-    return g_strdup ("<unknown>");
-  else
-    return g_strdup (buf);
-}
-
-static char *
-format_size (gint64 size)
-{
-  if (size < (gint64)1024)
-    return g_strdup_printf ("%d bytes", (gint)size);
-  else if (size < (gint64)1024*1024)
-    return g_strdup_printf ("%.1f K", size / (1024.));
-  else if (size < (gint64)1024*1024*1024)
-    return g_strdup_printf ("%.1f M", size / (1024.*1024.));
-  else
-    return g_strdup_printf ("%.1f G", size / (1024.*1024.*1024.));
-}
-
-static void
-update_preview_cb (GtkFileChooser *chooser)
-{
-  gchar *filename = gtk_file_chooser_get_preview_filename (chooser);
-  gboolean have_preview = FALSE;
-
-  if (filename)
-    {
-      GdkPixbuf *pixbuf;
-      GError *error = NULL;
-
-      pixbuf = my_new_from_file_at_size (filename, 128, 128, &error);
-      if (pixbuf)
-	{
-	  gtk_image_set_from_pixbuf (GTK_IMAGE (preview_image), pixbuf);
-	  g_object_unref (pixbuf);
-	  gtk_widget_show (preview_image);
-	  gtk_widget_hide (preview_label);
-	  have_preview = TRUE;
-	}
-      else
-	{
-	  struct stat buf;
-	  if (stat (filename, &buf) == 0)
-	    {
-	      gchar *preview_text;
-	      gchar *size_str;
-	      gchar *modified_time;
-
-	      size_str = format_size (buf.st_size);
-	      modified_time = format_time (buf.st_mtime);
-
-	      preview_text = g_strdup_printf ("<i>Modified:</i>\t%s\n"
-					      "<i>Size:</i>\t%s\n",
-					      modified_time,
-					      size_str);
-	      gtk_label_set_markup (GTK_LABEL (preview_label), preview_text);
-	      g_free (modified_time);
-	      g_free (size_str);
-	      g_free (preview_text);
-
-	      gtk_widget_hide (preview_image);
-	      gtk_widget_show (preview_label);
-	      have_preview = TRUE;
-	    }
-	}
-
-      g_free (filename);
-
-      if (error)
-	g_error_free (error);
-    }
-
-  gtk_file_chooser_set_preview_widget_active (chooser, have_preview);
-}
-#endif
-
 static void
 set_current_folder (GtkFileChooser *chooser,
 		    const char     *name)
 {
-  if (!gtk_file_chooser_set_current_folder (chooser, name))
+  GFile *file = g_file_new_for_path (name);
+  if (!gtk_file_chooser_set_current_folder (chooser, file, NULL))
     {
       GtkWidget *dialog;
 
@@ -354,6 +276,7 @@ set_current_folder (GtkFileChooser *chooser,
       gtk_dialog_run (GTK_DIALOG (dialog));
       gtk_widget_destroy (dialog);
     }
+  g_object_unref (file);
 }
 
 static void
@@ -374,7 +297,8 @@ static void
 set_filename (GtkFileChooser *chooser,
 	      const char     *name)
 {
-  if (!gtk_file_chooser_set_filename (chooser, name))
+  GFile *file = g_file_new_for_path (name);
+  if (!gtk_file_chooser_set_file (chooser, file, NULL))
     {
       GtkWidget *dialog;
 
@@ -387,6 +311,7 @@ set_filename (GtkFileChooser *chooser,
       gtk_dialog_run (GTK_DIALOG (dialog));
       gtk_widget_destroy (dialog);
     }
+  g_object_unref (file);
 }
 
 static void
@@ -409,7 +334,7 @@ get_selection_cb (GtkButton      *button,
 {
   GSList *selection;
 
-  selection = gtk_file_chooser_get_uris (chooser);
+  selection = gtk_file_chooser_get_files (chooser);
 
   g_print ("Selection: ");
 
@@ -421,16 +346,19 @@ get_selection_cb (GtkButton      *button,
       
       for (l = selection; l; l = l->next)
 	{
-	  char *uri = l->data;
+          GFile *file = l->data;
+	  char *uri = g_file_get_uri (file);
 
 	  g_print ("%s\n", uri);
+
+          g_free (uri);
 
 	  if (l->next)
 	    g_print ("           ");
 	}
     }
 
-  g_slist_free_full (selection, g_free);
+  g_slist_free_full (selection, g_object_unref);
 }
 
 static void
@@ -471,55 +399,6 @@ notify_multiple_cb (GtkWidget  *dialog,
   gtk_widget_set_sensitive (button, multiple);
 }
 
-static GtkFileChooserConfirmation
-confirm_overwrite_cb (GtkFileChooser *chooser,
-		      gpointer        data)
-{
-  GtkWidget *dialog;
-  GtkWidget *button;
-  int response;
-  GtkFileChooserConfirmation conf;
-
-  dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (chooser))),
-				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-				   GTK_MESSAGE_QUESTION,
-				   GTK_BUTTONS_NONE,
-				   "What do you want to do?");
-
-  button = gtk_button_new_with_label ("Use the stock confirmation dialog");
-  gtk_widget_show (button);
-  gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, 1);
-
-  button = gtk_button_new_with_label ("Type a new file name");
-  gtk_widget_show (button);
-  gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, 2);
-
-  button = gtk_button_new_with_label ("Accept the file name");
-  gtk_widget_show (button);
-  gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, 3);
-
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-
-  switch (response)
-    {
-    case 1:
-      conf = GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM;
-      break;
-
-    case 3:
-      conf = GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME;
-      break;
-
-    default:
-      conf = GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN;
-      break;
-    }
-
-  gtk_widget_destroy (dialog);
-
-  return conf;
-}
-
 int
 main (int argc, char **argv)
 {
@@ -530,15 +409,14 @@ main (int argc, char **argv)
   GtkFileFilter *filter;
   gboolean force_rtl = FALSE;
   gboolean multiple = FALSE;
-  gboolean local_only = FALSE;
   char *action_arg = NULL;
   char *initial_filename = NULL;
   char *initial_folder = NULL;
+  GFile *file;
   GError *error = NULL;
   GOptionEntry options[] = {
     { "action", 'a', 0, G_OPTION_ARG_STRING, &action_arg, "Filechooser action", "ACTION" },
     { "multiple", 'm', 0, G_OPTION_ARG_NONE, &multiple, "Select multiple", NULL },
-    { "local-only", 'l', 0, G_OPTION_ARG_NONE, &local_only, "Local only", NULL },
     { "right-to-left", 'r', 0, G_OPTION_ARG_NONE, &force_rtl, "Force right-to-left layout.", NULL },
     { "initial-filename", 'f', 0, G_OPTION_ARG_FILENAME, &initial_filename, "Initial filename to select", "FILENAME" },
     { "initial-folder", 'F', 0, G_OPTION_ARG_FILENAME, &initial_folder, "Initial folder to show", "FILENAME" },
@@ -578,11 +456,9 @@ main (int argc, char **argv)
 	action = GTK_FILE_CHOOSER_ACTION_SAVE;
       else if (! strcmp ("select_folder", action_arg))
 	action = GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
-      else if (! strcmp ("create_folder", action_arg))
-	action = GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER;
       else
 	{
-	  g_print ("--action must be one of \"open\", \"save\", \"select_folder\", \"create_folder\"\n");
+	  g_print ("--action must be one of \"open\", \"save\", \"select_folder\"\n");
 	  return 1;
 	}
 
@@ -592,7 +468,6 @@ main (int argc, char **argv)
   dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
 			 "action", action,
 			 "select-multiple", multiple,
-                         "local-only", local_only,
 			 NULL);
 
   switch (action)
@@ -606,7 +481,6 @@ main (int argc, char **argv)
 			      NULL);
       break;
     case GTK_FILE_CHOOSER_ACTION_SAVE:
-    case GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER:
       gtk_window_set_title (GTK_WINDOW (dialog), "Save a file");
       gtk_dialog_add_buttons (GTK_DIALOG (dialog),
 			      _("_Cancel"), GTK_RESPONSE_CANCEL,
@@ -622,8 +496,6 @@ main (int argc, char **argv)
 		    G_CALLBACK (print_current_folder), NULL);
   g_signal_connect (dialog, "response",
 		    G_CALLBACK (response_cb), &done);
-  g_signal_connect (dialog, "confirm-overwrite",
-		    G_CALLBACK (confirm_overwrite_cb), NULL);
 
   /* Filters */
   filter = gtk_file_filter_new ();
@@ -660,27 +532,7 @@ main (int argc, char **argv)
   gtk_file_filter_add_pixbuf_formats (filter);
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
 
-#if 0
-  /* Preview widget */
-  /* THIS IS A TERRIBLE PREVIEW WIDGET, AND SHOULD NOT BE COPIED AT ALL.
-   */
-  preview_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_file_chooser_set_preview_widget (GTK_FILE_CHOOSER (dialog), preview_vbox);
-
-  preview_label = gtk_label_new (NULL);
-  gtk_container_add (GTK_CONTAINER (preview_vbox), preview_label, TRUE, TRUE, 0);
-  g_object_set (preview_label, "margin", 6, NULL);
-
-  preview_image = gtk_image_new ();
-  gtk_container_add (GTK_CONTAINER (preview_vbox), preview_image, TRUE, TRUE, 0);
-  g_object_set (preview_image, "margin", 6, NULL);
-
-  update_preview_cb (GTK_FILE_CHOOSER (dialog));
-  g_signal_connect (dialog, "update-preview",
-		    G_CALLBACK (update_preview_cb), NULL);
-#endif
-
-  /* Extra widget */
+  /* Choices */
 
   gtk_file_chooser_add_choice (GTK_FILE_CHOOSER (dialog), "choice1",
                                "Choose one:",
@@ -690,12 +542,13 @@ main (int argc, char **argv)
 
   /* Shortcuts */
 
-  gtk_file_chooser_add_shortcut_folder_uri (GTK_FILE_CHOOSER (dialog),
-					    "file:///usr/share/pixmaps",
-					    NULL);
-  gtk_file_chooser_add_shortcut_folder (GTK_FILE_CHOOSER (dialog),
-					g_get_user_special_dir (G_USER_DIRECTORY_MUSIC),
-					NULL);
+  file = g_file_new_for_uri ("file:///usr/share/pixmaps");
+  gtk_file_chooser_add_shortcut_folder (GTK_FILE_CHOOSER (dialog), file, NULL);
+  g_object_unref (file);
+
+  file = g_file_new_for_path (g_get_user_special_dir (G_USER_DIRECTORY_MUSIC));
+  gtk_file_chooser_add_shortcut_folder (GTK_FILE_CHOOSER (dialog), file, NULL);
+  g_object_unref (file);
 
   /* Initial filename or folder */
 

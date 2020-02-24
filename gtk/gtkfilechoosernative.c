@@ -105,8 +105,6 @@
  *                                       "_Cancel");
  * chooser = GTK_FILE_CHOOSER (native);
  *
- * gtk_file_chooser_set_do_overwrite_confirmation (chooser, TRUE);
- *
  * if (user_edited_a_new_document)
  *   gtk_file_chooser_set_current_name (chooser,
  *                                      _("Untitled document"));
@@ -147,7 +145,6 @@
  * * #GtkFileChooser::current-folder-changed
  * * #GtkFileChooser::selection-changed
  * * #GtkFileChooser::file-activated
- * * #GtkFileChooser::confirm-overwrite
  *
  * You can also not use the methods that directly control user navigation:
  * * gtk_file_chooser_unselect_filename()
@@ -165,10 +162,6 @@
  * used. It supports many of the features that #GtkFileChooserDialog
  * does, but there are some things it does not handle:
  *
- * * Extra widgets added with gtk_file_chooser_set_extra_widget().
- *
- * * Use of custom previews by connecting to #GtkFileChooser::update-preview.
- *
  * * Any #GtkFileFilter added using a mimetype or custom filter.
  *
  * If any of these features are used the regular #GtkFileChooserDialog
@@ -182,10 +175,6 @@
  * be a GTK+ file chooser. In this situation, the following things are not
  * supported and will be silently ignored:
  *
- * * Extra widgets added with gtk_file_chooser_set_extra_widget().
- *
- * * Use of custom previews by connecting to #GtkFileChooser::update-preview.
- *
  * * Any #GtkFileFilter added with a custom filter.
  *
  * ## macOS details ## {#gtkfilechooserdialognative-macos}
@@ -193,12 +182,6 @@
  * On macOS the NSSavePanel and NSOpenPanel classes are used to provide native
  * file chooser dialogs. Some features provided by #GtkFileChooserDialog are
  * not supported:
- *
- * * Extra widgets added with gtk_file_chooser_set_extra_widget(), unless the
- *   widget is an instance of GtkLabel, in which case the label text will be used
- *   to set the NSSavePanel message instance property.
- *
- * * Use of custom previews by connecting to #GtkFileChooser::update-preview.
  *
  * * Any #GtkFileFilter added with a custom filter.
  *
@@ -578,13 +561,6 @@ dialog_response_cb (GtkDialog *dialog,
 }
 
 static void
-dialog_update_preview_cb (GtkFileChooser *file_chooser,
-                          gpointer data)
-{
-  g_signal_emit_by_name (data, "update-preview");
-}
-
-static void
 show_dialog (GtkFileChooserNative *self)
 {
   GtkFileChooserAction action;
@@ -618,11 +594,6 @@ show_dialog (GtkFileChooserNative *self)
                     G_CALLBACK (dialog_response_cb),
                     self);
 
-  g_signal_connect (self->dialog,
-                    "update-preview",
-                    G_CALLBACK (dialog_update_preview_cb),
-                    self);
-
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_window_present (GTK_WINDOW (self->dialog));
   G_GNUC_END_IGNORE_DEPRECATIONS
@@ -632,7 +603,6 @@ static void
 hide_dialog (GtkFileChooserNative *self)
 {
   g_signal_handlers_disconnect_by_func (self->dialog, dialog_response_cb, self);
-  g_signal_handlers_disconnect_by_func (self->dialog, dialog_update_preview_cb, self);
   gtk_widget_hide (self->dialog);
 }
 
@@ -644,8 +614,8 @@ gtk_file_chooser_native_set_current_folder (GtkFileChooser    *chooser,
   GtkFileChooserNative *self = GTK_FILE_CHOOSER_NATIVE (chooser);
   gboolean res;
 
-  res = gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (self->dialog),
-                                                  file, error);
+  res = gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (self->dialog),
+                                             file, error);
 
 
   if (res)

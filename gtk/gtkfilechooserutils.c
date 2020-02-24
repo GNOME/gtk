@@ -40,7 +40,6 @@ static void           delegate_unselect_file          (GtkFileChooser    *choose
 static void           delegate_select_all             (GtkFileChooser    *chooser);
 static void           delegate_unselect_all           (GtkFileChooser    *chooser);
 static GSList *       delegate_get_files              (GtkFileChooser    *chooser);
-static GFile *        delegate_get_preview_file       (GtkFileChooser    *chooser);
 static GtkFileSystem *delegate_get_file_system        (GtkFileChooser    *chooser);
 static void           delegate_add_filter             (GtkFileChooser    *chooser,
 						       GtkFileFilter     *filter);
@@ -61,13 +60,9 @@ static void           delegate_current_folder_changed (GtkFileChooser    *choose
 						       gpointer           data);
 static void           delegate_selection_changed      (GtkFileChooser    *chooser,
 						       gpointer           data);
-static void           delegate_update_preview         (GtkFileChooser    *chooser,
-						       gpointer           data);
 static void           delegate_file_activated         (GtkFileChooser    *chooser,
 						       gpointer           data);
 
-static GtkFileChooserConfirmation delegate_confirm_overwrite (GtkFileChooser    *chooser,
-							      gpointer           data);
 static void           delegate_add_choice             (GtkFileChooser  *chooser,
                                                        const char      *id,
                                                        const char      *label,
@@ -100,32 +95,11 @@ _gtk_file_chooser_install_properties (GObjectClass *klass)
 				    GTK_FILE_CHOOSER_PROP_ACTION,
 				    "action");
   g_object_class_override_property (klass,
-				    GTK_FILE_CHOOSER_PROP_EXTRA_WIDGET,
-				    "extra-widget");
-  g_object_class_override_property (klass,
 				    GTK_FILE_CHOOSER_PROP_FILTER,
 				    "filter");
   g_object_class_override_property (klass,
-				    GTK_FILE_CHOOSER_PROP_LOCAL_ONLY,
-				    "local-only");
-  g_object_class_override_property (klass,
-				    GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET,
-				    "preview-widget");
-  g_object_class_override_property (klass,
-				    GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET_ACTIVE,
-				    "preview-widget-active");
-  g_object_class_override_property (klass,
-				    GTK_FILE_CHOOSER_PROP_USE_PREVIEW_LABEL,
-				    "use-preview-label");
-  g_object_class_override_property (klass,
 				    GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE,
 				    "select-multiple");
-  g_object_class_override_property (klass,
-				    GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN,
-				    "show-hidden");
-  g_object_class_override_property (klass,
-				    GTK_FILE_CHOOSER_PROP_DO_OVERWRITE_CONFIRMATION,
-				    "do-overwrite-confirmation");
   g_object_class_override_property (klass,
 				    GTK_FILE_CHOOSER_PROP_CREATE_FOLDERS,
 				    "create-folders");
@@ -154,7 +128,6 @@ _gtk_file_chooser_delegate_iface_init (GtkFileChooserIface *iface)
   iface->select_all = delegate_select_all;
   iface->unselect_all = delegate_unselect_all;
   iface->get_files = delegate_get_files;
-  iface->get_preview_file = delegate_get_preview_file;
   iface->get_file_system = delegate_get_file_system;
   iface->add_filter = delegate_add_filter;
   iface->remove_filter = delegate_remove_filter;
@@ -193,12 +166,8 @@ _gtk_file_chooser_set_delegate (GtkFileChooser *receiver,
 		    G_CALLBACK (delegate_current_folder_changed), receiver);
   g_signal_connect (delegate, "selection-changed",
 		    G_CALLBACK (delegate_selection_changed), receiver);
-  g_signal_connect (delegate, "update-preview",
-		    G_CALLBACK (delegate_update_preview), receiver);
   g_signal_connect (delegate, "file-activated",
 		    G_CALLBACK (delegate_file_activated), receiver);
-  g_signal_connect (delegate, "confirm-overwrite",
-		    G_CALLBACK (delegate_confirm_overwrite), receiver);
 }
 
 GQuark
@@ -252,12 +221,6 @@ delegate_get_files (GtkFileChooser *chooser)
   return gtk_file_chooser_get_files (get_delegate (chooser));
 }
 
-static GFile *
-delegate_get_preview_file (GtkFileChooser *chooser)
-{
-  return gtk_file_chooser_get_preview_file (get_delegate (chooser));
-}
-
 static GtkFileSystem *
 delegate_get_file_system (GtkFileChooser *chooser)
 {
@@ -289,7 +252,7 @@ delegate_add_shortcut_folder (GtkFileChooser  *chooser,
 			      GFile           *file,
 			      GError         **error)
 {
-  return _gtk_file_chooser_add_shortcut_folder (get_delegate (chooser), file, error);
+  return gtk_file_chooser_add_shortcut_folder (get_delegate (chooser), file, error);
 }
 
 static gboolean
@@ -297,13 +260,13 @@ delegate_remove_shortcut_folder (GtkFileChooser  *chooser,
 				 GFile           *file,
 				 GError         **error)
 {
-  return _gtk_file_chooser_remove_shortcut_folder (get_delegate (chooser), file, error);
+  return gtk_file_chooser_remove_shortcut_folder (get_delegate (chooser), file, error);
 }
 
 static GSList *
 delegate_list_shortcut_folders (GtkFileChooser *chooser)
 {
-  return _gtk_file_chooser_list_shortcut_folder_files (get_delegate (chooser));
+  return gtk_file_chooser_list_shortcut_folders (get_delegate (chooser));
 }
 
 static gboolean
@@ -311,13 +274,13 @@ delegate_set_current_folder (GtkFileChooser  *chooser,
 			     GFile           *file,
 			     GError         **error)
 {
-  return gtk_file_chooser_set_current_folder_file (get_delegate (chooser), file, error);
+  return gtk_file_chooser_set_current_folder (get_delegate (chooser), file, error);
 }
 
 static GFile *
 delegate_get_current_folder (GtkFileChooser *chooser)
 {
-  return gtk_file_chooser_get_current_folder_file (get_delegate (chooser));
+  return gtk_file_chooser_get_current_folder (get_delegate (chooser));
 }
 
 static void
@@ -361,27 +324,10 @@ delegate_current_folder_changed (GtkFileChooser *chooser,
 }
 
 static void
-delegate_update_preview (GtkFileChooser    *chooser,
-			 gpointer           data)
-{
-  g_signal_emit_by_name (data, "update-preview");
-}
-
-static void
 delegate_file_activated (GtkFileChooser    *chooser,
 			 gpointer           data)
 {
   g_signal_emit_by_name (data, "file-activated");
-}
-
-static GtkFileChooserConfirmation
-delegate_confirm_overwrite (GtkFileChooser    *chooser,
-			    gpointer           data)
-{
-  GtkFileChooserConfirmation conf;
-
-  g_signal_emit_by_name (data, "confirm-overwrite", &conf);
-  return conf;
 }
 
 GSettings *

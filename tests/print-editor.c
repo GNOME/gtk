@@ -3,7 +3,7 @@
 #include <gtk/gtk.h>
 
 static GtkWidget *main_window;
-static char *filename = NULL;
+static GFile *filename = NULL;
 static GtkPageSetup *page_setup = NULL;
 static GtkPrintSettings *settings = NULL;
 static gboolean file_changed = FALSE;
@@ -20,7 +20,7 @@ update_title (GtkWindow *window)
   if (filename == NULL)
     basename = g_strdup ("Untitled");
   else
-    basename = g_path_get_basename (filename);
+    basename = g_file_get_basename (filename);
 
   title = g_strdup_printf ("Simple Editor with printing - %s", basename);
   g_free (basename);
@@ -81,7 +81,8 @@ get_text (void)
 }
 
 static void
-set_text (const char *text, gsize len)
+set_text (const char *text,
+          gsize       len)
 {
   gtk_text_buffer_set_text (buffer, text, len);
   file_changed = FALSE;
@@ -89,7 +90,7 @@ set_text (const char *text, gsize len)
 }
 
 static void
-load_file (const char *open_filename)
+load_file (GFile *open_filename)
 {
   GtkWidget *error_dialog;
   char *contents;
@@ -98,37 +99,45 @@ load_file (const char *open_filename)
 
   error_dialog = NULL;
   error = NULL;
-  if (g_file_get_contents (open_filename, &contents, &len, &error))
+  g_file_load_contents (open_filename, NULL, &contents, &len, NULL, &error);
+  if (error == NULL)
     {
       if (g_utf8_validate (contents, len, NULL))
 	{
-	  filename = g_strdup (open_filename);
+          g_clear_object (&filename);
+	  filename = g_object_ref (open_filename);
 	  set_text (contents, len);
 	  g_free (contents);
 	}
       else
 	{
+          GFileInfo *info = g_file_query_info (open_filename, "standard::display-name", 0, NULL, &error);
+          const char *display_name = g_file_info_get_display_name (info);
 	  error_dialog = gtk_message_dialog_new (GTK_WINDOW (main_window),
 						 GTK_DIALOG_DESTROY_WITH_PARENT,
 						 GTK_MESSAGE_ERROR,
 						 GTK_BUTTONS_CLOSE,
 						 "Error loading file %s:\n%s",
-						 open_filename,
+						 display_name,
 						 "Not valid utf8");
+         g_object_unref (info);
 	}
     }
   else
     {
+      GFileInfo *info = g_file_query_info (open_filename, "standard::display-name", 0, NULL, &error);
+      const char *display_name = g_file_info_get_display_name (info);
       error_dialog = gtk_message_dialog_new (GTK_WINDOW (main_window),
 					     GTK_DIALOG_DESTROY_WITH_PARENT,
 					     GTK_MESSAGE_ERROR,
 					     GTK_BUTTONS_CLOSE,
 					     "Error loading file %s:\n%s",
-					     open_filename,
+					     display_name,
 					     error->message);
-      
+      g_object_unref (info);
       g_error_free (error);
     }
+
   if (error_dialog)
     {
       g_signal_connect (error_dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
@@ -138,38 +147,49 @@ load_file (const char *open_filename)
 
 
 static void
-save_file (const char *save_filename)
+save_file (GFile *save_filename)
 {
   char *text = get_text ();
   GtkWidget *error_dialog;
   GError *error;
 
   error = NULL;
-  if (g_file_set_contents (save_filename,
-			   text, -1, &error))
+  g_file_replace_contents (save_filename,
+                           text, -1,
+                           NULL, FALSE,
+                           G_FILE_CREATE_NONE,
+                           NULL,
+                           NULL,
+                           &error);
+
+  if (error != NULL)
     {
       if (save_filename != filename)
 	{
-	  g_free (filename);
-	  filename = g_strdup (save_filename);
+          g_clear_object (&filename);
+          filename = g_object_ref (save_filename);
 	}
       file_changed = FALSE;
       update_ui ();
     }
   else
     {
+      GFileInfo *info = g_file_query_info (save_filename, "standard::display-name", 0, NULL, NULL);
+      const char *display_name = g_file_info_get_display_name (info);
+
       error_dialog = gtk_message_dialog_new (GTK_WINDOW (main_window),
 					     GTK_DIALOG_DESTROY_WITH_PARENT,
 					     GTK_MESSAGE_ERROR,
 					     GTK_BUTTONS_CLOSE,
 					     "Error saving to file %s:\n%s",
-					     filename,
+					     display_name,
 					     error->message);
       
       g_signal_connect (error_dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
       gtk_widget_show (error_dialog);
       
       g_error_free (error);
+      g_object_unref (info);
     }
 }
 
@@ -481,7 +501,6 @@ activate_save_as (GSimpleAction *action,
 {
   GtkWidget *dialog;
   gint response;
-  char *save_filename;
 
   dialog = gtk_file_chooser_dialog_new ("Select file",
                                         GTK_WINDOW (main_window),
@@ -494,9 +513,9 @@ activate_save_as (GSimpleAction *action,
 
   if (response == GTK_RESPONSE_OK)
     {
-      save_filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+      GFile *save_filename = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
       save_file (save_filename);
-      g_free (save_filename);
+      g_object_unref (save_filename);
     }
 
   gtk_widget_destroy (dialog);
@@ -520,7 +539,6 @@ activate_open (GSimpleAction *action,
 {
   GtkWidget *dialog;
   gint response;
-  char *open_filename;
 
   dialog = gtk_file_chooser_dialog_new ("Select file",
                                         GTK_WINDOW (main_window),
@@ -533,9 +551,9 @@ activate_open (GSimpleAction *action,
 
   if (response == GTK_RESPONSE_OK)
     {
-      open_filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+      GFile *open_filename = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
       load_file (open_filename);
-      g_free (open_filename);
+      g_object_unref (open_filename);
     }
 
   gtk_widget_destroy (dialog);
@@ -689,7 +707,11 @@ command_line (GApplication            *application,
   argv = g_application_command_line_get_arguments (command_line, &argc);
 
   if (argc == 2)
-    load_file (argv[1]);
+    {
+      GFile *file = g_file_new_for_commandline_arg (argv[1]);
+      load_file (file);
+      g_object_unref (file);
+    }
 
   return 0;
 }

@@ -5709,14 +5709,17 @@ native_response (GtkNativeDialog *self,
   char *response;
   GtkFileFilter *filter;
 
-  uris = gtk_file_chooser_get_uris (GTK_FILE_CHOOSER (self));
+  uris = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (self));
   filter = gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (self));
   s = g_string_new ("");
   for (l = uris; l != NULL; l = l->next)
     {
-      g_string_prepend (s, l->data);
+      char *uri = g_file_get_uri (l->data);
+      g_string_prepend (s, uri);
       g_string_prepend (s, "\n");
+      g_free (uri);
     }
+  g_slist_free_full (uris, g_object_unref);
 
   switch (response_id)
     {
@@ -5776,33 +5779,6 @@ native_multi_select_toggle (GtkWidget *checkbutton,
 }
 
 static void
-native_overwrite_confirmation_toggle (GtkWidget *checkbutton,
-                                      GtkFileChooserNative *native)
-{
-  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (native),
-                                                  gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(checkbutton)));
-}
-
-static void
-native_extra_widget_toggle (GtkWidget *checkbutton,
-                            GtkFileChooserNative *native)
-{
-  gboolean extra_widget = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(checkbutton));
-
-  if (extra_widget)
-    {
-      GtkWidget *extra = gtk_check_button_new_with_label ("Extra toggle");
-      gtk_widget_show (extra);
-      gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (native), extra);
-    }
-  else
-    {
-      gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (native), NULL);
-    }
-}
-
-
-static void
 native_visible_notify_show (GObject	*object,
                             GParamSpec	*pspec,
                             GtkWidget   *show_button)
@@ -5826,12 +5802,12 @@ native_visible_notify_hide (GObject	*object,
   gtk_widget_set_sensitive (hide_button, visible);
 }
 
-static char *
+static GFile *
 get_some_file (void)
 {
   GFile *dir = g_file_new_for_path (g_get_current_dir ());
   GFileEnumerator *e;
-  char *res = NULL;
+  GFile *res = NULL;
 
   e = g_file_enumerate_children (dir, "*", 0, NULL, NULL);
   if (e)
@@ -5846,8 +5822,7 @@ get_some_file (void)
               if (g_file_info_get_file_type (info) == G_FILE_TYPE_REGULAR)
                 {
                   GFile *child = g_file_enumerator_get_child (e, info);
-                  res = g_file_get_path (child);
-                  g_object_unref (child);
+                  res = g_steal_pointer (&child);
                 }
               g_object_unref (info);
             }
@@ -5877,14 +5852,12 @@ native_action_changed (GtkWidget *combo,
                                (GtkFileChooserAction) i);
 
 
-  if (i == GTK_FILE_CHOOSER_ACTION_SAVE ||
-      i == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+  if (i == GTK_FILE_CHOOSER_ACTION_SAVE)
     {
       if (save_as)
         {
-          char *file = get_some_file ();
-          gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (native), file);
-          g_free (file);
+          GFile *file = get_some_file ();
+          gtk_file_chooser_set_file (GTK_FILE_CHOOSER (native), file, NULL);
         }
       else
         gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (native), "newname.txt");
@@ -5962,6 +5935,8 @@ create_native_dialogs (GtkWidget *widget)
 
   if (!window)
     {
+      GFile *path;
+
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (widget));
@@ -5974,9 +5949,9 @@ create_native_dialogs (GtkWidget *widget)
 
       g_signal_connect_swapped (G_OBJECT (window), "destroy", G_CALLBACK (destroy_native), native);
 
-      gtk_file_chooser_add_shortcut_folder (GTK_FILE_CHOOSER (native),
-                                            g_get_current_dir (),
-                                            NULL);
+      path = g_file_new_for_path (g_get_current_dir ());
+      gtk_file_chooser_add_shortcut_folder (GTK_FILE_CHOOSER (native), path, NULL);
+      g_object_unref (path);
 
       gtk_window_set_title (GTK_WINDOW(window), "Native dialog parent");
 
@@ -6018,16 +5993,6 @@ create_native_dialogs (GtkWidget *widget)
       check_button = gtk_check_button_new_with_label ("Multiple select");
       g_signal_connect (check_button, "toggled",
                         G_CALLBACK (native_multi_select_toggle), native);
-      gtk_container_add (GTK_CONTAINER (box), check_button);
-
-      check_button = gtk_check_button_new_with_label ("Confirm overwrite");
-      g_signal_connect (check_button, "toggled",
-                        G_CALLBACK (native_overwrite_confirmation_toggle), native);
-      gtk_container_add (GTK_CONTAINER (box), check_button);
-
-      check_button = gtk_check_button_new_with_label ("Extra widget");
-      g_signal_connect (check_button, "toggled",
-                        G_CALLBACK (native_extra_widget_toggle), native);
       gtk_container_add (GTK_CONTAINER (box), check_button);
 
       show_button = gtk_button_new_with_label ("Show");

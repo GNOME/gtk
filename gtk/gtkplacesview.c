@@ -89,7 +89,6 @@ struct _GtkPlacesViewPrivate
 
   GtkPlacesViewRow              *row_for_action;
 
-  guint                          local_only : 1;
   guint                          should_open_location : 1;
   guint                          should_pulse_entry : 1;
   guint                          entry_pulse_timeout_id;
@@ -126,7 +125,6 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkPlacesView, gtk_places_view, GTK_TYPE_BOX)
 /* GtkPlacesView properties & signals */
 enum {
   PROP_0,
-  PROP_LOCAL_ONLY,
   PROP_OPEN_FLAGS,
   PROP_FETCHING_NETWORKS,
   PROP_LOADING,
@@ -449,10 +447,6 @@ gtk_places_view_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_LOCAL_ONLY:
-      g_value_set_boolean (value, gtk_places_view_get_local_only (self));
-      break;
-
     case PROP_LOADING:
       g_value_set_boolean (value, gtk_places_view_get_loading (self));
       break;
@@ -480,10 +474,6 @@ gtk_places_view_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_LOCAL_ONLY:
-      gtk_places_view_set_local_only (self, g_value_get_boolean (value));
-      break;
-
     case PROP_OPEN_FLAGS:
       gtk_places_view_set_open_flags (self, g_value_get_flags (value));
       break;
@@ -1954,37 +1944,11 @@ on_listbox_row_activated (GtkPlacesView    *view,
 }
 
 static gboolean
-is_mount_locally_accessible (GMount *mount)
-{
-  GFile *base_file;
-  gchar *path;
-
-  if (mount == NULL)
-    return FALSE;
-
-  base_file = g_mount_get_root (mount);
-
-  if (base_file == NULL)
-    return FALSE;
-
-  path = g_file_get_path (base_file);
-  g_object_unref (base_file);
-
-  if (path == NULL)
-    return FALSE;
-
-  g_free (path);
-  return TRUE;
-}
-
-static gboolean
 listbox_filter_func (GtkListBoxRow *row,
                      gpointer       user_data)
 {
   GtkPlacesViewPrivate *priv;
-  gboolean is_network;
   gboolean is_placeholder;
-  gboolean is_local = FALSE;
   gboolean retval;
   gboolean searching;
   gchar *name;
@@ -1994,24 +1958,7 @@ listbox_filter_func (GtkListBoxRow *row,
   retval = FALSE;
   searching = priv->search_query && priv->search_query[0] != '\0';
 
-  is_network = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row), "is-network"));
   is_placeholder = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row), "is-placeholder"));
-
-  if (GTK_IS_PLACES_VIEW_ROW (row))
-    {
-      GtkPlacesViewRow *placesviewrow;
-      GMount *mount;
-
-      placesviewrow = GTK_PLACES_VIEW_ROW (row);
-      g_object_get(G_OBJECT (placesviewrow), "mount", &mount, NULL);
-
-      is_local = is_mount_locally_accessible (mount);
-
-      g_clear_object (&mount);
-    }
-
-  if (is_network && priv->local_only && !is_local)
-    return FALSE;
 
   if (is_placeholder && searching)
     return FALSE;
@@ -2297,13 +2244,6 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
                         G_TYPE_NONE, 2,
                         G_TYPE_STRING,
                         G_TYPE_STRING);
-
-  properties[PROP_LOCAL_ONLY] =
-          g_param_spec_boolean ("local-only",
-                                P_("Local Only"),
-                                P_("Whether the sidebar only includes local files"),
-                                FALSE,
-                                GTK_PARAM_READWRITE);
 
   properties[PROP_LOADING] =
           g_param_spec_boolean ("loading",
@@ -2605,56 +2545,5 @@ gtk_places_view_set_fetching_networks (GtkPlacesView *view,
     {
       priv->fetching_networks = fetching_networks;
       g_object_notify_by_pspec (G_OBJECT (view), properties [PROP_FETCHING_NETWORKS]);
-    }
-}
-
-/*
- * gtk_places_view_get_local_only:
- * @view: a #GtkPlacesView
- *
- * Returns %TRUE if only local volumes are shown, i.e. no networks
- * are displayed.
- *
- * Returns: %TRUE if only local volumes are shown, %FALSE otherwise.
- */
-gboolean
-gtk_places_view_get_local_only (GtkPlacesView *view)
-{
-  GtkPlacesViewPrivate *priv;
-
-  g_return_val_if_fail (GTK_IS_PLACES_VIEW (view), FALSE);
-
-  priv = gtk_places_view_get_instance_private (view);
-
-  return priv->local_only;
-}
-
-/*
- * gtk_places_view_set_local_only:
- * @view: a #GtkPlacesView
- * @local_only: %TRUE to hide remote locations, %FALSE to show.
- *
- * Sets the #GtkPlacesView::local-only property to @local_only.
- */
-void
-gtk_places_view_set_local_only (GtkPlacesView *view,
-                                gboolean       local_only)
-{
-  GtkPlacesViewPrivate *priv;
-
-  g_return_if_fail (GTK_IS_PLACES_VIEW (view));
-
-  priv = gtk_places_view_get_instance_private (view);
-
-  if (priv->local_only != local_only)
-    {
-      priv->local_only = local_only;
-
-      gtk_widget_set_visible (priv->actionbar, !local_only);
-      update_places (view);
-
-      update_view_mode (view);
-
-      g_object_notify_by_pspec (G_OBJECT (view), properties [PROP_LOCAL_ONLY]);
     }
 }

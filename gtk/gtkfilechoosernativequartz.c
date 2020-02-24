@@ -54,9 +54,7 @@ typedef struct {
   gboolean folder;
   gboolean create_folders;
   gboolean modal;
-  gboolean overwrite_confirmation;
   gboolean select_multiple;
-  gboolean show_hidden;
   gboolean running;
 
   char *accept_label;
@@ -266,11 +264,6 @@ filechooser_quartz_launch (FileChooserQuartzData *data)
 
   [data->panel setReleasedWhenClosed:YES];
 
-  if (data->show_hidden)
-    {
-      [data->panel setShowsHiddenFiles:YES];
-    }
-
   if (data->accept_label)
     [data->panel setPrompt:[NSString stringWithUTF8String:data->accept_label]];
 
@@ -445,25 +438,9 @@ gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self)
   GtkWindow *transient_for;
   GtkFileChooserAction action;
 
-  guint update_preview_signal;
   GSList *filters, *l;
   int n_filters, i;
-  GtkWidget *extra_widget = NULL;
   char *message = NULL;
-
-  extra_widget = gtk_file_chooser_get_extra_widget (GTK_FILE_CHOOSER (self));
-  // if the extra_widget is a GtkLabel, then use its text to set the dialog message
-  if (extra_widget != NULL)
-    {
-      if (!GTK_IS_LABEL (extra_widget))
-        return FALSE;
-      else
-        message = g_strdup (gtk_label_get_text (GTK_LABEL (extra_widget)));
-    }
-
-  update_preview_signal = g_signal_lookup ("update-preview", GTK_TYPE_FILE_CHOOSER);
-  if (g_signal_has_handler_pending (self, update_preview_signal, 0, TRUE))
-    return FALSE;
 
   data = g_new0 (FileChooserQuartzData, 1);
 
@@ -505,25 +482,16 @@ gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self)
 
   action = gtk_file_chooser_get_action (GTK_FILE_CHOOSER (self->dialog));
 
-  if (action == GTK_FILE_CHOOSER_ACTION_SAVE ||
-      action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+  if (action == GTK_FILE_CHOOSER_ACTION_SAVE)
     data->save = TRUE;
 
-  if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-      action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+  if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     data->folder = TRUE;
 
   if ((action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
        action == GTK_FILE_CHOOSER_ACTION_OPEN) &&
       gtk_file_chooser_get_select_multiple (GTK_FILE_CHOOSER (self->dialog)))
     data->select_multiple = TRUE;
-
-  // overwrite confirmation appears to be always on
-  if (gtk_file_chooser_get_do_overwrite_confirmation (GTK_FILE_CHOOSER (self->dialog)))
-    data->overwrite_confirmation = TRUE;
-
-  if (gtk_file_chooser_get_show_hidden (GTK_FILE_CHOOSER (self->dialog)))
-    data->show_hidden = TRUE;
 
   transient_for = gtk_native_dialog_get_transient_for (GTK_NATIVE_DIALOG (self));
   if (transient_for)
@@ -547,8 +515,7 @@ gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self)
       if (self->current_folder)
         data->current_folder = g_object_ref (self->current_folder);
 
-      if (action == GTK_FILE_CHOOSER_ACTION_SAVE ||
-          action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+      if (action == GTK_FILE_CHOOSER_ACTION_SAVE)
         data->current_name = g_strdup (self->current_name);
     }
 

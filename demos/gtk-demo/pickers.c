@@ -50,7 +50,6 @@ do_pickers (GtkWidget *do_widget)
     gtk_widget_set_hexpand (label, TRUE);
     picker = gtk_file_chooser_button_new ("Pick a File",
                                           GTK_FILE_CHOOSER_ACTION_OPEN);
-    gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (picker), FALSE);
     gtk_grid_attach (GTK_GRID (table), label, 0, 2, 1, 1);
     gtk_grid_attach (GTK_GRID (table), picker, 1, 2, 1, 1);
 
