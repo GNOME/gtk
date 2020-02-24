@@ -750,10 +750,12 @@ GdkDragAction
 GDK_ACTION_ALL
 
 gdk_drag_get_display
+gdk_drag_get_content
 gdk_drag_get_actions
 gdk_drag_get_selected_action
 gdk_drag_get_formats
 gdk_drag_get_device
+gdk_drag_get_surface
 gdk_drag_get_drag_surface
 gdk_drag_set_hotspot
 
