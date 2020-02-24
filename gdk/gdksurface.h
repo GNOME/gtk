@@ -409,6 +409,9 @@ GDK_AVAILABLE_IN_ALL
 gboolean gdk_surface_is_viewable    (GdkSurface *surface);
 
 GDK_AVAILABLE_IN_ALL
+gboolean      gdk_surface_get_mapped   (GdkSurface *surface);
+
+GDK_AVAILABLE_IN_ALL
 gboolean      gdk_surface_get_autohide (GdkSurface *surface);
 
 GDK_AVAILABLE_IN_ALL
