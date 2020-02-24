@@ -180,8 +180,6 @@ void  gdk_device_set_seat  (GdkDevice *device,
 void           gdk_device_update_tool (GdkDevice     *device,
                                        GdkDeviceTool *tool);
 
-GdkInputMode gdk_device_get_input_mode (GdkDevice *device);
-
 G_END_DECLS
 
 #endif /* __GDK_DEVICE_PRIVATE_H__ */

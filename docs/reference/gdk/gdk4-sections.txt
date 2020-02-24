@@ -463,6 +463,8 @@ gdk_device_get_n_axes
 gdk_device_get_n_keys
 gdk_device_get_axes
 gdk_device_get_seat
+gdk_device_get_num_touches
+gdk_device_get_device_tool
 
 <SUBSECTION>
 gdk_device_get_state

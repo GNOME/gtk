@@ -92,8 +92,8 @@ enum {
   PROP_NAME,
   PROP_ASSOCIATED_DEVICE,
   PROP_TYPE,
-  PROP_INPUT_SOURCE,
-  PROP_INPUT_MODE,
+  PROP_SOURCE,
+  PROP_MODE,
   PROP_HAS_CURSOR,
   PROP_N_AXES,
   PROP_VENDOR_ID,
@@ -169,12 +169,12 @@ gdk_device_class_init (GdkDeviceClass *klass)
                            G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDevice:input-source:
+   * GdkDevice:source:
    *
    * Source type for the device.
    */
-  device_props[PROP_INPUT_SOURCE] =
-      g_param_spec_enum ("input-source",
+  device_props[PROP_SOURCE] =
+      g_param_spec_enum ("source",
                          P_("Input source"),
                          P_("Source type for the device"),
                          GDK_TYPE_INPUT_SOURCE,
@@ -183,12 +183,12 @@ gdk_device_class_init (GdkDeviceClass *klass)
                          G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /*
-   * GdkDevice:input-mode:
+   * GdkDevice:mode:
    *
    * Input mode for the device.
    */
-  device_props[PROP_INPUT_MODE] =
-      g_param_spec_enum ("input-mode",
+  device_props[PROP_MODE] =
+      g_param_spec_enum ("mode",
                          P_("Input mode for the device"),
                          P_("Input mode for the device"),
                          GDK_TYPE_INPUT_MODE,
@@ -414,10 +414,10 @@ gdk_device_set_property (GObject      *object,
     case PROP_TYPE:
       device->type = g_value_get_enum (value);
       break;
-    case PROP_INPUT_SOURCE:
+    case PROP_SOURCE:
       device->source = g_value_get_enum (value);
       break;
-    case PROP_INPUT_MODE:
+    case PROP_MODE:
       gdk_device_set_mode (device, g_value_get_enum (value));
       break;
     case PROP_HAS_CURSOR:
@@ -463,10 +463,10 @@ gdk_device_get_property (GObject    *object,
     case PROP_TYPE:
       g_value_set_enum (value, device->type);
       break;
-    case PROP_INPUT_SOURCE:
+    case PROP_SOURCE:
       g_value_set_enum (value, device->source);
       break;
-    case PROP_INPUT_MODE:
+    case PROP_MODE:
       g_value_set_enum (value, device->mode);
       break;
     case PROP_HAS_CURSOR:
@@ -519,7 +519,7 @@ gdk_device_get_state (GdkDevice       *device,
                       GdkModifierType *mask)
 {
   g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
+  g_return_if_fail (device->source != GDK_SOURCE_KEYBOARD);
   g_return_if_fail (GDK_IS_SURFACE (surface));
   g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
                     gdk_display_device_is_grabbed (gdk_device_get_display (device), device));
@@ -542,7 +542,7 @@ gdk_device_get_position (GdkDevice *device,
                          double    *y)
 {
   g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
+  g_return_if_fail (device->source != GDK_SOURCE_KEYBOARD);
   g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
                     gdk_display_device_is_grabbed (gdk_device_get_display (device), device));
 
@@ -577,7 +577,7 @@ gdk_device_get_surface_at_position (GdkDevice *device,
   GdkSurface *surface;
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
-  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
+  g_return_val_if_fail (device->source != GDK_SOURCE_KEYBOARD, NULL);
   g_return_val_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
                         gdk_display_device_is_grabbed (gdk_device_get_display (device), device), NULL);
 
@@ -626,7 +626,7 @@ gdk_device_get_history (GdkDevice      *device,
                         gint           *n_events)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
-  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, FALSE);
+  g_return_val_if_fail (device->source != GDK_SOURCE_KEYBOARD, FALSE);
   g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
 
   if (n_events)
@@ -772,7 +772,7 @@ gdk_device_set_mode (GdkDevice    *device,
     return FALSE;
 
   device->mode = mode;
-  g_object_notify_by_pspec (G_OBJECT (device), device_props[PROP_INPUT_MODE]);
+  g_object_notify_by_pspec (G_OBJECT (device), device_props[PROP_MODE]);
 
   return TRUE;
 }
@@ -1754,8 +1754,18 @@ gdk_device_update_tool (GdkDevice     *device,
     }
 }
 
-GdkInputMode
-gdk_device_get_input_mode (GdkDevice *device)
+guint
+gdk_device_get_num_touches (GdkDevice *device)
 {
-  return device->mode;
+  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
+
+  return device->num_touches;
+}
+
+GdkDeviceTool *
+gdk_device_get_device_tool (GdkDevice *device)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
+
+  return device->last_tool;
 }

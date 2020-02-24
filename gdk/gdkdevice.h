@@ -24,6 +24,7 @@
 
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
+#include <gdk/gdkdevicetool.h>
 
 
 G_BEGIN_DECLS
@@ -220,6 +221,12 @@ GdkSeat     *gdk_device_get_seat            (GdkDevice *device);
 
 GDK_AVAILABLE_IN_ALL
 GdkAxisFlags gdk_device_get_axes            (GdkDevice *device);
+
+GDK_AVAILABLE_IN_ALL
+guint           gdk_device_get_num_touches  (GdkDevice *device);
+
+GDK_AVAILABLE_IN_ALL
+GdkDeviceTool * gdk_device_get_device_tool  (GdkDevice *device);
 
 G_END_DECLS
 
