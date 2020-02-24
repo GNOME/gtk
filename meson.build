@@ -794,6 +794,13 @@ meson.add_install_script('build-aux/meson/post-install.py',
                          gtk_libdir,
                          gtk_datadir)
 
+if host_machine.system() != 'windows'
+  # Install Valgrind suppression files (except on Windows,
+  # as Valgrind is currently not supported on Windows)
+  install_data('gtk.supp', 'gtk64.supp',
+    install_dir : join_paths(gtk_datadir, 'gtk-4.0', 'valgrind'))
+endif
+
 summary = [
   '',
   '------',
