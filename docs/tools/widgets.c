@@ -593,6 +593,7 @@ create_file_button (void)
   GtkWidget *vbox2;
   GtkWidget *picker;
   char *path;
+  GFile *file;
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
   vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
@@ -615,8 +616,10 @@ create_file_button (void)
 		  			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
   gtk_widget_set_size_request (picker, 150, -1);
   path = g_build_filename (g_get_home_dir (), "Documents", NULL);
-  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (picker), path);
+  file = g_file_new_for_path (path);
+  gtk_file_chooser_set_file (GTK_FILE_CHOOSER (picker), file, NULL);
   g_free (path);
+  g_object_unref (file);
   gtk_widget_set_halign (picker, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (picker, GTK_ALIGN_CENTER);
   gtk_container_add (GTK_CONTAINER (vbox2), picker);
