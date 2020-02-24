@@ -230,9 +230,6 @@ gdk_x11_device_xi2_get_state (GdkDevice       *device,
             case GDK_AXIS_X:
             case GDK_AXIS_Y:
             case GDK_AXIS_IGNORE:
-              if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
-                _gdk_device_translate_surface_coord (device, surface, j, value, &axes[j]);
-              else
                 {
                   gint root_x, root_y;
 

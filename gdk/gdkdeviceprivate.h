@@ -44,7 +44,6 @@ struct _GdkDevice
 
   gchar *name;
   GdkInputSource source;
-  GdkInputMode mode;
   gboolean has_cursor;
   gint num_keys;
   GdkAxisFlags axis_flags;
