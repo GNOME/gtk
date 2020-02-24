@@ -2695,12 +2695,9 @@ _gdk_windowing_got_event (GdkDisplay *display,
 
       _gdk_display_device_grab_update (display, device, source_device, serial);
 
-      if (gdk_device_get_mode (device) == GDK_MODE_DISABLED ||
-          !_gdk_display_check_grab_ownership (display, device, serial))
+      if (!_gdk_display_check_grab_ownership (display, device, serial))
         {
-          /* Device events are blocked by another
-           * device grab, or the device is disabled
-           */
+          /* Device events are blocked by another device grab */
           unlink_event = TRUE;
           goto out;
         }
