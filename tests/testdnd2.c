@@ -141,7 +141,7 @@ static void
 do_copy (GtkWidget *button)
 {
   GtkWidget *popover = gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER);
-  GtkWidget *image = gtk_popover_get_relative_to (GTK_POPOVER (popover));
+  GtkWidget *image = gtk_widget_get_parent (popover);
   GdkDrop *drop = GDK_DROP (g_object_get_data (G_OBJECT (image), "drop"));
 
   gtk_popover_popdown (GTK_POPOVER (popover));
@@ -152,7 +152,7 @@ static void
 do_cancel (GtkWidget *button)
 {
   GtkWidget *popover = gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER);
-  GtkWidget *image = gtk_popover_get_relative_to (GTK_POPOVER (popover));
+  GtkWidget *image = gtk_widget_get_parent (popover);
   GdkDrop *drop = GDK_DROP (g_object_get_data (G_OBJECT (image), "drop"));
 
   gtk_popover_popdown (GTK_POPOVER (popover));
@@ -170,7 +170,8 @@ ask_actions (GdkDrop *drop,
   popover = g_object_get_data (G_OBJECT (image), "popover");
   if (!popover)
     {
-      popover = gtk_popover_new (image);
+      popover = gtk_popover_new ();
+      gtk_widget_set_parent (popover, image);
       g_object_set_data (G_OBJECT (image), "popover", popover);
 
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);

@@ -14,7 +14,6 @@
     <property name="popup-completion">0</property>
   </object>
   <object class="GtkPopover" id="server_adresses_popover">
-    <property name="relative-to">address_entry</property>
     <property name="position">top</property>
     <child>
       <object class="GtkBox">

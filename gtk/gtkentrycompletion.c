@@ -582,7 +582,7 @@ gtk_entry_completion_constructed (GObject *object)
                                               NULL);
 
   /* pack it all */
-  priv->popup_window = gtk_popover_new (NULL);
+  priv->popup_window = gtk_popover_new ();
   gtk_popover_set_position (GTK_POPOVER (priv->popup_window), GTK_POS_BOTTOM);
   gtk_popover_set_autohide (GTK_POPOVER (priv->popup_window), FALSE);
   gtk_popover_set_has_arrow (GTK_POPOVER (priv->popup_window), FALSE);
@@ -2438,8 +2438,7 @@ _gtk_entry_completion_disconnect (GtkEntryCompletion *completion)
 
   unset_accessible_relation (completion->priv->popup_window,
                              completion->priv->entry);
-  gtk_popover_set_relative_to (GTK_POPOVER (completion->priv->popup_window),
-                               NULL);
+  gtk_widget_unparent (completion->priv->popup_window);
 
   completion->priv->entry = NULL;
 }
@@ -2452,8 +2451,7 @@ _gtk_entry_completion_connect (GtkEntryCompletion *completion,
 
   set_accessible_relation (completion->priv->popup_window,
                            completion->priv->entry);
-  gtk_popover_set_relative_to (GTK_POPOVER (completion->priv->popup_window),
-                              completion->priv->entry);
+  gtk_widget_set_parent (completion->priv->popup_window, GTK_WIDGET (entry));
 
   connect_completion_signals (completion);
 }

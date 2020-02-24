@@ -653,9 +653,8 @@ gtk_emoji_completion_new (GtkText *text)
 {
   GtkEmojiCompletion *completion;
 
-  completion = GTK_EMOJI_COMPLETION (g_object_new (GTK_TYPE_EMOJI_COMPLETION,
-                                                   "relative-to", text,
-                                                   NULL));
+  completion = GTK_EMOJI_COMPLETION (g_object_new (GTK_TYPE_EMOJI_COMPLETION, NULL));
+  gtk_widget_set_parent (GTK_WIDGET (completion), GTK_WIDGET (text));
 
   connect_signals (completion, text);
 

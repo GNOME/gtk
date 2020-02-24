@@ -25,8 +25,7 @@
  *
  * GtkPopover is a bubble-like context window, primarily meant to
  * provide context-dependent information or options. Popovers are
- * attached to a widget, passed at construction time on gtk_popover_new(),
- * or updated afterwards through gtk_popover_set_relative_to(), by
+ * attached to a widget, set with gtk_widget_set_parent(). By
  * default they will point to the whole widget area, although this
  * behavior can be changed through gtk_popover_set_pointing_to().
  *
@@ -143,7 +142,6 @@ typedef struct {
   GtkWidget *default_widget;
 
   GdkSurfaceState state;
-  GtkWidget *relative_to;
   GdkRectangle pointing_to;
   gboolean has_pointing_to;
   guint surface_transform_changed_cb;
@@ -169,8 +167,7 @@ enum {
 static guint signals[LAST_SIGNAL] = { 0 };
 
 enum {
-  PROP_RELATIVE_TO = 1,
-  PROP_POINTING_TO,
+  PROP_POINTING_TO = 1,
   PROP_POSITION,
   PROP_AUTOHIDE,
   PROP_DEFAULT_WIDGET,
@@ -416,8 +413,10 @@ create_popup_layout (GtkPopover *popover)
   GdkGravity surface_anchor;
   GdkAnchorHints anchor_hints;
   GdkPopupLayout *layout;
+  GtkWidget *parent;
 
-  gtk_widget_get_surface_allocation (priv->relative_to, &rect);
+  parent = gtk_widget_get_parent (GTK_WIDGET (popover));
+  gtk_widget_get_surface_allocation (parent, &rect);
   if (priv->has_pointing_to)
     {
       rect.x += priv->pointing_to.x;
@@ -653,7 +652,7 @@ gtk_popover_activate_default (GtkPopover *popover)
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkWidget *focus_widget;
 
-  focus_widget = gtk_window_get_focus (GTK_WINDOW (gtk_widget_get_root (priv->relative_to)));
+  focus_widget = gtk_window_get_focus (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (popover))));
   if (!gtk_widget_is_ancestor (focus_widget, GTK_WIDGET (popover)))
     focus_widget = NULL;
 
@@ -744,10 +743,12 @@ gtk_popover_realize (GtkWidget *widget)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GdkSurface *parent;
+  GdkSurface *parent_surface;
+  GtkWidget *parent;
 
-  parent = gtk_native_get_surface (gtk_widget_get_native (priv->relative_to));
-  priv->surface = gdk_surface_new_popup (parent, priv->autohide);
+  parent = gtk_widget_get_parent (widget);
+  parent_surface = gtk_native_get_surface (gtk_widget_get_native (parent));
+  priv->surface = gdk_surface_new_popup (parent_surface, priv->autohide);
 
   gdk_surface_set_widget (priv->surface, widget);
 
@@ -838,11 +839,13 @@ gtk_popover_map (GtkWidget *widget)
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkWidget *child;
+  GtkWidget *parent;
 
   present_popup (popover);
 
+  parent = gtk_widget_get_parent (widget);
   priv->surface_transform_changed_cb =
-    gtk_widget_add_surface_transform_changed_callback (priv->relative_to,
+    gtk_widget_add_surface_transform_changed_callback (parent,
                                                        surface_transform_changed_cb,
                                                        popover,
                                                        unset_surface_transform_changed_cb);
@@ -860,8 +863,10 @@ gtk_popover_unmap (GtkWidget *widget)
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkWidget *child;
+  GtkWidget *parent;
 
-  gtk_widget_remove_surface_transform_changed_callback (priv->relative_to,
+  parent = gtk_widget_get_parent (widget);
+  gtk_widget_remove_surface_transform_changed_callback (parent,
                                                         priv->surface_transform_changed_cb);
   priv->surface_transform_changed_cb = 0;
 
@@ -926,11 +931,13 @@ gtk_popover_get_gap_coords (GtkPopover *popover,
   int border_radius;
   int popover_width, popover_height;
   GtkCssStyle *style;
+  GtkWidget *parent;
 
   popover_width = gtk_widget_get_allocated_width (widget);
   popover_height = gtk_widget_get_allocated_height (widget);
+  parent = gtk_widget_get_parent (widget);
 
-  gtk_widget_get_surface_allocation (priv->relative_to, &rect);
+  gtk_widget_get_surface_allocation (parent, &rect);
   if (priv->has_pointing_to)
     {
       rect.x += priv->pointing_to.x;
@@ -1097,8 +1104,11 @@ gtk_popover_apply_tail_path (GtkPopover *popover,
   gint tip_x, tip_y;
   gint final_x, final_y;
   GtkBorder border;
+  GtkWidget *parent;
 
-  if (!priv->relative_to)
+  parent = gtk_widget_get_parent (GTK_WIDGET (popover));
+
+  if (!parent)
     return;
 
   get_border (priv->arrow_node, &border);
@@ -1364,10 +1374,6 @@ gtk_popover_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_RELATIVE_TO:
-      gtk_popover_set_relative_to (popover, g_value_get_object (value));
-      break;
-
     case PROP_POINTING_TO:
       gtk_popover_set_pointing_to (popover, g_value_get_boxed (value));
       break;
@@ -1405,10 +1411,6 @@ gtk_popover_get_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_RELATIVE_TO:
-      g_value_set_object (value, priv->relative_to);
-      break;
-
     case PROP_POINTING_TO:
       g_value_set_boxed (value, &priv->pointing_to);
       break;
@@ -1483,13 +1485,6 @@ gtk_popover_class_init (GtkPopoverClass *klass)
 
   klass->activate_default = gtk_popover_activate_default;
 
-  properties[PROP_RELATIVE_TO] =
-      g_param_spec_object ("relative-to",
-                           P_("Relative to"),
-                           P_("Widget the bubble window points to"),
-                           GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE);
-
   properties[PROP_POINTING_TO] =
       g_param_spec_boxed ("pointing-to",
                           P_("Pointing to"),
@@ -1551,24 +1546,9 @@ gtk_popover_class_init (GtkPopoverClass *klass)
 }
 
 GtkWidget *
-gtk_popover_new (GtkWidget *relative_to)
+gtk_popover_new (void)
 {
-  return GTK_WIDGET (g_object_new (GTK_TYPE_POPOVER,
-                                   "relative-to", relative_to,
-                                   NULL));
-}
-
-static void
-relative_to_size_changed (GtkWidget  *widget,
-                          int         width,
-                          int         height,
-                          int         baseline,
-                          GtkPopover *popover)
-{
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-
-  if (priv->surface && gdk_surface_is_visible (priv->surface))
-    present_popup (popover);
+  return g_object_new (GTK_TYPE_POPOVER, NULL);
 }
 
 void
@@ -1611,78 +1591,12 @@ gtk_popover_native_interface_init (GtkNativeInterface *iface)
 }
 
 /**
- * gtk_popover_set_relative_to:
- * @popover: a #GtkPopover
- * @relative_to: (allow-none): a #GtkWidget
- *
- * Sets a new widget to be attached to @popover. If @popover is
- * visible, the position will be updated.
- *
- * Note: the ownership of popovers is always given to their @relative_to
- * widget, so if @relative_to is set to %NULL on an attached @popover, it
- * will be detached from its previous widget, and consequently destroyed
- * unless extra references are kept.
- **/
-void
-gtk_popover_set_relative_to (GtkPopover *popover,
-                             GtkWidget  *relative_to)
-{
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  
-  g_return_if_fail (GTK_IS_POPOVER (popover));
-
-  g_object_ref (popover);
-
-  if (priv->relative_to)
-    {
-      g_signal_handlers_disconnect_by_func (priv->relative_to,
-                                            relative_to_size_changed,
-                                            popover);
-      gtk_widget_unparent (GTK_WIDGET (popover));
-    }
-
-  priv->relative_to = relative_to;
-
-  if (priv->relative_to)
-    {
-      g_signal_connect_object (priv->relative_to, "size-allocate",
-                               G_CALLBACK (relative_to_size_changed), popover, 0);
-      gtk_css_node_set_parent (gtk_widget_get_css_node (GTK_WIDGET (popover)),
-                               gtk_widget_get_css_node (relative_to));
-      gtk_widget_set_parent (GTK_WIDGET (popover), relative_to);
-    }
-
-  g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_RELATIVE_TO]);
-
-  g_object_unref (popover);
-}
-
-/**
- * gtk_popover_get_relative_to:
- * @popover: a #GtkPopover
- *
- * Returns the widget @popover is currently attached to
- *
- * Returns: (transfer none): a #GtkWidget
- **/
-GtkWidget *
-gtk_popover_get_relative_to (GtkPopover *popover)
-{
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-
-  g_return_val_if_fail (GTK_IS_POPOVER (popover), NULL);
-
-  return priv->relative_to;
-}
-
-/**
  * gtk_popover_set_pointing_to:
  * @popover: a #GtkPopover
  * @rect: rectangle to point to
  *
  * Sets the rectangle that @popover will point to, in the
- * coordinate space of the widget @popover is attached to,
- * see gtk_popover_set_relative_to().
+ * coordinate space of the @popover parent.
  **/
 void
 gtk_popover_set_pointing_to (GtkPopover         *popover,
@@ -1726,11 +1640,12 @@ gtk_popover_get_pointing_to (GtkPopover   *popover,
 
   if (priv->has_pointing_to)
     *rect = priv->pointing_to;
-  else if (priv->relative_to)
+  else
     {
       graphene_rect_t r;
+      GtkWidget *parent = gtk_widget_get_parent (GTK_WIDGET (popover));
 
-      if (!gtk_widget_compute_bounds (priv->relative_to, priv->relative_to, &r))
+      if (!gtk_widget_compute_bounds (parent, parent, &r))
         return FALSE;
 
       rect->x = floorf (r.origin.x);

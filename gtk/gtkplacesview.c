@@ -1729,7 +1729,8 @@ popup_menu (GtkPlacesViewRow *row,
     {
       GMenuModel *model = get_menu_model ();
 
-      priv->popup_menu = gtk_popover_menu_new_from_model (GTK_WIDGET (view), model);
+      priv->popup_menu = gtk_popover_menu_new_from_model (model);
+      gtk_widget_set_parent (priv->popup_menu, GTK_WIDGET (view));
       gtk_popover_set_position (GTK_POPOVER (priv->popup_menu), GTK_POS_BOTTOM);
 
       gtk_popover_set_has_arrow (GTK_POPOVER (priv->popup_menu), FALSE);
@@ -1739,7 +1740,7 @@ popup_menu (GtkPlacesViewRow *row,
     }
 
   gtk_widget_set_halign (priv->popup_menu, GTK_ALIGN_CENTER);
-  gtk_popover_set_relative_to (GTK_POPOVER (priv->popup_menu), GTK_WIDGET (row));
+  gtk_widget_set_parent (priv->popup_menu, GTK_WIDGET (row));
 
   priv->row_for_action = row;
   gtk_popover_popup (GTK_POPOVER (priv->popup_menu));

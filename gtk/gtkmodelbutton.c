@@ -699,13 +699,13 @@ gtk_model_button_set_popover (GtkModelButton *button,
                               GtkWidget      *popover)
 {
   if (button->popover)
-    gtk_popover_set_relative_to (GTK_POPOVER (button->popover), NULL);
+    gtk_widget_unparent (button->popover);
 
   button->popover = popover;
 
   if (button->popover)
     {
-      gtk_popover_set_relative_to (GTK_POPOVER (button->popover), GTK_WIDGET (button));
+      gtk_widget_set_parent (button->popover, GTK_WIDGET (button));
       gtk_popover_set_position (GTK_POPOVER (button->popover), GTK_POS_RIGHT);
     }
 

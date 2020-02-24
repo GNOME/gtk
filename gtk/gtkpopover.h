@@ -60,13 +60,7 @@ GDK_AVAILABLE_IN_ALL
 GType           gtk_popover_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_popover_new             (GtkWidget    *relative_to);
-
-GDK_AVAILABLE_IN_ALL
-void            gtk_popover_set_relative_to (GtkPopover   *popover,
-                                             GtkWidget    *relative_to);
-GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_popover_get_relative_to (GtkPopover   *popover);
+GtkWidget *     gtk_popover_new             (void);
 
 GDK_AVAILABLE_IN_ALL
 void            gtk_popover_set_pointing_to (GtkPopover         *popover,
