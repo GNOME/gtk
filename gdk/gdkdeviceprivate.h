@@ -44,7 +44,6 @@ struct _GdkDevice
 
   gchar *name;
   GdkInputSource source;
-  GdkInputMode mode;
   gboolean has_cursor;
   gint num_keys;
   GdkAxisFlags axis_flags;
@@ -179,8 +178,6 @@ void  gdk_device_set_seat  (GdkDevice *device,
 
 void           gdk_device_update_tool (GdkDevice     *device,
                                        GdkDeviceTool *tool);
-
-GdkInputMode gdk_device_get_input_mode (GdkDevice *device);
 
 G_END_DECLS
 

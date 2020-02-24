@@ -233,11 +233,6 @@ _gdk_device_wintab_translate_axes (GdkDeviceWintab *device_wintab,
         {
         case GDK_AXIS_X:
         case GDK_AXIS_Y:
-          if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
-            _gdk_device_translate_surface_coord (device, window, i,
-                                                device_wintab->last_axis_data[i],
-                                                &axes[i]);
-          else
             {
               HMONITOR hmonitor;
               MONITORINFO minfo = {sizeof (MONITORINFO),};

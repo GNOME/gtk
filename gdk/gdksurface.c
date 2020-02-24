@@ -2695,12 +2695,9 @@ _gdk_windowing_got_event (GdkDisplay *display,
 
       _gdk_display_device_grab_update (display, device, source_device, serial);
 
-      if (gdk_device_get_input_mode (device) == GDK_MODE_DISABLED ||
-          !_gdk_display_check_grab_ownership (display, device, serial))
+      if (!_gdk_display_check_grab_ownership (display, device, serial))
         {
-          /* Device events are blocked by another
-           * device grab, or the device is disabled
-           */
+          /* Device events are blocked by another device grab */
           unlink_event = TRUE;
           goto out;
         }
@@ -4186,3 +4183,20 @@ gdk_surface_translate_coordinates (GdkSurface *from,
 
   return TRUE;
 }
+
+/**
+ * gdk_surface_get_autohide:
+ * @surface: a #GdkSurface
+ *
+ * Returns whether this surface is set to hide on outside clicks.
+ *
+ * Returns: %TRUE if @surface will autohide
+ */
+gboolean
+gdk_surface_get_autohide (GdkSurface *surface)
+{
+  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
+
+  return surface->autohide;
+}
+

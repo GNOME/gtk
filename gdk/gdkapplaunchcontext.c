@@ -60,9 +60,9 @@
  */
 
 static void    gdk_app_launch_context_finalize    (GObject           *object);
-static gchar * gdk_app_launch_context_get_display (GAppLaunchContext *context,
-                                                   GAppInfo          *info,
-                                                   GList             *files);
+static gchar * gdk_app_launch_context_get_display_name (GAppLaunchContext *context,
+                                                        GAppInfo          *info,
+                                                        GList             *files);
 static gchar * gdk_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
                                                              GAppInfo          *info,
                                                              GList             *files);
@@ -125,7 +125,7 @@ gdk_app_launch_context_class_init (GdkAppLaunchContextClass *klass)
 
   gobject_class->finalize = gdk_app_launch_context_finalize;
 
-  context_class->get_display = gdk_app_launch_context_get_display;
+  context_class->get_display = gdk_app_launch_context_get_display_name;
   context_class->get_startup_notify_id = gdk_app_launch_context_get_startup_notify_id;
   context_class->launch_failed = gdk_app_launch_context_launch_failed;
 
@@ -158,9 +158,9 @@ gdk_app_launch_context_finalize (GObject *object)
 }
 
 static gchar *
-gdk_app_launch_context_get_display (GAppLaunchContext *context,
-                                    GAppInfo          *info,
-                                    GList             *files)
+gdk_app_launch_context_get_display_name (GAppLaunchContext *context,
+                                         GAppInfo          *info,
+                                         GList             *files)
 {
   GdkAppLaunchContext *ctx = GDK_APP_LAUNCH_CONTEXT (context);
   GdkDisplay *display;
@@ -171,6 +171,22 @@ gdk_app_launch_context_get_display (GAppLaunchContext *context,
     display = gdk_display_get_default ();
 
   return g_strdup (gdk_display_get_name (display));
+}
+
+/**
+ * gdk_app_launch_context_get_display:
+ * @context: a #GdkAppLaunchContext
+ *
+ * Gets the #GdkDispolat that @context is for.
+ *
+ * Returns: the display of @context
+ */
+GdkDisplay *
+gdk_app_launch_context_get_display (GdkAppLaunchContext *context)
+{
+  g_return_val_if_fail (GDK_IS_APP_LAUNCH_CONTEXT (context), NULL);
+
+  return context->display;
 }
 
 /**

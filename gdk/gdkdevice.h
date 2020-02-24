@@ -24,6 +24,7 @@
 
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
+#include <gdk/gdkdevicetool.h>
 
 
 G_BEGIN_DECLS
@@ -69,25 +70,6 @@ typedef enum
 } GdkInputSource;
 
 /**
- * GdkInputMode:
- * @GDK_MODE_DISABLED: the device is disabled and will not report any events.
- * @GDK_MODE_SCREEN: the device is enabled. The device’s coordinate space
- *                   maps to the entire screen.
- * @GDK_MODE_SURFACE: the device is enabled. The device’s coordinate space
- *                   is mapped to a single surface. The manner in which this surface
- *                   is chosen is undefined, but it will typically be the same
- *                   way in which the focus surface for key events is determined.
- *
- * An enumeration that describes the mode of an input device.
- */
-typedef enum
-{
-  GDK_MODE_DISABLED,
-  GDK_MODE_SCREEN,
-  GDK_MODE_SURFACE
-} GdkInputMode;
-
-/**
  * GdkDeviceType:
  * @GDK_DEVICE_TYPE_MASTER: Device is a master (or virtual) device. There will
  *                          be an associated focus indicator on the screen.
@@ -131,13 +113,7 @@ gboolean              gdk_device_get_has_cursor (GdkDevice *device);
 
 /* Functions to configure a device */
 GDK_AVAILABLE_IN_ALL
-GdkInputSource gdk_device_get_source    (GdkDevice      *device);
-
-GDK_AVAILABLE_IN_ALL
-GdkInputMode   gdk_device_get_mode      (GdkDevice      *device);
-GDK_AVAILABLE_IN_ALL
-gboolean       gdk_device_set_mode      (GdkDevice      *device,
-                                         GdkInputMode    mode);
+GdkInputSource gdk_device_get_source (GdkDevice    *device);
 
 GDK_AVAILABLE_IN_ALL
 gint           gdk_device_get_n_keys    (GdkDevice       *device);
@@ -220,6 +196,12 @@ GdkSeat     *gdk_device_get_seat            (GdkDevice *device);
 
 GDK_AVAILABLE_IN_ALL
 GdkAxisFlags gdk_device_get_axes            (GdkDevice *device);
+
+GDK_AVAILABLE_IN_ALL
+guint           gdk_device_get_num_touches  (GdkDevice *device);
+
+GDK_AVAILABLE_IN_ALL
+GdkDeviceTool * gdk_device_get_device_tool  (GdkDevice *device);
 
 G_END_DECLS
 
