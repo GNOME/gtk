@@ -125,7 +125,7 @@ int main (int argc, char **argv)
     GtkBuilder *builder = gtk_builder_new_from_string (menu_data, -1);
     menu_model = G_MENU_MODEL (gtk_builder_get_object (builder, "menu_model"));
 
-    menu = gtk_popover_menu_new_from_model (NULL, menu_model);
+    menu = gtk_popover_menu_new_from_model (menu_model);
 
   }
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (menubutton), menu);

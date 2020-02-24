@@ -248,7 +248,8 @@ pressed_cb (GtkGesture *gesture,
   item = g_menu_item_new (_("_Paste"), "clipboard.paste");
   g_menu_append_item (menu, item);
 
-  popover = gtk_popover_menu_new_from_model (image, G_MENU_MODEL (menu));
+  popover = gtk_popover_menu_new_from_model (G_MENU_MODEL (menu));
+  gtk_widget_set_parent (popover, image);
 
   gtk_popover_set_pointing_to (GTK_POPOVER (popover), &(GdkRectangle) { x, y, 1, 1});
   gtk_popover_popup (GTK_POPOVER (popover));

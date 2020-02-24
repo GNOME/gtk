@@ -461,21 +461,17 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
 
 /**
  * gtk_popover_menu_new:
- * @relative_to: (allow-none): #GtkWidget the popover is related to
  *
  * Creates a new popover menu.
  *
  * Returns: a new #GtkPopoverMenu
  */
 GtkWidget *
-gtk_popover_menu_new (GtkWidget *relative_to)
+gtk_popover_menu_new (void)
 {
   GtkWidget *popover;
 
-  g_return_val_if_fail (relative_to == NULL || GTK_IS_WIDGET (relative_to), NULL);
-
   popover = g_object_new (GTK_TYPE_POPOVER_MENU,
-                          "relative-to", relative_to,
                           "autohide", TRUE,
                           NULL);
 
@@ -522,11 +518,10 @@ gtk_popover_menu_add_submenu (GtkPopoverMenu *popover,
 
 /**
  * gtk_popover_menu_new_from_model:
- * @relative_to: (allow-none): #GtkWidget the popover is related to
  * @model: (allow-none): a #GMenuModel, or %NULL
  *
  * Creates a #GtkPopoverMenu and populates it according to
- * @model. The popover is pointed to the @relative_to widget.
+ * @model.
  *
  * The created buttons are connected to actions found in the
  * #GtkApplicationWindow to which the popover belongs - typically
@@ -543,27 +538,25 @@ gtk_popover_menu_add_submenu (GtkPopoverMenu *popover,
  * Returns: the new #GtkPopoverMenu
  */
 GtkWidget *
-gtk_popover_menu_new_from_model (GtkWidget  *relative_to,
-                                 GMenuModel *model)
+gtk_popover_menu_new_from_model (GMenuModel *model)
 
 {
-  return gtk_popover_menu_new_from_model_full (relative_to, model, 0);
+  return gtk_popover_menu_new_from_model_full (model, 0);
 }
 
 /**
  * gtk_popover_menu_new_from_model_full:
- * @relative_to: (allow-none): #GtkWidget the popover is related to
  * @model: a #GMenuModel
  * @flags: flags that affect how the menu is created
  *
  * Creates a #GtkPopoverMenu and populates it according to
- * @model. The popover is pointed to the @relative_to widget.
+ * @model.
  *
  * The created buttons are connected to actions found in the
- * action groups that are accessible from the @relative-to widget.
+ * action groups that are accessible from the parent widget.
  * This includes the #GtkApplicationWindow to which the popover
  * belongs. Actions can also be added using gtk_widget_insert_action_group()
- * on the @relative-to widget or on any of its parent widgets.
+ * on the parent widget or on any of its parent widgets.
  *
  * The only flag that is supported currently is
  * #GTK_POPOVER_MENU_NESTED, which makes GTK create traditional,
@@ -572,16 +565,14 @@ gtk_popover_menu_new_from_model (GtkWidget  *relative_to,
  * Returns: (transfer full): the new #GtkPopoverMenu
  */
 GtkWidget *
-gtk_popover_menu_new_from_model_full (GtkWidget           *relative_to,
-                                      GMenuModel          *model,
+gtk_popover_menu_new_from_model_full (GMenuModel          *model,
                                       GtkPopoverMenuFlags  flags)
 {
   GtkWidget *popover;
 
-  g_return_val_if_fail (relative_to == NULL || GTK_IS_WIDGET (relative_to), NULL);
   g_return_val_if_fail (model == NULL || G_IS_MENU_MODEL (model), NULL);
 
-  popover = gtk_popover_menu_new (relative_to);
+  popover = gtk_popover_menu_new ();
   GTK_POPOVER_MENU (popover)->flags = flags;
   gtk_popover_menu_set_menu_model (GTK_POPOVER_MENU (popover), model);
 

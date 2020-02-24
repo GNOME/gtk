@@ -340,7 +340,8 @@ do_popup_menu (GtkWidget   *icon_list,
   if (!path)
     return;
 
-  menu = gtk_popover_new (icon_list);
+  menu = gtk_popover_new ();
+  gtk_widget_set_parent (menu, icon_list);
 
   data = g_new0 (ItemData, 1);
   data->icon_list = icon_view;

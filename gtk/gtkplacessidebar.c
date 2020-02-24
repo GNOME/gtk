@@ -2558,7 +2558,8 @@ create_rename_popover (GtkPlacesSidebar *sidebar)
   if (sidebar->rename_popover)
     return;
 
-  popover = gtk_popover_new (GTK_WIDGET (sidebar));
+  popover = gtk_popover_new ();
+  gtk_widget_set_parent (popover, GTK_WIDGET (sidebar));
   /* Clean sidebar pointer when its destroyed, most of the times due to its
    * relative_to associated row being destroyed */
   g_signal_connect (popover, "destroy", G_CALLBACK (on_rename_popover_destroy), sidebar);
@@ -2625,13 +2626,13 @@ update_popover_shadowing (GtkWidget *row,
 static void
 set_prelight (GtkPopover *popover)
 {
-  update_popover_shadowing (gtk_popover_get_relative_to (popover), TRUE);
+  update_popover_shadowing (gtk_widget_get_parent (GTK_WIDGET (popover)), TRUE);
 }
 
 static void
 unset_prelight (GtkPopover *popover)
 {
-  update_popover_shadowing (gtk_popover_get_relative_to (popover), FALSE);
+  update_popover_shadowing (gtk_widget_get_parent (GTK_WIDGET (popover)), FALSE);
 }
 
 static void
@@ -2661,7 +2662,7 @@ show_rename_popover (GtkSidebarRow *row)
   sidebar->rename_uri = g_strdup (uri);
 
   gtk_editable_set_text (GTK_EDITABLE (sidebar->rename_entry), name);
-  gtk_popover_set_relative_to (GTK_POPOVER (sidebar->rename_popover), GTK_WIDGET (row));
+  gtk_widget_set_parent (sidebar->rename_popover, GTK_WIDGET (row));
   setup_popover_shadowing (sidebar->rename_popover);
 
   gtk_popover_popup (GTK_POPOVER (sidebar->rename_popover));
@@ -3513,7 +3514,8 @@ create_row_popover (GtkPlacesSidebar *sidebar,
     }
 #endif
 
-  sidebar->popover = gtk_popover_new (GTK_WIDGET (sidebar));
+  sidebar->popover = gtk_popover_new ();
+  gtk_widget_set_parent (sidebar->popover, GTK_WIDGET (sidebar));
   /* Clean sidebar pointer when its destroyed, most of the times due to its
    * relative_to associated row being destroyed */
   g_signal_connect (sidebar->popover, "destroy", G_CALLBACK (on_row_popover_destroy), sidebar);
@@ -3561,7 +3563,7 @@ show_row_popover (GtkSidebarRow *row)
 
   create_row_popover (sidebar, row);
 
-  gtk_popover_set_relative_to (GTK_POPOVER (sidebar->popover), GTK_WIDGET (row));
+  gtk_widget_set_parent (sidebar->popover, GTK_WIDGET (row));
 
   sidebar->context_row = row;
   gtk_popover_popup (GTK_POPOVER (sidebar->popover));

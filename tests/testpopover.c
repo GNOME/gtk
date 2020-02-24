@@ -115,7 +115,7 @@ main (int argc, char *argv[])
   gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button), model);
   popover = GTK_WIDGET (gtk_menu_button_get_popover (GTK_MENU_BUTTON (button)));
 
-  popover1 = gtk_popover_menu_new_from_model_full (NULL, model, GTK_POPOVER_MENU_NESTED);
+  popover1 = gtk_popover_menu_new_from_model_full (model, GTK_POPOVER_MENU_NESTED);
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button1), popover1);
 
   g_object_unref (builder);
