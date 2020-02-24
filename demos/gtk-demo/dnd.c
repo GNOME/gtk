@@ -271,7 +271,8 @@ pressed_cb (GtkGesture *gesture,
       pos_x = x;
       pos_y = y;
 
-      menu = gtk_popover_new (widget);
+      menu = gtk_popover_new ();
+      gtk_widget_set_parent (menu, widget);
       gtk_popover_set_has_arrow (GTK_POPOVER (menu), FALSE);
       gtk_popover_set_pointing_to (GTK_POPOVER (menu), &(GdkRectangle){ x, y, 1, 1});
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);

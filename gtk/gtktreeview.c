@@ -10053,7 +10053,8 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
   if (tree_view->search_popover)
     return;
 
-  tree_view->search_popover = gtk_popover_new (GTK_WIDGET (tree_view));
+  tree_view->search_popover = gtk_popover_new ();
+  gtk_widget_set_parent (tree_view->search_popover, GTK_WIDGET (tree_view));
   gtk_popover_set_autohide (GTK_POPOVER (tree_view->search_popover), FALSE);
 
   controller = gtk_event_controller_key_new ();

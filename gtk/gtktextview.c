@@ -1756,7 +1756,8 @@ _gtk_text_view_ensure_magnifier (GtkTextView *text_view)
 
   priv->magnifier = _gtk_magnifier_new (GTK_WIDGET (text_view));
   _gtk_magnifier_set_magnification (GTK_MAGNIFIER (priv->magnifier), 2.0);
-  priv->magnifier_popover = gtk_popover_new (GTK_WIDGET (text_view));
+  priv->magnifier_popover = gtk_popover_new ();
+  gtk_widget_set_parent (priv->magnifier_popover, GTK_WIDGET (text_view));
   gtk_widget_add_css_class (priv->magnifier_popover, "magnifier");
   gtk_popover_set_autohide (GTK_POPOVER (priv->magnifier_popover), FALSE);
   gtk_container_add (GTK_CONTAINER (priv->magnifier_popover),
@@ -8633,7 +8634,8 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
       GMenuModel *model;
 
       model = gtk_text_view_get_menu_model (text_view);
-      priv->popup_menu = gtk_popover_menu_new_from_model (GTK_WIDGET (text_view), model);
+      priv->popup_menu = gtk_popover_menu_new_from_model (model);
+      gtk_widget_set_parent (priv->popup_menu, GTK_WIDGET (text_view));
       gtk_popover_set_position (GTK_POPOVER (priv->popup_menu), GTK_POS_BOTTOM);
 
       gtk_popover_set_has_arrow (GTK_POPOVER (priv->popup_menu), FALSE);
@@ -8847,7 +8849,8 @@ gtk_text_view_selection_bubble_popup_show (gpointer user_data)
 
   g_clear_pointer (&priv->selection_bubble, gtk_widget_unparent);
 
-  priv->selection_bubble = gtk_popover_new (GTK_WIDGET (text_view));
+  priv->selection_bubble = gtk_popover_new ();
+  gtk_widget_set_parent (priv->selection_bubble, GTK_WIDGET (text_view));
   gtk_widget_add_css_class (priv->selection_bubble, GTK_STYLE_CLASS_TOUCH_SELECTION);
   gtk_popover_set_position (GTK_POPOVER (priv->selection_bubble), GTK_POS_BOTTOM);
   gtk_popover_set_autohide (GTK_POPOVER (priv->selection_bubble), FALSE);
@@ -9646,7 +9649,7 @@ gtk_text_view_insert_emoji (GtkTextView *text_view)
       chooser = gtk_emoji_chooser_new ();
       g_object_set_data (G_OBJECT (text_view), "gtk-emoji-chooser", chooser);
 
-      gtk_popover_set_relative_to (GTK_POPOVER (chooser), GTK_WIDGET (text_view));
+      gtk_widget_set_parent (chooser, GTK_WIDGET (text_view));
       g_signal_connect_swapped (chooser, "emoji-picked",
                                 G_CALLBACK (gtk_text_view_insert_at_cursor), text_view);
     }
