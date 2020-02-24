@@ -651,6 +651,7 @@ static gboolean         gtk_widget_real_can_activate_accel      (GtkWidget *widg
                                                                  guint      signal_id);
 
 static void             gtk_widget_buildable_interface_init     (GtkBuildableIface  *iface);
+static void             gtk_widget_css_buildable_interface_init (GtkCssBuildableIface *iface);
 static void             gtk_widget_buildable_set_name           (GtkBuildable       *buildable,
                                                                  const gchar        *name);
 static const gchar *    gtk_widget_buildable_get_name           (GtkBuildable       *buildable);
@@ -743,9 +744,16 @@ gtk_widget_get_type (void)
 
       const GInterfaceInfo buildable_info =
       {
-	(GInterfaceInitFunc) gtk_widget_buildable_interface_init,
-	(GInterfaceFinalizeFunc) NULL,
-	NULL /* interface data */
+        (GInterfaceInitFunc) gtk_widget_buildable_interface_init,
+        (GInterfaceFinalizeFunc) NULL,
+        NULL /* interface data */
+      };
+
+      const GInterfaceInfo css_buildable_info =
+      {
+        (GInterfaceInitFunc) gtk_widget_css_buildable_interface_init,
+        (GInterfaceFinalizeFunc) NULL,
+        NULL /* interface data */
       };
 
       const GInterfaceInfo constraint_target_info =
@@ -767,6 +775,9 @@ gtk_widget_get_type (void)
                                    &accessibility_info) ;
       g_type_add_interface_static (widget_type, GTK_TYPE_BUILDABLE,
                                    &buildable_info) ;
+      g_type_add_interface_static (widget_type, GTK_TYPE_CSS_BUILDABLE,
+                                   &css_buildable_info) ;
+
       g_type_add_interface_static (widget_type, GTK_TYPE_CONSTRAINT_TARGET,
                                    &constraint_target_info) ;
     }
@@ -8699,6 +8710,30 @@ gtk_widget_buildable_add_child (GtkBuildable  *buildable,
     }
 }
 
+static gboolean
+gtk_widget_css_buildable_parse_declaration (GtkCssBuildable *self,
+                                            GtkCssParser    *parser,
+                                            const char      *decl_name,
+                                            size_t           decl_name_len)
+{
+  g_message (__FUNCTION__);
+  if (decl_name_len == strlen ("children"))
+    {
+      if (strcmp (decl_name, "children") == 0)
+        {
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static void
+gtk_widget_css_buildable_interface_init (GtkCssBuildableIface *iface)
+{
+  iface->parse_declaration = gtk_widget_css_buildable_parse_declaration;
+}
+
 static void
 gtk_widget_buildable_interface_init (GtkBuildableIface *iface)
 {
@@ -11323,6 +11358,7 @@ setup_template_child (GtkWidgetTemplate   *template_data,
  * before the construct properties are set. Properties passed to g_object_new()
  * should take precedence over properties set in the private template XML.
  */
+#include "gtkbuildercssparserprivate.h"
 void
 gtk_widget_init_template (GtkWidget *widget)
 {
@@ -11333,10 +11369,30 @@ gtk_widget_init_template (GtkWidget *widget)
   GSList *l;
   GType class_type;
 
+
+  class_type = G_OBJECT_TYPE (widget);
+   if (strcmp (G_OBJECT_TYPE_NAME (widget), "GtkLockButton") == 0 &&
+       g_type_from_name ("GtkLockButton") != G_TYPE_INVALID) {
+      GBytes *css_data;
+      GtkBuilderCssParser *p = gtk_builder_css_parser_new ();
+
+      char *d;
+
+      g_file_get_contents ("../gtk/gtklockbutton.cssui", &d, NULL, NULL);
+
+      css_data = g_bytes_new_static (d, strlen (d));
+
+      gtk_builder_css_parser_extend_with_template (p,
+                                                   class_type,
+                                                   G_OBJECT (widget),
+                                                   css_data);
+    }
+
+
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   object = G_OBJECT (widget);
-  class_type = G_OBJECT_TYPE (widget);
 
   template = GTK_WIDGET_GET_CLASS (widget)->priv->template;
   g_return_if_fail (template != NULL);

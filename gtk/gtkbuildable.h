@@ -25,7 +25,55 @@
 
 #include <gtk/gtkbuilder.h>
 
+// TODO FUCK
+#include "css/gtkcssparserprivate.h"
+
 G_BEGIN_DECLS
+
+
+
+#define GTK_TYPE_CSS_BUILDABLE            (gtk_css_buildable_get_type ())
+#define GTK_CSS_BUILDABLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CSS_BUILDABLE, GtkCssBuildable))
+#define GTK_CSS_BUILDABLE_CLASS(obj)      (G_TYPE_CHECK_CLASS_CAST ((obj), GTK_TYPE_CSS_BUILDABLE, GtkCssBuildableIface))
+#define GTK_IS_CSS_BUILDABLE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CSS_BUILDABLE))
+#define GTK_CSS_BUILDABLE_GET_IFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), GTK_TYPE_CSS_BUILDABLE, GtkCssBuildableIface))
+
+
+typedef struct _GtkCssBuildable      GtkCssBuildable; /* Dummy typedef */
+typedef struct _GtkCssBuildableIface GtkCssBuildableIface;
+
+
+struct _GtkCssBuildableIface
+{
+  GTypeInterface g_iface;
+
+  /* We set one value on the buildable TODO: Take multiple?*/
+  gboolean    (* set_gvalue)   (GtkCssBuildable *self,
+                                const char      *property_name,
+                                size_t           property_name_len,
+                                const GValue    *value);
+
+  /* Add child objects to the buildable */
+  gboolean    (* add_children) (GtkCssBuildable  *self,
+                                const char       *property_name,
+                                size_t            property_name_len,
+                                int               n_children,
+                                GObject         **children);
+
+
+  gboolean    (* parse_declaration) (GtkCssBuildable *self,
+                                     GtkCssParser    *parser,
+                                     const char      *decl_name,
+                                     size_t           decl_name_len);
+};
+
+
+GDK_AVAILABLE_IN_ALL
+GType     gtk_css_buildable_get_type               (void) G_GNUC_CONST;
+
+
+
+
 
 #define GTK_TYPE_BUILDABLE            (gtk_buildable_get_type ())
 #define GTK_BUILDABLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_BUILDABLE, GtkBuildable))
@@ -101,7 +149,7 @@ struct _GtkBuildableParser
  *  content below <child>. To handle an element, the implementation
  *  must fill in the @parser and @user_data and return %TRUE.
  *  #GtkWidget implements this to parse keyboard accelerators specified
- *  in <accelerator> elements. 
+ *  in <accelerator> elements.
  *  Note that @user_data must be freed in @custom_tag_end or @custom_finished.
  * @custom_tag_end: Called for the end tag of each custom element that is
  *  handled by the buildable (see @custom_tag_start).
