@@ -1,0 +1,26 @@
+GtkStatusBar {
+  children: {
+    GtkFrame {
+      id: "frame";
+      shadow-type: none;
+      hexpand: true;
+
+      children: {
+        GtkBox {
+          id: "message_area";
+          spacing: 4;
+
+          children: {
+            GtkLabel {
+              id: "label";
+              halign: start;
+              valign: center;
+              ellipsize: end;
+              single-line-mode: true;
+            }
+          }
+        }
+      }
+    }
+  }
+}

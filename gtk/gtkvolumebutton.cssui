@@ -1,0 +1,14 @@
+GtkVolumeButton {
+  can-focus: true;
+  receives-default: true;
+  has-tooltip: true;
+  relief: none;
+  focus-on-click: false;
+  orientation: vertical;
+  icons: "audio-volume-high", "audio-volume-low", "audio-volume-medium";
+  adjustment: GtkAdjustment {
+    upper: 1;
+    step-increment: 0.02;
+    page-increment: 0.2;
+  };
+}

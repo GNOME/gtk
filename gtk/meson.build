@@ -173,6 +173,7 @@ gtk_public_sources = files([
   'gtkbuildable.c',
   'gtkbuilder.c',
   'gtkbuilderparser.c',
+  'gtkbuildercssparser.c',
   'gtkbuilderscope.c',
   'gtkbutton.c',
   'gtkcalendar.c',

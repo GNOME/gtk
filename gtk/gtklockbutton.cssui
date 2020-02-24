@@ -1,0 +1,36 @@
+GtkLockButton {
+  can-focus: true;
+  receives-default: true;
+
+  children: {
+    GtkBox {
+      id: "box";
+      halign: center;
+      valign: center;
+      spacing: 6;
+      children: {
+        GtkImage {
+          id: "image";
+          icon-name: "missing-image";
+        }
+
+        GtkStack {
+          id: "stack";
+          children: {
+            GtkLabel {
+              id: "label_lock";
+              xalign: 0;
+              label: _("Lock");
+            }
+            GtkLabel {
+              id: "label_unlock";
+              xalign: 0;
+              label: _("Unlock");
+            }
+          }
+        }
+      }
+
+    }
+  }
+}

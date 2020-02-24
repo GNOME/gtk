@@ -651,6 +651,10 @@ static gboolean         gtk_widget_real_can_activate_accel      (GtkWidget *widg
                                                                  guint      signal_id);
 
 static void             gtk_widget_buildable_interface_init     (GtkBuildableIface  *iface);
+static void             gtk_widget_css_buildable_interface_init (GtkCssBuildableIface *iface);
+static void             gtk_widget_css_buildable_set_name       (GtkCssBuildable    *self,
+                                                                 const char         *name);
+
 static void             gtk_widget_buildable_set_name           (GtkBuildable       *buildable,
                                                                  const gchar        *name);
 static const gchar *    gtk_widget_buildable_get_name           (GtkBuildable       *buildable);
@@ -743,9 +747,16 @@ gtk_widget_get_type (void)
 
       const GInterfaceInfo buildable_info =
       {
-	(GInterfaceInitFunc) gtk_widget_buildable_interface_init,
-	(GInterfaceFinalizeFunc) NULL,
-	NULL /* interface data */
+        (GInterfaceInitFunc) gtk_widget_buildable_interface_init,
+        (GInterfaceFinalizeFunc) NULL,
+        NULL /* interface data */
+      };
+
+      const GInterfaceInfo css_buildable_info =
+      {
+        (GInterfaceInitFunc) gtk_widget_css_buildable_interface_init,
+        (GInterfaceFinalizeFunc) NULL,
+        NULL /* interface data */
       };
 
       const GInterfaceInfo constraint_target_info =
@@ -767,6 +778,9 @@ gtk_widget_get_type (void)
                                    &accessibility_info) ;
       g_type_add_interface_static (widget_type, GTK_TYPE_BUILDABLE,
                                    &buildable_info) ;
+      g_type_add_interface_static (widget_type, GTK_TYPE_CSS_BUILDABLE,
+                                   &css_buildable_info) ;
+
       g_type_add_interface_static (widget_type, GTK_TYPE_CONSTRAINT_TARGET,
                                    &constraint_target_info) ;
     }
@@ -8691,6 +8705,51 @@ gtk_widget_buildable_add_child (GtkBuildable  *buildable,
 }
 
 static void
+gtk_widget_css_buildable_set_name (GtkCssBuildable *self,
+                                   const char      *name)
+{
+  g_object_set_qdata_full (G_OBJECT (self), quark_builder_set_name,
+                           g_strdup (name), g_free);
+}
+
+static gboolean
+gtk_widget_css_buildable_set_property (GtkCssBuildable *self,
+                                       const char      *prop_name,
+                                       size_t           prop_name_len,
+                                       GType            value_type,
+                                       gpointer         value)
+{
+  if (prop_name_len != strlen ("children"))
+    return FALSE;
+
+  if (strcmp (prop_name, "children") == 0)
+    {
+      if (g_type_is_a (value_type, GTK_TYPE_WIDGET))
+        {
+          if (GTK_IS_CONTAINER (self))
+            gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (value));
+          else
+            gtk_widget_set_parent (GTK_WIDGET (value), GTK_WIDGET (self));
+
+          return TRUE;
+        }
+      else if (g_type_is_a (value_type, GTK_TYPE_EVENT_CONTROLLER))
+        {
+          gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (value));
+        }
+    }
+
+  return FALSE;
+}
+
+static void
+gtk_widget_css_buildable_interface_init (GtkCssBuildableIface *iface)
+{
+  iface->set_name = gtk_widget_css_buildable_set_name;
+  iface->set_property = gtk_widget_css_buildable_set_property;
+}
+
+static void
 gtk_widget_buildable_interface_init (GtkBuildableIface *iface)
 {
   quark_builder_atk_relations = g_quark_from_static_string ("gtk-builder-atk-relations");
@@ -11314,6 +11373,7 @@ setup_template_child (GtkWidgetTemplate   *template_data,
  * before the construct properties are set. Properties passed to g_object_new()
  * should take precedence over properties set in the private template XML.
  */
+#include "gtkbuildercssparserprivate.h"
 void
 gtk_widget_init_template (GtkWidget *widget)
 {
@@ -11324,12 +11384,69 @@ gtk_widget_init_template (GtkWidget *widget)
   GSList *l;
   GType class_type;
 
+  template = GTK_WIDGET_GET_CLASS (widget)->priv->template;
+  class_type = G_OBJECT_TYPE (widget);
+   if (strcmp (G_OBJECT_TYPE_NAME (widget), "GtkComboBox") == 0 &&
+       g_type_from_name ("GtkComboBox") != G_TYPE_INVALID) {
+      GBytes *css_data;
+      GtkBuilderCssParser *p = gtk_builder_css_parser_new ();
+
+      char *d;
+
+      g_file_get_contents ("../gtk/gtkcombobox.cssui", &d, NULL, NULL);
+
+      css_data = g_bytes_new_static (d, strlen (d));
+
+      if (template->scope)
+        p->builder_scope = template->scope;
+      else
+        p->builder_scope = gtk_builder_cscope_new ();
+
+      gtk_builder_css_parser_extend_with_template (p,
+                                                   class_type,
+                                                   G_OBJECT (widget),
+                                                   css_data);
+    /* Build the automatic child data
+     */
+    template = GTK_WIDGET_GET_CLASS (widget)->priv->template;
+    for (l = template->children; l; l = l->next)
+      {
+        GHashTable *auto_child_hash;
+        AutomaticChildClass *child_class = l->data;
+        GObject *o;
+
+        /* This will setup the pointer of an automated child, and cause
+         * it to be available in any GtkBuildable.get_internal_child()
+         * invocations which may follow by reference in child classes.
+         */
+        o = gtk_builder_css_parser_get_object (p, child_class->name);
+        if (!o)
+          {
+            g_critical ("Unable to retrieve object '%s' from class template for type '%s' while building a '%s'",
+                        child_class->name, g_type_name (class_type), G_OBJECT_TYPE_NAME (widget));
+            continue;
+          }
+
+        auto_child_hash = get_auto_child_hash (widget, class_type, TRUE);
+        g_hash_table_insert (auto_child_hash, child_class->name, g_object_ref (o));
+
+        if (child_class->offset != 0)
+          {
+            gpointer field_p;
+
+            /* Assign 'object' to the specified offset in the instance (or private) data */
+            field_p = G_STRUCT_MEMBER_P (widget, child_class->offset);
+            (* (gpointer *) field_p) = o;
+          }
+      }
+      return;
+    }
+
+
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   object = G_OBJECT (widget);
-  class_type = G_OBJECT_TYPE (widget);
-
-  template = GTK_WIDGET_GET_CLASS (widget)->priv->template;
   g_return_if_fail (template != NULL);
 
   builder = gtk_builder_new ();

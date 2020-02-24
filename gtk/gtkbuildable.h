@@ -27,6 +27,38 @@
 
 G_BEGIN_DECLS
 
+
+
+#define GTK_TYPE_CSS_BUILDABLE            (gtk_css_buildable_get_type ())
+#define GTK_CSS_BUILDABLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CSS_BUILDABLE, GtkCssBuildable))
+#define GTK_CSS_BUILDABLE_CLASS(obj)      (G_TYPE_CHECK_CLASS_CAST ((obj), GTK_TYPE_CSS_BUILDABLE, GtkCssBuildableIface))
+#define GTK_IS_CSS_BUILDABLE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CSS_BUILDABLE))
+#define GTK_CSS_BUILDABLE_GET_IFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), GTK_TYPE_CSS_BUILDABLE, GtkCssBuildableIface))
+
+
+typedef struct _GtkCssBuildable      GtkCssBuildable; /* Dummy typedef */
+typedef struct _GtkCssBuildableIface GtkCssBuildableIface;
+
+
+struct _GtkCssBuildableIface
+{
+  GTypeInterface g_iface;
+
+  void          (* set_name)               (GtkCssBuildable    *self,
+                                            const char         *name);
+
+  gboolean      (* set_property)           (GtkCssBuildable    *self,
+                                            const char         *prop_name,
+                                            size_t              prop_name_len,
+                                            GType               value_type,
+                                            gpointer            value);
+};
+
+
+GDK_AVAILABLE_IN_ALL
+GType     gtk_css_buildable_get_type               (void) G_GNUC_CONST;
+
+
 #define GTK_TYPE_BUILDABLE            (gtk_buildable_get_type ())
 #define GTK_BUILDABLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_BUILDABLE, GtkBuildable))
 #define GTK_BUILDABLE_CLASS(obj)      (G_TYPE_CHECK_CLASS_CAST ((obj), GTK_TYPE_BUILDABLE, GtkBuildableIface))
@@ -101,7 +133,7 @@ struct _GtkBuildableParser
  *  content below <child>. To handle an element, the implementation
  *  must fill in the @parser and @user_data and return %TRUE.
  *  #GtkWidget implements this to parse keyboard accelerators specified
- *  in <accelerator> elements. 
+ *  in <accelerator> elements.
  *  Note that @user_data must be freed in @custom_tag_end or @custom_finished.
  * @custom_tag_end: Called for the end tag of each custom element that is
  *  handled by the buildable (see @custom_tag_start).

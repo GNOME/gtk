@@ -40,6 +40,18 @@
 #include "gtkintl.h"
 
 
+
+typedef GtkCssBuildableIface GtkCssBuildableInterface;
+G_DEFINE_INTERFACE (GtkCssBuildable, gtk_css_buildable, G_TYPE_OBJECT)
+
+static void
+gtk_css_buildable_default_init (GtkCssBuildableInterface *iface)
+{
+  g_message ("%s!!!!", __FUNCTION__);
+}
+
+
+
 typedef GtkBuildableIface GtkBuildableInterface;
 G_DEFINE_INTERFACE (GtkBuildable, gtk_buildable, G_TYPE_OBJECT)
 
