@@ -214,6 +214,42 @@ gdk_drag_get_device (GdkDrag *drag)
   return priv->device;
 }
 
+/**
+ * gdk_drag_get_content:
+ * @drag: a #GdkDrag
+ *
+ * Returns the #GdkContentProvider associated to the GdkDrag object.
+ *
+ * Returns: (transfer none): The #GdkContentProvider associated to @drag.
+ **/
+GdkContentProvider *
+gdk_drag_get_content (GdkDrag *drag)
+{
+  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
+
+  g_return_val_if_fail (GDK_IS_DRAG (drag), NULL);
+
+  return priv->content;
+}
+
+/**
+ * gdk_drag_get_surface:
+ * @drag: a #GdkDrag
+ *
+ * Returns the #GdkSurface where the drag originates.
+ *
+ * Returns: (transfer none): The #GdkSurface where the drag originates
+ **/
+GdkSurface *
+gdk_drag_get_surface (GdkDrag *drag)
+{
+  GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
+
+  g_return_val_if_fail (GDK_IS_DRAG (drag), NULL);
+
+  return priv->surface;
+}
+
 static void
 gdk_drag_init (GdkDrag *drag)
 {
