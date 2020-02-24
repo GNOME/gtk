@@ -2066,8 +2066,8 @@ file_list_build_popover (GtkFileChooserWidget *impl)
   g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
   g_object_unref (section);
 
-  priv->browse_files_popover = gtk_popover_menu_new_from_model (priv->browse_files_tree_view,
-                                                                G_MENU_MODEL (menu));
+  priv->browse_files_popover = gtk_popover_menu_new_from_model (G_MENU_MODEL (menu));
+  gtk_widget_set_parent (priv->browse_files_popover, priv->browse_files_tree_view);
   g_object_unref (menu);
 }
 
@@ -3264,9 +3264,7 @@ gtk_file_chooser_widget_dispose (GObject *object)
 
   cancel_all_operations (impl);
 
-  if (priv->rename_file_popover)
-    gtk_popover_set_relative_to (GTK_POPOVER (priv->rename_file_popover), NULL);
-
+  g_clear_pointer (&priv->rename_file_popover, gtk_widget_unparent);
   g_clear_pointer (&priv->browse_files_popover, gtk_widget_destroy);
   g_clear_object (&priv->extra_widget);
   g_clear_pointer (&priv->bookmarks_manager, _gtk_bookmarks_manager_free);
@@ -8007,7 +8005,7 @@ post_process_ui (GtkFileChooserWidget *impl)
 
   gtk_popover_set_default_widget (GTK_POPOVER (priv->new_folder_popover), priv->new_folder_create_button);
   gtk_popover_set_default_widget (GTK_POPOVER (priv->rename_file_popover), priv->rename_file_rename_button);
-  gtk_popover_set_relative_to (GTK_POPOVER (priv->rename_file_popover), priv->browse_files_tree_view);
+  gtk_widget_set_parent (priv->rename_file_popover, priv->browse_files_tree_view);
 
   priv->item_actions = G_ACTION_GROUP (g_simple_action_group_new ());
   g_action_map_add_action_entries (G_ACTION_MAP (priv->item_actions),

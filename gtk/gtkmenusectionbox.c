@@ -303,7 +303,7 @@ gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
 
           model = _gtk_menu_tracker_item_get_link (item, G_MENU_LINK_SUBMENU);
 
-          submenu = gtk_popover_menu_new_from_model_full (NULL, model, box->flags);
+          submenu = gtk_popover_menu_new_from_model_full (model, box->flags);
           gtk_popover_set_has_arrow (GTK_POPOVER (submenu), FALSE);
           gtk_widget_set_valign (submenu, GTK_ALIGN_START);
 

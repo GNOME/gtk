@@ -6531,7 +6531,8 @@ gtk_notebook_popup_enable (GtkNotebook *notebook)
   if (priv->menu)
     return;
 
-  priv->menu = gtk_popover_menu_new (priv->tabs_widget);
+  priv->menu = gtk_popover_menu_new ();
+  gtk_widget_set_parent (priv->menu, priv->tabs_widget);
 
   priv->menu_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_popover_menu_add_submenu (GTK_POPOVER_MENU (priv->menu), priv->menu_box, "main");

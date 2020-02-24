@@ -152,7 +152,7 @@ create_menu_button (void)
   image = gtk_image_new ();
   gtk_image_set_from_icon_name (GTK_IMAGE (image), "emblem-system-symbolic");
   gtk_container_add (GTK_CONTAINER (widget), image);
-  menu = gtk_popover_new (NULL);
+  menu = gtk_popover_new ();
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (widget), menu);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
@@ -615,7 +615,7 @@ create_file_button (void)
 		  			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
   gtk_widget_set_size_request (picker, 150, -1);
   path = g_build_filename (g_get_home_dir (), "Documents", NULL);
-  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (picker), path);
+  //gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (picker), path);
   g_free (path);
   gtk_widget_set_halign (picker, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (picker, GTK_ALIGN_CENTER);

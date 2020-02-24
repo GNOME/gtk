@@ -22,7 +22,8 @@ create_popover (GtkWidget       *parent,
 {
   GtkWidget *popover;
 
-  popover = gtk_popover_new (parent);
+  popover = gtk_popover_new ();
+  gtk_widget_set_parent (popover, parent);
   gtk_popover_set_position (GTK_POPOVER (popover), pos);
   gtk_container_add (GTK_CONTAINER (popover), child);
   g_object_set (child, "margin", 6, NULL);

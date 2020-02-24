@@ -376,7 +376,7 @@ gtk_scale_button_init (GtkScaleButton *button)
   priv->applied_orientation = GTK_ORIENTATION_VERTICAL;
 
   gtk_widget_init_template (GTK_WIDGET (button));
-  gtk_popover_set_relative_to (GTK_POPOVER (priv->dock), GTK_WIDGET (button));
+  gtk_widget_set_parent (priv->dock, GTK_WIDGET (button));
 
   /* Need a local reference to the adjustment */
   priv->adjustment = gtk_adjustment_new (0, 0, 100, 2, 20, 0);
