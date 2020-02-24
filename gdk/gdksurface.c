@@ -4186,3 +4186,20 @@ gdk_surface_translate_coordinates (GdkSurface *from,
 
   return TRUE;
 }
+
+/**
+ * gdk_surface_get_autohide:
+ * @surface: a #GdkSurface
+ *
+ * Returns whether this surface is set to hide on outside clicks.
+ *
+ * Returns: %TRUE if @surface will autohide
+ */
+gboolean
+gdk_surface_get_autohide (GdkSurface *surface)
+{
+  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
+
+  return surface->autohide;
+}
+
