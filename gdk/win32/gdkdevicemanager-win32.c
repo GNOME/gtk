@@ -79,8 +79,7 @@ create_pointer (GdkDeviceManagerWin32 *device_manager,
   return g_object_new (g_type,
                        "name", name,
                        "type", type,
-                       "input-source", GDK_SOURCE_MOUSE,
-                       "input-mode", GDK_MODE_SCREEN,
+                       "source", GDK_SOURCE_MOUSE,
                        "has-cursor", type == GDK_DEVICE_TYPE_MASTER,
                        "display", _gdk_display,
                        NULL);
@@ -95,8 +94,7 @@ create_keyboard (GdkDeviceManagerWin32 *device_manager,
   return g_object_new (g_type,
                        "name", name,
                        "type", type,
-                       "input-source", GDK_SOURCE_KEYBOARD,
-                       "input-mode", GDK_MODE_SCREEN,
+                       "source", GDK_SOURCE_KEYBOARD,
                        "has-cursor", FALSE,
                        "display", _gdk_display,
                        NULL);
@@ -558,8 +556,7 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
           device = g_object_new (GDK_TYPE_DEVICE_WINTAB,
                                  "name", device_name,
                                  "type", GDK_DEVICE_TYPE_FLOATING,
-                                 "input-source", GDK_SOURCE_PEN,
-                                 "input-mode", GDK_MODE_SCREEN,
+                                 "source", GDK_SOURCE_PEN,
                                  "has-cursor", lc.lcOptions & CXO_SYSTEM,
                                  "display", display,
                                  NULL);
@@ -940,8 +937,7 @@ gdk_input_other_event (GdkDisplay *display,
 	  device_manager->dev_entered_proximity -= 1;
 
 	  if (source_device != NULL &&
-	      source_device->sends_core &&
-	      gdk_device_get_mode (GDK_DEVICE (source_device)) != GDK_MODE_DISABLED)
+	      source_device->sends_core)
 	    {
 	      _gdk_device_virtual_set_active (device_manager->core_pointer,
 					      GDK_DEVICE (source_device));
@@ -950,7 +946,6 @@ gdk_input_other_event (GdkDisplay *display,
 	}
       else if (source_device != NULL &&
 	       source_device->sends_core &&
-	       gdk_device_get_mode (GDK_DEVICE (source_device)) != GDK_MODE_DISABLED &&
                _gdk_input_ignore_core == 0)
         {
           /* A fallback for cases when two devices (disabled and enabled)
@@ -970,8 +965,7 @@ gdk_input_other_event (GdkDisplay *display,
 	  _gdk_input_ignore_core += 1;
         }
 
-      if (source_device == NULL ||
-	  gdk_device_get_mode (GDK_DEVICE (source_device)) == GDK_MODE_DISABLED)
+      if (source_device == NULL)
 	return NULL;
 
       /* Don't produce any button or motion events while a window is being
@@ -1127,8 +1121,7 @@ gdk_input_other_event (GdkDisplay *display,
 								  packet.pkCursor)) == NULL)
 	return NULL;
 
-      if (source_device->sends_core &&
-	  gdk_device_get_mode (GDK_DEVICE (source_device)) != GDK_MODE_DISABLED)
+      if (source_device->sends_core)
 	{
 	  _gdk_device_virtual_set_active (device_manager->core_pointer,
 					  GDK_DEVICE (source_device));

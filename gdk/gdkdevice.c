@@ -93,7 +93,6 @@ enum {
   PROP_ASSOCIATED_DEVICE,
   PROP_TYPE,
   PROP_SOURCE,
-  PROP_MODE,
   PROP_HAS_CURSOR,
   PROP_N_AXES,
   PROP_VENDOR_ID,
@@ -181,19 +180,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
                          GDK_SOURCE_MOUSE,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
-
-  /*
-   * GdkDevice:mode:
-   *
-   * Input mode for the device.
-   */
-  device_props[PROP_MODE] =
-      g_param_spec_enum ("mode",
-                         P_("Input mode for the device"),
-                         P_("Input mode for the device"),
-                         GDK_TYPE_INPUT_MODE,
-                         GDK_MODE_DISABLED,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GdkDevice:has-cursor:
@@ -417,9 +403,6 @@ gdk_device_set_property (GObject      *object,
     case PROP_SOURCE:
       device->source = g_value_get_enum (value);
       break;
-    case PROP_MODE:
-      gdk_device_set_mode (device, g_value_get_enum (value));
-      break;
     case PROP_HAS_CURSOR:
       device->has_cursor = g_value_get_boolean (value);
       break;
@@ -465,9 +448,6 @@ gdk_device_get_property (GObject    *object,
       break;
     case PROP_SOURCE:
       g_value_set_enum (value, device->source);
-      break;
-    case PROP_MODE:
-      g_value_set_enum (value, device->mode);
       break;
     case PROP_HAS_CURSOR:
       g_value_set_boolean (value, device->has_cursor);
@@ -728,56 +708,6 @@ gdk_device_get_source (GdkDevice *device)
 }
 
 /**
- * gdk_device_get_mode:
- * @device: a #GdkDevice
- *
- * Determines the mode of the device.
- *
- * Returns: a #GdkInputMode
- **/
-GdkInputMode
-gdk_device_get_mode (GdkDevice *device)
-{
-  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
-
-  return device->mode;
-}
-
-/**
- * gdk_device_set_mode:
- * @device: a #GdkDevice.
- * @mode: the input mode.
- *
- * Sets a the mode of an input device. The mode controls if the
- * device is active and whether the device’s range is mapped to the
- * entire screen or to a single surface.
- *
- * Note: This is only meaningful for floating devices, master devices (and
- * slaves connected to these) drive the pointer cursor, which is not limited
- * by the input mode.
- *
- * Returns: %TRUE if the mode was successfully changed.
- **/
-gboolean
-gdk_device_set_mode (GdkDevice    *device,
-                     GdkInputMode  mode)
-{
-  g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
-
-  if (device->mode == mode)
-    return TRUE;
-
-  if (mode == GDK_MODE_DISABLED &&
-      gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_MASTER)
-    return FALSE;
-
-  device->mode = mode;
-  g_object_notify_by_pspec (G_OBJECT (device), device_props[PROP_MODE]);
-
-  return TRUE;
-}
-
-/**
  * gdk_device_get_n_keys:
  * @device: a #GdkDevice
  *
@@ -866,7 +796,7 @@ gdk_device_get_axis_use (GdkDevice *device,
   GdkAxisInfo *info;
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_AXIS_IGNORE);
-  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, GDK_AXIS_IGNORE);
+  g_return_val_if_fail (device->source != GDK_SOURCE_KEYBOARD, GDK_AXIS_IGNORE);
   g_return_val_if_fail (index_ < device->axes->len, GDK_AXIS_IGNORE);
 
   info = &g_array_index (device->axes, GdkAxisInfo, index_);
@@ -890,7 +820,7 @@ gdk_device_set_axis_use (GdkDevice   *device,
   GdkAxisInfo *info;
 
   g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
+  g_return_if_fail (device->source != GDK_SOURCE_KEYBOARD);
   g_return_if_fail (index_ < device->axes->len);
 
   info = &g_array_index (device->axes, GdkAxisInfo, index_);
@@ -1075,7 +1005,7 @@ gint
 gdk_device_get_n_axes (GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
-  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, 0);
+  g_return_val_if_fail (device->source != GDK_SOURCE_KEYBOARD, 0);
 
   return device->axes->len;
 }
@@ -1098,7 +1028,7 @@ gdk_device_get_axis_names (GdkDevice *device)
   gint i;
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
-  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
+  g_return_val_if_fail (device->source != GDK_SOURCE_KEYBOARD, NULL);
 
   if (device->axes->len == 0)
     return NULL;
@@ -1140,7 +1070,7 @@ gdk_device_get_axis_value (GdkDevice  *device,
   gint i;
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
-  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, FALSE);
+  g_return_val_if_fail (device->source != GDK_SOURCE_KEYBOARD, FALSE);
 
   if (axes == NULL)
     return FALSE;
@@ -1184,7 +1114,7 @@ gdk_device_get_axis (GdkDevice  *device,
   gint i;
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
-  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, FALSE);
+  g_return_val_if_fail (device->source != GDK_SOURCE_KEYBOARD, FALSE);
 
   if (axes == NULL)
     return FALSE;
@@ -1506,9 +1436,6 @@ _gdk_device_translate_screen_coord (GdkDevice *device,
   GdkAxisInfo axis_info;
   gdouble axis_width, scale, offset;
 
-  if (device->mode != GDK_MODE_SCREEN)
-    return FALSE;
-
   if (index_ >= device->axes->len)
     return FALSE;
 
@@ -1626,7 +1553,7 @@ gdk_device_get_last_event_surface (GdkDevice *device)
   GdkPointerSurfaceInfo *info;
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
-  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
+  g_return_val_if_fail (device->source != GDK_SOURCE_KEYBOARD, NULL);
 
   display = gdk_device_get_display (device);
   info = _gdk_display_get_pointer_info (display, device);
