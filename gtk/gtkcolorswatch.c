@@ -259,7 +259,8 @@ do_popup (GtkColorSwatch *swatch)
   g_clear_pointer (&priv->popover, gtk_widget_unparent);
 
   model = gtk_color_swatch_get_menu_model (swatch);
-  priv->popover = gtk_popover_menu_new_from_model (GTK_WIDGET (swatch), model);
+  priv->popover = gtk_popover_menu_new_from_model (model);
+  gtk_widget_set_parent (priv->popover, GTK_WIDGET (swatch));
   g_object_unref (model);
 
   gtk_popover_popup (GTK_POPOVER (priv->popover));

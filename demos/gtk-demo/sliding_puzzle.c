@@ -448,7 +448,7 @@ do_sliding_puzzle (GtkWidget *do_widget)
       gtk_grid_attach (GTK_GRID (tweaks), apply, 1, 2, 1, 1);
       g_signal_connect (apply, "clicked", G_CALLBACK (reconfigure), NULL);
 
-      popover = gtk_popover_new (NULL);
+      popover = gtk_popover_new ();
       gtk_container_add (GTK_CONTAINER (popover), tweaks);
 
       tweak = gtk_menu_button_new ();

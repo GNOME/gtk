@@ -31,13 +31,13 @@ test_popover_parent (void)
 
   w = gtk_entry_new ();
 
-  p = gtk_popover_new (NULL);
+  p = gtk_popover_new ();
   a = gtk_widget_get_accessible (p);
 
   g_assert (a != NULL);
   g_assert (atk_object_get_parent (a) == NULL);
 
-  gtk_popover_set_relative_to (GTK_POPOVER (p), w);
+  gtk_widget_set_parent (p, w);
 
   g_assert (atk_object_get_parent (a) != NULL);
 
