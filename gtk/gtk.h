@@ -174,6 +174,7 @@
 #include <gtk/gtkpasswordentry.h>
 #include <gtk/gtkpicture.h>
 #include <gtk/gtkpopover.h>
+#include <gtk/gtkpopoverholder.h>
 #include <gtk/gtkpopovermenu.h>
 #include <gtk/gtkpopovermenubar.h>
 #include <gtk/gtkprintcontext.h>
