@@ -473,7 +473,6 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
   GdkInputSource touch_source;
   GdkDeviceType type;
   GdkDevice *device;
-  GdkInputMode mode;
   gint num_touches = 0;
   gchar *vendor_id = NULL, *product_id = NULL;
 
@@ -520,17 +519,14 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
     case XIMasterKeyboard:
     case XIMasterPointer:
       type = GDK_DEVICE_TYPE_MASTER;
-      mode = GDK_MODE_SCREEN;
       break;
     case XISlaveKeyboard:
     case XISlavePointer:
       type = GDK_DEVICE_TYPE_SLAVE;
-      mode = GDK_MODE_DISABLED;
       break;
     case XIFloatingSlave:
     default:
       type = GDK_DEVICE_TYPE_FLOATING;
-      mode = GDK_MODE_DISABLED;
       break;
     }
 
@@ -538,12 +534,10 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
             ({
               const gchar *type_names[] = { "master", "slave", "floating" };
               const gchar *source_names[] = { "mouse", "pen", "eraser", "cursor", "keyboard", "direct touch", "indirect touch", "trackpoint", "pad" };
-              const gchar *mode_names[] = { "disabled", "screen", "window" };
-              g_message ("input device:\n\tname: %s\n\ttype: %s\n\tsource: %s\n\tmode: %s\n\thas cursor: %d\n\ttouches: %d",
+              g_message ("input device:\n\tname: %s\n\ttype: %s\n\tsource: %s\n\thas cursor: %d\n\ttouches: %d",
                          dev->name,
                          type_names[type],
                          source_names[input_source],
-                         mode_names[mode],
                          dev->use == XIMasterPointer,
                          num_touches);
             }));
@@ -555,8 +549,7 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
   device = g_object_new (GDK_TYPE_X11_DEVICE_XI2,
                          "name", dev->name,
                          "type", type,
-                         "input-source", input_source,
-                         "input-mode", mode,
+                         "source", input_source,
                          "has-cursor", (dev->use == XIMasterPointer),
                          "display", display,
                          "device-id", dev->deviceid,
@@ -1228,9 +1221,6 @@ translate_axes (GdkDevice       *device,
         {
         case GDK_AXIS_X:
         case GDK_AXIS_Y:
-          if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
-            _gdk_device_translate_surface_coord (device, surface, i, val, &axes[i]);
-          else
             {
               if (use == GDK_AXIS_X)
                 axes[i] = x;
@@ -1661,17 +1651,8 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                    surface,
                                    &xev->valuators);
 
-            if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
-              {
-                /* Update event coordinates from axes */
-                gdk_device_get_axis (device, axes, GDK_AXIS_X, &x);
-                gdk_device_get_axis (device, axes, GDK_AXIS_Y, &y);
-              }
-            else
-              {
-                x = (double) xev->event_x / scale;
-                y = (double) xev->event_y / scale;
-              }
+             x = (double) xev->event_x / scale;
+             y = (double) xev->event_y / scale;
 
             event = gdk_event_button_new (ev->evtype == XI_ButtonPress
                                             ? GDK_BUTTON_PRESS
@@ -1746,17 +1727,8 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                surface,
                                &xev->valuators);
 
-        if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
-          {
-            /* Update event coordinates from axes */
-            gdk_device_get_axis (device, axes, GDK_AXIS_X, &x);
-            gdk_device_get_axis (device, axes, GDK_AXIS_Y, &y);
-          }
-        else
-          {
-            x = (double) xev->event_x / scale;
-            y = (double) xev->event_y / scale;
-          }
+        x = (double) xev->event_x / scale;
+        y = (double) xev->event_y / scale;
 
         event = gdk_event_motion_new (surface,
                                       device,
@@ -1803,17 +1775,9 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                surface,
                                &xev->valuators);
 
-        if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
-          {
-            /* Update event coordinates from axes */
-            gdk_device_get_axis (device, axes, GDK_AXIS_X, &x);
-            gdk_device_get_axis (device, axes, GDK_AXIS_Y, &y);
-          }
-        else
-          {
-            x = (double) xev->event_x / scale;
-            y = (double) xev->event_y / scale;
-          }
+        x = (double) xev->event_x / scale;
+        y = (double) xev->event_y / scale;
+ 
         event = gdk_event_touch_new (ev->evtype == XI_TouchBegin
                                        ? GDK_TOUCH_BEGIN
                                        : GDK_TOUCH_END,
@@ -1861,17 +1825,8 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                surface,
                                &xev->valuators);
 
-        if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
-          {
-            /* Update event coordinates from axes */
-            gdk_device_get_axis (device, axes, GDK_AXIS_X, &x);
-            gdk_device_get_axis (device, axes, GDK_AXIS_Y, &y);
-          }
-        else
-          {
-            x = (double) xev->event_x / scale;
-            y = (double) xev->event_y / scale;
-          }
+        x = (double) xev->event_x / scale;
+        y = (double) xev->event_y / scale;
 
         event = gdk_event_touch_new (GDK_TOUCH_UPDATE,
                                      GUINT_TO_POINTER (xev->detail),

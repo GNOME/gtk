@@ -110,8 +110,7 @@ create_core_pointer (GdkDisplay       *display)
   return g_object_new (GDK_TYPE_BROADWAY_DEVICE,
                        "name", "Core Pointer",
                        "type", GDK_DEVICE_TYPE_MASTER,
-                       "input-source", GDK_SOURCE_MOUSE,
-                       "input-mode", GDK_MODE_SCREEN,
+                       "source", GDK_SOURCE_MOUSE,
                        "has-cursor", TRUE,
                        "display", display,
                        NULL);
@@ -123,8 +122,7 @@ create_core_keyboard (GdkDisplay       *display)
   return g_object_new (GDK_TYPE_BROADWAY_DEVICE,
                        "name", "Core Keyboard",
                        "type", GDK_DEVICE_TYPE_MASTER,
-                       "input-source", GDK_SOURCE_KEYBOARD,
-                       "input-mode", GDK_MODE_SCREEN,
+                       "source", GDK_SOURCE_KEYBOARD,
                        "has-cursor", FALSE,
                        "display", display,
                        NULL);
@@ -136,8 +134,7 @@ create_touchscreen (GdkDisplay       *display)
   return g_object_new (GDK_TYPE_BROADWAY_DEVICE,
                        "name", "Touchscreen",
                        "type", GDK_DEVICE_TYPE_SLAVE,
-                       "input-source", GDK_SOURCE_TOUCHSCREEN,
-                       "input-mode", GDK_MODE_SCREEN,
+                       "source", GDK_SOURCE_TOUCHSCREEN,
                        "has-cursor", FALSE,
                        "display", display,
                        NULL);
