@@ -91,6 +91,13 @@ void            gdk_drag_set_hotspot (GdkDrag *drag,
                                       gint     hot_x,
                                       gint     hot_y);
 
+GDK_AVAILABLE_IN_ALL
+GdkContentProvider *
+                gdk_drag_get_content (GdkDrag *drag);
+
+GDK_AVAILABLE_IN_ALL
+GdkSurface *    gdk_drag_get_surface (GdkDrag *drag);
+
 G_END_DECLS
 
 #endif /* __GDK_DND_H__ */
