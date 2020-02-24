@@ -385,7 +385,11 @@ show_open_filechooser (NodeEditorWindow *self)
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), ".");
+
+  GFile *cwd = g_file_new_for_path (".");
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), cwd, NULL);
+  g_object_unref (cwd);
+
   g_signal_connect (dialog, "response", G_CALLBACK (open_response_cb), self);
   gtk_widget_show (dialog);
 }
@@ -406,13 +410,20 @@ save_response_cb (GtkWidget        *dialog,
 
   if (response == GTK_RESPONSE_ACCEPT)
     {
-      char *text, *filename;
+      GFile *file;
+      char *text;
       GError *error = NULL;
 
       text = get_current_text (self->text_buffer);
 
-      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-      if (!g_file_set_contents (filename, text, -1, &error))
+      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+      g_file_replace_contents (file, text, -1,
+                               NULL, FALSE,
+                               G_FILE_CREATE_NONE,
+                               NULL,
+                               NULL,
+                               &error);
+      if (error != NULL)
         {
           GtkWidget *dialog;
 
@@ -427,7 +438,9 @@ save_response_cb (GtkWidget        *dialog,
           gtk_widget_show (dialog);
           g_error_free (error);
         }
-      g_free (filename);
+
+      g_free (text);
+      g_object_unref (file);
     }
 
   gtk_widget_destroy (dialog);
@@ -448,8 +461,11 @@ save_cb (GtkWidget        *button,
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), ".");
+
+  GFile *cwd = g_file_new_for_path (".");
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), cwd, NULL);
+  g_object_unref (cwd);
+
   g_signal_connect (dialog, "response", G_CALLBACK (save_response_cb), self);
   gtk_widget_show (dialog);
 }
@@ -523,10 +539,10 @@ export_image_response_cb (GtkWidget  *dialog,
 
   if (response == GTK_RESPONSE_ACCEPT)
     {
-      char *filename;
+      GFile *file;
 
-      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-      if (!gdk_texture_save_to_png (texture, filename))
+      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+      if (!gdk_texture_save_to_png (texture, g_file_peek_path (file)))
         {
           GtkWidget *message_dialog;
 
@@ -538,7 +554,8 @@ export_image_response_cb (GtkWidget  *dialog,
           g_signal_connect (message_dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
           gtk_widget_show (message_dialog);
         }
-      g_free (filename);
+
+      g_object_unref (file);
     }
 
   gtk_widget_destroy (dialog);
@@ -565,7 +582,6 @@ export_image_cb (GtkWidget        *button,
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
   g_signal_connect (dialog, "response", G_CALLBACK (export_image_response_cb), texture);
   gtk_widget_show (dialog);
 }

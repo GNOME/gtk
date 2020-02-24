@@ -185,14 +185,22 @@ get_current_text (GtkTextBuffer *buffer)
 
 static void
 save_to_file (GtkInspectorCssEditor *ce,
-              const gchar           *filename)
+              GFile                 *file)
 {
-  gchar *text;
   GError *error = NULL;
+  char *text;
 
   text = get_current_text (ce->priv->text);
 
-  if (!g_file_set_contents (filename, text, -1, &error))
+  g_file_replace_contents (file, text, -1,
+                           NULL,
+                           FALSE,
+                           G_FILE_CREATE_NONE,
+                           NULL,
+                           NULL,
+                           &error);
+
+  if (error != NULL)
     {
       GtkWidget *dialog;
 
@@ -220,11 +228,9 @@ save_response (GtkWidget             *dialog,
 
   if (response == GTK_RESPONSE_ACCEPT)
     {
-      gchar *filename;
-
-      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-      save_to_file (ce, filename);
-      g_free (filename);
+      GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+      save_to_file (ce, file);
+      g_object_unref (file);
     }
 
   gtk_widget_destroy (dialog);
@@ -245,7 +251,6 @@ save_clicked (GtkButton             *button,
   gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), "custom.css");
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
   g_signal_connect (dialog, "response", G_CALLBACK (save_response), ce);
   gtk_widget_show (dialog);
 }

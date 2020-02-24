@@ -1033,7 +1033,6 @@ render_node_save (GtkButton            *button,
   g_free (filename);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
   g_signal_connect (dialog, "response", G_CALLBACK (render_node_save_response), node);
   gtk_widget_show (dialog);
 }

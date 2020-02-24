@@ -72,11 +72,6 @@ const gchar*       gtk_places_view_get_search_query              (GtkPlacesView 
 void               gtk_places_view_set_search_query              (GtkPlacesView      *view,
                                                                   const gchar        *query_text);
 
-gboolean           gtk_places_view_get_local_only                (GtkPlacesView         *view);
-
-void               gtk_places_view_set_local_only                (GtkPlacesView         *view,
-                                                                  gboolean               local_only);
-
 gboolean           gtk_places_view_get_loading                   (GtkPlacesView         *view);
 
 GtkWidget *        gtk_places_view_new                           (void);

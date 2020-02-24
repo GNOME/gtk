@@ -73,7 +73,6 @@ struct _GtkFileChooserIface
   void           (*select_all)         	   (GtkFileChooser    *chooser);
   void           (*unselect_all)       	   (GtkFileChooser    *chooser);
   GSList *       (*get_files)          	   (GtkFileChooser    *chooser);
-  GFile *        (*get_preview_file)   	   (GtkFileChooser    *chooser);
   GtkFileSystem *(*get_file_system)    	   (GtkFileChooser    *chooser);
   void           (*add_filter)         	   (GtkFileChooser    *chooser,
 					    GtkFileFilter     *filter);
@@ -94,7 +93,6 @@ struct _GtkFileChooserIface
   void (*selection_changed)      (GtkFileChooser *chooser);
   void (*update_preview)         (GtkFileChooser *chooser);
   void (*file_activated)         (GtkFileChooser *chooser);
-  GtkFileChooserConfirmation (*confirm_overwrite) (GtkFileChooser *chooser);
 
   /* 3.22 additions */
   void           (*add_choice)    (GtkFileChooser *chooser,
@@ -112,14 +110,6 @@ struct _GtkFileChooserIface
 };
 
 GtkFileSystem *_gtk_file_chooser_get_file_system         (GtkFileChooser    *chooser);
-gboolean       _gtk_file_chooser_add_shortcut_folder     (GtkFileChooser    *chooser,
-							  GFile             *folder,
-							  GError           **error);
-gboolean       _gtk_file_chooser_remove_shortcut_folder  (GtkFileChooser    *chooser,
-							  GFile             *folder,
-							  GError           **error);
-GSList *       _gtk_file_chooser_list_shortcut_folder_files (GtkFileChooser *chooser);
-
 
 G_END_DECLS
 

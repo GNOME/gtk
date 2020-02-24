@@ -185,7 +185,6 @@ struct _GtkPlacesSidebar {
   guint show_other_locations   : 1;
   guint show_trash             : 1;
   guint show_starred_location  : 1;
-  guint local_only             : 1;
 };
 
 struct _GtkPlacesSidebarClass {
@@ -242,7 +241,6 @@ enum {
   PROP_SHOW_ENTER_LOCATION,
   PROP_SHOW_TRASH,
   PROP_SHOW_STARRED_LOCATION,
-  PROP_LOCAL_ONLY,
   PROP_SHOW_OTHER_LOCATIONS,
   NUM_PROPERTIES
 };
@@ -699,9 +697,6 @@ should_show_file (GtkPlacesSidebar *sidebar,
 {
   gchar *path;
 
-  if (!sidebar->local_only)
-    return TRUE;
-
   path = g_file_get_path (file);
   if (path)
     {
@@ -1103,7 +1098,7 @@ update_places (GtkPlacesSidebar *sidebar)
     }
 
   /* Trash */
-  if (!sidebar->local_only && sidebar->show_trash)
+  if (sidebar->show_trash)
     {
       start_icon = _gtk_trash_monitor_get_icon (sidebar->trash_monitor);
       sidebar->trash_row = add_place (sidebar, PLACES_BUILT_IN,
@@ -1408,9 +1403,6 @@ update_places (GtkPlacesSidebar *sidebar)
       if (_gtk_bookmarks_manager_get_is_builtin (sidebar->bookmarks_manager, root))
         continue;
 
-      if (sidebar->local_only && !is_native)
-        continue;
-
       clos = g_slice_new (BookmarkQueryClosure);
       clos->sidebar = sidebar;
       clos->index = index;
@@ -1437,57 +1429,55 @@ update_places (GtkPlacesSidebar *sidebar)
   g_object_unref (new_bookmark_icon);
 
   /* network */
-  if (!sidebar->local_only)
+  network_volumes = g_list_reverse (network_volumes);
+  for (l = network_volumes; l != NULL; l = l->next)
     {
-      network_volumes = g_list_reverse (network_volumes);
-      for (l = network_volumes; l != NULL; l = l->next)
+      volume = l->data;
+      mount = g_volume_get_mount (volume);
+
+      if (mount != NULL)
         {
-          volume = l->data;
-          mount = g_volume_get_mount (volume);
-
-          if (mount != NULL)
-            {
-              network_mounts = g_list_prepend (network_mounts, mount);
-              continue;
-            }
-          else
-            {
-              start_icon = g_volume_get_symbolic_icon (volume);
-              name = g_volume_get_name (volume);
-              tooltip = g_strdup_printf (_("Mount and open “%s”"), name);
-
-              add_place (sidebar, PLACES_MOUNTED_VOLUME,
-                         SECTION_MOUNTS,
-                         name, start_icon, NULL, NULL,
-                         NULL, volume, NULL, NULL, 0, tooltip);
-              g_object_unref (start_icon);
-              g_free (name);
-              g_free (tooltip);
-            }
+          network_mounts = g_list_prepend (network_mounts, mount);
+          continue;
         }
-
-      network_mounts = g_list_reverse (network_mounts);
-      for (l = network_mounts; l != NULL; l = l->next)
+      else
         {
-          char *mount_uri;
+          start_icon = g_volume_get_symbolic_icon (volume);
+          name = g_volume_get_name (volume);
+          tooltip = g_strdup_printf (_("Mount and open “%s”"), name);
 
-          mount = l->data;
-          root = g_mount_get_default_location (mount);
-          start_icon = g_mount_get_symbolic_icon (mount);
-          mount_uri = g_file_get_uri (root);
-          name = g_mount_get_name (mount);
-          tooltip = g_file_get_parse_name (root);
           add_place (sidebar, PLACES_MOUNTED_VOLUME,
                      SECTION_MOUNTS,
-                     name, start_icon, NULL, mount_uri,
-                     NULL, NULL, mount, NULL, 0, tooltip);
-          g_object_unref (root);
+                     name, start_icon, NULL, NULL,
+                     NULL, volume, NULL, NULL, 0, tooltip);
           g_object_unref (start_icon);
           g_free (name);
-          g_free (mount_uri);
           g_free (tooltip);
         }
     }
+
+  network_mounts = g_list_reverse (network_mounts);
+  for (l = network_mounts; l != NULL; l = l->next)
+    {
+      char *mount_uri;
+
+      mount = l->data;
+      root = g_mount_get_default_location (mount);
+      start_icon = g_mount_get_symbolic_icon (mount);
+      mount_uri = g_file_get_uri (root);
+      name = g_mount_get_name (mount);
+      tooltip = g_file_get_parse_name (root);
+      add_place (sidebar, PLACES_MOUNTED_VOLUME,
+                 SECTION_MOUNTS,
+                 name, start_icon, NULL, mount_uri,
+                 NULL, NULL, mount, NULL, 0, tooltip);
+      g_object_unref (root);
+      g_object_unref (start_icon);
+      g_free (name);
+      g_free (mount_uri);
+      g_free (tooltip);
+    }
+  
 
   g_list_free_full (network_volumes, g_object_unref);
   g_list_free_full (network_mounts, g_object_unref);
@@ -3970,7 +3960,6 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   sidebar->cancellable = g_cancellable_new ();
 
   sidebar->show_trash = TRUE;
-  sidebar->local_only = TRUE;
   sidebar->show_other_locations = TRUE;
   sidebar->show_recent = TRUE;
   sidebar->show_desktop = TRUE;
@@ -4116,10 +4105,6 @@ gtk_places_sidebar_set_property (GObject      *obj,
       gtk_places_sidebar_set_show_starred_location (sidebar, g_value_get_boolean (value));
       break;
 
-    case PROP_LOCAL_ONLY:
-      gtk_places_sidebar_set_local_only (sidebar, g_value_get_boolean (value));
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
       break;
@@ -4166,10 +4151,6 @@ gtk_places_sidebar_get_property (GObject    *obj,
 
     case PROP_SHOW_STARRED_LOCATION:
       g_value_set_boolean (value, gtk_places_sidebar_get_show_starred_location (sidebar));
-      break;
-
-    case PROP_LOCAL_ONLY:
-      g_value_set_boolean (value, gtk_places_sidebar_get_local_only (sidebar));
       break;
 
     default:
@@ -4599,12 +4580,6 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                                 P_("Whether the sidebar includes a builtin shortcut to manually enter a location"),
                                 FALSE,
                                 GTK_PARAM_READWRITE);
-  properties[PROP_LOCAL_ONLY] =
-          g_param_spec_boolean ("local-only",
-                                P_("Local Only"),
-                                P_("Whether the sidebar only includes local files"),
-                                TRUE,
-                                GTK_PARAM_READWRITE);
   properties[PROP_SHOW_TRASH] =
           g_param_spec_boolean ("show-trash",
                                 P_("Show “Trash”"),
@@ -5021,44 +4996,6 @@ gtk_places_sidebar_get_show_trash (GtkPlacesSidebar *sidebar)
   g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), TRUE);
 
   return sidebar->show_trash;
-}
-
-/*
- * gtk_places_sidebar_set_local_only:
- * @sidebar: a places sidebar
- * @local_only: whether to show only local files
- *
- * Sets whether the @sidebar should only show local files.
- */
-void
-gtk_places_sidebar_set_local_only (GtkPlacesSidebar *sidebar,
-                                   gboolean          local_only)
-{
-  g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
-
-  local_only = !!local_only;
-  if (sidebar->local_only != local_only)
-    {
-      sidebar->local_only = local_only;
-      update_places (sidebar);
-      g_object_notify_by_pspec (G_OBJECT (sidebar), properties[PROP_LOCAL_ONLY]);
-    }
-}
-
-/*
- * gtk_places_sidebar_get_local_only:
- * @sidebar: a places sidebar
- *
- * Returns the value previously set with gtk_places_sidebar_set_local_only().
- *
- * Returns: %TRUE if the sidebar will only show local files.
- */
-gboolean
-gtk_places_sidebar_get_local_only (GtkPlacesSidebar *sidebar)
-{
-  g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), FALSE);
-
-  return sidebar->local_only;
 }
 
 static GSList *

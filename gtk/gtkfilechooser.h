@@ -44,9 +44,6 @@ typedef struct _GtkFileChooser      GtkFileChooser;
  * @GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER: Indicates an Open mode for
  *  selecting folders.  The file chooser will let the user pick an
  *  existing folder.
- * @GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER: Indicates a mode for creating a
- *  new folder.  The file chooser will let the user name an existing or
- *  new folder.
  *
  * Describes whether a #GtkFileChooser is being used to open existing files
  * or to save to a possibly new file.
@@ -55,31 +52,8 @@ typedef enum
 {
   GTK_FILE_CHOOSER_ACTION_OPEN,
   GTK_FILE_CHOOSER_ACTION_SAVE,
-  GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-  GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER
+  GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
 } GtkFileChooserAction;
-
-/**
- * GtkFileChooserConfirmation:
- * @GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM: The file chooser will present
- *  its stock dialog to confirm about overwriting an existing file.
- * @GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME: The file chooser will
- *  terminate and accept the user’s choice of a file name.
- * @GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN: The file chooser will
- *  continue running, so as to let the user select another file name.
- *
- * Used as a return value of handlers for the
- * #GtkFileChooser::confirm-overwrite signal of a #GtkFileChooser. This
- * value determines whether the file chooser will present the stock
- * confirmation dialog, accept the user’s choice of a filename, or
- * let the user choose another filename.
- */
-typedef enum
-{
-  GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM,
-  GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME,
-  GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN
-} GtkFileChooserConfirmation;
 
 GDK_AVAILABLE_IN_ALL
 GType gtk_file_chooser_get_type (void) G_GNUC_CONST;
@@ -121,27 +95,10 @@ void                 gtk_file_chooser_set_action          (GtkFileChooser       
 GDK_AVAILABLE_IN_ALL
 GtkFileChooserAction gtk_file_chooser_get_action          (GtkFileChooser       *chooser);
 GDK_AVAILABLE_IN_ALL
-void                 gtk_file_chooser_set_local_only      (GtkFileChooser       *chooser,
-							   gboolean              local_only);
-GDK_AVAILABLE_IN_ALL
-gboolean             gtk_file_chooser_get_local_only      (GtkFileChooser       *chooser);
-GDK_AVAILABLE_IN_ALL
 void                 gtk_file_chooser_set_select_multiple (GtkFileChooser       *chooser,
 							   gboolean              select_multiple);
 GDK_AVAILABLE_IN_ALL
 gboolean             gtk_file_chooser_get_select_multiple (GtkFileChooser       *chooser);
-GDK_AVAILABLE_IN_ALL
-void                 gtk_file_chooser_set_show_hidden     (GtkFileChooser       *chooser,
-							   gboolean              show_hidden);
-GDK_AVAILABLE_IN_ALL
-gboolean             gtk_file_chooser_get_show_hidden     (GtkFileChooser       *chooser);
-
-GDK_AVAILABLE_IN_ALL
-void                 gtk_file_chooser_set_do_overwrite_confirmation (GtkFileChooser *chooser,
-								     gboolean        do_overwrite_confirmation);
-GDK_AVAILABLE_IN_ALL
-gboolean             gtk_file_chooser_get_do_overwrite_confirmation (GtkFileChooser *chooser);
-
 GDK_AVAILABLE_IN_ALL
 void                 gtk_file_chooser_set_create_folders  (GtkFileChooser       *chooser,
 							  gboolean               create_folders);
@@ -156,52 +113,10 @@ void        gtk_file_chooser_set_current_name  (GtkFileChooser *chooser,
 GDK_AVAILABLE_IN_ALL
 gchar *gtk_file_chooser_get_current_name (GtkFileChooser *chooser);
 
-/* Filename manipulation
- */
-GDK_AVAILABLE_IN_ALL
-gchar *  gtk_file_chooser_get_filename       (GtkFileChooser *chooser);
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_file_chooser_set_filename       (GtkFileChooser *chooser,
-					      const char     *filename);
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_file_chooser_select_filename    (GtkFileChooser *chooser,
-					      const char     *filename);
-GDK_AVAILABLE_IN_ALL
-void     gtk_file_chooser_unselect_filename  (GtkFileChooser *chooser,
-					      const char     *filename);
 GDK_AVAILABLE_IN_ALL
 void     gtk_file_chooser_select_all         (GtkFileChooser *chooser);
 GDK_AVAILABLE_IN_ALL
 void     gtk_file_chooser_unselect_all       (GtkFileChooser *chooser);
-GDK_AVAILABLE_IN_ALL
-GSList * gtk_file_chooser_get_filenames      (GtkFileChooser *chooser);
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_file_chooser_set_current_folder (GtkFileChooser *chooser,
-					      const gchar    *filename);
-GDK_AVAILABLE_IN_ALL
-gchar *  gtk_file_chooser_get_current_folder (GtkFileChooser *chooser);
-
-
-/* URI manipulation
- */
-GDK_AVAILABLE_IN_ALL
-gchar *  gtk_file_chooser_get_uri                (GtkFileChooser *chooser);
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_file_chooser_set_uri                (GtkFileChooser *chooser,
-						  const char     *uri);
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_file_chooser_select_uri             (GtkFileChooser *chooser,
-						  const char     *uri);
-GDK_AVAILABLE_IN_ALL
-void     gtk_file_chooser_unselect_uri           (GtkFileChooser *chooser,
-						  const char     *uri);
-GDK_AVAILABLE_IN_ALL
-GSList * gtk_file_chooser_get_uris               (GtkFileChooser *chooser);
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_file_chooser_set_current_folder_uri (GtkFileChooser *chooser,
-						  const gchar    *uri);
-GDK_AVAILABLE_IN_ALL
-gchar *  gtk_file_chooser_get_current_folder_uri (GtkFileChooser *chooser);
 
 /* GFile manipulation */
 GDK_AVAILABLE_IN_ALL
@@ -220,44 +135,11 @@ void     gtk_file_chooser_unselect_file           (GtkFileChooser  *chooser,
 GDK_AVAILABLE_IN_ALL
 GSList * gtk_file_chooser_get_files               (GtkFileChooser  *chooser);
 GDK_AVAILABLE_IN_ALL
-gboolean gtk_file_chooser_set_current_folder_file (GtkFileChooser  *chooser,
+gboolean gtk_file_chooser_set_current_folder      (GtkFileChooser  *chooser,
                                                    GFile           *file,
                                                    GError         **error);
 GDK_AVAILABLE_IN_ALL
-GFile *  gtk_file_chooser_get_current_folder_file (GtkFileChooser  *chooser);
-
-/* Preview widget
- */
-GDK_AVAILABLE_IN_ALL
-void       gtk_file_chooser_set_preview_widget        (GtkFileChooser *chooser,
-						       GtkWidget      *preview_widget);
-GDK_AVAILABLE_IN_ALL
-GtkWidget *gtk_file_chooser_get_preview_widget        (GtkFileChooser *chooser);
-GDK_AVAILABLE_IN_ALL
-void       gtk_file_chooser_set_preview_widget_active (GtkFileChooser *chooser,
-						       gboolean        active);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_file_chooser_get_preview_widget_active (GtkFileChooser *chooser);
-GDK_AVAILABLE_IN_ALL
-void       gtk_file_chooser_set_use_preview_label     (GtkFileChooser *chooser,
-						       gboolean        use_label);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_file_chooser_get_use_preview_label     (GtkFileChooser *chooser);
-
-GDK_AVAILABLE_IN_ALL
-char  *gtk_file_chooser_get_preview_filename (GtkFileChooser *chooser);
-GDK_AVAILABLE_IN_ALL
-char  *gtk_file_chooser_get_preview_uri      (GtkFileChooser *chooser);
-GDK_AVAILABLE_IN_ALL
-GFile *gtk_file_chooser_get_preview_file     (GtkFileChooser *chooser);
-
-/* Extra widget
- */
-GDK_AVAILABLE_IN_ALL
-void       gtk_file_chooser_set_extra_widget (GtkFileChooser *chooser,
-					      GtkWidget      *extra_widget);
-GDK_AVAILABLE_IN_ALL
-GtkWidget *gtk_file_chooser_get_extra_widget (GtkFileChooser *chooser);
+GFile *  gtk_file_chooser_get_current_folder      (GtkFileChooser  *chooser);
 
 /* List of user selectable filters
  */
@@ -274,7 +156,7 @@ GSList *gtk_file_chooser_list_filters  (GtkFileChooser *chooser);
  */
 GDK_AVAILABLE_IN_ALL
 void           gtk_file_chooser_set_filter (GtkFileChooser *chooser,
-					   GtkFileFilter  *filter);
+					    GtkFileFilter  *filter);
 GDK_AVAILABLE_IN_ALL
 GtkFileFilter *gtk_file_chooser_get_filter (GtkFileChooser *chooser);
 
@@ -282,25 +164,14 @@ GtkFileFilter *gtk_file_chooser_get_filter (GtkFileChooser *chooser);
 
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_file_chooser_add_shortcut_folder    (GtkFileChooser *chooser,
-						  const char     *folder,
+						  GFile          *folder,
 						  GError        **error);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_file_chooser_remove_shortcut_folder (GtkFileChooser *chooser,
-						  const char     *folder,
+						  GFile          *folder,
 						  GError        **error);
 GDK_AVAILABLE_IN_ALL
 GSList *gtk_file_chooser_list_shortcut_folders   (GtkFileChooser *chooser);
-
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_file_chooser_add_shortcut_folder_uri    (GtkFileChooser *chooser,
-						      const char     *uri,
-						      GError        **error);
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_file_chooser_remove_shortcut_folder_uri (GtkFileChooser *chooser,
-						      const char     *uri,
-						      GError        **error);
-GDK_AVAILABLE_IN_ALL
-GSList *gtk_file_chooser_list_shortcut_folder_uris   (GtkFileChooser *chooser);
 
 GDK_AVAILABLE_IN_ALL
 void        gtk_file_chooser_add_choice              (GtkFileChooser  *chooser,
