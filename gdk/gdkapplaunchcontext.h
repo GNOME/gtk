@@ -39,6 +39,9 @@ GDK_AVAILABLE_IN_ALL
 GType                gdk_app_launch_context_get_type      (void);
 
 GDK_AVAILABLE_IN_ALL
+GdkDisplay *         gdk_app_launch_context_get_display   (GdkAppLaunchContext *context);
+
+GDK_AVAILABLE_IN_ALL
 void                 gdk_app_launch_context_set_desktop   (GdkAppLaunchContext *context,
                                                            gint                 desktop);
 GDK_AVAILABLE_IN_ALL
@@ -50,6 +53,7 @@ void                 gdk_app_launch_context_set_icon      (GdkAppLaunchContext *
 GDK_AVAILABLE_IN_ALL
 void                 gdk_app_launch_context_set_icon_name (GdkAppLaunchContext *context,
                                                            const char          *icon_name);
+
 
 G_END_DECLS
 

@@ -994,6 +994,7 @@ gdk_wayland_surface_get_type
 <TITLE>Application launching</TITLE>
 <FILE>gdkapplaunchcontext</FILE>
 GdkAppLaunchContext
+gdk_app_launch_context_get_display
 gdk_app_launch_context_set_desktop
 gdk_app_launch_context_set_timestamp
 gdk_app_launch_context_set_icon
