@@ -2181,7 +2181,7 @@ test_expose_object (void)
     "  </object>"
     "</interface>";
 
-  menu = gtk_popover_new (NULL);
+  menu = gtk_popover_new ();
   builder = gtk_builder_new ();
   gtk_builder_expose_object (builder, "builder", G_OBJECT (builder));
   gtk_builder_expose_object (builder, "external_menu", G_OBJECT (menu));

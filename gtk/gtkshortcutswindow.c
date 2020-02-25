@@ -932,7 +932,6 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   gtk_stack_add_named (priv->title_stack, GTK_WIDGET (priv->menu_button), "sections");
 
   priv->popover = g_object_new (GTK_TYPE_POPOVER,
-                                "relative-to", priv->menu_button,
                                 "position", GTK_POS_BOTTOM,
                                 NULL);
   gtk_menu_button_set_popover (priv->menu_button, GTK_WIDGET (priv->popover));

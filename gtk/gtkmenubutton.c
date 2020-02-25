@@ -301,6 +301,7 @@ gtk_menu_button_measure (GtkWidget      *widget,
                       for_size,
                       minimum, natural,
                       minimum_baseline, natural_baseline);
+
 }
 
 static void
@@ -315,7 +316,6 @@ gtk_menu_button_size_allocate (GtkWidget *widget,
   gtk_widget_size_allocate (priv->button,
                             &(GtkAllocation) { 0, 0, width, height },
                             baseline);
-
   if (priv->popover)
     gtk_native_check_resize (GTK_NATIVE (priv->popover));
 }
@@ -552,7 +552,7 @@ gtk_menu_button_set_menu_model (GtkMenuButton *menu_button,
     {
       GtkWidget *popover;
 
-      popover = gtk_popover_menu_new_from_model (GTK_WIDGET (menu_button), menu_model);
+      popover = gtk_popover_menu_new_from_model (menu_model);
       gtk_menu_button_set_popover (menu_button, popover);
     }
   else
@@ -752,7 +752,7 @@ gtk_menu_button_dispose (GObject *object)
       g_signal_handlers_disconnect_by_func (priv->popover,
                                             popover_destroy_cb,
                                             object);
-      gtk_popover_set_relative_to (GTK_POPOVER (priv->popover), NULL);
+      gtk_widget_unparent (priv->popover);
       priv->popover = NULL;
     }
 
@@ -803,14 +803,14 @@ gtk_menu_button_set_popover (GtkMenuButton *menu_button,
                                             popover_destroy_cb,
                                             menu_button);
 
-      gtk_popover_set_relative_to (GTK_POPOVER (priv->popover), NULL);
+      gtk_widget_unparent (priv->popover);
     }
 
   priv->popover = popover;
 
   if (popover)
     {
-      gtk_popover_set_relative_to (GTK_POPOVER (priv->popover), GTK_WIDGET (menu_button));
+      gtk_widget_set_parent (priv->popover, GTK_WIDGET (menu_button));
       g_signal_connect_swapped (priv->popover, "closed",
                                 G_CALLBACK (menu_deactivate_cb), menu_button);
       g_signal_connect_swapped (priv->popover, "destroy",

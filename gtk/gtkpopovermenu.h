@@ -36,8 +36,7 @@ GDK_AVAILABLE_IN_ALL
 GType       gtk_popover_menu_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget * gtk_popover_menu_new_from_model (GtkWidget  *relative_to,
-                                             GMenuModel *model);
+GtkWidget * gtk_popover_menu_new_from_model (GMenuModel *model);
 
 /**
  * GtkPopoverMenuFlags:
@@ -53,8 +52,7 @@ typedef enum {
 } GtkPopoverMenuFlags;
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget * gtk_popover_menu_new_from_model_full (GtkWidget           *relative_to,
-                                                  GMenuModel          *model,
+GtkWidget * gtk_popover_menu_new_from_model_full (GMenuModel          *model,
                                                   GtkPopoverMenuFlags  flags);
 
 GDK_AVAILABLE_IN_ALL

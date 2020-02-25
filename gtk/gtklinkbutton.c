@@ -421,7 +421,8 @@ gtk_link_button_do_popup (GtkLinkButton *link_button,
       GMenuModel *model;
 
       model = gtk_link_button_get_menu_model ();
-      priv->popup_menu = gtk_popover_menu_new_from_model (GTK_WIDGET (link_button), model);
+      priv->popup_menu = gtk_popover_menu_new_from_model (model);
+      gtk_widget_set_parent (priv->popup_menu, GTK_WIDGET (link_button));
       gtk_popover_set_position (GTK_POPOVER (priv->popup_menu), GTK_POS_BOTTOM);
 
       gtk_popover_set_has_arrow (GTK_POPOVER (priv->popup_menu), FALSE);

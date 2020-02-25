@@ -6045,7 +6045,8 @@ gtk_label_do_popup (GtkLabel *label,
       GMenuModel *model;
 
       model = gtk_label_get_menu_model (label);
-      priv->popup_menu = gtk_popover_menu_new_from_model (GTK_WIDGET (label), model);
+      priv->popup_menu = gtk_popover_menu_new_from_model (model);
+      gtk_widget_set_parent (priv->popup_menu, GTK_WIDGET (label));
       gtk_popover_set_position (GTK_POPOVER (priv->popup_menu), GTK_POS_BOTTOM);
 
       gtk_popover_set_has_arrow (GTK_POPOVER (priv->popup_menu), FALSE);

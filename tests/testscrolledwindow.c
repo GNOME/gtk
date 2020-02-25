@@ -213,7 +213,7 @@ scrollable_policy (void)
   gtk_widget_show (window);
 
   /* Popover */
-  popover = gtk_popover_new (NULL);
+  popover = gtk_popover_new ();
 
   widget = gtk_menu_button_new ();
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (widget), popover);

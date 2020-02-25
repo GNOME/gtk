@@ -943,7 +943,7 @@ property_editor (GObject                *object,
         GFlagsClass *fclass;
         gint j;
 
-        popover = gtk_popover_new (NULL);        
+        popover = gtk_popover_new ();        
         prop_edit = gtk_menu_button_new ();
         gtk_menu_button_set_popover (GTK_MENU_BUTTON (prop_edit), popover);
 
@@ -1010,7 +1010,7 @@ property_editor (GObject                *object,
       GtkWidget *sw; 
       GListModel *model;
 
-      popover = gtk_popover_new (NULL);        
+      popover = gtk_popover_new ();        
       prop_edit = gtk_menu_button_new ();
       gtk_menu_button_set_popover (GTK_MENU_BUTTON (prop_edit), popover);
 

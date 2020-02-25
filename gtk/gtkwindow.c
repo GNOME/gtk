@@ -6750,7 +6750,8 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
   minimized = (state & GDK_SURFACE_STATE_MINIMIZED) == GDK_SURFACE_STATE_MINIMIZED;
   maximized = priv->maximized && !minimized;
 
-  priv->popup_menu = gtk_popover_menu_new (priv->title_box);
+  priv->popup_menu = gtk_popover_menu_new ();
+  gtk_widget_set_parent (priv->popup_menu, priv->title_box);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_popover_menu_add_submenu (GTK_POPOVER_MENU (priv->popup_menu), box, "main");
