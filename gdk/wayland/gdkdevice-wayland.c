@@ -750,7 +750,7 @@ gdk_wayland_device_grab (GdkDevice    *device,
   GdkWaylandPointerData *pointer = GDK_WAYLAND_DEVICE (device)->pointer;
 
   if (gdk_surface_get_surface_type (surface) == GDK_SURFACE_TEMP &&
-      gdk_surface_is_visible (surface))
+      gdk_surface_get_mapped (surface))
     {
       g_warning ("Surface %p is already mapped at the time of grabbing. "
                  "gdk_seat_grab() should be used to simultanously grab input "
@@ -4502,7 +4502,7 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
   if (prepare_func)
     (prepare_func) (seat, surface, prepare_func_data);
 
-  if (!gdk_surface_is_visible (surface))
+  if (!gdk_surface_get_mapped (surface))
     {
       gdk_wayland_seat_set_grab_surface (wayland_seat, NULL);
       return GDK_GRAB_NOT_VIEWABLE;

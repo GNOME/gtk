@@ -119,14 +119,14 @@ gdk_seat_default_grab (GdkSeat                *seat,
   gboolean was_visible;
 
   priv = gdk_seat_default_get_instance_private (GDK_SEAT_DEFAULT (seat));
-  was_visible = gdk_surface_is_visible (surface);
+  was_visible = gdk_surface_get_mapped (surface);
 
   if (prepare_func)
     (prepare_func) (seat, surface, prepare_func_data);
 
-  if (!gdk_surface_is_visible (surface))
+  if (!gdk_surface_get_mapped (surface))
     {
-      g_critical ("Surface %p has not been made visible in GdkSeatGrabPrepareFunc",
+      g_critical ("Surface %p has not been mapped in GdkSeatGrabPrepareFunc",
                   surface);
       return GDK_GRAB_NOT_VIEWABLE;
     }
