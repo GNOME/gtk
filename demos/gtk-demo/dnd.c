@@ -59,7 +59,7 @@ serialize_widget (GtkWidget *widget)
     }
   else if (GTK_IS_SPINNER (widget))
     {
-      g_object_get (widget, "active", &demo->active, NULL);
+      g_object_get (widget, "spinning", &demo->active, NULL);
     }
   else
     {
@@ -80,7 +80,7 @@ deserialize_widget (GtkDemoWidget *demo)
     }
   else if (demo->type == GTK_TYPE_SPINNER)
     {
-      widget = g_object_new (demo->type, "active", demo->active, NULL);
+      widget = g_object_new (demo->type, "spinning", demo->active, NULL);
       gtk_style_context_add_class (gtk_widget_get_style_context (widget), "demo");
     }
   else
@@ -240,8 +240,8 @@ edit_cb (GtkWidget *button, GtkWidget *child)
     {
       gboolean active;
 
-      g_object_get (child, "active", &active, NULL);
-      g_object_set (child, "active", !active, NULL);
+      g_object_get (child, "spinning", &active, NULL);
+      g_object_set (child, "spinning", !active, NULL);
     }
 
   if (button)

@@ -733,7 +733,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </child>
                                 <child>
                                   <object class="GtkSpinner" id="spinner1">
-                                    <property name="active">1</property>
+                                    <property name="spinning">1</property>
                                     <layout>
                                       <property name="left-attach">2</property>
                                     </layout>
@@ -749,7 +749,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </child>
                                 <child>
                                   <object class="GtkSpinner" id="spinner3">
-                                    <property name="active">1</property>
+                                    <property name="spinning">1</property>
                                     <property name="sensitive">0</property>
                                     <layout>
                                       <property name="left-attach">2</property>
