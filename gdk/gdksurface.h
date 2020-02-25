@@ -404,8 +404,6 @@ void gdk_surface_input_shape_combine_region (GdkSurface       *surface,
                                              gint             offset_y);
 
 GDK_AVAILABLE_IN_ALL
-gboolean gdk_surface_is_visible     (GdkSurface *surface);
-GDK_AVAILABLE_IN_ALL
 gboolean gdk_surface_is_viewable    (GdkSurface *surface);
 
 GDK_AVAILABLE_IN_ALL
