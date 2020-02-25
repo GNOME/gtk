@@ -56,7 +56,7 @@
             </child>
             <child>
               <object class="GtkSpinner" id="busy_spinner">
-                <property name="active">1</property>
+                <property name="spinning">1</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
                 <property name="margin-start">4px</property>
