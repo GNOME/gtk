@@ -5881,8 +5881,6 @@ GtkPopover
 gtk_popover_new
 gtk_popover_popup
 gtk_popover_popdown
-gtk_popover_set_relative_to
-gtk_popover_get_relative_to
 gtk_popover_set_pointing_to
 gtk_popover_get_pointing_to
 gtk_popover_set_position

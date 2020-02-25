@@ -1163,7 +1163,8 @@ node_property_activated (GtkTreeView *tv,
   if (texture == NULL || visible)
     return;
 
-  popover = gtk_popover_new (GTK_WIDGET (tv));
+  popover = gtk_popover_new ();
+  gtk_widget_set_parent (popover, GTK_WIDGET (tv));
   gtk_popover_set_pointing_to (GTK_POPOVER (popover), &rect);
 
   image = gtk_image_new_from_paintable (GDK_PAINTABLE (texture));
