@@ -543,7 +543,7 @@ gdk_surface_cache_new (GdkDisplay *display)
                                 x * impl->surface_scale, y * impl->surface_scale, 
 				width * impl->surface_scale, 
 				height * impl->surface_scale,
-                                gdk_surface_is_visible (surface));
+                                gdk_surface_get_mapped (surface));
         }
       return result;
     }

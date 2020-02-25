@@ -864,7 +864,7 @@ gdk_wayland_surface_maybe_resize (GdkSurface *surface,
    */
 
   is_xdg_popup = is_realized_popup (surface);
-  is_visible = gdk_surface_is_visible (surface);
+  is_visible = gdk_surface_get_mapped (surface);
 
   if (is_xdg_popup && is_visible && !impl->initial_configure_received)
     gdk_wayland_surface_hide (surface);
