@@ -227,6 +227,7 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   const GdkRGBA *color;
   const GdkRGBA *decoration_color;
   gint letter_spacing;
+  const char *font_feature_settings;
 
   /* text-decoration */
   decoration_line = _gtk_css_text_decoration_line_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_TEXT_DECORATION_LINE));
@@ -260,6 +261,13 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   if (letter_spacing != 0)
     {
       attrs = add_pango_attr (attrs, pango_attr_letter_spacing_new (letter_spacing * PANGO_SCALE));
+    }
+
+  /* font-feature-settings */
+  font_feature_settings = _gtk_css_string_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_FEATURE_SETTINGS));
+  if (font_feature_settings != NULL)
+    {
+      attrs = add_pango_attr (attrs, pango_attr_font_features_new (font_feature_settings));
     }
 
   return attrs;
