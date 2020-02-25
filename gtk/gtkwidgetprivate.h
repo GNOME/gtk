@@ -180,12 +180,6 @@ struct _GtkWidgetPrivate
 
   GSList *paintables;
 
-  /* The widget's surface or its parent surface if it does
-   * not have a surface. (Which will be indicated by the
-   * no_surface field being set).
-   */
-  GdkSurface *surface;
-
   GList *event_controllers;
 
   AtkObject *accessible;
@@ -284,9 +278,6 @@ gboolean          _gtk_widget_consumes_motion              (GtkWidget           
                                                             GdkEventSequence    *sequence);
 
 gboolean          gtk_widget_has_tick_callback             (GtkWidget *widget);
-
-void              gtk_widget_set_csd_input_shape           (GtkWidget            *widget,
-                                                            const cairo_region_t *region);
 
 gboolean          gtk_widget_has_size_request              (GtkWidget *widget);
 

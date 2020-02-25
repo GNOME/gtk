@@ -369,7 +369,7 @@ tracker_remove (gint     position,
     {
       if (i == position)
         {
-          gtk_widget_destroy (child);
+          gtk_widget_unparent (child);
           break;
         }
     }
@@ -480,7 +480,7 @@ gtk_popover_menu_bar_dispose (GObject *object)
   g_clear_object (&bar->model);
 
   while ((child = gtk_widget_get_first_child (GTK_WIDGET (bar))))
-    gtk_widget_destroy (child);
+    gtk_widget_unparent (child);
 
   G_OBJECT_CLASS (gtk_popover_menu_bar_parent_class)->dispose (object);
 }
@@ -651,7 +651,7 @@ gtk_popover_menu_bar_set_menu_model (GtkPopoverMenuBar *bar,
       GtkActionMuxer *muxer;
 
       while ((child = gtk_widget_get_first_child (GTK_WIDGET (bar))))
-        gtk_widget_destroy (child);
+        gtk_widget_unparent (child);
 
       g_clear_pointer (&bar->tracker, gtk_menu_tracker_free);
 

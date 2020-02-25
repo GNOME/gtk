@@ -210,13 +210,13 @@ add_recent_item (GtkEmojiChooser *chooser,
 
       if (modifier == modifier2 && g_variant_equal (item, item2))
         {
-          gtk_widget_destroy (GTK_WIDGET (l->data));
+          gtk_container_remove (GTK_CONTAINER (chooser->recent.box), l->data);
           i--;
           continue;
         }
       if (i >= MAX_RECENT)
         {
-          gtk_widget_destroy (GTK_WIDGET (l->data));
+          gtk_container_remove (GTK_CONTAINER (chooser->recent.box), l->data);
           continue;
         }
 
@@ -414,7 +414,8 @@ add_emoji (GtkWidget    *box,
   if (pango_layout_get_unknown_glyphs_count (layout) > 0 ||
       rect.width >= 1.5 * chooser->emoji_max_width)
     {
-      gtk_widget_destroy (label);
+      g_object_ref_sink (label);
+      g_object_unref (label);
       return;
     }
 

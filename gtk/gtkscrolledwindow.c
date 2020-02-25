@@ -1404,13 +1404,10 @@ gtk_scrolled_window_size_allocate (GtkWidget *widget,
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
-  GtkBin *bin;
   GtkAllocation child_allocation;
   GtkWidget *child;
   gint sb_width;
   gint sb_height;
-
-  bin = GTK_BIN (scrolled_window);
 
   /* Get possible scrollbar dimensions */
   gtk_widget_measure (priv->vscrollbar, GTK_ORIENTATION_HORIZONTAL, -1,
@@ -1430,7 +1427,7 @@ gtk_scrolled_window_size_allocate (GtkWidget *widget,
            priv->vscrollbar_policy == GTK_POLICY_EXTERNAL)
     priv->vscrollbar_visible = FALSE;
 
-  child = gtk_bin_get_child (bin);
+  child = gtk_bin_get_child (GTK_BIN (scrolled_window));
   if (child && gtk_widget_get_visible (child))
     {
       gint child_scroll_width;
@@ -2069,7 +2066,6 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
                                      GtkAdjustment     *hadjustment)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
-  GtkBin *bin;
   GtkWidget *child;
 
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
@@ -2078,8 +2074,6 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
     g_return_if_fail (GTK_IS_ADJUSTMENT (hadjustment));
   else
     hadjustment = (GtkAdjustment*) g_object_new (GTK_TYPE_ADJUSTMENT, NULL);
-
-  bin = GTK_BIN (scrolled_window);
 
   if (!priv->hscrollbar)
     {
@@ -2121,7 +2115,7 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
   gtk_scrolled_window_adjustment_changed (hadjustment, scrolled_window);
   gtk_scrolled_window_adjustment_value_changed (hadjustment, scrolled_window);
 
-  child = gtk_bin_get_child (bin);
+  child = gtk_bin_get_child (GTK_BIN (scrolled_window));
   if (child)
     gtk_scrollable_set_hadjustment (GTK_SCROLLABLE (child), hadjustment);
 
@@ -2143,7 +2137,6 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
                                      GtkAdjustment     *vadjustment)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
-  GtkBin *bin;
   GtkWidget *child;
 
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
@@ -2152,8 +2145,6 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
     g_return_if_fail (GTK_IS_ADJUSTMENT (vadjustment));
   else
     vadjustment = (GtkAdjustment*) g_object_new (GTK_TYPE_ADJUSTMENT, NULL);
-
-  bin = GTK_BIN (scrolled_window);
 
   if (!priv->vscrollbar)
     {
@@ -2195,7 +2186,7 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
   gtk_scrolled_window_adjustment_changed (vadjustment, scrolled_window);
   gtk_scrolled_window_adjustment_value_changed (vadjustment, scrolled_window);
 
-  child = gtk_bin_get_child (bin);
+  child = gtk_bin_get_child (GTK_BIN (scrolled_window));
   if (child)
     gtk_scrollable_set_vadjustment (GTK_SCROLLABLE (child), vadjustment);
 
@@ -3495,7 +3486,7 @@ gtk_scrolled_window_add (GtkContainer *container,
   GtkAdjustment *hadj, *vadj;
 
   bin = GTK_BIN (container);
-  g_return_if_fail (gtk_bin_get_child (GTK_BIN (scrolled_window)) == NULL);
+  g_return_if_fail (gtk_bin_get_child (bin) == NULL);
 
   /* gtk_scrolled_window_set_[hv]adjustment have the side-effect
    * of creating the scrollbars

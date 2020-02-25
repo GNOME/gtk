@@ -204,7 +204,6 @@ static void          gtk_range_compute_slider_position  (GtkRange      *range,
                                                          GdkRectangle  *slider_rect);
 static gboolean      gtk_range_scroll                   (GtkRange      *range,
                                                          GtkScrollType  scroll);
-static void          gtk_range_calc_slider              (GtkRange      *range);
 static void          gtk_range_calc_marks               (GtkRange      *range);
 static void          gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
                                                          gpointer       data);
@@ -2299,11 +2298,18 @@ gtk_range_drag_gesture_begin (GtkGestureDrag *gesture,
 
 static void
 gtk_range_adjustment_changed (GtkAdjustment *adjustment,
-			      gpointer       data)
+                              gpointer       data)
 {
   GtkRange *range = GTK_RANGE (data);
+  GtkRangePrivate *priv = gtk_range_get_instance_private (range);
 
-  gtk_range_calc_slider (range);
+  if (gtk_adjustment_get_upper (priv->adjustment) == gtk_adjustment_get_lower (priv->adjustment) &&
+      GTK_IS_SCALE (range))
+    gtk_widget_hide (priv->slider_widget);
+  else
+    gtk_widget_show (priv->slider_widget);
+
+  gtk_widget_queue_allocate (priv->trough_widget);
 
   /* Note that we don't round off to priv->round_digits here.
    * that's because it's really broken to change a value
@@ -2521,9 +2527,6 @@ gtk_range_scroll (GtkRange     *range,
       break;
 
     case GTK_SCROLL_JUMP:
-      /* Used by CList, range doesn't use it. */
-      break;
-
     case GTK_SCROLL_NONE:
     default:
       break;
@@ -2546,11 +2549,11 @@ gtk_range_compute_slider_position (GtkRange     *range,
                                    GdkRectangle *slider_rect)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
-  int trough_width, trough_height;
-  int slider_width, slider_height, min_slider_size;
   const double upper = gtk_adjustment_get_upper (priv->adjustment);
   const double lower = gtk_adjustment_get_lower (priv->adjustment);
   const double page_size = gtk_adjustment_get_page_size (priv->adjustment);
+  int trough_width, trough_height;
+  int slider_width, slider_height;
 
   gtk_widget_measure (priv->slider_widget,
                       GTK_ORIENTATION_HORIZONTAL, -1,
@@ -2566,109 +2569,74 @@ gtk_range_compute_slider_position (GtkRange     *range,
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
     {
-      gint y, bottom, top, height;
-        
-      /* Slider fits into the trough, with stepper_spacing on either side,
-       * and the size/position based on the adjustment or fixed, depending.
-       */
+      int y, height;
+
       slider_rect->x = (int) floor ((trough_width - slider_width) / 2);
       slider_rect->width = slider_width;
-
-      min_slider_size = slider_height;
-
-      /* Compute slider position/length */
-      top = 0;
-      bottom = top + trough_height;
 
       /* slider height is the fraction (page_size /
        * total_adjustment_range) times the trough height in pixels
        */
 
       if (upper - lower != 0)
-        height = (bottom - top) * (page_size / (upper - lower));
+        height = trough_height * (page_size / (upper - lower));
       else
-        height = min_slider_size;
+        height = slider_height;
 
-      if (height < min_slider_size ||
+      if (height < slider_height ||
           priv->slider_size_fixed)
-        height = min_slider_size;
+        height = slider_height;
 
       height = MIN (height, trough_height);
-      
-      y = top;
 
       if (upper - lower - page_size != 0)
-        y += (bottom - top - height) * ((adjustment_value - lower)  / (upper - lower - page_size));
+        y = (trough_height - height) * ((adjustment_value - lower)  / (upper - lower - page_size));
+      else
+        y = 0;
 
-      y = CLAMP (y, top, bottom);
-      
+      y = CLAMP (y, 0, trough_height);
+
       if (should_invert (range))
-        y = bottom - (y - top + height);
-      
+        y = trough_height - y - height;
+
       slider_rect->y = y;
       slider_rect->height = height;
     }
   else
     {
-      gint x, left, right, width;
-        
-      /* Slider fits into the trough, with stepper_spacing on either side,
-       * and the size/position based on the adjustment or fixed, depending.
-       */
+      int x, width;
+
       slider_rect->y = (int) floor ((trough_height - slider_height) / 2);
       slider_rect->height = slider_height;
-
-      min_slider_size = slider_width;
-
-      /* Compute slider position/length */
-      left = 0;
-      right = left + trough_width;
 
       /* slider width is the fraction (page_size /
        * total_adjustment_range) times the trough width in pixels
        */
 
       if (upper - lower != 0)
-        width = (right - left) * (page_size / (upper - lower));
+        width = trough_width * (page_size / (upper - lower));
       else
-        width = min_slider_size;
+        width = slider_width;
 
-      if (width < min_slider_size ||
+      if (width < slider_width ||
           priv->slider_size_fixed)
-        width = min_slider_size;
+        width = slider_width;
 
       width = MIN (width, trough_width);
 
-      x = left;
-
       if (upper - lower - page_size != 0)
-        x += (right - left - width) * ((adjustment_value - lower) / (upper - lower - page_size));
-      
-      x = CLAMP (x, left, right);
-      
+        x = (trough_width - width) * ((adjustment_value - lower) / (upper - lower - page_size));
+      else
+        x = 0;
+
+      x = CLAMP (x, 0, trough_width);
+
       if (should_invert (range))
-        x = right - (x - left + width);
-      
+        x = trough_width - x - width;
+
       slider_rect->x = x;
       slider_rect->width = width;
     }
-}
-
-static void
-gtk_range_calc_slider (GtkRange *range)
-{
-  GtkRangePrivate *priv = gtk_range_get_instance_private (range);
-  gboolean visible;
-
-  if (GTK_IS_SCALE (range) &&
-      gtk_adjustment_get_upper (priv->adjustment) == gtk_adjustment_get_lower (priv->adjustment))
-    visible = FALSE;
-  else
-    visible = TRUE;
-
-  gtk_widget_set_visible (priv->slider_widget, visible);
-
-  gtk_widget_queue_allocate (priv->trough_widget);
 }
 
 static void
