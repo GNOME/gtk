@@ -1,8 +1,9 @@
 stages:
   - style-check
   - build
-  - deploy
+  - docs
   - flatpak
+  - deploy
 
 .cache-paths: &cache-paths
   paths:
@@ -166,7 +167,7 @@ flatpak-master:icon-browser:
     APPID: org.gtk.IconBrowser4
   <<: *flatpak-master
 
-pages:
+docs:
   image: registry.gitlab.gnome.org/gnome/gtk/fedora:v13
   stage: deploy
   variables:
@@ -174,10 +175,18 @@ pages:
   script:
     - meson ${COMMON_MESON_FLAGS} -Dgtk_doc=true _build
     - ninja -C _build gdk4-doc gsk4-doc gtk4-doc
-    - mkdir -p public/
-    - mv _build/docs/reference/gdk/html/ public/gdk/
-    - mv _build/docs/reference/gsk/html/ public/gsk/
-    - mv _build/docs/reference/gtk/html/ public/gtk/
+    - mkdir -p _reference/
+    - mv _build/docs/reference/gdk/html/ _reference/gdk/
+    - mv _build/docs/reference/gsk/html/ _reference/gsk/
+    - mv _build/docs/reference/gtk/html/ _reference/gtk/
+  artifacts:
+    paths:
+      - _reference
+
+pages:
+  stage: deploy
+  script:
+    - mv _reference/ public/
   artifacts:
     paths:
       - public
