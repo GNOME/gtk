@@ -515,7 +515,7 @@ check_filter_model_recurse (FilterTest  *fixture,
     {
       gboolean visible;
 
-      g_return_if_fail (store_has_next == TRUE);
+      g_assert_true (store_has_next);
 
       gtk_tree_model_get (GTK_TREE_MODEL (fixture->store),
                           &store_iter,
@@ -527,12 +527,12 @@ check_filter_model_recurse (FilterTest  *fixture,
           GtkTreePath *tmp;
           gchar *filter_str, *store_str;
 
-          g_return_if_fail (filter_has_next == TRUE);
+          g_assert_true (filter_has_next);
 
           /* Verify path */
           tmp = gtk_tree_model_get_path (GTK_TREE_MODEL (fixture->filter),
                                          &filter_iter);
-          g_return_if_fail (gtk_tree_path_compare (tmp, filter_parent_path) == 0);
+          g_assert_cmpint (gtk_tree_path_compare (tmp, filter_parent_path), ==, 0);
 
           /* Verify model content */
           gtk_tree_model_get (GTK_TREE_MODEL (fixture->store),
@@ -544,7 +544,7 @@ check_filter_model_recurse (FilterTest  *fixture,
                               0, &filter_str,
                               -1);
 
-          g_return_if_fail (g_strcmp0 (store_str, filter_str) == 0);
+          g_assert_cmpint (g_strcmp0 (store_str, filter_str), ==, 0);
 
           g_free (store_str);
           g_free (filter_str);
@@ -552,7 +552,7 @@ check_filter_model_recurse (FilterTest  *fixture,
           if (gtk_tree_model_iter_has_child (GTK_TREE_MODEL (fixture->filter),
                                              &filter_iter))
             {
-              g_return_if_fail (gtk_tree_model_iter_has_child (GTK_TREE_MODEL (fixture->store), &store_iter));
+              g_assert_true (gtk_tree_model_iter_has_child (GTK_TREE_MODEL (fixture->store), &store_iter));
 
               check_filter_model_recurse (fixture,
                                           gtk_tree_path_copy (store_parent_path),
@@ -571,8 +571,8 @@ check_filter_model_recurse (FilterTest  *fixture,
     }
 
   /* Both models should have no more content! */
-  g_return_if_fail (store_has_next == FALSE);
-  g_return_if_fail (filter_has_next == FALSE);
+  g_assert_false (store_has_next);
+  g_assert_false (filter_has_next);
 
   gtk_tree_path_free (store_parent_path);
   gtk_tree_path_free (filter_parent_path);
@@ -625,7 +625,7 @@ check_level_length (GtkTreeModelFilter *filter,
 
       retrieved_iter = gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (filter),
                                                             &iter, level);
-      g_return_if_fail (retrieved_iter);
+      g_assert_true (retrieved_iter);
       model_length = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (filter), &iter);
       g_assert_cmpint (model_length, ==, expected_length);
     }
@@ -6747,9 +6747,9 @@ specific_bug_679910 (void)
                                                     &filter_iter,
                                                     &iter);
   iter = filter_iter;
-  g_return_if_fail (gtk_tree_model_iter_next (filter, &iter));
+  g_assert_true (gtk_tree_model_iter_next (filter, &iter));
   iter = filter_iter;
-  g_return_if_fail (gtk_tree_model_iter_previous (filter, &iter));
+  g_assert_true (gtk_tree_model_iter_previous (filter, &iter));
 
   g_object_unref (filter);
   g_object_unref (store);
