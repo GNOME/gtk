@@ -826,7 +826,7 @@ surface_transform_changed_cb (GtkWidget               *widget,
   GtkPopover *popover = user_data;
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
-  if (priv->surface && gdk_surface_is_visible (priv->surface))
+  if (priv->surface && gdk_surface_get_mapped (priv->surface))
     present_popup (popover);
 
   return G_SOURCE_CONTINUE;
@@ -1567,7 +1567,7 @@ relative_to_size_changed (GtkWidget  *widget,
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
-  if (priv->surface && gdk_surface_is_visible (priv->surface))
+  if (priv->surface && gdk_surface_get_mapped (priv->surface))
     present_popup (popover);
 }
 

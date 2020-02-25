@@ -1024,7 +1024,7 @@ gdk_surface_get_position (GdkSurface *surface,
 }
 
 /**
- * gdk_surface_is_visible:
+ * gdk_surface_get_mapped:
  * @surface: a #GdkSurface
  *
  * Checks whether the surface has been mapped (with gdk_surface_show() or
@@ -1033,7 +1033,7 @@ gdk_surface_get_position (GdkSurface *surface,
  * Returns: %TRUE if the surface is mapped
  **/
 gboolean
-gdk_surface_is_visible (GdkSurface *surface)
+gdk_surface_get_mapped (GdkSurface *surface)
 {
   g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
 
