@@ -13,7 +13,8 @@
           <object class="GtkColorChooserWidget" id="chooser">
             <property name="margin">5</property>
             <property name="rgba">rgb(255,255,255)</property>
-            <property name="expand">1</property>
+            <property name="hexpand">1</property>
+            <property name="vexpand">1</property>
             <signal name="color-activated" handler="color_activated_cb" swapped="no"/>
             <signal name="notify::rgba" handler="propagate_notify" swapped="no"/>
             <signal name="notify::show-editor" handler="propagate_notify" swapped="no"/>

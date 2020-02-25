@@ -33,7 +33,8 @@
                 </child>
                 <child>
                   <object class="GtkScrolledWindow">
-                    <property name="expand">1</property>
+                    <property name="hexpand">1</property>
+                    <property name="vexpand">1</property>
                     <property name="vscrollbar-policy">always</property>
                     <child>
                       <object class="GtkTreeView" id="view">

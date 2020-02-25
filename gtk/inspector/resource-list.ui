@@ -50,7 +50,8 @@
                 </child>
                 <child>
                   <object class="GtkScrolledWindow">
-                    <property name="expand">1</property>
+                    <property name="hexpand">1</property>
+                    <property name="vexpand">1</property>
                     <property name="hscrollbar-policy">never</property>
                     <child>
                       <object class="GtkTreeView" id="tree">
@@ -198,7 +199,8 @@
                         <property name="name">text</property>
                         <property name="child">
                           <object class="GtkScrolledWindow">
-                            <property name="expand">1</property>
+                            <property name="hexpand">1</property>
+                            <property name="vexpand">1</property>
                             <property name="shadow-type">in</property>
                             <style>
                               <class name="view"/>
@@ -218,7 +220,8 @@
                         <property name="name">image</property>
                         <property name="child">
                           <object class="GtkScrolledWindow">
-                            <property name="expand">1</property>
+                            <property name="hexpand">1</property>
+                            <property name="vexpand">1</property>
                             <property name="shadow-type">in</property>
                             <style>
                               <class name="view"/>

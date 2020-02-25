@@ -555,7 +555,6 @@ enum {
   PROP_VEXPAND,
   PROP_HEXPAND_SET,
   PROP_VEXPAND_SET,
-  PROP_EXPAND,
   PROP_SCALE_FACTOR,
   PROP_CSS_NAME,
   PROP_CSS_CLASSES,
@@ -1255,18 +1254,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:expand:
-   *
-   * Whether to expand in both directions. Setting this sets both #GtkWidget:hexpand and #GtkWidget:vexpand
-   */
-  widget_props[PROP_EXPAND] =
-      g_param_spec_boolean ("expand",
-                            P_("Expand Both"),
-                            P_("Whether widget wants to expand in both directions"),
-                            FALSE,
-                            GTK_PARAM_READWRITE);
-
-  /**
    * GtkWidget:opacity:
    *
    * The requested opacity of the widget. See gtk_widget_set_opacity() for
@@ -1878,12 +1865,6 @@ gtk_widget_set_property (GObject         *object,
     case PROP_VEXPAND_SET:
       gtk_widget_set_vexpand_set (widget, g_value_get_boolean (value));
       break;
-    case PROP_EXPAND:
-      g_object_freeze_notify (G_OBJECT (widget));
-      gtk_widget_set_hexpand (widget, g_value_get_boolean (value));
-      gtk_widget_set_vexpand (widget, g_value_get_boolean (value));
-      g_object_thaw_notify (G_OBJECT (widget));
-      break;
     case PROP_OPACITY:
       gtk_widget_set_opacity (widget, g_value_get_double (value));
       break;
@@ -2025,11 +2006,6 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_VEXPAND_SET:
       g_value_set_boolean (value, gtk_widget_get_vexpand_set (widget));
-      break;
-    case PROP_EXPAND:
-      g_value_set_boolean (value,
-                           gtk_widget_get_hexpand (widget) &&
-                           gtk_widget_get_vexpand (widget));
       break;
     case PROP_OPACITY:
       g_value_set_double (value, gtk_widget_get_opacity (widget));
@@ -8442,13 +8418,10 @@ gtk_widget_set_expand (GtkWidget     *widget,
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   gint expand_prop;
   gint expand_set_prop;
-  gboolean was_both;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   expand = expand != FALSE;
-
-  was_both = priv->hexpand && priv->vexpand;
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -8480,8 +8453,6 @@ gtk_widget_set_expand (GtkWidget     *widget,
   g_object_freeze_notify (G_OBJECT (widget));
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[expand_prop]);
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[expand_set_prop]);
-  if (was_both != (priv->hexpand && priv->vexpand))
-    g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_EXPAND]);
   g_object_thaw_notify (G_OBJECT (widget));
 }
 

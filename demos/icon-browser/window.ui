@@ -77,7 +77,8 @@
             </child>
             <child>
               <object class="GtkScrolledWindow" id="sw">
-                <property name="expand">1</property>
+                <property name="hexpand">1</property>
+                <property name="vexpand">1</property>
                 <property name="hscrollbar-policy">never</property>
                 <child>
                   <object class="GtkIconView" id="list">

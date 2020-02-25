@@ -905,7 +905,8 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                                          GTK_WIDGET (self));
 
   priv->stack = g_object_new (GTK_TYPE_STACK,
-                              "expand", TRUE,
+                              "hexpand", TRUE,
+                              "vexpand", TRUE,
                               "homogeneous", TRUE,
                               "transition-type", GTK_STACK_TRANSITION_TYPE_CROSSFADE,
                               NULL);

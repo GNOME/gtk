@@ -1909,10 +1909,12 @@ microphone-sensitivity-medium-symbolic</property>
                                 <child>
                                   <object class="GtkBox">
                                     <property name="spacing">10</property>
-                                    <property name="expand">1</property>
+                                    <property name="hexpand">1</property>
+                                    <property name="vexpand">1</property>
                                     <child>
                                       <object class="GtkFrame" id="panedframe1">
-                                        <property name="expand">1</property>
+                                        <property name="hexpand">1</property>
+                                        <property name="vexpand">1</property>
                                         <child>
                                           <object class="GtkPaned">
                                             <style>
@@ -1934,7 +1936,8 @@ microphone-sensitivity-medium-symbolic</property>
                                     </child>
                                     <child>
                                       <object class="GtkFrame" id="panedframe2">
-                                        <property name="expand">1</property>
+                                        <property name="hexpand">1</property>
+                                        <property name="vexpand">1</property>
                                         <child>
                                           <object class="GtkPaned">
                                             <property name="orientation">vertical</property>

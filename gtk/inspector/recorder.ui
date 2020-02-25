@@ -137,7 +137,8 @@
                 </child>
                 <child>
                   <object class="GtkPicture" id="render_node_view">
-                    <property name="expand">1</property>
+                    <property name="hexpand">1</property>
+                    <property name="vexpand">1</property>
                   </object>
                 </child>
               </object>

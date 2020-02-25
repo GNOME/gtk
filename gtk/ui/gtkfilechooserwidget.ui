@@ -115,7 +115,8 @@
                         <child>
                           <object class="GtkStack" id="browse_files_stack">
                             <property name="transition-type">crossfade</property>
-                            <property name="expand">1</property>
+                            <property name="hexpand">1</property>
+                            <property name="vexpand">1</property>
                             <style>
                               <class name="view"/>
                             </style>

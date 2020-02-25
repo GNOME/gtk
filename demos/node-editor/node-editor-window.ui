@@ -133,7 +133,8 @@
         <child>
           <object class="GtkScrolledWindow">
             <property name="hscrollbar-policy">never</property>
-            <property name="expand">1</property>
+            <property name="hexpand">1</property>
+            <property name="vexpand">1</property>
             <child>
               <object class="GtkTextView" id="text_view">
                 <property name="wrap-mode">word</property>
@@ -156,7 +157,8 @@
           <object class="GtkBox">
             <child>
               <object class="GtkScrolledWindow">
-                <property name="expand">1</property>
+                <property name="hexpand">1</property>
+                <property name="vexpand">1</property>
                 <property name="min-content-height">100</property>
                 <property name="min-content-width">100</property>
                 <child>

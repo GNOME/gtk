@@ -497,9 +497,7 @@ test_type (gconstpointer data)
            g_str_equal (pspec->name, "is-focus") ||
            g_str_equal (pspec->name, "margin") ||
            g_str_equal (pspec->name, "hexpand") ||
-           g_str_equal (pspec->name, "vexpand") ||
-           g_str_equal (pspec->name, "expand")
-            ))
+           g_str_equal (pspec->name, "vexpand")))
 	continue;
 
       if (pspec->owner_type == GTK_TYPE_ENTRY &&
