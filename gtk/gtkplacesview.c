@@ -2050,7 +2050,7 @@ listbox_header_func (GtkListBoxRow *row,
           g_object_bind_property (GTK_PLACES_VIEW (user_data),
                                   "fetching-networks",
                                   network_header_spinner,
-                                  "active",
+                                  "spinning",
                                   G_BINDING_SYNC_CREATE);
 
           gtk_container_add (GTK_CONTAINER (header_name), label);

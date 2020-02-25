@@ -57,8 +57,9 @@
  *
  * # CSS nodes
  *
- * GtkSpinner has a single CSS node with the name spinner. When the animation is
- * active, the :checked pseudoclass is added to this node.
+ * GtkSpinner has a single CSS node with the name spinner.
+ * When the animation is active, the :checked pseudoclass is
+ * added to this node.
  */
 
 typedef struct _GtkSpinnerClass GtkSpinnerClass;
@@ -76,7 +77,7 @@ struct _GtkSpinnerClass
 
 enum {
   PROP_0,
-  PROP_ACTIVE
+  PROP_SPINNING
 };
 
 G_DEFINE_TYPE (GtkSpinner, gtk_spinner, GTK_TYPE_WIDGET)
@@ -138,25 +139,42 @@ gtk_spinner_css_changed (GtkWidget         *widget,
     }
 }
 
-static gboolean
-gtk_spinner_get_active (GtkSpinner *spinner)
+/**
+ * gtk_spinner_get_spinning:
+ * @spinner: a #GtkSpinner
+ *
+ * Returns whether the spinner is spinning.
+ *
+ * Returns: %TRUE if the spinner is active
+ */
+gboolean
+gtk_spinner_get_spinning (GtkSpinner *spinner)
 {
+  g_return_val_if_fail (GTK_IS_SPINNER (spinner), FALSE);
+
   return (gtk_widget_get_state_flags ((GtkWidget *)spinner) & GTK_STATE_FLAG_CHECKED) > 0;
 }
 
-static void
-gtk_spinner_set_active (GtkSpinner *spinner,
-                        gboolean    active)
+/**
+ * gtk_spinner_set_spinning:
+ * @spinner: a #GtkSpinner
+ * @spinning: whether the spinner should be spinning
+ *
+ * Sets the activity of the spinner.
+ */
+void
+gtk_spinner_set_spinning (GtkSpinner *spinner,
+                          gboolean    spinning)
 {
-  gboolean current_active = gtk_spinner_get_active (spinner);
+  g_return_if_fail (GTK_IS_SPINNER (spinner));
 
-  active = !!active;
+  spinning = !!spinning;
 
-  if (active != current_active)
+  if (spinning != gtk_spinner_get_spinning (spinner))
     {
-      g_object_notify (G_OBJECT (spinner), "active");
+      g_object_notify (G_OBJECT (spinner), "spinning");
 
-      if (active)
+      if (spinning)
         gtk_widget_set_state_flags (GTK_WIDGET (spinner),
                                     GTK_STATE_FLAG_CHECKED, FALSE);
       else
@@ -173,8 +191,8 @@ gtk_spinner_get_property (GObject    *object,
 {
   switch (param_id)
     {
-      case PROP_ACTIVE:
-        g_value_set_boolean (value, gtk_spinner_get_active (GTK_SPINNER (object)));
+      case PROP_SPINNING:
+        g_value_set_boolean (value, gtk_spinner_get_spinning (GTK_SPINNER (object)));
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -189,8 +207,8 @@ gtk_spinner_set_property (GObject      *object,
 {
   switch (param_id)
     {
-      case PROP_ACTIVE:
-        gtk_spinner_set_active (GTK_SPINNER (object), g_value_get_boolean (value));
+      case PROP_SPINNING:
+        gtk_spinner_set_spinning (GTK_SPINNER (object), g_value_get_boolean (value));
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -212,15 +230,15 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
   widget_class->measure = gtk_spinner_measure;
   widget_class->css_changed = gtk_spinner_css_changed;
 
-  /* GtkSpinner:active:
+  /* GtkSpinner:spinning:
    *
-   * Whether the spinner is active
+   * Whether the spinner is spinning
    */
   g_object_class_install_property (gobject_class,
-                                   PROP_ACTIVE,
-                                   g_param_spec_boolean ("active",
-                                                         P_("Active"),
-                                                         P_("Whether the spinner is active"),
+                                   PROP_SPINNING,
+                                   g_param_spec_boolean ("spinning",
+                                                         P_("Spinning"),
+                                                         P_("Whether the spinner is spinning"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -257,7 +275,7 @@ gtk_spinner_start (GtkSpinner *spinner)
 {
   g_return_if_fail (GTK_IS_SPINNER (spinner));
 
-  gtk_spinner_set_active (spinner, TRUE);
+  gtk_spinner_set_spinning (spinner, TRUE);
 }
 
 /**
@@ -271,5 +289,5 @@ gtk_spinner_stop (GtkSpinner *spinner)
 {
   g_return_if_fail (GTK_IS_SPINNER (spinner));
 
-  gtk_spinner_set_active (spinner, FALSE);
+  gtk_spinner_set_spinning (spinner, FALSE);
 }

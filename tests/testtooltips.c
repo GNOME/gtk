@@ -428,7 +428,7 @@ main (int argc, char *argv[])
   button = gtk_label_new ("Hidden here");
   custom = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
   gtk_container_add (GTK_CONTAINER (custom), gtk_label_new ("See, custom"));
-  gtk_container_add (GTK_CONTAINER (custom), g_object_new (GTK_TYPE_SPINNER, "active", TRUE, NULL));
+  gtk_container_add (GTK_CONTAINER (custom), g_object_new (GTK_TYPE_SPINNER, "spinning", TRUE, NULL));
   g_object_ref_sink (custom);
   g_object_set (button, "has-tooltip", TRUE, NULL);
   gtk_container_add (GTK_CONTAINER (box2), button);
@@ -438,7 +438,7 @@ main (int argc, char *argv[])
   button = gtk_label_new ("Custom tooltip II");
   custom = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
   gtk_container_add (GTK_CONTAINER (custom), gtk_label_new ("See, custom too"));
-  gtk_container_add (GTK_CONTAINER (custom), g_object_new (GTK_TYPE_SPINNER, "active", TRUE, NULL));
+  gtk_container_add (GTK_CONTAINER (custom), g_object_new (GTK_TYPE_SPINNER, "spinning", TRUE, NULL));
   g_object_ref_sink (custom);
   g_object_set (button, "has-tooltip", TRUE, NULL);
   g_signal_connect (button, "query-tooltip",

@@ -39,13 +39,18 @@ typedef struct _GtkSpinner      GtkSpinner;
 
 
 GDK_AVAILABLE_IN_ALL
-GType      gtk_spinner_get_type  (void) G_GNUC_CONST;
+GType      gtk_spinner_get_type     (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget *gtk_spinner_new (void);
+GtkWidget *gtk_spinner_new          (void);
 GDK_AVAILABLE_IN_ALL
-void       gtk_spinner_start      (GtkSpinner *spinner);
+void       gtk_spinner_start        (GtkSpinner *spinner);
 GDK_AVAILABLE_IN_ALL
-void       gtk_spinner_stop       (GtkSpinner *spinner);
+void       gtk_spinner_stop         (GtkSpinner *spinner);
+GDK_AVAILABLE_IN_ALL
+void       gtk_spinner_set_spinning (GtkSpinner *spinner,
+                                     gboolean    spinning);
+GDK_AVAILABLE_IN_ALL
+gboolean   gtk_spinner_get_spinning (GtkSpinner *spinner);
 
 G_END_DECLS
 
