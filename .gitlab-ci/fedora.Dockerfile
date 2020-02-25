@@ -9,6 +9,7 @@ RUN dnf -y install \
     cairo-gobject-devel \
     ccache \
     clang \
+    clang-analyzer \
     colord-devel \
     cups-devel \
     dbus-daemon \

@@ -1,8 +1,9 @@
 stages:
-  - style-check
   - build
-  - deploy
+  - analysis
+  - docs
   - flatpak
+  - deploy
 
 .cache-paths: &cache-paths
   paths:
@@ -26,14 +27,14 @@ variables:
 
 style-check-diff:
   extends: .only-default
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v13
-  stage: style-check
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v14
+  stage: .pre
   allow_failure: true
   script:
     - .gitlab-ci/run-style-check-diff.sh
 
 fedora-x86_64:
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v13
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v14
   stage: build
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
@@ -65,7 +66,7 @@ fedora-x86_64:
     <<: *cache-paths
 
 release-build:
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v13
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v14
   stage: build
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release"
@@ -166,18 +167,39 @@ flatpak-master:icon-browser:
     APPID: org.gtk.IconBrowser4
   <<: *flatpak-master
 
-pages:
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v13
-  stage: deploy
+static-scan:
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v14
+  stage: analysis
+  variables:
+    EXTRA_MESON_FLAGS: "--buildtype=debug"
+  script:
+    - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _scan_build
+    - ninja -C _scan_build scan-build
+  artifacts:
+    paths:
+      - _scan_build/meson-logs
+  allow_failure: true
+
+reference:
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v14
+  stage: docs
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release"
   script:
-    - meson ${COMMON_MESON_FLAGS} -Dgtk_doc=true _build
+    - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} -Dgtk_doc=true _build
     - ninja -C _build gdk4-doc gsk4-doc gtk4-doc
-    - mkdir -p public/
-    - mv _build/docs/reference/gdk/html/ public/gdk/
-    - mv _build/docs/reference/gsk/html/ public/gsk/
-    - mv _build/docs/reference/gtk/html/ public/gtk/
+    - mkdir -p _reference/
+    - mv _build/docs/reference/gdk/html/ _reference/gdk/
+    - mv _build/docs/reference/gsk/html/ _reference/gsk/
+    - mv _build/docs/reference/gtk/html/ _reference/gtk/
+  artifacts:
+    paths:
+      - _reference
+
+pages:
+  stage: deploy
+  script:
+    - mv _reference/ public/
   artifacts:
     paths:
       - public
