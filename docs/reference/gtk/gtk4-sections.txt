@@ -2505,6 +2505,8 @@ GtkSpinner
 gtk_spinner_new
 gtk_spinner_start
 gtk_spinner_stop
+gtk_spinner_set_spinning
+gtk_spinner_get_spinning
 
 <SUBSECTION Standard>
 GTK_SPINNER
