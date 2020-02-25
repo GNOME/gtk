@@ -22,8 +22,6 @@
 #include "gtkboxlayout.h"
 #include "gtklabel.h"
 #include "gtkframe.h"
-#include "gtkstylecontext.h"
-#include "gtkprivate.h"
 #include "gtkintl.h"
 
 /**

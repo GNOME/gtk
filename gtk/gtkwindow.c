@@ -273,6 +273,8 @@ typedef struct
   GdkSurface  *surface;
   GskRenderer *renderer;
 
+  cairo_region_t *extra_input_region;
+
   GList *foci;
 
   GtkConstraintSolver *constraint_solver;
@@ -4670,6 +4672,7 @@ gtk_window_finalize (GObject *object)
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkMnemonicHash *mnemonic_hash;
 
+  g_clear_pointer (&priv->extra_input_region, cairo_region_destroy);
   g_free (priv->title);
   gtk_window_release_application (window);
 
@@ -5335,9 +5338,24 @@ update_csd_shape (GtkWindow *window)
   if (rect.width > 0 && rect.height > 0)
     {
       cairo_region_t *region = cairo_region_create_rectangle (&rect);
-      gtk_widget_set_csd_input_shape (widget, region);
+
+      if (priv->extra_input_region)
+        cairo_region_intersect (region, priv->extra_input_region);
+
+      gdk_surface_input_shape_combine_region (priv->surface, region, 0, 0);
       cairo_region_destroy (region);
     }
+}
+
+void
+gtk_window_set_extra_input_region (GtkWindow      *window,
+                                   cairo_region_t *region)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  g_clear_pointer (&priv->extra_input_region, cairo_region_destroy);
+  priv->extra_input_region = cairo_region_copy (region);
+  update_csd_shape (window);
 }
 
 static void

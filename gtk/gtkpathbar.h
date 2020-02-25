@@ -36,12 +36,12 @@ typedef struct _GtkPathBarClass   GtkPathBarClass;
 
 struct _GtkPathBar
 {
-  GtkContainer parent_instance;
+  GtkWidget parent_instance;
 };
 
 struct _GtkPathBarClass
 {
-  GtkContainerClass parent_class;
+  GtkWidgetClass parent_class;
 
   void (* path_clicked) (GtkPathBar  *path_bar,
 			 GFile       *file,

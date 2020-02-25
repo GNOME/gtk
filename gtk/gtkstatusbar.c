@@ -26,6 +26,7 @@
 #include "config.h"
 
 #include "gtkstatusbar.h"
+#include "gtkstatusbarprivate.h"
 
 #include "gtkbinlayout.h"
 #include "gtkframe.h"
@@ -501,7 +502,7 @@ gtk_statusbar_remove_all (GtkStatusbar *statusbar,
     }
 }
 
-/**
+/** < private >
  * gtk_statusbar_get_message_area:
  * @statusbar: a #GtkStatusbar
  *
@@ -509,14 +510,14 @@ gtk_statusbar_remove_all (GtkStatusbar *statusbar,
  *
  * Returns: (type Gtk.Box) (transfer none): a #GtkBox
  */
-GtkWidget*
-gtk_statusbar_get_message_area (GtkStatusbar *statusbar)
+const char*
+gtk_statusbar_get_message (GtkStatusbar *statusbar)
 {
   GtkStatusbarPrivate *priv = gtk_statusbar_get_instance_private (statusbar);
 
   g_return_val_if_fail (GTK_IS_STATUSBAR (statusbar), NULL);
 
-  return priv->message_area;
+  return gtk_label_get_label (GTK_LABEL (priv->label));
 }
 
 static void

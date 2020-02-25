@@ -689,8 +689,6 @@ static void gtk_widget_set_usize_internal (GtkWidget          *widget,
 
 static gboolean event_surface_is_still_viewable (GdkEvent *event);
 
-static void gtk_widget_update_input_shape (GtkWidget *widget);
-
 static gboolean gtk_widget_class_get_visible_by_default (GtkWidgetClass *widget_class);
 
 static void remove_parent_surface_transform_changed_listener (GtkWidget *widget);
@@ -707,7 +705,6 @@ GtkTextDirection gtk_default_direction = GTK_TEXT_DIR_LTR;
 
 static GQuark		quark_accel_path = 0;
 static GQuark		quark_accel_closures = 0;
-static GQuark		quark_input_shape_info = 0;
 static GQuark		quark_pango_context = 0;
 static GQuark		quark_mnemonic_labels = 0;
 static GQuark		quark_tooltip_markup = 0;
@@ -864,7 +861,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   quark_accel_path = g_quark_from_static_string ("gtk-accel-path");
   quark_accel_closures = g_quark_from_static_string ("gtk-accel-closures");
-  quark_input_shape_info = g_quark_from_static_string ("gtk-input-shape-info");
   quark_pango_context = g_quark_from_static_string ("gtk-pango-context");
   quark_mnemonic_labels = g_quark_from_static_string ("gtk-mnemonic-labels");
   quark_tooltip_markup = g_quark_from_static_string ("gtk-tooltip-markup");
@@ -2413,7 +2409,6 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->name = NULL;
   priv->user_alpha = 255;
   priv->alpha = 255;
-  priv->surface = NULL;
   priv->parent = NULL;
   priv->first_child = NULL;
   priv->last_child = NULL;
@@ -3532,13 +3527,23 @@ gtk_widget_remove_surface_transform_changed_callback (GtkWidget *widget,
     }
 }
 
+static GdkSurface *
+gtk_widget_get_surface (GtkWidget *widget)
+{
+  GtkNative *native = gtk_widget_get_native (widget);
+
+  if (native)
+    return gtk_native_get_surface (native);
+
+  return NULL;
+}
+
 /**
  * gtk_widget_realize:
  * @widget: a #GtkWidget
  *
  * Creates the GDK (windowing system) resources associated with a
- * widget.  For example, @widget->surface will be created when a widget
- * is realized.  Normally realization happens implicitly; if you show
+ * widget. Normally realization happens implicitly; if you show
  * a widget and all its parent containers, then the widget will be
  * realized and mapped automatically.
  *
@@ -3580,10 +3585,12 @@ gtk_widget_realize (GtkWidget *widget)
 
       g_signal_emit (widget, widget_signals[REALIZE], 0);
 
-      gtk_widget_update_input_shape (widget);
-
       if (priv->multidevice)
-        gdk_surface_set_support_multidevice (priv->surface, TRUE);
+        {
+          GdkSurface *surface = gtk_widget_get_surface (widget);
+
+          gdk_surface_set_support_multidevice (surface, TRUE);
+        }
 
       gtk_widget_update_alpha (widget);
 
@@ -3602,7 +3609,7 @@ gtk_widget_realize (GtkWidget *widget)
  *
  * This function is only useful in widget implementations.
  * Causes a widget to be unrealized (frees all GDK resources
- * associated with the widget, such as @widget->surface).
+ * associated with the widget).
  **/
 void
 gtk_widget_unrealize (GtkWidget *widget)
@@ -3613,9 +3620,6 @@ gtk_widget_unrealize (GtkWidget *widget)
 
   g_object_ref (widget);
   gtk_widget_push_verify_invariants (widget);
-
-  if (g_object_get_qdata (G_OBJECT (widget), quark_input_shape_info))
-    gtk_widget_input_shape_combine_region (widget, NULL);
 
   if (_gtk_widget_get_realized (widget))
     {
@@ -3830,7 +3834,9 @@ gtk_widget_get_frame_clock (GtkWidget *widget)
 
   if (priv->realized)
     {
-      return gdk_surface_get_frame_clock (priv->surface);
+      GdkSurface *surface = gtk_widget_get_surface (widget);
+
+      return gdk_surface_get_frame_clock (surface);
     }
   else
     {
@@ -4362,12 +4368,16 @@ static gboolean
 gtk_widget_real_can_activate_accel (GtkWidget *widget,
                                     guint      signal_id)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GdkSurface *surface;
 
   /* widgets must be onscreen for accels to take effect */
-  return gtk_widget_is_sensitive (widget) &&
-         _gtk_widget_get_mapped (widget) &&
-         gdk_surface_is_viewable (priv->surface);
+  if (!gtk_widget_is_sensitive (widget) ||
+      !_gtk_widget_get_mapped (widget))
+    return FALSE;
+
+  surface = gtk_widget_get_surface (widget);
+
+  return gdk_surface_is_viewable (surface);
 }
 
 /**
@@ -6865,7 +6875,6 @@ _gtk_widget_scale_changed (GtkWidget *widget)
 gint
 gtk_widget_get_scale_factor (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkRoot *root;
   GdkDisplay *display;
   GdkMonitor *monitor;
@@ -6873,7 +6882,12 @@ gtk_widget_get_scale_factor (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 1);
 
   if (_gtk_widget_get_realized (widget))
-    return gdk_surface_get_scale_factor (priv->surface);
+    {
+      GdkSurface *surface = gtk_widget_get_surface (widget);
+
+      if (surface)
+        return gdk_surface_get_scale_factor (surface);
+    }
 
   root = _gtk_widget_get_root (widget);
   if (root && GTK_WIDGET (root) != widget)
@@ -7024,9 +7038,9 @@ gtk_widget_keynav_failed (GtkWidget        *widget,
 void
 gtk_widget_error_bell (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkSettings* settings;
   gboolean beep;
+  GdkSurface *surface;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
@@ -7034,12 +7048,14 @@ gtk_widget_error_bell (GtkWidget *widget)
   if (!settings)
     return;
 
+  surface = gtk_widget_get_surface (widget);
+
   g_object_get (settings,
                 "gtk-error-bell", &beep,
                 NULL);
 
-  if (beep && priv->surface)
-    gdk_surface_beep (priv->surface);
+  if (beep && surface)
+    gdk_surface_beep (surface);
 }
 
 static void
@@ -7754,18 +7770,6 @@ gtk_widget_real_realize (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  if (GTK_IS_NATIVE (widget))
-    {
-      priv->surface = gtk_native_get_surface (GTK_NATIVE (widget));
-      g_object_ref (priv->surface);
-    }
-  else
-    {
-      g_assert (priv->parent);
-      priv->surface = priv->parent->priv->surface;
-      g_object_ref (priv->surface);
-    }
-
   priv->realized = TRUE;
 
   gtk_widget_connect_frame_clock (widget);
@@ -7797,8 +7801,6 @@ gtk_widget_real_unrealize (GtkWidget *widget)
   gtk_widget_disconnect_frame_clock (widget);
 
   priv->realized = FALSE;
-
-  g_clear_object (&priv->surface);
 }
 
 void
@@ -7959,7 +7961,7 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
 
       from_surface = _gtk_widget_get_device_surface (from, device);
       if (!from_surface)
-        from_surface = from->priv->surface;
+        from_surface = gtk_widget_get_surface (from);
 
       gdk_surface_get_device_position (from_surface, device, &x, &y, NULL);
       gtk_widget_handle_crossing (from, &crossing, x, y);
@@ -7969,7 +7971,7 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
     {
       to_surface = _gtk_widget_get_device_surface (to, device);
       if (!to_surface)
-        to_surface = to->priv->surface;
+        to_surface = gtk_widget_get_surface (to);
 
       crossing.direction = GTK_CROSSING_IN;
       gdk_surface_get_device_position (to_surface, device, &x, &y, NULL);
@@ -8072,85 +8074,6 @@ gtk_widget_propagate_state (GtkWidget          *widget,
 
       g_object_unref (widget);
     }
-}
-
-static void
-gtk_widget_update_input_shape (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  /* set shape if widget has a GDK surface already.
-   * otherwise the shape is scheduled to be set by gtk_widget_realize().
-   */
-  if (priv->surface)
-    {
-      cairo_region_t *region;
-      cairo_region_t *csd_region;
-      cairo_region_t *app_region;
-      gboolean free_region;
-
-      app_region = g_object_get_qdata (G_OBJECT (widget), quark_input_shape_info);
-      csd_region = g_object_get_data (G_OBJECT (widget), "csd-region");
-
-      free_region = FALSE;
-
-      if (app_region && csd_region)
-        {
-          free_region = TRUE;
-          region = cairo_region_copy (app_region);
-          cairo_region_intersect (region, csd_region);
-        }
-      else if (app_region)
-        region = app_region;
-      else if (csd_region)
-        region = csd_region;
-      else
-        region = NULL;
-
-      gdk_surface_input_shape_combine_region (priv->surface, region, 0, 0);
-
-      if (free_region)
-        cairo_region_destroy (region);
-    }
-}
-
-void
-gtk_widget_set_csd_input_shape (GtkWidget            *widget,
-                                const cairo_region_t *region)
-{
-  if (region == NULL)
-    g_object_set_data (G_OBJECT (widget), "csd-region", NULL);
-  else
-    g_object_set_data_full (G_OBJECT (widget), "csd-region",
-                            cairo_region_copy (region),
-                            (GDestroyNotify) cairo_region_destroy);
-  gtk_widget_update_input_shape (widget);
-}
-
-/**
- * gtk_widget_input_shape_combine_region:
- * @widget: a #GtkWidget
- * @region: (allow-none): shape to be added, or %NULL to remove an existing shape
- *
- * Sets an input shape for this widget’s GDK surface. This allows for
- * windows which react to mouse click in a nonrectangular region, see
- * gdk_surface_input_shape_combine_region() for more information.
- **/
-void
-gtk_widget_input_shape_combine_region (GtkWidget      *widget,
-                                       cairo_region_t *region)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  /*  set_shape doesn't work on widgets without GDK surface */
-  g_return_if_fail (GTK_IS_NATIVE (widget));
-
-  if (region == NULL)
-    g_object_set_qdata (G_OBJECT (widget), quark_input_shape_info, NULL);
-  else
-    g_object_set_qdata_full (G_OBJECT (widget), quark_input_shape_info,
-                             cairo_region_copy (region),
-                             (GDestroyNotify) cairo_region_destroy);
-  gtk_widget_update_input_shape (widget);
 }
 
 /**
@@ -10728,7 +10651,12 @@ gtk_widget_set_support_multidevice (GtkWidget *widget,
   priv->multidevice = (support_multidevice == TRUE);
 
   if (_gtk_widget_get_realized (widget))
-    gdk_surface_set_support_multidevice (priv->surface, support_multidevice);
+    {
+      GdkSurface *surface = gtk_widget_get_surface (widget);
+
+      if (surface)
+        gdk_surface_set_support_multidevice (surface, support_multidevice);
+    }
 }
 
 /* There are multiple alpha related sources. First of all the user can specify alpha
@@ -10761,7 +10689,7 @@ gtk_widget_update_alpha (GtkWidget *widget)
     {
       if (GTK_IS_NATIVE (widget))
         {
-          gdk_surface_set_opacity (priv->surface, priv->alpha / 255.0);
+          gdk_surface_set_opacity (gtk_native_get_surface (GTK_NATIVE (widget)), priv->alpha / 255.0);
           gtk_widget_queue_allocate (widget);
         }
       else

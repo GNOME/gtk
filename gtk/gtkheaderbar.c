@@ -383,11 +383,11 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   priv->titlebar_icon = button;
                   gtk_widget_add_css_class (button, "titlebutton");
                   gtk_widget_add_css_class (button, "icon");
-                  gtk_widget_set_size_request (button, 20, 20);
 
                   if (!_gtk_header_bar_update_window_icon (bar, window))
                     {
-                      gtk_widget_destroy (button);
+                      g_object_ref_sink (button);
+                      g_object_unref (button);
                       priv->titlebar_icon = NULL;
                       button = NULL;
                     }
@@ -802,7 +802,7 @@ gtk_header_bar_dispose (GObject *object)
 
   if (priv->label_sizing_box)
     {
-      gtk_widget_destroy (priv->label_sizing_box);
+      g_object_ref_sink (priv->label_sizing_box);
       g_clear_object (&priv->label_sizing_box);
     }
 
