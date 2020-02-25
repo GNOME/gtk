@@ -85,20 +85,25 @@ else
         base_version="v$base_version"
 fi
 
-TAG="registry.gitlab.gnome.org/gnome/gtk/${base}:${base_version}"
+if [ ! -x "$(command -v docker)" ] || [ docker --help |& grep -q podman ]; then
+        # Docker is actually implemented by podman, and its OCI output
+        # is incompatible with some of the dockerd instances on GitLab
+        # CI runners.
+        echo "Using: Podman"
+        format="--format docker"
+        CMD="podman"
+else
+        echo "Using: Docker"
+        format=""
+        CMD="sudo socker"
+fi
+
+REGISTRY="registry.gitlab.gnome.org"
+TAG="${REGISTRY}/gnome/gtk/${base}:${base_version}"
 
 if [ $build == 1 ]; then
-        if docker --help |& grep -q podman; then
-                # Docker is actually implemented by podman, and its OCI output
-                # is incompatible with some of the dockerd instances on GitLab
-                # CI runners.
-                format="--format docker"
-        else
-                format=""
-        fi
-
         echo -e "\e[1;32mBUILDING\e[0m: ${base} as ${TAG}"
-        sudo docker build \
+        ${CMD} build \
                 ${format} \
                 --build-arg HOST_USER_ID="$UID" \
                 --tag "${TAG}" \
@@ -110,16 +115,16 @@ if [ $push == 1 ]; then
         echo -e "\e[1;32mPUSHING\e[0m: ${base} as ${TAG}"
 
         if [ $no_login == 0 ]; then
-                sudo docker login registry.gitlab.gnome.org
+                ${CMD} login ${REGISTRY}
         fi
 
-        sudo docker push $TAG
+        ${CMD} push ${TAG}
         exit $?
 fi
 
 if [ $run == 1 ]; then
         echo -e "\e[1;32mRUNNING\e[0m: ${base} as ${TAG}"
-        sudo docker run \
+        ${CMD} run \
                 --rm \
                 --volume "$(pwd)/..:/home/user/app" \
                 --workdir "/home/user/app" \
