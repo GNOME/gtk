@@ -13,6 +13,8 @@
             <property name="active">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="expand">True</property>
+            <property name="margin">10</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
