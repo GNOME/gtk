@@ -471,6 +471,12 @@ opacity_query (GtkCssStyleProperty *property,
   g_value_set_double (value, _gtk_css_number_value_get (css_value, 100));
 }
 
+static GtkCssValue *
+parse_font_feature_settings (GtkCssStyleProperty *property,
+                      GtkCssParser        *parser)
+{
+  return _gtk_css_string_value_parse (parser);
+}
 
 static GtkCssValue *
 parse_one_css_play_state (GtkCssParser *parser)
@@ -1869,4 +1875,13 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                           color_query,
                                           color_assign,
                                           _gtk_css_color_value_new_current_color ());
+  gtk_css_style_property_register        ("font-feature-settings",
+                                          GTK_CSS_PROPERTY_FONT_FEATURE_SETTINGS,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
+                                          GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          parse_font_feature_settings,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_string_value_new (""));
 }
