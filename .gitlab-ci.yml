@@ -27,14 +27,14 @@ variables:
 
 style-check-diff:
   extends: .only-default
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v13
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v14
   stage: analysis
   allow_failure: true
   script:
     - .gitlab-ci/run-style-check-diff.sh
 
 fedora-x86_64:
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v13
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v14
   stage: build
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
@@ -66,7 +66,7 @@ fedora-x86_64:
     <<: *cache-paths
 
 release-build:
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v13
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v14
   stage: build
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release"
@@ -168,7 +168,7 @@ flatpak-master:icon-browser:
   <<: *flatpak-master
 
 reference:
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v13
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v14
   stage: docs
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release"
