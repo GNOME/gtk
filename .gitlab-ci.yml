@@ -1,5 +1,5 @@
 stages:
-  - style-check
+  - analysis
   - build
   - docs
   - flatpak
@@ -28,7 +28,7 @@ variables:
 style-check-diff:
   extends: .only-default
   image: registry.gitlab.gnome.org/gnome/gtk/fedora:v13
-  stage: style-check
+  stage: analysis
   allow_failure: true
   script:
     - .gitlab-ci/run-style-check-diff.sh
