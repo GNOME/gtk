@@ -2101,7 +2101,7 @@ gdk_drag_event_get_drop (GdkEvent *event)
  *
  * Extracts the grab surface from a grab broken event.
  *
- * Returns: the grab surface of @event
+ * Returns: (transfer none): the grab surface of @event
  **/
 GdkSurface *
 gdk_grab_broken_event_get_grab_surface (GdkEvent *event)

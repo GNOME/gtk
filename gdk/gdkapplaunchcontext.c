@@ -179,7 +179,7 @@ gdk_app_launch_context_get_display_name (GAppLaunchContext *context,
  *
  * Gets the #GdkDispolat that @context is for.
  *
- * Returns: the display of @context
+ * Returns: (transfer none): the display of @context
  */
 GdkDisplay *
 gdk_app_launch_context_get_display (GdkAppLaunchContext *context)
