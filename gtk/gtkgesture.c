@@ -501,6 +501,7 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
     gdk_event_unref (data->event);
 
   data->event = gdk_event_ref ((GdkEvent *)event);
+  data->target = g_object_ref (target);
   _update_touchpad_deltas (data);
   data->widget_x = x + data->accum_dx;
   data->widget_y = y + data->accum_dy;
