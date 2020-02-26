@@ -727,8 +727,8 @@ maybe_rename_property (Element *element, MyParserData *data)
     const char *alt_names[3];
   } props[] = {
     { "GtkPopover", "modal", GTK_TYPE_POPOVER, PROP_KIND_OBJECT, "autohide", { NULL, NULL, NULL } },
-    { "GtkWidget", "expand", GTK_TYPE_WIDGET, PROP_KIND_OBJECT, "hexpand", { "vexpand",  NULL, NULL } },
-    { "GtkWidget", "margin", GTK_TYPE_WIDGET, PROP_KIND_OBJECT, "margin-left", { "margin-top",  "margin-right", "margin-bottom" } },
+    { "GtkWidget", "expand", GTK_TYPE_WIDGET, PROP_KIND_OBJECT, "hexpand", { "vexpand", NULL, NULL } },
+    { "GtkWidget", "margin", GTK_TYPE_WIDGET, PROP_KIND_OBJECT, "margin-left", { "margin-top", "margin-right", "margin-bottom" } },
   };
   int i, k, l;
   PropKind kind;
@@ -772,8 +772,8 @@ maybe_rename_property (Element *element, MyParserData *data)
               elt = g_new0 (Element, 1);
               elt->parent = element->parent;
               elt->element_name = g_strdup (element->element_name);
-              elt->attribute_names = g_strdupv ((char **)element->attribute_names);
-              elt->attribute_values = g_strdupv ((char **)element->attribute_values);
+              elt->attribute_names = g_strdupv ((char **) element->attribute_names);
+              elt->attribute_values = g_strdupv ((char **) element->attribute_values);
               elt->data = g_strdup (element->data);
 
               g_free (elt->attribute_values[prop_name_index]);

@@ -1022,7 +1022,7 @@ property_editor (GObject                *object,
                     "vexpand", TRUE,
                     "hscrollbar-policy", GTK_POLICY_NEVER,
                     "vscrollbar-policy", GTK_POLICY_NEVER,
-                      NULL);
+                    NULL);
 
       g_object_get (object, spec->name, &model, NULL);
 

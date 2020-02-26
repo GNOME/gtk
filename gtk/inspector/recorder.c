@@ -1138,7 +1138,6 @@ gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
   gtk_widget_set_margin_top (widget, 6);
   gtk_widget_set_margin_bottom (widget, 6);
 
-
   return widget;
 }
 

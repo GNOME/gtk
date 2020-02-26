@@ -84,7 +84,6 @@ test_nonzerox (void)
   gtk_widget_set_margin_top (child, 3);
   gtk_widget_set_margin_bottom (child, 3);
 
-
   return win;
 }
 
