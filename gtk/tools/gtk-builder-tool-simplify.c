@@ -733,7 +733,8 @@ maybe_rename_property (Element *element, MyParserData *data)
   int i, k, l;
   PropKind kind;
   int prop_name_index = 0;
-  GParamSpec *pspec;
+  GType type;
+  char *canonical_name;
 
   kind = get_prop_kind (element);
 
@@ -751,15 +752,16 @@ maybe_rename_property (Element *element, MyParserData *data)
 
   if (property_name == NULL)
     return;
+ 
+  type = g_type_from_name (class_name);
 
-  pspec = get_property_pspec (data, class_name, property_name, kind);
-  if (pspec == NULL)
-    return;
-
+  canonical_name = g_strdup (property_name);
+  g_strdelimit (canonical_name, "_", '-');
+  
   for (k = 0; k < G_N_ELEMENTS (props); k++)
     {
-      if (pspec->owner_type == props[k].type &&
-          strcmp (pspec->name, props[k].property) == 0 &&
+      if (g_type_is_a (type, props[k].type) &&
+          strcmp (canonical_name, props[k].property) == 0 &&
           kind == props[k].kind)
         {
           g_free (element->attribute_values[prop_name_index]);
@@ -787,6 +789,8 @@ maybe_rename_property (Element *element, MyParserData *data)
           break;
         }
     }
+
+  g_free (canonical_name);
 }
 
 static Element *

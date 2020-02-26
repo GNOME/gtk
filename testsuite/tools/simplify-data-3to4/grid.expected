@@ -9,7 +9,8 @@
             <property name="active">1</property>
             <property name="can_focus">1</property>
             <property name="receives_default">1</property>
-            <property name="expand">True</property>
+            <property name="vexpand">1</property>
+            <property name="hexpand">1</property>
             <property name="margin-top">10</property>
             <property name="margin-right">10</property>
             <property name="margin-bottom">10</property>
