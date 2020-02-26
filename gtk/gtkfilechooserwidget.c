@@ -591,7 +591,8 @@ static void     clear_model_cache            (GtkFileChooserWidget *impl,
 static void     set_model_filter             (GtkFileChooserWidget *impl,
                                               GtkFileFilter        *filter);
 static void     switch_to_home_dir           (GtkFileChooserWidget *impl);
-
+static void     set_show_hidden              (GtkFileChooserWidget *impl,
+                                              gboolean              show_hidden);
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkFileChooserWidget, gtk_file_chooser_widget, GTK_TYPE_WIDGET,
@@ -1639,7 +1640,7 @@ change_show_hidden_state (GSimpleAction *action,
   GtkFileChooserWidget *impl = data;
 
   g_simple_action_set_state (action, state);
-  g_object_set (impl, "show-hidden", g_variant_get_boolean (state), NULL);
+  set_show_hidden (impl, g_variant_get_boolean (state));
 }
 
 /* Callback used when the "Show Size Column" menu item is toggled */
@@ -4180,7 +4181,7 @@ show_and_select_files (GtkFileChooserWidget *impl,
               (g_file_info_get_is_hidden (info) ||
                g_file_info_get_is_backup (info)))
             {
-              g_object_set (impl, "show-hidden", TRUE, NULL);
+              set_show_hidden (impl, TRUE);
               enabled_hidden = TRUE;
             }
         }
@@ -7285,7 +7286,7 @@ path_bar_clicked (GtkPathBar           *path_bar,
    * be shown in the path bar: "/foo/[bar]/.baz"
    */
   if (child_is_hidden)
-    g_object_set (impl, "show-hidden", TRUE, NULL);
+    set_show_hidden (impl, TRUE);
 }
 
 static void
@@ -7481,7 +7482,7 @@ show_hidden_handler (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
 
-  g_object_set (impl, "show-hidden", !priv->show_hidden, NULL);
+  set_show_hidden (impl, !priv->show_hidden);
 }
 
 static void
