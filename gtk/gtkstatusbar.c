@@ -502,7 +502,7 @@ gtk_statusbar_remove_all (GtkStatusbar *statusbar,
     }
 }
 
-/** < private >
+/* < private >
  * gtk_statusbar_get_message_area:
  * @statusbar: a #GtkStatusbar
  *

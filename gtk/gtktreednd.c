@@ -260,8 +260,8 @@ G_DEFINE_BOXED_TYPE (GtkTreeRowData, gtk_tree_row_data,
  * 
  * Creates a content provider for dragging @path from @tree_model.
  * 
- * Returns: a new #GdkContentProvider
- **/
+ * Returns: (transfer full): a new #GdkContentProvider
+ */
 GdkContentProvider *
 gtk_tree_create_row_drag_content (GtkTreeModel *tree_model,
 			          GtkTreePath  *path)
