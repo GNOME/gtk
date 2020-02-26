@@ -1459,9 +1459,9 @@ gtk_icon_theme_set_search_path (GtkIconTheme       *self,
  *
  * Gets the current search path. See gtk_icon_theme_set_search_path().
  * 
- * Returns: (element-type filename):
- *     a list of icon theme path directories or %NULL.
- *     The returned value should be freed with g_strfreev().
+ * Returns: (transfer full) (array zero-terminated=1) (element-type filename) (nullable):
+ *   a list of icon theme path directories or %NULL.
+ *   The returned value should be freed with g_strfreev().
  */
 char **
 gtk_icon_theme_get_search_path (GtkIconTheme  *self)
@@ -1552,8 +1552,9 @@ gtk_icon_theme_set_resource_path (GtkIconTheme       *self,
  *
  * See gtk_icon_theme_set_resource_path().
  * 
- * Returns: A list of resource paths or %NULL.
- *     The returned value should be freed with g_strfreev().
+ * Returns: (transfer full) (array zero-terminated=1) (element-type utf8) (nullable):
+ *   A list of resource paths or %NULL.
+ *   The returned value should be freed with g_strfreev().
  */
 char **
 gtk_icon_theme_get_resource_path (GtkIconTheme  *self)

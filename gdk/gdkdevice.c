@@ -1681,6 +1681,14 @@ gdk_device_update_tool (GdkDevice     *device,
     }
 }
 
+/**
+ * gdk_device_get_num_touches:
+ * @device: a #GdkDevice
+ *
+ * Retrieves the number of touch points associated to @device.
+ *
+ * Returns: the number of touch points
+ */
 guint
 gdk_device_get_num_touches (GdkDevice *device)
 {
@@ -1689,6 +1697,14 @@ gdk_device_get_num_touches (GdkDevice *device)
   return device->num_touches;
 }
 
+/**
+ * gdk_device_get_device_tool:
+ * @device: a #GdkDevice
+ *
+ * Retrieves the #GdkDeviceTool associated to @device.
+ *
+ * Returns: (transfer none): the #GdkDeviceTool
+ */
 GdkDeviceTool *
 gdk_device_get_device_tool (GdkDevice *device)
 {

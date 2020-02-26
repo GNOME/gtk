@@ -367,7 +367,8 @@ gtk_drop_controller_motion_contains_pointer (GtkDropControllerMotion *self)
  *
  * Returns the value of the GtkDropControllerMotion:drop property.
  *
- * Returns: The #GdkDrop currently happening within @self or %NULL if none
+ * Returns: (transfer none) (nullable): The #GdkDrop currently happening
+ *   within @self or %NULL if none
  */
 GdkDrop *
 gtk_drop_controller_motion_get_drop (GtkDropControllerMotion *self)
