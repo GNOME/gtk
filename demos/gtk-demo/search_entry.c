@@ -258,7 +258,10 @@ do_search_entry (GtkWidget *do_widget)
                         G_CALLBACK (search_entry_destroyed), &window);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-      g_object_set (vbox, "margin", 5, NULL);
+      gtk_widget_set_margin_start (vbox, 5);
+      gtk_widget_set_margin_end (vbox, 5);
+      gtk_widget_set_margin_top (vbox, 5);
+      gtk_widget_set_margin_bottom (vbox, 5);
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       label = gtk_label_new (NULL);

@@ -96,7 +96,10 @@ change_header (GtkButton *button, gpointer data)
       header = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       gtk_style_context_add_class (gtk_widget_get_style_context (header), "titlebar");
       gtk_style_context_add_class (gtk_widget_get_style_context (header), "header-bar");
-      g_object_set (header, "margin", 10, NULL);
+      gtk_widget_set_margin_start (header, 10);
+      gtk_widget_set_margin_end (header, 10);
+      gtk_widget_set_margin_top (header, 10);
+      gtk_widget_set_margin_bottom (header, 10);
       label = gtk_label_new ("Label");
       gtk_container_add (GTK_CONTAINER (header), label);
       widget = gtk_level_bar_new ();

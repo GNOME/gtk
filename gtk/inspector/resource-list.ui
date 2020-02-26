@@ -124,7 +124,10 @@
                   <object class="GtkGrid" id="info_grid">
                     <property name="row-spacing">10</property>
                     <property name="column-spacing">10</property>
-                    <property name="margin">10</property>
+                    <property name="margin-start">10</property>
+                    <property name="margin-end">10</property>
+                    <property name="margin-top">10</property>
+                    <property name="margin-bottom">10</property>
                     <property name="halign">center</property>
                     <child>
                       <object class="GtkLabel" id="name">

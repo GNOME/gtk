@@ -495,7 +495,6 @@ test_type (gconstpointer data)
 	  (g_str_equal (pspec->name, "has-focus") ||
 	   g_str_equal (pspec->name, "has-default") ||
            g_str_equal (pspec->name, "is-focus") ||
-           g_str_equal (pspec->name, "margin") ||
            g_str_equal (pspec->name, "hexpand") ||
            g_str_equal (pspec->name, "vexpand")))
 	continue;

@@ -114,7 +114,10 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (window), grid);
   gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
-  g_object_set (grid, "margin", 10, NULL);
+  gtk_widget_set_margin_start (grid, 10);
+  gtk_widget_set_margin_end (grid, 10);
+  gtk_widget_set_margin_top (grid, 10);
+  gtk_widget_set_margin_bottom (grid, 10);
 
   /*
    * Open File - Sets the icon using a GIcon
@@ -274,7 +277,10 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (box), entry);
   image = gtk_image_new_from_icon_name ("edit-find-symbolic");
   gtk_widget_set_cursor_from_name (image, "default");
-  g_object_set (image, "margin", 6, NULL);
+  gtk_widget_set_margin_start (image, 6);
+  gtk_widget_set_margin_end (image, 6);
+  gtk_widget_set_margin_top (image, 6);
+  gtk_widget_set_margin_bottom (image, 6);
   gtk_widget_set_tooltip_text (image, "Click me");
 
   GtkGesture *gesture;
@@ -283,7 +289,10 @@ main (int argc, char **argv)
   gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (gesture));
   gtk_container_add (GTK_CONTAINER (box), image);
   image = gtk_image_new_from_icon_name ("document-save-symbolic");
-  g_object_set (image, "margin", 6, NULL);
+  gtk_widget_set_margin_start (image, 6);
+  gtk_widget_set_margin_end (image, 6);
+  gtk_widget_set_margin_top (image, 6);
+  gtk_widget_set_margin_bottom (image, 6);
   gtk_container_add (GTK_CONTAINER (box), image);
   gtk_grid_attach (GTK_GRID (grid), box, 1, 7, 1, 1);
 

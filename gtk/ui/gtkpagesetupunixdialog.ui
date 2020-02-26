@@ -25,12 +25,18 @@
       <object class="GtkBox" id="dialog-vbox1">
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
-        <property name="margin">5</property>
+        <property name="margin-start">5</property>
+        <property name="margin-end">5</property>
+        <property name="margin-top">5</property>
+        <property name="margin-bottom">5</property>
         <child>
           <object class="GtkGrid" id="grid1">
             <property name="row-spacing">6</property>
             <property name="column-spacing">12</property>
-            <property name="margin">5</property>
+            <property name="margin-start">5</property>
+            <property name="margin-end">5</property>
+            <property name="margin-top">5</property>
+            <property name="margin-bottom">5</property>
             <property name="vexpand">1</property>
             <child>
               <object class="GtkLabel" id="printer_combo_label">

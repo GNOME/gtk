@@ -114,11 +114,17 @@ do_dialog (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       frame = gtk_frame_new ("Dialogs");
-      g_object_set (frame, "margin", 8, NULL);
+      gtk_widget_set_margin_start (frame, 8);
+      gtk_widget_set_margin_end (frame, 8);
+      gtk_widget_set_margin_top (frame, 8);
+      gtk_widget_set_margin_bottom (frame, 8);
       gtk_container_add (GTK_CONTAINER (window), frame);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
-      g_object_set (vbox, "margin", 8, NULL);
+      gtk_widget_set_margin_start (vbox, 8);
+      gtk_widget_set_margin_end (vbox, 8);
+      gtk_widget_set_margin_top (vbox, 8);
+      gtk_widget_set_margin_bottom (vbox, 8);
       gtk_container_add (GTK_CONTAINER (frame), vbox);
 
       /* Standard message dialog */

@@ -125,7 +125,10 @@
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkGrid">
-            <property name="margin">10</property>
+            <property name="margin-start">10</property>
+            <property name="margin-end">10</property>
+            <property name="margin-top">10</property>
+            <property name="margin-bottom">10</property>
             <property name="row-spacing">18</property>
             <property name="column-spacing">18</property>
             <property name="halign">center</property>
@@ -376,13 +379,19 @@
             <property name="label" translatable="yes">Copy to Clipboard</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="margin">20</property>
+            <property name="margin-start">20</property>
+            <property name="margin-end">20</property>
+            <property name="margin-top">20</property>
+            <property name="margin-bottom">20</property>
             <signal name="clicked" handler="copy_to_clipboard"/>
           </object>
         </child>
         <child>
           <object class="GtkLabel" id="description">
-            <property name="margin">10</property>
+            <property name="margin-start">10</property>
+            <property name="margin-end">10</property>
+            <property name="margin-top">10</property>
+            <property name="margin-bottom">10</property>
             <property name="wrap">1</property>
             <property name="max-width-chars">60</property>
             <property name="valign">start</property>

@@ -8,10 +8,16 @@
       <object class="GtkBox" id="dialog-vbox1">
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
-        <property name="margin">5</property>
+        <property name="margin-start">5</property>
+        <property name="margin-end">5</property>
+        <property name="margin-top">5</property>
+        <property name="margin-bottom">5</property>
         <child>
           <object class="GtkColorChooserWidget" id="chooser">
-            <property name="margin">5</property>
+            <property name="margin-start">5</property>
+            <property name="margin-end">5</property>
+            <property name="margin-top">5</property>
+            <property name="margin-bottom">5</property>
             <property name="rgba">rgb(255,255,255)</property>
             <property name="hexpand">1</property>
             <property name="vexpand">1</property>

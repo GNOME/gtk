@@ -2,7 +2,10 @@
 <interface>
   <object class="GtkGrid" id="grid">
     <property name="row-spacing">10</property>
-    <property name="margin">10</property>
+    <property name="margin-start">10</property>
+    <property name="margin-end">10</property>
+    <property name="margin-top">10</property>
+    <property name="margin-bottom">10</property>
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkBox">

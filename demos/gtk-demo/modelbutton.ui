@@ -10,7 +10,10 @@
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
-        <property name="margin">80</property>
+        <property name="margin-start">80</property>
+        <property name="margin-end">80</property>
+        <property name="margin-top">80</property>
+        <property name="margin-bottom">80</property>
         <child>
           <object class="GtkMenuButton">
             <property name="popover">thing_a</property>
@@ -35,7 +38,10 @@
   <object class="GtkPopover" id="thing_a">
     <child>
       <object class="GtkBox">
-        <property name="margin">10</property>
+        <property name="margin-start">10</property>
+        <property name="margin-end">10</property>
+        <property name="margin-top">10</property>
+        <property name="margin-bottom">10</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkModelButton">
@@ -64,7 +70,10 @@
   <object class="GtkPopover" id="thing_b">
     <child>
       <object class="GtkBox">
-        <property name="margin">10</property>
+        <property name="margin-start">10</property>
+        <property name="margin-end">10</property>
+        <property name="margin-top">10</property>
+        <property name="margin-bottom">10</property>
         <property name="orientation">vertical</property>
         <property name="spacing">10</property>
         <child>
@@ -94,7 +103,10 @@
   <object class="GtkPopover" id="thing_c">
     <child>
       <object class="GtkBox">
-        <property name="margin">10</property>
+        <property name="margin-start">10</property>
+        <property name="margin-end">10</property>
+        <property name="margin-top">10</property>
+        <property name="margin-bottom">10</property>
         <property name="orientation">vertical</property>
         <property name="spacing">10</property>
         <child>

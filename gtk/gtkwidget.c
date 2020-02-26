@@ -550,7 +550,6 @@ enum {
   PROP_MARGIN_END,
   PROP_MARGIN_TOP,
   PROP_MARGIN_BOTTOM,
-  PROP_MARGIN,
   PROP_HEXPAND,
   PROP_VEXPAND,
   PROP_HEXPAND_SET,
@@ -1192,20 +1191,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:margin:
-   *
-   * Sets all four sides' margin at once. If read, returns max
-   * margin on any side.
-   */
-  widget_props[PROP_MARGIN] =
-      g_param_spec_int ("margin",
-                        P_("All Margins"),
-                        P_("Pixels of extra space on all four sides"),
-                        0, G_MAXINT16,
-                        0,
-                        GTK_PARAM_READWRITE);
-
-  /**
    * GtkWidget:hexpand:
    *
    * Whether to expand horizontally. See gtk_widget_set_hexpand().
@@ -1845,14 +1830,6 @@ gtk_widget_set_property (GObject         *object,
     case PROP_MARGIN_BOTTOM:
       gtk_widget_set_margin_bottom (widget, g_value_get_int (value));
       break;
-    case PROP_MARGIN:
-      g_object_freeze_notify (G_OBJECT (widget));
-      gtk_widget_set_margin_start (widget, g_value_get_int (value));
-      gtk_widget_set_margin_end (widget, g_value_get_int (value));
-      gtk_widget_set_margin_top (widget, g_value_get_int (value));
-      gtk_widget_set_margin_bottom (widget, g_value_get_int (value));
-      g_object_thaw_notify (G_OBJECT (widget));
-      break;
     case PROP_HEXPAND:
       gtk_widget_set_hexpand (widget, g_value_get_boolean (value));
       break;
@@ -1988,12 +1965,6 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_MARGIN_BOTTOM:
       g_value_set_int (value, gtk_widget_get_margin_bottom (widget));
-      break;
-    case PROP_MARGIN:
-      g_value_set_int (value, MAX (MAX (priv->margin.left,
-                                        priv->margin.right),
-                                   MAX (priv->margin.top,
-                                        priv->margin.bottom)));
       break;
     case PROP_HEXPAND:
       g_value_set_boolean (value, gtk_widget_get_hexpand (widget));

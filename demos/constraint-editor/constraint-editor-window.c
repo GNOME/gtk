@@ -601,7 +601,10 @@ create_widget_func (gpointer item,
     g_object_bind_property (item, "name",
                             label, "label",
                             G_BINDING_DEFAULT);
-  g_object_set (label, "margin", 10, NULL);
+  gtk_widget_set_margin_start (label, 10);
+  gtk_widget_set_margin_end (label, 10);
+  gtk_widget_set_margin_top (label, 10);
+  gtk_widget_set_margin_bottom (label, 10);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_widget_set_hexpand (label, TRUE);
   gtk_container_add (GTK_CONTAINER (row), box);

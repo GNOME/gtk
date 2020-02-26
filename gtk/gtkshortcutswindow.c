@@ -352,7 +352,10 @@ gtk_shortcuts_window_add_section (GtkShortcutsWindow  *self,
                       NULL);
   g_object_set_data (G_OBJECT (row), "gtk-shortcuts-section", section);
   label = g_object_new (GTK_TYPE_LABEL,
-                        "margin", 6,
+                        "margin-start", 6,
+                        "margin-end", 6,
+                        "margin-top", 6,
+                        "margin-bottom", 6,
                         "label", title,
                         "xalign", 0.5f,
                         NULL);
@@ -991,7 +994,10 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
 
   empty = g_object_new (GTK_TYPE_GRID,
                         "row-spacing", 12,
-                        "margin", 12,
+                        "margin-start", 12,
+                        "margin-end", 12,
+                        "margin-top", 12,
+                        "margin-bottom", 12,
                         "hexpand", TRUE,
                         "vexpand", TRUE,
                         "halign", GTK_ALIGN_CENTER,

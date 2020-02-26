@@ -208,7 +208,10 @@ add_widget (GtkInspectorSizeGroups *sl,
   text = g_strdup_printf ("%p (%s)", widget, g_type_name_from_instance ((GTypeInstance*)widget));
   label = gtk_label_new (text);
   g_free (text);
-  g_object_set (label, "margin", 10, NULL);
+  gtk_widget_set_margin_start (label, 10);
+  gtk_widget_set_margin_end (label, 10);
+  gtk_widget_set_margin_top (label, 10);
+  gtk_widget_set_margin_bottom (label, 10);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
   gtk_container_add (GTK_CONTAINER (row), label);
@@ -234,13 +237,19 @@ add_size_group (GtkInspectorSizeGroups *sl,
   gtk_container_add (GTK_CONTAINER (box), box2);
 
   label = gtk_label_new (_("Mode"));
-  g_object_set (label, "margin", 10, NULL);
+  gtk_widget_set_margin_start (label, 10);
+  gtk_widget_set_margin_end (label, 10);
+  gtk_widget_set_margin_top (label, 10);
+  gtk_widget_set_margin_bottom (label, 10);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
   gtk_container_add (GTK_CONTAINER (box2), label);
 
   combo = gtk_combo_box_text_new ();
-  g_object_set (combo, "margin", 10, NULL);
+  gtk_widget_set_margin_start (combo, 10);
+  gtk_widget_set_margin_end (combo, 10);
+  gtk_widget_set_margin_top (combo, 10);
+  gtk_widget_set_margin_bottom (combo, 10);
   gtk_widget_set_halign (combo, GTK_ALIGN_END);
   gtk_widget_set_valign (combo, GTK_ALIGN_BASELINE);
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), C_("sizegroup mode", "None"));

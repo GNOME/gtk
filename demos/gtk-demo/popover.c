@@ -26,7 +26,10 @@ create_popover (GtkWidget       *parent,
   gtk_widget_set_parent (popover, parent);
   gtk_popover_set_position (GTK_POPOVER (popover), pos);
   gtk_container_add (GTK_CONTAINER (popover), child);
-  g_object_set (child, "margin", 6, NULL);
+  gtk_widget_set_margin_start (child, 6);
+  gtk_widget_set_margin_end (child, 6);
+  gtk_widget_set_margin_top (child, 6);
+  gtk_widget_set_margin_bottom (child, 6);
   gtk_widget_show (child);
 
   return popover;
@@ -136,7 +139,10 @@ do_popover (GtkWidget *do_widget)
       window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "Popovers");
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 24);
-      g_object_set (box, "margin", 24, NULL);
+      gtk_widget_set_margin_start (box, 24);
+      gtk_widget_set_margin_end (box, 24);
+      gtk_widget_set_margin_top (box, 24);
+      gtk_widget_set_margin_bottom (box, 24);
       gtk_container_add (GTK_CONTAINER (window), box);
 
       g_signal_connect (window, "destroy",

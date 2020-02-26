@@ -9,7 +9,10 @@
         <property name="orientation">vertical</property>
         <child internal-child="action_area">
           <object class="GtkBox" id="dialog-action_area1">
-            <property name="margin">6</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
             <property name="hexpand">1</property>
             <property name="halign">end</property>
           </object>

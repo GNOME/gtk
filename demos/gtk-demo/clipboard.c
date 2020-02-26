@@ -284,7 +284,10 @@ do_clipboard (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      g_object_set (vbox, "margin", 8, NULL);
+      gtk_widget_set_margin_start (vbox, 8);
+      gtk_widget_set_margin_end (vbox, 8);
+      gtk_widget_set_margin_top (vbox, 8);
+      gtk_widget_set_margin_bottom (vbox, 8);
 
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
@@ -293,7 +296,10 @@ do_clipboard (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (vbox), label);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-      g_object_set (hbox, "margin", 8, NULL);
+      gtk_widget_set_margin_start (hbox, 8);
+      gtk_widget_set_margin_end (hbox, 8);
+      gtk_widget_set_margin_top (hbox, 8);
+      gtk_widget_set_margin_bottom (hbox, 8);
       gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
       /* Create the first entry */
@@ -310,7 +316,10 @@ do_clipboard (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (vbox), label);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-      g_object_set (hbox, "margin", 8, NULL);
+      gtk_widget_set_margin_start (hbox, 8);
+      gtk_widget_set_margin_end (hbox, 8);
+      gtk_widget_set_margin_top (hbox, 8);
+      gtk_widget_set_margin_bottom (hbox, 8);
       gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
       /* Create the second entry */
@@ -327,7 +336,10 @@ do_clipboard (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (vbox), label);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-      g_object_set (hbox, "margin", 8, NULL);
+      gtk_widget_set_margin_start (hbox, 8);
+      gtk_widget_set_margin_end (hbox, 8);
+      gtk_widget_set_margin_top (hbox, 8);
+      gtk_widget_set_margin_bottom (hbox, 8);
       gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
       /* Create the first image */

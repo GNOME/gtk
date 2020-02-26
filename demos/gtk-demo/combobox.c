@@ -319,7 +319,10 @@ do_combobox (GtkWidget *do_widget)
                       G_CALLBACK (gtk_widget_destroyed), &window);
 
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
-    g_object_set (vbox, "margin", 10, NULL);
+    gtk_widget_set_margin_start (vbox, 10);
+    gtk_widget_set_margin_end (vbox, 10);
+    gtk_widget_set_margin_top (vbox, 10);
+    gtk_widget_set_margin_bottom (vbox, 10);
     gtk_container_add (GTK_CONTAINER (window), vbox);
 
     /* A combobox demonstrating cell renderers, separators and
@@ -329,7 +332,10 @@ do_combobox (GtkWidget *do_widget)
     gtk_container_add (GTK_CONTAINER (vbox), frame);
 
     box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-    g_object_set (box, "margin", 5, NULL);
+    gtk_widget_set_margin_start (box, 5);
+    gtk_widget_set_margin_end (box, 5);
+    gtk_widget_set_margin_top (box, 5);
+    gtk_widget_set_margin_bottom (box, 5);
     gtk_container_add (GTK_CONTAINER (frame), box);
 
     model = create_icon_store ();
@@ -370,7 +376,10 @@ do_combobox (GtkWidget *do_widget)
     gtk_container_add (GTK_CONTAINER (vbox), frame);
 
     box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-    g_object_set (box, "margin", 5, NULL);
+    gtk_widget_set_margin_start (box, 5);
+    gtk_widget_set_margin_end (box, 5);
+    gtk_widget_set_margin_top (box, 5);
+    gtk_widget_set_margin_bottom (box, 5);
     gtk_container_add (GTK_CONTAINER (frame), box);
 
     model = create_capital_store ();
@@ -398,7 +407,10 @@ do_combobox (GtkWidget *do_widget)
     gtk_container_add (GTK_CONTAINER (vbox), frame);
 
     box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-    g_object_set (box, "margin", 5, NULL);
+    gtk_widget_set_margin_start (box, 5);
+    gtk_widget_set_margin_end (box, 5);
+    gtk_widget_set_margin_top (box, 5);
+    gtk_widget_set_margin_bottom (box, 5);
     gtk_container_add (GTK_CONTAINER (frame), box);
 
     combo = gtk_combo_box_text_new_with_entry ();
@@ -416,7 +428,10 @@ do_combobox (GtkWidget *do_widget)
     gtk_container_add (GTK_CONTAINER (vbox), frame);
 
     box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-    g_object_set (box, "margin", 5, NULL);
+    gtk_widget_set_margin_start (box, 5);
+    gtk_widget_set_margin_end (box, 5);
+    gtk_widget_set_margin_top (box, 5);
+    gtk_widget_set_margin_bottom (box, 5);
     gtk_container_add (GTK_CONTAINER (frame), box);
 
     combo = gtk_combo_box_text_new ();

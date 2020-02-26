@@ -158,7 +158,10 @@
       <object class="GtkBox">
         <property name="name">submenu1</property>
         <property name="orientation">vertical</property>
-        <property name="margin">10</property>
+        <property name="margin-start">10</property>
+        <property name="margin-end">10</property>
+        <property name="margin-top">10</property>
+        <property name="margin-bottom">10</property>
         <child>
           <object class="GtkBox">
             <property name="orientation">vertical</property>
@@ -355,7 +358,10 @@
       <object class="GtkBox">
         <property name="name">submenu2</property>
         <property name="orientation">vertical</property>
-        <property name="margin">10</property>
+        <property name="margin-start">10</property>
+        <property name="margin-end">10</property>
+        <property name="margin-top">10</property>
+        <property name="margin-bottom">10</property>
         <child>
           <object class="GtkModelButton">
             <property name="action-name">top.action7</property>
@@ -382,7 +388,10 @@
       <object class="GtkBox">
         <property name="name">subsubmenu</property>
         <property name="orientation">vertical</property>
-        <property name="margin">10</property>
+        <property name="margin-start">10</property>
+        <property name="margin-end">10</property>
+        <property name="margin-top">10</property>
+        <property name="margin-bottom">10</property>
         <child>
           <object class="GtkModelButton">
             <property name="action-name">action8</property>
