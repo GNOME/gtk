@@ -3017,8 +3017,7 @@ gdk_window_begin_paint_internal (GdkWindow            *window,
               surface_width == window->previous_paint.surface_width &&
               surface_height == window->previous_paint.surface_height &&
               display == window->previous_paint.display &&
-              rendering_mode == window->previous_paint.rendering_mode
-	      )
+              rendering_mode == window->previous_paint.rendering_mode)
             {
               /* Everything matches, we'll reuse the surface */
               cairo_surface_reference (window->previous_paint.surface);
@@ -3035,12 +3034,12 @@ gdk_window_begin_paint_internal (GdkWindow            *window,
       if (window->current_paint.surface == NULL)
         {
           window->current_paint.surface = gdk_window_create_similar_surface (window,
-                                                                            surface_content,
-                                                                            surface_width,
-                                                                            surface_height);
+                                                                             surface_content,
+                                                                             surface_width,
+                                                                             surface_height);
           sx = sy = 1;
           cairo_surface_get_device_scale (window->current_paint.surface, &sx, &sy);
-          cairo_surface_set_device_offset (window->current_paint.surface, -clip_box.x*sx, -clip_box.y*sy);
+          cairo_surface_set_device_offset (window->current_paint.surface, -clip_box.x * sx, -clip_box.y * sy);
           gdk_cairo_surface_mark_as_direct (window->current_paint.surface, window);
 
           if (window->current_paint.use_gl)
@@ -3052,7 +3051,7 @@ gdk_window_begin_paint_internal (GdkWindow            *window,
               window->previous_paint.surface_height = surface_height;
               window->previous_paint.display = display;
               window->previous_paint.rendering_mode = rendering_mode;
-	    }
+            }
         }
       
       window->current_paint.surface_needs_composite = TRUE;
