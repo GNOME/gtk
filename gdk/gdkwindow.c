@@ -3013,10 +3013,12 @@ gdk_window_begin_paint_internal (GdkWindow            *window,
       /* Can we reuse a previously allocated surface? */
       if (window->previous_paint.surface != NULL)
         {
-          if (surface_width == window->previous_paint.surface_width &&
+          if (window->current_paint.use_gl &&
+              surface_width == window->previous_paint.surface_width &&
               surface_height == window->previous_paint.surface_height &&
               display == window->previous_paint.display &&
-              rendering_mode == window->previous_paint.rendering_mode)
+              rendering_mode == window->previous_paint.rendering_mode
+	      )
             {
               /* Everything matches, we'll reuse the surface */
               cairo_surface_reference (window->previous_paint.surface);
@@ -3041,13 +3043,16 @@ gdk_window_begin_paint_internal (GdkWindow            *window,
           cairo_surface_set_device_offset (window->current_paint.surface, -clip_box.x*sx, -clip_box.y*sy);
           gdk_cairo_surface_mark_as_direct (window->current_paint.surface, window);
 
-          /* Cache this surface to be considered for reuse next paint. */
-          cairo_surface_reference (window->current_paint.surface);
-          window->previous_paint.surface = window->current_paint.surface;
-          window->previous_paint.surface_width = surface_width;
-          window->previous_paint.surface_height = surface_height;
-          window->previous_paint.display = display;
-          window->previous_paint.rendering_mode = rendering_mode;
+          if (window->current_paint.use_gl)
+            {
+              /* Cache OpenGL surfaces to be considered for reuse next paint. */
+              cairo_surface_reference (window->current_paint.surface);
+              window->previous_paint.surface = window->current_paint.surface;
+              window->previous_paint.surface_width = surface_width;
+              window->previous_paint.surface_height = surface_height;
+              window->previous_paint.display = display;
+              window->previous_paint.rendering_mode = rendering_mode;
+	    }
         }
       
       window->current_paint.surface_needs_composite = TRUE;
