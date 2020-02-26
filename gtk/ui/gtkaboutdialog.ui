@@ -18,12 +18,18 @@
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
-        <property name="margin">5</property>
+        <property name="margin-start">5</property>
+        <property name="margin-end">5</property>
+        <property name="margin-top">5</property>
+        <property name="margin-bottom">5</property>
         <child>
           <object class="GtkBox" id="box">
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
-            <property name="margin">5</property>
+            <property name="margin-start">5</property>
+            <property name="margin-end">5</property>
+            <property name="margin-top">5</property>
+            <property name="margin-bottom">5</property>
             <property name="vexpand">1</property>
             <child>
               <object class="GtkImage" id="logo_image">
@@ -134,7 +140,10 @@
                                     <property name="orientation">vertical</property>
                                     <property name="row-spacing">2</property>
                                     <property name="column-spacing">8</property>
-                                    <property name="margin">5</property>
+                                    <property name="margin-start">5</property>
+                                    <property name="margin-end">5</property>
+                                    <property name="margin-top">5</property>
+                                    <property name="margin-bottom">5</property>
                                   </object>
                                 </child>
                               </object>

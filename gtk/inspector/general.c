@@ -162,8 +162,10 @@ add_check_row (GtkInspectorGeneral *gen,
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
   g_object_set (box,
-                "margin", 10,
                 "margin-start", 10 + indent,
+                "margin-end", 10,
+                "margin-top", 10,
+                "margin-bottom", 10,
                 NULL);
 
   label = gtk_label_new (name);
@@ -202,8 +204,10 @@ add_label_row (GtkInspectorGeneral *gen,
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
   g_object_set (box,
-                "margin", 10,
                 "margin-start", 10 + indent,
+                "margin-end", 10,
+                "margin-top", 10,
+                "margin-bottom", 10,
                 NULL);
 
   label = gtk_label_new (name);

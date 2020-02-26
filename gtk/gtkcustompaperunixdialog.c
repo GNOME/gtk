@@ -1009,7 +1009,10 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 18);
-  g_object_set (hbox, "margin", 20, NULL);
+  gtk_widget_set_margin_start (hbox, 20);
+  gtk_widget_set_margin_end (hbox, 20);
+  gtk_widget_set_margin_top (hbox, 20);
+  gtk_widget_set_margin_bottom (hbox, 20);
   gtk_container_add (GTK_CONTAINER (content_area), hbox);
   gtk_widget_show (hbox);
 

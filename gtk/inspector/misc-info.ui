@@ -22,7 +22,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">40</property>
                             <child>
                               <object class="GtkLabel" id="address_label">
@@ -49,7 +52,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">40</property>
                             <child>
                               <object class="GtkLabel" id="type_label">
@@ -75,7 +81,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">40</property>
                             <child>
                               <object class="GtkLabel" id="refcount_label">
@@ -102,7 +111,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">40</property>
                             <child>
                               <object class="GtkLabel" id="state_label">
@@ -129,7 +141,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">40</property>
                             <child>
                               <object class="GtkLabel" id="buildable_id_label">
@@ -156,7 +171,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">40</property>
                             <child>
                               <object class="GtkLabel">
@@ -182,7 +200,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">40</property>
                             <child>
                               <object class="GtkLabel">
@@ -208,7 +229,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">40</property>
                             <child>
                               <object class="GtkLabel">
@@ -234,7 +258,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">40</property>
                             <child>
                               <object class="GtkLabel">
@@ -260,7 +287,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">40</property>
                             <child>
                               <object class="GtkLabel" id="surface_label">
@@ -296,7 +326,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">40</property>
                             <child>
                               <object class="GtkLabel" id="renderer_label">
@@ -332,7 +365,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">40</property>
                             <child>
                               <object class="GtkLabel" id="frame_clock_label">
@@ -368,7 +404,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">40</property>
                             <child>
                               <object class="GtkLabel">
@@ -395,7 +434,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">40</property>
                             <child>
                               <object class="GtkLabel">
@@ -421,7 +463,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">40</property>
                             <child>
                               <object class="GtkLabel">
@@ -447,7 +492,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">40</property>
                             <child>
                               <object class="GtkLabel">
@@ -473,7 +521,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">40</property>
                             <child>
                               <object class="GtkLabel">
@@ -501,7 +552,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">40</property>
                             <child>
                               <object class="GtkLabel">
@@ -529,7 +583,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">40</property>
                             <child>
                               <object class="GtkLabel">
@@ -556,7 +613,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">40</property>
                             <child>
                               <object class="GtkLabel">
@@ -583,7 +643,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">40</property>
                             <child>
                               <object class="GtkLabel">
@@ -610,7 +673,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">40</property>
                             <child>
                               <object class="GtkLabel">

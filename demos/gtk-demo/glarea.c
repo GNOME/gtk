@@ -396,7 +396,10 @@ create_glarea_window (GtkWidget *do_widget)
   g_signal_connect (window, "destroy", G_CALLBACK (close_window), NULL);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE);
-  g_object_set (box, "margin", 12, NULL);
+  gtk_widget_set_margin_start (box, 12);
+  gtk_widget_set_margin_end (box, 12);
+  gtk_widget_set_margin_top (box, 12);
+  gtk_widget_set_margin_bottom (box, 12);
   gtk_box_set_spacing (GTK_BOX (box), 6);
   gtk_container_add (GTK_CONTAINER (window), box);
 

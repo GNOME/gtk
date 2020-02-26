@@ -158,7 +158,10 @@ main (int argc, char *argv[])
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   gtk_container_add (GTK_CONTAINER (window), hbox);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  g_object_set (vbox, "margin", 12, NULL);
+  gtk_widget_set_margin_start (vbox, 12);
+  gtk_widget_set_margin_end (vbox, 12);
+  gtk_widget_set_margin_top (vbox, 12);
+  gtk_widget_set_margin_bottom (vbox, 12);
   gtk_container_add (GTK_CONTAINER (hbox), vbox);
 
   list = gtk_list_box_new ();

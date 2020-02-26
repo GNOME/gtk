@@ -8,7 +8,10 @@
       <object class="GtkBox" id="vbox">
         <child>
           <object class="GtkGrid" id="grid">
-            <property name="margin">6</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
             <property name="row-spacing">12</property>
             <property name="column-spacing">6</property>
             <child>

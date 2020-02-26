@@ -231,7 +231,10 @@
                                         <property name="icon-name">go-previous-symbolic</property>
                                         <property name="tooltip-text" translatable="yes">Toggle Sidebar</property>
                                         <property name="relief">none</property>
-                                        <property name="margin">6</property>
+                                        <property name="margin-start">6</property>
+                                        <property name="margin-end">6</property>
+                                        <property name="margin-top">6</property>
+                                        <property name="margin-bottom">6</property>
                                         <property name="halign">center</property>
                                         <property name="valign">center</property>
                                         <signal name="clicked" handler="toggle_sidebar"/>
@@ -253,7 +256,10 @@
                                             <property name="name">actions</property>
                                             <property name="child">
                                               <object class="GtkButton" id="refresh_actions_button">
-                                                <property name="margin">6</property>
+                                                <property name="margin-start">6</property>
+                                                <property name="margin-end">6</property>
+                                                <property name="margin-top">6</property>
+                                                <property name="margin-bottom">6</property>
                                                 <property name="icon-name">view-refresh-symbolic</property>
                                                 <property name="tooltip-text" translatable="yes">Refresh action state</property>
                                                 <property name="relief">none</property>
@@ -266,7 +272,10 @@
                                             <property name="name">magnifier</property>
                                             <property name="child">
                                               <object class="GtkScale">
-                                                <property name="margin">6</property>
+                                                <property name="margin-start">6</property>
+                                                <property name="margin-end">6</property>
+                                                <property name="margin-top">6</property>
+                                                <property name="margin-bottom">6</property>
                                                 <property name="width-request">150</property>
                                                 <property name="draw-value">0</property>
                                                 <property name="adjustment">magnification_adjustment</property>
@@ -304,7 +313,10 @@
                                         <property name="name">prop-search</property>
                                         <property name="child">
                                           <object class="GtkSearchEntry" id="prop_search_entry">
-                                            <property name="margin">6</property>
+                                            <property name="margin-start">6</property>
+                                            <property name="margin-end">6</property>
+                                            <property name="margin-top">6</property>
+                                            <property name="margin-bottom">6</property>
                                             <property name="max-width-chars">40</property>
                                           </object>
                                         </property>
@@ -315,7 +327,10 @@
                                         <property name="name">layout-prop-search</property>
                                         <property name="child">
                                           <object class="GtkSearchEntry" id="layout_prop_search_entry">
-                                            <property name="margin">6</property>
+                                            <property name="margin-start">6</property>
+                                            <property name="margin-end">6</property>
+                                            <property name="margin-top">6</property>
+                                            <property name="margin-bottom">6</property>
                                             <property name="max-width-chars">40</property>
                                           </object>
                                         </property>

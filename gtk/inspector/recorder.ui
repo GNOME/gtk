@@ -7,7 +7,10 @@
         <child>
           <object class="GtkBox">
             <property name="spacing">6</property>
-            <property name="margin">6</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
             <child>
               <object class="GtkToggleButton">
                 <property name="relief">none</property>
@@ -137,7 +140,8 @@
                 </child>
                 <child>
                   <object class="GtkPicture" id="render_node_view">
-                    <property name="expand">1</property>
+                    <property name="hexpand">1</property>
+                    <property name="vexpand">1</property>
                   </object>
                 </child>
               </object>

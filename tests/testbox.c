@@ -20,7 +20,10 @@ edit_widget (GtkWidget *button)
 
       grid = gtk_grid_new ();
       g_object_set (grid,
-                    "margin", 20,
+                    "margin-start", 20,
+                    "margin-end", 20,
+                    "margin-top", 20,
+                    "margin-bottom", 20,
                     "row-spacing", 10,
                     "column-spacing", 10,
                     NULL);
@@ -102,13 +105,19 @@ main (int argc, char *argv[])
   g_object_bind_property (box, "homogeneous",
                           check, "active",
                           G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
-  g_object_set (check, "margin", 10, NULL);
+  gtk_widget_set_margin_start (check, 10);
+  gtk_widget_set_margin_end (check, 10);
+  gtk_widget_set_margin_top (check, 10);
+  gtk_widget_set_margin_bottom (check, 10);
   gtk_widget_set_halign (check, GTK_ALIGN_CENTER);
   gtk_widget_show (check);
   gtk_container_add (GTK_CONTAINER (vbox), check);
 
   b = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-  g_object_set (b, "margin", 10, NULL);
+  gtk_widget_set_margin_start (b, 10);
+  gtk_widget_set_margin_end (b, 10);
+  gtk_widget_set_margin_top (b, 10);
+  gtk_widget_set_margin_bottom (b, 10);
   gtk_widget_set_halign (b, GTK_ALIGN_CENTER);
   label = gtk_label_new ("Spacing:");
   gtk_widget_set_halign (label, GTK_ALIGN_END);

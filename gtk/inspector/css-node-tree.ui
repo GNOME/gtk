@@ -15,7 +15,8 @@
         <property name="position">400</property>
         <child>
           <object class="GtkScrolledWindow">
-            <property name="expand">1</property>
+            <property name="hexpand">1</property>
+            <property name="vexpand">1</property>
             <property name="min-content-height">100</property>
             <child>
               <object class="GtkTreeView" id="node_tree">

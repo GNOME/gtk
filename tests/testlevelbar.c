@@ -92,7 +92,10 @@ main (int argc, char *argv[])
   window = gtk_window_new ();
   gtk_window_set_default_size (GTK_WINDOW (window), 500, 100);
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
-  g_object_set (box, "margin", 20, NULL);
+  gtk_widget_set_margin_start (box, 20);
+  gtk_widget_set_margin_end (box, 20);
+  gtk_widget_set_margin_top (box, 20);
+  gtk_widget_set_margin_bottom (box, 20);
   bar = create_level_bar ();
   gtk_container_add (GTK_CONTAINER (window), box);
   gtk_container_add (GTK_CONTAINER (box), bar);

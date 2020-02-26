@@ -50,7 +50,8 @@
                 </child>
                 <child>
                   <object class="GtkScrolledWindow">
-                    <property name="expand">1</property>
+                    <property name="hexpand">1</property>
+                    <property name="vexpand">1</property>
                     <property name="hscrollbar-policy">never</property>
                     <child>
                       <object class="GtkTreeView" id="tree">
@@ -123,7 +124,10 @@
                   <object class="GtkGrid" id="info_grid">
                     <property name="row-spacing">10</property>
                     <property name="column-spacing">10</property>
-                    <property name="margin">10</property>
+                    <property name="margin-start">10</property>
+                    <property name="margin-end">10</property>
+                    <property name="margin-top">10</property>
+                    <property name="margin-bottom">10</property>
                     <property name="halign">center</property>
                     <child>
                       <object class="GtkLabel" id="name">
@@ -198,7 +202,8 @@
                         <property name="name">text</property>
                         <property name="child">
                           <object class="GtkScrolledWindow">
-                            <property name="expand">1</property>
+                            <property name="hexpand">1</property>
+                            <property name="vexpand">1</property>
                             <property name="shadow-type">in</property>
                             <style>
                               <class name="view"/>
@@ -218,7 +223,8 @@
                         <property name="name">image</property>
                         <property name="child">
                           <object class="GtkScrolledWindow">
-                            <property name="expand">1</property>
+                            <property name="hexpand">1</property>
+                            <property name="vexpand">1</property>
                             <property name="shadow-type">in</property>
                             <style>
                               <class name="view"/>

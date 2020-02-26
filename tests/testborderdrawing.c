@@ -110,7 +110,10 @@ main (int argc, char **argv)
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 40);
   top = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
   bottom = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
-  g_object_set (box, "margin", 40, NULL);
+  gtk_widget_set_margin_start (box, 40);
+  gtk_widget_set_margin_end (box, 40);
+  gtk_widget_set_margin_top (box, 40);
+  gtk_widget_set_margin_bottom (box, 40);
 
   w = gtk_button_new ();
   gtk_widget_set_valign (w, GTK_ALIGN_CENTER);

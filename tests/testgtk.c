@@ -3415,7 +3415,10 @@ dialog_response_cb (GtkWidget *widget, gint response, gpointer unused)
           GtkWidget *label;
 
           label = gtk_label_new ("Dialog Test");
-          g_object_set (label, "margin", 10, NULL);
+          gtk_widget_set_margin_start (label, 10);
+          gtk_widget_set_margin_end (label, 10);
+          gtk_widget_set_margin_top (label, 10);
+          gtk_widget_set_margin_bottom (label, 10);
           gtk_container_add (GTK_CONTAINER (content_area),
                               label);
           gtk_widget_show (label);
@@ -5650,7 +5653,10 @@ create_timeout_test (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "Timeout Test");
 
       label = gtk_label_new ("count: 0");
-      g_object_set (label, "margin", 10, NULL);
+      gtk_widget_set_margin_start (label, 10);
+      gtk_widget_set_margin_end (label, 10);
+      gtk_widget_set_margin_top (label, 10);
+      gtk_widget_set_margin_bottom (label, 10);
       gtk_container_add (GTK_CONTAINER (content_area), label);
       gtk_widget_show (label);
 

@@ -75,7 +75,10 @@ create_box_window (void)
   toggle = gtk_toggle_button_new_with_label ("H Expand");
   gtk_widget_set_halign (toggle, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (toggle, GTK_ALIGN_CENTER);
-  g_object_set (toggle, "margin", 5, NULL);
+  gtk_widget_set_margin_start (toggle, 5);
+  gtk_widget_set_margin_end (toggle, 5);
+  gtk_widget_set_margin_top (toggle, 5);
+  gtk_widget_set_margin_bottom (toggle, 5);
   g_signal_connect (G_OBJECT (toggle), "toggled",
                     G_CALLBACK (on_toggle_hexpand), NULL);
   gtk_container_add (GTK_CONTAINER (colorbox), toggle);
@@ -87,7 +90,10 @@ create_box_window (void)
   toggle = gtk_toggle_button_new_with_label ("V Expand");
   gtk_widget_set_halign (toggle, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (toggle, GTK_ALIGN_CENTER);
-  g_object_set (toggle, "margin", 5, NULL);
+  gtk_widget_set_margin_start (toggle, 5);
+  gtk_widget_set_margin_end (toggle, 5);
+  gtk_widget_set_margin_top (toggle, 5);
+  gtk_widget_set_margin_bottom (toggle, 5);
   g_signal_connect (G_OBJECT (toggle), "toggled",
                     G_CALLBACK (on_toggle_vexpand), NULL);
   gtk_container_add (GTK_CONTAINER (colorbox), toggle);
@@ -122,7 +128,10 @@ create_grid_window (void)
   toggle = gtk_toggle_button_new_with_label ("H Expand");
   gtk_widget_set_halign (toggle, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (toggle, GTK_ALIGN_CENTER);
-  g_object_set (toggle, "margin", 5, NULL);
+  gtk_widget_set_margin_start (toggle, 5);
+  gtk_widget_set_margin_end (toggle, 5);
+  gtk_widget_set_margin_top (toggle, 5);
+  gtk_widget_set_margin_bottom (toggle, 5);
   g_signal_connect (G_OBJECT (toggle), "toggled",
                     G_CALLBACK (on_toggle_hexpand), NULL);
   gtk_container_add (GTK_CONTAINER (colorbox), toggle);
@@ -134,7 +143,10 @@ create_grid_window (void)
   toggle = gtk_toggle_button_new_with_label ("V Expand");
   gtk_widget_set_halign (toggle, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (toggle, GTK_ALIGN_CENTER);
-  g_object_set (toggle, "margin", 5, NULL);
+  gtk_widget_set_margin_start (toggle, 5);
+  gtk_widget_set_margin_end (toggle, 5);
+  gtk_widget_set_margin_top (toggle, 5);
+  gtk_widget_set_margin_bottom (toggle, 5);
   g_signal_connect (G_OBJECT (toggle), "toggled",
                     G_CALLBACK (on_toggle_vexpand), NULL);
   gtk_container_add (GTK_CONTAINER (colorbox), toggle);
