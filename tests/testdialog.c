@@ -95,7 +95,10 @@ add_content (GtkWidget *dialog)
   GtkWidget *label;
 
   label = gtk_label_new ("content");
-  g_object_set (label, "margin", 50, NULL);
+  gtk_widget_set_margin_start (label, 50);
+  gtk_widget_set_margin_end (label, 50);
+  gtk_widget_set_margin_top (label, 50);
+  gtk_widget_set_margin_bottom (label, 50);
   gtk_widget_show (label);
 
   gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), label);

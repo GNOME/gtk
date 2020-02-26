@@ -33,7 +33,10 @@
               <object class="GtkViewport">
                 <child>
                   <object class="GtkBox">
-                    <property name="margin">10</property>
+                    <property name="margin-start">10</property>
+                    <property name="margin-end">10</property>
+                    <property name="margin-top">10</property>
+                    <property name="margin-bottom">10</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
@@ -109,7 +112,10 @@
             <property name="orientation">vertical</property>
             <property name="hexpand">1</property>
             <property name="vexpand">1</property>
-            <property name="margin">20</property>
+            <property name="margin-start">20</property>
+            <property name="margin-end">20</property>
+            <property name="margin-top">20</property>
+            <property name="margin-bottom">20</property>
             <property name="spacing">20</property>
             <child>
               <object class="GtkStack" id="stack">

@@ -88,7 +88,10 @@
  *   <child>
  *     <object class="GtkBox">
  *       <property name="visible">True</property>
- *       <property name="margin">10</property>
+ *       <property name="margin-start">10</property>
+ *       <property name="margin-end">10</property>
+ *       <property name="margin-top">10</property>
+ *       <property name="margin-bottom">10</property>
  *       <child>
  *         <object class="GtkModelButton">
  *           <property name="visible">True</property>

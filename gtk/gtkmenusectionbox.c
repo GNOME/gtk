@@ -409,10 +409,7 @@ gtk_menu_section_box_init (GtkMenuSectionBox *box)
   box->item_box = GTK_BOX (item_box);
   gtk_container_add (GTK_CONTAINER (box), item_box);
   gtk_widget_set_halign (GTK_WIDGET (item_box), GTK_ALIGN_FILL);
-
   gtk_widget_set_halign (GTK_WIDGET (box), GTK_ALIGN_FILL);
-  g_object_set (box, "margin", 0, NULL);
-
 }
 
 static void

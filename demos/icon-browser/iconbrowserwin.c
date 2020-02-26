@@ -201,7 +201,10 @@ add_context (IconBrowserWindow *win,
   gtk_label_set_xalign (GTK_LABEL (row), 0);
   g_object_set_data (G_OBJECT (row), "context", c);
   gtk_widget_show (row);
-  g_object_set (row, "margin", 10, NULL);
+  gtk_widget_set_margin_start (row, 10);
+  gtk_widget_set_margin_end (row, 10);
+  gtk_widget_set_margin_top (row, 10);
+  gtk_widget_set_margin_bottom (row, 10);
 
   gtk_list_box_insert (GTK_LIST_BOX (win->context_list), row, -1);
 

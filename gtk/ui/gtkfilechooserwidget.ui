@@ -48,7 +48,10 @@
                                     <property name="child">
                                       <object class="GtkBox">
                                         <property name="spacing">6</property>
-                                        <property name="margin">6</property>
+                                        <property name="margin-start">6</property>
+                                        <property name="margin-end">6</property>
+                                        <property name="margin-top">6</property>
+                                        <property name="margin-bottom">6</property>
                                         <child>
                                           <object class="GtkPathBar" id="browse_path_bar">
                                             <property name="hexpand">1</property>
@@ -73,7 +76,10 @@
                                     <property name="child">
                                       <object class="GtkBox" id="location_entry_box">
                                         <property name="spacing">6</property>
-                                        <property name="margin">6</property>
+                                        <property name="margin-start">6</property>
+                                        <property name="margin-end">6</property>
+                                        <property name="margin-top">6</property>
+                                        <property name="margin-bottom">6</property>
                                       </object>
                                     </property>
                                   </object>
@@ -83,7 +89,10 @@
                                     <property name="name">search</property>
                                     <property name="child">
                                       <object class="GtkCenterBox" id="search_entry_box">
-                                        <property name="margin">6</property>
+                                        <property name="margin-start">6</property>
+                                        <property name="margin-end">6</property>
+                                        <property name="margin-top">6</property>
+                                        <property name="margin-bottom">6</property>
                                         <child type="center">
                                           <object class="GtkSearchEntry" id="search_entry">
                                             <property name="width-chars">45</property>
@@ -375,7 +384,10 @@
   <object class="GtkPopover" id="new_folder_popover">
     <child>
       <object class="GtkGrid">
-        <property name="margin">10</property>
+        <property name="margin-start">10</property>
+        <property name="margin-end">10</property>
+        <property name="margin-top">10</property>
+        <property name="margin-bottom">10</property>
         <property name="column-spacing">6</property>
         <property name="row-spacing">6</property>
         <child>
@@ -434,7 +446,10 @@
     <signal name="closed" handler="rename_file_end"/>
     <child>
       <object class="GtkGrid">
-        <property name="margin">10</property>
+        <property name="margin-start">10</property>
+        <property name="margin-end">10</property>
+        <property name="margin-top">10</property>
+        <property name="margin-bottom">10</property>
         <property name="row-spacing">6</property>
         <property name="column-spacing">6</property>
         <child>

@@ -796,7 +796,10 @@ overshot (GtkScrolledWindow *sw, GtkPositionType pos, GtkWidget *widget)
                 "halign", GTK_ALIGN_START,
                 "valign", GTK_ALIGN_CENTER,
                 "hexpand", TRUE,
-                "margin", 6,
+                "margin-start", 6,
+                "margin-end", 6,
+                "margin-top", 6,
+                "margin-bottom", 6,
                 "xalign", 0.0,
                 NULL);
   gtk_container_add (GTK_CONTAINER (row), label);
@@ -806,7 +809,10 @@ overshot (GtkScrolledWindow *sw, GtkPositionType pos, GtkWidget *widget)
                          "selectable", FALSE,
                          "halign", GTK_ALIGN_END,
                          "valign", GTK_ALIGN_CENTER,
-                         "margin", 6,
+                         "margin-start", 6,
+                         "margin-end", 6,
+                         "margin-top", 6,
+                         "margin-bottom", 6,
                          "height-request", 24,
                          NULL);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -906,7 +912,10 @@ populate_colors (GtkWidget *widget, GtkWidget *chooser)
       g_object_set (label,
                     "halign", GTK_ALIGN_START,
                     "valign", GTK_ALIGN_CENTER,
-                    "margin", 6,
+                    "margin-start", 6,
+                    "margin-end", 6,
+                    "margin-top", 6,
+                    "margin-bottom", 6,
                     "hexpand", TRUE,
                     "xalign", 0.0,
                     NULL);
@@ -917,7 +926,10 @@ populate_colors (GtkWidget *widget, GtkWidget *chooser)
                              "selectable", FALSE,
                              "halign", GTK_ALIGN_END,
                              "valign", GTK_ALIGN_CENTER,
-                             "margin", 6,
+                             "margin-start", 6,
+                             "margin-end", 6,
+                             "margin-top", 6,
+                             "margin-bottom", 6,
                              "height-request", 24,
                              NULL);
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);

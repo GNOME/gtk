@@ -304,7 +304,10 @@ main (int   argc,
   g_signal_connect (win, "response", G_CALLBACK (quit_cb), &done);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 18);
-  g_object_set (vbox, "margin", 6, NULL);
+  gtk_widget_set_margin_start (vbox, 6);
+  gtk_widget_set_margin_end (vbox, 6);
+  gtk_widget_set_margin_top (vbox, 6);
+  gtk_widget_set_margin_bottom (vbox, 6);
   gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (win))), vbox);
 
   frame = gtk_frame_new ("<b>GtkFileChooserButton</b>");

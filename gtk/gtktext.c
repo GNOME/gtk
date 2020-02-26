@@ -6037,7 +6037,10 @@ gtk_text_selection_bubble_popup_show (gpointer user_data)
                     G_CALLBACK (show_or_hide_handles), self);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-  g_object_set (box, "margin", 10, NULL);
+  gtk_widget_set_margin_start (box, 10);
+  gtk_widget_set_margin_end (box, 10);
+  gtk_widget_set_margin_top (box, 10);
+  gtk_widget_set_margin_bottom (box, 10);
   gtk_widget_show (box);
   toolbar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_add_css_class (toolbar, "linked");

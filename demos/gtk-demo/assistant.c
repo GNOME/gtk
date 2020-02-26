@@ -94,7 +94,10 @@ create_page1 (GtkWidget *assistant)
   GtkWidget *box, *label, *entry;
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  g_object_set (box, "margin", 12, NULL);
+  gtk_widget_set_margin_start (box, 12);
+  gtk_widget_set_margin_end (box, 12);
+  gtk_widget_set_margin_top (box, 12);
+  gtk_widget_set_margin_bottom (box, 12);
 
   label = gtk_label_new ("You must fill out this entry to continue:");
   gtk_container_add (GTK_CONTAINER (box), label);
@@ -117,7 +120,10 @@ create_page2 (GtkWidget *assistant)
   GtkWidget *box, *checkbutton;
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  g_object_set (box, "margin", 12, NULL);
+  gtk_widget_set_margin_start (box, 12);
+  gtk_widget_set_margin_end (box, 12);
+  gtk_widget_set_margin_top (box, 12);
+  gtk_widget_set_margin_bottom (box, 12);
 
   checkbutton = gtk_check_button_new_with_label ("This is optional data, you may continue "
                                                  "even if you do not check this");

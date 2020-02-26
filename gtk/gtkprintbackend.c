@@ -667,7 +667,10 @@ request_password (GtkPrintBackend  *backend,
   gtk_image_set_icon_size (GTK_IMAGE (icon), GTK_ICON_SIZE_LARGE);
   gtk_widget_set_halign (icon, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (icon, GTK_ALIGN_START);
-  g_object_set (icon, "margin", 12, NULL);
+  gtk_widget_set_margin_start (icon, 12);
+  gtk_widget_set_margin_end (icon, 12);
+  gtk_widget_set_margin_top (icon, 12);
+  gtk_widget_set_margin_bottom (icon, 12);
 
   /* Right */
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);

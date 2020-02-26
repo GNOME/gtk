@@ -296,8 +296,7 @@ open_margin_window (void)
     "margin-start",
     "margin-end",
     "margin-top",
-    "margin-bottom",
-    "margin"
+    "margin-bottom"
   };
 
   test_window = gtk_window_new ();

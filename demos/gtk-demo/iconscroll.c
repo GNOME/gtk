@@ -52,7 +52,10 @@ populate_icons (void)
 
   grid = gtk_grid_new ();
   gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
-  g_object_set (grid, "margin", 10, NULL);
+  gtk_widget_set_margin_start (grid, 10);
+  gtk_widget_set_margin_end (grid, 10);
+  gtk_widget_set_margin_top (grid, 10);
+  gtk_widget_set_margin_bottom (grid, 10);
   gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
 

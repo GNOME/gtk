@@ -3,7 +3,10 @@
   <template class="ConstraintEditor" parent="GtkWidget">
     <child>
       <object class="GtkGrid" id="grid">
-        <property name="margin">20</property>
+        <property name="margin-start">20</property>
+        <property name="margin-end">20</property>
+        <property name="margin-top">20</property>
+        <property name="margin-bottom">20</property>
         <property name="row-spacing">10</property>
         <property name="column-spacing">10</property>
         <child>

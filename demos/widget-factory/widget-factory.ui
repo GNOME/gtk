@@ -428,7 +428,10 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
     <child>
       <object class="GtkBox" id="box1">
         <property name="orientation">vertical</property>
-        <property name="margin">10</property>
+        <property name="margin-start">10</property>
+        <property name="margin-end">10</property>
+        <property name="margin-top">10</property>
+        <property name="margin-bottom">10</property>
         <child>
           <object class="GtkStack" id="toplevel_stack">
             <property name="transition-duration">1000</property>
@@ -1438,7 +1441,10 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkBox" id="page2box">
                                 <property name="spacing">20</property>
-                                <property name="margin">10</property>
+                                <property name="margin-start">10</property>
+                                <property name="margin-end">10</property>
+                                <property name="margin-top">10</property>
+                                <property name="margin-bottom">10</property>
                                 <child>
                                   <object class="GtkLabel" id="page2note">
                                     <property name="hexpand">1</property>
@@ -1629,7 +1635,10 @@ microphone-sensitivity-medium-symbolic</property>
                                                 <property name="label" translatable="yes">Row 1</property>
                                                 <property name="halign">start</property>
                                                 <property name="valign">center</property>
-                                                <property name="margin">6</property>
+                                                <property name="margin-start">6</property>
+                                                <property name="margin-end">6</property>
+                                                <property name="margin-top">6</property>
+                                                <property name="margin-bottom">6</property>
                                                 <property name="hexpand">1</property>
                                               </object>
                                             </child>
@@ -1657,7 +1666,10 @@ microphone-sensitivity-medium-symbolic</property>
                                                 <property name="label" translatable="yes">Row 2</property>
                                                 <property name="halign">start</property>
                                                 <property name="valign">center</property>
-                                                <property name="margin">6</property>
+                                                <property name="margin-start">6</property>
+                                                <property name="margin-end">6</property>
+                                                <property name="margin-top">6</property>
+                                                <property name="margin-bottom">6</property>
                                                 <property name="hexpand">1</property>
                                               </object>
                                             </child>
@@ -1687,7 +1699,10 @@ microphone-sensitivity-medium-symbolic</property>
                                                 <property name="label" translatable="yes">Row 3</property>
                                                 <property name="halign">start</property>
                                                 <property name="valign">center</property>
-                                                <property name="margin">6</property>
+                                                <property name="margin-start">6</property>
+                                                <property name="margin-end">6</property>
+                                                <property name="margin-top">6</property>
+                                                <property name="margin-bottom">6</property>
                                                 <property name="hexpand">1</property>
                                               </object>
                                             </child>
@@ -1716,7 +1731,10 @@ microphone-sensitivity-medium-symbolic</property>
                                                 <property name="label" translatable="yes">Row 4</property>
                                                 <property name="halign">start</property>
                                                 <property name="valign">center</property>
-                                                <property name="margin">6</property>
+                                                <property name="margin-start">6</property>
+                                                <property name="margin-end">6</property>
+                                                <property name="margin-top">6</property>
+                                                <property name="margin-bottom">6</property>
                                                 <property name="hexpand">1</property>
                                               </object>
                                             </child>
@@ -1742,7 +1760,11 @@ microphone-sensitivity-medium-symbolic</property>
                                                 <property name="label" translatable="yes">Row 5</property>
                                                 <property name="halign">start</property>
                                                 <property name="valign">center</property>
-                                                <property name="margin">6</property>
+                                                <property name="margin-start">6</property>
+                                                <property name="margin-start">6</property>
+                                                <property name="margin-end">6</property>
+                                                <property name="margin-top">6</property>
+                                                <property name="margin-bottom">6</property>
                                                 <property name="hexpand">1</property>
                                               </object>
                                             </child>
@@ -1771,7 +1793,10 @@ microphone-sensitivity-medium-symbolic</property>
                                                 <property name="label" translatable="yes">Row 6</property>
                                                 <property name="halign">start</property>
                                                 <property name="valign">center</property>
-                                                <property name="margin">6</property>
+                                                <property name="margin-start">6</property>
+                                                <property name="margin-end">6</property>
+                                                <property name="margin-top">6</property>
+                                                <property name="margin-bottom">6</property>
                                                 <property name="hexpand">1</property>
                                               </object>
                                             </child>
@@ -2290,7 +2315,10 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="child">
                                           <object class="GtkBox">
                                             <property name="orientation">vertical</property>
-                                            <property name="margin">20</property>
+                                            <property name="margin-start">20</property>
+                                            <property name="margin-end">20</property>
+                                            <property name="margin-top">20</property>
+                                            <property name="margin-bottom">20</property>
                                             <property name="spacing">10</property>
                                             <property name="halign">center</property>
                                             <property name="valign">center</property>
@@ -2315,7 +2343,10 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="child">
                                           <object class="GtkBox">
                                             <property name="orientation">vertical</property>
-                                            <property name="margin">20</property>
+                                            <property name="margin-start">20</property>
+                                            <property name="margin-end">20</property>
+                                            <property name="margin-top">20</property>
+                                            <property name="margin-bottom">20</property>
                                             <property name="spacing">10</property>
                                             <property name="halign">center</property>
                                             <property name="valign">center</property>
@@ -2397,7 +2428,10 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="child">
                                           <object class="GtkBox">
                                             <property name="orientation">vertical</property>
-                                            <property name="margin">20</property>
+                                            <property name="margin-start">20</property>
+                                            <property name="margin-end">20</property>
+                                            <property name="margin-top">20</property>
+                                            <property name="margin-bottom">20</property>
                                             <property name="halign">center</property>
                                             <property name="valign">center</property>
                                             <style>
@@ -2429,7 +2463,10 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="child">
                                           <object class="GtkBox">
                                             <property name="orientation">vertical</property>
-                                            <property name="margin">20</property>
+                                            <property name="margin-start">20</property>
+                                            <property name="margin-end">20</property>
+                                            <property name="margin-top">20</property>
+                                            <property name="margin-bottom">20</property>
                                             <property name="halign">center</property>
                                             <property name="valign">center</property>
                                             <style>
@@ -2515,7 +2552,10 @@ microphone-sensitivity-medium-symbolic</property>
                                 <child>
                                   <object class="GtkBox">
                                     <property name="orientation">vertical</property>
-                                    <property name="margin">6</property>
+                                    <property name="margin-start">6</property>
+                                    <property name="margin-end">6</property>
+                                    <property name="margin-top">6</property>
+                                    <property name="margin-bottom">6</property>
                                     <child>
                                       <object class="GtkBox">
                                         <property name="orientation">vertical</property>
@@ -2561,7 +2601,10 @@ microphone-sensitivity-medium-symbolic</property>
                               <object class="GtkBox" id="totem_like_osd">
                                 <property name="visible">0</property>
                                 <property name="opacity">0.9</property>
-                                <property name="margin">20</property>
+                                <property name="margin-start">20</property>
+                                <property name="margin-end">20</property>
+                                <property name="margin-top">20</property>
+                                <property name="margin-bottom">20</property>
                                 <property name="valign">end</property>
                                 <style>
                                   <class name="osd"/>
@@ -2888,7 +2931,10 @@ bad things might happen.</property>
       <object class="GtkBox">
         <child>
           <object class="GtkLabel">
-            <property name="margin">20</property>
+            <property name="margin-start">20</property>
+            <property name="margin-end">20</property>
+            <property name="margin-top">20</property>
+            <property name="margin-bottom">20</property>
             <property name="label" translatable="yes">To free the princess, you have to slay the dragon.</property>
             <accessibility>
               <role type="static"/>
@@ -2927,7 +2973,10 @@ bad things might happen.</property>
           <object class="GtkGrid">
             <property name="row-spacing">10</property>
             <property name="column-spacing">10</property>
-            <property name="margin">20</property>
+            <property name="margin-start">20</property>
+            <property name="margin-end">20</property>
+            <property name="margin-top">20</property>
+            <property name="margin-bottom">20</property>
             <child>
               <object class="GtkLabel">
                 <property name="halign">end</property>
@@ -3049,7 +3098,10 @@ bad things might happen.</property>
           <object class="GtkFlowBox" id="selection_flowbox">
             <property name="row-spacing">10</property>
             <property name="column-spacing">10</property>
-            <property name="margin">10</property>
+            <property name="margin-start">10</property>
+            <property name="margin-end">10</property>
+            <property name="margin-top">10</property>
+            <property name="margin-bottom">10</property>
             <property name="min-children-per-line">3</property>
             <property name="max-children-per-line">9</property>
           </object>
@@ -3076,7 +3128,10 @@ bad things might happen.</property>
   <object class="GtkPopover" id="open_popover">
     <child>
       <object class="GtkGrid">
-        <property name="margin">10</property>
+        <property name="margin-start">10</property>
+        <property name="margin-end">10</property>
+        <property name="margin-top">10</property>
+        <property name="margin-bottom">10</property>
         <property name="row-spacing">10</property>
         <property name="column-spacing">10</property>
         <child>

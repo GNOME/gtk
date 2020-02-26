@@ -40,7 +40,10 @@ populate_list (GtkListBox *list)
       label = gtk_label_new (text);
       g_free (text);
 
-      g_object_set (label, "margin", 10, NULL);
+      gtk_widget_set_margin_start (label, 10);
+      gtk_widget_set_margin_end (label, 10);
+      gtk_widget_set_margin_top (label, 10);
+      gtk_widget_set_margin_bottom (label, 10);
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_container_add (GTK_CONTAINER (row), label);
       gtk_container_add (GTK_CONTAINER (list), row);
@@ -105,7 +108,10 @@ main (int argc, char *argv[])
   popup = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_widget_set_halign (popup, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (popup, GTK_ALIGN_END);
-  g_object_set (popup, "margin", 40, NULL);
+  gtk_widget_set_margin_start (popup, 40);
+  gtk_widget_set_margin_end (popup, 40);
+  gtk_widget_set_margin_top (popup, 40);
+  gtk_widget_set_margin_bottom (popup, 40);
   label = gtk_label_new ("Getting more rows...");
   spinner = gtk_spinner_new ();
   gtk_container_add (GTK_CONTAINER (popup), label);

@@ -23,7 +23,10 @@
     <child>
       <object class="GtkBox">
         <property name="spacing">6</property>
-        <property name="margin">6</property>
+        <property name="margin-start">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-top">6</property>
+        <property name="margin-bottom">6</property>
         <child>
           <object class="GtkToggleButton" id="disable_button">
             <property name="relief">none</property>

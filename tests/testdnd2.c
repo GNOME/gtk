@@ -408,7 +408,10 @@ main (int argc, char *Argv[])
 
   grid = gtk_grid_new ();
   g_object_set (grid,
-                "margin", 20,
+                "margin-start", 20,
+                "margin-end", 20,
+                "margin-top", 20,
+                "margin-bottom", 20,
                 "row-spacing", 20,
                 "column-spacing", 20,
                 NULL);

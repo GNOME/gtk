@@ -123,7 +123,10 @@ main (int argc, char *argv[])
   popover2 = (GtkWidget *)gtk_builder_get_object (builder, "popover");
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button2), popover2);
 
-  g_object_set (box, "margin", 10, NULL);
+  gtk_widget_set_margin_start (box, 10);
+  gtk_widget_set_margin_end (box, 10);
+  gtk_widget_set_margin_top (box, 10);
+  gtk_widget_set_margin_bottom (box, 10);
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), box);
 
   label = gtk_label_new ("Popover hexpand");
