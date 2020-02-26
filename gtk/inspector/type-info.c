@@ -60,7 +60,10 @@ add_row (GtkContainer *box,
                       NULL);
 
   label = g_object_new (GTK_TYPE_LABEL,
-                        "margin", 6,
+                        "margin-start", 6,
+                        "margin-end", 6,
+                        "margin-top", 6,
+                        "margin-bottom", 6,
                         "label", name,
                         "selectable", TRUE,
                         "xalign", 0.0,
@@ -142,14 +145,20 @@ gtk_inspector_type_popover_init (GtkInspectorTypePopover *self)
   priv->type = G_TYPE_NONE;
 
   label = g_object_new (GTK_TYPE_LABEL,
-                        "margin", 12,
+                        "margin-start", 12,
+                        "margin-end", 12,
+                        "margin-top", 12,
+                        "margin-bottom", 12,
                         "label", "None",
                         NULL);
 
   gtk_list_box_set_placeholder (GTK_LIST_BOX (priv->parents), label);
 
   label = g_object_new (GTK_TYPE_LABEL,
-                        "margin", 12,
+                        "margin-start", 12,
+                        "margin-end", 12,
+                        "margin-top", 12,
+                        "margin-bottom", 12,
                         "label", "None",
                         NULL);
 

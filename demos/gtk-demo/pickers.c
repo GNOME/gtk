@@ -23,7 +23,10 @@ do_pickers (GtkWidget *do_widget)
                       G_CALLBACK (gtk_widget_destroyed), &window);
 
     table = gtk_grid_new ();
-    g_object_set (table, "margin", 20, NULL);
+    gtk_widget_set_margin_start (table, 20);
+    gtk_widget_set_margin_end (table, 20);
+    gtk_widget_set_margin_top (table, 20);
+    gtk_widget_set_margin_bottom (table, 20);
     gtk_grid_set_row_spacing (GTK_GRID (table), 3);
     gtk_grid_set_column_spacing (GTK_GRID (table), 10);
     gtk_container_add (GTK_CONTAINER (window), table);

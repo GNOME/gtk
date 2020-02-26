@@ -656,7 +656,10 @@
         <child>
           <object class="GtkBox">
             <property name="orientation">vertical</property>
-            <property name="margin">60</property>
+            <property name="margin-start">60</property>
+            <property name="margin-end">60</property>
+            <property name="margin-top">60</property>
+            <property name="margin-bottom">60</property>
             <property name="spacing">10</property>
             <property name="halign">center</property>
             <child>
@@ -672,7 +675,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -729,7 +735,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -786,7 +795,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -856,7 +868,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -913,7 +928,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -970,7 +988,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -1027,7 +1048,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -1084,7 +1108,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -1154,7 +1181,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -1211,7 +1241,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -1268,7 +1301,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -1325,7 +1361,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -1395,7 +1434,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -1452,7 +1494,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -1509,7 +1554,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -1566,7 +1614,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -1623,7 +1674,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -1680,7 +1734,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -1737,7 +1794,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -1807,7 +1867,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -1864,7 +1927,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -1921,7 +1987,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -1978,7 +2047,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -2035,7 +2107,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -2092,7 +2167,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -2149,7 +2227,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -2206,7 +2287,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -2263,7 +2347,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -2320,7 +2407,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -2377,7 +2467,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -2434,7 +2527,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -2491,7 +2587,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -2548,7 +2647,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -2605,7 +2707,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -2675,7 +2780,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
@@ -2732,7 +2840,10 @@
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="margin">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">

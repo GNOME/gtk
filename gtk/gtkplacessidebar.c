@@ -2426,7 +2426,10 @@ create_rename_popover (GtkPlacesSidebar *sidebar)
   grid = gtk_grid_new ();
   gtk_container_add (GTK_CONTAINER (popover), grid);
   g_object_set (grid,
-                "margin", 10,
+                "margin-start", 10,
+                "margin-end", 10,
+                "margin-top", 10,
+                "margin-bottom", 10,
                 "row-spacing", 6,
                 "column-spacing", 6,
                 NULL);

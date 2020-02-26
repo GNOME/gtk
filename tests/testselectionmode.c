@@ -21,7 +21,10 @@ selectable_row_init (SelectableRow *row)
   row->revealer = gtk_revealer_new ();
   gtk_revealer_set_transition_type (GTK_REVEALER (row->revealer), GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT);
   row->check = gtk_check_button_new ();
-  g_object_set (row->check, "margin", 10, NULL);
+  gtk_widget_set_margin_start (row->check, 10);
+  gtk_widget_set_margin_end (row->check, 10);
+  gtk_widget_set_margin_top (row->check, 10);
+  gtk_widget_set_margin_bottom (row->check, 10);
 
   gtk_widget_show (row->box);
   gtk_widget_show (row->check);

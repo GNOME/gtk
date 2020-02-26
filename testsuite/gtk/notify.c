@@ -492,15 +492,12 @@ test_type (gconstpointer data)
 
       /* These are special */
       if (g_type_is_a (pspec->owner_type, GTK_TYPE_WIDGET) &&
-	  (g_str_equal (pspec->name, "has-focus") ||
-	   g_str_equal (pspec->name, "has-default") ||
+          (g_str_equal (pspec->name, "has-focus") ||
+           g_str_equal (pspec->name, "has-default") ||
            g_str_equal (pspec->name, "is-focus") ||
-           g_str_equal (pspec->name, "margin") ||
            g_str_equal (pspec->name, "hexpand") ||
-           g_str_equal (pspec->name, "vexpand") ||
-           g_str_equal (pspec->name, "expand")
-            ))
-	continue;
+           g_str_equal (pspec->name, "vexpand")))
+        continue;
 
       if (pspec->owner_type == GTK_TYPE_ENTRY &&
           g_str_equal (pspec->name, "im-module"))

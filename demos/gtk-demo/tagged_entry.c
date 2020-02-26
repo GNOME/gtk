@@ -76,7 +76,10 @@ do_tagged_entry (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-      g_object_set (box, "margin", 18, NULL);
+      gtk_widget_set_margin_start (box, 18);
+      gtk_widget_set_margin_end (box, 18);
+      gtk_widget_set_margin_top (box, 18);
+      gtk_widget_set_margin_bottom (box, 18);
       gtk_container_add (GTK_CONTAINER (window), box);
 
       entry = demo_tagged_entry_new ();

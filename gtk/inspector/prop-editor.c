@@ -950,7 +950,8 @@ property_editor (GObject                *object,
         sw = gtk_scrolled_window_new (NULL, NULL);
         gtk_container_add (GTK_CONTAINER (popover), sw);
         g_object_set (sw,
-                      "expand", TRUE,
+                      "hexpand", TRUE,
+                      "vexpand", TRUE,
                       "hscrollbar-policy", GTK_POLICY_NEVER,
                       "vscrollbar-policy", GTK_POLICY_NEVER,
                       NULL);
@@ -1017,10 +1018,11 @@ property_editor (GObject                *object,
       sw = gtk_scrolled_window_new (NULL, NULL);
       gtk_container_add (GTK_CONTAINER (popover), sw);
       g_object_set (sw,
-                    "expand", TRUE,
+                    "hexpand", TRUE,
+                    "vexpand", TRUE,
                     "hscrollbar-policy", GTK_POLICY_NEVER,
                     "vscrollbar-policy", GTK_POLICY_NEVER,
-                      NULL);
+                    NULL);
 
       g_object_get (object, spec->name, &model, NULL);
 

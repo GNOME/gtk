@@ -421,7 +421,10 @@ do_sliding_puzzle (GtkWidget *do_widget)
       tweaks = gtk_grid_new ();
       gtk_grid_set_row_spacing (GTK_GRID (tweaks), 10);
       gtk_grid_set_column_spacing (GTK_GRID (tweaks), 10);
-      g_object_set (tweaks, "margin", 10, NULL);
+      gtk_widget_set_margin_start (tweaks, 10);
+      gtk_widget_set_margin_end (tweaks, 10);
+      gtk_widget_set_margin_top (tweaks, 10);
+      gtk_widget_set_margin_bottom (tweaks, 10);
 
       choices = gtk_flow_box_new ();
       gtk_style_context_add_class (gtk_widget_get_style_context (choices), GTK_STYLE_CLASS_VIEW);

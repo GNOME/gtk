@@ -45,7 +45,11 @@ test_nonzerox (void)
   gtk_window_set_title (GTK_WINDOW (win), "Non-zero X");
 
   grid = gtk_grid_new ();
-  g_object_set (grid, "margin", 5, NULL);
+  gtk_widget_set_margin_start (grid, 5);
+  gtk_widget_set_margin_end (grid, 5);
+  gtk_widget_set_margin_top (grid, 5);
+  gtk_widget_set_margin_bottom (grid, 5);
+
   gtk_container_add (GTK_CONTAINER (win), grid);
   gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Above"), 1, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Below"), 1, 2, 1, 1);
@@ -64,14 +68,21 @@ test_nonzerox (void)
   child = gtk_label_new ("I'm the overlay");
   gtk_widget_set_halign (child, GTK_ALIGN_START);
   gtk_widget_set_valign (child, GTK_ALIGN_START);
-  g_object_set (child, "margin", 3, NULL);
+  gtk_widget_set_margin_start (child, 3);
+  gtk_widget_set_margin_end (child, 3);
+  gtk_widget_set_margin_top (child, 3);
+  gtk_widget_set_margin_bottom (child, 3);
+
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
 
   child = gtk_label_new ("No, I'm the overlay");
   gtk_widget_set_halign (child, GTK_ALIGN_END);
   gtk_widget_set_valign (child, GTK_ALIGN_END);
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
-  g_object_set (child, "margin", 3, NULL);
+  gtk_widget_set_margin_start (child, 3);
+  gtk_widget_set_margin_end (child, 3);
+  gtk_widget_set_margin_top (child, 3);
+  gtk_widget_set_margin_bottom (child, 3);
 
   return win;
 }
@@ -135,7 +146,10 @@ test_relative (void)
 
   text = gtk_text_view_new ();
   gtk_widget_set_size_request (text, 200, 200);
-  g_object_set (text, "margin", 5, NULL);
+  gtk_widget_set_margin_start (text, 5);
+  gtk_widget_set_margin_end (text, 5);
+  gtk_widget_set_margin_top (text, 5);
+  gtk_widget_set_margin_bottom (text, 5);
   gtk_widget_set_hexpand (text, TRUE);
   gtk_widget_set_vexpand (text, TRUE);
   gtk_grid_attach (GTK_GRID (grid), text, 1, 1, 1, 1);
@@ -146,13 +160,19 @@ test_relative (void)
   gtk_widget_set_halign (child, GTK_ALIGN_START);
   gtk_widget_set_valign (child, GTK_ALIGN_START);
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
-  g_object_set (child, "margin", 1, NULL);
+  gtk_widget_set_margin_start (child, 1);
+  gtk_widget_set_margin_end (child, 1);
+  gtk_widget_set_margin_top (child, 1);
+  gtk_widget_set_margin_bottom (child, 1);
 
   child = gtk_label_new ("Bottom right overlay");
   gtk_widget_set_halign (child, GTK_ALIGN_END);
   gtk_widget_set_valign (child, GTK_ALIGN_END);
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
-  g_object_set (child, "margin", 1, NULL);
+  gtk_widget_set_margin_start (child, 1);
+  gtk_widget_set_margin_end (child, 1);
+  gtk_widget_set_margin_top (child, 1);
+  gtk_widget_set_margin_bottom (child, 1);
 
   return win;
 }
@@ -182,7 +202,10 @@ test_fullwidth (void)
   gtk_widget_set_halign (child, GTK_ALIGN_FILL);
   gtk_widget_set_valign (child, GTK_ALIGN_START);
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
-  g_object_set (child, "margin", 4, NULL);
+  gtk_widget_set_margin_start (child, 4);
+  gtk_widget_set_margin_end (child, 4);
+  gtk_widget_set_margin_top (child, 4);
+  gtk_widget_set_margin_bottom (child, 4);
 
   return win;
 }
@@ -230,7 +253,10 @@ test_scrolling (void)
   gtk_widget_set_halign (child, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (child, GTK_ALIGN_END);
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
-  g_object_set (child, "margin", 4, NULL);
+  gtk_widget_set_margin_start (child, 4);
+  gtk_widget_set_margin_end (child, 4);
+  gtk_widget_set_margin_top (child, 4);
+  gtk_widget_set_margin_bottom (child, 4);
 
   return win;
 }
@@ -373,7 +399,10 @@ test_chase (void)
   gtk_widget_set_halign (child, GTK_ALIGN_START);
   gtk_widget_set_valign (child, GTK_ALIGN_END);
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
-  g_object_set (child, "margin", 4, NULL);
+  gtk_widget_set_margin_start (child, 4);
+  gtk_widget_set_margin_end (child, 4);
+  gtk_widget_set_margin_top (child, 4);
+  gtk_widget_set_margin_bottom (child, 4);
 
   controller = gtk_event_controller_motion_new ();
   g_signal_connect (controller, "enter", G_CALLBACK (on_enter), overlay);

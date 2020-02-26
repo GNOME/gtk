@@ -1133,7 +1133,10 @@ gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
       gtk_label_set_use_markup (GTK_LABEL (widget), TRUE);
     }
 
-  g_object_set (widget, "margin", 6, NULL); /* Seriously? g_object_set() needed for that? */
+  gtk_widget_set_margin_start (widget, 6);
+  gtk_widget_set_margin_end (widget, 6);
+  gtk_widget_set_margin_top (widget, 6);
+  gtk_widget_set_margin_bottom (widget, 6);
 
   return widget;
 }
@@ -1168,7 +1171,10 @@ node_property_activated (GtkTreeView *tv,
   gtk_popover_set_pointing_to (GTK_POPOVER (popover), &rect);
 
   image = gtk_image_new_from_paintable (GDK_PAINTABLE (texture));
-  g_object_set (image, "margin", 20, NULL);
+  gtk_widget_set_margin_start (image, 20);
+  gtk_widget_set_margin_end (image, 20);
+  gtk_widget_set_margin_top (image, 20);
+  gtk_widget_set_margin_bottom (image, 20);
   gtk_container_add (GTK_CONTAINER (popover), image);
   gtk_popover_popup (GTK_POPOVER (popover));
 

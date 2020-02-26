@@ -21,7 +21,11 @@ int main (int argc, char *argv[])
   gtk_widget_set_vexpand (view, TRUE);
   gtk_container_add (GTK_CONTAINER (box), view);
   box3 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  g_object_set (box3, "margin", 10, NULL);
+  gtk_widget_set_margin_start (box3, 10);
+  gtk_widget_set_margin_end (box3, 10);
+  gtk_widget_set_margin_top (box3, 10);
+  gtk_widget_set_margin_bottom (box3, 10);
+
   gtk_style_context_add_class (gtk_widget_get_style_context (box3), GTK_STYLE_CLASS_LINKED);
   button = gtk_button_new_from_icon_name ("document-new-symbolic");
   gtk_container_add (GTK_CONTAINER (box3), button);

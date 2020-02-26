@@ -292,12 +292,11 @@ open_margin_window (void)
 {
   GtkWidget *box;
   int i;
-  const char * margins[] = {
+  const char *margins[] = {
     "margin-start",
     "margin-end",
     "margin-top",
-    "margin-bottom",
-    "margin"
+    "margin-bottom"
   };
 
   test_window = gtk_window_new ();

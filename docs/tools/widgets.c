@@ -437,7 +437,13 @@ create_action_bar (void)
   button = gtk_button_new_from_icon_name ("call-start-symbolic");
   gtk_widget_show (button);
   gtk_container_add (GTK_CONTAINER (widget), button);
-  g_object_set (gtk_widget_get_parent (button), "margin", 6, "spacing", 6, NULL);
+  g_object_set (gtk_widget_get_parent (button),
+                "margin-start", 6,
+                "margin-end", 6,
+                "margin-top", 6,
+                "margin-bottom", 6,
+                "spacing", 6,
+                NULL);
 
   gtk_widget_show (widget);
 

@@ -3,7 +3,8 @@
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkScrolledWindow">
-        <property name="expand">1</property>
+        <property name="hexpand">1</property>
+        <property name="vexpand">1</property>
         <child>
           <object class="GtkMagnifier" id="magnifier">
             <property name="visible">True</property>

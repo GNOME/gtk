@@ -25,6 +25,10 @@
                     <child>
                       <object class="GtkImage" id="run_image">
                         <property name="vexpand">1</property>
+                        <layout>
+                          <property name="left_attach">0</property>
+                          <property name="top_attach">0</property>
+                        </layout>
                       </object>
                     </child>
                     <child>
@@ -50,6 +54,7 @@
                         </attributes>
                         <layout>
                           <property name="left_attach">1</property>
+                          <property name="top_attach">0</property>
                         </layout>
                       </object>
                     </child>
@@ -77,6 +82,7 @@
                         <property name="vexpand">1</property>
                         <layout>
                           <property name="left_attach">1</property>
+                          <property name="top_attach">0</property>
                         </layout>
                       </object>
                     </child>
@@ -89,6 +95,10 @@
                           <attribute name="scale" value="10"></attribute>
                           <attribute name="font-features" value="tnum 1"></attribute>
                         </attributes>
+                        <layout>
+                          <property name="left_attach">0</property>
+                          <property name="top_attach">0</property>
+                        </layout>
                       </object>
                     </child>
                   </object>
@@ -109,7 +119,12 @@
                     <property name="row_spacing">12</property>
                     <property name="column_spacing">12</property>
                     <child>
-                      <object class="GtkImage" id="trophy_image"/>
+                      <object class="GtkImage" id="trophy_image">
+                        <layout>
+                          <property name="left_attach">0</property>
+                          <property name="top_attach">0</property>
+                        </layout>
+                      </object>
                     </child>
                     <child>
                       <object class="GtkBox" id="box2">
@@ -162,6 +177,7 @@
                         </child>
                         <layout>
                           <property name="left_attach">1</property>
+                          <property name="top_attach">0</property>
                         </layout>
                       </object>
                     </child>

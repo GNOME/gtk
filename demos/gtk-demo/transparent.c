@@ -33,7 +33,10 @@ do_transparent (GtkWidget *do_widget)
 
       button = gtk_button_new_with_label ("Don't click this button!");
       label = gtk_bin_get_child (GTK_BIN (button));
-      g_object_set (label, "margin", 50, NULL);
+      gtk_widget_set_margin_start (label, 50);
+      gtk_widget_set_margin_end (label, 50);
+      gtk_widget_set_margin_top (label, 50);
+      gtk_widget_set_margin_bottom (label, 50);
 
       gtk_widget_set_opacity (button, 0.7);
       gtk_widget_set_halign (button, GTK_ALIGN_FILL);
@@ -43,7 +46,10 @@ do_transparent (GtkWidget *do_widget)
 
       button = gtk_button_new_with_label ("Maybe this one?");
       label = gtk_bin_get_child (GTK_BIN (button));
-      g_object_set (label, "margin", 50, NULL);
+      gtk_widget_set_margin_start (label, 50);
+      gtk_widget_set_margin_end (label, 50);
+      gtk_widget_set_margin_top (label, 50);
+      gtk_widget_set_margin_bottom (label, 50);
 
       gtk_widget_set_opacity (button, 0.7);
       gtk_widget_set_halign (button, GTK_ALIGN_FILL);
