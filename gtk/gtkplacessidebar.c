@@ -3274,7 +3274,7 @@ build_popup_menu_using_gmenu (GtkSidebarRow *row)
         }
       cloud_provider_menu = cloud_providers_account_get_menu_model (cloud_provider_account);
       cloud_provider_action_group = cloud_providers_account_get_action_group (cloud_provider_account);
-      if (cloud_provider_menu != NULL && cloud_p:laurovider_action_group != NULL)
+      if (cloud_provider_menu != NULL && cloud_provider_action_group != NULL)
         {
           g_menu_append_section (menu, NULL, cloud_provider_menu);
           gtk_widget_insert_action_group (GTK_WIDGET (sidebar),
