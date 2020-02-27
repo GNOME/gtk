@@ -170,9 +170,7 @@ gtk_css_font_features_value_new_empty (void)
   GtkCssValue *result;
 
   result = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_FONT_FEATURES);
-  result->features = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                        g_free,
-                                        (GDestroyNotify) _gtk_css_value_unref);
+  result->features = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   result->is_computed = TRUE;
 
   return result;
