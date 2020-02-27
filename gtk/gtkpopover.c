@@ -1608,6 +1608,8 @@ gtk_popover_set_pointing_to (GtkPopover         *popover,
     {
       priv->pointing_to = *rect;
       priv->has_pointing_to = TRUE;
+      priv->pointing_to.width = MAX (priv->pointing_to.width, 1);
+      priv->pointing_to.height = MAX (priv->pointing_to.height, 1);
     }
   else
     priv->has_pointing_to = FALSE;
