@@ -1615,6 +1615,9 @@ gtk_popover_set_pointing_to (GtkPopover         *popover,
     priv->has_pointing_to = FALSE;
 
   g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_POINTING_TO]);
+
+  if (gtk_widget_is_visible (GTK_WIDGET (popover)))
+    present_popup (popover);
 }
 
 /**
@@ -1684,6 +1687,9 @@ gtk_popover_set_position (GtkPopover      *popover,
   priv->final_position = position;
 
   g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_POSITION]);
+
+  if (gtk_widget_is_visible (GTK_WIDGET (popover)))
+    present_popup (popover);
 }
 
 /**
