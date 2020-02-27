@@ -2105,7 +2105,7 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
 
   /* Perform propagation state starting from the next child in the chain */
   gtk_propagate_event_internal (event_widget, press, next_child);
-  g_object_unref (press);
+  gdk_event_unref (press);
 }
 
 static GdkEvent *
