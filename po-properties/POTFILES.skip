@@ -128,7 +128,6 @@ gtk/ui/gtkfontchooserwidget.ui
 gtk/ui/gtklockbutton.ui
 gtk/ui/gtkmessagedialog.ui
 gtk/ui/gtkpagesetupunixdialog.ui
-gtk/ui/gtkpathbar.ui
 gtk/ui/gtkplacesviewrow.ui
 gtk/ui/gtkplacesview.ui
 gtk/ui/gtkprintunixdialog.ui
