@@ -72,6 +72,7 @@ struct _GdkSurface
   guint in_update : 1;
   guint frame_clock_events_paused : 1;
   guint autohide : 1;
+  guint modal_shadowed : 1;
 
   struct {
     GdkGravity surface_anchor;

@@ -1817,6 +1817,21 @@ _gdk_surface_update_viewable (GdkSurface *surface)
 }
 
 static void
+propagate_modal (GdkSurface *surface,
+                 gboolean    modal)
+{
+  GdkSurface *parent = surface->transient_for;
+
+  modal = modal && GDK_SURFACE_IS_MAPPED (surface);
+
+  if (parent)
+    {
+      parent->modal_shadowed = modal;
+      propagate_modal (parent, modal || parent->modal_hint);
+    }
+}
+
+static void
 gdk_surface_show_internal (GdkSurface *surface, gboolean raise)
 {
   gboolean was_mapped;
@@ -1843,6 +1858,8 @@ gdk_surface_show_internal (GdkSurface *surface, gboolean raise)
     {
       if (gdk_surface_is_viewable (surface))
         gdk_surface_invalidate_rect (surface, NULL);
+
+      propagate_modal (surface, surface->modal_hint);
     }
 }
 
@@ -2005,6 +2022,9 @@ gdk_surface_hide (GdkSurface *surface)
     return;
 
   was_mapped = GDK_SURFACE_IS_MAPPED (surface);
+
+  if (surface->modal_hint)
+    propagate_modal (surface, FALSE);
 
   if (GDK_SURFACE_IS_MAPPED (surface))
     gdk_synthesize_surface_state (surface, 0, GDK_SURFACE_STATE_WITHDRAWN);
@@ -2862,7 +2882,11 @@ void
 gdk_surface_set_modal_hint (GdkSurface *surface,
                             gboolean   modal)
 {
+  surface->modal_hint = modal;
+
   GDK_SURFACE_GET_CLASS (surface)->set_modal_hint (surface, modal);
+
+  propagate_modal (surface, modal);
 }
 
 /**
@@ -2955,6 +2979,8 @@ gdk_surface_set_transient_for (GdkSurface *surface,
   surface->transient_for = parent;
 
   GDK_SURFACE_GET_CLASS (surface)->set_transient_for (surface, parent);
+
+  propagate_modal (surface, surface->modal_hint);
 }
 
 /**
@@ -4117,6 +4143,12 @@ gdk_surface_handle_event (GdkEvent *event)
 {
   gint64 begin_time = g_get_monotonic_time ();
   gboolean handled = FALSE;
+  GdkSurface *surface;
+
+  surface = gdk_event_get_surface (event);
+
+  if (surface->modal_shadowed)
+    return TRUE;
 
   if (check_autohide (event))
     return TRUE;
