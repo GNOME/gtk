@@ -26,8 +26,6 @@
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreeviewcolumn.h>
 #include <gtk/gtkentry.h>
-#include <gtk/gtkdragsource.h>
-#include <gtk/gtkdragdest.h>
 
 G_BEGIN_DECLS
 
@@ -320,7 +318,7 @@ void                   gtk_tree_view_enable_model_drag_source      (GtkTreeView 
 								    GdkContentFormats         *formats,
 								    GdkDragAction              actions);
 GDK_AVAILABLE_IN_ALL
-GtkDropTarget *        gtk_tree_view_enable_model_drag_dest        (GtkTreeView               *tree_view,
+void                   gtk_tree_view_enable_model_drag_dest        (GtkTreeView               *tree_view,
 								    GdkContentFormats         *formats,
 								    GdkDragAction              actions);
 GDK_AVAILABLE_IN_ALL
