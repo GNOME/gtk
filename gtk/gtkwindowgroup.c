@@ -27,6 +27,7 @@
 #include "gtkmain.h"
 #include "gtkwindowprivate.h"
 #include "gtkwindowgroup.h"
+#include "gtkprivate.h"
 
 
 /**
@@ -81,8 +82,10 @@ gtk_window_group_class_init (GtkWindowGroupClass *klass)
 /**
  * gtk_window_group_new:
  * 
- * Creates a new #GtkWindowGroup object. Grabs added with
- * gtk_grab_add() only affect windows within the same #GtkWindowGroup.
+ * Creates a new #GtkWindowGroup object.
+ *
+ * Modality of windows only affects windows
+ * within the same #GtkWindowGroup.
  * 
  * Returns: a new #GtkWindowGroup. 
  **/
@@ -208,15 +211,6 @@ gtk_window_group_list_windows (GtkWindowGroup *window_group)
   return g_list_reverse (group_windows);
 }
 
-/**
- * gtk_window_group_get_current_grab:
- * @window_group: a #GtkWindowGroup
- *
- * Gets the current grab widget of the given group,
- * see gtk_grab_add().
- *
- * Returns: (transfer none): the current grab widget of the group
- */
 GtkWidget *
 gtk_window_group_get_current_grab (GtkWindowGroup *window_group)
 {
