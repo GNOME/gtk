@@ -397,6 +397,10 @@ node_should_be_filtered_out (GtkFileSystemModel *model, guint id)
   if (required & GTK_FILE_FILTER_MIME_TYPE)
     {
       const char *s = g_file_info_get_content_type (node->info);
+
+      if (!s)
+        s = g_file_info_get_attribute_string (node->info, G_FILE_ATTRIBUTE_STANDARD_FAST_CONTENT_TYPE);
+
       if (s)
 	{
 	  mime_type = g_content_type_get_mime_type (s);
