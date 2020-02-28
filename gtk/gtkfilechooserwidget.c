@@ -4599,6 +4599,9 @@ get_type_information (GtkFileChooserWidget *impl,
 
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
   content_type = g_file_info_get_content_type (info);
+  if (!content_type)
+    goto end;
+
   switch (priv->type_format)
     {
     case TYPE_FORMAT_MIME:
@@ -4616,6 +4619,7 @@ get_type_information (GtkFileChooserWidget *impl,
       g_assert_not_reached ();
     }
 
+end:
   return g_strdup ("");
 }
 
