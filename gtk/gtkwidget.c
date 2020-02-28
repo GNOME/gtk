@@ -5526,7 +5526,6 @@ gtk_widget_device_is_shadowed (GtkWidget *widget,
   GtkRoot *root;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-  g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
 
   if (!_gtk_widget_get_realized (widget))
     return TRUE;
@@ -5537,14 +5536,6 @@ gtk_widget_device_is_shadowed (GtkWidget *widget,
     group = gtk_window_get_group (GTK_WINDOW (root));
   else
     group = gtk_window_get_group (NULL);
-
-  grab_widget = gtk_window_group_get_current_device_grab (group, device);
-
-  /* Widget not inside the hierarchy of grab_widget */
-  if (grab_widget &&
-      widget != grab_widget &&
-      !gtk_widget_is_ancestor (widget, grab_widget))
-    return TRUE;
 
   grab_widget = gtk_window_group_get_current_grab (group);
   if (grab_widget && widget != grab_widget &&

@@ -115,14 +115,6 @@ GDK_AVAILABLE_IN_ALL
 void       gtk_grab_remove         (GtkWidget          *widget);
 
 GDK_AVAILABLE_IN_ALL
-void       gtk_device_grab_add     (GtkWidget          *widget,
-                                    GdkDevice          *device,
-                                    gboolean            block_others);
-GDK_AVAILABLE_IN_ALL
-void       gtk_device_grab_remove  (GtkWidget          *widget,
-                                    GdkDevice          *device);
-
-GDK_AVAILABLE_IN_ALL
 GdkEvent * gtk_get_current_event        (void);
 GDK_AVAILABLE_IN_ALL
 guint32    gtk_get_current_event_time   (void);

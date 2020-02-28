@@ -62,7 +62,6 @@ struct _GtkDeviceGrabInfo
 struct _GtkWindowGroupPrivate
 {
   GSList *grabs;
-  GSList *device_grabs;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkWindowGroup, gtk_window_group, G_TYPE_OBJECT)
@@ -98,7 +97,6 @@ window_group_cleanup_grabs (GtkWindowGroup *group,
                             GtkWindow      *window)
 {
   GtkWindowGroupPrivate *priv;
-  GtkDeviceGrabInfo *info;
   GSList *tmp_list;
   GSList *to_remove = NULL;
 
@@ -116,26 +114,6 @@ window_group_cleanup_grabs (GtkWindowGroup *group,
     {
       gtk_grab_remove (to_remove->data);
       g_object_unref (to_remove->data);
-      to_remove = g_slist_delete_link (to_remove, to_remove);
-    }
-
-  tmp_list = priv->device_grabs;
-
-  while (tmp_list)
-    {
-      info = tmp_list->data;
-
-      if (gtk_widget_get_root (info->widget) == (GtkRoot *) window)
-        to_remove = g_slist_prepend (to_remove, info);
-
-      tmp_list = tmp_list->next;
-    }
-
-  while (to_remove)
-    {
-      info = to_remove->data;
-
-      gtk_device_grab_remove (info->widget, info->device);
       to_remove = g_slist_delete_link (to_remove, to_remove);
     }
 }
@@ -288,134 +266,4 @@ _gtk_window_group_remove_grab (GtkWindowGroup *window_group,
 
   priv = window_group->priv;
   priv->grabs = g_slist_remove (priv->grabs, widget);
-}
-
-void
-_gtk_window_group_add_device_grab (GtkWindowGroup *window_group,
-                                   GtkWidget      *widget,
-                                   GdkDevice      *device,
-                                   gboolean        block_others)
-{
-  GtkWindowGroupPrivate *priv;
-  GtkDeviceGrabInfo *info;
-
-  priv = window_group->priv;
-
-  info = g_slice_new0 (GtkDeviceGrabInfo);
-  info->widget = widget;
-  info->device = device;
-  info->block_others = block_others;
-
-  priv->device_grabs = g_slist_prepend (priv->device_grabs, info);
-
-  revoke_implicit_grabs (window_group, device, widget);
-}
-
-void
-_gtk_window_group_remove_device_grab (GtkWindowGroup *window_group,
-                                      GtkWidget      *widget,
-                                      GdkDevice      *device)
-{
-  GtkWindowGroupPrivate *priv;
-  GtkDeviceGrabInfo *info;
-  GSList *list, *node = NULL;
-  GdkDevice *other_device;
-
-  priv = window_group->priv;
-  other_device = gdk_device_get_associated_device (device);
-  list = priv->device_grabs;
-
-  while (list)
-    {
-      info = list->data;
-
-      if (info->widget == widget &&
-          (info->device == device ||
-           info->device == other_device))
-        {
-          node = list;
-          break;
-        }
-
-      list = list->next;
-    }
-
-  if (node)
-    {
-      info = node->data;
-
-      priv->device_grabs = g_slist_delete_link (priv->device_grabs, node);
-      g_slice_free (GtkDeviceGrabInfo, info);
-    }
-}
-
-/**
- * gtk_window_group_get_current_device_grab:
- * @window_group: a #GtkWindowGroup
- * @device: a #GdkDevice
- *
- * Returns the current grab widget for @device, or %NULL if none.
- *
- * Returns: (nullable) (transfer none): The grab widget, or %NULL
- */
-GtkWidget *
-gtk_window_group_get_current_device_grab (GtkWindowGroup *window_group,
-                                          GdkDevice      *device)
-{
-  GtkWindowGroupPrivate *priv;
-  GtkDeviceGrabInfo *info;
-  GdkDevice *other_device;
-  GSList *list;
-
-  g_return_val_if_fail (GTK_IS_WINDOW_GROUP (window_group), NULL);
-  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
-
-  priv = window_group->priv;
-  list = priv->device_grabs;
-  other_device = gdk_device_get_associated_device (device);
-
-  while (list)
-    {
-      info = list->data;
-      list = list->next;
-
-      if (info->device == device ||
-          info->device == other_device)
-        return info->widget;
-    }
-
-  return NULL;
-}
-
-gboolean
-_gtk_window_group_widget_is_blocked_for_device (GtkWindowGroup *window_group,
-                                                GtkWidget      *widget,
-                                                GdkDevice      *device)
-{
-  GtkWindowGroupPrivate *priv;
-  GtkDeviceGrabInfo *info;
-  GdkDevice *other_device;
-  GSList *list;
-
-  priv = window_group->priv;
-  other_device = gdk_device_get_associated_device (device);
-  list = priv->device_grabs;
-
-  while (list)
-    {
-      info = list->data;
-      list = list->next;
-
-      /* Look for blocking grabs on other device pairs
-       * that have the passed widget within the GTK+ grab.
-       */
-      if (info->block_others &&
-          info->device != device &&
-          info->device != other_device &&
-          (info->widget == widget ||
-           gtk_widget_is_ancestor (widget, info->widget)))
-        return TRUE;
-    }
-
-  return FALSE;
 }

@@ -1657,7 +1657,6 @@ gtk_main_do_event (GdkEvent *event)
   GtkWidget *grab_widget = NULL;
   GtkWindowGroup *window_group;
   GdkEvent *rewritten_event = NULL;
-  GdkDevice *device;
   GList *tmp_list;
 
   if (gtk_inspector_handle_event (event))
@@ -1712,14 +1711,9 @@ gtk_main_do_event (GdkEvent *event)
     goto cleanup;
 
   window_group = gtk_main_get_window_group (target_widget);
-  device = gdk_event_get_device (event);
 
-  /* check whether there is a (device) grab in effect... */
-  if (device)
-    grab_widget = gtk_window_group_get_current_device_grab (window_group, device);
-
-  if (!grab_widget)
-    grab_widget = gtk_window_group_get_current_grab (window_group);
+  /* check whether there is a grab in effect... */
+  grab_widget = gtk_window_group_get_current_grab (window_group);
 
   /* If the grab widget is an ancestor of the event widget
    * then we send the event to the original event widget.
@@ -1737,13 +1731,6 @@ gtk_main_do_event (GdkEvent *event)
    */
   if (check_event_in_child_popover (target_widget, grab_widget))
     grab_widget = target_widget;
-
-  /* If the widget receiving events is actually blocked by another
-   * device GTK grab
-   */
-  if (device &&
-      _gtk_window_group_widget_is_blocked_for_device (window_group, grab_widget, device))
-    goto cleanup;
 
   /* Not all events get sent to the grabbing widget.
    * The delete, destroy, expose, focus change and resize
@@ -2109,64 +2096,6 @@ gtk_grab_remove (GtkWidget *widget)
 }
 
 /**
- * gtk_device_grab_add:
- * @widget: a #GtkWidget
- * @device: a #GdkDevice to grab on.
- * @block_others: %TRUE to prevent other devices to interact with @widget.
- *
- * Adds a GTK grab on @device, so all the events on @device and its
- * associated pointer or keyboard (if any) are delivered to @widget.
- * If the @block_others parameter is %TRUE, any other devices will be
- * unable to interact with @widget during the grab.
- */
-void
-gtk_device_grab_add (GtkWidget *widget,
-                     GdkDevice *device,
-                     gboolean   block_others)
-{
-  GtkWindowGroup *group;
-  GtkWidget *old_grab_widget;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GDK_IS_DEVICE (device));
-
-  group = gtk_main_get_window_group (widget);
-  old_grab_widget = gtk_window_group_get_current_device_grab (group, device);
-
-  if (old_grab_widget != widget)
-    _gtk_window_group_add_device_grab (group, widget, device, block_others);
-
-  gtk_grab_notify (group, device, old_grab_widget, widget, TRUE);
-}
-
-/**
- * gtk_device_grab_remove:
- * @widget: a #GtkWidget
- * @device: a #GdkDevice
- *
- * Removes a device grab from the given widget.
- *
- * You have to pair calls to gtk_device_grab_add() and
- * gtk_device_grab_remove().
- */
-void
-gtk_device_grab_remove (GtkWidget *widget,
-                        GdkDevice *device)
-{
-  GtkWindowGroup *group;
-  GtkWidget *new_grab_widget;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GDK_IS_DEVICE (device));
-
-  group = gtk_main_get_window_group (widget);
-  _gtk_window_group_remove_device_grab (group, widget, device);
-  new_grab_widget = gtk_window_group_get_current_device_grab (group, device);
-
-  gtk_grab_notify (group, device, widget, new_grab_widget, FALSE);
-}
-
-/**
  * gtk_get_current_event:
  *
  * Obtains a reference of the event currently being processed by GTK.
@@ -2408,20 +2337,15 @@ gtk_propagate_event (GtkWidget *widget,
 {
   GtkWindowGroup *window_group;
   GtkWidget *event_widget, *topmost = NULL;
-  GdkDevice *device;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
   event_widget = gtk_get_event_widget (event);
   window_group = gtk_main_get_window_group (event_widget);
-  device = gdk_event_get_device (event);
 
-  /* check whether there is a (device) grab in effect... */
-  if (device)
-    topmost = gtk_window_group_get_current_device_grab (window_group, device);
-  if (!topmost)
-    topmost = gtk_window_group_get_current_grab (window_group);
+  /* check whether there is a grab in effect... */
+  topmost = gtk_window_group_get_current_grab (window_group);
 
   return gtk_propagate_event_internal (widget, event, topmost);
 }
