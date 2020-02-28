@@ -404,7 +404,7 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 #define MODEL_ATTRIBUTES "standard::name,standard::type,standard::display-name," \
                          "standard::is-hidden,standard::is-backup,standard::size," \
-                         "standard::content-type,time::modified,time::access," \
+                         "standard::content-type,standard::fast-content-type,time::modified,time::access," \
                          "access::can-rename,access::can-delete,access::can-trash," \
                          "standard::target-uri"
 enum {
@@ -5049,6 +5049,8 @@ get_type_information (GtkFileChooserWidget *impl,
   char *description;
 
   content_type = g_file_info_get_content_type (info);
+  if (!content_type)
+    content_type = g_file_info_get_attribute_string (info, G_FILE_ATTRIBUTE_STANDARD_FAST_CONTENT_TYPE);
   if (!content_type)
     goto end;
 
