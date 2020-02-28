@@ -4392,7 +4392,6 @@ gtk_init_check
 
 <SUBSECTION>
 gtk_grab_add
-gtk_grab_get_current
 gtk_grab_remove
 
 <SUBSECTION>

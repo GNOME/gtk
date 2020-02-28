@@ -110,8 +110,6 @@ GtkTextDirection gtk_get_locale_direction (void);
 GDK_AVAILABLE_IN_ALL
 void       gtk_grab_add            (GtkWidget          *widget);
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_grab_get_current    (void);
-GDK_AVAILABLE_IN_ALL
 void       gtk_grab_remove         (GtkWidget          *widget);
 
 GDK_AVAILABLE_IN_ALL

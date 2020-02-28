@@ -2046,24 +2046,6 @@ gtk_grab_add (GtkWidget *widget)
 }
 
 /**
- * gtk_grab_get_current:
- *
- * Queries the current grab of the default window group.
- *
- * Returns: (transfer none) (nullable): The widget which currently
- *     has the grab or %NULL if no grab is active
- */
-GtkWidget*
-gtk_grab_get_current (void)
-{
-  GtkWindowGroup *group;
-
-  group = gtk_main_get_window_group (NULL);
-
-  return gtk_window_group_get_current_grab (group);
-}
-
-/**
  * gtk_grab_remove: (method)
  * @widget: The widget which gives up the grab
  *
