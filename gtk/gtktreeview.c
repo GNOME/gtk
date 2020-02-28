@@ -12854,10 +12854,8 @@ gtk_tree_view_enable_model_drag_source (GtkTreeView       *tree_view,
  * 
  * Turns @tree_view into a drop destination for automatic DND. Calling
  * this method sets #GtkTreeView:reorderable to %FALSE.
- *
- * Returns: (transfer none): the drop target that has been attached
  **/
-GtkDropTarget *
+void
 gtk_tree_view_enable_model_drag_dest (GtkTreeView       *tree_view,
 				      GdkContentFormats *formats,
 				      GdkDragAction      actions)
@@ -12865,7 +12863,7 @@ gtk_tree_view_enable_model_drag_dest (GtkTreeView       *tree_view,
   TreeViewDragInfo *di;
   GtkCssNode *widget_node;
 
-  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
   di = ensure_info (tree_view);
   di->dest_set = TRUE;
@@ -12885,8 +12883,6 @@ gtk_tree_view_enable_model_drag_dest (GtkTreeView       *tree_view,
   g_object_unref (di->cssnode);
 
   unset_reorderable (tree_view);
-
-  return di->dest;
 }
 
 /**

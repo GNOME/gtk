@@ -24,6 +24,7 @@
 #include "gtkcellareabox.h"
 #include "gtkcellareacontext.h"
 #include "gtkcelllayout.h"
+#include "gtkdragsource.h"
 #include "gtkframe.h"
 #include "gtkimage.h"
 #include "gtkintl.h"

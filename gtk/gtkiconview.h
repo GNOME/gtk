@@ -27,8 +27,6 @@
 #include <gtk/gtkcellrenderer.h>
 #include <gtk/gtkcellarea.h>
 #include <gtk/gtktooltip.h>
-#include <gtk/gtkdragsource.h>
-#include <gtk/gtkdragdest.h>
 
 G_BEGIN_DECLS
 
@@ -219,7 +217,7 @@ void                   gtk_icon_view_enable_model_drag_source (GtkIconView      
 							       GdkContentFormats        *formats,
 							       GdkDragAction             actions);
 GDK_AVAILABLE_IN_ALL
-GtkDropTarget *        gtk_icon_view_enable_model_drag_dest   (GtkIconView              *icon_view,
+void                   gtk_icon_view_enable_model_drag_dest   (GtkIconView              *icon_view,
 							       GdkContentFormats        *formats,
 							       GdkDragAction             actions);
 GDK_AVAILABLE_IN_ALL

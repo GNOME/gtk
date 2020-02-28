@@ -17,6 +17,7 @@
 
 #include "gtk/gtkiconview.h"
 #include "gtk/gtkcssnodeprivate.h"
+#include "gtk/gtkdragdest.h"
 #include "gtk/gtkgestureclick.h"
 #include "gtk/gtkeventcontrollermotion.h"
 #include "gtk/gtkdragsource.h"

@@ -6397,16 +6397,15 @@ gtk_icon_view_enable_model_drag_source (GtkIconView              *icon_view,
  *
  * Turns @icon_view into a drop destination for automatic DND. Calling this
  * method sets #GtkIconView:reorderable to %FALSE.
- *
- * Returns: (transfer none): the drop target that was attached
  **/
-GtkDropTarget *
+void
 gtk_icon_view_enable_model_drag_dest (GtkIconView       *icon_view,
                                       GdkContentFormats *formats,
 				      GdkDragAction      actions)
 {
-  g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), NULL);
   GtkCssNode *widget_node;
+
+  g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
 
   icon_view->priv->dest = gtk_drop_target_new (gdk_content_formats_ref (formats), actions);
   g_signal_connect (icon_view->priv->dest, "drag-leave", G_CALLBACK (gtk_icon_view_drag_leave), icon_view);
@@ -6426,8 +6425,6 @@ gtk_icon_view_enable_model_drag_dest (GtkIconView       *icon_view,
   gtk_css_node_set_parent (icon_view->priv->dndnode, widget_node);
   gtk_css_node_set_state (icon_view->priv->dndnode, gtk_css_node_get_state (widget_node));
   g_object_unref (icon_view->priv->dndnode);
-
-  return icon_view->priv->dest;
 }
 
 /**
