@@ -1049,6 +1049,7 @@ update_gl_flag (GtkSwitch     *sw,
 
 static void
 software_gl_activate (GtkSwitch *sw,
+                      GParamSpec *pspec,
                       GtkInspectorVisual *vis)
 {
   update_gl_flag (sw, GDK_DEBUG_GL_SOFTWARE, vis);
