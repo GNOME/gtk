@@ -9494,10 +9494,8 @@ gtk_window_maybe_update_cursor (GtkWindow *window,
         continue;
 
       group = gtk_window_get_group (window);
-      grab_widget = gtk_window_group_get_current_device_grab (group,
-                                                              focus->device);
-      if (!grab_widget)
-        grab_widget = gtk_window_group_get_current_grab (group);
+
+      grab_widget = gtk_window_group_get_current_grab (group);
       if (!grab_widget)
         grab_widget = gtk_pointer_focus_get_implicit_grab (focus);
 

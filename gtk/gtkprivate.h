@@ -32,6 +32,7 @@
 #include "gtkcsstypesprivate.h"
 #include "gtktexthandleprivate.h"
 #include "gtkeventcontrollerprivate.h"
+#include "gtkwindowgroup.h"
 
 G_BEGIN_DECLS
 
@@ -66,6 +67,10 @@ gchar       * _gtk_get_lc_ctype           (void);
 void          _gtk_ensure_resources       (void);
 
 void          gtk_main_sync               (void);
+
+GtkWidget *   gtk_window_group_get_current_grab (GtkWindowGroup *window_group);
+void          gtk_grab_add                      (GtkWidget      *widget);
+void          gtk_grab_remove                   (GtkWidget      *widget);
 
 gboolean _gtk_boolean_handled_accumulator (GSignalInvocationHint *ihint,
                                            GValue                *return_accu,
