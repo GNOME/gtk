@@ -47,6 +47,7 @@ gdk_public_sources = files([
   'gdkprofiler.c',
   'gdkpopup.c',
   'gdktoplevellayout.c',
+  'gdktoplevel.c',
 ])
 
 gdk_public_headers = files([
@@ -93,6 +94,7 @@ gdk_public_headers = files([
   'gdkpopuplayout.h',
   'gdkpopup.h',
   'gdktoplevellayout.h',
+  'gdktoplevel.h',
 ])
 install_headers(gdk_public_headers, subdir: 'gtk-4.0/gdk/')
 
