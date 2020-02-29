@@ -1455,7 +1455,7 @@ gdk_x11_surface_layout_popup (GdkSurface     *surface,
 static void
 show_popup (GdkSurface *surface)
 {
-  gdk_surface_raise (surface);
+  gdk_x11_surface_raise (surface);
   gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
   _gdk_surface_update_viewable (surface);
   gdk_x11_surface_show (surface, FALSE);
@@ -1561,7 +1561,7 @@ _gdk_x11_surface_set_surface_scale (GdkSurface *surface,
   gdk_surface_invalidate_rect (surface, NULL);
 }
 
-static void
+void
 gdk_x11_surface_raise (GdkSurface *surface)
 {
   XRaiseWindow (GDK_SURFACE_XDISPLAY (surface), GDK_SURFACE_XID (surface));
