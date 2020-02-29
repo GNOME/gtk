@@ -199,5 +199,7 @@ void gdk_wayland_surface_restore_shortcuts (GdkSurface *surface,
 
 void gdk_wayland_surface_update_scale (GdkSurface *surface);
 
+GdkSurface * create_dnd_surface (GdkDisplay *display);
+
 
 #endif /* __GDK_PRIVATE_WAYLAND_H__ */
