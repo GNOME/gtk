@@ -263,8 +263,8 @@ struct _GtkNotebookPrivate
   GQuark         group;
 
   guint          dnd_timer;
-  guint          switch_tab_timer;
-  GList         *switch_tab;
+  guint                      switch_page_timer;
+  GtkNotebookPage           *switch_page;
 
   guint32        timer;
 
@@ -797,7 +797,6 @@ static void     gtk_notebook_drag_motion     (GtkDropTarget    *dest,
                                               GdkDrop          *drop,
                                               int               x,
                                               int               y);
-static void gtk_notebook_drag_leave          (GtkDropTarget    *dest);
 static gboolean gtk_notebook_drag_drop       (GtkDropTarget    *dest,
                                               GdkDrop          *drop,
                                               int               x,
@@ -1407,7 +1406,6 @@ gtk_notebook_init (GtkNotebook *notebook)
   priv->group = 0;
   priv->pressed_button = 0;
   priv->dnd_timer = 0;
-  priv->switch_tab_timer = 0;
   priv->operation = DRAG_OPERATION_NONE;
   priv->detached_tab = NULL;
   priv->has_scrolled = FALSE;
@@ -1434,7 +1432,6 @@ gtk_notebook_init (GtkNotebook *notebook)
 
   dest = gtk_drop_target_new (gdk_content_formats_new_for_gtype (GTK_TYPE_NOTEBOOK_PAGE), GDK_ACTION_MOVE);
   g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_notebook_drag_motion), NULL);
-  g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_notebook_drag_leave), NULL);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_notebook_drag_drop), NULL);
   gtk_widget_add_controller (GTK_WIDGET (priv->tabs_widget), GTK_EVENT_CONTROLLER (dest));
 
@@ -1908,18 +1905,6 @@ gtk_notebook_get_property (GObject         *object,
  * gtk_notebook_drag_data_get
  */
 static void
-remove_switch_tab_timer (GtkNotebook *notebook)
-{
-  GtkNotebookPrivate *priv = notebook->priv;
-
-  if (priv->switch_tab_timer)
-    {
-      g_source_remove (priv->switch_tab_timer);
-      priv->switch_tab_timer = 0;
-    }
-}
-
-static void
 gtk_notebook_destroy (GtkWidget *widget)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
@@ -1927,9 +1912,6 @@ gtk_notebook_destroy (GtkWidget *widget)
 
   if (priv->pages)
     g_list_model_items_changed (G_LIST_MODEL (priv->pages), 0, g_list_length (priv->children), 0);
-
-
-  remove_switch_tab_timer (notebook);
 
   GTK_WIDGET_CLASS (gtk_notebook_parent_class)->destroy (widget);
 }
@@ -3287,24 +3269,26 @@ gtk_notebook_drag_cancel_cb (GdkDrag             *drag,
 }
 
 static gboolean
-gtk_notebook_switch_tab_timeout (gpointer data)
+gtk_notebook_switch_page_timeout (gpointer data)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (data);
   GtkNotebookPrivate *priv = notebook->priv;
-  GList *switch_tab;
+  GtkNotebookPage *switch_page;
 
-  priv->switch_tab_timer = 0;
+  priv->switch_page_timer = 0;
 
-  switch_tab = priv->switch_tab;
-  priv->switch_tab = NULL;
+  switch_page = priv->switch_page;
+  priv->switch_page = NULL;
 
-  if (switch_tab)
+  if (switch_page)
     {
       /* FIXME: hack, we don't want the
        * focus to move fom the source widget
        */
       priv->child_has_focus = FALSE;
-      gtk_notebook_switch_focus_tab (notebook, switch_tab);
+      gtk_notebook_switch_focus_tab (notebook,
+                                     g_list_find (priv->children,
+                                                  switch_page));
     }
 
   return FALSE;
@@ -3320,9 +3304,10 @@ gtk_notebook_drag_motion (GtkDropTarget *dest,
   GtkWidget *widget = gtk_widget_get_ancestor (tabs, GTK_TYPE_NOTEBOOK);
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
-  graphene_rect_t position;
   GdkContentFormats *formats;
-  GList *tab;
+
+  priv->mouse_x = x;
+  priv->mouse_y = y;
 
   formats = gtk_drop_target_get_formats (dest);
   if (gdk_content_formats_contain_gtype (formats, GTK_TYPE_NOTEBOOK_PAGE))
@@ -3350,7 +3335,6 @@ gtk_notebook_drag_motion (GtkDropTarget *dest,
               gtk_widget_is_ancestor (widget, source_child)))
             {
               gdk_drop_status (drop, GDK_ACTION_MOVE);
-              goto out;
             }
           else
             {
@@ -3360,41 +3344,6 @@ gtk_notebook_drag_motion (GtkDropTarget *dest,
             }
         }
     }
-
-  if (gtk_notebook_get_tab_area_position (notebook, &position) &&
-      graphene_rect_contains_point (&position, &(graphene_point_t){x, y}) &&
-      (tab = get_tab_at_pos (notebook, x, y)))
-    {
-      priv->mouse_x = x;
-      priv->mouse_y = y;
-
-      if (tab != priv->switch_tab)
-        remove_switch_tab_timer (notebook);
-
-      priv->switch_tab = tab;
-
-      if (!priv->switch_tab_timer)
-        {
-          priv->switch_tab_timer = g_timeout_add (TIMEOUT_EXPAND, gtk_notebook_switch_tab_timeout, widget);
-          g_source_set_name_by_id (priv->switch_tab_timer, "[gtk] gtk_notebook_switch_tab_timeout");
-        }
-    }
-  else
-    {
-      remove_switch_tab_timer (notebook);
-    }
-
- out:;
-}
-
-static void
-gtk_notebook_drag_leave (GtkDropTarget *dest)
-{
-  GtkWidget *tabs = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
-  GtkWidget *widget = gtk_widget_get_ancestor (tabs, GTK_TYPE_NOTEBOOK);
-  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-
-  remove_switch_tab_timer (notebook);
 }
 
 static void
@@ -4075,6 +4024,35 @@ allocate_tab (GtkGizmo *gizmo,
   gtk_widget_size_allocate (page->tab_label, &child_allocation, baseline);
 }
 
+static void
+gtk_notebook_tab_drop_enter (GtkEventController *controller,
+                             double              x,
+                             double              y,
+                             GtkNotebookPage    *page)
+{
+  GtkWidget *widget = gtk_event_controller_get_widget (controller);
+  GtkNotebook *notebook = g_object_get_data (G_OBJECT (widget), "notebook");
+  GtkNotebookPrivate *priv = notebook->priv;
+
+  g_assert (!priv->switch_page_timer);
+
+  priv->switch_page = page;
+
+  priv->switch_page_timer = g_timeout_add (TIMEOUT_EXPAND, gtk_notebook_switch_page_timeout, notebook);
+  g_source_set_name_by_id (priv->switch_page_timer, "[gtk] gtk_notebook_switch_page_timeout");
+}
+
+static void
+gtk_notebook_tab_drop_leave (GtkEventController *controller,
+                             GtkNotebookPage    *page)
+{
+  GtkWidget *widget = gtk_event_controller_get_widget (controller);
+  GtkNotebook *notebook = g_object_get_data (G_OBJECT (widget), "notebook");
+  GtkNotebookPrivate *priv = notebook->priv;
+
+  g_clear_handle_id (&priv->switch_page_timer, g_source_remove);
+}
+
 static gint
 gtk_notebook_insert_notebook_page (GtkNotebook *notebook,
                                    GtkNotebookPage *page,
@@ -4084,6 +4062,7 @@ gtk_notebook_insert_notebook_page (GtkNotebook *notebook,
   gint nchildren;
   GList *list;
   GtkWidget *sibling;
+  GtkEventController *controller;
 
   nchildren = g_list_length (priv->children);
   if ((position < 0) || (position > nchildren))
@@ -4101,6 +4080,10 @@ gtk_notebook_insert_notebook_page (GtkNotebook *notebook,
   page->tab_widget = gtk_gizmo_new ("tab", measure_tab, allocate_tab, NULL, NULL);
   g_object_set_data (G_OBJECT (page->tab_widget), "notebook", notebook);
   gtk_widget_insert_before (page->tab_widget, priv->tabs_widget, sibling);
+  controller = gtk_drop_controller_motion_new ();
+  g_signal_connect (controller, "enter", G_CALLBACK (gtk_notebook_tab_drop_enter), page);
+  g_signal_connect (controller, "leave", G_CALLBACK (gtk_notebook_tab_drop_leave), page);
+  gtk_widget_add_controller (page->tab_widget, controller);
 
   page->expand = FALSE;
   page->fill = TRUE;
@@ -4291,6 +4274,8 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
   gboolean destroying;
   int position;
 
+  page = list->data;
+
   destroying = gtk_widget_in_destruction (GTK_WIDGET (notebook));
 
   next_list = gtk_notebook_search_page (notebook, list, STEP_NEXT, TRUE);
@@ -4311,15 +4296,13 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
   if (priv->detached_tab == list->data)
     priv->detached_tab = NULL;
 
-  if (priv->switch_tab == list)
-    priv->switch_tab = NULL;
+  if (priv->switch_page == page)
+    priv->switch_page = NULL;
 
   if (list == priv->first_tab)
     priv->first_tab = next_list;
   if (list == priv->focus_tab && !destroying)
     gtk_notebook_switch_focus_tab (notebook, next_list);
-
-  page = list->data;
 
   position = g_list_index (priv->children, page);
 
