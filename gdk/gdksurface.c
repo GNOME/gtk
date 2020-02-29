@@ -38,6 +38,7 @@
 #include "gdkframeclockidleprivate.h"
 #include "gdkmarshalers.h"
 #include "gdkglcontextprivate.h"
+#include "gdkpopupprivate.h"
 #include "gdk-private.h"
 
 #include <math.h>
@@ -112,7 +113,11 @@ static void gdk_surface_set_frame_clock (GdkSurface      *surface,
 static guint signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *properties[LAST_PROP] = { NULL, };
 
-G_DEFINE_ABSTRACT_TYPE (GdkSurface, gdk_surface, G_TYPE_OBJECT)
+static void gdk_surface_popup_init (GdkPopupInterface *iface);
+
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GdkSurface, gdk_surface, G_TYPE_OBJECT,
+                                  G_IMPLEMENT_INTERFACE (GDK_TYPE_POPUP,
+                                                         gdk_surface_popup_init))
 
 static gboolean
 gdk_surface_real_beep (GdkSurface *surface)
@@ -2135,6 +2140,82 @@ GdkGravity
 gdk_surface_get_popup_rect_anchor (GdkSurface *surface)
 {
   return surface->popup.rect_anchor;
+}
+
+static gboolean
+gdk_popup_surface_present (GdkPopup       *popup,
+                           int             width,
+                           int             height,
+                           GdkPopupLayout *layout)
+{
+  GdkSurface *surface = GDK_SURFACE (popup);
+
+  g_return_val_if_fail (surface->surface_type == GDK_SURFACE_POPUP, FALSE);
+
+  return gdk_surface_present_popup (surface, width, height, layout);
+}
+
+static GdkGravity
+gdk_popup_surface_get_surface_anchor (GdkPopup *popup)
+{
+  GdkSurface *surface = GDK_SURFACE (popup);
+
+  g_return_val_if_fail (surface->surface_type == GDK_SURFACE_POPUP, GDK_GRAVITY_STATIC);
+
+  return gdk_surface_get_popup_surface_anchor (surface);
+}
+
+static GdkGravity
+gdk_popup_surface_get_rect_anchor (GdkPopup *popup)
+{
+  GdkSurface *surface = GDK_SURFACE (popup);
+
+  g_return_val_if_fail (surface->surface_type == GDK_SURFACE_POPUP, GDK_GRAVITY_STATIC);
+
+  return gdk_surface_get_popup_rect_anchor (surface);
+}
+
+static GdkSurface *
+gdk_popup_surface_get_parent (GdkPopup *popup)
+{
+  GdkSurface *surface = GDK_SURFACE (popup);
+
+  g_return_val_if_fail (surface->surface_type == GDK_SURFACE_POPUP, NULL);
+
+  return gdk_surface_get_parent (surface);
+}
+
+static void
+gdk_popup_surface_get_position (GdkPopup *popup,
+                                int      *x,
+                                int      *y)
+{
+  GdkSurface *surface = GDK_SURFACE (popup);
+
+  g_return_if_fail (surface->surface_type == GDK_SURFACE_POPUP);
+
+  gdk_surface_get_position (surface, x, y);
+}
+
+static gboolean
+gdk_popup_surface_get_autohide (GdkPopup *popup)
+{
+  GdkSurface *surface = GDK_SURFACE (popup);
+
+  g_return_val_if_fail (surface->surface_type == GDK_SURFACE_POPUP, FALSE);
+
+  return surface->autohide;
+}
+
+static void
+gdk_surface_popup_init (GdkPopupInterface *iface)
+{
+  iface->present = gdk_popup_surface_present;
+  iface->get_surface_anchor = gdk_popup_surface_get_surface_anchor;
+  iface->get_rect_anchor = gdk_popup_surface_get_rect_anchor;
+  iface->get_parent = gdk_popup_surface_get_parent;
+  iface->get_position = gdk_popup_surface_get_position;
+  iface->get_autohide = gdk_popup_surface_get_autohide;
 }
 
 static void

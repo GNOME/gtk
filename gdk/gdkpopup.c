@@ -31,7 +31,10 @@
  */
 
 
-G_DEFINE_INTERFACE (GdkPopup, gdk_popup, GDK_TYPE_SURFACE)
+/* FIXME: this can't have GdkSurface as a prerequisite
+ * as long as GdkSurface implements this interface itself
+ */
+G_DEFINE_INTERFACE (GdkPopup, gdk_popup, G_TYPE_OBJECT)
 
 static gboolean
 gdk_popup_default_present (GdkPopup       *popup,
