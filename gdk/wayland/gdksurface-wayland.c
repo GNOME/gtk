@@ -1025,6 +1025,10 @@ gdk_wayland_surface_get_window_geometry (GdkSurface   *surface,
   };
 }
 
+static void gdk_wayland_surface_set_geometry_hints (GdkSurface         *surface,
+                                                    const GdkGeometry  *geometry,
+                                                    GdkSurfaceHints     geom_mask);
+
 static void
 gdk_wayland_surface_sync_margin (GdkSurface *surface)
 {
@@ -1037,9 +1041,9 @@ gdk_wayland_surface_sync_margin (GdkSurface *surface)
     return;
 
   gdk_wayland_surface_get_window_geometry (surface, &geometry);
-  gdk_surface_set_geometry_hints (surface,
-                                 &impl->geometry_hints,
-                                 impl->geometry_mask);
+  gdk_wayland_surface_set_geometry_hints (surface,
+                                          &impl->geometry_hints,
+                                          impl->geometry_mask);
 
   switch (display_wayland->shell_variant)
     {
@@ -3125,9 +3129,9 @@ gdk_wayland_surface_init_gtk_surface (GdkSurface *surface)
                                 impl->display_server.wl_surface);
   wl_proxy_set_queue ((struct wl_proxy *) impl->display_server.gtk_surface,
                       impl->event_queue);
-  gdk_surface_set_geometry_hints (surface,
-                                 &impl->geometry_hints,
-                                 impl->geometry_mask);
+  gdk_wayland_surface_set_geometry_hints (surface,
+                                          &impl->geometry_hints,
+                                          impl->geometry_mask);
   gtk_surface1_add_listener (impl->display_server.gtk_surface,
                              &gtk_surface_listener,
                              surface);
