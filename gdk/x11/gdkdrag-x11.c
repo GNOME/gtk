@@ -1270,8 +1270,6 @@ create_drag_surface (GdkDisplay *display)
 
   surface = gdk_surface_new_temp (display, &(GdkRectangle) { 0, 0, 100, 100 });
 
-  gdk_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_DND);
-  
   return surface;
 }
 
