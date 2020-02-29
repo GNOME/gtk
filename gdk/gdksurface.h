@@ -357,33 +357,9 @@ void          gdk_surface_show                  (GdkSurface     *surface);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_hide                  (GdkSurface     *surface);
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_show_unraised         (GdkSurface     *surface);
-GDK_AVAILABLE_IN_ALL
 void          gdk_surface_resize                (GdkSurface     *surface,
                                                  gint           width,
                                                  gint           height);
-
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_raise                 (GdkSurface     *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_lower                 (GdkSurface     *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_restack               (GdkSurface     *surface,
-                                                 GdkSurface     *sibling,
-                                                 gboolean       above);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_focus                 (GdkSurface     *surface,
-                                                 guint32        timestamp);
-GDK_AVAILABLE_IN_ALL
-gboolean      gdk_surface_get_accept_focus      (GdkSurface     *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_accept_focus      (GdkSurface     *surface,
-                                                 gboolean       accept_focus);
-GDK_AVAILABLE_IN_ALL
-gboolean      gdk_surface_get_focus_on_map      (GdkSurface     *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_focus_on_map      (GdkSurface     *surface,
-                                                 gboolean       focus_on_map);
 
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_input_region      (GdkSurface     *surface,
@@ -394,36 +370,6 @@ gboolean gdk_surface_is_viewable    (GdkSurface *surface);
 
 GDK_AVAILABLE_IN_ALL
 gboolean      gdk_surface_get_mapped   (GdkSurface *surface);
-
-GDK_AVAILABLE_IN_ALL
-GdkSurfaceState gdk_surface_get_state (GdkSurface *surface);
-
-GDK_AVAILABLE_IN_ALL
-void              gdk_surface_set_type_hint (GdkSurface        *surface,
-                                             GdkSurfaceTypeHint hint);
-GDK_AVAILABLE_IN_ALL
-GdkSurfaceTypeHint gdk_surface_get_type_hint (GdkSurface        *surface);
-
-GDK_AVAILABLE_IN_ALL
-gboolean      gdk_surface_get_modal_hint   (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_modal_hint   (GdkSurface       *surface,
-                                            gboolean         modal);
-
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_geometry_hints (GdkSurface          *surface,
-                                              const GdkGeometry  *geometry,
-                                              GdkSurfaceHints      geom_mask);
-
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_title         (GdkSurface   *surface,
-                                             const gchar  *title);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_startup_id    (GdkSurface     *surface,
-                                             const gchar   *startup_id);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_transient_for (GdkSurface     *surface,
-                                             GdkSurface     *parent);
 
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_cursor     (GdkSurface      *surface,
@@ -456,21 +402,6 @@ void          gdk_surface_get_device_position (GdkSurface      *surface,
                                                double          *x,
                                                double          *y,
                                                GdkModifierType *mask);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_icon_list   (GdkSurface       *surface,
-                                           GList           *surfaces);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_icon_name  (GdkSurface      *surface,
-                                          const gchar     *name);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_decorations (GdkSurface     *surface,
-                                           GdkWMDecoration  decorations);
-GDK_AVAILABLE_IN_ALL
-gboolean      gdk_surface_get_decorations (GdkSurface       *surface,
-                                           GdkWMDecoration *decorations);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_functions  (GdkSurface      *surface,
-                                          GdkWMFunction    functions);
 
 GDK_AVAILABLE_IN_ALL
 cairo_surface_t *
@@ -481,37 +412,6 @@ cairo_surface_t *
 
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_beep            (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_minimize        (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_unminimize      (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_stick           (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_unstick         (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_maximize        (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_unmaximize      (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_fullscreen      (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_fullscreen_on_monitor (GdkSurface      *surface,
-                                                 GdkMonitor     *monitor);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_fullscreen_mode (GdkSurface   *surface,
-                                               GdkFullscreenMode mode);
-GDK_AVAILABLE_IN_ALL
-GdkFullscreenMode
-              gdk_surface_get_fullscreen_mode (GdkSurface   *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_unfullscreen    (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_keep_above  (GdkSurface       *surface,
-                                           gboolean         setting);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_keep_below  (GdkSurface       *surface,
-                                           gboolean         setting);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_opacity     (GdkSurface       *surface,
                                            gdouble          opacity);
@@ -568,9 +468,6 @@ void       gdk_surface_set_shadow_width         (GdkSurface      *surface,
                                                  gint            right,
                                                  gint            top,
                                                  gint            bottom);
-GDK_AVAILABLE_IN_ALL
-gboolean  gdk_surface_show_window_menu          (GdkSurface      *surface,
-                                                 GdkEvent       *event);
 
 GDK_AVAILABLE_IN_ALL
 GdkCairoContext *gdk_surface_create_cairo_context(GdkSurface    *surface);
