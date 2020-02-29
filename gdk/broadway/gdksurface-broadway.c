@@ -487,9 +487,14 @@ gdk_broadway_surface_layout_popup (GdkSurface     *surface,
 }
 
 static void
+gdk_broadway_surface_raise (GdkSurface *surface)
+{
+}
+
+static void
 show_popup (GdkSurface *surface)
 {
-  gdk_surface_raise (surface);
+  gdk_broadway_surface_raise (surface);
   gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
   _gdk_surface_update_viewable (surface);
   gdk_broadway_surface_show (surface, FALSE);
@@ -530,11 +535,6 @@ gdk_broadway_surface_present_popup (GdkSurface     *surface,
     }
 
   return GDK_SURFACE_IS_MAPPED (surface);
-}
-
-static void
-gdk_broadway_surface_raise (GdkSurface *surface)
-{
 }
 
 static void
