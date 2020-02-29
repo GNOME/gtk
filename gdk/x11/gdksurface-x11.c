@@ -3890,7 +3890,7 @@ check_maximize (MoveResizeData *mv_resize,
   y = mv_resize->moveresize_orig_y + (y_root - mv_resize->moveresize_y);
 
   if (y < 10)
-    gdk_surface_maximize (mv_resize->moveresize_surface);
+    gdk_x11_surface_maximize (mv_resize->moveresize_surface);
 }
 
 static void
@@ -3913,7 +3913,7 @@ check_unmaximize (MoveResizeData *mv_resize,
   dy = y_root - mv_resize->moveresize_y;
 
   if (ABS (dx) > 20 || ABS (dy) > 20)
-    gdk_surface_unmaximize (mv_resize->moveresize_surface);
+    gdk_x11_surface_unmaximize (mv_resize->moveresize_surface);
 }
 
 static void
