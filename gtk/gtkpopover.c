@@ -351,28 +351,28 @@ update_popover_layout (GtkPopover     *popover,
   GdkRectangle final_rect;
   gboolean flipped_x;
   gboolean flipped_y;
+  GdkPopup *popup = GDK_POPUP (priv->surface);
 
   g_clear_pointer (&priv->layout, gdk_popup_layout_unref);
   priv->layout = layout;
 
   final_rect = (GdkRectangle) {
+    .x = gdk_popup_get_position_x (GDK_POPUP (priv->surface)),
+    .y = gdk_popup_get_position_y (GDK_POPUP (priv->surface)),
     .width = gdk_surface_get_width (priv->surface),
     .height = gdk_surface_get_height (priv->surface),
   };
-  gdk_surface_get_position (priv->surface,
-                            &final_rect.x,
-                            &final_rect.y);
 
   flipped_x =
     did_flip_horizontally (gdk_popup_layout_get_rect_anchor (layout),
-                           gdk_surface_get_popup_rect_anchor (priv->surface)) &&
+                           gdk_popup_get_rect_anchor (popup)) &&
     did_flip_horizontally (gdk_popup_layout_get_surface_anchor (layout),
-                           gdk_surface_get_popup_surface_anchor (priv->surface));
+                           gdk_popup_get_surface_anchor (popup));
   flipped_y =
     did_flip_vertically (gdk_popup_layout_get_rect_anchor (layout),
-                         gdk_surface_get_popup_rect_anchor (priv->surface)) &&
+                         gdk_popup_get_rect_anchor (popup)) &&
     did_flip_vertically (gdk_popup_layout_get_surface_anchor (layout),
-                         gdk_surface_get_popup_surface_anchor (priv->surface));
+                         gdk_popup_get_surface_anchor (popup));
 
   gtk_widget_allocate (GTK_WIDGET (popover),
                        gdk_surface_get_width (priv->surface),
@@ -544,7 +544,7 @@ present_popup (GtkPopover *popover)
 
   layout = create_popup_layout (popover);
   gtk_widget_get_preferred_size (GTK_WIDGET (popover), NULL, &req);
-  if (gdk_surface_present_popup (priv->surface,
+  if (gdk_popup_present (GDK_POPUP (priv->surface),
                                  MAX (req.width, 1),
                                  MAX (req.height, 1),
                                  layout))
