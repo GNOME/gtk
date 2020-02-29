@@ -33,7 +33,7 @@
 #include "gtkbuildable.h"
 #include "gtkbutton.h"
 #include "gtkcssstylepropertyprivate.h"
-#include "gtkdragdest.h"
+#include "gtkdroptarget.h"
 #include "gtkdragicon.h"
 #include "gtkdropcontrollermotion.h"
 #include "gtkeventcontrollermotion.h"
@@ -1430,9 +1430,9 @@ gtk_notebook_init (GtkNotebook *notebook)
   gtk_widget_set_vexpand (priv->stack_widget, TRUE);
   gtk_widget_set_parent (priv->stack_widget, GTK_WIDGET (notebook));
 
-  dest = gtk_drop_target_new (gdk_content_formats_new_for_gtype (GTK_TYPE_NOTEBOOK_PAGE), GDK_ACTION_MOVE);
-  g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_notebook_drag_motion), NULL);
-  g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_notebook_drag_drop), NULL);
+  dest = gtk_drop_target_new (GTK_TYPE_NOTEBOOK_PAGE, GDK_ACTION_MOVE);
+  g_signal_connect (dest, "motion", G_CALLBACK (gtk_notebook_drag_motion), NULL);
+  g_signal_connect (dest, "drop", G_CALLBACK (gtk_notebook_drag_drop), NULL);
   gtk_widget_add_controller (GTK_WIDGET (priv->tabs_widget), GTK_EVENT_CONTROLLER (dest));
 
   gesture = gtk_gesture_click_new ();

@@ -117,7 +117,7 @@
 #include "gtkaccelmapprivate.h"
 #include "gtkbox.h"
 #include "gtkdebug.h"
-#include "gtkdragdestprivate.h"
+#include "gtkdropprivate.h"
 #include "gtkmain.h"
 #include "gtkmediafileprivate.h"
 #include "gtkmodulesprivate.h"
@@ -1550,9 +1550,14 @@ handle_pointing_event (GdkEvent *event)
                                         event, gdk_crossing_event_get_mode (event), NULL);
       break;
     case GDK_DRAG_LEAVE:
-      old_target = update_pointer_focus_state (toplevel, event, NULL);
-      gtk_synthesize_crossing_events (GTK_ROOT (toplevel), GTK_CROSSING_DROP, old_target, NULL,
-                                      event, GDK_CROSSING_NORMAL, gdk_drag_event_get_drop (event));
+      {
+        GdkDrop *drop = gdk_drag_event_get_drop (event);
+        old_target = update_pointer_focus_state (toplevel, event, NULL);
+        gtk_drop_begin_event (drop, GDK_DRAG_LEAVE);
+        gtk_synthesize_crossing_events (GTK_ROOT (toplevel), GTK_CROSSING_DROP, old_target, NULL,
+                                        event, GDK_CROSSING_NORMAL, drop);
+        gtk_drop_end_event (drop);
+      }
       break;
     case GDK_ENTER_NOTIFY:
       if (gdk_crossing_event_get_mode (event) == GDK_CROSSING_GRAB ||
@@ -1586,10 +1591,14 @@ handle_pointing_event (GdkEvent *event)
 
           gtk_window_maybe_update_cursor (toplevel, NULL, device);
         }
-      else if (type == GDK_DRAG_ENTER || type == GDK_DRAG_MOTION || type == GDK_DROP_START)
+      else if ((old_target != target) &&
+               (type == GDK_DRAG_ENTER || type == GDK_DRAG_MOTION || type == GDK_DROP_START))
         {
+          GdkDrop *drop = gdk_drag_event_get_drop (event);
+          gtk_drop_begin_event (drop, type);
           gtk_synthesize_crossing_events (GTK_ROOT (toplevel), GTK_CROSSING_DROP, old_target, target,
                                           event, GDK_CROSSING_NORMAL, gdk_drag_event_get_drop (event));
+          gtk_drop_end_event (drop);
         }
       else if (type == GDK_TOUCH_BEGIN)
         gtk_window_set_pointer_focus_grab (toplevel, device, sequence, target);
@@ -1799,19 +1808,19 @@ gtk_main_do_event (GdkEvent *event)
 
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
       /* Crossing event propagation happens during picking */
       break;
 
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
-      if (gtk_propagate_event (target_widget, event))
-        break;
-      G_GNUC_FALLTHROUGH;
-
-    case GDK_DRAG_ENTER:
-    case GDK_DRAG_LEAVE:
-      /* Crossing event propagation happens during picking */
-      gtk_drag_dest_handle_event (target_widget, event);
+      {
+        GdkDrop *drop = gdk_drag_event_get_drop (event);
+        gtk_drop_begin_event (drop, gdk_event_get_event_type (event));
+        gtk_propagate_event (target_widget, event);
+        gtk_drop_end_event (drop);
+      }
       break;
 
     case GDK_EVENT_LAST:

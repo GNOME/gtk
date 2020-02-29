@@ -40,7 +40,7 @@
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssshadowvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
-#include "gtkdragdest.h"
+#include "gtkdroptargetasync.h"
 #include "gtkeventcontrollerfocus.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollermotion.h"
@@ -277,12 +277,6 @@ typedef struct
 
   GtkConstraintSolver *constraint_solver;
 } GtkWindowPrivate;
-
-#ifdef GDK_WINDOWING_X11
-static const char *dnd_dest_targets [] = {
-  "application/x-rootwindow-drop"
-};
-#endif
 
 enum {
   SET_FOCUS,
@@ -1765,6 +1759,18 @@ gtk_window_activate_default_activate (GtkWidget  *widget,
   gtk_window_real_activate_default (GTK_WINDOW (widget));
 }
 
+static gboolean
+gtk_window_accept_rootwindow_drop (GtkDropTargetAsync *self,
+                                   GdkDrop            *drop,
+                                   double              x,
+                                   double              y,
+                                   gpointer            unused)
+{
+  gdk_drop_finish (drop, GDK_ACTION_MOVE);
+
+  return TRUE;
+}
+
 static void
 gtk_window_init (GtkWindow *window)
 {
@@ -1774,9 +1780,7 @@ gtk_window_init (GtkWindow *window)
   GdkSeat *seat;
   GtkEventController *motion_controller;
   GtkEventController *controller;
-#ifdef GDK_WINDOWING_X11
-  GtkDropTarget *dest;
-#endif
+  GtkDropTargetAsync *target;
 
   widget = GTK_WIDGET (window);
 
@@ -1827,10 +1831,10 @@ gtk_window_init (GtkWindow *window)
 
   priv->scale = gtk_widget_get_scale_factor (widget);
 
-#ifdef GDK_WINDOWING_X11
-  dest = gtk_drop_target_new (gdk_content_formats_new (dnd_dest_targets, G_N_ELEMENTS (dnd_dest_targets)), GDK_ACTION_MOVE);
-  gtk_widget_add_controller (GTK_WIDGET (window), GTK_EVENT_CONTROLLER (dest));
-#endif
+  target = gtk_drop_target_async_new (gdk_content_formats_new ((const char*[1]) { "application/x-rootwindow-drop" }, 1),
+                                      GDK_ACTION_MOVE);
+  g_signal_connect (target, "drop", G_CALLBACK (gtk_window_accept_rootwindow_drop), NULL);
+  gtk_widget_add_controller (GTK_WIDGET (window), GTK_EVENT_CONTROLLER (target));
 
   seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
   g_signal_connect (seat, "device-removed",

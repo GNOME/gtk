@@ -30,6 +30,9 @@
 #include "gtkbutton.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkdebug.h"
+#include "gtkdragicon.h"
+#include "gtkdragsource.h"
+#include "gtkdroptarget.h"
 #include "gtkeditable.h"
 #include "gtkemojichooser.h"
 #include "gtkemojicompletion.h"
@@ -65,9 +68,6 @@
 #include "gtkwindow.h"
 #include "gtknative.h"
 #include "gtkactionmuxerprivate.h"
-#include "gtkdragsource.h"
-#include "gtkdragdest.h"
-#include "gtkdragicon.h"
 
 #include "a11y/gtktextaccessible.h"
 
@@ -190,7 +190,6 @@ struct _GtkTextPrivate
   int           dnd_position;               /* In chars, -1 == no DND cursor */
   int           drag_start_x;
   int           drag_start_y;
-  int           drop_position;              /* where the drop should happen */
   int           insert_pos;
   int           selection_bound;
   int           scroll_offset;
@@ -336,20 +335,18 @@ static void   gtk_text_state_flags_changed  (GtkWidget        *widget,
 static void   gtk_text_root                 (GtkWidget        *widget);
 
 static gboolean gtk_text_drag_drop          (GtkDropTarget    *dest,
-                                             GdkDrop          *drop,
-                                             int               x,
-                                             int               y,
+                                             const GValue     *value,
+                                             double            x,
+                                             double            y,
                                              GtkText          *text);
 static gboolean gtk_text_drag_accept        (GtkDropTarget    *dest,
                                              GdkDrop          *drop,
                                              GtkText          *self);
-static void     gtk_text_drag_motion        (GtkDropTarget    *dest,
-                                             GdkDrop          *drop,
-                                             int               x,
-                                             int               y,
+static GdkDragAction gtk_text_drag_motion   (GtkDropTarget    *dest,
+                                             double            x,
+                                             double            y,
                                              GtkText          *text);
 static void     gtk_text_drag_leave         (GtkDropTarget    *dest,
-                                             GdkDrop          *drop,
                                              GtkText          *text);
 
 
@@ -1712,7 +1709,7 @@ gtk_text_init (GtkText *self)
   GtkGesture *gesture;
   GtkEventController *controller;
   int i;
-  GtkDropTarget *dest;
+  GtkDropTarget *target;
 
   gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
@@ -1734,13 +1731,13 @@ gtk_text_init (GtkText *self)
   priv->selection_content = g_object_new (GTK_TYPE_TEXT_CONTENT, NULL);
   GTK_TEXT_CONTENT (priv->selection_content)->self = self;
 
-  dest = gtk_drop_target_new (gdk_content_formats_new_for_gtype (G_TYPE_STRING),
-                              GDK_ACTION_COPY | GDK_ACTION_MOVE);
-  g_signal_connect (dest, "accept", G_CALLBACK (gtk_text_drag_accept), self);
-  g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_text_drag_motion), self);
-  g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_text_drag_leave), self);
-  g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_text_drag_drop), self);
-  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (dest));
+  target = gtk_drop_target_new (G_TYPE_STRING, GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  g_signal_connect (target, "accept", G_CALLBACK (gtk_text_drag_accept), self);
+  g_signal_connect (target, "enter", G_CALLBACK (gtk_text_drag_motion), self);
+  g_signal_connect (target, "motion", G_CALLBACK (gtk_text_drag_motion), self);
+  g_signal_connect (target, "leave", G_CALLBACK (gtk_text_drag_leave), self);
+  g_signal_connect (target, "drop", G_CALLBACK (gtk_text_drag_drop), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (target));
 
   /* This object is completely private. No external entity can gain a reference
    * to it; so we create it here and destroy it in finalize().
@@ -6114,8 +6111,7 @@ gtk_text_selection_bubble_popup_set (GtkText *self)
 
 static void
 gtk_text_drag_leave (GtkDropTarget *dest,
-                     GdkDrop       *drop,
-                     GtkText *self)
+                     GtkText       *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   GtkWidget *widget = GTK_WIDGET (self);
@@ -6124,94 +6120,45 @@ gtk_text_drag_leave (GtkDropTarget *dest,
   gtk_widget_queue_draw (widget);
 }
 
-static GdkDragAction
-gtk_text_get_action (GtkText *self,
-                     GdkDrop *drop)
-{
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GdkDrag *drag = gdk_drop_get_drag (drop);
-  GdkDragAction actions;
-
-  actions = gdk_drop_get_actions (drop);
-
-  if (drag == priv->drag &&
-      actions & GDK_ACTION_MOVE)
-    return GDK_ACTION_MOVE;
-
-  if (actions & GDK_ACTION_COPY)
-    return GDK_ACTION_COPY;
-
-  if (actions & GDK_ACTION_MOVE)
-    return GDK_ACTION_MOVE;
-
-  return 0;
-}
-
-static void
-got_text (GObject      *source,
-          GAsyncResult *result,
-          gpointer      data)
-{
-  GdkDrop *drop = GDK_DROP (source);
-  GtkText *self = GTK_TEXT (data);
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  char *str;
-  GdkDragAction action;
-
-  str = gdk_drop_read_text_finish (drop, result, NULL);
-  action = gtk_text_get_action (self, drop);
-
-  if (action && str)
-    {
-      int length = -1;
-      int pos;
-
-      if (priv->truncate_multiline)
-        length = truncate_multiline (str);
-
-      if (priv->selection_bound == priv->current_pos ||
-          priv->drop_position < priv->selection_bound ||
-          priv->drop_position > priv->current_pos)
-        {
-          gtk_text_insert_text (self, str, length, &priv->drop_position);
-        }
-      else
-        {
-          /* Replacing selection */
-          begin_change (self);
-          gtk_text_delete_selection (self);
-          pos = MIN (priv->selection_bound, priv->current_pos);
-          gtk_text_insert_text (self, str, length, &pos);
-          end_change (self);
-        }
-      
-      gdk_drop_finish (drop, action);
-    }
-  else
-    {
-      /* Drag and drop didn't happen! */
-      gdk_drop_finish (drop, 0);
-    }
-
-  g_free (str);
-}
-
 static gboolean
 gtk_text_drag_drop (GtkDropTarget *dest,
-                    GdkDrop       *drop,
-                    int            x,
-                    int            y,
+                    const GValue  *value,
+                    double         x,
+                    double         y,
                     GtkText       *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  int drop_position;
+  int length;
+  const char *str;
 
-  if (priv->editable && gdk_drop_has_value (drop, G_TYPE_STRING))
+  if (!priv->editable)
+    return FALSE;
+
+  drop_position = gtk_text_find_position (self, x + priv->scroll_offset);
+
+  str = g_value_get_string (value);
+  if (priv->truncate_multiline)
+    length = truncate_multiline (str);
+  else
+    length = -1;
+
+  if (priv->selection_bound == priv->current_pos ||
+      drop_position < priv->selection_bound ||
+      drop_position > priv->current_pos)
     {
-      priv->drop_position = gtk_text_find_position (self, x + priv->scroll_offset);
-      gdk_drop_read_text_async (drop, NULL, got_text, self);
+      gtk_text_insert_text (self, str, length, &drop_position);
     }
   else
-    gdk_drop_finish (drop, 0);
+    {
+      int pos;
+      /* Replacing selection */
+      begin_change (self);
+      gtk_text_delete_selection (self);
+      pos = MIN (priv->selection_bound, priv->current_pos);
+      gtk_text_insert_text (self, str, length, &pos);
+      end_change (self);
+    }
   
   return TRUE;
 }
@@ -6232,40 +6179,42 @@ gtk_text_drag_accept (GtkDropTarget *dest,
   return gdk_content_formats_match (gtk_drop_target_get_formats (dest), gdk_drop_get_formats (drop));
 }
 
-static void
-gtk_text_drag_motion (GtkDropTarget *dest,
-                      GdkDrop       *drop,
-                      int            x,
-                      int            y,
-                      GtkText        *self)
+static GdkDragAction
+gtk_text_drag_motion (GtkDropTarget *target,
+                      double         x,
+                      double         y,
+                      GtkText       *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   int new_position, old_position;
 
+  if (!priv->editable)
+    {
+      gtk_drop_target_reject (target);
+      return 0;
+    }
+
   old_position = priv->dnd_position;
   new_position = gtk_text_find_position (self, x + priv->scroll_offset);
 
-  if (priv->editable)
+  if (priv->selection_bound == priv->current_pos ||
+      new_position < priv->selection_bound ||
+      new_position > priv->current_pos)
     {
-      if (priv->selection_bound == priv->current_pos ||
-          new_position < priv->selection_bound ||
-          new_position > priv->current_pos)
-        {
-          priv->dnd_position = new_position;
-        }
-      else
-        {
-          priv->dnd_position = -1;
-        }
+      priv->dnd_position = new_position;
     }
   else
     {
-      /* Entry not editable, or no text */
       priv->dnd_position = -1;
     }
 
   if (priv->dnd_position != old_position)
     gtk_widget_queue_draw (GTK_WIDGET (self));
+
+  if (priv->drag)
+    return GDK_ACTION_MOVE;
+  else
+    return GDK_ACTION_COPY;
 }
 
 /* We display the cursor when
