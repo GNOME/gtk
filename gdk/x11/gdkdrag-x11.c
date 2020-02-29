@@ -1399,7 +1399,7 @@ move_drag_surface (GdkDrag *drag,
   gdk_x11_surface_move (drag_x11->drag_surface,
                         x_root - drag_x11->hot_x,
                         y_root - drag_x11->hot_y);
-  gdk_surface_raise (drag_x11->drag_surface);
+  gdk_x11_surface_raise (drag_x11->drag_surface);
 }
 
 static gboolean

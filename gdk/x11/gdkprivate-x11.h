@@ -230,6 +230,8 @@ void gdk_x11_surface_get_root_coords (GdkSurface *surface,
                                       gint       *root_x,
                                       gint       *root_y);
 
+void gdk_x11_surface_raise (GdkSurface *surface);
+
 GdkGrabStatus _gdk_x11_convert_grab_status (gint status);
 
 cairo_surface_t * _gdk_x11_display_create_bitmap_surface (GdkDisplay *display,
