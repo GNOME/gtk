@@ -136,10 +136,10 @@ gtk_tooltip_window_relayout (GtkTooltipWindow *window)
 
   gtk_widget_get_preferred_size (GTK_WIDGET (window), NULL, &req);
   layout = create_popup_layout (window);
-  gdk_surface_present_popup (window->surface,
-                             MAX (req.width, 1),
-                             MAX (req.height, 1),
-                             layout);
+  gdk_popup_present (GDK_POPUP (window->surface),
+                     MAX (req.width, 1),
+                     MAX (req.height, 1),
+                     layout);
   gdk_popup_layout_unref (layout);
 }
 
@@ -284,10 +284,10 @@ gtk_tooltip_window_map (GtkWidget *widget)
   GtkWidget *child;
 
   layout = create_popup_layout (window);
-  gdk_surface_present_popup (window->surface,
-                             gdk_surface_get_width (window->surface),
-                             gdk_surface_get_height (window->surface),
-                             layout);
+  gdk_popup_present (GDK_POPUP (window->surface),
+                     gdk_surface_get_width (window->surface),
+                     gdk_surface_get_height (window->surface),
+                     layout);
   gdk_popup_layout_unref (layout);
 
   window->surface_transform_changed_cb =
