@@ -603,6 +603,8 @@ GdkVulkanContext *
                gdk_surface_create_vulkan_context(GdkSurface     *surface,
                                                  GError        **error);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkSurface, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GDK_SURFACE_H__ */
