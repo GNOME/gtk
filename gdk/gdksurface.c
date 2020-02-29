@@ -29,16 +29,17 @@
 
 #include "gdksurface.h"
 
+#include "gdk-private.h"
+#include "gdkdeviceprivate.h"
+#include "gdkdisplayprivate.h"
 #include "gdkeventsprivate.h"
-#include "gdkrectangle.h"
+#include "gdkframeclockidleprivate.h"
+#include "gdkglcontextprivate.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
-#include "gdkdisplayprivate.h"
-#include "gdkdeviceprivate.h"
-#include "gdkframeclockidleprivate.h"
 #include "gdkmarshalers.h"
-#include "gdkglcontextprivate.h"
-#include "gdk-private.h"
+#include "gdkpopupprivate.h"
+#include "gdkrectangle.h"
 
 #include <math.h>
 
@@ -81,11 +82,9 @@ enum {
   PROP_SURFACE_TYPE,
   PROP_CURSOR,
   PROP_DISPLAY,
-  PROP_PARENT,
   PROP_FRAME_CLOCK,
   PROP_STATE,
   PROP_MAPPED,
-  PROP_AUTOHIDE,
   LAST_PROP
 };
 
@@ -112,7 +111,11 @@ static void gdk_surface_set_frame_clock (GdkSurface      *surface,
 static guint signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *properties[LAST_PROP] = { NULL, };
 
-G_DEFINE_ABSTRACT_TYPE (GdkSurface, gdk_surface, G_TYPE_OBJECT)
+static void gdk_surface_popup_init (GdkPopupInterface *iface);
+
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GdkSurface, gdk_surface, G_TYPE_OBJECT,
+                                  G_IMPLEMENT_INTERFACE (GDK_TYPE_POPUP,
+                                                         gdk_surface_popup_init))
 
 static gboolean
 gdk_surface_real_beep (GdkSurface *surface)
@@ -433,13 +436,6 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                            GDK_TYPE_DISPLAY,
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  properties[PROP_PARENT] =
-      g_param_spec_object ("parent",
-                           P_("Parent"),
-                           P_("Parent surface"),
-                           GDK_TYPE_SURFACE,
-                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
-
   properties[PROP_FRAME_CLOCK] =
       g_param_spec_object ("frame-clock",
                            P_("Frame Clock"),
@@ -461,13 +457,6 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                             FALSE,
                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
-  properties[PROP_AUTOHIDE] =
-      g_param_spec_boolean ("autohide",
-                            P_("Autohide"),
-                            P_("Whether to dismiss the surface on outside clicks"),
-                            FALSE,
-                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
-
   properties[PROP_SURFACE_TYPE] =
       g_param_spec_enum ("surface-type",
                           P_("Surface type"),
@@ -476,6 +465,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
+  gdk_popup_install_properties (object_class, LAST_PROP);
 
   /**
    * GdkSurface::popup-layout-changed
@@ -636,22 +626,22 @@ gdk_surface_set_property (GObject      *object,
                         G_CALLBACK (seat_removed_cb), surface);
       break;
 
-    case PROP_PARENT:
+    case PROP_FRAME_CLOCK:
+      gdk_surface_set_frame_clock (surface, GDK_FRAME_CLOCK (g_value_get_object (value)));
+      break;
+
+    case PROP_SURFACE_TYPE:
+      surface->surface_type = g_value_get_enum (value);
+      break;
+
+    case LAST_PROP + GDK_POPUP_PROP_PARENT:
       surface->parent = g_value_dup_object (value);
       if (surface->parent != NULL)
         surface->parent->children = g_list_prepend (surface->parent->children, surface);
       break;
 
-    case PROP_FRAME_CLOCK:
-      gdk_surface_set_frame_clock (surface, GDK_FRAME_CLOCK (g_value_get_object (value)));
-      break;
-
-    case PROP_AUTOHIDE:
+    case LAST_PROP + GDK_POPUP_PROP_AUTOHIDE:
       surface->autohide = g_value_get_boolean (value);
-      break;
-
-    case PROP_SURFACE_TYPE:
-      surface->surface_type = g_value_get_enum (value);
       break;
 
     default:
@@ -678,10 +668,6 @@ gdk_surface_get_property (GObject    *object,
       g_value_set_object (value, surface->display);
       break;
 
-    case PROP_PARENT:
-      g_value_set_object (value, surface->parent);
-      break;
-
     case PROP_FRAME_CLOCK:
       g_value_set_object (value, surface->frame_clock);
       break;
@@ -694,12 +680,16 @@ gdk_surface_get_property (GObject    *object,
       g_value_set_boolean (value, GDK_SURFACE_IS_MAPPED (surface));
       break;
 
-    case PROP_AUTOHIDE:
-      g_value_set_boolean (value, surface->autohide);
-      break;
-
     case PROP_SURFACE_TYPE:
       g_value_set_enum (value, surface->surface_type);
+      break;
+
+    case LAST_PROP + GDK_POPUP_PROP_PARENT:
+      g_value_set_object (value, surface->parent);
+      break;
+
+    case LAST_PROP + GDK_POPUP_PROP_AUTOHIDE:
+      g_value_set_boolean (value, surface->autohide);
       break;
 
     default:
@@ -2135,6 +2125,69 @@ GdkGravity
 gdk_surface_get_popup_rect_anchor (GdkSurface *surface)
 {
   return surface->popup.rect_anchor;
+}
+
+static gboolean
+gdk_popup_surface_present (GdkPopup       *popup,
+                           int             width,
+                           int             height,
+                           GdkPopupLayout *layout)
+{
+  GdkSurface *surface = GDK_SURFACE (popup);
+
+  g_return_val_if_fail (surface->surface_type == GDK_SURFACE_POPUP, FALSE);
+
+  return gdk_surface_present_popup (surface, width, height, layout);
+}
+
+static GdkGravity
+gdk_popup_surface_get_surface_anchor (GdkPopup *popup)
+{
+  GdkSurface *surface = GDK_SURFACE (popup);
+
+  g_return_val_if_fail (surface->surface_type == GDK_SURFACE_POPUP, GDK_GRAVITY_STATIC);
+
+  return gdk_surface_get_popup_surface_anchor (surface);
+}
+
+static GdkGravity
+gdk_popup_surface_get_rect_anchor (GdkPopup *popup)
+{
+  GdkSurface *surface = GDK_SURFACE (popup);
+
+  g_return_val_if_fail (surface->surface_type == GDK_SURFACE_POPUP, GDK_GRAVITY_STATIC);
+
+  return gdk_surface_get_popup_rect_anchor (surface);
+}
+
+static int
+gdk_popup_surface_get_position_x (GdkPopup *popup)
+{
+  GdkSurface *surface = GDK_SURFACE (popup);
+
+  g_return_val_if_fail (surface->surface_type == GDK_SURFACE_POPUP, 0);
+
+  return surface->x;
+}
+
+static int
+gdk_popup_surface_get_position_y (GdkPopup *popup)
+{
+  GdkSurface *surface = GDK_SURFACE (popup);
+
+  g_return_val_if_fail (surface->surface_type == GDK_SURFACE_POPUP, 0);
+
+  return surface->y;
+}
+
+static void
+gdk_surface_popup_init (GdkPopupInterface *iface)
+{
+  iface->present = gdk_popup_surface_present;
+  iface->get_surface_anchor = gdk_popup_surface_get_surface_anchor;
+  iface->get_rect_anchor = gdk_popup_surface_get_rect_anchor;
+  iface->get_position_x = gdk_popup_surface_get_position_x;
+  iface->get_position_y = gdk_popup_surface_get_position_y;
 }
 
 static void

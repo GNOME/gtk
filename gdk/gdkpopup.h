@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 #define GDK_TYPE_POPUP (gdk_popup_get_type ())
 
 GDK_AVAILABLE_IN_ALL
-G_DECLARE_INTERFACE (GdkPopup, gdk_popup, GDK, POPUP, GdkSurface)
+G_DECLARE_INTERFACE (GdkPopup, gdk_popup, GDK, POPUP, GObject)
 
 GDK_AVAILABLE_IN_ALL
 gboolean        gdk_popup_present               (GdkPopup       *popup,
