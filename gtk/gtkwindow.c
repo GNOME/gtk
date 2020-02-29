@@ -4884,13 +4884,60 @@ gtk_window_hide (GtkWidget *widget)
     gtk_grab_remove (widget);
 }
 
+static GdkToplevelLayout *
+gtk_window_compute_layout (GtkWindow *window,
+                           int       *width,
+                           int       *height)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  GdkRectangle request;
+  GdkGeometry geometry;
+  GdkSurfaceHints flags;
+  GdkToplevelLayout *layout;
+
+  gtk_window_compute_configure_request (window, &request,
+                                        &geometry, &flags);
+
+  if (width)
+    *width = request.width;
+  if (height)
+    *height = request.height;
+
+  if (!(flags & GDK_HINT_MIN_SIZE))
+    geometry.min_width = geometry.min_height = 1;
+
+  if (!(flags & GDK_HINT_MAX_SIZE))
+    geometry.max_width = geometry.max_height = G_MAXINT;
+
+  layout = gdk_toplevel_layout_new (geometry.min_width, geometry.min_height,
+                                    geometry.max_width, geometry.max_height);
+
+  gdk_toplevel_layout_set_maximized (layout, priv->maximize_initially);
+  gdk_toplevel_layout_set_fullscreen (layout,
+                                      priv->fullscreen_initially,
+                                      priv->initial_fullscreen_monitor);
+
+  return layout;
+}
+
+static void
+gtk_window_present_toplevel (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  int width, height;
+  GdkToplevelLayout *layout;
+
+  layout = gtk_window_compute_layout (window, &width, &height);
+  gdk_surface_present_toplevel (priv->surface, width, height, layout);
+  gdk_toplevel_layout_unref (layout);
+}
+
 static void
 gtk_window_map (GtkWidget *widget)
 {
   GtkWidget *child;
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GdkSurface *surface;
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->map (widget);
 
@@ -4903,13 +4950,9 @@ gtk_window_map (GtkWidget *widget)
       gtk_widget_get_child_visible (priv->title_box))
     gtk_widget_map (priv->title_box);
 
-  surface = priv->surface;
+  gtk_window_present_toplevel (window);
 
-  if (priv->maximize_initially)
-    gdk_surface_maximize (surface);
-  else
-    gdk_surface_unmaximize (surface);
-
+#if 0
   if (priv->stick_initially)
     gdk_surface_stick (surface);
   else
@@ -4920,26 +4963,15 @@ gtk_window_map (GtkWidget *widget)
   else
     gdk_surface_unminimize (surface);
 
-  if (priv->fullscreen_initially)
-    {
-      if (priv->initial_fullscreen_monitor)
-        gdk_surface_fullscreen_on_monitor (surface, priv->initial_fullscreen_monitor);
-      else
-        gdk_surface_fullscreen (surface);
-    }
-  else
-    gdk_surface_unfullscreen (surface);
-
   gdk_surface_set_keep_above (surface, priv->above_initially);
 
   gdk_surface_set_keep_below (surface, priv->below_initially);
+#endif
 
   gtk_window_set_theme_variant (window);
 
   /* No longer use the default settings */
   priv->need_default_size = FALSE;
-
-  gdk_surface_show (surface);
 
   if (!disable_startup_notification)
     {
@@ -7045,6 +7077,7 @@ gtk_window_move_resize (GtkWindow *window)
   gboolean hints_changed; /* do we need to send these again */
   GtkWindowLastGeometryInfo saved_last_info;
   int current_width, current_height;
+  GdkToplevelLayout *layout;
 
   widget = GTK_WIDGET (window);
 
@@ -7266,8 +7299,11 @@ gtk_window_move_resize (GtkWindow *window)
       if (configure_request_pos_changed)
         g_warning ("configure request position changed. This should not happen. Ignoring the position");
 
-      gdk_surface_resize (priv->surface,
-			  new_request.width, new_request.height);
+      layout = gtk_window_compute_layout (window, NULL, NULL);
+      gdk_surface_present_toplevel (priv->surface,
+			            new_request.width, new_request.height,
+                                    layout);
+      gdk_toplevel_layout_unref (layout);
     }
   else
     {
@@ -7625,7 +7661,7 @@ gtk_window_present_with_time (GtkWindow *window,
 
       g_assert (surface != NULL);
 
-      gdk_surface_show (surface);
+      gtk_window_present_toplevel (window);
 
       /* Translate a timestamp of GDK_CURRENT_TIME appropriately */
       if (timestamp == GDK_CURRENT_TIME)
@@ -7799,7 +7835,7 @@ gtk_window_maximize (GtkWindow *window)
   priv->maximize_initially = TRUE;
 
   if (priv->surface)
-    gdk_surface_maximize (priv->surface);
+    gtk_window_present_toplevel (window);
 }
 
 /**
@@ -7827,7 +7863,7 @@ gtk_window_unmaximize (GtkWindow *window)
   priv->maximize_initially = FALSE;
 
   if (priv->surface)
-    gdk_surface_unmaximize (priv->surface);
+    gtk_window_present_toplevel (window);
 }
 
 /**
@@ -7854,7 +7890,7 @@ gtk_window_fullscreen (GtkWindow *window)
   priv->fullscreen_initially = TRUE;
 
   if (priv->surface)
-    gdk_surface_fullscreen (priv->surface);
+    gtk_window_present_toplevel (window);
 }
 
 static void
@@ -7901,7 +7937,7 @@ gtk_window_fullscreen_on_monitor (GtkWindow  *window,
   priv->fullscreen_initially = TRUE;
 
   if (priv->surface)
-    gdk_surface_fullscreen_on_monitor (priv->surface, monitor);
+    gtk_window_present_toplevel (window);
 }
 
 /**
@@ -7929,7 +7965,7 @@ gtk_window_unfullscreen (GtkWindow *window)
   priv->fullscreen_initially = FALSE;
 
   if (priv->surface)
-    gdk_surface_unfullscreen (priv->surface);
+    gtk_window_present_toplevel (window);
 }
 
 /**
