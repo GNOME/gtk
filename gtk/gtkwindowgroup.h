@@ -76,12 +76,6 @@ void             gtk_window_group_remove_window (GtkWindowGroup     *window_grou
 GDK_AVAILABLE_IN_ALL
 GList *          gtk_window_group_list_windows  (GtkWindowGroup     *window_group);
 
-GDK_AVAILABLE_IN_ALL
-GtkWidget *      gtk_window_group_get_current_grab (GtkWindowGroup *window_group);
-GDK_AVAILABLE_IN_ALL
-GtkWidget *      gtk_window_group_get_current_device_grab (GtkWindowGroup *window_group,
-                                                           GdkDevice      *device);
-
 
 G_END_DECLS
 
