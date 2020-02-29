@@ -27,12 +27,11 @@
 
 #define __GDK_H_INSIDE__
 
-#include <gdk/gdkconfig.h>
-#include <gdk/gdkversionmacros.h>
 #include <gdk/gdkapplaunchcontext.h>
 #include <gdk/gdkcairo.h>
 #include <gdk/gdkcairocontext.h>
 #include <gdk/gdkclipboard.h>
+#include <gdk/gdkconfig.h>
 #include <gdk/gdkcontentdeserializer.h>
 #include <gdk/gdkcontentformats.h>
 #include <gdk/gdkcontentprovider.h>
@@ -60,16 +59,19 @@
 #include <gdk/gdkpaintable.h>
 #include <gdk/gdkpango.h>
 #include <gdk/gdkpixbuf.h>
+#include <gdk/gdkpopup.h>
+#include <gdk/gdkpopuplayout.h>
 #include <gdk/gdkrectangle.h>
 #include <gdk/gdkrgba.h>
 #include <gdk/gdkseat.h>
 #include <gdk/gdksnapshot.h>
-#include <gdk/gdktexture.h>
-#include <gdk/gdktypes.h>
-#include <gdk/gdkvulkancontext.h>
 #include <gdk/gdksurface.h>
-#include <gdk/gdkpopup.h>
+#include <gdk/gdktexture.h>
+#include <gdk/gdktoplevel.h>
 #include <gdk/gdktoplevellayout.h>
+#include <gdk/gdktypes.h>
+#include <gdk/gdkversionmacros.h>
+#include <gdk/gdkvulkancontext.h>
 
 #include <gdk/gdk-autocleanup.h>
 

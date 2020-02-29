@@ -40,6 +40,7 @@
 #include "gdkmarshalers.h"
 #include "gdkpopupprivate.h"
 #include "gdkrectangle.h"
+#include "gdktoplevelprivate.h"
 
 #include <math.h>
 
@@ -83,7 +84,6 @@ enum {
   PROP_CURSOR,
   PROP_DISPLAY,
   PROP_FRAME_CLOCK,
-  PROP_STATE,
   PROP_MAPPED,
   LAST_PROP
 };
@@ -112,10 +112,13 @@ static guint signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *properties[LAST_PROP] = { NULL, };
 
 static void gdk_surface_popup_init (GdkPopupInterface *iface);
+static void gdk_surface_toplevel_init (GdkToplevelInterface *iface);
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GdkSurface, gdk_surface, G_TYPE_OBJECT,
                                   G_IMPLEMENT_INTERFACE (GDK_TYPE_POPUP,
-                                                         gdk_surface_popup_init))
+                                                         gdk_surface_popup_init)
+                                  G_IMPLEMENT_INTERFACE (GDK_TYPE_TOPLEVEL,
+                                                         gdk_surface_toplevel_init))
 
 static gboolean
 gdk_surface_real_beep (GdkSurface *surface)
@@ -443,13 +446,6 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                            GDK_TYPE_FRAME_CLOCK,
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  properties[PROP_STATE] =
-      g_param_spec_flags ("state",
-                          P_("State"),
-                          P_("State"),
-                          GDK_TYPE_SURFACE_STATE, GDK_SURFACE_STATE_WITHDRAWN,
-                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
   properties[PROP_MAPPED] =
       g_param_spec_boolean ("mapped",
                             P_("Mapped"),
@@ -466,6 +462,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
   gdk_popup_install_properties (object_class, LAST_PROP);
+  gdk_toplevel_install_properties (object_class, LAST_PROP + GDK_POPUP_NUM_PROPERTIES);
 
   /**
    * GdkSurface::popup-layout-changed
@@ -644,11 +641,77 @@ gdk_surface_set_property (GObject      *object,
       surface->autohide = g_value_get_boolean (value);
       break;
 
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_TITLE:
+      gdk_surface_set_title (surface, g_value_get_string (value));
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_STARTUP_ID:
+      gdk_surface_set_startup_id (surface, g_value_get_string (value));
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_TRANSIENT_FOR:
+      gdk_surface_set_transient_for (surface, g_value_get_object (value));
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_ICON_LIST:
+      gdk_surface_set_icon_list (surface, g_value_get_pointer (value));
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_STICKY:
+      if (g_value_get_boolean (value))
+        GDK_SURFACE_GET_CLASS (surface)->stick (surface);
+      else
+        GDK_SURFACE_GET_CLASS (surface)->unstick (surface);
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_KEEP_ABOVE:
+      GDK_SURFACE_GET_CLASS (surface)->set_keep_above (surface, g_value_get_boolean (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_KEEP_BELOW:
+      GDK_SURFACE_GET_CLASS (surface)->set_keep_below (surface, g_value_get_boolean (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS:
+      if (surface->accept_focus != g_value_get_boolean (value))
+        {
+          surface->accept_focus = g_value_get_boolean (value);
+          GDK_SURFACE_GET_CLASS (surface)->set_accept_focus (surface, surface->accept_focus);
+          g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+        }
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP:
+      if (surface->focus_on_map != g_value_get_boolean (value))
+        {
+          surface->focus_on_map = g_value_get_boolean (value);
+          GDK_SURFACE_GET_CLASS (surface)->set_focus_on_map (surface, surface->focus_on_map);
+          g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+        }
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_DECORATED:
+      GDK_SURFACE_GET_CLASS (surface)->set_decorations (surface, g_value_get_boolean (value) ? GDK_DECOR_ALL : 0);
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_DELETABLE:
+      GDK_SURFACE_GET_CLASS (surface)->set_functions (surface, g_value_get_boolean (value) ? GDK_FUNC_ALL : GDK_FUNC_ALL | GDK_FUNC_CLOSE);
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
+
+#define GDK_SURFACE_IS_STICKY(surface) (((surface)->state & GDK_SURFACE_STATE_STICKY))
+#define GDK_SURFACE_IS_ABOVE(surface) (((surface)->state & GDK_SURFACE_STATE_ABOVE))
+#define GDK_SURFACE_IS_BELOW(surface) (((surface)->state & GDK_SURFACE_STATE_BELOW))
 
 static void
 gdk_surface_get_property (GObject    *object,
@@ -672,10 +735,6 @@ gdk_surface_get_property (GObject    *object,
       g_value_set_object (value, surface->frame_clock);
       break;
 
-    case PROP_STATE:
-      g_value_set_flags (value, surface->state);
-      break;
-
     case PROP_MAPPED:
       g_value_set_boolean (value, GDK_SURFACE_IS_MAPPED (surface));
       break;
@@ -690,6 +749,54 @@ gdk_surface_get_property (GObject    *object,
 
     case LAST_PROP + GDK_POPUP_PROP_AUTOHIDE:
       g_value_set_boolean (value, surface->autohide);
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_STATE:
+      g_value_set_flags (value, surface->state);
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_TITLE:
+      g_value_set_string (value, ""); // FIXME
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_STARTUP_ID:
+      g_value_set_string (value, ""); // FIXME
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_TRANSIENT_FOR:
+      g_value_set_object (value, NULL); // FIXME
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_ICON_LIST:
+      g_value_set_pointer (value, NULL); // FIXME
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_STICKY:
+      g_value_set_boolean (value, GDK_SURFACE_IS_STICKY (surface));
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_KEEP_ABOVE:
+      g_value_set_boolean (value, GDK_SURFACE_IS_ABOVE (surface));
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_KEEP_BELOW:
+      g_value_set_boolean (value, GDK_SURFACE_IS_BELOW (surface));
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS:
+      g_value_set_boolean (value, surface->accept_focus);
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP:
+      g_value_set_boolean (value, surface->focus_on_map);
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_DECORATED:
+      g_value_set_boolean (value, FALSE); // FIXME
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_DELETABLE:
+      g_value_set_boolean (value, FALSE); // FIXME
       break;
 
     default:
@@ -867,7 +974,8 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
 
   surface_remove_from_pointer_info (surface, surface->display);
 
-  g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
+  if (GDK_IS_TOPLEVEL (surface))
+    g_object_notify (G_OBJECT (surface), "state");
   g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
 }
 
@@ -2078,6 +2186,117 @@ gdk_surface_popup_init (GdkPopupInterface *iface)
   iface->get_position_y = gdk_popup_surface_get_position_y;
 }
 
+static gboolean
+gdk_toplevel_surface_present (GdkToplevel       *toplevel,
+                              int                width,
+                              int                height,
+                              GdkToplevelLayout *layout)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+  GdkGeometry geometry;
+  GdkSurfaceHints mask;
+
+  g_return_val_if_fail (surface->surface_type == GDK_SURFACE_TOPLEVEL, FALSE);
+  g_return_val_if_fail (!GDK_SURFACE_DESTROYED (surface), FALSE);
+
+  GDK_SURFACE_GET_CLASS (surface)->unminimize (surface);
+
+  if (gdk_toplevel_layout_get_resizable (layout))
+    {
+      geometry.min_width = gdk_toplevel_layout_get_min_width (layout);
+      geometry.min_height = gdk_toplevel_layout_get_min_height (layout);
+      mask = GDK_HINT_MIN_SIZE;
+    }
+  else
+    {
+      geometry.max_width = geometry.min_width = width;
+      geometry.max_height = geometry.min_height = height;
+      mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE;
+    }
+
+  GDK_SURFACE_GET_CLASS (surface)->set_geometry_hints (surface, &geometry, mask);
+  gdk_surface_constrain_size (&geometry, mask, width, height, &width, &height);
+  GDK_SURFACE_GET_CLASS (surface)->toplevel_resize (surface, width, height);
+
+  if (gdk_toplevel_layout_get_maximized (layout))
+    gdk_surface_maximize (surface);
+  else
+    gdk_surface_unmaximize (surface);
+
+  if (gdk_toplevel_layout_get_fullscreen (layout))
+    {
+      GdkMonitor *monitor = gdk_toplevel_layout_get_fullscreen_monitor (layout);
+      if (monitor)
+        GDK_SURFACE_GET_CLASS (surface)->fullscreen_on_monitor (surface, monitor);
+      else
+        GDK_SURFACE_GET_CLASS (surface)->fullscreen (surface);
+    }
+  else
+    GDK_SURFACE_GET_CLASS (surface)->unfullscreen (surface);
+
+  GDK_SURFACE_GET_CLASS (surface)->set_modal_hint (surface, gdk_toplevel_layout_get_modal (layout));
+
+  gdk_surface_show_internal (surface, TRUE);
+
+  return TRUE;
+}
+
+static gboolean
+gdk_toplevel_surface_minimize (GdkToplevel *toplevel)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+
+  g_return_val_if_fail (surface->surface_type == GDK_SURFACE_TOPLEVEL, FALSE);
+  
+  GDK_SURFACE_GET_CLASS (surface)->minimize (surface);
+
+  return TRUE;
+}
+
+static gboolean
+gdk_toplevel_surface_lower (GdkToplevel *toplevel)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+
+  g_return_val_if_fail (surface->surface_type == GDK_SURFACE_TOPLEVEL, FALSE);
+
+  GDK_SURFACE_GET_CLASS (surface)->lower (surface);
+
+  return TRUE;
+}
+
+static void
+gdk_toplevel_surface_focus (GdkToplevel *toplevel,
+                            guint32      timestamp)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+
+  g_return_if_fail (surface->surface_type == GDK_SURFACE_TOPLEVEL);
+  
+  GDK_SURFACE_GET_CLASS (surface)->focus (surface, timestamp);
+}
+
+static gboolean
+gdk_toplevel_surface_show_window_menu (GdkToplevel *toplevel,
+                                       GdkEvent    *event)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+
+  g_return_val_if_fail (surface->surface_type == GDK_SURFACE_TOPLEVEL, FALSE);
+
+  return GDK_SURFACE_GET_CLASS (surface)->show_window_menu (surface, event);
+}
+
+static void
+gdk_surface_toplevel_init (GdkToplevelInterface *iface)
+{
+  iface->present = gdk_toplevel_surface_present;
+  iface->minimize = gdk_toplevel_surface_minimize;
+  iface->lower = gdk_toplevel_surface_lower;
+  iface->focus = gdk_toplevel_surface_focus;
+  iface->show_window_menu = gdk_toplevel_surface_show_window_menu;
+}
+
 static void
 gdk_surface_set_cursor_internal (GdkSurface *surface,
                                  GdkDevice *device,
@@ -2867,6 +3086,8 @@ gdk_surface_set_startup_id (GdkSurface   *surface,
                             const gchar *startup_id)
 {
   GDK_SURFACE_GET_CLASS (surface)->set_startup_id (surface, startup_id);
+
+  g_object_notify (G_OBJECT (surface), "startup-id");
 }
 
 /**
@@ -2889,6 +3110,8 @@ gdk_surface_set_transient_for (GdkSurface *surface,
   surface->transient_for = parent;
 
   GDK_SURFACE_GET_CLASS (surface)->set_transient_for (surface, parent);
+
+  g_object_notify (G_OBJECT (surface), "transient-for");
 }
 
 /**
@@ -2951,6 +3174,8 @@ gdk_surface_set_icon_list (GdkSurface *surface,
                            GList     *textures)
 {
   GDK_SURFACE_GET_CLASS (surface)->set_icon_list (surface, textures);
+
+  g_object_notify (G_OBJECT (surface), "icon-list");
 }
 
 /**
@@ -3790,6 +4015,7 @@ gdk_surface_set_state (GdkSurface      *surface,
                        GdkSurfaceState  new_state)
 {
   gboolean was_mapped, mapped;
+  gboolean was_sticky, sticky;
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   if (new_state == surface->state)
@@ -3801,17 +4027,23 @@ gdk_surface_set_state (GdkSurface      *surface,
    */
 
   was_mapped = GDK_SURFACE_IS_MAPPED (surface);
+  was_sticky = GDK_SURFACE_IS_STICKY (surface);
 
   surface->state = new_state;
 
   mapped = GDK_SURFACE_IS_MAPPED (surface);
+  sticky = GDK_SURFACE_IS_STICKY (surface);
 
   _gdk_surface_update_viewable (surface);
 
-  g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
+  if (GDK_IS_TOPLEVEL (surface))
+    g_object_notify (G_OBJECT (surface), "state");
 
   if (was_mapped != mapped)
     g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
+
+  if (was_sticky != sticky)
+    g_object_notify (G_OBJECT (surface), "sticky");
 }
 
 void
