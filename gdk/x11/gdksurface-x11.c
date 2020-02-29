@@ -1520,6 +1520,10 @@ gdk_x11_surface_update_popups (GdkSurface *parent)
     }
 }
 
+static void gdk_x11_surface_set_geometry_hints (GdkSurface         *surface,
+                                                const GdkGeometry *geometry,
+                                                GdkSurfaceHints     geom_mask);
+
 void
 _gdk_x11_surface_set_surface_scale (GdkSurface *surface,
 				  int scale)
@@ -1542,9 +1546,9 @@ _gdk_x11_surface_set_surface_scale (GdkSurface *surface,
       geom_mask = toplevel->last_geometry_hints_mask &
         (GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE | GDK_HINT_BASE_SIZE | GDK_HINT_RESIZE_INC);
       if (geom_mask)
-        gdk_surface_set_geometry_hints (surface,
-                                       &toplevel->last_geometry_hints,
-                                       geom_mask);
+        gdk_x11_surface_set_geometry_hints (surface,
+                                            &toplevel->last_geometry_hints,
+                                            geom_mask);
     }
 
   if (impl->override_redirect)
