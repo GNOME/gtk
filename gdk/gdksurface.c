@@ -1808,118 +1808,10 @@ gdk_surface_show_internal (GdkSurface *surface, gboolean raise)
     }
 }
 
-/**
- * gdk_surface_show_unraised:
- * @surface: a #GdkSurface
- *
- * Shows a #GdkSurface onscreen, but does not modify its stacking
- * order. In contrast, gdk_surface_show() will raise the surface
- * to the top of the surface stack.
- *
- * On the X11 platform, in Xlib terms, this function calls
- * XMapWindow() (it also updates some internal GDK state, which means
- * that you can’t really use XMapWindow() directly on a GDK surface).
- */
-void
-gdk_surface_show_unraised (GdkSurface *surface)
-{
-  gdk_surface_show_internal (surface, FALSE);
-}
-
-/**
- * gdk_surface_raise:
- * @surface: a #GdkSurface
- *
- * Raises @surface to the top of the Z-order (stacking order), so that
- * other surfaces with the same parent surface appear below @surface.
- * This is true whether or not the surfaces are visible.
- *
- * If @surface is a toplevel, the window manager may choose to deny the
- * request to move the surface in the Z-order, gdk_surface_raise() only
- * requests the restack, does not guarantee it.
- */
-void
-gdk_surface_raise (GdkSurface *surface)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  if (surface->destroyed)
-    return;
-
-  gdk_surface_raise_internal (surface);
-}
-
 static void
 gdk_surface_lower_internal (GdkSurface *surface)
 {
   GDK_SURFACE_GET_CLASS (surface)->lower (surface);
-}
-
-/**
- * gdk_surface_lower:
- * @surface: a #GdkSurface
- *
- * Lowers @surface to the bottom of the Z-order (stacking order), so that
- * other surfaces with the same parent surface appear above @surface.
- * This is true whether or not the other surfaces are visible.
- *
- * If @surface is a toplevel, the window manager may choose to deny the
- * request to move the surface in the Z-order, gdk_surface_lower() only
- * requests the restack, does not guarantee it.
- *
- * Note that gdk_surface_show() raises the surface again, so don’t call this
- * function before gdk_surface_show(). (Try gdk_surface_show_unraised().)
- */
-void
-gdk_surface_lower (GdkSurface *surface)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  if (surface->destroyed)
-    return;
-
-  /* Keep children in (reverse) stacking order */
-  gdk_surface_lower_internal (surface);
-}
-
-/**
- * gdk_surface_restack:
- * @surface: a #GdkSurface
- * @sibling: (allow-none): a #GdkSurface that is a sibling of @surface, or %NULL
- * @above: a boolean
- *
- * Changes the position of  @surface in the Z-order (stacking order), so that
- * it is above @sibling (if @above is %TRUE) or below @sibling (if @above is
- * %FALSE).
- *
- * If @sibling is %NULL, then this either raises (if @above is %TRUE) or
- * lowers the surface.
- *
- * If @surface is a toplevel, the window manager may choose to deny the
- * request to move the surface in the Z-order, gdk_surface_restack() only
- * requests the restack, does not guarantee it.
- */
-void
-gdk_surface_restack (GdkSurface     *surface,
-                     GdkSurface     *sibling,
-                     gboolean       above)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-  g_return_if_fail (sibling == NULL || GDK_IS_SURFACE (sibling));
-
-  if (surface->destroyed)
-    return;
-
-  if (sibling == NULL)
-    {
-      if (above)
-        gdk_surface_raise (surface);
-      else
-        gdk_surface_lower (surface);
-      return;
-    }
-
-  GDK_SURFACE_GET_CLASS (surface)->restack_toplevel (surface, sibling, above);
 }
 
 /**
@@ -2131,7 +2023,7 @@ gdk_toplevel_surface_present (GdkToplevel       *toplevel,
                                     &geometry.max_width,
                                     &geometry.max_height);
   mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE;
-  gdk_surface_set_geometry_hints (surface, &geometry, mask); 
+  GDK_SURFACE_GET_CLASS (surface)->set_geometry_hints (surface, &geometry, mask);
   gdk_surface_constrain_size (&geometry, mask, width, height, &width, &height);
   gdk_surface_resize (surface, width, height);
 
@@ -2151,8 +2043,8 @@ gdk_toplevel_surface_present (GdkToplevel       *toplevel,
   else
     gdk_surface_unfullscreen (surface);
 
-  gdk_surface_set_modal_hint (surface, gdk_toplevel_layout_get_modal (layout));
-  gdk_surface_set_type_hint (surface, gdk_toplevel_layout_get_type_hint (layout));
+  GDK_SURFACE_GET_CLASS (surface)->set_modal_hint (surface, gdk_toplevel_layout_get_modal (layout));
+  GDK_SURFACE_GET_CLASS (surface)->set_type_hint (surface, gdk_toplevel_layout_get_type_hint (layout));
 
   if (gdk_toplevel_layout_get_raise (layout))
     {
@@ -2517,23 +2409,6 @@ gdk_surface_input_shape_combine_region (GdkSurface       *surface,
 }
 
 /**
- * gdk_surface_get_modal_hint:
- * @surface: A toplevel #GdkSurface.
- *
- * Determines whether or not the window manager is hinted that @surface
- * has modal behaviour.
- *
- * Returns: whether or not the surface has the modal hint set.
- */
-gboolean
-gdk_surface_get_modal_hint (GdkSurface *surface)
-{
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
-
-  return surface->modal_hint;
-}
-
-/**
  * gdk_surface_get_accept_focus:
  * @surface: a toplevel #GdkSurface.
  *
@@ -2847,96 +2722,6 @@ gdk_surface_focus (GdkSurface *surface,
                    guint32    timestamp)
 {
   GDK_SURFACE_GET_CLASS (surface)->focus (surface, timestamp);
-}
-
-/**
- * gdk_surface_set_type_hint:
- * @surface: A toplevel #GdkSurface
- * @hint: A hint of the function this surface will have
- *
- * The application can use this call to provide a hint to the surface
- * manager about the functionality of a surface. The window manager
- * can use this information when determining the decoration and behaviour
- * of the surface.
- *
- * The hint must be set before the surface is mapped.
- **/
-void
-gdk_surface_set_type_hint (GdkSurface        *surface,
-                           GdkSurfaceTypeHint hint)
-{
-  GDK_SURFACE_GET_CLASS (surface)->set_type_hint (surface, hint);
-}
-
-/**
- * gdk_surface_get_type_hint:
- * @surface: A toplevel #GdkSurface
- *
- * This function returns the type hint set for a surface.
- *
- * Returns: The type hint set for @surface
- **/
-GdkSurfaceTypeHint
-gdk_surface_get_type_hint (GdkSurface *surface)
-{
-  return GDK_SURFACE_GET_CLASS (surface)->get_type_hint (surface);
-}
-
-/**
- * gdk_surface_set_modal_hint:
- * @surface: A toplevel #GdkSurface
- * @modal: %TRUE if the surface is modal, %FALSE otherwise.
- *
- * The application can use this hint to tell the window manager
- * that a certain surface has modal behaviour. The window manager
- * can use this information to handle modal surfaces in a special
- * way.
- *
- * You should only use this on surfaces for which you have
- * previously called gdk_surface_set_transient_for()
- **/
-void
-gdk_surface_set_modal_hint (GdkSurface *surface,
-                            gboolean   modal)
-{
-  GDK_SURFACE_GET_CLASS (surface)->set_modal_hint (surface, modal);
-}
-
-/**
- * gdk_surface_set_geometry_hints:
- * @surface: a toplevel #GdkSurface
- * @geometry: geometry hints
- * @geom_mask: bitmask indicating fields of @geometry to pay attention to
- *
- * Sets the geometry hints for @surface. Hints flagged in @geom_mask
- * are set, hints not flagged in @geom_mask are unset.
- * To unset all hints, use a @geom_mask of 0 and a @geometry of %NULL.
- *
- * This function provides hints to the surfaceing system about
- * acceptable sizes for a toplevel surface. The purpose of
- * this is to constrain user resizing, but the windowing system
- * will typically  (but is not required to) also constrain the
- * current size of the surface to the provided values and
- * constrain programatic resizing via gdk_surface_resize().
- *
- * Note that on X11, this effect has no effect on surfaces
- * of type %GDK_SURFACE_TEMP since these surfaces are not resizable
- * by the user.
- *
- * Since you can’t count on the windowing system doing the
- * constraints for programmatic resizes, you should generally
- * call gdk_surface_constrain_size() yourself to determine
- * appropriate sizes.
- *
- **/
-void
-gdk_surface_set_geometry_hints (GdkSurface         *surface,
-                                const GdkGeometry *geometry,
-                                GdkSurfaceHints     geom_mask)
-{
-  g_return_if_fail (geometry != NULL || geom_mask == 0);
-
-  GDK_SURFACE_GET_CLASS (surface)->set_geometry_hints (surface, geometry, geom_mask);
 }
 
 /**
