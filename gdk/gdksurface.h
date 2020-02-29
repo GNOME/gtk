@@ -465,10 +465,6 @@ void          gdk_surface_stick           (GdkSurface       *surface);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_unstick         (GdkSurface       *surface);
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_maximize        (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_unmaximize      (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
 void          gdk_surface_fullscreen      (GdkSurface       *surface);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_fullscreen_on_monitor (GdkSurface      *surface,

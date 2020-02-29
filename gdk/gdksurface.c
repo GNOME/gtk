@@ -2028,9 +2028,9 @@ gdk_toplevel_surface_present (GdkToplevel       *toplevel,
   gdk_surface_resize (surface, width, height);
 
   if (gdk_toplevel_layout_get_maximized (layout))
-    gdk_surface_maximize (surface);
+    GDK_SURFACE_GET_CLASS (surface)->maximize (surface);
   else
-    gdk_surface_unmaximize (surface);
+    GDK_SURFACE_GET_CLASS (surface)->unmaximize (surface);
 
   if (gdk_toplevel_layout_get_fullscreen (layout))
     {
@@ -2941,52 +2941,6 @@ void
 gdk_surface_unstick (GdkSurface *surface)
 {
   GDK_SURFACE_GET_CLASS (surface)->unstick (surface);
-}
-
-/**
- * gdk_surface_maximize:
- * @surface: a toplevel #GdkSurface
- *
- * Maximizes the surface. If the surface was already maximized, then
- * this function does nothing.
- *
- * On X11, asks the window manager to maximize @surface, if the window
- * manager supports this operation. Not all window managers support
- * this, and some deliberately ignore it or don’t have a concept of
- * “maximized”; so you can’t rely on the maximization actually
- * happening. But it will happen with most standard window managers,
- * and GDK makes a best effort to get it to happen.
- *
- * On Windows, reliably maximizes the surface.
- *
- **/
-void
-gdk_surface_maximize (GdkSurface *surface)
-{
-  GDK_SURFACE_GET_CLASS (surface)->maximize (surface);
-}
-
-/**
- * gdk_surface_unmaximize:
- * @surface: a toplevel #GdkSurface
- *
- * Unmaximizes the surface. If the surface wasn’t maximized, then this
- * function does nothing.
- *
- * On X11, asks the window manager to unmaximize @surface, if the
- * window manager supports this operation. Not all window managers
- * support this, and some deliberately ignore it or don’t have a
- * concept of “maximized”; so you can’t rely on the unmaximization
- * actually happening. But it will happen with most standard window
- * managers, and GDK makes a best effort to get it to happen.
- *
- * On Windows, reliably unmaximizes the surface.
- *
- **/
-void
-gdk_surface_unmaximize (GdkSurface *surface)
-{
-  GDK_SURFACE_GET_CLASS (surface)->unmaximize (surface);
 }
 
 /**
