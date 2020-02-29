@@ -1428,12 +1428,12 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
           gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
           gdk_event_get_position (event, &tx, &ty);
-          gdk_surface_begin_resize_drag_for_device (priv->surface,
-						    (GdkSurfaceEdge) region,
-						    gdk_event_get_device ((GdkEvent *) event),
-						    GDK_BUTTON_PRIMARY,
-						    tx, ty,
-						    gdk_event_get_time (event));
+          gdk_surface_begin_resize_drag (priv->surface,
+                                         (GdkSurfaceEdge) region,
+                                         gdk_event_get_device ((GdkEvent *) event),
+                                         GDK_BUTTON_PRIMARY,
+                                         tx, ty,
+                                         gdk_event_get_time (event));
 
           gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
           gtk_event_controller_reset (GTK_EVENT_CONTROLLER (priv->drag_gesture));
@@ -1529,11 +1529,11 @@ drag_gesture_update_cb (GtkGestureDrag *gesture,
 
       gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
 
-      gdk_surface_begin_move_drag_for_device (priv->surface,
-					      gtk_gesture_get_device (GTK_GESTURE (gesture)),
-					      gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)),
-					      (int)start_x, (int)start_y,
-					      gtk_get_current_event_time ());
+      gdk_surface_begin_move_drag (priv->surface,
+                                   gtk_gesture_get_device (GTK_GESTURE (gesture)),
+                                   gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)),
+                                   (int)start_x, (int)start_y,
+                                   gtk_get_current_event_time ());
 
       gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
       gtk_event_controller_reset (GTK_EVENT_CONTROLLER (priv->click_gesture));
@@ -6688,6 +6688,7 @@ move_window_clicked (GtkModelButton *button,
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
   gdk_surface_begin_move_drag (priv->surface,
+                               NULL,
                                0, /* 0 means "use keyboard" */
                                0, 0,
                                GDK_CURRENT_TIME);
@@ -6702,6 +6703,7 @@ resize_window_clicked (GtkModelButton *button,
 
   gdk_surface_begin_resize_drag (priv->surface,
                                  0,
+                                 NULL,
                                  0, /* 0 means "use keyboard" */
                                  0, 0,
                                  GDK_CURRENT_TIME);
