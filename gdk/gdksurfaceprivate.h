@@ -121,6 +121,10 @@ struct _GdkSurfaceClass
   void         (* toplevel_resize)      (GdkSurface      *surface,
                                          gint             width,
                                          gint             height);
+  gboolean     (* present_toplevel)     (GdkSurface        *surface,
+                                         int                width,
+                                         int                height,
+                                         GdkToplevelLayout *layout);
   gboolean     (* present_popup)        (GdkSurface     *surface,
                                          int             width,
                                          int             height,

@@ -397,6 +397,56 @@ gdk_surface_init (GdkSurface *surface)
 }
 
 static void
+get_geometry_hints (GdkToplevelLayout *layout,
+                    GdkGeometry       *geometry,
+                    GdkSurfaceHints   *mask)
+{
+  gdk_toplevel_layout_get_min_size (layout,
+                                    &geometry->min_width,
+                                    &geometry->min_height);
+  gdk_toplevel_layout_get_max_size (layout,
+                                    &geometry->max_width,
+                                    &geometry->max_height);
+
+  *mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE;
+}
+
+static gboolean
+gdk_surface_real_present_toplevel (GdkSurface        *surface,
+                                   int                width,
+                                   int                height,
+                                   GdkToplevelLayout *layout)
+{
+  GdkGeometry geometry;
+  GdkSurfaceHints mask;
+
+  get_geometry_hints (layout, &geometry, &mask);
+  gdk_surface_set_geometry_hints (surface, &geometry, mask); 
+  gdk_surface_constrain_size (&geometry, mask, width, height, &width, &height);
+  gdk_surface_resize (surface, width, height);
+
+  if (gdk_toplevel_layout_get_maximized (layout))
+    gdk_surface_maximize (surface);
+  else
+    gdk_surface_unmaximize (surface);
+
+  if (gdk_toplevel_layout_get_fullscreen (layout))
+    {
+      GdkMonitor *monitor = gdk_toplevel_layout_get_fullscreen_monitor (layout);
+      if (monitor)
+        gdk_surface_fullscreen_on_monitor (surface, monitor);
+      else
+        gdk_surface_fullscreen (surface);
+    }
+  else
+    gdk_surface_unfullscreen (surface);
+
+  gdk_surface_show (surface);
+
+  return TRUE;
+}
+
+static void
 gdk_surface_class_init (GdkSurfaceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -406,6 +456,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   object_class->get_property = gdk_surface_get_property;
 
   klass->beep = gdk_surface_real_beep;
+  klass->present_toplevel = gdk_surface_real_present_toplevel;
 
   /**
    * GdkSurface:cursor:
@@ -2068,6 +2119,24 @@ gdk_surface_resize (GdkSurface *surface,
                     gint       height)
 {
   GDK_SURFACE_GET_CLASS (surface)->toplevel_resize (surface, width, height);
+}
+
+gboolean
+gdk_surface_present_toplevel (GdkSurface        *surface,
+                              int                width,
+                              int                height,
+                              GdkToplevelLayout *layout)
+{
+  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
+  g_return_val_if_fail (surface->parent == NULL, FALSE);
+  g_return_val_if_fail (layout, FALSE);
+  g_return_val_if_fail (!GDK_SURFACE_DESTROYED (surface), FALSE);
+  g_return_val_if_fail (width > 0 && height > 0, FALSE);
+
+  return GDK_SURFACE_GET_CLASS (surface)->present_toplevel (surface,
+                                                            width,
+                                                            height,
+                                                            layout);
 }
 
 /**

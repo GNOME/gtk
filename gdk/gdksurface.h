@@ -35,6 +35,7 @@
 #include <gdk/gdkframeclock.h>
 #include <gdk/gdkmonitor.h>
 #include <gdk/gdkpopuplayout.h>
+#include <gdk/gdktoplevellayout.h>
 
 G_BEGIN_DECLS
 
@@ -365,6 +366,11 @@ GDK_AVAILABLE_IN_ALL
 void          gdk_surface_resize                (GdkSurface     *surface,
                                                  gint           width,
                                                  gint           height);
+GDK_AVAILABLE_IN_ALL
+gboolean      gdk_surface_present_toplevel      (GdkSurface        *surface,
+                                                 int                width,
+                                                 int                height,
+                                                 GdkToplevelLayout *layout);
 GDK_AVAILABLE_IN_ALL
 gboolean      gdk_surface_present_popup         (GdkSurface     *surface,
                                                  int             width,
