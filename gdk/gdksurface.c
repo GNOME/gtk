@@ -809,26 +809,6 @@ gdk_surface_new_popup (GdkSurface *parent,
   return surface;
 }
 
-/**
- * gdk_surface_get_parent:
- * @surface: a #GtkSurface
- *
- * Returns the parent surface of a surface, or
- * %NULL if the surface does not have a parent.
- *
- * Only popup surfaces have parents.
- *
- * Returns: (transfer none) (nullable): the parent of
- *   @surface, or %NULL
- */
-GdkSurface *
-gdk_surface_get_parent (GdkSurface *surface)
-{
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
-  
-  return surface->parent;
-}
-
 static void
 update_pointer_info_foreach (GdkDisplay           *display,
                              GdkDevice            *device,
@@ -999,33 +979,6 @@ gboolean
 gdk_surface_is_destroyed (GdkSurface *surface)
 {
   return GDK_SURFACE_DESTROYED (surface);
-}
-
-/**
- * gdk_surface_get_position:
- * @surface: a #GdkSurface
- * @x: (out): X coordinate of surface
- * @y: (out): Y coordinate of surface
- *
- * Obtains the position of the surface relative to its parent.
- **/
-void
-gdk_surface_get_position (GdkSurface *surface,
-                          int        *x,
-                          int        *y)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  if (surface->parent)
-    {
-      *x = surface->x;
-      *y = surface->y;
-    }
-  else
-    {
-      *x = 0;
-      *y = 0;
-    }
 }
 
 /**
@@ -2075,71 +2028,47 @@ gdk_surface_resize (GdkSurface *surface,
   GDK_SURFACE_GET_CLASS (surface)->toplevel_resize (surface, width, height);
 }
 
-/**
- * gdk_surface_present_popup:
- * @surface: the popup #GdkSurface to show
- * @width: the unconstrained popup width to layout
- * @height: the unconstrained popup height to layout
- * @layout: the #GdkPopupLayout object used to layout
- *
- * Present @surface after having processed the #GdkPopupLayout rules. If the
- * popup was previously now showing, it will be showed, otherwise it will
- * change position according to @layout.
- *
- * After calling this function, the result of the layout can be queried
- * using gdk_surface_get_position(), gdk_surface_get_width(),
- * gdk_surface_get_height(), gdk_surface_get_popup_rect_anchor() and
- * gdk_surface_get_popup_surface_anchor().
- *
- * Presenting may have fail, for example if it was immediately hidden if the
- * @surface was set to autohide.
- *
- * Returns: %FALSE if it failed to be presented, otherwise %TRUE.
- */
 gboolean
-gdk_surface_present_popup (GdkSurface     *surface,
-                           int             width,
-                           int             height,
-                           GdkPopupLayout *layout)
+gdk_surface_present_toplevel (GdkSurface        *surface,
+                              int                width,
+                              int                height,
+                              GdkToplevelLayout *layout)
 {
+  GdkGeometry geometry;
+  GdkSurfaceHints mask;
+
   g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
-  g_return_val_if_fail (surface->parent, FALSE);
+  g_return_val_if_fail (surface->parent == NULL, FALSE);
   g_return_val_if_fail (layout, FALSE);
   g_return_val_if_fail (!GDK_SURFACE_DESTROYED (surface), FALSE);
   g_return_val_if_fail (width > 0 && height > 0, FALSE);
 
-  return GDK_SURFACE_GET_CLASS (surface)->present_popup (surface,
-                                                         width,
-                                                         height,
-                                                         layout);
-}
+  get_geometry_hints (layout, &geometry, &mask);
+  gdk_surface_set_geometry_hints (surface, &geometry, mask); 
+  gdk_surface_constrain_size (&geometry, mask, width, height, &width, &height);
+  gdk_surface_resize (surface, width, height);
 
-/**
- * gdk_surface_get_popup_surface_anchor:
- * @surface: a #GdkSurface
- *
- * Get the current popup surface anchor. The value returned may chage after
- * calling gdk_surface_show_popup(), gdk_surface_layout_popup() or after the
- * "popup-layout-changed" is emitted.
- */
-GdkGravity
-gdk_surface_get_popup_surface_anchor (GdkSurface *surface)
-{
-  return surface->popup.surface_anchor;
-}
+  if (gdk_toplevel_layout_get_maximized (layout))
+    gdk_surface_maximize (surface);
+  else
+    gdk_surface_unmaximize (surface);
 
-/**
- * gdk_surface_get_popup_rect_anchor:
- * @surface: a #GdkSurface
- *
- * Get the current popup anchor rectangle anchor. The value
- * returned may chage after calling gdk_surface_show_popup(),
- * gdk_surface_layout_popup() or after the "popup-layout-changed" is emitted.
- */
-GdkGravity
-gdk_surface_get_popup_rect_anchor (GdkSurface *surface)
-{
-  return surface->popup.rect_anchor;
+  if (gdk_toplevel_layout_get_fullscreen (layout))
+    {
+      GdkMonitor *monitor = gdk_toplevel_layout_get_fullscreen_monitor (layout);
+      if (monitor)
+        gdk_surface_fullscreen_on_monitor (surface, monitor);
+      else
+        gdk_surface_fullscreen (surface);
+    }
+  else
+    gdk_surface_unfullscreen (surface);
+
+  gdk_surface_set_modal_hint (surface, gdk_toplevel_layout_get_modal (layout));
+
+  gdk_surface_show (surface);
+
+  return TRUE;
 }
 
 static gboolean
@@ -2151,8 +2080,10 @@ gdk_popup_surface_present (GdkPopup       *popup,
   GdkSurface *surface = GDK_SURFACE (popup);
 
   g_return_val_if_fail (surface->surface_type == GDK_SURFACE_POPUP, FALSE);
+  g_return_val_if_fail (surface->parent, FALSE);
+  g_return_val_if_fail (!GDK_SURFACE_DESTROYED (surface), FALSE);
 
-  return gdk_surface_present_popup (surface, width, height, layout);
+  return GDK_SURFACE_GET_CLASS (surface)->present_popup (surface, width, height, layout);
 }
 
 static GdkGravity
@@ -2162,7 +2093,7 @@ gdk_popup_surface_get_surface_anchor (GdkPopup *popup)
 
   g_return_val_if_fail (surface->surface_type == GDK_SURFACE_POPUP, GDK_GRAVITY_STATIC);
 
-  return gdk_surface_get_popup_surface_anchor (surface);
+  return surface->popup.surface_anchor;
 }
 
 static GdkGravity
@@ -2172,7 +2103,7 @@ gdk_popup_surface_get_rect_anchor (GdkPopup *popup)
 
   g_return_val_if_fail (surface->surface_type == GDK_SURFACE_POPUP, GDK_GRAVITY_STATIC);
 
-  return gdk_surface_get_popup_rect_anchor (surface);
+  return surface->popup.rect_anchor;
 }
 
 static GdkSurface *
@@ -2182,7 +2113,7 @@ gdk_popup_surface_get_parent (GdkPopup *popup)
 
   g_return_val_if_fail (surface->surface_type == GDK_SURFACE_POPUP, NULL);
 
-  return gdk_surface_get_parent (surface);
+  return surface->parent;
 }
 
 static void
@@ -2194,7 +2125,8 @@ gdk_popup_surface_get_position (GdkPopup *popup,
 
   g_return_if_fail (surface->surface_type == GDK_SURFACE_POPUP);
 
-  gdk_surface_get_position (surface, x, y);
+  *x = surface->x;
+  *y = surface->y;
 }
 
 static gboolean
@@ -4224,20 +4156,3 @@ gdk_surface_translate_coordinates (GdkSurface *from,
 
   return TRUE;
 }
-
-/**
- * gdk_surface_get_autohide:
- * @surface: a #GdkSurface
- *
- * Returns whether this surface is set to hide on outside clicks.
- *
- * Returns: %TRUE if @surface will autohide
- */
-gboolean
-gdk_surface_get_autohide (GdkSurface *surface)
-{
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
-
-  return surface->autohide;
-}
-
