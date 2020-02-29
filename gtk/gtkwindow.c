@@ -6681,11 +6681,12 @@ move_window_clicked (GtkModelButton *button,
                      gpointer        user_data)
 {
   GtkWindow *window = GTK_WINDOW (user_data);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-  gtk_window_begin_move_drag (window,
-                              0, /* 0 means "use keyboard" */
-                              0, 0,
-                              GDK_CURRENT_TIME);
+  gdk_surface_begin_move_drag (priv->surface,
+                               0, /* 0 means "use keyboard" */
+                               0, 0,
+                               GDK_CURRENT_TIME);
 }
 
 static void
@@ -6693,8 +6694,9 @@ resize_window_clicked (GtkModelButton *button,
                        gpointer        user_data)
 {
   GtkWindow *window = GTK_WINDOW (user_data);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-  gtk_window_begin_resize_drag  (window,
+  gdk_surface_begin_resize_drag (priv->surface,
                                  0,
                                  0, /* 0 means "use keyboard" */
                                  0, 0,
@@ -8062,60 +8064,6 @@ gtk_window_get_resizable (GtkWindow *window)
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
   return priv->resizable;
-}
-
-/**
- * gtk_window_begin_resize_drag:
- * @window: a #GtkWindow
- * @button: mouse button that initiated the drag
- * @edge: position of the resize control
- * @x: X position where the user clicked to initiate the drag, in window coordinates
- * @y: Y position where the user clicked to initiate the drag
- * @timestamp: timestamp from the click event that initiated the drag
- *
- * Starts resizing a window. This function is used if an application
- * has window resizing controls.
- */
-void
-gtk_window_begin_resize_drag (GtkWindow      *window,
-                              GdkSurfaceEdge  edge,
-                              gint            button,
-                              gint            x,
-                              gint            y,
-                              guint32         timestamp)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (gtk_widget_get_visible (GTK_WIDGET (window)));
-
-  gdk_surface_begin_resize_drag (priv->surface, edge, button, x, y, timestamp);
-}
-
-/**
- * gtk_window_begin_move_drag:
- * @window: a #GtkWindow
- * @button: mouse button that initiated the drag
- * @x: X position where the user clicked to initiate the drag, in window coordinates
- * @y: Y position where the user clicked to initiate the drag
- * @timestamp: timestamp from the click event that initiated the drag
- *
- * Starts moving a window. This function is used if an application has
- * window movement grips.
- */
-void
-gtk_window_begin_move_drag (GtkWindow *window,
-                            gint       button,
-                            gint       x,
-                            gint       y,
-                            guint32    timestamp)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (gtk_widget_get_visible (GTK_WIDGET (window)));
-
-  gdk_surface_begin_move_drag (priv->surface, button, x, y, timestamp);
 }
 
 /**
