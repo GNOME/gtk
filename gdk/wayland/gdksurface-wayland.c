@@ -97,6 +97,7 @@ struct _GdkWaylandSurface
   unsigned int pending_commit : 1;
   unsigned int awaiting_frame : 1;
   unsigned int awaiting_frame_frozen : 1;
+  unsigned int is_drag_surface : 1;
   GdkSurfaceTypeHint hint;
   GdkSurface *transient_for;
   GdkSurface *popup_parent;
@@ -2363,7 +2364,7 @@ should_be_mapped (GdkSurface *surface)
   if (surface->surface_type == GDK_SURFACE_TEMP && surface->x < 0 && surface->y < 0)
     return FALSE;
 
-  if (impl->hint == GDK_SURFACE_TYPE_HINT_DND)
+  if (impl->is_drag_surface)
     return FALSE;
 
   return TRUE;
@@ -4392,3 +4393,14 @@ gdk_wayland_surface_restore_shortcuts (GdkSurface *surface,
   g_hash_table_remove (impl->shortcuts_inhibitors, seat);
 }
 
+GdkSurface *
+create_dnd_surface (GdkDisplay *display)
+{
+  GdkSurface *surface;
+
+  surface = gdk_surface_new_temp (display, &(GdkRectangle) { 0, 0, 100, 100 });
+
+  GDK_WAYLAND_SURFACE (surface)->is_drag_surface = TRUE;
+
+  return surface;
+}

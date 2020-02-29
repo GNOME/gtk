@@ -197,18 +197,6 @@ gdk_wayland_drag_class_init (GdkWaylandDragClass *klass)
   drag_class->cancel = gdk_wayland_drag_cancel;
 }
 
-static GdkSurface *
-create_dnd_surface (GdkDisplay *display)
-{
-  GdkSurface *surface;
-
-  surface = gdk_surface_new_temp (display, &(GdkRectangle) { 0, 0, 100, 100 });
-
-  gdk_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_DND);
-  
-  return surface;
-}
-
 static inline GdkDragAction
 _wl_to_gdk_actions (uint32_t dnd_actions)
 {
