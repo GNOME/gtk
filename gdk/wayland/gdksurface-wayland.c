@@ -2634,6 +2634,11 @@ is_fallback_relayout_possible (GdkSurface *surface)
   return TRUE;
 }
 
+static gboolean gdk_wayland_surface_present_popup (GdkSurface     *surface,
+                                                   int             width,
+                                                   int             height,
+                                                   GdkPopupLayout *layout);
+
 static void
 queue_relayout_fallback (GdkSurface     *surface,
                          GdkPopupLayout *layout)
@@ -2644,10 +2649,10 @@ queue_relayout_fallback (GdkSurface     *surface,
     return;
 
   gdk_wayland_surface_hide_surface (surface);
-  gdk_surface_present_popup (surface,
-                             impl->popup.unconstrained_width,
-                             impl->popup.unconstrained_height,
-                             layout);
+  gdk_wayland_surface_present_popup (surface,
+                                     impl->popup.unconstrained_width,
+                                     impl->popup.unconstrained_height,
+                                     layout);
 }
 
 static void
