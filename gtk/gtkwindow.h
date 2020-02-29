@@ -266,20 +266,6 @@ void     gtk_window_set_keep_above    (GtkWindow *window, gboolean setting);
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_set_keep_below    (GtkWindow *window, gboolean setting);
 
-GDK_AVAILABLE_IN_ALL
-void gtk_window_begin_resize_drag (GtkWindow     *window,
-                                   GdkSurfaceEdge  edge,
-                                   gint           button,
-                                   gint           x,
-                                   gint           y,
-                                   guint32        timestamp);
-GDK_AVAILABLE_IN_ALL
-void gtk_window_begin_move_drag   (GtkWindow     *window,
-                                   gint           button,
-                                   gint           x,
-                                   gint           y,
-                                   guint32        timestamp);
-
 /* Set initial default size of the window (does not constrain user
  * resize operations)
  */
