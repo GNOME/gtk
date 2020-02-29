@@ -90,11 +90,12 @@
 #include <gtk/gtkcustomlayout.h>
 #include <gtk/gtkdebug.h>
 #include <gtk/gtkdialog.h>
-#include <gtk/gtkdragdest.h>
 #include <gtk/gtkdragicon.h>
 #include <gtk/gtkdragsource.h>
 #include <gtk/gtkdrawingarea.h>
 #include <gtk/gtkdropcontrollermotion.h>
+#include <gtk/gtkdroptarget.h>
+#include <gtk/gtkdroptargetasync.h>
 #include <gtk/gtkeditable.h>
 #include <gtk/gtkemojichooser.h>
 #include <gtk/gtkentry.h>

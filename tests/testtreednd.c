@@ -85,31 +85,15 @@ get_dragsource (void)
 }
 
 static void
-got_text (GObject      *source,
-          GAsyncResult *result,
-          gpointer      data)
-{
-  GdkDrop *drop = GDK_DROP (source);
-  GtkWidget *widget = data;
-  const GValue *value;
-
-  value = gdk_drop_read_value_finish (drop, result, NULL);
-  if (value == NULL)
-    return;
-  
-  gtk_label_set_label (GTK_LABEL (widget), g_value_get_string (value));
-}
-
-static void
 drag_drop (GtkDropTarget *dest,
-           GdkDrop       *drop,
+           const GValue  *value,
            int            x,
            int            y,
            gpointer       dada)
 {
   GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
 
-  gdk_drop_read_value_async (drop, G_TYPE_STRING, G_PRIORITY_DEFAULT, NULL, got_text, widget);
+  gtk_label_set_label (GTK_LABEL (widget), g_value_get_string (value));
 }
 
 static GtkWidget *
@@ -119,8 +103,8 @@ get_droptarget (void)
   GtkDropTarget *dest;
 
   label = gtk_label_new ("Drop here");
-  dest = gtk_drop_target_new (gdk_content_formats_new_for_gtype (G_TYPE_STRING), GDK_ACTION_COPY);
-  g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop), NULL);
+  dest = gtk_drop_target_new (G_TYPE_STRING, GDK_ACTION_COPY);
+  g_signal_connect (dest, "drop", G_CALLBACK (drag_drop), NULL);
   gtk_widget_add_controller (label, GTK_EVENT_CONTROLLER (dest));
 
   return label;

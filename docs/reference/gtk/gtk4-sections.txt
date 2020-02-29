@@ -6813,14 +6813,16 @@ gtk_drag_source_get_type
 <FILE>gtkdroptarget</FILE>
 GtkDropTarget
 gtk_drop_target_new
-gtk_drop_target_set_formats
+gtk_drop_target_set_gtypes
+gtk_drop_target_get_gtypes
 gtk_drop_target_get_formats
 gtk_drop_target_set_actions
 gtk_drop_target_get_actions
+gtk_drop_target_set_preload
+gtk_drop_target_get_preload
 gtk_drop_target_get_drop
-gtk_drop_target_find_mimetype
-gtk_drag_highlight
-gtk_drag_unhighlight
+gtk_drop_target_get_value
+gtk_drop_target_reject
 
 <SUBSECTION Standard>
 GTK_TYPE_DROP_TARGET
@@ -6831,6 +6833,27 @@ GTK_IS_DROP_TARGET_CLASS
 GTK_DROP_TARGET_GET_CLASS
 <SUBSECTION Private>
 gtk_drop_target_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkdroptargetasync</FILE>
+GtkDropTargetAsync
+gtk_drop_target_async_new
+gtk_drop_target_async_set_formats
+gtk_drop_target_async_get_formats
+gtk_drop_target_async_set_actions
+gtk_drop_target_async_get_actions
+gtk_drop_target_async_reject_drop
+
+<SUBSECTION Standard>
+GTK_TYPE_DROP_TARGET_ASYNC
+GTK_DROP_TARGET_ASYNC
+GTK_DROP_TARGET_ASYNC_CLASS
+GTK_IS_DROP_TARGET_ASYNC
+GTK_IS_DROP_TARGET_ASYNC_CLASS
+GTK_DROP_TARGET_ASYNC_GET_CLASS
+<SUBSECTION Private>
+gtk_drop_target_async_get_type
 </SECTION>
 
 <SECTION>

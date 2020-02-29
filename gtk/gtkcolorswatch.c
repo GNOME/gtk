@@ -22,8 +22,8 @@
 #include "gtkbox.h"
 #include "gtkcolorchooserprivate.h"
 #include "gtkcssnodeprivate.h"
-#include "gtkdragdest.h"
 #include "gtkdragsource.h"
+#include "gtkdroptarget.h"
 #include "gtkgesturelongpress.h"
 #include "gtkgestureclick.h"
 #include "gtkgesturesingle.h"
@@ -133,33 +133,16 @@ gtk_color_swatch_drag_begin (GtkDragSource  *source,
   g_object_unref (paintable);
 }
 
-static void
-got_color (GObject      *source,
-           GAsyncResult *result,
-           gpointer      data)
-{
-  GdkDrop *drop = GDK_DROP (source);
-  const GValue *value;
-
-  value = gdk_drop_read_value_finish (drop, result, NULL);
-  if (value)
-    {
-      GdkRGBA *color = g_value_get_boxed (value);
-      gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (data), color);
-      gdk_drop_finish (drop, GDK_ACTION_COPY);
-    }
-  else
-    gdk_drop_finish (drop, 0);
-}
-
 static gboolean
 swatch_drag_drop (GtkDropTarget  *dest,
-                  GdkDrop        *drop,
-                  int             x,
-                  int             y,
+                  const GValue   *value,
+                  double          x,
+                  double          y,
                   GtkColorSwatch *swatch)
+
 {
-  gdk_drop_read_value_async (drop, GDK_TYPE_RGBA, G_PRIORITY_DEFAULT, NULL, got_color, swatch);
+  gtk_color_swatch_set_rgba (swatch, g_value_get_boxed (value));
+
   return TRUE;
 }
 
@@ -670,9 +653,8 @@ gtk_color_swatch_set_can_drop (GtkColorSwatch *swatch,
 
   if (can_drop && !priv->dest)
     {
-      priv->dest = gtk_drop_target_new (gdk_content_formats_new_for_gtype (GDK_TYPE_RGBA),
-                                        GDK_ACTION_COPY);
-      g_signal_connect (priv->dest, "drag-drop", G_CALLBACK (swatch_drag_drop), swatch);
+      priv->dest = gtk_drop_target_new (GDK_TYPE_RGBA, GDK_ACTION_COPY);
+      g_signal_connect (priv->dest, "drop", G_CALLBACK (swatch_drag_drop), swatch);
       gtk_widget_add_controller (GTK_WIDGET (swatch), GTK_EVENT_CONTROLLER (priv->dest));
     }
   if (!can_drop && priv->dest)

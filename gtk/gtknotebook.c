@@ -33,7 +33,7 @@
 #include "gtkbuildable.h"
 #include "gtkbutton.h"
 #include "gtkcssstylepropertyprivate.h"
-#include "gtkdragdest.h"
+#include "gtkdroptarget.h"
 #include "gtkdragicon.h"
 #include "gtkdropcontrollermotion.h"
 #include "gtkeventcontrollermotion.h"
@@ -793,14 +793,15 @@ static void gtk_notebook_dnd_finished_cb     (GdkDrag          *drag,
 static void gtk_notebook_drag_cancel_cb      (GdkDrag          *drag,
                                               GdkDragCancelReason reason,
                                               GtkWidget        *widget);
-static void     gtk_notebook_drag_motion     (GtkDropTarget    *dest,
-                                              GdkDrop          *drop,
-                                              int               x,
-                                              int               y);
+static GdkDragAction gtk_notebook_drag_motion(GtkDropTarget    *dest,
+                                              double            x,
+                                              double            y,
+                                              GtkNotebook      *notebook);
 static gboolean gtk_notebook_drag_drop       (GtkDropTarget    *dest,
-                                              GdkDrop          *drop,
-                                              int               x,
-                                              int               y);
+                                              const GValue     *value,
+                                              double            x,
+                                              double            y,
+                                              GtkNotebook      *notebook);
 
 /*** GtkContainer Methods ***/
 static void gtk_notebook_add                 (GtkContainer     *container,
@@ -1430,9 +1431,10 @@ gtk_notebook_init (GtkNotebook *notebook)
   gtk_widget_set_vexpand (priv->stack_widget, TRUE);
   gtk_widget_set_parent (priv->stack_widget, GTK_WIDGET (notebook));
 
-  dest = gtk_drop_target_new (gdk_content_formats_new_for_gtype (GTK_TYPE_NOTEBOOK_PAGE), GDK_ACTION_MOVE);
-  g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_notebook_drag_motion), NULL);
-  g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_notebook_drag_drop), NULL);
+  dest = gtk_drop_target_new (GTK_TYPE_NOTEBOOK_PAGE, GDK_ACTION_MOVE);
+  gtk_drop_target_set_preload (dest, TRUE);
+  g_signal_connect (dest, "motion", G_CALLBACK (gtk_notebook_drag_motion), notebook);
+  g_signal_connect (dest, "drop", G_CALLBACK (gtk_notebook_drag_drop), notebook);
   gtk_widget_add_controller (GTK_WIDGET (priv->tabs_widget), GTK_EVENT_CONTROLLER (dest));
 
   gesture = gtk_gesture_click_new ();
@@ -3294,112 +3296,78 @@ gtk_notebook_switch_page_timeout (gpointer data)
   return FALSE;
 }
 
-static void
-gtk_notebook_drag_motion (GtkDropTarget *dest,
-                          GdkDrop       *drop,
-                          int            x,
-                          int            y)
+static gboolean
+gtk_notebook_can_drag_from (GtkNotebook     *self,
+                            GtkNotebook     *other,
+                            GtkNotebookPage *page)
 {
-  GtkWidget *tabs = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
-  GtkWidget *widget = gtk_widget_get_ancestor (tabs, GTK_TYPE_NOTEBOOK);
-  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+  /* always allow dragging inside self */
+  if (self == other)
+    return TRUE;
+
+  /* if the groups don't match, fail */
+  if (self->priv->group == 0 ||
+      self->priv->group != other->priv->group)
+    return FALSE;
+
+  /* Check that the dragged page is not a parent of the notebook
+   * being dragged into */
+  if (GTK_WIDGET (self) == page->child ||
+      gtk_widget_is_ancestor (GTK_WIDGET (self), GTK_WIDGET (page->child)) ||
+      GTK_WIDGET (self) == page->tab_label ||
+      gtk_widget_is_ancestor (GTK_WIDGET (self), GTK_WIDGET (page->tab_label)))
+    return FALSE;
+
+  return TRUE;
+}
+
+static GdkDragAction
+gtk_notebook_drag_motion (GtkDropTarget *dest,
+                          double         x,
+                          double         y,
+                          GtkNotebook   *notebook)
+{
   GtkNotebookPrivate *priv = notebook->priv;
-  GdkContentFormats *formats;
+  GdkDrag *drag = gdk_drop_get_drag (gtk_drop_target_get_drop (dest));
+  GtkNotebook *source;
 
   priv->mouse_x = x;
   priv->mouse_y = y;
 
-  formats = gtk_drop_target_get_formats (dest);
-  if (gdk_content_formats_contain_gtype (formats, GTK_TYPE_NOTEBOOK_PAGE))
-    {
-      GQuark group, source_group;
-      GtkWidget *source_child;
-      GdkDrag *drag = gdk_drop_get_drag (drop);
+  if (!drag)
+    return 0;
 
-      if (!drag)
-        {
-          gdk_drop_status (drop, 0);
-        }
-      else
-        {
-          GtkNotebook *source = GTK_NOTEBOOK (g_object_get_data (G_OBJECT (drag), "gtk-notebook-drag-origin"));
+  source = GTK_NOTEBOOK (g_object_get_data (G_OBJECT (drag), "gtk-notebook-drag-origin"));
+  g_assert (source->priv->cur_page != NULL);
 
-          g_assert (source->priv->cur_page != NULL);
-          source_child = source->priv->cur_page->child;
+  if (!gtk_notebook_can_drag_from (notebook, source, source->priv->cur_page))
+    return 0;
 
-          group = notebook->priv->group;
-          source_group = source->priv->group;
-
-          if (group != 0 && group == source_group &&
-              !(widget == source_child ||
-              gtk_widget_is_ancestor (widget, source_child)))
-            {
-              gdk_drop_status (drop, GDK_ACTION_MOVE);
-            }
-          else
-            {
-              /* it's a tab, but doesn't share
-               * ID with this notebook */
-              gdk_drop_status (drop, 0);
-            }
-        }
-    }
-}
-
-static void
-got_page (GObject      *source,
-          GAsyncResult *result,
-          gpointer      data)
-{
-  GtkNotebook *notebook = GTK_NOTEBOOK (data);
-  GdkDrop *drop = GDK_DROP (source);
-  GdkDrag *drag = gdk_drop_get_drag (drop);
-  GtkWidget *source_widget;
-  const GValue *value;
-
-  source_widget = GTK_WIDGET (drag ? g_object_get_data (G_OBJECT (drag), "gtk-notebook-drag-origin") : NULL);
-
-  value = gdk_drop_read_value_finish (drop, result, NULL);
-
-  if (value)
-    {
-      GtkNotebookPage *page = g_value_get_object (value);
-
-      do_detach_tab (GTK_NOTEBOOK (source_widget), notebook, page->child);
-      gdk_drop_finish (drop, GDK_ACTION_MOVE);
-    }
-  else
-    gdk_drop_finish (drop, 0);
+  return GDK_ACTION_MOVE;
 }
 
 static gboolean
 gtk_notebook_drag_drop (GtkDropTarget *dest,
-                        GdkDrop       *drop,
-                        int            x,
-                        int            y)
+                        const GValue  *value,
+                        double         x,
+                        double         y,
+                        GtkNotebook   *self)
 {
-  GtkWidget *tabs = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
-  GtkWidget *widget = gtk_widget_get_ancestor (tabs, GTK_TYPE_NOTEBOOK);
-  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GdkDrag *drag = gdk_drop_get_drag (drop);
-  GtkWidget *source_widget;
+  GdkDrag *drag = gdk_drop_get_drag (gtk_drop_target_get_drop (dest));
+  GtkNotebook *source;
+  GtkNotebookPage *page = g_value_get_object (value);
 
-  source_widget = GTK_WIDGET (drag ? g_object_get_data (G_OBJECT (drag), "gtk-notebook-drag-origin") : NULL);
+  source = drag ? g_object_get_data (G_OBJECT (drag), "gtk-notebook-drag-origin") : NULL;
 
-  if (GTK_IS_NOTEBOOK (source_widget) &&
-      (gdk_drop_get_actions (drop) & GDK_ACTION_MOVE))
-    {
-      notebook->priv->mouse_x = x;
-      notebook->priv->mouse_y = y;
+  if (!gtk_notebook_can_drag_from (self, source, source->priv->cur_page))
+    return FALSE;
 
-      gdk_drop_read_value_async (drop, GTK_TYPE_NOTEBOOK_PAGE, G_PRIORITY_DEFAULT, NULL, got_page, notebook);
+  self->priv->mouse_x = x;
+  self->priv->mouse_y = y;
 
-      return TRUE;
-    }
+  do_detach_tab (source, self, page->child);
 
-  gdk_drop_finish (drop, 0);
-
-  return FALSE;
+  return TRUE;
 }
 
 /**

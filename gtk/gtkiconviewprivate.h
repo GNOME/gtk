@@ -17,10 +17,10 @@
 
 #include "gtk/gtkiconview.h"
 #include "gtk/gtkcssnodeprivate.h"
-#include "gtk/gtkdragdest.h"
-#include "gtk/gtkgestureclick.h"
 #include "gtk/gtkeventcontrollermotion.h"
 #include "gtk/gtkdragsource.h"
+#include "gtk/gtkdroptargetasync.h"
+#include "gtk/gtkgestureclick.h"
 
 #ifndef __GTK_ICON_VIEW_PRIVATE_H__
 #define __GTK_ICON_VIEW_PRIVATE_H__
@@ -135,7 +135,7 @@ struct _GtkIconViewPrivate
   gint press_start_y;
 
   GdkContentFormats *source_formats;
-  GtkDropTarget *dest;
+  GtkDropTargetAsync *dest;
   GtkCssNode *dndnode;
 
   GdkDrag *drag;
