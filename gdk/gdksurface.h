@@ -540,26 +540,14 @@ void          gdk_surface_set_opacity     (GdkSurface       *surface,
 GDK_AVAILABLE_IN_ALL
 void gdk_surface_begin_resize_drag            (GdkSurface     *surface,
                                                GdkSurfaceEdge  edge,
-                                               gint            button,
-                                               gint            x,
-                                               gint            y,
-                                               guint32         timestamp);
-GDK_AVAILABLE_IN_ALL
-void gdk_surface_begin_resize_drag_for_device (GdkSurface     *surface,
-                                               GdkSurfaceEdge  edge,
                                                GdkDevice      *device,
                                                gint            button,
                                                gint            x,
                                                gint            y,
                                                guint32         timestamp);
+
 GDK_AVAILABLE_IN_ALL
 void gdk_surface_begin_move_drag              (GdkSurface     *surface,
-                                               gint            button,
-                                               gint            x,
-                                               gint            y,
-                                               guint32         timestamp);
-GDK_AVAILABLE_IN_ALL
-void gdk_surface_begin_move_drag_for_device   (GdkSurface     *surface,
                                                GdkDevice      *device,
                                                gint            button,
                                                gint            x,
