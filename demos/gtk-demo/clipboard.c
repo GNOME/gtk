@@ -152,43 +152,17 @@ prepare_drag (GtkDragSource *source,
   return gdk_content_provider_new_typed (GDK_TYPE_TEXTURE, paintable);
 }
 
-static void
-got_texture (GObject *source,
-             GAsyncResult *result,
-             gpointer data)
-{
-  GdkDrop *drop = GDK_DROP (source);
-  GtkWidget *image = data;
-  const GValue *value;
-  GError *error = NULL;
-
-  value = gdk_drop_read_value_finish (drop, result, &error);
-  if (value)
-    {
-      GdkTexture *texture = g_value_get_object (value);
-      gtk_image_set_from_paintable (GTK_IMAGE (image), GDK_PAINTABLE (texture));
-    }
-  else
-    {
-      g_print ("Failed to get data: %s\n", error->message);
-      g_error_free (error);
-    }
-}
-
 static gboolean
 drag_drop (GtkDropTarget *dest,
-           GdkDrop       *drop,
-           int            x,
-           int            y,
-           GtkWidget     *widget)
+           const GValue  *value,
+           double         x,
+           double         y,
+           GtkImage      *image)
 {
-  if (gdk_drop_has_value (drop, GDK_TYPE_TEXTURE))
-    {
-      gdk_drop_read_value_async (drop, GDK_TYPE_TEXTURE, G_PRIORITY_DEFAULT, NULL, got_texture, widget);
-      return TRUE;
-    }
+  GdkTexture *texture = g_value_get_object (value);
+  gtk_image_set_from_paintable (GTK_IMAGE (image), GDK_PAINTABLE (texture));
 
-  return FALSE;
+  return TRUE;
 }
 
 static void
@@ -341,8 +315,8 @@ do_clipboard (GtkWidget *do_widget)
       gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
 
       /* accept drops on image */
-      dest = gtk_drop_target_new (gdk_content_formats_new_for_gtype (GDK_TYPE_TEXTURE), GDK_ACTION_COPY);
-      g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop), image);
+      dest = gtk_drop_target_new (GDK_TYPE_TEXTURE, GDK_ACTION_COPY);
+      g_signal_connect (dest, "drop", G_CALLBACK (drag_drop), image);
       gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (dest));
 
       /* context menu on image */
@@ -370,8 +344,8 @@ do_clipboard (GtkWidget *do_widget)
       gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
 
       /* accept drops on image */
-      dest = gtk_drop_target_new (gdk_content_formats_new_for_gtype (GDK_TYPE_TEXTURE), GDK_ACTION_COPY);
-      g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop), image);
+      dest = gtk_drop_target_new (GDK_TYPE_TEXTURE, GDK_ACTION_COPY);
+      g_signal_connect (dest, "drop", G_CALLBACK (drag_drop), image);
       gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (dest));
 
       /* context menu on image */

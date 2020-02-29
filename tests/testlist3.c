@@ -29,46 +29,29 @@ drag_begin (GtkDragSource *source,
   g_object_unref (paintable);
 }
 
-static void
-got_row (GObject      *src,
-         GAsyncResult *result,
-         gpointer      data)
+static gboolean
+drag_drop (GtkDropTarget *dest,
+           const GValue  *value,
+           double         x,
+           double         y,
+           gpointer       data)
 {
-  GdkDrop *drop = GDK_DROP (src);
   GtkWidget *target = data;
   GtkWidget *source;
   int pos;
 
-  source = g_value_get_object (gdk_drop_read_value_finish (drop, result, NULL));
+  source = g_value_get_object (value);
   if (source == NULL)
-    {
-      gdk_drop_finish (drop, 0);
-      return;
-    }
+    return FALSE;
 
   pos = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (target));
   if (source == target)
-    {
-      gdk_drop_finish (drop, 0);
-      return;
-    }
+    return FALSE;
 
   g_object_ref (source);
   gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (source)), source);
   gtk_list_box_insert (GTK_LIST_BOX (gtk_widget_get_parent (target)), source, pos);
   g_object_unref (source);
-
-  gdk_drop_finish (drop, GDK_ACTION_MOVE);
-}
-
-static gboolean
-drag_drop (GtkDropTarget    *dest,
-           GdkDrop          *drop,
-           int               x,
-           int               y,
-           gpointer          data)
-{
-  gdk_drop_read_value_async (drop, GTK_TYPE_LIST_BOX_ROW, G_PRIORITY_DEFAULT, NULL, got_row, data);
 
   return TRUE;
 }
@@ -96,8 +79,8 @@ create_row (const gchar *text)
   g_signal_connect (source, "prepare", G_CALLBACK (prepare), row);
   gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
 
-  dest = gtk_drop_target_new (gdk_content_formats_new_for_gtype (GTK_TYPE_LIST_BOX_ROW), GDK_ACTION_MOVE);
-  g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop), row);
+  dest = gtk_drop_target_new (GTK_TYPE_LIST_BOX_ROW, GDK_ACTION_MOVE);
+  g_signal_connect (dest, "drop", G_CALLBACK (drag_drop), row);
   gtk_widget_add_controller (GTK_WIDGET (row), GTK_EVENT_CONTROLLER (dest));
 
   return row;

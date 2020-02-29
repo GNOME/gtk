@@ -128,7 +128,7 @@ static void
 perform_drop (GdkDrop   *drop,
               GtkWidget *image)
 {
-  if (gdk_drop_has_value (drop, GDK_TYPE_TEXTURE))
+  if (gdk_content_formats_contain_gtype (gdk_drop_get_formats (drop), GDK_TYPE_TEXTURE))
     gdk_drop_read_value_async (drop, GDK_TYPE_TEXTURE, G_PRIORITY_DEFAULT, NULL, got_texture, image);
   else
     {
@@ -191,30 +191,28 @@ ask_actions (GdkDrop *drop,
 static gboolean
 delayed_deny (gpointer data)
 {
-  GtkDropTarget *dest = data;
+  GtkDropTargetAsync *dest = data;
   GtkWidget *image = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
   GdkDrop *drop = GDK_DROP (g_object_get_data (G_OBJECT (image), "drop"));
 
   if (drop)
     {
       g_print ("denying drop, late\n");
-      gtk_drop_target_deny_drop (dest, drop);
+      gtk_drop_target_async_reject_drop (dest, drop);
     }
 
   return G_SOURCE_REMOVE;
 }
 
 static gboolean
-image_drag_motion (GtkDropTarget    *dest,
-                   GdkDrop          *drop,
-                   gpointer          data)
+image_drag_accept (GtkDropTargetAsync *dest,
+                   GdkDrop            *drop,
+                   gpointer            data)
 {
   GtkWidget *image = data;
   g_object_set_data_full (G_OBJECT (image), "drop", g_object_ref (drop), g_object_unref);
 
   g_timeout_add (1000, delayed_deny, dest);
-
-  gdk_drop_status (drop, gtk_drop_target_get_actions (dest));
 
   return TRUE;
 }
@@ -222,8 +220,8 @@ image_drag_motion (GtkDropTarget    *dest,
 static gboolean
 image_drag_drop (GtkDropTarget    *dest,
                  GdkDrop          *drop,
-                 int               x,
-                 int               y,
+                 double            x,
+                 double            y,
                  gpointer          data)
 {
   GtkWidget *image = data;
@@ -329,7 +327,7 @@ make_image (const gchar *icon_name, int hotspot)
 {
   GtkWidget *image;
   GtkDragSource *source;
-  GtkDropTarget *dest;
+  GtkDropTargetAsync *dest;
   GdkContentFormats *formats;
   GdkContentFormatsBuilder *builder;
 
@@ -351,9 +349,9 @@ make_image (const gchar *icon_name, int hotspot)
   g_signal_connect (source, "drag-cancel", G_CALLBACK (drag_cancel), NULL);
   gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
 
-  dest = gtk_drop_target_new (formats, GDK_ACTION_COPY|GDK_ACTION_MOVE|GDK_ACTION_ASK);
-  g_signal_connect (dest, "accept", G_CALLBACK (image_drag_motion), image);
-  g_signal_connect (dest, "drag-drop", G_CALLBACK (image_drag_drop), image);
+  dest = gtk_drop_target_async_new (formats, GDK_ACTION_COPY|GDK_ACTION_MOVE|GDK_ACTION_ASK);
+  g_signal_connect (dest, "accept", G_CALLBACK (image_drag_accept), image);
+  g_signal_connect (dest, "drop", G_CALLBACK (image_drag_drop), image);
   gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (dest));
 
   return image;

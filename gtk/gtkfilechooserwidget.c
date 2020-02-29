@@ -31,7 +31,7 @@
 #include "gtkcomboboxtext.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkdragsource.h"
-#include "gtkdragdest.h"
+#include "gtkdroptarget.h"
 #include "gtkentry.h"
 #include "gtkfilechooserprivate.h"
 #include "gtkfilechooserdialog.h"
@@ -1923,24 +1923,16 @@ out:
   g_object_unref (cancellable);
 }
 
-static void
-file_list_drag_data_received_cb (GObject      *source,
-                                 GAsyncResult *result,
-                                 gpointer      user_data)
+static gboolean
+file_list_drag_drop_cb (GtkDropTarget        *dest,
+                        const GValue         *value,
+                        double                x,
+                        double                y,
+                        GtkFileChooserWidget *impl)
 {
-  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (user_data);
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-  GdkDrop *drop = GDK_DROP (source);
   GSList *files;
-  const GValue *value;
   FileListDragData *data;
-
-  value = gdk_drop_read_value_finish (drop, result, NULL);
-  if (value == NULL)
-    {
-      gdk_drop_finish (drop, 0);
-      return;
-    }
 
   files = g_value_get_boxed (value);
 
@@ -1957,30 +1949,6 @@ file_list_drag_data_received_cb (GObject      *source,
                                file_list_drag_data_received_get_info_cb,
                                    data);
 
-  gdk_drop_finish (drop, gdk_drop_get_actions (drop));
-}
-
-/* Don't do anything with the drag_drop signal */
-static gboolean
-file_list_drag_drop_cb (GtkDropTarget        *dest,
-                        GdkDrop              *drop,
-                        int                   x,
-                        int                   y,
-                        GtkFileChooserWidget *impl)
-{
-  gdk_drop_read_value_async (drop, GDK_TYPE_FILE_LIST, G_PRIORITY_DEFAULT, NULL, file_list_drag_data_received_cb, impl);
-
-  return TRUE;
-}
-
-/* Disable the normal tree drag motion handler, it makes it look like you're
-   dropping the dragged item onto a tree item */
-static gboolean
-file_list_drag_accept_cb (GtkDropTarget        *dest,
-                          GdkDrop              *drop,
-                          GtkFileChooserWidget *impl)
-{
-  g_signal_stop_emission_by_name (dest, "accept");
   return TRUE;
 }
 
@@ -8321,7 +8289,7 @@ post_process_ui (GtkFileChooserWidget *impl)
   GtkCellRenderer  *cell;
   GList            *cells;
   GFile            *file;
-  GtkDropTarget *dest;
+  GtkDropTarget *target;
 
   /* Setup file list treeview */
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->browse_files_tree_view));
@@ -8333,11 +8301,9 @@ post_process_ui (GtkFileChooserWidget *impl)
                                           gdk_content_formats_new_for_gtype (GDK_TYPE_FILE_LIST),
                                           GDK_ACTION_COPY | GDK_ACTION_MOVE);
   
-  dest = gtk_drop_target_new (gdk_content_formats_new_for_gtype (GDK_TYPE_FILE_LIST),
-                              GDK_ACTION_COPY | GDK_ACTION_MOVE);
-  g_signal_connect (dest, "accept", G_CALLBACK (file_list_drag_accept_cb), impl);
-  g_signal_connect (dest, "drag-drop", G_CALLBACK (file_list_drag_drop_cb), impl);
-  gtk_widget_add_controller (priv->browse_files_tree_view, GTK_EVENT_CONTROLLER (dest));
+  target = gtk_drop_target_new (GDK_TYPE_FILE_LIST, GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  g_signal_connect (target, "drop", G_CALLBACK (file_list_drag_drop_cb), impl);
+  gtk_widget_add_controller (priv->browse_files_tree_view, GTK_EVENT_CONTROLLER (target));
 
   /* File browser treemodel columns are shared between GtkFileChooser implementations,
    * so we don't set cell renderer attributes in GtkBuilder, but rather keep that
