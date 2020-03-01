@@ -2015,6 +2015,16 @@ gdk_toplevel_surface_present (GdkToplevel       *toplevel,
   else
     GDK_SURFACE_GET_CLASS (surface)->unmaximize (surface);
 
+  if (gdk_toplevel_layout_get_minimized (layout))
+    GDK_SURFACE_GET_CLASS (surface)->minimize (surface);
+  else
+    GDK_SURFACE_GET_CLASS (surface)->unminimize (surface);
+
+  if (gdk_toplevel_layout_get_stick (layout))
+    GDK_SURFACE_GET_CLASS (surface)->stick (surface);
+  else
+    GDK_SURFACE_GET_CLASS (surface)->unstick (surface);
+
   if (gdk_toplevel_layout_get_fullscreen (layout))
     {
       GdkMonitor *monitor = gdk_toplevel_layout_get_fullscreen_monitor (layout);
@@ -2025,6 +2035,9 @@ gdk_toplevel_surface_present (GdkToplevel       *toplevel,
     }
   else
     GDK_SURFACE_GET_CLASS (surface)->unfullscreen (surface);
+
+  GDK_SURFACE_GET_CLASS (surface)->set_keep_above (surface, gdk_toplevel_layout_get_keep_above (layout));
+  GDK_SURFACE_GET_CLASS (surface)->set_keep_below (surface, gdk_toplevel_layout_get_keep_below (layout));
 
   GDK_SURFACE_GET_CLASS (surface)->set_modal_hint (surface, gdk_toplevel_layout_get_modal (layout));
   GDK_SURFACE_GET_CLASS (surface)->set_type_hint (surface, gdk_toplevel_layout_get_type_hint (layout));
