@@ -86,7 +86,7 @@ gtk_drop_end_event (GdkDrop *drop)
 
   if (self->waiting)
     {
-      gdk_drop_status (drop, 0);
+      gdk_drop_status (drop, 0, 0);
       self->waiting = FALSE;
     }
   self->active = FALSE;
@@ -106,7 +106,7 @@ gtk_drop_status (GdkDrop       *drop,
   if (!self->waiting)
     return FALSE;
 
-  gdk_drop_status (drop, actions);
+  gdk_drop_status (drop, actions, preferred_action);
   self->waiting = FALSE;
   return TRUE;
 }

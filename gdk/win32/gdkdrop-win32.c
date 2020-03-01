@@ -1059,7 +1059,8 @@ gdk_dropfiles_filter (GdkWin32Display *display,
 
 static void
 gdk_win32_drop_status (GdkDrop       *drop,
-                       GdkDragAction  actions)
+                       GdkDragAction  actions,
+                       GdkDragAction  preferred)
 {
   GdkWin32Drop *drop_win32 = GDK_WIN32_DROP (drop);
   GdkDrag *drag;
@@ -1067,8 +1068,9 @@ gdk_win32_drop_status (GdkDrop       *drop,
   g_return_if_fail (drop != NULL);
 
   GDK_NOTE (DND, g_print ("gdk_win32_drop_status: %s\n"
-                          " context=%p:{source_actions=%s}\n",
+                          " context=%p:{source_actions=%s, preferred=%s}\n",
                           _gdk_win32_drag_action_to_string (actions),
+                          _gdk_win32_drag_action_to_string (preferred),
                           drop,
                           _gdk_win32_drag_action_to_string (gdk_drop_get_actions (drop))));
 
