@@ -2060,10 +2060,21 @@ gdk_toplevel_surface_present (GdkToplevel       *toplevel,
   return TRUE;
 }
 
+static GdkSurfaceState
+gdk_toplevel_surface_get_state (GdkToplevel *toplevel)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+
+  g_return_val_if_fail (surface->surface_type == GDK_SURFACE_TOPLEVEL, 0);
+
+  return surface->state;
+}
+
 static void
 gdk_surface_toplevel_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_toplevel_surface_present;
+  iface->get_state = gdk_toplevel_surface_get_state;
 }
 
 static void
