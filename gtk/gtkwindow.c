@@ -2434,7 +2434,7 @@ gtk_window_set_title_internal (GtkWindow   *window,
   priv->title = new_title;
 
   if (_gtk_widget_get_realized (GTK_WIDGET (window)))
-    gdk_surface_set_title (priv->surface, new_title != NULL ? new_title : "");
+    gdk_toplevel_set_title (GDK_TOPLEVEL (priv->surface), new_title != NULL ? new_title : "");
 
   if (update_titlebar && GTK_IS_HEADER_BAR (priv->title_box))
     gtk_header_bar_set_title (GTK_HEADER_BAR (priv->title_box), new_title != NULL ? new_title : "");
@@ -2532,7 +2532,7 @@ gtk_window_set_startup_id (GtkWindow   *window,
 	gtk_window_present_with_time (window, timestamp);
       else
         {
-          gdk_surface_set_startup_id (priv->surface, priv->startup_id);
+          gdk_toplevel_set_startup_id (GDK_TOPLEVEL (priv->surface), priv->startup_id);
 
           /* If window is mapped, terminate the startup-notification too */
           if (_gtk_widget_get_mapped (widget) && !disable_startup_notification)
@@ -3049,7 +3049,7 @@ gtk_window_transient_parent_realized (GtkWidget *parent,
   GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (window));
   GtkWindowPrivate *parent_priv = gtk_window_get_instance_private (GTK_WINDOW (parent));
   if (_gtk_widget_get_realized (window))
-    gdk_surface_set_transient_for (priv->surface, parent_priv->surface);
+    gdk_toplevel_set_transient_for (GDK_TOPLEVEL (priv->surface), parent_priv->surface);
 }
 
 static void
@@ -3058,7 +3058,7 @@ gtk_window_transient_parent_unrealized (GtkWidget *parent,
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (window));
   if (_gtk_widget_get_realized (window))
-    gdk_surface_set_transient_for (priv->surface, NULL);
+    gdk_toplevel_set_transient_for (GDK_TOPLEVEL (priv->surface), NULL);
 }
 
 static void
@@ -3072,7 +3072,7 @@ gtk_window_transient_parent_display_changed (GtkWindow	*parent,
 }
 
 static void       
-gtk_window_unset_transient_for  (GtkWindow *window)
+gtk_window_unset_transient_for (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
@@ -4093,7 +4093,7 @@ gtk_window_realize_icon (GtkWindow *window)
 
   info->realized = TRUE;
 
-  gdk_surface_set_icon_list (priv->surface, icon_list);
+  gdk_toplevel_set_icon_list (GDK_TOPLEVEL (priv->surface), icon_list);
   if (GTK_IS_HEADER_BAR (priv->title_box))
     _gtk_header_bar_update_window_icon (GTK_HEADER_BAR (priv->title_box), window);
 
@@ -5589,11 +5589,11 @@ gtk_window_realize (GtkWidget *widget)
       _gtk_widget_get_realized (GTK_WIDGET (priv->transient_parent)))
     {
       GtkWindowPrivate *parent_priv = gtk_window_get_instance_private (priv->transient_parent);
-      gdk_surface_set_transient_for (surface, parent_priv->surface);
+      gdk_toplevel_set_transient_for (GDK_TOPLEVEL (surface), parent_priv->surface);
     }
 
   if (priv->title)
-    gdk_surface_set_title (surface, priv->title);
+    gdk_toplevel_set_title (GDK_TOPLEVEL (surface), priv->title);
 
   if (!priv->decorated || priv->client_decorated)
     gdk_surface_set_decorations (surface, 0);
@@ -5627,7 +5627,7 @@ gtk_window_realize (GtkWidget *widget)
         }
 #endif
       if (!startup_id_is_fake (priv->startup_id))
-        gdk_surface_set_startup_id (surface, priv->startup_id);
+        gdk_toplevel_set_startup_id (GDK_TOPLEVEL (surface), priv->startup_id);
     }
 
 #ifdef GDK_WINDOWING_X11
