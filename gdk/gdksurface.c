@@ -641,6 +641,22 @@ gdk_surface_set_property (GObject      *object,
       surface->autohide = g_value_get_boolean (value);
       break;
 
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_TITLE:
+      gdk_surface_set_title (surface, g_value_get_string (value));
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_STARTUP_ID:
+      gdk_surface_set_startup_id (surface, g_value_get_string (value));
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_TRANSIENT_FOR:
+      gdk_surface_set_transient_for (surface, g_value_get_object (value));
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_ICON_LIST:
+      gdk_surface_set_icon_list (surface, g_value_get_object (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -687,6 +703,22 @@ gdk_surface_get_property (GObject    *object,
 
     case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_STATE:
       g_value_set_flags (value, surface->state);
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_TITLE:
+      g_value_set_string (value, ""); // FIXME
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_STARTUP_ID:
+      g_value_set_string (value, ""); // FIXME
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_TRANSIENT_FOR:
+      g_value_set_object (value, NULL); // FIXME
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_ICON_LIST:
+      g_value_set_pointer (value, NULL); // FIXME
       break;
 
     default:
@@ -2710,6 +2742,8 @@ gdk_surface_set_startup_id (GdkSurface   *surface,
                             const gchar *startup_id)
 {
   GDK_SURFACE_GET_CLASS (surface)->set_startup_id (surface, startup_id);
+
+  g_object_notify (G_OBJECT (surface), "startup-id");
 }
 
 /**
@@ -2732,6 +2766,8 @@ gdk_surface_set_transient_for (GdkSurface *surface,
   surface->transient_for = parent;
 
   GDK_SURFACE_GET_CLASS (surface)->set_transient_for (surface, parent);
+
+  g_object_notify (G_OBJECT (surface), "transient-for");
 }
 
 /**
@@ -2794,6 +2830,8 @@ gdk_surface_set_icon_list (GdkSurface *surface,
                            GList     *textures)
 {
   GDK_SURFACE_GET_CLASS (surface)->set_icon_list (surface, textures);
+
+  g_object_notify (G_OBJECT (surface), "icon-list");
 }
 
 /**
