@@ -3835,19 +3835,7 @@ gtk_window_set_decorated (GtkWindow *window,
 
   priv->decorated = setting;
 
-  if (priv->surface)
-    {
-      if (priv->decorated)
-        {
-          if (priv->client_decorated)
-            gdk_surface_set_decorations (priv->surface, 0);
-          else
-            gdk_surface_set_decorations (priv->surface, GDK_DECOR_ALL);
-        }
-      else
-        gdk_surface_set_decorations (priv->surface, 0);
-    }
-
+  gtk_window_update_toplevel (window);
   update_window_buttons (window);
   gtk_widget_queue_resize (GTK_WIDGET (window));
 
@@ -3904,15 +3892,7 @@ gtk_window_set_deletable (GtkWindow *window,
 
   priv->deletable = setting;
 
-  if (priv->surface)
-    {
-      if (priv->deletable)
-        gdk_surface_set_functions (priv->surface, GDK_FUNC_ALL);
-      else
-        gdk_surface_set_functions (priv->surface,
-				   GDK_FUNC_ALL | GDK_FUNC_CLOSE);
-    }
-
+  gtk_window_update_toplevel (window);
   update_window_buttons (window);
 
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_DELETABLE]);
@@ -4951,6 +4931,14 @@ gtk_window_compute_layout (GtkWindow *window,
   gdk_toplevel_layout_set_modal (layout, priv->modal);
   gdk_toplevel_layout_set_type_hint (layout, priv->type_hint);
   gdk_toplevel_layout_set_raise (layout, TRUE);
+  if (priv->decorated && !priv->client_decorated)
+    gdk_toplevel_layout_set_decorations (layout, GDK_DECOR_ALL);
+  else
+    gdk_toplevel_layout_set_decorations (layout, 0);
+  if (priv->deletable)
+    gdk_toplevel_layout_set_functions (layout, GDK_FUNC_ALL);
+  else
+    gdk_toplevel_layout_set_functions (layout, GDK_FUNC_ALL | GDK_FUNC_CLOSE);
 
   return layout;
 }
@@ -5587,16 +5575,10 @@ gtk_window_realize (GtkWidget *widget)
   if (priv->title)
     gdk_toplevel_set_title (GDK_TOPLEVEL (surface), priv->title);
 
-  if (!priv->decorated || priv->client_decorated)
-    gdk_surface_set_decorations (surface, 0);
-
 #ifdef GDK_WINDOWING_WAYLAND
   if (priv->client_decorated && GDK_IS_WAYLAND_SURFACE (surface))
     gdk_wayland_surface_announce_csd (surface);
 #endif
-
-  if (!priv->deletable)
-    gdk_surface_set_functions (surface, GDK_FUNC_ALL | GDK_FUNC_CLOSE);
 
   if (gtk_window_get_accept_focus (window))
     gdk_surface_set_accept_focus (surface, TRUE);
