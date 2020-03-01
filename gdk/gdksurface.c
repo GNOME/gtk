@@ -2054,10 +2054,58 @@ gdk_toplevel_surface_get_state (GdkToplevel *toplevel)
 }
 
 static void
+gdk_toplevel_surface_set_title (GdkToplevel *toplevel,
+                                const char  *title)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+
+  g_return_if_fail (surface->surface_type == GDK_SURFACE_TOPLEVEL);
+
+  GDK_SURFACE_GET_CLASS (surface)->set_title (surface, title);
+}
+
+static void
+gdk_toplevel_surface_set_startup_id (GdkToplevel *toplevel,
+                                     const char  *startup_id)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+
+  g_return_if_fail (surface->surface_type == GDK_SURFACE_TOPLEVEL);
+
+  GDK_SURFACE_GET_CLASS (surface)->set_startup_id (surface, startup_id);
+}
+
+static void
+gdk_toplevel_surface_set_transient_for (GdkToplevel *toplevel,
+                                        GdkSurface  *parent)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+
+  g_return_if_fail (surface->surface_type == GDK_SURFACE_TOPLEVEL);
+
+  GDK_SURFACE_GET_CLASS (surface)->set_transient_for (surface, parent);
+}
+
+static void
+gdk_toplevel_surface_set_icon_list (GdkToplevel *toplevel,
+                                    GList       *surfaces)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+
+  g_return_if_fail (surface->surface_type == GDK_SURFACE_TOPLEVEL);
+
+  GDK_SURFACE_GET_CLASS (surface)->set_icon_list (surface, surfaces);
+}
+
+static void
 gdk_surface_toplevel_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_toplevel_surface_present;
   iface->get_state = gdk_toplevel_surface_get_state;
+  iface->set_title = gdk_toplevel_surface_set_title;
+  iface->set_startup_id = gdk_toplevel_surface_set_startup_id;
+  iface->set_transient_for = gdk_toplevel_surface_set_transient_for;
+  iface->set_icon_list = gdk_toplevel_surface_set_icon_list;
 }
 
 static void
