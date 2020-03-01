@@ -582,8 +582,8 @@ gdk_surface_finalize (GObject *object)
       _gdk_surface_destroy (surface, FALSE);
     }
 
-  if (surface->input_shape)
-    cairo_region_destroy (surface->input_shape);
+  if (surface->input_region)
+    cairo_region_destroy (surface->input_region);
 
   if (surface->cursor)
     g_object_unref (surface->cursor);
@@ -2372,11 +2372,9 @@ gdk_surface_get_root_coords (GdkSurface *surface,
 }
 
 /**
- * gdk_surface_input_shape_combine_region:
+ * gdk_surface_set_input_region:
  * @surface: a #GdkSurface
- * @shape_region: region of surface to be non-transparent
- * @offset_x: X position of @shape_region in @surface coordinates
- * @offset_y: Y position of @shape_region in @surface coordinates
+ * @region: region of surface to be reactive
  *
  * Apply the region to the surface for the purpose of event
  * handling. Mouse events which happen while the pointer position
@@ -2396,28 +2394,23 @@ gdk_surface_get_root_coords (GdkSurface *surface,
  * function does nothing.
  */
 void
-gdk_surface_input_shape_combine_region (GdkSurface       *surface,
-                                        const cairo_region_t *shape_region,
-                                        gint             offset_x,
-                                        gint             offset_y)
+gdk_surface_set_input_region (GdkSurface     *surface,
+                              cairo_region_t *region)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   if (GDK_SURFACE_DESTROYED (surface))
     return;
 
-  if (surface->input_shape)
-    cairo_region_destroy (surface->input_shape);
+  if (surface->input_region)
+    cairo_region_destroy (surface->input_region);
 
-  if (shape_region)
-    {
-      surface->input_shape = cairo_region_copy (shape_region);
-      cairo_region_translate (surface->input_shape, offset_x, offset_y);
-    }
+  if (region)
+    surface->input_region = cairo_region_copy (region);
   else
-    surface->input_shape = NULL;
+    surface->input_region = NULL;
 
-  GDK_SURFACE_GET_CLASS (surface)->input_shape_combine_region (surface, surface->input_shape, 0, 0);
+  GDK_SURFACE_GET_CLASS (surface)->set_input_region (surface, surface->input_region);
 }
 
 /**

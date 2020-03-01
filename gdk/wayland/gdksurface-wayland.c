@@ -2935,10 +2935,8 @@ gdk_wayland_surface_get_device_state (GdkSurface       *surface,
 }
 
 static void
-gdk_wayland_surface_input_shape_combine_region (GdkSurface           *surface,
-                                                const cairo_region_t *shape_region,
-                                                gint                  offset_x,
-                                                gint                  offset_y)
+gdk_wayland_surface_set_input_region (GdkSurface     *surface,
+                                      cairo_region_t *input_region)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
@@ -2947,11 +2945,8 @@ gdk_wayland_surface_input_shape_combine_region (GdkSurface           *surface,
 
   g_clear_pointer (&impl->input_region, cairo_region_destroy);
 
-  if (shape_region)
-    {
-      impl->input_region = cairo_region_copy (shape_region);
-      cairo_region_translate (impl->input_region, offset_x, offset_y);
-    }
+  if (input_region)
+    impl->input_region = cairo_region_copy (input_region);
 
   impl->input_region_dirty = TRUE;
 }
@@ -3909,7 +3904,7 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   impl_class->get_geometry = gdk_wayland_surface_get_geometry;
   impl_class->get_root_coords = gdk_wayland_surface_get_root_coords;
   impl_class->get_device_state = gdk_wayland_surface_get_device_state;
-  impl_class->input_shape_combine_region = gdk_wayland_surface_input_shape_combine_region;
+  impl_class->set_input_region = gdk_wayland_surface_set_input_region;
   impl_class->destroy = gdk_wayland_surface_destroy;
   impl_class->beep = gdk_wayland_surface_beep;
 
