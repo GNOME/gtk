@@ -3349,7 +3349,7 @@ create_row_popover (GtkPlacesSidebar *sidebar,
 
   if (sidebar->open_flags & GTK_PLACES_OPEN_NEW_TAB)
     {
-      item = g_menu_item_new (_("_Open in New _Tab"), "row.open");
+      item = g_menu_item_new (_("Open in New _Tab"), "row.open");
       g_menu_item_set_action_and_target_value (item, "row.open",
                                                g_variant_new_int32 (GTK_PLACES_OPEN_NEW_TAB));
       g_menu_append_item (section, item);
@@ -3358,7 +3358,7 @@ create_row_popover (GtkPlacesSidebar *sidebar,
 
   if (sidebar->open_flags & GTK_PLACES_OPEN_NEW_WINDOW)
     {
-      item = g_menu_item_new (_("_Open in New _Tab"), "row.open");
+      item = g_menu_item_new (_("Open in New _Window"), "row.open");
       g_menu_item_set_action_and_target_value (item, "row.open",
                                                g_variant_new_int32 (GTK_PLACES_OPEN_NEW_WINDOW));
       g_menu_append_item (section, item);
@@ -3443,7 +3443,7 @@ create_row_popover (GtkPlacesSidebar *sidebar,
 
       if (ss_type == G_DRIVE_START_STOP_TYPE_SHUTDOWN) stop_label = _("_Safely Remove Drive");
       else if (ss_type == G_DRIVE_START_STOP_TYPE_NETWORK) stop_label = _("_Disconnect Drive");
-      else if (ss_type == G_DRIVE_START_STOP_TYPE_MULTIDISK) stop_label = _("Stop Multi-disk Device");
+      else if (ss_type == G_DRIVE_START_STOP_TYPE_MULTIDISK) stop_label = _("_Stop Multi-disk Device");
       else if (ss_type == G_DRIVE_START_STOP_TYPE_PASSWORD) stop_label = _("_Lock Device");
 
       item = g_menu_item_new (stop_label, "row.stop");
