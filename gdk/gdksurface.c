@@ -2110,6 +2110,20 @@ gdk_toplevel_surface_set_icon_list (GdkToplevel *toplevel,
   GDK_SURFACE_GET_CLASS (surface)->set_icon_list (surface, surfaces);
 }
 
+static gboolean
+gdk_toplevel_surface_show_window_menu (GdkToplevel *toplevel,
+                                       GdkEvent    *event)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+
+  g_return_val_if_fail (surface->surface_type == GDK_SURFACE_TOPLEVEL, FALSE);
+
+  if (GDK_SURFACE_GET_CLASS (surface)->show_window_menu)
+    return GDK_SURFACE_GET_CLASS (surface)->show_window_menu (surface, event);
+
+  return FALSE;
+}
+
 static void
 gdk_surface_toplevel_init (GdkToplevelInterface *iface)
 {
@@ -2119,6 +2133,7 @@ gdk_surface_toplevel_init (GdkToplevelInterface *iface)
   iface->set_startup_id = gdk_toplevel_surface_set_startup_id;
   iface->set_transient_for = gdk_toplevel_surface_set_transient_for;
   iface->set_icon_list = gdk_toplevel_surface_set_icon_list;
+  iface->show_window_menu = gdk_toplevel_surface_show_window_menu;
 }
 
 static void
