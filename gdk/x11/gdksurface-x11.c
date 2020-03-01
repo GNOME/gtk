@@ -3882,7 +3882,7 @@ check_maximize (MoveResizeData *mv_resize,
   if (mv_resize->is_resize)
     return;
 
-  state = gdk_surface_get_state (mv_resize->moveresize_surface);
+  state = gdk_toplevel_get_state (GDK_TOPLEVEL (mv_resize->moveresize_surface));
 
   if (state & GDK_SURFACE_STATE_MAXIMIZED)
     return;
@@ -3904,7 +3904,7 @@ check_unmaximize (MoveResizeData *mv_resize,
   if (mv_resize->is_resize)
     return;
 
-  state = gdk_surface_get_state (mv_resize->moveresize_surface);
+  state = gdk_toplevel_get_state (GDK_TOPLEVEL (mv_resize->moveresize_surface));
 
   if ((state & (GDK_SURFACE_STATE_MAXIMIZED | GDK_SURFACE_STATE_TILED)) == 0)
     return;
