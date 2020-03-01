@@ -1084,7 +1084,7 @@ surface_state_changed (GtkWidget *widget)
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GdkSurfaceState changed, new_state;
 
-  new_state = gdk_surface_get_state (gtk_native_get_surface (gtk_widget_get_native (widget)));
+  new_state = gdk_toplevel_get_state (GDK_TOPLEVEL (gtk_native_get_surface (gtk_widget_get_native (widget))));
   changed = new_state ^ priv->state;
   priv->state = new_state;
 

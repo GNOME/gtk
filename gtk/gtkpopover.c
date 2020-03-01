@@ -141,7 +141,6 @@ typedef struct {
   GskRenderer *renderer;
   GtkWidget *default_widget;
 
-  GdkSurfaceState state;
   GdkRectangle pointing_to;
   gboolean has_pointing_to;
   guint surface_transform_changed_cb;
@@ -591,23 +590,12 @@ gtk_popover_key_pressed (GtkWidget       *widget,
 }
 
 static void
-surface_state_changed (GtkWidget *widget)
+surface_mapped_changed (GtkWidget *widget)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GdkSurfaceState new_surface_state;
-  GdkSurfaceState changed_mask;
 
-  new_surface_state = gdk_surface_get_state (priv->surface);
-  changed_mask = new_surface_state ^ priv->state;
-  priv->state = new_surface_state;
-
-  if (changed_mask & GDK_SURFACE_STATE_WITHDRAWN)
-    {
-      if (priv->state & GDK_SURFACE_STATE_WITHDRAWN &&
-          gtk_widget_is_visible (widget))
-        gtk_widget_hide (widget);
-    }
+  gtk_widget_set_visible (widget, gdk_surface_get_mapped (priv->surface));
 }
 
 static void
@@ -751,7 +739,7 @@ gtk_popover_realize (GtkWidget *widget)
 
   gdk_surface_set_widget (priv->surface, widget);
 
-  g_signal_connect_swapped (priv->surface, "notify::state", G_CALLBACK (surface_state_changed), widget);
+  g_signal_connect_swapped (priv->surface, "notify::mapped", G_CALLBACK (surface_mapped_changed), widget);
   g_signal_connect_swapped (priv->surface, "size-changed", G_CALLBACK (surface_size_changed), widget);
   g_signal_connect (priv->surface, "render", G_CALLBACK (surface_render), widget);
   g_signal_connect (priv->surface, "event", G_CALLBACK (surface_event), widget);
@@ -773,7 +761,7 @@ gtk_popover_unrealize (GtkWidget *widget)
   gsk_renderer_unrealize (priv->renderer);
   g_clear_object (&priv->renderer);
 
-  g_signal_handlers_disconnect_by_func (priv->surface, surface_state_changed, widget);
+  g_signal_handlers_disconnect_by_func (priv->surface, surface_mapped_changed, widget);
   g_signal_handlers_disconnect_by_func (priv->surface, surface_size_changed, widget);
   g_signal_handlers_disconnect_by_func (priv->surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (priv->surface, surface_event, widget);
