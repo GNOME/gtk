@@ -1024,23 +1024,6 @@ gdk_surface_is_viewable (GdkSurface *surface)
   return surface->viewable;
 }
 
-/**
- * gdk_surface_get_state:
- * @surface: a #GdkSurface
- *
- * Gets the bitwise OR of the currently active surface state flags,
- * from the #GdkSurfaceState enumeration.
- *
- * Returns: surface state bitfield
- **/
-GdkSurfaceState
-gdk_surface_get_state (GdkSurface *surface)
-{
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
-
-  return surface->state;
-}
-
 GdkGLContext *
 gdk_surface_get_shared_data_gl_context (GdkSurface *surface)
 {
