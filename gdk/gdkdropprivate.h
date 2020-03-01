@@ -40,7 +40,8 @@ struct _GdkDropClass {
   GObjectClass parent_class;
 
   void                  (* status)                              (GdkDrop                *self,
-                                                                 GdkDragAction           actions);
+                                                                 GdkDragAction           actions,
+                                                                 GdkDragAction           preferred);
   void                  (* finish)                              (GdkDrop                *self,
                                                                  GdkDragAction           action);
 

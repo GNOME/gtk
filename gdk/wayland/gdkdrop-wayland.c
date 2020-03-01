@@ -122,7 +122,8 @@ gdk_wayland_drop_drop_set_status (GdkWaylandDrop *drop_wayland,
 
 static void
 gdk_wayland_drop_commit_status (GdkWaylandDrop *wayland_drop,
-                                GdkDragAction   actions)
+                                GdkDragAction   actions,
+                                GdkDragAction   preferred)
 {
   GdkDisplay *display;
 
@@ -135,15 +136,7 @@ gdk_wayland_drop_commit_status (GdkWaylandDrop *wayland_drop,
       uint32_t preferred_action;
 
       dnd_actions = gdk_to_wl_actions (actions);
-
-      if (dnd_actions & WL_DATA_DEVICE_MANAGER_DND_ACTION_COPY)
-        preferred_action = WL_DATA_DEVICE_MANAGER_DND_ACTION_COPY;
-      else if (dnd_actions & WL_DATA_DEVICE_MANAGER_DND_ACTION_MOVE)
-        preferred_action = WL_DATA_DEVICE_MANAGER_DND_ACTION_MOVE;
-      else if (dnd_actions & WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK)
-        preferred_action = WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK;
-      else
-        preferred_action = 0;
+      preferred_action = gdk_to_wl_actions (preferred);
 
       wl_data_offer_set_actions (wayland_drop->offer, dnd_actions, preferred_action);
     }
@@ -153,11 +146,12 @@ gdk_wayland_drop_commit_status (GdkWaylandDrop *wayland_drop,
 
 static void
 gdk_wayland_drop_status (GdkDrop       *drop,
-                         GdkDragAction  actions)
+                         GdkDragAction  actions,
+                         GdkDragAction  preferred)
 {
   GdkWaylandDrop *wayland_drop = GDK_WAYLAND_DROP (drop);
 
-  gdk_wayland_drop_commit_status (wayland_drop, actions);
+  gdk_wayland_drop_commit_status (wayland_drop, actions, preferred);
 }
 
 static void
@@ -170,7 +164,7 @@ gdk_wayland_drop_finish (GdkDrop       *drop,
 
   if (action)
     {
-      gdk_wayland_drop_commit_status (wayland_drop, action);
+      gdk_wayland_drop_commit_status (wayland_drop, action, action);
 
       if (display_wayland->data_device_manager_version >=
           WL_DATA_OFFER_FINISH_SINCE_VERSION)
