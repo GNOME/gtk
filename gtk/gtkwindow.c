@@ -1335,7 +1335,15 @@ gtk_window_titlebar_action (GtkWindow      *window,
       gdk_toplevel_layout_unref (layout);
     }
   else if (g_str_equal (action, "minimize"))
-    gdk_surface_minimize (priv->surface);
+    {
+      int w, h;
+      GdkToplevelLayout *layout;
+
+      layout = gtk_window_compute_layout (window, &w, &h);
+      gdk_toplevel_layout_set_minimized (layout, TRUE);
+      gdk_toplevel_present (GDK_TOPLEVEL (priv->surface), w, h, layout);
+      gdk_toplevel_layout_unref (layout);
+    }
   else if (g_str_equal (action, "menu"))
     gtk_window_do_popup (window, (GdkEventButton*) event);
   else
@@ -4933,6 +4941,10 @@ gtk_window_compute_layout (GtkWindow *window,
                                     geometry.max_width, geometry.max_height);
 
   gdk_toplevel_layout_set_maximized (layout, priv->maximize_initially);
+  gdk_toplevel_layout_set_minimized (layout, priv->minimize_initially);
+  gdk_toplevel_layout_set_stick (layout, priv->stick_initially);
+  gdk_toplevel_layout_set_keep_above (layout, priv->above_initially);
+  gdk_toplevel_layout_set_keep_below (layout, priv->below_initially);
   gdk_toplevel_layout_set_fullscreen (layout,
                                       priv->fullscreen_initially,
                                       priv->initial_fullscreen_monitor);
@@ -4983,22 +4995,6 @@ gtk_window_map (GtkWidget *widget)
     gtk_widget_map (priv->title_box);
 
   gtk_window_present_toplevel (window);
-
-#if 0
-  if (priv->stick_initially)
-    gdk_surface_stick (surface);
-  else
-    gdk_surface_unstick (surface);
-
-  if (priv->minimize_initially)
-    gdk_surface_minimize (surface);
-  else
-    gdk_surface_unminimize (surface);
-
-  gdk_surface_set_keep_above (surface, priv->above_initially);
-
-  gdk_surface_set_keep_below (surface, priv->below_initially);
-#endif
 
   gtk_window_set_theme_variant (window);
 
@@ -7738,8 +7734,7 @@ gtk_window_minimize (GtkWindow *window)
 
   priv->minimize_initially = TRUE;
 
-  if (priv->surface)
-    gdk_surface_minimize (priv->surface);
+  gtk_window_update_toplevel (window);
 }
 
 /**
@@ -7766,8 +7761,7 @@ gtk_window_unminimize (GtkWindow *window)
 
   priv->minimize_initially = FALSE;
 
-  if (priv->surface)
-    gdk_surface_unminimize (priv->surface);
+  gtk_window_update_toplevel (window);
 }
 
 /**
@@ -7796,8 +7790,7 @@ gtk_window_stick (GtkWindow *window)
 
   priv->stick_initially = TRUE;
 
-  if (priv->surface)
-    gdk_surface_stick (priv->surface);
+  gtk_window_update_toplevel (window);
 }
 
 /**
@@ -7823,8 +7816,7 @@ gtk_window_unstick (GtkWindow *window)
 
   priv->stick_initially = FALSE;
 
-  if (priv->surface)
-    gdk_surface_unstick (priv->surface);
+  gtk_window_update_toplevel (window);
 }
 
 /**
@@ -8023,8 +8015,7 @@ gtk_window_set_keep_above (GtkWindow *window,
   priv->above_initially = setting;
   priv->below_initially &= !setting;
 
-  if (priv->surface)
-    gdk_surface_set_keep_above (priv->surface, setting);
+  gtk_window_update_toplevel (window);
 }
 
 /**
@@ -8065,8 +8056,7 @@ gtk_window_set_keep_below (GtkWindow *window,
   priv->below_initially = setting;
   priv->above_initially &= !setting;
 
-  if (priv->surface)
-    gdk_surface_set_keep_below (priv->surface, setting);
+  gtk_window_update_toplevel (window);
 }
 
 /**
