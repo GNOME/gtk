@@ -602,6 +602,8 @@ gdk_wayland_surface_update_scale (GdkSurface *surface)
 }
 
 static void gdk_wayland_surface_create_surface (GdkSurface *surface);
+static void gdk_wayland_surface_set_title      (GdkSurface *surface,
+                                                const char *title);
 
 GdkSurface *
 _gdk_wayland_display_create_surface (GdkDisplay     *display,
@@ -654,7 +656,7 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
       gdk_display_get_n_monitors (display) > 0)
     impl->scale = gdk_monitor_get_scale_factor (gdk_display_get_monitor (display, 0));
 
-  gdk_surface_set_title (surface, get_default_title ());
+  gdk_wayland_surface_set_title (surface, get_default_title ());
 
   if (parent == NULL)
     display_wayland->toplevels = g_list_prepend (display_wayland->toplevels, surface);
@@ -4338,7 +4340,7 @@ gdk_wayland_surface_set_transient_for_exported (GdkSurface *surface,
       return FALSE;
     }
 
-  gdk_surface_set_transient_for (surface, NULL);
+  gdk_wayland_surface_set_transient_for (surface, NULL);
 
   impl->imported_transient_for =
     zxdg_importer_v1_import (display_wayland->xdg_importer, parent_handle_str);
