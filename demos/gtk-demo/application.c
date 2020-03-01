@@ -477,7 +477,7 @@ surface_state_changed (GtkWidget *widget)
   DemoApplicationWindow *window = (DemoApplicationWindow *)widget;
   GdkSurfaceState new_state;
 
-  new_state = gdk_surface_get_state (gtk_native_get_surface (GTK_NATIVE (widget)));
+  new_state = gdk_toplevel_get_state (GDK_TOPLEVEL (gtk_native_get_surface (GTK_NATIVE (widget))));
   window->maximized = (new_state & GDK_SURFACE_STATE_MAXIMIZED) != 0;
   window->fullscreen = (new_state & GDK_SURFACE_STATE_FULLSCREEN) != 0;
 }
