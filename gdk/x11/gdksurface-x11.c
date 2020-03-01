@@ -792,6 +792,9 @@ disconnect_frame_clock (GdkSurface *surface)
     }
 }
 
+static void gdk_x11_surface_set_title (GdkSurface *surface,
+                                       const char *title);
+
 GdkSurface *
 _gdk_x11_display_create_surface (GdkDisplay     *display,
                                  GdkSurfaceType  surface_type,
@@ -909,7 +912,7 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
   g_object_ref (surface);
   _gdk_x11_display_add_window (x11_screen->display, &impl->xid, surface);
 
-  gdk_surface_set_title (surface, get_default_title ());
+  gdk_x11_surface_set_title (surface, get_default_title ());
 
   class_hint = XAllocClassHint ();
   class_hint->res_name = (char *) g_get_prgname ();
