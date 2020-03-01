@@ -229,9 +229,9 @@ gtk_window_accessible_ref_state_set (AtkObject *accessible)
     atk_state_set_add_state (state_set, ATK_STATE_ACTIVE);
 
   gdk_surface = gtk_native_get_surface (GTK_NATIVE (window));
-  if (gdk_surface)
+  if (GDK_IS_TOPLEVEL (gdk_surface))
     {
-      state = gdk_surface_get_state (gdk_surface);
+      state = gdk_toplevel_get_state (GDK_TOPLEVEL (gdk_surface));
       if (state & GDK_SURFACE_STATE_MINIMIZED)
         atk_state_set_add_state (state_set, ATK_STATE_ICONIFIED);
     }
