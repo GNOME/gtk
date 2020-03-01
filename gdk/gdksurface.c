@@ -642,19 +642,23 @@ gdk_surface_set_property (GObject      *object,
       break;
 
     case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_TITLE:
-      gdk_surface_set_title (surface, g_value_get_string (value));
+      GDK_SURFACE_GET_CLASS (surface)->set_title (surface, g_value_get_string (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
     case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_STARTUP_ID:
-      gdk_surface_set_startup_id (surface, g_value_get_string (value));
+      GDK_SURFACE_GET_CLASS (surface)->set_startup_id (surface, g_value_get_string (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
     case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_TRANSIENT_FOR:
-      gdk_surface_set_transient_for (surface, g_value_get_object (value));
+      GDK_SURFACE_GET_CLASS (surface)->set_transient_for (surface, g_value_get_object (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
     case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_ICON_LIST:
-      gdk_surface_set_icon_list (surface, g_value_get_object (value));
+      GDK_SURFACE_GET_CLASS (surface)->set_icon_list (surface, g_value_get_pointer (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
     default:
@@ -2696,65 +2700,6 @@ gdk_surface_focus (GdkSurface *surface,
 }
 
 /**
- * gdk_surface_set_title:
- * @surface: a toplevel #GdkSurface
- * @title: title of @surface
- *
- * Sets the title of a toplevel surface, to be displayed in the titlebar.
- * If you haven’t explicitly set the icon name for the surface
- * (using gdk_surface_set_icon_name()), the icon name will be set to
- * @title as well. @title must be in UTF-8 encoding (as with all
- * user-readable strings in GDK and GTK). @title may not be %NULL.
- **/
-void
-gdk_surface_set_title (GdkSurface   *surface,
-                       const gchar *title)
-{
-  GDK_SURFACE_GET_CLASS (surface)->set_title (surface, title);
-}
-
-/**
- * gdk_surface_set_startup_id:
- * @surface: a toplevel #GdkSurface
- * @startup_id: a string with startup-notification identifier
- *
- * When using GTK, typically you should use gtk_window_set_startup_id()
- * instead of this low-level function.
- **/
-void
-gdk_surface_set_startup_id (GdkSurface   *surface,
-                            const gchar *startup_id)
-{
-  GDK_SURFACE_GET_CLASS (surface)->set_startup_id (surface, startup_id);
-
-  g_object_notify (G_OBJECT (surface), "startup-id");
-}
-
-/**
- * gdk_surface_set_transient_for:
- * @surface: a toplevel #GdkSurface
- * @parent: another toplevel #GdkSurface
- *
- * Indicates to the window manager that @surface is a transient dialog
- * associated with the application surface @parent. This allows the
- * window manager to do things like center @surface on @parent and
- * keep @surface above @parent.
- *
- * See gtk_window_set_transient_for() if you’re using #GtkWindow or
- * #GtkDialog.
- **/
-void
-gdk_surface_set_transient_for (GdkSurface *surface,
-                               GdkSurface *parent)
-{
-  surface->transient_for = parent;
-
-  GDK_SURFACE_GET_CLASS (surface)->set_transient_for (surface, parent);
-
-  g_object_notify (G_OBJECT (surface), "transient-for");
-}
-
-/**
  * gdk_surface_set_accept_focus:
  * @surface: a toplevel #GdkSurface
  * @accept_focus: %TRUE if the surface should receive input focus
@@ -2791,56 +2736,6 @@ gdk_surface_set_focus_on_map (GdkSurface *surface,
                               gboolean focus_on_map)
 {
   GDK_SURFACE_GET_CLASS (surface)->set_focus_on_map (surface, focus_on_map);
-}
-
-/**
- * gdk_surface_set_icon_list:
- * @surface: The #GdkSurface toplevel surface to set the icon of.
- * @surfaces: (transfer none) (element-type GdkTexture):
- *     A list of image surfaces, of different sizes.
- *
- * Sets a list of icons for the surface. One of these will be used
- * to represent the surface when it has been iconified. The icon is
- * usually shown in an icon box or some sort of task bar. Which icon
- * size is shown depends on the window manager. The window manager
- * can scale the icon  but setting several size icons can give better
- * image quality since the window manager may only need to scale the
- * icon by a small amount or not at all.
- *
- * Note that some platforms don't support surface icons.
- */
-void
-gdk_surface_set_icon_list (GdkSurface *surface,
-                           GList     *textures)
-{
-  GDK_SURFACE_GET_CLASS (surface)->set_icon_list (surface, textures);
-
-  g_object_notify (G_OBJECT (surface), "icon-list");
-}
-
-/**
- * gdk_surface_set_icon_name:
- * @surface: a toplevel #GdkSurface
- * @name: (allow-none): name of surface while iconified (minimized)
- *
- * Surfaces may have a name used while minimized, distinct from the
- * name they display in their titlebar. Most of the time this is a bad
- * idea from a user interface standpoint. But you can set such a name
- * with this function, if you like.
- *
- * After calling this with a non-%NULL @name, calls to gdk_surface_set_title()
- * will not update the icon title.
- *
- * Using %NULL for @name unsets the icon title; further calls to
- * gdk_surface_set_title() will again update the icon title as well.
- *
- * Note that some platforms don't support surface icons.
- **/
-void
-gdk_surface_set_icon_name (GdkSurface   *surface,
-                           const gchar *name)
-{
-  GDK_SURFACE_GET_CLASS (surface)->set_icon_name (surface, name);
 }
 
 /**

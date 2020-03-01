@@ -388,16 +388,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean      gdk_surface_get_mapped   (GdkSurface *surface);
 
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_title         (GdkSurface   *surface,
-                                             const gchar  *title);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_startup_id    (GdkSurface     *surface,
-                                             const gchar   *startup_id);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_transient_for (GdkSurface     *surface,
-                                             GdkSurface     *parent);
-
-GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_cursor     (GdkSurface      *surface,
                                           GdkCursor       *cursor);
 GDK_AVAILABLE_IN_ALL
@@ -428,12 +418,6 @@ void          gdk_surface_get_device_position (GdkSurface      *surface,
                                                double          *x,
                                                double          *y,
                                                GdkModifierType *mask);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_icon_list   (GdkSurface       *surface,
-                                           GList           *surfaces);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_icon_name  (GdkSurface      *surface,
-                                          const gchar     *name);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_decorations (GdkSurface     *surface,
                                            GdkWMDecoration  decorations);
