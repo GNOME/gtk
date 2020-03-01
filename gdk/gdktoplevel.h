@@ -40,6 +40,9 @@ gboolean        gdk_toplevel_present            (GdkToplevel       *toplevel,
                                                  int                height,
                                                  GdkToplevelLayout *layout);
 
+GDK_AVAILABLE_IN_ALL
+GdkSurfaceState gdk_toplevel_get_state          (GdkToplevel       *toplevel);
+
 G_END_DECLS
 
 #endif /* __GDK_TOPLEVEL_H__ */
