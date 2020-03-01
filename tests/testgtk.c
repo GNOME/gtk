@@ -4682,8 +4682,6 @@ create_wmhints (GtkWidget *widget)
       g_object_unref (texture);
       g_object_unref (pixbuf);
 
-      gdk_surface_set_icon_name (gdk_surface, "WMHints Test Icon");
-
       gdk_surface_set_decorations (gdk_surface, GDK_DECOR_ALL | GDK_DECOR_MENU);
       gdk_surface_set_functions (gdk_surface, GDK_FUNC_ALL | GDK_FUNC_RESIZE);
 
