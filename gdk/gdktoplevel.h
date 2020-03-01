@@ -59,6 +59,11 @@ GDK_AVAILABLE_IN_ALL
 void            gdk_toplevel_set_icon_list      (GdkToplevel       *toplevel,
                                                  GList             *surfaces);
 
+GDK_AVAILABLE_IN_ALL
+gboolean        gdk_toplevel_show_window_menu   (GdkToplevel       *toplevel,
+                                                 GdkEvent          *event);
+
+
 G_END_DECLS
 
 #endif /* __GDK_TOPLEVEL_H__ */
