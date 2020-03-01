@@ -418,15 +418,6 @@ void          gdk_surface_get_device_position (GdkSurface      *surface,
                                                double          *x,
                                                double          *y,
                                                GdkModifierType *mask);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_decorations (GdkSurface     *surface,
-                                           GdkWMDecoration  decorations);
-GDK_AVAILABLE_IN_ALL
-gboolean      gdk_surface_get_decorations (GdkSurface       *surface,
-                                           GdkWMDecoration *decorations);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_functions  (GdkSurface      *surface,
-                                          GdkWMFunction    functions);
 
 GDK_AVAILABLE_IN_ALL
 cairo_surface_t *
