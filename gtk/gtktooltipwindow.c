@@ -178,7 +178,7 @@ surface_state_changed (GtkWidget *widget)
   GdkSurfaceState new_surface_state;
   GdkSurfaceState changed_mask;
 
-  new_surface_state = gdk_surface_get_state (window->surface);
+  new_surface_state = gdk_toplevel_get_state (GDK_TOPLEVEL (window->surface));
   changed_mask = new_surface_state ^ window->state;
   window->state = new_surface_state;
 
