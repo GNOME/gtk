@@ -1162,11 +1162,11 @@ gtk_popover_update_shape (GtkPopover *popover)
       region = gdk_cairo_region_create_from_surface (cairo_surface);
       cairo_surface_destroy (cairo_surface);
 
-      gdk_surface_input_shape_combine_region (priv->surface, region, 0, 0);
+      gdk_surface_set_input_region (priv->surface, region);
       cairo_region_destroy (region);
     }
   else
-    gdk_surface_input_shape_combine_region (priv->surface, NULL, 0, 0);
+    gdk_surface_set_input_region (priv->surface, NULL);
 }
 
 static gint

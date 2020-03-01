@@ -376,10 +376,8 @@ void          gdk_surface_set_focus_on_map      (GdkSurface     *surface,
                                                  gboolean       focus_on_map);
 
 GDK_AVAILABLE_IN_ALL
-void gdk_surface_input_shape_combine_region (GdkSurface       *surface,
-                                             const cairo_region_t *shape_region,
-                                             gint             offset_x,
-                                             gint             offset_y);
+void          gdk_surface_set_input_region      (GdkSurface     *surface,
+                                                 cairo_region_t *region);
 
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_surface_is_viewable    (GdkSurface *surface);
