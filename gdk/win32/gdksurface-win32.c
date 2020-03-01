@@ -5166,10 +5166,8 @@ _gdk_win32_surface_get_unscaled_size (GdkSurface *window,
 }
 
 static void
-gdk_win32_input_shape_combine_region (GdkSurface            *window,
-                                      const cairo_region_t *shape_region,
-                                      gint                  offset_x,
-                                      gint                  offset_y)
+gdk_win32_surface_set_input_region (GdkSurface     *window,
+                                    cairo_region_t *input_region)
 {
   /* Partial input shape support is implemented by handling the
    * NC_NCHITTEST message
@@ -5199,7 +5197,7 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
   impl_class->get_device_state = gdk_surface_win32_get_device_state;
   impl_class->get_root_coords = gdk_win32_surface_get_root_coords;
 
-  impl_class->input_shape_combine_region = gdk_win32_input_shape_combine_region;
+  impl_class->set_input_region = gdk_win32_surface_set_input_region;
   impl_class->destroy = gdk_win32_surface_destroy;
 
   //impl_class->beep = gdk_x11_surface_beep;

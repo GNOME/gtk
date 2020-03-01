@@ -89,7 +89,7 @@ struct _GdkSurface
   GdkCursor *cursor;
   GHashTable *device_cursor;
 
-  cairo_region_t *input_shape;
+  cairo_region_t *input_region;
 
   GList *devices_inside;
 
@@ -142,10 +142,8 @@ struct _GdkSurfaceClass
                                          gdouble         *y,
                                          GdkModifierType *mask);
 
-  void         (* input_shape_combine_region) (GdkSurface       *surface,
-                                               const cairo_region_t *shape_region,
-                                               gint             offset_x,
-                                               gint             offset_y);
+  void         (* set_input_region)     (GdkSurface      *surface,
+                                         cairo_region_t  *shape_region);
 
 /* Called to do the windowing system specific part of gdk_surface_destroy(),
  *

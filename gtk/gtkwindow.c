@@ -5409,7 +5409,7 @@ update_csd_shape (GtkWindow *window)
       if (priv->extra_input_region)
         cairo_region_intersect (region, priv->extra_input_region);
 
-      gdk_surface_input_shape_combine_region (priv->surface, region, 0, 0);
+      gdk_surface_set_input_region (priv->surface, region);
       cairo_region_destroy (region);
     }
 }

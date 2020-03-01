@@ -689,10 +689,8 @@ gdk_broadway_surface_get_device_state (GdkSurface      *surface,
 }
 
 static void
-gdk_broadway_surface_input_shape_combine_region (GdkSurface       *surface,
-                                                 const cairo_region_t *shape_region,
-                                                 gint             offset_x,
-                                                 gint             offset_y)
+gdk_broadway_surface_set_input_region (GdkSurface     *surface,
+                                       cairo_region_t *shape_region)
 {
 }
 
@@ -1410,7 +1408,7 @@ gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
   impl_class->get_geometry = gdk_broadway_surface_get_geometry;
   impl_class->get_root_coords = gdk_broadway_surface_get_root_coords;
   impl_class->get_device_state = gdk_broadway_surface_get_device_state;
-  impl_class->input_shape_combine_region = gdk_broadway_surface_input_shape_combine_region;
+  impl_class->set_input_region = gdk_broadway_surface_set_input_region;
   impl_class->destroy = _gdk_broadway_surface_destroy;
   impl_class->beep = gdk_broadway_surface_beep;
 
