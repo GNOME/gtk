@@ -446,19 +446,6 @@ void          gdk_surface_stick           (GdkSurface       *surface);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_unstick         (GdkSurface       *surface);
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_fullscreen      (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_fullscreen_on_monitor (GdkSurface      *surface,
-                                                 GdkMonitor     *monitor);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_fullscreen_mode (GdkSurface   *surface,
-                                               GdkFullscreenMode mode);
-GDK_AVAILABLE_IN_ALL
-GdkFullscreenMode
-              gdk_surface_get_fullscreen_mode (GdkSurface   *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_unfullscreen    (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_keep_above  (GdkSurface       *surface,
                                            gboolean         setting);
 GDK_AVAILABLE_IN_ALL

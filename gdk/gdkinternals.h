@@ -282,6 +282,12 @@ void           gdk_seat_ungrab           (GdkSeat                *seat);
 GdkSurface *   gdk_surface_new_temp             (GdkDisplay    *display,
                                                  const GdkRectangle *position);
 
+
+void              gdk_surface_set_fullscreen_mode (GdkSurface        *surface,
+                                                   GdkFullscreenMode  mode);
+GdkFullscreenMode gdk_surface_get_fullscreen_mode (GdkSurface        *surface);
+
+
 G_END_DECLS
 
 #endif /* __GDK_INTERNALS_H__ */
