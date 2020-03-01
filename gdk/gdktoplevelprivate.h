@@ -16,6 +16,14 @@ struct _GdkToplevelInterface
                                          GdkToplevelLayout *layout);
 };
 
+typedef enum {
+  GDK_TOPLEVEL_PROP_STATE,
+  GDK_TOPLEVEL_NUM_PROPERTIES
+} GdkToplevelProperties;
+
+guint gdk_toplevel_install_properties (GObjectClass *object_class,
+                                       guint         first_prop);
+
 G_END_DECLS
 
 #endif /* __GDK_TOPLEVEL_PRIVATE_H__ */
