@@ -6933,7 +6933,7 @@ gtk_window_do_popup (GtkWindow      *window,
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-  if (!gdk_surface_show_window_menu (priv->surface, (GdkEvent *) event))
+  if (!gdk_toplevel_show_window_menu (GDK_TOPLEVEL (priv->surface), (GdkEvent *) event))
     gtk_window_do_popup_fallback (window, event);
 }
 
