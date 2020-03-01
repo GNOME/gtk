@@ -199,6 +199,7 @@
     <file>paintable_mediastream.c</file>
     <file>panes.c</file>
     <file>password_entry.c</file>
+    <file>peg_solitaire.c</file>
     <file>pickers.c</file>
     <file>pixbufs.c</file>
     <file>popover.c</file>
