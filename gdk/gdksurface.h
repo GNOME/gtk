@@ -388,9 +388,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean      gdk_surface_get_mapped   (GdkSurface *surface);
 
 GDK_AVAILABLE_IN_ALL
-GdkSurfaceState gdk_surface_get_state (GdkSurface *surface);
-
-GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_title         (GdkSurface   *surface,
                                              const gchar  *title);
 GDK_AVAILABLE_IN_ALL
