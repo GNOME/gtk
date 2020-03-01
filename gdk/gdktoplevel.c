@@ -19,6 +19,8 @@
 
 #include "config.h"
 
+#include "gdkintl.h"
+#include "gdk-private.h"
 #include "gdktoplevelprivate.h"
 
 /**
@@ -48,6 +50,22 @@ static void
 gdk_toplevel_default_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_toplevel_default_present;
+
+  g_object_interface_install_property (iface,
+      g_param_spec_flags ("state",
+                          P_("State"),
+                          P_("State"),
+                          GDK_TYPE_SURFACE_STATE, GDK_SURFACE_STATE_WITHDRAWN,
+                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+}
+
+guint
+gdk_toplevel_install_properties (GObjectClass *object_class,
+                                 guint         first_prop)
+{
+  g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_STATE, "state");
+
+  return GDK_TOPLEVEL_NUM_PROPERTIES;
 }
 
 /**
@@ -77,4 +95,25 @@ gdk_toplevel_present (GdkToplevel       *toplevel,
   g_return_val_if_fail (layout != NULL, FALSE);
 
   return GDK_TOPLEVEL_GET_IFACE (toplevel)->present (toplevel, width, height, layout);
+}
+
+/**
+ * gdk_toplevel_get_state:
+ * @toplevel: a #GdkToplevel
+ *
+ * Gets the bitwise OR of the currently active surface state flags,
+ * from the #GdkSurfaceState enumeration.
+ *
+ * Returns: surface state bitfield
+ */
+GdkSurfaceState
+gdk_toplevel_get_state (GdkToplevel *toplevel)
+{
+  GdkSurfaceState state;
+
+  g_return_val_if_fail (GDK_IS_TOPLEVEL (toplevel), 0);
+
+  g_object_get (toplevel, "state", &state, NULL);
+
+  return state;
 }
