@@ -42,6 +42,8 @@ struct _GdkToplevelLayout
   guint keep_below : 1;
   GdkMonitor *fullscreen_monitor;
   GdkSurfaceTypeHint type_hint;
+  GdkWMDecoration decorations;
+  GdkWMFunction functions;
 };
 
 G_DEFINE_BOXED_TYPE (GdkToplevelLayout, gdk_toplevel_layout,
@@ -329,4 +331,30 @@ gboolean
 gdk_toplevel_layout_get_keep_below (GdkToplevelLayout *layout)
 {
   return layout->keep_below;
+}
+
+void
+gdk_toplevel_layout_set_decorations (GdkToplevelLayout *layout,
+                                     GdkWMDecoration    decorations)
+{
+  layout->decorations = decorations;
+}
+
+GdkWMDecoration
+gdk_toplevel_layout_get_decorations (GdkToplevelLayout *layout)
+{
+  return layout->decorations;
+}
+
+void
+gdk_toplevel_layout_set_functions (GdkToplevelLayout *layout,
+                                   GdkWMFunction      functions)
+{
+  layout->functions = functions;
+}
+
+GdkWMFunction
+gdk_toplevel_layout_get_functions (GdkToplevelLayout *layout)
+{
+  return layout->functions;
 }

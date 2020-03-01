@@ -26,6 +26,7 @@
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkmonitor.h>
+#include <gdk/gdksurface.h>
 
 G_BEGIN_DECLS
 
@@ -140,6 +141,20 @@ void                    gdk_toplevel_layout_set_keep_below (GdkToplevelLayout *l
 
 GDK_AVAILABLE_IN_ALL
 gboolean                gdk_toplevel_layout_get_keep_below (GdkToplevelLayout *layout);
+
+GDK_AVAILABLE_IN_ALL
+void                    gdk_toplevel_layout_set_decorations (GdkToplevelLayout *layout,
+                                                             GdkWMDecoration    decorations);
+
+GDK_AVAILABLE_IN_ALL
+GdkWMDecoration         gdk_toplevel_layout_get_decorations (GdkToplevelLayout *layout);
+
+GDK_AVAILABLE_IN_ALL
+void                    gdk_toplevel_layout_set_functions   (GdkToplevelLayout *layout,
+                                                             GdkWMFunction      functions);
+
+GDK_AVAILABLE_IN_ALL
+GdkWMFunction           gdk_toplevel_layout_get_functions   (GdkToplevelLayout *layout);
 
 G_END_DECLS
 
