@@ -4736,7 +4736,7 @@ surface_state_callback (GdkSurface  *window,
   gchar *msg;
   GdkSurfaceState new_state;
 
-  new_state = gdk_surface_get_state (window);
+  new_state = gdk_toplevel_get_state (GDK_TOPLEVEL (window));
   msg = g_strconcat ((const char *)g_object_get_data (G_OBJECT (label), "title"), ": ",
                      (new_state & GDK_SURFACE_STATE_WITHDRAWN) ?
                      "withdrawn" : "not withdrawn", ", ",
