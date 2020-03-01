@@ -43,6 +43,22 @@ gboolean        gdk_toplevel_present            (GdkToplevel       *toplevel,
 GDK_AVAILABLE_IN_ALL
 GdkSurfaceState gdk_toplevel_get_state          (GdkToplevel       *toplevel);
 
+GDK_AVAILABLE_IN_ALL
+void            gdk_toplevel_set_title          (GdkToplevel       *toplevel,
+                                                 const char        *title);
+
+GDK_AVAILABLE_IN_ALL
+void            gdk_toplevel_set_startup_id     (GdkToplevel       *toplevel,
+                                                 const char        *startup_id);
+
+GDK_AVAILABLE_IN_ALL
+void            gdk_toplevel_set_transient_for  (GdkToplevel       *toplevel,
+                                                 GdkSurface        *parent);
+
+GDK_AVAILABLE_IN_ALL
+void            gdk_toplevel_set_icon_list      (GdkToplevel       *toplevel,
+                                                 GList             *surfaces);
+
 G_END_DECLS
 
 #endif /* __GDK_TOPLEVEL_H__ */
