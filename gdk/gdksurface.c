@@ -2011,12 +2011,12 @@ gdk_toplevel_surface_present (GdkToplevel       *toplevel,
     {
       GdkMonitor *monitor = gdk_toplevel_layout_get_fullscreen_monitor (layout);
       if (monitor)
-        gdk_surface_fullscreen_on_monitor (surface, monitor);
+        GDK_SURFACE_GET_CLASS (surface)->fullscreen_on_monitor (surface, monitor);
       else
-        gdk_surface_fullscreen (surface);
+        GDK_SURFACE_GET_CLASS (surface)->fullscreen (surface);
     }
   else
-    gdk_surface_unfullscreen (surface);
+    GDK_SURFACE_GET_CLASS (surface)->unfullscreen (surface);
 
   GDK_SURFACE_GET_CLASS (surface)->set_modal_hint (surface, gdk_toplevel_layout_get_modal (layout));
   GDK_SURFACE_GET_CLASS (surface)->set_type_hint (surface, gdk_toplevel_layout_get_type_hint (layout));
@@ -2815,78 +2815,6 @@ gdk_surface_unstick (GdkSurface *surface)
   GDK_SURFACE_GET_CLASS (surface)->unstick (surface);
 }
 
-/**
- * gdk_surface_fullscreen:
- * @surface: a toplevel #GdkSurface
- *
- * Moves the surface into fullscreen mode. This means the
- * surface covers the entire screen and is above any panels
- * or task bars.
- *
- * If the surface was already fullscreen, then this function does nothing.
- *
- * On X11, asks the window manager to put @surface in a fullscreen
- * state, if the window manager supports this operation. Not all
- * window managers support this, and some deliberately ignore it or
- * don’t have a concept of “fullscreen”; so you can’t rely on the
- * fullscreenification actually happening. But it will happen with
- * most standard window managers, and GDK makes a best effort to get
- * it to happen.
- **/
-void
-gdk_surface_fullscreen (GdkSurface *surface)
-{
-  GDK_SURFACE_GET_CLASS (surface)->fullscreen (surface);
-}
-
-/**
- * gdk_surface_fullscreen_on_monitor:
- * @surface: a toplevel #GdkSurface
- * @monitor: Which monitor to display fullscreen on.
- *
- * Moves the surface into fullscreen mode on the given monitor. This means
- * the surface covers the entire screen and is above any panels or task bars.
- *
- * If the surface was already fullscreen, then this function does nothing.
- **/
-void
-gdk_surface_fullscreen_on_monitor (GdkSurface  *surface,
-                                   GdkMonitor *monitor)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-  g_return_if_fail (GDK_IS_MONITOR (monitor));
-  g_return_if_fail (gdk_monitor_get_display (monitor) == surface->display);
-  g_return_if_fail (gdk_monitor_is_valid (monitor));
-
-  if (GDK_SURFACE_GET_CLASS (surface)->fullscreen_on_monitor != NULL)
-    GDK_SURFACE_GET_CLASS (surface)->fullscreen_on_monitor (surface, monitor);
-  else
-    GDK_SURFACE_GET_CLASS (surface)->fullscreen (surface);
-}
-
-/**
- * gdk_surface_set_fullscreen_mode:
- * @surface: a toplevel #GdkSurface
- * @mode: fullscreen mode
- *
- * Specifies whether the @surface should span over all monitors (in a multi-head
- * setup) or only the current monitor when in fullscreen mode.
- *
- * The @mode argument is from the #GdkFullscreenMode enumeration.
- * If #GDK_FULLSCREEN_ON_ALL_MONITORS is specified, the fullscreen @surface will
- * span over all monitors of the display.
- *
- * On X11, searches through the list of monitors display the ones
- * which delimit the 4 edges of the entire display and will ask the window
- * manager to span the @surface over these monitors.
- *
- * If the XINERAMA extension is not available or not usable, this function
- * has no effect.
- *
- * Not all window managers support this, so you can’t rely on the fullscreen
- * surface to span over the multiple monitors when #GDK_FULLSCREEN_ON_ALL_MONITORS
- * is specified.
- **/
 void
 gdk_surface_set_fullscreen_mode (GdkSurface        *surface,
                                  GdkFullscreenMode mode)
@@ -2902,41 +2830,12 @@ gdk_surface_set_fullscreen_mode (GdkSurface        *surface,
     }
 }
 
-/**
- * gdk_surface_get_fullscreen_mode:
- * @surface: a toplevel #GdkSurface
- *
- * Obtains the #GdkFullscreenMode of the @surface.
- *
- * Returns: The #GdkFullscreenMode applied to the surface when fullscreen.
- **/
 GdkFullscreenMode
 gdk_surface_get_fullscreen_mode (GdkSurface *surface)
 {
   g_return_val_if_fail (GDK_IS_SURFACE (surface), GDK_FULLSCREEN_ON_CURRENT_MONITOR);
 
   return surface->fullscreen_mode;
-}
-
-/**
- * gdk_surface_unfullscreen:
- * @surface: a toplevel #GdkSurface
- *
- * Moves the surface out of fullscreen mode. If the surface was not
- * fullscreen, does nothing.
- *
- * On X11, asks the window manager to move @surface out of the fullscreen
- * state, if the window manager supports this operation. Not all
- * window managers support this, and some deliberately ignore it or
- * don’t have a concept of “fullscreen”; so you can’t rely on the
- * unfullscreenification actually happening. But it will happen with
- * most standard window managers, and GDK makes a best effort to get
- * it to happen.
- **/
-void
-gdk_surface_unfullscreen (GdkSurface *surface)
-{
-  GDK_SURFACE_GET_CLASS (surface)->unfullscreen (surface);
 }
 
 /**
