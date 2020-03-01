@@ -84,7 +84,6 @@ enum {
   PROP_CURSOR,
   PROP_DISPLAY,
   PROP_FRAME_CLOCK,
-  PROP_STATE,
   PROP_MAPPED,
   LAST_PROP
 };
@@ -447,13 +446,6 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                            GDK_TYPE_FRAME_CLOCK,
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  properties[PROP_STATE] =
-      g_param_spec_flags ("state",
-                          P_("State"),
-                          P_("State"),
-                          GDK_TYPE_SURFACE_STATE, GDK_SURFACE_STATE_WITHDRAWN,
-                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
   properties[PROP_MAPPED] =
       g_param_spec_boolean ("mapped",
                             P_("Mapped"),
@@ -470,6 +462,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
   gdk_popup_install_properties (object_class, LAST_PROP);
+  gdk_toplevel_install_properties (object_class, LAST_PROP + GDK_POPUP_NUM_PROPERTIES);
 
   /**
    * GdkSurface::popup-layout-changed
@@ -676,10 +669,6 @@ gdk_surface_get_property (GObject    *object,
       g_value_set_object (value, surface->frame_clock);
       break;
 
-    case PROP_STATE:
-      g_value_set_flags (value, surface->state);
-      break;
-
     case PROP_MAPPED:
       g_value_set_boolean (value, GDK_SURFACE_IS_MAPPED (surface));
       break;
@@ -694,6 +683,10 @@ gdk_surface_get_property (GObject    *object,
 
     case LAST_PROP + GDK_POPUP_PROP_AUTOHIDE:
       g_value_set_boolean (value, surface->autohide);
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_STATE:
+      g_value_set_flags (value, surface->state);
       break;
 
     default:
@@ -871,7 +864,7 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
 
   surface_remove_from_pointer_info (surface, surface->display);
 
-  g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
+  g_object_notify (G_OBJECT (surface), "state");
   g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
 }
 
@@ -3621,7 +3614,7 @@ gdk_surface_set_state (GdkSurface      *surface,
 
   _gdk_surface_update_viewable (surface);
 
-  g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
+  g_object_notify (G_OBJECT (surface), "state");
 
   if (was_mapped != mapped)
     g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
