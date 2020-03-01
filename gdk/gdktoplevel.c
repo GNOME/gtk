@@ -44,10 +44,17 @@ gdk_toplevel_default_present (GdkToplevel       *toplevel,
   return FALSE;
 }
 
+static GdkSurfaceState
+gdk_toplevel_default_get_state (GdkToplevel *toplevel)
+{
+  return 0;
+}
+
 static void
 gdk_toplevel_default_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_toplevel_default_present;
+  iface->get_state = gdk_toplevel_default_get_state;
 }
 
 /**
@@ -78,3 +85,12 @@ gdk_toplevel_present (GdkToplevel       *toplevel,
 
   return GDK_TOPLEVEL_GET_IFACE (toplevel)->present (toplevel, width, height, layout);
 }
+
+GdkSurfaceState
+gdk_toplevel_get_state (GdkToplevel *toplevel)
+{
+  g_return_val_if_fail (GDK_IS_TOPLEVEL (toplevel), 0);
+
+  return GDK_TOPLEVEL_GET_IFACE (toplevel)->get_state (toplevel);
+}
+

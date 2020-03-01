@@ -14,6 +14,8 @@ struct _GdkToplevelInterface
                                          int                width,
                                          int                height,
                                          GdkToplevelLayout *layout);
+
+  GdkSurfaceState (* get_state)         (GdkToplevel       *toplevel);
 };
 
 G_END_DECLS
