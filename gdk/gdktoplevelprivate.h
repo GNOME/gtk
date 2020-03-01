@@ -28,6 +28,9 @@ struct _GdkToplevelInterface
 
   void            (* set_icon_list)     (GdkToplevel       *toplevel,
                                          GList             *surfaces);
+
+  gboolean        (* show_window_menu)  (GdkToplevel       *toplevel,
+                                         GdkEvent          *event);
 };
 
 G_END_DECLS

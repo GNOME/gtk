@@ -74,6 +74,13 @@ gdk_toplevel_default_set_icon_list (GdkToplevel *toplevel,
 {
 }
 
+static gboolean
+gdk_toplevel_default_show_window_menu (GdkToplevel *toplevel,
+                                       GdkEvent    *event)
+{
+  return FALSE;
+}
+
 static void
 gdk_toplevel_default_init (GdkToplevelInterface *iface)
 {
@@ -83,6 +90,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
   iface->set_startup_id = gdk_toplevel_default_set_startup_id;
   iface->set_transient_for = gdk_toplevel_default_set_transient_for;
   iface->set_icon_list = gdk_toplevel_default_set_icon_list;
+  iface->show_window_menu = gdk_toplevel_default_show_window_menu;
 }
 
 /**
@@ -203,4 +211,27 @@ gdk_toplevel_set_icon_list (GdkToplevel *toplevel,
   g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
 
   GDK_TOPLEVEL_GET_IFACE (toplevel)->set_icon_list (toplevel, surfaces); 
+}
+
+/**
+ * gdk_toplevel_show_window_menu:
+ * @toplevel: a #GdkToplevel
+ * @event: a #GdkEvent to show the menu for
+ *
+ * Asks the windowing system to show the window menu.
+ *
+ * The window menu is the menu shown when right-clicking the titlebar
+ * on traditional windows managed by the window manager. This is useful
+ * for windows using client-side decorations, activating it with a
+ * right-click on the window decorations.
+ *
+ * Returns: %TRUE if the window menu was shown and %FALSE otherwise.
+ */
+gboolean
+gdk_toplevel_show_window_menu (GdkToplevel *toplevel,
+                               GdkEvent    *event)
+{
+  g_return_val_if_fail (GDK_IS_TOPLEVEL (toplevel), FALSE);
+
+  return GDK_TOPLEVEL_GET_IFACE (toplevel)->show_window_menu (toplevel, event); 
 }
