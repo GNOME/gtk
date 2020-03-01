@@ -5051,7 +5051,7 @@ gtk_window_unmap (GtkWidget *widget)
     }
   priv->configure_notify_received = FALSE;
 
-  state = gdk_surface_get_state (priv->surface);
+  state = gdk_toplevel_get_state (GDK_TOPLEVEL (priv->surface));
   priv->minimize_initially = (state & GDK_SURFACE_STATE_MINIMIZED) != 0;
   priv->maximize_initially = (state & GDK_SURFACE_STATE_MAXIMIZED) != 0;
   priv->stick_initially = (state & GDK_SURFACE_STATE_STICKY) != 0;
@@ -5970,7 +5970,7 @@ surface_state_changed (GtkWidget *widget)
   GdkSurfaceState new_surface_state;
   GdkSurfaceState changed_mask;
 
-  new_surface_state = gdk_surface_get_state (priv->surface);
+  new_surface_state = gdk_toplevel_get_state (GDK_TOPLEVEL (priv->surface));
   changed_mask = new_surface_state ^ priv->state;
   priv->state = new_surface_state;
 
@@ -6707,7 +6707,7 @@ gtk_window_get_state (GtkWindow *window)
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
   if (priv->surface)
-    return gdk_surface_get_state (priv->surface);
+    return gdk_toplevel_get_state (GDK_TOPLEVEL (priv->surface));
 
   return 0;
 }
@@ -8794,7 +8794,7 @@ ensure_state_flag_backdrop (GtkWidget *widget)
   GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (widget));
   gboolean surface_focused = TRUE;
 
-  surface_focused = gdk_surface_get_state (priv->surface) & GDK_SURFACE_STATE_FOCUSED;
+  surface_focused = gdk_toplevel_get_state (GDK_TOPLEVEL (priv->surface)) & GDK_SURFACE_STATE_FOCUSED;
 
   if (!surface_focused)
     gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_BACKDROP, FALSE);
