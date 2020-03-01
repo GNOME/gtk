@@ -2043,10 +2043,22 @@ gdk_toplevel_surface_present (GdkToplevel       *toplevel,
   return TRUE;
 }
 
+static gboolean
+gdk_toplevel_surface_show_window_menu (GdkToplevel *toplevel,
+                                       GdkEvent    *event)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+
+  g_return_val_if_fail (surface->surface_type == GDK_SURFACE_TOPLEVEL, FALSE);
+
+  return GDK_SURFACE_GET_CLASS (surface)->show_window_menu (surface, event);
+}
+
 static void
 gdk_surface_toplevel_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_toplevel_surface_present;
+  iface->show_window_menu = gdk_toplevel_surface_show_window_menu;
 }
 
 static void
