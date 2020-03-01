@@ -32,10 +32,14 @@ struct _GdkToplevelLayout
   int max_width;
   int max_height;
   guint maximized  : 1;
+  guint minimized  : 1;
   guint fullscreen : 1;
   guint modal      : 1;
   guint raise      : 1;
   guint lower      : 1;
+  guint stick      : 1;
+  guint keep_above : 1;
+  guint keep_below : 1;
   GdkMonitor *fullscreen_monitor;
   GdkSurfaceTypeHint type_hint;
 };
@@ -275,3 +279,54 @@ gdk_toplevel_layout_get_lower (GdkToplevelLayout *layout)
   return layout->lower;
 }
 
+void
+gdk_toplevel_layout_set_minimized (GdkToplevelLayout *layout,
+                                   gboolean           minimized)
+{
+  layout->minimized = minimized;
+}
+
+gboolean
+gdk_toplevel_layout_get_minimized (GdkToplevelLayout *layout)
+{
+  return layout->minimized;
+}
+
+void
+gdk_toplevel_layout_set_stick (GdkToplevelLayout *layout,
+                               gboolean           stick)
+{
+  layout->stick = stick;
+}
+
+gboolean
+gdk_toplevel_layout_get_stick (GdkToplevelLayout *layout)
+{
+  return layout->stick;
+}
+
+void
+gdk_toplevel_layout_set_keep_above (GdkToplevelLayout *layout,
+                                    gboolean           keep_above)
+{
+  layout->keep_above = keep_above;
+}
+
+gboolean
+gdk_toplevel_layout_get_keep_above (GdkToplevelLayout *layout)
+{
+  return layout->keep_above;
+}
+
+void
+gdk_toplevel_layout_set_keep_below (GdkToplevelLayout *layout,
+                                    gboolean           keep_below)
+{
+  layout->keep_below = keep_below;
+}
+
+gboolean
+gdk_toplevel_layout_get_keep_below (GdkToplevelLayout *layout)
+{
+  return layout->keep_below;
+}

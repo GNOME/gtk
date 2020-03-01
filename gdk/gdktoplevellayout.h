@@ -85,7 +85,6 @@ gboolean                gdk_toplevel_layout_get_fullscreen (GdkToplevelLayout *l
 GDK_AVAILABLE_IN_ALL
 GdkMonitor *            gdk_toplevel_layout_get_fullscreen_monitor (GdkToplevelLayout *layout);
 
-
 GDK_AVAILABLE_IN_ALL
 void                    gdk_toplevel_layout_set_modal (GdkToplevelLayout *layout,
                                                        gboolean           modal);
@@ -113,6 +112,34 @@ void                    gdk_toplevel_layout_set_lower (GdkToplevelLayout *layout
 
 GDK_AVAILABLE_IN_ALL
 gboolean                gdk_toplevel_layout_get_lower (GdkToplevelLayout *layout);
+
+GDK_AVAILABLE_IN_ALL
+void                    gdk_toplevel_layout_set_minimized (GdkToplevelLayout *layout,
+                                                           gboolean           minimized);
+
+GDK_AVAILABLE_IN_ALL
+gboolean                gdk_toplevel_layout_get_minimized (GdkToplevelLayout *layout);
+
+GDK_AVAILABLE_IN_ALL
+void                    gdk_toplevel_layout_set_stick (GdkToplevelLayout *layout,
+                                                       gboolean           stick);
+
+GDK_AVAILABLE_IN_ALL
+gboolean                gdk_toplevel_layout_get_stick (GdkToplevelLayout *layout);
+
+GDK_AVAILABLE_IN_ALL
+void                    gdk_toplevel_layout_set_keep_above (GdkToplevelLayout *layout,
+                                                            gboolean           keep_above);
+
+GDK_AVAILABLE_IN_ALL
+gboolean                gdk_toplevel_layout_get_keep_above (GdkToplevelLayout *layout);
+
+GDK_AVAILABLE_IN_ALL
+void                    gdk_toplevel_layout_set_keep_below (GdkToplevelLayout *layout,
+                                                            gboolean           keep_below);
+
+GDK_AVAILABLE_IN_ALL
+gboolean                gdk_toplevel_layout_get_keep_below (GdkToplevelLayout *layout);
 
 G_END_DECLS
 
