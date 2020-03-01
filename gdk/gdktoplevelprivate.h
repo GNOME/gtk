@@ -14,6 +14,9 @@ struct _GdkToplevelInterface
                                          int                width,
                                          int                height,
                                          GdkToplevelLayout *layout);
+
+  gboolean        (* show_window_menu)  (GdkToplevel       *toplevel,
+                                         GdkEvent          *event);
 };
 
 typedef enum {
