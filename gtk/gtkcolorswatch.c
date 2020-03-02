@@ -125,24 +125,6 @@ swatch_snapshot (GtkWidget   *widget,
   gtk_widget_snapshot_child (widget, priv->overlay_widget, snapshot);
 }
 
-static void
-gtk_color_swatch_drag_begin (GtkDragSource  *source,
-                             GdkDrag        *drag,
-                             GtkColorSwatch *swatch)
-{
-  GtkColorSwatchPrivate *priv = gtk_color_swatch_get_instance_private (swatch);
-  GtkSnapshot *snapshot;
-  GdkPaintable *paintable;
-
-  snapshot = gtk_snapshot_new ();
-  gtk_snapshot_append_color (snapshot, &priv->color, &GRAPHENE_RECT_INIT(0, 0, 48, 32));
-  paintable = gtk_snapshot_free_to_paintable (snapshot, NULL);
-
-  gtk_drag_source_set_icon (source, paintable, 0, 0);
-
-  g_object_unref (paintable);
-}
-
 static gboolean
 swatch_drag_drop (GtkDropTarget  *dest,
                   const GValue   *value,
@@ -594,7 +576,6 @@ gtk_color_swatch_set_rgba (GtkColorSwatch *swatch,
 
       source = gtk_drag_source_new ();
       g_signal_connect (source, "prepare", G_CALLBACK (gtk_color_swatch_drag_prepare), swatch);
-      g_signal_connect (source, "drag-begin", G_CALLBACK (gtk_color_swatch_drag_begin), swatch);
 
       gtk_widget_add_controller (GTK_WIDGET (swatch), GTK_EVENT_CONTROLLER (source));
     }

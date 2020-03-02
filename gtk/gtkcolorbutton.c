@@ -240,24 +240,6 @@ gtk_color_button_drop (GtkDropTarget  *dest,
   return TRUE;
 }
 
-static void
-gtk_color_button_drag_begin (GtkDragSource  *source,
-                             GdkDrag        *drag,
-                             GtkColorButton *button)
-{
-  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
-  GtkSnapshot *snapshot;
-  GdkPaintable *paintable;
-
-  snapshot = gtk_snapshot_new ();
-  gtk_snapshot_append_color (snapshot, &priv->rgba, &GRAPHENE_RECT_INIT(0, 0, 48, 32));
-  paintable = gtk_snapshot_free_to_paintable (snapshot, NULL);
-
-  gtk_drag_source_set_icon (source, paintable, 0, 0);
-
-  g_object_unref (paintable);
-}
-
 static GdkContentProvider *
 gtk_color_button_drag_prepare (GtkDragSource  *source,
                                double          x,
@@ -306,7 +288,6 @@ gtk_color_button_init (GtkColorButton *button)
 
   source = gtk_drag_source_new ();
   g_signal_connect (source, "prepare", G_CALLBACK (gtk_color_button_drag_prepare), button);
-  g_signal_connect (source, "drag-begin", G_CALLBACK (gtk_color_button_drag_begin), button);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (source), GTK_PHASE_CAPTURE);
   gtk_widget_add_controller (priv->button, GTK_EVENT_CONTROLLER (source));
 
