@@ -223,8 +223,30 @@ gtk_drop_target_load_done (GObject      *source,
 }
 
 static gboolean
+gtk_drop_target_load_local (GtkDropTarget *self,
+                            GType          type)
+{
+  GdkDrag *drag;
+
+  drag = gdk_drop_get_drag (self->drop);
+  if (drag == NULL)
+    return FALSE;
+
+  g_value_init (&self->value, type);
+  if (gdk_content_provider_get_value (gdk_drag_get_content (drag),
+                                      &self->value,
+                                      NULL))
+    return TRUE;
+
+  g_value_unset (&self->value);
+  return FALSE;
+}
+
+static gboolean
 gtk_drop_target_load (GtkDropTarget *self)
 {
+  GType type;
+
   g_assert (self->drop);
 
   if (G_IS_VALUE (&self->value))
@@ -233,10 +255,15 @@ gtk_drop_target_load (GtkDropTarget *self)
   if (self->cancellable)
     return FALSE;
 
+  type = gdk_content_formats_match_gtype (self->formats, gdk_drop_get_formats (self->drop));
+
+  if (gtk_drop_target_load_local (self, type))
+    return TRUE;
+
   self->cancellable = g_cancellable_new ();
 
   gdk_drop_read_value_async (self->drop, 
-                             gdk_content_formats_match_gtype (self->formats, gdk_drop_get_formats (self->drop)),
+                             type,
                              G_PRIORITY_DEFAULT,
                              self->cancellable,
                              gtk_drop_target_load_done,
