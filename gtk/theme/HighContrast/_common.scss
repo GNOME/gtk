@@ -43,6 +43,10 @@ flowboxchild:focus {
     background-color: $bg_color;
 }
 
+dnd {
+  color: $fg-color;
+}
+
 .background:backdrop {
     text-shadow: none;
     -gtk-icon-shadow: none;
