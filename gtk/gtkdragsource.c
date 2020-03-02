@@ -34,7 +34,7 @@
 #include "gtkintl.h"
 #include "gtkstylecontext.h"
 #include "gtkimageprivate.h"
-#include "gtkdragiconprivate.h"
+#include "gtkdragicon.h"
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkicontheme.h"

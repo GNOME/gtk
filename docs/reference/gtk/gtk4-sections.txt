@@ -6880,7 +6880,7 @@ gtk_drop_controller_motion_get_type
 <SECTION>
 <FILE>gtkdragicon</FILE>
 GtkDragIcon
-gtk_drag_icon_new_for_drag
+gtk_drag_icon_get_for_drag
 gtk_drag_icon_set_child
 gtk_drag_icon_get_child
 gtk_drag_icon_set_from_paintable
