@@ -775,8 +775,6 @@ gdk_drop_read_async
 gdk_drop_read_finish
 gdk_drop_read_value_async
 gdk_drop_read_value_finish
-gdk_drop_read_text_async
-gdk_drop_read_text_finish
 
 <SUBSECTION Standard>
 GDK_DRAG
