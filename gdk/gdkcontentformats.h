@@ -52,10 +52,10 @@ GDK_AVAILABLE_IN_ALL
 char *                  gdk_content_formats_to_string           (GdkContentFormats              *formats);
 
 GDK_AVAILABLE_IN_ALL
-const GType *           gdk_content_formats_get_gtypes          (GdkContentFormats              *formats,
+const GType *           gdk_content_formats_get_gtypes          (const GdkContentFormats        *formats,
                                                                  gsize                          *n_gtypes);
 GDK_AVAILABLE_IN_ALL
-const char * const *    gdk_content_formats_get_mime_types      (GdkContentFormats              *formats,
+const char * const *    gdk_content_formats_get_mime_types      (const GdkContentFormats        *formats,
                                                                  gsize                          *n_mime_types);
 
 GDK_AVAILABLE_IN_ALL
