@@ -38,7 +38,7 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkDragIcon, gtk_drag_icon, GTK, DRAG_ICON, GtkContainer)
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_drag_icon_new_for_drag (GdkDrag *drag);
+GtkWidget *     gtk_drag_icon_get_for_drag                      (GdkDrag                *drag);
 
 GDK_AVAILABLE_IN_ALL
 void            gtk_drag_icon_set_child                         (GtkDragIcon            *self,
