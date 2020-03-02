@@ -29,6 +29,11 @@
 #include "gtkpicture.h"
 #include "gtkcssnumbervalueprivate.h"
 
+/* for the drag icons */
+#include "gtkcolorswatchprivate.h"
+#include "gtklabel.h"
+#include "gtktextutil.h"
+
 
 /**
  * SECTION:gtkdragicon
@@ -482,5 +487,64 @@ gtk_drag_icon_get_child (GtkDragIcon *self)
   g_return_val_if_fail (GTK_IS_DRAG_ICON (self), NULL);
 
   return self->child;
+}
+
+/**
+ * gtk_drag_icon_create_widget_for_value:
+ * @value: a #GValue
+ *
+ * Creates a widget that can be used as a drag icon for the given
+ * @value.
+ *
+ * If GTK does not know how to create a widget for a given value,
+ * it will return %NULL.
+ *
+ * This method is used to set the default drag icon on drag'n'drop
+ * operations started by #GtkDragSource, so you don't need to set
+ * a drag icon using this function there.
+ *
+ * Returns: (nullable) (transfer full): A new #GtkWidget
+ *     for displaying @value as a drag icon.
+ **/
+GtkWidget *
+gtk_drag_icon_create_widget_for_value (const GValue *value)
+{
+  g_return_val_if_fail (G_IS_VALUE (value), NULL);
+
+  if (G_VALUE_HOLDS (value, G_TYPE_STRING))
+    {
+      return gtk_label_new (g_value_get_string (value));
+    }
+  else if (G_VALUE_HOLDS (value, GDK_TYPE_RGBA))
+    {
+      GtkWidget *swatch;
+
+      swatch = gtk_color_swatch_new ();
+      gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (swatch), g_value_get_boxed (value));
+
+      return swatch;
+    }
+  else if (G_VALUE_HOLDS (value, GTK_TYPE_TEXT_BUFFER))
+    {
+      GtkTextBuffer *buffer = g_value_get_object (value);
+      GtkTextIter start, end;
+      GdkPaintable *paintable;
+      GtkWidget *picture;
+
+      if (buffer == NULL || !gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
+        return NULL;
+
+      picture = gtk_picture_new ();
+      paintable = gtk_text_util_create_rich_drag_icon (picture, buffer, &start, &end);
+      gtk_picture_set_paintable (GTK_PICTURE (picture), paintable);
+      gtk_picture_set_can_shrink (GTK_PICTURE (picture), FALSE);
+      g_object_unref (paintable);
+
+      return picture;
+    }
+  else
+    {
+      return NULL;
+    }
 }
 
