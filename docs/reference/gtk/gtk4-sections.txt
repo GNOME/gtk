@@ -6885,6 +6885,9 @@ gtk_drag_icon_set_child
 gtk_drag_icon_get_child
 gtk_drag_icon_set_from_paintable
 
+<SUBSECTION>
+gtk_drag_icon_create_widget_for_value
+
 <SUBSECTION Standard>
 GTK_TYPE_DRAG_ICON
 GTK_DRAG_ICON
