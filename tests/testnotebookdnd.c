@@ -55,10 +55,6 @@ gchar *tabs4 [] = {
   NULL
 };
 
-static const char *button_targets[] = {
-  "GTK_NOTEBOOK_TAB"
-};
-
 static GtkNotebook*
 window_creation_function (GtkNotebook *source_notebook,
                           GtkWidget   *child,
@@ -93,7 +89,8 @@ on_page_reordered (GtkNotebook *notebook, GtkWidget *child, guint page_num, gpoi
 static gboolean
 remove_in_idle (gpointer data)
 {
-  GtkWidget *child = data;
+  GtkNotebookPage *page = data;
+  GtkWidget *child = gtk_notebook_page_get_child (page);
   GtkWidget *parent = gtk_widget_get_ancestor (child, GTK_TYPE_NOTEBOOK);
   GtkWidget *tab_label;
 
@@ -104,44 +101,17 @@ remove_in_idle (gpointer data)
   return G_SOURCE_REMOVE;
 }
 
-static void
-got_page (GObject *source,
-          GAsyncResult *result,
-          gpointer data)
-{
-  GdkDrop *drop = GDK_DROP (source);
-  GInputStream *stream;
-  const char *mime_type;
-
-  stream = gdk_drop_read_finish (drop, result, &mime_type, NULL);
-
-  if (stream)
-    {
-      GBytes *bytes;
-      GtkWidget **child;
-
-      bytes = g_input_stream_read_bytes (stream, sizeof (gpointer), NULL, NULL);
-      child = (gpointer)g_bytes_get_data (bytes, NULL);
-
-      g_idle_add (remove_in_idle, *child);
-
-      gdk_drop_finish (drop, GDK_ACTION_MOVE);
-
-      g_bytes_unref (bytes);
-      g_object_unref (stream);
-    }
-  else
-    gdk_drop_finish (drop, 0);
-}
-
 static gboolean
 on_button_drag_drop (GtkDropTarget *dest,
-                     GdkDrop       *drop,
+                     const GValue  *value,
+                     double         x,
+                     double         y,
                      gpointer       user_data)
 {
-  gdk_drop_read_async (drop, (const char *[]) { "GTK_NOTEBOOK_TAB", NULL }, G_PRIORITY_DEFAULT, NULL, got_page, NULL);
+  GtkNotebookPage *page;
 
-  gdk_drop_finish (drop, GDK_ACTION_MOVE);
+  page = g_value_get_object (value);
+  g_idle_add (remove_in_idle, page);
 
   return TRUE;
 }
@@ -298,8 +268,8 @@ create_trash_button (void)
 
   button = gtk_button_new_with_mnemonic ("_Delete");
 
-  dest = gtk_drop_target_new (gdk_content_formats_new (button_targets, G_N_ELEMENTS (button_targets)), GDK_ACTION_MOVE);
-  g_signal_connect (dest, "drag-drop", G_CALLBACK (on_button_drag_drop), NULL);
+  dest = gtk_drop_target_new (GTK_TYPE_NOTEBOOK_PAGE, GDK_ACTION_MOVE);
+  g_signal_connect (dest, "drop", G_CALLBACK (on_button_drag_drop), NULL);
   gtk_widget_add_controller (button, GTK_EVENT_CONTROLLER (dest));
 
   return button;

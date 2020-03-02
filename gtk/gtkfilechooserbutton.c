@@ -37,7 +37,7 @@
 #include "gtkcellrendererpixbuf.h"
 #include "gtkcombobox.h"
 #include "gtkcssiconthemevalueprivate.h"
-#include "gtkdragdest.h"
+#include "gtkdroptarget.h"
 #include "gtkicontheme.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
@@ -268,11 +268,6 @@ static void     gtk_file_chooser_button_finalize           (GObject          *ob
 
 /* GtkWidget Functions */
 static void     gtk_file_chooser_button_destroy            (GtkWidget        *widget);
-static gboolean gtk_file_chooser_button_drag_drop          (GtkDropTarget    *dest,
-                                                            GdkDrop          *drop,
-                                                            int               x,
-                                                            int               y,
-							    GtkWidget        *widget);
 static void     gtk_file_chooser_button_show               (GtkWidget        *widget);
 static void     gtk_file_chooser_button_hide               (GtkWidget        *widget);
 static void     gtk_file_chooser_button_root               (GtkWidget *widget);
@@ -349,6 +344,115 @@ G_DEFINE_TYPE_WITH_CODE (GtkFileChooserButton, gtk_file_chooser_button, GTK_TYPE
                          G_ADD_PRIVATE (GtkFileChooserButton)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER,
                                                 gtk_file_chooser_button_file_chooser_iface_init))
+
+struct DndSelectFolderData
+{
+  GtkFileSystem *file_system;
+  GtkFileChooserButton *button;
+  GtkFileChooserAction action;
+  GFile *file;
+  gchar **uris;
+  guint i;
+  gboolean selected;
+};
+
+static void
+dnd_select_folder_get_info_cb (GCancellable *cancellable,
+			       GFileInfo    *info,
+			       const GError *error,
+			       gpointer      user_data)
+{
+  struct DndSelectFolderData *data = user_data;
+  GtkFileChooserButton *button = data->button;
+  GtkFileChooserButtonPrivate *priv = gtk_file_chooser_button_get_instance_private (button);
+  gboolean cancelled = g_cancellable_is_cancelled (cancellable);
+
+  if (cancellable != priv->dnd_select_folder_cancellable)
+    {
+      g_object_unref (data->button);
+      g_object_unref (data->file);
+      g_strfreev (data->uris);
+      g_free (data);
+
+      g_object_unref (cancellable);
+      return;
+    }
+
+  priv->dnd_select_folder_cancellable = NULL;
+
+  if (!cancelled && !error && info != NULL)
+    {
+      gboolean is_folder;
+
+      is_folder = _gtk_file_info_consider_as_directory (info);
+
+      data->selected =
+	(((data->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER && is_folder) ||
+	  (data->action == GTK_FILE_CHOOSER_ACTION_OPEN && !is_folder)) &&
+	 gtk_file_chooser_select_file (GTK_FILE_CHOOSER (data->button), data->file, NULL));
+    }
+  else
+    data->selected = FALSE;
+
+  if (data->selected || data->uris[++data->i] == NULL)
+    {
+      g_signal_emit (data->button, file_chooser_button_signals[FILE_SET], 0);
+
+      g_object_unref (data->button);
+      g_object_unref (data->file);
+      g_strfreev (data->uris);
+      g_free (data);
+
+      g_object_unref (cancellable);
+      return;
+    }
+
+  if (data->file)
+    g_object_unref (data->file);
+
+  data->file = g_file_new_for_uri (data->uris[data->i]);
+
+  priv->dnd_select_folder_cancellable =
+    _gtk_file_system_get_info (data->file_system, data->file,
+                               "standard::type",
+                               dnd_select_folder_get_info_cb, user_data);
+
+  g_object_unref (cancellable);
+}
+
+static gboolean
+gtk_file_chooser_button_drop (GtkDropTarget        *target,
+                              const GValue         *value,
+                              double                x,
+                              double                y,
+                              GtkFileChooserButton *button)
+{
+  GtkFileChooserButtonPrivate *priv = gtk_file_chooser_button_get_instance_private (button);
+  struct DndSelectFolderData *info;
+  GFile *file;
+
+  file = g_value_get_object (value);
+
+  info = g_new0 (struct DndSelectFolderData, 1);
+  info->button = g_object_ref (button);
+  info->i = 0;
+  info->uris = g_new0 (char *, 2);
+  info->selected = FALSE;
+  info->file_system = priv->fs;
+  g_object_get (priv->chooser, "action", &info->action, NULL);
+
+  info->file = g_object_ref (file);
+
+  if (priv->dnd_select_folder_cancellable)
+    g_cancellable_cancel (priv->dnd_select_folder_cancellable);
+
+  priv->dnd_select_folder_cancellable =
+    _gtk_file_system_get_info (priv->fs, info->file,
+                               "standard::type",
+                               dnd_select_folder_get_info_cb, info);
+
+  return TRUE;
+}
 
 static void
 gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
@@ -441,8 +545,7 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   GtkFileChooserButtonPrivate *priv = gtk_file_chooser_button_get_instance_private (button);
   GtkWidget *box;
   GtkWidget *icon;
-  GdkContentFormatsBuilder *builder;
-  GtkDropTarget *dest;
+  GtkDropTarget *target;
 
   priv->button = gtk_button_new ();
   g_signal_connect (priv->button, "clicked", G_CALLBACK (button_clicked_cb), button);
@@ -494,13 +597,9 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
 				      NULL, NULL);
 
   /* DnD */
-  builder = gdk_content_formats_builder_new ();
-  gdk_content_formats_builder_add_gtype (builder, G_TYPE_STRING);
-  gdk_content_formats_builder_add_gtype (builder, GDK_TYPE_FILE_LIST);
-  dest = gtk_drop_target_new (gdk_content_formats_builder_free_to_formats (builder),
-                              GDK_ACTION_COPY);
-  g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_file_chooser_button_drag_drop), button);
-  gtk_widget_add_controller (GTK_WIDGET (button), GTK_EVENT_CONTROLLER (dest));
+  target = gtk_drop_target_new (G_TYPE_FILE, GDK_ACTION_COPY);
+  g_signal_connect (target, "drop", G_CALLBACK (gtk_file_chooser_button_drop), button);
+  gtk_widget_add_controller (GTK_WIDGET (button), GTK_EVENT_CONTROLLER (target));
 }
 
 
@@ -1043,169 +1142,6 @@ gtk_file_chooser_button_destroy (GtkWidget *widget)
   g_clear_pointer (&priv->bookmarks_manager, _gtk_bookmarks_manager_free);
 
   GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->destroy (widget);
-}
-
-struct DndSelectFolderData
-{
-  GtkFileSystem *file_system;
-  GtkFileChooserButton *button;
-  GtkFileChooserAction action;
-  GFile *file;
-  gchar **uris;
-  guint i;
-  gboolean selected;
-};
-
-static void
-dnd_select_folder_get_info_cb (GCancellable *cancellable,
-			       GFileInfo    *info,
-			       const GError *error,
-			       gpointer      user_data)
-{
-  struct DndSelectFolderData *data = user_data;
-  GtkFileChooserButton *button = data->button;
-  GtkFileChooserButtonPrivate *priv = gtk_file_chooser_button_get_instance_private (button);
-  gboolean cancelled = g_cancellable_is_cancelled (cancellable);
-
-  if (cancellable != priv->dnd_select_folder_cancellable)
-    {
-      g_object_unref (data->button);
-      g_object_unref (data->file);
-      g_strfreev (data->uris);
-      g_free (data);
-
-      g_object_unref (cancellable);
-      return;
-    }
-
-  priv->dnd_select_folder_cancellable = NULL;
-
-  if (!cancelled && !error && info != NULL)
-    {
-      gboolean is_folder;
-
-      is_folder = _gtk_file_info_consider_as_directory (info);
-
-      data->selected =
-	(((data->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER && is_folder) ||
-	  (data->action == GTK_FILE_CHOOSER_ACTION_OPEN && !is_folder)) &&
-	 gtk_file_chooser_select_file (GTK_FILE_CHOOSER (data->button), data->file, NULL));
-    }
-  else
-    data->selected = FALSE;
-
-  if (data->selected || data->uris[++data->i] == NULL)
-    {
-      g_signal_emit (data->button, file_chooser_button_signals[FILE_SET], 0);
-
-      g_object_unref (data->button);
-      g_object_unref (data->file);
-      g_strfreev (data->uris);
-      g_free (data);
-
-      g_object_unref (cancellable);
-      return;
-    }
-
-  if (data->file)
-    g_object_unref (data->file);
-
-  data->file = g_file_new_for_uri (data->uris[data->i]);
-
-  priv->dnd_select_folder_cancellable =
-    _gtk_file_system_get_info (data->file_system, data->file,
-                               "standard::type",
-                               dnd_select_folder_get_info_cb, user_data);
-
-  g_object_unref (cancellable);
-}
-
-static void
-dnd_select_file (GtkFileChooserButton *button,
-                 GFile                *file)
-{
-  GtkFileChooserButtonPrivate *priv = gtk_file_chooser_button_get_instance_private (button);
-  struct DndSelectFolderData *info;
-
-  info = g_new0 (struct DndSelectFolderData, 1);
-  info->button = g_object_ref (button);
-  info->i = 0;
-  info->uris = g_new0 (char *, 2);
-  info->selected = FALSE;
-  info->file_system = priv->fs;
-  g_object_get (priv->chooser, "action", &info->action, NULL);
-
-  info->file = g_object_ref (file);
-
-  if (priv->dnd_select_folder_cancellable)
-    g_cancellable_cancel (priv->dnd_select_folder_cancellable);
-
-  priv->dnd_select_folder_cancellable =
-    _gtk_file_system_get_info (priv->fs, info->file,
-                               "standard::type",
-                               dnd_select_folder_get_info_cb, info);
-}
-
-static void
-got_file (GObject      *source,
-          GAsyncResult *result,
-          gpointer      data)
-{
-  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (data);
-  GdkDrop *drop = GDK_DROP (source);
-  const GValue *value;
-
-  value = gdk_drop_read_value_finish (drop, result, NULL);
-  if (value)
-    {
-      GFile *file;
-
-      file = g_value_get_object (value);
-      dnd_select_file (button, file);
-    }
-}
-
-static void
-got_text (GObject      *source,
-          GAsyncResult *result,
-          gpointer      data)
-{
-  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (data);
-  GdkDrop *drop = GDK_DROP (source);
-  char *str;
-
-  str = gdk_drop_read_text_finish (drop, result, NULL);
-  if (str)
-    {
-      GFile *file;
-
-      file = g_file_new_for_uri (str);
-      dnd_select_file (button, file);
-      g_object_unref (file);
-    }
-
-}
-
-static gboolean
-gtk_file_chooser_button_drag_drop (GtkDropTarget *dest,
-                                   GdkDrop       *drop,
-                                   int            x,
-                                   int            y,
-                                   GtkWidget     *button)
-{
-  if (gdk_drop_has_value (drop, G_TYPE_FILE))
-    {
-      gdk_drop_read_value_async (drop, G_TYPE_FILE, G_PRIORITY_DEFAULT, NULL, got_file, button);
-      return TRUE;
-    }
-  else
-    {
-      gdk_drop_read_text_async (drop, NULL, got_text, button);
-      return TRUE;
-    }
-
-  return FALSE;
-
 }
 
 static void

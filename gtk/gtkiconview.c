@@ -30,7 +30,6 @@
 #include "gtkcellrenderertext.h"
 #include "gtkcombobox.h"
 #include "gtkcssnodeprivate.h"
-#include "gtkdragdest.h"
 #include "gtkdragsource.h"
 #include "gtkentry.h"
 #include "gtkintl.h"
@@ -48,7 +47,6 @@
 #include "gtkwindow.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkdragsource.h"
-#include "gtkdragdest.h"
 #include "gtkdragicon.h"
 #include "gtknative.h"
 
@@ -287,19 +285,19 @@ static GdkContentProvider * gtk_icon_view_drag_data_get                  (GtkIco
                                                                           GtkTreePath            *source_row);
 
 /* Target side drag signals */
-static void     gtk_icon_view_drag_leave         (GtkDropTarget    *dest,
-                                                  GdkDrop          *drop,
-                                                  GtkIconView      *icon_view);
-static void     gtk_icon_view_drag_motion        (GtkDropTarget    *dest,
-                                                  GdkDrop          *drop,
-                                                  int               x,
-                                                  int               y,
-                                                  GtkIconView      *icon_view);
-static gboolean gtk_icon_view_drag_drop          (GtkDropTarget    *dest,
-                                                  GdkDrop          *drop,
-                                                  int               x,
-                                                  int               y,
-                                                  GtkIconView      *icon_view);
+static void                 gtk_icon_view_drag_leave                     (GtkDropTargetAsync     *dest,
+                                                                          GdkDrop                *drop,
+                                                                          GtkIconView            *icon_view);
+static GdkDragAction        gtk_icon_view_drag_motion                    (GtkDropTargetAsync     *dest,
+                                                                          GdkDrop                *drop,
+                                                                          double                  x,
+                                                                          double                  y,
+                                                                          GtkIconView            *icon_view);
+static gboolean             gtk_icon_view_drag_drop                      (GtkDropTargetAsync     *dest,
+                                                                          GdkDrop                *drop,
+                                                                          double                  x,
+                                                                          double                  y,
+                                                                          GtkIconView            *icon_view);
 static void     gtk_icon_view_drag_data_received (GObject          *source,
                                                   GAsyncResult     *result,
                                                   gpointer          data);
@@ -5828,12 +5826,12 @@ drag_scroll_timeout (gpointer data)
 }
 
 static gboolean
-set_destination (GtkIconView    *icon_view,
-		 GtkDropTarget  *dest,
-		 gint            x,
-		 gint            y,
-		 GdkDragAction  *suggested_action,
-		 GType          *target)
+set_destination (GtkIconView        *icon_view,
+		 GtkDropTargetAsync *dest,
+		 gint                x,
+		 gint                y,
+		 GdkDragAction      *suggested_action,
+		 GType              *target)
 {
   GtkWidget *widget;
   GtkTreePath *path = NULL;
@@ -5863,7 +5861,7 @@ set_destination (GtkIconView    *icon_view,
       return FALSE; /* no longer a drop site */
     }
 
-  formats = gtk_drop_target_get_formats (dest);
+  formats = gtk_drop_target_async_get_formats (dest);
   *target = gdk_content_formats_match_gtype (formats, formats);
   if (*target == G_TYPE_INVALID)
     return FALSE;
@@ -6129,9 +6127,9 @@ gtk_icon_view_dnd_finished_cb (GdkDrag   *drag,
 
 /* Target side drag signals */
 static void
-gtk_icon_view_drag_leave (GtkDropTarget *dest,
-                          GdkDrop       *drop,
-                          GtkIconView   *icon_view)
+gtk_icon_view_drag_leave (GtkDropTargetAsync *dest,
+                          GdkDrop            *drop,
+                          GtkIconView        *icon_view)
 {
   /* unset any highlight row */
   gtk_icon_view_set_drag_dest_item (icon_view,
@@ -6141,24 +6139,22 @@ gtk_icon_view_drag_leave (GtkDropTarget *dest,
   remove_scroll_timeout (icon_view);
 }
 
-static void
-gtk_icon_view_drag_motion (GtkDropTarget *dest,
-                           GdkDrop       *drop,
-			   int            x,
-			   int            y,
-                           GtkIconView   *icon_view)
+static GdkDragAction
+gtk_icon_view_drag_motion (GtkDropTargetAsync *dest,
+                           GdkDrop            *drop,
+			   double              x,
+			   double              y,
+                           GtkIconView        *icon_view)
 {
   GtkTreePath *path = NULL;
   GtkIconViewDropPosition pos;
   GdkDragAction suggested_action = 0;
   GType target;
   gboolean empty;
+  GdkDragAction result;
 
   if (!set_destination (icon_view, dest, x, y, &suggested_action, &target))
-    {
-      gdk_drop_status (drop, 0);
-      return;
-    }
+    return 0;
 
   gtk_icon_view_get_drag_dest_item (icon_view, &path, &pos);
 
@@ -6168,7 +6164,7 @@ gtk_icon_view_drag_motion (GtkDropTarget *dest,
   if (path == NULL && !empty)
     {
       /* Can't drop here. */
-      gdk_drop_status (drop, 0);
+      result = 0;
     }
   else
     {
@@ -6189,20 +6185,22 @@ gtk_icon_view_drag_motion (GtkDropTarget *dest,
       else
         {
           set_status_pending (drop, 0);
-          gdk_drop_status (drop, suggested_action);
         }
+      result = suggested_action;
     }
 
   if (path)
     gtk_tree_path_free (path);
+
+  return result;
 }
 
 static gboolean 
-gtk_icon_view_drag_drop (GtkDropTarget *dest,
-                         GdkDrop       *drop,
-			 int            x,
-			 int            y,
-                         GtkIconView   *icon_view)
+gtk_icon_view_drag_drop (GtkDropTargetAsync *dest,
+                         GdkDrop            *drop,
+			 double              x,
+			 double              y,
+                         GtkIconView        *icon_view)
 {
   GtkTreePath *path;
   GdkDragAction suggested_action = 0;
@@ -6217,7 +6215,7 @@ gtk_icon_view_drag_drop (GtkDropTarget *dest,
   if (!icon_view->priv->dest_set)
     return FALSE;
 
-  if (!check_model_dnd (model, GTK_TYPE_TREE_DRAG_DEST, "drag-drop"))
+  if (!check_model_dnd (model, GTK_TYPE_TREE_DRAG_DEST, "drop"))
     return FALSE;
 
   if (!set_destination (icon_view, dest, x, y, &suggested_action, &target))
@@ -6324,8 +6322,6 @@ gtk_icon_view_drag_data_received (GObject *source,
 	    suggested_action = 0;
         }
 
-      gdk_drop_status (drop, suggested_action);
-
       if (path)
         gtk_tree_path_free (path);
 
@@ -6397,21 +6393,21 @@ gtk_icon_view_enable_model_drag_source (GtkIconView              *icon_view,
  *
  * Turns @icon_view into a drop destination for automatic DND. Calling this
  * method sets #GtkIconView:reorderable to %FALSE.
- *
- * Returns: (transfer none): the drop target that was attached
  **/
-GtkDropTarget *
+void
 gtk_icon_view_enable_model_drag_dest (GtkIconView       *icon_view,
                                       GdkContentFormats *formats,
 				      GdkDragAction      actions)
 {
-  g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), NULL);
   GtkCssNode *widget_node;
 
-  icon_view->priv->dest = gtk_drop_target_new (gdk_content_formats_ref (formats), actions);
+  g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
+
+  icon_view->priv->dest = gtk_drop_target_async_new (gdk_content_formats_ref (formats), actions);
   g_signal_connect (icon_view->priv->dest, "drag-leave", G_CALLBACK (gtk_icon_view_drag_leave), icon_view);
+  g_signal_connect (icon_view->priv->dest, "drag-enter", G_CALLBACK (gtk_icon_view_drag_motion), icon_view);
   g_signal_connect (icon_view->priv->dest, "drag-motion", G_CALLBACK (gtk_icon_view_drag_motion), icon_view);
-  g_signal_connect (icon_view->priv->dest, "drag-drop", G_CALLBACK (gtk_icon_view_drag_drop), icon_view);
+  g_signal_connect (icon_view->priv->dest, "drop", G_CALLBACK (gtk_icon_view_drag_drop), icon_view);
   gtk_widget_add_controller (GTK_WIDGET (icon_view), GTK_EVENT_CONTROLLER (icon_view->priv->dest));
 
   icon_view->priv->dest_actions = actions;
@@ -6426,8 +6422,6 @@ gtk_icon_view_enable_model_drag_dest (GtkIconView       *icon_view,
   gtk_css_node_set_parent (icon_view->priv->dndnode, widget_node);
   gtk_css_node_set_state (icon_view->priv->dndnode, gtk_css_node_get_state (widget_node));
   g_object_unref (icon_view->priv->dndnode);
-
-  return icon_view->priv->dest;
 }
 
 /**

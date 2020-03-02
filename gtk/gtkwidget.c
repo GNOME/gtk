@@ -5489,7 +5489,7 @@ gtk_widget_has_grab (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  if (!GTK_IS_WIDGET (widget)) return FALSE;
 
   return priv->has_grab;
 }

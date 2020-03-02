@@ -52,6 +52,10 @@ scale:focus(visible) > trough {
   }
 }
 
+dnd {
+  color: $fg-color;
+}
+
 .normal-icons {
   -gtk-icon-size: 16px;
 }
