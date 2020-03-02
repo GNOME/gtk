@@ -785,14 +785,11 @@ gdk_drop_read_value_internal (GdkDrop             *self,
   if (priv->drag)
     {
       GError *error = NULL;
-      GdkContentProvider *content;
       gboolean res;
 
-      g_object_get (priv->drag, "content", &content, NULL);
-
-      res = gdk_content_provider_get_value (content, value, &error);
-
-      g_object_unref (content);
+      res = gdk_content_provider_get_value (gdk_drag_get_content (priv->drag),
+                                            value,
+                                            &error);
 
       if (res)
         {
