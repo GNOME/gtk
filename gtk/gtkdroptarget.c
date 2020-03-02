@@ -45,25 +45,25 @@
  * receive Drag-and-Drop operations.
  *
  * The most basic way to use a #GtkDropTarget to receive drops on a
- * widget, is to create it via gtk_drop_target_new(), passing in the
+ * widget is to create it via gtk_drop_target_new() passing in the
  * #GType of the data you want to receive and connect to the
  * GtkDropTarget::drop signal to receive the data.
  *
  * #GtkDropTarget supports more options, such as:
  *
- *  * rejecting potential drops via the GtkDropTarget::accept signal
+ *  * rejecting potential drops via the #GtkDropTarget::accept signal
  *    and the gtk_drop_target_reject() function to let other drop
  *    targets handle the drop
  *  * tracking an ongoing drag operation before the drop via the
- *    GtkDropTarget::enter, GtkDropTarget::motion and
- *    GtkDropTarget::leave signals
+ *    #GtkDropTarget::enter, #GtkDropTarget::motion and
+ *    #GtkDropTarget::leave signals
  *  * configuring how to receive data by setting the
- *    GtkDropTarget:preload property and listening for its availability
- *    via the GtkDropTarget:value property
+ *    #GtkDropTarget:preload property and listening for its availability
+ *    via the #GtkDropTarget:value property
  *
  * However, #GtkDropTarget is ultimately modeled in a synchronous way
  * and only supports data transferred via #GType.  
- * If you want full control over an ongoing drop, the #GdkDropTargetAsync
+ * If you want full control over an ongoing drop, the #GtkDropTargetAsync
  * object gives you this ability.
  *
  * While a pointer is dragged over the drop target's widget and the drop
@@ -590,11 +590,13 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    * huge amounts of data by accident.  
    * For example, if somebody drags a full document of gigabytes of text
    * from a text editor across a widget with a preloading drop target,
-   * this data will be downlaoded, even if the data is ultimately dropped
+   * this data will be downloaded, even if the data is ultimately dropped
    * elsewhere.
    *
    * For a lot of data formats, the amount of data is very small (like
-   * %GDK_TYPE_RGBA), so enabling this property does not hurt at all.
+   * %GDK_TYPE_RGBA), so enabling this property does not hurt at all.  
+   * And for local-only drag'n'drop operations, no data transfer is done,
+   * so enabling it there is free.
    */
   properties[PROP_PRELOAD] =
        g_param_spec_boolean ("preload",

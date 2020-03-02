@@ -343,6 +343,7 @@
       <xi:include href="xml/gtkdragsource.xml"/>
       <xi:include href="xml/gtkdragicon.xml"/>
       <xi:include href="xml/gtkdroptarget.xml"/>
+      <xi:include href="xml/gtkdroptargetasync.xml"/>
     </chapter>
 
   </part>
