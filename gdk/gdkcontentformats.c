@@ -465,8 +465,8 @@ gdk_content_formats_contain_mime_type (const GdkContentFormats *formats,
  *     types included in @formats or %NULL if none.
  **/
 const GType *
-gdk_content_formats_get_gtypes (GdkContentFormats *formats,
-                                gsize             *n_gtypes)
+gdk_content_formats_get_gtypes (const GdkContentFormats *formats,
+                                gsize                   *n_gtypes)
 {
   g_return_val_if_fail (formats != NULL, NULL);
 
@@ -491,8 +491,8 @@ gdk_content_formats_get_gtypes (GdkContentFormats *formats,
  *     if none.
  **/
 const char * const *
-gdk_content_formats_get_mime_types (GdkContentFormats *formats,
-                                    gsize             *n_mime_types)
+gdk_content_formats_get_mime_types (const GdkContentFormats *formats,
+                                    gsize                   *n_mime_types)
 {
   g_return_val_if_fail (formats != NULL, NULL);
 
