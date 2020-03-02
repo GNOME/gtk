@@ -33,6 +33,7 @@
 #include "gtkbindings.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkdebug.h"
+#include "gtkdropcontrollermotion.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -422,17 +423,16 @@ static GtkTextBuffer* gtk_text_view_create_buffer (GtkTextView   *text_view);
 
 /* Target side drag signals */
 static void     gtk_text_view_drag_leave         (GtkDropTarget    *dest,
-                                                  GdkDrop          *drop,
                                                   GtkTextView      *text_view);
-static gboolean gtk_text_view_drag_motion        (GtkDropTarget    *dest,
-                                                  GdkDrop          *drop,
-                                                  int               x,
-                                                  int               y,
+static GdkDragAction
+                gtk_text_view_drag_motion        (GtkDropTarget    *dest,
+                                                  double            x,
+                                                  double            y,
                                                   GtkTextView      *text_view);
 static gboolean gtk_text_view_drag_drop          (GtkDropTarget    *dest,
-                                                  GdkDrop          *drop,
-                                                  int               x,
-                                                  int               y,
+                                                  const GValue     *value,
+                                                  double            x,
+                                                  double            y,
                                                   GtkTextView      *text_view);
 
 static gboolean gtk_text_view_popup_menu         (GtkWidget     *widget);
@@ -660,6 +660,118 @@ static guint signals[LAST_SIGNAL] = { 0 };
 G_DEFINE_TYPE_WITH_CODE (GtkTextView, gtk_text_view, GTK_TYPE_CONTAINER,
                          G_ADD_PRIVATE (GtkTextView)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
+
+static GtkTextBuffer*
+get_buffer (GtkTextView *text_view)
+{
+  if (text_view->priv->buffer == NULL)
+    {
+      GtkTextBuffer *b;
+      b = GTK_TEXT_VIEW_GET_CLASS (text_view)->create_buffer (text_view);
+      gtk_text_view_set_buffer (text_view, b);
+      g_object_unref (b);
+    }
+
+  return text_view->priv->buffer;
+}
+
+#define UPPER_OFFSET_ANCHOR 0.8
+#define LOWER_OFFSET_ANCHOR 0.2
+
+static gboolean
+check_scroll (gdouble offset, GtkAdjustment *adjustment)
+{
+  if ((offset > UPPER_OFFSET_ANCHOR &&
+       gtk_adjustment_get_value (adjustment) + gtk_adjustment_get_page_size (adjustment) < gtk_adjustment_get_upper (adjustment)) ||
+      (offset < LOWER_OFFSET_ANCHOR &&
+       gtk_adjustment_get_value (adjustment) > gtk_adjustment_get_lower (adjustment)))
+    return TRUE;
+
+  return FALSE;
+}
+
+static int
+gtk_text_view_drop_motion_scroll_timeout (gpointer data)
+{
+  GtkTextView *text_view;
+  GtkTextViewPrivate *priv;
+  GtkTextIter newplace;
+  gdouble pointer_xoffset, pointer_yoffset;
+
+  text_view = GTK_TEXT_VIEW (data);
+  priv = text_view->priv;
+
+  gtk_text_layout_get_iter_at_pixel (priv->layout,
+                                     &newplace,
+                                     priv->dnd_x + priv->xoffset,
+                                     priv->dnd_y + priv->yoffset);
+
+  gtk_text_buffer_move_mark (get_buffer (text_view), priv->dnd_mark, &newplace);
+
+  pointer_xoffset = (gdouble) priv->dnd_x / text_window_get_width (priv->text_window);
+  pointer_yoffset = (gdouble) priv->dnd_y / text_window_get_height (priv->text_window);
+
+  if (check_scroll (pointer_xoffset, priv->hadjustment) ||
+      check_scroll (pointer_yoffset, priv->vadjustment))
+    {
+      /* do not make offsets surpass lower nor upper anchors, this makes
+       * scrolling speed relative to the distance of the pointer to the
+       * anchors when it moves beyond them.
+       */
+      pointer_xoffset = CLAMP (pointer_xoffset, LOWER_OFFSET_ANCHOR, UPPER_OFFSET_ANCHOR);
+      pointer_yoffset = CLAMP (pointer_yoffset, LOWER_OFFSET_ANCHOR, UPPER_OFFSET_ANCHOR);
+
+      gtk_text_view_scroll_to_mark (text_view,
+                                    priv->dnd_mark,
+                                    0., TRUE, pointer_xoffset, pointer_yoffset);
+    }
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+gtk_text_view_drop_scroll_motion (GtkDropControllerMotion *motion,
+                                  double                   x,
+                                  double                   y,
+                                  GtkTextView             *self)
+{
+  GtkTextViewPrivate *priv = self->priv;
+  GdkRectangle target_rect;
+
+  target_rect = priv->text_window->allocation;
+  
+  if (x < target_rect.x ||
+      y < target_rect.y ||
+      x > (target_rect.x + target_rect.width) ||
+      y > (target_rect.y + target_rect.height))
+    {
+      priv->dnd_x = priv->dnd_y = -1;
+      g_clear_handle_id (&priv->scroll_timeout, g_source_remove);
+      return;
+    }
+
+  /* DnD uses text window coords, so subtract extra widget
+   * coords that happen e.g. when displaying line numbers.
+   */
+  priv->dnd_x = x - target_rect.x;
+  priv->dnd_y = y - target_rect.y;
+
+  if (!priv->scroll_timeout)
+  {
+    priv->scroll_timeout = g_timeout_add (100, gtk_text_view_drop_motion_scroll_timeout, self);
+    g_source_set_name_by_id (priv->scroll_timeout, "[gtk] gtk_text_view_drop_motion_scroll_timeout");
+  }
+}
+
+static void
+gtk_text_view_drop_scroll_leave (GtkDropControllerMotion *motion,
+                                 GtkTextView             *self)
+{
+  GtkTextViewPrivate *priv = self->priv;
+
+  priv->dnd_x = priv->dnd_y = -1;
+  g_clear_handle_id (&priv->scroll_timeout, g_source_remove);
+}
 
 static void
 add_move_binding (GtkBindingSet  *binding_set,
@@ -1639,11 +1751,18 @@ gtk_text_view_init (GtkTextView *text_view)
 
   priv->scroll_after_paste = FALSE;
 
-  dest = gtk_drop_target_new (gdk_content_formats_new_for_gtype (GTK_TYPE_TEXT_BUFFER), GDK_ACTION_COPY | GDK_ACTION_MOVE);
-  g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_text_view_drag_leave), text_view);
-  g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_text_view_drag_motion), text_view);
-  g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_text_view_drag_drop), text_view);
+  dest = gtk_drop_target_new (G_TYPE_STRING, GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  g_signal_connect (dest, "enter", G_CALLBACK (gtk_text_view_drag_motion), text_view);
+  g_signal_connect (dest, "motion", G_CALLBACK (gtk_text_view_drag_motion), text_view);
+  g_signal_connect (dest, "leave", G_CALLBACK (gtk_text_view_drag_leave), text_view);
+  g_signal_connect (dest, "drop", G_CALLBACK (gtk_text_view_drag_drop), text_view);
   gtk_widget_add_controller (GTK_WIDGET (text_view), GTK_EVENT_CONTROLLER (dest));
+
+  controller = gtk_drop_controller_motion_new ();
+  g_signal_connect (controller, "enter", G_CALLBACK (gtk_text_view_drop_scroll_motion), text_view);
+  g_signal_connect (controller, "motion", G_CALLBACK (gtk_text_view_drop_scroll_motion), text_view);
+  g_signal_connect (controller, "leave", G_CALLBACK (gtk_text_view_drop_scroll_leave), text_view);
+  gtk_widget_add_controller (GTK_WIDGET (text_view), controller);
 
   priv->virtual_cursor_x = -1;
   priv->virtual_cursor_y = -1;
@@ -1948,20 +2067,6 @@ static GtkTextBuffer*
 gtk_text_view_create_buffer (GtkTextView *text_view)
 {
   return gtk_text_buffer_new (NULL);
-}
-
-static GtkTextBuffer*
-get_buffer (GtkTextView *text_view)
-{
-  if (text_view->priv->buffer == NULL)
-    {
-      GtkTextBuffer *b;
-      b = GTK_TEXT_VIEW_GET_CLASS (text_view)->create_buffer (text_view);
-      gtk_text_view_set_buffer (text_view, b);
-      g_object_unref (b);
-    }
-
-  return text_view->priv->buffer;
 }
 
 /**
@@ -6896,60 +7001,6 @@ selection_scan_timeout (gpointer data)
   return TRUE; /* remain installed. */
 }
 
-#define UPPER_OFFSET_ANCHOR 0.8
-#define LOWER_OFFSET_ANCHOR 0.2
-
-static gboolean
-check_scroll (gdouble offset, GtkAdjustment *adjustment)
-{
-  if ((offset > UPPER_OFFSET_ANCHOR &&
-       gtk_adjustment_get_value (adjustment) + gtk_adjustment_get_page_size (adjustment) < gtk_adjustment_get_upper (adjustment)) ||
-      (offset < LOWER_OFFSET_ANCHOR &&
-       gtk_adjustment_get_value (adjustment) > gtk_adjustment_get_lower (adjustment)))
-    return TRUE;
-
-  return FALSE;
-}
-
-static gint
-drag_scan_timeout (gpointer data)
-{
-  GtkTextView *text_view;
-  GtkTextViewPrivate *priv;
-  GtkTextIter newplace;
-  gdouble pointer_xoffset, pointer_yoffset;
-
-  text_view = GTK_TEXT_VIEW (data);
-  priv = text_view->priv;
-
-  gtk_text_layout_get_iter_at_pixel (priv->layout,
-                                     &newplace,
-                                     priv->dnd_x + priv->xoffset,
-                                     priv->dnd_y + priv->yoffset);
-
-  gtk_text_buffer_move_mark (get_buffer (text_view), priv->dnd_mark, &newplace);
-
-  pointer_xoffset = (gdouble) priv->dnd_x / text_window_get_width (priv->text_window);
-  pointer_yoffset = (gdouble) priv->dnd_y / text_window_get_height (priv->text_window);
-
-  if (check_scroll (pointer_xoffset, priv->hadjustment) ||
-      check_scroll (pointer_yoffset, priv->vadjustment))
-    {
-      /* do not make offsets surpass lower nor upper anchors, this makes
-       * scrolling speed relative to the distance of the pointer to the
-       * anchors when it moves beyond them.
-       */
-      pointer_xoffset = CLAMP (pointer_xoffset, LOWER_OFFSET_ANCHOR, UPPER_OFFSET_ANCHOR);
-      pointer_yoffset = CLAMP (pointer_yoffset, LOWER_OFFSET_ANCHOR, UPPER_OFFSET_ANCHOR);
-
-      gtk_text_view_scroll_to_mark (text_view,
-                                    priv->dnd_mark,
-                                    0., TRUE, pointer_xoffset, pointer_yoffset);
-    }
-
-  return TRUE;
-}
-
 static void
 extend_selection (GtkTextView          *text_view,
                   SelectionGranularity  granularity,
@@ -7737,43 +7788,25 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
 
 static void
 gtk_text_view_drag_leave (GtkDropTarget *dest,
-                          GdkDrop       *drop,
                           GtkTextView   *text_view)
 {
   GtkTextViewPrivate *priv = text_view->priv;
 
   gtk_text_mark_set_visible (priv->dnd_mark, FALSE);
-
-  priv->dnd_x = priv->dnd_y = -1;
-
-  if (priv->scroll_timeout != 0)
-    g_source_remove (priv->scroll_timeout);
-
-  priv->scroll_timeout = 0;
 }
 
-static gboolean
+static GdkDragAction
 gtk_text_view_drag_motion (GtkDropTarget *dest,
-                           GdkDrop       *drop,
-                           int            x,
-                           int            y,
+                           double         x,
+                           double         y,
                            GtkTextView   *text_view)
 {
   GtkTextViewPrivate *priv = text_view->priv;
   GtkTextIter newplace;
   GtkTextIter start;
   GtkTextIter end;
-  GdkRectangle target_rect;
   gint bx, by;
   gboolean can_accept = FALSE;
-
-  target_rect = priv->text_window->allocation;
-  
-  if (x < target_rect.x ||
-      y < target_rect.y ||
-      x > (target_rect.x + target_rect.width) ||
-      y > (target_rect.y + target_rect.height))
-    return FALSE; /* outside the text window, allow parent widgets to handle event */
 
   gtk_text_view_window_to_buffer_coords (text_view,
                                          GTK_TEXT_WINDOW_WIDGET,
@@ -7799,134 +7832,50 @@ gtk_text_view_drag_motion (GtkDropTarget *dest,
   if (can_accept)
     {
       gtk_text_mark_set_visible (priv->dnd_mark, cursor_visible (text_view));
-      gdk_drop_status (drop, GDK_ACTION_COPY | GDK_ACTION_MOVE);
+      if (text_view->priv->drag)
+        return GDK_ACTION_MOVE;
+      else
+        return GDK_ACTION_COPY;
     }
   else
     {
-      gdk_drop_status (drop, 0);
       gtk_text_mark_set_visible (priv->dnd_mark, FALSE);
+      return 0;
     }
-
-  /* DnD uses text window coords, so subtract extra widget
-   * coords that happen e.g. when displaying line numbers.
-   */
-  priv->dnd_x = x - target_rect.x;
-  priv->dnd_y = y - target_rect.y;
-
-  if (!priv->scroll_timeout)
-  {
-    priv->scroll_timeout = g_timeout_add (100, drag_scan_timeout, text_view);
-    g_source_set_name_by_id (text_view->priv->scroll_timeout, "[gtk] drag_scan_timeout");
-  }
-
-  /* TRUE return means don't propagate the drag motion to parent
-   * widgets that may also be drop sites.
-   */
-  return TRUE;
 }
 
-static GdkDragAction
-gtk_text_view_get_action (GtkTextView *textview,
-                          GdkDrop     *drop)
+static gboolean
+gtk_text_view_drag_drop (GtkDropTarget *dest,
+                         const GValue  *value,
+                         double         x,
+                         double         y,
+                         GtkTextView   *text_view)
 {
-  GdkDrag *drag = gdk_drop_get_drag (drop);
-  GdkDragAction actions;
-
-  actions = gdk_drop_get_actions (drop);
-
-  if (drag == textview->priv->drag &&
-      actions & GDK_ACTION_MOVE)
-    return GDK_ACTION_MOVE;
-
-  if (actions & GDK_ACTION_COPY)
-    return GDK_ACTION_COPY;
-
-  if (actions & GDK_ACTION_MOVE)
-    return GDK_ACTION_MOVE;
-
-  return 0;
-}
-
-static void
-got_text (GObject *source,
-          GAsyncResult *result,
-          gpointer data)
-{
-  GdkDrop *drop = GDK_DROP (source);
-  GtkTextView *text_view = GTK_TEXT_VIEW (data);
   GtkTextViewPrivate *priv = text_view->priv;
   GtkTextBuffer *buffer;
-  char *str;
   GtkTextIter drop_point;
-  GdkDragAction action;
-
-  str = gdk_drop_read_text_finish (drop, result, NULL);
-  if (!str)
-    {
-      gdk_drop_finish (drop, 0);
-      return;
-    }
 
   buffer = get_buffer (text_view);
   gtk_text_buffer_get_iter_at_mark (buffer, &drop_point, priv->dnd_mark);
 
-  action = gtk_text_view_get_action (text_view, drop);
+  if (!gtk_text_iter_can_insert (&drop_point, priv->editable))
+    return FALSE;
 
   gtk_text_buffer_begin_user_action (buffer);
 
   if (!gtk_text_buffer_insert_interactive (buffer,
-                                           &drop_point, (gchar *) str, -1,
+                                           &drop_point, (gchar *) g_value_get_string (value), -1,
                                            text_view->priv->editable))
     gtk_widget_error_bell (GTK_WIDGET (text_view));
-
-  g_free (str);
 
   gtk_text_buffer_get_iter_at_mark (buffer, &drop_point, priv->dnd_mark);
   gtk_text_buffer_place_cursor (buffer, &drop_point);
 
   gtk_text_buffer_end_user_action (buffer);
 
-  gdk_drop_finish (drop, action);
-}
-
-static gboolean
-gtk_text_view_drag_drop (GtkDropTarget *dest,
-                         GdkDrop       *drop,
-                         int            x,
-                         int            y,
-                         GtkTextView *text_view)
-{
-  GtkTextViewPrivate *priv = text_view->priv;
-  GtkTextIter drop_point;
-  GtkTextBuffer *buffer = NULL;
-
-  if (priv->scroll_timeout != 0)
-    g_source_remove (priv->scroll_timeout);
-
-  priv->scroll_timeout = 0;
-
-  gtk_text_mark_set_visible (priv->dnd_mark, FALSE);
-
-  buffer = get_buffer (text_view);
-  gtk_text_buffer_get_iter_at_mark (buffer, &drop_point, priv->dnd_mark);
-  
-  if (!gtk_text_iter_can_insert (&drop_point, priv->editable))
-    goto done;
-
-  if (gtk_text_view_get_action (text_view, drop) == 0)
-    goto done;
-
-  if (gdk_drop_has_value (drop, G_TYPE_STRING))
-    {
-       gdk_drop_read_text_async (drop, NULL, got_text, text_view);
-       return TRUE;
-    }
-
-done:
-  gdk_drop_finish (drop, 0);
   return TRUE;
 }
-        
+
 static void
 gtk_text_view_set_hadjustment (GtkTextView   *text_view,
                                GtkAdjustment *adjustment)

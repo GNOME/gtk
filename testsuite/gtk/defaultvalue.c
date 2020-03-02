@@ -150,7 +150,8 @@ test_type (gconstpointer data)
 
       /* These are set in init() */
       if ((g_type_is_a (type, GDK_TYPE_CLIPBOARD) ||
-           g_type_is_a (type, GDK_TYPE_CONTENT_PROVIDER)) &&
+           g_type_is_a (type, GDK_TYPE_CONTENT_PROVIDER) ||
+           g_type_is_a (type, GTK_TYPE_DROP_TARGET)) &&
 	  strcmp (pspec->name, "formats") == 0)
 	continue;
 

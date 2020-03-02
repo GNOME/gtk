@@ -97,8 +97,7 @@ GSList *           gtk_places_sidebar_list_shortcuts             (GtkPlacesSideb
 GFile *            gtk_places_sidebar_get_nth_bookmark           (GtkPlacesSidebar   *sidebar,
                                                                   gint                n);
 void               gtk_places_sidebar_set_drop_targets_visible   (GtkPlacesSidebar   *sidebar,
-                                                                  gboolean            visible,
-                                                                  GdkDrag            *drag);
+                                                                  gboolean            visible);
 gboolean           gtk_places_sidebar_get_show_trash             (GtkPlacesSidebar   *sidebar);
 void               gtk_places_sidebar_set_show_trash             (GtkPlacesSidebar   *sidebar,
                                                                   gboolean            show_trash);

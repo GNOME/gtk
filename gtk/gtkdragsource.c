@@ -34,7 +34,7 @@
 #include "gtkintl.h"
 #include "gtkstylecontext.h"
 #include "gtkimageprivate.h"
-#include "gtkdragiconprivate.h"
+#include "gtkdragicon.h"
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkicontheme.h"
@@ -440,6 +440,52 @@ gtk_drag_source_cancel_cb (GdkDrag             *drag,
 }
 
 static void
+gtk_drag_source_ensure_icon (GtkDragSource *self,
+                             GdkDrag       *drag)
+{
+  GdkContentProvider *provider;
+  GtkWidget *icon, *child;
+  GdkContentFormats *formats;
+  const GType *types;
+  gsize i, n_types;
+
+  icon = gtk_drag_icon_get_for_drag (drag);
+  /* If an icon has been set already, we don't need to set one. */
+  if (gtk_drag_icon_get_child (GTK_DRAG_ICON (icon)))
+    return;
+
+  gdk_drag_set_hotspot (drag, -2, -2);
+
+  provider = gdk_drag_get_content (drag);
+  formats = gdk_content_provider_ref_formats (provider);
+  types = gdk_content_formats_get_gtypes (formats, &n_types);
+  for (i = 0; i < n_types; i++)
+    {
+      GValue value = G_VALUE_INIT;
+
+      g_value_init (&value, types[i]);
+      if (gdk_content_provider_get_value (provider, &value, NULL))
+        {
+          child = gtk_drag_icon_create_widget_for_value (&value);
+
+          if (child)
+            {
+              gtk_drag_icon_set_child (GTK_DRAG_ICON (icon), child);
+              g_value_unset (&value);
+              gdk_content_formats_unref (formats);
+              return;
+            }
+        }
+      g_value_unset (&value);
+    }
+
+  gdk_content_formats_unref (formats);
+  child = gtk_image_new_from_icon_name ("text-x-generic");
+  gtk_image_set_icon_size (GTK_IMAGE (child), GTK_ICON_SIZE_LARGE);
+  gtk_drag_icon_set_child (GTK_DRAG_ICON (icon), child);
+}
+
+static void
 gtk_drag_source_drag_begin (GtkDragSource *source)
 {
   GtkWidget *widget;
@@ -481,23 +527,7 @@ gtk_drag_source_drag_begin (GtkDragSource *source)
 
   g_signal_emit (source, signals[DRAG_BEGIN], 0, source->drag);
 
-  if (!source->paintable)
-    {
-      GtkIconTheme *theme;
-
-      theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (widget));
-      source->paintable = GDK_PAINTABLE(gtk_icon_theme_lookup_icon (theme,
-                                                                    "text-x-generic",
-                                                                    NULL,
-                                                                    32,
-                                                                    1,
-                                                                    gtk_widget_get_direction (widget),
-                                                                    0));
-      source->hot_x = 0;
-      source->hot_y = 0;
-    }
-
-  gtk_drag_icon_set_from_paintable (source->drag, source->paintable, source->hot_x, source->hot_y);
+  gtk_drag_source_ensure_icon (source, source->drag);
 
   g_signal_connect (source->drag, "dnd-finished",
                     G_CALLBACK (gtk_drag_source_dnd_finished_cb), source);

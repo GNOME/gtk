@@ -54,7 +54,8 @@ GdkDrag *               gdk_drop_get_drag               (GdkDrop                
 
 GDK_AVAILABLE_IN_ALL
 void                    gdk_drop_status                 (GdkDrop                *self,
-                                                         GdkDragAction           actions);
+                                                         GdkDragAction           actions,
+                                                         GdkDragAction           preferred);
 GDK_AVAILABLE_IN_ALL
 void                    gdk_drop_finish                 (GdkDrop                *self,
                                                          GdkDragAction           action);
@@ -82,19 +83,6 @@ GDK_AVAILABLE_IN_ALL
 const GValue *          gdk_drop_read_value_finish      (GdkDrop                *self,
                                                          GAsyncResult           *result,
                                                          GError                **error);
-GDK_AVAILABLE_IN_ALL
-void                    gdk_drop_read_text_async        (GdkDrop                *self,
-                                                         GCancellable           *cancellable,
-                                                         GAsyncReadyCallback     callback,
-                                                         gpointer                user_data);
-GDK_AVAILABLE_IN_ALL
-char *                  gdk_drop_read_text_finish       (GdkDrop                *self,
-                                                         GAsyncResult           *result,
-                                                         GError                **error);
-
-GDK_AVAILABLE_IN_ALL
-gboolean                gdk_drop_has_value              (GdkDrop                *self,
-                                                         GType                   type);
 
 G_END_DECLS
 

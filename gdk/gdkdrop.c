@@ -75,7 +75,8 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkDrop, gdk_drop, G_TYPE_OBJECT)
 
 static void
 gdk_drop_default_status (GdkDrop       *self,
-                         GdkDragAction  actions)
+                         GdkDragAction  actions,
+                         GdkDragAction  preferred)
 {
 }
 
@@ -545,12 +546,17 @@ gdk_drop_get_drag (GdkDrop *self)
  * @self: a #GdkDrop
  * @actions: Supported actions of the destination, or 0 to indicate
  *    that a drop will not be accepted
+ * @preferred: A unique action that's a member of @actions indicating the
+ *    preferred action.
  *
  * Selects all actions that are potentially supported by the destination.
  *
  * When calling this function, do not restrict the passed in actions to
  * the ones provided by gdk_drop_get_actions(). Those actions may
  * change in the future, even depending on the actions you provide here.
+ *
+ * The @preferred action is a hint to the drag'n'drop mechanism about which
+ * action to use when multiple actions are possible.
  *
  * This function should be called by drag destinations in response to
  * %GDK_DRAG_ENTER or %GDK_DRAG_MOTION events. If the destination does
@@ -559,7 +565,8 @@ gdk_drop_get_drag (GdkDrop *self)
  */
 void
 gdk_drop_status (GdkDrop       *self,
-                 GdkDragAction  actions)
+                 GdkDragAction  actions,
+                 GdkDragAction  preferred)
 {
 #ifndef G_DISABLE_CHECKS
   GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
@@ -567,8 +574,10 @@ gdk_drop_status (GdkDrop       *self,
 
   g_return_if_fail (GDK_IS_DROP (self));
   g_return_if_fail (priv->state != GDK_DROP_STATE_FINISHED);
+  g_return_if_fail (gdk_drag_action_is_unique (preferred));
+  g_return_if_fail ((preferred & actions) == preferred);
 
-  GDK_DROP_GET_CLASS (self)->status (self, actions);
+  GDK_DROP_GET_CLASS (self)->status (self, actions, preferred);
 }
 
 /**
@@ -883,70 +892,6 @@ gdk_drop_read_value_finish (GdkDrop       *self,
   return g_task_propagate_pointer (G_TASK (result), error);
 }
 
-/**
- * gdk_drop_read_text_async:
- * @self: a #GdkDrop
- * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): callback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
- *
- * Asynchronously request the drag operation's contents converted to a string.
- * When the operation is finished @callback will be called. You can then
- * call gdk_drop_read_text_finish() to get the result.
- *
- * This is a simple wrapper around gdk_drop_read_value_async(). Use
- * that function or gdk_drop_read_async() directly if you need more
- * control over the operation.
- **/
-void
-gdk_drop_read_text_async (GdkDrop             *self,
-                          GCancellable        *cancellable,
-                          GAsyncReadyCallback  callback,
-                          gpointer             user_data)
-{
-  g_return_if_fail (GDK_IS_DROP (self));
-  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
-  g_return_if_fail (callback != NULL);
-
-  gdk_drop_read_value_internal (self,
-                                G_TYPE_STRING,
-                                gdk_drop_read_text_async,
-                                G_PRIORITY_DEFAULT,
-                                cancellable,
-                                callback,
-                                user_data);
-}
-
-/**
- * gdk_drop_read_text_finish:
- * @self: a #GdkDrop
- * @result: a #GAsyncResult
- * @error: a #GError location to store the error occurring, or %NULL to 
- * ignore.
- *
- * Finishes an asynchronous read started with
- * gdk_drop_read_text_async().
- *
- * Returns: (transfer full) (nullable): a new string or %NULL on error.
- **/
-char *
-gdk_drop_read_text_finish (GdkDrop       *self,
-                           GAsyncResult  *result,
-                           GError       **error)
-{
-  const GValue *value;
-
-  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
-  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gdk_drop_read_text_async, NULL);
-  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-
-  value = g_task_propagate_pointer (G_TASK (result), error);
-  if (!value)
-    return NULL;
-  
-  return g_value_dup_string (value);
-}
-
 static void
 gdk_drop_do_emit_event (GdkEvent *event,
                         gboolean  dont_queue)
@@ -1052,32 +997,5 @@ gdk_drop_emit_drop_event (GdkDrop  *self,
   priv->state = GDK_DROP_STATE_DROPPING;
 
   gdk_drop_do_emit_event (event, dont_queue);
-}
-
-/**
- * gdk_drop_has_value:
- * @self: a #GdkDrop
- * @type: the type to check
- *
- * Returns whether calling gdk_drop_read_value_async() for @type
- * can succeed.
- *
- * Returns: %TRUE if the data can be deserialized to the given type
- */ 
-gboolean
-gdk_drop_has_value (GdkDrop *self,
-                    GType    type)
-{
-  GdkContentFormats *formats;
-  gboolean ret;
-
-  formats = gdk_content_formats_ref (gdk_drop_get_formats (self));
-  formats = gdk_content_formats_union_deserialize_gtypes (formats);
-
-  ret = gdk_content_formats_contain_gtype (formats, type);
-
-  gdk_content_formats_unref (formats);
-
-  return ret;
 }
 

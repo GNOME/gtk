@@ -25,7 +25,6 @@
 #include "gtkbuildable.h"
 #include "gtkcontainerprivate.h"
 #include "gtkcssnodeprivate.h"
-#include "gtkdragdest.h"
 #include "gtkgestureclick.h"
 #include "gtkintl.h"
 #include "gtkmain.h"

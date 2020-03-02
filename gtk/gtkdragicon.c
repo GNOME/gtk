@@ -17,7 +17,7 @@
 
 #include "config.h"
 
-#include "gtkdragiconprivate.h"
+#include "gtkdragicon.h"
 
 #include "gtkprivate.h"
 #include "gtkintl.h"
@@ -29,21 +29,28 @@
 #include "gtkpicture.h"
 #include "gtkcssnumbervalueprivate.h"
 
+/* for the drag icons */
+#include "gtkcolorswatchprivate.h"
+#include "gtklabel.h"
+#include "gtktextutil.h"
+
 
 /**
  * SECTION:gtkdragicon
  * @Short_description: A toplevel to use as drag icon
  * @Title: GtkDragIcon
  *
- * GtkDragIcon is a #GtkNative implementation with the sole purpose
+ * GtkDragIcon is a #GtkRoot implementation with the sole purpose
  * to serve as a drag icon during DND operations. A drag icon moves
  * with the pointer during a drag operation and is destroyed when
  * the drag ends.
  *
  * To set up a drag icon and associate it with an ongoing drag operation,
- * use gtk_drag_icon_set_from_paintable(). It is also possible to create
- * a GtkDragIcon with gtk_drag_icon_new_for_drag(() and populate it
- * with widgets yourself.
+ * use gtk_drag_icon_get_for_drag() to get the icon for a drag. You can
+ * then use it like any other widget and use gtk_drag_icon_set_child() to
+ * set whatever widget should be used for the drag icon.
+ *
+ * Keep in mind that drag icons do not allow user input.
  */
 struct _GtkDragIcon
 {
@@ -51,7 +58,7 @@ struct _GtkDragIcon
 
   GdkSurface *surface;
   GskRenderer *renderer;
-  GtkWidget *widget;
+  GtkWidget *child;
 };
 
 struct _GtkDragIconClass
@@ -60,8 +67,13 @@ struct _GtkDragIconClass
 };
 
 enum {
-  LAST_ARG = 1
+  PROP_0,
+  PROP_CHILD,
+
+  LAST_ARG
 };
+
+static GParamSpec *properties[LAST_ARG] = { NULL, };
 
 static void gtk_drag_icon_root_init   (GtkRootInterface *iface);
 static void gtk_drag_icon_native_init (GtkNativeInterface *iface);
@@ -214,8 +226,8 @@ gtk_drag_icon_map (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_drag_icon_parent_class)->map (widget);
 
-  if (icon->widget && gtk_widget_get_visible (icon->widget))
-    gtk_widget_map (icon->widget);
+  if (icon->child && gtk_widget_get_visible (icon->child))
+    gtk_widget_map (icon->child);
 }
 
 static void
@@ -228,8 +240,8 @@ gtk_drag_icon_unmap (GtkWidget *widget)
   if (icon->surface)
     gdk_surface_hide (icon->surface);
 
-  if (icon->widget)
-    gtk_widget_unmap (icon->widget);
+  if (icon->child)
+    gtk_widget_unmap (icon->child);
 }
 
 static void
@@ -243,8 +255,8 @@ gtk_drag_icon_measure (GtkWidget      *widget,
 {
   GtkDragIcon *icon = GTK_DRAG_ICON (widget);
 
-  if (icon->widget)
-    gtk_widget_measure (icon->widget,
+  if (icon->child)
+    gtk_widget_measure (icon->child,
                         orientation, for_size,
                         minimum, natural,
                         minimum_baseline, natural_baseline);
@@ -258,8 +270,8 @@ gtk_drag_icon_size_allocate (GtkWidget *widget,
 {
   GtkDragIcon *icon = GTK_DRAG_ICON (widget);
 
-  if (icon->widget)
-    gtk_widget_allocate (icon->widget, width, height, baseline, NULL);
+  if (icon->child)
+    gtk_widget_allocate (icon->child, width, height, baseline, NULL);
 }
 
 static void
@@ -284,7 +296,7 @@ gtk_drag_icon_dispose (GObject *object)
 {
   GtkDragIcon *icon = GTK_DRAG_ICON (object);
 
-  g_clear_pointer (&icon->widget, gtk_widget_unparent);
+  g_clear_pointer (&icon->child, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_drag_icon_parent_class)->dispose (object);
 
@@ -297,11 +309,18 @@ gtk_drag_icon_get_property (GObject     *object,
                             GValue      *value,
                             GParamSpec  *pspec)
 {
+  GtkDragIcon *self = GTK_DRAG_ICON (object);
+
   switch (prop_id)
     {
+    case PROP_CHILD:
+      g_value_set_object (value, self->child);
+      break;
+
     case LAST_ARG + GTK_ROOT_PROP_FOCUS_WIDGET:
       g_value_set_object (value, NULL);
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -314,8 +333,14 @@ gtk_drag_icon_set_property (GObject      *object,
                             const GValue *value,
                             GParamSpec    *pspec)
 {
+  GtkDragIcon *self = GTK_DRAG_ICON (object);
+
   switch (prop_id)
     {
+    case PROP_CHILD:
+      gtk_drag_icon_set_child (self, g_value_get_object (value));
+      break;
+
     case LAST_ARG + GTK_ROOT_PROP_FOCUS_WIDGET:
       // do nothing
       break;
@@ -326,40 +351,10 @@ gtk_drag_icon_set_property (GObject      *object,
 }
 
 static void
-gtk_drag_icon_add (GtkContainer *self,
-                   GtkWidget    *widget)
-{
-  GtkDragIcon *icon = GTK_DRAG_ICON (self);
-
-  if (icon->widget)
-    {
-      g_warning ("GtkDragIcon already has a child");
-      return;
-    }
-
-  gtk_widget_set_parent (widget, GTK_WIDGET (icon));
-  icon->widget = widget;
-}
-
-static void
-gtk_drag_icon_remove (GtkContainer *self,
-                      GtkWidget    *widget)
-{
-  GtkDragIcon *icon = GTK_DRAG_ICON (self);
-
-  if (icon->widget == widget)
-    {
-      gtk_widget_unparent (widget);
-      icon->widget = NULL;
-    }
-}
-
-static void
 gtk_drag_icon_class_init (GtkDragIconClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->dispose = gtk_drag_icon_dispose;
   object_class->get_property = gtk_drag_icon_get_property;
@@ -374,9 +369,19 @@ gtk_drag_icon_class_init (GtkDragIconClass *klass)
   widget_class->show = gtk_drag_icon_show;
   widget_class->hide = gtk_drag_icon_hide;
 
-  container_class->add = gtk_drag_icon_add;
-  container_class->remove = gtk_drag_icon_remove;
+  /**
+   * GtkDragIcon:child:
+   *
+   * The widget to display as drag icon.
+   */
+  properties[PROP_CHILD] =
+    g_param_spec_object ("child",
+                         P_("Child"),
+                         P_("The widget to display as drag icon."),
+                         GTK_TYPE_WIDGET,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
+  g_object_class_install_properties (object_class, LAST_ARG, properties);
   gtk_root_install_properties (object_class, LAST_ARG);
 
   gtk_widget_class_set_css_name (widget_class, "dnd");
@@ -387,32 +392,41 @@ gtk_drag_icon_init (GtkDragIcon *self)
 {
 }
 
-GtkWidget *
-gtk_drag_icon_new (void)
-{
-  return g_object_new (GTK_TYPE_DRAG_ICON, NULL);
-}
-
 /**
- * gtk_drag_icon_new_for_drag:
- * @drag: a #GtkDrag
+ * gtk_drag_icon_get_for_drag:
+ * @drag: a #GdkDrag
  *
- * Creates a #GtkDragIcon and associates it with the drag operation.
+ * Gets the #GtkDragIcon in use with @drag.
  *
- * Returns: the new #GtkDragIcon
+ * If no drag icon exists yet, a new one will be created
+ * and shown.
+ *
+ * Returns: (transfer none) the #GtkDragIcon
  */
 GtkWidget *
-gtk_drag_icon_new_for_drag (GdkDrag *drag)
+gtk_drag_icon_get_for_drag (GdkDrag *drag)
 {
-  GtkWidget *icon;
+  static GQuark drag_icon_quark = 0;
+  GtkWidget *self;
 
   g_return_val_if_fail (GDK_IS_DRAG (drag), NULL);
 
-  icon = g_object_new (GTK_TYPE_DRAG_ICON, NULL);
+  if (G_UNLIKELY (drag_icon_quark == 0))
+    drag_icon_quark = g_quark_from_static_string ("-gtk-drag-icon");
 
-  gtk_drag_icon_set_surface (GTK_DRAG_ICON (icon), gdk_drag_get_drag_surface (drag));
+  self = g_object_get_qdata (G_OBJECT (drag), drag_icon_quark);
+  if (self == NULL)
+    {
+      self = g_object_new (GTK_TYPE_DRAG_ICON, NULL);
 
-  return icon;
+      GTK_DRAG_ICON (self)->surface = g_object_ref (gdk_drag_get_drag_surface (drag));
+
+      g_object_set_qdata_full (G_OBJECT (drag), drag_icon_quark, g_object_ref_sink (self), g_object_unref);
+
+      gtk_widget_show (self);
+    }
+
+  return self;
 }
 
 /**
@@ -437,38 +451,113 @@ gtk_drag_icon_set_from_paintable (GdkDrag      *drag,
 
   gdk_drag_set_hotspot (drag, hot_x, hot_y);
 
-  icon = gtk_drag_icon_new_for_drag (drag);
+  icon = gtk_drag_icon_get_for_drag (drag);
 
   picture = gtk_picture_new_for_paintable (paintable);
   gtk_picture_set_can_shrink (GTK_PICTURE (picture), FALSE);
-  gtk_container_add (GTK_CONTAINER (icon), picture);
-
-  g_object_set_data_full (G_OBJECT (drag),
-                          "icon",
-                          g_object_ref_sink (icon),
-                          (GDestroyNotify)gtk_widget_destroy);
-  gtk_widget_show (icon);
+  gtk_drag_icon_set_child (GTK_DRAG_ICON (icon), picture);
 }
 
+/**
+ * gtk_drag_icon_set_child:
+ * @self: a #GtkDragIcon
+ * @child: (nullable): a #GtkWidget or %NULL
+ *
+ * Sets the widget to display as the drag icon.
+ **/
 void
-gtk_drag_icon_set_surface (GtkDragIcon *icon,
-                           GdkSurface  *surface)
+gtk_drag_icon_set_child (GtkDragIcon *self,
+                         GtkWidget   *child)
 {
-  g_set_object (&icon->surface, surface);
-}
+  g_return_if_fail (GTK_IS_DRAG_ICON (self));
+  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
 
-void
-gtk_drag_icon_set_widget (GtkDragIcon *icon,
-                          GtkWidget   *widget)
-{
-  if (icon->widget == widget)
+  if (self->child == child)
     return;
 
-  if (icon->widget)
-    gtk_widget_unparent (icon->widget);
+  if (self->child)
+    gtk_widget_unparent (self->child);
 
-  icon->widget = widget;
+  self->child = child;
 
-  if (icon->widget)
-    gtk_widget_set_parent (icon->widget, GTK_WIDGET (icon));
+  if (self->child)
+    gtk_widget_set_parent (self->child, GTK_WIDGET (self));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CHILD]);
 }
+
+/**
+ * gtk_drag_icon_get_child:
+ * @self: a #GtkDragIcon
+ *
+ * Gets the widget currently used as drag icon.
+ *
+ * Returns: (nullable) (transfer none): The drag icon or %NULL if none.
+ **/
+GtkWidget *
+gtk_drag_icon_get_child (GtkDragIcon *self)
+{
+  g_return_val_if_fail (GTK_IS_DRAG_ICON (self), NULL);
+
+  return self->child;
+}
+
+/**
+ * gtk_drag_icon_create_widget_for_value:
+ * @value: a #GValue
+ *
+ * Creates a widget that can be used as a drag icon for the given
+ * @value.
+ *
+ * If GTK does not know how to create a widget for a given value,
+ * it will return %NULL.
+ *
+ * This method is used to set the default drag icon on drag'n'drop
+ * operations started by #GtkDragSource, so you don't need to set
+ * a drag icon using this function there.
+ *
+ * Returns: (nullable) (transfer full): A new #GtkWidget
+ *     for displaying @value as a drag icon.
+ **/
+GtkWidget *
+gtk_drag_icon_create_widget_for_value (const GValue *value)
+{
+  g_return_val_if_fail (G_IS_VALUE (value), NULL);
+
+  if (G_VALUE_HOLDS (value, G_TYPE_STRING))
+    {
+      return gtk_label_new (g_value_get_string (value));
+    }
+  else if (G_VALUE_HOLDS (value, GDK_TYPE_RGBA))
+    {
+      GtkWidget *swatch;
+
+      swatch = gtk_color_swatch_new ();
+      gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (swatch), g_value_get_boxed (value));
+
+      return swatch;
+    }
+  else if (G_VALUE_HOLDS (value, GTK_TYPE_TEXT_BUFFER))
+    {
+      GtkTextBuffer *buffer = g_value_get_object (value);
+      GtkTextIter start, end;
+      GdkPaintable *paintable;
+      GtkWidget *picture;
+
+      if (buffer == NULL || !gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
+        return NULL;
+
+      picture = gtk_picture_new ();
+      paintable = gtk_text_util_create_rich_drag_icon (picture, buffer, &start, &end);
+      gtk_picture_set_paintable (GTK_PICTURE (picture), paintable);
+      gtk_picture_set_can_shrink (GTK_PICTURE (picture), FALSE);
+      g_object_unref (paintable);
+
+      return picture;
+    }
+  else
+    {
+      return NULL;
+    }
+}
+
