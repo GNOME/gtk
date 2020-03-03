@@ -47,6 +47,12 @@ gdk_toplevel_default_present (GdkToplevel       *toplevel,
 }
 
 static gboolean
+gdk_toplevel_default_minimize (GdkToplevel *toplevel)
+{
+  return FALSE;
+}
+
+static gboolean
 gdk_toplevel_default_show_window_menu (GdkToplevel *toplevel,
                                        GdkEvent    *event)
 {
@@ -57,6 +63,7 @@ static void
 gdk_toplevel_default_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_toplevel_default_present;
+  iface->minimize = gdk_toplevel_default_minimize;
   iface->show_window_menu = gdk_toplevel_default_show_window_menu;
 
   g_object_interface_install_property (iface,
@@ -151,6 +158,24 @@ gdk_toplevel_present (GdkToplevel       *toplevel,
   g_return_val_if_fail (layout != NULL, FALSE);
 
   return GDK_TOPLEVEL_GET_IFACE (toplevel)->present (toplevel, width, height, layout);
+}
+
+/**
+ * gdk_toplevel_minimize:
+ * @toplevel: a #GdkToplevel
+ *
+ * Asks to minimize the @toplevel.
+ *
+ * The windowing system may choose to ignore the request.
+ *
+ * Returns: %TRUE if the surface was minimized
+ */
+gboolean
+gdk_toplevel_minimize (GdkToplevel *toplevel)
+{
+  g_return_val_if_fail (GDK_IS_TOPLEVEL (toplevel), FALSE);
+
+  return GDK_TOPLEVEL_GET_IFACE (toplevel)->minimize (toplevel);
 }
 
 /**
