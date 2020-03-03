@@ -44,6 +44,10 @@ GDK_AVAILABLE_IN_ALL
 gboolean        gdk_toplevel_minimize           (GdkToplevel       *toplevel);
 
 GDK_AVAILABLE_IN_ALL
+void            gdk_toplevel_focus              (GdkToplevel       *toplevel,
+                                                 guint32            timestamp);
+
+GDK_AVAILABLE_IN_ALL
 GdkSurfaceState gdk_toplevel_get_state          (GdkToplevel       *toplevel);
 
 GDK_AVAILABLE_IN_ALL
