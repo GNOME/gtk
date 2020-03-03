@@ -4988,20 +4988,15 @@ gtk_window_map (GtkWidget *widget)
 
   gtk_window_present_toplevel (window);
 
-#if 0
-  if (priv->stick_initially)
-    gdk_surface_stick (surface);
-  else
-    gdk_surface_unstick (surface);
+  gdk_toplevel_set_sticky (GDK_TOPLEVEL (priv->surface), priv->stick_initially);
+  gdk_toplevel_set_keep_above (GDK_TOPLEVEL (priv->surface), priv->above_initially);
+  gdk_toplevel_set_keep_below (GDK_TOPLEVEL (priv->surface), priv->below_initially);
 
+#if 0
   if (priv->minimize_initially)
     gdk_surface_minimize (surface);
   else
     gdk_surface_unminimize (surface);
-
-  gdk_surface_set_keep_above (surface, priv->above_initially);
-
-  gdk_surface_set_keep_below (surface, priv->below_initially);
 #endif
 
   gtk_window_set_theme_variant (window);
@@ -7801,7 +7796,7 @@ gtk_window_stick (GtkWindow *window)
   priv->stick_initially = TRUE;
 
   if (priv->surface)
-    gdk_surface_stick (priv->surface);
+    gdk_toplevel_set_sticky (GDK_TOPLEVEL (priv->surface), TRUE);
 }
 
 /**
@@ -7828,7 +7823,7 @@ gtk_window_unstick (GtkWindow *window)
   priv->stick_initially = FALSE;
 
   if (priv->surface)
-    gdk_surface_unstick (priv->surface);
+    gdk_toplevel_set_sticky (GDK_TOPLEVEL (priv->surface), FALSE);
 }
 
 /**
@@ -8028,7 +8023,7 @@ gtk_window_set_keep_above (GtkWindow *window,
   priv->below_initially &= !setting;
 
   if (priv->surface)
-    gdk_surface_set_keep_above (priv->surface, setting);
+    gdk_toplevel_set_keep_above (GDK_TOPLEVEL (priv->surface), setting);
 }
 
 /**
@@ -8070,7 +8065,7 @@ gtk_window_set_keep_below (GtkWindow *window,
   priv->above_initially &= !setting;
 
   if (priv->surface)
-    gdk_surface_set_keep_below (priv->surface, setting);
+    gdk_toplevel_set_keep_below (GDK_TOPLEVEL (priv->surface), setting);
 }
 
 /**
