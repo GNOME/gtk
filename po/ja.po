@@ -1,5 +1,5 @@
 # gtk+ ja.po.
-# Copyright (C) 1998,2000-2010 Free Software Foundation, Inc.
+# Copyright (C) 1998-2020 Free Software Foundation, Inc.
 # Yasuhiro SHIRASAKI <yasuhiro@awa.tohoku.ac.jp>, 1998.
 # Yukihiro Nakai <nakai@gnome.gr.jp>, 2000-2001.
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2002, 2009-2010.
@@ -13,14 +13,14 @@
 # Jiro Matsuzawa <jmatsuzawa@gnome.org>, 2011, 2012, 2013, 2014, 2015, 2016.
 # Shushi KUROSE <md81bird@hitaki.net>, 2013.
 # Hajime Taira <htaira@redhat.com>, 2015.
-# sicklylife <translation@sicklylife.jp>, 2019.
+# sicklylife <translation@sicklylife.jp>, 2019-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-03-02 14:52+0000\n"
-"PO-Revision-Date: 2020-01-23 01:30+0900\n"
+"PO-Revision-Date: 2020-03-03 20:25+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
@@ -1198,9 +1198,9 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
-"既に選択している色で、現在選択している色と比較するために表示しています。この"
-"色をパレットのエントリにドラッグしたり、他の見本の横にドラッグして現在の色と"
-"して選択できます"
+"すでに選択している色で、現在選択している色と比較するために表示しています。こ"
+"の色をパレットのエントリにドラッグしたり、他の見本の横にドラッグして現在の色"
+"として選択できます"
 
 #: gtk/deprecated/gtkcolorsel.c:1078
 msgid ""
@@ -1717,7 +1717,7 @@ msgstr "%s はブックマークリストに存在しません"
 #: gtk/gtkbookmarksmanager.c:362
 #, c-format
 msgid "%s already exists in the bookmarks list"
-msgstr "%s は既にブックマークリストに存在します"
+msgstr "%s はすでにブックマークリストに存在します"
 
 #: gtk/gtkbuilder-menus.c:223
 #, c-format
@@ -2312,9 +2312,9 @@ msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
-"同名のファイルが既に存在しているので、そのフォルダーを作成できませんでした。"
-"別のフォルダー名を使用するか、ファイルの名前を変更するなどして、もう一度実行"
-"してください。"
+"同名のファイルがすでに存在しているため、そのフォルダーを作成できませんでした"
+"。別のフォルダー名を使用するか、ファイルの名前を変更するなどして、もう一度実"
+"行してください。"
 
 #: gtk/gtkfilechooserwidget.c:835
 msgid "You need to choose a valid filename."
@@ -2361,11 +2361,11 @@ msgstr "ファイルをゴミ箱へ移動できませんでした"
 
 #: gtk/gtkfilechooserwidget.c:1038
 msgid "A folder with that name already exists"
-msgstr "同じ名前のフォルダーが既に存在します"
+msgstr "同じ名前のフォルダーがすでに存在します"
 
 #: gtk/gtkfilechooserwidget.c:1040
 msgid "A file with that name already exists"
-msgstr "同じ名前のファイルが既に存在します"
+msgstr "同じ名前のファイルがすでに存在します"
 
 #: gtk/gtkfilechooserwidget.c:1075
 msgid "A folder cannot be called “.”"
@@ -2418,7 +2418,7 @@ msgstr "“.”で始まるファイルは隠しファイルになります"
 #: gtk/gtkfilechooserwidget.c:1490
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
-msgstr "“%s”を完全に削除してもよろしいですか?"
+msgstr "本当に“%s”を完全に削除しますか?"
 
 #: gtk/gtkfilechooserwidget.c:1493
 #, c-format
@@ -2612,13 +2612,13 @@ msgstr "ローカルではないので、フォルダーを変更できません
 #: gtk/gtkfilechooserwidget.c:6547 gtk/gtkprintunixdialog.c:665
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
-msgstr "“%s”というファイルは既に存在します。上書きしてもよろしいですか?"
+msgstr "“%s”というファイルはすでに存在します。上書きしますか?"
 
 #: gtk/gtkfilechooserwidget.c:6550 gtk/gtkprintunixdialog.c:669
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
-msgstr "“%s”にファイルが既に存在します。すべての内容を上書きします。"
+msgstr "“%s”にファイルがすでに存在します。すべての内容を上書きします。"
 
 #: gtk/gtkfilechooserwidget.c:6555 gtk/gtkprintunixdialog.c:677
 msgid "_Replace"
@@ -3386,7 +3386,7 @@ msgstr "このコンピューター"
 #, c-format
 msgid "%s / %s available"
 msgid_plural "%s / %s available"
-msgstr[0] "%s / %s 利用可能"
+msgstr[0] "%s / %s の空き領域"
 
 #: gtk/gtkplacesviewrow.c:481
 msgid "Disconnect"
@@ -3899,7 +3899,7 @@ msgstr "\"%s\" は属性 \"%s\" に対して妥当な値ではありません"
 #: gtk/gtktextbufferserialize.c:1291
 #, c-format
 msgid "Tag \"%s\" already defined"
-msgstr "タグ \"%s\" は既に定義されています"
+msgstr "タグ \"%s\" はすでに定義されています"
 
 #: gtk/gtktextbufferserialize.c:1304
 #, c-format
@@ -3916,7 +3916,7 @@ msgstr ""
 #: gtk/gtktextbufferserialize.c:1366 gtk/gtktextbufferserialize.c:1382
 #, c-format
 msgid "A <%s> element has already been specified"
-msgstr "要素 <%s> は既に指定されています"
+msgstr "要素 <%s> はすでに指定されています"
 
 #: gtk/gtktextbufferserialize.c:1388
 msgid "A <text> element can't occur before a <tags> element"
