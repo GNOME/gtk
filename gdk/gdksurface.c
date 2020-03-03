@@ -2033,6 +2033,8 @@ gdk_toplevel_surface_present (GdkToplevel       *toplevel,
   g_return_val_if_fail (surface->surface_type == GDK_SURFACE_TOPLEVEL, FALSE);
   g_return_val_if_fail (!GDK_SURFACE_DESTROYED (surface), FALSE);
 
+  GDK_SURFACE_GET_CLASS (surface)->unminimize (surface);
+
   gdk_toplevel_layout_get_min_size (layout,
                                     &geometry.min_width,
                                     &geometry.min_height);
@@ -2078,6 +2080,18 @@ gdk_toplevel_surface_present (GdkToplevel       *toplevel,
 }
 
 static gboolean
+gdk_toplevel_surface_minimize (GdkToplevel *toplevel)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+
+  g_return_val_if_fail (surface->surface_type == GDK_SURFACE_TOPLEVEL, FALSE);
+  
+  GDK_SURFACE_GET_CLASS (surface)->minimize (surface);
+
+  return TRUE;
+}
+
+static gboolean
 gdk_toplevel_surface_show_window_menu (GdkToplevel *toplevel,
                                        GdkEvent    *event)
 {
@@ -2092,6 +2106,7 @@ static void
 gdk_surface_toplevel_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_toplevel_surface_present;
+  iface->minimize = gdk_toplevel_surface_minimize;
   iface->show_window_menu = gdk_toplevel_surface_show_window_menu;
 }
 
