@@ -729,6 +729,7 @@ maybe_rename_property (Element *element, MyParserData *data)
     { "GtkPopover", "modal", GTK_TYPE_POPOVER, PROP_KIND_OBJECT, "autohide", { NULL, NULL, NULL } },
     { "GtkWidget", "expand", GTK_TYPE_WIDGET, PROP_KIND_OBJECT, "hexpand", { "vexpand", NULL, NULL } },
     { "GtkWidget", "margin", GTK_TYPE_WIDGET, PROP_KIND_OBJECT, "margin-left", { "margin-top", "margin-right", "margin-bottom" } },
+    { "GtkHeaderBar", "show-close-button", GTK_TYPE_HEADER_BAR, PROP_KIND_OBJECT, "show-title-buttons", { NULL, NULL, NULL } }
   };
   int i, k, l;
   PropKind kind;
