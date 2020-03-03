@@ -679,6 +679,23 @@ gdk_surface_set_property (GObject      *object,
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS:
+      if (surface->accept_focus != g_value_get_boolean (value))
+        {
+          surface->accept_focus = g_value_get_boolean (value);
+          GDK_SURFACE_GET_CLASS (surface)->set_accept_focus (surface, surface->accept_focus);
+          g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+        }
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP:
+      if (surface->focus_on_map != g_value_get_boolean (value))
+        {
+          surface->focus_on_map = g_value_get_boolean (value);
+          GDK_SURFACE_GET_CLASS (surface)->set_focus_on_map (surface, surface->focus_on_map);
+          g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+        }
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -757,6 +774,14 @@ gdk_surface_get_property (GObject    *object,
 
     case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_KEEP_BELOW:
       g_value_set_boolean (value, GDK_SURFACE_IS_BELOW (surface));
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS:
+      g_value_set_boolean (value, surface->accept_focus);
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP:
+      g_value_set_boolean (value, surface->focus_on_map);
       break;
 
     default:
