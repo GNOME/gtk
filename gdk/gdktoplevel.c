@@ -52,6 +52,12 @@ gdk_toplevel_default_minimize (GdkToplevel *toplevel)
   return FALSE;
 }
 
+static void
+gdk_toplevel_default_focus (GdkToplevel *toplevel,
+                            guint32      timestamp)
+{
+}
+
 static gboolean
 gdk_toplevel_default_show_window_menu (GdkToplevel *toplevel,
                                        GdkEvent    *event)
@@ -64,6 +70,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_toplevel_default_present;
   iface->minimize = gdk_toplevel_default_minimize;
+  iface->focus = gdk_toplevel_default_focus;
   iface->show_window_menu = gdk_toplevel_default_show_window_menu;
 
   g_object_interface_install_property (iface,
@@ -176,6 +183,25 @@ gdk_toplevel_minimize (GdkToplevel *toplevel)
   g_return_val_if_fail (GDK_IS_TOPLEVEL (toplevel), FALSE);
 
   return GDK_TOPLEVEL_GET_IFACE (toplevel)->minimize (toplevel);
+}
+
+/**
+ * gdk_toplevel_focus:
+ * @toplevel: a #GdkToplevel
+ * @timestamp: timestamp of the event triggering the surface focus
+ *
+ * Sets keyboard focus to @surface.
+ *
+ * In most cases, gtk_window_present_with_time() should be used
+ * on a #GtkWindow, rather than calling this function.
+ */
+void
+gdk_toplevel_focus (GdkToplevel *toplevel,
+                   guint32       timestamp)
+{
+  g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
+
+  return GDK_TOPLEVEL_GET_IFACE (toplevel)->focus (toplevel, timestamp);
 }
 
 /**
