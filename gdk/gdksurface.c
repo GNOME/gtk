@@ -661,11 +661,33 @@ gdk_surface_set_property (GObject      *object,
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_STICKY:
+      if (g_value_get_boolean (value))
+        GDK_SURFACE_GET_CLASS (surface)->stick (surface);
+      else
+        GDK_SURFACE_GET_CLASS (surface)->unstick (surface);
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_KEEP_ABOVE:
+      GDK_SURFACE_GET_CLASS (surface)->set_keep_above (surface, g_value_get_boolean (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_KEEP_BELOW:
+      GDK_SURFACE_GET_CLASS (surface)->set_keep_below (surface, g_value_get_boolean (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
+
+#define GDK_SURFACE_IS_STICKY(surface) (((surface)->state & GDK_SURFACE_STATE_STICKY))
+#define GDK_SURFACE_IS_ABOVE(surface) (((surface)->state & GDK_SURFACE_STATE_ABOVE))
+#define GDK_SURFACE_IS_BELOW(surface) (((surface)->state & GDK_SURFACE_STATE_BELOW))
 
 static void
 gdk_surface_get_property (GObject    *object,
@@ -723,6 +745,18 @@ gdk_surface_get_property (GObject    *object,
 
     case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_ICON_LIST:
       g_value_set_pointer (value, NULL); // FIXME
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_STICKY:
+      g_value_set_boolean (value, GDK_SURFACE_IS_STICKY (surface));
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_KEEP_ABOVE:
+      g_value_set_boolean (value, GDK_SURFACE_IS_ABOVE (surface));
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_KEEP_BELOW:
+      g_value_set_boolean (value, GDK_SURFACE_IS_BELOW (surface));
       break;
 
     default:
@@ -3395,6 +3429,7 @@ gdk_surface_set_state (GdkSurface      *surface,
                        GdkSurfaceState  new_state)
 {
   gboolean was_mapped, mapped;
+  gboolean was_sticky, sticky;
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   if (new_state == surface->state)
@@ -3406,10 +3441,12 @@ gdk_surface_set_state (GdkSurface      *surface,
    */
 
   was_mapped = GDK_SURFACE_IS_MAPPED (surface);
+  was_sticky = GDK_SURFACE_IS_STICKY (surface);
 
   surface->state = new_state;
 
   mapped = GDK_SURFACE_IS_MAPPED (surface);
+  sticky = GDK_SURFACE_IS_STICKY (surface);
 
   _gdk_surface_update_viewable (surface);
 
@@ -3417,6 +3454,9 @@ gdk_surface_set_state (GdkSurface      *surface,
 
   if (was_mapped != mapped)
     g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
+
+  if (was_sticky != sticky)
+    g_object_notify (G_OBJECT (surface), "sticky");
 }
 
 void

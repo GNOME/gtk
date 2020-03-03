@@ -63,6 +63,16 @@ GDK_AVAILABLE_IN_ALL
 gboolean        gdk_toplevel_show_window_menu   (GdkToplevel       *toplevel,
                                                  GdkEvent          *event);
 
+GDK_AVAILABLE_IN_ALL
+void            gdk_toplevel_set_sticky         (GdkToplevel       *toplevel,
+                                                 gboolean           sticky);
+
+GDK_AVAILABLE_IN_ALL
+void            gdk_toplevel_set_keep_above     (GdkToplevel       *toplevel,
+                                                 gboolean           above);
+GDK_AVAILABLE_IN_ALL
+void            gdk_toplevel_set_keep_below     (GdkToplevel       *toplevel,
+                                                 gboolean           below);
 
 G_END_DECLS
 
