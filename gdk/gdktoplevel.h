@@ -81,6 +81,13 @@ GDK_AVAILABLE_IN_ALL
 void            gdk_toplevel_set_keep_below     (GdkToplevel       *toplevel,
                                                  gboolean           below);
 
+GDK_AVAILABLE_IN_ALL
+void          gdk_toplevel_set_accept_focus      (GdkToplevel      *toplevel,
+                                                  gboolean          accept_focus);
+
+GDK_AVAILABLE_IN_ALL
+void          gdk_toplevel_set_focus_on_map      (GdkToplevel      *toplevel,
+                                                  gboolean          focus_on_map);
 G_END_DECLS
 
 #endif /* __GDK_TOPLEVEL_H__ */
