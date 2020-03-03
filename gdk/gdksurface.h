@@ -436,10 +436,6 @@ cairo_surface_t *
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_beep            (GdkSurface       *surface);
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_minimize        (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_unminimize      (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_opacity     (GdkSurface       *surface,
                                            gdouble          opacity);
 

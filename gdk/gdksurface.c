@@ -2806,48 +2806,6 @@ gdk_surface_set_focus_on_map (GdkSurface *surface,
   GDK_SURFACE_GET_CLASS (surface)->set_focus_on_map (surface, focus_on_map);
 }
 
-/**
- * gdk_surface_minimize:
- * @surface: a toplevel #GdkSurface
- *
- * Asks to minimize the @surface.
- *
- * The windowing system may choose to ignore the request.
- *
- * You can track the result of this request by using the #GdkSurface:state
- * property.
- *
- * This function only makes sense when @surface is a toplevel surface.
- */
-void
-gdk_surface_minimize (GdkSurface *surface)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  GDK_SURFACE_GET_CLASS (surface)->minimize (surface);
-}
-
-/**
- * gdk_surface_unminimize:
- * @surface: a toplevel #GdkSurface
- *
- * Asks to unminimize the @surface.
- *
- * The windowing system may choose to ignore the request.
- *
- * You can track the result of this request by using the #GdkSurface:state
- * property.
- *
- * This function only makes sense when @surface is a toplevel surface.
- */
-void
-gdk_surface_unminimize (GdkSurface *surface)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  GDK_SURFACE_GET_CLASS (surface)->unminimize (surface);
-}
-
 void
 gdk_surface_set_fullscreen_mode (GdkSurface        *surface,
                                  GdkFullscreenMode mode)
