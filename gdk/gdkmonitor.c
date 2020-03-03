@@ -422,7 +422,7 @@ gdk_monitor_get_manufacturer (GdkMonitor *monitor)
  * gdk_monitor_get_model:
  * @monitor: a #GdkMonitor
  *
- * Gets the a string identifying the monitor model, if available.
+ * Gets a string identifying the monitor model, if available.
  *
  * Returns: (transfer none) (nullable): the monitor model, or %NULL
  */
