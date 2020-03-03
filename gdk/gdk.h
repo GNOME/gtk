@@ -71,6 +71,7 @@
 #include <gdk/gdkpopup.h>
 #include <gdk/gdktoplevellayout.h>
 #include <gdk/gdktoplevel.h>
+#include <gdk/gdkdragsurface.h>
 
 #include <gdk/gdk-autocleanup.h>
 
