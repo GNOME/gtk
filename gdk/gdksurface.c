@@ -2827,41 +2827,6 @@ gdk_surface_unminimize (GdkSurface *surface)
   GDK_SURFACE_GET_CLASS (surface)->unminimize (surface);
 }
 
-/**
- * gdk_surface_stick:
- * @surface: a toplevel #GdkSurface
- *
- * “Pins” a surface such that it’s on all workspaces and does not scroll
- * with viewports, for window managers that have scrollable viewports.
- * (When using #GtkWindow, gtk_window_stick() may be more useful.)
- *
- * On the X11 platform, this function depends on window manager
- * support, so may have no effect with many window managers. However,
- * GDK will do the best it can to convince the window manager to stick
- * the surface. For window managers that don’t support this operation,
- * there’s nothing you can do to force it to happen.
- *
- **/
-void
-gdk_surface_stick (GdkSurface *surface)
-{
-  GDK_SURFACE_GET_CLASS (surface)->stick (surface);
-}
-
-/**
- * gdk_surface_unstick:
- * @surface: a toplevel #GdkSurface
- *
- * Reverse operation for gdk_surface_stick(); see gdk_surface_stick(),
- * and gtk_window_unstick().
- *
- **/
-void
-gdk_surface_unstick (GdkSurface *surface)
-{
-  GDK_SURFACE_GET_CLASS (surface)->unstick (surface);
-}
-
 void
 gdk_surface_set_fullscreen_mode (GdkSurface        *surface,
                                  GdkFullscreenMode mode)
@@ -2883,50 +2848,6 @@ gdk_surface_get_fullscreen_mode (GdkSurface *surface)
   g_return_val_if_fail (GDK_IS_SURFACE (surface), GDK_FULLSCREEN_ON_CURRENT_MONITOR);
 
   return surface->fullscreen_mode;
-}
-
-/**
- * gdk_surface_set_keep_above:
- * @surface: a toplevel #GdkSurface
- * @setting: whether to keep @surface above other surfaces
- *
- * Set if @surface must be kept above other surfaces. If the
- * surface was already above, then this function does nothing.
- *
- * On X11, asks the window manager to keep @surface above, if the window
- * manager supports this operation. Not all window managers support
- * this, and some deliberately ignore it or don’t have a concept of
- * “keep above”; so you can’t rely on the surface being kept above.
- * But it will happen with most standard window managers,
- * and GDK makes a best effort to get it to happen.
- **/
-void
-gdk_surface_set_keep_above (GdkSurface *surface,
-                            gboolean   setting)
-{
-  GDK_SURFACE_GET_CLASS (surface)->set_keep_above (surface, setting);
-}
-
-/**
- * gdk_surface_set_keep_below:
- * @surface: a toplevel #GdkSurface
- * @setting: whether to keep @surface below other surfaces
- *
- * Set if @surface must be kept below other surfaces. If the
- * surface was already below, then this function does nothing.
- *
- * On X11, asks the window manager to keep @surface below, if the window
- * manager supports this operation. Not all window managers support
- * this, and some deliberately ignore it or don’t have a concept of
- * “keep below”; so you can’t rely on the surface being kept below.
- * But it will happen with most standard window managers,
- * and GDK makes a best effort to get it to happen.
- **/
-void
-gdk_surface_set_keep_below (GdkSurface *surface,
-                            gboolean setting)
-{
-  GDK_SURFACE_GET_CLASS (surface)->set_keep_below (surface, setting);
 }
 
 /**
