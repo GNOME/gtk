@@ -41,6 +41,9 @@ gboolean        gdk_toplevel_present            (GdkToplevel       *toplevel,
                                                  GdkToplevelLayout *layout);
 
 GDK_AVAILABLE_IN_ALL
+gboolean        gdk_toplevel_minimize           (GdkToplevel       *toplevel);
+
+GDK_AVAILABLE_IN_ALL
 GdkSurfaceState gdk_toplevel_get_state          (GdkToplevel       *toplevel);
 
 GDK_AVAILABLE_IN_ALL
