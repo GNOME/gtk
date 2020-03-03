@@ -139,6 +139,18 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
                             "Whether the surface should receive keyboard focus on map",
                             TRUE,
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+  g_object_interface_install_property (iface,
+      g_param_spec_boolean ("decorated",
+                            "Decorated",
+                            "Decorated",
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+  g_object_interface_install_property (iface,
+      g_param_spec_boolean ("deletable",
+                            "Deletable",
+                            "Deletable",
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 }
 
 guint
@@ -155,6 +167,8 @@ gdk_toplevel_install_properties (GObjectClass *object_class,
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_KEEP_BELOW, "keep-below");
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS, "accept-focus");
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP, "focus-on-map");
+  g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_DECORATED, "decorated");
+  g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_DELETABLE, "deletable");
 
   return GDK_TOPLEVEL_NUM_PROPERTIES;
 }
@@ -451,4 +465,22 @@ gdk_toplevel_set_focus_on_map (GdkToplevel *toplevel,
   g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
 
   g_object_set (toplevel, "focus-on-map", focus_on_map, NULL);
+}
+
+void
+gdk_toplevel_set_decorated (GdkToplevel *toplevel,
+                            gboolean     decorated)
+{
+  g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
+
+  g_object_set (toplevel, "decorated", decorated, NULL);
+}
+
+void
+gdk_toplevel_set_deletable (GdkToplevel *toplevel,
+                            gboolean     deletable)
+{
+  g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
+
+  g_object_set (toplevel, "deletable", deletable, NULL);
 }
