@@ -472,6 +472,7 @@ gtk_public_headers = files([
   'gtkentrycompletion.h',
   'gtkenums.h',
   'gtkeventcontroller.h',
+  'gtkeventcontrollerfocus.h',
   'gtkeventcontrollerkey.h',
   'gtkeventcontrollerscroll.h',
   'gtkeventcontrollermotion.h',
