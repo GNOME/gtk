@@ -2013,49 +2013,6 @@ gdk_surface_resize (GdkSurface *surface,
   GDK_SURFACE_GET_CLASS (surface)->toplevel_resize (surface, width, height);
 }
 
-gboolean
-gdk_surface_present_toplevel (GdkSurface        *surface,
-                              int                width,
-                              int                height,
-                              GdkToplevelLayout *layout)
-{
-  GdkGeometry geometry;
-  GdkSurfaceHints mask;
-
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
-  g_return_val_if_fail (surface->parent == NULL, FALSE);
-  g_return_val_if_fail (layout, FALSE);
-  g_return_val_if_fail (!GDK_SURFACE_DESTROYED (surface), FALSE);
-  g_return_val_if_fail (width > 0 && height > 0, FALSE);
-
-  get_geometry_hints (layout, &geometry, &mask);
-  gdk_surface_set_geometry_hints (surface, &geometry, mask); 
-  gdk_surface_constrain_size (&geometry, mask, width, height, &width, &height);
-  gdk_surface_resize (surface, width, height);
-
-  if (gdk_toplevel_layout_get_maximized (layout))
-    gdk_surface_maximize (surface);
-  else
-    gdk_surface_unmaximize (surface);
-
-  if (gdk_toplevel_layout_get_fullscreen (layout))
-    {
-      GdkMonitor *monitor = gdk_toplevel_layout_get_fullscreen_monitor (layout);
-      if (monitor)
-        gdk_surface_fullscreen_on_monitor (surface, monitor);
-      else
-        gdk_surface_fullscreen (surface);
-    }
-  else
-    gdk_surface_unfullscreen (surface);
-
-  gdk_surface_set_modal_hint (surface, gdk_toplevel_layout_get_modal (layout));
-
-  gdk_surface_show (surface);
-
-  return TRUE;
-}
-
 static gboolean
 gdk_popup_surface_present (GdkPopup       *popup,
                            int             width,
