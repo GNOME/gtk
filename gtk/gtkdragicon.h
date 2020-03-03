@@ -42,7 +42,7 @@ GtkWidget *     gtk_drag_icon_get_for_drag                      (GdkDrag        
 
 GDK_AVAILABLE_IN_ALL
 void            gtk_drag_icon_set_child                         (GtkDragIcon            *self,
-                                                                 GtkWidget              *widget);
+                                                                 GtkWidget              *child);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_drag_icon_get_child                         (GtkDragIcon            *self);
 
