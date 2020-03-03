@@ -88,6 +88,24 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
                             "Icon List",
                             "The list of icon textures",
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+  g_object_interface_install_property (iface,
+      g_param_spec_boolean ("sticky",
+                            "Sticky",
+                            "Whether the surface is on all workspaces",
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+  g_object_interface_install_property (iface,
+      g_param_spec_boolean ("keep-above",
+                            "Keep above",
+                            "Whether the surface is on above all other surfaces",
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+  g_object_interface_install_property (iface,
+      g_param_spec_boolean ("keep-below",
+                            "Keep below",
+                            "Whether the surface is below all other surfaces",
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 }
 
 guint
@@ -99,6 +117,9 @@ gdk_toplevel_install_properties (GObjectClass *object_class,
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_STARTUP_ID, "startup-id");
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_TRANSIENT_FOR, "transient-for");
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_ICON_LIST, "icon-list");
+  g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_STICKY, "sticky");
+  g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_KEEP_ABOVE, "keep-above");
+  g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_KEEP_BELOW, "keep-below");
 
   return GDK_TOPLEVEL_NUM_PROPERTIES;
 }
@@ -256,4 +277,52 @@ gdk_toplevel_show_window_menu (GdkToplevel *toplevel,
   g_return_val_if_fail (GDK_IS_TOPLEVEL (toplevel), FALSE);
 
   return GDK_TOPLEVEL_GET_IFACE (toplevel)->show_window_menu (toplevel, event); 
+}
+
+/**
+ * gdk_toplevel_set_sticky:
+ * @toplevel: a #GdkToplevel
+ * @sticky: whether to make @toplevel show on all workspaces
+ *
+ * Set if @surface is sticky.
+ **/
+void
+gdk_toplevel_set_sticky (GdkToplevel *toplevel,
+                         gboolean     sticky)
+{
+  g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
+
+  g_object_set (toplevel, "sticky", sticky, NULL);
+}
+
+/**
+ * gdk_toplevel_set_keep_above:
+ * @toplevel: a #GdkToplevel
+ * @above: whether to keep @toplevel above other surfaces
+ *
+ * Set if @surface must be kept above other surfaces.
+ **/
+void
+gdk_toplevel_set_keep_above (GdkToplevel *toplevel,
+                             gboolean     above)
+{
+  g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
+
+  g_object_set (toplevel, "keep-above", above, NULL);
+}
+
+/**
+ * gdk_toplevel_set_keep_below:
+ * @toplevel: a #GdkToplevel
+ * @above: whether to keep @toplevel below other surfaces
+ *
+ * Set if @surface must be kept below other surfaces.
+ **/
+void
+gdk_toplevel_set_keep_below (GdkToplevel *toplevel,
+                             gboolean     below)
+{
+  g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
+
+  g_object_set (toplevel, "keep-below", below, NULL);
 }
