@@ -864,7 +864,7 @@ gtk_drop_target_set_gtypes (GtkDropTarget *self,
 /**
  * gtk_drop_target_get_gtypes:
  * @self: a #GtkDropTarget
- * @n_gtypes: (out) (allow-none): optional pointer to take the
+ * @n_types: (out) (optional): optional pointer to take the
  *     number of #GTypes contained in the return value
  *
  * Gets the list of supported #GTypes for @self. If no type have been set,
