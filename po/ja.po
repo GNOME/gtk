@@ -1,5 +1,5 @@
 # gtk+ ja.po.
-# Copyright (C) 1998,2000-2010 Free Software Foundation, Inc.
+# Copyright (C) 1998-2020 Free Software Foundation, Inc.
 # Yasuhiro SHIRASAKI <yasuhiro@awa.tohoku.ac.jp>, 1998.
 # Yukihiro Nakai <nakai@gnome.gr.jp>, 2000-2001.
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2002, 2009-2010.
@@ -13,14 +13,14 @@
 # Jiro Matsuzawa <jmatsuzawa@gnome.org>, 2011, 2012, 2013, 2014, 2015, 2016.
 # Shushi KUROSE <md81bird@hitaki.net>, 2013.
 # Hajime Taira <htaira@redhat.com>, 2015.
-# sicklylife <translation@sicklylife.jp>, 2019.
+# sicklylife <translation@sicklylife.jp>, 2019-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-03-01 15:08+0000\n"
-"PO-Revision-Date: 2020-01-23 01:30+0900\n"
+"PO-Revision-Date: 2020-03-03 20:25+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
@@ -36,15 +36,15 @@ msgstr "サポートされていない Broadway ディスプレイタイプ '%s'
 
 #: gdk/gdkclipboard.c:239
 msgid "This clipboard cannot store data."
-msgstr ""
+msgstr "このクリップボードはデータを格納できません。"
 
 #: gdk/gdkclipboard.c:294 gdk/gdkclipboard.c:789 gdk/gdkclipboard.c:1087
 msgid "Cannot read from empty clipboard."
-msgstr ""
+msgstr "空のクリップボードからは読み取れません。"
 
 #: gdk/gdkclipboard.c:325 gdk/gdkclipboard.c:1137 gdk/gdkdrag.c:638
 msgid "No compatible formats to transfer clipboard contents."
-msgstr ""
+msgstr "クリップボードの内容を転送するための、互換性のあるフォーマットはありません。"
 
 #: gdk/gdkcontentprovider.c:108 gdk/gdkcontentproviderimpl.c:310
 #: gdk/gdkcontentproviderimpl.c:530
@@ -59,11 +59,11 @@ msgstr ""
 
 #: gdk/gdkdrop.c:117
 msgid "Drag’n’drop from other applications is not supported."
-msgstr ""
+msgstr "他のアプリケーションからのドラッグ＆ドロップはサポートしていません。"
 
 #: gdk/gdkdrop.c:150
 msgid "No compatible formats to transfer contents."
-msgstr ""
+msgstr "内容を転送するための、互換性のあるフォーマットはありません。"
 
 #: gdk/gdksurface.c:1132
 msgid "GL support disabled via GDK_DEBUG"
@@ -456,14 +456,14 @@ msgstr "Suspend"
 
 #: gdk/quartz/gdkglcontext-quartz.c:37
 msgid "Not implemented on OS X"
-msgstr ""
+msgstr "OS X では実装されていません"
 
 #: gdk/wayland/gdkclipboard-wayland.c:231 gdk/wayland/gdkdrop-wayland.c:210
 #: gdk/wayland/gdkprimary-wayland.c:312 gdk/win32/gdkdrop-win32.c:1275
 #: gdk/win32/gdkdrop-win32.c:1320 gdk/x11/gdkclipboard-x11.c:761
 #: gdk/x11/gdkdrop-x11.c:196
 msgid "No compatible transfer format found"
-msgstr ""
+msgstr "互換性のある転送フォーマットが見つかりませんでした"
 
 #: gdk/wayland/gdkglcontext-wayland.c:151 gdk/win32/gdkglcontext-win32.c:725
 #: gdk/x11/gdkglcontext-x11.c:672 gdk/x11/gdkglcontext-x11.c:722
@@ -702,7 +702,7 @@ msgstr "フォーマット %s はサポートしていません"
 
 #: gdk/x11/gdktextlistconverter-x11.c:65 gdk/x11/gdktextlistconverter-x11.c:105
 msgid "Not enough space in destination"
-msgstr ""
+msgstr "転送先に十分な空き容量がありません"
 
 #: gdk/x11/gdktextlistconverter-x11.c:91 gdk/x11/gdktextlistconverter-x11.c:195
 msgid "Need complete input to do conversion"
@@ -711,7 +711,7 @@ msgstr ""
 #: gdk/x11/gdktextlistconverter-x11.c:216
 #: gdk/x11/gdktextlistconverter-x11.c:250
 msgid "Invalid byte sequence in conversion input"
-msgstr ""
+msgstr "変換入力に不正なバイトシーケンス"
 
 #: gdk/x11/gdktextlistconverter-x11.c:242
 msgid "Invalid formats in compound text conversion."
@@ -1237,17 +1237,17 @@ msgstr "スイッチを切り替えます"
 #: gtk/css/gtkcssdataurl.c:70
 #, c-format
 msgid "Not a data: URL"
-msgstr ""
+msgstr "データではありません: URL"
 
 #: gtk/css/gtkcssdataurl.c:83
 #, c-format
 msgid "Malformed data: URL"
-msgstr ""
+msgstr "不正な形式のデータです: URL"
 
 #: gtk/css/gtkcssdataurl.c:141
 #, c-format
 msgid "Could not unescape string"
-msgstr ""
+msgstr "文字列をアンエスケープできませんでした"
 
 #: gtk/gtkaboutdialog.c:119 gtk/ui/gtkaboutdialog.ui:161
 msgid "License"
@@ -1508,7 +1508,7 @@ msgstr "%s はブックマークリストに存在しません"
 #: gtk/gtkbookmarksmanager.c:403
 #, c-format
 msgid "%s already exists in the bookmarks list"
-msgstr "%s は既にブックマークリストに存在します"
+msgstr "%s はすでにブックマークリストに存在します"
 
 #: gtk/gtkbuilder-menus.c:223
 #, c-format
@@ -1991,11 +1991,11 @@ msgstr "“.”で始まるファイルは隠しファイルになります"
 
 #: gtk/gtkfilechoosererrorstack.c:113
 msgid "A folder with that name already exists"
-msgstr "同じ名前のフォルダーが既に存在します"
+msgstr "同じ名前のフォルダーがすでに存在します"
 
 #: gtk/gtkfilechoosererrorstack.c:117
 msgid "A file with that name already exists"
-msgstr "同じ名前のファイルが既に存在します"
+msgstr "同じ名前のファイルがすでに存在します"
 
 #: gtk/gtkfilechoosernative.c:508 gtk/gtkfilechoosernative.c:579
 #: gtk/gtkfilechooserwidget.c:1374 gtk/gtkfilechooserwidget.c:5985
@@ -2088,7 +2088,7 @@ msgstr "ファイルをゴミ箱へ移動できませんでした"
 #: gtk/gtkfilechooserwidget.c:1370
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
-msgstr "“%s”を完全に削除してもよろしいですか?"
+msgstr "本当に“%s”を完全に削除しますか?"
 
 #: gtk/gtkfilechooserwidget.c:1373
 #, c-format
@@ -2150,8 +2150,6 @@ msgid "Show _Time"
 msgstr "時刻を表示する(_T)"
 
 #: gtk/gtkfilechooserwidget.c:2063
-#, fuzzy
-#| msgid "Sort _Folders before Files"
 msgid "Sort _Folders Before Files"
 msgstr "フォルダーをファイルよりも前に配置する(_F)"
 
@@ -2282,13 +2280,13 @@ msgstr "ホーム"
 #: gtk/gtkfilechooserwidget.c:5978 gtk/gtkprintunixdialog.c:671
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
-msgstr "“%s”というファイルは既に存在します。上書きしてもよろしいですか?"
+msgstr "“%s”というファイルはすでに存在します。上書きしますか?"
 
 #: gtk/gtkfilechooserwidget.c:5981 gtk/gtkprintunixdialog.c:675
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
-msgstr "“%s”にファイルが既に存在します。すべての内容を上書きします。"
+msgstr "“%s”にファイルがすでに存在します。すべての内容を上書きします。"
 
 #: gtk/gtkfilechooserwidget.c:5986 gtk/gtkprintunixdialog.c:683
 msgid "_Replace"
@@ -3012,7 +3010,7 @@ msgstr "このコンピューター"
 #, c-format
 msgid "%s / %s available"
 msgid_plural "%s / %s available"
-msgstr[0] "%s / %s 利用可能"
+msgstr[0] "%s / %s の空き領域"
 
 #: gtk/gtkplacesviewrow.c:482
 msgid "Disconnect"
@@ -7778,15 +7776,6 @@ msgstr "不明なプロファイル"
 #~ msgid "2000"
 #~ msgstr "2000"
 
-#~ msgid ""
-#~ "The folder could not be created, as a file with the same name already "
-#~ "exists.  Try using a different name for the folder, or rename the file "
-#~ "first."
-#~ msgstr ""
-#~ "同名のファイルが既に存在しているので、そのフォルダーを作成できませんでし"
-#~ "た。別のフォルダー名を使用するか、ファイルの名前を変更するなどして、もう一"
-#~ "度実行してください。"
-
 #~ msgid "Enter location"
 #~ msgstr "場所を指定する"
 
@@ -8059,15 +8048,6 @@ msgstr "不明なプロファイル"
 
 #~ msgid "Color Wheel"
 #~ msgstr "色ホイール"
-
-#~ msgid ""
-#~ "The previously-selected color, for comparison to the color you’re "
-#~ "selecting now. You can drag this color to a palette entry, or select this "
-#~ "color as current by dragging it to the other color swatch alongside."
-#~ msgstr ""
-#~ "既に選択している色で、現在選択している色と比較するために表示しています。こ"
-#~ "の色をパレットのエントリにドラッグしたり、他の見本の横にドラッグして現在の"
-#~ "色として選択できます"
 
 #~ msgid ""
 #~ "The color you’ve chosen. You can drag this color to a palette entry to "
@@ -8355,9 +8335,6 @@ msgstr "不明なプロファイル"
 #~ msgid "\"%s\" is not a valid value for attribute \"%s\""
 #~ msgstr "\"%s\" は属性 \"%s\" に対して妥当な値ではありません"
 
-#~ msgid "Tag \"%s\" already defined"
-#~ msgstr "タグ \"%s\" は既に定義されています"
-
 #~ msgid "Tag \"%s\" has invalid priority \"%s\""
 #~ msgstr "タグ \"%s\" の優先度 \"%s\" が間違っています"
 
@@ -8365,9 +8342,6 @@ msgstr "不明なプロファイル"
 #~ msgstr ""
 #~ "テキストの中にある一番外側の要素は <%s> ではなく <text_view_markup> にして"
 #~ "ください"
-
-#~ msgid "A <%s> element has already been specified"
-#~ msgstr "要素 <%s> は既に指定されています"
 
 #~ msgid "A <text> element can't occur before a <tags> element"
 #~ msgstr "要素 <text> は要素 <tag> の前に記述できません"
