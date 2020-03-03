@@ -3374,35 +3374,6 @@ gdk_surface_set_shadow_width (GdkSurface *surface,
     class->set_shadow_width (surface, left, right, top, bottom);
 }
 
-/**
- * gdk_surface_show_window_menu:
- * @surface: a #GdkSurface
- * @event: a #GdkEvent to show the menu for
- *
- * Asks the windowing system to show the window menu. The window menu
- * is the menu shown when right-clicking the titlebar on traditional
- * windows managed by the window manager. This is useful for windows
- * using client-side decorations, activating it with a right-click
- * on the window decorations.
- *
- * Returns: %TRUE if the window menu was shown and %FALSE otherwise.
- */
-gboolean
-gdk_surface_show_window_menu (GdkSurface *surface,
-                              GdkEvent  *event)
-{
-  GdkSurfaceClass *class;
-
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
-  g_return_val_if_fail (!GDK_SURFACE_DESTROYED (surface), FALSE);
-
-  class = GDK_SURFACE_GET_CLASS (surface);
-  if (class->show_window_menu)
-    return class->show_window_menu (surface, event);
-  else
-    return FALSE;
-}
-
 gboolean
 gdk_surface_supports_edge_constraints (GdkSurface *surface)
 {
