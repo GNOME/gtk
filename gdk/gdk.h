@@ -71,6 +71,7 @@
 #include <gdk/gdkpopup.h>
 #include <gdk/gdktoplevellayout.h>
 #include <gdk/gdktoplevel.h>
+#include <gdk/gdkdragicon.h>
 
 #include <gdk/gdk-autocleanup.h>
 
