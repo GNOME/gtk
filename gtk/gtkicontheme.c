@@ -1414,8 +1414,8 @@ gtk_icon_theme_finalize (GObject *object)
 /**
  * gtk_icon_theme_set_search_path:
  * @self: a #GtkIconTheme
- * @path: (element-type filename): NULL-terminated array of
- *     directories that are searched for icon themes
+ * @path: (array zero-terminated=1) (element-type filename) (nullable): NULL-terminated
+ *   array of directories that are searched for icon themes
  *
  * Sets the search path for the icon theme object. When looking
  * for an icon theme, GTK will search for a subdirectory of
