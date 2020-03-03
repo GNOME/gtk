@@ -3432,7 +3432,7 @@ gtk_window_set_accept_focus (GtkWindow *window,
     {
       priv->accept_focus = setting;
       if (_gtk_widget_get_realized (GTK_WIDGET (window)))
-        gdk_surface_set_accept_focus (priv->surface, priv->accept_focus);
+        gdk_toplevel_set_accept_focus (GDK_TOPLEVEL (priv->surface), priv->accept_focus);
       g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_ACCEPT_FOCUS]);
     }
 }
@@ -3478,7 +3478,7 @@ gtk_window_set_focus_on_map (GtkWindow *window,
     {
       priv->focus_on_map = setting;
       if (_gtk_widget_get_realized (GTK_WIDGET (window)))
-        gdk_surface_set_focus_on_map (priv->surface, priv->focus_on_map);
+        gdk_toplevel_set_focus_on_map (GDK_TOPLEVEL (priv->surface), priv->focus_on_map);
       g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_FOCUS_ON_MAP]);
     }
 }
@@ -5597,15 +5597,10 @@ gtk_window_realize (GtkWidget *widget)
   if (!priv->deletable)
     gdk_surface_set_functions (surface, GDK_FUNC_ALL | GDK_FUNC_CLOSE);
 
-  if (gtk_window_get_accept_focus (window))
-    gdk_surface_set_accept_focus (surface, TRUE);
-  else
-    gdk_surface_set_accept_focus (surface, FALSE);
-
-  if (gtk_window_get_focus_on_map (window))
-    gdk_surface_set_focus_on_map (surface, TRUE);
-  else
-    gdk_surface_set_focus_on_map (surface, FALSE);
+  gdk_toplevel_set_accept_focus (GDK_TOPLEVEL (surface),
+                                 gtk_window_get_accept_focus (window));
+  gdk_toplevel_set_focus_on_map (GDK_TOPLEVEL (surface),
+                                 gtk_window_get_focus_on_map (window));
 
   if (priv->startup_id)
     {
