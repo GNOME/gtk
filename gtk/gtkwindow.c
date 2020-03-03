@@ -7688,7 +7688,7 @@ gtk_window_present_with_time (GtkWindow *window,
 	    timestamp = gtk_get_current_event_time ();
         }
 
-      gdk_surface_focus (surface, timestamp);
+      gdk_toplevel_focus (GDK_TOPLEVEL (surface), timestamp);
     }
   else
     {
