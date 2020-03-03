@@ -2488,41 +2488,6 @@ gdk_surface_set_input_region (GdkSurface     *surface,
   GDK_SURFACE_GET_CLASS (surface)->input_shape_combine_region (surface, surface->input_shape, 0, 0);
 }
 
-/**
- * gdk_surface_get_accept_focus:
- * @surface: a toplevel #GdkSurface.
- *
- * Determines whether or not the desktop environment shuld be hinted that
- * the surface does not want to receive input focus.
- *
- * Returns: whether or not the surface should receive input focus.
- */
-gboolean
-gdk_surface_get_accept_focus (GdkSurface *surface)
-{
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
-
-  return surface->accept_focus;
-}
-
-/**
- * gdk_surface_get_focus_on_map:
- * @surface: a toplevel #GdkSurface.
- *
- * Determines whether or not the desktop environment should be hinted that the
- * surface does not want to receive input focus when it is mapped.
- *
- * Returns: whether or not the surface wants to receive input focus when
- * it is mapped.
- */
-gboolean
-gdk_surface_get_focus_on_map (GdkSurface *surface)
-{
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
-
-  return surface->focus_on_map;
-}
-
 static void
 update_cursor (GdkDisplay *display,
                GdkDevice  *device)
@@ -2786,45 +2751,6 @@ gdk_surface_create_similar_surface (GdkSurface *     surface,
   cairo_surface_set_device_scale (similar_surface, scale, scale);
 
   return similar_surface;
-}
-
-/**
- * gdk_surface_set_accept_focus:
- * @surface: a toplevel #GdkSurface
- * @accept_focus: %TRUE if the surface should receive input focus
- *
- * Setting @accept_focus to %FALSE hints the desktop environment that the
- * surface doesn’t want to receive input focus.
- *
- * On X, it is the responsibility of the window manager to interpret this
- * hint. ICCCM-compliant window manager usually respect it.
- **/
-void
-gdk_surface_set_accept_focus (GdkSurface *surface,
-                              gboolean accept_focus)
-{
-  GDK_SURFACE_GET_CLASS (surface)->set_accept_focus (surface, accept_focus);
-}
-
-/**
- * gdk_surface_set_focus_on_map:
- * @surface: a toplevel #GdkSurface
- * @focus_on_map: %TRUE if the surface should receive input focus when mapped
- *
- * Setting @focus_on_map to %FALSE hints the desktop environment that the
- * surface doesn’t want to receive input focus when it is mapped.
- * focus_on_map should be turned off for surfaces that aren’t triggered
- * interactively (such as popups from network activity).
- *
- * On X, it is the responsibility of the window manager to interpret
- * this hint. Window managers following the freedesktop.org window
- * manager extension specification should respect it.
- **/
-void
-gdk_surface_set_focus_on_map (GdkSurface *surface,
-                              gboolean focus_on_map)
-{
-  GDK_SURFACE_GET_CLASS (surface)->set_focus_on_map (surface, focus_on_map);
 }
 
 void
