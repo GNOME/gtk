@@ -362,9 +362,6 @@ void          gdk_surface_resize                (GdkSurface     *surface,
                                                  gint           height);
 
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_focus                 (GdkSurface     *surface,
-                                                 guint32        timestamp);
-GDK_AVAILABLE_IN_ALL
 gboolean      gdk_surface_get_accept_focus      (GdkSurface     *surface);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_accept_focus      (GdkSurface     *surface,
