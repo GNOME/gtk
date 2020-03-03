@@ -121,10 +121,12 @@ gtk/gtkcssstaticstyle.c
 gtk/gtkcssstyleproperty.c
 gtk/gtkcustompaperunixdialog.c
 gtk/gtkdialog.c
-gtk/gtkdragdest.c
+gtk/gtkdragicon.c
 gtk/gtkdragsource.c
 gtk/gtkdrawingarea.c
 gtk/gtkdropcontrollermotion.c
+gtk/gtkdroptargetasync.c
+gtk/gtkdroptarget.c
 gtk/gtkeditable.c
 gtk/gtkemojichooser.c
 gtk/gtkemojicompletion.c
