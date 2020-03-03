@@ -2091,6 +2091,17 @@ gdk_toplevel_surface_minimize (GdkToplevel *toplevel)
   return TRUE;
 }
 
+static void
+gdk_toplevel_surface_focus (GdkToplevel *toplevel,
+                            guint32      timestamp)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+
+  g_return_if_fail (surface->surface_type == GDK_SURFACE_TOPLEVEL);
+  
+  GDK_SURFACE_GET_CLASS (surface)->focus (surface, timestamp);
+}
+
 static gboolean
 gdk_toplevel_surface_show_window_menu (GdkToplevel *toplevel,
                                        GdkEvent    *event)
@@ -2107,6 +2118,7 @@ gdk_surface_toplevel_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_toplevel_surface_present;
   iface->minimize = gdk_toplevel_surface_minimize;
+  iface->focus = gdk_toplevel_surface_focus;
   iface->show_window_menu = gdk_toplevel_surface_show_window_menu;
 }
 
