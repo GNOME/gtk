@@ -14,7 +14,7 @@ struct _GdkToplevelInterface
                                          int                width,
                                          int                height,
                                          GdkToplevelLayout *layout);
-
+  gboolean      (* minimize)            (GdkToplevel       *toplevel);
   gboolean      (* show_window_menu)    (GdkToplevel       *toplevel,
                                          GdkEvent          *event);
 };
