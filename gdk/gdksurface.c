@@ -2764,22 +2764,6 @@ gdk_surface_create_similar_surface (GdkSurface *     surface,
 }
 
 /**
- * gdk_surface_focus:
- * @surface: a #GdkSurface
- * @timestamp: timestamp of the event triggering the surface focus
- *
- * Sets keyboard focus to @surface. In most cases, gtk_window_present_with_time()
- * should be used on a #GtkWindow, rather than calling this function.
- *
- **/
-void
-gdk_surface_focus (GdkSurface *surface,
-                   guint32    timestamp)
-{
-  GDK_SURFACE_GET_CLASS (surface)->focus (surface, timestamp);
-}
-
-/**
  * gdk_surface_set_accept_focus:
  * @surface: a toplevel #GdkSurface
  * @accept_focus: %TRUE if the surface should receive input focus
