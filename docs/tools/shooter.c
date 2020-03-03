@@ -213,12 +213,7 @@ static guint shot_id;
 static gboolean
 window_is_csd (GdkSurface *window)
 {
-  gboolean set;
-  GdkWMDecoration decorations = 0;
-
-  /* FIXME: is this accurate? */
-  set = gdk_surface_get_decorations (window, &decorations);
-  return (set && (decorations == 0));
+  return TRUE;
 }
 
 static gboolean
