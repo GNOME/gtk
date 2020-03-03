@@ -4682,8 +4682,8 @@ create_wmhints (GtkWidget *widget)
       g_object_unref (texture);
       g_object_unref (pixbuf);
 
-      gdk_surface_set_decorations (gdk_surface, GDK_DECOR_ALL | GDK_DECOR_MENU);
-      gdk_surface_set_functions (gdk_surface, GDK_FUNC_ALL | GDK_FUNC_RESIZE);
+      gdk_toplevel_set_decorations (GDK_TOPLEVEL (gdk_surface), GDK_DECOR_ALL | GDK_DECOR_MENU);
+      gdk_toplevel_set_functions (GDK_TOPLEVEL (gdk_surface), GDK_FUNC_ALL | GDK_FUNC_RESIZE);
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
