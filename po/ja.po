@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-22 13:52+0000\n"
+"POT-Creation-Date: 2020-03-02 14:52+0000\n"
 "PO-Revision-Date: 2020-01-23 01:30+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -478,11 +478,11 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Suspend"
 
-#: gdk/quartz/gdkglcontext-quartz.c:122
+#: gdk/quartz/gdkglcontext-quartz.c:123
 msgid "Unable to create a GL pixel format"
 msgstr "GL ピクセルフォーマットを生成できません"
 
-#: gdk/quartz/gdkglcontext-quartz.c:132 gdk/wayland/gdkglcontext-wayland.c:208
+#: gdk/quartz/gdkglcontext-quartz.c:133 gdk/wayland/gdkglcontext-wayland.c:208
 #: gdk/win32/gdkglcontext-win32.c:1070 gdk/win32/gdkglcontext-win32.c:1110
 #: gdk/x11/gdkglcontext-x11.c:720 gdk/x11/gdkglcontext-x11.c:770
 msgid "Unable to create a GL context"
@@ -684,15 +684,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "閉じる(_C)"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9313
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9319
 msgid "Minimize"
 msgstr "最小化"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9322
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9328
 msgid "Maximize"
 msgstr "最大化"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9279
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9285
 msgid "Restore"
 msgstr "元のサイズに戻す"
 
@@ -1235,12 +1235,12 @@ msgstr ""
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
 #: gtk/gtkfilechoosernative.c:544 gtk/gtkfilechoosernative.c:636
-#: gtk/gtkfilechooserwidget.c:1494 gtk/gtkfilechooserwidget.c:6548
+#: gtk/gtkfilechooserwidget.c:1494 gtk/gtkfilechooserwidget.c:6554
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
 #: gtk/gtkmountoperation.c:594 gtk/gtkpagesetupunixdialog.c:197
 #: gtk/gtkprintbackend.c:779 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:747
-#: gtk/gtkwindow.c:12783 gtk/inspector/css-editor.c:201
+#: gtk/gtkwindow.c:12789 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1289,7 +1289,7 @@ msgid "_Apply"
 msgstr "適用(_A)"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12784
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12790
 msgid "_OK"
 msgstr "OK(_O)"
 
@@ -2506,7 +2506,7 @@ msgstr "場所を指定する"
 msgid "Enter location or URL"
 msgstr "場所または URL を指定する"
 
-#: gtk/gtkfilechooserwidget.c:4432 gtk/gtkfilechooserwidget.c:7463
+#: gtk/gtkfilechooserwidget.c:4432 gtk/gtkfilechooserwidget.c:7469
 #: gtk/ui/gtkfilechooserwidget.ui:247
 msgid "Modified"
 msgstr "更新日時"
@@ -2595,48 +2595,48 @@ msgstr "表計算"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:5036 gtk/gtkfilechooserwidget.c:5219
+#: gtk/gtkfilechooserwidget.c:5036 gtk/gtkfilechooserwidget.c:5225
 #: gtk/inspector/prop-editor.c:1689
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "不明"
 
-#: gtk/gtkfilechooserwidget.c:5258 gtk/gtkplacessidebar.c:1094
+#: gtk/gtkfilechooserwidget.c:5264 gtk/gtkplacessidebar.c:1094
 msgid "Home"
 msgstr "ホーム"
 
-#: gtk/gtkfilechooserwidget.c:5755
+#: gtk/gtkfilechooserwidget.c:5761
 msgid "Cannot change to folder because it is not local"
 msgstr "ローカルではないので、フォルダーを変更できません"
 
-#: gtk/gtkfilechooserwidget.c:6541 gtk/gtkprintunixdialog.c:665
+#: gtk/gtkfilechooserwidget.c:6547 gtk/gtkprintunixdialog.c:665
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "“%s”というファイルは既に存在します。上書きしてもよろしいですか?"
 
-#: gtk/gtkfilechooserwidget.c:6544 gtk/gtkprintunixdialog.c:669
+#: gtk/gtkfilechooserwidget.c:6550 gtk/gtkprintunixdialog.c:669
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "“%s”にファイルが既に存在します。すべての内容を上書きします。"
 
-#: gtk/gtkfilechooserwidget.c:6549 gtk/gtkprintunixdialog.c:677
+#: gtk/gtkfilechooserwidget.c:6555 gtk/gtkprintunixdialog.c:677
 msgid "_Replace"
 msgstr "置き換える(_R)"
 
-#: gtk/gtkfilechooserwidget.c:6763
+#: gtk/gtkfilechooserwidget.c:6769
 msgid "You do not have access to the specified folder."
 msgstr "指定したフォルダーへのアクセス権がありません。"
 
-#: gtk/gtkfilechooserwidget.c:7386
+#: gtk/gtkfilechooserwidget.c:7392
 msgid "Could not send the search request"
 msgstr "検索結果をプログラム側に送信できませんでした"
 
-#: gtk/gtkfilechooserwidget.c:7674
+#: gtk/gtkfilechooserwidget.c:7680
 msgid "Accessed"
 msgstr "アクセス日時"
 
-#: gtk/gtkfilechooserwidget.c:8793 gtk/ui/gtkfilechooserwidget.ui:69
+#: gtk/gtkfilechooserwidget.c:8799 gtk/ui/gtkfilechooserwidget.ui:69
 msgid "Create Folder"
 msgstr "フォルダーを作成します"
 
@@ -2718,16 +2718,16 @@ msgstr "OpenGL のコンテキストの生成に失敗しました"
 msgid "Application menu"
 msgstr "アプリケーションメニュー"
 
-#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9349
+#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9355
 msgid "Close"
 msgstr "閉じる"
 
-#: gtk/gtkicontheme.c:2357 gtk/gtkicontheme.c:2422
+#: gtk/gtkicontheme.c:2358 gtk/gtkicontheme.c:2423
 #, c-format
 msgid "Icon '%s' not present in theme %s"
 msgstr "アイコン '%s' はテーマ %s の中にありません"
 
-#: gtk/gtkicontheme.c:4100 gtk/gtkicontheme.c:4467
+#: gtk/gtkicontheme.c:4101 gtk/gtkicontheme.c:4468
 msgid "Failed to load icon"
 msgstr "アイコンの読み込みに失敗しました"
 
@@ -2752,19 +2752,19 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "システム (%s)"
 
-#: gtk/gtkinfobar.c:1304 gtk/gtkmessagedialog.c:385
+#: gtk/gtkinfobar.c:1307 gtk/gtkmessagedialog.c:385
 msgid "Information"
 msgstr "情報"
 
-#: gtk/gtkinfobar.c:1308 gtk/gtkmessagedialog.c:389
+#: gtk/gtkinfobar.c:1311 gtk/gtkmessagedialog.c:389
 msgid "Question"
 msgstr "質問"
 
-#: gtk/gtkinfobar.c:1312 gtk/gtkmessagedialog.c:393
+#: gtk/gtkinfobar.c:1315 gtk/gtkmessagedialog.c:393
 msgid "Warning"
 msgstr "警告"
 
-#: gtk/gtkinfobar.c:1316 gtk/gtkmessagedialog.c:397
+#: gtk/gtkinfobar.c:1319 gtk/gtkmessagedialog.c:397
 msgid "Error"
 msgstr "エラー"
 
@@ -3996,24 +3996,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9297
+#: gtk/gtkwindow.c:9303
 msgid "Move"
 msgstr "移動"
 
-#: gtk/gtkwindow.c:9305
+#: gtk/gtkwindow.c:9311
 msgid "Resize"
 msgstr "サイズの変更"
 
-#: gtk/gtkwindow.c:9336
+#: gtk/gtkwindow.c:9342
 msgid "Always on Top"
 msgstr "常に最前面に配置する"
 
-#: gtk/gtkwindow.c:12771
+#: gtk/gtkwindow.c:12777
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "GTK+ インスペクターを使用しますか?"
 
-#: gtk/gtkwindow.c:12773
+#: gtk/gtkwindow.c:12779
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -4024,7 +4024,7 @@ msgstr ""
 "的デバッガーです。使用方法によっては、アプリケーションの異常動作やクラッシュ"
 "を引き起こす可能性があります。"
 
-#: gtk/gtkwindow.c:12778
+#: gtk/gtkwindow.c:12784
 msgid "Don't show this message again"
 msgstr "このメッセージを今後表示しない"
 
@@ -7694,7 +7694,7 @@ msgid "Vietnamese (VIQR)"
 msgstr "ベトナム語 (VIQR)"
 
 #. ID
-#: modules/input/imwayland.c:104
+#: modules/input/imwayland.c:105
 msgctxt "input method menu"
 msgid "Wayland"
 msgstr "Wayland"
