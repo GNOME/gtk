@@ -141,9 +141,9 @@ gtk_drag_icon_move_resize (GtkDragIcon *icon)
   if (icon->surface)
     {
       gtk_widget_get_preferred_size (GTK_WIDGET (icon), NULL, &req);
-      gdk_surface_resize (icon->surface,
-                          MAX (1, req.width),
-                          MAX (1, req.height));
+      gdk_drag_surface_present (GDK_DRAG_SURFACE (icon->surface),
+                                MAX (1, req.width),
+                                MAX (1, req.height));
     }
 }
 
@@ -222,7 +222,7 @@ gtk_drag_icon_map (GtkWidget *widget)
 {
   GtkDragIcon *icon = GTK_DRAG_ICON (widget);
 
-  gdk_surface_show (icon->surface);
+  gtk_drag_icon_move_resize (icon);
 
   GTK_WIDGET_CLASS (gtk_drag_icon_parent_class)->map (widget);
 
