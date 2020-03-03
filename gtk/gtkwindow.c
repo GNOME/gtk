@@ -1329,7 +1329,7 @@ gtk_window_titlebar_action (GtkWindow      *window,
       gdk_toplevel_layout_unref (layout);
     }
   else if (g_str_equal (action, "minimize"))
-    gdk_surface_minimize (priv->surface);
+    gdk_toplevel_minimize (GDK_TOPLEVEL (priv->surface));
   else if (g_str_equal (action, "menu"))
     gtk_window_do_popup (window, (GdkEventButton*) event);
   else
@@ -4991,12 +4991,8 @@ gtk_window_map (GtkWidget *widget)
   gdk_toplevel_set_keep_above (GDK_TOPLEVEL (priv->surface), priv->above_initially);
   gdk_toplevel_set_keep_below (GDK_TOPLEVEL (priv->surface), priv->below_initially);
 
-#if 0
   if (priv->minimize_initially)
-    gdk_surface_minimize (surface);
-  else
-    gdk_surface_unminimize (surface);
-#endif
+    gdk_toplevel_minimize (GDK_TOPLEVEL (priv->surface));
 
   gtk_window_set_theme_variant (window);
 
@@ -6778,15 +6774,7 @@ static void
 maximize_window_clicked (GtkModelButton *button,
                          gpointer        user_data)
 {
-  GtkWindow *window = GTK_WINDOW (user_data);
-  GdkSurfaceState state;
-
-  state = gtk_window_get_state (window);
-
-  if (state & GDK_SURFACE_STATE_MINIMIZED)
-    gtk_window_unminimize (window);
-
-  gtk_window_maximize (window);
+  gtk_window_maximize (GTK_WINDOW (user_data));
 }
 
 static void
@@ -7737,7 +7725,7 @@ gtk_window_minimize (GtkWindow *window)
   priv->minimize_initially = TRUE;
 
   if (priv->surface)
-    gdk_surface_minimize (priv->surface);
+    gdk_toplevel_minimize (GDK_TOPLEVEL (priv->surface));
 }
 
 /**
@@ -7764,8 +7752,7 @@ gtk_window_unminimize (GtkWindow *window)
 
   priv->minimize_initially = FALSE;
 
-  if (priv->surface)
-    gdk_surface_unminimize (priv->surface);
+  gtk_window_update_toplevel (window);
 }
 
 /**
