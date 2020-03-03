@@ -507,9 +507,6 @@ void       gdk_surface_set_shadow_width         (GdkSurface      *surface,
                                                  gint            right,
                                                  gint            top,
                                                  gint            bottom);
-GDK_AVAILABLE_IN_ALL
-gboolean  gdk_surface_show_window_menu          (GdkSurface      *surface,
-                                                 GdkEvent       *event);
 
 GDK_AVAILABLE_IN_ALL
 GdkCairoContext *gdk_surface_create_cairo_context(GdkSurface    *surface);
