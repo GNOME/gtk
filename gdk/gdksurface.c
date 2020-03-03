@@ -696,6 +696,17 @@ gdk_surface_set_property (GObject      *object,
           g_object_notify_by_pspec (G_OBJECT (surface), pspec);
         }
       break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_DECORATED:
+      GDK_SURFACE_GET_CLASS (surface)->set_decorations (surface, g_value_get_boolean (value) ? GDK_DECOR_ALL : 0);
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_DELETABLE:
+      GDK_SURFACE_GET_CLASS (surface)->set_functions (surface, g_value_get_boolean (value) ? GDK_FUNC_ALL : GDK_FUNC_ALL | GDK_FUNC_CLOSE);
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -782,6 +793,14 @@ gdk_surface_get_property (GObject    *object,
 
     case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP:
       g_value_set_boolean (value, surface->focus_on_map);
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_DECORATED:
+      g_value_set_boolean (value, FALSE); // FIXME
+      break;
+
+    case LAST_PROP + GDK_POPUP_NUM_PROPERTIES + GDK_TOPLEVEL_PROP_DELETABLE:
+      g_value_set_boolean (value, FALSE); // FIXME
       break;
 
     default:
