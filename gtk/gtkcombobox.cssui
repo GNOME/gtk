@@ -1,0 +1,45 @@
+GtkComboBox {
+  children: {
+    GtkBox {
+      id: "box";
+      css-classes: "linked";
+
+      children: {
+        GtkToggleButton {
+          id: "button";
+
+          children: {
+            GtkBox {
+              children: {
+                GtkBuiltinIcon {
+                  id: "arrow";
+                  css-name: "arrow";
+                }
+              }
+            }
+          }
+
+          signals: {
+            toggled: "gtk_combo_box_button_toggled";
+            "clicked": {
+              handler: "gtk_combo_box_button_toggled";
+            }
+          }
+        }
+      }
+
+    }
+    GtkTreePopover {
+      id: "popup_widget";
+      has_arrow: false;
+      cell-area: GtkCellAreaBox {
+        id: "area";
+      };
+
+      children: {
+        GtkEventControllerKey {
+        }
+      }
+    }
+  }
+}

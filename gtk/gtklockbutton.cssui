@@ -8,24 +8,29 @@ GtkLockButton {
       halign: center;
       valign: center;
       spacing: 6;
-      children: GtkImage {
-        icon-name: "missing-image";
-      }
-    }
-    GtkStack {
-      id: "stack";
       children: {
-        GtkLabel {
-          id: "label_lock";
-          xalign: 0;
-          label: _("Lock");
+        GtkImage {
+          id: "image";
+          icon-name: "missing-image";
         }
-        GtkLabel {
-          id: "label_unlock";
-          xalign: 0;
-          label: _("Unlock");
+
+        GtkStack {
+          id: "stack";
+          children: {
+            GtkLabel {
+              id: "label_lock";
+              xalign: 0;
+              label: _("Lock");
+            }
+            GtkLabel {
+              id: "label_unlock";
+              xalign: 0;
+              label: _("Unlock");
+            }
+          }
         }
       }
+
     }
   }
 }

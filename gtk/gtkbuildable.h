@@ -25,9 +25,6 @@
 
 #include <gtk/gtkbuilder.h>
 
-// TODO FUCK
-#include "css/gtkcssparserprivate.h"
-
 G_BEGIN_DECLS
 
 
@@ -47,32 +44,19 @@ struct _GtkCssBuildableIface
 {
   GTypeInterface g_iface;
 
-  /* We set one value on the buildable TODO: Take multiple?*/
-  gboolean    (* set_gvalue)   (GtkCssBuildable *self,
-                                const char      *property_name,
-                                size_t           property_name_len,
-                                const GValue    *value);
+  void          (* set_name)               (GtkCssBuildable    *self,
+                                            const char         *name);
 
-  /* Add child objects to the buildable */
-  gboolean    (* add_children) (GtkCssBuildable  *self,
-                                const char       *property_name,
-                                size_t            property_name_len,
-                                int               n_children,
-                                GObject         **children);
-
-
-  gboolean    (* parse_declaration) (GtkCssBuildable *self,
-                                     GtkCssParser    *parser,
-                                     const char      *decl_name,
-                                     size_t           decl_name_len);
+  gboolean      (* set_property)           (GtkCssBuildable    *self,
+                                            const char         *prop_name,
+                                            size_t              prop_name_len,
+                                            GType               value_type,
+                                            gpointer            value);
 };
 
 
 GDK_AVAILABLE_IN_ALL
 GType     gtk_css_buildable_get_type               (void) G_GNUC_CONST;
-
-
-
 
 
 #define GTK_TYPE_BUILDABLE            (gtk_buildable_get_type ())

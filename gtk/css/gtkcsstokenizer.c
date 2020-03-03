@@ -412,6 +412,7 @@ gtk_css_token_print (const GtkCssToken *token,
       break;
 
     case GTK_CSS_TOKEN_EOF:
+      g_string_append (string, "EOF");
       break;
 
     case GTK_CSS_TOKEN_WHITESPACE:

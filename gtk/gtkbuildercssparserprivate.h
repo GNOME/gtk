@@ -10,6 +10,10 @@ typedef struct _GtkBuilderCssParser GtkBuilderCssParser;
 struct _GtkBuilderCssParser
 {
   GtkCssParser *css_parser;
+
+  GObject *template_object;
+  GtkBuilderScope *builder_scope;
+  GHashTable *object_table; /* Name -> Object */
 };
 
 
@@ -19,8 +23,7 @@ void                        gtk_builder_css_parser_extend_with_template (GtkBuil
                                                                          GType                template_type,
                                                                          GObject             *object,
                                                                          GBytes              *buffer);
-
-
-
+GObject *                   gtk_builder_css_parser_get_object           (GtkBuilderCssParser *self,
+                                                                         const char          *object_name);
 
 #endif
