@@ -88,6 +88,14 @@ void          gdk_toplevel_set_accept_focus      (GdkToplevel      *toplevel,
 GDK_AVAILABLE_IN_ALL
 void          gdk_toplevel_set_focus_on_map      (GdkToplevel      *toplevel,
                                                   gboolean          focus_on_map);
+
+GDK_AVAILABLE_IN_ALL
+void          gdk_toplevel_set_decorations       (GdkToplevel      *toplevel,
+                                                  GdkWMDecoration   decorations);
+
+GDK_AVAILABLE_IN_ALL
+void          gdk_toplevel_set_functions         (GdkToplevel      *toplevel,
+                                                  GdkWMFunction     functions);
 G_END_DECLS
 
 #endif /* __GDK_TOPLEVEL_H__ */

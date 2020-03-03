@@ -132,6 +132,18 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
                             "Whether the surface should receive keyboard focus on map",
                             TRUE,
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+  g_object_interface_install_property (iface,
+      g_param_spec_flags ("decorations",
+                          "Decorations",
+                          "Decorations",
+                          GDK_TYPE_WM_DECORATION, 0,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+  g_object_interface_install_property (iface,
+      g_param_spec_flags ("functions",
+                          "Functions",
+                          "Functions",
+                          GDK_TYPE_WM_FUNCTION, 0,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 }
 
 guint
@@ -148,6 +160,8 @@ gdk_toplevel_install_properties (GObjectClass *object_class,
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_KEEP_BELOW, "keep-below");
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS, "accept-focus");
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP, "focus-on-map");
+  g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_DECORATIONS, "decorations");
+  g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_FUNCTIONS, "functions");
 
   return GDK_TOPLEVEL_NUM_PROPERTIES;
 }
@@ -426,4 +440,22 @@ gdk_toplevel_set_focus_on_map (GdkToplevel *toplevel,
   g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
 
   g_object_set (toplevel, "focus-on-map", focus_on_map, NULL);
+}
+
+void
+gdk_toplevel_set_decorations (GdkToplevel     *toplevel,
+                              GdkWMDecoration  decorations)
+{
+  g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
+
+  g_object_set (toplevel, "decorations", decorations, NULL);
+}
+
+void
+gdk_toplevel_set_functions (GdkToplevel   *toplevel,
+                            GdkWMFunction  functions)
+{
+  g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
+
+  g_object_set (toplevel, "functions", functions, NULL);
 }
