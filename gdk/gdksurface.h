@@ -362,17 +362,6 @@ void          gdk_surface_resize                (GdkSurface     *surface,
                                                  gint           height);
 
 GDK_AVAILABLE_IN_ALL
-gboolean      gdk_surface_get_accept_focus      (GdkSurface     *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_accept_focus      (GdkSurface     *surface,
-                                                 gboolean       accept_focus);
-GDK_AVAILABLE_IN_ALL
-gboolean      gdk_surface_get_focus_on_map      (GdkSurface     *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_focus_on_map      (GdkSurface     *surface,
-                                                 gboolean       focus_on_map);
-
-GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_input_region      (GdkSurface     *surface,
                                                  cairo_region_t *region);
 
