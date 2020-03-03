@@ -40,6 +40,7 @@
 #include "gdkglcontextprivate.h"
 #include "gdkpopupprivate.h"
 #include "gdktoplevelprivate.h"
+#include "gdkdragiconprivate.h"
 #include "gdk-private.h"
 
 #include <math.h>
@@ -113,12 +114,15 @@ static GParamSpec *properties[LAST_PROP] = { NULL, };
 
 static void gdk_surface_popup_init (GdkPopupInterface *iface);
 static void gdk_surface_toplevel_init (GdkToplevelInterface *iface);
+static void gdk_surface_drag_icon_init (GdkDragIconInterface *iface);
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GdkSurface, gdk_surface, G_TYPE_OBJECT,
                                   G_IMPLEMENT_INTERFACE (GDK_TYPE_POPUP,
                                                          gdk_surface_popup_init)
                                   G_IMPLEMENT_INTERFACE (GDK_TYPE_TOPLEVEL,
-                                                         gdk_surface_toplevel_init))
+                                                         gdk_surface_toplevel_init)
+                                  G_IMPLEMENT_INTERFACE (GDK_TYPE_DRAG_ICON,
+                                                         gdk_surface_drag_icon_init))
 
 static gboolean
 gdk_surface_real_beep (GdkSurface *surface)
@@ -2156,6 +2160,27 @@ gdk_surface_toplevel_init (GdkToplevelInterface *iface)
   iface->minimize = gdk_toplevel_surface_minimize;
   iface->focus = gdk_toplevel_surface_focus;
   iface->show_window_menu = gdk_toplevel_surface_show_window_menu;
+}
+
+static gboolean
+gdk_drag_icon_surface_present (GdkDragIcon *drag_icon,
+                               int          width,
+                               int          height)
+{
+  GdkSurface *surface = GDK_SURFACE (drag_icon);
+
+  g_return_val_if_fail (surface->surface_type == GDK_SURFACE_TEMP, FALSE);
+
+  GDK_SURFACE_GET_CLASS (surface)->toplevel_resize (surface, width, height);
+  gdk_surface_show_internal (surface, TRUE);
+
+  return TRUE;
+}
+
+static void
+gdk_surface_drag_icon_init (GdkDragIconInterface *iface)
+{
+  iface->present = gdk_drag_icon_surface_present;
 }
 
 static void
