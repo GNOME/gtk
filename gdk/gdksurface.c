@@ -2844,43 +2844,6 @@ gdk_surface_begin_move_drag (GdkSurface *surface,
   GDK_SURFACE_GET_CLASS (surface)->begin_move_drag (surface, device, button, x, y, timestamp);
 }
 
-/**
- * gdk_surface_set_opacity:
- * @surface: a top-level or non-native #GdkSurface
- * @opacity: opacity
- *
- * Set @surface to render as partially transparent,
- * with opacity 0 being fully transparent and 1 fully opaque. (Values
- * of the opacity parameter are clamped to the [0,1] range.) 
- *
- * For toplevel surfaces this depends on support from the windowing system
- * that may not always be there. For instance, On X11, this works only on
- * X screens with a compositing manager running. On Wayland, there is no
- * per-surface opacity value that the compositor would apply. Instead, use
- * `gdk_surface_set_opaque_region (surface, NULL)` to tell the compositor
- * that the entire surface is (potentially) non-opaque, and draw your content
- * with alpha, or use gtk_widget_set_opacity() to set an overall opacity
- * for your widgets.
- *
- * Support for non-toplevel surfaces was added in 3.8.
- */
-void
-gdk_surface_set_opacity (GdkSurface *surface,
-                         gdouble    opacity)
-{
-  if (opacity < 0)
-    opacity = 0;
-  else if (opacity > 1)
-    opacity = 1;
-
-  surface->alpha = round (opacity * 255);
-
-  if (surface->destroyed)
-    return;
-
-  GDK_SURFACE_GET_CLASS (surface)->set_opacity (surface, opacity);
-}
-
 /* This function is called when the XWindow is really gone.
  */
 void
