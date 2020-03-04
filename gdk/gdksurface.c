@@ -1893,28 +1893,9 @@ gdk_surface_lower_internal (GdkSurface *surface)
   GDK_SURFACE_GET_CLASS (surface)->lower (surface);
 }
 
-/**
- * gdk_surface_show:
- * @surface: a #GdkSurface
- *
- * Like gdk_surface_show_unraised(), but also raises the surface to the
- * top of the surface stack (moves the surface to the front of the
- * Z-order).
- *
- * This function maps a surface so it’s visible onscreen. Its opposite
- * is gdk_surface_hide().
- *
- * This function may not be used on a #GdkSurface with the surface type
- * GTK_SURFACE_POPUP.
- *
- * When implementing a #GtkWidget, you should call this function on the widget's
- * #GdkSurface as part of the “map” method.
- */
 void
 gdk_surface_show (GdkSurface *surface)
 {
-  g_return_if_fail (surface->surface_type != GDK_SURFACE_POPUP);
-
   gdk_surface_show_internal (surface, TRUE);
 }
 
@@ -1981,26 +1962,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   surface->popup.surface_anchor = 0;
   surface->x = 0;
   surface->y = 0;
-}
-
-/**
- * gdk_surface_resize:
- * @surface: a #GdkSurface
- * @width: new width of the surface
- * @height: new height of the surface
- *
- * Resizes @surface; for toplevel surfaces, asks the window manager to resize
- * the surface. The window manager may not allow the resize. When using GTK,
- * use gtk_window_resize() instead of this low-level GDK function.
- *
- * Surfaces may not be resized below 1x1.
- */
-void
-gdk_surface_resize (GdkSurface *surface,
-                    gint       width,
-                    gint       height)
-{
-  GDK_SURFACE_GET_CLASS (surface)->toplevel_resize (surface, width, height);
 }
 
 static gboolean
