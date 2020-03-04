@@ -1908,8 +1908,6 @@ gdk_surface_show_internal (GdkSurface *surface, gboolean raise)
 void
 gdk_surface_show (GdkSurface *surface)
 {
-  g_return_if_fail (surface->surface_type != GDK_SURFACE_POPUP);
-
   gdk_surface_show_internal (surface, TRUE);
 }
 
@@ -1976,26 +1974,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   surface->popup.surface_anchor = 0;
   surface->x = 0;
   surface->y = 0;
-}
-
-/**
- * gdk_surface_resize:
- * @surface: a #GdkSurface
- * @width: new width of the surface
- * @height: new height of the surface
- *
- * Resizes @surface; for toplevel surfaces, asks the window manager to resize
- * the surface. The window manager may not allow the resize. When using GTK,
- * use gtk_window_resize() instead of this low-level GDK function.
- *
- * Surfaces may not be resized below 1x1.
- */
-void
-gdk_surface_resize (GdkSurface *surface,
-                    gint       width,
-                    gint       height)
-{
-  GDK_SURFACE_GET_CLASS (surface)->toplevel_resize (surface, width, height);
 }
 
 static gboolean
