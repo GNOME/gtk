@@ -4447,9 +4447,9 @@ gdk_x11_surface_beep (GdkSurface *surface)
   return FALSE;
 }
 
-static void
+void
 gdk_x11_surface_set_opacity (GdkSurface *surface,
-			    gdouble    opacity)
+			     double      opacity)
 {
   GdkDisplay *display;
   gulong cardinal;
