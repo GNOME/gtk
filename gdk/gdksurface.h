@@ -353,13 +353,7 @@ gboolean      gdk_surface_is_destroyed          (GdkSurface     *surface);
 GDK_AVAILABLE_IN_ALL
 GdkDisplay *  gdk_surface_get_display           (GdkSurface     *surface);
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_show                  (GdkSurface     *surface);
-GDK_AVAILABLE_IN_ALL
 void          gdk_surface_hide                  (GdkSurface     *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_resize                (GdkSurface     *surface,
-                                                 gint           width,
-                                                 gint           height);
 
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_input_region      (GdkSurface     *surface,
