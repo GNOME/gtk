@@ -182,6 +182,7 @@ void gdk_surface_get_unscaled_size (GdkSurface *surface,
                                     int *unscaled_height);
 gboolean gdk_surface_handle_event (GdkEvent       *event);
 
+void gdk_surface_show (GdkSurface *surface);
 
 /*****************************************
  * Interfaces provided by windowing code *
