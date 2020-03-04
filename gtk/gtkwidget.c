@@ -10618,18 +10618,7 @@ gtk_widget_update_alpha (GtkWidget *widget)
 
   priv->alpha = alpha;
 
-  if (_gtk_widget_get_realized (widget))
-    {
-      if (GTK_IS_NATIVE (widget))
-        {
-          gdk_surface_set_opacity (gtk_native_get_surface (GTK_NATIVE (widget)), priv->alpha / 255.0);
-          gtk_widget_queue_allocate (widget);
-        }
-      else
-        {
-          gtk_widget_queue_draw (widget);
-        }
-    }
+  gtk_widget_queue_draw (widget);
 }
 
 /**
