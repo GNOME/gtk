@@ -52,6 +52,12 @@ gdk_toplevel_default_minimize (GdkToplevel *toplevel)
   return FALSE;
 }
 
+static gboolean
+gdk_toplevel_default_lower (GdkToplevel *toplevel)
+{
+  return FALSE;
+}
+
 static void
 gdk_toplevel_default_focus (GdkToplevel *toplevel,
                             guint32      timestamp)
@@ -70,6 +76,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_toplevel_default_present;
   iface->minimize = gdk_toplevel_default_minimize;
+  iface->lower = gdk_toplevel_default_lower;
   iface->focus = gdk_toplevel_default_focus;
   iface->show_window_menu = gdk_toplevel_default_show_window_menu;
 
@@ -197,6 +204,24 @@ gdk_toplevel_minimize (GdkToplevel *toplevel)
   g_return_val_if_fail (GDK_IS_TOPLEVEL (toplevel), FALSE);
 
   return GDK_TOPLEVEL_GET_IFACE (toplevel)->minimize (toplevel);
+}
+
+/**
+ * gdk_toplevel_lower:
+ * @toplevel: a #GdkToplevel
+ *
+ * Asks to lower the @toplevel below other windows.
+ *
+ * The windowing system may choose to ignore the request.
+ *
+ * Returns: %TRUE if the surface was lowered
+ */
+gboolean
+gdk_toplevel_lower (GdkToplevel *toplevel)
+{
+  g_return_val_if_fail (GDK_IS_TOPLEVEL (toplevel), FALSE);
+
+  return GDK_TOPLEVEL_GET_IFACE (toplevel)->lower (toplevel);
 }
 
 /**
