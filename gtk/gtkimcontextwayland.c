@@ -321,7 +321,7 @@ notify_surrounding_text (GtkIMContextWayland *context)
             }
 
           mid = MIN (context->surrounding.cursor_idx,
-                     context->surrounding.cursor_idx) + (cursor_len / 2);
+                     context->surrounding.anchor_idx) + (cursor_len / 2);
           a = MAX (0, mid - (MAX_LEN / 2));
           b = MIN (MAX_LEN, mid + (MAX_LEN / 2));
 

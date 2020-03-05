@@ -882,7 +882,7 @@ get_name_for_window_with_pid (GtkMountOperationLookupContext *context,
 
           endp = NULL;
           windowid_window = (Window) g_ascii_strtoll (windowid_value, &endp, 10);
-          if (endp != NULL || *endp == '\0')
+          if (endp != NULL && *endp == '\0')
             {
               window = windowid_window;
             }

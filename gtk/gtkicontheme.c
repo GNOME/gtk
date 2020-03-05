@@ -2123,8 +2123,7 @@ real_choose_icon (GtkIconTheme      *self,
                   gint               size,
                   gint               scale,
                   GtkIconLookupFlags flags,
-                  gboolean           non_blocking,
-                  gboolean           *would_block)
+                  gboolean           non_blocking)
 {
   GList *l;
   GtkIconPaintable *icon = NULL;
@@ -2135,10 +2134,7 @@ real_choose_icon (GtkIconTheme      *self,
   IconKey key;
 
   if (!ensure_valid_themes (self, non_blocking))
-    {
-      *would_block = TRUE;
-      return NULL;
-    }
+    return NULL;
 
   key.icon_names = (gchar **)icon_names;
   key.size = size;
@@ -2209,11 +2205,12 @@ real_choose_icon (GtkIconTheme      *self,
               g_clear_object (&icon);
             }
 
-          icon->is_svg = suffix_from_name (icon->filename) == ICON_CACHE_FLAG_SVG_SUFFIX;
-          icon->is_resource = unthemed_icon->is_resource;
-
           if (icon)
-            goto out;
+            {
+              icon->is_svg = suffix_from_name (icon->filename) == ICON_CACHE_FLAG_SVG_SUFFIX;
+              icon->is_resource = unthemed_icon->is_resource;
+              goto out;
+            }
         }
     }
 
@@ -2281,8 +2278,7 @@ choose_icon (GtkIconTheme      *self,
              gint               scale,
              GtkTextDirection   direction,
              GtkIconLookupFlags flags,
-             gboolean           non_blocking,
-             gboolean           *would_block)
+             gboolean           non_blocking)
 {
   gboolean has_regular = FALSE, has_symbolic = FALSE;
   GtkIconPaintable *icon;
@@ -2337,7 +2333,7 @@ choose_icon (GtkIconTheme      *self,
                                size,
                                scale,
                                flags & ~(GTK_ICON_LOOKUP_FORCE_REGULAR | GTK_ICON_LOOKUP_FORCE_SYMBOLIC),
-                               non_blocking, would_block);
+                               non_blocking);
 
       g_ptr_array_free (new_names, TRUE);
     }
@@ -2363,7 +2359,7 @@ choose_icon (GtkIconTheme      *self,
                                size,
                                scale,
                                flags & ~(GTK_ICON_LOOKUP_FORCE_REGULAR | GTK_ICON_LOOKUP_FORCE_SYMBOLIC),
-                               non_blocking, would_block);
+                               non_blocking);
 
       g_ptr_array_free (new_names, TRUE);
     }
@@ -2381,7 +2377,7 @@ choose_icon (GtkIconTheme      *self,
                                size,
                                scale,
                                flags & ~(GTK_ICON_LOOKUP_FORCE_REGULAR | GTK_ICON_LOOKUP_FORCE_SYMBOLIC),
-                               non_blocking, would_block);
+                               non_blocking);
 
       g_ptr_array_free (new_names, TRUE);
     }
@@ -2392,7 +2388,7 @@ choose_icon (GtkIconTheme      *self,
                                size,
                                scale,
                                flags & ~(GTK_ICON_LOOKUP_FORCE_REGULAR | GTK_ICON_LOOKUP_FORCE_SYMBOLIC),
-                               non_blocking, would_block);
+                               non_blocking);
     }
 
   return icon;
@@ -2469,7 +2465,7 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
       memcpy (&names[1], fallbacks, sizeof (char *) * n_fallbacks);
       names[n_fallbacks + 1] = NULL;
 
-      icon = choose_icon (self, names, size, scale, direction, flags, FALSE, NULL);
+      icon = choose_icon (self, names, size, scale, direction, flags, FALSE);
 
       g_free (names);
     }
@@ -2480,7 +2476,7 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
       names[0] = icon_name;
       names[1] = NULL;
 
-      icon = choose_icon (self, names, size, scale, direction, flags, FALSE, NULL);
+      icon = choose_icon (self, names, size, scale, direction, flags, FALSE);
     }
 
   gtk_icon_theme_unlock (self);
@@ -4086,6 +4082,7 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
   /* We can't render emblemed icons atm, but at least render the base */
   while (G_IS_EMBLEMED_ICON (gicon))
     gicon = g_emblemed_icon_get_icon (G_EMBLEMED_ICON (gicon));
+  g_assert (gicon); /* shut up gcc -Wnull-dereference */
 
   if (GDK_IS_PIXBUF (gicon))
     {

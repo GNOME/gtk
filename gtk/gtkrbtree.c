@@ -61,8 +61,8 @@ struct _GtkRbNode
   };
 };
 
-#define NODE_FROM_POINTER(ptr) ((GtkRbNode *) ((ptr) ? (((guchar *) (ptr)) - sizeof (GtkRbNode)) : NULL))
-#define NODE_TO_POINTER(node) ((gpointer) ((node) ? (((guchar *) (node)) + sizeof (GtkRbNode)) : NULL))
+#define NODE_FROM_POINTER(ptr) ((GtkRbNode *) (((guchar *) (ptr)) - sizeof (GtkRbNode)))
+#define NODE_TO_POINTER(node) ((node) ? ((gpointer) (((guchar *) (node)) + sizeof (GtkRbNode))) : NULL)
 #define NODE_TO_AUG_POINTER(tree, node) ((gpointer) ((node) ? (((guchar *) (node)) + sizeof (GtkRbNode) + (tree)->element_size) : NULL))
 
 static inline gboolean
@@ -381,10 +381,9 @@ gtk_rb_tree_insert_fixup (GtkRbTree *tree,
 	      if (node == p->right)
 		{
 		  /* make node a left child */
-		  node = p;
-		  gtk_rb_node_rotate_left (tree, node);
-                  p = parent (node);
-                  pp = parent (p);
+		  gtk_rb_node_rotate_left (tree, p);
+		  p = node;
+                  node = p->left;
 		}
 	      /* recolor and rotate */
               set_black (p);
@@ -410,10 +409,9 @@ gtk_rb_tree_insert_fixup (GtkRbTree *tree,
               /* uncle is black */
 	      if (node == p->left)
 		{
-		  node = p;
-		  gtk_rb_node_rotate_right (tree, node);
-                  p = parent (node);
-                  pp = parent (p);
+		  gtk_rb_node_rotate_right (tree, p);
+		  p = node;
+                  node = p->right;
 		}
 	      set_black (p);
 	      set_red (pp);
@@ -443,6 +441,7 @@ gtk_rb_tree_remove_node_fixup (GtkRbTree *tree,
 	      gtk_rb_node_rotate_left (tree, p);
 	      w = p->right;
 	    }
+          g_assert (w);
 	  if (is_black (w->left) && is_black (w->right))
 	    {
 	      set_red (w);
@@ -474,6 +473,7 @@ gtk_rb_tree_remove_node_fixup (GtkRbTree *tree,
 	      gtk_rb_node_rotate_right (tree, p);
 	      w = p->left;
 	    }
+          g_assert (w);
 	  if (is_black (w->right) && is_black (w->left))
 	    {
 	      set_red (w);

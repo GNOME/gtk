@@ -50,6 +50,7 @@ gtk_tests = [
   ['testgtk'],
   ['testheaderbar'],
   ['testheightforwidth'],
+  ['testhover'],
   ['testiconview'],
   ['testiconview-keynav'],
   ['testicontheme'],
