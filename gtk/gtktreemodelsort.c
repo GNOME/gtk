@@ -1285,6 +1285,7 @@ gtk_tree_model_sort_get_iter (GtkTreeModel *tree_model,
         }
 
       elt = GET_ELT (siter);
+      g_assert (elt);
       if (elt->children == NULL)
 	gtk_tree_model_sort_build_level (tree_model_sort, level, elt);
 
@@ -2395,6 +2396,7 @@ gtk_tree_model_sort_convert_path_to_child_path (GtkTreeModelSort *tree_model_sor
         }
 
       elt = GET_ELT (siter);
+      g_assert (elt);
       if (elt->children == NULL)
 	gtk_tree_model_sort_build_level (tree_model_sort, level, elt);
 
