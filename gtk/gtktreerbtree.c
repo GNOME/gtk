@@ -722,9 +722,9 @@ gtk_tree_rbtree_column_invalid (GtkTreeRBTree *tree)
   if (tree == NULL)
     return;
 
-  node = gtk_tree_rbtree_first (tree);
-
-  do
+  for (node = gtk_tree_rbtree_first (tree);
+       node != NULL;
+       node = gtk_tree_rbtree_next (tree, node))
     {
       if (!(GTK_TREE_RBNODE_FLAG_SET (node, GTK_TREE_RBNODE_INVALID)))
         GTK_TREE_RBNODE_SET_FLAG (node, GTK_TREE_RBNODE_COLUMN_INVALID);
@@ -733,7 +733,6 @@ gtk_tree_rbtree_column_invalid (GtkTreeRBTree *tree)
       if (node->children)
         gtk_tree_rbtree_column_invalid (node->children);
     }
-  while ((node = gtk_tree_rbtree_next (tree, node)) != NULL);
 }
 
 void
@@ -744,9 +743,9 @@ gtk_tree_rbtree_mark_invalid (GtkTreeRBTree *tree)
   if (tree == NULL)
     return;
 
-  node = gtk_tree_rbtree_first (tree);
-
-  do
+  for (node = gtk_tree_rbtree_first (tree);
+       node != NULL;
+       node = gtk_tree_rbtree_next (tree, node))
     {
       GTK_TREE_RBNODE_SET_FLAG (node, GTK_TREE_RBNODE_INVALID);
       GTK_TREE_RBNODE_SET_FLAG (node, GTK_TREE_RBNODE_DESCENDANTS_INVALID);
@@ -754,7 +753,6 @@ gtk_tree_rbtree_mark_invalid (GtkTreeRBTree *tree)
       if (node->children)
         gtk_tree_rbtree_mark_invalid (node->children);
     }
-  while ((node = gtk_tree_rbtree_next (tree, node)) != NULL);
 }
 
 void
@@ -767,9 +765,9 @@ gtk_tree_rbtree_set_fixed_height (GtkTreeRBTree *tree,
   if (tree == NULL)
     return;
 
-  node = gtk_tree_rbtree_first (tree);
-
-  do
+  for (node = gtk_tree_rbtree_first (tree);
+       node != NULL;
+       node = gtk_tree_rbtree_next (tree, node))
     {
       if (GTK_TREE_RBNODE_FLAG_SET (node, GTK_TREE_RBNODE_INVALID))
         {
@@ -781,7 +779,6 @@ gtk_tree_rbtree_set_fixed_height (GtkTreeRBTree *tree,
       if (node->children)
         gtk_tree_rbtree_set_fixed_height (node->children, height, mark_valid);
     }
-  while ((node = gtk_tree_rbtree_next (tree, node)) != NULL);
 }
 
 static void
