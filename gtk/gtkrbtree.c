@@ -441,6 +441,7 @@ gtk_rb_tree_remove_node_fixup (GtkRbTree *tree,
 	      gtk_rb_node_rotate_left (tree, p);
 	      w = p->right;
 	    }
+          g_assert (w);
 	  if (is_black (w->left) && is_black (w->right))
 	    {
 	      set_red (w);
@@ -472,6 +473,7 @@ gtk_rb_tree_remove_node_fixup (GtkRbTree *tree,
 	      gtk_rb_node_rotate_right (tree, p);
 	      w = p->left;
 	    }
+          g_assert (w);
 	  if (is_black (w->right) && is_black (w->left))
 	    {
 	      set_red (w);

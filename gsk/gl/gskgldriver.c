@@ -658,7 +658,7 @@ gsk_gl_driver_mark_texture_permanent (GskGLDriver *self,
 {
   Texture *t = gsk_gl_driver_get_texture (self, texture_id);
 
-  g_assert_nonnull (t);
+  g_assert (t != NULL);
 
   t->permanent = TRUE;
 }

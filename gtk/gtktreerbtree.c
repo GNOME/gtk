@@ -269,6 +269,7 @@ gtk_tree_rbtree_remove_node_fixup (GtkTreeRBTree *tree,
               gtk_tree_rbnode_rotate_left (tree, parent);
               w = parent->right;
             }
+          g_assert (w);
           if (GTK_TREE_RBNODE_GET_COLOR (w->left) == GTK_TREE_RBNODE_BLACK && GTK_TREE_RBNODE_GET_COLOR (w->right) == GTK_TREE_RBNODE_BLACK)
             {
               GTK_TREE_RBNODE_SET_COLOR (w, GTK_TREE_RBNODE_RED);
@@ -300,6 +301,7 @@ gtk_tree_rbtree_remove_node_fixup (GtkTreeRBTree *tree,
               gtk_tree_rbnode_rotate_right (tree, parent);
               w = parent->left;
             }
+          g_assert (w);
           if (GTK_TREE_RBNODE_GET_COLOR (w->right) == GTK_TREE_RBNODE_BLACK && GTK_TREE_RBNODE_GET_COLOR (w->left) == GTK_TREE_RBNODE_BLACK)
             {
               GTK_TREE_RBNODE_SET_COLOR (w, GTK_TREE_RBNODE_RED);
@@ -1595,6 +1597,8 @@ gtk_tree_rbtree_test_dirty (GtkTreeRBTree *tree,
                             GtkTreeRBNode *node,
                             gint           expected_dirtyness)
 {
+  g_assert (node);
+
   if (expected_dirtyness)
     {
       g_assert (GTK_TREE_RBNODE_FLAG_SET (node, GTK_TREE_RBNODE_COLUMN_INVALID) ||
