@@ -332,6 +332,7 @@ internal_change_entry (const gchar    *accel_path,
 	{
 	  gtk_accel_map_add_entry (accel_path, 0, 0);
 	  entry = accel_path_lookup (accel_path);
+          g_assert (entry);
 	  entry->accel_key = accel_key;
 	  entry->accel_mods = accel_mods;
 	  entry->changed = TRUE;
