@@ -2673,7 +2673,11 @@ gdk_x11_display_error_trap_pop_internal (GdkDisplay *display,
         break;
     }
 
-  g_return_val_if_fail (trap != NULL, Success);
+  if (trap == NULL)
+    {
+      g_critical ("gdk_x11_display_error_trap_pop() called without gdk_x11_display_error_trap_push()");
+      return Success;
+    }
   g_assert (trap->end_sequence == 0);
 
   /* May need to sync to fill in trap->error_code if we care about

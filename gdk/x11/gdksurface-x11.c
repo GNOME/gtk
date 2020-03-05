@@ -129,7 +129,7 @@ _gdk_x11_surface_get_toplevel (GdkSurface *surface)
 {
   GdkX11Surface *impl;
   
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
+  g_assert (GDK_IS_SURFACE (surface));
 
   impl = GDK_X11_SURFACE (surface);
 
