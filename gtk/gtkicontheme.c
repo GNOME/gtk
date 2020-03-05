@@ -2209,11 +2209,12 @@ real_choose_icon (GtkIconTheme      *self,
               g_clear_object (&icon);
             }
 
-          icon->is_svg = suffix_from_name (icon->filename) == ICON_CACHE_FLAG_SVG_SUFFIX;
-          icon->is_resource = unthemed_icon->is_resource;
-
           if (icon)
-            goto out;
+            {
+              icon->is_svg = suffix_from_name (icon->filename) == ICON_CACHE_FLAG_SVG_SUFFIX;
+              icon->is_resource = unthemed_icon->is_resource;
+              goto out;
+            }
         }
     }
 
