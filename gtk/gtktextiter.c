@@ -209,6 +209,8 @@ gtk_text_iter_make_real (const GtkTextIter *_iter)
   GtkTextRealIter *iter;
 
   iter = gtk_text_iter_make_surreal (_iter);
+  if (iter == NULL)
+    return NULL;
 
   if (iter->segments_changed_stamp !=
       _gtk_text_btree_get_segments_changed_stamp (iter->tree))
@@ -242,8 +244,8 @@ iter_init_common (GtkTextIter *_iter,
 {
   GtkTextRealIter *iter = (GtkTextRealIter*)_iter;
 
-  g_return_val_if_fail (iter != NULL, NULL);
-  g_return_val_if_fail (tree != NULL, NULL);
+  g_assert (iter != NULL);
+  g_assert (tree != NULL);
 
   memset (iter, 0, sizeof (GtkTextRealIter));
 

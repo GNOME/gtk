@@ -251,6 +251,7 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     '-Wmissing-include-dirs',
     '-Wmissing-noreturn',
     '-Wnested-externs',
+    '-Wnull-dereference',
     '-Wold-style-definition',
     '-Wpointer-arith',
     '-Wshadow',

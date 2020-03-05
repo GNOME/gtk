@@ -382,8 +382,7 @@ state_pop (ParserData *data)
 {
   gpointer old = NULL;
 
-  if (!data->stack)
-    return NULL;
+  g_assert (data->stack);
 
   old = data->stack->data;
   data->stack = g_slist_delete_link (data->stack, data->stack);

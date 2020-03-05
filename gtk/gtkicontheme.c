@@ -4082,6 +4082,7 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
   /* We can't render emblemed icons atm, but at least render the base */
   while (G_IS_EMBLEMED_ICON (gicon))
     gicon = g_emblemed_icon_get_icon (G_EMBLEMED_ICON (gicon));
+  g_assert (gicon); /* shut up gcc -Wnull-dereference */
 
   if (GDK_IS_PIXBUF (gicon))
     {
