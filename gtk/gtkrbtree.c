@@ -61,8 +61,8 @@ struct _GtkRbNode
   };
 };
 
-#define NODE_FROM_POINTER(ptr) ((GtkRbNode *) ((ptr) ? (((guchar *) (ptr)) - sizeof (GtkRbNode)) : NULL))
-#define NODE_TO_POINTER(node) ((gpointer) ((node) ? (((guchar *) (node)) + sizeof (GtkRbNode)) : NULL))
+#define NODE_FROM_POINTER(ptr) ((GtkRbNode *) (((guchar *) (ptr)) - sizeof (GtkRbNode)))
+#define NODE_TO_POINTER(node) ((node) ? ((gpointer) (((guchar *) (node)) + sizeof (GtkRbNode))) : NULL)
 #define NODE_TO_AUG_POINTER(tree, node) ((gpointer) ((node) ? (((guchar *) (node)) + sizeof (GtkRbNode) + (tree)->element_size) : NULL))
 
 static inline gboolean
