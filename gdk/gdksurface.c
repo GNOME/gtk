@@ -1864,29 +1864,6 @@ gdk_surface_show_internal (GdkSurface *surface, gboolean raise)
     }
 }
 
-static void
-gdk_surface_lower_internal (GdkSurface *surface)
-{
-  GDK_SURFACE_GET_CLASS (surface)->lower (surface);
-}
-
-/**
- * gdk_surface_show:
- * @surface: a #GdkSurface
- *
- * Like gdk_surface_show_unraised(), but also raises the surface to the
- * top of the surface stack (moves the surface to the front of the
- * Z-order).
- *
- * This function maps a surface so it’s visible onscreen. Its opposite
- * is gdk_surface_hide().
- *
- * This function may not be used on a #GdkSurface with the surface type
- * GTK_SURFACE_POPUP.
- *
- * When implementing a #GtkWidget, you should call this function on the widget's
- * #GdkSurface as part of the “map” method.
- */
 void
 gdk_surface_show (GdkSurface *surface)
 {
@@ -2090,16 +2067,7 @@ gdk_toplevel_surface_present (GdkToplevel       *toplevel,
   GDK_SURFACE_GET_CLASS (surface)->set_modal_hint (surface, gdk_toplevel_layout_get_modal (layout));
   GDK_SURFACE_GET_CLASS (surface)->set_type_hint (surface, gdk_toplevel_layout_get_type_hint (layout));
 
-  if (gdk_toplevel_layout_get_raise (layout))
-    {
-      gdk_surface_show_internal (surface, TRUE);
-    }
-  else
-    {
-      gdk_surface_show_internal (surface, FALSE);
-      if (gdk_toplevel_layout_get_lower (layout))
-        gdk_surface_lower_internal (surface);
-    }
+  gdk_surface_show_internal (surface, TRUE);
 
   return TRUE;
 }
@@ -2112,6 +2080,18 @@ gdk_toplevel_surface_minimize (GdkToplevel *toplevel)
   g_return_val_if_fail (surface->surface_type == GDK_SURFACE_TOPLEVEL, FALSE);
   
   GDK_SURFACE_GET_CLASS (surface)->minimize (surface);
+
+  return TRUE;
+}
+
+static gboolean
+gdk_toplevel_surface_lower (GdkToplevel *toplevel)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+
+  g_return_val_if_fail (surface->surface_type == GDK_SURFACE_TOPLEVEL, FALSE);
+
+  GDK_SURFACE_GET_CLASS (surface)->lower (surface);
 
   return TRUE;
 }
@@ -2143,6 +2123,7 @@ gdk_surface_toplevel_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_toplevel_surface_present;
   iface->minimize = gdk_toplevel_surface_minimize;
+  iface->lower = gdk_toplevel_surface_lower;
   iface->focus = gdk_toplevel_surface_focus;
   iface->show_window_menu = gdk_toplevel_surface_show_window_menu;
 }
