@@ -1354,11 +1354,15 @@ _gdk_device_translate_surface_coord (GdkDevice *device,
     {
       axis_info_x = &axis_info;
       axis_info_y = find_axis_info (device->axes, GDK_AXIS_Y);
+      if (axis_info_y == NULL)
+        return FALSE;
     }
   else
     {
       axis_info_x = find_axis_info (device->axes, GDK_AXIS_X);
       axis_info_y = &axis_info;
+      if (axis_info_x == NULL)
+        return FALSE;
     }
 
   device_width = axis_info_x->max_value - axis_info_x->min_value;
