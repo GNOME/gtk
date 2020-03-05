@@ -381,10 +381,9 @@ gtk_rb_tree_insert_fixup (GtkRbTree *tree,
 	      if (node == p->right)
 		{
 		  /* make node a left child */
-		  node = p;
-		  gtk_rb_node_rotate_left (tree, node);
-                  p = parent (node);
-                  pp = parent (p);
+		  gtk_rb_node_rotate_left (tree, p);
+		  p = node;
+                  node = p->left;
 		}
 	      /* recolor and rotate */
               set_black (p);
@@ -410,10 +409,9 @@ gtk_rb_tree_insert_fixup (GtkRbTree *tree,
               /* uncle is black */
 	      if (node == p->left)
 		{
-		  node = p;
-		  gtk_rb_node_rotate_right (tree, node);
-                  p = parent (node);
-                  pp = parent (p);
+		  gtk_rb_node_rotate_right (tree, p);
+		  p = node;
+                  node = p->right;
 		}
 	      set_black (p);
 	      set_red (pp);
