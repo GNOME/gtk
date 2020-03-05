@@ -3002,6 +3002,7 @@ gtk_tree_model_filter_get_iter_full (GtkTreeModel *model,
         }
 
       elt = GET_ELT (siter);
+      g_assert (elt);
 
       if (!elt->children)
         gtk_tree_model_filter_build_level (filter, level, elt, FALSE);
@@ -3072,6 +3073,7 @@ gtk_tree_model_filter_get_iter (GtkTreeModel *model,
         }
 
       elt = GET_ELT (siter);
+      g_assert (elt);
       if (!elt->children)
         gtk_tree_model_filter_build_level (filter, level, elt, FALSE);
       level = elt->children;
@@ -4192,6 +4194,7 @@ gtk_tree_model_filter_convert_path_to_child_path (GtkTreeModelFilter *filter,
         }
 
       elt = GET_ELT (siter);
+      g_assert (elt);
       if (elt->children == NULL)
         gtk_tree_model_filter_build_level (filter, level, elt, FALSE);
 

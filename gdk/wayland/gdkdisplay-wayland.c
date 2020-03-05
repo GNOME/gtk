@@ -1505,15 +1505,19 @@ update_xft_settings (GdkDisplay *display)
       TranslationEntry *entry;
 
       entry = find_translation_entry_by_schema ("org.gnome.settings-daemon.plugins.xsettings", "antialiasing");
+      g_assert (entry);
       antialiasing = entry->fallback.i;
 
       entry = find_translation_entry_by_schema ("org.gnome.settings-daemon.plugins.xsettings", "hinting");
+      g_assert (entry);
       hinting = entry->fallback.i;
 
       entry = find_translation_entry_by_schema ("org.gnome.settings-daemon.plugins.xsettings", "rgba-order");
+      g_assert (entry);
       order = entry->fallback.i;
 
       entry = find_translation_entry_by_schema ("org.gnome.desktop.interface", "text-scaling-factor");
+      g_assert (entry);
       dpi = 96.0 * entry->fallback.i / 65536.0 * 1024; /* Xft wants 1/1024th of an inch */
     }
   else

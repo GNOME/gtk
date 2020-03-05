@@ -4118,6 +4118,7 @@ tablet_pad_handle_button (void                     *data,
                        wp_tablet_pad, button, state));
 
   group = tablet_pad_lookup_button_group (pad, button);
+  g_assert (group != NULL);
   n_group = g_list_index (pad->mode_groups, group);
 
   event = gdk_event_pad_button_new (state == ZWP_TABLET_PAD_V2_BUTTON_STATE_PRESSED
