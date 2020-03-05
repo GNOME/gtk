@@ -3823,17 +3823,7 @@ gtk_window_set_decorated (GtkWindow *window,
   priv->decorated = setting;
 
   if (priv->surface)
-    {
-      if (priv->decorated)
-        {
-          if (priv->client_decorated)
-            gdk_surface_set_decorations (priv->surface, 0);
-          else
-            gdk_surface_set_decorations (priv->surface, GDK_DECOR_ALL);
-        }
-      else
-        gdk_surface_set_decorations (priv->surface, 0);
-    }
+    gdk_toplevel_set_decorated (GDK_TOPLEVEL (priv->surface), priv->decorated && !priv->client_decorated);
 
   update_window_buttons (window);
   gtk_widget_queue_resize (GTK_WIDGET (window));
@@ -3892,13 +3882,7 @@ gtk_window_set_deletable (GtkWindow *window,
   priv->deletable = setting;
 
   if (priv->surface)
-    {
-      if (priv->deletable)
-        gdk_surface_set_functions (priv->surface, GDK_FUNC_ALL);
-      else
-        gdk_surface_set_functions (priv->surface,
-				   GDK_FUNC_ALL | GDK_FUNC_CLOSE);
-    }
+    gdk_toplevel_set_deletable (GDK_TOPLEVEL (priv->surface), priv->deletable);
 
   update_window_buttons (window);
 
@@ -5573,16 +5557,13 @@ gtk_window_realize (GtkWidget *widget)
   if (priv->title)
     gdk_toplevel_set_title (GDK_TOPLEVEL (surface), priv->title);
 
-  if (!priv->decorated || priv->client_decorated)
-    gdk_surface_set_decorations (surface, 0);
+  gdk_toplevel_set_decorated (GDK_TOPLEVEL (surface), priv->decorated && !priv->client_decorated);
+  gdk_toplevel_set_deletable (GDK_TOPLEVEL (surface), priv->deletable);
 
 #ifdef GDK_WINDOWING_WAYLAND
   if (priv->client_decorated && GDK_IS_WAYLAND_SURFACE (surface))
     gdk_wayland_surface_announce_csd (surface);
 #endif
-
-  if (!priv->deletable)
-    gdk_surface_set_functions (surface, GDK_FUNC_ALL | GDK_FUNC_CLOSE);
 
   gdk_toplevel_set_accept_focus (GDK_TOPLEVEL (surface),
                                  gtk_window_get_accept_focus (window));
