@@ -234,6 +234,7 @@ gtk_menu_tracker_item_visibility_changed (GtkMenuTrackerItem *item,
 
   /* remember: the item is our model */
   section = gtk_menu_tracker_section_find_model (tracker->toplevel, item, &offset);
+  g_assert (section);
 
   was_visible = section->items != NULL;
 
@@ -424,6 +425,7 @@ gtk_menu_tracker_model_changed (GMenuModel *model,
    * position of that section within the overall menu.
    */
   section = gtk_menu_tracker_section_find_model (tracker->toplevel, model, &offset);
+  g_assert (section);
 
   /* Next, seek through that section to the change point.  This gives us
    * the correct GSList** to make the change to and also finds the final

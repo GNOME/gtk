@@ -693,6 +693,7 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
           n += height;
         }
 
+      g_assert (g);
       for (g = g->next; g; g = g->next)
         {
           GtkShortcutsGroup *group = g->data;

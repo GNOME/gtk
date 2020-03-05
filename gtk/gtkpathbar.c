@@ -690,6 +690,7 @@ gtk_path_bar_scroll_down (GtkPathBar *path_bar)
 	  break;
 	}
     }
+  g_assert (down_button);
 
   gtk_widget_get_allocation (GTK_WIDGET (path_bar), &allocation);
   gtk_widget_get_allocation (BUTTON_DATA (down_button->data)->button, &button_allocation);
