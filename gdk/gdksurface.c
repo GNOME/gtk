@@ -2095,14 +2095,22 @@ gdk_toplevel_surface_present (GdkToplevel       *toplevel,
   g_return_val_if_fail (surface->surface_type == GDK_SURFACE_TOPLEVEL, FALSE);
   g_return_val_if_fail (!GDK_SURFACE_DESTROYED (surface), FALSE);
 
-  gdk_toplevel_layout_get_min_size (layout,
-                                    &geometry.min_width,
-                                    &geometry.min_height);
-  gdk_toplevel_layout_get_max_size (layout,
-                                    &geometry.max_width,
-                                    &geometry.max_height);
-  mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE;
-  gdk_surface_set_geometry_hints (surface, &geometry, mask); 
+  GDK_SURFACE_GET_CLASS (surface)->unminimize (surface);
+
+  if (gdk_toplevel_layout_get_resizable (layout))
+    {
+      geometry.min_width = gdk_toplevel_layout_get_min_width (layout);
+      geometry.min_height = gdk_toplevel_layout_get_min_height (layout);
+      mask = GDK_HINT_MIN_SIZE;
+    }
+  else
+    {
+      geometry.max_width = geometry.min_width = width;
+      geometry.max_height = geometry.min_height = height;
+      mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE;
+    }
+
+  GDK_SURFACE_GET_CLASS (surface)->set_geometry_hints (surface, &geometry, mask);
   gdk_surface_constrain_size (&geometry, mask, width, height, &width, &height);
   GDK_SURFACE_GET_CLASS (surface)->toplevel_resize (surface, width, height);
 
