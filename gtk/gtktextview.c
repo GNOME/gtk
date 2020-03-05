@@ -5692,8 +5692,8 @@ gtk_text_view_remove (GtkContainer *container,
 
       if (vc == priv->left_child)
         vcp = &priv->left_child;
-      else if (vc == priv->left_child)
-        vcp = &priv->left_child;
+      else if (vc == priv->right_child)
+        vcp = &priv->right_child;
       else if (vc == priv->top_child)
         vcp = &priv->top_child;
       else if (vc == priv->bottom_child)

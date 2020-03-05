@@ -3359,7 +3359,7 @@ gtk_notebook_drag_drop (GtkDropTarget *dest,
 
   source = drag ? g_object_get_data (G_OBJECT (drag), "gtk-notebook-drag-origin") : NULL;
 
-  if (!gtk_notebook_can_drag_from (self, source, source->priv->cur_page))
+  if (!source || !gtk_notebook_can_drag_from (self, source, source->priv->cur_page))
     return FALSE;
 
   self->priv->mouse_x = x;
