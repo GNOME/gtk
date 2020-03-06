@@ -590,7 +590,7 @@ key_controller_key_pressed (GtkEventControllerKey *key,
 	{
 	case GDK_KEY_BackSpace:
 	  cleared = TRUE;
-          /* fall thru */
+          G_GNUC_FALLTHROUGH;
 	case GDK_KEY_Escape:
 	  goto out;
 	default:

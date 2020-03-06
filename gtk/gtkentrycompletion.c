@@ -1527,6 +1527,7 @@ gtk_entry_completion_compute_prefix (GtkEntryCompletion *completion,
                     case (gunichar)-2:
                     case (gunichar)-1:
                       *q = 0;
+                      break;
                     default: ;
                     }
                 }

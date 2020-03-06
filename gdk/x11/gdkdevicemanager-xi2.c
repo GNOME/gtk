@@ -303,6 +303,7 @@ translate_device_classes (GdkDisplay      *display,
                                                      direction,
                                                      scroll_info->increment);
           }
+          break;
 #endif /* XINPUT_2_2 */
         default:
           /* Ignore */

@@ -142,6 +142,7 @@ gtk_app_chooser_dialog_response (GtkDialog *dialog,
     case GTK_RESPONSE_CANCEL:
     case GTK_RESPONSE_DELETE_EVENT:
       priv->dismissed = TRUE;
+      break;
     default:
       break;
     }

@@ -3539,8 +3539,8 @@ set_startup_mode (GtkFileChooserWidget *impl)
           operation_mode_set (impl, OPERATION_MODE_RECENT);
           break;
         }
-      /* else fall thru */
 
+      G_GNUC_FALLTHROUGH;
     case STARTUP_MODE_CWD:
       switch_to_cwd (impl);
       break;

@@ -1745,6 +1745,7 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
           rect.y = dest_item->cell_area.y;
           rect.width = 2;
           rect.height = dest_item->cell_area.height;
+          break;
 	case GTK_ICON_VIEW_NO_DROP:
         default:
 	  break;
