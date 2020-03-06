@@ -387,7 +387,7 @@ gtk_css_token_print (const GtkCssToken *token,
     case GTK_CSS_TOKEN_SIGNED_NUMBER:
       if (token->number.number >= 0)
         g_string_append_c (string, '+');
-      /* fall through */
+      G_GNUC_FALLTHROUGH;
     case GTK_CSS_TOKEN_SIGNLESS_INTEGER:
     case GTK_CSS_TOKEN_SIGNLESS_NUMBER:
       g_ascii_dtostr (buf, G_ASCII_DTOSTR_BUF_SIZE, token->number.number);
@@ -403,7 +403,7 @@ gtk_css_token_print (const GtkCssToken *token,
     case GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION:
       if (token->dimension.value >= 0)
         g_string_append_c (string, '+');
-      /* fall through */
+      G_GNUC_FALLTHROUGH;
     case GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION:
     case GTK_CSS_TOKEN_DIMENSION:
       g_ascii_dtostr (buf, G_ASCII_DTOSTR_BUF_SIZE, token->dimension.value);

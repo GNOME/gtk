@@ -32,7 +32,7 @@ _gtk_print_convert_to_mm (gdouble len,
     case GTK_UNIT_NONE:
     default:
       g_warning ("Unsupported unit");
-      /* Fall through */
+      G_GNUC_FALLTHROUGH;
     case GTK_UNIT_POINTS:
       return len * (MM_PER_INCH / POINTS_PER_INCH);
       break;
@@ -52,7 +52,7 @@ _gtk_print_convert_from_mm (gdouble len,
     case GTK_UNIT_NONE:
     default:
       g_warning ("Unsupported unit");
-      /* Fall through */
+      G_GNUC_FALLTHROUGH;
     case GTK_UNIT_POINTS:
       return len / (MM_PER_INCH / POINTS_PER_INCH);
       break;
