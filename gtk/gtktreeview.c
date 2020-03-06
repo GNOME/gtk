@@ -2823,7 +2823,6 @@ gtk_tree_view_click_gesture_pressed (GtkGestureClick *gesture,
   GList *list;
   gboolean rtl;
 
-  rtl = (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
   gtk_tree_view_stop_editing (tree_view, FALSE);
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
 
@@ -7378,8 +7377,6 @@ gtk_tree_view_drag_data_received (GObject      *source,
   gboolean path_down_mode;
   gboolean drop_append_mode;
   const GValue *value;
-
-  suggested_action = 0;
 
   value = gdk_drop_read_value_finish (drop, result, NULL);
   if (value == NULL)

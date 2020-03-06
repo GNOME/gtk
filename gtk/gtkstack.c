@@ -1301,6 +1301,7 @@ stack_child_visibility_notify_cb (GObject    *obj,
   GtkStackPage *child_info;
 
   child_info = find_child_info_for_widget (stack, child);
+  g_return_if_fail (child_info != NULL);
 
   if (priv->visible_child == NULL &&
       gtk_widget_get_visible (child))

@@ -1019,8 +1019,8 @@ gtk_real_model_types_iter_next (GtkTreeModel  *tree_model,
 
       if (children[i] != G_TYPE_INVALID)
         {
-          g_free (children);
           iter->user_data = GINT_TO_POINTER (children[i]);
+          g_free (children);
           return TRUE;
         }
       else

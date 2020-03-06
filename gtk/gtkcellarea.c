@@ -2950,7 +2950,9 @@ gtk_cell_area_add_focus_sibling (GtkCellArea     *area,
   siblings = g_hash_table_lookup (priv->focus_siblings, renderer);
 
   if (siblings)
-    siblings = g_list_append (siblings, sibling);
+    {
+      G_GNUC_UNUSED GList *unused = g_list_append (siblings, sibling);
+    }
   else
     {
       siblings = g_list_append (siblings, sibling);

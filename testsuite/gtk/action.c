@@ -379,10 +379,8 @@ test_introspection (void)
     {
       g_assert (expected[i].owner == owner);
       g_assert (strcmp (expected[i].name, name) == 0);
-      g_assert ((expected[i].params == NULL && params == NULL) ||
-                strcmp (expected[i].params, g_variant_type_peek_string (params)) == 0);
-      g_assert ((expected[i].property == NULL && property == NULL) ||
-                strcmp (expected[i].property, property) == 0);
+      g_assert (g_strcmp0 (expected[i].params, params ? g_variant_type_peek_string (params) : NULL) == 0);
+      g_assert (g_strcmp0 (expected[i].property, property) == 0);
       i++;
     }
   g_assert (i == G_N_ELEMENTS (expected));

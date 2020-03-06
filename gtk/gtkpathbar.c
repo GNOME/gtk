@@ -201,8 +201,6 @@ gtk_path_bar_init (GtkPathBar *path_bar)
   GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (path_bar);
   GtkEventController *controller;
 
-  priv = gtk_path_bar_get_instance_private (path_bar);
-
   priv->up_slider_button = gtk_button_new_from_icon_name ("pan-start-symbolic");
   gtk_widget_set_parent (priv->up_slider_button, GTK_WIDGET (path_bar));
 
