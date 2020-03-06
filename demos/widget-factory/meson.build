@@ -6,6 +6,7 @@ widgetfactory_resources = gnome.compile_resources('widgetfactory_resources',
 
 executable('gtk4-widget-factory',
            'widget-factory.c', widgetfactory_resources,
+           c_args: common_cflags,
            dependencies: libgtk_dep,
            include_directories: confinc,
            gui_app: true,
