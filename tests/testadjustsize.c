@@ -62,9 +62,9 @@ static void
 quit_cb (GtkWidget *widget,
          gpointer   data)
 {
-  gboolean *done = data;
+  gboolean *is_done = data;
 
-  *done = TRUE;
+  *is_done = TRUE;
 
   g_main_context_wakeup (NULL);
 }

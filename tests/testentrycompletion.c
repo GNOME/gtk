@@ -24,7 +24,7 @@
 /* Don't copy this bad example; inline RGB data is always a better
  * idea than inline XPMs.
  */
-static char  *book_closed_xpm[] = {
+static const char *book_closed_xpm[] = {
 "16 16 6 1",
 "       c None s None",
 ".      c black",
@@ -54,7 +54,7 @@ static GtkWidget *window = NULL;
 
 
 /* Creates a tree model containing the completions */
-GtkTreeModel *
+static GtkTreeModel *
 create_simple_completion_model (void)
 {
   GtkListStore *store;
@@ -120,7 +120,7 @@ create_simple_completion_model (void)
 }
 
 /* Creates a tree model containing the completions */
-GtkTreeModel *
+static GtkTreeModel *
 create_completion_model (void)
 {
   GtkListStore *store;
@@ -192,7 +192,7 @@ activated_cb (GtkEntryCompletion *completion,
 
 static gint timer_count = 0;
 
-static gchar *dynamic_completions[] = {
+static const char *dynamic_completions[] = {
   "GNOME",
   "gnominious",
   "Gnomonic projection",
@@ -269,7 +269,7 @@ animation_timer (GtkEntryCompletion *completion)
   return TRUE;
 }
 
-gboolean 
+static gboolean
 match_selected_cb (GtkEntryCompletion *completion,
 		   GtkTreeModel       *model,
 		   GtkTreeIter        *iter)
@@ -297,7 +297,7 @@ quit_cb (GtkWidget *widget,
   g_main_context_wakeup (NULL);
 }
 
-int 
+int
 main (int argc, char *argv[])
 {
   GtkWidget *vbox;

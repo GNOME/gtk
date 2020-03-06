@@ -204,6 +204,8 @@ create_control (GtkWidget *box, gint number, gint cntl, CallbackData *data)
       name = g_strdup_printf ("Fix size Cell #%d", number); 
       callback = G_CALLBACK (fixed_cell_toggled);
       break;
+    default:
+      g_assert_not_reached ();
     }
 
   checkbutton = gtk_check_button_new_with_label (name);

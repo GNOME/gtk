@@ -11,6 +11,7 @@ typedef struct {
   GtkTextViewClass parent_class;
 } MyTextViewClass;
 
+static GType my_text_view_get_type (void);
 G_DEFINE_TYPE (MyTextView, my_text_view, GTK_TYPE_TEXT_VIEW);
 
 static void snapshot_background (GtkWidget *widget, GtkSnapshot *snapshot);

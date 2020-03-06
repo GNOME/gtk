@@ -317,6 +317,8 @@ on_update (GdkFrameClock *frame_clock,
                                     &refresh_interval, NULL);
 
   pending_frame = peek_pending_frame ();
+  g_assert (pending_frame);
+
   if (stream_time_to_clock_time (pending_frame->stream_time)
       < predicted_presentation_time + refresh_interval / 2)
     {
@@ -341,6 +343,7 @@ on_update (GdkFrameClock *frame_clock,
 
       n_frames++;
       displayed_frame = unqueue_frame ();
+      g_assert (displayed_frame);
       displayed_frame->clock_time = stream_time_to_clock_time (displayed_frame->stream_time);
 
       displayed_frame->frame_counter = gdk_frame_timings_get_frame_counter (timings);

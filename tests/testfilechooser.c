@@ -140,123 +140,6 @@ filter_changed (GtkFileChooserDialog *dialog,
 #include <errno.h>
 #define _(s) (s)
 
-static void
-size_prepared_cb (GdkPixbufLoader *loader,
-		  int              width,
-		  int              height,
-		  int             *data)
-{
-	int des_width = data[0];
-	int des_height = data[1];
-
-	if (des_height >= height && des_width >= width) {
-		/* Nothing */
-	} else if ((double)height * des_width > (double)width * des_height) {
-		width = 0.5 + (double)width * des_height / (double)height;
-		height = des_height;
-	} else {
-		height = 0.5 + (double)height * des_width / (double)width;
-		width = des_width;
-	}
-
-	gdk_pixbuf_loader_set_size (loader, width, height);
-}
-
-GdkPixbuf *
-my_new_from_file_at_size (const char *filename,
-			  int         width,
-			  int         height,
-			  GError    **error)
-{
-	GdkPixbufLoader *loader;
-	GdkPixbuf       *pixbuf;
-	int              info[2];
-	struct stat st;
-
-	guchar buffer [4096];
-	int length;
-	FILE *f;
-
-	g_return_val_if_fail (filename != NULL, NULL);
-        g_return_val_if_fail (width > 0 && height > 0, NULL);
-
-	if (stat (filename, &st) != 0) {
-                int errsv = errno;
-
-		g_set_error (error,
-			     G_FILE_ERROR,
-			     g_file_error_from_errno (errsv),
-			     _("Could not get information for file '%s': %s"),
-			     filename, g_strerror (errsv));
-		return NULL;
-	}
-
-	if (!S_ISREG (st.st_mode))
-		return NULL;
-
-	f = fopen (filename, "rb");
-	if (!f) {
-                int errsv = errno;
-
-                g_set_error (error,
-                             G_FILE_ERROR,
-                             g_file_error_from_errno (errsv),
-                             _("Failed to open file '%s': %s"),
-                             filename, g_strerror (errsv));
-		return NULL;
-        }
-
-	loader = gdk_pixbuf_loader_new ();
-#ifdef DONT_PRESERVE_ASPECT
-	gdk_pixbuf_loader_set_size (loader, width, height);
-#else
-	info[0] = width;
-	info[1] = height;
-	g_signal_connect (loader, "size-prepared", G_CALLBACK (size_prepared_cb), info);
-#endif
-
-	while (!feof (f)) {
-		length = fread (buffer, 1, sizeof (buffer), f);
-		if (length > 0)
-			if (!gdk_pixbuf_loader_write (loader, buffer, length, error)) {
-			        gdk_pixbuf_loader_close (loader, NULL);
-				fclose (f);
-				g_object_unref (loader);
-				return NULL;
-			}
-	}
-
-	fclose (f);
-
-	g_assert (*error == NULL);
-	if (!gdk_pixbuf_loader_close (loader, error)) {
-		g_object_unref (loader);
-		return NULL;
-	}
-
-	pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
-
-	if (!pixbuf) {
-		g_object_unref (loader);
-
-		/* did the loader set an error? */
-		if (*error != NULL)
-			return NULL;
-
-		g_set_error (error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_FAILED,
-                             _("Failed to load image '%s': reason not known, probably a corrupt image file"),
-                             filename);
-		return NULL;
-	}
-
-	g_object_ref (pixbuf);
-
-	g_object_unref (loader);
-
-	return pixbuf;
-}
 
 static void
 set_current_folder (GtkFileChooser *chooser,
@@ -487,6 +370,8 @@ main (int argc, char **argv)
 			      _("_Save"), GTK_RESPONSE_OK,
 			      NULL);
       break;
+    default:
+      g_assert_not_reached ();
     }
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 

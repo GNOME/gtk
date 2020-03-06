@@ -204,7 +204,7 @@ tree_store_insert_deep (GtkTreeModel *model,
 
 
 static void
-test_run (gchar        *title,
+test_run (const char        *title,
 	  GtkTreeModel *store,
 	  ClearFunc    *clear,
 	  InsertFunc   *insert)

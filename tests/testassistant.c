@@ -677,7 +677,7 @@ create_page_flipping_assistant (GtkWidget *widget)
 }
 
 struct {
-  gchar *text;
+  const char *text;
   void  (*func) (GtkWidget *widget);
 } buttons[] =
   {

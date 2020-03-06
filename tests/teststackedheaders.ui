@@ -16,7 +16,6 @@
                     <property name="valign">center</property>
                     <signal name="clicked" handler="go_to_secondary"/>
                   </object>
-                  <packing/>
                 </child>
                 <child type="title">
                   <object class="GtkStackSwitcher">
@@ -38,7 +37,6 @@
                     <property name="valign">center</property>
                     <signal name="clicked" handler="back_to_main"/>
                   </object>
-                  <packing/>
                 </child>
               </object>
             </property>

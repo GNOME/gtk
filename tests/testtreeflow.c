@@ -28,7 +28,7 @@ enum
   NUM_COLUMNS
 };
 
-static char *words[] =
+static const char *words[] =
 {
   "Boom",
   "Borp",
@@ -102,6 +102,8 @@ futz_row (void)
       			  TEXT_COLUMN, words[g_rand_int_range (grand, 0, NUM_WORDS)],
       			  -1);
       break;
+    default:
+      g_assert_not_reached ();
     }
 }
 

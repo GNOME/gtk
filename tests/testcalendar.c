@@ -50,7 +50,7 @@ enum
 
 static char *
 calendar_date_to_string (CalendarData *data,
-                         char         *format)
+                         const char   *format)
 {
   GDateTime *date;
   char *str;
