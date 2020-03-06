@@ -77,7 +77,7 @@ update_weak_position (ConstraintView *self,
                                                 GTK_CONSTRAINT_RELATION_EQ,
                                                 x,
                                                 GTK_CONSTRAINT_STRENGTH_WEAK);
-      g_object_set_data (G_OBJECT (constraint), "internal", "yes");
+      g_object_set_data (G_OBJECT (constraint), "internal", (char *)"yes");
       gtk_constraint_layout_add_constraint (GTK_CONSTRAINT_LAYOUT (manager),
                                             constraint);
       g_object_set_data (G_OBJECT (child), "x-constraint", constraint);
@@ -97,7 +97,7 @@ update_weak_position (ConstraintView *self,
                                                 GTK_CONSTRAINT_RELATION_EQ,
                                                 y,
                                                 GTK_CONSTRAINT_STRENGTH_WEAK);
-      g_object_set_data (G_OBJECT (constraint), "internal", "yes");
+      g_object_set_data (G_OBJECT (constraint), "internal", (char *)"yes");
       gtk_constraint_layout_add_constraint (GTK_CONSTRAINT_LAYOUT (manager),
                                             constraint);
       g_object_set_data (G_OBJECT (child), "y-constraint", constraint);
@@ -258,7 +258,7 @@ constraint_view_add_guide (ConstraintView *view,
 
   frame = gtk_frame_new (NULL);
   gtk_style_context_add_class (gtk_widget_get_style_context (frame), "guide");
-  g_object_set_data (G_OBJECT (frame), "internal", "yes");
+  g_object_set_data (G_OBJECT (frame), "internal", (char *)"yes");
   gtk_container_add (GTK_CONTAINER (frame), label);
   gtk_widget_insert_after (frame, GTK_WIDGET (view), NULL);
 
@@ -276,7 +276,7 @@ constraint_view_add_guide (ConstraintView *view,
                                        names[i].attr,
                                        1.0, 0.0,
                                        GTK_CONSTRAINT_STRENGTH_REQUIRED);
-      g_object_set_data (G_OBJECT (constraint), "internal", "yes");
+      g_object_set_data (G_OBJECT (constraint), "internal", (char *)"yes");
       gtk_constraint_layout_add_constraint (layout, constraint);
       g_object_set_data (G_OBJECT (guide), names[i].name, constraint);
     }
