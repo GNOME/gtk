@@ -802,12 +802,8 @@ gtk_tree_path_append_index (GtkTreePath *path,
 
   if (path->depth == path->alloc)
     {
-      gint *indices;
       path->alloc = MAX (path->alloc * 2, 1);
-      indices = g_new (gint, path->alloc);
-      memcpy (indices, path->indices, path->depth * sizeof (gint));
-      g_free (path->indices);
-      path->indices = indices;
+      path->indices = g_renew (gint, path->indices, path->alloc);
     }
 
   path->depth += 1;

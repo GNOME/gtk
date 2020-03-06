@@ -1215,7 +1215,7 @@ rewrite_paned_child (Element *element,
               if (g_str_equal (elt2->element_name, "property") &&
                   has_attribute (elt2, "name", "resize"))
                 resize = elt2;
-              if (g_str_equal (elt2->element_name, "property") &&
+              else if (g_str_equal (elt2->element_name, "property") &&
                   has_attribute (elt2, "name", "shrink"))
                 shrink = elt2;
             }
