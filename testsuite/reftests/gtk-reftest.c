@@ -172,7 +172,7 @@ get_test_file (const char *test_file,
 
   get_components_of_test_file (test_file, &dir, &base);
 
-  file = g_string_new (dir);
+  g_string_append (file, dir);
   g_string_append (file, G_DIR_SEPARATOR_S);
   g_string_append (file, base);
   g_string_append (file, extension);
