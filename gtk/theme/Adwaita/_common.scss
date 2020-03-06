@@ -2837,9 +2837,9 @@ switch {
 
   &:checked {
     color: $selected_fg_color;
-    border-color: $suggested_border_color;
-    background-color: $suggested_bg_color;
-    text-shadow: 0 1px transparentize($suggested_border_color, 0.5),
+    border-color: $checkradio_borders_color;
+    background-color: $checkradio_bg_color;
+    text-shadow: 0 1px transparentize($selected_borders_color, 0.5),
                  0 0 2px transparentize(white, 0.4);
   }
 
@@ -2859,8 +2859,9 @@ switch {
 
     &:checked {
       @if $variant == 'light' { color: $backdrop_bg_color; }
-      border-color: if($variant=='light', $suggested_bg_color, $suggested_border_color);
-      background-color: $suggested_bg_color;
+      border-color: if($variant == 'light', $checkradio_borders_color,
+                                            $selected_borders_color);
+      background-color: $checkradio_bg_color;
     }
 
     &:disabled {
@@ -2898,7 +2899,7 @@ switch {
     }
   }
 
-  &:checked slider { border: 1px solid $suggested_border_color; }
+  &:checked > slider { border: 1px solid $checkradio_borders_color; }
 
   &:disabled slider { @include button(insensitive); }
 
@@ -2909,7 +2910,7 @@ switch {
       @include button(backdrop);
     }
 
-    &:checked slider { border-color: if($variant == 'light', $suggested_bg_color, $suggested_border_color); }
+    &:checked > slider { border-color: $checkradio_borders_color; }
 
     &:disabled slider { @include button(backdrop-insensitive); }
   }
@@ -2917,11 +2918,11 @@ switch {
   row:selected & {
     @if $variant == 'light' {
       box-shadow: none;
-      border-color: $selected_borders_color;
+      border-color: $checkradio_borders_color;
 
-      &:backdrop { border-color: $selected_borders_color; }
+      &:backdrop { border-color: $checkradio_borders_color; }
 
-      slider { &:checked, & { border-color: $selected_borders_color; } }
+      > slider { &:checked, & { border-color: $checkradio_borders_color; } }
     }
   }
 
@@ -2937,14 +2938,14 @@ switch {
 
 //selection-mode
 @each $check_state, $check_icon, $check_color, $check_background in
-  ('', 'none', 'transparent', '#{transparentize($checkradio_bg_color, .05)}'),
-  (':hover', 'none', 'transparent', '#{transparentize($checkradio_bg_color, .05)}'),
-  (':active', 'none', 'transparent', '#{transparentize($checkradio_bg_color, .05)}'),
-  (':backdrop', 'none', 'transparent', '#{transparentize(desaturate($checkradio_bg_color, 100%), .05)}'),
-  (':checked', '-gtk-icontheme(\'object-select-symbolic\')', '#{$osd_fg_color}', '#{transparentize($checkradio_bg_color, .05)}'),
-  (':checked:hover', '-gtk-icontheme(\'object-select-symbolic\')', '#{$osd_fg_color}', '#{transparentize($checkradio_bg_color, .05)}'),
-  (':checked:active', '-gtk-icontheme(\'object-select-symbolic\')', '#{$osd_fg_color}', '#{transparentize($checkradio_bg_color, .05)}'),
-  (':backdrop:checked', '-gtk-icontheme(\'object-select-symbolic\')', '#{transparentize($osd_fg_color, 0.2)}', '#{transparentize(desaturate($checkradio_bg_color, 100%), .05)}'), {
+  ('', 'none', 'transparent', '$checkradio_bg_color'),
+  (':hover', 'none', 'transparent', '$checkradio_bg_color'),
+  (':active', 'none', 'transparent', '$checkradio_bg_color'),
+  (':backdrop', 'none', 'transparent', '#{desaturate($checkradio_bg_color, 100%)}'),
+  (':checked', '-gtk-icontheme(\'object-select-symbolic\')', '#{$osd_fg_color}', '$checkradio_bg_color'),
+  (':checked:hover', '-gtk-icontheme(\'object-select-symbolic\')', '#{$osd_fg_color}', '$checkradio_bg_color'),
+  (':checked:active', '-gtk-icontheme(\'object-select-symbolic\')', '#{$osd_fg_color}', '$checkradio_bg_color'),
+  (':backdrop:checked', '-gtk-icontheme(\'object-select-symbolic\')', '#{transparentize($osd_fg_color, 0.2)}', '#{desaturate($checkradio_bg_color, 100%)}'), {
 
   .view.content-view.check#{$check_state}:not(list),
   .content-view .tile check#{$check_state}:not(list) {
@@ -3037,7 +3038,7 @@ radio {
   @if $variant == 'light' {
     // the borders of the light variant versions of checks and radios are too similar in luminosity to the selected background
     // color, hence we need special casing.
-    row:selected & { border-color: $selected_borders_color; }
+    row:selected & { border-color: $checkradio_borders_color; }
   }
 
   .osd & {
