@@ -346,9 +346,8 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
   else
     menu = NULL;
 
-  is_sovereign_window = (!gtk_window_get_modal (window) &&
-                          gtk_window_get_transient_for (window) == NULL &&
-                          gtk_window_get_type_hint (window) == GDK_SURFACE_TYPE_HINT_NORMAL);
+  is_sovereign_window = !gtk_window_get_modal (window) &&
+                         gtk_window_get_transient_for (window) == NULL;
 
   tokens = g_strsplit (layout_desc, ":", 2);
   if (tokens)
