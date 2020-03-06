@@ -135,6 +135,7 @@ plug_man_open (GApplication  *application,
 typedef GtkApplication PlugMan;
 typedef GtkApplicationClass PlugManClass;
 
+static GType plug_man_get_type (void);
 G_DEFINE_TYPE (PlugMan, plug_man, GTK_TYPE_APPLICATION)
 
 static void
@@ -376,10 +377,10 @@ configure_plugins (GSimpleAction *action,
   dialog = (GtkWidget *)gtk_builder_get_object (builder, "plugin-dialog");
   check = (GtkWidget *)gtk_builder_get_object (builder, "red-plugin");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), plugin_enabled ("red"));
-  g_signal_connect (check, "toggled", G_CALLBACK (enable_or_disable_plugin), "red");
+  g_signal_connect (check, "toggled", G_CALLBACK (enable_or_disable_plugin), (char *) "red");
   check = (GtkWidget *)gtk_builder_get_object (builder, "black-plugin");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), plugin_enabled ("black"));
-  g_signal_connect (check, "toggled", G_CALLBACK (enable_or_disable_plugin), "black");
+  g_signal_connect (check, "toggled", G_CALLBACK (enable_or_disable_plugin), (char *) "black");
 
   g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
 
@@ -481,7 +482,7 @@ plug_man_class_init (PlugManClass *class)
 
 }
 
-PlugMan *
+static PlugMan *
 plug_man_new (void)
 {
   return g_object_new (plug_man_get_type (),
