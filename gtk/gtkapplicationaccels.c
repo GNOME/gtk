@@ -96,8 +96,7 @@ add_entry (GtkApplicationAccels *accels,
   else
     n = 0;
 
-  new = g_new (const gchar *, n + 1 + 1);
-  memcpy (new, old, n * sizeof (const gchar *));
+  new = g_renew (const gchar *, old, n + 1 + 1);
   new[n] = action_and_target;
   new[n + 1] = NULL;
 
