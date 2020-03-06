@@ -2,6 +2,7 @@ testexecdir = join_paths(installed_test_bindir, 'css', 'nodes')
 testdatadir = join_paths(installed_test_datadir, 'css')
 
 test_nodes = executable('test-css-nodes', 'test-css-nodes.c',
+                        c_args: common_cflags,
                         install: get_option('install-tests'),
                         install_dir: testexecdir,
                         dependencies: libgtk_dep)
