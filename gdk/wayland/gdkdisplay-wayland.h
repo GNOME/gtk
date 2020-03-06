@@ -123,9 +123,6 @@ struct _GdkWaylandDisplay
 
   GList *event_queues;
 
-  /* Keep a list of orphaned dialogs (i.e. without parent) */
-  GList *orphan_dialogs;
-
   GList *current_popups;
   GList *current_grabbing_popups;
 
