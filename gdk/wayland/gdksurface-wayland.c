@@ -256,17 +256,6 @@ gdk_wayland_surface_thaw_state (GdkSurface *surface)
 }
 
 static void
-_gdk_wayland_screen_add_orphan_dialog (GdkSurface *surface)
-{
-  GdkWaylandDisplay *display_wayland =
-    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
-
-  if (!g_list_find (display_wayland->orphan_dialogs, surface))
-    display_wayland->orphan_dialogs =
-      g_list_prepend (display_wayland->orphan_dialogs, surface);
-}
-
-static void
 _gdk_wayland_surface_save_size (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
@@ -955,37 +944,6 @@ gdk_wayland_surface_sync_parent_of_imported (GdkSurface *surface)
 }
 
 static void
-gdk_wayland_surface_update_dialogs (GdkSurface *surface)
-{
-  GdkWaylandDisplay *display_wayland =
-    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
-  GList *l;
-
-  if (!display_wayland->orphan_dialogs)
-    return;
-
-  for (l = display_wayland->orphan_dialogs; l; l = l->next)
-    {
-      GdkSurface *w = l->data;
-      GdkWaylandSurface *impl;
-
-      if (!GDK_IS_WAYLAND_SURFACE (w))
-        continue;
-
-      impl = GDK_WAYLAND_SURFACE (w);
-      if (w == surface)
-	continue;
-      if (impl->hint != GDK_SURFACE_TYPE_HINT_DIALOG)
-        continue;
-      if (impl->transient_for)
-        continue;
-
-      /* Update the parent relationship only for dialogs without transients */
-      gdk_wayland_surface_sync_parent (w, surface);
-    }
-}
-
-static void
 gdk_wayland_surface_sync_title (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
@@ -1274,10 +1232,6 @@ gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
     default:
       g_assert_not_reached ();
     }
-
-  if (impl->hint != GDK_SURFACE_TYPE_HINT_DIALOG &&
-      new_state & GDK_SURFACE_STATE_FOCUSED)
-    gdk_wayland_surface_update_dialogs (surface);
 }
 
 static void
@@ -1634,9 +1588,6 @@ gdk_wayland_surface_create_xdg_toplevel (GdkSurface *surface)
 
   maybe_set_gtk_surface_dbus_properties (surface);
   maybe_set_gtk_surface_modal (surface);
-
-  if (impl->hint == GDK_SURFACE_TYPE_HINT_DIALOG)
-    _gdk_wayland_screen_add_orphan_dialog (surface);
 
   gdk_profiler_add_mark (g_get_monotonic_time (), 0, "wayland", "surface commit");
   wl_surface_commit (impl->display_server.wl_surface);
@@ -2547,10 +2498,6 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
       g_slist_free (impl->display_server.outputs);
       impl->display_server.outputs = NULL;
 
-      if (impl->hint == GDK_SURFACE_TYPE_HINT_DIALOG && !impl->transient_for)
-        display_wayland->orphan_dialogs =
-          g_list_remove (display_wayland->orphan_dialogs, surface);
-
       g_clear_pointer (&impl->popup.layout, gdk_popup_layout_unref);
     }
 
@@ -3292,9 +3239,6 @@ gdk_wayland_surface_set_transient_for (GdkSurface *surface,
                                        GdkSurface *parent)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  GdkWaylandDisplay *display_wayland =
-    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
-  GdkSurface *previous_parent;
 
   g_assert (parent == NULL ||
             gdk_surface_get_display (surface) == gdk_surface_get_display (parent));
@@ -3307,17 +3251,8 @@ gdk_wayland_surface_set_transient_for (GdkSurface *surface,
 
   unset_transient_for_exported (surface);
 
-  previous_parent = impl->transient_for;
   impl->transient_for = parent;
 
-  if (impl->hint == GDK_SURFACE_TYPE_HINT_DIALOG)
-    {
-      if (!parent)
-        _gdk_wayland_screen_add_orphan_dialog (surface);
-      else if (!previous_parent)
-        display_wayland->orphan_dialogs =
-          g_list_remove (display_wayland->orphan_dialogs, surface);
-    }
   gdk_wayland_surface_sync_parent (surface, NULL);
 }
 
