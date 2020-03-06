@@ -303,7 +303,6 @@ enum {
   PROP_HIDE_ON_CLOSE,
   PROP_ICON_NAME,
   PROP_DISPLAY,
-  PROP_TYPE_HINT,
   PROP_ACCEPT_FOCUS,
   PROP_FOCUS_ON_MAP,
   PROP_DECORATED,
@@ -928,14 +927,6 @@ gtk_window_class_init (GtkWindowClass *klass)
                             FALSE,
                             GTK_PARAM_READABLE);
 
-  window_props[PROP_TYPE_HINT] =
-      g_param_spec_enum ("type-hint",
-                         P_("Type hint"),
-                         P_("Hint to help the desktop environment understand what kind of window this is and how to treat it."),
-                         GDK_TYPE_SURFACE_TYPE_HINT,
-                         GDK_SURFACE_TYPE_HINT_NORMAL,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
   /**
    * GtkWindow:accept-focus:
    *
@@ -1308,9 +1299,8 @@ gtk_window_titlebar_action (GtkWindow      *window,
        * properties are not met, apply the same to title bar actions for
        * consistency.
        */
-      if (gtk_window_get_resizable (window) &&
-          gtk_window_get_type_hint (window) == GDK_SURFACE_TYPE_HINT_NORMAL)
-            _gtk_window_toggle_maximized (window);
+      if (gtk_window_get_resizable (window))
+        _gtk_window_toggle_maximized (window);
     }
   else if (g_str_equal (action, "lower"))
     gdk_surface_lower (priv->surface);
@@ -1805,7 +1795,6 @@ gtk_window_init (GtkWindow *window)
   priv->accept_focus = TRUE;
   priv->focus_on_map = TRUE;
   priv->deletable = TRUE;
-  priv->type_hint = GDK_SURFACE_TYPE_HINT_NORMAL;
   priv->startup_id = NULL;
   priv->initial_timestamp = GDK_CURRENT_TIME;
   priv->mnemonics_visible = FALSE;
@@ -1954,10 +1943,6 @@ gtk_window_set_property (GObject      *object,
     case PROP_DISPLAY:
       gtk_window_set_display (window, g_value_get_object (value));
       break;
-    case PROP_TYPE_HINT:
-      gtk_window_set_type_hint (window,
-                                g_value_get_enum (value));
-      break;
     case PROP_ACCEPT_FOCUS:
       gtk_window_set_accept_focus (window,
 				   g_value_get_boolean (value));
@@ -2048,9 +2033,6 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_IS_ACTIVE:
       g_value_set_boolean (value, priv->is_active);
-      break;
-    case PROP_TYPE_HINT:
-      g_value_set_enum (value, priv->type_hint);
       break;
     case PROP_ACCEPT_FOCUS:
       g_value_set_boolean (value,
@@ -3335,59 +3317,6 @@ gtk_window_set_application (GtkWindow      *window,
 
       g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_APPLICATION]);
     }
-}
-
-/**
- * gtk_window_set_type_hint:
- * @window: a #GtkWindow
- * @hint: the window type
- *
- * By setting the type hint for the window, you allow the window
- * manager to decorate and handle the window in a way which is
- * suitable to the function of the window in your application.
- *
- * This function should be called before the window becomes visible.
- *
- * gtk_dialog_new_with_buttons() and other convenience functions in GTK+
- * will sometimes call gtk_window_set_type_hint() on your behalf.
- **/
-void
-gtk_window_set_type_hint (GtkWindow          *window,
-			  GdkSurfaceTypeHint  hint)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  if (priv->type_hint == hint)
-    return;
-
-  priv->type_hint = hint;
-
-  if (priv->surface)
-    gdk_surface_set_type_hint (priv->surface, hint);
-
-  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_TYPE_HINT]);
-
-  update_window_buttons (window);
-}
-
-/**
- * gtk_window_get_type_hint:
- * @window: a #GtkWindow
- *
- * Gets the type hint for this window. See gtk_window_set_type_hint().
- *
- * Returns: the type hint for @window.
- **/
-GdkSurfaceTypeHint
-gtk_window_get_type_hint (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_val_if_fail (GTK_IS_WINDOW (window), GDK_SURFACE_TYPE_HINT_NORMAL);
-
-  return priv->type_hint;
 }
 
 /**
@@ -6794,8 +6723,7 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
    */
   if ((gtk_widget_is_visible (GTK_WIDGET (window)) &&
        !(maximized || minimized)) ||
-      (!minimized && !priv->resizable) ||
-      priv->type_hint != GDK_SURFACE_TYPE_HINT_NORMAL)
+      (!minimized && !priv->resizable))
     gtk_widget_set_sensitive (menuitem, FALSE);
   g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (restore_window_clicked), window);
@@ -6822,8 +6750,7 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
   menuitem = gtk_model_button_new ();
   g_object_set (menuitem, "text", _("Minimize"), NULL);
 
-  if (minimized ||
-      priv->type_hint != GDK_SURFACE_TYPE_HINT_NORMAL)
+  if (minimized)
     gtk_widget_set_sensitive (menuitem, FALSE);
   g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (minimize_window_clicked), window);
@@ -6832,9 +6759,7 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
   menuitem = gtk_model_button_new ();
   g_object_set (menuitem, "text", _("Maximize"), NULL);
 
-  if (maximized ||
-      !priv->resizable ||
-      priv->type_hint != GDK_SURFACE_TYPE_HINT_NORMAL)
+  if (maximized || !priv->resizable)
     gtk_widget_set_sensitive (menuitem, FALSE);
   g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (maximize_window_clicked), window);
