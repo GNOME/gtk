@@ -1405,10 +1405,12 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
       int w, h;
       GdkToplevelLayout *layout;
 
-      layout = gtk_window_compute_layout (window, &w, &h);
+      layout = gtk_window_compute_layout (window, NULL, NULL);
       gdk_toplevel_layout_set_raise (layout, TRUE);
       gdk_toplevel_layout_set_lower (layout, FALSE);
-      gdk_toplevel_present (GDK_TOPLEVEL (priv->surface), w, y, layout);
+      w = gdk_surface_get_width (priv->surface);
+      h = gdk_surface_get_height (priv->surface);
+      gdk_toplevel_present (GDK_TOPLEVEL (priv->surface), w, h, layout);
       gdk_toplevel_layout_unref (layout);
     }
 
