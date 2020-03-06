@@ -1814,7 +1814,7 @@ gdk_x11_surface_set_type_hint (GdkSurface        *surface,
       break;
     default:
       g_warning ("Unknown hint %d passed to gdk_surface_set_type_hint", hint);
-      /* Fall thru */
+      G_GNUC_FALLTHROUGH;
     case GDK_SURFACE_TYPE_HINT_NORMAL:
       atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_NORMAL");
       break;

@@ -1314,6 +1314,7 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
 
           calendar_select_and_focus_day (calendar, day);
         }
+      break;
     default:
       break;
     }

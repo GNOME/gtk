@@ -68,9 +68,6 @@ gtk_css_value_dimension_compute (GtkCssValue      *number,
 {
   switch (number->unit)
     {
-    default:
-      g_assert_not_reached();
-      G_GNUC_FALLTHROUGH;
     case GTK_CSS_PERCENT:
       /* percentages for font sizes are computed, other percentages aren't */
       if (property_id == GTK_CSS_PROPERTY_FONT_SIZE)
@@ -123,6 +120,8 @@ gtk_css_value_dimension_compute (GtkCssValue      *number,
     case GTK_CSS_MS:
       return gtk_css_dimension_value_new (number->value / 1000.0,
                                           GTK_CSS_S);
+    default:
+      g_assert_not_reached();
     }
 }
 

@@ -3796,8 +3796,7 @@ gtk_text_delete_from_cursor (GtkText       *self,
           start_pos = gtk_text_move_forward_word (self, start_pos, FALSE);
           start_pos = gtk_text_move_backward_word (self, start_pos, FALSE);
         }
-        
-      /* Fall through */
+      G_GNUC_FALLTHROUGH;
     case GTK_DELETE_WORD_ENDS:
       while (count < 0)
         {
