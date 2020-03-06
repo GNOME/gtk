@@ -33,9 +33,9 @@ test_init (void)
     g_setenv ("GTK_IM_MODULE_FILE", "../modules/input/immodules.cache", TRUE);
 }
 
-static void
+G_GNUC_PRINTF (1, 2) static void
 combochange_log (const char *fmt,
-     ...)
+                 ...)
 {
   GtkTextBuffer *buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
   GtkTextIter iter;
@@ -204,6 +204,8 @@ animation_timer (gpointer data)
     case 2:
       on_reorder ();
       break;
+    default:
+      g_assert_not_reached ();
     }
 
   n_animations--;

@@ -1,5 +1,5 @@
 /* XPM */
-static char *openfile[] = {
+static const char *openfile[] = {
 /* width height num_colors chars_per_pixel */
 "    20    19       66            2",
 /* colors */

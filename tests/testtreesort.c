@@ -68,26 +68,14 @@ enum
   NUM_COLUMNS
 };
 
-gboolean
-select_func (GtkTreeSelection  *selection,
-	     GtkTreeModel      *model,
-	     GtkTreePath       *path,
-	     gboolean           path_currently_selected,
-	     gpointer           data)
-{
-  if (gtk_tree_path_get_depth (path) > 1)
-    return TRUE;
-  return FALSE;
-}
-
 static void
 switch_search_method (GtkWidget *button,
 		      gpointer   tree_view)
 {
   if (!gtk_tree_view_get_search_entry (GTK_TREE_VIEW (tree_view)))
     {
-      gpointer data = g_object_get_data (tree_view, "my-search-entry");
-      gtk_tree_view_set_search_entry (GTK_TREE_VIEW (tree_view), GTK_EDITABLE (data));
+      gpointer search_entry = g_object_get_data (tree_view, "my-search-entry");
+      gtk_tree_view_set_search_entry (GTK_TREE_VIEW (tree_view), GTK_EDITABLE (search_entry));
     }
   else
     gtk_tree_view_set_search_entry (GTK_TREE_VIEW (tree_view), NULL);
@@ -95,9 +83,9 @@ switch_search_method (GtkWidget *button,
 
 static void
 quit_cb (GtkWidget *widget,
-         gpointer   data)
+         gpointer   user_data)
 {
-  gboolean *done = data;
+  gboolean *done = user_data;
 
   *done = TRUE;
 

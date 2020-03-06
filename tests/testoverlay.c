@@ -364,7 +364,7 @@ test_chase (void)
   GtkWidget *sw;
   GtkWidget *text;
   GtkWidget *child;
-  GtkTextBuffer *buffer;
+  GtkTextBuffer *text_buffer;
   gchar *contents;
   gsize len;
   GtkEventController *controller;
@@ -381,15 +381,15 @@ test_chase (void)
   gtk_container_add (GTK_CONTAINER (overlay), sw);
 
   text = gtk_text_view_new ();
-  buffer = gtk_text_buffer_new (NULL);
+  text_buffer = gtk_text_buffer_new (NULL);
   if (!g_file_get_contents ("testoverlay.c", &contents, &len, NULL))
     {
       contents = g_strdup ("Text should go here...");
       len = strlen (contents);
     }
-  gtk_text_buffer_set_text (buffer, contents, len);
+  gtk_text_buffer_set_text (text_buffer, contents, len);
   g_free (contents);
-  gtk_text_view_set_buffer (GTK_TEXT_VIEW (text), buffer);
+  gtk_text_view_set_buffer (GTK_TEXT_VIEW (text), text_buffer);
 
   gtk_widget_set_hexpand (text, TRUE);
   gtk_widget_set_vexpand (text, TRUE);

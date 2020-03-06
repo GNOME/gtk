@@ -76,6 +76,19 @@ struct _ViewColumnModelClass
   GtkListStoreClass parent_class;
 };
 
+static void view_column_model_tree_model_init (GtkTreeModelIface *iface);
+static void view_column_model_drag_source_init (GtkTreeDragSourceIface *iface);
+static void view_column_model_drag_dest_init (GtkTreeDragDestIface *iface);
+
+
+static GType view_column_model_get_type (void);
+G_DEFINE_TYPE_WITH_CODE (ViewColumnModel, view_column_model, GTK_TYPE_LIST_STORE,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL, view_column_model_tree_model_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE, view_column_model_drag_source_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_DEST, view_column_model_drag_dest_init))
+
+
+
 static void view_column_model_init (ViewColumnModel *model)
 {
   model->stamp = g_random_int ();
@@ -367,11 +380,6 @@ static void
 view_column_model_class_init (ViewColumnModelClass *klass)
 {
 }
-
-G_DEFINE_TYPE_WITH_CODE (ViewColumnModel, view_column_model, GTK_TYPE_LIST_STORE,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL, view_column_model_tree_model_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE, view_column_model_drag_source_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_DEST, view_column_model_drag_dest_init))
 
 static void
 update_columns (GtkTreeView *view, ViewColumnModel *view_model)
