@@ -24,15 +24,19 @@
 #include "gdkwayland.h"
 #include "gdkwaylandsurface.h"
 
-#include "gdksurfaceprivate.h"
-#include "gdkdisplay-wayland.h"
-#include "gdkglcontext-wayland.h"
-#include "gdkframeclockidleprivate.h"
-#include "gdkprivate-wayland.h"
 #include "gdkdeviceprivate.h"
-#include "gdkprivate-wayland.h"
+#include "gdkdisplay-wayland.h"
+#include "gdkdragsurfaceprivate.h"
+#include "gdkframeclockidleprivate.h"
+#include "gdkglcontext-wayland.h"
 #include "gdkmonitor-wayland.h"
+#include "gdkpopupprivate.h"
+#include "gdkprivate-wayland.h"
+#include "gdkprivate-wayland.h"
 #include "gdkseat-wayland.h"
+#include "gdksurfaceprivate.h"
+#include "gdktoplevelprivate.h"
+
 #include <wayland/xdg-shell-unstable-v6-client-protocol.h>
 
 #include <stdlib.h>
@@ -218,6 +222,14 @@ static void update_popup_layout_state (GdkSurface     *surface,
 static gboolean gdk_wayland_surface_is_exported (GdkSurface *surface);
 
 G_DEFINE_TYPE (GdkWaylandSurface, gdk_wayland_surface, GDK_TYPE_SURFACE)
+
+GType gdk_wayland_toplevel_get_type (void) G_GNUC_CONST;
+GType gdk_wayland_popup_get_type (void) G_GNUC_CONST;
+GType gdk_wayland_drag_surface_get_type (void) G_GNUC_CONST;
+
+#define GDK_TYPE_WAYLAND_TOPLEVEL (gdk_wayland_toplevel_get_type ())
+#define GDK_TYPE_WAYLAND_POPUP (gdk_wayland_popup_get_type ())
+#define GDK_TYPE_WAYLAND_DRAG_SURFACE (gdk_wayland_drag_surface_get_type ())
 
 static void
 gdk_wayland_surface_init (GdkWaylandSurface *impl)
@@ -613,12 +625,34 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
   else
     frame_clock = _gdk_frame_clock_idle_new ();
 
-  surface = g_object_new (GDK_TYPE_WAYLAND_SURFACE,
-                          "surface-type", surface_type,
-                          "display", display,
-                          "parent", parent,
-                          "frame-clock", frame_clock,
-                          NULL);
+  switch (surface_type)
+    {
+    case GDK_SURFACE_TOPLEVEL:
+      surface = g_object_new (GDK_TYPE_WAYLAND_TOPLEVEL,
+                              "surface-type", surface_type,
+                              "display", display,
+                              "frame-clock", frame_clock,
+                              NULL);
+      break;
+    case GDK_SURFACE_POPUP:
+      surface = g_object_new (GDK_TYPE_WAYLAND_POPUP,
+                              "surface-type", surface_type,
+                              "parent", parent,
+                              "display", display,
+                              "frame-clock", frame_clock,
+                              NULL);
+      break;
+    case GDK_SURFACE_TEMP:
+      surface = g_object_new (GDK_TYPE_WAYLAND_DRAG_SURFACE,
+                              "surface-type", surface_type,
+                              "display", display,
+                              "frame-clock", frame_clock,
+                              NULL);
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+    }
 
   impl = GDK_WAYLAND_SURFACE (surface);
 
@@ -4334,9 +4368,442 @@ create_dnd_surface (GdkDisplay *display)
 {
   GdkSurface *surface;
 
-  surface = gdk_surface_new_temp (display, &(GdkRectangle) { 0, 0, 100, 100 });
+  surface = gdk_surface_new_temp (display, &(GdkRectangle){ 0, 0, 100, 100 });
 
   GDK_WAYLAND_SURFACE (surface)->is_drag_surface = TRUE;
 
   return surface;
 }
+
+#define LAST_PROP 1
+
+typedef struct
+{
+  GdkWaylandSurface parent_instance;
+} GdkWaylandPopup;
+
+typedef struct
+{
+  GdkWaylandSurfaceClass parent_class;
+} GdkWaylandPopupClass;
+
+static void gdk_wayland_popup_iface_init (GdkPopupInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GdkWaylandPopup, gdk_wayland_popup, GDK_TYPE_WAYLAND_SURFACE,
+                         G_IMPLEMENT_INTERFACE (GDK_TYPE_POPUP,
+                                                gdk_wayland_popup_iface_init))
+
+static void
+gdk_wayland_popup_init (GdkWaylandPopup *popup)
+{
+}
+
+static void
+gdk_wayland_popup_get_property (GObject    *object,
+                                guint       prop_id,
+                                GValue     *value,
+                                GParamSpec *pspec)
+{
+  GdkSurface *surface = GDK_SURFACE (object);
+
+  switch (prop_id)
+    {
+    case LAST_PROP + GDK_POPUP_PROP_PARENT:
+      g_value_set_object (value, surface->parent);
+      break;
+
+    case LAST_PROP + GDK_POPUP_PROP_AUTOHIDE:
+      g_value_set_boolean (value, surface->autohide);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gdk_wayland_popup_set_property (GObject      *object,
+                                guint         prop_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
+{
+  GdkSurface *surface = GDK_SURFACE (object);
+
+  switch (prop_id)
+    {
+    case LAST_PROP + GDK_POPUP_PROP_PARENT:
+      surface->parent = g_value_dup_object (value);
+      if (surface->parent != NULL)
+        surface->parent->children = g_list_prepend (surface->parent->children, surface);
+      break;
+
+    case LAST_PROP + GDK_POPUP_PROP_AUTOHIDE:
+      surface->autohide = g_value_get_boolean (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gdk_wayland_popup_class_init (GdkWaylandPopupClass *class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  object_class->get_property = gdk_wayland_popup_get_property;
+  object_class->set_property = gdk_wayland_popup_set_property;
+
+  gdk_popup_install_properties (object_class, 1);
+}
+
+static gboolean
+gdk_wayland_popup_present (GdkPopup       *popup,
+                           int             width,
+                           int             height,
+                           GdkPopupLayout *layout)
+{
+  return gdk_wayland_surface_present_popup (GDK_SURFACE (popup), width, height, layout);
+}
+
+static GdkGravity
+gdk_wayland_popup_get_surface_anchor (GdkPopup *popup)
+{
+  return GDK_SURFACE (popup)->popup.surface_anchor;
+}
+
+static GdkGravity
+gdk_wayland_popup_get_rect_anchor (GdkPopup *popup)
+{
+  return GDK_SURFACE (popup)->popup.rect_anchor;
+}
+
+static int
+gdk_wayland_popup_get_position_x (GdkPopup *popup)
+{
+  return GDK_SURFACE (popup)->x;
+}
+
+static int
+gdk_wayland_popup_get_position_y (GdkPopup *popup)
+{
+  return GDK_SURFACE (popup)->y;
+}
+
+static void
+gdk_wayland_popup_iface_init (GdkPopupInterface *iface)
+{
+  iface->present = gdk_wayland_popup_present;
+  iface->get_surface_anchor = gdk_wayland_popup_get_surface_anchor;
+  iface->get_rect_anchor = gdk_wayland_popup_get_rect_anchor;
+  iface->get_position_x = gdk_wayland_popup_get_position_x;
+  iface->get_position_y = gdk_wayland_popup_get_position_y;
+}
+
+typedef struct
+{
+  GdkWaylandSurface parent_instance;
+} GdkWaylandToplevel;
+
+typedef struct
+{
+  GdkWaylandSurfaceClass parent_class;
+} GdkWaylandToplevelClass;
+
+static void gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GdkWaylandToplevel, gdk_wayland_toplevel, GDK_TYPE_WAYLAND_SURFACE,
+                         G_IMPLEMENT_INTERFACE (GDK_TYPE_TOPLEVEL,
+                                                gdk_wayland_toplevel_iface_init))
+
+static void
+gdk_wayland_toplevel_init (GdkWaylandToplevel *toplevel)
+{
+}
+
+static void
+gdk_wayland_toplevel_set_property (GObject      *object,
+                                   guint         prop_id,
+                                   const GValue *value,
+                                   GParamSpec   *pspec)
+{
+  GdkSurface *surface = GDK_SURFACE (object);
+
+  switch (prop_id)
+    {
+    case LAST_PROP + GDK_TOPLEVEL_PROP_TITLE:
+      gdk_wayland_surface_set_title (surface, g_value_get_string (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_STARTUP_ID:
+      gdk_wayland_surface_set_startup_id (surface, g_value_get_string (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_TRANSIENT_FOR:
+      gdk_wayland_surface_set_transient_for (surface, g_value_get_object (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_STICKY:
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_KEEP_ABOVE:
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_KEEP_BELOW:
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS:
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP:
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_DECORATED:
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_DELETABLE:
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gdk_wayland_toplevel_get_property (GObject    *object,
+                                   guint       prop_id,
+                                   GValue     *value,
+                                   GParamSpec *pspec)
+{
+  GdkSurface *surface = GDK_SURFACE (object);
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  switch (prop_id)
+    {
+    case LAST_PROP + GDK_TOPLEVEL_PROP_STATE:
+      g_value_set_flags (value, surface->state);
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_TITLE:
+      g_value_set_string (value, impl->title);
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_STARTUP_ID:
+      g_value_set_string (value, "");
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_TRANSIENT_FOR:
+      g_value_set_object (value, impl->transient_for);
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
+      g_value_set_pointer (value, NULL);
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_STICKY:
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_KEEP_ABOVE:
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_KEEP_BELOW:
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS:
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP:
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_DECORATED:
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_DELETABLE:
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gdk_wayland_toplevel_class_init (GdkWaylandToplevelClass *class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  object_class->get_property = gdk_wayland_toplevel_get_property;
+  object_class->set_property = gdk_wayland_toplevel_set_property;
+
+  gdk_toplevel_install_properties (object_class, 1);
+}
+
+static void
+show_surface (GdkSurface *surface)
+{
+  gboolean was_mapped;
+
+  if (surface->destroyed)
+    return;
+
+  was_mapped = GDK_SURFACE_IS_MAPPED (surface);
+
+  if (!was_mapped)
+    gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
+
+  _gdk_surface_update_viewable (surface);
+
+  gdk_wayland_surface_show (surface, FALSE);
+
+  if (!was_mapped)
+    {
+      if (gdk_surface_is_viewable (surface))
+        gdk_surface_invalidate_rect (surface, NULL);
+    }
+}
+
+static gboolean
+gdk_wayland_toplevel_present (GdkToplevel       *toplevel,
+                              int                width,
+                              int                height,
+                              GdkToplevelLayout *layout)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkGeometry geometry;
+  GdkSurfaceHints mask;
+
+  gdk_wayland_surface_unminimize (surface);
+
+  if (gdk_toplevel_layout_get_resizable (layout))
+    {
+      geometry.min_width = gdk_toplevel_layout_get_min_width (layout);
+      geometry.min_height = gdk_toplevel_layout_get_min_height (layout);
+      mask = GDK_HINT_MIN_SIZE;
+    }
+  else
+    {
+      geometry.max_width = geometry.min_width = width;
+      geometry.max_height = geometry.min_height = height;
+      mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE;
+    }
+  gdk_wayland_surface_set_geometry_hints (surface, &geometry, mask);
+  gdk_surface_constrain_size (&geometry, mask, width, height, &width, &height);
+  gdk_wayland_surface_resize (surface, width, height, impl->scale);
+
+  if (gdk_toplevel_layout_get_maximized (layout))
+    gdk_wayland_surface_maximize (surface);
+  else
+    gdk_wayland_surface_unmaximize (surface);
+
+  if (gdk_toplevel_layout_get_fullscreen (layout))
+    {
+      GdkMonitor *monitor = gdk_toplevel_layout_get_fullscreen_monitor (layout);
+      if (monitor)
+        gdk_wayland_surface_fullscreen_on_monitor (surface, monitor);
+      else
+        gdk_wayland_surface_fullscreen (surface);
+    }
+  else
+    gdk_wayland_surface_unfullscreen (surface);
+
+  gdk_wayland_surface_set_modal_hint (surface, gdk_toplevel_layout_get_modal (layout));
+
+  show_surface (surface);
+
+  return TRUE;
+}
+
+static gboolean
+gdk_wayland_toplevel_minimize (GdkToplevel *toplevel)
+{
+  gdk_wayland_surface_minimize (GDK_SURFACE (toplevel));
+
+  return TRUE;
+}
+
+static gboolean
+gdk_wayland_toplevel_lower (GdkToplevel *toplevel)
+{
+  return FALSE;
+}
+
+static void
+gdk_wayland_toplevel_focus (GdkToplevel *toplevel,
+                            guint32      timestamp)
+{
+  gdk_wayland_surface_focus (GDK_SURFACE (toplevel), timestamp);
+}
+
+static gboolean
+gdk_wayland_toplevel_show_window_menu (GdkToplevel *toplevel,
+                                       GdkEvent    *event)
+{
+  return gdk_wayland_surface_show_window_menu (GDK_SURFACE (toplevel), event);
+}
+
+static void
+gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface)
+{
+  iface->present = gdk_wayland_toplevel_present;
+  iface->minimize = gdk_wayland_toplevel_minimize;
+  iface->lower = gdk_wayland_toplevel_lower;
+  iface->focus = gdk_wayland_toplevel_focus;
+  iface->show_window_menu = gdk_wayland_toplevel_show_window_menu;
+}
+
+typedef struct
+{
+  GdkWaylandSurface parent_instance;
+} GdkWaylandDragSurface;
+
+typedef struct
+{
+  GdkWaylandSurfaceClass parent_class;
+} GdkWaylandDragSurfaceClass;
+
+static void gdk_wayland_drag_surface_iface_init (GdkDragSurfaceInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GdkWaylandDragSurface, gdk_wayland_drag_surface, GDK_TYPE_WAYLAND_SURFACE,
+                         G_IMPLEMENT_INTERFACE (GDK_TYPE_DRAG_SURFACE,
+                                                gdk_wayland_drag_surface_iface_init))
+
+static void
+gdk_wayland_drag_surface_init (GdkWaylandDragSurface *surface)
+{
+}
+
+static void
+gdk_wayland_drag_surface_class_init (GdkWaylandDragSurfaceClass *class)
+{
+}
+
+static gboolean
+gdk_wayland_drag_surface_present (GdkDragSurface *drag_surface,
+                                  int             width,
+                                  int             height)
+{
+  GdkSurface *surface = GDK_SURFACE (drag_surface);
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  gdk_wayland_surface_resize (surface, width, height, impl->scale);
+  show_surface (surface);
+
+  return TRUE;
+}
+
+static void
+gdk_wayland_drag_surface_iface_init (GdkDragSurfaceInterface *iface)
+{
+  iface->present = gdk_wayland_drag_surface_present;
+}
+
