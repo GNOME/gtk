@@ -603,6 +603,9 @@ gdk_event_history_supported (GdkEvent *event)
     case GDK_SCROLL:
       /* Only support precise scroll events */
       return (event->scroll.direction == GDK_SCROLL_SMOOTH);
+    case GDK_TOUCHPAD_SWIPE:
+    case GDK_TOUCHPAD_PINCH:
+      return TRUE;
     default:
       /* The event is unsupported */
       break;
