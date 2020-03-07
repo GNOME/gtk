@@ -9,7 +9,7 @@
 #include <gtk/gtk.h>
 
 /* Creates a tree model containing the completions */
-GtkTreeModel *
+static GtkTreeModel *
 create_completion_model (void)
 {
   GtkListStore *store;

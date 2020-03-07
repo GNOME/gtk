@@ -11,8 +11,8 @@
  * These are the available blend modes.
  */
 struct {
-  gchar *name;
-  gchar *id;
+  const char *name;
+  const char *id;
 } blend_modes[] =
 {
   { "Color", "color" },

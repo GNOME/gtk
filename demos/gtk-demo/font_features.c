@@ -25,14 +25,14 @@
 
 #define MAKE_TAG(a,b,c,d) (unsigned int)(((a) << 24) | ((b) << 16) | ((c) <<  8) | (d))
 
-static GtkWidget *label;
+static GtkWidget *the_label;
 static GtkWidget *settings;
 static GtkWidget *description;
 static GtkWidget *font;
 static GtkWidget *script_lang;
 static GtkWidget *resetbutton;
 static GtkWidget *stack;
-static GtkWidget *entry;
+static GtkWidget *the_entry;
 static GtkWidget *variations_heading;
 static GtkWidget *variations_grid;
 static GtkWidget *instance_combo;
@@ -301,9 +301,9 @@ update_display (void)
   char *font_desc;
   char *features;
 
-  text = gtk_editable_get_text (GTK_EDITABLE (entry));
+  text = gtk_editable_get_text (GTK_EDITABLE (the_entry));
 
-  if (gtk_label_get_selection_bounds (GTK_LABEL (label), &ins, &bound))
+  if (gtk_label_get_selection_bounds (GTK_LABEL (the_label), &ins, &bound))
     {
       start = g_utf8_offset_to_pointer (text, ins) - text;
       end = g_utf8_offset_to_pointer (text, bound) - text;
@@ -409,8 +409,8 @@ update_display (void)
 
   gtk_label_set_text (GTK_LABEL (description), font_desc);
   gtk_label_set_text (GTK_LABEL (settings), features);
-  gtk_label_set_text (GTK_LABEL (label), text);
-  gtk_label_set_attributes (GTK_LABEL (label), attrs);
+  gtk_label_set_text (GTK_LABEL (the_label), text);
+  gtk_label_set_attributes (GTK_LABEL (the_label), attrs);
 
   g_free (font_desc);
   pango_font_description_free (desc);
@@ -548,7 +548,7 @@ update_script_combo (void)
     {
       const char *langname;
       char langbuf[5];
-      GtkTreeIter iter;
+      GtkTreeIter tree_iter;
 
       if (pair->lang_tag == HB_OT_TAG_DEFAULT_LANGUAGE)
         langname = NC_("Language", "Default");
@@ -563,7 +563,7 @@ update_script_combo (void)
             }
         }
 
-      gtk_list_store_insert_with_values (store, &iter, -1,
+      gtk_list_store_insert_with_values (store, &tree_iter, -1,
                                          0, langname,
                                          1, pair->script_index,
                                          2, pair->lang_index,
@@ -572,7 +572,7 @@ update_script_combo (void)
       if (pair->lang_tag == active)
         {
           have_active = TRUE;
-          active_iter = iter;
+          active_iter = tree_iter;
         }
     }
 
@@ -751,7 +751,7 @@ add_font_variations (GString *s)
   GHashTableIter iter;
   Axis *axis;
   char buf[G_ASCII_DTOSTR_BUF_SIZE];
-  char *sep = "";
+  const char *sep = "";
 
   g_hash_table_iter_init (&iter, axes);
   while (g_hash_table_iter_next (&iter, (gpointer *)NULL, (gpointer *)&axis))
@@ -1129,7 +1129,7 @@ font_features_reset_features (void)
 {
   GList *l;
 
-  gtk_label_select_region (GTK_LABEL (label), 0, 0);
+  gtk_label_select_region (GTK_LABEL (the_label), 0, 0);
 
   g_list_free_full (ranges, free_range);
   ranges = NULL;
@@ -1156,9 +1156,9 @@ static char *text;
 static void
 switch_to_entry (void)
 {
-  text = g_strdup (gtk_editable_get_text (GTK_EDITABLE (entry)));
+  text = g_strdup (gtk_editable_get_text (GTK_EDITABLE (the_entry)));
   gtk_stack_set_visible_child_name (GTK_STACK (stack), "entry");
-  gtk_widget_grab_focus (entry);
+  gtk_widget_grab_focus (the_entry);
 }
 
 static void
@@ -1217,20 +1217,20 @@ do_font_features (GtkWidget *do_widget)
 
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       feature_list = GTK_WIDGET (gtk_builder_get_object (builder, "feature_list"));
-      label = GTK_WIDGET (gtk_builder_get_object (builder, "label"));
+      the_label = GTK_WIDGET (gtk_builder_get_object (builder, "label"));
       settings = GTK_WIDGET (gtk_builder_get_object (builder, "settings"));
       description = GTK_WIDGET (gtk_builder_get_object (builder, "description"));
       resetbutton = GTK_WIDGET (gtk_builder_get_object (builder, "reset"));
       font = GTK_WIDGET (gtk_builder_get_object (builder, "font"));
       script_lang = GTK_WIDGET (gtk_builder_get_object (builder, "script_lang"));
       stack = GTK_WIDGET (gtk_builder_get_object (builder, "stack"));
-      entry = GTK_WIDGET (gtk_builder_get_object (builder, "entry"));
+      the_entry = GTK_WIDGET (gtk_builder_get_object (builder, "entry"));
       edit_toggle = GTK_WIDGET (gtk_builder_get_object (builder, "edit_toggle"));
 
       controller = gtk_event_controller_key_new ();
-      g_object_set_data_full (G_OBJECT (entry), "controller", g_object_ref (controller), g_object_unref);
-      g_signal_connect (controller, "key-pressed", G_CALLBACK (entry_key_press), entry);
-      gtk_widget_add_controller (entry, controller);
+      g_object_set_data_full (G_OBJECT (the_entry), "controller", g_object_ref (controller), g_object_unref);
+      g_signal_connect (controller, "key-pressed", G_CALLBACK (entry_key_press), the_entry);
+      gtk_widget_add_controller (the_entry, controller);
 
       add_check_group (feature_list, _("Kerning"), (const char *[]){ "kern", NULL });
       add_check_group (feature_list, _("Ligatures"), (const char *[]){ "liga",

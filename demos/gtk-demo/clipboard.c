@@ -15,7 +15,7 @@
 
 static GtkWidget *window = NULL;
 
-void
+static void
 copy_button_clicked (GtkWidget *button,
                      gpointer   user_data)
 {
@@ -31,7 +31,7 @@ copy_button_clicked (GtkWidget *button,
   gdk_clipboard_set_text (clipboard, gtk_editable_get_text (GTK_EDITABLE (entry)));
 }
 
-void
+static void
 paste_received (GObject      *source_object,
                 GAsyncResult *result,
                 gpointer      user_data)
@@ -75,7 +75,7 @@ paste_received (GObject      *source_object,
     }
 }
 
-void
+static void
 paste_button_clicked (GtkWidget *button,
                       gpointer   user_data)
 {
@@ -116,6 +116,9 @@ get_image_paintable (GtkImage *image)
       if (icon == NULL)
         return NULL;
       return GDK_PAINTABLE (icon);
+
+    case GTK_IMAGE_EMPTY:
+    case GTK_IMAGE_GICON:
     default:
       g_warning ("Image storage type %d not handled",
                  gtk_image_get_storage_type (image));
