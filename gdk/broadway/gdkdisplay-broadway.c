@@ -340,12 +340,6 @@ gdk_broadway_display_get_setting (GdkDisplay *display,
   return FALSE;
 }
 
-static guint32
-gdk_broadway_display_get_last_seen_time (GdkDisplay *display)
-{
-  return _gdk_broadway_server_get_last_seen_time (GDK_BROADWAY_DISPLAY (display)->server);
-}
-
 typedef struct {
   int id;
   GdkDisplay *display;
@@ -437,5 +431,4 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   display_class->get_n_monitors = gdk_broadway_display_get_n_monitors;
   display_class->get_monitor = gdk_broadway_display_get_monitor;
   display_class->get_setting = gdk_broadway_display_get_setting;
-  display_class->get_last_seen_time = gdk_broadway_display_get_last_seen_time;
 }

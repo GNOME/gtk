@@ -1282,15 +1282,6 @@ gdk_broadway_surface_beep (GdkSurface *surface)
   return FALSE;
 }
 
-guint32
-gdk_broadway_get_last_seen_time (GdkSurface  *surface)
-{
-  GdkDisplay *display;
-
-  display = gdk_surface_get_display (surface);
-  return _gdk_broadway_server_get_last_seen_time (GDK_BROADWAY_DISPLAY (display)->server);
-}
-
 static void
 gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
 {

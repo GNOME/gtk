@@ -2975,12 +2975,6 @@ gdk_x11_display_get_toplevel_windows (GdkDisplay *display)
   return GDK_X11_DISPLAY (display)->toplevels;
 }
 
-static guint32
-gdk_x11_display_get_last_seen_time (GdkDisplay *display)
-{
-  return gdk_x11_get_server_time (GDK_X11_DISPLAY (display)->leader_gdk_surface);
-}
-
 static gboolean
 gdk_boolean_handled_accumulator (GSignalInvocationHint *ihint,
                                  GValue                *return_accu,
@@ -3037,7 +3031,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->get_n_monitors = gdk_x11_display_get_n_monitors;
   display_class->get_monitor = gdk_x11_display_get_monitor;
   display_class->get_setting = gdk_x11_display_get_setting;
-  display_class->get_last_seen_time = gdk_x11_display_get_last_seen_time;
   display_class->set_cursor_theme = gdk_x11_display_set_cursor_theme;
 
   class->xevent = gdk_event_source_xevent;
