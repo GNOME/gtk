@@ -1,6 +1,6 @@
 #include <gtk/gtk.h>
 
-static char *icon_names[] = {
+static const char *icon_names[] = {
   /*** Icons used in code or templates, sorted alphabetically ***/
   "audio-volume-high",
   "audio-volume-high-symbolic",

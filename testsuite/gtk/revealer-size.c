@@ -59,73 +59,73 @@ keep_size (int      direction,
 
 
 static void
-slide_right_animations ()
+slide_right_animations (void)
 {
   keep_size (KEEP_HEIGHT, GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT, TRUE);
 }
 
 static void
-slide_right_no_animations ()
+slide_right_no_animations (void)
 {
   keep_size (KEEP_HEIGHT, GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT, FALSE);
 }
 
 static void
-slide_left_animations ()
+slide_left_animations (void)
 {
   keep_size (KEEP_HEIGHT, GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT, TRUE);
 }
 
 static void
-slide_left_no_animations ()
+slide_left_no_animations (void)
 {
   keep_size (KEEP_HEIGHT, GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT, FALSE);
 }
 
 static void
-none_animations ()
+none_animations (void)
 {
   keep_size (KEEP_WIDTH | KEEP_HEIGHT, GTK_REVEALER_TRANSITION_TYPE_NONE, TRUE);
 }
 
 static void
-none_no_animations ()
+none_no_animations (void)
 {
   keep_size (KEEP_WIDTH | KEEP_HEIGHT, GTK_REVEALER_TRANSITION_TYPE_NONE, FALSE);
 }
 
 static void
-crossfade_animations()
+crossfade_animations (void)
 {
   keep_size (KEEP_WIDTH | KEEP_HEIGHT, GTK_REVEALER_TRANSITION_TYPE_CROSSFADE, TRUE);
 }
 
 static void
-crossfade_no_animations ()
+crossfade_no_animations (void)
 {
   keep_size (KEEP_WIDTH | KEEP_HEIGHT, GTK_REVEALER_TRANSITION_TYPE_CROSSFADE, FALSE);
 }
 
 static void
-slide_down_animations ()
+slide_down_animations (void)
 {
   keep_size (KEEP_WIDTH, GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN, TRUE);
 }
 
 static void
-slide_down_no_animations ()
+slide_down_no_animations (void)
 {
   keep_size (KEEP_WIDTH, GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN, FALSE);
 }
 
 static void
-slide_up_animations ()
+slide_up_animations (void)
 {
   keep_size (KEEP_WIDTH, GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP, TRUE);
 }
 
 static void
-slide_up_no_animations ()
+slide_up_no_animations (void)
 {
   keep_size (KEEP_WIDTH, GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP, FALSE);
 }

@@ -115,6 +115,8 @@ gtk_tree_rbtree_test_dirty (GtkTreeRBTree *tree,
                             GtkTreeRBNode *node,
                             gint           expected_dirtyness)
 {
+  g_assert (node);
+
   if (expected_dirtyness)
     {
       g_assert (GTK_TREE_RBNODE_FLAG_SET (node, GTK_TREE_RBNODE_COLUMN_INVALID) ||
