@@ -792,6 +792,11 @@ disconnect_frame_clock (GdkSurface *surface)
     }
 }
 
+static void gdk_x11_surface_set_title (GdkSurface *surface,
+                                       const char *title);
+static void gdk_x11_surface_set_type_hint (GdkSurface        *surface,
+                                           GdkSurfaceTypeHint hint);
+
 GdkSurface *
 _gdk_x11_display_create_surface (GdkDisplay     *display,
                                  GdkSurfaceType  surface_type,
@@ -909,7 +914,11 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
   g_object_ref (surface);
   _gdk_x11_display_add_window (x11_screen->display, &impl->xid, surface);
 
-  gdk_surface_set_title (surface, get_default_title ());
+  gdk_x11_surface_set_title (surface, get_default_title ());
+  if (surface->surface_type == GDK_SURFACE_TOPLEVEL)
+    gdk_x11_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_NORMAL);
+  else if (surface->surface_type == GDK_SURFACE_POPUP)
+    gdk_x11_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_MENU);
 
   class_hint = XAllocClassHint ();
   class_hint->res_name = (char *) g_get_prgname ();
@@ -2348,13 +2357,19 @@ gdk_x11_surface_set_transient_for (GdkSurface *surface,
 
   /* XSetTransientForHint() doesn't allow unsetting, so do it manually */
   if (parent && !GDK_SURFACE_DESTROYED (parent))
-    XSetTransientForHint (GDK_SURFACE_XDISPLAY (surface), 
-			  GDK_SURFACE_XID (surface),
-			  GDK_SURFACE_XID (parent));
+    {
+      XSetTransientForHint (GDK_SURFACE_XDISPLAY (surface), 
+                            GDK_SURFACE_XID (surface),
+                            GDK_SURFACE_XID (parent));
+      gdk_x11_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_DIALOG);
+    }
   else
-    XDeleteProperty (GDK_SURFACE_XDISPLAY (surface),
-                     GDK_SURFACE_XID (surface),
-                     gdk_x11_get_xatom_by_name_for_display (GDK_SURFACE_DISPLAY (surface), "WM_TRANSIENT_FOR"));
+    {
+      XDeleteProperty (GDK_SURFACE_XDISPLAY (surface),
+                       GDK_SURFACE_XID (surface),
+                       gdk_x11_get_xatom_by_name_for_display (GDK_SURFACE_DISPLAY (surface), "WM_TRANSIENT_FOR"));
+      gdk_x11_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_NORMAL);
+    }
 }
 
 GdkCursor *
