@@ -30,6 +30,9 @@
 #include "gdkbroadwaydisplay.h"
 #include "gdkdisplay.h"
 #include "gdksurfaceprivate.h"
+#include "gdkpopupprivate.h"
+#include "gdktoplevelprivate.h"
+#include "gdkdragsurfaceprivate.h"
 #include "gdkdisplay-broadway.h"
 #include "gdkprivate-broadway.h"
 #include "gdkinternals.h"
@@ -46,6 +49,14 @@
 static void        gdk_broadway_surface_finalize   (GObject            *object);
 
 G_DEFINE_TYPE (GdkBroadwaySurface, gdk_broadway_surface, GDK_TYPE_SURFACE)
+
+GType gdk_broadway_toplevel_get_type (void) G_GNUC_CONST;
+GType gdk_broadway_popup_get_type (void) G_GNUC_CONST;
+GType gdk_broadway_drag_surface_get_type (void) G_GNUC_CONST;
+
+#define GDK_TYPE_BROADWAY_TOPLEVEL (gdk_broadway_toplevel_get_type ())
+#define GDK_TYPE_BROADWAY_POPUP (gdk_broadway_popup_get_type ())
+#define GDK_TYPE_BROADWAY_DRAG_SURFACE (gdk_broadway_drag_surface_get_type ())
 
 /* We need to flush in an idle rather than AFTER_PAINT, as the clock
    is frozen during e.g. surface resizes so the paint will not happen
@@ -206,10 +217,27 @@ _gdk_broadway_display_create_surface (GdkDisplay     *display,
   GdkFrameClock *frame_clock;
   GdkSurface *surface;
   GdkBroadwaySurface *impl;
+  GType type;
 
   frame_clock = _gdk_frame_clock_idle_new ();
 
-  surface = g_object_new (GDK_TYPE_BROADWAY_SURFACE,
+  switch (surface_type)
+    {
+    case GDK_SURFACE_TOPLEVEL:
+      type = GDK_TYPE_BROADWAY_TOPLEVEL;
+      break;
+    case GDK_SURFACE_POPUP:
+      type = GDK_TYPE_BROADWAY_POPUP;
+      break;
+    case GDK_SURFACE_TEMP:
+      type = GDK_TYPE_BROADWAY_DRAG_SURFACE;
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+
+  surface = g_object_new (type,
                           "surface-type", surface_type,
                           "display", display,
                           "frame-clock", frame_clock,
@@ -1444,4 +1472,411 @@ gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
   impl_class->set_opacity = gdk_broadway_surface_set_opacity;
   impl_class->destroy_notify = gdk_broadway_surface_destroy_notify;
   impl_class->drag_begin = _gdk_broadway_surface_drag_begin;
+}
+
+typedef struct {
+  GdkBroadwaySurface parent_instance;
+} GdkBroadwayPopup;
+
+typedef struct {
+  GdkBroadwaySurfaceClass parent_class;
+} GdkBroadwayPopupClass;
+
+static void gdk_broadway_popup_iface_init (GdkPopupInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GdkBroadwayPopup, gdk_broadway_popup, GDK_TYPE_BROADWAY_SURFACE,
+                         G_IMPLEMENT_INTERFACE (GDK_TYPE_POPUP,
+                                                gdk_broadway_popup_iface_init))
+
+static void
+gdk_broadway_popup_init (GdkBroadwayPopup *popup)
+{
+}
+
+static void
+gdk_broadway_popup_get_property (GObject    *object,
+                                 guint       prop_id,
+                                 GValue     *value,
+                                 GParamSpec *pspec)
+{
+  GdkSurface *surface = GDK_SURFACE (object);
+
+  switch (prop_id)
+    {
+    case 1 + GDK_POPUP_PROP_PARENT:
+      g_value_set_object (value, surface->parent);
+      break;
+
+    case 1 + GDK_POPUP_PROP_AUTOHIDE:
+      g_value_set_boolean (value, surface->autohide);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gdk_broadway_popup_set_property (GObject      *object,
+                                 guint         prop_id,
+                                 const GValue *value,
+                                 GParamSpec   *pspec)
+{
+  GdkSurface *surface = GDK_SURFACE (object);
+
+  switch (prop_id)
+    {
+    case 1 + GDK_POPUP_PROP_PARENT:
+      surface->parent = g_value_dup_object (value);
+      if (surface->parent != NULL)
+        surface->parent->children = g_list_prepend (surface->parent->children, surface);
+      break;
+
+    case 1 + GDK_POPUP_PROP_AUTOHIDE:
+      surface->autohide = g_value_get_boolean (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gdk_broadway_popup_class_init (GdkBroadwayPopupClass *class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  object_class->get_property = gdk_broadway_popup_get_property;
+  object_class->set_property = gdk_broadway_popup_set_property;
+
+  gdk_popup_install_properties (object_class, 1);
+}
+
+static gboolean
+gdk_broadway_popup_present (GdkPopup       *popup,
+                            int             width,
+                            int             height,
+                            GdkPopupLayout *layout)
+{
+  return gdk_broadway_surface_present_popup (GDK_SURFACE (popup), width, height, layout);
+}
+
+static GdkGravity
+gdk_broadway_popup_get_surface_anchor (GdkPopup *popup)
+{
+  return GDK_SURFACE (popup)->popup.surface_anchor;
+}
+
+static GdkGravity
+gdk_broadway_popup_get_rect_anchor (GdkPopup *popup)
+{
+  return GDK_SURFACE (popup)->popup.rect_anchor;
+}
+
+static int
+gdk_broadway_popup_get_position_x (GdkPopup *popup)
+{
+  return GDK_SURFACE (popup)->x;
+}
+
+static int
+gdk_broadway_popup_get_position_y (GdkPopup *popup)
+{
+  return GDK_SURFACE (popup)->y;
+}
+
+static void
+gdk_broadway_popup_iface_init (GdkPopupInterface *iface)
+{
+  iface->present = gdk_broadway_popup_present;
+  iface->get_surface_anchor = gdk_broadway_popup_get_surface_anchor;
+  iface->get_rect_anchor = gdk_broadway_popup_get_rect_anchor;
+  iface->get_position_x = gdk_broadway_popup_get_position_x;
+  iface->get_position_y = gdk_broadway_popup_get_position_y;
+}
+
+typedef struct {
+  GdkBroadwaySurface parent_instance;
+} GdkBroadwayToplevel;
+
+typedef struct {
+  GdkBroadwaySurfaceClass parent_class;
+} GdkBroadwayToplevelClass;
+
+static void gdk_broadway_toplevel_iface_init (GdkToplevelInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GdkBroadwayToplevel, gdk_broadway_toplevel, GDK_TYPE_BROADWAY_SURFACE,
+                         G_IMPLEMENT_INTERFACE (GDK_TYPE_TOPLEVEL,
+                                                gdk_broadway_toplevel_iface_init))
+
+static void
+gdk_broadway_toplevel_init (GdkBroadwayToplevel *toplevel)
+{
+}
+
+
+static void
+gdk_broadway_toplevel_set_property (GObject      *object,
+                                    guint         prop_id,
+                                    const GValue *value,
+                                    GParamSpec   *pspec)
+{
+  GdkSurface *surface = GDK_SURFACE (object);
+
+  switch (prop_id)
+    {
+    case 1 + GDK_TOPLEVEL_PROP_TITLE:
+      gdk_broadway_surface_set_title (surface, g_value_get_string (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
+    case 1 + GDK_TOPLEVEL_PROP_STARTUP_ID:
+      gdk_broadway_surface_set_startup_id (surface, g_value_get_string (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
+    case 1 + GDK_TOPLEVEL_PROP_TRANSIENT_FOR:
+      gdk_broadway_surface_set_transient_for (surface, g_value_get_object (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
+    case 1 + GDK_TOPLEVEL_PROP_ICON_LIST:
+      break;
+
+    case 1 + GDK_TOPLEVEL_PROP_STICKY:
+      break;
+
+    case 1 + GDK_TOPLEVEL_PROP_KEEP_ABOVE:
+      break;
+
+    case 1 + GDK_TOPLEVEL_PROP_KEEP_BELOW:
+      break;
+
+    case 1 + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS:
+      break;
+
+    case 1 + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP:
+      break;
+
+    case 1 + GDK_TOPLEVEL_PROP_DECORATED:
+      break;
+
+    case 1 + GDK_TOPLEVEL_PROP_DELETABLE:
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gdk_broadway_toplevel_get_property (GObject    *object,
+                                    guint       prop_id,
+                                    GValue     *value,
+                                    GParamSpec *pspec)
+{
+  GdkSurface *surface = GDK_SURFACE (object);
+
+  switch (prop_id)
+    {
+    case 1 + GDK_TOPLEVEL_PROP_STATE:
+      g_value_set_flags (value, surface->state);
+      break;
+
+    case 1 + GDK_TOPLEVEL_PROP_TITLE:
+      g_value_set_string (value, "");
+      break;
+
+    case 1 + GDK_TOPLEVEL_PROP_STARTUP_ID:
+      g_value_set_string (value, "");
+      break;
+
+    case 1 + GDK_TOPLEVEL_PROP_TRANSIENT_FOR:
+      g_value_set_object (value, surface->transient_for);
+      break;
+
+    case 1 + GDK_TOPLEVEL_PROP_ICON_LIST:
+      g_value_set_pointer (value, NULL);
+      break;
+
+    case 1 + GDK_TOPLEVEL_PROP_STICKY:
+      break;
+
+    case 1 + GDK_TOPLEVEL_PROP_KEEP_ABOVE:
+      break;
+
+    case 1 + GDK_TOPLEVEL_PROP_KEEP_BELOW:
+      break;
+
+    case 1 + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS:
+      break;
+
+    case 1 + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP:
+      break;
+
+    case 1 + GDK_TOPLEVEL_PROP_DECORATED:
+      break;
+
+    case 1 + GDK_TOPLEVEL_PROP_DELETABLE:
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gdk_broadway_toplevel_class_init (GdkBroadwayToplevelClass *class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  object_class->get_property = gdk_broadway_toplevel_get_property;
+  object_class->set_property = gdk_broadway_toplevel_set_property;
+
+  gdk_toplevel_install_properties (object_class, 1);
+}
+
+static gboolean
+gdk_broadway_toplevel_present (GdkToplevel       *toplevel,
+                               int                width,
+                               int                height,
+                               GdkToplevelLayout *layout)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+  GdkGeometry geometry;
+  GdkSurfaceHints mask;
+
+  gdk_broadway_surface_unminimize (surface);
+
+  if (gdk_toplevel_layout_get_resizable (layout))
+    {
+      geometry.min_width = gdk_toplevel_layout_get_min_width (layout);
+      geometry.min_height = gdk_toplevel_layout_get_min_height (layout);
+      mask = GDK_HINT_MIN_SIZE;
+    }
+  else
+    {
+      geometry.max_width = geometry.min_width = width;
+      geometry.max_height = geometry.min_height = height;
+      mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE;
+    }
+  gdk_broadway_surface_set_geometry_hints (surface, &geometry, mask);
+  gdk_surface_constrain_size (&geometry, mask, width, height, &width, &height);
+  gdk_broadway_surface_toplevel_resize (surface, width, height);
+
+  if (gdk_toplevel_layout_get_maximized (layout))
+    gdk_broadway_surface_maximize (surface);
+  else
+    gdk_broadway_surface_unmaximize (surface);
+
+  gdk_broadway_surface_set_modal_hint (surface, gdk_toplevel_layout_get_modal (layout));
+
+  {
+  gboolean was_mapped;
+
+  if (surface->destroyed)
+    return TRUE;
+
+  was_mapped = GDK_SURFACE_IS_MAPPED (surface);
+
+  if (!was_mapped)
+    gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
+
+  _gdk_surface_update_viewable (surface);
+
+  gdk_broadway_surface_show (surface, FALSE);
+
+  if (!was_mapped)
+    {
+      if (gdk_surface_is_viewable (surface))
+        gdk_surface_invalidate_rect (surface, NULL);
+    }
+  }
+
+  return TRUE;
+}
+
+static gboolean
+gdk_broadway_toplevel_minimize (GdkToplevel *toplevel)
+{
+  gdk_broadway_surface_minimize (GDK_SURFACE (toplevel));
+
+  return TRUE;
+}
+
+static gboolean
+gdk_broadway_toplevel_lower (GdkToplevel *toplevel)
+{
+  return FALSE;
+}
+
+static void
+gdk_broadway_toplevel_focus (GdkToplevel *toplevel,
+                            guint32      timestamp)
+{
+  gdk_broadway_surface_focus (GDK_SURFACE (toplevel), timestamp);
+}
+
+static gboolean
+gdk_broadway_toplevel_show_window_menu (GdkToplevel *toplevel,
+                                       GdkEvent    *event)
+{
+  return FALSE;
+}
+
+static void
+gdk_broadway_toplevel_iface_init (GdkToplevelInterface *iface)
+{
+  iface->present = gdk_broadway_toplevel_present;
+  iface->minimize = gdk_broadway_toplevel_minimize;
+  iface->lower = gdk_broadway_toplevel_lower;
+  iface->focus = gdk_broadway_toplevel_focus;
+  iface->show_window_menu = gdk_broadway_toplevel_show_window_menu;
+}
+
+typedef struct {
+  GdkBroadwaySurface parent_instance;
+} GdkBroadwayDragSurface;
+
+typedef struct {
+  GdkBroadwaySurfaceClass parent_class;
+} GdkBroadwayDragSurfaceClass;
+
+static void gdk_broadway_drag_surface_iface_init (GdkDragSurfaceInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GdkBroadwayDragSurface, gdk_broadway_drag_surface, GDK_TYPE_BROADWAY_SURFACE,
+                         G_IMPLEMENT_INTERFACE (GDK_TYPE_DRAG_SURFACE,
+                                                gdk_broadway_drag_surface_iface_init))
+
+static void
+gdk_broadway_drag_surface_init (GdkBroadwayDragSurface *surface)
+{
+}
+
+static void
+gdk_broadway_drag_surface_class_init (GdkBroadwayDragSurfaceClass *class)
+{
+}
+
+static gboolean
+gdk_broadway_drag_surface_present (GdkDragSurface *drag_surface,
+                                  int             width,
+                                  int             height)
+{
+  GdkSurface *surface = GDK_SURFACE (drag_surface);
+
+  gdk_broadway_surface_toplevel_resize (surface, width, height);
+  gdk_broadway_surface_show (surface, FALSE);
+
+  return TRUE;
+}
+
+static void
+gdk_broadway_drag_surface_iface_init (GdkDragSurfaceInterface *iface)
+{
+  iface->present = gdk_broadway_drag_surface_present;
 }
