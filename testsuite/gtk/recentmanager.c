@@ -51,8 +51,8 @@ recent_manager_add (void)
 
   /* mime type is mandatory */
   recent_data->mime_type = NULL;
-  recent_data->app_name = "testrecentchooser";
-  recent_data->app_exec = "testrecentchooser %u";
+  recent_data->app_name = (char *)"testrecentchooser";
+  recent_data->app_exec = (char *)"testrecentchooser %u";
   if (g_test_trap_fork (0, G_TEST_TRAP_SILENCE_STDERR))
     {
       res = gtk_recent_manager_add_full (manager,
@@ -62,9 +62,9 @@ recent_manager_add (void)
   g_test_trap_assert_failed ();
 
   /* app name is mandatory */
-  recent_data->mime_type = "text/plain";
+  recent_data->mime_type = (char *)"text/plain";
   recent_data->app_name = NULL;
-  recent_data->app_exec = "testrecentchooser %u";
+  recent_data->app_exec = (char *)"testrecentchooser %u";
   if (g_test_trap_fork (0, G_TEST_TRAP_SILENCE_STDERR))
     {
       res = gtk_recent_manager_add_full (manager,
@@ -74,8 +74,8 @@ recent_manager_add (void)
   g_test_trap_assert_failed ();
 
   /* app exec is mandatory */
-  recent_data->mime_type = "text/plain";
-  recent_data->app_name = "testrecentchooser";
+  recent_data->mime_type = (char *)"text/plain";
+  recent_data->app_name = (char *)"testrecentchooser";
   recent_data->app_exec = NULL;
   if (g_test_trap_fork (0, G_TEST_TRAP_SILENCE_STDERR))
     {
@@ -87,9 +87,9 @@ recent_manager_add (void)
 
   G_GNUC_END_IGNORE_DEPRECATIONS;
 
-  recent_data->mime_type = "text/plain";
-  recent_data->app_name = "testrecentchooser";
-  recent_data->app_exec = "testrecentchooser %u";
+  recent_data->mime_type = (char *)"text/plain";
+  recent_data->app_name = (char *)"testrecentchooser";
+  recent_data->app_exec = (char *)"testrecentchooser %u";
   res = gtk_recent_manager_add_full (manager,
                                      uri,
                                      recent_data);
@@ -130,9 +130,9 @@ add_bulk (gpointer data_)
     {
       char *new_uri;
 
-      data->mime_type = "text/plain";
-      data->app_name = "testrecentchooser";
-      data->app_exec = "testrecentchooser %u";
+      data->mime_type = (char *)"text/plain";
+      data->app_name = (char *)"testrecentchooser";
+      data->app_exec = (char *)"testrecentchooser %u";
 
       if (g_test_verbose ())
         g_print (G_STRLOC ": adding item %d\n", i);
@@ -295,9 +295,9 @@ recent_manager_purge (void)
   g_assert (error == NULL);
 
   recent_data = g_slice_new0 (GtkRecentData);
-  recent_data->mime_type = "text/plain";
-  recent_data->app_name = "testrecentchooser";
-  recent_data->app_exec = "testrecentchooser %u";
+  recent_data->mime_type = (char *)"text/plain";
+  recent_data->app_name = (char *)"testrecentchooser";
+  recent_data->app_exec = (char *)"testrecentchooser %u";
   gtk_recent_manager_add_full (manager, uri, recent_data);
   g_slice_free (GtkRecentData, recent_data);
 

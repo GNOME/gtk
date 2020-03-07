@@ -22,7 +22,7 @@
 #include <gtk/gtk.h>
 
 static void
-test_empty_search ()
+test_empty_search (void)
 {
   GtkTextBuffer *buffer;
   GtkTextIter it, s, e;

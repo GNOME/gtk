@@ -83,6 +83,12 @@ if os_unix
   test_cargs += ['-DHAVE_UNIX_PRINT_WIDGETS']
 endif
 
+foreach flag: common_cflags
+  if flag not in ['-Werror=missing-prototypes', '-Werror=missing-declarations', '-fvisibility=hidden']
+    test_cargs += flag
+  endif
+endforeach
+
 foreach t : tests
   test_name = t.get(0)
   test_srcs = ['@0@.c'.format(test_name)] + t.get(1, [])
