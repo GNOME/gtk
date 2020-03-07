@@ -982,7 +982,8 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
 
   surface_remove_from_pointer_info (surface, surface->display);
 
-  g_object_notify (G_OBJECT (surface), "state");
+  if (GDK_IS_TOPLEVEL (surface))
+    g_object_notify (G_OBJECT (surface), "state");
   g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
 }
 
@@ -3182,7 +3183,8 @@ gdk_surface_set_state (GdkSurface      *surface,
 
   _gdk_surface_update_viewable (surface);
 
-  g_object_notify (G_OBJECT (surface), "state");
+  if (GDK_IS_TOPLEVEL (surface))
+    g_object_notify (G_OBJECT (surface), "state");
 
   if (was_mapped != mapped)
     g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
