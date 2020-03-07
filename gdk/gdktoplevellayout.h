@@ -92,13 +92,6 @@ void                    gdk_toplevel_layout_set_modal (GdkToplevelLayout *layout
 GDK_AVAILABLE_IN_ALL
 gboolean                gdk_toplevel_layout_get_modal (GdkToplevelLayout *layout);
 
-GDK_AVAILABLE_IN_ALL
-void                    gdk_toplevel_layout_set_type_hint (GdkToplevelLayout *layout,
-                                                           GdkSurfaceTypeHint hint);
-
-GDK_AVAILABLE_IN_ALL
-GdkSurfaceTypeHint      gdk_toplevel_layout_get_type_hint (GdkToplevelLayout *layout);
-
 G_END_DECLS
 
 #endif /* __GDK_TOPLEVEL_LAYOUT_H__ */
