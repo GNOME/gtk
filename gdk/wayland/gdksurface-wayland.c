@@ -81,7 +81,8 @@ struct _GdkWaylandSurface
     struct gtk_surface1  *gtk_surface;
     struct wl_egl_window *egl_window;
     struct wl_egl_window *dummy_egl_window;
-    struct zxdg_exported_v1 *xdg_exported;
+    struct zxdg_exported_v1 *xdg_exported_v1;
+    struct zxdg_exported_v2 *xdg_exported_v2;
     struct org_kde_kwin_server_decoration *server_decoration;
   } display_server;
 
@@ -176,7 +177,8 @@ struct _GdkWaylandSurface
     GDestroyNotify destroy_func;
   } exported;
 
-  struct zxdg_imported_v1 *imported_transient_for;
+  struct zxdg_imported_v1 *imported_v1_transient_for;
+  struct zxdg_imported_v2 *imported_v2_transient_for;
   GHashTable *shortcuts_inhibitors;
 };
 
@@ -941,14 +943,19 @@ gdk_wayland_surface_sync_parent_of_imported (GdkSurface *surface)
   if (!impl->display_server.wl_surface)
     return;
 
-  if (!impl->imported_transient_for)
-    return;
-
   if (!is_realized_toplevel (surface))
     return;
 
-  zxdg_imported_v1_set_parent_of (impl->imported_transient_for,
-                                  impl->display_server.wl_surface);
+  if (impl->imported_v2_transient_for)
+    {
+      zxdg_imported_v2_set_parent_of (impl->imported_v2_transient_for,
+                                      impl->display_server.wl_surface);
+    }
+  else if (impl->imported_v1_transient_for)
+    {
+      zxdg_imported_v1_set_parent_of (impl->imported_v1_transient_for,
+                                      impl->display_server.wl_surface);
+    }
 }
 
 static void
@@ -4135,9 +4142,9 @@ _gdk_wayland_surface_offset_next_wl_buffer (GdkSurface *surface,
 }
 
 static void
-xdg_exported_handle (void                    *data,
-                     struct zxdg_exported_v1 *zxdg_exported_v1,
-                     const char              *handle)
+xdg_exported_v1_handle (void                    *data,
+                        struct zxdg_exported_v1 *zxdg_exported_v1,
+                        const char              *handle)
 {
   GdkSurface *surface = data;
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
@@ -4150,8 +4157,20 @@ xdg_exported_handle (void                    *data,
     }
 }
 
-static const struct zxdg_exported_v1_listener xdg_exported_listener = {
-  xdg_exported_handle
+static const struct zxdg_exported_v1_listener xdg_exported_v1_listener = {
+  xdg_exported_v1_handle
+};
+
+static void
+xdg_exported_v2_handle (void                    *data,
+                        struct zxdg_exported_v2 *zxdg_exported_v2,
+                        const char              *handle)
+{
+  xdg_exported_v1_handle(data, NULL, handle);
+}
+
+static const struct zxdg_exported_v2_listener xdg_exported_v2_listener = {
+  xdg_exported_v2_handle
 };
 
 /**
@@ -4171,7 +4190,8 @@ gdk_wayland_surface_is_exported (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  return !!impl->display_server.xdg_exported;
+  return impl->display_server.xdg_exported_v2 ||
+         impl->display_server.xdg_exported_v1;
 }
 
 /**
@@ -4210,7 +4230,8 @@ gdk_wayland_surface_export_handle (GdkSurface                *surface,
   GdkWaylandSurface *impl;
   GdkWaylandDisplay *display_wayland;
   GdkDisplay *display = gdk_surface_get_display (surface);
-  struct zxdg_exported_v1 *xdg_exported;
+  struct zxdg_exported_v1 *xdg_exported_v1;
+  struct zxdg_exported_v2 *xdg_exported_v2;
 
   g_return_val_if_fail (GDK_IS_WAYLAND_SURFACE (surface), FALSE);
   g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY (display), FALSE);
@@ -4218,19 +4239,38 @@ gdk_wayland_surface_export_handle (GdkSurface                *surface,
   impl = GDK_WAYLAND_SURFACE (surface);
   display_wayland = GDK_WAYLAND_DISPLAY (display);
 
-  g_return_val_if_fail (!impl->display_server.xdg_exported, FALSE);
+  g_return_val_if_fail (!impl->display_server.xdg_exported_v2 &&
+                        !impl->display_server.xdg_exported_v1,
+                        FALSE);
 
-  if (!display_wayland->xdg_exporter)
+  if (display_wayland->xdg_exporter_v2)
+    {
+      xdg_exported_v2 =
+        zxdg_exporter_v2_export_toplevel (display_wayland->xdg_exporter_v2,
+                                          impl->display_server.wl_surface);
+      zxdg_exported_v2_add_listener (xdg_exported_v2,
+                                     &xdg_exported_v2_listener,
+                                     surface);
+
+      impl->display_server.xdg_exported_v2 = xdg_exported_v2;
+    }
+  else if (display_wayland->xdg_exporter_v1)
+    {
+      xdg_exported_v1 =
+        zxdg_exporter_v1_export (display_wayland->xdg_exporter_v1,
+                                 impl->display_server.wl_surface);
+      zxdg_exported_v1_add_listener (xdg_exported_v1,
+                                     &xdg_exported_v1_listener,
+                                     surface);
+
+      impl->display_server.xdg_exported_v1 = xdg_exported_v1;
+    }
+  else
     {
       g_warning ("Server is missing xdg_foreign support");
       return FALSE;
     }
 
-  xdg_exported = zxdg_exporter_v1_export (display_wayland->xdg_exporter,
-                                          impl->display_server.wl_surface);
-  zxdg_exported_v1_add_listener (xdg_exported,  &xdg_exported_listener, surface);
-
-  impl->display_server.xdg_exported = xdg_exported;
   impl->exported.callback = callback;
   impl->exported.user_data = user_data;
   impl->exported.destroy_func = destroy_func;
@@ -4260,10 +4300,20 @@ gdk_wayland_surface_unexport_handle (GdkSurface *surface)
 
   impl = GDK_WAYLAND_SURFACE (surface);
 
-  g_return_if_fail (impl->display_server.xdg_exported);
+  g_return_if_fail (impl->display_server.xdg_exported_v2 ||
+                    impl->display_server.xdg_exported_v1);
 
-  g_clear_pointer (&impl->display_server.xdg_exported,
-                   zxdg_exported_v1_destroy);
+  if (impl->display_server.xdg_exported_v2)
+    {
+      g_clear_pointer (&impl->display_server.xdg_exported_v2,
+                       zxdg_exported_v2_destroy);
+    }
+  else if (impl->display_server.xdg_exported_v1)
+    {
+      g_clear_pointer (&impl->display_server.xdg_exported_v1,
+                       zxdg_exported_v1_destroy);
+    }
+
   if (impl->exported.destroy_func)
     {
       g_clear_pointer (&impl->exported.user_data,
@@ -4276,20 +4326,40 @@ unset_transient_for_exported (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  g_clear_pointer (&impl->imported_transient_for, zxdg_imported_v1_destroy);
+  if (impl->imported_v2_transient_for)
+    {
+      g_clear_pointer (&impl->imported_v2_transient_for,
+                       zxdg_imported_v2_destroy);
+    }
+  else if (impl->imported_v1_transient_for)
+    {
+      g_clear_pointer (&impl->imported_v1_transient_for,
+                       zxdg_imported_v1_destroy);
+    }
 }
 
 static void
-xdg_imported_destroyed (void                    *data,
-                        struct zxdg_imported_v1 *zxdg_imported_v1)
+xdg_imported_v1_destroyed (void                    *data,
+                           struct zxdg_imported_v1 *zxdg_imported_v1)
 {
   GdkSurface *surface = data;
 
   unset_transient_for_exported (surface);
 }
 
-static const struct zxdg_imported_v1_listener xdg_imported_listener = {
-  xdg_imported_destroyed,
+static const struct zxdg_imported_v1_listener xdg_imported_v1_listener = {
+  xdg_imported_v1_destroyed,
+};
+
+static void
+xdg_imported_v2_destroyed (void                    *data,
+                           struct zxdg_imported_v2 *zxdg_imported_v2)
+{
+  xdg_imported_v1_destroyed(data, NULL);
+}
+
+static const struct zxdg_imported_v2_listener xdg_imported_v2_listener = {
+  xdg_imported_v2_destroyed,
 };
 
 /**
@@ -4322,19 +4392,35 @@ gdk_wayland_surface_set_transient_for_exported (GdkSurface *surface,
   impl = GDK_WAYLAND_SURFACE (surface);
   display_wayland = GDK_WAYLAND_DISPLAY (display);
 
-  if (!display_wayland->xdg_importer)
+  if (display_wayland->xdg_importer_v2)
+    {
+      gdk_surface_set_transient_for (surface, NULL);
+
+      impl->imported_v2_transient_for =
+        zxdg_importer_v2_import_toplevel (display_wayland->xdg_importer_v2,
+                                          parent_handle_str);
+      zxdg_imported_v2_add_listener (impl->imported_v2_transient_for,
+          &xdg_imported_v2_listener,
+          surface);
+
+    }
+  else if (display_wayland->xdg_importer_v1)
+    {
+      gdk_surface_set_transient_for (surface, NULL);
+
+      impl->imported_v1_transient_for =
+        zxdg_importer_v1_import (display_wayland->xdg_importer_v1,
+                                 parent_handle_str);
+      zxdg_imported_v1_add_listener (impl->imported_v1_transient_for,
+          &xdg_imported_v1_listener,
+          surface);
+
+    }
+  else
     {
       g_warning ("Server is missing xdg_foreign support");
       return FALSE;
     }
-
-  gdk_surface_set_transient_for (surface, NULL);
-
-  impl->imported_transient_for =
-    zxdg_importer_v1_import (display_wayland->xdg_importer, parent_handle_str);
-  zxdg_imported_v1_add_listener (impl->imported_transient_for,
-                                 &xdg_imported_listener,
-                                 surface);
 
   gdk_wayland_surface_sync_parent_of_imported (surface);
 

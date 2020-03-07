@@ -54,6 +54,7 @@ proto_sources = [
   ['xdg-shell', 'unstable', 'v6', ],
   ['xdg-shell', 'stable', ],
   ['xdg-foreign', 'unstable', 'v1', ],
+  ['xdg-foreign', 'unstable', 'v2', ],
   ['tablet', 'unstable', 'v2', ],
   ['keyboard-shortcuts-inhibit', 'unstable', 'v1', ],
   ['server-decoration', 'private' ],
