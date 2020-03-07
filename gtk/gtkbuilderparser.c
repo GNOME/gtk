@@ -1542,7 +1542,7 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
                                   const gchar  *filename,
                                   const gchar  *buffer,
                                   gssize        length,
-                                  gchar       **requested_objs,
+                                  const char  **requested_objs,
                                   GError      **error)
 {
   const gchar* domain;
