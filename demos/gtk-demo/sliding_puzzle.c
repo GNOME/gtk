@@ -277,7 +277,7 @@ puzzle_button_pressed (GtkGestureClick *gesture,
 }
 
 static void
-start_puzzle (GdkPaintable *puzzle)
+start_puzzle (GdkPaintable *paintable)
 {
   GtkWidget *picture, *grid;
   GtkEventController *controller;
@@ -293,7 +293,7 @@ start_puzzle (GdkPaintable *puzzle)
   grid = gtk_grid_new ();
   gtk_widget_set_can_focus (grid, TRUE);
   gtk_container_add (GTK_CONTAINER (frame), grid);
-  aspect_ratio = gdk_paintable_get_intrinsic_aspect_ratio (puzzle);
+  aspect_ratio = gdk_paintable_get_intrinsic_aspect_ratio (paintable);
   if (aspect_ratio == 0.0)
     aspect_ratio = 1.0;
   gtk_aspect_frame_set (GTK_ASPECT_FRAME (frame), 0.5, 0.5, aspect_ratio, FALSE);
@@ -332,7 +332,7 @@ start_puzzle (GdkPaintable *puzzle)
           if (x == pos_x && y == pos_y)
             piece = NULL;
           else
-            piece = gtk_puzzle_piece_new (puzzle,
+            piece = gtk_puzzle_piece_new (paintable,
                                           x, y,
                                           width, height);
           picture = gtk_picture_new_for_paintable (piece);
@@ -390,7 +390,7 @@ reconfigure (void)
 }
 
 static void
-add_choice (GtkWidget    *choices,
+add_choice (GtkWidget    *container,
             GdkPaintable *paintable)
 {
   GtkWidget *icon;
@@ -398,7 +398,7 @@ add_choice (GtkWidget    *choices,
   icon = gtk_image_new_from_paintable (paintable);
   gtk_image_set_icon_size (GTK_IMAGE (icon), GTK_ICON_SIZE_LARGE);
 
-  gtk_container_add (GTK_CONTAINER (choices), icon);
+  gtk_container_add (GTK_CONTAINER (container), icon);
 }
 
 GtkWidget *

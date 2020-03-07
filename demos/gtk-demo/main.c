@@ -205,14 +205,14 @@ enum {
   STATE_IN_COMMENT
 };
 
-static gchar *tokens[] =
+static const char *tokens[] =
 {
   "/*",
   "\"",
   NULL
 };
 
-static gchar *types[] =
+static const char *types[] =
 {
   "static",
   "const ",
@@ -337,7 +337,7 @@ static gchar *types[] =
   NULL
 };
 
-static gchar *control[] =
+static const char *control[] =
 {
   " if ",
   " while ",
@@ -351,11 +351,11 @@ static gchar *control[] =
   NULL
 };
 void
-parse_chars (gchar     *text,
-             gchar    **end_ptr,
-             gint      *state,
-             gchar    **tag,
-             gboolean   start)
+parse_chars (gchar       *text,
+             gchar      **end_ptr,
+             gint        *state,
+             const char **tag,
+             gboolean     start)
 {
   gint i;
   gchar *next_token;
@@ -494,7 +494,7 @@ fontify (GtkTextBuffer *source_buffer)
   gint state;
   gchar *text;
   gchar *start_ptr, *end_ptr;
-  gchar *tag;
+  const char *tag;
 
   gtk_text_buffer_create_tag (source_buffer, "source",
                               "font", "monospace",
@@ -868,7 +868,7 @@ load_file (const gchar *demoname,
 
           p = lines[i];
           state++;
-          /* Fall through */
+          G_GNUC_FALLTHROUGH;
 
         case 3:
           /* Reading program body */
@@ -876,6 +876,9 @@ load_file (const gchar *demoname,
           if (lines[i+1] != NULL)
             gtk_text_buffer_insert (source_buffer, &start, "\n", 1);
           break;
+
+        default:
+          g_assert_not_reached ();
         }
     }
 
@@ -975,10 +978,10 @@ startup (GApplication *app)
 {
   GtkBuilder *builder;
   GMenuModel *appmenu;
-  gchar *ids[] = { "appmenu", NULL };
+  const char *ids[] = { "appmenu", NULL };
 
   builder = gtk_builder_new ();
-  gtk_builder_add_objects_from_resource (builder, "/ui/appmenu.ui", ids, NULL);
+  gtk_builder_add_objects_from_resource (builder, "/ui/appmenu.ui", (char **)ids, NULL);
 
   appmenu = (GMenuModel *)gtk_builder_get_object (builder, "appmenu");
 

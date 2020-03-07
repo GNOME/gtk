@@ -47,6 +47,7 @@ static const gchar *pad_colors[] = {
   "orange"
 };
 
+static GType drawing_area_get_type (void);
 G_DEFINE_TYPE (DrawingArea, drawing_area, GTK_TYPE_WIDGET)
 
 static void drawing_area_set_color (DrawingArea *area,
@@ -340,7 +341,7 @@ drawing_area_init (DrawingArea *area)
   area->draw_color = (GdkRGBA) { 0, 0, 0, 1 };
 }
 
-GtkWidget *
+static GtkWidget *
 drawing_area_new (void)
 {
   return g_object_new (drawing_area_get_type (), NULL);

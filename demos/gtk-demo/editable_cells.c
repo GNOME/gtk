@@ -275,6 +275,9 @@ cell_edited (GtkCellRendererText *cell,
                             g_array_index (articles, Item, i).product, -1);
       }
       break;
+
+    default:
+      g_assert_not_reached ();
     }
 
   gtk_tree_path_free (path);
