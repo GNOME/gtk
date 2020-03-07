@@ -2072,7 +2072,6 @@ gdk_toplevel_surface_present (GdkToplevel       *toplevel,
     GDK_SURFACE_GET_CLASS (surface)->unfullscreen (surface);
 
   GDK_SURFACE_GET_CLASS (surface)->set_modal_hint (surface, gdk_toplevel_layout_get_modal (layout));
-  GDK_SURFACE_GET_CLASS (surface)->set_type_hint (surface, gdk_toplevel_layout_get_type_hint (layout));
 
   gdk_surface_show_internal (surface, TRUE);
 
