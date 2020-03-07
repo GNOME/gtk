@@ -79,5 +79,23 @@ main (int argc, char *argv[])
               interpolation_test_constant_speed,
               interpolation_test_teardown);
 
+  static TestData swipe_display_is_slower;
+  swipe_display_is_slower.event_type = GDK_TOUCHPAD_SWIPE;
+  swipe_display_is_slower.display_interval = EVENT_INTERVAL * 1.5;
+  g_test_add ("/interpolation/swipe_display_is_slower",
+              Fixture, &swipe_display_is_slower,
+              interpolation_test_setup,
+              interpolation_test_constant_speed,
+              interpolation_test_teardown);
+
+  static TestData pinch_display_is_slower;
+  pinch_display_is_slower.event_type = GDK_TOUCHPAD_PINCH;
+  pinch_display_is_slower.display_interval = EVENT_INTERVAL * 1.5;
+  g_test_add ("/interpolation/pinch_display_is_slower",
+              Fixture, &pinch_display_is_slower,
+              interpolation_test_setup,
+              interpolation_test_constant_speed,
+              interpolation_test_teardown);
+
   return g_test_run ();
 }

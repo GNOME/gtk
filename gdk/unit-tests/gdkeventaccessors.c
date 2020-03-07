@@ -33,6 +33,13 @@ validate_absolute_prop_names (GdkEvent *event,
       g_assert (event->scroll.direction == GDK_SCROLL_SMOOTH);
       g_assert_cmpuint (property_names->len, ==, 0);
       break;
+    case GDK_TOUCHPAD_SWIPE:
+      g_assert_cmpuint (property_names->len, ==, 0);
+      break;
+    case GDK_TOUCHPAD_PINCH:
+      g_assert_cmpuint (property_names->len, ==, 1);
+      g_assert_cmpstr (g_array_index (property_names, char *, 0), ==, "scale");
+      break;
     default:
       /* Event type is unsupported */
       g_assert_not_reached ();
@@ -50,6 +57,13 @@ validate_absolute_prop_values (GdkEvent *event,
     case GDK_SCROLL:
       g_assert (event->scroll.direction == GDK_SCROLL_SMOOTH);
       g_assert_cmpuint (property_values->len, ==, 0);
+      break;
+    case GDK_TOUCHPAD_SWIPE:
+      g_assert_cmpuint (property_values->len, ==, 0);
+      break;
+    case GDK_TOUCHPAD_PINCH:
+      g_assert_cmpuint (property_values->len, ==, 1);
+      g_assert_cmpfloat_with_epsilon (event->touchpad_pinch.scale, 1.0 * coef, EPSILON);
       break;
     default:
       /* Event type is unsupported */
@@ -70,6 +84,17 @@ validate_relative_prop_names (GdkEvent *event,
       g_assert_cmpstr (g_array_index (property_names, char *, 0), ==, "delta_x");
       g_assert_cmpstr (g_array_index (property_names, char *, 1), ==, "delta_y");
       break;
+    case GDK_TOUCHPAD_SWIPE:
+      g_assert_cmpuint (property_names->len, ==, 2);
+      g_assert_cmpstr (g_array_index (property_names, char *, 0), ==, "dx");
+      g_assert_cmpstr (g_array_index (property_names, char *, 1), ==, "dy");
+      break;
+    case GDK_TOUCHPAD_PINCH:
+      g_assert_cmpuint (property_names->len, ==, 3);
+      g_assert_cmpstr (g_array_index (property_names, char *, 0), ==, "dx");
+      g_assert_cmpstr (g_array_index (property_names, char *, 1), ==, "dy");
+      g_assert_cmpstr (g_array_index (property_names, char *, 2), ==, "angle_delta");
+      break;
     default:
       /* Event type is unsupported */
       g_assert_not_reached ();
@@ -89,6 +114,17 @@ validate_relative_prop_values (GdkEvent *event,
       g_assert_cmpuint (property_values->len, ==, 2);
       g_assert_cmpfloat_with_epsilon (event->scroll.delta_x, 1.0 * coef, EPSILON);
       g_assert_cmpfloat_with_epsilon (event->scroll.delta_y, 2.0 * coef, EPSILON);
+      break;
+    case GDK_TOUCHPAD_SWIPE:
+      g_assert_cmpuint (property_values->len, ==, 2);
+      g_assert_cmpfloat_with_epsilon (event->touchpad_swipe.dx, 1.0 * coef, EPSILON);
+      g_assert_cmpfloat_with_epsilon (event->touchpad_swipe.dy, 2.0 * coef, EPSILON);
+      break;
+    case GDK_TOUCHPAD_PINCH:
+      g_assert_cmpuint (property_values->len, ==, 3);
+      g_assert_cmpfloat_with_epsilon (event->touchpad_pinch.dx, 1.0 * coef, EPSILON);
+      g_assert_cmpfloat_with_epsilon (event->touchpad_pinch.dy, 2.0 * coef, EPSILON);
+      g_assert_cmpfloat_with_epsilon (event->touchpad_pinch.angle_delta, 3.0 * coef, EPSILON);
       break;
     default:
       /* Event type is unsupported */
@@ -193,6 +229,22 @@ interpolation_test_events_accessors (Fixture       *fixture,
   GDK_NOTE (EVENTS, g_message ("Smooth scroll event"));
 
   event = make_event (GDK_SCROLL, 0, 0, INPUT_PHASE_UPDATE);
+  test_event_accessors (event, GDK_INTERP_ABSOLUTE);
+  test_event_accessors (event, GDK_INTERP_RELATIVE);
+  gdk_event_free (event);
+
+  /* Touchpad swipe */
+  GDK_NOTE (EVENTS, g_message ("Touchpad swipe event"));
+
+  event = make_event (GDK_TOUCHPAD_SWIPE, 0, 0, INPUT_PHASE_UPDATE);
+  test_event_accessors (event, GDK_INTERP_ABSOLUTE);
+  test_event_accessors (event, GDK_INTERP_RELATIVE);
+  gdk_event_free (event);
+
+  /* Touchpad pinch */
+  GDK_NOTE (EVENTS, g_message ("Touchpad pinch event"));
+
+  event = make_event (GDK_TOUCHPAD_PINCH, 0, 0, INPUT_PHASE_UPDATE);
   test_event_accessors (event, GDK_INTERP_ABSOLUTE);
   test_event_accessors (event, GDK_INTERP_RELATIVE);
   gdk_event_free (event);
