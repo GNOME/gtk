@@ -33,7 +33,6 @@ struct _GdkToplevelLayout
   guint maximized  : 1;
   guint fullscreen : 1;
   guint modal      : 1;
-  GdkSurfaceTypeHint type_hint;
   GdkMonitor *fullscreen_monitor;
 };
 
@@ -64,7 +63,6 @@ gdk_toplevel_layout_new (int min_width,
   layout->maximized = FALSE;
   layout->fullscreen = FALSE;
   layout->modal = FALSE;
-  layout->type_hint = GDK_SURFACE_TYPE_HINT_NORMAL;
   layout->fullscreen_monitor = NULL;
 
   return layout;
@@ -123,7 +121,6 @@ gdk_toplevel_layout_copy (GdkToplevelLayout *layout)
   new_layout->maximized = layout->maximized;
   new_layout->fullscreen = layout->fullscreen;
   new_layout->modal = layout->modal;
-  new_layout->type_hint = layout->type_hint;
   if (layout->fullscreen_monitor)
     new_layout->fullscreen_monitor = g_object_ref (layout->fullscreen_monitor);
 
@@ -153,7 +150,6 @@ gdk_toplevel_layout_equal (GdkToplevelLayout *layout,
          layout->maximized == other->maximized &&
          layout->fullscreen == other->fullscreen &&
          layout->modal == other->modal &&
-         layout->type_hint == other->type_hint &&
          layout->fullscreen_monitor == other->fullscreen_monitor;
 }
 
@@ -229,18 +225,4 @@ gboolean
 gdk_toplevel_layout_get_modal (GdkToplevelLayout *layout)
 {
   return layout->modal;
-}
-
-void
-gdk_toplevel_layout_set_type_hint (GdkToplevelLayout  *layout,
-                                   GdkSurfaceTypeHint  type_hint)
-{
-  layout->type_hint = type_hint;
-}
-
-
-GdkSurfaceTypeHint
-gdk_toplevel_layout_get_type_hint (GdkToplevelLayout *layout)
-{
-  return layout->type_hint;
 }
