@@ -84,7 +84,7 @@ struct _GtkPadController {
   GActionGroup *action_group;
   GdkDevice *pad;
 
-  GList *entries;
+  GArray *action_entries;
 };
 
 struct _GtkPadControllerClass {
@@ -98,42 +98,31 @@ enum {
   N_PROPS
 };
 
+typedef struct
+{
+  GtkPadActionType type;
+  int index;
+  int mode;
+  char *label;
+  char *action_name;
+} ActionEntryData;
+
 static GParamSpec *pspecs[N_PROPS] = { NULL };
 
 G_DEFINE_TYPE (GtkPadController, gtk_pad_controller, GTK_TYPE_EVENT_CONTROLLER)
 
-static GtkPadActionEntry *
-gtk_pad_action_entry_copy (const GtkPadActionEntry *entry)
-{
-  GtkPadActionEntry *copy;
-
-  copy = g_slice_new0 (GtkPadActionEntry);
-  *copy = *entry;
-  copy->label = g_strdup (entry->label);
-  copy->action_name = g_strdup (entry->action_name);
-
-  return copy;
-}
-
-static void
-gtk_pad_action_entry_free (GtkPadActionEntry *entry)
-{
-  g_free (entry->label);
-  g_free (entry->action_name);
-  g_slice_free (GtkPadActionEntry, entry);
-}
-
-static const GtkPadActionEntry *
+static const ActionEntryData *
 gtk_pad_action_find_match (GtkPadController *controller,
                            GtkPadActionType  type,
                            gint              index,
                            gint              mode)
 {
-  GList *l;
+  guint i;
 
-  for (l = controller->entries; l; l = l->next)
+  for (i = 0; i < controller->action_entries->len; i++)
     {
-      GtkPadActionEntry *entry = l->data;
+      const ActionEntryData *entry = &g_array_index (controller->action_entries,
+                                                     ActionEntryData, i);
       gboolean match_index = FALSE, match_mode = FALSE;
 
       if (entry->type != type)
@@ -151,7 +140,7 @@ gtk_pad_action_find_match (GtkPadController *controller,
 
 static void
 gtk_pad_controller_activate_action (GtkPadController        *controller,
-                                    const GtkPadActionEntry *entry)
+                                    const ActionEntryData   *entry)
 {
   g_action_group_activate_action (controller->action_group,
                                   entry->action_name,
@@ -160,7 +149,7 @@ gtk_pad_controller_activate_action (GtkPadController        *controller,
 
 static void
 gtk_pad_controller_activate_action_with_axis (GtkPadController        *controller,
-                                              const GtkPadActionEntry *entry,
+                                              const ActionEntryData   *entry,
                                               gdouble                  value)
 {
   g_action_group_activate_action (controller->action_group,
@@ -177,7 +166,7 @@ gtk_pad_controller_handle_mode_switch (GtkPadController *controller,
 #ifdef GDK_WINDOWING_WAYLAND
   if (GDK_IS_WAYLAND_DISPLAY (gdk_device_get_display (pad)))
     {
-      const GtkPadActionEntry *entry;
+      const ActionEntryData *entry;
       gint elem, idx, n_features;
 
       for (elem = GTK_PAD_ACTION_BUTTON; elem <= GTK_PAD_ACTION_STRIP; elem++)
@@ -235,7 +224,7 @@ gtk_pad_controller_handle_event (GtkEventController *controller,
 {
   GtkPadController *pad_controller = GTK_PAD_CONTROLLER (controller);
   GdkEventType event_type = gdk_event_get_event_type (event);
-  const GtkPadActionEntry *entry;
+  const ActionEntryData *entry;
   GtkPadActionType type;
   guint index, mode, group;
   gdouble value = 0;
@@ -346,8 +335,17 @@ static void
 gtk_pad_controller_finalize (GObject *object)
 {
   GtkPadController *controller = GTK_PAD_CONTROLLER (object);
+  guint i;
 
-  g_list_free_full (controller->entries, (GDestroyNotify) gtk_pad_action_entry_free);
+  for (i = 0; i < controller->action_entries->len; i++)
+    {
+      const ActionEntryData *entry = &g_array_index (controller->action_entries,
+                                                     ActionEntryData, i);
+
+      g_free (entry->label);
+      g_free (entry->action_name);
+    }
+  g_array_free (controller->action_entries, TRUE);
 
   G_OBJECT_CLASS (gtk_pad_controller_parent_class)->finalize (object);
 }
@@ -385,6 +383,7 @@ gtk_pad_controller_class_init (GtkPadControllerClass *klass)
 static void
 gtk_pad_controller_init (GtkPadController *controller)
 {
+  controller->action_entries = g_array_new (FALSE, TRUE, sizeof (ActionEntryData));
 }
 
 /**
@@ -444,11 +443,25 @@ static void
 gtk_pad_controller_add_entry (GtkPadController        *controller,
                               const GtkPadActionEntry *entry)
 {
-  GtkPadActionEntry *copy;
+  guint i;
+  const ActionEntryData new_entry = {
+   .type = entry->type,
+   .index = entry->index,
+   .mode = entry->mode,
+   .label= g_strdup (entry->label),
+   .action_name = g_strdup (entry->action_name)
+  };
 
-  copy = gtk_pad_action_entry_copy (entry);
-  controller->entries = g_list_insert_sorted (controller->entries, copy,
-                                              (GCompareFunc) entry_compare_func);
+  g_array_set_size (controller->action_entries, controller->action_entries->len + 1);
+
+  for (i = 0; i < controller->action_entries->len; i++)
+    {
+      if (entry_compare_func (&new_entry,
+                              &g_array_index (controller->action_entries, ActionEntryData, i)) == 0)
+        break;
+    }
+
+  g_array_insert_val (controller->action_entries, i, new_entry);
 }
 
 /**
@@ -496,13 +509,12 @@ gtk_pad_controller_set_action_entries (GtkPadController        *controller,
 void
 gtk_pad_controller_set_action (GtkPadController *controller,
                                GtkPadActionType  type,
-                               gint              index,
-                               gint              mode,
-                               const gchar      *label,
-                               const gchar      *action_name)
+                               int               index,
+                               int               mode,
+                               const char       *label,
+                               const char       *action_name)
 {
-  GtkPadActionEntry entry = { type, index, mode,
-                              (gchar *) label, (gchar *) action_name };
+  const GtkPadActionEntry entry = { type, index, mode, label, action_name };
 
   g_return_if_fail (GTK_IS_PAD_CONTROLLER (controller));
   g_return_if_fail (type <= GTK_PAD_ACTION_STRIP);
