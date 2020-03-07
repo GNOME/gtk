@@ -23,6 +23,24 @@
 #include "gdkinterptest.h"
 
 
+static GdkTouchpadGesturePhase
+input_phase_to_touchpad_phase (InputPhase input_phase)
+{
+  switch (input_phase)
+    {
+    case INPUT_PHASE_BEGIN:
+      return GDK_TOUCHPAD_GESTURE_PHASE_BEGIN;
+    case INPUT_PHASE_UPDATE:
+      return GDK_TOUCHPAD_GESTURE_PHASE_UPDATE;
+    case INPUT_PHASE_END:
+      return GDK_TOUCHPAD_GESTURE_PHASE_END;
+    case INPUT_PHASE_CANCEL:
+      return GDK_TOUCHPAD_GESTURE_PHASE_CANCEL;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 /*
  * make_event() is loosely based on _gdk_make_event()
  * It is used here to simulate 'real' events.
@@ -49,6 +67,24 @@ make_event (GdkEventType type,
       event->scroll.x_root = 300;
       event->scroll.y_root = 400;
       event->scroll.is_stop = (input_phase == INPUT_PHASE_END);
+      break;
+
+    case GDK_TOUCHPAD_SWIPE:
+      event->touchpad_swipe.x = 100;
+      event->touchpad_swipe.y = 200;
+      event->touchpad_swipe.x_root = 300;
+      event->touchpad_swipe.y_root = 400;
+      event->touchpad_swipe.phase = input_phase_to_touchpad_phase (input_phase);
+      event->touchpad_swipe.n_fingers = 2;
+      break;
+
+    case GDK_TOUCHPAD_PINCH:
+      event->touchpad_pinch.x = 100;
+      event->touchpad_pinch.y = 200;
+      event->touchpad_pinch.x_root = 300;
+      event->touchpad_pinch.y_root = 400;
+      event->touchpad_pinch.phase = input_phase_to_touchpad_phase (input_phase);
+      event->touchpad_pinch.n_fingers = 2;
       break;
 
     case GDK_MOTION_NOTIFY:
@@ -139,6 +175,12 @@ print_event (GdkEvent *event, char *prefix)
     {
     case GDK_SCROLL:
       event_type_name = "Scroll";
+      break;
+    case GDK_TOUCHPAD_SWIPE:
+      event_type_name = "Swipe";
+      break;
+    case GDK_TOUCHPAD_PINCH:
+      event_type_name = "Pinch";
       break;
     default:
       event_type_name = "Unhandled";
