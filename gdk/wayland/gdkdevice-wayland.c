@@ -749,7 +749,7 @@ gdk_wayland_device_grab (GdkDevice    *device,
   GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (device));
   GdkWaylandPointerData *pointer = GDK_WAYLAND_DEVICE (device)->pointer;
 
-  if (gdk_surface_get_surface_type (surface) == GDK_SURFACE_TEMP &&
+  if (GDK_IS_DRAG_SURFACE (surface) &&
       gdk_surface_get_mapped (surface))
     {
       g_warning ("Surface %p is already mapped at the time of grabbing. "
