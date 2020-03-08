@@ -1,5 +1,3 @@
-image: registry.gitlab.gnome.org/gnome/gtk/gtk-3-24:v3
-
 stages:
   - build
 
@@ -8,24 +6,41 @@ cache:
     - _ccache/
 
 fedora-autotools:
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora-gtk3:v1
   stage: build
   script:
-   - bash -x ./.gitlab-ci/test-docker-autotools.sh
+    - bash -x ./.gitlab-ci/test-docker-autotools.sh
 
 fedora-distcheck:
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora-gtk3:v1
   variables:
     DO_DISTCHECK: "yes"
   when: manual
   stage: build
   script:
-   - bash -x ./.gitlab-ci/test-docker-autotools.sh
+    - bash -x ./.gitlab-ci/test-docker-autotools.sh
 
 fedora-meson:
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora-gtk3:v1
   stage: build
   variables:
     EXTRA_MESON_FLAGS: "-Ddefault_library=both"
   script:
-   - bash -x ./.gitlab-ci/test-docker-meson.sh
+    - bash -x ./.gitlab-ci/test-docker-meson.sh
+  artifacts:
+    when: always
+    name: "gtk3-${CI_JOB_NAME}-${CI_COMMIT_REF_NAME}"
+    paths:
+      - "_build/meson-logs"
+      - "_build/testsuite/reftests/output"
+
+debian-meson:
+  image: registry.gitlab.gnome.org/gnome/gtk/debian-gtk3:v1
+  stage: build
+  variables:
+    EXTRA_MESON_FLAGS: "-Ddefault_library=both"
+  script:
+    - bash -x ./.gitlab-ci/test-docker-meson.sh
   artifacts:
     when: always
     name: "gtk3-${CI_JOB_NAME}-${CI_COMMIT_REF_NAME}"
