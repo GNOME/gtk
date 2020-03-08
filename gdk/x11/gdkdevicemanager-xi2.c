@@ -1865,7 +1865,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
         if (ev->evtype == XI_Enter &&
             xev->detail != XINotifyInferior && xev->mode != XINotifyPassiveUngrab &&
-	    gdk_surface_get_surface_type (surface) == GDK_SURFACE_TOPLEVEL)
+            GDK_IS_TOPLEVEL (surface))
           {
             if (gdk_device_get_device_type (source_device) != GDK_DEVICE_TYPE_MASTER)
               _gdk_device_xi2_reset_scroll_valuators (GDK_X11_DEVICE_XI2 (source_device));
