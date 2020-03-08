@@ -375,7 +375,7 @@ do_net_wm_state_changes (GdkSurface *surface)
   GdkSurfaceState old_state, set, unset;
 
   if (GDK_SURFACE_DESTROYED (surface) ||
-      gdk_surface_get_surface_type (surface) != GDK_SURFACE_TOPLEVEL)
+      !GDK_IS_TOPLEVEL (surface))
     return;
 
   old_state = gdk_toplevel_get_state (GDK_TOPLEVEL (surface));
