@@ -1,5 +1,6 @@
 stages:
   - build
+  - docs
 
 cache:
   paths:
@@ -47,6 +48,21 @@ debian-meson:
     paths:
       - "_build/meson-logs"
       - "_build/testsuite/reftests/output"
+
+reference:
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora-gtk3:v1
+  stage: docs
+  variables:
+    EXTRA_MESON_FLAGS: "--buildtype=release -Dgtk_doc=true -Dman=true"
+  script:
+    - bash -x ./.gitlab-ci/test-docker-meson.sh
+    - ninja -C _build gdk3-doc gtk3-doc
+    - tar -c -J -f gdk3-docs.tar.xz _build/docs/reference/gdk
+    - tar -c -J -f gtk3-docs.tar.xz _build/docs/reference/gtk
+  artifacts:
+    paths:
+      - gdk3-docs.tar.xz
+      - gtk3-docs.tar.xz
 
 msys2-mingw32-meson:
   variables:
