@@ -1869,72 +1869,6 @@ gdk_x11_surface_set_type_hint (GdkSurface        *surface,
 		   (guchar *)&atom, 1);
 }
 
-static GdkSurfaceTypeHint
-gdk_x11_surface_get_type_hint (GdkSurface *surface)
-{
-  GdkDisplay *display;
-  GdkSurfaceTypeHint type;
-  Atom type_return;
-  gint format_return;
-  gulong nitems_return;
-  gulong bytes_after_return;
-  guchar *data = NULL;
-
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), GDK_SURFACE_TYPE_HINT_NORMAL);
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return GDK_SURFACE_TYPE_HINT_NORMAL;
-
-  type = GDK_SURFACE_TYPE_HINT_NORMAL;
-
-  display = gdk_surface_get_display (surface);
-
-  if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), GDK_SURFACE_XID (surface),
-                          gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE"),
-                          0, G_MAXLONG, False, XA_ATOM, &type_return,
-                          &format_return, &nitems_return, &bytes_after_return,
-                          &data) == Success)
-    {
-      if ((type_return == XA_ATOM) && (format_return == 32) &&
-          (data) && (nitems_return == 1))
-        {
-          Atom atom = *(Atom*)data;
-
-          if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_DIALOG"))
-            type = GDK_SURFACE_TYPE_HINT_DIALOG;
-          else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_MENU"))
-            type = GDK_SURFACE_TYPE_HINT_MENU;
-          else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_TOOLBAR"))
-            type = GDK_SURFACE_TYPE_HINT_TOOLBAR;
-          else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_UTILITY"))
-            type = GDK_SURFACE_TYPE_HINT_UTILITY;
-          else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_SPLASH"))
-            type = GDK_SURFACE_TYPE_HINT_SPLASHSCREEN;
-          else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_DOCK"))
-            type = GDK_SURFACE_TYPE_HINT_DOCK;
-          else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_DESKTOP"))
-            type = GDK_SURFACE_TYPE_HINT_DESKTOP;
-	  else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_DROPDOWN_MENU"))
-	    type = GDK_SURFACE_TYPE_HINT_DROPDOWN_MENU;
-	  else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_POPUP_MENU"))
-	    type = GDK_SURFACE_TYPE_HINT_POPUP_MENU;
-	  else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_TOOLTIP"))
-	    type = GDK_SURFACE_TYPE_HINT_TOOLTIP;
-	  else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_NOTIFICATION"))
-	    type = GDK_SURFACE_TYPE_HINT_NOTIFICATION;
-	  else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_COMBO"))
-	    type = GDK_SURFACE_TYPE_HINT_COMBO;
-	  else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_DND"))
-	    type = GDK_SURFACE_TYPE_HINT_DND;
-        }
-
-      if (type_return != None && data != NULL)
-        XFree (data);
-    }
-
-  return type;
-}
-
 static void
 gdk_wmspec_change_state (gboolean    add,
 			 GdkSurface *surface,
@@ -4726,38 +4660,14 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->destroy = gdk_x11_surface_destroy;
   impl_class->beep = gdk_x11_surface_beep;
 
-  impl_class->focus = gdk_x11_surface_focus;
-  impl_class->set_type_hint = gdk_x11_surface_set_type_hint;
-  impl_class->get_type_hint = gdk_x11_surface_get_type_hint;
-  impl_class->set_modal_hint = gdk_x11_surface_set_modal_hint;
-  impl_class->set_geometry_hints = gdk_x11_surface_set_geometry_hints;
-  impl_class->set_title = gdk_x11_surface_set_title;
-  impl_class->set_startup_id = gdk_x11_surface_set_startup_id;
-  impl_class->set_transient_for = gdk_x11_surface_set_transient_for;
-  impl_class->set_accept_focus = gdk_x11_surface_set_accept_focus;
-  impl_class->set_focus_on_map = gdk_x11_surface_set_focus_on_map;
-  impl_class->set_icon_list = gdk_x11_surface_set_icon_list;
-  impl_class->minimize = gdk_x11_surface_minimize;
-  impl_class->unminimize = gdk_x11_surface_unminimize;
-  impl_class->stick = gdk_x11_surface_stick;
-  impl_class->unstick = gdk_x11_surface_unstick;
-  impl_class->maximize = gdk_x11_surface_maximize;
-  impl_class->unmaximize = gdk_x11_surface_unmaximize;
-  impl_class->fullscreen = gdk_x11_surface_fullscreen;
-  impl_class->fullscreen_on_monitor = gdk_x11_surface_fullscreen_on_monitor;
   impl_class->apply_fullscreen_mode = gdk_x11_surface_apply_fullscreen_mode;
-  impl_class->unfullscreen = gdk_x11_surface_unfullscreen;
-  impl_class->set_keep_above = gdk_x11_surface_set_keep_above;
-  impl_class->set_keep_below = gdk_x11_surface_set_keep_below;
   impl_class->begin_resize_drag = gdk_x11_surface_begin_resize_drag;
   impl_class->begin_move_drag = gdk_x11_surface_begin_move_drag;
-  impl_class->set_opacity = gdk_x11_surface_set_opacity;
   impl_class->destroy_notify = gdk_x11_surface_destroy_notify;
   impl_class->drag_begin = _gdk_x11_surface_drag_begin;
   impl_class->get_scale_factor = gdk_x11_surface_get_scale_factor;
   impl_class->set_opaque_region = gdk_x11_surface_set_opaque_region;
   impl_class->set_shadow_width = gdk_x11_surface_set_shadow_width;
-  impl_class->show_window_menu = gdk_x11_surface_show_window_menu;
   impl_class->create_gl_context = gdk_x11_surface_create_gl_context;
   impl_class->get_unscaled_size = gdk_x11_surface_get_unscaled_size;
   impl_class->supports_edge_constraints = gdk_x11_surface_supports_edge_constraints;
