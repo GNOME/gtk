@@ -1653,12 +1653,6 @@ gdk_surface_get_device_position (GdkSurface       *surface,
     *mask = tmp_mask;
 }
 
-static void
-gdk_surface_raise_internal (GdkSurface *surface)
-{
-  GDK_SURFACE_GET_CLASS (surface)->raise (surface);
-}
-
 /* Returns TRUE If the native surface was mapped or unmapped */
 static gboolean
 set_viewable (GdkSurface *w,
@@ -1676,42 +1670,6 @@ gboolean
 _gdk_surface_update_viewable (GdkSurface *surface)
 {
   return set_viewable (surface, GDK_SURFACE_IS_MAPPED (surface));
-}
-
-static void
-gdk_surface_show_internal (GdkSurface *surface, gboolean raise)
-{
-  gboolean was_mapped;
-  gboolean did_show;
-
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  if (surface->destroyed)
-    return;
-
-  was_mapped = GDK_SURFACE_IS_MAPPED (surface);
-
-  if (raise)
-    gdk_surface_raise_internal (surface);
-
-  if (!was_mapped)
-    gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
-
-  did_show = _gdk_surface_update_viewable (surface);
-
-  GDK_SURFACE_GET_CLASS (surface)->show (surface, !did_show ? was_mapped : TRUE);
-
-  if (!was_mapped)
-    {
-      if (gdk_surface_is_viewable (surface))
-        gdk_surface_invalidate_rect (surface, NULL);
-    }
-}
-
-void
-gdk_surface_show (GdkSurface *surface)
-{
-  gdk_surface_show_internal (surface, TRUE);
 }
 
 /**
