@@ -610,9 +610,8 @@ unselect_current_file (GtkFileChooserButton *button)
     {
       g_object_unref (priv->selection_while_inactive);
       priv->selection_while_inactive = NULL;
+      priv->is_changing_selection = TRUE;
     }
-
-  priv->is_changing_selection = TRUE;
 
   update_label_and_image (button);
   update_combo_box (button);
