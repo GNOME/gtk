@@ -3527,25 +3527,6 @@ gdk_wayland_surface_set_keep_below (GdkSurface *surface,
 }
 
 static void
-gdk_wayland_surface_set_decorations (GdkSurface      *surface,
-                                     GdkWMDecoration  decorations)
-{
-}
-
-static gboolean
-gdk_wayland_surface_get_decorations (GdkSurface      *surface,
-                                     GdkWMDecoration *decorations)
-{
-  return FALSE;
-}
-
-static void
-gdk_wayland_surface_set_functions (GdkSurface    *surface,
-                                   GdkWMFunction  functions)
-{
-}
-
-static void
 gdk_wayland_surface_begin_resize_drag (GdkSurface     *surface,
                                        GdkSurfaceEdge  edge,
                                        GdkDevice      *device,
@@ -3864,9 +3845,6 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   impl_class->unfullscreen = gdk_wayland_surface_unfullscreen;
   impl_class->set_keep_above = gdk_wayland_surface_set_keep_above;
   impl_class->set_keep_below = gdk_wayland_surface_set_keep_below;
-  impl_class->set_decorations = gdk_wayland_surface_set_decorations;
-  impl_class->get_decorations = gdk_wayland_surface_get_decorations;
-  impl_class->set_functions = gdk_wayland_surface_set_functions;
   impl_class->begin_resize_drag = gdk_wayland_surface_begin_resize_drag;
   impl_class->begin_move_drag = gdk_wayland_surface_begin_move_drag;
   impl_class->set_opacity = gdk_wayland_surface_set_opacity;

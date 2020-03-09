@@ -870,37 +870,6 @@ gdk_broadway_surface_set_keep_below (GdkSurface *surface, gboolean setting)
 
 }
 
-static void
-gdk_broadway_surface_set_decorations (GdkSurface      *surface,
-                                      GdkWMDecoration decorations)
-{
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
-}
-
-static gboolean
-gdk_broadway_surface_get_decorations (GdkSurface       *surface,
-                                      GdkWMDecoration *decorations)
-{
-  gboolean result = FALSE;
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return FALSE;
-
-  return result;
-}
-
-static void
-gdk_broadway_surface_set_functions (GdkSurface    *surface,
-                                    GdkWMFunction functions)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-}
-
 void
 gdk_broadway_surface_update_popups (GdkSurface *parent)
 {
@@ -1440,9 +1409,6 @@ gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
   impl_class->unfullscreen = gdk_broadway_surface_unfullscreen;
   impl_class->set_keep_above = gdk_broadway_surface_set_keep_above;
   impl_class->set_keep_below = gdk_broadway_surface_set_keep_below;
-  impl_class->set_decorations = gdk_broadway_surface_set_decorations;
-  impl_class->get_decorations = gdk_broadway_surface_get_decorations;
-  impl_class->set_functions = gdk_broadway_surface_set_functions;
   impl_class->begin_resize_drag = gdk_broadway_surface_begin_resize_drag;
   impl_class->begin_move_drag = gdk_broadway_surface_begin_move_drag;
   impl_class->set_opacity = gdk_broadway_surface_set_opacity;

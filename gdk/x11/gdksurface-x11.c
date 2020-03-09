@@ -4755,9 +4755,6 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->unfullscreen = gdk_x11_surface_unfullscreen;
   impl_class->set_keep_above = gdk_x11_surface_set_keep_above;
   impl_class->set_keep_below = gdk_x11_surface_set_keep_below;
-  impl_class->set_decorations = gdk_x11_surface_set_decorations;
-  impl_class->get_decorations = gdk_x11_surface_get_decorations;
-  impl_class->set_functions = gdk_x11_surface_set_functions;
   impl_class->begin_resize_drag = gdk_x11_surface_begin_resize_drag;
   impl_class->begin_move_drag = gdk_x11_surface_begin_move_drag;
   impl_class->set_opacity = gdk_x11_surface_set_opacity;

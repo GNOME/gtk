@@ -120,8 +120,6 @@ typedef struct _AeroSnapEdgeRegion AeroSnapEdgeRegion;
 
 static void     gdk_win32_impl_frame_clock_after_paint (GdkFrameClock *clock,
                                                         GdkSurface    *surface);
-static gboolean _gdk_surface_get_functions (GdkSurface         *window,
-                                           GdkWMFunction     *functions);
 
 G_DEFINE_TYPE (GdkWin32Surface, gdk_win32_surface, GDK_TYPE_SURFACE)
 
@@ -2208,119 +2206,6 @@ update_single_system_menu_entry (HMENU    hmenu,
     EnableMenuItem (hmenu, menu_entry, MF_BYCOMMAND | MF_ENABLED);
   else
     EnableMenuItem (hmenu, menu_entry, MF_BYCOMMAND | MF_GRAYED);
-}
-
-static void
-update_system_menu (GdkSurface *window)
-{
-  GdkWMFunction functions;
-  BOOL all;
-
-  if (_gdk_surface_get_functions (window, &functions))
-    {
-      HMENU hmenu = GetSystemMenu (GDK_SURFACE_HWND (window), FALSE);
-
-      all = (functions & GDK_FUNC_ALL);
-      update_single_system_menu_entry (hmenu, all, functions & GDK_FUNC_RESIZE, SC_SIZE);
-      update_single_system_menu_entry (hmenu, all, functions & GDK_FUNC_MOVE, SC_MOVE);
-      update_single_system_menu_entry (hmenu, all, functions & GDK_FUNC_MINIMIZE, SC_MINIMIZE);
-      update_single_system_menu_entry (hmenu, all, functions & GDK_FUNC_MAXIMIZE, SC_MAXIMIZE);
-      update_single_system_menu_entry (hmenu, all, functions & GDK_FUNC_CLOSE, SC_CLOSE);
-    }
-}
-
-static void
-gdk_win32_surface_set_decorations (GdkSurface      *window,
-				  GdkWMDecoration decorations)
-{
-  GdkWin32Surface *impl;
-
-  g_return_if_fail (GDK_IS_SURFACE (window));
-
-  impl = GDK_WIN32_SURFACE (window);
-
-  GDK_NOTE (MISC, g_print ("gdk_surface_set_decorations: %p: %s %s%s%s%s%s%s\n",
-			   GDK_SURFACE_HWND (window),
-			   (decorations & GDK_DECOR_ALL ? "clearing" : "setting"),
-			   (decorations & GDK_DECOR_BORDER ? "BORDER " : ""),
-			   (decorations & GDK_DECOR_RESIZEH ? "RESIZEH " : ""),
-			   (decorations & GDK_DECOR_TITLE ? "TITLE " : ""),
-			   (decorations & GDK_DECOR_MENU ? "MENU " : ""),
-			   (decorations & GDK_DECOR_MINIMIZE ? "MINIMIZE " : ""),
-			   (decorations & GDK_DECOR_MAXIMIZE ? "MAXIMIZE " : "")));
-
-  if (!impl->decorations)
-    impl->decorations = g_malloc (sizeof (GdkWMDecoration));
-
-  *impl->decorations = decorations;
-
-  _gdk_win32_surface_update_style_bits (window);
-}
-
-static gboolean
-gdk_win32_surface_get_decorations (GdkSurface       *window,
-				  GdkWMDecoration *decorations)
-{
-  GdkWin32Surface *impl;
-
-  g_return_val_if_fail (GDK_IS_SURFACE (window), FALSE);
-
-  impl = GDK_WIN32_SURFACE (window);
-
-  if (impl->decorations == NULL)
-    return FALSE;
-
-  *decorations = *impl->decorations;
-
-  return TRUE;
-}
-
-static GQuark
-get_functions_quark ()
-{
-  static GQuark quark = 0;
-
-  if (!quark)
-    quark = g_quark_from_static_string ("gdk-surface-functions");
-
-  return quark;
-}
-
-static void
-gdk_win32_surface_set_functions (GdkSurface    *window,
-			  GdkWMFunction functions)
-{
-  GdkWMFunction* functions_copy;
-
-  g_return_if_fail (GDK_IS_SURFACE (window));
-
-  GDK_NOTE (MISC, g_print ("gdk_surface_set_functions: %p: %s %s%s%s%s%s\n",
-			   GDK_SURFACE_HWND (window),
-			   (functions & GDK_FUNC_ALL ? "clearing" : "setting"),
-			   (functions & GDK_FUNC_RESIZE ? "RESIZE " : ""),
-			   (functions & GDK_FUNC_MOVE ? "MOVE " : ""),
-			   (functions & GDK_FUNC_MINIMIZE ? "MINIMIZE " : ""),
-			   (functions & GDK_FUNC_MAXIMIZE ? "MAXIMIZE " : ""),
-			   (functions & GDK_FUNC_CLOSE ? "CLOSE " : "")));
-
-  functions_copy = g_malloc (sizeof (GdkWMFunction));
-  *functions_copy = functions;
-  g_object_set_qdata_full (G_OBJECT (window), get_functions_quark (), functions_copy, g_free);
-
-  update_system_menu (window);
-}
-
-gboolean
-_gdk_surface_get_functions (GdkSurface     *window,
-		           GdkWMFunction *functions)
-{
-  GdkWMFunction* functions_set;
-
-  functions_set = g_object_get_qdata (G_OBJECT (window), get_functions_quark ());
-  if (functions_set)
-    *functions = *functions_set;
-
-  return (functions_set != NULL);
 }
 
 #if defined(MORE_AEROSNAP_DEBUGGING)
@@ -5187,9 +5072,6 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
   impl_class->unfullscreen = gdk_win32_surface_unfullscreen;
   impl_class->set_keep_above = gdk_win32_surface_set_keep_above;
   impl_class->set_keep_below = gdk_win32_surface_set_keep_below;
-  impl_class->set_decorations = gdk_win32_surface_set_decorations;
-  impl_class->get_decorations = gdk_win32_surface_get_decorations;
-  impl_class->set_functions = gdk_win32_surface_set_functions;
 
   impl_class->set_shadow_width = gdk_win32_surface_set_shadow_width;
   impl_class->begin_resize_drag = gdk_win32_surface_begin_resize_drag;
