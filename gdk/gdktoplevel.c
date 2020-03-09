@@ -164,6 +164,13 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
                             "Deletable",
                             FALSE,
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+  g_object_interface_install_property (iface,
+      g_param_spec_enum ("fullscreen-mode",
+                         "Fullscreen mode",
+                         "Fullscreen mode",
+                         GDK_TYPE_FULLSCREEN_MODE,
+                         GDK_FULLSCREEN_ON_CURRENT_MONITOR,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 }
 
 guint
@@ -183,6 +190,7 @@ gdk_toplevel_install_properties (GObjectClass *object_class,
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP, "focus-on-map");
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_DECORATED, "decorated");
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_DELETABLE, "deletable");
+  g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_FULLSCREEN_MODE, "fullscreen-mode");
 
   return GDK_TOPLEVEL_NUM_PROPERTIES;
 }

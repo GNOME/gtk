@@ -148,7 +148,6 @@ struct _GdkSurfaceClass
   /* optional */
   gboolean     (* beep)                 (GdkSurface       *surface);
 
-  void         (* apply_fullscreen_mode) (GdkSurface *surface);
   void         (* begin_resize_drag)    (GdkSurface     *surface,
                                          GdkSurfaceEdge  edge,
                                          GdkDevice     *device,
