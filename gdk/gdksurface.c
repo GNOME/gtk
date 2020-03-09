@@ -267,7 +267,7 @@ gdk_surface_layout_popup_helper (GdkSurface     *surface,
   gboolean flipped_y;
   int x, y;
 
-  g_return_if_fail (surface->surface_type == GDK_SURFACE_POPUP);
+  g_return_if_fail (GDK_IS_POPUP (surface));
 
   root_rect = *gdk_popup_layout_get_anchor_rect (layout);
   gdk_surface_get_root_coords (surface->parent,
