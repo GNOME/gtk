@@ -3774,7 +3774,6 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   object_class->finalize = gdk_wayland_surface_finalize;
 
   impl_class->hide = gdk_wayland_surface_hide;
-  impl_class->present_popup = gdk_wayland_surface_present_popup;
   impl_class->get_geometry = gdk_wayland_surface_get_geometry;
   impl_class->get_root_coords = gdk_wayland_surface_get_root_coords;
   impl_class->get_device_state = gdk_wayland_surface_get_device_state;
