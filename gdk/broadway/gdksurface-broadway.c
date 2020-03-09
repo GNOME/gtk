@@ -1357,7 +1357,6 @@ gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
 
   impl_class->ref_cairo_surface = gdk_broadway_surface_ref_cairo_surface;
   impl_class->hide = gdk_broadway_surface_hide;
-  impl_class->present_popup = gdk_broadway_surface_present_popup;
   impl_class->get_geometry = gdk_broadway_surface_get_geometry;
   impl_class->get_root_coords = gdk_broadway_surface_get_root_coords;
   impl_class->get_device_state = gdk_broadway_surface_get_device_state;
