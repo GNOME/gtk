@@ -20,9 +20,13 @@ gdk_keymap_get_type
 gdk_memory_texture_get_type
 gdk_monitor_get_type
 gdk_paintable_get_type
+gdk_popup_get_type
+gdk_popup_layout_get_type
 gdk_rgba_get_type
 gdk_seat_get_type
 gdk_snapshot_get_type
 gdk_surface_get_type
 gdk_texture_get_type
+gdk_toplevel_get_type
+gdk_toplevel_layout_get_type
 gdk_vulkan_context_get_type
