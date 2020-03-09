@@ -184,7 +184,7 @@ gdk_x11_surface_get_unscaled_size (GdkSurface *surface,
     *unscaled_height = impl->unscaled_height;
 }
 
-static gboolean
+gboolean
 gdk_x11_surface_supports_edge_constraints (GdkSurface *surface)
 {
   return gdk_x11_screen_supports_net_wm_hint (GDK_SURFACE_SCREEN (surface),
@@ -4670,7 +4670,6 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->set_shadow_width = gdk_x11_surface_set_shadow_width;
   impl_class->create_gl_context = gdk_x11_surface_create_gl_context;
   impl_class->get_unscaled_size = gdk_x11_surface_get_unscaled_size;
-  impl_class->supports_edge_constraints = gdk_x11_surface_supports_edge_constraints;
 }
 
 #define LAST_PROP 1
@@ -5082,6 +5081,12 @@ gdk_x11_toplevel_show_window_menu (GdkToplevel *toplevel,
   return gdk_x11_surface_show_window_menu (GDK_SURFACE (toplevel), event);
 }
 
+static gboolean
+gdk_x11_toplevel_supports_edge_constraints (GdkToplevel *toplevel)
+{
+  return gdk_x11_surface_supports_edge_constraints (GDK_SURFACE (toplevel));
+}
+
 static void
 gdk_x11_toplevel_iface_init (GdkToplevelInterface *iface)
 {
@@ -5090,6 +5095,7 @@ gdk_x11_toplevel_iface_init (GdkToplevelInterface *iface)
   iface->lower = gdk_x11_toplevel_lower;
   iface->focus = gdk_x11_toplevel_focus;
   iface->show_window_menu = gdk_x11_toplevel_show_window_menu;
+  iface->supports_edge_constraints = gdk_x11_toplevel_supports_edge_constraints;
 }
 
 typedef struct {

@@ -2920,21 +2920,6 @@ gdk_surface_set_shadow_width (GdkSurface *surface,
     class->set_shadow_width (surface, left, right, top, bottom);
 }
 
-gboolean
-gdk_surface_supports_edge_constraints (GdkSurface *surface)
-{
-  GdkSurfaceClass *class;
-
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
-  g_return_val_if_fail (!GDK_SURFACE_DESTROYED (surface), FALSE);
-
-  class = GDK_SURFACE_GET_CLASS (surface);
-  if (class->supports_edge_constraints)
-    return class->supports_edge_constraints (surface);
-  else
-    return FALSE;
-}
-
 void
 gdk_surface_set_state (GdkSurface      *surface,
                        GdkSurfaceState  new_state)
