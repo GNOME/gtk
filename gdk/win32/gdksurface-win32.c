@@ -1043,7 +1043,7 @@ show_window_internal (GdkSurface *window,
     }
 }
 
-static void
+void
 gdk_win32_surface_show (GdkSurface *window,
 		       gboolean already_mapped)
 {

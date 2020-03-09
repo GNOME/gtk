@@ -2103,7 +2103,7 @@ gdk_drag_anim_timeout (gpointer data)
 
   t = ease_out_cubic (f);
 
-  gdk_surface_show (drag->drag_surface);
+  gdk_win32_surface_show (drag->drag_surface, FALSE);
   x = (drag->util_data.last_x +
        (drag->start_x - drag->util_data.last_x) * t -
        drag->hot_x);
