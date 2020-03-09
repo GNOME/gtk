@@ -551,15 +551,12 @@ static void
 gdk_wayland_device_query_state (GdkDevice        *device,
                                 GdkSurface       *surface,
                                 GdkSurface      **child_surface,
-                                gdouble          *root_x,
-                                gdouble          *root_y,
                                 gdouble          *win_x,
                                 gdouble          *win_y,
                                 GdkModifierType  *mask)
 {
   GdkWaylandPointerData *pointer;
   GList *children = NULL;
-  int x_root, y_root;
 
   if (surface == NULL)
     children = gdk_wayland_display_get_toplevel_surfaces (gdk_device_get_display (device));
@@ -576,24 +573,6 @@ gdk_wayland_device_query_state (GdkDevice        *device,
     *win_x = pointer->surface_x;
   if (win_y)
     *win_y = pointer->surface_y;
-
-  if (pointer->focus)
-    {
-      gdk_surface_get_root_coords (pointer->focus,
-                                  pointer->surface_x,
-                                  pointer->surface_y,
-                                  &x_root, &y_root);
-    }
-  else
-    {
-      x_root = pointer->surface_x;
-      y_root = pointer->surface_y;
-    }
-
-  if (root_x)
-    *root_x = x_root;
-  if (root_y)
-    *root_y = y_root;
 }
 
 static void

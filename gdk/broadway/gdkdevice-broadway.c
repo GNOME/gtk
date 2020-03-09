@@ -37,12 +37,10 @@ static void gdk_broadway_device_set_surface_cursor (GdkDevice *device,
                                                     GdkSurface *surface,
                                                     GdkCursor *cursor);
 static void gdk_broadway_device_query_state (GdkDevice        *device,
-                                             GdkSurface        *surface,
-                                             GdkSurface       **child_surface,
-                                             gdouble          *root_x,
-                                             gdouble          *root_y,
-                                             gdouble          *win_x,
-                                             gdouble          *win_y,
+                                             GdkSurface       *surface,
+                                             GdkSurface      **child_surface,
+                                             double           *win_x,
+                                             double           *win_y,
                                              GdkModifierType  *mask);
 static GdkGrabStatus gdk_broadway_device_grab   (GdkDevice     *device,
                                                  GdkSurface     *surface,
@@ -123,14 +121,12 @@ gdk_broadway_device_set_surface_cursor (GdkDevice *device,
 }
 
 static void
-gdk_broadway_device_query_state (GdkDevice        *device,
+gdk_broadway_device_query_state (GdkDevice         *device,
                                  GdkSurface        *surface,
                                  GdkSurface       **child_surface,
-                                 gdouble          *root_x,
-                                 gdouble          *root_y,
-                                 gdouble          *win_x,
-                                 gdouble          *win_y,
-                                 GdkModifierType  *mask)
+                                 double            *win_x,
+                                 double            *win_y,
+                                 GdkModifierType   *mask)
 {
   GdkDisplay *display;
   GdkBroadwayDisplay *broadway_display;
@@ -150,10 +146,6 @@ gdk_broadway_device_query_state (GdkDevice        *device,
                                     &device_root_y,
                                     &mask32);
 
-  if (root_x)
-    *root_x = device_root_x;
-  if (root_y)
-    *root_y = device_root_y;
   if (win_x)
     *win_x = device_root_x;
   if (win_y)
@@ -305,7 +297,7 @@ gdk_broadway_device_surface_at_position (GdkDevice       *device,
 {
   GdkSurface *surface = NULL;
 
-  gdk_broadway_device_query_state (device, NULL, &surface, NULL, NULL, win_x, win_y, mask);
+  gdk_broadway_device_query_state (device, NULL, &surface, win_x, win_y, mask);
 
   return surface;
 }
