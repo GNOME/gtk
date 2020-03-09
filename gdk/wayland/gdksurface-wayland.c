@@ -2928,33 +2928,6 @@ gdk_wayland_surface_focus (GdkSurface *surface,
 }
 
 static void
-gdk_wayland_surface_set_type_hint (GdkSurface         *surface,
-                                   GdkSurfaceTypeHint  hint)
-{
-  GdkWaylandSurface *impl;
-
-  impl = GDK_WAYLAND_SURFACE (surface);
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
-  impl->hint = hint;
-}
-
-static GdkSurfaceTypeHint
-gdk_wayland_surface_get_type_hint (GdkSurface *surface)
-{
-  GdkWaylandSurface *impl;
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return GDK_SURFACE_TYPE_HINT_NORMAL;
-
-  impl = GDK_WAYLAND_SURFACE (surface);
-
-  return impl->hint;
-}
-
-static void
 gtk_surface_configure (void                *data,
                        struct gtk_surface1 *gtk_surface,
                        struct wl_array     *states)
@@ -3241,24 +3214,6 @@ gdk_wayland_surface_set_transient_for (GdkSurface *surface,
 }
 
 static void
-gdk_wayland_surface_set_accept_focus (GdkSurface *surface,
-                                      gboolean    accept_focus)
-{
-}
-
-static void
-gdk_wayland_surface_set_focus_on_map (GdkSurface *surface,
-                                      gboolean    focus_on_map)
-{
-}
-
-static void
-gdk_wayland_surface_set_icon_list (GdkSurface *surface,
-                                   GList      *surfaces)
-{
-}
-
-static void
 gdk_wayland_surface_minimize (GdkSurface *surface)
 {
   if (GDK_SURFACE_DESTROYED (surface) ||
@@ -3289,21 +3244,6 @@ gdk_wayland_surface_minimize (GdkSurface *surface)
       g_assert_not_reached ();
     }
 #endif
-}
-
-static void
-gdk_wayland_surface_unminimize (GdkSurface *surface)
-{
-}
-
-static void
-gdk_wayland_surface_stick (GdkSurface *surface)
-{
-}
-
-static void
-gdk_wayland_surface_unstick (GdkSurface *surface)
-{
 }
 
 static void
@@ -3479,18 +3419,6 @@ gdk_wayland_surface_unfullscreen (GdkSurface *surface)
 }
 
 static void
-gdk_wayland_surface_set_keep_above (GdkSurface *surface,
-                                    gboolean    setting)
-{
-}
-
-static void
-gdk_wayland_surface_set_keep_below (GdkSurface *surface,
-                                    gboolean    setting)
-{
-}
-
-static void
 gdk_wayland_surface_begin_resize_drag (GdkSurface     *surface,
                                        GdkSurfaceEdge  edge,
                                        GdkDevice      *device,
@@ -3629,12 +3557,6 @@ gdk_wayland_surface_begin_move_drag (GdkSurface *surface,
    * above function - FIXME: Is this always safe..?
    */
   gdk_seat_ungrab (gdk_device_get_seat (device));
-}
-
-static void
-gdk_wayland_surface_set_opacity (GdkSurface *surface,
-                                 gdouble     opacity)
-{
 }
 
 static void
@@ -3781,37 +3703,13 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   impl_class->destroy = gdk_wayland_surface_destroy;
   impl_class->beep = gdk_wayland_surface_beep;
 
-  impl_class->focus = gdk_wayland_surface_focus;
-  impl_class->set_type_hint = gdk_wayland_surface_set_type_hint;
-  impl_class->get_type_hint = gdk_wayland_surface_get_type_hint;
-  impl_class->set_modal_hint = gdk_wayland_surface_set_modal_hint;
-  impl_class->set_geometry_hints = gdk_wayland_surface_set_geometry_hints;
-  impl_class->set_title = gdk_wayland_surface_set_title;
-  impl_class->set_startup_id = gdk_wayland_surface_set_startup_id;
-  impl_class->set_transient_for = gdk_wayland_surface_set_transient_for;
-  impl_class->set_accept_focus = gdk_wayland_surface_set_accept_focus;
-  impl_class->set_focus_on_map = gdk_wayland_surface_set_focus_on_map;
-  impl_class->set_icon_list = gdk_wayland_surface_set_icon_list;
-  impl_class->minimize = gdk_wayland_surface_minimize;
-  impl_class->unminimize = gdk_wayland_surface_unminimize;
-  impl_class->stick = gdk_wayland_surface_stick;
-  impl_class->unstick = gdk_wayland_surface_unstick;
-  impl_class->maximize = gdk_wayland_surface_maximize;
-  impl_class->unmaximize = gdk_wayland_surface_unmaximize;
-  impl_class->fullscreen = gdk_wayland_surface_fullscreen;
-  impl_class->fullscreen_on_monitor = gdk_wayland_surface_fullscreen_on_monitor;
-  impl_class->unfullscreen = gdk_wayland_surface_unfullscreen;
-  impl_class->set_keep_above = gdk_wayland_surface_set_keep_above;
-  impl_class->set_keep_below = gdk_wayland_surface_set_keep_below;
   impl_class->begin_resize_drag = gdk_wayland_surface_begin_resize_drag;
   impl_class->begin_move_drag = gdk_wayland_surface_begin_move_drag;
-  impl_class->set_opacity = gdk_wayland_surface_set_opacity;
   impl_class->destroy_notify = gdk_wayland_surface_destroy_notify;
   impl_class->drag_begin = _gdk_wayland_surface_drag_begin;
   impl_class->get_scale_factor = gdk_wayland_surface_get_scale_factor;
   impl_class->set_opaque_region = gdk_wayland_surface_set_opaque_region;
   impl_class->set_shadow_width = gdk_wayland_surface_set_shadow_width;
-  impl_class->show_window_menu = gdk_wayland_surface_show_window_menu;
   impl_class->create_gl_context = gdk_wayland_surface_create_gl_context;
   impl_class->supports_edge_constraints = gdk_wayland_surface_supports_edge_constraints;
 
@@ -4572,8 +4470,6 @@ gdk_wayland_toplevel_present (GdkToplevel       *toplevel,
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkGeometry geometry;
   GdkSurfaceHints mask;
-
-  gdk_wayland_surface_unminimize (surface);
 
   if (gdk_toplevel_layout_get_resizable (layout))
     {
