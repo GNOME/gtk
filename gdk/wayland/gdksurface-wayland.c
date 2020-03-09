@@ -2545,30 +2545,6 @@ gdk_wayland_surface_hide (GdkSurface *surface)
 }
 
 static void
-gdk_wayland_surface_withdraw (GdkSurface *surface)
-{
-  if (!surface->destroyed)
-    {
-      if (GDK_SURFACE_IS_MAPPED (surface))
-        gdk_synthesize_surface_state (surface, 0, GDK_SURFACE_STATE_WITHDRAWN);
-
-      g_assert (!GDK_SURFACE_IS_MAPPED (surface));
-
-      gdk_wayland_surface_hide_surface (surface);
-    }
-}
-
-static void
-gdk_wayland_surface_raise (GdkSurface *surface)
-{
-}
-
-static void
-gdk_wayland_surface_lower (GdkSurface *surface)
-{
-}
-
-static void
 gdk_wayland_surface_move_resize (GdkSurface *surface,
                                  gint        x,
                                  gint        y,
@@ -3809,11 +3785,7 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   object_class->dispose = gdk_wayland_surface_dispose;
   object_class->finalize = gdk_wayland_surface_finalize;
 
-  impl_class->show = gdk_wayland_surface_show;
   impl_class->hide = gdk_wayland_surface_hide;
-  impl_class->withdraw = gdk_wayland_surface_withdraw;
-  impl_class->raise = gdk_wayland_surface_raise;
-  impl_class->lower = gdk_wayland_surface_lower;
   impl_class->toplevel_resize = gdk_wayland_surface_toplevel_resize;
   impl_class->present_popup = gdk_wayland_surface_present_popup;
   impl_class->get_geometry = gdk_wayland_surface_get_geometry;
