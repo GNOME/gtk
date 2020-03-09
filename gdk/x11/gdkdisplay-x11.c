@@ -241,7 +241,7 @@ do_edge_constraint_state_check (GdkSurface      *surface,
    * GDK_SURFACE_STATE_TILED to be set if any edge is tiled, and cleared
    * if no edge is tiled.
    */
-  if (!gdk_surface_supports_edge_constraints (surface))
+  if (!gdk_x11_surface_supports_edge_constraints (surface))
     {
       /* FIXME: we rely on implementation details of mutter here:
        * mutter only tiles horizontally, and sets maxvert when it does
