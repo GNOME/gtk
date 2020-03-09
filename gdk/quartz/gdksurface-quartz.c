@@ -1434,25 +1434,6 @@ gdk_surface_quartz_lower (GdkSurface *window)
 }
 
 static void
-gdk_surface_quartz_restack_toplevel (GdkSurface *window,
-				    GdkSurface *sibling,
-				    gboolean   above)
-{
-  GdkSurfaceImplQuartz *impl;
-  gint sibling_num;
-
-  impl = GDK_SURFACE_IMPL_QUARTZ (sibling->impl);
-  sibling_num = [impl->toplevel windowNumber];
-
-  impl = GDK_SURFACE_IMPL_QUARTZ (window->impl);
-
-  if (above)
-    [impl->toplevel orderWindow:NSWindowAbove relativeTo:sibling_num];
-  else
-    [impl->toplevel orderWindow:NSWindowBelow relativeTo:sibling_num];
-}
-
-static void
 gdk_surface_quartz_get_geometry (GdkSurface *window,
                                 gint      *x,
                                 gint      *y,
@@ -2705,7 +2686,6 @@ gdk_surface_impl_quartz_class_init (GdkSurfaceImplQuartzClass *klass)
   impl_class->withdraw = gdk_surface_quartz_withdraw;
   impl_class->raise = gdk_surface_quartz_raise;
   impl_class->lower = gdk_surface_quartz_lower;
-  impl_class->restack_toplevel = gdk_surface_quartz_restack_toplevel;
   impl_class->toplevel_resize = gdk_surface_quartz_toplevel_resize;
   impl_class->present_popup = gdk_quartz_surface_present_popup;
   impl_class->get_geometry = gdk_surface_quartz_get_geometry;

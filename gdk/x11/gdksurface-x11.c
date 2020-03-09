@@ -4760,7 +4760,6 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->withdraw = gdk_x11_surface_withdraw;
   impl_class->raise = gdk_x11_surface_raise;
   impl_class->lower = gdk_x11_surface_lower;
-  impl_class->restack_toplevel = gdk_x11_surface_restack_toplevel;
   impl_class->toplevel_resize = gdk_x11_surface_toplevel_resize;
   impl_class->present_popup = gdk_x11_surface_present_popup;
   impl_class->get_geometry = gdk_x11_surface_get_geometry;

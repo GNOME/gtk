@@ -119,10 +119,6 @@ struct _GdkSurfaceClass
   void         (* withdraw)             (GdkSurface       *surface);
   void         (* raise)                (GdkSurface       *surface);
   void         (* lower)                (GdkSurface       *surface);
-  void         (* restack_toplevel)     (GdkSurface       *surface,
-                                         GdkSurface       *sibling,
-                                         gboolean        above);
-
   void         (* toplevel_resize)      (GdkSurface      *surface,
                                          gint             width,
                                          gint             height);

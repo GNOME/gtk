@@ -565,13 +565,6 @@ gdk_broadway_surface_present_popup (GdkSurface     *surface,
 }
 
 static void
-gdk_broadway_surface_restack_toplevel (GdkSurface *surface,
-                                       GdkSurface *sibling,
-                                       gboolean   above)
-{
-}
-
-static void
 gdk_broadway_surface_lower (GdkSurface *surface)
 {
 }
@@ -935,7 +928,6 @@ gdk_broadway_surface_update_popups (GdkSurface *parent)
         gdk_broadway_surface_move_resize (popup,
                                           new_x, new_y,
                                           popup->width, popup->height);
-      gdk_broadway_surface_restack_toplevel (popup, parent, TRUE);
     }
 }
 
@@ -1429,7 +1421,6 @@ gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
   impl_class->withdraw = gdk_broadway_surface_withdraw;
   impl_class->raise = gdk_broadway_surface_raise;
   impl_class->lower = gdk_broadway_surface_lower;
-  impl_class->restack_toplevel = gdk_broadway_surface_restack_toplevel;
   impl_class->toplevel_resize = gdk_broadway_surface_toplevel_resize;
   impl_class->present_popup = gdk_broadway_surface_present_popup;
   impl_class->get_geometry = gdk_broadway_surface_get_geometry;

@@ -1862,14 +1862,6 @@ gdk_win32_surface_get_root_coords (GdkSurface *window,
 			   (ty + _gdk_offset_y) / impl->surface_scale));
 }
 
-static void
-gdk_win32_surface_restack_toplevel (GdkSurface *window,
-				   GdkSurface *sibling,
-				   gboolean   above)
-{
-	// ### TODO
-}
-
 static gboolean
 gdk_surface_win32_get_device_state (GdkSurface       *window,
                                    GdkDevice       *device,
@@ -5190,7 +5182,6 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
   impl_class->withdraw = gdk_win32_surface_withdraw;
   impl_class->raise = gdk_win32_surface_raise;
   impl_class->lower = gdk_win32_surface_lower;
-  impl_class->restack_toplevel = gdk_win32_surface_restack_toplevel;
   impl_class->toplevel_resize = gdk_win32_surface_toplevel_resize;
   impl_class->present_popup = gdk_win32_surface_present_popup;
   impl_class->get_geometry = gdk_win32_surface_get_geometry;

@@ -2569,13 +2569,6 @@ gdk_wayland_surface_lower (GdkSurface *surface)
 }
 
 static void
-gdk_wayland_surface_restack_toplevel (GdkSurface *surface,
-                                      GdkSurface *sibling,
-                                      gboolean    above)
-{
-}
-
-static void
 gdk_wayland_surface_move_resize (GdkSurface *surface,
                                  gint        x,
                                  gint        y,
@@ -3848,7 +3841,6 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   impl_class->withdraw = gdk_wayland_surface_withdraw;
   impl_class->raise = gdk_wayland_surface_raise;
   impl_class->lower = gdk_wayland_surface_lower;
-  impl_class->restack_toplevel = gdk_wayland_surface_restack_toplevel;
   impl_class->toplevel_resize = gdk_wayland_surface_toplevel_resize;
   impl_class->present_popup = gdk_wayland_surface_present_popup;
   impl_class->get_geometry = gdk_wayland_surface_get_geometry;
