@@ -387,12 +387,6 @@ gdk_broadway_surface_hide (GdkSurface *surface)
 }
 
 static void
-gdk_broadway_surface_withdraw (GdkSurface *surface)
-{
-  gdk_broadway_surface_hide (surface);
-}
-
-static void
 gdk_broadway_surface_move_resize_internal (GdkSurface *surface,
                                            gboolean    with_move,
                                            gint        x,
@@ -514,14 +508,8 @@ gdk_broadway_surface_layout_popup (GdkSurface     *surface,
 }
 
 static void
-gdk_broadway_surface_raise (GdkSurface *surface)
-{
-}
-
-static void
 show_popup (GdkSurface *surface)
 {
-  gdk_broadway_surface_raise (surface);
   gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
   _gdk_surface_update_viewable (surface);
   gdk_broadway_surface_show (surface, FALSE);
@@ -563,12 +551,6 @@ gdk_broadway_surface_present_popup (GdkSurface     *surface,
 
   return GDK_SURFACE_IS_MAPPED (surface);
 }
-
-static void
-gdk_broadway_surface_lower (GdkSurface *surface)
-{
-}
-
 
 static void
 gdk_broadway_surface_focus (GdkSurface *surface,
@@ -1374,11 +1356,7 @@ gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
   object_class->finalize = gdk_broadway_surface_finalize;
 
   impl_class->ref_cairo_surface = gdk_broadway_surface_ref_cairo_surface;
-  impl_class->show = gdk_broadway_surface_show;
   impl_class->hide = gdk_broadway_surface_hide;
-  impl_class->withdraw = gdk_broadway_surface_withdraw;
-  impl_class->raise = gdk_broadway_surface_raise;
-  impl_class->lower = gdk_broadway_surface_lower;
   impl_class->toplevel_resize = gdk_broadway_surface_toplevel_resize;
   impl_class->present_popup = gdk_broadway_surface_present_popup;
   impl_class->get_geometry = gdk_broadway_surface_get_geometry;
