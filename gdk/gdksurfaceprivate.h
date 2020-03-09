@@ -26,6 +26,13 @@
 
 G_BEGIN_DECLS
 
+typedef enum
+{
+  GDK_SURFACE_TOPLEVEL,
+  GDK_SURFACE_TEMP,
+  GDK_SURFACE_POPUP
+} GdkSurfaceType;
+
 struct _GdkSurface
 {
   GObject parent_instance;
