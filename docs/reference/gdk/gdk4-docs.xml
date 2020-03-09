@@ -31,6 +31,10 @@
     <xi:include href="xml/rgba_colors.xml" />
     <xi:include href="xml/cursors.xml" />
     <xi:include href="xml/gdksurface.xml" />
+    <xi:include href="xml/gdktoplevel.xml" />
+    <xi:include href="xml/gdktoplevellayout.xml" />
+    <xi:include href="xml/gdkpopup.xml" />
+    <xi:include href="xml/gdkpopuplayout.xml" />
     <xi:include href="xml/gdkframeclock.xml" />
     <xi:include href="xml/gdkframetimings.xml" />
     <xi:include href="xml/gdkdrawcontext.xml" />
