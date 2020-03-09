@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-02 14:52+0000\n"
-"PO-Revision-Date: 2020-03-03 20:25+0900\n"
+"POT-Creation-Date: 2020-03-07 17:38+0000\n"
+"PO-Revision-Date: 2020-03-09 21:20+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
@@ -2312,9 +2312,9 @@ msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
-"同名のファイルがすでに存在しているため、そのフォルダーを作成できませんでした"
-"。別のフォルダー名を使用するか、ファイルの名前を変更するなどして、もう一度実"
-"行してください。"
+"同名のファイルがすでに存在しているため、そのフォルダーを作成できませんでし"
+"た。別のフォルダー名を使用するか、ファイルの名前を変更するなどして、もう一度"
+"実行してください。"
 
 #: gtk/gtkfilechooserwidget.c:835
 msgid "You need to choose a valid filename."
@@ -7273,7 +7273,7 @@ msgstr "サーバーへ接続(_S)"
 
 #: gtk/ui/gtkplacesview.ui:340
 msgid "Enter server address…"
-msgstr "サーバーのアドレスを入力…"
+msgstr "サーバーアドレスを入力…"
 
 #: gtk/ui/gtkprintunixdialog.ui:112
 msgid "Printer"
