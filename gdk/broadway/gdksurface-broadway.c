@@ -387,12 +387,6 @@ gdk_broadway_surface_hide (GdkSurface *surface)
 }
 
 static void
-gdk_broadway_surface_withdraw (GdkSurface *surface)
-{
-  gdk_broadway_surface_hide (surface);
-}
-
-static void
 gdk_broadway_surface_move_resize_internal (GdkSurface *surface,
                                            gboolean    with_move,
                                            gint        x,
@@ -514,14 +508,8 @@ gdk_broadway_surface_layout_popup (GdkSurface     *surface,
 }
 
 static void
-gdk_broadway_surface_raise (GdkSurface *surface)
-{
-}
-
-static void
 show_popup (GdkSurface *surface)
 {
-  gdk_broadway_surface_raise (surface);
   gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
   _gdk_surface_update_viewable (surface);
   gdk_broadway_surface_show (surface, FALSE);
@@ -565,19 +553,6 @@ gdk_broadway_surface_present_popup (GdkSurface     *surface,
 }
 
 static void
-gdk_broadway_surface_restack_toplevel (GdkSurface *surface,
-                                       GdkSurface *sibling,
-                                       gboolean   above)
-{
-}
-
-static void
-gdk_broadway_surface_lower (GdkSurface *surface)
-{
-}
-
-
-static void
 gdk_broadway_surface_focus (GdkSurface *surface,
                             guint32    timestamp)
 {
@@ -594,24 +569,6 @@ gdk_broadway_surface_focus (GdkSurface *surface,
   broadway_display = GDK_BROADWAY_DISPLAY (gdk_surface_get_display (surface));
   _gdk_broadway_server_surface_focus (broadway_display->server,
                                       impl->id);
-}
-
-static void
-gdk_broadway_surface_set_type_hint (GdkSurface        *surface,
-                                    GdkSurfaceTypeHint hint)
-{
-}
-
-static GdkSurfaceTypeHint
-gdk_broadway_surface_get_type_hint (GdkSurface *surface)
-{
-  return GDK_SURFACE_TYPE_HINT_NORMAL;
-}
-
-static void
-gdk_broadway_surface_set_modal_hint (GdkSurface *surface,
-                                     gboolean   modal)
-{
 }
 
 static void
@@ -722,48 +679,6 @@ gdk_broadway_surface_set_input_region (GdkSurface     *surface,
 }
 
 static void
-gdk_broadway_surface_set_accept_focus (GdkSurface *surface,
-                                       gboolean accept_focus)
-{
-  accept_focus = accept_focus != FALSE;
-
-  if (surface->accept_focus != accept_focus)
-    {
-      surface->accept_focus = accept_focus;
-    }
-}
-
-static void
-gdk_broadway_surface_set_focus_on_map (GdkSurface *surface,
-                                       gboolean focus_on_map)
-{
-  focus_on_map = focus_on_map != FALSE;
-
-  if (surface->focus_on_map != focus_on_map)
-    {
-      surface->focus_on_map = focus_on_map;
-    }
-}
-
-
-static void
-gdk_broadway_surface_set_icon_list (GdkSurface *surface,
-                                    GList     *surfaces)
-{
-}
-
-static void
-gdk_broadway_surface_set_icon_name (GdkSurface   *surface,
-                                   const gchar *name)
-{
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
-  g_object_set_qdata (G_OBJECT (surface), g_quark_from_static_string ("gdk-icon-name-set"),
-                      GUINT_TO_POINTER (name != NULL));
-}
-
-static void
 gdk_broadway_surface_minimize (GdkSurface *surface)
 {
   if (GDK_SURFACE_DESTROYED (surface))
@@ -775,22 +690,6 @@ gdk_broadway_surface_unminimize (GdkSurface *surface)
 {
   if (GDK_SURFACE_DESTROYED (surface))
     return;
-}
-
-static void
-gdk_broadway_surface_stick (GdkSurface *surface)
-{
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
-}
-
-static void
-gdk_broadway_surface_unstick (GdkSurface *surface)
-{
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
 }
 
 static void
@@ -851,74 +750,6 @@ gdk_broadway_surface_unmaximize (GdkSurface *surface)
                                     impl->pre_maximize_height);
 }
 
-static void
-gdk_broadway_surface_fullscreen (GdkSurface *surface)
-{
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
-}
-
-static void
-gdk_broadway_surface_unfullscreen (GdkSurface *surface)
-{
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
-}
-
-static void
-gdk_broadway_surface_set_keep_above (GdkSurface *surface,
-                                     gboolean   setting)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
-}
-
-static void
-gdk_broadway_surface_set_keep_below (GdkSurface *surface, gboolean setting)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
-}
-
-static void
-gdk_broadway_surface_set_decorations (GdkSurface      *surface,
-                                      GdkWMDecoration decorations)
-{
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
-}
-
-static gboolean
-gdk_broadway_surface_get_decorations (GdkSurface       *surface,
-                                      GdkWMDecoration *decorations)
-{
-  gboolean result = FALSE;
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return FALSE;
-
-  return result;
-}
-
-static void
-gdk_broadway_surface_set_functions (GdkSurface    *surface,
-                                    GdkWMFunction functions)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-}
-
 void
 gdk_broadway_surface_update_popups (GdkSurface *parent)
 {
@@ -935,7 +766,6 @@ gdk_broadway_surface_update_popups (GdkSurface *parent)
         gdk_broadway_surface_move_resize (popup,
                                           new_x, new_y,
                                           popup->width, popup->height);
-      gdk_broadway_surface_restack_toplevel (popup, parent, TRUE);
     }
 }
 
@@ -1391,21 +1221,6 @@ gdk_broadway_surface_beep (GdkSurface *surface)
   return FALSE;
 }
 
-static void
-gdk_broadway_surface_set_opacity (GdkSurface *surface,
-                                 gdouble    opacity)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
-  if (opacity < 0)
-    opacity = 0;
-  else if (opacity > 1)
-    opacity = 1;
-}
-
 guint32
 gdk_broadway_get_last_seen_time (GdkSurface  *surface)
 {
@@ -1424,49 +1239,15 @@ gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
   object_class->finalize = gdk_broadway_surface_finalize;
 
   impl_class->ref_cairo_surface = gdk_broadway_surface_ref_cairo_surface;
-  impl_class->show = gdk_broadway_surface_show;
   impl_class->hide = gdk_broadway_surface_hide;
-  impl_class->withdraw = gdk_broadway_surface_withdraw;
-  impl_class->raise = gdk_broadway_surface_raise;
-  impl_class->lower = gdk_broadway_surface_lower;
-  impl_class->restack_toplevel = gdk_broadway_surface_restack_toplevel;
-  impl_class->toplevel_resize = gdk_broadway_surface_toplevel_resize;
-  impl_class->present_popup = gdk_broadway_surface_present_popup;
   impl_class->get_geometry = gdk_broadway_surface_get_geometry;
   impl_class->get_root_coords = gdk_broadway_surface_get_root_coords;
   impl_class->get_device_state = gdk_broadway_surface_get_device_state;
   impl_class->set_input_region = gdk_broadway_surface_set_input_region;
   impl_class->destroy = _gdk_broadway_surface_destroy;
   impl_class->beep = gdk_broadway_surface_beep;
-
-  impl_class->focus = gdk_broadway_surface_focus;
-  impl_class->set_type_hint = gdk_broadway_surface_set_type_hint;
-  impl_class->get_type_hint = gdk_broadway_surface_get_type_hint;
-  impl_class->set_modal_hint = gdk_broadway_surface_set_modal_hint;
-  impl_class->set_geometry_hints = gdk_broadway_surface_set_geometry_hints;
-  impl_class->set_title = gdk_broadway_surface_set_title;
-  impl_class->set_startup_id = gdk_broadway_surface_set_startup_id;
-  impl_class->set_transient_for = gdk_broadway_surface_set_transient_for;
-  impl_class->set_accept_focus = gdk_broadway_surface_set_accept_focus;
-  impl_class->set_focus_on_map = gdk_broadway_surface_set_focus_on_map;
-  impl_class->set_icon_list = gdk_broadway_surface_set_icon_list;
-  impl_class->set_icon_name = gdk_broadway_surface_set_icon_name;
-  impl_class->minimize = gdk_broadway_surface_minimize;
-  impl_class->unminimize = gdk_broadway_surface_unminimize;
-  impl_class->stick = gdk_broadway_surface_stick;
-  impl_class->unstick = gdk_broadway_surface_unstick;
-  impl_class->maximize = gdk_broadway_surface_maximize;
-  impl_class->unmaximize = gdk_broadway_surface_unmaximize;
-  impl_class->fullscreen = gdk_broadway_surface_fullscreen;
-  impl_class->unfullscreen = gdk_broadway_surface_unfullscreen;
-  impl_class->set_keep_above = gdk_broadway_surface_set_keep_above;
-  impl_class->set_keep_below = gdk_broadway_surface_set_keep_below;
-  impl_class->set_decorations = gdk_broadway_surface_set_decorations;
-  impl_class->get_decorations = gdk_broadway_surface_get_decorations;
-  impl_class->set_functions = gdk_broadway_surface_set_functions;
   impl_class->begin_resize_drag = gdk_broadway_surface_begin_resize_drag;
   impl_class->begin_move_drag = gdk_broadway_surface_begin_move_drag;
-  impl_class->set_opacity = gdk_broadway_surface_set_opacity;
   impl_class->destroy_notify = gdk_broadway_surface_destroy_notify;
   impl_class->drag_begin = _gdk_broadway_surface_drag_begin;
 }
