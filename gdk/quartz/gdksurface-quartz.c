@@ -1832,13 +1832,6 @@ gdk_quartz_surface_set_focus_on_map (GdkSurface *window,
 }
 
 static void
-gdk_quartz_surface_set_icon_name (GdkSurface   *window,
-                                 const gchar *name)
-{
-  /* FIXME: Implement */
-}
-
-static void
 gdk_quartz_surface_focus (GdkSurface *window,
                          guint32    timestamp)
 {
@@ -2708,7 +2701,6 @@ gdk_surface_impl_quartz_class_init (GdkSurfaceImplQuartzClass *klass)
   impl_class->set_accept_focus = gdk_quartz_surface_set_accept_focus;
   impl_class->set_focus_on_map = gdk_quartz_surface_set_focus_on_map;
   impl_class->set_icon_list = gdk_quartz_surface_set_icon_list;
-  impl_class->set_icon_name = gdk_quartz_surface_set_icon_name;
   impl_class->minimize = gdk_quartz_surface_minimize;
   impl_class->unminimize = gdk_quartz_surface_unminimize;
   impl_class->stick = gdk_quartz_surface_stick;

@@ -746,17 +746,6 @@ gdk_broadway_surface_set_icon_list (GdkSurface *surface,
 }
 
 static void
-gdk_broadway_surface_set_icon_name (GdkSurface   *surface,
-                                   const gchar *name)
-{
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
-  g_object_set_qdata (G_OBJECT (surface), g_quark_from_static_string ("gdk-icon-name-set"),
-                      GUINT_TO_POINTER (name != NULL));
-}
-
-static void
 gdk_broadway_surface_minimize (GdkSurface *surface)
 {
   if (GDK_SURFACE_DESTROYED (surface))
@@ -1441,7 +1430,6 @@ gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
   impl_class->set_accept_focus = gdk_broadway_surface_set_accept_focus;
   impl_class->set_focus_on_map = gdk_broadway_surface_set_focus_on_map;
   impl_class->set_icon_list = gdk_broadway_surface_set_icon_list;
-  impl_class->set_icon_name = gdk_broadway_surface_set_icon_name;
   impl_class->minimize = gdk_broadway_surface_minimize;
   impl_class->unminimize = gdk_broadway_surface_unminimize;
   impl_class->stick = gdk_broadway_surface_stick;

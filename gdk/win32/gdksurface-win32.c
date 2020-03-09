@@ -1982,35 +1982,6 @@ gdk_win32_surface_set_icon_list (GdkSurface *window,
 }
 
 static void
-gdk_win32_surface_set_icon_name (GdkSurface   *window,
-                                const gchar *name)
-{
-  /* In case I manage to confuse this again (or somebody else does):
-   * Please note that "icon name" here really *does* mean the name or
-   * title of a window minimized as an icon on the desktop, or in the
-   * taskbar. It has nothing to do with the freedesktop.org icon
-   * naming stuff.
-   */
-
-  g_return_if_fail (GDK_IS_SURFACE (window));
-
-  if (GDK_SURFACE_DESTROYED (window))
-    return;
-
-#if 0
-  /* This is not the correct thing to do. We should keep both the
-   * "normal" window title, and the icon name. When the window is
-   * minimized, call SetWindowText() with the icon name, and when the
-   * window is restored, with the normal window title. Also, the name
-   * is in UTF-8, so we should do the normal conversion to either wide
-   * chars or system codepage, and use either the W or A version of
-   * SetWindowText(), depending on Windows version.
-   */
-  API_CALL (SetWindowText, (GDK_SURFACE_HWND (window), name));
-#endif
-}
-
-static void
 update_single_bit (LONG    *style,
                    gboolean all,
 		   int      gdk_bit,
@@ -5206,7 +5177,6 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
   impl_class->set_accept_focus = gdk_win32_surface_set_accept_focus;
   impl_class->set_focus_on_map = gdk_win32_surface_set_focus_on_map;
   impl_class->set_icon_list = gdk_win32_surface_set_icon_list;
-  impl_class->set_icon_name = gdk_win32_surface_set_icon_name;
   impl_class->minimize = gdk_win32_surface_minimize;
   impl_class->unminimize = gdk_win32_surface_unminimize;
   impl_class->stick = gdk_win32_surface_stick;

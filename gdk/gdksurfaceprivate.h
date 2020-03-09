@@ -185,8 +185,6 @@ struct _GdkSurfaceClass
                                          gboolean focus_on_map);
   void         (* set_icon_list)        (GdkSurface *surface,
                                          GList     *pixbufs);
-  void         (* set_icon_name)        (GdkSurface   *surface,
-                                         const gchar *name);
   void         (* minimize)             (GdkSurface *surface);
   void         (* unminimize)           (GdkSurface *surface);
   void         (* stick)                (GdkSurface *surface);

@@ -3295,14 +3295,6 @@ gdk_wayland_surface_set_icon_list (GdkSurface *surface,
 }
 
 static void
-gdk_wayland_surface_set_icon_name (GdkSurface  *surface,
-                                   const gchar *name)
-{
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-}
-
-static void
 gdk_wayland_surface_minimize (GdkSurface *surface)
 {
   if (GDK_SURFACE_DESTROYED (surface) ||
@@ -3861,7 +3853,6 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   impl_class->set_accept_focus = gdk_wayland_surface_set_accept_focus;
   impl_class->set_focus_on_map = gdk_wayland_surface_set_focus_on_map;
   impl_class->set_icon_list = gdk_wayland_surface_set_icon_list;
-  impl_class->set_icon_name = gdk_wayland_surface_set_icon_name;
   impl_class->minimize = gdk_wayland_surface_minimize;
   impl_class->unminimize = gdk_wayland_surface_unminimize;
   impl_class->stick = gdk_wayland_surface_stick;

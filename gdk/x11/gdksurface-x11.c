@@ -3080,43 +3080,6 @@ gdk_surface_icon_name_set (GdkSurface *surface)
 }
 
 static void
-gdk_x11_surface_set_icon_name (GdkSurface   *surface,
-			      const gchar *name)
-{
-  GdkDisplay *display;
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
-  display = gdk_surface_get_display (surface);
-
-  g_object_set_qdata (G_OBJECT (surface), g_quark_from_static_string ("gdk-icon-name-set"),
-                      GUINT_TO_POINTER (name != NULL));
-
-  if (name != NULL)
-    {
-      XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
-                       GDK_SURFACE_XID (surface),
-                       gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_ICON_NAME"),
-                       gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
-                       PropModeReplace, (guchar *)name, strlen (name));
-
-      set_text_property (display, GDK_SURFACE_XID (surface),
-                         gdk_x11_get_xatom_by_name_for_display (display, "WM_ICON_NAME"),
-                         name);
-    }
-  else
-    {
-      XDeleteProperty (GDK_DISPLAY_XDISPLAY (display),
-                       GDK_SURFACE_XID (surface),
-                       gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_ICON_NAME"));
-      XDeleteProperty (GDK_DISPLAY_XDISPLAY (display),
-                       GDK_SURFACE_XID (surface),
-                       gdk_x11_get_xatom_by_name_for_display (display, "WM_ICON_NAME"));
-    }
-}
-
-static void
 gdk_x11_surface_minimize (GdkSurface *surface)
 {
   if (GDK_SURFACE_DESTROYED (surface))
@@ -4780,7 +4743,6 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->set_accept_focus = gdk_x11_surface_set_accept_focus;
   impl_class->set_focus_on_map = gdk_x11_surface_set_focus_on_map;
   impl_class->set_icon_list = gdk_x11_surface_set_icon_list;
-  impl_class->set_icon_name = gdk_x11_surface_set_icon_name;
   impl_class->minimize = gdk_x11_surface_minimize;
   impl_class->unminimize = gdk_x11_surface_unminimize;
   impl_class->stick = gdk_x11_surface_stick;
