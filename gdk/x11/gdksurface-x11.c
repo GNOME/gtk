@@ -850,14 +850,12 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
     {
     case GDK_SURFACE_TOPLEVEL:
       surface = g_object_new (GDK_TYPE_X11_TOPLEVEL,
-                              "surface-type", surface_type,
                               "display", display,
                               "frame-clock", frame_clock,
                               NULL);
       break;
     case GDK_SURFACE_POPUP:
       surface = g_object_new (GDK_TYPE_X11_POPUP,
-                              "surface-type", surface_type,
                               "parent", parent,
                               "display", display,
                               "frame-clock", frame_clock,
@@ -865,7 +863,6 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
       break;
     case GDK_SURFACE_TEMP:
       surface = g_object_new (GDK_TYPE_X11_DRAG_SURFACE,
-                              "surface-type", surface_type,
                               "display", display,
                               "frame-clock", frame_clock,
                               NULL);
@@ -907,8 +904,8 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
   xattributes.colormap = gdk_x11_display_get_window_colormap (display_x11);
   xattributes_mask |= CWColormap;
 
-  if (surface->surface_type == GDK_SURFACE_TEMP ||
-      surface->surface_type == GDK_SURFACE_POPUP)
+  if (surface_type == GDK_SURFACE_TEMP ||
+      surface_type == GDK_SURFACE_POPUP)
     {
       xattributes.save_under = True;
       xattributes.override_redirect = True;
@@ -948,9 +945,9 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
   _gdk_x11_display_add_window (x11_screen->display, &impl->xid, surface);
 
   gdk_x11_surface_set_title (surface, get_default_title ());
-  if (surface->surface_type == GDK_SURFACE_TOPLEVEL)
+  if (surface_type == GDK_SURFACE_TOPLEVEL)
     gdk_x11_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_NORMAL);
-  else if (surface->surface_type == GDK_SURFACE_POPUP)
+  else if (surface_type == GDK_SURFACE_POPUP)
     gdk_x11_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_MENU);
 
   class_hint = XAllocClassHint ();
