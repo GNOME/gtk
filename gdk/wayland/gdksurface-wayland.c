@@ -3345,20 +3345,6 @@ gdk_wayland_surface_minimize (GdkSurface *surface)
 static void
 gdk_wayland_surface_unminimize (GdkSurface *surface)
 {
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
-    return;
-
-#if 0
-  if (GDK_SURFACE_IS_MAPPED (surface))
-    {
-      gdk_surface_show (surface);
-    }
-  else
-    {
-      gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_MINIMIZED, 0);
-    }
-#endif
 }
 
 static void
