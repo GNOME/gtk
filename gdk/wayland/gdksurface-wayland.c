@@ -629,14 +629,12 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
     {
     case GDK_SURFACE_TOPLEVEL:
       surface = g_object_new (GDK_TYPE_WAYLAND_TOPLEVEL,
-                              "surface-type", surface_type,
                               "display", display,
                               "frame-clock", frame_clock,
                               NULL);
       break;
     case GDK_SURFACE_POPUP:
       surface = g_object_new (GDK_TYPE_WAYLAND_POPUP,
-                              "surface-type", surface_type,
                               "parent", parent,
                               "display", display,
                               "frame-clock", frame_clock,
@@ -644,7 +642,6 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
       break;
     case GDK_SURFACE_TEMP:
       surface = g_object_new (GDK_TYPE_WAYLAND_DRAG_SURFACE,
-                              "surface-type", surface_type,
                               "display", display,
                               "frame-clock", frame_clock,
                               NULL);
@@ -2303,7 +2300,7 @@ gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
   gdk_profiler_add_mark (g_get_monotonic_time (), 0, "wayland", "surface commit");
   wl_surface_commit (impl->display_server.wl_surface);
 
-  if (surface->surface_type == GDK_SURFACE_POPUP)
+  if (GDK_IS_POPUP (surface))
     {
       g_assert (impl->popup_state == POPUP_STATE_IDLE);
       impl->popup_state = POPUP_STATE_WAITING_FOR_CONFIGURE;
@@ -2352,7 +2349,7 @@ should_be_mapped (GdkSurface *surface)
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
   /* Don't map crazy temp that GTK+ uses for internal X11 shenanigans. */
-  if (surface->surface_type == GDK_SURFACE_TEMP && surface->x < 0 && surface->y < 0)
+  if (GDK_IS_DRAG_SURFACE (surface) && surface->x < 0 && surface->y < 0)
     return FALSE;
 
   if (impl->is_drag_surface)
@@ -2382,8 +2379,6 @@ gdk_wayland_surface_show (GdkSurface *surface,
                           gboolean    already_mapped)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-
-  g_return_if_fail (GDK_SURFACE_TYPE (surface) != GDK_SURFACE_POPUP);
 
   if (!impl->display_server.wl_surface)
     gdk_wayland_surface_create_surface (surface);
@@ -2502,7 +2497,7 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
           gdk_surface_thaw_updates (surface);
         }
 
-      if (surface->surface_type == GDK_SURFACE_POPUP)
+      if (GDK_IS_POPUP (surface))
         {
           switch (impl->popup_state)
             {
@@ -2772,8 +2767,6 @@ gdk_wayland_surface_present_popup (GdkSurface     *surface,
   GdkWaylandDisplay *display_wayland =
     GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   GdkWaylandSurface *impl;
-
-  g_return_val_if_fail (GDK_SURFACE_TYPE (surface) == GDK_SURFACE_POPUP, FALSE);
 
   impl = GDK_WAYLAND_SURFACE (surface);
 
@@ -4293,7 +4286,6 @@ gdk_wayland_surface_set_transient_for_exported (GdkSurface *surface,
 
   g_return_val_if_fail (GDK_IS_WAYLAND_SURFACE (surface), FALSE);
   g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY (display), FALSE);
-  g_return_val_if_fail (GDK_SURFACE_TYPE (surface) != GDK_SURFACE_POPUP, FALSE);
 
   impl = GDK_WAYLAND_SURFACE (surface);
   display_wayland = GDK_WAYLAND_DISPLAY (display);
