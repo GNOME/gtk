@@ -850,14 +850,12 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
     {
     case GDK_SURFACE_TOPLEVEL:
       surface = g_object_new (GDK_TYPE_X11_TOPLEVEL,
-                              "surface-type", surface_type,
                               "display", display,
                               "frame-clock", frame_clock,
                               NULL);
       break;
     case GDK_SURFACE_POPUP:
       surface = g_object_new (GDK_TYPE_X11_POPUP,
-                              "surface-type", surface_type,
                               "parent", parent,
                               "display", display,
                               "frame-clock", frame_clock,
@@ -865,7 +863,6 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
       break;
     case GDK_SURFACE_TEMP:
       surface = g_object_new (GDK_TYPE_X11_DRAG_SURFACE,
-                              "surface-type", surface_type,
                               "display", display,
                               "frame-clock", frame_clock,
                               NULL);
