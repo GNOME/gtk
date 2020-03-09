@@ -88,8 +88,6 @@ struct _GdkDeviceClass
   void (* query_state)       (GdkDevice       *device,
                               GdkSurface       *surface,
                               GdkSurface      **child_surface,
-                              gdouble          *root_x,
-                              gdouble          *root_y,
                               gdouble          *win_x,
                               gdouble          *win_y,
                               GdkModifierType  *mask);
@@ -162,8 +160,6 @@ void _gdk_device_remove_slave (GdkDevice *device,
 void _gdk_device_query_state                  (GdkDevice        *device,
                                                GdkSurface        *surface,
                                                GdkSurface       **child_surface,
-                                               gdouble          *root_x,
-                                               gdouble          *root_y,
                                                gdouble          *win_x,
                                                gdouble          *win_y,
                                                GdkModifierType  *mask);
