@@ -238,7 +238,6 @@ _gdk_broadway_display_create_surface (GdkDisplay     *display,
     }
 
   surface = g_object_new (type,
-                          "surface-type", surface_type,
                           "display", display,
                           "frame-clock", frame_clock,
                           NULL);
@@ -259,7 +258,7 @@ _gdk_broadway_display_create_surface (GdkDisplay     *display,
                                                surface->y,
                                                surface->width,
                                                surface->height,
-                                               surface->surface_type == GDK_SURFACE_TEMP);
+                                               surface_type == GDK_SURFACE_TEMP);
   g_hash_table_insert (broadway_display->id_ht, GINT_TO_POINTER(impl->id), surface);
 
   if (!surface->parent)
