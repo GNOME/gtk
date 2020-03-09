@@ -71,6 +71,12 @@ gdk_toplevel_default_show_window_menu (GdkToplevel *toplevel,
   return FALSE;
 }
 
+static gboolean
+gdk_toplevel_default_supports_edge_constraints (GdkToplevel *toplevel)
+{
+  return FALSE;
+}
+
 static void
 gdk_toplevel_default_init (GdkToplevelInterface *iface)
 {
@@ -79,6 +85,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
   iface->lower = gdk_toplevel_default_lower;
   iface->focus = gdk_toplevel_default_focus;
   iface->show_window_menu = gdk_toplevel_default_show_window_menu;
+  iface->supports_edge_constraints = gdk_toplevel_default_supports_edge_constraints;
 
   g_object_interface_install_property (iface,
       g_param_spec_flags ("state",
@@ -483,4 +490,12 @@ gdk_toplevel_set_deletable (GdkToplevel *toplevel,
   g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
 
   g_object_set (toplevel, "deletable", deletable, NULL);
+}
+
+gboolean
+gdk_toplevel_supports_edge_constraints (GdkToplevel *toplevel)
+{
+  g_return_val_if_fail (GDK_IS_TOPLEVEL (toplevel), FALSE);
+
+  return GDK_TOPLEVEL_GET_IFACE (toplevel)->supports_edge_constraints (toplevel);
 }

@@ -235,6 +235,7 @@ void gdk_x11_surface_show (GdkSurface *surface,
 void gdk_x11_surface_raise (GdkSurface *surface);
 void gdk_x11_surface_set_opacity (GdkSurface *surface,
                                   double      opacity);
+gboolean gdk_x11_surface_supports_edge_constraints (GdkSurface *surface);
 
 GdkGrabStatus _gdk_x11_convert_grab_status (gint status);
 

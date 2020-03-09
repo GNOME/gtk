@@ -1628,7 +1628,7 @@ edge_under_coordinates (GtkWindow     *window,
       priv->maximized)
     return FALSE;
 
-  supports_edge_constraints = gdk_surface_supports_edge_constraints (priv->surface);
+  supports_edge_constraints = gdk_toplevel_supports_edge_constraints (GDK_TOPLEVEL (priv->surface));
   constraints = constraints_for_edge (edge);
 
   if (!supports_edge_constraints && priv->tiled)
