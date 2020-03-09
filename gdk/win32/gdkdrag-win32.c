@@ -2440,7 +2440,7 @@ gdk_dnd_handle_key_event (GdkDrag  *drag,
   /* The state is not yet updated in the event, so we need
    * to query it here.
    */
-  _gdk_device_query_state (pointer, NULL, NULL, NULL, NULL, NULL, NULL, &state);
+  _gdk_device_query_state (pointer, NULL, NULL, NULL, NULL, &state);
 
   if (dx != 0 || dy != 0)
     {
