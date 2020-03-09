@@ -1287,7 +1287,6 @@ gdk_x11_surface_withdraw (GdkSurface *surface)
                                      GDK_SURFACE_STATE_WITHDRAWN);
 
       g_assert (!GDK_SURFACE_IS_MAPPED (surface));
-
       XWithdrawWindow (GDK_SURFACE_XDISPLAY (surface),
                        GDK_SURFACE_XID (surface), 0);
     }
@@ -3288,7 +3287,8 @@ gdk_x11_surface_fullscreen_on_monitor (GdkSurface  *surface,
   gdk_monitor_get_geometry (monitor, &geom);
   gdk_x11_surface_move (surface, geom.x, geom.y);
 
-  gdk_surface_set_fullscreen_mode (surface, GDK_FULLSCREEN_ON_CURRENT_MONITOR);
+  surface->fullscreen_mode = GDK_FULLSCREEN_ON_CURRENT_MONITOR;
+  g_object_notify (G_OBJECT (surface), "fullscreen-mode");
   gdk_x11_surface_fullscreen (surface);
 }
 
@@ -4660,7 +4660,6 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->destroy = gdk_x11_surface_destroy;
   impl_class->beep = gdk_x11_surface_beep;
 
-  impl_class->apply_fullscreen_mode = gdk_x11_surface_apply_fullscreen_mode;
   impl_class->begin_resize_drag = gdk_x11_surface_begin_resize_drag;
   impl_class->begin_move_drag = gdk_x11_surface_begin_move_drag;
   impl_class->destroy_notify = gdk_x11_surface_destroy_notify;
@@ -4882,6 +4881,12 @@ gdk_wayland_toplevel_set_property (GObject      *object,
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
+    case 1 + GDK_TOPLEVEL_PROP_FULLSCREEN_MODE:
+      surface->fullscreen_mode = g_value_get_enum (value);
+      gdk_x11_surface_apply_fullscreen_mode (surface);
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -4951,6 +4956,10 @@ gdk_wayland_toplevel_get_property (GObject    *object,
         gdk_x11_surface_get_functions (surface, &functions);
         g_value_set_boolean (value, functions == GDK_FUNC_ALL);
       }
+      break;
+
+    case 1 + GDK_TOPLEVEL_PROP_FULLSCREEN_MODE:
+      g_value_set_enum (value, surface->fullscreen_mode);
       break;
 
     default:
