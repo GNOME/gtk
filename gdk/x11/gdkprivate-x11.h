@@ -230,6 +230,8 @@ void gdk_x11_surface_get_root_coords (GdkSurface *surface,
                                       gint       *root_x,
                                       gint       *root_y);
 
+void gdk_x11_surface_show (GdkSurface *surface,
+                           gboolean    already_mapped);
 void gdk_x11_surface_raise (GdkSurface *surface);
 void gdk_x11_surface_set_opacity (GdkSurface *surface,
                                   double      opacity);
