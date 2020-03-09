@@ -454,15 +454,16 @@ gdk_content_formats_contain_mime_type (const GdkContentFormats *formats,
 /**
  * gdk_content_formats_get_gtypes:
  * @formats: a #GdkContentFormats
- * @n_gtypes: (out) (allow-none): optional pointer to take the
+ * @n_gtypes: (out) (optional): optional pointer to take the
  *     number of #GTypes contained in the return value
  *
  * Gets the #GTypes included in @formats. Note that @formats may not
  * contain any #GTypes, in particular when they are empty. In that
  * case %NULL will be returned. 
  *
- * Returns: (transfer none) (nullable): %G_TYPE_INVALID-terminated array of 
- *     types included in @formats or %NULL if none.
+ * Returns: (transfer none) (nullable) (array length=n_gtypes):
+ *      %G_TYPE_INVALID-terminated array of types included in @formats or
+ *      %NULL if none.
  **/
 const GType *
 gdk_content_formats_get_gtypes (const GdkContentFormats *formats,
