@@ -870,8 +870,9 @@ gtk_drop_target_set_gtypes (GtkDropTarget *self,
  * Gets the list of supported #GTypes for @self. If no type have been set,
  * %NULL will be returned.
  *
- * Returns: (transfer none) (nullable): %G_TYPE_INVALID-terminated array of 
- *     types included in @formats or %NULL if none.
+ * Returns: (transfer none) (nullable) (array length=n_types):
+ *      %G_TYPE_INVALID-terminated array of types included in @formats or
+ *      %NULL if none.
  **/
 const GType *
 gtk_drop_target_get_gtypes (GtkDropTarget *self,
