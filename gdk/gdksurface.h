@@ -76,59 +76,6 @@ typedef enum
   GDK_HINT_USER_SIZE   = 1 << 8
 } GdkSurfaceHints;
 
-/* The next two enumeration values current match the
- * Motif constants. If this is changed, the implementation
- * of gdk_surface_set_decorations/gdk_surface_set_functions
- * will need to change as well.
- */
-/**
- * GdkWMDecoration:
- * @GDK_DECOR_ALL: all decorations should be applied.
- * @GDK_DECOR_BORDER: a frame should be drawn around the surface.
- * @GDK_DECOR_RESIZEH: the frame should have resize handles.
- * @GDK_DECOR_TITLE: a titlebar should be placed above the surface.
- * @GDK_DECOR_MENU: a button for opening a menu should be included.
- * @GDK_DECOR_MINIMIZE: a minimize button should be included.
- * @GDK_DECOR_MAXIMIZE: a maximize button should be included.
- *
- * These are hints originally defined by the Motif toolkit.
- * The window manager can use them when determining how to decorate
- * the surface. The hint must be set before mapping the surface.
- */
-typedef enum
-{
-  GDK_DECOR_ALL		= 1 << 0,
-  GDK_DECOR_BORDER	= 1 << 1,
-  GDK_DECOR_RESIZEH	= 1 << 2,
-  GDK_DECOR_TITLE	= 1 << 3,
-  GDK_DECOR_MENU	= 1 << 4,
-  GDK_DECOR_MINIMIZE	= 1 << 5,
-  GDK_DECOR_MAXIMIZE	= 1 << 6
-} GdkWMDecoration;
-
-/**
- * GdkWMFunction:
- * @GDK_FUNC_ALL: all functions should be offered.
- * @GDK_FUNC_RESIZE: the surface should be resizable.
- * @GDK_FUNC_MOVE: the surface should be movable.
- * @GDK_FUNC_MINIMIZE: the surface should be minimizable.
- * @GDK_FUNC_MAXIMIZE: the surface should be maximizable.
- * @GDK_FUNC_CLOSE: the surface should be closable.
- *
- * These are hints originally defined by the Motif toolkit. The window manager
- * can use them when determining the functions to offer for the surface. The
- * hint must be set before mapping the surface.
- */
-typedef enum
-{
-  GDK_FUNC_ALL		= 1 << 0,
-  GDK_FUNC_RESIZE	= 1 << 1,
-  GDK_FUNC_MOVE		= 1 << 2,
-  GDK_FUNC_MINIMIZE	= 1 << 3,
-  GDK_FUNC_MAXIMIZE	= 1 << 4,
-  GDK_FUNC_CLOSE	= 1 << 5
-} GdkWMFunction;
-
 /**
  * GdkSurfaceEdge:
  * @GDK_SURFACE_EDGE_NORTH_WEST: the top left corner.
