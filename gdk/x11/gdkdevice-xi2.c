@@ -80,8 +80,6 @@ static void gdk_x11_device_xi2_set_surface_cursor (GdkDevice *device,
 static void gdk_x11_device_xi2_query_state (GdkDevice        *device,
                                             GdkSurface        *surface,
                                             GdkSurface       **child_surface,
-                                            gdouble          *root_x,
-                                            gdouble          *root_y,
                                             gdouble          *win_x,
                                             gdouble          *win_y,
                                             GdkModifierType  *mask);
@@ -259,7 +257,6 @@ gdk_x11_device_xi2_get_state (GdkDevice       *device,
     gdk_x11_device_xi2_query_state (device, surface,
                                     NULL,
                                     NULL, NULL,
-                                    NULL, NULL,
                                     mask);
 }
 
@@ -289,8 +286,6 @@ static void
 gdk_x11_device_xi2_query_state (GdkDevice        *device,
                                 GdkSurface        *surface,
                                 GdkSurface       **child_surface,
-                                gdouble          *root_x,
-                                gdouble          *root_y,
                                 gdouble          *win_x,
                                 gdouble          *win_y,
                                 GdkModifierType  *mask)
@@ -324,7 +319,7 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
 
       if (master)
         _gdk_device_query_state (master, surface, child_surface,
-                                 root_x, root_y, win_x, win_y, mask);
+                                 win_x, win_y, mask);
       return;
     }
 
@@ -365,12 +360,6 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
 
   if (child_surface)
     *child_surface = gdk_x11_surface_lookup_for_display (display, xchild_window);
-
-  if (root_x)
-    *root_x = xroot_x / scale;
-
-  if (root_y)
-    *root_y = xroot_y / scale;
 
   if (win_x)
     *win_x = xwin_x / scale;
