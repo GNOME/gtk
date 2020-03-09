@@ -38,21 +38,6 @@
 
 G_BEGIN_DECLS
 
-/**
- * GdkSurfaceType:
- * @GDK_SURFACE_TOPLEVEL: toplevel window (used to implement #GtkWindow)
- * @GDK_SURFACE_TEMP: override redirect temporary surface (used to implement #GtkMenu)
- * @GDK_SURFACE_POPUP: popup window with semantics like xdg-popover
- *
- * Describes the kind of surface.
- */
-typedef enum
-{
-  GDK_SURFACE_TOPLEVEL,
-  GDK_SURFACE_TEMP,
-  GDK_SURFACE_POPUP
-} GdkSurfaceType;
-
 /* Size restriction enumeration.
  */
 /**
@@ -345,8 +330,6 @@ GdkSurface *   gdk_surface_new_popup            (GdkSurface    *parent,
 
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_destroy               (GdkSurface     *surface);
-GDK_AVAILABLE_IN_ALL
-GdkSurfaceType gdk_surface_get_surface_type     (GdkSurface     *surface);
 GDK_AVAILABLE_IN_ALL
 gboolean      gdk_surface_is_destroyed          (GdkSurface     *surface);
 
