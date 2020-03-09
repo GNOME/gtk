@@ -2536,29 +2536,6 @@ gdk_surface_create_similar_surface (GdkSurface *     surface,
   return similar_surface;
 }
 
-void
-gdk_surface_set_fullscreen_mode (GdkSurface        *surface,
-                                 GdkFullscreenMode mode)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  if (surface->fullscreen_mode != mode)
-    {
-      surface->fullscreen_mode = mode;
-
-      if (GDK_SURFACE_GET_CLASS (surface)->apply_fullscreen_mode != NULL)
-        GDK_SURFACE_GET_CLASS (surface)->apply_fullscreen_mode (surface);
-    }
-}
-
-GdkFullscreenMode
-gdk_surface_get_fullscreen_mode (GdkSurface *surface)
-{
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), GDK_FULLSCREEN_ON_CURRENT_MONITOR);
-
-  return surface->fullscreen_mode;
-}
-
 /**
  * gdk_surface_begin_resize_drag:
  * @surface: a toplevel #GdkSurface
