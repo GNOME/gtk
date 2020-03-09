@@ -1238,7 +1238,7 @@ set_initial_hints (GdkSurface *surface)
   toplevel->map_serial = NextRequest (xdisplay);
 }
 
-static void
+void
 gdk_x11_surface_show (GdkSurface *surface, gboolean already_mapped)
 {
   GdkDisplay *display;
@@ -3146,7 +3146,7 @@ gdk_x11_surface_unminimize (GdkSurface *surface)
 
   if (GDK_SURFACE_IS_MAPPED (surface))
     {  
-      gdk_surface_show (surface);
+      gdk_x11_surface_show (surface, TRUE);
       gdk_wmspec_change_state (FALSE, surface,
                                "_NET_WM_STATE_HIDDEN",
                                NULL);
@@ -4274,7 +4274,7 @@ create_moveresize_surface (MoveResizeData *mv_resize,
   g_assert (mv_resize->moveresize_emulation_surface == NULL);
 
   mv_resize->moveresize_emulation_surface = gdk_surface_new_temp (mv_resize->display, &rect);
-  gdk_surface_show (mv_resize->moveresize_emulation_surface);
+  gdk_x11_surface_show (mv_resize->moveresize_emulation_surface, FALSE);
 
   status = gdk_seat_grab (gdk_device_get_seat (mv_resize->device),
                           mv_resize->moveresize_emulation_surface,
