@@ -114,9 +114,6 @@ struct _GdkSurfaceClass
                (* ref_cairo_surface)    (GdkSurface       *surface);
 
   void         (* hide)                 (GdkSurface       *surface);
-  void         (* toplevel_resize)      (GdkSurface      *surface,
-                                         gint             width,
-                                         gint             height);
   gboolean     (* present_popup)        (GdkSurface     *surface,
                                          int             width,
                                          int             height,
