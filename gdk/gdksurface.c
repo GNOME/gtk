@@ -3159,6 +3159,24 @@ gdk_surface_handle_event (GdkEvent *event)
   return handled;
 }
 
+/**
+ * gdk_surface_translate_coordinates:
+ * @from: the origin surface
+ * @to: the target surface
+ * @x: coordinates to translate
+ * @y: coordinates to translate
+ *
+ * Translates the given coordinates from being
+ * relative to the @from surface to being relative
+ * to the @to surface.
+ *
+ * Note that this only works if @to and @from are
+ * popups or transient-for to the same toplevel
+ * (directly or indirectly).
+ *
+ * Returns: %TRUE if the coordinates were successfully
+ *     translated
+ */
 gboolean
 gdk_surface_translate_coordinates (GdkSurface *from,
                                    GdkSurface *to,
