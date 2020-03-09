@@ -5030,7 +5030,6 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
   impl_class->withdraw = gdk_win32_surface_withdraw;
   impl_class->raise = gdk_win32_surface_raise;
   impl_class->lower = gdk_win32_surface_lower;
-  impl_class->present_popup = gdk_win32_surface_present_popup;
   impl_class->get_geometry = gdk_win32_surface_get_geometry;
   impl_class->get_device_state = gdk_surface_win32_get_device_state;
   impl_class->get_root_coords = gdk_win32_surface_get_root_coords;
