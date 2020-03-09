@@ -4719,7 +4719,6 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   object_class->finalize = gdk_x11_surface_finalize;
   
   impl_class->hide = gdk_x11_surface_hide;
-  impl_class->toplevel_resize = gdk_x11_surface_toplevel_resize;
   impl_class->present_popup = gdk_x11_surface_present_popup;
   impl_class->get_geometry = gdk_x11_surface_get_geometry;
   impl_class->get_root_coords = gdk_x11_surface_get_root_coords;
