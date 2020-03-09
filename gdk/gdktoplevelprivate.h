@@ -20,6 +20,7 @@ struct _GdkToplevelInterface
                                          guint32            timestamp);
   gboolean      (* show_window_menu)    (GdkToplevel       *toplevel,
                                          GdkEvent          *event);
+  gboolean      (* supports_edge_constraints) (GdkToplevel *toplevel);
 };
 
 typedef enum
