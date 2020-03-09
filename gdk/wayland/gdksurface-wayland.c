@@ -2859,7 +2859,6 @@ gdk_wayland_surface_get_device_state (GdkSurface       *surface,
 
       GDK_DEVICE_GET_CLASS (device)->query_state (device, surface,
                                                   &child,
-                                                  NULL, NULL,
                                                   x, y, mask);
       return_val = (child != NULL);
     }
