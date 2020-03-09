@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-01 15:08+0000\n"
+"POT-Creation-Date: 2020-03-06 18:02+0000\n"
 "PO-Revision-Date: 2020-03-03 20:25+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -44,7 +44,8 @@ msgstr "空のクリップボードからは読み取れません。"
 
 #: gdk/gdkclipboard.c:325 gdk/gdkclipboard.c:1137 gdk/gdkdrag.c:638
 msgid "No compatible formats to transfer clipboard contents."
-msgstr "クリップボードの内容を転送するための、互換性のあるフォーマットはありません。"
+msgstr ""
+"クリップボードの内容を転送するための、互換性のあるフォーマットはありません。"
 
 #: gdk/gdkcontentprovider.c:108 gdk/gdkcontentproviderimpl.c:310
 #: gdk/gdkcontentproviderimpl.c:530
@@ -57,11 +58,11 @@ msgstr ""
 msgid "Cannot provide contents as %s"
 msgstr ""
 
-#: gdk/gdkdrop.c:117
+#: gdk/gdkdrop.c:118
 msgid "Drag’n’drop from other applications is not supported."
 msgstr "他のアプリケーションからのドラッグ＆ドロップはサポートしていません。"
 
-#: gdk/gdkdrop.c:150
+#: gdk/gdkdrop.c:151
 msgid "No compatible formats to transfer contents."
 msgstr "内容を転送するための、互換性のあるフォーマットはありません。"
 
@@ -458,9 +459,9 @@ msgstr "Suspend"
 msgid "Not implemented on OS X"
 msgstr "OS X では実装されていません"
 
-#: gdk/wayland/gdkclipboard-wayland.c:231 gdk/wayland/gdkdrop-wayland.c:210
-#: gdk/wayland/gdkprimary-wayland.c:312 gdk/win32/gdkdrop-win32.c:1275
-#: gdk/win32/gdkdrop-win32.c:1320 gdk/x11/gdkclipboard-x11.c:761
+#: gdk/wayland/gdkclipboard-wayland.c:231 gdk/wayland/gdkdrop-wayland.c:204
+#: gdk/wayland/gdkprimary-wayland.c:312 gdk/win32/gdkdrop-win32.c:1277
+#: gdk/win32/gdkdrop-win32.c:1322 gdk/x11/gdkclipboard-x11.c:761
 #: gdk/x11/gdkdrop-x11.c:196
 msgid "No compatible transfer format found"
 msgstr "互換性のある転送フォーマットが見つかりませんでした"
@@ -567,37 +568,37 @@ msgstr ""
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr ""
 
-#: gdk/win32/gdkdrop-win32.c:1208
+#: gdk/win32/gdkdrop-win32.c:1210
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
 
-#: gdk/win32/gdkdrop-win32.c:1217
+#: gdk/win32/gdkdrop-win32.c:1219
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
 
-#: gdk/win32/gdkdrop-win32.c:1227
+#: gdk/win32/gdkdrop-win32.c:1229
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %lu bytes to store the data."
 msgstr ""
 
-#: gdk/win32/gdkdrop-win32.c:1294
+#: gdk/win32/gdkdrop-win32.c:1296
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr ""
 
-#: gdk/win32/gdkdrop-win32.c:1301
+#: gdk/win32/gdkdrop-win32.c:1303
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr ""
 
-#: gdk/win32/gdkdrop-win32.c:1339
+#: gdk/win32/gdkdrop-win32.c:1341
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr ""
 
-#: gdk/win32/gdkdrop-win32.c:1371
+#: gdk/win32/gdkdrop-win32.c:1373
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr ""
@@ -849,15 +850,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "閉じる(_C)"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:434 gtk/gtkwindow.c:6815
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:434 gtk/gtkwindow.c:6819
 msgid "Minimize"
 msgstr "最小化"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:457 gtk/gtkwindow.c:6825
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:457 gtk/gtkwindow.c:6829
 msgid "Maximize"
 msgstr "最大化"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:457 gtk/gtkwindow.c:6778
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:457 gtk/gtkwindow.c:6782
 msgid "Restore"
 msgstr "元のサイズに戻す"
 
@@ -1443,34 +1444,34 @@ msgstr "\\"
 msgid "Other application…"
 msgstr "別のアプリケーション…"
 
-#: gtk/gtkappchooserdialog.c:216 gtk/gtkappchooserdialog.c:223
-#: gtk/gtkappchooserdialog.c:240 gtk/ui/gtkappchooserdialog.ui:4
+#: gtk/gtkappchooserdialog.c:217 gtk/gtkappchooserdialog.c:224
+#: gtk/gtkappchooserdialog.c:241 gtk/ui/gtkappchooserdialog.ui:4
 msgid "Select Application"
 msgstr "アプリケーションの選択"
 
 #. Translators: %s is a filename
-#: gtk/gtkappchooserdialog.c:218
+#: gtk/gtkappchooserdialog.c:219
 #, c-format
 msgid "Opening “%s”."
 msgstr "“%s”を開いています"
 
-#: gtk/gtkappchooserdialog.c:219
+#: gtk/gtkappchooserdialog.c:220
 #, c-format
 msgid "No applications found for “%s”"
 msgstr "“%s”を開くアプリケーションが見つかりません"
 
 #. Translators: %s is a file type description
-#: gtk/gtkappchooserdialog.c:225
+#: gtk/gtkappchooserdialog.c:226
 #, c-format
 msgid "Opening “%s” files."
 msgstr "“%s”のファイルを開いています"
 
-#: gtk/gtkappchooserdialog.c:227
+#: gtk/gtkappchooserdialog.c:228
 #, c-format
 msgid "No applications found for “%s” files"
 msgstr "“%s”のファイルを開くアプリケーションが見つかりません"
 
-#: gtk/gtkappchooserdialog.c:413
+#: gtk/gtkappchooserdialog.c:414
 msgid "Failed to start GNOME Software"
 msgstr "GNOME ソフトウェアを起動できませんでした"
 
@@ -1535,7 +1536,7 @@ msgstr "文字列は <%s> 内に含められません"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:742
+#: gtk/gtkcalendar.c:773
 msgid "calendar:MY"
 msgstr "calendar:YM"
 
@@ -1543,7 +1544,7 @@ msgstr "calendar:YM"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:780
+#: gtk/gtkcalendar.c:811
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
@@ -1553,7 +1554,7 @@ msgstr "calendar:week_start:0"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1621
+#: gtk/gtkcalendar.c:1402
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1568,7 +1569,7 @@ msgstr "%Y"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1658
+#: gtk/gtkcalendar.c:1439
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1582,7 +1583,7 @@ msgstr "%d"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#: gtk/gtkcalendar.c:1716
+#: gtk/gtkcalendar.c:1497
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1618,7 +1619,7 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkcolorbutton.c:175 gtk/gtkcolorbutton.c:314
+#: gtk/gtkcolorbutton.c:172 gtk/gtkcolorbutton.c:276
 msgid "Pick a Color"
 msgstr "色の選択"
 
@@ -1849,7 +1850,7 @@ msgctxt "Color channel"
 msgid "Alpha"
 msgstr "アルファ"
 
-#: gtk/gtkcolorswatch.c:241
+#: gtk/gtkcolorswatch.c:216
 msgid "Customize"
 msgstr "カスタマイズ"
 
@@ -1925,7 +1926,7 @@ msgstr "絵文字を挿入"
 msgid "Select a File"
 msgstr "ファイルを選択"
 
-#: gtk/gtkfilechooserbutton.c:114 gtk/gtkplacessidebar.c:1080
+#: gtk/gtkfilechooserbutton.c:114 gtk/gtkplacessidebar.c:1055
 msgid "Desktop"
 msgstr "デスクトップ"
 
@@ -1933,7 +1934,7 @@ msgstr "デスクトップ"
 msgid "(None)"
 msgstr "(なし)"
 
-#: gtk/gtkfilechooserbutton.c:2041
+#: gtk/gtkfilechooserbutton.c:1977
 msgid "Other…"
 msgstr "その他…"
 
@@ -1998,12 +1999,12 @@ msgid "A file with that name already exists"
 msgstr "同じ名前のファイルがすでに存在します"
 
 #: gtk/gtkfilechoosernative.c:508 gtk/gtkfilechoosernative.c:579
-#: gtk/gtkfilechooserwidget.c:1374 gtk/gtkfilechooserwidget.c:5985
+#: gtk/gtkfilechooserwidget.c:1374 gtk/gtkfilechooserwidget.c:5953
 #: gtk/gtkmessagedialog.c:777 gtk/gtkmessagedialog.c:786
 #: gtk/gtkmountoperation.c:597 gtk/gtkpagesetupunixdialog.c:210
 #: gtk/gtkprintbackend.c:657 gtk/gtkprinteroptionwidget.c:551
 #: gtk/gtkprintunixdialog.c:680 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:9069 gtk/inspector/css-editor.c:248
+#: gtk/gtkwindow.c:9073 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1026 gtk/ui/gtkappchooserdialog.ui:46
 #: gtk/ui/gtkassistant.ui:53 gtk/ui/gtkcolorchooserdialog.ui:34
 #: gtk/ui/gtkfontchooserdialog.ui:25
@@ -2011,7 +2012,7 @@ msgid "_Cancel"
 msgstr "キャンセル(_C)"
 
 #: gtk/gtkfilechoosernative.c:509 gtk/gtkfilechoosernative.c:573
-#: gtk/gtkplacessidebar.c:3259 gtk/gtkplacessidebar.c:3344
+#: gtk/gtkplacessidebar.c:3131 gtk/gtkplacessidebar.c:3216
 #: gtk/gtkplacesview.c:1657
 msgid "_Open"
 msgstr "開く(_O)"
@@ -2095,8 +2096,8 @@ msgstr "本当に“%s”を完全に削除しますか?"
 msgid "If you delete an item, it will be permanently lost."
 msgstr "削除すると、アイテムは完全に失われます。"
 
-#: gtk/gtkfilechooserwidget.c:1375 gtk/gtkfilechooserwidget.c:2034
-#: gtk/gtklabel.c:5999 gtk/gtktext.c:5883 gtk/gtktextview.c:8575
+#: gtk/gtkfilechooserwidget.c:1375 gtk/gtkfilechooserwidget.c:2002
+#: gtk/gtklabel.c:5999 gtk/gtktext.c:5879 gtk/gtktextview.c:8524
 msgid "_Delete"
 msgstr "削除(_D)"
 
@@ -2108,199 +2109,199 @@ msgstr "ファイル名を変更できませんでした"
 msgid "Could not select file"
 msgstr "ファイルを選択できませんでした"
 
-#: gtk/gtkfilechooserwidget.c:2014
+#: gtk/gtkfilechooserwidget.c:1982
 msgid "_Visit File"
 msgstr "ファイルの場所に移動する(_V)"
 
-#: gtk/gtkfilechooserwidget.c:2018
+#: gtk/gtkfilechooserwidget.c:1986
 msgid "_Open With File Manager"
 msgstr "ファイルマネージャーで開く(_O)"
 
-#: gtk/gtkfilechooserwidget.c:2022
+#: gtk/gtkfilechooserwidget.c:1990
 msgid "_Copy Location"
 msgstr "場所のコピー(_C)"
 
-#: gtk/gtkfilechooserwidget.c:2026
+#: gtk/gtkfilechooserwidget.c:1994
 msgid "_Add to Bookmarks"
 msgstr "ブックマークへ追加(_A)"
 
-#: gtk/gtkfilechooserwidget.c:2030 gtk/gtkplacessidebar.c:2445
-#: gtk/gtkplacessidebar.c:3380 gtk/ui/gtkfilechooserwidget.ui:482
+#: gtk/gtkfilechooserwidget.c:1998 gtk/gtkplacessidebar.c:2317
+#: gtk/gtkplacessidebar.c:3252 gtk/ui/gtkfilechooserwidget.ui:482
 msgid "_Rename"
 msgstr "名前の変更(_R)"
 
-#: gtk/gtkfilechooserwidget.c:2038
+#: gtk/gtkfilechooserwidget.c:2006
 msgid "_Move to Trash"
 msgstr "ゴミ箱へ移動する(_M)"
 
-#: gtk/gtkfilechooserwidget.c:2047
+#: gtk/gtkfilechooserwidget.c:2015
 msgid "Show _Hidden Files"
 msgstr "隠しファイルを表示する(_H)"
 
-#: gtk/gtkfilechooserwidget.c:2051
+#: gtk/gtkfilechooserwidget.c:2019
 msgid "Show _Size Column"
 msgstr "サイズを表示する(_S)"
 
-#: gtk/gtkfilechooserwidget.c:2055
+#: gtk/gtkfilechooserwidget.c:2023
 msgid "Show T_ype Column"
 msgstr "種類を表示する(_Y)"
 
-#: gtk/gtkfilechooserwidget.c:2059
+#: gtk/gtkfilechooserwidget.c:2027
 msgid "Show _Time"
 msgstr "時刻を表示する(_T)"
 
-#: gtk/gtkfilechooserwidget.c:2063
+#: gtk/gtkfilechooserwidget.c:2031
 msgid "Sort _Folders Before Files"
 msgstr "フォルダーをファイルよりも前に配置する(_F)"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2373 gtk/inspector/css-node-tree.ui:135
+#: gtk/gtkfilechooserwidget.c:2341 gtk/inspector/css-node-tree.ui:135
 #: gtk/ui/gtkfilechooserwidget.ui:197 gtk/ui/gtkprintunixdialog.ui:111
 msgid "Location"
 msgstr "場所"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2465
+#: gtk/gtkfilechooserwidget.c:2433
 msgid "_Name:"
 msgstr "名前(_N):"
 
-#: gtk/gtkfilechooserwidget.c:3045 gtk/gtkfilechooserwidget.c:3059
+#: gtk/gtkfilechooserwidget.c:3013 gtk/gtkfilechooserwidget.c:3027
 #, c-format
 msgid "Searching in %s"
 msgstr "%s 内を検索"
 
-#: gtk/gtkfilechooserwidget.c:3065
+#: gtk/gtkfilechooserwidget.c:3033
 msgid "Searching"
 msgstr "検索"
 
-#: gtk/gtkfilechooserwidget.c:3071
+#: gtk/gtkfilechooserwidget.c:3039
 msgid "Enter location or URL"
 msgstr "場所または URL を指定する"
 
-#: gtk/gtkfilechooserwidget.c:3996 gtk/gtkfilechooserwidget.c:6852
+#: gtk/gtkfilechooserwidget.c:3964 gtk/gtkfilechooserwidget.c:6820
 #: gtk/ui/gtkfilechooserwidget.ui:237
 msgid "Modified"
 msgstr "更新日時"
 
-#: gtk/gtkfilechooserwidget.c:4274
+#: gtk/gtkfilechooserwidget.c:4242
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "%s の内容を読み込めませんでした"
 
-#: gtk/gtkfilechooserwidget.c:4278
+#: gtk/gtkfilechooserwidget.c:4246
 msgid "Could not read the contents of the folder"
 msgstr "フォルダーの内容を読み込めませんでした"
 
 #. Translators: see g_date_time_format() for details on the format
-#: gtk/gtkfilechooserwidget.c:4432 gtk/gtkfilechooserwidget.c:4476
+#: gtk/gtkfilechooserwidget.c:4400 gtk/gtkfilechooserwidget.c:4444
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4434 gtk/gtkfilechooserwidget.c:4478
+#: gtk/gtkfilechooserwidget.c:4402 gtk/gtkfilechooserwidget.c:4446
 msgid "%l:%M %p"
 msgstr "%P%I:%M"
 
-#: gtk/gtkfilechooserwidget.c:4438
+#: gtk/gtkfilechooserwidget.c:4406
 msgid "Yesterday"
 msgstr "昨日"
 
-#: gtk/gtkfilechooserwidget.c:4446
+#: gtk/gtkfilechooserwidget.c:4414
 msgid "%-e %b"
 msgstr "%-m月%-d日"
 
-#: gtk/gtkfilechooserwidget.c:4450
+#: gtk/gtkfilechooserwidget.c:4418
 msgid "%-e %b %Y"
 msgstr "%Y年%-m月%-d日"
 
-#: gtk/gtkfilechooserwidget.c:4540 gtk/gtkfilechooserwidget.c:4548
+#: gtk/gtkfilechooserwidget.c:4508 gtk/gtkfilechooserwidget.c:4516
 msgid "Program"
 msgstr "プログラム"
 
-#: gtk/gtkfilechooserwidget.c:4541
+#: gtk/gtkfilechooserwidget.c:4509
 msgid "Audio"
 msgstr "音声"
 
-#: gtk/gtkfilechooserwidget.c:4542 gtk/gtkfontbutton.c:563
+#: gtk/gtkfilechooserwidget.c:4510 gtk/gtkfontbutton.c:563
 #: gtk/inspector/visual.ui:208
 msgid "Font"
 msgstr "フォント"
 
-#: gtk/gtkfilechooserwidget.c:4543
+#: gtk/gtkfilechooserwidget.c:4511
 msgid "Image"
 msgstr "画像"
 
-#: gtk/gtkfilechooserwidget.c:4544
+#: gtk/gtkfilechooserwidget.c:4512
 msgid "Archive"
 msgstr "アーカイブ"
 
-#: gtk/gtkfilechooserwidget.c:4545
+#: gtk/gtkfilechooserwidget.c:4513
 msgid "Markup"
 msgstr "マークアップ"
 
-#: gtk/gtkfilechooserwidget.c:4546 gtk/gtkfilechooserwidget.c:4547
+#: gtk/gtkfilechooserwidget.c:4514 gtk/gtkfilechooserwidget.c:4515
 msgid "Text"
 msgstr "テキスト"
 
-#: gtk/gtkfilechooserwidget.c:4549
+#: gtk/gtkfilechooserwidget.c:4517
 msgid "Video"
 msgstr "動画"
 
-#: gtk/gtkfilechooserwidget.c:4550
+#: gtk/gtkfilechooserwidget.c:4518
 msgid "Contacts"
 msgstr "連絡先"
 
-#: gtk/gtkfilechooserwidget.c:4551
+#: gtk/gtkfilechooserwidget.c:4519
 msgid "Calendar"
 msgstr "カレンダー"
 
-#: gtk/gtkfilechooserwidget.c:4552
+#: gtk/gtkfilechooserwidget.c:4520
 msgid "Document"
 msgstr "ドキュメント"
 
-#: gtk/gtkfilechooserwidget.c:4553
+#: gtk/gtkfilechooserwidget.c:4521
 msgid "Presentation"
 msgstr "プレゼンテーション"
 
-#: gtk/gtkfilechooserwidget.c:4554
+#: gtk/gtkfilechooserwidget.c:4522
 msgid "Spreadsheet"
 msgstr "表計算"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:4585 gtk/gtkfilechooserwidget.c:4768
+#: gtk/gtkfilechooserwidget.c:4553 gtk/gtkfilechooserwidget.c:4736
 #: gtk/inspector/prop-editor.c:1500
 #: modules/printbackends/gtkprintbackendcloudprint.c:731
 msgid "Unknown"
 msgstr "不明"
 
-#: gtk/gtkfilechooserwidget.c:4807 gtk/gtkplacessidebar.c:1065
+#: gtk/gtkfilechooserwidget.c:4775 gtk/gtkplacessidebar.c:1040
 msgid "Home"
 msgstr "ホーム"
 
-#: gtk/gtkfilechooserwidget.c:5978 gtk/gtkprintunixdialog.c:671
+#: gtk/gtkfilechooserwidget.c:5946 gtk/gtkprintunixdialog.c:671
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "“%s”というファイルはすでに存在します。上書きしますか?"
 
-#: gtk/gtkfilechooserwidget.c:5981 gtk/gtkprintunixdialog.c:675
+#: gtk/gtkfilechooserwidget.c:5949 gtk/gtkprintunixdialog.c:675
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "“%s”にファイルがすでに存在します。すべての内容を上書きします。"
 
-#: gtk/gtkfilechooserwidget.c:5986 gtk/gtkprintunixdialog.c:683
+#: gtk/gtkfilechooserwidget.c:5954 gtk/gtkprintunixdialog.c:683
 msgid "_Replace"
 msgstr "置き換える(_R)"
 
-#: gtk/gtkfilechooserwidget.c:6168
+#: gtk/gtkfilechooserwidget.c:6136
 msgid "You do not have access to the specified folder."
 msgstr "指定したフォルダーへのアクセス権がありません。"
 
-#: gtk/gtkfilechooserwidget.c:6775
+#: gtk/gtkfilechooserwidget.c:6743
 msgid "Could not send the search request"
 msgstr "検索結果をプログラム側に送信できませんでした"
 
-#: gtk/gtkfilechooserwidget.c:7101
+#: gtk/gtkfilechooserwidget.c:7069
 msgid "Accessed"
 msgstr "アクセス日時"
 
@@ -2382,7 +2383,7 @@ msgstr "OpenGL のコンテキストの生成に失敗しました"
 msgid "Application menu"
 msgstr "アプリケーションメニュー"
 
-#: gtk/gtkheaderbar.c:475 gtk/gtkwindow.c:6855
+#: gtk/gtkheaderbar.c:475 gtk/gtkwindow.c:6859
 msgid "Close"
 msgstr "閉じる"
 
@@ -2402,19 +2403,19 @@ msgstr "警告"
 msgid "Error"
 msgstr "エラー"
 
-#: gtk/gtklabel.c:5996 gtk/gtktext.c:5871 gtk/gtktextview.c:8563
+#: gtk/gtklabel.c:5996 gtk/gtktext.c:5867 gtk/gtktextview.c:8512
 msgid "Cu_t"
 msgstr "切り取り(_T)"
 
-#: gtk/gtklabel.c:5997 gtk/gtktext.c:5875 gtk/gtktextview.c:8567
+#: gtk/gtklabel.c:5997 gtk/gtktext.c:5871 gtk/gtktextview.c:8516
 msgid "_Copy"
 msgstr "コピー(_C)"
 
-#: gtk/gtklabel.c:5998 gtk/gtktext.c:5879 gtk/gtktextview.c:8571
+#: gtk/gtklabel.c:5998 gtk/gtktext.c:5875 gtk/gtktextview.c:8520
 msgid "_Paste"
 msgstr "貼り付け(_P)"
 
-#: gtk/gtklabel.c:6004 gtk/gtktext.c:5892 gtk/gtktextview.c:8596
+#: gtk/gtklabel.c:6004 gtk/gtktext.c:5888 gtk/gtktextview.c:8545
 msgid "Select _All"
 msgstr "すべて選択(_A)"
 
@@ -2524,7 +2525,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:769 gtk/gtkmessagedialog.c:787
-#: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:9070
+#: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:9074
 msgid "_OK"
 msgstr "OK(_O)"
 
@@ -2643,7 +2644,7 @@ msgstr ""
 "GTK がメディアモジュールを見つけられませんでした。インストールを確認してくだ"
 "さい。"
 
-#: gtk/gtknotebook.c:4392 gtk/gtknotebook.c:6675
+#: gtk/gtknotebook.c:4343 gtk/gtknotebook.c:6626
 #, c-format
 msgid "Page %u"
 msgstr "%u ページ"
@@ -2708,83 +2709,83 @@ msgstr "パスワード"
 msgid "_Show Text"
 msgstr "テキストを表示(_S)"
 
-#: gtk/gtkpathbar.c:1044
+#: gtk/gtkpathbar.c:1043
 msgid "File System Root"
 msgstr "ファイルシステムのルート"
 
 #. translators: %s is the name of a cloud provider for files
-#: gtk/gtkplacessidebar.c:954
+#: gtk/gtkplacessidebar.c:929
 #, c-format
 msgid "Open %s"
 msgstr "%s を開きます"
 
-#: gtk/gtkplacessidebar.c:1043
+#: gtk/gtkplacessidebar.c:1018
 msgid "Recent"
 msgstr "最近開いたファイル"
 
-#: gtk/gtkplacessidebar.c:1045
+#: gtk/gtkplacessidebar.c:1020
 msgid "Recent files"
 msgstr "最近開いたファイル"
 
-#: gtk/gtkplacessidebar.c:1054
+#: gtk/gtkplacessidebar.c:1029
 msgid "Starred"
 msgstr "星付き"
 
-#: gtk/gtkplacessidebar.c:1056
+#: gtk/gtkplacessidebar.c:1031
 msgid "Starred files"
 msgstr "星を付けたファイル"
 
-#: gtk/gtkplacessidebar.c:1067
+#: gtk/gtkplacessidebar.c:1042
 msgid "Open your personal folder"
 msgstr "ユーザー専用のフォルダーを開きます"
 
-#: gtk/gtkplacessidebar.c:1082
+#: gtk/gtkplacessidebar.c:1057
 msgid "Open the contents of your desktop in a folder"
 msgstr "フォルダー内にあるデスクトップの内容を開きます"
 
-#: gtk/gtkplacessidebar.c:1096
+#: gtk/gtkplacessidebar.c:1071
 msgid "Enter Location"
 msgstr "場所を指定する"
 
-#: gtk/gtkplacessidebar.c:1098
+#: gtk/gtkplacessidebar.c:1073
 msgid "Manually enter a location"
 msgstr "場所を手動で入力します"
 
-#: gtk/gtkplacessidebar.c:1108
+#: gtk/gtkplacessidebar.c:1083
 msgid "Trash"
 msgstr "ゴミ箱"
 
-#: gtk/gtkplacessidebar.c:1110
+#: gtk/gtkplacessidebar.c:1085
 msgid "Open the trash"
 msgstr "ゴミ箱を開きます"
 
-#: gtk/gtkplacessidebar.c:1221 gtk/gtkplacessidebar.c:1249
-#: gtk/gtkplacessidebar.c:1449
+#: gtk/gtkplacessidebar.c:1196 gtk/gtkplacessidebar.c:1224
+#: gtk/gtkplacessidebar.c:1424
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "“%s”をマウントして開きます"
 
-#: gtk/gtkplacessidebar.c:1344
+#: gtk/gtkplacessidebar.c:1319
 msgid "Open the contents of the file system"
 msgstr "ファイルシステムの内容を開きます"
 
-#: gtk/gtkplacessidebar.c:1427
+#: gtk/gtkplacessidebar.c:1402
 msgid "New bookmark"
 msgstr "新しいブックマーク"
 
-#: gtk/gtkplacessidebar.c:1429
+#: gtk/gtkplacessidebar.c:1404
 msgid "Add a new bookmark"
 msgstr "新しいブックマークを追加する"
 
-#: gtk/gtkplacessidebar.c:1494
+#: gtk/gtkplacessidebar.c:1469
 msgid "Other Locations"
 msgstr "他の場所"
 
-#: gtk/gtkplacessidebar.c:1495
+#: gtk/gtkplacessidebar.c:1470
 msgid "Show other locations"
 msgstr "他の場所を表示する"
 
-#: gtk/gtkplacessidebar.c:2099 gtk/gtkplacessidebar.c:3094
+#: gtk/gtkplacessidebar.c:1971 gtk/gtkplacessidebar.c:2966
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "“%s”を起動できません"
@@ -2792,126 +2793,126 @@ msgstr "“%s”を起動できません"
 #. Translators: This means that unlocking an encrypted storage
 #. * device failed. %s is the name of the device.
 #.
-#: gtk/gtkplacessidebar.c:2135
+#: gtk/gtkplacessidebar.c:2007
 #, c-format
 msgid "Error unlocking “%s”"
 msgstr "“%s”のロック解除時にエラー"
 
-#: gtk/gtkplacessidebar.c:2137
+#: gtk/gtkplacessidebar.c:2009
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "“%s”にアクセスできません"
 
-#: gtk/gtkplacessidebar.c:2366
+#: gtk/gtkplacessidebar.c:2238
 msgid "This name is already taken"
 msgstr "この名前はすでに使用されています"
 
-#: gtk/gtkplacessidebar.c:2439 gtk/inspector/actions.ui:25
+#: gtk/gtkplacessidebar.c:2311 gtk/inspector/actions.ui:25
 #: gtk/inspector/css-node-tree.ui:35 gtk/ui/gtkfilechooserwidget.ui:179
 #: gtk/ui/gtkfilechooserwidget.ui:457
 msgid "Name"
 msgstr "名前"
 
-#: gtk/gtkplacessidebar.c:2635
+#: gtk/gtkplacessidebar.c:2507
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "“%s”をアンマウントできません"
 
-#: gtk/gtkplacessidebar.c:2811
+#: gtk/gtkplacessidebar.c:2683
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "“%s”を停止できません"
 
-#: gtk/gtkplacessidebar.c:2840
+#: gtk/gtkplacessidebar.c:2712
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "“%s”を取り出せません"
 
-#: gtk/gtkplacessidebar.c:2869 gtk/gtkplacessidebar.c:2898
+#: gtk/gtkplacessidebar.c:2741 gtk/gtkplacessidebar.c:2770
 #, c-format
 msgid "Unable to eject %s"
 msgstr "%s を取り出せません"
 
-#: gtk/gtkplacessidebar.c:3046
+#: gtk/gtkplacessidebar.c:2918
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "メディアの変更で“%s”を監視できません"
 
-#: gtk/gtkplacessidebar.c:3265 gtk/gtkplacessidebar.c:3352
+#: gtk/gtkplacessidebar.c:3137 gtk/gtkplacessidebar.c:3224
 #: gtk/gtkplacesview.c:1661
 msgid "Open in New _Tab"
 msgstr "新しいタブで開く(_T)"
 
-#: gtk/gtkplacessidebar.c:3271 gtk/gtkplacessidebar.c:3361
+#: gtk/gtkplacessidebar.c:3143 gtk/gtkplacessidebar.c:3233
 #: gtk/gtkplacesview.c:1666
 msgid "Open in New _Window"
 msgstr "新しいウィンドウで開く(_W)"
 
-#: gtk/gtkplacessidebar.c:3372
+#: gtk/gtkplacessidebar.c:3244
 msgid "_Add Bookmark"
 msgstr "ブックマークを追加(_A)"
 
-#: gtk/gtkplacessidebar.c:3376
+#: gtk/gtkplacessidebar.c:3248
 msgid "_Remove"
 msgstr "削除(_R)"
 
-#: gtk/gtkplacessidebar.c:3392 gtk/gtkplacesview.c:1691
+#: gtk/gtkplacessidebar.c:3264 gtk/gtkplacesview.c:1691
 msgid "_Mount"
 msgstr "マウント(_M)"
 
-#: gtk/gtkplacessidebar.c:3401 gtk/gtkplacesview.c:1680
+#: gtk/gtkplacessidebar.c:3273 gtk/gtkplacesview.c:1680
 msgid "_Unmount"
 msgstr "アンマウント(_U)"
 
-#: gtk/gtkplacessidebar.c:3408
+#: gtk/gtkplacessidebar.c:3280
 msgid "_Eject"
 msgstr "取り出す(_E)"
 
-#: gtk/gtkplacessidebar.c:3418
+#: gtk/gtkplacessidebar.c:3290
 msgid "_Detect Media"
 msgstr "メディアを検出(_D)"
 
-#: gtk/gtkplacessidebar.c:3427
+#: gtk/gtkplacessidebar.c:3299
 msgid "_Start"
 msgstr "開始(_S)"
 
-#: gtk/gtkplacessidebar.c:3429
+#: gtk/gtkplacessidebar.c:3301
 msgid "_Power On"
 msgstr "電源オン(_P)"
 
-#: gtk/gtkplacessidebar.c:3430
+#: gtk/gtkplacessidebar.c:3302
 msgid "_Connect Drive"
 msgstr "ドライブに接続(_C)"
 
-#: gtk/gtkplacessidebar.c:3431
+#: gtk/gtkplacessidebar.c:3303
 msgid "_Start Multi-disk Device"
 msgstr "マルチディスクデバイスを起動(_S)"
 
-#: gtk/gtkplacessidebar.c:3432
+#: gtk/gtkplacessidebar.c:3304
 msgid "_Unlock Device"
 msgstr "デバイスのロック解除(_U)"
 
-#: gtk/gtkplacessidebar.c:3442
+#: gtk/gtkplacessidebar.c:3314
 msgid "_Stop"
 msgstr "停止(_S)"
 
-#: gtk/gtkplacessidebar.c:3444
+#: gtk/gtkplacessidebar.c:3316
 msgid "_Safely Remove Drive"
 msgstr "ドライブの安全な取り出し(_S)"
 
-#: gtk/gtkplacessidebar.c:3445
+#: gtk/gtkplacessidebar.c:3317
 msgid "_Disconnect Drive"
 msgstr "ドライブを切断(_D)"
 
-#: gtk/gtkplacessidebar.c:3446
+#: gtk/gtkplacessidebar.c:3318
 msgid "_Stop Multi-disk Device"
 msgstr "マルチディスクデバイスを停止(_S)"
 
-#: gtk/gtkplacessidebar.c:3447
+#: gtk/gtkplacessidebar.c:3319
 msgid "_Lock Device"
 msgstr "デバイスのロック(_L)"
 
-#: gtk/gtkplacessidebar.c:3942 gtk/gtkplacesview.c:1114
+#: gtk/gtkplacessidebar.c:3811 gtk/gtkplacesview.c:1114
 msgid "Computer"
 msgstr "コンピューター"
 
@@ -3378,15 +3379,15 @@ msgstr "見つかりませんでした"
 msgid "Try a different search"
 msgstr "他のキーワードを試してください"
 
-#: gtk/gtktext.c:5897 gtk/gtktextview.c:8601
+#: gtk/gtktext.c:5893 gtk/gtktextview.c:8550
 msgid "Insert _Emoji"
 msgstr "絵文字を挿入(_E)"
 
-#: gtk/gtktextview.c:8583
+#: gtk/gtktextview.c:8532
 msgid "_Undo"
 msgstr "元に戻す(_U)"
 
-#: gtk/gtktextview.c:8587
+#: gtk/gtktextview.c:8536
 msgid "_Redo"
 msgstr "やり直す(_R)"
 
@@ -3413,24 +3414,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6797
+#: gtk/gtkwindow.c:6801
 msgid "Move"
 msgstr "移動"
 
-#: gtk/gtkwindow.c:6806
+#: gtk/gtkwindow.c:6810
 msgid "Resize"
 msgstr "サイズの変更"
 
-#: gtk/gtkwindow.c:6840
+#: gtk/gtkwindow.c:6844
 msgid "Always on Top"
 msgstr "常に最前面に配置する"
 
-#: gtk/gtkwindow.c:9057
+#: gtk/gtkwindow.c:9061
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "GTK インスペクターを使用しますか?"
 
-#: gtk/gtkwindow.c:9059
+#: gtk/gtkwindow.c:9063
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3441,7 +3442,7 @@ msgstr ""
 "デバッガーです。使用方法によっては、アプリケーションの異常動作やクラッシュを"
 "引き起こす可能性があります。"
 
-#: gtk/gtkwindow.c:9064
+#: gtk/gtkwindow.c:9068
 msgid "Don’t show this message again"
 msgstr "このメッセージを今後表示しない"
 
@@ -6471,32 +6472,32 @@ msgstr "%s:%d: プロパティ '%s' の値を解析できませんでした: %s\
 msgid "%s:%d: %sproperty %s::%s not found\n"
 msgstr "%s:%d: %sプロパティ %s::%s が見つかりません\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:1773
+#: gtk/tools/gtk-builder-tool-simplify.c:1774
 #, c-format
 msgid "Can’t load “%s”: %s\n"
 msgstr "“%s”を読み込めません: %s\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:1784
+#: gtk/tools/gtk-builder-tool-simplify.c:1785
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
 msgstr "“%s”を解析できません: %s\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:1808
+#: gtk/tools/gtk-builder-tool-simplify.c:1809
 #, c-format
 msgid "Failed to read “%s”: %s\n"
 msgstr "“%s”の読み取りに失敗しました: %s\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:1814
+#: gtk/tools/gtk-builder-tool-simplify.c:1815
 #, c-format
 msgid "Failed to write %s: “%s”\n"
 msgstr "%s の書き込みに失敗しました: “%s”\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:1854
+#: gtk/tools/gtk-builder-tool-simplify.c:1855
 #, c-format
 msgid "No .ui file specified\n"
 msgstr ".ui ファイルを指定していません\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:1860
+#: gtk/tools/gtk-builder-tool-simplify.c:1861
 #, c-format
 msgid "Can only simplify a single .ui file without --replace\n"
 msgstr ""
