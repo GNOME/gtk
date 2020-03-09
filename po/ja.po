@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-03-06 18:02+0000\n"
-"PO-Revision-Date: 2020-03-03 20:25+0900\n"
+"PO-Revision-Date: 2020-03-09 21:20+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
@@ -6931,7 +6931,7 @@ msgstr "サーバーへ接続(_S)"
 
 #: gtk/ui/gtkplacesview.ui:290
 msgid "Enter server address…"
-msgstr "サーバーのアドレスを入力…"
+msgstr "サーバーアドレスを入力…"
 
 #: gtk/ui/gtkprintunixdialog.ui:100
 msgid "Printer"
