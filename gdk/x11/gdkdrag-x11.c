@@ -1780,7 +1780,7 @@ gdk_drag_anim_timeout (gpointer data)
 
   t = ease_out_cubic (f);
 
-  gdk_surface_show (drag->drag_surface);
+  gdk_x11_surface_show (drag->drag_surface, FALSE);
   gdk_x11_surface_move (drag->drag_surface,
                         (drag->last_x - drag->hot_x) +
                         (drag->start_x - drag->last_x) * t,
@@ -2028,7 +2028,7 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
   x11_drag->ipc_surface = ipc_surface;
   if (gdk_x11_surface_get_group (surface))
     gdk_x11_surface_set_group (x11_drag->ipc_surface, surface);
-  gdk_surface_show (x11_drag->ipc_surface);
+  gdk_x11_surface_show (x11_drag->ipc_surface, FALSE);
 
   x11_drag->drag_surface = create_drag_surface (display);
 
