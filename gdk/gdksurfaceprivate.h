@@ -113,12 +113,7 @@ struct _GdkSurfaceClass
   cairo_surface_t *
                (* ref_cairo_surface)    (GdkSurface       *surface);
 
-  void         (* show)                 (GdkSurface       *surface,
-                                         gboolean         already_mapped);
   void         (* hide)                 (GdkSurface       *surface);
-  void         (* withdraw)             (GdkSurface       *surface);
-  void         (* raise)                (GdkSurface       *surface);
-  void         (* lower)                (GdkSurface       *surface);
   void         (* toplevel_resize)      (GdkSurface      *surface,
                                          gint             width,
                                          gint             height);
