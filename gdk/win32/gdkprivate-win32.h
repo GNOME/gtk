@@ -428,6 +428,9 @@ gboolean _gdk_win32_surface_fill_min_max_info    (GdkSurface  *window,
 
 gboolean _gdk_win32_surface_lacks_wm_decorations (GdkSurface *window);
 
+void gdk_win32_surface_show (GdkSurface *surface,
+                             gboolean    already_mapped);
+
 BOOL WINAPI GtkShowWindow (GdkSurface *window,
                            int        cmd_show);
 
