@@ -3711,7 +3711,6 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   impl_class->set_opaque_region = gdk_wayland_surface_set_opaque_region;
   impl_class->set_shadow_width = gdk_wayland_surface_set_shadow_width;
   impl_class->create_gl_context = gdk_wayland_surface_create_gl_context;
-  impl_class->supports_edge_constraints = gdk_wayland_surface_supports_edge_constraints;
 
   signals[COMMITTED] = g_signal_new (g_intern_static_string ("committed"),
                                      G_TYPE_FROM_CLASS (object_class),
@@ -4544,6 +4543,12 @@ gdk_wayland_toplevel_show_window_menu (GdkToplevel *toplevel,
   return gdk_wayland_surface_show_window_menu (GDK_SURFACE (toplevel), event);
 }
 
+static gboolean
+gdk_wayland_toplevel_supports_edge_constraints (GdkToplevel *toplevel)
+{
+  return gdk_wayland_surface_supports_edge_constraints (GDK_SURFACE (toplevel));
+}
+
 static void
 gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface)
 {
@@ -4552,6 +4557,7 @@ gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface)
   iface->lower = gdk_wayland_toplevel_lower;
   iface->focus = gdk_wayland_toplevel_focus;
   iface->show_window_menu = gdk_wayland_toplevel_show_window_menu;
+  iface->supports_edge_constraints = gdk_wayland_toplevel_supports_edge_constraints;
 }
 
 typedef struct

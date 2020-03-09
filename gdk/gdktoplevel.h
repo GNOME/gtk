@@ -99,6 +99,9 @@ void          gdk_toplevel_set_decorated         (GdkToplevel      *toplevel,
 GDK_AVAILABLE_IN_ALL
 void          gdk_toplevel_set_deletable         (GdkToplevel      *toplevel,
                                                   gboolean          deletable);
+GDK_AVAILABLE_IN_ALL
+gboolean      gdk_toplevel_supports_edge_constraints (GdkToplevel *toplevel);
+
 G_END_DECLS
 
 #endif /* __GDK_TOPLEVEL_H__ */
