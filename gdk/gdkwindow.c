@@ -9774,6 +9774,7 @@ proxy_gesture_event (GdkEvent *source_event,
   GdkEventType evtype;
   GdkEvent *event;
   guint state;
+  gint events_to_unlink = 1;
 
   evtype = source_event->any.type;
   gdk_event_get_coords (source_event, &toplevel_x, &toplevel_y);
@@ -9818,6 +9819,10 @@ proxy_gesture_event (GdkEvent *source_event,
       event->touchpad_swipe.n_fingers = source_event->touchpad_swipe.n_fingers;
       event->touchpad_swipe.phase = source_event->touchpad_swipe.phase;
 
+      if (event_win->interpolate_events)
+        events_to_unlink = gdk_event_interpolation_control_add (event_win->event_interpolation,
+                                                                event);
+
       break;
 
     case GDK_TOUCHPAD_PINCH:
@@ -9835,13 +9840,17 @@ proxy_gesture_event (GdkEvent *source_event,
       event->touchpad_pinch.n_fingers = source_event->touchpad_pinch.n_fingers;
       event->touchpad_pinch.phase = source_event->touchpad_pinch.phase;
 
+      if (event_win->interpolate_events)
+        events_to_unlink = gdk_event_interpolation_control_add (event_win->event_interpolation,
+                                                                event);
+
       break;
 
     default:
       break;
     }
 
-  return 1;
+  return events_to_unlink;
 }
 
 #ifdef DEBUG_WINDOW_PRINTING
