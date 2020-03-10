@@ -28,18 +28,18 @@
 #include "gdksurface-broadway.h"
 
 #include "gdkbroadwaydisplay.h"
-#include "gdkdisplay.h"
-#include "gdksurfaceprivate.h"
-#include "gdkpopupprivate.h"
-#include "gdktoplevelprivate.h"
-#include "gdkdragsurfaceprivate.h"
-#include "gdkdisplay-broadway.h"
-#include "gdkprivate-broadway.h"
-#include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
+#include "gdkdisplay-broadway.h"
+#include "gdkdisplay.h"
+#include "gdkdragsurfaceprivate.h"
 #include "gdkeventsource.h"
-#include "gdktextureprivate.h"
 #include "gdkframeclockidleprivate.h"
+#include "gdkinternals.h"
+#include "gdkpopupprivate.h"
+#include "gdkprivate-broadway.h"
+#include "gdksurfaceprivate.h"
+#include "gdktextureprivate.h"
+#include "gdktoplevelprivate.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -1472,11 +1472,13 @@ gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
   impl_class->drag_begin = _gdk_broadway_surface_drag_begin;
 }
 
-typedef struct {
+typedef struct
+{
   GdkBroadwaySurface parent_instance;
 } GdkBroadwayPopup;
 
-typedef struct {
+typedef struct
+{
   GdkBroadwaySurfaceClass parent_class;
 } GdkBroadwayPopupClass;
 
@@ -1595,11 +1597,13 @@ gdk_broadway_popup_iface_init (GdkPopupInterface *iface)
   iface->get_position_y = gdk_broadway_popup_get_position_y;
 }
 
-typedef struct {
+typedef struct
+{
   GdkBroadwaySurface parent_instance;
 } GdkBroadwayToplevel;
 
-typedef struct {
+typedef struct
+{
   GdkBroadwaySurfaceClass parent_class;
 } GdkBroadwayToplevelClass;
 
@@ -1613,7 +1617,6 @@ static void
 gdk_broadway_toplevel_init (GdkBroadwayToplevel *toplevel)
 {
 }
-
 
 static void
 gdk_broadway_toplevel_set_property (GObject      *object,
@@ -1738,6 +1741,30 @@ gdk_broadway_toplevel_class_init (GdkBroadwayToplevelClass *class)
   gdk_toplevel_install_properties (object_class, 1);
 }
 
+static void
+show_surface (GdkSurface *surface)
+{
+  gboolean was_mapped;
+
+  if (surface->destroyed)
+    return;
+
+  was_mapped = GDK_SURFACE_IS_MAPPED (surface);
+
+  if (!was_mapped)
+    gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
+
+  _gdk_surface_update_viewable (surface);
+
+  gdk_broadway_surface_show (surface, FALSE);
+
+  if (!was_mapped)
+    {
+      if (gdk_surface_is_viewable (surface))
+        gdk_surface_invalidate_rect (surface, NULL);
+    }
+}
+
 static gboolean
 gdk_broadway_toplevel_present (GdkToplevel       *toplevel,
                                int                width,
@@ -1773,27 +1800,7 @@ gdk_broadway_toplevel_present (GdkToplevel       *toplevel,
 
   gdk_broadway_surface_set_modal_hint (surface, gdk_toplevel_layout_get_modal (layout));
 
-  {
-  gboolean was_mapped;
-
-  if (surface->destroyed)
-    return TRUE;
-
-  was_mapped = GDK_SURFACE_IS_MAPPED (surface);
-
-  if (!was_mapped)
-    gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
-
-  _gdk_surface_update_viewable (surface);
-
-  gdk_broadway_surface_show (surface, FALSE);
-
-  if (!was_mapped)
-    {
-      if (gdk_surface_is_viewable (surface))
-        gdk_surface_invalidate_rect (surface, NULL);
-    }
-  }
+  show_surface (surface);
 
   return TRUE;
 }
@@ -1814,14 +1821,14 @@ gdk_broadway_toplevel_lower (GdkToplevel *toplevel)
 
 static void
 gdk_broadway_toplevel_focus (GdkToplevel *toplevel,
-                            guint32      timestamp)
+                             guint32      timestamp)
 {
   gdk_broadway_surface_focus (GDK_SURFACE (toplevel), timestamp);
 }
 
 static gboolean
 gdk_broadway_toplevel_show_window_menu (GdkToplevel *toplevel,
-                                       GdkEvent    *event)
+                                        GdkEvent    *event)
 {
   return FALSE;
 }
@@ -1836,11 +1843,13 @@ gdk_broadway_toplevel_iface_init (GdkToplevelInterface *iface)
   iface->show_window_menu = gdk_broadway_toplevel_show_window_menu;
 }
 
-typedef struct {
+typedef struct
+{
   GdkBroadwaySurface parent_instance;
 } GdkBroadwayDragSurface;
 
-typedef struct {
+typedef struct
+{
   GdkBroadwaySurfaceClass parent_class;
 } GdkBroadwayDragSurfaceClass;
 
@@ -1862,13 +1871,13 @@ gdk_broadway_drag_surface_class_init (GdkBroadwayDragSurfaceClass *class)
 
 static gboolean
 gdk_broadway_drag_surface_present (GdkDragSurface *drag_surface,
-                                  int             width,
-                                  int             height)
+                                   int             width,
+                                   int             height)
 {
   GdkSurface *surface = GDK_SURFACE (drag_surface);
 
   gdk_broadway_surface_toplevel_resize (surface, width, height);
-  gdk_broadway_surface_show (surface, FALSE);
+  show_surface (surface);
 
   return TRUE;
 }
