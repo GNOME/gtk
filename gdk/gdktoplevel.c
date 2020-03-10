@@ -433,7 +433,7 @@ gdk_toplevel_set_keep_above (GdkToplevel *toplevel,
 /**
  * gdk_toplevel_set_keep_below:
  * @toplevel: a #GdkToplevel
- * @above: whether to keep @toplevel below other surfaces
+ * @below: whether to keep @toplevel below other surfaces
  *
  * Set if @surface must be kept below other surfaces.
  **/
@@ -482,6 +482,15 @@ gdk_toplevel_set_focus_on_map (GdkToplevel *toplevel,
   g_object_set (toplevel, "focus-on-map", focus_on_map, NULL);
 }
 
+/**
+ * gdk_toplevel_set_decorated:
+ * @toplevel: a #GdkToplevel
+ * @decorated: %TRUE to request decorations
+ *
+ * Setting @decorated to %FALSE hints the desktop environment
+ * that the surface has its own, client-side decorations and
+ * does not need to have window decorations added.
+ */
 void
 gdk_toplevel_set_decorated (GdkToplevel *toplevel,
                             gboolean     decorated)
@@ -491,6 +500,14 @@ gdk_toplevel_set_decorated (GdkToplevel *toplevel,
   g_object_set (toplevel, "decorated", decorated, NULL);
 }
 
+/**
+ * gdk_toplevel_set_deletable:
+ * @toplevel: a #GdkToplevel
+ * @deletable: %TRUE to request a delete button
+ *
+ * Setting @deletable to %TRUE hints the desktop environment
+ * that it should offer the user a way to close the surface.
+ */
 void
 gdk_toplevel_set_deletable (GdkToplevel *toplevel,
                             gboolean     deletable)
@@ -500,6 +517,16 @@ gdk_toplevel_set_deletable (GdkToplevel *toplevel,
   g_object_set (toplevel, "deletable", deletable, NULL);
 }
 
+/**
+ * gdk_toplevel_supports_edge_constraints:
+ * @toplevel: a #GdkToplevel
+ *
+ * Returns whether the desktop environment supports
+ * tiled window states.
+ *
+ * Returns: %TRUE if the desktop environment supports
+ *     tiled window states
+ */
 gboolean
 gdk_toplevel_supports_edge_constraints (GdkToplevel *toplevel)
 {
