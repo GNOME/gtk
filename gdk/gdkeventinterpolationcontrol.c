@@ -862,14 +862,23 @@ stop_interpolation_callback (GdkEventInterpolationControl *control)
 static gboolean
 is_gesture_start (GdkEvent *event)
 {
-  return FALSE;
+  return (((gdk_event_get_event_type (event) == GDK_TOUCHPAD_SWIPE) &&
+            (event->touchpad_swipe.phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN)) ||
+          ((gdk_event_get_event_type (event) == GDK_TOUCHPAD_PINCH) &&
+            (event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN)));
 }
 
 static gboolean
 is_gesture_end (GdkEvent *event)
 {
-  return ((gdk_event_get_event_type (event) == GDK_SCROLL) &&
-          gdk_event_is_scroll_stop_event (event));
+  return (((gdk_event_get_event_type (event) == GDK_SCROLL) &&
+           gdk_event_is_scroll_stop_event (event)) ||
+          ((gdk_event_get_event_type (event) == GDK_TOUCHPAD_SWIPE) &&
+           ((event->touchpad_swipe.phase == GDK_TOUCHPAD_GESTURE_PHASE_END) ||
+            (event->touchpad_swipe.phase == GDK_TOUCHPAD_GESTURE_PHASE_CANCEL))) ||
+          ((gdk_event_get_event_type (event) == GDK_TOUCHPAD_PINCH) &&
+           ((event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_END) ||
+            (event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_CANCEL))));
 }
 
 static GdkDeviceInterpolator *
