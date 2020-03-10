@@ -31,11 +31,7 @@
  * A #GdkToplevel is a freestanding toplevel surface.
  */
 
-
-/* FIXME: this can't have GdkSurface as a prerequisite
- * as long as GdkSurface implements this interface itself
- */
-G_DEFINE_INTERFACE (GdkToplevel, gdk_toplevel, G_TYPE_OBJECT)
+G_DEFINE_INTERFACE (GdkToplevel, gdk_toplevel, GDK_TYPE_SURFACE)
 
 static gboolean
 gdk_toplevel_default_present (GdkToplevel       *toplevel,
