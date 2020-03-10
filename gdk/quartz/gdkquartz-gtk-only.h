@@ -23,7 +23,7 @@
 #error "This API is for use only in Gtk internal code."
 #endif
 
-#include <Appkit/Appkit.h>
+#include <AppKit/AppKit.h>
 #include <gdk/gdk.h>
 #include <gdk/quartz/gdkquartz.h>
 
