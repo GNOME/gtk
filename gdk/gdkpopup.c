@@ -19,9 +19,9 @@
 
 #include "config.h"
 
+#include "gdk-private.h"
 #include "gdkintl.h"
 #include "gdkpopupprivate.h"
-#include "gdk-private.h"
 
 /**
  * SECTION:gdkpopup
@@ -32,11 +32,7 @@
  * and is positioned relative to it.
  */
 
-
-/* FIXME: this can't have GdkSurface as a prerequisite
- * as long as GdkSurface implements this interface itself
- */
-G_DEFINE_INTERFACE (GdkPopup, gdk_popup, G_TYPE_OBJECT)
+G_DEFINE_INTERFACE (GdkPopup, gdk_popup, GDK_TYPE_SURFACE)
 
 static gboolean
 gdk_popup_default_present (GdkPopup       *popup,
