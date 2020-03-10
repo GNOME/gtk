@@ -1,4 +1,4 @@
-deprecated_h_sources = 			\
+gtk_deprecated_h_sources = 			\
 	deprecated/gtkactivatable.h	\
 	deprecated/gtkaction.h		\
 	deprecated/gtkactiongroup.h	\
@@ -40,14 +40,14 @@ deprecated_h_sources = 			\
 	deprecated/gtkvseparator.h	\
 	deprecated/gtkvpaned.h
 
-deprecated_private_h_sources =			\
+gtk_deprecated_private_h_sources =		\
 	deprecated/gtkgradientprivate.h		\
 	deprecated/gtkiconfactoryprivate.h	\
 	deprecated/gtknumerableiconprivate.h	\
 	deprecated/gtkstylepropertiesprivate.h	\
 	deprecated/gtksymboliccolorprivate.h
 
-deprecated_c_sources = 			\
+gtk_deprecated_c_sources = 			\
 	deprecated/gtkactivatable.c	\
 	deprecated/gtkaction.c		\
 	deprecated/gtkactiongroup.c	\

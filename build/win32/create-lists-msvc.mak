@@ -99,3 +99,37 @@ NULL=
 
 !if [del /f /q resources_sources.mak]
 !endif
+
+# Get absolute path of glib-mkenums
+!if [call create-lists.bat header gtk_sources.mak GLIB_MKENUMS_ABS]
+!endif
+
+!if [for %f in ($(GLIB_MKENUMS)) do @call create-lists.bat file gtk_sources.mak %~ff]
+!endif
+
+!if [call create-lists.bat footer gtk_sources.mak]
+!endif
+
+# Get actual paths of demo sources in gtk-demo
+!if [call create-lists.bat header gtk_sources.mak GTK_DEMO_BASE_SRCS]
+!endif
+
+!if [for %f in ($(demos_base:		=)) do @call create-lists.bat file gtk_sources.mak ..\..\demos\gtk-demo\%f]
+!endif
+
+!if [call create-lists.bat footer gtk_sources.mak]
+!endif
+
+!if [call create-lists.bat header gtk_sources.mak GTK_FONT_FEATURE_DEMO_SRCS]
+!endif
+
+!if [for %f in ($(font_features_demo:		=)) do @call create-lists.bat file gtk_sources.mak ..\..\demos\gtk-demo\%f]
+!endif
+
+!if [call create-lists.bat footer gtk_sources.mak]
+!endif
+
+!include gtk_sources.mak
+
+!if [del /f /q gtk_sources.mak]
+!endif

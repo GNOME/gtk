@@ -3,8 +3,11 @@
 # Items in here should not need to be edited unless
 # one is maintaining the NMake build files.
 
+!include ..\..\demos\gtk-demo\Makefile.inc
+
 !include config-msvc.mak
 !include create-lists-msvc.mak
+
 
 # Copy the pre-defined gdkconfig.h.[win32|win32_broadway]
 !if "$(CFG)" == "release" || "$(CFG)" == "Release"
@@ -23,6 +26,12 @@ GDK_DEL_CONFIG = broadway
 GDK_CONFIG_TEMPLATE = ..\..\gdk\gdkconfig.h.win32
 !endif
 
+gtk_demo_sources = $(GTK_DEMO_BASE_SRCS)
+
+!ifdef HARFBUZZ
+gtk_demo_sources = $(gtk_demo_sources) $(GTK_FONT_FEATURE_DEMO_SRCS)
+!endif
+
 GDK_MARSHALERS_FLAGS = --prefix=_gdk_marshal --valist-marshallers
 GDK_RESOURCES_ARGS = ..\..\gdk\gdk.gresource.xml --target=$@ --sourcedir=..\..\gdk --c-name _gdk --manual-register
 GTK_MARSHALERS_FLAGS = --prefix=_gtk_marshal --valist-marshallers
@@ -36,6 +45,8 @@ all:	\
 	..\..\gdk\gdkmarshalers.c	\
 	..\..\gdk\gdkresources.h	\
 	..\..\gdk\gdkresources.c	\
+	..\..\gdk\gdkenumtypes.h	\
+	..\..\gdk\gdkenumtypes.c	\
 	..\..\gtk\gtk-win32.rc	\
 	..\..\gtk\libgtk3.manifest	\
 	..\..\gtk\gtkdbusgenerated.h	\
@@ -44,6 +55,10 @@ all:	\
 	..\..\gtk\gtk.gresource.xml	\
 	..\..\gtk\gtkmarshalers.h	\
 	..\..\gtk\gtkmarshalers.c	\
+	..\..\gtk\gtktypebuiltins.h	\
+	..\..\gtk\gtktypebuiltins.c	\
+	..\..\gtk\gtkprivatetypebuiltins.h	\
+	..\..\gtk\gtkprivatetypebuiltins.c	\
 	..\..\gtk\gtkresources.h	\
 	..\..\gtk\gtkresources.c	\
 	..\..\demos\gtk-demo\demos.h	\
@@ -106,6 +121,29 @@ all:	\
 	@if not "$(JSON_GLIB_FORMAT)" == "" set JSON_GLIB_FORMAT=$(JSON_GLIB_FORMAT)
 	@if not "$(GDK_PIXBUF_PIXDATA)" == "" set GDK_PIXBUF_PIXDATA=$(GDK_PIXBUF_PIXDATA)
 	@$(GLIB_COMPILE_RESOURCES) $(GDK_RESOURCES_ARGS) --generate-source
+
+# Create temporary Makefile for glib-mkenums in ..\..\gdk
+..\..\gdk\mkenums-msvc.mak:
+	@echo !include Makefile.inc>$@
+	@echo gdkenumtypes.h: Makefile.inc gdkenumtypes.h.template ^$(gdk_public_h_sources) ^$(gdk_deprecated_h_sources)>>$@
+	@echo.	@echo Generating ^$@...>>$@
+	@echo.	@^$(PYTHON) ^$(GLIB_MKENUMS_ABS) --template=^$@.template ^$(gdk_public_h_sources) ^$(gdk_deprecated_h_sources) --output ^$@.tmp>> $@
+	@echo.	@move ^$@.tmp ^$@>> $@
+	@echo.>>$@
+	@echo gdkenumtypes.c: Makefile.inc gdkenumtypes.c.template ^$(gdk_public_h_sources) ^$(gdk_deprecated_h_sources)>>$@
+	@echo.	@echo Generating ^$@...>>$@
+	@echo.	@^$(PYTHON) ^$(GLIB_MKENUMS_ABS) --template=^$@.template ^$(gdk_public_h_sources) ^$(gdk_deprecated_h_sources) --output ^$@.tmp>> $@
+	@echo.	@move ^$@.tmp ^$@>> $@
+
+..\..\gdk\gdkenumtypes.h: ..\..\gdk\gdkenumtypes.h.template $(gdk_pub_headers)
+..\..\gdk\gdkenumtypes.c: ..\..\gdk\gdkenumtypes.c.template $(gdk_pub_headers)
+
+..\..\gdk\gdkenumtypes.h ..\..\gdk\gdkenumtypes.c:
+	@$(MAKE) /nologo /f generate-msvc.mak ..\..\gdk\mkenums-msvc.mak
+	@cd ..\..\gdk
+	@$(MAKE) /nologo /f mkenums-msvc.mak PYTHON=$(PYTHON) GLIB_MKENUMS_ABS=$(GLIB_MKENUMS_ABS) $(@F)
+	@del mkenums-msvc.mak
+	@cd $(MAKEDIR)
 
 ..\..\gtk\libgtk3.manifest: ..\..\gtk\libgtk3.manifest.in
 	@echo Generating $@...
@@ -185,6 +223,45 @@ all:	\
 	@$(PYTHON) $(GLIB_GENMARSHAL) $(GTK_MARSHALERS_FLAGS) --body $** >> $@.tmp
 	@move $@.tmp $@
 
+..\..\gtk\mkenums-msvc.mak:
+	@echo !include a11y\Makefile.inc>$@
+	@echo !include deprecated\Makefile.inc>>$@
+	@echo !include inspector\Makefile.inc>>$@
+	@echo !include Makefile.inc>>$@
+	@echo gtktypebuiltins.h: a11y\Makefile.inc deprecated\Makefile.inc inspector\Makefile.inc Makefile.inc gtktypebuiltins.h.template ^$(gtk_public_h_sources) ^$(a11y_h_sources) ^$(gtk_deprecated_h_sources)>>$@
+	@echo.	@echo Generating ^$@...>>$@
+	@echo.	@^$(PYTHON) ^$(GLIB_MKENUMS_ABS) --template=^$@.template ^$(gtk_public_h_sources) ^$(a11y_h_sources) ^$(gtk_deprecated_h_sources) --output ^$@.tmp>> $@
+	@echo.	@move ^$@.tmp ^$@>> $@
+	@echo.>>$@
+	@echo gtktypebuiltins.c: a11y\Makefile.inc deprecated\Makefile.inc inspector\Makefile.inc Makefile.inc gtktypebuiltins.h.template ^$(gtk_public_h_sources) ^$(a11y_h_sources) ^$(gtk_deprecated_h_sources)>>$@
+	@echo.	@echo Generating ^$@...>>$@
+	@echo.	@^$(PYTHON) ^$(GLIB_MKENUMS_ABS) --template=^$@.template ^$(gtk_public_h_sources) ^$(a11y_h_sources) ^$(gtk_deprecated_h_sources) --output ^$@.tmp>> $@
+	@echo.	@move ^$@.tmp ^$@>> $@
+	@echo.>>$@
+	@echo gtkprivatetypebuiltins.h: a11y\Makefile.inc deprecated\Makefile.inc inspector\Makefile.inc Makefile.inc ^$(gtk_private_type_h_sources) gtkprivatetypebuiltins.h.template>>$@
+	@echo.	@echo Generating ^$@...>>$@
+	@echo.	@^$(PYTHON) ^$(GLIB_MKENUMS_ABS) --template=^$@.template ^$(gtk_private_type_h_sources) --output ^$@.tmp>> $@
+	@echo.	@move ^$@.tmp ^$@>> $@
+	@echo.>>$@
+	@echo gtkprivatetypebuiltins.c: a11y\Makefile.inc deprecated\Makefile.inc inspector\Makefile.inc Makefile.inc ^$(gtk_private_type_h_sources) gtkprivatetypebuiltins.c.template>>$@
+	@echo.	@echo Generating ^$@...>>$@
+	@echo.	@^$(PYTHON) ^$(GLIB_MKENUMS_ABS) --template=^$@.template ^$(gtk_private_type_h_sources) --output ^$@.tmp>> $@
+	@echo.	@move ^$@.tmp ^$@>> $@
+	@echo.>>$@
+
+..\..\gtk\gtktypebuiltins.h: ..\..\gtk\gtktypebuiltins.h.template
+..\..\gtk\gtktypebuiltins.c: ..\..\gtk\gtktypebuiltins.c.template
+..\..\gtk\gtkprivatetypebuiltins.h: ..\..\gtk\gtkprivatetypebuiltins.h.template
+..\..\gtk\gtkprivatetypebuiltins.c: ..\..\gtk\gtkprivatetypebuiltins.c.template
+
+..\..\gtk\gtktypebuiltins.h ..\..\gtk\gtktypebuiltins.c	\
+..\..\gtk\gtkprivatetypebuiltins.h ..\..\gtk\gtkprivatetypebuiltins.c:
+	@$(MAKE) /nologo /f generate-msvc.mak ..\..\gtk\mkenums-msvc.mak
+	@cd ..\..\gtk
+	@$(MAKE) /nologo /f mkenums-msvc.mak PYTHON=$(PYTHON) GLIB_MKENUMS_ABS=$(GLIB_MKENUMS_ABS) $(@F)
+	@del mkenums-msvc.mak
+	@cd $(MAKEDIR)
+
 ..\..\demos\gtk-demo\demo_resources.c: ..\..\demos\gtk-demo\demo.gresource.xml $(GTK_DEMO_RESOURCES)
 	@echo Generating $@...
 	@$(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(@D) --generate-source $(@D)\demo.gresource.xml
@@ -193,11 +270,21 @@ all:	\
 	@echo Generating $@...
 	@$(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(@D) --generate-source $(@D)\iconbrowser.gresource.xml
 
+..\..\demos\gtk-demo\demos.h.win32: ..\..\demos\gtk-demo\geninclude.pl.in $(gtk_demo_sources)
+	@echo Re-generating $@...
+	@cd $(@D)
+	@$(PERL) geninclude.pl.in $(gtk_demo_sources:..\..\demos\gtk-demo\=)> $@
+	@cd $(MAKEDIR)
+
 # Remove the generated files
 clean:
 	@-del /f /q ..\..\demos\icon-browser\resources.c
 	@-del /f /q ..\..\demos\gtk-demo\demo_resources.c
 	@-del /f /q ..\..\demos\gtk-demo\demos.h
+	@-del /f /q ..\..\gtk\gtkprivatetypebuiltins.c
+	@-del /f /q ..\..\gtk\gtkprivatetypebuiltins.h
+	@-del /f /q ..\..\gtk\gtktypebuiltins.c
+	@-del /f /q ..\..\gtk\gtktypebuiltins.h
 	@-del /f /q ..\..\gtk\gtkresources.c
 	@-del /f /q ..\..\gtk\gtkresources.h
 	@-del /f /q ..\..\gtk\gtkmarshalers.c
@@ -208,6 +295,8 @@ clean:
 	@-del /f /q ..\..\gtk\gtkdbusgenerated.h
 	@-del /f /q ..\..\gtk\libgtk3.manifest
 	@-del /f /q ..\..\gtk\gtk-win32.rc
+	@-del /f /q ..\..\gdk\gdkenumtypes.c
+	@-del /f /q ..\..\gdk\gdkenumtypes.h
 	@-del /f /q ..\..\gdk\gdkresources.c
 	@-del /f /q ..\..\gdk\gdkresources.h
 	@-del /f /q ..\..\gdk\gdk.gresource.xml
