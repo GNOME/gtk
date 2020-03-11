@@ -45,7 +45,7 @@ window1
           layer: widget
           alpha: 1
           <AtkImage>
-          image size: 16 x 16
+          image size: 0 x 0
           image description: (null)
         name_label
           "label"
