@@ -2016,14 +2016,7 @@ gtk_constraint_layout_add_constraints_from_descriptionv (GtkConstraintLayout *la
           char *squiggly = NULL;
 
           if (range > 0)
-            {
-              squiggly = g_new (char, range + 1);
-
-              for (int r = 0; r < range; i++)
-                squiggly[r] = '~';
-
-              squiggly[range] = '\0';
-            }
+            squiggly = g_strnfill (range, '~');
 
           g_set_error (error, GTK_CONSTRAINT_VFL_PARSER_ERROR,
                        internal_error->code,
