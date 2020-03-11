@@ -351,9 +351,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean      gdk_surface_is_destroyed          (GdkSurface     *surface);
 
 GDK_AVAILABLE_IN_ALL
-GdkSurface *  gdk_surface_get_parent            (GdkSurface     *surface);
-
-GDK_AVAILABLE_IN_ALL
 GdkDisplay *  gdk_surface_get_display           (GdkSurface     *surface);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_show                  (GdkSurface     *surface);
@@ -365,15 +362,6 @@ GDK_AVAILABLE_IN_ALL
 void          gdk_surface_resize                (GdkSurface     *surface,
                                                  gint           width,
                                                  gint           height);
-GDK_AVAILABLE_IN_ALL
-gboolean      gdk_surface_present_popup         (GdkSurface     *surface,
-                                                 int             width,
-                                                 int             height,
-                                                 GdkPopupLayout *layout);
-GDK_AVAILABLE_IN_ALL
-GdkGravity    gdk_surface_get_popup_surface_anchor (GdkSurface     *surface);
-GDK_AVAILABLE_IN_ALL
-GdkGravity    gdk_surface_get_popup_rect_anchor    (GdkSurface     *surface);
 
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_raise                 (GdkSurface     *surface);
@@ -408,9 +396,6 @@ gboolean gdk_surface_is_viewable    (GdkSurface *surface);
 
 GDK_AVAILABLE_IN_ALL
 gboolean      gdk_surface_get_mapped   (GdkSurface *surface);
-
-GDK_AVAILABLE_IN_ALL
-gboolean      gdk_surface_get_autohide (GdkSurface *surface);
 
 GDK_AVAILABLE_IN_ALL
 GdkSurfaceState gdk_surface_get_state (GdkSurface *surface);
@@ -458,10 +443,6 @@ GDK_AVAILABLE_IN_ALL
 int           gdk_surface_get_width       (GdkSurface       *surface);
 GDK_AVAILABLE_IN_ALL
 int           gdk_surface_get_height      (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_get_position   (GdkSurface      *surface,
-                                          gint            *x,
-                                          gint            *y);
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_surface_translate_coordinates (GdkSurface *from,
                                             GdkSurface *to,
