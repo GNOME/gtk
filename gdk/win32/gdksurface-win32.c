@@ -1805,7 +1805,7 @@ gdk_win32_surface_get_geometry (GdkSurface *window,
       API_CALL (GetClientRect, (GDK_SURFACE_HWND (window), &rect));
 
 	  POINT pt;
-	  GdkSurface *parent = gdk_surface_get_parent (window);
+	  GdkSurface *parent = gdk_toplevel_get_parent (GDK_TOPLEVEL (window));
 
 	  pt.x = rect.left;
 	  pt.y = rect.top;
@@ -2665,7 +2665,7 @@ _gdk_win32_surface_handle_aerosnap (GdkSurface            *window,
   GdkWin32Surface *impl;
   GdkDisplay *display;
   gint n_monitors;
-  GdkSurfaceState surface_state = gdk_surface_get_state (window);
+  GdkSurfaceState surface_state = gdk_toplevel_get_state (GDK_TOPLEVEL (window));
   gboolean minimized = surface_state & GDK_SURFACE_STATE_MINIMIZED;
   gboolean maximized = surface_state & GDK_SURFACE_STATE_MAXIMIZED;
   gboolean halfsnapped;
@@ -3697,7 +3697,7 @@ setup_drag_move_resize_context (GdkSurface                   *window,
   const gchar *cursor_name;
   GdkSurface *pointer_window;
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
-  gboolean maximized = gdk_surface_get_state (window) & GDK_SURFACE_STATE_MAXIMIZED;
+  gboolean maximized = gdk_toplevel_get_state (GDK_TOPLEVEL (window)) & GDK_SURFACE_STATE_MAXIMIZED;
   gint root_x, root_y;
 
   gdk_win32_surface_get_root_coords (window, x, y, &root_x, &root_y);
