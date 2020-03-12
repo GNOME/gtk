@@ -27,6 +27,7 @@ typedef struct _GtkPopoverAccessiblePrivate GtkPopoverAccessiblePrivate;
 
 struct _GtkPopoverAccessiblePrivate
 {
+  gchar dummy;
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkPopoverAccessible, gtk_popover_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
