@@ -101,12 +101,10 @@ gdk_device_wintab_set_surface_cursor (GdkDevice *device,
 
 static void
 gdk_device_wintab_query_state (GdkDevice        *device,
-                               GdkSurface        *window,
-                               GdkSurface       **child_window,
-                               gdouble          *root_x,
-                               gdouble          *root_y,
-                               gdouble          *win_x,
-                               gdouble          *win_y,
+                               GdkSurface       *window,
+                               GdkSurface      **child_window,
+                               double           *win_x,
+                               double           *win_y,
                                GdkModifierType  *mask)
 {
   GdkDeviceWintab *device_wintab;
@@ -129,12 +127,6 @@ gdk_device_wintab_query_state (GdkDevice        *device,
     }
 
   GetCursorPos (&point);
-
-  if (root_x)
-    *root_x = point.x / scale;
-
-  if (root_y)
-    *root_y = point.y / scale;
 
   if (hwnd)
     ScreenToClient (hwnd, &point);
