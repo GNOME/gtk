@@ -1278,7 +1278,7 @@ _gdk_win32_get_window_rect (GdkSurface *window,
   point.y = client_rect.top;
 
   /* top level windows need screen coords */
-  if (gdk_toplevel_get_parent (GDK_TOPLEVEL (window)) == NULL)
+  if (GDK_IS_TOPLEVEL (window))
     {
       ClientToScreen (hwnd, &point);
       point.x += _gdk_offset_x * impl->surface_scale;
