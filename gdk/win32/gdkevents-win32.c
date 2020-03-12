@@ -318,7 +318,7 @@ low_level_keystroke_handler (WPARAM message,
 	  gboolean lshiftdown = GetKeyState (VK_LSHIFT) & 0x8000;
           gboolean rshiftdown = GetKeyState (VK_RSHIFT) & 0x8000;
           gboolean oneshiftdown = (lshiftdown || rshiftdown) && !(lshiftdown && rshiftdown);
-          gboolean maximized = gdk_surface_get_state (toplevel) & GDK_SURFACE_STATE_MAXIMIZED;
+          gboolean maximized = gdk_toplevel_get_state (GDK_TOPLEVEL (toplevel)) & GDK_SURFACE_STATE_MAXIMIZED;
 
 	  switch (kbdhook->vkCode)
 	    {
@@ -997,9 +997,9 @@ show_window_recurse (GdkSurface *window, gboolean hide_window)
 	{
 	  if (!hide_window)
 	    {
-	      if (gdk_surface_get_state (window) & GDK_SURFACE_STATE_MINIMIZED)
+	      if (gdk_toplevel_get_state (GDK_TOPLEVEL (window)) & GDK_SURFACE_STATE_MINIMIZED)
 		{
-		  if (gdk_surface_get_state (window) & GDK_SURFACE_STATE_MAXIMIZED)
+		  if (gdk_toplevel_get_state (GDK_TOPLEVEL (window)) & GDK_SURFACE_STATE_MAXIMIZED)
 		    {
 		      GtkShowWindow (window, SW_SHOWMAXIMIZED);
 		    }
@@ -1278,7 +1278,7 @@ _gdk_win32_get_window_rect (GdkSurface *window,
   point.y = client_rect.top;
 
   /* top level windows need screen coords */
-  if (gdk_surface_get_parent (window) == NULL)
+  if (gdk_toplevel_get_parent (GDK_TOPLEVEL (window)) == NULL)
     {
       ClientToScreen (hwnd, &point);
       point.x += _gdk_offset_x * impl->surface_scale;
