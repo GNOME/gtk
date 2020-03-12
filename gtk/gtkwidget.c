@@ -243,7 +243,7 @@
  * or a baseline assigned to it by the grandparent.
  *
  * Baseline alignment support for a widget is also done by the #GtkWidgetClass.measure()
- * virtual function. It allows you to report a both a minimum and natural 
+ * virtual function. It allows you to report both a minimum and natural size.
  *
  * If a widget ends up baseline aligned it will be allocated all the space in the parent
  * as if it was %GTK_ALIGN_FILL, but the selected baseline can be found via gtk_widget_get_allocated_baseline().
