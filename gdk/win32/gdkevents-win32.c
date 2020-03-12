@@ -1492,7 +1492,7 @@ handle_nchittest (HWND hwnd,
   RECT rect;
   GdkWin32Surface *impl;
 
-  if (window == NULL || window->input_shape == NULL)
+  if (window == NULL || window->input_region == NULL)
     return FALSE;
 
   /* If the window has decorations, DefWindowProc() will take
@@ -1509,7 +1509,7 @@ handle_nchittest (HWND hwnd,
   rect.top = screen_y - rect.top;
 
   /* If it's inside the rect, return FALSE and let DefWindowProc() handle it */
-  if (cairo_region_contains_point (window->input_shape,
+  if (cairo_region_contains_point (window->input_region,
                                    rect.left / impl->surface_scale,
                                    rect.top / impl->surface_scale))
     return FALSE;
@@ -1569,7 +1569,7 @@ handle_dpi_changed (GdkSurface *window,
                                    window->x, window->y,
                                    window->width, window->height);
   else
-    gdk_surface_resize (window, window->width, window->height);
+    gdk_win32_surface_resize (window, window->width, window->height);
 }
 
 static void
@@ -1616,7 +1616,7 @@ should_window_be_always_on_top (GdkSurface *window)
 {
   DWORD exstyle;
 
-  if ((GDK_SURFACE_TYPE (window) == GDK_SURFACE_TEMP) ||
+  if (GDK_IS_DRAG_SURFACE (window) ||
       (window->state & GDK_SURFACE_STATE_ABOVE))
     return TRUE;
 
@@ -1678,9 +1678,7 @@ ensure_stacking_on_unminimize (MSG *msg)
       rover_impl = GDK_WIN32_SURFACE (rover_gdkw);
 
       if (GDK_SURFACE_IS_MAPPED (rover_gdkw) &&
-          (rover_impl->type_hint == GDK_SURFACE_TYPE_HINT_UTILITY ||
-           rover_impl->type_hint == GDK_SURFACE_TYPE_HINT_DIALOG ||
-           rover_impl->transient_owner != NULL) &&
+           rover_impl->transient_owner != NULL &&
            ((window_ontop && rover_ontop) || (!window_ontop && !rover_ontop)))
         {
           lowest_transient = rover;
@@ -1708,8 +1706,6 @@ ensure_stacking_on_window_pos_changing (MSG       *msg,
   gboolean window_ontop;
 
   if (GetActiveWindow () != msg->hwnd ||
-      impl->type_hint == GDK_SURFACE_TYPE_HINT_UTILITY ||
-      impl->type_hint == GDK_SURFACE_TYPE_HINT_DIALOG ||
       impl->transient_owner != NULL)
     return FALSE;
 
@@ -1740,9 +1736,7 @@ ensure_stacking_on_window_pos_changing (MSG       *msg,
       rover_impl = GDK_WIN32_SURFACE (rover_gdkw);
 
       if (GDK_SURFACE_IS_MAPPED (rover_gdkw) &&
-          (rover_impl->type_hint == GDK_SURFACE_TYPE_HINT_UTILITY ||
-           rover_impl->type_hint == GDK_SURFACE_TYPE_HINT_DIALOG ||
-           rover_impl->transient_owner != NULL) &&
+           rover_impl->transient_owner != NULL &&
           ((window_ontop && rover_ontop) || (!window_ontop && !rover_ontop)))
         {
           restacking = TRUE;
@@ -1769,9 +1763,7 @@ ensure_stacking_on_activate_app (MSG       *msg,
   HWND rover;
   gboolean window_ontop;
 
-  if (impl->type_hint == GDK_SURFACE_TYPE_HINT_UTILITY ||
-      impl->type_hint == GDK_SURFACE_TYPE_HINT_DIALOG ||
-      impl->transient_owner != NULL)
+  if (impl->transient_owner != NULL)
     {
       GdkSurface *child = window;
       GdkSurface *owner = impl->transient_owner;
@@ -1819,8 +1811,6 @@ ensure_stacking_on_activate_app (MSG       *msg,
       rover_impl = GDK_WIN32_SURFACE (rover_gdkw);
 
       if (GDK_SURFACE_IS_MAPPED (rover_gdkw) &&
-          (rover_impl->type_hint == GDK_SURFACE_TYPE_HINT_UTILITY ||
-           rover_impl->type_hint == GDK_SURFACE_TYPE_HINT_DIALOG ||
            rover_impl->transient_owner != NULL) &&
           ((window_ontop && rover_ontop) || (!window_ontop && !rover_ontop)))
         {

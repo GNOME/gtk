@@ -433,6 +433,9 @@ void gdk_win32_surface_show (GdkSurface *surface,
 void gdk_win32_surface_raise (GdkSurface *surface);
 void gdk_win32_surface_set_opacity (GdkSurface *surface,
                                     double      opacity);
+void gdk_win32_surface_resize (GdkSurface *surface,
+                               int         width,
+                               int         height);
 
 BOOL WINAPI GtkShowWindow (GdkSurface *window,
                            int        cmd_show);
