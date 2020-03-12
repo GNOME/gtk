@@ -415,9 +415,7 @@ RegisterGdkClass (GdkSurfaceType wtype, GdkSurfaceTypeHint wtype_hint)
       break;
 
     case GDK_SURFACE_TEMP:
-      if ((wtype_hint == GDK_SURFACE_TYPE_HINT_MENU) ||
-          (wtype_hint == GDK_SURFACE_TYPE_HINT_DROPDOWN_MENU) ||
-          (wtype_hint == GDK_SURFACE_TYPE_HINT_POPUP_MENU))
+      if (TRUE)
         {
           if (klassTEMPSHADOW == 0)
             {
@@ -606,16 +604,11 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
   if (!title || !*title)
     title = "";
 
-  if (impl->type_hint == GDK_SURFACE_TYPE_HINT_UTILITY)
-    dwExStyle |= WS_EX_TOOLWINDOW;
-
   /* WS_EX_TRANSPARENT means "try draw this window last, and ignore input".
    * It's the last part we're after. We don't want DND indicator to accept
    * input, because that will make it a potential drop target, and if it's
    * under the mouse cursor, this will kill any DND.
    */
-  if (impl->type_hint == GDK_SURFACE_TYPE_HINT_DND)
-    dwExStyle |= WS_EX_TRANSPARENT;
 
   klass = RegisterGdkClass (surface_type, impl->type_hint);
 
@@ -892,7 +885,7 @@ show_window_internal (GdkSurface *window,
     {
       UINT flags = SWP_SHOWWINDOW | SWP_NOREDRAW | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER;
 
-      if (GDK_SURFACE_TYPE (window) == GDK_SURFACE_TEMP || !focus_on_map)
+      if (GDK_IS_DRAG_SURFACE (window) || !focus_on_map)
 	flags |= SWP_NOACTIVATE;
 
       SetWindowPos (GDK_SURFACE_HWND (window),
@@ -912,7 +905,7 @@ show_window_internal (GdkSurface *window,
    */
   surface = GDK_WIN32_SURFACE (window);
   if (!already_mapped &&
-      GDK_SURFACE_TYPE (window) == GDK_SURFACE_TOPLEVEL &&
+      GDK_IS_TOPLEVEL (window) &&
       (surface->hint_flags & (GDK_HINT_POS | GDK_HINT_USER_POS)) == 0)
     {
       gboolean center = FALSE;
@@ -922,7 +915,7 @@ show_window_internal (GdkSurface *window,
       x = surface->initial_x;
       y = surface->initial_y;
 
-      if (surface->type_hint == GDK_SURFACE_TYPE_HINT_SPLASHSCREEN)
+      if (FALSE)
 	{
 	  HMONITOR monitor;
 	  MONITORINFO mi;
@@ -972,8 +965,7 @@ show_window_internal (GdkSurface *window,
 			       SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER));
     }
 
-  if (!already_mapped &&
-      GDK_SURFACE_TYPE (window) == GDK_SURFACE_TOPLEVEL)
+  if (!already_mapped && GDK_IS_TOPLEVEL (window))
     {
       /* Ensure new windows are fully onscreen */
       RECT window_rect;
@@ -1038,7 +1030,7 @@ show_window_internal (GdkSurface *window,
       else
         GtkShowWindow (window, SW_SHOWNOACTIVATE);
     }
-  else if (GDK_SURFACE_TYPE (window) == GDK_SURFACE_TEMP || !focus_on_map)
+  else if (GDK_IS_DRAG_SURFACE (window) || !focus_on_map)
     {
       if (!IsWindowVisible (GDK_SURFACE_HWND (window)))
         GtkShowWindow (window, SW_SHOWNOACTIVATE);
@@ -1055,7 +1047,7 @@ show_window_internal (GdkSurface *window,
     }
 
   /* Sync STATE_ABOVE to TOPMOST */
-  if (GDK_SURFACE_TYPE (window) != GDK_SURFACE_TEMP &&
+  if (!GDK_IS_DRAG_SURFACE (window) &&
       (((window->state & GDK_SURFACE_STATE_ABOVE) &&
 	!(exstyle & WS_EX_TOPMOST)) ||
        (!(window->state & GDK_SURFACE_STATE_ABOVE) &&
@@ -1092,7 +1084,7 @@ gdk_win32_surface_hide (GdkSurface *window)
 
   _gdk_surface_clear_update_area (window);
 
-  if (GDK_SURFACE_TYPE (window) == GDK_SURFACE_TOPLEVEL)
+  if (GDK_IS_TOPLEVEL (window))
     ShowOwnedPopups (GDK_SURFACE_HWND (window), FALSE);
 
   /* Use SetWindowPos to hide transparent windows so automatic redraws
@@ -1394,7 +1386,7 @@ gdk_win32_surface_raise (GdkSurface *window)
       GDK_NOTE (MISC, g_print ("gdk_win32_surface_raise: %p\n",
 			       GDK_SURFACE_HWND (window)));
 
-      if (GDK_SURFACE_TYPE (window) == GDK_SURFACE_TEMP)
+      if (GDK_IS_DRAG_SURFACE (window))
         API_CALL (SetWindowPos, (GDK_SURFACE_HWND (window), HWND_TOPMOST,
 	                         0, 0, 0, 0,
 				 SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER));
@@ -1483,65 +1475,21 @@ get_effective_window_decorations (GdkSurface       *window,
     {
       *decoration = GDK_DECOR_ALL | GDK_DECOR_RESIZEH | GDK_DECOR_MAXIMIZE;
 
-      if (impl->type_hint == GDK_SURFACE_TYPE_HINT_DIALOG ||
-	  impl->type_hint == GDK_SURFACE_TYPE_HINT_MENU ||
-	  impl->type_hint == GDK_SURFACE_TYPE_HINT_TOOLBAR)
-	{
-	  *decoration |= GDK_DECOR_MINIMIZE;
-	}
-      else if (impl->type_hint == GDK_SURFACE_TYPE_HINT_SPLASHSCREEN)
-	{
-	  *decoration |= GDK_DECOR_MENU | GDK_DECOR_MINIMIZE;
-	}
+      *decoration |= GDK_DECOR_MINIMIZE;
 
       return TRUE;
     }
   else if (impl->hint_flags & GDK_HINT_MAX_SIZE)
     {
       *decoration = GDK_DECOR_ALL | GDK_DECOR_MAXIMIZE;
-      if (impl->type_hint == GDK_SURFACE_TYPE_HINT_DIALOG ||
-	  impl->type_hint == GDK_SURFACE_TYPE_HINT_MENU ||
-	  impl->type_hint == GDK_SURFACE_TYPE_HINT_TOOLBAR)
-	{
-	  *decoration |= GDK_DECOR_MINIMIZE;
-	}
+      *decoration |= GDK_DECOR_MINIMIZE;
 
       return TRUE;
     }
   else
     {
-      switch (impl->type_hint)
-	{
-	case GDK_SURFACE_TYPE_HINT_DIALOG:
-	  *decoration = (GDK_DECOR_ALL | GDK_DECOR_MINIMIZE | GDK_DECOR_MAXIMIZE);
-	  return TRUE;
-
-	case GDK_SURFACE_TYPE_HINT_MENU:
-	  *decoration = (GDK_DECOR_ALL | GDK_DECOR_RESIZEH | GDK_DECOR_MINIMIZE | GDK_DECOR_MAXIMIZE);
-	  return TRUE;
-
-	case GDK_SURFACE_TYPE_HINT_TOOLBAR:
-	case GDK_SURFACE_TYPE_HINT_UTILITY:
-	  *decoration = (GDK_DECOR_ALL | GDK_DECOR_MINIMIZE | GDK_DECOR_MAXIMIZE);
-	  return TRUE;
-
-	case GDK_SURFACE_TYPE_HINT_SPLASHSCREEN:
-	  *decoration = (GDK_DECOR_ALL | GDK_DECOR_RESIZEH | GDK_DECOR_MENU |
-			 GDK_DECOR_MINIMIZE | GDK_DECOR_MAXIMIZE);
-	  return TRUE;
-
-	case GDK_SURFACE_TYPE_HINT_DOCK:
-	  return FALSE;
-
-	case GDK_SURFACE_TYPE_HINT_DESKTOP:
-	  return FALSE;
-
-	default:
-	  /* Fall thru */
-	case GDK_SURFACE_TYPE_HINT_NORMAL:
-	  *decoration = GDK_DECOR_ALL;
-	  return TRUE;
-	}
+      *decoration = (GDK_DECOR_ALL | GDK_DECOR_MINIMIZE | GDK_DECOR_MAXIMIZE);
+      return TRUE;
     }
 
   return FALSE;
@@ -2114,14 +2062,10 @@ _gdk_win32_surface_update_style_bits (GdkSurface *window)
   new_style = old_style;
   new_exstyle = old_exstyle;
 
-  if (window->surface_type == GDK_SURFACE_TEMP)
+  if (GDK_IS_DRAG_SURFACE (window))
     {
       new_exstyle |= WS_EX_TOOLWINDOW;
       will_be_topmost = TRUE;
-    }
-  else if (impl->type_hint == GDK_SURFACE_TYPE_HINT_UTILITY)
-    {
-      new_exstyle |= WS_EX_TOOLWINDOW;
     }
   else
     {
