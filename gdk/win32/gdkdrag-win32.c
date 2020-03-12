@@ -738,7 +738,7 @@ move_drag_surface (GdkDrag *drag,
   gdk_win32_surface_move (drag_win32->drag_surface,
                           x_root - drag_win32->hot_x,
                           y_root - drag_win32->hot_y);
-  gdk_surface_raise (drag_win32->drag_surface);
+  gdk_win32_surface_raise (drag_win32->drag_surface);
 }
 
 static void
@@ -1701,8 +1701,6 @@ create_drag_surface (GdkDisplay *display)
 
   surface = gdk_surface_new_temp (display, &(GdkRectangle) { 0, 0, 100, 100 });
 
-  gdk_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_DND);
-
   return surface;
 }
 
@@ -2111,7 +2109,7 @@ gdk_drag_anim_timeout (gpointer data)
        (drag->start_y - drag->util_data.last_y) * t -
        drag->hot_y);
   gdk_win32_surface_move (drag->drag_surface, x, y);
-  gdk_surface_set_opacity (drag->drag_surface, 1.0 - f);
+  gdk_win32_surface_set_opacity (drag->drag_surface, 1.0 - f);
 
   return G_SOURCE_CONTINUE;
 }

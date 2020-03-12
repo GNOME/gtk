@@ -1343,7 +1343,7 @@ gdk_win32_surface_layout_popup (GdkSurface     *surface,
 static void
 show_popup (GdkSurface *surface)
 {
-  gdk_surface_raise (surface);
+  gdk_win32_surface_raise (surface);
   gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
   _gdk_surface_update_viewable (surface);
   show_window_internal (surface, FALSE, FALSE);
@@ -1386,7 +1386,7 @@ gdk_win32_surface_present_popup (GdkSurface     *surface,
   return GDK_SURFACE_IS_MAPPED (surface);
 }
 
-static void
+void
 gdk_win32_surface_raise (GdkSurface *window)
 {
   if (!GDK_SURFACE_DESTROYED (window))
@@ -1805,7 +1805,14 @@ gdk_win32_surface_get_geometry (GdkSurface *window,
       API_CALL (GetClientRect, (GDK_SURFACE_HWND (window), &rect));
 
 	  POINT pt;
-	  GdkSurface *parent = gdk_toplevel_get_parent (GDK_TOPLEVEL (window));
+         
+	  GdkSurface *parent;
+
+          if (GDK_IS_TOPLEVEL (window))
+            parent = NULL;
+          else if (GDK_IS_POPUP (window))
+            parent = gdk_popup_get_parent (GDK_POPUP (window));
+         
 
 	  pt.x = rect.left;
 	  pt.y = rect.top;
@@ -4703,7 +4710,7 @@ gdk_win32_surface_set_modal_hint (GdkSurface *window,
   if (modal)
     {
       _gdk_push_modal_window (window);
-      gdk_surface_raise (window);
+      gdk_win32_surface_raise (window);
     }
   else
     {
@@ -4757,9 +4764,9 @@ gdk_win32_surface_lookup_for_display (GdkDisplay *display,
   return (GdkSurface*) gdk_win32_handle_table_lookup (anid);
 }
 
-static void
+void
 gdk_win32_surface_set_opacity (GdkSurface *window,
-			gdouble    opacity)
+                               double      opacity)
 {
   LONG exstyle;
   typedef BOOL (WINAPI *PFN_SetLayeredWindowAttributes) (HWND, COLORREF, BYTE, DWORD);
