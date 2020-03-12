@@ -9401,14 +9401,19 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
 
   if (cursor_changed)
     {
+      SetCursorFlags flags = CURSOR_INVALID;
+
+      if (gtk_tree_selection_get_mode (tree_view->priv->selection) == GTK_SELECTION_BROWSE)
+        flags |= CLEAR_AND_SELECT;
+
       if (cursor_node)
         {
           GtkTreePath *cursor_path = _gtk_tree_path_new_from_rbtree (cursor_tree, cursor_node);
-          gtk_tree_view_real_set_cursor (tree_view, cursor_path, CLEAR_AND_SELECT | CURSOR_INVALID);
+          gtk_tree_view_real_set_cursor (tree_view, cursor_path, flags);
           gtk_tree_path_free (cursor_path);
         }
       else
-        gtk_tree_view_real_set_cursor (tree_view, NULL, CLEAR_AND_SELECT | CURSOR_INVALID);
+        gtk_tree_view_real_set_cursor (tree_view, NULL, flags);
     }
   if (selection_changed)
     g_signal_emit_by_name (tree_view->priv->selection, "changed");
