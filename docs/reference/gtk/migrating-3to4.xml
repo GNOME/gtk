@@ -717,8 +717,8 @@
       <title>Adapt to changes in GtkOverlay API</title>
       <para>
         The GtkOverlay::pass-through child property has been replaced by the
-        GtkWidget::can-pick property. Note that they have the opposite sense:
-        pass-through == !can-pick.
+        GtkWidget::can-target property. Note that they have the opposite sense:
+        pass-through == !can-target.
       </para>
     </section>
 
