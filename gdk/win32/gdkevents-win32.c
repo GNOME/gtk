@@ -3472,8 +3472,7 @@ gdk_event_translate (MSG  *msg,
 				   (LOWORD (msg->wParam) == WA_INACTIVE ? "INACTIVE" : "???"))),
 				 HIWORD (msg->wParam) ? " minimized" : "",
 				 (HWND) msg->lParam));
-      if (window->surface_type == GDK_SURFACE_POPUP ||
-          window->surface_type == GDK_SURFACE_TEMP)
+      if (GDK_IS_POPUP (window) || GDK_IS_DRAG_SURFACE (window))
         {
           /* Popups cannot be activated or de-activated - 
            * they only support keyboard focus, which GTK
@@ -3500,8 +3499,7 @@ gdk_event_translate (MSG  *msg,
         {
           GdkSurface *other_surface = gdk_win32_handle_table_lookup ((HWND) msg->lParam);
           if (other_surface != NULL &&
-              (other_surface->surface_type == GDK_SURFACE_POPUP ||
-               other_surface->surface_type == GDK_SURFACE_TEMP))
+              (GDK_IS_POPUP (other_surface) || GDK_IS_DRAG_SURFACE (other_surface)))
             {
               /* We're being deactivated in favour of some popup or temp window.
                * Since only toplevels can have visual focus, pretend that
