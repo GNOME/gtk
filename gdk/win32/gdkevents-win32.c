@@ -1811,7 +1811,7 @@ ensure_stacking_on_activate_app (MSG       *msg,
       rover_impl = GDK_WIN32_SURFACE (rover_gdkw);
 
       if (GDK_SURFACE_IS_MAPPED (rover_gdkw) &&
-           rover_impl->transient_owner != NULL) &&
+          rover_impl->transient_owner != NULL &&
           ((window_ontop && rover_ontop) || (!window_ontop && !rover_ontop)))
         {
 	  GDK_NOTE (EVENTS,
@@ -2837,7 +2837,7 @@ gdk_event_translate (MSG  *msg,
 
      case WM_MOUSEACTIVATE:
        {
-	 if (gdk_surface_get_surface_type (window) == GDK_SURFACE_TEMP
+	 if (GDK_IS_DRAG_SURFACE (window)
 	     || !window->accept_focus)
 	   {
 	     *ret_valp = MA_NOACTIVATE;
