@@ -1641,7 +1641,7 @@ _gtk_gesture_get_pointer_emulating_sequence (GtkGesture        *gesture,
         case GDK_TOUCH_END:
           if (!gdk_touch_event_get_emulating_pointer (data->event))
             continue;
-          /* Fall through */
+          G_GNUC_FALLTHROUGH;
         case GDK_BUTTON_PRESS:
         case GDK_BUTTON_RELEASE:
         case GDK_MOTION_NOTIFY:

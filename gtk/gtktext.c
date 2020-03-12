@@ -3631,7 +3631,7 @@ gtk_text_move_cursor (GtkText         *self,
         case GTK_MOVEMENT_WORDS:
           if (priv->resolved_dir == PANGO_DIRECTION_RTL)
             count *= -1;
-          /* Fall through */
+          G_GNUC_FALLTHROUGH;
 
         case GTK_MOVEMENT_LOGICAL_POSITIONS:
           if (count < 0)
