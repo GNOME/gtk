@@ -63,6 +63,10 @@ gdk_broadway_display_init (GdkBroadwayDisplay *display)
                                    NULL);
   gdk_monitor_set_manufacturer (display->monitor, "browser");
   gdk_monitor_set_model (display->monitor, "0");
+  display->scale_factor = 1;
+  gdk_monitor_set_size (display->monitor, 1024, 768);
+  gdk_monitor_set_physical_size (display->monitor, 1024 * 25.4 / 96, 768 * 25.4 / 96);
+  gdk_monitor_set_scale_factor (display->monitor, 1);
 }
 
 static void
@@ -80,16 +84,21 @@ _gdk_broadway_display_size_changed (GdkDisplay                      *display,
 {
   GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
   GdkMonitor *monitor;
-  GdkRectangle size;
+  GdkRectangle current_size;
   GList *toplevels, *l;
 
   monitor = broadway_display->monitor;
-  gdk_monitor_get_geometry (monitor, &size);
+  gdk_monitor_get_geometry (monitor, &current_size);
 
-  if (msg->width == size.width && msg->height == size.height)
+  if (msg->width == current_size.width &&
+      msg->height == current_size.height &&
+      msg->scale == broadway_display->scale_factor)
     return;
 
+  broadway_display->scale_factor = msg->scale;
+
   gdk_monitor_set_size (monitor, msg->width, msg->height);
+  gdk_monitor_set_scale_factor (monitor, msg->scale);
   gdk_monitor_set_physical_size (monitor, msg->width * 25.4 / 96, msg->height * 25.4 / 96);
 
   toplevels =  broadway_display->toplevels;
@@ -101,8 +110,7 @@ _gdk_broadway_display_size_changed (GdkDisplay                      *display,
         gdk_broadway_surface_move_resize (GDK_SURFACE (toplevel),
                                           0, 0,
                                           msg->width, msg->height);
-    }
-}
+    }}
 
 static GdkDevice *
 create_core_pointer (GdkDisplay       *display)

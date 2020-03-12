@@ -67,8 +67,7 @@ struct _BroadwayServer {
   guint32 next_texture_id;
   GHashTable *textures;
 
-  guint32 screen_width;
-  guint32 screen_height;
+  guint32 screen_scale;
 
   gint32 mouse_in_surface_id;
   int last_x, last_y; /* in root coords */
@@ -273,6 +272,7 @@ broadway_server_init (BroadwayServer *server)
   root->visible = TRUE;
 
   server->root = root;
+  server->screen_scale = 1;
 
   g_hash_table_insert (server->surface_id_hash,
                        GINT_TO_POINTER (root->id),
@@ -428,6 +428,7 @@ update_event_state (BroadwayServer *server,
   case BROADWAY_EVENT_SCREEN_SIZE_CHANGED:
     server->root->width = message->screen_resize_notify.width;
     server->root->height = message->screen_resize_notify.height;
+    server->screen_scale = message->screen_resize_notify.scale;
     break;
 
   default:
@@ -722,6 +723,7 @@ parse_input_message (BroadwayInput *input, const unsigned char *message)
   case BROADWAY_EVENT_SCREEN_SIZE_CHANGED:
     msg.screen_resize_notify.width = ntohl (*p++);
     msg.screen_resize_notify.height = ntohl (*p++);
+    msg.screen_resize_notify.scale = ntohl (*p++);
     break;
 
   default:
@@ -958,10 +960,12 @@ broadway_server_get_next_serial (BroadwayServer *server)
 void
 broadway_server_get_screen_size (BroadwayServer   *server,
                                  guint32          *width,
-                                 guint32          *height)
+                                 guint32          *height,
+                                 guint32          *scale)
 {
   *width = server->root->width;
   *height = server->root->height;
+  *scale = server->screen_scale;
 }
 
 static void

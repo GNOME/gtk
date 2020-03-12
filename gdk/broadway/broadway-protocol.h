@@ -165,6 +165,7 @@ typedef struct {
   BroadwayInputBaseMsg base;
   guint32 width;
   guint32 height;
+  guint32 scale;
 } BroadwayInputScreenResizeNotify;
 
 typedef struct {

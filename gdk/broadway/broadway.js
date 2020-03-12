@@ -3184,20 +3184,32 @@ function setupDocument(document)
     }
 }
 
+function sendScreenSizeChanged() {
+    var w, h, s;
+    w = window.innerWidth;
+    h = window.innerHeight;
+    s = Math.round(window.devicePixelRatio);
+    sendInput (BROADWAY_EVENT_SCREEN_SIZE_CHANGED, [w, h, s]);
+}
+
 function start()
 {
     setupDocument(document);
 
-    var w, h;
-    w = window.innerWidth;
-    h = window.innerHeight;
     window.onresize = function(ev) {
-        var w, h;
-        w = window.innerWidth;
-        h = window.innerHeight;
-        sendInput (BROADWAY_EVENT_SCREEN_SIZE_CHANGED, [w, h]);
+        sendScreenSizeChanged();
     };
-    sendInput (BROADWAY_EVENT_SCREEN_SIZE_CHANGED, [w, h]);
+    window.matchMedia('screen and (min-resolution: 2dppx)').
+        addListener(function(e) {
+                        if (e.matches) {
+                            /* devicePixelRatio >= 2 */
+                            sendScreenSizeChanged();
+                        } else {
+                            /* devicePixelRatio < 2 */
+                            sendScreenSizeChanged();
+                        }
+                    });
+    sendScreenSizeChanged();
 }
 
 function connect()

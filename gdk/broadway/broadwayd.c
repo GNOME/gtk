@@ -513,7 +513,8 @@ incoming_client (GSocketService    *service,
   ev.base.time = broadway_server_get_last_seen_time (server);
   broadway_server_get_screen_size (server,
                                    &ev.screen_resize_notify.width,
-                                   &ev.screen_resize_notify.height);
+                                   &ev.screen_resize_notify.height,
+                                   &ev.screen_resize_notify.scale);
 
   broadway_events_got_input (&ev,
                              client->id);

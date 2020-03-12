@@ -386,6 +386,19 @@ gdk_broadway_surface_hide (GdkSurface *surface)
   _gdk_surface_clear_update_area (surface);
 }
 
+static gint
+gdk_broadway_surface_get_scale_factor (GdkSurface *surface)
+{
+  GdkBroadwayDisplay *broadway_display;
+
+  if (GDK_SURFACE_DESTROYED (surface))
+    return 1;
+
+  broadway_display = GDK_BROADWAY_DISPLAY (gdk_surface_get_display (surface));
+
+  return broadway_display->scale_factor;
+}
+
 static void
 gdk_broadway_surface_move_resize_internal (GdkSurface *surface,
                                            gboolean    with_move,
@@ -1249,6 +1262,7 @@ gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
   impl_class->begin_move_drag = gdk_broadway_surface_begin_move_drag;
   impl_class->destroy_notify = gdk_broadway_surface_destroy_notify;
   impl_class->drag_begin = _gdk_broadway_surface_drag_begin;
+  impl_class->get_scale_factor = gdk_broadway_surface_get_scale_factor;
 }
 
 #define LAST_PROP 1

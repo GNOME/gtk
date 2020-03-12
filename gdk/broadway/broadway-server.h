@@ -64,7 +64,8 @@ void                broadway_server_roundtrip                 (BroadwayServer  *
                                                                guint32          tag);
 void                broadway_server_get_screen_size           (BroadwayServer  *server,
                                                                guint32         *width,
-                                                               guint32         *height);
+                                                               guint32         *height,
+                                                               guint32         *scale);
 guint32             broadway_server_get_next_serial           (BroadwayServer  *server);
 guint32             broadway_server_get_last_seen_time        (BroadwayServer  *server);
 gboolean            broadway_server_lookahead_event           (BroadwayServer  *server,
