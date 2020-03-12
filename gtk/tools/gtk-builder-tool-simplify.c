@@ -494,23 +494,23 @@ has_attribute (Element    *elt,
 
   for (i = 0; elt->attribute_names[i]; i++)
     {
-      /**
+      /*
        * Attribute values for GTK3 form may use '_'
        * as the delimiter. Convert them here to use
        * '-' before comparing with expected result
-       **/
-      char* converted_value;
-      converted_value = g_strdup(elt->attribute_values[i]);
+       */
+      char *converted_value;
+      converted_value = g_strdup (elt->attribute_values[i]);
       g_strdelimit (converted_value, "_", '-');
-      
+
       if (strcmp (elt->attribute_names[i], name) == 0 &&
           (value == NULL || strcmp (converted_value, value) == 0))
-          {
-            g_free(converted_value);
-            return TRUE;
-          }
+        {
+          g_free (converted_value);
+          return TRUE;
+        }
 
-          g_free(converted_value);
+      g_free (converted_value);
     }
 
   return FALSE;
