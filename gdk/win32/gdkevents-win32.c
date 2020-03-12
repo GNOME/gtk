@@ -3472,8 +3472,7 @@ gdk_event_translate (MSG  *msg,
 				   (LOWORD (msg->wParam) == WA_INACTIVE ? "INACTIVE" : "???"))),
 				 HIWORD (msg->wParam) ? " minimized" : "",
 				 (HWND) msg->lParam));
-      if (window->surface_type == GDK_SURFACE_POPUP ||
-          window->surface_type == GDK_SURFACE_TEMP)
+      if (GDK_IS_POPUP (window) || GDK_IS_DRAG_SURFACE (window))
         {
           /* Popups cannot be activated or de-activated - 
            * they only support keyboard focus, which GTK
