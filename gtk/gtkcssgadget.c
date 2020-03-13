@@ -895,7 +895,7 @@ gtk_css_gadget_draw (GtkCssGadget *gadget,
                                   width - margin.left - margin.right,
                                   height - margin.top - margin.bottom);
 
-#if G_ENABLE_DEBUG
+#ifdef G_ENABLE_DEBUG
   {
     GdkDisplay *display = gtk_widget_get_display (gtk_css_gadget_get_owner (gadget));
     GtkDebugFlag flags = gtk_get_display_debug_flags (display);
