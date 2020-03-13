@@ -16,8 +16,10 @@ gdk/gdkdrop.c
 gdk/gdkevents.c
 gdk/gdkglcontext.c
 gdk/gdkpango.c
+gdk/gdkpopup.c
 gdk/gdkseat.c
 gdk/gdksurface.c
+gdk/gdktoplevel.c
 gdk/keyname-table.h
 gdk/quartz/gdkglcontext-quartz.c
 gdk/wayland/gdkclipboard-wayland.c
