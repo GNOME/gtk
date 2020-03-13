@@ -318,7 +318,7 @@ low_level_keystroke_handler (WPARAM message,
 	  gboolean lshiftdown = GetKeyState (VK_LSHIFT) & 0x8000;
           gboolean rshiftdown = GetKeyState (VK_RSHIFT) & 0x8000;
           gboolean oneshiftdown = (lshiftdown || rshiftdown) && !(lshiftdown && rshiftdown);
-          gboolean maximized = gdk_surface_get_state (toplevel) & GDK_SURFACE_STATE_MAXIMIZED;
+          gboolean maximized = gdk_toplevel_get_state (GDK_TOPLEVEL (toplevel)) & GDK_SURFACE_STATE_MAXIMIZED;
 
 	  switch (kbdhook->vkCode)
 	    {
@@ -997,9 +997,9 @@ show_window_recurse (GdkSurface *window, gboolean hide_window)
 	{
 	  if (!hide_window)
 	    {
-	      if (gdk_surface_get_state (window) & GDK_SURFACE_STATE_MINIMIZED)
+	      if (gdk_toplevel_get_state (GDK_TOPLEVEL (window)) & GDK_SURFACE_STATE_MINIMIZED)
 		{
-		  if (gdk_surface_get_state (window) & GDK_SURFACE_STATE_MAXIMIZED)
+		  if (gdk_toplevel_get_state (GDK_TOPLEVEL (window)) & GDK_SURFACE_STATE_MAXIMIZED)
 		    {
 		      GtkShowWindow (window, SW_SHOWMAXIMIZED);
 		    }
@@ -1278,7 +1278,7 @@ _gdk_win32_get_window_rect (GdkSurface *window,
   point.y = client_rect.top;
 
   /* top level windows need screen coords */
-  if (gdk_surface_get_parent (window) == NULL)
+  if (GDK_IS_TOPLEVEL (window))
     {
       ClientToScreen (hwnd, &point);
       point.x += _gdk_offset_x * impl->surface_scale;
@@ -1492,7 +1492,7 @@ handle_nchittest (HWND hwnd,
   RECT rect;
   GdkWin32Surface *impl;
 
-  if (window == NULL || window->input_shape == NULL)
+  if (window == NULL || window->input_region == NULL)
     return FALSE;
 
   /* If the window has decorations, DefWindowProc() will take
@@ -1509,7 +1509,7 @@ handle_nchittest (HWND hwnd,
   rect.top = screen_y - rect.top;
 
   /* If it's inside the rect, return FALSE and let DefWindowProc() handle it */
-  if (cairo_region_contains_point (window->input_shape,
+  if (cairo_region_contains_point (window->input_region,
                                    rect.left / impl->surface_scale,
                                    rect.top / impl->surface_scale))
     return FALSE;
@@ -1569,7 +1569,7 @@ handle_dpi_changed (GdkSurface *window,
                                    window->x, window->y,
                                    window->width, window->height);
   else
-    gdk_surface_resize (window, window->width, window->height);
+    gdk_win32_surface_resize (window, window->width, window->height);
 }
 
 static void
@@ -1616,7 +1616,7 @@ should_window_be_always_on_top (GdkSurface *window)
 {
   DWORD exstyle;
 
-  if ((GDK_SURFACE_TYPE (window) == GDK_SURFACE_TEMP) ||
+  if (GDK_IS_DRAG_SURFACE (window) ||
       (window->state & GDK_SURFACE_STATE_ABOVE))
     return TRUE;
 
@@ -1678,9 +1678,7 @@ ensure_stacking_on_unminimize (MSG *msg)
       rover_impl = GDK_WIN32_SURFACE (rover_gdkw);
 
       if (GDK_SURFACE_IS_MAPPED (rover_gdkw) &&
-          (rover_impl->type_hint == GDK_SURFACE_TYPE_HINT_UTILITY ||
-           rover_impl->type_hint == GDK_SURFACE_TYPE_HINT_DIALOG ||
-           rover_impl->transient_owner != NULL) &&
+           rover_impl->transient_owner != NULL &&
            ((window_ontop && rover_ontop) || (!window_ontop && !rover_ontop)))
         {
           lowest_transient = rover;
@@ -1708,8 +1706,6 @@ ensure_stacking_on_window_pos_changing (MSG       *msg,
   gboolean window_ontop;
 
   if (GetActiveWindow () != msg->hwnd ||
-      impl->type_hint == GDK_SURFACE_TYPE_HINT_UTILITY ||
-      impl->type_hint == GDK_SURFACE_TYPE_HINT_DIALOG ||
       impl->transient_owner != NULL)
     return FALSE;
 
@@ -1740,9 +1736,7 @@ ensure_stacking_on_window_pos_changing (MSG       *msg,
       rover_impl = GDK_WIN32_SURFACE (rover_gdkw);
 
       if (GDK_SURFACE_IS_MAPPED (rover_gdkw) &&
-          (rover_impl->type_hint == GDK_SURFACE_TYPE_HINT_UTILITY ||
-           rover_impl->type_hint == GDK_SURFACE_TYPE_HINT_DIALOG ||
-           rover_impl->transient_owner != NULL) &&
+           rover_impl->transient_owner != NULL &&
           ((window_ontop && rover_ontop) || (!window_ontop && !rover_ontop)))
         {
           restacking = TRUE;
@@ -1769,9 +1763,7 @@ ensure_stacking_on_activate_app (MSG       *msg,
   HWND rover;
   gboolean window_ontop;
 
-  if (impl->type_hint == GDK_SURFACE_TYPE_HINT_UTILITY ||
-      impl->type_hint == GDK_SURFACE_TYPE_HINT_DIALOG ||
-      impl->transient_owner != NULL)
+  if (impl->transient_owner != NULL)
     {
       GdkSurface *child = window;
       GdkSurface *owner = impl->transient_owner;
@@ -1819,9 +1811,7 @@ ensure_stacking_on_activate_app (MSG       *msg,
       rover_impl = GDK_WIN32_SURFACE (rover_gdkw);
 
       if (GDK_SURFACE_IS_MAPPED (rover_gdkw) &&
-          (rover_impl->type_hint == GDK_SURFACE_TYPE_HINT_UTILITY ||
-           rover_impl->type_hint == GDK_SURFACE_TYPE_HINT_DIALOG ||
-           rover_impl->transient_owner != NULL) &&
+          rover_impl->transient_owner != NULL &&
           ((window_ontop && rover_ontop) || (!window_ontop && !rover_ontop)))
         {
 	  GDK_NOTE (EVENTS,
@@ -2847,7 +2837,7 @@ gdk_event_translate (MSG  *msg,
 
      case WM_MOUSEACTIVATE:
        {
-	 if (gdk_surface_get_surface_type (window) == GDK_SURFACE_TEMP
+	 if (GDK_IS_DRAG_SURFACE (window)
 	     || !window->accept_focus)
 	   {
 	     *ret_valp = MA_NOACTIVATE;
@@ -3482,8 +3472,7 @@ gdk_event_translate (MSG  *msg,
 				   (LOWORD (msg->wParam) == WA_INACTIVE ? "INACTIVE" : "???"))),
 				 HIWORD (msg->wParam) ? " minimized" : "",
 				 (HWND) msg->lParam));
-      if (window->surface_type == GDK_SURFACE_POPUP ||
-          window->surface_type == GDK_SURFACE_TEMP)
+      if (GDK_IS_POPUP (window) || GDK_IS_DRAG_SURFACE (window))
         {
           /* Popups cannot be activated or de-activated - 
            * they only support keyboard focus, which GTK
@@ -3510,8 +3499,7 @@ gdk_event_translate (MSG  *msg,
         {
           GdkSurface *other_surface = gdk_win32_handle_table_lookup ((HWND) msg->lParam);
           if (other_surface != NULL &&
-              (other_surface->surface_type == GDK_SURFACE_POPUP ||
-               other_surface->surface_type == GDK_SURFACE_TEMP))
+              (GDK_IS_POPUP (other_surface) || GDK_IS_DRAG_SURFACE (other_surface)))
             {
               /* We're being deactivated in favour of some popup or temp window.
                * Since only toplevels can have visual focus, pretend that

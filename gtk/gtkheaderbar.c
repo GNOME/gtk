@@ -346,9 +346,8 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
   else
     menu = NULL;
 
-  is_sovereign_window = (!gtk_window_get_modal (window) &&
-                          gtk_window_get_transient_for (window) == NULL &&
-                          gtk_window_get_type_hint (window) == GDK_SURFACE_TYPE_HINT_NORMAL);
+  is_sovereign_window = !gtk_window_get_modal (window) &&
+                         gtk_window_get_transient_for (window) == NULL;
 
   tokens = g_strsplit (layout_desc, ":", 2);
   if (tokens)
@@ -1084,7 +1083,7 @@ surface_state_changed (GtkWidget *widget)
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GdkSurfaceState changed, new_state;
 
-  new_state = gdk_surface_get_state (gtk_native_get_surface (gtk_widget_get_native (widget)));
+  new_state = gdk_toplevel_get_state (GDK_TOPLEVEL (gtk_native_get_surface (gtk_widget_get_native (widget))));
   changed = new_state ^ priv->state;
   priv->state = new_state;
 

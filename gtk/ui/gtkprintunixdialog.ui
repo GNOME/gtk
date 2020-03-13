@@ -37,7 +37,6 @@
     <property name="step-increment">1</property>
   </object>
   <template class="GtkPrintUnixDialog" parent="GtkDialog">
-    <property name="type-hint">dialog</property>
     <signal name="notify::page-setup" handler="redraw_page_layout_preview" swapped="no"/>
     <signal name="response" handler="error_dialogs" swapped="no"/>
     <child internal-child="content_area">

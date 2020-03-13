@@ -3,7 +3,6 @@ window1
   index: 0
   state: enabled resizable sensitive showing visible
   toolkit: gtk
-  window-type: normal
   <AtkComponent>
   layer: widget
   alpha: 1

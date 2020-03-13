@@ -141,7 +141,6 @@ typedef struct {
   GskRenderer *renderer;
   GtkWidget *default_widget;
 
-  GdkSurfaceState state;
   GdkRectangle pointing_to;
   gboolean has_pointing_to;
   guint surface_transform_changed_cb;
@@ -351,28 +350,28 @@ update_popover_layout (GtkPopover     *popover,
   GdkRectangle final_rect;
   gboolean flipped_x;
   gboolean flipped_y;
+  GdkPopup *popup = GDK_POPUP (priv->surface);
 
   g_clear_pointer (&priv->layout, gdk_popup_layout_unref);
   priv->layout = layout;
 
   final_rect = (GdkRectangle) {
+    .x = gdk_popup_get_position_x (GDK_POPUP (priv->surface)),
+    .y = gdk_popup_get_position_y (GDK_POPUP (priv->surface)),
     .width = gdk_surface_get_width (priv->surface),
     .height = gdk_surface_get_height (priv->surface),
   };
-  gdk_surface_get_position (priv->surface,
-                            &final_rect.x,
-                            &final_rect.y);
 
   flipped_x =
     did_flip_horizontally (gdk_popup_layout_get_rect_anchor (layout),
-                           gdk_surface_get_popup_rect_anchor (priv->surface)) &&
+                           gdk_popup_get_rect_anchor (popup)) &&
     did_flip_horizontally (gdk_popup_layout_get_surface_anchor (layout),
-                           gdk_surface_get_popup_surface_anchor (priv->surface));
+                           gdk_popup_get_surface_anchor (popup));
   flipped_y =
     did_flip_vertically (gdk_popup_layout_get_rect_anchor (layout),
-                         gdk_surface_get_popup_rect_anchor (priv->surface)) &&
+                         gdk_popup_get_rect_anchor (popup)) &&
     did_flip_vertically (gdk_popup_layout_get_surface_anchor (layout),
-                         gdk_surface_get_popup_surface_anchor (priv->surface));
+                         gdk_popup_get_surface_anchor (popup));
 
   gtk_widget_allocate (GTK_WIDGET (popover),
                        gdk_surface_get_width (priv->surface),
@@ -544,7 +543,7 @@ present_popup (GtkPopover *popover)
 
   layout = create_popup_layout (popover);
   gtk_widget_get_preferred_size (GTK_WIDGET (popover), NULL, &req);
-  if (gdk_surface_present_popup (priv->surface,
+  if (gdk_popup_present (GDK_POPUP (priv->surface),
                                  MAX (req.width, 1),
                                  MAX (req.height, 1),
                                  layout))
@@ -592,23 +591,12 @@ gtk_popover_key_pressed (GtkWidget       *widget,
 }
 
 static void
-surface_state_changed (GtkWidget *widget)
+surface_mapped_changed (GtkWidget *widget)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GdkSurfaceState new_surface_state;
-  GdkSurfaceState changed_mask;
 
-  new_surface_state = gdk_surface_get_state (priv->surface);
-  changed_mask = new_surface_state ^ priv->state;
-  priv->state = new_surface_state;
-
-  if (changed_mask & GDK_SURFACE_STATE_WITHDRAWN)
-    {
-      if (priv->state & GDK_SURFACE_STATE_WITHDRAWN &&
-          gtk_widget_is_visible (widget))
-        gtk_widget_hide (widget);
-    }
+  gtk_widget_set_visible (widget, gdk_surface_get_mapped (priv->surface));
 }
 
 static void
@@ -752,7 +740,7 @@ gtk_popover_realize (GtkWidget *widget)
 
   gdk_surface_set_widget (priv->surface, widget);
 
-  g_signal_connect_swapped (priv->surface, "notify::state", G_CALLBACK (surface_state_changed), widget);
+  g_signal_connect_swapped (priv->surface, "notify::mapped", G_CALLBACK (surface_mapped_changed), widget);
   g_signal_connect_swapped (priv->surface, "size-changed", G_CALLBACK (surface_size_changed), widget);
   g_signal_connect (priv->surface, "render", G_CALLBACK (surface_render), widget);
   g_signal_connect (priv->surface, "event", G_CALLBACK (surface_event), widget);
@@ -774,7 +762,7 @@ gtk_popover_unrealize (GtkWidget *widget)
   gsk_renderer_unrealize (priv->renderer);
   g_clear_object (&priv->renderer);
 
-  g_signal_handlers_disconnect_by_func (priv->surface, surface_state_changed, widget);
+  g_signal_handlers_disconnect_by_func (priv->surface, surface_mapped_changed, widget);
   g_signal_handlers_disconnect_by_func (priv->surface, surface_size_changed, widget);
   g_signal_handlers_disconnect_by_func (priv->surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (priv->surface, surface_event, widget);
@@ -1175,11 +1163,11 @@ gtk_popover_update_shape (GtkPopover *popover)
       region = gdk_cairo_region_create_from_surface (cairo_surface);
       cairo_surface_destroy (cairo_surface);
 
-      gdk_surface_input_shape_combine_region (priv->surface, region, 0, 0);
+      gdk_surface_set_input_region (priv->surface, region);
       cairo_region_destroy (region);
     }
   else
-    gdk_surface_input_shape_combine_region (priv->surface, NULL, 0, 0);
+    gdk_surface_set_input_region (priv->surface, NULL);
 }
 
 static gint

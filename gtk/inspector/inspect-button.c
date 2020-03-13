@@ -99,7 +99,9 @@ on_inspect_widget (GtkInspectorWindow *iw,
 {
   GtkWidget *widget;
 
+#if 0
   gdk_surface_raise (gtk_native_get_surface (GTK_NATIVE (iw)));
+#endif
 
   clear_flash (iw);
 
@@ -122,8 +124,10 @@ reemphasize_window (GtkWidget *window)
       gtk_widget_set_opacity (window, 1.0);
       gtk_window_set_extra_input_region (GTK_WINDOW (iw), NULL);
     }
+#if 0
   else
     gdk_surface_raise (gtk_native_get_surface (GTK_NATIVE (window)));
+#endif
 }
 
 static gboolean handle_event (GtkInspectorWindow *iw, GdkEvent *event);
@@ -206,8 +210,10 @@ gtk_inspector_on_inspect (GtkWidget          *button,
       gtk_window_set_extra_input_region (GTK_WINDOW (iw), region);
       cairo_region_destroy (region);
     }
+#if 0
   else
     gdk_surface_lower (gtk_native_get_surface (GTK_NATIVE (iw)));
+#endif
 
   g_signal_connect (iw, "event", G_CALLBACK (handle_event), NULL);
 }

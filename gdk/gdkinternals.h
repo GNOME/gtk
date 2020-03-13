@@ -182,7 +182,6 @@ void gdk_surface_get_unscaled_size (GdkSurface *surface,
                                     int *unscaled_height);
 gboolean gdk_surface_handle_event (GdkEvent       *event);
 
-
 /*****************************************
  * Interfaces provided by windowing code *
  *****************************************/
@@ -281,6 +280,7 @@ GdkGrabStatus  gdk_seat_grab             (GdkSeat                *seat,
 void           gdk_seat_ungrab           (GdkSeat                *seat);
 GdkSurface *   gdk_surface_new_temp             (GdkDisplay    *display,
                                                  const GdkRectangle *position);
+
 
 G_END_DECLS
 

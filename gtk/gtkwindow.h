@@ -124,11 +124,6 @@ void       gtk_window_set_attached_to          (GtkWindow           *window,
 GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_window_get_attached_to          (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_type_hint            (GtkWindow           *window,
-						GdkSurfaceTypeHint    hint);
-GDK_AVAILABLE_IN_ALL
-GdkSurfaceTypeHint gtk_window_get_type_hint     (GtkWindow           *window);
-GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_accept_focus         (GtkWindow           *window,
                                                 gboolean             setting);
 GDK_AVAILABLE_IN_ALL
@@ -265,20 +260,6 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_window_set_keep_above    (GtkWindow *window, gboolean setting);
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_set_keep_below    (GtkWindow *window, gboolean setting);
-
-GDK_AVAILABLE_IN_ALL
-void gtk_window_begin_resize_drag (GtkWindow     *window,
-                                   GdkSurfaceEdge  edge,
-                                   gint           button,
-                                   gint           x,
-                                   gint           y,
-                                   guint32        timestamp);
-GDK_AVAILABLE_IN_ALL
-void gtk_window_begin_move_drag   (GtkWindow     *window,
-                                   gint           button,
-                                   gint           x,
-                                   gint           y,
-                                   guint32        timestamp);
 
 /* Set initial default size of the window (does not constrain user
  * resize operations)

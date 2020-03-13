@@ -526,7 +526,7 @@ gdk_device_get_position (GdkDevice *device,
   g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
                     gdk_display_device_is_grabbed (gdk_device_get_display (device), device));
 
-  _gdk_device_query_state (device, NULL, NULL, x, y, NULL, NULL, NULL);
+  _gdk_device_query_state (device, NULL, NULL, x, y, NULL);
 }
 
 /**
@@ -1508,8 +1508,6 @@ void
 _gdk_device_query_state (GdkDevice        *device,
                          GdkSurface        *surface,
                          GdkSurface       **child_surface,
-                         gdouble          *root_x,
-                         gdouble          *root_y,
                          gdouble          *win_x,
                          gdouble          *win_y,
                          GdkModifierType  *mask)
@@ -1517,8 +1515,6 @@ _gdk_device_query_state (GdkDevice        *device,
   GDK_DEVICE_GET_CLASS (device)->query_state (device,
                                               surface,
                                               child_surface,
-                                              root_x,
-                                              root_y,
                                               win_x,
                                               win_y,
                                               mask);

@@ -22,6 +22,16 @@
 
 #include "gdksurface.h"
 
+/**
+ * SECTION:gdkpopuplayout
+ * @Title: GdkPopupLayout
+ * @Short_description: Information for presenting popups
+ *
+ * Popups are positioned relative to their parent surface.
+ * The GdkPopupLayout struct contains information that is
+ * necessary to do so.
+ */
+
 struct _GdkPopupLayout
 {
   /* < private >*/
@@ -200,6 +210,8 @@ gdk_popup_layout_set_rect_anchor (GdkPopupLayout *layout,
  * gdk_popup_layout_get_rect_anchor:
  * @layout: a #GdkPopupLayout
  *
+ * Returns the anchor position on the anchor rectangle.
+ *
  * Returns: the anchor on the anchor rectangle.
  */
 GdkGravity
@@ -225,6 +237,8 @@ gdk_popup_layout_set_surface_anchor (GdkPopupLayout *layout,
 /**
  * gdk_popup_layout_get_surface_anchor:
  * @layout: a #GdkPopupLayout
+ *
+ * Returns the anchor position on the popup surface.
  *
  * Returns: the anchor on the popup surface.
  */

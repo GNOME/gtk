@@ -28,7 +28,7 @@ start_resize (GtkGestureClick *gesture,
 
   gtk_widget_translate_coordinates (widget, GTK_WIDGET (gtk_widget_get_root (widget)),
                                     xx, yy, &xx, &yy);
-  gdk_surface_begin_resize_drag (surface, edge, button, xx, yy, timestamp);
+  gdk_surface_begin_resize_drag (surface, edge, gdk_event_get_device (event), button, xx, yy, timestamp);
 
   gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
 }
@@ -76,7 +76,7 @@ start_move (GtkGestureClick *gesture,
 
   gtk_widget_translate_coordinates (widget, GTK_WIDGET (gtk_widget_get_root (widget)),
                                     xx, yy, &xx, &yy);
-  gdk_surface_begin_move_drag (surface, button, xx, yy, timestamp);
+  gdk_surface_begin_move_drag (surface, gdk_event_get_device (event), button, xx, yy, timestamp);
   gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
 }
 

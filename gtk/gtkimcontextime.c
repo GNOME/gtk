@@ -1114,16 +1114,20 @@ static void
 get_window_position (GdkSurface *surface, gint *x, gint *y)
 {
   GdkSurface *parent, *toplevel;
-  gint wx, wy;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
   g_return_if_fail (x && y);
 
-  gdk_surface_get_position (surface, &wx, &wy);
-  *x += wx;
-  *y += wy;
-  parent = gdk_surface_get_parent (surface);
-  toplevel = surface;
+  if (GDK_IS_POPUP (surface))
+    {
+      parent = gdk_popup_get_parent (GDK_POPUP (surface));
+      toplevel = surface;
+    }
+  else
+    {
+      parent = NULL;
+      toplevel = surface;
+    }
 
   if (parent && parent != toplevel)
     get_window_position (parent, x, y);

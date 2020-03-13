@@ -1434,25 +1434,6 @@ gdk_surface_quartz_lower (GdkSurface *window)
 }
 
 static void
-gdk_surface_quartz_restack_toplevel (GdkSurface *window,
-				    GdkSurface *sibling,
-				    gboolean   above)
-{
-  GdkSurfaceImplQuartz *impl;
-  gint sibling_num;
-
-  impl = GDK_SURFACE_IMPL_QUARTZ (sibling->impl);
-  sibling_num = [impl->toplevel windowNumber];
-
-  impl = GDK_SURFACE_IMPL_QUARTZ (window->impl);
-
-  if (above)
-    [impl->toplevel orderWindow:NSWindowAbove relativeTo:sibling_num];
-  else
-    [impl->toplevel orderWindow:NSWindowBelow relativeTo:sibling_num];
-}
-
-static void
 gdk_surface_quartz_get_geometry (GdkSurface *window,
                                 gint      *x,
                                 gint      *y,
@@ -1848,13 +1829,6 @@ gdk_quartz_surface_set_focus_on_map (GdkSurface *window,
                                     gboolean focus_on_map)
 {
   window->focus_on_map = focus_on_map != FALSE;
-}
-
-static void
-gdk_quartz_surface_set_icon_name (GdkSurface   *window,
-                                 const gchar *name)
-{
-  /* FIXME: Implement */
 }
 
 static void
@@ -2274,53 +2248,6 @@ gdk_quartz_surface_get_decorations (GdkSurface       *window,
 }
 
 static void
-gdk_quartz_surface_set_functions (GdkSurface    *window,
-                                 GdkWMFunction functions)
-{
-  GdkSurfaceImplQuartz *impl;
-  gboolean min, max, close;
-
-  g_return_if_fail (GDK_IS_SURFACE (window));
-
-  impl = GDK_SURFACE_IMPL_QUARTZ (window->impl);
-
-  if (functions & GDK_FUNC_ALL)
-    {
-      min = !(functions & GDK_FUNC_MINIMIZE);
-      max = !(functions & GDK_FUNC_MAXIMIZE);
-      close = !(functions & GDK_FUNC_CLOSE);
-    }
-  else
-    {
-      min = (functions & GDK_FUNC_MINIMIZE);
-      max = (functions & GDK_FUNC_MAXIMIZE);
-      close = (functions & GDK_FUNC_CLOSE);
-    }
-
-  if (impl->toplevel)
-    {
-      NSUInteger mask = [impl->toplevel styleMask];
-
-      if (min)
-        mask = mask | NSMiniaturizableWindowMask;
-      else
-        mask = mask & ~NSMiniaturizableWindowMask;
-
-      if (max)
-        mask = mask | NSResizableWindowMask;
-      else
-        mask = mask & ~NSResizableWindowMask;
-
-      if (close)
-        mask = mask | NSClosableWindowMask;
-      else
-        mask = mask & ~NSClosableWindowMask;
-
-      [impl->toplevel setStyleMask:mask];
-    }
-}
-
-static void
 gdk_quartz_surface_stick (GdkSurface *window)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
@@ -2523,14 +2450,14 @@ gdk_quartz_surface_fullscreen (GdkSurface *window)
       geometry->width = window->width;
       geometry->height = window->height;
 
-      if (!gdk_surface_get_decorations (window, &geometry->decor))
+      if (!gdk_quartz_surface_get_decorations (window, &geometry->decor))
         geometry->decor = GDK_DECOR_ALL;
 
       g_object_set_data_full (G_OBJECT (window),
                               FULLSCREEN_DATA, geometry, 
                               g_free);
 
-      gdk_surface_set_decorations (window, 0);
+      gdk_quartz_surface_set_decorations (window, 0);
 
       frame = [[impl->toplevel screen] frame];
       move_resize_window_internal (window,
@@ -2568,7 +2495,7 @@ gdk_quartz_surface_unfullscreen (GdkSurface *window)
                                    geometry->width,
                                    geometry->height);
       
-      gdk_surface_set_decorations (window, geometry->decor);
+      gdk_quartz_surface_set_decorations (window, geometry->decor);
 
       g_object_set_data (G_OBJECT (window), FULLSCREEN_DATA, NULL);
 
@@ -2705,7 +2632,6 @@ gdk_surface_impl_quartz_class_init (GdkSurfaceImplQuartzClass *klass)
   impl_class->withdraw = gdk_surface_quartz_withdraw;
   impl_class->raise = gdk_surface_quartz_raise;
   impl_class->lower = gdk_surface_quartz_lower;
-  impl_class->restack_toplevel = gdk_surface_quartz_restack_toplevel;
   impl_class->toplevel_resize = gdk_surface_quartz_toplevel_resize;
   impl_class->present_popup = gdk_quartz_surface_present_popup;
   impl_class->get_geometry = gdk_surface_quartz_get_geometry;
@@ -2728,7 +2654,6 @@ gdk_surface_impl_quartz_class_init (GdkSurfaceImplQuartzClass *klass)
   impl_class->set_accept_focus = gdk_quartz_surface_set_accept_focus;
   impl_class->set_focus_on_map = gdk_quartz_surface_set_focus_on_map;
   impl_class->set_icon_list = gdk_quartz_surface_set_icon_list;
-  impl_class->set_icon_name = gdk_quartz_surface_set_icon_name;
   impl_class->minimize = gdk_quartz_surface_minimize;
   impl_class->unminimize = gdk_quartz_surface_unminimize;
   impl_class->stick = gdk_quartz_surface_stick;
@@ -2739,9 +2664,6 @@ gdk_surface_impl_quartz_class_init (GdkSurfaceImplQuartzClass *klass)
   impl_class->unfullscreen = gdk_quartz_surface_unfullscreen;
   impl_class->set_keep_above = gdk_quartz_surface_set_keep_above;
   impl_class->set_keep_below = gdk_quartz_surface_set_keep_below;
-  impl_class->set_decorations = gdk_quartz_surface_set_decorations;
-  impl_class->get_decorations = gdk_quartz_surface_get_decorations;
-  impl_class->set_functions = gdk_quartz_surface_set_functions;
   impl_class->begin_resize_drag = gdk_quartz_surface_begin_resize_drag;
   impl_class->begin_move_drag = gdk_quartz_surface_begin_move_drag;
   impl_class->set_opacity = gdk_quartz_surface_set_opacity;

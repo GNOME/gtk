@@ -35,6 +35,17 @@
 
 G_BEGIN_DECLS
 
+typedef enum
+{
+  GDK_DECOR_ALL         = 1 << 0,
+  GDK_DECOR_BORDER      = 1 << 1,
+  GDK_DECOR_RESIZEH     = 1 << 2,
+  GDK_DECOR_TITLE       = 1 << 3,
+  GDK_DECOR_MENU        = 1 << 4,
+  GDK_DECOR_MINIMIZE    = 1 << 5,
+  GDK_DECOR_MAXIMIZE    = 1 << 6
+} GdkWMDecoration;
+
 enum _GdkWin32AeroSnapCombo
 {
   GDK_WIN32_AEROSNAP_COMBO_NOTHING = 0,
