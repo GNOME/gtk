@@ -1061,6 +1061,7 @@ function handleCommands(cmd, display_commands, new_textures, modified_trees)
                 doUngrab();
             surface = surfaces[id];
             if (surface.visible) {
+                surface.visible = false;
                 display_commands.push([DISPLAY_OP_HIDE_SURFACE, surface.div]);
             }
             break;
@@ -1109,13 +1110,13 @@ function handleCommands(cmd, display_commands, new_textures, modified_trees)
             surface = surfaces[id];
             if (has_pos) {
                 surface.positioned = true;
-                surface.x = cmd.get_16s();;
-                surface.y = cmd.get_16s();;
+                surface.x = cmd.get_16s();
+                surface.y = cmd.get_16s();
                 display_commands.push([DISPLAY_OP_MOVE_NODE, surface.div, surface.x, surface.y]);
             }
             if (has_size) {
                 surface.width = cmd.get_16();
-                surface.height = cmd.get_16();;
+                surface.height = cmd.get_16();
                 display_commands.push([DISPLAY_OP_RESIZE_NODE, surface.div, surface.width, surface.height]);
 
             }
