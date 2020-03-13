@@ -274,6 +274,7 @@ function Texture(id, data) {
     var image = new Image();
     image.src = this.url;
     this.image = image;
+    this.decoded = image.decode();
     textures[id] = this;
 }
 
@@ -1237,16 +1238,14 @@ function handleOutstanding()
         outstandingDisplayCommands = display_commands;
 
     if (new_textures.length > 0) {
-        var n_textures = new_textures.length;
+        var decodes = [];
         for (var i = 0; i < new_textures.length; i++) {
-            var t = new_textures[i];
-            t.image.onload = function() {
-                n_textures -= 1;
-                if (n_textures == 0) {
-                    handleOutstandingDisplayCommands();
-                }
-            };
+            decodes.push(new_textures[i].decoded);
         }
+        Promise.allSettled(decodes).then(
+            () => {
+                handleOutstandingDisplayCommands();
+            });
     } else {
         handleOutstandingDisplayCommands();
     }
