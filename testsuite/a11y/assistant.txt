@@ -4,7 +4,6 @@ window1
   name: Page 1
   state: enabled resizable sensitive showing visible
   toolkit: gtk
-  window-type: normal
   <AtkComponent>
   layer: widget
   alpha: 1

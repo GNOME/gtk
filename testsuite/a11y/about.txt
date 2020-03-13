@@ -4,7 +4,6 @@ window1
   name: About FancyPants
   state: enabled sensitive showing visible
   toolkit: gtk
-  window-type: dialog
   <AtkComponent>
   layer: widget
   alpha: 1
@@ -45,7 +44,7 @@ window1
           layer: widget
           alpha: 1
           <AtkImage>
-          image size: 16 x 16
+          image size: 0 x 0
           image description: (null)
         name_label
           "label"

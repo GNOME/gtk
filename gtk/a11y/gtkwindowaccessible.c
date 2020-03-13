@@ -229,9 +229,9 @@ gtk_window_accessible_ref_state_set (AtkObject *accessible)
     atk_state_set_add_state (state_set, ATK_STATE_ACTIVE);
 
   gdk_surface = gtk_native_get_surface (GTK_NATIVE (window));
-  if (gdk_surface)
+  if (GDK_IS_TOPLEVEL (gdk_surface))
     {
-      state = gdk_surface_get_state (gdk_surface);
+      state = gdk_toplevel_get_state (GDK_TOPLEVEL (gdk_surface));
       if (state & GDK_SURFACE_STATE_MINIMIZED)
         atk_state_set_add_state (state_set, ATK_STATE_ICONIFIED);
     }
@@ -289,40 +289,6 @@ gtk_window_accessible_ref_child (AtkObject *object,
   return g_object_ref (gtk_widget_get_accessible (ref_child));
 }
 
-static AtkAttributeSet *
-gtk_widget_accessible_get_attributes (AtkObject *obj)
-{
-  GtkWidget *window;
-  GdkSurfaceTypeHint hint;
-  AtkAttributeSet *attributes;
-  AtkAttribute *attr;
-  GEnumClass *class;
-  GEnumValue *value;
-
-  attributes = ATK_OBJECT_CLASS (gtk_window_accessible_parent_class)->get_attributes (obj);
-
-  attr = g_new (AtkAttribute, 1);
-  attr->name = g_strdup ("window-type");
-
-  window = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
-  hint = gtk_window_get_type_hint (GTK_WINDOW (window));
-
-  class = g_type_class_ref (GDK_TYPE_SURFACE_TYPE_HINT);
-  for (value = class->values; value->value_name; value++)
-    {
-      if (hint == value->value)
-        {
-          attr->value = g_strdup (value->value_nick);
-          break;
-        }
-    }
-  g_type_class_unref (class);
-
-  attributes = g_slist_append (attributes, attr);
-
-  return attributes;
-}
-
 static void
 gtk_window_accessible_class_init (GtkWindowAccessibleClass *klass)
 {
@@ -338,7 +304,6 @@ gtk_window_accessible_class_init (GtkWindowAccessibleClass *klass)
   class->focus_event = gtk_window_accessible_focus_event;
   class->get_n_children = gtk_window_accessible_get_n_children;
   class->ref_child = gtk_window_accessible_ref_child;
-  class->get_attributes = gtk_widget_accessible_get_attributes;
 }
 
 static void

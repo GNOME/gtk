@@ -43,7 +43,7 @@ tests = [
   ['object'],
   ['objects-finalize'],
   ['papersize'],
-  ['popover'],
+  #['popover'],
   ['propertylookuplistmodel', ['../../gtk/gtkpropertylookuplistmodel.c'], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']],
   ['rbtree', ['../../gtk/gtktreerbtree.c'], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']],
   ['recentmanager'],

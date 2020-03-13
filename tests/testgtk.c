@@ -4651,7 +4651,6 @@ create_wmhints (GtkWidget *widget)
   GtkWidget *button;
   GtkWidget *box1;
   GtkWidget *box2;
-  GdkSurface *gdk_surface;
   GdkPixbuf *pixbuf;
   GdkTexture *texture;
   GList *list;
@@ -4671,8 +4670,6 @@ create_wmhints (GtkWidget *widget)
 
       gtk_widget_realize (window);
 
-      gdk_surface = gtk_native_get_surface (GTK_NATIVE (window));
-
       pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) openfile);
       texture = gdk_texture_new_for_pixbuf (pixbuf);
 
@@ -4681,11 +4678,6 @@ create_wmhints (GtkWidget *widget)
       g_list_free (list);
       g_object_unref (texture);
       g_object_unref (pixbuf);
-
-      gdk_surface_set_icon_name (gdk_surface, "WMHints Test Icon");
-
-      gdk_surface_set_decorations (gdk_surface, GDK_DECOR_ALL | GDK_DECOR_MENU);
-      gdk_surface_set_functions (gdk_surface, GDK_FUNC_ALL | GDK_FUNC_RESIZE);
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
@@ -4736,7 +4728,7 @@ surface_state_callback (GdkSurface  *window,
   gchar *msg;
   GdkSurfaceState new_state;
 
-  new_state = gdk_surface_get_state (window);
+  new_state = gdk_toplevel_get_state (GDK_TOPLEVEL (window));
   msg = g_strconcat ((const char *)g_object_get_data (G_OBJECT (label), "title"), ": ",
                      (new_state & GDK_SURFACE_STATE_WITHDRAWN) ?
                      "withdrawn" : "not withdrawn", ", ",

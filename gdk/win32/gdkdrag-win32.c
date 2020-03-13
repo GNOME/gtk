@@ -738,7 +738,7 @@ move_drag_surface (GdkDrag *drag,
   gdk_win32_surface_move (drag_win32->drag_surface,
                           x_root - drag_win32->hot_x,
                           y_root - drag_win32->hot_y);
-  gdk_surface_raise (drag_win32->drag_surface);
+  gdk_win32_surface_raise (drag_win32->drag_surface);
 }
 
 static void
@@ -1701,8 +1701,6 @@ create_drag_surface (GdkDisplay *display)
 
   surface = gdk_surface_new_temp (display, &(GdkRectangle) { 0, 0, 100, 100 });
 
-  gdk_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_DND);
-
   return surface;
 }
 
@@ -2103,7 +2101,7 @@ gdk_drag_anim_timeout (gpointer data)
 
   t = ease_out_cubic (f);
 
-  gdk_surface_show (drag->drag_surface);
+  gdk_win32_surface_show (drag->drag_surface, FALSE);
   x = (drag->util_data.last_x +
        (drag->start_x - drag->util_data.last_x) * t -
        drag->hot_x);
@@ -2111,7 +2109,7 @@ gdk_drag_anim_timeout (gpointer data)
        (drag->start_y - drag->util_data.last_y) * t -
        drag->hot_y);
   gdk_win32_surface_move (drag->drag_surface, x, y);
-  gdk_surface_set_opacity (drag->drag_surface, 1.0 - f);
+  gdk_win32_surface_set_opacity (drag->drag_surface, 1.0 - f);
 
   return G_SOURCE_CONTINUE;
 }
@@ -2440,7 +2438,7 @@ gdk_dnd_handle_key_event (GdkDrag  *drag,
   /* The state is not yet updated in the event, so we need
    * to query it here.
    */
-  _gdk_device_query_state (pointer, NULL, NULL, NULL, NULL, NULL, NULL, &state);
+  _gdk_device_query_state (pointer, NULL, NULL, NULL, NULL, &state);
 
   if (dx != 0 || dy != 0)
     {

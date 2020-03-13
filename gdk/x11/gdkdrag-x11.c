@@ -1270,8 +1270,6 @@ create_drag_surface (GdkDisplay *display)
 
   surface = gdk_surface_new_temp (display, &(GdkRectangle) { 0, 0, 100, 100 });
 
-  gdk_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_DND);
-  
   return surface;
 }
 
@@ -1401,7 +1399,7 @@ move_drag_surface (GdkDrag *drag,
   gdk_x11_surface_move (drag_x11->drag_surface,
                         x_root - drag_x11->hot_x,
                         y_root - drag_x11->hot_y);
-  gdk_surface_raise (drag_x11->drag_surface);
+  gdk_x11_surface_raise (drag_x11->drag_surface);
 }
 
 static gboolean
@@ -1782,13 +1780,13 @@ gdk_drag_anim_timeout (gpointer data)
 
   t = ease_out_cubic (f);
 
-  gdk_surface_show (drag->drag_surface);
+  gdk_x11_surface_show (drag->drag_surface, FALSE);
   gdk_x11_surface_move (drag->drag_surface,
                         (drag->last_x - drag->hot_x) +
                         (drag->start_x - drag->last_x) * t,
                         (drag->last_y - drag->hot_y) +
                         (drag->start_y - drag->last_y) * t);
-  gdk_surface_set_opacity (drag->drag_surface, 1.0 - f);
+  gdk_x11_surface_set_opacity (drag->drag_surface, 1.0 - f);
 
   return G_SOURCE_CONTINUE;
 }
@@ -2012,7 +2010,7 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
 
   precache_target_list (drag);
 
-  gdk_device_get_position (device, &px, &py);
+  _gdk_device_query_state (device, surface, NULL, &px, &py, NULL);
 
   gdk_x11_surface_get_root_coords (surface,
                                    round (px) + dx,
@@ -2030,7 +2028,7 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
   x11_drag->ipc_surface = ipc_surface;
   if (gdk_x11_surface_get_group (surface))
     gdk_x11_surface_set_group (x11_drag->ipc_surface, surface);
-  gdk_surface_show (x11_drag->ipc_surface);
+  gdk_x11_surface_show (x11_drag->ipc_surface, FALSE);
 
   x11_drag->drag_surface = create_drag_surface (display);
 
@@ -2266,7 +2264,7 @@ gdk_dnd_handle_key_event (GdkDrag           *drag,
    * to query it here. We could use XGetModifierMapping, but
    * that would be overkill.
    */
-  _gdk_device_query_state (pointer, NULL, NULL, NULL, NULL, NULL, NULL, &state);
+  _gdk_device_query_state (pointer, NULL, NULL, NULL, NULL, &state);
 
   if (dx != 0 || dy != 0)
     {

@@ -4,7 +4,6 @@ window1
   name: Select a Color
   state: enabled sensitive showing visible
   toolkit: gtk
-  window-type: dialog
   <AtkComponent>
   layer: widget
   alpha: 1
