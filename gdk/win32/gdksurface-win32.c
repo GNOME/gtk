@@ -1732,13 +1732,14 @@ gdk_win32_surface_get_geometry (GdkSurface *window,
       API_CALL (GetClientRect, (GDK_SURFACE_HWND (window), &rect));
 
 	  POINT pt;
+          GdkSurface *parent;
          
-	  GdkSurface *parent;
-
           if (GDK_IS_TOPLEVEL (window))
             parent = NULL;
           else if (GDK_IS_POPUP (window))
             parent = gdk_popup_get_parent (GDK_POPUP (window));
+          else
+            parent = NULL;
          
 
 	  pt.x = rect.left;
