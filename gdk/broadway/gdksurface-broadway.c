@@ -273,6 +273,13 @@ _gdk_broadway_display_create_surface (GdkDisplay     *display,
 
   connect_frame_clock (surface);
 
+  /* We treat the real parent as a default transient for to get stacking right */
+  if (parent)
+    {
+      impl->transient_for = GDK_BROADWAY_SURFACE (parent)->id;
+      _gdk_broadway_server_surface_set_transient_for (broadway_display->server, impl->id, impl->transient_for);
+    }
+
   return surface;
 }
 
@@ -669,6 +676,10 @@ gdk_broadway_surface_set_transient_for (GdkSurface *surface,
   int parent_id;
 
   impl = GDK_BROADWAY_SURFACE (surface);
+
+  /* We treat the real parent as a default transient for to get stacking right */
+  if (parent == NULL)
+    parent = surface->parent;
 
   parent_id = 0;
   if (parent)
