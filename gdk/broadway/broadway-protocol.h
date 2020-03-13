@@ -276,7 +276,6 @@ typedef struct {
   gint32 y;
   guint32 width;
   guint32 height;
-  guint32 is_temp;
 } BroadwayRequestNewSurface;
 
 typedef struct {

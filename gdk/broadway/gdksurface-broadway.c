@@ -253,12 +253,19 @@ _gdk_broadway_display_create_surface (GdkDisplay     *display,
   broadway_display = GDK_BROADWAY_DISPLAY (display);
 
   impl = GDK_BROADWAY_SURFACE (surface);
+  impl->root_x = x;
+  impl->root_y = y;
+  if (parent)
+    {
+      impl->root_x += GDK_BROADWAY_SURFACE (parent)->root_x;
+      impl->root_y += GDK_BROADWAY_SURFACE (parent)->root_y;
+    }
+
   impl->id = _gdk_broadway_server_new_surface (broadway_display->server,
-                                               surface->x,
-                                               surface->y,
+                                               impl->root_x,
+                                               impl->root_y,
                                                surface->width,
-                                               surface->height,
-                                               surface_type == GDK_SURFACE_TEMP);
+                                               surface->height);
   g_hash_table_insert (broadway_display->id_ht, GINT_TO_POINTER(impl->id), surface);
 
   if (!surface->parent)
@@ -400,6 +407,41 @@ gdk_broadway_surface_get_scale_factor (GdkSurface *surface)
 }
 
 static void
+sync_child_root_pos (GdkSurface *parent)
+{
+  GdkBroadwaySurface *parent_impl = GDK_BROADWAY_SURFACE (parent);
+  GdkBroadwayDisplay *broadway_display;
+  GList *l;
+
+  broadway_display = GDK_BROADWAY_DISPLAY (gdk_surface_get_display (parent));
+
+  for (l = parent->children; l; l = l->next)
+    {
+      GdkBroadwaySurface *child_impl = l->data;
+      GdkSurface *child = GDK_SURFACE (child_impl);
+      int root_x, root_y;
+
+      root_x = child->x + parent_impl->root_x;
+      root_y = child->y + parent_impl->root_y;
+
+      if (root_x != child_impl->root_x ||
+          root_y != child_impl->root_y)
+        {
+          child_impl->root_x = root_x;
+          child_impl->root_y = root_y;
+
+          _gdk_broadway_server_surface_move_resize (broadway_display->server,
+                                                    child_impl->id,
+                                                    TRUE,
+                                                    child_impl->root_x, child_impl->root_y,
+                                                    child->width, child->height);
+          sync_child_root_pos (child);
+        }
+    }
+}
+
+/* x, y is relative to parent */
+static void
 gdk_broadway_surface_move_resize_internal (GdkSurface *surface,
                                            gboolean    with_move,
                                            gint        x,
@@ -410,6 +452,20 @@ gdk_broadway_surface_move_resize_internal (GdkSurface *surface,
   GdkBroadwaySurface *impl = GDK_BROADWAY_SURFACE (surface);
   GdkBroadwayDisplay *broadway_display;
   gboolean size_changed;
+
+  if (with_move)
+    {
+      surface->x = x;
+      surface->y = y;
+      impl->root_x = x;
+      impl->root_y = y;
+      if (surface->parent)
+        {
+          GdkBroadwaySurface *parent_impl = GDK_BROADWAY_SURFACE (surface->parent);
+          impl->root_x += parent_impl->root_x;
+          impl->root_y += parent_impl->root_y;
+        }
+    }
 
   size_changed = FALSE;
 
@@ -437,17 +493,13 @@ gdk_broadway_surface_move_resize_internal (GdkSurface *surface,
         }
     }
 
-  if (surface->parent)
-    {
-      impl->offset_x = x - surface->parent->x;
-      impl->offset_y = y - surface->parent->y;
-    }
-
   _gdk_broadway_server_surface_move_resize (broadway_display->server,
                                             impl->id,
                                             with_move,
-                                            x, y,
+                                            impl->root_x, impl->root_y,
                                             surface->width, surface->height);
+  sync_child_root_pos (surface);
+
   queue_flush (surface);
   if (size_changed)
     {
@@ -501,9 +553,8 @@ gdk_broadway_surface_layout_popup (GdkSurface     *surface,
                                    layout,
                                    &final_rect);
 
-  gdk_surface_get_origin (surface->parent, &x, &y);
-  x += final_rect.x;
-  y += final_rect.y;
+  x = final_rect.x;
+  y = final_rect.y;
 
   if (final_rect.width != surface->width ||
       final_rect.height != surface->height)
@@ -658,10 +709,14 @@ gdk_broadway_surface_get_root_coords (GdkSurface *surface,
                                       gint       *root_x,
                                       gint       *root_y)
 {
+  GdkBroadwaySurface *impl;
+
+  impl = GDK_BROADWAY_SURFACE (surface);
+
   if (root_x)
-    *root_x = x + surface->x;
+    *root_x = x + impl->root_x;
   if (root_y)
-    *root_y = y + surface->y;
+    *root_y = y + impl->root_y;
 }
 
 static gboolean
@@ -760,25 +815,6 @@ gdk_broadway_surface_unmaximize (GdkSurface *surface)
                                     impl->pre_maximize_y,
                                     impl->pre_maximize_width,
                                     impl->pre_maximize_height);
-}
-
-void
-gdk_broadway_surface_update_popups (GdkSurface *parent)
-{
-  GList *l;
-
-  for (l = parent ->children; l; l = l->next)
-    {
-      GdkBroadwaySurface *popup_impl = l->data;
-      GdkSurface *popup = GDK_SURFACE (popup_impl);
-      int new_x = parent->x + popup_impl->offset_x;
-      int new_y = parent->y + popup_impl->offset_y;
-
-      if (new_x != popup->x || new_y != popup->y)
-        gdk_broadway_surface_move_resize (popup,
-                                          new_x, new_y,
-                                          popup->width, popup->height);
-    }
 }
 
 typedef struct _MoveResizeData MoveResizeData;

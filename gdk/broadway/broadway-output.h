@@ -30,8 +30,7 @@ void            broadway_output_new_surface         (BroadwayOutput *output,
                                                      int             x,
                                                      int             y,
                                                      int             w,
-                                                     int             h,
-                                                     gboolean        is_temp);
+                                                     int             h);
 void            broadway_output_disconnected        (BroadwayOutput *output);
 void            broadway_output_show_surface        (BroadwayOutput *output,
                                                      int             id);

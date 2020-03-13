@@ -91,8 +91,7 @@ guint32             broadway_server_new_surface               (BroadwayServer  *
                                                                int              x,
                                                                int              y,
                                                                int              width,
-                                                               int              height,
-                                                               gboolean         is_temp);
+                                                               int              height);
 void                broadway_server_destroy_surface           (BroadwayServer  *server,
                                                                gint             id);
 gboolean            broadway_server_surface_show              (BroadwayServer  *server,

@@ -120,7 +120,6 @@ struct BroadwaySurface {
   gint32 y;
   gint32 width;
   gint32 height;
-  gboolean is_temp;
   gboolean visible;
   gint32 transient_for;
   guint32 texture;
@@ -2074,8 +2073,7 @@ broadway_server_new_surface (BroadwayServer *server,
                              int x,
                              int y,
                              int width,
-                             int height,
-                             gboolean is_temp)
+                             int height)
 {
   BroadwaySurface *surface;
 
@@ -2084,15 +2082,8 @@ broadway_server_new_surface (BroadwayServer *server,
   surface->id = server->id_counter++;
   surface->x = x;
   surface->y = y;
-  if (x == 0 && y == 0 && !is_temp)
-    {
-      /* TODO: Better way to know if we should pick default pos */
-      surface->x = 100;
-      surface->y = 100;
-    }
   surface->width = width;
   surface->height = height;
-  surface->is_temp = is_temp;
   surface->node_lookup = g_hash_table_new (g_direct_hash, g_direct_equal);
 
   g_hash_table_insert (server->surface_id_hash,
@@ -2107,8 +2098,7 @@ broadway_server_new_surface (BroadwayServer *server,
                                  surface->x,
                                  surface->y,
                                  surface->width,
-                                 surface->height,
-                                 surface->is_temp);
+                                 surface->height);
   else
     fake_configure_notify (server, surface);
 
@@ -2148,8 +2138,7 @@ broadway_server_resync_surfaces (BroadwayServer *server)
                                    surface->x,
                                    surface->y,
                                    surface->width,
-                                   surface->height,
-                                   surface->is_temp);
+                                   surface->height);
     }
 
   /* Then do everything that may reference other surfaces */

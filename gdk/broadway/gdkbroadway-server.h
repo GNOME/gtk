@@ -43,8 +43,7 @@ guint32            _gdk_broadway_server_new_surface               (GdkBroadwaySe
 								  int                 x,
 								  int                 y,
 								  int                 width,
-								  int                 height,
-								  gboolean            is_temp);
+								  int                 height);
 void               _gdk_broadway_server_destroy_surface           (GdkBroadwayServer  *server,
 								  gint                id);
 gboolean           _gdk_broadway_server_surface_show              (GdkBroadwayServer  *server,

@@ -298,10 +298,9 @@ function sendConfigureNotify(surface)
     sendInput(BROADWAY_EVENT_CONFIGURE_NOTIFY, [surface.id, surface.x, surface.y, surface.width, surface.height]);
 }
 
-function cmdCreateSurface(id, x, y, width, height, isTemp)
+function cmdCreateSurface(id, x, y, width, height)
 {
-    var surface = { id: id, x: x, y:y, width: width, height: height, isTemp: isTemp };
-    surface.positioned = isTemp;
+    var surface = { id: id, x: x, y:y, width: width, height: height };
     surface.transientParent = 0;
     surface.visible = false;
     surface.imageData = null;
@@ -1039,8 +1038,7 @@ function handleCommands(cmd, display_commands, new_textures, modified_trees)
             y = cmd.get_16s();
             w = cmd.get_16();
             h = cmd.get_16();
-            var isTemp = cmd.get_bool();
-            var div = cmdCreateSurface(id, x, y, w, h, isTemp);
+            var div = cmdCreateSurface(id, x, y, w, h);
             display_commands.push([DISPLAY_OP_APPEND_ROOT, div]);
             need_restack = true;
             break;
@@ -1109,7 +1107,6 @@ function handleCommands(cmd, display_commands, new_textures, modified_trees)
             var has_size = ops & 2;
             surface = surfaces[id];
             if (has_pos) {
-                surface.positioned = true;
                 surface.x = cmd.get_16s();
                 surface.y = cmd.get_16s();
                 display_commands.push([DISPLAY_OP_MOVE_NODE, surface.div, surface.x, surface.y]);

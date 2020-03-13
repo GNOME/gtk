@@ -238,8 +238,7 @@ client_handle_request (BroadwayClient *client,
                                      request->new_surface.x,
                                      request->new_surface.y,
                                      request->new_surface.width,
-                                     request->new_surface.height,
-                                     request->new_surface.is_temp);
+                                     request->new_surface.height);
       client->surfaces =
         g_list_prepend (client->surfaces,
                         GUINT_TO_POINTER (reply_new_surface.id));
