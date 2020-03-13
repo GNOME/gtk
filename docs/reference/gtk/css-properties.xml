@@ -229,6 +229,15 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
               <entry></entry>
             </row>
+            <row>
+              <entry><phrase role="nowrap">font-feature-settings</phrase></entry>
+              <entry><code>〈feature-tag-value〉&num; </code></entry>
+              <entry>""</entry>
+              <entry>✓</entry>
+              <entry>></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-fonts/#font-feature-settings-prop">CSS3</ulink></entry>
+              <entry></entry>
+            </row>
           </tbody>
         </tgroup>
         <tgroup cols="5">
