@@ -1,4 +1,4 @@
-<!-- irrelevant comments and context are stripped -->
+<!-- comments and context are preserved -->
 <interface>
   <object class="GtkWindow">
     <property name="visible" comments="foo" context="bla">True</property>
