@@ -997,12 +997,13 @@ function handleDisplayCommands(display_commands)
         case DISPLAY_OP_CHANGE_TEXTURE:
             var image = cmd[1];
             var texture = cmd[2];
-            // We need a new closure here to have a separate copy of "template" for each iteration...
-            function a_block(t) {
+            // We need a new closure here to have a separate copy of "texture" for each iteration in the onload callback...
+            var block = function(t) {
                 image.src = t.url;
                 // Unref blob url when loaded
                 image.onload = function() { t.unref(); };
-            }(texture);
+            };
+            block(texture);
             break;
         case DISPLAY_OP_CHANGE_TRANSFORM:
             var div = cmd[1];
