@@ -1,4 +1,4 @@
-<!-- placeholders are stripped -->
+<!-- placeholders are preserved -->
 <interface>
   <object class="GtkWindow">
     <child>
