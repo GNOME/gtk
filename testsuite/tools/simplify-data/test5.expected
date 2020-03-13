@@ -1,8 +1,11 @@
-<!-- placeholders are stripped -->
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkWindow">
     <child>
       <object class="GtkBox">
+        <child>
+          <placeholder/>
+        </child>
       </object>
     </child>
   </object>

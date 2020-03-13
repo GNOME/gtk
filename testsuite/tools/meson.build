@@ -19,6 +19,7 @@ if bash.found()
     test(t, bash,
          args: t,
          workdir: meson.current_build_dir(),
+         protocol: 'tap',
          env: [ 'GIO_USE_VOLUME_MONITOR=unix',
                 'GSETTINGS_BACKEND=memory',
                 'GDK_DEBUG=default-settings',

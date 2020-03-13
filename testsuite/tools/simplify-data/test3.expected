@@ -1,4 +1,4 @@
-<!-- translatable property not stripped -->
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkWindow">
     <property name="visible" translatable="yes">0</property>
