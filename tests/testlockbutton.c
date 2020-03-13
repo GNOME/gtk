@@ -43,6 +43,7 @@ struct _GTestPermissionClass
   GPermissionClass parent_class;
 };
 
+static GType g_test_permission_get_type (void);
 G_DEFINE_TYPE (GTestPermission, g_test_permission, G_TYPE_PERMISSION)
 
 static void
@@ -101,7 +102,7 @@ acquire_async (GPermission         *permission,
   g_object_unref (result);
 }
 
-gboolean
+static gboolean
 acquire_finish (GPermission   *permission,
                 GAsyncResult  *result,
                 GError       **error)
@@ -135,7 +136,7 @@ release_async (GPermission         *permission,
   g_object_unref (result);
 }
 
-gboolean
+static gboolean
 release_finish (GPermission   *permission,
                 GAsyncResult  *result,
                 GError       **error)
@@ -158,7 +159,7 @@ g_test_permission_class_init (GTestPermissionClass *class)
   permission_class->release_finish = release_finish;
 }
 
-void
+static void
 g_test_permission_set_success (GTestPermission *permission,
                                gboolean         success)
 {

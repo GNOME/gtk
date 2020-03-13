@@ -17,6 +17,7 @@ typedef struct
 
 typedef GtkTextViewClass MyTextViewClass;
 
+static GType my_text_view_get_type (void);
 G_DEFINE_TYPE (MyTextView, my_text_view, GTK_TYPE_TEXT_VIEW)
 
 static void
@@ -27,7 +28,7 @@ my_text_view_class_init (MyTextViewClass *tv_class) {}
 
 
 
-GtkWidget *
+static GtkWidget *
 create_widget_factory_content (void)
 {
   GError *error = NULL;
@@ -64,7 +65,7 @@ set_adjustment_to_fraction (GtkAdjustment *adjustment,
                             fraction * (upper - page_size));
 }
 
-gboolean
+static gboolean
 scroll_viewport (GtkWidget     *viewport,
                  GdkFrameClock *frame_clock,
                  gpointer       user_data)

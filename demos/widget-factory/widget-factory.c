@@ -1075,6 +1075,7 @@ typedef struct
 
 typedef GtkTextViewClass MyTextViewClass;
 
+static GType my_text_view_get_type (void);
 G_DEFINE_TYPE (MyTextView, my_text_view, GTK_TYPE_TEXT_VIEW)
 
 static void
@@ -1446,6 +1447,7 @@ struct _GTestPermissionClass
   GPermissionClass parent_class;
 };
 
+static GType g_test_permission_get_type (void);
 G_DEFINE_TYPE (GTestPermission, g_test_permission, G_TYPE_PERMISSION)
 
 static void
@@ -1484,7 +1486,7 @@ acquire_async (GPermission         *permission,
   g_object_unref (task);
 }
 
-gboolean
+static gboolean
 acquire_finish (GPermission   *permission,
                 GAsyncResult  *res,
                 GError       **error)
@@ -1513,7 +1515,7 @@ release_async (GPermission         *permission,
   g_object_unref (task);
 }
 
-gboolean
+static gboolean
 release_finish (GPermission   *permission,
                 GAsyncResult  *result,
                 GError       **error)

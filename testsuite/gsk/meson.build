@@ -197,7 +197,7 @@ foreach t : tests
   test_extra_ldflags = t.get(3, [])
 
   test_exe = executable(test_name, test_srcs,
-    c_args : test_cargs + test_extra_cargs,
+    c_args : test_cargs + test_extra_cargs + common_cflags,
     link_args : test_extra_ldflags,
     dependencies : libgtk_dep,
     install: get_option('install-tests'),

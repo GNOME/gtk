@@ -134,7 +134,7 @@ typedef struct {
   GSList *finalizers;
   GSList *custom_finalizers;
 
-  char **requested_objects; /* NULL if all the objects are requested */
+  const char **requested_objects; /* NULL if all the objects are requested */
   gboolean inside_requested_object;
   gint requested_object_level;
   gint cur_object_level;
@@ -160,7 +160,7 @@ void _gtk_builder_parser_parse_buffer (GtkBuilder *builder,
                                        const gchar *filename,
                                        const gchar *buffer,
                                        gssize length,
-                                       gchar **requested_objs,
+                                       const char **requested_objs,
                                        GError **error);
 GObject * _gtk_builder_construct (GtkBuilder *builder,
                                   ObjectInfo *info,

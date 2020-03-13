@@ -94,6 +94,8 @@ populate_flowbox_focus (GtkFlowBox *flowbox)
           widget = gtk_label_new ("bla");
           sensitive = FALSE;
           break;
+        default:
+          g_assert_not_reached ();
         }
 
       gtk_container_add (GTK_CONTAINER (box), widget);

@@ -41,6 +41,7 @@ a11y_state_tests = [
 
 a11y_dump_bin = executable('accessibility-dump',
   'accessibility-dump.c',
+  c_args: common_cflags,
   dependencies: libgtk_dep,
   install: get_option('install-tests'),
   install_dir: testexecdir,

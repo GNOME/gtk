@@ -6,6 +6,7 @@
 typedef GtkApplication DemoApplication;
 typedef GtkApplicationClass DemoApplicationClass;
 
+static GType demo_application_get_type (void);
 G_DEFINE_TYPE (DemoApplication, demo_application, GTK_TYPE_APPLICATION)
 
 typedef struct {
@@ -25,6 +26,7 @@ typedef struct {
 } DemoApplicationWindow;
 typedef GtkApplicationWindowClass DemoApplicationWindowClass;
 
+static GType demo_application_window_get_type (void);
 G_DEFINE_TYPE (DemoApplicationWindow, demo_application_window, GTK_TYPE_APPLICATION_WINDOW)
 
 static void create_window (GApplication *app, const char *contents);

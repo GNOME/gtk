@@ -17,9 +17,9 @@ typedef struct _Demo Demo;
 
 struct _Demo
 {
-  gchar *name;
-  gchar *title;
-  gchar *filename;
+  const char *name;
+  const char *title;
+  const char *filename;
   GDoDemoFunc func;
   Demo *children;
 };

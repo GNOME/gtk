@@ -51,7 +51,7 @@
 
 static gboolean done = FALSE;
 
-gboolean
+static gboolean
 file_exists (const char *filename)
 {
   struct stat statbuf;
@@ -60,7 +60,7 @@ file_exists (const char *filename)
 }
 
 static GtkWidget *
-build_option_menu (gchar           *items[],
+build_option_menu (const char           *items[],
 		   gint             num_items,
 		   gint             history,
 		   void           (*func) (GtkWidget *widget, gpointer data),
@@ -91,7 +91,7 @@ typedef struct sTreeButtons {
 /* end of tree section */
 
 static GtkWidget *
-build_option_menu (gchar           *items[],
+build_option_menu (const char           *items[],
 		   gint             num_items,
 		   gint             history,
 		   void           (*func)(GtkWidget *widget, gpointer data),
@@ -180,7 +180,7 @@ on_composited_changed (GdkDisplay *display,
   gtk_widget_queue_draw (GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (label))));
 }
 
-void
+static void
 create_alpha_window (GtkWidget *widget)
 {
   static GtkWidget *window;
@@ -599,8 +599,8 @@ create_radio_buttons (GtkWidget *widget)
  */
 
 static GtkWidget*
-new_pixbuf (char      *filename,
-	    GdkSurface *window)
+new_pixbuf (const char *filename,
+            GdkSurface *window)
 {
   GtkWidget *widget;
   GdkPixbuf *pixbuf;
@@ -674,7 +674,7 @@ statusbar_popped (GtkStatusbar  *statusbar,
 static void
 statusbar_contexts (GtkStatusbar *statusbar)
 {
-  gchar *string;
+  const char *string;
 
   string = "any context";
   g_print ("GtkStatusBar: context=\"%s\", context_id=%d\n",
@@ -916,7 +916,7 @@ activate_link (GtkWidget *label, const gchar *uri, gpointer data)
   return FALSE;
 }
 
-void create_labels (GtkWidget *widget)
+static void create_labels (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
   GtkWidget *hbox;
@@ -1132,7 +1132,7 @@ on_rotated_text_draw (GtkDrawingArea *drawing_area,
   n_words = G_N_ELEMENTS (words);
   for (i = 0; i < n_words; i++)
     {
-      int width, height;
+      int layout_width, layout_height;
 
       cairo_save (cr);
 
@@ -1140,9 +1140,9 @@ on_rotated_text_draw (GtkDrawingArea *drawing_area,
       pango_cairo_update_layout (cr, layout);
 
       pango_layout_set_text (layout, words[i], -1);
-      pango_layout_get_size (layout, &width, &height);
+      pango_layout_get_size (layout, &layout_width, &layout_height);
 
-      cairo_move_to (cr, - width / 2 / PANGO_SCALE, - DEFAULT_TEXT_RADIUS);
+      cairo_move_to (cr, - layout_width / 2 / PANGO_SCALE, - DEFAULT_TEXT_RADIUS);
       pango_cairo_show_layout (cr, layout);
 
       cairo_restore (cr);
@@ -2509,7 +2509,7 @@ spin_button_month_input_func (GtkSpinButton *spin_button,
 			      gdouble       *new_val)
 {
   gint i;
-  static gchar *month[12] = { "January", "February", "March", "April",
+  static const char *month[12] = { "January", "February", "March", "April",
 			      "May", "June", "July", "August",
 			      "September", "October", "November", "December" };
   gchar *tmp1, *tmp2;
@@ -2541,7 +2541,7 @@ spin_button_month_output_func (GtkSpinButton *spin_button)
   GtkAdjustment *adjustment;
   gdouble value;
   gint i;
-  static gchar *month[12] = { "January", "February", "March", "April",
+  static const char *month[12] = { "January", "February", "March", "April",
 			      "May", "June", "July", "August", "September",
 			      "October", "November", "December" };
 
@@ -3168,7 +3168,7 @@ create_cursors (GtkWidget *widget)
  * GtkColorSelection
  */
 
-void
+static void
 create_color_selection (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
@@ -3206,7 +3206,7 @@ create_color_selection (GtkWidget *widget)
     gtk_widget_destroy (window);
 }
 
-void
+static void
 flipping_toggled_cb (GtkWidget *widget, gpointer data)
 {
   int state = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
@@ -3243,7 +3243,7 @@ orientable_toggle_orientation (GtkOrientable *orientable)
     }
 }
 
-void
+static void
 flipping_orientation_toggled_cb (GtkWidget *widget, gpointer data)
 {
   GtkWidget *content_area;
@@ -3285,7 +3285,7 @@ create_forward_back (const char       *title,
   return frame;
 }
 
-void
+static void
 create_flipping (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
@@ -3345,7 +3345,7 @@ create_flipping (GtkWidget *widget)
  * GtkFontSelection
  */
 
-void
+static void
 create_font_selection (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
@@ -3530,13 +3530,13 @@ screen_display_check (GtkWidget *widget, ScreenDisplaySelection *data)
     }
 }
 
-void
+static void
 screen_display_destroy_diag (GtkWidget *widget, GtkWidget *data)
 {
   gtk_widget_destroy (data);
 }
 
-void
+static void
 create_display_screen (GtkWidget *widget)
 {
   GtkWidget *grid, *frame, *window, *combo_dpy, *vbox;
@@ -3966,6 +3966,8 @@ notebook_type_changed (GtkWidget *optionmenu,
 
       return;
       break;
+    default:
+      g_assert_not_reached ();
     }
 
   if (gtk_notebook_get_n_pages (notebook) == 15)
@@ -3994,7 +3996,7 @@ create_notebook (GtkWidget *widget)
   GtkWidget *omenu;
   GtkWidget *label;
 
-  static gchar *items[] =
+  static const char *items[] =
   {
     "Standard",
     "No tabs",
@@ -4103,7 +4105,7 @@ create_notebook (GtkWidget *widget)
  * GtkPanes
  */
 
-void
+static void
 toggle_resize (GtkWidget *widget, GtkWidget *child)
 {
   GtkPaned *paned = GTK_PANED (gtk_widget_get_parent (child));
@@ -4117,7 +4119,7 @@ toggle_resize (GtkWidget *widget, GtkWidget *child)
   g_object_set (paned, prop, !resize, NULL);
 }
 
-void
+static void
 toggle_shrink (GtkWidget *widget, GtkWidget *child)
 {
   GtkPaned *paned = GTK_PANED (gtk_widget_get_parent (child));
@@ -4131,7 +4133,7 @@ toggle_shrink (GtkWidget *widget, GtkWidget *child)
   g_object_set (paned, prop, !resize, NULL);
 }
 
-GtkWidget *
+static GtkWidget *
 create_pane_options (GtkPaned    *paned,
 		     const gchar *frame_label,
 		     const gchar *label1,
@@ -4190,7 +4192,7 @@ create_pane_options (GtkPaned    *paned,
   return frame;
 }
 
-void
+static void
 create_panes (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
@@ -4642,7 +4644,7 @@ create_paned_keyboard_navigation (GtkWidget *widget)
  * WM Hints demo
  */
 
-void
+static void
 create_wmhints (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
@@ -4828,7 +4830,7 @@ tracking_label (GtkWidget *window)
   return hbox;
 }
 
-void
+static void
 keep_window_above (GtkToggleButton *togglebutton, gpointer data)
 {
   GtkWidget *button = g_object_get_data (G_OBJECT (togglebutton), "radio");
@@ -4840,7 +4842,7 @@ keep_window_above (GtkToggleButton *togglebutton, gpointer data)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
 }
 
-void
+static void
 keep_window_below (GtkToggleButton *togglebutton, gpointer data)
 {
   GtkWidget *button = g_object_get_data (G_OBJECT (togglebutton), "radio");
@@ -4949,7 +4951,7 @@ get_state_controls (GtkWidget *window)
   return vbox;
 }
 
-void
+static void
 create_surface_states (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
@@ -5240,7 +5242,7 @@ window_controls (GtkWidget *window)
   return control_window;
 }
 
-void
+static void
 create_window_sizing (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
@@ -5302,7 +5304,7 @@ typedef struct _ProgressData {
   gboolean activity;
 } ProgressData;
 
-gboolean
+static gboolean
 progress_timeout (gpointer data)
 {
   ProgressData *pdata = data;
@@ -5421,7 +5423,7 @@ entry_changed (GtkWidget *widget, ProgressData *pdata)
 			  gtk_editable_get_text (GTK_EDITABLE (pdata->entry)));
 }
 
-void
+static void
 create_progress_bar (GtkWidget *widget)
 {
   GtkWidget *content_area;
@@ -5434,7 +5436,7 @@ create_progress_bar (GtkWidget *widget)
   GtkWidget *label;
   static ProgressData *pdata = NULL;
 
-  static gchar *items1[] =
+  static const char *items1[] =
   {
     "Left-Right",
     "Right-Left",
@@ -5442,7 +5444,7 @@ create_progress_bar (GtkWidget *widget)
     "Top-Bottom"
   };
 
-    static char *ellipsize_items[] = {
+    static const char *ellipsize_items[] = {
     "None",     // PANGO_ELLIPSIZE_NONE,
     "Start",    // PANGO_ELLIPSIZE_START,
     "Middle",   // PANGO_ELLIPSIZE_MIDDLE,
@@ -5578,7 +5580,7 @@ create_progress_bar (GtkWidget *widget)
 
 static int timer = 0;
 
-gint
+static int
 timeout_test (GtkWidget *label)
 {
   static int count = 0;
@@ -5590,7 +5592,7 @@ timeout_test (GtkWidget *label)
   return TRUE;
 }
 
-void
+static void
 start_timeout_test (GtkWidget *widget,
 		    GtkWidget *label)
 {
@@ -5600,7 +5602,7 @@ start_timeout_test (GtkWidget *widget,
     }
 }
 
-void
+static void
 stop_timeout_test (GtkWidget *widget,
 		   gpointer   data)
 {
@@ -5611,7 +5613,7 @@ stop_timeout_test (GtkWidget *widget,
     }
 }
 
-void
+static void
 destroy_timeout_test (GtkWidget  *widget,
 		      GtkWidget **window)
 {
@@ -5620,7 +5622,7 @@ destroy_timeout_test (GtkWidget  *widget,
   *window = NULL;
 }
 
-void
+static void
 create_timeout_test (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
@@ -5912,6 +5914,8 @@ native_filter_changed (GtkWidget *combo,
       gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (native), filter);
       gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (native), filter);
       break;
+    default:
+      g_assert_not_reached ();
     }
 }
 
@@ -5922,7 +5926,7 @@ destroy_native (GtkFileChooserNative *native)
   g_object_unref (native);
 }
 
-void
+static void
 create_native_dialogs (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
@@ -6028,7 +6032,7 @@ create_native_dialogs (GtkWidget *widget)
  * Main Window and Exit
  */
 
-void
+static void
 do_exit (GtkWidget *widget, GtkWidget *window)
 {
   gtk_widget_destroy (window);
@@ -6037,7 +6041,7 @@ do_exit (GtkWidget *widget, GtkWidget *window)
 }
 
 struct {
-  char *label;
+  const char *label;
   void (*func) (GtkWidget *widget);
   gboolean do_not_benchmark;
 } buttons[] =
@@ -6083,16 +6087,16 @@ int nbuttons = sizeof (buttons) / sizeof (buttons[0]);
 
 static void
 quit_cb (GtkWidget *widget,
-         gpointer   data)
+         gpointer   user_data)
 {
-  gboolean *done = data;
+  gboolean *is_done = user_data;
 
-  *done = TRUE;
+  *is_done = TRUE;
 
   g_main_context_wakeup (NULL);
 }
 
-void
+static void
 create_main_window (void)
 {
   GtkWidget *window;
@@ -6203,8 +6207,8 @@ bench_iteration (GtkWidget *widget, void (* fn) (GtkWidget *widget))
   while (g_main_context_iteration (NULL, FALSE));
 }
 
-void
-do_real_bench (GtkWidget *widget, void (* fn) (GtkWidget *widget), char *name, int num)
+static void
+do_real_bench (GtkWidget *widget, void (* fn) (GtkWidget *widget), const char *name, int num)
 {
   GTimeVal tv0, tv1;
   double dt_first;
@@ -6239,7 +6243,7 @@ do_real_bench (GtkWidget *widget, void (* fn) (GtkWidget *widget), char *name, i
     g_print ("%10.1f\n", dt_first);
 }
 
-void
+static void
 do_bench (char* what, int num)
 {
   int i;
@@ -6276,7 +6280,7 @@ do_bench (char* what, int num)
     }
 }
 
-void 
+static void 
 usage (void)
 {
   fprintf (stderr, "Usage: testgtk [--bench ALL|<bench>[:<count>]]\n");

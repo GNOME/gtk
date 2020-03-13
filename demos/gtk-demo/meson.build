@@ -112,9 +112,16 @@ gtkdemo_resources = gnome.compile_resources('gtkdemo_resources',
                                             'demo.gresource.xml',
                                             source_dir: '.')
 
+demo_cflags = []
+foreach flag: common_cflags
+  if flag not in ['-Werror=missing-prototypes', '-Werror=missing-declarations', '-fvisibility=hidden']
+    demo_cflags += flag
+  endif
+endforeach
+
 executable('gtk4-demo',
            demos, demos_h, extra_demo_sources, gtkdemo_resources,
-           c_args: gtkdemo_args,
+           c_args: gtkdemo_args + demo_cflags,
            dependencies: gtkdemo_deps,
            include_directories: confinc,
            gui_app: true,
@@ -123,7 +130,7 @@ executable('gtk4-demo',
 
 executable('gtk4-demo-application',
            'application.c', gtkdemo_resources,
-           c_args: gtkdemo_args,
+           c_args: gtkdemo_args + common_cflags,
            dependencies: gtkdemo_deps,
            include_directories: confinc,
            gui_app: true,

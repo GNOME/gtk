@@ -383,6 +383,8 @@ get_image_paintable (GtkImage *image)
       if (icon == NULL)
         return NULL;
       return GDK_PAINTABLE (icon);
+    case GTK_IMAGE_GICON:
+    case GTK_IMAGE_EMPTY:
     default:
       g_warning ("Image storage type %d not handled",
                  gtk_image_get_storage_type (image));

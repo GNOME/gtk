@@ -14,6 +14,7 @@ tests = [
 
 foreach t : tests
   test_exe = executable(t, '@0@.c'.format(t),
+                        c_args: common_cflags,
                         dependencies: libgtk_dep,
                         install: get_option('install-tests'),
                         install_dir: testexecdir)

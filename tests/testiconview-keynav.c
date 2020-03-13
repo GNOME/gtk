@@ -77,7 +77,7 @@ visible_func (GtkTreeModel *model,
   return visible;
 }
 
-GtkTreeModel *
+static GtkTreeModel *
 get_filter_model (gboolean first)
 {
   GtkTreeModelFilter *model;

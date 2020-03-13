@@ -29,7 +29,7 @@
 /* There shall be no other styles */
 #define GTK_STYLE_PROVIDER_PRIORITY_FORCE G_MAXUINT
 
-char *
+static char *
 test_get_other_file (const char *ui_file, const char *extension)
 {
   GString *file = g_string_new (NULL);

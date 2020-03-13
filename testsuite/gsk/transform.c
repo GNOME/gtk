@@ -190,16 +190,16 @@ check_conversions (GskTransform         *transform,
                                   &f[4 * 3 + 0], &f[4 * 3 + 1]);
       graphene_matrix_init_from_float (&test, f);
       graphene_assert_fuzzy_matrix_equal (&matrix, &test, EPSILON);
-      /* fallthrough */
 
+      G_GNUC_FALLTHROUGH;
     case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
       gsk_transform_to_affine (transform,
                                &f[4 * 0 + 0], &f[4 * 1 + 1],
                                &f[4 * 3 + 0], &f[4 * 3 + 1]);
       graphene_matrix_init_from_float (&test, f);
       graphene_assert_fuzzy_matrix_equal (&matrix, &test, EPSILON);
-      /* fallthrough */
 
+      G_GNUC_FALLTHROUGH;
     case GSK_TRANSFORM_CATEGORY_2D:
       gsk_transform_to_2d (transform,
                            &f[4 * 0 + 0], &f[4 * 0 + 1],
@@ -208,6 +208,9 @@ check_conversions (GskTransform         *transform,
       graphene_matrix_init_from_float (&test, f);
       graphene_assert_fuzzy_matrix_equal (&matrix, &test, EPSILON);
       break;
+
+    default:
+      g_assert_not_reached ();
    }
 }
 

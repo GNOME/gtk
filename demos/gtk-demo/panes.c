@@ -13,7 +13,7 @@
 
 #include <gtk/gtk.h>
 
-void
+static void
 toggle_resize (GtkWidget *widget,
                GtkWidget *child)
 {
@@ -47,7 +47,7 @@ toggle_resize (GtkWidget *widget,
   g_object_unref (child);
 }
 
-void
+static void
 toggle_shrink (GtkWidget *widget,
                GtkWidget *child)
 {
@@ -81,7 +81,7 @@ toggle_shrink (GtkWidget *widget,
   g_object_unref (child);
 }
 
-GtkWidget *
+static GtkWidget *
 create_pane_options (GtkPaned    *paned,
                      const gchar *frame_label,
                      const gchar *label1,

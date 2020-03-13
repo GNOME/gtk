@@ -682,14 +682,14 @@ static const gchar ui_info[] =
   "</interface>";
 
 static void
-buffer_changed_callback (GtkTextBuffer *buffer)
+buffer_changed_callback (GtkTextBuffer *text_buffer)
 {
   file_changed = TRUE;
   update_statusbar ();
 }
 
 static void
-mark_set_callback (GtkTextBuffer     *buffer,
+mark_set_callback (GtkTextBuffer     *text_buffer,
                    const GtkTextIter *new_location,
                    GtkTextMark       *mark,
                    gpointer           data)

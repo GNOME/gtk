@@ -185,13 +185,13 @@ text_changed (GObject *object,
               gpointer data)
 {
   GtkEntry *entry = GTK_ENTRY (object);
-  GActionMap *actions = data;
+  GActionMap *action_map = data;
   GAction *action;
   gboolean has_text;
 
   has_text = gtk_entry_get_text_length (entry) > 0;
 
-  action = g_action_map_lookup_action (actions, "clear");
+  action = g_action_map_lookup_action (action_map, "clear");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), has_text);
 }
 

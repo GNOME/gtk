@@ -31,7 +31,7 @@
 
 #include <gtk/gtk.h>
 
-static gchar *backend = "gtk+";
+static const char *backend = "gtk+";
 static gboolean rtl = FALSE;
 static GOptionEntry entries[] = {
   { "backend", 'b', 0, G_OPTION_ARG_STRING, &backend, "The filesystem backend to use.", "gtk+" },

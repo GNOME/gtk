@@ -23,7 +23,7 @@
 /* Don't copy this bad example; inline RGB data is always a better
  * idea than inline XPMs.
  */
-static char  *book_closed_xpm[] = {
+static const char *book_closed_xpm[] = {
 "16 16 6 1",
 "       c None s None",
 ".      c black",
@@ -132,7 +132,7 @@ typedef enum
   COLUMNS_LAST
 } ColumnsType;
 
-static gchar *column_type_names[] = {
+static const char *column_type_names[] = {
   "No columns",
   "One column",
   "Many columns"
@@ -459,6 +459,8 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
                                                       NULL);
 
       gtk_tree_view_insert_column (GTK_TREE_VIEW (tree_view), col, 0);
+      break;
+    case COLUMNS_LAST:
     default:
       break;
     }
@@ -632,7 +634,7 @@ columns_selected (GtkComboBox *combo_box, gpointer data)
     }
 }
 
-void
+static void
 on_row_activated (GtkTreeView       *tree_view,
                   GtkTreePath       *path,
                   GtkTreeViewColumn *column,

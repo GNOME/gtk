@@ -48,9 +48,9 @@ static void
 fullscreen_clicked_cb (GtkWidget *button,
                        gpointer   unused)
 {
-  GtkWidget *window = GTK_WIDGET (gtk_widget_get_root (button));
+  GtkWidget *widget_window = GTK_WIDGET (gtk_widget_get_root (button));
 
-  gtk_window_fullscreen (GTK_WINDOW (window));
+  gtk_window_fullscreen (GTK_WINDOW (widget_window));
 }
 
 GtkWidget *

@@ -301,8 +301,6 @@ dump_text_attributes (GString         *string,
   atk_attribute_set_free (attributes);
 }
 
-extern GType atk_layer_get_type (void);
-
 static const gchar *
 layer_name (AtkLayer layer)
 {

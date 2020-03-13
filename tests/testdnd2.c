@@ -79,6 +79,8 @@ get_image_texture (GtkImage *image)
                                          0);
       paintable = GDK_PAINTABLE (icon);
       break;
+    case GTK_IMAGE_GICON:
+    case GTK_IMAGE_EMPTY:
     default:
       g_warning ("Image storage type %d not handled",
                  gtk_image_get_storage_type (image));
@@ -323,7 +325,7 @@ drag_cancel (GtkDragSource       *source,
   return FALSE;
 }
 
-GtkWidget *
+static GtkWidget *
 make_image (const gchar *icon_name, int hotspot)
 {
   GtkWidget *image;

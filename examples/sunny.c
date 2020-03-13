@@ -70,6 +70,7 @@ open (GApplication  *application,
 typedef GtkApplication MenuButton;
 typedef GtkApplicationClass MenuButtonClass;
 
+static GType menu_button_get_type (void);
 G_DEFINE_TYPE (MenuButton, menu_button, GTK_TYPE_APPLICATION)
 
 static void
@@ -176,7 +177,7 @@ menu_button_class_init (MenuButtonClass *class)
   application_class->open = open;
 }
 
-MenuButton *
+static MenuButton *
 menu_button_new (void)
 {
   return g_object_new (menu_button_get_type (),

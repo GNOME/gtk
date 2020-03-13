@@ -17,7 +17,7 @@
 static void
 insert_link (GtkTextBuffer *buffer,
              GtkTextIter   *iter,
-             gchar         *text,
+             const char    *text,
              gint           page)
 {
   GtkTextTag *tag;

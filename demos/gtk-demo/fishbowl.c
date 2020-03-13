@@ -37,6 +37,7 @@ get_random_icon_name (GtkIconTheme *theme)
   return icon_names[g_random_int_range(0, n_icon_names)];
 }
 
+/* Can't be static because it's also used in iconscroll.c */
 GtkWidget *
 create_icon (void)
 {

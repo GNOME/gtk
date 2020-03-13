@@ -383,7 +383,7 @@ close_window (GtkWidget *widget)
   rotation_angles[Z_AXIS] = 0.0;
 }
 
-GtkWidget *
+static GtkWidget *
 create_glarea_window (GtkWidget *do_widget)
 {
   GtkWidget *window, *box, *button, *controls;

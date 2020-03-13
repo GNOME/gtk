@@ -280,11 +280,11 @@ static gboolean done = FALSE;
 
 static void
 quit_cb (GtkWidget *widget,
-         gpointer   data)
+         gpointer   user_data)
 {
-  gboolean *done = data;
+  gboolean *is_done = user_data;
 
-  *done = TRUE;
+  *is_done = TRUE;
 
   g_main_context_wakeup (NULL);
 }
@@ -312,6 +312,8 @@ make_window (gint view_type)
     case 1:
       gtk_window_set_title (GTK_WINDOW (window), "Sorted list");
       break;
+    default:
+      g_assert_not_reached ();
     }
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);

@@ -267,17 +267,17 @@ gtk_focus_widget_class_init (GtkFocusWidgetClass *klass)
 
 static void
 quit_cb (GtkWidget *widget,
-         gpointer   data)
+         gpointer   user_data)
 {
-  gboolean *done = data;
+  gboolean *is_done = user_data;
 
-  *done = TRUE;
+  *is_done = TRUE;
 
   g_main_context_wakeup (NULL);
 }
 
 int
-main()
+main(int argc, char **argv)
 {
   GtkWidget *window;
   GtkWidget *widget;

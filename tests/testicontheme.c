@@ -47,7 +47,6 @@ int
 main (int argc, char *argv[])
 {
   GtkIconTheme *icon_theme;
-  GtkIconPaintable *icon;
   char *themename;
   int size = 48;
   int scale = 1;
@@ -127,6 +126,7 @@ main (int argc, char *argv[])
   else if (strcmp (argv[1], "lookup") == 0)
     {
       GFile *file;
+      GtkIconPaintable *icon;
 
       if (argc < 4)
 	{

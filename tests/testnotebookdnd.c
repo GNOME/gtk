@@ -20,10 +20,10 @@
  */
 #include <gtk/gtk.h>
 
-static gpointer GROUP_A = "GROUP_A";
-static gpointer GROUP_B = "GROUP_B";
+static gconstpointer GROUP_A = "GROUP_A";
+static gconstpointer GROUP_B = "GROUP_B";
 
-gchar *tabs1 [] = {
+const char *tabs1 [] = {
   "aaaaaaaaaa",
   "bbbbbbbbbb",
   "cccccccccc",
@@ -31,7 +31,7 @@ gchar *tabs1 [] = {
   NULL
 };
 
-gchar *tabs2 [] = {
+const char *tabs2 [] = {
   "1",
   "2",
   "3",
@@ -40,13 +40,13 @@ gchar *tabs2 [] = {
   NULL
 };
 
-gchar *tabs3 [] = {
+const char *tabs3 [] = {
   "foo",
   "bar",
   NULL
 };
 
-gchar *tabs4 [] = {
+const char *tabs4 [] = {
   "beer",
   "water",
   "lemonade",
@@ -133,8 +133,8 @@ action_clicked_cb (GtkWidget *button,
 }
 
 static GtkWidget*
-create_notebook (gchar           **labels,
-                 const gchar      *group,
+create_notebook (const char     **labels,
+                 const char      *group,
                  GtkPositionType   pos)
 {
   GtkWidget *notebook, *title, *page, *action_widget;
@@ -174,7 +174,7 @@ create_notebook (gchar           **labels,
 }
 
 static GtkWidget*
-create_notebook_non_dragable_content (gchar           **labels,
+create_notebook_non_dragable_content (const char      **labels,
                                       const gchar      *group,
                                       GtkPositionType   pos)
 {
@@ -225,7 +225,7 @@ create_notebook_non_dragable_content (gchar           **labels,
 }
 
 static GtkWidget*
-create_notebook_with_notebooks (gchar           **labels,
+create_notebook_with_notebooks (const char      **labels,
                                 const gchar      *group,
                                 GtkPositionType   pos)
 {

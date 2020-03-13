@@ -307,7 +307,7 @@ action_make_unique (GdkDragAction action)
   return 0;
 }
 
-GdkDragAction
+static GdkDragAction
 trash_drag_enter (GtkDropTarget *dest,
                   GdkDrop       *drop,
                   double         x,
@@ -325,7 +325,7 @@ trash_drag_enter (GtkDropTarget *dest,
   return action_make_unique (gdk_drop_get_actions (drop));;
 }
 
-GdkDragAction
+static GdkDragAction
 trash_drag_leave (GtkDropTarget *dest,
                   GdkDrop       *drop,
                   GtkWidget     *widget) 
@@ -341,7 +341,7 @@ trash_drag_leave (GtkDropTarget *dest,
   return action_make_unique (gdk_drop_get_actions (drop));
 }
 
-gboolean
+static gboolean
 trash_drag_drop (GtkDropTarget *dest,
                  GdkDrop       *drop,
                  double         x,
@@ -359,7 +359,7 @@ trash_drag_drop (GtkDropTarget *dest,
   return TRUE;
 }
 
-gboolean
+static gboolean
 label_drag_drop (GtkDropTarget *dest,
                  const GValue  *value,
                  int            x,
@@ -381,7 +381,7 @@ static gboolean in_popup = FALSE;
 static guint popdown_timer = 0;
 static guint popup_timer = 0;
 
-gint
+static int
 popdown_cb (gpointer data)
 {
   popdown_timer = 0;
@@ -392,7 +392,7 @@ popdown_cb (gpointer data)
   return FALSE;
 }
 
-void  
+static void  
 popup_enter (GtkDropTarget *dest)
 {
   g_print ("popup enter\n");
@@ -408,7 +408,7 @@ popup_enter (GtkDropTarget *dest)
     }
 }
 
-void  
+static void  
 popup_leave (GtkDropTarget *dest)
 {
 g_print ("popup leave\n");
@@ -430,7 +430,7 @@ popup_drop (GtkDropTarget *dest)
   return TRUE;
 }
 
-gboolean
+static gboolean
 popup_cb (gpointer data)
 {
   if (!popped_up)
@@ -474,16 +474,7 @@ popup_cb (gpointer data)
   return FALSE;
 }
 
-gboolean
-popsite_motion (GtkDropTarget *dest,
-                int            x,
-                int            y,
-                GtkWidget     *widget)
-{
-  return TRUE;
-}
-
-void  
+static void  
 popsite_enter (GtkDropControllerMotion *motion)
 {
   g_print ("popsite enter\n");
@@ -491,7 +482,7 @@ popsite_enter (GtkDropControllerMotion *motion)
     popup_timer = g_timeout_add (500, popup_cb, NULL);
 }
 
-void  
+static void  
 popsite_leave (GtkDropControllerMotion *motion)
 {
   g_print ("popsite leave\n");
@@ -502,14 +493,7 @@ popsite_leave (GtkDropControllerMotion *motion)
     }
 }
 
-void
-source_drag_data_delete (GtkWidget *widget,
-                         gpointer  data)
-{
-  g_print ("Delete the data!\n");
-}
-  
-void
+static void
 test_init (void)
 {
   if (g_file_test ("../modules/input/immodules.cache", G_FILE_TEST_EXISTS))

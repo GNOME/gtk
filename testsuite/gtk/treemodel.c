@@ -58,9 +58,9 @@ signal_name_to_string (SignalName signal)
       case ROWS_REORDERED:
           return "rows-reordered";
 
+      case LAST_SIGNAL:
       default:
-          /* Fall through */
-          break;
+        g_assert_not_reached ();
     }
 
   return "(unknown)";

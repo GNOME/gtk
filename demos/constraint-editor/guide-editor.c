@@ -78,7 +78,7 @@ get_strength (const char *id)
   return strength;
 }
 
-const char *
+static const char *
 get_strength_nick (GtkConstraintStrength strength)
 {
   GEnumClass *class = g_type_class_ref (GTK_TYPE_CONSTRAINT_STRENGTH);

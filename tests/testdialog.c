@@ -200,6 +200,7 @@ typedef struct {
   GtkDialogClass parent_class;
 } MyDialogClass;
 
+static GType my_dialog_get_type (void);
 G_DEFINE_TYPE (MyDialog, my_dialog, GTK_TYPE_DIALOG);
 
 static void
@@ -270,6 +271,7 @@ typedef struct {
   GtkDialogClass parent_class;
 } MyDialog2Class;
 
+static GType my_dialog2_get_type (void);
 G_DEFINE_TYPE (MyDialog2, my_dialog2, GTK_TYPE_DIALOG);
 
 static void

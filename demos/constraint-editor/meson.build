@@ -13,6 +13,7 @@ constraint_editor_resources = gnome.compile_resources('constraint_editor_resourc
 
 executable('gtk4-constraint-editor',
            constraint_editor_sources, constraint_editor_resources,
+           c_args: common_cflags,
            dependencies: libgtk_dep,
            include_directories: confinc,
            gui_app: true,
