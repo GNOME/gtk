@@ -541,7 +541,7 @@ gtk_css_gadget_margin_box_contains_point (GtkCssGadget *gadget,
                                           int           x,
                                           int           y)
 {
-  GtkAllocation margin_box;
+  GtkAllocation margin_box = { 0, };
   gtk_css_gadget_get_margin_box (gadget, &margin_box);
   return allocation_contains_point (&margin_box, x, y);
 }
