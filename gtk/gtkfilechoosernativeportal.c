@@ -294,6 +294,7 @@ show_portal_file_chooser (GtkFileChooserNative *self,
   GDBusMessage *message;
   GVariantBuilder opt_builder;
   gboolean multiple;
+  gboolean directory;
   const char *title;
   char *token;
 
@@ -315,6 +316,7 @@ show_portal_file_chooser (GtkFileChooserNative *self,
                                             self, NULL);
 
   multiple = gtk_file_chooser_get_select_multiple (GTK_FILE_CHOOSER (self));
+  directory = gtk_file_chooser_get_action (GTK_FILE_CHOOSER (self)) == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
   g_variant_builder_init (&opt_builder, G_VARIANT_TYPE_VARDICT);
 
   g_variant_builder_add (&opt_builder, "{sv}", "handle_token",
@@ -323,6 +325,8 @@ show_portal_file_chooser (GtkFileChooserNative *self,
 
   g_variant_builder_add (&opt_builder, "{sv}", "multiple",
                          g_variant_new_boolean (multiple));
+  g_variant_builder_add (&opt_builder, "{sv}", "directory",
+                         g_variant_new_boolean (directory));
   if (self->accept_label)
     g_variant_builder_add (&opt_builder, "{sv}", "accept_label",
                            g_variant_new_string (self->accept_label));
@@ -418,13 +422,14 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
 
   action = gtk_file_chooser_get_action (GTK_FILE_CHOOSER (self));
 
-  if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
+  if (action == GTK_FILE_CHOOSER_ACTION_OPEN ||
+      action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     method_name = "OpenFile";
   else if (action == GTK_FILE_CHOOSER_ACTION_SAVE)
     method_name = "SaveFile";
   else
     {
-      g_warning ("GTK_FILE_CHOOSER_ACTION_%s is not supported by GtkFileChooserNativePortal", action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ? "SELECT_FOLDER" : "CREATE_FOLDER");
+      g_warning ("GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER is not supported by GtkFileChooserNativePortal");
       return FALSE;
     }
 
