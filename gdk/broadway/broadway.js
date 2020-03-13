@@ -274,6 +274,7 @@ function Texture(id, data) {
     var image = new Image();
     image.src = this.url;
     this.image = image;
+    this.decoded = image.decode();
     textures[id] = this;
 }
 
@@ -297,10 +298,9 @@ function sendConfigureNotify(surface)
     sendInput(BROADWAY_EVENT_CONFIGURE_NOTIFY, [surface.id, surface.x, surface.y, surface.width, surface.height]);
 }
 
-function cmdCreateSurface(id, x, y, width, height, isTemp)
+function cmdCreateSurface(id, x, y, width, height)
 {
-    var surface = { id: id, x: x, y:y, width: width, height: height, isTemp: isTemp };
-    surface.positioned = isTemp;
+    var surface = { id: id, x: x, y:y, width: width, height: height };
     surface.transientParent = 0;
     surface.visible = false;
     surface.imageData = null;
@@ -997,12 +997,13 @@ function handleDisplayCommands(display_commands)
         case DISPLAY_OP_CHANGE_TEXTURE:
             var image = cmd[1];
             var texture = cmd[2];
-            // We need a new closure here to have a separate copy of "template" for each iteration...
-            function a_block(t) {
+            // We need a new closure here to have a separate copy of "texture" for each iteration in the onload callback...
+            var block = function(t) {
                 image.src = t.url;
                 // Unref blob url when loaded
                 image.onload = function() { t.unref(); };
-            }(texture);
+            };
+            block(texture);
             break;
         case DISPLAY_OP_CHANGE_TRANSFORM:
             var div = cmd[1];
@@ -1037,8 +1038,7 @@ function handleCommands(cmd, display_commands, new_textures, modified_trees)
             y = cmd.get_16s();
             w = cmd.get_16();
             h = cmd.get_16();
-            var isTemp = cmd.get_bool();
-            var div = cmdCreateSurface(id, x, y, w, h, isTemp);
+            var div = cmdCreateSurface(id, x, y, w, h);
             display_commands.push([DISPLAY_OP_APPEND_ROOT, div]);
             need_restack = true;
             break;
@@ -1059,6 +1059,7 @@ function handleCommands(cmd, display_commands, new_textures, modified_trees)
                 doUngrab();
             surface = surfaces[id];
             if (surface.visible) {
+                surface.visible = false;
                 display_commands.push([DISPLAY_OP_HIDE_SURFACE, surface.div]);
             }
             break;
@@ -1106,14 +1107,13 @@ function handleCommands(cmd, display_commands, new_textures, modified_trees)
             var has_size = ops & 2;
             surface = surfaces[id];
             if (has_pos) {
-                surface.positioned = true;
-                surface.x = cmd.get_16s();;
-                surface.y = cmd.get_16s();;
+                surface.x = cmd.get_16s();
+                surface.y = cmd.get_16s();
                 display_commands.push([DISPLAY_OP_MOVE_NODE, surface.div, surface.x, surface.y]);
             }
             if (has_size) {
                 surface.width = cmd.get_16();
-                surface.height = cmd.get_16();;
+                surface.height = cmd.get_16();
                 display_commands.push([DISPLAY_OP_RESIZE_NODE, surface.div, surface.width, surface.height]);
 
             }
@@ -1236,16 +1236,14 @@ function handleOutstanding()
         outstandingDisplayCommands = display_commands;
 
     if (new_textures.length > 0) {
-        var n_textures = new_textures.length;
+        var decodes = [];
         for (var i = 0; i < new_textures.length; i++) {
-            var t = new_textures[i];
-            t.image.onload = function() {
-                n_textures -= 1;
-                if (n_textures == 0) {
-                    handleOutstandingDisplayCommands();
-                }
-            };
+            decodes.push(new_textures[i].decoded);
         }
+        Promise.allSettled(decodes).then(
+            () => {
+                handleOutstandingDisplayCommands();
+            });
     } else {
         handleOutstandingDisplayCommands();
     }
@@ -3184,20 +3182,32 @@ function setupDocument(document)
     }
 }
 
+function sendScreenSizeChanged() {
+    var w, h, s;
+    w = window.innerWidth;
+    h = window.innerHeight;
+    s = Math.round(window.devicePixelRatio);
+    sendInput (BROADWAY_EVENT_SCREEN_SIZE_CHANGED, [w, h, s]);
+}
+
 function start()
 {
     setupDocument(document);
 
-    var w, h;
-    w = window.innerWidth;
-    h = window.innerHeight;
     window.onresize = function(ev) {
-        var w, h;
-        w = window.innerWidth;
-        h = window.innerHeight;
-        sendInput (BROADWAY_EVENT_SCREEN_SIZE_CHANGED, [w, h]);
+        sendScreenSizeChanged();
     };
-    sendInput (BROADWAY_EVENT_SCREEN_SIZE_CHANGED, [w, h]);
+    window.matchMedia('screen and (min-resolution: 2dppx)').
+        addListener(function(e) {
+                        if (e.matches) {
+                            /* devicePixelRatio >= 2 */
+                            sendScreenSizeChanged();
+                        } else {
+                            /* devicePixelRatio < 2 */
+                            sendScreenSizeChanged();
+                        }
+                    });
+    sendScreenSizeChanged();
 }
 
 function connect()

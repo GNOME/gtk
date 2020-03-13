@@ -477,6 +477,7 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
                                 float offset_y)
 {
   GdkDisplay *display = gdk_surface_get_display (gsk_renderer_get_surface (renderer));
+  GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
   GskBroadwayRenderer *self = GSK_BROADWAY_RENDERER (renderer);
   GArray *nodes = self->nodes;
 
@@ -753,9 +754,11 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
       int y = floorf (node->bounds.origin.y);
       int width = ceil (node->bounds.origin.x + node->bounds.size.width) - x;
       int height = ceil (node->bounds.origin.y + node->bounds.size.height) - y;
+      int scale = broadway_display->scale_factor;
 
-      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width * scale, height * scale);
       cr = cairo_create (surface);
+      cairo_scale (cr, scale, scale);
       cairo_translate (cr, -x, -y);
       gsk_render_node_draw (node, cr);
       cairo_destroy (cr);
@@ -766,8 +769,8 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
       texture_id = gdk_broadway_display_ensure_texture (display, texture);
       add_float (nodes, x - offset_x);
       add_float (nodes, y - offset_y);
-      add_float (nodes, gdk_texture_get_width (texture));
-      add_float (nodes, gdk_texture_get_height (texture));
+      add_float (nodes, width);
+      add_float (nodes, height);
       add_uint32 (nodes, texture_id);
     }
 }

@@ -482,8 +482,7 @@ _gdk_broadway_server_new_surface (GdkBroadwayServer *server,
                                  int x,
                                  int y,
                                  int width,
-                                 int height,
-                                 gboolean is_temp)
+                                 int height)
 {
   BroadwayRequestNewSurface msg;
   guint32 serial, id;
@@ -493,7 +492,6 @@ _gdk_broadway_server_new_surface (GdkBroadwayServer *server,
   msg.y = y;
   msg.width = width;
   msg.height = height;
-  msg.is_temp = is_temp;
   serial = gdk_broadway_server_send_message (server, msg,
                                              BROADWAY_REQUEST_NEW_SURFACE);
   reply = gdk_broadway_server_wait_for_reply (server, serial);
