@@ -1,29 +1,33 @@
-image: registry.gitlab.gnome.org/gnome/gtk/gtk-3-24:v3
-
 stages:
   - build
+  - docs
 
 cache:
   paths:
     - _ccache/
 
 fedora-autotools:
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora-gtk3:v1
   stage: build
   script:
-   - bash -x ./.gitlab-ci/test-docker-autotools.sh
+    - bash -x ./.gitlab-ci/test-docker-autotools.sh
 
 fedora-distcheck:
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora-gtk3:v1
   variables:
     DO_DISTCHECK: "yes"
   when: manual
   stage: build
   script:
-   - bash -x ./.gitlab-ci/test-docker-autotools.sh
+    - bash -x ./.gitlab-ci/test-docker-autotools.sh
 
-fedora-meson: &fedora-meson-defaults
+fedora-meson:
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora-gtk3:v1
   stage: build
+  variables:
+    EXTRA_MESON_FLAGS: "-Ddefault_library=both"
   script:
-   - bash -x ./.gitlab-ci/test-docker-meson.sh
+    - bash -x ./.gitlab-ci/test-docker-meson.sh
   artifacts:
     when: always
     name: "gtk3-${CI_JOB_NAME}-${CI_COMMIT_REF_NAME}"
@@ -31,10 +35,34 @@ fedora-meson: &fedora-meson-defaults
       - "_build/meson-logs"
       - "_build/testsuite/reftests/output"
 
-fedora-meson-staticlibs:
+debian-meson:
+  image: registry.gitlab.gnome.org/gnome/gtk/debian-gtk3:v1
+  stage: build
   variables:
     EXTRA_MESON_FLAGS: "-Ddefault_library=both"
-  <<: *fedora-meson-defaults
+  script:
+    - bash -x ./.gitlab-ci/test-docker-meson.sh
+  artifacts:
+    when: always
+    name: "gtk3-${CI_JOB_NAME}-${CI_COMMIT_REF_NAME}"
+    paths:
+      - "_build/meson-logs"
+      - "_build/testsuite/reftests/output"
+
+reference:
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora-gtk3:v1
+  stage: docs
+  variables:
+    EXTRA_MESON_FLAGS: "--buildtype=release -Dgtk_doc=true -Dman=true"
+  script:
+    - bash -x ./.gitlab-ci/test-docker-meson.sh
+    - ninja -C _build gdk3-doc gtk3-doc
+    - tar -c -J -f gdk3-docs.tar.xz _build/docs/reference/gdk
+    - tar -c -J -f gtk3-docs.tar.xz _build/docs/reference/gtk
+  artifacts:
+    paths:
+      - gdk3-docs.tar.xz
+      - gtk3-docs.tar.xz
 
 msys2-mingw32-meson:
   variables:

@@ -50,6 +50,12 @@ tests = [
   ['revealer-size'],
 ]
 
+# Tests that are expected to fail
+xfail = [
+]
+
+is_debug = get_option('buildtype').startswith('debug')
+
 test_cargs = []
 
 if os_unix
@@ -77,6 +83,8 @@ foreach t : tests
     install: get_option('installed_tests'),
     install_dir: installed_test_bindir)
 
+  expect_fail = xfail.contains(test_name)
+
   test(test_name, test_exe,
        args: [ '--tap', '-k' ],
        env: [ 'GIO_USE_VOLUME_MONITOR=unix',
@@ -89,7 +97,9 @@ foreach t : tests
               'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
               'GTK_TEST_MESON=1',
             ],
-       suite: 'gtk')
+       suite: 'gtk',
+       should_fail: expect_fail,
+  )
 endforeach
 
 # FIXME: if objc autotestkeywords_CPPFLAGS += -DHAVE_OBJC=1 -x objective-c++

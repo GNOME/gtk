@@ -220,15 +220,20 @@ gtk_cloudprint_account_search_rest_call_cb (RestProxyCall *call,
 					    gpointer user_data)
 {
   GTask *task = user_data;
-  GtkCloudprintAccount *account = g_task_get_task_data (task);
   JsonParser *json_parser = NULL;
   JsonObject *result;
   JsonNode *printers = NULL;
   GError *error = NULL;
 
-  GTK_NOTE (PRINTING,
-	    g_print ("Cloud Print Backend: (%p) 'search' REST call "
-		     "returned\n", account));
+#ifdef G_ENABLE_DEBUG
+  {
+    GtkCloudprintAccount *account = g_task_get_task_data (task);
+
+    GTK_NOTE (PRINTING,
+              g_print ("Cloud Print Backend: (%p) 'search' REST call returned\n",
+                       account));
+  }
+#endif
 
   if (cb_error != NULL)
     {
@@ -445,14 +450,19 @@ gtk_cloudprint_account_printer_rest_call_cb (RestProxyCall *call,
 					     gpointer user_data)
 {
   GTask *task = user_data;
-  GtkCloudprintAccount *account = g_task_get_task_data (task);
   JsonParser *json_parser = NULL;
   JsonObject *result;
   GError *error = NULL;
 
-  GTK_NOTE (PRINTING,
-	    g_print ("Cloud Print Backend: (%p) 'printer' REST call "
-		     "returned\n", account));
+#ifdef G_ENABLE_DEBUG
+  {
+    GtkCloudprintAccount *account = g_task_get_task_data (task);
+
+    GTK_NOTE (PRINTING,
+              g_print ("Cloud Print Backend: (%p) 'printer' REST call returned\n",
+                       account));
+  }
+#endif
 
   if (cb_error != NULL)
     {
@@ -536,14 +546,19 @@ gtk_cloudprint_account_submit_rest_call_cb (RestProxyCall *call,
 					    gpointer user_data)
 {
   GTask *task = user_data;
-  GtkCloudprintAccount *account = g_task_get_task_data (task);
   JsonParser *json_parser = NULL;
   JsonObject *result;
   GError *error = NULL;
 
-  GTK_NOTE (PRINTING,
-	    g_print ("Cloud Print Backend: (%p) 'submit' REST call "
-		     "returned\n", account));
+#ifdef G_ENABLE_DEBUG
+  {
+    GtkCloudprintAccount *account = g_task_get_task_data (task);
+
+    GTK_NOTE (PRINTING,
+              g_print ("Cloud Print Backend: (%p) 'submit' REST call returned\n",
+                       account));
+  }
+#endif
 
   if (cb_error != NULL)
     {

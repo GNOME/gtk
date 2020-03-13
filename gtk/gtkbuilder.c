@@ -769,7 +769,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       else
         g_object_set_property (obj, param->name, &param->value);
 
-#if G_ENABLE_DEBUG
+#ifdef G_ENABLE_DEBUG
       if (GTK_DEBUG_CHECK (BUILDER))
         {
           gchar *str = g_strdup_value_contents ((const GValue*)&param->value);
@@ -838,7 +838,7 @@ _gtk_builder_apply_properties (GtkBuilder  *builder,
       else
         g_object_set_property (info->object, param->name, &param->value);
 
-#if G_ENABLE_DEBUG
+#ifdef G_ENABLE_DEBUG
       if (GTK_DEBUG_CHECK (BUILDER))
         {
           gchar *str = g_strdup_value_contents ((const GValue*)&param->value);

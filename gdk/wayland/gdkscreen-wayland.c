@@ -1539,10 +1539,12 @@ xdg_output_handle_description (void                  *data,
                                struct zxdg_output_v1 *xdg_output,
                                const char            *description)
 {
+#ifdef G_ENABLE_DEBUG
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *) data;
 
   GDK_NOTE (MISC,
             g_message ("handle description xdg-output %d", monitor->id));
+#endif
 }
 
 static const struct zxdg_output_v1_listener xdg_output_listener = {
