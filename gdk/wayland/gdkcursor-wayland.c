@@ -162,8 +162,6 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
                                 int               *height,
                                 int               *scale)
 {
-  desired_scale = MIN (desired_scale, GDK_WAYLAND_MAX_THEME_SCALE);
-
   if (gdk_cursor_get_name (cursor))
     {
       struct wl_cursor *c;
