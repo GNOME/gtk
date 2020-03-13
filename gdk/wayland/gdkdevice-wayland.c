@@ -3671,8 +3671,10 @@ tablet_tool_handle_proximity_out (void                      *data,
 {
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
-  GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (tool->seat);
   GdkEvent *event;
+#ifdef G_ENABLE_DEBUG
+  GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (tool->seat);
+#endif
 
   GDK_NOTE (EVENTS,
             g_message ("proximity out, seat %p, tool %d", seat,
