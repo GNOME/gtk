@@ -61,8 +61,8 @@ struct _GdkBroadwaySurface
   GArray *node_data;
   GPtrArray *node_data_textures;
 
-  int offset_x;
-  int offset_y;
+  int root_x;
+  int root_y;
 };
 
 struct _GdkBroadwaySurfaceClass

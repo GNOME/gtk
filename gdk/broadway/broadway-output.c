@@ -200,8 +200,7 @@ broadway_output_ungrab_pointer (BroadwayOutput *output)
 
 void
 broadway_output_new_surface(BroadwayOutput *output,
-                            int id, int x, int y, int w, int h,
-                            gboolean is_temp)
+                            int id, int x, int y, int w, int h)
 {
   write_header (output, BROADWAY_OP_NEW_SURFACE);
   append_uint16 (output, id);
@@ -209,7 +208,6 @@ broadway_output_new_surface(BroadwayOutput *output,
   append_uint16 (output, y);
   append_uint16 (output, w);
   append_uint16 (output, h);
-  append_bool (output, is_temp);
 }
 
 void

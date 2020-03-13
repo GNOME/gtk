@@ -50,10 +50,10 @@ struct _GdkBroadwayDisplay
   GdkKeymap *keymap;
 
   GdkBroadwayServer *server;
-
   gpointer move_resize_data;
 
   GdkMonitor *monitor;
+  int scale_factor;
 
   GHashTable *texture_cache;
 
