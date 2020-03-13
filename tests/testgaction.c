@@ -4,26 +4,34 @@ GtkWidget *label;
 
 
 static void
-change_label_button ()
+change_label_button (GSimpleAction *action,
+                     GVariant      *parameter,
+                     gpointer       user_data)
 {
   gtk_label_set_label (GTK_LABEL (label), "Text set from button");
 }
 
 static void
-normal_menu_item ()
+normal_menu_item (GSimpleAction *action,
+                  GVariant      *parameter,
+                  gpointer       user_data)
 {
   gtk_label_set_label (GTK_LABEL (label), "Text set from normal menu item");
 }
 
 static void
-toggle_menu_item ()
+toggle_menu_item (GSimpleAction *action,
+                  GVariant      *parameter,
+                  gpointer       user_data)
 {
 
   gtk_label_set_label (GTK_LABEL (label), "Text set from toggle menu item");
 }
 
 static void
-submenu_item ()
+submenu_item (GSimpleAction *action,
+              GVariant      *parameter,
+              gpointer       user_data)
 {
   gtk_label_set_label (GTK_LABEL (label), "Text set from submenu item");
 }

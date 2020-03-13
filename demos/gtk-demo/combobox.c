@@ -19,7 +19,7 @@ enum
 static GtkTreeModel *
 create_icon_store (void)
 {
-  const gchar *icon_names[6] = {
+  const char *icon_names[6] = {
     "dialog-warning",
     "process-stop",
     "document-new",
@@ -27,7 +27,7 @@ create_icon_store (void)
     NULL,
     "document-open"
   };
-  const gchar *labels[6] = {
+  const char *labels[6] = {
     N_("Warning"),
     N_("Stop"),
     N_("New"),
@@ -111,8 +111,8 @@ static GtkTreeModel *
 create_capital_store (void)
 {
   struct {
-    gchar *group;
-    gchar *capital;
+    const char *group;
+    const char *capital;
   } capitals[] = {
     { "A - B", NULL },
     { NULL, "Albany" },
@@ -234,7 +234,7 @@ typedef struct _MaskEntry MaskEntry;
 struct _MaskEntry
 {
   GtkEntry entry;
-  gchar *mask;
+  const char *mask;
 };
 
 typedef struct _MaskEntryClass MaskEntryClass;
@@ -246,6 +246,7 @@ struct _MaskEntryClass
 
 static void mask_entry_editable_init (GtkEditableInterface *iface);
 
+static GType mask_entry_get_type (void);
 G_DEFINE_TYPE_WITH_CODE (MaskEntry, mask_entry, GTK_TYPE_ENTRY,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
                                                 mask_entry_editable_init));

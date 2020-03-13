@@ -27,12 +27,12 @@ static GtkWidget *toplevel, *button, *box;
 static GtkWidget *sel_image, *sel_name;
 
 static void
-combo_changed_cb (GtkAppChooserButton *button,
+combo_changed_cb (GtkAppChooserButton *chooser_button,
                   gpointer             user_data)
 {
   GAppInfo *app_info;
 
-  app_info = gtk_app_chooser_get_app_info (GTK_APP_CHOOSER (button));
+  app_info = gtk_app_chooser_get_app_info (GTK_APP_CHOOSER (chooser_button));
 
   if (app_info == NULL)
     return;

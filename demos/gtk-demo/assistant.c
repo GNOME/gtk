@@ -7,7 +7,7 @@
 
 #include <gtk/gtk.h>
 
-static GtkWidget *assistant = NULL;
+/*static GtkWidget *assistant = NULL;*/
 static GtkWidget *progress_bar = NULL;
 
 static gboolean
@@ -27,8 +27,7 @@ apply_changes_gradually (gpointer data)
   else
     {
       /* Close automatically once changes are fully applied. */
-      gtk_widget_destroy (assistant);
-      assistant = NULL;
+      gtk_widget_destroy (data);
       return G_SOURCE_REMOVE;
     }
 }
@@ -37,7 +36,7 @@ static void
 on_assistant_apply (GtkWidget *widget, gpointer data)
 {
   /* Start a timer to simulate changes taking a few seconds to apply. */
-  g_timeout_add (100, apply_changes_gradually, NULL);
+  g_timeout_add (100, apply_changes_gradually, widget);
 }
 
 static void
@@ -173,6 +172,8 @@ create_page4 (GtkWidget *assistant)
 GtkWidget*
 do_assistant (GtkWidget *do_widget)
 {
+  static GtkWidget *assistant;
+
   if (!assistant)
     {
       assistant = gtk_assistant_new ();

@@ -78,7 +78,7 @@ hsv_to_rgb (GdkRGBA *rgba,
     }
 }
 
-GskRenderNode *
+static GskRenderNode *
 rounded_borders (guint n)
 {
   GskRenderNode **nodes = g_newa (GskRenderNode *, n);
@@ -112,7 +112,7 @@ rounded_borders (guint n)
   return container;
 }
 
-GskRenderNode *
+static GskRenderNode *
 rounded_backgrounds (guint n)
 {
   GskRenderNode **nodes = g_newa (GskRenderNode *, n);
@@ -145,7 +145,7 @@ rounded_backgrounds (guint n)
   return container;
 }
 
-GskRenderNode *
+static GskRenderNode *
 colors (guint n)
 {
   GskRenderNode **nodes = g_new (GskRenderNode *, 10 * n);
@@ -174,7 +174,7 @@ colors (guint n)
   return container;
 }
 
-GskRenderNode *
+static GskRenderNode *
 clipped_colors (guint n)
 {
   GskRenderNode **nodes = g_newa (GskRenderNode *,n);
@@ -241,7 +241,7 @@ compare_color_stops (gconstpointer a,
     return 0;
 }
 
-GskRenderNode *
+static GskRenderNode *
 linear_gradient (guint n)
 {
   GskRenderNode **nodes = g_newa (GskRenderNode *, n);
@@ -306,7 +306,7 @@ linear_gradient (guint n)
   return container;
 }
 
-GskRenderNode *
+static GskRenderNode *
 borders (guint n)
 {
   GskRenderNode **nodes = g_newa (GskRenderNode *, n);
@@ -355,7 +355,7 @@ const char *example =
 "Beware the Jubjub bird, and shun\n"
 "The frumious Bandersnatch!'";
 
-GskRenderNode *
+static GskRenderNode *
 text (guint n)
 {
   GPtrArray *nodes;
@@ -447,7 +447,7 @@ text (guint n)
   return container;
 }
 
-GskRenderNode *
+static GskRenderNode *
 cairo_node (guint n)
 {
   GskRenderNode **nodes = g_newa (GskRenderNode *, n);
@@ -472,7 +472,7 @@ cairo_node (guint n)
   return container;
 }
 
-GskRenderNode *
+static GskRenderNode *
 box_shadows (guint n)
 {
   GskRenderNode **nodes = g_newa (GskRenderNode *, n);
@@ -540,7 +540,7 @@ main (int argc, char **argv)
   GError *error = NULL;
   GskRenderNode *node;
   GPatternSpec *matcher;
-  char *pattern;
+  const char *pattern;
   guint i, n;
 
   gtk_init ();

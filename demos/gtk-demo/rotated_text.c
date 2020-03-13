@@ -28,26 +28,23 @@ fancy_shape_renderer (cairo_t        *cr,
                (double) attr->ink_rect.width  / PANGO_SCALE,
                (double) attr->ink_rect.height / PANGO_SCALE);
 
-  switch (GPOINTER_TO_UINT (attr->data))
+  if (GPOINTER_TO_UINT (attr->data) == 0x2664) /* U+2665 BLACK HEART SUIT */
     {
-    case 0x2665: /* U+2665 BLACK HEART SUIT */
-      {
-        cairo_move_to (cr, .5, .0);
-        cairo_line_to (cr, .9, -.4);
-        cairo_curve_to (cr, 1.1, -.8, .5, -.9, .5, -.5);
-        cairo_curve_to (cr, .5, -.9, -.1, -.8, .1, -.4);
-        cairo_close_path (cr);
-      }
-      break;
+      cairo_move_to (cr, .5, .0);
+      cairo_line_to (cr, .9, -.4);
+      cairo_curve_to (cr, 1.1, -.8, .5, -.9, .5, -.5);
+      cairo_curve_to (cr, .5, -.9, -.1, -.8, .1, -.4);
+      cairo_close_path (cr);
     }
 
-  if (!do_path) {
-    cairo_set_source_rgb (cr, 1., 0., 0.);
-    cairo_fill (cr);
-  }
+  if (!do_path)
+    {
+      cairo_set_source_rgb (cr, 1., 0., 0.);
+      cairo_fill (cr);
+    }
 }
 
-PangoAttrList *
+static PangoAttrList *
 create_fancy_attr_list_for_layout (PangoLayout *layout)
 {
   PangoAttrList *attrs;
@@ -145,13 +142,13 @@ rotated_text_draw (GtkDrawingArea *da,
   /* Draw the layout N_WORDS times in a circle */
   for (i = 0; i < N_WORDS; i++)
     {
-      int width, height;
+      int layout_width, layout_height;
 
       /* Inform Pango to re-layout the text with the new transformation matrix */
       pango_cairo_update_layout (cr, layout);
 
-      pango_layout_get_pixel_size (layout, &width, &height);
-      cairo_move_to (cr, - width / 2, - RADIUS * .9);
+      pango_layout_get_pixel_size (layout, &layout_width, &layout_height);
+      cairo_move_to (cr, - layout_width / 2, - RADIUS * .9);
       pango_cairo_show_layout (cr, layout);
 
       /* Rotate for the next turn */

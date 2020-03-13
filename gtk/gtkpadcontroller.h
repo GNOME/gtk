@@ -68,10 +68,10 @@ typedef enum {
  */
 struct _GtkPadActionEntry {
   GtkPadActionType type;
-  gint index;
-  gint mode;
-  gchar *label;
-  gchar *action_name;
+  int index;
+  int mode;
+  const char *label;
+  const char *action_name;
 };
 
 GDK_AVAILABLE_IN_ALL

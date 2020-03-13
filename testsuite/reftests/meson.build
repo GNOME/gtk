@@ -27,10 +27,12 @@ tcdata.set('libexecdir', join_paths(get_option('prefix'), get_option('libexecdir
 #endforeach
 
 gtk_reftest = executable('gtk-reftest', 'gtk-reftest.c',
+  c_args: common_cflags,
   link_with : [libgtkreftestprivate, libreftest],
   dependencies : libgtk_dep)
 
 image_compare = executable('image-compare', 'image-compare.c',
+  c_args: common_cflags,
   link_with : [libgtkreftestprivate, libreftest],
   dependencies : libgtk_dep)
 # Installed data (TODO)

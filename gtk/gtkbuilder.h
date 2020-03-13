@@ -114,18 +114,18 @@ gboolean     gtk_builder_add_from_string         (GtkBuilder    *builder,
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_builder_add_objects_from_file   (GtkBuilder    *builder,
                                                   const gchar   *filename,
-                                                  gchar        **object_ids,
+                                                  const char   **object_ids,
                                                   GError       **error);
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_builder_add_objects_from_resource(GtkBuilder    *builder,
                                                   const gchar   *resource_path,
-                                                  gchar        **object_ids,
+                                                  const char   **object_ids,
                                                   GError       **error);
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_builder_add_objects_from_string (GtkBuilder    *builder,
                                                   const gchar   *buffer,
                                                   gssize         length,
-                                                  gchar        **object_ids,
+                                                  const char   **object_ids,
                                                   GError       **error);
 GDK_AVAILABLE_IN_ALL
 GObject*     gtk_builder_get_object              (GtkBuilder    *builder,

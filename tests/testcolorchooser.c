@@ -61,13 +61,13 @@ main (int argc, char *argv[])
           const gchar *c[9] = { "red", "maroon", "yellow", "green", "blue", "magenta", "DarkOliveGreen4", "khaki2", "thistle1" };
           GdkRGBA color;
           GdkRGBA colors[9*9];
-          gint i,j;
+          gint k,j;
           gdouble f[5] = { 0.2, 0.35, 0.5, 0.65, 0.8 };
 
           g_print ("setting custom palette\n");
-          for (i = 0; i < 9; i++)
+          for (k = 0; k < 9; k++)
             {
-              gdk_rgba_parse (&color, c[i]);
+              gdk_rgba_parse (&color, c[k]);
               for (j = 0; j < 5; j++)
                 {
                   colors[i*9 + j].red   = f[j]*color.red;

@@ -1926,8 +1926,8 @@ test_add_objects (void)
   GError *error;
   gint ret;
   GObject *obj;
-  gchar *objects[2] = {"mainbox", NULL};
-  gchar *objects2[3] = {"mainbox", "window2", NULL};
+  const gchar *objects[2] = {"mainbox", NULL};
+  const gchar *objects2[3] = {"mainbox", "window2", NULL};
   const gchar buffer[] =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window\">"
@@ -2356,7 +2356,7 @@ my_gtk_grid_class_init (MyGtkGridClass *klass)
 }
 
 static void
-test_template ()
+test_template (void)
 {
   MyGtkGrid *my_gtk_grid;
 

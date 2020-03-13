@@ -19,7 +19,7 @@
 #include <gtk/gtk.h>
 
 
-void
+static void
 hello (void)
 {
   g_print ("hello world\n");

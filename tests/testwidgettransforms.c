@@ -261,12 +261,12 @@ tick_cb (GtkWidget     *widget,
 
 static void
 gtk_transform_tester_set_test_widget (GtkTransformTester *self,
-                                      GtkWidget          *test_widget)
+                                      GtkWidget          *widget)
 {
   g_assert (!self->test_widget);
 
-  self->test_widget = test_widget;
-  gtk_widget_set_parent (test_widget, (GtkWidget *)self);
+  self->test_widget = widget;
+  gtk_widget_set_parent (widget, (GtkWidget *)self);
 
   gtk_widget_add_tick_callback (GTK_WIDGET (self), tick_cb, NULL, NULL);
 }

@@ -4,19 +4,21 @@
 static GtkWidget *header_stack;
 static GtkWidget *page_stack;
 
-void
+#if 0
+static void
 back_to_main (GtkButton *button)
 {
   gtk_stack_set_visible_child_name (GTK_STACK (header_stack), "main");
   gtk_stack_set_visible_child_name (GTK_STACK (page_stack), "page1");
 }
 
-void
+static void
 go_to_secondary (GtkButton *button)
 {
   gtk_stack_set_visible_child_name (GTK_STACK (header_stack), "secondary");
   gtk_stack_set_visible_child_name (GTK_STACK (page_stack), "secondary");
 }
+#endif
 
 int
 main (int argc, char *argv[])
@@ -36,6 +38,8 @@ main (int argc, char *argv[])
   win = (GtkWidget *)gtk_builder_get_object (builder, "window");
   header_stack = (GtkWidget *)gtk_builder_get_object (builder, "header_stack");
   page_stack = (GtkWidget *)gtk_builder_get_object (builder, "page_stack");
+
+  g_assert (header_stack);
 
   gtk_window_present (GTK_WINDOW (win));
 

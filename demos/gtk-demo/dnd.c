@@ -42,7 +42,7 @@ free_demo_widget (gpointer data)
 }
 
 #define GTK_TYPE_DEMO_WIDGET (gtk_demo_widget_get_type ())
-
+static GType gtk_demo_widget_get_type (void);
 G_DEFINE_BOXED_TYPE (GtkDemoWidget, gtk_demo_widget, copy_demo_widget, free_demo_widget)
 
 static GtkDemoWidget *

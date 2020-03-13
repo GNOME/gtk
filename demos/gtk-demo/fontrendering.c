@@ -43,7 +43,6 @@ update_image (void)
   cairo_font_options_t *fopt;
   cairo_hint_style_t hintstyle;
   cairo_hint_metrics_t hintmetrics;
-  int i;
 
   if (!context)
     context = gtk_widget_create_pango_context (image);
@@ -116,6 +115,7 @@ update_image (void)
 
       if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (show_grid)))
         {
+          int i;
           cairo_set_source_rgba (cr, 0.2, 0, 0, 0.2);
           for (i = 1; i < ink.height + 20; i++)
             {

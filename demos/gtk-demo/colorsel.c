@@ -16,7 +16,7 @@ static GtkWidget *frame;
 /* draw callback for the drawing area
  */
 static void
-draw_function (GtkDrawingArea *da,
+draw_function (GtkDrawingArea *drawing_area,
                cairo_t        *cr,
                int             width,
                int             height,

@@ -106,7 +106,7 @@ spinbutton_time_spin_output (GtkSpinButton *spin_button)
   return TRUE;
 }
 
-static gchar *month[12] = {
+static const char *month[12] = {
   "January",
   "February",
   "March",

@@ -7,6 +7,7 @@ typedef struct
 
 typedef GtkApplicationClass TestAppClass;
 
+static GType test_app_get_type (void);
 G_DEFINE_TYPE (TestApp, test_app, GTK_TYPE_APPLICATION)
 
 static GtkWidget *create_row (const gchar *label);
@@ -193,7 +194,7 @@ test_app_class_init (TestAppClass *class)
   G_APPLICATION_CLASS (class)->activate = test_app_activate;
 }
 
-TestApp *
+static TestApp *
 test_app_new (void)
 {
   TestApp *test_app;

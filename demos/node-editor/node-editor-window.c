@@ -425,17 +425,17 @@ save_response_cb (GtkWidget        *dialog,
                                &error);
       if (error != NULL)
         {
-          GtkWidget *dialog;
+          GtkWidget *message_dialog;
 
-          dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self))),
-                                           GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
-                                           GTK_MESSAGE_INFO,
-                                           GTK_BUTTONS_OK,
-                                           "Saving failed");
-          gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+          message_dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self))),
+                                                   GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                   GTK_MESSAGE_INFO,
+                                                   GTK_BUTTONS_OK,
+                                                   "Saving failed");
+          gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (message_dialog),
                                                     "%s", error->message);
-          g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
-          gtk_widget_show (dialog);
+          g_signal_connect (message_dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+          gtk_widget_show (message_dialog);
           g_error_free (error);
         }
 

@@ -58,7 +58,7 @@ apply_css (GtkWidget *widget, GtkStyleProvider *provider)
     gtk_container_forall (GTK_CONTAINER (widget), (GtkCallback) apply_css, provider);
 }
 
-GtkWidget *
+static GtkWidget *
 create_toolbar (void)
 {
   GtkWidget *toolbar;

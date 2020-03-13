@@ -37,6 +37,7 @@ struct _MyTooltipClass
   GtkBinClass parent_class;
 };
 
+static GType my_tooltip_get_type (void);
 G_DEFINE_TYPE (MyTooltip, my_tooltip, GTK_TYPE_BIN)
 
 static void

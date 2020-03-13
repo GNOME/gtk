@@ -17,7 +17,7 @@ struct _GtkBlurBoxClass
 };
 typedef struct _GtkBlurBoxClass GtkBlurBoxClass;
 
-
+static GType gtk_blur_box_get_type (void);
 G_DEFINE_TYPE (GtkBlurBox, gtk_blur_box, GTK_TYPE_BOX)
 
 

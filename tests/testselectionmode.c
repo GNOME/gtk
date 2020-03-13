@@ -12,6 +12,7 @@ typedef struct {
   GtkListBoxRowClass parent_class;
 } SelectableRowClass;
 
+static GType selectable_row_get_type (void);
 G_DEFINE_TYPE (SelectableRow, selectable_row, GTK_TYPE_LIST_BOX_ROW)
 
 static void
@@ -34,7 +35,7 @@ selectable_row_init (SelectableRow *row)
   gtk_container_add (GTK_CONTAINER (row->revealer), row->check);
 }
 
-void
+static void
 selectable_row_add (SelectableRow *row, GtkWidget *child)
 {
   gtk_container_add (GTK_CONTAINER (row->box), child);
@@ -73,7 +74,7 @@ selectable_row_class_init (SelectableRowClass *class)
 {
 }
 
-GtkWidget *
+static GtkWidget *
 selectable_row_new (void)
 {
   return GTK_WIDGET (g_object_new (selectable_row_get_type (), NULL));

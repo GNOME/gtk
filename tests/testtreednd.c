@@ -5,6 +5,7 @@ typedef GtkListStoreClass MyModelClass;
 
 static void my_model_drag_source_init (GtkTreeDragSourceIface *iface);
 
+static GType my_model_get_type (void);
 G_DEFINE_TYPE_WITH_CODE (MyModel, my_model, GTK_TYPE_LIST_STORE,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE,
                                                 my_model_drag_source_init))

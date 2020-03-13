@@ -16,10 +16,9 @@ typedef struct
 {
   const gboolean  fixed;
   const guint     number;
-  const gchar    *severity;
-  const gchar    *description;
-}
-Bug;
+  const char     *severity;
+  const char     *description;
+} Bug;
 
 enum
 {
@@ -34,7 +33,7 @@ enum
   NUM_COLUMNS
 };
 
-static Bug data[] =
+static Bug bugs[] =
 {
   { FALSE, 60482, "Normal",     "scrollable notebooks and hidden tabs" },
   { FALSE, 60620, "Critical",   "gdk_surface_clear_area (gdksurface-win32.c) is not thread-safe" },
@@ -98,9 +97,9 @@ create_model (void)
                               G_TYPE_BOOLEAN);
 
   /* add data to the list store */
-  for (i = 0; i < G_N_ELEMENTS (data); i++)
+  for (i = 0; i < G_N_ELEMENTS (bugs); i++)
     {
-      gchar *icon_name;
+      const char *icon_name;
       gboolean sensitive;
 
       if (i == 1 || i == 3)
@@ -113,10 +112,10 @@ create_model (void)
         sensitive = TRUE;
       gtk_list_store_append (store, &iter);
       gtk_list_store_set (store, &iter,
-                          COLUMN_FIXED, data[i].fixed,
-                          COLUMN_NUMBER, data[i].number,
-                          COLUMN_SEVERITY, data[i].severity,
-                          COLUMN_DESCRIPTION, data[i].description,
+                          COLUMN_FIXED, bugs[i].fixed,
+                          COLUMN_NUMBER, bugs[i].number,
+                          COLUMN_SEVERITY, bugs[i].severity,
+                          COLUMN_DESCRIPTION, bugs[i].description,
                           COLUMN_PULSE, 0,
                           COLUMN_ICON, icon_name,
                           COLUMN_ACTIVE, FALSE,
@@ -129,23 +128,23 @@ create_model (void)
 
 static void
 fixed_toggled (GtkCellRendererToggle *cell,
-               gchar                 *path_str,
+               char                  *path_str,
                gpointer               data)
 {
-  GtkTreeModel *model = (GtkTreeModel *)data;
+  GtkTreeModel *tree_model = (GtkTreeModel *)data;
   GtkTreeIter  iter;
   GtkTreePath *path = gtk_tree_path_new_from_string (path_str);
   gboolean fixed;
 
   /* get toggled iter */
-  gtk_tree_model_get_iter (model, &iter, path);
-  gtk_tree_model_get (model, &iter, COLUMN_FIXED, &fixed, -1);
+  gtk_tree_model_get_iter (tree_model, &iter, path);
+  gtk_tree_model_get (tree_model, &iter, COLUMN_FIXED, &fixed, -1);
 
   /* do something with the value */
   fixed ^= 1;
 
   /* set new value */
-  gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_FIXED, fixed, -1);
+  gtk_list_store_set (GTK_LIST_STORE (tree_model), &iter, COLUMN_FIXED, fixed, -1);
 
   /* clean up */
   gtk_tree_path_free (path);
@@ -156,7 +155,6 @@ add_columns (GtkTreeView *treeview)
 {
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
-  GtkTreeModel *model = gtk_tree_view_get_model (treeview);
 
   /* column for fixed toggles */
   renderer = gtk_cell_renderer_toggle_new ();

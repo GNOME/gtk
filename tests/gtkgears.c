@@ -511,7 +511,7 @@ invert(GLfloat *m)
  * @param zNear the near clipping plane
  * @param zFar the far clipping plane
  */
-void perspective(GLfloat *m, GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar)
+static void perspective(GLfloat *m, GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar)
 {
    GLfloat tmp[16];
    double sine, cosine, cotangent, deltaZ;
