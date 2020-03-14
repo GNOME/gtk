@@ -733,9 +733,7 @@ setup_toplevel_window (GdkSurface    *surface,
                      XA_WINDOW, 32, PropModeReplace,
                      (guchar *) &toplevel->focus_window, 1);
 
-  if (!surface->focus_on_map)
-    gdk_x11_surface_set_user_time (surface, 0);
-  else if (GDK_X11_DISPLAY (x11_screen->display)->user_time != 0)
+  if (GDK_X11_DISPLAY (x11_screen->display)->user_time != 0)
     gdk_x11_surface_set_user_time (surface, GDK_X11_DISPLAY (x11_screen->display)->user_time);
 
   ensure_sync_counter (surface);
@@ -1071,7 +1069,7 @@ update_wm_hints (GdkSurface *surface,
     return;
 
   wm_hints.flags = StateHint | InputHint;
-  wm_hints.input = surface->accept_focus ? True : False;
+  wm_hints.input = True;
   wm_hints.initial_state = NormalState;
   
   if (surface->state & GDK_SURFACE_STATE_MINIMIZED)
@@ -2629,37 +2627,6 @@ gdk_x11_surface_set_input_region (GdkSurface     *surface,
       g_free (xrects);
     }
 #endif
-}
-
-static void
-gdk_x11_surface_set_accept_focus (GdkSurface *surface,
-				 gboolean accept_focus)
-{
-  accept_focus = accept_focus != FALSE;
-
-  if (surface->accept_focus != accept_focus)
-    {
-      surface->accept_focus = accept_focus;
-
-      if (!GDK_SURFACE_DESTROYED (surface)) 
-	update_wm_hints (surface, FALSE);
-    }
-}
-
-static void
-gdk_x11_surface_set_focus_on_map (GdkSurface *surface,
-				 gboolean focus_on_map)
-{
-  focus_on_map = focus_on_map != FALSE;
-
-  if (surface->focus_on_map != focus_on_map)
-    {
-      surface->focus_on_map = focus_on_map;
-      
-      if (!GDK_SURFACE_DESTROYED (surface) &&
-	  !surface->focus_on_map)
-	gdk_x11_surface_set_user_time (surface, 0);
-    }
 }
 
 /**
@@ -4742,16 +4709,6 @@ gdk_wayland_toplevel_set_property (GObject      *object,
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
-    case LAST_PROP + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS:
-      gdk_x11_surface_set_accept_focus (surface, g_value_get_boolean (value));
-      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP:
-      gdk_x11_surface_set_focus_on_map (surface, g_value_get_boolean (value));
-      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
-      break;
-
     case LAST_PROP + GDK_TOPLEVEL_PROP_DECORATED:
       gdk_x11_surface_set_decorations (surface, g_value_get_boolean (value) ? GDK_DECOR_ALL : 0);
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
@@ -4806,9 +4763,6 @@ gdk_wayland_toplevel_get_property (GObject    *object,
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
       g_value_set_pointer (value, NULL);
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP:
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_DECORATED:

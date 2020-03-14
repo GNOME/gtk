@@ -842,7 +842,6 @@ show_window_internal (GdkSurface *window,
 		      gboolean    unminimize)
 {
   GdkWin32Surface *surface;
-  gboolean focus_on_map = FALSE;
   DWORD exstyle;
 
   if (window->destroyed)
@@ -883,9 +882,6 @@ show_window_internal (GdkSurface *window,
 
   /* Other cases */
 
-  if (!already_mapped)
-    focus_on_map = window->focus_on_map;
-
   exstyle = GetWindowLong (GDK_SURFACE_HWND (window), GWL_EXSTYLE);
 
   /* Use SetWindowPos to show transparent windows so automatic redraws
@@ -895,7 +891,7 @@ show_window_internal (GdkSurface *window,
     {
       UINT flags = SWP_SHOWWINDOW | SWP_NOREDRAW | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER;
 
-      if (GDK_IS_DRAG_SURFACE (window) || !focus_on_map)
+      if (GDK_IS_DRAG_SURFACE (window))
 	flags |= SWP_NOACTIVATE;
 
       SetWindowPos (GDK_SURFACE_HWND (window),
@@ -1035,12 +1031,9 @@ show_window_internal (GdkSurface *window,
     }
   else if (window->state & GDK_SURFACE_STATE_MINIMIZED)
     {
-      if (focus_on_map)
-        GtkShowWindow (window, SW_RESTORE);
-      else
-        GtkShowWindow (window, SW_SHOWNOACTIVATE);
+      GtkShowWindow (window, SW_RESTORE);
     }
-  else if (GDK_IS_DRAG_SURFACE (window) || !focus_on_map)
+  else if (GDK_IS_DRAG_SURFACE (window))
     {
       if (!IsWindowVisible (GDK_SURFACE_HWND (window)))
         GtkShowWindow (window, SW_SHOWNOACTIVATE);
@@ -1387,16 +1380,12 @@ gdk_win32_surface_raise (GdkSurface *window)
         API_CALL (SetWindowPos, (GDK_SURFACE_HWND (window), HWND_TOPMOST,
 	                         0, 0, 0, 0,
 				 SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER));
-      else if (window->accept_focus)
+      else
         /* Do not wrap this in an API_CALL macro as SetForegroundWindow might
          * fail when for example dragging a window belonging to a different
          * application at the time of a gtk_window_present() call due to focus
          * stealing prevention. */
         SetForegroundWindow (GDK_SURFACE_HWND (window));
-      else
-        API_CALL (SetWindowPos, (GDK_SURFACE_HWND (window), HWND_TOP,
-  			         0, 0, 0, 0,
-			         SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER));
     }
 }
 
@@ -4907,12 +4896,6 @@ gdk_win32_toplevel_set_property (GObject      *object,
     case LAST_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
       break;
 
-    case LAST_PROP + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS:
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP:
-      break;
-
     case LAST_PROP + GDK_TOPLEVEL_PROP_DECORATED:
       break;
 
@@ -4958,12 +4941,6 @@ gdk_win32_toplevel_get_property (GObject    *object,
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
       g_value_set_pointer (value, NULL);
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS:
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP:
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_DECORATED:

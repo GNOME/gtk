@@ -70,8 +70,6 @@ struct _GdkSurface
 
   guint destroyed : 2;
 
-  guint accept_focus : 1;
-  guint focus_on_map : 1;
   guint support_multidevice : 1;
   guint viewable : 1; /* mapped and all parents mapped */
   guint in_update : 1;

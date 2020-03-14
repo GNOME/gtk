@@ -2837,8 +2837,7 @@ gdk_event_translate (MSG  *msg,
 
      case WM_MOUSEACTIVATE:
        {
-	 if (GDK_IS_DRAG_SURFACE (window)
-	     || !window->accept_focus)
+	 if (GDK_IS_DRAG_SURFACE (window))
 	   {
 	     *ret_valp = MA_NOACTIVATE;
 	     return_val = TRUE;

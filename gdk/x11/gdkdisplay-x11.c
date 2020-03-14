@@ -1273,7 +1273,7 @@ _gdk_wm_protocols_filter (const XEvent  *xevent,
       /* There is no way of knowing reliably whether we are viewable;
        * so trap errors asynchronously around the XSetInputFocus call
        */
-      if (toplevel && win->accept_focus)
+      if (toplevel)
         {
           gdk_x11_display_error_trap_push (display);
           XSetInputFocus (GDK_DISPLAY_XDISPLAY (display),

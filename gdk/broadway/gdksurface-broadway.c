@@ -635,8 +635,7 @@ gdk_broadway_surface_focus (GdkSurface *surface,
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !surface->accept_focus)
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   impl = GDK_BROADWAY_SURFACE (surface);
@@ -1494,12 +1493,6 @@ gdk_broadway_toplevel_set_property (GObject      *object,
     case LAST_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
       break;
 
-    case LAST_PROP + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS:
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP:
-      break;
-
     case LAST_PROP + GDK_TOPLEVEL_PROP_DECORATED:
       break;
 
@@ -1540,12 +1533,6 @@ gdk_broadway_toplevel_get_property (GObject    *object,
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
       g_value_set_pointer (value, NULL);
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS:
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP:
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_DECORATED:
