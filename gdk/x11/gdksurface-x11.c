@@ -4833,6 +4833,8 @@ enum
   PROP_STICKY = 1,
   PROP_KEEP_ABOVE,
   PROP_KEEP_BELOW,
+  PROP_ACCEPT_FOCUS,
+  PROP_FOCUS_ON_MAP,
   LAST_TOPLEVEL_PROP
 };
 
@@ -4872,6 +4874,16 @@ gdk_wayland_toplevel_set_property (GObject      *object,
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
+    case PROP_ACCEPT_FOCUS:
+      gdk_x11_surface_set_accept_focus (surface, g_value_get_boolean (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
+    case PROP_FOCUS_ON_MAP:
+      gdk_x11_surface_set_focus_on_map (surface, g_value_get_boolean (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
     case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_TITLE:
       gdk_x11_surface_set_title (surface, g_value_get_string (value));
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
@@ -4894,16 +4906,6 @@ gdk_wayland_toplevel_set_property (GObject      *object,
 
     case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
       gdk_x11_surface_set_icon_list (surface, g_value_get_pointer (value));
-      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
-      break;
-
-    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS:
-      gdk_x11_surface_set_accept_focus (surface, g_value_get_boolean (value));
-      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
-      break;
-
-    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP:
-      gdk_x11_surface_set_focus_on_map (surface, g_value_get_boolean (value));
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
@@ -4952,7 +4954,10 @@ gdk_wayland_toplevel_get_property (GObject    *object,
       g_value_set_boolean (value, (surface->state & GDK_SURFACE_STATE_BELOW) != 0);
       break;
 
-    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS:
+    case PROP_ACCEPT_FOCUS:
+      break;
+
+    case PROP_FOCUS_ON_MAP:
       break;
 
     case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_STATE:
@@ -4977,9 +4982,6 @@ gdk_wayland_toplevel_get_property (GObject    *object,
 
     case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
       g_value_set_pointer (value, NULL);
-      break;
-
-    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP:
       break;
 
     case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_DECORATED:
@@ -5038,7 +5040,20 @@ gdk_x11_toplevel_class_init (GdkX11ToplevelClass *class)
                             "Whether the surface is below all other surfaces",
                             FALSE,
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
-
+  g_object_class_install_property (object_class,
+      PROP_ACCEPT_FOCUS,
+      g_param_spec_boolean ("accept-focus",
+                            "Accept focus",
+                            "Whether the surface should accept keyboard focus",
+                            TRUE,
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+  g_object_class_install_property (object_class,
+      PROP_FOCUS_ON_MAP,
+      g_param_spec_boolean ("focus-on-map",
+                            "Focus on map",
+                            "Whether the surface should receive keyboard focus on map",
+                            TRUE,
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
   gdk_toplevel_install_properties (object_class, LAST_TOPLEVEL_PROP);
 }
