@@ -1158,14 +1158,6 @@ set_initial_hints (GdkSurface *surface)
       ++i;
     }
   
-  if (surface->state & GDK_SURFACE_STATE_STICKY)
-    {
-      atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
-							"_NET_WM_STATE_STICKY");
-      ++i;
-      toplevel->have_sticky = TRUE;
-    }
-
   if (surface->state & GDK_SURFACE_STATE_FULLSCREEN)
     {
       atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
@@ -3058,78 +3050,6 @@ gdk_x11_surface_unminimize (GdkSurface *surface)
 }
 
 static void
-gdk_x11_surface_stick (GdkSurface *surface)
-{
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
-  if (GDK_SURFACE_IS_MAPPED (surface))
-    {
-      /* "stick" means stick to all desktops _and_ do not scroll with the
-       * viewport. i.e. glue to the monitor glass in all cases.
-       */
-      
-      XClientMessageEvent xclient;
-
-      /* Request stick during viewport scroll */
-      gdk_wmspec_change_state (TRUE, surface,
-			       "_NET_WM_STATE_STICKY",
-			       NULL);
-
-      /* Request desktop 0xFFFFFFFF */
-      memset (&xclient, 0, sizeof (xclient));
-      xclient.type = ClientMessage;
-      xclient.window = GDK_SURFACE_XID (surface);
-      xclient.display = GDK_SURFACE_XDISPLAY (surface);
-      xclient.message_type = gdk_x11_get_xatom_by_name_for_display (GDK_SURFACE_DISPLAY (surface), 
-									"_NET_WM_DESKTOP");
-      xclient.format = 32;
-
-      xclient.data.l[0] = 0xFFFFFFFF;
-      xclient.data.l[1] = 0;
-      xclient.data.l[2] = 0;
-      xclient.data.l[3] = 0;
-      xclient.data.l[4] = 0;
-
-      XSendEvent (GDK_SURFACE_XDISPLAY (surface), GDK_SURFACE_XROOTWIN (surface), False,
-                  SubstructureRedirectMask | SubstructureNotifyMask,
-                  (XEvent *)&xclient);
-    }
-  else
-    {
-      /* Flip our client side flag, the real work happens on map. */
-      gdk_synthesize_surface_state (surface,
-                                   0,
-                                   GDK_SURFACE_STATE_STICKY);
-    }
-}
-
-static void
-gdk_x11_surface_unstick (GdkSurface *surface)
-{
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
-  if (GDK_SURFACE_IS_MAPPED (surface))
-    {
-      /* Request unstick from viewport */
-      gdk_wmspec_change_state (FALSE, surface,
-			       "_NET_WM_STATE_STICKY",
-			       NULL);
-
-      move_to_current_desktop (surface);
-    }
-  else
-    {
-      /* Flip our client side flag, the real work happens on map. */
-      gdk_synthesize_surface_state (surface,
-                                   GDK_SURFACE_STATE_STICKY,
-                                   0);
-
-    }
-}
-
-static void
 gdk_x11_surface_maximize (GdkSurface *surface)
 {
   if (GDK_SURFACE_DESTROYED (surface))
@@ -4871,14 +4791,6 @@ gdk_wayland_toplevel_set_property (GObject      *object,
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
-    case LAST_PROP + GDK_TOPLEVEL_PROP_STICKY:
-      if (g_value_get_boolean (value))
-        gdk_x11_surface_stick (surface);
-      else
-        gdk_x11_surface_unstick (surface);
-      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
-      break;
-
     case LAST_PROP + GDK_TOPLEVEL_PROP_KEEP_ABOVE:
       gdk_x11_surface_set_keep_above (surface, g_value_get_boolean (value));
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
@@ -4928,7 +4840,6 @@ gdk_wayland_toplevel_get_property (GObject    *object,
                                    GParamSpec *pspec)
 {
   GdkSurface *surface = GDK_SURFACE (object);
-  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
 
   switch (prop_id)
     {
@@ -4954,10 +4865,6 @@ gdk_wayland_toplevel_get_property (GObject    *object,
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
       g_value_set_pointer (value, NULL);
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_STICKY:
-      g_value_set_boolean (value, impl->toplevel->have_sticky);
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_KEEP_ABOVE:
