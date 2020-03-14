@@ -477,7 +477,7 @@ gdk_display_peek_event (GdkDisplay *display)
 /**
  * gdk_display_put_event:
  * @display: a #GdkDisplay
- * @event (transfer none): a #GdkEvent.
+ * @event: (transfer none): a #GdkEvent
  *
  * Appends the given event onto the front of the event
  * queue for @display.

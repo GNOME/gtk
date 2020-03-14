@@ -129,7 +129,7 @@ gdk_content_provider_new_for_value (const GValue *value)
 /**
  * gdk_content_provider_new_typed:
  * @type: Type of value to follow
- * ...: value
+ * @...: value
  *
  * Create a content provider that provides the value of the given
  * @type.
