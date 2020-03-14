@@ -616,11 +616,9 @@ gtk_button_get_type
 <FILE>gtkcalendar</FILE>
 <TITLE>GtkCalendar</TITLE>
 GtkCalendar
-GtkCalendarDisplayOptions
 
 <SUBSECTION>
 gtk_calendar_new
-gtk_calendar_select_month
 gtk_calendar_select_day
 gtk_calendar_mark_day
 gtk_calendar_unmark_day
@@ -628,8 +626,6 @@ gtk_calendar_get_day_is_marked
 gtk_calendar_clear_marks
 
 <SUBSECTION>
-gtk_calendar_get_display_options
-gtk_calendar_set_display_options
 gtk_calendar_get_date
 
 <SUBSECTION Standard>
@@ -1123,7 +1119,6 @@ GtkExpanderPrivate
 <TITLE>GtkFileChooser</TITLE>
 GtkFileChooser
 GtkFileChooserAction
-GtkFileChooserConfirmation
 GTK_FILE_CHOOSER_ERROR
 GtkFileChooserError
 gtk_file_chooser_set_action
@@ -2602,7 +2597,6 @@ gtk_text_buffer_backspace
 gtk_text_buffer_set_text
 gtk_text_buffer_get_text
 gtk_text_buffer_get_slice
-gtk_text_buffer_insert_texture
 gtk_text_buffer_insert_child_anchor
 gtk_text_buffer_create_child_anchor
 gtk_text_buffer_create_mark
@@ -2687,7 +2681,6 @@ gtk_text_iter_get_slice
 gtk_text_iter_get_text
 gtk_text_iter_get_visible_slice
 gtk_text_iter_get_visible_text
-gtk_text_iter_get_texture
 gtk_text_iter_get_marks
 gtk_text_iter_get_toggled_tags
 gtk_text_iter_get_child_anchor
@@ -4046,7 +4039,6 @@ gtk_widget_remove_accelerator
 gtk_widget_set_accel_path
 gtk_widget_list_accel_closures
 gtk_widget_can_activate_accel
-gtk_widget_event
 gtk_widget_activate
 gtk_widget_is_focus
 gtk_widget_grab_focus
@@ -4066,7 +4058,6 @@ GtkTextDirection
 gtk_widget_get_direction
 gtk_widget_set_default_direction
 gtk_widget_get_default_direction
-gtk_widget_input_shape_combine_region
 gtk_widget_create_pango_context
 gtk_widget_get_pango_context
 gtk_widget_set_font_options
@@ -4100,8 +4091,6 @@ gtk_widget_get_tooltip_markup
 gtk_widget_set_tooltip_markup
 gtk_widget_get_tooltip_text
 gtk_widget_set_tooltip_text
-gtk_widget_get_tooltip_window
-gtk_widget_set_tooltip_window
 gtk_widget_get_has_tooltip
 gtk_widget_set_has_tooltip
 gtk_widget_trigger_tooltip_query
@@ -4301,12 +4290,9 @@ gtk_window_fullscreen_on_monitor
 gtk_window_unfullscreen
 gtk_window_set_keep_above
 gtk_window_set_keep_below
-gtk_window_begin_resize_drag
-gtk_window_begin_move_drag
 gtk_window_set_decorated
 gtk_window_set_deletable
 gtk_window_set_mnemonic_modifier
-gtk_window_set_type_hint
 gtk_window_set_accept_focus
 gtk_window_set_focus_on_map
 gtk_window_set_startup_id
@@ -4322,7 +4308,6 @@ gtk_window_get_size
 gtk_window_get_title
 gtk_window_get_transient_for
 gtk_window_get_attached_to
-gtk_window_get_type_hint
 gtk_window_get_accept_focus
 gtk_window_get_focus_on_map
 gtk_window_get_group
@@ -4546,7 +4531,6 @@ gtk_style_context_remove_provider_for_display
 gtk_style_context_reset_widgets
 gtk_style_context_restore
 gtk_style_context_save
-gtk_style_context_set_parent
 gtk_style_context_add_class
 gtk_style_context_remove_class
 gtk_style_context_has_class
@@ -4699,8 +4683,6 @@ gtk_icon_theme_set_theme_name
 gtk_icon_theme_get_theme_name
 gtk_icon_theme_has_icon
 gtk_icon_theme_lookup_icon
-gtk_icon_theme_choose_icon_async
-gtk_icon_theme_choose_icon_finish
 gtk_icon_theme_lookup_by_gicon
 gtk_icon_theme_get_icon_names
 gtk_icon_theme_get_icon_sizes
@@ -5942,7 +5924,6 @@ gtk_event_controller_set_propagation_phase
 GtkPropagationLimit
 gtk_event_controller_get_propagation_limit
 gtk_event_controller_set_propagation_limit
-gtk_event_controller_handle_event
 gtk_event_controller_get_widget
 gtk_event_controller_reset
 
@@ -6109,8 +6090,6 @@ gtk_event_controller_key_get_type
 <TITLE>GtkEventControllerFocus</TITLE>
 GtkEventControllerFocus
 gtk_event_controller_focus_new
-gtk_event_controller_focus_get_focus_origin
-gtk_event_controller_focus_get_focus_target
 gtk_event_controller_focus_contains_focus
 gtk_event_controller_focus_is_focus
 
