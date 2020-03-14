@@ -119,12 +119,6 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
                             "The list of icon textures",
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
   g_object_interface_install_property (iface,
-      g_param_spec_boolean ("sticky",
-                            "Sticky",
-                            "Whether the surface is on all workspaces",
-                            FALSE,
-                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
-  g_object_interface_install_property (iface,
       g_param_spec_boolean ("keep-above",
                             "Keep above",
                             "Whether the surface is on above all other surfaces",
@@ -179,7 +173,6 @@ gdk_toplevel_install_properties (GObjectClass *object_class,
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_TRANSIENT_FOR, "transient-for");
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_MODAL, "modal");
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_ICON_LIST, "icon-list");
-  g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_STICKY, "sticky");
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_KEEP_ABOVE, "keep-above");
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_KEEP_BELOW, "keep-below");
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS, "accept-focus");
@@ -420,22 +413,6 @@ gdk_toplevel_show_window_menu (GdkToplevel *toplevel,
   g_return_val_if_fail (GDK_IS_TOPLEVEL (toplevel), FALSE);
 
   return GDK_TOPLEVEL_GET_IFACE (toplevel)->show_window_menu (toplevel, event);
-}
-
-/**
- * gdk_toplevel_set_sticky:
- * @toplevel: a #GdkToplevel
- * @sticky: whether to make @toplevel show on all workspaces
- *
- * Set if @surface is sticky.
- **/
-void
-gdk_toplevel_set_sticky (GdkToplevel *toplevel,
-                         gboolean     sticky)
-{
-  g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
-
-  g_object_set (toplevel, "sticky", sticky, NULL);
 }
 
 /**
