@@ -7418,9 +7418,6 @@ gtk_widget_dispose (GObject *object)
 
   g_object_set_qdata (object, quark_action_muxer, NULL);
 
-  while (priv->attached_windows)
-    gtk_window_set_attached_to (priv->attached_windows->data, NULL);
-
   G_OBJECT_CLASS (gtk_widget_parent_class)->dispose (object);
 }
 
