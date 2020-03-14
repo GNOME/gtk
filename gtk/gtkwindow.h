@@ -124,16 +124,6 @@ void       gtk_window_set_attached_to          (GtkWindow           *window,
 GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_window_get_attached_to          (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_accept_focus         (GtkWindow           *window,
-                                                gboolean             setting);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_window_get_accept_focus         (GtkWindow           *window);
-GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_focus_on_map         (GtkWindow           *window,
-                                                gboolean             setting);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_window_get_focus_on_map         (GtkWindow           *window);
-GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_destroy_with_parent  (GtkWindow           *window,
                                                 gboolean             setting);
 GDK_AVAILABLE_IN_ALL
