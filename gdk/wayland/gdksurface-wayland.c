@@ -4349,12 +4349,6 @@ gdk_wayland_toplevel_set_property (GObject      *object,
     case LAST_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
       break;
 
-    case LAST_PROP + GDK_TOPLEVEL_PROP_KEEP_ABOVE:
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_KEEP_BELOW:
-      break;
-
     case LAST_PROP + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS:
       break;
 
@@ -4411,12 +4405,6 @@ gdk_wayland_toplevel_get_property (GObject    *object,
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
       g_value_set_pointer (value, NULL);
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_KEEP_ABOVE:
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_KEEP_BELOW:
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS:

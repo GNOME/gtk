@@ -78,13 +78,6 @@ gboolean        gdk_toplevel_show_window_menu   (GdkToplevel       *toplevel,
                                                  GdkEvent          *event);
 
 GDK_AVAILABLE_IN_ALL
-void            gdk_toplevel_set_keep_above     (GdkToplevel       *toplevel,
-                                                 gboolean           above);
-GDK_AVAILABLE_IN_ALL
-void            gdk_toplevel_set_keep_below     (GdkToplevel       *toplevel,
-                                                 gboolean           below);
-
-GDK_AVAILABLE_IN_ALL
 void          gdk_toplevel_set_accept_focus      (GdkToplevel      *toplevel,
                                                   gboolean          accept_focus);
 
