@@ -1,3 +1,63 @@
+Overview of Changes in GTK 3.98.1
+=================================
+
+* revealer: Fix size allocation at small scales
+
+* GL: Share programs between renderers to speed up initialization
+
+* clean up profiler marks
+
+* OS X: Fix OpenGL extension detection
+
+* GtkFileChooser:
+ - Remove filename/uri api
+ - Drop extra-widget
+ - Remove overwrite confirmation
+ - Remove show-hidden property
+ - Remove local-only property
+ - Remove GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER
+
+* GtkSpinner:
+ - Rename active property to spinning
+
+* GtkPopover:
+ - Drop :relative-to, it is always the :parent now
+
+* GtkWindow:
+ - Drop window-type, it is always a regular toplevel
+
+* GtkWidget:
+ - Drop expand property
+ - Drop margin property
+ - Drop gtk_grab_add, gtk_device_grab_add
+
+* GDK:
+ - Drop gdk_surface_new_temp
+ - Make GdkEvent an immutable boxed type, not an object
+ - Remove GdkAtom and property- and selection-related apis
+ - Introduce GdkPopup and GdkToplevel interfaces
+ - Rename gdk_surface_input_shape_combine_region to
+   gdk_surface_set_input_region
+
+* Broadway: implement scaling
+
+* DND:
+ - Fix local DND to avoid serialization
+ - Add new content provider constructors
+ - Split GtkDropTargetAsync and GtkDropTarget
+ - Group DND events into event sequences
+ - Propagate DND events like motion events
+ - Introduce GtkDropControllerMotion
+ - Remove GtkSelectionData
+
+* Split GtkEventControllerFocus from GtkEventControllerKey
+
+* Translation updates:
+ Dutch
+ Japanese
+ Persian
+
+
 Overview of Changes in GTK 3.98.0
 =================================
 
