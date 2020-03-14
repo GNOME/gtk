@@ -252,10 +252,6 @@ void     gtk_window_fullscreen_on_monitor (GtkWindow  *window,
                                            GdkMonitor *monitor);
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_close         (GtkWindow *window);
-GDK_AVAILABLE_IN_ALL
-void     gtk_window_set_keep_above    (GtkWindow *window, gboolean setting);
-GDK_AVAILABLE_IN_ALL
-void     gtk_window_set_keep_below    (GtkWindow *window, gboolean setting);
 
 /* Set initial default size of the window (does not constrain user
  * resize operations)
