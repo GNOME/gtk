@@ -248,7 +248,6 @@ typedef struct
   guint    focus_visible             : 1;
   guint    modal                     : 1;
   guint    resizable                 : 1;
-  guint    stick_initially           : 1;
   guint    transient_parent_group    : 1;
   guint    gravity                   : 5; /* GdkGravity */
   guint    csd_requested             : 1;
@@ -4790,7 +4789,6 @@ gtk_window_map (GtkWidget *widget)
       gtk_widget_get_child_visible (priv->title_box))
     gtk_widget_map (priv->title_box);
 
-  gdk_toplevel_set_sticky (GDK_TOPLEVEL (priv->surface), priv->stick_initially);
   gdk_toplevel_set_keep_above (GDK_TOPLEVEL (priv->surface), priv->above_initially);
   gdk_toplevel_set_keep_below (GDK_TOPLEVEL (priv->surface), priv->below_initially);
 
@@ -4863,7 +4861,6 @@ gtk_window_unmap (GtkWidget *widget)
   state = gdk_toplevel_get_state (GDK_TOPLEVEL (priv->surface));
   priv->minimize_initially = (state & GDK_SURFACE_STATE_MINIMIZED) != 0;
   priv->maximize_initially = (state & GDK_SURFACE_STATE_MAXIMIZED) != 0;
-  priv->stick_initially = (state & GDK_SURFACE_STATE_STICKY) != 0;
   priv->above_initially = (state & GDK_SURFACE_STATE_ABOVE) != 0;
   priv->below_initially = (state & GDK_SURFACE_STATE_BELOW) != 0;
 
@@ -7557,63 +7554,6 @@ gtk_window_unminimize (GtkWindow *window)
   priv->minimize_initially = FALSE;
 
   gtk_window_update_toplevel (window);
-}
-
-/**
- * gtk_window_stick:
- * @window: a #GtkWindow
- *
- * Asks to stick @window, which means that it will appear on all user
- * desktops. Note that you shouldn’t assume the window is definitely
- * stuck afterward, because other entities (e.g. the user or
- * [window manager][gtk-X11-arch] could unstick it
- * again, and some window managers do not support sticking
- * windows. But normally the window will end up stuck. Just don't
- * write code that crashes if not.
- *
- * It’s permitted to call this function before showing a window.
- *
- * You can track result of this operation via the #GdkSurface:state
- * property.
- */
-void
-gtk_window_stick (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  priv->stick_initially = TRUE;
-
-  if (priv->surface)
-    gdk_toplevel_set_sticky (GDK_TOPLEVEL (priv->surface), TRUE);
-}
-
-/**
- * gtk_window_unstick:
- * @window: a #GtkWindow
- *
- * Asks to unstick @window, which means that it will appear on only
- * one of the user’s desktops. Note that you shouldn’t assume the
- * window is definitely unstuck afterward, because other entities
- * (e.g. the user or [window manager][gtk-X11-arch]) could
- * stick it again. But normally the window will
- * end up stuck. Just don’t write code that crashes if not.
- *
- * You can track result of this operation via the #GdkSurface:state
- * property.
- */
-void
-gtk_window_unstick (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  priv->stick_initially = FALSE;
-
-  if (priv->surface)
-    gdk_toplevel_set_sticky (GDK_TOPLEVEL (priv->surface), FALSE);
 }
 
 /**

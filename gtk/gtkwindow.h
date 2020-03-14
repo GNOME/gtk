@@ -235,10 +235,6 @@ void     gtk_window_minimize      (GtkWindow *window);
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_unminimize    (GtkWindow *window);
 GDK_AVAILABLE_IN_ALL
-void     gtk_window_stick         (GtkWindow *window);
-GDK_AVAILABLE_IN_ALL
-void     gtk_window_unstick       (GtkWindow *window);
-GDK_AVAILABLE_IN_ALL
 void     gtk_window_maximize      (GtkWindow *window);
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_unmaximize    (GtkWindow *window);
