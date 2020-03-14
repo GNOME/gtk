@@ -116,7 +116,6 @@ struct _GdkToplevelX11
 
   guint on_all_desktops : 1;   /* _NET_WM_STICKY == 0xFFFFFFFF */
 
-  guint have_sticky : 1;	/* _NET_WM_STATE_STICKY */
   guint have_maxvert : 1;       /* _NET_WM_STATE_MAXIMIZED_VERT */
   guint have_maxhorz : 1;       /* _NET_WM_STATE_MAXIMIZED_HORZ */
   guint have_fullscreen : 1;    /* _NET_WM_STATE_FULLSCREEN */

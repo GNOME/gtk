@@ -119,16 +119,6 @@ void       gtk_window_set_transient_for        (GtkWindow           *window,
 GDK_AVAILABLE_IN_ALL
 GtkWindow *gtk_window_get_transient_for        (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_accept_focus         (GtkWindow           *window,
-                                                gboolean             setting);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_window_get_accept_focus         (GtkWindow           *window);
-GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_focus_on_map         (GtkWindow           *window,
-                                                gboolean             setting);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_window_get_focus_on_map         (GtkWindow           *window);
-GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_destroy_with_parent  (GtkWindow           *window,
                                                 gboolean             setting);
 GDK_AVAILABLE_IN_ALL
@@ -235,10 +225,6 @@ void     gtk_window_minimize      (GtkWindow *window);
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_unminimize    (GtkWindow *window);
 GDK_AVAILABLE_IN_ALL
-void     gtk_window_stick         (GtkWindow *window);
-GDK_AVAILABLE_IN_ALL
-void     gtk_window_unstick       (GtkWindow *window);
-GDK_AVAILABLE_IN_ALL
 void     gtk_window_maximize      (GtkWindow *window);
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_unmaximize    (GtkWindow *window);
@@ -251,10 +237,6 @@ void     gtk_window_fullscreen_on_monitor (GtkWindow  *window,
                                            GdkMonitor *monitor);
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_close         (GtkWindow *window);
-GDK_AVAILABLE_IN_ALL
-void     gtk_window_set_keep_above    (GtkWindow *window, gboolean setting);
-GDK_AVAILABLE_IN_ALL
-void     gtk_window_set_keep_below    (GtkWindow *window, gboolean setting);
 
 /* Set initial default size of the window (does not constrain user
  * resize operations)

@@ -4830,56 +4830,13 @@ tracking_label (GtkWidget *window)
   return hbox;
 }
 
-static void
-keep_window_above (GtkToggleButton *togglebutton, gpointer data)
-{
-  GtkWidget *button = g_object_get_data (G_OBJECT (togglebutton), "radio");
-
-  gtk_window_set_keep_above (GTK_WINDOW (data),
-                             gtk_toggle_button_get_active (togglebutton));
-
-  if (gtk_toggle_button_get_active (togglebutton))
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
-}
-
-static void
-keep_window_below (GtkToggleButton *togglebutton, gpointer data)
-{
-  GtkWidget *button = g_object_get_data (G_OBJECT (togglebutton), "radio");
-
-  gtk_window_set_keep_below (GTK_WINDOW (data),
-                             gtk_toggle_button_get_active (togglebutton));
-
-  if (gtk_toggle_button_get_active (togglebutton))
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
-}
-
-
 static GtkWidget*
 get_state_controls (GtkWidget *window)
 {
   GtkWidget *vbox;
   GtkWidget *button;
-  GtkWidget *button_above;
-  GtkWidget *button_below;
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-
-  button = gtk_button_new_with_label ("Stick");
-  g_signal_connect_object (button,
-			   "clicked",
-			   G_CALLBACK (gtk_window_stick),
-			   window,
-			   G_CONNECT_SWAPPED);
-  gtk_container_add (GTK_CONTAINER (vbox), button);
-
-  button = gtk_button_new_with_label ("Unstick");
-  g_signal_connect_object (button,
-			   "clicked",
-			   G_CALLBACK (gtk_window_unstick),
-			   window,
-			   G_CONNECT_SWAPPED);
-  gtk_container_add (GTK_CONTAINER (vbox), button);
 
   button = gtk_button_new_with_label ("Maximize");
   g_signal_connect_object (button,
@@ -4920,23 +4877,6 @@ get_state_controls (GtkWidget *window)
 			   window,
 			   G_CONNECT_SWAPPED);
   gtk_container_add (GTK_CONTAINER (vbox), button);
-
-  button_above = gtk_toggle_button_new_with_label ("Keep above");
-  g_signal_connect (button_above,
-		    "toggled",
-		    G_CALLBACK (keep_window_above),
-		    window);
-  gtk_container_add (GTK_CONTAINER (vbox), button_above);
-
-  button_below = gtk_toggle_button_new_with_label ("Keep below");
-  g_signal_connect (button_below,
-		    "toggled",
-		    G_CALLBACK (keep_window_below),
-		    window);
-  gtk_container_add (GTK_CONTAINER (vbox), button_below);
-
-  g_object_set_data (G_OBJECT (button_above), "radio", button_below);
-  g_object_set_data (G_OBJECT (button_below), "radio", button_above);
 
   button = gtk_button_new_with_label ("Hide (withdraw)");
   g_signal_connect_object (button,

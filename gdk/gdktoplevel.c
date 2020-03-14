@@ -119,36 +119,6 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
                             "The list of icon textures",
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
   g_object_interface_install_property (iface,
-      g_param_spec_boolean ("sticky",
-                            "Sticky",
-                            "Whether the surface is on all workspaces",
-                            FALSE,
-                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
-  g_object_interface_install_property (iface,
-      g_param_spec_boolean ("keep-above",
-                            "Keep above",
-                            "Whether the surface is on above all other surfaces",
-                            FALSE,
-                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
-  g_object_interface_install_property (iface,
-      g_param_spec_boolean ("keep-below",
-                            "Keep below",
-                            "Whether the surface is below all other surfaces",
-                            FALSE,
-                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
-  g_object_interface_install_property (iface,
-      g_param_spec_boolean ("accept-focus",
-                            "Accept focus",
-                            "Whether the surface should accept keyboard focus",
-                            TRUE,
-                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
-  g_object_interface_install_property (iface,
-      g_param_spec_boolean ("focus-on-map",
-                            "Focus on map",
-                            "Whether the surface should receive keyboard focus on map",
-                            TRUE,
-                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
-  g_object_interface_install_property (iface,
       g_param_spec_boolean ("decorated",
                             "Decorated",
                             "Decorated",
@@ -179,11 +149,6 @@ gdk_toplevel_install_properties (GObjectClass *object_class,
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_TRANSIENT_FOR, "transient-for");
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_MODAL, "modal");
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_ICON_LIST, "icon-list");
-  g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_STICKY, "sticky");
-  g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_KEEP_ABOVE, "keep-above");
-  g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_KEEP_BELOW, "keep-below");
-  g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS, "accept-focus");
-  g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP, "focus-on-map");
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_DECORATED, "decorated");
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_DELETABLE, "deletable");
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_FULLSCREEN_MODE, "fullscreen-mode");
@@ -420,90 +385,6 @@ gdk_toplevel_show_window_menu (GdkToplevel *toplevel,
   g_return_val_if_fail (GDK_IS_TOPLEVEL (toplevel), FALSE);
 
   return GDK_TOPLEVEL_GET_IFACE (toplevel)->show_window_menu (toplevel, event);
-}
-
-/**
- * gdk_toplevel_set_sticky:
- * @toplevel: a #GdkToplevel
- * @sticky: whether to make @toplevel show on all workspaces
- *
- * Set if @surface is sticky.
- **/
-void
-gdk_toplevel_set_sticky (GdkToplevel *toplevel,
-                         gboolean     sticky)
-{
-  g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
-
-  g_object_set (toplevel, "sticky", sticky, NULL);
-}
-
-/**
- * gdk_toplevel_set_keep_above:
- * @toplevel: a #GdkToplevel
- * @above: whether to keep @toplevel above other surfaces
- *
- * Set if @surface must be kept above other surfaces.
- **/
-void
-gdk_toplevel_set_keep_above (GdkToplevel *toplevel,
-                             gboolean     above)
-{
-  g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
-
-  g_object_set (toplevel, "keep-above", above, NULL);
-}
-
-/**
- * gdk_toplevel_set_keep_below:
- * @toplevel: a #GdkToplevel
- * @below: whether to keep @toplevel below other surfaces
- *
- * Set if @surface must be kept below other surfaces.
- **/
-void
-gdk_toplevel_set_keep_below (GdkToplevel *toplevel,
-                             gboolean     below)
-{
-  g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
-
-  g_object_set (toplevel, "keep-below", below, NULL);
-}
-
-/**
- * gdk_toplevel_set_accept_focus:
- * @toplevel: a #GdkToplevel
- * @accept_focus: whether @toplevel should accept keyboard focus
- *
- * Setting @accept_focus to %FALSE hints the desktop environment
- * that the surface doesn’t want to receive input focus.
- */
-void
-gdk_toplevel_set_accept_focus (GdkToplevel *toplevel,
-                               gboolean     accept_focus)
-{
-  g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
-
-  g_object_set (toplevel, "accept-focus", accept_focus, NULL);
-}
-
-/**
- * gdk_toplevel_set_focus_on_map:
- * @toplevel: a #GdkToplevel
- * @focus_on_map: whether @toplevel should receive input focus when mapped
- *
- * Setting @focus_on_map to %FALSE hints the desktop environment that the
- * surface doesn’t want to receive input focus when it is mapped.
- * focus_on_map should be turned off for surfaces that aren’t triggered
- * interactively (such as popups from network activity).
- */
-void
-gdk_toplevel_set_focus_on_map (GdkToplevel *toplevel,
-                               gboolean     focus_on_map)
-{
-  g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
-
-  g_object_set (toplevel, "focus-on-map", focus_on_map, NULL);
 }
 
 /**
