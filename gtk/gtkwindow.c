@@ -230,13 +230,11 @@ typedef struct
    */
   guint    need_default_size         : 1;
 
-  guint    accept_focus              : 1;
   guint    builder_visible           : 1;
   guint    configure_notify_received : 1;
   guint    decorated                 : 1;
   guint    deletable                 : 1;
   guint    destroy_with_parent       : 1;
-  guint    focus_on_map              : 1;
   guint    fullscreen_initially      : 1;
   guint    has_user_ref_count        : 1;
   guint    minimize_initially        : 1;
@@ -300,8 +298,6 @@ enum {
   PROP_HIDE_ON_CLOSE,
   PROP_ICON_NAME,
   PROP_DISPLAY,
-  PROP_ACCEPT_FOCUS,
-  PROP_FOCUS_ON_MAP,
   PROP_DECORATED,
   PROP_DELETABLE,
   PROP_TRANSIENT_FOR,
@@ -927,30 +923,6 @@ gtk_window_class_init (GtkWindowClass *klass)
                             P_("Whether the toplevel is the current active window"),
                             FALSE,
                             GTK_PARAM_READABLE);
-
-  /**
-   * GtkWindow:accept-focus:
-   *
-   * Whether the window should receive the input focus.
-   */
-  window_props[PROP_ACCEPT_FOCUS] =
-      g_param_spec_boolean ("accept-focus",
-                            P_("Accept focus"),
-                            P_("TRUE if the window should receive the input focus."),
-                            TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GtkWindow:focus-on-map:
-   *
-   * Whether the window should receive the input focus when mapped.
-   */
-  window_props[PROP_FOCUS_ON_MAP] =
-      g_param_spec_boolean ("focus-on-map",
-                            P_("Focus on map"),
-                            P_("TRUE if the window should receive the input focus when mapped."),
-                            TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:decorated:
@@ -1775,8 +1747,6 @@ gtk_window_init (GtkWindow *window)
 
   priv->state = GDK_SURFACE_STATE_WITHDRAWN;
 
-  priv->accept_focus = TRUE;
-  priv->focus_on_map = TRUE;
   priv->deletable = TRUE;
   priv->startup_id = NULL;
   priv->initial_timestamp = GDK_CURRENT_TIME;
@@ -1926,14 +1896,6 @@ gtk_window_set_property (GObject      *object,
     case PROP_DISPLAY:
       gtk_window_set_display (window, g_value_get_object (value));
       break;
-    case PROP_ACCEPT_FOCUS:
-      gtk_window_set_accept_focus (window,
-				   g_value_get_boolean (value));
-      break;
-    case PROP_FOCUS_ON_MAP:
-      gtk_window_set_focus_on_map (window,
-				   g_value_get_boolean (value));
-      break;
     case PROP_DECORATED:
       gtk_window_set_decorated (window, g_value_get_boolean (value));
       break;
@@ -2013,14 +1975,6 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_IS_ACTIVE:
       g_value_set_boolean (value, priv->is_active);
-      break;
-    case PROP_ACCEPT_FOCUS:
-      g_value_set_boolean (value,
-                           gtk_window_get_accept_focus (window));
-      break;
-    case PROP_FOCUS_ON_MAP:
-      g_value_set_boolean (value,
-                           gtk_window_get_focus_on_map (window));
       break;
     case PROP_DECORATED:
       g_value_set_boolean (value, gtk_window_get_decorated (window));
@@ -3222,98 +3176,6 @@ gtk_window_set_application (GtkWindow      *window,
 
       g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_APPLICATION]);
     }
-}
-
-/**
- * gtk_window_set_accept_focus:
- * @window: a #GtkWindow 
- * @setting: %TRUE to let this window receive input focus
- * 
- * Windows may set a hint asking the desktop environment not to receive
- * the input focus. This function sets this hint.
- **/
-void
-gtk_window_set_accept_focus (GtkWindow *window,
-			     gboolean   setting)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  setting = setting != FALSE;
-
-  if (priv->accept_focus != setting)
-    {
-      priv->accept_focus = setting;
-      if (_gtk_widget_get_realized (GTK_WIDGET (window)))
-        gdk_toplevel_set_accept_focus (GDK_TOPLEVEL (priv->surface), priv->accept_focus);
-      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_ACCEPT_FOCUS]);
-    }
-}
-
-/**
- * gtk_window_get_accept_focus:
- * @window: a #GtkWindow
- * 
- * Gets the value set by gtk_window_set_accept_focus().
- * 
- * Returns: %TRUE if window should receive the input focus
- **/
-gboolean
-gtk_window_get_accept_focus (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
-
-  return priv->accept_focus;
-}
-
-/**
- * gtk_window_set_focus_on_map:
- * @window: a #GtkWindow 
- * @setting: %TRUE to let this window receive input focus on map
- * 
- * Windows may set a hint asking the desktop environment not to receive
- * the input focus when the window is mapped.  This function sets this
- * hint.
- **/
-void
-gtk_window_set_focus_on_map (GtkWindow *window,
-			     gboolean   setting)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  setting = setting != FALSE;
-
-  if (priv->focus_on_map != setting)
-    {
-      priv->focus_on_map = setting;
-      if (_gtk_widget_get_realized (GTK_WIDGET (window)))
-        gdk_toplevel_set_focus_on_map (GDK_TOPLEVEL (priv->surface), priv->focus_on_map);
-      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_FOCUS_ON_MAP]);
-    }
-}
-
-/**
- * gtk_window_get_focus_on_map:
- * @window: a #GtkWindow
- * 
- * Gets the value set by gtk_window_set_focus_on_map().
- * 
- * Returns: %TRUE if window should receive the input focus when
- * mapped.
- **/
-gboolean
-gtk_window_get_focus_on_map (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
-
-  return priv->focus_on_map;
 }
 
 /**
@@ -5398,10 +5260,6 @@ gtk_window_realize (GtkWidget *widget)
     gdk_wayland_surface_announce_csd (surface);
 #endif
 
-  gdk_toplevel_set_accept_focus (GDK_TOPLEVEL (surface),
-                                 gtk_window_get_accept_focus (window));
-  gdk_toplevel_set_focus_on_map (GDK_TOPLEVEL (surface),
-                                 gtk_window_get_focus_on_map (window));
   gdk_toplevel_set_modal (GDK_TOPLEVEL (surface), priv->modal);
 
   if (priv->startup_id)
