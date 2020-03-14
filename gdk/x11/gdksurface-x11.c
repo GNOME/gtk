@@ -1319,6 +1319,7 @@ x11_surface_resize (GdkSurface *surface,
       impl->unscaled_height = height * impl->surface_scale;
       surface->width = width;
       surface->height = height;
+      _gdk_surface_update_size (surface);
       _gdk_x11_surface_update_size (GDK_X11_SURFACE (surface));
     }
   else
