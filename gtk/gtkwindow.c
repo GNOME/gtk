@@ -308,7 +308,6 @@ enum {
   PROP_DECORATED,
   PROP_DELETABLE,
   PROP_TRANSIENT_FOR,
-  PROP_ATTACHED_TO,
   PROP_APPLICATION,
   PROP_DEFAULT_WIDGET,
 
@@ -991,24 +990,6 @@ gtk_window_class_init (GtkWindowClass *klass)
                            P_("Transient for Window"),
                            P_("The transient parent of the dialog"),
                            GTK_TYPE_WINDOW,
-                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GtkWindow:attached-to:
-   *
-   * The widget to which this window is attached.
-   * See gtk_window_set_attached_to().
-   *
-   * Examples of places where specifying this relation is useful are
-   * for instance a #GtkMenu created by a #GtkComboBox, a completion
-   * popup window created by #GtkEntry or a typeahead search entry
-   * created by #GtkTreeView.
-   */
-  window_props[PROP_ATTACHED_TO] =
-      g_param_spec_object ("attached-to",
-                           P_("Attached to Widget"),
-                           P_("The widget where the window is attached"),
-                           GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   window_props[PROP_IS_MAXIMIZED] =
@@ -1965,9 +1946,6 @@ gtk_window_set_property (GObject      *object,
     case PROP_TRANSIENT_FOR:
       gtk_window_set_transient_for (window, g_value_get_object (value));
       break;
-    case PROP_ATTACHED_TO:
-      gtk_window_set_attached_to (window, g_value_get_object (value));
-      break;
     case PROP_APPLICATION:
       gtk_window_set_application (window, g_value_get_object (value));
       break;
@@ -2055,9 +2033,6 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_TRANSIENT_FOR:
       g_value_set_object (value, gtk_window_get_transient_for (window));
-      break;
-    case PROP_ATTACHED_TO:
-      g_value_set_object (value, gtk_window_get_attached_to (window));
       break;
     case PROP_APPLICATION:
       g_value_set_object (value, gtk_window_get_application (window));
@@ -3167,77 +3142,6 @@ gtk_window_get_transient_for (GtkWindow *window)
   g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
 
   return priv->transient_parent;
-}
-
-/**
- * gtk_window_set_attached_to:
- * @window: a #GtkWindow
- * @attach_widget: (allow-none): a #GtkWidget, or %NULL
- *
- * Marks @window as attached to @attach_widget. This creates a logical binding
- * between the window and the widget it belongs to, which is used by GTK+ to
- * propagate information such as styling or accessibility to @window as if it
- * was a children of @attach_widget.
- *
- * Examples of places where specifying this relation is useful are for instance
- * a #GtkMenu created by a #GtkComboBox, a completion popup window
- * created by #GtkEntry or a typeahead search entry created by #GtkTreeView.
- *
- * Note that this function should not be confused with
- * gtk_window_set_transient_for(), which specifies a window manager relation
- * between two toplevels instead.
- *
- * Passing %NULL for @attach_widget detaches the window.
- **/
-void
-gtk_window_set_attached_to (GtkWindow *window,
-                            GtkWidget *attach_widget)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (GTK_WIDGET (window) != attach_widget);
-
-  if (priv->attach_widget == attach_widget)
-    return;
-
-  remove_attach_widget (window);
-
-  priv->attach_widget = attach_widget;
-
-  if (priv->attach_widget)
-    {
-      _gtk_widget_add_attached_window (priv->attach_widget, window);
-    }
-
-  /* Update the style, as the widget path might change. */
-  if (priv->attach_widget)
-    gtk_css_node_set_parent (gtk_widget_get_css_node (GTK_WIDGET (window)),
-                             gtk_widget_get_css_node (priv->attach_widget));
-  else
-    gtk_css_node_set_parent (gtk_widget_get_css_node (GTK_WIDGET (window)), NULL);
-
-  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_ATTACHED_TO]);
-}
-
-/**
- * gtk_window_get_attached_to:
- * @window: a #GtkWindow
- *
- * Fetches the attach widget for this window. See
- * gtk_window_set_attached_to().
- *
- * Returns: (nullable) (transfer none): the widget where the window
- * is attached, or %NULL if the window is not attached to any widget.
- **/
-GtkWidget *
-gtk_window_get_attached_to (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
-
-  return priv->attach_widget;
 }
 
 /**

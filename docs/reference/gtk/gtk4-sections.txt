@@ -4260,7 +4260,6 @@ gtk_window_set_default_size
 gtk_window_set_hide_on_close
 gtk_window_get_hide_on_close
 gtk_window_set_transient_for
-gtk_window_set_attached_to
 gtk_window_set_destroy_with_parent
 gtk_window_set_display
 gtk_window_is_active
@@ -4307,7 +4306,6 @@ gtk_window_get_modal
 gtk_window_get_size
 gtk_window_get_title
 gtk_window_get_transient_for
-gtk_window_get_attached_to
 gtk_window_get_accept_focus
 gtk_window_get_focus_on_map
 gtk_window_get_group
