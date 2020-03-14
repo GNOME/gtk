@@ -4865,22 +4865,6 @@ get_state_controls (GtkWidget *window)
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
-  button = gtk_button_new_with_label ("Stick");
-  g_signal_connect_object (button,
-			   "clicked",
-			   G_CALLBACK (gtk_window_stick),
-			   window,
-			   G_CONNECT_SWAPPED);
-  gtk_container_add (GTK_CONTAINER (vbox), button);
-
-  button = gtk_button_new_with_label ("Unstick");
-  g_signal_connect_object (button,
-			   "clicked",
-			   G_CALLBACK (gtk_window_unstick),
-			   window,
-			   G_CONNECT_SWAPPED);
-  gtk_container_add (GTK_CONTAINER (vbox), button);
-
   button = gtk_button_new_with_label ("Maximize");
   g_signal_connect_object (button,
 			   "clicked",
