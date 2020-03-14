@@ -3229,55 +3229,6 @@ gdk_x11_surface_unfullscreen (GdkSurface *surface)
 				 0);
 }
 
-static void
-gdk_x11_surface_set_keep_above (GdkSurface *surface,
-			       gboolean   setting)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
-  if (GDK_SURFACE_IS_MAPPED (surface))
-    {
-      if (setting)
-	gdk_wmspec_change_state (FALSE, surface,
-				 "_NET_WM_STATE_BELOW",
-				 NULL);
-      gdk_wmspec_change_state (setting, surface,
-			       "_NET_WM_STATE_ABOVE",
-			       NULL);
-    }
-  else
-    gdk_synthesize_surface_state (surface,
-    				 setting ? GDK_SURFACE_STATE_BELOW : GDK_SURFACE_STATE_ABOVE,
-				 setting ? GDK_SURFACE_STATE_ABOVE : 0);
-}
-
-static void
-gdk_x11_surface_set_keep_below (GdkSurface *surface, gboolean setting)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
-  if (GDK_SURFACE_IS_MAPPED (surface))
-    {
-      if (setting)
-	gdk_wmspec_change_state (FALSE, surface,
-				 "_NET_WM_STATE_ABOVE",
-				 NULL);
-      gdk_wmspec_change_state (setting, surface,
-			       "_NET_WM_STATE_BELOW",
-			       NULL);
-    }
-  else
-    gdk_synthesize_surface_state (surface,
-				 setting ? GDK_SURFACE_STATE_ABOVE : GDK_SURFACE_STATE_BELOW,
-				 setting ? GDK_SURFACE_STATE_BELOW : 0);
-}
-
 /**
  * gdk_x11_surface_get_group:
  * @surface: The #GdkSurface
@@ -4791,16 +4742,6 @@ gdk_wayland_toplevel_set_property (GObject      *object,
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
-    case LAST_PROP + GDK_TOPLEVEL_PROP_KEEP_ABOVE:
-      gdk_x11_surface_set_keep_above (surface, g_value_get_boolean (value));
-      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_KEEP_BELOW:
-      gdk_x11_surface_set_keep_below (surface, g_value_get_boolean (value));
-      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
-      break;
-
     case LAST_PROP + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS:
       gdk_x11_surface_set_accept_focus (surface, g_value_get_boolean (value));
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
@@ -4867,17 +4808,6 @@ gdk_wayland_toplevel_get_property (GObject    *object,
       g_value_set_pointer (value, NULL);
       break;
 
-    case LAST_PROP + GDK_TOPLEVEL_PROP_KEEP_ABOVE:
-      g_value_set_boolean (value, (surface->state & GDK_SURFACE_STATE_ABOVE) != 0);
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_KEEP_BELOW:
-      g_value_set_boolean (value, (surface->state & GDK_SURFACE_STATE_BELOW) != 0);
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS:
-      break;
-
     case LAST_PROP + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP:
       break;
 
@@ -4915,7 +4845,7 @@ gdk_x11_toplevel_class_init (GdkX11ToplevelClass *class)
   object_class->get_property = gdk_wayland_toplevel_get_property;
   object_class->set_property = gdk_wayland_toplevel_set_property;
 
-  gdk_toplevel_install_properties (object_class, 1);
+  gdk_toplevel_install_properties (object_class, LAST_PROP);
 }
 
 static gboolean
