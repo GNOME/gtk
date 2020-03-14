@@ -4772,7 +4772,7 @@ gdk_x11_popup_class_init (GdkX11PopupClass *class)
   object_class->get_property = gdk_wayland_popup_get_property;
   object_class->set_property = gdk_wayland_popup_set_property;
 
-  gdk_popup_install_properties (object_class, 1);
+  gdk_popup_install_properties (object_class, LAST_PROP);
 }
 
 static gboolean
@@ -4828,6 +4828,12 @@ typedef struct {
 
 static void gdk_x11_toplevel_iface_init (GdkToplevelInterface *iface);
 
+enum
+{
+  PROP_STICKY = 1,
+  LAST_TOPLEVEL_PROP
+};
+
 G_DEFINE_TYPE_WITH_CODE (GdkX11Toplevel, gdk_x11_toplevel, GDK_TYPE_X11_SURFACE,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_TOPLEVEL,
                                                 gdk_x11_toplevel_iface_init))
@@ -4846,32 +4852,7 @@ gdk_wayland_toplevel_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case LAST_PROP + GDK_TOPLEVEL_PROP_TITLE:
-      gdk_x11_surface_set_title (surface, g_value_get_string (value));
-      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_STARTUP_ID:
-      gdk_x11_surface_set_startup_id (surface, g_value_get_string (value));
-      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_TRANSIENT_FOR:
-      gdk_x11_surface_set_transient_for (surface, g_value_get_object (value));
-      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_MODAL:
-      gdk_x11_surface_set_modal_hint (surface, g_value_get_boolean (value));
-      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
-      gdk_x11_surface_set_icon_list (surface, g_value_get_pointer (value));
-      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_STICKY:
+    case PROP_STICKY:
       if (g_value_get_boolean (value))
         gdk_x11_surface_stick (surface);
       else
@@ -4879,37 +4860,62 @@ gdk_wayland_toplevel_set_property (GObject      *object,
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
-    case LAST_PROP + GDK_TOPLEVEL_PROP_KEEP_ABOVE:
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_TITLE:
+      gdk_x11_surface_set_title (surface, g_value_get_string (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_STARTUP_ID:
+      gdk_x11_surface_set_startup_id (surface, g_value_get_string (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_TRANSIENT_FOR:
+      gdk_x11_surface_set_transient_for (surface, g_value_get_object (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_MODAL:
+      gdk_x11_surface_set_modal_hint (surface, g_value_get_boolean (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
+      gdk_x11_surface_set_icon_list (surface, g_value_get_pointer (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
+      break;
+
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_KEEP_ABOVE:
       gdk_x11_surface_set_keep_above (surface, g_value_get_boolean (value));
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
-    case LAST_PROP + GDK_TOPLEVEL_PROP_KEEP_BELOW:
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_KEEP_BELOW:
       gdk_x11_surface_set_keep_below (surface, g_value_get_boolean (value));
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
-    case LAST_PROP + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS:
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS:
       gdk_x11_surface_set_accept_focus (surface, g_value_get_boolean (value));
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
-    case LAST_PROP + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP:
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP:
       gdk_x11_surface_set_focus_on_map (surface, g_value_get_boolean (value));
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
-    case LAST_PROP + GDK_TOPLEVEL_PROP_DECORATED:
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_DECORATED:
       gdk_x11_surface_set_decorations (surface, g_value_get_boolean (value) ? GDK_DECOR_ALL : 0);
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
-    case LAST_PROP + GDK_TOPLEVEL_PROP_DELETABLE:
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_DELETABLE:
       gdk_x11_surface_set_functions (surface, g_value_get_boolean (value) ? GDK_FUNC_ALL : GDK_FUNC_ALL | GDK_FUNC_CLOSE);
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
-    case LAST_PROP + GDK_TOPLEVEL_PROP_FULLSCREEN_MODE:
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_FULLSCREEN_MODE:
       surface->fullscreen_mode = g_value_get_enum (value);
       gdk_x11_surface_apply_fullscreen_mode (surface);
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
@@ -4932,49 +4938,49 @@ gdk_wayland_toplevel_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case LAST_PROP + GDK_TOPLEVEL_PROP_STATE:
-      g_value_set_flags (value, surface->state);
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_TITLE:
-      g_value_set_string (value, "");
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_STARTUP_ID:
-      g_value_set_string (value, "");
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_TRANSIENT_FOR:
-      g_value_set_object (value, surface->transient_for);
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_MODAL:
-      g_value_set_boolean (value, surface->modal_hint);
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
-      g_value_set_pointer (value, NULL);
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_STICKY:
+    case PROP_STICKY:
       g_value_set_boolean (value, impl->toplevel->have_sticky);
       break;
 
-    case LAST_PROP + GDK_TOPLEVEL_PROP_KEEP_ABOVE:
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_STATE:
+      g_value_set_flags (value, surface->state);
+      break;
+
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_TITLE:
+      g_value_set_string (value, "");
+      break;
+
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_STARTUP_ID:
+      g_value_set_string (value, "");
+      break;
+
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_TRANSIENT_FOR:
+      g_value_set_object (value, surface->transient_for);
+      break;
+
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_MODAL:
+      g_value_set_boolean (value, surface->modal_hint);
+      break;
+
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
+      g_value_set_pointer (value, NULL);
+      break;
+
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_KEEP_ABOVE:
       g_value_set_boolean (value, (surface->state & GDK_SURFACE_STATE_ABOVE) != 0);
       break;
 
-    case LAST_PROP + GDK_TOPLEVEL_PROP_KEEP_BELOW:
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_KEEP_BELOW:
       g_value_set_boolean (value, (surface->state & GDK_SURFACE_STATE_BELOW) != 0);
       break;
 
-    case LAST_PROP + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS:
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_ACCEPT_FOCUS:
       break;
 
-    case LAST_PROP + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP:
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_FOCUS_ON_MAP:
       break;
 
-    case LAST_PROP + GDK_TOPLEVEL_PROP_DECORATED:
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_DECORATED:
       {
         GdkWMDecoration decorations = GDK_DECOR_ALL;
         gdk_x11_surface_get_decorations (surface, &decorations);
@@ -4982,7 +4988,7 @@ gdk_wayland_toplevel_get_property (GObject    *object,
       }
       break;
 
-    case LAST_PROP + GDK_TOPLEVEL_PROP_DELETABLE:
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_DELETABLE:
       {
         GdkWMFunction functions = GDK_FUNC_ALL;
         gdk_x11_surface_get_functions (surface, &functions);
@@ -4990,7 +4996,7 @@ gdk_wayland_toplevel_get_property (GObject    *object,
       }
       break;
 
-    case LAST_PROP + GDK_TOPLEVEL_PROP_FULLSCREEN_MODE:
+    case LAST_TOPLEVEL_PROP + GDK_TOPLEVEL_PROP_FULLSCREEN_MODE:
       g_value_set_enum (value, surface->fullscreen_mode);
       break;
 
@@ -5008,7 +5014,15 @@ gdk_x11_toplevel_class_init (GdkX11ToplevelClass *class)
   object_class->get_property = gdk_wayland_toplevel_get_property;
   object_class->set_property = gdk_wayland_toplevel_set_property;
 
-  gdk_toplevel_install_properties (object_class, 1);
+  g_object_class_install_property (object_class,
+      PROP_STICKY,
+      g_param_spec_boolean ("sticky",
+                            "Sticky",
+                            "Whether the surface is on all workspaces",
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+
+  gdk_toplevel_install_properties (object_class, LAST_TOPLEVEL_PROP);
 }
 
 static gboolean
