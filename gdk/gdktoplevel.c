@@ -352,6 +352,19 @@ gdk_toplevel_set_transient_for (GdkToplevel *toplevel,
   g_object_set (toplevel, "transient-for", parent, NULL);
 }
 
+/**
+ * gdk_toplevel_set_modal:
+ * @toplevel: A toplevel surface
+ * @modal: %TRUE if the surface is modal, %FALSE otherwise.
+ *
+ * The application can use this hint to tell the
+ * window manager that a certain surface has modal
+ * behaviour. The window manager can use this information
+ * to handle modal surfaces in a special way.
+ *
+ * You should only use this on surfaces for which you have
+ * previously called gdk_toplevel_set_transient_for().
+ */
 void
 gdk_toplevel_set_modal (GdkToplevel *toplevel,
                         gboolean     modal)
