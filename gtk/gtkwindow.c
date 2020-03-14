@@ -230,9 +230,7 @@ typedef struct
    */
   guint    need_default_size         : 1;
 
-  guint    above_initially           : 1;
   guint    accept_focus              : 1;
-  guint    below_initially           : 1;
   guint    builder_visible           : 1;
   guint    configure_notify_received : 1;
   guint    decorated                 : 1;
@@ -4789,9 +4787,6 @@ gtk_window_map (GtkWidget *widget)
       gtk_widget_get_child_visible (priv->title_box))
     gtk_widget_map (priv->title_box);
 
-  gdk_toplevel_set_keep_above (GDK_TOPLEVEL (priv->surface), priv->above_initially);
-  gdk_toplevel_set_keep_below (GDK_TOPLEVEL (priv->surface), priv->below_initially);
-
   layout = gdk_toplevel_layout_new (1, 1);
   gdk_toplevel_layout_set_resizable (layout, priv->resizable);
   gdk_toplevel_layout_set_maximized (layout, priv->maximize_initially);
@@ -4861,8 +4856,6 @@ gtk_window_unmap (GtkWidget *widget)
   state = gdk_toplevel_get_state (GDK_TOPLEVEL (priv->surface));
   priv->minimize_initially = (state & GDK_SURFACE_STATE_MINIMIZED) != 0;
   priv->maximize_initially = (state & GDK_SURFACE_STATE_MAXIMIZED) != 0;
-  priv->above_initially = (state & GDK_SURFACE_STATE_ABOVE) != 0;
-  priv->below_initially = (state & GDK_SURFACE_STATE_BELOW) != 0;
 
   if (priv->title_box != NULL)
     gtk_widget_unmap (priv->title_box);
@@ -6590,7 +6583,6 @@ ontop_window_clicked (GtkModelButton *button,
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
   gtk_popover_popdown (GTK_POPOVER (priv->popup_menu));
-  gtk_window_set_keep_above (window, !priv->above_initially);
 }
 
 static void
@@ -6687,7 +6679,6 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
   g_object_set (menuitem,
                 "text", _("Always on Top"),
                 "role", GTK_BUTTON_ROLE_CHECK,
-                "active", priv->above_initially,
                 NULL);
 
   if (maximized)
@@ -7712,90 +7703,6 @@ gtk_window_unfullscreen (GtkWindow *window)
   priv->fullscreen_initially = FALSE;
 
   gtk_window_update_toplevel (window);
-}
-
-/**
- * gtk_window_set_keep_above:
- * @window: a #GtkWindow
- * @setting: whether to keep @window above other windows
- *
- * Asks to keep @window above, so that it stays on top. Note that
- * you shouldn’t assume the window is definitely above afterward,
- * because other entities (e.g. the user or
- * [window manager][gtk-X11-arch]) could not keep it above,
- * and not all window managers support keeping windows above. But
- * normally the window will end kept above. Just don’t write code
- * that crashes if not.
- *
- * It’s permitted to call this function before showing a window,
- * in which case the window will be kept above when it appears onscreen
- * initially.
- *
- * You can track iconification via the #GdkSurface::state property
- *
- * Note that, according to the
- * [Extended Window Manager Hints Specification](http://www.freedesktop.org/Standards/wm-spec),
- * the above state is mainly meant for user preferences and should not
- * be used by applications e.g. for drawing attention to their
- * dialogs.
- **/
-void
-gtk_window_set_keep_above (GtkWindow *window,
-			   gboolean   setting)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  setting = setting != FALSE;
-
-  priv->above_initially = setting;
-  priv->below_initially &= !setting;
-
-  if (priv->surface)
-    gdk_toplevel_set_keep_above (GDK_TOPLEVEL (priv->surface), setting);
-}
-
-/**
- * gtk_window_set_keep_below:
- * @window: a #GtkWindow
- * @setting: whether to keep @window below other windows
- *
- * Asks to keep @window below, so that it stays in bottom. Note that
- * you shouldn’t assume the window is definitely below afterward,
- * because other entities (e.g. the user or
- * [window manager][gtk-X11-arch]) could not keep it below,
- * and not all window managers support putting windows below. But
- * normally the window will be kept below. Just don’t write code
- * that crashes if not.
- *
- * It’s permitted to call this function before showing a window,
- * in which case the window will be kept below when it appears onscreen
- * initially.
- *
- * You can track iconification via the #GdkSurface::state property
- *
- * Note that, according to the
- * [Extended Window Manager Hints Specification](http://www.freedesktop.org/Standards/wm-spec),
- * the above state is mainly meant for user preferences and should not
- * be used by applications e.g. for drawing attention to their
- * dialogs.
- **/
-void
-gtk_window_set_keep_below (GtkWindow *window,
-			   gboolean   setting)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  setting = setting != FALSE;
-
-  priv->below_initially = setting;
-  priv->above_initially &= !setting;
-
-  if (priv->surface)
-    gdk_toplevel_set_keep_below (GDK_TOPLEVEL (priv->surface), setting);
 }
 
 /**
