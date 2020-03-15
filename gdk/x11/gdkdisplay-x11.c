@@ -382,20 +382,6 @@ do_net_wm_state_changes (GdkSurface *surface)
 
   set = unset = 0;
 
-  /* For found_sticky to remain TRUE, we have to also be on desktop
-   * 0xFFFFFFFF
-   */
-  if (old_state & GDK_SURFACE_STATE_STICKY)
-    {
-      if (!(toplevel->have_sticky && toplevel->on_all_desktops))
-        unset |= GDK_SURFACE_STATE_STICKY;
-    }
-  else
-    {
-      if (toplevel->have_sticky && toplevel->on_all_desktops)
-        set |= GDK_SURFACE_STATE_STICKY;
-    }
-
   if (old_state & GDK_SURFACE_STATE_FULLSCREEN)
     {
       if (!toplevel->have_fullscreen)
@@ -499,9 +485,6 @@ gdk_check_wm_state_changed (GdkSurface *surface)
   Atom *atoms = NULL;
   gulong i;
 
-  gboolean had_sticky = toplevel->have_sticky;
-
-  toplevel->have_sticky = FALSE;
   toplevel->have_maxvert = FALSE;
   toplevel->have_maxhorz = FALSE;
   toplevel->have_fullscreen = FALSE;
@@ -518,7 +501,6 @@ gdk_check_wm_state_changed (GdkSurface *surface)
 
   if (type != None)
     {
-      Atom sticky_atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_STICKY");
       Atom maxvert_atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_MAXIMIZED_VERT");
       Atom maxhorz_atom	= gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_MAXIMIZED_HORZ");
       Atom fullscreen_atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_FULLSCREEN");
@@ -530,9 +512,7 @@ gdk_check_wm_state_changed (GdkSurface *surface)
       i = 0;
       while (i < nitems)
         {
-          if (atoms[i] == sticky_atom)
-            toplevel->have_sticky = TRUE;
-          else if (atoms[i] == maxvert_atom)
+          if (atoms[i] == maxvert_atom)
             toplevel->have_maxvert = TRUE;
           else if (atoms[i] == maxhorz_atom)
             toplevel->have_maxhorz = TRUE;
@@ -553,13 +533,7 @@ gdk_check_wm_state_changed (GdkSurface *surface)
                                             g_intern_static_string ("_NET_WM_STATE_FOCUSED")))
     toplevel->have_focused = TRUE;
 
-  /* When have_sticky is turned on, we have to check the DESKTOP property
-   * as well.
-   */
-  if (toplevel->have_sticky && !had_sticky)
-    gdk_check_wm_desktop_changed (surface);
-  else
-    do_net_wm_state_changes (surface);
+  do_net_wm_state_changes (surface);
 }
 
 static void
@@ -1299,7 +1273,7 @@ _gdk_wm_protocols_filter (const XEvent  *xevent,
       /* There is no way of knowing reliably whether we are viewable;
        * so trap errors asynchronously around the XSetInputFocus call
        */
-      if (toplevel && win->accept_focus)
+      if (toplevel)
         {
           gdk_x11_display_error_trap_push (display);
           XSetInputFocus (GDK_DISPLAY_XDISPLAY (display),

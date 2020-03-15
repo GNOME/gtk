@@ -385,8 +385,6 @@ gdk_surface_init (GdkSurface *surface)
   surface->width = 1;
   surface->height = 1;
 
-  surface->accept_focus = TRUE;
-  surface->focus_on_map = TRUE;
   surface->alpha = 255;
 
   surface->device_cursor = g_hash_table_new_full (NULL, NULL,

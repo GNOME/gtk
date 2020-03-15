@@ -681,9 +681,6 @@ gdk_toplevel_set_transient_for
 gdk_toplevel_set_modal
 gdk_toplevel_set_icon_list
 gdk_toplevel_show_window_menu
-gdk_toplevel_set_sticky
-gdk_toplevel_set_keep_above
-gdk_toplevel_set_keep_below
 gdk_toplevel_set_accept_focus
 gdk_toplevel_set_focus_on_map
 gdk_toplevel_set_decorated
