@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gtkshortcutmanager.h"
+#include "gtkshortcutmanagerprivate.h"
 #include "gtkconcatmodelprivate.h"
 
 /**
@@ -32,6 +33,24 @@
  */
 
 G_DEFINE_INTERFACE (GtkShortcutManager, gtk_shortcut_manager, G_TYPE_OBJECT)
+
+void
+gtk_shortcut_manager_create_controllers (GtkWidget *widget)
+{
+  GtkConcatModel *model;
+  GtkEventController *controller;
+
+  model = gtk_concat_model_new (GTK_TYPE_SHORTCUT);
+  g_object_set_data_full (G_OBJECT (widget), "gtk-shortcut-manager-bubble", model, g_object_unref);
+  controller = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (model));
+  gtk_widget_add_controller (widget, controller);
+
+  model = gtk_concat_model_new (GTK_TYPE_SHORTCUT);
+  g_object_set_data_full (G_OBJECT (widget), "gtk-shortcut-manager-capture", model, g_object_unref);
+  controller = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (model));
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+  gtk_widget_add_controller (widget, controller);
+}
 
 static GtkConcatModel *
 gtk_shortcut_manager_get_model (GtkShortcutManager  *self,
