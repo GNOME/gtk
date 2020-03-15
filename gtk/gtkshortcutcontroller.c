@@ -62,7 +62,7 @@ gtk_shortcut_controller_finalize (GObject *object)
 static gboolean
 gtk_shortcut_controller_trigger_shortcut (GtkShortcutController *self,
                                           GtkShortcut           *shortcut,
-                                          const GdkEvent        *event)
+                                          GdkEvent              *event)
 {
   if (!gtk_shortcut_trigger (shortcut, event))
     return FALSE;
