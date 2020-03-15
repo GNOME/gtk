@@ -2450,6 +2450,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
     gtk_widget_set_layout_manager (widget, g_object_new (layout_manager_type, NULL));
 
   controller = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (GTK_WIDGET_CLASS (g_class)->priv->shortcuts));
+  gtk_event_controller_set_name (controller, "gtk-widget-class-shortcuts");
   gtk_widget_add_controller (widget, controller);
 }
 
