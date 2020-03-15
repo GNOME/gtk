@@ -1751,6 +1751,7 @@ gtk_window_init (GtkWindow *window)
   shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (MENU_BAR_ACCEL, 0),
                                gtk_callback_action_new (gtk_window_activate_menubar, NULL, NULL));
   gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
+  gtk_event_controller_set_name (controller, "gtk-window-menubar-accel");
   gtk_widget_add_controller (widget, controller);
 }
 
@@ -2787,6 +2788,7 @@ gtk_window_set_application (GtkWindow      *window,
 
           app_accels = gtk_application_get_application_accels (priv->application);
           priv->application_shortcut_controller = gtk_shortcut_controller_new_for_model (gtk_application_accels_get_shortcuts (app_accels));
+          gtk_event_controller_set_name (priv->application_shortcut_controller, "gtk-application-shortcuts");
           gtk_event_controller_set_propagation_phase (priv->application_shortcut_controller, GTK_PHASE_CAPTURE);
           gtk_shortcut_controller_set_scope (GTK_SHORTCUT_CONTROLLER (priv->application_shortcut_controller), GTK_SHORTCUT_SCOPE_GLOBAL);
           gtk_widget_add_controller (GTK_WIDGET (window), priv->application_shortcut_controller);
