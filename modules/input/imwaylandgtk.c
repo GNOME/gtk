@@ -598,7 +598,7 @@ gtk_im_context_wayland_set_surrounding (GtkIMContext *context,
   context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
 
   g_free (context_wayland->surrounding.text);
-  context_wayland->surrounding.text = g_strdup (text);
+  context_wayland->surrounding.text = g_strndup (text, len);
   context_wayland->surrounding.cursor_idx = cursor_index;
 
   notify_surrounding_text (context_wayland);
