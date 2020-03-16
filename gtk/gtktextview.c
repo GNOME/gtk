@@ -434,7 +434,9 @@ static gboolean gtk_text_view_drag_drop          (GtkDropTarget    *dest,
                                                   double            y,
                                                   GtkTextView      *text_view);
 
-static gboolean gtk_text_view_popup_menu         (GtkWidget     *widget);
+static void gtk_text_view_popup_menu        (GtkWidget  *widget,
+                                             const char *action_name,
+                                             GVariant   *parameters);
 static void gtk_text_view_move_cursor       (GtkTextView           *text_view,
                                              GtkMovementStep        step,
                                              gint                   count,
@@ -817,8 +819,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->size_allocate = gtk_text_view_size_allocate;
   widget_class->snapshot = gtk_text_view_snapshot;
   widget_class->focus = gtk_text_view_focus;
-
-  widget_class->popup_menu = gtk_text_view_popup_menu;
 
   container_class->add = gtk_text_view_add;
   container_class->remove = gtk_text_view_remove;
@@ -1462,10 +1462,20 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 
   gtk_widget_class_install_action (widget_class, "text.undo", NULL, gtk_text_view_real_undo);
   gtk_widget_class_install_action (widget_class, "text.redo", NULL, gtk_text_view_real_redo);
+  gtk_widget_class_install_action (widget_class, "menu.popup", NULL, gtk_text_view_popup_menu);
 
   /*
    * Key bindings
    */
+
+  gtk_widget_class_add_binding_action (widget_class,
+                                       GDK_KEY_F10, GDK_SHIFT_MASK,
+                                       "menu.popup",
+                                       NULL);
+  gtk_widget_class_add_binding_action (widget_class,
+                                       GDK_KEY_Menu, 0,
+                                       "menu.popup",
+                                       NULL);
 
   /* Moving the insertion point */
   add_move_binding (widget_class, GDK_KEY_Right, 0,
@@ -8692,11 +8702,12 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
     g_object_unref (trigger_event);
 }
 
-static gboolean
-gtk_text_view_popup_menu (GtkWidget *widget)
+static void
+gtk_text_view_popup_menu (GtkWidget  *widget,
+                          const char *action_name,
+                          GVariant   *parameters)
 {
   gtk_text_view_do_popup (GTK_TEXT_VIEW (widget), NULL);
-  return TRUE;
 }
 
 static void
