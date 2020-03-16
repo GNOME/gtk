@@ -716,6 +716,7 @@ gtk_mnemonic_trigger_print (GtkShortcutTrigger *trigger,
   if (keyval_str == NULL)
     keyval_str = "???";
 
+  g_string_append (string, "<Mnemonic>");
   g_string_append (string, keyval_str);
 }
 
