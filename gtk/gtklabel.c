@@ -480,7 +480,9 @@ static void gtk_label_set_markup_internal        (GtkLabel      *label,
 static void gtk_label_recalculate                (GtkLabel      *label);
 static void gtk_label_root                       (GtkWidget     *widget);
 static void gtk_label_unroot                     (GtkWidget     *widget);
-static gboolean gtk_label_popup_menu             (GtkWidget     *widget);
+static void gtk_label_popup_menu                 (GtkWidget     *widget,
+                                                  const char    *action_name,
+                                                  GVariant      *parameters);
 static void gtk_label_do_popup                   (GtkLabel      *label,
                                                   double         x,
                                                   double         y);
@@ -645,7 +647,6 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->root = gtk_label_root;
   widget_class->unroot = gtk_label_unroot;
   widget_class->mnemonic_activate = gtk_label_mnemonic_activate;
-  widget_class->popup_menu = gtk_label_popup_menu;
   widget_class->grab_focus = gtk_label_grab_focus;
   widget_class->focus = gtk_label_focus;
   widget_class->get_request_mode = gtk_label_get_request_mode;
@@ -1022,9 +1023,20 @@ gtk_label_class_init (GtkLabelClass *class)
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, label_props);
 
+  gtk_widget_class_install_action (widget_class, "menu.popup", NULL, gtk_label_popup_menu);
+
   /*
    * Key bindings
    */
+
+  gtk_widget_class_add_binding_action (widget_class,
+                                       GDK_KEY_F10, GDK_SHIFT_MASK,
+                                       "menu.popup",
+                                       NULL);
+  gtk_widget_class_add_binding_action (widget_class,
+                                       GDK_KEY_Menu, 0,
+                                       "menu.popup",
+                                       NULL);
 
   /* Moving the insertion point */
   add_move_binding (widget_class, GDK_KEY_Right, 0,
@@ -6059,13 +6071,14 @@ gtk_label_do_popup (GtkLabel *label,
   gtk_popover_popup (GTK_POPOVER (priv->popup_menu));
 }
 
-static gboolean
-gtk_label_popup_menu (GtkWidget *widget)
+static void
+gtk_label_popup_menu (GtkWidget  *widget,
+                      const char *action_name,
+                      GVariant   *parameters)
 {
   GtkLabel *label = GTK_LABEL (widget);
 
   gtk_label_do_popup (label, -1, -1);
-  return TRUE;
 }
 
 static void

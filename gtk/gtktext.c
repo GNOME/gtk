@@ -389,7 +389,9 @@ static void        gtk_text_set_alignment        (GtkText    *self,
 /* Default signal handlers
  */
 static GMenuModel *gtk_text_get_menu_model  (GtkText         *self);
-static gboolean gtk_text_popup_menu         (GtkWidget       *widget);
+static void     gtk_text_popup_menu         (GtkWidget       *widget,
+                                             const char      *action_name,
+                                             GVariant        *parameters);
 static void     gtk_text_move_cursor        (GtkText         *self,
                                              GtkMovementStep  step,
                                              int              count,
@@ -727,7 +729,6 @@ gtk_text_class_init (GtkTextClass *class)
   widget_class->state_flags_changed = gtk_text_state_flags_changed;
   widget_class->root = gtk_text_root;
   widget_class->mnemonic_activate = gtk_text_mnemonic_activate;
-  widget_class->popup_menu = gtk_text_popup_menu;
 
   class->move_cursor = gtk_text_move_cursor;
   class->insert_at_cursor = gtk_text_insert_at_cursor;
@@ -1195,10 +1196,20 @@ gtk_text_class_init (GtkTextClass *class)
 
   gtk_widget_class_install_action (widget_class, "text.undo", NULL, gtk_text_real_undo);
   gtk_widget_class_install_action (widget_class, "text.redo", NULL, gtk_text_real_redo);
+  gtk_widget_class_install_action (widget_class, "menu.popup", NULL, gtk_text_popup_menu);
 
   /*
    * Key bindings
    */
+
+  gtk_widget_class_add_binding_action (widget_class,
+                                       GDK_KEY_F10, GDK_SHIFT_MASK,
+                                       "menu.popup",
+                                       NULL);
+  gtk_widget_class_add_binding_action (widget_class,
+                                       GDK_KEY_Menu, 0,
+                                       "menu.popup",
+                                       NULL);
 
   /* Moving the insertion point */
   add_move_binding (widget_class, GDK_KEY_Right, 0,
@@ -5871,11 +5882,12 @@ gtk_text_mnemonic_activate (GtkWidget *widget,
   return GDK_EVENT_STOP;
 }
 
-static gboolean
-gtk_text_popup_menu (GtkWidget *widget)
+static void
+gtk_text_popup_menu (GtkWidget  *widget,
+                     const char *action_name,
+                     GVariant   *parameters)
 {
   gtk_text_do_popup (GTK_TEXT (widget), -1, -1);
-  return TRUE;
 }
 
 static void
