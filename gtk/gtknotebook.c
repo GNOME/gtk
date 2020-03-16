@@ -772,7 +772,9 @@ static void gtk_notebook_dispose             (GObject         *object);
 /*** GtkWidget Methods ***/
 static void gtk_notebook_destroy             (GtkWidget        *widget);
 static void gtk_notebook_unmap               (GtkWidget        *widget);
-static gboolean gtk_notebook_popup_menu      (GtkWidget        *widget);
+static void gtk_notebook_popup_menu          (GtkWidget        *widget,
+                                              const char       *action_name,
+                                              GVariant         *parameters);
 static void gtk_notebook_motion              (GtkEventController *controller,
                                               double              x,
                                               double              y,
@@ -1046,7 +1048,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 
   widget_class->destroy = gtk_notebook_destroy;
   widget_class->unmap = gtk_notebook_unmap;
-  widget_class->popup_menu = gtk_notebook_popup_menu;
   widget_class->grab_notify = gtk_notebook_grab_notify;
   widget_class->state_flags_changed = gtk_notebook_state_flags_changed;
   widget_class->direction_changed = gtk_notebook_direction_changed;
@@ -1310,6 +1311,8 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                               G_TYPE_FROM_CLASS (gobject_class),
                               _gtk_marshal_OBJECT__OBJECTv);
 
+  gtk_widget_class_install_action (widget_class, "menu.popup", NULL, gtk_notebook_popup_menu);
+
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_space, 0,
                                        "select-page",
@@ -1335,6 +1338,15 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                                        GDK_KEY_KP_End, 0,
                                        "focus-tab",
                                        "(i)", GTK_NOTEBOOK_TAB_LAST);
+
+  gtk_widget_class_add_binding_action (widget_class,
+                                       GDK_KEY_F10, GDK_SHIFT_MASK,
+                                       "menu.popup",
+                                       NULL);
+  gtk_widget_class_add_binding_action (widget_class,
+                                       GDK_KEY_Menu, 0,
+                                       "menu.popup",
+                                       NULL);
 
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_Page_Up, GDK_CONTROL_MASK,
@@ -2599,20 +2611,16 @@ gtk_notebook_gesture_pressed (GtkGestureClick *gesture,
     }
 }
 
-
-static gboolean
-gtk_notebook_popup_menu (GtkWidget *widget)
+static void
+gtk_notebook_popup_menu (GtkWidget  *widget,
+                         const char *action_name,
+                         GVariant   *parameters)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
 
   if (priv->menu)
-    {
-      gtk_popover_popup (GTK_POPOVER (priv->menu));
-      return TRUE;
-    }
-
-  return FALSE;
+    gtk_popover_popup (GTK_POPOVER (priv->menu));
 }
 
 static void
