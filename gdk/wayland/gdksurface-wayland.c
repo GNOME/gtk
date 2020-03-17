@@ -200,6 +200,74 @@ struct _GdkWaylandSurfaceClass
   GdkSurfaceClass parent_class;
 };
 
+G_DEFINE_TYPE (GdkWaylandSurface, gdk_wayland_surface, GDK_TYPE_SURFACE)
+
+typedef struct _GdkWaylandToplevel GdkWaylandToplevel;
+struct _GdkWaylandToplevel
+{
+  GdkWaylandSurface parent_instance;
+};
+
+typedef struct
+{
+  GdkWaylandSurfaceClass parent_class;
+} GdkWaylandToplevelClass;
+
+static void gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface);
+
+GType gdk_wayland_toplevel_get_type (void) G_GNUC_CONST;
+
+#define GDK_IS_WAYLAND_TOPLEVEL(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WAYLAND_TOPLEVEL))
+#define GDK_WAYLAND_TOPLEVEL(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WAYLAND_TOPLEVEL, GdkWaylandToplevel))
+
+#define GDK_TYPE_WAYLAND_TOPLEVEL (gdk_wayland_toplevel_get_type ())
+G_DEFINE_TYPE_WITH_CODE (GdkWaylandToplevel, gdk_wayland_toplevel, GDK_TYPE_WAYLAND_SURFACE,
+                         G_IMPLEMENT_INTERFACE (GDK_TYPE_TOPLEVEL,
+                                                gdk_wayland_toplevel_iface_init))
+
+typedef struct
+{
+  GdkWaylandSurface parent_instance;
+} GdkWaylandPopup;
+
+typedef struct
+{
+  GdkWaylandSurfaceClass parent_class;
+} GdkWaylandPopupClass;
+
+static void gdk_wayland_popup_iface_init (GdkPopupInterface *iface);
+
+GType gdk_wayland_popup_get_type (void) G_GNUC_CONST;
+
+#define GDK_IS_WAYLAND_POPUP(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WAYLAND_POPUP))
+#define GDK_WAYLAND_POPUP(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WAYLAND_POPUP, GdkWaylandPopup))
+
+#define GDK_TYPE_WAYLAND_POPUP (gdk_wayland_popup_get_type ())
+G_DEFINE_TYPE_WITH_CODE (GdkWaylandPopup, gdk_wayland_popup, GDK_TYPE_WAYLAND_SURFACE,
+                         G_IMPLEMENT_INTERFACE (GDK_TYPE_POPUP,
+                                                gdk_wayland_popup_iface_init))
+
+typedef struct
+{
+  GdkWaylandSurface parent_instance;
+} GdkWaylandDragSurface;
+
+typedef struct
+{
+  GdkWaylandSurfaceClass parent_class;
+} GdkWaylandDragSurfaceClass;
+
+static void gdk_wayland_drag_surface_iface_init (GdkDragSurfaceInterface *iface);
+
+GType gdk_wayland_drag_surface_get_type (void) G_GNUC_CONST;
+
+#define GDK_IS_WAYLAND_DRAG_SURFACE(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WAYLAND_DRAG_SURFACE))
+
+#define GDK_TYPE_WAYLAND_DRAG_SURFACE (gdk_wayland_drag_surface_get_type ())
+G_DEFINE_TYPE_WITH_CODE (GdkWaylandDragSurface, gdk_wayland_drag_surface, GDK_TYPE_WAYLAND_SURFACE,
+                         G_IMPLEMENT_INTERFACE (GDK_TYPE_DRAG_SURFACE,
+                                                gdk_wayland_drag_surface_iface_init))
+
 static void gdk_wayland_surface_maybe_resize (GdkSurface *surface,
                                               int         width,
                                               int         height,
@@ -230,16 +298,6 @@ static void update_popup_layout_state (GdkSurface     *surface,
                                        GdkPopupLayout *layout);
 
 static gboolean gdk_wayland_surface_is_exported (GdkSurface *surface);
-
-G_DEFINE_TYPE (GdkWaylandSurface, gdk_wayland_surface, GDK_TYPE_SURFACE)
-
-GType gdk_wayland_toplevel_get_type (void) G_GNUC_CONST;
-GType gdk_wayland_popup_get_type (void) G_GNUC_CONST;
-GType gdk_wayland_drag_surface_get_type (void) G_GNUC_CONST;
-
-#define GDK_TYPE_WAYLAND_TOPLEVEL (gdk_wayland_toplevel_get_type ())
-#define GDK_TYPE_WAYLAND_POPUP (gdk_wayland_popup_get_type ())
-#define GDK_TYPE_WAYLAND_DRAG_SURFACE (gdk_wayland_drag_surface_get_type ())
 
 static void
 gdk_wayland_surface_init (GdkWaylandSurface *impl)
@@ -4285,22 +4343,6 @@ create_dnd_surface (GdkDisplay *display)
 
 #define LAST_PROP 1
 
-typedef struct
-{
-  GdkWaylandSurface parent_instance;
-} GdkWaylandPopup;
-
-typedef struct
-{
-  GdkWaylandSurfaceClass parent_class;
-} GdkWaylandPopupClass;
-
-static void gdk_wayland_popup_iface_init (GdkPopupInterface *iface);
-
-G_DEFINE_TYPE_WITH_CODE (GdkWaylandPopup, gdk_wayland_popup, GDK_TYPE_WAYLAND_SURFACE,
-                         G_IMPLEMENT_INTERFACE (GDK_TYPE_POPUP,
-                                                gdk_wayland_popup_iface_init))
-
 static void
 gdk_wayland_popup_init (GdkWaylandPopup *popup)
 {
@@ -4409,22 +4451,6 @@ gdk_wayland_popup_iface_init (GdkPopupInterface *iface)
   iface->get_position_x = gdk_wayland_popup_get_position_x;
   iface->get_position_y = gdk_wayland_popup_get_position_y;
 }
-
-typedef struct
-{
-  GdkWaylandSurface parent_instance;
-} GdkWaylandToplevel;
-
-typedef struct
-{
-  GdkWaylandSurfaceClass parent_class;
-} GdkWaylandToplevelClass;
-
-static void gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface);
-
-G_DEFINE_TYPE_WITH_CODE (GdkWaylandToplevel, gdk_wayland_toplevel, GDK_TYPE_WAYLAND_SURFACE,
-                         G_IMPLEMENT_INTERFACE (GDK_TYPE_TOPLEVEL,
-                                                gdk_wayland_toplevel_iface_init))
 
 static void
 gdk_wayland_toplevel_init (GdkWaylandToplevel *toplevel)
@@ -4732,22 +4758,6 @@ gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface)
   iface->inhibit_system_shortcuts = gdk_wayland_toplevel_inhibit_system_shortcuts;
   iface->restore_system_shortcuts = gdk_wayland_toplevel_restore_system_shortcuts;
 }
-
-typedef struct
-{
-  GdkWaylandSurface parent_instance;
-} GdkWaylandDragSurface;
-
-typedef struct
-{
-  GdkWaylandSurfaceClass parent_class;
-} GdkWaylandDragSurfaceClass;
-
-static void gdk_wayland_drag_surface_iface_init (GdkDragSurfaceInterface *iface);
-
-G_DEFINE_TYPE_WITH_CODE (GdkWaylandDragSurface, gdk_wayland_drag_surface, GDK_TYPE_WAYLAND_SURFACE,
-                         G_IMPLEMENT_INTERFACE (GDK_TYPE_DRAG_SURFACE,
-                                                gdk_wayland_drag_surface_iface_init))
 
 static void
 gdk_wayland_drag_surface_init (GdkWaylandDragSurface *surface)
