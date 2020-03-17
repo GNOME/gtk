@@ -108,7 +108,6 @@ struct _GdkWaylandSurface
   unsigned int is_drag_surface : 1;
   GdkSurfaceTypeHint hint;
   GdkSurface *transient_for;
-  GdkSurface *popup_parent;
 
   int pending_buffer_offset_x;
   int pending_buffer_offset_y;
@@ -840,8 +839,6 @@ gdk_wayland_surface_dispose (GObject *object)
   g_return_if_fail (GDK_IS_WAYLAND_SURFACE (surface));
 
   impl = GDK_WAYLAND_SURFACE (surface);
-
-  g_clear_object (&impl->popup_parent);
 
   if (impl->event_queue)
     {
@@ -2440,7 +2437,6 @@ gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
       freeze_popup_toplevel_state (surface);
     }
 
-  g_set_object (&impl->popup_parent, parent);
   display->current_popups = g_list_append (display->current_popups, surface);
   if (grab_input_seat)
     {
@@ -2529,9 +2525,8 @@ unmap_popups_for_surface (GdkSurface *surface)
   for (l = display_wayland->current_popups; l; l = l->next)
     {
        GdkSurface *popup = l->data;
-       GdkWaylandSurface *popup_impl = GDK_WAYLAND_SURFACE (popup);
 
-       if (popup_impl->popup_parent == surface)
+       if (popup->parent == surface)
          {
            g_warning ("Tried to unmap the parent of a popup");
            gdk_surface_hide (popup);
