@@ -119,6 +119,7 @@
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtksnapshot.h"
+#include "gtkshortcuttrigger.h"
 
 #include "gtkrender.h"
 #include "gtkstylecontextprivate.h"
@@ -1443,6 +1444,49 @@ gtk_popover_remove (GtkContainer *container,
 }
 
 static void
+add_tab_bindings (GtkWidgetClass   *widget_class,
+                  GdkModifierType   modifiers,
+                  GtkDirectionType  direction)
+{
+  GtkShortcut *shortcut;
+
+  shortcut = gtk_shortcut_new_with_arguments (
+                 gtk_alternative_trigger_new (gtk_keyval_trigger_new (GDK_KEY_Tab, modifiers),
+                                              gtk_keyval_trigger_new (GDK_KEY_KP_Tab, modifiers)),
+                 gtk_signal_action_new ("move-focus"),
+                 "(i)", direction);
+
+  gtk_widget_class_add_shortcut (widget_class, shortcut);
+
+  g_object_unref (shortcut);
+}
+
+static void
+add_arrow_bindings (GtkWidgetClass   *widget_class,
+                    guint             keysym,
+                    GtkDirectionType  direction)
+{
+  guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
+
+  gtk_widget_class_add_binding_signal (widget_class, keysym, 0,
+                                       "move-focus",
+                                       "(i)",
+                                       direction);
+  gtk_widget_class_add_binding_signal (widget_class, keysym, GDK_CONTROL_MASK,
+                                       "move-focus",
+                                       "(i)",
+                                       direction);
+  gtk_widget_class_add_binding_signal (widget_class, keypad_keysym, 0,
+                                       "move-focus",
+                                       "(i)",
+                                       direction);
+  gtk_widget_class_add_binding_signal (widget_class, keypad_keysym, GDK_CONTROL_MASK,
+                                       "move-focus",
+                                       "(i)",
+                                       direction);
+}
+
+static void
 gtk_popover_class_init (GtkPopoverClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -1525,6 +1569,23 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                   NULL,
                   G_TYPE_NONE,
                   0);
+
+  add_arrow_bindings (widget_class, GDK_KEY_Up, GTK_DIR_UP);
+  add_arrow_bindings (widget_class, GDK_KEY_Down, GTK_DIR_DOWN);
+  add_arrow_bindings (widget_class, GDK_KEY_Left, GTK_DIR_LEFT);
+  add_arrow_bindings (widget_class, GDK_KEY_Right, GTK_DIR_RIGHT);
+
+  add_tab_bindings (widget_class, 0, GTK_DIR_TAB_FORWARD);
+  add_tab_bindings (widget_class, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
+  add_tab_bindings (widget_class, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
+  add_tab_bindings (widget_class, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
+
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Return, 0,
+                                       "activate-default", NULL);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_ISO_Enter, 0,
+                                       "activate-default", NULL);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Enter, 0,
+                                       "activate-default", NULL);
 
   gtk_widget_class_set_css_name (widget_class, "popover");
 }
