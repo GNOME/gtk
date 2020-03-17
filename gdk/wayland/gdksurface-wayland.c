@@ -107,7 +107,6 @@ struct _GdkWaylandSurface
   unsigned int awaiting_frame_frozen : 1;
   unsigned int is_drag_surface : 1;
   GdkSurfaceTypeHint hint;
-  GdkSurface *transient_for;
 
   int pending_buffer_offset_x;
   int pending_buffer_offset_y;
@@ -205,6 +204,8 @@ typedef struct _GdkWaylandToplevel GdkWaylandToplevel;
 struct _GdkWaylandToplevel
 {
   GdkWaylandSurface parent_instance;
+
+  GdkWaylandToplevel *transient_for;
 };
 
 typedef struct
@@ -749,7 +750,6 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
 
   gdk_wayland_surface_set_title (surface, get_default_title ());
 
-  impl->transient_for = parent;
 
   gdk_wayland_surface_create_surface (surface);
 
@@ -969,6 +969,7 @@ gdk_wayland_surface_sync_parent (GdkSurface *surface,
                                  GdkSurface *parent)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (impl);
   GdkWaylandDisplay *display_wayland =
     GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   GdkWaylandSurface *impl_parent = NULL;
@@ -979,8 +980,8 @@ gdk_wayland_surface_sync_parent (GdkSurface *surface,
   if (!is_realized_toplevel (surface))
     return;
 
-  if (impl->transient_for)
-    impl_parent = GDK_WAYLAND_SURFACE (impl->transient_for);
+  if (toplevel->transient_for)
+    impl_parent = GDK_WAYLAND_SURFACE (toplevel->transient_for);
   else if (parent)
     impl_parent = GDK_WAYLAND_SURFACE (parent);
 
@@ -3342,44 +3343,46 @@ gdk_wayland_surface_set_startup_id (GdkSurface  *surface,
 }
 
 static gboolean
-check_transient_for_loop (GdkSurface *surface,
-                          GdkSurface *parent)
+check_transient_for_loop (GdkWaylandToplevel *toplevel,
+                          GdkWaylandToplevel *parent)
 {
   while (parent)
     {
-      GdkWaylandSurface *impl;
-
-      if (!GDK_IS_WAYLAND_SURFACE (parent))
-        return FALSE;
-
-      impl = GDK_WAYLAND_SURFACE (parent);
-      if (impl->transient_for == surface)
+      if (parent->transient_for == toplevel)
         return TRUE;
-      parent = impl->transient_for;
+      parent = parent->transient_for;
     }
   return FALSE;
 }
 
 static void
-gdk_wayland_surface_set_transient_for (GdkSurface *surface,
-                                       GdkSurface *parent)
+gdk_wayland_toplevel_set_transient_for (GdkWaylandToplevel *toplevel,
+                                        GdkSurface         *parent)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  g_return_if_fail (!parent || GDK_IS_WAYLAND_TOPLEVEL (parent));
+  g_return_if_fail (gdk_surface_get_display (GDK_SURFACE (toplevel)) ==
+                    gdk_surface_get_display (parent));
 
-  g_assert (parent == NULL ||
-            gdk_surface_get_display (surface) == gdk_surface_get_display (parent));
-
-  if (check_transient_for_loop (surface, parent))
+  if (parent)
     {
-      g_warning ("Setting %p transient for %p would create a loop", surface, parent);
-      return;
+      GdkWaylandToplevel *parent_toplevel = GDK_WAYLAND_TOPLEVEL (parent);
+
+      if (check_transient_for_loop (toplevel, parent_toplevel))
+        {
+          g_warning ("Setting %p transient for %p would create a loop",
+                     toplevel, parent);
+          return;
+        }
     }
 
-  unset_transient_for_exported (surface);
+  unset_transient_for_exported (GDK_SURFACE (toplevel));
 
-  impl->transient_for = parent;
+  if (parent)
+    toplevel->transient_for = GDK_WAYLAND_TOPLEVEL (parent);
+  else
+    toplevel->transient_for = NULL;
 
-  gdk_wayland_surface_sync_parent (surface, NULL);
+  gdk_wayland_surface_sync_parent (GDK_SURFACE (toplevel), NULL);
 }
 
 static void
@@ -4267,7 +4270,7 @@ gdk_wayland_surface_set_transient_for_exported (GdkSurface *surface,
       return FALSE;
     }
 
-  gdk_wayland_surface_set_transient_for (surface, NULL);
+  gdk_wayland_toplevel_set_transient_for (GDK_WAYLAND_TOPLEVEL (impl), NULL);
 
   impl->imported_transient_for =
     zxdg_importer_v1_import (display_wayland->xdg_importer, parent_handle_str);
@@ -4460,6 +4463,7 @@ gdk_wayland_toplevel_set_property (GObject      *object,
                                    GParamSpec   *pspec)
 {
   GdkSurface *surface = GDK_SURFACE (object);
+  GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (surface);
 
   switch (prop_id)
     {
@@ -4474,7 +4478,8 @@ gdk_wayland_toplevel_set_property (GObject      *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_TRANSIENT_FOR:
-      gdk_wayland_surface_set_transient_for (surface, g_value_get_object (value));
+      gdk_wayland_toplevel_set_transient_for (toplevel,
+                                              g_value_get_object (value));
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
@@ -4514,6 +4519,7 @@ gdk_wayland_toplevel_get_property (GObject    *object,
 {
   GdkSurface *surface = GDK_SURFACE (object);
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (surface);
 
   switch (prop_id)
     {
@@ -4530,7 +4536,7 @@ gdk_wayland_toplevel_get_property (GObject    *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_TRANSIENT_FOR:
-      g_value_set_object (value, impl->transient_for);
+      g_value_set_object (value, toplevel->transient_for);
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_MODAL:
