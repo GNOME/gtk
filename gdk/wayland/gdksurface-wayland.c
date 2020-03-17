@@ -700,6 +700,9 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
                               "display", display,
                               "frame-clock", frame_clock,
                               NULL);
+      display_wayland->toplevels = g_list_prepend (display_wayland->toplevels,
+                                                   surface);
+      g_warn_if_fail (!parent);
       break;
     case GDK_SURFACE_POPUP:
       surface = g_object_new (GDK_TYPE_WAYLAND_POPUP,
@@ -745,9 +748,6 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
     impl->scale = gdk_monitor_get_scale_factor (gdk_display_get_monitor (display, 0));
 
   gdk_wayland_surface_set_title (surface, get_default_title ());
-
-  if (parent == NULL)
-    display_wayland->toplevels = g_list_prepend (display_wayland->toplevels, surface);
 
   impl->transient_for = parent;
 
