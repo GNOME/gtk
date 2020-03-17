@@ -138,7 +138,7 @@ void                    gdk_popup_layout_get_offset             (GdkPopupLayout 
 
 GDK_AVAILABLE_IN_ALL
 void                    gdk_popup_layout_set_reactive           (GdkPopupLayout         *layout,
-                                                                 gboolean                is_recative);
+                                                                 gboolean                is_reactive);
 
 GDK_AVAILABLE_IN_ALL
 gboolean                gdk_popup_layout_is_reactive            (GdkPopupLayout         *layout);
