@@ -35,6 +35,7 @@
 #include "gtksearchentryprivate.h"
 #include "gtkstylecontext.h"
 #include "gtktext.h"
+#include "gtknative.h"
 #include "gdk/gdkprofilerprivate.h"
 
 /**
@@ -67,6 +68,49 @@
  */
 
 #define BOX_SPACE 6
+
+GType gtk_emoji_chooser_child_get_type (void);
+
+#define GTK_TYPE_EMOJI_CHOOSER_CHILD (gtk_emoji_chooser_child_get_type ())
+
+typedef struct
+{
+  GtkFlowBoxChild parent;
+  GtkWidget *variations;
+} GtkEmojiChooserChild;
+
+typedef struct
+{
+  GtkFlowBoxChildClass parent_class;
+} GtkEmojiChooserChildClass;
+
+G_DEFINE_TYPE (GtkEmojiChooserChild, gtk_emoji_chooser_child, GTK_TYPE_FLOW_BOX_CHILD)
+
+static void
+gtk_emoji_chooser_child_init (GtkEmojiChooserChild *child)
+{
+}
+
+static void
+gtk_emoji_chooser_child_size_allocate (GtkWidget *widget,
+                                       int        width,
+                                       int        height,
+                                       int        baseline)
+{
+  GtkEmojiChooserChild *child = (GtkEmojiChooserChild *)widget;
+
+  GTK_WIDGET_CLASS (gtk_emoji_chooser_child_parent_class)->size_allocate (widget, width, height, baseline);
+  if (child->variations)
+    gtk_native_check_resize (GTK_NATIVE (child->variations));
+}
+
+static void
+gtk_emoji_chooser_child_class_init (GtkEmojiChooserChildClass *class)
+{
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  widget_class->size_allocate = gtk_emoji_chooser_child_size_allocate;
+  gtk_widget_class_set_css_name (widget_class, "emoji");
+}
 
 typedef struct {
   GtkWidget *box;
@@ -293,6 +337,7 @@ show_variations (GtkEmojiChooser *chooser,
   GVariant *emoji_data;
   GtkWidget *parent_popover;
   gunichar modifier;
+  GtkEmojiChooserChild *ch = (GtkEmojiChooserChild *)child;
 
   if (!child)
     return;
@@ -305,7 +350,7 @@ show_variations (GtkEmojiChooser *chooser,
     return;
 
   parent_popover = gtk_widget_get_ancestor (child, GTK_TYPE_POPOVER);
-  popover = gtk_popover_new ();
+  popover = ch->variations = gtk_popover_new ();
   gtk_widget_set_parent (popover, child);
   view = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_add_css_class (view, "view");
@@ -419,7 +464,7 @@ add_emoji (GtkWidget    *box,
       return;
     }
 
-  child = g_object_new (GTK_TYPE_FLOW_BOX_CHILD, "css-name", "emoji", NULL);
+  child = g_object_new (GTK_TYPE_EMOJI_CHOOSER_CHILD, NULL);
   g_object_set_data_full (G_OBJECT (child), "emoji-data",
                           g_variant_ref (item),
                           (GDestroyNotify)g_variant_unref);
