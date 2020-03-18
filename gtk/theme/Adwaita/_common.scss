@@ -81,7 +81,7 @@ treeview.expander:disabled { -gtk-icon-filter: opacity(0.5); }
 .view,
 %view {
   color: $text_color;
-  background-color: $base_color;
+  background-color: if($variant=='light',$base_color,darken($base_color,4%));
 
   &:backdrop {
     color: $backdrop_text_color;
