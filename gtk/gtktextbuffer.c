@@ -38,6 +38,7 @@
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"
 #include "gtktexttagprivate.h"
+#include "gtktexttagtableprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
