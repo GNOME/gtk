@@ -54,6 +54,7 @@ proto_sources = [
   ['keyboard-shortcuts-inhibit', 'unstable', 'v1', ],
   ['server-decoration', 'private' ],
   ['xdg-output', 'unstable', 'v1', ],
+  ['transactions', 'unstable', 'v1', ],
 ]
 
 gdk_wayland_gen_headers = []
