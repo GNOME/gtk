@@ -4636,7 +4636,6 @@ gtk_window_map (GtkWidget *widget)
   GtkWidget *child;
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GdkToplevelLayout *layout;
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->map (widget);
 
@@ -4649,17 +4648,7 @@ gtk_window_map (GtkWidget *widget)
       gtk_widget_get_child_visible (priv->title_box))
     gtk_widget_map (priv->title_box);
 
-  layout = gdk_toplevel_layout_new (1, 1);
-  gdk_toplevel_layout_set_resizable (layout, priv->resizable);
-  gdk_toplevel_layout_set_maximized (layout, priv->maximize_initially);
-  gdk_toplevel_layout_set_fullscreen (layout,
-                                      priv->fullscreen_initially,
-                                      priv->initial_fullscreen_monitor);
-  gdk_toplevel_present (GDK_TOPLEVEL (priv->surface),
-                        gdk_surface_get_width (priv->surface),
-                        gdk_surface_get_height (priv->surface),
-                        layout);
-  gdk_toplevel_layout_unref (layout);
+  gtk_window_present_toplevel (window);
 
   if (priv->minimize_initially)
     gdk_toplevel_minimize (GDK_TOPLEVEL (priv->surface));
