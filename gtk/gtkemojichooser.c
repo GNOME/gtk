@@ -104,11 +104,27 @@ gtk_emoji_chooser_child_size_allocate (GtkWidget *widget,
     gtk_native_check_resize (GTK_NATIVE (child->variations));
 }
 
+static gboolean
+gtk_emoji_chooser_child_focus (GtkWidget        *widget,
+                               GtkDirectionType  direction)
+{
+  GtkEmojiChooserChild *child = (GtkEmojiChooserChild *)widget;
+
+  if (child->variations && gtk_widget_is_visible (child->variations))
+    {
+      if (gtk_widget_child_focus (child->variations, direction))
+        return TRUE;
+    }
+
+  return GTK_WIDGET_CLASS (gtk_emoji_chooser_child_parent_class)->focus (widget, direction);
+}
+
 static void
 gtk_emoji_chooser_child_class_init (GtkEmojiChooserChildClass *class)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   widget_class->size_allocate = gtk_emoji_chooser_child_size_allocate;
+  widget_class->focus = gtk_emoji_chooser_child_focus;
   gtk_widget_class_set_css_name (widget_class, "emoji");
 }
 
@@ -351,6 +367,7 @@ show_variations (GtkEmojiChooser *chooser,
 
   parent_popover = gtk_widget_get_ancestor (child, GTK_TYPE_POPOVER);
   popover = ch->variations = gtk_popover_new ();
+  gtk_popover_set_autohide (GTK_POPOVER (popover), TRUE);
   gtk_widget_set_parent (popover, child);
   view = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_add_css_class (view, "view");
