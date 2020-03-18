@@ -68,6 +68,8 @@ struct _GtkTextTagTablePrivate
   GSList     *buffers;
 
   gint anon_count;
+
+  guint seen_invisible : 1;
 };
 
 enum {
@@ -158,6 +160,22 @@ gtk_text_tag_table_init (GtkTextTagTable *table)
 {
   table->priv = gtk_text_tag_table_get_instance_private (table);
   table->priv->hash = g_hash_table_new (g_str_hash, g_str_equal);
+}
+
+static void
+check_visible (GtkTextTagTable *table,
+               GtkTextTag      *tag)
+{
+  if (table->priv->seen_invisible)
+    return;
+
+  if (tag->priv->invisible_set)
+    {
+      gboolean invisible;
+
+      g_object_get (tag, "invisible", &invisible, NULL);
+      table->priv->seen_invisible = invisible;
+    }
 }
 
 /**
@@ -280,6 +298,8 @@ gtk_text_tag_table_add (GtkTextTagTable *table,
   size = gtk_text_tag_table_get_size (table);
   g_assert (size > 0);
   tag->priv->priority = size - 1;
+
+  check_visible (table, tag);
 
   g_signal_emit (table, signals[TAG_ADDED], 0, tag);
   return TRUE;
@@ -470,5 +490,12 @@ _gtk_text_tag_table_tag_changed (GtkTextTagTable *table,
                                  GtkTextTag      *tag,
                                  gboolean         size_changed)
 {
+  check_visible (table, tag);
   g_signal_emit (table, signals[TAG_CHANGED], 0, tag, size_changed);
+}
+
+gboolean
+_gtk_text_tag_table_affects_visibility (GtkTextTagTable *table)
+{
+  return table->priv->seen_invisible;
 }
