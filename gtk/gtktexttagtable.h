@@ -93,15 +93,6 @@ void             gtk_text_tag_table_foreach  (GtkTextTagTable        *table,
 GDK_AVAILABLE_IN_ALL
 gint             gtk_text_tag_table_get_size (GtkTextTagTable        *table);
 
-
-/* INTERNAL private stuff - not even exported from the library on
- * many platforms
- */
-void _gtk_text_tag_table_add_buffer    (GtkTextTagTable *table,
-                                        gpointer         buffer);
-void _gtk_text_tag_table_remove_buffer (GtkTextTagTable *table,
-                                        gpointer         buffer);
-
 G_END_DECLS
 
 #endif
