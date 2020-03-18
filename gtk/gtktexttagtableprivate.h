@@ -29,13 +29,14 @@
 
 G_BEGIN_DECLS
 
-void _gtk_text_tag_table_add_buffer    (GtkTextTagTable *table,
-                                        gpointer         buffer);
-void _gtk_text_tag_table_remove_buffer (GtkTextTagTable *table,
-                                        gpointer         buffer);
-void _gtk_text_tag_table_tag_changed   (GtkTextTagTable *table,
-                                        GtkTextTag      *tag,
-                                        gboolean         size_changed);
+void     _gtk_text_tag_table_add_buffer         (GtkTextTagTable *table,
+                                                 gpointer         buffer);
+void     _gtk_text_tag_table_remove_buffer      (GtkTextTagTable *table,
+                                                 gpointer         buffer);
+void     _gtk_text_tag_table_tag_changed        (GtkTextTagTable *table,
+                                                 GtkTextTag      *tag,
+                                                 gboolean         size_changed);
+gboolean _gtk_text_tag_table_affects_visibility (GtkTextTagTable *table);
 
 G_END_DECLS
 
