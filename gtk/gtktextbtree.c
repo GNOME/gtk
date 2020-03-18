@@ -60,7 +60,7 @@
 #include "gtktextbufferprivate.h"
 #include "gtktexttag.h"
 #include "gtktexttagprivate.h"
-#include "gtktexttagtable.h"
+#include "gtktexttagtableprivate.h"
 #include "gtktextlayoutprivate.h"
 #include "gtktextiterprivate.h"
 #include "gtkdebug.h"
@@ -2491,6 +2491,13 @@ _gtk_text_btree_char_is_invisible (const GtkTextIter *iter)
 
   line = _gtk_text_iter_get_text_line (iter);
   tree = _gtk_text_iter_get_btree (iter);
+
+  /* Short-circuit if we've never seen a visibility tag within the
+   * tag table (meaning everything must be visible).
+   */
+  if G_LIKELY (!_gtk_text_tag_table_affects_visibility (tree->table))
+    return FALSE;
+
   byte_index = gtk_text_iter_get_line_index (iter);
 
   numTags = gtk_text_tag_table_get_size (tree->table);
