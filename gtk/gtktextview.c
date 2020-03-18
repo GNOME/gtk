@@ -8085,7 +8085,7 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
           if (gdk_event_get_event_type (current_event) == GDK_SCROLL)
             move_mark_to_pointer_and_scroll (text_view, "insert");
 
-          g_object_unref (current_event);
+          gdk_event_unref (current_event);
         }
     }
 
@@ -8652,7 +8652,7 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
   gtk_popover_popup (GTK_POPOVER (priv->popup_menu));
 
   if (trigger_event && trigger_event != event)
-    g_object_unref (trigger_event);
+    gdk_event_unref (trigger_event);
 }
 
 static gboolean
