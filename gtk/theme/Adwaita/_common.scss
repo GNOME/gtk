@@ -2938,13 +2938,13 @@ switch {
 
 //selection-mode
 @each $check_state, $check_icon, $check_color, $check_background in
-  ('', 'none', 'transparent', '$checkradio_bg_color'),
-  (':hover', 'none', 'transparent', '$checkradio_bg_color'),
-  (':active', 'none', 'transparent', '$checkradio_bg_color'),
+  ('', 'none', 'transparent', $checkradio_bg_color),
+  (':hover', 'none', 'transparent', $checkradio_bg_color),
+  (':active', 'none', 'transparent', $checkradio_bg_color),
   (':backdrop', 'none', 'transparent', '#{desaturate($checkradio_bg_color, 100%)}'),
-  (':checked', '-gtk-icontheme(\'object-select-symbolic\')', '#{$osd_fg_color}', '$checkradio_bg_color'),
-  (':checked:hover', '-gtk-icontheme(\'object-select-symbolic\')', '#{$osd_fg_color}', '$checkradio_bg_color'),
-  (':checked:active', '-gtk-icontheme(\'object-select-symbolic\')', '#{$osd_fg_color}', '$checkradio_bg_color'),
+  (':checked', '-gtk-icontheme(\'object-select-symbolic\')', $osd_fg_color, $checkradio_bg_color),
+  (':checked:hover', '-gtk-icontheme(\'object-select-symbolic\')', $osd_fg_color, $checkradio_bg_color),
+  (':checked:active', '-gtk-icontheme(\'object-select-symbolic\')', $osd_fg_color, $checkradio_bg_color),
   (':backdrop:checked', '-gtk-icontheme(\'object-select-symbolic\')', '#{transparentize($osd_fg_color, 0.2)}', '#{desaturate($checkradio_bg_color, 100%)}'), {
 
   .view.content-view.check#{$check_state}:not(list),
