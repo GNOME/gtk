@@ -80,7 +80,7 @@ gtk_shortcut_dispose (GObject *object)
   GtkShortcut *self = GTK_SHORTCUT (object);
 
   g_clear_pointer (&self->action, gtk_shortcut_action_unref);
-  g_clear_pointer (&self->trigger, gtk_shortcut_trigger_unref);
+  g_clear_object (&self->trigger);
   g_clear_pointer (&self->args, g_variant_unref);
 
   G_OBJECT_CLASS (gtk_shortcut_parent_class)->dispose (object);
@@ -105,7 +105,7 @@ gtk_shortcut_get_property (GObject    *object,
       break;
 
     case PROP_TRIGGER:
-      g_value_set_boxed (value, self->trigger);
+      g_value_set_object (value, self->trigger);
       break;
 
     default:
@@ -133,7 +133,7 @@ gtk_shortcut_set_property (GObject      *object,
       break;
 
     case PROP_TRIGGER:
-      gtk_shortcut_set_trigger (self, g_value_dup_boxed (value));
+      gtk_shortcut_set_trigger (self, g_value_dup_object (value));
       break;
 
     default:
@@ -182,11 +182,13 @@ gtk_shortcut_class_init (GtkShortcutClass *klass)
    * The trigger that triggers this shortcut.
    */
   properties[PROP_TRIGGER] =
-    g_param_spec_boxed ("trigger",
-                        P_("Trigger"),
-                        P_("The trigger for this shortcut"),
-                        GTK_TYPE_SHORTCUT_TRIGGER,
-                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+    g_param_spec_object ("trigger",
+                         P_("Trigger"),
+                         P_("The trigger for this shortcut"),
+                         GTK_TYPE_SHORTCUT_TRIGGER,
+                         G_PARAM_READWRITE |
+                         G_PARAM_EXPLICIT_NOTIFY |
+                         G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
@@ -195,13 +197,13 @@ static void
 gtk_shortcut_init (GtkShortcut *self)
 {
   self->action = gtk_nothing_action_new ();
-  self->trigger = gtk_shortcut_trigger_ref (gtk_never_trigger_get ());
+  self->trigger = g_object_ref (gtk_never_trigger_get ());
 }
 
 /**
  * gtk_shortcut_new:
- * @trigger: (transfer full) (allow-none): The trigger that will trigger the shortcut
- * @action: (transfer full) (allow-none): The action that will be activated upon
+ * @trigger: (transfer full) (nullable): The trigger that will trigger the shortcut
+ * @action: (transfer full) (nullable): The action that will be activated upon
  *    triggering
  *
  * Creates a new #GtkShortcut that is triggered by @trigger and then activates
@@ -221,7 +223,7 @@ gtk_shortcut_new (GtkShortcutTrigger *trigger,
                            NULL);
 
   if (trigger)
-    gtk_shortcut_trigger_unref (trigger);
+    g_object_unref (trigger);
   if (action)
     gtk_shortcut_action_unref (action);
 
@@ -230,8 +232,8 @@ gtk_shortcut_new (GtkShortcutTrigger *trigger,
 
 /**
  * gtk_shortcut_new_with_arguments: (skip)
- * @trigger: (transfer full) (allow-none): The trigger that will trigger the shortcut
- * @action: (transfer full) (allow-none): The action that will be activated upon
+ * @trigger: (transfer full) (nullable): The trigger that will trigger the shortcut
+ * @action: (transfer full) (nullable): The action that will be activated upon
  *    triggering
  * @format_string: (allow-none): GVariant format string for arguments or %NULL for
  *     no arguments
@@ -270,7 +272,7 @@ gtk_shortcut_new_with_arguments (GtkShortcutTrigger *trigger,
                            NULL);
 
   if (trigger)
-    gtk_shortcut_trigger_unref (trigger);
+    g_object_unref (trigger);
   if (action)
     gtk_shortcut_action_unref (action);
 
@@ -353,18 +355,13 @@ gtk_shortcut_set_trigger (GtkShortcut *self,
   g_return_if_fail (GTK_IS_SHORTCUT (self));
 
   if (trigger == NULL)
-    trigger = gtk_shortcut_trigger_ref (gtk_never_trigger_get ());
+    trigger = g_object_ref (gtk_never_trigger_get ());
 
-  if (self->trigger == trigger)
+  if (g_set_object (&self->trigger, trigger))
     {
-      gtk_shortcut_trigger_unref (trigger);
-      return;
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_TRIGGER]);
+      g_object_unref (trigger);
     }
-  
-  gtk_shortcut_trigger_unref (self->trigger);
-  self->trigger = trigger;
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_TRIGGER]);
 }
 
 GVariant *
