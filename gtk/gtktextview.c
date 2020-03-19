@@ -4441,6 +4441,9 @@ gtk_text_view_size_allocate (GtkWidget *widget,
 
   if (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND])
     gtk_native_check_resize (GTK_NATIVE (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]));
+
+  if (priv->selection_bubble)
+    gtk_native_check_resize (GTK_NATIVE (priv->selection_bubble));
 }
 
 static void
