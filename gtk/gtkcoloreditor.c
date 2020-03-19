@@ -189,34 +189,43 @@ dismiss_current_popup (GtkColorEditor *editor)
 }
 
 static void
-popup_edit (GtkWidget      *widget,
-            GtkColorEditor *editor)
+popup_edit (GtkWidget  *widget,
+            const char *action_name,
+            GVariant   *parameters)
 {
+  GtkColorEditor *editor = GTK_COLOR_EDITOR (widget);
   GtkWidget *popup = NULL;
   GtkRoot *root;
   GtkWidget *focus;
   gint position;
   gint s, e;
+  char *param;
 
-  if (widget == editor->priv->sv_plane)
+  param = g_variant_get_string (parameters, NULL);
+
+  if (strcmp (param, "sv") == 0)
     {
       popup = editor->priv->sv_popup;
       focus = editor->priv->s_entry;
       position = 0;
     }
-  else if (widget == editor->priv->h_slider)
+  else if (strcmp (param, "h") == 0)
     {
       popup = editor->priv->h_popup;
       focus = editor->priv->h_entry;
       gtk_range_get_slider_range (GTK_RANGE (editor->priv->h_slider), &s, &e);
       position = (s + e) / 2;
     }
-  else if (widget == editor->priv->a_slider)
+  else if (strcmp (param, "a") == 0)
     {
       popup = editor->priv->a_popup;
       focus = editor->priv->a_entry;
       gtk_range_get_slider_range (GTK_RANGE (editor->priv->a_slider), &s, &e);
       position = (s + e) / 2;
+    }
+  else
+    {
+      g_warning ("unsupported popup_edit parameter %s", param);
     }
 
   if (popup == editor->priv->current_popup)
@@ -544,8 +553,12 @@ gtk_color_editor_class_init (GtkColorEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, entry_text_changed);
   gtk_widget_class_bind_template_callback (widget_class, entry_apply);
   gtk_widget_class_bind_template_callback (widget_class, entry_focus_changed);
-  gtk_widget_class_bind_template_callback (widget_class, popup_edit);
   gtk_widget_class_bind_template_callback (widget_class, pick_color);
+
+  gtk_widget_class_install_action (widget_class, "color.edit", "s", popup_edit);
+  gtk_widget_class_install_action (widget_class, "color.edit", "s", popup_edit);
+  gtk_widget_class_install_action (widget_class, "color.edit", "s", popup_edit);
+
 }
 
 static void
