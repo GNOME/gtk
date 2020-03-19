@@ -118,9 +118,8 @@ gtk_application_accels_set_accels_for_action (GtkApplicationAccels *accels,
         {
           g_critical ("Unable to parse accelerator '%s': ignored request to install accelerators",
                       accelerators[i]);
-          if (trigger)
-            gtk_shortcut_trigger_unref (trigger);
-          goto out;;
+          g_clear_object (&trigger);
+          goto out;
         }
       new_trigger = gtk_keyval_trigger_new (key, modifier);
       if (trigger)
@@ -146,23 +145,23 @@ static void
 append_accelerators (GPtrArray          *accels,
                      GtkShortcutTrigger *trigger)
 {
-  switch (gtk_shortcut_trigger_get_trigger_type (trigger))
+  if (GTK_IS_KEYVAL_TRIGGER (trigger))
     {
-    case GTK_SHORTCUT_TRIGGER_KEYVAL:
-      g_ptr_array_add (accels,
-                       gtk_accelerator_name (gtk_keyval_trigger_get_keyval (trigger),
-                                             gtk_keyval_trigger_get_modifiers (trigger)));
-      return;
+      GtkKeyvalTrigger *kt = GTK_KEYVAL_TRIGGER (trigger);
+      guint keyval = gtk_keyval_trigger_get_keyval (kt);
+      GdkModifierType mods = gtk_keyval_trigger_get_modifiers (kt);
 
-    case GTK_SHORTCUT_TRIGGER_ALTERNATIVE:
-      append_accelerators (accels, gtk_alternative_trigger_get_first (trigger));
-      append_accelerators (accels, gtk_alternative_trigger_get_second (trigger));
+      g_ptr_array_add (accels, gtk_accelerator_name (keyval, mods));
       return;
+    }
+  else if (GTK_IS_ALTERNATIVE_TRIGGER (trigger))
+    {
+      GtkAlternativeTrigger *at = GTK_ALTERNATIVE_TRIGGER (trigger);
+      GtkShortcutTrigger *first = gtk_alternative_trigger_get_first (at);
+      GtkShortcutTrigger *second = gtk_alternative_trigger_get_second (at);
 
-    case GTK_SHORTCUT_TRIGGER_MNEMONIC:
-    case GTK_SHORTCUT_TRIGGER_NEVER:
-    default:
-      /* not an accelerator */
+      append_accelerators (accels, first);
+      append_accelerators (accels, second); 
       return;
     }
 }
@@ -217,19 +216,22 @@ trigger_matches_accel (GtkShortcutTrigger *trigger,
                        guint               keyval,
                        GdkModifierType     modifiers)
 {
-  switch (gtk_shortcut_trigger_get_trigger_type (trigger))
+  if (GTK_IS_KEYVAL_TRIGGER (trigger))
     {
-    case GTK_SHORTCUT_TRIGGER_KEYVAL:
-      return gtk_keyval_trigger_get_keyval (trigger) == keyval
-          && gtk_keyval_trigger_get_modifiers (trigger) == modifiers;
+      GtkKeyvalTrigger *kt = GTK_KEYVAL_TRIGGER (trigger);
 
-    case GTK_SHORTCUT_TRIGGER_ALTERNATIVE:
-      return trigger_matches_accel (gtk_alternative_trigger_get_first (trigger), keyval, modifiers)
-          || trigger_matches_accel (gtk_alternative_trigger_get_second (trigger), keyval, modifiers);
+      return gtk_keyval_trigger_get_keyval (kt) == keyval
+          && gtk_keyval_trigger_get_modifiers (kt) == modifiers;
+    }
+  else if (GTK_IS_ALTERNATIVE_TRIGGER (trigger))
+    {
+      GtkAlternativeTrigger *at = GTK_ALTERNATIVE_TRIGGER (trigger);
 
-    case GTK_SHORTCUT_TRIGGER_MNEMONIC:
-    case GTK_SHORTCUT_TRIGGER_NEVER:
-    default:
+      return trigger_matches_accel (gtk_alternative_trigger_get_first (at), keyval, modifiers)
+          || trigger_matches_accel (gtk_alternative_trigger_get_second (at), keyval, modifiers);
+    }
+  else
+    {
       return FALSE;
     }
 }

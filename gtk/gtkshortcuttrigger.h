@@ -30,37 +30,13 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_SHORTCUT_TRIGGER (gtk_shortcut_trigger_get_type ())
 
-#define GTK_IS_SHORTCUT_TRIGGER(obj) ((obj) != NULL)
-
 /**
- * GtkShortcutTriggerType:
- * @GTK_SHORTCUT_TRIGGER_NEVER: Never ever trigger
- * @GTK_SHORTCUT_TRIGGER_KEYVAL: Trigger if a key event with matching
- *     modifiers and keyval is received.
- * @GTK_SHORTCUT_TRIGGER_MNEMONIC: Trigger if a key event with matching
- *     keyval is received and mnemonics are enabled for this event.
- * @GTK_SHORTCUT_TRIGGER_ALTERNAITVE: Trigger if either if two
- *     alternatives triggers
+ * GtkShortcutTrigger:
  *
- * The type of a trigger determines what the trigger triggers on.
- **/
-typedef enum {
-  GTK_SHORTCUT_TRIGGER_NEVER,
-  GTK_SHORTCUT_TRIGGER_KEYVAL,
-  GTK_SHORTCUT_TRIGGER_MNEMONIC,
-  GTK_SHORTCUT_TRIGGER_ALTERNATIVE
-} GtkShortcutTriggerType;
-
+ * A trigger for a key shortcut.
+ */
 GDK_AVAILABLE_IN_ALL
-GType                   gtk_shortcut_trigger_get_type           (void) G_GNUC_CONST;
-
-GDK_AVAILABLE_IN_ALL
-GtkShortcutTrigger *    gtk_shortcut_trigger_ref                (GtkShortcutTrigger *self);
-GDK_AVAILABLE_IN_ALL
-void                    gtk_shortcut_trigger_unref              (GtkShortcutTrigger *self);
-
-GDK_AVAILABLE_IN_ALL
-GtkShortcutTriggerType  gtk_shortcut_trigger_get_trigger_type   (GtkShortcutTrigger *self);
+GDK_DECLARE_INTERNAL_TYPE (GtkShortcutTrigger, gtk_shortcut_trigger, GTK, SHORTCUT_TRIGGER, GObject)
 
 GDK_AVAILABLE_IN_ALL
 GtkShortcutTrigger *    gtk_shortcut_trigger_parse_string       (const char         *string);
@@ -92,29 +68,75 @@ gboolean                gtk_shortcut_trigger_trigger            (GtkShortcutTrig
                                                                  GdkEvent           *event,
                                                                  gboolean            enable_mnemonics);
 
+
+#define GTK_TYPE_NEVER_TRIGGER (gtk_never_trigger_get_type())
+
+/**
+ * GtkNeverTrigger:
+ *
+ * A #GtkShortcutTrigger that never triggers.
+ */
+GDK_AVAILABLE_IN_ALL
+GDK_DECLARE_INTERNAL_TYPE (GtkNeverTrigger, gtk_never_trigger, GTK, NEVER_TRIGGER, GtkShortcutTrigger)
+
 GDK_AVAILABLE_IN_ALL
 GtkShortcutTrigger *    gtk_never_trigger_get                   (void);
 
+#define GTK_TYPE_KEYVAL_TRIGGER (gtk_keyval_trigger_get_type())
+
+/**
+ * GtkKeyvalTrigger:
+ *
+ * A #GtkShortcutTrigger that triggers when a specific keyval
+ * and (optionally) modifiers are pressed.
+ */
+
 GDK_AVAILABLE_IN_ALL
-GtkShortcutTrigger *    gtk_keyval_trigger_new                  (guint               keyval,
-                                                                 GdkModifierType     modifiers);
+GDK_DECLARE_INTERNAL_TYPE (GtkKeyvalTrigger, gtk_keyval_trigger, GTK, KEYVAL_TRIGGER, GtkShortcutTrigger)
+
 GDK_AVAILABLE_IN_ALL
-GdkModifierType         gtk_keyval_trigger_get_modifiers        (GtkShortcutTrigger *self);
+GtkShortcutTrigger *    gtk_keyval_trigger_new                  (guint             keyval,
+                                                                 GdkModifierType   modifiers);
 GDK_AVAILABLE_IN_ALL
-guint                   gtk_keyval_trigger_get_keyval           (GtkShortcutTrigger *self);
+GdkModifierType         gtk_keyval_trigger_get_modifiers        (GtkKeyvalTrigger *self);
+GDK_AVAILABLE_IN_ALL
+guint                   gtk_keyval_trigger_get_keyval           (GtkKeyvalTrigger *self);
+
+#define GTK_TYPE_MNEMONIC_TRIGGER (gtk_mnemonic_trigger_get_type())
+
+/**
+ * GtkMnemonicTrigger:
+ *
+ * A #GtkShortcutTrigger that triggers when a specific mnemonic
+ * is pressed.
+ */
+GDK_AVAILABLE_IN_ALL
+GDK_DECLARE_INTERNAL_TYPE (GtkMnemonicTrigger, gtk_mnemonic_trigger, GTK, MNEMONIC_TRIGGER, GtkShortcutTrigger)
 
 GDK_AVAILABLE_IN_ALL
 GtkShortcutTrigger *    gtk_mnemonic_trigger_new                (guint               keyval);
 GDK_AVAILABLE_IN_ALL
-guint                   gtk_mnemonic_trigger_get_keyval         (GtkShortcutTrigger *self);
+guint                   gtk_mnemonic_trigger_get_keyval         (GtkMnemonicTrigger *self);
+
+#define GTK_TYPE_ALTERNATIVE_TRIGGER (gtk_alternative_trigger_get_type())
+
+/**
+ * GtkAlternativeTrigger:
+ *
+ * A #GtkShortcutTrigger that triggers when either of two
+ * #GtkShortcutTriggers trigger.
+ */
 
 GDK_AVAILABLE_IN_ALL
-GtkShortcutTrigger *    gtk_alternative_trigger_new             (GtkShortcutTrigger *one,
-                                                                 GtkShortcutTrigger *two);
+GDK_DECLARE_INTERNAL_TYPE (GtkAlternativeTrigger, gtk_alternative_trigger, GTK, ALTERNATIVE_TRIGGER, GtkShortcutTrigger)
+
 GDK_AVAILABLE_IN_ALL
-GtkShortcutTrigger *    gtk_alternative_trigger_get_first       (GtkShortcutTrigger *self);
+GtkShortcutTrigger *    gtk_alternative_trigger_new             (GtkShortcutTrigger    *first,
+                                                                 GtkShortcutTrigger    *second);
 GDK_AVAILABLE_IN_ALL
-GtkShortcutTrigger *    gtk_alternative_trigger_get_second      (GtkShortcutTrigger *self);
+GtkShortcutTrigger *    gtk_alternative_trigger_get_first       (GtkAlternativeTrigger *self);
+GDK_AVAILABLE_IN_ALL
+GtkShortcutTrigger *    gtk_alternative_trigger_get_second      (GtkAlternativeTrigger *self);
 
 G_END_DECLS
 
