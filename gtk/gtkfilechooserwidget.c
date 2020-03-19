@@ -85,6 +85,10 @@
 #include "gtkwidgetprivate.h"
 #include "gtkpopovermenuprivate.h"
 #include "gtknative.h"
+#include "gtkshortcutcontroller.h"
+#include "gtkshortcuttrigger.h"
+#include "gtkshortcutaction.h"
+#include "gtkshortcut.h"
 
 #include <cairo-gobject.h>
 
@@ -2037,6 +2041,36 @@ file_list_show_popover (GtkFileChooserWidget *impl,
 
   gtk_popover_set_pointing_to (GTK_POPOVER (priv->browse_files_popover), &rect);
   gtk_popover_popup (GTK_POPOVER (priv->browse_files_popover));
+}
+
+static gboolean
+list_popup_menu_cb (GtkWidget *widget,
+                    GVariant  *args,
+                    gpointer   user_data)
+{
+  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (user_data);
+  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
+  graphene_rect_t bounds;
+
+  if (gtk_widget_compute_bounds (priv->browse_files_tree_view,
+                                 priv->browse_files_tree_view,
+                                 &bounds))
+    {
+      file_list_show_popover (impl, 0.5 * bounds.size.width, 0.5 * bounds.size.height);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+files_list_clicked (GtkGesture           *gesture,
+                    int                   n_press,
+                    double                x,
+                    double                y,
+                    GtkFileChooserWidget *impl)
+{
+  list_popup_menu_cb (NULL, NULL, impl);
 }
 
 /* Callback used when a button is pressed on the file list.  We trap button 3 to
@@ -7851,6 +7885,11 @@ post_process_ui (GtkFileChooserWidget *impl)
   GList            *cells;
   GFile            *file;
   GtkDropTarget *target;
+  GtkGesture *gesture;
+  GtkEventController *controller;
+  GtkShortcutTrigger *trigger;
+  GtkShortcutAction *action;
+  GtkShortcut *shortcut;
 
   /* Setup file list treeview */
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->browse_files_tree_view));
@@ -7912,6 +7951,19 @@ post_process_ui (GtkFileChooserWidget *impl)
   gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (priv->search_entry), priv->search_entry);
 
   gtk_widget_set_parent (priv->rename_file_popover, GTK_WIDGET (impl));
+
+  gesture = gtk_gesture_click_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
+  g_signal_connect (gesture, "pressed", G_CALLBACK (files_list_clicked), impl);
+  gtk_widget_add_controller (GTK_WIDGET (priv->browse_files_tree_view), GTK_EVENT_CONTROLLER (gesture));
+
+  controller = gtk_shortcut_controller_new ();
+  trigger = gtk_alternative_trigger_new (gtk_keyval_trigger_new (GDK_KEY_F10, GDK_SHIFT_MASK),
+                                         gtk_keyval_trigger_new (GDK_KEY_Menu, 0));
+  action = gtk_callback_action_new (list_popup_menu_cb, impl, NULL);
+  shortcut = gtk_shortcut_new (trigger, action);
+  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
+  gtk_widget_add_controller (GTK_WIDGET (priv->browse_files_tree_view), controller);
 }
 
 void
