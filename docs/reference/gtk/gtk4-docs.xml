@@ -336,6 +336,15 @@
       <xi:include href="xml/gtkgesturezoom.xml" />
       <xi:include href="xml/gtkgesturestylus.xml" />
       <xi:include href="xml/gtkpadcontroller.xml" />
+      <xi:include href="xml/gtkshortcutcontroller.xml" />
+    </chapter>
+
+    <chapter>
+      <title>Keyboard shortcuts</title>
+      <xi:include href="xml/gtkshortcut.xml" />
+      <xi:include href="xml/gtkshortcuttrigger.xml" />
+      <xi:include href="xml/gtkshortcutaction.xml" />
+      <xi:include href="xml/gtkshortcutmanager.xml" />
     </chapter>
 
     <chapter>

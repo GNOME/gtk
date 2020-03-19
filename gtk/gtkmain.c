@@ -114,7 +114,6 @@
 
 #include "gtkintl.h"
 
-#include "gtkaccelmapprivate.h"
 #include "gtkbox.h"
 #include "gtkdebug.h"
 #include "gtkdropprivate.h"
@@ -662,8 +661,6 @@ do_post_parse_initialization (void)
 
   gsk_ensure_resources ();
   _gtk_ensure_resources ();
-
-  _gtk_accel_map_init ();
 
   gtk_initialized = TRUE;
 
@@ -1697,14 +1694,11 @@ gtk_main_do_event (GdkEvent *event)
   current_events = g_list_prepend (current_events, event);
 
   if (is_pointing_event (event))
-    target_widget = handle_pointing_event (event);
+    {
+      target_widget = handle_pointing_event (event);
+    }
   else if (is_key_event (event))
     {
-      if (gdk_event_get_event_type (event) == GDK_KEY_PRESS &&
-          GTK_IS_WINDOW (target_widget) &&
-          gtk_window_activate_key (GTK_WINDOW (target_widget), event))
-        goto cleanup;
-
       target_widget = handle_key_event (event);
     }
   else if (is_focus_event (event))

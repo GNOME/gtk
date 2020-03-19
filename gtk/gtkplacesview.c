@@ -106,7 +106,15 @@ static void        mount_volume                                  (GtkPlacesView 
 static void        on_eject_button_clicked                       (GtkWidget        *widget,
                                                                   GtkPlacesViewRow *row);
 
-static gboolean    on_row_popup_menu                             (GtkPlacesViewRow *row);
+static gboolean on_row_popup_menu (GtkWidget *widget,
+                                   GVariant  *args,
+                                   gpointer   user_data);
+
+static void click_cb (GtkGesture *gesture,
+                      int         n_press,
+                      double      x,
+                      double      y,
+                      gpointer    user_data);
 
 static void        populate_servers                              (GtkPlacesView *view);
 
@@ -673,12 +681,28 @@ insert_row (GtkPlacesView *view,
             gboolean       is_network)
 {
   GtkPlacesViewPrivate *priv;
+  GtkEventController *controller;
+  GtkShortcutTrigger *trigger;
+  GtkShortcutAction *action;
+  GtkShortcut *shortcut;
+  GtkGesture *gesture;
 
   priv = gtk_places_view_get_instance_private (view);
 
   g_object_set_data (G_OBJECT (row), "is-network", GINT_TO_POINTER (is_network));
 
-  g_signal_connect (row, "popup-menu", G_CALLBACK (on_row_popup_menu), row);
+  controller = gtk_shortcut_controller_new ();
+  trigger = gtk_alternative_trigger_new (gtk_keyval_trigger_new (GDK_KEY_F10, GDK_SHIFT_MASK),
+                                         gtk_keyval_trigger_new (GDK_KEY_Menu, 0));
+  action = gtk_callback_action_new (on_row_popup_menu, row, NULL);
+  shortcut = gtk_shortcut_new (trigger, action);
+  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
+  gtk_widget_add_controller (GTK_WIDGET (row), controller);
+
+  gesture = gtk_gesture_click_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
+  g_signal_connect (gesture, "pressed", G_CALLBACK (click_cb), row);
+  gtk_widget_add_controller (row, GTK_EVENT_CONTROLLER (gesture));
 
   g_signal_connect (gtk_places_view_row_get_eject_button (GTK_PLACES_VIEW_ROW (row)),
                     "clicked",
@@ -1699,10 +1723,12 @@ get_menu_model (void)
   return G_MENU_MODEL (menu);
 }
 
-static void
-popup_menu (GtkPlacesViewRow *row,
-            GdkEventButton   *event)
+static gboolean
+on_row_popup_menu (GtkWidget *widget,
+                   GVariant  *args,
+                   gpointer   user_data)
 {
+  GtkPlacesViewRow *row = GTK_PLACES_VIEW_ROW (widget);
   GtkPlacesViewPrivate *priv;
   GtkWidget *view;
   GMount *mount;
@@ -1730,27 +1756,39 @@ popup_menu (GtkPlacesViewRow *row,
       GMenuModel *model = get_menu_model ();
 
       priv->popup_menu = gtk_popover_menu_new_from_model (model);
-      gtk_widget_set_parent (priv->popup_menu, GTK_WIDGET (view));
       gtk_popover_set_position (GTK_POPOVER (priv->popup_menu), GTK_POS_BOTTOM);
 
       gtk_popover_set_has_arrow (GTK_POPOVER (priv->popup_menu), FALSE);
-      gtk_widget_set_halign (priv->popup_menu, GTK_ALIGN_START);
+      gtk_widget_set_halign (priv->popup_menu, GTK_ALIGN_CENTER);
 
       g_object_unref (model);
     }
 
-  gtk_widget_set_halign (priv->popup_menu, GTK_ALIGN_CENTER);
+  if (priv->row_for_action)
+    g_object_set_data (G_OBJECT (priv->row_for_action), "menu", NULL);
+
+  g_object_ref (priv->popup_menu);
+  gtk_widget_unparent (priv->popup_menu);
   gtk_widget_set_parent (priv->popup_menu, GTK_WIDGET (row));
+  g_object_unref (priv->popup_menu);
 
   priv->row_for_action = row;
+  if (priv->row_for_action)
+    g_object_set_data (G_OBJECT (priv->row_for_action), "menu", priv->popup_menu);
+
   gtk_popover_popup (GTK_POPOVER (priv->popup_menu));
+
+  return TRUE;
 }
 
-static gboolean
-on_row_popup_menu (GtkPlacesViewRow *row)
+static void
+click_cb (GtkGesture *gesture,
+          int         n_press,
+          double      x,
+          double      y,
+          gpointer    user_data)
 {
-  popup_menu (row, NULL);
-  return TRUE;
+  on_row_popup_menu (GTK_WIDGET (user_data), NULL, NULL);
 }
 
 static gboolean

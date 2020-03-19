@@ -97,12 +97,6 @@ GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_startup_id           (GtkWindow           *window,
                                                 const gchar         *startup_id);
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_add_accel_group          (GtkWindow           *window,
-						GtkAccelGroup	    *accel_group);
-GDK_AVAILABLE_IN_ALL
-void       gtk_window_remove_accel_group       (GtkWindow           *window,
-						GtkAccelGroup	    *accel_group);
-GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_focus                (GtkWindow           *window,
 						GtkWidget           *focus);
 GDK_AVAILABLE_IN_ALL
@@ -189,31 +183,6 @@ GList*     gtk_window_list_toplevels (void);
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_has_user_ref_count (GtkWindow *window,
                                               gboolean   setting);
-
-GDK_AVAILABLE_IN_ALL
-void     gtk_window_add_mnemonic          (GtkWindow       *window,
-					   guint            keyval,
-					   GtkWidget       *target);
-GDK_AVAILABLE_IN_ALL
-void     gtk_window_remove_mnemonic       (GtkWindow       *window,
-					   guint            keyval,
-					   GtkWidget       *target);
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_window_mnemonic_activate     (GtkWindow       *window,
-					   guint            keyval,
-					   GdkModifierType  modifier);
-GDK_AVAILABLE_IN_ALL
-void     gtk_window_set_mnemonic_modifier (GtkWindow       *window,
-					   GdkModifierType  modifier);
-GDK_AVAILABLE_IN_ALL
-GdkModifierType gtk_window_get_mnemonic_modifier (GtkWindow *window);
-
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_window_activate_key          (GtkWindow        *window,
-					   GdkEvent         *event);
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_window_propagate_key_event   (GtkWindow        *window,
-					   GdkEvent         *event);
 
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_present            (GtkWindow *window);
