@@ -35,6 +35,7 @@
 #include "gtkspinner.h"
 #include "gtkstack.h"
 #include "gtktypebuiltins.h"
+#include "gtknative.h"
 #else
 #include <gtk/gtk.h>
 #endif
@@ -194,18 +195,6 @@ measure_available_space (GtkPlacesViewRow *row)
 }
 
 static void
-pressed_cb (GtkGesture       *gesture,
-            int               n_pressed,
-            double            x,
-            double            y,
-            GtkPlacesViewRow *row)
-{
-  gboolean menu_activated;
-
-  g_signal_emit_by_name (row, "popup-menu", &menu_activated);
-}
-
-static void
 gtk_places_view_row_finalize (GObject *object)
 {
   GtkPlacesViewRow *self = GTK_PLACES_VIEW_ROW (object);
@@ -321,6 +310,19 @@ gtk_places_view_row_set_property (GObject      *object,
 }
 
 static void
+gtk_places_view_row_size_allocate (GtkWidget *widget,
+                                   int        width,
+                                   int        height,
+                                   int        baseline)
+{
+  GtkWidget *menu = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "menu"));
+
+  GTK_WIDGET_CLASS (gtk_places_view_row_parent_class)->size_allocate (widget, width, height, baseline);
+  if (menu)
+    gtk_native_check_resize (GTK_NATIVE (menu));
+}
+
+static void
 gtk_places_view_row_class_init (GtkPlacesViewRowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -329,6 +331,8 @@ gtk_places_view_row_class_init (GtkPlacesViewRowClass *klass)
   object_class->finalize = gtk_places_view_row_finalize;
   object_class->get_property = gtk_places_view_row_get_property;
   object_class->set_property = gtk_places_view_row_set_property;
+
+  widget_class->size_allocate = gtk_places_view_row_size_allocate;
 
   properties[PROP_ICON] =
           g_param_spec_object ("icon",
@@ -391,8 +395,6 @@ gtk_places_view_row_class_init (GtkPlacesViewRowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkPlacesViewRow, icon_image);
   gtk_widget_class_bind_template_child (widget_class, GtkPlacesViewRow, name_label);
   gtk_widget_class_bind_template_child (widget_class, GtkPlacesViewRow, path_label);
-
-  gtk_widget_class_bind_template_callback (widget_class, pressed_cb);
 }
 
 static void
