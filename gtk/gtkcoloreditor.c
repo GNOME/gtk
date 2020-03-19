@@ -199,7 +199,7 @@ popup_edit (GtkWidget  *widget,
   GtkWidget *focus;
   gint position;
   gint s, e;
-  char *param;
+  const char *param;
 
   param = g_variant_get_string (parameters, NULL);
 
