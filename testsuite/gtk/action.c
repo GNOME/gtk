@@ -360,6 +360,7 @@ test_introspection (void)
   } expected[] = {
     { GTK_TYPE_TEXT, "text.undo", NULL, NULL },
     { GTK_TYPE_TEXT, "text.redo", NULL, NULL },
+    { GTK_TYPE_TEXT, "menu.popup", NULL, NULL },
     { GTK_TYPE_TEXT, "clipboard.cut", NULL, NULL },
     { GTK_TYPE_TEXT, "clipboard.copy", NULL, NULL },
     { GTK_TYPE_TEXT, "clipboard.paste", NULL, NULL },
@@ -378,9 +379,9 @@ test_introspection (void)
                                         &property))
     {
       g_assert (expected[i].owner == owner);
-      g_assert (strcmp (expected[i].name, name) == 0);
-      g_assert (g_strcmp0 (expected[i].params, params ? g_variant_type_peek_string (params) : NULL) == 0);
-      g_assert (g_strcmp0 (expected[i].property, property) == 0);
+      g_assert_cmpstr (expected[i].name, ==, name);
+      g_assert_cmpstr (expected[i].params, ==, params ? g_variant_type_peek_string (params) : NULL);
+      g_assert_cmpstr (expected[i].property, ==, property);
       i++;
     }
   g_assert (i == G_N_ELEMENTS (expected));
