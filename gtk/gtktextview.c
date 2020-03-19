@@ -4475,6 +4475,9 @@ gtk_text_view_size_allocate (GtkWidget *widget,
 
   if (priv->popup_menu)
     gtk_native_check_resize (GTK_NATIVE (priv->popup_menu));
+
+  if (priv->selection_bubble)
+    gtk_native_check_resize (GTK_NATIVE (priv->selection_bubble));
 }
 
 static void
