@@ -141,6 +141,17 @@ update_value (GtkFontPlane *plane,
 }
 
 static void
+hold_action (GtkGestureLongPress *gesture,
+             gdouble              x,
+             gdouble              y,
+             GtkFontPlane       *plane)
+{
+  gboolean handled;
+
+  g_signal_emit_by_name (plane, "popup-menu", &handled);
+}
+
+static void
 plane_drag_gesture_begin (GtkGestureDrag *gesture,
                           gdouble         start_x,
                           gdouble         start_y,
@@ -149,6 +160,13 @@ plane_drag_gesture_begin (GtkGestureDrag *gesture,
   guint button;
 
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+
+  if (button == GDK_BUTTON_SECONDARY)
+    {
+      gboolean handled;
+
+      g_signal_emit_by_name (plane, "popup-menu", &handled);
+    }
 
   if (button != GDK_BUTTON_PRIMARY)
     {
@@ -199,6 +217,13 @@ gtk_font_plane_init (GtkFontPlane *plane)
   g_signal_connect (gesture, "drag-end",
 		    G_CALLBACK (plane_drag_gesture_end), plane);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  gtk_widget_add_controller (GTK_WIDGET (plane), GTK_EVENT_CONTROLLER (gesture));
+
+  gesture = gtk_gesture_long_press_new ();
+  g_signal_connect (gesture, "pressed",
+                    G_CALLBACK (hold_action), plane);
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture),
+                                     TRUE);
   gtk_widget_add_controller (GTK_WIDGET (plane), GTK_EVENT_CONTROLLER (gesture));
 }
 

@@ -303,7 +303,8 @@ parse_combination (GtkShortcutLabel *self,
   accels = g_strsplit (str, "&", 0);
   for (k = 0; accels[k]; k++)
     {
-      if (!gtk_accelerator_parse (accels[k], &key, &modifier))
+      gtk_accelerator_parse (accels[k], &key, &modifier);
+      if (key == 0 && modifier == 0)
         {
           retval = FALSE;
           break;

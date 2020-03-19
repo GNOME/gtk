@@ -281,19 +281,25 @@ create_accel_label (void)
 {
   WidgetInfo *info;
   GtkWidget *widget, *button, *box;
+  GtkAccelGroup *accel_group;
 
   widget = gtk_accel_label_new ("Accel Label");
 
   button = gtk_button_new_with_label ("Quit");
+  gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (widget), button);
   gtk_widget_hide (button);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (box), widget);
   gtk_container_add (GTK_CONTAINER (box), button);
 
-  gtk_accel_label_set_accel (GTK_ACCEL_LABEL (widget), GDK_KEY_Q, GDK_CONTROL_MASK);
+  gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (widget), button);
+  accel_group = gtk_accel_group_new();
 
   info = new_widget_info ("accel-label", box, SMALL);
+
+  gtk_widget_add_accelerator (button, "activate", accel_group, GDK_KEY_Q, GDK_CONTROL_MASK,
+			      GTK_ACCEL_VISIBLE | GTK_ACCEL_LOCKED);
 
   return info;
 }

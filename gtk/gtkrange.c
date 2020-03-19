@@ -1883,6 +1883,16 @@ gtk_range_click_gesture_pressed (GtkGestureClick *gesture,
       mouse_location == priv->highlight_widget)
     mouse_location = priv->trough_widget;
 
+  if (mouse_location == priv->slider_widget &&
+      gdk_event_triggers_context_menu (event))
+    {
+      gboolean handled;
+
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+      g_signal_emit_by_name (widget, "popup-menu", &handled);
+      return;
+    }
+
   if (mouse_location == priv->slider_widget)
     {
       /* Shift-click in the slider = fine adjustment */

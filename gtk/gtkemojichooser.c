@@ -119,39 +119,12 @@ gtk_emoji_chooser_child_focus (GtkWidget        *widget,
   return GTK_WIDGET_CLASS (gtk_emoji_chooser_child_parent_class)->focus (widget, direction);
 }
 
-static void show_variations (GtkEmojiChooser *chooser,
-                             GtkWidget       *child);
-
-static void
-gtk_emoji_chooser_child_popup_menu (GtkWidget  *widget,
-                                    const char *action_name,
-                                    GVariant   *paramters)
-{
-  GtkWidget *chooser;
-
-  chooser = gtk_widget_get_ancestor (widget, GTK_TYPE_EMOJI_CHOOSER);
-
-  show_variations (GTK_EMOJI_CHOOSER (chooser), widget);
-}
-
 static void
 gtk_emoji_chooser_child_class_init (GtkEmojiChooserChildClass *class)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   widget_class->size_allocate = gtk_emoji_chooser_child_size_allocate;
   widget_class->focus = gtk_emoji_chooser_child_focus;
-
-  gtk_widget_class_install_action (widget_class, "menu.popup", NULL, gtk_emoji_chooser_child_popup_menu);
-
-  gtk_widget_class_add_binding_action (widget_class,
-                                       GDK_KEY_F10, GDK_SHIFT_MASK,
-                                       "menu.popup",
-                                       NULL);
-  gtk_widget_class_add_binding_action (widget_class,
-                                       GDK_KEY_Menu, 0,
-                                       "menu.popup",
-                                       NULL);
-
   gtk_widget_class_set_css_name (widget_class, "emoji");
 }
 
@@ -448,6 +421,16 @@ pressed_cb (GtkGesture *gesture,
   show_variations (chooser, child);
 }
 
+static gboolean
+popup_menu (GtkWidget *widget,
+            gpointer   data)
+{
+  GtkEmojiChooser *chooser = data;
+
+  show_variations (chooser, widget);
+  return TRUE;
+}
+
 static void
 add_emoji (GtkWidget    *box,
            gboolean      prepend,
@@ -504,6 +487,9 @@ add_emoji (GtkWidget    *box,
                           (GDestroyNotify)g_variant_unref);
   if (modifier != 0)
     g_object_set_data (G_OBJECT (child), "modifier", GUINT_TO_POINTER (modifier));
+
+  if (chooser)
+    g_signal_connect (child, "popup-menu", G_CALLBACK (popup_menu), chooser);
 
   gtk_container_add (GTK_CONTAINER (child), label);
   gtk_flow_box_insert (GTK_FLOW_BOX (box), child, prepend ? 0 : -1);

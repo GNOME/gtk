@@ -34,6 +34,7 @@
 #include <gtk/gtkaboutdialog.h>
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkaccellabel.h>
+#include <gtk/gtkaccelmap.h>
 #include <gtk/gtkaccessible.h>
 #include <gtk/gtkactionable.h>
 #include <gtk/gtkactionbar.h>
@@ -48,6 +49,7 @@
 #include <gtk/gtkassistant.h>
 #include <gtk/gtkbin.h>
 #include <gtk/gtkbinlayout.h>
+#include <gtk/gtkbindings.h>
 #include <gtk/gtkborder.h>
 #include <gtk/gtkboxlayout.h>
 #include <gtk/gtkbox.h>
@@ -196,16 +198,11 @@
 #include <gtk/gtkselectionmodel.h>
 #include <gtk/gtkseparator.h>
 #include <gtk/gtksettings.h>
-#include <gtk/gtkshortcut.h>
-#include <gtk/gtkshortcutaction.h>
-#include <gtk/gtkshortcutcontroller.h>
 #include <gtk/gtkshortcutlabel.h>
-#include <gtk/gtkshortcutmanager.h>
 #include <gtk/gtkshortcutsgroup.h>
 #include <gtk/gtkshortcutssection.h>
 #include <gtk/gtkshortcutsshortcut.h>
 #include <gtk/gtkshortcutswindow.h>
-#include <gtk/gtkshortcuttrigger.h>
 #include <gtk/gtkshow.h>
 #include <gtk/gtksingleselection.h>
 #include <gtk/gtkslicelistmodel.h>

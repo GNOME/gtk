@@ -56,6 +56,7 @@ void            gtk_window_check_resize            (GtkWindow     *self);
 typedef void (*GtkWindowKeysForeachFunc) (GtkWindow      *window,
                                           guint           keyval,
                                           GdkModifierType modifiers,
+                                          gboolean        is_mnemonic,
                                           gpointer        data);
 
 gboolean gtk_window_emit_close_request (GtkWindow *window);

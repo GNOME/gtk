@@ -23,6 +23,7 @@
 #include "gtkpasswordentry.h"
 
 #include "gtkaccessible.h"
+#include "gtkbindings.h"
 #include "gtktextprivate.h"
 #include "gtkeditable.h"
 #include "gtkgestureclick.h"

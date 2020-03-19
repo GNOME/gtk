@@ -39,6 +39,7 @@
 #include "gtklabel.h"
 #include "gtkbutton.h"
 #include "gtkenums.h"
+#include "gtkbindings.h"
 #include "gtkdialog.h"
 #include "gtkrevealer.h"
 #include "gtkintl.h"
@@ -377,9 +378,14 @@ gtk_info_bar_dispose (GObject *object)
 static void
 gtk_info_bar_class_init (GtkInfoBarClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
+  GObjectClass *object_class;
+  GtkWidgetClass *widget_class;
+  GtkContainerClass *container_class;
+  GtkBindingSet *binding_set;
+
+  object_class = G_OBJECT_CLASS (klass);
+  widget_class = GTK_WIDGET_CLASS (klass);
+  container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->get_property = gtk_info_bar_get_property;
   object_class->set_property = gtk_info_bar_set_property;
@@ -463,10 +469,9 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
                                   NULL,
                                   G_TYPE_NONE, 0);
 
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Escape, 0,
-                                       "close",
-                                       NULL);
+  binding_set = gtk_binding_set_by_class (klass);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "close", 0);
 
   gtk_widget_class_set_css_name (widget_class, I_("infobar"));
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);

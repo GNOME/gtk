@@ -33,8 +33,6 @@
 #include <gsk/gsk.h>
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkborder.h>
-#include <gtk/gtkshortcut.h>
-#include <gtk/gtkshortcutaction.h>
 #include <gtk/gtktypes.h>
 #include <atk/atk.h>
 
@@ -376,32 +374,23 @@ GDK_AVAILABLE_IN_ALL
 GType                   gtk_widget_class_get_layout_manager_type        (GtkWidgetClass *widget_class);
 
 GDK_AVAILABLE_IN_ALL
-void       gtk_widget_class_add_binding   (GtkWidgetClass      *widget_class,
-                                           guint                keyval,
-                                           GdkModifierType      mods,
-                                           GtkShortcutFunc      callback,
-                                           const gchar         *format_string,
-                                           ...);
+void       gtk_widget_add_accelerator     (GtkWidget           *widget,
+                                           const gchar         *accel_signal,
+                                           GtkAccelGroup       *accel_group,
+                                           guint                accel_key,
+                                           GdkModifierType      accel_mods,
+                                           GtkAccelFlags        accel_flags);
 GDK_AVAILABLE_IN_ALL
-void       gtk_widget_class_add_binding_signal
-                                          (GtkWidgetClass      *widget_class,
-                                           GdkModifierType      mods,
-                                           guint                keyval,
-                                           const gchar         *signal,
-                                           const gchar         *format_string,
-                                           ...);
+gboolean   gtk_widget_remove_accelerator  (GtkWidget           *widget,
+                                           GtkAccelGroup       *accel_group,
+                                           guint                accel_key,
+                                           GdkModifierType      accel_mods);
 GDK_AVAILABLE_IN_ALL
-void       gtk_widget_class_add_binding_action
-                                          (GtkWidgetClass      *widget_class,
-                                           GdkModifierType      mods,
-                                           guint                keyval,
-                                           const gchar         *action_name,
-                                           const gchar         *format_string,
-                                           ...);
+void       gtk_widget_set_accel_path      (GtkWidget           *widget,
+                                           const gchar         *accel_path,
+                                           GtkAccelGroup       *accel_group);
 GDK_AVAILABLE_IN_ALL
-void       gtk_widget_class_add_shortcut  (GtkWidgetClass      *widget_class,
-                                           GtkShortcut         *shortcut);
-
+GList*     gtk_widget_list_accel_closures (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_can_activate_accel  (GtkWidget           *widget,
                                            guint                signal_id);

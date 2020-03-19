@@ -1390,6 +1390,58 @@ test_message_dialog (void)
 }
 
 static void
+test_accelerators (void)
+{
+  GtkBuilder *builder;
+  const gchar *buffer =
+    "<interface>"
+    "  <object class=\"GtkWindow\" id=\"window1\">"
+    "    <child>"
+    "      <object class=\"GtkButton\" id=\"button1\">"
+    "        <accelerator key=\"q\" modifiers=\"GDK_CONTROL_MASK\" signal=\"clicked\"/>"
+    "      </object>"
+    "    </child>"
+    "  </object>"
+    "</interface>";
+  const gchar *buffer2 =
+    "<interface>"
+    "  <object class=\"GtkWindow\" id=\"window1\">"
+    "    <child>"
+    "      <object class=\"GtkTreeView\" id=\"treeview1\">"
+    "      </object>"
+    "    </child>"
+    "  </object>"
+    "</interface>";
+  GObject *window1;
+  GSList *accel_groups;
+  GObject *accel_group;
+  
+  builder = builder_new_from_string (buffer, -1, NULL);
+  window1 = gtk_builder_get_object (builder, "window1");
+  g_assert (window1);
+  g_assert (GTK_IS_WINDOW (window1));
+
+  accel_groups = gtk_accel_groups_from_object (window1);
+  g_assert (g_slist_length (accel_groups) == 1);
+  accel_group = g_slist_nth_data (accel_groups, 0);
+  g_assert (accel_group);
+
+  gtk_widget_destroy (GTK_WIDGET (window1));
+  g_object_unref (builder);
+
+  builder = builder_new_from_string (buffer2, -1, NULL);
+  window1 = gtk_builder_get_object (builder, "window1");
+  g_assert (window1);
+  g_assert (GTK_IS_WINDOW (window1));
+
+  accel_groups = gtk_accel_groups_from_object (window1);
+  g_assert_cmpint (g_slist_length (accel_groups), ==, 0);
+
+  gtk_widget_destroy (GTK_WIDGET (window1));
+  g_object_unref (builder);
+}
+
+static void
 test_widget (void)
 {
   const gchar *buffer =
@@ -2445,6 +2497,7 @@ main (int argc, char **argv)
 #endif
   g_test_add_func ("/Builder/CellView", test_cell_view);
   g_test_add_func ("/Builder/Dialog", test_dialog);
+  g_test_add_func ("/Builder/Accelerators", test_accelerators);
   g_test_add_func ("/Builder/Widget", test_widget);
   g_test_add_func ("/Builder/Value From String", test_value_from_string);
   g_test_add_func ("/Builder/Reference Counting", test_reference_counting);

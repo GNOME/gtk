@@ -17,7 +17,6 @@ tests = [
   ['builderparser'],
   ['cellarea'],
   ['check-icon-names'],
-  ['concatmodel', ['../../gtk/gtkconcatmodel.c'], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']],
   ['constraint-solver', [
       '../../gtk/gtkconstraintsolver.c',
       '../../gtk/gtkconstraintexpression.c',
@@ -65,6 +64,7 @@ tests = [
   ['treepath'],
   ['treeview'],
   ['typename'],
+  ['window'],
   ['displayclose'],
   ['revealer-size'],
   ['widgetorder'],
@@ -72,10 +72,6 @@ tests = [
 
 # Tests that are expected to fail
 xfail = [
-  # one of the window resizing tests fails after
-  # the GdkToplevel refactoring, and needs a big
-  # gtkwindow.c configure request cleanup
-  'window',
 ]
 
 is_debug = get_option('buildtype').startswith('debug')

@@ -1,5 +1,5 @@
-/*
- * Copyright (c) 2020 Red Hat, Inc.
+/* GTK - The GIMP Toolkit
+ * Copyright (C) 2011 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,17 +15,16 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _GTK_INSPECTOR_SHORTCUTS_H_
-#define _GTK_INSPECTOR_SHORTCUTS_H_
+#ifndef __GTK_BINDINGS_PRIVATE_H__
+#define __GTK_BINDINGS_PRIVATE_H__
 
-#include <gtk/gtkbox.h>
+#include "gtkbindings.h"
 
-#define GTK_TYPE_INSPECTOR_SHORTCUTS (gtk_inspector_shortcuts_get_type ())
+G_BEGIN_DECLS
 
-G_DECLARE_FINAL_TYPE (GtkInspectorShortcuts, gtk_inspector_shortcuts, GTK, INSPECTOR_SHORTCUTS, GtkWidget)
+guint _gtk_binding_parse_binding     (GScanner        *scanner);
+void  _gtk_binding_reset_parsed      (void);
 
+G_END_DECLS
 
-void gtk_inspector_shortcuts_set_object (GtkInspectorShortcuts *sl,
-                                         GObject               *object);
-
-#endif
+#endif /* __GTK_BINDINGS_PRIVATE_H__ */

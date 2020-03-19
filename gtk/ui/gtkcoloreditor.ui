@@ -83,12 +83,12 @@
             </child>
             <child>
               <object class="GtkColorScale" id="h_slider">
-                <property name="name">h</property>
                 <property name="can-focus">True</property>
                 <property name="orientation">vertical</property>
                 <property name="adjustment">h_adj</property>
                 <property name="draw-value">False</property>
                 <property name="has-origin">False</property>
+                <signal name="popup-menu" handler="popup_edit" swapped="no"/>
                 <layout>
                   <property name="left-attach">0</property>
                   <property name="top-attach">1</property>
@@ -97,7 +97,6 @@
             </child>
             <child>
               <object class="GtkColorScale" id="a_slider">
-                <property name="name">a</property>
                 <property name="can-focus">True</property>
                 <property name="adjustment">a_adj</property>
                 <property name="draw-value">False</property>
@@ -106,6 +105,7 @@
                 <style>
                   <class name="marks-before"/>
                 </style>
+                <signal name="popup-menu" handler="popup_edit" swapped="no"/>
                 <layout>
                   <property name="left-attach">1</property>
                   <property name="top-attach">2</property>
@@ -115,13 +115,13 @@
             </child>
             <child>
               <object class="GtkColorPlane" id="sv_plane">
-                <property name="name">sv</property>
                 <property name="width-request">300</property>
                 <property name="height-request">300</property>
                 <property name="can-focus">True</property>
                 <property name="h-adjustment">h_adj</property>
                 <property name="s-adjustment">s_adj</property>
                 <property name="v-adjustment">v_adj</property>
+                <signal name="popup-menu" handler="popup_edit" swapped="no"/>
                 <layout>
                   <property name="left-attach">1</property>
                   <property name="top-attach">1</property>
