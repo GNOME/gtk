@@ -160,12 +160,6 @@
                                                 <signal name="pressed" handler="click_cb" swapped="no"/>
                                               </object>
                                             </child>
-                                            <child>
-                                              <object class="GtkEventControllerKey">
-                                                <signal name="key-pressed" handler="treeview_key_press_cb" swapped="no"/>
-                                              </object>
-                                            </child>
-                                            <signal name="popup-menu" handler="list_popup_menu_cb" swapped="no"/>
                                             <signal name="query-tooltip" handler="file_list_query_tooltip_cb" swapped="no"/>
                                             <signal name="row-activated" handler="list_row_activated" swapped="no"/>
                                             <signal name="keynav-failed" handler="browse_files_tree_view_keynav_failed_cb"/>
@@ -366,11 +360,6 @@
             </child>
           </object>
         </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkEventControllerKey">
-        <signal name="key-pressed" handler="widget_key_press_cb" swapped="no"/>
       </object>
     </child>
   </template>

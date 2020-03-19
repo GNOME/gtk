@@ -23,7 +23,6 @@
 #include "gtkfilechooserwidgetprivate.h"
 
 #include "gtkbookmarksmanagerprivate.h"
-#include "gtkbindings.h"
 #include "gtkbutton.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrendererpixbuf.h"
@@ -85,6 +84,10 @@
 #include "gtkbinlayout.h"
 #include "gtkwidgetprivate.h"
 #include "gtkpopovermenuprivate.h"
+#include "gtkshortcutcontroller.h"
+#include "gtkshortcuttrigger.h"
+#include "gtkshortcutaction.h"
+#include "gtkshortcut.h"
 
 #include <cairo-gobject.h>
 
@@ -1190,125 +1193,22 @@ places_sidebar_show_error_message_cb (GtkPlacesSidebar *sidebar,
 }
 
 static gboolean
-should_trigger_location_entry (GtkFileChooserWidget *impl,
-                               guint                 keyval,
-                               GdkModifierType       state,
-                               const char          **string)
+trigger_location_entry (GtkWidget *widget,
+                        GVariant  *arguments,
+                        gpointer   unused)
 {
+  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (widget);
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-  GdkModifierType no_text_input_mask;
 
   if (priv->operation_mode == OPERATION_MODE_SEARCH)
     return FALSE;
 
-  no_text_input_mask =
-    gtk_widget_get_modifier_mask (GTK_WIDGET (impl), GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
-
-  if (state & no_text_input_mask)
+  if (priv->action != GTK_FILE_CHOOSER_ACTION_OPEN &&
+      priv->action != GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     return FALSE;
 
-  switch (keyval)
-    {
-    case GDK_KEY_slash:
-    case GDK_KEY_KP_Divide:
-      *string = "/";
-      return TRUE;
-
-    case GDK_KEY_period:
-      *string = ".";
-      return TRUE;
-
-    case GDK_KEY_asciitilde:
-      *string = "~";
-      return TRUE;
-
-    default:
-      return FALSE;
-    }
-}
-
-/* Handles key press events on the file list, so that we can trap Enter to
- * activate the default button on our own.  Also, checks to see if “/” has been
- * pressed.
- */
-static gboolean
-treeview_key_press_cb (GtkEventControllerKey *controller,
-                       guint                  keyval,
-                       guint                  keycode,
-                       GdkModifierType        state,
-                       gpointer               data)
-{
-  GtkFileChooserWidget *impl = (GtkFileChooserWidget *) data;
-  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-  const char *string;
-
-  if (should_trigger_location_entry (impl, keyval, state, &string) &&
-      (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
-       priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER))
-    {
-      location_popup_handler (impl, string);
-      return GDK_EVENT_STOP;
-    }
-
-  if ((keyval == GDK_KEY_Return ||
-       keyval == GDK_KEY_ISO_Enter ||
-       keyval == GDK_KEY_KP_Enter ||
-       keyval == GDK_KEY_space ||
-       keyval == GDK_KEY_KP_Space) &&
-      !(state & gtk_accelerator_get_default_mod_mask ()) &&
-      priv->action != GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-    {
-      gtk_widget_activate_default (GTK_WIDGET (impl));
-      return GDK_EVENT_STOP;
-    }
-
-  if (keyval == GDK_KEY_Escape &&
-      priv->operation_mode == OPERATION_MODE_SEARCH)
-    {
-      return gtk_event_controller_key_forward (controller,
-                                               GTK_WIDGET (gtk_search_entry_get_text_widget (GTK_SEARCH_ENTRY (priv->search_entry))));
-    }
-
-  return GDK_EVENT_PROPAGATE;
-}
-
-static gboolean
-widget_key_press_cb (GtkEventControllerKey *controller,
-                     guint                  keyval,
-                     guint                  keycode,
-                     GdkModifierType        state,
-                     gpointer               data)
-{
-  GtkFileChooserWidget *impl = (GtkFileChooserWidget *) data;
-  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-  gboolean handled = FALSE;
-  const char *string;
-
-  if (should_trigger_location_entry (impl, keyval, state, &string))
-    {
-      if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
-          priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-        {
-          location_popup_handler (impl, string);
-          handled = TRUE;
-        }
-    }
-  else
-    {
-      priv->starting_search = TRUE;
-      if (gtk_event_controller_key_forward (controller, priv->search_entry))
-        {
-          gtk_widget_grab_focus (priv->search_entry);
-
-          if (priv->operation_mode != OPERATION_MODE_SEARCH &&
-              priv->starting_search)
-            operation_mode_set (impl, OPERATION_MODE_SEARCH);
-
-          handled = TRUE;
-        }
-    }
-
-  return handled;
+  location_popup_handler (impl, g_variant_get_string (arguments, NULL));
+  return TRUE;
 }
 
 /* Callback used from gtk_tree_selection_selected_foreach(); adds a bookmark for
@@ -2132,11 +2032,12 @@ file_list_show_popover (GtkFileChooserWidget *impl,
   gtk_popover_popup (GTK_POPOVER (priv->browse_files_popover));
 }
 
-/* Callback used for the GtkWidget::popup-menu signal of the file list */
 static gboolean
-list_popup_menu_cb (GtkWidget            *widget,
-                    GtkFileChooserWidget *impl)
+list_popup_menu_cb (GtkWidget *widget,
+                    GVariant  *args,
+                    gpointer   user_data)
 {
+  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (user_data);
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
   graphene_rect_t bounds;
 
@@ -2149,6 +2050,16 @@ list_popup_menu_cb (GtkWidget            *widget,
     }
 
   return FALSE;
+}
+
+static void
+files_list_clicked (GtkGesture           *gesture,
+                    int                   n_press,
+                    double                x,
+                    double                y,
+                    GtkFileChooserWidget *impl)
+{
+  list_popup_menu_cb (NULL, NULL, impl);
 }
 
 /* Callback used when a button is pressed on the file list.  We trap button 3 to
@@ -7461,18 +7372,20 @@ show_hidden_handler (GtkFileChooserWidget *impl)
 }
 
 static void
-add_normal_and_shifted_binding (GtkBindingSet   *binding_set,
+add_normal_and_shifted_binding (GtkWidgetClass  *widget_class,
                                 guint            keyval,
                                 GdkModifierType  modifiers,
                                 const gchar     *signal_name)
 {
-  gtk_binding_entry_add_signal (binding_set,
-                                keyval, modifiers,
-                                signal_name, 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keyval, modifiers,
+                                       signal_name,
+                                       NULL);
 
-  gtk_binding_entry_add_signal (binding_set,
-                                keyval, modifiers | GDK_SHIFT_MASK,
-                                signal_name, 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keyval, modifiers | GDK_SHIFT_MASK,
+                                       signal_name,
+                                       NULL);
 }
 
 static void
@@ -7483,7 +7396,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   };
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-  GtkBindingSet *binding_set;
   gint i;
 
   gobject_class->finalize = gtk_file_chooser_widget_finalize;
@@ -7764,71 +7676,84 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 NULL,
                                 G_TYPE_NONE, 0);
 
-  binding_set = gtk_binding_set_by_class (class);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_l, GDK_CONTROL_MASK,
+                                       "location-toggle-popup",
+                                       NULL);
 
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_l, GDK_CONTROL_MASK,
-                                "location-toggle-popup",
-                                0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_v, GDK_CONTROL_MASK,
+                                       "location-popup-on-paste",
+                                       NULL);
 
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_v, GDK_CONTROL_MASK,
-                                "location-popup-on-paste",
-                                0);
-
-  add_normal_and_shifted_binding (binding_set,
+  add_normal_and_shifted_binding (widget_class,
                                   GDK_KEY_Up, GDK_MOD1_MASK,
                                   "up-folder");
-
-  add_normal_and_shifted_binding (binding_set,
+  add_normal_and_shifted_binding (widget_class,
                                   GDK_KEY_KP_Up, GDK_MOD1_MASK,
                                   "up-folder");
 
-  add_normal_and_shifted_binding (binding_set,
+  add_normal_and_shifted_binding (widget_class,
                                   GDK_KEY_Down, GDK_MOD1_MASK,
                                   "down-folder");
-  add_normal_and_shifted_binding (binding_set,
+  add_normal_and_shifted_binding (widget_class,
                                   GDK_KEY_KP_Down, GDK_MOD1_MASK,
                                   "down-folder");
 
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_Home, GDK_MOD1_MASK,
-                                "home-folder",
-                                0);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_KP_Home, GDK_MOD1_MASK,
-                                "home-folder",
-                                0);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_d, GDK_MOD1_MASK,
-                                "desktop-folder",
-                                0);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_h, GDK_CONTROL_MASK,
-                                "show-hidden",
-                                0);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_s, GDK_MOD1_MASK,
-                                "search-shortcut",
-                                0);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_f, GDK_CONTROL_MASK,
-                                "search-shortcut",
-                                0);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_r, GDK_MOD1_MASK,
-                                "recent-shortcut",
-                                0);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_p, GDK_MOD1_MASK,
-                                "places-shortcut",
-                                0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Home, GDK_MOD1_MASK,
+                                       "home-folder",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Home, GDK_MOD1_MASK,
+                                       "home-folder",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_d, GDK_MOD1_MASK,
+                                       "desktop-folder",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_h, GDK_CONTROL_MASK,
+                                       "show-hidden",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_s, GDK_MOD1_MASK,
+                                       "search-shortcut",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_f, GDK_CONTROL_MASK,
+                                       "search-shortcut",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_r, GDK_MOD1_MASK,
+                                       "recent-shortcut",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_p, GDK_MOD1_MASK,
+                                       "places-shortcut",
+                                       NULL);
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_slash, 0,
+                                trigger_location_entry,
+                                "s", "/");
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_KP_Divide, 0,
+                                trigger_location_entry,
+                                "s", "/");
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_period, 0,
+                                trigger_location_entry,
+                                "s", ".");
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_asciitilde, 0,
+                                trigger_location_entry,
+                                "s", "~");
 
-  for (i = 0; i < 10; i++)
-    gtk_binding_entry_add_signal (binding_set,
-                                  quick_bookmark_keyvals[i], GDK_MOD1_MASK,
-                                  "quick-bookmark",
-                                  1, G_TYPE_INT, i);
+  for (i = 0; i < G_N_ELEMENTS (quick_bookmark_keyvals); i++)
+    gtk_widget_class_add_binding_signal (widget_class,
+                                         quick_bookmark_keyvals[i], GDK_MOD1_MASK,
+                                         "quick-bookmark",
+                                         "(i)", i);
 
   g_object_class_install_property (gobject_class, PROP_SEARCH_MODE,
                                    g_param_spec_boolean ("search-mode",
@@ -7893,7 +7818,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, box);
 
   /* And a *lot* of callbacks to bind ... */
-  gtk_widget_class_bind_template_callback (widget_class, list_popup_menu_cb);
   gtk_widget_class_bind_template_callback (widget_class, file_list_query_tooltip_cb);
   gtk_widget_class_bind_template_callback (widget_class, list_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, list_selection_changed);
@@ -7913,8 +7837,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, rename_file_end);
   gtk_widget_class_bind_template_callback (widget_class, click_cb);
   gtk_widget_class_bind_template_callback (widget_class, long_press_cb);
-  gtk_widget_class_bind_template_callback (widget_class, treeview_key_press_cb);
-  gtk_widget_class_bind_template_callback (widget_class, widget_key_press_cb);
 
   gtk_widget_class_set_css_name (widget_class, I_("filechooser"));
 
@@ -7930,6 +7852,11 @@ post_process_ui (GtkFileChooserWidget *impl)
   GList            *cells;
   GFile            *file;
   GtkDropTarget *target;
+  GtkGesture *gesture;
+  GtkEventController *controller;
+  GtkShortcutTrigger *trigger;
+  GtkShortcutAction *action;
+  GtkShortcut *shortcut;
 
   /* Setup file list treeview */
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->browse_files_tree_view));
@@ -7988,6 +7915,20 @@ post_process_ui (GtkFileChooserWidget *impl)
                                   priv->item_actions);
 
   gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (priv->search_entry), priv->search_entry);
+
+  gesture = gtk_gesture_click_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
+  g_signal_connect (gesture, "pressed", G_CALLBACK (files_list_clicked), impl);
+  gtk_widget_add_controller (GTK_WIDGET (priv->browse_files_tree_view), GTK_EVENT_CONTROLLER (gesture));
+
+  controller = gtk_shortcut_controller_new ();
+  trigger = gtk_alternative_trigger_new (gtk_keyval_trigger_new (GDK_KEY_F10, GDK_SHIFT_MASK),
+                                         gtk_keyval_trigger_new (GDK_KEY_Menu, 0));
+  action = gtk_callback_action_new (list_popup_menu_cb, impl, NULL);
+  shortcut = gtk_shortcut_new (trigger, action);
+  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
+  gtk_widget_add_controller (GTK_WIDGET (priv->browse_files_tree_view), controller);
+
 }
 
 void
