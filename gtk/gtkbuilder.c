@@ -2102,7 +2102,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
           GtkShortcutTrigger *trigger = gtk_shortcut_trigger_parse_string (string);
 
           if (trigger)
-            g_value_take_boxed (value, trigger);
+            g_value_take_object (value, trigger);
           else
             {
               g_set_error (error,
