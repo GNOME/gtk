@@ -19,12 +19,12 @@
 
 #include "gtkcomboboxprivate.h"
 
-#include "gtkbindings.h"
 #include "gtkbox.h"
 #include "gtkcellareabox.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcellview.h"
+#include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollerscroll.h"
 #include "gtkframe.h"
 #include "gtkbuiltiniconprivate.h"
@@ -33,10 +33,11 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
+#include "gtkshortcutcontroller.h"
 #include "gtktogglebutton.h"
 #include "gtktreepopoverprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtkeventcontrollerkey.h"
+#include "gtkwidgetprivate.h"
 
 #include "a11y/gtkcomboboxaccessible.h"
 
@@ -409,7 +410,6 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   GObjectClass *object_class;
   GtkContainerClass *container_class;
   GtkWidgetClass *widget_class;
-  GtkBindingSet *binding_set;
 
   container_class = (GtkContainerClass *)klass;
   container_class->forall = gtk_combo_box_forall;
@@ -560,57 +560,77 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                   G_TYPE_STRING, 1, G_TYPE_STRING);
 
   /* key bindings */
-  binding_set = gtk_binding_set_by_class (widget_class);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Down, GDK_MOD1_MASK,
+                                       "popup",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Down, GDK_MOD1_MASK,
+                                       "popup",
+                                       NULL);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Down, GDK_MOD1_MASK,
-                                "popup", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Down, GDK_MOD1_MASK,
-                                "popup", 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Up, GDK_MOD1_MASK,
+                                       "popdown",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Up, GDK_MOD1_MASK,
+                                       "popdown",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Escape, 0,
+                                       "popdown",
+                                       NULL);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Up, GDK_MOD1_MASK,
-                                "popdown", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Up, GDK_MOD1_MASK,
-                                "popdown", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0,
-                                "popdown", 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Up, 0,
+                                       "move-active",
+                                       "(i)", GTK_SCROLL_STEP_UP);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Up, 0,
+                                       "move-active",
+                                       "(i)", GTK_SCROLL_STEP_UP);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Page_Up, 0,
+                                       "move-active",
+                                       "(i)", GTK_SCROLL_PAGE_UP);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Page_Up, 0,
+                                       "move-active",
+                                       "(i)", GTK_SCROLL_PAGE_UP);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Home, 0,
+                                       "move-active",
+                                       "(i)", GTK_SCROLL_START);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                      GDK_KEY_KP_Home, 0,
+                                       "move-active",
+                                       "(i)", GTK_SCROLL_START);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Up, 0,
-                                "move-active", 1,
-                                GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_STEP_UP);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Up, 0,
-                                "move-active", 1,
-                                GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_STEP_UP);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Page_Up, 0,
-                                "move-active", 1,
-                                GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_PAGE_UP);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Page_Up, 0,
-                                "move-active", 1,
-                                GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_PAGE_UP);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Home, 0,
-                                "move-active", 1,
-                                GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_START);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Home, 0,
-                                "move-active", 1,
-                                GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_START);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Down, 0,
-                                "move-active", 1,
-                                GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_STEP_DOWN);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Down, 0,
-                                "move-active", 1,
-                                GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_STEP_DOWN);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Page_Down, 0,
-                                "move-active", 1,
-                                GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_PAGE_DOWN);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Page_Down, 0,
-                                "move-active", 1,
-                                GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_PAGE_DOWN);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_End, 0,
-                                "move-active", 1,
-                                GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_END);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_End, 0,
-                                "move-active", 1,
-                                GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_END);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Down, 0,
+                                       "move-active",
+                                       "(i)", GTK_SCROLL_STEP_DOWN);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Down, 0,
+                                       "move-active",
+                                       "(i)", GTK_SCROLL_STEP_DOWN);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Page_Down, 0,
+                                       "move-active",
+                                       "(i)", GTK_SCROLL_PAGE_DOWN);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Page_Down, 0,
+                                       "move-active",
+                                       "(i)", GTK_SCROLL_PAGE_DOWN);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_End, 0,
+                                       "move-active",
+                                       "(i)", GTK_SCROLL_END);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_End, 0,
+                                       "move-active",
+                                       "(i)", GTK_SCROLL_END);
 
   /* properties */
   g_object_class_override_property (object_class,
@@ -826,6 +846,7 @@ gtk_combo_box_init (GtkComboBox *combo_box)
 {
   GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
   GtkEventController *controller;
+  GList *controllers, *list;
 
   priv->active = -1;
   priv->active_row = NULL;
@@ -860,6 +881,19 @@ gtk_combo_box_init (GtkComboBox *combo_box)
                     G_CALLBACK (gtk_combo_box_scroll_controller_scroll),
                     combo_box);
   gtk_widget_add_controller (GTK_WIDGET (combo_box), controller);
+
+  controllers = gtk_widget_list_controllers (priv->popup_widget, GTK_PHASE_BUBBLE);
+  for (list = controllers; list; list = list->next)
+    {
+      if (GTK_IS_SHORTCUT_CONTROLLER (list->data))
+        {
+          g_object_ref (list->data);
+          gtk_widget_remove_controller (priv->popup_widget, list->data);
+          gtk_widget_add_controller (priv->popup_widget, list->data);
+          break;
+        }
+    }
+  g_list_free (controllers);
 }
 
 static void
@@ -1789,18 +1823,7 @@ gtk_combo_box_menu_key (GtkEventControllerKey *key,
                         GdkModifierType        modifiers,
                         GtkComboBox           *combo_box)
 {
-  GtkWidget *widget;
-  GdkEvent *event;
-
-  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (key));
-  event = gtk_get_current_event ();
-
-  if (!gtk_bindings_activate_event (G_OBJECT (widget), event))
-    {
-      gtk_event_controller_key_forward (key, GTK_WIDGET (combo_box));
-    }
-
-  gdk_event_unref (event);
+  gtk_event_controller_key_forward (key, GTK_WIDGET (combo_box));
 
   return TRUE;
 }

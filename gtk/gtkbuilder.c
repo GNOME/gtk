@@ -215,16 +215,20 @@
 
 #include "gtkbuilderprivate.h"
 
+#include "gdkpixbufutilsprivate.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderscopeprivate.h"
 #include "gtkdebug.h"
 #include "gtkmain.h"
+#include "gtkicontheme.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtkshortcutactionprivate.h"
+#include "gtkshortcuttrigger.h"
+#include "gtktestutils.h"
 #include "gtktypebuiltins.h"
 #include "gtkicontheme.h"
 #include "gtkiconthemeprivate.h"
-#include "gdkpixbufutilsprivate.h"
 
 static void gtk_builder_finalize       (GObject         *object);
 static void gtk_builder_set_property   (GObject         *object,
@@ -2091,6 +2095,29 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
                            string);
               ret = FALSE;
             }
+        }
+      else if (G_VALUE_HOLDS (value, GTK_TYPE_SHORTCUT_TRIGGER))
+        {
+          GtkShortcutTrigger *trigger = gtk_shortcut_trigger_parse_string (string);
+
+          if (trigger)
+            g_value_take_boxed (value, trigger);
+          else
+            {
+              g_set_error (error,
+                           GTK_BUILDER_ERROR,
+                           GTK_BUILDER_ERROR_INVALID_VALUE,
+                           "Could not parse shortcut trigger '%s'",
+                           string);
+              ret = FALSE;
+            }
+        }
+      else if (G_VALUE_HOLDS (value, GTK_TYPE_SHORTCUT_ACTION))
+        {
+          GtkShortcutAction *action = gtk_shortcut_action_parse_builder (builder, string, error);
+
+          /* Works for success and failure (NULL) case */
+          g_value_take_boxed (value, action);
         }
       else if (G_VALUE_HOLDS (value, G_TYPE_STRV))
         {
