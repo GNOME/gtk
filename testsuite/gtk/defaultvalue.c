@@ -100,7 +100,8 @@ test_type (gconstpointer data)
       g_str_equal (g_type_name (type), "GtkPlacesSidebar"))
     return;
  
-  if (g_type_is_a (type, GTK_TYPE_SHORTCUT_TRIGGER))
+  if (g_type_is_a (type, GTK_TYPE_SHORTCUT_TRIGGER) ||
+      g_type_is_a (type, GTK_TYPE_SHORTCUT_ACTION))
     return;
 
   klass = g_type_class_ref (type);

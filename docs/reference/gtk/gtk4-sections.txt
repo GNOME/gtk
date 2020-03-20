@@ -6022,8 +6022,8 @@ gtk_signal_action_new
 gtk_signal_action_get_signal_name
 
 <SUBSECTION>
-gtk_action_action_new
-gtk_action_action_get_name
+gtk_named_action_new
+gtk_named_action_get_name
 
 <SUBSECTION Private>
 gtk_shortcut_action_get_type
