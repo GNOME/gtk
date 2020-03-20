@@ -439,6 +439,7 @@ foreach testname : testdata
                  '-o', join_paths(meson.current_build_dir(), 'output'),
                  join_paths(meson.current_source_dir(), testname),
          ],
+         protocol: 'tap',
          env: [ 'GIO_USE_VOLUME_MONITOR=unix',
                 'GSETTINGS_BACKEND=memory',
                 'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
