@@ -109,6 +109,7 @@ static void     set_wm_name                       (GdkDisplay  *display,
 						   Window       xwindow,
 						   const gchar *name);
 static void     move_to_current_desktop           (GdkSurface *surface);
+static void     gdk_x11_toplevel_state_callback   (GdkSurface *surface);
 
 /* Return whether time1 is considered later than time2 as far as xserver
  * time is concerned.  Accounts for wraparound.
@@ -148,6 +149,11 @@ _gdk_x11_surface_get_toplevel (GdkSurface *surface)
     {
       impl->toplevel = g_new0 (GdkToplevelX11, 1);
       impl->toplevel->have_focused = FALSE;
+      impl->toplevel->inhibit_seats_list = NULL;
+      impl->toplevel->surface_state = GDK_SURFACE_STATE_WITHDRAWN;
+      g_signal_connect (surface, "notify::state",
+                        G_CALLBACK (gdk_x11_toplevel_state_callback),
+                        NULL);
     }
 
   return impl->toplevel;
@@ -444,6 +450,11 @@ gdk_x11_surface_finalize (GObject *object)
 
   if (impl->toplevel->in_frame)
     unhook_surface_changed (GDK_SURFACE (impl));
+
+  g_signal_handlers_disconnect_by_func (GDK_SURFACE (impl),
+                                        gdk_x11_toplevel_state_callback,
+                                        NULL);
+  g_clear_pointer (&impl->toplevel->inhibit_seats_list, g_list_free);
 
   _gdk_x11_surface_grab_check_destroy (GDK_SURFACE (impl));
 
@@ -4725,6 +4736,9 @@ gdk_x11_toplevel_set_property (GObject      *object,
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
+    case LAST_PROP + GDK_TOPLEVEL_PROP_INHIBIT_LIST:
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -4738,6 +4752,7 @@ gdk_x11_toplevel_get_property (GObject    *object,
                                GParamSpec *pspec)
 {
   GdkSurface *surface = GDK_SURFACE (object);
+  GdkToplevelX11 *toplevel_x11;
 
   switch (prop_id)
     {
@@ -4783,6 +4798,11 @@ gdk_x11_toplevel_get_property (GObject    *object,
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_FULLSCREEN_MODE:
       g_value_set_enum (value, surface->fullscreen_mode);
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_INHIBIT_LIST:
+      toplevel_x11 = _gdk_x11_surface_get_toplevel (surface);
+      g_value_set_pointer (value, toplevel_x11->inhibit_seats_list);
       break;
 
     default:
@@ -4909,6 +4929,85 @@ gdk_x11_toplevel_supports_edge_constraints (GdkToplevel *toplevel)
 }
 
 static void
+gdk_x11_toplevel_state_callback (GdkSurface *surface)
+{
+  GdkToplevelX11 *toplevel_x11;
+  GdkSurfaceState new_state;
+  GdkSurfaceState changed;
+  GList *l;
+
+  toplevel_x11 = _gdk_x11_surface_get_toplevel (surface);
+  new_state = gdk_toplevel_get_state (GDK_TOPLEVEL (surface));
+  changed = new_state ^ toplevel_x11->surface_state;
+  toplevel_x11->surface_state = new_state;
+
+  if (!(changed & GDK_SURFACE_STATE_FOCUSED))
+    return;
+
+  if (toplevel_x11->have_focused)
+    return;
+
+  for (l = toplevel_x11->inhibit_seats_list; l != NULL; l = l->next)
+    gdk_seat_ungrab (GDK_SEAT (l->data));
+  g_clear_pointer (&toplevel_x11->inhibit_seats_list, g_list_free);
+
+  g_object_notify (G_OBJECT (surface), "inhibit-list");
+}
+
+static gboolean
+gdk_x11_toplevel_inhibit_system_shortcuts (GdkToplevel *toplevel,
+                                           GdkSeat     *gdk_seat,
+                                           GdkEvent    *gdk_event)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+  GdkToplevelX11 *toplevel_x11;
+  GdkGrabStatus status;
+
+  if (!(surface->state & GDK_SURFACE_STATE_FOCUSED))
+    return FALSE;
+
+  if (!(gdk_seat_get_capabilities (gdk_seat) & GDK_SEAT_CAPABILITY_KEYBOARD))
+    return FALSE;
+
+  toplevel_x11 = _gdk_x11_surface_get_toplevel (GDK_SURFACE (toplevel));
+
+  if (g_list_find (toplevel_x11->inhibit_seats_list, gdk_seat))
+    return FALSE; /* Already inhibited */
+
+  status = gdk_seat_grab (gdk_seat, surface, GDK_SEAT_CAPABILITY_KEYBOARD,
+                          TRUE, NULL, gdk_event, NULL, NULL);
+
+  if (status != GDK_GRAB_SUCCESS)
+    return FALSE;
+
+  toplevel_x11->inhibit_seats_list =
+    g_list_append (toplevel_x11->inhibit_seats_list, gdk_seat);
+
+  g_object_notify (G_OBJECT (toplevel), "inhibit-list");
+
+  return TRUE;
+}
+
+static void
+gdk_x11_toplevel_restore_system_shortcuts (GdkToplevel *toplevel,
+                                           GdkSeat     *gdk_seat)
+{
+  GdkToplevelX11 *toplevel_x11;
+
+  toplevel_x11 = _gdk_x11_surface_get_toplevel (GDK_SURFACE (toplevel));
+
+  if (!g_list_find (toplevel_x11->inhibit_seats_list, gdk_seat))
+    return; /* Not inhibited */
+
+  gdk_seat_ungrab (gdk_seat);
+
+  toplevel_x11->inhibit_seats_list =
+    g_list_remove (toplevel_x11->inhibit_seats_list, gdk_seat);
+
+  g_object_notify (G_OBJECT (toplevel), "inhibit-list");
+}
+
+static void
 gdk_x11_toplevel_iface_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_x11_toplevel_present;
@@ -4917,6 +5016,8 @@ gdk_x11_toplevel_iface_init (GdkToplevelInterface *iface)
   iface->focus = gdk_x11_toplevel_focus;
   iface->show_window_menu = gdk_x11_toplevel_show_window_menu;
   iface->supports_edge_constraints = gdk_x11_toplevel_supports_edge_constraints;
+  iface->inhibit_system_shortcuts = gdk_x11_toplevel_inhibit_system_shortcuts;
+  iface->restore_system_shortcuts = gdk_x11_toplevel_restore_system_shortcuts;
 }
 
 typedef struct {
