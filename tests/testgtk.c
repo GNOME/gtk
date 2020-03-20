@@ -1623,7 +1623,7 @@ accel_button_new (const gchar *text,
   gtk_shortcut_controller_set_scope (GTK_SHORTCUT_CONTROLLER (controller), GTK_SHORTCUT_SCOPE_GLOBAL);
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
   shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (keyval, modifiers),
-                               gtk_activate_action_new ());
+                               g_object_ref (gtk_activate_action_get ()));
   gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
   g_object_unref (shortcut);
   gtk_widget_add_controller (button, controller);
