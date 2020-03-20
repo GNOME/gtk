@@ -74,6 +74,13 @@ gdk_toplevel_default_supports_edge_constraints (GdkToplevel *toplevel)
 }
 
 static void
+gdk_toplevel_default_divert_system_shortcuts (GdkToplevel *toplevel,
+                                              GdkSeat     *seat,
+                                              gboolean     diverted)
+{
+}
+
+static void
 gdk_toplevel_default_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_toplevel_default_present;
@@ -82,6 +89,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
   iface->focus = gdk_toplevel_default_focus;
   iface->show_window_menu = gdk_toplevel_default_show_window_menu;
   iface->supports_edge_constraints = gdk_toplevel_default_supports_edge_constraints;
+  iface->divert_system_shortcuts = gdk_toplevel_default_divert_system_shortcuts;
 
   g_object_interface_install_property (iface,
       g_param_spec_flags ("state",
@@ -438,4 +446,30 @@ gdk_toplevel_supports_edge_constraints (GdkToplevel *toplevel)
   g_return_val_if_fail (GDK_IS_TOPLEVEL (toplevel), FALSE);
 
   return GDK_TOPLEVEL_GET_IFACE (toplevel)->supports_edge_constraints (toplevel);
+}
+
+/**
+ * gdk_toplevel_divert_system_shortcuts:
+ * @toplevel: a #GdkToplevel
+ * @seat: a #GdkSeat
+ * @diverted: %TRUE to request system shortcuts
+ *
+ * Setting @diverted to %TRUE hints the desktop environment that it
+ * should divert the system shortcuts to the surface for the given seat
+ * instead of processing those system shortcuts itself.
+ *
+ * The windowing system may ask the user to grant or deny the request or
+ * even choose to ignore the request entirely.
+ */
+void
+gdk_toplevel_divert_system_shortcuts (GdkToplevel *toplevel,
+                                      GdkSeat     *seat,
+                                      gboolean     diverted)
+{
+  g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
+  g_return_if_fail (GDK_IS_SEAT (seat));
+
+  return GDK_TOPLEVEL_GET_IFACE (toplevel)->divert_system_shortcuts (toplevel,
+                                                                     seat,
+                                                                     diverted);
 }

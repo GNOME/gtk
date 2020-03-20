@@ -125,6 +125,7 @@ gtk_tests = [
   ['testblur'],
   ['testtexture'],
   ['testwindowdrag'],
+  ['testdivershortcuts'],
   ['testtexthistory', ['../gtk/gtktexthistory.c']],
 ]
 
