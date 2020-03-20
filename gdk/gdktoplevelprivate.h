@@ -21,6 +21,9 @@ struct _GdkToplevelInterface
   gboolean      (* show_window_menu)    (GdkToplevel       *toplevel,
                                          GdkEvent          *event);
   gboolean      (* supports_edge_constraints) (GdkToplevel *toplevel);
+  void          (* inhibit_system_shortcuts)  (GdkToplevel *toplevel,
+                                               GdkEvent    *event);
+  void          (* restore_system_shortcuts)  (GdkToplevel *toplevel);
 };
 
 typedef enum
@@ -34,6 +37,7 @@ typedef enum
   GDK_TOPLEVEL_PROP_DECORATED,
   GDK_TOPLEVEL_PROP_DELETABLE,
   GDK_TOPLEVEL_PROP_FULLSCREEN_MODE,
+  GDK_TOPLEVEL_PROP_SHORTCUTS_INHIBITED,
   GDK_TOPLEVEL_NUM_PROPERTIES
 } GdkToplevelProperties;
 
