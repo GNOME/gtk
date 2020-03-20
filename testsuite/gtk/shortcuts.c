@@ -242,14 +242,13 @@ test_trigger_trigger (void)
   g_object_unref (trigger4);
 }
 
-static int callback_count;
-
 static gboolean
 callback (GtkWidget *widget,
           GVariant  *args,
           gpointer   user_data)
 {
-  callback_count++;
+  int *callback_count = user_data;
+  *callback_count += 1;
   return TRUE;
 }
 
@@ -258,31 +257,13 @@ test_action_basic (void)
 {
   GtkShortcutAction *action;
 
-  action = gtk_nothing_action_new ();
-  g_assert_cmpint (gtk_shortcut_action_get_action_type (action), ==, GTK_SHORTCUT_ACTION_NOTHING);
-  gtk_shortcut_action_unref (action);
-
-  action = gtk_callback_action_new (callback, NULL, NULL);
-  g_assert_cmpint (gtk_shortcut_action_get_action_type (action), ==, GTK_SHORTCUT_ACTION_CALLBACK);
-  gtk_shortcut_action_unref (action);
-
-  action = gtk_mnemonic_action_new ();
-  g_assert_cmpint (gtk_shortcut_action_get_action_type (action), ==, GTK_SHORTCUT_ACTION_MNEMONIC);
-  gtk_shortcut_action_unref (action);
-
-  action = gtk_activate_action_new ();
-  g_assert_cmpint (gtk_shortcut_action_get_action_type (action), ==, GTK_SHORTCUT_ACTION_ACTIVATE);
-  gtk_shortcut_action_unref (action);
-
   action = gtk_signal_action_new ("activate");
-  g_assert_cmpint (gtk_shortcut_action_get_action_type (action), ==, GTK_SHORTCUT_ACTION_SIGNAL);
-  g_assert_cmpstr (gtk_signal_action_get_signal_name (action), ==, "activate");
-  gtk_shortcut_action_unref (action);
+  g_assert_cmpstr (gtk_signal_action_get_signal_name (GTK_SIGNAL_ACTION (action)), ==, "activate");
+  g_object_unref (action);
 
-  action = gtk_action_action_new ("text.undo");
-  g_assert_cmpint (gtk_shortcut_action_get_action_type (action), ==, GTK_SHORTCUT_ACTION_ACTION);
-  g_assert_cmpstr (gtk_action_action_get_name (action), ==, "text.undo");
-  gtk_shortcut_action_unref (action);
+  action = gtk_named_action_new ("text.undo");
+  g_assert_cmpstr (gtk_named_action_get_action_name (GTK_NAMED_ACTION (action)), ==, "text.undo");
+  g_object_unref (action);
 }
 
 static void
@@ -290,19 +271,19 @@ test_action_activate (void)
 {
   GtkShortcutAction *action;
   GtkWidget *widget;
+  int callback_count;
 
   widget = gtk_label_new ("");
   g_object_ref_sink (widget);
 
-  action = gtk_nothing_action_new ();
-  g_assert_cmpint (gtk_shortcut_action_activate (action, 0, widget, NULL), ==, FALSE);
-  gtk_shortcut_action_unref (action);
+  action = gtk_nothing_action_get ();
+  g_assert_false (gtk_shortcut_action_activate (action, 0, widget, NULL));
 
   callback_count = 0;
-  action = gtk_callback_action_new (callback, NULL, NULL);
-  g_assert_cmpint (gtk_shortcut_action_activate (action, 0, widget , NULL), ==, TRUE);
+  action = gtk_callback_action_new (callback, &callback_count, NULL);
+  g_assert_true (gtk_shortcut_action_activate (action, 0, widget, NULL));
   g_assert_cmpint (callback_count, ==, 1);
-  gtk_shortcut_action_unref (action);
+  g_object_unref (action);
 
   g_object_unref (widget);
 }
