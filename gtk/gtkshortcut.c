@@ -79,7 +79,7 @@ gtk_shortcut_dispose (GObject *object)
 {
   GtkShortcut *self = GTK_SHORTCUT (object);
 
-  g_clear_pointer (&self->action, gtk_shortcut_action_unref);
+  g_clear_object (&self->action);
   g_clear_object (&self->trigger);
   g_clear_pointer (&self->args, g_variant_unref);
 
@@ -125,7 +125,7 @@ gtk_shortcut_set_property (GObject      *object,
   switch (property_id)
     {
     case PROP_ACTION:
-      gtk_shortcut_set_action (self, g_value_dup_boxed (value));
+      gtk_shortcut_set_action (self, g_value_dup_object (value));
       break;
 
     case PROP_ARGUMENTS:
@@ -157,11 +157,13 @@ gtk_shortcut_class_init (GtkShortcutClass *klass)
    * The action that gets activated by this shortcut.
    */
   properties[PROP_ACTION] =
-    g_param_spec_boxed ("action",
-                        P_("Action"),
-                        P_("The action activated by this shortcut"),
-                        GTK_TYPE_SHORTCUT_ACTION,
-                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+    g_param_spec_object ("action",
+                         P_("Action"),
+                         P_("The action activated by this shortcut"),
+                         GTK_TYPE_SHORTCUT_ACTION,
+                         G_PARAM_READWRITE |
+                         G_PARAM_EXPLICIT_NOTIFY |
+                         G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkShortcut:arguments:
@@ -196,7 +198,7 @@ gtk_shortcut_class_init (GtkShortcutClass *klass)
 static void
 gtk_shortcut_init (GtkShortcut *self)
 {
-  self->action = gtk_nothing_action_new ();
+  self->action = g_object_ref (gtk_nothing_action_get ());
   self->trigger = g_object_ref (gtk_never_trigger_get ());
 }
 
@@ -225,7 +227,7 @@ gtk_shortcut_new (GtkShortcutTrigger *trigger,
   if (trigger)
     g_object_unref (trigger);
   if (action)
-    gtk_shortcut_action_unref (action);
+    g_object_unref (action);
 
   return shortcut;
 }
@@ -274,7 +276,7 @@ gtk_shortcut_new_with_arguments (GtkShortcutTrigger *trigger,
   if (trigger)
     g_object_unref (trigger);
   if (action)
-    gtk_shortcut_action_unref (action);
+    g_object_unref (action);
 
   return shortcut;
 }
@@ -310,18 +312,13 @@ gtk_shortcut_set_action (GtkShortcut *self,
   g_return_if_fail (GTK_IS_SHORTCUT (self));
 
   if (action == NULL)
-    action = gtk_nothing_action_new ();
+    action = g_object_ref (gtk_nothing_action_get ());
 
-  if (self->action == action)
+  if (g_set_object (&self->action, action))
     {
-      gtk_shortcut_action_unref (action);
-      return;
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACTION]);
+      g_object_unref (action);
     }
-  
-  gtk_shortcut_action_unref (self->action);
-  self->action = action;
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACTION]);
 }
 
 /**

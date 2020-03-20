@@ -420,7 +420,10 @@ test_type (gconstpointer data)
     return;
 
   /* these assert in constructed */
-  if (g_type_is_a (type, GTK_TYPE_ALTERNATIVE_TRIGGER))
+ if (g_type_is_a (type, GTK_TYPE_ALTERNATIVE_TRIGGER) ||
+     g_type_is_a (type, GTK_TYPE_GACTION_ACTION) ||
+     g_type_is_a (type, GTK_TYPE_SIGNAL_ACTION) ||
+     g_type_is_a (type, GTK_TYPE_NAMED_ACTION))
     return;
 
   klass = g_type_class_ref (type);
@@ -466,6 +469,12 @@ test_type (gconstpointer data)
   /* special casing for singletons */
   else if (g_type_is_a (type, GTK_TYPE_NEVER_TRIGGER))
     instance = (GObject *) g_object_ref (gtk_never_trigger_get ());
+  else if (g_type_is_a (type, GTK_TYPE_NOTHING_ACTION))
+    instance = (GObject *) g_object_ref (gtk_nothing_action_get ());
+  else if (g_type_is_a (type, GTK_TYPE_ACTIVATE_ACTION))
+    instance = (GObject *) g_object_ref (gtk_activate_action_get ());
+  else if (g_type_is_a (type, GTK_TYPE_MNEMONIC_ACTION))
+    instance = (GObject *) g_object_ref (gtk_mnemonic_action_get ());
   else
     instance = g_object_new (type, NULL);
 
