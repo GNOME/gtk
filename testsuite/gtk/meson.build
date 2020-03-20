@@ -51,6 +51,7 @@ tests = [
   ['regression-tests'],
   ['scrolledwindow'],
   ['searchbar'],
+  ['shortcuts'],
   ['singleselection'],
   ['slicelistmodel'],
   ['sortlistmodel'],
@@ -110,7 +111,7 @@ foreach t : tests
 
   test(test_name, test_exe,
        args: [ '--tap', '-k' ],
-       #protocol: 'tap',
+       protocol: 'tap',
        env: [ 'GIO_USE_VOLUME_MONITOR=unix',
               'GSETTINGS_BACKEND=memory',
               'GDK_DEBUG=default-settings',
