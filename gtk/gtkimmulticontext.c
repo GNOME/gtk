@@ -189,6 +189,12 @@ gtk_im_multicontext_set_slave (GtkIMMulticontext *multicontext,
       g_signal_handlers_disconnect_by_func (priv->slave,
 					    gtk_im_multicontext_commit_cb,
 					    multicontext);
+      g_signal_handlers_disconnect_by_func (priv->slave,
+					    gtk_im_multicontext_retrieve_surrounding_cb,
+					    multicontext);
+      g_signal_handlers_disconnect_by_func (priv->slave,
+					    gtk_im_multicontext_delete_surrounding_cb,
+					    multicontext);
 
       g_object_unref (priv->slave);
       priv->slave = NULL;
