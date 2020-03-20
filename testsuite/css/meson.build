@@ -13,6 +13,7 @@ test_api = executable('api', 'api.c',
                       install_dir: testexecdir)
 test('api', test_api,
      args: ['--tap', '-k' ],
+     protocol: 'tap',
      env: [ 'GIO_USE_VOLUME_MONITOR=unix',
             'GSETTINGS_BACKEND=memory',
             'GDK_DEBUG=default-settings',
@@ -31,6 +32,7 @@ test_data = executable('data', ['data.c', '../../gtk/css/gtkcssdataurl.c'],
                        install_dir: testexecdir)
 test('data', test_data,
      args: ['--tap', '-k' ],
+     protocol: 'tap',
      env: [ 'GIO_USE_VOLUME_MONITOR=unix',
             'GSETTINGS_BACKEND=memory',
             'GDK_DEBUG=default-settings',
@@ -50,7 +52,7 @@ if get_option('install-tests')
                  install_dir: testdatadir)
 endif
 
-if get_option ('profiler')
+if false and get_option ('profiler')
 
   test('performance-adwaita', test_performance,
        args: [ '--mark', 'css validation',

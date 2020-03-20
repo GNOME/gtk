@@ -18,6 +18,7 @@ test_style = executable(
 )
 test('style', test_style,
      args: [ '--tap', '-k' ],
+     protocol: 'tap',
      env: [ 'GIO_USE_VOLUME_MONITOR=unix',
             'GSETTINGS_BACKEND=memory',
             'GDK_DEBUG=default-settings',
