@@ -57,11 +57,14 @@ static const GOptionEntry test_args[] = {
   { NULL }
 };
 
+static gboolean using_tap;
+
 static gboolean
 parse_command_line (int *argc, char ***argv)
 {
   GError *error = NULL;
   GOptionContext *context;
+  int i;
 
   context = g_option_context_new ("- run GTK reftests");
   g_option_context_add_main_entries (context, test_args, NULL);
@@ -71,6 +74,12 @@ parse_command_line (int *argc, char ***argv)
     {
       g_print ("option parsing failed: %s\n", error->message);
       return FALSE;
+    }
+
+  for (i = 0; i < *argc; i++)
+    {
+      if (strcmp ((*argv)[i], "--tap") == 0)
+        using_tap = TRUE;
     }
 
   gtk_test_init (argc, argv);
@@ -379,6 +388,7 @@ int
 main (int argc, char **argv)
 {
   const char *basedir;
+  int result;
   
   /* I don't want to fight fuzzy scaling algorithms in GPUs,
    * so unless you explicitly set it to something else, we
@@ -424,6 +434,11 @@ main (int argc, char **argv)
    */
   chdir (basedir);
 
-  return g_test_run ();
+  result = g_test_run ();
+
+  if (using_tap)
+    return 0;
+
+  return result;
 }
 
