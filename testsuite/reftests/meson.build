@@ -436,7 +436,6 @@ foreach testname : testdata
     test('reftest ' + testname, gtk_reftest,
          args: [ '--tap',
                  '-k',
-                 '--verbose',
                  '-o', join_paths(meson.current_build_dir(), 'output'),
                  join_paths(meson.current_source_dir(), testname),
          ],
