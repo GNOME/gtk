@@ -358,15 +358,15 @@ test_introspection (void)
     const char *params;
     const char *property;
   } expected[] = {
-    { GTK_TYPE_TEXT, "text.undo", NULL, NULL },
-    { GTK_TYPE_TEXT, "text.redo", NULL, NULL },
-    { GTK_TYPE_TEXT, "clipboard.cut", NULL, NULL },
-    { GTK_TYPE_TEXT, "clipboard.copy", NULL, NULL },
-    { GTK_TYPE_TEXT, "clipboard.paste", NULL, NULL },
-    { GTK_TYPE_TEXT, "selection.delete", NULL, NULL },
-    { GTK_TYPE_TEXT, "selection.select-all", NULL, NULL },
-    { GTK_TYPE_TEXT, "misc.insert-emoji", NULL, NULL },
     { GTK_TYPE_TEXT, "misc.toggle-visibility", NULL, "visibility" },
+    { GTK_TYPE_TEXT, "misc.insert-emoji", NULL, NULL },
+    { GTK_TYPE_TEXT, "selection.select-all", NULL, NULL },
+    { GTK_TYPE_TEXT, "selection.delete", NULL, NULL },
+    { GTK_TYPE_TEXT, "clipboard.paste", NULL, NULL },
+    { GTK_TYPE_TEXT, "clipboard.copy", NULL, NULL },
+    { GTK_TYPE_TEXT, "clipboard.cut", NULL, NULL },
+    { GTK_TYPE_TEXT, "text.redo", NULL, NULL },
+    { GTK_TYPE_TEXT, "text.undo", NULL, NULL },
   };
 
   i = 0;
