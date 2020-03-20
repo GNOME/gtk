@@ -102,6 +102,9 @@ struct _GdkSurface
   GdkDrawContext *paint_context;
 
   cairo_region_t *opaque_region;
+
+  guint shortcuts_inhibited : 1;
+  GdkSeat *current_shortcuts_inhibited_seat;
 };
 
 struct _GdkSurfaceClass
