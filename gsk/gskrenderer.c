@@ -566,13 +566,12 @@ get_renderer_fallback (GdkSurface *surface)
 }
 
 static struct {
-  gboolean verbose;
   GType (* get_renderer) (GdkSurface *surface);
 } renderer_possibilities[] = {
-  { TRUE,  get_renderer_for_display },
-  { TRUE,  get_renderer_for_env_var },
-  { FALSE, get_renderer_for_backend },
-  { FALSE, get_renderer_fallback },
+  { get_renderer_for_display },
+  { get_renderer_for_env_var },
+  { get_renderer_for_backend },
+  { get_renderer_fallback },
 };
 
 /**
@@ -591,7 +590,6 @@ gsk_renderer_new_for_surface (GdkSurface *surface)
   GType renderer_type;
   GskRenderer *renderer;
   GError *error = NULL;
-  gboolean verbose = FALSE;
   guint i;
 
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
@@ -602,30 +600,22 @@ gsk_renderer_new_for_surface (GdkSurface *surface)
       if (renderer_type == G_TYPE_INVALID)
         continue;
 
-      /* If a renderer is selected that's marked as verbose, start printing
-       * information to stdout.
-       */
-      verbose |= renderer_possibilities[i].verbose;
       renderer = g_object_new (renderer_type, NULL);
 
       if (gsk_renderer_realize (renderer, surface, &error))
         {
-          if (verbose || GSK_RENDERER_DEBUG_CHECK (renderer, RENDERER))
-            {
-              g_print ("Using renderer of type '%s' for surface '%s'\n",
-                       G_OBJECT_TYPE_NAME (renderer),
-                       G_OBJECT_TYPE_NAME (surface));
-            }
+          GSK_RENDERER_NOTE (renderer, RENDERER,
+              g_message ("Using renderer of type '%s' for surface '%s'\n",
+                         G_OBJECT_TYPE_NAME (renderer),
+                         G_OBJECT_TYPE_NAME (surface)));
           return renderer;
         }
 
-      if (verbose || GSK_RENDERER_DEBUG_CHECK (renderer, RENDERER))
-        {
-          g_print ("Failed to realize renderer of type '%s' for surface '%s': %s\n",
+      GSK_RENDERER_NOTE (renderer, RENDERER,
+          g_message ("Failed to realize renderer of type '%s' for surface '%s': %s\n",
                    G_OBJECT_TYPE_NAME (renderer),
                    G_OBJECT_TYPE_NAME (surface),
-                   error->message);
-        }
+                   error->message));
       g_object_unref (renderer);
       g_clear_error (&error);
     }

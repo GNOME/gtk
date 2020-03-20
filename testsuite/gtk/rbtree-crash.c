@@ -110,6 +110,7 @@ delete (GtkRbTree *tree,
   gtk_rb_tree_remove (tree, node);
 }
 
+#if 0
 static guint
 print_node (GtkRbTree  *tree,
             Node       *node,
@@ -136,6 +137,7 @@ print (GtkRbTree *tree)
 {
   print_node (tree, gtk_rb_tree_get_root (tree), 0, "", 0);
 }
+#endif
 
 static void
 test_crash (void)
@@ -147,7 +149,7 @@ test_crash (void)
 
   for (i = 0; i < 300; i++)
     add (tree, i);
-  print (tree);
+  //print (tree);
   delete (tree, 144);
   add (tree, 56);
   delete (tree, 113);
@@ -267,7 +269,7 @@ test_crash (void)
   delete (tree, 12);
   add (tree, 20);
   delete (tree, 68);
-  print (tree);
+  //print (tree);
   delete (tree, 102);
 
   gtk_rb_tree_unref (tree);

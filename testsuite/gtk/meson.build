@@ -109,6 +109,7 @@ foreach t : tests
 
   test(test_name, test_exe,
        args: [ '--tap', '-k' ],
+       #protocol: 'tap',
        env: [ 'GIO_USE_VOLUME_MONITOR=unix',
               'GSETTINGS_BACKEND=memory',
               'GDK_DEBUG=default-settings',
@@ -134,6 +135,7 @@ if add_languages('cpp', required: false)
                         install_dir: testexecdir)
   test('c++ keywords', test_exe,
        args: [ '--tap', '-k' ],
+       #protocol: 'tap',
        env: [ 'GIO_USE_VOLUME_MONITOR=unix',
               'GSETTINGS_BACKEND=memory',
               'GDK_DEBUG=default-settings',
@@ -206,17 +208,13 @@ if get_option('install-tests')
 
 endif
 
-if get_option ('profiler')
+if false and get_option ('profiler')
 
   test('performance-layout', test_performance,
        args: [ '--mark', 'size allocation', join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory') ],
        env: [ 'GTK_THEME=Empty',
               'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir) ],
        suite: [ 'gtk' ])
-
-endif
-
-if get_option ('profiler')
 
   test('performance-snapshot', test_performance,
        args: [ '--mark', 'widget snapshot', join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory') ],

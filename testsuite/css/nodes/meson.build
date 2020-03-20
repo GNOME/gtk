@@ -8,6 +8,7 @@ test_nodes = executable('test-css-nodes', 'test-css-nodes.c',
                         dependencies: libgtk_dep)
 test('nodes', test_nodes,
      args: [ '--tap', '-k' ],
+     protocol: 'tap',
      env: [ 'GIO_USE_VOLUME_MONITOR=unix',
             'GSETTINGS_BACKEND=memory',
             'GDK_DEBUG=default-settings',
