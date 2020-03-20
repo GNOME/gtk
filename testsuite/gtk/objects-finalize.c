@@ -172,7 +172,8 @@ main (int argc, char **argv)
 	  /* Not allowed to finalize a GdkPixbufLoader without calling gdk_pixbuf_loader_close() */
 	  all_types[i] != GDK_TYPE_PIXBUF_LOADER &&
 	  all_types[i] != gdk_pixbuf_simple_anim_iter_get_type() &&
-          !g_type_is_a (all_types[i], GTK_TYPE_SHORTCUT_TRIGGER))
+          !g_type_is_a (all_types[i], GTK_TYPE_SHORTCUT_TRIGGER) &&
+          !g_type_is_a (all_types[i], GTK_TYPE_SHORTCUT_ACTION))
 	{
 	  gchar *test_path = g_strdup_printf ("/FinalizeObject/%s", g_type_name (all_types[i]));
 
