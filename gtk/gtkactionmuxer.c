@@ -23,9 +23,10 @@
 
 #include "gtkactionobservableprivate.h"
 #include "gtkactionobserverprivate.h"
+#include "gtkbitmaskprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
-#include "gtkwidget.h"
+#include "gtkwidgetprivate.h"
 #include "gsettings-mapping.h"
 
 #include <string.h>
@@ -73,8 +74,8 @@ struct _GtkActionMuxer
   GtkActionMuxer *parent;
 
   GtkWidget *widget;
-  GPtrArray *widget_actions;
-  gboolean *widget_actions_enabled;
+
+  GtkBitmask *widget_actions_disabled;
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkActionMuxer, gtk_action_muxer, G_TYPE_OBJECT,
@@ -86,7 +87,6 @@ enum
   PROP_0,
   PROP_PARENT,
   PROP_WIDGET,
-  PROP_WIDGET_ACTIONS,
   NUM_PROPERTIES
 };
 
@@ -108,6 +108,19 @@ typedef struct
   gchar        *prefix;
   gulong        handler_ids[4];
 } Group;
+
+static inline guint
+get_action_position (GtkWidgetAction *action)
+{
+  guint slot;
+  /* We use the length of @action to the end of the chain as the slot so that
+   * we have stable positions for any class or it's subclasses. Doing so helps
+   * us avoid having mutable arrays in the class data as we will not have
+   * access to the ClassPrivate data during instance _init() functions.
+   */
+  for (slot = 0; action->next != NULL; slot++, action = action->next) {}
+  return slot;
+}
 
 static void
 gtk_action_muxer_append_group_actions (const char *prefix,
@@ -143,15 +156,14 @@ gtk_action_muxer_list_actions (GActionGroup *action_group)
       const char *prefix;
       Group *group;
 
-      if (muxer->widget_actions)
+      if (muxer->widget)
         {
-          int i;
+          GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (muxer->widget);
+          GtkWidgetClassPrivate *priv = klass->priv;
+          GtkWidgetAction *action;
 
-          for (i = 0; i < muxer->widget_actions->len; i++)
-            {
-              GtkWidgetAction *action = g_ptr_array_index (muxer->widget_actions, i);
-              g_hash_table_add (actions, g_strdup (action->name));
-            }
+          for (action = priv->actions; action; action = action->next)
+            g_hash_table_add (actions, g_strdup (action->name));
         }
 
       g_hash_table_iter_init (&iter, muxer->groups);
@@ -217,22 +229,27 @@ gtk_action_muxer_action_enabled_changed (GtkActionMuxer *muxer,
                                          const gchar    *action_name,
                                          gboolean        enabled)
 {
+  GtkWidgetAction *iter;
   Action *action;
   GSList *node;
 
-  if (muxer->widget_actions)
+  if (muxer->widget)
     {
-      int i;
-      for (i = 0; i < muxer->widget_actions->len; i++)
+      GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (muxer->widget);
+      GtkWidgetClassPrivate *priv = klass->priv;
+
+      for (iter = priv->actions; iter; iter = iter->next)
         {
-          GtkWidgetAction *a = g_ptr_array_index (muxer->widget_actions, i);
-          if (strcmp (a->name, action_name) == 0)
+          if (strcmp (action_name, iter->name) == 0)
             {
-              muxer->widget_actions_enabled[i] = enabled;
+              guint position = get_action_position (iter);
+              muxer->widget_actions_disabled =
+                _gtk_bitmask_set (muxer->widget_actions_disabled, position, !enabled);
               break;
             }
         }
     }
+
   action = g_hash_table_lookup (muxer->observed_actions, action_name);
   for (node = action ? action->watchers : NULL; node; node = node->next)
     gtk_action_observer_action_enabled_changed (node->data, GTK_ACTION_OBSERVABLE (muxer), action_name, enabled);
@@ -517,21 +534,21 @@ prop_action_notify (GObject    *object,
                     gpointer    user_data)
 {
   GtkActionMuxer *muxer = user_data;
-  int i;
+  GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (muxer->widget);
+  GtkWidgetClassPrivate *priv = klass->priv;
   GtkWidgetAction *action = NULL;
   GVariant *state;
 
   g_assert ((GObject *)muxer->widget == object);
 
-  for (i = 0; i < muxer->widget_actions->len; i++)
+  for (action = priv->actions; action; action = action->next)
     {
-      action = g_ptr_array_index (muxer->widget_actions, i);
       if (action->pspec == pspec)
         break;
-      action = NULL;
     }
 
   g_assert (action != NULL);
+  g_assert (action->pspec == pspec);
 
   state = prop_action_get_state (muxer->widget, action);
   gtk_action_muxer_action_state_changed (muxer, action->name, state);
@@ -541,14 +558,20 @@ prop_action_notify (GObject    *object,
 static void
 prop_actions_connect (GtkActionMuxer *muxer)
 {
-  int i;
+  GtkWidgetClassPrivate *priv;
+  GtkWidgetAction *action;
+  GtkWidgetClass *klass;
 
-  if (!muxer->widget || !muxer->widget_actions)
+  if (!muxer->widget)
     return;
 
-  for (i = 0; i < muxer->widget_actions->len; i++)
+  klass = GTK_WIDGET_GET_CLASS (muxer->widget);
+  priv = klass->priv;
+  if (!priv->actions)
+    return;
+
+  for (action = priv->actions; action; action = action->next)
     {
-      GtkWidgetAction *action = g_ptr_array_index (muxer->widget_actions, i);
       char *detailed;
 
       if (!action->pspec)
@@ -572,41 +595,46 @@ gtk_action_muxer_query_action (GActionGroup        *action_group,
                                GVariant           **state)
 {
   GtkActionMuxer *muxer = GTK_ACTION_MUXER (action_group);
+  GtkWidgetAction *action;
   Group *group;
   const gchar *unprefixed_name;
 
-  if (muxer->widget_actions)
+  if (muxer->widget)
     {
-      int i;
+      GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (muxer->widget);
+      GtkWidgetClassPrivate *priv = klass->priv;
 
-      for (i = 0; i < muxer->widget_actions->len; i++)
+      for (action = priv->actions; action; action = action->next)
         {
-          GtkWidgetAction *action = g_ptr_array_index (muxer->widget_actions, i);
-          if (strcmp (action->name, action_name) == 0)
+          guint position;
+
+          if (strcmp (action->name, action_name) != 0)
+            continue;
+
+          position = get_action_position (action);
+
+          if (enabled)
+            *enabled = !_gtk_bitmask_get (muxer->widget_actions_disabled, position);
+          if (parameter_type)
+            *parameter_type = action->parameter_type;
+          if (state_type)
+            *state_type = action->state_type;
+
+          if (state_hint)
+            *state_hint = NULL;
+          if (state)
+            *state = NULL;
+
+          if (action->pspec)
             {
-              if (enabled)
-                *enabled = muxer->widget_actions_enabled[i];
-              if (parameter_type)
-                *parameter_type = action->parameter_type;
-              if (state_type)
-                *state_type = action->state_type;
-
-              if (state_hint)
-                *state_hint = NULL;
               if (state)
-                *state = NULL;
-
-              if (action->pspec)
-                {
-                  if (state)
-                    *state = prop_action_get_state (muxer->widget, action);
-                  if (state_hint)
-                    *state_hint = prop_action_get_state_hint (muxer->widget, action);
-                }
-
-              return TRUE;
+                *state = prop_action_get_state (muxer->widget, action);
+              if (state_hint)
+                *state_hint = prop_action_get_state_hint (muxer->widget, action);
             }
-       }
+
+          return TRUE;
+        }
     }
 
   group = gtk_action_muxer_find_group (muxer, action_name, &unprefixed_name);
@@ -629,19 +657,22 @@ gtk_action_muxer_activate_action (GActionGroup *action_group,
                                   GVariant     *parameter)
 {
   GtkActionMuxer *muxer = GTK_ACTION_MUXER (action_group);
-  Group *group;
   const gchar *unprefixed_name;
+  Group *group;
 
-  if (muxer->widget_actions)
+  if (muxer->widget)
     {
-      int i;
+      GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (muxer->widget);
+      GtkWidgetClassPrivate *priv = klass->priv;
+      GtkWidgetAction *action;
 
-      for (i = 0; i < muxer->widget_actions->len; i++)
+      for (action = priv->actions; action; action = action->next)
         {
-          GtkWidgetAction *action = g_ptr_array_index (muxer->widget_actions, i);
           if (strcmp (action->name, action_name) == 0)
             {
-              if (muxer->widget_actions_enabled[i])
+              guint position = get_action_position (action);
+
+              if (!_gtk_bitmask_get (muxer->widget_actions_disabled, position))
                 {
                   if (action->activate)
                     action->activate (muxer->widget, action->name, parameter);
@@ -668,16 +699,17 @@ gtk_action_muxer_change_action_state (GActionGroup *action_group,
                                       GVariant     *state)
 {
   GtkActionMuxer *muxer = GTK_ACTION_MUXER (action_group);
-  Group *group;
+  GtkWidgetAction *action;
   const gchar *unprefixed_name;
+  Group *group;
 
-  if (muxer->widget_actions)
+  if (muxer->widget)
     {
-      int i;
+      GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (muxer->widget);
+      GtkWidgetClassPrivate *priv = klass->priv;
 
-      for (i = 0; i < muxer->widget_actions->len; i++)
+      for (action = priv->actions; action; action = action->next)
         {
-          GtkWidgetAction *action = g_ptr_array_index (muxer->widget_actions, i);
           if (strcmp (action->name, action_name) == 0)
             {
               if (action->pspec)
@@ -803,10 +835,9 @@ gtk_action_muxer_finalize (GObject *object)
   if (muxer->primary_accels)
     g_hash_table_unref (muxer->primary_accels);
 
-  g_free (muxer->widget_actions_enabled);
+  _gtk_bitmask_free (muxer->widget_actions_disabled);
 
-  G_OBJECT_CLASS (gtk_action_muxer_parent_class)
-    ->finalize (object);
+  G_OBJECT_CLASS (gtk_action_muxer_parent_class)->finalize (object);
 }
 
 static void
@@ -859,10 +890,6 @@ gtk_action_muxer_get_property (GObject    *object,
       g_value_set_object (value, muxer->widget);
       break;
 
-    case PROP_WIDGET_ACTIONS:
-      g_value_set_boxed (value, muxer->widget_actions);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
@@ -886,18 +913,6 @@ gtk_action_muxer_set_property (GObject      *object,
       muxer->widget = g_value_get_object (value);
       break;
 
-    case PROP_WIDGET_ACTIONS:
-      muxer->widget_actions = g_value_get_boxed (value);
-      if (muxer->widget_actions)
-        {
-          int i;
-
-          muxer->widget_actions_enabled = g_new (gboolean, muxer->widget_actions->len);
-          for (i = 0; i < muxer->widget_actions->len; i++)
-            muxer->widget_actions_enabled[i] = TRUE;
-        }
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
@@ -908,6 +923,7 @@ gtk_action_muxer_init (GtkActionMuxer *muxer)
 {
   muxer->observed_actions = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, gtk_action_muxer_free_action);
   muxer->groups = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, gtk_action_muxer_free_group);
+  muxer->widget_actions_disabled = _gtk_bitmask_new ();
 }
 
 static void
@@ -958,13 +974,6 @@ gtk_action_muxer_class_init (GObjectClass *class)
                                                  G_PARAM_READWRITE |
                                                  G_PARAM_CONSTRUCT_ONLY |
                                                  G_PARAM_STATIC_STRINGS);
-
-  properties[PROP_WIDGET_ACTIONS] = g_param_spec_boxed ("widget-actions", "Widget actions",
-                                                        "Widget actions",
-                                                        G_TYPE_PTR_ARRAY,
-                                                        G_PARAM_READWRITE |
-                                                        G_PARAM_CONSTRUCT_ONLY |
-                                                        G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (class, NUM_PROPERTIES, properties);
 }
@@ -1060,17 +1069,14 @@ gtk_action_muxer_remove (GtkActionMuxer *muxer,
 /*< private >
  * gtk_action_muxer_new:
  * @widget: the widget to which the muxer belongs
- * @actions: widget actions
  *
  * Creates a new #GtkActionMuxer.
  */
 GtkActionMuxer *
-gtk_action_muxer_new (GtkWidget *widget,
-                      GPtrArray *actions)
+gtk_action_muxer_new (GtkWidget *widget)
 {
   return g_object_new (GTK_TYPE_ACTION_MUXER,
                        "widget", widget,
-                       "widget-actions", actions,
                        NULL);
 }
 
