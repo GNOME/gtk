@@ -1443,6 +1443,7 @@ spinbutton {
       padding: 1px 2px;
     }
   }
+  font-feature-settings: "tnum";
 }
 
 
@@ -3331,7 +3332,10 @@ scale {
   }
 
   marks,
-  value { color: gtkalpha(currentColor, 0.55); }
+  value {
+    color: gtkalpha(currentColor, 0.55);
+    font-feature-settings: "tnum";
+  }
 
   //marks margins
   @each $scale_orient, $marks_class, $marks_pos, $marks_margin in (horizontal, top, top, bottom),
@@ -3599,6 +3603,7 @@ progressbar {
   // FIXME: insensitive state missing and some other state should be set probably
   font-size: smaller;
   color: transparentize($fg_color, 0.6);
+  font-feature-settings: "tnum";
 
   &:backdrop {
     box-shadow: none;
