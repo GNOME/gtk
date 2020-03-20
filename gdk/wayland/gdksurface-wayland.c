@@ -4303,18 +4303,31 @@ typedef struct
 
 typedef struct
 {
+  GList *inhibit_seats_list;
+} GdkWaylandToplevelPrivate;
+
+typedef struct
+{
   GdkWaylandSurfaceClass parent_class;
 } GdkWaylandToplevelClass;
 
 static void gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GdkWaylandToplevel, gdk_wayland_toplevel, GDK_TYPE_WAYLAND_SURFACE,
+                         G_ADD_PRIVATE (GdkWaylandToplevel)
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_TOPLEVEL,
                                                 gdk_wayland_toplevel_iface_init))
+
+#define GDK_WAYLAND_TOPLEVEL(object) \
+  (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WAYLAND_SURFACE, GdkWaylandToplevel))
 
 static void
 gdk_wayland_toplevel_init (GdkWaylandToplevel *toplevel)
 {
+  GdkWaylandToplevelPrivate *priv =
+    gdk_wayland_toplevel_get_instance_private (toplevel);
+
+  priv->inhibit_seats_list = NULL;
 }
 
 static void
@@ -4361,6 +4374,9 @@ gdk_wayland_toplevel_set_property (GObject      *object,
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
+    case LAST_PROP + GDK_TOPLEVEL_PROP_INHIBIT_LIST:
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -4375,6 +4391,9 @@ gdk_wayland_toplevel_get_property (GObject    *object,
 {
   GdkSurface *surface = GDK_SURFACE (object);
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandToplevelPrivate *priv =
+    gdk_wayland_toplevel_get_instance_private (GDK_WAYLAND_TOPLEVEL (object));
+
 
   switch (prop_id)
     {
@@ -4412,10 +4431,24 @@ gdk_wayland_toplevel_get_property (GObject    *object,
       g_value_set_enum (value, surface->fullscreen_mode);
       break;
 
+    case LAST_PROP + GDK_TOPLEVEL_PROP_INHIBIT_LIST:
+      g_value_set_pointer (value, priv->inhibit_seats_list);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
+}
+
+static void
+gdk_wayland_toplevel_finalize (GObject *object)
+{
+  GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (object);
+  GdkWaylandToplevelPrivate *priv =
+    gdk_wayland_toplevel_get_instance_private (toplevel);
+
+  g_clear_pointer (&priv->inhibit_seats_list, g_list_free);
 }
 
 static void
@@ -4425,6 +4458,7 @@ gdk_wayland_toplevel_class_init (GdkWaylandToplevelClass *class)
 
   object_class->get_property = gdk_wayland_toplevel_get_property;
   object_class->set_property = gdk_wayland_toplevel_set_property;
+  object_class->finalize = gdk_wayland_toplevel_finalize;
 
   gdk_toplevel_install_properties (object_class, 1);
 }
@@ -4536,6 +4570,96 @@ gdk_wayland_toplevel_supports_edge_constraints (GdkToplevel *toplevel)
 }
 
 static void
+inhibitor_active (void *data,
+                  struct zwp_keyboard_shortcuts_inhibitor_v1 *inhibitor)
+{
+  GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (data);
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (toplevel);
+  GdkWaylandToplevelPrivate *priv =
+    gdk_wayland_toplevel_get_instance_private (data);
+  GHashTableIter iter;
+  GdkSeat *gdk_seat;
+  struct zwp_keyboard_shortcuts_inhibitor_v1 *shortcuts_inhibitors;
+
+  g_hash_table_iter_init (&iter, impl->shortcuts_inhibitors);
+  while (g_hash_table_iter_next (&iter,
+                                 (gpointer *) &gdk_seat,
+                                 (gpointer *) &shortcuts_inhibitors))
+    {
+      if (g_list_find (priv->inhibit_seats_list, gdk_seat))
+        break;
+
+      if (shortcuts_inhibitors == inhibitor)
+        {
+          priv->inhibit_seats_list =
+            g_list_append (priv->inhibit_seats_list, gdk_seat);
+          break;
+        }
+    }
+
+  g_object_notify (G_OBJECT (toplevel), "inhibit-list");
+}
+
+static void
+inhibitor_inactive (void *data,
+                    struct zwp_keyboard_shortcuts_inhibitor_v1 *inhibitor)
+{
+  GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (data);
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (toplevel);
+  GdkWaylandToplevelPrivate *priv =
+    gdk_wayland_toplevel_get_instance_private (data);
+  GHashTableIter iter;
+  GdkSeat *gdk_seat;
+  struct zwp_keyboard_shortcuts_inhibitor_v1 *shortcuts_inhibitors;
+
+  g_hash_table_iter_init (&iter, impl->shortcuts_inhibitors);
+  while (g_hash_table_iter_next (&iter,
+                                 (gpointer *) &gdk_seat,
+                                 (gpointer *) &shortcuts_inhibitors))
+    {
+      if (shortcuts_inhibitors == inhibitor)
+        {
+          priv->inhibit_seats_list =
+            g_list_remove (priv->inhibit_seats_list, gdk_seat);
+          break;
+        }
+    }
+
+  g_object_notify (G_OBJECT (toplevel), "inhibit-list");
+}
+
+static const struct zwp_keyboard_shortcuts_inhibitor_v1_listener
+zwp_keyboard_shortcuts_inhibitor_listener = {
+  inhibitor_active,
+  inhibitor_inactive,
+};
+
+static gboolean
+gdk_wayland_toplevel_inhibit_system_shortcuts (GdkToplevel *toplevel,
+                                               GdkSeat     *gdk_seat,
+                                               GdkEvent    *event)
+{
+  struct zwp_keyboard_shortcuts_inhibitor_v1 *inhibitor;
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (toplevel);
+
+  if (!gdk_wayland_surface_inhibit_shortcuts (GDK_SURFACE (toplevel), gdk_seat))
+    return FALSE;
+
+  inhibitor = gdk_wayland_surface_get_inhibitor (impl, gdk_seat);
+  zwp_keyboard_shortcuts_inhibitor_v1_add_listener
+    (inhibitor, &zwp_keyboard_shortcuts_inhibitor_listener, toplevel);
+
+  return TRUE;
+}
+
+static void
+gdk_wayland_toplevel_restore_system_shortcuts (GdkToplevel *toplevel,
+                                               GdkSeat     *seat)
+{
+  gdk_wayland_surface_restore_shortcuts (GDK_SURFACE (toplevel), seat);
+}
+
+static void
 gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_wayland_toplevel_present;
@@ -4544,6 +4668,8 @@ gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface)
   iface->focus = gdk_wayland_toplevel_focus;
   iface->show_window_menu = gdk_wayland_toplevel_show_window_menu;
   iface->supports_edge_constraints = gdk_wayland_toplevel_supports_edge_constraints;
+  iface->inhibit_system_shortcuts = gdk_wayland_toplevel_inhibit_system_shortcuts;
+  iface->restore_system_shortcuts = gdk_wayland_toplevel_restore_system_shortcuts;
 }
 
 typedef struct
