@@ -149,6 +149,13 @@
 typedef struct _GtkTextWindow GtkTextWindow;
 typedef struct _GtkTextPendingScroll GtkTextPendingScroll;
 
+enum
+{
+  TEXT_HANDLE_CURSOR,
+  TEXT_HANDLE_SELECTION_BOUND,
+  TEXT_HANDLE_N_HANDLES
+};
+
 struct _GtkTextViewPrivate 
 {
   GtkTextLayout *layout;
@@ -161,7 +168,7 @@ struct _GtkTextViewPrivate
   gint dnd_x;
   gint dnd_y;
 
-  GtkTextHandle *text_handle;
+  GtkTextHandle *text_handles[TEXT_HANDLE_N_HANDLES];
   GtkWidget *selection_bubble;
   guint selection_bubble_timeout_id;
 
@@ -272,6 +279,8 @@ struct _GtkTextViewPrivate
   guint mouse_cursor_obscured : 1;
 
   guint scroll_after_paste : 1;
+
+  guint text_handles_enabled : 1;
 
   /* GtkScrollablePolicy needs to be checked when
    * driving the scrollable adjustment values */
@@ -565,18 +574,14 @@ static void update_node_ordering (GtkWidget    *widget);
 
 /* GtkTextHandle handlers */
 static void gtk_text_view_handle_drag_started  (GtkTextHandle         *handle,
-                                                GtkTextHandlePosition  pos,
                                                 GtkTextView           *text_view);
 static void gtk_text_view_handle_dragged       (GtkTextHandle         *handle,
-                                                GtkTextHandlePosition  pos,
                                                 gint                   x,
                                                 gint                   y,
                                                 GtkTextView           *text_view);
 static void gtk_text_view_handle_drag_finished (GtkTextHandle         *handle,
-                                                GtkTextHandlePosition  pos,
                                                 GtkTextView           *text_view);
-static void gtk_text_view_update_handles       (GtkTextView           *text_view,
-                                                GtkTextHandleMode      mode);
+static void gtk_text_view_update_handles       (GtkTextView           *text_view);
 
 static void gtk_text_view_selection_bubble_popup_unset (GtkTextView *text_view);
 static void gtk_text_view_selection_bubble_popup_set   (GtkTextView *text_view);
@@ -1720,6 +1725,26 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 }
 
 static void
+_gtk_text_view_ensure_text_handles (GtkTextView *text_view)
+{
+  GtkTextViewPrivate *priv = text_view->priv;
+  int i;
+
+  for (i = 0; i < TEXT_HANDLE_N_HANDLES; i++)
+    {
+      if (priv->text_handles[i])
+	continue;
+      priv->text_handles[i] = gtk_text_handle_new (GTK_WIDGET (text_view));
+      g_signal_connect (priv->text_handles[i], "drag-started",
+                        G_CALLBACK (gtk_text_view_handle_drag_started), text_view);
+      g_signal_connect (priv->text_handles[i], "handle-dragged",
+                        G_CALLBACK (gtk_text_view_handle_dragged), text_view);
+      g_signal_connect (priv->text_handles[i], "drag-finished",
+                        G_CALLBACK (gtk_text_view_handle_drag_finished), text_view);
+    }
+}
+
+static void
 gtk_text_view_init (GtkTextView *text_view)
 {
   GtkWidget *widget = GTK_WIDGET (text_view);
@@ -1849,23 +1874,6 @@ gtk_text_view_get_selection_node (GtkTextView *text_view)
 }
 
 static void
-_gtk_text_view_ensure_text_handles (GtkTextView *text_view)
-{
-  GtkTextViewPrivate *priv = text_view->priv;
-
-  if (priv->text_handle)
-    return;
-
-  priv->text_handle = _gtk_text_handle_new (GTK_WIDGET (text_view));
-  g_signal_connect (priv->text_handle, "drag-started",
-                    G_CALLBACK (gtk_text_view_handle_drag_started), text_view);
-  g_signal_connect (priv->text_handle, "handle-dragged",
-                    G_CALLBACK (gtk_text_view_handle_dragged), text_view);
-  g_signal_connect (priv->text_handle, "drag-finished",
-                    G_CALLBACK (gtk_text_view_handle_drag_finished), text_view);
-}
-
-static void
 _gtk_text_view_ensure_magnifier (GtkTextView *text_view)
 {
   GtkTextViewPrivate *priv = text_view->priv;
@@ -1876,6 +1884,7 @@ _gtk_text_view_ensure_magnifier (GtkTextView *text_view)
   priv->magnifier = _gtk_magnifier_new (GTK_WIDGET (text_view));
   _gtk_magnifier_set_magnification (GTK_MAGNIFIER (priv->magnifier), 2.0);
   priv->magnifier_popover = gtk_popover_new ();
+  gtk_popover_set_position (GTK_POPOVER (priv->magnifier_popover), GTK_POS_TOP);
   gtk_widget_set_parent (priv->magnifier_popover, GTK_WIDGET (text_view));
   gtk_widget_add_css_class (priv->magnifier_popover, "magnifier");
   gtk_popover_set_autohide (GTK_POPOVER (priv->magnifier_popover), FALSE);
@@ -2043,8 +2052,7 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 	  gtk_text_buffer_add_selection_clipboard (priv->buffer, clipboard);
 	}
 
-      if (priv->text_handle)
-        gtk_text_view_update_handles (text_view, GTK_TEXT_HANDLE_MODE_NONE);
+      gtk_text_view_update_handles (text_view);
 
       gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "text.undo", can_undo);
       gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "text.redo", can_redo);
@@ -2655,9 +2663,7 @@ gtk_text_view_flush_scroll (GtkTextView *text_view)
                                           scroll->yalign,
                                           TRUE);
 
-  if (text_view->priv->text_handle)
-    gtk_text_view_update_handles (text_view,
-                                  _gtk_text_handle_get_mode (text_view->priv->text_handle));
+  gtk_text_view_update_handles (text_view);
 
   free_pending_scroll (scroll);
 
@@ -3695,6 +3701,9 @@ gtk_text_view_destroy (GtkWidget *widget)
   if (priv->magnifier)
     _gtk_magnifier_set_inspected (GTK_MAGNIFIER (priv->magnifier), NULL);
 
+  g_clear_pointer ((GtkWidget **) &priv->text_handles[TEXT_HANDLE_CURSOR], gtk_widget_unparent);
+  g_clear_pointer ((GtkWidget **) &priv->text_handles[TEXT_HANDLE_SELECTION_BOUND], gtk_widget_unparent);
+
   GTK_WIDGET_CLASS (gtk_text_view_parent_class)->destroy (widget);
 }
 
@@ -3737,8 +3746,6 @@ gtk_text_view_finalize (GObject *object)
 
   if (priv->magnifier_popover)
     gtk_widget_destroy (priv->magnifier_popover);
-  if (priv->text_handle)
-    g_object_unref (priv->text_handle);
   g_object_unref (priv->im_context);
 
   g_free (priv->im_module);
@@ -4428,6 +4435,12 @@ gtk_text_view_size_allocate (GtkWidget *widget,
 
   if (priv->popup_menu)
     gtk_native_check_resize (GTK_NATIVE (priv->popup_menu));
+
+  if (priv->text_handles[TEXT_HANDLE_CURSOR])
+    gtk_native_check_resize (GTK_NATIVE (priv->text_handles[TEXT_HANDLE_CURSOR]));
+
+  if (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND])
+    gtk_native_check_resize (GTK_NATIVE (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]));
 }
 
 static void
@@ -4860,9 +4873,9 @@ _widget_to_text_surface_coords (GtkTextView *text_view,
 }
 
 static void
-gtk_text_view_set_handle_position (GtkTextView           *text_view,
-                                   GtkTextIter           *iter,
-                                   GtkTextHandlePosition  pos)
+gtk_text_view_set_handle_position (GtkTextView   *text_view,
+                                   GtkTextHandle *handle,
+                                   GtkTextIter   *iter)
 {
   GtkTextViewPrivate *priv;
   GdkRectangle rect;
@@ -4874,32 +4887,32 @@ gtk_text_view_set_handle_position (GtkTextView           *text_view,
   x = rect.x - priv->xoffset;
   y = rect.y - priv->yoffset;
 
-  if (!_gtk_text_handle_get_is_dragged (priv->text_handle, pos) &&
+  if (!gtk_text_handle_get_is_dragged (handle) &&
       (x < 0 || x > SCREEN_WIDTH (text_view) ||
        y < 0 || y > SCREEN_HEIGHT (text_view)))
     {
       /* Hide the handle if it's not being manipulated
        * and fell outside of the visible text area.
        */
-      _gtk_text_handle_set_visible (priv->text_handle, pos, FALSE);
+      gtk_widget_hide (GTK_WIDGET (handle));
     }
   else
     {
       GtkTextDirection dir = GTK_TEXT_DIR_LTR;
       GtkTextAttributes attributes = { 0 };
 
-      _gtk_text_handle_set_visible (priv->text_handle, pos, TRUE);
+      gtk_widget_show (GTK_WIDGET (handle));
 
       rect.x = CLAMP (x, 0, SCREEN_WIDTH (text_view));
       rect.y = CLAMP (y, 0, SCREEN_HEIGHT (text_view));
       _text_window_to_widget_coords (text_view, &rect.x, &rect.y);
 
-      _gtk_text_handle_set_position (priv->text_handle, pos, &rect);
+      gtk_text_handle_set_position (handle, &rect);
 
       if (gtk_text_iter_get_attributes (iter, &attributes))
         dir = attributes.direction;
 
-      _gtk_text_handle_set_direction (priv->text_handle, pos, dir);
+      gtk_widget_set_direction (GTK_WIDGET (handle), dir);
     }
 }
 
@@ -4948,23 +4961,17 @@ gtk_text_view_show_magnifier (GtkTextView *text_view,
 }
 
 static void
-gtk_text_view_handle_dragged (GtkTextHandle         *handle,
-                              GtkTextHandlePosition  pos,
-                              gint                   x,
-                              gint                   y,
-                              GtkTextView           *text_view)
+gtk_text_view_handle_dragged (GtkTextHandle *handle,
+                              gint           x,
+                              gint           y,
+                              GtkTextView   *text_view)
 {
   GtkTextViewPrivate *priv;
-  GtkTextIter old_cursor, old_bound;
-  GtkTextIter cursor, bound, iter;
-  GtkTextIter *min, *max;
-  GtkTextHandleMode mode;
+  GtkTextIter cursor, bound, iter, *old_iter;
   GtkTextBuffer *buffer;
-  GtkTextHandlePosition cursor_pos;
 
   priv = text_view->priv;
   buffer = get_buffer (text_view);
-  mode = _gtk_text_handle_get_mode (handle);
 
   _widget_to_text_surface_coords (text_view, &x, &y);
 
@@ -4972,93 +4979,81 @@ gtk_text_view_handle_dragged (GtkTextHandle         *handle,
   gtk_text_layout_get_iter_at_pixel (priv->layout, &iter,
                                      x + priv->xoffset,
                                      y + priv->yoffset);
-  gtk_text_buffer_get_iter_at_mark (buffer, &old_cursor,
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &cursor,
                                     gtk_text_buffer_get_insert (buffer));
-  gtk_text_buffer_get_iter_at_mark (buffer, &old_bound,
+  gtk_text_buffer_get_iter_at_mark (buffer, &bound,
                                     gtk_text_buffer_get_selection_bound (buffer));
-  cursor = old_cursor;
-  bound = old_bound;
 
-  if (mode == GTK_TEXT_HANDLE_MODE_CURSOR ||
-      gtk_text_iter_compare (&cursor, &bound) >= 0)
-    {
-      cursor_pos = GTK_TEXT_HANDLE_POSITION_CURSOR;
-      max = &cursor;
-      min = &bound;
-    }
-  else
-    {
-      cursor_pos = GTK_TEXT_HANDLE_POSITION_SELECTION_START;
-      max = &bound;
-      min = &cursor;
-    }
 
-  if (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_END)
+  if (handle == priv->text_handles[TEXT_HANDLE_CURSOR])
     {
-      if (mode == GTK_TEXT_HANDLE_MODE_SELECTION &&
-	  gtk_text_iter_compare (&iter, min) <= 0)
+      /* Avoid running past the other handle in selection mode */
+      if (gtk_text_iter_compare (&iter, &bound) >= 0 &&
+          gtk_widget_is_visible (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND])))
         {
-          iter = *min;
-          gtk_text_iter_forward_char (&iter);
-        }
-
-      *max = iter;
-      gtk_text_view_set_handle_position (text_view, &iter, pos);
-    }
-  else
-    {
-      if (mode == GTK_TEXT_HANDLE_MODE_SELECTION &&
-	  gtk_text_iter_compare (&iter, max) >= 0)
-        {
-          iter = *max;
+          iter = bound;
           gtk_text_iter_backward_char (&iter);
         }
 
-      *min = iter;
-      gtk_text_view_set_handle_position (text_view, &iter, pos);
+      old_iter = &cursor;
+      gtk_text_view_set_handle_position (text_view, handle, &iter);
     }
-
-  if (gtk_text_iter_compare (&old_cursor, &cursor) != 0 ||
-      gtk_text_iter_compare (&old_bound, &bound) != 0)
+  else if (handle == priv->text_handles[TEXT_HANDLE_SELECTION_BOUND])
     {
-      if (mode == GTK_TEXT_HANDLE_MODE_CURSOR)
+      /* Avoid running past the other handle */
+      if (gtk_text_iter_compare (&iter, &cursor) <= 0)
+        {
+          iter = cursor;
+          gtk_text_iter_forward_char (&iter);
+        }
+
+      old_iter = &bound;
+      gtk_text_view_set_handle_position (text_view, handle, &iter);
+    }
+  else
+    g_assert_not_reached ();
+
+  if (gtk_text_iter_compare (&iter, old_iter) != 0)
+    {
+      *old_iter = iter;
+
+      if (handle == priv->text_handles[TEXT_HANDLE_CURSOR] &&
+          !gtk_widget_is_visible (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND])))
         gtk_text_buffer_place_cursor (buffer, &cursor);
       else
         gtk_text_buffer_select_range (buffer, &cursor, &bound);
 
-      if (_gtk_text_handle_get_is_dragged (priv->text_handle, cursor_pos))
+      if (handle == priv->text_handles[TEXT_HANDLE_CURSOR])
         {
           text_view->priv->cursor_handle_dragged = TRUE;
           gtk_text_view_scroll_mark_onscreen (text_view,
                                               gtk_text_buffer_get_insert (buffer));
         }
-      else
+      else if (handle == priv->text_handles[TEXT_HANDLE_SELECTION_BOUND])
         {
           text_view->priv->selection_handle_dragged = TRUE;
           gtk_text_view_scroll_mark_onscreen (text_view,
                                               gtk_text_buffer_get_selection_bound (buffer));
         }
+
+      gtk_text_view_update_handles (text_view);
     }
 
-  if (_gtk_text_handle_get_is_dragged (priv->text_handle, cursor_pos))
-    gtk_text_view_show_magnifier (text_view, &cursor, x, y);
-  else
-    gtk_text_view_show_magnifier (text_view, &bound, x, y);
+  gtk_text_view_show_magnifier (text_view, &iter, x, y);
 }
 
 static void
-gtk_text_view_handle_drag_started (GtkTextHandle         *handle,
-                                   GtkTextHandlePosition  pos,
-                                   GtkTextView           *text_view)
+gtk_text_view_handle_drag_started (GtkTextHandle *handle,
+                                   GtkTextView   *text_view)
 {
   text_view->priv->cursor_handle_dragged = FALSE;
   text_view->priv->selection_handle_dragged = FALSE;
 }
 
 static void
-gtk_text_view_handle_drag_finished (GtkTextHandle         *handle,
-                                    GtkTextHandlePosition  pos,
-                                    GtkTextView           *text_view)
+gtk_text_view_handle_drag_finished (GtkTextHandle *handle,
+                                    GtkTextView   *text_view)
 {
   GtkTextViewPrivate *priv = text_view->priv;
 
@@ -5079,7 +5074,7 @@ gtk_text_view_handle_drag_finished (GtkTextHandle         *handle,
           extend_selection (text_view, SELECT_WORDS, &cursor, &start, &end);
           gtk_text_buffer_select_range (buffer, &start, &end);
 
-          gtk_text_view_update_handles (text_view, GTK_TEXT_HANDLE_MODE_SELECTION);
+          gtk_text_view_update_handles (text_view);
         }
       else
         gtk_text_view_selection_bubble_popup_set (text_view);
@@ -5092,52 +5087,64 @@ gtk_text_view_handle_drag_finished (GtkTextHandle         *handle,
 static gboolean cursor_visible (GtkTextView *text_view);
 
 static void
-gtk_text_view_update_handles (GtkTextView       *text_view,
-                              GtkTextHandleMode  mode)
+gtk_text_view_update_handles (GtkTextView *text_view)
 {
   GtkTextViewPrivate *priv = text_view->priv;
-  GtkTextIter cursor, bound, min, max;
+  GtkTextIter cursor, bound;
   GtkTextBuffer *buffer;
 
-  buffer = get_buffer (text_view);
-
-  gtk_text_buffer_get_iter_at_mark (buffer, &cursor,
-                                    gtk_text_buffer_get_insert (buffer));
-  gtk_text_buffer_get_iter_at_mark (buffer, &bound,
-                                    gtk_text_buffer_get_selection_bound (buffer));
-
-  if (mode == GTK_TEXT_HANDLE_MODE_SELECTION &&
-      gtk_text_iter_compare (&cursor, &bound) == 0)
+  if (!priv->text_handles_enabled)
     {
-      mode = GTK_TEXT_HANDLE_MODE_CURSOR;
-    }
-
-  if (mode == GTK_TEXT_HANDLE_MODE_CURSOR &&
-      (!gtk_widget_is_sensitive (GTK_WIDGET (text_view)) || !cursor_visible (text_view)))
-    {
-      mode = GTK_TEXT_HANDLE_MODE_NONE;
-    }
-
-  _gtk_text_handle_set_mode (priv->text_handle, mode);
-
-  if (gtk_text_iter_compare (&cursor, &bound) >= 0)
-    {
-      min = bound;
-      max = cursor;
+      if (priv->text_handles[TEXT_HANDLE_CURSOR])
+	gtk_widget_hide (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_CURSOR]));
+      if (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND])
+	gtk_widget_hide (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]));
     }
   else
     {
-      min = cursor;
-      max = bound;
+      _gtk_text_view_ensure_text_handles (text_view);
+	buffer = get_buffer (text_view);
+
+      gtk_text_buffer_get_iter_at_mark (buffer, &cursor,
+                                        gtk_text_buffer_get_insert (buffer));
+      gtk_text_buffer_get_iter_at_mark (buffer, &bound,
+                                        gtk_text_buffer_get_selection_bound (buffer));
+
+      if (gtk_text_iter_compare (&cursor, &bound) == 0 && priv->editable)
+        {
+          /* Cursor mode */
+          gtk_widget_hide (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]));
+
+          gtk_text_view_set_handle_position (text_view,
+                                             priv->text_handles[TEXT_HANDLE_CURSOR],
+                                             &cursor);
+          gtk_text_handle_set_role (priv->text_handles[TEXT_HANDLE_CURSOR],
+                                    GTK_TEXT_HANDLE_ROLE_CURSOR);
+          gtk_widget_show (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_CURSOR]));
+        }
+      else if (gtk_text_iter_compare (&cursor, &bound) != 0)
+        {
+          /* Selection mode */
+          gtk_text_view_set_handle_position (text_view,
+                                             priv->text_handles[TEXT_HANDLE_CURSOR],
+                                             &cursor);
+          gtk_text_handle_set_role (priv->text_handles[TEXT_HANDLE_CURSOR],
+                                    GTK_TEXT_HANDLE_ROLE_SELECTION_START);
+          gtk_widget_show (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_CURSOR]));
+
+          gtk_text_view_set_handle_position (text_view,
+                                             priv->text_handles[TEXT_HANDLE_SELECTION_BOUND],
+                                             &bound);
+          gtk_text_handle_set_role (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND],
+                                    GTK_TEXT_HANDLE_ROLE_SELECTION_END);
+          gtk_widget_show (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]));
+        }
+      else
+        {
+          gtk_widget_hide (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_CURSOR]));
+          gtk_widget_hide (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]));
+        }
     }
-
-  if (mode != GTK_TEXT_HANDLE_MODE_NONE)
-    gtk_text_view_set_handle_position (text_view, &max,
-                                       GTK_TEXT_HANDLE_POSITION_SELECTION_END);
-
-  if (mode == GTK_TEXT_HANDLE_MODE_SELECTION)
-    gtk_text_view_set_handle_position (text_view, &min,
-                                       GTK_TEXT_HANDLE_POSITION_SELECTION_START);
 }
 
 static gboolean
@@ -5199,9 +5206,8 @@ gtk_text_view_key_controller_key_pressed (GtkEventControllerKey *controller,
   gtk_text_view_reset_blink_time (text_view);
   gtk_text_view_pend_cursor_blink (text_view);
 
-  if (priv->text_handle)
-    _gtk_text_handle_set_mode (priv->text_handle,
-                               GTK_TEXT_HANDLE_MODE_NONE);
+  text_view->priv->text_handles_enabled = FALSE;
+  gtk_text_view_update_handles (text_view);
 
   gtk_text_view_selection_bubble_popup_unset (text_view);
 
@@ -5312,7 +5318,6 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
     }
   else if (button == GDK_BUTTON_PRIMARY)
     {
-      GtkTextHandleMode handle_mode = GTK_TEXT_HANDLE_MODE_NONE;
       gboolean extends = FALSE;
       GdkModifierType state;
 
@@ -5332,8 +5337,7 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
              */
             GtkTextIter start, end;
 
-            if (is_touchscreen)
-              handle_mode = GTK_TEXT_HANDLE_MODE_CURSOR;
+            priv->text_handles_enabled = is_touchscreen;
 
             get_iter_from_gesture (text_view, GTK_GESTURE (gesture),
                                    &iter, NULL, NULL);
@@ -5348,12 +5352,11 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
 			!gtk_widget_get_visible (priv->selection_bubble))
                       {
                         gtk_text_view_selection_bubble_popup_set (text_view);
-                        handle_mode = GTK_TEXT_HANDLE_MODE_NONE;
+                        priv->text_handles_enabled = FALSE;
                       }
                     else
                       {
                         gtk_text_view_selection_bubble_popup_unset (text_view);
-                        handle_mode = GTK_TEXT_HANDLE_MODE_SELECTION;
                       }
                   }
                 else
@@ -5383,11 +5386,6 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
           }
         case 2:
         case 3:
-          if (is_touchscreen)
-            {
-              handle_mode = GTK_TEXT_HANDLE_MODE_SELECTION;
-              break;
-            }
           gtk_text_view_end_selection_drag (text_view);
 
           get_iter_from_gesture (text_view, GTK_GESTURE (gesture),
@@ -5400,8 +5398,7 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
           break;
         }
 
-      _gtk_text_view_ensure_text_handles (text_view);
-      gtk_text_view_update_handles (text_view, handle_mode);
+      gtk_text_view_update_handles (text_view);
     }
 
   if (n_press >= 3)
@@ -5468,9 +5465,8 @@ gtk_text_view_focus_out (GtkWidget *widget)
                                         text_view);
   gtk_text_view_selection_bubble_popup_unset (text_view);
 
-  if (priv->text_handle)
-    _gtk_text_handle_set_mode (priv->text_handle,
-                               GTK_TEXT_HANDLE_MODE_NONE);
+  text_view->priv->text_handles_enabled = FALSE;
+  gtk_text_view_update_handles (text_view);
 
   if (priv->editable)
     {
@@ -6840,11 +6836,8 @@ gtk_text_view_buffer_changed_handler (GtkTextBuffer *buffer,
                                       gpointer       data)
 {
   GtkTextView *text_view = data;
-  GtkTextViewPrivate *priv = text_view->priv;
 
-  if (priv->text_handle)
-    gtk_text_view_update_handles (text_view,
-                                  _gtk_text_handle_get_mode (priv->text_handle));
+  gtk_text_view_update_handles (text_view);
 }
 
 static void
@@ -7288,8 +7281,8 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
 
   if (is_touchscreen)
     {
-      _gtk_text_view_ensure_text_handles (text_view);
-      gtk_text_view_update_handles (text_view, GTK_TEXT_HANDLE_MODE_SELECTION);
+      text_view->priv->text_handles_enabled = TRUE;
+      gtk_text_view_update_handles (text_view);
       gtk_text_view_show_magnifier (text_view, &cursor, x, y);
     }
 }
@@ -7338,7 +7331,6 @@ gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
   if (!is_touchscreen && clicked_in_selection &&
       !gtk_drag_check_threshold (GTK_WIDGET (text_view), start_x, start_y, x, y))
     {
-      GtkTextHandleMode mode = GTK_TEXT_HANDLE_MODE_NONE;
       GtkTextIter iter;
 
       /* Unselect everything; we clicked inside selection, but
@@ -7351,13 +7343,7 @@ gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
       gtk_text_buffer_place_cursor (get_buffer (text_view), &iter);
       gtk_text_view_check_cursor_blink (text_view);
 
-      if (priv->text_handle)
-        {
-          if (is_touchscreen)
-            mode = GTK_TEXT_HANDLE_MODE_CURSOR;
-
-          gtk_text_view_update_handles (text_view, mode);
-        }
+      gtk_text_view_update_handles (text_view);
     }
 }
 
@@ -8094,9 +8080,7 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
    */
   gtk_text_view_update_im_spot_location (text_view);
 
-  if (priv->text_handle)
-    gtk_text_view_update_handles (text_view,
-                                  _gtk_text_handle_get_mode (priv->text_handle));
+  gtk_text_view_update_handles (text_view);
 
   if (priv->anchored_children.length > 0)
     gtk_widget_queue_allocate (GTK_WIDGET (text_view));
@@ -8285,9 +8269,7 @@ gtk_text_view_mark_set_handler (GtkTextBuffer     *buffer,
   if (need_reset)
     {
       gtk_text_view_reset_im_context (text_view);
-      if (text_view->priv->text_handle)
-        gtk_text_view_update_handles (text_view,
-                                      _gtk_text_handle_get_mode (text_view->priv->text_handle));
+      gtk_text_view_update_handles (text_view);
 
       has_selection = gtk_text_buffer_get_selection_bounds (get_buffer (text_view), NULL, NULL);
       gtk_css_node_set_visible (text_view->priv->selection_node, has_selection);
@@ -8697,21 +8679,10 @@ show_or_hide_handles (GtkWidget   *popover,
                       GtkTextView *text_view)
 {
   gboolean visible;
-  GtkTextHandle *handle;
-  GtkTextHandleMode mode;
 
   visible = gtk_widget_get_visible (popover);
-
-  handle = text_view->priv->text_handle;
-  mode = _gtk_text_handle_get_mode (handle);
-
-  if (!visible)
-    gtk_text_view_update_handles (text_view, mode);
-  else
-    {
-      _gtk_text_handle_set_visible (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_START, FALSE);
-      _gtk_text_handle_set_visible (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_END, FALSE);
-    }
+  text_view->priv->text_handles_enabled = !visible;
+  gtk_text_view_update_handles (text_view);
 }
 
 static void
