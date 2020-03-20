@@ -30,8 +30,6 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_SHORTCUT_ACTION (gtk_shortcut_action_get_type ())
 
-#define GTK_IS_SHORTCUT_ACTION(obj) ((obj) != NULL)
-
 /**
  * GtkShortcutFunc:
  * @widget: The widget passed to the activation
@@ -57,37 +55,8 @@ typedef enum {
   GTK_SHORTCUT_ACTION_EXCLUSIVE = 1 << 0
 } GtkShortcutActionFlags;
 
-/**
- * GtkShortcutActionType:
- * @GTK_SHORTCUT_ACTION_NOTHING: Don't ever activate
- * @GTK_SHORTCUT_ACTION_CALLBACK: Call a custom user-provided callback
- * @GTK_SHORTCUT_ACTION_ACTIVATE: Call gtk_widget_activate() on the widget
- * @GTK_SHORTCUT_ACTION_MNEMONIC: Call gtk_widget_mnemonic_activate()
- *     on the widget
- * @GTK_SHORTCUT_ACTION_SIGNAL: Emit the given action signal on the widget
- * @GTK_SHORTCUT_ACTION_ACTION: Call the provided action on the widget
- *
- * The type of a action determines what the action does when activated.
- **/
-typedef enum {
- GTK_SHORTCUT_ACTION_NOTHING,
- GTK_SHORTCUT_ACTION_CALLBACK,
- GTK_SHORTCUT_ACTION_ACTIVATE,
- GTK_SHORTCUT_ACTION_MNEMONIC,
- GTK_SHORTCUT_ACTION_SIGNAL,
- GTK_SHORTCUT_ACTION_ACTION
-} GtkShortcutActionType;
-
 GDK_AVAILABLE_IN_ALL
-GType                   gtk_shortcut_action_get_type            (void) G_GNUC_CONST;
-
-GDK_AVAILABLE_IN_ALL
-GtkShortcutAction *     gtk_shortcut_action_ref                 (GtkShortcutAction      *self);
-GDK_AVAILABLE_IN_ALL
-void                    gtk_shortcut_action_unref               (GtkShortcutAction      *self);
-
-GDK_AVAILABLE_IN_ALL
-GtkShortcutActionType   gtk_shortcut_action_get_action_type     (GtkShortcutAction      *self);
+GDK_DECLARE_INTERNAL_TYPE (GtkShortcutAction, gtk_shortcut_action, GTK, SHORTCUT_ACTION, GObject)
 
 GDK_AVAILABLE_IN_ALL
 char *                  gtk_shortcut_action_to_string           (GtkShortcutAction      *self);
@@ -100,28 +69,89 @@ gboolean                gtk_shortcut_action_activate            (GtkShortcutActi
                                                                  GtkWidget              *widget,
                                                                  GVariant               *args);
 
+#define GTK_TYPE_NOTHING_ACTION (gtk_nothing_action_get_type())
+
+/**
+ * GtkNothingAction:
+ *
+ * A #GtkShortcutAction that does nothing.
+ */
 GDK_AVAILABLE_IN_ALL
-GtkShortcutAction *     gtk_nothing_action_new                  (void);
+GDK_DECLARE_INTERNAL_TYPE (GtkNothingAction, gtk_nothing_action, GTK, NOTHING_ACTION, GtkShortcutAction)
+
+GDK_AVAILABLE_IN_ALL
+GtkShortcutAction *     gtk_nothing_action_get                  (void);
+
+#define GTK_TYPE_CALLBACK_ACTION (gtk_callback_action_get_type())
+
+/**
+ * GtkCallbackAction:
+ *
+ * A #GtkShortcutAction that invokes a callback.
+ */
+GDK_AVAILABLE_IN_ALL
+GDK_DECLARE_INTERNAL_TYPE (GtkCallbackAction, gtk_callback_action, GTK, CALLBACK_ACTION, GtkShortcutAction)
 
 GDK_AVAILABLE_IN_ALL
 GtkShortcutAction *     gtk_callback_action_new                 (GtkShortcutFunc         callback,
                                                                  gpointer                data,
                                                                  GDestroyNotify          destroy);
 
+#define GTK_TYPE_MNEMONIC_ACTION (gtk_mnemonic_action_get_type())
+
+/**
+ * GtkMnemonicAction:
+ *
+ * A #GtkShortcutAction that calls gtk_widget_mnemonic_activate().
+ */
 GDK_AVAILABLE_IN_ALL
-GtkShortcutAction *     gtk_mnemonic_action_new                 (void);
-GDK_AVAILABLE_IN_ALL
-GtkShortcutAction *     gtk_activate_action_new                 (void);
+GDK_DECLARE_INTERNAL_TYPE (GtkMnemonicAction, gtk_mnemonic_action, GTK, MNEMONIC_ACTION, GtkShortcutAction)
 
 GDK_AVAILABLE_IN_ALL
-GtkShortcutAction *     gtk_signal_action_new                   (const char             *signal_name);
+GtkShortcutAction *     gtk_mnemonic_action_get                 (void);
+
+#define GTK_TYPE_ACTIVATE_ACTION (gtk_activate_action_get_type())
+
+/**
+ * GtkActivateAction:
+ *
+ * A #GtkShortcutAction that calls gtk_widget_activate().
+ */
 GDK_AVAILABLE_IN_ALL
-const char *            gtk_signal_action_get_signal_name       (GtkShortcutAction      *action);
+GDK_DECLARE_INTERNAL_TYPE (GtkActivateAction, gtk_activate_action, GTK, ACTIVATE_ACTION, GtkShortcutAction)
 
 GDK_AVAILABLE_IN_ALL
-GtkShortcutAction *     gtk_action_action_new                   (const char             *name);
+GtkShortcutAction *     gtk_activate_action_get                 (void);
+
+#define GTK_TYPE_SIGNAL_ACTION (gtk_signal_action_get_type())
+
+/**
+ * GtkSignalAction:
+ *
+ * A #GtkShortcutAction that emits a signal.
+ */
 GDK_AVAILABLE_IN_ALL
-const char *            gtk_action_action_get_name              (GtkShortcutAction      *action);
+GDK_DECLARE_INTERNAL_TYPE (GtkSignalAction, gtk_signal_action, GTK, SIGNAL_ACTION, GtkShortcutAction)
+
+GDK_AVAILABLE_IN_ALL
+GtkShortcutAction *     gtk_signal_action_new                   (const char      *signal_name);
+GDK_AVAILABLE_IN_ALL
+const char *            gtk_signal_action_get_signal_name       (GtkSignalAction *self);
+
+#define GTK_TYPE_NAMED_ACTION (gtk_named_action_get_type())
+
+/**
+ * GtkNamedAction:
+ *
+ * A #GtkShortcutAction that activates an action by name.
+ */
+GDK_AVAILABLE_IN_ALL
+GDK_DECLARE_INTERNAL_TYPE (GtkNamedAction, gtk_named_action, GTK, NAMED_ACTION, GtkShortcutAction)
+
+GDK_AVAILABLE_IN_ALL
+GtkShortcutAction *     gtk_named_action_new                    (const char     *name);
+GDK_AVAILABLE_IN_ALL
+const char *            gtk_named_action_get_action_name        (GtkNamedAction *self);
 
 G_END_DECLS
 

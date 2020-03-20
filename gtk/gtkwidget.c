@@ -4396,7 +4396,7 @@ gtk_widget_class_add_binding_action (GtkWidgetClass  *widget_class,
   /* XXX: validate variant format for action */
 
   shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (keyval, mods),
-                               gtk_action_action_new (action_name));
+                               gtk_named_action_new (action_name));
   if (format_string)
     {
       va_list args;

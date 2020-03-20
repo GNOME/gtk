@@ -94,8 +94,8 @@ gtk_application_accels_set_accels_for_action (GtkApplicationAccels *accels,
       GtkShortcutAction *action = gtk_shortcut_get_action (shortcut_i);
       GVariant *args = gtk_shortcut_get_arguments (shortcut_i);
 
-      if (gtk_shortcut_action_get_action_type (action) != GTK_SHORTCUT_ACTION_ACTION ||
-          !g_str_equal (gtk_action_action_get_name (action), action_name))
+      if (!GTK_IS_NAMED_ACTION (action) ||
+          !g_str_equal (gtk_named_action_get_action_name (GTK_NAMED_ACTION (action)), action_name))
         continue;
 
       if ((target == NULL && args != NULL) ||
@@ -130,7 +130,7 @@ gtk_application_accels_set_accels_for_action (GtkApplicationAccels *accels,
   if (trigger == NULL)
     goto out;
 
-  shortcut = gtk_shortcut_new (trigger, gtk_action_action_new (action_name));
+  shortcut = gtk_shortcut_new (trigger, gtk_named_action_new (action_name));
   gtk_shortcut_set_arguments (shortcut, target);
   g_list_store_append (G_LIST_STORE (accels->shortcuts), shortcut);
   g_object_unref (shortcut);
@@ -192,8 +192,8 @@ gtk_application_accels_get_accels_for_action (GtkApplicationAccels *accels,
       GtkShortcutAction *action = gtk_shortcut_get_action (shortcut);
       GVariant *args = gtk_shortcut_get_arguments (shortcut);
 
-      if (gtk_shortcut_action_get_action_type (action) != GTK_SHORTCUT_ACTION_ACTION ||
-          !g_str_equal (gtk_action_action_get_name (action), action_name))
+      if (!GTK_IS_NAMED_ACTION (action) ||
+          !g_str_equal (gtk_named_action_get_action_name (GTK_NAMED_ACTION (action)), action_name))
         continue;
 
       if ((target == NULL && args != NULL) ||
@@ -241,10 +241,11 @@ get_detailed_name_for_shortcut (GtkShortcut *shortcut)
 {
   GtkShortcutAction *action = gtk_shortcut_get_action (shortcut);
 
-  if (gtk_shortcut_action_get_action_type (action) != GTK_SHORTCUT_ACTION_ACTION)
+  if (!GTK_IS_NAMED_ACTION (action))
     return NULL;
 
-  return g_action_print_detailed_name (gtk_action_action_get_name (action), gtk_shortcut_get_arguments (shortcut));
+  return g_action_print_detailed_name (gtk_named_action_get_action_name (GTK_NAMED_ACTION (action)),
+                                       gtk_shortcut_get_arguments (shortcut));
 }
 
 gchar **
