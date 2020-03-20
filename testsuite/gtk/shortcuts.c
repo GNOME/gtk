@@ -245,6 +245,71 @@ test_trigger_trigger (void)
   gtk_shortcut_trigger_unref (trigger4);
 }
 
+static int callback_count;
+
+static gboolean
+callback (GtkWidget *widget,
+          GVariant  *args,
+          gpointer   user_data)
+{
+  callback_count++;
+  return TRUE;
+}
+
+static void
+test_action_basic (void)
+{
+  GtkShortcutAction *action;
+
+  action = gtk_nothing_action_new ();
+  g_assert_cmpint (gtk_shortcut_action_get_action_type (action), ==, GTK_SHORTCUT_ACTION_NOTHING);
+  gtk_shortcut_action_unref (action);
+
+  action = gtk_callback_action_new (callback, NULL, NULL);
+  g_assert_cmpint (gtk_shortcut_action_get_action_type (action), ==, GTK_SHORTCUT_ACTION_CALLBACK);
+  gtk_shortcut_action_unref (action);
+
+  action = gtk_mnemonic_action_new ();
+  g_assert_cmpint (gtk_shortcut_action_get_action_type (action), ==, GTK_SHORTCUT_ACTION_MNEMONIC);
+  gtk_shortcut_action_unref (action);
+
+  action = gtk_activate_action_new ();
+  g_assert_cmpint (gtk_shortcut_action_get_action_type (action), ==, GTK_SHORTCUT_ACTION_ACTIVATE);
+  gtk_shortcut_action_unref (action);
+
+  action = gtk_signal_action_new ("activate");
+  g_assert_cmpint (gtk_shortcut_action_get_action_type (action), ==, GTK_SHORTCUT_ACTION_SIGNAL);
+  g_assert_cmpstr (gtk_signal_action_get_signal_name (action), ==, "activate");
+  gtk_shortcut_action_unref (action);
+
+  action = gtk_action_action_new ("text.undo");
+  g_assert_cmpint (gtk_shortcut_action_get_action_type (action), ==, GTK_SHORTCUT_ACTION_ACTION);
+  g_assert_cmpstr (gtk_action_action_get_name (action), ==, "text.undo");
+  gtk_shortcut_action_unref (action);
+}
+
+static void
+test_action_activate (void)
+{
+  GtkShortcutAction *action;
+  GtkWidget *widget;
+
+  widget = gtk_label_new ("");
+  g_object_ref_sink (widget);
+
+  action = gtk_nothing_action_new ();
+  g_assert_cmpint (gtk_shortcut_action_activate (action, 0, widget, NULL), ==, FALSE);
+  gtk_shortcut_action_unref (action);
+
+  callback_count = 0;
+  action = gtk_callback_action_new (callback, NULL, NULL);
+  g_assert_cmpint (gtk_shortcut_action_activate (action, 0, widget , NULL), ==, TRUE);
+  g_assert_cmpint (callback_count, ==, 1);
+  gtk_shortcut_action_unref (action);
+
+  g_object_unref (widget);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -254,6 +319,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/shortcuts/trigger/equal", test_trigger_equal);
   g_test_add_func ("/shortcuts/trigger/parse", test_trigger_parse);
   g_test_add_func ("/shortcuts/trigger/trigger", test_trigger_trigger);
+  g_test_add_func ("/shortcuts/action/basic", test_action_basic);
+  g_test_add_func ("/shortcuts/action/activate", test_action_activate);
 
   return g_test_run ();
 }
