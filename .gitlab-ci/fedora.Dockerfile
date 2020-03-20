@@ -13,6 +13,7 @@ RUN dnf -y install \
     colord-devel \
     cups-devel \
     dbus-daemon \
+    dbus-x11 \
     dejavu-sans-mono-fonts \
     desktop-file-utils \
     diffutils \
