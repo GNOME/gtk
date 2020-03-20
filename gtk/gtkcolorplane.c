@@ -441,7 +441,7 @@ gtk_color_plane_init (GtkColorPlane *plane)
   controller = gtk_shortcut_controller_new ();
   trigger = gtk_alternative_trigger_new (gtk_keyval_trigger_new (GDK_KEY_F10, GDK_SHIFT_MASK),
                                          gtk_keyval_trigger_new (GDK_KEY_Menu, 0));
-  action = gtk_action_action_new ("color.edit");
+  action = gtk_named_action_new ("color.edit");
   shortcut = gtk_shortcut_new_with_arguments (trigger, action, "s", "sv");
   gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
   gtk_widget_add_controller (GTK_WIDGET (plane), controller);

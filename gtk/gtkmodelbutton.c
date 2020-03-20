@@ -1019,7 +1019,7 @@ gtk_model_button_root (GtkWidget *widget)
       GtkShortcutTrigger *trigger;
 
       detailed = g_action_print_detailed_name (action_name, action_target);
-      action = gtk_action_action_new (detailed);
+      action = gtk_named_action_new (detailed);
 
       trigger = gtk_shortcut_manager_get_trigger (manager, action, widget);
 
@@ -1032,7 +1032,7 @@ gtk_model_button_root (GtkWidget *widget)
           g_free (label);
         }
 
-      gtk_shortcut_action_unref (action);
+      g_object_unref (action);
       g_free (detailed);
     }
 }
