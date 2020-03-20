@@ -31,7 +31,13 @@ G_BEGIN_DECLS
 #define GTK_IS_ACTION_MUXER(inst)                           (G_TYPE_CHECK_INSTANCE_TYPE ((inst),                     \
                                                              GTK_TYPE_ACTION_MUXER))
 
-typedef struct {
+typedef struct _GtkWidgetAction GtkWidgetAction;
+typedef struct _GtkActionMuxer GtkActionMuxer;
+
+struct _GtkWidgetAction
+{
+  GtkWidgetAction *next;
+
   char *name;
   GType owner;
 
@@ -40,13 +46,10 @@ typedef struct {
 
   const GVariantType *state_type;
   GParamSpec *pspec;
-} GtkWidgetAction;
-
-typedef struct _GtkActionMuxer                              GtkActionMuxer;
+};
 
 GType                   gtk_action_muxer_get_type                       (void);
-GtkActionMuxer *        gtk_action_muxer_new                            (GtkWidget      *widget,
-                                                                         GPtrArray      *actions);
+GtkActionMuxer *        gtk_action_muxer_new                            (GtkWidget      *widget);
 
 void                    gtk_action_muxer_insert                         (GtkActionMuxer *muxer,
                                                                          const gchar    *prefix,
