@@ -109,6 +109,7 @@ static void     set_wm_name                       (GdkDisplay  *display,
 						   Window       xwindow,
 						   const gchar *name);
 static void     move_to_current_desktop           (GdkSurface *surface);
+static void     gdk_x11_toplevel_state_callback   (GdkSurface *surface);
 
 /* Return whether time1 is considered later than time2 as far as xserver
  * time is concerned.  Accounts for wraparound.
@@ -148,6 +149,9 @@ _gdk_x11_surface_get_toplevel (GdkSurface *surface)
     {
       impl->toplevel = g_new0 (GdkToplevelX11, 1);
       impl->toplevel->have_focused = FALSE;
+      g_signal_connect (surface, "notify::state",
+                        G_CALLBACK (gdk_x11_toplevel_state_callback),
+                        NULL);
     }
 
   return impl->toplevel;
@@ -444,6 +448,10 @@ gdk_x11_surface_finalize (GObject *object)
 
   if (impl->toplevel->in_frame)
     unhook_surface_changed (GDK_SURFACE (impl));
+
+  g_signal_handlers_disconnect_by_func (GDK_SURFACE (impl),
+                                        gdk_x11_toplevel_state_callback,
+                                        NULL);
 
   _gdk_x11_surface_grab_check_destroy (GDK_SURFACE (impl));
 
@@ -4725,6 +4733,9 @@ gdk_x11_toplevel_set_property (GObject      *object,
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
+    case LAST_PROP + GDK_TOPLEVEL_PROP_SHORTCUTS_INHIBITED:
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -4783,6 +4794,10 @@ gdk_x11_toplevel_get_property (GObject    *object,
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_FULLSCREEN_MODE:
       g_value_set_enum (value, surface->fullscreen_mode);
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_SHORTCUTS_INHIBITED:
+      g_value_set_boolean (value, surface->shortcuts_inhibited);
       break;
 
     default:
@@ -4909,6 +4924,60 @@ gdk_x11_toplevel_supports_edge_constraints (GdkToplevel *toplevel)
 }
 
 static void
+gdk_x11_toplevel_inhibit_system_shortcuts (GdkToplevel *toplevel,
+                                           GdkEvent    *gdk_event)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+  GdkDisplay *display;
+  GdkSeat *gdk_seat;
+  GdkGrabStatus status;
+
+  if (!(surface->state & GDK_SURFACE_STATE_FOCUSED))
+    return;
+
+  display = gdk_surface_get_display (GDK_SURFACE (toplevel));
+  gdk_seat = gdk_display_get_default_seat (display);;
+
+  if (!(gdk_seat_get_capabilities (gdk_seat) & GDK_SEAT_CAPABILITY_KEYBOARD))
+    return;
+
+  status = gdk_seat_grab (gdk_seat, surface, GDK_SEAT_CAPABILITY_KEYBOARD,
+                          TRUE, NULL, gdk_event, NULL, NULL);
+
+  surface->shortcuts_inhibited = (status == GDK_GRAB_SUCCESS);
+  g_object_notify (G_OBJECT (toplevel), "shortcuts-inhibited");
+}
+
+static void
+gdk_x11_toplevel_restore_system_shortcuts (GdkToplevel *toplevel)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+  GdkDisplay *display;
+  GdkSeat *gdk_seat;
+
+  if (!surface->shortcuts_inhibited)
+    return; /* Not inhibited */
+
+  display = gdk_surface_get_display (GDK_SURFACE (toplevel));
+  gdk_seat = gdk_display_get_default_seat (display);;
+
+  gdk_seat_ungrab (gdk_seat);
+
+  surface->shortcuts_inhibited = FALSE;
+  g_object_notify (G_OBJECT (toplevel), "shortcuts-inhibited");
+}
+
+static void
+gdk_x11_toplevel_state_callback (GdkSurface *surface)
+{
+  if (surface->state & GDK_SURFACE_STATE_FOCUSED)
+    return;
+
+  if (surface->shortcuts_inhibited)
+    gdk_x11_toplevel_restore_system_shortcuts (GDK_TOPLEVEL (surface));
+}
+
+static void
 gdk_x11_toplevel_iface_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_x11_toplevel_present;
@@ -4917,6 +4986,8 @@ gdk_x11_toplevel_iface_init (GdkToplevelInterface *iface)
   iface->focus = gdk_x11_toplevel_focus;
   iface->show_window_menu = gdk_x11_toplevel_show_window_menu;
   iface->supports_edge_constraints = gdk_x11_toplevel_supports_edge_constraints;
+  iface->inhibit_system_shortcuts = gdk_x11_toplevel_inhibit_system_shortcuts;
+  iface->restore_system_shortcuts = gdk_x11_toplevel_restore_system_shortcuts;
 }
 
 typedef struct {
