@@ -2117,7 +2117,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
           GtkShortcutAction *action = gtk_shortcut_action_parse_builder (builder, string, error);
 
           /* Works for success and failure (NULL) case */
-          g_value_take_boxed (value, action);
+          g_value_take_object (value, action);
         }
       else if (G_VALUE_HOLDS (value, G_TYPE_STRV))
         {
