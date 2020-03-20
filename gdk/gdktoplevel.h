@@ -24,6 +24,7 @@
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
+#include <gdk/gdkseat.h>
 #include <gdk/gdksurface.h>
 #include <gdk/gdktoplevellayout.h>
 
@@ -86,6 +87,11 @@ void          gdk_toplevel_set_deletable         (GdkToplevel      *toplevel,
                                                   gboolean          deletable);
 GDK_AVAILABLE_IN_ALL
 gboolean      gdk_toplevel_supports_edge_constraints (GdkToplevel *toplevel);
+
+GDK_AVAILABLE_IN_ALL
+void          gdk_toplevel_divert_system_shortcuts (GdkToplevel *toplevel,
+                                                    GdkSeat     *seat,
+                                                    gboolean     diverted);
 
 G_END_DECLS
 

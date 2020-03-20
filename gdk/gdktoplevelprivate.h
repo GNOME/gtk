@@ -21,6 +21,9 @@ struct _GdkToplevelInterface
   gboolean      (* show_window_menu)    (GdkToplevel       *toplevel,
                                          GdkEvent          *event);
   gboolean      (* supports_edge_constraints) (GdkToplevel *toplevel);
+  void          (* divert_system_shortcuts) (GdkToplevel *toplevel,
+                                             GdkSeat     *seat,
+                                             gboolean     diverted);
 };
 
 typedef enum
