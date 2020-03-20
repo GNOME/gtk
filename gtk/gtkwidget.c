@@ -484,22 +484,6 @@ typedef struct {
   GCallback  callback_symbol;
 } CallbackSymbol;
 
-typedef struct {
-  GBytes               *data;
-  GSList               *children;
-  GtkBuilderScope      *scope;
-} GtkWidgetTemplate;
-
-struct _GtkWidgetClassPrivate
-{
-  GtkWidgetTemplate *template;
-  GType accessible_type;
-  AtkRole accessible_role;
-  GQuark css_name;
-  GType layout_manager_type;
-  GPtrArray *actions;
-};
-
 enum {
   DESTROY,
   SHOW,
