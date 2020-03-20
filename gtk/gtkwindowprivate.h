@@ -89,28 +89,6 @@ GtkWindowGroup *_gtk_window_get_window_group (GtkWindow *window);
 void            _gtk_window_set_window_group (GtkWindow      *window,
                                               GtkWindowGroup *group);
 
-/* Popovers */
-void    _gtk_window_add_popover          (GtkWindow                   *window,
-                                          GtkWidget                   *popover,
-                                          GtkWidget                   *popover_parent,
-                                          gboolean                     clamp_allocation);
-void    _gtk_window_remove_popover       (GtkWindow                   *window,
-                                          GtkWidget                   *popover);
-void    _gtk_window_set_popover_position (GtkWindow                   *window,
-                                          GtkWidget                   *popover,
-                                          GtkPositionType              pos,
-                                          const cairo_rectangle_int_t *rect);
-void    _gtk_window_get_popover_position (GtkWindow                   *window,
-                                          GtkWidget                   *popover,
-                                          GtkPositionType             *pos,
-                                          cairo_rectangle_int_t       *rect);
-void    _gtk_window_raise_popover        (GtkWindow                   *window,
-                                          GtkWidget                   *popover);
-
-GtkWidget * _gtk_window_get_popover_parent (GtkWindow *window,
-                                            GtkWidget *popover);
-gboolean    _gtk_window_is_popover_widget  (GtkWindow *window,
-                                            GtkWidget *popover);
 
 GdkPaintable *    gtk_window_get_icon_for_size (GtkWindow *window,
                                                 int        size);
