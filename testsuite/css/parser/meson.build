@@ -465,6 +465,7 @@ foreach testname : test_data
                  '-k',
                  join_paths(meson.current_source_dir(), testname),
                ],
+         protocol: 'tap',
          env: [ 'GIO_USE_VOLUME_MONITOR=unix',
                 'GSETTINGS_BACKEND=memory',
                 'GDK_DEBUG=default-settings',

@@ -11,6 +11,7 @@ test_change = executable(
 )
 test('change', test_change,
      args: [ '--tap', '-k' ],
+     protocol: 'tap',
      env: [ 'GIO_USE_VOLUME_MONITOR=unix',
             'GSETTINGS_BACKEND=memory',
             'GDK_DEBUG=default-settings',
