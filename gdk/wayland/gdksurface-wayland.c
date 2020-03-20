@@ -4535,6 +4535,17 @@ gdk_wayland_toplevel_supports_edge_constraints (GdkToplevel *toplevel)
 }
 
 static void
+gdk_wayland_toplevel_divert_system_shortcuts (GdkToplevel *toplevel,
+                                              GdkSeat     *seat,
+                                              gboolean     diverted)
+{
+  if (diverted)
+    gdk_wayland_surface_inhibit_shortcuts (GDK_SURFACE (toplevel), seat);
+  else
+    gdk_wayland_surface_restore_shortcuts (GDK_SURFACE (toplevel), seat);
+}
+
+static void
 gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_wayland_toplevel_present;
@@ -4543,6 +4554,7 @@ gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface)
   iface->focus = gdk_wayland_toplevel_focus;
   iface->show_window_menu = gdk_wayland_toplevel_show_window_menu;
   iface->supports_edge_constraints = gdk_wayland_toplevel_supports_edge_constraints;
+  iface->divert_system_shortcuts = gdk_wayland_toplevel_divert_system_shortcuts;
 }
 
 typedef struct
