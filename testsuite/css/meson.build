@@ -52,7 +52,7 @@ if get_option('install-tests')
                  install_dir: testdatadir)
 endif
 
-if get_option ('profiler')
+if false and get_option ('profiler')
 
   test('performance-adwaita', test_performance,
        args: [ '--mark', 'css validation',
