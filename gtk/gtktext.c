@@ -1923,6 +1923,7 @@ gtk_text_ensure_magnifier (GtkText *self)
   gtk_widget_set_size_request (priv->magnifier, 100, 60);
   _gtk_magnifier_set_magnification (GTK_MAGNIFIER (priv->magnifier), 2.0);
   priv->magnifier_popover = gtk_popover_new ();
+  gtk_popover_set_position (priv->magnifier_popover, GTK_POS_TOP);
   gtk_widget_set_parent (priv->magnifier_popover, GTK_WIDGET (self));
   gtk_widget_add_css_class (priv->magnifier_popover, "magnifier");
   gtk_popover_set_autohide (GTK_POPOVER (priv->magnifier_popover), FALSE);
