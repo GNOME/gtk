@@ -109,6 +109,9 @@ static void     set_wm_name                       (GdkDisplay  *display,
 						   Window       xwindow,
 						   const gchar *name);
 static void     move_to_current_desktop           (GdkSurface *surface);
+static gboolean gdk_x11_toplevel_handle_surface_event (GdkSurface *surface,
+                                                       GdkEvent   *event,
+                                                       gpointer    data);
 
 /* Return whether time1 is considered later than time2 as far as xserver
  * time is concerned.  Accounts for wraparound.
@@ -148,6 +151,11 @@ _gdk_x11_surface_get_toplevel (GdkSurface *surface)
     {
       impl->toplevel = g_new0 (GdkToplevelX11, 1);
       impl->toplevel->have_focused = FALSE;
+      impl->toplevel->shortcuts_inhibit_seats = NULL;
+      impl->toplevel->event_handler_id =
+        g_signal_connect (surface, "event",
+                          G_CALLBACK (gdk_x11_toplevel_handle_surface_event),
+                          NULL);
     }
 
   return impl->toplevel;
@@ -444,6 +452,10 @@ gdk_x11_surface_finalize (GObject *object)
 
   if (impl->toplevel->in_frame)
     unhook_surface_changed (GDK_SURFACE (impl));
+
+  g_signal_handler_disconnect (GDK_SURFACE (impl),
+                               impl->toplevel->event_handler_id);
+  g_clear_pointer (&impl->toplevel->shortcuts_inhibit_seats, g_list_free);
 
   _gdk_x11_surface_grab_check_destroy (GDK_SURFACE (impl));
 
@@ -4909,6 +4921,72 @@ gdk_x11_toplevel_supports_edge_constraints (GdkToplevel *toplevel)
 }
 
 static void
+gdk_x11_surface_inhibit_shortcuts (GdkSurface  *surface,
+                                   GdkSeat     *seat)
+{
+  gdk_seat_grab (seat, surface, GDK_SEAT_CAPABILITY_KEYBOARD,
+                 TRUE, NULL, NULL, NULL, NULL);
+}
+
+static void
+gdk_x11_surface_restore_shortcuts (GdkSurface  *surface,
+                                   GdkSeat     *seat)
+{
+  /* We may ungrab more than the keyboard here */
+  gdk_seat_ungrab (seat);
+}
+
+static gboolean
+gdk_x11_toplevel_handle_surface_event (GdkSurface *surface,
+                                       GdkEvent   *event,
+                                       gpointer    data)
+{
+  GdkToplevelX11 *toplevel_x11;
+  GList *l;
+
+  if (event->any.type != GDK_FOCUS_CHANGE)
+    return FALSE;
+
+  toplevel_x11 = _gdk_x11_surface_get_toplevel (surface);
+  for (l = toplevel_x11->shortcuts_inhibit_seats; l != NULL; l = l->next)
+    {
+      GdkSeat *seat = l->data;
+
+      if (toplevel_x11->have_focused)
+        gdk_x11_surface_inhibit_shortcuts (surface, seat);
+      else
+        gdk_x11_surface_restore_shortcuts (surface, seat);
+    }
+
+  return FALSE;
+}
+
+static void
+gdk_x11_toplevel_divert_system_shortcuts (GdkToplevel *toplevel,
+                                          GdkSeat     *seat,
+                                          gboolean     diverted)
+{
+  GdkToplevelX11 *toplevel_x11;
+
+  if (!(gdk_seat_get_capabilities (seat) & GDK_SEAT_CAPABILITY_KEYBOARD))
+    return;
+
+  toplevel_x11 = _gdk_x11_surface_get_toplevel (GDK_SURFACE (toplevel));
+  if (diverted)
+    {
+      toplevel_x11->shortcuts_inhibit_seats =
+        g_list_append (toplevel_x11->shortcuts_inhibit_seats, seat);
+      gdk_x11_surface_inhibit_shortcuts (GDK_SURFACE (toplevel), seat);
+    }
+  else
+    {
+      toplevel_x11->shortcuts_inhibit_seats =
+        g_list_remove (toplevel_x11->shortcuts_inhibit_seats, seat);
+      gdk_x11_surface_restore_shortcuts (GDK_SURFACE (toplevel), seat);
+    }
+}
+
+static void
 gdk_x11_toplevel_iface_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_x11_toplevel_present;
@@ -4917,6 +4995,7 @@ gdk_x11_toplevel_iface_init (GdkToplevelInterface *iface)
   iface->focus = gdk_x11_toplevel_focus;
   iface->show_window_menu = gdk_x11_toplevel_show_window_menu;
   iface->supports_edge_constraints = gdk_x11_toplevel_supports_edge_constraints;
+  iface->divert_system_shortcuts = gdk_x11_toplevel_divert_system_shortcuts;
 }
 
 typedef struct {

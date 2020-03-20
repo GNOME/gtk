@@ -158,6 +158,9 @@ struct _GdkToplevelX11
   /* Constrained edge information */
   guint edge_constraints;
 
+  gulong event_handler_id;
+  GList *shortcuts_inhibit_seats;
+
 #ifdef HAVE_XSYNC
   XID update_counter;
   XID extended_update_counter;
