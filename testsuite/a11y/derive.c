@@ -57,17 +57,24 @@ my_button_class_init (MyButtonClass *class)
                                         my_button_accessible_get_type ());
 }
 
-int main (int argc, char *argv[])
+static void
+test_derive (void)
 {
   GtkWidget *widget;
   GtkAccessible *accessible;
-
-  gtk_init ();
 
   widget = GTK_WIDGET (g_object_new (my_button_get_type (), NULL));
   accessible = GTK_ACCESSIBLE (gtk_widget_get_accessible (widget));
 
   g_assert (G_TYPE_CHECK_INSTANCE_TYPE (accessible, my_button_accessible_get_type ()));
+}
 
-  return 0;
+int
+main (int argc, char *argv[])
+{
+  gtk_test_init (&argc, &argv, NULL);
+
+  g_test_add_func ("/derive", test_derive);
+
+  return g_test_run ();
 }
