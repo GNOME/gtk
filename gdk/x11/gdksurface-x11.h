@@ -158,6 +158,10 @@ struct _GdkToplevelX11
   /* Constrained edge information */
   guint edge_constraints;
 
+  /* Simulate shortcuts inhibition */
+  GList *shortcuts_inhibit_seats;
+  GdkSurfaceState surface_state;
+
 #ifdef HAVE_XSYNC
   XID update_counter;
   XID extended_update_counter;
