@@ -11095,7 +11095,7 @@ _gtk_widget_get_action_muxer (GtkWidget *widget,
 
   if (create || priv->actions)
     {
-      muxer = gtk_action_muxer_new (widget, priv->actions);
+      muxer = gtk_action_muxer_new (widget);
       g_object_set_qdata_full (G_OBJECT (widget),
                                quark_action_muxer,
                                muxer,
@@ -12673,29 +12673,12 @@ gtk_widget_class_add_action (GtkWidgetClass  *widget_class,
 {
   GtkWidgetClassPrivate *priv = widget_class->priv;
 
-  if (priv->actions == NULL)
-    priv->actions = g_ptr_array_new ();
-  else
-    {
-      GtkWidgetClass *parent_class = GTK_WIDGET_CLASS (g_type_class_peek (g_type_parent (G_TYPE_FROM_CLASS (widget_class))));
-      GtkWidgetClassPrivate *parent_priv = parent_class->priv;
-      GPtrArray *parent_actions = parent_priv->actions;
-
-      if (priv->actions == parent_actions)
-        {
-          int i;
-
-          priv->actions = g_ptr_array_new ();
-          for (i = 0; i < parent_actions->len; i++)
-            g_ptr_array_add (priv->actions, g_ptr_array_index (parent_actions, i));
-        }
-    }
-
   GTK_NOTE(ACTIONS, g_message ("%sClass: Adding %s action\n",
                                g_type_name (G_TYPE_FROM_CLASS (widget_class)),
                                action->name));
 
-  g_ptr_array_add (priv->actions, action);
+  action->next = priv->actions;
+  priv->actions = action;
 }
 
 /*
@@ -12875,11 +12858,13 @@ gtk_widget_class_query_action (GtkWidgetClass      *widget_class,
                                const char         **property_name)
 {
   GtkWidgetClassPrivate *priv = widget_class->priv;
+  GtkWidgetAction *action = priv->actions;
 
-  if (priv->actions && index_ < priv->actions->len)
+  for (; index_ > 0 && action != NULL; index_--)
+    action = action->next;
+
+  if (action != NULL && index_ == 0)
     {
-      GtkWidgetAction *action = g_ptr_array_index (priv->actions, index_);
-
       *owner = action->owner;
       *action_name = action->name;
       *parameter_type = action->parameter_type;
