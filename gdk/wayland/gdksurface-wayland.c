@@ -4130,7 +4130,7 @@ gdk_wayland_surface_inhibit_shortcuts (GdkSurface *surface,
   if (display->keyboard_shortcuts_inhibit == NULL)
     return;
 
-  if (gdk_wayland_surface_get_inhibitor (impl, seat))
+  if (gdk_wayland_surface_get_inhibitor (impl, gdk_seat))
     return; /* Already inhibited */
 
   inhibitor =
@@ -4359,6 +4359,9 @@ gdk_wayland_toplevel_set_property (GObject      *object,
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
+    case LAST_PROP + GDK_TOPLEVEL_PROP_SHORTCUTS_INHIBITED:
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -4408,6 +4411,10 @@ gdk_wayland_toplevel_get_property (GObject    *object,
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_FULLSCREEN_MODE:
       g_value_set_enum (value, surface->fullscreen_mode);
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_SHORTCUTS_INHIBITED:
+      g_value_set_boolean (value, surface->shortcuts_inhibited);
       break;
 
     default:
@@ -4534,6 +4541,70 @@ gdk_wayland_toplevel_supports_edge_constraints (GdkToplevel *toplevel)
 }
 
 static void
+inhibitor_active (void *data,
+                  struct zwp_keyboard_shortcuts_inhibitor_v1 *inhibitor)
+{
+  GdkToplevel *toplevel = GDK_TOPLEVEL (data);
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+
+  surface->shortcuts_inhibited = TRUE;
+  g_object_notify (G_OBJECT (toplevel), "shortcuts-inhibited");
+}
+
+static void
+inhibitor_inactive (void *data,
+                    struct zwp_keyboard_shortcuts_inhibitor_v1 *inhibitor)
+{
+  GdkToplevel *toplevel = GDK_TOPLEVEL (data);
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+
+  surface->shortcuts_inhibited = FALSE;
+  g_object_notify (G_OBJECT (toplevel), "shortcuts-inhibited");
+}
+
+static const struct zwp_keyboard_shortcuts_inhibitor_v1_listener
+zwp_keyboard_shortcuts_inhibitor_listener = {
+  inhibitor_active,
+  inhibitor_inactive,
+};
+
+static void
+gdk_wayland_toplevel_inhibit_system_shortcuts (GdkToplevel *toplevel,
+                                               GdkEvent    *event)
+{
+  struct zwp_keyboard_shortcuts_inhibitor_v1 *inhibitor;
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+  GdkWaylandSurface *impl= GDK_WAYLAND_SURFACE (surface);
+  GdkSeat *gdk_seat;
+
+  if (surface->shortcuts_inhibited)
+    return;
+
+  gdk_seat = gdk_surface_get_seat_from_event (surface, event);
+  gdk_wayland_surface_inhibit_shortcuts (surface, gdk_seat);
+
+  inhibitor = gdk_wayland_surface_get_inhibitor (impl, gdk_seat);
+  if (!inhibitor)
+    return;
+
+  surface->current_shortcuts_inhibited_seat = gdk_seat;
+  zwp_keyboard_shortcuts_inhibitor_v1_add_listener
+    (inhibitor, &zwp_keyboard_shortcuts_inhibitor_listener, toplevel);
+}
+
+static void
+gdk_wayland_toplevel_restore_system_shortcuts (GdkToplevel *toplevel)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+
+  gdk_wayland_surface_restore_shortcuts (surface,
+                                         surface->current_shortcuts_inhibited_seat);
+  surface->current_shortcuts_inhibited_seat = NULL;
+  surface->shortcuts_inhibited = FALSE;
+  g_object_notify (G_OBJECT (toplevel), "shortcuts-inhibited");
+}
+
+static void
 gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_wayland_toplevel_present;
@@ -4542,6 +4613,8 @@ gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface)
   iface->focus = gdk_wayland_toplevel_focus;
   iface->show_window_menu = gdk_wayland_toplevel_show_window_menu;
   iface->supports_edge_constraints = gdk_wayland_toplevel_supports_edge_constraints;
+  iface->inhibit_system_shortcuts = gdk_wayland_toplevel_inhibit_system_shortcuts;
+  iface->restore_system_shortcuts = gdk_wayland_toplevel_restore_system_shortcuts;
 }
 
 typedef struct
