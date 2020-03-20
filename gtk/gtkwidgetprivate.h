@@ -201,6 +201,23 @@ struct _GtkWidgetPrivate
   GdkCursor *cursor;
 };
 
+typedef struct
+{
+  GBytes          *data;
+  GSList          *children;
+  GtkBuilderScope *scope;
+} GtkWidgetTemplate;
+
+struct _GtkWidgetClassPrivate
+{
+  GtkWidgetTemplate *template;
+  GType              accessible_type;
+  AtkRole            accessible_role;
+  GQuark             css_name;
+  GType              layout_manager_type;
+  GtkWidgetAction   *actions;
+};
+
 void          gtk_widget_root               (GtkWidget *widget);
 void          gtk_widget_unroot             (GtkWidget *widget);
 GtkCssNode *  gtk_widget_get_css_node       (GtkWidget *widget);
