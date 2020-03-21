@@ -645,6 +645,15 @@ gdk_offscreen_window_set_wmfunctions (GdkWindow	    *window,
 }
 
 static void
+gdk_offscreen_window_begin_move_drag (GdkWindow *window,
+                                      gint       button,
+                                      gint       root_x,
+                                      gint       root_y,
+                                      guint32    timestamp)
+{
+}
+
+static void
 gdk_offscreen_window_set_transient_for (GdkWindow *window,
 					GdkWindow *another)
 {
@@ -754,7 +763,7 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   impl_class->get_decorations = NULL;
   impl_class->set_functions = gdk_offscreen_window_set_wmfunctions;
   impl_class->begin_resize_drag = NULL;
-  impl_class->begin_move_drag = NULL;
+  impl_class->begin_move_drag = gdk_offscreen_window_begin_move_drag;
   impl_class->enable_synchronized_configure = gdk_offscreen_window_do_nothing;
   impl_class->configure_finished = NULL;
   impl_class->set_opacity = gdk_offscreen_window_set_opacity;
