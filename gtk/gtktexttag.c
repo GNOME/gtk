@@ -117,6 +117,10 @@ enum {
   PROP_RIGHT_MARGIN,
   PROP_UNDERLINE,
   PROP_UNDERLINE_RGBA,
+#if PANGO_VERSION_CHECK(1,45,0)
+  PROP_OVERLINE,
+  PROP_OVERLINE_RGBA,
+#endif
   PROP_RISE,
   PROP_BACKGROUND_FULL_HEIGHT,
   PROP_LANGUAGE,
@@ -127,6 +131,9 @@ enum {
   PROP_FALLBACK,
   PROP_LETTER_SPACING,
   PROP_FONT_FEATURES,
+  PROP_ALLOW_BREAKS,
+  PROP_SHOW_SPACES,
+  PROP_INSERT_HYPHENS,
 
   /* Behavior args */
   PROP_ACCUMULATIVE_MARGIN,
@@ -154,6 +161,10 @@ enum {
   PROP_RIGHT_MARGIN_SET,
   PROP_UNDERLINE_SET,
   PROP_UNDERLINE_RGBA_SET,
+#if PANGO_VERSION_CHECK(1,45,0)
+  PROP_OVERLINE_SET,
+  PROP_OVERLINE_RGBA_SET,
+#endif
   PROP_RISE_SET,
   PROP_BACKGROUND_FULL_HEIGHT_SET,
   PROP_LANGUAGE_SET,
@@ -163,6 +174,9 @@ enum {
   PROP_FALLBACK_SET,
   PROP_LETTER_SPACING_SET,
   PROP_FONT_FEATURES_SET,
+  PROP_ALLOW_BREAKS_SET,
+  PROP_SHOW_SPACES_SET,
+  PROP_INSERT_HYPHENS_SET,
 
   LAST_ARG
 };
@@ -500,6 +514,25 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                        GDK_TYPE_RGBA,
                                                        GTK_PARAM_READWRITE));
 
+#if PANGO_VERSION_CHECK(1,45,0)
+  g_object_class_install_property (object_class,
+                                   PROP_OVERLINE,
+                                   g_param_spec_enum ("overline",
+                                                      P_("Overline"),
+                                                      P_("Style of overline for this text"),
+                                                      PANGO_TYPE_OVERLINE,
+                                                      PANGO_OVERLINE_NONE,
+                                                      GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class,
+                                   PROP_OVERLINE_RGBA,
+                                   g_param_spec_boxed ("overline-rgba",
+                                                       P_("Overline RGBA"),
+                                                       P_("Color of overline for this text"),
+                                                       GDK_TYPE_RGBA,
+                                                       GTK_PARAM_READWRITE));
+#endif
+
   /**
    * GtkTextTag:strikethrough-rgba:
    *
@@ -616,6 +649,31 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                         P_("OpenType Font Features to use"),
                                                         NULL,
                                                         GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class,
+                                   PROP_ALLOW_BREAKS,
+                                   g_param_spec_boolean ("allow-breaks",
+                                                         P_("Allow Breaks"),
+                                                         P_("Whether breaks are allowed."),
+                                                         TRUE,
+                                                         GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class,
+                                   PROP_SHOW_SPACES,
+                                   g_param_spec_flags ("show-spaces",
+                                                         P_("Show spaces"),
+                                                         P_("How to render invisible characters."),
+                                                         PANGO_TYPE_SHOW_FLAGS,
+                                                         PANGO_SHOW_NONE,
+                                                         GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class,
+                                   PROP_INSERT_HYPHENS,
+                                   g_param_spec_boolean ("insert-hyphens",
+                                                         P_("Insert hyphens"),
+                                                         P_("Whether to insert hyphens at breaks."),
+                                                         TRUE,
+                                                         GTK_PARAM_READWRITE));
 
   /**
    * GtkTextTag:accumulative-margin:
@@ -735,6 +793,16 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                 P_("Underline RGBA set"),
                 P_("Whether this tag affects underlining color"));
 
+#if PANGO_VERSION_CHECK(1,45,0)
+  ADD_SET_PROP ("overline-set", PROP_OVERLINE_SET,
+                P_("Overline set"),
+                P_("Whether this tag affects overlining"));
+
+  ADD_SET_PROP ("overline-rgba-set", PROP_OVERLINE_RGBA_SET,
+                P_("Overline RGBA set"),
+                P_("Whether this tag affects overlining color"));
+#endif
+
   /**
    * GtkTextTag:strikethrough-rgba-set:
    *
@@ -771,6 +839,18 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   ADD_SET_PROP ("font-features-set", PROP_FONT_FEATURES_SET,
                 P_("Font features set"),
                 P_("Whether this tag affects font features"));
+
+  ADD_SET_PROP ("allow-breaks-set", PROP_ALLOW_BREAKS_SET,
+                P_("Allow breaks set"),
+                P_("Whether this tag affects line breaks"));
+
+  ADD_SET_PROP ("show-spaces-set", PROP_SHOW_SPACES_SET,
+                P_("Show spaces set"),
+                P_("Whether this tag affects rendering of invisible characters"));
+
+  ADD_SET_PROP ("insert-hyphens-set", PROP_INSERT_HYPHENS_SET,
+                P_("Insert hyphens set"),
+                P_("Whether this tag affects insertion of hyphens"));
 }
 
 static void
@@ -848,6 +928,38 @@ set_underline_rgba (GtkTextTag    *tag,
         }
     }
 }
+
+#if PANGO_VERSION_CHECK(1,45,0)
+static void
+set_overline_rgba (GtkTextTag    *tag,
+                   const GdkRGBA *rgba)
+{
+  GtkTextTagPrivate *priv = tag->priv;
+
+  if (priv->values->appearance.overline_rgba)
+    gdk_rgba_free (priv->values->appearance.overline_rgba);
+  priv->values->appearance.overline_rgba = NULL;
+
+  if (rgba)
+    {
+      priv->values->appearance.overline_rgba = gdk_rgba_copy (rgba);
+
+      if (!priv->overline_rgba_set)
+        {
+          priv->overline_rgba_set = TRUE;
+          g_object_notify (G_OBJECT (tag), "overline-rgba-set");
+        }
+    }
+  else
+    {
+      if (priv->overline_rgba_set)
+        {
+          priv->overline_rgba_set = FALSE;
+          g_object_notify (G_OBJECT (tag), "overline-rgba-set");
+        }
+    }
+}
+#endif
 
 static void
 set_strikethrough_rgba (GtkTextTag    *tag,
@@ -1373,6 +1485,21 @@ gtk_text_tag_set_property (GObject      *object,
       }
       break;
 
+#if PANGO_VERSION_CHECK(1,45,0)
+    case PROP_OVERLINE:
+      priv->overline_set = TRUE;
+      priv->values->appearance.overline = g_value_get_enum (value);
+      g_object_notify (object, "overline-set");
+      break;
+
+    case PROP_OVERLINE_RGBA:
+      {
+        GdkRGBA *color = g_value_get_boxed (value);
+        set_overline_rgba (text_tag, color);
+      }
+      break;
+#endif
+
     case PROP_RISE:
       priv->rise_set = TRUE;
       priv->values->appearance.rise = g_value_get_int (value);
@@ -1451,6 +1578,24 @@ gtk_text_tag_set_property (GObject      *object,
       priv->font_features_set = TRUE;
       priv->values->font_features = g_value_dup_string (value);
       g_object_notify (object, "font-features-set");
+      break;
+
+    case PROP_ALLOW_BREAKS:
+      priv->allow_breaks_set = TRUE;
+      priv->values->no_breaks = !g_value_get_boolean (value);
+      g_object_notify (object, "allow-breaks-set");
+      break;
+
+    case PROP_SHOW_SPACES:
+      priv->show_spaces_set = TRUE;
+      priv->values->show_spaces = g_value_get_flags (value);
+      g_object_notify (object, "show-spaces-set");
+      break;
+
+    case PROP_INSERT_HYPHENS:
+      priv->insert_hyphens_set = TRUE;
+      priv->values->no_hyphens = !g_value_get_boolean (value);
+      g_object_notify (object, "insert-hyphens-set");
       break;
 
     case PROP_ACCUMULATIVE_MARGIN:
@@ -1557,6 +1702,16 @@ gtk_text_tag_set_property (GObject      *object,
       priv->underline_rgba_set = g_value_get_boolean (value);
       break;
 
+#if PANGO_VERSION_CHECK(1,45,0)
+    case PROP_OVERLINE_SET:
+      priv->overline_set = g_value_get_boolean (value);
+      break;
+
+    case PROP_OVERLINE_RGBA_SET:
+      priv->overline_rgba_set = g_value_get_boolean (value);
+      break;
+#endif
+
     case PROP_RISE_SET:
       priv->rise_set = g_value_get_boolean (value);
       size_changed = TRUE;
@@ -1595,6 +1750,18 @@ gtk_text_tag_set_property (GObject      *object,
 
     case PROP_FONT_FEATURES_SET:
       priv->font_features_set = g_value_get_boolean (value);
+      break;
+
+    case PROP_ALLOW_BREAKS_SET:
+      priv->allow_breaks_set = g_value_get_boolean (value);
+      break;
+
+    case PROP_SHOW_SPACES_SET:
+      priv->show_spaces_set = g_value_get_boolean (value);
+      break;
+
+    case PROP_INSERT_HYPHENS_SET:
+      priv->insert_hyphens_set = g_value_get_boolean (value);
       break;
 
     default:
@@ -1746,6 +1913,17 @@ gtk_text_tag_get_property (GObject      *object,
         g_value_set_boxed (value, priv->values->appearance.underline_rgba);
       break;
 
+#if PANGO_VERSION_CHECK(1,45,0)
+    case PROP_OVERLINE:
+      g_value_set_enum (value, priv->values->appearance.overline);
+      break;
+
+    case PROP_OVERLINE_RGBA:
+      if (priv->overline_rgba_set)
+        g_value_set_boxed (value, priv->values->appearance.overline_rgba);
+      break;
+#endif
+
     case PROP_RISE:
       g_value_set_int (value, priv->values->appearance.rise);
       break;
@@ -1782,6 +1960,18 @@ gtk_text_tag_get_property (GObject      *object,
 
     case PROP_FONT_FEATURES:
       g_value_set_string (value, priv->values->font_features);
+      break;
+
+    case PROP_ALLOW_BREAKS:
+      g_value_set_boolean (value, !priv->values->no_breaks);
+      break;
+
+    case PROP_SHOW_SPACES:
+      g_value_set_flags (value, priv->values->show_spaces);
+      break;
+
+    case PROP_INSERT_HYPHENS:
+      g_value_set_boolean (value, !priv->values->no_hyphens);
       break;
 
     case PROP_ACCUMULATIVE_MARGIN:
@@ -1866,6 +2056,16 @@ gtk_text_tag_get_property (GObject      *object,
       g_value_set_boolean (value, priv->underline_rgba_set);
       break;
 
+#if PANGO_VERSION_CHECK(1,45,0)
+    case PROP_OVERLINE_SET:
+      g_value_set_boolean (value, priv->overline_set);
+      break;
+
+    case PROP_OVERLINE_RGBA_SET:
+      g_value_set_boolean (value, priv->overline_rgba_set);
+      break;
+#endif
+
     case PROP_RISE_SET:
       g_value_set_boolean (value, priv->rise_set);
       break;
@@ -1900,6 +2100,18 @@ gtk_text_tag_get_property (GObject      *object,
 
     case PROP_FONT_FEATURES_SET:
       g_value_set_boolean (value, priv->font_features_set);
+      break;
+
+    case PROP_ALLOW_BREAKS_SET:
+      g_value_set_boolean (value, priv->allow_breaks_set);
+      break;
+
+    case PROP_SHOW_SPACES_SET:
+      g_value_set_boolean (value, priv->show_spaces_set);
+      break;
+
+    case PROP_INSERT_HYPHENS_SET:
+      g_value_set_boolean (value, priv->insert_hyphens_set);
       break;
 
     case PROP_BACKGROUND:
