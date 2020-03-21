@@ -4758,10 +4758,6 @@ get_tag_for_attributes (PangoAttrIterator *iter)
   if (attr)
     g_object_set (tag, "underline", ((PangoAttrInt*)attr)->value, NULL);
 
-  attr = pango_attr_iterator_get (iter, PANGO_ATTR_OVERLINE);
-  if (attr)
-    g_object_set (tag, "overline", ((PangoAttrInt*)attr)->value, NULL);
-
   attr = pango_attr_iterator_get (iter, PANGO_ATTR_UNDERLINE_COLOR);
   if (attr)
     {
@@ -4776,6 +4772,11 @@ get_tag_for_attributes (PangoAttrIterator *iter)
       g_object_set (tag, "underline-rgba", &rgba, NULL);
     }
 
+#if PANGO_VERSION_CHECK(1,45,0)
+  attr = pango_attr_iterator_get (iter, PANGO_ATTR_OVERLINE);
+  if (attr)
+    g_object_set (tag, "overline", ((PangoAttrInt*)attr)->value, NULL);
+
   attr = pango_attr_iterator_get (iter, PANGO_ATTR_OVERLINE_COLOR);
   if (attr)
     {
@@ -4789,6 +4790,7 @@ get_tag_for_attributes (PangoAttrIterator *iter)
       rgba.alpha = 1.;
       g_object_set (tag, "overline-rgba", &rgba, NULL);
     }
+#endif
 
   attr = pango_attr_iterator_get (iter, PANGO_ATTR_STRIKETHROUGH);
   if (attr)
