@@ -99,9 +99,7 @@ on_inspect_widget (GtkInspectorWindow *iw,
 {
   GtkWidget *widget;
 
-#if 0
-  gdk_surface_raise (gtk_native_get_surface (GTK_NATIVE (iw)));
-#endif
+  gtk_window_present (GTK_WINDOW (iw));
 
   clear_flash (iw);
 
@@ -114,20 +112,7 @@ on_inspect_widget (GtkInspectorWindow *iw,
 static void
 reemphasize_window (GtkWidget *window)
 {
-  GdkDisplay *display;
-
-  display = gtk_widget_get_display (window);
-  if (gdk_display_is_composited (display))
-    {
-      GtkInspectorWindow *iw = GTK_INSPECTOR_WINDOW (window);
-
-      gtk_widget_set_opacity (window, 1.0);
-      gtk_window_set_extra_input_region (GTK_WINDOW (iw), NULL);
-    }
-#if 0
-  else
-    gdk_surface_raise (gtk_native_get_surface (GTK_NATIVE (window)));
-#endif
+  gtk_window_present (GTK_WINDOW (window));
 }
 
 static gboolean handle_event (GtkInspectorWindow *iw, GdkEvent *event);
@@ -196,24 +181,7 @@ void
 gtk_inspector_on_inspect (GtkWidget          *button,
                           GtkInspectorWindow *iw)
 {
-  GdkDisplay *display = gtk_widget_get_display (GTK_WIDGET (iw));
-
-  /* de-emphasize window */
-  if (gdk_display_is_composited (display))
-    {
-      cairo_rectangle_int_t rect;
-      cairo_region_t *region;
-
-      gtk_widget_set_opacity (GTK_WIDGET (iw), 0.3);
-      rect.x = rect.y = rect.width = rect.height = 0;
-      region = cairo_region_create_rectangle (&rect);
-      gtk_window_set_extra_input_region (GTK_WINDOW (iw), region);
-      cairo_region_destroy (region);
-    }
-#if 0
-  else
-    gdk_surface_lower (gtk_native_get_surface (GTK_NATIVE (iw)));
-#endif
+  gtk_widget_hide (GTK_WIDGET (iw));
 
   g_signal_connect (iw, "event", G_CALLBACK (handle_event), NULL);
 }
