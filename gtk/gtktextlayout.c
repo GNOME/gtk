@@ -1585,9 +1585,11 @@ add_generic_attrs (GtkTextLayout      *layout,
       pango_attr_list_insert (attrs, attr);
     }
 
-  if (appearance->overline != PANGO_OVERLINE_NONE)
+  if (appearance->underline_rgba)
     {
-      attr = pango_attr_overline_new (appearance->overline);
+      attr = pango_attr_underline_color_new (appearance->underline_rgba->red * 65535,
+                                             appearance->underline_rgba->green * 65535,
+                                             appearance->underline_rgba->blue * 65535);
 
       attr->start_index = start;
       attr->end_index = start + byte_count;
@@ -1595,11 +1597,10 @@ add_generic_attrs (GtkTextLayout      *layout,
       pango_attr_list_insert (attrs, attr);
     }
 
-  if (appearance->underline_rgba)
+#if PANGO_VERSION_CHECK(1,45,0)
+  if (appearance->overline != PANGO_OVERLINE_NONE)
     {
-      attr = pango_attr_underline_color_new (appearance->underline_rgba->red * 65535,
-                                             appearance->underline_rgba->green * 65535,
-                                             appearance->underline_rgba->blue * 65535);
+      attr = pango_attr_overline_new (appearance->overline);
 
       attr->start_index = start;
       attr->end_index = start + byte_count;
@@ -1618,6 +1619,7 @@ add_generic_attrs (GtkTextLayout      *layout,
 
       pango_attr_list_insert (attrs, attr);
     }
+#endif
 
   if (appearance->strikethrough)
     {
