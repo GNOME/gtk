@@ -1520,7 +1520,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
         GdkKeymap *keymap = gdk_display_get_keymap (display);
-        GdkModifierType consumed, state;
+        GdkModifierType consumed, state, orig_state;
         guint keyval;
 
         GDK_DISPLAY_NOTE (display, EVENTS,
@@ -1550,9 +1550,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                              xev->group.effective,
                                              &keyval,
                                              NULL, NULL, &consumed);
-
+        orig_state = state;
         state &= ~consumed;
         _gdk_x11_keymap_add_virt_mods (keymap, &state);
+        state |= orig_state;
 
         event = gdk_event_key_new (xev->evtype == XI_KeyPress
                                      ? GDK_KEY_PRESS
