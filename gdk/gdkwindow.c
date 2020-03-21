@@ -11244,8 +11244,9 @@ gdk_window_begin_move_drag_for_device (GdkWindow *window,
                                        gint       root_y,
                                        guint32    timestamp)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->begin_move_drag (window,
-                                                             device, button, root_x, root_y, timestamp);
+  GdkWindowImplClass *win_impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+  if (win_impl_class->begin_move_drag)
+    win_impl_class->begin_move_drag (window, device, button, root_x, root_y, timestamp);
 }
 
 /**
