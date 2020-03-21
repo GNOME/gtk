@@ -59,6 +59,7 @@ struct _GtkTextTagPrivate
   guint bg_color_set : 1;
   guint fg_color_set : 1;
   guint underline_rgba_set : 1;
+  guint overline_rgba_set : 1;
   guint strikethrough_rgba_set : 1;
   guint scale_set : 1;
   guint justification_set : 1;
@@ -72,6 +73,7 @@ struct _GtkTextTagPrivate
   guint pixels_inside_wrap_set : 1;
   guint tabs_set : 1;
   guint underline_set : 1;
+  guint overline_set : 1;
   guint wrap_mode_set : 1;
   guint bg_full_height_set : 1;
   guint invisible_set : 1;
@@ -81,6 +83,9 @@ struct _GtkTextTagPrivate
   guint fallback_set : 1;
   guint letter_spacing_set : 1;
   guint font_features_set : 1;
+  guint allow_breaks_set : 1;
+  guint show_spaces_set : 1;
+  guint insert_hyphens_set : 1;
 
   /* Whether these margins accumulate or override */
   guint accumulative_margin : 1;

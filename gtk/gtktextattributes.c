@@ -140,6 +140,9 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
   if (dest->appearance.underline_rgba)
     gdk_rgba_free (dest->appearance.underline_rgba);
 
+  if (dest->appearance.overline_rgba)
+    gdk_rgba_free (dest->appearance.overline_rgba);
+
   if (dest->appearance.strikethrough_rgba)
     gdk_rgba_free (dest->appearance.strikethrough_rgba);
 
@@ -170,6 +173,9 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
 
   if (src->appearance.underline_rgba)
     dest->appearance.underline_rgba = gdk_rgba_copy (src->appearance.underline_rgba);
+
+  if (src->appearance.overline_rgba)
+    dest->appearance.overline_rgba = gdk_rgba_copy (src->appearance.overline_rgba);
 
   if (src->appearance.strikethrough_rgba)
     dest->appearance.strikethrough_rgba = gdk_rgba_copy (src->appearance.strikethrough_rgba);
@@ -231,6 +237,9 @@ gtk_text_attributes_unref (GtkTextAttributes *values)
 	gdk_rgba_free (values->appearance.bg_rgba);
 
       if (values->appearance.underline_rgba)
+	gdk_rgba_free (values->appearance.underline_rgba);
+
+      if (values->appearance.overline_rgba)
 	gdk_rgba_free (values->appearance.underline_rgba);
 
       if (values->appearance.strikethrough_rgba)
@@ -298,6 +307,18 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
 
 	  if (vals->appearance.underline_rgba)
 	    dest->appearance.underline_rgba = gdk_rgba_copy (vals->appearance.underline_rgba);
+        }
+
+      if (tag->priv->overline_rgba_set)
+        {
+	  if (dest->appearance.overline_rgba)
+	    {
+	      gdk_rgba_free (dest->appearance.overline_rgba);
+	      dest->appearance.overline_rgba = NULL;
+	    }
+
+	  if (vals->appearance.overline_rgba)
+	    dest->appearance.overline_rgba = gdk_rgba_copy (vals->appearance.overline_rgba);
         }
 
       if (tag->priv->strikethrough_rgba_set)
@@ -386,6 +407,9 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
       if (tag->priv->underline_set)
         dest->appearance.underline = vals->appearance.underline;
 
+      if (tag->priv->overline_set)
+        dest->appearance.overline = vals->appearance.overline;
+
       if (tag->priv->strikethrough_set)
         dest->appearance.strikethrough = vals->appearance.strikethrough;
 
@@ -409,6 +433,15 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
 
       if (tag->priv->font_features_set)
         dest->font_features = g_strdup (vals->font_features);
+
+      if (tag->priv->allow_breaks_set)
+        dest->no_breaks = vals->no_breaks;
+
+      if (tag->priv->show_spaces_set)
+        dest->show_spaces = vals->show_spaces;
+
+      if (tag->priv->insert_hyphens_set)
+        dest->no_hyphens = vals->no_hyphens;
 
       ++n;
     }
@@ -435,6 +468,7 @@ _gtk_text_tag_affects_size (GtkTextTag *tag)
     priv->pixels_inside_wrap_set ||
     priv->tabs_set ||
     priv->underline_set ||
+    priv->overline_set ||
     priv->wrap_mode_set ||
     priv->invisible_set ||
     priv->font_features_set ||
@@ -454,5 +488,7 @@ _gtk_text_tag_affects_nonsize_appearance (GtkTextTag *tag)
     priv->pg_bg_color_set ||
     priv->fallback_set ||
     priv->underline_rgba_set ||
-    priv->strikethrough_rgba_set;
+    priv->overline_rgba_set ||
+    priv->strikethrough_rgba_set ||
+    priv->show_spaces_set;
 }

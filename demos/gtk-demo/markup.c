@@ -78,7 +78,7 @@ do_markup (GtkWidget *do_widget)
 
       view = gtk_text_view_new ();
       gtk_text_view_set_editable (GTK_TEXT_VIEW (view), FALSE);
-      gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view), GTK_WRAP_WORD);
+      gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view), GTK_WRAP_WORD_CHAR);
       gtk_text_view_set_left_margin (GTK_TEXT_VIEW (view), 10);
       gtk_text_view_set_right_margin (GTK_TEXT_VIEW (view), 10);
 

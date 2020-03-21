@@ -87,12 +87,14 @@ struct _GtkTextAppearance
   GdkRGBA *bg_rgba;
   GdkRGBA *fg_rgba;
   GdkRGBA *underline_rgba;
+  GdkRGBA *overline_rgba;
   GdkRGBA *strikethrough_rgba;
 
   /* super/subscript rise, can be negative */
   gint rise;
 
   guint underline : 4;          /* PangoUnderline */
+  guint overline  : 2;          /* PangoOverline */
   guint strikethrough : 1;
 
   /* Whether to use background-related values; this is irrelevant for
@@ -170,6 +172,10 @@ struct _GtkTextAttributes
   guint bg_full_height : 1;
   guint editable : 1;
   guint no_fallback: 1;
+  guint no_breaks : 1;
+  guint show_spaces : 3; /* PangoShowFlags */
+  gint  no_hyphens : 1;
+
 
   GdkRGBA *pg_bg_rgba;
 
