@@ -14,3 +14,7 @@ Superscripts and subscripts: 𝜀<span rise="-6000" size="x-small" font_desc="it
 OpenType font features: <span font_desc="sans regular" font_features="dlig=0">feast</span> versus <span font_desc="sans regular" font_features="dlig=1">feast</span>
 
 Shortcuts: <tt>Monospace</tt> – <b>Bold</b> – <i>Italic</i> – <big>Big</big> – <small>Small</small> – <u>Underlined</u> – <s>Strikethrough</s> – Super<sup>script</sup> – Sub<sub>script</sub>
+
+<span allow_breaks="false">A</span> hy­phen­ation al­go­rithm is a set of rules, espe­ci­ally one co­di­fied for im­ple­men­tation in a com­pu­ter pro­gram, that de­ci­des at which points a word can be bro­ken over two lines with a hy­phen. For ex­am­ple, a hy­phen­ation al­go­rithm might de­cide that im­peach­ment can be broken as <span allow_breaks="false">impeach‧ment</span> or <span allow_breaks="false">im‧peachment</span> but not <span allow_breaks="false">impe‧achment.</span>
+
+<span insert_hyphens="false">one/two three/four five/six seven/eight nine/ten</span>
