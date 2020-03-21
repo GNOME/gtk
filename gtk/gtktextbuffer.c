@@ -4758,6 +4758,10 @@ get_tag_for_attributes (PangoAttrIterator *iter)
   if (attr)
     g_object_set (tag, "underline", ((PangoAttrInt*)attr)->value, NULL);
 
+  attr = pango_attr_iterator_get (iter, PANGO_ATTR_OVERLINE);
+  if (attr)
+    g_object_set (tag, "overline", ((PangoAttrInt*)attr)->value, NULL);
+
   attr = pango_attr_iterator_get (iter, PANGO_ATTR_UNDERLINE_COLOR);
   if (attr)
     {
@@ -4770,6 +4774,20 @@ get_tag_for_attributes (PangoAttrIterator *iter)
       rgba.blue = color->blue / 65535.;
       rgba.alpha = 1.;
       g_object_set (tag, "underline-rgba", &rgba, NULL);
+    }
+
+  attr = pango_attr_iterator_get (iter, PANGO_ATTR_OVERLINE_COLOR);
+  if (attr)
+    {
+      PangoColor *color;
+      GdkRGBA rgba;
+
+      color = &((PangoAttrColor*)attr)->color;
+      rgba.red = color->red / 65535.;
+      rgba.green = color->green / 65535.;
+      rgba.blue = color->blue / 65535.;
+      rgba.alpha = 1.;
+      g_object_set (tag, "overline-rgba", &rgba, NULL);
     }
 
   attr = pango_attr_iterator_get (iter, PANGO_ATTR_STRIKETHROUGH);
@@ -4809,6 +4827,18 @@ get_tag_for_attributes (PangoAttrIterator *iter)
   attr = pango_attr_iterator_get (iter, PANGO_ATTR_FONT_FEATURES);
   if (attr)
     g_object_set (tag, "font-features", ((PangoAttrString*)attr)->value, NULL);
+
+  attr = pango_attr_iterator_get (iter, PANGO_ATTR_ALLOW_BREAKS);
+  if (attr)
+    g_object_set (tag, "allow-breaks", ((PangoAttrInt*)attr)->value, NULL);
+
+  attr = pango_attr_iterator_get (iter, PANGO_ATTR_SHOW);
+  if (attr)
+    g_object_set (tag, "show-spaces", ((PangoAttrInt*)attr)->value, NULL);
+
+  attr = pango_attr_iterator_get (iter, PANGO_ATTR_INSERT_HYPHENS);
+  if (attr)
+    g_object_set (tag, "insert-hyphens", ((PangoAttrInt*)attr)->value, NULL);
 
   return tag;
 }
