@@ -1452,6 +1452,9 @@ gtk_text_attr_appearance_destroy (PangoAttribute *attr)
   if (appearance_attr->appearance.underline_rgba)
     gdk_rgba_free (appearance_attr->appearance.underline_rgba);
 
+  if (appearance_attr->appearance.overline_rgba)
+    gdk_rgba_free (appearance_attr->appearance.overline_rgba);
+
   if (appearance_attr->appearance.strikethrough_rgba)
     gdk_rgba_free (appearance_attr->appearance.strikethrough_rgba);
 
@@ -1480,6 +1483,15 @@ underline_equal (const GtkTextAppearance *appearance1,
 }
 
 static gboolean
+overline_equal (const GtkTextAppearance *appearance1,
+                const GtkTextAppearance *appearance2)
+{
+  return (appearance1->overline == appearance2->overline) &&
+          rgba_equal ((const GdkRGBA *)appearance1->overline_rgba,
+                      (const GdkRGBA *)appearance2->overline_rgba);
+}
+
+static gboolean
 strikethrough_equal (const GtkTextAppearance *appearance1,
                      const GtkTextAppearance *appearance2)
 {
@@ -1495,11 +1507,12 @@ gtk_text_attr_appearance_compare (const PangoAttribute *attr1,
   const GtkTextAppearance *appearance1 = &((const GtkTextAttrAppearance *)attr1)->appearance;
   const GtkTextAppearance *appearance2 = &((const GtkTextAttrAppearance *)attr2)->appearance;
 
-  return (rgba_equal (appearance1->fg_rgba, appearance2->fg_rgba) &&
-          rgba_equal (appearance1->bg_rgba, appearance2->bg_rgba) &&
-          appearance1->draw_bg == appearance2->draw_bg &&
-          strikethrough_equal (appearance1, appearance2) &&
-          underline_equal (appearance1, appearance2));
+  return rgba_equal (appearance1->fg_rgba, appearance2->fg_rgba) &&
+         rgba_equal (appearance1->bg_rgba, appearance2->bg_rgba) &&
+         appearance1->draw_bg == appearance2->draw_bg &&
+         strikethrough_equal (appearance1, appearance2) &&
+         underline_equal (appearance1, appearance2) &&
+         overline_equal (appearance1, appearance2);
 }
 
 /*
@@ -1542,6 +1555,9 @@ gtk_text_attr_appearance_new (const GtkTextAppearance *appearance)
   if (appearance->underline_rgba)
     result->appearance.underline_rgba = gdk_rgba_copy (appearance->underline_rgba);
 
+  if (appearance->overline_rgba)
+    result->appearance.overline_rgba = gdk_rgba_copy (appearance->overline_rgba);
+
   if (appearance->strikethrough_rgba)
     result->appearance.strikethrough_rgba = gdk_rgba_copy (appearance->strikethrough_rgba);
 
@@ -1569,11 +1585,33 @@ add_generic_attrs (GtkTextLayout      *layout,
       pango_attr_list_insert (attrs, attr);
     }
 
+  if (appearance->overline != PANGO_OVERLINE_NONE)
+    {
+      attr = pango_attr_overline_new (appearance->overline);
+
+      attr->start_index = start;
+      attr->end_index = start + byte_count;
+
+      pango_attr_list_insert (attrs, attr);
+    }
+
   if (appearance->underline_rgba)
     {
       attr = pango_attr_underline_color_new (appearance->underline_rgba->red * 65535,
                                              appearance->underline_rgba->green * 65535,
                                              appearance->underline_rgba->blue * 65535);
+
+      attr->start_index = start;
+      attr->end_index = start + byte_count;
+
+      pango_attr_list_insert (attrs, attr);
+    }
+
+  if (appearance->overline_rgba)
+    {
+      attr = pango_attr_overline_color_new (appearance->overline_rgba->red * 65535,
+                                            appearance->overline_rgba->green * 65535,
+                                            appearance->overline_rgba->blue * 65535);
 
       attr->start_index = start;
       attr->end_index = start + byte_count;
@@ -1707,6 +1745,34 @@ add_text_attrs (GtkTextLayout      *layout,
 
       pango_attr_list_insert (attrs, attr);
     }
+
+  if (style->no_breaks)
+    {
+      attr = pango_attr_allow_breaks_new (FALSE);
+      attr->start_index = start;
+      attr->end_index = start + byte_count;
+
+      pango_attr_list_insert (attrs, attr);
+    }
+
+  if (style->show_spaces != PANGO_SHOW_NONE)
+    {
+      attr = pango_attr_show_new (style->show_spaces);
+      attr->start_index = start;
+      attr->end_index = start + byte_count;
+
+      pango_attr_list_insert (attrs, attr);
+    }
+
+  if (style->no_hyphens)
+    {
+      attr = pango_attr_insert_hyphens_new (FALSE);
+      attr->start_index = start;
+      attr->end_index = start + byte_count;
+
+      pango_attr_list_insert (attrs, attr);
+    }
+
 }
 
 static void
@@ -2036,6 +2102,8 @@ add_preedit_attrs (GtkTextLayout     *layout,
 	appearance.bg_rgba = gdk_rgba_copy (appearance.bg_rgba);
       if (appearance.underline_rgba)
 	appearance.underline_rgba = gdk_rgba_copy (appearance.underline_rgba);
+      if (appearance.overline_rgba)
+	appearance.overline_rgba = gdk_rgba_copy (appearance.overline_rgba);
       if (appearance.strikethrough_rgba)
 	appearance.strikethrough_rgba = gdk_rgba_copy (appearance.strikethrough_rgba);
       
@@ -2063,11 +2131,20 @@ add_preedit_attrs (GtkTextLayout     *layout,
 	    case PANGO_ATTR_UNDERLINE:
 	      appearance.underline = ((PangoAttrInt *)attr)->value;
 	      break;
+	    case PANGO_ATTR_OVERLINE:
+	      appearance.overline = ((PangoAttrInt *)attr)->value;
+	      break;
             case PANGO_ATTR_UNDERLINE_COLOR:
               convert_color (&rgba, (PangoAttrColor*)attr);
 	      if (appearance.underline_rgba)
 		gdk_rgba_free (appearance.underline_rgba);
 	      appearance.underline_rgba = gdk_rgba_copy (&rgba);
+	      break;
+            case PANGO_ATTR_OVERLINE_COLOR:
+              convert_color (&rgba, (PangoAttrColor*)attr);
+	      if (appearance.overline_rgba)
+		gdk_rgba_free (appearance.overline_rgba);
+	      appearance.overline_rgba = gdk_rgba_copy (&rgba);
 	      break;
 	    case PANGO_ATTR_STRIKETHROUGH:
 	      appearance.strikethrough = ((PangoAttrInt *)attr)->value;
@@ -2116,6 +2193,8 @@ add_preedit_attrs (GtkTextLayout     *layout,
 	gdk_rgba_free (appearance.bg_rgba);
       if (appearance.underline_rgba)
 	gdk_rgba_free (appearance.underline_rgba);
+      if (appearance.overline_rgba)
+	gdk_rgba_free (appearance.overline_rgba);
       if (appearance.strikethrough_rgba)
 	gdk_rgba_free (appearance.strikethrough_rgba);
 
