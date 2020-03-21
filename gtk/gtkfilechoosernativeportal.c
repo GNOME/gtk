@@ -43,6 +43,7 @@
 #include "gtkfilefilterprivate.h"
 #include "gtkwindowprivate.h"
 
+
 typedef struct {
   GtkFileChooserNative *self;
 
@@ -58,6 +59,7 @@ typedef struct {
   const char *method_name;
 
   GtkWindow *exported_window;
+  PortalErrorHandler error_handler;
 } FilechooserPortalData;
 
 
@@ -188,12 +190,13 @@ open_file_msg_cb (GObject *source_object,
 
   if (reply == NULL)
     {
-      if (!data->hidden)
-        _gtk_native_dialog_emit_response (GTK_NATIVE_DIALOG (self), GTK_RESPONSE_DELETE_EVENT);
-      g_warning ("Can't open portal file chooser: %s", error->message);
+      if (!data->hidden && data->error_handler)
+        {
+          data->error_handler (self);
+          filechooser_portal_data_free (data);
+          self->mode_data = NULL;
+        }
       g_error_free (error);
-      filechooser_portal_data_free (data);
-      self->mode_data = NULL;
       return;
     }
 
@@ -398,7 +401,8 @@ window_handle_exported (GtkWindow  *window,
 }
 
 gboolean
-gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
+gtk_file_chooser_native_portal_show (GtkFileChooserNative *self,
+                                     PortalErrorHandler    error_handler)
 {
   FilechooserPortalData *data;
   GtkWindow *transient_for;
@@ -428,6 +432,7 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
   data = g_new0 (FilechooserPortalData, 1);
   data->self = g_object_ref (self);
   data->connection = connection;
+  data->error_handler = error_handler;
 
   data->method_name = method_name;
 
@@ -470,10 +475,9 @@ gtk_file_chooser_native_portal_hide (GtkFileChooserNative *self)
   data->hidden = TRUE;
 
   if (data->portal_handle)
-    {
-      send_close (data);
-      filechooser_portal_data_free (data);
-    }
+    send_close (data);
+
+  filechooser_portal_data_free (data);
 
   self->mode_data = NULL;
 }
