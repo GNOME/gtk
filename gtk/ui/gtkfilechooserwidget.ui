@@ -63,7 +63,6 @@
                                             <property name="tooltip-text" translatable="yes">Create Folder</property>
                                             <property name="popover">new_folder_popover</property>
                                             <property name="icon-name">folder-new-symbolic</property>
-                                            <signal name="notify::active" handler="new_folder_popover_active"/>
                                           </object>
                                         </child>
                                       </object>
@@ -382,6 +381,7 @@
     </widgets>
   </object>
   <object class="GtkPopover" id="new_folder_popover">
+    <signal name="notify::visible" handler="new_folder_popover_active"/>
     <child>
       <object class="GtkGrid">
         <property name="margin-start">10</property>
