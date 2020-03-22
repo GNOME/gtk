@@ -45,6 +45,10 @@ void                    gtk_flatten_list_model_set_model        (GtkFlattenListM
 GDK_AVAILABLE_IN_ALL
 GListModel *            gtk_flatten_list_model_get_model        (GtkFlattenListModel    *self);
 
+GDK_AVAILABLE_IN_ALL
+GListModel *            gtk_flatten_list_model_get_model_for_item (GtkFlattenListModel    *self,
+                                                                   guint                   position);
+
 G_END_DECLS
 
 #endif /* __GTK_FLATTEN_LIST_MODEL_H__ */
