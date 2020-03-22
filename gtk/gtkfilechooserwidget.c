@@ -1536,7 +1536,12 @@ rename_selected_cb (GtkTreeModel *model,
                                path, priv->list_name_column, &rect);
 
   gtk_tree_view_convert_bin_window_to_widget_coords (GTK_TREE_VIEW (priv->browse_files_tree_view),
-                                                     rect.x, rect.y, &rect.x, &rect.y);
+                                                     rect.x, rect.y,
+                                                     &rect.x, &rect.y);
+  gtk_widget_translate_coordinates (priv->browse_files_tree_view,
+                                    GTK_WIDGET (impl),
+                                    rect.x, rect.y,
+                                    &rect.x, &rect.y);
 
   filename = g_file_get_basename (priv->rename_file_source_file);
   gtk_editable_set_text (GTK_EDITABLE (priv->rename_file_name_entry), filename);
@@ -7479,6 +7484,8 @@ gtk_file_chooser_widget_size_allocate (GtkWidget *widget,
   GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->size_allocate (widget, width, height, baseline);
   if (priv->browse_files_popover)
     gtk_native_check_resize (GTK_NATIVE (priv->browse_files_popover));
+  if (priv->rename_file_popover)
+    gtk_native_check_resize (GTK_NATIVE (priv->rename_file_popover));
 }
 
 static void
@@ -7995,6 +8002,8 @@ post_process_ui (GtkFileChooserWidget *impl)
                                   priv->item_actions);
 
   gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (priv->search_entry), priv->search_entry);
+
+  gtk_widget_set_parent (priv->rename_file_popover, GTK_WIDGET (impl));
 }
 
 void
