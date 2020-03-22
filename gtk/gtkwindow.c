@@ -49,7 +49,6 @@
 #include "gtkheaderbarprivate.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
-#include "gtkkeyhash.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmessagedialog.h"
@@ -460,8 +459,6 @@ static void     get_shadow_width                      (GtkWindow    *window,
 static gboolean    gtk_window_activate_menubar        (GtkWidget    *widget,
                                                        GVariant     *args,
                                                        gpointer      unused);
-static GtkKeyHash *gtk_window_get_key_hash        (GtkWindow   *window);
-static void        gtk_window_free_key_hash       (GtkWindow   *window);
 #ifdef GDK_WINDOWING_X11
 static void        gtk_window_on_theme_variant_changed (GtkSettings *settings,
                                                         GParamSpec  *pspec,
@@ -492,7 +489,6 @@ static guint        window_signals[LAST_SIGNAL] = { 0 };
 static gchar       *default_icon_name = NULL;
 static gboolean     disable_startup_notification = FALSE;
 
-static GQuark       quark_gtk_window_key_hash = 0;
 static GQuark       quark_gtk_window_icon_info = 0;
 
 static GtkBuildableIface *parent_buildable_iface;
@@ -716,7 +712,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
-  quark_gtk_window_key_hash = g_quark_from_static_string ("gtk-window-key-hash");
   quark_gtk_window_icon_info = g_quark_from_static_string ("gtk-window-icon-info");
 
   if (toplevel_list == NULL)
@@ -3936,8 +3931,6 @@ gtk_window_destroy (GtkWidget *widget)
   if (priv->group)
     gtk_window_group_remove_window (priv->group, window);
 
-   gtk_window_free_key_hash (window);
-
   GTK_WIDGET_CLASS (gtk_window_parent_class)->destroy (widget);
 }
 
@@ -7021,7 +7014,6 @@ gtk_window_set_display (GtkWindow  *window,
   if (priv->transient_parent && gtk_widget_get_display (GTK_WIDGET (priv->transient_parent)) != display)
     gtk_window_set_transient_for (window, NULL);
 
-  gtk_window_free_key_hash (window);
 #ifdef GDK_WINDOWING_X11
   g_signal_handlers_disconnect_by_func (gtk_settings_get_for_display (priv->display),
                                         gtk_window_on_theme_variant_changed, window);
@@ -7197,49 +7189,6 @@ gtk_window_activate_menubar (GtkWidget *widget,
 static void
 gtk_window_keys_changed (GtkWindow *window)
 {
-  gtk_window_free_key_hash (window);
-  gtk_window_get_key_hash (window);
-}
-
-typedef struct _GtkWindowKeyEntry GtkWindowKeyEntry;
-
-struct _GtkWindowKeyEntry
-{
-  guint keyval;
-  guint modifiers;
-};
-
-static void 
-window_key_entry_destroy (gpointer data)
-{
-  g_slice_free (GtkWindowKeyEntry, data);
-}
-
-static GtkKeyHash *
-gtk_window_get_key_hash (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkKeyHash *key_hash = g_object_get_qdata (G_OBJECT (window), quark_gtk_window_key_hash);
-  
-  if (key_hash)
-    return key_hash;
-  
-  key_hash = _gtk_key_hash_new (gdk_display_get_keymap (priv->display),
-				(GDestroyNotify)window_key_entry_destroy);
-  g_object_set_qdata (G_OBJECT (window), quark_gtk_window_key_hash, key_hash);
-
-  return key_hash;
-}
-
-static void
-gtk_window_free_key_hash (GtkWindow *window)
-{
-  GtkKeyHash *key_hash = g_object_get_qdata (G_OBJECT (window), quark_gtk_window_key_hash);
-  if (key_hash)
-    {
-      _gtk_key_hash_free (key_hash);
-      g_object_set_qdata (G_OBJECT (window), quark_gtk_window_key_hash, NULL);
-    }
 }
 
 /*
