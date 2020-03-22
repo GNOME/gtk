@@ -247,7 +247,7 @@ gtk_shortcut_controller_trigger_shortcut (GtkShortcutController *self,
 {
   GtkWidget *widget;
 
-  if (!gtk_shortcut_trigger_trigger (gtk_shortcut_get_trigger (shortcut), event, enable_mnemonics))
+  if (gtk_shortcut_trigger_trigger (gtk_shortcut_get_trigger (shortcut), event, enable_mnemonics) == GTK_SHORTCUT_TRIGGER_MATCH_NONE)
     return FALSE;
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self));
