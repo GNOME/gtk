@@ -31,7 +31,6 @@
 #include "gtkapplicationprivate.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
-#include "gtkconcatmodelprivate.h"
 #include "gtkcontainerprivate.h"
 #include "gtkcssboxesprivate.h"
 #include "gtkcssfiltervalueprivate.h"
