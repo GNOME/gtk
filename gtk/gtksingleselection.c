@@ -240,8 +240,11 @@ gtk_single_selection_items_changed_cb (GListModel         *model,
                   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED]);
                   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_ITEM]);
                 }
+
+              g_object_unref (item);
               break;
             }
+          g_object_unref (item);
         }
       if (i == added)
         {
