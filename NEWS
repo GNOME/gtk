@@ -1,14 +1,6 @@
 Overview of Changes in GTK 3.98.1
 =================================
 
-* revealer: Fix size allocation at small scales
-
-* GL: Share programs between renderers to speed up initialization
-
-* clean up profiler marks
-
-* OS X: Fix OpenGL extension detection
-
 * GtkFileChooser:
  - Remove filename/uri api
  - Drop extra-widget
@@ -16,9 +8,13 @@ Overview of Changes in GTK 3.98.1
  - Remove show-hidden property
  - Remove local-only property
  - Remove GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER
+ - The portal file chooser supports selecting folders
 
 * GtkSpinner:
  - Rename active property to spinning
+
+* GtkRevealer:
+ - Fix size allocation at small scales
 
 * GtkPopover:
  - Drop :relative-to, it is always the :parent now
@@ -31,15 +27,12 @@ Overview of Changes in GTK 3.98.1
  - Drop margin property
  - Drop gtk_grab_add, gtk_device_grab_add
 
-* GDK:
- - Drop gdk_surface_new_temp
- - Make GdkEvent an immutable boxed type, not an object
- - Remove GdkAtom and property- and selection-related apis
- - Introduce GdkPopup and GdkToplevel interfaces
- - Rename gdk_surface_input_shape_combine_region to
-   gdk_surface_set_input_region
+* GtkTextView:
+ - Support overlines in GtkTextTag
+ - Support visible spaces in GtkTextTag
+ - Support hyphenation control in GtkTextTag
 
-* Broadway: implement scaling
+* Split GtkEventControllerFocus from GtkEventControllerKey
 
 * DND:
  - Fix local DND to avoid serialization
@@ -50,7 +43,23 @@ Overview of Changes in GTK 3.98.1
  - Introduce GtkDropControllerMotion
  - Remove GtkSelectionData
 
-* Split GtkEventControllerFocus from GtkEventControllerKey
+* Performance:
+ - Clean up profiler marks
+ - Share GL programs between renderers
+
+* GDK:
+ - Drop gdk_surface_new_temp
+ - Make GdkEvent an immutable boxed type, not an object
+ - Remove GdkAtom and property- and selection-related apis
+ - Introduce GdkPopup and GdkToplevel interfaces
+ - Implement them in backend-specific surface subtypes
+ - Rename gdk_surface_input_shape_combine_region to
+   gdk_surface_set_input_region
+ - Drop X11-only concepts such as sticky or keep-below
+
+* OS X: Fix OpenGL extension detection
+
+* Broadway: implement scaling
 
 * Translation updates:
  Dutch
