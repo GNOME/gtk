@@ -5965,10 +5965,6 @@ gtk_event_controller_motion_get_type
 <FILE>gtkshortcuttrigger</FILE>
 <TITLE>GtkShortcutTrigger</TITLE>
 GtkShortcutTrigger
-gtk_shortcut_trigger_ref
-gtk_shortcut_trigger_unref
-GtkShortcutTriggerType
-gtk_shortcut_trigger_get_trigger_type
 gtk_shortcut_trigger_parse_string
 gtk_shortcut_trigger_trigger
 gtk_shortcut_trigger_hash
@@ -5980,15 +5976,36 @@ gtk_shortcut_trigger_to_label
 gtk_shortcut_trigger_print_label
 
 <SUBSECTION>
+GtkNeverTrigger
+gtk_never_trigger_get
+
+<SUBSECTION>
+GtkKeyvalTrigger
 gtk_keyval_trigger_new
 gtk_keyval_trigger_get_modifiers
 gtk_keyval_trigger_get_keyval
 
 <SUBSECTION>
+GtkMnemonicTrigger
 gtk_mnemonic_trigger_new
 gtk_mnemonic_trigger_get_keyval
 
+<SUBSECTION>
+GtkAlternativeTrigger
+gtk_alternative_trigger_new
+gtk_alternative_trigger_get_first
+gtk_alternative_trigger_get_second
+
 <SUBSECTION Private>
+GTK_TYPE_ALTERNATIVE_TRIGGER
+GTK_TYPE_KEYVAL_TRIGGER
+GTK_TYPE_MNEMONIC_TRIGGER
+GTK_TYPE_NEVER_TRIGGER
+GTK_TYPE_SHORTCUT_TRIGGER
+gtk_alternative_trigger_get_type
+gtk_keyval_trigger_get_type
+gtk_mnemonic_trigger_get_type
+gtk_never_trigger_get_type
 gtk_shortcut_trigger_get_type
 </SECTION>
 
@@ -5996,40 +6013,58 @@ gtk_shortcut_trigger_get_type
 <FILE>gtkshortcutaction</FILE>
 <TITLE>GtkShortcutAction</TITLE>
 GtkShortcutAction
-gtk_shortcut_action_ref
-gtk_shortcut_action_unref
-GtkShortcutActionType
-gtk_shortcut_action_get_action_type
 gtk_shortcut_action_to_string
 gtk_shortcut_action_print
 gtk_shortcut_action_activate
 
 <SUBSECTION>
-gtk_nothing_action_new
+GtkNothingAction
+gtk_nothing_action_get
 
 <SUBSECTION>
+GtkCallbackAction
 gtk_callback_action_new
 
 <SUBSECTION>
-gtk_mnemonic_action_new
+GtkMnemonicAction
+gtk_mnemonic_action_get
 
 <SUBSECTION>
-gtk_activate_action_new
+GtkActivateAction
+gtk_activate_action_get
 
 <SUBSECTION>
+GtkSignalAction
 gtk_signal_action_new
 gtk_signal_action_get_signal_name
 
 <SUBSECTION>
-gtk_action_action_new
-gtk_action_action_get_name
+GtkNamedAction
+gtk_named_action_new
+gtk_named_action_get_name
 
 <SUBSECTION>
+GtkGActionAction
 gtk_gaction_action_new
 gtk_gaction_action_get_gaction
 
 <SUBSECTION Private>
+GTK_TYPE_ACTIVATE_ACTION
+GTK_TYPE_CALLBACK_ACTION
+GTK_TYPE_GACTION_ACTION
+GTK_TYPE_MNEMONIC_ACTION
+GTK_TYPE_NAMED_ACTION
+GTK_TYPE_NOTHING_ACTION
+GTK_TYPE_SHORTCUT_ACTION
+GTK_TYPE_SIGNAL_ACTION
+gtk_activate_action_get_type
+gtk_callback_action_get_type
+gtk_gaction_action_get_type
+gtk_mnemonic_action_get_type
+gtk_named_action_get_type
+gtk_nothing_action_get_type
 gtk_shortcut_action_get_type
+gtk_signal_action_get_type
 </SECTION>
 
 <SECTION>
