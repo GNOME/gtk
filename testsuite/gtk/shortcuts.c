@@ -186,7 +186,7 @@ test_trigger_parse (void)
 static void
 test_trigger_trigger (void)
 {
-  GtkShortcutTrigger *trigger1, *trigger2, *trigger3, *trigger4;
+  GtkShortcutTrigger *trigger[4];
   GdkDisplay *display;
   GdkSurface *surface;
   GdkDevice *device;
@@ -204,13 +204,13 @@ test_trigger_trigger (void)
     { GDK_KEY_u, GDK_SHIFT_MASK,   FALSE, { GTK_SHORTCUT_TRIGGER_MATCH_NONE, GTK_SHORTCUT_TRIGGER_MATCH_NONE, GTK_SHORTCUT_TRIGGER_MATCH_NONE, GTK_SHORTCUT_TRIGGER_MATCH_NONE } }, 
     { GDK_KEY_u, GDK_SHIFT_MASK,   TRUE,  { GTK_SHORTCUT_TRIGGER_MATCH_NONE, GTK_SHORTCUT_TRIGGER_MATCH_NONE, GTK_SHORTCUT_TRIGGER_MATCH_EXACT, GTK_SHORTCUT_TRIGGER_MATCH_EXACT } }, 
   };
-  int i;
+  int i, j;
 
-  trigger1 = gtk_shortcut_trigger_ref (gtk_never_trigger_get ());
-  trigger2 = gtk_keyval_trigger_new (GDK_KEY_a, GDK_CONTROL_MASK);
-  trigger3 = gtk_mnemonic_trigger_new (GDK_KEY_u);
-  trigger4 = gtk_alternative_trigger_new (gtk_shortcut_trigger_ref (trigger2),
-                                          gtk_shortcut_trigger_ref (trigger3));
+  trigger[0] = gtk_shortcut_trigger_ref (gtk_never_trigger_get ());
+  trigger[1] = gtk_keyval_trigger_new (GDK_KEY_a, GDK_CONTROL_MASK);
+  trigger[2] = gtk_mnemonic_trigger_new (GDK_KEY_u);
+  trigger[3] = gtk_alternative_trigger_new (gtk_shortcut_trigger_ref (trigger[1]),
+                                            gtk_shortcut_trigger_ref (trigger[2]));
 
   display = gdk_display_get_default ();
   device = gdk_seat_get_keyboard (gdk_display_get_default_seat (display));
@@ -218,6 +218,13 @@ test_trigger_trigger (void)
 
   for (i = 0; i < G_N_ELEMENTS (tests); i++)
     {
+      GdkKeymapKey *keys;
+      int n_keys;
+
+      if (!gdk_keymap_get_entries_for_keyval (gdk_display_get_keymap (display),
+                                              tests[i].keyval, &keys, &n_keys))
+        continue;
+
       event = gdk_event_key_new (GDK_KEY_PRESS,
                                  surface,
                                  device,
@@ -225,24 +232,22 @@ test_trigger_trigger (void)
                                  GDK_CURRENT_TIME,
                                  tests[i].state,
                                  tests[i].keyval,
-                                 0,
-                                 0,
-                                 0,
+                                 keys[0].keycode,
+                                 keys[0].keycode,
+                                 keys[0].group,
                                  FALSE);
-      g_assert_cmpint (gtk_shortcut_trigger_trigger (trigger1, event, tests[i].mnemonic), ==, tests[i].result[0]);
-      g_assert_cmpint (gtk_shortcut_trigger_trigger (trigger2, event, tests[i].mnemonic), ==, tests[i].result[1]);
-      g_assert_cmpint (gtk_shortcut_trigger_trigger (trigger3, event, tests[i].mnemonic), ==, tests[i].result[2]);
-      g_assert_cmpint (gtk_shortcut_trigger_trigger (trigger4, event, tests[i].mnemonic), ==, tests[i].result[3]);
+      for (j = 0; j < 4; j++)
+        g_assert_cmpint (gtk_shortcut_trigger_trigger (trigger[j], event, tests[i].mnemonic), ==, tests[i].result[j]);
 
       gdk_event_unref (event);
     }
 
   g_object_unref (surface);
 
-  gtk_shortcut_trigger_unref (trigger1);
-  gtk_shortcut_trigger_unref (trigger2);
-  gtk_shortcut_trigger_unref (trigger3);
-  gtk_shortcut_trigger_unref (trigger4);
+  gtk_shortcut_trigger_unref (trigger[0]);
+  gtk_shortcut_trigger_unref (trigger[1]);
+  gtk_shortcut_trigger_unref (trigger[2]);
+  gtk_shortcut_trigger_unref (trigger[3]);
 }
 
 static int callback_count;
