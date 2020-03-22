@@ -307,7 +307,7 @@ static void
 test_submodel_add2 (void)
 {
   GtkFlattenListModel *flat;
-  GListStore *model, *store[2];
+  GListStore *model, *store[3];
 
   model = g_list_store_new (G_TYPE_LIST_MODEL);
   flat = new_model (model);
