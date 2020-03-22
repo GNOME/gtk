@@ -21,7 +21,7 @@
 
 #include "gtkshortcutmanager.h"
 #include "gtkshortcutmanagerprivate.h"
-#include "gtkconcatmodelprivate.h"
+#include "gtkflattenlistmodel.h"
 
 /**
  * SECTION:gtkshortcutmanager
@@ -37,16 +37,21 @@ G_DEFINE_INTERFACE (GtkShortcutManager, gtk_shortcut_manager, G_TYPE_OBJECT)
 void
 gtk_shortcut_manager_create_controllers (GtkWidget *widget)
 {
-  GtkConcatModel *model;
+  GListStore *store;
+  GtkFlattenListModel *model;
   GtkEventController *controller;
 
-  model = gtk_concat_model_new (GTK_TYPE_SHORTCUT);
+  store = g_list_store_new (GTK_TYPE_SHORTCUT_CONTROLLER);
+  model = gtk_flatten_list_model_new (GTK_TYPE_SHORTCUT, G_LIST_MODEL (store));
+  g_object_unref (store);
   g_object_set_data_full (G_OBJECT (widget), "gtk-shortcut-manager-bubble", model, g_object_unref);
   controller = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (model));
   gtk_event_controller_set_name (controller, "gtk-shortcut-manager-bubble");
   gtk_widget_add_controller (widget, controller);
 
-  model = gtk_concat_model_new (GTK_TYPE_SHORTCUT);
+  store = g_list_store_new (GTK_TYPE_SHORTCUT_CONTROLLER);
+  model = gtk_flatten_list_model_new (GTK_TYPE_SHORTCUT, G_LIST_MODEL (store));
+  g_object_unref (store);
   g_object_set_data_full (G_OBJECT (widget), "gtk-shortcut-manager-capture", model, g_object_unref);
   controller = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (model));
   gtk_event_controller_set_name (controller, "gtk-shortcut-manager-capture");
@@ -54,7 +59,7 @@ gtk_shortcut_manager_create_controllers (GtkWidget *widget)
   gtk_widget_add_controller (widget, controller);
 }
 
-static GtkConcatModel *
+static GtkFlattenListModel *
 gtk_shortcut_manager_get_model (GtkShortcutManager  *self,
                                 GtkPropagationPhase  phase)
 {
@@ -77,24 +82,36 @@ static void
 gtk_shortcut_manager_default_add_controller (GtkShortcutManager    *self,
                                              GtkShortcutController *controller)
 {
-  GtkConcatModel *model;
+  GtkFlattenListModel *model;
+  GtkPropagationPhase phase;
 
-  model = gtk_shortcut_manager_get_model (self, 
-                                          gtk_event_controller_get_propagation_phase (GTK_EVENT_CONTROLLER (controller)));
+  phase = gtk_event_controller_get_propagation_phase (GTK_EVENT_CONTROLLER (controller));
+  model = gtk_shortcut_manager_get_model (self, phase);
   if (model)
-    gtk_concat_model_append (model, G_LIST_MODEL (controller));
+    {
+      GListModel *store = gtk_flatten_list_model_get_model (model); 
+      g_list_store_append (G_LIST_STORE (store), controller);
+    }
 }
 
 static void
 gtk_shortcut_manager_default_remove_controller (GtkShortcutManager    *self,
                                                 GtkShortcutController *controller)
 {
-  GtkConcatModel *model;
+  GtkFlattenListModel *model;
+  GtkPropagationPhase phase;
 
-  model = gtk_shortcut_manager_get_model (self, 
-                                          gtk_event_controller_get_propagation_phase (GTK_EVENT_CONTROLLER (controller)));
+  phase = gtk_event_controller_get_propagation_phase (GTK_EVENT_CONTROLLER (controller));
+  model = gtk_shortcut_manager_get_model (self, phase);
   if (model)
-    gtk_concat_model_remove (model, G_LIST_MODEL (controller));
+    {
+      GListModel *store;
+      guint position;
+
+      store = gtk_flatten_list_model_get_model (model); 
+      if (g_list_store_find (G_LIST_STORE (store), controller, &position))
+        g_list_store_remove (G_LIST_STORE (store), position);
+    }
 }
 
 static void

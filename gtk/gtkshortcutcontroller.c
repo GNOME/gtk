@@ -35,7 +35,7 @@
 #include "gtkshortcutcontrollerprivate.h"
 
 #include "gtkbuildable.h"
-#include "gtkconcatmodelprivate.h"
+#include "gtkflattenlistmodel.h"
 #include "gtkeventcontrollerprivate.h"
 #include "gtkintl.h"
 #include "gtkshortcut.h"
@@ -252,9 +252,9 @@ gtk_shortcut_controller_trigger_shortcut (GtkShortcutController *self,
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self));
   if (!self->custom_shortcuts &&
-      GTK_IS_CONCAT_MODEL (self->shortcuts))
+      GTK_IS_FLATTEN_LIST_MODEL (self->shortcuts))
     {
-      GListModel *model = gtk_concat_model_get_model_for_item (GTK_CONCAT_MODEL (self->shortcuts), position);
+      GListModel *model = gtk_flatten_list_model_get_model_for_item (GTK_FLATTEN_LIST_MODEL (self->shortcuts), position);
       if (GTK_IS_SHORTCUT_CONTROLLER (model))
         widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (model));
     }
