@@ -55,6 +55,8 @@ struct _GtkShortcutController
   GdkModifierType mnemonics_modifiers;
 
   guint custom_shortcuts : 1;
+
+  guint last_activated;
 };
 
 struct _GtkShortcutControllerClass
@@ -238,31 +240,18 @@ gtk_shortcut_controller_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_shortcut_controller_parent_class)->finalize (object);
 }
 
-static gboolean
-gtk_shortcut_controller_trigger_shortcut (GtkShortcutController *self,
-                                          GtkShortcut           *shortcut,
-                                          guint                  position,
-                                          GdkEvent              *event,
-                                          gboolean               enable_mnemonics)
+typedef struct {
+  GtkShortcut *shortcut;
+  guint index;
+} ShortcutData;
+
+static void
+shortcut_data_free (gpointer data)
 {
-  GtkWidget *widget;
+  ShortcutData *sdata = data;
 
-  if (gtk_shortcut_trigger_trigger (gtk_shortcut_get_trigger (shortcut), event, enable_mnemonics) == GTK_SHORTCUT_TRIGGER_MATCH_NONE)
-    return FALSE;
-
-  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self));
-  if (!self->custom_shortcuts &&
-      GTK_IS_FLATTEN_LIST_MODEL (self->shortcuts))
-    {
-      GListModel *model = gtk_flatten_list_model_get_model_for_item (GTK_FLATTEN_LIST_MODEL (self->shortcuts), position);
-      if (GTK_IS_SHORTCUT_CONTROLLER (model))
-        widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (model));
-    }
-
-  return gtk_shortcut_action_activate (gtk_shortcut_get_action (shortcut),
-                                       GTK_SHORTCUT_ACTION_EXCLUSIVE, /* FIXME */
-                                       widget,
-                                       gtk_shortcut_get_arguments (shortcut));
+  g_object_unref (sdata->shortcut);
+  g_free (sdata);
 }
 
 static gboolean
@@ -274,21 +263,79 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
 {
   GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (controller);
   guint i;
+  GSList *shortcuts = NULL;
+  GSList *l;
+  gboolean has_exact = FALSE;
+  gboolean retval = FALSE;
 
   for (i = 0; i < g_list_model_get_n_items (self->shortcuts); i++)
     {
-      GtkShortcut *shortcut = g_list_model_get_item (self->shortcuts, i);
-      g_object_unref (shortcut);
+      GtkShortcut *shortcut;
+      ShortcutData *data;
+      guint index;
 
-      if (gtk_shortcut_controller_trigger_shortcut (self, 
-                                                    shortcut,
-                                                    i,
-                                                    event,
-                                                    enable_mnemonics))
-        return TRUE;
+      index = (self->last_activated + 1 + i) % g_list_model_get_n_items (self->shortcuts);
+      shortcut = g_list_model_get_item (self->shortcuts, index);
+
+      switch (gtk_shortcut_trigger_trigger (gtk_shortcut_get_trigger (shortcut), event, enable_mnemonics))
+        {
+        case GTK_SHORTCUT_TRIGGER_MATCH_PARTIAL:
+          if (!has_exact)
+            break;
+          G_GNUC_FALLTHROUGH;
+
+        case GTK_SHORTCUT_TRIGGER_MATCH_NONE:
+          g_object_unref (shortcut);
+          continue;
+
+        case GTK_SHORTCUT_TRIGGER_MATCH_EXACT:
+          if (!has_exact)
+            {
+              g_slist_free_full (shortcuts, shortcut_data_free);
+              shortcuts = NULL;
+            }
+          has_exact = TRUE;
+          break;
+
+        default:
+          g_assert_not_reached ();
+        }
+
+      data = g_new0 (ShortcutData, 1);
+      data->shortcut = shortcut;
+      data->index = index;
+
+      shortcuts = g_slist_append (shortcuts, data);
     }
 
-  return FALSE;
+  for (l = shortcuts; l; l = l->next)
+    {
+      ShortcutData *data = l->data;
+      GtkWidget *widget;
+
+      widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self));
+      if (!self->custom_shortcuts &&
+          GTK_IS_FLATTEN_LIST_MODEL (self->shortcuts))
+        {
+          GListModel *model = gtk_flatten_list_model_get_model_for_item (GTK_FLATTEN_LIST_MODEL (self->shortcuts), data->index);
+          if (GTK_IS_SHORTCUT_CONTROLLER (model))
+            widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (model));
+        }
+
+      if (gtk_shortcut_action_activate (gtk_shortcut_get_action (data->shortcut),
+                                        shortcuts->next == NULL ? GTK_SHORTCUT_ACTION_EXCLUSIVE : 0,
+                                        widget,
+                                        gtk_shortcut_get_arguments (data->shortcut)))
+        {
+          self->last_activated = data->index;
+          retval = TRUE;
+          break;
+        }
+    }
+
+  g_slist_free_full (shortcuts, shortcut_data_free);
+
+  return retval;
 }
 
 static gboolean
