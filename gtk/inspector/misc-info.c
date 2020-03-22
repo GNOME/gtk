@@ -31,6 +31,7 @@
 #include "gtkbutton.h"
 #include "gtkmenubutton.h"
 #include "gtkwidgetprivate.h"
+#include "gtkbinlayout.h"
 
 
 struct _GtkInspectorMiscInfoPrivate {
@@ -570,34 +571,13 @@ set_property (GObject      *object,
 }
 
 static void
-measure (GtkWidget      *widget,
-         GtkOrientation  orientation,
-         int             for_size,
-         int            *minimum,
-         int            *natural,
-         int            *minimum_baseline,
-         int            *natural_baseline)
+dispose (GObject *o)
 {
-  GtkInspectorMiscInfo *sl = GTK_INSPECTOR_MISC_INFO (widget);
+  GtkInspectorMiscInfo *sl = GTK_INSPECTOR_MISC_INFO (o);
 
-  gtk_widget_measure (sl->priv->swin,
-                      orientation,
-                      for_size,
-                      minimum, natural,
-                      minimum_baseline, natural_baseline);
-}
+  g_clear_pointer (&sl->priv->swin, gtk_widget_unparent);
 
-static void
-size_allocate (GtkWidget *widget,
-               int        width,
-               int        height,
-               int        baseline)
-{
-  GtkInspectorMiscInfo *sl = GTK_INSPECTOR_MISC_INFO (widget);
-
-  gtk_widget_size_allocate (sl->priv->swin,
-                            &(GtkAllocation) { 0, 0, width, height },
-                            baseline);
+  G_OBJECT_CLASS (gtk_inspector_misc_info_parent_class)->dispose (o);
 }
 
 static void
@@ -608,11 +588,10 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
 
   object_class->get_property = get_property;
   object_class->set_property = set_property;
+  object_class->dispose = dispose;
 
   widget_class->map = map;
   widget_class->unmap = unmap;
-  widget_class->measure = measure;
-  widget_class->size_allocate = size_allocate;
 
   g_object_class_install_property (object_class, PROP_OBJECT_TREE,
       g_param_spec_object ("object-tree", "Object Tree", "Object tree",
@@ -669,6 +648,8 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, show_surface);
   gtk_widget_class_bind_template_callback (widget_class, show_renderer);
   gtk_widget_class_bind_template_callback (widget_class, show_frame_clock);
+
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
 
 // vim: set et sw=2 ts=2:

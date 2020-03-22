@@ -262,11 +262,6 @@ finalize (GObject *object)
 
   cleanup_object (pl);
 
-  g_object_unref (pl->priv->names);
-  g_object_unref (pl->priv->types);
-  g_object_unref (pl->priv->values);
-  g_object_unref (pl->priv->origins);
-
   G_OBJECT_CLASS (gtk_inspector_prop_list_parent_class)->finalize (object);
 }
 
