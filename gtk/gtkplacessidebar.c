@@ -2396,7 +2396,11 @@ show_rename_popover (GtkSidebarRow *row)
   sidebar->rename_uri = g_strdup (uri);
 
   gtk_editable_set_text (GTK_EDITABLE (sidebar->rename_entry), name);
+  g_object_ref (sidebar->rename_popover);
+  gtk_widget_unparent (sidebar->rename_popover);
   gtk_widget_set_parent (sidebar->rename_popover, GTK_WIDGET (row));
+  g_object_unref (sidebar->rename_popover);
+
   setup_popover_shadowing (sidebar->rename_popover);
 
   gtk_popover_popup (GTK_POPOVER (sidebar->rename_popover));
@@ -4083,6 +4087,9 @@ gtk_places_sidebar_size_allocate (GtkWidget *widget,
   gtk_widget_size_allocate (sidebar->swin,
                             &(GtkAllocation) { 0, 0, width, height },
                             baseline);
+
+  if (sidebar->popover)
+    gtk_native_check_resize (GTK_NATIVE (sidebar->popover));
 
   if (sidebar->rename_popover)
     gtk_native_check_resize (GTK_NATIVE (sidebar->rename_popover));
