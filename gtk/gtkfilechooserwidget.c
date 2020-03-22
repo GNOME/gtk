@@ -85,6 +85,7 @@
 #include "gtkbinlayout.h"
 #include "gtkwidgetprivate.h"
 #include "gtkpopovermenuprivate.h"
+#include "gtknative.h"
 
 #include <cairo-gobject.h>
 
@@ -2036,7 +2037,7 @@ file_list_build_popover (GtkFileChooserWidget *impl)
   g_object_unref (section);
 
   priv->browse_files_popover = gtk_popover_menu_new_from_model (G_MENU_MODEL (menu));
-  gtk_widget_set_parent (priv->browse_files_popover, priv->browse_files_tree_view);
+  gtk_widget_set_parent (priv->browse_files_popover, GTK_WIDGET (impl));
   g_object_unref (menu);
 }
 
@@ -2113,7 +2114,12 @@ file_list_show_popover (GtkFileChooserWidget *impl,
       path = list->data;
       gtk_tree_view_get_cell_area (GTK_TREE_VIEW (priv->browse_files_tree_view), path, NULL, &rect);
       gtk_tree_view_convert_bin_window_to_widget_coords (GTK_TREE_VIEW (priv->browse_files_tree_view),
-                                                     rect.x, rect.y, &rect.x, &rect.y);
+                                                         rect.x, rect.y,
+                                                         &rect.x, &rect.y);
+      gtk_widget_translate_coordinates (priv->browse_files_tree_view,
+                                        GTK_WIDGET (impl),
+                                        rect.x, rect.y,
+                                        &rect.x, &rect.y);
 
       rect.x = CLAMP (x - 20, 0, bounds.size.width - 40);
       rect.width = 40;
@@ -2130,25 +2136,6 @@ file_list_show_popover (GtkFileChooserWidget *impl,
 
   gtk_popover_set_pointing_to (GTK_POPOVER (priv->browse_files_popover), &rect);
   gtk_popover_popup (GTK_POPOVER (priv->browse_files_popover));
-}
-
-/* Callback used for the GtkWidget::popup-menu signal of the file list */
-static gboolean
-list_popup_menu_cb (GtkWidget            *widget,
-                    GtkFileChooserWidget *impl)
-{
-  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-  graphene_rect_t bounds;
-
-  if (gtk_widget_compute_bounds (priv->browse_files_tree_view,
-                                 priv->browse_files_tree_view,
-                                 &bounds))
-    {
-      file_list_show_popover (impl, 0.5 * bounds.size.width, 0.5 * bounds.size.height);
-      return TRUE;
-    }
-
-  return FALSE;
 }
 
 /* Callback used when a button is pressed on the file list.  We trap button 3 to
@@ -2179,12 +2166,17 @@ click_cb (GtkGesture           *gesture,
           double                y,
           GtkFileChooserWidget *impl)
 {
+  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
   PopoverData *pd;
+  int xx, yy;
 
   pd = g_new (PopoverData, 1);
   pd->impl = impl;
-  pd->x = x;
-  pd->y = y;
+  gtk_widget_translate_coordinates (priv->browse_files_tree_view,
+                                    GTK_WIDGET (impl),
+                                    x, y, &xx, &yy);
+  pd->x = xx;
+  pd->y = yy;
 
   g_idle_add (file_list_show_popover_in_idle, pd);
 }
@@ -7476,6 +7468,20 @@ add_normal_and_shifted_binding (GtkBindingSet   *binding_set,
 }
 
 static void
+gtk_file_chooser_widget_size_allocate (GtkWidget *widget,
+                                       int        width,
+                                       int        height,
+                                       int        baseline)
+{
+  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (widget);
+  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
+
+  GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->size_allocate (widget, width, height, baseline);
+  if (priv->browse_files_popover)
+    gtk_native_check_resize (GTK_NATIVE (priv->browse_files_popover));
+}
+
+static void
 gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
 {
   static const guint quick_bookmark_keyvals[10] = {
@@ -7497,6 +7503,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   widget_class->root = gtk_file_chooser_widget_root;
   widget_class->unroot = gtk_file_chooser_widget_unroot;
   widget_class->css_changed = gtk_file_chooser_widget_css_changed;
+  widget_class->size_allocate = gtk_file_chooser_widget_size_allocate;
 
   /*
    * Signals
@@ -7893,7 +7900,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, box);
 
   /* And a *lot* of callbacks to bind ... */
-  gtk_widget_class_bind_template_callback (widget_class, list_popup_menu_cb);
   gtk_widget_class_bind_template_callback (widget_class, file_list_query_tooltip_cb);
   gtk_widget_class_bind_template_callback (widget_class, list_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, list_selection_changed);
@@ -7984,7 +7990,8 @@ post_process_ui (GtkFileChooserWidget *impl)
   g_action_map_add_action_entries (G_ACTION_MAP (priv->item_actions),
                                    entries, G_N_ELEMENTS (entries),
                                    impl);
-  gtk_widget_insert_action_group (GTK_WIDGET (priv->browse_files_tree_view), "item",
+  gtk_widget_insert_action_group (GTK_WIDGET (impl),
+                                  "item",
                                   priv->item_actions);
 
   gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (priv->search_entry), priv->search_entry);
