@@ -31,6 +31,7 @@
 #include "gtkimage.h"
 #include "gtkadjustment.h"
 #include "gtkbox.h"
+#include "gtkbinlayout.h"
 
 
 #ifdef GDK_WINDOWING_X11
@@ -881,34 +882,13 @@ gtk_inspector_general_constructed (GObject *object)
 }
 
 static void
-measure (GtkWidget      *widget,
-         GtkOrientation  orientation,
-         int             for_size,
-         int            *minimum,
-         int            *natural,
-         int            *minimum_baseline,
-         int            *natural_baseline)
+gtk_inspector_general_dispose (GObject *object)
 {
-  GtkInspectorGeneral *gen = GTK_INSPECTOR_GENERAL (widget);
+  GtkInspectorGeneral *gen = GTK_INSPECTOR_GENERAL (object);
 
-  gtk_widget_measure (gen->priv->swin,
-                      orientation,
-                      for_size,
-                      minimum, natural,
-                      minimum_baseline, natural_baseline);
-}
+  g_clear_pointer (&gen->priv->swin, gtk_widget_unparent);
 
-static void
-size_allocate (GtkWidget *widget,
-               int        width,
-               int        height,
-               int        baseline)
-{
-  GtkInspectorGeneral *gen = GTK_INSPECTOR_GENERAL (widget);
-
-  gtk_widget_size_allocate (gen->priv->swin,
-                            &(GtkAllocation) { 0, 0, width, height },
-                            baseline);
+  G_OBJECT_CLASS (gtk_inspector_general_parent_class)->dispose (object);
 }
 
 static void
@@ -918,9 +898,7 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = gtk_inspector_general_constructed;
-
-  widget_class->measure = measure;
-  widget_class->size_allocate = size_allocate;
+  object_class->dispose = gtk_inspector_general_dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/general.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, swin);
@@ -951,6 +929,8 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, display_composited);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, display_rgba);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, device_box);
+
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
 
 void

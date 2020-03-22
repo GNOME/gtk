@@ -41,6 +41,7 @@
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
 #include "gtknative.h"
+#include "gtkbinlayout.h"
 
 #include "fallback-c89.c"
 
@@ -1082,6 +1083,16 @@ gtk_inspector_visual_constructed (GObject *object)
 }
 
 static void
+gtk_inspector_visual_dispose (GObject *object)
+{
+  GtkInspectorVisual *vis = GTK_INSPECTOR_VISUAL (object);
+
+  g_clear_pointer (&vis->priv->swin, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (gtk_inspector_visual_parent_class)->dispose (object);
+}
+
+static void
 gtk_inspector_visual_finalize (GObject *object)
 {
   GtkInspectorVisual *vis = GTK_INSPECTOR_VISUAL (object);
@@ -1100,47 +1111,14 @@ gtk_inspector_visual_finalize (GObject *object)
 }
 
 static void
-measure (GtkWidget      *widget,
-         GtkOrientation  orientation,
-         int             for_size,
-         int            *minimum,
-         int            *natural,
-         int            *minimum_baseline,
-         int            *natural_baseline)
-{
-  GtkInspectorVisual *vis = GTK_INSPECTOR_VISUAL (widget);
-
-  gtk_widget_measure (vis->priv->swin,
-                      orientation,
-                      for_size,
-                      minimum, natural,
-                      minimum_baseline, natural_baseline);
-}
-
-static void
-size_allocate (GtkWidget *widget,
-               int        width,
-               int        height,
-               int        baseline)
-{
-  GtkInspectorVisual *vis = GTK_INSPECTOR_VISUAL (widget);
-
-  gtk_widget_size_allocate (vis->priv->swin,
-                            &(GtkAllocation) { 0, 0, width, height },
-                            baseline);
-}
-
-static void
 gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->constructed = gtk_inspector_visual_constructed;
+  object_class->dispose = gtk_inspector_visual_dispose;
   object_class->finalize = gtk_inspector_visual_finalize;
-
-  widget_class->measure = measure;
-  widget_class->size_allocate = size_allocate;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/visual.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, swin);
@@ -1182,6 +1160,8 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, widget_resize_activate);
   gtk_widget_class_bind_template_callback (widget_class, focus_activate);
   gtk_widget_class_bind_template_callback (widget_class, software_gl_activate);
+
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
 
 void
