@@ -539,3 +539,28 @@ gtk_flatten_list_model_get_model (GtkFlattenListModel *self)
 
   return self->model;
 }
+
+/**
+ * gtk_flatten_list_model_get_model_for_item:
+ * @self: a #GtkFlattenListModel
+ * @position: a position
+ *
+ * Returns the model containing the item at the given position.
+ *
+ * Returns: (transfer none): the model containing the item at @position
+ */
+GListModel *
+gtk_flatten_list_model_get_model_for_item (GtkFlattenListModel *self,
+                                           guint                position)
+{
+  FlattenNode *node;
+
+  if (!self->items)
+    return NULL;
+
+  node = gtk_flatten_list_model_get_nth (self->items, position, NULL);
+  if (node == NULL)
+    return NULL;
+
+  return node->model;
+}
