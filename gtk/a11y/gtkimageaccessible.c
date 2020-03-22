@@ -309,6 +309,11 @@ gtk_image_accessible_get_image_size (AtkImage *image,
 
   if (gtk_image_get_storage_type (gtk_image) != GTK_IMAGE_EMPTY)
     gtk_image_get_image_size (gtk_image, width, height);
+  else
+    {
+      *height = 0;
+      *width = 0;
+    }
 }
 
 static gboolean
