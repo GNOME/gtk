@@ -40,6 +40,7 @@
 #include "gtkshortcuttrigger.h"
 
 #include "gtkaccelgroupprivate.h"
+#include "gtkprivate.h"
 
 typedef struct _GtkShortcutTriggerClass GtkShortcutTriggerClass;
 
@@ -499,25 +500,99 @@ gtk_keyval_trigger_trigger (GtkShortcutTrigger *trigger,
                             gboolean            enable_mnemonics)
 {
   GtkKeyvalTrigger *self = (GtkKeyvalTrigger *) trigger;
-  GdkModifierType modifiers;
+  guint keycode;
+  GdkModifierType state;
+  GdkModifierType mask;
+  int group;
+  GdkKeymap *keymap;
   guint keyval;
+  int effective_group;
+  int level;
+  GdkModifierType consumed_modifiers;
+  GdkModifierType shift_group_mask;
+  gboolean group_mod_is_accel_mod = FALSE;
+  const GdkModifierType xmods = GDK_MOD2_MASK|GDK_MOD3_MASK|GDK_MOD4_MASK|GDK_MOD5_MASK;
+  const GdkModifierType vmods = GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK;
+  GdkModifierType modifiers;
 
   if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
     return GTK_SHORTCUT_TRIGGER_MATCH_NONE;
 
-  /* XXX: This needs to deal with groups */
-  modifiers = gdk_event_get_modifier_state (event);
-  keyval = gdk_key_event_get_keyval (event);
+  mask = gtk_accelerator_get_default_mod_mask ();
 
-  if (keyval == GDK_KEY_ISO_Left_Tab)
-    keyval = GDK_KEY_Tab;
-  else
-    keyval = gdk_keyval_to_lower (keyval);
+  keycode = gdk_key_event_get_keycode (event);
+  state = gdk_event_get_modifier_state (event);
+  group = gdk_key_event_get_group (event);
+  keymap = gdk_display_get_keymap (gdk_event_get_display (event));
 
-  if (keyval != self->keyval || modifiers != self->modifiers)
-    return GTK_SHORTCUT_TRIGGER_MATCH_NONE;
+  /* We don't want Caps_Lock to affect keybinding lookups.
+   */
+  state &= ~GDK_LOCK_MASK;
 
-  return GTK_SHORTCUT_TRIGGER_MATCH_EXACT;
+  _gtk_translate_keyboard_accel_state (keymap,
+                                       keycode, state, mask, group,
+                                       &keyval,
+                                       &effective_group, &level,
+                                       &consumed_modifiers);
+
+  /* if the group-toggling modifier is part of the default accel mod
+   * mask, and it is active, disable it for matching
+   */
+  shift_group_mask = gdk_keymap_get_modifier_mask (keymap,
+                                                   GDK_MODIFIER_INTENT_SHIFT_GROUP);
+  if (mask & shift_group_mask)
+    group_mod_is_accel_mod = TRUE;
+
+  gdk_keymap_map_virtual_modifiers (keymap, &mask);
+  gdk_keymap_add_virtual_modifiers (keymap, &state);
+
+  modifiers = self->modifiers;
+  if (gdk_keymap_map_virtual_modifiers (keymap, &modifiers) &&
+      ((modifiers & ~consumed_modifiers & mask & ~vmods) == (state & ~consumed_modifiers & mask & ~vmods) ||
+       (modifiers & ~consumed_modifiers & mask & ~xmods) == (state & ~consumed_modifiers & mask & ~xmods)))
+    {
+      /* modifier match */
+      GdkKeymapKey *keys;
+      int n_keys;
+      int i;
+      guint key;
+
+      /* Shift gets consumed and applied for the event,
+       * so apply it to our keyval to match
+       */
+      key = self->keyval;
+      if (self->modifiers & GDK_SHIFT_MASK)
+        key = gdk_keyval_to_upper (key);
+
+      if (keyval == key && /* exact match */
+          (!group_mod_is_accel_mod ||
+           (state & shift_group_mask) == (self->modifiers & shift_group_mask)))
+        return GTK_SHORTCUT_TRIGGER_MATCH_EXACT;
+
+      gdk_keymap_get_entries_for_keyval (keymap,
+                                         self->keyval,
+                                         &keys, &n_keys);
+
+      for (i = 0; i < n_keys; i++)
+        {
+          if (keys[i].keycode == keycode &&
+              keys[i].level == level &&
+              /* Only match for group if it's an accel mod */
+              (!group_mod_is_accel_mod ||
+               keys[i].group == effective_group))
+            {
+              /* partial match */
+              g_free (keys);
+
+              return GTK_SHORTCUT_TRIGGER_MATCH_PARTIAL;
+            }
+        }
+ 
+      g_free (keys);
+    }
+
+
+  return GTK_SHORTCUT_TRIGGER_MATCH_NONE;
 }
 
 static guint
