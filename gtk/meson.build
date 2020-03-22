@@ -199,7 +199,6 @@ gtk_public_sources = files([
   'gtkcombobox.c',
   'gtkcomboboxtext.c',
   'gtkcomposetable.c',
-  'gtkconcatmodel.c',
   'gtkconstraintguide.c',
   'gtkconstraintlayout.c',
   'gtkconstraint.c',
