@@ -59,7 +59,8 @@ struct _GtkShortcutTriggerClass
   const char *type_name;
 
   void            (* finalize)    (GtkShortcutTrigger  *trigger);
-  gboolean        (* trigger)     (GtkShortcutTrigger  *trigger,
+  GtkShortcutTriggerMatch
+                  (* trigger)     (GtkShortcutTrigger  *trigger,
                                    GdkEvent            *event,
                                    gboolean             enable_mnemonics);
   guint           (* hash)        (GtkShortcutTrigger  *trigger);
@@ -166,17 +167,16 @@ gtk_shortcut_trigger_get_trigger_type (GtkShortcutTrigger *self)
  *     value of this property is determined by checking that the passed
  *     in @event is a Key event and has the right modifiers set.
  *
- * Checks if the given @event triggers @self. If so,
- * returns %TRUE.
+ * Checks if the given @event triggers @self.
  *
- * Returns: %TRUE if this event triggered the trigger
+ * Returns: Whether the event triggered the shortcut
  **/
-gboolean
+GtkShortcutTriggerMatch
 gtk_shortcut_trigger_trigger (GtkShortcutTrigger *self,
                               GdkEvent           *event,
                               gboolean            enable_mnemonics)
 {
-  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER (self), FALSE);
+  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER (self), GTK_SHORTCUT_TRIGGER_MATCH_NONE);
 
   return self->trigger_class->trigger (self, event, enable_mnemonics);
 }
@@ -411,12 +411,12 @@ gtk_never_trigger_finalize (GtkShortcutTrigger *trigger)
   g_assert_not_reached ();
 }
 
-static gboolean
+static GtkShortcutTriggerMatch
 gtk_never_trigger_trigger (GtkShortcutTrigger *trigger,
                            GdkEvent           *event,
                            gboolean            enable_mnemonics)
 {
-  return FALSE;
+  return GTK_SHORTCUT_TRIGGER_MATCH_NONE;
 }
 
 static guint
@@ -493,7 +493,7 @@ gtk_keyval_trigger_finalize (GtkShortcutTrigger *trigger)
 {
 }
 
-static gboolean
+static GtkShortcutTriggerMatch
 gtk_keyval_trigger_trigger (GtkShortcutTrigger *trigger,
                             GdkEvent           *event,
                             gboolean            enable_mnemonics)
@@ -503,7 +503,7 @@ gtk_keyval_trigger_trigger (GtkShortcutTrigger *trigger,
   guint keyval;
 
   if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
-    return FALSE;
+    return GTK_SHORTCUT_TRIGGER_MATCH_NONE;
 
   /* XXX: This needs to deal with groups */
   modifiers = gdk_event_get_modifier_state (event);
@@ -514,7 +514,10 @@ gtk_keyval_trigger_trigger (GtkShortcutTrigger *trigger,
   else
     keyval = gdk_keyval_to_lower (keyval);
 
-  return keyval == self->keyval && modifiers == self->modifiers;
+  if (keyval != self->keyval || modifiers != self->modifiers)
+    return GTK_SHORTCUT_TRIGGER_MATCH_NONE;
+
+  return GTK_SHORTCUT_TRIGGER_MATCH_EXACT;
 }
 
 static guint
@@ -659,7 +662,7 @@ gtk_mnemonic_trigger_finalize (GtkShortcutTrigger *trigger)
 {
 }
 
-static gboolean
+static GtkShortcutTriggerMatch
 gtk_mnemonic_trigger_trigger (GtkShortcutTrigger *trigger,
                               GdkEvent           *event,
                               gboolean            enable_mnemonics)
@@ -668,10 +671,10 @@ gtk_mnemonic_trigger_trigger (GtkShortcutTrigger *trigger,
   guint keyval;
 
   if (!enable_mnemonics)
-    return FALSE;
+    return GTK_SHORTCUT_TRIGGER_MATCH_NONE;
 
   if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
-    return FALSE;
+    return GTK_SHORTCUT_TRIGGER_MATCH_NONE;
 
   /* XXX: This needs to deal with groups */
   keyval = gdk_key_event_get_keyval (event);
@@ -681,7 +684,10 @@ gtk_mnemonic_trigger_trigger (GtkShortcutTrigger *trigger,
   else
     keyval = gdk_keyval_to_lower (keyval);
 
-  return keyval == self->keyval;
+  if (keyval != self->keyval)
+    return GTK_SHORTCUT_TRIGGER_MATCH_NONE;
+
+  return GTK_SHORTCUT_TRIGGER_MATCH_EXACT;
 }
 
 static guint
@@ -814,20 +820,15 @@ gtk_alternative_trigger_finalize (GtkShortcutTrigger *trigger)
   gtk_shortcut_trigger_unref (self->second);
 }
 
-static gboolean
+static GtkShortcutTriggerMatch
 gtk_alternative_trigger_trigger (GtkShortcutTrigger *trigger,
                                  GdkEvent           *event,
                                  gboolean            enable_mnemonics)
 {
   GtkAlternativeTrigger *self = (GtkAlternativeTrigger *) trigger;
 
-  if (gtk_shortcut_trigger_trigger (self->first, event, enable_mnemonics))
-    return TRUE;
-
-  if (gtk_shortcut_trigger_trigger (self->second, event, enable_mnemonics))
-    return TRUE;
-
-  return FALSE;
+  return MAX (gtk_shortcut_trigger_trigger (self->first, event, enable_mnemonics),
+              gtk_shortcut_trigger_trigger (self->second, event, enable_mnemonics));
 }
 
 static guint
