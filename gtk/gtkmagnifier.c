@@ -158,7 +158,9 @@ gtk_magnifier_dispose (GObject *object)
   GtkMagnifier *self = GTK_MAGNIFIER (object);
   GtkMagnifierPrivate *priv = gtk_magnifier_get_instance_private (self);
 
-  _gtk_magnifier_set_inspected (self, NULL);
+  if (priv->paintable)
+    _gtk_magnifier_set_inspected (self, NULL);
+
   g_clear_object (&priv->paintable);
 
   G_OBJECT_CLASS (gtk_magnifier_parent_class)->dispose (object);
