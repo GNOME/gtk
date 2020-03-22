@@ -34,7 +34,6 @@ tests = [
   ['grid'],
   ['grid-layout'],
   ['icontheme'],
-  ['keyhash', ['../../gtk/gtkkeyhash.c', gtkresources, '../../gtk/gtkprivate.c'], gtk_cargs],
   ['listbox'],
   ['main'],
   ['maplistmodel'],
