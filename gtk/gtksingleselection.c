@@ -231,6 +231,7 @@ gtk_single_selection_items_changed_cb (GListModel         *model,
       for (i = 0; i < added; i++)
         {
           gpointer item = g_list_model_get_item (model, position + i);
+          g_object_unref (item);
           if (item == self->selected_item)
             {
               /* the item moved */
