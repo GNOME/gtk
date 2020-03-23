@@ -502,8 +502,6 @@ enum {
   MNEMONIC_ACTIVATE,
   MOVE_FOCUS,
   KEYNAV_FAILED,
-  ACCEL_CLOSURES_CHANGED,
-  CAN_ACTIVATE_ACCEL,
   QUERY_TOOLTIP,
   LAST_SIGNAL
 };
@@ -633,8 +631,6 @@ static void             gtk_widget_real_state_flags_changed     (GtkWidget      
 static AtkObject*	gtk_widget_real_get_accessible		(GtkWidget	  *widget);
 static void		gtk_widget_accessible_interface_init	(AtkImplementorIface *iface);
 static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
-static gboolean         gtk_widget_real_can_activate_accel      (GtkWidget *widget,
-                                                                 guint      signal_id);
 
 static void             gtk_widget_buildable_interface_init     (GtkBuildableIface  *iface);
 static void             gtk_widget_buildable_set_name           (GtkBuildable       *buildable,
@@ -915,7 +911,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->focus = gtk_widget_real_focus;
   klass->move_focus = gtk_widget_real_move_focus;
   klass->keynav_failed = gtk_widget_real_keynav_failed;
-  klass->can_activate_accel = gtk_widget_real_can_activate_accel;
   klass->query_tooltip = gtk_widget_real_query_tooltip;
   klass->css_changed = gtk_widget_real_css_changed;
 
@@ -1655,47 +1650,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   g_signal_set_va_marshaller (widget_signals[QUERY_TOOLTIP],
                               G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__INT_INT_BOOLEAN_OBJECTv);
-
-  /**
-   * GtkWidget::accel-closures-changed:
-   * @widget: the object which received the signal.
-   *
-   * The ::accel-closures-changed signal gets emitted when accelerators for this
-   * widget get added, removed or changed.
-   */
-  widget_signals[ACCEL_CLOSURES_CHANGED] =
-    g_signal_new (I_("accel-closures-changed"),
-		  G_TYPE_FROM_CLASS (klass),
-		  0,
-		  0,
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 0);
-
-  /**
-   * GtkWidget::can-activate-accel:
-   * @widget: the object which received the signal
-   * @signal_id: the ID of a signal installed on @widget
-   *
-   * Determines whether an accelerator that activates the signal
-   * identified by @signal_id can currently be activated.
-   * This signal is present to allow applications and derived
-   * widgets to override the default #GtkWidget handling
-   * for determining whether an accelerator can be activated.
-   *
-   * Returns: %TRUE if the signal can be activated.
-   */
-  widget_signals[CAN_ACTIVATE_ACCEL] =
-     g_signal_new (I_("can-activate-accel"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, can_activate_accel),
-                  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__UINT,
-                  G_TYPE_BOOLEAN, 1, G_TYPE_UINT);
-  g_signal_set_va_marshaller (widget_signals[CAN_ACTIVATE_ACCEL],
-                              G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__UINTv);
 
   gtk_widget_class_set_accessible_type (klass, GTK_TYPE_WIDGET_ACCESSIBLE);
   gtk_widget_class_set_css_name (klass, I_("widget"));
@@ -4484,47 +4438,6 @@ gtk_widget_class_add_shortcut (GtkWidgetClass *widget_class,
   priv = widget_class->priv;
 
   g_list_store_append (priv->shortcuts, shortcut);
-}
-
-static gboolean
-gtk_widget_real_can_activate_accel (GtkWidget *widget,
-                                    guint      signal_id)
-{
-  GdkSurface *surface;
-
-  /* widgets must be onscreen for accels to take effect */
-  if (!gtk_widget_is_sensitive (widget) ||
-      !_gtk_widget_get_mapped (widget))
-    return FALSE;
-
-  surface = gtk_widget_get_surface (widget);
-
-  return gdk_surface_is_viewable (surface);
-}
-
-/**
- * gtk_widget_can_activate_accel:
- * @widget: a #GtkWidget
- * @signal_id: the ID of a signal installed on @widget
- *
- * Determines whether an accelerator that activates the signal
- * identified by @signal_id can currently be activated.
- * This is done by emitting the #GtkWidget::can-activate-accel
- * signal on @widget; if the signal isn’t overridden by a
- * handler or in a derived widget, then the default check is
- * that the widget must be sensitive, and the widget and all
- * its ancestors mapped.
- *
- * Returns: %TRUE if the accelerator can be activated.
- **/
-gboolean
-gtk_widget_can_activate_accel (GtkWidget *widget,
-                               guint      signal_id)
-{
-  gboolean can_activate = FALSE;
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-  g_signal_emit (widget, widget_signals[CAN_ACTIVATE_ACCEL], 0, signal_id, &can_activate);
-  return can_activate;
 }
 
 /**
