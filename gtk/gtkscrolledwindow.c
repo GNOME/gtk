@@ -1435,9 +1435,9 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 	  /* If, after the first iteration, the hscrollbar and the
 	   * vscrollbar flip visiblity, then we need both.
 	   */
-	  if (count &&
+	  if ((count &&
 	      previous_hvis != scrolled_window->hscrollbar_visible &&
-	      previous_vvis != scrolled_window->vscrollbar_visible)
+	      previous_vvis != scrolled_window->vscrollbar_visible) || count > 3)
 	    {
 	      scrolled_window->hscrollbar_visible = TRUE;
 	      scrolled_window->vscrollbar_visible = TRUE;
