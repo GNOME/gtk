@@ -292,6 +292,57 @@ gtk_should_use_portal (void)
   return use_portal[0] == '1';
 }
 
+/*
+ * gtk_get_portal_interface_version:
+ * @connection: a session #GDBusConnection
+ * @interface_name: the interface name for the portal interface
+ *   we're interested in.
+ *
+ * Returns: the version number of the portal, or 0 on error.
+ */
+guint
+gtk_get_portal_interface_version (GDBusConnection *connection,
+                                  const char      *interface_name)
+{
+  g_autoptr(GDBusProxy) proxy = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GVariant) ret = NULL;
+  g_autofree char *owner = NULL;
+  guint version = 0;
+
+  proxy = g_dbus_proxy_new_sync (connection,
+                                 0,
+                                 NULL,
+                                 "org.freedesktop.portal.Desktop",
+                                 "/org/freedesktop/portal/desktop",
+                                 interface_name,
+                                 NULL,
+                                 &error);
+  if (!proxy)
+    {
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_warning ("Could not query portal version on interface '%s': %s",
+                   interface_name, error->message);
+      return 0;
+    }
+
+  owner = g_dbus_proxy_get_name_owner (proxy);
+  if (owner == NULL)
+    {
+      g_debug ("%s not provided by any service", interface_name);
+      return FALSE;
+    }
+
+  ret = g_dbus_proxy_get_cached_property (proxy, "version");
+  if (ret)
+    version = g_variant_get_uint32 (ret);
+
+  g_debug ("Got version %u for portal interface '%s'",
+           version, interface_name);
+
+  return version;
+}
+
 static char *
 get_portal_path (GDBusConnection  *connection,
                  const char       *kind,

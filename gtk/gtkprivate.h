@@ -100,6 +100,8 @@ char *gtk_get_portal_request_path (GDBusConnection  *connection,
                                    char            **token);
 char *gtk_get_portal_session_path (GDBusConnection  *connection,
                                    char            **token);
+guint gtk_get_portal_interface_version (GDBusConnection *connection,
+                                        const char      *interface_name);
 
 #ifdef G_OS_WIN32
 void _gtk_load_dll_with_libgtk3_manifest (const char *dllname);
