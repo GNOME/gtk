@@ -951,6 +951,104 @@ gdk_event_get_time (const GdkEvent *event)
   return GDK_CURRENT_TIME;
 }
 
+/*
+ * gdk_event_set_time:
+ * @event: a #GdkEvent
+ * @time: a time stamp
+ *
+ * Sets the time stamp of @event, if there is one; otherwise does nothing.
+ */
+void
+gdk_event_set_time (GdkEvent *event, guint32 time)
+{
+  g_return_if_fail (event != NULL);
+
+  switch (event->type)
+    {
+    case GDK_MOTION_NOTIFY:
+      event->motion.time = time;
+      break;
+    case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+      event->button.time = time;
+      break;
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
+      event->touch.time = time;
+      break;
+    case GDK_TOUCHPAD_SWIPE:
+      event->touchpad_swipe.time = time;
+      break;
+    case GDK_TOUCHPAD_PINCH:
+      event->touchpad_pinch.time = time;
+      break;
+    case GDK_SCROLL:
+      event->scroll.time = time;
+      break;
+    case GDK_KEY_PRESS:
+    case GDK_KEY_RELEASE:
+      event->key.time = time;
+      break;
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+      event->crossing.time = time;
+      break;
+    case GDK_PROPERTY_NOTIFY:
+      event->property.time = time;
+      break;
+    case GDK_SELECTION_CLEAR:
+    case GDK_SELECTION_REQUEST:
+    case GDK_SELECTION_NOTIFY:
+      event->selection.time = time;
+      break;
+    case GDK_PROXIMITY_IN:
+    case GDK_PROXIMITY_OUT:
+      event->proximity.time = time;
+      break;
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DRAG_STATUS:
+    case GDK_DROP_START:
+    case GDK_DROP_FINISHED:
+      event->dnd.time = time;
+      break;
+    case GDK_PAD_BUTTON_PRESS:
+    case GDK_PAD_BUTTON_RELEASE:
+      event->pad_button.time = time;
+      break;
+    case GDK_PAD_RING:
+    case GDK_PAD_STRIP:
+      event->pad_axis.time = time;
+      break;
+    case GDK_PAD_GROUP_MODE:
+      event->pad_group_mode.time = time;
+      break;
+    case GDK_CLIENT_EVENT:
+    case GDK_VISIBILITY_NOTIFY:
+    case GDK_CONFIGURE:
+    case GDK_FOCUS_CHANGE:
+    case GDK_NOTHING:
+    case GDK_DAMAGE:
+    case GDK_DELETE:
+    case GDK_DESTROY:
+    case GDK_EXPOSE:
+    case GDK_MAP:
+    case GDK_UNMAP:
+    case GDK_WINDOW_STATE:
+    case GDK_SETTING:
+    case GDK_OWNER_CHANGE:
+    case GDK_GRAB_BROKEN:
+    case GDK_EVENT_LAST:
+      /* Do nothing */
+      break;
+    }
+}
+
 /**
  * gdk_event_get_state:
  * @event: (allow-none): a #GdkEvent or %NULL
@@ -1045,6 +1143,93 @@ gdk_event_get_state (const GdkEvent        *event,
   return FALSE;
 }
 
+/*
+ * gdk_event_set_state:
+ * @event: (allow-none): a #GdkEvent or %NULL
+ * @state: (in): state
+ *
+ * If the event contains a “state” field, puts @state in that field. Otherwise
+ * does nothing. @event may be %NULL, in which case it’s treated as if the
+ * event had no state field.
+ */
+void
+gdk_event_set_state (GdkEvent        *event,
+                     GdkModifierType  state)
+{
+  g_return_if_fail (event != NULL);
+
+  switch (event->type)
+    {
+    case GDK_MOTION_NOTIFY:
+      event->motion.state = state;
+      break;
+    case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+      event->button.state = state;
+      break;
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
+      event->touch.state = state;
+      break;
+    case GDK_TOUCHPAD_SWIPE:
+      event->touchpad_swipe.state = state;
+      break;
+    case GDK_TOUCHPAD_PINCH:
+      event->touchpad_pinch.state = state;
+      break;
+    case GDK_SCROLL:
+      event->scroll.state = state;
+      break;
+    case GDK_KEY_PRESS:
+    case GDK_KEY_RELEASE:
+      event->key.state = state;
+      break;
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+      event->crossing.state = state;
+      break;
+    case GDK_PROPERTY_NOTIFY:
+    case GDK_VISIBILITY_NOTIFY:
+    case GDK_CLIENT_EVENT:
+    case GDK_CONFIGURE:
+    case GDK_FOCUS_CHANGE:
+    case GDK_SELECTION_CLEAR:
+    case GDK_SELECTION_REQUEST:
+    case GDK_SELECTION_NOTIFY:
+    case GDK_PROXIMITY_IN:
+    case GDK_PROXIMITY_OUT:
+    case GDK_DAMAGE:
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DRAG_STATUS:
+    case GDK_DROP_START:
+    case GDK_DROP_FINISHED:
+    case GDK_NOTHING:
+    case GDK_DELETE:
+    case GDK_DESTROY:
+    case GDK_EXPOSE:
+    case GDK_MAP:
+    case GDK_UNMAP:
+    case GDK_WINDOW_STATE:
+    case GDK_SETTING:
+    case GDK_OWNER_CHANGE:
+    case GDK_GRAB_BROKEN:
+    case GDK_PAD_BUTTON_PRESS:
+    case GDK_PAD_BUTTON_RELEASE:
+    case GDK_PAD_RING:
+    case GDK_PAD_STRIP:
+    case GDK_PAD_GROUP_MODE:
+    case GDK_EVENT_LAST:
+      /* no state field */
+      break;
+    }
+}
+
 /**
  * gdk_event_get_coords:
  * @event: a #GdkEvent
@@ -1117,6 +1302,386 @@ gdk_event_get_coords (const GdkEvent *event,
     *y_win = y;
 
   return fetched;
+}
+
+/*
+ * gdk_event_get_absolute_interpolation_prop_names:
+ * @event: a #GdkEvent
+ * @names: (out caller-allocates): array to hold returned names
+ *
+ * Returns the names of the properties which are interpolated as absolute
+ * values.
+ *
+ * Returns: %TRUE if the name array was filled.
+ */
+gboolean
+gdk_event_get_absolute_interpolation_prop_names (const GdkEvent *event,
+                                                 GArray         *names)
+{
+  gboolean fetched = TRUE;
+
+  g_return_val_if_fail (event != NULL, FALSE);
+  g_return_val_if_fail (names != NULL, FALSE);
+
+  switch (event->type)
+    {
+    case GDK_SCROLL:
+      // Doesn't have absolute properties for interpolation.
+      g_array_set_size (names, 0);
+      break;
+    case GDK_CONFIGURE:
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+    case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
+    case GDK_MOTION_NOTIFY:
+    case GDK_TOUCHPAD_SWIPE:
+    case GDK_TOUCHPAD_PINCH:
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DRAG_STATUS:
+    case GDK_DROP_START:
+    case GDK_DROP_FINISHED:
+    default:
+      // Not supported
+      fetched = FALSE;
+      break;
+    }
+
+  return fetched;
+}
+
+/*
+ * gdk_event_get_absolute_values_for_interpolation:
+ * @event: a #GdkEvent
+ * @values: (out caller-allocates): array to hold returned values
+ *
+ * Extract the values of the event absolute properties intended for
+ * interpolation.
+ *
+ * Returns: %TRUE if the event delivered properties for interpolation
+ */
+gboolean
+gdk_event_get_absolute_values_for_interpolation (const GdkEvent *event,
+                                                 GArray         *values)
+{
+  gboolean fetched = TRUE;
+
+  g_return_val_if_fail (event != NULL, FALSE);
+  g_return_val_if_fail (values != NULL, FALSE);
+
+  switch (event->type)
+    {
+    case GDK_SCROLL:
+      // Doesn't have absolute properties for interpolation.
+      g_array_set_size (values, 0);
+      break;
+    case GDK_CONFIGURE:
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+    case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
+    case GDK_MOTION_NOTIFY:
+    case GDK_TOUCHPAD_SWIPE:
+    case GDK_TOUCHPAD_PINCH:
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DRAG_STATUS:
+    case GDK_DROP_START:
+    case GDK_DROP_FINISHED:
+    default:
+      // Not supported
+      fetched = FALSE;
+      break;
+    }
+
+  return fetched;
+}
+
+/*
+ * gdk_event_set_interpolated_absolute_values:
+ * @event: a #GdkEvent
+ * @values: (in): array of values
+ *
+ * Sets the values of the absolute properties after interpolation.
+ * The order of the values is the same as that returned by
+ * gdk_event_get_absolute_values_for_interpolation().
+ */
+void
+gdk_event_set_interpolated_absolute_values (GdkEvent *event,
+                                            GArray   *values)
+{
+  g_return_if_fail (event != NULL);
+  g_return_if_fail (values != NULL);
+
+  switch (event->type)
+    {
+    case GDK_SCROLL:
+    case GDK_CONFIGURE:
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+    case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
+    case GDK_MOTION_NOTIFY:
+    case GDK_TOUCHPAD_SWIPE:
+    case GDK_TOUCHPAD_PINCH:
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DRAG_STATUS:
+    case GDK_DROP_START:
+    case GDK_DROP_FINISHED:
+    default:
+      // Not supported or doesn't have absolute properties for interpolation.
+      break;
+    }
+}
+
+/*
+ * gdk_event_get_relative_interpolation_prop_names:
+ * @event: a #GdkEvent
+ * @names: (out caller-allocates): array to hold returned names
+ *
+ * Returns the names of the properties which are interpolated as relative
+ * values.
+ *
+ * Returns: %TRUE if the name array was filled.
+ */
+gboolean
+gdk_event_get_relative_interpolation_prop_names (const GdkEvent *event,
+                                                 GArray         *names)
+{
+  gboolean fetched = TRUE;
+
+  g_return_val_if_fail (event != NULL, FALSE);
+  g_return_val_if_fail (names != NULL, FALSE);
+
+  switch (event->type)
+    {
+    case GDK_SCROLL:
+      if (event->scroll.direction == GDK_SCROLL_SMOOTH)
+        {
+          g_array_set_size (names, 2);
+          g_array_index (names, char *, 0) = "delta_x";
+          g_array_index (names, char *, 1) = "delta_y";
+        }
+      else
+        fetched = FALSE;
+      break;
+    case GDK_CONFIGURE:
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+    case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
+    case GDK_MOTION_NOTIFY:
+    case GDK_TOUCHPAD_SWIPE:
+    case GDK_TOUCHPAD_PINCH:
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DRAG_STATUS:
+    case GDK_DROP_START:
+    case GDK_DROP_FINISHED:
+    default:
+      // Not supported or doesn't have relative properties for interpolation.
+      fetched = FALSE;
+      break;
+    }
+
+  return fetched;
+}
+
+/*
+ * gdk_event_get_relative_values_for_interpolation:
+ * @event: a #GdkEvent
+ * @values: (out caller-allocates): array to hold returned values
+ *
+ * Extract the values of the event relative properties intended for
+ * interpolation. A more accurate name for this function would be
+ * gdk_event_get_values_of_relative_properties_for_interpolation but the
+ * function name is too wordy as it is.
+ *
+ * Returns: %TRUE if the event delivered properties for interpolation
+ */
+gboolean
+gdk_event_get_relative_values_for_interpolation (const GdkEvent *event,
+                                                 GArray         *values)
+{
+  gboolean fetched = TRUE;
+
+  g_return_val_if_fail (event != NULL, FALSE);
+  g_return_val_if_fail (values != NULL, FALSE);
+
+  switch (event->type)
+    {
+    case GDK_SCROLL:
+      if (event->scroll.direction == GDK_SCROLL_SMOOTH)
+        {
+          g_array_set_size (values, 2);
+          g_array_index (values, gdouble, 0) = event->scroll.delta_x;
+          g_array_index (values, gdouble, 1) = event->scroll.delta_y;
+        }
+      else
+        fetched = FALSE;
+      break;
+    case GDK_CONFIGURE:
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+    case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
+    case GDK_MOTION_NOTIFY:
+    case GDK_TOUCHPAD_SWIPE:
+    case GDK_TOUCHPAD_PINCH:
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DRAG_STATUS:
+    case GDK_DROP_START:
+    case GDK_DROP_FINISHED:
+    default:
+      // Not supported or doesn't have relative properties for interpolation.
+      fetched = FALSE;
+      break;
+    }
+
+  return fetched;
+}
+
+/*
+ * gdk_event_set_interpolated_relative_values:
+ * @event: a #GdkEvent
+ * @values: (in): array of values
+ *
+ * Sets the values of the relative properties after interpolation.
+ * The order of the values is the same as that returned by
+ * gdk_event_get_relative_values_for_interpolation().
+ */
+void
+gdk_event_set_interpolated_relative_values (GdkEvent *event,
+                                            GArray   *values)
+{
+  g_return_if_fail (event != NULL);
+  g_return_if_fail (values != NULL);
+
+  switch (event->type)
+    {
+    case GDK_SCROLL:
+      if (event->scroll.direction == GDK_SCROLL_SMOOTH)
+        {
+          g_return_if_fail (values->len == 2);
+          event->scroll.delta_x = g_array_index (values, gdouble, 0);
+          event->scroll.delta_y = g_array_index (values, gdouble, 1);
+        }
+      break;
+    case GDK_CONFIGURE:
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+    case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
+    case GDK_MOTION_NOTIFY:
+    case GDK_TOUCHPAD_SWIPE:
+    case GDK_TOUCHPAD_PINCH:
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DRAG_STATUS:
+    case GDK_DROP_START:
+    case GDK_DROP_FINISHED:
+    default:
+      // Not supported or doesn't have relative properties for interpolation.
+      break;
+    }
+}
+
+gboolean
+gdk_event_get_interpolation_prop_names (const GdkEvent           *event,
+                                        GArray                   *names,
+                                        GdkInterpolationCategory  category)
+{
+  switch (category)
+    {
+    case GDK_INTERP_ABSOLUTE:
+      return gdk_event_get_absolute_interpolation_prop_names (event, names);
+    case GDK_INTERP_RELATIVE:
+      return gdk_event_get_relative_interpolation_prop_names (event, names);
+    default:
+      // Shouldn't get here
+      return FALSE;
+    }
+}
+
+gboolean
+gdk_event_get_values_for_interpolation (const GdkEvent           *event,
+                                        GArray                   *values,
+                                        GdkInterpolationCategory  category)
+{
+  switch (category)
+    {
+    case GDK_INTERP_ABSOLUTE:
+      return gdk_event_get_absolute_values_for_interpolation (event, values);
+    case GDK_INTERP_RELATIVE:
+      return gdk_event_get_relative_values_for_interpolation (event, values);
+    default:
+      // Shouldn't get here
+      return FALSE;
+    }
+}
+
+void
+gdk_event_set_interpolated_values (GdkEvent                 *event,
+                                   GArray                   *values,
+                                   GdkInterpolationCategory  category)
+{
+  switch (category)
+    {
+    case GDK_INTERP_ABSOLUTE:
+      gdk_event_set_interpolated_absolute_values (event, values);
+      break;
+    case GDK_INTERP_RELATIVE:
+      gdk_event_set_interpolated_relative_values (event, values);
+      break;
+    default:
+      // Shouldn't get here
+      break;
+    }
 }
 
 /**
