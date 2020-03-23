@@ -51,7 +51,7 @@ gtk_color_picker_portal_initable_init (GInitable     *initable,
   GtkColorPickerPortal *picker = GTK_COLOR_PICKER_PORTAL (initable);
   g_autofree char *owner = NULL;
   g_autoptr(GVariant) ret = NULL;
-  guint version;
+  guint version = 0;
 
   if (!gdk_should_use_portal ())
     return FALSE;
@@ -80,7 +80,9 @@ gtk_color_picker_portal_initable_init (GInitable     *initable,
     }
 
   ret = g_dbus_proxy_get_cached_property (picker->portal_proxy, "version");
-  version = g_variant_get_uint32 (ret);
+  if (ret)
+    version = g_variant_get_uint32 (ret);
+
   if (version != 2)
     {
       g_debug ("Screenshot portal version: %u", version);
