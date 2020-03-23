@@ -65,6 +65,10 @@ struct _GtkShortcutManagerInterface
                                                          GtkShortcutController        *controller);
 };
 
+GtkShortcutTrigger *
+gtk_shortcut_manager_get_trigger        (GtkShortcutManager     *self,
+                                         GtkShortcutAction      *action,
+                                         GtkWidget              *widget);
 
 G_END_DECLS
 

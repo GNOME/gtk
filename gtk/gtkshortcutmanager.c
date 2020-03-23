@@ -22,6 +22,7 @@
 #include "gtkshortcutmanager.h"
 #include "gtkshortcutmanagerprivate.h"
 #include "gtkflattenlistmodel.h"
+#include "gtkshortcut.h"
 
 /**
  * SECTION:gtkshortcutmanager
@@ -121,3 +122,40 @@ gtk_shortcut_manager_default_init (GtkShortcutManagerInterface *iface)
   iface->remove_controller = gtk_shortcut_manager_default_remove_controller;
 }
 
+GtkShortcutTrigger *
+gtk_shortcut_manager_get_trigger (GtkShortcutManager *self,
+                                  GtkShortcutAction  *action,
+                                  GtkWidget          *widget)
+{
+  GtkPropagationPhase phase[2] = { GTK_PHASE_CAPTURE, GTK_PHASE_BUBBLE };
+  int i;
+
+  for (i = 0; i < 2; i++)
+    {
+      GListModel *model;
+
+      model = G_LIST_MODEL (gtk_shortcut_manager_get_model (self, phase[i]));
+      if (model)
+        {
+          for (i = 0; i < g_list_model_get_n_items (model); i++)
+            {
+              GtkShortcut *shortcut;
+
+              shortcut = g_list_model_get_item (model, i);
+              g_object_unref (shortcut);
+
+              if (gtk_shortcut_action_equal (action, gtk_shortcut_get_action (shortcut)))
+                {
+                  GListModel *child_model = gtk_flatten_list_model_get_model_for_item (GTK_FLATTEN_LIST_MODEL (model), i);
+                  if (GTK_IS_SHORTCUT_CONTROLLER (child_model))
+                    {
+                      if (widget == gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (child_model)))
+                        return gtk_shortcut_get_trigger (shortcut);
+                    }
+                }
+            }
+        }
+    }
+
+  return NULL;
+}
