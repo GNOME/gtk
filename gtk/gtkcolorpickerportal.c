@@ -81,7 +81,7 @@ gtk_color_picker_portal_initable_init (GInitable     *initable,
   g_free (owner);
 
   ret = g_dbus_proxy_get_cached_property (picker->portal_proxy, "version");
-  g_variant_get (ret, "u", &version);
+  version = g_variant_get_uint32 (ret);
   g_variant_unref (ret);
   if (version != 2)
     {
