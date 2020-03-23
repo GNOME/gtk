@@ -46,6 +46,9 @@
 #include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollerfocus.h"
 #include "gtknative.h"
+#include "gtkshortcutmanager.h"
+#include "gtkshortcutaction.h"
+#include "gtkshortcuttrigger.h"
 
 /**
  * SECTION:gtkmodelbutton
@@ -980,12 +983,20 @@ gtk_model_button_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_model_button_parent_class)->finalize (object);
 }
 
+static GtkShortcutManager *
+get_shortcut_manager (GtkWidget *widget)
+{
+  while (widget && !GTK_IS_SHORTCUT_MANAGER (widget))
+    widget = gtk_widget_get_parent (widget);
+
+  return GTK_SHORTCUT_MANAGER (widget);
+}
+
 static void
 gtk_model_button_root (GtkWidget *widget)
 {
   GtkModelButton *self = GTK_MODEL_BUTTON (widget);
-  GtkRoot *root;
-  GtkApplication *app;
+  GtkShortcutManager *manager;
   const char *action_name;
   GVariant *action_target;
 
@@ -994,14 +1005,8 @@ gtk_model_button_root (GtkWidget *widget)
   if (!self->accel)
     return;
 
-  root = gtk_widget_get_root (widget);
-
-  if (!GTK_IS_WINDOW (root))
-    return;
-
-  app = gtk_window_get_application (GTK_WINDOW (root));
-
-  if (!app)
+  manager = get_shortcut_manager (widget);
+  if (!manager)
     return;
 
   action_name = gtk_actionable_get_action_name (GTK_ACTIONABLE (widget));
@@ -1010,14 +1015,24 @@ gtk_model_button_root (GtkWidget *widget)
   if (action_name)
     {
       char *detailed;
-      char **accels;
+      GtkShortcutAction *action;
+      GtkShortcutTrigger *trigger;
 
       detailed = g_action_print_detailed_name (action_name, action_target);
-      accels = gtk_application_get_accels_for_action (app, detailed);
+      action = gtk_action_action_new (detailed);
 
-      update_accel (self, accels[0]);
+      trigger = gtk_shortcut_manager_get_trigger (manager, action, widget);
 
-      g_strfreev (accels);
+      if (trigger)
+        {
+          char *label;
+
+          label = gtk_shortcut_trigger_to_label (trigger, gtk_widget_get_display (widget));
+          update_accel (self, label);
+          g_free (label);
+        }
+
+      gtk_shortcut_action_unref (action);
       g_free (detailed);
     }
 }
