@@ -43,6 +43,7 @@
 #include "gtkshortcuttrigger.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
+#include "gtknative.h"
 
 #include <gdk/gdk.h>
 
@@ -242,6 +243,7 @@ gtk_shortcut_controller_finalize (GObject *object)
 
 typedef struct {
   GtkShortcut *shortcut;
+  GtkWidget *widget;
   guint index;
 } ShortcutData;
 
@@ -273,6 +275,8 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
       GtkShortcut *shortcut;
       ShortcutData *data;
       guint index;
+      GtkWidget *widget;
+      GtkNative *native;
 
       index = (self->last_activated + 1 + i) % g_list_model_get_n_items (self->shortcuts);
       shortcut = g_list_model_get_item (self->shortcuts, index);
@@ -301,9 +305,28 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
           g_assert_not_reached ();
         }
 
+      widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self));
+      if (!self->custom_shortcuts &&
+          GTK_IS_FLATTEN_LIST_MODEL (self->shortcuts))
+        {
+          GListModel *model = gtk_flatten_list_model_get_model_for_item (GTK_FLATTEN_LIST_MODEL (self->shortcuts), index);
+          if (GTK_IS_SHORTCUT_CONTROLLER (model))
+            widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (model));
+        }
+
+      native = gtk_widget_get_native (widget);
+      if (!gtk_widget_is_sensitive (widget) ||
+          !gtk_widget_get_mapped (widget) ||
+          !gdk_surface_is_viewable (gtk_native_get_surface (native)))
+        {
+          g_object_unref (shortcut);
+          continue;
+        }
+
       data = g_new0 (ShortcutData, 1);
       data->shortcut = shortcut;
       data->index = index;
+      data->widget = widget;
 
       shortcuts = g_slist_append (shortcuts, data);
     }
@@ -311,20 +334,10 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
   for (l = shortcuts; l; l = l->next)
     {
       ShortcutData *data = l->data;
-      GtkWidget *widget;
-
-      widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self));
-      if (!self->custom_shortcuts &&
-          GTK_IS_FLATTEN_LIST_MODEL (self->shortcuts))
-        {
-          GListModel *model = gtk_flatten_list_model_get_model_for_item (GTK_FLATTEN_LIST_MODEL (self->shortcuts), data->index);
-          if (GTK_IS_SHORTCUT_CONTROLLER (model))
-            widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (model));
-        }
 
       if (gtk_shortcut_action_activate (gtk_shortcut_get_action (data->shortcut),
                                         shortcuts->next == NULL ? GTK_SHORTCUT_ACTION_EXCLUSIVE : 0,
-                                        widget,
+                                        data->widget,
                                         gtk_shortcut_get_arguments (data->shortcut)))
         {
           self->last_activated = data->index;
@@ -345,12 +358,16 @@ gtk_shortcut_controller_handle_event (GtkEventController *controller,
                                       double              y)
 {
   GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (controller);
+  GdkEventType event_type = gdk_event_get_event_type (event);
   gboolean enable_mnemonics;
 
   if (self->scope != GTK_SHORTCUT_SCOPE_LOCAL)
     return FALSE;
 
-  if (gdk_event_get_event_type (event) == GDK_KEY_PRESS)
+  if (event_type != GDK_KEY_PRESS && event_type != GDK_KEY_RELEASE)
+    return FALSE;
+
+  if (event_type == GDK_KEY_PRESS)
     {
       GdkModifierType modifiers;
       modifiers = gdk_event_get_modifier_state (event);
