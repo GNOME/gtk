@@ -66,6 +66,8 @@ struct _GtkShortcutActionClass
                                    GVariant                     *args);
   void            (* print)       (GtkShortcutAction            *action,
                                    GString                      *string);
+  gboolean        (* equal)       (GtkShortcutAction            *action1,
+                                   GtkShortcutAction            *action2);
 };
 
 G_DEFINE_BOXED_TYPE (GtkShortcutAction, gtk_shortcut_action,
@@ -135,6 +137,19 @@ gtk_shortcut_action_unref (GtkShortcutAction *self)
 
   if (g_atomic_ref_count_dec (&self->ref_count))
     gtk_shortcut_action_finalize (self);
+}
+
+gboolean
+gtk_shortcut_action_equal (GtkShortcutAction *action1,
+                           GtkShortcutAction *action2)
+{
+  g_return_val_if_fail (GTK_IS_SHORTCUT_ACTION (action1), FALSE);
+  g_return_val_if_fail (GTK_IS_SHORTCUT_ACTION (action2), FALSE);
+
+  if (action1->action_class->action_type != action2->action_class->action_type)
+    return FALSE;
+
+  return action1->action_class->equal (action1, action2);
 }
 
 /**
@@ -339,13 +354,21 @@ gtk_nothing_action_print (GtkShortcutAction *action,
   g_string_append (string, "nothing");
 }
 
+static gboolean
+gtk_nothing_action_equal (GtkShortcutAction *action1,
+                          GtkShortcutAction *action2)
+{
+  return TRUE;
+}
+
 static const GtkShortcutActionClass GTK_NOTHING_ACTION_CLASS = {
   GTK_SHORTCUT_ACTION_NOTHING,
   sizeof (GtkNothingAction),
   "GtkNothingAction",
   gtk_nothing_action_finalize,
   gtk_nothing_action_activate,
-  gtk_nothing_action_print
+  gtk_nothing_action_print,
+  gtk_nothing_action_equal,
 };
 
 static GtkNothingAction nothing = { { &GTK_NOTHING_ACTION_CLASS, 1 } };
@@ -406,13 +429,25 @@ gtk_callback_action_print (GtkShortcutAction *action,
   g_string_append_printf (string, "callback(%p)", self->callback);
 }
 
+static gboolean
+gtk_callback_action_equal (GtkShortcutAction *action1,
+                           GtkShortcutAction *action2)
+{
+  GtkCallbackAction *ca1 = (GtkCallbackAction *) action1;
+  GtkCallbackAction *ca2 = (GtkCallbackAction *) action2;
+
+  return ca1->callback == ca2->callback &&
+         ca1->user_data == ca2->user_data;
+}
+
 static const GtkShortcutActionClass GTK_CALLBACK_ACTION_CLASS = {
   GTK_SHORTCUT_ACTION_CALLBACK,
   sizeof (GtkCallbackAction),
   "GtkCallbackAction",
   gtk_callback_action_finalize,
   gtk_callback_action_activate,
-  gtk_callback_action_print
+  gtk_callback_action_print,
+  gtk_callback_action_equal
 };
 
 /**
@@ -475,13 +510,21 @@ gtk_activate_action_print (GtkShortcutAction *action,
   g_string_append (string, "activate");
 }
 
+static gboolean
+gtk_activate_action_equal (GtkShortcutAction *action1,
+                           GtkShortcutAction *action2)
+{
+  return TRUE;
+}
+
 static const GtkShortcutActionClass GTK_ACTIVATE_ACTION_CLASS = {
   GTK_SHORTCUT_ACTION_ACTIVATE,
   sizeof (GtkActivateAction),
   "GtkActivateAction",
   gtk_activate_action_finalize,
   gtk_activate_action_activate,
-  gtk_activate_action_print
+  gtk_activate_action_print,
+  gtk_activate_action_equal
 };
 
 static GtkActivateAction activate = { { &GTK_ACTIVATE_ACTION_CLASS, 1 } };
@@ -531,13 +574,21 @@ gtk_mnemonic_action_print (GtkShortcutAction *action,
   g_string_append (string, "mnemonic-activate");
 }
 
+static gboolean
+gtk_mnemonic_action_equal (GtkShortcutAction *action1,
+                           GtkShortcutAction *action2)
+{
+  return TRUE;
+}
+
 static const GtkShortcutActionClass GTK_MNEMONIC_ACTION_CLASS = {
   GTK_SHORTCUT_ACTION_MNEMONIC,
   sizeof (GtkMnemonicAction),
   "GtkMnemonicAction",
   gtk_mnemonic_action_finalize,
   gtk_mnemonic_action_activate,
-  gtk_mnemonic_action_print
+  gtk_mnemonic_action_print,
+  gtk_mnemonic_action_equal
 };
 
 static GtkMnemonicAction mnemonic = { { &GTK_MNEMONIC_ACTION_CLASS, 1 } };
@@ -830,13 +881,24 @@ gtk_signal_action_print (GtkShortcutAction *action,
   g_string_append_printf (string, "signal(%s)", self->name);
 }
 
+static gboolean
+gtk_signal_action_equal (GtkShortcutAction *action1,
+                         GtkShortcutAction *action2)
+{
+  GtkSignalAction *signal_action1 = (GtkSignalAction *) action1;
+  GtkSignalAction *signal_action2 = (GtkSignalAction *) action2;
+
+  return strcmp (signal_action1->name, signal_action2->name) == 0;
+}
+
 static const GtkShortcutActionClass GTK_SIGNAL_ACTION_CLASS = {
   GTK_SHORTCUT_ACTION_SIGNAL,
   sizeof (GtkSignalAction),
   "GtkSignalAction",
   gtk_signal_action_finalize,
   gtk_signal_action_activate,
-  gtk_signal_action_print
+  gtk_signal_action_print,
+  gtk_signal_action_equal
 };
 
 /**
@@ -983,13 +1045,24 @@ gtk_action_action_print (GtkShortcutAction *action,
   g_string_append_printf (string, "action(%s)", self->name);
 }
 
+static gboolean
+gtk_action_action_equal (GtkShortcutAction *action1,
+                         GtkShortcutAction *action2)
+{
+  GtkActionAction *action_action1 = (GtkActionAction *) action1;
+  GtkActionAction *action_action2 = (GtkActionAction *) action2;
+
+  return strcmp (action_action1->name, action_action2->name) == 0;
+}
+
 static const GtkShortcutActionClass GTK_ACTION_ACTION_CLASS = {
   GTK_SHORTCUT_ACTION_ACTION,
   sizeof (GtkActionAction),
   "GtkActionAction",
   gtk_action_action_finalize,
   gtk_action_action_activate,
-  gtk_action_action_print
+  gtk_action_action_print,
+  gtk_action_action_equal
 };
 
 /**
@@ -1082,13 +1155,53 @@ gtk_gaction_action_print (GtkShortcutAction *action,
   g_string_append_printf (string, "gaction(%s %p)", g_action_get_name (self->gaction), self->gaction);
 }
 
+static gboolean
+gtk_gaction_action_equal (GtkShortcutAction *action1,
+                          GtkShortcutAction *action2)
+{
+  GtkGActionAction *action_action1 = (GtkGActionAction *) action1;
+  GtkGActionAction *action_action2 = (GtkGActionAction *) action2;
+  GAction *a1 = action_action1->gaction;
+  GAction *a2 = action_action2->gaction;
+  const GVariantType *t1, *t2;
+  GVariant *v1, *v2;
+
+  if (strcmp (g_action_get_name (a1), g_action_get_name (a2)) != 0)
+    return FALSE;
+
+  t1 = g_action_get_parameter_type (a1);
+  t2 = g_action_get_parameter_type (a2);
+
+  if (t1 != t2 && t1 != NULL && t2 != NULL && !g_variant_type_equal (t1, t2))
+    return FALSE;
+
+  v1 = g_action_get_state (a1);
+  v2 = g_action_get_state (a2);
+
+  if (v1 != v2 && v1 != NULL && v2 != NULL && !g_variant_equal (v1, v2))
+    {
+      g_clear_pointer (&v1, g_variant_unref);
+      g_clear_pointer (&v2, g_variant_unref);
+      return FALSE;
+    }
+
+  g_clear_pointer (&v1, g_variant_unref);
+  g_clear_pointer (&v2, g_variant_unref);
+
+  if (g_action_get_enabled (a1) != g_action_get_enabled (a2))
+    return FALSE;
+
+  return TRUE;
+}
+
 static const GtkShortcutActionClass GTK_GACTION_ACTION_CLASS = {
   GTK_SHORTCUT_ACTION_GACTION,
   sizeof (GtkGActionAction),
   "GtkGActionAction",
   gtk_gaction_action_finalize,
   gtk_gaction_action_activate,
-  gtk_gaction_action_print
+  gtk_gaction_action_print,
+  gtk_gaction_action_equal
 };
 
 /**
