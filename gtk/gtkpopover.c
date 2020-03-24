@@ -102,6 +102,7 @@
 #include "gtknative.h"
 #include "gtkwidgetprivate.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtkeventcontrollerfocus.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkbinlayout.h"
 #include "gtkenums.h"
@@ -130,6 +131,8 @@
 #include "wayland/gdkwayland.h"
 #endif
 
+#define MNEMONICS_DELAY 300 /* ms */
+
 #define TAIL_GAP_WIDTH  24
 #define TAIL_HEIGHT     12
 
@@ -147,6 +150,9 @@ typedef struct {
   gboolean autohide;
   gboolean has_arrow;
   gboolean mnemonics_visible;
+  gboolean disable_auto_mnemonics;
+
+  guint mnemonics_display_timeout_id;
 
   GtkWidget *contents_widget;
   GtkCssNode *arrow_node;
@@ -580,16 +586,135 @@ close_menu (GtkPopover *popover)
 }
 
 static gboolean
+gtk_popover_has_mnemonic_modifier_pressed (GtkPopover *popover)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+  GList *seats, *s;
+  gboolean retval = FALSE;
+
+  seats = gdk_display_list_seats (gtk_widget_get_display (GTK_WIDGET (popover)));
+
+  for (s = seats; s; s = s->next)
+    {
+      GdkDevice *dev = gdk_seat_get_pointer (s->data);
+      GdkModifierType mask;
+
+      gdk_device_get_state (dev, priv->surface, NULL, &mask);
+      if ((mask & gtk_accelerator_get_default_mod_mask ()) == GDK_MOD1_MASK)
+        {
+          retval = TRUE;
+          break;
+        }
+    }
+
+  g_list_free (seats);
+
+  return retval;
+}
+
+static gboolean
+schedule_mnemonics_visible_cb (gpointer data)
+{
+  GtkPopover *popover = data;
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  priv->mnemonics_display_timeout_id = 0;
+
+  gtk_popover_set_mnemonics_visible (popover, TRUE);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gtk_popover_schedule_mnemonics_visible (GtkPopover *popover)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  if (priv->mnemonics_display_timeout_id)
+    return;
+
+  priv->mnemonics_display_timeout_id =
+    g_timeout_add (MNEMONICS_DELAY, schedule_mnemonics_visible_cb, popover);
+  g_source_set_name_by_id (priv->mnemonics_display_timeout_id, "[gtk] popover_schedule_mnemonics_visible_cb");
+}
+
+static void
+gtk_popover_focus_in (GtkWidget *widget)
+{
+  GtkPopover *popover = GTK_POPOVER (widget);
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  if (priv->disable_auto_mnemonics)
+    return;
+
+  if (gtk_widget_get_visible (widget))
+    {
+      if (gtk_popover_has_mnemonic_modifier_pressed (popover))
+        gtk_popover_schedule_mnemonics_visible (popover);
+    }
+}
+
+static void
+gtk_popover_focus_out (GtkWidget *widget)
+{
+  GtkPopover *popover = GTK_POPOVER (widget);
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  if (priv->disable_auto_mnemonics)
+    return;
+
+  gtk_popover_set_mnemonics_visible (popover, FALSE);
+}
+
+static void
+update_mnemonics_visible (GtkPopover      *popover,
+                          guint            keyval,
+                          GdkModifierType  state,
+                          gboolean         visible)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  if (priv->disable_auto_mnemonics)
+    return;
+
+  if ((keyval == GDK_KEY_Alt_L || keyval == GDK_KEY_Alt_R) &&
+      ((state & (gtk_accelerator_get_default_mod_mask ()) & ~(GDK_MOD1_MASK)) == 0))
+    {
+      if (visible)
+        gtk_popover_schedule_mnemonics_visible (popover);
+      else
+        gtk_popover_set_mnemonics_visible (popover, FALSE);
+    }
+}
+
+static gboolean
 gtk_popover_key_pressed (GtkWidget       *widget,
                          guint            keyval,
                          guint            keycode,
                          GdkModifierType  state)
 {
+  GtkPopover *popover = GTK_POPOVER (widget);
+
   if (keyval == GDK_KEY_Escape)
     {
-      close_menu (GTK_POPOVER (widget));
+      close_menu (popover);
       return TRUE;
     }
+
+  update_mnemonics_visible (popover, keyval, state, TRUE);
+
+  return FALSE;
+}
+
+static gboolean
+gtk_popover_key_released (GtkWidget       *widget,
+                          guint            keyval,
+                          guint            keycode,
+                          GdkModifierType  state)
+{
+  GtkPopover *popover = GTK_POPOVER (widget);
+
+  update_mnemonics_visible (popover, keyval, state, FALSE);
 
   return FALSE;
 }
@@ -709,7 +834,13 @@ gtk_popover_init (GtkPopover *popover)
 
   controller = gtk_event_controller_key_new ();
   g_signal_connect_swapped (controller, "key-pressed", G_CALLBACK (gtk_popover_key_pressed), popover);
+  g_signal_connect_swapped (controller, "key-released", G_CALLBACK (gtk_popover_key_released), popover);
   gtk_widget_add_controller (GTK_WIDGET (popover), controller);
+
+  controller = gtk_event_controller_focus_new ();
+  g_signal_connect_swapped (controller, "enter", G_CALLBACK (gtk_popover_focus_in), popover);
+  g_signal_connect_swapped (controller, "leave", G_CALLBACK (gtk_popover_focus_out), popover);
+  gtk_widget_add_controller (widget, controller);
 
   priv->arrow_node = gtk_css_node_new ();
   gtk_css_node_set_name (priv->arrow_node, g_quark_from_static_string ("arrow"));
@@ -797,6 +928,7 @@ gtk_popover_show (GtkWidget *widget)
 static void
 gtk_popover_hide (GtkWidget *widget)
 {
+  gtk_popover_set_mnemonics_visible (GTK_POPOVER (widget), FALSE);
   _gtk_widget_set_visible_flag (widget, FALSE);
   gtk_widget_unmap (widget);
   g_signal_emit (widget, signals[CLOSED], 0);
@@ -898,6 +1030,12 @@ gtk_popover_finalize (GObject *object)
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   g_clear_pointer (&priv->layout, gdk_popup_layout_unref);
+
+  if (priv->mnemonics_display_timeout_id)
+    {
+      g_source_remove (priv->mnemonics_display_timeout_id);
+      priv->mnemonics_display_timeout_id = 0;
+    }
 
   G_OBJECT_CLASS (gtk_popover_parent_class)->finalize (object);
 }
@@ -1938,6 +2076,12 @@ gtk_popover_set_mnemonics_visible (GtkPopover *popover,
 
   g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_MNEMONICS_VISIBLE]);
   gtk_widget_queue_resize (GTK_WIDGET (popover));
+
+  if (priv->mnemonics_display_timeout_id)
+    {
+      g_source_remove (priv->mnemonics_display_timeout_id);
+      priv->mnemonics_display_timeout_id = 0;
+    }
 }
 
 /**
@@ -1956,4 +2100,12 @@ gtk_popover_get_mnemonics_visible (GtkPopover *popover)
   g_return_val_if_fail (GTK_IS_POPOVER (popover), FALSE);
 
   return priv->mnemonics_visible;
+}
+
+void
+gtk_popover_disable_auto_mnemonics (GtkPopover *popover)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  priv->disable_auto_mnemonics = TRUE;
 }
