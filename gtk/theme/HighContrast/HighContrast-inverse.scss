@@ -6,6 +6,7 @@
 
 $variant: 'dark';
 
-@import 'colors';
-@import 'drawing';
-@import 'common';
+@import '../Adwaita/colors';
+@import 'colors-hc';
+@import '../Adwaita/drawing';
+@import '../Adwaita/common';
