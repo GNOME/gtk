@@ -153,8 +153,8 @@
  *
  * If you need any of the above you will have to use #GtkFileChooserDialog directly.
  *
- * No operations that change the the dialog work while the dialog is
- * visible. Set all the properties that are required before showing the dialog.
+ * No operations that change the dialog work while the dialog is visible. Set
+ * all the properties that are required before showing the dialog.
  *
  * ## Win32 details ## {#gtkfilechooserdialognative-win32}
  *
