@@ -1960,14 +1960,14 @@ _gtk_label_mnemonics_visible_apply_recursively (GtkWidget *widget,
 }
 
 static void
-label_mnemonics_visible_changed (GtkWindow  *window,
+label_mnemonics_visible_changed (GtkWidget  *widget,
                                  GParamSpec *pspec,
                                  gpointer    data)
 {
   gboolean visible;
 
-  g_object_get (window, "mnemonics-visible", &visible, NULL);
-  _gtk_label_mnemonics_visible_apply_recursively (GTK_WIDGET (window), visible);
+  g_object_get (widget, "mnemonics-visible", &visible, NULL);
+  _gtk_label_mnemonics_visible_apply_recursively (widget, visible);
 }
 
 static void
@@ -4572,15 +4572,16 @@ connect_mnemonics_visible_notify (GtkLabel *label)
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
   GtkNative *native;
   gboolean connected;
+  gboolean mnemonics_visible;
 
   native = gtk_widget_get_native (GTK_WIDGET (label));
 
-  if (!GTK_IS_WINDOW (native))
+  if (!GTK_IS_WINDOW (native) && !GTK_IS_POPOVER (native))
     return;
 
   /* always set up this widgets initial value */
-  priv->mnemonics_visible =
-    gtk_window_get_mnemonics_visible (GTK_WINDOW (native));
+  g_object_get (native, "mnemonics-visible", &mnemonics_visible, NULL);
+  priv->mnemonics_visible = mnemonics_visible;
 
   connected =
     GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (native), quark_mnemonics_visible_connected));
