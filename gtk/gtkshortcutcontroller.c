@@ -26,6 +26,14 @@
  *
  * #GtkShortcutController is an event controller that manages shortcuts.
  *
+ * Most common shortcuts are using this controller implicitly, e.g. by
+ * adding a mnemonic underline to a #GtkLabel, or by installing a key
+ * binding using gtk_widget_class_add_binding(), or by adding accelerators
+ * to global actions using gtk_application_set_accels_for_action().
+ *
+ * But it is possible to create your own shortcut controller, and add
+ * shortcuts to it.
+ *
  * #GtkShortcutController implements #GListModel for querying the shortcuts that
  * have been added to it.
  **/
@@ -610,6 +618,13 @@ gtk_shortcut_controller_unroot (GtkShortcutController *self)
   GTK_SHORTCUT_MANAGER_GET_IFACE (manager)->remove_controller (manager, self);
 }
 
+/**
+ * gtk_shortcut_controller_new:
+ *
+ * Creates a new shortcut controller.
+ *
+ * Returns: a newly created shortcut controller
+ */
 GtkEventController *
 gtk_shortcut_controller_new (void)
 {
@@ -617,6 +632,19 @@ gtk_shortcut_controller_new (void)
                        NULL);
 }
 
+/**
+ * gtk_shortcut_controller_new_for_model:
+ * @model: a #GListModel containing shortcuts
+ *
+ * Creates a new shortcut controller that takes its shortcuts from
+ * the given list model.
+ *
+ * A controller created by this function does not let you add or
+ * remove individual shortcuts using the shortcut controller api,
+ * but you can change the contents of the model.
+ *
+ * Returns: a newly created shortcut controller
+ */
 GtkEventController *
 gtk_shortcut_controller_new_for_model (GListModel *model)
 {
@@ -635,13 +663,8 @@ gtk_shortcut_controller_new_for_model (GListModel *model)
  *
  * Adds @shortcut to the list of shortcuts handled by @self.
  *
- * If this controller uses an external shortcut list, this function does
- * nothing.
- *
- * The shortcut is added to the list so that it is triggered before
- * all existing shortcuts.
- *
- * FIXME: What's supposed to happen if a shortcut gets added twice?
+ * If this controller uses an external shortcut list, this
+ * function does nothing.
  **/
 void
 gtk_shortcut_controller_add_shortcut (GtkShortcutController *self,
@@ -715,6 +738,9 @@ gtk_shortcut_controller_remove_shortcut (GtkShortcutController  *self,
  * event propagation. In particular, it allows installing global
  * keyboard shortcuts that can be activated even when a widget does
  * not have focus.
+ *
+ * With %GTK_SHORTCUT_SCOPE_LOCAL, shortcuts will only be activated
+ * when the widget has focus.
  **/
 void
 gtk_shortcut_controller_set_scope (GtkShortcutController *self,
@@ -766,6 +792,11 @@ gtk_shortcut_controller_get_scope (GtkShortcutController *self)
  *
  * The mnemonics modifiers determines which modifiers need to be pressed to allow
  * activation of shortcuts with mnemonics triggers.
+ *
+ * GTK normally uses the Alt modifier for mnemonics, except in #GtkPopoverMenus,
+ * where mnemonics can be triggered without any modifiers. It should be very
+ * rarely necessary to change this, and doing so is likely to interfere with
+ * other shortcuts.
  *
  * This value is only relevant for local shortcut controllers. Global and managed
  * shortcut controllers will have their shortcuts activated from other places which
