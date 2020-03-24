@@ -151,7 +151,7 @@ gtk_shortcut_trigger_parse_string (const char *string)
  * @self: a #GtkShortcutTrigger
  *
  * Prints the given trigger into a human-readable string.
- * This is a small wrapper around gdk_content_formats_print()
+ * This is a small wrapper around gtk_shortcut_trigger_print()
  * to help when debugging.
  *
  * Returns: (transfer full): a new string
@@ -305,10 +305,10 @@ gtk_shortcut_trigger_equal (gconstpointer trigger1,
  * gtk_shortcut_trigger_compare:
  * @trigger1: (type GtkShortcutTrigger): a #GtkShortcutTrigger
  * @trigger2: (type GtkShortcutTrigger): a #GtkShortcutTrigger
- *
  * 
- * The types of @one and @two are #gconstpointer only to allow use of this
- * function as a #GCompareFunc. They must each be a #GtkShortcutTrigger.
+ * The types of @trigger1 and @trigger2 are #gconstpointer only to allow
+ * use of this function as a #GCompareFunc. They must each be a
+ * #GtkShortcutTrigger.
  *
  * Returns: An integer less than, equal to, or greater than zero if
  *     @trigger1 is found, respectively, to be less than, to match,
