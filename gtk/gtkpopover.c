@@ -146,6 +146,7 @@ typedef struct {
   GtkPositionType position;
   gboolean autohide;
   gboolean has_arrow;
+  gboolean mnemonics_visible;
 
   GtkWidget *contents_widget;
   GtkCssNode *arrow_node;
@@ -170,6 +171,7 @@ enum {
   PROP_AUTOHIDE,
   PROP_DEFAULT_WIDGET,
   PROP_HAS_ARROW,
+  PROP_MNEMONICS_VISIBLE,
   NUM_PROPERTIES
 };
 
@@ -1382,6 +1384,10 @@ gtk_popover_set_property (GObject      *object,
       gtk_popover_set_has_arrow (popover, g_value_get_boolean (value));
       break;
 
+    case PROP_MNEMONICS_VISIBLE:
+      gtk_popover_set_mnemonics_visible (popover, g_value_get_boolean (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1417,6 +1423,10 @@ gtk_popover_get_property (GObject      *object,
 
     case PROP_HAS_ARROW:
       g_value_set_boolean (value, priv->has_arrow);
+      break;
+
+    case PROP_MNEMONICS_VISIBLE:
+      g_value_set_boolean (value, priv->mnemonics_visible);
       break;
 
     default:
@@ -1544,6 +1554,13 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                             P_("Has Arrow"),
                             P_("Whether to draw an arrow"),
                             TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_MNEMONICS_VISIBLE] =
+      g_param_spec_boolean ("mnemonics-visible",
+                            P_("Mnemonics visible"),
+                            P_("Whether mnemonics are currently visible in this popover"),
+                            FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
@@ -1889,4 +1906,46 @@ gtk_popover_get_has_arrow (GtkPopover *popover)
   g_return_val_if_fail (GTK_IS_POPOVER (popover), TRUE);
 
   return priv->has_arrow;
+}
+
+/**
+ * gtk_popover_set_mnemonics_visible:
+ * @popover: a #GtkPopover
+ * @mnemonics_visible: the new value
+ *
+ * Sets the #GtkPopover:mnemonics-visible property.
+ */
+void
+gtk_popover_set_mnemonics_visible (GtkPopover *popover,
+                                   gboolean    mnemonics_visible)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  g_return_if_fail (GTK_IS_POPOVER (popover));
+
+  if (priv->mnemonics_visible == mnemonics_visible)
+    return;
+
+  priv->mnemonics_visible = mnemonics_visible;
+
+  g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_MNEMONICS_VISIBLE]);
+  gtk_widget_queue_resize (GTK_WIDGET (popover));
+}
+
+/**
+ * gtk_popover_get_mnemonics_visible:
+ * @popover: a #GtkPopover
+ *
+ * Gets the value of the #GtkPopover:mnemonics-visible property.
+ *
+ * Returns: %TRUE if mnemonics are supposed to be visible in this popover 
+ */
+gboolean
+gtk_popover_get_mnemonics_visible (GtkPopover *popover)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  g_return_val_if_fail (GTK_IS_POPOVER (popover), FALSE);
+
+  return priv->mnemonics_visible;
 }
