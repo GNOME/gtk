@@ -230,6 +230,8 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
         gtk_shortcut_controller_set_mnemonics_modifiers (GTK_SHORTCUT_CONTROLLER (controller), 0);
     }
   g_list_free (controllers);
+
+  gtk_popover_disable_auto_mnemonics (GTK_POPOVER (popover));
 }
 
 static void
@@ -416,6 +418,15 @@ gtk_popover_menu_show (GtkWidget *widget)
 }
 
 static void
+gtk_popover_menu_move_focus (GtkWidget         *widget,
+                             GtkDirectionType  direction)
+{
+  gtk_popover_set_mnemonics_visible (GTK_POPOVER (widget), TRUE);
+
+  GTK_WIDGET_CLASS (gtk_popover_menu_parent_class)->move_focus (widget, direction);
+}
+
+static void
 gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -429,6 +440,7 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
   widget_class->unmap = gtk_popover_menu_unmap;
   widget_class->focus = gtk_popover_menu_focus;
   widget_class->show = gtk_popover_menu_show;
+  widget_class->move_focus = gtk_popover_menu_move_focus;
 
   g_object_class_install_property (object_class,
                                    PROP_VISIBLE_SUBMENU,
