@@ -34,6 +34,8 @@
 #include "gtktypebuiltins.h"
 #include "gtkmodelbuttonprivate.h"
 #include "gtkpopovermenubar.h"
+#include "gtkshortcutmanager.h"
+#include "gtkshortcutcontroller.h"
 
 
 /**
@@ -199,6 +201,7 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
 {
   GtkWidget *stack;
   GtkEventController *controller;
+  GList *controllers, *l;
 
   stack = gtk_stack_new ();
   gtk_stack_set_vhomogeneous (GTK_STACK (stack), FALSE);
@@ -217,6 +220,16 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
   controller = gtk_event_controller_motion_new ();
   g_signal_connect (controller, "leave", G_CALLBACK (leave_cb), popover);
   gtk_widget_add_controller (GTK_WIDGET (popover), controller);
+
+  controllers = gtk_widget_list_controllers (GTK_WIDGET (popover), GTK_PHASE_CAPTURE);
+  for (l = controllers; l; l = l->next)
+    {
+      controller = l->data;
+      if (GTK_IS_SHORTCUT_CONTROLLER (controller) &&
+          strcmp (gtk_event_controller_get_name (controller), "gtk-shortcut-manager-capture") == 0)
+        gtk_shortcut_controller_set_mnemonics_modifiers (GTK_SHORTCUT_CONTROLLER (controller), 0);
+    }
+  g_list_free (controllers);
 }
 
 static void
