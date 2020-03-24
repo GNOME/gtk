@@ -1951,6 +1951,9 @@ _gtk_label_mnemonics_visible_apply_recursively (GtkWidget *widget,
            child;
            child = gtk_widget_get_next_sibling (child))
         {
+          if (GTK_IS_NATIVE (child))
+            continue;
+
           _gtk_label_mnemonics_visible_apply_recursively (child, visible);
         }
     }
@@ -4567,28 +4570,28 @@ static void
 connect_mnemonics_visible_notify (GtkLabel *label)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  GtkRoot *root;
+  GtkNative *native;
   gboolean connected;
 
-  root = gtk_widget_get_root (GTK_WIDGET (label));
+  native = gtk_widget_get_native (GTK_WIDGET (label));
 
-  if (!GTK_IS_WINDOW (root))
+  if (!GTK_IS_WINDOW (native))
     return;
 
   /* always set up this widgets initial value */
   priv->mnemonics_visible =
-    gtk_window_get_mnemonics_visible (GTK_WINDOW (root));
+    gtk_window_get_mnemonics_visible (GTK_WINDOW (native));
 
   connected =
-    GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (root), quark_mnemonics_visible_connected));
+    GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (native), quark_mnemonics_visible_connected));
 
   if (!connected)
     {
-      g_signal_connect (root,
+      g_signal_connect (native,
                         "notify::mnemonics-visible",
                         G_CALLBACK (label_mnemonics_visible_changed),
                         label);
-      g_object_set_qdata (G_OBJECT (root),
+      g_object_set_qdata (G_OBJECT (native),
                           quark_mnemonics_visible_connected,
                           GINT_TO_POINTER (1));
     }
