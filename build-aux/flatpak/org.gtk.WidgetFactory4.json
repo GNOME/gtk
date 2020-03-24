@@ -98,5 +98,10 @@
                 }
             ]
         }
-    ]
+    ],
+    "build-options" : {
+        "env" : {
+            "GTK_THEME" : "HighContrast"
+        }
+    }
 }
