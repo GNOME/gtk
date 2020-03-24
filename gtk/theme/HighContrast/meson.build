@@ -1,7 +1,5 @@
-scss_files = files([
-  '_colors.scss',
-  '_common.scss',
-  '_drawing.scss',
+hc_scss_files = files([
+  '_colors-hc.scss'
 ])
 
 theme_variants = [
