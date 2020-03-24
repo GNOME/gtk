@@ -1368,7 +1368,8 @@ treeview.view {
       box-shadow: none;
       &:hover {
         @extend %column_header_button;
-        color: mix($_column_header_color,$fg_color,50%);
+        color: $selected_fg_color;
+        background-color: $_column_header_color;
         box-shadow: none;
       }
       &:active {
