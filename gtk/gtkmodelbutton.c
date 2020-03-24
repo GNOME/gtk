@@ -46,6 +46,9 @@
 #include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollerfocus.h"
 #include "gtknative.h"
+#include "gtkshortcuttrigger.h"
+#include "gtkshortcutcontroller.h"
+#include "gtkshortcut.h"
 
 /**
  * SECTION:gtkmodelbutton
@@ -174,6 +177,7 @@ struct _GtkModelButton
   GtkSizeGroup *indicators;
   char *accel;
   guint open_timeout;
+  GtkEventController *controller;
 
   guint active : 1;
   guint centered : 1;
@@ -741,10 +745,45 @@ update_accel (GtkModelButton *self,
       str = gtk_accelerator_get_label (key, mods);
       gtk_label_set_label (GTK_LABEL (self->accel_label), str);
       g_free (str);
+
+      if (GTK_IS_POPOVER (gtk_widget_get_native (GTK_WIDGET (self))))
+        {
+          GtkShortcut *shortcut;
+          GtkShortcutTrigger *trigger;
+          GtkShortcutAction *action;
+
+          if (self->controller)
+            {
+              while (g_list_model_get_n_items (G_LIST_MODEL (self->controller)) > 0)
+                {
+                  shortcut = g_list_model_get_item (G_LIST_MODEL (self->controller), 0);
+                  gtk_shortcut_controller_remove_shortcut (GTK_SHORTCUT_CONTROLLER (self->controller),
+                                                           shortcut);
+                  g_object_unref (shortcut);
+                }
+            }
+          else
+            {
+              self->controller = gtk_shortcut_controller_new ();
+              gtk_shortcut_controller_set_scope (GTK_SHORTCUT_CONTROLLER (self->controller), GTK_SHORTCUT_SCOPE_MANAGED);
+              gtk_widget_add_controller (GTK_WIDGET (self), self->controller);
+            }
+
+          trigger = gtk_keyval_trigger_new (key, mods);
+          action = gtk_signal_action_new ("clicked");
+          shortcut = gtk_shortcut_new (trigger, action);
+          gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (self->controller), shortcut);
+          g_object_unref (shortcut);
+        }
     }
   else
     {
       g_clear_pointer (&self->accel_label, gtk_widget_unparent);
+      if (self->controller)
+        {
+          gtk_widget_remove_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (self->controller));
+          g_clear_object (&self->controller);
+        }
     }
 }
 
