@@ -119,6 +119,7 @@
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtksnapshot.h"
+#include "gtkshortcutmanager.h"
 
 #include "gtkrender.h"
 #include "gtkstylecontextprivate.h"
@@ -174,10 +175,13 @@ enum {
 
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL };
 
+static void gtk_popover_shortcut_manager_interface_init (GtkShortcutManagerInterface *iface);
 static void gtk_popover_native_interface_init (GtkNativeInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkPopover, gtk_popover, GTK_TYPE_BIN,
                          G_ADD_PRIVATE (GtkPopover)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SHORTCUT_MANAGER,
+                                                gtk_popover_shortcut_manager_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_NATIVE,
                                                 gtk_popover_native_interface_init))
 
@@ -1618,6 +1622,11 @@ gtk_popover_set_default_widget (GtkPopover *popover,
     }
 
   g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_DEFAULT_WIDGET]);
+}
+
+static void
+gtk_popover_shortcut_manager_interface_init (GtkShortcutManagerInterface *iface)
+{
 }
 
 static void
