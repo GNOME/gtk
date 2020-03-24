@@ -1,0 +1,10 @@
+// High Contrast color overrides
+// When color definition differs for dark and light variant
+// it gets @if ed depending on $variant
+
+
+$selected_bg_color: darken($selected_bg_color,10%);
+$selected_borders_color: darken($selected_borders_color, 10%);
+$borders_color: if($variant == 'light', darken($borders_color, 30%), lighten($borders_color, 30%));
+$alt_borders_color: if($variant == 'light', darken($borders_color, 35%), lighten($borders_color, 35%));
+
