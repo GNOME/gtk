@@ -63,25 +63,19 @@
      GDK translates these raw windowing system events into #GdkEvents.
      Typical input events are:
      <simplelist>
-       <member>#GdkEventButton</member>
-       <member>#GdkEventMotion</member>
-       <member>#GdkEventCrossing</member>
-       <member>#GdkEventKey</member>
-       <member>#GdkEventFocus</member>
-       <member>#GdkEventTouch</member>
+       <member>button clicks</member>
+       <member>pointer motion</member>
+       <member>key presses</member>
+       <member>focus changes</member>
+       <member>touch events</member>
      </simplelist>
+     These are all represented as #GdkEvents, but you can differentiate
+     between different events by looking at their type, using
+     gdk_event_get_event_type().
     </para>
     <para>
-      Additionally, GDK/GTK synthesizes other signals to let know whether
-      grabs (system-wide or in-app) are taking input away:
-      <simplelist>
-	<member>#GdkEventGrabBroken</member>
-	<member>#GtkWidget::grab-notify</member>
-      </simplelist>
-    </para>
-    <para>
-      When GTK creates a GdkSurface, it connects to the ::event signal
-      on it, which receives all of these input events. Surfaces have
+      When GTK creates a GdkSurface, it connects to the #GdkSurface::event
+      signal on it, which receives all of these input events. Surfaces have
       have signals and properties, e.g. to deal with window management
       related events.
     </para>
@@ -96,14 +90,11 @@
     </para>
     <orderedlist>
       <listitem><para>
-        Compress enter/leave notify events. If the event passed build an
-        enter/leave pair together with the next event (peeked from GDK), both
-        events are thrown away. This is to avoid a backlog of (de-)highlighting
-        widgets crossed by the pointer.
+        Find the widget which got the event.
       </para></listitem>
       <listitem><para>
-        Find the widget which got the event. If the widget can’t be determined
-        the event is thrown away unless it belongs to a INCR transaction.
+        Generate crossing (i.e. enter and leave) events when the focus or hover
+        location change from one widget to another.
       </para></listitem>
       <listitem><para>
         Then the event is pushed onto a stack so you can query the currently
@@ -136,24 +127,6 @@
         After finishing the delivery the event is popped from the event stack.
       </para></listitem>
     </orderedlist>
-
-    <para>
-      When a GDK backend produces an input event, it is tied to a #GdkDevice and
-      a #GdkSurface, which in turn represents a windowing system surface in the
-      backend. If a widget has grabbed the current input device, or all input
-      devices, the event is propagated to that #GtkWidget. Otherwise, it is
-      propagated to the the #GtkRoot which owns the #GdkSurface receiving the event.
-    </para>
-
-    <para>
-      Grabs are implemented for each input device, and globally. A grab for a
-      specific input device (gtk_device_grab_add()), is sent events in
-      preference to a global grab (gtk_grab_add()). Input grabs only have effect
-      within the #GtkWindowGroup containing the #GtkWidget which registered the
-      event’s #GdkSurface. If this #GtkWidget is a child of the grab widget, the
-      event is propagated to the child — this is the basis for propagating
-      events within modal dialogs.
-    </para>
 
     <para>
       An event is propagated down and up the widget hierarchy in three phases
@@ -220,70 +193,74 @@
   </refsect2>
 
   <refsect2>
-    <title>Grabs</title>
-
-    <para>
-      Grabs are a method to claim all input events from a device,
-      they happen either implicitly on pointer and touch devices,
-      or explicitly. Implicit grabs happen on user interaction, when
-      a #GdkEventButtonPress happens, all events from then on, until
-      after the corresponding #GdkEventButtonRelease, will be reported
-      to the widget that got the first event. Likewise, on touch events,
-      every #GdkEventSequence will deliver only events to the widget
-      that received its %GDK_TOUCH_BEGIN event.
-    </para>
-
-    <para>
-      Explicit grabs happen programatically (both activation and
-      deactivation), and can be either system-wide (GDK grabs) or
-      application-wide (GTK grabs). On the windowing platforms that
-      support it, GDK grabs will prevent any interaction with any other
-      application/window/widget than the grabbing one, whereas GTK grabs
-      will be effective only within the application (across all its
-      windows), still allowing for interaction with other applications.
-    </para>
-
-    <para>
-      But one important aspect of grabs is that they may potentially
-      happen at any point somewhere else, even while the pointer/touch
-      device is already grabbed. This makes it necessary for widgets to
-      handle the cancellation of any ongoing interaction. Depending on
-      whether a GTK or GDK grab is causing this, the widget will
-      respectively receive a #GtkWidget::grab-notify signal, or a
-      #GdkEventGrabBroken event.
-    </para>
-
-    <para>
-      On gestures, these signals are handled automatically, causing the
-      gesture to cancel all tracked pointer/touch events, and signal
-      the end of recognition.
-    </para>
-  </refsect2>
-
-  <refsect2>
     <title>Keyboard input</title>
 
     <para>
-      Every #GtkWindow maintains a single focus location (in
-      the ::focus-widget property). The focus widget is the
-      target widget for key events sent to the window. Only
-      widgets which have ::can-focus set to %TRUE can become
-      the focus. Typically these are input controls such as
-      entries or text fields, but e.g. buttons can take the
-      focus too.
+      Every #GtkWindow maintains a single focus location (in the
+      #GtkWindow:focus-widget property). The focus widget is the target
+      widget for key events sent to the window. Only widgets which have
+      #GtkWidget:can-focus set to %TRUE can become the focus. Typically
+      these are input controls such as entries or text fields, but e.g.
+      buttons can take the focus too.
     </para>
 
     <para>
-      Input widgets can be given the focus by clicking on them,
-      but focus can also be moved around with certain key
-      events (this is known as “keyboard navigation”). GTK
-      reserves the Tab key to move the focus to the next location,
-      and Shift-Tab to move it back to the previous one. In addition
-      many containers allow “directional navigation” with the
-      arrow keys.
+      Input widgets can be given the focus by clicking on them, but focus
+      can also be moved around with certain key events (this is known as
+      “keyboard navigation”). GTK reserves the Tab key to move the focus
+      to the next location, and Shift-Tab to move it back to the previous
+      one. In addition many containers allow “directional navigation” with
+      the arrow keys.
     </para>
 
-    <!-- mnemonics, accelerators, bindings -->
+    <para>
+      Many widgets can be “activated” to trigger and action. E.g., you can
+      activate a button or switch by clicking on them, but you can also
+      activate them with the keyboard, by using the Enter or Space keys.
+    </para>
+
+    <para>
+      Apart from keyboard navigation, activation and directly typing into
+      entries or text views, GTK widgets can use key events for activating
+      “shortcuts”. Shortcuts generally act as a quick way to move the focus
+      around or to activate a widget that does not currently have the focus.
+    </para>
+
+    <para>
+      GTK has traditionally supported different kinds of shortcuts:
+      <variablelist>
+        <varlistentry>
+          <term>Mnmemonics</term>
+          <listitem><para>
+            Mnemonics are usually triggered using Alt as a modifier for a letter.
+            They are used in places where a label is associated with a control,
+            and are indicated by underlining the letter in the label. As a special
+            case, inside menus (i.e. inside #GtkPopoverMenu), mnemonics can be
+            trigered without the modifier.
+          </para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Key bindings</term>
+          <listitem><para>
+            Key bindings are specific to individual widgets, such as Ctrl-C or
+            Ctrl-V in an entry copy to or paste from the clipboard. They are only
+            triggered when the widget has focus.
+          </para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Accelerators</term>
+          <listitem><para>
+            Accelerators are any other shortcuts that can be activated regardless
+            of where the focus is, and typically trigger global actions, such as
+            Ctrl-Q to quit an application.
+          </para></listitem>
+        </varlistentry>
+      </variablelist>
+    </para>
+    <para>
+      Under the hood, all shortcuts are represented as instances of #GtkShortcut,
+      and they are managed by #GtkShortcutController.
+    </para>
   </refsect2>
 
   <refsect2 id="event-controllers-and-gestures">
@@ -329,6 +306,13 @@
           those would need grouping.
 	</member>
       </simplelist>
+    </para>
+
+    <para>
+      Shortcuts are handled by #GtkShortcutController, which is
+      a complex event handler that can either activate shortcuts
+      itself, or propagate them to another controller, depending
+      on its #GtkShortcutController:scope.
     </para>
   </refsect2>
 
