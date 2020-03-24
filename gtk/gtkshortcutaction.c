@@ -23,19 +23,21 @@
 * @Short_description: Tracking if shortcuts should be activated
 * @See_also: #GtkShortcut
 *
-* #GtkShortcutAction is the object used to track if a #GtkShortcut should be
-* activated. For this purpose, gtk_shortcut_action_action() can be called
-* on a #GdkEvent.
+* #GtkShortcutAction is the object used to describe what a #GtkShortcut should
+* do when triggered. To activate a #GtkShortcutAction manually,
+* gtk_shortcut_action_activate() can be called.
 *
 * #GtkShortcutActions contain functions that allow easy presentation to end
 * users as well as being printed for debugging.
 *
 * All #GtkShortcutActions are immutable, you can only specify their properties
 * during construction. If you want to change a action, you have to replace it
-* with a new one.
+* with a new one. If you need to pass arguments to an action, these are specified
+* by the higher-level #GtkShortcut object.
 *
 * GTK provides various actions:
 *
+*  - #GtkMnemonicAction: a shortcut action that calls gtk_widget_mnemonic_activate()
 *  - #GtkCallbackAction: a shortcut action that invokes a given callback
 *  - #GtkSignalAction: a shortcut action that emits a given signal
 *  - #GtkActivateAction: a shortcut action that calls gtk_widget_activate()
@@ -136,8 +138,7 @@ gtk_shortcut_action_print (GtkShortcutAction *self,
  *
  * Activates the action on the @widget with the given @args. 
  *
- * Note that some actions do ignore the passed in @flags, @widget or
- * @args.
+ * Note that some actions ignore the passed in @flags, @widget or @args.
  *
  * Activation of an action can fail for various reasons. If the action
  * is not supported by the @widget, if the @args don't match the action
