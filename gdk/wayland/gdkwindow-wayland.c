@@ -2181,7 +2181,7 @@ get_real_parent_and_translate (GdkWindow *window,
         GDK_WINDOW_IMPL_WAYLAND (parent->impl);
       GdkWindow *effective_parent = gdk_window_get_effective_parent (parent);
 
-      if ((gdk_window_has_native (parent) &&
+      if (parent == NULL || (gdk_window_has_native (parent) &&
            !parent_impl->display_server.wl_subsurface) ||
           !effective_parent)
         break;
@@ -2208,8 +2208,10 @@ translate_to_real_parent_window_geometry (GdkWindow  *window,
 
   parent = get_real_parent_and_translate (window, x, y);
 
-  *x -= parent->shadow_left;
-  *y -= parent->shadow_top;
+  if (parent != NULL) {
+    *x -= parent->shadow_left;
+    *y -= parent->shadow_top;
+  }
 }
 
 static GdkWindow *
@@ -2223,8 +2225,13 @@ translate_from_real_parent_window_geometry (GdkWindow *window,
 
   parent = get_real_parent_and_translate (window, &dx, &dy);
 
-  *x -= dx - parent->shadow_left;
-  *y -= dy - parent->shadow_top;
+  *x -= dx;
+  *y -= dy;
+
+  if (parent != NULL) {
+    *x += parent->shadow_left;
+    *y += parent->shadow_top;
+  }
 
   return parent;
 }
