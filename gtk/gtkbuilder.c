@@ -227,6 +227,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkicontheme.h"
 #include "gtkiconthemeprivate.h"
+#include "gdkpixbufutilsprivate.h"
 
 static void gtk_builder_finalize       (GObject         *object);
 static void gtk_builder_set_property   (GObject         *object,
