@@ -1791,7 +1791,7 @@ treeview.view {
   padding: 0 6px;
   background-image: none;
   border-style: none solid solid none;
-  border-color: $bg_color;
+  border-color: darken($bg_color,10%);
   border-radius: 0;
   text-shadow: none;
 
