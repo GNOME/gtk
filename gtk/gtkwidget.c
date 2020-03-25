@@ -60,6 +60,7 @@
 #include "gtkshortcut.h"
 #include "gtkshortcutcontrollerprivate.h"
 #include "gtkshortcutmanager.h"
+#include "gtkshortcutmanagerprivate.h"
 #include "gtkshortcuttrigger.h"
 #include "gtksizegroup-private.h"
 #include "gtksnapshotprivate.h"
@@ -2444,16 +2445,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
     priv->root = (GtkRoot *) widget;
 
   if (g_type_is_a (G_TYPE_FROM_CLASS (g_class), GTK_TYPE_SHORTCUT_MANAGER))
-    {
-      controller = gtk_shortcut_controller_new ();
-      gtk_shortcut_controller_set_run_managed (GTK_SHORTCUT_CONTROLLER (controller), TRUE);
-      gtk_widget_add_controller (widget, controller);
-
-      controller = gtk_shortcut_controller_new ();
-      gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
-      gtk_shortcut_controller_set_run_managed (GTK_SHORTCUT_CONTROLLER (controller), TRUE);
-      gtk_widget_add_controller (widget, controller);
-    }
+    gtk_shortcut_manager_create_controllers (widget);
 
   layout_manager_type = gtk_widget_class_get_layout_manager_type (g_class);
   if (layout_manager_type != G_TYPE_INVALID)
