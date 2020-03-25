@@ -7357,6 +7357,11 @@ gtk_widget_dispose (GObject *object)
   GtkWidget *widget = GTK_WIDGET (object);
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GSList *sizegroups;
+  GtkActionMuxer *muxer;
+
+  muxer = g_object_get_qdata (G_OBJECT (widget), quark_action_muxer);
+  if (muxer != NULL)
+    g_object_run_dispose (G_OBJECT (muxer));
 
   if (priv->children_observer)
     gtk_list_list_model_clear (priv->children_observer);

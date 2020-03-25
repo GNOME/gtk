@@ -858,6 +858,8 @@ gtk_action_muxer_dispose (GObject *object)
 
   g_hash_table_remove_all (muxer->observed_actions);
 
+  muxer->widget = NULL;
+
   G_OBJECT_CLASS (gtk_action_muxer_parent_class)
     ->dispose (object);
 }
