@@ -7880,6 +7880,7 @@ static void
 post_process_ui (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
+  GdkContentFormats *drag_formats;
   GtkTreeSelection *selection;
   GtkCellRenderer  *cell;
   GList            *cells;
@@ -7896,11 +7897,14 @@ post_process_ui (GtkFileChooserWidget *impl)
   gtk_tree_selection_set_select_function (selection,
                                           list_select_func,
                                           impl, NULL);
+
+  drag_formats = gdk_content_formats_new_for_gtype (GDK_TYPE_FILE_LIST);
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (priv->browse_files_tree_view),
                                           GDK_BUTTON1_MASK,
-                                          gdk_content_formats_new_for_gtype (GDK_TYPE_FILE_LIST),
+                                          drag_formats,
                                           GDK_ACTION_COPY | GDK_ACTION_MOVE);
-  
+  gdk_content_formats_unref (drag_formats);
+
   target = gtk_drop_target_new (GDK_TYPE_FILE_LIST, GDK_ACTION_COPY | GDK_ACTION_MOVE);
   g_signal_connect (target, "drop", G_CALLBACK (file_list_drag_drop_cb), impl);
   gtk_widget_add_controller (priv->browse_files_tree_view, GTK_EVENT_CONTROLLER (target));
