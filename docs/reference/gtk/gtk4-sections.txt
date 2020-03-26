@@ -1316,6 +1316,7 @@ GtkFlattenListModel
 gtk_flatten_list_model_new
 gtk_flatten_list_model_set_model
 gtk_flatten_list_model_get_model
+gtk_flatten_list_model_get_model_for_item
 <SUBSECTION Standard>
 GTK_FLATTEN_LIST_MODEL
 GTK_IS_FLATTEN_LIST_MODEL
