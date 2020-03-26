@@ -6,10 +6,36 @@
         <attribute name="label" translatable="yes">Get Busy</attribute>
         <attribute name="action">win.busy</attribute>
       </item>
-      <item>
-        <attribute name="label" translatable="yes">Dark Theme</attribute>
-        <attribute name="action">win.dark</attribute>
-      </item>
+      <submenu>
+        <attribute name="label" translatable="yes">Theme</attribute>
+        <section>
+          <item>
+            <attribute name="label" translatable="yes">Current theme</attribute>
+            <attribute name="action">win.theme</attribute>
+            <attribute name="target">current</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Adwaita</attribute>
+            <attribute name="action">win.theme</attribute>
+            <attribute name="target">adwaita</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Adwaita dark</attribute>
+            <attribute name="action">win.theme</attribute>
+            <attribute name="target">adwaita-dark</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">High contrast</attribute>
+            <attribute name="action">win.theme</attribute>
+            <attribute name="target">highcontrast</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">High contrast inverse</attribute>
+            <attribute name="action">win.theme</attribute>
+            <attribute name="target">highcontrast-inverse</attribute>
+          </item>
+        </section>
+      </submenu> 
       <item>
         <attribute name="label" translatable="yes">Slide Pages</attribute>
         <attribute name="action">win.transition</attribute>
