@@ -748,7 +748,6 @@ update_accel (GtkModelButton *self,
 
       if (GTK_IS_POPOVER (gtk_widget_get_native (GTK_WIDGET (self))))
         {
-          GtkShortcut *shortcut;
           GtkShortcutTrigger *trigger;
           GtkShortcutAction *action;
 
@@ -756,7 +755,7 @@ update_accel (GtkModelButton *self,
             {
               while (g_list_model_get_n_items (G_LIST_MODEL (self->controller)) > 0)
                 {
-                  shortcut = g_list_model_get_item (G_LIST_MODEL (self->controller), 0);
+                  GtkShortcut *shortcut = g_list_model_get_item (G_LIST_MODEL (self->controller), 0);
                   gtk_shortcut_controller_remove_shortcut (GTK_SHORTCUT_CONTROLLER (self->controller),
                                                            shortcut);
                   g_object_unref (shortcut);
@@ -771,9 +770,8 @@ update_accel (GtkModelButton *self,
 
           trigger = gtk_keyval_trigger_new (key, mods);
           action = gtk_signal_action_new ("clicked");
-          shortcut = gtk_shortcut_new (trigger, action);
-          gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (self->controller), shortcut);
-          g_object_unref (shortcut);
+          gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (self->controller),
+                                                gtk_shortcut_new (trigger, action));
         }
     }
   else
