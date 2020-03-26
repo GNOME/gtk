@@ -26,11 +26,9 @@
 
 #include "gtkwidgetprivate.h"
 
-#include "gtkaccelmapprivate.h"
 #include "gtkaccelgroupprivate.h"
 #include "gtkaccessible.h"
 #include "gtkapplicationprivate.h"
-#include "gtkbindings.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtkcontainerprivate.h"
@@ -59,6 +57,11 @@
 #include "gtknativeprivate.h"
 #include "gtkscrollable.h"
 #include "gtksettingsprivate.h"
+#include "gtkshortcut.h"
+#include "gtkshortcutcontrollerprivate.h"
+#include "gtkshortcutmanager.h"
+#include "gtkshortcutmanagerprivate.h"
+#include "gtkshortcuttrigger.h"
 #include "gtksizegroup-private.h"
 #include "gtksnapshotprivate.h"
 #include "gtkstylecontextprivate.h"
@@ -499,9 +502,6 @@ enum {
   MNEMONIC_ACTIVATE,
   MOVE_FOCUS,
   KEYNAV_FAILED,
-  POPUP_MENU,
-  ACCEL_CLOSURES_CHANGED,
-  CAN_ACTIVATE_ACCEL,
   QUERY_TOOLTIP,
   LAST_SIGNAL
 };
@@ -631,8 +631,6 @@ static void             gtk_widget_real_state_flags_changed     (GtkWidget      
 static AtkObject*	gtk_widget_real_get_accessible		(GtkWidget	  *widget);
 static void		gtk_widget_accessible_interface_init	(AtkImplementorIface *iface);
 static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
-static gboolean         gtk_widget_real_can_activate_accel      (GtkWidget *widget,
-                                                                 guint      signal_id);
 
 static void             gtk_widget_buildable_interface_init     (GtkBuildableIface  *iface);
 static void             gtk_widget_buildable_set_name           (GtkBuildable       *buildable,
@@ -685,8 +683,6 @@ static gpointer         gtk_widget_parent_class = NULL;
 static guint            widget_signals[LAST_SIGNAL] = { 0 };
 GtkTextDirection gtk_default_direction = GTK_TEXT_DIR_LTR;
 
-static GQuark		quark_accel_path = 0;
-static GQuark		quark_accel_closures = 0;
 static GQuark		quark_pango_context = 0;
 static GQuark		quark_mnemonic_labels = 0;
 static GQuark		quark_tooltip_markup = 0;
@@ -768,9 +764,29 @@ static void
 gtk_widget_base_class_init (gpointer g_class)
 {
   GtkWidgetClass *klass = g_class;
+  GtkWidgetClassPrivate *priv;
 
-  klass->priv = G_TYPE_CLASS_GET_PRIVATE (g_class, GTK_TYPE_WIDGET, GtkWidgetClassPrivate);
-  klass->priv->template = NULL;
+  priv = klass->priv = G_TYPE_CLASS_GET_PRIVATE (g_class, GTK_TYPE_WIDGET, GtkWidgetClassPrivate);
+  
+  priv->template = NULL;
+
+  if (priv->shortcuts == NULL)
+    {
+      priv->shortcuts = g_list_store_new (GTK_TYPE_SHORTCUT);
+    }
+  else
+    {
+      GListModel *parent_shortcuts = G_LIST_MODEL (priv->shortcuts);
+      guint i;
+
+      priv->shortcuts = g_list_store_new (GTK_TYPE_SHORTCUT);
+      for (i = 0; i < g_list_model_get_n_items (parent_shortcuts); i++)
+        {
+          GtkShortcut *shortcut = g_list_model_get_item (parent_shortcuts, i);
+          g_list_store_append (priv->shortcuts, shortcut);
+          g_object_unref (shortcut);
+        }
+    }
 }
 
 static void
@@ -823,12 +839,30 @@ gtk_widget_real_grab_notify (GtkWidget *widget,
 static void
 gtk_widget_real_root (GtkWidget *widget)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GList *l;
+
   gtk_widget_forall (widget, (GtkCallback) gtk_widget_root, NULL);
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      if (GTK_IS_SHORTCUT_CONTROLLER (l->data))
+        gtk_shortcut_controller_root (GTK_SHORTCUT_CONTROLLER (l->data));
+    }
 }
 
 static void
 gtk_widget_real_unroot (GtkWidget *widget)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GList *l;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      if (GTK_IS_SHORTCUT_CONTROLLER (l->data))
+        gtk_shortcut_controller_unroot (GTK_SHORTCUT_CONTROLLER (l->data));
+    }
+
   gtk_widget_forall (widget, (GtkCallback) gtk_widget_unroot, NULL);
 }
 
@@ -836,13 +870,10 @@ static void
 gtk_widget_class_init (GtkWidgetClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GtkBindingSet *binding_set;
 
   g_type_class_adjust_private_offset (klass, &GtkWidget_private_offset);
   gtk_widget_parent_class = g_type_class_peek_parent (klass);
 
-  quark_accel_path = g_quark_from_static_string ("gtk-accel-path");
-  quark_accel_closures = g_quark_from_static_string ("gtk-accel-closures");
   quark_pango_context = g_quark_from_static_string ("gtk-pango-context");
   quark_mnemonic_labels = g_quark_from_static_string ("gtk-mnemonic-labels");
   quark_tooltip_markup = g_quark_from_static_string ("gtk-tooltip-markup");
@@ -880,7 +911,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->focus = gtk_widget_real_focus;
   klass->move_focus = gtk_widget_real_move_focus;
   klass->keynav_failed = gtk_widget_real_keynav_failed;
-  klass->can_activate_accel = gtk_widget_real_can_activate_accel;
   klass->query_tooltip = gtk_widget_real_query_tooltip;
   klass->css_changed = gtk_widget_real_css_changed;
 
@@ -1621,79 +1651,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                               G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__INT_INT_BOOLEAN_OBJECTv);
 
-  /**
-   * GtkWidget::popup-menu:
-   * @widget: the object which received the signal
-   *
-   * This signal gets emitted whenever a widget should pop up a context
-   * menu. This usually happens through the standard key binding mechanism;
-   * by pressing a certain key while a widget is focused, the user can cause
-   * the widget to pop up a menu.  For example, the #GtkEntry widget creates
-   * a menu with clipboard commands. See the
-   * [Popup Menu Migration Checklist][checklist-popup-menu]
-   * for an example of how to use this signal.
-   *
-   * Returns: %TRUE if a menu was activated
-   */
-  widget_signals[POPUP_MENU] =
-    g_signal_new (I_("popup-menu"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-		  G_STRUCT_OFFSET (GtkWidgetClass, popup_menu),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__VOID,
-		  G_TYPE_BOOLEAN, 0);
-  g_signal_set_va_marshaller (widget_signals[POPUP_MENU],
-                              G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__VOIDv);
-
-  /**
-   * GtkWidget::accel-closures-changed:
-   * @widget: the object which received the signal.
-   *
-   * The ::accel-closures-changed signal gets emitted when accelerators for this
-   * widget get added, removed or changed.
-   */
-  widget_signals[ACCEL_CLOSURES_CHANGED] =
-    g_signal_new (I_("accel-closures-changed"),
-		  G_TYPE_FROM_CLASS (klass),
-		  0,
-		  0,
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 0);
-
-  /**
-   * GtkWidget::can-activate-accel:
-   * @widget: the object which received the signal
-   * @signal_id: the ID of a signal installed on @widget
-   *
-   * Determines whether an accelerator that activates the signal
-   * identified by @signal_id can currently be activated.
-   * This signal is present to allow applications and derived
-   * widgets to override the default #GtkWidget handling
-   * for determining whether an accelerator can be activated.
-   *
-   * Returns: %TRUE if the signal can be activated.
-   */
-  widget_signals[CAN_ACTIVATE_ACCEL] =
-     g_signal_new (I_("can-activate-accel"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, can_activate_accel),
-                  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__UINT,
-                  G_TYPE_BOOLEAN, 1, G_TYPE_UINT);
-  g_signal_set_va_marshaller (widget_signals[CAN_ACTIVATE_ACCEL],
-                              G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__UINTv);
-
-  binding_set = gtk_binding_set_by_class (klass);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_F10, GDK_SHIFT_MASK,
-                                "popup-menu", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Menu, 0,
-                                "popup-menu", 0);
-
   gtk_widget_class_set_accessible_type (klass, GTK_TYPE_WIDGET_ACCESSIBLE);
   gtk_widget_class_set_css_name (klass, I_("widget"));
 }
@@ -1701,7 +1658,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 static void
 gtk_widget_base_class_finalize (GtkWidgetClass *klass)
 {
+
   template_data_free (klass->priv->template);
+  g_object_unref (klass->priv->shortcuts);
 }
 
 static void
@@ -2332,6 +2291,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   GtkWidget *widget = GTK_WIDGET (instance);
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GType layout_manager_type;
+  GtkEventController *controller;
 
   widget->priv = priv;
 
@@ -2400,9 +2360,19 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   if (g_type_is_a (G_TYPE_FROM_CLASS (g_class), GTK_TYPE_ROOT))
     priv->root = (GtkRoot *) widget;
 
+  if (g_type_is_a (G_TYPE_FROM_CLASS (g_class), GTK_TYPE_SHORTCUT_MANAGER))
+    gtk_shortcut_manager_create_controllers (widget);
+
   layout_manager_type = gtk_widget_class_get_layout_manager_type (g_class);
   if (layout_manager_type != G_TYPE_INVALID)
     gtk_widget_set_layout_manager (widget, g_object_new (layout_manager_type, NULL));
+
+  if (g_list_model_get_n_items (G_LIST_MODEL (GTK_WIDGET_CLASS (g_class)->priv->shortcuts)) > 0)
+    {
+      controller = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (GTK_WIDGET_CLASS (g_class)->priv->shortcuts));
+      gtk_event_controller_set_name (controller, "gtk-widget-class-shortcuts");
+      gtk_widget_add_controller (widget, controller);
+    }
 }
 
 /**
@@ -4295,350 +4265,179 @@ gtk_widget_real_size_allocate (GtkWidget *widget,
 {
 }
 
-static gboolean
-gtk_widget_real_can_activate_accel (GtkWidget *widget,
-                                    guint      signal_id)
-{
-  GdkSurface *surface;
-
-  /* widgets must be onscreen for accels to take effect */
-  if (!gtk_widget_is_sensitive (widget) ||
-      !_gtk_widget_get_mapped (widget))
-    return FALSE;
-
-  surface = gtk_widget_get_surface (widget);
-
-  return gdk_surface_is_viewable (surface);
-}
-
 /**
- * gtk_widget_can_activate_accel:
- * @widget: a #GtkWidget
- * @signal_id: the ID of a signal installed on @widget
+ * gtk_widget_class_add_binding: (skip)
+ * @widget_class: the class to add the binding to
+ * @keyval: key value of binding to install
+ * @mods: key modifier of binding to install
+ * @callback: the callback to call upon activation
+ * @format_string: GVariant format string for arguments or %NULL for
+ *     no arguments
+ * @...: arguments, as given by format string.
  *
- * Determines whether an accelerator that activates the signal
- * identified by @signal_id can currently be activated.
- * This is done by emitting the #GtkWidget::can-activate-accel
- * signal on @widget; if the signal isn’t overridden by a
- * handler or in a derived widget, then the default check is
- * that the widget must be sensitive, and the widget and all
- * its ancestors mapped.
+ * Creates a new shortcut for @widget_class that calls the given @callback
+ * with arguments read according to @format_string.
+ * The arguments and format string must be provided in the same way as
+ * with g_variant_new().
  *
- * Returns: %TRUE if the accelerator can be activated.
- **/
-gboolean
-gtk_widget_can_activate_accel (GtkWidget *widget,
-                               guint      signal_id)
-{
-  gboolean can_activate = FALSE;
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-  g_signal_emit (widget, widget_signals[CAN_ACTIVATE_ACCEL], 0, signal_id, &can_activate);
-  return can_activate;
-}
-
-typedef struct {
-  GClosure   closure;
-  guint      signal_id;
-} AccelClosure;
-
-static void
-closure_accel_activate (GClosure     *closure,
-			GValue       *return_value,
-			guint         n_param_values,
-			const GValue *param_values,
-			gpointer      invocation_hint,
-			gpointer      marshal_data)
-{
-  AccelClosure *aclosure = (AccelClosure*) closure;
-  gboolean can_activate = gtk_widget_can_activate_accel (closure->data, aclosure->signal_id);
-
-  if (can_activate)
-    g_signal_emit (closure->data, aclosure->signal_id, 0);
-
-  /* whether accelerator was handled */
-  g_value_set_boolean (return_value, can_activate);
-}
-
-static void
-closures_destroy (gpointer data)
-{
-  GSList *slist, *closures = data;
-
-  for (slist = closures; slist; slist = slist->next)
-    {
-      g_closure_invalidate (slist->data);
-      g_closure_unref (slist->data);
-    }
-  g_slist_free (closures);
-}
-
-static GClosure*
-widget_new_accel_closure (GtkWidget *widget,
-			  guint      signal_id)
-{
-  AccelClosure *aclosure;
-  GClosure *closure = NULL;
-  GSList *slist, *closures;
-
-  closures = g_object_steal_qdata (G_OBJECT (widget), quark_accel_closures);
-  for (slist = closures; slist; slist = slist->next)
-    if (!gtk_accel_group_from_accel_closure (slist->data))
-      {
-	/* reuse this closure */
-	closure = slist->data;
-	break;
-      }
-  if (!closure)
-    {
-      closure = g_closure_new_object (sizeof (AccelClosure), G_OBJECT (widget));
-      closures = g_slist_prepend (closures, g_closure_ref (closure));
-      g_closure_sink (closure);
-      g_closure_set_marshal (closure, closure_accel_activate);
-    }
-  g_object_set_qdata_full (G_OBJECT (widget), quark_accel_closures, closures, closures_destroy);
-
-  aclosure = (AccelClosure*) closure;
-  g_assert (closure->data == widget);
-  g_assert (closure->marshal == closure_accel_activate);
-  aclosure->signal_id = signal_id;
-
-  return closure;
-}
-
-/**
- * gtk_widget_add_accelerator:
- * @widget:       widget to install an accelerator on
- * @accel_signal: widget signal to emit on accelerator activation
- * @accel_group:  accel group for this widget, added to its toplevel
- * @accel_key:    GDK keyval of the accelerator
- * @accel_mods:   modifier key combination of the accelerator
- * @accel_flags:  flag accelerators, e.g. %GTK_ACCEL_VISIBLE
- *
- * Installs an accelerator for this @widget in @accel_group that causes
- * @accel_signal to be emitted if the accelerator is activated.
- * The @accel_group needs to be added to the widget’s toplevel via
- * gtk_window_add_accel_group(), and the signal must be of type %G_SIGNAL_ACTION.
- * Accelerators added through this function are not user changeable during
- * runtime. If you want to support accelerators that can be changed by the
- * user, use gtk_accel_map_add_entry() and gtk_widget_set_accel_path() or
- * gtk_menu_item_set_accel_path() instead.
- */
-void
-gtk_widget_add_accelerator (GtkWidget      *widget,
-			    const gchar    *accel_signal,
-			    GtkAccelGroup  *accel_group,
-			    guint           accel_key,
-			    GdkModifierType accel_mods,
-			    GtkAccelFlags   accel_flags)
-{
-  GClosure *closure;
-  GSignalQuery query;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (accel_signal != NULL);
-  g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
-
-  g_signal_query (g_signal_lookup (accel_signal, G_OBJECT_TYPE (widget)), &query);
-  if (!query.signal_id ||
-      !(query.signal_flags & G_SIGNAL_ACTION) ||
-      query.return_type != G_TYPE_NONE ||
-      query.n_params)
-    {
-      /* hmm, should be elaborate enough */
-      g_warning (G_STRLOC ": widget '%s' has no activatable signal \"%s\" without arguments",
-		 G_OBJECT_TYPE_NAME (widget), accel_signal);
-      return;
-    }
-
-  closure = widget_new_accel_closure (widget, query.signal_id);
-
-  g_object_ref (widget);
-
-  /* install the accelerator. since we don't map this onto an accel_path,
-   * the accelerator will automatically be locked.
-   */
-  gtk_accel_group_connect (accel_group,
-			   accel_key,
-			   accel_mods,
-			   accel_flags | GTK_ACCEL_LOCKED,
-			   closure);
-
-  g_signal_emit (widget, widget_signals[ACCEL_CLOSURES_CHANGED], 0);
-
-  g_object_unref (widget);
-}
-
-/**
- * gtk_widget_remove_accelerator:
- * @widget:       widget to install an accelerator on
- * @accel_group:  accel group for this widget
- * @accel_key:    GDK keyval of the accelerator
- * @accel_mods:   modifier key combination of the accelerator
- *
- * Removes an accelerator from @widget, previously installed with
- * gtk_widget_add_accelerator().
- *
- * Returns: whether an accelerator was installed and could be removed
- */
-gboolean
-gtk_widget_remove_accelerator (GtkWidget      *widget,
-			       GtkAccelGroup  *accel_group,
-			       guint           accel_key,
-			       GdkModifierType accel_mods)
-{
-  GtkAccelGroupEntry *ag_entry;
-  GList *slist, *clist;
-  guint n;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-  g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), FALSE);
-
-  ag_entry = gtk_accel_group_query (accel_group, accel_key, accel_mods, &n);
-  clist = gtk_widget_list_accel_closures (widget);
-  for (slist = clist; slist; slist = slist->next)
-    {
-      guint i;
-
-      for (i = 0; i < n; i++)
-	if (slist->data == (gpointer) ag_entry[i].closure)
-	  {
-	    gboolean is_removed = gtk_accel_group_disconnect (accel_group, slist->data);
-
-	    g_signal_emit (widget, widget_signals[ACCEL_CLOSURES_CHANGED], 0);
-
-	    g_list_free (clist);
-
-	    return is_removed;
-	  }
-    }
-  g_list_free (clist);
-
-  g_warning (G_STRLOC ": no accelerator (%u,%u) installed in accel group (%p) for %s (%p)",
-	     accel_key, accel_mods, accel_group,
-	     G_OBJECT_TYPE_NAME (widget), widget);
-
-  return FALSE;
-}
-
-/**
- * gtk_widget_list_accel_closures:
- * @widget:  widget to list accelerator closures for
- *
- * Lists the closures used by @widget for accelerator group connections
- * with gtk_accel_group_connect_by_path() or gtk_accel_group_connect().
- * The closures can be used to monitor accelerator changes on @widget,
- * by connecting to the @GtkAccelGroup::accel-changed signal of the
- * #GtkAccelGroup of a closure which can be found out with
- * gtk_accel_group_from_accel_closure().
- *
- * Returns: (transfer container) (element-type GClosure):
- *     a newly allocated #GList of closures
- */
-GList*
-gtk_widget_list_accel_closures (GtkWidget *widget)
-{
-  GSList *slist;
-  GList *clist = NULL;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  for (slist = g_object_get_qdata (G_OBJECT (widget), quark_accel_closures); slist; slist = slist->next)
-    if (gtk_accel_group_from_accel_closure (slist->data))
-      clist = g_list_prepend (clist, slist->data);
-  return clist;
-}
-
-typedef struct {
-  GQuark         path_quark;
-  GtkAccelGroup *accel_group;
-  GClosure      *closure;
-} AccelPath;
-
-static void
-destroy_accel_path (gpointer data)
-{
-  AccelPath *apath = data;
-
-  gtk_accel_group_disconnect (apath->accel_group, apath->closure);
-
-  /* closures_destroy takes care of unrefing the closure */
-  g_object_unref (apath->accel_group);
-
-  g_slice_free (AccelPath, apath);
-}
-
-
-/**
- * gtk_widget_set_accel_path:
- * @widget: a #GtkWidget
- * @accel_path: (allow-none): path used to look up the accelerator
- * @accel_group: (allow-none): a #GtkAccelGroup.
- *
- * Given an accelerator group, @accel_group, and an accelerator path,
- * @accel_path, sets up an accelerator in @accel_group so whenever the
- * key binding that is defined for @accel_path is pressed, @widget
- * will be activated.  This removes any accelerators (for any
- * accelerator group) installed by previous calls to
- * gtk_widget_set_accel_path(). Associating accelerators with
- * paths allows them to be modified by the user and the modifications
- * to be saved for future use. (See gtk_accel_map_save().)
- *
- * This function is a low level function that would most likely
- * be used by a menu creation system.
- *
- * If you only want to
- * set up accelerators on menu items gtk_menu_item_set_accel_path()
- * provides a somewhat more convenient interface.
- *
- * Note that @accel_path string will be stored in a #GQuark. Therefore, if you
- * pass a static string, you can save some memory by interning it first with
- * g_intern_static_string().
+ * This function is a convenience wrapper around
+ * gtk_widget_class_add_shortcut() and must be called during class
+ * initialization. It does not provide for user_data, if you need that,
+ * you will have to use gtk_widget_class_add_shortcut() with a custom
+ * shortcut.
  **/
 void
-gtk_widget_set_accel_path (GtkWidget     *widget,
-			   const gchar   *accel_path,
-			   GtkAccelGroup *accel_group)
+gtk_widget_class_add_binding (GtkWidgetClass  *widget_class,
+                              guint            keyval,
+                              GdkModifierType  mods,
+                              GtkShortcutFunc  func,
+                              const gchar     *format_string,
+                              ...)
 {
-  AccelPath *apath;
+  GtkShortcut *shortcut;
 
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GTK_WIDGET_GET_CLASS (widget)->activate_signal != 0);
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
 
-  if (accel_path)
+  shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (keyval, mods),
+                               gtk_callback_action_new (func, NULL, NULL));
+  if (format_string)
     {
-      g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
-      g_return_if_fail (_gtk_accel_path_is_valid (accel_path));
-
-      gtk_accel_map_add_entry (accel_path, 0, 0);
-      apath = g_slice_new (AccelPath);
-      apath->accel_group = g_object_ref (accel_group);
-      apath->path_quark = g_quark_from_string (accel_path);
-      apath->closure = widget_new_accel_closure (widget, GTK_WIDGET_GET_CLASS (widget)->activate_signal);
+      va_list args;
+      va_start (args, format_string);
+      gtk_shortcut_set_arguments (shortcut,
+                                  g_variant_new_va (format_string, NULL, &args));
+      va_end (args);
     }
-  else
-    apath = NULL;
 
-  /* also removes possible old settings */
-  g_object_set_qdata_full (G_OBJECT (widget), quark_accel_path, apath, destroy_accel_path);
+  gtk_widget_class_add_shortcut (widget_class, shortcut);
 
-  if (apath)
-    gtk_accel_group_connect_by_path (apath->accel_group, g_quark_to_string (apath->path_quark), apath->closure);
-
-  g_signal_emit (widget, widget_signals[ACCEL_CLOSURES_CHANGED], 0);
+  g_object_unref (shortcut);
 }
 
-const gchar*
-_gtk_widget_get_accel_path (GtkWidget *widget,
-			    gboolean  *locked)
+/**
+ * gtk_widget_class_add_binding_signal: (skip)
+ * @widget_class: the class to add the binding to
+ * @keyval: key value of binding to install
+ * @mods: key modifier of binding to install
+ * @signal: the signal to execute
+ * @format_string: GVariant format string for arguments or %NULL for
+ *     no arguments
+ * @...: arguments, as given by format string.
+ *
+ * Creates a new shortcut for @widget_class that emits the given action
+ * @signal with arguments read according to @format_string.
+ * The arguments and format string must be provided in the same way as
+ * with g_variant_new().
+ *
+ * This function is a convenience wrapper around
+ * gtk_widget_class_add_shortcut() and must be called during class
+ * initialization.
+ */
+void
+gtk_widget_class_add_binding_signal (GtkWidgetClass  *widget_class,
+                                     guint            keyval,
+                                     GdkModifierType  mods,
+                                     const gchar     *signal,
+                                     const gchar     *format_string,
+                                     ...)
 {
-  AccelPath *apath;
+  GtkShortcut *shortcut;
 
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+  g_return_if_fail (g_signal_lookup (signal, G_TYPE_FROM_CLASS (widget_class)));
+  /* XXX: validate variant format for signal */
 
-  apath = g_object_get_qdata (G_OBJECT (widget), quark_accel_path);
-  if (locked)
-    *locked = apath ? gtk_accel_group_get_is_locked (apath->accel_group) : TRUE;
-  return apath ? g_quark_to_string (apath->path_quark) : NULL;
+  shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (keyval, mods),
+                               gtk_signal_action_new (signal));
+  if (format_string)
+    {
+      va_list args;
+      va_start (args, format_string);
+      gtk_shortcut_set_arguments (shortcut,
+                                  g_variant_new_va (format_string, NULL, &args));
+      va_end (args);
+    }
+
+  gtk_widget_class_add_shortcut (widget_class, shortcut);
+
+  g_object_unref (shortcut);
+}
+
+/**
+ * gtk_widget_class_add_binding_action: (skip)
+ * @widget_class: the class to add the binding to
+ * @keyval: key value of binding to install
+ * @mods: key modifier of binding to install
+ * @action_name: the action to activate
+ * @format_string: GVariant format string for arguments or %NULL for
+ *     no arguments
+ * @...: arguments, as given by format string.
+ *
+ * Creates a new shortcut for @widget_class that activates the given
+ * @action_name with arguments read according to @format_string.
+ * The arguments and format string must be provided in the same way as
+ * with g_variant_new().
+ *
+ * This function is a convenience wrapper around
+ * gtk_widget_class_add_shortcut() and must be called during class
+ * initialization.
+ */
+void
+gtk_widget_class_add_binding_action (GtkWidgetClass  *widget_class,
+                                     guint            keyval,
+                                     GdkModifierType  mods,
+                                     const gchar     *action_name,
+                                     const gchar     *format_string,
+                                     ...)
+{
+  GtkShortcut *shortcut;
+
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+  /* XXX: validate variant format for action */
+
+  shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (keyval, mods),
+                               gtk_named_action_new (action_name));
+  if (format_string)
+    {
+      va_list args;
+      va_start (args, format_string);
+      gtk_shortcut_set_arguments (shortcut,
+                                  g_variant_new_va (format_string, NULL, &args));
+      va_end (args);
+    }
+
+  gtk_widget_class_add_shortcut (widget_class, shortcut);
+
+  g_object_unref (shortcut);
+}
+
+/**
+ * gtk_widget_class_add_shortcut:
+ * @widget_class: the class to add the shortcut to
+ * @shortcut: (transfer none): the #GtkShortcut to add
+ *
+ * Installs a shortcut in @widget_class. Every instance created for
+ * @widget_class or its subclasses will inherit this shortcut and
+ * trigger it.
+ *
+ * Shortcuts added this way will be triggered in the @GTK_PHASE_BUBBLE
+ * phase, which means they may also trigger if child widgets have focus.
+ *
+ * This function must only be used in class initialization functions
+ * otherwise it is not guaranteed that the shortcut will be installed.
+ **/
+void
+gtk_widget_class_add_shortcut (GtkWidgetClass *widget_class,
+                               GtkShortcut    *shortcut)
+{
+  GtkWidgetClassPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+  g_return_if_fail (GTK_IS_SHORTCUT (shortcut));
+
+  priv = widget_class->priv;
+
+  g_list_store_append (priv->shortcuts, shortcut);
 }
 
 /**
@@ -4893,11 +4692,6 @@ gtk_widget_event (GtkWidget *widget,
 
   if (return_val == FALSE)
     return_val |= gtk_widget_run_controllers (widget, event, target, x, y, GTK_PHASE_BUBBLE);
-
-  if (return_val == FALSE &&
-      (gdk_event_get_event_type (event) == GDK_KEY_PRESS ||
-       gdk_event_get_event_type (event) == GDK_KEY_RELEASE))
-    return_val |= gtk_bindings_activate_event (G_OBJECT (widget), event);
 
   return return_val;
 }
@@ -7546,10 +7340,6 @@ gtk_widget_real_destroy (GtkWidget *object)
       priv->accessible = NULL;
     }
 
-  /* wipe accelerator closures (keep order) */
-  g_object_set_qdata (G_OBJECT (widget), quark_accel_path, NULL);
-  g_object_set_qdata (G_OBJECT (widget), quark_accel_closures, NULL);
-
   /* Callers of add_mnemonic_label() should disconnect on ::destroy */
   g_object_set_qdata (G_OBJECT (widget), quark_mnemonic_labels, NULL);
 
@@ -8987,90 +8777,6 @@ static const GtkBuildableParser accessibility_parser =
 
 typedef struct
 {
-  GObject *object;
-  GtkBuilder *builder;
-  guint    key;
-  guint    modifiers;
-  gchar   *signal;
-} AccelGroupParserData;
-
-static void
-accel_group_start_element (GtkBuildableParseContext  *context,
-                           const gchar               *element_name,
-                           const gchar              **names,
-                           const gchar              **values,
-                           gpointer                   user_data,
-                           GError                   **error)
-{
-  AccelGroupParserData *data = (AccelGroupParserData*)user_data;
-
-  if (strcmp (element_name, "accelerator") == 0)
-    {
-      const gchar *key_str = NULL;
-      const gchar *signal = NULL;
-      const gchar *modifiers_str = NULL;
-      guint key = 0;
-      guint modifiers = 0;
-
-      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
-        return;
-
-      if (!g_markup_collect_attributes (element_name, names, values, error,
-                                        G_MARKUP_COLLECT_STRING, "key", &key_str,
-                                        G_MARKUP_COLLECT_STRING, "signal", &signal,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "modifiers", &modifiers_str,
-                                        G_MARKUP_COLLECT_INVALID))
-        {
-          _gtk_builder_prefix_error (data->builder, context, error);
-          return;
-        }
-
-      key = gdk_keyval_from_name (key_str);
-      if (key == 0)
-        {
-          g_set_error (error,
-                       GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE,
-                       "Could not parse key '%s'", key_str);
-          _gtk_builder_prefix_error (data->builder, context, error);
-          return;
-        }
-
-      if (modifiers_str != NULL)
-        {
-          GFlagsValue aliases[2] = {
-            { 0, "primary", "primary" },
-            { 0, NULL, NULL }
-          };
-
-          aliases[0].value = _gtk_get_primary_accel_mod ();
-
-          if (!_gtk_builder_flags_from_string (GDK_TYPE_MODIFIER_TYPE, aliases,
-                                               modifiers_str, &modifiers, error))
-            {
-              _gtk_builder_prefix_error (data->builder, context, error);
-	      return;
-            }
-        }
-
-      data->key = key;
-      data->modifiers = modifiers;
-      data->signal = g_strdup (signal);
-    }
-  else
-    {
-      _gtk_builder_error_unhandled_tag (data->builder, context,
-                                        "GtkWidget", element_name,
-                                        error);
-    }
-}
-
-static const GtkBuildableParser accel_group_parser =
-  {
-    accel_group_start_element,
-  };
-
-typedef struct
-{
   GtkBuilder *builder;
   GSList *classes;
 } StyleParserData;
@@ -9272,20 +8978,6 @@ gtk_widget_buildable_custom_tag_start (GtkBuildable       *buildable,
                                        GtkBuildableParser *parser,
                                        gpointer           *parser_data)
 {
-  if (strcmp (tagname, "accelerator") == 0)
-    {
-      AccelGroupParserData *data;
-
-      data = g_slice_new0 (AccelGroupParserData);
-      data->object = (GObject *)g_object_ref (buildable);
-      data->builder = builder;
-
-      *parser = accel_group_parser;
-      *parser_data = data;
-
-      return TRUE;
-    }
-
   if (strcmp (tagname, "accessibility") == 0)
     {
       AccessibilitySubParserData *data;
@@ -9336,45 +9028,6 @@ gtk_widget_buildable_custom_tag_end (GtkBuildable  *buildable,
                                      const gchar   *tagname,
                                      gpointer       data)
 {
-}
-
-void
-_gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
-                                          GtkWidget *toplevel,
-                                          gpointer   user_data)
-{
-  AccelGroupParserData *accel_data;
-  GSList *accel_groups;
-  GtkAccelGroup *accel_group;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GTK_IS_WIDGET (toplevel));
-  g_return_if_fail (user_data != NULL);
-
-  accel_data = (AccelGroupParserData*)user_data;
-  accel_groups = gtk_accel_groups_from_object (G_OBJECT (toplevel));
-  if (g_slist_length (accel_groups) == 0)
-    {
-      accel_group = gtk_accel_group_new ();
-      if (GTK_IS_WINDOW (toplevel))
-        gtk_window_add_accel_group (GTK_WINDOW (toplevel), accel_group);
-    }
-  else
-    {
-      g_assert (g_slist_length (accel_groups) == 1);
-      accel_group = g_slist_nth_data (accel_groups, 0);
-    }
-
-  gtk_widget_add_accelerator (GTK_WIDGET (accel_data->object),
-			      accel_data->signal,
-			      accel_group,
-			      accel_data->key,
-			      accel_data->modifiers,
-			      GTK_ACCEL_VISIBLE);
-
-  g_object_unref (accel_data->object);
-  g_free (accel_data->signal);
-  g_slice_free (AccelGroupParserData, accel_data);
 }
 
 static void
@@ -9450,19 +9103,7 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
                                       const gchar  *tagname,
                                       gpointer      user_data)
 {
-  if (strcmp (tagname, "accelerator") == 0)
-    {
-      AccelGroupParserData *accel_data;
-      GtkRoot *root;
-
-      accel_data = (AccelGroupParserData*)user_data;
-      g_assert (accel_data->object);
-
-      root = _gtk_widget_get_root (GTK_WIDGET (accel_data->object));
-
-      _gtk_widget_buildable_finish_accelerator (GTK_WIDGET (buildable), GTK_WIDGET (root), user_data);
-    }
-  else if (strcmp (tagname, "accessibility") == 0)
+  if (strcmp (tagname, "accessibility") == 0)
     {
       AccessibilitySubParserData *a11y_data;
 
@@ -11831,6 +11472,24 @@ gtk_widget_reset_controllers (GtkWidget *widget)
 
       gtk_event_controller_reset (controller);
     }
+}
+
+GList *
+gtk_widget_list_controllers (GtkWidget           *widget,
+                             GtkPropagationPhase  phase)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GList *res = NULL, *l;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      GtkEventController *controller = l->data;
+
+      if (gtk_event_controller_get_propagation_phase (controller) == phase)
+        res = g_list_prepend (res, controller);
+    }
+
+  return g_list_reverse (res);
 }
 
 static inline void

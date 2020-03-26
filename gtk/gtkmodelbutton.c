@@ -46,6 +46,9 @@
 #include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollerfocus.h"
 #include "gtknative.h"
+#include "gtkshortcuttrigger.h"
+#include "gtkshortcutcontroller.h"
+#include "gtkshortcut.h"
 
 /**
  * SECTION:gtkmodelbutton
@@ -174,6 +177,7 @@ struct _GtkModelButton
   GtkSizeGroup *indicators;
   char *accel;
   guint open_timeout;
+  GtkEventController *controller;
 
   guint active : 1;
   guint centered : 1;
@@ -727,7 +731,6 @@ update_accel (GtkModelButton *self,
     {
       guint key;
       GdkModifierType mods;
-      GtkAccelLabelClass *accel_class;
       char *str;
 
       if (!self->accel_label)
@@ -739,16 +742,48 @@ update_accel (GtkModelButton *self,
         }
 
       gtk_accelerator_parse (accel, &key, &mods);
-
-      accel_class = g_type_class_ref (GTK_TYPE_ACCEL_LABEL);
-      str = _gtk_accel_label_class_get_accelerator_label (accel_class, key, mods);
+      str = gtk_accelerator_get_label (key, mods);
       gtk_label_set_label (GTK_LABEL (self->accel_label), str);
       g_free (str);
-      g_type_class_unref (accel_class);
+
+      if (GTK_IS_POPOVER (gtk_widget_get_native (GTK_WIDGET (self))))
+        {
+          GtkShortcut *shortcut;
+          GtkShortcutTrigger *trigger;
+          GtkShortcutAction *action;
+
+          if (self->controller)
+            {
+              while (g_list_model_get_n_items (G_LIST_MODEL (self->controller)) > 0)
+                {
+                  shortcut = g_list_model_get_item (G_LIST_MODEL (self->controller), 0);
+                  gtk_shortcut_controller_remove_shortcut (GTK_SHORTCUT_CONTROLLER (self->controller),
+                                                           shortcut);
+                  g_object_unref (shortcut);
+                }
+            }
+          else
+            {
+              self->controller = gtk_shortcut_controller_new ();
+              gtk_shortcut_controller_set_scope (GTK_SHORTCUT_CONTROLLER (self->controller), GTK_SHORTCUT_SCOPE_MANAGED);
+              gtk_widget_add_controller (GTK_WIDGET (self), self->controller);
+            }
+
+          trigger = gtk_keyval_trigger_new (key, mods);
+          action = gtk_signal_action_new ("clicked");
+          shortcut = gtk_shortcut_new (trigger, action);
+          gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (self->controller), shortcut);
+          g_object_unref (shortcut);
+        }
     }
   else
     {
       g_clear_pointer (&self->accel_label, gtk_widget_unparent);
+      if (self->controller)
+        {
+          gtk_widget_remove_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (self->controller));
+          g_clear_object (&self->controller);
+        }
     }
 }
 
@@ -984,48 +1019,6 @@ gtk_model_button_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_model_button_parent_class)->finalize (object);
 }
 
-static void
-gtk_model_button_root (GtkWidget *widget)
-{
-  GtkModelButton *self = GTK_MODEL_BUTTON (widget);
-  GtkRoot *root;
-  GtkApplication *app;
-  const char *action_name;
-  GVariant *action_target;
-
-  GTK_WIDGET_CLASS (gtk_model_button_parent_class)->root (widget);
-
-  if (!self->accel)
-    return;
-
-  root = gtk_widget_get_root (widget);
-
-  if (!GTK_IS_WINDOW (root))
-    return;
-
-  app = gtk_window_get_application (GTK_WINDOW (root));
-
-  if (!app)
-    return;
-
-  action_name = gtk_actionable_get_action_name (GTK_ACTIONABLE (widget));
-  action_target = gtk_actionable_get_action_target_value (GTK_ACTIONABLE (widget));
-
-  if (action_name)
-    {
-      char *detailed;
-      char **accels;
-
-      detailed = g_action_print_detailed_name (action_name, action_target);
-      accels = gtk_application_get_accels_for_action (app, detailed);
-
-      update_accel (self, accels[0]);
-
-      g_strfreev (accels);
-      g_free (detailed);
-    }
-}
-
 static gboolean
 gtk_model_button_focus (GtkWidget        *widget,
                         GtkDirectionType  direction)
@@ -1098,7 +1091,6 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   widget_class->state_flags_changed = gtk_model_button_state_flags_changed;
   widget_class->direction_changed = gtk_model_button_direction_changed;
   widget_class->focus = gtk_model_button_focus;
-  widget_class->root = gtk_model_button_root;
   widget_class->get_accessible = gtk_model_button_get_accessible;
 
   /**
@@ -1232,6 +1224,8 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
                                           NULL, NULL,
                                           NULL,
                                           G_TYPE_NONE, 0);
+
+  widget_class->activate_signal = signals[SIGNAL_CLICKED];
 
   gtk_widget_class_set_accessible_role (GTK_WIDGET_CLASS (class), ATK_ROLE_PUSH_BUTTON);
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);

@@ -232,8 +232,7 @@ typedef enum
  * @GDK_HYPER_MASK: the Hyper modifier
  * @GDK_META_MASK: the Meta modifier
  * @GDK_MODIFIER_RESERVED_29_MASK: A reserved bit flag; do not use in your own code
- * @GDK_RELEASE_MASK: not used in GDK itself. GTK uses it to differentiate
- *  between (keyval, modifiers) pairs from key press and release events.
+ * @GDK_MODIFIER_RESERVED_30_MASK: A reserved bit flag; do not use in your own code
  * @GDK_MODIFIER_MASK: a mask covering all modifier types.
  *
  * A set of bit-flags to indicate the state of modifier keys and mouse buttons
@@ -294,12 +293,11 @@ typedef enum
   GDK_META_MASK     = 1 << 28,
   
   GDK_MODIFIER_RESERVED_29_MASK  = 1 << 29,
-
-  GDK_RELEASE_MASK  = 1 << 30,
+  GDK_MODIFIER_RESERVED_30_MASK  = 1 << 30,
 
   /* Combination of GDK_SHIFT_MASK..GDK_BUTTON5_MASK + GDK_SUPER_MASK
-     + GDK_HYPER_MASK + GDK_META_MASK + GDK_RELEASE_MASK */
-  GDK_MODIFIER_MASK = 0x5c001fff
+     + GDK_HYPER_MASK + GDK_META_MASK */
+  GDK_MODIFIER_MASK = 0x1c001fff
 } GdkModifierType;
 
 /**
@@ -623,6 +621,45 @@ typedef enum
  * is not yet known.
  */
 #define GDK_ACTION_ALL (GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK)
+
+/*
+ * GDK_DECLARE_INTERNAL_TYPE:
+ * @ModuleObjName: The name of the new type, in camel case (like GtkWidget)
+ * @module_obj_name: The name of the new type in lowercase, with words
+ *  separated by '_' (like 'gtk_widget')
+ * @MODULE: The name of the module, in all caps (like 'GTK')
+ * @OBJ_NAME: The bare name of the type, in all caps (like 'WIDGET')
+ * @ParentName: the name of the parent type, in camel case (like GtkWidget)
+ *
+ * A convenience macro for emitting the usual declarations in the
+ * header file for a type which is intended to be subclassed only
+ * by internal consumers.
+ *
+ * This macro differs from %G_DECLARE_DERIVABLE_TYPE and %G_DECLARE_FINAL_TYPE
+ * by declaring a type that is only derivable internally. Internal users can
+ * derive this type, assuming they have access to the instance and class
+ * structures; external users will not be able to subclass this type.
+ */
+#define GDK_DECLARE_INTERNAL_TYPE(ModuleObjName, module_obj_name, MODULE, OBJ_NAME, ParentName) \
+  GType module_obj_name##_get_type (void);                                                               \
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS                                                                       \
+  typedef struct _##ModuleObjName ModuleObjName;                                                         \
+  typedef struct _##ModuleObjName##Class ModuleObjName##Class;                                           \
+                                                                                                         \
+  _GLIB_DEFINE_AUTOPTR_CHAINUP (ModuleObjName, ParentName)                                               \
+  G_DEFINE_AUTOPTR_CLEANUP_FUNC (ModuleObjName##Class, g_type_class_unref)                               \
+                                                                                                         \
+  G_GNUC_UNUSED static inline ModuleObjName * MODULE##_##OBJ_NAME (gpointer ptr) {                       \
+    return G_TYPE_CHECK_INSTANCE_CAST (ptr, module_obj_name##_get_type (), ModuleObjName); }             \
+  G_GNUC_UNUSED static inline ModuleObjName##Class * MODULE##_##OBJ_NAME##_CLASS (gpointer ptr) {        \
+    return G_TYPE_CHECK_CLASS_CAST (ptr, module_obj_name##_get_type (), ModuleObjName##Class); }         \
+  G_GNUC_UNUSED static inline gboolean MODULE##_IS_##OBJ_NAME (gpointer ptr) {                           \
+    return G_TYPE_CHECK_INSTANCE_TYPE (ptr, module_obj_name##_get_type ()); }                            \
+  G_GNUC_UNUSED static inline gboolean MODULE##_IS_##OBJ_NAME##_CLASS (gpointer ptr) {                   \
+    return G_TYPE_CHECK_CLASS_TYPE (ptr, module_obj_name##_get_type ()); }                               \
+  G_GNUC_UNUSED static inline ModuleObjName##Class * MODULE##_##OBJ_NAME##_GET_CLASS (gpointer ptr) {    \
+    return G_TYPE_INSTANCE_GET_CLASS (ptr, module_obj_name##_get_type (), ModuleObjName##Class); }       \
+  G_GNUC_END_IGNORE_DEPRECATIONS
 
 G_END_DECLS
 

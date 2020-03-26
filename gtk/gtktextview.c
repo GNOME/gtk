@@ -30,7 +30,6 @@
 #include <string.h>
 
 #include "gtkadjustmentprivate.h"
-#include "gtkbindings.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkdebug.h"
 #include "gtkdropcontrollermotion.h"
@@ -444,7 +443,9 @@ static gboolean gtk_text_view_drag_drop          (GtkDropTarget    *dest,
                                                   double            y,
                                                   GtkTextView      *text_view);
 
-static gboolean gtk_text_view_popup_menu         (GtkWidget     *widget);
+static void gtk_text_view_popup_menu        (GtkWidget  *widget,
+                                             const char *action_name,
+                                             GVariant   *parameters);
 static void gtk_text_view_move_cursor       (GtkTextView           *text_view,
                                              GtkMovementStep        step,
                                              gint                   count,
@@ -779,7 +780,7 @@ gtk_text_view_drop_scroll_leave (GtkDropControllerMotion *motion,
 }
 
 static void
-add_move_binding (GtkBindingSet  *binding_set,
+add_move_binding (GtkWidgetClass *widget_class,
                   guint           keyval,
                   guint           modmask,
                   GtkMovementStep step,
@@ -787,18 +788,16 @@ add_move_binding (GtkBindingSet  *binding_set,
 {
   g_assert ((modmask & GDK_SHIFT_MASK) == 0);
 
-  gtk_binding_entry_add_signal (binding_set, keyval, modmask,
-                                "move-cursor", 3,
-                                G_TYPE_ENUM, step,
-                                G_TYPE_INT, count,
-                                G_TYPE_BOOLEAN, FALSE);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keyval, modmask,
+                                       "move-cursor",
+                                       "(iib)", step, count, FALSE);
 
   /* Selection-extending version */
-  gtk_binding_entry_add_signal (binding_set, keyval, modmask | GDK_SHIFT_MASK,
-                                "move-cursor", 3,
-                                G_TYPE_ENUM, step,
-                                G_TYPE_INT, count,
-                                G_TYPE_BOOLEAN, TRUE);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keyval, modmask | GDK_SHIFT_MASK,
+                                       "move-cursor",
+                                       "(iib)", step, count, TRUE);
 }
 
 static void
@@ -807,7 +806,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
-  GtkBindingSet *binding_set;
 
   /* Default handlers and virtual methods
    */
@@ -826,8 +824,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->size_allocate = gtk_text_view_size_allocate;
   widget_class->snapshot = gtk_text_view_snapshot;
   widget_class->focus = gtk_text_view_focus;
-
-  widget_class->popup_menu = gtk_text_view_popup_menu;
 
   container_class->add = gtk_text_view_add;
   container_class->remove = gtk_text_view_remove;
@@ -1471,237 +1467,288 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 
   gtk_widget_class_install_action (widget_class, "text.undo", NULL, gtk_text_view_real_undo);
   gtk_widget_class_install_action (widget_class, "text.redo", NULL, gtk_text_view_real_redo);
+  gtk_widget_class_install_action (widget_class, "menu.popup", NULL, gtk_text_view_popup_menu);
 
   /*
    * Key bindings
    */
 
-  binding_set = gtk_binding_set_by_class (klass);
-  
+  gtk_widget_class_add_binding_action (widget_class,
+                                       GDK_KEY_F10, GDK_SHIFT_MASK,
+                                       "menu.popup",
+                                       NULL);
+  gtk_widget_class_add_binding_action (widget_class,
+                                       GDK_KEY_Menu, 0,
+                                       "menu.popup",
+                                       NULL);
+
   /* Moving the insertion point */
-  add_move_binding (binding_set, GDK_KEY_Right, 0,
+  add_move_binding (widget_class, GDK_KEY_Right, 0,
                     GTK_MOVEMENT_VISUAL_POSITIONS, 1);
 
-  add_move_binding (binding_set, GDK_KEY_KP_Right, 0,
+  add_move_binding (widget_class, GDK_KEY_KP_Right, 0,
                     GTK_MOVEMENT_VISUAL_POSITIONS, 1);
   
-  add_move_binding (binding_set, GDK_KEY_Left, 0,
+  add_move_binding (widget_class, GDK_KEY_Left, 0,
                     GTK_MOVEMENT_VISUAL_POSITIONS, -1);
 
-  add_move_binding (binding_set, GDK_KEY_KP_Left, 0,
+  add_move_binding (widget_class, GDK_KEY_KP_Left, 0,
                     GTK_MOVEMENT_VISUAL_POSITIONS, -1);
   
-  add_move_binding (binding_set, GDK_KEY_Right, GDK_CONTROL_MASK,
+  add_move_binding (widget_class, GDK_KEY_Right, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_WORDS, 1);
 
-  add_move_binding (binding_set, GDK_KEY_KP_Right, GDK_CONTROL_MASK,
+  add_move_binding (widget_class, GDK_KEY_KP_Right, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_WORDS, 1);
   
-  add_move_binding (binding_set, GDK_KEY_Left, GDK_CONTROL_MASK,
+  add_move_binding (widget_class, GDK_KEY_Left, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_WORDS, -1);
 
-  add_move_binding (binding_set, GDK_KEY_KP_Left, GDK_CONTROL_MASK,
+  add_move_binding (widget_class, GDK_KEY_KP_Left, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_WORDS, -1);
   
-  add_move_binding (binding_set, GDK_KEY_Up, 0,
+  add_move_binding (widget_class, GDK_KEY_Up, 0,
                     GTK_MOVEMENT_DISPLAY_LINES, -1);
 
-  add_move_binding (binding_set, GDK_KEY_KP_Up, 0,
+  add_move_binding (widget_class, GDK_KEY_KP_Up, 0,
                     GTK_MOVEMENT_DISPLAY_LINES, -1);
   
-  add_move_binding (binding_set, GDK_KEY_Down, 0,
+  add_move_binding (widget_class, GDK_KEY_Down, 0,
                     GTK_MOVEMENT_DISPLAY_LINES, 1);
 
-  add_move_binding (binding_set, GDK_KEY_KP_Down, 0,
+  add_move_binding (widget_class, GDK_KEY_KP_Down, 0,
                     GTK_MOVEMENT_DISPLAY_LINES, 1);
   
-  add_move_binding (binding_set, GDK_KEY_Up, GDK_CONTROL_MASK,
+  add_move_binding (widget_class, GDK_KEY_Up, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_PARAGRAPHS, -1);
 
-  add_move_binding (binding_set, GDK_KEY_KP_Up, GDK_CONTROL_MASK,
+  add_move_binding (widget_class, GDK_KEY_KP_Up, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_PARAGRAPHS, -1);
   
-  add_move_binding (binding_set, GDK_KEY_Down, GDK_CONTROL_MASK,
+  add_move_binding (widget_class, GDK_KEY_Down, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_PARAGRAPHS, 1);
 
-  add_move_binding (binding_set, GDK_KEY_KP_Down, GDK_CONTROL_MASK,
+  add_move_binding (widget_class, GDK_KEY_KP_Down, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_PARAGRAPHS, 1);
   
-  add_move_binding (binding_set, GDK_KEY_Home, 0,
+  add_move_binding (widget_class, GDK_KEY_Home, 0,
                     GTK_MOVEMENT_DISPLAY_LINE_ENDS, -1);
 
-  add_move_binding (binding_set, GDK_KEY_KP_Home, 0,
+  add_move_binding (widget_class, GDK_KEY_KP_Home, 0,
                     GTK_MOVEMENT_DISPLAY_LINE_ENDS, -1);
   
-  add_move_binding (binding_set, GDK_KEY_End, 0,
+  add_move_binding (widget_class, GDK_KEY_End, 0,
                     GTK_MOVEMENT_DISPLAY_LINE_ENDS, 1);
 
-  add_move_binding (binding_set, GDK_KEY_KP_End, 0,
+  add_move_binding (widget_class, GDK_KEY_KP_End, 0,
                     GTK_MOVEMENT_DISPLAY_LINE_ENDS, 1);
   
-  add_move_binding (binding_set, GDK_KEY_Home, GDK_CONTROL_MASK,
+  add_move_binding (widget_class, GDK_KEY_Home, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_BUFFER_ENDS, -1);
 
-  add_move_binding (binding_set, GDK_KEY_KP_Home, GDK_CONTROL_MASK,
+  add_move_binding (widget_class, GDK_KEY_KP_Home, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_BUFFER_ENDS, -1);
   
-  add_move_binding (binding_set, GDK_KEY_End, GDK_CONTROL_MASK,
+  add_move_binding (widget_class, GDK_KEY_End, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_BUFFER_ENDS, 1);
 
-  add_move_binding (binding_set, GDK_KEY_KP_End, GDK_CONTROL_MASK,
+  add_move_binding (widget_class, GDK_KEY_KP_End, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_BUFFER_ENDS, 1);
   
-  add_move_binding (binding_set, GDK_KEY_Page_Up, 0,
+  add_move_binding (widget_class, GDK_KEY_Page_Up, 0,
                     GTK_MOVEMENT_PAGES, -1);
 
-  add_move_binding (binding_set, GDK_KEY_KP_Page_Up, 0,
+  add_move_binding (widget_class, GDK_KEY_KP_Page_Up, 0,
                     GTK_MOVEMENT_PAGES, -1);
   
-  add_move_binding (binding_set, GDK_KEY_Page_Down, 0,
+  add_move_binding (widget_class, GDK_KEY_Page_Down, 0,
                     GTK_MOVEMENT_PAGES, 1);
 
-  add_move_binding (binding_set, GDK_KEY_KP_Page_Down, 0,
+  add_move_binding (widget_class, GDK_KEY_KP_Page_Down, 0,
                     GTK_MOVEMENT_PAGES, 1);
 
-  add_move_binding (binding_set, GDK_KEY_Page_Up, GDK_CONTROL_MASK,
+  add_move_binding (widget_class, GDK_KEY_Page_Up, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_HORIZONTAL_PAGES, -1);
 
-  add_move_binding (binding_set, GDK_KEY_KP_Page_Up, GDK_CONTROL_MASK,
+  add_move_binding (widget_class, GDK_KEY_KP_Page_Up, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_HORIZONTAL_PAGES, -1);
   
-  add_move_binding (binding_set, GDK_KEY_Page_Down, GDK_CONTROL_MASK,
+  add_move_binding (widget_class, GDK_KEY_Page_Down, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_HORIZONTAL_PAGES, 1);
 
-  add_move_binding (binding_set, GDK_KEY_KP_Page_Down, GDK_CONTROL_MASK,
+  add_move_binding (widget_class, GDK_KEY_KP_Page_Down, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_HORIZONTAL_PAGES, 1);
 
   /* Select all */
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_CONTROL_MASK,
-				"select-all", 1,
-  				G_TYPE_BOOLEAN, TRUE);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_a, GDK_CONTROL_MASK,
+                                       "select-all",
+                                       "(b)", TRUE);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_slash, GDK_CONTROL_MASK,
-				"select-all", 1,
-  				G_TYPE_BOOLEAN, TRUE);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_slash, GDK_CONTROL_MASK,
+                                       "select-all",
+                                       "(b)", TRUE);
   
   /* Unselect all */
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_backslash, GDK_CONTROL_MASK,
-				 "select-all", 1,
-				 G_TYPE_BOOLEAN, FALSE);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_backslash, GDK_CONTROL_MASK,
+                                       "select-all",
+                                       "(b)", FALSE);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
-				 "select-all", 1,
-				 G_TYPE_BOOLEAN, FALSE);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_a, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+                                       "select-all",
+                                       "(b)", FALSE);
 
   /* Deleting text */
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Delete, 0,
-				"delete-from-cursor", 2,
-				G_TYPE_ENUM, GTK_DELETE_CHARS,
-				G_TYPE_INT, 1);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Delete, 0,
+                                       "delete-from-cursor",
+                                       "(ii)", GTK_DELETE_CHARS, 1);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Delete, 0,
-				"delete-from-cursor", 2,
-				G_TYPE_ENUM, GTK_DELETE_CHARS,
-				G_TYPE_INT, 1);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Delete, 0,
+                                       "delete-from-cursor",
+                                       "(ii)", GTK_DELETE_CHARS, 1);
   
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_BackSpace, 0,
-				"backspace", 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_BackSpace, 0,
+                                       "backspace",
+                                       NULL);
 
   /* Make this do the same as Backspace, to help with mis-typing */
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_BackSpace, GDK_SHIFT_MASK,
-				"backspace", 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_BackSpace, GDK_SHIFT_MASK,
+                                       "backspace",
+                                       NULL);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Delete, GDK_CONTROL_MASK,
-				"delete-from-cursor", 2,
-				G_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
-				G_TYPE_INT, 1);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Delete, GDK_CONTROL_MASK,
+                                       "delete-from-cursor",
+                                       "(ii)", GTK_DELETE_WORD_ENDS, 1);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Delete, GDK_CONTROL_MASK,
-				"delete-from-cursor", 2,
-				G_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
-				G_TYPE_INT, 1);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Delete, GDK_CONTROL_MASK,
+                                       "delete-from-cursor",
+                                       "(ii)", GTK_DELETE_WORD_ENDS, 1);
   
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_BackSpace, GDK_CONTROL_MASK,
-				"delete-from-cursor", 2,
-				G_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
-				G_TYPE_INT, -1);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_BackSpace, GDK_CONTROL_MASK,
+                                       "delete-from-cursor",
+                                       "(ii)", GTK_DELETE_WORD_ENDS, -1);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Delete, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
-				"delete-from-cursor", 2,
-				G_TYPE_ENUM, GTK_DELETE_PARAGRAPH_ENDS,
-				G_TYPE_INT, 1);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Delete, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+                                       "delete-from-cursor",
+                                       "(ii)", GTK_DELETE_PARAGRAPH_ENDS, 1);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Delete, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
-				"delete-from-cursor", 2,
-				G_TYPE_ENUM, GTK_DELETE_PARAGRAPH_ENDS,
-				G_TYPE_INT, 1);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Delete, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+                                       "delete-from-cursor",
+                                       "(ii)", GTK_DELETE_PARAGRAPH_ENDS, 1);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_BackSpace, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
-				"delete-from-cursor", 2,
-				G_TYPE_ENUM, GTK_DELETE_PARAGRAPH_ENDS,
-				G_TYPE_INT, -1);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_BackSpace, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+                                       "delete-from-cursor",
+                                       "(ii)", GTK_DELETE_PARAGRAPH_ENDS, -1);
 
   /* Cut/copy/paste */
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_x, GDK_CONTROL_MASK,
-				"cut-clipboard", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_c, GDK_CONTROL_MASK,
-				"copy-clipboard", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_v, GDK_CONTROL_MASK,
-				"paste-clipboard", 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_x, GDK_CONTROL_MASK,
+                                       "cut-clipboard",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_c, GDK_CONTROL_MASK,
+                                       "copy-clipboard",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_v, GDK_CONTROL_MASK,
+                                       "paste-clipboard",
+                                       NULL);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Delete, GDK_SHIFT_MASK,
-				"cut-clipboard", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Insert, GDK_CONTROL_MASK,
-				"copy-clipboard", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Insert, GDK_SHIFT_MASK,
-				"paste-clipboard", 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Delete, GDK_SHIFT_MASK,
+                                       "cut-clipboard",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Insert, GDK_CONTROL_MASK,
+                                       "copy-clipboard",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Insert, GDK_SHIFT_MASK,
+                                       "paste-clipboard",
+                                       NULL);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Delete, GDK_SHIFT_MASK,
-                                "cut-clipboard", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Insert, GDK_CONTROL_MASK,
-                                "copy-clipboard", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Insert, GDK_SHIFT_MASK,
-                                "paste-clipboard", 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Delete, GDK_SHIFT_MASK,
+                                       "cut-clipboard",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Insert, GDK_CONTROL_MASK,
+                                       "copy-clipboard",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Insert, GDK_SHIFT_MASK,
+                                       "paste-clipboard",
+                                       NULL);
 
   /* Undo/Redo */
-  gtk_binding_entry_add_action (binding_set, GDK_KEY_z, GDK_CONTROL_MASK,
-                                "text.undo", NULL);
-  gtk_binding_entry_add_action (binding_set, GDK_KEY_y, GDK_CONTROL_MASK,
-                                "text.redo", NULL);
-  gtk_binding_entry_add_action (binding_set, GDK_KEY_z, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
-                                "text.redo", NULL);
+  gtk_widget_class_add_binding_action (widget_class,
+                                       GDK_KEY_z, GDK_CONTROL_MASK,
+                                       "text.undo", NULL);
+  gtk_widget_class_add_binding_action (widget_class,
+                                       GDK_KEY_y, GDK_CONTROL_MASK,
+                                       "text.redo", NULL);
+  gtk_widget_class_add_binding_action (widget_class,
+                                       GDK_KEY_z, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                       "text.redo", NULL);
 
   /* Overwrite */
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Insert, 0,
-				"toggle-overwrite", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Insert, 0,
-				"toggle-overwrite", 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Insert, 0,
+                                       "toggle-overwrite",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Insert, 0,
+                                       "toggle-overwrite",
+                                       NULL);
 
   /* Emoji */
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_period, GDK_CONTROL_MASK,
-                                "insert-emoji", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_semicolon, GDK_CONTROL_MASK,
-                                "insert-emoji", 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_period, GDK_CONTROL_MASK,
+                                       "insert-emoji",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_semicolon, GDK_CONTROL_MASK,
+                                       "insert-emoji",
+                                       NULL);
 
   /* Caret mode */
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_F7, 0,
-				"toggle-cursor-visible", 0);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_F7, 0,
+                                       "toggle-cursor-visible",
+                                       NULL);
 
   /* Control-tab focus motion */
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Tab, GDK_CONTROL_MASK,
-				"move-focus", 1,
-				GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Tab, GDK_CONTROL_MASK,
-				"move-focus", 1,
-				GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Tab, GDK_CONTROL_MASK,
+                                       "move-focus",
+                                       "(i)", GTK_DIR_TAB_FORWARD);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Tab, GDK_CONTROL_MASK,
+                                       "move-focus",
+                                       "(i)", GTK_DIR_TAB_FORWARD);
   
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Tab, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
-				"move-focus", 1,
-				GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Tab, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
-				"move-focus", 1,
-				GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Tab, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+                                       "move-focus",
+                                       "(i)", GTK_DIR_TAB_BACKWARD);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_KP_Tab, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+                                       "move-focus",
+                                       "(i)", GTK_DIR_TAB_BACKWARD);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TEXT_VIEW_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("textview"));
@@ -8640,11 +8687,12 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
     gdk_event_unref (trigger_event);
 }
 
-static gboolean
-gtk_text_view_popup_menu (GtkWidget *widget)
+static void
+gtk_text_view_popup_menu (GtkWidget  *widget,
+                          const char *action_name,
+                          GVariant   *parameters)
 {
   gtk_text_view_do_popup (GTK_TEXT_VIEW (widget), NULL);
-  return TRUE;
 }
 
 static void

@@ -449,6 +449,16 @@
                                     </property>
                                   </object>
                                 </child>
+                                <child>
+                                  <object class="GtkStackPage">
+                                    <property name="name">shortcuts</property>
+                                    <property name="title" translatable="yes">Shortcuts</property>
+                                    <property name="child">
+                                      <object class="GtkInspectorShortcuts" id="shortcuts">
+                                      </object>
+                                    </property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>

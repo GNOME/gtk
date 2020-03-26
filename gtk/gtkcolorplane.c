@@ -28,6 +28,10 @@
 #include "gtksnapshot.h"
 #include "gtkprivate.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtkshortcutcontroller.h"
+#include "gtkshortcuttrigger.h"
+#include "gtkshortcutaction.h"
+#include "gtkshortcut.h"
 
 struct _GtkColorPlanePrivate
 {
@@ -244,11 +248,11 @@ static void
 hold_action (GtkGestureLongPress *gesture,
              gdouble              x,
              gdouble              y,
-             GtkColorPlane       *plane)
+             GtkWidget           *plane)
 {
-  gboolean handled;
-
-  g_signal_emit_by_name (plane, "popup-menu", &handled);
+  gtk_widget_activate_action (plane,
+                              "color.edit",
+                              "s", gtk_widget_get_name (plane));
 }
 
 static void
@@ -344,7 +348,7 @@ static void
 plane_drag_gesture_begin (GtkGestureDrag *gesture,
                           gdouble         start_x,
                           gdouble         start_y,
-                          GtkColorPlane  *plane)
+                          GtkWidget      *plane)
 {
   guint button;
 
@@ -352,9 +356,9 @@ plane_drag_gesture_begin (GtkGestureDrag *gesture,
 
   if (button == GDK_BUTTON_SECONDARY)
     {
-      gboolean handled;
-
-      g_signal_emit_by_name (plane, "popup-menu", &handled);
+      gtk_widget_activate_action (plane,
+                                  "color.edit",
+                                  "s", gtk_widget_get_name (plane));
     }
 
   if (button != GDK_BUTTON_PRIMARY)
@@ -363,9 +367,9 @@ plane_drag_gesture_begin (GtkGestureDrag *gesture,
       return;
     }
 
-  set_cross_cursor (GTK_WIDGET (plane), TRUE);
-  update_color (plane, start_x, start_y);
-  gtk_widget_grab_focus (GTK_WIDGET (plane));
+  set_cross_cursor (plane, TRUE);
+  update_color (GTK_COLOR_PLANE (plane), start_x, start_y);
+  gtk_widget_grab_focus (plane);
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
@@ -397,6 +401,9 @@ gtk_color_plane_init (GtkColorPlane *plane)
   GtkEventController *controller;
   GtkGesture *gesture;
   AtkObject *atk_obj;
+  GtkShortcutTrigger *trigger;
+  GtkShortcutAction *action;
+  GtkShortcut *shortcut;
 
   plane->priv = gtk_color_plane_get_instance_private (plane);
 
@@ -429,6 +436,14 @@ gtk_color_plane_init (GtkColorPlane *plane)
   controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (key_controller_key_pressed), plane);
+  gtk_widget_add_controller (GTK_WIDGET (plane), controller);
+
+  controller = gtk_shortcut_controller_new ();
+  trigger = gtk_alternative_trigger_new (gtk_keyval_trigger_new (GDK_KEY_F10, GDK_SHIFT_MASK),
+                                         gtk_keyval_trigger_new (GDK_KEY_Menu, 0));
+  action = gtk_named_action_new ("color.edit");
+  shortcut = gtk_shortcut_new_with_arguments (trigger, action, "s", "sv");
+  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
   gtk_widget_add_controller (GTK_WIDGET (plane), controller);
 }
 
