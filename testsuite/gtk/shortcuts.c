@@ -156,6 +156,7 @@ test_trigger_parse (void)
   enum {
     TRIGGER_KEYVAL,
     TRIGGER_MNEMONIC,
+    TRIGGER_ALT,
     TRIGGER_NEVER,
     TRIGGER_INVALID
   };
@@ -177,6 +178,7 @@ test_trigger_parse (void)
     { "_s", 0, GDK_KEY_s, TRIGGER_MNEMONIC },
     { "foo", 0, 0, TRIGGER_INVALID },
     { "<Nyaa>B", 0, 0, TRIGGER_INVALID },
+    { "<Control>U|<Shift><Control>U", GDK_CONTROL_MASK, 'u', TRIGGER_ALT }
   };
   GtkShortcutTrigger *trigger;
   int i;
@@ -198,6 +200,9 @@ test_trigger_parse (void)
           g_assert_cmpuint (gtk_keyval_trigger_get_keyval (GTK_KEYVAL_TRIGGER (trigger)),
                             ==,
                             tests[i].keyval);
+          break;
+        case TRIGGER_ALT:
+          g_assert_true (GTK_IS_ALTERNATIVE_TRIGGER (trigger));
           break;
         case TRIGGER_NEVER:
           g_assert_true (GTK_IS_NEVER_TRIGGER (trigger));

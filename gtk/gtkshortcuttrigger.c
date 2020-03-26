@@ -120,8 +120,11 @@ gtk_shortcut_trigger_trigger (GtkShortcutTrigger *self,
  *   - `never`, for #GtkNeverTrigger
  *   - a string parsed by gtk_accelerator_parse(), for a #GtkKeyvalTrigger
  *   - underscore, followed by a single character, for #GtkMnemonicTrigger
+ *   - two valid trigger strings, separated by a `|` character, for a
+ *     #GtkAlternativeTrigger
  *
- * Returns: (nullable): a new #GtkShortcutTrigger or %NULL on error
+ * Returns: (nullable) (transfer full): a new #GtkShortcutTrigger
+ *   or %NULL on error
  */
 GtkShortcutTrigger *
 gtk_shortcut_trigger_parse_string (const char *string)
@@ -131,8 +134,44 @@ gtk_shortcut_trigger_parse_string (const char *string)
 
   g_return_val_if_fail (string != NULL, NULL);
 
+  if (strchr (string, '|') != NULL)
+    {
+      const char *sep = strchr (string, '|');
+      char *frag_a = g_strndup (string, sep - string - 1);
+      char *frag_b = g_strdup (sep + 1);
+      GtkShortcutTrigger *t1, *t2;
+
+      if (frag_b == NULL)
+        {
+          g_free (frag_a);
+          return NULL;
+        }
+
+      t1 = gtk_shortcut_trigger_parse_string (frag_a);
+      if (t1 == NULL)
+        {
+          g_free (frag_a);
+          g_free (frag_b);
+          return NULL;
+        }
+
+      t2 = gtk_shortcut_trigger_parse_string (frag_b);
+      if (t2 == NULL)
+        {
+          g_object_unref (t1);
+          g_free (frag_a);
+          g_free (frag_b);
+          return NULL;
+        }
+
+      g_free (frag_a);
+      g_free (frag_b);
+
+      return gtk_alternative_trigger_new (t1, t2);
+    }
+
   if (g_str_equal (string, "never"))
-    return gtk_never_trigger_get ();
+    return g_object_ref (gtk_never_trigger_get ());
 
   if (string[0] == '_')
     {
@@ -1090,7 +1129,7 @@ gtk_alternative_trigger_print (GtkShortcutTrigger *trigger,
   GtkAlternativeTrigger *self = GTK_ALTERNATIVE_TRIGGER (trigger);
 
   gtk_shortcut_trigger_print (self->first, string);
-  g_string_append (string, ", ");
+  g_string_append (string, "|");
   gtk_shortcut_trigger_print (self->second, string);
 }
 
