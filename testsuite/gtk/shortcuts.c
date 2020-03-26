@@ -155,15 +155,18 @@ test_trigger_parse (void)
 {
   struct {
     const char *str;
+    GType type;
     GdkModifierType modifiers;
     guint keyval;
   } tests[] = {
-    { "<Primary><Alt>z", GDK_CONTROL_MASK|GDK_MOD1_MASK, 'z' },
-    { "<Control>U", GDK_CONTROL_MASK, 'u' },
-    { "<Hyper>x", GDK_HYPER_MASK, 'x' },
-    { "<Meta>y", GDK_META_MASK, 'y' },
-    { "KP_7", 0, GDK_KEY_KP_7 },
-    { "<Shift>exclam", GDK_SHIFT_MASK, '!' },
+    { "<Primary><Alt>z", GTK_TYPE_KEYVAL_TRIGGER, GDK_CONTROL_MASK|GDK_MOD1_MASK, 'z' },
+    { "<Control>U", GTK_TYPE_KEYVAL_TRIGGER, GDK_CONTROL_MASK, 'u' },
+    { "<Hyper>x", GTK_TYPE_KEYVAL_TRIGGER, GDK_HYPER_MASK, 'x' },
+    { "<Meta>y", GTK_TYPE_KEYVAL_TRIGGER, GDK_META_MASK, 'y' },
+    { "KP_7", GTK_TYPE_KEYVAL_TRIGGER, 0, GDK_KEY_KP_7 },
+    { "<Shift>exclam", GTK_TYPE_KEYVAL_TRIGGER, GDK_SHIFT_MASK, '!' },
+    { "_a", GTK_TYPE_MNEMONIC_TRIGGER, 0, 'a' },
+    { "_A", GTK_TYPE_MNEMONIC_TRIGGER, 0, 'a' },
   };
   GtkShortcutTrigger *trigger;
   int i;
@@ -172,9 +175,17 @@ test_trigger_parse (void)
     {
       trigger = gtk_shortcut_trigger_parse_string (tests[i].str);
 
-      g_assert_true (GTK_IS_KEYVAL_TRIGGER (trigger));
-      g_assert_cmpint (gtk_keyval_trigger_get_modifiers (GTK_KEYVAL_TRIGGER (trigger)), ==, tests[i].modifiers);
-      g_assert_cmpuint (gtk_keyval_trigger_get_keyval (GTK_KEYVAL_TRIGGER (trigger)), ==, tests[i].keyval);
+      g_assert_cmpint (G_OBJECT_TYPE (trigger), ==, tests[i].type);
+
+      if (GTK_IS_KEYVAL_TRIGGER (trigger))
+        {
+          g_assert_cmpint (gtk_keyval_trigger_get_modifiers (GTK_KEYVAL_TRIGGER (trigger)), ==, tests[i].modifiers);
+          g_assert_cmpuint (gtk_keyval_trigger_get_keyval (GTK_KEYVAL_TRIGGER (trigger)), ==, tests[i].keyval);
+        }
+      else if (GTK_IS_MNEMONIC_TRIGGER (trigger))
+        {
+          g_assert_cmpuint (gtk_mnemonic_trigger_get_keyval (GTK_MNEMONIC_TRIGGER (trigger)), ==, tests[i].keyval);
+        }
 
       g_object_unref (trigger);
     }
