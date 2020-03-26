@@ -153,17 +153,30 @@ test_trigger_equal (void)
 static void
 test_trigger_parse (void)
 {
+  enum {
+    TRIGGER_KEYVAL,
+    TRIGGER_MNEMONIC,
+    TRIGGER_NEVER,
+    TRIGGER_INVALID
+  };
+
   struct {
     const char *str;
     GdkModifierType modifiers;
     guint keyval;
+    int trigger_type;
   } tests[] = {
-    { "<Primary><Alt>z", GDK_CONTROL_MASK|GDK_MOD1_MASK, 'z' },
-    { "<Control>U", GDK_CONTROL_MASK, 'u' },
-    { "<Hyper>x", GDK_HYPER_MASK, 'x' },
-    { "<Meta>y", GDK_META_MASK, 'y' },
-    { "KP_7", 0, GDK_KEY_KP_7 },
-    { "<Shift>exclam", GDK_SHIFT_MASK, '!' },
+    { "<Primary><Alt>z", GDK_CONTROL_MASK|GDK_MOD1_MASK, 'z', TRIGGER_KEYVAL },
+    { "<Control>U", GDK_CONTROL_MASK, 'u', TRIGGER_KEYVAL },
+    { "<Hyper>x", GDK_HYPER_MASK, 'x', TRIGGER_KEYVAL },
+    { "<Meta>y", GDK_META_MASK, 'y', TRIGGER_KEYVAL },
+    { "KP_7", 0, GDK_KEY_KP_7, TRIGGER_KEYVAL },
+    { "<Shift>exclam", GDK_SHIFT_MASK, '!', TRIGGER_KEYVAL },
+    { "never", 0, 0, TRIGGER_NEVER },
+    { "_A", 0, GDK_KEY_a, TRIGGER_MNEMONIC },
+    { "_s", 0, GDK_KEY_s, TRIGGER_MNEMONIC },
+    { "foo", 0, 0, TRIGGER_INVALID },
+    { "<Nyaa>B", 0, 0, TRIGGER_INVALID },
   };
   GtkShortcutTrigger *trigger;
   int i;
@@ -172,11 +185,37 @@ test_trigger_parse (void)
     {
       trigger = gtk_shortcut_trigger_parse_string (tests[i].str);
 
-      g_assert_true (GTK_IS_KEYVAL_TRIGGER (trigger));
-      g_assert_cmpint (gtk_keyval_trigger_get_modifiers (GTK_KEYVAL_TRIGGER (trigger)), ==, tests[i].modifiers);
-      g_assert_cmpuint (gtk_keyval_trigger_get_keyval (GTK_KEYVAL_TRIGGER (trigger)), ==, tests[i].keyval);
+      switch (tests[i].trigger_type)
+        {
+        case TRIGGER_INVALID:
+          g_assert_null (trigger);
+          break;
+        case TRIGGER_KEYVAL:
+          g_assert_true (GTK_IS_KEYVAL_TRIGGER (trigger));
+          g_assert_cmpint (gtk_keyval_trigger_get_modifiers (GTK_KEYVAL_TRIGGER (trigger)),
+                           ==,
+                           tests[i].modifiers);
+          g_assert_cmpuint (gtk_keyval_trigger_get_keyval (GTK_KEYVAL_TRIGGER (trigger)),
+                            ==,
+                            tests[i].keyval);
+          break;
+        case TRIGGER_NEVER:
+          g_assert_true (GTK_IS_NEVER_TRIGGER (trigger));
+          break;
+        case TRIGGER_MNEMONIC:
+          g_assert_true (GTK_IS_MNEMONIC_TRIGGER (trigger));
+          g_assert_cmpuint (gtk_mnemonic_trigger_get_keyval (GTK_MNEMONIC_TRIGGER (trigger)),
+                            ==,
+                            tests[i].keyval);
+          break;
+        default:
+          g_assert_not_reached ();
+          break;
+        }
 
-      g_object_unref (trigger);
+      if (tests[i].trigger_type != TRIGGER_INVALID &&
+          tests[i].trigger_type != TRIGGER_NEVER)
+        g_object_unref (trigger);
     }
 }
 
