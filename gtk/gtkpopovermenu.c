@@ -32,9 +32,10 @@
 #include "gtkeventcontrollermotion.h"
 #include "gtkmain.h"
 #include "gtktypebuiltins.h"
-#include "gtkbindings.h"
 #include "gtkmodelbuttonprivate.h"
 #include "gtkpopovermenubar.h"
+#include "gtkshortcutmanager.h"
+#include "gtkshortcutcontroller.h"
 
 
 /**
@@ -200,6 +201,7 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
 {
   GtkWidget *stack;
   GtkEventController *controller;
+  GList *controllers, *l;
 
   stack = gtk_stack_new ();
   gtk_stack_set_vhomogeneous (GTK_STACK (stack), FALSE);
@@ -218,6 +220,18 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
   controller = gtk_event_controller_motion_new ();
   g_signal_connect (controller, "leave", G_CALLBACK (leave_cb), popover);
   gtk_widget_add_controller (GTK_WIDGET (popover), controller);
+
+  controllers = gtk_widget_list_controllers (GTK_WIDGET (popover), GTK_PHASE_CAPTURE);
+  for (l = controllers; l; l = l->next)
+    {
+      controller = l->data;
+      if (GTK_IS_SHORTCUT_CONTROLLER (controller) &&
+          strcmp (gtk_event_controller_get_name (controller), "gtk-shortcut-manager-capture") == 0)
+        gtk_shortcut_controller_set_mnemonics_modifiers (GTK_SHORTCUT_CONTROLLER (controller), 0);
+    }
+  g_list_free (controllers);
+
+  gtk_popover_disable_auto_mnemonics (GTK_POPOVER (popover));
 }
 
 static void
@@ -362,37 +376,37 @@ gtk_popover_menu_focus (GtkWidget        *widget,
 
 
 static void
-add_tab_bindings (GtkBindingSet    *binding_set,
+add_tab_bindings (GtkWidgetClass   *widget_class,
                   GdkModifierType   modifiers,
                   GtkDirectionType  direction)
 {
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Tab, modifiers,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Tab, modifiers,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Tab, modifiers,
+                                       "move-focus",
+                                       "(i)", direction);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Tab, modifiers,
+                                       "move-focus",
+                                       "(i)", direction);
 }
 
 static void
-add_arrow_bindings (GtkBindingSet    *binding_set,
+add_arrow_bindings (GtkWidgetClass   *widget_class,
                     guint             keysym,
                     GtkDirectionType  direction)
 {
   guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
  
-  gtk_binding_entry_add_signal (binding_set, keysym, 0,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, keysym, GDK_CONTROL_MASK,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, keypad_keysym, 0,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, keypad_keysym, GDK_CONTROL_MASK,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_widget_class_add_binding_signal (widget_class, keysym, 0,
+                                       "move-focus",
+                                       "(i)", direction);
+  gtk_widget_class_add_binding_signal (widget_class, keysym, GDK_CONTROL_MASK,
+                                       "move-focus",
+                                       "(i)", direction);
+  gtk_widget_class_add_binding_signal (widget_class, keypad_keysym, 0,
+                                       "move-focus",
+                                       "(i)", direction);
+  gtk_widget_class_add_binding_signal (widget_class, keypad_keysym, GDK_CONTROL_MASK,
+                                       "move-focus",
+                                       "(i)", direction);
 }
 
 static void
@@ -404,11 +418,19 @@ gtk_popover_menu_show (GtkWidget *widget)
 }
 
 static void
+gtk_popover_menu_move_focus (GtkWidget         *widget,
+                             GtkDirectionType  direction)
+{
+  gtk_popover_set_mnemonics_visible (GTK_POPOVER (widget), TRUE);
+
+  GTK_WIDGET_CLASS (gtk_popover_menu_parent_class)->move_focus (widget, direction);
+}
+
+static void
 gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkBindingSet *binding_set;
 
   object_class->dispose = gtk_popover_menu_dispose;
   object_class->set_property = gtk_popover_menu_set_property;
@@ -418,6 +440,7 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
   widget_class->unmap = gtk_popover_menu_unmap;
   widget_class->focus = gtk_popover_menu_focus;
   widget_class->show = gtk_popover_menu_show;
+  widget_class->move_focus = gtk_popover_menu_move_focus;
 
   g_object_class_install_property (object_class,
                                    PROP_VISIBLE_SUBMENU,
@@ -435,28 +458,26 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
                                                         G_TYPE_MENU_MODEL,
                                                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  binding_set = gtk_binding_set_by_class (klass);
+  add_arrow_bindings (widget_class, GDK_KEY_Up, GTK_DIR_UP);
+  add_arrow_bindings (widget_class, GDK_KEY_Down, GTK_DIR_DOWN);
+  add_arrow_bindings (widget_class, GDK_KEY_Left, GTK_DIR_LEFT);
+  add_arrow_bindings (widget_class, GDK_KEY_Right, GTK_DIR_RIGHT);
 
-  add_arrow_bindings (binding_set, GDK_KEY_Up, GTK_DIR_UP);
-  add_arrow_bindings (binding_set, GDK_KEY_Down, GTK_DIR_DOWN);
-  add_arrow_bindings (binding_set, GDK_KEY_Left, GTK_DIR_LEFT);
-  add_arrow_bindings (binding_set, GDK_KEY_Right, GTK_DIR_RIGHT);
+  add_tab_bindings (widget_class, 0, GTK_DIR_TAB_FORWARD);
+  add_tab_bindings (widget_class, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
+  add_tab_bindings (widget_class, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
+  add_tab_bindings (widget_class, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 
-  add_tab_bindings (binding_set, 0, GTK_DIR_TAB_FORWARD);
-  add_tab_bindings (binding_set, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
-  add_tab_bindings (binding_set, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
-  add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Return, 0,
-                                "activate-default", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_ISO_Enter, 0,
-                                "activate-default", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Enter, 0,
-                                "activate-default", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_space, 0,
-                                "activate-default", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Space, 0,
-                                "activate-default", 0);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Return, 0,
+                                       "activate-default", NULL);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_ISO_Enter, 0,
+                                       "activate-default", NULL);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Enter, 0,
+                                       "activate-default", NULL);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_space, 0,
+                                       "activate-default", NULL);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Space, 0,
+                                       "activate-default", NULL);
 }
 
 /**

@@ -211,6 +211,7 @@ typedef struct
 struct _GtkWidgetClassPrivate
 {
   GtkWidgetTemplate *template;
+  GListStore *shortcuts;
   GType accessible_type;
   AtkRole accessible_role;
   GQuark css_name;
@@ -247,9 +248,6 @@ void         _gtk_widget_add_attached_window    (GtkWidget    *widget,
 void         _gtk_widget_remove_attached_window (GtkWidget    *widget,
                                                  GtkWindow    *window);
 
-const gchar*      _gtk_widget_get_accel_path               (GtkWidget *widget,
-                                                            gboolean  *locked);
-
 AtkObject *       _gtk_widget_peek_accessible              (GtkWidget *widget);
 
 void              _gtk_widget_set_has_default              (GtkWidget *widget,
@@ -275,9 +273,6 @@ void              _gtk_widget_synthesize_crossing          (GtkWidget       *fro
                                                             GdkDevice       *device,
                                                             GdkCrossingMode  mode);
 
-void              _gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
-                                                            GtkWidget *toplevel,
-                                                            gpointer   user_data);
 GtkStyleContext * _gtk_widget_peek_style_context           (GtkWidget *widget);
 
 gboolean          _gtk_widget_captured_event               (GtkWidget *widget,
@@ -299,6 +294,9 @@ gboolean          gtk_widget_has_tick_callback             (GtkWidget *widget);
 gboolean          gtk_widget_has_size_request              (GtkWidget *widget);
 
 void              gtk_widget_reset_controllers             (GtkWidget *widget);
+
+GList *           gtk_widget_list_controllers              (GtkWidget           *widget,
+                                                            GtkPropagationPhase  phase);
 
 gboolean          gtk_widget_query_tooltip                 (GtkWidget  *widget,
                                                             gint        x,

@@ -100,6 +100,10 @@ test_type (gconstpointer data)
       g_str_equal (g_type_name (type), "GtkPlacesSidebar"))
     return;
  
+  if (g_type_is_a (type, GTK_TYPE_SHORTCUT_TRIGGER) ||
+      g_type_is_a (type, GTK_TYPE_SHORTCUT_ACTION))
+    return;
+
   klass = g_type_class_ref (type);
 
   if (g_type_is_a (type, GTK_TYPE_SETTINGS))
@@ -322,6 +326,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 	continue;
 
       if (g_type_is_a (type, GTK_TYPE_SETTINGS))
+        continue;
+
+      if (g_type_is_a (type, GTK_TYPE_SHORTCUT) &&
+	  (strcmp (pspec->name, "action") == 0 ||
+           strcmp (pspec->name, "trigger") == 0))
         continue;
 
       if (g_type_is_a (type, GTK_TYPE_SPIN_BUTTON) &&

@@ -29,6 +29,10 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtksnapshot.h"
+#include "gtkshortcutcontroller.h"
+#include "gtkshortcuttrigger.h"
+#include "gtkshortcutaction.h"
+#include "gtkshortcut.h"
 
 #include <math.h>
 
@@ -48,7 +52,7 @@ enum
 static void hold_action (GtkGestureLongPress *gesture,
                          gdouble              x,
                          gdouble              y,
-                         GtkColorScale       *scale);
+                         GtkWidget           *scale);
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkColorScale, gtk_color_scale, GTK_TYPE_SCALE)
 
@@ -161,6 +165,29 @@ gtk_color_scale_init (GtkColorScale *scale)
 }
 
 static void
+scale_constructed (GObject *object)
+{
+  GtkColorScale *scale = GTK_COLOR_SCALE (object);
+  GtkColorScalePrivate *priv = gtk_color_scale_get_instance_private (scale);
+  GtkEventController *controller;
+  GtkShortcutTrigger *trigger;
+  GtkShortcutAction *action;
+  GtkShortcut *shortcut;
+
+  controller = gtk_shortcut_controller_new ();
+  trigger = gtk_alternative_trigger_new (gtk_keyval_trigger_new (GDK_KEY_F10, GDK_SHIFT_MASK),
+                                         gtk_keyval_trigger_new (GDK_KEY_Menu, 0));
+  action = gtk_named_action_new ("color.edit");
+  shortcut = gtk_shortcut_new_with_arguments (trigger,
+                                              action,
+                                              "s",
+                                              priv->type == GTK_COLOR_SCALE_ALPHA
+                                                ? "a" : "h");
+  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
+  gtk_widget_add_controller (GTK_WIDGET (scale), controller);
+}
+
+static void
 scale_get_property (GObject    *object,
                     guint       prop_id,
                     GValue     *value,
@@ -223,11 +250,11 @@ static void
 hold_action (GtkGestureLongPress *gesture,
              gdouble              x,
              gdouble              y,
-             GtkColorScale       *scale)
+             GtkWidget           *scale)
 {
-  gboolean handled;
-
-  g_signal_emit_by_name (scale, "popup-menu", &handled);
+  gtk_widget_activate_action (scale,
+                              "color.edit",
+                              "s", gtk_widget_get_name (scale));
 }
 
 static void
@@ -245,6 +272,7 @@ gtk_color_scale_class_init (GtkColorScaleClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
+  object_class->constructed = scale_constructed;
   object_class->finalize = scale_finalize;
   object_class->get_property = scale_get_property;
   object_class->set_property = scale_set_property;
@@ -253,6 +281,7 @@ gtk_color_scale_class_init (GtkColorScaleClass *class)
       g_param_spec_int ("scale-type", P_("Scale type"), P_("Scale type"),
                         0, 1, 0,
                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
 }
 
 void

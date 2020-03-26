@@ -87,6 +87,12 @@ GDK_AVAILABLE_IN_ALL
 gboolean        gtk_popover_get_has_arrow   (GtkPopover         *popover);
 
 GDK_AVAILABLE_IN_ALL
+void            gtk_popover_set_mnemonics_visible (GtkPopover   *popover,
+                                                   gboolean      mnemonics_visible);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_popover_get_mnemonics_visible (GtkPopover   *popover);
+
+GDK_AVAILABLE_IN_ALL
 void            gtk_popover_popup (GtkPopover *popover);
 GDK_AVAILABLE_IN_ALL
 void            gtk_popover_popdown (GtkPopover *popover);

@@ -102,12 +102,11 @@
 #include "gtknative.h"
 #include "gtkwidgetprivate.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtkeventcontrollerfocus.h"
 #include "gtkcssnodeprivate.h"
-#include "gtkbindings.h"
 #include "gtkbinlayout.h"
 #include "gtkenums.h"
 #include "gtktypebuiltins.h"
-#include "gtkmnemonichash.h"
 #include "gtkgizmoprivate.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
@@ -121,6 +120,7 @@
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtksnapshot.h"
+#include "gtkshortcutmanager.h"
 
 #include "gtkrender.h"
 #include "gtkstylecontextprivate.h"
@@ -130,6 +130,8 @@
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
 #endif
+
+#define MNEMONICS_DELAY 300 /* ms */
 
 #define TAIL_GAP_WIDTH  24
 #define TAIL_HEIGHT     12
@@ -147,6 +149,10 @@ typedef struct {
   GtkPositionType position;
   gboolean autohide;
   gboolean has_arrow;
+  gboolean mnemonics_visible;
+  gboolean disable_auto_mnemonics;
+
+  guint mnemonics_display_timeout_id;
 
   GtkWidget *contents_widget;
   GtkCssNode *arrow_node;
@@ -171,15 +177,19 @@ enum {
   PROP_AUTOHIDE,
   PROP_DEFAULT_WIDGET,
   PROP_HAS_ARROW,
+  PROP_MNEMONICS_VISIBLE,
   NUM_PROPERTIES
 };
 
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL };
 
+static void gtk_popover_shortcut_manager_interface_init (GtkShortcutManagerInterface *iface);
 static void gtk_popover_native_interface_init (GtkNativeInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkPopover, gtk_popover, GTK_TYPE_BIN,
                          G_ADD_PRIVATE (GtkPopover)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SHORTCUT_MANAGER,
+                                                gtk_popover_shortcut_manager_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_NATIVE,
                                                 gtk_popover_native_interface_init))
 
@@ -576,16 +586,135 @@ close_menu (GtkPopover *popover)
 }
 
 static gboolean
+gtk_popover_has_mnemonic_modifier_pressed (GtkPopover *popover)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+  GList *seats, *s;
+  gboolean retval = FALSE;
+
+  seats = gdk_display_list_seats (gtk_widget_get_display (GTK_WIDGET (popover)));
+
+  for (s = seats; s; s = s->next)
+    {
+      GdkDevice *dev = gdk_seat_get_pointer (s->data);
+      GdkModifierType mask;
+
+      gdk_device_get_state (dev, priv->surface, NULL, &mask);
+      if ((mask & gtk_accelerator_get_default_mod_mask ()) == GDK_MOD1_MASK)
+        {
+          retval = TRUE;
+          break;
+        }
+    }
+
+  g_list_free (seats);
+
+  return retval;
+}
+
+static gboolean
+schedule_mnemonics_visible_cb (gpointer data)
+{
+  GtkPopover *popover = data;
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  priv->mnemonics_display_timeout_id = 0;
+
+  gtk_popover_set_mnemonics_visible (popover, TRUE);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gtk_popover_schedule_mnemonics_visible (GtkPopover *popover)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  if (priv->mnemonics_display_timeout_id)
+    return;
+
+  priv->mnemonics_display_timeout_id =
+    g_timeout_add (MNEMONICS_DELAY, schedule_mnemonics_visible_cb, popover);
+  g_source_set_name_by_id (priv->mnemonics_display_timeout_id, "[gtk] popover_schedule_mnemonics_visible_cb");
+}
+
+static void
+gtk_popover_focus_in (GtkWidget *widget)
+{
+  GtkPopover *popover = GTK_POPOVER (widget);
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  if (priv->disable_auto_mnemonics)
+    return;
+
+  if (gtk_widget_get_visible (widget))
+    {
+      if (gtk_popover_has_mnemonic_modifier_pressed (popover))
+        gtk_popover_schedule_mnemonics_visible (popover);
+    }
+}
+
+static void
+gtk_popover_focus_out (GtkWidget *widget)
+{
+  GtkPopover *popover = GTK_POPOVER (widget);
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  if (priv->disable_auto_mnemonics)
+    return;
+
+  gtk_popover_set_mnemonics_visible (popover, FALSE);
+}
+
+static void
+update_mnemonics_visible (GtkPopover      *popover,
+                          guint            keyval,
+                          GdkModifierType  state,
+                          gboolean         visible)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  if (priv->disable_auto_mnemonics)
+    return;
+
+  if ((keyval == GDK_KEY_Alt_L || keyval == GDK_KEY_Alt_R) &&
+      ((state & (gtk_accelerator_get_default_mod_mask ()) & ~(GDK_MOD1_MASK)) == 0))
+    {
+      if (visible)
+        gtk_popover_schedule_mnemonics_visible (popover);
+      else
+        gtk_popover_set_mnemonics_visible (popover, FALSE);
+    }
+}
+
+static gboolean
 gtk_popover_key_pressed (GtkWidget       *widget,
                          guint            keyval,
                          guint            keycode,
                          GdkModifierType  state)
 {
+  GtkPopover *popover = GTK_POPOVER (widget);
+
   if (keyval == GDK_KEY_Escape)
     {
-      close_menu (GTK_POPOVER (widget));
+      close_menu (popover);
       return TRUE;
     }
+
+  update_mnemonics_visible (popover, keyval, state, TRUE);
+
+  return FALSE;
+}
+
+static gboolean
+gtk_popover_key_released (GtkWidget       *widget,
+                          guint            keyval,
+                          guint            keycode,
+                          GdkModifierType  state)
+{
+  GtkPopover *popover = GTK_POPOVER (widget);
+
+  update_mnemonics_visible (popover, keyval, state, FALSE);
 
   return FALSE;
 }
@@ -705,7 +834,13 @@ gtk_popover_init (GtkPopover *popover)
 
   controller = gtk_event_controller_key_new ();
   g_signal_connect_swapped (controller, "key-pressed", G_CALLBACK (gtk_popover_key_pressed), popover);
+  g_signal_connect_swapped (controller, "key-released", G_CALLBACK (gtk_popover_key_released), popover);
   gtk_widget_add_controller (GTK_WIDGET (popover), controller);
+
+  controller = gtk_event_controller_focus_new ();
+  g_signal_connect_swapped (controller, "enter", G_CALLBACK (gtk_popover_focus_in), popover);
+  g_signal_connect_swapped (controller, "leave", G_CALLBACK (gtk_popover_focus_out), popover);
+  gtk_widget_add_controller (widget, controller);
 
   priv->arrow_node = gtk_css_node_new ();
   gtk_css_node_set_name (priv->arrow_node, g_quark_from_static_string ("arrow"));
@@ -793,6 +928,7 @@ gtk_popover_show (GtkWidget *widget)
 static void
 gtk_popover_hide (GtkWidget *widget)
 {
+  gtk_popover_set_mnemonics_visible (GTK_POPOVER (widget), FALSE);
   _gtk_widget_set_visible_flag (widget, FALSE);
   gtk_widget_unmap (widget);
   g_signal_emit (widget, signals[CLOSED], 0);
@@ -894,6 +1030,12 @@ gtk_popover_finalize (GObject *object)
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   g_clear_pointer (&priv->layout, gdk_popup_layout_unref);
+
+  if (priv->mnemonics_display_timeout_id)
+    {
+      g_source_remove (priv->mnemonics_display_timeout_id);
+      priv->mnemonics_display_timeout_id = 0;
+    }
 
   G_OBJECT_CLASS (gtk_popover_parent_class)->finalize (object);
 }
@@ -1380,6 +1522,10 @@ gtk_popover_set_property (GObject      *object,
       gtk_popover_set_has_arrow (popover, g_value_get_boolean (value));
       break;
 
+    case PROP_MNEMONICS_VISIBLE:
+      gtk_popover_set_mnemonics_visible (popover, g_value_get_boolean (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1417,6 +1563,10 @@ gtk_popover_get_property (GObject      *object,
       g_value_set_boolean (value, priv->has_arrow);
       break;
 
+    case PROP_MNEMONICS_VISIBLE:
+      g_value_set_boolean (value, priv->mnemonics_visible);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1445,37 +1595,41 @@ gtk_popover_remove (GtkContainer *container,
 }
 
 static void
-add_tab_bindings (GtkBindingSet    *binding_set,
+add_tab_bindings (GtkWidgetClass   *widget_class,
                   GdkModifierType   modifiers,
                   GtkDirectionType  direction)
 {
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Tab, modifiers,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Tab, modifiers,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Tab, modifiers,
+                                       "move-focus",
+                                       "(i)", direction);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Tab, modifiers,
+                                       "move-focus",
+                                       "(i)", direction);
 }
 
 static void
-add_arrow_bindings (GtkBindingSet    *binding_set,
+add_arrow_bindings (GtkWidgetClass   *widget_class,
                     guint             keysym,
                     GtkDirectionType  direction)
 {
   guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
 
-  gtk_binding_entry_add_signal (binding_set, keysym, 0,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, keysym, GDK_CONTROL_MASK,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, keypad_keysym, 0,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, keypad_keysym, GDK_CONTROL_MASK,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_widget_class_add_binding_signal (widget_class, keysym, 0,
+                                       "move-focus",
+                                       "(i)",
+                                       direction);
+  gtk_widget_class_add_binding_signal (widget_class, keysym, GDK_CONTROL_MASK,
+                                       "move-focus",
+                                       "(i)",
+                                       direction);
+  gtk_widget_class_add_binding_signal (widget_class, keypad_keysym, 0,
+                                       "move-focus",
+                                       "(i)",
+                                       direction);
+  gtk_widget_class_add_binding_signal (widget_class, keypad_keysym, GDK_CONTROL_MASK,
+                                       "move-focus",
+                                       "(i)",
+                                       direction);
 }
 
 static void
@@ -1484,7 +1638,6 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
-  GtkBindingSet *binding_set;
 
   object_class->dispose = gtk_popover_dispose;
   object_class->finalize = gtk_popover_finalize;
@@ -1541,6 +1694,13 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  properties[PROP_MNEMONICS_VISIBLE] =
+      g_param_spec_boolean ("mnemonics-visible",
+                            P_("Mnemonics visible"),
+                            P_("Whether mnemonics are currently visible in this popover"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
   signals[CLOSED] =
@@ -1563,24 +1723,22 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  binding_set = gtk_binding_set_by_class (klass);
+  add_arrow_bindings (widget_class, GDK_KEY_Up, GTK_DIR_UP);
+  add_arrow_bindings (widget_class, GDK_KEY_Down, GTK_DIR_DOWN);
+  add_arrow_bindings (widget_class, GDK_KEY_Left, GTK_DIR_LEFT);
+  add_arrow_bindings (widget_class, GDK_KEY_Right, GTK_DIR_RIGHT);
 
-  add_arrow_bindings (binding_set, GDK_KEY_Up, GTK_DIR_UP);
-  add_arrow_bindings (binding_set, GDK_KEY_Down, GTK_DIR_DOWN);
-  add_arrow_bindings (binding_set, GDK_KEY_Left, GTK_DIR_LEFT);
-  add_arrow_bindings (binding_set, GDK_KEY_Right, GTK_DIR_RIGHT);
+  add_tab_bindings (widget_class, 0, GTK_DIR_TAB_FORWARD);
+  add_tab_bindings (widget_class, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
+  add_tab_bindings (widget_class, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
+  add_tab_bindings (widget_class, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 
-  add_tab_bindings (binding_set, 0, GTK_DIR_TAB_FORWARD);
-  add_tab_bindings (binding_set, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
-  add_tab_bindings (binding_set, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
-  add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Return, 0,
-                                "activate-default", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_ISO_Enter, 0,
-                                "activate-default", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Enter, 0,
-                                "activate-default", 0);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Return, 0,
+                                       "activate-default", NULL);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_ISO_Enter, 0,
+                                       "activate-default", NULL);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Enter, 0,
+                                       "activate-default", NULL);
 
   gtk_widget_class_set_css_name (widget_class, "popover");
 }
@@ -1619,6 +1777,11 @@ gtk_popover_set_default_widget (GtkPopover *popover,
     }
 
   g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_DEFAULT_WIDGET]);
+}
+
+static void
+gtk_popover_shortcut_manager_interface_init (GtkShortcutManagerInterface *iface)
+{
 }
 
 static void
@@ -1889,4 +2052,60 @@ gtk_popover_get_has_arrow (GtkPopover *popover)
   g_return_val_if_fail (GTK_IS_POPOVER (popover), TRUE);
 
   return priv->has_arrow;
+}
+
+/**
+ * gtk_popover_set_mnemonics_visible:
+ * @popover: a #GtkPopover
+ * @mnemonics_visible: the new value
+ *
+ * Sets the #GtkPopover:mnemonics-visible property.
+ */
+void
+gtk_popover_set_mnemonics_visible (GtkPopover *popover,
+                                   gboolean    mnemonics_visible)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  g_return_if_fail (GTK_IS_POPOVER (popover));
+
+  if (priv->mnemonics_visible == mnemonics_visible)
+    return;
+
+  priv->mnemonics_visible = mnemonics_visible;
+
+  g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_MNEMONICS_VISIBLE]);
+  gtk_widget_queue_resize (GTK_WIDGET (popover));
+
+  if (priv->mnemonics_display_timeout_id)
+    {
+      g_source_remove (priv->mnemonics_display_timeout_id);
+      priv->mnemonics_display_timeout_id = 0;
+    }
+}
+
+/**
+ * gtk_popover_get_mnemonics_visible:
+ * @popover: a #GtkPopover
+ *
+ * Gets the value of the #GtkPopover:mnemonics-visible property.
+ *
+ * Returns: %TRUE if mnemonics are supposed to be visible in this popover 
+ */
+gboolean
+gtk_popover_get_mnemonics_visible (GtkPopover *popover)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  g_return_val_if_fail (GTK_IS_POPOVER (popover), FALSE);
+
+  return priv->mnemonics_visible;
+}
+
+void
+gtk_popover_disable_auto_mnemonics (GtkPopover *popover)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  priv->disable_auto_mnemonics = TRUE;
 }

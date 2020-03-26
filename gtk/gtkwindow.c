@@ -28,7 +28,6 @@
 
 #include "gtkaccelgroupprivate.h"
 #include "gtkapplicationprivate.h"
-#include "gtkbindings.h"
 #include "gtkbox.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
@@ -50,11 +49,9 @@
 #include "gtkheaderbarprivate.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
-#include "gtkkeyhash.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmessagedialog.h"
-#include "gtkmnemonichash.h"
 #include "gtkpointerfocusprivate.h"
 #include "gtkpopovermenuprivate.h"
 #include "gtkmodelbuttonprivate.h"
@@ -63,6 +60,10 @@
 #include "gtkroot.h"
 #include "gtknative.h"
 #include "gtksettings.h"
+#include "gtkshortcut.h"
+#include "gtkshortcutcontroller.h"
+#include "gtkshortcutmanager.h"
+#include "gtkshortcuttrigger.h"
 #include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
@@ -160,7 +161,7 @@
  * widget that is added as a titlebar child.
  */
 
-#define MENU_BAR_ACCEL "F10"
+#define MENU_BAR_ACCEL GDK_KEY_F10
 #define RESIZE_HANDLE_SIZE 20
 #define MNEMONICS_DELAY 300 /* ms */
 #define NO_CONTENT_CHILD_NAT 200
@@ -172,8 +173,6 @@
 
 typedef struct
 {
-  GtkMnemonicHash       *mnemonic_hash;
-
   GtkWidget             *attach_widget;
   GtkWidget             *default_widget;
   GtkWidget             *initial_focus;
@@ -183,8 +182,6 @@ typedef struct
   GtkWindowGroup        *group;
   GdkDisplay            *display;
   GtkApplication        *application;
-
-  GdkModifierType        mnemonic_modifier;
 
   gchar   *startup_id;
   gchar   *title;
@@ -249,6 +246,7 @@ typedef struct
   GtkGesture *drag_gesture;
   GtkGesture *bubble_drag_gesture;
   GtkEventController *key_controller;
+  GtkEventController *application_shortcut_controller;
 
   GtkCssNode *decoration_node;
 
@@ -458,8 +456,9 @@ static void     update_window_buttons                 (GtkWindow    *window);
 static void     get_shadow_width                      (GtkWindow    *window,
                                                        GtkBorder    *shadow_width);
 
-static GtkKeyHash *gtk_window_get_key_hash        (GtkWindow   *window);
-static void        gtk_window_free_key_hash       (GtkWindow   *window);
+static gboolean    gtk_window_activate_menubar        (GtkWidget    *widget,
+                                                       GVariant     *args,
+                                                       gpointer      unused);
 #ifdef GDK_WINDOWING_X11
 static void        gtk_window_on_theme_variant_changed (GtkSettings *settings,
                                                         GParamSpec  *pspec,
@@ -490,9 +489,7 @@ static guint        window_signals[LAST_SIGNAL] = { 0 };
 static gchar       *default_icon_name = NULL;
 static gboolean     disable_startup_notification = FALSE;
 
-static GQuark       quark_gtk_window_key_hash = 0;
 static GQuark       quark_gtk_window_icon_info = 0;
-static GQuark       quark_gtk_buildable_accels = 0;
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -515,20 +512,8 @@ static void     gtk_window_buildable_set_buildable_property (GtkBuildable       
                                                              GtkBuilder         *builder,
                                                              const gchar        *name,
                                                              const GValue       *value);
-static void     gtk_window_buildable_parser_finished        (GtkBuildable       *buildable,
-                                                             GtkBuilder         *builder);
-static gboolean gtk_window_buildable_custom_tag_start       (GtkBuildable       *buildable,
-                                                             GtkBuilder         *builder,
-                                                             GObject            *child,
-                                                             const gchar        *tagname,
-                                                             GtkBuildableParser *parser,
-                                                             gpointer           *data);
-static void     gtk_window_buildable_custom_finished        (GtkBuildable       *buildable,
-                                                             GtkBuilder         *builder,
-                                                             GObject            *child,
-                                                             const gchar        *tagname,
-                                                             gpointer            user_data);
 
+static void             gtk_window_shortcut_manager_interface_init      (GtkShortcutManagerInterface *iface);
 /* GtkRoot */
 static void             gtk_window_root_interface_init (GtkRootInterface *iface);
 static void             gtk_window_native_interface_init  (GtkNativeInterface  *iface);
@@ -549,41 +534,52 @@ G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
 						gtk_window_buildable_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_NATIVE,
 						gtk_window_native_interface_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SHORTCUT_MANAGER,
+						gtk_window_shortcut_manager_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ROOT,
 						gtk_window_root_interface_init))
 
 static void
-add_tab_bindings (GtkBindingSet    *binding_set,
+add_tab_bindings (GtkWidgetClass   *widget_class,
 		  GdkModifierType   modifiers,
 		  GtkDirectionType  direction)
 {
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Tab, modifiers,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Tab, modifiers,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
+  GtkShortcut *shortcut;
+
+  shortcut = gtk_shortcut_new_with_arguments (
+                 gtk_alternative_trigger_new (gtk_keyval_trigger_new (GDK_KEY_Tab, modifiers),
+                                              gtk_keyval_trigger_new (GDK_KEY_KP_Tab, modifiers)),
+                 gtk_signal_action_new ("move-focus"),
+                 "(i)", direction);
+
+  gtk_widget_class_add_shortcut (widget_class, shortcut);
+
+  g_object_unref (shortcut);
 }
 
 static void
-add_arrow_bindings (GtkBindingSet    *binding_set,
+add_arrow_bindings (GtkWidgetClass   *widget_class,
 		    guint             keysym,
 		    GtkDirectionType  direction)
 {
   guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
   
-  gtk_binding_entry_add_signal (binding_set, keysym, 0,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, keysym, GDK_CONTROL_MASK,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, keypad_keysym, 0,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, keypad_keysym, GDK_CONTROL_MASK,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_widget_class_add_binding_signal (widget_class, keysym, 0,
+                                       "move-focus",
+                                       "(i)",
+                                       direction);
+  gtk_widget_class_add_binding_signal (widget_class, keysym, GDK_CONTROL_MASK,
+                                       "move-focus",
+                                       "(i)",
+                                       direction);
+  gtk_widget_class_add_binding_signal (widget_class, keypad_keysym, 0,
+                                       "move-focus",
+                                       "(i)",
+                                       direction);
+  gtk_widget_class_add_binding_signal (widget_class, keypad_keysym, GDK_CONTROL_MASK,
+                                       "move-focus",
+                                       "(i)",
+                                       direction);
 }
 
 static guint32
@@ -713,16 +709,10 @@ static void
 gtk_window_class_init (GtkWindowClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class;
-  GtkContainerClass *container_class;
-  GtkBindingSet *binding_set;
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
-  widget_class = (GtkWidgetClass*) klass;
-  container_class = (GtkContainerClass*) klass;
-  
-  quark_gtk_window_key_hash = g_quark_from_static_string ("gtk-window-key-hash");
   quark_gtk_window_icon_info = g_quark_from_static_string ("gtk-window-icon-info");
-  quark_gtk_buildable_accels = g_quark_from_static_string ("gtk-window-buildable-accels");
 
   if (toplevel_list == NULL)
     toplevel_list = g_list_store_new (GTK_TYPE_WIDGET);
@@ -1061,36 +1051,32 @@ gtk_window_class_init (GtkWindowClass *klass)
   gtk_widget_class_install_action (widget_class, "default.activate", NULL,
                                    gtk_window_activate_default_activate);
 
-  binding_set = gtk_binding_set_by_class (klass);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_space, 0,
-                                "activate-focus", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Space, 0,
-                                "activate-focus", 0);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_space, 0,
+                                       "activate-focus", NULL);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Space, 0,
+                                       "activate-focus", NULL);
   
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Return, 0,
-                                "activate-default", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_ISO_Enter, 0,
-                                "activate-default", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Enter, 0,
-                                "activate-default", 0);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Return, 0,
+                                       "activate-default", NULL);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_ISO_Enter, 0,
+                                       "activate-default", NULL);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Enter, 0,
+                                       "activate-default", NULL);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_I, GDK_CONTROL_MASK|GDK_SHIFT_MASK,
-                                "enable-debugging", 1,
-                                G_TYPE_BOOLEAN, FALSE);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_D, GDK_CONTROL_MASK|GDK_SHIFT_MASK,
-                                "enable-debugging", 1,
-                                G_TYPE_BOOLEAN, TRUE);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_I, GDK_CONTROL_MASK|GDK_SHIFT_MASK,
+                                       "enable-debugging", "(b)", FALSE);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_D, GDK_CONTROL_MASK|GDK_SHIFT_MASK,
+                                       "enable-debugging", "(b)", TRUE);
 
-  add_arrow_bindings (binding_set, GDK_KEY_Up, GTK_DIR_UP);
-  add_arrow_bindings (binding_set, GDK_KEY_Down, GTK_DIR_DOWN);
-  add_arrow_bindings (binding_set, GDK_KEY_Left, GTK_DIR_LEFT);
-  add_arrow_bindings (binding_set, GDK_KEY_Right, GTK_DIR_RIGHT);
+  add_arrow_bindings (widget_class, GDK_KEY_Up, GTK_DIR_UP);
+  add_arrow_bindings (widget_class, GDK_KEY_Down, GTK_DIR_DOWN);
+  add_arrow_bindings (widget_class, GDK_KEY_Left, GTK_DIR_LEFT);
+  add_arrow_bindings (widget_class, GDK_KEY_Right, GTK_DIR_RIGHT);
 
-  add_tab_bindings (binding_set, 0, GTK_DIR_TAB_FORWARD);
-  add_tab_bindings (binding_set, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
-  add_tab_bindings (binding_set, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
-  add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
+  add_tab_bindings (widget_class, 0, GTK_DIR_TAB_FORWARD);
+  add_tab_bindings (widget_class, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
+  add_tab_bindings (widget_class, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
+  add_tab_bindings (widget_class, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_WINDOW_ACCESSIBLE);
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FRAME);
@@ -1672,9 +1658,9 @@ gtk_window_init (GtkWindow *window)
   GtkWidget *widget;
   GtkCssNode *widget_node;
   GdkSeat *seat;
-  GtkEventController *motion_controller;
   GtkEventController *controller;
   GtkDropTargetAsync *target;
+  GtkShortcut *shortcut;
 
   widget = GTK_WIDGET (window);
 
@@ -1689,7 +1675,6 @@ gtk_window_init (GtkWindow *window)
   priv->modal = FALSE;
   priv->gravity = GDK_GRAVITY_NORTH_WEST;
   priv->decorated = TRUE;
-  priv->mnemonic_modifier = GDK_MOD1_MASK;
   priv->display = gdk_display_get_default ();
 
   priv->state = GDK_SURFACE_STATE_WITHDRAWN;
@@ -1731,12 +1716,12 @@ gtk_window_init (GtkWindow *window)
   g_signal_connect (seat, "device-removed",
                     G_CALLBACK (device_removed_cb), window);
 
-  motion_controller = gtk_event_controller_motion_new ();
-  gtk_event_controller_set_propagation_phase (motion_controller,
+  controller = gtk_event_controller_motion_new ();
+  gtk_event_controller_set_propagation_phase (controller,
                                               GTK_PHASE_CAPTURE);
-  g_signal_connect_swapped (motion_controller, "motion",
+  g_signal_connect_swapped (controller, "motion",
                             G_CALLBACK (gtk_window_capture_motion), window);
-  gtk_widget_add_controller (widget, motion_controller);
+  gtk_widget_add_controller (widget, controller);
 
   priv->key_controller = gtk_event_controller_key_new ();
   gtk_event_controller_set_propagation_phase (priv->key_controller, GTK_PHASE_CAPTURE);
@@ -1754,6 +1739,15 @@ gtk_window_init (GtkWindow *window)
 
   /* Shared constraint solver */
   priv->constraint_solver = gtk_constraint_solver_new ();
+
+  controller = gtk_shortcut_controller_new ();
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+
+  shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (MENU_BAR_ACCEL, 0),
+                               gtk_callback_action_new (gtk_window_activate_menubar, NULL, NULL));
+  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
+  gtk_event_controller_set_name (controller, "gtk-window-menubar-accel");
+  gtk_widget_add_controller (widget, controller);
 }
 
 static GtkGesture *
@@ -1961,9 +1955,6 @@ gtk_window_buildable_interface_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
   iface->set_buildable_property = gtk_window_buildable_set_buildable_property;
-  iface->parser_finished = gtk_window_buildable_parser_finished;
-  iface->custom_tag_start = gtk_window_buildable_custom_tag_start;
-  iface->custom_finished = gtk_window_buildable_custom_finished;
   iface->add_child = gtk_window_buildable_add_child;
 }
 
@@ -1996,166 +1987,9 @@ gtk_window_buildable_set_buildable_property (GtkBuildable *buildable,
     g_object_set_property (G_OBJECT (buildable), name, value);
 }
 
-typedef struct {
-  gchar *name;
-  gint line;
-  gint col;
-} ItemData;
-
 static void
-item_data_free (gpointer data)
+gtk_window_shortcut_manager_interface_init (GtkShortcutManagerInterface *iface)
 {
-  ItemData *item_data = data;
-
-  g_free (item_data->name);
-  g_free (item_data);
-}
-
-static void
-item_list_free (gpointer data)
-{
-  GSList *list = data;
-
-  g_slist_free_full (list, item_data_free);
-}
-
-static void
-gtk_window_buildable_parser_finished (GtkBuildable *buildable,
-				      GtkBuilder   *builder)
-{
-  GtkWindow *window = GTK_WINDOW (buildable);
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GObject *object;
-  GSList *accels, *l;
-
-  if (priv->builder_visible)
-    gtk_widget_show (GTK_WIDGET (buildable));
-
-  accels = g_object_get_qdata (G_OBJECT (buildable), quark_gtk_buildable_accels);
-  for (l = accels; l; l = l->next)
-    {
-      ItemData *data = l->data;
-
-      object = _gtk_builder_lookup_object (builder, data->name, data->line, data->col);
-      if (!object)
-	continue;
-      gtk_window_add_accel_group (GTK_WINDOW (buildable), GTK_ACCEL_GROUP (object));
-    }
-
-  g_object_set_qdata (G_OBJECT (buildable), quark_gtk_buildable_accels, NULL);
-
-  parent_buildable_iface->parser_finished (buildable, builder);
-}
-
-typedef struct {
-  GObject *object;
-  GtkBuilder *builder;
-  GSList *items;
-} GSListSubParserData;
-
-static void
-window_start_element (GtkBuildableParseContext  *context,
-                      const gchar          *element_name,
-                      const gchar         **names,
-                      const gchar         **values,
-                      gpointer              user_data,
-                      GError              **error)
-{
-  GSListSubParserData *data = (GSListSubParserData*)user_data;
-
-  if (strcmp (element_name, "group") == 0)
-    {
-      const gchar *name;
-      ItemData *item_data;
-
-      if (!_gtk_builder_check_parent (data->builder, context, "accel-groups", error))
-        return;
-
-      if (!g_markup_collect_attributes (element_name, names, values, error,
-                                        G_MARKUP_COLLECT_STRING, "name", &name,
-                                        G_MARKUP_COLLECT_INVALID))
-        {
-          _gtk_builder_prefix_error (data->builder, context, error);
-          return;
-        }
-
-      item_data = g_new (ItemData, 1);
-      item_data->name = g_strdup (name);
-      gtk_buildable_parse_context_get_position (context, &item_data->line, &item_data->col);
-      data->items = g_slist_prepend (data->items, item_data);
-    }
-  else if (strcmp (element_name, "accel-groups") == 0)
-    {
-      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
-        return;
-
-      if (!g_markup_collect_attributes (element_name, names, values, error,
-                                        G_MARKUP_COLLECT_INVALID, NULL, NULL,
-                                        G_MARKUP_COLLECT_INVALID))
-        _gtk_builder_prefix_error (data->builder, context, error);
-    }
-  else
-    {
-      _gtk_builder_error_unhandled_tag (data->builder, context,
-                                        "GtkWindow", element_name,
-                                        error);
-    }
-}
-
-static const GtkBuildableParser window_parser =
-  {
-    window_start_element
-  };
-
-static gboolean
-gtk_window_buildable_custom_tag_start (GtkBuildable       *buildable,
-                                       GtkBuilder         *builder,
-                                       GObject            *child,
-                                       const gchar        *tagname,
-                                       GtkBuildableParser *parser,
-                                       gpointer           *parser_data)
-{
-  if (parent_buildable_iface->custom_tag_start (buildable, builder, child,
-						tagname, parser, parser_data))
-    return TRUE;
-
-  if (strcmp (tagname, "accel-groups") == 0)
-    {
-      GSListSubParserData *data;
-
-      data = g_slice_new0 (GSListSubParserData);
-      data->items = NULL;
-      data->object = G_OBJECT (buildable);
-      data->builder = builder;
-
-      *parser = window_parser;
-      *parser_data = data;
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static void
-gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
-                                      GtkBuilder    *builder,
-                                      GObject       *child,
-                                      const gchar   *tagname,
-                                      gpointer       user_data)
-{
-  parent_buildable_iface->custom_finished (buildable, builder, child,
-					   tagname, user_data);
-
-  if (strcmp (tagname, "accel-groups") == 0)
-    {
-      GSListSubParserData *data = (GSListSubParserData*)user_data;
-
-      g_object_set_qdata_full (G_OBJECT (buildable), quark_gtk_buildable_accels,
-                               data->items, (GDestroyNotify) item_list_free);
-
-      g_slice_free (GSListSubParserData, data);
-    }
 }
 
 static GdkDisplay *
@@ -2487,174 +2321,6 @@ _gtk_window_notify_keys_changed (GtkWindow *window)
       priv->keys_changed_handler = g_idle_add (handle_keys_changed, window);
       g_source_set_name_by_id (priv->keys_changed_handler, "[gtk] handle_keys_changed");
     }
-}
-
-/**
- * gtk_window_add_accel_group:
- * @window: window to attach accelerator group to
- * @accel_group: a #GtkAccelGroup
- *
- * Associate @accel_group with @window, such that calling
- * gtk_accel_groups_activate() on @window will activate accelerators
- * in @accel_group.
- **/
-void
-gtk_window_add_accel_group (GtkWindow     *window,
-			    GtkAccelGroup *accel_group)
-{
-  g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
-
-  _gtk_accel_group_attach (accel_group, G_OBJECT (window));
-  g_signal_connect_object (accel_group, "accel-changed",
-			   G_CALLBACK (_gtk_window_notify_keys_changed),
-			   window, G_CONNECT_SWAPPED);
-  _gtk_window_notify_keys_changed (window);
-}
-
-/**
- * gtk_window_remove_accel_group:
- * @window: a #GtkWindow
- * @accel_group: a #GtkAccelGroup
- *
- * Reverses the effects of gtk_window_add_accel_group().
- **/
-void
-gtk_window_remove_accel_group (GtkWindow     *window,
-			       GtkAccelGroup *accel_group)
-{
-  g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
-
-  g_signal_handlers_disconnect_by_func (accel_group,
-					_gtk_window_notify_keys_changed,
-					window);
-  _gtk_accel_group_detach (accel_group, G_OBJECT (window));
-  _gtk_window_notify_keys_changed (window);
-}
-
-static GtkMnemonicHash *
-gtk_window_get_mnemonic_hash (GtkWindow *window,
-			      gboolean   create)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  if (!priv->mnemonic_hash && create)
-    priv->mnemonic_hash = _gtk_mnemonic_hash_new ();
-
-  return priv->mnemonic_hash;
-}
-
-/**
- * gtk_window_add_mnemonic:
- * @window: a #GtkWindow
- * @keyval: the mnemonic
- * @target: the widget that gets activated by the mnemonic
- *
- * Adds a mnemonic to this window.
- */
-void
-gtk_window_add_mnemonic (GtkWindow *window,
-			 guint      keyval,
-			 GtkWidget *target)
-{
-  g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (GTK_IS_WIDGET (target));
-
-  _gtk_mnemonic_hash_add (gtk_window_get_mnemonic_hash (window, TRUE),
-			  keyval, target);
-  _gtk_window_notify_keys_changed (window);
-}
-
-/**
- * gtk_window_remove_mnemonic:
- * @window: a #GtkWindow
- * @keyval: the mnemonic
- * @target: the widget that gets activated by the mnemonic
- *
- * Removes a mnemonic from this window.
- */
-void
-gtk_window_remove_mnemonic (GtkWindow *window,
-			    guint      keyval,
-			    GtkWidget *target)
-{
-  g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (GTK_IS_WIDGET (target));
-  
-  _gtk_mnemonic_hash_remove (gtk_window_get_mnemonic_hash (window, TRUE),
-			     keyval, target);
-  _gtk_window_notify_keys_changed (window);
-}
-
-/**
- * gtk_window_mnemonic_activate:
- * @window: a #GtkWindow
- * @keyval: the mnemonic
- * @modifier: the modifiers
- *
- * Activates the targets associated with the mnemonic.
- *
- * Returns: %TRUE if the activation is done.
- */
-gboolean
-gtk_window_mnemonic_activate (GtkWindow      *window,
-			      guint           keyval,
-			      GdkModifierType modifier)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
-
-  if (priv->mnemonic_modifier == (modifier & gtk_accelerator_get_default_mod_mask ()))
-      {
-	GtkMnemonicHash *mnemonic_hash = gtk_window_get_mnemonic_hash (window, FALSE);
-	if (mnemonic_hash)
-	  return _gtk_mnemonic_hash_activate (mnemonic_hash, keyval);
-      }
-
-  return FALSE;
-}
-
-/**
- * gtk_window_set_mnemonic_modifier:
- * @window: a #GtkWindow
- * @modifier: the modifier mask used to activate
- *               mnemonics on this window.
- *
- * Sets the mnemonic modifier for this window. 
- **/
-void
-gtk_window_set_mnemonic_modifier (GtkWindow      *window,
-				  GdkModifierType modifier)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail ((modifier & ~GDK_MODIFIER_MASK) == 0);
-
-  priv->mnemonic_modifier = modifier;
-  _gtk_window_notify_keys_changed (window);
-}
-
-/**
- * gtk_window_get_mnemonic_modifier:
- * @window: a #GtkWindow
- *
- * Returns the mnemonic modifier for this window. See
- * gtk_window_set_mnemonic_modifier().
- *
- * Returns: the modifier mask used to activate
- *               mnemonics on this window.
- **/
-GdkModifierType
-gtk_window_get_mnemonic_modifier (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_val_if_fail (GTK_IS_WINDOW (window), 0);
-
-  return priv->mnemonic_modifier;
 }
 
 /**
@@ -3066,6 +2732,9 @@ gtk_window_release_application (GtkWindow *window)
       /* steal reference into temp variable */
       application = priv->application;
       priv->application = NULL;
+      gtk_widget_remove_controller (GTK_WIDGET (window),
+                                    priv->application_shortcut_controller);
+      priv->application_shortcut_controller = NULL;
 
       gtk_application_remove_window (application, window);
       g_object_unref (application);
@@ -3106,9 +2775,18 @@ gtk_window_set_application (GtkWindow      *window,
 
       if (priv->application != NULL)
         {
+          GtkApplicationAccels *app_accels;
+
           g_object_ref (priv->application);
 
           gtk_application_add_window (priv->application, window);
+
+          app_accels = gtk_application_get_application_accels (priv->application);
+          priv->application_shortcut_controller = gtk_shortcut_controller_new_for_model (gtk_application_accels_get_shortcuts (app_accels));
+          gtk_event_controller_set_name (priv->application_shortcut_controller, "gtk-application-shortcuts");
+          gtk_event_controller_set_propagation_phase (priv->application_shortcut_controller, GTK_PHASE_CAPTURE);
+          gtk_shortcut_controller_set_scope (GTK_SHORTCUT_CONTROLLER (priv->application_shortcut_controller), GTK_SHORTCUT_SCOPE_GLOBAL);
+          gtk_widget_add_controller (GTK_WIDGET (window), priv->application_shortcut_controller);
         }
 
       _gtk_widget_update_parent_muxer (GTK_WIDGET (window));
@@ -4253,8 +3931,6 @@ gtk_window_destroy (GtkWidget *widget)
   if (priv->group)
     gtk_window_group_remove_window (priv->group, window);
 
-   gtk_window_free_key_hash (window);
-
   GTK_WIDGET_CLASS (gtk_window_parent_class)->destroy (widget);
 }
 
@@ -4295,15 +3971,10 @@ gtk_window_finalize (GObject *object)
 {
   GtkWindow *window = GTK_WINDOW (object);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkMnemonicHash *mnemonic_hash;
 
   g_clear_pointer (&priv->extra_input_region, cairo_region_destroy);
   g_free (priv->title);
   gtk_window_release_application (window);
-
-  mnemonic_hash = gtk_window_get_mnemonic_hash (window, FALSE);
-  if (mnemonic_hash)
-    _gtk_mnemonic_hash_free (mnemonic_hash);
 
   if (priv->geometry_info)
     {
@@ -5487,8 +5158,6 @@ _gtk_window_query_nonaccels (GtkWindow      *window,
 			     guint           accel_key,
 			     GdkModifierType accel_mods)
 {
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
   /* movement keys are considered locked accels */
@@ -5505,75 +5174,7 @@ _gtk_window_query_nonaccels (GtkWindow      *window,
 	  return TRUE;
     }
 
-  /* mnemonics are considered locked accels */
-  if (accel_mods == priv->mnemonic_modifier)
-    {
-      GtkMnemonicHash *mnemonic_hash = gtk_window_get_mnemonic_hash (window, FALSE);
-      if (mnemonic_hash && _gtk_mnemonic_hash_lookup (mnemonic_hash, accel_key))
-	return TRUE;
-    }
-
   return FALSE;
-}
-
-/**
- * gtk_window_propagate_key_event:
- * @window:  a #GtkWindow
- * @event:   a #GdkEvent
- *
- * Propagate a key press or release event to the focus widget and
- * up the focus container chain until a widget handles @event.
- * This is normally called by the default ::key_press_event and
- * ::key_release_event handlers for toplevel windows,
- * however in some cases it may be useful to call this directly when
- * overriding the standard key handling for a toplevel window.
- *
- * Returns: %TRUE if a widget in the focus chain handled the event.
- */
-gboolean
-gtk_window_propagate_key_event (GtkWindow *window,
-                                GdkEvent  *event)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  gboolean handled = FALSE;
-  GtkWidget *widget, *focus, *target;
-
-  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
-
-  widget = GTK_WIDGET (window);
-
-  focus = priv->focus_widget;
-  if (focus)
-    g_object_ref (focus);
-  
-  target = focus;
-
-  while (!handled &&
-         focus && focus != widget &&
-         gtk_widget_get_root (focus) == GTK_ROOT (widget))
-    {
-      GtkWidget *parent;
-      
-      if (gtk_widget_is_sensitive (focus))
-        {
-          handled = gtk_widget_event (focus, (GdkEvent *)event, target);
-          if (handled)
-            break;
-        }
-
-      parent = _gtk_widget_get_parent (focus);
-      if (parent)
-        g_object_ref (parent);
-      
-      g_object_unref (focus);
-      
-      focus = parent;
-    }
-  
-  if (focus)
-    g_object_unref (focus);
-
-  return handled;
 }
 
 static GtkWindowRegion
@@ -5621,9 +5222,6 @@ gtk_window_has_mnemonic_modifier_pressed (GtkWindow *window)
   GList *seats, *s;
   gboolean retval = FALSE;
 
-  if (!priv->mnemonic_modifier)
-    return FALSE;
-
   seats = gdk_display_list_seats (gtk_widget_get_display (GTK_WIDGET (window)));
 
   for (s = seats; s; s = s->next)
@@ -5632,7 +5230,7 @@ gtk_window_has_mnemonic_modifier_pressed (GtkWindow *window)
       GdkModifierType mask;
 
       gdk_device_get_state (dev, priv->surface, NULL, &mask);
-      if (priv->mnemonic_modifier == (mask & gtk_accelerator_get_default_mod_mask ()))
+      if ((mask & gtk_accelerator_get_default_mod_mask ()) == GDK_MOD1_MASK)
         {
           retval = TRUE;
           break;
@@ -7416,7 +7014,6 @@ gtk_window_set_display (GtkWindow  *window,
   if (priv->transient_parent && gtk_widget_get_display (GTK_WIDGET (priv->transient_parent)) != display)
     gtk_window_set_transient_for (window, NULL);
 
-  gtk_window_free_key_hash (window);
 #ifdef GDK_WINDOWING_X11
   g_signal_handlers_disconnect_by_func (gtk_settings_get_for_display (priv->display),
                                         gtk_window_on_theme_variant_changed, window);
@@ -7551,314 +7148,47 @@ _gtk_window_set_window_group (GtkWindow      *window,
 }
 
 static gboolean
-gtk_window_activate_menubar (GtkWindow *window,
-                             GdkEvent  *event)
+gtk_window_activate_menubar (GtkWidget *widget,
+                             GVariant  *args,
+                             gpointer   unused)
 {
+  GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  guint keyval = 0;
-  GdkModifierType mods = 0;
+  GList *tmp_menubars, *l;
+  GPtrArray *menubars;
+  GtkWidget *focus;
+  GtkWidget *first;
 
-  gtk_accelerator_parse (MENU_BAR_ACCEL, &keyval, &mods);
+  focus = gtk_window_get_focus (window);
 
-  if (keyval == 0)
-    {
-      g_warning ("Failed to parse menu bar accelerator '%s'", MENU_BAR_ACCEL);
-      return FALSE;
-    }
+  if (priv->title_box != NULL &&
+      (focus == NULL || !gtk_widget_is_ancestor (focus, priv->title_box)) &&
+      gtk_widget_child_focus (priv->title_box, GTK_DIR_TAB_FORWARD))
+    return TRUE;
 
-  if (!(gdk_event_get_event_type (event) == GDK_KEY_PRESS ||
-        gdk_event_get_event_type (event) == GDK_KEY_RELEASE))
+  tmp_menubars = gtk_popover_menu_bar_get_viewable_menu_bars (window);
+  if (tmp_menubars == NULL)
     return FALSE;
 
-  /* FIXME this is wrong, needs to be in the global accel resolution
-   * thing, to properly consider i18n etc., but that probably requires
-   * AccelGroup changes etc.
-   */
-  if (gdk_key_event_get_keyval (event) == keyval &&
-      ((gdk_event_get_modifier_state (event) & gtk_accelerator_get_default_mod_mask ()) ==
-       (mods & gtk_accelerator_get_default_mod_mask ())))
-    {
-      GList *tmp_menubars, *l;
-      GPtrArray *menubars;
-      GtkWidget *focus;
-      GtkWidget *first;
+  menubars = g_ptr_array_sized_new (g_list_length (tmp_menubars));;
+  for (l = tmp_menubars; l; l = l->next)
+    g_ptr_array_add (menubars, l->data);
 
-      focus = gtk_window_get_focus (window);
+  g_list_free (tmp_menubars);
 
-      if (priv->title_box != NULL &&
-          (focus == NULL || !gtk_widget_is_ancestor (focus, priv->title_box)) &&
-          gtk_widget_child_focus (priv->title_box, GTK_DIR_TAB_FORWARD))
-        return TRUE;
+  gtk_widget_focus_sort (GTK_WIDGET (window), GTK_DIR_TAB_FORWARD, menubars);
 
-      tmp_menubars = gtk_popover_menu_bar_get_viewable_menu_bars (window);
-      if (tmp_menubars == NULL)
-        return FALSE;
+  first = g_ptr_array_index (menubars, 0);
+  gtk_popover_menu_bar_select_first (GTK_POPOVER_MENU_BAR (first));
 
-      menubars = g_ptr_array_sized_new (g_list_length (tmp_menubars));;
-      for (l = tmp_menubars; l; l = l->next)
-        g_ptr_array_add (menubars, l->data);
+  g_ptr_array_free (menubars, TRUE);
 
-      g_list_free (tmp_menubars);
-
-      gtk_widget_focus_sort (GTK_WIDGET (window), GTK_DIR_TAB_FORWARD, menubars);
-
-      first = g_ptr_array_index (menubars, 0);
-      gtk_popover_menu_bar_select_first (GTK_POPOVER_MENU_BAR (first));
-
-      g_ptr_array_free (menubars, TRUE);
-
-      return TRUE;
-    }
-  return FALSE;
-}
-
-static void
-gtk_window_mnemonic_hash_foreach (guint      keyval,
-				  GSList    *targets,
-				  gpointer   data)
-{
-  struct {
-    GtkWindow *window;
-    GtkWindowKeysForeachFunc func;
-    gpointer func_data;
-  } *info = data;
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (info->window);
-
-  (*info->func) (info->window, keyval, priv->mnemonic_modifier, TRUE, info->func_data);
-}
-
-static void
-_gtk_window_keys_foreach (GtkWindow                *window,
-			  GtkWindowKeysForeachFunc func,
-			  gpointer                 func_data)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GSList *groups;
-  GtkMnemonicHash *mnemonic_hash;
-
-  struct {
-    GtkWindow *window;
-    GtkWindowKeysForeachFunc func;
-    gpointer func_data;
-  } info;
-
-  info.window = window;
-  info.func = func;
-  info.func_data = func_data;
-
-  mnemonic_hash = gtk_window_get_mnemonic_hash (window, FALSE);
-  if (mnemonic_hash)
-    _gtk_mnemonic_hash_foreach (mnemonic_hash,
-				gtk_window_mnemonic_hash_foreach, &info);
-
-  groups = gtk_accel_groups_from_object (G_OBJECT (window));
-  while (groups)
-    {
-      GtkAccelGroup *group = groups->data;
-      gint i;
-
-      for (i = 0; i < group->priv->n_accels; i++)
-	{
-	  GtkAccelKey *key = &group->priv->priv_accels[i].key;
-	  
-	  if (key->accel_key)
-	    (*func) (window, key->accel_key, key->accel_mods, FALSE, func_data);
-	}
-      
-      groups = groups->next;
-    }
-
-  if (priv->application)
-    {
-      GtkApplicationAccels *app_accels;
-
-      app_accels = gtk_application_get_application_accels (priv->application);
-      gtk_application_accels_foreach_key (app_accels, window, func, func_data);
-    }
+  return TRUE;
 }
 
 static void
 gtk_window_keys_changed (GtkWindow *window)
 {
-  gtk_window_free_key_hash (window);
-  gtk_window_get_key_hash (window);
-}
-
-typedef struct _GtkWindowKeyEntry GtkWindowKeyEntry;
-
-struct _GtkWindowKeyEntry
-{
-  guint keyval;
-  guint modifiers;
-  guint is_mnemonic : 1;
-};
-
-static void 
-window_key_entry_destroy (gpointer data)
-{
-  g_slice_free (GtkWindowKeyEntry, data);
-}
-
-static void
-add_to_key_hash (GtkWindow      *window,
-		 guint           keyval,
-		 GdkModifierType modifiers,
-		 gboolean        is_mnemonic,
-		 gpointer        data)
-{
-  GtkKeyHash *key_hash = data;
-
-  GtkWindowKeyEntry *entry = g_slice_new (GtkWindowKeyEntry);
-
-  entry->keyval = keyval;
-  entry->modifiers = modifiers;
-  entry->is_mnemonic = is_mnemonic;
-
-  /* GtkAccelGroup stores lowercased accelerators. To deal
-   * with this, if <Shift> was specified, uppercase.
-   */
-  if (modifiers & GDK_SHIFT_MASK)
-    {
-      if (keyval == GDK_KEY_Tab)
-	keyval = GDK_KEY_ISO_Left_Tab;
-      else
-	keyval = gdk_keyval_to_upper (keyval);
-    }
-  
-  _gtk_key_hash_add_entry (key_hash, keyval, entry->modifiers, entry);
-}
-
-static GtkKeyHash *
-gtk_window_get_key_hash (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkKeyHash *key_hash = g_object_get_qdata (G_OBJECT (window), quark_gtk_window_key_hash);
-  
-  if (key_hash)
-    return key_hash;
-  
-  key_hash = _gtk_key_hash_new (gdk_display_get_keymap (priv->display),
-				(GDestroyNotify)window_key_entry_destroy);
-  _gtk_window_keys_foreach (window, add_to_key_hash, key_hash);
-  g_object_set_qdata (G_OBJECT (window), quark_gtk_window_key_hash, key_hash);
-
-  return key_hash;
-}
-
-static void
-gtk_window_free_key_hash (GtkWindow *window)
-{
-  GtkKeyHash *key_hash = g_object_get_qdata (G_OBJECT (window), quark_gtk_window_key_hash);
-  if (key_hash)
-    {
-      _gtk_key_hash_free (key_hash);
-      g_object_set_qdata (G_OBJECT (window), quark_gtk_window_key_hash, NULL);
-    }
-}
-
-/**
- * gtk_window_activate_key:
- * @window:  a #GtkWindow
- * @event:   a #GdkEvent
- *
- * Activates mnemonics and accelerators for this #GtkWindow. This is normally
- * called by the default ::key_press_event handler for toplevel windows,
- * however in some cases it may be useful to call this directly when
- * overriding the standard key handling for a toplevel window.
- *
- * Returns: %TRUE if a mnemonic or accelerator was found and activated.
- */
-gboolean
-gtk_window_activate_key (GtkWindow *window,
-			 GdkEvent  *event)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkKeyHash *key_hash;
-  GtkWindowKeyEntry *found_entry = NULL;
-  gboolean enable_accels;
-
-  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  if (!(gdk_event_get_event_type (event) == GDK_KEY_PRESS ||
-        gdk_event_get_event_type (event) == GDK_KEY_RELEASE))
-    return FALSE;
-
-  key_hash = gtk_window_get_key_hash (window);
-
-  if (key_hash)
-    {
-      GSList *tmp_list;
-      GSList *entries = _gtk_key_hash_lookup (key_hash,
-					      gdk_key_event_get_keycode (event),
-                                              gdk_event_get_modifier_state (event),
-					      gtk_accelerator_get_default_mod_mask (),
-					      gdk_key_event_get_group (event));
-
-      g_object_get (gtk_widget_get_settings (GTK_WIDGET (window)),
-                    "gtk-enable-accels", &enable_accels,
-                    NULL);
-
-      for (tmp_list = entries; tmp_list; tmp_list = tmp_list->next)
-	{
-	  GtkWindowKeyEntry *entry = tmp_list->data;
-	  if (entry->is_mnemonic)
-            {
-              found_entry = entry;
-              break;
-            }
-          else 
-            {
-              if (enable_accels && !found_entry)
-                {
-	          found_entry = entry;
-                }
-            }
-	}
-
-      g_slist_free (entries);
-    }
-
-  if (found_entry)
-    {
-      if (found_entry->is_mnemonic)
-        {
-          return gtk_window_mnemonic_activate (window, found_entry->keyval,
-                                               found_entry->modifiers);
-        }
-      else
-        {
-          if (enable_accels)
-            {
-              if (gtk_accel_groups_activate (G_OBJECT (window), found_entry->keyval, found_entry->modifiers))
-                return TRUE;
-
-              if (priv->application)
-                {
-                  GtkWidget *focused_widget;
-                  GtkActionMuxer *muxer;
-                  GtkApplicationAccels *app_accels;
-
-                  focused_widget = gtk_window_get_focus (window);
-
-                  if (focused_widget)
-                    muxer = _gtk_widget_get_action_muxer (focused_widget, FALSE);
-                  else
-                    muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (window), FALSE);
-
-                  if (muxer == NULL)
-                    return FALSE;
-
-                  app_accels = gtk_application_get_application_accels (priv->application);
-                  return gtk_application_accels_activate (app_accels,
-                                                          G_ACTION_GROUP (muxer),
-                                                          found_entry->keyval, found_entry->modifiers);
-                }
-            }
-        }
-    }
-
-  return gtk_window_activate_menubar (window, event);
 }
 
 /*

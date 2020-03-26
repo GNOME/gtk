@@ -419,6 +419,12 @@ test_type (gconstpointer data)
   if (g_type_is_a (type, GTK_TYPE_DRAG_ICON))
     return;
 
+  /* these assert in constructed */
+ if (g_type_is_a (type, GTK_TYPE_ALTERNATIVE_TRIGGER) ||
+     g_type_is_a (type, GTK_TYPE_SIGNAL_ACTION) ||
+     g_type_is_a (type, GTK_TYPE_NAMED_ACTION))
+    return;
+
   klass = g_type_class_ref (type);
 
   if (g_type_is_a (type, GTK_TYPE_SETTINGS))
@@ -459,6 +465,15 @@ test_type (gconstpointer data)
                                NULL);
       g_object_unref (list_store);
     }
+  /* special casing for singletons */
+  else if (g_type_is_a (type, GTK_TYPE_NEVER_TRIGGER))
+    instance = (GObject *) g_object_ref (gtk_never_trigger_get ());
+  else if (g_type_is_a (type, GTK_TYPE_NOTHING_ACTION))
+    instance = (GObject *) g_object_ref (gtk_nothing_action_get ());
+  else if (g_type_is_a (type, GTK_TYPE_ACTIVATE_ACTION))
+    instance = (GObject *) g_object_ref (gtk_activate_action_get ());
+  else if (g_type_is_a (type, GTK_TYPE_MNEMONIC_ACTION))
+    instance = (GObject *) g_object_ref (gtk_mnemonic_action_get ());
   else
     instance = g_object_new (type, NULL);
 
