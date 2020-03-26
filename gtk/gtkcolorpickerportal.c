@@ -49,9 +49,9 @@ gtk_color_picker_portal_initable_init (GInitable     *initable,
                                        GError       **error)
 {
   GtkColorPickerPortal *picker = GTK_COLOR_PICKER_PORTAL (initable);
-  char *owner;
-  GVariant *ret;
-  guint version;
+  g_autofree char *owner = NULL;
+  g_autoptr(GVariant) ret = NULL;
+  guint version = 0;
 
   if (!gtk_should_use_portal ())
     return FALSE;
@@ -71,18 +71,18 @@ gtk_color_picker_portal_initable_init (GInitable     *initable,
       return FALSE;
     }
 
- owner = g_dbus_proxy_get_name_owner (picker->portal_proxy);
+  owner = g_dbus_proxy_get_name_owner (picker->portal_proxy);
   if (owner == NULL)
     {
       g_debug ("org.freedesktop.portal.Screenshot not provided");
       g_clear_object (&picker->portal_proxy);
       return FALSE;
     }
-  g_free (owner);
 
   ret = g_dbus_proxy_get_cached_property (picker->portal_proxy, "version");
-  g_variant_get (ret, "u", &version);
-  g_variant_unref (ret);
+  if (ret)
+    version = g_variant_get_uint32 (ret);
+
   if (version != 2)
     {
       g_debug ("Screenshot portal version: %u", version);
