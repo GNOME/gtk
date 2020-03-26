@@ -136,8 +136,9 @@ gtk_shortcut_trigger_parse_string (const char *string)
 
   if (string[0] == '_')
     {
-      if (gtk_accelerator_parse (string + 1, &keyval, &modifiers))
-        return gtk_mnemonic_trigger_new (keyval);
+      keyval = gdk_keyval_from_name (string + 1);
+      if (keyval != GDK_KEY_VoidSymbol)
+        return gtk_mnemonic_trigger_new (gdk_keyval_to_lower (keyval));
     }
 
   if (gtk_accelerator_parse (string, &keyval, &modifiers))
