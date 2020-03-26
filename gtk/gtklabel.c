@@ -1838,7 +1838,6 @@ gtk_label_setup_mnemonic (GtkLabel *label)
                                    g_object_ref (gtk_mnemonic_action_get ()));
       gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (priv->mnemonic_controller), shortcut);
       gtk_widget_add_controller (GTK_WIDGET (label), priv->mnemonic_controller);
-      g_object_unref (shortcut);
     }
   else
     {

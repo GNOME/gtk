@@ -659,7 +659,7 @@ gtk_shortcut_controller_new_for_model (GListModel *model)
 /**
  * gtk_shortcut_controller_add_shortcut:
  * @self: the controller
- * @shortcut: a #GtkShortcut
+ * @shortcut: (transfer-full): a #GtkShortcut
  *
  * Adds @shortcut to the list of shortcuts handled by @self.
  *
@@ -676,13 +676,17 @@ gtk_shortcut_controller_add_shortcut (GtkShortcutController *self,
   g_return_if_fail (GTK_IS_SHORTCUT (shortcut));
 
   if (!self->custom_shortcuts)
-    return;
+    {
+      g_object_unref (shortcut);
+      return;
+    }
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self));
   if (widget)
     update_accel (shortcut, widget, TRUE);
 
   g_list_store_append (G_LIST_STORE (self->shortcuts), shortcut);
+  g_object_unref (shortcut);
 }
 
 /**
