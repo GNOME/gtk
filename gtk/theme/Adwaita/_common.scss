@@ -4640,6 +4640,10 @@ decoration {
 
     &:backdrop { box-shadow: inset 0 0 0 3px $backdrop_bg_color, inset 0 1px $top_hilight; }
   }
+
+  window.csd & {
+   background: black; /* transparent makes gtk3 leak light on the corners #2537 */
+  }
 }
 
 // Window Close button
