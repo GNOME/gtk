@@ -2520,14 +2520,20 @@ treeview.view radio:selected { &:focus, & { @extend %radio; }} // This is a work
   border-radius: 3px;
   background-color: $dark_fill;
 
-  &:disabled { background-color: $insensitive_bg_color; }
+  &:disabled {
+   background-color: $insensitive_bg_color;
+   borders-color: $insensitive_borders_color;
+  }
 
   &:backdrop {
     background-color: $backdrop_dark_fill;
     border-color: $backdrop_borders_color;
     transition: $backdrop_transition;
 
-    &:disabled { background-color: $insensitive_bg_color; }
+    &:disabled {
+      background-color: $insensitive_bg_color;
+      borders-color: $insensitive_borders_color;
+    }
   }
 
   // ...on selected list rows
