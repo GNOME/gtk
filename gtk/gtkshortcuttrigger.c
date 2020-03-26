@@ -121,7 +121,8 @@ gtk_shortcut_trigger_trigger (GtkShortcutTrigger *self,
  *   - a string parsed by gtk_accelerator_parse(), for a #GtkKeyvalTrigger
  *   - underscore, followed by a single character, for #GtkMnemonicTrigger
  *
- * Returns: (nullable): a new #GtkShortcutTrigger or %NULL on error
+ * Returns: (nullable) (transfer full): a new #GtkShortcutTrigger
+ *   or %NULL on error
  */
 GtkShortcutTrigger *
 gtk_shortcut_trigger_parse_string (const char *string)
@@ -132,7 +133,7 @@ gtk_shortcut_trigger_parse_string (const char *string)
   g_return_val_if_fail (string != NULL, NULL);
 
   if (g_str_equal (string, "never"))
-    return gtk_never_trigger_get ();
+    return g_object_ref (gtk_never_trigger_get ());
 
   if (string[0] == '_')
     {
