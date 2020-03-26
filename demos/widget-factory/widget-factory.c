@@ -26,7 +26,7 @@
 #include <gtk/gtk.h>
 
 static void
-change_theme_state (GSimpleAction *action,
+change_dark_state (GSimpleAction *action,
                     GVariant      *state,
                     gpointer       user_data)
 {
@@ -35,6 +35,57 @@ change_theme_state (GSimpleAction *action,
   g_object_set (G_OBJECT (settings),
                 "gtk-application-prefer-dark-theme",
                 g_variant_get_boolean (state),
+                NULL);
+
+  g_simple_action_set_state (action, state);
+}
+
+static char *current_theme;
+static gboolean current_dark;
+
+static void
+change_theme_state (GSimpleAction *action,
+                    GVariant      *state,
+                    gpointer       user_data)
+{
+  GtkSettings *settings = gtk_settings_get_default ();
+  const char *s;
+  const char *theme;
+  gboolean prefer_dark = FALSE;
+
+  s = g_variant_get_string (state, NULL);
+
+  if (strcmp (s, "adwaita") == 0)
+    {
+      theme = "Adwaita";
+      prefer_dark = FALSE;
+    }
+  else if (strcmp (s, "adwaita-dark") == 0)
+    {
+      theme = "Adwaita";
+      prefer_dark = TRUE;
+    }
+  else if (strcmp (s, "highcontrast") == 0)
+    {
+      theme = "HighContrast";
+      prefer_dark = FALSE;
+    }
+  else if (strcmp (s, "highcontrast-inverse") == 0)
+    {
+      theme = "HighContrastInverse";
+      prefer_dark = FALSE;
+    }
+  else if (strcmp (s, "current") == 0)
+    {
+      theme = current_theme;
+      prefer_dark = current_dark;
+    }
+  else
+    return;
+
+  g_object_set (G_OBJECT (settings),
+                "gtk-theme-name", theme,
+                "gtk-application-prefer-dark-theme", prefer_dark,
                 NULL);
 
   g_simple_action_set_state (action, state);
@@ -1671,7 +1722,8 @@ activate (GApplication *app)
   GtkCssProvider *provider;
   GMenuModel *model;
   static GActionEntry win_entries[] = {
-    { "dark", NULL, NULL, "false", change_theme_state },
+    { "dark", NULL, NULL, "false", change_dark_state },
+    { "theme", NULL, "s", "'current'", change_theme_state }, 
     { "transition", NULL, NULL, "false", change_transition_state },
     { "search", activate_search, NULL, NULL, NULL },
     { "delete", activate_delete, NULL, NULL, NULL },
@@ -1702,6 +1754,11 @@ activate (GApplication *app)
   gint i;
   GPermission *permission;
   GAction *action;
+
+  g_object_get (gtk_settings_get_default (),
+                "gtk-theme-name", &current_theme,
+                "gtk-application-prefer-dark-theme", &current_dark,
+                NULL);
 
   g_type_ensure (my_text_view_get_type ());
 
