@@ -20,8 +20,8 @@ xml += '''
     <file>theme/Empty/gtk.css</file>
     <file>theme/Adwaita/gtk.css</file>
     <file>theme/Adwaita/gtk-dark.css</file>
-    <file alias='theme/Adwaita/gtk-contained.css'>theme/Adwaita/Adwaita.css</file>
-    <file alias='theme/Adwaita/gtk-contained-dark.css'>theme/Adwaita/Adwaita-dark.css</file>
+    <file>theme/Adwaita/Adwaita.css</file>
+    <file>theme/Adwaita/Adwaita-dark.css</file>
 '''
 
 for f in get_files('theme/Adwaita/assets', '.png'):
@@ -35,8 +35,8 @@ for f in get_files('theme/Adwaita/assets', '.svg'):
 xml += '''
     <file>theme/HighContrast/gtk.css</file>
     <file alias='theme/HighContrastInverse/gtk.css'>theme/HighContrast/gtk-inverse.css</file>
-    <file alias='theme/HighContrast/gtk-contained.css'>theme/HighContrast/HighContrast.css</file>
-    <file alias='theme/HighContrast/gtk-contained-inverse.css'>theme/HighContrast/HighContrast-inverse.css</file>
+    <file>theme/HighContrast/HighContrast.css</file>
+    <file>theme/HighContrast/HighContrast-inverse.css</file>
 '''
 
 for f in get_files('theme/HighContrast/assets', '.png'):
