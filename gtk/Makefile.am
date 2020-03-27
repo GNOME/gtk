@@ -583,6 +583,7 @@ gtk_private_h_sources =		\
 	gtktextmarkprivate.h	\
 	gtktextsegment.h	\
 	gtktexttagprivate.h	\
+	gtktexttagtableprivate.h	\
 	gtktexttypes.h		\
 	gtktextutil.h		\
 	gtktrashmonitor.h	\
