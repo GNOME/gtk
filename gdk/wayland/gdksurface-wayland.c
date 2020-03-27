@@ -4117,7 +4117,7 @@ gdk_wayland_surface_get_inhibitor (GdkWaylandSurface *impl,
   return g_hash_table_lookup (impl->shortcuts_inhibitors, seat);
 }
 
-void
+gboolean
 gdk_wayland_surface_inhibit_shortcuts (GdkSurface *surface,
                                        GdkSeat    *gdk_seat)
 {
@@ -4128,16 +4128,18 @@ gdk_wayland_surface_inhibit_shortcuts (GdkSurface *surface,
   struct zwp_keyboard_shortcuts_inhibitor_v1 *inhibitor;
 
   if (display->keyboard_shortcuts_inhibit == NULL)
-    return;
+    return FALSE;
 
-  if (gdk_wayland_surface_get_inhibitor (impl, seat))
-    return; /* Already inhibitted */
+  if (gdk_wayland_surface_get_inhibitor (impl, gdk_seat))
+    return TRUE; /* Already inhibited */
 
   inhibitor =
       zwp_keyboard_shortcuts_inhibit_manager_v1_inhibit_shortcuts (
           display->keyboard_shortcuts_inhibit, wl_surface, seat);
 
   g_hash_table_insert (impl->shortcuts_inhibitors, seat, inhibitor);
+
+  return TRUE;
 }
 
 void
