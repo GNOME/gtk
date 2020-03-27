@@ -216,10 +216,17 @@ entry_add_to_context_menu (GtkEntry *entry)
   };
   GMenuModel *submenu;
   GMenuItem *item;
+  GAction *action;
+  GVariant *value;
 
   actions = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (actions), entries, G_N_ELEMENTS(entries), entry);
   gtk_widget_insert_action_group (GTK_WIDGET (entry), "search", G_ACTION_GROUP (actions));
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "search-by");
+  value = g_variant_ref_sink (g_variant_new_string ("name"));
+  set_search_by (G_SIMPLE_ACTION (action), value, entry);
+  g_variant_unref (value);
 
   menu = g_menu_new ();
   item = g_menu_item_new (_("C_lear"), "search.clear");
@@ -297,10 +304,6 @@ do_search_entry (GtkWidget *do_widget)
       gtk_widget_show (cancel_button);
 
       /* Set up the search icon */
-      GVariant *value = g_variant_ref_sink (g_variant_new_string ("name"));
-      set_search_by (NULL, value, entry);
-      g_variant_unref (value);
-
       gtk_entry_set_icon_activatable (GTK_ENTRY (entry), GTK_ENTRY_ICON_PRIMARY, TRUE);
       gtk_entry_set_icon_sensitive (GTK_ENTRY (entry), GTK_ENTRY_ICON_PRIMARY, TRUE);
 
