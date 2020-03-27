@@ -4552,10 +4552,10 @@ gdk_x11_popup_init (GdkX11Popup *popup)
 }
 
 static void
-gdk_wayland_popup_get_property (GObject    *object,
-                                guint       prop_id,
-                                GValue     *value,
-                                GParamSpec *pspec)
+gdk_x11_popup_get_property (GObject    *object,
+                            guint       prop_id,
+                            GValue     *value,
+                            GParamSpec *pspec)
 {
   GdkSurface *surface = GDK_SURFACE (object);
 
@@ -4576,10 +4576,10 @@ gdk_wayland_popup_get_property (GObject    *object,
 }
 
 static void
-gdk_wayland_popup_set_property (GObject      *object,
-                                guint         prop_id,
-                                const GValue *value,
-                                GParamSpec   *pspec)
+gdk_x11_popup_set_property (GObject      *object,
+                            guint         prop_id,
+                            const GValue *value,
+                            GParamSpec   *pspec)
 {
   GdkSurface *surface = GDK_SURFACE (object);
 
@@ -4607,8 +4607,8 @@ gdk_x11_popup_class_init (GdkX11PopupClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
-  object_class->get_property = gdk_wayland_popup_get_property;
-  object_class->set_property = gdk_wayland_popup_set_property;
+  object_class->get_property = gdk_x11_popup_get_property;
+  object_class->set_property = gdk_x11_popup_set_property;
 
   gdk_popup_install_properties (object_class, 1);
 }
@@ -4675,10 +4675,10 @@ gdk_x11_toplevel_init (GdkX11Toplevel *toplevel)
 {
 }
 static void
-gdk_wayland_toplevel_set_property (GObject      *object,
-                                   guint         prop_id,
-                                   const GValue *value,
-                                   GParamSpec   *pspec)
+gdk_x11_toplevel_set_property (GObject      *object,
+                               guint         prop_id,
+                               const GValue *value,
+                               GParamSpec   *pspec)
 {
   GdkSurface *surface = GDK_SURFACE (object);
 
@@ -4732,10 +4732,10 @@ gdk_wayland_toplevel_set_property (GObject      *object,
 }
 
 static void
-gdk_wayland_toplevel_get_property (GObject    *object,
-                                   guint       prop_id,
-                                   GValue     *value,
-                                   GParamSpec *pspec)
+gdk_x11_toplevel_get_property (GObject    *object,
+                               guint       prop_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
 {
   GdkSurface *surface = GDK_SURFACE (object);
 
@@ -4796,8 +4796,8 @@ gdk_x11_toplevel_class_init (GdkX11ToplevelClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
-  object_class->get_property = gdk_wayland_toplevel_get_property;
-  object_class->set_property = gdk_wayland_toplevel_set_property;
+  object_class->get_property = gdk_x11_toplevel_get_property;
+  object_class->set_property = gdk_x11_toplevel_set_property;
 
   gdk_toplevel_install_properties (object_class, LAST_PROP);
 }
