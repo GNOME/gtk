@@ -1,3 +1,38 @@
+Overview of Changes in GTK+ 3.24.15
+===================================
+
+* filechooser:
+ - Fix a crash
+ - Support selecting directories with a new enough
+   file chooser portal
+
+* textview:
+ - Speed up tag handling
+
+* wayland:
+ - Fix problems with clipboard handling
+ - Fix a crash in the Wayland input method
+ - Support cursor scale of 400%
+ - Fix a crash in glade
+
+* css: Support font-feature-settings
+
+* Adwaita:
+ - Use tabular figures where appropriate
+ - Color tweaks for dark mode
+ - Improve rendering of rounded corners
+
+* Translation updates
+ Dutch
+ German
+ Japanese
+ Korean
+ Lithuanian
+ Norwegian Bokmål
+ Persian
+ Ukrainian
+
+
 Overview of Changes in GTK+ 3.24.14
 ===================================
 
