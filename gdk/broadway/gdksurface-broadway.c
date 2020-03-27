@@ -1499,6 +1499,9 @@ gdk_broadway_toplevel_set_property (GObject      *object,
     case LAST_PROP + GDK_TOPLEVEL_PROP_DELETABLE:
       break;
 
+    case LAST_PROP + GDK_TOPLEVEL_PROP_INHIBIT_LIST:
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1539,6 +1542,10 @@ gdk_broadway_toplevel_get_property (GObject    *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_DELETABLE:
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_INHIBIT_LIST:
+      g_value_set_pointer (value, NULL);
       break;
 
     default:
