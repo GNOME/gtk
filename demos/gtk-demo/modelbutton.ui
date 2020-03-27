@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkWindow" id="window1">
+    <property name="resizable">0</property>
     <child type="titlebar">
       <object class="GtkHeaderBar">
         <property name="show-title-buttons">1</property>
@@ -36,12 +37,11 @@
     </child>
   </object>
   <object class="GtkPopover" id="thing_a">
+    <style>
+      <class name="menu"/>
+    </style>
     <child>
       <object class="GtkBox">
-        <property name="margin-start">10</property>
-        <property name="margin-end">10</property>
-        <property name="margin-top">10</property>
-        <property name="margin-bottom">10</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkModelButton">
@@ -68,14 +68,12 @@
     </child>
   </object>
   <object class="GtkPopover" id="thing_b">
+    <style>
+      <class name="menu"/>
+    </style>
     <child>
       <object class="GtkBox">
-        <property name="margin-start">10</property>
-        <property name="margin-end">10</property>
-        <property name="margin-top">10</property>
-        <property name="margin-bottom">10</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">10</property>
         <child>
           <object class="GtkModelButton">
             <property name="action-name">win.chocolate</property>
@@ -101,14 +99,12 @@
     </child>
   </object>
   <object class="GtkPopover" id="thing_c">
+    <style>
+      <class name="menu"/>
+    </style>
     <child>
       <object class="GtkBox">
-        <property name="margin-start">10</property>
-        <property name="margin-end">10</property>
-        <property name="margin-top">10</property>
-        <property name="margin-bottom">10</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">10</property>
         <child>
           <object class="GtkModelButton">
             <property name="text">Hammer</property>
