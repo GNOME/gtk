@@ -1457,7 +1457,8 @@ gtk_calendar_select_day (GtkCalendar *self,
         else
           gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_SELECTED);
 
-        if (day == today_day)
+        if (day == today_day &&
+            priv->day_month[y][x] == MONTH_CURRENT)
           gtk_widget_add_css_class (label, "today");
         else
           gtk_widget_remove_css_class (label, "today");
