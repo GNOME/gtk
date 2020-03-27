@@ -700,7 +700,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   <object class="GtkRadioButton" id="radiobutton2">
                                     <property name="label" translatable="yes">radiobutton</property>
                                     <property name="can-focus">1</property>
-                                    <property name="active">1</property>
                                     <property name="group">radiobutton1</property>
                                     <layout>
                                       <property name="left-attach">1</property>
@@ -713,7 +712,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="label" translatable="yes">radiobutton</property>
                                     <property name="inconsistent">1</property>
                                     <property name="can-focus">1</property>
-                                    <property name="active">1</property>
                                     <property name="group">radiobutton1</property>
                                     <layout>
                                       <property name="left-attach">1</property>
@@ -726,7 +724,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="label" translatable="yes">radiobutton</property>
                                     <property name="sensitive">0</property>
                                     <property name="can-focus">1</property>
-                                    <property name="active">1</property>
                                     <layout>
                                       <property name="left-attach">1</property>
                                       <property name="top-attach">3</property>
@@ -738,7 +735,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="label" translatable="yes">radiobutton</property>
                                     <property name="sensitive">0</property>
                                     <property name="can-focus">1</property>
-                                    <property name="active">1</property>
                                     <property name="group">radiobutton3</property>
                                     <layout>
                                       <property name="left-attach">1</property>
@@ -752,7 +748,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="sensitive">0</property>
                                     <property name="inconsistent">1</property>
                                     <property name="can-focus">1</property>
-                                    <property name="active">1</property>
                                     <property name="group">radiobutton3</property>
                                     <layout>
                                       <property name="left-attach">1</property>
