@@ -4112,9 +4112,9 @@ gdk_wayland_surface_set_transient_for_exported (GdkSurface *surface,
 
 static struct zwp_keyboard_shortcuts_inhibitor_v1 *
 gdk_wayland_surface_get_inhibitor (GdkWaylandSurface *impl,
-                                  struct wl_seat *seat)
+                                   GdkSeat           *gdk_seat)
 {
-  return g_hash_table_lookup (impl->shortcuts_inhibitors, seat);
+  return g_hash_table_lookup (impl->shortcuts_inhibitors, gdk_seat);
 }
 
 gboolean
@@ -4137,7 +4137,7 @@ gdk_wayland_surface_inhibit_shortcuts (GdkSurface *surface,
       zwp_keyboard_shortcuts_inhibit_manager_v1_inhibit_shortcuts (
           display->keyboard_shortcuts_inhibit, wl_surface, seat);
 
-  g_hash_table_insert (impl->shortcuts_inhibitors, seat, inhibitor);
+  g_hash_table_insert (impl->shortcuts_inhibitors, gdk_seat, inhibitor);
 
   return TRUE;
 }
@@ -4147,15 +4147,14 @@ gdk_wayland_surface_restore_shortcuts (GdkSurface *surface,
                                        GdkSeat    *gdk_seat)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  struct wl_seat *seat = gdk_wayland_seat_get_wl_seat (gdk_seat);
   struct zwp_keyboard_shortcuts_inhibitor_v1 *inhibitor;
 
-  inhibitor = gdk_wayland_surface_get_inhibitor (impl, seat);
+  inhibitor = gdk_wayland_surface_get_inhibitor (impl, gdk_seat);
   if (inhibitor == NULL)
     return; /* Not inhibited */
 
   zwp_keyboard_shortcuts_inhibitor_v1_destroy (inhibitor);
-  g_hash_table_remove (impl->shortcuts_inhibitors, seat);
+  g_hash_table_remove (impl->shortcuts_inhibitors, gdk_seat);
 }
 
 GdkSurface *
