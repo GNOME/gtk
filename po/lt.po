@@ -15,65 +15,65 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-11 15:36+0000\n"
-"PO-Revision-Date: 2019-09-28 12:51+0300\n"
-"Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
+"POT-Creation-Date: 2020-03-22 12:36+0000\n"
+"PO-Revision-Date: 2020-03-27 15:07+0000\n"
+"Last-Translator: Mantas Kriaučiūnas <baltix@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
-"%100<10 || n%100>=20) ? 1 : 2)\n"
-"X-Generator: Gtranslator 3.32.1\n"
+"%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 2.3\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
 msgid "Broadway display type not supported: %s"
 msgstr "Broadway vaizduoklio tipas nepalaikomas „%s“"
 
-#: gdk/gdk.c:187
+#: gdk/gdk.c:179
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Klaida analizuojant parametrą --gdk-debug"
 
-#: gdk/gdk.c:207
+#: gdk/gdk.c:199
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Klaida analizuojant parametrą --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: gdk/gdk.c:236
+#: gdk/gdk.c:228
 msgid "Program class as used by the window manager"
 msgstr "Programos klasė, kurią naudoja langų tvarkyklė"
 
 #. Placeholder in --class=CLASS in --help output
-#: gdk/gdk.c:237
+#: gdk/gdk.c:229
 msgid "CLASS"
 msgstr "KLASĖ"
 
 #. Description of --name=NAME in --help output
-#: gdk/gdk.c:239
+#: gdk/gdk.c:231
 msgid "Program name as used by the window manager"
 msgstr "Programos pavadinimas, kurį naudoja langų tvarkyklė"
 
 #. Placeholder in --name=NAME in --help output
-#: gdk/gdk.c:240
+#: gdk/gdk.c:232
 msgid "NAME"
 msgstr "VARDAS"
 
 #. Description of --display=DISPLAY in --help output
-#: gdk/gdk.c:243
+#: gdk/gdk.c:235
 msgid "X display to use"
 msgstr "Naudojamas X displėjus"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: gdk/gdk.c:244
+#: gdk/gdk.c:236
 msgid "DISPLAY"
 msgstr "DISPLĖJUS"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: gdk/gdk.c:248
+#: gdk/gdk.c:240
 msgid "GDK debugging flags to set"
 msgstr "GDK derinimo parametrai, kuriuos naudoti"
 
@@ -81,12 +81,12 @@ msgstr "GDK derinimo parametrai, kuriuos naudoti"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:249 gdk/gdk.c:252 gtk/gtkmain.c:471 gtk/gtkmain.c:474
+#: gdk/gdk.c:241 gdk/gdk.c:244 gtk/gtkmain.c:471 gtk/gtkmain.c:474
 msgid "FLAGS"
 msgstr "PARAMETRAI"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:251
+#: gdk/gdk.c:243
 msgid "GDK debugging flags to unset"
 msgstr "GDK derinimo parametrai, kurių nenaudoti"
 
@@ -813,7 +813,7 @@ msgstr "Au_kštyn"
 #: gtk/a11y/gtkimageaccessible.c:83 gtk/deprecated/gtkstock.c:384
 msgctxt "Stock label"
 msgid "_Hard Disk"
-msgstr "_Kietasis diskas"
+msgstr "_Standusis diskas"
 
 #: gtk/a11y/gtkimageaccessible.c:84 gtk/deprecated/gtkstock.c:385
 msgctxt "Stock label"
@@ -1256,7 +1256,7 @@ msgstr "Pa_sirinkti"
 
 #: gtk/deprecated/gtkcolorseldialog.c:201
 msgid "_Help"
-msgstr "_Žinynas"
+msgstr "_Pagalba"
 
 #: gtk/deprecated/gtkcolorseldialog.c:213
 msgid "Color Selection"
@@ -1696,7 +1696,7 @@ msgstr "Nerasta programų „%s“ atvėrimui."
 
 #: gtk/gtkappchooserwidget.c:726
 msgid "Recommended Applications"
-msgstr "Rekomenduojama programa"
+msgstr "Rekomenduojamos programos"
 
 #: gtk/gtkappchooserwidget.c:741
 msgid "Related Applications"
@@ -2269,7 +2269,7 @@ msgstr "Darbalaukis"
 msgid "(None)"
 msgstr "(Joks)"
 
-#: gtk/gtkfilechooserbutton.c:2163
+#: gtk/gtkfilechooserbutton.c:2162
 msgid "Other…"
 msgstr "Kita…"
 
@@ -2332,7 +2332,7 @@ msgstr "Nepavyko sukurti failo, kadangi failo pavadinimas per ilgas"
 
 #: gtk/gtkfilechooserwidget.c:849
 msgid "Try using a shorter name."
-msgstr "Mėginkite trumpesnį pavadinimą"
+msgstr "Mėginkite trumpesnį pavadinimą."
 
 #: gtk/gtkfilechooserwidget.c:859
 msgid "You may only select folders"
@@ -2412,7 +2412,7 @@ msgstr "Aplankai, kurių pavadinimai prasideda „.“ yra nerodomi"
 
 #: gtk/gtkfilechooserwidget.c:1120
 msgid "File names starting with a “.” are hidden"
-msgstr "Failai, kurių pavadinimai prasideda „.“ yra nerodomi"
+msgstr "Failai, kurių pavadinimai prasideda tašku (.) yra nerodomi"
 
 #: gtk/gtkfilechooserwidget.c:1490
 #, c-format
@@ -2438,7 +2438,7 @@ msgstr "_Aplankyti šį failą"
 
 #: gtk/gtkfilechooserwidget.c:2317
 msgid "_Open With File Manager"
-msgstr "_Atverti failų tvarkyklę"
+msgstr "_Atverti failų tvarkyklėje"
 
 #: gtk/gtkfilechooserwidget.c:2318
 msgid "_Copy Location"
@@ -2463,7 +2463,7 @@ msgstr "Rod_yti paslėptus failus"
 
 #: gtk/gtkfilechooserwidget.c:2327
 msgid "Show _Size Column"
-msgstr "Rodydi _dydžio stulpelį"
+msgstr "Rodyti _dydžio stulpelį"
 
 #: gtk/gtkfilechooserwidget.c:2328
 msgid "Show T_ype Column"
@@ -2574,7 +2574,7 @@ msgstr "Vaizdo įrašas"
 
 #: gtk/gtkfilechooserwidget.c:5001
 msgid "Contacts"
-msgstr "Kontaktai"
+msgstr "Adresatai"
 
 #: gtk/gtkfilechooserwidget.c:5002
 msgid "Calendar"
@@ -2602,7 +2602,7 @@ msgstr "Nežinomas"
 
 #: gtk/gtkfilechooserwidget.c:5264 gtk/gtkplacessidebar.c:1094
 msgid "Home"
-msgstr "Namai"
+msgstr "Asmeninis aplankas"
 
 #: gtk/gtkfilechooserwidget.c:5761
 msgid "Cannot change to folder because it is not local"
@@ -2740,12 +2740,12 @@ msgctxt "input method menu"
 msgid "None"
 msgstr "Joks"
 
-#: gtk/gtkimmulticontext.c:609
+#: gtk/gtkimmulticontext.c:615
 msgctxt "input method menu"
 msgid "System"
 msgstr "Sistemos numatytasis"
 
-#: gtk/gtkimmulticontext.c:688
+#: gtk/gtkimmulticontext.c:694
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
@@ -2952,7 +2952,7 @@ msgstr "S_ritis"
 
 #: gtk/gtkmountoperation.c:714
 msgid "Volume type"
-msgstr "Tomo tipas"
+msgstr "Tomo (skirsnio) tipas"
 
 #: gtk/gtkmountoperation.c:724
 msgid "_Hidden"
@@ -4115,7 +4115,7 @@ msgstr "GDK realizacija"
 
 #: gtk/inspector/general.ui:373
 msgid "Display"
-msgstr "Vaizduoklis"
+msgstr "Displėjus"
 
 #: gtk/inspector/general.ui:408
 msgid "RGBA visual"
@@ -7726,7 +7726,7 @@ msgstr "Puslapių _lakšte:"
 #: modules/printbackends/cups/gtkprintbackendcups.c:1129
 #: modules/printbackends/cups/gtkprintbackendcups.c:1438
 msgid "Username:"
-msgstr "Vartotojo vardas:"
+msgstr "Naudotojo vardas:"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1130
 #: modules/printbackends/cups/gtkprintbackendcups.c:1447
