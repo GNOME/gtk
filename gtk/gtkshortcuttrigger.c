@@ -120,24 +120,63 @@ gtk_shortcut_trigger_trigger (GtkShortcutTrigger *self,
  *   - `never`, for #GtkNeverTrigger
  *   - a string parsed by gtk_accelerator_parse(), for a #GtkKeyvalTrigger
  *   - underscore, followed by a single character, for #GtkMnemonicTrigger
+ *   - two valid trigger strings, separated by a `|` character, for a
+ *     #GtkAlternativeTrigger
  *
- * Returns: (nullable): a new #GtkShortcutTrigger or %NULL on error
+ * Returns: (nullable) (transfer full): a new #GtkShortcutTrigger
+ *   or %NULL on error
  */
 GtkShortcutTrigger *
 gtk_shortcut_trigger_parse_string (const char *string)
 {
   GdkModifierType modifiers;
   guint keyval;
+  const char *sep;
 
   g_return_val_if_fail (string != NULL, NULL);
 
+  if ((sep = strchr (string, '|')) != NULL)
+    {
+      char *frag_a = g_strndup (string, sep - string);
+      const char *frag_b = sep + 1;
+      GtkShortcutTrigger *t1, *t2;
+
+      /* empty first slot */
+      if (*frag_a == '\0')
+        return NULL;
+
+      /* empty second slot */
+      if (*frag_b == '\0')
+        return NULL;
+
+      t1 = gtk_shortcut_trigger_parse_string (frag_a);
+      if (t1 == NULL)
+        {
+          g_free (frag_a);
+          return NULL;
+        }
+
+      t2 = gtk_shortcut_trigger_parse_string (frag_b);
+      if (t2 == NULL)
+        {
+          g_object_unref (t1);
+          g_free (frag_a);
+          return NULL;
+        }
+
+      g_free (frag_a);
+
+      return gtk_alternative_trigger_new (t1, t2);
+    }
+
   if (g_str_equal (string, "never"))
-    return gtk_never_trigger_get ();
+    return g_object_ref (gtk_never_trigger_get ());
 
   if (string[0] == '_')
     {
-      if (gtk_accelerator_parse (string + 1, &keyval, &modifiers))
-        return gtk_mnemonic_trigger_new (keyval);
+      keyval = gdk_keyval_from_name (string + 1);
+      if (keyval != GDK_KEY_VoidSymbol)
+        return gtk_mnemonic_trigger_new (gdk_keyval_to_lower (keyval));
     }
 
   if (gtk_accelerator_parse (string, &keyval, &modifiers))
@@ -396,7 +435,7 @@ static void
 gtk_never_trigger_print (GtkShortcutTrigger *trigger,
                          GString            *string)
 {
-  g_string_append (string, "<never>");
+  g_string_append (string, "never");
 }
 
 static gboolean
@@ -1089,7 +1128,7 @@ gtk_alternative_trigger_print (GtkShortcutTrigger *trigger,
   GtkAlternativeTrigger *self = GTK_ALTERNATIVE_TRIGGER (trigger);
 
   gtk_shortcut_trigger_print (self->first, string);
-  g_string_append (string, ", ");
+  g_string_append (string, "|");
   gtk_shortcut_trigger_print (self->second, string);
 }
 
