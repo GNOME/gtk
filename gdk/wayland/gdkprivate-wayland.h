@@ -192,10 +192,10 @@ void gdk_wayland_seat_set_drag (GdkSeat        *seat,
 
 struct wl_output *gdk_wayland_surface_get_wl_output (GdkSurface *surface);
 
-void gdk_wayland_surface_inhibit_shortcuts (GdkSurface *surface,
-                                           GdkSeat   *gdk_seat);
+gboolean gdk_wayland_surface_inhibit_shortcuts (GdkSurface *surface,
+                                                GdkSeat    *gdk_seat);
 void gdk_wayland_surface_restore_shortcuts (GdkSurface *surface,
-                                           GdkSeat   *gdk_seat);
+                                            GdkSeat    *gdk_seat);
 
 void gdk_wayland_surface_update_scale (GdkSurface *surface);
 
