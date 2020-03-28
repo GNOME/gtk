@@ -102,11 +102,6 @@ struct _GtkAccelLabel
 struct _GtkAccelLabelClass
 {
   GtkWidgetClass parent_class;
-
-  char *mod_name_shift;
-  char *mod_name_control;
-  char *mod_name_alt;
-  char *mod_separator;
 };
 
 GParamSpec *props[LAST_PROP] = { NULL, };
