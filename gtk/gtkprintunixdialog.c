@@ -265,20 +265,11 @@ enum {
 };
 
 typedef struct _GtkPrintUnixDialogClass    GtkPrintUnixDialogClass;
-typedef struct GtkPrintUnixDialogPrivate   GtkPrintUnixDialogPrivate;
 
 struct _GtkPrintUnixDialog
 {
   GtkDialog parent_instance;
-};
 
-struct _GtkPrintUnixDialogClass
-{
-  GtkDialogClass parent_class;
-};
-
-struct GtkPrintUnixDialogPrivate
-{
   GtkWidget *notebook;
 
   GtkWidget *printer_treeview;
@@ -388,8 +379,12 @@ struct GtkPrintUnixDialogPrivate
   gint current_page;
 };
 
+struct _GtkPrintUnixDialogClass
+{
+  GtkDialogClass parent_class;
+};
+
 G_DEFINE_TYPE_WITH_CODE (GtkPrintUnixDialog, gtk_print_unix_dialog, GTK_TYPE_DIALOG,
-                         G_ADD_PRIVATE (GtkPrintUnixDialog)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_print_unix_dialog_buildable_init))
 
@@ -399,10 +394,8 @@ static gboolean
 is_default_printer (GtkPrintUnixDialog *dialog,
                     GtkPrinter         *printer)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
-  if (priv->format_for_printer)
-    return strcmp (priv->format_for_printer,
+  if (dialog->format_for_printer)
+    return strcmp (dialog->format_for_printer,
                    gtk_printer_get_name (printer)) == 0;
  else
    return gtk_printer_is_default (printer);
@@ -497,68 +490,68 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
 					       "/org/gtk/libgtk/ui/gtkprintunixdialog.ui");
 
   /* GtkTreeView / GtkTreeModel */
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, printer_treeview);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, printer_list);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, printer_list_filter);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, page_setup_list);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, custom_paper_list);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, printer_icon_column);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, printer_name_column);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, printer_location_column);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, printer_status_column);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, printer_icon_renderer);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, printer_name_renderer);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, printer_location_renderer);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, printer_status_renderer);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, printer_treeview);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, printer_list);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, printer_list_filter);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, page_setup_list);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, custom_paper_list);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, printer_icon_column);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, printer_name_column);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, printer_location_column);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, printer_status_column);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, printer_icon_renderer);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, printer_name_renderer);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, printer_location_renderer);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, printer_status_renderer);
 
   /* General Widgetry */
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, notebook);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, all_pages_radio);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, all_pages_radio);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, current_page_radio);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, selection_radio);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, range_table);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, page_range_radio);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, page_range_entry);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, copies_spin);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, collate_check);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, reverse_check);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, collate_image);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, page_layout_preview);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, scale_spin);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, page_set_combo);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, print_now_radio);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, print_at_radio);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, print_at_entry);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, print_hold_radio);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, paper_size_combo);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, paper_size_combo_label);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, paper_size_renderer);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, orientation_combo);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, orientation_combo_label);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, conflicts_widget);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, job_page);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, finishing_table);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, finishing_page);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, image_quality_table);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, image_quality_page);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, color_table);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, color_page);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, advanced_vbox);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, advanced_page);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, extension_point);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, notebook);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, all_pages_radio);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, all_pages_radio);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, current_page_radio);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, selection_radio);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, range_table);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, page_range_radio);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, page_range_entry);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, copies_spin);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, collate_check);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, reverse_check);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, collate_image);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, page_layout_preview);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, scale_spin);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, page_set_combo);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, print_now_radio);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, print_at_radio);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, print_at_entry);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, print_hold_radio);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, paper_size_combo);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, paper_size_combo_label);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, paper_size_renderer);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, orientation_combo);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, orientation_combo_label);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, conflicts_widget);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, job_page);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, finishing_table);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, finishing_page);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, image_quality_table);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, image_quality_page);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, color_table);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, color_page);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, advanced_vbox);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, advanced_page);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, extension_point);
 
   /* GtkPrinterOptionWidgets... */
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, pages_per_sheet);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, duplex);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, paper_type);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, paper_source);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, output_tray);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, job_prio);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, billing_info);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, cover_before);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, cover_after);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, number_up_layout);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, pages_per_sheet);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, duplex);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, paper_type);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, paper_source);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, output_tray);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, job_prio);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, billing_info);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, cover_before);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, cover_after);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, number_up_layout);
 
   /* Callbacks handled in the UI */
   gtk_widget_class_bind_template_callback (widget_class, redraw_page_layout_preview);
@@ -613,29 +606,27 @@ set_busy_cursor (GtkPrintUnixDialog *dialog,
 /* This function handles error messages before printing.
  */
 static gboolean
-error_dialogs (GtkPrintUnixDialog *print_dialog,
-               gint                print_dialog_response_id,
+error_dialogs (GtkPrintUnixDialog *dialog,
+               gint                dialog_response_id,
                gpointer            data)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (print_dialog);
   GtkPrinterOption          *option = NULL;
   GtkPrinter                *printer = NULL;
   GtkWindow                 *toplevel = NULL;
-  GtkWidget                 *dialog = NULL;
   GFile                     *file = NULL;
   gchar                     *basename = NULL;
   gchar                     *dirname = NULL;
   int                        response;
 
-  if (print_dialog != NULL && print_dialog_response_id == GTK_RESPONSE_OK)
+  if (dialog != NULL && dialog_response_id == GTK_RESPONSE_OK)
     {
-      printer = gtk_print_unix_dialog_get_selected_printer (print_dialog);
+      printer = gtk_print_unix_dialog_get_selected_printer (dialog);
 
       if (printer != NULL)
         {
-          if (priv->request_details_tag || !gtk_printer_is_accepting_jobs (printer))
+          if (dialog->request_details_tag || !gtk_printer_is_accepting_jobs (printer))
             {
-              g_signal_stop_emission_by_name (print_dialog, "response");
+              g_signal_stop_emission_by_name (dialog, "response");
               return TRUE;
             }
 
@@ -644,7 +635,7 @@ error_dialogs (GtkPrintUnixDialog *print_dialog,
            */
           if (gtk_printer_is_virtual (printer))
             {
-              option = gtk_printer_option_set_lookup (priv->options,
+              option = gtk_printer_option_set_lookup (dialog->options,
                                                       "gtk-main-page-custom-input");
 
               if (option != NULL &&
@@ -655,50 +646,51 @@ error_dialogs (GtkPrintUnixDialog *print_dialog,
                   if (g_file_query_exists (file, NULL))
                     {
                       GFile *parent;
+                      GtkWidget *message_dialog;
 
-                      toplevel = get_toplevel (GTK_WIDGET (print_dialog));
+                      toplevel = get_toplevel (GTK_WIDGET (dialog));
 
                       basename = g_file_get_basename (file);
                       parent = g_file_get_parent (file);
                       dirname = g_file_get_parse_name (parent);
                       g_object_unref (parent);
 
-                      dialog = gtk_message_dialog_new (toplevel,
-                                                       GTK_DIALOG_MODAL |
-                                                       GTK_DIALOG_DESTROY_WITH_PARENT,
-                                                       GTK_MESSAGE_QUESTION,
-                                                       GTK_BUTTONS_NONE,
-                                                       _("A file named “%s” already exists.  Do you want to replace it?"),
-                                                       basename);
+                      message_dialog = gtk_message_dialog_new (toplevel,
+                                                               GTK_DIALOG_MODAL |
+                                                               GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                               GTK_MESSAGE_QUESTION,
+                                                               GTK_BUTTONS_NONE,
+                                                               _("A file named “%s” already exists.  Do you want to replace it?"),
+                                                               basename);
 
-                      gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                      gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (message_dialog),
                                                                 _("The file already exists in “%s”.  Replacing it will "
                                                                 "overwrite its contents."),
                                                                 dirname);
 
-                      gtk_dialog_add_button (GTK_DIALOG (dialog),
+                      gtk_dialog_add_button (GTK_DIALOG (message_dialog),
                                              _("_Cancel"),
                                              GTK_RESPONSE_CANCEL);
-                      gtk_dialog_add_button (GTK_DIALOG (dialog),
+                      gtk_dialog_add_button (GTK_DIALOG (message_dialog),
                                              _("_Replace"),
                                              GTK_RESPONSE_ACCEPT);
-                      gtk_dialog_set_default_response (GTK_DIALOG (dialog),
+                      gtk_dialog_set_default_response (GTK_DIALOG (message_dialog),
                                                        GTK_RESPONSE_ACCEPT);
 
                       if (gtk_window_has_group (toplevel))
                         gtk_window_group_add_window (gtk_window_get_group (toplevel),
-                                                     GTK_WINDOW (dialog));
+                                                     GTK_WINDOW (message_dialog));
 
-                      response = gtk_dialog_run (GTK_DIALOG (dialog));
+                      response = gtk_dialog_run (GTK_DIALOG (message_dialog));
 
-                      gtk_widget_destroy (dialog);
+                      gtk_widget_destroy (message_dialog);
 
                       g_free (dirname);
                       g_free (basename);
 
                       if (response != GTK_RESPONSE_ACCEPT)
                         {
-                          g_signal_stop_emission_by_name (print_dialog, "response");
+                          g_signal_stop_emission_by_name (dialog, "response");
                           g_object_unref (file);
                           return TRUE;
                         }
@@ -715,24 +707,21 @@ error_dialogs (GtkPrintUnixDialog *print_dialog,
 static void
 gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv;
   GtkTreeSortable *sort;
   GtkWidget *widget;
 
-  priv = gtk_print_unix_dialog_get_instance_private (dialog);
+  dialog->print_backends = NULL;
+  dialog->current_page = -1;
+  dialog->number_up_layout_n_option = NULL;
+  dialog->number_up_layout_2_option = NULL;
 
-  priv->print_backends = NULL;
-  priv->current_page = -1;
-  priv->number_up_layout_n_option = NULL;
-  priv->number_up_layout_2_option = NULL;
+  dialog->page_setup = gtk_page_setup_new ();
+  dialog->page_setup_set = FALSE;
+  dialog->embed_page_setup = FALSE;
+  dialog->internal_page_setup_change = FALSE;
 
-  priv->page_setup = gtk_page_setup_new ();
-  priv->page_setup_set = FALSE;
-  priv->embed_page_setup = FALSE;
-  priv->internal_page_setup_change = FALSE;
-
-  priv->support_selection = FALSE;
-  priv->has_selection = FALSE;
+  dialog->support_selection = FALSE;
+  dialog->has_selection = FALSE;
 
   g_type_ensure (GTK_TYPE_PRINTER);
   g_type_ensure (GTK_TYPE_PRINTER_OPTION);
@@ -750,16 +739,16 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   widget = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   gtk_widget_set_sensitive (widget, FALSE);
 
-  gtk_widget_set_visible (priv->selection_radio, FALSE);
-  gtk_widget_set_visible (priv->conflicts_widget, FALSE);
+  gtk_widget_set_visible (dialog->selection_radio, FALSE);
+  gtk_widget_set_visible (dialog->conflicts_widget, FALSE);
 
   /* Treeview auxiliary functions need to be setup here */
-  gtk_tree_model_filter_set_visible_func (priv->printer_list_filter,
+  gtk_tree_model_filter_set_visible_func (dialog->printer_list_filter,
                                           (GtkTreeModelFilterVisibleFunc) is_printer_active,
                                           dialog,
                                           NULL);
 
-  sort = GTK_TREE_SORTABLE (priv->printer_list);
+  sort = GTK_TREE_SORTABLE (dialog->printer_list);
   gtk_tree_sortable_set_default_sort_func (sort,
                                            default_printer_list_sort_func,
                                            NULL,
@@ -769,48 +758,48 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
                                         GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
                                         GTK_SORT_ASCENDING);
 
-  gtk_tree_view_set_search_equal_func (GTK_TREE_VIEW (priv->printer_treeview),
+  gtk_tree_view_set_search_equal_func (GTK_TREE_VIEW (dialog->printer_treeview),
                                        printer_compare, NULL, NULL);
 
-  gtk_tree_view_column_set_cell_data_func (priv->printer_icon_column,
-					   priv->printer_icon_renderer,
+  gtk_tree_view_column_set_cell_data_func (dialog->printer_icon_column,
+					   dialog->printer_icon_renderer,
 					   set_cell_sensitivity_func, NULL, NULL);
 
-  gtk_tree_view_column_set_cell_data_func (priv->printer_name_column,
-					   priv->printer_name_renderer,
+  gtk_tree_view_column_set_cell_data_func (dialog->printer_name_column,
+					   dialog->printer_name_renderer,
 					   set_cell_sensitivity_func, NULL, NULL);
 
-  gtk_tree_view_column_set_cell_data_func (priv->printer_location_column,
-					   priv->printer_location_renderer,
+  gtk_tree_view_column_set_cell_data_func (dialog->printer_location_column,
+					   dialog->printer_location_renderer,
 					   set_cell_sensitivity_func, NULL, NULL);
 
-  gtk_tree_view_column_set_cell_data_func (priv->printer_status_column,
-					   priv->printer_status_renderer,
+  gtk_tree_view_column_set_cell_data_func (dialog->printer_status_column,
+					   dialog->printer_status_renderer,
 					   set_cell_sensitivity_func, NULL, NULL);
 
 
   /* Paper size combo auxilary funcs */
-  gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (priv->paper_size_combo),
+  gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (dialog->paper_size_combo),
                                         paper_size_row_is_separator, NULL, NULL);
-  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (priv->paper_size_combo),
-				      priv->paper_size_renderer,
+  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (dialog->paper_size_combo),
+				      dialog->paper_size_renderer,
                                       page_name_func, NULL, NULL);
 
   /* Load backends */
   load_print_backends (dialog);
 
   /* Load custom papers */
-  _gtk_print_load_custom_papers (priv->custom_paper_list);
+  _gtk_print_load_custom_papers (dialog->custom_paper_list);
 
-  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (priv->collate_image),
+  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (dialog->collate_image),
                                   draw_collate,
                                   dialog, NULL);
-  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (priv->page_layout_preview),
+  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (dialog->page_layout_preview),
                                   draw_page,
                                   dialog, NULL);
 
-  gtk_css_node_set_name (gtk_widget_get_css_node (priv->collate_image), g_quark_from_static_string ("drawing"));
-  gtk_css_node_set_name (gtk_widget_get_css_node (priv->page_layout_preview), g_quark_from_static_string ("drawing"));
+  gtk_css_node_set_name (gtk_widget_get_css_node (dialog->collate_image), g_quark_from_static_string ("drawing"));
+  gtk_css_node_set_name (gtk_widget_get_css_node (dialog->page_layout_preview), g_quark_from_static_string ("drawing"));
 }
 
 static void
@@ -851,30 +840,28 @@ static void
 disconnect_printer_details_request (GtkPrintUnixDialog *dialog,
                                     gboolean            details_failed)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
-  if (priv->request_details_tag)
+  if (dialog->request_details_tag)
     {
-      g_signal_handler_disconnect (priv->request_details_printer,
-                                   priv->request_details_tag);
-      priv->request_details_tag = 0;
+      g_signal_handler_disconnect (dialog->request_details_printer,
+                                   dialog->request_details_tag);
+      dialog->request_details_tag = 0;
       set_busy_cursor (dialog, FALSE);
       if (details_failed)
-        gtk_list_store_set (GTK_LIST_STORE (priv->printer_list),
-                            g_object_get_data (G_OBJECT (priv->request_details_printer),
+        gtk_list_store_set (GTK_LIST_STORE (dialog->printer_list),
+                            g_object_get_data (G_OBJECT (dialog->request_details_printer),
                                                "gtk-print-tree-iter"),
                             PRINTER_LIST_COL_STATE,
                              _("Getting printer information failed"),
                             -1);
       else
-        gtk_list_store_set (GTK_LIST_STORE (priv->printer_list),
-                            g_object_get_data (G_OBJECT (priv->request_details_printer),
+        gtk_list_store_set (GTK_LIST_STORE (dialog->printer_list),
+                            g_object_get_data (G_OBJECT (dialog->request_details_printer),
                                                "gtk-print-tree-iter"),
                             PRINTER_LIST_COL_STATE,
-                            gtk_printer_get_state_message (priv->request_details_printer),
+                            gtk_printer_get_state_message (dialog->request_details_printer),
                             -1);
-      g_object_unref (priv->request_details_printer);
-      priv->request_details_printer = NULL;
+      g_object_unref (dialog->request_details_printer);
+      dialog->request_details_printer = NULL;
     }
 }
 
@@ -882,35 +869,34 @@ static void
 gtk_print_unix_dialog_finalize (GObject *object)
 {
   GtkPrintUnixDialog *dialog = GTK_PRINT_UNIX_DIALOG (object);
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GtkPrintBackend *backend;
   GList *node;
 
   unschedule_idle_mark_conflicts (dialog);
   disconnect_printer_details_request (dialog, FALSE);
 
-  g_clear_object (&priv->current_printer);
-  g_clear_object (&priv->options);
+  g_clear_object (&dialog->current_printer);
+  g_clear_object (&dialog->options);
 
-  if (priv->number_up_layout_2_option)
+  if (dialog->number_up_layout_2_option)
     {
-      priv->number_up_layout_2_option->choices[0] = NULL;
-      priv->number_up_layout_2_option->choices[1] = NULL;
-      g_free (priv->number_up_layout_2_option->choices_display[0]);
-      g_free (priv->number_up_layout_2_option->choices_display[1]);
-      priv->number_up_layout_2_option->choices_display[0] = NULL;
-      priv->number_up_layout_2_option->choices_display[1] = NULL;
-      g_object_unref (priv->number_up_layout_2_option);
-      priv->number_up_layout_2_option = NULL;
+      dialog->number_up_layout_2_option->choices[0] = NULL;
+      dialog->number_up_layout_2_option->choices[1] = NULL;
+      g_free (dialog->number_up_layout_2_option->choices_display[0]);
+      g_free (dialog->number_up_layout_2_option->choices_display[1]);
+      dialog->number_up_layout_2_option->choices_display[0] = NULL;
+      dialog->number_up_layout_2_option->choices_display[1] = NULL;
+      g_object_unref (dialog->number_up_layout_2_option);
+      dialog->number_up_layout_2_option = NULL;
     }
 
-  g_clear_object (&priv->number_up_layout_n_option);
-  g_clear_object (&priv->page_setup);
-  g_clear_object (&priv->initial_settings);
-  g_clear_pointer (&priv->waiting_for_printer, (GDestroyNotify)g_free);
-  g_clear_pointer (&priv->format_for_printer, (GDestroyNotify)g_free);
+  g_clear_object (&dialog->number_up_layout_n_option);
+  g_clear_object (&dialog->page_setup);
+  g_clear_object (&dialog->initial_settings);
+  g_clear_pointer (&dialog->waiting_for_printer, (GDestroyNotify)g_free);
+  g_clear_pointer (&dialog->format_for_printer, (GDestroyNotify)g_free);
 
-  for (node = priv->print_backends; node != NULL; node = node->next)
+  for (node = dialog->print_backends; node != NULL; node = node->next)
     {
       backend = GTK_PRINT_BACKEND (node->data);
 
@@ -922,10 +908,10 @@ gtk_print_unix_dialog_finalize (GObject *object)
       g_object_unref (backend);
     }
 
-  g_list_free (priv->print_backends);
-  priv->print_backends = NULL;
+  g_list_free (dialog->print_backends);
+  dialog->print_backends = NULL;
 
-  g_clear_object (&priv->page_setup_list);
+  g_clear_object (&dialog->page_setup_list);
 
   G_OBJECT_CLASS (gtk_print_unix_dialog_parent_class)->finalize (object);
 }
@@ -935,11 +921,10 @@ printer_removed_cb (GtkPrintBackend    *backend,
                     GtkPrinter         *printer,
                     GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GtkTreeIter *iter;
 
   iter = g_object_get_data (G_OBJECT (printer), "gtk-print-tree-iter");
-  gtk_list_store_remove (GTK_LIST_STORE (priv->printer_list), iter);
+  gtk_list_store_remove (GTK_LIST_STORE (dialog->printer_list), iter);
 }
 
 static void
@@ -955,10 +940,10 @@ gtk_print_unix_dialog_buildable_get_internal_child (GtkBuildable *buildable,
                                                     GtkBuilder   *builder,
                                                     const gchar  *childname)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (GTK_PRINT_UNIX_DIALOG (buildable));
+  GtkPrintUnixDialog *dialog = GTK_PRINT_UNIX_DIALOG (buildable);
 
   if (strcmp (childname, "notebook") == 0)
-    return G_OBJECT (priv->notebook);
+    return G_OBJECT (dialog->notebook);
 
   return parent_buildable_iface->get_internal_child (buildable, builder, childname);
 }
@@ -991,7 +976,6 @@ printer_status_cb (GtkPrintBackend    *backend,
                    GtkPrinter         *printer,
                    GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GtkTreeIter *iter;
   GtkTreeSelection *selection;
   GIcon *icon;
@@ -1000,7 +984,7 @@ printer_status_cb (GtkPrintBackend    *backend,
 
   icon = g_themed_icon_new ("printer");
   g_themed_icon_prepend_name (G_THEMED_ICON (icon), gtk_printer_get_icon_name (printer));
-  gtk_list_store_set (GTK_LIST_STORE (priv->printer_list), iter,
+  gtk_list_store_set (GTK_LIST_STORE (dialog->printer_list), iter,
                       PRINTER_LIST_COL_ICON, icon,
                       PRINTER_LIST_COL_STATE, gtk_printer_get_state_message (printer),
                       PRINTER_LIST_COL_JOBS, gtk_printer_get_job_count (printer),
@@ -1011,10 +995,10 @@ printer_status_cb (GtkPrintBackend    *backend,
   /* When the pause state change then we need to update sensitive property
    * of GTK_RESPONSE_OK button inside of selected_printer_changed function.
    */
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->printer_treeview));
-  priv->internal_printer_change = TRUE;
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->printer_treeview));
+  dialog->internal_printer_change = TRUE;
   selected_printer_changed (selection, dialog);
-  priv->internal_printer_change = FALSE;
+  dialog->internal_printer_change = FALSE;
 
   if (gtk_print_backend_printer_list_is_done (backend) &&
       gtk_printer_is_default (printer) &&
@@ -1027,13 +1011,12 @@ printer_added_cb (GtkPrintBackend    *backend,
                   GtkPrinter         *printer,
                   GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GtkTreeIter iter, filter_iter;
   GtkTreeSelection *selection;
   GtkTreePath *path;
   GIcon *icon;
 
-  gtk_list_store_append (GTK_LIST_STORE (priv->printer_list), &iter);
+  gtk_list_store_append (GTK_LIST_STORE (dialog->printer_list), &iter);
 
   g_object_set_data_full (G_OBJECT (printer),
                          "gtk-print-tree-iter",
@@ -1042,7 +1025,7 @@ printer_added_cb (GtkPrintBackend    *backend,
 
   icon = g_themed_icon_new ("printer");
   g_themed_icon_prepend_name (G_THEMED_ICON (icon), gtk_printer_get_icon_name (printer));
-  gtk_list_store_set (GTK_LIST_STORE (priv->printer_list), &iter,
+  gtk_list_store_set (GTK_LIST_STORE (dialog->printer_list), &iter,
                       PRINTER_LIST_COL_ICON, icon,
                       PRINTER_LIST_COL_NAME, gtk_printer_get_name (printer),
                       PRINTER_LIST_COL_STATE, gtk_printer_get_state_message (printer),
@@ -1052,31 +1035,31 @@ printer_added_cb (GtkPrintBackend    *backend,
                       -1);
   g_object_unref (icon);
 
-  gtk_tree_model_filter_convert_child_iter_to_iter (priv->printer_list_filter,
+  gtk_tree_model_filter_convert_child_iter_to_iter (dialog->printer_list_filter,
                                                     &filter_iter, &iter);
-  path = gtk_tree_model_get_path (GTK_TREE_MODEL (priv->printer_list_filter), &filter_iter);
+  path = gtk_tree_model_get_path (GTK_TREE_MODEL (dialog->printer_list_filter), &filter_iter);
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->printer_treeview));
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->printer_treeview));
 
-  if (priv->waiting_for_printer != NULL &&
-      strcmp (gtk_printer_get_name (printer), priv->waiting_for_printer) == 0)
+  if (dialog->waiting_for_printer != NULL &&
+      strcmp (gtk_printer_get_name (printer), dialog->waiting_for_printer) == 0)
     {
-      priv->internal_printer_change = TRUE;
+      dialog->internal_printer_change = TRUE;
       gtk_tree_selection_select_iter (selection, &filter_iter);
-      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (priv->printer_treeview),
+      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (dialog->printer_treeview),
                                     path, NULL, TRUE, 0.5, 0.0);
-      priv->internal_printer_change = FALSE;
-      g_free (priv->waiting_for_printer);
-      priv->waiting_for_printer = NULL;
+      dialog->internal_printer_change = FALSE;
+      g_free (dialog->waiting_for_printer);
+      dialog->waiting_for_printer = NULL;
     }
   else if (is_default_printer (dialog, printer) &&
            gtk_tree_selection_count_selected_rows (selection) == 0)
     {
-      priv->internal_printer_change = TRUE;
+      dialog->internal_printer_change = TRUE;
       gtk_tree_selection_select_iter (selection, &filter_iter);
-      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (priv->printer_treeview),
+      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (dialog->printer_treeview),
                                     path, NULL, TRUE, 0.5, 0.0);
-      priv->internal_printer_change = FALSE;
+      dialog->internal_printer_change = FALSE;
     }
 
   gtk_tree_path_free (path);
@@ -1115,13 +1098,12 @@ printer_list_initialize (GtkPrintUnixDialog *dialog,
 static void
 load_print_backends (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GList *node;
 
   if (g_module_supported ())
-    priv->print_backends = gtk_print_backend_load_modules ();
+    dialog->print_backends = gtk_print_backend_load_modules ();
 
-  for (node = priv->print_backends; node != NULL; node = node->next)
+  for (node = dialog->print_backends; node != NULL; node = node->next)
     {
       GtkPrintBackend *backend = node->data;
       printer_list_initialize (dialog, backend);
@@ -1173,33 +1155,32 @@ gtk_print_unix_dialog_get_property (GObject    *object,
                                     GParamSpec *pspec)
 {
   GtkPrintUnixDialog *dialog = GTK_PRINT_UNIX_DIALOG (object);
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
 
   switch (prop_id)
     {
     case PROP_PAGE_SETUP:
-      g_value_set_object (value, priv->page_setup);
+      g_value_set_object (value, dialog->page_setup);
       break;
     case PROP_CURRENT_PAGE:
-      g_value_set_int (value, priv->current_page);
+      g_value_set_int (value, dialog->current_page);
       break;
     case PROP_PRINT_SETTINGS:
       g_value_take_object (value, gtk_print_unix_dialog_get_settings (dialog));
       break;
     case PROP_SELECTED_PRINTER:
-      g_value_set_object (value, priv->current_printer);
+      g_value_set_object (value, dialog->current_printer);
       break;
     case PROP_MANUAL_CAPABILITIES:
-      g_value_set_flags (value, priv->manual_capabilities);
+      g_value_set_flags (value, dialog->manual_capabilities);
       break;
     case PROP_SUPPORT_SELECTION:
-      g_value_set_boolean (value, priv->support_selection);
+      g_value_set_boolean (value, dialog->support_selection);
       break;
     case PROP_HAS_SELECTION:
-      g_value_set_boolean (value, priv->has_selection);
+      g_value_set_boolean (value, dialog->has_selection);
       break;
     case PROP_EMBED_PAGE_SETUP:
-      g_value_set_boolean (value, priv->embed_page_setup);
+      g_value_set_boolean (value, dialog->embed_page_setup);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1214,7 +1195,6 @@ is_printer_active (GtkTreeModel       *model,
 {
   gboolean result;
   GtkPrinter *printer;
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
 
   gtk_tree_model_get (model, iter,
                       PRINTER_LIST_COL_PRINTER_OBJ, &printer,
@@ -1226,15 +1206,15 @@ is_printer_active (GtkTreeModel       *model,
   result = gtk_printer_is_active (printer);
 
   if (result &&
-      priv->manual_capabilities & (GTK_PRINT_CAPABILITY_GENERATE_PDF |
+      dialog->manual_capabilities & (GTK_PRINT_CAPABILITY_GENERATE_PDF |
                                    GTK_PRINT_CAPABILITY_GENERATE_PS))
     {
        /* Check that the printer can handle at least one of the data
         * formats that the application supports.
         */
-       result = ((priv->manual_capabilities & GTK_PRINT_CAPABILITY_GENERATE_PDF) &&
+       result = ((dialog->manual_capabilities & GTK_PRINT_CAPABILITY_GENERATE_PDF) &&
                  gtk_printer_accepts_pdf (printer)) ||
-                ((priv->manual_capabilities & GTK_PRINT_CAPABILITY_GENERATE_PS) &&
+                ((dialog->manual_capabilities & GTK_PRINT_CAPABILITY_GENERATE_PS) &&
                  gtk_printer_accepts_ps (printer));
     }
 
@@ -1330,10 +1310,9 @@ setup_option (GtkPrintUnixDialog     *dialog,
               const gchar            *option_name,
               GtkPrinterOptionWidget *widget)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GtkPrinterOption *option;
 
-  option = gtk_printer_option_set_lookup (priv->options, option_name);
+  option = gtk_printer_option_set_lookup (dialog->options, option_name);
   gtk_printer_option_widget_set_source (widget, option);
 
   return option != NULL;
@@ -1458,30 +1437,29 @@ setup_page_table (GtkPrinterOptionSet *options,
 static void
 update_print_at_option (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GtkPrinterOption *option;
 
-  option = gtk_printer_option_set_lookup (priv->options, "gtk-print-time");
+  option = gtk_printer_option_set_lookup (dialog->options, "gtk-print-time");
 
   if (option == NULL)
     return;
 
-  if (priv->updating_print_at)
+  if (dialog->updating_print_at)
     return;
 
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->print_at_radio)))
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->print_at_radio)))
     gtk_printer_option_set (option, "at");
-  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->print_hold_radio)))
+  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->print_hold_radio)))
     gtk_printer_option_set (option, "on-hold");
   else
     gtk_printer_option_set (option, "now");
 
-  option = gtk_printer_option_set_lookup (priv->options, "gtk-print-time-text");
+  option = gtk_printer_option_set_lookup (dialog->options, "gtk-print-time-text");
   if (option != NULL)
     {
       const gchar *text;
 
-      text = gtk_editable_get_text (GTK_EDITABLE (priv->print_at_entry));
+      text = gtk_editable_get_text (GTK_EDITABLE (dialog->print_at_entry));
       gtk_printer_option_set (option, text);
     }
 }
@@ -1490,48 +1468,47 @@ update_print_at_option (GtkPrintUnixDialog *dialog)
 static gboolean
 setup_print_at (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GtkPrinterOption *option;
 
-  option = gtk_printer_option_set_lookup (priv->options, "gtk-print-time");
+  option = gtk_printer_option_set_lookup (dialog->options, "gtk-print-time");
 
   if (option == NULL)
     {
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->print_now_radio),
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->print_now_radio),
                                     TRUE);
-      gtk_widget_set_sensitive (priv->print_at_radio, FALSE);
-      gtk_widget_set_sensitive (priv->print_at_entry, FALSE);
-      gtk_widget_set_sensitive (priv->print_hold_radio, FALSE);
-      gtk_editable_set_text (GTK_EDITABLE (priv->print_at_entry), "");
+      gtk_widget_set_sensitive (dialog->print_at_radio, FALSE);
+      gtk_widget_set_sensitive (dialog->print_at_entry, FALSE);
+      gtk_widget_set_sensitive (dialog->print_hold_radio, FALSE);
+      gtk_editable_set_text (GTK_EDITABLE (dialog->print_at_entry), "");
       return FALSE;
     }
 
-  priv->updating_print_at = TRUE;
+  dialog->updating_print_at = TRUE;
 
-  gtk_widget_set_sensitive (priv->print_at_entry, FALSE);
-  gtk_widget_set_sensitive (priv->print_at_radio,
+  gtk_widget_set_sensitive (dialog->print_at_entry, FALSE);
+  gtk_widget_set_sensitive (dialog->print_at_radio,
                             gtk_printer_option_has_choice (option, "at"));
 
-  gtk_widget_set_sensitive (priv->print_hold_radio,
+  gtk_widget_set_sensitive (dialog->print_hold_radio,
                             gtk_printer_option_has_choice (option, "on-hold"));
 
   update_print_at_option (dialog);
 
   if (strcmp (option->value, "at") == 0)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->print_at_radio),
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->print_at_radio),
                                   TRUE);
   else if (strcmp (option->value, "on-hold") == 0)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->print_hold_radio),
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->print_hold_radio),
                                   TRUE);
   else
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->print_now_radio),
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->print_now_radio),
                                   TRUE);
 
-  option = gtk_printer_option_set_lookup (priv->options, "gtk-print-time-text");
+  option = gtk_printer_option_set_lookup (dialog->options, "gtk-print-time-text");
   if (option != NULL)
-    gtk_editable_set_text (GTK_EDITABLE (priv->print_at_entry), option->value);
+    gtk_editable_set_text (GTK_EDITABLE (dialog->print_at_entry), option->value);
 
-  priv->updating_print_at = FALSE;
+  dialog->updating_print_at = FALSE;
 
   return TRUE;
 }
@@ -1539,7 +1516,6 @@ setup_print_at (GtkPrintUnixDialog *dialog)
 static void
 update_dialog_from_settings (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GList *groups, *l;
   gchar *group;
   GtkWidget *table, *frame;
@@ -1547,70 +1523,70 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
   guint nrows;
   GList *children;
 
-  if (priv->current_printer == NULL)
+  if (dialog->current_printer == NULL)
     {
        clear_per_printer_ui (dialog);
-       gtk_widget_hide (priv->job_page);
-       gtk_widget_hide (priv->advanced_page);
-       gtk_widget_hide (priv->image_quality_page);
-       gtk_widget_hide (priv->finishing_page);
-       gtk_widget_hide (priv->color_page);
+       gtk_widget_hide (dialog->job_page);
+       gtk_widget_hide (dialog->advanced_page);
+       gtk_widget_hide (dialog->image_quality_page);
+       gtk_widget_hide (dialog->finishing_page);
+       gtk_widget_hide (dialog->color_page);
        gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, FALSE);
 
        return;
     }
 
-  setup_option (dialog, "gtk-n-up", priv->pages_per_sheet);
-  setup_option (dialog, "gtk-n-up-layout", priv->number_up_layout);
-  setup_option (dialog, "gtk-duplex", priv->duplex);
-  setup_option (dialog, "gtk-paper-type", priv->paper_type);
-  setup_option (dialog, "gtk-paper-source", priv->paper_source);
-  setup_option (dialog, "gtk-output-tray", priv->output_tray);
+  setup_option (dialog, "gtk-n-up", dialog->pages_per_sheet);
+  setup_option (dialog, "gtk-n-up-layout", dialog->number_up_layout);
+  setup_option (dialog, "gtk-duplex", dialog->duplex);
+  setup_option (dialog, "gtk-paper-type", dialog->paper_type);
+  setup_option (dialog, "gtk-paper-source", dialog->paper_source);
+  setup_option (dialog, "gtk-output-tray", dialog->output_tray);
 
   has_job = FALSE;
-  has_job |= setup_option (dialog, "gtk-job-prio", priv->job_prio);
-  has_job |= setup_option (dialog, "gtk-billing-info", priv->billing_info);
-  has_job |= setup_option (dialog, "gtk-cover-before", priv->cover_before);
-  has_job |= setup_option (dialog, "gtk-cover-after", priv->cover_after);
+  has_job |= setup_option (dialog, "gtk-job-prio", dialog->job_prio);
+  has_job |= setup_option (dialog, "gtk-billing-info", dialog->billing_info);
+  has_job |= setup_option (dialog, "gtk-cover-before", dialog->cover_before);
+  has_job |= setup_option (dialog, "gtk-cover-after", dialog->cover_after);
   has_job |= setup_print_at (dialog);
 
   if (has_job)
-    gtk_widget_show (priv->job_page);
+    gtk_widget_show (dialog->job_page);
   else
-    gtk_widget_hide (priv->job_page);
+    gtk_widget_hide (dialog->job_page);
 
-  setup_page_table (priv->options,
+  setup_page_table (dialog->options,
                     "ImageQualityPage",
-                    priv->image_quality_table,
-                    priv->image_quality_page);
+                    dialog->image_quality_table,
+                    dialog->image_quality_page);
 
-  setup_page_table (priv->options,
+  setup_page_table (dialog->options,
                     "FinishingPage",
-                    priv->finishing_table,
-                    priv->finishing_page);
+                    dialog->finishing_table,
+                    dialog->finishing_page);
 
-  setup_page_table (priv->options,
+  setup_page_table (dialog->options,
                     "ColorPage",
-                    priv->color_table,
-                    priv->color_page);
+                    dialog->color_table,
+                    dialog->color_page);
 
-  gtk_printer_option_set_foreach_in_group (priv->options,
+  gtk_printer_option_set_foreach_in_group (dialog->options,
                                            "GtkPrintDialogExtension",
                                            add_option_to_extension_point,
-                                           priv->extension_point);
+                                           dialog->extension_point);
 
   /* A bit of a hack, keep the last option flush right.
    * This keeps the file format radios from moving as the
    * filename changes.
    */
-  children = gtk_container_get_children (GTK_CONTAINER (priv->extension_point));
+  children = gtk_container_get_children (GTK_CONTAINER (dialog->extension_point));
   l = g_list_last (children);
   if (l && l != children)
     gtk_widget_set_halign (GTK_WIDGET (l->data), GTK_ALIGN_END);
   g_list_free (children);
 
   /* Put the rest of the groups in the advanced page */
-  groups = gtk_printer_option_set_get_groups (priv->options);
+  groups = gtk_printer_option_set_get_groups (dialog->options);
 
   has_advanced = FALSE;
   for (l = groups; l != NULL; l = l->next)
@@ -1630,7 +1606,7 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
       gtk_grid_set_row_spacing (GTK_GRID (table), 6);
       gtk_grid_set_column_spacing (GTK_GRID (table), 12);
 
-      gtk_printer_option_set_foreach_in_group (priv->options,
+      gtk_printer_option_set_foreach_in_group (dialog->options,
                                                group,
                                                add_option_to_table,
                                                table);
@@ -1645,15 +1621,15 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
           gtk_widget_show (table);
           gtk_widget_show (frame);
 
-          gtk_container_add (GTK_CONTAINER (priv->advanced_vbox),
+          gtk_container_add (GTK_CONTAINER (dialog->advanced_vbox),
                               frame);
         }
     }
 
   if (has_advanced)
-    gtk_widget_show (priv->advanced_page);
+    gtk_widget_show (dialog->advanced_page);
   else
-    gtk_widget_hide (priv->advanced_page);
+    gtk_widget_hide (dialog->advanced_page);
 
   g_list_free_full (groups, g_free);
 }
@@ -1661,29 +1637,28 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
 static void
 update_dialog_from_capabilities (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GtkPrintCapabilities caps;
   gboolean can_collate;
   const gchar *copies;
   GtkWidget *button;
 
-  copies = gtk_editable_get_text (GTK_EDITABLE (priv->copies_spin));
+  copies = gtk_editable_get_text (GTK_EDITABLE (dialog->copies_spin));
   can_collate = (*copies != '\0' && atoi (copies) > 1);
 
-  caps = priv->manual_capabilities | priv->printer_capabilities;
+  caps = dialog->manual_capabilities | dialog->printer_capabilities;
 
-  gtk_widget_set_sensitive (priv->page_set_combo,
+  gtk_widget_set_sensitive (dialog->page_set_combo,
                             caps & GTK_PRINT_CAPABILITY_PAGE_SET);
-  gtk_widget_set_sensitive (priv->copies_spin,
+  gtk_widget_set_sensitive (dialog->copies_spin,
                             caps & GTK_PRINT_CAPABILITY_COPIES);
-  gtk_widget_set_sensitive (priv->collate_check,
+  gtk_widget_set_sensitive (dialog->collate_check,
                             can_collate &&
                             (caps & GTK_PRINT_CAPABILITY_COLLATE));
-  gtk_widget_set_sensitive (priv->reverse_check,
+  gtk_widget_set_sensitive (dialog->reverse_check,
                             caps & GTK_PRINT_CAPABILITY_REVERSE);
-  gtk_widget_set_sensitive (priv->scale_spin,
+  gtk_widget_set_sensitive (dialog->scale_spin,
                             caps & GTK_PRINT_CAPABILITY_SCALE);
-  gtk_widget_set_sensitive (GTK_WIDGET (priv->pages_per_sheet),
+  gtk_widget_set_sensitive (GTK_WIDGET (dialog->pages_per_sheet),
                             caps & GTK_PRINT_CAPABILITY_NUMBER_UP);
 
   button = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_APPLY);
@@ -1691,7 +1666,7 @@ update_dialog_from_capabilities (GtkPrintUnixDialog *dialog)
 
   update_collate_icon (NULL, dialog);
 
-  gtk_tree_model_filter_refilter (priv->printer_list_filter);
+  gtk_tree_model_filter_refilter (dialog->printer_list_filter);
 }
 
 static gboolean
@@ -1721,24 +1696,23 @@ set_paper_size (GtkPrintUnixDialog *dialog,
                 gboolean            size_only,
                 gboolean            add_item)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GtkTreeModel *model;
   GtkTreeIter iter;
   GtkPageSetup *list_page_setup;
 
-  if (!priv->internal_page_setup_change)
+  if (!dialog->internal_page_setup_change)
     return TRUE;
 
   if (page_setup == NULL)
     return FALSE;
 
-  model = GTK_TREE_MODEL (priv->page_setup_list);
+  model = GTK_TREE_MODEL (dialog->page_setup_list);
 
   if (gtk_tree_model_get_iter_first (model, &iter))
     {
       do
         {
-          gtk_tree_model_get (GTK_TREE_MODEL (priv->page_setup_list), &iter,
+          gtk_tree_model_get (GTK_TREE_MODEL (dialog->page_setup_list), &iter,
                               PAGE_SETUP_LIST_COL_PAGE_SETUP, &list_page_setup,
                               -1);
           if (list_page_setup == NULL)
@@ -1747,9 +1721,9 @@ set_paper_size (GtkPrintUnixDialog *dialog,
           if ((size_only && page_setup_is_same_size (page_setup, list_page_setup)) ||
               (!size_only && page_setup_is_equal (page_setup, list_page_setup)))
             {
-              gtk_combo_box_set_active_iter (GTK_COMBO_BOX (priv->paper_size_combo),
+              gtk_combo_box_set_active_iter (GTK_COMBO_BOX (dialog->paper_size_combo),
                                              &iter);
-              gtk_combo_box_set_active (GTK_COMBO_BOX (priv->orientation_combo),
+              gtk_combo_box_set_active (GTK_COMBO_BOX (dialog->orientation_combo),
                                         gtk_page_setup_get_orientation (page_setup));
               g_object_unref (list_page_setup);
               return TRUE;
@@ -1762,17 +1736,17 @@ set_paper_size (GtkPrintUnixDialog *dialog,
 
   if (add_item)
     {
-      gtk_list_store_append (priv->page_setup_list, &iter);
-      gtk_list_store_set (priv->page_setup_list, &iter,
+      gtk_list_store_append (dialog->page_setup_list, &iter);
+      gtk_list_store_set (dialog->page_setup_list, &iter,
                           PAGE_SETUP_LIST_COL_IS_SEPARATOR, TRUE,
                           -1);
-      gtk_list_store_append (priv->page_setup_list, &iter);
-      gtk_list_store_set (priv->page_setup_list, &iter,
+      gtk_list_store_append (dialog->page_setup_list, &iter);
+      gtk_list_store_set (dialog->page_setup_list, &iter,
                           PAGE_SETUP_LIST_COL_PAGE_SETUP, page_setup,
                           -1);
-      gtk_combo_box_set_active_iter (GTK_COMBO_BOX (priv->paper_size_combo),
+      gtk_combo_box_set_active_iter (GTK_COMBO_BOX (dialog->paper_size_combo),
                                      &iter);
-      gtk_combo_box_set_active (GTK_COMBO_BOX (priv->orientation_combo),
+      gtk_combo_box_set_active (GTK_COMBO_BOX (dialog->orientation_combo),
                                 gtk_page_setup_get_orientation (page_setup));
       return TRUE;
     }
@@ -1783,15 +1757,14 @@ set_paper_size (GtkPrintUnixDialog *dialog,
 static void
 fill_custom_paper_sizes (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GtkTreeIter iter, paper_iter;
   GtkTreeModel *model;
 
-  model = GTK_TREE_MODEL (priv->custom_paper_list);
+  model = GTK_TREE_MODEL (dialog->custom_paper_list);
   if (gtk_tree_model_get_iter_first (model, &iter))
     {
-      gtk_list_store_append (priv->page_setup_list, &paper_iter);
-      gtk_list_store_set (priv->page_setup_list, &paper_iter,
+      gtk_list_store_append (dialog->page_setup_list, &paper_iter);
+      gtk_list_store_set (dialog->page_setup_list, &paper_iter,
                           PAGE_SETUP_LIST_COL_IS_SEPARATOR, TRUE,
                           -1);
       do
@@ -1799,8 +1772,8 @@ fill_custom_paper_sizes (GtkPrintUnixDialog *dialog)
           GtkPageSetup *page_setup;
           gtk_tree_model_get (model, &iter, 0, &page_setup, -1);
 
-          gtk_list_store_append (priv->page_setup_list, &paper_iter);
-          gtk_list_store_set (priv->page_setup_list, &paper_iter,
+          gtk_list_store_append (dialog->page_setup_list, &paper_iter);
+          gtk_list_store_set (dialog->page_setup_list, &paper_iter,
                               PAGE_SETUP_LIST_COL_PAGE_SETUP, page_setup,
                               -1);
 
@@ -1808,12 +1781,12 @@ fill_custom_paper_sizes (GtkPrintUnixDialog *dialog)
         } while (gtk_tree_model_iter_next (model, &iter));
     }
 
-  gtk_list_store_append (priv->page_setup_list, &paper_iter);
-  gtk_list_store_set (priv->page_setup_list, &paper_iter,
+  gtk_list_store_append (dialog->page_setup_list, &paper_iter);
+  gtk_list_store_set (dialog->page_setup_list, &paper_iter,
                       PAGE_SETUP_LIST_COL_IS_SEPARATOR, TRUE,
                       -1);
-  gtk_list_store_append (priv->page_setup_list, &paper_iter);
-  gtk_list_store_set (priv->page_setup_list, &paper_iter,
+  gtk_list_store_append (dialog->page_setup_list, &paper_iter);
+  gtk_list_store_set (dialog->page_setup_list, &paper_iter,
                       PAGE_SETUP_LIST_COL_PAGE_SETUP, NULL,
                       -1);
 }
@@ -1822,14 +1795,13 @@ static void
 fill_paper_sizes (GtkPrintUnixDialog *dialog,
                   GtkPrinter         *printer)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GList *list, *l;
   GtkPageSetup *page_setup;
   GtkPaperSize *paper_size;
   GtkTreeIter iter;
   gint i;
 
-  gtk_list_store_clear (priv->page_setup_list);
+  gtk_list_store_clear (dialog->page_setup_list);
 
   if (printer == NULL || (list = gtk_printer_list_papers (printer)) == NULL)
     {
@@ -1840,8 +1812,8 @@ fill_paper_sizes (GtkPrintUnixDialog *dialog,
           gtk_page_setup_set_paper_size_and_default_margins (page_setup, paper_size);
           gtk_paper_size_free (paper_size);
 
-          gtk_list_store_append (priv->page_setup_list, &iter);
-          gtk_list_store_set (priv->page_setup_list, &iter,
+          gtk_list_store_append (dialog->page_setup_list, &iter);
+          gtk_list_store_set (dialog->page_setup_list, &iter,
                               PAGE_SETUP_LIST_COL_PAGE_SETUP, page_setup,
                               -1);
           g_object_unref (page_setup);
@@ -1852,8 +1824,8 @@ fill_paper_sizes (GtkPrintUnixDialog *dialog,
       for (l = list; l != NULL; l = l->next)
         {
           page_setup = l->data;
-          gtk_list_store_append (priv->page_setup_list, &iter);
-          gtk_list_store_set (priv->page_setup_list, &iter,
+          gtk_list_store_append (dialog->page_setup_list, &iter);
+          gtk_list_store_set (dialog->page_setup_list, &iter,
                               PAGE_SETUP_LIST_COL_PAGE_SETUP, page_setup,
                               -1);
           g_object_unref (page_setup);
@@ -1888,42 +1860,40 @@ update_paper_sizes (GtkPrintUnixDialog *dialog)
 static void
 mark_conflicts (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GtkPrinter *printer;
   gboolean have_conflict;
 
   have_conflict = FALSE;
 
-  printer = priv->current_printer;
+  printer = dialog->current_printer;
 
   if (printer)
     {
 
-      g_signal_handler_block (priv->options,
-                              priv->options_changed_handler);
+      g_signal_handler_block (dialog->options,
+                              dialog->options_changed_handler);
 
-      gtk_printer_option_set_clear_conflicts (priv->options);
+      gtk_printer_option_set_clear_conflicts (dialog->options);
 
       have_conflict = _gtk_printer_mark_conflicts (printer,
-                                                   priv->options);
+                                                   dialog->options);
 
-      g_signal_handler_unblock (priv->options,
-                                priv->options_changed_handler);
+      g_signal_handler_unblock (dialog->options,
+                                dialog->options_changed_handler);
     }
 
   if (have_conflict)
-    gtk_widget_show (priv->conflicts_widget);
+    gtk_widget_show (dialog->conflicts_widget);
   else
-    gtk_widget_hide (priv->conflicts_widget);
+    gtk_widget_hide (dialog->conflicts_widget);
 }
 
 static gboolean
 mark_conflicts_callback (gpointer data)
 {
   GtkPrintUnixDialog *dialog = data;
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
 
-  priv->mark_conflicts_id = 0;
+  dialog->mark_conflicts_id = 0;
 
   mark_conflicts (dialog);
 
@@ -1933,36 +1903,30 @@ mark_conflicts_callback (gpointer data)
 static void
 unschedule_idle_mark_conflicts (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
-  if (priv->mark_conflicts_id != 0)
+  if (dialog->mark_conflicts_id != 0)
     {
-      g_source_remove (priv->mark_conflicts_id);
-      priv->mark_conflicts_id = 0;
+      g_source_remove (dialog->mark_conflicts_id);
+      dialog->mark_conflicts_id = 0;
     }
 }
 
 static void
 schedule_idle_mark_conflicts (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
-  if (priv->mark_conflicts_id != 0)
+  if (dialog->mark_conflicts_id != 0)
     return;
 
-  priv->mark_conflicts_id = g_idle_add (mark_conflicts_callback, dialog);
-  g_source_set_name_by_id (priv->mark_conflicts_id, "[gtk] mark_conflicts_callback");
+  dialog->mark_conflicts_id = g_idle_add (mark_conflicts_callback, dialog);
+  g_source_set_name_by_id (dialog->mark_conflicts_id, "[gtk] mark_conflicts_callback");
 }
 
 static void
 options_changed_cb (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
   schedule_idle_mark_conflicts (dialog);
 
-  g_free (priv->waiting_for_printer);
-  priv->waiting_for_printer = NULL;
+  g_free (dialog->waiting_for_printer);
+  dialog->waiting_for_printer = NULL;
 }
 
 static void
@@ -1983,20 +1947,18 @@ extension_point_clear_children (GtkContainer *container)
 static void
 clear_per_printer_ui (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
-  if (priv->finishing_table == NULL)
+  if (dialog->finishing_table == NULL)
     return;
 
-  gtk_container_foreach (GTK_CONTAINER (priv->finishing_table),
+  gtk_container_foreach (GTK_CONTAINER (dialog->finishing_table),
                          (GtkCallback)gtk_widget_destroy, NULL);
-  gtk_container_foreach (GTK_CONTAINER (priv->image_quality_table),
+  gtk_container_foreach (GTK_CONTAINER (dialog->image_quality_table),
                          (GtkCallback)gtk_widget_destroy, NULL);
-  gtk_container_foreach (GTK_CONTAINER (priv->color_table),
+  gtk_container_foreach (GTK_CONTAINER (dialog->color_table),
                          (GtkCallback)gtk_widget_destroy, NULL);
-  gtk_container_foreach (GTK_CONTAINER (priv->advanced_vbox),
+  gtk_container_foreach (GTK_CONTAINER (dialog->advanced_vbox),
                          (GtkCallback)gtk_widget_destroy, NULL);
-  extension_point_clear_children (GTK_CONTAINER (priv->extension_point));
+  extension_point_clear_children (GTK_CONTAINER (dialog->extension_point));
 }
 
 static void
@@ -2004,14 +1966,12 @@ printer_details_acquired (GtkPrinter         *printer,
                           gboolean            success,
                           GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
   disconnect_printer_details_request (dialog, !success);
 
   if (success)
     {
       GtkTreeSelection *selection;
-      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->printer_treeview));
+      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->printer_treeview));
 
       selected_printer_changed (selection, dialog);
     }
@@ -2021,18 +1981,17 @@ static void
 selected_printer_changed (GtkTreeSelection   *selection,
                           GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GtkPrinter *printer;
   GtkTreeIter iter, filter_iter;
 
   /* Whenever the user selects a printer we stop looking for
    * the printer specified in the initial settings
    */
-  if (priv->waiting_for_printer &&
-      !priv->internal_printer_change)
+  if (dialog->waiting_for_printer &&
+      !dialog->internal_printer_change)
     {
-      g_free (priv->waiting_for_printer);
-      priv->waiting_for_printer = NULL;
+      g_free (dialog->waiting_for_printer);
+      dialog->waiting_for_printer = NULL;
     }
 
   disconnect_printer_details_request (dialog, FALSE);
@@ -2040,11 +1999,11 @@ selected_printer_changed (GtkTreeSelection   *selection,
   printer = NULL;
   if (gtk_tree_selection_get_selected (selection, NULL, &filter_iter))
     {
-      gtk_tree_model_filter_convert_iter_to_child_iter (priv->printer_list_filter,
+      gtk_tree_model_filter_convert_iter_to_child_iter (dialog->printer_list_filter,
                                                         &iter,
                                                         &filter_iter);
 
-      gtk_tree_model_get (priv->printer_list, &iter,
+      gtk_tree_model_get (dialog->printer_list, &iter,
                           PRINTER_LIST_COL_PRINTER_OBJ, &printer,
                           -1);
     }
@@ -2056,7 +2015,7 @@ selected_printer_changed (GtkTreeSelection   *selection,
     {
       if (!gtk_printer_is_accepting_jobs (printer))
         gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, FALSE);
-      else if (priv->current_printer == printer && gtk_printer_has_details (printer))
+      else if (dialog->current_printer == printer && gtk_printer_has_details (printer))
 
         gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, TRUE);
     }
@@ -2064,13 +2023,13 @@ selected_printer_changed (GtkTreeSelection   *selection,
   if (printer != NULL && !gtk_printer_has_details (printer))
     {
       gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, FALSE);
-      priv->request_details_tag =
+      dialog->request_details_tag =
         g_signal_connect (printer, "details-acquired",
                           G_CALLBACK (printer_details_acquired), dialog);
       /* take the reference */
-      priv->request_details_printer = printer;
+      dialog->request_details_printer = printer;
       set_busy_cursor (dialog, TRUE);
-      gtk_list_store_set (GTK_LIST_STORE (priv->printer_list),
+      gtk_list_store_set (GTK_LIST_STORE (dialog->printer_list),
                           g_object_get_data (G_OBJECT (printer), "gtk-print-tree-iter"),
                           PRINTER_LIST_COL_STATE, _("Getting printer information…"),
                           -1);
@@ -2078,29 +2037,29 @@ selected_printer_changed (GtkTreeSelection   *selection,
       return;
     }
 
-  if (printer == priv->current_printer)
+  if (printer == dialog->current_printer)
     {
       if (printer)
         g_object_unref (printer);
       return;
     }
 
-  if (priv->options)
+  if (dialog->options)
     {
-      g_clear_object (&priv->options);
+      g_clear_object (&dialog->options);
       clear_per_printer_ui (dialog);
     }
 
-  g_clear_object (&priv->current_printer);
-  priv->printer_capabilities = 0;
+  g_clear_object (&dialog->current_printer);
+  dialog->printer_capabilities = 0;
 
   if (printer != NULL && gtk_printer_is_accepting_jobs (printer))
     gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, TRUE);
-  priv->current_printer = printer;
+  dialog->current_printer = printer;
 
   if (printer != NULL)
     {
-      if (!priv->page_setup_set)
+      if (!dialog->page_setup_set)
         {
           /* if no explicit page setup has been set, use the printer default */
           GtkPageSetup *page_setup;
@@ -2110,30 +2069,30 @@ selected_printer_changed (GtkTreeSelection   *selection,
           if (!page_setup)
             page_setup = gtk_page_setup_new ();
 
-          if (page_setup && priv->page_setup)
-            gtk_page_setup_set_orientation (page_setup, gtk_page_setup_get_orientation (priv->page_setup));
+          if (page_setup && dialog->page_setup)
+            gtk_page_setup_set_orientation (page_setup, gtk_page_setup_get_orientation (dialog->page_setup));
 
-          g_clear_object (&priv->page_setup);
-          priv->page_setup = page_setup; /* transfer ownership */
+          g_clear_object (&dialog->page_setup);
+          dialog->page_setup = page_setup; /* transfer ownership */
         }
 
-      priv->printer_capabilities = gtk_printer_get_capabilities (printer);
-      priv->options = _gtk_printer_get_options (printer,
-                                                priv->initial_settings,
-                                                priv->page_setup,
-                                                priv->manual_capabilities);
+      dialog->printer_capabilities = gtk_printer_get_capabilities (printer);
+      dialog->options = _gtk_printer_get_options (printer,
+                                                dialog->initial_settings,
+                                                dialog->page_setup,
+                                                dialog->manual_capabilities);
 
-      priv->options_changed_handler =
-        g_signal_connect_swapped (priv->options, "changed", G_CALLBACK (options_changed_cb), dialog);
+      dialog->options_changed_handler =
+        g_signal_connect_swapped (dialog->options, "changed", G_CALLBACK (options_changed_cb), dialog);
       schedule_idle_mark_conflicts (dialog);
     }
 
   update_dialog_from_settings (dialog);
   update_dialog_from_capabilities (dialog);
 
-  priv->internal_page_setup_change = TRUE;
+  dialog->internal_page_setup_change = TRUE;
   update_paper_sizes (dialog);
-  priv->internal_page_setup_change = FALSE;
+  dialog->internal_page_setup_change = FALSE;
 
   g_object_notify ( G_OBJECT(dialog), "selected-printer");
 }
@@ -2221,9 +2180,7 @@ static void
 update_collate_icon (GtkToggleButton    *toggle_button,
                      GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
-  gtk_widget_queue_draw (priv->collate_image);
+  gtk_widget_queue_draw (dialog->collate_image);
 }
 
 static void
@@ -2321,10 +2278,8 @@ page_range_entry_focus_changed (GtkWidget          *entry,
                                 GParamSpec         *pspec,
                                 GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
   if (gtk_widget_has_focus (entry))
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->page_range_radio), TRUE);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->page_range_radio), TRUE);
 
   return FALSE;
 }
@@ -2333,28 +2288,26 @@ static void
 update_page_range_entry_sensitivity (GtkWidget *button,
 				     GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   gboolean active;
 
   active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
 
   if (active)
-    gtk_widget_grab_focus (priv->page_range_entry);
+    gtk_widget_grab_focus (dialog->page_range_entry);
 }
 
 static void
 update_print_at_entry_sensitivity (GtkWidget *button,
 				   GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   gboolean active;
 
   active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
 
-  gtk_widget_set_sensitive (priv->print_at_entry, active);
+  gtk_widget_set_sensitive (dialog->print_at_entry, active);
 
   if (active)
-    gtk_widget_grab_focus (priv->print_at_entry);
+    gtk_widget_grab_focus (dialog->print_at_entry);
 }
 
 static void
@@ -2380,14 +2333,13 @@ static GtkPageRange *
 dialog_get_page_ranges (GtkPrintUnixDialog *dialog,
                         gint               *n_ranges_out)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   gint i, n_ranges;
   const gchar *text, *p;
   gchar *next;
   GtkPageRange *ranges;
   gint start, end;
 
-  text = gtk_editable_get_text (GTK_EDITABLE (priv->page_range_entry));
+  text = gtk_editable_get_text (GTK_EDITABLE (dialog->page_range_entry));
 
   if (*text == 0)
     {
@@ -2462,7 +2414,6 @@ dialog_set_page_ranges (GtkPrintUnixDialog *dialog,
                         GtkPageRange       *ranges,
                         gint                n_ranges)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   gint i;
   GString *s = g_string_new (NULL);
 
@@ -2478,7 +2429,7 @@ dialog_set_page_ranges (GtkPrintUnixDialog *dialog,
         g_string_append (s, ",");
     }
 
-  gtk_editable_set_text (GTK_EDITABLE (priv->page_range_entry), s->str);
+  gtk_editable_set_text (GTK_EDITABLE (dialog->page_range_entry), s->str);
 
   g_string_free (s, TRUE);
 }
@@ -2486,13 +2437,11 @@ dialog_set_page_ranges (GtkPrintUnixDialog *dialog,
 static GtkPrintPages
 dialog_get_print_pages (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->all_pages_radio)))
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->all_pages_radio)))
     return GTK_PRINT_PAGES_ALL;
-  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->current_page_radio)))
+  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->current_page_radio)))
     return GTK_PRINT_PAGES_CURRENT;
-  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->selection_radio)))
+  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->selection_radio)))
     return GTK_PRINT_PAGES_SELECTION;
   else
     return GTK_PRINT_PAGES_RANGES;
@@ -2502,25 +2451,21 @@ static void
 dialog_set_print_pages (GtkPrintUnixDialog *dialog,
                         GtkPrintPages       pages)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
   if (pages == GTK_PRINT_PAGES_RANGES)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->page_range_radio), TRUE);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->page_range_radio), TRUE);
   else if (pages == GTK_PRINT_PAGES_CURRENT)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->current_page_radio), TRUE);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->current_page_radio), TRUE);
   else if (pages == GTK_PRINT_PAGES_SELECTION)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->selection_radio), TRUE);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->selection_radio), TRUE);
   else
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->all_pages_radio), TRUE);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->all_pages_radio), TRUE);
 }
 
 static gdouble
 dialog_get_scale (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
-  if (gtk_widget_is_sensitive (priv->scale_spin))
-    return gtk_spin_button_get_value (GTK_SPIN_BUTTON (priv->scale_spin));
+  if (gtk_widget_is_sensitive (dialog->scale_spin))
+    return gtk_spin_button_get_value (GTK_SPIN_BUTTON (dialog->scale_spin));
   else
     return 100.0;
 }
@@ -2529,18 +2474,14 @@ static void
 dialog_set_scale (GtkPrintUnixDialog *dialog,
                   gdouble             val)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
-  gtk_spin_button_set_value (GTK_SPIN_BUTTON (priv->scale_spin), val);
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (dialog->scale_spin), val);
 }
 
 static GtkPageSet
 dialog_get_page_set (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
-  if (gtk_widget_is_sensitive (priv->page_set_combo))
-    return (GtkPageSet)gtk_combo_box_get_active (GTK_COMBO_BOX (priv->page_set_combo));
+  if (gtk_widget_is_sensitive (dialog->page_set_combo))
+    return (GtkPageSet)gtk_combo_box_get_active (GTK_COMBO_BOX (dialog->page_set_combo));
   else
     return GTK_PAGE_SET_ALL;
 }
@@ -2549,26 +2490,23 @@ static void
 dialog_set_page_set (GtkPrintUnixDialog *dialog,
                      GtkPageSet          val)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
-  gtk_combo_box_set_active (GTK_COMBO_BOX (priv->page_set_combo), (int)val);
+  gtk_combo_box_set_active (GTK_COMBO_BOX (dialog->page_set_combo), (int)val);
 }
 
 static gint
 dialog_get_n_copies (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GtkAdjustment *adjustment;
   const gchar *text;
   gchar *endptr = NULL;
   gint n_copies;
 
-  adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->copies_spin));
+  adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (dialog->copies_spin));
 
-  text = gtk_editable_get_text (GTK_EDITABLE (priv->copies_spin));
+  text = gtk_editable_get_text (GTK_EDITABLE (dialog->copies_spin));
   n_copies = g_ascii_strtoull (text, &endptr, 0);
 
-  if (gtk_widget_is_sensitive (priv->copies_spin))
+  if (gtk_widget_is_sensitive (dialog->copies_spin))
     {
       if (n_copies != 0 && endptr != text && (endptr != NULL && endptr[0] == '\0') &&
           n_copies >= gtk_adjustment_get_lower (adjustment) &&
@@ -2577,7 +2515,7 @@ dialog_get_n_copies (GtkPrintUnixDialog *dialog)
           return n_copies;
         }
 
-      return gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (priv->copies_spin));
+      return gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (dialog->copies_spin));
     }
 
   return 1;
@@ -2587,19 +2525,14 @@ static void
 dialog_set_n_copies (GtkPrintUnixDialog *dialog,
                      gint                n_copies)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
-  gtk_spin_button_set_value (GTK_SPIN_BUTTON (priv->copies_spin),
-                             n_copies);
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (dialog->copies_spin), n_copies);
 }
 
 static gboolean
 dialog_get_collate (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
-  if (gtk_widget_is_sensitive (priv->collate_check))
-    return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->collate_check));
+  if (gtk_widget_is_sensitive (dialog->collate_check))
+    return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->collate_check));
   return FALSE;
 }
 
@@ -2607,19 +2540,14 @@ static void
 dialog_set_collate (GtkPrintUnixDialog *dialog,
                     gboolean            collate)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->collate_check),
-                                collate);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->collate_check), collate);
 }
 
 static gboolean
 dialog_get_reverse (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
-  if (gtk_widget_is_sensitive (priv->reverse_check))
-    return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->reverse_check));
+  if (gtk_widget_is_sensitive (dialog->reverse_check))
+    return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->reverse_check));
   return FALSE;
 }
 
@@ -2627,20 +2555,16 @@ static void
 dialog_set_reverse (GtkPrintUnixDialog *dialog,
                     gboolean            reverse)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->reverse_check),
-                                reverse);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->reverse_check), reverse);
 }
 
 static gint
 dialog_get_pages_per_sheet (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   const gchar *val;
   gint num;
 
-  val = gtk_printer_option_widget_get_value (priv->pages_per_sheet);
+  val = gtk_printer_option_widget_get_value (dialog->pages_per_sheet);
 
   num = 1;
 
@@ -2657,16 +2581,15 @@ dialog_get_pages_per_sheet (GtkPrintUnixDialog *dialog)
 static GtkNumberUpLayout
 dialog_get_number_up_layout (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GtkPrintCapabilities       caps;
   GtkNumberUpLayout          layout;
   const gchar               *val;
   GEnumClass                *enum_class;
   GEnumValue                *enum_value;
 
-  val = gtk_printer_option_widget_get_value (priv->number_up_layout);
+  val = gtk_printer_option_widget_get_value (dialog->number_up_layout);
 
-  caps = priv->manual_capabilities | priv->printer_capabilities;
+  caps = dialog->manual_capabilities | dialog->printer_capabilities;
 
   if ((caps & GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT) == 0)
     return GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM;
@@ -2679,9 +2602,9 @@ dialog_get_number_up_layout (GtkPrintUnixDialog *dialog)
   if (val == NULL)
     return layout;
 
-  if (val[0] == '\0' && priv->options)
+  if (val[0] == '\0' && dialog->options)
     {
-      GtkPrinterOption *option = gtk_printer_option_set_lookup (priv->options, "gtk-n-up-layout");
+      GtkPrinterOption *option = gtk_printer_option_set_lookup (dialog->options, "gtk-n-up-layout");
       if (option)
         val = option->value;
     }
@@ -2704,7 +2627,6 @@ draw_page (GtkDrawingArea *da,
 {
   GtkWidget *widget = GTK_WIDGET (da);
   GtkPrintUnixDialog *dialog = GTK_PRINT_UNIX_DIALOG (data);
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GtkStyleContext *context;
   gdouble ratio;
   gint w, h, tmp;
@@ -2726,7 +2648,7 @@ draw_page (GtkDrawingArea *da,
   gint pages_per_sheet;
   gboolean ltr = TRUE;
 
-  orientation = gtk_page_setup_get_orientation (priv->page_setup);
+  orientation = gtk_page_setup_get_orientation (dialog->page_setup);
   landscape =
     (orientation == GTK_PAGE_ORIENTATION_LANDSCAPE) ||
     (orientation == GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE);
@@ -3101,16 +3023,13 @@ draw_page (GtkDrawingArea *da,
 static void
 redraw_page_layout_preview (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
-  if (priv->page_layout_preview)
-    gtk_widget_queue_draw (priv->page_layout_preview);
+  if (dialog->page_layout_preview)
+    gtk_widget_queue_draw (dialog->page_layout_preview);
 }
 
 static void
 update_number_up_layout (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GtkPrintCapabilities       caps;
   GtkPrinterOptionSet       *set;
   GtkNumberUpLayout          layout;
@@ -3118,16 +3037,16 @@ update_number_up_layout (GtkPrintUnixDialog *dialog)
   GtkPrinterOption          *old_option;
   GtkPageOrientation         page_orientation;
 
-  set = priv->options;
+  set = dialog->options;
 
-  caps = priv->manual_capabilities | priv->printer_capabilities;
+  caps = dialog->manual_capabilities | dialog->printer_capabilities;
 
   if (caps & GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT)
     {
-      if (priv->number_up_layout_n_option == NULL)
+      if (dialog->number_up_layout_n_option == NULL)
         {
-          priv->number_up_layout_n_option = gtk_printer_option_set_lookup (set, "gtk-n-up-layout");
-          if (priv->number_up_layout_n_option == NULL)
+          dialog->number_up_layout_n_option = gtk_printer_option_set_lookup (set, "gtk-n-up-layout");
+          if (dialog->number_up_layout_n_option == NULL)
             {
               const char *n_up_layout[] = { "lrtb", "lrbt", "rltb", "rlbt", "tblr", "tbrl", "btlr", "btrl" };
                /* Translators: These strings name the possible arrangements of
@@ -3139,51 +3058,51 @@ update_number_up_layout (GtkPrintUnixDialog *dialog)
                                                     N_("Bottom to top, left to right"), N_("Bottom to top, right to left") };
               int i;
 
-              priv->number_up_layout_n_option = gtk_printer_option_new ("gtk-n-up-layout",
+              dialog->number_up_layout_n_option = gtk_printer_option_new ("gtk-n-up-layout",
                                                                         _("Page Ordering"),
                                                                         GTK_PRINTER_OPTION_TYPE_PICKONE);
-              gtk_printer_option_allocate_choices (priv->number_up_layout_n_option, 8);
+              gtk_printer_option_allocate_choices (dialog->number_up_layout_n_option, 8);
 
               for (i = 0; i < G_N_ELEMENTS (n_up_layout_display); i++)
                 {
-                  priv->number_up_layout_n_option->choices[i] = g_strdup (n_up_layout[i]);
-                  priv->number_up_layout_n_option->choices_display[i] = g_strdup (_(n_up_layout_display[i]));
+                  dialog->number_up_layout_n_option->choices[i] = g_strdup (n_up_layout[i]);
+                  dialog->number_up_layout_n_option->choices_display[i] = g_strdup (_(n_up_layout_display[i]));
                 }
             }
-          g_object_ref (priv->number_up_layout_n_option);
+          g_object_ref (dialog->number_up_layout_n_option);
 
-          priv->number_up_layout_2_option = gtk_printer_option_new ("gtk-n-up-layout",
+          dialog->number_up_layout_2_option = gtk_printer_option_new ("gtk-n-up-layout",
                                                                     _("Page Ordering"),
                                                                     GTK_PRINTER_OPTION_TYPE_PICKONE);
-          gtk_printer_option_allocate_choices (priv->number_up_layout_2_option, 2);
+          gtk_printer_option_allocate_choices (dialog->number_up_layout_2_option, 2);
         }
 
-      page_orientation = gtk_page_setup_get_orientation (priv->page_setup);
+      page_orientation = gtk_page_setup_get_orientation (dialog->page_setup);
       if (page_orientation == GTK_PAGE_ORIENTATION_PORTRAIT ||
           page_orientation == GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT)
         {
-          if (! (priv->number_up_layout_2_option->choices[0] == priv->number_up_layout_n_option->choices[0] &&
-                 priv->number_up_layout_2_option->choices[1] == priv->number_up_layout_n_option->choices[2]))
+          if (! (dialog->number_up_layout_2_option->choices[0] == dialog->number_up_layout_n_option->choices[0] &&
+                 dialog->number_up_layout_2_option->choices[1] == dialog->number_up_layout_n_option->choices[2]))
             {
-              g_free (priv->number_up_layout_2_option->choices_display[0]);
-              g_free (priv->number_up_layout_2_option->choices_display[1]);
-              priv->number_up_layout_2_option->choices[0] = priv->number_up_layout_n_option->choices[0];
-              priv->number_up_layout_2_option->choices[1] = priv->number_up_layout_n_option->choices[2];
-              priv->number_up_layout_2_option->choices_display[0] = g_strdup ( _("Left to right"));
-              priv->number_up_layout_2_option->choices_display[1] = g_strdup ( _("Right to left"));
+              g_free (dialog->number_up_layout_2_option->choices_display[0]);
+              g_free (dialog->number_up_layout_2_option->choices_display[1]);
+              dialog->number_up_layout_2_option->choices[0] = dialog->number_up_layout_n_option->choices[0];
+              dialog->number_up_layout_2_option->choices[1] = dialog->number_up_layout_n_option->choices[2];
+              dialog->number_up_layout_2_option->choices_display[0] = g_strdup ( _("Left to right"));
+              dialog->number_up_layout_2_option->choices_display[1] = g_strdup ( _("Right to left"));
             }
         }
       else
         {
-          if (! (priv->number_up_layout_2_option->choices[0] == priv->number_up_layout_n_option->choices[0] &&
-                 priv->number_up_layout_2_option->choices[1] == priv->number_up_layout_n_option->choices[1]))
+          if (! (dialog->number_up_layout_2_option->choices[0] == dialog->number_up_layout_n_option->choices[0] &&
+                 dialog->number_up_layout_2_option->choices[1] == dialog->number_up_layout_n_option->choices[1]))
             {
-              g_free (priv->number_up_layout_2_option->choices_display[0]);
-              g_free (priv->number_up_layout_2_option->choices_display[1]);
-              priv->number_up_layout_2_option->choices[0] = priv->number_up_layout_n_option->choices[0];
-              priv->number_up_layout_2_option->choices[1] = priv->number_up_layout_n_option->choices[1];
-              priv->number_up_layout_2_option->choices_display[0] = g_strdup ( _("Top to bottom"));
-              priv->number_up_layout_2_option->choices_display[1] = g_strdup ( _("Bottom to top"));
+              g_free (dialog->number_up_layout_2_option->choices_display[0]);
+              g_free (dialog->number_up_layout_2_option->choices_display[1]);
+              dialog->number_up_layout_2_option->choices[0] = dialog->number_up_layout_n_option->choices[0];
+              dialog->number_up_layout_2_option->choices[1] = dialog->number_up_layout_n_option->choices[1];
+              dialog->number_up_layout_2_option->choices_display[0] = g_strdup ( _("Top to bottom"));
+              dialog->number_up_layout_2_option->choices_display[1] = g_strdup ( _("Bottom to top"));
             }
         }
 
@@ -3201,7 +3120,7 @@ update_number_up_layout (GtkPrintUnixDialog *dialog)
 
           if (dialog_get_pages_per_sheet (dialog) == 2)
             {
-              option = priv->number_up_layout_2_option;
+              option = dialog->number_up_layout_2_option;
 
               switch (layout)
                 {
@@ -3232,7 +3151,7 @@ update_number_up_layout (GtkPrintUnixDialog *dialog)
             }
           else
             {
-              option = priv->number_up_layout_n_option;
+              option = dialog->number_up_layout_n_option;
 
               enum_value = g_enum_get_value (enum_class, layout);
             }
@@ -3245,10 +3164,10 @@ update_number_up_layout (GtkPrintUnixDialog *dialog)
         }
     }
 
-  setup_option (dialog, "gtk-n-up-layout", priv->number_up_layout);
+  setup_option (dialog, "gtk-n-up-layout", dialog->number_up_layout);
 
-  if (priv->number_up_layout != NULL)
-    gtk_widget_set_sensitive (GTK_WIDGET (priv->number_up_layout),
+  if (dialog->number_up_layout != NULL)
+    gtk_widget_set_sensitive (GTK_WIDGET (dialog->number_up_layout),
                               (caps & GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT) &&
                               (dialog_get_pages_per_sheet (dialog) > 1));
 }
@@ -3258,20 +3177,19 @@ custom_paper_dialog_response_cb (GtkDialog *custom_paper_dialog,
                                  gint       response_id,
                                  gpointer   user_data)
 {
-  GtkPrintUnixDialog        *print_dialog = GTK_PRINT_UNIX_DIALOG (user_data);
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (print_dialog);
+  GtkPrintUnixDialog        *dialog = GTK_PRINT_UNIX_DIALOG (user_data);
   GtkTreeModel              *model;
   GtkTreeIter                iter;
 
-  _gtk_print_load_custom_papers (priv->custom_paper_list);
+  _gtk_print_load_custom_papers (dialog->custom_paper_list);
 
-  priv->internal_page_setup_change = TRUE;
-  update_paper_sizes (print_dialog);
-  priv->internal_page_setup_change = FALSE;
+  dialog->internal_page_setup_change = TRUE;
+  update_paper_sizes (dialog);
+  dialog->internal_page_setup_change = FALSE;
 
-  if (priv->page_setup_set)
+  if (dialog->page_setup_set)
     {
-      model = GTK_TREE_MODEL (priv->custom_paper_list);
+      model = GTK_TREE_MODEL (dialog->custom_paper_list);
       if (gtk_tree_model_get_iter_first (model, &iter))
         {
           do
@@ -3281,8 +3199,8 @@ custom_paper_dialog_response_cb (GtkDialog *custom_paper_dialog,
 
               if (page_setup &&
                   g_strcmp0 (gtk_paper_size_get_display_name (gtk_page_setup_get_paper_size (page_setup)),
-                             gtk_paper_size_get_display_name (gtk_page_setup_get_paper_size (priv->page_setup))) == 0)
-                gtk_print_unix_dialog_set_page_setup (print_dialog, page_setup);
+                             gtk_paper_size_get_display_name (gtk_page_setup_get_paper_size (dialog->page_setup))) == 0)
+                gtk_print_unix_dialog_set_page_setup (dialog, page_setup);
 
               g_clear_object (&page_setup);
             } while (gtk_tree_model_iter_next (model, &iter));
@@ -3296,18 +3214,17 @@ static void
 orientation_changed (GtkComboBox        *combo_box,
                      GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GtkPageOrientation         orientation;
   GtkPageSetup              *page_setup;
 
-  if (priv->internal_page_setup_change)
+  if (dialog->internal_page_setup_change)
     return;
 
-  orientation = (GtkPageOrientation) gtk_combo_box_get_active (GTK_COMBO_BOX (priv->orientation_combo));
+  orientation = (GtkPageOrientation) gtk_combo_box_get_active (GTK_COMBO_BOX (dialog->orientation_combo));
 
-  if (priv->page_setup)
+  if (dialog->page_setup)
     {
-      page_setup = gtk_page_setup_copy (priv->page_setup);
+      page_setup = gtk_page_setup_copy (dialog->page_setup);
       if (page_setup)
         gtk_page_setup_set_orientation (page_setup, orientation);
 
@@ -3321,12 +3238,11 @@ static void
 paper_size_changed (GtkComboBox        *combo_box,
                     GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GtkTreeIter iter;
   GtkPageSetup *page_setup, *last_page_setup;
   GtkPageOrientation orientation;
 
-  if (priv->internal_page_setup_change)
+  if (dialog->internal_page_setup_change)
     return;
 
   if (gtk_combo_box_get_active_iter (combo_box, &iter))
@@ -3340,8 +3256,8 @@ paper_size_changed (GtkComboBox        *combo_box,
           GtkWidget *custom_paper_dialog;
 
           /* Change from "manage" menu item to last value */
-          if (priv->page_setup)
-            last_page_setup = g_object_ref (priv->page_setup);
+          if (dialog->page_setup)
+            last_page_setup = g_object_ref (dialog->page_setup);
           else
             last_page_setup = gtk_page_setup_new (); /* "good" default */
 
@@ -3359,8 +3275,8 @@ paper_size_changed (GtkComboBox        *combo_box,
           return;
         }
 
-      if (priv->page_setup)
-        orientation = gtk_page_setup_get_orientation (priv->page_setup);
+      if (dialog->page_setup)
+        orientation = gtk_page_setup_get_orientation (dialog->page_setup);
       else
         orientation = GTK_PAGE_ORIENTATION_PORTRAIT;
 
@@ -3443,11 +3359,9 @@ gtk_print_unix_dialog_new (const gchar *title,
 GtkPrinter *
 gtk_print_unix_dialog_get_selected_printer (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
   g_return_val_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog), NULL);
 
-  return priv->current_printer;
+  return dialog->current_printer;
 }
 
 /**
@@ -3461,17 +3375,15 @@ void
 gtk_print_unix_dialog_set_page_setup (GtkPrintUnixDialog *dialog,
                                       GtkPageSetup       *page_setup)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
   g_return_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog));
   g_return_if_fail (GTK_IS_PAGE_SETUP (page_setup));
 
-  if (priv->page_setup != page_setup)
+  if (dialog->page_setup != page_setup)
     {
-      g_clear_object (&priv->page_setup);
-      priv->page_setup = g_object_ref (page_setup);
+      g_clear_object (&dialog->page_setup);
+      dialog->page_setup = g_object_ref (page_setup);
 
-      priv->page_setup_set = TRUE;
+      dialog->page_setup_set = TRUE;
 
       g_object_notify (G_OBJECT (dialog), "page-setup");
     }
@@ -3488,11 +3400,9 @@ gtk_print_unix_dialog_set_page_setup (GtkPrintUnixDialog *dialog,
 GtkPageSetup *
 gtk_print_unix_dialog_get_page_setup (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
   g_return_val_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog), NULL);
 
-  return priv->page_setup;
+  return dialog->page_setup;
 }
 
 /**
@@ -3506,11 +3416,9 @@ gtk_print_unix_dialog_get_page_setup (GtkPrintUnixDialog *dialog)
 gboolean
 gtk_print_unix_dialog_get_page_setup_set (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
   g_return_val_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog), FALSE);
 
-  return priv->page_setup_set;
+  return dialog->page_setup_set;
 }
 
 /**
@@ -3525,16 +3433,14 @@ void
 gtk_print_unix_dialog_set_current_page (GtkPrintUnixDialog *dialog,
                                         gint                current_page)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
   g_return_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog));
 
-  if (priv->current_page != current_page)
+  if (dialog->current_page != current_page)
     {
-      priv->current_page = current_page;
+      dialog->current_page = current_page;
 
-      if (priv->current_page_radio)
-        gtk_widget_set_sensitive (priv->current_page_radio, current_page != -1);
+      if (dialog->current_page_radio)
+        gtk_widget_set_sensitive (dialog->current_page_radio, current_page != -1);
 
       g_object_notify (G_OBJECT (dialog), "current-page");
     }
@@ -3551,30 +3457,27 @@ gtk_print_unix_dialog_set_current_page (GtkPrintUnixDialog *dialog,
 gint
 gtk_print_unix_dialog_get_current_page (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
   g_return_val_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog), -1);
 
-  return priv->current_page;
+  return dialog->current_page;
 }
 
 static gboolean
 set_active_printer (GtkPrintUnixDialog *dialog,
                     const gchar        *printer_name)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GtkTreeModel *model;
   GtkTreeIter iter, filter_iter;
   GtkTreeSelection *selection;
   GtkPrinter *printer;
 
-  model = GTK_TREE_MODEL (priv->printer_list);
+  model = GTK_TREE_MODEL (dialog->printer_list);
 
   if (gtk_tree_model_get_iter_first (model, &iter))
     {
       do
         {
-          gtk_tree_model_get (GTK_TREE_MODEL (priv->printer_list), &iter,
+          gtk_tree_model_get (GTK_TREE_MODEL (dialog->printer_list), &iter,
                               PRINTER_LIST_COL_PRINTER_OBJ, &printer,
                               -1);
           if (printer == NULL)
@@ -3582,15 +3485,15 @@ set_active_printer (GtkPrintUnixDialog *dialog,
 
           if (strcmp (gtk_printer_get_name (printer), printer_name) == 0)
             {
-              gtk_tree_model_filter_convert_child_iter_to_iter (priv->printer_list_filter,
+              gtk_tree_model_filter_convert_child_iter_to_iter (dialog->printer_list_filter,
                                                                 &filter_iter, &iter);
 
-              selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->printer_treeview));
-              priv->internal_printer_change = TRUE;
+              selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->printer_treeview));
+              dialog->internal_printer_change = TRUE;
               gtk_tree_selection_select_iter (selection, &filter_iter);
-              priv->internal_printer_change = FALSE;
-              g_free (priv->waiting_for_printer);
-              priv->waiting_for_printer = NULL;
+              dialog->internal_printer_change = FALSE;
+              g_free (dialog->waiting_for_printer);
+              dialog->waiting_for_printer = NULL;
 
               g_object_unref (printer);
               return TRUE;
@@ -3617,7 +3520,6 @@ void
 gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
                                     GtkPrintSettings   *settings)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   const gchar *printer;
   GtkPageRange *ranges;
   gint num_ranges;
@@ -3640,17 +3542,17 @@ gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
           g_free (ranges);
         }
 
-      priv->format_for_printer =
+      dialog->format_for_printer =
         g_strdup (gtk_print_settings_get (settings, "format-for-printer"));
     }
 
-  if (priv->initial_settings)
-    g_object_unref (priv->initial_settings);
+  if (dialog->initial_settings)
+    g_object_unref (dialog->initial_settings);
 
-  priv->initial_settings = settings;
+  dialog->initial_settings = settings;
 
-  g_free (priv->waiting_for_printer);
-  priv->waiting_for_printer = NULL;
+  g_free (dialog->waiting_for_printer);
+  dialog->waiting_for_printer = NULL;
 
   if (settings)
     {
@@ -3659,7 +3561,7 @@ gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
       printer = gtk_print_settings_get_printer (settings);
 
       if (printer && !set_active_printer (dialog, printer))
-        priv->waiting_for_printer = g_strdup (printer);
+        dialog->waiting_for_printer = g_strdup (printer);
     }
 
   g_object_notify (G_OBJECT (dialog), "print-settings");
@@ -3679,7 +3581,6 @@ gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
 GtkPrintSettings *
 gtk_print_unix_dialog_get_settings (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GtkPrintSettings *settings;
   GtkPrintPages print_pages;
   GtkPageRange *ranges;
@@ -3689,14 +3590,14 @@ gtk_print_unix_dialog_get_settings (GtkPrintUnixDialog *dialog)
 
   settings = gtk_print_settings_new ();
 
-  if (priv->current_printer)
+  if (dialog->current_printer)
     gtk_print_settings_set_printer (settings,
-                                    gtk_printer_get_name (priv->current_printer));
+                                    gtk_printer_get_name (dialog->current_printer));
   else
     gtk_print_settings_set_printer (settings, "default");
 
   gtk_print_settings_set (settings, "format-for-printer",
-                          priv->format_for_printer);
+                          dialog->format_for_printer);
 
   gtk_print_settings_set_collate (settings,
                                   dialog_get_collate (dialog));
@@ -3725,9 +3626,9 @@ gtk_print_unix_dialog_get_settings (GtkPrintUnixDialog *dialog)
 
   /* TODO: print when. How to handle? */
 
-  if (priv->current_printer)
-    _gtk_printer_get_settings_from_options (priv->current_printer,
-                                            priv->options,
+  if (dialog->current_printer)
+    _gtk_printer_get_settings_from_options (dialog->current_printer,
+                                            dialog->options,
                                             settings);
 
   return settings;
@@ -3746,9 +3647,7 @@ gtk_print_unix_dialog_add_custom_tab (GtkPrintUnixDialog *dialog,
                                       GtkWidget          *child,
                                       GtkWidget          *tab_label)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
-  gtk_notebook_insert_page (GTK_NOTEBOOK (priv->notebook),
+  gtk_notebook_insert_page (GTK_NOTEBOOK (dialog->notebook),
                             child, tab_label, 2);
   gtk_widget_show (child);
   gtk_widget_show (tab_label);
@@ -3769,22 +3668,20 @@ void
 gtk_print_unix_dialog_set_manual_capabilities (GtkPrintUnixDialog   *dialog,
                                                GtkPrintCapabilities  capabilities)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
-  if (priv->manual_capabilities != capabilities)
+  if (dialog->manual_capabilities != capabilities)
     {
-      priv->manual_capabilities = capabilities;
+      dialog->manual_capabilities = capabilities;
       update_dialog_from_capabilities (dialog);
 
-      if (priv->current_printer)
+      if (dialog->current_printer)
         {
           GtkTreeSelection *selection;
 
-          selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->printer_treeview));
-          g_clear_object (&priv->current_printer);
-          priv->internal_printer_change = TRUE;
+          selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->printer_treeview));
+          g_clear_object (&dialog->current_printer);
+          dialog->internal_printer_change = TRUE;
           selected_printer_changed (selection, dialog);
-          priv->internal_printer_change = FALSE;
+          dialog->internal_printer_change = FALSE;
        }
 
       g_object_notify (G_OBJECT (dialog), "manual-capabilities");
@@ -3802,11 +3699,9 @@ gtk_print_unix_dialog_set_manual_capabilities (GtkPrintUnixDialog   *dialog,
 GtkPrintCapabilities
 gtk_print_unix_dialog_get_manual_capabilities (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
   g_return_val_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog), FALSE);
 
-  return priv->manual_capabilities;
+  return dialog->manual_capabilities;
 }
 
 /**
@@ -3820,26 +3715,24 @@ void
 gtk_print_unix_dialog_set_support_selection (GtkPrintUnixDialog *dialog,
                                              gboolean            support_selection)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
   g_return_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog));
 
   support_selection = support_selection != FALSE;
-  if (priv->support_selection != support_selection)
+  if (dialog->support_selection != support_selection)
     {
-      priv->support_selection = support_selection;
+      dialog->support_selection = support_selection;
 
-      if (priv->selection_radio)
+      if (dialog->selection_radio)
         {
           if (support_selection)
             {
-              gtk_widget_set_sensitive (priv->selection_radio, priv->has_selection);
-              gtk_widget_show (priv->selection_radio);
+              gtk_widget_set_sensitive (dialog->selection_radio, dialog->has_selection);
+              gtk_widget_show (dialog->selection_radio);
             }
           else
             {
-              gtk_widget_set_sensitive (priv->selection_radio, FALSE);
-              gtk_widget_hide (priv->selection_radio);
+              gtk_widget_set_sensitive (dialog->selection_radio, FALSE);
+              gtk_widget_hide (dialog->selection_radio);
             }
         }
 
@@ -3858,11 +3751,9 @@ gtk_print_unix_dialog_set_support_selection (GtkPrintUnixDialog *dialog,
 gboolean
 gtk_print_unix_dialog_get_support_selection (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
   g_return_val_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog), FALSE);
 
-  return priv->support_selection;
+  return dialog->support_selection;
 }
 
 /**
@@ -3876,21 +3767,19 @@ void
 gtk_print_unix_dialog_set_has_selection (GtkPrintUnixDialog *dialog,
                                          gboolean            has_selection)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
   g_return_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog));
 
   has_selection = has_selection != FALSE;
-  if (priv->has_selection != has_selection)
+  if (dialog->has_selection != has_selection)
     {
-      priv->has_selection = has_selection;
+      dialog->has_selection = has_selection;
 
-      if (priv->selection_radio)
+      if (dialog->selection_radio)
         {
-          if (priv->support_selection)
-            gtk_widget_set_sensitive (priv->selection_radio, has_selection);
+          if (dialog->support_selection)
+            gtk_widget_set_sensitive (dialog->selection_radio, has_selection);
           else
-            gtk_widget_set_sensitive (priv->selection_radio, FALSE);
+            gtk_widget_set_sensitive (dialog->selection_radio, FALSE);
         }
 
       g_object_notify (G_OBJECT (dialog), "has-selection");
@@ -3908,11 +3797,9 @@ gtk_print_unix_dialog_set_has_selection (GtkPrintUnixDialog *dialog,
 gboolean
 gtk_print_unix_dialog_get_has_selection (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
   g_return_val_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog), FALSE);
 
-  return priv->has_selection;
+  return dialog->has_selection;
 }
 
 /**
@@ -3926,38 +3813,36 @@ void
 gtk_print_unix_dialog_set_embed_page_setup (GtkPrintUnixDialog *dialog,
                                             gboolean            embed)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
   g_return_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog));
 
   embed = embed != FALSE;
-  if (priv->embed_page_setup != embed)
+  if (dialog->embed_page_setup != embed)
     {
-      priv->embed_page_setup = embed;
+      dialog->embed_page_setup = embed;
 
-      gtk_widget_set_sensitive (priv->paper_size_combo, priv->embed_page_setup);
-      gtk_widget_set_sensitive (priv->orientation_combo, priv->embed_page_setup);
+      gtk_widget_set_sensitive (dialog->paper_size_combo, dialog->embed_page_setup);
+      gtk_widget_set_sensitive (dialog->orientation_combo, dialog->embed_page_setup);
 
-      if (priv->embed_page_setup)
+      if (dialog->embed_page_setup)
         {
-          if (priv->paper_size_combo != NULL)
-            g_signal_connect (priv->paper_size_combo, "changed", G_CALLBACK (paper_size_changed), dialog);
+          if (dialog->paper_size_combo != NULL)
+            g_signal_connect (dialog->paper_size_combo, "changed", G_CALLBACK (paper_size_changed), dialog);
 
-          if (priv->orientation_combo)
-            g_signal_connect (priv->orientation_combo, "changed", G_CALLBACK (orientation_changed), dialog);
+          if (dialog->orientation_combo)
+            g_signal_connect (dialog->orientation_combo, "changed", G_CALLBACK (orientation_changed), dialog);
         }
       else
         {
-          if (priv->paper_size_combo != NULL)
-            g_signal_handlers_disconnect_by_func (priv->paper_size_combo, G_CALLBACK (paper_size_changed), dialog);
+          if (dialog->paper_size_combo != NULL)
+            g_signal_handlers_disconnect_by_func (dialog->paper_size_combo, G_CALLBACK (paper_size_changed), dialog);
 
-          if (priv->orientation_combo)
-            g_signal_handlers_disconnect_by_func (priv->orientation_combo, G_CALLBACK (orientation_changed), dialog);
+          if (dialog->orientation_combo)
+            g_signal_handlers_disconnect_by_func (dialog->orientation_combo, G_CALLBACK (orientation_changed), dialog);
         }
 
-      priv->internal_page_setup_change = TRUE;
+      dialog->internal_page_setup_change = TRUE;
       update_paper_sizes (dialog);
-      priv->internal_page_setup_change = FALSE;
+      dialog->internal_page_setup_change = FALSE;
     }
 }
 
@@ -3972,9 +3857,7 @@ gtk_print_unix_dialog_set_embed_page_setup (GtkPrintUnixDialog *dialog,
 gboolean
 gtk_print_unix_dialog_get_embed_page_setup (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
-
   g_return_val_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog), FALSE);
 
-  return priv->embed_page_setup;
+  return dialog->embed_page_setup;
 }
