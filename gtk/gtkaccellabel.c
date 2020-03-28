@@ -91,6 +91,12 @@ enum {
 struct _GtkAccelLabel
 {
   GtkWidget parent_instance;
+
+  GtkWidget     *text_label;
+  GtkWidget     *accel_label;
+
+  guint           accel_key;         /* manual accel key specification if != 0 */
+  GdkModifierType accel_mods;
 };
 
 struct _GtkAccelLabelClass
@@ -101,16 +107,6 @@ struct _GtkAccelLabelClass
   char *mod_name_control;
   char *mod_name_alt;
   char *mod_separator;
-};
-
-typedef struct _GtkAccelLabelPrivate GtkAccelLabelPrivate;
-struct _GtkAccelLabelPrivate
-{
-  GtkWidget     *text_label;
-  GtkWidget     *accel_label;
-
-  guint           accel_key;         /* manual accel key specification if != 0 */
-  GdkModifierType accel_mods;
 };
 
 GParamSpec *props[LAST_PROP] = { NULL, };
@@ -125,7 +121,7 @@ static void         gtk_accel_label_get_property (GObject            *object,
 						  GParamSpec         *pspec);
 static void         gtk_accel_label_finalize     (GObject            *object);
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkAccelLabel, gtk_accel_label, GTK_TYPE_WIDGET)
+G_DEFINE_TYPE (GtkAccelLabel, gtk_accel_label, GTK_TYPE_WIDGET)
 
 static void
 gtk_accel_label_class_init (GtkAccelLabelClass *class)
@@ -165,9 +161,7 @@ gtk_accel_label_set_property (GObject      *object,
 			      const GValue *value,
 			      GParamSpec   *pspec)
 {
-  GtkAccelLabel  *accel_label;
-
-  accel_label = GTK_ACCEL_LABEL (object);
+  GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (object);
 
   switch (prop_id)
     {
@@ -208,16 +202,14 @@ gtk_accel_label_get_property (GObject    *object,
 static void
 gtk_accel_label_init (GtkAccelLabel *accel_label)
 {
-  GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (accel_label);
-
-  priv->text_label = gtk_label_new ("");
-  gtk_widget_set_hexpand (priv->text_label, TRUE);
-  gtk_label_set_xalign (GTK_LABEL (priv->text_label), 0.0f);
-  priv->accel_label = g_object_new (GTK_TYPE_LABEL,
-                                    "css-name", "accelerator",
-                                    NULL);
-  gtk_widget_set_parent (priv->text_label, GTK_WIDGET (accel_label));
-  gtk_widget_set_parent (priv->accel_label, GTK_WIDGET (accel_label));
+  accel_label->text_label = gtk_label_new ("");
+  gtk_widget_set_hexpand (accel_label->text_label, TRUE);
+  gtk_label_set_xalign (GTK_LABEL (accel_label->text_label), 0.0f);
+  accel_label->accel_label = g_object_new (GTK_TYPE_LABEL,
+                                           "css-name", "accelerator",
+                                           NULL);
+  gtk_widget_set_parent (accel_label->text_label, GTK_WIDGET (accel_label));
+  gtk_widget_set_parent (accel_label->accel_label, GTK_WIDGET (accel_label));
 }
 
 /**
@@ -231,25 +223,18 @@ gtk_accel_label_init (GtkAccelLabel *accel_label)
 GtkWidget *
 gtk_accel_label_new (const gchar *string)
 {
-  GtkAccelLabel *accel_label;
-
-  g_return_val_if_fail (string != NULL, NULL);
-
-  accel_label = g_object_new (GTK_TYPE_ACCEL_LABEL,
-                              "label", string,
-                              NULL);
-
-  return GTK_WIDGET (accel_label);
+  return g_object_new (GTK_TYPE_ACCEL_LABEL,
+                       "label", string,
+                       NULL);
 }
 
 static void
 gtk_accel_label_finalize (GObject *object)
 {
   GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (object);
-  GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (accel_label);
 
-  gtk_widget_unparent (priv->accel_label);
-  gtk_widget_unparent (priv->text_label);
+  gtk_widget_unparent (accel_label->accel_label);
+  gtk_widget_unparent (accel_label->text_label);
 
   G_OBJECT_CLASS (gtk_accel_label_parent_class)->finalize (object);
 }
@@ -267,12 +252,11 @@ gtk_accel_label_finalize (GObject *object)
 guint
 gtk_accel_label_get_accel_width (GtkAccelLabel *accel_label)
 {
-  GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (accel_label);
   int min;
 
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), 0);
 
-  gtk_widget_measure (priv->accel_label, GTK_ORIENTATION_HORIZONTAL, -1,
+  gtk_widget_measure (accel_label->accel_label, GTK_ORIENTATION_HORIZONTAL, -1,
                       &min, NULL, NULL, NULL);
 
   return min;
@@ -291,7 +275,6 @@ gtk_accel_label_get_accel_width (GtkAccelLabel *accel_label)
 gboolean
 gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 {
-  GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (accel_label);
   gboolean enable_accels;
   char *accel_string = NULL;
 
@@ -301,17 +284,17 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
                 "gtk-enable-accels", &enable_accels,
                 NULL);
 
-  if (enable_accels && priv->accel_key)
+  if (enable_accels && accel_label->accel_key)
     {
       gboolean have_accel = FALSE;
       guint accel_key;
       GdkModifierType accel_mods;
 
       /* First check for a manual accel set with _set_accel() */
-      if (priv->accel_key)
+      if (accel_label->accel_key)
         {
-          accel_mods = priv->accel_mods;
-          accel_key = priv->accel_key;
+          accel_mods = accel_label->accel_mods;
+          accel_key = accel_label->accel_key;
           have_accel = TRUE;
         }
 
@@ -326,7 +309,7 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
   if (!accel_string)
     accel_string = g_strdup ("");
 
-  gtk_label_set_label (GTK_LABEL (priv->accel_label), accel_string);
+  gtk_label_set_label (GTK_LABEL (accel_label->accel_label), accel_string);
 
   g_free (accel_string);
 
@@ -352,12 +335,10 @@ gtk_accel_label_set_accel (GtkAccelLabel   *accel_label,
                            guint            accelerator_key,
                            GdkModifierType  accelerator_mods)
 {
-  GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (accel_label);
-
   g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
 
-  priv->accel_key = accelerator_key;
-  priv->accel_mods = accelerator_mods;
+  accel_label->accel_key = accelerator_key;
+  accel_label->accel_mods = accelerator_mods;
 
   gtk_accel_label_refetch (accel_label);
 }
@@ -376,12 +357,10 @@ gtk_accel_label_get_accel (GtkAccelLabel   *accel_label,
                            guint           *accelerator_key,
                            GdkModifierType *accelerator_mods)
 {
-  GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (accel_label);
-
   g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
 
-  *accelerator_key = priv->accel_key;
-  *accelerator_mods = priv->accel_mods;
+  *accelerator_key = accel_label->accel_key;
+  *accelerator_mods = accel_label->accel_mods;
 }
 
 /**
@@ -396,11 +375,9 @@ void
 gtk_accel_label_set_label (GtkAccelLabel *accel_label,
                            const char    *text)
 {
-  GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (accel_label);
-
   g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
 
-  gtk_label_set_text_with_mnemonic (GTK_LABEL (priv->text_label), text);
+  gtk_label_set_text_with_mnemonic (GTK_LABEL (accel_label->text_label), text);
 }
 
 /**
@@ -415,11 +392,9 @@ gtk_accel_label_set_label (GtkAccelLabel *accel_label,
 const char *
 gtk_accel_label_get_label (GtkAccelLabel *accel_label)
 {
-  GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (accel_label);
-
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), NULL);
 
-  return gtk_label_get_label (GTK_LABEL (priv->text_label));
+  return gtk_label_get_label (GTK_LABEL (accel_label->text_label));
 }
 
 /**
@@ -434,18 +409,13 @@ void
 gtk_accel_label_set_use_underline (GtkAccelLabel *accel_label,
                                    gboolean       setting)
 {
-  GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (accel_label);
-
   g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
 
-  setting = !!setting;
+  if (setting == gtk_label_get_use_underline (GTK_LABEL (accel_label->text_label)))
+    return;
 
-  if (setting != gtk_label_get_use_underline (GTK_LABEL (priv->text_label)))
-    {
-      gtk_label_set_use_underline (GTK_LABEL (priv->text_label), setting);
-
-      g_object_notify_by_pspec (G_OBJECT (accel_label), props[PROP_USE_UNDERLINE]);
-    }
+  gtk_label_set_use_underline (GTK_LABEL (accel_label->text_label), setting);
+  g_object_notify_by_pspec (G_OBJECT (accel_label), props[PROP_USE_UNDERLINE]);
 }
 
 /**
@@ -461,9 +431,7 @@ gtk_accel_label_set_use_underline (GtkAccelLabel *accel_label,
 gboolean
 gtk_accel_label_get_use_underline (GtkAccelLabel *accel_label)
 {
-  GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (accel_label);
-
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), FALSE);
 
-  return gtk_label_get_use_underline (GTK_LABEL (priv->text_label));
+  return gtk_label_get_use_underline (GTK_LABEL (accel_label->text_label));
 }
