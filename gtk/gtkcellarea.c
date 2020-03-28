@@ -1042,11 +1042,18 @@ gtk_cell_area_real_event (GtkCellArea          *area,
           GtkCellRenderer *renderer = NULL;
           GtkCellRenderer *focus_renderer;
           GdkRectangle     alloc_area;
-          gdouble          event_x, event_y;
+          double event_x, event_y;
+          int x, y;
+          GtkNative *native;
 
           /* We may need some semantics to tell us the offset of the event
            * window we are handling events for (i.e. GtkTreeView has a bin_window) */
           gdk_event_get_position (event, &event_x, &event_y);
+
+          native = gtk_widget_get_native (widget);
+          gtk_widget_translate_coordinates (GTK_WIDGET (native), widget, event_x, event_y, &x, &y);
+          event_x = x;
+          event_y = y;
 
           /* Dont try to search for an event coordinate that is not in the area, that will
            * trigger a runtime warning.
