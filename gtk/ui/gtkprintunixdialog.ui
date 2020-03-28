@@ -830,6 +830,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkRadioButton" id="print_at_radio">
+                                    <property name="sensitive">0</property>
                                     <property name="label" translatable="yes" comments="this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.">A_t:</property>
                                     <property name="can-focus">1</property>
                                     <property name="has-tooltip">1</property>
@@ -872,6 +873,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkRadioButton" id="print_hold_radio">
+                                    <property name="sensitive">0</property>
                                     <property name="label" translatable="yes" comments="this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets &apos;released&apos;.">On _hold</property>
                                     <property name="can-focus">1</property>
                                     <property name="has-tooltip">1</property>
