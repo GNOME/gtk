@@ -18,19 +18,22 @@
         <child>
           <object class="GtkMenuButton">
             <property name="popover">thing_a</property>
-            <property name="label">Color</property>
+            <property name="label">_Color</property>
+            <property name="use-underline">1</property>
           </object>
         </child>
         <child>
           <object class="GtkMenuButton">
             <property name="popover">thing_b</property>
-            <property name="label">Flavors</property>
+            <property name="label">_Flavors</property>
+            <property name="use-underline">1</property>
           </object>
         </child>
         <child>
           <object class="GtkMenuButton">
             <property name="popover">thing_c</property>
-            <property name="label">Tools</property>
+            <property name="label">_Tools</property>
+            <property name="use-underline">1</property>
           </object>
         </child>
       </object>
