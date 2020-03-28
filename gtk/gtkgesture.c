@@ -1293,8 +1293,6 @@ gtk_gesture_get_bounding_box (GtkGesture   *gesture,
 
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &data))
     {
-      gdouble x, y;
-
       if (data->state == GTK_EVENT_SEQUENCE_DENIED)
         continue;
 
@@ -1304,12 +1302,11 @@ gtk_gesture_get_bounding_box (GtkGesture   *gesture,
           event_type == GDK_BUTTON_RELEASE)
         continue;
 
-      gdk_event_get_position (data->event, &x, &y);
       n_points++;
-      x1 = MIN (x1, x);
-      y1 = MIN (y1, y);
-      x2 = MAX (x2, x);
-      y2 = MAX (y2, y);
+      x1 = MIN (x1, data->widget_x);
+      y1 = MIN (y1, data->widget_y);
+      x2 = MAX (x2, data->widget_x);
+      y2 = MAX (y2, data->widget_y);
     }
 
   if (n_points == 0)

@@ -120,7 +120,7 @@ handle_focus_change (GdkEvent *event)
                                          gdk_event_get_source_device (event),
                                          focus_in);
       gdk_display_put_event (gdk_event_get_display (event), focus_event);
-      g_object_unref (focus_event);
+      gdk_event_unref (focus_event);
     }
 }
 
@@ -209,7 +209,7 @@ handle_touch_synthetic_crossing (GdkEvent *event)
   if (crossing)
     {
       gdk_display_put_event (gdk_device_get_display (device), crossing);
-      g_object_unref (crossing);
+      gdk_event_unref (crossing);
     }
 }
 
