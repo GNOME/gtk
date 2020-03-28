@@ -11474,22 +11474,28 @@ gtk_widget_reset_controllers (GtkWidget *widget)
     }
 }
 
-GList *
+GtkEventController **
 gtk_widget_list_controllers (GtkWidget           *widget,
-                             GtkPropagationPhase  phase)
+                             GtkPropagationPhase  phase,
+                             guint               *out_n_controllers)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GList *res = NULL, *l;
+  GPtrArray *controllers = g_ptr_array_new ();
+  GList *l;
+
+  g_assert (out_n_controllers);
 
   for (l = priv->event_controllers; l; l = l->next)
     {
       GtkEventController *controller = l->data;
 
       if (gtk_event_controller_get_propagation_phase (controller) == phase)
-        res = g_list_prepend (res, controller);
+        g_ptr_array_add (controllers, controller);
     }
 
-  return g_list_reverse (res);
+  *out_n_controllers = controllers->len;
+
+  return (GtkEventController **)g_ptr_array_free (controllers, FALSE);
 }
 
 static inline void

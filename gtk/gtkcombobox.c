@@ -846,7 +846,8 @@ gtk_combo_box_init (GtkComboBox *combo_box)
 {
   GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
   GtkEventController *controller;
-  GList *controllers, *list;
+  GtkEventController **controllers;
+  guint n_controllers, i;
 
   priv->active = -1;
   priv->active_row = NULL;
@@ -882,18 +883,20 @@ gtk_combo_box_init (GtkComboBox *combo_box)
                     combo_box);
   gtk_widget_add_controller (GTK_WIDGET (combo_box), controller);
 
-  controllers = gtk_widget_list_controllers (priv->popup_widget, GTK_PHASE_BUBBLE);
-  for (list = controllers; list; list = list->next)
+  controllers = gtk_widget_list_controllers (priv->popup_widget, GTK_PHASE_BUBBLE, &n_controllers);
+  for (i = 0; i < n_controllers; i ++)
     {
-      if (GTK_IS_SHORTCUT_CONTROLLER (list->data))
+      controller = controllers[i];
+
+      if (GTK_IS_SHORTCUT_CONTROLLER (controller))
         {
-          g_object_ref (list->data);
-          gtk_widget_remove_controller (priv->popup_widget, list->data);
-          gtk_widget_add_controller (priv->popup_widget, list->data);
+          g_object_ref (controller);
+          gtk_widget_remove_controller (priv->popup_widget, controller);
+          gtk_widget_add_controller (priv->popup_widget, controller);
           break;
         }
     }
-  g_list_free (controllers);
+  g_free (controllers);
 }
 
 static void

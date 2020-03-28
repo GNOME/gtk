@@ -1704,7 +1704,8 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   GtkCssNode *widget_node;
   GtkGesture *gesture;
   GtkEventController *controller;
-  GList *list, *controllers;
+  GtkEventController **controllers;
+  guint n_controllers, i;
 
   gtk_widget_set_can_focus (GTK_WIDGET (tree_view), TRUE);
   gtk_widget_set_overflow (GTK_WIDGET (tree_view), GTK_OVERFLOW_HIDDEN);
@@ -1771,18 +1772,19 @@ gtk_tree_view_init (GtkTreeView *tree_view)
                     G_CALLBACK (gtk_tree_view_forward_controller_key_pressed), tree_view);
   gtk_widget_add_controller (GTK_WIDGET (tree_view), controller);
 
-  controllers = gtk_widget_list_controllers (GTK_WIDGET (tree_view), GTK_PHASE_BUBBLE);
-  for (list = controllers; list; list = list->next)
+  controllers = gtk_widget_list_controllers (GTK_WIDGET (tree_view), GTK_PHASE_BUBBLE, &n_controllers);
+  for (i = 0; i < n_controllers; i ++)
     {
-      if (GTK_IS_SHORTCUT_CONTROLLER (list->data))
+      controller = controllers[i];
+      if (GTK_IS_SHORTCUT_CONTROLLER (controller))
         {
-          g_object_ref (list->data);
-          gtk_widget_remove_controller (GTK_WIDGET (tree_view), list->data);
-          gtk_widget_add_controller (GTK_WIDGET (tree_view), list->data);
+          g_object_ref (controller);
+          gtk_widget_remove_controller (GTK_WIDGET (tree_view), controller);
+          gtk_widget_add_controller (GTK_WIDGET (tree_view), controller);
           break;
         }
     }
-  g_list_free (controllers);
+  g_free (controllers);
 
   tree_view->click_gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (tree_view->click_gesture), 0);

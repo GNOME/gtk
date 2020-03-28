@@ -201,7 +201,8 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
 {
   GtkWidget *stack;
   GtkEventController *controller;
-  GList *controllers, *l;
+  GtkEventController **controllers;
+  guint n_controllers, i;
 
   stack = gtk_stack_new ();
   gtk_stack_set_vhomogeneous (GTK_STACK (stack), FALSE);
@@ -221,15 +222,15 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
   g_signal_connect (controller, "leave", G_CALLBACK (leave_cb), popover);
   gtk_widget_add_controller (GTK_WIDGET (popover), controller);
 
-  controllers = gtk_widget_list_controllers (GTK_WIDGET (popover), GTK_PHASE_CAPTURE);
-  for (l = controllers; l; l = l->next)
+  controllers = gtk_widget_list_controllers (GTK_WIDGET (popover), GTK_PHASE_CAPTURE, &n_controllers);
+  for (i = 0; i < n_controllers; i ++)
     {
-      controller = l->data;
+      controller = controllers[i];
       if (GTK_IS_SHORTCUT_CONTROLLER (controller) &&
           strcmp (gtk_event_controller_get_name (controller), "gtk-shortcut-manager-capture") == 0)
         gtk_shortcut_controller_set_mnemonics_modifiers (GTK_SHORTCUT_CONTROLLER (controller), 0);
     }
-  g_list_free (controllers);
+  g_free (controllers);
 
   gtk_popover_disable_auto_mnemonics (GTK_POPOVER (popover));
 }
