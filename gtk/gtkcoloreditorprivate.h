@@ -31,27 +31,6 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkColorEditor         GtkColorEditor;
-typedef struct _GtkColorEditorClass    GtkColorEditorClass;
-typedef struct _GtkColorEditorPrivate  GtkColorEditorPrivate;
-
-struct _GtkColorEditor
-{
-  GtkBox parent_instance;
-
-  GtkColorEditorPrivate *priv;
-};
-
-struct _GtkColorEditorClass
-{
-  GtkBoxClass parent_class;
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
-
 
 GType       gtk_color_editor_get_type (void) G_GNUC_CONST;
 GtkWidget * gtk_color_editor_new      (void);
