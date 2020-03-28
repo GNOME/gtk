@@ -61,7 +61,10 @@ do_shortcut_triggers (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       list = gtk_list_box_new ();
-      g_object_set (list, "margin", 6, NULL);
+      gtk_widget_set_margin_top (list, 6);
+      gtk_widget_set_margin_bottom (list, 6);
+      gtk_widget_set_margin_start (list, 6);
+      gtk_widget_set_margin_end (list, 6);
       gtk_container_add (GTK_CONTAINER (window), list);
 
       for (i = 0; i < G_N_ELEMENTS (shortcuts); i++)
