@@ -929,7 +929,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
                                                    0);
 	  
 	  gtk_im_context_filter_keypress (context, tmp_event);
-	  g_object_unref (tmp_event);
+	  gdk_event_unref (tmp_event);
 	}
 
       return gtk_im_context_filter_keypress (context, event);

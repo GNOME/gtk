@@ -306,10 +306,11 @@ click_pressed_cb (GtkGestureClick *gesture,
 }
 
 static gboolean
-touch_release_in_button (GtkButton *button)
+touch_release_in_button (GtkButton *button,
+                         double     x,
+                         double     y)
 {
   GdkEvent *event;
-  gdouble x, y;
 
   event = gtk_get_current_event ();
 
@@ -321,8 +322,6 @@ touch_release_in_button (GtkButton *button)
       gdk_event_unref (event);
       return FALSE;
     }
-
-  gdk_event_get_position (event, &x, &y);
 
   gdk_event_unref (event);
 
@@ -346,7 +345,7 @@ click_released_cb (GtkGestureClick *gesture,
   gtk_button_do_release (button,
                          gtk_widget_is_sensitive (GTK_WIDGET (button)) &&
                          (priv->in_button ||
-                          touch_release_in_button (button)));
+                          touch_release_in_button (button, x, y)));
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
