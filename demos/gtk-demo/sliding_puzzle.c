@@ -257,7 +257,6 @@ add_move_binding (GtkShortcutController *controller,
                  gtk_callback_action_new (puzzle_key_pressed, NULL, NULL),
                  "(ii)", dx, dy);
   gtk_shortcut_controller_add_shortcut (controller, shortcut);
-  g_object_unref (shortcut);
 }
 
 static void

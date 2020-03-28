@@ -153,6 +153,7 @@ struct _GtkMenuButtonPrivate
   gpointer create_popup_user_data;
   GDestroyNotify create_popup_destroy_notify;
 
+  GtkWidget *label_widget;
   GtkWidget *align_widget;
   GtkWidget *arrow_widget;
   GtkArrowType arrow_type;
@@ -167,6 +168,7 @@ enum
   PROP_POPOVER,
   PROP_ICON_NAME,
   PROP_LABEL,
+  PROP_USE_UNDERLINE,
   PROP_RELIEF,
   LAST_PROP
 };
@@ -205,6 +207,9 @@ gtk_menu_button_set_property (GObject      *object,
       case PROP_LABEL:
         gtk_menu_button_set_label (self, g_value_get_string (value));
         break;
+      case PROP_USE_UNDERLINE:
+        gtk_menu_button_set_use_underline (self, g_value_get_boolean (value));
+        break;
       case PROP_RELIEF:
         gtk_menu_button_set_relief (self, g_value_get_enum (value));
         break;
@@ -240,6 +245,9 @@ gtk_menu_button_get_property (GObject    *object,
         break;
       case PROP_LABEL:
         g_value_set_string (value, gtk_menu_button_get_label (GTK_MENU_BUTTON (object)));
+        break;
+      case PROP_USE_UNDERLINE:
+        g_value_set_boolean (value, gtk_menu_button_get_use_underline (GTK_MENU_BUTTON (object)));
         break;
       case PROP_RELIEF:
         g_value_set_enum (value, gtk_menu_button_get_relief (GTK_MENU_BUTTON (object)));
@@ -413,6 +421,13 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                            P_("Label"),
                            P_("The label for the button"),
                            NULL,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  menu_button_props[PROP_USE_UNDERLINE] =
+      g_param_spec_boolean ("use-underline",
+                            P_("Use underline"),
+                            P_("If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"),
+                           FALSE,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   menu_button_props[PROP_RELIEF] =
@@ -896,6 +911,8 @@ gtk_menu_button_set_label (GtkMenuButton *menu_button,
   GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
   GtkWidget *child;
   GtkWidget *box;
+  GtkWidget *label_widget;
+  GtkWidget *image;
 
   g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
 
@@ -904,9 +921,17 @@ gtk_menu_button_set_label (GtkMenuButton *menu_button,
     gtk_container_remove (GTK_CONTAINER (priv->button), child);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_container_add (GTK_CONTAINER (box), gtk_label_new (label));
-  gtk_container_add (GTK_CONTAINER (box), gtk_image_new_from_icon_name ("pan-down-symbolic"));
+  label_widget = gtk_label_new (label);
+  g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
+  gtk_label_set_xalign (GTK_LABEL (label_widget), 0);
+  gtk_label_set_use_underline (GTK_LABEL (label_widget),
+                               gtk_button_get_use_underline (GTK_BUTTON (priv->button)));
+  gtk_widget_set_hexpand (label_widget, TRUE);
+  image = gtk_image_new_from_icon_name ("pan-down-symbolic");
+  gtk_container_add (GTK_CONTAINER (box), label_widget);
+  gtk_container_add (GTK_CONTAINER (box), image);
   gtk_container_add (GTK_CONTAINER (priv->button), box);
+  priv->label_widget = label_widget;
 
   g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_LABEL]);
 }
@@ -1066,4 +1091,32 @@ gtk_menu_button_set_create_popup_func (GtkMenuButton                *menu_button
   priv->create_popup_destroy_notify = destroy_notify;
 
   update_sensitivity (menu_button);
+}
+
+void
+gtk_menu_button_set_use_underline (GtkMenuButton *menu_button,
+                                   gboolean       use_underline)
+{
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
+
+  g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
+
+  if (gtk_button_get_use_underline (GTK_BUTTON (priv->button)) == use_underline)
+    return;
+
+  gtk_button_set_use_underline (GTK_BUTTON (priv->button), use_underline);
+  if (priv->label_widget)
+    gtk_label_set_use_underline (GTK_LABEL (priv->label_widget), use_underline);
+
+  g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_USE_UNDERLINE]);
+}
+
+gboolean
+gtk_menu_button_get_use_underline (GtkMenuButton *menu_button)
+{
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
+
+  g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), FALSE);
+
+  return gtk_button_get_use_underline (GTK_BUTTON (priv->button));
 }

@@ -53,7 +53,7 @@
                   <object class="GtkSpinner">
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <property name="active">1</property>
+                    <property name="spinning">1</property>
                   </object>
                 </property>
               </object>
