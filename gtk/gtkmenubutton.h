@@ -90,6 +90,12 @@ GDK_AVAILABLE_IN_ALL
 const char * gtk_menu_button_get_label (GtkMenuButton *menu_button);
 
 GDK_AVAILABLE_IN_ALL
+void         gtk_menu_button_set_use_underline (GtkMenuButton *menu_button,
+                                                gboolean       use_underline);
+GDK_AVAILABLE_IN_ALL
+gboolean     gtk_menu_button_get_use_underline (GtkMenuButton *menu_button);
+
+GDK_AVAILABLE_IN_ALL
 void           gtk_menu_button_set_relief   (GtkMenuButton  *menu_button,
                                              GtkReliefStyle  relief);
 GDK_AVAILABLE_IN_ALL
