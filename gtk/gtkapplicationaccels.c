@@ -96,11 +96,17 @@ gtk_application_accels_set_accels_for_action (GtkApplicationAccels *accels,
 
       if (!GTK_IS_NAMED_ACTION (action) ||
           !g_str_equal (gtk_named_action_get_action_name (GTK_NAMED_ACTION (action)), action_name))
-        continue;
+        {
+          g_object_unref (shortcut_i);
+          continue;
+        }
 
       if ((target == NULL && args != NULL) ||
           (target != NULL && (args == NULL || !g_variant_equal (target, args))))
-        continue;
+        {
+          g_object_unref (shortcut_i);
+          continue;
+        }
 
       g_list_store_remove (G_LIST_STORE (accels->shortcuts), i);
       break;
@@ -194,13 +200,20 @@ gtk_application_accels_get_accels_for_action (GtkApplicationAccels *accels,
 
       if (!GTK_IS_NAMED_ACTION (action) ||
           !g_str_equal (gtk_named_action_get_action_name (GTK_NAMED_ACTION (action)), action_name))
-        continue;
+        {
+          g_object_unref (shortcut);
+          continue;
+        }
 
       if ((target == NULL && args != NULL) ||
           (target != NULL && (args == NULL || !g_variant_equal (target, args))))
-        continue;
+        {
+          g_object_unref (shortcut);
+          continue;
+        }
 
       append_accelerators (result, gtk_shortcut_get_trigger (shortcut));
+      g_object_unref (shortcut);
       break;
     }
 
@@ -263,18 +276,23 @@ gtk_application_accels_get_actions_for_accel (GtkApplicationAccels *accels,
     }
 
   result = g_ptr_array_new ();
-  
+
   for (i = 0; i < g_list_model_get_n_items (accels->shortcuts); i++)
     {
       GtkShortcut *shortcut = g_list_model_get_item (accels->shortcuts, i);
       char *detailed_name;
 
       if (!trigger_matches_accel (gtk_shortcut_get_trigger (shortcut), key, modifiers))
-        continue;
-      
+        {
+          g_object_unref (shortcut);
+          continue;
+        }
+
       detailed_name = get_detailed_name_for_shortcut (shortcut);
       if (detailed_name)
         g_ptr_array_add (result, detailed_name);
+
+      g_object_unref (shortcut);
     }
 
   g_ptr_array_add (result, NULL);
@@ -288,7 +306,7 @@ gtk_application_accels_list_action_descriptions (GtkApplicationAccels *accels)
   guint i;
 
   result = g_ptr_array_new ();
-  
+
   for (i = 0; i < g_list_model_get_n_items (accels->shortcuts); i++)
     {
       GtkShortcut *shortcut = g_list_model_get_item (accels->shortcuts, i);
@@ -297,6 +315,8 @@ gtk_application_accels_list_action_descriptions (GtkApplicationAccels *accels)
       detailed_name = get_detailed_name_for_shortcut (shortcut);
       if (detailed_name)
         g_ptr_array_add (result, detailed_name);
+
+      g_object_unref (shortcut);
     }
 
   g_ptr_array_add (result, NULL);
