@@ -39,10 +39,6 @@ typedef struct _GtkSettingsValue GtkSettingsValue;
 
 
 /* --- structures --- */
-struct _GtkSettings
-{
-  GObject parent_instance;
-};
 
 /**
  * GtkSettingsValue:

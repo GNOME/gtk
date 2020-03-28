@@ -31,8 +31,6 @@
 
 #include <gtk/gtk.h>
 
-typedef struct _GtkTextHandlePrivate GtkTextHandlePrivate;
-
 enum {
   DRAG_STARTED,
   HANDLE_DRAGGED,
@@ -40,8 +38,10 @@ enum {
   LAST_SIGNAL
 };
 
-struct _GtkTextHandlePrivate
+struct _GtkTextHandle
 {
+  GtkWidget parent_instance;
+
   GtkWidget *parent;
   GdkSurface *surface;
   GskRenderer *renderer;
@@ -57,15 +57,9 @@ struct _GtkTextHandlePrivate
   guint has_point : 1;
 };
 
-struct _GtkTextHandle
-{
-  GtkWidget parent_instance;
-};
-
 static void gtk_text_handle_native_interface_init (GtkNativeInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkTextHandle, gtk_text_handle, GTK_TYPE_WIDGET,
-                         G_ADD_PRIVATE (GtkTextHandle)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_NATIVE,
                                                 gtk_text_handle_native_interface_init))
 
@@ -74,19 +68,13 @@ static guint signals[LAST_SIGNAL] = { 0 };
 static GdkSurface *
 gtk_text_handle_native_get_surface (GtkNative *native)
 {
-  GtkTextHandle *handle = GTK_TEXT_HANDLE (native);
-  GtkTextHandlePrivate *priv = gtk_text_handle_get_instance_private (handle);
-
-  return priv->surface;
+  return GTK_TEXT_HANDLE (native)->surface;
 }
 
 static GskRenderer *
 gtk_text_handle_native_get_renderer (GtkNative *native)
 {
-  GtkTextHandle *handle = GTK_TEXT_HANDLE (native);
-  GtkTextHandlePrivate *priv = gtk_text_handle_get_instance_private (handle);
-
-  return priv->renderer;
+  return GTK_TEXT_HANDLE (native)->renderer;
 }
 
 static void
@@ -139,29 +127,28 @@ gtk_text_handle_get_padding (GtkTextHandle *handle,
 static void
 gtk_text_handle_present_surface (GtkTextHandle *handle)
 {
-  GtkTextHandlePrivate *priv = gtk_text_handle_get_instance_private (handle);
   GtkWidget *widget = GTK_WIDGET (handle);
   GdkPopupLayout *layout;
   GdkRectangle rect;
   GtkRequisition req;
 
   gtk_widget_get_preferred_size (widget, NULL, &req);
-  gtk_text_handle_get_padding (handle, &priv->border);
+  gtk_text_handle_get_padding (handle, &handle->border);
 
-  rect.x = priv->pointing_to.x;
-  rect.y = priv->pointing_to.y + priv->pointing_to.height - priv->border.top;
-  rect.width = req.width - priv->border.left - priv->border.right;
+  rect.x = handle->pointing_to.x;
+  rect.y = handle->pointing_to.y + handle->pointing_to.height - handle->border.top;
+  rect.width = req.width - handle->border.left - handle->border.right;
   rect.height = 1;
 
   gtk_widget_translate_coordinates (gtk_widget_get_parent (widget),
                                     gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW),
                                     rect.x, rect.y, &rect.x, &rect.y);
 
-  if (priv->role == GTK_TEXT_HANDLE_ROLE_CURSOR)
+  if (handle->role == GTK_TEXT_HANDLE_ROLE_CURSOR)
     rect.x -= rect.width / 2;
-  else if ((priv->role == GTK_TEXT_HANDLE_ROLE_SELECTION_END &&
+  else if ((handle->role == GTK_TEXT_HANDLE_ROLE_SELECTION_END &&
             gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) ||
-           (priv->role == GTK_TEXT_HANDLE_ROLE_SELECTION_START &&
+           (handle->role == GTK_TEXT_HANDLE_ROLE_SELECTION_START &&
             gtk_widget_get_direction (widget) != GTK_TEXT_DIR_RTL))
     rect.x -= rect.width;
 
@@ -171,15 +158,15 @@ gtk_text_handle_present_surface (GtkTextHandle *handle)
   gdk_popup_layout_set_anchor_hints (layout,
                                      GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_SLIDE_X);
 
-  gdk_popup_present (GDK_POPUP (priv->surface),
+  gdk_popup_present (GDK_POPUP (handle->surface),
                      MAX (req.width, 1),
                      MAX (req.height, 1),
                      layout);
   gdk_popup_layout_unref (layout);
 
   gtk_widget_allocate (widget,
-                       gdk_surface_get_width (priv->surface),
-                       gdk_surface_get_height (priv->surface),
+                       gdk_surface_get_width (handle->surface),
+                       gdk_surface_get_height (handle->surface),
                        -1, NULL);
 }
 
@@ -226,9 +213,8 @@ static void
 surface_mapped_changed (GtkWidget *widget)
 {
   GtkTextHandle *handle = GTK_TEXT_HANDLE (widget);
-  GtkTextHandlePrivate *priv = gtk_text_handle_get_instance_private (handle);
 
-  gtk_widget_set_visible (widget, gdk_surface_get_mapped (priv->surface));
+  gtk_widget_set_visible (widget, gdk_surface_get_mapped (handle->surface));
 }
 
 static void
@@ -247,55 +233,52 @@ static void
 gtk_text_handle_realize (GtkWidget *widget)
 {
   GtkTextHandle *handle = GTK_TEXT_HANDLE (widget);
-  GtkTextHandlePrivate *priv = gtk_text_handle_get_instance_private (handle);
   GdkSurface *parent_surface;
   GtkWidget *parent;
 
   parent = gtk_widget_get_parent (widget);
   parent_surface = gtk_native_get_surface (gtk_widget_get_native (parent));
 
-  priv->surface = gdk_surface_new_popup (parent_surface, FALSE);
-  gdk_surface_set_widget (priv->surface, widget);
+  handle->surface = gdk_surface_new_popup (parent_surface, FALSE);
+  gdk_surface_set_widget (handle->surface, widget);
 
-  g_signal_connect_swapped (priv->surface, "notify::mapped",
+  g_signal_connect_swapped (handle->surface, "notify::mapped",
                             G_CALLBACK (surface_mapped_changed), widget);
-  g_signal_connect (priv->surface, "render", G_CALLBACK (surface_render), widget);
-  g_signal_connect (priv->surface, "event", G_CALLBACK (surface_event), widget);
+  g_signal_connect (handle->surface, "render", G_CALLBACK (surface_render), widget);
+  g_signal_connect (handle->surface, "event", G_CALLBACK (surface_event), widget);
 
   GTK_WIDGET_CLASS (gtk_text_handle_parent_class)->realize (widget);
 
-  priv->renderer = gsk_renderer_new_for_surface (priv->surface);
+  handle->renderer = gsk_renderer_new_for_surface (handle->surface);
 }
 
 static void
 gtk_text_handle_unrealize (GtkWidget *widget)
 {
   GtkTextHandle *handle = GTK_TEXT_HANDLE (widget);
-  GtkTextHandlePrivate *priv = gtk_text_handle_get_instance_private (handle);
 
   GTK_WIDGET_CLASS (gtk_text_handle_parent_class)->unrealize (widget);
 
-  gsk_renderer_unrealize (priv->renderer);
-  g_clear_object (&priv->renderer);
+  gsk_renderer_unrealize (handle->renderer);
+  g_clear_object (&handle->renderer);
 
-  g_signal_handlers_disconnect_by_func (priv->surface, surface_render, widget);
-  g_signal_handlers_disconnect_by_func (priv->surface, surface_event, widget);
-  g_signal_handlers_disconnect_by_func (priv->surface, surface_mapped_changed, widget);
+  g_signal_handlers_disconnect_by_func (handle->surface, surface_render, widget);
+  g_signal_handlers_disconnect_by_func (handle->surface, surface_event, widget);
+  g_signal_handlers_disconnect_by_func (handle->surface, surface_mapped_changed, widget);
 
-  gdk_surface_set_widget (priv->surface, NULL);
-  gdk_surface_destroy (priv->surface);
-  g_clear_object (&priv->surface);
+  gdk_surface_set_widget (handle->surface, NULL);
+  gdk_surface_destroy (handle->surface);
+  g_clear_object (&handle->surface);
 }
 
 static void
 gtk_text_handle_map (GtkWidget *widget)
 {
   GtkTextHandle *handle = GTK_TEXT_HANDLE (widget);
-  GtkTextHandlePrivate *priv = gtk_text_handle_get_instance_private (handle);
 
   GTK_WIDGET_CLASS (gtk_text_handle_parent_class)->map (widget);
 
-  if (priv->has_point)
+  if (handle->has_point)
     gtk_text_handle_present_surface (handle);
 }
 
@@ -303,10 +286,9 @@ static void
 gtk_text_handle_unmap (GtkWidget *widget)
 {
   GtkTextHandle *handle = GTK_TEXT_HANDLE (widget);
-  GtkTextHandlePrivate *priv = gtk_text_handle_get_instance_private (handle);
 
   GTK_WIDGET_CLASS (gtk_text_handle_parent_class)->unmap (widget);
-  gdk_surface_hide (priv->surface);
+  gdk_surface_hide (handle->surface);
 }
 
 static void
@@ -374,24 +356,23 @@ handle_drag_begin (GtkGestureDrag *gesture,
                    gdouble         y,
                    GtkTextHandle  *handle)
 {
-  GtkTextHandlePrivate *priv = gtk_text_handle_get_instance_private (handle);
   GtkWidget *widget;
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
 
-  if (priv->role == GTK_TEXT_HANDLE_ROLE_CURSOR)
+  if (handle->role == GTK_TEXT_HANDLE_ROLE_CURSOR)
     x -= gtk_widget_get_width (widget) / 2;
-  else if ((priv->role == GTK_TEXT_HANDLE_ROLE_SELECTION_END &&
+  else if ((handle->role == GTK_TEXT_HANDLE_ROLE_SELECTION_END &&
             gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) ||
-           (priv->role == GTK_TEXT_HANDLE_ROLE_SELECTION_START &&
+           (handle->role == GTK_TEXT_HANDLE_ROLE_SELECTION_START &&
             gtk_widget_get_direction (widget) != GTK_TEXT_DIR_RTL))
     x -= gtk_widget_get_width (widget);
 
-  y += priv->border.top / 2;
+  y += handle->border.top / 2;
 
-  priv->dx = x;
-  priv->dy = y;
-  priv->dragged = TRUE;
+  handle->dx = x;
+  handle->dy = y;
+  handle->dragged = TRUE;
   g_signal_emit (handle, signals[DRAG_STARTED], 0);
 }
 
@@ -401,23 +382,22 @@ handle_drag_update (GtkGestureDrag *gesture,
                     gdouble         offset_y,
                     GtkWidget      *widget)
 {
-  GtkTextHandle *text_handle = GTK_TEXT_HANDLE (widget);
-  GtkTextHandlePrivate *priv = gtk_text_handle_get_instance_private (text_handle);
+  GtkTextHandle *handle = GTK_TEXT_HANDLE (widget);
   gdouble start_x, start_y;
   gint x, y;
 
   gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
 
-  x = priv->pointing_to.x + priv->pointing_to.width / 2 +
-    start_x + offset_x - priv->dx;
-  y = priv->pointing_to.y + priv->pointing_to.height +
-    start_y + offset_y - priv->dy;
+  x = handle->pointing_to.x + handle->pointing_to.width / 2 +
+    start_x + offset_x - handle->dx;
+  y = handle->pointing_to.y + handle->pointing_to.height +
+    start_y + offset_y - handle->dy;
 
-  if (priv->role == GTK_TEXT_HANDLE_ROLE_CURSOR)
+  if (handle->role == GTK_TEXT_HANDLE_ROLE_CURSOR)
     x -= gtk_widget_get_width (widget) / 2;
-  else if ((priv->role == GTK_TEXT_HANDLE_ROLE_SELECTION_END &&
+  else if ((handle->role == GTK_TEXT_HANDLE_ROLE_SELECTION_END &&
             gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) ||
-           (priv->role == GTK_TEXT_HANDLE_ROLE_SELECTION_START &&
+           (handle->role == GTK_TEXT_HANDLE_ROLE_SELECTION_START &&
             gtk_widget_get_direction (widget) != GTK_TEXT_DIR_RTL))
     x -= gtk_widget_get_width (widget);
 
@@ -430,31 +410,28 @@ handle_drag_end (GtkGestureDrag *gesture,
                  gdouble         offset_y,
                  GtkTextHandle  *handle)
 {
-  GtkTextHandlePrivate *priv = gtk_text_handle_get_instance_private (handle);
-
   g_signal_emit (handle, signals[DRAG_FINISHED], 0);
-  priv->dragged = FALSE;
+  handle->dragged = FALSE;
 }
 
 static void
 gtk_text_handle_update_for_role (GtkTextHandle *handle)
 {
-  GtkTextHandlePrivate *priv = gtk_text_handle_get_instance_private (handle);
   GtkWidget *widget = GTK_WIDGET (handle);
 
-  if (priv->role == GTK_TEXT_HANDLE_ROLE_CURSOR)
+  if (handle->role == GTK_TEXT_HANDLE_ROLE_CURSOR)
     {
       gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_TOP);
       gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_BOTTOM);
       gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_INSERTION_CURSOR);
     }
-  else if (priv->role == GTK_TEXT_HANDLE_ROLE_SELECTION_END)
+  else if (handle->role == GTK_TEXT_HANDLE_ROLE_SELECTION_END)
     {
       gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_TOP);
       gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_BOTTOM);
       gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_INSERTION_CURSOR);
     }
-  else if (priv->role == GTK_TEXT_HANDLE_ROLE_SELECTION_START)
+  else if (handle->role == GTK_TEXT_HANDLE_ROLE_SELECTION_START)
     {
       gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_TOP);
       gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_BOTTOM);
@@ -482,33 +459,27 @@ gtk_text_handle_init (GtkTextHandle *widget)
 GtkTextHandle *
 gtk_text_handle_new (GtkWidget *parent)
 {
-  GtkWidget *handle;
-
-  handle = g_object_new (GTK_TYPE_TEXT_HANDLE,
-                         "css-name", I_("cursor-handle"),
-                         NULL);
-  gtk_widget_set_parent (handle, parent);
-
-  return GTK_TEXT_HANDLE (handle);
+  return g_object_new (GTK_TYPE_TEXT_HANDLE,
+                       "parent", parent,
+                       "css-name", I_("cursor-handle"),
+                       NULL);
 }
 
 void
 gtk_text_handle_set_role (GtkTextHandle     *handle,
                           GtkTextHandleRole  role)
 {
-  GtkTextHandlePrivate *priv = gtk_text_handle_get_instance_private (handle);
-
   g_return_if_fail (GTK_IS_TEXT_HANDLE (handle));
 
-  if (priv->role == role)
+  if (handle->role == role)
     return;
 
-  priv->role = role;
+  handle->role = role;
   gtk_text_handle_update_for_role (handle);
 
   if (gtk_widget_get_visible (GTK_WIDGET (handle)))
     {
-      if (priv->has_point)
+      if (handle->has_point)
         gtk_text_handle_present_surface (handle);
     }
 }
@@ -516,29 +487,25 @@ gtk_text_handle_set_role (GtkTextHandle     *handle,
 GtkTextHandleRole
 gtk_text_handle_get_role (GtkTextHandle *handle)
 {
-  GtkTextHandlePrivate *priv = gtk_text_handle_get_instance_private (handle);
-
   g_return_val_if_fail (GTK_IS_TEXT_HANDLE (handle), GTK_TEXT_HANDLE_ROLE_CURSOR);
 
-  return priv->role;
+  return handle->role;
 }
 
 void
 gtk_text_handle_set_position (GtkTextHandle      *handle,
                               const GdkRectangle *rect)
 {
-  GtkTextHandlePrivate *priv = gtk_text_handle_get_instance_private (handle);
-
   g_return_if_fail (GTK_IS_TEXT_HANDLE (handle));
 
-  if (priv->pointing_to.x == rect->x &&
-      priv->pointing_to.y == rect->y &&
-      priv->pointing_to.width == rect->width &&
-      priv->pointing_to.height == rect->height)
+  if (handle->pointing_to.x == rect->x &&
+      handle->pointing_to.y == rect->y &&
+      handle->pointing_to.width == rect->width &&
+      handle->pointing_to.height == rect->height)
     return;
 
-  priv->pointing_to = *rect;
-  priv->has_point = TRUE;
+  handle->pointing_to = *rect;
+  handle->has_point = TRUE;
 
   if (gtk_widget_is_visible (GTK_WIDGET (handle)))
     gtk_text_handle_present_surface (handle);
@@ -547,9 +514,7 @@ gtk_text_handle_set_position (GtkTextHandle      *handle,
 gboolean
 gtk_text_handle_get_is_dragged (GtkTextHandle *handle)
 {
-  GtkTextHandlePrivate *priv = gtk_text_handle_get_instance_private (handle);
-
   g_return_val_if_fail (GTK_IS_TEXT_HANDLE (handle), FALSE);
 
-  return priv->dragged;
+  return handle->dragged;
 }

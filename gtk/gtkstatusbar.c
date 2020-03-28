@@ -85,6 +85,16 @@ typedef struct _GtkStatusbarClass         GtkStatusbarClass;
 struct _GtkStatusbar
 {
   GtkWidget parent_instance;
+
+  GtkWidget     *frame;
+  GtkWidget     *label;
+  GtkWidget     *message_area;
+
+  GSList        *messages;
+  GSList        *keys;
+
+  guint          seq_context_id;
+  guint          seq_message_id;
 };
 
 struct _GtkStatusbarClass
@@ -98,20 +108,6 @@ struct _GtkStatusbarClass
                          guint           context_id,
                          const gchar    *text);
 };
-
-typedef struct
-{
-  GtkWidget     *frame;
-  GtkWidget     *label;
-  GtkWidget     *message_area;
-
-  GSList        *messages;
-  GSList        *keys;
-
-  guint          seq_context_id;
-  guint          seq_message_id;
-} GtkStatusbarPrivate;
-
 
 struct _GtkStatusbarMsg
 {
@@ -134,14 +130,14 @@ static void     gtk_statusbar_destroy           (GtkWidget         *widget);
 
 static guint              statusbar_signals[SIGNAL_LAST] = { 0 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkStatusbar, gtk_statusbar, GTK_TYPE_WIDGET)
+G_DEFINE_TYPE (GtkStatusbar, gtk_statusbar, GTK_TYPE_WIDGET)
 
 static void
 gtk_statusbar_dispose (GObject *object)
 {
-  GtkStatusbarPrivate *priv = gtk_statusbar_get_instance_private (GTK_STATUSBAR (object));
+  GtkStatusbar *self = GTK_STATUSBAR (object);
 
-  g_clear_pointer (&priv->frame, gtk_widget_unparent);
+  g_clear_pointer (&self->frame, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_statusbar_parent_class)->dispose (object);
 }
@@ -200,9 +196,9 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
   /* Bind class to template
    */
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkstatusbar.ui");
-  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkStatusbar, message_area);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkStatusbar, frame);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkStatusbar, label);
+  gtk_widget_class_bind_template_child_internal (widget_class, GtkStatusbar, message_area);
+  gtk_widget_class_bind_template_child (widget_class, GtkStatusbar, frame);
+  gtk_widget_class_bind_template_child (widget_class, GtkStatusbar, label);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_STATUSBAR_ACCESSIBLE);
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
@@ -212,12 +208,10 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
 static void
 gtk_statusbar_init (GtkStatusbar *statusbar)
 {
-  GtkStatusbarPrivate *priv = gtk_statusbar_get_instance_private (statusbar);
-
-  priv->seq_context_id = 1;
-  priv->seq_message_id = 1;
-  priv->messages = NULL;
-  priv->keys = NULL;
+  statusbar->seq_context_id = 1;
+  statusbar->seq_message_id = 1;
+  statusbar->messages = NULL;
+  statusbar->keys = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (statusbar));
 }
@@ -240,14 +234,12 @@ gtk_statusbar_update (GtkStatusbar *statusbar,
 		      guint	    context_id,
 		      const gchar  *text)
 {
-  GtkStatusbarPrivate *priv = gtk_statusbar_get_instance_private (statusbar);
-
   g_return_if_fail (GTK_IS_STATUSBAR (statusbar));
 
   if (!text)
     text = "";
 
-  gtk_label_set_text (GTK_LABEL (priv->label), text);
+  gtk_label_set_text (GTK_LABEL (statusbar->label), text);
 }
 
 /**
@@ -266,7 +258,6 @@ guint
 gtk_statusbar_get_context_id (GtkStatusbar *statusbar,
 			      const gchar  *context_description)
 {
-  GtkStatusbarPrivate *priv = gtk_statusbar_get_instance_private (statusbar);
   gchar *string;
   guint id;
   
@@ -279,9 +270,9 @@ gtk_statusbar_get_context_id (GtkStatusbar *statusbar,
   id = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (statusbar), string));
   if (id == 0)
     {
-      id = priv->seq_context_id++;
+      id = statusbar->seq_context_id++;
       g_object_set_data_full (G_OBJECT (statusbar), string, GUINT_TO_POINTER (id), NULL);
-      priv->keys = g_slist_prepend (priv->keys, string);
+      statusbar->keys = g_slist_prepend (statusbar->keys, string);
     }
   else
     g_free (string);
@@ -294,13 +285,12 @@ gtk_statusbar_msg_create (GtkStatusbar *statusbar,
 		          guint         context_id,
 		          const gchar  *text)
 {
-  GtkStatusbarPrivate *priv = gtk_statusbar_get_instance_private (statusbar);
   GtkStatusbarMsg *msg;
 
   msg = g_slice_new (GtkStatusbarMsg);
   msg->text = g_strdup (text);
   msg->context_id = context_id;
-  msg->message_id = priv->seq_message_id++;
+  msg->message_id = statusbar->seq_message_id++;
 
   return msg;
 }
@@ -329,14 +319,13 @@ gtk_statusbar_push (GtkStatusbar *statusbar,
 		    guint	  context_id,
 		    const gchar  *text)
 {
-  GtkStatusbarPrivate *priv = gtk_statusbar_get_instance_private (statusbar);
   GtkStatusbarMsg *msg;
 
   g_return_val_if_fail (GTK_IS_STATUSBAR (statusbar), 0);
   g_return_val_if_fail (text != NULL, 0);
 
   msg = gtk_statusbar_msg_create (statusbar, context_id, text);
-  priv->messages = g_slist_prepend (priv->messages, msg);
+  statusbar->messages = g_slist_prepend (statusbar->messages, msg);
 
   g_signal_emit (statusbar,
 		 statusbar_signals[SIGNAL_TEXT_PUSHED],
@@ -363,22 +352,21 @@ void
 gtk_statusbar_pop (GtkStatusbar *statusbar,
 		   guint	 context_id)
 {
-  GtkStatusbarPrivate *priv = gtk_statusbar_get_instance_private (statusbar);
   GtkStatusbarMsg *msg;
 
   g_return_if_fail (GTK_IS_STATUSBAR (statusbar));
 
-  if (priv->messages)
+  if (statusbar->messages)
     {
       GSList *list;
 
-      for (list = priv->messages; list; list = list->next)
+      for (list = statusbar->messages; list; list = list->next)
 	{
 	  msg = list->data;
 
 	  if (msg->context_id == context_id)
 	    {
-	      priv->messages = g_slist_remove_link (priv->messages, list);
+	      statusbar->messages = g_slist_remove_link (statusbar->messages, list);
 	      gtk_statusbar_msg_free (msg);
 	      g_slist_free_1 (list);
 	      break;
@@ -386,7 +374,7 @@ gtk_statusbar_pop (GtkStatusbar *statusbar,
 	}
     }
 
-  msg = priv->messages ? priv->messages->data : NULL;
+  msg = statusbar->messages ? statusbar->messages->data : NULL;
 
   g_signal_emit (statusbar,
 		 statusbar_signals[SIGNAL_TEXT_POPPED],
@@ -409,13 +397,12 @@ gtk_statusbar_remove (GtkStatusbar *statusbar,
 		      guint	   context_id,
 		      guint        message_id)
 {
-  GtkStatusbarPrivate *priv = gtk_statusbar_get_instance_private (statusbar);
   GtkStatusbarMsg *msg;
 
   g_return_if_fail (GTK_IS_STATUSBAR (statusbar));
   g_return_if_fail (message_id > 0);
 
-  msg = priv->messages ? priv->messages->data : NULL;
+  msg = statusbar->messages ? statusbar->messages->data : NULL;
   if (msg)
     {
       GSList *list;
@@ -428,14 +415,14 @@ gtk_statusbar_remove (GtkStatusbar *statusbar,
 	  return;
 	}
       
-      for (list = priv->messages; list; list = list->next)
+      for (list = statusbar->messages; list; list = list->next)
 	{
 	  msg = list->data;
 	  
 	  if (msg->context_id == context_id &&
 	      msg->message_id == message_id)
 	    {
-	      priv->messages = g_slist_remove_link (priv->messages, list);
+	      statusbar->messages = g_slist_remove_link (statusbar->messages, list);
 	      gtk_statusbar_msg_free (msg);
 	      g_slist_free_1 (list);
 	      
@@ -457,13 +444,12 @@ void
 gtk_statusbar_remove_all (GtkStatusbar *statusbar,
                           guint         context_id)
 {
-  GtkStatusbarPrivate *priv = gtk_statusbar_get_instance_private (statusbar);
   GtkStatusbarMsg *msg;
   GSList *prev, *list;
 
   g_return_if_fail (GTK_IS_STATUSBAR (statusbar));
 
-  if (priv->messages == NULL)
+  if (statusbar->messages == NULL)
     return;
 
   /* We special-case the topmost message at the bottom of this
@@ -471,7 +457,7 @@ gtk_statusbar_remove_all (GtkStatusbar *statusbar,
    * If we need to pop it, we have to update various state and we want
    * an up-to-date list of remaining messages in that case.
    */
-  prev = priv->messages;
+  prev = statusbar->messages;
   list = prev->next;
 
   while (list != NULL)
@@ -495,7 +481,7 @@ gtk_statusbar_remove_all (GtkStatusbar *statusbar,
     }
 
   /* Treat topmost message here */
-  msg = priv->messages->data;
+  msg = statusbar->messages->data;
   if (msg->context_id == context_id)
     {
       gtk_statusbar_pop (statusbar, context_id);
@@ -513,24 +499,21 @@ gtk_statusbar_remove_all (GtkStatusbar *statusbar,
 const char*
 gtk_statusbar_get_message (GtkStatusbar *statusbar)
 {
-  GtkStatusbarPrivate *priv = gtk_statusbar_get_instance_private (statusbar);
-
   g_return_val_if_fail (GTK_IS_STATUSBAR (statusbar), NULL);
 
-  return gtk_label_get_label (GTK_LABEL (priv->label));
+  return gtk_label_get_label (GTK_LABEL (statusbar->label));
 }
 
 static void
 gtk_statusbar_destroy (GtkWidget *widget)
 {
   GtkStatusbar *statusbar = GTK_STATUSBAR (widget);
-  GtkStatusbarPrivate *priv = gtk_statusbar_get_instance_private (statusbar);
 
-  g_slist_free_full (priv->messages, (GDestroyNotify) gtk_statusbar_msg_free);
-  priv->messages = NULL;
+  g_slist_free_full (statusbar->messages, (GDestroyNotify) gtk_statusbar_msg_free);
+  statusbar->messages = NULL;
 
-  g_slist_free_full (priv->keys, g_free);
-  priv->keys = NULL;
+  g_slist_free_full (statusbar->keys, g_free);
+  statusbar->keys = NULL;
 
   GTK_WIDGET_CLASS (gtk_statusbar_parent_class)->destroy (widget);
 }
