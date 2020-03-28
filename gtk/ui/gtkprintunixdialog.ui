@@ -185,7 +185,6 @@
                                         <property name="sensitive">0</property>
                                         <property name="can-focus">1</property>
                                         <property name="use-underline">1</property>
-                                        <property name="active">1</property>
                                         <property name="group">all_pages_radio</property>
                                         <layout>
                                           <property name="left-attach">0</property>
@@ -200,7 +199,6 @@
                                         <property name="sensitive">0</property>
                                         <property name="can-focus">1</property>
                                         <property name="use-underline">1</property>
-                                        <property name="active">1</property>
                                         <property name="group">all_pages_radio</property>
                                         <layout>
                                           <property name="left-attach">0</property>
@@ -216,7 +214,6 @@
                                         <property name="tooltip-text" translatable="yes">Specify one or more page ranges,
  e.g. 1–3, 7, 11</property>
                                         <property name="use-underline">1</property>
-                                        <property name="active">1</property>
                                         <property name="group">all_pages_radio</property>
                                         <signal name="toggled" handler="update_page_range_entry_sensitivity" swapped="no"/>
                                         <layout>
