@@ -28,7 +28,7 @@ fancy_shape_renderer (cairo_t        *cr,
                (double) attr->ink_rect.width  / PANGO_SCALE,
                (double) attr->ink_rect.height / PANGO_SCALE);
 
-  if (GPOINTER_TO_UINT (attr->data) == 0x2664) /* U+2665 BLACK HEART SUIT */
+  if (GPOINTER_TO_UINT (attr->data) == 0x2665) /* U+2665 BLACK HEART SUIT */
     {
       cairo_move_to (cr, .5, .0);
       cairo_line_to (cr, .9, -.4);
