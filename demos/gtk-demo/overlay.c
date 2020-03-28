@@ -56,23 +56,25 @@ do_overlay (GtkWidget *do_widget)
         }
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
-      gtk_overlay_add_overlay (GTK_OVERLAY (overlay), vbox);
       gtk_widget_set_can_target (vbox, FALSE);
+      gtk_overlay_add_overlay (GTK_OVERLAY (overlay), vbox);
       gtk_widget_set_halign (vbox, GTK_ALIGN_CENTER);
-      gtk_widget_set_valign (vbox, GTK_ALIGN_CENTER);
+      gtk_widget_set_valign (vbox, GTK_ALIGN_START);
 
       label = gtk_label_new ("<span foreground='blue' weight='ultrabold' font='40'>Numbers</span>");
       gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+      gtk_widget_set_can_target (label, FALSE);
       gtk_widget_set_margin_top (label, 8);
-      gtk_widget_set_margin_bottom (label, 50);
+      gtk_widget_set_margin_bottom (label, 8);
       gtk_container_add (GTK_CONTAINER (vbox), label);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_overlay_add_overlay (GTK_OVERLAY (overlay), vbox);
       gtk_widget_set_halign (vbox, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (vbox, GTK_ALIGN_CENTER);
+
       gtk_entry_set_placeholder_text (GTK_ENTRY (entry), "Your Lucky Number");
-      gtk_widget_set_margin_top (entry, 50);
+      gtk_widget_set_margin_top (entry, 8);
       gtk_widget_set_margin_bottom (entry, 8);
       gtk_container_add (GTK_CONTAINER (vbox), entry);
 
