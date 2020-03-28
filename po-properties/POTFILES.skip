@@ -102,6 +102,7 @@ gtk/inspector/resource-list.ui
 gtk/inspector/resource-list.ui.h
 gtk/inspector/selector.ui
 gtk/inspector/selector.ui.h
+gtk/inspector/shortcuts.ui
 gtk/inspector/signals-list.ui
 gtk/inspector/signals-list.ui.h
 gtk/inspector/statistics.ui

@@ -61,7 +61,6 @@ gtk/css/gtkcssdataurl.c
 gtk/gtkaboutdialog.c
 gtk/gtkaccelgroup.c
 gtk/gtkaccellabel.c
-gtk/gtkaccelmap.c
 gtk/gtkaccessible.c
 gtk/gtkactionable.c
 gtk/gtkactionbar.c
@@ -256,11 +255,15 @@ gtk/gtksearchengine.c
 gtk/gtksearchentry.c
 gtk/gtkseparator.c
 gtk/gtksettings.c
+gtk/gtkshortcutaction.c
+gtk/gtkshortcut.c
+gtk/gtkshortcutcontroller.c
 gtk/gtkshortcutlabel.c
 gtk/gtkshortcutsgroup.c
 gtk/gtkshortcutssection.c
 gtk/gtkshortcutsshortcut.c
 gtk/gtkshortcutswindow.c
+gtk/gtkshortcuttrigger.c
 gtk/gtksidebarrow.c
 gtk/gtksingleselection.c
 gtk/gtksizegroup.c
@@ -331,6 +334,7 @@ gtk/inspector/prop-list.ui
 gtk/inspector/recorder.c
 gtk/inspector/recorder.ui
 gtk/inspector/resource-list.ui
+gtk/inspector/shortcuts.ui
 gtk/inspector/size-groups.c
 gtk/inspector/statistics.c
 gtk/inspector/statistics.ui
