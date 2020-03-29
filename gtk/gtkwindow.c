@@ -5667,7 +5667,10 @@ gtk_window_set_focus (GtkWindow *window,
 {
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  gtk_root_set_focus (GTK_ROOT (window), focus);
+  if (focus)
+    gtk_widget_grab_focus (focus);
+  else
+    gtk_window_root_set_focus (GTK_ROOT (window), NULL);
 }
 
 static void
