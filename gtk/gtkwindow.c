@@ -288,6 +288,7 @@ enum {
   PROP_TRANSIENT_FOR,
   PROP_APPLICATION,
   PROP_DEFAULT_WIDGET,
+  PROP_FOCUS_WIDGET,
 
   /* Readonly properties */
   PROP_IS_ACTIVE,
@@ -941,8 +942,14 @@ gtk_window_class_init (GtkWindowClass *klass)
                            GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
+  window_props[PROP_FOCUS_WIDGET] =
+      g_param_spec_object ("focus-widget",
+                           P_("Focus widget"),
+                           P_("The focus widget"),
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (gobject_class, LAST_ARG, window_props);
-  gtk_root_install_properties (gobject_class, LAST_ARG);
 
   /**
    * GtkWindow::activate-focus:
@@ -1858,7 +1865,7 @@ gtk_window_set_property (GObject      *object,
     case PROP_FOCUS_VISIBLE:
       gtk_window_set_focus_visible (window, g_value_get_boolean (value));
       break;
-    case LAST_ARG + GTK_ROOT_PROP_FOCUS_WIDGET:
+    case PROP_FOCUS_WIDGET:
       gtk_window_set_focus (window, g_value_get_object (value));
       break;
     default:
@@ -1941,7 +1948,7 @@ gtk_window_get_property (GObject      *object,
     case PROP_IS_MAXIMIZED:
       g_value_set_boolean (value, gtk_window_is_maximized (window));
       break;
-    case LAST_ARG + GTK_ROOT_PROP_FOCUS_WIDGET:
+    case PROP_FOCUS_WIDGET:
       g_value_set_object (value, gtk_window_get_focus (window));
       break;
     default:
@@ -2028,6 +2035,52 @@ gtk_window_root_get_constraint_solver (GtkRoot *root)
   return priv->constraint_solver;
 }
 
+static GtkWidget *
+gtk_window_root_get_focus (GtkRoot *root)
+{
+  GtkWindow *self = GTK_WINDOW (root);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (self);
+
+  return priv->focus_widget;
+}
+
+static void synthesize_focus_change_events (GtkWindow *window,
+                                            GtkWidget *old_focus,
+                                            GtkWidget *new_focus);
+
+static void
+gtk_window_root_set_focus (GtkRoot   *root,
+                           GtkWidget *focus)
+{
+  GtkWindow *self = GTK_WINDOW (root);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (self);
+  GtkWidget *old_focus = NULL;
+
+  if (focus && !gtk_widget_is_sensitive (focus))
+    return;
+
+  if (focus == priv->focus_widget)
+    return;
+
+  if (priv->focus_widget)
+    old_focus = g_object_ref (priv->focus_widget);
+  g_set_object (&priv->focus_widget, NULL);
+
+  if (old_focus)
+    gtk_widget_set_has_focus (old_focus, FALSE);
+
+  synthesize_focus_change_events (self, old_focus, focus);
+
+  if (focus)
+    gtk_widget_set_has_focus (focus, TRUE);
+
+  g_set_object (&priv->focus_widget, focus);
+
+  g_clear_object (&old_focus);
+
+  g_object_notify (G_OBJECT (self), "focus-widget");
+}
+
 static void
 gtk_window_native_get_surface_transform (GtkNative *native,
                                          int       *x,
@@ -2054,6 +2107,8 @@ gtk_window_root_interface_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_window_root_get_display;
   iface->get_constraint_solver = gtk_window_root_get_constraint_solver;
+  iface->get_focus = gtk_window_root_get_focus;
+  iface->set_focus = gtk_window_root_set_focus;
 }
 
 static void
@@ -5610,34 +5665,9 @@ void
 gtk_window_set_focus (GtkWindow *window,
                       GtkWidget *focus)
 {
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWidget *old_focus = NULL;
-
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  if (focus && !gtk_widget_is_sensitive (focus))
-    return;
-
-  if (focus == priv->focus_widget)
-    return;
-
-  if (priv->focus_widget)
-    old_focus = g_object_ref (priv->focus_widget);
-  g_set_object (&priv->focus_widget, NULL);
-
-  if (old_focus)
-    gtk_widget_set_has_focus (old_focus, FALSE);
-
-  synthesize_focus_change_events (window, old_focus, focus);
-
-  if (focus)
-    gtk_widget_set_has_focus (focus, TRUE);
-
-  g_set_object (&priv->focus_widget, focus);
-
-  g_clear_object (&old_focus);
-
-  g_object_notify (G_OBJECT (window), "focus-widget");
+  gtk_root_set_focus (GTK_ROOT (window), focus);
 }
 
 static void
