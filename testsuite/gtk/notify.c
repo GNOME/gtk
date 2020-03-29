@@ -465,6 +465,15 @@ test_type (gconstpointer data)
                                NULL);
       g_object_unref (list_store);
     }
+  else if (g_type_is_a (type, GTK_TYPE_CALENDAR))
+    {
+      /* avoid day 30 and 31, since they don't exist in February */
+      instance = g_object_new (type,
+                               "year", 1984,
+                               "month", 10,
+                               "day", 05,
+                               NULL);
+    }
   /* special casing for singletons */
   else if (g_type_is_a (type, GTK_TYPE_NEVER_TRIGGER))
     instance = (GObject *) g_object_ref (gtk_never_trigger_get ());
