@@ -175,7 +175,6 @@ typedef struct
 {
   GtkWidget             *attach_widget;
   GtkWidget             *default_widget;
-  GtkWidget             *initial_focus;
   GtkWidget             *focus_widget;
   GtkWindow             *transient_parent;
   GtkWindowGeometryInfo *geometry_info;
@@ -2343,10 +2342,7 @@ gtk_window_get_focus (GtkWindow *window)
 
   g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
 
-  if (priv->initial_focus)
-    return priv->initial_focus;
-  else
-    return priv->focus_widget;
+  return priv->focus_widget;
 }
 
 static void
@@ -4156,12 +4152,7 @@ gtk_window_show (GtkWidget *widget)
   gtk_widget_map (widget);
 
   if (!priv->focus_widget)
-    {
-      if (priv->initial_focus)
-        gtk_window_set_focus (window, priv->initial_focus);
-      else
-        gtk_window_move_focus (widget, GTK_DIR_TAB_FORWARD);
-    }
+    gtk_window_move_focus (widget, GTK_DIR_TAB_FORWARD);
   
   if (priv->modal)
     gtk_grab_add (widget);

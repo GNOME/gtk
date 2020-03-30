@@ -262,9 +262,6 @@ struct _GtkWidgetClass
   gboolean (* keynav_failed)            (GtkWidget           *widget,
                                          GtkDirectionType     direction);
 
-  /* Signals used only for keybindings */
-  gboolean (* popup_menu)          (GtkWidget          *widget);
-
   /* accessibility support
    */
   AtkObject *  (* get_accessible)     (GtkWidget       *widget);
