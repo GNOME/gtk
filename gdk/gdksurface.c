@@ -3015,3 +3015,22 @@ gdk_surface_translate_coordinates (GdkSurface *from,
 
   return TRUE;
 }
+
+GdkSeat *
+gdk_surface_get_seat_from_event (GdkSurface *surface,
+                                 GdkEvent   *event)
+{
+  if (event)
+    {
+      GdkDevice *device = gdk_event_get_device (event);
+      GdkSeat *seat = NULL;
+
+      device = gdk_event_get_device (event);
+      if (device)
+        seat = gdk_device_get_seat (device);
+
+      if (seat)
+        return seat;
+    }
+  return gdk_display_get_default_seat (surface->display);
+}
