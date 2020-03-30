@@ -56,7 +56,6 @@ add_row (GtkContainer *box,
   row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
                       "selectable", FALSE,
                       "activatable", FALSE,
-                      "can-focus", FALSE,
                       NULL);
 
   label = g_object_new (GTK_TYPE_LABEL,
