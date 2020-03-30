@@ -304,10 +304,10 @@ guint
 gtk_get_portal_interface_version (GDBusConnection *connection,
                                   const char      *interface_name)
 {
-  g_autoptr(GDBusProxy) proxy = NULL;
-  g_autoptr(GError) error = NULL;
-  g_autoptr(GVariant) ret = NULL;
-  g_autofree char *owner = NULL;
+  GDBusProxy *proxy = NULL;
+  GError *error = NULL;
+  GVariant *ret = NULL;
+  char *owner = NULL;
   guint version = 0;
 
   proxy = g_dbus_proxy_new_sync (connection,
@@ -323,14 +323,14 @@ gtk_get_portal_interface_version (GDBusConnection *connection,
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
         g_warning ("Could not query portal version on interface '%s': %s",
                    interface_name, error->message);
-      return 0;
+      goto out;
     }
 
   owner = g_dbus_proxy_get_name_owner (proxy);
   if (owner == NULL)
     {
       g_debug ("%s not provided by any service", interface_name);
-      return FALSE;
+      goto out;
     }
 
   ret = g_dbus_proxy_get_cached_property (proxy, "version");
@@ -339,6 +339,12 @@ gtk_get_portal_interface_version (GDBusConnection *connection,
 
   g_debug ("Got version %u for portal interface '%s'",
            version, interface_name);
+
+out:
+  g_clear_object (&proxy);
+  g_clear_error (&error);
+  g_clear_pointer (&ret, g_variant_unref);
+  g_clear_pointer (&owner, g_free);
 
   return version;
 }
