@@ -1,0 +1,16 @@
+// High Contrast color overrides
+// When color definition differs for dark and light variant
+// it gets @if ed depending on $variant
+
+
+$fg_color: if($variant == 'light', darken($fg_color, 3%), lighten($fg_color, 2%));
+$bg_color: if($variant == 'light', lighten($bg_color, 3%), darken($bg_color, 2%));
+$selected_bg_color: darken($selected_bg_color,10%);
+$selected_borders_color: darken($selected_borders_color, 10%);
+$borders_color: if($variant == 'light', darken($borders_color, 30%), lighten($borders_color, 30%));
+$alt_borders_color: if($variant == 'light', darken($alt_borders_color, 33%), lighten($alt_borders_color, 28%));
+
+//insensitive state derived colors
+$insensitive_fg_color: mix($fg_color, $bg_color, 50%);
+$insensitive_bg_color: mix($bg_color, $base_color, 60%);
+$insensitive_borders_color: mix($borders_color, $bg_color, 80%);
