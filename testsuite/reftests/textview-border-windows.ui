@@ -7,7 +7,6 @@
       <object class="GtkTextView" id="textview1">
         <property name="width_request">160</property>
         <property name="height_request">160</property>
-        <property name="can_focus">1</property>
         <property name="wrap_mode">word</property>
         <signal name="map" handler="reftest:add_border_windows" swapped="no"/>
       </object>
