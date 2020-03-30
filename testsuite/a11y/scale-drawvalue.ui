@@ -9,12 +9,10 @@
     <property name="page_increment">10</property>
   </object>
   <object class="GtkWindow" id="window1">
-    <property name="can_focus">False</property>
     <child>
       <object class="GtkScale" id="scale1">
         <property name="width-request">100</property>
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
         <property name="adjustment">adjustment1</property>
         <property name="round_digits">1</property>
       </object>
