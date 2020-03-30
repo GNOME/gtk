@@ -505,6 +505,9 @@ gtk_button_set_property (GObject         *object,
     case PROP_ICON_NAME:
       gtk_button_set_icon_name (button, g_value_get_string (value));
       break;
+    case PROP_NO_FOCUS:
+      gtk_button_set_no_focus (button, g_value_get_boolean (value));
+      break;
     case PROP_ACTION_NAME:
       gtk_button_set_action_name (GTK_ACTIONABLE (button), g_value_get_string (value));
       break;
@@ -539,6 +542,9 @@ gtk_button_get_property (GObject         *object,
       break;
     case PROP_ICON_NAME:
       g_value_set_string (value, gtk_button_get_icon_name (button));
+      break;
+    case PROP_NO_FOCUS:
+      g_value_set_boolean (value, priv->no_focus);
       break;
     case PROP_ACTION_NAME:
       g_value_set_string (value, gtk_action_helper_get_action_name (priv->action_helper));
