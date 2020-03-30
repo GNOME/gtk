@@ -132,7 +132,7 @@ window1
         "text"
         parent: combo2
         index: 1
-        state: editable enabled sensitive showing single-line visible
+        state: editable enabled focusable sensitive showing single-line visible
         toolkit: gtk
         <AtkComponent>
         layer: widget
@@ -235,7 +235,7 @@ window1
         "text"
         parent: combo4
         index: 1
-        state: editable enabled sensitive showing single-line visible
+        state: editable enabled focusable sensitive showing single-line visible
         toolkit: gtk
         <AtkComponent>
         layer: widget

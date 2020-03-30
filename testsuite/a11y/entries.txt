@@ -151,7 +151,7 @@ window1
       parent: box1
       index: 3
       labelled-by: label1
-      state: editable enabled sensitive showing single-line visible
+      state: editable enabled focusable focused sensitive showing single-line visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
@@ -195,7 +195,7 @@ window1
       parent: box1
       index: 4
       labelled-by: label2
-      state: editable enabled sensitive showing single-line visible
+      state: editable enabled focusable sensitive showing single-line visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
@@ -237,7 +237,7 @@ window1
       "text"
       parent: box1
       index: 5
-      state: editable enabled sensitive showing single-line visible
+      state: editable enabled focusable sensitive showing single-line visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
