@@ -2418,6 +2418,34 @@ test_file_filter (void)
   g_object_unref (builder);
 }
 
+static void
+test_shortcuts (void)
+{
+  GtkBuilder *builder;
+  GObject *obj;
+
+  const char buffer[] = 
+    "<interface>"
+    "  <object class='GtkBox' id='box'>"
+    "    <child>"
+    "      <object class='GtkShortcutController' id='controller'>"
+    "        <child>"
+    "          <object class='GtkShortcut'>"
+    "            <property name='trigger'>&lt;Control&gt;k</property>"
+    "            <property name='action'>activate</property>"
+    "          </object>"
+    "        </child>"
+    "      </object>"
+    "    </child>"
+    "  </object>"
+    "</interface>";
+
+  builder = builder_new_from_string (buffer, -1, NULL);
+  obj = gtk_builder_get_object (builder, "controller");
+  g_assert (GTK_IS_SHORTCUT_CONTROLLER (obj));
+  g_object_unref (builder);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -2462,6 +2490,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/Property Bindings", test_property_bindings);
   g_test_add_func ("/Builder/anaconda-signal", test_anaconda_signal);
   g_test_add_func ("/Builder/FileFilter", test_file_filter);
+  g_test_add_func ("/Builder/Shortcuts", test_shortcuts);
 
   return g_test_run();
 }
