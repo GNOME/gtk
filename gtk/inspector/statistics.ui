@@ -143,7 +143,6 @@
             <property name="name">excuse</property>
             <property name="child">
               <object class="GtkBox">
-                <property name="can-focus">1</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
                 <child>
