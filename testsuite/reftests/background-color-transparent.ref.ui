@@ -6,7 +6,6 @@
         <child>
           <object class="GtkButton" id="opaque">
             <property name="label" translatable="yes">opaque</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <layout>
               <property name="left_attach">0</property>
@@ -19,7 +18,6 @@
         <child>
           <object class="GtkButton" id="transparent">
             <property name="label" translatable="yes">transparent</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <style>
               <class name="reference"/>

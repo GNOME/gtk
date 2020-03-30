@@ -6,7 +6,6 @@
     <child>
       <object class="GtkButton" id="b">
         <property name="label" translatable="yes">Hello World!</property>
-        <property name="can_focus">1</property>
         <property name="receives_default">1</property>
       </object>
     </child>
