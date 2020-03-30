@@ -115,6 +115,8 @@ char *gtk_get_portal_request_path (GDBusConnection  *connection,
                                    char            **token);
 char *gtk_get_portal_session_path (GDBusConnection  *connection,
                                    char            **token);
+guint gtk_get_portal_interface_version (GDBusConnection *connection,
+                                        const char      *interface_name);
 
 #define PORTAL_BUS_NAME "org.freedesktop.portal.Desktop"
 #define PORTAL_OBJECT_PATH "/org/freedesktop/portal/desktop"

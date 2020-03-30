@@ -423,11 +423,19 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self,
 
   action = gtk_file_chooser_get_action (GTK_FILE_CHOOSER (self));
 
-  if (action == GTK_FILE_CHOOSER_ACTION_OPEN ||
-      action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+  if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
     method_name = "OpenFile";
   else if (action == GTK_FILE_CHOOSER_ACTION_SAVE)
     method_name = "SaveFile";
+  else if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+    {
+      if (gtk_get_portal_interface_version (connection, "org.freedesktop.portal.FileChooser") < 3)
+        {
+          g_warning ("GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER is not supported by GtkFileChooserNativePortal because portal is too old");
+          return FALSE;
+        }
+      method_name = "OpenFile";
+    }
   else
     {
       g_warning ("GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER is not supported by GtkFileChooserNativePortal");
