@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
   <template class="GtkLockButton" parent="GtkButton">
-    <property name="can-focus">1</property>
     <property name="receives-default">1</property>
     <child>
       <object class="GtkBox" id="box">
