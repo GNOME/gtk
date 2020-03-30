@@ -9,10 +9,8 @@
     </section>
   </menu>
   <object class="GtkWindow" id="window1">
-    <property name="can_focus">False</property>
     <child>
       <object class="GtkMenuButton" id="menubutton">
-        <property name="can_focus">True</property>
         <property name="menu-model">menu</property>
       </object>
     </child>
