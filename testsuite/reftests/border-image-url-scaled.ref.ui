@@ -5,7 +5,6 @@
     <child>
       <object class="GtkButton" id="button1">
         <property name="name">reference</property>
-        <property name="can_focus">1</property>
         <property name="has_focus">1</property>
         <property name="receives_default">1</property>
         <style>
@@ -14,7 +13,6 @@
         <child>
           <object class="GtkButton" id="button2">
             <property name="name">reference</property>
-            <property name="can_focus">1</property>
             <property name="has_focus">1</property>
             <property name="receives_default">1</property>
             <style>
@@ -24,7 +22,6 @@
               <object class="GtkButton" id="button3">
                 <property name="name">reference</property>
                 <property name="label" translatable="yes">Hello World</property>
-                <property name="can_focus">1</property>
                 <property name="has_focus">1</property>
                 <property name="receives_default">1</property>
                 <style>

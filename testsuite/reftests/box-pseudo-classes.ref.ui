@@ -10,7 +10,6 @@
             <child>
               <object class="GtkButton" id="button1">
                 <property name="label" translatable="yes">button</property>
-                <property name="can_focus">1</property>
                 <property name="receives_default">1</property>
                 <property name="name">purple</property>
               </object>
@@ -18,7 +17,6 @@
             <child>
               <object class="GtkButton" id="button2">
                 <property name="label" translatable="yes">button</property>
-                <property name="can_focus">1</property>
                 <property name="receives_default">1</property>
                 <property name="name">yellow</property>
               </object>
@@ -26,7 +24,6 @@
             <child>
               <object class="GtkButton" id="button3">
                 <property name="label" translatable="yes">button</property>
-                <property name="can_focus">1</property>
                 <property name="receives_default">1</property>
                 <property name="name">red</property>
               </object>
@@ -34,7 +31,6 @@
             <child>
               <object class="GtkButton" id="button4">
                 <property name="label" translatable="yes">button</property>
-                <property name="can_focus">1</property>
                 <property name="receives_default">1</property>
                 <property name="name">yellow</property>
               </object>
@@ -42,7 +38,6 @@
             <child>
               <object class="GtkButton" id="button5">
                 <property name="label" translatable="yes">button</property>
-                <property name="can_focus">1</property>
                 <property name="receives_default">1</property>
                 <property name="name">purple</property>
               </object>
@@ -55,7 +50,6 @@
             <child>
               <object class="GtkButton" id="button7">
                 <property name="label" translatable="yes">button</property>
-                <property name="can_focus">1</property>
                 <property name="receives_default">1</property>
                 <property name="name">purple</property>
               </object>
@@ -63,7 +57,6 @@
             <child>
               <object class="GtkButton" id="button8">
                 <property name="label" translatable="yes">button</property>
-                <property name="can_focus">1</property>
                 <property name="receives_default">1</property>
                 <property name="name">yellow</property>
               </object>
@@ -71,7 +64,6 @@
             <child>
               <object class="GtkButton" id="button9">
                 <property name="label" translatable="yes">button</property>
-                <property name="can_focus">1</property>
                 <property name="receives_default">1</property>
                 <property name="name">red</property>
               </object>
@@ -79,7 +71,6 @@
             <child>
               <object class="GtkButton" id="button10">
                 <property name="label" translatable="yes">button</property>
-                <property name="can_focus">1</property>
                 <property name="receives_default">1</property>
                 <property name="name">green</property>
               </object>
@@ -92,7 +83,6 @@
             <child>
               <object class="GtkButton" id="button13">
                 <property name="label" translatable="yes">button</property>
-                <property name="can_focus">1</property>
                 <property name="receives_default">1</property>
                 <property name="name">purple</property>
               </object>
@@ -100,7 +90,6 @@
             <child>
               <object class="GtkButton" id="button14">
                 <property name="label" translatable="yes">button</property>
-                <property name="can_focus">1</property>
                 <property name="receives_default">1</property>
                 <property name="name">yellow</property>
               </object>
@@ -108,7 +97,6 @@
             <child>
               <object class="GtkButton" id="button15">
                 <property name="label" translatable="yes">button</property>
-                <property name="can_focus">1</property>
                 <property name="receives_default">1</property>
                 <property name="name">purple</property>
               </object>
@@ -121,7 +109,6 @@
             <child>
               <object class="GtkButton" id="button6">
                 <property name="label" translatable="yes">button</property>
-                <property name="can_focus">1</property>
                 <property name="receives_default">1</property>
                 <property name="name">purple</property>
               </object>
@@ -129,7 +116,6 @@
             <child>
               <object class="GtkButton" id="button11">
                 <property name="label" translatable="yes">button</property>
-                <property name="can_focus">1</property>
                 <property name="receives_default">1</property>
                 <property name="name">green</property>
               </object>
@@ -142,7 +128,6 @@
             <child>
               <object class="GtkButton" id="button12">
                 <property name="label" translatable="yes">button</property>
-                <property name="can_focus">1</property>
                 <property name="receives_default">1</property>
                 <property name="name">blue</property>
               </object>
