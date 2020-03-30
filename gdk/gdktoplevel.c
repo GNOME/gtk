@@ -74,6 +74,17 @@ gdk_toplevel_default_supports_edge_constraints (GdkToplevel *toplevel)
 }
 
 static void
+gdk_toplevel_default_inhibit_system_shortcuts (GdkToplevel *toplevel,
+                                               GdkEvent    *event)
+{
+}
+
+static void
+gdk_toplevel_default_restore_system_shortcuts (GdkToplevel *toplevel)
+{
+}
+
+static void
 gdk_toplevel_default_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_toplevel_default_present;
@@ -82,6 +93,8 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
   iface->focus = gdk_toplevel_default_focus;
   iface->show_window_menu = gdk_toplevel_default_show_window_menu;
   iface->supports_edge_constraints = gdk_toplevel_default_supports_edge_constraints;
+  iface->inhibit_system_shortcuts = gdk_toplevel_default_inhibit_system_shortcuts;
+  iface->restore_system_shortcuts = gdk_toplevel_default_restore_system_shortcuts;
 
   g_object_interface_install_property (iface,
       g_param_spec_flags ("state",
@@ -137,6 +150,12 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
                          GDK_TYPE_FULLSCREEN_MODE,
                          GDK_FULLSCREEN_ON_CURRENT_MONITOR,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+  g_object_interface_install_property (iface,
+      g_param_spec_boolean ("shortcuts-inhibited",
+                            "Shortcuts inhibited",
+                            "Whether keyboard shortcuts are inhibited",
+                            FALSE,
+                            G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY));
 }
 
 guint
@@ -152,6 +171,7 @@ gdk_toplevel_install_properties (GObjectClass *object_class,
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_DECORATED, "decorated");
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_DELETABLE, "deletable");
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_FULLSCREEN_MODE, "fullscreen-mode");
+  g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_SHORTCUTS_INHIBITED, "shortcuts-inhibited");
 
   return GDK_TOPLEVEL_NUM_PROPERTIES;
 }
@@ -438,4 +458,57 @@ gdk_toplevel_supports_edge_constraints (GdkToplevel *toplevel)
   g_return_val_if_fail (GDK_IS_TOPLEVEL (toplevel), FALSE);
 
   return GDK_TOPLEVEL_GET_IFACE (toplevel)->supports_edge_constraints (toplevel);
+}
+
+/**
+ * gdk_toplevel_inhibit_system_shortcuts:
+ * @toplevel: the #GdkToplevel requesting system keyboard shortcuts
+ * @event: (nullable): the #GdkEvent that is triggering the inhibit
+ *         request, or %NULL if none is available.
+ *
+ * Requests that the @toplevel inhibit the system shortcuts, asking the
+ * desktop environment/windowing system to let all keyboard events reach
+ * the surface, as long as it is focused, instead of triggering system
+ * actions.
+ *
+ * If granted, the rerouting remains active until the default shortcuts
+ * processing is restored with gdk_toplevel_restore_system_shortcuts(),
+ * or the request is revoked by the desktop enviroment, windowing system
+ * or the user.
+ *
+ * A typical use case for this API is remote desktop or virtual machine
+ * viewers which need to inhibit the default system keyboard shortcuts
+ * so that the remote session or virtual host gets those instead of the
+ * local environment.
+ *
+ * The windowing system or desktop environment may ask the user to grant
+ * or deny the request or even choose to ignore the request entirely.
+ *
+ * The caller can be notified whenever the request is granted or revoked
+ * by listening to the GdkToplevel::shortcuts-inhibited property.
+ *
+ */
+void
+gdk_toplevel_inhibit_system_shortcuts (GdkToplevel *toplevel,
+                                       GdkEvent    *event)
+{
+  g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
+
+  GDK_TOPLEVEL_GET_IFACE (toplevel)->inhibit_system_shortcuts (toplevel,
+                                                               event);
+}
+
+/**
+ * gdk_toplevel_restore_system_shortcuts:
+ * @toplevel: a #GdkToplevel
+ *
+ * Restore default system keyboard shortcuts which were previously
+ * requested to be inhibited by gdk_toplevel_inhibit_system_shortcuts().
+ */
+void
+gdk_toplevel_restore_system_shortcuts (GdkToplevel *toplevel)
+{
+  g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
+
+  GDK_TOPLEVEL_GET_IFACE (toplevel)->restore_system_shortcuts (toplevel);
 }

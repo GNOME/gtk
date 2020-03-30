@@ -181,6 +181,8 @@ void gdk_surface_get_unscaled_size (GdkSurface *surface,
                                     int *unscaled_width,
                                     int *unscaled_height);
 gboolean gdk_surface_handle_event (GdkEvent       *event);
+GdkSeat * gdk_surface_get_seat_from_event (GdkSurface *surface,
+                                           GdkEvent    *event);
 
 /*****************************************
  * Interfaces provided by windowing code *
