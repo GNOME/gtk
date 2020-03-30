@@ -54,7 +54,6 @@
             <child>
               <object class="GtkColorSwatch" id="swatch">
                 <property name="name">editor-color-sample</property>
-                <property name="can-focus">False</property>
                 <property name="rgba">rgb(255,255,255)</property>
                 <property name="selectable">False</property>
                 <property name="has-menu">False</property>
@@ -66,7 +65,6 @@
             </child>
             <child>
               <object class="GtkEntry" id="entry">
-                <property name="can-focus">1</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="entry-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes">Color Name</property>
@@ -84,7 +82,6 @@
             <child>
               <object class="GtkColorScale" id="h_slider">
                 <property name="name">h</property>
-                <property name="can-focus">True</property>
                 <property name="orientation">vertical</property>
                 <property name="adjustment">h_adj</property>
                 <property name="draw-value">False</property>
@@ -98,7 +95,6 @@
             <child>
               <object class="GtkColorScale" id="a_slider">
                 <property name="name">a</property>
-                <property name="can-focus">True</property>
                 <property name="adjustment">a_adj</property>
                 <property name="draw-value">False</property>
                 <property name="scale-type">1</property>
@@ -118,7 +114,6 @@
                 <property name="name">sv</property>
                 <property name="width-request">300</property>
                 <property name="height-request">300</property>
-                <property name="can-focus">True</property>
                 <property name="h-adjustment">h_adj</property>
                 <property name="s-adjustment">s_adj</property>
                 <property name="v-adjustment">v_adj</property>
@@ -158,7 +153,6 @@
         </child>
         <child>
           <object class="GtkSpinButton" id="a_entry">
-            <property name="can-focus">1</property>
             <property name="width-chars">2</property>
             <property name="max-width-chars">2</property>
             <property name="climb-rate">1</property>
@@ -200,7 +194,6 @@
         </child>
         <child>
           <object class="GtkSpinButton" id="h_entry">
-            <property name="can-focus">1</property>
             <property name="width-chars">2</property>
             <property name="max-width-chars">2</property>
             <property name="climb-rate">1</property>
@@ -252,7 +245,6 @@
         </child>
         <child>
           <object class="GtkSpinButton" id="s_entry">
-            <property name="can-focus">1</property>
             <property name="width-chars">2</property>
             <property name="max-width-chars">2</property>
             <property name="climb-rate">1</property>
@@ -269,7 +261,6 @@
         </child>
         <child>
           <object class="GtkSpinButton" id="v_entry">
-            <property name="can-focus">1</property>
             <property name="width-chars">2</property>
             <property name="max-width-chars">2</property>
             <property name="climb-rate">1</property>
