@@ -13,11 +13,9 @@
     </data>
   </object>
   <object class="GtkWindow" id="window1">
-    <property name="can_focus">False</property>
     <child>
       <object class="GtkTreeView" id="tv">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
         <property name="model">store</property>
         <child>
           <object class="GtkTreeViewColumn" id="col">
