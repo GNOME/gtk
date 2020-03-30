@@ -402,7 +402,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   gtk_widget_add_css_class (button, "menu");
                   image = gtk_image_new ();
                   gtk_menu_button_add_child (GTK_MENU_BUTTON (button), image);
-                  gtk_widget_set_can_focus (button, FALSE);
 
                   accessible = gtk_widget_get_accessible (button);
                   if (GTK_IS_ACCESSIBLE (accessible))
@@ -424,7 +423,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   image = gtk_image_new_from_icon_name ("window-minimize-symbolic");
                   g_object_set (image, "use-fallback", TRUE, NULL);
                   gtk_container_add (GTK_CONTAINER (button), image);
-                  gtk_widget_set_can_focus (button, FALSE);
+                  gtk_button_set_no_focus (GTK_BUTTON (button), TRUE);
                   g_signal_connect_swapped (button, "clicked",
                                             G_CALLBACK (gtk_window_minimize), window);
 
@@ -447,7 +446,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   image = gtk_image_new_from_icon_name (icon_name);
                   g_object_set (image, "use-fallback", TRUE, NULL);
                   gtk_container_add (GTK_CONTAINER (button), image);
-                  gtk_widget_set_can_focus (button, FALSE);
+                  gtk_button_set_no_focus (GTK_BUTTON (button), TRUE);
                   g_signal_connect_swapped (button, "clicked",
                                             G_CALLBACK (_gtk_window_toggle_maximized), window);
 
@@ -465,7 +464,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   gtk_widget_add_css_class (button, "close");
                   g_object_set (image, "use-fallback", TRUE, NULL);
                   gtk_container_add (GTK_CONTAINER (button), image);
-                  gtk_widget_set_can_focus (button, FALSE);
+                  gtk_button_set_no_focus (GTK_BUTTON (button), TRUE);
                   g_signal_connect_swapped (button, "clicked",
                                             G_CALLBACK (gtk_window_close), window);
 
