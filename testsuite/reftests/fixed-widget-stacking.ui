@@ -22,7 +22,6 @@ TEST123</property>
               <object class="GtkTextView" id="textview2">
                 <property name="width_request">100</property>
                 <property name="height_request">100</property>
-                <property name="can_focus">1</property>
                 <property name="buffer">textbuffer1</property>
               </object>
             </child>
