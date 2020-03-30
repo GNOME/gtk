@@ -17,7 +17,6 @@
     <property name="decorated">0</property>
     <child>
       <object class="GtkTreeView" id="treeview1">
-        <property name="can_focus">1</property>
         <property name="model">liststore1</property>
         <property name="headers-visible">0</property>
         <child internal-child="selection">
