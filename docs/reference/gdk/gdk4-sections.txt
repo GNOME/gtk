@@ -686,6 +686,8 @@ gdk_toplevel_set_focus_on_map
 gdk_toplevel_set_decorated
 gdk_toplevel_set_deletable
 gdk_toplevel_supports_edge_constraints
+gdk_toplevel_inhibit_system_shortcuts
+gdk_toplevel_restore_system_shortcuts
 <SUBSECTION Standard>
 GDK_TYPE_TOPLEVEL
 gdk_toplevel_get_type
