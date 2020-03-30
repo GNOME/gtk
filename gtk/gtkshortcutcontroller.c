@@ -127,7 +127,7 @@ gtk_shortcut_controller_buildable_add_child (GtkBuildable  *buildable,
     }
   if (GTK_IS_SHORTCUT (child))
     {
-      gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (buildable), GTK_SHORTCUT (child));
+      gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (buildable), g_object_ref (GTK_SHORTCUT (child)));
     }
   else
     {
