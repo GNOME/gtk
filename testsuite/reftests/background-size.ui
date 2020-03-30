@@ -9,7 +9,6 @@
             <property name="label" translatable="yes">A</property>
             <property name="width_request">40</property>
             <property name="height_request">40</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="name">a</property>
             <layout>
@@ -25,7 +24,6 @@
             <property name="label" translatable="yes">B</property>
             <property name="width_request">40</property>
             <property name="height_request">40</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="name">b</property>
             <layout>
@@ -41,7 +39,6 @@
             <property name="label" translatable="yes">C</property>
             <property name="width_request">40</property>
             <property name="height_request">40</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="name">c</property>
             <layout>
@@ -57,7 +54,6 @@
             <property name="label" translatable="yes">D</property>
             <property name="width_request">40</property>
             <property name="height_request">40</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="name">d</property>
             <layout>
@@ -73,7 +69,6 @@
             <property name="label" translatable="yes">E</property>
             <property name="width_request">40</property>
             <property name="height_request">40</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="name">e</property>
             <layout>
@@ -89,7 +84,6 @@
             <property name="label" translatable="yes">F</property>
             <property name="width_request">40</property>
             <property name="height_request">40</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="name">f</property>
             <layout>
@@ -105,7 +99,6 @@
             <property name="label" translatable="yes">G</property>
             <property name="width_request">40</property>
             <property name="height_request">40</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="name">g</property>
             <layout>
@@ -121,7 +114,6 @@
             <property name="label" translatable="yes">H</property>
             <property name="width_request">40</property>
             <property name="height_request">40</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="name">h</property>
             <layout>
@@ -137,7 +129,6 @@
             <property name="label" translatable="yes">I</property>
             <property name="width_request">40</property>
             <property name="height_request">40</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="name">i</property>
             <layout>
@@ -153,7 +144,6 @@
             <property name="label" translatable="yes">J</property>
             <property name="width_request">40</property>
             <property name="height_request">40</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="name">j</property>
             <layout>
@@ -169,7 +159,6 @@
             <property name="label" translatable="yes">K</property>
             <property name="width_request">40</property>
             <property name="height_request">40</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="name">k</property>
             <layout>
@@ -185,7 +174,6 @@
             <property name="label" translatable="yes">L</property>
             <property name="width_request">40</property>
             <property name="height_request">40</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="name">l</property>
             <layout>
