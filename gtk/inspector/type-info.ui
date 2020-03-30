@@ -17,7 +17,6 @@
         </child>
         <child>
           <object class="GtkScrolledWindow">
-            <property name="can-focus">1</property>
             <property name="shadow-type">etched-in</property>
             <property name="min-content-width">200</property>
             <property name="max-content-height">200</property>
@@ -39,7 +38,6 @@
         </child>
         <child>
           <object class="GtkScrolledWindow">
-            <property name="can-focus">1</property>
             <property name="shadow-type">etched-in</property>
             <property name="min-content-width">200</property>
             <property name="max-content-height">150</property>

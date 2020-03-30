@@ -376,7 +376,6 @@
                             </child>
                             <child>
                               <object class="GtkScale" id="slowdown_scale">
-                                <property name="can-focus">1</property>
                                 <property name="adjustment">slowdown_adjustment</property>
                                 <property name="valign">baseline</property>
                                 <property name="draw-value">0</property>
