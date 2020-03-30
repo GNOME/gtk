@@ -12,7 +12,6 @@
       <object class="GtkGrid" id="grid1">
         <child>
           <object class="GtkScale" id="scale1">
-            <property name="can_focus">1</property>
             <property name="adjustment">adjustment1</property>
             <layout>
               <property name="left_attach">0</property>
@@ -22,7 +21,6 @@
         </child>
         <child>
           <object class="GtkScrollbar" id="scrollbar1">
-            <property name="can_focus">1</property>
             <property name="adjustment">adjustment1</property>
             <layout>
               <property name="left_attach">1</property>
