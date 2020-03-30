@@ -10,7 +10,6 @@
         <property name="title">Font Explorer</property>
         <child>
           <object class="GtkButton" id="reset">
-            <property name="can-focus">1</property>
             <property name="receives-default">1</property>
             <property name="tooltip-text">Reset</property>
             <signal name="clicked" handler="font_features_reset_features" swapped="no"/>
@@ -27,7 +26,6 @@
       <object class="GtkBox">
         <child>
           <object class="GtkScrolledWindow">
-            <property name="can-focus">1</property>
             <property name="hscrollbar-policy">never</property>
             <child>
               <object class="GtkViewport">
@@ -41,7 +39,6 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkFontButton" id="font">
-                        <property name="can-focus">1</property>
                         <property name="receives-default">1</property>
                         <property name="font">Sans 12</property>
                         <property name="level">family|style|size|variations|features</property>
@@ -64,7 +61,6 @@
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkComboBox" id="script_lang">
-                                <property name="can-focus">1</property>
                                 <property name="margin-top">10</property>
                                 <signal name="changed" handler="font_features_script_changed" swapped="no"/>
                                 <child>

@@ -44,19 +44,16 @@
         <property name="spacing">6</property>
         <child>
           <object class="GtkEntry" id="entry1">
-            <property name="can-focus">1</property>
             <property name="primary-icon-name">edit-find</property>
             <property name="secondary-icon-name">edit-clear</property>
           </object>
         </child>
         <child>
           <object class="GtkScrolledWindow" id="scrolledwindow1">
-            <property name="can-focus">1</property>
             <property name="shadow-type">in</property>
             <property name="max-content-height">100</property>
             <child>
               <object class="GtkTreeView" id="treeview1">
-                <property name="can-focus">1</property>
                 <property name="vexpand">1</property>
                 <property name="model">liststore1</property>
                 <property name="headers-visible">0</property>
