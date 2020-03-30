@@ -934,7 +934,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
 
   spin_button->down_button = gtk_button_new_from_icon_name ("value-decrease-symbolic");
   gtk_widget_add_css_class (spin_button->down_button, "down");
-  gtk_widget_set_can_focus (spin_button->down_button, FALSE);
+  gtk_button_set_no_focus (GTK_BUTTON (spin_button->down_button), TRUE);
   gtk_widget_set_parent (spin_button->down_button, GTK_WIDGET (spin_button));
 
   gesture = gtk_gesture_click_new ();
@@ -949,7 +949,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
 
   spin_button->up_button = gtk_button_new_from_icon_name ("value-increase-symbolic");
   gtk_widget_add_css_class (spin_button->up_button, "up");
-  gtk_widget_set_can_focus (spin_button->up_button, FALSE);
+  gtk_button_set_no_focus (GTK_BUTTON (spin_button->up_button), TRUE);
   gtk_widget_set_parent (spin_button->up_button, GTK_WIDGET (spin_button));
 
   gesture = gtk_gesture_click_new ();
