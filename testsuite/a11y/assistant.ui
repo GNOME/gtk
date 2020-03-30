@@ -6,7 +6,6 @@
         <property name="child">
           <object class="GtkButton" id="button1">
             <property name="label" translatable="yes">Button 1</property>
-            <property name="can_focus">1</property>
           </object>
         </property>
       </object>
@@ -17,7 +16,6 @@
         <property name="child">
           <object class="GtkButton" id="button2">
             <property name="label" translatable="yes">Button 2</property>
-            <property name="can_focus">1</property>
           </object>
         </property>
       </object>
