@@ -2,12 +2,10 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkWindow" id="window1">
-    <property name="can_focus">False</property>
     <child>
       <object class="GtkLinkButton" id="button1">
         <property name="label" translatable="yes">Hello World!</property>
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
         <property name="uri">http://www.gtk.org</property>
         <property name="visited">True</property>
       </object>
