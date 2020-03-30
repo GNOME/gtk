@@ -63,7 +63,6 @@ For example, &quot;Work&quot; or &quot;Personal&quot;.</property>
         </child>
         <child>
           <object class="GtkEntry" id="entry1">
-            <property name="can_focus">1</property>
             <property name="hexpand">1</property>
             <property name="invisible_char">●</property>
             <layout>
@@ -104,7 +103,6 @@ For example, &quot;Work&quot; or &quot;Personal&quot;.</property>
         </child>
         <child>
           <object class="GtkEntry" id="entry2">
-            <property name="can_focus">1</property>
             <property name="hexpand">1</property>
             <property name="invisible_char">●</property>
             <layout>
@@ -130,7 +128,6 @@ For example, &quot;Work&quot; or &quot;Personal&quot;.</property>
         </child>
         <child>
           <object class="GtkEntry" id="entry3">
-            <property name="can_focus">1</property>
             <property name="hexpand">1</property>
             <property name="invisible_char">●</property>
             <layout>
@@ -171,7 +168,6 @@ For example, &quot;Work&quot; or &quot;Personal&quot;.</property>
         </child>
         <child>
           <object class="GtkEntry" id="entry4">
-            <property name="can_focus">1</property>
             <property name="hexpand">1</property>
             <property name="invisible_char">●</property>
             <layout>
@@ -199,7 +195,6 @@ For example, &quot;Work&quot; or &quot;Personal&quot;.</property>
         </child>
         <child>
           <object class="GtkEntry" id="entry5">
-            <property name="can_focus">1</property>
             <property name="invisible_char">●</property>
             <layout>
               <property name="left_attach">1</property>

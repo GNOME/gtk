@@ -7,7 +7,6 @@
       <object class="GtkNotebook" id="notebook1">
         <property name="width_request">50</property>
         <property name="height_request">50</property>
-        <property name="can_focus">1</property>
         <style>
           <class name="test"/>
         </style>
