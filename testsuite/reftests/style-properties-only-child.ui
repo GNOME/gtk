@@ -9,7 +9,6 @@
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkButton" id="button1">
-            <property name="can_focus">1</property>
             <property name="label">Foo</property>
             <style>
               <class name="only-child-notref"/>
