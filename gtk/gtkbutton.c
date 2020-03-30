@@ -68,6 +68,7 @@
 #include "gtkprivate.h"
 #include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
+#include "gtkwidgetprivate.h"
 
 #include "a11y/gtkbuttonaccessible.h"
 
@@ -90,6 +91,7 @@ struct _GtkButtonPrivate
   guint          in_button             : 1;
   guint          use_underline         : 1;
   guint          child_type            : 2;
+  guint          no_focus              : 1;
 };
 
 enum {
@@ -104,6 +106,7 @@ enum {
   PROP_RELIEF,
   PROP_USE_UNDERLINE,
   PROP_ICON_NAME,
+  PROP_NO_FOCUS,
 
   /* actionable properties */
   PROP_ACTION_NAME,
@@ -240,6 +243,12 @@ gtk_button_class_init (GtkButtonClass *klass)
                          NULL,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  props[PROP_NO_FOCUS] =
+    g_param_spec_boolean ("no-focus",
+                          P_("No focus"),
+                          P_("Whether the button should not accept the input focus"),
+                          FALSE,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, props);
 
@@ -415,6 +424,7 @@ gtk_button_init (GtkButton *button)
   priv->button_down = FALSE;
   priv->use_underline = FALSE;
   priv->child_type = WIDGET_CHILD;
+  priv->no_focus = FALSE;
 
   priv->gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->gesture), FALSE);
@@ -991,4 +1001,32 @@ gtk_button_get_gesture (GtkButton *button)
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
   return priv->gesture;
+}
+
+void
+gtk_button_set_no_focus (GtkButton *button,
+                         gboolean   no_focus)
+{
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
+
+  g_return_if_fail (GTK_IS_BUTTON (button));
+
+  if (priv->no_focus == no_focus)
+    return;
+
+  priv->no_focus = no_focus;
+
+  gtk_widget_set_can_focus (GTK_WIDGET (button), !no_focus);
+
+  g_object_notify_by_pspec (G_OBJECT (button), props[PROP_NO_FOCUS]);
+}
+
+gboolean
+gtk_button_get_no_focus (GtkButton *button)
+{
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
+
+  g_return_val_if_fail (GTK_IS_BUTTON (button), FALSE);
+
+  return priv->no_focus;
 }

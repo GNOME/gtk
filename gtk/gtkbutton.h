@@ -107,6 +107,12 @@ void                  gtk_button_set_icon_name      (GtkButton      *button,
 GDK_AVAILABLE_IN_ALL
 const char *          gtk_button_get_icon_name      (GtkButton      *button);
 
+GDK_AVAILABLE_IN_ALL
+void                  gtk_button_set_no_focus       (GtkButton      *button,
+						     gboolean        no_focus);
+GDK_AVAILABLE_IN_ALL
+gboolean              gtk_button_get_no_focus       (GtkButton      *button);
+
 
 G_END_DECLS
 
