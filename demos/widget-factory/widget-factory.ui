@@ -7,10 +7,10 @@
         <attribute name="action">win.busy</attribute>
       </item>
       <submenu>
-        <attribute name="label" translatable="yes">Theme</attribute>
+        <attribute name="label" translatable="yes">Style</attribute>
         <section>
           <item>
-            <attribute name="label" translatable="yes">Current theme</attribute>
+            <attribute name="label" translatable="yes">Current</attribute>
             <attribute name="action">win.theme</attribute>
             <attribute name="target">current</attribute>
           </item>
