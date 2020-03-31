@@ -230,6 +230,7 @@ if cc.get_id() == 'msvc'
   ]
   add_project_arguments(cc.get_supported_arguments(test_cflags), language: 'c')
 
+  add_languages('cpp')
   cxx = meson.get_compiler('cpp')
   if cxx.get_id() == 'msvc'
     add_project_arguments(cxx.get_supported_arguments(test_cflags), language: 'cpp')
