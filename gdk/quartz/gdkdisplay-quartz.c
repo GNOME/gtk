@@ -379,16 +379,17 @@ display_reconfiguration_callback (CGDirectDisplayID            cg_display,
                                   "display", display, NULL);
           monitor->id = cg_display;
           g_ptr_array_add (display->monitors, monitor);
+          display_rect (display);
+          configure_monitor (GDK_MONITOR (monitor), display);
           gdk_display_monitor_added (GDK_DISPLAY (display),
                                      GDK_MONITOR (monitor));
         }
       else
         {
           monitor = g_ptr_array_index (display->monitors, index);
+          display_rect (display);
+          configure_monitor (GDK_MONITOR (monitor), display);
         }
-
-      display_rect (display);
-      configure_monitor (GDK_MONITOR (monitor), display);
     }
   else if (flags & (kCGDisplayRemoveFlag |  kCGDisplayDisabledFlag))
     {
