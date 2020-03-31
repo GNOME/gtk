@@ -531,6 +531,8 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
           (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_PIXBUF) &&
           (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_TEXTURE) &&
           (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_PAINTABLE) &&
+          (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GTK_TYPE_SHORTCUT_TRIGGER) &&
+          (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GTK_TYPE_SHORTCUT_ACTION) &&
           (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != G_TYPE_FILE))
         {
           GObject *object = g_hash_table_lookup (priv->objects,
@@ -2097,29 +2099,6 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
               ret = FALSE;
             }
         }
-      else if (G_VALUE_HOLDS (value, GTK_TYPE_SHORTCUT_TRIGGER))
-        {
-          GtkShortcutTrigger *trigger = gtk_shortcut_trigger_parse_string (string);
-
-          if (trigger)
-            g_value_take_object (value, trigger);
-          else
-            {
-              g_set_error (error,
-                           GTK_BUILDER_ERROR,
-                           GTK_BUILDER_ERROR_INVALID_VALUE,
-                           "Could not parse shortcut trigger '%s'",
-                           string);
-              ret = FALSE;
-            }
-        }
-      else if (G_VALUE_HOLDS (value, GTK_TYPE_SHORTCUT_ACTION))
-        {
-          GtkShortcutAction *action = gtk_shortcut_action_parse_builder (builder, string, error);
-
-          /* Works for success and failure (NULL) case */
-          g_value_take_object (value, action);
-        }
       else if (G_VALUE_HOLDS (value, G_TYPE_STRV))
         {
           gchar **vector = g_strsplit (string, "\n", 0);
@@ -2236,6 +2215,29 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
           g_object_unref (G_OBJECT (file));
 
           ret = TRUE;
+        }
+      else if (G_VALUE_HOLDS (value, GTK_TYPE_SHORTCUT_TRIGGER))
+        {
+          GtkShortcutTrigger *trigger = gtk_shortcut_trigger_parse_string (string);
+
+          if (trigger)
+            g_value_take_object (value, trigger);
+          else
+            {
+              g_set_error (error,
+                           GTK_BUILDER_ERROR,
+                           GTK_BUILDER_ERROR_INVALID_VALUE,
+                           "Could not parse shortcut trigger '%s'",
+                           string);
+              ret = FALSE;
+            }
+        }
+      else if (G_VALUE_HOLDS (value, GTK_TYPE_SHORTCUT_ACTION))
+        {
+          GtkShortcutAction *action = gtk_shortcut_action_parse_builder (builder, string, error);
+
+          /* Works for success and failure (NULL) case */
+          g_value_take_object (value, action);
         }
       else
         {
