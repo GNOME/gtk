@@ -257,6 +257,7 @@ typedef struct
   GList *foci;
 
   GtkConstraintSolver *constraint_solver;
+  GdkToplevelLayout *layout;
 } GtkWindowPrivate;
 
 enum {
@@ -4194,7 +4195,6 @@ static void
 gtk_window_present_toplevel (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GdkToplevelLayout *layout;
   GdkRectangle request;
   GdkGeometry geometry;
   GdkSurfaceHints flags;
@@ -4205,13 +4205,13 @@ gtk_window_present_toplevel (GtkWindow *window)
   if (!(flags & GDK_HINT_MIN_SIZE))
     geometry.min_width = geometry.min_height = 1;
 
-  layout = gtk_window_compute_layout (window, geometry.min_width, geometry.min_height);
+  if (!priv->layout)
+    priv->layout = gtk_window_compute_layout (window, geometry.min_width, geometry.min_height);
 
   gdk_toplevel_present (GDK_TOPLEVEL (priv->surface),
                         request.width,
                         request.height,
-                        layout);
-  gdk_toplevel_layout_unref (layout);
+                        priv->layout);
 }
 
 static void
@@ -4219,17 +4219,24 @@ gtk_window_update_toplevel (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   
-
   if (priv->surface && gdk_surface_get_mapped (priv->surface))
     {
-      GdkToplevelLayout *layout;
+      int min_width = 1;
+      int  min_height = 1;
 
-      layout = gtk_window_compute_layout (window, 1, 1);
+      if (priv->layout)
+        {
+          min_width = gdk_toplevel_layout_get_min_width (priv->layout);
+          min_height = gdk_toplevel_layout_get_min_height (priv->layout);
+        }
+
+      g_clear_pointer (&priv->layout, gdk_toplevel_layout_unref);
+      priv->layout = gtk_window_compute_layout (window, min_width, min_height);
+
       gdk_toplevel_present (GDK_TOPLEVEL (priv->surface),
                             gdk_surface_get_width (priv->surface),
                             gdk_surface_get_height (priv->surface),
-                            layout);
-      gdk_toplevel_layout_unref (layout);
+                            priv->layout);
     }
 }
 
@@ -6105,7 +6112,6 @@ gtk_window_move_resize (GtkWindow *window)
   gboolean hints_changed; /* do we need to send these again */
   GtkWindowLastGeometryInfo saved_last_info;
   int current_width, current_height;
-  GdkToplevelLayout *layout;
 
   widget = GTK_WIDGET (window);
 
@@ -6117,6 +6123,13 @@ gtk_window_move_resize (GtkWindow *window)
 
   gtk_window_compute_configure_request (window, &new_request,
                                         &new_geometry, &new_flags);
+
+  if (!(new_flags & GDK_HINT_MIN_SIZE))
+    new_geometry.min_width = new_geometry.min_height = 1;
+
+  g_clear_pointer (&priv->layout, gdk_toplevel_layout_unref);
+  priv->layout = gtk_window_compute_layout (window, new_geometry.min_width, new_geometry.min_height);
+
 
   /* This check implies the invariant that we never set info->last
    * without setting the hints and sending off a configure request.
@@ -6267,6 +6280,7 @@ gtk_window_move_resize (GtkWindow *window)
            * to postpone our configure request until later.
            */
 	  info->last = saved_last_info;
+          g_clear_pointer (&priv->layout, gdk_toplevel_layout_unref);
 	  gtk_widget_queue_resize (widget); /* might recurse for GTK_RESIZE_IMMEDIATE */
 	}
 
@@ -6320,11 +6334,9 @@ gtk_window_move_resize (GtkWindow *window)
       if (configure_request_pos_changed)
         g_warning ("configure request position changed. This should not happen. Ignoring the position");
 
-      layout = gtk_window_compute_layout (window, 1, 1);
       gdk_toplevel_present (GDK_TOPLEVEL (priv->surface),
 			    new_request.width, new_request.height,
-                            layout);
-      gdk_toplevel_layout_unref (layout);
+                            priv->layout);
     }
   else
     {

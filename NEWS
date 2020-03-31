@@ -1,3 +1,23 @@
+Overview of Changes in GTK 3.98.2
+=================================
+
+* Introduce GtkShortcutController, and replace key bindings,
+  mnemonics and accelerators by GtkShortcut
+
+* Derive the HighContrast theme from Adwaita
+
+* GtkMenuButton: Add a use-underline property
+
+* GtkTreeView: Fix cell editing
+
+* Add gdk_toplevel_inhibit_system_shortcuts
+
+* gtk-demo: Fix issues in multiple demos
+
+* Translation updates:
+ Polish
+
+
 Overview of Changes in GTK 3.98.1
 =================================
 
