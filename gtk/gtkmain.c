@@ -1482,15 +1482,6 @@ handle_pointing_event (GdkEvent *event)
   switch ((guint) type)
     {
     case GDK_LEAVE_NOTIFY:
-      if (gdk_crossing_event_get_mode (event) == GDK_CROSSING_NORMAL &&
-          gtk_window_lookup_pointer_focus_implicit_grab (toplevel, device, NULL))
-        {
-          /* We have an implicit grab, wait for the corresponding
-           * GDK_CROSSING_UNGRAB.
-           */
-          break;
-        }
-      G_GNUC_FALLTHROUGH;
     case GDK_TOUCH_END:
     case GDK_TOUCH_CANCEL:
       old_target = update_pointer_focus_state (toplevel, event, NULL);
@@ -1509,10 +1500,6 @@ handle_pointing_event (GdkEvent *event)
       }
       break;
     case GDK_ENTER_NOTIFY:
-      if (gdk_crossing_event_get_mode (event) == GDK_CROSSING_GRAB ||
-          gdk_crossing_event_get_mode (event) == GDK_CROSSING_UNGRAB)
-        break;
-      G_GNUC_FALLTHROUGH;
     case GDK_DRAG_ENTER:
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
