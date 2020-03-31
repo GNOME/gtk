@@ -36,6 +36,28 @@
  *
  * #GtkShortcutController implements #GListModel for querying the shortcuts that
  * have been added to it.
+ *
+ * # GtkShortcutController as a GtkBuildable
+ *
+ * GtkShortcutControllers can be creates in ui files to set up shortcuts
+ * in the same place as the widgets.
+ *
+ * An example of a UI definition fragment with GtkShortcutController:
+ * |[
+ *   <object class='GtkButton'>
+ *     <child>
+ *       <object class='GtkShortcutController'>
+ *         <property name='scope'>managed</property>
+ *         <child>
+ *           <object class='GtkShortcut'>
+ *             <property name='trigger'>&lt;Control&gt;k</property>
+ *             <property name='action'>activate</property>
+ *           </object>
+ *         </child>
+ *       </object>
+ *     </child>
+ *   </object>
+ * ]|
  **/
 
 #include "config.h"
