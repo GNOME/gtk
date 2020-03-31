@@ -73,6 +73,7 @@
 #include "gtkmain.h"
 #include "gtkscrollable.h"
 #include "gtkpopover.h"
+#include "gtkpopoverprivate.h"
 #include "gtkrevealer.h"
 #include "gtkspinner.h"
 #include "gtkseparator.h"
@@ -1680,7 +1681,16 @@ rename_file_cb (GSimpleAction *action,
   GtkFileChooserWidget *impl = data;
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   GtkTreeSelection *selection;
+  GtkWidget *prev_default;
+  GtkWindow *window;
 
+  prev_default = gtk_popover_get_prev_default (GTK_POPOVER (priv->browse_files_popover));
+  if (prev_default) {
+    /* set 'default' early so rename popover can get it */
+    window = GTK_WINDOW (gtk_widget_get_ancestor (priv->browse_files_popover, GTK_TYPE_WINDOW));
+    if (window)
+      gtk_window_set_default (window, prev_default);
+  }
   /* insensitive until we change the name */
   gtk_widget_set_sensitive (priv->rename_file_rename_button, FALSE);
 

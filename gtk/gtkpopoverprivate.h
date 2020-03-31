@@ -23,6 +23,7 @@
 G_BEGIN_DECLS
 
 void gtk_popover_update_position (GtkPopover *popover);
+GtkWidget *gtk_popover_get_prev_default (GtkPopover *popover);
 
 G_END_DECLS
 

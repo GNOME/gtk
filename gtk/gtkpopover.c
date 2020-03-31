@@ -674,6 +674,15 @@ gtk_popover_set_state (GtkPopover *popover,
     }
 }
 
+GtkWidget *
+gtk_popover_get_prev_default (GtkPopover *popover)
+{
+  g_return_val_if_fail (GTK_IS_POPOVER (popover), NULL);
+
+  return popover->priv->prev_default;
+}
+
+
 static void
 gtk_popover_map (GtkWidget *widget)
 {
