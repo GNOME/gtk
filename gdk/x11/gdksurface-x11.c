@@ -110,6 +110,8 @@ static void     set_wm_name                       (GdkDisplay  *display,
 						   const gchar *name);
 static void     move_to_current_desktop           (GdkSurface *surface);
 static void     gdk_x11_toplevel_state_callback   (GdkSurface *surface);
+static gboolean gdk_x11_toplevel_event_callback   (GdkSurface *surface,
+                                                   GdkEvent   *gdk_event);
 
 /* Return whether time1 is considered later than time2 as far as xserver
  * time is concerned.  Accounts for wraparound.
@@ -151,6 +153,9 @@ _gdk_x11_surface_get_toplevel (GdkSurface *surface)
       impl->toplevel->have_focused = FALSE;
       g_signal_connect (surface, "notify::state",
                         G_CALLBACK (gdk_x11_toplevel_state_callback),
+                        NULL);
+      g_signal_connect (surface, "event",
+                        G_CALLBACK (gdk_x11_toplevel_event_callback),
                         NULL);
     }
 
@@ -451,6 +456,9 @@ gdk_x11_surface_finalize (GObject *object)
 
   g_signal_handlers_disconnect_by_func (GDK_SURFACE (impl),
                                         gdk_x11_toplevel_state_callback,
+                                        NULL);
+  g_signal_handlers_disconnect_by_func (GDK_SURFACE (impl),
+                                        gdk_x11_toplevel_event_callback,
                                         NULL);
 
   _gdk_x11_surface_grab_check_destroy (GDK_SURFACE (impl));
@@ -4978,6 +4986,29 @@ gdk_x11_toplevel_state_callback (GdkSurface *surface)
 
   if (surface->shortcuts_inhibited)
     gdk_x11_toplevel_restore_system_shortcuts (GDK_TOPLEVEL (surface));
+}
+
+static gboolean
+gdk_x11_toplevel_event_callback (GdkSurface *surface,
+                                 GdkEvent   *gdk_event)
+{
+  GdkSeat *gdk_seat;
+
+  if (!surface->shortcuts_inhibited)
+    return FALSE;
+
+  if (gdk_event_get_event_type (gdk_event) != GDK_GRAB_BROKEN)
+    return FALSE;
+
+  gdk_seat = gdk_surface_get_seat_from_event (surface, gdk_event);
+  if (gdk_seat != surface->current_shortcuts_inhibited_seat)
+    return FALSE;
+
+  surface->current_shortcuts_inhibited_seat = NULL;
+  surface->shortcuts_inhibited = FALSE;
+  g_object_notify (G_OBJECT (surface), "shortcuts-inhibited");
+
+  return FALSE;
 }
 
 static void
