@@ -975,17 +975,25 @@ test_children (void)
 }
 
 static void
-test_child_properties (void)
+test_layout_properties (void)
 {
   GtkBuilder * builder;
   const gchar buffer1[] =
     "<interface>"
-    "  <object class=\"GtkBox\" id=\"vbox1\">"
+    "  <object class=\"GtkGrid\" id=\"grid1\">"
     "    <child>"
-    "      <object class=\"GtkLabel\" id=\"label1\"/>"
+    "      <object class=\"GtkLabel\" id=\"label1\">"
+    "        <layout>"
+    "          <property name=\"left-attach\">1</property>"
+    "        </layout>"
+    "      </object>"
     "    </child>"
     "    <child>"
-    "      <object class=\"GtkLabel\" id=\"label2\"/>"
+    "      <object class=\"GtkLabel\" id=\"label2\">"
+    "        <layout>"
+    "          <property name=\"left-attach\">0</property>"
+    "        </layout>"
+    "      </object>"
     "    </child>"
     "  </object>"
     "</interface>";
@@ -993,8 +1001,8 @@ test_child_properties (void)
   GObject *label, *vbox;
 
   builder = builder_new_from_string (buffer1, -1, NULL);
-  vbox = gtk_builder_get_object (builder, "vbox1");
-  g_assert (GTK_IS_BOX (vbox));
+  vbox = gtk_builder_get_object (builder, "grid1");
+  g_assert (GTK_IS_GRID (vbox));
 
   label = gtk_builder_get_object (builder, "label1");
   g_assert (GTK_IS_LABEL (label));
@@ -2457,7 +2465,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/Types", test_types);
   g_test_add_func ("/Builder/Construct-Only Properties", test_construct_only_property);
   g_test_add_func ("/Builder/Children", test_children);
-  g_test_add_func ("/Builder/Child Properties", test_child_properties);
+  g_test_add_func ("/Builder/Layout Properties", test_layout_properties);
   g_test_add_func ("/Builder/Object Properties", test_object_properties);
   g_test_add_func ("/Builder/Notebook", test_notebook);
   g_test_add_func ("/Builder/Domain", test_domain);
