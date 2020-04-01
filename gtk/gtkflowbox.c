@@ -4574,7 +4574,7 @@ gtk_flow_box_get_selection_mode (GtkFlowBox *box)
  * @child: a #GtkFlowBoxChild that may be filtered
  * @user_data: (closure): user data
  *
- * A function that will be called whenrever a child changes
+ * A function that will be called whenever a child changes
  * or is added. It lets you control if the child should be
  * visible or not.
  *
