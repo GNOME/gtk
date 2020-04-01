@@ -621,6 +621,7 @@ gtk_menu_button_init (GtkMenuButton *menu_button)
 
   add_arrow (menu_button);
 
+  gtk_widget_set_focus_on_click (GTK_WIDGET (menu_button), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET (menu_button), FALSE);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (menu_button));
