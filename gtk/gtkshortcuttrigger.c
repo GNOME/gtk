@@ -578,7 +578,12 @@ gtk_keyval_trigger_trigger (GtkShortcutTrigger *trigger,
        */
       key = self->keyval;
       if (self->modifiers & GDK_SHIFT_MASK)
-        key = gdk_keyval_to_upper (key);
+        {
+          if (key == GDK_KEY_Tab)
+            key = GDK_KEY_ISO_Left_Tab;
+          else
+            key = gdk_keyval_to_upper (key);
+        }
 
       if (keyval == key && /* exact match */
           (!group_mod_is_accel_mod ||
