@@ -86,6 +86,8 @@ struct _GdkWaylandPointerFrameData
   /* Specific to the scroll event */
   gdouble delta_x, delta_y;
   int32_t discrete_x, discrete_y;
+  gdouble v120_x, v120_y;
+  gint8 have_v120;
   gint8 is_scroll_stop;
   enum wl_pointer_axis_source source;
 };
@@ -1399,6 +1401,28 @@ flush_scroll_event (GdkWaylandSeat             *seat,
 {
   gboolean is_stop = FALSE;
 
+  if (pointer_frame->have_v120)
+    {
+      pointer_frame->have_v120 = FALSE;
+      pointer_frame->discrete_x = 0;
+      pointer_frame->discrete_y = 0;
+      pointer_frame->delta_x = 0;
+      pointer_frame->delta_y = 0;
+      pointer_frame->is_scroll_stop = FALSE;
+
+      /* We have a v120 event but they're both zero so our frame here is
+         a legacy event from a device we usually get v120 from. Ignore it */
+      if (pointer_frame->v120_x == 0 && pointer_frame->v120_y == 0)
+            return;
+
+      flush_smooth_scroll_event (seat,
+                                 pointer_frame->v120_x,
+                                 pointer_frame->v120_y,
+                                 is_stop);
+      pointer_frame->v120_x = 0;
+      pointer_frame->v120_y = 0;
+    }
+
   if (pointer_frame->discrete_x || pointer_frame->discrete_y)
     {
       GdkScrollDirection direction;
@@ -1844,6 +1868,43 @@ pointer_handle_axis_discrete (void              *data,
 
   GDK_SEAT_NOTE (seat, EVENTS,
             g_message ("discrete scroll, axis %s, value %d, seat %p",
+                       get_axis_name (axis), value, seat));
+}
+
+static void
+pointer_handle_axis_v120 (void              *data,
+                          struct wl_pointer *pointer,
+                          uint32_t           time,
+                          uint32_t           axis,
+                          int32_t            value)
+{
+  GdkWaylandSeat *seat = data;
+  GdkWaylandPointerFrameData *pointer_frame = &seat->pointer_info.frame;
+
+  if (!seat->pointer_info.focus)
+    return;
+
+  /* Normal pointer movement is converted to 10 delta == 1 unit of
+   * scrolling. Let's make this the same here so 120 == 1 unit of scrolling
+   */
+  switch (axis)
+    {
+    case WL_POINTER_AXIS_VERTICAL_SCROLL:
+      pointer_frame->v120_y = value / 120.0;
+      pointer_frame->have_v120 = TRUE;
+      break;
+    case WL_POINTER_AXIS_HORIZONTAL_SCROLL:
+      pointer_frame->v120_x = value / 120.0;
+      pointer_frame->have_v120 = TRUE;
+      break;
+    default:
+      g_return_if_reached ();
+    }
+
+  seat->pointer_info.time = time;
+
+  GDK_NOTE (EVENTS,
+            g_message ("v120 scroll, axis %s, value %d, seat %p",
                        get_axis_name (axis), value, seat));
 }
 
@@ -2845,6 +2906,7 @@ static const struct wl_pointer_listener pointer_listener = {
   pointer_handle_axis_source,
   pointer_handle_axis_stop,
   pointer_handle_axis_discrete,
+  pointer_handle_axis_v120,
 };
 
 static const struct wl_keyboard_listener keyboard_listener = {
