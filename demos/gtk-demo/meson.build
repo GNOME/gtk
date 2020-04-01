@@ -54,7 +54,6 @@ demos = files([
   'peg_solitaire.c',
   'pickers.c',
   'pixbufs.c',
-  'popover.c',
   'printing.c',
   'revealer.c',
   'rotated_text.c',
