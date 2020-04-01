@@ -77,11 +77,6 @@
 {
   GdkWindow *window = [[self contentView] gdkWindow];
 
-  // Raise to top of transient windows
-  // https://gitlab.gnome.org/GNOME/gtk/issues/2436
-  _gdk_quartz_window_detach_from_parent (window);
-  _gdk_quartz_window_attach_to_parent (window);
-
   gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FOCUSED);
   _gdk_quartz_events_update_focus_window (window, TRUE);
 }
