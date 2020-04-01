@@ -202,7 +202,6 @@
     <file>peg_solitaire.c</file>
     <file>pickers.c</file>
     <file>pixbufs.c</file>
-    <file>popover.c</file>
     <file>printing.c</file>
     <file>revealer.c</file>
     <file>rotated_text.c</file>
@@ -239,9 +238,6 @@
     <file>listbox.ui</file>
     <file>messages.txt</file>
     <file>apple-red.png</file>
-  </gresource>
-  <gresource prefix="/popover">
-    <file>popover.ui</file>
   </gresource>
   <gresource prefix="/glarea">
     <file>glarea-gl.fs.glsl</file>
