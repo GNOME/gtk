@@ -203,6 +203,9 @@ struct _GdkWindowImplWayland
   int saved_width;
   int saved_height;
 
+  int unconfigured_width;
+  int unconfigured_height;
+
   gulong parent_surface_committed_handler;
 
   struct {
@@ -1083,6 +1086,13 @@ gdk_wayland_window_maybe_configure (GdkWindow *window,
       impl->scale == scale)
     return;
 
+  if (!impl->initial_configure_received)
+    {
+      impl->unconfigured_width = width;
+      impl->unconfigured_height = height;
+      return;
+    }
+
   /* For xdg_popup using an xdg_positioner, there is a race condition if
    * the application tries to change the size after it's mapped, but before
    * the initial configure is received, so hide and show the surface again
@@ -1578,6 +1588,14 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
 
       gdk_wayland_window_configure (window, width, height, impl->scale);
     }
+  else
+    {
+      gdk_wayland_window_configure (window,
+                                    impl->unconfigured_width,
+                                    impl->unconfigured_height,
+                                    impl->scale);
+    }
+
 
   GDK_NOTE (EVENTS,
             g_message ("configure, window %p %dx%d,%s%s%s%s",
