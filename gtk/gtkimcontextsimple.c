@@ -44,6 +44,7 @@
 
 #include "gtkimcontextsimpleprivate.h"
 #include "gtkimcontextsimpleseqs.h"
+#include "gdk/gdkprofilerprivate.h"
 
 /**
  * SECTION:gtkimcontextsimple
@@ -244,12 +245,17 @@ init_compose_table_thread_cb (GTask            *task,
                               gpointer          task_data,
                               GCancellable     *cancellable)
 {
+  guint64 before = g_get_monotonic_time ();
+
   if (g_task_return_error_if_cancelled (task))
     return;
 
   g_return_if_fail (GTK_IS_IM_CONTEXT_SIMPLE (task_data));
 
   gtk_im_context_simple_init_compose_table (GTK_IM_CONTEXT_SIMPLE (task_data));
+
+  if (GDK_PROFILER_IS_RUNNING)
+    gdk_profiler_end_mark (before, "im compose table load (thread)", NULL);
 }
 
 static void
