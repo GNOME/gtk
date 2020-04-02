@@ -29,8 +29,7 @@ EXTRA_DIST +=			\
 	po-properties/meson.build	\
 	build-aux/meson/post-install.py	\
 	config.h.meson		\
-	gtk.supp		\
-	gtk64.supp
+	gtk.supp
 
 MAINTAINERCLEANFILES = \
 	$(GITIGNORE_MAINTAINERCLEANFILES_TOPLEVEL) \
@@ -44,7 +43,7 @@ MAINTAINERCLEANFILES = \
 
 if OS_UNIX
 valgrinddir = $(datadir)/gtk-3.0/valgrind
-valgrind_DATA = gtk.supp gtk64.supp
+valgrind_DATA = gtk.supp
 endif
 
 ## Copy .pc files to target-specific names
