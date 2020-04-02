@@ -1963,6 +1963,8 @@ keyboard_handle_leave (void               *data,
   GdkWaylandSeat *seat = data;
   GdkEvent *event;
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
+  GdkKeymap *keymap;
+  PangoDirection direction;
 
   if (!seat->keyboard_focus)
     return;
@@ -1972,6 +1974,17 @@ keyboard_handle_leave (void               *data,
    * window before loosing keyboard focus.
    */
   stop_key_repeat (seat);
+
+  keymap = seat->keymap;
+  direction = gdk_keymap_get_direction (keymap);
+
+  _gdk_wayland_keymap_reset_xkb_state (keymap);
+
+  seat->key_modifiers = gdk_keymap_get_modifier_state (keymap);
+
+  g_signal_emit_by_name (keymap, "state-changed");
+  if (direction != gdk_keymap_get_direction (keymap))
+    g_signal_emit_by_name (keymap, "direction-changed");
 
   _gdk_wayland_display_update_serial (display, serial);
 

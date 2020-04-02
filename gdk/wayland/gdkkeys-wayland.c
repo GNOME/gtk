@@ -646,6 +646,15 @@ _gdk_wayland_keymap_update_from_fd (GdkKeymap *keymap,
   update_direction (keymap_wayland);
 }
 
+void
+_gdk_wayland_keymap_reset_xkb_state (GdkKeymap *keymap)
+{
+  GdkWaylandKeymap *keymap_wayland = GDK_WAYLAND_KEYMAP (keymap);
+
+  xkb_state_unref (keymap_wayland->xkb_state);
+  keymap_wayland->xkb_state = xkb_state_new (keymap_wayland->xkb_keymap);
+}
+
 struct xkb_keymap *
 _gdk_wayland_keymap_get_xkb_keymap (GdkKeymap *keymap)
 {
