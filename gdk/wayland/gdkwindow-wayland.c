@@ -203,6 +203,12 @@ struct _GdkWindowImplWayland
   int saved_width;
   int saved_height;
 
+  int unconfigured_width;
+  int unconfigured_height;
+
+  int fixed_size_width;
+  int fixed_size_height;
+
   gulong parent_surface_committed_handler;
 
   struct {
@@ -309,7 +315,9 @@ _gdk_wayland_window_save_size (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
-  if (window->state & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED))
+  if (window->state & (GDK_WINDOW_STATE_FULLSCREEN |
+                       GDK_WINDOW_STATE_MAXIMIZED |
+                       GDK_WINDOW_STATE_TILED))
     return;
 
   impl->saved_width = window->width - impl->margin_left - impl->margin_right;
@@ -321,7 +329,9 @@ _gdk_wayland_window_clear_saved_size (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
-  if (window->state & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED))
+  if (window->state & (GDK_WINDOW_STATE_FULLSCREEN |
+                       GDK_WINDOW_STATE_MAXIMIZED |
+                       GDK_WINDOW_STATE_TILED))
     return;
 
   impl->saved_width = -1;
@@ -1083,6 +1093,13 @@ gdk_wayland_window_maybe_configure (GdkWindow *window,
       impl->scale == scale)
     return;
 
+  if (!impl->initial_configure_received)
+    {
+      impl->unconfigured_width = width;
+      impl->unconfigured_height = height;
+      return;
+    }
+
   /* For xdg_popup using an xdg_positioner, there is a race condition if
    * the application tries to change the size after it's mapped, but before
    * the initial configure is received, so hide and show the surface again
@@ -1501,6 +1518,14 @@ gdk_wayland_window_create_surface (GdkWindow *window)
   wl_surface_add_listener (impl->display_server.wl_surface, &surface_listener, window);
 }
 
+static gboolean
+should_use_fixed_size (GdkWindowState state)
+{
+  return state & (GDK_WINDOW_STATE_MAXIMIZED |
+                  GDK_WINDOW_STATE_FULLSCREEN |
+                  GDK_WINDOW_STATE_TILED);
+}
+
 static void
 gdk_wayland_window_handle_configure (GdkWindow *window,
                                      uint32_t   serial)
@@ -1535,10 +1560,7 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
   new_state = impl->pending.state;
   impl->pending.state = 0;
 
-  fixed_size =
-    new_state & (GDK_WINDOW_STATE_MAXIMIZED |
-                 GDK_WINDOW_STATE_FULLSCREEN |
-                 GDK_WINDOW_STATE_TILED);
+  fixed_size = should_use_fixed_size (new_state);
 
   saved_size = (width == 0 && height == 0);
   /* According to xdg_shell, an xdg_surface.configure with size 0x0
@@ -1558,6 +1580,8 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
   if (width > 0 && height > 0)
     {
       GdkWindowHints geometry_mask = impl->geometry_mask;
+      int configure_width;
+      int configure_height;
 
       /* Ignore size increments for maximized/fullscreen windows */
       if (fixed_size)
@@ -1576,7 +1600,33 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
           _gdk_wayland_window_save_size (window);
         }
 
-      gdk_wayland_window_configure (window, width, height, impl->scale);
+      if (saved_size)
+        {
+          configure_width = width + impl->margin_left + impl->margin_right;
+          configure_height = height + impl->margin_top + impl->margin_bottom;
+        }
+      else
+        {
+          configure_width = width;
+          configure_height = height;
+        }
+      gdk_wayland_window_configure (window,
+                                    configure_width,
+                                    configure_height,
+                                    impl->scale);
+    }
+  else
+    {
+      gdk_wayland_window_configure (window,
+                                    impl->unconfigured_width,
+                                    impl->unconfigured_height,
+                                    impl->scale);
+    }
+
+  if (fixed_size)
+    {
+      impl->fixed_size_width = width;
+      impl->fixed_size_height = height;
     }
 
   GDK_NOTE (EVENTS,
@@ -3317,7 +3367,9 @@ gdk_window_wayland_move_resize (GdkWindow *window,
         }
     }
 
-  if (window->state & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED))
+  if (window->state & (GDK_WINDOW_STATE_FULLSCREEN |
+                       GDK_WINDOW_STATE_MAXIMIZED |
+                       GDK_WINDOW_STATE_TILED))
     {
       impl->saved_width = width;
       impl->saved_height = height;
@@ -3327,7 +3379,12 @@ gdk_window_wayland_move_resize (GdkWindow *window,
    * just move the window - don't update its size
    */
   if (width > 0 && height > 0)
-    gdk_wayland_window_maybe_configure (window, width, height, impl->scale);
+    {
+      if (!should_use_fixed_size (window->state) ||
+          (width == impl->fixed_size_width &&
+           height == impl->fixed_size_height))
+        gdk_wayland_window_maybe_configure (window, width, height, impl->scale);
+    }
 }
 
 /* Avoid zero width/height as this is a protocol error */
