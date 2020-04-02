@@ -2252,9 +2252,23 @@ _gdk_windowing_got_event (GdkDisplay *display,
   else if (type == GDK_LEAVE_NOTIFY)
     _gdk_display_set_surface_under_pointer (display, device, NULL);
 
-  if (type == GDK_BUTTON_RELEASE ||
-      type == GDK_TOUCH_CANCEL ||
-      type == GDK_TOUCH_END)
+  if (type == GDK_BUTTON_PRESS)
+    {
+      _gdk_display_add_device_grab  (display,
+                                     device,
+                                     event_surface,
+                                     GDK_OWNERSHIP_NONE,
+                                     FALSE,
+                                     GDK_ALL_EVENTS_MASK,
+                                     serial,
+                                     gdk_event_get_time (event),
+                                     TRUE);
+      _gdk_display_device_grab_update (display, device,
+                                       source_device, serial);
+    }
+  else if (type == GDK_BUTTON_RELEASE ||
+           type == GDK_TOUCH_CANCEL ||
+           type == GDK_TOUCH_END)
     {
       if (type == GDK_BUTTON_RELEASE ||
           gdk_event_get_pointer_emulated (event))
