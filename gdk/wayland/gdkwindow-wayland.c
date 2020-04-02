@@ -206,6 +206,9 @@ struct _GdkWindowImplWayland
   int unconfigured_width;
   int unconfigured_height;
 
+  int fixed_size_width;
+  int fixed_size_height;
+
   gulong parent_surface_committed_handler;
 
   struct {
@@ -1511,6 +1514,14 @@ gdk_wayland_window_create_surface (GdkWindow *window)
   wl_surface_add_listener (impl->display_server.wl_surface, &surface_listener, window);
 }
 
+static gboolean
+should_use_fixed_size (GdkWindowState state)
+{
+  return state & (GDK_WINDOW_STATE_MAXIMIZED |
+                  GDK_WINDOW_STATE_FULLSCREEN |
+                  GDK_WINDOW_STATE_TILED);
+}
+
 static void
 gdk_wayland_window_handle_configure (GdkWindow *window,
                                      uint32_t   serial)
@@ -1545,10 +1556,7 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
   new_state = impl->pending.state;
   impl->pending.state = 0;
 
-  fixed_size =
-    new_state & (GDK_WINDOW_STATE_MAXIMIZED |
-                 GDK_WINDOW_STATE_FULLSCREEN |
-                 GDK_WINDOW_STATE_TILED);
+  fixed_size = should_use_fixed_size (new_state);
 
   saved_size = (width == 0 && height == 0);
   /* According to xdg_shell, an xdg_surface.configure with size 0x0
@@ -1596,6 +1604,11 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
                                     impl->scale);
     }
 
+  if (fixed_size)
+    {
+      impl->fixed_size_width = width;
+      impl->fixed_size_height = height;
+    }
 
   GDK_NOTE (EVENTS,
             g_message ("configure, window %p %dx%d,%s%s%s%s",
@@ -3345,7 +3358,12 @@ gdk_window_wayland_move_resize (GdkWindow *window,
    * just move the window - don't update its size
    */
   if (width > 0 && height > 0)
-    gdk_wayland_window_maybe_configure (window, width, height, impl->scale);
+    {
+      if (!should_use_fixed_size (window->state) ||
+          (width == impl->fixed_size_width &&
+           height == impl->fixed_size_height))
+        gdk_wayland_window_maybe_configure (window, width, height, impl->scale);
+    }
 }
 
 /* Avoid zero width/height as this is a protocol error */
