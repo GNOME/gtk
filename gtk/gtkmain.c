@@ -1317,6 +1317,7 @@ gtk_synthesize_crossing_events (GtkRoot         *toplevel,
       gtk_widget_handle_crossing (widget, &crossing, x, y);
       if (crossing_type == GTK_CROSSING_POINTER)
         gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
+      prev = widget;
       widget = gtk_widget_get_parent (widget);
     }
 
