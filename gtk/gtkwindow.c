@@ -5088,7 +5088,16 @@ surface_state_changed (GtkWidget *widget)
   priv->state = new_surface_state;
 
   if (changed_mask & GDK_SURFACE_STATE_FOCUSED)
-    ensure_state_flag_backdrop (widget);
+    {
+      gboolean focused = new_surface_state & GDK_SURFACE_STATE_FOCUSED;
+
+      ensure_state_flag_backdrop (widget);
+
+      _gtk_window_set_is_active (window, focused);
+
+      if (!focused)
+        gtk_window_set_mnemonics_visible (window, FALSE);
+    }
 
   if (changed_mask & GDK_SURFACE_STATE_FULLSCREEN)
     {
