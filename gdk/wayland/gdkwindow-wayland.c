@@ -1580,6 +1580,8 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
   if (width > 0 && height > 0)
     {
       GdkWindowHints geometry_mask = impl->geometry_mask;
+      int configure_width;
+      int configure_height;
 
       /* Ignore size increments for maximized/fullscreen windows */
       if (fixed_size)
@@ -1598,7 +1600,20 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
           _gdk_wayland_window_save_size (window);
         }
 
-      gdk_wayland_window_configure (window, width, height, impl->scale);
+      if (saved_size)
+        {
+          configure_width = width + impl->margin_left + impl->margin_right;
+          configure_height = height + impl->margin_top + impl->margin_bottom;
+        }
+      else
+        {
+          configure_width = width;
+          configure_height = height;
+        }
+      gdk_wayland_window_configure (window,
+                                    configure_width,
+                                    configure_height,
+                                    impl->scale);
     }
   else
     {
