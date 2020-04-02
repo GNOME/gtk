@@ -77,6 +77,28 @@ gtk_menu_button_accessible_get_name (AtkObject *obj)
   return _("Menu");
 }
 
+static AtkStateSet *
+gtk_menu_button_accessible_ref_state_set (AtkObject *obj)
+{
+  AtkStateSet *state_set;
+  GtkWidget *widget;
+  GtkWidget *button;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
+  if (widget == NULL)
+    return NULL;
+
+  button = gtk_widget_get_first_child (widget);
+
+  state_set = ATK_OBJECT_CLASS (gtk_menu_button_accessible_parent_class)->ref_state_set (obj);
+
+  atk_state_set_add_state (state_set, ATK_STATE_FOCUSABLE);
+  if (gtk_widget_has_focus (button))
+    atk_state_set_add_state (state_set, ATK_STATE_FOCUSED);
+
+  return state_set;
+}
+
 static void
 gtk_menu_button_accessible_class_init (GtkMenuButtonAccessibleClass *klass)
 {
@@ -86,6 +108,7 @@ gtk_menu_button_accessible_class_init (GtkMenuButtonAccessibleClass *klass)
   class->initialize = gtk_menu_button_accessible_initialize;
   class->get_n_children = gtk_menu_button_accessible_get_n_children;
   class->ref_child = gtk_menu_button_accessible_ref_child;
+  class->ref_state_set = gtk_menu_button_accessible_ref_state_set;
 }
 
 static void

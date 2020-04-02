@@ -2160,6 +2160,21 @@ keyboard_handle_modifiers (void               *data,
   direction = gdk_keymap_get_direction (keymap);
   xkb_state = _gdk_wayland_keymap_get_xkb_state (keymap);
 
+  /* Note: the docs for xkb_state_update mask state that all parameters
+   * must be passed, or we may end up with an 'incoherent' state. But the
+   * Wayland modifiers event only includes a single group field, so we
+   * can't pass depressed/latched/locked groups.
+   *
+   * We assume that the compositor is sending us the 'effective' group
+   * (the protocol is not clear on that point), and pass it as the depressed
+   * group - we are basically pretending that the user holds down a key for
+   * this group at all times.
+   *
+   * This means that our xkb_state would answer a few questions differently
+   * from the compositors xkb_state - e.g. if you asked it about the latched
+   * group. But nobody is asking it those questions, so it does not really
+   * matter. We hope.
+   */
   xkb_state_update_mask (xkb_state, mods_depressed, mods_latched, mods_locked, group, 0, 0);
 
   seat->key_modifiers = gdk_keymap_get_modifier_state (keymap);
