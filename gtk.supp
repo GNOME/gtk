@@ -33,55 +33,55 @@
   Memcheck:Leak
   fun:calloc
   ...
-  obj:/usr/lib/dri/radeonsi_dri.so
+  obj:/usr/lib*/dri/radeonsi_dri.so
 }
 
 # mesa driver stuff
 {
    i965 addr4
    Memcheck:Addr4
-   obj:/usr/lib/dri/i965_dri.so*
+   obj:/usr/lib*/dri/i965_dri.so*
 }
 
 {
    i965 addr8
    Memcheck:Addr8
-   obj:/usr/lib/dri/i965_dri.so*
+   obj:/usr/lib*/dri/i965_dri.so*
 }
 
 {
    i965 memcpy
    Memcheck:Addr8
    fun:memcpy*
-   obj:/usr/lib/dri/i965_dri.so*
+   obj:/usr/lib*/dri/i965_dri.so*
 }
 
 {
    i965 memcpy
    Memcheck:Addr2
    fun:memcpy*
-   obj:/usr/lib/dri/i965_dri.so*
+   obj:/usr/lib*/dri/i965_dri.so*
 }
 
 {
    mesa memcmp 8
    Memcheck:Addr8
    fun:*memcmp*
-   obj:/usr/lib/dri/i965_dri.so*
+   obj:/usr/lib*/dri/i965_dri.so*
 }
 
 {
    mesa memcmp 1
    Memcheck:Addr1
    fun:*memcmp*
-   obj:/usr/lib/dri/i965_dri.so*
+   obj:/usr/lib*/dri/i965_dri.so*
 }
 
 {
    mesa memset 8
    Memcheck:Addr8
    fun:*memset*
-   obj:/usr/lib/dri/i965_dri.so
+   obj:/usr/lib*/dri/i965_dri.so
 }
 
 {
@@ -123,7 +123,7 @@
    Memcheck:Leak
    match-leak-kinds: definite
    fun:malloc
-   obj:/usr/lib/dri/i965_dri.so*
+   obj:/usr/lib*/dri/i965_dri.so*
 }
 
 {
@@ -187,8 +187,8 @@
    Memcheck:Leak
    match-leak-kinds: definite
    fun:malloc
-   obj:/usr/lib/libfontconfig.so*
-   obj:/usr/lib/libfontconfig.so*
+   obj:/usr/lib*/libfontconfig.so*
+   obj:/usr/lib*/libfontconfig.so*
    fun:FcFontSetList
 }
 
@@ -197,8 +197,8 @@
    Memcheck:Leak
    match-leak-kinds: definite
    fun:realloc
-   obj:/usr/lib/libfontconfig.so*
-   obj:/usr/lib/libfontconfig.so*
+   obj:/usr/lib*/libfontconfig.so*
+   obj:/usr/lib*/libfontconfig.so*
    fun:FcFontRenderPrepare
 }
 
@@ -207,8 +207,8 @@
    Memcheck:Leak
    match-leak-kinds: definite
    fun:realloc
-   obj:/usr/lib/libfontconfig.so*
-   obj:/usr/lib/libfontconfig.so*
+   obj:/usr/lib*/libfontconfig.so*
+   obj:/usr/lib*/libfontconfig.so*
    fun:FcDefaultSubstitute
 }
 
@@ -216,8 +216,8 @@
 {
    pixman_image_composite32
    Memcheck:Cond
-   obj:/usr/lib/libpixman-1.so*
-   obj:/usr/lib/libpixman-1.so*
+   obj:/usr/lib*/libpixman-1.so*
+   obj:/usr/lib*/libpixman-1.so*
    fun:pixman_image_composite32
 }
 
@@ -227,9 +227,9 @@
    Memcheck:Leak
    match-leak-kinds: definite
    fun:realloc
-   obj:/usr/lib/libfontconfig.so*
-   obj:/usr/lib/libfontconfig.so*
-   obj:/usr/lib/libcairo.so*
+   obj:/usr/lib*/libfontconfig.so*
+   obj:/usr/lib*/libfontconfig.so*
+   obj:/usr/lib*/libcairo.so*
    fun:pango_cairo_fc_font_map_fontset_key_substitute
 }
 
@@ -237,7 +237,17 @@
   pango 2
   Memcheck:Leak
   fun:realloc
-  obj:/usr/lib/libfontconfig.so*
-  obj:/usr/lib/libfontconfig.so*
+  obj:/usr/lib*/libfontconfig.so*
+  obj:/usr/lib*/libfontconfig.so*
   fun:_cairo_ft_font_options_substitute
+}
+
+# GLib
+{
+  glib 1
+  Memcheck:Leak
+  match-leak-kinds: definite
+  fun:malloc
+  fun:g_malloc
+  fun:g_quark_init
 }
