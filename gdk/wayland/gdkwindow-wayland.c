@@ -315,7 +315,9 @@ _gdk_wayland_window_save_size (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
-  if (window->state & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED))
+  if (window->state & (GDK_WINDOW_STATE_FULLSCREEN |
+                       GDK_WINDOW_STATE_MAXIMIZED |
+                       GDK_WINDOW_STATE_TILED))
     return;
 
   impl->saved_width = window->width - impl->margin_left - impl->margin_right;
@@ -327,7 +329,9 @@ _gdk_wayland_window_clear_saved_size (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
-  if (window->state & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED))
+  if (window->state & (GDK_WINDOW_STATE_FULLSCREEN |
+                       GDK_WINDOW_STATE_MAXIMIZED |
+                       GDK_WINDOW_STATE_TILED))
     return;
 
   impl->saved_width = -1;
@@ -3348,7 +3352,9 @@ gdk_window_wayland_move_resize (GdkWindow *window,
         }
     }
 
-  if (window->state & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED))
+  if (window->state & (GDK_WINDOW_STATE_FULLSCREEN |
+                       GDK_WINDOW_STATE_MAXIMIZED |
+                       GDK_WINDOW_STATE_TILED))
     {
       impl->saved_width = width;
       impl->saved_height = height;
