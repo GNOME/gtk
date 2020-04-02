@@ -1986,6 +1986,7 @@ keyboard_handle_leave (void               *data,
   g_object_unref (seat->keyboard_focus);
   seat->keyboard_focus = NULL;
   seat->repeat_key = 0;
+  seat->key_modifiers = 0;
 
   GDK_NOTE (EVENTS,
             g_message ("focus out, seat %p surface %p",
