@@ -121,8 +121,10 @@ static void     gtk_im_context_simple_get_preedit_string (GtkIMContext          
 							  gchar                   **str,
 							  PangoAttrList           **attrs,
 							  gint                     *cursor_pos);
-static void     gtk_im_context_simple_set_client_widget  (GtkIMContext             *context,
-                                                          GtkWidget                *widget);
+
+static void init_compose_table_async (GCancellable         *cancellable,
+                                      GAsyncReadyCallback   callback,
+                                      gpointer              user_data);
 
 G_DEFINE_TYPE_WITH_CODE (GtkIMContextSimple, gtk_im_context_simple, GTK_TYPE_IM_CONTEXT,
                          G_ADD_PRIVATE (GtkIMContextSimple)
@@ -141,8 +143,9 @@ gtk_im_context_simple_class_init (GtkIMContextSimpleClass *class)
   im_context_class->filter_keypress = gtk_im_context_simple_filter_keypress;
   im_context_class->reset = gtk_im_context_simple_reset;
   im_context_class->get_preedit_string = gtk_im_context_simple_get_preedit_string;
-  im_context_class->set_client_widget = gtk_im_context_simple_set_client_widget;
   gobject_class->finalize = gtk_im_context_simple_finalize;
+
+  init_compose_table_async (NULL, NULL, NULL);
 }
 
 static gchar*
@@ -258,8 +261,6 @@ init_compose_table_thread_cb (GTask            *task,
 
   if (g_task_return_error_if_cancelled (task))
     return;
-
-  g_return_if_fail (GTK_IS_IM_CONTEXT_SIMPLE (task_data));
 
   gtk_im_context_simple_init_compose_table ();
 
@@ -1438,13 +1439,6 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
 
   if (cursor_pos)
     *cursor_pos = len;
-}
-
-static void
-gtk_im_context_simple_set_client_widget  (GtkIMContext *context,
-                                          GtkWidget    *widget)
-{
-  init_compose_table_async (NULL, NULL, NULL);
 }
 
 /**
