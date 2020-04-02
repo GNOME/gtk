@@ -1287,6 +1287,7 @@ gtk_model_button_init (GtkModelButton *button)
 
   button->role = GTK_BUTTON_ROLE_NORMAL;
   gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+  gtk_widget_set_focus_on_click (GTK_WIDGET (button), FALSE);
   button->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_widget_set_halign (button->box, GTK_ALIGN_FILL);
   gtk_widget_show (button->box);
