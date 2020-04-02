@@ -644,6 +644,8 @@ gtk_im_context_wayland_set_client_window (GtkIMContext *context,
           context_wayland->gesture = gesture;
         }
     }
+
+  GTK_IM_CONTEXT_CLASS (parent_class)->set_client_window (context, window);
 }
 
 static void
