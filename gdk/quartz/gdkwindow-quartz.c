@@ -743,13 +743,11 @@ _gdk_quartz_window_find_child (GdkWindow *window,
   return NULL;
 }
 
-/* Raises a transient window. Return false if the window is not transient.
+/* Raises a transient window.
  */
-static gboolean
-_gdk_quartz_window_raise_transient (GdkWindow *window)
+static void
+raise_transient (GdkWindowImplQuartz *impl)
 {
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
-
   /* In quartz the transient-for behavior is implemented by
    * attaching the transient-for GdkNSWindows to the parent's
    * GdkNSWindow. Stacking is managed by Quartz and the order
@@ -757,28 +755,26 @@ _gdk_quartz_window_raise_transient (GdkWindow *window)
    * to change that order is to remove the child from the
    * parent and then add it back in.
    */
-  if (impl->transient_for)
-    {
-      GdkWindowImplQuartz *parent_impl =
-            GDK_WINDOW_IMPL_QUARTZ (impl->transient_for->impl);
-      [parent_impl->toplevel removeChildWindow:impl->toplevel];
-      [parent_impl->toplevel addChildWindow:impl->toplevel
-                             ordered:NSWindowAbove];
-      clear_toplevel_order ();
-      return TRUE;
-    }
-  return FALSE;
+  GdkWindowImplQuartz *parent_impl =
+        GDK_WINDOW_IMPL_QUARTZ (impl->transient_for->impl);
+  [parent_impl->toplevel removeChildWindow:impl->toplevel];
+  [parent_impl->toplevel addChildWindow:impl->toplevel
+                         ordered:NSWindowAbove];
 }
 
 void
 _gdk_quartz_window_did_become_main (GdkWindow *window)
 {
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+
   main_window_stack = g_slist_remove (main_window_stack, window);
 
   if (window->window_type != GDK_WINDOW_TEMP)
     main_window_stack = g_slist_prepend (main_window_stack, window);
 
-  _gdk_quartz_window_raise_transient (window);
+  if (impl->transient_for)
+    raise_transient (impl);
+
   clear_toplevel_order ();
 }
 
@@ -1536,11 +1532,12 @@ gdk_window_quartz_raise (GdkWindow *window)
     {
       GdkWindowImplQuartz *impl;
 
-      if (_gdk_quartz_window_raise_transient (window))
-        return;
-
       impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
-      [impl->toplevel orderFront:impl->toplevel];
+
+      if (impl->transient_for)
+        raise_transient (impl);
+      else
+        [impl->toplevel orderFront:impl->toplevel];
 
       clear_toplevel_order ();
     }
