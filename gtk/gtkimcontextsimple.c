@@ -1438,23 +1438,11 @@ gtk_im_context_simple_set_client_widget  (GtkIMContext *context,
                                           GtkWidget    *widget)
 {
   GtkIMContextSimple *im_context_simple = GTK_IM_CONTEXT_SIMPLE (context);
-  gboolean run_compose_table = FALSE;
 
   if (!widget)
     return;
 
-  /* Load compose table for X11 or Wayland. */
-#ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_DISPLAY (gtk_widget_get_display (widget)))
-    run_compose_table = TRUE;
-#endif
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
-    run_compose_table = TRUE;
-#endif
-
-  if (run_compose_table)
-    init_compose_table_async (im_context_simple, NULL, NULL, NULL);
+  init_compose_table_async (im_context_simple, NULL, NULL, NULL);
 }
 
 /**
