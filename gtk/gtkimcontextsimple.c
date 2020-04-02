@@ -160,7 +160,7 @@ get_x11_compose_file_dir (void)
 }
 
 static void
-gtk_im_context_simple_init_compose_table (GtkIMContextSimple *im_context_simple)
+gtk_im_context_simple_init_compose_table (void)
 {
   gchar *path = NULL;
   const gchar *home;
@@ -174,7 +174,10 @@ gtk_im_context_simple_init_compose_table (GtkIMContextSimple *im_context_simple)
   path = g_build_filename (g_get_user_config_dir (), "gtk-4.0", "Compose", NULL);
   if (g_file_test (path, G_FILE_TEST_EXISTS))
     {
-      gtk_im_context_simple_add_compose_file (im_context_simple, path);
+      G_LOCK (global_tables);
+      global_tables = gtk_compose_table_list_add_file (global_tables, path);
+      G_UNLOCK (global_tables);
+
       g_free (path);
       return;
     }
@@ -188,7 +191,9 @@ gtk_im_context_simple_init_compose_table (GtkIMContextSimple *im_context_simple)
   path = g_build_filename (home, ".XCompose", NULL);
   if (g_file_test (path, G_FILE_TEST_EXISTS))
     {
-      gtk_im_context_simple_add_compose_file (im_context_simple, path);
+      G_LOCK (global_tables);
+      global_tables = gtk_compose_table_list_add_file (global_tables, path);
+      G_UNLOCK (global_tables);
       g_free (path);
       return;
     }
@@ -234,7 +239,11 @@ gtk_im_context_simple_init_compose_table (GtkIMContextSimple *im_context_simple)
   g_strfreev (langs);
 
   if (path != NULL)
-    gtk_im_context_simple_add_compose_file (im_context_simple, path);
+    {
+      G_LOCK (global_tables);
+      global_tables = gtk_compose_table_list_add_file (global_tables, path);
+      G_UNLOCK (global_tables);
+    }
   g_free (path);
   path = NULL;
 }
@@ -252,21 +261,19 @@ init_compose_table_thread_cb (GTask            *task,
 
   g_return_if_fail (GTK_IS_IM_CONTEXT_SIMPLE (task_data));
 
-  gtk_im_context_simple_init_compose_table (GTK_IM_CONTEXT_SIMPLE (task_data));
+  gtk_im_context_simple_init_compose_table ();
 
   if (GDK_PROFILER_IS_RUNNING)
     gdk_profiler_end_mark (before, "im compose table load (thread)", NULL);
 }
 
 static void
-init_compose_table_async (GtkIMContextSimple   *im_context_simple,
-                          GCancellable         *cancellable,
+init_compose_table_async (GCancellable         *cancellable,
                           GAsyncReadyCallback   callback,
                           gpointer              user_data)
 {
   GTask *task = g_task_new (NULL, cancellable, callback, user_data);
   g_task_set_source_tag (task, init_compose_table_async);
-  g_task_set_task_data (task, g_object_ref (im_context_simple), g_object_unref);
   g_task_run_in_thread (task, init_compose_table_thread_cb);
   g_object_unref (task);
 }
@@ -1437,12 +1444,7 @@ static void
 gtk_im_context_simple_set_client_widget  (GtkIMContext *context,
                                           GtkWidget    *widget)
 {
-  GtkIMContextSimple *im_context_simple = GTK_IM_CONTEXT_SIMPLE (context);
-
-  if (!widget)
-    return;
-
-  init_compose_table_async (im_context_simple, NULL, NULL, NULL);
+  init_compose_table_async (NULL, NULL, NULL);
 }
 
 /**
