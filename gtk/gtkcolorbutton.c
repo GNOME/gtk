@@ -265,6 +265,7 @@ gtk_color_button_init (GtkColorButton *button)
   gtk_widget_set_parent (priv->button, GTK_WIDGET (button));
 
   priv->swatch = gtk_color_swatch_new ();
+  gtk_widget_set_can_focus (priv->swatch, FALSE);
   layout = gtk_widget_create_pango_layout (GTK_WIDGET (button), "Black");
   pango_layout_get_pixel_extents (layout, NULL, &rect);
   g_object_unref (layout);
