@@ -1,3 +1,23 @@
+Overview of Changes in GTK+ 3.24.17
+===================================
+
+* GtkFileChooser: Fix some keynav issues
+
+* GtkMenuButton: disable focus-on-click
+
+* Derive the HighContrast and HighContrastInverse themes from Adwaita
+
+* Wayland:
+ - Fix firefox sizing problems
+ - Prevent Alt lingering after Alt-Tab
+ - Load compose sequences from ~/.Compose
+ - Fix a crash in the Wayland input method
+
+* Translation updates
+ Finnish
+ Hebrew
+
+
 Overview of Changes in GTK+ 3.24.16
 ===================================
 
