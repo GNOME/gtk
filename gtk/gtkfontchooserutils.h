@@ -44,7 +44,7 @@ typedef enum {
 } GtkFontChooserProp;
 
 void   _gtk_font_chooser_install_properties  (GObjectClass          *klass);
-void   _gtk_font_chooser_delegate_iface_init (GtkFontChooserIface *iface);
+void   _gtk_font_chooser_delegate_iface_init (GtkFontChooserInterface *iface);
 void   _gtk_font_chooser_set_delegate        (GtkFontChooser      *receiver,
                                               GtkFontChooser      *delegate);
 

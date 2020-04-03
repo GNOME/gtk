@@ -1309,7 +1309,7 @@ gtk_font_chooser_set_font_map
 gtk_font_chooser_get_font_map
 
 <SUBSECTION Standard>
-GtkFontChooserIface
+GtkFontChooserInterface
 GTK_TYPE_FONT_CHOOSER
 GTK_FONT_CHOOSER
 GTK_FONT_CHOOSER_IFACE
