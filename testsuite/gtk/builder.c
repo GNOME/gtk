@@ -1403,9 +1403,9 @@ test_widget (void)
   const gchar *buffer =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window1\">"
+    "    <property name=\"focus-widget\">button1</property>"
     "    <child>"
     "      <object class=\"GtkButton\" id=\"button1\">"
-    "         <property name=\"has-focus\">True</property>"
     "      </object>"
     "    </child>"
     "  </object>"
@@ -1473,9 +1473,7 @@ test_widget (void)
   builder = builder_new_from_string (buffer, -1, NULL);
   button1 = gtk_builder_get_object (builder, "button1");
 
-#if 0
   g_assert (gtk_widget_has_focus (GTK_WIDGET (button1)));
-#endif
   window1 = gtk_builder_get_object (builder, "window1");
   gtk_widget_destroy (GTK_WIDGET (window1));
   
