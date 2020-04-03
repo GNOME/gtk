@@ -1090,6 +1090,9 @@ gtk_parse_args (int    *argc,
  * communication with the user - for example a curses or command line
  * interface.
  *
+ * Note that calling any GTK function or instantiating any GTK type after
+ * this function returns %FALSE results in undefined behavior.
+ *
  * Returns: %TRUE if the commandline arguments (if any) were valid and
  *     the windowing system has been successfully initialized, %FALSE
  *     otherwise
