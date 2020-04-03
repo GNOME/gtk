@@ -517,7 +517,6 @@ enum {
   PROP_SENSITIVE,
   PROP_CAN_FOCUS,
   PROP_HAS_FOCUS,
-  PROP_IS_FOCUS,
   PROP_CAN_TARGET,
   PROP_FOCUS_ON_CLICK,
   PROP_HAS_DEFAULT,
@@ -991,13 +990,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             P_("Whether the widget has the input focus"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  widget_props[PROP_IS_FOCUS] =
-      g_param_spec_boolean ("is-focus",
-                            P_("Is focus"),
-                            P_("Whether the widget is the focus widget within the toplevel"),
-                            FALSE,
-                            GTK_PARAM_READWRITE);
 
   widget_props[PROP_CAN_TARGET] =
       g_param_spec_boolean ("can-target",
@@ -1699,10 +1691,6 @@ gtk_widget_set_property (GObject         *object,
       if (g_value_get_boolean (value))
 	gtk_widget_grab_focus (widget);
       break;
-    case PROP_IS_FOCUS:
-      if (g_value_get_boolean (value))
-	gtk_widget_grab_focus (widget);
-      break;
     case PROP_CAN_TARGET:
       gtk_widget_set_can_target (widget, g_value_get_boolean (value));
       break;
@@ -1855,9 +1843,6 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_HAS_FOCUS:
       g_value_set_boolean (value, gtk_widget_has_focus (widget));
-      break;
-    case PROP_IS_FOCUS:
-      g_value_set_boolean (value, gtk_widget_is_focus (widget));
       break;
     case PROP_CAN_TARGET:
       g_value_set_boolean (value, gtk_widget_get_can_target (widget));
