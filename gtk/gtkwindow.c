@@ -2496,6 +2496,7 @@ gtk_window_dispose (GObject *object)
   g_list_free_full (priv->foci, (GDestroyNotify) gtk_pointer_focus_unref);
   priv->foci = NULL;
 
+  g_clear_pointer (&priv->layout, gdk_toplevel_layout_unref);
   gtk_window_set_focus (window, NULL);
   gtk_window_set_default_widget (window, NULL);
   remove_attach_widget (window);
