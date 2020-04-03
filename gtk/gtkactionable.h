@@ -25,16 +25,9 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_ACTIONABLE                                 (gtk_actionable_get_type ())
-#define GTK_ACTIONABLE(inst)                                (G_TYPE_CHECK_INSTANCE_CAST ((inst),                     \
-                                                             GTK_TYPE_ACTIONABLE, GtkActionable))
-#define GTK_IS_ACTIONABLE(inst)                             (G_TYPE_CHECK_INSTANCE_TYPE ((inst),                     \
-                                                             GTK_TYPE_ACTIONABLE))
-#define GTK_ACTIONABLE_GET_IFACE(inst)                      (G_TYPE_INSTANCE_GET_INTERFACE ((inst),                  \
-                                                             GTK_TYPE_ACTIONABLE, GtkActionableInterface))
-
-typedef struct _GtkActionableInterface                      GtkActionableInterface;
-typedef struct _GtkActionable                               GtkActionable;
+#define GTK_TYPE_ACTIONABLE (gtk_actionable_get_type ())
+GDK_AVAILABLE_IN_ALL
+G_DECLARE_INTERFACE (GtkActionable, gtk_actionable, GTK, ACTIONABLE, GtkWidget)
 
 struct _GtkActionableInterface
 {
@@ -50,9 +43,6 @@ struct _GtkActionableInterface
   void          (* set_action_target_value)     (GtkActionable *actionable,
                                                  GVariant      *target_value);
 };
-
-GDK_AVAILABLE_IN_ALL
-GType                   gtk_actionable_get_type                         (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
 const gchar *           gtk_actionable_get_action_name                  (GtkActionable *actionable);
