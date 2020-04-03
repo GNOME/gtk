@@ -30,14 +30,8 @@
 G_BEGIN_DECLS
 
 
-#define GTK_TYPE_COLOR_PICKER             (gtk_color_picker_get_type ())
-#define GTK_COLOR_PICKER(o)               (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_COLOR_PICKER, GtkColorPicker))
-#define GTK_IS_COLOR_PICKER(o)            (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_COLOR_PICKER))
-#define GTK_COLOR_PICKER_GET_INTERFACE(o) (G_TYPE_INSTANCE_GET_INTERFACE ((o), GTK_TYPE_COLOR_PICKER, GtkColorPickerInterface))
-
-
-typedef struct _GtkColorPicker            GtkColorPicker;
-typedef struct _GtkColorPickerInterface   GtkColorPickerInterface;
+#define GTK_TYPE_COLOR_PICKER (gtk_color_picker_get_type ())
+G_DECLARE_INTERFACE (GtkColorPicker, gtk_color_picker, GTK, COLOR_PICKER, GObject)
 
 struct _GtkColorPickerInterface {
   GTypeInterface g_iface;
@@ -51,7 +45,6 @@ struct _GtkColorPickerInterface {
                              GError             **error);
 };
 
-GType            gtk_color_picker_get_type    (void) G_GNUC_CONST;
 GtkColorPicker * gtk_color_picker_new         (void);
 void             gtk_color_picker_pick        (GtkColorPicker       *picker,
                                                GAsyncReadyCallback   callback,
