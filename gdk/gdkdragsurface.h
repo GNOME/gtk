@@ -34,7 +34,7 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (GdkDragSurface, gdk_drag_surface, GDK, DRAG_SURFACE, GObject)
 
 GDK_AVAILABLE_IN_ALL
-gboolean gdk_drag_surface_present (GdkDragSurface *drag_icon,
+gboolean gdk_drag_surface_present (GdkDragSurface *drag_surface,
                                    int             width,
                                    int             height);
 
