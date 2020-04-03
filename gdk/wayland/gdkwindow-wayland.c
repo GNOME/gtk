@@ -272,6 +272,8 @@ static gboolean gdk_wayland_window_is_exported (GdkWindow *window);
 static void gdk_wayland_window_unexport (GdkWindow *window);
 static void gdk_wayland_window_announce_decoration_mode (GdkWindow *window);
 
+static gboolean should_map_as_subsurface (GdkWindow *window);
+
 GType _gdk_window_impl_wayland_get_type (void);
 
 G_DEFINE_TYPE (GdkWindowImplWayland, _gdk_window_impl_wayland, GDK_TYPE_WINDOW_IMPL)
@@ -1078,6 +1080,21 @@ is_realized_popup (GdkWindow *window)
           impl->display_server.zxdg_popup_v6);
 }
 
+static gboolean
+needs_initial_configure (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (impl->display_server.wl_subsurface)
+    return FALSE;
+  else if (is_realized_toplevel (window))
+    return TRUE;
+  else if (is_realized_popup (window))
+    return TRUE;
+  else
+    return !should_map_as_subsurface (window);
+}
+
 static void
 gdk_wayland_window_maybe_configure (GdkWindow *window,
                                     int        width,
@@ -1093,7 +1110,8 @@ gdk_wayland_window_maybe_configure (GdkWindow *window,
       impl->scale == scale)
     return;
 
-  if (!impl->initial_configure_received)
+  if (needs_initial_configure (window) &&
+      !impl->initial_configure_received)
     {
       impl->unconfigured_width = width;
       impl->unconfigured_height = height;
