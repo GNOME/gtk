@@ -43,7 +43,6 @@
  */
 
 
-typedef GtkOrientableIface GtkOrientableInterface;
 G_DEFINE_INTERFACE (GtkOrientable, gtk_orientable, G_TYPE_OBJECT)
 
 static void
