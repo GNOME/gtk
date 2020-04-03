@@ -28,9 +28,9 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_STYLE_PROVIDER          (gtk_style_provider_get_type ())
-#define GTK_STYLE_PROVIDER(o)            (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_STYLE_PROVIDER, GtkStyleProvider))
-#define GTK_IS_STYLE_PROVIDER(o)         (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_STYLE_PROVIDER))
+#define GTK_TYPE_STYLE_PROVIDER (gtk_style_provider_get_type ())
+GDK_AVAILABLE_IN_ALL
+G_DECLARE_INTERFACE (GtkStyleProvider, gtk_style_provider, GTK, STYLE_PROVIDER, GObject)
 
 /**
  * GTK_STYLE_PROVIDER_PRIORITY_FALLBACK:
@@ -82,11 +82,6 @@ G_BEGIN_DECLS
  * give the user the last word.
  */
 #define GTK_STYLE_PROVIDER_PRIORITY_USER        800
-
-typedef struct _GtkStyleProvider GtkStyleProvider; /* dummy typedef */
-
-GDK_AVAILABLE_IN_ALL
-GType gtk_style_provider_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 

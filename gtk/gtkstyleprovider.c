@@ -66,7 +66,7 @@ gtk_style_provider_get_color (GtkStyleProvider *provider,
 
   gtk_internal_return_val_if_fail (GTK_IS_STYLE_PROVIDER (provider), NULL);
 
-  iface = GTK_STYLE_PROVIDER_GET_INTERFACE (provider);
+  iface = GTK_STYLE_PROVIDER_GET_IFACE (provider);
 
   if (!iface->get_color)
     return NULL;
@@ -83,7 +83,7 @@ gtk_style_provider_get_keyframes (GtkStyleProvider *provider,
   gtk_internal_return_val_if_fail (GTK_IS_STYLE_PROVIDER (provider), NULL);
   gtk_internal_return_val_if_fail (name != NULL, NULL);
 
-  iface = GTK_STYLE_PROVIDER_GET_INTERFACE (provider);
+  iface = GTK_STYLE_PROVIDER_GET_IFACE (provider);
 
   if (!iface->get_keyframes)
     return NULL;
@@ -107,7 +107,7 @@ gtk_style_provider_lookup (GtkStyleProvider             *provider,
   if (out_change)
     *out_change = 0;
 
-  iface = GTK_STYLE_PROVIDER_GET_INTERFACE (provider);
+  iface = GTK_STYLE_PROVIDER_GET_IFACE (provider);
 
   if (!iface->lookup)
     return;
@@ -130,7 +130,7 @@ gtk_style_provider_get_settings (GtkStyleProvider *provider)
 
   gtk_internal_return_val_if_fail (GTK_IS_STYLE_PROVIDER (provider), NULL);
 
-  iface = GTK_STYLE_PROVIDER_GET_INTERFACE (provider);
+  iface = GTK_STYLE_PROVIDER_GET_IFACE (provider);
 
   if (!iface->get_settings)
     return NULL;
@@ -145,7 +145,7 @@ gtk_style_provider_get_scale (GtkStyleProvider *provider)
 
   gtk_internal_return_val_if_fail (GTK_IS_STYLE_PROVIDER (provider), 1);
 
-  iface = GTK_STYLE_PROVIDER_GET_INTERFACE (provider);
+  iface = GTK_STYLE_PROVIDER_GET_IFACE (provider);
 
   if (!iface->get_scale)
     return 1;
@@ -160,7 +160,7 @@ gtk_style_provider_emit_error (GtkStyleProvider *provider,
 {
   GtkStyleProviderInterface *iface;
 
-  iface = GTK_STYLE_PROVIDER_GET_INTERFACE (provider);
+  iface = GTK_STYLE_PROVIDER_GET_IFACE (provider);
 
   if (iface->emit_error)
     iface->emit_error (provider, section, error);
