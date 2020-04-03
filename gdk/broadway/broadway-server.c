@@ -7,6 +7,7 @@
 #include <glib.h>
 #include <glib/gprintf.h>
 #include "gdktypes.h"
+#include "gdkinternals.h"
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>

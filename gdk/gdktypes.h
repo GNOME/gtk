@@ -342,45 +342,6 @@ typedef enum
 } GdkModifierIntent;
 
 /**
- * GdkGrabStatus:
- * @GDK_GRAB_SUCCESS: the resource was successfully grabbed.
- * @GDK_GRAB_ALREADY_GRABBED: the resource is actively grabbed by another client.
- * @GDK_GRAB_INVALID_TIME: the resource was grabbed more recently than the
- *  specified time.
- * @GDK_GRAB_NOT_VIEWABLE: the grab surface or the @confine_to surface are not
- *  viewable.
- * @GDK_GRAB_FROZEN: the resource is frozen by an active grab of another client.
- * @GDK_GRAB_FAILED: the grab failed for some other reason
- *
- * Returned by gdk_device_grab() to indicate success or the reason for the
- * failure of the grab attempt.
- */
-typedef enum
-{
-  GDK_GRAB_SUCCESS         = 0,
-  GDK_GRAB_ALREADY_GRABBED = 1,
-  GDK_GRAB_INVALID_TIME    = 2,
-  GDK_GRAB_NOT_VIEWABLE    = 3,
-  GDK_GRAB_FROZEN          = 4,
-  GDK_GRAB_FAILED          = 5
-} GdkGrabStatus;
-
-/**
- * GdkGrabOwnership:
- * @GDK_OWNERSHIP_NONE: All other devices’ events are allowed.
- * @GDK_OWNERSHIP_SURFACE: Other devices’ events are blocked for the grab surface.
- * @GDK_OWNERSHIP_APPLICATION: Other devices’ events are blocked for the whole application.
- *
- * Defines how device grabs interact with other devices.
- */
-typedef enum
-{
-  GDK_OWNERSHIP_NONE,
-  GDK_OWNERSHIP_SURFACE,
-  GDK_OWNERSHIP_APPLICATION
-} GdkGrabOwnership;
-
-/**
  * GdkEventMask:
  * @GDK_EXPOSURE_MASK: receive expose events
  * @GDK_POINTER_MOTION_MASK: receive all pointer motion events
