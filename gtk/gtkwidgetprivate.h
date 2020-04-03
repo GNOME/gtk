@@ -360,6 +360,18 @@ guint             gtk_widget_add_surface_transform_changed_callback (GtkWidget  
 void              gtk_widget_remove_surface_transform_changed_callback (GtkWidget *widget,
                                                                         guint      id);
 
+/* focus vfuncs for non-focusable non-containers */
+gboolean gtk_widget_grab_focus_none  (GtkWidget        *widget);
+gboolean gtk_widget_focus_none       (GtkWidget        *widget,
+                                      GtkDirectionType  direction);
+/* focus vfuncs for non-focusable containers with focusable children */
+gboolean gtk_widget_grab_focus_child (GtkWidget        *widget);
+gboolean gtk_widget_focus_child      (GtkWidget        *widget,
+                                      GtkDirectionType  direction);
+/* focus vfuncs for focusable widgets with children */
+gboolean gtk_widget_grab_focus_self  (GtkWidget        *widget);
+gboolean gtk_widget_focus_self       (GtkWidget        *widget,
+                                      GtkDirectionType  direction);
 
 /* inline getters */
 

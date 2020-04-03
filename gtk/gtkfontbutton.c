@@ -41,6 +41,7 @@
 #include "gtkprivate.h"
 #include "gtkseparator.h"
 #include "gtkstylecontext.h"
+#include "gtkwidgetprivate.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -482,6 +483,9 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
   gobject_class->finalize = gtk_font_button_finalize;
   gobject_class->set_property = gtk_font_button_set_property;
   gobject_class->get_property = gtk_font_button_get_property;
+
+  widget_class->grab_focus = gtk_widget_grab_focus_child;
+  widget_class->focus = gtk_widget_focus_child;
 
   klass->font_set = NULL;
 

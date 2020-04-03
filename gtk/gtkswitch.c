@@ -548,6 +548,9 @@ gtk_switch_class_init (GtkSwitchClass *klass)
 
   g_object_class_install_properties (gobject_class, LAST_PROP, switch_props);
 
+  widget_class->grab_focus = gtk_widget_grab_focus_self;
+  widget_class->focus = gtk_widget_focus_self;
+
   klass->activate = gtk_switch_activate;
   klass->state_set = state_set;
 

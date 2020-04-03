@@ -340,6 +340,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->query_tooltip = gtk_entry_query_tooltip;
   widget_class->direction_changed = gtk_entry_direction_changed;
   widget_class->grab_focus = gtk_entry_grab_focus;
+  widget_class->focus = gtk_widget_focus_child;
   widget_class->mnemonic_activate = gtk_entry_mnemonic_activate;
   
   quark_entry_completion = g_quark_from_static_string ("gtk-entry-completion-key");

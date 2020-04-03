@@ -981,7 +981,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
       g_param_spec_boolean ("can-focus",
                             P_("Can focus"),
                             P_("Whether the widget can accept the input focus"),
-                            FALSE,
+                            TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   widget_props[PROP_HAS_FOCUS] =
@@ -2297,6 +2297,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
 #ifdef G_ENABLE_DEBUG
   priv->highlight_resize = FALSE;
 #endif
+  priv->can_focus = TRUE;
   priv->can_target = TRUE;
 
   switch (_gtk_widget_get_direction (widget))
@@ -4740,25 +4741,34 @@ gtk_widget_grab_focus (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   if (!gtk_widget_is_sensitive (widget) ||
+      !gtk_widget_get_can_focus (widget) ||
       widget->priv->root == NULL)
     return FALSE;
 
   return GTK_WIDGET_GET_CLASS (widget)->grab_focus (widget);
 }
 
-static gboolean
-gtk_widget_real_grab_focus (GtkWidget *focus_widget)
+gboolean
+gtk_widget_grab_focus_none (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (focus_widget);
+  return FALSE;
+}
+
+gboolean
+gtk_widget_grab_focus_self (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  gtk_root_set_focus (priv->root, widget);
+  return TRUE;
+}
+
+gboolean
+gtk_widget_grab_focus_child (GtkWidget *widget)
+{
   GtkWidget *child;
 
-  if (priv->can_focus)
-    {
-      gtk_root_set_focus (priv->root, focus_widget);
-      return TRUE;
-    }
-
-  for (child = _gtk_widget_get_first_child (focus_widget);
+  for (child = _gtk_widget_get_first_child (widget);
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
@@ -4767,6 +4777,15 @@ gtk_widget_real_grab_focus (GtkWidget *focus_widget)
     }
 
   return FALSE;
+}
+
+static gboolean
+gtk_widget_real_grab_focus (GtkWidget *focus_widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (focus_widget);
+
+  gtk_root_set_focus (priv->root, focus_widget);
+  return TRUE;
 }
 
 static gboolean
@@ -4878,19 +4897,10 @@ direction_is_forward (GtkDirectionType direction)
 }
 
 static gboolean
-gtk_widget_real_focus (GtkWidget         *widget,
-                       GtkDirectionType   direction)
+gtk_widget_real_focus (GtkWidget        *widget,
+                       GtkDirectionType  direction)
 {
   GtkWidget *focus;
-
-  /* The easy case: not focusable. Just try the children */
-  if (!gtk_widget_get_can_focus (widget))
-    {
-      if (gtk_widget_focus_move (widget, direction))
-        return TRUE;
-
-      return FALSE;
-    }
 
   /* For focusable widgets, we want to focus the widget
    * before its children. We differentiate 3 cases:
@@ -4932,6 +4942,32 @@ gtk_widget_real_focus (GtkWidget         *widget,
 
   gtk_widget_grab_focus (widget);
   return TRUE;
+}
+
+gboolean
+gtk_widget_focus_self (GtkWidget         *widget,
+                       GtkDirectionType   direction)
+{
+  if (!gtk_widget_is_focus (widget))
+    {
+      gtk_widget_grab_focus (widget);
+      return TRUE;
+    }
+  return FALSE;
+}
+
+gboolean
+gtk_widget_focus_child (GtkWidget         *widget,
+                        GtkDirectionType   direction)
+{
+  return gtk_widget_focus_move (widget, direction);
+}
+
+gboolean
+gtk_widget_focus_none (GtkWidget        *widget,
+                       GtkDirectionType  direction)
+{
+  return FALSE;
 }
 
 static void
@@ -6658,7 +6694,8 @@ gtk_widget_child_focus (GtkWidget       *widget,
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   if (!_gtk_widget_get_visible (widget) ||
-      !gtk_widget_is_sensitive (widget))
+      !gtk_widget_is_sensitive (widget) ||
+      !gtk_widget_get_can_focus (widget))
     return FALSE;
 
   /* Emit ::focus in any case, even if can-focus is FALSE,
