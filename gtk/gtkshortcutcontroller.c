@@ -681,7 +681,7 @@ gtk_shortcut_controller_new_for_model (GListModel *model)
 /**
  * gtk_shortcut_controller_add_shortcut:
  * @self: the controller
- * @shortcut: (transfer-full): a #GtkShortcut
+ * @shortcut: (transfer full): a #GtkShortcut
  *
  * Adds @shortcut to the list of shortcuts handled by @self.
  *
