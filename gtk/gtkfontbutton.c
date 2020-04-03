@@ -170,7 +170,7 @@ static PangoFontMap *    gtk_font_button_font_chooser_get_font_map    (GtkFontCh
 
 
 static void
-gtk_font_button_font_chooser_iface_init (GtkFontChooserIface *iface)
+gtk_font_button_font_chooser_iface_init (GtkFontChooserInterface *iface)
 {
   iface->get_font_family = gtk_font_button_font_chooser_get_font_family;
   iface->get_font_face = gtk_font_button_font_chooser_get_font_face;

@@ -47,7 +47,6 @@ enum
 
 static guint chooser_signals[LAST_SIGNAL];
 
-typedef GtkFontChooserIface GtkFontChooserInterface;
 G_DEFINE_INTERFACE (GtkFontChooser, gtk_font_chooser, G_TYPE_OBJECT);
 
 static void
@@ -164,7 +163,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
     g_signal_new (I_("font-activated"),
                   GTK_TYPE_FONT_CHOOSER,
                   G_SIGNAL_RUN_FIRST,
-                  G_STRUCT_OFFSET (GtkFontChooserIface, font_activated),
+                  G_STRUCT_OFFSET (GtkFontChooserInterface, font_activated),
                   NULL, NULL,
                   NULL,
                   G_TYPE_NONE,
