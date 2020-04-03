@@ -293,7 +293,7 @@ gdk_toplevel_layout_get_fullscreen (GdkToplevelLayout *layout)
  * Returns the monitor that the layout is fullscreening
  * the surface on.
  *
- * Returns: (nullable): the monitor on which @layout fullscreens
+ * Returns: (nullable) (transfer none): the monitor on which @layout fullscreens
  */
 GdkMonitor *
 gdk_toplevel_layout_get_fullscreen_monitor (GdkToplevelLayout *layout)
