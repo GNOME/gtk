@@ -4,6 +4,20 @@
 import sys
 import re
 import os
+import filecmp
+
+def replace_if_changed(new, old):
+  '''
+  Compare contents and only replace if changed to avoid triggering a rebuild.
+  '''
+  try:
+    changed = not filecmp.cmp(new, old, shallow=False)
+  except FileNotFoundError:
+    changed = True
+  if changed:
+    os.replace(new, old)
+  else:
+    os.remove(new)
 
 debug = os.getenv('GTK_GENTYPEFUNCS_DEBUG') is not None
 
@@ -50,6 +64,7 @@ for f in funcs:
 
 if debug: print (len(funcs), 'functions')
 
-ofile = open(out_file, "w")
-ofile.write(file_output)
-ofile.close()
+tmp_file = out_file + '~'
+with open(tmp_file, 'w') as f:
+    f.write(file_output)
+replace_if_changed(tmp_file, out_file)
