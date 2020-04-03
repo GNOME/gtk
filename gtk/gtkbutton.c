@@ -68,6 +68,7 @@
 #include "gtkprivate.h"
 #include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
+#include "gtkwidgetprivate.h"
 
 #include "a11y/gtkbuttonaccessible.h"
 
@@ -204,6 +205,8 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->state_flags_changed = gtk_button_state_flags_changed;
   widget_class->grab_notify = gtk_button_grab_notify;
   widget_class->unmap = gtk_button_unmap;
+  widget_class->grab_focus = gtk_widget_grab_focus_self;
+  widget_class->focus = gtk_widget_focus_self;
 
   container_class->add    = gtk_button_add;
   container_class->remove = gtk_button_remove;
@@ -408,7 +411,6 @@ gtk_button_init (GtkButton *button)
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
   GtkEventController *key_controller;
 
-  gtk_widget_set_can_focus (GTK_WIDGET (button), TRUE);
   gtk_widget_set_receives_default (GTK_WIDGET (button), TRUE);
 
   priv->in_button = FALSE;

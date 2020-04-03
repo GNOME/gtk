@@ -330,7 +330,15 @@ gtk_menu_button_focus (GtkWidget        *widget,
   if (self->popover && gtk_widget_get_visible (self->popover))
     return gtk_widget_child_focus (self->popover, direction);
   else
-    return GTK_WIDGET_CLASS (gtk_menu_button_parent_class)->focus (widget, direction);
+    return gtk_widget_child_focus (self->button, direction);
+}
+
+static gboolean
+gtk_menu_button_grab_focus (GtkWidget *widget)
+{
+  GtkMenuButton *self = GTK_MENU_BUTTON (widget);
+
+  return gtk_widget_grab_focus (self->button);
 }
 
 static void
@@ -347,6 +355,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   widget_class->size_allocate = gtk_menu_button_size_allocate;
   widget_class->state_flags_changed = gtk_menu_button_state_flags_changed;
   widget_class->focus = gtk_menu_button_focus;
+  widget_class->grab_focus = gtk_menu_button_grab_focus;
 
   /**
    * GtkMenuButton:menu-model:

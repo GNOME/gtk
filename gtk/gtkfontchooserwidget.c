@@ -49,7 +49,7 @@
 #include "gtktextview.h"
 #include "gtktreeselection.h"
 #include "gtktreeview.h"
-#include "gtkwidget.h"
+#include "gtkwidgetprivate.h"
 #include "gtksettings.h"
 #include "gtkdialog.h"
 #include "gtkradiobutton.h"
@@ -737,6 +737,8 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   widget_class->unroot = gtk_font_chooser_widget_unroot;
   widget_class->map = gtk_font_chooser_widget_map;
   widget_class->unmap = gtk_font_chooser_widget_unmap;
+  widget_class->focus = gtk_widget_focus_child;
+  widget_class->grab_focus = gtk_widget_grab_focus_child;
 
   gobject_class->finalize = gtk_font_chooser_widget_finalize;
   gobject_class->dispose = gtk_font_chooser_widget_dispose;
