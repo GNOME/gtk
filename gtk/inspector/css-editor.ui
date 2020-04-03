@@ -55,7 +55,6 @@
             <property name="buffer">text</property>
             <property name="wrap-mode">word</property>
             <property name="monospace">1</property>
-            <property name="has-focus">1</property>
             <property name="left-margin">6</property>
             <property name="right-margin">6</property>
             <property name="has-tooltip">1</property>
