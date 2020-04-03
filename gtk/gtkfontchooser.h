@@ -66,15 +66,11 @@ typedef enum {
   GTK_FONT_CHOOSER_LEVEL_FEATURES   = 1 << 3
 } GtkFontChooserLevel;
 
-#define GTK_TYPE_FONT_CHOOSER			(gtk_font_chooser_get_type ())
-#define GTK_FONT_CHOOSER(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FONT_CHOOSER, GtkFontChooser))
-#define GTK_IS_FONT_CHOOSER(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FONT_CHOOSER))
-#define GTK_FONT_CHOOSER_GET_IFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), GTK_TYPE_FONT_CHOOSER, GtkFontChooserIface))
+#define GTK_TYPE_FONT_CHOOSER (gtk_font_chooser_get_type ())
+GDK_AVAILABLE_IN_ALL
+G_DECLARE_INTERFACE (GtkFontChooser, gtk_font_chooser, GTK, FONT_CHOOSER, GObject)
 
-typedef struct _GtkFontChooser      GtkFontChooser; /* dummy */
-typedef struct _GtkFontChooserIface GtkFontChooserIface;
-
-struct _GtkFontChooserIface
+struct _GtkFontChooserInterface
 {
   GTypeInterface base_iface;
 
@@ -101,8 +97,6 @@ struct _GtkFontChooserIface
   gpointer padding[10];
 };
 
-GDK_AVAILABLE_IN_ALL
-GType            gtk_font_chooser_get_type                 (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
 PangoFontFamily *gtk_font_chooser_get_font_family          (GtkFontChooser   *fontchooser);

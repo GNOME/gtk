@@ -221,7 +221,7 @@ static void selection_changed (GtkTreeSelection *selection,
                                GtkFontChooserWidget *fontchooser);
 static void update_font_features (GtkFontChooserWidget *fontchooser);
 
-static void gtk_font_chooser_widget_iface_init (GtkFontChooserIface *iface);
+static void gtk_font_chooser_widget_iface_init (GtkFontChooserInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkFontChooserWidget, gtk_font_chooser_widget, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkFontChooserWidget)
@@ -2524,7 +2524,7 @@ gtk_font_chooser_widget_set_language (GtkFontChooserWidget *fontchooser,
 }
 
 static void
-gtk_font_chooser_widget_iface_init (GtkFontChooserIface *iface)
+gtk_font_chooser_widget_iface_init (GtkFontChooserInterface *iface)
 {
   iface->get_font_family = gtk_font_chooser_widget_get_family;
   iface->get_font_face = gtk_font_chooser_widget_get_face;

@@ -147,7 +147,7 @@ _gtk_font_chooser_install_properties (GObjectClass *klass)
 
 /**
  * _gtk_font_chooser_delegate_iface_init:
- * @iface: a #GtkFontChooserIface
+ * @iface: a #GtkFontChooserInterface
  *
  * An interface-initialization function for use in cases where
  * an object is simply delegating the methods, signals of
@@ -157,7 +157,7 @@ _gtk_font_chooser_install_properties (GObjectClass *klass)
  * be found.
  */
 void
-_gtk_font_chooser_delegate_iface_init (GtkFontChooserIface *iface)
+_gtk_font_chooser_delegate_iface_init (GtkFontChooserInterface *iface)
 {
   iface->get_font_family = delegate_get_font_family;
   iface->get_font_face = delegate_get_font_face;
