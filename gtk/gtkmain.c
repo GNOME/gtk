@@ -1090,6 +1090,9 @@ gtk_parse_args (int    *argc,
  * communication with the user - for example a curses or command line
  * interface.
  *
+ * Note that it is generally not safe to call GTK APIs after gtk_init_check()
+ * returns %FALSE.
+ *
  * Returns: %TRUE if the commandline arguments (if any) were valid and
  *     the windowing system has been successfully initialized, %FALSE
  *     otherwise
