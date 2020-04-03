@@ -548,6 +548,9 @@ gtk_switch_class_init (GtkSwitchClass *klass)
 
   g_object_class_install_properties (gobject_class, LAST_PROP, switch_props);
 
+  widget_class->grab_focus = gtk_widget_grab_focus_self;
+  widget_class->focus = gtk_widget_focus_self;
+
   klass->activate = gtk_switch_activate;
   klass->state_set = state_set;
 
@@ -656,7 +659,7 @@ gtk_switch_init (GtkSwitch *self)
   self->off_image = gtk_image_new_from_icon_name ("switch-off-symbolic");
   gtk_widget_set_parent (self->off_image, GTK_WIDGET (self));
 
-  self->slider = gtk_gizmo_new ("slider", NULL, NULL, NULL, NULL);
+  self->slider = gtk_gizmo_new ("slider", NULL, NULL, NULL, NULL, NULL, NULL);
   gtk_widget_set_parent (self->slider, GTK_WIDGET (self));
 }
 

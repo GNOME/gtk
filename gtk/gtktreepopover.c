@@ -666,7 +666,7 @@ gtk_tree_popover_create_item (GtkTreePopover *popover,
       gtk_cell_view_set_displayed_row (GTK_CELL_VIEW (view), path);
       gtk_widget_set_hexpand (view, TRUE);
 
-      item = gtk_gizmo_new ("modelbutton", NULL, NULL, NULL, NULL);
+      item = gtk_gizmo_new ("modelbutton", NULL, NULL, NULL, NULL, NULL, NULL);
       gtk_widget_set_layout_manager (item, gtk_box_layout_new (GTK_ORIENTATION_HORIZONTAL));
       gtk_widget_add_css_class (item, "flat");
 
