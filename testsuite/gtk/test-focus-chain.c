@@ -93,6 +93,7 @@ generate_focus_chain (GtkWidget        *window,
   char *first = NULL;
   char *last = NULL;
   char *name = NULL;
+  char *key = NULL;
   GString *output = g_string_new ("");
   GtkWidget *focus;
   int count = 0;
@@ -119,17 +120,22 @@ generate_focus_chain (GtkWidget        *window,
                                     gtk_widget_get_name (focus));
           else
             name = g_strdup (gtk_widget_get_name (focus));
+
+          key = g_strdup_printf ("%s %p", name, focus);
         }
       else
-        name = g_strdup ("NONE");
+        {
+          name = g_strdup ("NONE");
+          key = g_strdup (key);
+        }
 
-      if (first && g_str_equal (name, first))
+      if (first && g_str_equal (key, first))
         {
           g_string_append (output, "WRAP\n");
           break; /* cycle completed */
         }
 
-      if (last && g_str_equal (name, last))
+      if (last && g_str_equal (key, last))
         {
           g_string_append (output, "STOP\n");
           break; /* dead end */
@@ -139,10 +145,10 @@ generate_focus_chain (GtkWidget        *window,
       count++;
 
       if (!first)
-        first = g_strdup (name);
+        first = g_strdup (key);
 
       g_free (last);
-      last = g_strdup (name);
+      last = key;
 
       if (count == 100)
         {
