@@ -5136,7 +5136,7 @@ gtk_orientable_get_orientation
 gtk_orientable_set_orientation
 
 <SUBSECTION Standard>
-GtkOrientableIface
+GtkOrientableInterface
 GTK_IS_ORIENTABLE
 GTK_IS_ORIENTABLE_CLASS
 GTK_ORIENTABLE
