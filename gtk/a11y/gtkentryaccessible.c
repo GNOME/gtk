@@ -387,12 +387,19 @@ gtk_entry_accessible_ref_state_set (AtkObject *accessible)
   AtkStateSet *state_set;
   gboolean value;
   GtkWidget *widget;
+  GtkWidget *text;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   if (widget == NULL)
     return NULL;
 
+  text = gtk_widget_get_first_child (widget);
+
   state_set = ATK_OBJECT_CLASS (gtk_entry_accessible_parent_class)->ref_state_set (accessible);
+
+  atk_state_set_add_state (state_set, ATK_STATE_FOCUSABLE);
+  if (gtk_widget_has_focus (text))
+    atk_state_set_add_state (state_set, ATK_STATE_FOCUSED);
 
   g_object_get (G_OBJECT (widget), "editable", &value, NULL);
   if (value)

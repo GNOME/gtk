@@ -787,7 +787,7 @@ window1
                 "radio button"
                 parent: grid
                 index: 1
-                state: enabled sensitive visible
+                state: enabled focusable sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
@@ -982,7 +982,7 @@ window1
                   parent: grid2
                   index: 2
                   name: Saturation
-                  state: enabled focusable horizontal sensitive visible
+                  state: enabled horizontal sensitive visible
                   toolkit: gtk
                   <AtkComponent>
                   layer: widget
@@ -996,7 +996,7 @@ window1
                   parent: grid2
                   index: 3
                   name: Value
-                  state: enabled focusable horizontal sensitive visible
+                  state: enabled horizontal sensitive visible
                   toolkit: gtk
                   <AtkComponent>
                   layer: widget
@@ -1068,7 +1068,7 @@ window1
                   parent: grid3
                   index: 1
                   name: Hue
-                  state: enabled focusable horizontal sensitive visible
+                  state: enabled horizontal sensitive visible
                   toolkit: gtk
                   <AtkComponent>
                   layer: widget
@@ -1140,7 +1140,7 @@ window1
                   parent: grid4
                   index: 1
                   name: Alpha
-                  state: enabled focusable horizontal sensitive visible
+                  state: enabled horizontal sensitive visible
                   toolkit: gtk
                   <AtkComponent>
                   layer: widget
