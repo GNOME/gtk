@@ -60,14 +60,17 @@ add_project_arguments('-DGTK_VERSION="@0@"'.format(meson.project_version()), lan
 
 add_project_arguments('-D_GNU_SOURCE', language: 'c')
 
+# Use debug/optimization flags to determine whether to enable debug or disable
+# cast checks
 gtk_debug_cflags = []
-buildtype = get_option('buildtype')
-if buildtype.startswith('debug')
+debug = get_option('debug')
+optimization = get_option('optimization')
+if debug
   gtk_debug_cflags += '-DG_ENABLE_DEBUG'
-  if buildtype == 'debug'
+  if optimization in ['0', 'g']
     gtk_debug_cflags += '-DG_ENABLE_CONSISTENCY_CHECKS'
   endif
-elif buildtype == 'release'
+elif optimization in ['2', '3', 's']
   gtk_debug_cflags += '-DG_DISABLE_CAST_CHECKS'
 endif
 
