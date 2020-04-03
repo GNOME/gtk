@@ -22,6 +22,7 @@
 #include "gdkdevicetool.h"
 #include "gdkevents.h"
 #include "gdkseat.h"
+#include "gdkinternals.h"
 
 G_BEGIN_DECLS
 
