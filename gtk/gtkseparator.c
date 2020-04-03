@@ -29,6 +29,7 @@
 #include "gtkorientableprivate.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtkwidgetprivate.h"
 
 /**
  * SECTION:gtkseparator
@@ -140,6 +141,9 @@ gtk_separator_class_init (GtkSeparatorClass *class)
 
   object_class->set_property = gtk_separator_set_property;
   object_class->get_property = gtk_separator_get_property;
+
+  widget_class->grab_focus = gtk_widget_grab_focus_none;
+  widget_class->focus = gtk_widget_focus_none;
 
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 

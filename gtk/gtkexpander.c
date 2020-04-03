@@ -300,12 +300,13 @@ gtk_expander_class_init (GtkExpanderClass *klass)
   gobject_class->set_property = gtk_expander_set_property;
   gobject_class->get_property = gtk_expander_get_property;
 
-  widget_class->destroy              = gtk_expander_destroy;
-  widget_class->size_allocate        = gtk_expander_size_allocate;
-  widget_class->focus                = gtk_expander_focus;
-  widget_class->measure              = gtk_expander_measure;
+  widget_class->destroy = gtk_expander_destroy;
+  widget_class->size_allocate = gtk_expander_size_allocate;
+  widget_class->focus = gtk_expander_focus;
+  widget_class->grab_focus = gtk_widget_grab_focus_self;
+  widget_class->measure = gtk_expander_measure;
 
-  container_class->add    = gtk_expander_add;
+  container_class->add = gtk_expander_add;
   container_class->remove = gtk_expander_remove;
   container_class->forall = gtk_expander_forall;
 
@@ -384,8 +385,6 @@ gtk_expander_init (GtkExpander *expander)
   GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
   GtkGesture *gesture;
   GtkEventController *controller;
-
-  gtk_widget_set_can_focus (GTK_WIDGET (expander), TRUE);
 
   priv->label_widget = NULL;
   priv->child = NULL;

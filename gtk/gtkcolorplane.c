@@ -407,8 +407,6 @@ gtk_color_plane_init (GtkColorPlane *plane)
 
   plane->priv = gtk_color_plane_get_instance_private (plane);
 
-  gtk_widget_set_can_focus (GTK_WIDGET (plane), TRUE);
-
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (plane));
   if (GTK_IS_ACCESSIBLE (atk_obj))
     {
