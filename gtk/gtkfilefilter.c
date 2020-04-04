@@ -142,7 +142,7 @@ static void gtk_file_filter_get_property (GObject            *object,
 static void gtk_file_filter_finalize   (GObject            *object);
 
 
-static void         gtk_file_filter_buildable_init             (GtkBuildableIface  *iface);
+static void         gtk_file_filter_buildable_init             (GtkBuildableInterface *iface);
 
 static gboolean     gtk_file_filter_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                                 GtkBuilder         *builder,
@@ -271,7 +271,7 @@ gtk_file_filter_finalize (GObject  *object)
  * GtkBuildable implementation
  */
 static void
-gtk_file_filter_buildable_init (GtkBuildableIface *iface)
+gtk_file_filter_buildable_init (GtkBuildableInterface *iface)
 {
   iface->custom_tag_start = gtk_file_filter_buildable_custom_tag_start;
   iface->custom_tag_end = gtk_file_filter_buildable_custom_tag_end;

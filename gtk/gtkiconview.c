@@ -308,8 +308,8 @@ static gboolean gtk_icon_view_maybe_begin_drag   (GtkIconView      *icon_view,
 static void     remove_scroll_timeout            (GtkIconView *icon_view);
 
 /* GtkBuildable */
-static GtkBuildableIface *parent_buildable_iface;
-static void     gtk_icon_view_buildable_init             (GtkBuildableIface  *iface);
+static GtkBuildableInterface *parent_buildable_iface;
+static void     gtk_icon_view_buildable_init             (GtkBuildableInterface  *iface);
 static gboolean gtk_icon_view_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                           GtkBuilder         *builder,
                                                           GObject            *child,
@@ -906,7 +906,7 @@ gtk_icon_view_buildable_add_child (GtkBuildable *buildable,
 }
 
 static void
-gtk_icon_view_buildable_init (GtkBuildableIface *iface)
+gtk_icon_view_buildable_init (GtkBuildableInterface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
   iface->add_child = gtk_icon_view_buildable_add_child;

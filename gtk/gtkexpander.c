@@ -202,7 +202,7 @@ static void gtk_expander_activate (GtkExpander *expander);
 
 
 /* GtkBuildable */
-static void gtk_expander_buildable_init           (GtkBuildableIface *iface);
+static void gtk_expander_buildable_init           (GtkBuildableInterface *iface);
 static void gtk_expander_buildable_add_child      (GtkBuildable *buildable,
                                                    GtkBuilder   *builder,
                                                    GObject      *child,
@@ -425,7 +425,7 @@ gtk_expander_init (GtkExpander *expander)
   gtk_widget_add_controller (GTK_WIDGET (priv->title_widget), GTK_EVENT_CONTROLLER (gesture));
 }
 
-static GtkBuildableIface *parent_buildable_iface;
+static GtkBuildableInterface *parent_buildable_iface;
 
 static void
 gtk_expander_buildable_add_child (GtkBuildable  *buildable,
@@ -440,7 +440,7 @@ gtk_expander_buildable_add_child (GtkBuildable  *buildable,
 }
 
 static void
-gtk_expander_buildable_init (GtkBuildableIface *iface)
+gtk_expander_buildable_init (GtkBuildableInterface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 

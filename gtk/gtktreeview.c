@@ -915,7 +915,7 @@ static void     gtk_tree_view_buildable_add_child          (GtkBuildable      *t
 static GObject *gtk_tree_view_buildable_get_internal_child (GtkBuildable      *buildable,
 							    GtkBuilder        *builder,
 							    const gchar       *childname);
-static void     gtk_tree_view_buildable_init               (GtkBuildableIface *iface);
+static void     gtk_tree_view_buildable_init               (GtkBuildableInterface *iface);
 
 /* GtkScrollable */
 static void     gtk_tree_view_scrollable_init              (GtkScrollableInterface *iface);
@@ -2043,10 +2043,10 @@ gtk_tree_view_finalize (GObject *object)
 }
 
 
-static GtkBuildableIface *parent_buildable_iface;
+static GtkBuildableInterface *parent_buildable_iface;
 
 static void
-gtk_tree_view_buildable_init (GtkBuildableIface *iface)
+gtk_tree_view_buildable_init (GtkBuildableInterface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
   iface->add_child = gtk_tree_view_buildable_add_child;

@@ -463,8 +463,8 @@ static void      gtk_cell_area_reorder                       (GtkCellLayout     
 static GList    *gtk_cell_area_get_cells                     (GtkCellLayout         *cell_layout);
 static GtkCellArea *gtk_cell_area_get_area                   (GtkCellLayout         *cell_layout);
 
-/* GtkBuildableIface */
-static void      gtk_cell_area_buildable_init                (GtkBuildableIface     *iface);
+/* GtkBuildableInterface */
+static void      gtk_cell_area_buildable_init                (GtkBuildableInterface     *iface);
 static void      gtk_cell_area_buildable_custom_tag_end      (GtkBuildable          *buildable,
                                                               GtkBuilder            *builder,
                                                               GObject               *child,
@@ -1562,10 +1562,10 @@ gtk_cell_area_get_area (GtkCellLayout *cell_layout)
 }
 
 /*************************************************************
- *                   GtkBuildableIface                       *
+ *                   GtkBuildableInterface                   *
  *************************************************************/
 static void
-gtk_cell_area_buildable_init (GtkBuildableIface *iface)
+gtk_cell_area_buildable_init (GtkBuildableInterface *iface)
 {
   iface->add_child = _gtk_cell_layout_buildable_add_child;
   iface->custom_tag_start = _gtk_cell_layout_buildable_custom_tag_start;

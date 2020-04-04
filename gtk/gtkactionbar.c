@@ -78,7 +78,7 @@ enum {
 };
 static GParamSpec *props[LAST_PROP] = { NULL, };
 
-static void gtk_action_bar_buildable_interface_init (GtkBuildableIface *iface);
+static void gtk_action_bar_buildable_interface_init (GtkBuildableInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkActionBar, gtk_action_bar, GTK_TYPE_CONTAINER,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
@@ -253,7 +253,7 @@ gtk_action_bar_init (GtkActionBar *self)
   gtk_container_add (GTK_CONTAINER (self->revealer), self->center_box);
 }
 
-static GtkBuildableIface *parent_buildable_iface;
+static GtkBuildableInterface *parent_buildable_iface;
 
 static void
 gtk_action_bar_buildable_add_child (GtkBuildable *buildable,
@@ -274,7 +274,7 @@ gtk_action_bar_buildable_add_child (GtkBuildable *buildable,
 }
 
 static void
-gtk_action_bar_buildable_interface_init (GtkBuildableIface *iface)
+gtk_action_bar_buildable_interface_init (GtkBuildableInterface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
   iface->add_child = gtk_action_bar_buildable_add_child;

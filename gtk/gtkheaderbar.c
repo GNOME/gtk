@@ -151,7 +151,7 @@ enum {
 
 static GParamSpec *header_bar_props[LAST_PROP] = { NULL, };
 
-static void gtk_header_bar_buildable_init (GtkBuildableIface *iface);
+static void gtk_header_bar_buildable_init (GtkBuildableInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkHeaderBar, gtk_header_bar, GTK_TYPE_CONTAINER,
                          G_ADD_PRIVATE (GtkHeaderBar)
@@ -1244,7 +1244,7 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   construct_label_box (bar);
 }
 
-static GtkBuildableIface *parent_buildable_iface;
+static GtkBuildableInterface *parent_buildable_iface;
 
 static void
 gtk_header_bar_buildable_add_child (GtkBuildable *buildable,
@@ -1263,7 +1263,7 @@ gtk_header_bar_buildable_add_child (GtkBuildable *buildable,
 }
 
 static void
-gtk_header_bar_buildable_init (GtkBuildableIface *iface)
+gtk_header_bar_buildable_init (GtkBuildableInterface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 

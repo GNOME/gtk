@@ -632,7 +632,7 @@ static AtkObject*	gtk_widget_real_get_accessible		(GtkWidget	  *widget);
 static void		gtk_widget_accessible_interface_init	(AtkImplementorIface *iface);
 static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
 
-static void             gtk_widget_buildable_interface_init     (GtkBuildableIface  *iface);
+static void             gtk_widget_buildable_interface_init     (GtkBuildableInterface  *iface);
 static void             gtk_widget_buildable_set_name           (GtkBuildable       *buildable,
                                                                  const gchar        *name);
 static const gchar *    gtk_widget_buildable_get_name           (GtkBuildable       *buildable);
@@ -8467,7 +8467,7 @@ gtk_widget_buildable_add_child (GtkBuildable  *buildable,
 }
 
 static void
-gtk_widget_buildable_interface_init (GtkBuildableIface *iface)
+gtk_widget_buildable_interface_init (GtkBuildableInterface *iface)
 {
   quark_builder_atk_relations = g_quark_from_static_string ("gtk-builder-atk-relations");
   quark_builder_set_name = g_quark_from_static_string ("gtk-builder-set-name");
@@ -11163,7 +11163,7 @@ gtk_widget_class_set_template_scope (GtkWidgetClass  *widget_class,
  * pointer the first time your classes #GObjectClass.dispose() runs, or alternatively in
  * #GtkWidgetClass.destroy().
  *
- * If @internal_child is specified, #GtkBuildableIface.get_internal_child() will be automatically
+ * If @internal_child is specified, #GtkBuildableInterface.get_internal_child() will be automatically
  * implemented by the #GtkWidget class so there is no need to implement it manually.
  *
  * The wrapper macros gtk_widget_class_bind_template_child(), gtk_widget_class_bind_template_child_internal(),

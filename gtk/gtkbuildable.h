@@ -27,14 +27,8 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_BUILDABLE            (gtk_buildable_get_type ())
-#define GTK_BUILDABLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_BUILDABLE, GtkBuildable))
-#define GTK_BUILDABLE_CLASS(obj)      (G_TYPE_CHECK_CLASS_CAST ((obj), GTK_TYPE_BUILDABLE, GtkBuildableIface))
-#define GTK_IS_BUILDABLE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_BUILDABLE))
-#define GTK_BUILDABLE_GET_IFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), GTK_TYPE_BUILDABLE, GtkBuildableIface))
-
-typedef struct _GtkBuildable      GtkBuildable; /* Dummy typedef */
-typedef struct _GtkBuildableIface GtkBuildableIface;
+#define GTK_TYPE_BUILDABLE (gtk_buildable_get_type ())
+G_DECLARE_INTERFACE (GtkBuildable, gtk_buildable, GTK, BUILDABLE, GObject)
 
 typedef struct _GtkBuildableParseContext      GtkBuildableParseContext;
 typedef struct _GtkBuildableParser GtkBuildableParser;
@@ -74,7 +68,7 @@ struct _GtkBuildableParser
 };
 
 /**
- * GtkBuildableIface:
+ * GtkBuildableInterface:
  * @g_iface: the parent class
  * @set_name: Stores the name attribute given in the GtkBuilder UI definition.
  *  #GtkWidget stores the name as object data. Implement this method if your
@@ -117,11 +111,11 @@ struct _GtkBuildableParser
  *  Implement this if the buildable has internal children that may
  *  need to be accessed from a UI definition.
  *
- * The #GtkBuildableIface interface contains method that are
+ * The #GtkBuildableInterface interface contains methods that are
  * necessary to allow #GtkBuilder to construct an object from
  * a #GtkBuilder UI definition.
  */
-struct _GtkBuildableIface
+struct _GtkBuildableInterface
 {
   GTypeInterface g_iface;
 
@@ -164,9 +158,6 @@ struct _GtkBuildableIface
                                             const gchar        *childname);
 };
 
-
-GDK_AVAILABLE_IN_ALL
-GType     gtk_buildable_get_type               (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
 void      gtk_buildable_set_name               (GtkBuildable        *buildable,

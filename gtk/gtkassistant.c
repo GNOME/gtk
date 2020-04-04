@@ -177,7 +177,7 @@ static void     gtk_assistant_page_get_property  (GObject           *object,
                                                   GValue            *value,
                                                   GParamSpec        *pspec);
 
-static void     gtk_assistant_buildable_interface_init   (GtkBuildableIface  *iface);
+static void     gtk_assistant_buildable_interface_init   (GtkBuildableInterface  *iface);
 static void     gtk_assistant_buildable_add_child        (GtkBuildable       *buildable,
                                                           GtkBuilder         *builder,
                                                           GObject            *child,
@@ -2318,10 +2318,10 @@ _gtk_assistant_accessible_init (GtkAssistantAccessible *self)
 
 /* buildable implementation */
 
-static GtkBuildableIface *parent_buildable_iface;
+static GtkBuildableInterface *parent_buildable_iface;
 
 static void
-gtk_assistant_buildable_interface_init (GtkBuildableIface *iface)
+gtk_assistant_buildable_interface_init (GtkBuildableInterface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
   iface->custom_tag_start = gtk_assistant_buildable_custom_tag_start;

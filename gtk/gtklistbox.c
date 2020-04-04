@@ -206,9 +206,9 @@ enum {
 
 #define ROW_PRIV(row) ((GtkListBoxRowPrivate*)gtk_list_box_row_get_instance_private ((GtkListBoxRow*)(row)))
 
-static GtkBuildableIface *parent_buildable_iface;
+static GtkBuildableInterface *parent_buildable_iface;
 
-static void     gtk_list_box_buildable_interface_init   (GtkBuildableIface *iface);
+static void     gtk_list_box_buildable_interface_init   (GtkBuildableInterface *iface);
 
 static void     gtk_list_box_row_actionable_iface_init  (GtkActionableInterface *iface);
 
@@ -3461,7 +3461,7 @@ gtk_list_box_buildable_add_child (GtkBuildable *buildable,
 }
 
 static void
-gtk_list_box_buildable_interface_init (GtkBuildableIface *iface)
+gtk_list_box_buildable_interface_init (GtkBuildableInterface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 

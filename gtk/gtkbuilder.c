@@ -690,7 +690,7 @@ _gtk_builder_construct (GtkBuilder  *builder,
   ObjectProperties *parameters, *construct_parameters;
   GObject *obj;
   int i;
-  GtkBuildableIface *iface;
+  GtkBuildableInterface *iface;
   gboolean custom_set_property;
   GtkBuildable *buildable;
   GParamFlags param_filter_flags;
@@ -850,7 +850,7 @@ _gtk_builder_apply_properties (GtkBuilder  *builder,
                                GError     **error)
 {
   ObjectProperties *parameters;
-  GtkBuildableIface *iface;
+  GtkBuildableInterface *iface;
   GtkBuildable *buildable;
   gboolean custom_set_property;
   gint i;

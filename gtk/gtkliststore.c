@@ -199,7 +199,7 @@ static void         gtk_list_store_tree_model_init (GtkTreeModelIface *iface);
 static void         gtk_list_store_drag_source_init(GtkTreeDragSourceIface *iface);
 static void         gtk_list_store_drag_dest_init  (GtkTreeDragDestIface   *iface);
 static void         gtk_list_store_sortable_init   (GtkTreeSortableIface   *iface);
-static void         gtk_list_store_buildable_init  (GtkBuildableIface      *iface);
+static void         gtk_list_store_buildable_init  (GtkBuildableInterface  *iface);
 static void         gtk_list_store_finalize        (GObject           *object);
 static GtkTreeModelFlags gtk_list_store_get_flags  (GtkTreeModel      *tree_model);
 static gint         gtk_list_store_get_n_columns   (GtkTreeModel      *tree_model);
@@ -363,7 +363,7 @@ gtk_list_store_sortable_init (GtkTreeSortableIface *iface)
 }
 
 void
-gtk_list_store_buildable_init (GtkBuildableIface *iface)
+gtk_list_store_buildable_init (GtkBuildableInterface *iface)
 {
   iface->custom_tag_start = gtk_list_store_buildable_custom_tag_start;
   iface->custom_tag_end = gtk_list_store_buildable_custom_tag_end;

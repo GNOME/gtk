@@ -83,7 +83,7 @@ static GtkCellArea *gtk_cell_view_cell_layout_get_area         (GtkCellLayout   
 
 
 /* buildable */
-static void        gtk_cell_view_buildable_init             (GtkBuildableIface  *iface);
+static void        gtk_cell_view_buildable_init             (GtkBuildableInterface  *iface);
 static gboolean    gtk_cell_view_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                              GtkBuilder         *builder,
                                                              GObject            *child,
@@ -142,7 +142,7 @@ struct _GtkCellViewPrivate
   guint                fit_model      : 1;
 };
 
-static GtkBuildableIface *parent_buildable_iface;
+static GtkBuildableInterface *parent_buildable_iface;
 
 enum
 {
@@ -295,7 +295,7 @@ gtk_cell_view_buildable_add_child (GtkBuildable *buildable,
 }
 
 static void
-gtk_cell_view_buildable_init (GtkBuildableIface *iface)
+gtk_cell_view_buildable_init (GtkBuildableInterface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
   iface->add_child = gtk_cell_view_buildable_add_child;

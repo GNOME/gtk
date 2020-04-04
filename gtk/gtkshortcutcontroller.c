@@ -159,7 +159,7 @@ gtk_shortcut_controller_buildable_add_child (GtkBuildable  *buildable,
 }
 
 static void
-gtk_shortcut_controller_buildable_init (GtkBuildableIface *iface)
+gtk_shortcut_controller_buildable_init (GtkBuildableInterface *iface)
 {
   iface->add_child = gtk_shortcut_controller_buildable_add_child;
 }

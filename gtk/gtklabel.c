@@ -504,7 +504,7 @@ static gboolean gtk_label_mnemonic_activate (GtkWidget         *widget,
 					     gboolean           group_cycling);
 static void     gtk_label_setup_mnemonic    (GtkLabel          *label);
 
-static void     gtk_label_buildable_interface_init   (GtkBuildableIface  *iface);
+static void     gtk_label_buildable_interface_init   (GtkBuildableInterface  *iface);
 static gboolean gtk_label_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                       GtkBuilder         *builder,
                                                       GObject            *child,
@@ -599,7 +599,7 @@ static void     gtk_label_measure (GtkWidget     *widget,
 
 
 
-static GtkBuildableIface *buildable_parent_iface = NULL;
+static GtkBuildableInterface *buildable_parent_iface = NULL;
 
 G_DEFINE_TYPE_WITH_CODE (GtkLabel, gtk_label, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkLabel)
@@ -1352,7 +1352,7 @@ gtk_label_init (GtkLabel *label)
 
 
 static void
-gtk_label_buildable_interface_init (GtkBuildableIface *iface)
+gtk_label_buildable_interface_init (GtkBuildableInterface *iface)
 {
   buildable_parent_iface = g_type_interface_peek_parent (iface);
 

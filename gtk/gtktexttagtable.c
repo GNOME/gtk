@@ -101,7 +101,7 @@ enum {
 
 static void gtk_text_tag_table_finalize                 (GObject             *object);
 
-static void gtk_text_tag_table_buildable_interface_init (GtkBuildableIface   *iface);
+static void gtk_text_tag_table_buildable_interface_init (GtkBuildableInterface *iface);
 static void gtk_text_tag_table_buildable_add_child      (GtkBuildable        *buildable,
 							 GtkBuilder          *builder,
 							 GObject             *child,
@@ -251,7 +251,7 @@ gtk_text_tag_table_finalize (GObject *object)
 }
 
 static void
-gtk_text_tag_table_buildable_interface_init (GtkBuildableIface   *iface)
+gtk_text_tag_table_buildable_interface_init (GtkBuildableInterface *iface)
 {
   iface->add_child = gtk_text_tag_table_buildable_add_child;
 }

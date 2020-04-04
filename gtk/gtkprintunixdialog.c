@@ -214,7 +214,7 @@ static gboolean printer_compare                    (GtkTreeModel       *model,
                                                     gpointer            search_data);
 
 /* GtkBuildable */
-static void gtk_print_unix_dialog_buildable_init                    (GtkBuildableIface *iface);
+static void gtk_print_unix_dialog_buildable_init                    (GtkBuildableInterface *iface);
 static GObject *gtk_print_unix_dialog_buildable_get_internal_child  (GtkBuildable *buildable,
                                                                      GtkBuilder   *builder,
                                                                      const gchar  *childname);
@@ -388,7 +388,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkPrintUnixDialog, gtk_print_unix_dialog, GTK_TYPE_DIA
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_print_unix_dialog_buildable_init))
 
-static GtkBuildableIface *parent_buildable_iface;
+static GtkBuildableInterface *parent_buildable_iface;
 
 static gboolean
 is_default_printer (GtkPrintUnixDialog *dialog,
@@ -928,7 +928,7 @@ printer_removed_cb (GtkPrintBackend    *backend,
 }
 
 static void
-gtk_print_unix_dialog_buildable_init (GtkBuildableIface *iface)
+gtk_print_unix_dialog_buildable_init (GtkBuildableInterface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 

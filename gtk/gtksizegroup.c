@@ -132,7 +132,7 @@ static void gtk_size_group_get_property (GObject      *object,
 					 GParamSpec   *pspec);
 
 /* GtkBuildable */
-static void     gtk_size_group_buildable_init             (GtkBuildableIface  *iface);
+static void     gtk_size_group_buildable_init             (GtkBuildableInterface *iface);
 static gboolean gtk_size_group_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                            GtkBuilder         *builder,
                                                            GObject            *child,
@@ -244,7 +244,7 @@ gtk_size_group_init (GtkSizeGroup *size_group)
 }
 
 static void
-gtk_size_group_buildable_init (GtkBuildableIface *iface)
+gtk_size_group_buildable_init (GtkBuildableInterface *iface)
 {
   iface->custom_tag_start = gtk_size_group_buildable_custom_tag_start;
   iface->custom_finished = gtk_size_group_buildable_custom_finished;

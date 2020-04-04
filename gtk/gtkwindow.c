@@ -491,7 +491,7 @@ static gboolean     disable_startup_notification = FALSE;
 
 static GQuark       quark_gtk_window_icon_info = 0;
 
-static GtkBuildableIface *parent_buildable_iface;
+static GtkBuildableInterface *parent_buildable_iface;
 
 static void gtk_window_set_property (GObject         *object,
 				     guint            prop_id,
@@ -503,7 +503,7 @@ static void gtk_window_get_property (GObject         *object,
 				     GParamSpec      *pspec);
 
 /* GtkBuildable */
-static void     gtk_window_buildable_interface_init         (GtkBuildableIface  *iface);
+static void     gtk_window_buildable_interface_init         (GtkBuildableInterface  *iface);
 static void     gtk_window_buildable_add_child              (GtkBuildable       *buildable,
                                                              GtkBuilder         *builder,
                                                              GObject            *child,
@@ -1951,7 +1951,7 @@ gtk_window_get_property (GObject      *object,
 }
 
 static void
-gtk_window_buildable_interface_init (GtkBuildableIface *iface)
+gtk_window_buildable_interface_init (GtkBuildableInterface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
   iface->set_buildable_property = gtk_window_buildable_set_buildable_property;

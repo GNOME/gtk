@@ -197,7 +197,7 @@ static void      gtk_dialog_close                (GtkDialog    *dialog);
 static ResponseData * get_response_data          (GtkWidget    *widget,
                                                   gboolean      create);
 
-static void     gtk_dialog_buildable_interface_init   (GtkBuildableIface  *iface);
+static void     gtk_dialog_buildable_interface_init   (GtkBuildableInterface  *iface);
 static gboolean gtk_dialog_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                        GtkBuilder         *builder,
                                                        GObject            *child,
@@ -589,10 +589,10 @@ gtk_dialog_init (GtkDialog *dialog)
   gtk_widget_init_template (GTK_WIDGET (dialog));
 }
 
-static GtkBuildableIface *parent_buildable_iface;
+static GtkBuildableInterface *parent_buildable_iface;
 
 static void
-gtk_dialog_buildable_interface_init (GtkBuildableIface *iface)
+gtk_dialog_buildable_interface_init (GtkBuildableInterface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
   iface->custom_tag_start = gtk_dialog_buildable_custom_tag_start;

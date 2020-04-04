@@ -186,7 +186,7 @@ static GParamSpec *entry_completion_props[NUM_PROPERTIES] = { NULL, };
 static guint entry_completion_signals[LAST_SIGNAL] = { 0 };
 
 /* GtkBuildable */
-static void     gtk_entry_completion_buildable_init      (GtkBuildableIface  *iface);
+static void     gtk_entry_completion_buildable_init      (GtkBuildableInterface  *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkEntryCompletion, gtk_entry_completion, G_TYPE_OBJECT,
                          G_ADD_PRIVATE (GtkEntryCompletion)
@@ -457,7 +457,7 @@ gtk_entry_completion_buildable_custom_tag_end (GtkBuildable *buildable,
 }
 
 static void
-gtk_entry_completion_buildable_init (GtkBuildableIface *iface)
+gtk_entry_completion_buildable_init (GtkBuildableInterface *iface)
 {
   iface->add_child = _gtk_cell_layout_buildable_add_child;
   iface->custom_tag_start = _gtk_cell_layout_buildable_custom_tag_start;

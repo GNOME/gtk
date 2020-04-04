@@ -293,9 +293,9 @@ static gchar   *gtk_combo_box_format_entry_text              (GtkComboBox     *c
                                                               const gchar     *path);
 
 /* GtkBuildable method implementation */
-static GtkBuildableIface *parent_buildable_iface;
+static GtkBuildableInterface *parent_buildable_iface;
 
-static void     gtk_combo_box_buildable_init                 (GtkBuildableIface  *iface);
+static void     gtk_combo_box_buildable_init                 (GtkBuildableInterface  *iface);
 static void     gtk_combo_box_buildable_add_child            (GtkBuildable       *buildable,
                                                               GtkBuilder         *builder,
                                                               GObject            *child,
@@ -807,7 +807,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
 }
 
 static void
-gtk_combo_box_buildable_init (GtkBuildableIface *iface)
+gtk_combo_box_buildable_init (GtkBuildableInterface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
   iface->add_child = gtk_combo_box_buildable_add_child;

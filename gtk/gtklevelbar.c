@@ -197,7 +197,7 @@ struct _GtkLevelBarClass {
 static void gtk_level_bar_set_value_internal (GtkLevelBar *self,
                                               gdouble      value);
 
-static void gtk_level_bar_buildable_init (GtkBuildableIface *iface);
+static void gtk_level_bar_buildable_init (GtkBuildableInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkLevelBar, gtk_level_bar, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
@@ -785,7 +785,7 @@ gtk_level_bar_buildable_custom_finished (GtkBuildable *buildable,
 }
 
 static void
-gtk_level_bar_buildable_init (GtkBuildableIface *iface)
+gtk_level_bar_buildable_init (GtkBuildableInterface *iface)
 {
   iface->custom_tag_start = gtk_level_bar_buildable_custom_tag_start;
   iface->custom_finished = gtk_level_bar_buildable_custom_finished;

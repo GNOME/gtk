@@ -99,7 +99,7 @@ struct _GtkComboBoxTextClass
 };
 
 
-static void     gtk_combo_box_text_buildable_interface_init   (GtkBuildableIface  *iface);
+static void     gtk_combo_box_text_buildable_interface_init   (GtkBuildableInterface  *iface);
 static gboolean gtk_combo_box_text_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                                GtkBuilder         *builder,
                                                                GObject            *child,
@@ -114,7 +114,7 @@ static void     gtk_combo_box_text_buildable_custom_finished  (GtkBuildable     
                                                                gpointer            user_data);
 
 
-static GtkBuildableIface *buildable_parent_iface = NULL;
+static GtkBuildableInterface *buildable_parent_iface = NULL;
 
 G_DEFINE_TYPE_WITH_CODE (GtkComboBoxText, gtk_combo_box_text, GTK_TYPE_COMBO_BOX,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
@@ -162,7 +162,7 @@ gtk_combo_box_text_class_init (GtkComboBoxTextClass *klass)
 }
 
 static void
-gtk_combo_box_text_buildable_interface_init (GtkBuildableIface *iface)
+gtk_combo_box_text_buildable_interface_init (GtkBuildableInterface *iface)
 {
   buildable_parent_iface = g_type_interface_peek_parent (iface);
 

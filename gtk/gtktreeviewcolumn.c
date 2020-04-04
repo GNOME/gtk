@@ -133,7 +133,7 @@ static void gtk_tree_view_column_set_attributesv               (GtkTreeViewColum
 								va_list                  args);
 
 /* GtkBuildable implementation */
-static void gtk_tree_view_column_buildable_init                 (GtkBuildableIface     *iface);
+static void gtk_tree_view_column_buildable_init                 (GtkBuildableInterface     *iface);
 
 typedef struct _GtkTreeViewColumnClass   GtkTreeViewColumnClass;
 typedef struct _GtkTreeViewColumnPrivate GtkTreeViewColumnPrivate;
@@ -440,7 +440,7 @@ gtk_tree_view_column_custom_tag_end (GtkBuildable *buildable,
 }
 
 static void
-gtk_tree_view_column_buildable_init (GtkBuildableIface *iface)
+gtk_tree_view_column_buildable_init (GtkBuildableInterface *iface)
 {
   iface->add_child = _gtk_cell_layout_buildable_add_child;
   iface->custom_tag_start = _gtk_cell_layout_buildable_custom_tag_start;

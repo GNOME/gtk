@@ -201,7 +201,7 @@ static void     gtk_scale_snapshot                (GtkWidget      *widget,
 static void     gtk_scale_real_get_layout_offsets (GtkScale       *scale,
                                                    gint           *x,
                                                    gint           *y);
-static void     gtk_scale_buildable_interface_init   (GtkBuildableIface  *iface);
+static void     gtk_scale_buildable_interface_init   (GtkBuildableInterface  *iface);
 static gboolean gtk_scale_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                       GtkBuilder         *builder,
                                                       GObject            *child,
@@ -1804,10 +1804,10 @@ gtk_scale_add_mark (GtkScale        *scale,
   gtk_widget_queue_resize (widget);
 }
 
-static GtkBuildableIface *parent_buildable_iface;
+static GtkBuildableInterface *parent_buildable_iface;
 
 static void
-gtk_scale_buildable_interface_init (GtkBuildableIface *iface)
+gtk_scale_buildable_interface_init (GtkBuildableInterface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
   iface->custom_tag_start = gtk_scale_buildable_custom_tag_start;

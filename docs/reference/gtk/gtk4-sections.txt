@@ -423,7 +423,7 @@ gtk_single_selection_get_type
 <SECTION>
 <FILE>gtkbuildable</FILE>
 GtkBuildable
-GtkBuildableIface
+GtkBuildableInterface
 gtk_buildable_set_name
 gtk_buildable_get_name
 gtk_buildable_add_child

@@ -40,7 +40,6 @@
 #include "gtkintl.h"
 
 
-typedef GtkBuildableIface GtkBuildableInterface;
 G_DEFINE_INTERFACE (GtkBuildable, gtk_buildable, G_TYPE_OBJECT)
 
 static void
@@ -59,7 +58,7 @@ void
 gtk_buildable_set_name (GtkBuildable *buildable,
                         const gchar  *name)
 {
-  GtkBuildableIface *iface;
+  GtkBuildableInterface *iface;
 
   g_return_if_fail (GTK_IS_BUILDABLE (buildable));
   g_return_if_fail (name != NULL);
@@ -90,7 +89,7 @@ gtk_buildable_set_name (GtkBuildable *buildable,
 const gchar *
 gtk_buildable_get_name (GtkBuildable *buildable)
 {
-  GtkBuildableIface *iface;
+  GtkBuildableInterface *iface;
 
   g_return_val_if_fail (GTK_IS_BUILDABLE (buildable), NULL);
 
@@ -119,7 +118,7 @@ gtk_buildable_add_child (GtkBuildable *buildable,
 			 GObject      *child,
 			 const gchar  *type)
 {
-  GtkBuildableIface *iface;
+  GtkBuildableInterface *iface;
 
   g_return_if_fail (GTK_IS_BUILDABLE (buildable));
   g_return_if_fail (GTK_IS_BUILDER (builder));
@@ -145,7 +144,7 @@ gtk_buildable_set_buildable_property (GtkBuildable *buildable,
 				      const gchar  *name,
 				      const GValue *value)
 {
-  GtkBuildableIface *iface;
+  GtkBuildableInterface *iface;
 
   g_return_if_fail (GTK_IS_BUILDABLE (buildable));
   g_return_if_fail (GTK_IS_BUILDER (builder));
@@ -174,7 +173,7 @@ void
 gtk_buildable_parser_finished (GtkBuildable *buildable,
 			       GtkBuilder   *builder)
 {
-  GtkBuildableIface *iface;
+  GtkBuildableInterface *iface;
 
   g_return_if_fail (GTK_IS_BUILDABLE (buildable));
   g_return_if_fail (GTK_IS_BUILDER (builder));
@@ -202,7 +201,7 @@ gtk_buildable_construct_child (GtkBuildable *buildable,
                                GtkBuilder   *builder,
                                const gchar  *name)
 {
-  GtkBuildableIface *iface;
+  GtkBuildableInterface *iface;
 
   g_return_val_if_fail (GTK_IS_BUILDABLE (buildable), NULL);
   g_return_val_if_fail (GTK_IS_BUILDER (builder), NULL);
@@ -237,7 +236,7 @@ gtk_buildable_custom_tag_start (GtkBuildable       *buildable,
                                 GtkBuildableParser *parser,
                                 gpointer           *data)
 {
-  GtkBuildableIface *iface;
+  GtkBuildableInterface *iface;
 
   g_return_val_if_fail (GTK_IS_BUILDABLE (buildable), FALSE);
   g_return_val_if_fail (GTK_IS_BUILDER (builder), FALSE);
@@ -268,7 +267,7 @@ gtk_buildable_custom_tag_end (GtkBuildable  *buildable,
                               const gchar   *tagname,
                               gpointer       data)
 {
-  GtkBuildableIface *iface;
+  GtkBuildableInterface *iface;
 
   g_return_if_fail (GTK_IS_BUILDABLE (buildable));
   g_return_if_fail (GTK_IS_BUILDER (builder));
@@ -297,7 +296,7 @@ gtk_buildable_custom_finished (GtkBuildable  *buildable,
 			       const gchar   *tagname,
 			       gpointer       data)
 {
-  GtkBuildableIface *iface;
+  GtkBuildableInterface *iface;
 
   g_return_if_fail (GTK_IS_BUILDABLE (buildable));
   g_return_if_fail (GTK_IS_BUILDER (builder));
@@ -322,7 +321,7 @@ gtk_buildable_get_internal_child (GtkBuildable *buildable,
                                   GtkBuilder   *builder,
                                   const gchar  *childname)
 {
-  GtkBuildableIface *iface;
+  GtkBuildableInterface *iface;
 
   g_return_val_if_fail (GTK_IS_BUILDABLE (buildable), NULL);
   g_return_val_if_fail (GTK_IS_BUILDER (builder), NULL);

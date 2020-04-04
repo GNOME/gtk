@@ -130,7 +130,7 @@ static void gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
 						     GtkAllocation *child_allocation);
 
 /* GtkBuildable */
-static void gtk_frame_buildable_init                (GtkBuildableIface *iface);
+static void gtk_frame_buildable_init                (GtkBuildableInterface *iface);
 static void gtk_frame_buildable_add_child           (GtkBuildable *buildable,
 						     GtkBuilder   *builder,
 						     GObject      *child,
@@ -206,10 +206,10 @@ gtk_frame_class_init (GtkFrameClass *class)
   gtk_widget_class_set_css_name (widget_class, I_("frame"));
 }
 
-static GtkBuildableIface *parent_buildable_iface;
+static GtkBuildableInterface *parent_buildable_iface;
 
 static void
-gtk_frame_buildable_init (GtkBuildableIface *iface)
+gtk_frame_buildable_init (GtkBuildableInterface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 

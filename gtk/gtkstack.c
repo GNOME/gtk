@@ -156,7 +156,7 @@ typedef struct {
 
 } GtkStackPrivate;
 
-static void gtk_stack_buildable_interface_init (GtkBuildableIface *iface);
+static void gtk_stack_buildable_interface_init (GtkBuildableInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkStack, gtk_stack, GTK_TYPE_CONTAINER,
                          G_ADD_PRIVATE (GtkStack)
@@ -587,7 +587,7 @@ gtk_stack_buildable_add_child (GtkBuildable *buildable,
 }
 
 static void
-gtk_stack_buildable_interface_init (GtkBuildableIface *iface)
+gtk_stack_buildable_interface_init (GtkBuildableInterface *iface)
 {
   iface->add_child = gtk_stack_buildable_add_child;
 }

@@ -73,7 +73,7 @@ enum {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-static void gtk_overlay_buildable_init (GtkBuildableIface *iface);
+static void gtk_overlay_buildable_init (GtkBuildableInterface *iface);
 
 typedef struct _GtkOverlayClass    GtkOverlayClass;
 
@@ -336,7 +336,7 @@ gtk_overlay_init (GtkOverlay *overlay)
   priv->layout = gtk_widget_get_layout_manager (GTK_WIDGET (overlay));
 }
 
-static GtkBuildableIface *parent_buildable_iface;
+static GtkBuildableInterface *parent_buildable_iface;
 
 static void
 gtk_overlay_buildable_add_child (GtkBuildable *buildable,
@@ -364,7 +364,7 @@ gtk_overlay_buildable_add_child (GtkBuildable *buildable,
 }
 
 static void
-gtk_overlay_buildable_init (GtkBuildableIface *iface)
+gtk_overlay_buildable_init (GtkBuildableInterface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 

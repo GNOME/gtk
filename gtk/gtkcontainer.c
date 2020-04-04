@@ -116,8 +116,8 @@ static void     gtk_container_children_callback    (GtkWidget         *widget,
 static GtkSizeRequestMode gtk_container_get_request_mode (GtkWidget   *widget);
 
 /* GtkBuildable */
-static void gtk_container_buildable_init           (GtkBuildableIface *iface);
-static GtkBuildableIface    *parent_buildable_iface;
+static void gtk_container_buildable_init           (GtkBuildableInterface *iface);
+static GtkBuildableInterface    *parent_buildable_iface;
 
 static GQuark                vadjustment_key_id;
 static GQuark                hadjustment_key_id;
@@ -190,7 +190,7 @@ gtk_container_buildable_add_child (GtkBuildable  *buildable,
 }
 
 static void
-gtk_container_buildable_init (GtkBuildableIface *iface)
+gtk_container_buildable_init (GtkBuildableInterface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
   iface->add_child = gtk_container_buildable_add_child;

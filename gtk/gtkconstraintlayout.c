@@ -527,7 +527,7 @@ gtk_constraint_layout_child_init (GtkConstraintLayoutChild *self)
                            (GDestroyNotify) gtk_constraint_variable_unref);
 }
 
-static void gtk_buildable_interface_init (GtkBuildableIface *iface);
+static void gtk_buildable_interface_init (GtkBuildableInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkConstraintLayout, gtk_constraint_layout, GTK_TYPE_LAYOUT_MANAGER,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gtk_buildable_interface_init))
@@ -1675,7 +1675,7 @@ gtk_constraint_layout_custom_finished (GtkBuildable *buildable,
 }
 
 static void
-gtk_buildable_interface_init (GtkBuildableIface *iface)
+gtk_buildable_interface_init (GtkBuildableInterface *iface)
 {
   iface->custom_tag_start = gtk_constraint_layout_custom_tag_start;
   iface->custom_tag_end = gtk_constraint_layout_custom_tag_end;

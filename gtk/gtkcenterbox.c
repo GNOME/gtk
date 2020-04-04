@@ -86,9 +86,9 @@ enum {
   PROP_ORIENTATION
 };
 
-static GtkBuildableIface *parent_buildable_iface;
+static GtkBuildableInterface *parent_buildable_iface;
 
-static void gtk_center_box_buildable_init (GtkBuildableIface *iface);
+static void gtk_center_box_buildable_init (GtkBuildableInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkCenterBox, gtk_center_box, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
@@ -111,7 +111,7 @@ gtk_center_box_buildable_add_child (GtkBuildable  *buildable,
 }
 
 static void
-gtk_center_box_buildable_init (GtkBuildableIface *iface)
+gtk_center_box_buildable_init (GtkBuildableInterface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 

@@ -79,7 +79,7 @@ struct _GtkFontChooserDialogPrivate
  * and “cancel_button”.
  */
 
-static void     gtk_font_chooser_dialog_buildable_interface_init     (GtkBuildableIface *iface);
+static void     gtk_font_chooser_dialog_buildable_interface_init     (GtkBuildableInterface *iface);
 static GObject *gtk_font_chooser_dialog_buildable_get_internal_child (GtkBuildable *buildable,
                                                                       GtkBuilder   *builder,
                                                                       const gchar  *childname);
@@ -91,7 +91,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkFontChooserDialog, gtk_font_chooser_dialog, GTK_TYPE
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_font_chooser_dialog_buildable_interface_init))
 
-static GtkBuildableIface *parent_buildable_iface;
+static GtkBuildableInterface *parent_buildable_iface;
 
 static void
 gtk_font_chooser_dialog_set_property (GObject      *object,
@@ -292,7 +292,7 @@ gtk_font_chooser_dialog_new (const gchar *title,
 }
 
 static void
-gtk_font_chooser_dialog_buildable_interface_init (GtkBuildableIface *iface)
+gtk_font_chooser_dialog_buildable_interface_init (GtkBuildableInterface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
   iface->get_internal_child = gtk_font_chooser_dialog_buildable_get_internal_child;

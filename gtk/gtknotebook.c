@@ -903,7 +903,7 @@ static void do_detach_tab  (GtkNotebook *from,
                             GtkWidget   *child);
 
 /* GtkBuildable */
-static void gtk_notebook_buildable_init           (GtkBuildableIface *iface);
+static void gtk_notebook_buildable_init           (GtkBuildableInterface *iface);
 static void gtk_notebook_buildable_add_child      (GtkBuildable *buildable,
                                                    GtkBuilder   *builder,
                                                    GObject      *child,
@@ -1454,10 +1454,10 @@ gtk_notebook_init (GtkNotebook *notebook)
   gtk_orientable_set_orientation (GTK_ORIENTABLE (layout), GTK_ORIENTATION_VERTICAL);
 }
 
-static GtkBuildableIface *parent_buildable_iface;
+static GtkBuildableInterface *parent_buildable_iface;
 
 static void
-gtk_notebook_buildable_init (GtkBuildableIface *iface)
+gtk_notebook_buildable_init (GtkBuildableInterface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 

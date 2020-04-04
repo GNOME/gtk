@@ -189,7 +189,7 @@ static void     gtk_info_bar_get_property (GObject        *object,
                                            guint           prop_id,
                                            GValue         *value,
                                            GParamSpec     *pspec);
-static void     gtk_info_bar_buildable_interface_init   (GtkBuildableIface  *iface);
+static void     gtk_info_bar_buildable_interface_init   (GtkBuildableInterface  *iface);
 static gboolean gtk_info_bar_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                          GtkBuilder         *builder,
                                                          GObject            *child,
@@ -521,10 +521,10 @@ gtk_info_bar_init (GtkInfoBar *info_bar)
   gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture));
 }
 
-static GtkBuildableIface *parent_buildable_iface;
+static GtkBuildableInterface *parent_buildable_iface;
 
 static void
-gtk_info_bar_buildable_interface_init (GtkBuildableIface *iface)
+gtk_info_bar_buildable_interface_init (GtkBuildableInterface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 
