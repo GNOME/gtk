@@ -61,6 +61,9 @@ GDK_DECLARE_INTERNAL_TYPE (GtkShortcutAction, gtk_shortcut_action, GTK, SHORTCUT
 GDK_AVAILABLE_IN_ALL
 char *                  gtk_shortcut_action_to_string           (GtkShortcutAction      *self);
 GDK_AVAILABLE_IN_ALL
+GtkShortcutAction *     gtk_shortcut_action_parse_string        (const char *            string);
+
+GDK_AVAILABLE_IN_ALL
 void                    gtk_shortcut_action_print               (GtkShortcutAction      *self,
                                                                  GString                *string);
 GDK_AVAILABLE_IN_ALL
