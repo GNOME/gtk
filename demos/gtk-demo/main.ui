@@ -34,7 +34,6 @@
         <child>
           <object class="GtkButton">
             <property name="valign">center</property>
-            <property name="can-focus">1</property>
             <property name="action-name">win.run</property>
             <style>
               <class name="text-button"/>
@@ -62,12 +61,10 @@
             <child>
               <object class="GtkScrolledWindow">
                 <property name="width-request">120</property>
-                <property name="can-focus">1</property>
                 <property name="hscrollbar-policy">never</property>
                 <property name="min-content-width">150</property>
                 <child>
                   <object class="GtkTreeView" id="treeview">
-                    <property name="can-focus">1</property>
                     <property name="model">treestore</property>
                     <property name="headers-visible">0</property>
                     <child internal-child="selection">
@@ -99,7 +96,6 @@
         </child>
         <child>
           <object class="GtkNotebook" id="notebook">
-            <property name="can-focus">1</property>
             <property name="scrollable">1</property>
             <property name="enable-popup">1</property>
             <property name="show-border">0</property>
@@ -110,10 +106,8 @@
                 <property name="tab-expand">1</property>
                 <property name="child">
                   <object class="GtkScrolledWindow">
-                    <property name="can-focus">1</property>
                     <child>
                       <object class="GtkTextView" id="info-textview">
-                        <property name="can-focus">1</property>
                         <property name="left-margin">20</property>
                         <property name="right-margin">20</property>
                         <property name="top-margin">20</property>
@@ -141,10 +135,8 @@
                 <property name="tab-expand">1</property>
                 <property name="child">
                   <object class="GtkScrolledWindow" id="source-scrolledwindow">
-                    <property name="can-focus">1</property>
                     <child>
                       <object class="GtkTextView" id="source-textview">
-                        <property name="can-focus">1</property>
                         <property name="left-margin">20</property>
                         <property name="right-margin">20</property>
                         <property name="top-margin">20</property>

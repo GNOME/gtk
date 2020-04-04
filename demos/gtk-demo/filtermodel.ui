@@ -56,7 +56,6 @@
         </child>
         <child>
           <object class="GtkTreeView" id="treeview1">
-            <property name="can-focus">1</property>
             <property name="model">liststore1</property>
             <property name="headers-clickable">0</property>
             <child internal-child="selection">
@@ -95,7 +94,6 @@
         </child>
         <child>
           <object class="GtkTreeView" id="treeview2">
-            <property name="can-focus">1</property>
             <property name="headers-clickable">0</property>
             <property name="search-column">0</property>
             <child internal-child="selection">
@@ -178,7 +176,6 @@
         </child>
         <child>
           <object class="GtkTreeView" id="treeview3">
-            <property name="can-focus">1</property>
             <property name="headers-clickable">0</property>
             <property name="search-column">0</property>
             <child internal-child="selection">
