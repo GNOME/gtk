@@ -441,6 +441,32 @@ test_action_activate (void)
   g_object_unref (widget);
 }
 
+static void
+test_action_parse (void)
+{
+  GtkShortcutAction *action;
+
+  action = gtk_shortcut_action_parse_string ("nothing");
+  g_assert_true (GTK_IS_NOTHING_ACTION (action));
+  g_object_unref (action);
+
+  action = gtk_shortcut_action_parse_string ("activate");
+  g_assert_true (GTK_IS_ACTIVATE_ACTION (action));
+  g_object_unref (action);
+
+  action = gtk_shortcut_action_parse_string ("mnemonic-activate");
+  g_assert_true (GTK_IS_MNEMONIC_ACTION (action));
+  g_object_unref (action);
+
+  action = gtk_shortcut_action_parse_string ("action(win.dark)");
+  g_assert_true (GTK_IS_NAMED_ACTION (action));
+  g_object_unref (action);
+
+  action = gtk_shortcut_action_parse_string ("signal(frob)");
+  g_assert_true (GTK_IS_SIGNAL_ACTION (action));
+  g_object_unref (action);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -456,6 +482,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/shortcuts/trigger/trigger", test_trigger_trigger);
   g_test_add_func ("/shortcuts/action/basic", test_action_basic);
   g_test_add_func ("/shortcuts/action/activate", test_action_activate);
+  g_test_add_func ("/shortcuts/action/parse", test_action_parse);
 
   return g_test_run ();
 }
