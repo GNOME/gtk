@@ -28,21 +28,18 @@
             <child>
               <object class="GtkButton">
                 <property name="label" translatable="yes">Hi, I am a button</property>
-                <property name="can-focus">1</property>
                 <property name="receives-default">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
                 <property name="label" translatable="yes">And I&apos;m another button</property>
-                <property name="can-focus">1</property>
                 <property name="receives-default">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
                 <property name="label" translatable="yes">This is a button party!</property>
-                <property name="can-focus">1</property>
                 <property name="receives-default">1</property>
               </object>
             </child>

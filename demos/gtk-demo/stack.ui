@@ -16,7 +16,6 @@
         </child>
         <child>
           <object class="GtkStack" id="stack">
-            <property name="can-focus">1</property>
             <property name="transition-type">crossfade</property>
             <child>
               <object class="GtkStackPage">
@@ -38,7 +37,6 @@
                 <property name="child">
                   <object class="GtkCheckButton">
                     <property name="label" translatable="yes">Page 2</property>
-                    <property name="can-focus">1</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                   </object>

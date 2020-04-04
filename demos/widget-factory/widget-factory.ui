@@ -534,7 +534,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="button224">
-                                    <property name="can-focus">1</property>
                                     <property name="icon-name">window-close-symbolic</property>
                                   </object>
                                 </child>
@@ -625,14 +624,12 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <child>
                                   <object class="GtkCheckButton" id="checkbutton1">
                                     <property name="label" translatable="yes">checkbutton</property>
-                                    <property name="can-focus">1</property>
                                     <property name="active">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="checkbutton2">
                                     <property name="label" translatable="yes">checkbutton</property>
-                                    <property name="can-focus">1</property>
                                     <layout>
                                       <property name="left-attach">0</property>
                                       <property name="top-attach">1</property>
@@ -643,7 +640,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   <object class="GtkCheckButton" id="checkbutton3">
                                     <property name="label" translatable="yes">checkbutton</property>
                                     <property name="inconsistent">1</property>
-                                    <property name="can-focus">1</property>
                                     <layout>
                                       <property name="left-attach">0</property>
                                       <property name="top-attach">2</property>
@@ -654,7 +650,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   <object class="GtkCheckButton" id="checkbutton4">
                                     <property name="label" translatable="yes">checkbutton</property>
                                     <property name="sensitive">0</property>
-                                    <property name="can-focus">1</property>
                                     <property name="active">1</property>
                                     <layout>
                                       <property name="left-attach">0</property>
@@ -666,7 +661,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   <object class="GtkCheckButton" id="checkbutton5">
                                     <property name="label" translatable="yes">checkbutton</property>
                                     <property name="sensitive">0</property>
-                                    <property name="can-focus">1</property>
                                     <layout>
                                       <property name="left-attach">0</property>
                                       <property name="top-attach">4</property>
@@ -678,7 +672,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="label" translatable="yes">checkbutton</property>
                                     <property name="sensitive">0</property>
                                     <property name="inconsistent">1</property>
-                                    <property name="can-focus">1</property>
                                     <layout>
                                       <property name="left-attach">0</property>
                                       <property name="top-attach">5</property>
@@ -688,7 +681,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <child>
                                   <object class="GtkRadioButton" id="radiobutton1">
                                     <property name="label" translatable="yes">radiobutton</property>
-                                    <property name="can-focus">1</property>
                                     <property name="active">1</property>
                                     <layout>
                                       <property name="left-attach">0</property>
@@ -699,7 +691,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <child>
                                   <object class="GtkRadioButton" id="radiobutton2">
                                     <property name="label" translatable="yes">radiobutton</property>
-                                    <property name="can-focus">1</property>
                                     <property name="group">radiobutton1</property>
                                     <layout>
                                       <property name="left-attach">1</property>
@@ -711,7 +702,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   <object class="GtkRadioButton" id="radiobutton3">
                                     <property name="label" translatable="yes">radiobutton</property>
                                     <property name="inconsistent">1</property>
-                                    <property name="can-focus">1</property>
                                     <property name="group">radiobutton1</property>
                                     <layout>
                                       <property name="left-attach">1</property>
@@ -723,7 +713,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   <object class="GtkRadioButton" id="radiobutton4">
                                     <property name="label" translatable="yes">radiobutton</property>
                                     <property name="sensitive">0</property>
-                                    <property name="can-focus">1</property>
                                     <layout>
                                       <property name="left-attach">1</property>
                                       <property name="top-attach">3</property>
@@ -734,7 +723,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   <object class="GtkRadioButton" id="radiobutton5">
                                     <property name="label" translatable="yes">radiobutton</property>
                                     <property name="sensitive">0</property>
-                                    <property name="can-focus">1</property>
                                     <property name="group">radiobutton3</property>
                                     <layout>
                                       <property name="left-attach">1</property>
@@ -747,7 +735,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="label" translatable="yes">radiobutton</property>
                                     <property name="sensitive">0</property>
                                     <property name="inconsistent">1</property>
-                                    <property name="can-focus">1</property>
                                     <property name="group">radiobutton3</property>
                                     <layout>
                                       <property name="left-attach">1</property>
@@ -806,7 +793,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkToggleButton" id="togglebutton1">
                                 <property name="label" translatable="yes">togglebutton</property>
-                                <property name="can-focus">1</property>
                                 <property name="receives-default">1</property>
                               </object>
                             </child>
@@ -814,14 +800,12 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               <object class="GtkToggleButton" id="togglebutton2">
                                 <property name="label" translatable="yes">togglebutton</property>
                                 <property name="sensitive">0</property>
-                                <property name="can-focus">1</property>
                                 <property name="receives-default">1</property>
                               </object>
                             </child>
                             <child>
                               <object class="GtkToggleButton" id="togglebutton3">
                                 <property name="label" translatable="yes">togglebutton</property>
-                                <property name="can-focus">1</property>
                                 <property name="receives-default">1</property>
                                 <property name="active">1</property>
                               </object>
@@ -830,7 +814,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               <object class="GtkToggleButton" id="togglebutton4">
                                 <property name="label" translatable="yes">togglebutton</property>
                                 <property name="sensitive">0</property>
-                                <property name="can-focus">1</property>
                                 <property name="receives-default">1</property>
                                 <property name="active">1</property>
                               </object>
@@ -862,14 +845,12 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                             <child>
                               <object class="GtkFontButton" id="fontbutton1">
-                                <property name="can-focus">1</property>
                                 <property name="receives-default">1</property>
                                 <property name="level">family|style|size|features|variations</property>
                               </object>
                             </child>
                             <child>
                               <object class="GtkColorButton" id="colorbutton1">
-                                <property name="can-focus">1</property>
                                 <property name="receives-default">1</property>
                                 <property name="rgba">#31316867a09f</property>
                                 <property name="use-alpha">1</property>
@@ -881,7 +862,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkLinkButton" id="linkbutton1">
                                 <property name="label" translatable="yes">link button</property>
-                                <property name="can-focus">1</property>
                                 <property name="receives-default">1</property>
                                 <property name="has-tooltip">1</property>
                                 <property name="relief">none</property>
@@ -960,7 +940,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="homogeneous">1</property>
                                     <child>
                                       <object class="GtkScale" id="scale1">
-                                        <property name="can-focus">1</property>
                                         <property name="adjustment">adjustment1</property>
                                         <property name="restrict-to-fill-level">0</property>
                                         <property name="fill-level">75</property>
@@ -970,7 +949,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <child>
                                       <object class="GtkScale" id="scale2">
                                         <property name="sensitive">0</property>
-                                        <property name="can-focus">1</property>
                                         <property name="adjustment">adjustment1</property>
                                         <property name="restrict-to-fill-level">0</property>
                                         <property name="fill-level">75</property>
@@ -983,7 +961,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                             <child>
                               <object class="GtkScale" id="scale5">
-                                <property name="can-focus">1</property>
                                 <property name="draw-value">0</property>
                                 <property name="has-origin">0</property>
                                 <property name="round-digits">0</property>
@@ -1031,7 +1008,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <child>
                                       <object class="GtkScale" id="scale3">
                                         <property name="height-request">100</property>
-                                        <property name="can-focus">1</property>
                                         <property name="orientation">vertical</property>
                                         <property name="adjustment">adjustment1</property>
                                         <property name="restrict-to-fill-level">0</property>
@@ -1044,7 +1020,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                       <object class="GtkScale" id="scale4">
                                         <property name="height-request">100</property>
                                         <property name="sensitive">0</property>
-                                        <property name="can-focus">1</property>
                                         <property name="orientation">vertical</property>
                                         <property name="adjustment">adjustment1</property>
                                         <property name="restrict-to-fill-level">0</property>
@@ -1137,13 +1112,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkScrolledWindow" id="scrolledwindow1">
                                 <property name="width-request">150</property>
-                                <property name="can-focus">1</property>
                                 <property name="vscrollbar-policy">always</property>
                                 <property name="shadow-type">in</property>
                                 <property name="vexpand">1</property>
                                 <child>
                                   <object class="GtkTreeView" id="treeview1">
-                                    <property name="can-focus">1</property>
                                     <property name="model">liststore1</property>
                                     <property name="headers-clickable">0</property>
                                     <property name="search-column">0</property>
@@ -1214,12 +1187,10 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                             <child>
                               <object class="GtkScrolledWindow" id="scrolledwindow2">
-                                <property name="can-focus">1</property>
                                 <property name="shadow-type">in</property>
                                 <property name="vexpand">1</property>
                                 <child>
                                   <object class="GtkTextView" id="textview1">
-                                    <property name="can-focus">1</property>
                                     <property name="buffer">textbuffer1</property>
                                     <property name="wrap-mode">2</property>
                                     <property name="left-margin">10</property>
@@ -1241,7 +1212,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         <property name="homogeneous">1</property>
                         <child>
                           <object class="GtkNotebook" id="notebook1">
-                            <property name="can-focus">1</property>
                             <child>
                               <object class="GtkNotebookPage">
                                 <property name="child">
@@ -1289,7 +1259,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkNotebook" id="notebook2">
-                            <property name="can-focus">1</property>
                             <property name="tab-pos">right</property>
                             <child>
                               <object class="GtkNotebookPage">
@@ -1339,7 +1308,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkNotebook" id="notebook3">
-                            <property name="can-focus">1</property>
                             <property name="tab-pos">bottom</property>
                             <child>
                               <object class="GtkNotebookPage">
@@ -1389,7 +1357,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkNotebook" id="notebook4">
-                            <property name="can-focus">1</property>
                             <property name="tab-pos">left</property>
                             <child>
                               <object class="GtkNotebookPage">
@@ -1577,7 +1544,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                 <property name="hscrollbar-policy">never</property>
                                                 <child>
                                                   <object class="GtkTextView" id="tvo">
-                                                    <property name="can-focus">1</property>
                                                     <property name="buffer">textbuffer2</property>
                                                     <property name="left-margin">10</property>
                                                     <property name="right-margin">10</property>
@@ -1928,7 +1894,6 @@ microphone-sensitivity-medium-symbolic</property>
                                         <child>
                                           <object class="MyTextView" id="text3">
                                             <property name="visible">True</property>
-                                            <property name="can-focus">True</property>
                                             <property name="buffer">textbuffer1</property>
                                             <property name="wrap-mode">2</property>
                                             <property name="left-margin">10</property>
@@ -2029,20 +1994,17 @@ microphone-sensitivity-medium-symbolic</property>
                             </child>
                             <child>
                               <object class="GtkExpander" id="expander1">
-                                <property name="can-focus">1</property>
                                 <property name="expanded">1</property>
                                 <child>
                                   <object class="GtkBox">
                                     <property name="orientation">vertical</property>
                                     <child>
                                       <object class="GtkScrolledWindow" id="scrolledwindow3">
-                                        <property name="can-focus">1</property>
                                         <property name="shadow-type">in</property>
                                         <property name="margin-top">6</property>
                                         <property name="height-request">226</property>
                                         <child>
                                           <object class="GtkIconView" id="iconview1">
-                                            <property name="can-focus">1</property>
                                             <property name="selection-mode">multiple</property>
                                             <property name="model">iconsmodel</property>
                                             <child>
