@@ -44,6 +44,10 @@
 *  - #GtkNamedAction: a shortcut action that calls gtk_widget_activate_action()
 *  - #GtkGActionAction: a shortcut action that activates a given #GAction
 *  - #GtkNothingAction: a shortcut action that does nothing
+*
+* # GtkShortcutAction as GtkBuildable
+*
+* GtkShortcut
 */
 
 #include "config.h"
@@ -180,9 +184,7 @@ string_is_function (const char *string,
 }
 
 GtkShortcutAction *
-gtk_shortcut_action_parse_builder (GtkBuilder  *builder,
-                                   const char  *string,
-                                   GError     **error)
+gtk_shortcut_action_parse_string (const char *string)
 {
   GtkShortcutAction *result;
   char *arg;
@@ -204,6 +206,22 @@ gtk_shortcut_action_parse_builder (GtkBuilder  *builder,
       result = gtk_signal_action_new (arg);
       g_free (arg);
     }
+  else
+    return NULL;
+
+  return result;
+}
+
+GtkShortcutAction *
+gtk_shortcut_action_parse_builder (GtkBuilder  *builder,
+                                   const char  *string,
+                                   GError     **error)
+{
+  GtkShortcutAction *result;
+
+  result = gtk_shortcut_action_parse_string (string);
+
+  if (!result)
     {
       g_set_error (error,
                    GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE,
