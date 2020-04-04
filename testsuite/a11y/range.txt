@@ -41,8 +41,12 @@ window1
       "scroll bar"
       parent: grid1
       index: 1
-      state: enabled horizontal sensitive showing visible
+      state: enabled focusable horizontal sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
+      <AtkValue>
+      minimum value: 0.500000
+      maximum value: 99.500000
+      current value: 45.500000
