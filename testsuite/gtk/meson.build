@@ -166,6 +166,16 @@ focus_chain_tests = [
   [ 'basic', 'right' ],
   [ 'focusable-container', 'tab' ],
   [ 'focusable-container', 'tab-backward' ],
+  [ 'widget-factory', 'tab' ],
+  [ 'widget-factory', 'tab-backward' ],
+  [ 'widget-factory', 'up' ],
+  [ 'widget-factory', 'down' ],
+  [ 'widget-factory', 'left' ],
+  [ 'widget-factory', 'right' ],
+  [ 'widget-factory2', 'tab' ],
+  [ 'widget-factory2', 'tab-backward' ],
+  [ 'widget-factory3', 'tab' ],
+  [ 'widget-factory3', 'tab-backward' ],
 ]
 
 focus_chain = executable(
