@@ -298,7 +298,7 @@ extern UINT		 _gdk_input_codepage;
 extern guint		 _gdk_keymap_serial;
 
 /* The singleton selection object pointer */
-GdkWin32Selection *_win32_selection;
+extern GdkWin32Selection *_win32_selection;
 
 void _gdk_win32_dnd_do_dragdrop (void);
 void _gdk_win32_ole2_dnd_property_change (GdkAtom       type,
