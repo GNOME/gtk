@@ -285,5 +285,8 @@ gtk_scrollbar_get_adjustment (GtkScrollbar  *self)
 
   g_return_val_if_fail (GTK_IS_SCROLLBAR (self), NULL);
 
-  return gtk_range_get_adjustment (GTK_RANGE (priv->range));
+  if (priv->range)
+    return gtk_range_get_adjustment (GTK_RANGE (priv->range));
+
+  return NULL;
 }
