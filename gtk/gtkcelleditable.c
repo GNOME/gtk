@@ -33,7 +33,6 @@
 #include "gtkintl.h"
 
 
-typedef GtkCellEditableIface GtkCellEditableInterface;
 G_DEFINE_INTERFACE(GtkCellEditable, gtk_cell_editable, GTK_TYPE_WIDGET)
 
 static void
@@ -70,7 +69,7 @@ gtk_cell_editable_default_init (GtkCellEditableInterface *iface)
   g_signal_new (I_("editing-done"),
                 GTK_TYPE_CELL_EDITABLE,
                 G_SIGNAL_RUN_LAST,
-                G_STRUCT_OFFSET (GtkCellEditableIface, editing_done),
+                G_STRUCT_OFFSET (GtkCellEditableInterface, editing_done),
                 NULL, NULL,
                 NULL,
                 G_TYPE_NONE, 0);
@@ -95,7 +94,7 @@ gtk_cell_editable_default_init (GtkCellEditableInterface *iface)
   g_signal_new (I_("remove-widget"),
                 GTK_TYPE_CELL_EDITABLE,
                 G_SIGNAL_RUN_LAST,
-                G_STRUCT_OFFSET (GtkCellEditableIface, remove_widget),
+                G_STRUCT_OFFSET (GtkCellEditableInterface, remove_widget),
                 NULL, NULL,
                 NULL,
                 G_TYPE_NONE, 0);

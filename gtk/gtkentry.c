@@ -245,7 +245,7 @@ typedef enum
 /* GObject methods
  */
 static void   gtk_entry_editable_init        (GtkEditableInterface *iface);
-static void   gtk_entry_cell_editable_init   (GtkCellEditableIface *iface);
+static void   gtk_entry_cell_editable_init   (GtkCellEditableInterface *iface);
 static void   gtk_entry_set_property         (GObject          *object,
                                               guint             prop_id,
                                               const GValue     *value,
@@ -908,7 +908,7 @@ gtk_entry_editable_init (GtkEditableInterface *iface)
 }
 
 static void
-gtk_entry_cell_editable_init (GtkCellEditableIface *iface)
+gtk_entry_cell_editable_init (GtkCellEditableInterface *iface)
 {
   iface->start_editing = gtk_entry_start_editing;
 }

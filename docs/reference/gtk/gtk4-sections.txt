@@ -3635,7 +3635,7 @@ gtk_cell_renderer_state_get_type
 <FILE>gtkcelleditable</FILE>
 <TITLE>GtkCellEditable</TITLE>
 GtkCellEditable
-GtkCellEditableIface
+GtkCellEditableInterface
 gtk_cell_editable_start_editing
 gtk_cell_editable_editing_done
 gtk_cell_editable_remove_widget

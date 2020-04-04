@@ -259,7 +259,7 @@ enum
 };
 
 static void gtk_spin_button_editable_init  (GtkEditableInterface *iface);
-static void gtk_spin_button_cell_editable_init  (GtkCellEditableIface *iface);
+static void gtk_spin_button_cell_editable_init  (GtkCellEditableInterface *iface);
 static void gtk_spin_button_finalize       (GObject            *object);
 static void gtk_spin_button_set_property   (GObject         *object,
                                             guint            prop_id,
@@ -622,7 +622,7 @@ gtk_spin_button_start_editing (GtkCellEditable *cell_editable,
 }
 
 static void
-gtk_spin_button_cell_editable_init (GtkCellEditableIface *iface)
+gtk_spin_button_cell_editable_init (GtkCellEditableInterface *iface)
 {
   iface->start_editing = gtk_spin_button_start_editing;
 }

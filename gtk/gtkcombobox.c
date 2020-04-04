@@ -198,7 +198,7 @@ static guint combo_box_signals[LAST_SIGNAL] = {0,};
 /* common */
 
 static void     gtk_combo_box_cell_layout_init     (GtkCellLayoutIface *iface);
-static void     gtk_combo_box_cell_editable_init   (GtkCellEditableIface *iface);
+static void     gtk_combo_box_cell_editable_init   (GtkCellEditableInterface *iface);
 static void     gtk_combo_box_constructed          (GObject          *object);
 static void     gtk_combo_box_dispose              (GObject          *object);
 static void     gtk_combo_box_unmap                (GtkWidget        *widget);
@@ -823,7 +823,7 @@ gtk_combo_box_cell_layout_init (GtkCellLayoutIface *iface)
 }
 
 static void
-gtk_combo_box_cell_editable_init (GtkCellEditableIface *iface)
+gtk_combo_box_cell_editable_init (GtkCellEditableInterface *iface)
 {
   iface->start_editing = gtk_combo_box_start_editing;
 }

@@ -500,7 +500,7 @@ enum {
 };
 
 GType       gtk_cell_editable_widget_get_type (void);
-static void gtk_cell_editable_widget_cell_editable_init (GtkCellEditableIface *iface);
+static void gtk_cell_editable_widget_cell_editable_init (GtkCellEditableInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkCellEditableWidget, gtk_cell_editable_widget, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_EDITABLE, gtk_cell_editable_widget_cell_editable_init))
@@ -513,7 +513,7 @@ gtk_cell_editable_widget_start_editing (GtkCellEditable *cell_editable,
 }
 
 static void
-gtk_cell_editable_widget_cell_editable_init (GtkCellEditableIface *iface)
+gtk_cell_editable_widget_cell_editable_init (GtkCellEditableInterface *iface)
 {
   iface->start_editing = gtk_cell_editable_widget_start_editing;
 }

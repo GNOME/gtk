@@ -26,24 +26,19 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_CELL_EDITABLE            (gtk_cell_editable_get_type ())
-#define GTK_CELL_EDITABLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CELL_EDITABLE, GtkCellEditable))
-#define GTK_CELL_EDITABLE_CLASS(obj)      (G_TYPE_CHECK_CLASS_CAST ((obj), GTK_TYPE_CELL_EDITABLE, GtkCellEditableIface))
-#define GTK_IS_CELL_EDITABLE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CELL_EDITABLE))
-#define GTK_CELL_EDITABLE_GET_IFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), GTK_TYPE_CELL_EDITABLE, GtkCellEditableIface))
-
-typedef struct _GtkCellEditable      GtkCellEditable; /* Dummy typedef */
-typedef struct _GtkCellEditableIface GtkCellEditableIface;
+#define GTK_TYPE_CELL_EDITABLE (gtk_cell_editable_get_type ())
+GDK_AVAILABLE_IN_ALL
+G_DECLARE_INTERFACE (GtkCellEditable, gtk_cell_editable, GTK, CELL_EDITABLE, GtkWidget)
 
 /**
- * GtkCellEditableIface:
+ * GtkCellEditableInterface:
  * @editing_done: Signal is a sign for the cell renderer to update its
  *    value from the cell_editable.
  * @remove_widget: Signal is meant to indicate that the cell is
  *    finished editing, and the widget may now be destroyed.
  * @start_editing: Begins editing on a cell_editable.
  */
-struct _GtkCellEditableIface
+struct _GtkCellEditableInterface
 {
   /*< private >*/
   GTypeInterface g_iface;
@@ -59,9 +54,6 @@ struct _GtkCellEditableIface
 			  GdkEvent        *event);
 };
 
-
-GDK_AVAILABLE_IN_ALL
-GType gtk_cell_editable_get_type      (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
 void  gtk_cell_editable_start_editing (GtkCellEditable *cell_editable,
