@@ -182,6 +182,7 @@ testsuite/css/style/inherit.ui
 testsuite/css/style/label.ui
 testsuite/css/style/nth-child.ui
 testsuite/gtk/filechooser.c
+testsuite/gtk/focus-chain/widget-factory.ui
 testsuite/gtk/ui/celllayout1.ui
 testsuite/gtk/ui/container1.ui
 testsuite/gtk/ui/container8.ui
