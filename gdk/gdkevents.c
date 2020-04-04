@@ -2110,3 +2110,159 @@ gdk_grab_broken_event_get_grab_surface (GdkEvent *event)
 
   return event->grab_broken.grab_surface;
 }
+
+static gboolean
+translate_keyboard_accel_state (GdkKeymap       *keymap,
+                                guint            hardware_keycode,
+                                GdkModifierType  state,
+                                gint             group,
+                                guint           *keyval,
+                                gint            *effective_group,
+                                gint            *level,
+                                GdkModifierType *consumed_modifiers)
+{
+  GdkModifierType mask;
+  GdkModifierType shift_group_mask;
+  gboolean group_mask_disabled = FALSE;
+  gboolean retval;
+
+  mask = gdk_keymap_get_modifier_mask (keymap,
+                                       GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK);
+
+  /* if the group-toggling modifier is part of the accel mod mask, and
+   * it is active, disable it for matching
+   */
+  shift_group_mask = gdk_keymap_get_modifier_mask (keymap,
+                                                   GDK_MODIFIER_INTENT_SHIFT_GROUP);
+  if (mask & state & shift_group_mask)
+    {
+      state &= ~shift_group_mask;
+      group = 0;
+      group_mask_disabled = TRUE;
+    }
+
+  retval = gdk_keymap_translate_keyboard_state (keymap,
+                                                hardware_keycode, state, group,
+                                                keyval,
+                                                effective_group, level,
+                                                consumed_modifiers);
+
+  /* add back the group mask, we want to match against the modifier,
+   * but not against the keyval from its group
+   */
+  if (group_mask_disabled)
+    {
+      if (effective_group)
+        *effective_group = 1;
+
+      if (consumed_modifiers)
+        *consumed_modifiers &= ~shift_group_mask;
+    }
+
+  return retval;
+}
+
+
+GdkEventMatch
+gdk_event_matches (GdkEvent        *event,
+                   guint            match_keyval,
+                   GdkModifierType  match_modifiers)
+{
+  guint keycode;
+  GdkModifierType state;
+  GdkModifierType mask;
+  int group;
+  GdkKeymap *keymap;
+  guint keyval;
+  int effective_group;
+  int level;
+  GdkModifierType consumed_modifiers;
+  GdkModifierType shift_group_mask;
+  gboolean group_mod_is_accel_mod = FALSE;
+  const GdkModifierType xmods = GDK_MOD2_MASK|GDK_MOD3_MASK|GDK_MOD4_MASK|GDK_MOD5_MASK;
+  const GdkModifierType vmods = GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK;
+  GdkModifierType modifiers;
+
+  if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
+    return GDK_EVENT_MATCH_NONE;
+
+  keycode = gdk_key_event_get_keycode (event);
+  state = gdk_event_get_modifier_state (event);
+  group = gdk_key_event_get_group (event);
+  keymap = gdk_display_get_keymap (gdk_event_get_display (event));
+
+  mask = gdk_keymap_get_modifier_mask (keymap,
+                                       GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK);
+
+  /* We don't want Caps_Lock to affect keybinding lookups.
+   */
+  state &= ~GDK_LOCK_MASK;
+
+  translate_keyboard_accel_state (keymap,
+                                  keycode, state, group,
+                                  &keyval,
+                                  &effective_group, &level,
+                                  &consumed_modifiers);
+
+  /* if the group-toggling modifier is part of the default accel mod
+   * mask, and it is active, disable it for matching
+   */
+  shift_group_mask = gdk_keymap_get_modifier_mask (keymap,
+                                                   GDK_MODIFIER_INTENT_SHIFT_GROUP);
+  if (mask & shift_group_mask)
+    group_mod_is_accel_mod = TRUE;
+
+  gdk_keymap_map_virtual_modifiers (keymap, &mask);
+  gdk_keymap_add_virtual_modifiers (keymap, &state);
+
+  modifiers = match_modifiers;
+  if (gdk_keymap_map_virtual_modifiers (keymap, &modifiers) &&
+      ((modifiers & ~consumed_modifiers & mask & ~vmods) == (state & ~consumed_modifiers & mask & ~vmods) ||
+       (modifiers & ~consumed_modifiers & mask & ~xmods) == (state & ~consumed_modifiers & mask & ~xmods)))
+    {
+      /* modifier match */
+      GdkKeymapKey *keys;
+      int n_keys;
+      int i;
+      guint key;
+
+      /* Shift gets consumed and applied for the event,
+       * so apply it to our keyval to match
+       */
+      key = match_keyval;
+      if (match_modifiers & GDK_SHIFT_MASK)
+        {
+          if (key == GDK_KEY_Tab)
+            key = GDK_KEY_ISO_Left_Tab;
+          else
+            key = gdk_keyval_to_upper (key);
+        }
+
+      if (keyval == key && /* exact match */
+          (!group_mod_is_accel_mod ||
+           (state & shift_group_mask) == (match_modifiers & shift_group_mask)))
+        return GDK_EVENT_MATCH_EXACT;
+
+      gdk_keymap_get_entries_for_keyval (keymap, match_keyval, &keys, &n_keys);
+
+      for (i = 0; i < n_keys; i++)
+        {
+          if (keys[i].keycode == keycode &&
+              keys[i].level == level &&
+              /* Only match for group if it's an accel mod */
+              (!group_mod_is_accel_mod ||
+               keys[i].group == effective_group))
+            {
+              /* partial match */
+              g_free (keys);
+
+              return GDK_EVENT_MATCH_PARTIAL;
+            }
+        }
+
+      g_free (keys);
+    }
+
+
+  return GDK_EVENT_MATCH_NONE;
+}

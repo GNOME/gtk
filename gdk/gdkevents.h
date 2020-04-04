@@ -428,6 +428,17 @@ gboolean                gdk_events_get_center           (GdkEvent *event1,
                                                          double   *x,
                                                          double   *y);
 
+typedef enum {
+  GDK_EVENT_MATCH_NONE,
+  GDK_EVENT_MATCH_PARTIAL,
+  GDK_EVENT_MATCH_EXACT
+} GdkEventMatch;
+
+GDK_AVAILABLE_IN_ALL
+GdkEventMatch          gdk_event_matches (GdkEvent        *event,
+                                          guint            keyval,
+                                          GdkModifierType  modifiers);
+
 G_END_DECLS
 
 #endif /* __GDK_EVENTS_H__ */

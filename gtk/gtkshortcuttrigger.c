@@ -59,8 +59,7 @@ struct _GtkShortcutTriggerClass
 {
   GObjectClass parent_class;
 
-  GtkShortcutTriggerMatch
-                  (* trigger)     (GtkShortcutTrigger  *trigger,
+  GdkEventMatch   (* trigger)     (GtkShortcutTrigger  *trigger,
                                    GdkEvent            *event,
                                    gboolean             enable_mnemonics);
   guint           (* hash)        (GtkShortcutTrigger  *trigger);
@@ -97,12 +96,12 @@ gtk_shortcut_trigger_init (GtkShortcutTrigger *self)
  *
  * Returns: Whether the event triggered the shortcut
  **/
-GtkShortcutTriggerMatch
+GdkEventMatch
 gtk_shortcut_trigger_trigger (GtkShortcutTrigger *self,
                               GdkEvent           *event,
                               gboolean            enable_mnemonics)
 {
-  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER (self), GTK_SHORTCUT_TRIGGER_MATCH_NONE);
+  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER (self), GDK_EVENT_MATCH_NONE);
 
   return GTK_SHORTCUT_TRIGGER_GET_CLASS (self)->trigger (self, event, enable_mnemonics);
 }
@@ -410,12 +409,12 @@ gtk_never_trigger_finalize (GObject *gobject)
   G_OBJECT_CLASS (gtk_never_trigger_parent_class)->finalize (gobject);
 }
 
-static GtkShortcutTriggerMatch
+static GdkEventMatch
 gtk_never_trigger_trigger (GtkShortcutTrigger *trigger,
                            GdkEvent           *event,
                            gboolean            enable_mnemonics)
 {
-  return GTK_SHORTCUT_TRIGGER_MATCH_NONE;
+  return GDK_EVENT_MATCH_NONE;
 }
 
 static guint
@@ -510,110 +509,14 @@ enum
 
 static GParamSpec *keyval_props[KEYVAL_N_PROPS];
 
-static GtkShortcutTriggerMatch
+static GdkEventMatch
 gtk_keyval_trigger_trigger (GtkShortcutTrigger *trigger,
                             GdkEvent           *event,
                             gboolean            enable_mnemonics)
 {
   GtkKeyvalTrigger *self = GTK_KEYVAL_TRIGGER (trigger);
-  guint keycode;
-  GdkModifierType state;
-  GdkModifierType mask;
-  int group;
-  GdkKeymap *keymap;
-  guint keyval;
-  int effective_group;
-  int level;
-  GdkModifierType consumed_modifiers;
-  GdkModifierType shift_group_mask;
-  gboolean group_mod_is_accel_mod = FALSE;
-  const GdkModifierType xmods = GDK_MOD2_MASK|GDK_MOD3_MASK|GDK_MOD4_MASK|GDK_MOD5_MASK;
-  const GdkModifierType vmods = GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK;
-  GdkModifierType modifiers;
 
-  if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
-    return GTK_SHORTCUT_TRIGGER_MATCH_NONE;
-
-  mask = gtk_accelerator_get_default_mod_mask ();
-
-  keycode = gdk_key_event_get_keycode (event);
-  state = gdk_event_get_modifier_state (event);
-  group = gdk_key_event_get_group (event);
-  keymap = gdk_display_get_keymap (gdk_event_get_display (event));
-
-  /* We don't want Caps_Lock to affect keybinding lookups.
-   */
-  state &= ~GDK_LOCK_MASK;
-
-  _gtk_translate_keyboard_accel_state (keymap,
-                                       keycode, state, mask, group,
-                                       &keyval,
-                                       &effective_group, &level,
-                                       &consumed_modifiers);
-
-  /* if the group-toggling modifier is part of the default accel mod
-   * mask, and it is active, disable it for matching
-   */
-  shift_group_mask = gdk_keymap_get_modifier_mask (keymap,
-                                                   GDK_MODIFIER_INTENT_SHIFT_GROUP);
-  if (mask & shift_group_mask)
-    group_mod_is_accel_mod = TRUE;
-
-  gdk_keymap_map_virtual_modifiers (keymap, &mask);
-  gdk_keymap_add_virtual_modifiers (keymap, &state);
-
-  modifiers = self->modifiers;
-  if (gdk_keymap_map_virtual_modifiers (keymap, &modifiers) &&
-      ((modifiers & ~consumed_modifiers & mask & ~vmods) == (state & ~consumed_modifiers & mask & ~vmods) ||
-       (modifiers & ~consumed_modifiers & mask & ~xmods) == (state & ~consumed_modifiers & mask & ~xmods)))
-    {
-      /* modifier match */
-      GdkKeymapKey *keys;
-      int n_keys;
-      int i;
-      guint key;
-
-      /* Shift gets consumed and applied for the event,
-       * so apply it to our keyval to match
-       */
-      key = self->keyval;
-      if (self->modifiers & GDK_SHIFT_MASK)
-        {
-          if (key == GDK_KEY_Tab)
-            key = GDK_KEY_ISO_Left_Tab;
-          else
-            key = gdk_keyval_to_upper (key);
-        }
-
-      if (keyval == key && /* exact match */
-          (!group_mod_is_accel_mod ||
-           (state & shift_group_mask) == (self->modifiers & shift_group_mask)))
-        return GTK_SHORTCUT_TRIGGER_MATCH_EXACT;
-
-      gdk_keymap_get_entries_for_keyval (keymap,
-                                         self->keyval,
-                                         &keys, &n_keys);
-
-      for (i = 0; i < n_keys; i++)
-        {
-          if (keys[i].keycode == keycode &&
-              keys[i].level == level &&
-              /* Only match for group if it's an accel mod */
-              (!group_mod_is_accel_mod ||
-               keys[i].group == effective_group))
-            {
-              /* partial match */
-              g_free (keys);
-
-              return GTK_SHORTCUT_TRIGGER_MATCH_PARTIAL;
-            }
-        }
- 
-      g_free (keys);
-    }
-
-
-  return GTK_SHORTCUT_TRIGGER_MATCH_NONE;
+  return gdk_event_matches (event, self->keyval, self->modifiers);
 }
 
 static guint
@@ -849,7 +752,7 @@ enum
 
 static GParamSpec *mnemonic_props[MNEMONIC_N_PROPS];
 
-static GtkShortcutTriggerMatch
+static GdkEventMatch
 gtk_mnemonic_trigger_trigger (GtkShortcutTrigger *trigger,
                               GdkEvent           *event,
                               gboolean            enable_mnemonics)
@@ -858,10 +761,10 @@ gtk_mnemonic_trigger_trigger (GtkShortcutTrigger *trigger,
   guint keyval;
 
   if (!enable_mnemonics)
-    return GTK_SHORTCUT_TRIGGER_MATCH_NONE;
+    return GDK_EVENT_MATCH_NONE;
 
   if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
-    return GTK_SHORTCUT_TRIGGER_MATCH_NONE;
+    return GDK_EVENT_MATCH_NONE;
 
   /* XXX: This needs to deal with groups */
   keyval = gdk_key_event_get_keyval (event);
@@ -872,9 +775,9 @@ gtk_mnemonic_trigger_trigger (GtkShortcutTrigger *trigger,
     keyval = gdk_keyval_to_lower (keyval);
 
   if (keyval != self->keyval)
-    return GTK_SHORTCUT_TRIGGER_MATCH_NONE;
+    return GDK_EVENT_MATCH_NONE;
 
-  return GTK_SHORTCUT_TRIGGER_MATCH_EXACT;
+  return GDK_EVENT_MATCH_EXACT;
 }
 
 static guint
@@ -1085,7 +988,7 @@ gtk_alternative_trigger_dispose (GObject *gobject)
   G_OBJECT_CLASS (gtk_alternative_trigger_parent_class)->dispose (gobject);
 }
 
-static GtkShortcutTriggerMatch
+static GdkEventMatch
 gtk_alternative_trigger_trigger (GtkShortcutTrigger *trigger,
                                  GdkEvent           *event,
                                  gboolean            enable_mnemonics)
