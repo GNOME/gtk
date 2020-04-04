@@ -46,12 +46,12 @@ $_switch_margin: if($_sizevariant=='default', 10px, 7px);
   // to the adwaita engine: using real CSS properties is faster,
   // and we don't use any outlines for now.
 
-  outline-color: gtkalpha(currentColor, 0.3);
-  outline-style: dashed;
-  outline-offset: -3px;
-  outline-width: 1px;
-  -gtk-outline-radius: $button-radius - 2;
-
+  outline-color: $focus_border_color;
+  outline-style: solid;
+  outline-offset: -2px;
+  outline-width: 2px;
+  -gtk-outline-radius: $button-radius;
+  :selected & { outline-color: $coloured_focus_border_color; }
   -gtk-secondary-caret-color: $selected_bg_color
 }
 
@@ -4867,4 +4867,55 @@ popover.emoji-completion contents row box {
 
 popover.emoji-completion .emoji:hover {
   background: $popover_hover_color;
+}
+
+/*********
+ * Outlines *
+ ********/
+
+button {
+  outline-color: $focus_border_color;
+  outline-style: solid;
+  outline-offset: -2px;
+  outline-width: 2px;
+  -gtk-outline-radius: $button-radius;
+
+  row:selected & { outline-color: $coloured_focus_border_color; }
+
+  &.suggested-action, &.destructive-action{ &, &:hover, &:active { outline-color: $coloured_focus_border_color; } }
+}
+
+switch {
+  &, &:hover { slider { outline-color: transparent; } }
+  &:focus {
+    box-shadow: 0 0 0 3px if($variant=='light', lighten(opacify($focus_border_color, 1), 20%), $focus_border_color);
+  }
+  row:selected & { outline-color: $coloured_focus_border_color; }
+}
+
+checkbutton,
+radiobutton {
+  outline-color: $focus_border_color;
+  outline-offset: 1px;
+  outline-width: 2px;
+  row:selected & , treeview:selected & { outline-color: $coloured_focus_border_color; }
+}
+
+row {
+  outline-color: $focus_border_color;
+  outline-offset: -2px;
+  -gtk-outline-radius: 0px;
+
+  &:selected {
+    outline-color: $coloured_focus_border_color;
+  }
+}
+
+treeview {
+  outline-color: $focus_border_color;
+  -gtk-outline-radius: 0px;
+
+  &:selected {
+    outline-color: $coloured_focus_border_color;
+  }
 }
