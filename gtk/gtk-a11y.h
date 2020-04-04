@@ -62,6 +62,7 @@
 #include <gtk/a11y/gtkscaleaccessible.h>
 #include <gtk/a11y/gtkscalebuttonaccessible.h>
 #include <gtk/a11y/gtkscrolledwindowaccessible.h>
+#include <gtk/a11y/gtkscrollbaraccessible.h>
 #include <gtk/a11y/gtkspinbuttonaccessible.h>
 #include <gtk/a11y/gtkspinneraccessible.h>
 #include <gtk/a11y/gtkstackaccessible.h>
