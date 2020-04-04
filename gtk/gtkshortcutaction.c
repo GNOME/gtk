@@ -183,6 +183,25 @@ string_is_function (const char *string,
   return g_strndup (string, len - 1);
 }
 
+/**
+ * gtk_shortcut_action_parse_string: (constructor)
+ * @string: the string to parse
+ *
+ * Tries to parse the given string into an action. On
+ * success, the parsed action is returned. When parsing
+ * failed, %NULL is returned.
+ *
+ * The accepted strings are:
+ *
+ *   - `nothing`, for #GtkNothingAction
+ *   - `activate`, for #GtkActivateAction
+ *   - `mnemonic-activate`, for #GtkMnemonicAction
+ *   - `action(NAME)`, for a #GtkNamedAction for the action named `NAME`
+ *   - `signal(NAME)`, for a #GtkSignalAction for the signal `NAME`
+ *
+ * Returns: (nullable) (transfer full): a new #GtkShortcutAction
+ *     or %NULL on error
+ */
 GtkShortcutAction *
 gtk_shortcut_action_parse_string (const char *string)
 {
