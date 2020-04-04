@@ -7,7 +7,6 @@
 
 #include <gtk/gtk.h>
 
-/*static GtkWidget *assistant = NULL;*/
 static GtkWidget *progress_bar = NULL;
 
 static gboolean
@@ -42,10 +41,7 @@ on_assistant_apply (GtkWidget *widget, gpointer data)
 static void
 on_assistant_close_cancel (GtkWidget *widget, gpointer data)
 {
-  GtkWidget **assistant = (GtkWidget **) data;
-
-  gtk_widget_destroy (*assistant);
-  *assistant = NULL;
+  gtk_widget_destroy (widget);
 }
 
 static void
@@ -182,6 +178,8 @@ do_assistant (GtkWidget *do_widget)
 
       gtk_window_set_display (GTK_WINDOW (assistant),
                               gtk_widget_get_display (do_widget));
+      g_signal_connect (assistant, "destroy",
+                        G_CALLBACK (gtk_widget_destroyed), &window);
 
       create_page1 (assistant);
       create_page2 (assistant);
@@ -189,9 +187,9 @@ do_assistant (GtkWidget *do_widget)
       create_page4 (assistant);
 
       g_signal_connect (G_OBJECT (assistant), "cancel",
-                        G_CALLBACK (on_assistant_close_cancel), &assistant);
+                        G_CALLBACK (on_assistant_close_cancel), NULL);
       g_signal_connect (G_OBJECT (assistant), "close",
-                        G_CALLBACK (on_assistant_close_cancel), &assistant);
+                        G_CALLBACK (on_assistant_close_cancel), NULL);
       g_signal_connect (G_OBJECT (assistant), "apply",
                         G_CALLBACK (on_assistant_apply), NULL);
       g_signal_connect (G_OBJECT (assistant), "prepare",
@@ -201,10 +199,7 @@ do_assistant (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (assistant))
     gtk_widget_show (assistant);
   else
-    {
-      gtk_widget_destroy (assistant);
-      assistant = NULL;
-    }
+    gtk_widget_destroy (assistant);
 
   return assistant;
 }
