@@ -118,10 +118,10 @@ gtk_shortcut_trigger_trigger (GtkShortcutTrigger *self,
  * The accepted strings are:
  *
  *   - `never`, for #GtkNeverTrigger
- *   - a string parsed by gtk_accelerator_parse(), for a #GtkKeyvalTrigger
- *   - underscore, followed by a single character, for #GtkMnemonicTrigger
+ *   - a string parsed by gtk_accelerator_parse(), for a #GtkKeyvalTrigger, e.g. `<Control>C`
+ *   - underscore, followed by a single character, for MnemonicTrigger, e.g. `_l`
  *   - two valid trigger strings, separated by a `|` character, for a
- *     #GtkAlternativeTrigger
+ *     #GtkAlternativeTrigger: `<Control>q|<Control>w`
  *
  * Returns: (nullable) (transfer full): a new #GtkShortcutTrigger
  *   or %NULL on error
