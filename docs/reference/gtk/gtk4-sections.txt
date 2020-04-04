@@ -5960,7 +5960,6 @@ gtk_event_controller_motion_get_type
 GtkShortcutTrigger
 GtkNeverTrigger
 
-GtkShortcutTriggerMatch
 gtk_shortcut_trigger_trigger
 gtk_shortcut_trigger_hash
 gtk_shortcut_trigger_equal

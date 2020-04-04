@@ -313,16 +313,16 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
 
       switch (gtk_shortcut_trigger_trigger (gtk_shortcut_get_trigger (shortcut), event, enable_mnemonics))
         {
-        case GTK_SHORTCUT_TRIGGER_MATCH_PARTIAL:
+        case GDK_EVENT_MATCH_PARTIAL:
           if (!has_exact)
             break;
           G_GNUC_FALLTHROUGH;
 
-        case GTK_SHORTCUT_TRIGGER_MATCH_NONE:
+        case GDK_EVENT_MATCH_NONE:
           g_object_unref (shortcut);
           continue;
 
-        case GTK_SHORTCUT_TRIGGER_MATCH_EXACT:
+        case GDK_EVENT_MATCH_EXACT:
           if (!has_exact)
             {
               g_slist_free_full (shortcuts, shortcut_data_free);

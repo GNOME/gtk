@@ -36,25 +36,6 @@ G_BEGIN_DECLS
  * A trigger for a key shortcut.
  */
 
-/**
- * GtkShortcutTriggerMatch:
- * @GTK_SHORTCUT_TRIGGER_MATCH_NONE: The key event does not
- *     match the trigger
- * @GTK_SHORTCUT_TRIGGER_MATCH_PARTIAL: The key event matches
- *     the trigger if keyboard state (specifically, the currently
- *     active group) is ignored
- * @GTK_SHORTCUT_TRIGGER_MATCH_EXACT: The key event matches
- *     the trigger
- *
- * The possible return values from gtk_shortcut_trigger_trigger()
- * describe if a key event triggers a shortcut.
- */
-typedef enum {
-  GTK_SHORTCUT_TRIGGER_MATCH_NONE,
-  GTK_SHORTCUT_TRIGGER_MATCH_PARTIAL,
-  GTK_SHORTCUT_TRIGGER_MATCH_EXACT,
-} GtkShortcutTriggerMatch;
-
 GDK_AVAILABLE_IN_ALL
 GDK_DECLARE_INTERNAL_TYPE (GtkShortcutTrigger, gtk_shortcut_trigger, GTK, SHORTCUT_TRIGGER, GObject)
 
@@ -84,7 +65,7 @@ gint                    gtk_shortcut_trigger_compare            (gconstpointer  
                                                                  gconstpointer       trigger2);
 
 GDK_AVAILABLE_IN_ALL
-GtkShortcutTriggerMatch gtk_shortcut_trigger_trigger            (GtkShortcutTrigger *self,
+GdkEventMatch           gtk_shortcut_trigger_trigger            (GtkShortcutTrigger *self,
                                                                  GdkEvent           *event,
                                                                  gboolean            enable_mnemonics);
 
