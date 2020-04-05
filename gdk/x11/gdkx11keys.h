@@ -23,6 +23,7 @@
 #endif
 
 #include <gdk/gdk.h>
+#include <gdk/gdkkeysprivate.h>
 
 G_BEGIN_DECLS
 

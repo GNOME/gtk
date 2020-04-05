@@ -24,7 +24,7 @@
 #include "gdkdisplayprivate.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
-#include "gdkkeys.h"
+#include "gdkkeysprivate.h"
 
 /* for the use of round() */
 #include "fallback-c89.c"
