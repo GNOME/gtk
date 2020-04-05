@@ -442,11 +442,10 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
 
           if (keyval && accelerator_codes != NULL)
             {
-              GdkKeymap *keymap = gdk_display_get_keymap (display ? display : gdk_display_get_default ());
               GdkKeymapKey *keys;
               gint n_keys, i, j;
 
-              if (!gdk_keymap_get_entries_for_keyval (keymap, keyval, &keys, &n_keys))
+              if (!gdk_display_map_keyval (display, keyval, &keys, &n_keys))
                 {
                   /* Not in keymap */
                   error = TRUE;

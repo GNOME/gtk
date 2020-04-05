@@ -982,14 +982,12 @@ is_hex_keyval (guint keyval)
 static guint
 canonical_hex_keyval (GdkEvent *event)
 {
-  GdkSurface *surface = gdk_event_get_surface ((GdkEvent *) event);
-  GdkKeymap *keymap = gdk_display_get_keymap (gdk_surface_get_display (surface));
   guint keyval, event_keyval;
   guint *keyvals = NULL;
   gint n_vals = 0;
   gint i;
 
-  event_keyval = gdk_key_event_get_keyval ((GdkEvent *)event);
+  event_keyval = gdk_key_event_get_keyval (event);
 
   /* See if the keyval is already a hex digit */
   if (is_hex_keyval (event_keyval))
@@ -998,10 +996,10 @@ canonical_hex_keyval (GdkEvent *event)
   /* See if this key would have generated a hex keyval in
    * any other state, and return that hex keyval if so
    */
-  gdk_keymap_get_entries_for_keycode (keymap,
-                                      gdk_key_event_get_scancode ((GdkEvent *) event),
-				      NULL,
-				      &keyvals, &n_vals);
+  gdk_display_map_keycode (gdk_event_get_display (event),
+                           gdk_key_event_get_scancode (event),
+                           NULL,
+                           &keyvals, &n_vals);
 
   keyval = 0;
   i = 0;
