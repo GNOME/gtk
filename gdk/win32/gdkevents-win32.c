@@ -658,7 +658,7 @@ build_key_event_state (BYTE *key_state)
       (key_state[VK_LCONTROL] & 0x80) &&
       (key_state[VK_RMENU] & 0x80))
     {
-      state |= GDK_MOD2_MASK;
+      //state |= GDK_MOD2_MASK;
       if (key_state[VK_RCONTROL] & 0x80)
 	state |= GDK_CONTROL_MASK;
       if (key_state[VK_LMENU] & 0x80)
@@ -742,10 +742,6 @@ print_event_state (guint state)
   CASE (LOCK);
   CASE (CONTROL);
   CASE (ALT);
-  CASE (MOD2);
-  CASE (MOD3);
-  CASE (MOD4);
-  CASE (MOD5);
   CASE (BUTTON1);
   CASE (BUTTON2);
   CASE (BUTTON3);
