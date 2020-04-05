@@ -366,8 +366,7 @@ test_trigger_trigger (void)
       GdkKeymapKey *keys;
       int n_keys;
 
-      if (!gdk_keymap_get_entries_for_keyval (gdk_display_get_keymap (display),
-                                              tests[i].keyval, &keys, &n_keys))
+      if (!gdk_display_map_keyval (display, tests[i].keyval, &keys, &n_keys))
         continue;
 
       event = gdk_event_key_new (GDK_KEY_PRESS,
