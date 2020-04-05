@@ -1635,10 +1635,11 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
     }
   else
     {
-      gdk_wayland_window_configure (window,
-                                    impl->unconfigured_width,
-                                    impl->unconfigured_height,
-                                    impl->scale);
+      if (impl->unconfigured_width > 0 && impl->unconfigured_height > 0)
+        gdk_wayland_window_configure (window,
+                                      impl->unconfigured_width,
+                                      impl->unconfigured_height,
+                                      impl->scale);
     }
 
   if (fixed_size)
