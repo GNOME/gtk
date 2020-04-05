@@ -1139,8 +1139,8 @@ gtk_accelerator_get_default_mod_mask (void)
         return GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK;
 
       default_accel_mod_mask =
-          gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
-				        GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK);
+          gdk_display_get_modifier_mask (display,
+                                         GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK);
     }
 
   return default_accel_mod_mask;
