@@ -929,18 +929,21 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
       
       for (i = 0; i < n_compose - len - 1; i++)
 	{
-          guint tmp_keyval = priv->compose_buffer[len + i];
+          GdkTranslatedKey translated;
+          translated.keyval = priv->compose_buffer[len + i];
+          translated.consumed = 0;
+          translated.layout = 0;
+          translated.level = 0;
           GdkEvent *tmp_event = gdk_event_key_new (GDK_KEY_PRESS,
                                                    gdk_event_get_surface (event),
                                                    gdk_event_get_device (event),
                                                    gdk_event_get_source_device (event),
                                                    gdk_event_get_time (event),
+                                                   priv->compose_buffer[len + i],
                                                    gdk_event_get_modifier_state (event),
-                                                   tmp_keyval,
-                                                   tmp_keyval,
-                                                   tmp_keyval,
-                                                   0,
-                                                   0);
+                                                   FALSE,
+                                                   &translated,
+                                                   &translated);
 	  
 	  gtk_im_context_filter_keypress (context, tmp_event);
 	  gdk_event_unref (tmp_event);
@@ -997,7 +1000,7 @@ canonical_hex_keyval (GdkEvent *event)
    * any other state, and return that hex keyval if so
    */
   gdk_display_map_keycode (gdk_event_get_display (event),
-                           gdk_key_event_get_scancode (event),
+                           gdk_key_event_get_keycode (event),
                            NULL,
                            &keyvals, &n_vals);
 

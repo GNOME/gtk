@@ -2214,7 +2214,7 @@ gdk_dnd_handle_key_event (GdkDrag           *drag,
 
   if (event->any.type == GDK_KEY_PRESS)
     {
-      switch (event->keyval)
+      switch (event->translated[0].keyval)
         {
         case GDK_KEY_Escape:
           gdk_drag_cancel (drag, GDK_DRAG_CANCEL_USER_CANCELLED);

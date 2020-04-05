@@ -59,7 +59,7 @@ struct _GtkShortcutTriggerClass
 {
   GObjectClass parent_class;
 
-  GdkEventMatch   (* trigger)     (GtkShortcutTrigger  *trigger,
+  GdkKeyMatch     (* trigger)     (GtkShortcutTrigger  *trigger,
                                    GdkEvent            *event,
                                    gboolean             enable_mnemonics);
   guint           (* hash)        (GtkShortcutTrigger  *trigger);
@@ -96,12 +96,12 @@ gtk_shortcut_trigger_init (GtkShortcutTrigger *self)
  *
  * Returns: Whether the event triggered the shortcut
  **/
-GdkEventMatch
+GdkKeyMatch
 gtk_shortcut_trigger_trigger (GtkShortcutTrigger *self,
                               GdkEvent           *event,
                               gboolean            enable_mnemonics)
 {
-  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER (self), GDK_EVENT_MATCH_NONE);
+  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER (self), GDK_KEY_MATCH_NONE);
 
   return GTK_SHORTCUT_TRIGGER_GET_CLASS (self)->trigger (self, event, enable_mnemonics);
 }
@@ -409,12 +409,12 @@ gtk_never_trigger_finalize (GObject *gobject)
   G_OBJECT_CLASS (gtk_never_trigger_parent_class)->finalize (gobject);
 }
 
-static GdkEventMatch
+static GdkKeyMatch
 gtk_never_trigger_trigger (GtkShortcutTrigger *trigger,
                            GdkEvent           *event,
                            gboolean            enable_mnemonics)
 {
-  return GDK_EVENT_MATCH_NONE;
+  return GDK_KEY_MATCH_NONE;
 }
 
 static guint
@@ -509,14 +509,14 @@ enum
 
 static GParamSpec *keyval_props[KEYVAL_N_PROPS];
 
-static GdkEventMatch
+static GdkKeyMatch
 gtk_keyval_trigger_trigger (GtkShortcutTrigger *trigger,
                             GdkEvent           *event,
                             gboolean            enable_mnemonics)
 {
   GtkKeyvalTrigger *self = GTK_KEYVAL_TRIGGER (trigger);
 
-  return gdk_event_matches (event, self->keyval, self->modifiers);
+  return gdk_key_event_matches (event, self->keyval, self->modifiers);
 }
 
 static guint
@@ -752,7 +752,7 @@ enum
 
 static GParamSpec *mnemonic_props[MNEMONIC_N_PROPS];
 
-static GdkEventMatch
+static GdkKeyMatch
 gtk_mnemonic_trigger_trigger (GtkShortcutTrigger *trigger,
                               GdkEvent           *event,
                               gboolean            enable_mnemonics)
@@ -761,10 +761,10 @@ gtk_mnemonic_trigger_trigger (GtkShortcutTrigger *trigger,
   guint keyval;
 
   if (!enable_mnemonics)
-    return GDK_EVENT_MATCH_NONE;
+    return GDK_KEY_MATCH_NONE;
 
   if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
-    return GDK_EVENT_MATCH_NONE;
+    return GDK_KEY_MATCH_NONE;
 
   /* XXX: This needs to deal with groups */
   keyval = gdk_key_event_get_keyval (event);
@@ -775,9 +775,9 @@ gtk_mnemonic_trigger_trigger (GtkShortcutTrigger *trigger,
     keyval = gdk_keyval_to_lower (keyval);
 
   if (keyval != self->keyval)
-    return GDK_EVENT_MATCH_NONE;
+    return GDK_KEY_MATCH_NONE;
 
-  return GDK_EVENT_MATCH_EXACT;
+  return GDK_KEY_MATCH_EXACT;
 }
 
 static guint
@@ -988,7 +988,7 @@ gtk_alternative_trigger_dispose (GObject *gobject)
   G_OBJECT_CLASS (gtk_alternative_trigger_parent_class)->dispose (gobject);
 }
 
-static GdkEventMatch
+static GdkKeyMatch
 gtk_alternative_trigger_trigger (GtkShortcutTrigger *trigger,
                                  GdkEvent           *event,
                                  gboolean            enable_mnemonics)
