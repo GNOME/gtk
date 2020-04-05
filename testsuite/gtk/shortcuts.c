@@ -19,27 +19,21 @@ struct _GdkEventAny
   GdkDevice *source_device;
 };
 
+typedef struct {
+  guint keyval;
+  GdkModifierType consumed;
+  guint layout;
+  guint level;
+} GdkTranslatedKey;
+
 struct _GdkEventKey
 {
   GdkEventAny any;
   GdkModifierType state;
-  guint keyval;
-  guint16 hardware_keycode;
-  guint16 key_scancode;
-  guint8 group;
+  guint32 keycode;
+  GdkTranslatedKey translated[2];
 };
 
-static GdkEvent * gdk_event_key_new     (GdkEventType     type,
-                                         GdkSurface      *surface,
-                                         GdkDevice       *device,
-                                         GdkDevice       *source_device,
-                                         guint32          time,
-                                         GdkModifierType  state,
-                                         guint            keyval,
-                                         guint16          keycode,
-                                         guint16          scancode,
-                                         guint8           group,
-                                         gboolean         is_modifier);
 
 static GdkEvent *
 gdk_event_key_new (GdkEventType     type,
@@ -47,12 +41,23 @@ gdk_event_key_new (GdkEventType     type,
                    GdkDevice       *device,
                    GdkDevice       *source_device,
                    guint32          time,
+                   guint            keycode,
                    GdkModifierType  state,
-                   guint            keyval,
-                   guint16          keycode,
-                   guint16          scancode,
-                   guint8           group,
-                   gboolean         is_modifier)
+                   gboolean         is_modifier,
+                   GdkTranslatedKey *translated,
+                   GdkTranslatedKey *no_lock);
+
+static GdkEvent *
+gdk_event_key_new (GdkEventType     type,
+                   GdkSurface      *surface,
+                   GdkDevice       *device,
+                   GdkDevice       *source_device,
+                   guint32          time,
+                   guint            keycode,
+                   GdkModifierType  state,
+                   gboolean         is_modifier,
+                   GdkTranslatedKey *translated,
+                   GdkTranslatedKey *no_lock)
 {
   GdkEventKey *event;
 
@@ -67,12 +72,11 @@ gdk_event_key_new (GdkEventType     type,
   event->any.surface = g_object_ref (surface);
   event->any.device = g_object_ref (device);
   event->any.source_device = g_object_ref (source_device);
+  event->keycode = keycode;
   event->state = state;
-  event->keyval = keyval;
-  event->hardware_keycode = keycode;
-  event->key_scancode = scancode;
-  event->group = group;
   event->any.key_is_modifier = is_modifier;
+  event->translated[0] = *translated;
+  event->translated[1] = *no_lock;
 
   return (GdkEvent *)event;
 }
@@ -340,14 +344,14 @@ test_trigger_trigger (void)
     guint keyval;
     GdkModifierType state;
     gboolean mnemonic;
-    GdkEventMatch result[4];
+    GdkKeyMatch result[4];
   } tests[] = {
-    { GDK_KEY_a, GDK_CONTROL_MASK, FALSE, { GDK_EVENT_MATCH_NONE, GDK_EVENT_MATCH_EXACT, GDK_EVENT_MATCH_NONE, GDK_EVENT_MATCH_EXACT } }, 
-    { GDK_KEY_a, GDK_CONTROL_MASK, TRUE,  { GDK_EVENT_MATCH_NONE, GDK_EVENT_MATCH_EXACT, GDK_EVENT_MATCH_NONE, GDK_EVENT_MATCH_EXACT } }, 
-    { GDK_KEY_a, GDK_SHIFT_MASK,   FALSE, { GDK_EVENT_MATCH_NONE, GDK_EVENT_MATCH_NONE, GDK_EVENT_MATCH_NONE, GDK_EVENT_MATCH_NONE } }, 
-    { GDK_KEY_a, GDK_SHIFT_MASK,   TRUE,  { GDK_EVENT_MATCH_NONE, GDK_EVENT_MATCH_NONE, GDK_EVENT_MATCH_NONE, GDK_EVENT_MATCH_NONE } }, 
-    { GDK_KEY_u, GDK_SHIFT_MASK,   FALSE, { GDK_EVENT_MATCH_NONE, GDK_EVENT_MATCH_NONE, GDK_EVENT_MATCH_NONE, GDK_EVENT_MATCH_NONE } }, 
-    { GDK_KEY_u, GDK_SHIFT_MASK,   TRUE,  { GDK_EVENT_MATCH_NONE, GDK_EVENT_MATCH_NONE, GDK_EVENT_MATCH_EXACT, GDK_EVENT_MATCH_EXACT } }, 
+    { GDK_KEY_a, GDK_CONTROL_MASK, FALSE, { GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_EXACT, GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_EXACT } }, 
+    { GDK_KEY_a, GDK_CONTROL_MASK, TRUE,  { GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_EXACT, GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_EXACT } }, 
+    { GDK_KEY_a, GDK_SHIFT_MASK,   FALSE, { GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE } }, 
+    { GDK_KEY_a, GDK_SHIFT_MASK,   TRUE,  { GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE } }, 
+    { GDK_KEY_u, GDK_SHIFT_MASK,   FALSE, { GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE } }, 
+    { GDK_KEY_u, GDK_SHIFT_MASK,   TRUE,  { GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_EXACT, GDK_KEY_MATCH_EXACT } }, 
   };
   int i, j;
 
@@ -365,23 +369,29 @@ test_trigger_trigger (void)
     {
       GdkKeymapKey *keys;
       int n_keys;
+      GdkTranslatedKey translated;
 
       if (!gdk_display_map_keyval (display, tests[i].keyval, &keys, &n_keys))
         continue;
 
+      translated.keyval = tests[i].keyval;
+      translated.consumed = 0;
+      translated.layout = keys[0].group;
+      translated.level = keys[0].level;
       event = gdk_event_key_new (GDK_KEY_PRESS,
                                  surface,
                                  device,
                                  device,
                                  GDK_CURRENT_TIME,
+                                 keys[0].keycode,
                                  tests[i].state,
-                                 tests[i].keyval,
-                                 keys[0].keycode,
-                                 keys[0].keycode,
-                                 keys[0].group,
-                                 FALSE);
+                                 FALSE,
+                                 &translated,
+                                 &translated);
       for (j = 0; j < 4; j++)
-        g_assert_cmpint (gtk_shortcut_trigger_trigger (trigger[j], event, tests[i].mnemonic), ==, tests[i].result[j]);
+        {
+          g_assert_cmpint (gtk_shortcut_trigger_trigger (trigger[j], event, tests[i].mnemonic), ==, tests[i].result[j]);
+        }
 
       gdk_event_unref (event);
     }

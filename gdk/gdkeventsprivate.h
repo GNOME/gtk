@@ -223,6 +223,13 @@ struct _GdkEventScroll
   GdkDeviceTool *tool;
 };
 
+typedef struct {
+  guint keyval;
+  GdkModifierType consumed;
+  guint layout;
+  guint level;
+} GdkTranslatedKey;
+
 /*
  * GdkEventKey:
  * @type: the type of the event (%GDK_KEY_PRESS or %GDK_KEY_RELEASE).
@@ -232,13 +239,9 @@ struct _GdkEventScroll
  * @state: (type GdkModifierType): a bit-mask representing the state of
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
  *   buttons. See #GdkModifierType.
- * @keyval: the key that was pressed or released. See the
- *   `gdk/gdkkeysyms.h` header file for a
- *   complete list of GDK key codes.
- * @hardware_keycode: the raw code of the key that was pressed or released.
- * @group: the keyboard group.
- * @is_modifier: a flag that indicates if @hardware_keycode is mapped to a
- *   modifier
+ * @keycode: the raw code of the key that was pressed or released.
+ * @translated: the result of translating @keycode. First with the full
+ *   @state, then while ignoring Caps Lock.
  *
  * Describes a key press or key release event.
  */
@@ -246,10 +249,8 @@ struct _GdkEventKey
 {
   GdkEventAny any;
   GdkModifierType state;
-  guint keyval;
-  guint16 hardware_keycode;
-  guint16 key_scancode;
-  guint8 group;
+  guint32 keycode;
+  GdkTranslatedKey translated[2];
 };
 
 /*
@@ -594,17 +595,16 @@ GdkEvent * gdk_event_proximity_new      (GdkEventType     type,
                                          GdkDeviceTool   *tool,
                                          guint32          time);
 
-GdkEvent * gdk_event_key_new            (GdkEventType     type,
-                                         GdkSurface      *surface,
-                                         GdkDevice       *device,
-                                         GdkDevice       *source_device,
-                                         guint32          time,
-                                         GdkModifierType  state,
-                                         guint            keyval,
-                                         guint16          keycode,
-                                         guint16          scancode,
-                                         guint8           group,
-                                         gboolean         is_modifier);
+GdkEvent * gdk_event_key_new            (GdkEventType      type,
+                                         GdkSurface       *surface,
+                                         GdkDevice        *device,
+                                         GdkDevice        *source_device,
+                                         guint32           time,
+                                         guint             keycode,
+                                         GdkModifierType   modifiers,
+                                         gboolean          is_modifier,
+                                         GdkTranslatedKey *translated,
+                                         GdkTranslatedKey *no_lock);
 
 GdkEvent * gdk_event_focus_new          (GdkSurface      *surface,
                                          GdkDevice       *device,

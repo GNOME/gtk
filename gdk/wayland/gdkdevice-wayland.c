@@ -2020,9 +2020,13 @@ deliver_key_event (GdkWaylandSeat *seat,
   struct xkb_state *xkb_state;
   struct xkb_keymap *xkb_keymap;
   GdkKeymap *keymap;
-  xkb_keysym_t sym;
   guint delay, interval, timeout;
   gint64 begin_time, now;
+  xkb_mod_mask_t consumed;
+  GdkTranslatedKey translated;
+  GdkTranslatedKey no_lock;
+  xkb_mod_mask_t modifiers;
+  xkb_mod_index_t caps_lock;
 
   begin_time = g_get_monotonic_time ();
 
@@ -2032,36 +2036,69 @@ deliver_key_event (GdkWaylandSeat *seat,
   xkb_state = _gdk_wayland_keymap_get_xkb_state (keymap);
   xkb_keymap = _gdk_wayland_keymap_get_xkb_keymap (keymap);
 
-  sym = xkb_state_key_get_one_sym (xkb_state, key);
-  if (sym == XKB_KEY_NoSymbol)
+  translated.keyval = xkb_state_key_get_one_sym (xkb_state, key);
+  modifiers = xkb_state_serialize_mods (xkb_state, XKB_STATE_MODS_EFFECTIVE);
+  consumed = modifiers & ~xkb_state_mod_mask_remove_consumed (xkb_state, key, modifiers);
+  translated.consumed = gdk_wayland_keymap_get_gdk_modifiers (keymap, consumed);
+  translated.layout = xkb_state_key_get_layout (xkb_state, key);
+  translated.level = xkb_state_key_get_level (xkb_state, key, translated.layout);
+
+  if (translated.keyval == XKB_KEY_NoSymbol)
     return;
 
   seat->pointer_info.time = time_;
   seat->key_modifiers = gdk_keymap_get_modifier_state (keymap);
+
+
+  modifiers = xkb_state_serialize_mods (xkb_state, XKB_STATE_MODS_EFFECTIVE);
+  caps_lock = xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_CAPS);
+  if (modifiers & (1 << caps_lock))
+    {
+      struct xkb_state *tmp_state = xkb_state_new (xkb_keymap);
+      xkb_layout_index_t layout;
+
+      modifiers &= ~(1 << caps_lock);
+      layout = xkb_state_serialize_layout (xkb_state, XKB_STATE_LAYOUT_EFFECTIVE);
+      xkb_state_update_mask (tmp_state, modifiers, 0, 0, layout, 0, 0);
+
+      no_lock.keyval = xkb_state_key_get_one_sym (tmp_state, key);
+      consumed = modifiers & ~xkb_state_mod_mask_remove_consumed (tmp_state, key, modifiers);
+      no_lock.consumed = gdk_wayland_keymap_get_gdk_modifiers (keymap, consumed);
+      no_lock.layout = xkb_state_key_get_layout (tmp_state, key);
+      no_lock.level = xkb_state_key_get_level (tmp_state, key, no_lock.layout);
+
+      xkb_state_unref (tmp_state);
+    }
+  else
+    {
+      no_lock = translated;
+    }
 
   event = gdk_event_key_new (state ? GDK_KEY_PRESS : GDK_KEY_RELEASE,
                              seat->keyboard_focus,
                              seat->master_keyboard,
                              seat->keyboard,
                              time_,
+                             key,
                              device_get_modifiers (seat->master_pointer),
-                             sym,
-                             key,
-                             key,
-                             0,
-                             _gdk_wayland_keymap_key_is_modifier (keymap, key));
+                             _gdk_wayland_keymap_key_is_modifier (keymap, key),
+                             &translated, 
+                             &no_lock);
 
   _gdk_wayland_display_deliver_event (seat->display, event);
 
   GDK_SEAT_NOTE (seat, EVENTS,
             g_message ("keyboard %s event%s, surface %p, code %d, sym %d, "
-                       "mods 0x%x",
+                       "mods 0x%x, consumed 0x%x, layout %d level %d",
                        (state ? "press" : "release"),
                        (from_key_repeat ? " (repeat)" : ""),
                        gdk_event_get_surface (event),
                        gdk_key_event_get_keycode (event),
                        gdk_key_event_get_keyval (event),
-                       gdk_event_get_modifier_state (event)));
+                       gdk_event_get_modifier_state (event),
+                       gdk_key_event_get_consumed_modifiers (event),
+                       gdk_key_event_get_layout (event),
+                       gdk_key_event_get_level (event)));
 
   if (!xkb_keymap_key_repeats (xkb_keymap, key))
     return;

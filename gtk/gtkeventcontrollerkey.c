@@ -385,5 +385,5 @@ gtk_event_controller_key_get_group (GtkEventControllerKey *controller)
   g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER_KEY (controller), FALSE);
   g_return_val_if_fail (controller->current_event != NULL, FALSE);
 
-  return gdk_key_event_get_group (controller->current_event);
+  return gdk_key_event_get_layout (controller->current_event);
 }
