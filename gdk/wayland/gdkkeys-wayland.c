@@ -260,14 +260,6 @@ get_xkb_modifiers (struct xkb_keymap *xkb_keymap,
     mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_CTRL);
   if (state & GDK_ALT_MASK)
     mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_ALT);
-  if (state & GDK_MOD2_MASK)
-    mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_NUM);
-  if (state & GDK_MOD3_MASK)
-    mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, "Mod3");
-  if (state & GDK_MOD4_MASK)
-    mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_LOGO);
-  if (state & GDK_MOD5_MASK)
-    mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, "Mod5");
   if (state & GDK_SUPER_MASK)
     mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, "Super");
   if (state & GDK_HYPER_MASK)
@@ -292,14 +284,6 @@ get_gdk_modifiers (struct xkb_keymap *xkb_keymap,
     state |= GDK_CONTROL_MASK;
   if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_ALT)))
     state |= GDK_ALT_MASK;
-  if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_NUM)))
-    state |= GDK_MOD2_MASK;
-  if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, "Mod3")))
-    state |= GDK_MOD3_MASK;
-  if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_LOGO)))
-    state |= GDK_MOD4_MASK;
-  if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, "Mod5")))
-    state |= GDK_MOD5_MASK;
   if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, "Super")))
     state |= GDK_SUPER_MASK;
   if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, "Hyper")))
