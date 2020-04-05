@@ -1089,6 +1089,8 @@ needs_initial_configure (GdkWindow *window)
     return FALSE;
   else if (impl->use_custom_surface)
     return FALSE;
+  else if (impl->hint == GDK_WINDOW_TYPE_HINT_DND)
+    return FALSE;
   else if (is_realized_toplevel (window))
     return TRUE;
   else if (is_realized_popup (window))
