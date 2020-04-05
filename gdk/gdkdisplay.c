@@ -1718,3 +1718,75 @@ gdk_display_get_modifier_mask (GdkDisplay        *display,
 {
   return gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display), intent);  
 }
+
+/**
+ * gdk_display_map_keyval:
+ * @display: a #GdkDisplay
+ * @keyval: a keyval, such as %GDK_KEY_a, %GDK_KEY_Up, %GDK_KEY_Return, etc.
+ * @keys: (out) (array length=n_keys) (transfer full): return location
+ *     for an array of #GdkKeymapKey
+ * @n_keys: return location for number of elements in returned array
+ *
+ * Obtains a list of keycode/group/level combinations that will
+ * generate @keyval. Groups and levels are two kinds of keyboard mode;
+ * in general, the level determines whether the top or bottom symbol
+ * on a key is used, and the group determines whether the left or
+ * right symbol is used.
+ *
+ * On US keyboards, the shift key changes the keyboard level, and there
+ * are no groups. A group switch key might convert a keyboard between
+ * Hebrew to English modes, for example.
+ *
+ * #GdkEventKey contains a %group field that indicates the active
+ * keyboard group. The level is computed from the modifier mask.
+ *
+ * The returned array should be freed with g_free().
+ *
+ * Returns: %TRUE if keys were found and returned
+ */
+gboolean
+gdk_display_map_keyval (GdkDisplay    *display,
+                        guint          keyval,
+                        GdkKeymapKey **keys,
+                        int           *n_keys)
+{
+  return gdk_keymap_get_entries_for_keyval (gdk_display_get_keymap (display),
+                                            keyval,
+                                            keys,
+                                            n_keys);
+}
+
+/**
+ * gdk_display_map_keycode:
+ * @display: a #GdkDisplay
+ * @keycode: a keycode
+ * @keys: (out) (array length=n_entries) (transfer full) (optional): return
+ *     location for array of #GdkKeymapKey, or %NULL
+ * @keyvals: (out) (array length=n_entries) (transfer full) (optional): return
+ *     location for array of keyvals, or %NULL
+ * @n_entries: length of @keys and @keyvals
+ *
+ * Returns the keyvals bound to @keycode. The Nth #GdkKeymapKey
+ * in @keys is bound to the Nth keyval in @keyvals.
+ *
+ * When a keycode is pressed by the user, the keyval from
+ * this list of entries is selected by considering the effective
+ * keyboard group and level.
+ *
+ * Free the returned arrays with g_free().
+ *
+ * Returns: %TRUE if there were any entries
+ */
+gboolean
+gdk_display_map_keycode (GdkDisplay    *display,
+                         guint          keycode,
+                         GdkKeymapKey **keys,
+                         guint        **keyvals,
+                         int           *n_entries)
+{
+  return gdk_keymap_get_entries_for_keycode (gdk_display_get_keymap (display),
+                                             keycode,
+                                             keys,
+                                             keyvals,
+                                             n_entries);
+}

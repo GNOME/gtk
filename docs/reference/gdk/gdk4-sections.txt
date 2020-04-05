@@ -100,6 +100,10 @@ gdk_display_get_primary_clipboard
 gdk_display_get_setting
 gdk_display_get_keymap
 
+<SUBSECTION>
+gdk_display_map_keyval
+gdk_display_map_keycode
+
 <SUBSECTION Standard>
 GDK_DISPLAY
 GDK_DISPLAY_OBJECT
