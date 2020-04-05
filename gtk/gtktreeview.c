@@ -2791,10 +2791,10 @@ get_current_selection_modifiers (GtkWidget *widget,
 
   if (gtk_get_current_event_state (&state))
     {
-      mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_MODIFY_SELECTION);
+      mask = GDK_CONTROL_MASK;
       if ((state & mask) == mask)
         *modify = TRUE;
-      mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_EXTEND_SELECTION);
+      mask = GDK_SHIFT_MASK;
       if ((state & mask) == mask)
         *extend = TRUE;
     }
@@ -7966,13 +7966,8 @@ gtk_tree_view_real_move_cursor (GtkTreeView       *tree_view,
       GdkModifierType extend_mod_mask;
       GdkModifierType modify_mod_mask;
 
-      extend_mod_mask =
-        gtk_widget_get_modifier_mask (GTK_WIDGET (tree_view),
-                                      GDK_MODIFIER_INTENT_EXTEND_SELECTION);
-
-      modify_mod_mask =
-        gtk_widget_get_modifier_mask (GTK_WIDGET (tree_view),
-                                      GDK_MODIFIER_INTENT_MODIFY_SELECTION);
+      extend_mod_mask = GDK_SHIFT_MASK;
+      modify_mod_mask = GDK_CONTROL_MASK;
 
       if ((state & modify_mod_mask) == modify_mod_mask)
         tree_view->modify_selection_pressed = TRUE;
@@ -9990,9 +9985,7 @@ gtk_tree_view_real_select_cursor_parent (GtkTreeView *tree_view)
 	{
           GdkModifierType modify_mod_mask;
 
-          modify_mod_mask =
-            gtk_widget_get_modifier_mask (GTK_WIDGET (tree_view),
-                                          GDK_MODIFIER_INTENT_MODIFY_SELECTION);
+          modify_mod_mask = GDK_CONTROL_MASK;
 
 	  if ((state & modify_mod_mask) == modify_mod_mask)
 	    tree_view->modify_selection_pressed = TRUE;
@@ -13686,8 +13679,7 @@ gtk_tree_view_search_key_pressed (GtkEventControllerKey *key,
       return TRUE;
     }
 
-  default_accel = gtk_widget_get_modifier_mask (widget,
-                                                GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
+  default_accel = GDK_CONTROL_MASK;
 
   /* select previous matching iter */
   if (keyval == GDK_KEY_Up || keyval == GDK_KEY_KP_Up)
