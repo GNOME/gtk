@@ -18,9 +18,11 @@
 #include <locale.h>
 
 static void
-test_one_accel (const char *accel,
-		const char *exp_label,
-		gboolean    has_keysym)
+test_one_accel (const char      *accel,
+                GdkModifierType  exp_mods,
+                guint            exp_key,
+		const char      *exp_label,
+		gboolean         has_keysym)
 {
   guint accel_key;
   GdkModifierType mods;
@@ -47,7 +49,8 @@ test_one_accel (const char *accel,
     }
 
   if (has_keysym)
-    g_assert (accel_key != 0);
+    g_assert (accel_key == exp_key);
+  g_assert (mods == exp_mods);
   g_assert (keycodes);
   g_assert (keycodes[0] != 0);
 
@@ -72,49 +75,49 @@ test_one_accel (const char *accel,
 static void
 accel1 (void)
 {
-  test_one_accel ("0xb3", "0xb3", FALSE);
+  test_one_accel ("0xb3", 0, 0xb3, "0xb3", FALSE);
 }
 
 static void
 accel2 (void)
 {
-  test_one_accel ("<Primary><Alt>z", "Ctrl+Alt+Z", TRUE);
+  test_one_accel ("<Control><Alt>z", GDK_CONTROL_MASK|GDK_ALT_MASK, GDK_KEY_z, "Ctrl+Alt+Z", TRUE);
 }
 
 static void
 accel3 (void)
 {
-  test_one_accel ("KP_7", "7", TRUE);
+  test_one_accel ("KP_7", 0, GDK_KEY_KP_7, "7", TRUE);
 }
 
 static void
 accel4 (void)
 {
-  test_one_accel ("<Primary>KP_7", "Ctrl+7", TRUE);
+  test_one_accel ("<Control>KP_7", GDK_CONTROL_MASK, GDK_KEY_KP_7, "Ctrl+7", TRUE);
 }
 
 static void
 accel5 (void)
 {
-  test_one_accel ("<Shift>exclam", "Shift+!", TRUE);
+  test_one_accel ("<Shift>exclam", GDK_SHIFT_MASK, GDK_KEY_exclam, "Shift+!", TRUE);
 }
 
 static void
 accel6 (void)
 {
-  test_one_accel ("<Hyper>x", "Hyper+X", TRUE);
+  test_one_accel ("<Hyper>x", GDK_HYPER_MASK, GDK_KEY_x, "Hyper+X", TRUE);
 }
 
 static void
 accel7 (void)
 {
-  test_one_accel ("<Super>x", "Super+X", TRUE);
+  test_one_accel ("<Super>x", GDK_SUPER_MASK, GDK_KEY_x, "Super+X", TRUE);
 }
 
 static void
 accel8 (void)
 {
-  test_one_accel ("<Meta>x", "Meta+X", TRUE);
+  test_one_accel ("<Meta>x", GDK_META_MASK, GDK_KEY_x, "Meta+X", TRUE);
 }
 
 static void
