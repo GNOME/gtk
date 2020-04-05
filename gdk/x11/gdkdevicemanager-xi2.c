@@ -19,6 +19,7 @@
 
 #include "gdkx11devicemanager-xi2.h"
 #include "gdkx11device-xi2.h"
+#include "gdkx11keys.h"
 
 #include "gdkdeviceprivate.h"
 #include "gdkdevicetoolprivate.h"

@@ -30,6 +30,7 @@
 #include "gdkdisplayprivate.h"
 #include "gdkdragprivate.h"
 #include "gdkdropprivate.h"
+#include "gdkkeysprivate.h"
 #include "gdk-private.h"
 
 #include <string.h>

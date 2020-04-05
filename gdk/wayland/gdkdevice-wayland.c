@@ -30,6 +30,7 @@
 #include "gdkseat-wayland.h"
 #include "gdkwayland.h"
 #include "gdkkeysyms.h"
+#include "gdkkeysprivate.h"
 #include "gdkcursorprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevicepadprivate.h"
