@@ -6275,8 +6275,7 @@ main (int argc, char *argv[])
 					GDK_ALT_MASK | 
 					GDK_META_MASK |
 					GDK_SUPER_MASK |
-					GDK_HYPER_MASK |
-					GDK_MOD4_MASK);
+					GDK_HYPER_MASK);
   /*  benchmarking
    */
   for (i = 1; i < argc; i++)
