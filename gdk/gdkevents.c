@@ -2191,9 +2191,6 @@ gdk_event_matches (GdkEvent        *event,
   GdkModifierType consumed_modifiers;
   GdkModifierType shift_group_mask;
   gboolean group_mod_is_accel_mod = FALSE;
-  const GdkModifierType xmods = GDK_MOD2_MASK|GDK_MOD3_MASK|GDK_MOD4_MASK|GDK_MOD5_MASK;
-  const GdkModifierType vmods = GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK;
-  GdkModifierType mods;
 
   if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
     return GDK_EVENT_MATCH_NONE;
@@ -2224,13 +2221,7 @@ gdk_event_matches (GdkEvent        *event,
   if (mask & shift_group_mask)
     group_mod_is_accel_mod = TRUE;
 
-  gdk_keymap_map_virtual_modifiers (keymap, &mask);
-  gdk_keymap_add_virtual_modifiers (keymap, &state);
-
-  mods = modifiers;
-  if (gdk_keymap_map_virtual_modifiers (keymap, &mods) &&
-      ((mods & ~consumed_modifiers & mask & ~vmods) == (state & ~consumed_modifiers & mask & ~vmods) ||
-       (mods & ~consumed_modifiers & mask & ~xmods) == (state & ~consumed_modifiers & mask & ~xmods)))
+  if ((modifiers & ~consumed_modifiers & mask) == (state & ~consumed_modifiers & mask))
     {
       /* modifier match */
       GdkKeymapKey *keys;
