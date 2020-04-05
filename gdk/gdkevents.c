@@ -2318,7 +2318,7 @@ gdk_event_get_match (GdkEvent        *event,
   accel_mods = gdk_event_get_modifier_state (event);
 
   if (accel_key == GDK_KEY_Sys_Req &&
-      (accel_mods & GDK_MOD1_MASK) != 0)
+      (accel_mods & GDK_ALT_MASK) != 0)
     {
       /* HACK: we don't want to use SysRq as a keybinding (but we do
        * want Alt+Print), so we avoid translation from Alt+Print to SysRq

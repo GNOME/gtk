@@ -137,7 +137,7 @@ get_labels (guint key, GdkModifierType modifier, guint *n_mods)
     labels[i++] = C_("keyboard label", "Shift");
   if (modifier & GDK_CONTROL_MASK)
     labels[i++] = C_("keyboard label", "Ctrl");
-  if (modifier & GDK_MOD1_MASK)
+  if (modifier & GDK_ALT_MASK)
     labels[i++] = C_("keyboard label", "Alt");
   if (modifier & GDK_MOD2_MASK)
     labels[i++] = "Mod2";

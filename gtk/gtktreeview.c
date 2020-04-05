@@ -5348,7 +5348,7 @@ gtk_tree_view_key_controller_key_pressed (GtkEventControllerKey *key,
         }
 
       if (focus_column &&
-          (state & GDK_SHIFT_MASK) && (state & GDK_MOD1_MASK) &&
+          (state & GDK_SHIFT_MASK) && (state & GDK_ALT_MASK) &&
           (keyval == GDK_KEY_Left || keyval == GDK_KEY_KP_Left
            || keyval == GDK_KEY_Right || keyval == GDK_KEY_KP_Right))
         {
@@ -5380,7 +5380,7 @@ gtk_tree_view_key_controller_key_pressed (GtkEventControllerKey *key,
         }
 
       if (focus_column &&
-          (state & GDK_MOD1_MASK) &&
+          (state & GDK_ALT_MASK) &&
           (keyval == GDK_KEY_Left || keyval == GDK_KEY_KP_Left
            || keyval == GDK_KEY_Right || keyval == GDK_KEY_KP_Right
            || keyval == GDK_KEY_Home || keyval == GDK_KEY_KP_Home

@@ -171,7 +171,7 @@ test_trigger_parse_keyval (void)
     guint keyval;
     int trigger_type;
   } tests[] = {
-    { "<Primary><Alt>z", GDK_CONTROL_MASK | GDK_MOD1_MASK, 'z' },
+    { "<Primary><Alt>z", GDK_CONTROL_MASK | GDK_ALT_MASK, 'z' },
     { "<Control>U", GDK_CONTROL_MASK, 'u' },
     { "<Hyper>x", GDK_HYPER_MASK, 'x' },
     { "<Meta>y", GDK_META_MASK, 'y' },

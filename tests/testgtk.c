@@ -6272,7 +6272,7 @@ main (int argc, char *argv[])
 
   gtk_accelerator_set_default_mod_mask (GDK_SHIFT_MASK |
 					GDK_CONTROL_MASK |
-					GDK_MOD1_MASK | 
+					GDK_ALT_MASK | 
 					GDK_META_MASK |
 					GDK_SUPER_MASK |
 					GDK_HYPER_MASK |

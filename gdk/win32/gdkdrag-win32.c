@@ -1869,7 +1869,7 @@ manufacture_keystate_from_GMT (GdkModifierType state)
 {
   DWORD key_state = 0;
 
-  if (state & GDK_MOD1_MASK)
+  if (state & GDK_ALT_MASK)
     key_state |= MK_ALT;
   if (state & GDK_CONTROL_MASK)
     key_state |= MK_CONTROL;
@@ -2415,22 +2415,22 @@ gdk_dnd_handle_key_event (GdkDrag  *drag,
 
         case GDK_KEY_Up:
         case GDK_KEY_KP_Up:
-          dy = (state & GDK_MOD1_MASK) ? -BIG_STEP : -SMALL_STEP;
+          dy = (state & GDK_ALT_MASK) ? -BIG_STEP : -SMALL_STEP;
           break;
 
         case GDK_KEY_Down:
         case GDK_KEY_KP_Down:
-          dy = (state & GDK_MOD1_MASK) ? BIG_STEP : SMALL_STEP;
+          dy = (state & GDK_ALT_MASK) ? BIG_STEP : SMALL_STEP;
           break;
 
         case GDK_KEY_Left:
         case GDK_KEY_KP_Left:
-          dx = (state & GDK_MOD1_MASK) ? -BIG_STEP : -SMALL_STEP;
+          dx = (state & GDK_ALT_MASK) ? -BIG_STEP : -SMALL_STEP;
           break;
 
         case GDK_KEY_Right:
         case GDK_KEY_KP_Right:
-          dx = (state & GDK_MOD1_MASK) ? BIG_STEP : SMALL_STEP;
+          dx = (state & GDK_ALT_MASK) ? BIG_STEP : SMALL_STEP;
           break;
         }
     }
