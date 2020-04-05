@@ -82,8 +82,6 @@ gboolean _gtk_single_string_accumulator   (GSignalInvocationHint *ihint,
                                            const GValue          *handler_return,
                                            gpointer               dummy);
 
-GdkModifierType _gtk_get_primary_accel_mod     (void);
-
 gboolean         gtk_propagate_event_internal  (GtkWidget       *widget,
                                                 GdkEvent        *event,
                                                 GtkWidget       *topmost);
