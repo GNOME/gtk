@@ -40,7 +40,6 @@
 #include <gdk/x11/gdkx11display.h>
 #include <gdk/x11/gdkx11dnd.h>
 #include <gdk/x11/gdkx11glcontext.h>
-#include <gdk/x11/gdkx11keys.h>
 #include <gdk/x11/gdkx11monitor.h>
 #include <gdk/x11/gdkx11property.h>
 #include <gdk/x11/gdkx11screen.h>
