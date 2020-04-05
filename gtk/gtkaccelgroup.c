@@ -276,6 +276,7 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
   GdkModifierType mods;
   gint len;
   gboolean error;
+  GdkModifierType primary;
 
   if (accelerator_key)
     *accelerator_key = 0;
@@ -285,6 +286,9 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
     *accelerator_codes = NULL;
 
   g_return_val_if_fail (accelerator != NULL, FALSE);
+
+  primary = gdk_display_get_modifier_mask (display,
+                                           GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
 
   error = FALSE;
   keyval = 0;
@@ -298,7 +302,7 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
             {
               accelerator += 9;
               len -= 9;
-              mods |= _gtk_get_primary_accel_mod ();
+              mods |= primary;
             }
           else if (len >= 9 && is_control (accelerator))
             {
@@ -541,7 +545,6 @@ gtk_accelerator_name_with_keycode (GdkDisplay      *display,
   if (display == NULL)
     display = gdk_display_manager_get_default_display (gdk_display_manager_get ());
 
-  gdk_keymap_add_virtual_modifiers (gdk_display_get_keymap (display), &accelerator_mods);
   gtk_name = gtk_accelerator_name (accelerator_key, accelerator_mods);
 
   if (!accelerator_key)
@@ -584,6 +587,10 @@ gtk_accelerator_name (guint           accelerator_key,
   guint l;
   const char *keyval_name;
   gchar *accelerator;
+  GdkModifierType primary;
+
+  primary = gdk_display_get_modifier_mask (gdk_display_get_default (),
+                                           GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
 
   accelerator_mods &= GDK_MODIFIER_MASK;
 
@@ -593,10 +600,10 @@ gtk_accelerator_name (guint           accelerator_key,
 
   saved_mods = accelerator_mods;
   l = 0;
-  if (accelerator_mods & _gtk_get_primary_accel_mod ())
+  if (accelerator_mods & primary)
     {
       l += sizeof (text_primary) - 1;
-      accelerator_mods &= ~_gtk_get_primary_accel_mod (); /* consume the default accel */
+      accelerator_mods &= ~primary; /* consume the default accel */
     }
   if (accelerator_mods & GDK_SHIFT_MASK)
     l += sizeof (text_shift) - 1;
@@ -616,11 +623,11 @@ gtk_accelerator_name (guint           accelerator_key,
   accelerator_mods = saved_mods;
   l = 0;
   accelerator[l] = 0;
-  if (accelerator_mods & _gtk_get_primary_accel_mod ())
+  if (accelerator_mods & primary)
     {
       strcpy (accelerator + l, text_primary);
       l += sizeof (text_primary) - 1;
-      accelerator_mods &= ~_gtk_get_primary_accel_mod (); /* consume the default accel */
+      accelerator_mods &= ~primary; /* consume the default accel */
     }
   if (accelerator_mods & GDK_SHIFT_MASK)
     {
@@ -685,7 +692,6 @@ gtk_accelerator_get_label_with_keycode (GdkDisplay      *display,
   if (display == NULL)
     display = gdk_display_manager_get_default_display (gdk_display_manager_get ());
 
-  gdk_keymap_add_virtual_modifiers (gdk_display_get_keymap (display), &accelerator_mods);
   gtk_label = gtk_accelerator_get_label (accelerator_key, accelerator_mods);
 
   if (!accelerator_key)
