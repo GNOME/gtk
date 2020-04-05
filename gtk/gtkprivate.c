@@ -158,22 +158,6 @@ _gtk_single_string_accumulator (GSignalInvocationHint *ihint,
   return continue_emission;
 }
 
-GdkModifierType
-_gtk_get_primary_accel_mod (void)
-{
-  static GdkModifierType primary = 0;
-
-  if (! primary)
-    {
-      GdkDisplay *display = gdk_display_get_default ();
-
-      primary = gdk_display_get_modifier_mask (display,
-                                               GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
-    }
-
-  return primary;
-}
-
 static gpointer
 register_resources (gpointer data)
 {
