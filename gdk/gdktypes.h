@@ -260,10 +260,7 @@ typedef enum
   GDK_LOCK_MASK     = 1 << 1,
   GDK_CONTROL_MASK  = 1 << 2,
   GDK_ALT_MASK      = 1 << 3,
-  GDK_MOD2_MASK     = 1 << 4,
-  GDK_MOD3_MASK     = 1 << 5,
-  GDK_MOD4_MASK     = 1 << 6,
-  GDK_MOD5_MASK     = 1 << 7,
+
   GDK_BUTTON1_MASK  = 1 << 8,
   GDK_BUTTON2_MASK  = 1 << 9,
   GDK_BUTTON3_MASK  = 1 << 10,
@@ -274,11 +271,13 @@ typedef enum
   GDK_HYPER_MASK    = 1 << 27,
   GDK_META_MASK     = 1 << 28,
   
-  /* Combination of GDK_SHIFT_MASK..GDK_BUTTON5_MASK + GDK_SUPER_MASK
-     + GDK_HYPER_MASK + GDK_META_MASK */
-  GDK_MODIFIER_MASK = 0x1c001fff
 } GdkModifierType;
 
+
+#define GDK_MODIFIER_MASK (GDK_SHIFT_MASK|GDK_LOCK_MASK|GDK_CONTROL_MASK| \
+                           GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK| \
+                           GDK_BUTTON1_MASK|GDK_BUTTON2_MASK|GDK_BUTTON3_MASK| \
+                           GDK_BUTTON4_MASK|GDK_BUTTON5_MASK)
 /**
  * GdkModifierIntent:
  * @GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR: the primary modifier used to invoke
