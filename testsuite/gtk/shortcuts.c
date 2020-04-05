@@ -23,23 +23,13 @@ struct _GdkEventKey
 {
   GdkEventAny any;
   GdkModifierType state;
+  guint32 keycode;
   guint keyval;
-  guint16 hardware_keycode;
-  guint16 key_scancode;
-  guint8 group;
+  GdkModifierType consumed;
+  guint layout;
+  guint level;
 };
 
-static GdkEvent * gdk_event_key_new     (GdkEventType     type,
-                                         GdkSurface      *surface,
-                                         GdkDevice       *device,
-                                         GdkDevice       *source_device,
-                                         guint32          time,
-                                         GdkModifierType  state,
-                                         guint            keyval,
-                                         guint16          keycode,
-                                         guint16          scancode,
-                                         guint8           group,
-                                         gboolean         is_modifier);
 
 static GdkEvent *
 gdk_event_key_new (GdkEventType     type,
@@ -47,11 +37,26 @@ gdk_event_key_new (GdkEventType     type,
                    GdkDevice       *device,
                    GdkDevice       *source_device,
                    guint32          time,
-                   GdkModifierType  state,
+                   guint            keycode,
                    guint            keyval,
-                   guint16          keycode,
-                   guint16          scancode,
-                   guint8           group,
+                   GdkModifierType  state,
+                   GdkModifierType  consumed,
+                   guint            layout,
+                   guint            level,
+                   gboolean         is_modifier);
+
+static GdkEvent *
+gdk_event_key_new (GdkEventType     type,
+                   GdkSurface      *surface,
+                   GdkDevice       *device,
+                   GdkDevice       *source_device,
+                   guint32          time,
+                   guint            keycode,
+                   guint            keyval,
+                   GdkModifierType  state,
+                   GdkModifierType  consumed,
+                   guint            layout,
+                   guint            level,
                    gboolean         is_modifier)
 {
   GdkEventKey *event;
@@ -67,11 +72,12 @@ gdk_event_key_new (GdkEventType     type,
   event->any.surface = g_object_ref (surface);
   event->any.device = g_object_ref (device);
   event->any.source_device = g_object_ref (source_device);
-  event->state = state;
+  event->keycode = keycode;
   event->keyval = keyval;
-  event->hardware_keycode = keycode;
-  event->key_scancode = scancode;
-  event->group = group;
+  event->state = state;
+  event->consumed = consumed;
+  event->layout = layout;
+  event->level = level;
   event->any.key_is_modifier = is_modifier;
 
   return (GdkEvent *)event;
@@ -374,14 +380,17 @@ test_trigger_trigger (void)
                                  device,
                                  device,
                                  GDK_CURRENT_TIME,
-                                 tests[i].state,
+                                 keys[0].keycode,
                                  tests[i].keyval,
-                                 keys[0].keycode,
-                                 keys[0].keycode,
+                                 tests[i].state,
+                                 0,
                                  keys[0].group,
+                                 keys[0].level,
                                  FALSE);
       for (j = 0; j < 4; j++)
-        g_assert_cmpint (gtk_shortcut_trigger_trigger (trigger[j], event, tests[i].mnemonic), ==, tests[i].result[j]);
+        {
+          g_assert_cmpint (gtk_shortcut_trigger_trigger (trigger[j], event, tests[i].mnemonic), ==, tests[i].result[j]);
+        }
 
       gdk_event_unref (event);
     }

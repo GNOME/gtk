@@ -931,17 +931,16 @@ gdk_event_proximity_new (GdkEventType   type,
 }
 
 GdkEvent *
-gdk_event_key_new (GdkEventType     type,
-                   GdkSurface      *surface,
-                   GdkDevice       *device,
-                   GdkDevice       *source_device,
-                   guint32          time,
-                   GdkModifierType  state,
-                   guint            keyval,
-                   guint16          keycode,
-                   guint16          scancode,
-                   guint8           group,
-                   gboolean         is_modifier)
+gdk_event_key_new (GdkEventType      type,
+                   GdkSurface       *surface,
+                   GdkDevice        *device,
+                   GdkDevice        *source_device,
+                   guint32           time,
+                   guint             keycode,
+                   GdkModifierType   state,
+                   gboolean          is_modifier,
+                   GdkTranslatedKey *translated,
+                   GdkTranslatedKey *no_lock)
 {
   GdkEventKey *event;
 
@@ -956,12 +955,11 @@ gdk_event_key_new (GdkEventType     type,
   event->any.surface = g_object_ref (surface);
   event->any.device = g_object_ref (device);
   event->any.source_device = g_object_ref (source_device);
+  event->keycode = keycode;
   event->state = state;
-  event->keyval = keyval;
-  event->hardware_keycode = keycode;
-  event->key_scancode = scancode;
-  event->group = group;
   event->any.key_is_modifier = is_modifier;
+  event->translated[0] = *translated;
+  event->translated[1] = *no_lock;
 
   return (GdkEvent *)event;
 }
@@ -1669,7 +1667,7 @@ gdk_key_event_get_keyval (GdkEvent *event)
   g_return_val_if_fail (event->any.type == GDK_KEY_PRESS ||
                         event->any.type == GDK_KEY_RELEASE, 0);
 
-  return event->key.keyval;
+  return event->key.translated[0].keyval;
 }
 
 /**
@@ -1686,41 +1684,58 @@ gdk_key_event_get_keycode (GdkEvent *event)
   g_return_val_if_fail (event->any.type == GDK_KEY_PRESS ||
                         event->any.type == GDK_KEY_RELEASE, 0);
 
-  return event->key.hardware_keycode;
+  return event->key.keycode;
 }
 
 /**
- * gdk_key_event_get_scancode:
+ * gdk_key_event_get_level:
  * @event: a key event
  *
- * Extracts the scancode from a key event.
+ * Extracts the shift level from a key event.
  *
- * Returns: the scancode of @event
+ * Returns: the shift level of @event
  */
 guint
-gdk_key_event_get_scancode (GdkEvent *event)
+gdk_key_event_get_level (GdkEvent *event)
 {
   g_return_val_if_fail (event->any.type == GDK_KEY_PRESS ||
                         event->any.type == GDK_KEY_RELEASE, 0);
 
-  return event->key.key_scancode;
+  return event->key.translated[0].level;
 }
 
 /**
- * gdk_key_event_get_group:
+ * gdk_key_event_get_layout:
  * @event: a key event
  *
- * Extracts the group from a key event.
+ * Extracts the layout from a key event.
  *
- * Returns: the group of @event
+ * Returns: the layout of @event
  */
 guint
-gdk_key_event_get_group (GdkEvent *event)
+gdk_key_event_get_layout (GdkEvent *event)
 {
   g_return_val_if_fail (event->any.type == GDK_KEY_PRESS ||
                         event->any.type == GDK_KEY_RELEASE, 0);
 
-  return event->key.group;
+  return event->key.translated[0].layout;
+}
+
+/**
+ * gdk_key_event_get_consumed_modifiers:
+ * @event: a key event
+ *
+ * Extracts the consumed modifiers from a key event.
+ *
+ * Returns: the consumed modifiers or @event
+ */
+GdkModifierType
+gdk_key_event_get_consumed_modifiers (GdkEvent *event)
+{
+  g_return_val_if_fail (event->any.type == GDK_KEY_PRESS ||
+                        event->any.type == GDK_KEY_RELEASE, 0);
+
+  return event->key.translated[0].consumed;
 }
 
 /**
@@ -2111,57 +2126,6 @@ gdk_grab_broken_event_get_grab_surface (GdkEvent *event)
   return event->grab_broken.grab_surface;
 }
 
-static gboolean
-translate_keyboard_accel_state (GdkKeymap       *keymap,
-                                guint            hardware_keycode,
-                                GdkModifierType  state,
-                                gint             group,
-                                guint           *keyval,
-                                gint            *effective_group,
-                                gint            *level,
-                                GdkModifierType *consumed_modifiers)
-{
-  GdkModifierType mask;
-  GdkModifierType shift_group_mask;
-  gboolean group_mask_disabled = FALSE;
-  gboolean retval;
-
-  mask = gdk_keymap_get_modifier_mask (keymap,
-                                       GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK);
-
-  /* if the group-toggling modifier is part of the accel mod mask, and
-   * it is active, disable it for matching
-   */
-  shift_group_mask = gdk_keymap_get_modifier_mask (keymap,
-                                                   GDK_MODIFIER_INTENT_SHIFT_GROUP);
-  if (mask & state & shift_group_mask)
-    {
-      state &= ~shift_group_mask;
-      group = 0;
-      group_mask_disabled = TRUE;
-    }
-
-  retval = gdk_keymap_translate_keyboard_state (keymap,
-                                                hardware_keycode, state, group,
-                                                keyval,
-                                                effective_group, level,
-                                                consumed_modifiers);
-
-  /* add back the group mask, we want to match against the modifier,
-   * but not against the keyval from its group
-   */
-  if (group_mask_disabled)
-    {
-      if (effective_group)
-        *effective_group = 1;
-
-      if (consumed_modifiers)
-        *consumed_modifiers &= ~shift_group_mask;
-    }
-
-  return retval;
-}
-
 /**
  * gdk_event_matches:
  * @event: the #GdkEvent
@@ -2169,9 +2133,10 @@ translate_keyboard_accel_state (GdkKeymap       *keymap,
  * @modifiers: the modifiers to match
  *
  * Matches an event against a keyboard shortcut that is specified
- * as a keyval and modifiers. Note that partial matches are possible
- * where the combination matches if the currently active group is
- * ignored.
+ * as a keyval and modifiers. Partial matches are possible where the
+ * combination matches if the currently active group is ignored.
+ *
+ * Note that we ignore Caps Lock for matching.
  *
  * Returns: a GdkEventMatch value describing whether @event matches
  */
@@ -2183,10 +2148,8 @@ gdk_event_matches (GdkEvent        *event,
   guint keycode;
   GdkModifierType state;
   GdkModifierType mask;
-  int group;
-  GdkKeymap *keymap;
   guint ev_keyval;
-  int effective_group;
+  int layout;
   int level;
   GdkModifierType consumed_modifiers;
   GdkModifierType shift_group_mask;
@@ -2195,23 +2158,15 @@ gdk_event_matches (GdkEvent        *event,
   if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
     return GDK_EVENT_MATCH_NONE;
 
-  keycode = gdk_key_event_get_keycode (event);
-  state = gdk_event_get_modifier_state (event);
-  group = gdk_key_event_get_group (event);
-  keymap = gdk_display_get_keymap (gdk_event_get_display (event));
+  keycode = event->key.keycode;
+  state = event->key.state & ~GDK_LOCK_MASK;
+  ev_keyval = event->key.translated[1].keyval;
+  layout = event->key.translated[1].layout;
+  level = event->key.translated[1].level;
+  consumed_modifiers = event->key.translated[1].consumed;
 
   mask = gdk_keymap_get_modifier_mask (keymap,
                                        GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK);
-
-  /* We don't want Caps_Lock to affect keybinding lookups.
-   */
-  state &= ~GDK_LOCK_MASK;
-
-  translate_keyboard_accel_state (keymap,
-                                  keycode, state, group,
-                                  &ev_keyval,
-                                  &effective_group, &level,
-                                  &consumed_modifiers);
 
   /* if the group-toggling modifier is part of the default accel mod
    * mask, and it is active, disable it for matching
@@ -2244,17 +2199,18 @@ gdk_event_matches (GdkEvent        *event,
       if (ev_keyval == key && /* exact match */
           (!group_mod_is_accel_mod ||
            (state & shift_group_mask) == (modifiers & shift_group_mask)))
-        return GDK_EVENT_MATCH_EXACT;
+        {
+          return GDK_EVENT_MATCH_EXACT;
+        }
 
-      gdk_keymap_get_entries_for_keyval (keymap, keyval, &keys, &n_keys);
+      gdk_display_map_keyval (gdk_event_get_display (event), keyval, &keys, &n_keys);
 
       for (i = 0; i < n_keys; i++)
         {
           if (keys[i].keycode == keycode &&
               keys[i].level == level &&
               /* Only match for group if it's an accel mod */
-              (!group_mod_is_accel_mod ||
-               keys[i].group == effective_group))
+              (!group_mod_is_accel_mod || keys[i].group == layout))
             {
               /* partial match */
               g_free (keys);
@@ -2288,8 +2244,6 @@ gdk_event_get_match (GdkEvent        *event,
 {
   GdkKeymap *keymap;
   GdkModifierType mask;
-  guint keycode;
-  guint group;
   guint key;
   guint accel_key;
   GdkModifierType accel_mods;
@@ -2303,10 +2257,9 @@ gdk_event_get_match (GdkEvent        *event,
   mask = gdk_keymap_get_modifier_mask (keymap,
                                        GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK);
 
-  keycode = gdk_key_event_get_keycode (event);
-  group = gdk_key_event_get_group (event);
-  accel_key = gdk_key_event_get_keyval (event);
-  accel_mods = gdk_event_get_modifier_state (event);
+  accel_key = event->key.translated[1].keyval;
+  accel_mods = event->key.state;
+  consumed_modifiers = event->key.translated[1].consumed;
 
   if (accel_key == GDK_KEY_Sys_Req &&
       (accel_mods & GDK_ALT_MASK) != 0)
@@ -2319,24 +2272,17 @@ gdk_event_get_match (GdkEvent        *event,
       return TRUE;
     }
 
-  translate_keyboard_accel_state (keymap,
-                                  keycode,
-                                  accel_mods,
-                                  group,
-                                  &key, NULL, NULL, &consumed_modifiers);
+  key = gdk_keyval_to_lower (accel_key);
 
-  accel_key = gdk_keyval_to_lower (key);
-
-  if (accel_key == GDK_KEY_ISO_Left_Tab)
-    accel_key = GDK_KEY_Tab;
+  if (key == GDK_KEY_ISO_Left_Tab)
+    key = GDK_KEY_Tab;
 
   accel_mods &= mask & ~consumed_modifiers;
 
-  /* Put shift back if it changed the case of the key, not otherwise. */
   if (accel_key != key)
     accel_mods |= GDK_SHIFT_MASK;
 
-  *keyval = accel_key;
+  *keyval = key;
   *modifiers = accel_mods;
 
   return TRUE;

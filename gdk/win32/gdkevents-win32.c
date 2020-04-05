@@ -806,7 +806,7 @@ _gdk_win32_print_event (GdkEvent *event)
       kvname = gdk_keyval_name (gdk_key_event_get_keyval (event));
       g_print ("%#.02x group:%d %s",
                gdk_key_event_get_keycode (event),
-               gdk_key_event_get_group (event),
+               gdk_key_event_get_layout (event),
 	       (kvname ? kvname : "??"));
       print_event_state (gdk_event_get_modifier_state (event));
       break;
