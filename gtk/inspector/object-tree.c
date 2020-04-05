@@ -742,7 +742,7 @@ key_pressed (GtkEventController     *controller,
       gboolean search_started;
 
       search_started = gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (wt->priv->search_bar));
-      default_accel = gtk_widget_get_modifier_mask (GTK_WIDGET (wt), GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
+      default_accel = GDK_CONTROL_MASK;
 
       if (search_started &&
           (keyval == GDK_KEY_Return ||
