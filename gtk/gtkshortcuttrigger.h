@@ -65,7 +65,7 @@ gint                    gtk_shortcut_trigger_compare            (gconstpointer  
                                                                  gconstpointer       trigger2);
 
 GDK_AVAILABLE_IN_ALL
-GdkEventMatch           gtk_shortcut_trigger_trigger            (GtkShortcutTrigger *self,
+GdkKeyMatch             gtk_shortcut_trigger_trigger            (GtkShortcutTrigger *self,
                                                                  GdkEvent           *event,
                                                                  gboolean            enable_mnemonics);
 
