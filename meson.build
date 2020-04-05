@@ -794,11 +794,15 @@ subdir('docs/tools')
 subdir('docs/reference')
 
 # Keep this in sync with post-install.sh expected arguments
-meson.add_install_script('build-aux/meson/post-install.py',
-                         gtk_api_version,
-                         gtk_binary_version,
-                         gtk_libdir,
-                         gtk_datadir)
+if not meson.is_cross_build()
+  meson.add_install_script('build-aux/meson/post-install.py',
+                           gtk_api_version,
+                           gtk_binary_version,
+                           gtk_libdir,
+                           gtk_datadir)
+else
+  message('Not executing post-install steps automatically when cross compiling')
+endif
 
 if host_machine.system() != 'windows'
   # Install Valgrind suppression files (except on Windows,
