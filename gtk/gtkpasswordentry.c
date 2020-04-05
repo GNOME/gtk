@@ -89,8 +89,8 @@ keymap_state_changed (GdkKeymap *keymap,
 
   if (gtk_editable_get_editable (GTK_EDITABLE (entry)) &&
       gtk_widget_has_focus (priv->entry) &&
-      gdk_keymap_get_caps_lock_state (priv->keymap) &&
-      !priv->peek_icon)
+      !gtk_text_get_visibility (GTK_TEXT (priv->entry)) &&
+      gdk_keymap_get_caps_lock_state (priv->keymap))
     gtk_widget_show (priv->icon);
   else
     gtk_widget_hide (priv->icon);
@@ -133,6 +133,9 @@ visibility_toggled (GObject          *object,
       gtk_image_set_from_icon_name (GTK_IMAGE (priv->peek_icon), "eye-not-looking-symbolic");
       gtk_widget_set_tooltip_text (priv->peek_icon, _("Show text"));
     }
+
+  if (priv->keymap)
+    keymap_state_changed (priv->keymap, GTK_WIDGET (entry));
 }
 
 static void
