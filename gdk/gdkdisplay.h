@@ -123,6 +123,19 @@ GdkModifierType gdk_display_get_modifier_mask (GdkDisplay        *display,
                                                GdkModifierIntent  intent);
 
 GDK_AVAILABLE_IN_ALL
+gboolean       gdk_display_map_keyval  (GdkDisplay    *display,
+                                        guint          keyval,
+                                        GdkKeymapKey **keys,
+                                        int           *n_keys);
+
+GDK_AVAILABLE_IN_ALL
+gboolean       gdk_display_map_keycode (GdkDisplay    *display,
+                                        guint          keycode,
+                                        GdkKeymapKey **keys,
+                                        guint        **keyvals,
+                                        int           *n_entries);
+
+GDK_AVAILABLE_IN_ALL
 gboolean     gdk_display_get_setting (GdkDisplay *display,
                                       const char *name,
                                       GValue     *value);

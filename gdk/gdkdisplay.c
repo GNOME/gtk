@@ -1718,3 +1718,29 @@ gdk_display_get_modifier_mask (GdkDisplay        *display,
 {
   return gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display), intent);  
 }
+
+gboolean
+gdk_display_map_keyval (GdkDisplay    *display,
+                        guint          keyval,
+                        GdkKeymapKey **keys,
+                        int           *n_keys)
+{
+  return gdk_keymap_get_entries_for_keyval (gdk_display_get_keymap (display),
+                                            keyval,
+                                            keys,
+                                            n_keys);
+}
+
+gboolean
+gdk_display_map_keycode (GdkDisplay    *display,
+                         guint          keycode,
+                         GdkKeymapKey **keys,
+                         guint        **keyvals,
+                         int           *n_entries)
+{
+  return gdk_keymap_get_entries_for_keycode (gdk_display_get_keymap (display),
+                                             keycode,
+                                             keys,
+                                             keyvals,
+                                             n_entries);
+}
