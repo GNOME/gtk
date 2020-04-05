@@ -203,6 +203,24 @@ guint           gdk_device_get_num_touches  (GdkDevice *device);
 GDK_AVAILABLE_IN_ALL
 GdkDeviceTool * gdk_device_get_device_tool  (GdkDevice *device);
 
+GDK_AVAILABLE_IN_ALL
+gboolean        gdk_device_get_caps_lock_state (GdkDevice *device);
+
+GDK_AVAILABLE_IN_ALL
+gboolean        gdk_device_get_num_lock_state (GdkDevice *device);
+
+GDK_AVAILABLE_IN_ALL
+gboolean        gdk_device_get_scroll_lock_state (GdkDevice *device);
+
+GDK_AVAILABLE_IN_ALL
+GdkModifierType gdk_device_get_modifier_state (GdkDevice *device);
+
+GDK_AVAILABLE_IN_ALL
+PangoDirection  gdk_device_get_direction (GdkDevice *device);
+
+GDK_AVAILABLE_IN_ALL
+gboolean        gdk_device_has_bidi_layouts (GdkDevice *device);
+
 G_END_DECLS
 
 #endif /* __GDK_DEVICE_H__ */
