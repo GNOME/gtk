@@ -615,57 +615,6 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 								  consumed_modifiers);
 }
 
-/**
- * gdk_keymap_add_virtual_modifiers:
- * @keymap: a #GdkKeymap
- * @state: (inout): pointer to the modifier mask to change
- *
- * Maps the non-virtual modifiers (i.e Mod2, Mod3, ...) which are set
- * in @state to the virtual modifiers (i.e. Super, Hyper and Meta) and
- * set the corresponding bits in @state.
- *
- * GDK already does this before delivering key events, but for
- * compatibility reasons, it only sets the first virtual modifier
- * it finds, whereas this function sets all matching virtual modifiers.
- *
- * This function is useful when matching key events against
- * accelerators.
- */
-void
-gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
-			          GdkModifierType *state)
-{
-  g_return_if_fail (GDK_IS_KEYMAP (keymap));
-
-  GDK_KEYMAP_GET_CLASS (keymap)->add_virtual_modifiers (keymap, state);
-}
-
-/**
- * gdk_keymap_map_virtual_modifiers:
- * @keymap: a #GdkKeymap
- * @state: (inout): pointer to the modifier state to map
- *
- * Maps the virtual modifiers (i.e. Super, Hyper and Meta) which
- * are set in @state to their non-virtual counterparts (i.e. Mod2,
- * Mod3,...) and set the corresponding bits in @state.
- *
- * This function is useful when matching key events against
- * accelerators.
- *
- * Returns: %FALSE if two virtual modifiers were mapped to the
- *     same non-virtual modifier. Note that %FALSE is also returned
- *     if a virtual modifier is mapped to a non-virtual modifier that
- *     was already set in @state.
- */
-gboolean
-gdk_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
-                                  GdkModifierType *state)
-{
-  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), FALSE);
-
-  return GDK_KEYMAP_GET_CLASS(keymap)->map_virtual_modifiers (keymap, state);
-}
-
 static GdkModifierType
 gdk_keymap_real_get_modifier_mask (GdkKeymap         *keymap,
                                    GdkModifierIntent  intent)
