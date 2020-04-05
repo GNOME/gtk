@@ -1455,7 +1455,12 @@ _gdk_x11_keymap_add_virt_mods (GdkKeymap       *keymap,
   GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
   int i;
 
-  /* See comment in add_virtual_modifiers() */
+  /*  This loop used to start at 3, which included MOD1 in the
+   *  virtual mapping. However, all of GTK+ treats MOD1 as a
+   *  synonym for Alt, and does not expect it to be mapped around,
+   *  therefore it's more sane to simply treat MOD1 like SHIFT and
+   *  CONTROL, which are not mappable either.
+   */
   for (i = 4; i < 8; i++)
     {
       if ((1 << i) & *modifiers)
@@ -1466,33 +1471,6 @@ _gdk_x11_keymap_add_virt_mods (GdkKeymap       *keymap,
             *modifiers |= GDK_HYPER_MASK;
           else if (keymap_x11->modmap[i] & GDK_META_MASK)
             *modifiers |= GDK_META_MASK;
-        }
-    }
-}
-
-static void
-gdk_x11_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
-                                      GdkModifierType *state)
-{
-  GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
-  int i;
-
-  /*  This loop used to start at 3, which included MOD1 in the
-   *  virtual mapping. However, all of GTK+ treats MOD1 as a
-   *  synonym for Alt, and does not expect it to be mapped around,
-   *  therefore it's more sane to simply treat MOD1 like SHIFT and
-   *  CONTROL, which are not mappable either.
-   */
-  for (i = 4; i < 8; i++)
-    {
-      if ((1 << i) & *state)
-        {
-          if (keymap_x11->modmap[i] & GDK_SUPER_MASK)
-            *state |= GDK_SUPER_MASK;
-          if (keymap_x11->modmap[i] & GDK_HYPER_MASK)
-            *state |= GDK_HYPER_MASK;
-          if (keymap_x11->modmap[i] & GDK_META_MASK)
-            *state |= GDK_META_MASK;
         }
     }
 }
@@ -1546,43 +1524,6 @@ gdk_x11_keymap_key_is_modifier (GdkKeymap *keymap,
   return FALSE;
 }
 
-static gboolean
-gdk_x11_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
-                                      GdkModifierType *state)
-{
-  GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
-  const guint vmods[] = { GDK_SUPER_MASK, GDK_HYPER_MASK, GDK_META_MASK };
-  int i, j;
-  gboolean retval;
-
-#ifdef HAVE_XKB
-  if (KEYMAP_USE_XKB (keymap))
-    get_xkb (keymap_x11);
-#endif
-
-  retval = TRUE;
-
-  for (j = 0; j < 3; j++)
-    {
-      if (*state & vmods[j])
-        {
-          /* See comment in add_virtual_modifiers() */
-          for (i = 4; i < 8; i++)
-            {
-              if (keymap_x11->modmap[i] & vmods[j])
-                {
-                  if (*state & (1 << i))
-                    retval = FALSE;
-                  else
-                    *state |= 1 << i;
-                }
-            }
-        }
-    }
-
-  return retval;
-}
-
 static GdkModifierType
 gdk_x11_keymap_get_modifier_mask (GdkKeymap         *keymap,
                                   GdkModifierIntent  intent)
@@ -1614,7 +1555,5 @@ gdk_x11_keymap_class_init (GdkX11KeymapClass *klass)
   keymap_class->get_entries_for_keycode = gdk_x11_keymap_get_entries_for_keycode;
   keymap_class->lookup_key = gdk_x11_keymap_lookup_key;
   keymap_class->translate_keyboard_state = gdk_x11_keymap_translate_keyboard_state;
-  keymap_class->add_virtual_modifiers = gdk_x11_keymap_add_virtual_modifiers;
-  keymap_class->map_virtual_modifiers = gdk_x11_keymap_map_virtual_modifiers;
   keymap_class->get_modifier_mask = gdk_x11_keymap_get_modifier_mask;
 }
