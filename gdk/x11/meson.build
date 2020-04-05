@@ -41,7 +41,6 @@ gdk_x11_public_headers = files([
   'gdkx11display.h',
   'gdkx11dnd.h',
   'gdkx11glcontext.h',
-  'gdkx11keys.h',
   'gdkx11monitor.h',
   'gdkx11property.h',
   'gdkx11screen.h',
