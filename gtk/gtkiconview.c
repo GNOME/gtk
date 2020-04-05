@@ -2125,7 +2125,7 @@ gtk_icon_view_button_press (GtkGestureClick *gesture,
   GtkCellRenderer *cell = NULL, *cursor_cell = NULL;
   int button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
   GdkEventSequence *sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-  GdkEventButton *event = (GdkEventButton *)gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+  GdkEvent *event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
   GdkModifierType state;
 
   if (!gtk_widget_has_focus (widget))
@@ -2133,15 +2133,10 @@ gtk_icon_view_button_press (GtkGestureClick *gesture,
 
   if (button == GDK_BUTTON_PRIMARY)
     {
-      GdkModifierType extend_mod_mask;
-      GdkModifierType modify_mod_mask;
+      GdkModifierType extend_mod_mask = GDK_SHIFT_MASK;
+      GdkModifierType modify_mod_mask = GDK_CONTROL_MASK;
 
-      state = gdk_event_get_modifier_state ((GdkEvent *)event);
-      extend_mod_mask =
-        gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_EXTEND_SELECTION);
-
-      modify_mod_mask =
-        gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_MODIFY_SELECTION);
+      state = gdk_event_get_modifier_state (event);
 
       item = _gtk_icon_view_get_item_at_widget_coords (icon_view,
                                                        x, y,
@@ -3468,15 +3463,8 @@ gtk_icon_view_real_move_cursor (GtkIconView     *icon_view,
 
   if (gtk_get_current_event_state (&state))
     {
-      GdkModifierType extend_mod_mask;
-      GdkModifierType modify_mod_mask;
-
-      extend_mod_mask =
-        gtk_widget_get_modifier_mask (GTK_WIDGET (icon_view),
-                                      GDK_MODIFIER_INTENT_EXTEND_SELECTION);
-      modify_mod_mask =
-        gtk_widget_get_modifier_mask (GTK_WIDGET (icon_view),
-                                      GDK_MODIFIER_INTENT_MODIFY_SELECTION);
+      GdkModifierType extend_mod_mask = GDK_SHIFT_MASK;
+      GdkModifierType modify_mod_mask = GDK_CONTROL_MASK;
 
       if ((state & modify_mod_mask) == modify_mod_mask)
         icon_view->priv->modify_selection_pressed = TRUE;
