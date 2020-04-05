@@ -1034,7 +1034,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   GtkIMContextSimplePrivate *priv = context_simple->priv;
   GdkSurface *surface = gdk_event_get_surface ((GdkEvent *) event);
   GdkDisplay *display = gdk_surface_get_display (surface);
-  GdkKeymap *keymap = gdk_display_get_keymap (display);
   GSList *tmp_list;
   int n_compose = 0;
   GdkModifierType hex_mod_mask;
@@ -1053,10 +1052,10 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   while (priv->compose_buffer[n_compose] != 0)
     n_compose++;
 
-  keyval = gdk_key_event_get_keyval ((GdkEvent *)event);
-  state = gdk_event_get_modifier_state ((GdkEvent *)event);
+  keyval = gdk_key_event_get_keyval (event);
+  state = gdk_event_get_modifier_state (event);
 
-  if (gdk_event_get_event_type ((GdkEvent *) event) == GDK_KEY_RELEASE)
+  if (gdk_event_get_event_type (event) == GDK_KEY_RELEASE)
     {
       if (priv->in_hex_sequence &&
           (keyval == GDK_KEY_Control_L || keyval == GDK_KEY_Control_R ||
@@ -1100,7 +1099,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     if (keyval == gtk_compose_ignore[i])
       return FALSE;
 
-  hex_mod_mask = gdk_keymap_get_modifier_mask (keymap, GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
+  hex_mod_mask = gdk_display_get_modifier_mask (display, GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
   hex_mod_mask |= GDK_SHIFT_MASK;
 
   if (priv->in_hex_sequence && priv->modifiers_dropped)
@@ -1132,7 +1131,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     {
       GdkModifierType no_text_input_mask;
 
-      no_text_input_mask = gdk_keymap_get_modifier_mask (keymap, GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
+      no_text_input_mask = gdk_display_get_modifier_mask (display, GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
 
       if (state & no_text_input_mask ||
 	  (priv->in_hex_sequence && priv->modifiers_dropped &&

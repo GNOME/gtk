@@ -10670,7 +10670,7 @@ gtk_widget_get_style_context (GtkWidget *widget)
  * Returns the modifier mask the @widget’s windowing system backend
  * uses for a particular purpose.
  *
- * See gdk_keymap_get_modifier_mask().
+ * See gdk_display_get_modifier_mask().
  *
  * Returns: the modifier mask used for @intent.
  **/
@@ -10678,14 +10678,9 @@ GdkModifierType
 gtk_widget_get_modifier_mask (GtkWidget         *widget,
                               GdkModifierIntent  intent)
 {
-  GdkDisplay *display;
-
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  display = _gtk_widget_get_display (widget);
-
-  return gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
-                                       intent);
+  return gdk_display_get_modifier_mask (_gtk_widget_get_display (widget), intent);
 }
 
 static GtkActionMuxer *
