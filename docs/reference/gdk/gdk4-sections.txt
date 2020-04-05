@@ -566,6 +566,11 @@ gdk_events_get_angle
 gdk_events_get_center
 gdk_events_get_distance
 
+<SUBSECTION>
+GdkEventMatch
+gdk_event_matches
+gdk_event_get_match
+
 <SUBSECTION Standard>
 GDK_TYPE_EVENT
 GDK_TYPE_EVENT_MASK
