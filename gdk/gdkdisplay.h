@@ -116,9 +116,6 @@ GdkMonitor * gdk_display_get_monitor_at_surface (GdkDisplay *display,
                                                 GdkSurface  *surface);
 
 GDK_AVAILABLE_IN_ALL
-GdkKeymap *  gdk_display_get_keymap  (GdkDisplay *display);
-
-GDK_AVAILABLE_IN_ALL
 GdkModifierType gdk_display_get_modifier_mask (GdkDisplay        *display,
                                                GdkModifierIntent  intent);
 

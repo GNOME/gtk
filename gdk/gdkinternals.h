@@ -33,6 +33,7 @@
 #include "gdksurfaceprivate.h"
 #include "gdkenumtypes.h"
 #include "gdkdragprivate.h"
+#include "gdkkeysprivate.h"
 
 G_BEGIN_DECLS
 
@@ -322,6 +323,7 @@ void           gdk_seat_ungrab           (GdkSeat                *seat);
 GdkSurface *   gdk_surface_new_temp             (GdkDisplay    *display,
                                                  const GdkRectangle *position);
 
+GdkKeymap *  gdk_display_get_keymap  (GdkDisplay *display);
 
 G_END_DECLS
 
