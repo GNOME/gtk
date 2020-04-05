@@ -2657,7 +2657,6 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
       gboolean have_selection;
       gboolean is_touchscreen, extend_selection;
       GdkDevice *source;
-      guint state;
 
       sel_start = priv->selection_bound;
       sel_end = priv->current_pos;
@@ -2673,12 +2672,7 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
       priv->select_words = FALSE;
       priv->select_lines = FALSE;
 
-      state = gdk_event_get_modifier_state (event);
-
-      extend_selection =
-        (state &
-         gtk_widget_get_modifier_mask (widget,
-                                       GDK_MODIFIER_INTENT_EXTEND_SELECTION));
+      extend_selection = GDK_SHIFT_MASK;
 
       /* Always emit reset when preedit is shown */
       priv->need_im_reset = TRUE;

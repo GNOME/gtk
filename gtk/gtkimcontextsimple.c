@@ -1034,7 +1034,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
   GtkIMContextSimplePrivate *priv = context_simple->priv;
   GdkSurface *surface = gdk_event_get_surface ((GdkEvent *) event);
-  GdkDisplay *display = gdk_surface_get_display (surface);
   GSList *tmp_list;
   int n_compose = 0;
   GdkModifierType hex_mod_mask;
@@ -1100,8 +1099,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     if (keyval == gtk_compose_ignore[i])
       return FALSE;
 
-  hex_mod_mask = gdk_display_get_modifier_mask (display, GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
-  hex_mod_mask |= GDK_SHIFT_MASK;
+  hex_mod_mask = GDK_CONTROL_MASK|GDK_SHIFT_MASK;
 
   if (priv->in_hex_sequence && priv->modifiers_dropped)
     have_hex_mods = TRUE;
@@ -1132,7 +1130,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     {
       GdkModifierType no_text_input_mask;
 
-      no_text_input_mask = gdk_display_get_modifier_mask (display, GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
+      no_text_input_mask = GDK_ALT_MASK|GDK_CONTROL_MASK;
 
       if (state & no_text_input_mask ||
 	  (priv->in_hex_sequence && priv->modifiers_dropped &&
