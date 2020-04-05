@@ -742,10 +742,6 @@ print_event_state (guint state)
   CASE (LOCK);
   CASE (CONTROL);
   CASE (ALT);
-  CASE (MOD2);
-  CASE (MOD3);
-  CASE (MOD4);
-  CASE (MOD5);
   CASE (BUTTON1);
   CASE (BUTTON2);
   CASE (BUTTON3);
