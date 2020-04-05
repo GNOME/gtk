@@ -119,6 +119,10 @@ GDK_AVAILABLE_IN_ALL
 GdkKeymap *  gdk_display_get_keymap  (GdkDisplay *display);
 
 GDK_AVAILABLE_IN_ALL
+GdkModifierType gdk_display_get_modifier_mask (GdkDisplay        *display,
+                                               GdkModifierIntent  intent);
+
+GDK_AVAILABLE_IN_ALL
 gboolean     gdk_display_get_setting (GdkDisplay *display,
                                       const char *name,
                                       GValue     *value);

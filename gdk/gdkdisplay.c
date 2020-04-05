@@ -1711,3 +1711,10 @@ gdk_display_set_cursor_theme (GdkDisplay *display,
   if (GDK_DISPLAY_GET_CLASS (display)->set_cursor_theme)
     GDK_DISPLAY_GET_CLASS (display)->set_cursor_theme (display, name, size);
 }
+
+GdkModifierType
+gdk_display_get_modifier_mask (GdkDisplay        *display,
+                               GdkModifierIntent  intent)
+{
+  return gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display), intent);  
+}
