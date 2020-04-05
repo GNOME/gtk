@@ -133,17 +133,6 @@ is_ctl (const gchar *string)
 }
 
 static inline gboolean
-is_modx (const gchar *string)
-{
-  return ((string[0] == '<') &&
-          (string[1] == 'm' || string[1] == 'M') &&
-          (string[2] == 'o' || string[2] == 'O') &&
-          (string[3] == 'd' || string[3] == 'D') &&
-          (string[4] >= '1' && string[4] <= '5') &&
-          (string[5] == '>'));
-}
-
-static inline gboolean
 is_ctrl (const gchar *string)
 {
   return ((string[0] == '<') &&
@@ -334,18 +323,6 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
               accelerator += 6;
               len -= 6;
               mods |= GDK_CONTROL_MASK;
-            }
-          else if (len >= 6 && is_modx (accelerator))
-            {
-              static const guint mod_vals[] = {
-                GDK_ALT_MASK, GDK_MOD2_MASK, GDK_MOD3_MASK,
-                GDK_MOD4_MASK, GDK_MOD5_MASK
-              };
-
-              len -= 6;
-              accelerator += 4;
-              mods |= mod_vals[*accelerator - '1'];
-              accelerator += 2;
             }
           else if (len >= 5 && is_ctl (accelerator))
             {
@@ -600,10 +577,6 @@ gtk_accelerator_name (guint           accelerator_key,
   static const gchar text_shift[] = "<Shift>";
   static const gchar text_control[] = "<Control>";
   static const gchar text_alt[] = "<Alt>";
-  static const gchar text_mod2[] = "<Mod2>";
-  static const gchar text_mod3[] = "<Mod3>";
-  static const gchar text_mod4[] = "<Mod4>";
-  static const gchar text_mod5[] = "<Mod5>";
   static const gchar text_meta[] = "<Meta>";
   static const gchar text_super[] = "<Super>";
   static const gchar text_hyper[] = "<Hyper>";
@@ -631,15 +604,6 @@ gtk_accelerator_name (guint           accelerator_key,
     l += sizeof (text_control) - 1;
   if (accelerator_mods & GDK_ALT_MASK)
     l += sizeof (text_alt) - 1;
-  if (accelerator_mods & GDK_MOD2_MASK)
-    l += sizeof (text_mod2) - 1;
-  if (accelerator_mods & GDK_MOD3_MASK)
-    l += sizeof (text_mod3) - 1;
-  if (accelerator_mods & GDK_MOD4_MASK)
-    l += sizeof (text_mod4) - 1;
-  if (accelerator_mods & GDK_MOD5_MASK)
-    l += sizeof (text_mod5) - 1;
-  l += strlen (keyval_name);
   if (accelerator_mods & GDK_META_MASK)
     l += sizeof (text_meta) - 1;
   if (accelerator_mods & GDK_HYPER_MASK)
@@ -672,26 +636,6 @@ gtk_accelerator_name (guint           accelerator_key,
     {
       strcpy (accelerator + l, text_alt);
       l += sizeof (text_alt) - 1;
-    }
-  if (accelerator_mods & GDK_MOD2_MASK)
-    {
-      strcpy (accelerator + l, text_mod2);
-      l += sizeof (text_mod2) - 1;
-    }
-  if (accelerator_mods & GDK_MOD3_MASK)
-    {
-      strcpy (accelerator + l, text_mod3);
-      l += sizeof (text_mod3) - 1;
-    }
-  if (accelerator_mods & GDK_MOD4_MASK)
-    {
-      strcpy (accelerator + l, text_mod4);
-      l += sizeof (text_mod4) - 1;
-    }
-  if (accelerator_mods & GDK_MOD5_MASK)
-    {
-      strcpy (accelerator + l, text_mod5);
-      l += sizeof (text_mod5) - 1;
     }
   if (accelerator_mods & GDK_META_MASK)
     {
@@ -962,42 +906,6 @@ gtk_accelerator_print_label (GString        *gstring,
       /* U+2325 OPTION KEY */
       g_string_append (gstring, "\xe2\x8c\xa5");
 #endif
-      seen_mod = TRUE;
-    }
-
-  if (accelerator_mods & GDK_MOD2_MASK)
-    {
-      if (seen_mod)
-        append_separator (gstring);
-
-      g_string_append (gstring, "Mod2");
-      seen_mod = TRUE;
-    }
-
-  if (accelerator_mods & GDK_MOD3_MASK)
-    {
-      if (seen_mod)
-        append_separator (gstring);
-
-      g_string_append (gstring, "Mod3");
-      seen_mod = TRUE;
-    }
-
-  if (accelerator_mods & GDK_MOD4_MASK)
-    {
-      if (seen_mod)
-        append_separator (gstring);
-
-      g_string_append (gstring, "Mod4");
-      seen_mod = TRUE;
-    }
-
-  if (accelerator_mods & GDK_MOD5_MASK)
-    {
-      if (seen_mod)
-        append_separator (gstring);
-
-      g_string_append (gstring, "Mod5");
       seen_mod = TRUE;
     }
 
