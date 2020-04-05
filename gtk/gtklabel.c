@@ -1090,10 +1090,10 @@ gtk_label_class_init (GtkLabelClass *class)
 				       "move-cursor",
                                        "(iib)", GTK_MOVEMENT_PARAGRAPH_ENDS, 0, FALSE);
 
-  add_move_binding (widget_class, GDK_KEY_f, GDK_MOD1_MASK,
+  add_move_binding (widget_class, GDK_KEY_f, GDK_ALT_MASK,
 		    GTK_MOVEMENT_WORDS, 1);
 
-  add_move_binding (widget_class, GDK_KEY_b, GDK_MOD1_MASK,
+  add_move_binding (widget_class, GDK_KEY_b, GDK_ALT_MASK,
 		    GTK_MOVEMENT_WORDS, -1);
 
   add_move_binding (widget_class, GDK_KEY_Home, 0,

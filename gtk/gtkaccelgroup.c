@@ -338,7 +338,7 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
           else if (len >= 6 && is_modx (accelerator))
             {
               static const guint mod_vals[] = {
-                GDK_MOD1_MASK, GDK_MOD2_MASK, GDK_MOD3_MASK,
+                GDK_ALT_MASK, GDK_MOD2_MASK, GDK_MOD3_MASK,
                 GDK_MOD4_MASK, GDK_MOD5_MASK
               };
 
@@ -357,7 +357,7 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
             {
               accelerator += 5;
               len -= 5;
-              mods |= GDK_MOD1_MASK;
+              mods |= GDK_ALT_MASK;
             }
           else if (len >= 6 && is_meta (accelerator))
             {
@@ -598,7 +598,7 @@ gtk_accelerator_name (guint           accelerator_key,
   static const gchar text_primary[] = "<Primary>";
   static const gchar text_shift[] = "<Shift>";
   static const gchar text_control[] = "<Control>";
-  static const gchar text_mod1[] = "<Alt>";
+  static const gchar text_alt[] = "<Alt>";
   static const gchar text_mod2[] = "<Mod2>";
   static const gchar text_mod3[] = "<Mod3>";
   static const gchar text_mod4[] = "<Mod4>";
@@ -628,8 +628,8 @@ gtk_accelerator_name (guint           accelerator_key,
     l += sizeof (text_shift) - 1;
   if (accelerator_mods & GDK_CONTROL_MASK)
     l += sizeof (text_control) - 1;
-  if (accelerator_mods & GDK_MOD1_MASK)
-    l += sizeof (text_mod1) - 1;
+  if (accelerator_mods & GDK_ALT_MASK)
+    l += sizeof (text_alt) - 1;
   if (accelerator_mods & GDK_MOD2_MASK)
     l += sizeof (text_mod2) - 1;
   if (accelerator_mods & GDK_MOD3_MASK)
@@ -667,10 +667,10 @@ gtk_accelerator_name (guint           accelerator_key,
       strcpy (accelerator + l, text_control);
       l += sizeof (text_control) - 1;
     }
-  if (accelerator_mods & GDK_MOD1_MASK)
+  if (accelerator_mods & GDK_ALT_MASK)
     {
-      strcpy (accelerator + l, text_mod1);
-      l += sizeof (text_mod1) - 1;
+      strcpy (accelerator + l, text_alt);
+      l += sizeof (text_alt) - 1;
     }
   if (accelerator_mods & GDK_MOD2_MASK)
     {
@@ -945,7 +945,7 @@ gtk_accelerator_print_label (GString        *gstring,
       seen_mod = TRUE;
     }
 
-  if (accelerator_mods & GDK_MOD1_MASK)
+  if (accelerator_mods & GDK_ALT_MASK)
     {
       if (seen_mod)
         append_separator (gstring);
@@ -1098,7 +1098,7 @@ gtk_accelerator_print_label (GString        *gstring,
  * Sets the modifiers that will be considered significant for keyboard
  * accelerators. The default mod mask depends on the GDK backend in use,
  * but will typically include #GDK_CONTROL_MASK | #GDK_SHIFT_MASK |
- * #GDK_MOD1_MASK | #GDK_SUPER_MASK | #GDK_HYPER_MASK | #GDK_META_MASK.
+ * #GDK_ALT_MASK | #GDK_SUPER_MASK | #GDK_HYPER_MASK | #GDK_META_MASK.
  * In other words, Control, Shift, Alt, Super, Hyper and Meta. Other
  * modifiers will by default be ignored by #GtkAccelGroup.
  *
@@ -1112,7 +1112,7 @@ void
 gtk_accelerator_set_default_mod_mask (GdkModifierType default_mod_mask)
 {
   default_accel_mod_mask = (default_mod_mask & GDK_MODIFIER_MASK) |
-    (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK);
+    (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_ALT_MASK);
 }
 
 /**
@@ -1135,7 +1135,7 @@ gtk_accelerator_get_default_mod_mask (void)
       display = gdk_display_get_default ();
 
       if (!display)
-        return GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK;
+        return GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_ALT_MASK;
 
       default_accel_mod_mask =
           gdk_display_get_modifier_mask (display,

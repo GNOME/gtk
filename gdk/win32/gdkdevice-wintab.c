@@ -54,7 +54,7 @@ get_current_mask (void)
   if (kbd[VK_CONTROL] & 0x80)
     mask |= GDK_CONTROL_MASK;
   if (kbd[VK_MENU] & 0x80)
-    mask |= GDK_MOD1_MASK;
+    mask |= GDK_ALT_MASK;
   if (kbd[VK_LBUTTON] & 0x80)
     mask |= GDK_BUTTON1_MASK;
   if (kbd[VK_MBUTTON] & 0x80)

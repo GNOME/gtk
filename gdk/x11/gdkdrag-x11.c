@@ -2148,7 +2148,7 @@ gdk_drag_get_current_actions (GdkModifierType  state,
     {
       *possible_actions = actions;
 
-      if ((state & (GDK_MOD1_MASK)) && (actions & GDK_ACTION_ASK))
+      if ((state & (GDK_ALT_MASK)) && (actions & GDK_ACTION_ASK))
         *suggested_action = GDK_ACTION_ASK;
       else if (actions & GDK_ACTION_COPY)
         *suggested_action =  GDK_ACTION_COPY;
@@ -2237,22 +2237,22 @@ gdk_dnd_handle_key_event (GdkDrag           *drag,
 
         case GDK_KEY_Up:
         case GDK_KEY_KP_Up:
-          dy = (state & GDK_MOD1_MASK) ? -BIG_STEP : -SMALL_STEP;
+          dy = (state & GDK_ALT_MASK) ? -BIG_STEP : -SMALL_STEP;
           break;
 
         case GDK_KEY_Down:
         case GDK_KEY_KP_Down:
-          dy = (state & GDK_MOD1_MASK) ? BIG_STEP : SMALL_STEP;
+          dy = (state & GDK_ALT_MASK) ? BIG_STEP : SMALL_STEP;
           break;
 
         case GDK_KEY_Left:
         case GDK_KEY_KP_Left:
-          dx = (state & GDK_MOD1_MASK) ? -BIG_STEP : -SMALL_STEP;
+          dx = (state & GDK_ALT_MASK) ? -BIG_STEP : -SMALL_STEP;
           break;
 
         case GDK_KEY_Right:
         case GDK_KEY_KP_Right:
-          dx = (state & GDK_MOD1_MASK) ? BIG_STEP : SMALL_STEP;
+          dx = (state & GDK_ALT_MASK) ? BIG_STEP : SMALL_STEP;
           break;
 
         default:

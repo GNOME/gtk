@@ -844,7 +844,7 @@ get_modifier_key_state (void)
   if (GetKeyState (VK_SHIFT) < 0)
     state |= GDK_SHIFT_MASK;
   if (GetKeyState (VK_MENU) < 0)
-    state |= GDK_MOD1_MASK;
+    state |= GDK_ALT_MASK;
   if (GetKeyState (VK_CAPITAL) & 0x1)
     state |= GDK_LOCK_MASK;
 
