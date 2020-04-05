@@ -370,68 +370,6 @@ gdk_wayland_keymap_get_modifier_state (GdkKeymap *keymap)
 }
 
 static void
-gdk_wayland_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
-					  GdkModifierType *state)
-{
-  struct xkb_keymap *xkb_keymap;
-  struct xkb_state *xkb_state;
-  xkb_mod_index_t idx;
-  uint32_t mods, real;
-  struct { const char *name; GdkModifierType mask; } vmods[] = {
-    { "Super", GDK_SUPER_MASK },
-    { "Hyper", GDK_HYPER_MASK },
-    { "Meta", GDK_META_MASK },
-    { NULL, 0 }
-  };
-  int i;
-
-  xkb_keymap = GDK_WAYLAND_KEYMAP (keymap)->xkb_keymap;
-  mods = get_xkb_modifiers (xkb_keymap, *state);
-
-  xkb_state = xkb_state_new (xkb_keymap);
-
-  for (i = 0; vmods[i].name; i++)
-    {
-      idx = xkb_keymap_mod_get_index (xkb_keymap, vmods[i].name);
-      if (idx == XKB_MOD_INVALID)
-        continue;
-
-      xkb_state_update_mask (xkb_state, 1 << idx, 0, 0, 0, 0, 0);
-      real = xkb_state_serialize_mods (xkb_state, XKB_STATE_MODS_EFFECTIVE);
-      real &= 0xf0; /* ignore mapping to Lock, Shift, Control, Mod1 */
-      if (mods & real)
-        *state |= vmods[i].mask;
-      xkb_state_update_mask (xkb_state, 0, 0, 0, 0, 0, 0);
-    }
-
-  xkb_state_unref (xkb_state);
-}
-
-static gboolean
-gdk_wayland_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
-					  GdkModifierType *state)
-{
-  struct xkb_keymap *xkb_keymap;
-  struct xkb_state *xkb_state;
-  uint32_t mods, mapped;
-  gboolean ret = TRUE;
-
-  xkb_keymap = GDK_WAYLAND_KEYMAP (keymap)->xkb_keymap;
-  mods = get_xkb_modifiers (xkb_keymap, *state);
-
-  xkb_state = xkb_state_new (xkb_keymap);
-  xkb_state_update_mask (xkb_state, mods & ~0xff, 0, 0, 0, 0, 0);
-  mapped = xkb_state_serialize_mods (xkb_state, XKB_STATE_MODS_EFFECTIVE);
-  if ((mapped & mods & 0xff) != 0)
-    ret = FALSE;
-  *state |= get_gdk_modifiers (xkb_keymap, mapped);
-
-  xkb_state_unref (xkb_state);
-
-  return ret;
-}
-
-static void
 _gdk_wayland_keymap_class_init (GdkWaylandKeymapClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -449,8 +387,6 @@ _gdk_wayland_keymap_class_init (GdkWaylandKeymapClass *klass)
   keymap_class->lookup_key = gdk_wayland_keymap_lookup_key;
   keymap_class->translate_keyboard_state = gdk_wayland_keymap_translate_keyboard_state;
   keymap_class->get_modifier_state = gdk_wayland_keymap_get_modifier_state;
-  keymap_class->add_virtual_modifiers = gdk_wayland_keymap_add_virtual_modifiers;
-  keymap_class->map_virtual_modifiers = gdk_wayland_keymap_map_virtual_modifiers;
 }
 
 static void
