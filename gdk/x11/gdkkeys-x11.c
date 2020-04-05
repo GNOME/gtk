@@ -581,6 +581,7 @@ get_num_groups (GdkKeymap *keymap,
 
 static gboolean
 update_direction (GdkX11Keymap *keymap_x11,
+                  GdkDevice    *keyboard,
                   gint          group)
 {
   XkbDescPtr xkb = get_xkb (keymap_x11);
@@ -601,11 +602,18 @@ update_direction (GdkX11Keymap *keymap_x11,
       keymap_x11->have_direction = TRUE;
     }
 
-  return !had_direction || old_direction != keymap_x11->current_direction;
+  if (!had_direction || old_direction != keymap_x11->current_direction)
+    {
+      g_object_notify (G_OBJECT (keyboard), "direction");
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static gboolean
 update_lock_state (GdkX11Keymap *keymap_x11,
+                   GdkDevice    *keyboard,
                    gint          locked_mods,
                    gint          effective_mods)
 {
@@ -632,6 +640,15 @@ update_lock_state (GdkX11Keymap *keymap_x11,
   /* FIXME: sanitize this */
   keymap_x11->modifier_state = (guint)effective_mods;
 
+  if (caps_lock_state != keymap_x11->caps_lock_state)
+    g_object_notify (G_OBJECT (keyboard), "caps-lock-state");
+  if (num_lock_state != keymap_x11->num_lock_state)
+    g_object_notify (G_OBJECT (keyboard), "num-lock-state");
+  if (scroll_lock_state != keymap_x11->scroll_lock_state)
+    g_object_notify (G_OBJECT (keyboard), "scroll-lock-state");
+  if (modifier_state != keymap_x11->modifier_state)
+    g_object_notify (G_OBJECT (keyboard), "modifier-state");
+
   return !have_lock_state
          || (caps_lock_state != keymap_x11->caps_lock_state)
          || (num_lock_state != keymap_x11->num_lock_state)
@@ -652,11 +669,15 @@ _gdk_x11_keymap_state_changed (GdkDisplay   *display,
   if (display_x11->keymap)
     {
       GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (display_x11->keymap);
+      GdkDevice *keyboard;
 
-      if (update_direction (keymap_x11, XkbStateGroup (&xkb_event->state)))
+      keyboard = gdk_seat_get_keyboard (gdk_display_get_default_seat (display));
+
+      if (update_direction (keymap_x11, keyboard, XkbStateGroup (&xkb_event->state)))
         g_signal_emit_by_name (keymap_x11, "direction-changed");
 
       if (update_lock_state (keymap_x11,
+                             keyboard,
                              xkb_event->state.locked_mods,
                              xkb_event->state.mods))
         g_signal_emit_by_name (keymap_x11, "state-changed");
@@ -672,6 +693,9 @@ ensure_lock_state (GdkKeymap *keymap)
   if (KEYMAP_USE_XKB (keymap))
     {
       GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
+      GdkDevice *keyboard;
+
+      keyboard = gdk_seat_get_keyboard (gdk_display_get_default_seat (keymap->display));
 
       if (!keymap_x11->have_lock_state)
         {
@@ -679,7 +703,7 @@ ensure_lock_state (GdkKeymap *keymap)
           XkbStateRec state_rec;
 
           XkbGetState (GDK_DISPLAY_XDISPLAY (display), XkbUseCoreKbd, &state_rec);
-          update_lock_state (keymap_x11, state_rec.locked_mods, state_rec.mods);
+          update_lock_state (keymap_x11, keyboard, state_rec.locked_mods, state_rec.mods);
         }
     }
 #endif /* HAVE_XKB */
@@ -707,11 +731,14 @@ gdk_x11_keymap_get_direction (GdkKeymap *keymap)
       if (!keymap_x11->have_direction)
         {
           GdkDisplay *display = keymap->display;
+          GdkDevice *keyboard;
           XkbStateRec state_rec;
+
+          keyboard = gdk_seat_get_keyboard (gdk_display_get_default_seat (display));
 
           XkbGetState (GDK_DISPLAY_XDISPLAY (display), XkbUseCoreKbd,
                        &state_rec);
-          update_direction (keymap_x11, XkbStateGroup (&state_rec));
+          update_direction (keymap_x11, keyboard, XkbStateGroup (&state_rec));
         }
 
       return keymap_x11->current_direction;
