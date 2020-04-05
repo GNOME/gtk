@@ -5238,7 +5238,7 @@ gtk_window_has_mnemonic_modifier_pressed (GtkWindow *window)
       GdkModifierType mask;
 
       gdk_device_get_state (dev, priv->surface, NULL, &mask);
-      if ((mask & gtk_accelerator_get_default_mod_mask ()) == GDK_MOD1_MASK)
+      if ((mask & gtk_accelerator_get_default_mod_mask ()) == GDK_ALT_MASK)
         {
           retval = TRUE;
           break;
@@ -5287,7 +5287,7 @@ update_mnemonics_visible (GtkWindow       *window,
                           gboolean         visible)
 {
   if ((keyval == GDK_KEY_Alt_L || keyval == GDK_KEY_Alt_R) &&
-      ((state & (gtk_accelerator_get_default_mod_mask ()) & ~(GDK_MOD1_MASK)) == 0))
+      ((state & (gtk_accelerator_get_default_mod_mask ()) & ~(GDK_ALT_MASK)) == 0))
     {
       if (visible)
         _gtk_window_schedule_mnemonics_visible (window);

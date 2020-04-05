@@ -558,7 +558,7 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  *
  * |[<!-- language="C" -->
  * // We want to ignore irrelevant modifiers like ScrollLock
- * #define ALL_ACCELS_MASK (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK)
+ * #define ALL_ACCELS_MASK (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_ALT_MASK)
  * state = gdk_event_get_modifier_state (event);
  * gdk_keymap_translate_keyboard_state (keymap,
  *                                      gdk_key_event_get_keycode (event),
@@ -685,13 +685,13 @@ gdk_keymap_real_get_modifier_mask (GdkKeymap         *keymap,
       return GDK_CONTROL_MASK;
 
     case GDK_MODIFIER_INTENT_NO_TEXT_INPUT:
-      return GDK_MOD1_MASK | GDK_CONTROL_MASK;
+      return GDK_ALT_MASK | GDK_CONTROL_MASK;
 
     case GDK_MODIFIER_INTENT_SHIFT_GROUP:
       return 0;
 
     case GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK:
-      return (GDK_SHIFT_MASK   | GDK_CONTROL_MASK | GDK_MOD1_MASK    |
+      return (GDK_SHIFT_MASK   | GDK_CONTROL_MASK | GDK_ALT_MASK    |
 	      GDK_SUPER_MASK   | GDK_HYPER_MASK   | GDK_META_MASK);
 
     default:
@@ -708,7 +708,7 @@ gdk_keymap_real_get_modifier_mask (GdkKeymap         *keymap,
  * uses for a particular purpose.
  *
  * Note that this function always returns real hardware modifiers, not
- * virtual ones (e.g. it will return #GDK_MOD1_MASK rather than
+ * virtual ones (e.g. it will return #GDK_ALT_MASK rather than
  * #GDK_META_MASK if the backend maps MOD1 to META), so there are use
  * cases where the return value of this function has to be transformed
  * by gdk_keymap_add_virtual_modifiers() in order to contain the

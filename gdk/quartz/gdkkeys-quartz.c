@@ -757,10 +757,10 @@ gdk_quartz_keymap_get_modifier_mask (GdkKeymap         *keymap,
       return GDK_MOD2_MASK | GDK_CONTROL_MASK;
 
     case GDK_MODIFIER_INTENT_SHIFT_GROUP:
-      return GDK_MOD1_MASK;
+      return GDK_ALT_MASK;
 
     case GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK:
-      return (GDK_SHIFT_MASK   | GDK_CONTROL_MASK | GDK_MOD1_MASK    |
+      return (GDK_SHIFT_MASK   | GDK_CONTROL_MASK | GDK_ALT_MASK    |
 	      GDK_MOD2_MASK    | GDK_SUPER_MASK   | GDK_HYPER_MASK   |
 	      GDK_META_MASK);
 

@@ -662,14 +662,14 @@ build_key_event_state (BYTE *key_state)
       if (key_state[VK_RCONTROL] & 0x80)
 	state |= GDK_CONTROL_MASK;
       if (key_state[VK_LMENU] & 0x80)
-	state |= GDK_MOD1_MASK;
+	state |= GDK_ALT_MASK;
     }
   else
     {
       if (key_state[VK_CONTROL] & 0x80)
 	state |= GDK_CONTROL_MASK;
       if (key_state[VK_MENU] & 0x80)
-	state |= GDK_MOD1_MASK;
+	state |= GDK_ALT_MASK;
     }
 
   return state;
@@ -724,7 +724,7 @@ build_pointer_event_state (MSG *msg)
     state |= GDK_SHIFT_MASK;
 
   if (GetKeyState (VK_MENU) < 0)
-    state |= GDK_MOD1_MASK;
+    state |= GDK_ALT_MASK;
 
   if (GetKeyState (VK_CAPITAL) & 0x1)
     state |= GDK_LOCK_MASK;
@@ -741,7 +741,7 @@ print_event_state (guint state)
   CASE (SHIFT);
   CASE (LOCK);
   CASE (CONTROL);
-  CASE (MOD1);
+  CASE (ALT);
   CASE (MOD2);
   CASE (MOD3);
   CASE (MOD4);
@@ -2326,9 +2326,9 @@ gdk_event_translate (MSG  *msg,
       both_shift_pressed[0] = both_shift_pressed[1] = 0;
     }
 
-      /* Reset MOD1_MASK if it is the Alt key itself */
+      /* Reset ALT_MASK if it is the Alt key itself */
       if (msg->wParam == VK_MENU)
-	state &= ~GDK_MOD1_MASK;
+	state &= ~GDK_ALT_MASK;
 
       event = gdk_event_key_new ((msg->message == WM_KEYDOWN || msg->message == WM_SYSKEYDOWN)
                                    ? GDK_KEY_PRESS

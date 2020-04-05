@@ -561,20 +561,20 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
 
   /* key bindings */
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Down, GDK_MOD1_MASK,
+                                       GDK_KEY_Down, GDK_ALT_MASK,
                                        "popup",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Down, GDK_MOD1_MASK,
+                                       GDK_KEY_KP_Down, GDK_ALT_MASK,
                                        "popup",
                                        NULL);
 
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Up, GDK_MOD1_MASK,
+                                       GDK_KEY_Up, GDK_ALT_MASK,
                                        "popdown",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Up, GDK_MOD1_MASK,
+                                       GDK_KEY_KP_Up, GDK_ALT_MASK,
                                        "popdown",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,

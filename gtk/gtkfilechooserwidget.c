@@ -7500,29 +7500,29 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                        NULL);
 
   add_normal_and_shifted_binding (widget_class,
-                                  GDK_KEY_Up, GDK_MOD1_MASK,
+                                  GDK_KEY_Up, GDK_ALT_MASK,
                                   "up-folder");
   add_normal_and_shifted_binding (widget_class,
-                                  GDK_KEY_KP_Up, GDK_MOD1_MASK,
+                                  GDK_KEY_KP_Up, GDK_ALT_MASK,
                                   "up-folder");
 
   add_normal_and_shifted_binding (widget_class,
-                                  GDK_KEY_Down, GDK_MOD1_MASK,
+                                  GDK_KEY_Down, GDK_ALT_MASK,
                                   "down-folder");
   add_normal_and_shifted_binding (widget_class,
-                                  GDK_KEY_KP_Down, GDK_MOD1_MASK,
+                                  GDK_KEY_KP_Down, GDK_ALT_MASK,
                                   "down-folder");
 
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Home, GDK_MOD1_MASK,
+                                       GDK_KEY_Home, GDK_ALT_MASK,
                                        "home-folder",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Home, GDK_MOD1_MASK,
+                                       GDK_KEY_KP_Home, GDK_ALT_MASK,
                                        "home-folder",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_d, GDK_MOD1_MASK,
+                                       GDK_KEY_d, GDK_ALT_MASK,
                                        "desktop-folder",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
@@ -7530,7 +7530,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                        "show-hidden",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_s, GDK_MOD1_MASK,
+                                       GDK_KEY_s, GDK_ALT_MASK,
                                        "search-shortcut",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
@@ -7538,11 +7538,11 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                        "search-shortcut",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_r, GDK_MOD1_MASK,
+                                       GDK_KEY_r, GDK_ALT_MASK,
                                        "recent-shortcut",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_p, GDK_MOD1_MASK,
+                                       GDK_KEY_p, GDK_ALT_MASK,
                                        "places-shortcut",
                                        NULL);
   gtk_widget_class_add_binding (widget_class,
@@ -7564,7 +7564,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
 
   for (i = 0; i < G_N_ELEMENTS (quick_bookmark_keyvals); i++)
     gtk_widget_class_add_binding_signal (widget_class,
-                                         quick_bookmark_keyvals[i], GDK_MOD1_MASK,
+                                         quick_bookmark_keyvals[i], GDK_ALT_MASK,
                                          "quick-bookmark",
                                          "(i)", i);
 

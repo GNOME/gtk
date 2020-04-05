@@ -401,7 +401,7 @@ update_keymaps (GdkX11Keymap *keymap_x11)
 
           keymap_x11->modmap[i / keymap_x11->mod_keymap->max_keypermod] |= mask;
 
-          /* The fourth modifier, GDK_MOD1_MASK is 1 << 3.
+          /* The fourth modifier, GDK_ALT_MASK is 1 << 3.
            * Each group of max_keypermod entries refers to the same modifier.
            */
           mask = 1 << (i / keymap_x11->mod_keymap->max_keypermod);
@@ -427,7 +427,7 @@ update_keymaps (GdkX11Keymap *keymap_x11)
 
             case GDK_CONTROL_MASK:
             case GDK_SHIFT_MASK:
-            case GDK_MOD1_MASK:
+            case GDK_ALT_MASK:
               /* Some keyboard maps are known to map Mode_Switch as an
                * extra Mod1 key. In circumstances like that, it won't be
                * used to switch groups.

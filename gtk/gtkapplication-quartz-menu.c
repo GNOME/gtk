@@ -346,7 +346,7 @@ icon_loaded (GObject      *object,
         modifiers |= NSShiftKeyMask;
       if (mask & GDK_CONTROL_MASK)
         modifiers |= NSControlKeyMask;
-      if (mask & GDK_MOD1_MASK)
+      if (mask & GDK_ALT_MASK)
         modifiers |= NSAlternateKeyMask;
       if (mask & GDK_META_MASK)
         modifiers |= NSCommandKeyMask;

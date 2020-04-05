@@ -199,7 +199,7 @@ typedef enum
  * @GDK_LOCK_MASK: a Lock key (depending on the modifier mapping of the
  *  X server this may either be CapsLock or ShiftLock).
  * @GDK_CONTROL_MASK: the Control key.
- * @GDK_MOD1_MASK: the fourth modifier key (it depends on the modifier
+ * @GDK_ALT_MASK: the fourth modifier key (it depends on the modifier
  *  mapping of the X server which key is interpreted as this modifier, but
  *  normally it is the Alt key).
  * @GDK_MOD2_MASK: the fifth modifier key (it depends on the modifier
@@ -259,7 +259,7 @@ typedef enum
   GDK_SHIFT_MASK    = 1 << 0,
   GDK_LOCK_MASK     = 1 << 1,
   GDK_CONTROL_MASK  = 1 << 2,
-  GDK_MOD1_MASK     = 1 << 3,
+  GDK_ALT_MASK      = 1 << 3,
   GDK_MOD2_MASK     = 1 << 4,
   GDK_MOD3_MASK     = 1 << 5,
   GDK_MOD4_MASK     = 1 << 6,

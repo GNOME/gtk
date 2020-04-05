@@ -550,7 +550,7 @@ gtk_search_entry_is_keynav (guint           keyval,
       keyval == GDK_KEY_End       || keyval == GDK_KEY_KP_End ||
       keyval == GDK_KEY_Page_Up   || keyval == GDK_KEY_KP_Page_Up ||
       keyval == GDK_KEY_Page_Down || keyval == GDK_KEY_KP_Page_Down ||
-      ((state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) != 0))
+      ((state & (GDK_CONTROL_MASK | GDK_ALT_MASK)) != 0))
         return TRUE;
 
   /* Other navigation events should get automatically

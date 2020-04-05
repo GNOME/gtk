@@ -513,7 +513,7 @@ gtk_shortcut_controller_class_init (GtkShortcutControllerClass *klass)
                           P_("Mnemonic modifers"),
                           P_("The modifiers to be pressed to allow mnemonics activation"),
                           GDK_TYPE_MODIFIER_TYPE,
-                          GDK_MOD1_MASK,
+                          GDK_ALT_MASK,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
@@ -547,7 +547,7 @@ gtk_shortcut_controller_class_init (GtkShortcutControllerClass *klass)
 static void
 gtk_shortcut_controller_init (GtkShortcutController *self)
 {
-  self->mnemonics_modifiers = GDK_MOD1_MASK;
+  self->mnemonics_modifiers = GDK_ALT_MASK;
 }
 
 void
