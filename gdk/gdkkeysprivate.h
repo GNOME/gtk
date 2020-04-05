@@ -60,10 +60,6 @@ struct _GdkKeymapClass
                                          gint            *effective_group,
                                          gint            *level,
                                          GdkModifierType *consumed_modifiers);
-  void (* add_virtual_modifiers)        (GdkKeymap       *keymap,
-                                         GdkModifierType *state);
-  gboolean (* map_virtual_modifiers)    (GdkKeymap       *keymap,
-                                         GdkModifierType *state);
   GdkModifierType (*get_modifier_mask)  (GdkKeymap         *keymap,
                                          GdkModifierIntent  intent);
   guint (* get_modifier_state)          (GdkKeymap *keymap);
@@ -111,10 +107,6 @@ gboolean       gdk_keymap_get_caps_lock_state      (GdkKeymap           *keymap)
 gboolean       gdk_keymap_get_num_lock_state       (GdkKeymap           *keymap);
 gboolean       gdk_keymap_get_scroll_lock_state    (GdkKeymap           *keymap);
 guint          gdk_keymap_get_modifier_state       (GdkKeymap           *keymap);
-void           gdk_keymap_add_virtual_modifiers    (GdkKeymap           *keymap,
-                                                    GdkModifierType     *state);
-gboolean       gdk_keymap_map_virtual_modifiers    (GdkKeymap           *keymap,
-                                                    GdkModifierType     *state);
 GdkModifierType gdk_keymap_get_modifier_mask       (GdkKeymap           *keymap,
                                                     GdkModifierIntent    intent);
 
