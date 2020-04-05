@@ -43,7 +43,12 @@
  */
 
 /* --- variables --- */
-static guint  default_accel_mod_mask     = 0;
+static guint default_accel_mod_mask = GDK_CONTROL_MASK|
+                                      GDK_SHIFT_MASK|
+                                      GDK_ALT_MASK|
+                                      GDK_SUPER_MASK|
+                                      GDK_HYPER_MASK|
+                                      GDK_META_MASK;
 
 
 /* --- functions --- */
@@ -276,7 +281,6 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
   GdkModifierType mods;
   gint len;
   gboolean error;
-  GdkModifierType primary;
 
   if (accelerator_key)
     *accelerator_key = 0;
@@ -290,9 +294,6 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
   if (!display)
     display = gdk_display_get_default ();
 
-  primary = gdk_display_get_modifier_mask (display,
-                                           GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
-
   error = FALSE;
   keyval = 0;
   mods = 0;
@@ -305,7 +306,7 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
             {
               accelerator += 9;
               len -= 9;
-              mods |= primary;
+              mods |= GDK_CONTROL_MASK;
             }
           else if (len >= 9 && is_control (accelerator))
             {
@@ -578,7 +579,6 @@ gchar*
 gtk_accelerator_name (guint           accelerator_key,
                       GdkModifierType accelerator_mods)
 {
-  static const gchar text_primary[] = "<Primary>";
   static const gchar text_shift[] = "<Shift>";
   static const gchar text_control[] = "<Control>";
   static const gchar text_alt[] = "<Alt>";
@@ -589,10 +589,6 @@ gtk_accelerator_name (guint           accelerator_key,
   guint l;
   const char *keyval_name;
   gchar *accelerator;
-  GdkModifierType primary;
-
-  primary = gdk_display_get_modifier_mask (gdk_display_get_default (),
-                                           GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
 
   accelerator_mods &= GDK_MODIFIER_MASK;
 
@@ -602,11 +598,6 @@ gtk_accelerator_name (guint           accelerator_key,
 
   saved_mods = accelerator_mods;
   l = 0;
-  if (accelerator_mods & primary)
-    {
-      l += sizeof (text_primary) - 1;
-      accelerator_mods &= ~primary; /* consume the default accel */
-    }
   if (accelerator_mods & GDK_SHIFT_MASK)
     l += sizeof (text_shift) - 1;
   if (accelerator_mods & GDK_CONTROL_MASK)
@@ -625,12 +616,6 @@ gtk_accelerator_name (guint           accelerator_key,
   accelerator_mods = saved_mods;
   l = 0;
   accelerator[l] = 0;
-  if (accelerator_mods & primary)
-    {
-      strcpy (accelerator + l, text_primary);
-      l += sizeof (text_primary) - 1;
-      accelerator_mods &= ~primary; /* consume the default accel */
-    }
   if (accelerator_mods & GDK_SHIFT_MASK)
     {
       strcpy (accelerator + l, text_shift);
@@ -1045,19 +1030,5 @@ gtk_accelerator_set_default_mod_mask (GdkModifierType default_mod_mask)
 GdkModifierType
 gtk_accelerator_get_default_mod_mask (void)
 {
-  if (!default_accel_mod_mask)
-    {
-      GdkDisplay *display;
-
-      display = gdk_display_get_default ();
-
-      if (!display)
-        return GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_ALT_MASK;
-
-      default_accel_mod_mask =
-          gdk_display_get_modifier_mask (display,
-                                         GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK);
-    }
-
   return default_accel_mod_mask;
 }

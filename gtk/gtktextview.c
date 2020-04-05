@@ -5373,9 +5373,7 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
 
       state = gdk_event_get_modifier_state (event);
 
-      if (state &
-          gtk_widget_get_modifier_mask (GTK_WIDGET (text_view),
-                                        GDK_MODIFIER_INTENT_EXTEND_SELECTION))
+      if (state & GDK_SHIFT_MASK)
         extends = TRUE;
 
       switch (n_press)
