@@ -196,8 +196,8 @@ _gtk_get_primary_accel_mod (void)
     {
       GdkDisplay *display = gdk_display_get_default ();
 
-      primary = gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
-                                              GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
+      primary = gdk_display_get_modifier_mask (display,
+                                               GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
       primary = _gtk_replace_virtual_modifiers (gdk_display_get_keymap (display),
                                                 primary);
     }

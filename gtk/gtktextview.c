@@ -7534,7 +7534,8 @@ gtk_text_view_check_keymap_direction (GtkTextView *text_view)
   if (priv->layout)
     {
       GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (text_view));
-      GdkKeymap *keymap = gdk_display_get_keymap (gtk_widget_get_display (GTK_WIDGET (text_view)));
+      GdkSeat *seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (text_view)));
+      GdkDevice *keyboard = gdk_seat_get_keyboard (seat);
       GtkTextDirection new_cursor_dir;
       GtkTextDirection new_keyboard_dir;
       gboolean split_cursor;
@@ -7543,7 +7544,7 @@ gtk_text_view_check_keymap_direction (GtkTextView *text_view)
 		    "gtk-split-cursor", &split_cursor,
 		    NULL);
       
-      if (gdk_keymap_get_direction (keymap) == PANGO_DIRECTION_RTL)
+      if (gdk_device_get_direction (keyboard) == PANGO_DIRECTION_RTL)
 	new_keyboard_dir = GTK_TEXT_DIR_RTL;
       else
 	new_keyboard_dir  = GTK_TEXT_DIR_LTR;

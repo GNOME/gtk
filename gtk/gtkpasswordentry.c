@@ -55,7 +55,7 @@ typedef struct {
   GtkWidget *entry;
   GtkWidget *icon;
   GtkWidget *peek_icon;
-  GdkKeymap *keymap;
+  GdkDevice *keyboard;
   GMenuModel *extra_menu;
 } GtkPasswordEntryPrivate;
 
@@ -81,8 +81,9 @@ G_DEFINE_TYPE_WITH_CODE (GtkPasswordEntry, gtk_password_entry, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE, gtk_password_entry_editable_init))
 
 static void
-keymap_state_changed (GdkKeymap *keymap,
-                      GtkWidget *widget)
+caps_lock_state_changed (GdkDevice  *device,
+                         GParamSpec *pspec,
+                        GtkWidget   *widget)
 {
   GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (widget);
   GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
@@ -90,7 +91,7 @@ keymap_state_changed (GdkKeymap *keymap,
   if (gtk_editable_get_editable (GTK_EDITABLE (entry)) &&
       gtk_widget_has_focus (priv->entry) &&
       !gtk_text_get_visibility (GTK_TEXT (priv->entry)) &&
-      gdk_keymap_get_caps_lock_state (priv->keymap))
+      gdk_device_get_caps_lock_state (device))
     gtk_widget_show (priv->icon);
   else
     gtk_widget_hide (priv->icon);
@@ -102,8 +103,8 @@ focus_changed (GtkWidget *widget)
   GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (widget);
   GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
 
-  if (priv->keymap)
-    keymap_state_changed (priv->keymap, widget);
+  if (priv->keyboard)
+    caps_lock_state_changed (priv->keyboard, NULL, widget);
 }
  
 static void
@@ -134,8 +135,8 @@ visibility_toggled (GObject          *object,
       gtk_widget_set_tooltip_text (priv->peek_icon, _("Show text"));
     }
 
-  if (priv->keymap)
-    keymap_state_changed (priv->keymap, GTK_WIDGET (entry));
+  if (priv->keyboard)
+    caps_lock_state_changed (priv->keyboard, NULL, GTK_WIDGET (entry));
 }
 
 static void
@@ -168,9 +169,9 @@ gtk_password_entry_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_password_entry_parent_class)->realize (widget);
 
-  priv->keymap = gdk_display_get_keymap (gtk_widget_get_display (widget));
-  g_signal_connect (priv->keymap, "state-changed", G_CALLBACK (keymap_state_changed), entry);
-  keymap_state_changed (priv->keymap, widget);
+  priv->keyboard = gdk_seat_get_keyboard (gdk_display_get_default_seat (gtk_widget_get_display (widget)));
+  g_signal_connect (priv->keyboard, "notify::caps-lock-state", G_CALLBACK (caps_lock_state_changed), entry);
+  caps_lock_state_changed (priv->keyboard, NULL, widget);
 }
 
 static void
@@ -179,8 +180,8 @@ gtk_password_entry_dispose (GObject *object)
   GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (object);
   GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
 
-  if (priv->keymap)
-    g_signal_handlers_disconnect_by_func (priv->keymap, keymap_state_changed, entry);
+  if (priv->keyboard)
+    g_signal_handlers_disconnect_by_func (priv->keyboard, caps_lock_state_changed, entry);
 
   if (priv->entry)
     gtk_editable_finish_delegate (GTK_EDITABLE (entry));
@@ -502,7 +503,7 @@ gtk_password_entry_set_show_peek_icon (GtkPasswordEntry *entry,
                                             entry);
     }
 
-  keymap_state_changed (priv->keymap, GTK_WIDGET (entry));
+  caps_lock_state_changed (priv->keyboard, NULL, GTK_WIDGET (entry));
 
   g_object_notify_by_pspec (G_OBJECT (entry), props[PROP_SHOW_PEEK_ICON]);
 }
