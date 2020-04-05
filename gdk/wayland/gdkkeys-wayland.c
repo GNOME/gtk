@@ -300,6 +300,15 @@ get_gdk_modifiers (struct xkb_keymap *xkb_keymap,
   return state;
 }
 
+GdkModifierType
+gdk_wayland_keymap_get_gdk_modifiers (GdkKeymap *keymap,
+                                      guint32    mods)
+{
+  struct xkb_keymap *xkb_keymap = GDK_WAYLAND_KEYMAP (keymap)->xkb_keymap;
+
+  return get_gdk_modifiers (xkb_keymap, mods);
+}
+
 static gboolean
 gdk_wayland_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 					     guint            hardware_keycode,

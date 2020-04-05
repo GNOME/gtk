@@ -363,9 +363,11 @@ guint                   gdk_key_event_get_keyval        (GdkEvent *event);
 GDK_AVAILABLE_IN_ALL
 guint                   gdk_key_event_get_keycode       (GdkEvent *event);
 GDK_AVAILABLE_IN_ALL
-guint                   gdk_key_event_get_scancode      (GdkEvent *event);
+GdkModifierType         gdk_key_event_get_consumed_modifiers (GdkEvent *event);
 GDK_AVAILABLE_IN_ALL
-guint                   gdk_key_event_get_group         (GdkEvent *event);
+guint                   gdk_key_event_get_layout        (GdkEvent *event);
+GDK_AVAILABLE_IN_ALL
+guint                   gdk_key_event_get_level         (GdkEvent *event);
 GDK_AVAILABLE_IN_ALL
 gboolean                gdk_key_event_is_modifier       (GdkEvent *event);
 GDK_AVAILABLE_IN_ALL

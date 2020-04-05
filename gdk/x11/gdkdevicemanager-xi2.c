@@ -1521,7 +1521,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
         GdkKeymap *keymap = gdk_display_get_keymap (display);
         GdkModifierType consumed, state, orig_state;
+        int layout, level;
         guint keyval;
+        GdkTranslatedKey translated;
+        GdkTranslatedKey no_lock;
 
         GDK_DISPLAY_NOTE (display, EVENTS,
                   g_message ("key %s:\twindow %ld\n"
@@ -1549,12 +1552,37 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                              state,
                                              xev->group.effective,
                                              &keyval,
-                                             NULL, NULL, &consumed);
+                                             &layout, &level, &consumed);
         orig_state = state;
         state &= ~consumed;
         _gdk_x11_keymap_add_virt_mods (keymap, &state);
         state |= orig_state;
 
+        translated.keyval = keyval;
+        translated.consumed = consumed;
+        translated.layout = layout;
+        translated.level = level;
+
+        if (orig_state & GDK_LOCK_MASK)
+          {
+            orig_state &= ~GDK_LOCK_MASK;
+
+            gdk_keymap_translate_keyboard_state (keymap,
+                                                 xev->detail,
+                                                 orig_state,
+                                                 xev->group.effective,
+                                                 &keyval,
+                                                 &layout, &level, &consumed);
+
+            no_lock.keyval = keyval;
+            no_lock.consumed = consumed;
+            no_lock.layout = layout;
+            no_lock.level = level;
+          }
+        else
+          {
+            no_lock = translated;
+          }
         event = gdk_event_key_new (xev->evtype == XI_KeyPress
                                      ? GDK_KEY_PRESS
                                      : GDK_KEY_RELEASE,
@@ -1562,12 +1590,11 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                    device,
                                    source_device,
                                    xev->time,
+                                   xev->detail,
                                    state,
-                                   keyval,
-                                   xev->detail,
-                                   xev->detail,
-                                   xev->group.effective,
-                                   gdk_x11_keymap_key_is_modifier (keymap, xev->detail));
+                                   gdk_x11_keymap_key_is_modifier (keymap, xev->detail),
+                                   &translated,
+                                   &no_lock);
 
         if (ev->evtype == XI_KeyPress)
           set_user_time (event);

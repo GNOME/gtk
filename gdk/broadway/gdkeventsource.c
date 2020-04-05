@@ -266,6 +266,11 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
                                   GINT_TO_POINTER (message->key.surface_id));
     if (surface)
       {
+        GdkTranslatedKey translated;
+        translated.keyval = message->key.key;
+        translated.consumed = 0;
+        translated.layout = 0;
+        translated.level = 0;
         event = gdk_event_key_new (message->base.type == BROADWAY_EVENT_KEY_PRESS
                                      ? GDK_KEY_PRESS
                                      : GDK_KEY_RELEASE,
@@ -273,12 +278,11 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
                                    gdk_seat_get_keyboard (seat),
                                    gdk_seat_get_keyboard (seat),
                                    message->base.time,
+                                   message->key.key,
                                    message->key.state,
-                                   message->key.key,
-                                   message->key.key,
-                                   message->key.key,
-                                   0,
-                                   FALSE);
+                                   FALSE,
+                                   &translated,
+                                   &translated);
 
         node = _gdk_event_queue_append (display, event);
         _gdk_windowing_got_event (display, node, event, message->base.serial);
