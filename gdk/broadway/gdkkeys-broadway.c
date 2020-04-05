@@ -188,19 +188,6 @@ gdk_broadway_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 }
 
 static void
-gdk_broadway_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
-					   GdkModifierType *state)
-{
-}
-
-static gboolean
-gdk_broadway_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
-					   GdkModifierType *state)
-{
-  return TRUE;
-}
-
-static void
 gdk_broadway_keymap_class_init (GdkBroadwayKeymapClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -217,7 +204,5 @@ gdk_broadway_keymap_class_init (GdkBroadwayKeymapClass *klass)
   keymap_class->get_entries_for_keycode = gdk_broadway_keymap_get_entries_for_keycode;
   keymap_class->lookup_key = gdk_broadway_keymap_lookup_key;
   keymap_class->translate_keyboard_state = gdk_broadway_keymap_translate_keyboard_state;
-  keymap_class->add_virtual_modifiers = gdk_broadway_keymap_add_virtual_modifiers;
-  keymap_class->map_virtual_modifiers = gdk_broadway_keymap_map_virtual_modifiers;
 }
 
