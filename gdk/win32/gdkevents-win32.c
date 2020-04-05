@@ -809,7 +809,7 @@ _gdk_win32_print_event (GdkEvent *event)
       kvname = gdk_keyval_name (gdk_key_event_get_keyval (event));
       g_print ("%#.02x group:%d %s",
                gdk_key_event_get_keycode (event),
-               gdk_key_event_get_group (event),
+               gdk_key_event_get_layout (event),
 	       (kvname ? kvname : "??"));
       print_event_state (gdk_event_get_modifier_state (event));
       break;
@@ -2050,12 +2050,12 @@ gdk_event_translate (MSG  *msg,
   GdkModifierType state;
   guint keyval;
   guint16 keycode;
-  guint16 scancode;
   guint8 group;
   gboolean is_modifier;
 
   double delta_x, delta_y;
   GdkScrollDirection direction;
+  GdkTranslatedKey translated;
 
   display = gdk_display_get_default ();
   win32_display = GDK_WIN32_DISPLAY (display);
@@ -2129,17 +2129,20 @@ gdk_event_translate (MSG  *msg,
       gdk_display_setting_changed (display, "gtk-im-module");
 
       /* Generate a dummy key event to "nudge" IMContext */
+      translated.keyval = GDK_KEY_VoidSymbol;
+      translated.consumed = 0;
+      translated.layout = 0;
+      translated.level = 0;
       event = gdk_event_key_new (GDK_KEY_PRESS,
                                  window,
                                  device_manager_win32->core_keyboard,
                                  device_manager_win32->system_keyboard,
                                  _gdk_win32_get_next_tick (msg->time),
                                  0,
-                                 GDK_KEY_VoidSymbol,
                                  0,
-                                 0,
-                                 0,
-                                 FALSE);
+                                 FALSE,
+                                 &translated,
+                                 &translated);
       _gdk_win32_append_event (event);
       break;
 
@@ -2225,7 +2228,6 @@ gdk_event_translate (MSG  *msg,
 
       keyval = GDK_KEY_VoidSymbol;
       keycode = msg->wParam;
-      scancode = msg->lParam >> 16;
 
       if (HIWORD (msg->lParam) & KF_EXTENDED)
 	{
@@ -2329,6 +2331,11 @@ gdk_event_translate (MSG  *msg,
       if (msg->wParam == VK_MENU)
 	state &= ~GDK_ALT_MASK;
 
+      /* FIXME do proper translation */
+      translated.keyval = keyval;
+      translated.consumed = 0;
+      translated.layout = group;
+      translated.level = 0;
       event = gdk_event_key_new ((msg->message == WM_KEYDOWN || msg->message == WM_SYSKEYDOWN)
                                    ? GDK_KEY_PRESS
                                    : GDK_KEY_RELEASE,
@@ -2337,11 +2344,10 @@ gdk_event_translate (MSG  *msg,
                                  device_manager_win32->system_keyboard,
                                  _gdk_win32_get_next_tick (msg->time),
                                  state,
-                                 keyval,
                                  keycode,
-                                 scancode,
-                                 group,
-                                 is_modifier);
+                                 is_modifier,
+                                 &translated,
+                                 &translated);
 
       _gdk_win32_append_event (event);
 
@@ -2403,17 +2409,20 @@ gdk_event_translate (MSG  *msg,
       for (i = 0; i < ccount; i++)
 	{
           /* Build a key press event */
+          translated.keyval = gdk_unicode_to_keyval (wbuf[i]);
+          translated.consumed = 0;
+          translated.layout = get_active_group ();
+          translated.level = 0;
           event = gdk_event_key_new (GDK_KEY_PRESS,
                                      window,
                                      device_manager_win32->core_keyboard,
                                      device_manager_win32->system_keyboard,
                                      _gdk_win32_get_next_tick (msg->time),
                                      build_key_event_state (key_state),
-                                     gdk_unicode_to_keyval (wbuf[i]),               
                                      0,
-                                     0,
-                                     get_active_group (),
-                                     FALSE);
+                                     FALSE,
+                                     &translated,
+                                     &translated);
 
           _gdk_win32_append_event (event);
 
@@ -2424,11 +2433,10 @@ gdk_event_translate (MSG  *msg,
                                      device_manager_win32->system_keyboard,
                                      _gdk_win32_get_next_tick (msg->time),
                                      build_key_event_state (key_state),
-                                     gdk_unicode_to_keyval (wbuf[i]),               
                                      0,
-                                     0,
-                                     get_active_group (),
-                                     FALSE);
+                                     FALSE,
+                                     &translated,
+                                     &translated);
 
           _gdk_win32_append_event (event);
 	}
