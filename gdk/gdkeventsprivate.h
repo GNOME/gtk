@@ -232,13 +232,13 @@ struct _GdkEventScroll
  * @state: (type GdkModifierType): a bit-mask representing the state of
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
  *   buttons. See #GdkModifierType.
+ * @keycode: the raw code of the key that was pressed or released.
  * @keyval: the key that was pressed or released. See the
- *   `gdk/gdkkeysyms.h` header file for a
- *   complete list of GDK key codes.
- * @hardware_keycode: the raw code of the key that was pressed or released.
- * @group: the keyboard group.
- * @is_modifier: a flag that indicates if @hardware_keycode is mapped to a
- *   modifier
+ *   `gdk/gdkkeysyms.h` header file for a complete list of GDK key codes.
+ * @consumed_modifiers: Modifiers that were consumed when translating
+ *    @keycode to @keyval
+ * @layout: the effective keyboard layout
+ * @level: the effective shift level
  *
  * Describes a key press or key release event.
  */
@@ -246,10 +246,11 @@ struct _GdkEventKey
 {
   GdkEventAny any;
   GdkModifierType state;
+  guint32 keycode;
   guint keyval;
-  guint16 hardware_keycode;
-  guint16 key_scancode;
-  guint8 group;
+  GdkModifierType consumed;
+  guint layout;
+  guint level;
 };
 
 /*
@@ -599,11 +600,12 @@ GdkEvent * gdk_event_key_new            (GdkEventType     type,
                                          GdkDevice       *device,
                                          GdkDevice       *source_device,
                                          guint32          time,
-                                         GdkModifierType  state,
+                                         guint            keycode,
                                          guint            keyval,
-                                         guint16          keycode,
-                                         guint16          scancode,
-                                         guint8           group,
+                                         GdkModifierType  modifiers,
+                                         GdkModifierType  consumed_modifiers,
+                                         guint            layout,
+                                         guint            shift_level,
                                          gboolean         is_modifier);
 
 GdkEvent * gdk_event_focus_new          (GdkSurface      *surface,

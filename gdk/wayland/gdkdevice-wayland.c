@@ -2023,6 +2023,9 @@ deliver_key_event (GdkWaylandSeat *seat,
   xkb_keysym_t sym;
   guint delay, interval, timeout;
   gint64 begin_time, now;
+  xkb_mod_mask_t consumed;
+  xkb_layout_index_t layout;
+  xkb_level_index_t level;
 
   begin_time = g_get_monotonic_time ();
 
@@ -2033,6 +2036,10 @@ deliver_key_event (GdkWaylandSeat *seat,
   xkb_keymap = _gdk_wayland_keymap_get_xkb_keymap (keymap);
 
   sym = xkb_state_key_get_one_sym (xkb_state, key);
+  consumed = xkb_state_key_get_consumed_mods2 (xkb_state, key, XKB_CONSUMED_MODE_GTK);
+  layout = xkb_state_key_get_layout (xkb_state, key);
+  level = xkb_state_key_get_level (xkb_state, key, layout);
+
   if (sym == XKB_KEY_NoSymbol)
     return;
 
@@ -2044,24 +2051,28 @@ deliver_key_event (GdkWaylandSeat *seat,
                              seat->master_keyboard,
                              seat->keyboard,
                              time_,
-                             device_get_modifiers (seat->master_pointer),
+                             key,
                              sym,
-                             key,
-                             key,
-                             0,
+                             device_get_modifiers (seat->master_pointer),
+                             gdk_wayland_keymap_get_gdk_modifiers (keymap, consumed),
+                             layout,
+                             level,
                              _gdk_wayland_keymap_key_is_modifier (keymap, key));
 
   _gdk_wayland_display_deliver_event (seat->display, event);
 
   GDK_SEAT_NOTE (seat, EVENTS,
             g_message ("keyboard %s event%s, surface %p, code %d, sym %d, "
-                       "mods 0x%x",
+                       "mods 0x%x, consumed 0x%x, layout %d level %d",
                        (state ? "press" : "release"),
                        (from_key_repeat ? " (repeat)" : ""),
                        gdk_event_get_surface (event),
                        gdk_key_event_get_keycode (event),
                        gdk_key_event_get_keyval (event),
-                       gdk_event_get_modifier_state (event)));
+                       gdk_event_get_modifier_state (event),
+                       gdk_key_event_get_consumed_modifiers (event),
+                       gdk_key_event_get_layout (event),
+                       gdk_key_event_get_level (event)));
 
   if (!xkb_keymap_key_repeats (xkb_keymap, key))
     return;

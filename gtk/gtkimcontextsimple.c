@@ -935,10 +935,11 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
                                                    gdk_event_get_device (event),
                                                    gdk_event_get_source_device (event),
                                                    gdk_event_get_time (event),
+                                                   tmp_keyval,
+                                                   tmp_keyval,
                                                    gdk_event_get_modifier_state (event),
-                                                   tmp_keyval,
-                                                   tmp_keyval,
-                                                   tmp_keyval,
+                                                   0,
+                                                   0,
                                                    0,
                                                    0);
 	  
@@ -997,7 +998,7 @@ canonical_hex_keyval (GdkEvent *event)
    * any other state, and return that hex keyval if so
    */
   gdk_display_map_keycode (gdk_event_get_display (event),
-                           gdk_key_event_get_scancode (event),
+                           gdk_key_event_get_keycode (event),
                            NULL,
                            &keyvals, &n_vals);
 
