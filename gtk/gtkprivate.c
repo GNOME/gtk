@@ -159,35 +159,6 @@ _gtk_single_string_accumulator (GSignalInvocationHint *ihint,
 }
 
 GdkModifierType
-_gtk_replace_virtual_modifiers (GdkKeymap       *keymap,
-                                GdkModifierType  modifiers)
-{
-  GdkModifierType result = 0;
-  gint            i;
-
-  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), 0);
-
-  for (i = 0; i < 8; i++) /* SHIFT...MOD5 */
-    {
-      GdkModifierType real = 1 << i;
-
-      if (modifiers & real)
-        {
-          GdkModifierType virtual = real;
-
-          gdk_keymap_add_virtual_modifiers (keymap, &virtual);
-
-          if (virtual == real)
-            result |= virtual;
-          else
-            result |= virtual & ~real;
-        }
-    }
-
-  return result;
-}
-
-GdkModifierType
 _gtk_get_primary_accel_mod (void)
 {
   static GdkModifierType primary = 0;
@@ -198,8 +169,6 @@ _gtk_get_primary_accel_mod (void)
 
       primary = gdk_display_get_modifier_mask (display,
                                                GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
-      primary = _gtk_replace_virtual_modifiers (gdk_display_get_keymap (display),
-                                                primary);
     }
 
   return primary;
