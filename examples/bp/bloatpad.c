@@ -517,13 +517,13 @@ bloat_pad_startup (GApplication *application)
     const gchar *action_and_target;
     const gchar *accelerators[2];
   } accels[] = {
-    { "app.new", { "<Primary>n", NULL } },
-    { "app.quit", { "<Primary>q", NULL } },
-    { "win.copy", { "<Primary>c", NULL } },
-    { "win.paste", { "<Primary>p", NULL } },
-    { "win.justify::left", { "<Primary>l", NULL } },
-    { "win.justify::center", { "<Primary>m", NULL } },
-    { "win.justify::right", { "<Primary>r", NULL } }
+    { "app.new", { "<Control>n", NULL } },
+    { "app.quit", { "<Control>q", NULL } },
+    { "win.copy", { "<Control>c", NULL } },
+    { "win.paste", { "<Control>p", NULL } },
+    { "win.justify::left", { "<Control>l", NULL } },
+    { "win.justify::center", { "<Control>m", NULL } },
+    { "win.justify::right", { "<Control>r", NULL } }
   };
 
   G_APPLICATION_CLASS (bloat_pad_parent_class)
@@ -592,7 +592,7 @@ bloat_pad_startup (GApplication *application)
   g_object_unref (item);
   g_object_unref (icon);
 
-  const gchar *new_accels[] = { "<Primary>n", "<Primary>t", NULL };
+  const gchar *new_accels[] = { "<Control>n", "<Control>t", NULL };
   gtk_application_set_accels_for_action (GTK_APPLICATION (application), "app.new", new_accels);
 
   dump_accels (GTK_APPLICATION (application));

@@ -278,7 +278,7 @@ gtk_application_load_resources (GtkApplication *application)
     path = g_strconcat (base_path, "/gtk/help-overlay.ui", NULL);
     if (g_resources_get_info (path, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL, NULL, NULL))
       {
-        const gchar * const accels[] = { "<Primary>question", NULL };
+        const gchar * const accels[] = { "<Control>question", NULL };
 
         priv->help_overlay_path = path;
         gtk_application_set_accels_for_action (application, "win.show-help-overlay", accels);

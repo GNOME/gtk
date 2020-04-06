@@ -124,10 +124,10 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
   GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) impl;
   GSimpleActionGroup *gtkinternal;
   GMenuModel *app_menu;
-  const gchar *pref_accel[] = {"<Primary>comma", NULL};
-  const gchar *hide_others_accel[] = {"<Primary><Alt>h", NULL};
-  const gchar *hide_accel[] = {"<Primary>h", NULL};
-  const gchar *quit_accel[] = {"<Primary>q", NULL};
+  const gchar *pref_accel[] = {"<Control>comma", NULL};
+  const gchar *hide_others_accel[] = {"<Control><Alt>h", NULL};
+  const gchar *hide_accel[] = {"<Control>h", NULL};
+  const gchar *quit_accel[] = {"<Control>q", NULL};
 
   if (register_session)
     {

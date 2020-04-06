@@ -1738,18 +1738,18 @@ activate (GApplication *app)
     const gchar *accelerators[2];
   } accels[] = {
     { "app.about", { "F1", NULL } },
-    { "app.quit", { "<Primary>q", NULL } },
-    { "app.open-in", { "<Primary>n", NULL } },
-    { "app.cut", { "<Primary>x", NULL } },
-    { "app.copy", { "<Primary>c", NULL } },
-    { "app.paste", { "<Primary>v", NULL } },
-    { "win.dark", { "<Primary>d", NULL } },
-    { "win.search", { "<Primary>s", NULL } },
+    { "app.quit", { "<Control>q", NULL } },
+    { "app.open-in", { "<Control>n", NULL } },
+    { "app.cut", { "<Control>x", NULL } },
+    { "app.copy", { "<Control>c", NULL } },
+    { "app.paste", { "<Control>v", NULL } },
+    { "win.dark", { "<Control>d", NULL } },
+    { "win.search", { "<Control>s", NULL } },
     { "win.delete", { "Delete", NULL } },
-    { "win.background", { "<Primary>b", NULL } },
-    { "win.open", { "<Primary>o", NULL } },
-    { "win.record", { "<Primary>r", NULL } },
-    { "win.lock", { "<Primary>l", NULL } },
+    { "win.background", { "<Control>b", NULL } },
+    { "win.open", { "<Control>o", NULL } },
+    { "win.record", { "<Control>r", NULL } },
+    { "win.lock", { "<Control>l", NULL } },
   };
   gint i;
   GPermission *permission;
