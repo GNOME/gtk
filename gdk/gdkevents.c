@@ -552,10 +552,7 @@ gdk_event_get_axis (GdkEvent   *event,
  *
  * This function returns whether a #GdkEventButton should trigger a
  * context menu, according to platform conventions. The right mouse
- * button always triggers context menus. Additionally, if
- * gdk_keymap_get_modifier_mask() returns a non-0 mask for
- * %GDK_MODIFIER_INTENT_CONTEXT_MENU, then the left mouse button will
- * also trigger a context menu if this modifier is pressed.
+ * button always triggers context menus.
  *
  * This function should always be used instead of simply checking for
  * event->button == %GDK_BUTTON_SECONDARY.
@@ -570,24 +567,11 @@ gdk_event_triggers_context_menu (GdkEvent *event)
   if (event->any.type == GDK_BUTTON_PRESS)
     {
       GdkEventButton *bevent = (GdkEventButton *) event;
-      GdkDisplay *display;
-      GdkModifierType modifier;
 
       g_return_val_if_fail (GDK_IS_SURFACE (bevent->any.surface), FALSE);
 
       if (bevent->button == GDK_BUTTON_SECONDARY &&
           ! (bevent->state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK)))
-        return TRUE;
-
-      display = gdk_surface_get_display (bevent->any.surface);
-
-      modifier = gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
-                                               GDK_MODIFIER_INTENT_CONTEXT_MENU);
-
-      if (modifier != 0 &&
-          bevent->button == GDK_BUTTON_PRIMARY &&
-          ! (bevent->state & (GDK_BUTTON2_MASK | GDK_BUTTON3_MASK)) &&
-          (bevent->state & modifier))
         return TRUE;
     }
 
@@ -2166,14 +2150,16 @@ gdk_event_matches (GdkEvent        *event,
   level = event->key.translated[1].level;
   consumed_modifiers = event->key.translated[1].consumed;
 
-  mask = gdk_keymap_get_modifier_mask (keymap,
-                                       GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK);
+  mask = GDK_CONTROL_MASK|GDK_SHIFT_MASK|GDK_ALT_MASK|
+         GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK;
 
   /* if the group-toggling modifier is part of the default accel mod
    * mask, and it is active, disable it for matching
+   *
+   * FIXME: get shift group mask from backends
    */
-  shift_group_mask = gdk_keymap_get_modifier_mask (keymap,
-                                                   GDK_MODIFIER_INTENT_SHIFT_GROUP);
+  shift_group_mask = 0;
+
   if (mask & shift_group_mask)
     group_mod_is_accel_mod = TRUE;
 
@@ -2243,7 +2229,6 @@ gdk_event_get_match (GdkEvent        *event,
                      guint           *keyval,
                      GdkModifierType *modifiers)
 {
-  GdkKeymap *keymap;
   GdkModifierType mask;
   guint key;
   guint accel_key;
@@ -2253,10 +2238,8 @@ gdk_event_get_match (GdkEvent        *event,
   if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
     return FALSE;
 
-  keymap = gdk_display_get_keymap (gdk_event_get_display (event));
-
-  mask = gdk_keymap_get_modifier_mask (keymap,
-                                       GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK);
+  mask = GDK_CONTROL_MASK|GDK_SHIFT_MASK|GDK_ALT_MASK|
+         GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK;
 
   accel_key = event->key.translated[1].keyval;
   accel_mods = event->key.state;
