@@ -516,6 +516,9 @@ gtk_keyval_trigger_trigger (GtkShortcutTrigger *trigger,
 {
   GtkKeyvalTrigger *self = GTK_KEYVAL_TRIGGER (trigger);
 
+  if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
+    return GDK_KEY_MATCH_NONE;
+
   return gdk_key_event_matches (event, self->keyval, self->modifiers);
 }
 
