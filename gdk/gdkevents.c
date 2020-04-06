@@ -2112,23 +2112,23 @@ gdk_grab_broken_event_get_grab_surface (GdkEvent *event)
 }
 
 /**
- * gdk_event_matches:
- * @event: the #GdkEvent
+ * gdk_key_event_matches:
+ * @event: a key #GdkEvent
  * @keyval: the keyval to match
  * @modifiers: the modifiers to match
  *
- * Matches an event against a keyboard shortcut that is specified
+ * Matches a key event against a keyboard shortcut that is specified
  * as a keyval and modifiers. Partial matches are possible where the
  * combination matches if the currently active group is ignored.
  *
  * Note that we ignore Caps Lock for matching.
  *
- * Returns: a GdkEventMatch value describing whether @event matches
+ * Returns: a GdkKeyMatch value describing whether @event matches
  */
-GdkEventMatch
-gdk_event_matches (GdkEvent        *event,
-                   guint            keyval,
-                   GdkModifierType  modifiers)
+GdkKeyMatch
+gdk_key_event_matches (GdkEvent        *event,
+                       guint            keyval,
+                       GdkModifierType  modifiers)
 {
   guint keycode;
   GdkModifierType state;
@@ -2140,8 +2140,8 @@ gdk_event_matches (GdkEvent        *event,
   GdkModifierType shift_group_mask;
   gboolean group_mod_is_accel_mod = FALSE;
 
-  if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
-    return GDK_EVENT_MATCH_NONE;
+  g_return_val_if_fail (event->any.type == GDK_KEY_PRESS ||
+                        event->any.type == GDK_KEY_RELEASE, GDK_KEY_MATCH_NONE);
 
   keycode = event->key.keycode;
   state = event->key.state & ~GDK_LOCK_MASK;
@@ -2187,7 +2187,7 @@ gdk_event_matches (GdkEvent        *event,
           (!group_mod_is_accel_mod ||
            (state & shift_group_mask) == (modifiers & shift_group_mask)))
         {
-          return GDK_EVENT_MATCH_EXACT;
+          return GDK_KEY_MATCH_EXACT;
         }
 
       gdk_display_map_keyval (gdk_event_get_display (event), keyval, &keys, &n_keys);
@@ -2202,7 +2202,7 @@ gdk_event_matches (GdkEvent        *event,
               /* partial match */
               g_free (keys);
 
-              return GDK_EVENT_MATCH_PARTIAL;
+              return GDK_KEY_MATCH_PARTIAL;
             }
         }
 
@@ -2210,12 +2210,12 @@ gdk_event_matches (GdkEvent        *event,
     }
 
 
-  return GDK_EVENT_MATCH_NONE;
+  return GDK_KEY_MATCH_NONE;
 }
 
 /**
- * gdk_event_get_match:
- * @event: a #GdkEvent
+ * gdk_key_event_get_match:
+ * @event: a key #GdkEvent
  * @keyval: (out): return location for a keyval
  * @modifiers: (out): return location for modifiers
  *
@@ -2225,9 +2225,9 @@ gdk_event_matches (GdkEvent        *event,
  * Returns: %TRUE on success
  */
 gboolean
-gdk_event_get_match (GdkEvent        *event,
-                     guint           *keyval,
-                     GdkModifierType *modifiers)
+gdk_key_event_get_match (GdkEvent        *event,
+                         guint           *keyval,
+                         GdkModifierType *modifiers)
 {
   GdkModifierType mask;
   guint key;
@@ -2235,8 +2235,8 @@ gdk_event_get_match (GdkEvent        *event,
   GdkModifierType accel_mods;
   GdkModifierType consumed_modifiers;
 
-  if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
-    return FALSE;
+  g_return_val_if_fail (event->any.type == GDK_KEY_PRESS ||
+                        event->any.type == GDK_KEY_RELEASE, FALSE);
 
   mask = GDK_CONTROL_MASK|GDK_SHIFT_MASK|GDK_ALT_MASK|
          GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK;

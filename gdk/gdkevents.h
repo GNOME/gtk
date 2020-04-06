@@ -431,30 +431,30 @@ gboolean                gdk_events_get_center           (GdkEvent *event1,
                                                          double   *y);
 
 /**
- * GdkEventMatch:
- * @GDK_EVENT_MATCH_NONE: The key event does not match
- * @GDK_EVENT_MATCH_PARTIAL: The key event matches if keyboard state
+ * GdkKeyMatch:
+ * @GDK_KEY_MATCH_NONE: The key event does not match
+ * @GDK_KEY_MATCH_PARTIAL: The key event matches if keyboard state
  *     (specifically, the currently active group) is ignored
- * @GDK_EVENT_MATCH_EXACT: The key event matches
+ * @GDK_KEY_MATCH_EXACT: The key event matches
  *
- * The possible return values from gdk_event_matches()
+ * The possible return values from gdk_key_event_matches()
  * describe how well an event matches a given keyval and modifiers.
  */
 typedef enum {
-  GDK_EVENT_MATCH_NONE,
-  GDK_EVENT_MATCH_PARTIAL,
-  GDK_EVENT_MATCH_EXACT
-} GdkEventMatch;
+  GDK_KEY_MATCH_NONE,
+  GDK_KEY_MATCH_PARTIAL,
+  GDK_KEY_MATCH_EXACT
+} GdkKeyMatch;
 
 GDK_AVAILABLE_IN_ALL
-GdkEventMatch          gdk_event_matches (GdkEvent        *event,
-                                          guint            keyval,
-                                          GdkModifierType  modifiers);
+GdkKeyMatch            gdk_key_event_matches (GdkEvent        *event,
+                                              guint            keyval,
+                                              GdkModifierType  modifiers);
 
 GDK_AVAILABLE_IN_ALL
-gboolean               gdk_event_get_match (GdkEvent        *event,
-                                            guint           *keyval,
-                                            GdkModifierType *modifiers);
+gboolean               gdk_key_event_get_match (GdkEvent        *event,
+                                                guint           *keyval,
+                                                GdkModifierType *modifiers);
 
 G_END_DECLS
 
