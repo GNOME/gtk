@@ -1145,16 +1145,12 @@ gdk_wayland_window_maybe_configure (GdkWindow *window,
   gboolean is_xdg_popup;
   gboolean is_visible;
 
+  impl->unconfigured_width = calculate_width_without_margin (window, width);
+  impl->unconfigured_height = calculate_height_without_margin (window, height);
 
   if (needs_initial_configure (window) &&
       !impl->initial_configure_received)
-    {
-      impl->unconfigured_width = calculate_width_without_margin (window,
-                                                                 width);
-      impl->unconfigured_height = calculate_height_without_margin (window,
-                                                                   height);
-      return;
-    }
+    return;
 
   if (window->width == width &&
       window->height == height &&
