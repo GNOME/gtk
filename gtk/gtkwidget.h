@@ -382,16 +382,16 @@ void       gtk_widget_class_add_binding   (GtkWidgetClass      *widget_class,
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_class_add_binding_signal
                                           (GtkWidgetClass      *widget_class,
-                                           GdkModifierType      mods,
                                            guint                keyval,
+                                           GdkModifierType      mods,
                                            const gchar         *signal,
                                            const gchar         *format_string,
                                            ...);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_class_add_binding_action
                                           (GtkWidgetClass      *widget_class,
-                                           GdkModifierType      mods,
                                            guint                keyval,
+                                           GdkModifierType      mods,
                                            const gchar         *action_name,
                                            const gchar         *format_string,
                                            ...);
