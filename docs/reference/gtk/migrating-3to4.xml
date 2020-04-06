@@ -397,8 +397,29 @@
     <section>
       <title>Adapt to GdkKeymap API changes</title>
       <para>
-        The way to get a keymap has changed slightly. gdk_keymap_get_for_display() has
-        been renamed to gdk_display_get_keymap().
+        GdkKeymap no longer exists as an independent object.
+      </para>
+      <para>
+        If you need access to keymap state, it is now exposed as properties
+        on the #GdkDevice representing the keyboard: #GdkDevice:direction,
+        #GdkDevice:has-bidi-layouts, #GdkDevice:caps-lock-state,
+        #GdkDevice:num-lock-state, #GdkDevice:scroll-lock-state and
+        #GdkDevice:modifier-state.
+        To obtain the keyboard device, you can use
+        <literal>gdk_seat_get_keyboard (gdk_display_get_default_seat (display))</literal>.
+      </para>
+      <para>
+        If you need access to translated keys for event handling, #GdkEvent
+        now includes all of the translated key state, including consumed
+        modifiers, group and shift level, so there should be no need to
+        do manually call gdk_keymap_translate_keyboard_state() (which has
+        been removed).
+      </para>
+      <para>
+        If you need to do forward or backward mapping between key codes
+        and key values, use gdk_display_map_keycode() and gdk_display_map_keyval(),
+        which is the replacement for gdk_keymap_get_entries_for_keycode()
+        and gdk_keymap_get_entries_for_keycode().
       </para>
     </section>
 
@@ -414,6 +435,38 @@
         #GtkEventControllerKey::focus-out signals
         have gained new arguments. Another is that #GtkGestureMultiPress
         has been renamed to #GtkGestureClick.
+      </para>
+    </section>
+
+    <section>
+      <title>Adapt to changes in keyboard modifier handling</title>
+      <para>
+        GTK 3 has the idea that use of modifiers may differ between different
+        platforms, and has a #GdkModifierIntent api to let platforms provide
+        hint about how modifiers are expected to be used. It also promoted
+        the use of &lt;Primary&gt; instead of &lt;Control&gt; to specify
+        accelerators that adapt to platform conventions.
+      </para>
+      <para>
+        In GTK 4, the meaning of modifiers has been fixed, and backends are
+        expected to map the platform conventions to the existing modifiers.
+        The expected use of modifiers in GTK 4 is:
+        <simplelist>
+          <member>GDK_CONTROL_MASK - Primary accelerators</member>
+          <member>GDK_ALT_MASK - Mnemonics</member>
+          <member>GDK_SHIFT_MASK - Extending selections</member>
+          <member>GDK_CONTROL_MASK - Modifying selections</member>
+          <member>GDK_CONTROL_MASK|GDK_ALT_MASK - Prevent text input</member>
+        </simplelist>
+      </para>
+      <para>
+        Consequently, #GdkModifierIntent and related APIs have been removed,
+        and &lt;Control&gt; is preferred over &lt;Primary&gt; in accelerators.
+      </para>
+      <para>
+        A related change is that GTK 4 no longer supports the use of archaic
+        X11 'real' modifiers with the names Mod1,..., Mod5, and %GDK_MOD1_MASK
+        has been renamed to %GDK_ALT_MASK.
       </para>
     </section>
 
@@ -809,15 +862,6 @@
     </section>
 
     <section>
-      <title>Stop using tabular menus</title>
-      <para>
-        Tabular menus were rarely used and complicated the menu code,
-        so they have been removed. If you need complex layout in menu-like
-        popups, consider using a #GtkPopover instead.
-      </para>
-    </section>
-
-    <section>
       <title>Stop using gtk_menu_set_display()</title>
       <para>
         This function has been removed. Menus should always be
@@ -943,6 +987,13 @@
         can only be constructed from menu models, so the porting effort involves
         switching to menu models and actions.
       </para>
+      <para>
+        Tabular menus were rarely used and complicated the menu code,
+        so they have not been brought over to #GtkPopoverMenu. If you need
+        complex layout in menu-like popups, consider directly using a
+        #GtkPopover instead.
+      </para>
+
       <para>
         Since menus are gone, GtkMenuButton also lost its ability to show menus,
         and needs to be used with popovers in GTK 4.
