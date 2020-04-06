@@ -1524,19 +1524,6 @@ gdk_x11_keymap_key_is_modifier (GdkKeymap *keymap,
   return FALSE;
 }
 
-static GdkModifierType
-gdk_x11_keymap_get_modifier_mask (GdkKeymap         *keymap,
-                                  GdkModifierIntent  intent)
-{
-  GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
-
-  if (intent == GDK_MODIFIER_INTENT_SHIFT_GROUP)
-    return keymap_x11->group_switch_mask;
-
-  return GDK_KEYMAP_CLASS (gdk_x11_keymap_parent_class)->get_modifier_mask (keymap,
-                                                                            intent);
-}
-
 static void
 gdk_x11_keymap_class_init (GdkX11KeymapClass *klass)
 {
@@ -1555,5 +1542,4 @@ gdk_x11_keymap_class_init (GdkX11KeymapClass *klass)
   keymap_class->get_entries_for_keycode = gdk_x11_keymap_get_entries_for_keycode;
   keymap_class->lookup_key = gdk_x11_keymap_lookup_key;
   keymap_class->translate_keyboard_state = gdk_x11_keymap_translate_keyboard_state;
-  keymap_class->get_modifier_mask = gdk_x11_keymap_get_modifier_mask;
 }
