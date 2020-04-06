@@ -1090,10 +1090,10 @@ gtk_label_class_init (GtkLabelClass *class)
 				       "move-cursor",
                                        "(iib)", GTK_MOVEMENT_PARAGRAPH_ENDS, 0, FALSE);
 
-  add_move_binding (widget_class, GDK_KEY_f, GDK_MOD1_MASK,
+  add_move_binding (widget_class, GDK_KEY_f, GDK_ALT_MASK,
 		    GTK_MOVEMENT_WORDS, 1);
 
-  add_move_binding (widget_class, GDK_KEY_b, GDK_MOD1_MASK,
+  add_move_binding (widget_class, GDK_KEY_b, GDK_ALT_MASK,
 		    GTK_MOVEMENT_WORDS, -1);
 
   add_move_binding (widget_class, GDK_KEY_Home, 0,
@@ -5540,8 +5540,9 @@ get_better_cursor (GtkLabel *label,
 		   gint      *y)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  GdkKeymap *keymap = gdk_display_get_keymap (gtk_widget_get_display (GTK_WIDGET (label)));
-  PangoDirection keymap_direction = gdk_keymap_get_direction (keymap);
+  GdkSeat *seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (label)));
+  GdkDevice *device = gdk_seat_get_keyboard (seat);
+  PangoDirection keymap_direction = gdk_device_get_direction (device);
   PangoDirection cursor_direction = get_cursor_direction (label);
   gboolean split_cursor;
   PangoRectangle strong_pos, weak_pos;
@@ -5644,8 +5645,9 @@ gtk_label_move_visually (GtkLabel *label,
 	strong = TRUE;
       else
 	{
-	  GdkKeymap *keymap = gdk_display_get_keymap (gtk_widget_get_display (GTK_WIDGET (label)));
-	  PangoDirection keymap_direction = gdk_keymap_get_direction (keymap);
+	  GdkSeat *seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (label)));
+          GdkDevice *device = gdk_seat_get_keyboard (seat);
+	  PangoDirection keymap_direction = gdk_device_get_direction (device);
 
 	  strong = keymap_direction == get_cursor_direction (label);
 	}

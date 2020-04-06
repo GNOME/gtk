@@ -1253,7 +1253,8 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
   gboolean split_cursor;
   PangoRectangle strong_pos, weak_pos;
   PangoRectangle *cursor1, *cursor2;
-  PangoDirection keymap_direction;
+  GdkDevice *keyboard;
+  PangoDirection keyboard_direction;
   PangoDirection direction2;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
@@ -1265,7 +1266,8 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
                 "gtk-split-cursor", &split_cursor,
                 NULL);
 
-  keymap_direction = gdk_keymap_get_direction (gdk_display_get_keymap (priv->display));
+  keyboard = gdk_seat_get_keyboard (gdk_display_get_default_seat (priv->display));
+  keyboard_direction = gdk_device_get_direction (keyboard);
 
   pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
 
@@ -1283,7 +1285,7 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
     }
   else
     {
-      if (keymap_direction == direction)
+      if (keyboard_direction == direction)
         cursor1 = &strong_pos;
       else
         cursor1 = &weak_pos;
@@ -1339,7 +1341,8 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
   float aspect_ratio;
   PangoRectangle strong_pos, weak_pos;
   PangoRectangle *cursor1, *cursor2;
-  PangoDirection keymap_direction;
+  GdkDevice *keyboard;
+  PangoDirection keyboard_direction;
   PangoDirection direction2;
 
   g_return_if_fail (snapshot != NULL);
@@ -1352,7 +1355,8 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
                 "gtk-cursor-aspect-ratio", &aspect_ratio,
                 NULL);
 
-  keymap_direction = gdk_keymap_get_direction (gdk_display_get_keymap (priv->display));
+  keyboard = gdk_seat_get_keyboard (gdk_display_get_default_seat (priv->display));
+  keyboard_direction = gdk_device_get_direction (keyboard);
 
   pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
 
@@ -1370,7 +1374,7 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
     }
   else
     {
-      if (keymap_direction == direction)
+      if (keyboard_direction == direction)
         cursor1 = &strong_pos;
       else
         cursor1 = &weak_pos;

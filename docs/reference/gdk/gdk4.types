@@ -17,7 +17,6 @@ gdk_event_get_type
 gdk_frame_clock_get_type
 gdk_gl_context_get_type
 gdk_gl_texture_get_type
-gdk_keymap_get_type
 gdk_memory_texture_get_type
 gdk_monitor_get_type
 gdk_paintable_get_type

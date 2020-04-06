@@ -23,6 +23,7 @@
 #endif
 
 #include <gdk/gdk.h>
+#include <gdk/gdkkeysprivate.h>
 
 G_BEGIN_DECLS
 
@@ -43,11 +44,9 @@ typedef struct _GdkX11KeymapClass GdkX11KeymapClass;
 GDK_AVAILABLE_IN_ALL
 GType gdk_x11_keymap_get_type (void);
 
-GDK_AVAILABLE_IN_ALL
 gint gdk_x11_keymap_get_group_for_state (GdkKeymap *keymap,
                                          guint      state);
 
-GDK_AVAILABLE_IN_ALL
 gboolean gdk_x11_keymap_key_is_modifier (GdkKeymap *keymap,
                                          guint      keycode);
 G_END_DECLS

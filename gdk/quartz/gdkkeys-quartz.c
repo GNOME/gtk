@@ -735,40 +735,6 @@ gdk_quartz_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
   return TRUE;
 }
 
-static GdkModifierType
-gdk_quartz_keymap_get_modifier_mask (GdkKeymap         *keymap,
-                                     GdkModifierIntent  intent)
-{
-  switch (intent)
-    {
-    case GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR:
-      return GDK_MOD2_MASK;
-
-    case GDK_MODIFIER_INTENT_CONTEXT_MENU:
-      return GDK_CONTROL_MASK;
-
-    case GDK_MODIFIER_INTENT_EXTEND_SELECTION:
-      return GDK_SHIFT_MASK;
-
-    case GDK_MODIFIER_INTENT_MODIFY_SELECTION:
-      return GDK_MOD2_MASK;
-
-    case GDK_MODIFIER_INTENT_NO_TEXT_INPUT:
-      return GDK_MOD2_MASK | GDK_CONTROL_MASK;
-
-    case GDK_MODIFIER_INTENT_SHIFT_GROUP:
-      return GDK_MOD1_MASK;
-
-    case GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK:
-      return (GDK_SHIFT_MASK   | GDK_CONTROL_MASK | GDK_MOD1_MASK    |
-	      GDK_MOD2_MASK    | GDK_SUPER_MASK   | GDK_HYPER_MASK   |
-	      GDK_META_MASK);
-
-    default:
-      g_return_val_if_reached (0);
-    }
-}
-
 /* What sort of key event is this? Returns one of
  * GDK_KEY_PRESS, GDK_KEY_RELEASE, GDK_NOTHING (should be ignored)
  */
@@ -881,5 +847,4 @@ gdk_quartz_keymap_class_init (GdkQuartzKeymapClass *klass)
   keymap_class->translate_keyboard_state = gdk_quartz_keymap_translate_keyboard_state;
   keymap_class->add_virtual_modifiers = gdk_quartz_keymap_add_virtual_modifiers;
   keymap_class->map_virtual_modifiers = gdk_quartz_keymap_map_virtual_modifiers;
-  keymap_class->get_modifier_mask = gdk_quartz_keymap_get_modifier_mask;
 }

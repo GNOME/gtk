@@ -60,7 +60,6 @@ gtk_accelerator_get_label
 gtk_accelerator_parse_with_keycode
 gtk_accelerator_name_with_keycode
 gtk_accelerator_get_label_with_keycode
-gtk_accelerator_set_default_mod_mask
 gtk_accelerator_get_default_mod_mask
 </SECTION>
 
@@ -4063,7 +4062,6 @@ gtk_widget_get_support_multidevice
 gtk_widget_get_realized
 gtk_widget_get_mapped
 gtk_widget_device_is_shadowed
-gtk_widget_get_modifier_mask
 gtk_widget_get_opacity
 gtk_widget_set_opacity
 gtk_widget_get_overflow
@@ -5960,7 +5958,6 @@ gtk_event_controller_motion_get_type
 GtkShortcutTrigger
 GtkNeverTrigger
 
-GtkShortcutTriggerMatch
 gtk_shortcut_trigger_trigger
 gtk_shortcut_trigger_hash
 gtk_shortcut_trigger_equal

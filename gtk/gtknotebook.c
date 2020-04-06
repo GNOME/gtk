@@ -968,11 +968,11 @@ add_reorder_bindings (GtkWidgetClass   *widget_class,
   guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
 
   gtk_widget_class_add_binding_signal (widget_class,
-                                       keysym, GDK_MOD1_MASK,
+                                       keysym, GDK_ALT_MASK,
                                        "reorder_tab",
                                        "(ib)", direction, move_to_last);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       keypad_keysym, GDK_MOD1_MASK,
+                                       keypad_keysym, GDK_ALT_MASK,
                                        "reorder_tab",
                                        "(ib)", direction, move_to_last);
 }
@@ -1349,11 +1349,11 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                                        "(i)", 1);
 
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Page_Up, GDK_CONTROL_MASK | GDK_MOD1_MASK,
+                                       GDK_KEY_Page_Up, GDK_CONTROL_MASK | GDK_ALT_MASK,
                                        "change-current-page",
                                        "(i)", -1);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Page_Down, GDK_CONTROL_MASK | GDK_MOD1_MASK,
+                                       GDK_KEY_Page_Down, GDK_CONTROL_MASK | GDK_ALT_MASK,
                                        "change-current-page",
                                        "(i)", 1);
 

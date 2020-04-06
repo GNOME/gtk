@@ -772,10 +772,6 @@ GDK_AVAILABLE_IN_ALL
 const char *      gtk_widget_class_get_css_name (GtkWidgetClass *widget_class);
 
 GDK_AVAILABLE_IN_ALL
-GdkModifierType   gtk_widget_get_modifier_mask (GtkWidget         *widget,
-                                                GdkModifierIntent  intent);
-
-GDK_AVAILABLE_IN_ALL
 guint gtk_widget_add_tick_callback (GtkWidget       *widget,
                                     GtkTickCallback  callback,
                                     gpointer         user_data,

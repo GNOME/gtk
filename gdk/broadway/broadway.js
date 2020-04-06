@@ -78,11 +78,7 @@ const GDK_CROSSING_UNGRAB = 2;
 const GDK_SHIFT_MASK    = 1 << 0;
 const GDK_LOCK_MASK     = 1 << 1;
 const GDK_CONTROL_MASK  = 1 << 2;
-const GDK_MOD1_MASK     = 1 << 3;
-const GDK_MOD2_MASK     = 1 << 4;
-const GDK_MOD3_MASK     = 1 << 5;
-const GDK_MOD4_MASK     = 1 << 6;
-const GDK_MOD5_MASK     = 1 << 7;
+const GDK_ALT_MASK      = 1 << 3;
 const GDK_BUTTON1_MASK  = 1 << 8;
 const GDK_BUTTON2_MASK  = 1 << 9;
 const GDK_BUTTON3_MASK  = 1 << 10;
@@ -1383,13 +1379,13 @@ function updateKeyboardStatus() {
 }
 
 function updateForEvent(ev) {
-    lastState &= ~(GDK_SHIFT_MASK|GDK_CONTROL_MASK|GDK_MOD1_MASK);
+    lastState &= ~(GDK_SHIFT_MASK|GDK_CONTROL_MASK|GDK_ALT_MASK);
     if (ev.shiftKey)
         lastState |= GDK_SHIFT_MASK;
     if (ev.ctrlKey)
         lastState |= GDK_CONTROL_MASK;
     if (ev.altKey)
-        lastState |= GDK_MOD1_MASK;
+        lastState |= GDK_ALT_MASK;
 
     lastTimeStamp = ev.timeStamp;
 }

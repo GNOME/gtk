@@ -535,55 +535,14 @@ key_controller_key_pressed (GtkEventControllerKey *key,
                             GtkWidget             *widget)
 {
   GtkCellEditableWidget *box = (GtkCellEditableWidget*)widget;
+  gboolean edited = FALSE;
+  gboolean cleared = FALSE;
   GdkModifierType accel_mods = 0;
   guint accel_key;
-  gboolean edited;
-  gboolean cleared;
-  GdkModifierType consumed_modifiers;
-  GdkDisplay *display;
-  guint group = 0;
 
-  display = gtk_widget_get_display (widget);
-  group = gtk_event_controller_key_get_group (key);
-
-  edited = FALSE;
-  cleared = FALSE;
-
-  accel_mods = state;
-
-  if (keyval == GDK_KEY_Sys_Req &&
-      (accel_mods & GDK_MOD1_MASK) != 0)
-    {
-      /* HACK: we don't want to use SysRq as a keybinding (but we do
-       * want Alt+Print), so we avoid translation from Alt+Print to SysRq
-       */
-      keyval = GDK_KEY_Print;
-      consumed_modifiers = 0;
-    }
-  else
-    {
-      _gtk_translate_keyboard_accel_state (gdk_display_get_keymap (display),
-                                           keycode,
-                                           state,
-                                           gtk_accelerator_get_default_mod_mask (),
-                                           group,
-                                           &keyval, NULL, NULL, &consumed_modifiers);
-    }
-
-  accel_key = gdk_keyval_to_lower (keyval);
-  if (accel_key == GDK_KEY_ISO_Left_Tab)
-    accel_key = GDK_KEY_Tab;
-
-  accel_mods &= gtk_accelerator_get_default_mod_mask ();
-
-  /* Filter consumed modifiers */
-  if (box->accel_mode == GTK_CELL_RENDERER_ACCEL_MODE_GTK)
-    accel_mods &= ~consumed_modifiers;
-
-  /* Put shift back if it changed the case of the key, not otherwise. */
-  if (accel_key != keyval)
-    accel_mods |= GDK_SHIFT_MASK;
-
+  if (!gdk_key_event_get_match (gtk_get_current_event (), &accel_key, &accel_mods))
+    return FALSE;
+    
   if (accel_mods == 0)
     {
       switch (keyval)

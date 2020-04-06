@@ -26,6 +26,7 @@
 
 #include "gdkdisplay-x11.h"
 #include "gdkdisplayprivate.h"
+#include "gdkx11keys.h"
 
 #include "gdkasync.h"
 #include "gdkdisplay.h"

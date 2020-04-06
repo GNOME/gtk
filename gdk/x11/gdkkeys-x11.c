@@ -401,7 +401,7 @@ update_keymaps (GdkX11Keymap *keymap_x11)
 
           keymap_x11->modmap[i / keymap_x11->mod_keymap->max_keypermod] |= mask;
 
-          /* The fourth modifier, GDK_MOD1_MASK is 1 << 3.
+          /* The fourth modifier, GDK_ALT_MASK is 1 << 3.
            * Each group of max_keypermod entries refers to the same modifier.
            */
           mask = 1 << (i / keymap_x11->mod_keymap->max_keypermod);
@@ -427,7 +427,7 @@ update_keymaps (GdkX11Keymap *keymap_x11)
 
             case GDK_CONTROL_MASK:
             case GDK_SHIFT_MASK:
-            case GDK_MOD1_MASK:
+            case GDK_ALT_MASK:
               /* Some keyboard maps are known to map Mode_Switch as an
                * extra Mod1 key. In circumstances like that, it won't be
                * used to switch groups.
@@ -581,6 +581,7 @@ get_num_groups (GdkKeymap *keymap,
 
 static gboolean
 update_direction (GdkX11Keymap *keymap_x11,
+                  GdkDevice    *keyboard,
                   gint          group)
 {
   XkbDescPtr xkb = get_xkb (keymap_x11);
@@ -601,11 +602,18 @@ update_direction (GdkX11Keymap *keymap_x11,
       keymap_x11->have_direction = TRUE;
     }
 
-  return !had_direction || old_direction != keymap_x11->current_direction;
+  if (!had_direction || old_direction != keymap_x11->current_direction)
+    {
+      g_object_notify (G_OBJECT (keyboard), "direction");
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static gboolean
 update_lock_state (GdkX11Keymap *keymap_x11,
+                   GdkDevice    *keyboard,
                    gint          locked_mods,
                    gint          effective_mods)
 {
@@ -632,6 +640,15 @@ update_lock_state (GdkX11Keymap *keymap_x11,
   /* FIXME: sanitize this */
   keymap_x11->modifier_state = (guint)effective_mods;
 
+  if (caps_lock_state != keymap_x11->caps_lock_state)
+    g_object_notify (G_OBJECT (keyboard), "caps-lock-state");
+  if (num_lock_state != keymap_x11->num_lock_state)
+    g_object_notify (G_OBJECT (keyboard), "num-lock-state");
+  if (scroll_lock_state != keymap_x11->scroll_lock_state)
+    g_object_notify (G_OBJECT (keyboard), "scroll-lock-state");
+  if (modifier_state != keymap_x11->modifier_state)
+    g_object_notify (G_OBJECT (keyboard), "modifier-state");
+
   return !have_lock_state
          || (caps_lock_state != keymap_x11->caps_lock_state)
          || (num_lock_state != keymap_x11->num_lock_state)
@@ -652,11 +669,15 @@ _gdk_x11_keymap_state_changed (GdkDisplay   *display,
   if (display_x11->keymap)
     {
       GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (display_x11->keymap);
+      GdkDevice *keyboard;
 
-      if (update_direction (keymap_x11, XkbStateGroup (&xkb_event->state)))
+      keyboard = gdk_seat_get_keyboard (gdk_display_get_default_seat (display));
+
+      if (update_direction (keymap_x11, keyboard, XkbStateGroup (&xkb_event->state)))
         g_signal_emit_by_name (keymap_x11, "direction-changed");
 
       if (update_lock_state (keymap_x11,
+                             keyboard,
                              xkb_event->state.locked_mods,
                              xkb_event->state.mods))
         g_signal_emit_by_name (keymap_x11, "state-changed");
@@ -672,6 +693,9 @@ ensure_lock_state (GdkKeymap *keymap)
   if (KEYMAP_USE_XKB (keymap))
     {
       GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
+      GdkDevice *keyboard;
+
+      keyboard = gdk_seat_get_keyboard (gdk_display_get_default_seat (keymap->display));
 
       if (!keymap_x11->have_lock_state)
         {
@@ -679,7 +703,7 @@ ensure_lock_state (GdkKeymap *keymap)
           XkbStateRec state_rec;
 
           XkbGetState (GDK_DISPLAY_XDISPLAY (display), XkbUseCoreKbd, &state_rec);
-          update_lock_state (keymap_x11, state_rec.locked_mods, state_rec.mods);
+          update_lock_state (keymap_x11, keyboard, state_rec.locked_mods, state_rec.mods);
         }
     }
 #endif /* HAVE_XKB */
@@ -707,11 +731,14 @@ gdk_x11_keymap_get_direction (GdkKeymap *keymap)
       if (!keymap_x11->have_direction)
         {
           GdkDisplay *display = keymap->display;
+          GdkDevice *keyboard;
           XkbStateRec state_rec;
+
+          keyboard = gdk_seat_get_keyboard (gdk_display_get_default_seat (display));
 
           XkbGetState (GDK_DISPLAY_XDISPLAY (display), XkbUseCoreKbd,
                        &state_rec);
-          update_direction (keymap_x11, XkbStateGroup (&state_rec));
+          update_direction (keymap_x11, keyboard, XkbStateGroup (&state_rec));
         }
 
       return keymap_x11->current_direction;
@@ -1428,7 +1455,12 @@ _gdk_x11_keymap_add_virt_mods (GdkKeymap       *keymap,
   GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
   int i;
 
-  /* See comment in add_virtual_modifiers() */
+  /*  This loop used to start at 3, which included MOD1 in the
+   *  virtual mapping. However, all of GTK+ treats MOD1 as a
+   *  synonym for Alt, and does not expect it to be mapped around,
+   *  therefore it's more sane to simply treat MOD1 like SHIFT and
+   *  CONTROL, which are not mappable either.
+   */
   for (i = 4; i < 8; i++)
     {
       if ((1 << i) & *modifiers)
@@ -1439,33 +1471,6 @@ _gdk_x11_keymap_add_virt_mods (GdkKeymap       *keymap,
             *modifiers |= GDK_HYPER_MASK;
           else if (keymap_x11->modmap[i] & GDK_META_MASK)
             *modifiers |= GDK_META_MASK;
-        }
-    }
-}
-
-static void
-gdk_x11_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
-                                      GdkModifierType *state)
-{
-  GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
-  int i;
-
-  /*  This loop used to start at 3, which included MOD1 in the
-   *  virtual mapping. However, all of GTK+ treats MOD1 as a
-   *  synonym for Alt, and does not expect it to be mapped around,
-   *  therefore it's more sane to simply treat MOD1 like SHIFT and
-   *  CONTROL, which are not mappable either.
-   */
-  for (i = 4; i < 8; i++)
-    {
-      if ((1 << i) & *state)
-        {
-          if (keymap_x11->modmap[i] & GDK_SUPER_MASK)
-            *state |= GDK_SUPER_MASK;
-          if (keymap_x11->modmap[i] & GDK_HYPER_MASK)
-            *state |= GDK_HYPER_MASK;
-          if (keymap_x11->modmap[i] & GDK_META_MASK)
-            *state |= GDK_META_MASK;
         }
     }
 }
@@ -1519,56 +1524,6 @@ gdk_x11_keymap_key_is_modifier (GdkKeymap *keymap,
   return FALSE;
 }
 
-static gboolean
-gdk_x11_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
-                                      GdkModifierType *state)
-{
-  GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
-  const guint vmods[] = { GDK_SUPER_MASK, GDK_HYPER_MASK, GDK_META_MASK };
-  int i, j;
-  gboolean retval;
-
-#ifdef HAVE_XKB
-  if (KEYMAP_USE_XKB (keymap))
-    get_xkb (keymap_x11);
-#endif
-
-  retval = TRUE;
-
-  for (j = 0; j < 3; j++)
-    {
-      if (*state & vmods[j])
-        {
-          /* See comment in add_virtual_modifiers() */
-          for (i = 4; i < 8; i++)
-            {
-              if (keymap_x11->modmap[i] & vmods[j])
-                {
-                  if (*state & (1 << i))
-                    retval = FALSE;
-                  else
-                    *state |= 1 << i;
-                }
-            }
-        }
-    }
-
-  return retval;
-}
-
-static GdkModifierType
-gdk_x11_keymap_get_modifier_mask (GdkKeymap         *keymap,
-                                  GdkModifierIntent  intent)
-{
-  GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
-
-  if (intent == GDK_MODIFIER_INTENT_SHIFT_GROUP)
-    return keymap_x11->group_switch_mask;
-
-  return GDK_KEYMAP_CLASS (gdk_x11_keymap_parent_class)->get_modifier_mask (keymap,
-                                                                            intent);
-}
-
 static void
 gdk_x11_keymap_class_init (GdkX11KeymapClass *klass)
 {
@@ -1587,7 +1542,4 @@ gdk_x11_keymap_class_init (GdkX11KeymapClass *klass)
   keymap_class->get_entries_for_keycode = gdk_x11_keymap_get_entries_for_keycode;
   keymap_class->lookup_key = gdk_x11_keymap_lookup_key;
   keymap_class->translate_keyboard_state = gdk_x11_keymap_translate_keyboard_state;
-  keymap_class->add_virtual_modifiers = gdk_x11_keymap_add_virtual_modifiers;
-  keymap_class->map_virtual_modifiers = gdk_x11_keymap_map_virtual_modifiers;
-  keymap_class->get_modifier_mask = gdk_x11_keymap_get_modifier_mask;
 }

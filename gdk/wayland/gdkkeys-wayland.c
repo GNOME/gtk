@@ -258,16 +258,8 @@ get_xkb_modifiers (struct xkb_keymap *xkb_keymap,
     mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_CAPS);
   if (state & GDK_CONTROL_MASK)
     mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_CTRL);
-  if (state & GDK_MOD1_MASK)
+  if (state & GDK_ALT_MASK)
     mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_ALT);
-  if (state & GDK_MOD2_MASK)
-    mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_NUM);
-  if (state & GDK_MOD3_MASK)
-    mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, "Mod3");
-  if (state & GDK_MOD4_MASK)
-    mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_LOGO);
-  if (state & GDK_MOD5_MASK)
-    mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, "Mod5");
   if (state & GDK_SUPER_MASK)
     mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, "Super");
   if (state & GDK_HYPER_MASK)
@@ -291,15 +283,7 @@ get_gdk_modifiers (struct xkb_keymap *xkb_keymap,
   if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_CTRL)))
     state |= GDK_CONTROL_MASK;
   if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_ALT)))
-    state |= GDK_MOD1_MASK;
-  if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_NUM)))
-    state |= GDK_MOD2_MASK;
-  if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, "Mod3")))
-    state |= GDK_MOD3_MASK;
-  if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_LOGO)))
-    state |= GDK_MOD4_MASK;
-  if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, "Mod5")))
-    state |= GDK_MOD5_MASK;
+    state |= GDK_ALT_MASK;
   if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, "Super")))
     state |= GDK_SUPER_MASK;
   if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, "Hyper")))
@@ -310,10 +294,19 @@ get_gdk_modifiers (struct xkb_keymap *xkb_keymap,
    * rely on that behavior.
    */
   if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, "Meta")) &&
-      (state & GDK_MOD1_MASK) == 0)
+      (state & GDK_ALT_MASK) == 0)
     state |= GDK_META_MASK;
 
   return state;
+}
+
+GdkModifierType
+gdk_wayland_keymap_get_gdk_modifiers (GdkKeymap *keymap,
+                                      guint32    mods)
+{
+  struct xkb_keymap *xkb_keymap = GDK_WAYLAND_KEYMAP (keymap)->xkb_keymap;
+
+  return get_gdk_modifiers (xkb_keymap, mods);
 }
 
 static gboolean
@@ -377,68 +370,6 @@ gdk_wayland_keymap_get_modifier_state (GdkKeymap *keymap)
 }
 
 static void
-gdk_wayland_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
-					  GdkModifierType *state)
-{
-  struct xkb_keymap *xkb_keymap;
-  struct xkb_state *xkb_state;
-  xkb_mod_index_t idx;
-  uint32_t mods, real;
-  struct { const char *name; GdkModifierType mask; } vmods[] = {
-    { "Super", GDK_SUPER_MASK },
-    { "Hyper", GDK_HYPER_MASK },
-    { "Meta", GDK_META_MASK },
-    { NULL, 0 }
-  };
-  int i;
-
-  xkb_keymap = GDK_WAYLAND_KEYMAP (keymap)->xkb_keymap;
-  mods = get_xkb_modifiers (xkb_keymap, *state);
-
-  xkb_state = xkb_state_new (xkb_keymap);
-
-  for (i = 0; vmods[i].name; i++)
-    {
-      idx = xkb_keymap_mod_get_index (xkb_keymap, vmods[i].name);
-      if (idx == XKB_MOD_INVALID)
-        continue;
-
-      xkb_state_update_mask (xkb_state, 1 << idx, 0, 0, 0, 0, 0);
-      real = xkb_state_serialize_mods (xkb_state, XKB_STATE_MODS_EFFECTIVE);
-      real &= 0xf0; /* ignore mapping to Lock, Shift, Control, Mod1 */
-      if (mods & real)
-        *state |= vmods[i].mask;
-      xkb_state_update_mask (xkb_state, 0, 0, 0, 0, 0, 0);
-    }
-
-  xkb_state_unref (xkb_state);
-}
-
-static gboolean
-gdk_wayland_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
-					  GdkModifierType *state)
-{
-  struct xkb_keymap *xkb_keymap;
-  struct xkb_state *xkb_state;
-  uint32_t mods, mapped;
-  gboolean ret = TRUE;
-
-  xkb_keymap = GDK_WAYLAND_KEYMAP (keymap)->xkb_keymap;
-  mods = get_xkb_modifiers (xkb_keymap, *state);
-
-  xkb_state = xkb_state_new (xkb_keymap);
-  xkb_state_update_mask (xkb_state, mods & ~0xff, 0, 0, 0, 0, 0);
-  mapped = xkb_state_serialize_mods (xkb_state, XKB_STATE_MODS_EFFECTIVE);
-  if ((mapped & mods & 0xff) != 0)
-    ret = FALSE;
-  *state |= get_gdk_modifiers (xkb_keymap, mapped);
-
-  xkb_state_unref (xkb_state);
-
-  return ret;
-}
-
-static void
 _gdk_wayland_keymap_class_init (GdkWaylandKeymapClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -456,8 +387,6 @@ _gdk_wayland_keymap_class_init (GdkWaylandKeymapClass *klass)
   keymap_class->lookup_key = gdk_wayland_keymap_lookup_key;
   keymap_class->translate_keyboard_state = gdk_wayland_keymap_translate_keyboard_state;
   keymap_class->get_modifier_state = gdk_wayland_keymap_get_modifier_state;
-  keymap_class->add_virtual_modifiers = gdk_wayland_keymap_add_virtual_modifiers;
-  keymap_class->map_virtual_modifiers = gdk_wayland_keymap_map_virtual_modifiers;
 }
 
 static void

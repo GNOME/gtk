@@ -1425,18 +1425,8 @@ gtk_list_box_add_move_binding (GtkWidgetClass  *widget_class,
                                GtkMovementStep  step,
                                gint             count)
 {
-  GdkDisplay *display;
   GdkModifierType extend_mod_mask = GDK_SHIFT_MASK;
   GdkModifierType modify_mod_mask = GDK_CONTROL_MASK;
-
-  display = gdk_display_get_default ();
-  if (display)
-    {
-      extend_mod_mask = gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
-                                                      GDK_MODIFIER_INTENT_EXTEND_SELECTION);
-      modify_mod_mask = gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
-                                                      GDK_MODIFIER_INTENT_MODIFY_SELECTION);
-    }
 
   gtk_widget_class_add_binding_signal (widget_class,
                                        keyval, modmask,
@@ -1786,10 +1776,10 @@ get_current_selection_modifiers (GtkWidget *widget,
 
   if (gtk_get_current_event_state (&state))
     {
-      mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_MODIFY_SELECTION);
+      mask = GDK_CONTROL_MASK;
       if ((state & mask) == mask)
         *modify = TRUE;
-      mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_EXTEND_SELECTION);
+      mask = GDK_SHIFT_MASK;
       if ((state & mask) == mask)
         *extend = TRUE;
     }
