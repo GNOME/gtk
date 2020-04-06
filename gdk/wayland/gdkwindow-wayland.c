@@ -312,6 +312,42 @@ drop_cairo_surfaces (GdkWindow *window)
   impl->committed_cairo_surface = NULL;
 }
 
+static int
+calculate_width_without_margin (GdkWindow *window,
+                                int        width)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  return width - (impl->margin_left + impl->margin_right);
+}
+
+static int
+calculate_height_without_margin (GdkWindow *window,
+                                 int        height)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  return height - (impl->margin_top + impl->margin_bottom);
+}
+
+static int
+calculate_width_with_margin (GdkWindow *window,
+                             int        width)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  return width + impl->margin_left + impl->margin_right;
+}
+
+static int
+calculate_height_with_margin (GdkWindow *window,
+                              int        height)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  return height + impl->margin_top + impl->margin_bottom;
+}
+
 static void
 _gdk_wayland_window_save_size (GdkWindow *window)
 {
@@ -322,8 +358,8 @@ _gdk_wayland_window_save_size (GdkWindow *window)
                        GDK_WINDOW_STATE_TILED))
     return;
 
-  impl->saved_width = window->width - impl->margin_left - impl->margin_right;
-  impl->saved_height = window->height - impl->margin_top - impl->margin_bottom;
+  impl->saved_width = calculate_width_without_margin (window, window->width);
+  impl->saved_height = calculate_height_without_margin (window, window->height);
 }
 
 static void
@@ -1286,8 +1322,8 @@ gdk_wayland_window_get_window_geometry (GdkWindow    *window,
   *geometry = (GdkRectangle) {
     .x = impl->margin_left,
     .y = impl->margin_top,
-    .width = window->width - (impl->margin_left + impl->margin_right),
-    .height = window->height - (impl->margin_top + impl->margin_bottom)
+    .width = calculate_width_without_margin (window, window->width),
+    .height = calculate_height_without_margin (window, window->height)
   };
 }
 
@@ -1613,8 +1649,8 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
           /* Do not reapply contrains if we are restoring original size */
           gdk_window_constrain_size (&impl->geometry_hints,
                                      geometry_mask,
-                                     width + impl->margin_left + impl->margin_right,
-                                     height + impl->margin_top + impl->margin_bottom,
+                                     calculate_width_with_margin (window, width),
+                                     calculate_height_with_margin (window, height),
                                      &width,
                                      &height);
 
@@ -1624,8 +1660,8 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
 
       if (saved_size)
         {
-          configure_width = width + impl->margin_left + impl->margin_right;
-          configure_height = height + impl->margin_top + impl->margin_bottom;
+          configure_width = calculate_width_with_margin (window, width);
+          configure_height = calculate_height_with_margin (window, height);
         }
       else
         {
@@ -3845,14 +3881,18 @@ gdk_wayland_window_set_geometry_hints (GdkWindow         *window,
 
   if (geom_mask & GDK_HINT_MIN_SIZE)
     {
-      min_width = MAX (0, geometry->min_width - (impl->margin_left + impl->margin_right));
-      min_height = MAX (0, geometry->min_height - (impl->margin_top + impl->margin_bottom));
+      min_width =
+        MAX (0, calculate_width_without_margin (window, geometry->min_width));
+      min_height =
+        MAX (0, calculate_height_without_margin (window, geometry->min_height));
     }
 
   if (geom_mask & GDK_HINT_MAX_SIZE)
     {
-      max_width = MAX (0, geometry->max_width - (impl->margin_left + impl->margin_right));
-      max_height = MAX (0, geometry->max_height - (impl->margin_top + impl->margin_bottom));
+      max_width =
+        MAX (0, calculate_width_without_margin (window, geometry->max_width));
+      max_height =
+        MAX (0, calculate_height_without_margin (window, geometry->max_height));
     }
 
   switch (display_wayland->shell_variant)
@@ -4531,10 +4571,10 @@ gdk_wayland_window_set_shadow_width (GdkWindow *window,
     return;
 
   /* Reconfigure window to keep the same window geometry */
-  new_width = window->width -
-    (impl->margin_left + impl->margin_right) + (left + right);
-  new_height = window->height -
-    (impl->margin_top + impl->margin_bottom) + (top + bottom);
+  new_width = (calculate_width_without_margin (window, window->width) +
+               (left + right));
+  new_height = (calculate_height_without_margin (window, window->height) +
+                (top + bottom));
   gdk_wayland_window_maybe_configure (window, new_width, new_height, impl->scale);
 
   impl->margin_left = left;
