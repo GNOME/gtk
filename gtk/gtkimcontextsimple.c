@@ -1262,7 +1262,8 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     {
       gboolean success = FALSE;
 
-#ifdef GDK_WINDOWING_WIN32
+#if 0
+  /* FIXME this needs redoing since keymaps are no longer exposed */
       if (GDK_IS_WIN32_DISPLAY (display))
         {
           guint16  output[2];
