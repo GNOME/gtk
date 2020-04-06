@@ -313,16 +313,16 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
 
       switch (gtk_shortcut_trigger_trigger (gtk_shortcut_get_trigger (shortcut), event, enable_mnemonics))
         {
-        case GTK_SHORTCUT_TRIGGER_MATCH_PARTIAL:
+        case GDK_KEY_MATCH_PARTIAL:
           if (!has_exact)
             break;
           G_GNUC_FALLTHROUGH;
 
-        case GTK_SHORTCUT_TRIGGER_MATCH_NONE:
+        case GDK_KEY_MATCH_NONE:
           g_object_unref (shortcut);
           continue;
 
-        case GTK_SHORTCUT_TRIGGER_MATCH_EXACT:
+        case GDK_KEY_MATCH_EXACT:
           if (!has_exact)
             {
               g_slist_free_full (shortcuts, shortcut_data_free);
@@ -513,7 +513,7 @@ gtk_shortcut_controller_class_init (GtkShortcutControllerClass *klass)
                           P_("Mnemonic modifers"),
                           P_("The modifiers to be pressed to allow mnemonics activation"),
                           GDK_TYPE_MODIFIER_TYPE,
-                          GDK_MOD1_MASK,
+                          GDK_ALT_MASK,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
@@ -547,7 +547,7 @@ gtk_shortcut_controller_class_init (GtkShortcutControllerClass *klass)
 static void
 gtk_shortcut_controller_init (GtkShortcutController *self)
 {
-  self->mnemonics_modifiers = GDK_MOD1_MASK;
+  self->mnemonics_modifiers = GDK_ALT_MASK;
 }
 
 void

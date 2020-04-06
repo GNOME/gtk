@@ -122,7 +122,6 @@ typedef struct _GdkClipboard          GdkClipboard;
 typedef struct _GdkDisplayManager     GdkDisplayManager;
 typedef struct _GdkDisplay            GdkDisplay;
 typedef struct _GdkSurface             GdkSurface;
-typedef struct _GdkKeymap             GdkKeymap;
 typedef struct _GdkAppLaunchContext   GdkAppLaunchContext;
 typedef struct _GdkSeat               GdkSeat;
 typedef struct _GdkSnapshot           GdkSnapshot;
@@ -199,147 +198,54 @@ typedef enum
  * @GDK_LOCK_MASK: a Lock key (depending on the modifier mapping of the
  *  X server this may either be CapsLock or ShiftLock).
  * @GDK_CONTROL_MASK: the Control key.
- * @GDK_MOD1_MASK: the fourth modifier key (it depends on the modifier
+ * @GDK_ALT_MASK: the fourth modifier key (it depends on the modifier
  *  mapping of the X server which key is interpreted as this modifier, but
  *  normally it is the Alt key).
- * @GDK_MOD2_MASK: the fifth modifier key (it depends on the modifier
- *  mapping of the X server which key is interpreted as this modifier).
- * @GDK_MOD3_MASK: the sixth modifier key (it depends on the modifier
- *  mapping of the X server which key is interpreted as this modifier).
- * @GDK_MOD4_MASK: the seventh modifier key (it depends on the modifier
- *  mapping of the X server which key is interpreted as this modifier).
- * @GDK_MOD5_MASK: the eighth modifier key (it depends on the modifier
- *  mapping of the X server which key is interpreted as this modifier).
  * @GDK_BUTTON1_MASK: the first mouse button.
  * @GDK_BUTTON2_MASK: the second mouse button.
  * @GDK_BUTTON3_MASK: the third mouse button.
  * @GDK_BUTTON4_MASK: the fourth mouse button.
  * @GDK_BUTTON5_MASK: the fifth mouse button.
- * @GDK_MODIFIER_RESERVED_13_MASK: A reserved bit flag; do not use in your own code
- * @GDK_MODIFIER_RESERVED_14_MASK: A reserved bit flag; do not use in your own code
- * @GDK_MODIFIER_RESERVED_15_MASK: A reserved bit flag; do not use in your own code
- * @GDK_MODIFIER_RESERVED_16_MASK: A reserved bit flag; do not use in your own code
- * @GDK_MODIFIER_RESERVED_17_MASK: A reserved bit flag; do not use in your own code
- * @GDK_MODIFIER_RESERVED_18_MASK: A reserved bit flag; do not use in your own code
- * @GDK_MODIFIER_RESERVED_19_MASK: A reserved bit flag; do not use in your own code
- * @GDK_MODIFIER_RESERVED_20_MASK: A reserved bit flag; do not use in your own code
- * @GDK_MODIFIER_RESERVED_21_MASK: A reserved bit flag; do not use in your own code
- * @GDK_MODIFIER_RESERVED_22_MASK: A reserved bit flag; do not use in your own code
- * @GDK_MODIFIER_RESERVED_23_MASK: A reserved bit flag; do not use in your own code
- * @GDK_MODIFIER_RESERVED_24_MASK: A reserved bit flag; do not use in your own code
- * @GDK_MODIFIER_RESERVED_25_MASK: A reserved bit flag; do not use in your own code
  * @GDK_SUPER_MASK: the Super modifier
  * @GDK_HYPER_MASK: the Hyper modifier
  * @GDK_META_MASK: the Meta modifier
- * @GDK_MODIFIER_RESERVED_29_MASK: A reserved bit flag; do not use in your own code
- * @GDK_MODIFIER_RESERVED_30_MASK: A reserved bit flag; do not use in your own code
- * @GDK_MODIFIER_MASK: a mask covering all modifier types.
  *
  * A set of bit-flags to indicate the state of modifier keys and mouse buttons
  * in various event types. Typical modifier keys are Shift, Control, Meta,
  * Super, Hyper, Alt, Compose, Apple, CapsLock or ShiftLock.
  *
- * Like the X Window System, GDK supports 8 modifier keys and 5 mouse buttons.
- *
- * GDK recognizes which of the Meta, Super or Hyper keys are mapped
- * to Mod2 - Mod5, and indicates this by setting %GDK_SUPER_MASK,
- * %GDK_HYPER_MASK or %GDK_META_MASK in the state field of key events.
- *
- * Note that GDK may add internal values to events which include
- * reserved values such as %GDK_MODIFIER_RESERVED_13_MASK.  Your code
- * should preserve and ignore them.  You can use %GDK_MODIFIER_MASK to
- * remove all reserved values.
- *
- * Also note that the GDK X backend interprets button press events for button
- * 4-7 as scroll events, so %GDK_BUTTON4_MASK and %GDK_BUTTON5_MASK will never
- * be set.
+ * Note that GDK may add internal values to events which include values outside
+ * of this enumeration. Your code should preserve and ignore them.  You can use
+ * %GDK_MODIFIER_MASK to remove all private values.
  */
 typedef enum
 {
   GDK_SHIFT_MASK    = 1 << 0,
   GDK_LOCK_MASK     = 1 << 1,
   GDK_CONTROL_MASK  = 1 << 2,
-  GDK_MOD1_MASK     = 1 << 3,
-  GDK_MOD2_MASK     = 1 << 4,
-  GDK_MOD3_MASK     = 1 << 5,
-  GDK_MOD4_MASK     = 1 << 6,
-  GDK_MOD5_MASK     = 1 << 7,
+  GDK_ALT_MASK      = 1 << 3,
+
   GDK_BUTTON1_MASK  = 1 << 8,
   GDK_BUTTON2_MASK  = 1 << 9,
   GDK_BUTTON3_MASK  = 1 << 10,
   GDK_BUTTON4_MASK  = 1 << 11,
   GDK_BUTTON5_MASK  = 1 << 12,
 
-  GDK_MODIFIER_RESERVED_13_MASK  = 1 << 13,
-  GDK_MODIFIER_RESERVED_14_MASK  = 1 << 14,
-  GDK_MODIFIER_RESERVED_15_MASK  = 1 << 15,
-  GDK_MODIFIER_RESERVED_16_MASK  = 1 << 16,
-  GDK_MODIFIER_RESERVED_17_MASK  = 1 << 17,
-  GDK_MODIFIER_RESERVED_18_MASK  = 1 << 18,
-  GDK_MODIFIER_RESERVED_19_MASK  = 1 << 19,
-  GDK_MODIFIER_RESERVED_20_MASK  = 1 << 20,
-  GDK_MODIFIER_RESERVED_21_MASK  = 1 << 21,
-  GDK_MODIFIER_RESERVED_22_MASK  = 1 << 22,
-  GDK_MODIFIER_RESERVED_23_MASK  = 1 << 23,
-  GDK_MODIFIER_RESERVED_24_MASK  = 1 << 24,
-  GDK_MODIFIER_RESERVED_25_MASK  = 1 << 25,
-
-  /* The next few modifiers are used by XKB, so we skip to the end.
-   * Bits 15 - 25 are currently unused. Bit 29 is used internally.
-   */
-  
   GDK_SUPER_MASK    = 1 << 26,
   GDK_HYPER_MASK    = 1 << 27,
   GDK_META_MASK     = 1 << 28,
-  
-  GDK_MODIFIER_RESERVED_29_MASK  = 1 << 29,
-  GDK_MODIFIER_RESERVED_30_MASK  = 1 << 30,
-
-  /* Combination of GDK_SHIFT_MASK..GDK_BUTTON5_MASK + GDK_SUPER_MASK
-     + GDK_HYPER_MASK + GDK_META_MASK */
-  GDK_MODIFIER_MASK = 0x1c001fff
 } GdkModifierType;
 
+
 /**
- * GdkModifierIntent:
- * @GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR: the primary modifier used to invoke
- *  menu accelerators.
- * @GDK_MODIFIER_INTENT_CONTEXT_MENU: the modifier used to invoke context menus.
- *  Note that mouse button 3 always triggers context menus. When this modifier
- *  is not 0, it additionally triggers context menus when used with mouse button 1.
- * @GDK_MODIFIER_INTENT_EXTEND_SELECTION: the modifier used to extend selections
- *  using `modifier`-click or `modifier`-cursor-key
- * @GDK_MODIFIER_INTENT_MODIFY_SELECTION: the modifier used to modify selections,
- *  which in most cases means toggling the clicked item into or out of the selection.
- * @GDK_MODIFIER_INTENT_NO_TEXT_INPUT: when any of these modifiers is pressed, the
- *  key event cannot produce a symbol directly. This is meant to be used for
- *  input methods, and for use cases like typeahead search.
- * @GDK_MODIFIER_INTENT_SHIFT_GROUP: the modifier that switches between keyboard
- *  groups (AltGr on X11/Windows and Option/Alt on OS X).
- * @GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK: The set of modifier masks accepted
- * as modifiers in accelerators. Needed because Command is mapped to MOD2 on
- * OSX, which is widely used, but on X11 MOD2 is NumLock and using that for a
- * mod key is problematic at best.
- * Ref: https://bugzilla.gnome.org/show_bug.cgi?id=736125.
+ * GDK_MODIFIER_MASK:
  *
- * This enum is used with gdk_keymap_get_modifier_mask()
- * in order to determine what modifiers the
- * currently used windowing system backend uses for particular
- * purposes. For example, on X11/Windows, the Control key is used for
- * invoking menu shortcuts (accelerators), whereas on Apple computers
- * it’s the Command key (which correspond to %GDK_CONTROL_MASK and
- * %GDK_MOD2_MASK, respectively).
- **/
-typedef enum
-{
-  GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR,
-  GDK_MODIFIER_INTENT_CONTEXT_MENU,
-  GDK_MODIFIER_INTENT_EXTEND_SELECTION,
-  GDK_MODIFIER_INTENT_MODIFY_SELECTION,
-  GDK_MODIFIER_INTENT_NO_TEXT_INPUT,
-  GDK_MODIFIER_INTENT_SHIFT_GROUP,
-  GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK,
-} GdkModifierIntent;
+ * A mask covering all entries in #GdkModifierType.
+ */
+#define GDK_MODIFIER_MASK (GDK_SHIFT_MASK|GDK_LOCK_MASK|GDK_CONTROL_MASK| \
+                           GDK_ALT_MASK|GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK| \
+                           GDK_BUTTON1_MASK|GDK_BUTTON2_MASK|GDK_BUTTON3_MASK| \
+                           GDK_BUTTON4_MASK|GDK_BUTTON5_MASK)
 
 /**
  * GdkEventMask:
@@ -621,6 +527,33 @@ typedef enum
   G_GNUC_UNUSED static inline ModuleObjName##Class * MODULE##_##OBJ_NAME##_GET_CLASS (gpointer ptr) {    \
     return G_TYPE_INSTANCE_GET_CLASS (ptr, module_obj_name##_get_type (), ModuleObjName##Class); }       \
   G_GNUC_END_IGNORE_DEPRECATIONS
+
+typedef struct _GdkKeymapKey GdkKeymapKey;
+
+/**
+ * GdkKeymapKey:
+ * @keycode: the hardware keycode. This is an identifying number for a
+ *   physical key.
+ * @group: indicates movement in a horizontal direction. Usually groups are used
+ *   for two different languages. In group 0, a key might have two English
+ *   characters, and in group 1 it might have two Hebrew characters. The Hebrew
+ *   characters will be printed on the key next to the English characters.
+ * @level: indicates which symbol on the key will be used, in a vertical direction.
+ *   So on a standard US keyboard, the key with the number “1” on it also has the
+ *   exclamation point ("!") character on it. The level indicates whether to use
+ *   the “1” or the “!” symbol. The letter keys are considered to have a lowercase
+ *   letter at level 0, and an uppercase letter at level 1, though only the
+ *   uppercase letter is printed.
+ *
+ * A #GdkKeymapKey is a hardware key that can be mapped to a keyval.
+ */
+struct _GdkKeymapKey
+{
+  guint keycode;
+  gint  group;
+  gint  level;
+};
+
 
 G_END_DECLS
 

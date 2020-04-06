@@ -3061,7 +3061,7 @@ on_key_pressed (GtkEventControllerKey *controller,
         }
 
       if (keyval == GDK_KEY_Down &&
-          (state & modifiers) == GDK_MOD1_MASK)
+          (state & modifiers) == GDK_ALT_MASK)
         return eject_or_unmount_selection (sidebar);
 
       if ((keyval == GDK_KEY_Delete ||

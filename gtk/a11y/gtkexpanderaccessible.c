@@ -258,7 +258,7 @@ gtk_expander_accessible_get_keybinding (AtkAction *action,
 
       key_val = gtk_label_get_mnemonic_keyval (GTK_LABEL (label));
       if (key_val != GDK_KEY_VoidSymbol)
-        return_value = gtk_accelerator_name (key_val, GDK_MOD1_MASK);
+        return_value = gtk_accelerator_name (key_val, GDK_ALT_MASK);
     }
 
   return return_value;

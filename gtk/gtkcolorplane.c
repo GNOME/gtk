@@ -321,7 +321,7 @@ key_controller_key_pressed (GtkEventControllerKey *controller,
   GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
   gdouble step;
 
-  if ((state & GDK_MOD1_MASK) != 0)
+  if ((state & GDK_ALT_MASK) != 0)
     step = 0.1;
   else
     step = 0.01;

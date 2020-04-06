@@ -2815,17 +2815,18 @@ rewrite_event_for_toplevel (GdkEvent *event)
                                 gdk_event_get_source_device (event),
                                 gdk_focus_event_get_in (event));
   else
-    return gdk_event_key_new (gdk_event_get_event_type (event),
-                              surface,
-                              gdk_event_get_device (event),
-                              gdk_event_get_source_device (event),
-                              gdk_event_get_time (event),
-                              gdk_event_get_modifier_state (event),
-                              gdk_key_event_get_keyval (event),
-                              gdk_key_event_get_keycode (event),
-                              gdk_key_event_get_scancode (event),
-                              gdk_key_event_get_group (event),
-                              gdk_key_event_is_modifier (event));
+    {
+      return gdk_event_key_new (gdk_event_get_event_type (event),
+                                surface,
+                                gdk_event_get_device (event),
+                                gdk_event_get_source_device (event),
+                                gdk_event_get_time (event),
+                                gdk_key_event_get_keycode (event),
+                                gdk_event_get_modifier_state (event),
+                                gdk_key_event_is_modifier (event),
+                                &event->key.translated[0],
+                                &event->key.translated[1]);
+    }
 }
 
 static void
@@ -2874,13 +2875,13 @@ add_event_mark (GdkEvent *event,
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
       {
-        message = g_strdup_printf ("%s {keyval=%u, state=0x%x, hardware_keycode=%u key_scancode=%u group=%u is_modifier=%u}",
+        message = g_strdup_printf ("%s {keyval=%u, state=0x%x, keycode=%u layout=%u level=%u is_modifier=%u}",
                                    kind,
                                    gdk_key_event_get_keyval (event),
                                    gdk_event_get_modifier_state (event),
                                    gdk_key_event_get_keycode (event),
-                                   gdk_key_event_get_scancode (event),
-                                   gdk_key_event_get_group (event),
+                                   gdk_key_event_get_layout (event),
+                                   gdk_key_event_get_level (event),
                                    gdk_key_event_is_modifier (event));
         break;
       }

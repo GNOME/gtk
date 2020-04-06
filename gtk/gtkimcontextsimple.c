@@ -929,18 +929,21 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
       
       for (i = 0; i < n_compose - len - 1; i++)
 	{
-          guint tmp_keyval = priv->compose_buffer[len + i];
+          GdkTranslatedKey translated;
+          translated.keyval = priv->compose_buffer[len + i];
+          translated.consumed = 0;
+          translated.layout = 0;
+          translated.level = 0;
           GdkEvent *tmp_event = gdk_event_key_new (GDK_KEY_PRESS,
                                                    gdk_event_get_surface (event),
                                                    gdk_event_get_device (event),
                                                    gdk_event_get_source_device (event),
                                                    gdk_event_get_time (event),
+                                                   priv->compose_buffer[len + i],
                                                    gdk_event_get_modifier_state (event),
-                                                   tmp_keyval,
-                                                   tmp_keyval,
-                                                   tmp_keyval,
-                                                   0,
-                                                   0);
+                                                   FALSE,
+                                                   &translated,
+                                                   &translated);
 	  
 	  gtk_im_context_filter_keypress (context, tmp_event);
 	  gdk_event_unref (tmp_event);
@@ -982,14 +985,12 @@ is_hex_keyval (guint keyval)
 static guint
 canonical_hex_keyval (GdkEvent *event)
 {
-  GdkSurface *surface = gdk_event_get_surface ((GdkEvent *) event);
-  GdkKeymap *keymap = gdk_display_get_keymap (gdk_surface_get_display (surface));
   guint keyval, event_keyval;
   guint *keyvals = NULL;
   gint n_vals = 0;
   gint i;
 
-  event_keyval = gdk_key_event_get_keyval ((GdkEvent *)event);
+  event_keyval = gdk_key_event_get_keyval (event);
 
   /* See if the keyval is already a hex digit */
   if (is_hex_keyval (event_keyval))
@@ -998,10 +999,10 @@ canonical_hex_keyval (GdkEvent *event)
   /* See if this key would have generated a hex keyval in
    * any other state, and return that hex keyval if so
    */
-  gdk_keymap_get_entries_for_keycode (keymap,
-                                      gdk_key_event_get_scancode ((GdkEvent *) event),
-				      NULL,
-				      &keyvals, &n_vals);
+  gdk_display_map_keycode (gdk_event_get_display (event),
+                           gdk_key_event_get_keycode (event),
+                           NULL,
+                           &keyvals, &n_vals);
 
   keyval = 0;
   i = 0;
@@ -1033,8 +1034,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
   GtkIMContextSimplePrivate *priv = context_simple->priv;
   GdkSurface *surface = gdk_event_get_surface ((GdkEvent *) event);
-  GdkDisplay *display = gdk_surface_get_display (surface);
-  GdkKeymap *keymap = gdk_display_get_keymap (display);
   GSList *tmp_list;
   int n_compose = 0;
   GdkModifierType hex_mod_mask;
@@ -1053,10 +1052,10 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   while (priv->compose_buffer[n_compose] != 0)
     n_compose++;
 
-  keyval = gdk_key_event_get_keyval ((GdkEvent *)event);
-  state = gdk_event_get_modifier_state ((GdkEvent *)event);
+  keyval = gdk_key_event_get_keyval (event);
+  state = gdk_event_get_modifier_state (event);
 
-  if (gdk_event_get_event_type ((GdkEvent *) event) == GDK_KEY_RELEASE)
+  if (gdk_event_get_event_type (event) == GDK_KEY_RELEASE)
     {
       if (priv->in_hex_sequence &&
           (keyval == GDK_KEY_Control_L || keyval == GDK_KEY_Control_R ||
@@ -1100,8 +1099,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     if (keyval == gtk_compose_ignore[i])
       return FALSE;
 
-  hex_mod_mask = gdk_keymap_get_modifier_mask (keymap, GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
-  hex_mod_mask |= GDK_SHIFT_MASK;
+  hex_mod_mask = GDK_CONTROL_MASK|GDK_SHIFT_MASK;
 
   if (priv->in_hex_sequence && priv->modifiers_dropped)
     have_hex_mods = TRUE;
@@ -1132,7 +1130,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     {
       GdkModifierType no_text_input_mask;
 
-      no_text_input_mask = gdk_keymap_get_modifier_mask (keymap, GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
+      no_text_input_mask = GDK_ALT_MASK|GDK_CONTROL_MASK;
 
       if (state & no_text_input_mask ||
 	  (priv->in_hex_sequence && priv->modifiers_dropped &&
@@ -1262,7 +1260,8 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     {
       gboolean success = FALSE;
 
-#ifdef GDK_WINDOWING_WIN32
+#if 0
+  /* FIXME this needs redoing since keymaps are no longer exposed */
       if (GDK_IS_WIN32_DISPLAY (display))
         {
           guint16  output[2];

@@ -24,6 +24,7 @@
 #include "gdkdisplayprivate.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
+#include "gdkkeysprivate.h"
 
 /* for the use of round() */
 #include "fallback-c89.c"
@@ -101,6 +102,12 @@ enum {
   PROP_NUM_TOUCHES,
   PROP_AXES,
   PROP_TOOL,
+  PROP_DIRECTION,
+  PROP_HAS_BIDI_LAYOUTS,
+  PROP_CAPS_LOCK_STATE,
+  PROP_NUM_LOCK_STATE,
+  PROP_SCROLL_LOCK_STATE,
+  PROP_MODIFIER_STATE,
   LAST_PROP
 };
 
@@ -280,6 +287,48 @@ gdk_device_class_init (GdkDeviceClass *klass)
                          P_("The tool that is currently used with this device"),
                          GDK_TYPE_DEVICE_TOOL,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  device_props[PROP_DIRECTION] =
+      g_param_spec_enum ("direction",
+                         P_("Direction"),
+                         P_("The direction of the current layout of the keyboard"),
+                         PANGO_TYPE_DIRECTION, PANGO_DIRECTION_NEUTRAL,
+                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  device_props[PROP_HAS_BIDI_LAYOUTS] =
+      g_param_spec_boolean ("has-bidi-layouts",
+                            P_("Has bidi layouts"),
+                            P_("Whether the keyboard has bidi layouts"),
+                            FALSE,
+                            G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  device_props[PROP_CAPS_LOCK_STATE] =
+      g_param_spec_boolean ("caps-lock-state",
+                            P_("Caps lock state"),
+                            P_("Whether the keyboard caps lock is on"),
+                            FALSE,
+                            G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  device_props[PROP_NUM_LOCK_STATE] =
+      g_param_spec_boolean ("num-lock-state",
+                            P_("Num lock state"),
+                            P_("Whether the keyboard num lock is on"),
+                            FALSE,
+                            G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  device_props[PROP_SCROLL_LOCK_STATE] =
+      g_param_spec_boolean ("scroll-lock-state",
+                            P_("Scroll lock state"),
+                            P_("Whether the keyboard scroll lock is on"),
+                            FALSE,
+                            G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  device_props[PROP_MODIFIER_STATE] =
+      g_param_spec_flags ("modifier-state",
+                          P_("Modifier state"),
+                          P_("The modifier state of the keyboard"),
+                          GDK_TYPE_MODIFIER_TYPE, 0,
+                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, device_props);
 
@@ -472,6 +521,24 @@ gdk_device_get_property (GObject    *object,
       break;
     case PROP_TOOL:
       g_value_set_object (value, device->last_tool);
+      break;
+    case PROP_DIRECTION:
+      g_value_set_enum (value, gdk_device_get_direction (device));
+      break;
+    case PROP_HAS_BIDI_LAYOUTS:
+      g_value_set_boolean (value, gdk_device_has_bidi_layouts (device));
+      break;
+    case PROP_CAPS_LOCK_STATE:
+      g_value_set_boolean (value, gdk_device_get_caps_lock_state (device));
+      break;
+    case PROP_NUM_LOCK_STATE:
+      g_value_set_boolean (value, gdk_device_get_num_lock_state (device));
+      break;
+    case PROP_SCROLL_LOCK_STATE:
+      g_value_set_boolean (value, gdk_device_get_scroll_lock_state (device));
+      break;
+    case PROP_MODIFIER_STATE:
+      g_value_set_flags (value, gdk_device_get_modifier_state (device));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1711,4 +1778,70 @@ gdk_device_get_device_tool (GdkDevice *device)
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
 
   return device->last_tool;
+}
+
+gboolean
+gdk_device_get_caps_lock_state (GdkDevice *device)
+{
+  GdkKeymap *keymap = gdk_display_get_keymap (device->display);
+
+  if (device->source == GDK_SOURCE_KEYBOARD)
+    return gdk_keymap_get_caps_lock_state (keymap);
+
+  return FALSE;
+}
+
+gboolean
+gdk_device_get_num_lock_state (GdkDevice *device)
+{
+  GdkKeymap *keymap = gdk_display_get_keymap (device->display);
+
+  if (device->source == GDK_SOURCE_KEYBOARD)
+    return gdk_keymap_get_num_lock_state (keymap);
+
+  return FALSE;
+}
+
+gboolean
+gdk_device_get_scroll_lock_state (GdkDevice *device)
+{
+  GdkKeymap *keymap = gdk_display_get_keymap (device->display);
+
+  if (device->source == GDK_SOURCE_KEYBOARD)
+    return gdk_keymap_get_scroll_lock_state (keymap);
+
+  return FALSE;
+}
+
+GdkModifierType
+gdk_device_get_modifier_state (GdkDevice *device)
+{
+  GdkKeymap *keymap = gdk_display_get_keymap (device->display);
+
+  if (device->source == GDK_SOURCE_KEYBOARD)
+    return gdk_keymap_get_modifier_state (keymap);
+
+  return 0;
+}
+
+PangoDirection
+gdk_device_get_direction (GdkDevice *device)
+{
+  GdkKeymap *keymap = gdk_display_get_keymap (device->display);
+
+  if (device->source == GDK_SOURCE_KEYBOARD)
+    return gdk_keymap_get_direction (keymap);
+
+  return PANGO_DIRECTION_NEUTRAL;
+}
+
+gboolean
+gdk_device_has_bidi_layouts (GdkDevice *device)
+{
+  GdkKeymap *keymap = gdk_display_get_keymap (device->display);
+
+  if (device->source == GDK_SOURCE_KEYBOARD)
+    return gdk_keymap_have_bidi_layouts (keymap);
+
+  return FALSE;
 }
