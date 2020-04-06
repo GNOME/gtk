@@ -1076,6 +1076,9 @@ gdk_wayland_window_configure (GdkWindow *window,
   GdkDisplay *display;
   GdkEvent *event;
 
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
+
   event = gdk_event_new (GDK_CONFIGURE);
   event->configure.window = g_object_ref (window);
   event->configure.send_event = FALSE;
