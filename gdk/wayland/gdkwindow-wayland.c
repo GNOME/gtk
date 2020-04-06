@@ -1145,10 +1145,6 @@ gdk_wayland_window_maybe_configure (GdkWindow *window,
   gboolean is_xdg_popup;
   gboolean is_visible;
 
-  if (window->width == width &&
-      window->height == height &&
-      impl->scale == scale)
-    return;
 
   if (needs_initial_configure (window) &&
       !impl->initial_configure_received)
@@ -1157,6 +1153,11 @@ gdk_wayland_window_maybe_configure (GdkWindow *window,
       impl->unconfigured_height = height;
       return;
     }
+
+  if (window->width == width &&
+      window->height == height &&
+      impl->scale == scale)
+    return;
 
   /* For xdg_popup using an xdg_positioner, there is a race condition if
    * the application tries to change the size after it's mapped, but before
