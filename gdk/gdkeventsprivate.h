@@ -240,12 +240,8 @@ typedef struct {
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
  *   buttons. See #GdkModifierType.
  * @keycode: the raw code of the key that was pressed or released.
- * @keyval: the key that was pressed or released. See the
- *   `gdk/gdkkeysyms.h` header file for a complete list of GDK key codes.
- * @consumed_modifiers: Modifiers that were consumed when translating
- *    @keycode to @keyval
- * @layout: the effective keyboard layout
- * @level: the effective shift level
+ * @translated: the result of translating @keycode. First with the full
+ *   @state, then while ignoring Caps Lock.
  *
  * Describes a key press or key release event.
  */
