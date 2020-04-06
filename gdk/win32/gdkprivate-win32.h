@@ -288,10 +288,10 @@ extern UINT              _gdk_input_codepage;
 extern guint             _gdk_keymap_serial;
 
 /* The singleton clipdrop object pointer */
-GdkWin32Clipdrop *_win32_clipdrop;
+extern GdkWin32Clipdrop *_win32_clipdrop;
 
 /* Used to identify the main thread */
-GThread          *_win32_main_thread;
+extern GThread          *_win32_main_thread;
 
 void _gdk_win32_dnd_do_dragdrop (void);
 
