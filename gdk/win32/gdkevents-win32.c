@@ -72,6 +72,8 @@
 
 #include <imm.h>
 
+#define GDK_MOD2_MASK (1 << 4)
+
 #ifndef XBUTTON1
 #define XBUTTON1 1
 #define XBUTTON2 2
@@ -743,9 +745,6 @@ print_event_state (guint state)
   CASE (CONTROL);
   CASE (ALT);
   CASE (MOD2);
-  CASE (MOD3);
-  CASE (MOD4);
-  CASE (MOD5);
   CASE (BUTTON1);
   CASE (BUTTON2);
   CASE (BUTTON3);

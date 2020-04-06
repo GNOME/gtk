@@ -38,6 +38,8 @@
 #include "gdkkeysprivate.h"
 #include "gdkwin32keys.h"
 
+#define GDK_MOD2_MASK (1 << 4)
+
 enum _GdkWin32KeyLevelState
 {
   GDK_WIN32_LEVEL_NONE = 0,
