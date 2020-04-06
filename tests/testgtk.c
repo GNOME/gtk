@@ -6270,13 +6270,6 @@ main (int argc, char *argv[])
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   g_object_unref (provider);
 
-  gtk_accelerator_set_default_mod_mask (GDK_SHIFT_MASK |
-					GDK_CONTROL_MASK |
-					GDK_MOD1_MASK | 
-					GDK_META_MASK |
-					GDK_SUPER_MASK |
-					GDK_HYPER_MASK |
-					GDK_MOD4_MASK);
   /*  benchmarking
    */
   for (i = 1; i < argc; i++)
