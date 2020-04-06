@@ -1,5 +1,6 @@
 stages:
   - build
+  - test
   - docs
 
 cache:
@@ -91,3 +92,29 @@ msys2-mingw32-autotools:
   script:
     - C:\msys64\usr\bin\pacman --noconfirm -Syyuu
     - C:\msys64\usr\bin\bash -lc "bash -x ./.gitlab-ci/test-msys2-autotools.sh"
+
+fedora-mutter:
+  image: registry.gitlab.gnome.org/gnome/mutter/master:v3
+  stage: test
+  variables:
+    XDG_RUNTIME_DIR: "$CI_PROJECT_DIR/runtime-dir"
+    GSETTINGS_SCHEMA_DIR: "$CI_PROJECT_DIR/mutter/build/data"
+    NO_AT_BRIDGE: "1"
+  script:
+    - dnf -y install pip
+    - dnf -y builddep gtk3
+    - ln -s /usr/bin/gio-querymodules-$(getconf LONG_BIT) /usr/bin/gio-querymodules
+    - ./.gitlab-ci/test-docker-meson.sh
+    - ninja -C _build install
+    - cd $CI_PROJECT_DIR
+    - git clone https://gitlab.gnome.org/GNOME/mutter.git
+    - cd mutter
+    - meson . build -Dbuildtype=debugoptimized -Degl_device=true -Dwayland_eglstream=true --werror --prefix /usr
+    - ninja -C build
+    - ninja -C build install
+    - dconf update
+    - mkdir -m 700 $XDG_RUNTIME_DIR
+    - glib-compile-schemas $GSETTINGS_SCHEMA_DIR
+    - >
+       dbus-run-session -- xvfb-run -s '+iglx -noreset'
+       meson test -C build --no-rebuild -t 10 --verbose --no-stdsplit --print-errorlogs --wrap catchsegv --suite mutter/stacking
