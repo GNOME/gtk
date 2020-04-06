@@ -237,6 +237,11 @@ typedef enum
 } GdkModifierType;
 
 
+/**
+ * GDK_MODIFIER_MASK:
+ *
+ * A mask covering all entries in #GdkModifierType.
+ */
 #define GDK_MODIFIER_MASK (GDK_SHIFT_MASK|GDK_LOCK_MASK|GDK_CONTROL_MASK| \
                            GDK_ALT_MASK|GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK| \
                            GDK_BUTTON1_MASK|GDK_BUTTON2_MASK|GDK_BUTTON3_MASK| \
