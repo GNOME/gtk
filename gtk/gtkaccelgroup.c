@@ -40,6 +40,10 @@
  *
  * We have various utility functions to parse and generate
  * textual representations of keyboard accelerators.
+ *
+ * If you want to set up keyboard accelerators for widgets,
+ * #GtkShortcutTrigger is probably more convenient than the
+ * functions in this section.
  */
 
 
@@ -494,8 +498,7 @@ out:
  *     modifier mask, %NULL
  *
  * Parses a string representing an accelerator. The format looks like
- * “<Control>a” or “<Shift><Alt>F1” or “<Release>z” (the last one is
- * for key release).
+ * “<Control>a” or “<Shift><Alt>F1”.
  *
  * The parser is fairly liberal and allows lower or upper case, and also
  * abbreviations such as “<Ctl>” and “<Ctrl>”. Key names are parsed using
