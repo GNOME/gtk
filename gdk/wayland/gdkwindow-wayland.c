@@ -749,6 +749,8 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
 
   impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WAYLAND, NULL);
   window->impl = GDK_WINDOW_IMPL (impl);
+  impl->unconfigured_width = window->width;
+  impl->unconfigured_height = window->height;
   impl->wrapper = GDK_WINDOW (window);
   impl->shortcuts_inhibitors = g_hash_table_new (NULL, NULL);
   impl->using_csd = TRUE;
