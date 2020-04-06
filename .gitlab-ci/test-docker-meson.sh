@@ -10,6 +10,7 @@ export PATH="${HOME}/.local/bin:${PATH}"
 python3 -m pip install --user meson==0.49.2
 
 meson \
+    -Dprefix=/usr \
     -Dinstalled_tests=true \
     -Dbroadway_backend=true \
     -Dx11_backend=true \
