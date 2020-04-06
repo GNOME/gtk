@@ -60,7 +60,6 @@ gtk_accelerator_get_label
 gtk_accelerator_parse_with_keycode
 gtk_accelerator_name_with_keycode
 gtk_accelerator_get_label_with_keycode
-gtk_accelerator_set_default_mod_mask
 gtk_accelerator_get_default_mod_mask
 </SECTION>
 
