@@ -273,6 +273,7 @@ static void gdk_wayland_window_unexport (GdkWindow *window);
 static void gdk_wayland_window_announce_decoration_mode (GdkWindow *window);
 
 static gboolean should_map_as_subsurface (GdkWindow *window);
+static gboolean should_map_as_popup (GdkWindow *window);
 
 GType _gdk_window_impl_wayland_get_type (void);
 
@@ -749,6 +750,8 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
 
   impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WAYLAND, NULL);
   window->impl = GDK_WINDOW_IMPL (impl);
+  impl->unconfigured_width = window->width;
+  impl->unconfigured_height = window->height;
   impl->wrapper = GDK_WINDOW (window);
   impl->shortcuts_inhibitors = g_hash_table_new (NULL, NULL);
   impl->using_csd = TRUE;
@@ -1120,7 +1123,7 @@ is_realized_popup (GdkWindow *window)
 }
 
 static gboolean
-needs_initial_configure (GdkWindow *window)
+should_inhibit_resize (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
@@ -1130,12 +1133,17 @@ needs_initial_configure (GdkWindow *window)
     return FALSE;
   else if (impl->hint == GDK_WINDOW_TYPE_HINT_DND)
     return FALSE;
-  else if (is_realized_toplevel (window))
-    return TRUE;
   else if (is_realized_popup (window))
-    return TRUE;
-  else
-    return !should_map_as_subsurface (window);
+    return FALSE;
+  else if (should_map_as_popup (window))
+    return FALSE;
+  else if (should_map_as_subsurface (window))
+    return FALSE;
+
+  /* This should now either be, or eventually be, a toplevel window,
+   * and we should wait for the initial configure to really configure it.
+   */
+  return !impl->initial_configure_received;
 }
 
 static void
@@ -1149,15 +1157,8 @@ gdk_wayland_window_maybe_configure (GdkWindow *window,
   gboolean is_visible;
 
 
-  if (needs_initial_configure (window) &&
-      !impl->initial_configure_received)
-    {
-      impl->unconfigured_width = calculate_width_without_margin (window,
-                                                                 width);
-      impl->unconfigured_height = calculate_height_without_margin (window,
-                                                                   height);
-      return;
-    }
+  if (should_inhibit_resize (window))
+    return;
 
   if (window->width == width &&
       window->height == height &&
