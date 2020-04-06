@@ -42,14 +42,6 @@
  * textual representations of keyboard accelerators.
  */
 
-/* --- variables --- */
-static guint default_accel_mod_mask = GDK_CONTROL_MASK|
-                                      GDK_SHIFT_MASK|
-                                      GDK_ALT_MASK|
-                                      GDK_SUPER_MASK|
-                                      GDK_HYPER_MASK|
-                                      GDK_META_MASK;
-
 
 /* --- functions --- */
 /**
@@ -994,41 +986,19 @@ gtk_accelerator_print_label (GString        *gstring,
 }
 
 /**
- * gtk_accelerator_set_default_mod_mask:
- * @default_mod_mask: accelerator modifier mask
- *
- * Sets the modifiers that will be considered significant for keyboard
- * accelerators. The default mod mask depends on the GDK backend in use,
- * but will typically include #GDK_CONTROL_MASK | #GDK_SHIFT_MASK |
- * #GDK_ALT_MASK | #GDK_SUPER_MASK | #GDK_HYPER_MASK | #GDK_META_MASK.
- * In other words, Control, Shift, Alt, Super, Hyper and Meta. Other
- * modifiers will by default be ignored by #GtkAccelGroup.
- *
- * You must include at least the three modifiers Control, Shift
- * and Alt in any value you pass to this function.
- *
- * The default mod mask should be changed on application startup,
- * before using any accelerator groups.
- */
-void
-gtk_accelerator_set_default_mod_mask (GdkModifierType default_mod_mask)
-{
-  default_accel_mod_mask = (default_mod_mask & GDK_MODIFIER_MASK) |
-    (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_ALT_MASK);
-}
-
-/**
  * gtk_accelerator_get_default_mod_mask:
  *
  * Gets the modifier mask.
  *
  * The modifier mask determines which modifiers are considered significant
- * for keyboard accelerators. See gtk_accelerator_set_default_mod_mask().
+ * for keyboard accelerators. This includes all keyboard modifiers except
+ * for %GDK_LOCK_MASK.
  *
- * Returns: the default accelerator modifier mask
+ * Returns: the modifier mask for accelerators
  */
 GdkModifierType
 gtk_accelerator_get_default_mod_mask (void)
 {
-  return default_accel_mod_mask;
+  return GDK_CONTROL_MASK|GDK_SHIFT_MASK|GDK_ALT_MASK|
+         GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK;
 }
