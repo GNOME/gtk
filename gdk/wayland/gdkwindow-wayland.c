@@ -1149,8 +1149,10 @@ gdk_wayland_window_maybe_configure (GdkWindow *window,
   if (needs_initial_configure (window) &&
       !impl->initial_configure_received)
     {
-      impl->unconfigured_width = width;
-      impl->unconfigured_height = height;
+      impl->unconfigured_width = calculate_width_without_margin (window,
+                                                                 width);
+      impl->unconfigured_height = calculate_height_without_margin (window,
+                                                                   height);
       return;
     }
 
@@ -1676,9 +1678,16 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
     }
   else
     {
+      int unconfigured_width;
+      int unconfigured_height;
+
+      unconfigured_width =
+        calculate_width_with_margin (window, impl->unconfigured_width);
+      unconfigured_height =
+        calculate_height_with_margin (window, impl->unconfigured_height);
       gdk_wayland_window_configure (window,
-                                    impl->unconfigured_width,
-                                    impl->unconfigured_height,
+                                    unconfigured_width,
+                                    unconfigured_height,
                                     impl->scale);
     }
 
