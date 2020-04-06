@@ -111,9 +111,6 @@ enum {
 static GParamSpec *props[LAST_PROP] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
 
-static GdkModifierType gdk_keymap_real_get_modifier_mask (GdkKeymap         *keymap,
-                                                          GdkModifierIntent  intent);
-
 G_DEFINE_TYPE (GdkKeymap, gdk_keymap, G_TYPE_OBJECT)
 
 static void
@@ -160,8 +157,6 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
 
   object_class->get_property = gdk_keymap_get_property;
   object_class->set_property = gdk_keymap_set_property;
-
-  klass->get_modifier_mask = gdk_keymap_real_get_modifier_mask;
 
   props[PROP_DISPLAY] =
     g_param_spec_object ("display",
@@ -613,65 +608,6 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 								  effective_group,
 								  level,
 								  consumed_modifiers);
-}
-
-static GdkModifierType
-gdk_keymap_real_get_modifier_mask (GdkKeymap         *keymap,
-                                   GdkModifierIntent  intent)
-{
-  switch (intent)
-    {
-    case GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR:
-      return GDK_CONTROL_MASK;
-
-    case GDK_MODIFIER_INTENT_CONTEXT_MENU:
-      return 0;
-
-    case GDK_MODIFIER_INTENT_EXTEND_SELECTION:
-      return GDK_SHIFT_MASK;
-
-    case GDK_MODIFIER_INTENT_MODIFY_SELECTION:
-      return GDK_CONTROL_MASK;
-
-    case GDK_MODIFIER_INTENT_NO_TEXT_INPUT:
-      return GDK_ALT_MASK | GDK_CONTROL_MASK;
-
-    case GDK_MODIFIER_INTENT_SHIFT_GROUP:
-      return 0;
-
-    case GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK:
-      return (GDK_SHIFT_MASK   | GDK_CONTROL_MASK | GDK_ALT_MASK    |
-	      GDK_SUPER_MASK   | GDK_HYPER_MASK   | GDK_META_MASK);
-
-    default:
-      g_return_val_if_reached (0);
-    }
-}
-
-/**
- * gdk_keymap_get_modifier_mask:
- * @keymap: a #GdkKeymap
- * @intent: the use case for the modifier mask
- *
- * Returns the modifier mask the @keymap’s windowing system backend
- * uses for a particular purpose.
- *
- * Note that this function always returns real hardware modifiers, not
- * virtual ones (e.g. it will return #GDK_ALT_MASK rather than
- * #GDK_META_MASK if the backend maps MOD1 to META), so there are use
- * cases where the return value of this function has to be transformed
- * by gdk_keymap_add_virtual_modifiers() in order to contain the
- * expected result.
- *
- * Returns: the modifier mask used for @intent.
- **/
-GdkModifierType
-gdk_keymap_get_modifier_mask (GdkKeymap         *keymap,
-                              GdkModifierIntent  intent)
-{
-  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), 0);
-
-  return GDK_KEYMAP_GET_CLASS (keymap)->get_modifier_mask (keymap, intent);
 }
 
 #include "gdkkeynames.c"
