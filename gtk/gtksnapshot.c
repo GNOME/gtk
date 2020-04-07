@@ -1152,7 +1152,7 @@ gtk_snapshot_pop_collect (GtkSnapshot *snapshot)
  * @snapshot. The only function that should be
  * called after this is gtk_snapshot_unref().
  *
- * Returns: the constructed #GskRenderNode
+ * Returns: (transfer full): the constructed #GskRenderNode
  */
 GskRenderNode *
 gtk_snapshot_to_node (GtkSnapshot *snapshot)
