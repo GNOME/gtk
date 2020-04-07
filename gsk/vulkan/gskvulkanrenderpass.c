@@ -258,7 +258,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       return;
     case GSK_SHADOW_NODE:
     default:
-      FALLBACK ("Unsupported node '%s'", node->node_class->type_name);
+      FALLBACK ("Unsupported node '%s'", g_type_name_from_instance ((GTypeInstance *) node));
 
     case GSK_REPEAT_NODE:
       if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
@@ -346,7 +346,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
     case GSK_TEXT_NODE:
       {
         const PangoFont *font = gsk_text_node_peek_font (node);
-        const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node);
+        const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node, NULL);
         guint num_glyphs = gsk_text_node_get_num_glyphs (node);
         gboolean has_color_glyphs = gsk_text_node_has_color_glyphs (node);
         int i;
@@ -817,7 +817,7 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass  *self,
             g_message ("Upload op=%s, node %s[%p], bounds %gx%g",
                      op->type == GSK_VULKAN_OP_FALLBACK_CLIP ? "fallback-clip" :
                      (op->type == GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP ? "fallback-rounded-clip" : "fallback"),
-                     node->node_class->type_name, node,
+                     g_type_name_from_instance ((GTypeInstance *) node), node,
                      ceil (node->bounds.size.width),
                      ceil (node->bounds.size.height)));
 #ifdef G_ENABLE_DEBUG
@@ -1195,7 +1195,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
                                                           &op->text.node->bounds,
                                                           (PangoFont *)gsk_text_node_peek_font (op->text.node),
                                                           gsk_text_node_get_num_glyphs (op->text.node),
-                                                          gsk_text_node_peek_glyphs (op->text.node),
+                                                          gsk_text_node_peek_glyphs (op->text.node, NULL),
                                                           gsk_text_node_peek_color (op->text.node),
                                                           gsk_text_node_get_offset (op->text.node),
                                                           op->text.start_glyph,
@@ -1214,7 +1214,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
                                                                 &op->text.node->bounds,
                                                                 (PangoFont *)gsk_text_node_peek_font (op->text.node),
                                                                 gsk_text_node_get_num_glyphs (op->text.node),
-                                                                gsk_text_node_peek_glyphs (op->text.node),
+                                                                gsk_text_node_peek_glyphs (op->text.node, NULL),
                                                                 gsk_text_node_get_offset (op->text.node),
                                                                 op->text.start_glyph,
                                                                 op->text.num_glyphs,
@@ -1244,7 +1244,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
                                                                      gsk_linear_gradient_node_peek_end (op->render.node),
                                                                      gsk_render_node_get_node_type (op->render.node) == GSK_REPEATING_LINEAR_GRADIENT_NODE,
                                                                      gsk_linear_gradient_node_get_n_color_stops (op->render.node),
-                                                                     gsk_linear_gradient_node_peek_color_stops (op->render.node));
+                                                                     gsk_linear_gradient_node_peek_color_stops (op->render.node, NULL));
             n_bytes += op->render.vertex_count;
           }
           break;

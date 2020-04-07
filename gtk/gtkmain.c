@@ -95,6 +95,7 @@
 #include "gdk/gdk.h"
 #include "gdk/gdk-private.h"
 #include "gsk/gskprivate.h"
+#include "gsk/gskrendernodeprivate.h"
 
 #include <locale.h>
 
@@ -660,6 +661,7 @@ do_post_parse_initialization (void)
   gtk_widget_set_default_direction (gtk_get_locale_direction ());
 
   gsk_ensure_resources ();
+  gsk_render_node_init_types ();
   _gtk_ensure_resources ();
 
   gtk_initialized = TRUE;
