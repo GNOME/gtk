@@ -293,12 +293,85 @@ static void     gtk_entry_measure (GtkWidget           *widget,
                                    int                 *minimum_baseline,
                                    int                 *natural_baseline);
 
+static GtkBuildableIface *buildable_parent_iface = NULL;
+
+static void     gtk_entry_buildable_interface_init (GtkBuildableIface *iface);
+
 G_DEFINE_TYPE_WITH_CODE (GtkEntry, gtk_entry, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkEntry)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_entry_buildable_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
                                                 gtk_entry_editable_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_EDITABLE,
                                                 gtk_entry_cell_editable_init))
+
+
+static const GtkBuildableParser pango_parser =
+{
+  gtk_pango_attribute_start_element,
+};
+
+static gboolean
+gtk_entry_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                      GtkBuilder         *builder,
+                                      GObject            *child,
+                                      const gchar        *tagname,
+                                      GtkBuildableParser *parser,
+                                      gpointer           *data)
+{
+  if (buildable_parent_iface->custom_tag_start (buildable, builder, child,
+                                                tagname, parser, data))
+    return TRUE;
+
+  if (strcmp (tagname, "attributes") == 0)
+    {
+      GtkPangoAttributeParserData *parser_data;
+
+      parser_data = g_slice_new0 (GtkPangoAttributeParserData);
+      parser_data->builder = g_object_ref (builder);
+      parser_data->object = (GObject *) g_object_ref (buildable);
+      *parser = pango_parser;
+      *data = parser_data;
+      return TRUE;
+    }
+  return FALSE;
+}
+
+static void
+gtk_entry_buildable_custom_finished (GtkBuildable *buildable,
+                                     GtkBuilder   *builder,
+                                     GObject      *child,
+                                     const gchar  *tagname,
+                                     gpointer      user_data)
+{
+  GtkPangoAttributeParserData *data = user_data;
+
+  buildable_parent_iface->custom_finished (buildable, builder, child,
+                                           tagname, user_data);
+
+  if (strcmp (tagname, "attributes") == 0)
+    {
+      if (data->attrs)
+        {
+          gtk_entry_set_attributes (GTK_ENTRY (buildable), data->attrs);
+          pango_attr_list_unref (data->attrs);
+        }
+
+      g_object_unref (data->object);
+      g_object_unref (data->builder);
+      g_slice_free (GtkPangoAttributeParserData, data);
+    }
+}
+
+static void
+gtk_entry_buildable_interface_init (GtkBuildableIface *iface)
+{
+  buildable_parent_iface = g_type_interface_peek_parent (iface);
+
+  iface->custom_tag_start = gtk_entry_buildable_custom_tag_start;
+  iface->custom_finished = gtk_entry_buildable_custom_finished;
+}
 
 static gboolean
 gtk_entry_grab_focus (GtkWidget *widget)
