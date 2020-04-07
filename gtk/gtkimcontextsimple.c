@@ -19,16 +19,6 @@
 
 #include <gdk/gdk.h>
 
-#ifdef GDK_WINDOWING_X11
-#include <gdk/x11/gdkx.h>
-#endif
-#ifdef GDK_WINDOWING_WAYLAND
-#include <wayland/gdkwayland.h>
-#endif
-#ifdef GDK_WINDOWING_WIN32
-#include <win32/gdkwin32.h>
-#endif
-
 #include <stdlib.h>
 #include <string.h>
 
@@ -153,7 +143,7 @@ get_x11_compose_file_dir (void)
 {
   gchar* compose_file_dir;
 
-#if defined (GDK_WINDOWING_X11)
+#if defined (X11_DATA_PREFIX)
   compose_file_dir = g_strdup (X11_DATA_PREFIX "/share/X11/locale");
 #else
   compose_file_dir = g_build_filename (_gtk_get_datadir (), "X11", "locale", NULL);
@@ -442,124 +432,6 @@ check_table (GtkIMContextSimple    *context_simple,
  */
 #define IS_DEAD_KEY(k) \
     ((k) >= GDK_KEY_dead_grave && (k) <= (GDK_KEY_dead_dasia+1))
-
-#ifdef GDK_WINDOWING_WIN32
-
-/* On Windows, user expectation is that typing a dead accent followed
- * by space will input the corresponding spacing character. The X
- * compose tables are different for dead acute and diaeresis, which
- * when followed by space produce a plain ASCII apostrophe and double
- * quote respectively. So special-case those.
- */
-
-static gboolean
-check_win32_special_cases (GtkIMContextSimple    *context_simple,
-			   gint                   n_compose)
-{
-  GtkIMContextSimplePrivate *priv = context_simple->priv;
-  if (n_compose == 2 &&
-      priv->compose_buffer[1] == GDK_KEY_space)
-    {
-      gunichar value = 0;
-
-      switch (priv->compose_buffer[0])
-	{
-	case GDK_KEY_dead_acute:
-	  value = 0x00B4; break;
-	case GDK_KEY_dead_diaeresis:
-	  value = 0x00A8; break;
-        default:
-          break;
-	}
-      if (value > 0)
-	{
-	  gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
-	  priv->compose_buffer[0] = 0;
-
-	  return TRUE;
-	}
-    }
-  return FALSE;
-}
-
-static void
-check_win32_special_case_after_compact_match (GtkIMContextSimple    *context_simple,
-					      gint                   n_compose,
-					      guint                  value)
-{
-  GtkIMContextSimplePrivate *priv = context_simple->priv;
-
-  /* On Windows user expectation is that typing two dead accents will input
-   * two corresponding spacing accents.
-   */
-  if (n_compose == 2 &&
-      priv->compose_buffer[0] == priv->compose_buffer[1] &&
-      IS_DEAD_KEY (priv->compose_buffer[0]))
-    {
-      gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
-    }
-}
-
-#endif
-
-#ifdef GDK_WINDOWING_QUARTZ
-
-static gboolean
-check_quartz_special_cases (GtkIMContextSimple *context_simple,
-                            gint                n_compose)
-{
-  GtkIMContextSimplePrivate *priv = context_simple->priv;
-  guint value = 0;
-
-  if (n_compose == 2)
-    {
-      switch (priv->compose_buffer[0])
-        {
-        case GDK_KEY_dead_doubleacute:
-          switch (priv->compose_buffer[1])
-            {
-            case GDK_KEY_dead_doubleacute:
-            case GDK_KEY_space:
-              value = GDK_KEY_quotedbl; break;
-
-            case 'a': value = GDK_KEY_adiaeresis; break;
-            case 'A': value = GDK_KEY_Adiaeresis; break;
-            case 'e': value = GDK_KEY_ediaeresis; break;
-            case 'E': value = GDK_KEY_Ediaeresis; break;
-            case 'i': value = GDK_KEY_idiaeresis; break;
-            case 'I': value = GDK_KEY_Idiaeresis; break;
-            case 'o': value = GDK_KEY_odiaeresis; break;
-            case 'O': value = GDK_KEY_Odiaeresis; break;
-            case 'u': value = GDK_KEY_udiaeresis; break;
-            case 'U': value = GDK_KEY_Udiaeresis; break;
-            case 'y': value = GDK_KEY_ydiaeresis; break;
-            case 'Y': value = GDK_KEY_Ydiaeresis; break;
-            }
-          break;
-
-        case GDK_KEY_dead_acute:
-          switch (priv->compose_buffer[1])
-            {
-            case 'c': value = GDK_KEY_ccedilla; break;
-            case 'C': value = GDK_KEY_Ccedilla; break;
-            }
-          break;
-        }
-    }
-
-  if (value > 0)
-    {
-      gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple),
-                                         gdk_keyval_to_unicode (value));
-      priv->compose_buffer[0] = 0;
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-#endif
 
 gboolean
 gtk_check_compact_table (const GtkComposeTableCompact  *table,
@@ -1260,39 +1132,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     {
       gboolean success = FALSE;
 
-#if 0
-  /* FIXME this needs redoing since keymaps are no longer exposed */
-      if (GDK_IS_WIN32_DISPLAY (display))
-        {
-          guint16  output[2];
-          gsize    output_size = 2;
-
-          switch (gdk_win32_keymap_check_compose (GDK_WIN32_KEYMAP (keymap),
-                                                  priv->compose_buffer,
-                                                  n_compose,
-                                                  output, &output_size))
-            {
-            case GDK_WIN32_KEYMAP_MATCH_NONE:
-              break;
-            case GDK_WIN32_KEYMAP_MATCH_EXACT:
-            case GDK_WIN32_KEYMAP_MATCH_PARTIAL:
-              for (i = 0; i < output_size; i++)
-                {
-                  output_char = gdk_keyval_to_unicode (output[i]);
-                  gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple),
-                                                     output_char);
-                }
-              priv->compose_buffer[0] = 0;
-              return TRUE;
-            case GDK_WIN32_KEYMAP_MATCH_INCOMPLETE:
-              return TRUE;
-            default:
-              g_assert_not_reached ();
-              break;
-            }
-        }
-#endif
-
       G_LOCK (global_tables);
 
       tmp_list = global_tables;
@@ -1311,16 +1150,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       if (success)
         return TRUE;
 
-#ifdef GDK_WINDOWING_WIN32
-      if (check_win32_special_cases (context_simple, n_compose))
-	return TRUE;
-#endif
-
-#ifdef GDK_WINDOWING_QUARTZ
-      if (check_quartz_special_cases (context_simple, n_compose))
-        return TRUE;
-#endif
-
       if (gtk_check_compact_table (&gtk_compose_table_compact,
                                    priv->compose_buffer,
                                    n_compose, &compose_finish,
@@ -1332,11 +1161,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
                 {
                   gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple),
                                                      output_char);
-#ifdef G_OS_WIN32
-                  check_win32_special_case_after_compact_match (context_simple,
-                                                                n_compose,
-                                                                output_char);
-#endif
                   priv->compose_buffer[0] = 0;
                 }
             }
