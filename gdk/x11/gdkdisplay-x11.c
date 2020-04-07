@@ -26,7 +26,6 @@
 
 #include "gdkdisplay-x11.h"
 #include "gdkdisplayprivate.h"
-#include "gdkx11keys.h"
 
 #include "gdkasync.h"
 #include "gdkdisplay.h"
@@ -39,12 +38,15 @@
 #include "gdkkeysprivate.h"
 #include "gdkmarshalers.h"
 #include "xsettings-client.h"
+
+#include "gdkcairocontext-x11.h"
 #include "gdkclipboard-x11.h"
+#include "gdkglcontext-x11.h"
+#include "gdkkeys-x11.h"
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
-#include "gdkcairocontext-x11.h"
-#include "gdkglcontext-x11.h"
 #include "gdkvulkancontext-x11.h"
+
 #include "gdk-private.h"
 
 #include <glib.h>

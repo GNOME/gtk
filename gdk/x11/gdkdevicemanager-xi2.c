@@ -19,12 +19,12 @@
 
 #include "gdkx11devicemanager-xi2.h"
 #include "gdkx11device-xi2.h"
-#include "gdkx11keys.h"
 
 #include "gdkdeviceprivate.h"
 #include "gdkdevicetoolprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkeventtranslator.h"
+#include "gdkkeys-x11.h"
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"
 #include "gdkintl.h"
