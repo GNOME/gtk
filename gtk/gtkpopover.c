@@ -127,10 +127,6 @@
 #include "gtkroundedboxprivate.h"
 #include "gsk/gskroundedrectprivate.h"
 
-#ifdef GDK_WINDOWING_WAYLAND
-#include "wayland/gdkwayland.h"
-#endif
-
 #define MNEMONICS_DELAY 300 /* ms */
 
 #define TAIL_GAP_WIDTH  24
