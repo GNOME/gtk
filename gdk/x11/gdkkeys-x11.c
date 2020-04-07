@@ -24,7 +24,8 @@
 
 #include "config.h"
 
-#include "gdkx11keys.h"
+#include "gdkkeys-x11.h"
+
 #include "gdkkeysprivate.h"
 #include "gdkkeysyms.h"
 #include "gdkprivate-x11.h"
