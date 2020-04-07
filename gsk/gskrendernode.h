@@ -99,6 +99,53 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
                                                                  GskParseErrorFunc  error_func,
                                                                  gpointer           user_data);
 
+#define GSK_TYPE_DEBUG_NODE                     (gsk_render_node_types[GSK_DEBUG_NODE])
+#define GSK_TYPE_COLOR_NODE                     (gsk_render_node_types[GSK_COLOR_NODE])
+#define GSK_TYPE_TEXTURE_NODE                   (gsk_render_node_types[GSK_TEXTURE_NODE])
+#define GSK_TYPE_LINEAR_GRADIENT_NODE           (gsk_render_node_types[GSK_LINEAR_GRADIENT_NODE])
+#define GSK_TYPE_REPEATING_LINEAR_GRADIENT_NODE (gsk_render_node_types[GSK_REPEATING_LINEAR_GRADIENT_NODE])
+#define GSK_TYPE_BORDER_NODE                    (gsk_render_node_types[GSK_BORDER_NODE])
+#define GSK_TYPE_INSET_SHADOW_NODE              (gsk_render_node_types[GSK_INSET_SHADOW_NODE])
+#define GSK_TYPE_OUTSET_SHADOW_NODE             (gsk_render_node_types[GSK_OUTSET_SHADOW_NODE])
+#define GSK_TYPE_CAIRO_NODE                     (gsk_render_node_types[GSK_CAIRO_NODE])
+#define GSK_TYPE_CONTAINER_NODE                 (gsk_render_node_types[GSK_CONTAINER_NODE])
+#define GSK_TYPE_TRANSFORM_NODE                 (gsk_render_node_types[GSK_TRANSFORM_NODE])
+#define GSK_TYPE_OPACITY_NODE                   (gsk_render_node_types[GSK_OPACITY_NODE])
+#define GSK_TYPE_COLOR_MATRIX_NODE              (gsk_render_node_types[GSK_COLOR_MATRIX_NODE])
+#define GSK_TYPE_REPEAT_NODE                    (gsk_render_node_types[GSK_REPEAT_NODE])
+#define GSK_TYPE_CLIP_NODE                      (gsk_render_node_types[GSK_CLIP_NODE])
+#define GSK_TYPE_ROUNDED_CLIP_NODE              (gsk_render_node_types[GSK_ROUNDED_CLIP_NODE])
+#define GSK_TYPE_SHADOW_NODE                    (gsk_render_node_types[GSK_SHADOW_NODE])
+#define GSK_TYPE_BLEND_NODE                     (gsk_render_node_types[GSK_BLEND_NODE])
+#define GSK_TYPE_CROSS_FADE_NODE                (gsk_render_node_types[GSK_CROSS_FADE_NODE])
+#define GSK_TYPE_TEXT_NODE                      (gsk_render_node_types[GSK_TEXT_NODE])
+#define GSK_TYPE_BLUR_NODE                      (gsk_render_node_types[GSK_BLUR_NODE])
+
+/*< private >*/
+GDK_EXTERN_VAR GType gsk_render_node_types[];
+
+typedef struct _GskDebugNode                    GskDebugNode;
+typedef struct _GskColorNode                    GskColorNode;
+typedef struct _GskTextureNode                  GskTextureNode;
+typedef struct _GskLinearGradientNode           GskLinearGradientNode;
+typedef struct _GskRepeatingLinearGradientNode  GskRepeatingLinearGradientNode;
+typedef struct _GskBorderNode                   GskBorderNode;
+typedef struct _GskInsetShadowNode              GskInsetShadowNode;
+typedef struct _GskOutsetShadowNode             GskOutsetShadowNode;
+typedef struct _GskCairoNode                    GskCairoNode;
+typedef struct _GskContainerNode                GskContainerNode;
+typedef struct _GskTransformNode                GskTransformNode;
+typedef struct _GskOpacityNode                  GskOpacityNode;
+typedef struct _GskColorMatrixNode              GskColorMatrixNode;
+typedef struct _GskRepeatNode                   GskRepeatNode;
+typedef struct _GskClipNode                     GskClipNode;
+typedef struct _GskRoundedClipNode              GskRoundedClipNode;
+typedef struct _GskShadowNode                   GskShadowNode;
+typedef struct _GskBlendNode                    GskBlendNode;
+typedef struct _GskCrossFadeNode                GskCrossFadeNode;
+typedef struct _GskTextNode                     GskTextNode;
+typedef struct _GskBlurNode                     GskBlurNode;
+
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_debug_node_new                      (GskRenderNode            *child,
                                                                  char                     *message);
@@ -132,7 +179,8 @@ const graphene_point_t * gsk_linear_gradient_node_peek_end          (GskRenderNo
 GDK_AVAILABLE_IN_ALL
 gsize                    gsk_linear_gradient_node_get_n_color_stops (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
-const GskColorStop *     gsk_linear_gradient_node_peek_color_stops  (GskRenderNode            *node);
+const GskColorStop *     gsk_linear_gradient_node_peek_color_stops  (GskRenderNode            *node,
+                                                                     gsize                    *n_stops);
 
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_repeating_linear_gradient_node_new      (const graphene_rect_t    *bounds,
@@ -151,7 +199,6 @@ GDK_AVAILABLE_IN_ALL
 const float *           gsk_border_node_peek_widths             (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
 const GdkRGBA *         gsk_border_node_peek_colors             (GskRenderNode            *node);
-
 
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_inset_shadow_node_new               (const GskRoundedRect     *outline,
@@ -254,7 +301,6 @@ GskRenderNode *         gsk_clip_node_get_child                 (GskRenderNode  
 GDK_AVAILABLE_IN_ALL
 const graphene_rect_t * gsk_clip_node_peek_clip                 (GskRenderNode            *node);
 
-
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_rounded_clip_node_new               (GskRenderNode            *child,
                                                                  const GskRoundedRect     *clip);
@@ -308,7 +354,8 @@ gboolean                gsk_text_node_has_color_glyphs          (GskRenderNode  
 GDK_AVAILABLE_IN_ALL
 guint                   gsk_text_node_get_num_glyphs            (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
-const PangoGlyphInfo   *gsk_text_node_peek_glyphs               (GskRenderNode            *node);
+const PangoGlyphInfo   *gsk_text_node_peek_glyphs               (GskRenderNode            *node,
+                                                                 guint                    *n_glyphs);
 GDK_AVAILABLE_IN_ALL
 const GdkRGBA *         gsk_text_node_peek_color                (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL

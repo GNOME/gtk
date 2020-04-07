@@ -601,7 +601,7 @@ populate_render_node_properties (GtkListStore  *store,
         const graphene_point_t *start = gsk_linear_gradient_node_peek_start (node);
         const graphene_point_t *end = gsk_linear_gradient_node_peek_end (node);
         const gsize n_stops = gsk_linear_gradient_node_get_n_color_stops (node);
-        const GskColorStop *stops = gsk_linear_gradient_node_peek_color_stops (node);
+        const GskColorStop *stops = gsk_linear_gradient_node_peek_color_stops (node, NULL);
         int i;
         GString *s;
         GdkTexture *texture;
@@ -633,7 +633,7 @@ populate_render_node_properties (GtkListStore  *store,
     case GSK_TEXT_NODE:
       {
         const PangoFont *font = gsk_text_node_peek_font (node);
-        const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node);
+        const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node, NULL);
         const GdkRGBA *color = gsk_text_node_peek_color (node);
         guint num_glyphs = gsk_text_node_get_num_glyphs (node);
         const graphene_point_t *offset = gsk_text_node_get_offset (node);
