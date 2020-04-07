@@ -28,6 +28,7 @@
 
 #include <pango/pangocairo.h>
 #include <atk/atk.h>
+#include  "gtkbuildable.h"
 
 G_BEGIN_DECLS
 
@@ -58,6 +59,27 @@ gchar *_gtk_pango_get_text_after  (PangoLayout     *layout,
 
 PangoAttrList *_gtk_pango_attr_list_merge (PangoAttrList *into,
                                            PangoAttrList *from);
+
+gboolean gtk_buildable_attribute_tag_start (GtkBuildable       *buildable,
+                                            GtkBuilder         *builder,
+                                            GObject            *child,
+                                            const gchar        *tagname,
+                                            GtkBuildableParser *parser,
+                                            gpointer           *data);
+
+typedef struct {
+  GtkBuilder    *builder;
+  GObject       *object;
+  PangoAttrList *attrs;
+} GtkPangoAttributeParserData;
+
+void
+gtk_pango_attribute_start_element (GtkBuildableParseContext  *context,
+                                   const char                *element_name,
+                                   const char               **names,
+                                   const char               **values,
+                                   gpointer                   user_data,
+                                   GError                   **error);
 
 G_END_DECLS
 
