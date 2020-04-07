@@ -138,6 +138,30 @@
  *
  * For all the subnodes added to the text node in various situations,
  * see #GtkText.
+ *
+ * # GtkEntry as GtkBuildable
+ *
+ * The GtkEntry implementation of the GtkBuildable interface supports a
+ * custom <attributes> element, which supports any number of <attribute>
+ * elements. The <attribute> element has attributes named “name“, “value“,
+ * “start“ and “end“ and allows you to specify #PangoAttribute values for
+ * this label.
+ *
+ * An example of a UI definition fragment specifying Pango attributes:
+ * |[
+ * <object class="GtkEnry">
+ *   <attributes>
+ *     <attribute name="weight" value="PANGO_WEIGHT_BOLD"/>
+ *     <attribute name="background" value="red" start="5" end="10"/>
+ *   </attributes>
+ * </object>
+ * ]|
+ *
+ * The start and end attributes specify the range of characters to which the
+ * Pango attribute applies. If start and end are not specified, the attribute is
+ * applied to the whole text. Note that specifying ranges does not make much
+ * sense with translatable attributes. Use markup embedded in the translatable
+ * content instead.
  */
 
 #define MAX_ICONS 2
