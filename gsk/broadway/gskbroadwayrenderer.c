@@ -595,7 +595,7 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
           n = gsk_linear_gradient_node_get_n_color_stops (node);
           add_uint32 (nodes, n);
           for (i = 0; i < n; i++)
-            add_color_stop (nodes, &gsk_linear_gradient_node_peek_color_stops (node)[i]);
+            add_color_stop (nodes, &gsk_linear_gradient_node_peek_color_stops (node, NULL)[i]);
         }
       return;
 
