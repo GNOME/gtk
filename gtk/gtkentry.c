@@ -33,6 +33,8 @@
 #include "gtkadjustment.h"
 #include "gtkbox.h"
 #include "gtkbutton.h"
+#include "gtkbuildable.h"
+#include "gtkbuilderprivate.h"
 #include "gtkcelleditable.h"
 #include "gtkcelllayout.h"
 #include "gtkcssnodeprivate.h"
@@ -273,6 +275,22 @@ static gboolean gtk_entry_query_tooltip      (GtkWidget        *widget,
 static void   gtk_entry_direction_changed    (GtkWidget        *widget,
 					      GtkTextDirection  previous_dir);
 
+static void     gtk_entry_buildable_interface_init   (GtkBuildableIface  *iface);
+static gboolean gtk_entry_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                                      GtkBuilder         *builder,
+                                                      GObject            *child,
+                                                      const gchar        *tagname,
+                                                      GtkBuildableParser *parser,
+                                                      gpointer           *data);
+
+static void     gtk_entry_buildable_custom_finished  (GtkBuildable       *buildable,
+                                                      GtkBuilder         *builder,
+                                                      GObject            *child,
+                                                      const gchar        *tagname,
+                                                      gpointer            user_data);
+
+
+
 
 /* GtkCellEditable method implementations
  */
@@ -293,12 +311,16 @@ static void     gtk_entry_measure (GtkWidget           *widget,
                                    int                 *minimum_baseline,
                                    int                 *natural_baseline);
 
+static GtkBuildableIface *buildable_parent_iface = NULL;
+
 G_DEFINE_TYPE_WITH_CODE (GtkEntry, gtk_entry, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkEntry)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
                                                 gtk_entry_editable_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_EDITABLE,
-                                                gtk_entry_cell_editable_init))
+                                                gtk_entry_cell_editable_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_entry_buildable_interface_init))
 
 static gboolean
 gtk_entry_grab_focus (GtkWidget *widget)
@@ -1278,6 +1300,375 @@ gtk_entry_init (GtkEntry *entry)
   connect_text_signals (entry);
 
   priv->editing_canceled = FALSE;
+}
+
+
+static void
+gtk_entry_buildable_interface_init (GtkBuildableIface *iface)
+{
+  buildable_parent_iface = g_type_interface_peek_parent (iface);
+
+  iface->custom_tag_start = gtk_entry_buildable_custom_tag_start;
+  iface->custom_finished = gtk_entry_buildable_custom_finished;
+}
+
+typedef struct {
+  GtkBuilder    *builder;
+  GObject       *object;
+  PangoAttrList *attrs;
+} PangoParserData;
+
+static PangoAttribute *
+attribute_from_text (GtkBuilder   *builder,
+		     const gchar  *name,
+		     const gchar  *value,
+		     GError      **error)
+{
+  PangoAttribute *attribute = NULL;
+  PangoAttrType   type;
+  PangoLanguage  *language;
+  PangoFontDescription *font_desc;
+  GdkRGBA        *color;
+  GValue          val = G_VALUE_INIT;
+
+  if (!gtk_builder_value_from_string_type (builder, PANGO_TYPE_ATTR_TYPE, name, &val, error))
+    return NULL;
+
+  type = g_value_get_enum (&val);
+  g_value_unset (&val);
+
+  switch (type)
+    {
+      /* PangoAttrLanguage */
+    case PANGO_ATTR_LANGUAGE:
+      if ((language = pango_language_from_string (value)))
+	{
+	  attribute = pango_attr_language_new (language);
+	  g_value_init (&val, G_TYPE_INT);
+	}
+      break;
+      /* PangoAttrInt */
+    case PANGO_ATTR_STYLE:
+      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_STYLE, value, &val, error))
+	attribute = pango_attr_style_new (g_value_get_enum (&val));
+      break;
+    case PANGO_ATTR_WEIGHT:
+      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_WEIGHT, value, &val, error))
+	attribute = pango_attr_weight_new (g_value_get_enum (&val));
+      break;
+    case PANGO_ATTR_VARIANT:
+      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_VARIANT, value, &val, error))
+	attribute = pango_attr_variant_new (g_value_get_enum (&val));
+      break;
+    case PANGO_ATTR_STRETCH:
+      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_STRETCH, value, &val, error))
+	attribute = pango_attr_stretch_new (g_value_get_enum (&val));
+      break;
+    case PANGO_ATTR_UNDERLINE:
+      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_UNDERLINE, value, &val, NULL))
+	attribute = pango_attr_underline_new (g_value_get_enum (&val));
+      else
+        {
+          /* XXX: allow boolean for backwards compat, so ignore error */
+          /* Deprecate this somehow */
+          g_value_unset (&val);
+          if (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, value, &val, error))
+            attribute = pango_attr_underline_new (g_value_get_boolean (&val));
+        }
+      break;
+    case PANGO_ATTR_STRIKETHROUGH:
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, value, &val, error))
+	attribute = pango_attr_strikethrough_new (g_value_get_boolean (&val));
+      break;
+    case PANGO_ATTR_GRAVITY:
+      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_GRAVITY, value, &val, error))
+	attribute = pango_attr_gravity_new (g_value_get_enum (&val));
+      break;
+    case PANGO_ATTR_GRAVITY_HINT:
+      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_GRAVITY_HINT, value, &val, error))
+	attribute = pango_attr_gravity_hint_new (g_value_get_enum (&val));
+      break;
+      /* PangoAttrString */
+    case PANGO_ATTR_FAMILY:
+      attribute = pango_attr_family_new (value);
+      g_value_init (&val, G_TYPE_INT);
+      break;
+
+      /* PangoAttrSize */
+    case PANGO_ATTR_SIZE:
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
+	attribute = pango_attr_size_new (g_value_get_int (&val));
+      break;
+    case PANGO_ATTR_ABSOLUTE_SIZE:
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
+	attribute = pango_attr_size_new_absolute (g_value_get_int (&val));
+      break;
+
+      /* PangoAttrFontDesc */
+    case PANGO_ATTR_FONT_DESC:
+      if ((font_desc = pango_font_description_from_string (value)))
+	{
+	  attribute = pango_attr_font_desc_new (font_desc);
+	  pango_font_description_free (font_desc);
+	  g_value_init (&val, G_TYPE_INT);
+	}
+      break;
+      /* PangoAttrColor */
+    case PANGO_ATTR_FOREGROUND:
+      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_RGBA, value, &val, error))
+	{
+	  color = g_value_get_boxed (&val);
+          attribute = pango_attr_foreground_new (color->red * 65535,
+                                                 color->green * 65535,
+                                                 color->blue * 65535);
+	}
+      break;
+    case PANGO_ATTR_BACKGROUND:
+      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_RGBA, value, &val, error))
+	{
+	  color = g_value_get_boxed (&val);
+          attribute = pango_attr_background_new (color->red * 65535,
+                                                 color->green * 65535,
+                                                 color->blue * 65535);
+	}
+      break;
+    case PANGO_ATTR_UNDERLINE_COLOR:
+      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_RGBA, value, &val, error))
+	{
+	  color = g_value_get_boxed (&val);
+          attribute = pango_attr_underline_color_new (color->red * 65535,
+                                                      color->green * 65535,
+                                                      color->blue * 65535);
+	}
+      break;
+    case PANGO_ATTR_STRIKETHROUGH_COLOR:
+      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_RGBA, value, &val, error))
+	{
+          color = g_value_get_boxed (&val);
+          attribute = pango_attr_strikethrough_color_new (color->red * 65535,
+                                                          color->green * 65535,
+                                                          color->blue * 65535);
+	}
+      break;
+      /* PangoAttrShape */
+    case PANGO_ATTR_SHAPE:
+      /* Unsupported for now */
+      break;
+      /* PangoAttrFloat */
+    case PANGO_ATTR_SCALE:
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_DOUBLE, value, &val, error))
+	attribute = pango_attr_scale_new (g_value_get_double (&val));
+      break;
+    case PANGO_ATTR_LETTER_SPACING:
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
+        attribute = pango_attr_letter_spacing_new (g_value_get_int (&val));
+      break;
+    case PANGO_ATTR_RISE:
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
+        attribute = pango_attr_rise_new (g_value_get_int (&val));
+      break;
+    case PANGO_ATTR_FALLBACK:
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, value, &val, error))
+        attribute = pango_attr_fallback_new (g_value_get_boolean (&val));
+      break;
+    case PANGO_ATTR_FONT_FEATURES:
+      attribute = pango_attr_font_features_new (value);
+      break;
+    case PANGO_ATTR_FOREGROUND_ALPHA:
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
+        attribute = pango_attr_foreground_alpha_new ((guint16)g_value_get_int (&val));
+      break;
+    case PANGO_ATTR_BACKGROUND_ALPHA:
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
+        attribute = pango_attr_background_alpha_new ((guint16)g_value_get_int (&val));
+      break;
+#if PANGO_VERSION_CHECK(1,44,0)
+    case PANGO_ATTR_ALLOW_BREAKS:
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, value, &val, error))
+        attribute = pango_attr_allow_breaks_new (g_value_get_boolean (&val));
+      break;
+    case PANGO_ATTR_SHOW:
+      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_SHOW_FLAGS, value, &val, error))
+	attribute = pango_attr_show_new (g_value_get_flags (&val));
+      break;
+    case PANGO_ATTR_INSERT_HYPHENS:
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, value, &val, error))
+	attribute = pango_attr_insert_hyphens_new (g_value_get_boolean (&val));
+      break;
+#endif
+#if PANGO_VERSION_CHECK(1,45,0)
+    case PANGO_ATTR_OVERLINE:
+      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_OVERLINE, value, &val, NULL))
+	attribute = pango_attr_overline_new (g_value_get_enum (&val));
+      break;
+    case PANGO_ATTR_OVERLINE_COLOR:
+      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_RGBA, value, &val, error))
+	{
+	  color = g_value_get_boxed (&val);
+          attribute = pango_attr_overline_color_new (color->red * 65535,
+                                                     color->green * 65535,
+                                                     color->blue * 65535);
+	}
+      break;
+#endif
+    case PANGO_ATTR_INVALID:
+    default:
+      break;
+    }
+
+  g_value_unset (&val);
+
+  return attribute;
+}
+
+
+static void
+pango_start_element (GtkBuildableParseContext *context,
+                     const gchar              *element_name,
+                     const gchar             **names,
+                     const gchar             **values,
+                     gpointer                  user_data,
+                     GError                  **error)
+{
+  PangoParserData *data = (PangoParserData*)user_data;
+
+  if (strcmp (element_name, "attribute") == 0)
+    {
+      PangoAttribute *attr = NULL;
+      const gchar *name = NULL;
+      const gchar *value = NULL;
+      const gchar *start = NULL;
+      const gchar *end = NULL;
+      guint start_val = 0;
+      guint end_val = G_MAXUINT;
+      GValue val = G_VALUE_INIT;
+
+      if (!_gtk_builder_check_parent (data->builder, context, "attributes", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_STRING, "name", &name,
+                                        G_MARKUP_COLLECT_STRING, "value", &value,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "start", &start,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "end", &end,
+                                        G_MARKUP_COLLECT_INVALID))
+        {
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
+      if (start)
+        {
+          if (!gtk_builder_value_from_string_type (data->builder, G_TYPE_UINT, start, &val, error))
+            {
+              _gtk_builder_prefix_error (data->builder, context, error);
+              return;
+            }
+          start_val = g_value_get_uint (&val);
+          g_value_unset (&val);
+        }
+
+      if (end)
+        {
+          if (!gtk_builder_value_from_string_type (data->builder, G_TYPE_UINT, end, &val, error))
+            {
+              _gtk_builder_prefix_error (data->builder, context, error);
+              return;
+            }
+          end_val = g_value_get_uint (&val);
+          g_value_unset (&val);
+        }
+
+      attr = attribute_from_text (data->builder, name, value, error);
+      if (!attr)
+        {
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
+      attr->start_index = start_val;
+      attr->end_index = end_val;
+
+      if (!data->attrs)
+        data->attrs = pango_attr_list_new ();
+
+      pango_attr_list_insert (data->attrs, attr);
+    }
+  else if (strcmp (element_name, "attributes") == 0)
+    {
+      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_INVALID, NULL, NULL,
+                                        G_MARKUP_COLLECT_INVALID))
+        _gtk_builder_prefix_error (data->builder, context, error);
+    }
+  else
+    {
+      _gtk_builder_error_unhandled_tag (data->builder, context,
+                                        "GtkContainer", element_name,
+                                        error);
+    }
+}
+
+static const GtkBuildableParser pango_parser =
+  {
+    pango_start_element,
+  };
+
+static gboolean
+gtk_entry_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                      GtkBuilder         *builder,
+                                      GObject            *child,
+                                      const gchar        *tagname,
+                                      GtkBuildableParser *parser,
+                                      gpointer           *data)
+{
+  if (buildable_parent_iface->custom_tag_start (buildable, builder, child,
+						tagname, parser, data))
+    return TRUE;
+
+  if (strcmp (tagname, "attributes") == 0)
+    {
+      PangoParserData *parser_data;
+
+      parser_data = g_slice_new0 (PangoParserData);
+      parser_data->builder = g_object_ref (builder);
+      parser_data->object = (GObject *) g_object_ref (buildable);
+      *parser = pango_parser;
+      *data = parser_data;
+      return TRUE;
+    }
+  return FALSE;
+}
+
+static void
+gtk_entry_buildable_custom_finished (GtkBuildable *buildable,
+				     GtkBuilder   *builder,
+				     GObject      *child,
+				     const gchar  *tagname,
+				     gpointer      user_data)
+{
+  PangoParserData *data;
+
+  buildable_parent_iface->custom_finished (buildable, builder, child,
+					   tagname, user_data);
+
+  if (strcmp (tagname, "attributes") == 0)
+    {
+      data = (PangoParserData*)user_data;
+
+      if (data->attrs)
+	{
+	  gtk_entry_set_attributes (GTK_ENTRY (buildable), data->attrs);
+	  pango_attr_list_unref (data->attrs);
+	}
+
+      g_object_unref (data->object);
+      g_object_unref (data->builder);
+      g_slice_free (PangoParserData, data);
+    }
 }
 
 static void

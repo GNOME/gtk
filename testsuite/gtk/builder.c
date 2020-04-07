@@ -1856,6 +1856,84 @@ test_pango_attributes (void)
 }
 
 static void
+test_pango_attributes_entry (void)
+{
+  GtkBuilder *builder;
+  FoundAttrs found = { 0, };
+  const gchar buffer[] =
+    "<interface>"
+    "  <object class=\"GtkEntry\" id=\"entry1\">"
+    "    <attributes>"
+    "      <attribute name=\"weight\" value=\"PANGO_WEIGHT_BOLD\"/>"
+    "      <attribute name=\"foreground\" value=\"DarkSlateGray\"/>"
+    "      <attribute name=\"underline\" value=\"True\"/>"
+    "      <attribute name=\"size\" value=\"4\" start=\"5\" end=\"10\"/>"
+    "      <attribute name=\"font-desc\" value=\"Sans Italic 22\"/>"
+    "      <attribute name=\"language\" value=\"pt_BR\"/>"
+    "    </attributes>"
+    "  </object>"
+    "</interface>";
+  const gchar err_buffer1[] =
+    "<interface>"
+    "  <object class=\"GtkEntry\" id=\"entry1\">"
+    "    <attributes>"
+    "      <attribute name=\"weight\"/>"
+    "    </attributes>"
+    "  </object>"
+    "</interface>";
+  const gchar err_buffer2[] =
+    "<interface>"
+    "  <object class=\"GtkEntry\" id=\"entry1\">"
+    "    <attributes>"
+    "      <attribute name=\"weight\" value=\"PANGO_WEIGHT_BOLD\" unrecognized=\"True\"/>"
+    "    </attributes>"
+    "  </object>"
+    "</interface>";
+
+  GObject *entry;
+  GError  *error = NULL;
+  PangoAttrList *attrs, *filtered;
+  
+  /* Test attributes are set */
+  builder = builder_new_from_string (buffer, -1, NULL);
+  entry = gtk_builder_get_object (builder, "entry1");
+  g_assert (entry != NULL);
+
+  attrs = gtk_entry_get_attributes (GTK_ENTRY (entry));
+  g_assert (attrs != NULL);
+
+  filtered = pango_attr_list_filter (attrs, filter_pango_attrs, &found);
+  g_assert (filtered);
+  pango_attr_list_unref (filtered);
+
+  g_assert (found.weight);
+  g_assert (found.foreground);
+  g_assert (found.underline);
+  g_assert (found.size);
+  g_assert (found.language);
+  g_assert (found.font_desc);
+
+  g_object_unref (builder);
+
+  /* Test errors are set */
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_string (builder, err_buffer1, -1, &error);
+  entry = gtk_builder_get_object (builder, "entry1");
+  g_assert_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_MISSING_ATTRIBUTE);
+  g_object_unref (builder);
+  g_error_free (error);
+  error = NULL;
+
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_string (builder, err_buffer2, -1, &error);
+  entry = gtk_builder_get_object (builder, "entry1");
+
+  g_assert_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE);
+  g_object_unref (builder);
+  g_error_free (error);
+}
+
+static void
 test_requires (void)
 {
   GtkBuilder *builder;
@@ -2526,6 +2604,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/Reference Counting", test_reference_counting);
   g_test_add_func ("/Builder/Window", test_window);
   g_test_add_func ("/Builder/PangoAttributes", test_pango_attributes);
+  g_test_add_func ("/Builder/PangoAttributesEntry", test_pango_attributes_entry);
   g_test_add_func ("/Builder/Requires", test_requires);
   g_test_add_func ("/Builder/AddObjects", test_add_objects);
   g_test_add_func ("/Builder/MessageArea", test_message_area);
