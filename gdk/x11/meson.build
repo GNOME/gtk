@@ -1,36 +1,44 @@
+# A list of sources that contain public API; these are the sources that
+# will be introspected for the GdkX11 namespace.
+#
 # Note: gdksettings.c gets included from xsettings-client.c, do not add here
-gdk_x11_sources = files([
-  'gdkapplaunchcontext-x11.c',
-  'gdkasync.c',
-  'gdkcairocontext-x11.c',
-  'gdkclipboard-x11.c',
+gdk_x11_public_sources = files([
   'gdkcursor-x11.c',
   'gdkdevice-xi2.c',
   'gdkdevicemanager-x11.c',
   'gdkdevicemanager-xi2.c',
   'gdkdisplay-x11.c',
-  'gdkdrag-x11.c',
-  'gdkdrop-x11.c',
-  'gdkeventsource.c',
-  'gdkeventtranslator.c',
   'gdkglcontext-x11.c',
   'gdkkeys-x11.c',
-  'gdkmain-x11.c',
   'gdkmonitor-x11.c',
   'gdkproperty-x11.c',
   'gdkscreen-x11.c',
   'gdkselection-x11.c',
-  'gdkselectioninputstream-x11.c',
-  'gdkselectionoutputstream-x11.c',
-  'gdktextlistconverter-x11.c',
   'gdkvisual-x11.c',
-  'gdkvulkancontext-x11.c',
   'gdksurface-x11.c',
-  'gdkxftdefaults.c',
   'gdkxid.c',
   'xsettings-client.c',
 ])
 
+# All sources
+gdk_x11_sources = gdk_x11_public_sources + [
+  'gdkapplaunchcontext-x11.c',
+  'gdkasync.c',
+  'gdkcairocontext-x11.c',
+  'gdkclipboard-x11.c',
+  'gdkdrag-x11.c',
+  'gdkdrop-x11.c',
+  'gdkeventsource.c',
+  'gdkeventtranslator.c',
+  'gdkmain-x11.c',
+  'gdkselectioninputstream-x11.c',
+  'gdkselectionoutputstream-x11.c',
+  'gdktextlistconverter-x11.c',
+  'gdkvulkancontext-x11.c',
+  'gdkxftdefaults.c',
+]
+
+# Public headers; will be installed and introspected
 gdk_x11_public_headers = files([
   'gdkx-autocleanups.h',
   'gdkx11applaunchcontext.h',

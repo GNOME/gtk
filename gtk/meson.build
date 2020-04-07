@@ -1044,7 +1044,7 @@ if build_gir
 
   if x11_enabled
     gdk_x11_gir = gnome.generate_gir(libgtk,
-                                     sources: gdk_x11_public_headers + gdk_x11_sources,
+                                     sources: gdk_x11_public_headers + gdk_x11_public_sources,
                                      namespace: 'GdkX11',
                                      nsversion: gtk_api_version,
                                      identifier_prefix: 'Gdk',

@@ -18,10 +18,6 @@
 #ifndef __GDK_X11_KEYS_H__
 #define __GDK_X11_KEYS_H__
 
-#if !defined (__GDKX_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gdk/x11/gdkx.h> can be included directly."
-#endif
-
 #include <gdk/gdk.h>
 #include <gdk/gdkkeysprivate.h>
 
@@ -41,7 +37,6 @@ typedef struct _GdkX11KeymapClass GdkX11KeymapClass;
 #define GDK_IS_X11_KEYMAP_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_X11_KEYMAP))
 #define GDK_X11_KEYMAP_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_X11_KEYMAP, GdkX11KeymapClass))
 
-GDK_AVAILABLE_IN_ALL
 GType gdk_x11_keymap_get_type (void);
 
 gint gdk_x11_keymap_get_group_for_state (GdkKeymap *keymap,
