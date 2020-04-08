@@ -140,6 +140,8 @@ gtk_container_class_init (GtkContainerClass *class)
   widget_class->destroy = gtk_container_destroy;
   widget_class->compute_expand = gtk_container_compute_expand;
   widget_class->get_request_mode = gtk_container_get_request_mode;
+  widget_class->grab_focus = gtk_widget_grab_focus_none;
+  widget_class->focus = gtk_widget_focus_child;
 
   class->add = gtk_container_add_unimplemented;
   class->remove = gtk_container_remove_unimplemented;

@@ -32,6 +32,7 @@
 #include "gtkselectionmodel.h"
 #include "gtkstack.h"
 #include "gtkprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gtkintl.h"
 
 /**
@@ -388,6 +389,9 @@ gtk_stack_sidebar_class_init (GtkStackSidebarClass *klass)
   object_class->finalize = gtk_stack_sidebar_finalize;
   object_class->set_property = gtk_stack_sidebar_set_property;
   object_class->get_property = gtk_stack_sidebar_get_property;
+
+  widget_class->grab_focus = gtk_widget_grab_focus_none;
+  widget_class->focus = gtk_widget_focus_child;
 
   obj_properties[PROP_STACK] =
       g_param_spec_object (I_("stack"), P_("Stack"),

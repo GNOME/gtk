@@ -30,6 +30,7 @@
 #include "gtknative.h"
 #include "gtkpicture.h"
 #include "gtkrevealer.h"
+#include "gtkwidgetprivate.h"
 
 /**
  * SECTION:gtkvideo
@@ -252,6 +253,8 @@ gtk_video_class_init (GtkVideoClass *klass)
   widget_class->unrealize = gtk_video_unrealize;
   widget_class->map = gtk_video_map;
   widget_class->unmap = gtk_video_unmap;
+  widget_class->grab_focus = gtk_widget_grab_focus_none;
+  widget_class->focus = gtk_widget_focus_child;
 
   gobject_class->dispose = gtk_video_dispose;
   gobject_class->get_property = gtk_video_get_property;
