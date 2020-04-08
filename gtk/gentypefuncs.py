@@ -43,28 +43,46 @@ for filename in in_files:
     for line in f:
       line = line.rstrip('\n').rstrip('\r')
       # print line
-      match = re.search(r'\bg[tds]k_[a-zA-Z0-9_]*_get_type\b', line)
+      match = re.search(r'\bg[dst]k_[a-zA-Z0-9_]*_get_type\b', line)
       if match:
         func = match.group(0)
         if not func in funcs:
           funcs.append(func)
           if debug: print ('Found ', func)
 
-file_output = 'G_GNUC_BEGIN_IGNORE_DEPRECATIONS\n'
+file_output = ['G_GNUC_BEGIN_IGNORE_DEPRECATIONS']
 
 funcs = sorted(funcs)
 
 for f in funcs:
-  if f.startswith('gdk_x11') or f.startswith('gtk_socket') or f.startswith('gtk_plug'):
-    file_output += '#ifdef GDK_WINDOWING_X11\n'
-    file_output += '*tp++ = {0}();\n'.format(f)
-    file_output += '#endif\n'
+  if f.startswith('gdk_x11'):
+    file_output += ['#ifdef GDK_WINDOWING_X11']
+    file_output += ['*tp++ = {0}();'.format(f)]
+    file_output += ['#endif']
+  elif f.startswith('gdk_broadway'):
+    file_output += ['#ifdef GDK_WINDOWING_BROADWAY']
+    file_output += ['*tp++ = {0}();'.format(f)]
+    file_output += ['#endif']
+  elif f.startswith('gdk_wayland'):
+    file_output += ['#ifdef GDK_WINDOWING_WAYLAND']
+    file_output += ['*tp++ = {0}();'.format(f)]
+    file_output += ['#endif']
+  elif f.startswith('gdk_win32'):
+    file_output += ['#ifdef GDK_WINDOWING_WIN32']
+    file_output += ['*tp++ = {0}();'.format(f)]
+    file_output += ['#endif']
+  elif f.startswith('gdk_quartz'):
+    file_output += ['#ifdef GDK_WINDOWING_QUARTZ']
+    file_output += ['*tp++ = {0}();'.format(f)]
+    file_output += ['#endif']
   else:
-    file_output += '*tp++ = {0}();\n'.format(f)
+    file_output += ['*tp++ = {0}();'.format(f)]
+
+file_output += ['G_GNUC_END_IGNORE_DEPRECATIONS']
 
 if debug: print (len(funcs), 'functions')
 
 tmp_file = out_file + '~'
 with open(tmp_file, 'w') as f:
-    f.write(file_output)
+    f.write('\n'.join(file_output))
 replace_if_changed(tmp_file, out_file)

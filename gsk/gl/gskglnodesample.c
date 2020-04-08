@@ -25,7 +25,7 @@ node_sample_add (NodeSample    *self,
   g_assert (node_type <= N_NODE_TYPES);
 
   if (self->nodes[node_type].class_name == NULL)
-    self->nodes[node_type].class_name = node->node_class->type_name;
+    self->nodes[node_type].class_name = g_type_name_from_instance ((GTypeInstance *) node); 
 
   self->nodes[node_type].count ++;
   self->count ++;

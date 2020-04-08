@@ -557,4 +557,26 @@ struct _GdkKeymapKey
 
 G_END_DECLS
 
+/*< private >
+ * GDK_EXTERN_VAR:
+ *
+ * A macro to annotate extern variables so that they show up properly in
+ * Windows DLLs.
+ */
+#ifndef GDK_EXTERN_VAR
+#  ifdef G_PLATFORM_WIN32
+#    ifdef GTK_COMPILATION
+#      ifdef DLL_EXPORT
+#        define GDK_EXTERN_VAR __declspec(dllexport)
+#      else /* !DLL_EXPORT */
+#        define GDK_EXTERN_VAR extern
+#      endif /* !DLL_EXPORT */
+#    else /* !GTK_COMPILATION */
+#      define GDK_EXTERN_VAR extern __declspec(dllimport)
+#    endif /* !GTK_COMPILATION */
+#  else /* !G_PLATFORM_WIN32 */
+#    define GDK_EXTERN_VAR _GDK_EXTERN
+#  endif /* !G_PLATFORM_WIN32 */
+#endif /* GDK_EXTERN_VAR */
+
 #endif /* __GDK_TYPES_H__ */
