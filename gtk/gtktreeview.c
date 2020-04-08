@@ -1707,7 +1707,6 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   GtkEventController **controllers;
   guint n_controllers, i;
 
-  gtk_widget_set_can_focus (GTK_WIDGET (tree_view), TRUE);
   gtk_widget_set_overflow (GTK_WIDGET (tree_view), GTK_OVERFLOW_HIDDEN);
 
   tree_view->show_expanders = TRUE;

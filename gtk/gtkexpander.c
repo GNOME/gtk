@@ -385,8 +385,6 @@ gtk_expander_init (GtkExpander *expander)
   GtkGesture *gesture;
   GtkEventController *controller;
 
-  gtk_widget_set_can_focus (GTK_WIDGET (expander), TRUE);
-
   priv->label_widget = NULL;
   priv->child = NULL;
 

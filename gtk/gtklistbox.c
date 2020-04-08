@@ -3430,8 +3430,6 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
 static void
 gtk_list_box_row_init (GtkListBoxRow *row)
 {
-  gtk_widget_set_can_focus (GTK_WIDGET (row), TRUE);
-
   ROW_PRIV (row)->activatable = TRUE;
   ROW_PRIV (row)->selectable = TRUE;
 

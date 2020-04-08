@@ -1387,8 +1387,6 @@ gtk_notebook_init (GtkNotebook *notebook)
   GtkLayoutManager *layout;
   GtkDropTarget *dest;
 
-  gtk_widget_set_can_focus (GTK_WIDGET (notebook), TRUE);
-
   notebook->cur_page = NULL;
   notebook->children = NULL;
   notebook->first_tab = NULL;
@@ -6087,8 +6085,6 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
 
   if (!show_tabs)
     {
-      gtk_widget_set_can_focus (GTK_WIDGET (notebook), FALSE);
-
       while (children)
         {
           page = children->data;
@@ -6106,7 +6102,6 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
     }
   else
     {
-      gtk_widget_set_can_focus (GTK_WIDGET (notebook), TRUE);
       gtk_notebook_update_labels (notebook);
       gtk_widget_show (notebook->header_widget);
     }
