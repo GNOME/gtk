@@ -11,32 +11,6 @@ $menu_radius: 5px;
 $window_radius: $button_radius + 3;
 $popover_radius: $button_radius + 4;
 
-button:focus(visible),
-checkbutton:focus(visible),
-radiobutton:focus(visible),
-switch:focus(visible),
-label:focus(visible),
-row:focus(visible),
-flowboxchild:focus(visible) {
-  // We use the outline properties to signal the focus properties
-  // to the adwaita engine: using real CSS properties is faster,
-  // and we don't use any outlines for now.
-
-  outline-color: gtkalpha(currentColor, 0.3);
-  outline-style: dashed;
-  outline-offset: -3px;
-  outline-width: 1px;
-}
-
-// Widgets that draw their focus indicator outset and not inset
-scale:focus(visible) > trough {
-  outline-color: gtkalpha(currentColor, 0.3);
-  outline-style: dashed;
-  outline-offset: 2px;
-  outline-width: 1px;
-}
-
-
 /***************
  * Base States *
  ***************/
@@ -62,6 +36,86 @@ dnd {
 
 .large-icons {
   -gtk-icon-size: 32px;
+}
+
+/*********
+ * Outlines *
+ ********/
+
+label:focus(visible),
+row:focus(visible),
+flowboxchild:focus(visible) {
+  // We use the outline properties to signal the focus properties
+  // to the adwaita engine: using real CSS properties is faster,
+  // and we don't use any outlines for now.
+
+  outline-color: $focus_border_color;
+  outline-style: solid;
+  outline-offset: -1px;
+  outline-width: 2px;
+  :selected & { outline-color: $alt_focus_border_color; }
+}
+
+// Widgets that draw their focus indicator outset and not inset
+scale:focus(visible) > trough {
+  outline-color: $focus_border_color;
+  outline-style: solid;
+  outline-offset: 10px;
+  outline-width: 2px;
+}
+
+button:focus(visible), modelbutton:focus(visible) {
+  outline-color: $focus_border_color;
+  outline-style: solid;
+  outline-offset: -2px;
+  outline-width: 2px;
+
+  row:selected & { outline-color: $alt_focus_border_color; }
+
+  &.suggested-action, &.destructive-action { &, &:hover, &:active { outline-color: $alt_focus_border_color; } }
+}
+
+// Draw the "outline" around the whole switch not the slider
+switch:focus(visible) {
+  &, &:hover { slider { outline-color: transparent; } }
+  &:focus {
+    box-shadow: 0 0 0 3px if($variant=='light', lighten(opacify($focus_border_color, 1), 20%), $focus_border_color);
+  }
+  row:selected & { outline-color: $alt_focus_border_color; }
+}
+
+checkbutton:focus(visible),
+radiobutton:focus(visible) {
+  outline-color: $focus_border_color;
+  outline-style: solid;
+  outline-offset: 1px;
+  outline-width: 2px;
+  row:selected & , treeview:selected & { outline-color: $alt_focus_border_color; }
+}
+
+row:focus(visible) {
+  outline-color: $focus_border_color;
+  outline-offset: -2px;
+  outline-style: solid;
+  &:selected {
+    outline-color: $alt_focus_border_color;
+  }
+}
+
+treeview:focus(visible) {
+  outline-color: $focus_border_color;
+  outline-style: solid;
+  outline-width: 2px;
+  &:selected {
+    outline-color: $alt_focus_border_color;
+  }
+}
+
+notebook:focus(visible) {
+  outline-color: $focus_border_color;
+  outline-style: solid;
+  outline-offset: -1px;
+  outline-width: 2px;
 }
 
 /*
@@ -149,8 +203,6 @@ flowbox {
 
     &:selected {
       @extend %selected_items;
-
-      outline-offset: -2px;
     }
   }
 }
@@ -786,8 +838,6 @@ button {
     // child, a label needs just lateral padding while an icon needs vertical
     // padding added too.
 
-    outline-offset: -3px; // needs to be set or it gets overriden by GtkRadioButton outline-offset
-
     > label {
       padding-left: 6px;  // label padding
       padding-right: 6px; //
@@ -928,7 +978,6 @@ modelbutton.flat {
   padding-left: 5px;
   padding-right: 5px;
   border-radius: $button_radius;
-  outline-offset: -2px;
 
   @extend %undecorated_button;
 
@@ -2018,8 +2067,6 @@ notebook {
       min-width: 30px;
       padding: 3px 12px;
 
-      outline-offset: -5px;
-
       color: $insensitive_fg_color;
       font-weight: bold;
 
@@ -2243,7 +2290,6 @@ treeview ~ scrollbar.vertical {
 switch {
   font-weight: bold;
   font-size: smaller;
-  outline-offset: -4px;
 
   // similar to the .scale
   border: 1px solid $borders_color;
@@ -2382,7 +2428,6 @@ switch {
 checkbutton.text-button, radiobutton.text-button {
   // this is for a nice focus on check and radios text
   padding: 2px 0;
-  outline-offset: 0;
   border-spacing: 4px;
 }
 
@@ -2628,8 +2673,6 @@ scale {
   // the backing bit
   > trough {
     @extend %scale_trough;
-
-    outline-offset: 2px;
   }
 
   // the colored part of the backing bit
@@ -4285,8 +4328,6 @@ button.emoji-section {
   background: none;
   box-shadow: none;
   text-shadow: none;
-
-  outline-offset: -5px;
 
   &:dir(ltr):not(:last-child) { margin-right: 0; }
   &:dir(rtl):not(:last-child) { margin-left: 0; }
