@@ -408,7 +408,6 @@ gtk_button_init (GtkButton *button)
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
   GtkEventController *key_controller;
 
-  gtk_widget_set_can_focus (GTK_WIDGET (button), TRUE);
   gtk_widget_set_receives_default (GTK_WIDGET (button), TRUE);
 
   priv->in_button = FALSE;
