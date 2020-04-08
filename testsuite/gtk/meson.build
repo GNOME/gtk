@@ -157,14 +157,13 @@ if add_languages('cpp', required: false)
   endif
 endif
 
+
 focus_chain_tests = [
   # test     direction
   [ 'basic', 'tab' ],
   [ 'basic', 'tab-backward' ],
   [ 'basic', 'left' ],
   [ 'basic', 'right' ],
-  [ 'focusable-container', 'tab' ],
-  [ 'focusable-container', 'tab-backward' ],
   [ 'widget-factory', 'tab' ],
   [ 'widget-factory', 'tab-backward' ],
   [ 'widget-factory', 'up' ],
