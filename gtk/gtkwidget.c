@@ -586,7 +586,6 @@ static void	gtk_widget_real_size_allocate    (GtkWidget         *widget,
 static void	gtk_widget_real_direction_changed(GtkWidget         *widget,
                                                   GtkTextDirection   previous_direction);
 
-static gboolean	gtk_widget_real_grab_focus	 (GtkWidget         *focus_widget);
 static gboolean gtk_widget_real_query_tooltip    (GtkWidget         *widget,
 						  gint               x,
 						  gint               y,
@@ -595,8 +594,6 @@ static gboolean gtk_widget_real_query_tooltip    (GtkWidget         *widget,
 static void     gtk_widget_real_css_changed      (GtkWidget         *widget,
                                                   GtkCssStyleChange *change);
 
-static gboolean		gtk_widget_real_focus			(GtkWidget        *widget,
-								 GtkDirectionType  direction);
 static void             gtk_widget_real_move_focus              (GtkWidget        *widget,
                                                                  GtkDirectionType  direction);
 static gboolean		gtk_widget_real_keynav_failed		(GtkWidget        *widget,
@@ -906,8 +903,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->grab_notify = gtk_widget_real_grab_notify;
   klass->snapshot = gtk_widget_real_snapshot;
   klass->mnemonic_activate = gtk_widget_real_mnemonic_activate;
-  klass->grab_focus = gtk_widget_real_grab_focus;
-  klass->focus = gtk_widget_real_focus;
+  klass->grab_focus = gtk_widget_grab_focus_self;
+  klass->focus = gtk_widget_focus_all;
   klass->move_focus = gtk_widget_real_move_focus;
   klass->keynav_failed = gtk_widget_real_keynav_failed;
   klass->query_tooltip = gtk_widget_real_query_tooltip;
@@ -4740,25 +4737,34 @@ gtk_widget_grab_focus (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   if (!gtk_widget_is_sensitive (widget) ||
+      !gtk_widget_get_can_focus (widget) ||
       widget->priv->root == NULL)
     return FALSE;
 
   return GTK_WIDGET_GET_CLASS (widget)->grab_focus (widget);
 }
 
-static gboolean
-gtk_widget_real_grab_focus (GtkWidget *focus_widget)
+gboolean
+gtk_widget_grab_focus_none (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (focus_widget);
+  return FALSE;
+}
+
+gboolean
+gtk_widget_grab_focus_self (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  gtk_root_set_focus (priv->root, widget);
+  return TRUE;
+}
+
+gboolean
+gtk_widget_grab_focus_child (GtkWidget *widget)
+{
   GtkWidget *child;
 
-  if (priv->can_focus)
-    {
-      gtk_root_set_focus (priv->root, focus_widget);
-      return TRUE;
-    }
-
-  for (child = _gtk_widget_get_first_child (focus_widget);
+  for (child = _gtk_widget_get_first_child (widget);
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
@@ -4877,20 +4883,11 @@ direction_is_forward (GtkDirectionType direction)
     }
 }
 
-static gboolean
-gtk_widget_real_focus (GtkWidget         *widget,
-                       GtkDirectionType   direction)
+gboolean
+gtk_widget_focus_all (GtkWidget        *widget,
+                      GtkDirectionType  direction)
 {
   GtkWidget *focus;
-
-  /* The easy case: not focusable. Just try the children */
-  if (!gtk_widget_get_can_focus (widget))
-    {
-      if (gtk_widget_focus_move (widget, direction))
-        return TRUE;
-
-      return FALSE;
-    }
 
   /* For focusable widgets, we want to focus the widget
    * before its children. We differentiate 3 cases:
@@ -4932,6 +4929,32 @@ gtk_widget_real_focus (GtkWidget         *widget,
 
   gtk_widget_grab_focus (widget);
   return TRUE;
+}
+
+gboolean
+gtk_widget_focus_self (GtkWidget         *widget,
+                       GtkDirectionType   direction)
+{
+  if (!gtk_widget_is_focus (widget))
+    {
+      gtk_widget_grab_focus (widget);
+      return TRUE;
+    }
+  return FALSE;
+}
+
+gboolean
+gtk_widget_focus_child (GtkWidget         *widget,
+                        GtkDirectionType   direction)
+{
+  return gtk_widget_focus_move (widget, direction);
+}
+
+gboolean
+gtk_widget_focus_none (GtkWidget        *widget,
+                       GtkDirectionType  direction)
+{
+  return FALSE;
 }
 
 static void
