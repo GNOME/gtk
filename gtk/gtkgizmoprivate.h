@@ -30,15 +30,20 @@ typedef void    (* GtkGizmoSnapshotFunc)  (GtkGizmo    *gizmo,
 typedef gboolean (* GtkGizmoContainsFunc) (GtkGizmo  *gizmo,
                                            double     x,
                                            double     y);
+typedef gboolean (* GtkGizmoFocusFunc)    (GtkGizmo         *gizmo,
+                                           GtkDirectionType  direction);
+typedef gboolean (* GtkGizmoGrabFocusFunc)(GtkGizmo         *gizmo);
 
 struct _GtkGizmo
 {
   GtkWidget parent_instance;
 
-  GtkGizmoMeasureFunc  measure_func;
-  GtkGizmoAllocateFunc allocate_func;
-  GtkGizmoSnapshotFunc snapshot_func;
-  GtkGizmoContainsFunc contains_func;
+  GtkGizmoMeasureFunc   measure_func;
+  GtkGizmoAllocateFunc  allocate_func;
+  GtkGizmoSnapshotFunc  snapshot_func;
+  GtkGizmoContainsFunc  contains_func;
+  GtkGizmoFocusFunc     focus_func;
+  GtkGizmoGrabFocusFunc grab_focus_func;
 };
 
 struct _GtkGizmoClass
@@ -48,11 +53,13 @@ struct _GtkGizmoClass
 
 GType      gtk_gizmo_get_type (void) G_GNUC_CONST;
 
-GtkWidget *gtk_gizmo_new (const char          *css_name,
-                          GtkGizmoMeasureFunc  measure_func,
-                          GtkGizmoAllocateFunc allocate_func,
-                          GtkGizmoSnapshotFunc snapshot_func,
-                          GtkGizmoContainsFunc contains_func);
+GtkWidget *gtk_gizmo_new (const char            *css_name,
+                          GtkGizmoMeasureFunc    measure_func,
+                          GtkGizmoAllocateFunc   allocate_func,
+                          GtkGizmoSnapshotFunc   snapshot_func,
+                          GtkGizmoContainsFunc   contains_func,
+                          GtkGizmoFocusFunc      focus_func,
+                          GtkGizmoGrabFocusFunc  grab_focus_func);
 
 
 #endif

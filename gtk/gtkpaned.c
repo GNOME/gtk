@@ -1390,7 +1390,7 @@ gtk_paned_init (GtkPaned *paned)
   gtk_widget_add_controller (GTK_WIDGET (paned), GTK_EVENT_CONTROLLER (gesture));
   priv->drag_gesture = gesture;
 
-  priv->handle_widget = gtk_gizmo_new ("separator", NULL, NULL, gtk_paned_render_handle, gtk_paned_handle_contains);
+  priv->handle_widget = gtk_gizmo_new ("separator", NULL, NULL, gtk_paned_render_handle, gtk_paned_handle_contains, NULL, NULL);
   gtk_widget_set_parent (priv->handle_widget, GTK_WIDGET (paned));
   gtk_widget_set_cursor_from_name (priv->handle_widget, "col-resize");
 }
