@@ -1715,7 +1715,8 @@ gtk_scale_add_mark (GtkScale        *scale,
                                                   gtk_scale_measure_marks,
                                                   gtk_scale_allocate_marks,
                                                   NULL,
-                                                  NULL);
+                                                  NULL,
+                                                  NULL, NULL);
 
           gtk_widget_insert_after (priv->top_marks_widget,
                                    GTK_WIDGET (scale),
@@ -1734,7 +1735,8 @@ gtk_scale_add_mark (GtkScale        *scale,
                                                      gtk_scale_measure_marks,
                                                      gtk_scale_allocate_marks,
                                                      NULL,
-                                                     NULL);
+                                                     NULL,
+                                                     NULL, NULL);
 
           gtk_widget_insert_before (priv->bottom_marks_widget,
                                     GTK_WIDGET (scale),
@@ -1746,10 +1748,10 @@ gtk_scale_add_mark (GtkScale        *scale,
       marks_widget = priv->bottom_marks_widget;
     }
 
-  mark->widget = gtk_gizmo_new ("mark", gtk_scale_measure_mark, gtk_scale_allocate_mark, NULL, NULL);
+  mark->widget = gtk_gizmo_new ("mark", gtk_scale_measure_mark, gtk_scale_allocate_mark, NULL, NULL, NULL, NULL);
   g_object_set_data (G_OBJECT (mark->widget), "mark", mark);
 
-  mark->indicator_widget = gtk_gizmo_new ("indicator", NULL, NULL, NULL, NULL);
+  mark->indicator_widget = gtk_gizmo_new ("indicator", NULL, NULL, NULL, NULL, NULL, NULL);
   gtk_widget_set_parent (mark->indicator_widget, mark->widget);
   if (mark->markup && *mark->markup)
     {

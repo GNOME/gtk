@@ -1412,17 +1412,19 @@ gtk_notebook_init (GtkNotebook *notebook)
   notebook->has_scrolled = FALSE;
 
   notebook->header_widget = g_object_new (GTK_TYPE_BOX,
-                                      "css-name", "header",
-                                      NULL);
+                                          "css-name", "header",
+                                          NULL);
   gtk_widget_add_css_class (notebook->header_widget, GTK_STYLE_CLASS_TOP);
   gtk_widget_hide (notebook->header_widget);
   gtk_widget_set_parent (notebook->header_widget, GTK_WIDGET (notebook));
 
   notebook->tabs_widget = gtk_gizmo_new ("tabs",
-                                     gtk_notebook_measure_tabs,
-                                     gtk_notebook_allocate_tabs,
-                                     gtk_notebook_snapshot_tabs,
-                                     NULL);
+                                         gtk_notebook_measure_tabs,
+                                         gtk_notebook_allocate_tabs,
+                                         gtk_notebook_snapshot_tabs,
+                                         NULL,
+                                         (GtkGizmoFocusFunc)gtk_widget_focus_self,
+                                         (GtkGizmoGrabFocusFunc)gtk_widget_grab_focus_self);
   gtk_widget_set_hexpand (notebook->tabs_widget, TRUE);
   gtk_container_add (GTK_CONTAINER (notebook->header_widget), notebook->tabs_widget);
 
@@ -3981,7 +3983,7 @@ gtk_notebook_insert_notebook_page (GtkNotebook *notebook,
   else
   sibling = notebook->arrow_widget[ARROW_RIGHT_AFTER];
 
-  page->tab_widget = gtk_gizmo_new ("tab", measure_tab, allocate_tab, NULL, NULL);
+  page->tab_widget = gtk_gizmo_new ("tab", measure_tab, allocate_tab, NULL, NULL, NULL, NULL);
   g_object_set_data (G_OBJECT (page->tab_widget), "notebook", notebook);
   gtk_widget_insert_before (page->tab_widget, notebook->tabs_widget, sibling);
   controller = gtk_drop_controller_motion_new ();
