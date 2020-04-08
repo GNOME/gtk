@@ -1973,9 +1973,9 @@ render_node_print (Printer       *p,
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_LINEAR_GRADIENT_NODE:
       {
-        const guint n_stops = gsk_linear_gradient_node_get_n_color_stops (node);
-        const GskColorStop *stops = gsk_linear_gradient_node_peek_color_stops (node);
-        int i;
+        const gsize n_stops = gsk_linear_gradient_node_get_n_color_stops (node);
+        const GskColorStop *stops = gsk_linear_gradient_node_peek_color_stops (node, NULL);
+        gsize i;
 
         if (gsk_render_node_get_node_type (node) == GSK_REPEATING_LINEAR_GRADIENT_NODE)
           start_node (p, "repeating-linear-gradient");
@@ -2229,7 +2229,7 @@ render_node_print (Printer       *p,
     case GSK_TEXT_NODE:
       {
         const guint n_glyphs = gsk_text_node_get_num_glyphs (node);
-        const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node);
+        const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node, NULL);
         const graphene_point_t *offset = gsk_text_node_get_offset (node);
         const GdkRGBA *color = gsk_text_node_peek_color (node);
         PangoFont *font = gsk_text_node_peek_font (node);
@@ -2449,7 +2449,7 @@ render_node_print (Printer       *p,
       break;
 
     default:
-      g_error ("Unhandled node: %s", node->node_class->type_name);
+      g_error ("Unhandled node: %s", g_type_name_from_instance ((GTypeInstance *) node));
       break;
     }
 }
