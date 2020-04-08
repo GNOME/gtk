@@ -76,5 +76,5 @@ $progress_border_color: $selected_borders_color;
 $checkradio_bg_color: if($variant == 'light', $selected_bg_color, lighten($selected_bg_color,10%));
 $checkradio_fg_color: $selected_fg_color;
 $checkradio_borders_color: if($variant == 'light', darken($checkradio_bg_color,20%), darken($checkradio_bg_color,40%));
-$focus_border_color: transparentize(#3584e4, 0.3);
-$coloured_focus_border_color: transparentize(white, 0.3);
+$focus_border_color: if($variant == 'light', transparentize($selected_bg_color, 0.5), transparentize($selected_bg_color, 0.3));
+$alt_focus_border_color: transparentize(white, 0.5);
