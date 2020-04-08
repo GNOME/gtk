@@ -459,10 +459,11 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
                                        NULL,
                                        allocate_trough,
                                        NULL,
-                                       NULL);
+                                       NULL,
+                                       NULL, NULL);
   gtk_widget_set_parent (priv->trough_widget, GTK_WIDGET (pbar));
 
-  priv->progress_widget = gtk_gizmo_new ("progress", NULL, NULL, NULL, NULL);
+  priv->progress_widget = gtk_gizmo_new ("progress", NULL, NULL, NULL, NULL, NULL, NULL);
   gtk_widget_set_parent (priv->progress_widget, priv->trough_widget);
 
   /* horizontal is default */
