@@ -36,7 +36,7 @@ How do I get started with GTK+?
 
 <answer><para>
 The GTK+ <ulink url="https://www.gtk.org">website</ulink> offers some
-<ulink url="https://www.gtk.org/documentation.php">tutorials</ulink> and other
+<ulink url="https://www.gtk.org/docs/">tutorials</ulink> and other
 documentation (most of it about GTK+ 2.x, but mostly still applicable).
 More documentation ranging from whitepapers to online books can be found at
 the <ulink url="https://developer.gnome.org">GNOME developer's site</ulink>.
@@ -77,7 +77,7 @@ specific widgets and functions.
 <para>
 If you have a question not covered in the manual, feel free to
 ask on the mailing lists and please <ulink
-url="https://bugzilla.gnome.org">file a bug report</ulink> against the
+url="https://gitlab.gnome.org/GNOME/gtk/issues/new">file a bug report</ulink> against the
 documentation.
 </para>
 
@@ -105,8 +105,8 @@ state (explained in its documentation).
 For strings returned from functions, they will be declared "const"
 if they should not be freed. Non-const strings should be
 freed with g_free(). Arrays follow the same rule. If you find an
-undocumented exception to the rules, please report a bug to <ulink
-url="https://bugzilla.gnome.org">https://bugzilla.gnome.org</ulink>.
+undocumented exception to the rules, please report a bug on <ulink
+url="https://gitlab.gnome.org/GNOME/gtk/issues/new">GitLab</ulink>.
 </para>
 
 </answer>
@@ -415,7 +415,7 @@ How do I use GTK+ with other non-C languages?
 
 <answer>
 <para>
-See the <ulink url="https://www.gtk.org/language-bindings.php">list of language
+See the <ulink url="https://www.gtk.org/docs/language-bindings/">list of language
 bindings</ulink> on <ulink
 url="https://www.gtk.org">https://www.gtk.org</ulink>.
 </para>
