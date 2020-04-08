@@ -847,7 +847,9 @@ gtk_popover_init (GtkPopover *popover)
                            G_CALLBACK (node_style_changed_cb), popover, 0);
   g_object_unref (priv->arrow_node);
 
-  priv->contents_widget = gtk_gizmo_new ("contents", NULL, NULL, NULL, NULL);
+  priv->contents_widget = gtk_gizmo_new ("contents", NULL, NULL, NULL, NULL,
+                                         (GtkGizmoFocusFunc)gtk_widget_focus_child,
+                                         (GtkGizmoGrabFocusFunc)gtk_widget_grab_focus_child);
   gtk_widget_set_layout_manager (priv->contents_widget, gtk_bin_layout_new ());
   gtk_widget_set_parent (priv->contents_widget, GTK_WIDGET (popover));
 
