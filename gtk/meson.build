@@ -1001,6 +1001,7 @@ build_gir = get_option('introspection')
 if build_gir
   gir_args = [
     '-DGTK_COMPILATION',
+    '--add-init-section=extern void gtk_init (void); gtk_init();',
     '--quiet',
   ]
 
