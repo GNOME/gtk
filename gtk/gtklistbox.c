@@ -436,6 +436,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   object_class->finalize = gtk_list_box_finalize;
   widget_class->show = gtk_list_box_show;
   widget_class->focus = gtk_list_box_focus;
+  widget_class->grab_focus = gtk_widget_grab_focus_self;
   widget_class->compute_expand = gtk_list_box_compute_expand;
   widget_class->get_request_mode = gtk_list_box_get_request_mode;
   widget_class->measure = gtk_list_box_measure;
@@ -3346,8 +3347,7 @@ gtk_list_box_row_grab_focus (GtkWidget *widget)
 
   g_return_val_if_fail (box != NULL, FALSE);
 
-  if (!GTK_WIDGET_CLASS (gtk_list_box_row_parent_class)->grab_focus (widget))
-    return FALSE;
+  gtk_widget_grab_focus_self (widget);
 
   if (box->cursor_row != row)
     gtk_list_box_update_cursor (box, row, FALSE);

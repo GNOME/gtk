@@ -25,6 +25,7 @@
 #include "gtkbutton.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
+#include "gtkwidgetprivate.h"
 
 /**
  * SECTION:gtkmediacontrols
@@ -259,6 +260,8 @@ gtk_media_controls_class_init (GtkMediaControlsClass *klass)
 
   widget_class->measure = gtk_media_controls_measure;
   widget_class->size_allocate = gtk_media_controls_size_allocate;
+  widget_class->grab_focus = gtk_widget_grab_focus_child;
+  widget_class->focus = gtk_widget_focus_child;
 
   gobject_class->dispose = gtk_media_controls_dispose;
   gobject_class->get_property = gtk_media_controls_get_property;

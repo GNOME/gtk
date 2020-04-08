@@ -7852,9 +7852,6 @@ gtk_tree_view_focus (GtkWidget        *widget,
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GtkWidget *focus_child;
 
-  if (!gtk_widget_is_sensitive (widget) || !gtk_widget_get_can_focus (widget))
-    return FALSE;
-
   focus_child = gtk_widget_get_focus_child (widget);
 
   gtk_tree_view_stop_editing (GTK_TREE_VIEW (widget), FALSE);
@@ -7898,7 +7895,7 @@ gtk_tree_view_focus (GtkWidget        *widget,
 static gboolean
 gtk_tree_view_grab_focus (GtkWidget *widget)
 {
-  if (!GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->grab_focus (widget))
+  if (!gtk_widget_grab_focus_self (widget))
     return FALSE;
 
   gtk_tree_view_focus_to_cursor (GTK_TREE_VIEW (widget));
