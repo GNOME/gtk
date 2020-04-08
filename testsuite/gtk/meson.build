@@ -29,7 +29,6 @@ tests = [
   ['filterlistmodel'],
   ['flattenlistmodel'],
   ['floating'],
-  ['focus'],
   #['gestures'],
   ['grid'],
   ['grid-layout'],
