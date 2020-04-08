@@ -2,4 +2,4 @@
 directory=gdk-pixbuf
 url=https://gitlab.gnome.org/GNOME/gdk-pixbuf.git
 push-url=ssh://git@gitlab.gnome.org:GNOME/gdk-pixbuf.git
-revision=origin/master
+revision=master

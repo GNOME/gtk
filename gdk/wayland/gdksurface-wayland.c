@@ -59,6 +59,7 @@ static guint signals[LAST_SIGNAL];
 typedef enum _PopupState
 {
   POPUP_STATE_IDLE,
+  POPUP_STATE_WAITING_FOR_REPOSITIONED,
   POPUP_STATE_WAITING_FOR_CONFIGURE,
   POPUP_STATE_WAITING_FOR_FRAME,
 } PopupState;
@@ -94,6 +95,9 @@ struct _GdkWaylandSurface
   EGLSurface egl_surface;
   EGLSurface dummy_egl_surface;
 
+  uint32_t reposition_token;
+  uint32_t received_reposition_token;
+
   PopupState popup_state;
 
   unsigned int initial_configure_received : 1;
@@ -103,8 +107,6 @@ struct _GdkWaylandSurface
   unsigned int awaiting_frame_frozen : 1;
   unsigned int is_drag_surface : 1;
   GdkSurfaceTypeHint hint;
-  GdkSurface *transient_for;
-  GdkSurface *popup_parent;
 
   int pending_buffer_offset_x;
   int pending_buffer_offset_y;
@@ -167,11 +169,17 @@ struct _GdkWaylandSurface
       int y;
       int width;
       int height;
+      uint32_t repositioned_token;
+      gboolean has_repositioned_token;
     } popup;
+
+    gboolean is_initial_configure;
 
     uint32_t serial;
     gboolean is_dirty;
   } pending;
+
+  uint32_t last_configure_serial;
 
   int state_freeze_count;
 
@@ -189,6 +197,76 @@ struct _GdkWaylandSurfaceClass
 {
   GdkSurfaceClass parent_class;
 };
+
+G_DEFINE_TYPE (GdkWaylandSurface, gdk_wayland_surface, GDK_TYPE_SURFACE)
+
+typedef struct _GdkWaylandToplevel GdkWaylandToplevel;
+struct _GdkWaylandToplevel
+{
+  GdkWaylandSurface parent_instance;
+
+  GdkWaylandToplevel *transient_for;
+};
+
+typedef struct
+{
+  GdkWaylandSurfaceClass parent_class;
+} GdkWaylandToplevelClass;
+
+static void gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface);
+
+GType gdk_wayland_toplevel_get_type (void) G_GNUC_CONST;
+
+#define GDK_IS_WAYLAND_TOPLEVEL(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WAYLAND_TOPLEVEL))
+#define GDK_WAYLAND_TOPLEVEL(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WAYLAND_TOPLEVEL, GdkWaylandToplevel))
+
+#define GDK_TYPE_WAYLAND_TOPLEVEL (gdk_wayland_toplevel_get_type ())
+G_DEFINE_TYPE_WITH_CODE (GdkWaylandToplevel, gdk_wayland_toplevel, GDK_TYPE_WAYLAND_SURFACE,
+                         G_IMPLEMENT_INTERFACE (GDK_TYPE_TOPLEVEL,
+                                                gdk_wayland_toplevel_iface_init))
+
+typedef struct
+{
+  GdkWaylandSurface parent_instance;
+} GdkWaylandPopup;
+
+typedef struct
+{
+  GdkWaylandSurfaceClass parent_class;
+} GdkWaylandPopupClass;
+
+static void gdk_wayland_popup_iface_init (GdkPopupInterface *iface);
+
+GType gdk_wayland_popup_get_type (void) G_GNUC_CONST;
+
+#define GDK_IS_WAYLAND_POPUP(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WAYLAND_POPUP))
+#define GDK_WAYLAND_POPUP(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WAYLAND_POPUP, GdkWaylandPopup))
+
+#define GDK_TYPE_WAYLAND_POPUP (gdk_wayland_popup_get_type ())
+G_DEFINE_TYPE_WITH_CODE (GdkWaylandPopup, gdk_wayland_popup, GDK_TYPE_WAYLAND_SURFACE,
+                         G_IMPLEMENT_INTERFACE (GDK_TYPE_POPUP,
+                                                gdk_wayland_popup_iface_init))
+
+typedef struct
+{
+  GdkWaylandSurface parent_instance;
+} GdkWaylandDragSurface;
+
+typedef struct
+{
+  GdkWaylandSurfaceClass parent_class;
+} GdkWaylandDragSurfaceClass;
+
+static void gdk_wayland_drag_surface_iface_init (GdkDragSurfaceInterface *iface);
+
+GType gdk_wayland_drag_surface_get_type (void) G_GNUC_CONST;
+
+#define GDK_IS_WAYLAND_DRAG_SURFACE(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WAYLAND_DRAG_SURFACE))
+
+#define GDK_TYPE_WAYLAND_DRAG_SURFACE (gdk_wayland_drag_surface_get_type ())
+G_DEFINE_TYPE_WITH_CODE (GdkWaylandDragSurface, gdk_wayland_drag_surface, GDK_TYPE_WAYLAND_SURFACE,
+                         G_IMPLEMENT_INTERFACE (GDK_TYPE_DRAG_SURFACE,
+                                                gdk_wayland_drag_surface_iface_init))
 
 static void gdk_wayland_surface_maybe_resize (GdkSurface *surface,
                                               int         width,
@@ -220,16 +298,6 @@ static void update_popup_layout_state (GdkSurface     *surface,
                                        GdkPopupLayout *layout);
 
 static gboolean gdk_wayland_surface_is_exported (GdkSurface *surface);
-
-G_DEFINE_TYPE (GdkWaylandSurface, gdk_wayland_surface, GDK_TYPE_SURFACE)
-
-GType gdk_wayland_toplevel_get_type (void) G_GNUC_CONST;
-GType gdk_wayland_popup_get_type (void) G_GNUC_CONST;
-GType gdk_wayland_drag_surface_get_type (void) G_GNUC_CONST;
-
-#define GDK_TYPE_WAYLAND_TOPLEVEL (gdk_wayland_toplevel_get_type ())
-#define GDK_TYPE_WAYLAND_POPUP (gdk_wayland_popup_get_type ())
-#define GDK_TYPE_WAYLAND_DRAG_SURFACE (gdk_wayland_drag_surface_get_type ())
 
 static void
 gdk_wayland_surface_init (GdkWaylandSurface *impl)
@@ -438,6 +506,7 @@ frame_callback (void               *data,
   switch (impl->popup_state)
     {
     case POPUP_STATE_IDLE:
+    case POPUP_STATE_WAITING_FOR_REPOSITIONED:
     case POPUP_STATE_WAITING_FOR_CONFIGURE:
       break;
     case POPUP_STATE_WAITING_FOR_FRAME:
@@ -632,6 +701,9 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
                               "display", display,
                               "frame-clock", frame_clock,
                               NULL);
+      display_wayland->toplevels = g_list_prepend (display_wayland->toplevels,
+                                                   surface);
+      g_warn_if_fail (!parent);
       break;
     case GDK_SURFACE_POPUP:
       surface = g_object_new (GDK_TYPE_WAYLAND_POPUP,
@@ -678,10 +750,6 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
 
   gdk_wayland_surface_set_title (surface, get_default_title ());
 
-  if (parent == NULL)
-    display_wayland->toplevels = g_list_prepend (display_wayland->toplevels, surface);
-
-  impl->transient_for = parent;
 
   gdk_wayland_surface_create_surface (surface);
 
@@ -771,8 +839,6 @@ gdk_wayland_surface_dispose (GObject *object)
   g_return_if_fail (GDK_IS_WAYLAND_SURFACE (surface));
 
   impl = GDK_WAYLAND_SURFACE (surface);
-
-  g_clear_object (&impl->popup_parent);
 
   if (impl->event_queue)
     {
@@ -903,6 +969,7 @@ gdk_wayland_surface_sync_parent (GdkSurface *surface,
                                  GdkSurface *parent)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (impl);
   GdkWaylandDisplay *display_wayland =
     GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   GdkWaylandSurface *impl_parent = NULL;
@@ -913,8 +980,8 @@ gdk_wayland_surface_sync_parent (GdkSurface *surface,
   if (!is_realized_toplevel (surface))
     return;
 
-  if (impl->transient_for)
-    impl_parent = GDK_WAYLAND_SURFACE (impl->transient_for);
+  if (toplevel->transient_for)
+    impl_parent = GDK_WAYLAND_SURFACE (toplevel->transient_for);
   else if (parent)
     impl_parent = GDK_WAYLAND_SURFACE (parent);
 
@@ -1282,8 +1349,17 @@ gdk_wayland_surface_configure_popup (GdkSurface *surface)
                                      impl->pending.serial);
     }
 
+  if (impl->pending.popup.has_repositioned_token)
+    impl->received_reposition_token = impl->pending.popup.repositioned_token;
+
   switch (impl->popup_state)
     {
+    case POPUP_STATE_WAITING_FOR_REPOSITIONED:
+      if (impl->received_reposition_token != impl->reposition_token)
+        return;
+      else
+        gdk_surface_thaw_updates (surface);
+      G_GNUC_FALLTHROUGH;
     case POPUP_STATE_WAITING_FOR_CONFIGURE:
       impl->popup_state = POPUP_STATE_WAITING_FOR_FRAME;
       break;
@@ -1306,6 +1382,10 @@ gdk_wayland_surface_configure_popup (GdkSurface *surface)
                              width, height,
                              impl->popup.layout);
 
+  if (!impl->pending.popup.has_repositioned_token &&
+      !impl->pending.is_initial_configure)
+    g_signal_emit_by_name (surface, "popup-layout-changed");
+
   gdk_surface_invalidate_rect (surface, NULL);
 }
 
@@ -1318,6 +1398,7 @@ gdk_wayland_surface_configure (GdkSurface *surface)
     {
       gdk_surface_thaw_updates (surface);
       impl->initial_configure_received = TRUE;
+      impl->pending.is_initial_configure = TRUE;
     }
 
   if (is_realized_popup (surface))
@@ -1326,6 +1407,8 @@ gdk_wayland_surface_configure (GdkSurface *surface)
     gdk_wayland_surface_configure_toplevel (surface);
   else
     g_warn_if_reached ();
+
+  impl->last_configure_serial = impl->pending.serial;
 
   memset (&impl->pending, 0, sizeof (impl->pending));
 }
@@ -1663,9 +1746,31 @@ xdg_popup_done (void             *data,
   gdk_surface_hide (surface);
 }
 
+static void
+xdg_popup_repositioned (void             *data,
+                        struct xdg_popup *xdg_popup,
+                        uint32_t          token)
+{
+  GdkSurface *surface = GDK_SURFACE (data);
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  GDK_DISPLAY_NOTE (gdk_surface_get_display (surface), EVENTS,
+                    g_message ("repositioned %p", surface));
+
+  if (impl->popup_state != POPUP_STATE_WAITING_FOR_REPOSITIONED)
+    {
+      g_warning ("Unexpected xdg_popup.repositioned event, probably buggy compositor");
+      return;
+    }
+
+  impl->pending.popup.repositioned_token = token;
+  impl->pending.popup.has_repositioned_token = TRUE;
+}
+
 static const struct xdg_popup_listener xdg_popup_listener = {
   xdg_popup_configure,
   xdg_popup_done,
+  xdg_popup_repositioned,
 };
 
 static void
@@ -2052,7 +2157,8 @@ static gpointer
 create_dynamic_positioner (GdkSurface     *surface,
                            int             width,
                            int             height,
-                           GdkPopupLayout *layout)
+                           GdkPopupLayout *layout,
+                           gboolean        ack_parent_configure)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkSurface *parent = surface->parent;
@@ -2128,6 +2234,30 @@ create_dynamic_positioner (GdkSurface     *surface,
           constraint_adjustment |= XDG_POSITIONER_CONSTRAINT_ADJUSTMENT_RESIZE_Y;
         xdg_positioner_set_constraint_adjustment (positioner,
                                                   constraint_adjustment);
+
+        if (xdg_positioner_get_version (positioner) >=
+            XDG_POSITIONER_SET_REACTIVE_SINCE_VERSION)
+          xdg_positioner_set_reactive (positioner);
+
+        if (ack_parent_configure &&
+            xdg_positioner_get_version (positioner) >=
+            XDG_POSITIONER_SET_PARENT_CONFIGURE_SINCE_VERSION)
+          {
+            GdkWaylandSurface *parent_impl = GDK_WAYLAND_SURFACE (parent);
+            int parent_width;
+            int parent_height;
+
+            parent_width = parent->width - (parent_impl->margin_left +
+                                            parent_impl->margin_right);
+            parent_height = parent->height - (parent_impl->margin_top +
+                                              parent_impl->margin_bottom);
+
+            xdg_positioner_set_parent_size (positioner,
+                                            parent_width,
+                                            parent_height);
+            xdg_positioner_set_parent_configure (positioner,
+                                                 parent_impl->last_configure_serial);
+          }
 
         return positioner;
       }
@@ -2233,7 +2363,7 @@ gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
 
   gdk_surface_freeze_updates (surface);
 
-  positioner = create_dynamic_positioner (surface, width, height, layout);
+  positioner = create_dynamic_positioner (surface, width, height, layout, FALSE);
 
   switch (display->shell_variant)
     {
@@ -2307,7 +2437,6 @@ gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
       freeze_popup_toplevel_state (surface);
     }
 
-  g_set_object (&impl->popup_parent, parent);
   display->current_popups = g_list_append (display->current_popups, surface);
   if (grab_input_seat)
     {
@@ -2396,9 +2525,8 @@ unmap_popups_for_surface (GdkSurface *surface)
   for (l = display_wayland->current_popups; l; l = l->next)
     {
        GdkSurface *popup = l->data;
-       GdkWaylandSurface *popup_impl = GDK_WAYLAND_SURFACE (popup);
 
-       if (popup_impl->popup_parent == surface)
+       if (popup->parent == surface)
          {
            g_warning ("Tried to unmap the parent of a popup");
            gdk_surface_hide (popup);
@@ -2501,6 +2629,9 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
         {
           switch (impl->popup_state)
             {
+            case POPUP_STATE_WAITING_FOR_REPOSITIONED:
+              gdk_surface_thaw_updates (surface);
+              G_GNUC_FALLTHROUGH;
             case POPUP_STATE_WAITING_FOR_CONFIGURE:
             case POPUP_STATE_WAITING_FOR_FRAME:
               thaw_popup_toplevel_state (surface);
@@ -2602,6 +2733,7 @@ do_queue_relayout (GdkSurface     *surface,
                    GdkPopupLayout *layout)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  struct xdg_positioner *positioner;
 
   g_assert (is_realized_popup (surface));
   g_assert (impl->popup_state == POPUP_STATE_IDLE ||
@@ -2612,7 +2744,41 @@ do_queue_relayout (GdkSurface     *surface,
   impl->popup.unconstrained_width = width;
   impl->popup.unconstrained_height = height;
 
-  queue_relayout_fallback (surface, layout);
+  if (!impl->display_server.xdg_popup ||
+      xdg_popup_get_version (impl->display_server.xdg_popup) <
+      XDG_POPUP_REPOSITION_SINCE_VERSION)
+    {
+      g_warning_once ("Compositor doesn't support moving popups, "
+                      "relying on remapping");
+      queue_relayout_fallback (surface, layout);
+
+      return;
+    }
+
+  positioner = create_dynamic_positioner (surface,
+                                          width, height, layout,
+                                          TRUE);
+  xdg_popup_reposition (impl->display_server.xdg_popup,
+                        positioner,
+                        ++impl->reposition_token);
+  xdg_positioner_destroy (positioner);
+
+  gdk_surface_freeze_updates (surface);
+
+  switch (impl->popup_state)
+    {
+    case POPUP_STATE_IDLE:
+      freeze_popup_toplevel_state (surface);
+      break;
+    case POPUP_STATE_WAITING_FOR_FRAME:
+      break;
+    case POPUP_STATE_WAITING_FOR_CONFIGURE:
+    case POPUP_STATE_WAITING_FOR_REPOSITIONED:
+    default:
+      g_assert_not_reached ();
+    }
+
+  impl->popup_state = POPUP_STATE_WAITING_FOR_REPOSITIONED;
 }
 
 static gboolean
@@ -2621,6 +2787,9 @@ is_relayout_finished (GdkSurface *surface)
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
   if (!impl->initial_configure_received)
+    return FALSE;
+
+  if (impl->reposition_token != impl->received_reposition_token)
     return FALSE;
 
   return TRUE;
@@ -2707,6 +2876,7 @@ reposition_popup (GdkSurface     *surface,
     case POPUP_STATE_WAITING_FOR_FRAME:
       do_queue_relayout (surface, width, height, layout);
       break;
+    case POPUP_STATE_WAITING_FOR_REPOSITIONED:
     case POPUP_STATE_WAITING_FOR_CONFIGURE:
       g_warn_if_reached ();
       break;
@@ -3172,44 +3342,46 @@ gdk_wayland_surface_set_startup_id (GdkSurface  *surface,
 }
 
 static gboolean
-check_transient_for_loop (GdkSurface *surface,
-                          GdkSurface *parent)
+check_transient_for_loop (GdkWaylandToplevel *toplevel,
+                          GdkWaylandToplevel *parent)
 {
   while (parent)
     {
-      GdkWaylandSurface *impl;
-
-      if (!GDK_IS_WAYLAND_SURFACE (parent))
-        return FALSE;
-
-      impl = GDK_WAYLAND_SURFACE (parent);
-      if (impl->transient_for == surface)
+      if (parent->transient_for == toplevel)
         return TRUE;
-      parent = impl->transient_for;
+      parent = parent->transient_for;
     }
   return FALSE;
 }
 
 static void
-gdk_wayland_surface_set_transient_for (GdkSurface *surface,
-                                       GdkSurface *parent)
+gdk_wayland_toplevel_set_transient_for (GdkWaylandToplevel *toplevel,
+                                        GdkSurface         *parent)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  g_return_if_fail (!parent || GDK_IS_WAYLAND_TOPLEVEL (parent));
+  g_return_if_fail (gdk_surface_get_display (GDK_SURFACE (toplevel)) ==
+                    gdk_surface_get_display (parent));
 
-  g_assert (parent == NULL ||
-            gdk_surface_get_display (surface) == gdk_surface_get_display (parent));
-
-  if (check_transient_for_loop (surface, parent))
+  if (parent)
     {
-      g_warning ("Setting %p transient for %p would create a loop", surface, parent);
-      return;
+      GdkWaylandToplevel *parent_toplevel = GDK_WAYLAND_TOPLEVEL (parent);
+
+      if (check_transient_for_loop (toplevel, parent_toplevel))
+        {
+          g_warning ("Setting %p transient for %p would create a loop",
+                     toplevel, parent);
+          return;
+        }
     }
 
-  unset_transient_for_exported (surface);
+  unset_transient_for_exported (GDK_SURFACE (toplevel));
 
-  impl->transient_for = parent;
+  if (parent)
+    toplevel->transient_for = GDK_WAYLAND_TOPLEVEL (parent);
+  else
+    toplevel->transient_for = NULL;
 
-  gdk_wayland_surface_sync_parent (surface, NULL);
+  gdk_wayland_surface_sync_parent (GDK_SURFACE (toplevel), NULL);
 }
 
 static void
@@ -4097,7 +4269,7 @@ gdk_wayland_surface_set_transient_for_exported (GdkSurface *surface,
       return FALSE;
     }
 
-  gdk_wayland_surface_set_transient_for (surface, NULL);
+  gdk_wayland_toplevel_set_transient_for (GDK_WAYLAND_TOPLEVEL (impl), NULL);
 
   impl->imported_transient_for =
     zxdg_importer_v1_import (display_wayland->xdg_importer, parent_handle_str);
@@ -4168,22 +4340,6 @@ create_dnd_surface (GdkDisplay *display)
 }
 
 #define LAST_PROP 1
-
-typedef struct
-{
-  GdkWaylandSurface parent_instance;
-} GdkWaylandPopup;
-
-typedef struct
-{
-  GdkWaylandSurfaceClass parent_class;
-} GdkWaylandPopupClass;
-
-static void gdk_wayland_popup_iface_init (GdkPopupInterface *iface);
-
-G_DEFINE_TYPE_WITH_CODE (GdkWaylandPopup, gdk_wayland_popup, GDK_TYPE_WAYLAND_SURFACE,
-                         G_IMPLEMENT_INTERFACE (GDK_TYPE_POPUP,
-                                                gdk_wayland_popup_iface_init))
 
 static void
 gdk_wayland_popup_init (GdkWaylandPopup *popup)
@@ -4294,22 +4450,6 @@ gdk_wayland_popup_iface_init (GdkPopupInterface *iface)
   iface->get_position_y = gdk_wayland_popup_get_position_y;
 }
 
-typedef struct
-{
-  GdkWaylandSurface parent_instance;
-} GdkWaylandToplevel;
-
-typedef struct
-{
-  GdkWaylandSurfaceClass parent_class;
-} GdkWaylandToplevelClass;
-
-static void gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface);
-
-G_DEFINE_TYPE_WITH_CODE (GdkWaylandToplevel, gdk_wayland_toplevel, GDK_TYPE_WAYLAND_SURFACE,
-                         G_IMPLEMENT_INTERFACE (GDK_TYPE_TOPLEVEL,
-                                                gdk_wayland_toplevel_iface_init))
-
 static void
 gdk_wayland_toplevel_init (GdkWaylandToplevel *toplevel)
 {
@@ -4322,6 +4462,7 @@ gdk_wayland_toplevel_set_property (GObject      *object,
                                    GParamSpec   *pspec)
 {
   GdkSurface *surface = GDK_SURFACE (object);
+  GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (surface);
 
   switch (prop_id)
     {
@@ -4336,7 +4477,8 @@ gdk_wayland_toplevel_set_property (GObject      *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_TRANSIENT_FOR:
-      gdk_wayland_surface_set_transient_for (surface, g_value_get_object (value));
+      gdk_wayland_toplevel_set_transient_for (toplevel,
+                                              g_value_get_object (value));
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
@@ -4376,6 +4518,7 @@ gdk_wayland_toplevel_get_property (GObject    *object,
 {
   GdkSurface *surface = GDK_SURFACE (object);
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (surface);
 
   switch (prop_id)
     {
@@ -4392,7 +4535,7 @@ gdk_wayland_toplevel_get_property (GObject    *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_TRANSIENT_FOR:
-      g_value_set_object (value, impl->transient_for);
+      g_value_set_object (value, toplevel->transient_for);
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_MODAL:
@@ -4616,22 +4759,6 @@ gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface)
   iface->inhibit_system_shortcuts = gdk_wayland_toplevel_inhibit_system_shortcuts;
   iface->restore_system_shortcuts = gdk_wayland_toplevel_restore_system_shortcuts;
 }
-
-typedef struct
-{
-  GdkWaylandSurface parent_instance;
-} GdkWaylandDragSurface;
-
-typedef struct
-{
-  GdkWaylandSurfaceClass parent_class;
-} GdkWaylandDragSurfaceClass;
-
-static void gdk_wayland_drag_surface_iface_init (GdkDragSurfaceInterface *iface);
-
-G_DEFINE_TYPE_WITH_CODE (GdkWaylandDragSurface, gdk_wayland_drag_surface, GDK_TYPE_WAYLAND_SURFACE,
-                         G_IMPLEMENT_INTERFACE (GDK_TYPE_DRAG_SURFACE,
-                                                gdk_wayland_drag_surface_iface_init))
 
 static void
 gdk_wayland_drag_surface_init (GdkWaylandDragSurface *surface)
