@@ -157,6 +157,8 @@ gtk_image_class_init (GtkImageClass *class)
   widget_class->measure = gtk_image_measure;
   widget_class->unrealize = gtk_image_unrealize;
   widget_class->css_changed = gtk_image_css_changed;
+  widget_class->grab_focus = gtk_widget_grab_focus_none;
+  widget_class->focus = gtk_widget_focus_none;
 
   image_props[PROP_PAINTABLE] =
       g_param_spec_object ("paintable",

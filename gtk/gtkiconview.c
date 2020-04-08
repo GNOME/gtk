@@ -350,6 +350,8 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   widget_class->measure = gtk_icon_view_measure;
   widget_class->size_allocate = gtk_icon_view_size_allocate;
   widget_class->snapshot = gtk_icon_view_snapshot;
+  widget_class->focus = gtk_widget_focus_self;
+  widget_class->grab_focus = gtk_widget_grab_focus_self;
 
   container_class->remove = gtk_icon_view_remove;
   container_class->forall = gtk_icon_view_forall;

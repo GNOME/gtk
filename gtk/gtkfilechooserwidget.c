@@ -7222,6 +7222,8 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   widget_class->unroot = gtk_file_chooser_widget_unroot;
   widget_class->css_changed = gtk_file_chooser_widget_css_changed;
   widget_class->size_allocate = gtk_file_chooser_widget_size_allocate;
+  widget_class->grab_focus = gtk_widget_grab_focus_child;
+  widget_class->focus = gtk_widget_focus_child;
 
   /*
    * Signals

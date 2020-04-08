@@ -901,6 +901,8 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
   oclass->finalize = gtk_level_bar_finalize;
 
   wclass->direction_changed = gtk_level_bar_direction_changed;
+  wclass->grab_focus = gtk_widget_grab_focus_none;
+  wclass->focus = gtk_widget_focus_none;
 
   g_object_class_override_property (oclass, PROP_ORIENTATION, "orientation");
 

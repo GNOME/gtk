@@ -361,6 +361,8 @@ gtk_drag_icon_class_init (GtkDragIconClass *klass)
   widget_class->size_allocate = gtk_drag_icon_size_allocate;
   widget_class->show = gtk_drag_icon_show;
   widget_class->hide = gtk_drag_icon_hide;
+  widget_class->focus = gtk_widget_focus_none;
+  widget_class->grab_focus = gtk_widget_grab_focus_none;
 
   /**
    * GtkDragIcon:child:

@@ -518,6 +518,9 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
   object_class->dispose = gtk_stack_switcher_dispose;
   object_class->finalize = gtk_stack_switcher_finalize;
 
+  widget_class->grab_focus = gtk_widget_grab_focus_none;
+  widget_class->focus = gtk_widget_focus_child;
+
   g_object_class_install_property (object_class,
                                    PROP_STACK,
                                    g_param_spec_object ("stack",

@@ -68,6 +68,7 @@
 #include "gtkprivate.h"
 #include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
+#include "gtkwidgetprivate.h"
 
 #include "a11y/gtkbuttonaccessible.h"
 
@@ -204,6 +205,8 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->state_flags_changed = gtk_button_state_flags_changed;
   widget_class->grab_notify = gtk_button_grab_notify;
   widget_class->unmap = gtk_button_unmap;
+  widget_class->grab_focus = gtk_widget_grab_focus_self;
+  widget_class->focus = gtk_widget_focus_self;
 
   container_class->add    = gtk_button_add;
   container_class->remove = gtk_button_remove;
