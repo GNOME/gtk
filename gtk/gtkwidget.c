@@ -978,7 +978,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
       g_param_spec_boolean ("can-focus",
                             P_("Can focus"),
                             P_("Whether the widget can accept the input focus"),
-                            FALSE,
+                            TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   widget_props[PROP_HAS_FOCUS] =
@@ -2294,6 +2294,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
 #ifdef G_ENABLE_DEBUG
   priv->highlight_resize = FALSE;
 #endif
+  priv->can_focus = TRUE;
   priv->can_target = TRUE;
 
   switch (_gtk_widget_get_direction (widget))
@@ -6681,7 +6682,8 @@ gtk_widget_child_focus (GtkWidget       *widget,
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   if (!_gtk_widget_get_visible (widget) ||
-      !gtk_widget_is_sensitive (widget))
+      !gtk_widget_is_sensitive (widget) ||
+      !gtk_widget_get_can_focus (widget))
     return FALSE;
 
   /* Emit ::focus in any case, even if can-focus is FALSE,
