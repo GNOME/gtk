@@ -53,7 +53,7 @@ flowboxchild:focus(visible) {
   outline-style: solid;
   outline-offset: -1px;
   outline-width: 2px;
-  :selected & { outline-color: $coloured_focus_border_color; }
+  :selected & { outline-color: $alt_focus_border_color; }
 }
 
 // Widgets that draw their focus indicator outset and not inset
@@ -70,9 +70,9 @@ button:focus(visible), modelbutton:focus(visible) {
   outline-offset: -2px;
   outline-width: 2px;
 
-  row:selected & { outline-color: $coloured_focus_border_color; }
+  row:selected & { outline-color: $alt_focus_border_color; }
 
-  &.suggested-action, &.destructive-action { &, &:hover, &:active { outline-color: $coloured_focus_border_color; } }
+  &.suggested-action, &.destructive-action { &, &:hover, &:active { outline-color: $alt_focus_border_color; } }
 }
 
 // Draw the "outline" around the whole switch not the slider
@@ -81,16 +81,17 @@ switch:focus(visible) {
   &:focus {
     box-shadow: 0 0 0 3px if($variant=='light', lighten(opacify($focus_border_color, 1), 20%), $focus_border_color);
   }
-  row:selected & { outline-color: $coloured_focus_border_color; }
+  row:selected & { outline-color: $alt_focus_border_color; }
 }
 
 checkbutton:focus(visible),
 radiobutton:focus(visible) {
   outline-color: $focus_border_color;
   outline-style: solid;
-  outline-offset: 1px;
+  outline-offset: 3px;
   outline-width: 2px;
-  row:selected & , treeview:selected & { outline-color: $coloured_focus_border_color; }
+  border-radius: 3px;
+  row:selected & , treeview:selected & { outline-color: $alt_focus_border_color; }
 }
 
 row:focus(visible) {
@@ -98,15 +99,28 @@ row:focus(visible) {
   outline-offset: -2px;
   outline-style: solid;
   &:selected {
-    outline-color: $coloured_focus_border_color;
+    outline-color: $alt_focus_border_color;
   }
 }
 
 treeview:focus(visible) {
   outline-color: $focus_border_color;
   outline-style: solid;
+  outline-width: 2px;
   &:selected {
-    outline-color: $coloured_focus_border_color;
+    outline-color: $alt_focus_border_color;
+  }
+}
+
+notebook > header {
+  tabs {
+    &, &:hover, &:backdrop {
+      &, &.right, &.left, &.top, &.bottom {
+        tab:focus(visible), tab:checked:focus(visible) {
+          color: $focus_border_color;
+        }
+      }
+    }
   }
 }
 
@@ -2428,7 +2442,6 @@ switch {
 checkbutton.text-button, radiobutton.text-button {
   // this is for a nice focus on check and radios text
   padding: 2px 0;
-  outline-offset: 0;
   border-spacing: 4px;
 }
 
