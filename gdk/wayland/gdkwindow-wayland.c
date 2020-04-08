@@ -2955,10 +2955,6 @@ should_map_as_popup (GdkWindow *window)
           if (impl->grab_input_seat)
             return TRUE;
         }
-      else
-        g_message ("Window %p is a temporary window without parent, "
-                   "application will not be able to position it on screen.",
-                   window);
     }
 
   /* Yet we need to keep the window type hint tests for compatibility */
@@ -3042,6 +3038,16 @@ gdk_wayland_window_map (GdkWindow *window)
 
   if (impl->mapped || impl->use_custom_surface)
     return;
+
+  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
+    {
+      if (!impl->transient_for)
+        {
+          g_message ("Window %p is a temporary window without parent, "
+                     "application will not be able to position it on screen.",
+                     window);
+        }
+    }
 
   if (should_map_as_subsurface (window))
     {
