@@ -30,8 +30,6 @@
 #include "gdk/gdktextureprivate.h"
 #include <cairo-ft.h>
 
-GType gsk_render_node_types[GSK_RENDER_NODE_TYPE_N_TYPES];
-
 static inline void
 gsk_cairo_rectangle (cairo_t               *cr,
                      const graphene_rect_t *rect)
@@ -4088,17 +4086,44 @@ gsk_debug_node_get_message (GskRenderNode *node)
   return self->message;
 }
 
+GType gsk_render_node_types[GSK_RENDER_NODE_TYPE_N_TYPES];
+
 #ifndef I_
 # define I_(str) g_intern_static_string ((str))
 #endif
 
-/*< private >
- * gsk_render_node_init_types:
- *
- * Initialize all the #GskRenderNode types provided by GSK.
- */
-void
-gsk_render_node_init_types (void)
+#define GSK_DEFINE_RENDER_NODE_TYPE(type_name, TYPE_ENUM_VALUE) \
+GType \
+type_name ## _get_type (void) { \
+  gsk_render_node_init_types (); \
+  g_assert (gsk_render_node_types[TYPE_ENUM_VALUE] != G_TYPE_INVALID); \
+  return gsk_render_node_types[TYPE_ENUM_VALUE]; \
+}
+
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_container_node, GSK_CONTAINER_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_cairo_node, GSK_CAIRO_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_color_node, GSK_COLOR_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_linear_gradient_node, GSK_LINEAR_GRADIENT_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_repeating_linear_gradient_node, GSK_REPEATING_LINEAR_GRADIENT_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_border_node, GSK_BORDER_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_texture_node, GSK_TEXTURE_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_inset_shadow_node, GSK_INSET_SHADOW_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_outset_shadow_node, GSK_OUTSET_SHADOW_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_transform_node, GSK_TRANSFORM_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_opacity_node, GSK_OPACITY_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_color_matrix_node, GSK_COLOR_MATRIX_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_repeat_node, GSK_REPEAT_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_clip_node, GSK_CLIP_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_rounded_clip_node, GSK_ROUNDED_CLIP_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_shadow_node, GSK_SHADOW_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_blend_node, GSK_BLEND_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_cross_fade_node, GSK_CROSS_FADE_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_text_node, GSK_TEXT_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_blur_node, GSK_BLUR_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_debug_node, GSK_DEBUG_NODE)
+
+static void
+gsk_render_node_init_types_once (void)
 {
   {
     const GskRenderNodeTypeInfo node_info =
@@ -4114,7 +4139,6 @@ gsk_render_node_init_types (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskContainerNode"), &node_info);
     gsk_render_node_types[GSK_CONTAINER_NODE] = node_type;
-    g_assert (GSK_TYPE_CONTAINER_NODE == node_type);
   }
 
   {
@@ -4131,7 +4155,6 @@ gsk_render_node_init_types (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskCairoNode"), &node_info);
     gsk_render_node_types[GSK_CAIRO_NODE] = node_type;
-    g_assert (GSK_TYPE_CAIRO_NODE == node_type);
   }
 
   {
@@ -4148,7 +4171,6 @@ gsk_render_node_init_types (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskColorNode"), &node_info);
     gsk_render_node_types[GSK_COLOR_NODE] = node_type;
-    g_assert (GSK_TYPE_COLOR_NODE == node_type);
   }
 
   {
@@ -4165,7 +4187,6 @@ gsk_render_node_init_types (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskLinearGradientNode"), &node_info);
     gsk_render_node_types[GSK_LINEAR_GRADIENT_NODE] = node_type;
-    g_assert (GSK_TYPE_LINEAR_GRADIENT_NODE == node_type);
   }
 
   {
@@ -4182,7 +4203,6 @@ gsk_render_node_init_types (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskRepeatingLinearGradientNode"), &node_info);
     gsk_render_node_types[GSK_REPEATING_LINEAR_GRADIENT_NODE] = node_type;
-    g_assert (GSK_TYPE_REPEATING_LINEAR_GRADIENT_NODE == node_type);
   }
 
   {
@@ -4199,7 +4219,6 @@ gsk_render_node_init_types (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskBorderNode"), &node_info);
     gsk_render_node_types[GSK_BORDER_NODE] = node_type;
-    g_assert (GSK_TYPE_BORDER_NODE == node_type);
   }
 
   {
@@ -4216,7 +4235,6 @@ gsk_render_node_init_types (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskTextureNode"), &node_info);
     gsk_render_node_types[GSK_TEXTURE_NODE] = node_type;
-    g_assert (GSK_TYPE_TEXTURE_NODE == node_type);
   }
 
   {
@@ -4233,7 +4251,6 @@ gsk_render_node_init_types (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskInsetShadowNode"), &node_info);
     gsk_render_node_types[GSK_INSET_SHADOW_NODE] = node_type;
-    g_assert (GSK_TYPE_INSET_SHADOW_NODE == node_type);
   }
 
   {
@@ -4250,7 +4267,6 @@ gsk_render_node_init_types (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskOutsetShadowNode"), &node_info);
     gsk_render_node_types[GSK_OUTSET_SHADOW_NODE] = node_type;
-    g_assert (GSK_TYPE_OUTSET_SHADOW_NODE == node_type);
   }
 
   {
@@ -4267,7 +4283,6 @@ gsk_render_node_init_types (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskTransformNode"), &node_info);
     gsk_render_node_types[GSK_TRANSFORM_NODE] = node_type;
-    g_assert (GSK_TYPE_TRANSFORM_NODE == node_type);
   }
 
   {
@@ -4284,7 +4299,6 @@ gsk_render_node_init_types (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskOpacityNode"), &node_info);
     gsk_render_node_types[GSK_OPACITY_NODE] = node_type;
-    g_assert (GSK_TYPE_OPACITY_NODE == node_type);
   }
 
   {
@@ -4301,7 +4315,6 @@ gsk_render_node_init_types (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskColorMatrixNode"), &node_info);
     gsk_render_node_types[GSK_COLOR_MATRIX_NODE] = node_type;
-    g_assert (GSK_TYPE_COLOR_MATRIX_NODE == node_type);
   }
 
   {
@@ -4318,7 +4331,6 @@ gsk_render_node_init_types (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskRepeatNode"), &node_info);
     gsk_render_node_types[GSK_REPEAT_NODE] = node_type;
-    g_assert (GSK_TYPE_REPEAT_NODE == node_type);
   }
 
   {
@@ -4335,7 +4347,6 @@ gsk_render_node_init_types (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskClipNode"), &node_info);
     gsk_render_node_types[GSK_CLIP_NODE] = node_type;
-    g_assert (GSK_TYPE_CLIP_NODE == node_type);
   }
 
   {
@@ -4352,7 +4363,6 @@ gsk_render_node_init_types (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskRoundedClipNode"), &node_info);
     gsk_render_node_types[GSK_ROUNDED_CLIP_NODE] = node_type;
-    g_assert (GSK_TYPE_ROUNDED_CLIP_NODE == node_type);
   }
 
   {
@@ -4369,7 +4379,6 @@ gsk_render_node_init_types (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskShadowNode"), &node_info);
     gsk_render_node_types[GSK_SHADOW_NODE] = node_type;
-    g_assert (GSK_TYPE_SHADOW_NODE == node_type);
   }
 
   {
@@ -4386,7 +4395,6 @@ gsk_render_node_init_types (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskBlendNode"), &node_info);
     gsk_render_node_types[GSK_BLEND_NODE] = node_type;
-    g_assert (GSK_TYPE_BLEND_NODE == node_type);
   }
 
   {
@@ -4403,7 +4411,6 @@ gsk_render_node_init_types (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskCrossFadeNode"), &node_info);
     gsk_render_node_types[GSK_CROSS_FADE_NODE] = node_type;
-    g_assert (GSK_TYPE_CROSS_FADE_NODE == node_type);
   }
 
   {
@@ -4420,7 +4427,6 @@ gsk_render_node_init_types (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskTextNode"), &node_info);
     gsk_render_node_types[GSK_TEXT_NODE] = node_type;
-    g_assert (GSK_TYPE_TEXT_NODE == node_type);
   }
 
   {
@@ -4437,7 +4443,6 @@ gsk_render_node_init_types (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskBlurNode"), &node_info);
     gsk_render_node_types[GSK_BLUR_NODE] = node_type;
-    g_assert (GSK_TYPE_BLUR_NODE == node_type);
   }
 
   {
@@ -4454,6 +4459,22 @@ gsk_render_node_init_types (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskDebugNode"), &node_info);
     gsk_render_node_types[GSK_DEBUG_NODE] = node_type;
-    g_assert (GSK_TYPE_DEBUG_NODE == node_type);
   }
+}
+/*< private >
+ * gsk_render_node_init_types:
+ *
+ * Initialize all the #GskRenderNode types provided by GSK.
+ */
+void
+gsk_render_node_init_types (void)
+{
+  static volatile gsize register_types__volatile;
+
+  if (g_once_init_enter (&register_types__volatile))
+    {
+      gboolean initialized = TRUE;
+      gsk_render_node_init_types_once ();
+      g_once_init_leave (&register_types__volatile, initialized);
+    }
 }
