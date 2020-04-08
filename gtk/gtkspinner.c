@@ -229,6 +229,8 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
   widget_class->snapshot = gtk_spinner_snapshot;
   widget_class->measure = gtk_spinner_measure;
   widget_class->css_changed = gtk_spinner_css_changed;
+  widget_class->grab_focus = gtk_widget_grab_focus_none;
+  widget_class->focus = gtk_widget_focus_none;
 
   /* GtkSpinner:spinning:
    *

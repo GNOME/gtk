@@ -61,6 +61,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkbitmaskprivate.h"
 #include "gtkeventcontroller.h"
+#include "gtkwidgetprivate.h"
 
 /**
  * SECTION:gtkfilechooserbutton
@@ -476,6 +477,8 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   widget_class->root = gtk_file_chooser_button_root;
   widget_class->mnemonic_activate = gtk_file_chooser_button_mnemonic_activate;
   widget_class->state_flags_changed = gtk_file_chooser_button_state_flags_changed;
+  widget_class->grab_focus = gtk_widget_grab_focus_child;
+  widget_class->focus = gtk_widget_focus_child;
 
   /**
    * GtkFileChooserButton::file-set:

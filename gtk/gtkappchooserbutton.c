@@ -57,6 +57,7 @@
 #include "gtkcellrendererpixbuf.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcombobox.h"
+#include "gtkwidgetprivate.h"
 #include "gtkdialog.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
@@ -667,6 +668,8 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
 
   widget_class->measure = gtk_app_chooser_button_measure;
   widget_class->size_allocate = gtk_app_chooser_button_size_allocate;
+  widget_class->grab_focus = gtk_widget_grab_focus_child;
+  widget_class->focus = gtk_widget_focus_child;
 
   g_object_class_override_property (oclass, PROP_CONTENT_TYPE, "content-type");
 
