@@ -111,7 +111,7 @@ gsk_color_node_peek_color (GskRenderNode *node)
  * Creates a #GskRenderNode that will render the color specified by @rgba into
  * the area given by @bounds.
  *
- * Returns: (transfer full): A new #GskRenderNode
+ * Returns: (transfer full) (type GskColorNode): A new #GskRenderNode
  */
 GskRenderNode *
 gsk_color_node_new (const GdkRGBA         *rgba,
@@ -231,7 +231,7 @@ gsk_linear_gradient_node_diff (GskRenderNode  *node1,
  * Creates a #GskRenderNode that will create a linear gradient from the given
  * points and color stops, and render that into the area given by @bounds.
  *
- * Returns: (transfer full): A new #GskRenderNode
+ * Returns: (transfer full) (type GskLinearGradientNode): A new #GskRenderNode
  */
 GskRenderNode *
 gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
@@ -280,7 +280,7 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
  * from the given points and color stops, and render that into the area
  * given by @bounds.
  *
- * Returns: (transfer full): A new #GskRenderNode
+ * Returns: (transfer full) (type GskRepeatingLinearGradientNode): A new #GskRenderNode
  */
 GskRenderNode *
 gsk_repeating_linear_gradient_node_new (const graphene_rect_t  *bounds,
@@ -591,7 +591,7 @@ gsk_border_node_peek_colors (GskRenderNode *node)
  * given @outline. The 4 sides of the border can have different widths and
  * colors.
  *
- * Returns: (transfer full): A new #GskRenderNode
+ * Returns: (transfer full) (type GskBorderNode): A new #GskRenderNode
  */
 GskRenderNode *
 gsk_border_node_new (const GskRoundedRect     *outline,
@@ -707,7 +707,7 @@ gsk_texture_node_get_texture (GskRenderNode *node)
  * Creates a #GskRenderNode that will render the given
  * @texture into the area given by @bounds.
  *
- * Returns: (transfer full): A new #GskRenderNode
+ * Returns: (transfer full) (type GskTextureNode): A new #GskRenderNode
  */
 GskRenderNode *
 gsk_texture_node_new (GdkTexture            *texture,
@@ -1148,7 +1148,7 @@ gsk_inset_shadow_node_diff (GskRenderNode  *node1,
  * Creates a #GskRenderNode that will render an inset shadow
  * into the box given by @outline.
  *
- * Returns: (transfer full): A new #GskRenderNode
+ * Returns: (transfer full) (type GskInsetShadowNode): A new #GskRenderNode
  */
 GskRenderNode *
 gsk_inset_shadow_node_new (const GskRoundedRect *outline,
@@ -1450,7 +1450,7 @@ gsk_outset_shadow_node_diff (GskRenderNode  *node1,
  * Creates a #GskRenderNode that will render an outset shadow
  * around the box given by @outline.
  *
- * Returns: (transfer full): A new #GskRenderNode
+ * Returns: (transfer full) (type GskOutsetShadowNode): A new #GskRenderNode
  */
 GskRenderNode *
 gsk_outset_shadow_node_new (const GskRoundedRect *outline,
@@ -1653,7 +1653,7 @@ gsk_cairo_node_peek_surface (GskRenderNode *node)
  * into the area given by @bounds. You can draw to the cairo
  * surface using gsk_cairo_node_get_draw_context()
  *
- * Returns: (transfer full): A new #GskRenderNode
+ * Returns: (transfer full) (type GskCairoNode): A new #GskRenderNode
  */
 GskRenderNode *
 gsk_cairo_node_new (const graphene_rect_t *bounds)
@@ -1833,7 +1833,7 @@ gsk_container_node_diff (GskRenderNode  *node1,
  * Creates a new #GskRenderNode instance for holding the given @children.
  * The new node will acquire a reference to each of the children.
  *
- * Returns: (transfer full): the new #GskRenderNode
+ * Returns: (transfer full) (type GskContainerNode): the new #GskRenderNode
  */
 GskRenderNode *
 gsk_container_node_new (GskRenderNode **children,
@@ -2043,7 +2043,7 @@ gsk_transform_node_diff (GskRenderNode  *node1,
  * Creates a #GskRenderNode that will transform the given @child
  * with the given @transform.
  *
- * Returns: (transfer full): A new #GskRenderNode
+ * Returns: (transfer full) (type GskTransformNode): A new #GskRenderNode
  */
 GskRenderNode *
 gsk_transform_node_new (GskRenderNode *child,
@@ -2169,7 +2169,7 @@ gsk_opacity_node_diff (GskRenderNode  *node1,
  * Creates a #GskRenderNode that will drawn the @child with reduced
  * @opacity.
  *
- * Returns: (transfer full): A new #GskRenderNode
+ * Returns: (transfer full) (type GskOpacityNode): A new #GskRenderNode
  */
 GskRenderNode *
 gsk_opacity_node_new (GskRenderNode *child,
@@ -2348,7 +2348,7 @@ gsk_color_matrix_node_draw (GskRenderNode *node,
  *
  * for every pixel.
  *
- * Returns: (transfer full): A new #GskRenderNode
+ * Returns: (transfer full) (type GskColorMatrixNode): A new #GskRenderNode
  */
 GskRenderNode *
 gsk_color_matrix_node_new (GskRenderNode           *child,
@@ -2494,7 +2494,7 @@ gsk_repeat_node_draw (GskRenderNode *node,
  * Creates a #GskRenderNode that will repeat the drawing of @child across
  * the given @bounds.
  *
- * Returns: (transfer full): A new #GskRenderNode
+ * Returns: (transfer full) (type GskRepeatNode): A new #GskRenderNode
  */
 GskRenderNode *
 gsk_repeat_node_new (const graphene_rect_t *bounds,
@@ -2629,7 +2629,7 @@ gsk_clip_node_diff (GskRenderNode  *node1,
  * Creates a #GskRenderNode that will clip the @child to the area
  * given by @clip.
  *
- * Returns: (transfer full): A new #GskRenderNode
+ * Returns: (transfer full) (type GskClipNode): A new #GskRenderNode
  */
 GskRenderNode *
 gsk_clip_node_new (GskRenderNode         *child,
@@ -2759,7 +2759,7 @@ gsk_rounded_clip_node_diff (GskRenderNode  *node1,
  * Creates a #GskRenderNode that will clip the @child to the area
  * given by @clip.
  *
- * Returns: (transfer none): A new #GskRenderNode
+ * Returns: (transfer none) (type GskRoundedClipNode): A new #GskRenderNode
  */
 GskRenderNode *
 gsk_rounded_clip_node_new (GskRenderNode         *child,
@@ -2973,7 +2973,7 @@ gsk_shadow_node_get_bounds (GskShadowNode *self,
  * Creates a #GskRenderNode that will draw a @child with the given
  * @shadows below it.
  *
- * Returns: (transfer full): A new #GskRenderNode
+ * Returns: (transfer full) (type GskShadowNode): A new #GskRenderNode
  */
 GskRenderNode *
 gsk_shadow_node_new (GskRenderNode   *child,
@@ -3169,7 +3169,7 @@ gsk_blend_node_diff (GskRenderNode  *node1,
  * Creates a #GskRenderNode that will use @blend_mode to blend the @top
  * node onto the @bottom node.
  *
- * Returns: (transfer full): A new #GskRenderNode
+ * Returns: (transfer full) (type GskBlendNode): A new #GskRenderNode
  */
 GskRenderNode *
 gsk_blend_node_new (GskRenderNode *bottom,
@@ -3318,7 +3318,7 @@ gsk_cross_fade_node_diff (GskRenderNode  *node1,
  *
  * Creates a #GskRenderNode that will do a cross-fade between @start and @end.
  *
- * Returns: (transfer full): A new #GskRenderNode
+ * Returns: (transfer full) (type GskCrossFadeNode): A new #GskRenderNode
  */
 GskRenderNode *
 gsk_cross_fade_node_new (GskRenderNode *start,
@@ -3510,7 +3510,7 @@ font_has_color_glyphs (const PangoFont *font)
  * Note that @color may not be used if the font contains
  * color glyphs.
  *
- * Returns: (nullable) (transfer full): a new text node, or %NULL
+ * Returns: (nullable) (transfer full) (type GskTextNode): a new #GskRenderNode
  */
 GskRenderNode *
 gsk_text_node_new (PangoFont              *font,
@@ -3902,7 +3902,7 @@ gsk_blur_node_diff (GskRenderNode  *node1,
  *
  * Creates a render node that blurs the child.
  *
- * Returns: (transfer full): a new #GskRenderNode
+ * Returns: (transfer full) (type GskBlurNode): a new #GskRenderNode
  */
 GskRenderNode *
 gsk_blur_node_new (GskRenderNode *child,
@@ -4028,7 +4028,7 @@ gsk_debug_node_diff (GskRenderNode  *node1,
  *
  * Adding this node has no visual effect.
  *
- * Returns: (transfer full): A new #GskRenderNode
+ * Returns: (transfer full) (type GskDebugNode): A new #GskRenderNode
  */
 GskRenderNode *
 gsk_debug_node_new (GskRenderNode *child,
