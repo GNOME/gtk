@@ -3558,6 +3558,8 @@ gtk_notebook_focus (GtkWidget        *widget,
 
   widget_is_focus = gtk_widget_is_focus (widget);
   old_focus_child = gtk_widget_get_focus_child (widget);
+  if (old_focus_child)
+    old_focus_child = gtk_widget_get_focus_child (old_focus_child);
 
   effective_direction = get_effective_direction (notebook, direction);
 
