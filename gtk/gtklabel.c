@@ -3652,20 +3652,27 @@ gtk_label_update_cursor (GtkLabel *label)
 }
 
 static void
-update_link_state (GtkLabel *label)
+update_child_nodes_state (GtkLabel *label)
 {
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
   GList *l;
-  GtkStateFlags state;
+  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
+  GtkStateFlags parent_state = gtk_widget_get_state_flags (GTK_WIDGET (label));
+
+  for (l = priv->child_nodes; l; l = l->next)
+    {
+      GtkLabelChildNode *node = l->data;
+
+      gtk_css_node_set_state (node->cssnode, parent_state);
+    }
 
   if (!priv->select_info)
     return;
 
   for (l = priv->select_info->links; l; l = l->next)
     {
+      GtkStateFlags state = parent_state;
       GtkLabelLink *link = l->data;
 
-      state = gtk_widget_get_state_flags (GTK_WIDGET (label));
       if (link->visited)
         state |= GTK_STATE_FLAG_VISITED;
       else
@@ -3694,7 +3701,7 @@ gtk_label_state_flags_changed (GtkWidget     *widget,
         gtk_label_select_region (label, 0, 0);
 
       gtk_label_update_cursor (label);
-      update_link_state (label);
+      update_child_nodes_state (label);
     }
 
   if (GTK_WIDGET_CLASS (gtk_label_parent_class)->state_flags_changed)
@@ -3711,7 +3718,7 @@ gtk_label_css_changed (GtkWidget         *widget,
   GTK_WIDGET_CLASS (gtk_label_parent_class)->css_changed (widget, change);
 
   if (change == NULL || gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_ATTRS) ||
-      (priv->select_info && priv->select_info->links))
+      priv->child_nodes)
     gtk_label_update_layout_attributes (label);
 }
 
@@ -4380,14 +4387,14 @@ gtk_label_click_gesture_pressed (GtkGestureClick *gesture,
       if (gdk_event_triggers_context_menu (event))
         {
           info->link_clicked = TRUE;
-          update_link_state (label);
+          update_child_nodes_state (label);
           gtk_label_do_popup (label, widget_x, widget_y);
           return;
         }
       else if (button == GDK_BUTTON_PRIMARY)
         {
           info->link_clicked = TRUE;
-          update_link_state (label);
+          update_child_nodes_state (label);
           gtk_widget_queue_draw (widget);
           if (!info->selectable)
             return;
@@ -4738,7 +4745,7 @@ gtk_label_update_active_link (GtkWidget *widget,
             {
               info->link_clicked = FALSE;
               info->active_link = link;
-              update_link_state (label);
+              update_child_nodes_state (label);
               gtk_label_update_cursor (label);
               gtk_widget_queue_draw (widget);
             }
@@ -4749,7 +4756,7 @@ gtk_label_update_active_link (GtkWidget *widget,
             {
               info->link_clicked = FALSE;
               info->active_link = NULL;
-              update_link_state (label);
+              update_child_nodes_state (label);
               gtk_label_update_cursor (label);
               gtk_widget_queue_draw (widget);
             }
