@@ -301,6 +301,8 @@ gtk_picture_class_init (GtkPictureClass *class)
   widget_class->snapshot = gtk_picture_snapshot;
   widget_class->get_request_mode = gtk_picture_get_request_mode;
   widget_class->measure = gtk_picture_measure;
+  widget_class->grab_focus = gtk_widget_grab_focus_none;
+  widget_class->focus = gtk_widget_focus_none;
 
   /**
    * GtkPicture:paintable:

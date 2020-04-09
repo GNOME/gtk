@@ -30,6 +30,7 @@
 #include "gtkrender.h"
 #include "gtksnapshot.h"
 #include "gtknative.h"
+#include "gtkwidgetprivate.h"
 
 #include <epoxy/gl.h>
 
@@ -782,6 +783,8 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
   widget_class->unrealize = gtk_gl_area_unrealize;
   widget_class->size_allocate = gtk_gl_area_size_allocate;
   widget_class->snapshot = gtk_gl_area_snapshot;
+  widget_class->focus = gtk_widget_focus_none;
+  widget_class->grab_focus = gtk_widget_grab_focus_none;
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_DRAWING_AREA);
 

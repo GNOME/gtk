@@ -147,7 +147,6 @@
                 </child>
                 <child>
                   <object class="GtkScrolledWindow">
-                    <property name="can-focus">1</property>
                     <property name="vexpand">1</property>
                     <property name="shadow-type">in</property>
                     <property name="min-content-width">250</property>
@@ -157,7 +156,6 @@
                         <property name="shadow-type">none</property>
                         <child>
                           <object class="GtkListBox" id="recent_servers_listbox">
-                            <property name="can-focus">1</property>
                             <property name="selection-mode">none</property>
                             <signal name="row-activated" handler="on_recent_servers_listbox_row_activated" object="GtkPlacesView" swapped="yes"/>
                           </object>
@@ -194,7 +192,6 @@
                         <property name="shadow-type">none</property>
                         <child>
                           <object class="GtkListBox" id="listbox">
-                            <property name="can-focus">1</property>
                             <property name="selection-mode">none</property>
                             <signal name="row-activated" handler="on_listbox_row_activated" object="GtkPlacesView" swapped="yes"/>
                           </object>
@@ -272,7 +269,6 @@
           <object class="GtkButton" id="connect_button">
             <property name="label" translatable="yes">Con_nect</property>
             <property name="use-underline">1</property>
-            <property name="can-focus">1</property>
             <property name="sensitive">0</property>
             <property name="receives-default">1</property>
             <property name="valign">center</property>
@@ -284,7 +280,6 @@
             <property name="hexpand">1</property>
             <child>
               <object class="GtkEntry" id="address_entry">
-                <property name="can-focus">1</property>
                 <property name="hexpand">1</property>
                 <property name="width-chars">20</property>
                 <property name="placeholder-text" translatable="yes">Enter server address…</property>
@@ -297,7 +292,6 @@
             </child>
             <child>
               <object class="GtkMenuButton" id="server_list_button">
-                <property name="can-focus">1</property>
                 <property name="receives-default">1</property>
                 <property name="direction">up</property>
                 <property name="popover">recent_servers_popover</property>

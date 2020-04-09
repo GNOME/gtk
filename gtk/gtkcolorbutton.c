@@ -44,6 +44,7 @@
 #include "gtkprivate.h"
 #include "gtksnapshot.h"
 #include "gtkstylecontext.h"
+#include "gtkwidgetprivate.h"
 
 
 /**
@@ -142,6 +143,9 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
   gobject_class->get_property = gtk_color_button_get_property;
   gobject_class->set_property = gtk_color_button_set_property;
   gobject_class->finalize = gtk_color_button_finalize;
+
+  widget_class->grab_focus = gtk_widget_grab_focus_child;
+  widget_class->focus = gtk_widget_focus_child;
 
   klass->color_set = NULL;
 

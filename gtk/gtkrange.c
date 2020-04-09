@@ -548,11 +548,12 @@ gtk_range_init (GtkRange *range)
                                        gtk_range_measure_trough,
                                        gtk_range_allocate_trough,
                                        gtk_range_render_trough,
-                                       NULL);
+                                       NULL,
+                                       NULL, NULL);
 
   gtk_widget_set_parent (priv->trough_widget, GTK_WIDGET (range));
 
-  priv->slider_widget = gtk_gizmo_new ("slider", NULL, NULL, NULL, NULL);
+  priv->slider_widget = gtk_gizmo_new ("slider", NULL, NULL, NULL, NULL, NULL, NULL);
   gtk_widget_set_parent (priv->slider_widget, priv->trough_widget);
 
   /* Note: Order is important here.
@@ -1115,7 +1116,7 @@ gtk_range_set_show_fill_level (GtkRange *range,
 
   if (show_fill_level)
     {
-      priv->fill_widget = gtk_gizmo_new ("fill", NULL, NULL, NULL, NULL);
+      priv->fill_widget = gtk_gizmo_new ("fill", NULL, NULL, NULL, NULL, NULL, NULL);
       gtk_widget_insert_after (priv->fill_widget, priv->trough_widget, NULL);
       update_fill_position (range);
     }
@@ -2757,7 +2758,7 @@ _gtk_range_set_has_origin (GtkRange *range,
 
   if (has_origin)
     {
-      priv->highlight_widget = gtk_gizmo_new ("highlight", NULL, NULL, NULL, NULL);
+      priv->highlight_widget = gtk_gizmo_new ("highlight", NULL, NULL, NULL, NULL, NULL, NULL);
       gtk_widget_insert_before (priv->highlight_widget, priv->trough_widget, priv->slider_widget);
 
       update_highlight_position (range);

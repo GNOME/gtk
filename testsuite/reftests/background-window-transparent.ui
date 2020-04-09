@@ -4,7 +4,6 @@
     <property name="decorated">0</property>
     <child>
       <object class="GtkViewport" id="viewport1">
-        <property name="can_focus">1</property>
       </object>
     </child>
   </object>

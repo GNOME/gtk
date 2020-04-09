@@ -317,10 +317,6 @@ gtk_drag_icon_get_property (GObject     *object,
       g_value_set_object (value, self->child);
       break;
 
-    case LAST_ARG + GTK_ROOT_PROP_FOCUS_WIDGET:
-      g_value_set_object (value, NULL);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -341,9 +337,6 @@ gtk_drag_icon_set_property (GObject      *object,
       gtk_drag_icon_set_child (self, g_value_get_object (value));
       break;
 
-    case LAST_ARG + GTK_ROOT_PROP_FOCUS_WIDGET:
-      // do nothing
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -368,6 +361,8 @@ gtk_drag_icon_class_init (GtkDragIconClass *klass)
   widget_class->size_allocate = gtk_drag_icon_size_allocate;
   widget_class->show = gtk_drag_icon_show;
   widget_class->hide = gtk_drag_icon_hide;
+  widget_class->focus = gtk_widget_focus_none;
+  widget_class->grab_focus = gtk_widget_grab_focus_none;
 
   /**
    * GtkDragIcon:child:
@@ -382,7 +377,6 @@ gtk_drag_icon_class_init (GtkDragIconClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_ARG, properties);
-  gtk_root_install_properties (object_class, LAST_ARG);
 
   gtk_widget_class_set_css_name (widget_class, "dnd");
 }

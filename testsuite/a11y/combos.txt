@@ -29,7 +29,7 @@ window1
       index: 0
       name: Combo:
       label-for: combo1
-      state: enabled multi-line sensitive showing visible
+      state: enabled focusable multi-line sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget

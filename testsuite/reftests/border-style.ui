@@ -6,7 +6,6 @@
       <object class="GtkGrid" id="grid1">
         <child>
           <object class="GtkButton" id="button1">
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="width_request">20</property>
             <property name="height_request">20</property>
@@ -23,7 +22,6 @@
         </child>
         <child>
           <object class="GtkButton" id="button2">
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="width_request">20</property>
             <property name="height_request">20</property>
@@ -40,7 +38,6 @@
         </child>
         <child>
           <object class="GtkButton" id="button3">
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="width_request">20</property>
             <property name="height_request">20</property>
@@ -57,7 +54,6 @@
         </child>
         <child>
           <object class="GtkButton" id="button4">
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="width_request">20</property>
             <property name="height_request">20</property>

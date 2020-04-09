@@ -420,6 +420,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   widget_class->size_allocate = gtk_combo_box_size_allocate;
   widget_class->mnemonic_activate = gtk_combo_box_mnemonic_activate;
   widget_class->grab_focus = gtk_combo_box_grab_focus;
+  widget_class->focus = gtk_widget_focus_child;
   widget_class->measure = gtk_combo_box_measure;
   widget_class->unmap = gtk_combo_box_unmap;
   widget_class->destroy = gtk_combo_box_destroy;

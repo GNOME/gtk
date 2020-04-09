@@ -6,7 +6,6 @@
       <object class="GtkBox">
         <property name="width_request">10</property>
         <property name="height_request">10</property>
-        <property name="can_focus">1</property>
       </object>
     </child>
   </object>

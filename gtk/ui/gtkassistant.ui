@@ -20,7 +20,6 @@
             <property name="hexpand">1</property>
             <child>
               <object class="GtkStack" id="content">
-                <property name="can-focus">1</property>
                 <property name="vexpand">1</property>
                 <signal name="remove" handler="assistant_remove_page_cb" swapped="no"/>
                 <child type="tab"/>
@@ -38,7 +37,6 @@
                   <object class="GtkButton" id="close">
                     <property name="visible">0</property>
                     <property name="label" translatable="yes">_Close</property>
-                    <property name="can-focus">1</property>
                     <property name="receives-default">1</property>
                     <property name="use-underline">1</property>
                     <style>
@@ -51,7 +49,6 @@
                   <object class="GtkButton" id="cancel">
                     <property name="visible">0</property>
                     <property name="label" translatable="yes">_Cancel</property>
-                    <property name="can-focus">1</property>
                     <property name="receives-default">1</property>
                     <property name="use-underline">1</property>
                     <style>
@@ -64,7 +61,6 @@
                   <object class="GtkButton" id="last">
                     <property name="visible">0</property>
                     <property name="label" translatable="yes">_Finish</property>
-                    <property name="can-focus">1</property>
                     <property name="receives-default">1</property>
                     <property name="use-underline">1</property>
                     <style>
@@ -76,7 +72,6 @@
                 <child>
                   <object class="GtkButton" id="back">
                     <property name="label" translatable="yes">_Back</property>
-                    <property name="can-focus">1</property>
                     <property name="receives-default">1</property>
                     <property name="use-underline">1</property>
                     <style>
@@ -88,7 +83,6 @@
                 <child>
                   <object class="GtkButton" id="forward">
                     <property name="label" translatable="yes">_Next</property>
-                    <property name="can-focus">1</property>
                     <property name="receives-default">1</property>
                     <property name="use-underline">1</property>
                     <style>
@@ -101,7 +95,6 @@
                   <object class="GtkButton" id="apply">
                     <property name="visible">0</property>
                     <property name="label" translatable="yes">_Apply</property>
-                    <property name="can-focus">1</property>
                     <property name="receives-default">1</property>
                     <property name="use-underline">1</property>
                     <style>

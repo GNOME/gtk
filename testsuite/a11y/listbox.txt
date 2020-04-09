@@ -37,7 +37,7 @@ window1
         "list item"
         parent: listbox1
         index: 0
-        state: enabled focusable focused sensitive showing visible
+        state: enabled focused sensitive showing visible
         toolkit: gtk
         <AtkComponent>
         layer: widget
@@ -47,7 +47,7 @@ window1
           parent: unnamed-GtkListBoxRowAccessible-1
           index: 0
           name: Row One
-          state: enabled multi-line sensitive showing visible
+          state: enabled focusable multi-line sensitive showing visible
           toolkit: gtk
           <AtkComponent>
           layer: widget
@@ -86,7 +86,7 @@ window1
         "list item"
         parent: listbox1
         index: 1
-        state: enabled focusable sensitive showing visible
+        state: enabled sensitive showing visible
         toolkit: gtk
         <AtkComponent>
         layer: widget
@@ -96,7 +96,7 @@ window1
           parent: unnamed-GtkListBoxRowAccessible-2
           index: 0
           name: Row Two
-          state: enabled multi-line sensitive showing visible
+          state: enabled focusable multi-line sensitive showing visible
           toolkit: gtk
           <AtkComponent>
           layer: widget
@@ -145,7 +145,7 @@ window1
         "list item"
         parent: listbox2
         index: 0
-        state: enabled focusable selectable sensitive showing visible
+        state: enabled selectable sensitive showing visible
         toolkit: gtk
         <AtkComponent>
         layer: widget
@@ -155,7 +155,7 @@ window1
           parent: unnamed-GtkListBoxRowAccessible-3
           index: 0
           name: Row Tree
-          state: enabled multi-line sensitive showing visible
+          state: enabled focusable multi-line sensitive showing visible
           toolkit: gtk
           <AtkComponent>
           layer: widget

@@ -471,6 +471,22 @@
     </section>
 
     <section>
+      <title>Focus handling changes</title>
+      <para>
+        The semantics of the #GtkWidget:can-focus property have changed.
+        In GTK 3, this property only meant that the widget itself would not
+        accept keyboard input, but its children still might (in the case of
+        containers). In GTK 4, if :can-focus is %FALSE, the focus cannot enter
+        the widget or any of its descendents, and the default value has changed
+        from %FALSE to %TRUE.
+      </para>
+      <para>
+        The recommended way to influence focus behavior of custom widgets
+        in GTK 4 is to override the focus() and grab_focus() vfuncs.
+      </para>
+    </section>
+
+    <section>
       <title>Stop using GtkEventBox</title>
       <para>
         GtkEventBox is no longer needed and has been removed.

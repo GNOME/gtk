@@ -61,14 +61,12 @@
                               <object class="GtkScrolledWindow" id="list_scrolled_window">
                                 <property name="width-request">400</property>
                                 <property name="height-request">300</property>
-                                <property name="can-focus">1</property>
                                 <property name="hexpand">1</property>
                                 <property name="vexpand">1</property>
                                 <property name="hscrollbar-policy">never</property>
                                 <property name="shadow-type">etched-in</property>
                                 <child>
                                   <object class="GtkTreeView" id="family_face_list">
-                                    <property name="can-focus">1</property>
                                     <property name="model">filter_model</property>
                                     <property name="headers-visible">0</property>
                                     <property name="enable-search">0</property>
@@ -103,7 +101,6 @@
                             </child>
                             <child>
                               <object class="GtkEntry" id="preview">
-                                <property name="can-focus">1</property>
                                 <property name="placeholder-text" translatable="yes">Preview text</property>
                                 <child>
                                   <object class="GtkEventControllerScroll">
@@ -131,7 +128,6 @@
                             </child>
                             <child>
                               <object class="GtkScale" id="size_slider">
-                                <property name="can-focus">1</property>
                                 <property name="hexpand">1</property>
                                 <property name="adjustment">slider_adjustment</property>
                                 <property name="draw-value">0</property>
@@ -150,7 +146,6 @@
                             </child>
                             <child>
                               <object class="GtkSpinButton" id="size_spin">
-                                <property name="can-focus">1</property>
                                 <property name="adjustment">spin_adjustment</property>
                                 <property name="valign">center</property>
                                 <signal name="output" handler="output_cb"/>
@@ -233,7 +228,6 @@
                 </child>
                 <child>
                   <object class="GtkEntry" id="preview2">
-                    <property name="can-focus">1</property>
                     <property name="placeholder-text" translatable="yes">Preview text</property>
                     <property name="text" bind-source="preview" bind-property="text" bind-flags="bidirectional"/>
                     <property name="attributes" bind-source="preview" bind-property="attributes" bind-flags="bidirectional"/>
@@ -272,7 +266,6 @@
                             </child>
                             <child>
                               <object class="GtkScale" id="size_slider2">
-                                <property name="can-focus">1</property>
                                 <property name="hexpand">1</property>
                                 <property name="adjustment">slider_adjustment</property>
                                 <property name="draw-value">0</property>
@@ -285,7 +278,6 @@
                             </child>
                             <child>
                               <object class="GtkSpinButton" id="size_spin2">
-                                <property name="can-focus">1</property>
                                 <property name="adjustment">spin_adjustment</property>
                                 <property name="valign">center</property>
                                 <signal name="output" handler="output_cb"/>

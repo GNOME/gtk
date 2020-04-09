@@ -780,6 +780,7 @@ static void gtk_notebook_direction_changed   (GtkWidget        *widget,
                                               GtkTextDirection  previous_direction);
 static gboolean gtk_notebook_focus           (GtkWidget        *widget,
                                               GtkDirectionType  direction);
+static gboolean gtk_notebook_grab_focus      (GtkWidget        *widget);
 
 /*** Drag and drop Methods ***/
 static void gtk_notebook_dnd_finished_cb     (GdkDrag          *drag,
@@ -1043,6 +1044,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->state_flags_changed = gtk_notebook_state_flags_changed;
   widget_class->direction_changed = gtk_notebook_direction_changed;
   widget_class->focus = gtk_notebook_focus;
+  widget_class->grab_focus = gtk_notebook_grab_focus;
   widget_class->compute_expand = gtk_notebook_compute_expand;
 
   container_class->add = gtk_notebook_add;
@@ -1387,8 +1389,6 @@ gtk_notebook_init (GtkNotebook *notebook)
   GtkLayoutManager *layout;
   GtkDropTarget *dest;
 
-  gtk_widget_set_can_focus (GTK_WIDGET (notebook), TRUE);
-
   notebook->cur_page = NULL;
   notebook->children = NULL;
   notebook->first_tab = NULL;
@@ -1412,17 +1412,19 @@ gtk_notebook_init (GtkNotebook *notebook)
   notebook->has_scrolled = FALSE;
 
   notebook->header_widget = g_object_new (GTK_TYPE_BOX,
-                                      "css-name", "header",
-                                      NULL);
+                                          "css-name", "header",
+                                          NULL);
   gtk_widget_add_css_class (notebook->header_widget, GTK_STYLE_CLASS_TOP);
   gtk_widget_hide (notebook->header_widget);
   gtk_widget_set_parent (notebook->header_widget, GTK_WIDGET (notebook));
 
   notebook->tabs_widget = gtk_gizmo_new ("tabs",
-                                     gtk_notebook_measure_tabs,
-                                     gtk_notebook_allocate_tabs,
-                                     gtk_notebook_snapshot_tabs,
-                                     NULL);
+                                         gtk_notebook_measure_tabs,
+                                         gtk_notebook_allocate_tabs,
+                                         gtk_notebook_snapshot_tabs,
+                                         NULL,
+                                         (GtkGizmoFocusFunc)gtk_widget_focus_self,
+                                         (GtkGizmoGrabFocusFunc)gtk_widget_grab_focus_self);
   gtk_widget_set_hexpand (notebook->tabs_widget, TRUE);
   gtk_container_add (GTK_CONTAINER (notebook->header_widget), notebook->tabs_widget);
 
@@ -3558,6 +3560,8 @@ gtk_notebook_focus (GtkWidget        *widget,
 
   widget_is_focus = gtk_widget_is_focus (widget);
   old_focus_child = gtk_widget_get_focus_child (widget);
+  if (old_focus_child)
+    old_focus_child = gtk_widget_get_focus_child (old_focus_child);
 
   effective_direction = get_effective_direction (notebook, direction);
 
@@ -3703,6 +3707,17 @@ gtk_notebook_focus (GtkWidget        *widget,
 
   g_assert_not_reached ();
   return FALSE;
+}
+
+static gboolean
+gtk_notebook_grab_focus (GtkWidget *widget)
+{
+  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+
+  if (notebook->show_tabs)
+    return gtk_widget_grab_focus_self (widget);
+  else
+    return gtk_widget_grab_focus_child (widget);
 }
 
 static void
@@ -3979,7 +3994,7 @@ gtk_notebook_insert_notebook_page (GtkNotebook *notebook,
   else
   sibling = notebook->arrow_widget[ARROW_RIGHT_AFTER];
 
-  page->tab_widget = gtk_gizmo_new ("tab", measure_tab, allocate_tab, NULL, NULL);
+  page->tab_widget = gtk_gizmo_new ("tab", measure_tab, allocate_tab, NULL, NULL, NULL, NULL);
   g_object_set_data (G_OBJECT (page->tab_widget), "notebook", notebook);
   gtk_widget_insert_before (page->tab_widget, notebook->tabs_widget, sibling);
   controller = gtk_drop_controller_motion_new ();
@@ -6083,8 +6098,6 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
 
   if (!show_tabs)
     {
-      gtk_widget_set_can_focus (GTK_WIDGET (notebook), FALSE);
-
       while (children)
         {
           page = children->data;
@@ -6102,7 +6115,6 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
     }
   else
     {
-      gtk_widget_set_can_focus (GTK_WIDGET (notebook), TRUE);
       gtk_notebook_update_labels (notebook);
       gtk_widget_show (notebook->header_widget);
     }

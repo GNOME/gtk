@@ -1403,10 +1403,9 @@ test_widget (void)
   const gchar *buffer =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window1\">"
+    "    <property name=\"focus-widget\">button1</property>"
     "    <child>"
     "      <object class=\"GtkButton\" id=\"button1\">"
-    "         <property name=\"can-focus\">True</property>"
-    "         <property name=\"has-focus\">True</property>"
     "      </object>"
     "    </child>"
     "  </object>"
@@ -1457,7 +1456,6 @@ test_widget (void)
     "    <child>"
     "      <object class=\"GtkLabel\" id=\"label1\">"
     "         <property name=\"label\">Thelabel</property>"
-    "         <property name=\"can_focus\">False</property>"
     "         <accessibility>"
     "            <role type=\"static\"/>"
     "         </accessibility>"
@@ -1475,9 +1473,7 @@ test_widget (void)
   builder = builder_new_from_string (buffer, -1, NULL);
   button1 = gtk_builder_get_object (builder, "button1");
 
-#if 0
   g_assert (gtk_widget_has_focus (GTK_WIDGET (button1)));
-#endif
   window1 = gtk_builder_get_object (builder, "window1");
   gtk_widget_destroy (GTK_WIDGET (window1));
   
@@ -2351,11 +2347,9 @@ test_anaconda_signal (void)
     "    </columns>"
     "  </object>"
     "  <object class='GtkWindow' id='window1'>"
-    "    <property name='can_focus'>False</property>"
     "    <child>"
     "      <object class='GtkTreeView' id='treeview1'>"
     "        <property name='visible'>True</property>"
-    "        <property name='can_focus'>True</property>"
     "        <property name='model'>liststore1</property>"
     "        <child internal-child='selection'>"
     "          <object class='GtkTreeSelection' id='treeview-selection1'/>"

@@ -29,7 +29,6 @@ tests = [
   ['filterlistmodel'],
   ['flattenlistmodel'],
   ['floating'],
-  ['focus'],
   #['gestures'],
   ['grid'],
   ['grid-layout'],
@@ -158,14 +157,25 @@ if add_languages('cpp', required: false)
   endif
 endif
 
+
 focus_chain_tests = [
   # test     direction
   [ 'basic', 'tab' ],
   [ 'basic', 'tab-backward' ],
   [ 'basic', 'left' ],
   [ 'basic', 'right' ],
-  [ 'focusable-container', 'tab' ],
-  [ 'focusable-container', 'tab-backward' ],
+  [ 'widget-factory', 'tab' ],
+  [ 'widget-factory', 'tab-backward' ],
+  [ 'widget-factory', 'up' ],
+  [ 'widget-factory', 'down' ],
+  [ 'widget-factory', 'left' ],
+  [ 'widget-factory', 'right' ],
+  [ 'widget-factory2', 'tab' ],
+  [ 'widget-factory2', 'tab-backward' ],
+  # in ci, we don't show a color picker, so the focus chain
+  # for page3 is missing an expected button in the color editor
+  #[ 'widget-factory3', 'tab' ],
+  #[ 'widget-factory3', 'tab-backward' ],
 ]
 
 focus_chain = executable(
@@ -185,6 +195,7 @@ foreach test : focus_chain_tests
               'GDK_DEBUG=default-settings',
               'GTK_CSD=1',
               'G_ENABLE_DIAGNOSTIC=0',
+              'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
               'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
               'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
              ],

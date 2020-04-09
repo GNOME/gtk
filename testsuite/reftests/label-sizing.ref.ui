@@ -94,13 +94,11 @@
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required1">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required1">
@@ -131,7 +129,6 @@
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required1">
@@ -204,13 +201,11 @@
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required2">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required2">
@@ -243,7 +238,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required2">
@@ -316,13 +310,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required3">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required3">
@@ -353,7 +345,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required3">
@@ -426,13 +417,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required4">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required4">
@@ -463,7 +452,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required4">
@@ -536,13 +524,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required5">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required5">
@@ -575,7 +561,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required5">
@@ -650,13 +635,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required6">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required6">
@@ -691,7 +674,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required6">
@@ -766,13 +748,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required7">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required7">
@@ -805,7 +785,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required7">
@@ -880,13 +859,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required8">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required8">
@@ -919,7 +896,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required8">
@@ -994,13 +970,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required9">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required9">
@@ -1033,7 +1007,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required9">
@@ -1108,13 +1081,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required10">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required10">
@@ -1149,7 +1120,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required10">
@@ -1224,13 +1194,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required11">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required11">
@@ -1263,7 +1231,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required11">
@@ -1338,13 +1305,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required12">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required12">
@@ -1377,7 +1342,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required12">
@@ -1452,13 +1416,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required13">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required13">
@@ -1491,7 +1453,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required13">
@@ -1566,13 +1527,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required14">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required14">
@@ -1605,7 +1564,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required14">
@@ -1680,13 +1638,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required15">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required15">
@@ -1719,7 +1675,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required15">
@@ -1794,13 +1749,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required16">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required16">
@@ -1833,7 +1786,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required16">
@@ -1908,13 +1860,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required17">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required17">
@@ -1947,7 +1897,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required17">
@@ -2022,13 +1971,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required18">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required18">
@@ -2063,7 +2010,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required18">
@@ -2140,13 +2086,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required19">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required19">
@@ -2179,7 +2123,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required19">
@@ -2254,13 +2197,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required20">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required20">
@@ -2293,7 +2234,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required20">
@@ -2368,13 +2308,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required21">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required21">
@@ -2409,7 +2347,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required21">
@@ -2486,13 +2423,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required22">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required22">
@@ -2529,7 +2464,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required22">
@@ -2608,13 +2542,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required23">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required23">
@@ -2649,7 +2581,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required23">
@@ -2726,13 +2657,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required24">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required24">
@@ -2767,7 +2696,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required24">
@@ -2844,13 +2772,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required25">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required25">
@@ -2885,7 +2811,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required25">
@@ -2962,13 +2887,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required26">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required26">
@@ -3005,7 +2928,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required26">
@@ -3084,13 +3006,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required27">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required27">
@@ -3125,7 +3045,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required27">
@@ -3202,13 +3121,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required28">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required28">
@@ -3243,7 +3160,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required28">
@@ -3320,13 +3236,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required29">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required29">
@@ -3361,7 +3275,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required29">
@@ -3438,13 +3351,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required30">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required30">
@@ -3479,7 +3390,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required30">
@@ -3556,13 +3466,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required31">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required31">
@@ -3597,7 +3505,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required31">
@@ -3674,13 +3581,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required32">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required32">
@@ -3715,7 +3620,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required32">
@@ -3792,13 +3696,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required33">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required33">
@@ -3831,7 +3733,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required33">
@@ -3906,13 +3807,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required34">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required34">
@@ -3947,7 +3846,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required34">
@@ -4024,13 +3922,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required35">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required35">
@@ -4063,7 +3959,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required35">
@@ -4138,13 +4033,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required36">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required36">
@@ -4177,7 +4070,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required36">
@@ -4252,13 +4144,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required37">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required37">
@@ -4293,7 +4183,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required37">
@@ -4370,13 +4259,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required38">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required38">
@@ -4413,7 +4300,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required38">
@@ -4492,13 +4378,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required39">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required39">
@@ -4533,7 +4417,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required39">
@@ -4610,13 +4493,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required40">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required40">
@@ -4651,7 +4532,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required40">
@@ -4728,13 +4608,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required41">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required41">
@@ -4769,7 +4647,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required41">
@@ -4846,13 +4723,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required42">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required42">
@@ -4889,7 +4764,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required42">
@@ -4968,13 +4842,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required43">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required43">
@@ -5009,7 +4881,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required43">
@@ -5086,13 +4957,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required44">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required44">
@@ -5127,7 +4996,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required44">
@@ -5204,13 +5072,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required45">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required45">
@@ -5245,7 +5111,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required45">
@@ -5322,13 +5187,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required46">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required46">
@@ -5363,7 +5226,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required46">
@@ -5440,13 +5302,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required47">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required47">
@@ -5481,7 +5341,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required47">
@@ -5558,13 +5417,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required48">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required48">
@@ -5599,7 +5456,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required48">
@@ -5676,13 +5532,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required49">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required49">
@@ -5715,7 +5569,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required49">
@@ -5790,13 +5643,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required50">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required50">
@@ -5831,7 +5682,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required50">
@@ -5906,13 +5756,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required51">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required51">
@@ -5945,7 +5793,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required51">
@@ -6020,13 +5867,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required52">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required52">
@@ -6059,7 +5904,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required52">
@@ -6134,13 +5978,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required53">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required53">
@@ -6175,7 +6017,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required53">
@@ -6252,13 +6093,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required54">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required54">
@@ -6295,7 +6134,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required54">
@@ -6372,13 +6210,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required55">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required55">
@@ -6413,7 +6249,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required55">
@@ -6490,13 +6325,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required56">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required56">
@@ -6531,7 +6364,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required56">
@@ -6608,13 +6440,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required57">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required57">
@@ -6649,7 +6479,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required57">
@@ -6726,13 +6555,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required58">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required58">
@@ -6769,7 +6596,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required58">
@@ -6846,13 +6672,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required59">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required59">
@@ -6887,7 +6711,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required59">
@@ -6964,13 +6787,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required60">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required60">
@@ -7005,7 +6826,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required60">
@@ -7082,13 +6902,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required61">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required61">
@@ -7123,7 +6941,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required61">
@@ -7200,13 +7017,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required62">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required62">
@@ -7241,7 +7056,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required62">
@@ -7318,13 +7132,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required63">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required63">
@@ -7359,7 +7171,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required63">
@@ -7436,13 +7247,11 @@ ABCD</property>
             <property name="shrink-child2">0</property>
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <child>
               <object class="GtkPaned" id="required64">
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required64">
@@ -7477,7 +7286,6 @@ ABCD</property>
                 <property name="shrink-child2">0</property>
                 <property name="shrink-child1">0</property>
                 <property name="resize-child1">0</property>
-                <property name="can_focus">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required64">

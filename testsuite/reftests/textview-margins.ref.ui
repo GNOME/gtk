@@ -10,7 +10,6 @@
     <property name="resizable">0</property>
     <child>
       <object class="GtkTextView" id="textview1">
-        <property name="can_focus">1</property>
         <property name="wrap_mode">word</property>
         <property name="margin_start">8</property>
         <property name="margin_end">8</property>

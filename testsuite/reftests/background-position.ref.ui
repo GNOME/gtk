@@ -11,7 +11,6 @@
           <object class="GtkButton" id="button1">
             <property name="width_request">20</property>
             <property name="height_request">20</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="name">ref</property>
             <layout>
@@ -23,7 +22,6 @@
           <object class="GtkButton" id="button2">
             <property name="width_request">20</property>
             <property name="height_request">20</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="name">ref</property>
             <layout>
@@ -35,7 +33,6 @@
           <object class="GtkButton" id="button3">
             <property name="width_request">20</property>
             <property name="height_request">20</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="name">ref</property>
             <layout>
@@ -47,7 +44,6 @@
           <object class="GtkButton" id="button4">
             <property name="width_request">20</property>
             <property name="height_request">20</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="name">ref</property>
             <layout>
@@ -59,7 +55,6 @@
           <object class="GtkButton" id="button5">
             <property name="width_request">20</property>
             <property name="height_request">20</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="name">ref</property>
             <layout>
@@ -71,7 +66,6 @@
           <object class="GtkButton" id="button6">
             <property name="width_request">20</property>
             <property name="height_request">20</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="name">ref</property>
             <layout>
@@ -83,7 +77,6 @@
           <object class="GtkButton" id="button7">
             <property name="width_request">20</property>
             <property name="height_request">20</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="name">ref</property>
             <layout>
@@ -95,7 +88,6 @@
           <object class="GtkButton" id="button8">
             <property name="width_request">10</property>
             <property name="height_request">20</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="name">ref</property>
             <layout>
@@ -107,7 +99,6 @@
           <object class="GtkButton" id="button9">
             <property name="width_request">20</property>
             <property name="height_request">20</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="name">ref</property>
             <layout>
