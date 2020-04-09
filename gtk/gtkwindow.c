@@ -5740,7 +5740,16 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
         child = _gtk_widget_get_parent (child);
 
       if (child == widget)
-	gtk_window_set_focus (GTK_WINDOW (window), NULL);
+        {
+          GtkWidget *new_focus;
+
+          if (GTK_IS_NATIVE (widget))
+            new_focus = gtk_widget_get_parent (widget);
+          else
+            new_focus = NULL;
+
+	  gtk_window_set_focus (GTK_WINDOW (window), new_focus);
+        }
     }
       
   child = priv->default_widget;
