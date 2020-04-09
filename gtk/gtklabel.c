@@ -83,7 +83,10 @@
  * ├── [selection]
  * ├── [link]
  * ┊
- * ╰── [link]
+ * ├── [link]
+ * ├── [span]
+ * ┊
+ * ╰── [span]
  * ]|
  *
  * GtkLabel has a single CSS node with the name label. A wide variety
@@ -249,6 +252,21 @@
  *
  * It is possible to implement custom handling for links and their tooltips with
  * the #GtkLabel::activate-link signal and the gtk_label_get_current_uri() function.
+ *
+ * # Spans
+ *
+ * GTK+ also supports markup for spans, which function in a very similar way to
+ * a span in HTML. Spans support a “class“ attribute in addition to all regular
+ * Pango attributes. In GTK+, spans are ranges of text, not widgets, so they
+ * lack many css features that would be expected from a widget, including
+ * borders, shadows, etc.
+ *
+ * An example looks like this:
+ *
+ * |[<!-- language="C" -->
+ *   GtkWidget *label = gtk_label_new (NULL);
+ *   gtk_label_set_markup (GTK_LABEL (label), "<span class='class-name'>Span text</span>");
+ * ]|
  */
 
 typedef struct _GtkLabelPrivate       GtkLabelPrivate;
