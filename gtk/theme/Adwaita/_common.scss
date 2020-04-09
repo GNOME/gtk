@@ -57,6 +57,7 @@ flowboxchild:focus(visible) {
 }
 
 // Widgets that draw their focus indicator outset and not inset
+plane:focus(visible),
 scale:focus(visible) > trough {
   outline-color: $focus_border_color;
   outline-style: solid;
