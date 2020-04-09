@@ -172,8 +172,10 @@ focus_chain_tests = [
   [ 'widget-factory', 'right' ],
   [ 'widget-factory2', 'tab' ],
   [ 'widget-factory2', 'tab-backward' ],
-  [ 'widget-factory3', 'tab' ],
-  [ 'widget-factory3', 'tab-backward' ],
+  # in ci, we don't show a color picker, so the focus chain
+  # for page3 is missing an expected button in the color editor
+  #[ 'widget-factory3', 'tab' ],
+  #[ 'widget-factory3', 'tab-backward' ],
 ]
 
 focus_chain = executable(
