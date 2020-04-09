@@ -627,6 +627,28 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   return attrs;
 }
 
+void
+gtk_css_style_add_child_attributes (GtkCssStyle *style,
+                                    GtkCssStyle *parent_style,
+                                    PangoAttrList *attrs,
+                                    gint start,
+                                    gint end)
+{
+  PangoAttribute *attr;
+  const GdkRGBA *color = gtk_css_color_value_get_rgba (style->core->color);
+  const GdkRGBA *parent_color = gtk_css_color_value_get_rgba (parent_style->core->color);
+
+  if (!gdk_rgba_equal(color, parent_color))
+    {
+      attr = pango_attr_foreground_new (color->red * 65535,
+                                        color->green * 65535,
+                                        color->blue * 65535);
+      attr->start_index = start;
+      attr->end_index = end;
+      pango_attr_list_insert (attrs, attr);
+    }
+}
+
 PangoFontDescription *
 gtk_css_style_get_pango_font (GtkCssStyle *style)
 {

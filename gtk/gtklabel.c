@@ -560,7 +560,8 @@ static GtkLabelChildNode* gtk_label_child_node_new  (GtkLabel *label,
                                                      gint start);
 static void               gtk_label_child_node_free (GtkLabelChildNode *node);
 
-static void gtk_label_clear_child_nodes (GtkLabel *label);
+static PangoAttrList* gtk_label_get_child_node_attrs (GtkLabel *label);
+static void           gtk_label_clear_child_nodes    (GtkLabel *label);
 
 
 /* Event controller callbacks */
@@ -2681,6 +2682,28 @@ gtk_label_child_node_free (GtkLabelChildNode *node)
   g_free (node);
 }
 
+static PangoAttrList *
+gtk_label_get_child_node_attrs (GtkLabel *label)
+{
+  GList *list;
+  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
+  PangoAttrList *attrs = pango_attr_list_new ();
+
+  for (list = priv->child_nodes; list; list = list->next)
+    {
+      GtkLabelChildNode *node = list->data;
+
+      gtk_css_style_add_child_attributes (
+          gtk_css_node_get_style (node->cssnode),
+          gtk_css_node_get_style (gtk_css_node_get_parent (node->cssnode)),
+          attrs,
+          node->start,
+          node->end);
+    }
+
+  return attrs;
+}
+
 static void
 gtk_label_clear_child_nodes (GtkLabel *label)
 {
@@ -3227,35 +3250,8 @@ gtk_label_update_layout_attributes (GtkLabel *label)
   if (priv->layout == NULL)
     return;
 
-
-  if (priv->select_info && priv->select_info->links)
-    {
-      const GdkRGBA *link_color;
-      PangoAttribute *attribute;
-      GList *list;
-
-      attrs = pango_attr_list_new ();
-
-      for (list = priv->select_info->links; list; list = list->next)
-        {
-          GtkLabelLink *link = list->data;
-
-          attribute = pango_attr_underline_new (TRUE);
-          attribute->start_index = link->node->start;
-          attribute->end_index = link->node->end;
-          pango_attr_list_insert (attrs, attribute);
-
-          style = gtk_css_node_get_style (link->node->cssnode);
-          link_color = gtk_css_color_value_get_rgba (style->core->color);
-
-          attribute = pango_attr_foreground_new (link_color->red * 65535,
-                                                 link_color->green * 65535,
-                                                 link_color->blue * 65535);
-          attribute->start_index = link->node->start;
-          attribute->end_index = link->node->end;
-          pango_attr_list_insert (attrs, attribute);
-        }
-    }
+  if (priv->child_nodes)
+    attrs = gtk_label_get_child_node_attrs (label);
   else if (priv->markup_attrs && priv->attrs)
     attrs = pango_attr_list_new ();
   else

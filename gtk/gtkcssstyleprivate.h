@@ -261,6 +261,11 @@ gboolean                gtk_css_style_print                     (GtkCssStyle    
                                                                  guint                   indent,
                                                                  gboolean                skip_initial);
 PangoAttrList *         gtk_css_style_get_pango_attributes      (GtkCssStyle            *style);
+void                    gtk_css_style_add_child_attributes      (GtkCssStyle            *style,
+                                                                 GtkCssStyle            *parent_style,
+                                                                 PangoAttrList          *attrs,
+                                                                 gint                    start,
+                                                                 gint                    end);
 
 PangoFontDescription *  gtk_css_style_get_pango_font            (GtkCssStyle            *style);
 GtkCssStaticStyle *     gtk_css_style_get_static_style          (GtkCssStyle            *style);
