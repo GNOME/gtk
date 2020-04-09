@@ -18,7 +18,7 @@ window1
     "table"
     parent: window1
     index: 0
-    state: enabled focusable focused sensitive showing visible manages-descendants
+    state: enabled focused sensitive showing visible manages-descendants
     toolkit: gtk
     <AtkComponent>
     layer: widget
@@ -40,7 +40,7 @@ window1
       parent: tv
       index: 0
       name: Test
-      state: enabled sensitive showing visible
+      state: enabled focusable sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget

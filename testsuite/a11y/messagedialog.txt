@@ -21,7 +21,7 @@ window1
       parent: unnamed-GtkContainerAccessible-0
       index: 0
       name: 
-      state: enabled multi-line sensitive
+      state: enabled focusable multi-line sensitive
       toolkit: gtk
       <AtkComponent>
       layer: widget
@@ -97,7 +97,7 @@ window1
             parent: message_area
             index: 0
             name: Information
-            state: enabled multi-line sensitive showing visible
+            state: enabled focusable multi-line sensitive showing visible
             toolkit: gtk
             <AtkComponent>
             layer: widget
@@ -137,7 +137,7 @@ window1
             parent: message_area
             index: 1
             name: More Information
-            state: enabled multi-line sensitive showing visible
+            state: enabled focusable multi-line sensitive showing visible
             toolkit: gtk
             <AtkComponent>
             layer: widget

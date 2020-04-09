@@ -19,7 +19,7 @@ window1
     parent: window1
     index: 0
     name: Reveal this
-    state: enabled expandable focusable focused sensitive showing visible
+    state: enabled expandable focused sensitive showing visible
     toolkit: gtk
     <AtkComponent>
     layer: widget
@@ -30,7 +30,7 @@ window1
     label1
       "label"
       name: Hello World!
-      state: enabled multi-line sensitive visible
+      state: enabled focusable multi-line sensitive visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
