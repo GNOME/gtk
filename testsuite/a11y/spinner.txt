@@ -1,7 +1,7 @@
 window1
   "frame"
   index: 0
-  state: enabled resizable sensitive showing visible
+  state: enabled focusable resizable sensitive showing visible
   toolkit: gtk
   <AtkComponent>
   layer: widget
@@ -9,7 +9,7 @@ window1
   unnamed-GtkContainerAccessible-0
     "panel"
     parent: window1
-    state: enabled sensitive showing visible
+    state: enabled focusable sensitive showing visible
     toolkit: gtk
     <AtkComponent>
     layer: widget
@@ -20,7 +20,7 @@ window1
     index: 0
     name: Spinner
     description: Provides visual indication of progress
-    state: enabled sensitive showing visible
+    state: enabled focusable sensitive showing visible
     toolkit: gtk
     <AtkComponent>
     layer: widget

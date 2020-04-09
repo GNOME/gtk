@@ -1,7 +1,7 @@
 window1
   "frame"
   index: 0
-  state: enabled resizable sensitive showing visible
+  state: enabled focusable resizable sensitive showing visible
   toolkit: gtk
   <AtkComponent>
   layer: widget
@@ -9,7 +9,7 @@ window1
   unnamed-GtkContainerAccessible-0
     "panel"
     parent: window1
-    state: enabled sensitive showing visible
+    state: enabled focusable sensitive showing visible
     toolkit: gtk
     <AtkComponent>
     layer: widget
@@ -30,7 +30,7 @@ window1
       parent: notebook1
       index: 0
       name: Tab 1
-      state: enabled multi-line selectable selected sensitive showing visible
+      state: enabled focusable multi-line selectable selected sensitive showing visible
       <AtkComponent>
       layer: widget
       alpha: 1
@@ -54,7 +54,7 @@ window1
       parent: notebook1
       index: 1
       name: Tab 2
-      state: enabled multi-line selectable sensitive showing visible
+      state: enabled focusable multi-line selectable sensitive showing visible
       <AtkComponent>
       layer: widget
       alpha: 1

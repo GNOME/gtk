@@ -1,7 +1,7 @@
 window1
   "frame"
   index: 0
-  state: enabled resizable sensitive showing visible
+  state: enabled focusable resizable sensitive showing visible
   toolkit: gtk
   <AtkComponent>
   layer: widget
@@ -9,7 +9,7 @@ window1
   unnamed-GtkContainerAccessible-0
     "panel"
     parent: window1
-    state: enabled sensitive showing visible
+    state: enabled focusable sensitive showing visible
     toolkit: gtk
     <AtkComponent>
     layer: widget
@@ -18,7 +18,7 @@ window1
     "filler"
     parent: window1
     index: 0
-    state: enabled horizontal sensitive showing visible
+    state: enabled focusable horizontal sensitive showing visible
     toolkit: gtk
     <AtkComponent>
     layer: widget
@@ -29,7 +29,7 @@ window1
       index: 0
       name: entry:
       label-for: entry1
-      state: enabled multi-line sensitive showing visible
+      state: enabled focusable multi-line sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
@@ -70,7 +70,7 @@ window1
       index: 1
       name: password entry:
       label-for: entry2
-      state: enabled multi-line sensitive showing visible
+      state: enabled focusable multi-line sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
@@ -111,7 +111,7 @@ window1
       index: 2
       name: spinbutton:
       label-for: spinbutton1
-      state: enabled multi-line sensitive showing visible
+      state: enabled focusable multi-line sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
@@ -299,7 +299,7 @@ window1
       parent: box1
       index: 6
       labelled-by: label3
-      state: enabled horizontal sensitive showing visible
+      state: enabled focusable horizontal sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget

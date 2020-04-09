@@ -1,7 +1,7 @@
 window1
   "frame"
   index: 0
-  state: enabled resizable sensitive showing visible
+  state: enabled focusable resizable sensitive showing visible
   toolkit: gtk
   <AtkComponent>
   layer: widget
@@ -9,7 +9,7 @@ window1
   unnamed-GtkContainerAccessible-0
     "panel"
     parent: window1
-    state: enabled sensitive showing visible
+    state: enabled focusable sensitive showing visible
     toolkit: gtk
     <AtkComponent>
     layer: widget
@@ -18,7 +18,7 @@ window1
     "filler"
     parent: window1
     index: 0
-    state: enabled horizontal sensitive showing visible
+    state: enabled focusable horizontal sensitive showing visible
     toolkit: gtk
     <AtkComponent>
     layer: widget
@@ -27,7 +27,7 @@ window1
       "list box"
       parent: box1
       index: 0
-      state: enabled sensitive showing visible manages-descendants
+      state: enabled focusable sensitive showing visible manages-descendants
       toolkit: gtk
       <AtkComponent>
       layer: widget
@@ -47,7 +47,7 @@ window1
           parent: unnamed-GtkListBoxRowAccessible-1
           index: 0
           name: Row One
-          state: enabled multi-line sensitive showing visible
+          state: enabled focusable multi-line sensitive showing visible
           toolkit: gtk
           <AtkComponent>
           layer: widget
@@ -96,7 +96,7 @@ window1
           parent: unnamed-GtkListBoxRowAccessible-2
           index: 0
           name: Row Two
-          state: enabled multi-line sensitive showing visible
+          state: enabled focusable multi-line sensitive showing visible
           toolkit: gtk
           <AtkComponent>
           layer: widget
@@ -135,7 +135,7 @@ window1
       "list box"
       parent: box1
       index: 1
-      state: enabled sensitive showing visible manages-descendants
+      state: enabled focusable sensitive showing visible manages-descendants
       toolkit: gtk
       <AtkComponent>
       layer: widget
@@ -155,7 +155,7 @@ window1
           parent: unnamed-GtkListBoxRowAccessible-3
           index: 0
           name: Row Tree
-          state: enabled multi-line sensitive showing visible
+          state: enabled focusable multi-line sensitive showing visible
           toolkit: gtk
           <AtkComponent>
           layer: widget
