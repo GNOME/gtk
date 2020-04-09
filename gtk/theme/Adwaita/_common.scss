@@ -1000,6 +1000,7 @@ list > row button.image-button:not(.flat) {
 button:link,
 link:link {
   color: $link_color;
+  text-decoration-line: underline;
 
   &:visited {
     color: $link_visited_color;
