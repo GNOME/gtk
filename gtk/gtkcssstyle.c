@@ -399,16 +399,60 @@ get_pango_underline_from_style (GtkTextDecorationStyle style)
   g_return_val_if_reached (PANGO_UNDERLINE_SINGLE);
 }
 
+static PangoColor
+gtk_css_style_get_pango_color (GtkCssStyle *style, guint id)
+{
+  PangoColor color;
+  GtkCssValue *v = gtk_css_style_get_value (style, id);
+  const GdkRGBA *rgba = gtk_css_color_value_get_rgba (v);
+
+  color.red = rgba->red * 65535;
+  color.green = rgba->green * 65535;
+  color.blue = rgba->blue * 65535;
+
+  return color;
+}
+
 static PangoAttrList *
-add_pango_attr (PangoAttrList  *attrs,
-                PangoAttribute *attr)
+add_pango_attr_range (PangoAttrList *attrs,
+                      PangoAttribute *attr,
+                      gint start,
+                      gint end)
 {
   if (attrs == NULL)
     attrs = pango_attr_list_new ();
 
+  attr->start_index = start;
+  attr->end_index = end;
   pango_attr_list_insert (attrs, attr);
 
   return attrs;
+}
+
+static PangoAttrList *
+add_pango_attr (PangoAttrList *attrs,
+                PangoAttribute *attr)
+{
+  return add_pango_attr_range (attrs,
+                               attr,
+                               PANGO_ATTR_INDEX_FROM_TEXT_BEGINNING,
+                               PANGO_ATTR_INDEX_TO_TEXT_END);
+}
+
+static inline gint
+gtk_css_style_get_number (GtkCssStyle *style, guint id)
+{
+  GtkCssValue *v = gtk_css_style_get_value (style, id);
+  return _gtk_css_number_value_get (v, 100);
+}
+
+static inline gboolean
+gtk_css_style_value_equal (GtkCssStyle *a,
+                           GtkCssStyle *b,
+                           guint id)
+{
+  return _gtk_css_value_equal (gtk_css_style_get_value (a, id),
+                               gtk_css_style_get_value (b, id));
 }
 
 static void
@@ -634,19 +678,69 @@ gtk_css_style_add_child_attributes (GtkCssStyle *style,
                                     gint start,
                                     gint end)
 {
-  PangoAttribute *attr;
-  const GdkRGBA *color = gtk_css_color_value_get_rgba (style->core->color);
-  const GdkRGBA *parent_color = gtk_css_color_value_get_rgba (parent_style->core->color);
+#define DIFFERENT(prop) !gtk_css_style_value_equal (style, parent_style, prop)
 
-  if (!gdk_rgba_equal(color, parent_color))
+  PangoAttribute *attr;
+
+  if (DIFFERENT (GTK_CSS_PROPERTY_COLOR))
     {
-      attr = pango_attr_foreground_new (color->red * 65535,
-                                        color->green * 65535,
-                                        color->blue * 65535);
-      attr->start_index = start;
-      attr->end_index = end;
-      pango_attr_list_insert (attrs, attr);
+      PangoColor color = gtk_css_style_get_pango_color (style, GTK_CSS_PROPERTY_COLOR);
+
+      attr = pango_attr_foreground_new (color.red, color.green, color.blue);
+      add_pango_attr_range (attrs, attr, start, end);
     }
+
+  if (DIFFERENT (GTK_CSS_PROPERTY_FONT_SIZE))
+    {
+      gint size = gtk_css_style_get_number (style, GTK_CSS_PROPERTY_FONT_SIZE);
+
+      attr = pango_attr_size_new_absolute (round (size * PANGO_SCALE));
+      add_pango_attr_range (attrs, attr, start, end);
+    }
+
+  if (DIFFERENT (GTK_CSS_PROPERTY_BACKGROUND_COLOR))
+    {
+      PangoColor color = gtk_css_style_get_pango_color (style, GTK_CSS_PROPERTY_BACKGROUND_COLOR);
+
+      attr = pango_attr_background_new (color.red, color.green, color.blue);
+      add_pango_attr_range (attrs, attr, start, end);
+    }
+
+  if (DIFFERENT (GTK_CSS_PROPERTY_FONT_STYLE))
+    {
+      GtkCssValue *v = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_STYLE);
+      PangoStyle font_style = _gtk_css_font_style_value_get (v);
+
+      attr = pango_attr_style_new (font_style);
+      add_pango_attr_range (attrs, attr, start, end);
+    }
+
+  if (DIFFERENT (GTK_CSS_PROPERTY_FONT_WEIGHT))
+    {
+      gint weight = gtk_css_style_get_number (style, GTK_CSS_PROPERTY_FONT_WEIGHT);
+
+      attr = pango_attr_weight_new (weight);
+      add_pango_attr_range (attrs, attr, start, end);
+    }
+
+  if (DIFFERENT (GTK_CSS_PROPERTY_FONT_STRETCH))
+    {
+      GtkCssValue *v = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_STRETCH);
+      PangoStretch stretch = _gtk_css_font_stretch_value_get (v);
+
+      attr = pango_attr_stretch_new (stretch);
+      add_pango_attr_range (attrs, attr, start, end);
+    }
+
+  if (DIFFERENT (GTK_CSS_PROPERTY_LETTER_SPACING))
+    {
+      gint spacing = gtk_css_style_get_number (style, GTK_CSS_PROPERTY_LETTER_SPACING);
+
+      attr = pango_attr_letter_spacing_new (spacing);
+      add_pango_attr_range (attrs, attr, start, end);
+    }
+
+#undef DIFFERENT
 }
 
 PangoFontDescription *
