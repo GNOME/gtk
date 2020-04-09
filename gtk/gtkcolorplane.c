@@ -545,6 +545,8 @@ gtk_color_plane_class_init (GtkColorPlaneClass *class)
 							GTK_TYPE_ADJUSTMENT,
 							GTK_PARAM_WRITABLE |
 							G_PARAM_CONSTRUCT_ONLY));
+
+  gtk_widget_class_set_css_name (widget_class, "plane");
 }
 
 GtkWidget *
