@@ -2,4 +2,33 @@ a
 sv
 h
 GtkEntry GtkText
-STOP
+GtkButton
+GtkToggleButton
+GtkNotebook
+GtkEntry GtkText
+GtkEntry GtkText
+GtkNotebook
+GtkToggleButton
+GtkNotebook
+GtkTextView
+GtkButton
+GtkButton
+GtkButton
+GtkButton
+GtkEntry GtkText
+GtkEntry GtkText
+GtkListBoxRow
+GtkToggleButton
+GtkButton
+GtkRadioButton
+GtkRadioButton
+GtkToggleButton
+GtkToggleButton
+GtkScrolledWindow
+GtkLabel
+GtkTreeView
+GtkToggleButton
+GtkToggleButton
+GtkToggleButton
+GtkToggleButton
+WRAP
