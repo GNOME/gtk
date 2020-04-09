@@ -974,6 +974,12 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkWidget:can-focus:
+   *
+   * Whether the widget or any of its descendents can accept
+   * the input focus.
+   */
   widget_props[PROP_CAN_FOCUS] =
       g_param_spec_boolean ("can-focus",
                             P_("Can focus"),
@@ -1001,9 +1007,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * Whether the widget should grab focus when it is clicked with the mouse.
    *
    * This property is only relevant for widgets that can take focus.
-   *
-   * Before 3.20, several widgets (GtkButton, GtkFileChooserButton,
-   * GtkComboBox) implemented this property individually.
    */
   widget_props[PROP_FOCUS_ON_CLICK] =
       g_param_spec_boolean ("focus-on-click",
