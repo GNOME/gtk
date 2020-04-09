@@ -7,7 +7,6 @@
           <object class="GtkToggleButton" id="button1">
             <property name="label" translatable="yes">Hello World!</property>
             <property name="active">1</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="vexpand">1</property>
             <property name="hexpand">1</property>
@@ -24,7 +23,6 @@
         <child>
           <object class="GtkCheckButton" id="button2">
             <property name="label" translatable="yes">Hello World!</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <layout>
               <property name="left_attach">1</property>
@@ -35,7 +33,6 @@
         <child>
           <object class="GtkRadioButton" id="button3">
             <property name="label" translatable="yes">Hello World!</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <layout>
               <property name="left_attach">2</property>
@@ -48,7 +45,6 @@
             <property name="label" translatable="yes">Hello World!</property>
             <property name="active">1</property>
             <property name="group">button3</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <layout>
               <property name="left_attach">3</property>
@@ -59,7 +55,6 @@
         <child>
           <object class="GtkSwitch" id="button5">
             <property name="active">1</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <layout>
               <property name="left_attach">4</property>
@@ -69,7 +64,6 @@
         </child>
         <child>
           <object class="GtkSwitch" id="button6">
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="button6-accessible">
@@ -84,7 +78,6 @@
         </child>
         <child>
           <object class="GtkButton" id="button7">
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="label">Text Button</property>
             <layout>
@@ -95,7 +88,6 @@
         </child>
         <child>
           <object class="GtkButton" id="button8">
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
@@ -107,7 +99,6 @@
         </child>
         <child>
           <object class="GtkButton" id="button9">
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="halign">center</property>
             <property name="valign">center</property>

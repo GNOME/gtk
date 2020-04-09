@@ -2,7 +2,6 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkWindow" id="window1">
-    <property name="can_focus">False</property>
     <child>
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
@@ -11,7 +10,6 @@
             <property name="label" translatable="yes">Hello World!</property>
             <property name="visible">True</property>
             <property name="active">True</property>
-            <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="expand">True</property>
             <property name="margin">10</property>
@@ -26,7 +24,6 @@
             <property name="label" translatable="yes">Hello World!</property>
             <property name="visible">True</property>
             <property name="active">False</property>
-            <property name="can_focus">True</property>
             <property name="receives_default">True</property>
           </object>
           <packing>
@@ -39,7 +36,6 @@
             <property name="label" translatable="yes">Hello World!</property>
             <property name="visible">True</property>
             <property name="active">False</property>
-            <property name="can_focus">True</property>
             <property name="receives_default">True</property>
           </object>
           <packing>
