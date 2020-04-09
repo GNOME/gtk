@@ -198,7 +198,6 @@
         </child>
         <child>
           <object class="GtkButton" id="run_button">
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="hexpand">1</property>
             <property name="vexpand">1</property>
