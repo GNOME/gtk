@@ -280,6 +280,7 @@ struct _GtkLabelPrivate
   GtkWidget *mnemonic_widget;
   GtkEventController *mnemonic_controller;
 
+  GList *child_nodes;
   PangoAttrList *attrs;
   PangoAttrList *markup_attrs;
   PangoLayout   *layout;
@@ -312,6 +313,13 @@ struct _GtkLabelPrivate
   gint     lines;
 };
 
+typedef struct
+{
+  GtkCssNode *cssnode;
+  gint start; /* position of the child in the PangoLayout */
+  gint end;
+} GtkLabelChildNode;
+
 /* Notes about the handling of links:
  *
  * Links share the GtkLabelSelectionInfo struct with selectable labels.
@@ -342,14 +350,10 @@ typedef struct
 {
   gchar *uri;
   gchar *title;     /* the title attribute, used as tooltip */
-
-  GtkCssNode *cssnode;
-
   gboolean visited; /* get set when the link is activated; this flag
                      * gets preserved over later set_markup() calls
                      */
-  gint start;       /* position of the link in the PangoLayout */
-  gint end;
+  GtkLabelChildNode *node;
 } GtkLabelLink;
 
 struct _GtkLabelSelectionInfo
@@ -547,6 +551,17 @@ static void          gtk_label_activate_current_link (GtkLabel *label);
 static GtkLabelLink *gtk_label_get_current_link (GtkLabel  *label);
 static void          emit_activate_link         (GtkLabel     *label,
                                                  GtkLabelLink *link);
+
+/* For child nodes: */
+static GtkLabelChildNode* gtk_label_child_node_new  (GtkLabel *label,
+                                                     GQuark element_name,
+                                                     GtkCssNode *parent,
+                                                     const char *classes,
+                                                     gint start);
+static void               gtk_label_child_node_free (GtkLabelChildNode *node);
+
+static void gtk_label_clear_child_nodes (GtkLabel *label);
+
 
 /* Event controller callbacks */
 static void   gtk_label_click_gesture_pressed  (GtkGestureClick *gesture,
@@ -1849,7 +1864,7 @@ gtk_label_recalculate (GtkLabel *label)
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
   guint keyval = priv->mnemonic_keyval;
 
-  gtk_label_clear_links (label);
+  gtk_label_clear_child_nodes (label);
 
   if (priv->use_markup)
     gtk_label_set_markup_internal (label, priv->label, priv->use_underline);
@@ -2022,149 +2037,281 @@ typedef struct
 {
   GtkLabel *label;
   GList *links;
+  GList *child_nodes;
+  GQueue els;
   GString *new_str;
   gsize text_len;
-} UriParserData;
+} MarkupParserData;
 
-static void
-start_element_handler (GMarkupParseContext  *context,
-                       const gchar          *element_name,
-                       const gchar         **attribute_names,
-                       const gchar         **attribute_values,
-                       gpointer              user_data,
-                       GError              **error)
+typedef struct
 {
-  UriParserData *pdata = user_data;
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (pdata->label);
+  GtkLabelChildNode *node;
+  gboolean has_open_tag;
+} MarkupParserElement;
 
-  if (strcmp (element_name, "a") == 0)
-    {
-      GtkLabelLink *link;
-      const gchar *uri = NULL;
-      const gchar *title = NULL;
-      const gchar *class = NULL;
-      gboolean visited = FALSE;
-      gint line_number;
-      gint char_number;
-      gint i;
-      GtkCssNode *widget_node;
-      GtkStateFlags state;
+static GtkCssNode*
+parser_get_css_parent (MarkupParserData *pdata)
+{
+  MarkupParserElement *el = g_queue_peek_tail (&pdata->els);
+  if (el != NULL)
+    return el->node->cssnode;
 
-      g_markup_parse_context_get_position (context, &line_number, &char_number);
-
-      for (i = 0; attribute_names[i] != NULL; i++)
-        {
-          const gchar *attr = attribute_names[i];
-
-          if (strcmp (attr, "href") == 0)
-            uri = attribute_values[i];
-          else if (strcmp (attr, "title") == 0)
-            title = attribute_values[i];
-          else if (strcmp (attr, "class") == 0)
-            class = attribute_values[i];
-          else
-            {
-              g_set_error (error,
-                           G_MARKUP_ERROR,
-                           G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE,
-                           "Attribute '%s' is not allowed on the <a> tag "
-                           "on line %d char %d",
-                            attr, line_number, char_number);
-              return;
-            }
-        }
-
-      if (uri == NULL)
-        {
-          g_set_error (error,
-                       G_MARKUP_ERROR,
-                       G_MARKUP_ERROR_INVALID_CONTENT,
-                       "Attribute 'href' was missing on the <a> tag "
-                       "on line %d char %d",
-                       line_number, char_number);
-          return;
-        }
-
-      visited = FALSE;
-      if (priv->track_links && priv->select_info)
-        {
-          GList *l;
-          for (l = priv->select_info->links; l; l = l->next)
-            {
-              link = l->data;
-              if (strcmp (uri, link->uri) == 0)
-                {
-                  visited = link->visited;
-                  break;
-                }
-            }
-        }
-
-      link = g_new0 (GtkLabelLink, 1);
-      link->uri = g_strdup (uri);
-      link->title = g_strdup (title);
-
-      widget_node = gtk_widget_get_css_node (GTK_WIDGET (pdata->label));
-      link->cssnode = gtk_css_node_new ();
-      gtk_css_node_set_name (link->cssnode, g_quark_from_static_string ("link"));
-      gtk_css_node_set_parent (link->cssnode, widget_node);
-      if (class)
-        gtk_css_node_add_class (link->cssnode, g_quark_from_string (class));
-
-      state = gtk_css_node_get_state (widget_node);
-      if (visited)
-        state |= GTK_STATE_FLAG_VISITED;
-      else
-        state |= GTK_STATE_FLAG_LINK;
-      gtk_css_node_set_state (link->cssnode, state);
-      g_object_unref (link->cssnode);
-
-      link->visited = visited;
-      link->start = pdata->text_len;
-      pdata->links = g_list_prepend (pdata->links, link);
-    }
-  else
-    {
-      gint i;
-
-      g_string_append_c (pdata->new_str, '<');
-      g_string_append (pdata->new_str, element_name);
-
-      for (i = 0; attribute_names[i] != NULL; i++)
-        {
-          const gchar *attr  = attribute_names[i];
-          const gchar *value = attribute_values[i];
-          gchar *newvalue;
-
-          newvalue = g_markup_escape_text (value, -1);
-
-          g_string_append_c (pdata->new_str, ' ');
-          g_string_append (pdata->new_str, attr);
-          g_string_append (pdata->new_str, "=\"");
-          g_string_append (pdata->new_str, newvalue);
-          g_string_append_c (pdata->new_str, '\"');
-
-          g_free (newvalue);
-        }
-      g_string_append_c (pdata->new_str, '>');
-    }
+  return gtk_widget_get_css_node (GTK_WIDGET (pdata->label));
 }
 
 static void
-end_element_handler (GMarkupParseContext  *context,
-                     const gchar          *element_name,
-                     gpointer              user_data,
-                     GError              **error)
+start_element_handler_default (GMarkupParseContext *context,
+                               const gchar *element_name,
+                               const gchar **attribute_names,
+                               const gchar **attribute_values,
+                               gpointer user_data,
+                               GError **error)
 {
-  UriParserData *pdata = user_data;
+  gint i;
+  MarkupParserData *pdata = user_data;
 
-  if (!strcmp (element_name, "a"))
+  g_string_append_c (pdata->new_str, '<');
+  g_string_append (pdata->new_str, element_name);
+
+  for (i = 0; attribute_names[i] != NULL; i++)
     {
-      GtkLabelLink *link = pdata->links->data;
-      link->end = pdata->text_len;
+      const gchar *attr = attribute_names[i];
+      const gchar *value = attribute_values[i];
+      gchar *newvalue;
+
+      newvalue = g_markup_escape_text (value, -1);
+
+      g_string_append_c (pdata->new_str, ' ');
+      g_string_append (pdata->new_str, attr);
+      g_string_append (pdata->new_str, "=\"");
+      g_string_append (pdata->new_str, newvalue);
+      g_string_append_c (pdata->new_str, '\"');
+
+      g_free (newvalue);
     }
+
+  g_string_append_c (pdata->new_str, '>');
+}
+
+static void
+start_element_handler_link (GMarkupParseContext *context,
+                            const gchar *element_name,
+                            const gchar **attribute_names,
+                            const gchar **attribute_values,
+                            gpointer user_data,
+                            GError **error)
+{
+  GtkLabelLink *link;
+  MarkupParserData *pdata = user_data;
+  GtkLabelPrivate *priv = gtk_label_get_instance_private (pdata->label);
+  const gchar *uri = NULL;
+  const gchar *title = NULL;
+  const gchar *class = NULL;
+  gboolean visited = FALSE;
+  gint line_number;
+  gint char_number;
+  gint i;
+  GtkStateFlags state;
+  MarkupParserElement *el;
+
+  g_markup_parse_context_get_position (context, &line_number, &char_number);
+
+  for (i = 0; attribute_names[i] != NULL; i++)
+    {
+      const gchar *attr = attribute_names[i];
+
+      if (strcmp (attr, "href") == 0)
+        uri = attribute_values[i];
+      else if (strcmp (attr, "title") == 0)
+        title = attribute_values[i];
+      else if (strcmp (attr, "class") == 0)
+        class = attribute_values[i];
+      else
+        {
+          g_set_error (error,
+                       G_MARKUP_ERROR,
+                       G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE,
+                       "Attribute '%s' is not allowed on the <a> tag "
+                       "on line %d char %d",
+                       attr, line_number, char_number);
+          return;
+        }
+    }
+
+  if (uri == NULL)
+    {
+      g_set_error (error,
+                   G_MARKUP_ERROR,
+                   G_MARKUP_ERROR_INVALID_CONTENT,
+                   "Attribute 'href' was missing on the <a> tag "
+                   "on line %d char %d",
+                   line_number, char_number);
+      return;
+    }
+
+  visited = FALSE;
+  if (priv->track_links && priv->select_info)
+    {
+      GList *l;
+      for (l = priv->select_info->links; l; l = l->next)
+        {
+          link = l->data;
+          if (strcmp (uri, link->uri) == 0)
+            {
+              visited = link->visited;
+              break;
+            }
+        }
+    }
+
+  link = g_new0 (GtkLabelLink, 1);
+  link->uri = g_strdup (uri);
+  link->title = g_strdup (title);
+  link->visited = visited;
+  link->node = gtk_label_child_node_new (GTK_LABEL (pdata->label),
+                                         g_quark_from_static_string ("link"),
+                                         parser_get_css_parent (pdata),
+                                         class,
+                                         pdata->text_len);
+
+  state = gtk_css_node_get_state (link->node->cssnode);
+  if (visited)
+    state |= GTK_STATE_FLAG_VISITED;
+  else
+    state |= GTK_STATE_FLAG_LINK;
+  gtk_css_node_set_state (link->node->cssnode, state);
+
+  pdata->links = g_list_prepend (pdata->links, link);
+  pdata->child_nodes = g_list_prepend (pdata->child_nodes, link->node);
+
+  el = g_new0 (MarkupParserElement, 1);
+  el->node = link->node;
+  g_queue_push_tail (&pdata->els, el);
+}
+
+static void
+end_element_handler_link (GMarkupParseContext *context,
+                          const gchar *element_name,
+                          gpointer user_data,
+                          GError **error)
+{
+  MarkupParserData *pdata = user_data;
+  MarkupParserElement *el = g_queue_pop_tail (&pdata->els);
+
+  el->node->end = pdata->text_len;
+  g_free (el);
+}
+
+static void
+start_element_handler_span (GMarkupParseContext *context,
+                            const gchar *element_name,
+                            const gchar **attribute_names,
+                            const gchar **attribute_values,
+                            gpointer user_data,
+                            GError **error)
+{
+  gint i, j;
+  MarkupParserElement *el;
+  const gchar *class = NULL;
+  MarkupParserData *pdata = user_data;
+
+  for (i = 0, j = 0; attribute_names[i] != NULL; i++)
+    {
+      if (strcmp (attribute_names[i], "class") == 0)
+        class = attribute_values[i];
+      else
+        {
+          attribute_names[j] = attribute_names[i];
+          attribute_values[j] = attribute_values[i];
+          j++;
+        }
+    }
+
+  el = g_new0 (MarkupParserElement, 1);
+
+  if (j > 0)
+    {
+      el->has_open_tag = TRUE;
+      attribute_names[j] = NULL;
+      attribute_values[j] = NULL;
+      start_element_handler_default (context,
+                                     element_name,
+                                     attribute_names,
+                                     attribute_values,
+                                     user_data,
+                                     error);
+    }
+
+  el->node = gtk_label_child_node_new (GTK_LABEL (pdata->label),
+                                       g_quark_from_static_string ("span"),
+                                       parser_get_css_parent (pdata),
+                                       class,
+                                       pdata->text_len);
+  pdata->child_nodes = g_list_prepend (pdata->child_nodes, el->node);
+  g_queue_push_tail (&pdata->els, el);
+}
+
+static void
+end_element_handler_span (GMarkupParseContext *context,
+                          const gchar *element_name,
+                          gpointer user_data,
+                          GError **error)
+{
+  MarkupParserData *pdata = user_data;
+  MarkupParserElement *el = g_queue_pop_tail (&pdata->els);
+
+  if (el->has_open_tag)
+    g_string_append (pdata->new_str, "</span>");
+
+  el->node->end = pdata->text_len;
+  g_free (el);
+}
+
+static void
+start_element_handler (GMarkupParseContext *context,
+                       const gchar *element_name,
+                       const gchar **attribute_names,
+                       const gchar **attribute_values,
+                       gpointer user_data,
+                       GError **error)
+{
+  if (strcmp (element_name, "a") == 0)
+    start_element_handler_link (context,
+                                element_name,
+                                attribute_names,
+                                attribute_values,
+                                user_data,
+                                error);
+  else if (strcmp (element_name, "span") == 0)
+    start_element_handler_span (context,
+                                element_name,
+                                attribute_names,
+                                attribute_values,
+                                user_data,
+                                error);
+  else
+    start_element_handler_default (context,
+                                   element_name,
+                                   attribute_names,
+                                   attribute_values,
+                                   user_data,
+                                   error);
+}
+
+static void
+end_element_handler (GMarkupParseContext *context,
+                     const gchar *element_name,
+                     gpointer user_data,
+                     GError **error)
+{
+  if (strcmp (element_name, "a") == 0)
+    end_element_handler_link (context, element_name, user_data, error);
+  else if (strcmp (element_name, "span") == 0)
+    end_element_handler_span (context, element_name, user_data, error);
   else
     {
+      MarkupParserData *pdata = user_data;
+
       g_string_append (pdata->new_str, "</");
       g_string_append (pdata->new_str, element_name);
       g_string_append_c (pdata->new_str, '>');
@@ -2172,13 +2319,13 @@ end_element_handler (GMarkupParseContext  *context,
 }
 
 static void
-text_handler (GMarkupParseContext  *context,
-              const gchar          *text,
-              gsize                 text_len,
-              gpointer              user_data,
-              GError              **error)
+text_handler (GMarkupParseContext *context,
+              const gchar *text,
+              gsize text_len,
+              gpointer user_data,
+              GError **error)
 {
-  UriParserData *pdata = user_data;
+  MarkupParserData *pdata = user_data;
   gchar *newtext;
 
   newtext = g_markup_escape_text (text, text_len);
@@ -2205,25 +2352,24 @@ xml_isspace (gchar c)
 static void
 link_free (GtkLabelLink *link)
 {
-  gtk_css_node_set_parent (link->cssnode, NULL);
   g_free (link->uri);
   g_free (link->title);
   g_free (link);
 }
 
-
 static gboolean
-parse_uri_markup (GtkLabel     *label,
-                  const gchar  *str,
-                  gchar       **new_str,
-                  GList       **links,
-                  GError      **error)
+parse_markup (GtkLabel *label,
+              const gchar *str,
+              gchar **new_str,
+              GList **links,
+              GList **child_nodes,
+              GError **error)
 {
   GMarkupParseContext *context = NULL;
   const gchar *p, *end;
   gboolean needs_root = TRUE;
   gsize length;
-  UriParserData pdata;
+  MarkupParserData pdata;
 
   length = strlen (str);
   p = str;
@@ -2231,6 +2377,8 @@ parse_uri_markup (GtkLabel     *label,
 
   pdata.label = label;
   pdata.links = NULL;
+  pdata.child_nodes = NULL;
+  g_queue_init (&pdata.els);
   pdata.new_str = g_string_sized_new (length);
   pdata.text_len = 0;
 
@@ -2264,6 +2412,7 @@ parse_uri_markup (GtkLabel     *label,
 
   *new_str = g_string_free (pdata.new_str, FALSE);
   *links = pdata.links;
+  *child_nodes = pdata.child_nodes;
 
   return TRUE;
 
@@ -2271,6 +2420,8 @@ failed:
   g_markup_parse_context_free (context);
   g_string_free (pdata.new_str, TRUE);
   g_list_free_full (pdata.links, (GDestroyNotify) link_free);
+  g_list_free_full (pdata.child_nodes, (GDestroyNotify) gtk_label_child_node_free);
+  g_queue_free_full (&pdata.els, g_free);
 
   return FALSE;
 }
@@ -2308,8 +2459,9 @@ gtk_label_set_markup_internal (GtkLabel    *label,
   gchar *str_for_display = NULL;
   gchar *str_for_accel = NULL;
   GList *links = NULL;
+  GList *child_nodes = NULL;
 
-  if (!parse_uri_markup (label, str, &str_for_display, &links, &error))
+  if (!parse_markup (label, str, &str_for_display, &links, &child_nodes, &error))
     {
       g_warning ("Failed to set text '%s' from markup due to error parsing markup: %s",
                  str, error->message);
@@ -2326,6 +2478,8 @@ gtk_label_set_markup_internal (GtkLabel    *label,
       _gtk_label_accessible_update_links (label);
       gtk_label_ensure_has_tooltip (label);
     }
+
+  priv->child_nodes = g_list_reverse (child_nodes);
 
   if (with_uline)
     {
@@ -2483,6 +2637,58 @@ gtk_label_set_markup_with_mnemonic (GtkLabel    *label,
   gtk_label_recalculate (label);
 
   g_object_thaw_notify (G_OBJECT (label));
+}
+
+static GtkLabelChildNode *
+gtk_label_child_node_new (GtkLabel *label,
+                          GQuark element_name,
+                          GtkCssNode *parent,
+                          const char *classes,
+                          gint start)
+{
+  gint i;
+  GtkLabelChildNode *node;
+
+  node = g_new0 (GtkLabelChildNode, 1);
+  node->start = start;
+  node->cssnode = gtk_css_node_new ();
+  gtk_css_node_set_name (node->cssnode, element_name);
+  gtk_css_node_set_parent (node->cssnode, parent);
+  gtk_css_node_set_state (node->cssnode, gtk_css_node_get_state (parent));
+
+  if (classes)
+    {
+      gchar **list = g_strsplit_set (classes, " \t\n\r", -1);
+      for (i = 0; list[i] != NULL; i++)
+        {
+          if (strlen (list[i]) > 0)
+            gtk_css_node_add_class (node->cssnode,
+                                    g_quark_from_string (list[i]));
+        }
+
+      g_strfreev (list);
+    }
+
+  return node;
+}
+
+static void
+gtk_label_child_node_free (GtkLabelChildNode *node)
+{
+  gtk_css_node_set_parent (node->cssnode, NULL);
+  g_object_unref (node->cssnode);
+  g_free (node);
+}
+
+static void
+gtk_label_clear_child_nodes (GtkLabel *label)
+{
+  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
+
+  gtk_label_clear_links (label);
+  g_list_free_full (priv->child_nodes,
+                    (GDestroyNotify) gtk_label_child_node_free);
+  priv->child_nodes = NULL;
 }
 
 /**
@@ -2920,7 +3126,7 @@ gtk_label_finalize (GObject *object)
       g_object_unref (priv->select_info->provider);
     }
 
-  gtk_label_clear_links (label);
+  gtk_label_clear_child_nodes (label);
   g_free (priv->select_info);
 
   g_clear_pointer (&priv->popup_menu, gtk_widget_unparent);
@@ -3034,18 +3240,18 @@ gtk_label_update_layout_attributes (GtkLabel *label)
           GtkLabelLink *link = list->data;
 
           attribute = pango_attr_underline_new (TRUE);
-          attribute->start_index = link->start;
-          attribute->end_index = link->end;
+          attribute->start_index = link->node->start;
+          attribute->end_index = link->node->end;
           pango_attr_list_insert (attrs, attribute);
 
-          style = gtk_css_node_get_style (link->cssnode);
+          style = gtk_css_node_get_style (link->node->cssnode);
           link_color = gtk_css_color_value_get_rgba (style->core->color);
 
           attribute = pango_attr_foreground_new (link_color->red * 65535,
                                                  link_color->green * 65535,
                                                  link_color->blue * 65535);
-          attribute->start_index = link->start;
-          attribute->end_index = link->end;
+          attribute->start_index = link->node->start;
+          attribute->end_index = link->node->end;
           pango_attr_list_insert (attrs, attribute);
         }
     }
@@ -3055,6 +3261,7 @@ gtk_label_update_layout_attributes (GtkLabel *label)
     attrs = NULL;
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
+
   style_attrs = gtk_css_style_get_pango_attributes (style);
   attrs = _gtk_pango_attr_list_merge (attrs, style_attrs);
   if (style_attrs)
@@ -3470,7 +3677,7 @@ update_link_state (GtkLabel *label)
           else
             state |= GTK_STATE_FLAG_PRELIGHT;
         }
-      gtk_css_node_set_state (link->cssnode, state);
+      gtk_css_node_set_state (link->node->cssnode, state);
     }
 }
 
@@ -3552,8 +3759,8 @@ gtk_label_get_focus_link (GtkLabel *label)
   for (l = info->links; l; l = l->next)
     {
       GtkLabelLink *link = l->data;
-      if (link->start <= info->selection_anchor &&
-          info->selection_anchor <= link->end)
+      if (link->node->start <= info->selection_anchor &&
+          info->selection_anchor <= link->node->end)
         return link;
     }
 
@@ -3651,10 +3858,10 @@ gtk_label_snapshot (GtkWidget   *widget,
 
           if (active_link)
             {
-              range[0] = active_link->start;
-              range[1] = active_link->end;
+              range[0] = active_link->node->start;
+              range[1] = active_link->node->end;
 
-              gtk_style_context_save_to_node (context, active_link->cssnode);
+              gtk_style_context_save_to_node (context, active_link->node->cssnode);
 
               range_clip = gdk_pango_layout_get_clip_region (priv->layout, lx, ly, range, 1);
               for (i = 0; i < cairo_region_num_rectangles (range_clip); i++)
@@ -3674,8 +3881,8 @@ gtk_label_snapshot (GtkWidget   *widget,
 
           if (focus_link && gtk_widget_has_visible_focus (widget))
             {
-              range[0] = focus_link->start;
-              range[1] = focus_link->end;
+              range[0] = focus_link->node->start;
+              range[1] = focus_link->node->end;
 
               range_clip = gdk_pango_layout_get_clip_region (priv->layout, lx, ly, range, 1);
               cairo_region_get_extents (range_clip, &rect);
@@ -3990,10 +4197,10 @@ gtk_label_grab_focus (GtkWidget *widget)
           for (l = priv->select_info->links; l; l = l->next)
             {
               link = l->data;
-              if (!range_is_in_ellipsis (label, link->start, link->end))
+              if (!range_is_in_ellipsis (label, link->node->start, link->node->end))
                 {
-                  priv->select_info->selection_anchor = link->start;
-                  priv->select_info->selection_end = link->start;
+                  priv->select_info->selection_anchor = link->node->start;
+                  priv->select_info->selection_end = link->node->start;
                   _gtk_label_accessible_focus_link_changed (label);
                   break;
                 }
@@ -4025,10 +4232,10 @@ gtk_label_focus (GtkWidget        *widget,
               for (l = g_list_last (info->links); l; l = l->prev)
                 {
                   focus_link = l->data;
-                  if (!range_is_in_ellipsis (label, focus_link->start, focus_link->end))
+                  if (!range_is_in_ellipsis (label, focus_link->node->start, focus_link->node->end))
                     {
-                      info->selection_anchor = focus_link->start;
-                      info->selection_end = focus_link->start;
+                      info->selection_anchor = focus_link->node->start;
+                      info->selection_end = focus_link->node->start;
                       _gtk_label_accessible_focus_link_changed (label);
                     }
                 }
@@ -4057,11 +4264,11 @@ gtk_label_focus (GtkWidget        *widget,
           {
             GtkLabelLink *link = l->data;
 
-            if (link->start > index)
+            if (link->node->start > index)
               {
-                if (!range_is_in_ellipsis (label, link->start, link->end))
+                if (!range_is_in_ellipsis (label, link->node->start, link->node->end))
                   {
-                    gtk_label_select_region_index (label, link->start, link->start);
+                    gtk_label_select_region_index (label, link->node->start, link->node->start);
                     _gtk_label_accessible_focus_link_changed (label);
                     return TRUE;
                   }
@@ -4072,11 +4279,11 @@ gtk_label_focus (GtkWidget        *widget,
           {
             GtkLabelLink *link = l->data;
 
-            if (link->end < index)
+            if (link->node->end < index)
               {
-                if (!range_is_in_ellipsis (label, link->start, link->end))
+                if (!range_is_in_ellipsis (label, link->node->start, link->node->end))
                   {
-                    gtk_label_select_region_index (label, link->start, link->start);
+                    gtk_label_select_region_index (label, link->node->start, link->node->start);
                     _gtk_label_accessible_focus_link_changed (label);
                     return TRUE;
                   }
@@ -4101,7 +4308,7 @@ gtk_label_focus (GtkWidget        *widget,
           for (; l; l = l->next)
             {
               GtkLabelLink *link = l->data;
-              if (!range_is_in_ellipsis (label, link->start, link->end))
+              if (!range_is_in_ellipsis (label, link->node->start, link->node->end))
                 break;
             }
           break;
@@ -4117,7 +4324,7 @@ gtk_label_focus (GtkWidget        *widget,
           for (; l; l = l->prev)
             {
               GtkLabelLink *link = l->data;
-              if (!range_is_in_ellipsis (label, link->start, link->end))
+              if (!range_is_in_ellipsis (label, link->node->start, link->node->end))
                 break;
             }
           break;
@@ -4133,8 +4340,8 @@ gtk_label_focus (GtkWidget        *widget,
       if (l)
         {
           focus_link = l->data;
-          info->selection_anchor = focus_link->start;
-          info->selection_end = focus_link->start;
+          info->selection_anchor = focus_link->node->start;
+          info->selection_end = focus_link->node->start;
           _gtk_label_accessible_focus_link_changed (label);
           gtk_widget_queue_draw (widget);
 
@@ -4515,9 +4722,9 @@ gtk_label_update_active_link (GtkWidget *widget,
               for (l = info->links; l != NULL; l = l->next)
                 {
                   link = l->data;
-                  if (index >= link->start && index <= link->end)
+                  if (index >= link->node->start && index <= link->node->end)
                     {
-                      if (!range_is_in_ellipsis (label, link->start, link->end))
+                      if (!range_is_in_ellipsis (label, link->node->start, link->node->end))
                         found = TRUE;
                       break;
                     }
@@ -5838,8 +6045,8 @@ emit_activate_link (GtkLabel     *label,
       priv->select_info && priv->select_info->links)
     {
       link->visited = TRUE;
-      state = gtk_css_node_get_state (link->cssnode);
-      gtk_css_node_set_state (link->cssnode, (state & ~GTK_STATE_FLAG_LINK) | GTK_STATE_FLAG_VISITED);
+      state = gtk_css_node_get_state (link->node->cssnode);
+      gtk_css_node_set_state (link->node->cssnode, (state & ~GTK_STATE_FLAG_LINK) | GTK_STATE_FLAG_VISITED);
       /* FIXME: shouldn't have to redo everything here */
       gtk_label_clear_layout (label);
     }
@@ -5985,7 +6192,7 @@ gtk_label_query_tooltip (GtkWidget  *widget,
           for (l = info->links; l != NULL; l = l->next)
             {
               GtkLabelLink *link = l->data;
-              if (index >= link->start && index <= link->end)
+              if (index >= link->node->start && index <= link->node->end)
                 {
                   if (link->title)
                     {
@@ -6118,8 +6325,8 @@ _gtk_label_get_link_extent (GtkLabel *label,
         if (i == idx)
           {
             link = l->data;
-            *start = link->start;
-            *end = link->end;
+            *start = link->node->start;
+            *end = link->node->end;
             return;
           }
       }
@@ -6141,7 +6348,7 @@ _gtk_label_get_link_at (GtkLabel *label,
     for (l = priv->select_info->links, i = 0; l; l = l->next, i++)
       {
         link = l->data;
-        if (link->start <= pos && pos < link->end)
+        if (link->node->start <= pos && pos < link->node->end)
           return i;
       }
 
@@ -6199,8 +6406,8 @@ _gtk_label_get_link_focused (GtkLabel *label,
       if (i == idx)
         {
           link = l->data;
-          if (link->start <= info->selection_anchor &&
-              info->selection_anchor <= link->end)
+          if (link->node->start <= info->selection_anchor &&
+              info->selection_anchor <= link->node->end)
             return TRUE;
         }
     }
