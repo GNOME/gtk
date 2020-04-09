@@ -3683,6 +3683,9 @@ update_child_nodes_state (GtkLabel *label)
   if (!priv->select_info)
     return;
 
+  /* Allow links to have hover and click states independent of the parent. */
+  parent_state = parent_state & ~(GTK_STATE_FLAG_ACTIVE | GTK_STATE_FLAG_PRELIGHT);
+
   for (l = priv->select_info->links; l; l = l->next)
     {
       GtkStateFlags state = parent_state;
