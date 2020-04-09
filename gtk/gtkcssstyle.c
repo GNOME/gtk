@@ -626,44 +626,68 @@ gtk_css_style_get_font_features (GtkCssStyle *style)
   return attr;
 }
 
-PangoAttrList *
-gtk_css_style_get_pango_attributes (GtkCssStyle *style)
+static PangoAttrList *
+gtk_css_style_add_text_decoration (GtkCssStyle *style,
+                                   PangoAttrList *attrs,
+                                   gint start,
+                                   gint end)
 {
-  PangoAttrList *attrs = NULL;
   GtkTextDecorationLine decoration_line;
   GtkTextDecorationStyle decoration_style;
-  const GdkRGBA *color;
   const GdkRGBA *decoration_color;
-  gint letter_spacing;
 
   /* text-decoration */
   decoration_line = _gtk_css_text_decoration_line_value_get (style->font_variant->text_decoration_line);
   decoration_style = _gtk_css_text_decoration_style_value_get (style->font_variant->text_decoration_style);
-  color = gtk_css_color_value_get_rgba (style->core->color);
   decoration_color = gtk_css_color_value_get_rgba (style->font_variant->text_decoration_color
-                                                   ? style->font_variant->text_decoration_color
-                                                   : style->core->color);
+                                                       ? style->font_variant->text_decoration_color
+                                                       : style->core->color);
 
   switch (decoration_line)
     {
     case GTK_CSS_TEXT_DECORATION_LINE_UNDERLINE:
-      attrs = add_pango_attr (attrs, pango_attr_underline_new (get_pango_underline_from_style (decoration_style)));
-      if (!gdk_rgba_equal (color, decoration_color))
-        attrs = add_pango_attr (attrs, pango_attr_underline_color_new (decoration_color->red * 65535. + 0.5,
-                                                                       decoration_color->green * 65535. + 0.5,
-                                                                       decoration_color->blue * 65535. + 0.5));
+      attrs = add_pango_attr_range (attrs,
+                                    pango_attr_underline_new (get_pango_underline_from_style (decoration_style)),
+                                    start,
+                                    end);
+      attrs = add_pango_attr_range (attrs,
+                                    pango_attr_underline_color_new (decoration_color->red * 65535. + 0.5,
+                                                                    decoration_color->green * 65535. + 0.5,
+                                                                    decoration_color->blue * 65535. + 0.5),
+                                    start,
+                                    end);
       break;
     case GTK_CSS_TEXT_DECORATION_LINE_LINE_THROUGH:
-      attrs = add_pango_attr (attrs, pango_attr_strikethrough_new (TRUE));
-      if (!gdk_rgba_equal (color, decoration_color))
-        attrs = add_pango_attr (attrs, pango_attr_strikethrough_color_new (decoration_color->red * 65535. + 0.5,
-                                                                           decoration_color->green * 65535. + 0.5,
-                                                                           decoration_color->blue * 65535. + 0.5));
+      attrs = add_pango_attr_range (attrs,
+                                    pango_attr_strikethrough_new (TRUE),
+                                    start,
+                                    end);
+      attrs = add_pango_attr_range (attrs,
+                                    pango_attr_strikethrough_color_new (decoration_color->red * 65535. + 0.5,
+                                                                        decoration_color->green * 65535. + 0.5,
+                                                                        decoration_color->blue * 65535. + 0.5),
+                                    start,
+                                    end);
       break;
     case GTK_CSS_TEXT_DECORATION_LINE_NONE:
     default:
       break;
     }
+
+  return attrs;
+}
+
+PangoAttrList *
+gtk_css_style_get_pango_attributes (GtkCssStyle *style)
+{
+  PangoAttrList *attrs = NULL;
+  gint letter_spacing;
+
+  /* text-decoration */
+  attrs = gtk_css_style_add_text_decoration (style,
+                                             attrs,
+                                             PANGO_ATTR_INDEX_FROM_TEXT_BEGINNING,
+                                             PANGO_ATTR_INDEX_TO_TEXT_END);
 
   /* letter-spacing */
   letter_spacing = _gtk_css_number_value_get (style->font->letter_spacing, 100);
@@ -811,6 +835,9 @@ gtk_css_style_add_child_attributes (GtkCssStyle *style,
       attr = gtk_css_style_get_font_features (style);
       add_pango_attr_range (attrs, attr, start, end);
     }
+
+  /* text-decorations aren't inherited, so they must be checked for every element */
+  gtk_css_style_add_text_decoration (style, attrs, start, end);
 
 #undef DIFFERENT
 }
