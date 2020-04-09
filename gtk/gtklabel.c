@@ -28,7 +28,7 @@
 
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
-#include "gtkcssnodeprivate.h"
+#include "gtkcsswidgetnodeprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkgesturedrag.h"
@@ -2651,7 +2651,7 @@ gtk_label_child_node_new (GtkLabel *label,
 
   node = g_new0 (GtkLabelChildNode, 1);
   node->start = start;
-  node->cssnode = gtk_css_node_new ();
+  node->cssnode = gtk_css_widget_node_new (GTK_WIDGET (label));
   gtk_css_node_set_name (node->cssnode, element_name);
   gtk_css_node_set_parent (node->cssnode, parent);
   gtk_css_node_set_state (node->cssnode, gtk_css_node_get_state (parent));
@@ -2675,6 +2675,7 @@ gtk_label_child_node_new (GtkLabel *label,
 static void
 gtk_label_child_node_free (GtkLabelChildNode *node)
 {
+  gtk_css_widget_node_widget_destroyed (GTK_CSS_WIDGET_NODE (node->cssnode));
   gtk_css_node_set_parent (node->cssnode, NULL);
   g_object_unref (node->cssnode);
   g_free (node);
