@@ -1267,10 +1267,11 @@ gtk_synthesize_crossing_events (GtkRoot         *toplevel,
   GtkCrossingData crossing;
   GtkWidget *ancestor;
   GtkWidget *widget;
-  GList *list, *l;
   double x, y;
   GtkWidget *prev;
   gboolean seen_ancestor;
+  GPtrArray *targets;
+  int i;
 
   if (old_target == new_target)
     return;
@@ -1323,20 +1324,22 @@ gtk_synthesize_crossing_events (GtkRoot         *toplevel,
       widget = gtk_widget_get_parent (widget);
     }
 
-  list = NULL;
+  targets = g_ptr_array_new_full (16, NULL);
   for (widget = new_target; widget; widget = gtk_widget_get_parent (widget))
-    list = g_list_prepend (list, widget);
+    g_ptr_array_add (targets, widget);
 
   crossing.direction = GTK_CROSSING_IN;
 
   seen_ancestor = FALSE;
-  for (l = list; l; l = l->next)
+  for (i = (int)targets->len - 1; i >= 0; i--)
     {
-      widget = l->data;
-      if (l->next)
-        crossing.new_descendent = l->next->data;
+      widget = g_ptr_array_index (targets, i);
+
+      if (i < (int)targets->len - 1)
+        crossing.new_descendent = g_ptr_array_index (targets, i + 1);
       else
         crossing.new_descendent = NULL;
+
       if (seen_ancestor)
         {
           crossing.old_descendent = NULL;
@@ -1362,7 +1365,7 @@ gtk_synthesize_crossing_events (GtkRoot         *toplevel,
         gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
     }
 
-  g_list_free (list);
+  g_ptr_array_free (targets, TRUE);
 }
 
 static GtkWidget *
@@ -2173,26 +2176,29 @@ propagate_event_down (GtkWidget *widget,
                       GtkWidget *topmost)
 {
   gint handled_event = FALSE;
-  GList *widgets = NULL;
-  GList *l;
   GtkWidget *target = widget;
+  GPtrArray *widgets;
+  int i;
 
-  widgets = g_list_prepend (widgets, g_object_ref (widget));
-  while (widget && widget != topmost)
+  widgets = g_ptr_array_new_full (16, g_object_unref);
+  g_ptr_array_add (widgets, g_object_ref (widget));
+
+  for (;;)
     {
       widget = gtk_widget_get_parent (widget);
       if (!widget)
         break;
 
-      widgets = g_list_prepend (widgets, g_object_ref (widget));
+      g_ptr_array_add (widgets, g_object_ref (widget));
 
       if (widget == topmost)
         break;
     }
 
-  for (l = widgets; l && !handled_event; l = l->next)
+  i = (int)widgets->len - 1;
+  for (;;)
     {
-      widget = (GtkWidget *)l->data;
+      widget = g_ptr_array_index (widgets, i);
 
       if (!gtk_widget_is_sensitive (widget))
         {
@@ -2208,8 +2214,17 @@ propagate_event_down (GtkWidget *widget,
         handled_event = _gtk_widget_captured_event (widget, event, target);
 
       handled_event |= !gtk_widget_get_realized (widget);
+
+      if (handled_event)
+        break;
+
+      if (i == 0)
+        break;
+
+      i--;
     }
-  g_list_free_full (widgets, (GDestroyNotify)g_object_unref);
+
+  g_ptr_array_free (widgets, TRUE);
 
   return handled_event;
 }
