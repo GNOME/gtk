@@ -8,7 +8,7 @@
   color: purple;
 }
 
-:link,*, :visited * {
+:link, :link *, :visited * {
   text-decoration: underline;
 }
 

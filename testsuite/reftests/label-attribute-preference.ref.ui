@@ -13,6 +13,7 @@
           <attribute name="foreground" value="#ffff80008000" start="10" end="14"></attribute>
           <attribute name="foreground" value="#8000ffff8000" start="14" end="16"></attribute>
           <attribute name="underline" value="True" start="6" end="11"></attribute>
+          <attribute name="underline-color" value="#00000000ffff" start="6" end="11"></attribute>
         </attributes>
       </object>
     </child>
