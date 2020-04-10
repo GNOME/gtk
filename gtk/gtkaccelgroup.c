@@ -413,6 +413,7 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
             }
 	  else
 	    {
+            g_message ("Accel: %s, %u", accelerator, len);
 	      keyval = gdk_keyval_from_name (accelerator);
 	      if (keyval == GDK_KEY_VoidSymbol)
 	        {
@@ -570,20 +571,28 @@ gtk_accelerator_name_with_keycode (GdkDisplay      *display,
  *
  * Returns: a newly-allocated accelerator name
  */
-gchar*
+char *
 gtk_accelerator_name (guint           accelerator_key,
                       GdkModifierType accelerator_mods)
 {
-  static const gchar text_shift[] = "<Shift>";
-  static const gchar text_control[] = "<Control>";
-  static const gchar text_alt[] = "<Alt>";
-  static const gchar text_meta[] = "<Meta>";
-  static const gchar text_super[] = "<Super>";
-  static const gchar text_hyper[] = "<Hyper>";
+  static const struct {
+    guint mask;
+    const char *text;
+    gsize text_len;
+  } mask_text[] = {
+    { GDK_SHIFT_MASK,   "<Shift>",   strlen ("<Shift>") },
+    { GDK_CONTROL_MASK, "<Control>", strlen ("<Control>") },
+    { GDK_ALT_MASK,     "<Alt>",     strlen ("<Alt>") },
+    { GDK_META_MASK,    "<Meta>",    strlen ("<Meta>") },
+    { GDK_SUPER_MASK,   "<Super>",   strlen ("<Super>") },
+    { GDK_HYPER_MASK,   "<Hyper>",   strlen ("<Hyper>") }
+  };
   GdkModifierType saved_mods;
   guint l;
+  guint name_len;
   const char *keyval_name;
-  gchar *accelerator;
+  char *accelerator;
+  int i;
 
   accelerator_mods &= GDK_MODIFIER_MASK;
 
@@ -591,57 +600,34 @@ gtk_accelerator_name (guint           accelerator_key,
   if (!keyval_name)
     keyval_name = "";
 
-  saved_mods = accelerator_mods;
-  l = 0;
-  if (accelerator_mods & GDK_SHIFT_MASK)
-    l += sizeof (text_shift) - 1;
-  if (accelerator_mods & GDK_CONTROL_MASK)
-    l += sizeof (text_control) - 1;
-  if (accelerator_mods & GDK_ALT_MASK)
-    l += sizeof (text_alt) - 1;
-  if (accelerator_mods & GDK_META_MASK)
-    l += sizeof (text_meta) - 1;
-  if (accelerator_mods & GDK_HYPER_MASK)
-    l += sizeof (text_hyper) - 1;
-  if (accelerator_mods & GDK_SUPER_MASK)
-    l += sizeof (text_super) - 1;
+  name_len = strlen (keyval_name);
 
-  accelerator = g_new (gchar, l + 1);
+  saved_mods = accelerator_mods;
+  for (i = 0; i < G_N_ELEMENTS (mask_text); i++)
+    {
+      if (accelerator_mods & mask_text[i].mask)
+        name_len += mask_text[i].text_len;
+    }
+
+  if (name_len == 0)
+    return g_strdup (keyval_name);
+
+  name_len += 1; /* NUL byte */
+  accelerator = g_new (char, name_len);
 
   accelerator_mods = saved_mods;
   l = 0;
-  accelerator[l] = 0;
-  if (accelerator_mods & GDK_SHIFT_MASK)
+  for (i = 0; i < G_N_ELEMENTS (mask_text); i++)
     {
-      strcpy (accelerator + l, text_shift);
-      l += sizeof (text_shift) - 1;
+      if (accelerator_mods & mask_text[i].mask)
+        {
+          strcpy (accelerator + l, mask_text[i].text);
+          l += mask_text[i].text_len;
+        }
     }
-  if (accelerator_mods & GDK_CONTROL_MASK)
-    {
-      strcpy (accelerator + l, text_control);
-      l += sizeof (text_control) - 1;
-    }
-  if (accelerator_mods & GDK_ALT_MASK)
-    {
-      strcpy (accelerator + l, text_alt);
-      l += sizeof (text_alt) - 1;
-    }
-  if (accelerator_mods & GDK_META_MASK)
-    {
-      strcpy (accelerator + l, text_meta);
-      l += sizeof (text_meta) - 1;
-    }
-  if (accelerator_mods & GDK_HYPER_MASK)
-    {
-      strcpy (accelerator + l, text_hyper);
-      l += sizeof (text_hyper) - 1;
-    }
-  if (accelerator_mods & GDK_SUPER_MASK)
-    {
-      strcpy (accelerator + l, text_super);
-      l += sizeof (text_super) - 1;
-    }
+
   strcpy (accelerator + l, keyval_name);
+  accelerator[name_len - 1] = '\0';
 
   return accelerator;
 }
