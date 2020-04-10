@@ -1859,11 +1859,8 @@ gtk_label_recalculate (GtkLabel *label)
   else
     {
       if (!priv->pattern_set)
-        {
-          if (priv->markup_attrs)
-            pango_attr_list_unref (priv->markup_attrs);
-          priv->markup_attrs = NULL;
-        }
+        g_clear_pointer (&priv->markup_attrs, pango_attr_list_unref);
+
       gtk_label_set_text_internal (label, g_strdup (priv->label));
     }
 
@@ -2933,9 +2930,7 @@ gtk_label_finalize (GObject *object)
   g_clear_pointer (&priv->markup_attrs, pango_attr_list_unref);
 
   if (priv->select_info)
-    {
-      g_object_unref (priv->select_info->provider);
-    }
+    g_object_unref (priv->select_info->provider);
 
   gtk_label_clear_links (label);
   g_free (priv->select_info);
