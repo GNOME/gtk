@@ -2332,7 +2332,6 @@ gtk_label_set_markup_internal (GtkLabel    *label,
       return;
     }
 
-  str_for_accel = g_strdup (str_for_display);
 
   if (links)
     {
@@ -2348,6 +2347,8 @@ gtk_label_set_markup_internal (GtkLabel    *label,
     {
       gboolean enable_mnemonics = TRUE;
       gboolean auto_mnemonics = TRUE;
+
+      str_for_accel = g_strdup (str_for_display);
 
       if (!(enable_mnemonics && priv->mnemonics_visible &&
             (!auto_mnemonics ||
