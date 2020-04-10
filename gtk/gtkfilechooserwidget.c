@@ -2290,7 +2290,7 @@ save_widgets_create (GtkFileChooserWidget *impl)
     }
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
-  gtk_style_context_add_class (gtk_widget_get_style_context (vbox), "search-bar");
+  gtk_widget_add_css_class (vbox, "search-bar");
 
   impl->save_widgets_table = gtk_grid_new ();
   gtk_container_add (GTK_CONTAINER (vbox), impl->save_widgets_table);

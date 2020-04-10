@@ -42,7 +42,7 @@ do_headerbar (GtkWidget *do_widget)
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_style_context_add_class (gtk_widget_get_style_context (box), "linked");
+      gtk_widget_add_css_class (box, "linked");
       button = gtk_button_new ();
       gtk_container_add (GTK_CONTAINER (button), gtk_image_new_from_icon_name ("pan-start-symbolic"));
       gtk_container_add (GTK_CONTAINER (box), button);

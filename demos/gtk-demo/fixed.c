@@ -52,7 +52,7 @@ create_faces (void)
       /* Add a face */
       faces[i].face = gtk_frame_new (NULL);
       gtk_widget_set_size_request (faces[i].face, face_size, face_size);
-      gtk_style_context_add_class (gtk_widget_get_style_context (faces[i].face), faces[i].css_class);
+      gtk_widget_add_css_class (faces[i].face, faces[i].css_class);
       gtk_container_add (GTK_CONTAINER (fixed), faces[i].face);
 
       /* Set up the transformation for each face */

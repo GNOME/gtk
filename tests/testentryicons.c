@@ -269,8 +269,8 @@ main (int argc, char **argv)
   gtk_grid_attach (GTK_GRID (grid), entry, 1, 6, 1, 1);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_style_context_add_class (gtk_widget_get_style_context (box), "view");
-  gtk_style_context_add_class (gtk_widget_get_style_context (box), "entry-frame");
+  gtk_widget_add_css_class (box, "view");
+  gtk_widget_add_css_class (box, "entry-frame");
   gtk_widget_set_cursor_from_name (box, "text");
   entry = gtk_entry_new ();
   gtk_widget_set_hexpand (entry, TRUE);

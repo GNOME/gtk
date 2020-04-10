@@ -1226,7 +1226,7 @@ create_sidebar (void)
   stack = gtk_stack_new ();
   gtk_widget_set_size_request (stack, 120, 120);
   view = gtk_label_new ("Sidebar");
-  gtk_style_context_add_class (gtk_widget_get_style_context (view), "view");
+  gtk_widget_add_css_class (view, "view");
   gtk_widget_set_halign (view, GTK_ALIGN_FILL);
   gtk_widget_set_valign (view, GTK_ALIGN_FILL);
   gtk_widget_show (view);

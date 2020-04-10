@@ -115,49 +115,49 @@ main (int argc, char **argv)
 
   w = gtk_button_new ();
   gtk_widget_set_valign (w, GTK_ALIGN_CENTER);
-  gtk_style_context_add_class (gtk_widget_get_style_context (w), "one");
+  gtk_widget_add_css_class (w, "one");
   gtk_container_add (GTK_CONTAINER (top), w);
 
   w = gtk_button_new ();
   gtk_widget_set_valign (w, GTK_ALIGN_CENTER);
-  gtk_style_context_add_class (gtk_widget_get_style_context (w), "two");
+  gtk_widget_add_css_class (w, "two");
   gtk_container_add (GTK_CONTAINER (top), w);
 
   w = gtk_button_new ();
   gtk_widget_set_valign (w, GTK_ALIGN_CENTER);
-  gtk_style_context_add_class (gtk_widget_get_style_context (w), "three");
+  gtk_widget_add_css_class (w, "three");
   gtk_widget_set_opacity (w, 0.7);
   gtk_container_add (GTK_CONTAINER (top), w);
 
   w = gtk_button_new ();
   gtk_widget_set_valign (w, GTK_ALIGN_CENTER);
-  gtk_style_context_add_class (gtk_widget_get_style_context (w), "four");
+  gtk_widget_add_css_class (w, "four");
   gtk_container_add (GTK_CONTAINER (top), w);
 
   w = gtk_button_new ();
   gtk_widget_set_valign (w, GTK_ALIGN_CENTER);
-  gtk_style_context_add_class (gtk_widget_get_style_context (w), "five");
+  gtk_widget_add_css_class (w, "five");
   gtk_container_add (GTK_CONTAINER (top), w);
 
   /* Bottom */
   w = gtk_button_new ();
   gtk_widget_set_valign (w, GTK_ALIGN_CENTER);
-  gtk_style_context_add_class (gtk_widget_get_style_context (w), "b1");
+  gtk_widget_add_css_class (w, "b1");
   gtk_container_add (GTK_CONTAINER (bottom), w);
 
   /*w = gtk_button_new ();*/
   /*gtk_widget_set_valign (w, GTK_ALIGN_CENTER);*/
-  /*gtk_style_context_add_class (gtk_widget_get_style_context (w), "b2");*/
+  /*gtk_widget_add_css_class (w, "b2");*/
   /*gtk_container_add (GTK_CONTAINER (bottom), w);*/
 
   /*w = gtk_button_new ();*/
   /*gtk_widget_set_valign (w, GTK_ALIGN_CENTER);*/
-  /*gtk_style_context_add_class (gtk_widget_get_style_context (w), "b3");*/
+  /*gtk_widget_add_css_class (w, "b3");*/
   /*gtk_container_add (GTK_CONTAINER (bottom), w);*/
 
   /*w = gtk_button_new ();*/
   /*gtk_widget_set_valign (w, GTK_ALIGN_CENTER);*/
-  /*gtk_style_context_add_class (gtk_widget_get_style_context (w), "b4");*/
+  /*gtk_widget_add_css_class (w, "b4");*/
   /*gtk_container_add (GTK_CONTAINER (bottom), w);*/
 
   gtk_container_add (GTK_CONTAINER (box), top);

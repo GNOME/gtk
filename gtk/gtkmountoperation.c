@@ -1419,8 +1419,7 @@ do_popup_menu_for_process_tree_view (GtkWidget         *widget,
 
   menu = gtk_popover_new ();
   gtk_widget_set_parent (menu, widget);
-  gtk_style_context_add_class (gtk_widget_get_style_context (menu),
-                               GTK_STYLE_CLASS_CONTEXT_MENU);
+  gtk_widget_add_css_class (menu, GTK_STYLE_CLASS_CONTEXT_MENU);
 
   item = gtk_model_button_new ();
   g_object_set (item, "text", _("_End Process"), NULL);

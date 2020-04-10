@@ -93,7 +93,6 @@ G_MODULE_EXPORT gboolean
 add_reference_class_if_no_animation (GtkWidget *widget)
 {
   gboolean enabled;
-  GtkStyleContext *context;
 
   g_object_get (gtk_widget_get_settings (widget), "gtk-enable-animations", &enabled, NULL);
   if (enabled)
@@ -101,8 +100,7 @@ add_reference_class_if_no_animation (GtkWidget *widget)
 
   g_message ("Adding reference class because animation is disabled");
 
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_add_class (context, "reference");
+  gtk_widget_add_css_class (widget, "reference");
 
   return FALSE;
 }

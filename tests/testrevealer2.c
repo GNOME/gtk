@@ -43,8 +43,7 @@ on_activate (GApplication *app,
 
       sidebar = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_widget_set_size_request (sidebar, 150, -1);
-      gtk_style_context_add_class (gtk_widget_get_style_context (sidebar),
-                                   GTK_STYLE_CLASS_SIDEBAR);
+      gtk_widget_add_css_class (sidebar, GTK_STYLE_CLASS_SIDEBAR);
       gtk_container_add (GTK_CONTAINER (revealer), sidebar);
 
       img = gtk_image_new ();

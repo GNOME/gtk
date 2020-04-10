@@ -499,7 +499,7 @@ add_emoji (GtkWidget          *list,
   pango_attr_list_insert (attrs, pango_attr_scale_new (PANGO_SCALE_X_LARGE));
   gtk_label_set_attributes (GTK_LABEL (label), attrs);
   pango_attr_list_unref (attrs);
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), "emoji");
+  gtk_widget_add_css_class (label, "emoji");
 
   child = g_object_new (GTK_TYPE_LIST_BOX_ROW, "css-name", "emoji-completion-row", NULL);
   gtk_widget_set_focus_on_click (child, FALSE);

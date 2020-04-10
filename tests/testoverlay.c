@@ -429,7 +429,7 @@ test_stacking (void)
   grid = gtk_grid_new ();
   overlay = gtk_overlay_new ();
   main_child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_style_context_add_class (gtk_widget_get_style_context (main_child), "overlay-green");
+  gtk_widget_add_css_class (main_child, "overlay-green");
   gtk_widget_set_hexpand (main_child, TRUE);
   gtk_widget_set_vexpand (main_child, TRUE);
   label = gtk_label_new ("Main child");

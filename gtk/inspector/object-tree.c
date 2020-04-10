@@ -710,18 +710,14 @@ static void
 widget_mapped (GtkWidget     *widget,
                GtkListBoxRow *row)
 {
-  GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET (row));
-
-  gtk_style_context_remove_class (context, "dim-label");
+  gtk_widget_remove_css_class (GTK_WIDGET (row), "dim-label");
 }
 
 static void
 widget_unmapped (GtkWidget     *widget,
                  GtkListBoxRow *row)
 {
-  GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET (row));
-
-  gtk_style_context_add_class (context, "dim-label");
+  gtk_widget_add_css_class (GTK_WIDGET (row), "dim-label");
 }
 
 static gboolean

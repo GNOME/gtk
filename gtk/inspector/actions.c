@@ -91,13 +91,13 @@ add_action (GtkInspectorActions *sl,
   gtk_container_add (GTK_CONTAINER (row), box);
 
   label = gtk_label_new (name);
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), "cell");
+  gtk_widget_add_css_class (label, "cell");
   gtk_label_set_xalign (GTK_LABEL (label), 0);
   gtk_size_group_add_widget (sl->priv->name, label);
   gtk_container_add (GTK_CONTAINER (box), label);
 
   label = gtk_label_new (enabled ? "+" : "-");
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), "cell");
+  gtk_widget_add_css_class (label, "cell");
   gtk_label_set_xalign (GTK_LABEL (label), 0);
   gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
   gtk_size_group_add_widget (sl->priv->enabled, label);
@@ -106,20 +106,20 @@ add_action (GtkInspectorActions *sl,
   g_object_set_data (G_OBJECT (row), "enabled", label);
 
   label = gtk_label_new (parameter);
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), "cell");
+  gtk_widget_add_css_class (label, "cell");
   gtk_label_set_xalign (GTK_LABEL (label), 0);
   gtk_size_group_add_widget (sl->priv->parameter, label);
   gtk_container_add (GTK_CONTAINER (box), label);
 
   label = gtk_label_new (state_string);
   gtk_label_set_xalign (GTK_LABEL (label), 0);
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), "cell");
+  gtk_widget_add_css_class (label, "cell");
   gtk_size_group_add_widget (sl->priv->state, label);
   gtk_container_add (GTK_CONTAINER (box), label);
   g_object_set_data (G_OBJECT (row), "state", label);
 
   editor = gtk_inspector_action_editor_new (group, name, sl->priv->activate);
-  gtk_style_context_add_class (gtk_widget_get_style_context (editor), "cell");
+  gtk_widget_add_css_class (editor, "cell");
   gtk_container_add (GTK_CONTAINER (box), editor);
   g_object_set_data (G_OBJECT (row), "editor", editor);
 

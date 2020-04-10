@@ -81,7 +81,7 @@ deserialize_widget (GtkDemoWidget *demo)
   else if (demo->type == GTK_TYPE_SPINNER)
     {
       widget = g_object_new (demo->type, "spinning", demo->active, NULL);
-      gtk_style_context_add_class (gtk_widget_get_style_context (widget), "demo");
+      gtk_widget_add_css_class (widget, "demo");
     }
   else
     {
@@ -114,7 +114,7 @@ new_spinner_cb (GtkWidget *button,
   GtkWidget *widget;
 
   widget = gtk_spinner_new ();
-  gtk_style_context_add_class (gtk_widget_get_style_context (widget), "demo");
+  gtk_widget_add_css_class (widget, "demo");
   gtk_spinner_start (GTK_SPINNER (widget));
   gtk_fixed_put (fixed, widget, pos_x, pos_y);
 
