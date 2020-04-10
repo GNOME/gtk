@@ -2343,7 +2343,7 @@ gtk_label_set_markup_internal (GtkLabel    *label,
       priv->select_info->n_links = n_links;
       _gtk_label_accessible_update_links (label);
       gtk_label_ensure_has_tooltip (label);
-      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (label)), "link");
+      gtk_widget_add_css_class (GTK_WIDGET (label), "link");
     }
 
   if (with_uline)
@@ -5823,13 +5823,13 @@ gtk_label_clear_links (GtkLabel *label)
   if (!priv->select_info)
     return;
 
-  for (i = 0; i < priv->select_info->n_links; i++)
-    link_free (&priv->select_info->links[i]);
-  g_free (priv->select_info->links);
-  priv->select_info->links = NULL;
-  priv->select_info->n_links = 0;
-  priv->select_info->active_link = NULL;
-  gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (label)), "link");
+  for (i = 0; i < self->select_info->n_links; i++)
+    link_free (&self->select_info->links[i]);
+  g_free (self->select_info->links);
+  self->select_info->links = NULL;
+  self->select_info->n_links = 0;
+  self->select_info->active_link = NULL;
+  gtk_widget_remove_css_class (GTK_WIDGET (label), "link");
 
   _gtk_label_accessible_update_links (label);
 }
