@@ -302,7 +302,6 @@ struct _GtkLabelPrivate
   guint    wrap_mode          : 3;
   guint    single_line_mode   : 1;
   guint    in_click           : 1;
-  guint    pattern_set        : 1;
   guint    track_links        : 1;
 
   guint    mnemonic_keyval;
@@ -392,7 +391,6 @@ enum {
   PROP_USE_MARKUP,
   PROP_USE_UNDERLINE,
   PROP_JUSTIFY,
-  PROP_PATTERN,
   PROP_WRAP,
   PROP_WRAP_MODE,
   PROP_SELECTABLE,
@@ -472,9 +470,6 @@ static gboolean gtk_label_set_use_underline_internal (GtkLabel  *label,
                                                       gboolean   val);
 static void gtk_label_set_uline_text_internal    (GtkLabel      *label,
 						  const gchar   *str);
-static void gtk_label_set_pattern_internal       (GtkLabel      *label,
-				                  const gchar   *pattern,
-                                                  gboolean       is_mnemonic);
 static void gtk_label_set_markup_internal        (GtkLabel      *label,
 						  const gchar   *str,
 						  gboolean       with_uline);
@@ -524,8 +519,7 @@ static void     gtk_label_buildable_custom_finished  (GtkBuildable       *builda
 static void connect_mnemonics_visible_notify    (GtkLabel   *label);
 static gboolean      separate_uline_pattern     (const gchar  *str,
                                                  guint        *accel_key,
-                                                 gchar       **new_str,
-                                                 gchar       **pattern);
+                                                 gchar       **new_str);
 
 
 /* For selectable labels: */
@@ -836,13 +830,6 @@ gtk_label_class_init (GtkLabelClass *class)
                           0.0, 1.0,
                           0.5,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  label_props[PROP_PATTERN] =
-      g_param_spec_string ("pattern",
-                           P_("Pattern"),
-                           P_("A string with _ characters in positions correspond to characters in the text to underline"),
-                           NULL,
-                           GTK_PARAM_WRITABLE);
 
   label_props[PROP_WRAP] =
       g_param_spec_boolean ("wrap",
@@ -1190,9 +1177,6 @@ gtk_label_set_property (GObject      *object,
     case PROP_JUSTIFY:
       gtk_label_set_justify (label, g_value_get_enum (value));
       break;
-    case PROP_PATTERN:
-      gtk_label_set_pattern (label, g_value_get_string (value));
-      break;
     case PROP_WRAP:
       gtk_label_set_wrap (label, g_value_get_boolean (value));
       break;	  
@@ -1338,7 +1322,6 @@ gtk_label_init (GtkLabel *label)
 
   priv->use_underline = FALSE;
   priv->use_markup = FALSE;
-  priv->pattern_set = FALSE;
   priv->track_links = TRUE;
 
   priv->mnemonic_keyval = GDK_KEY_VoidSymbol;
@@ -1859,12 +1842,7 @@ gtk_label_recalculate (GtkLabel *label)
   else if (priv->use_underline)
     gtk_label_set_uline_text_internal (label, priv->label);
   else
-    {
-      if (!priv->pattern_set)
-        g_clear_pointer (&priv->markup_attrs, pango_attr_list_unref);
-
-      gtk_label_set_text_internal (label, g_strdup (priv->label));
-    }
+    gtk_label_set_text_internal (label, g_strdup (priv->label));
 
   if (!priv->use_underline)
     priv->mnemonic_keyval = GDK_KEY_VoidSymbol;
@@ -2352,14 +2330,12 @@ gtk_label_set_markup_internal (GtkLabel    *label,
                gtk_widget_is_sensitive (priv->mnemonic_widget))))))
         {
           gchar *tmp;
-          gchar *pattern;
           guint key;
 
-          if (separate_uline_pattern (str_for_display, &key, &tmp, &pattern))
+          if (separate_uline_pattern (str_for_display, &key, &tmp))
             {
               g_free (str_for_display);
               str_for_display = tmp;
-              g_free (pattern);
             }
         }
     }
@@ -2517,111 +2493,6 @@ gtk_label_get_text (GtkLabel *label)
 
   return priv->text;
 }
-
-static PangoAttrList *
-gtk_label_pattern_to_attrs (GtkLabel      *label,
-			    const gchar   *pattern)
-{
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  const char *start;
-  const char *p = priv->text;
-  const char *q = pattern;
-  PangoAttrList *attrs;
-
-  attrs = pango_attr_list_new ();
-
-  while (1)
-    {
-      while (*p && *q && *q != '_')
-	{
-	  p = g_utf8_next_char (p);
-	  q++;
-	}
-      start = p;
-      while (*p && *q && *q == '_')
-	{
-	  p = g_utf8_next_char (p);
-	  q++;
-	}
-      
-      if (p > start)
-	{
-	  PangoAttribute *attr = pango_attr_underline_new (PANGO_UNDERLINE_LOW);
-	  attr->start_index = start - priv->text;
-	  attr->end_index = p - priv->text;
-	  
-	  pango_attr_list_insert (attrs, attr);
-	}
-      else
-	break;
-    }
-
-  return attrs;
-}
-
-static void
-gtk_label_set_pattern_internal (GtkLabel    *label,
-				const gchar *pattern,
-                                gboolean     is_mnemonic)
-{
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  PangoAttrList *attrs;
-  gboolean auto_mnemonics = TRUE;
-
-  if (priv->pattern_set)
-    return;
-
-  if (is_mnemonic)
-    {
-      if (priv->mnemonics_visible && pattern &&
-          (!auto_mnemonics ||
-           (gtk_widget_is_sensitive (GTK_WIDGET (label)) &&
-            (!priv->mnemonic_widget ||
-             gtk_widget_is_sensitive (priv->mnemonic_widget)))))
-        attrs = gtk_label_pattern_to_attrs (label, pattern);
-      else
-        attrs = NULL;
-    }
-  else
-    attrs = gtk_label_pattern_to_attrs (label, pattern);
-
-  if (priv->markup_attrs)
-    pango_attr_list_unref (priv->markup_attrs);
-  priv->markup_attrs = attrs;
-}
-
-/**
- * gtk_label_set_pattern:
- * @label: The #GtkLabel you want to set the pattern to.
- * @pattern: The pattern as described above.
- *
- * The pattern of underlines you want under the existing text within the
- * #GtkLabel widget.  For example if the current text of the label says
- * “FooBarBaz” passing a pattern of “___   ___” will underline
- * “Foo” and “Baz” but not “Bar”.
- */
-void
-gtk_label_set_pattern (GtkLabel	   *label,
-		       const gchar *pattern)
-{
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-
-  g_return_if_fail (GTK_IS_LABEL (label));
-
-  priv->pattern_set = FALSE;
-
-  if (pattern)
-    {
-      gtk_label_set_pattern_internal (label, pattern, FALSE);
-      priv->pattern_set = TRUE;
-    }
-  else
-    gtk_label_recalculate (label);
-
-  gtk_label_clear_layout (label);
-  gtk_widget_queue_resize (GTK_WIDGET (label));
-}
-
 
 /**
  * gtk_label_set_justify:
@@ -3708,23 +3579,19 @@ gtk_label_snapshot (GtkWidget   *widget,
 static gboolean
 separate_uline_pattern (const gchar  *str,
                         guint        *accel_key,
-                        gchar       **new_str,
-                        gchar       **pattern)
+                        gchar       **new_str)
 {
   gboolean underscore;
   const gchar *src;
   gchar *dest;
-  gchar *pattern_dest;
 
   *accel_key = GDK_KEY_VoidSymbol;
   *new_str = g_new (gchar, strlen (str) + 1);
-  *pattern = g_new (gchar, g_utf8_strlen (str, -1) + 1);
 
   underscore = FALSE;
 
   src = str;
   dest = *new_str;
-  pattern_dest = *pattern;
 
   while (*src)
     {
@@ -3736,7 +3603,6 @@ separate_uline_pattern (const gchar  *str,
 	{
 	  g_warning ("Invalid input string");
 	  g_free (*new_str);
-	  g_free (*pattern);
 
 	  return FALSE;
 	}
@@ -3744,11 +3610,8 @@ separate_uline_pattern (const gchar  *str,
 
       if (underscore)
 	{
-	  if (c == '_')
-	    *pattern_dest++ = ' ';
-	  else
+	  if (c != '_')
 	    {
-	      *pattern_dest++ = '_';
 	      if (*accel_key == GDK_KEY_VoidSymbol)
 		*accel_key = gdk_keyval_to_lower (gdk_unicode_to_keyval (c));
 	    }
@@ -3769,14 +3632,11 @@ separate_uline_pattern (const gchar  *str,
 	    {
 	      while (src < next_src)
 		*dest++ = *src++;
-
-	      *pattern_dest++ = ' ';
 	    }
 	}
     }
 
   *dest = 0;
-  *pattern_dest = 0;
 
   return TRUE;
 }
@@ -3788,7 +3648,6 @@ gtk_label_set_uline_text_internal (GtkLabel    *label,
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
   guint accel_key = GDK_KEY_VoidSymbol;
   gchar *new_str;
-  gchar *pattern;
 
   g_return_if_fail (GTK_IS_LABEL (label));
   g_return_if_fail (str != NULL);
@@ -3796,14 +3655,11 @@ gtk_label_set_uline_text_internal (GtkLabel    *label,
   /* Split text into the base text and a separate pattern
    * of underscores.
    */
-  if (!separate_uline_pattern (str, &accel_key, &new_str, &pattern))
+  if (!separate_uline_pattern (str, &accel_key, &new_str))
     return;
 
   gtk_label_set_text_internal (label, new_str);
-  gtk_label_set_pattern_internal (label, pattern, TRUE);
   priv->mnemonic_keyval = accel_key;
-
-  g_free (pattern);
 }
 
 /**
