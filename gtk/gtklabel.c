@@ -2338,7 +2338,7 @@ gtk_label_set_markup_internal (GtkLabel    *label,
       priv->select_info->n_links = n_links;
       _gtk_label_accessible_update_links (label);
       gtk_label_ensure_has_tooltip (label);
-      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (label)), "link");
+      gtk_widget_add_css_class (GTK_WIDGET (label), "link");
     }
 
   if (with_uline)
