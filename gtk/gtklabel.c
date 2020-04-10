@@ -2218,7 +2218,7 @@ parse_uri_markup (GtkLabel      *label,
                   guint         *out_n_links,
                   GError       **error)
 {
-  GMarkupParseContext *context = NULL;
+  GMarkupParseContext *context;
   const char *p, *end;
   gsize length;
   UriParserData pdata;
@@ -2244,13 +2244,13 @@ parse_uri_markup (GtkLabel      *label,
     }
   else
     {
-      if (!g_markup_parse_context_parse (context, "<markup>", -1, error))
+      if (!g_markup_parse_context_parse (context, "<markup>", 8, error))
         goto failed;
 
       if (!g_markup_parse_context_parse (context, str, length, error))
         goto failed;
 
-      if (!g_markup_parse_context_parse (context, "</markup>", -1, error))
+      if (!g_markup_parse_context_parse (context, "</markup>", 9, error))
         goto failed;
     }
 
