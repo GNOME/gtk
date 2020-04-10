@@ -7619,38 +7619,47 @@ _gtk_widget_get_device_surface (GtkWidget *widget,
  *
  * Returns the list of pointer #GdkDevices that are currently
  * on top of any surface belonging to @widget. Free the list
- * with g_list_free(), the elements are owned by GTK+ and must
+ * with g_free(), the elements are owned by GTK+ and must
  * not be freed.
  */
-GList *
-_gtk_widget_list_devices (GtkWidget *widget)
+GdkDevice **
+_gtk_widget_list_devices (GtkWidget *widget,
+                          guint     *out_n_devices)
 {
+  GPtrArray *result;
   GdkSeat *seat;
-  GList *result = NULL;
   GList *devices;
   GList *l;
   GdkDevice *device;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_assert (out_n_devices);
 
   if (!_gtk_widget_get_mapped (widget))
-    return NULL;
+    {
+      *out_n_devices = 0;
+      return NULL;
+    }
 
+  result = g_ptr_array_new ();
   seat = gdk_display_get_default_seat (_gtk_widget_get_display (widget));
   device = gdk_seat_get_pointer (seat);
   if (is_my_surface (widget, gdk_device_get_last_event_surface (device)))
-    result = g_list_prepend (result, device);
+    {
+      g_ptr_array_add (result, device);
+    }
 
   devices = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_ALL_POINTING);
   for (l = devices; l; l = l->next)
     {
       device = l->data;
       if (is_my_surface (widget, gdk_device_get_last_event_surface (device)))
-        result = g_list_prepend (result, device);
+        g_ptr_array_add (result, device);
     }
   g_list_free (devices);
 
-  return result;
+  *out_n_devices = result->len;
+  return (GdkDevice **)g_ptr_array_free (result, FALSE);
 }
 
 /*
@@ -7741,17 +7750,18 @@ gtk_widget_propagate_state (GtkWidget          *widget,
       if (!priv->shadowed &&
           (new_flags & GTK_STATE_FLAG_INSENSITIVE) != (old_flags & GTK_STATE_FLAG_INSENSITIVE))
         {
+          guint i, n_devices;
+          GdkDevice **devices;
           GList *event_surfaces = NULL;
-          GList *devices, *d;
 
-          devices = _gtk_widget_list_devices (widget);
+          devices = _gtk_widget_list_devices (widget, &n_devices);
 
-          for (d = devices; d; d = d->next)
+          for (i = 0; i < n_devices; i++)
             {
               GdkSurface *surface;
               GdkDevice *device;
 
-              device = d->data;
+              device = devices[i];
               surface = _gtk_widget_get_device_surface (widget, device);
 
               /* Do not propagate more than once to the
@@ -7762,17 +7772,17 @@ gtk_widget_propagate_state (GtkWidget          *widget,
                 continue;
 
               if (!gtk_widget_is_sensitive (widget))
-                _gtk_widget_synthesize_crossing (widget, NULL, d->data,
+                _gtk_widget_synthesize_crossing (widget, NULL, device,
                                                  GDK_CROSSING_STATE_CHANGED);
               else
-                _gtk_widget_synthesize_crossing (NULL, widget, d->data,
+                _gtk_widget_synthesize_crossing (NULL, widget, device,
                                                  GDK_CROSSING_STATE_CHANGED);
 
               event_surfaces = g_list_prepend (event_surfaces, surface);
             }
 
           g_list_free (event_surfaces);
-          g_list_free (devices);
+          g_free (devices);
         }
 
       if (!gtk_widget_is_sensitive (widget))
