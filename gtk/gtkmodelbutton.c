@@ -1387,6 +1387,7 @@ gtk_model_button_init (GtkModelButton *self)
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   controller = gtk_event_controller_focus_new ();
+  gtk_event_controller_set_propagation_limit (controller, GTK_LIMIT_NONE);
   g_signal_connect (controller, "enter", G_CALLBACK (focus_in_cb), NULL);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
