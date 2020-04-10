@@ -637,12 +637,23 @@ gtk_radio_button_focus (GtkWidget         *widget,
   GtkRadioButton *radio_button = GTK_RADIO_BUTTON (widget);
   GtkRadioButtonPrivate *priv = gtk_radio_button_get_instance_private (radio_button);
   GSList *tmp_slist;
+  GtkRadioButton *selected_button = NULL;
 
   /* Radio buttons with draw_indicator unset focus "normally", since
    * they look like buttons to the user.
    */
   if (!gtk_check_button_get_draw_indicator (GTK_CHECK_BUTTON (widget)))
     return GTK_WIDGET_CLASS (gtk_radio_button_parent_class)->focus (widget, direction);
+
+  /* Find the currently active button in the group */
+  tmp_slist = priv->group;
+  while (tmp_slist)
+    {
+      if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (tmp_slist->data)) &&
+          gtk_widget_get_visible (tmp_slist->data))
+        selected_button = tmp_slist->data;
+      tmp_slist = tmp_slist->next;
+    }
 
   if (gtk_widget_is_focus (widget))
     {
@@ -692,29 +703,15 @@ gtk_radio_button_focus (GtkWidget         *widget,
         {
           gtk_widget_grab_focus (new_focus);
           gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (new_focus), TRUE);
+          if (selected_button && selected_button != (GtkRadioButton *)new_focus)
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (selected_button), FALSE);
         }
 
       g_ptr_array_free (child_array, TRUE);
-
       return TRUE;
     }
   else
     {
-      GtkRadioButton *selected_button = NULL;
-
-      /* We accept the focus if, we don't have the focus and
-       *  - we are the currently active button in the group
-       *  - there is no currently active radio button.
-       */
-      tmp_slist = priv->group;
-      while (tmp_slist)
-	{
-	  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (tmp_slist->data)) &&
-	      gtk_widget_get_visible (tmp_slist->data))
-	    selected_button = tmp_slist->data;
-	  tmp_slist = tmp_slist->next;
-	}
-
       if (selected_button && selected_button != radio_button)
 	return FALSE;
 
