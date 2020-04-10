@@ -1798,15 +1798,18 @@ typedef struct
 } GrabNotifyInfo;
 
 static void
-synth_crossing_for_grab_notify (GtkWidget       *from,
-                                GtkWidget       *to,
-                                GrabNotifyInfo  *info,
-                                GList           *devices,
-                                GdkCrossingMode  mode)
+synth_crossing_for_grab_notify (GtkWidget        *from,
+                                GtkWidget        *to,
+                                GrabNotifyInfo   *info,
+                                GdkDevice       **devices,
+                                guint             n_devices,
+                                GdkCrossingMode   mode)
 {
-  while (devices)
+  guint i;
+
+  for (i = 0; i < n_devices; i++)
     {
-      GdkDevice *device = devices->data;
+      GdkDevice *device = devices[i];
       GdkSurface *from_surface, *to_surface;
 
       /* Do not propagate events more than once to
@@ -1848,8 +1851,6 @@ synth_crossing_for_grab_notify (GtkWidget       *from,
           if (to_surface)
             info->notified_surfaces = g_list_prepend (info->notified_surfaces, to_surface);
         }
-
-      devices = devices->next;
     }
 }
 
@@ -1859,7 +1860,8 @@ gtk_grab_notify_foreach (GtkWidget *child,
 {
   GrabNotifyInfo *info = data;
   gboolean was_grabbed, is_grabbed, was_shadowed, is_shadowed;
-  GList *devices;
+  GdkDevice **devices;
+  guint n_devices;
 
   was_grabbed = info->was_grabbed;
   is_grabbed = info->is_grabbed;
@@ -1888,10 +1890,12 @@ gtk_grab_notify_foreach (GtkWidget *child,
       _gtk_widget_get_device_surface (child, info->device))
     {
       /* Device specified and is on widget */
-      devices = g_list_prepend (NULL, info->device);
+      devices = g_new (GdkDevice *, 1);
+      devices[0] = info->device;
+      n_devices = 1;
     }
   else
-    devices = _gtk_widget_list_devices (child);
+    devices = _gtk_widget_list_devices (child, &n_devices);
 
   if (is_shadowed)
     {
@@ -1899,7 +1903,7 @@ gtk_grab_notify_foreach (GtkWidget *child,
       if (!was_shadowed && devices &&
           gtk_widget_is_sensitive (child))
         synth_crossing_for_grab_notify (child, info->new_grab_widget,
-                                        info, devices,
+                                        info, devices, n_devices,
                                         GDK_CROSSING_GTK_GRAB);
     }
   else
@@ -1908,7 +1912,7 @@ gtk_grab_notify_foreach (GtkWidget *child,
       if (was_shadowed && devices &&
           gtk_widget_is_sensitive (child))
         synth_crossing_for_grab_notify (info->old_grab_widget, child,
-                                        info, devices,
+                                        info, devices, n_devices,
                                         info->from_grab ? GDK_CROSSING_GTK_GRAB :
                                         GDK_CROSSING_GTK_UNGRAB);
     }
@@ -1917,7 +1921,7 @@ gtk_grab_notify_foreach (GtkWidget *child,
     _gtk_widget_grab_notify (child, was_shadowed);
 
   g_object_unref (child);
-  g_list_free (devices);
+  g_free (devices);
 
   info->was_grabbed = was_grabbed;
   info->is_grabbed = is_grabbed;
