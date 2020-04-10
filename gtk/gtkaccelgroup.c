@@ -592,7 +592,7 @@ gtk_accelerator_name (guint           accelerator_key,
     keyval_name = "";
 
   saved_mods = accelerator_mods;
-  l = 0;
+  l = strlen (keyval_name);
   if (accelerator_mods & GDK_SHIFT_MASK)
     l += sizeof (text_shift) - 1;
   if (accelerator_mods & GDK_CONTROL_MASK)
