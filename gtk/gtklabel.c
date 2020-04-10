@@ -1856,6 +1856,8 @@ gtk_label_recalculate (GtkLabel *label)
   guint keyval = priv->mnemonic_keyval;
 
   gtk_label_clear_links (label);
+  gtk_label_clear_layout (label);
+  gtk_label_clear_select_info (label);
 
   if (priv->use_markup)
     gtk_label_set_markup_internal (label, priv->label, priv->use_underline);
@@ -1878,8 +1880,6 @@ gtk_label_recalculate (GtkLabel *label)
       g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_MNEMONIC_KEYVAL]);
     }
 
-  gtk_label_clear_layout (label);
-  gtk_label_clear_select_info (label);
   gtk_widget_queue_resize (GTK_WIDGET (label));
 }
 
