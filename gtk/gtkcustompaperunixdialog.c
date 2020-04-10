@@ -1003,7 +1003,6 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   GtkTreeIter iter;
   GtkTreeSelection *selection;
   GtkUnit user_units;
-  GtkStyleContext *context;
 
   content_area = gtk_dialog_get_content_area (cpu_dialog);
   gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
@@ -1052,8 +1051,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
 
   toolbar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
-  context = gtk_widget_get_style_context (toolbar);
-  gtk_style_context_add_class (context, "linked");
+  gtk_widget_add_css_class (toolbar, "linked");
 
   gtk_container_add (GTK_CONTAINER (vbox), toolbar);
 

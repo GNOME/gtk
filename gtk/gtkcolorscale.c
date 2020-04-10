@@ -24,7 +24,6 @@
 #include "gtkcolorutils.h"
 #include "gtkorientable.h"
 #include "gtkrangeprivate.h"
-#include "gtkstylecontext.h"
 #include "gtkaccessible.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"

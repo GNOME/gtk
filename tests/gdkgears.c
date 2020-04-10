@@ -151,8 +151,7 @@ main (int argc, char *argv[])
   gtk_widget_show (revealer);
 
   frame = gtk_frame_new (NULL);
-  gtk_style_context_add_class (gtk_widget_get_style_context (frame),
-			       "app-notification");
+  gtk_widget_add_css_class (frame, "app-notification");
   gtk_container_add (GTK_CONTAINER (revealer), frame);
   gtk_widget_show (frame);
 

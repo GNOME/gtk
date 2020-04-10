@@ -74,7 +74,7 @@ do_password_entry (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (box), entry2);
 
       button = gtk_button_new_with_mnemonic ("_Done");
-      gtk_style_context_add_class (gtk_widget_get_style_context (button), "suggested-action");
+      gtk_widget_add_css_class (button, "suggested-action");
       g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_widget_destroy), window);
       gtk_widget_set_sensitive (button, FALSE);
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);

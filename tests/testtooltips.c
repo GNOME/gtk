@@ -47,7 +47,7 @@ my_tooltip_init (MyTooltip *tt)
 
   gtk_container_add (GTK_CONTAINER (tt), label);
 
-  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (tt)), "background");
+  gtk_widget_add_css_class (GTK_WIDGET (tt), "background");
 }
 
 static void

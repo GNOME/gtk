@@ -107,7 +107,7 @@ canvas_new (void)
   canvas = gtk_fixed_new ();
   gtk_widget_set_hexpand (canvas, TRUE);
   gtk_widget_set_vexpand (canvas, TRUE);
-  gtk_style_context_add_class (gtk_widget_get_style_context (canvas), "frame");
+  gtk_widget_add_css_class (canvas, "frame");
 
   source = gtk_drag_source_new ();
   gtk_drag_source_set_actions (source, GDK_ACTION_MOVE);
@@ -218,7 +218,7 @@ canvas_item_new (int i,
   gdk_rgba_parse (&rgba, "yellow");
 
   widget = gtk_label_new (label);
-  gtk_style_context_add_class (gtk_widget_get_style_context (widget), "frame");
+  gtk_widget_add_css_class (widget, "frame");
   gtk_widget_set_name (widget, id);
 
   set_color (widget, &rgba);
@@ -300,7 +300,7 @@ int main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (box), sw);
 
   box3 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_style_context_add_class (gtk_widget_get_style_context (box3), "linked");
+  gtk_widget_add_css_class (box3, "linked");
   gtk_container_add (GTK_CONTAINER (sw), box3);
 
   for (i = 0; colors[i]; i++)

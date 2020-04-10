@@ -481,13 +481,11 @@ static void
 on_record_button_toggled (GtkToggleButton *button,
                           gpointer         user_data)
 {
-  GtkStyleContext *context;
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (button));
   if (gtk_toggle_button_get_active (button))
-    gtk_style_context_remove_class (context, "destructive-action");
+    gtk_widget_remove_css_class (GTK_WIDGET (button), "destructive-action");
   else
-    gtk_style_context_add_class (context, "destructive-action");
+    gtk_widget_add_css_class (GTK_WIDGET (button), "destructive-action");
 }
 
 static void

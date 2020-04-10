@@ -34,7 +34,6 @@
 #include "gtkadjustment.h"
 #include "gtklabel.h"
 #include "gtkspinbutton.h"
-#include "gtkstylecontext.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkroot.h"
 

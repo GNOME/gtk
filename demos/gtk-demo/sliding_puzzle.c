@@ -419,7 +419,7 @@ do_sliding_puzzle (GtkWidget *do_widget)
       gtk_widget_set_margin_bottom (tweaks, 10);
 
       choices = gtk_flow_box_new ();
-      gtk_style_context_add_class (gtk_widget_get_style_context (choices), GTK_STYLE_CLASS_VIEW);
+      gtk_widget_add_css_class (choices, GTK_STYLE_CLASS_VIEW);
       add_choice (choices, puzzle);
       add_choice (choices, gtk_nuclear_animation_new ());
       media = gtk_media_file_new_for_resource ("/images/gtk-logo.webm");

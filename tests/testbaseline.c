@@ -63,7 +63,7 @@ set_font_size (GtkWidget *widget, gint size)
 {
   const gchar *class[3] = { "small-font", "medium-font", "large-font" };
 
-  gtk_style_context_add_class (gtk_widget_get_style_context (widget), class[size]);
+  gtk_widget_add_css_class (widget, class[size]);
 }
 
 static void
