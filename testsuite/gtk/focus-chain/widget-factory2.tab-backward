@@ -30,8 +30,8 @@ GtkToggleButton
 GtkToggleButton
 GtkToggleButton
 GtkTextView
-GtkScaleButton
-GtkVolumeButton
+GtkToggleButton
+GtkToggleButton
 GtkSpinButton GtkText
 GtkToggleButton
 GtkToggleButton
