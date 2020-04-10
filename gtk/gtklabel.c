@@ -2411,8 +2411,7 @@ gtk_label_set_markup_internal (GtkLabel    *label,
 
   if (attrs)
     {
-      if (priv->markup_attrs)
-	pango_attr_list_unref (priv->markup_attrs);
+      g_clear_pointer (&priv->markup_attrs, pango_attr_list_unref);
       priv->markup_attrs = attrs;
     }
 
