@@ -85,7 +85,7 @@ gtk_inspector_controllers_init (GtkInspectorControllers *sl)
   gtk_widget_set_vexpand (box, TRUE);
 
   sl->priv->listbox = gtk_list_box_new ();
-  gtk_style_context_add_class (gtk_widget_get_style_context (sl->priv->listbox), "frame");
+  gtk_widget_add_css_class (sl->priv->listbox, "frame");
   gtk_widget_set_halign (sl->priv->listbox, GTK_ALIGN_CENTER);
   g_signal_connect (sl->priv->listbox, "row-activated", G_CALLBACK (row_activated), sl);
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (sl->priv->listbox), GTK_SELECTION_NONE);

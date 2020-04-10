@@ -51,7 +51,6 @@
 #include "gtkbutton.h"
 #include "gtkentry.h"
 #include "gtktogglebutton.h"
-#include "gtkstylecontext.h"
 #include "gtkheaderbar.h"
 #include "gtkdialogprivate.h"
 #include "gtksearchbar.h"

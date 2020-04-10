@@ -62,7 +62,7 @@ create_blurred_button (void)
 {
   GtkWidget *w = gtk_button_new ();
 
-  gtk_style_context_add_class (gtk_widget_get_style_context (w), "blurred-button");
+  gtk_widget_add_css_class (w, "blurred-button");
 
   return w;
 }

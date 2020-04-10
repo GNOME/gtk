@@ -177,16 +177,16 @@ create_widget_visible_border (const char *text)
   GtkWidget *label;
 
   outer_box = gtk_overlay_new ();
-  gtk_style_context_add_class (gtk_widget_get_style_context (outer_box), "black-bg");
+  gtk_widget_add_css_class (outer_box, "black-bg");
 
   inner_box = gtk_overlay_new ();
-  gtk_style_context_add_class (gtk_widget_get_style_context (inner_box), "blue-bg");
+  gtk_widget_add_css_class (inner_box, "blue-bg");
 
   gtk_container_add (GTK_CONTAINER (outer_box), inner_box);
 
 
   test_widget = gtk_overlay_new ();
-  gtk_style_context_add_class (gtk_widget_get_style_context (test_widget), "red-bg");
+  gtk_widget_add_css_class (test_widget, "red-bg");
 
   gtk_container_add (GTK_CONTAINER (inner_box), test_widget);
 

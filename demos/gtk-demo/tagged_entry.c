@@ -25,7 +25,7 @@ add_tag (GtkButton *button, DemoTaggedEntry *entry)
   DemoTaggedEntryTag *tag;
 
   tag = demo_tagged_entry_tag_new ("Blue");
-  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (tag)), "blue");
+  gtk_widget_add_css_class (GTK_WIDGET (tag), "blue");
   demo_tagged_entry_tag_set_has_close_button (tag, TRUE);
   g_signal_connect (tag, "button-clicked", G_CALLBACK (closed_cb), entry);
 
@@ -98,7 +98,7 @@ do_tagged_entry (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (box2), button);
       
       button = gtk_button_new_with_mnemonic ("_Done");
-      gtk_style_context_add_class (gtk_widget_get_style_context (button), "suggested-action");
+      gtk_widget_add_css_class (button, "suggested-action");
       g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_widget_destroy), window);
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
 

@@ -94,8 +94,8 @@ change_header (GtkButton *button, gpointer data)
   if (button && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
     {
       header = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-      gtk_style_context_add_class (gtk_widget_get_style_context (header), "titlebar");
-      gtk_style_context_add_class (gtk_widget_get_style_context (header), "header-bar");
+      gtk_widget_add_css_class (header, "titlebar");
+      gtk_widget_add_css_class (header, "header-bar");
       gtk_widget_set_margin_start (header, 10);
       gtk_widget_set_margin_end (header, 10);
       gtk_widget_set_margin_top (header, 10);
@@ -110,12 +110,12 @@ change_header (GtkButton *button, gpointer data)
   else
     {
       header = gtk_header_bar_new ();
-      gtk_style_context_add_class (gtk_widget_get_style_context (header), "titlebar");
+      gtk_widget_add_css_class (header, "titlebar");
       gtk_header_bar_set_title (GTK_HEADER_BAR (header), "Example header");
 
       widget = gtk_button_new_with_label ("_Close");
       gtk_button_set_use_underline (GTK_BUTTON (widget), TRUE);
-      gtk_style_context_add_class (gtk_widget_get_style_context (widget), "suggested-action");
+      gtk_widget_add_css_class (widget, "suggested-action");
       g_signal_connect (widget, "clicked", G_CALLBACK (quit_cb), &done);
 
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), widget);
@@ -144,7 +144,7 @@ main (int argc, char *argv[])
   gtk_init ();
 
   window = gtk_window_new ();
-  gtk_style_context_add_class (gtk_widget_get_style_context (window), "main");
+  gtk_widget_add_css_class (window, "main");
 
   provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_data (provider, css, -1);

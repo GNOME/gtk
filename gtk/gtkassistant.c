@@ -452,7 +452,7 @@ add_action_widgets (GtkAssistant *assistant)
           if (has_default)
             {
               gtk_window_set_default_widget (GTK_WINDOW (assistant), child);
-              gtk_style_context_add_class (gtk_widget_get_style_context (child), GTK_STYLE_CLASS_SUGGESTED_ACTION);
+              gtk_widget_add_css_class (child, GTK_STYLE_CLASS_SUGGESTED_ACTION);
             }
         }
       g_list_free (children);
@@ -1795,7 +1795,6 @@ gtk_assistant_add_page (GtkAssistant *assistant,
 {
   GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
   gint n_pages;
-  GtkStyleContext *context;
   GtkWidget *sibling;
   char *name;
 
@@ -1808,8 +1807,7 @@ gtk_assistant_add_page (GtkAssistant *assistant,
   gtk_widget_show (page_info->regular_title);
   gtk_widget_hide (page_info->current_title);
 
-  context = gtk_widget_get_style_context (page_info->current_title);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_HIGHLIGHT);
+  gtk_widget_add_css_class (page_info->current_title, GTK_STYLE_CLASS_HIGHLIGHT);
 
   gtk_size_group_add_widget (priv->title_size_group, page_info->regular_title);
   gtk_size_group_add_widget (priv->title_size_group, page_info->current_title);
