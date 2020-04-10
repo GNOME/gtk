@@ -258,6 +258,8 @@ typedef struct
 
   GtkConstraintSolver *constraint_solver;
   GdkToplevelLayout *layout;
+
+  GdkCursor *resize_cursor;
 } GtkWindowPrivate;
 
 enum {
@@ -1619,6 +1621,8 @@ gtk_window_capture_motion (GtkWidget *widget,
                            gdouble    x,
                            gdouble    y)
 {
+  GtkWindow *window = GTK_WINDOW (widget);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   gint i;
   const gchar *cursor_names[8] = {
     "nw-resize", "n-resize", "ne-resize",
@@ -1626,16 +1630,18 @@ gtk_window_capture_motion (GtkWidget *widget,
     "sw-resize", "s-resize", "se-resize"
   };
 
+  g_clear_object (&priv->resize_cursor);
+
   for (i = 0; i < 8; i++)
     {
       if (edge_under_coordinates (GTK_WINDOW (widget), x, y, i))
         {
-          gtk_widget_set_cursor_from_name (widget, cursor_names[i]);
-          return;
+          priv->resize_cursor = gdk_cursor_new_from_name (cursor_names[i], NULL);
+          break;
         }
     }
 
-  gtk_widget_set_cursor (widget, NULL);
+  gtk_window_maybe_update_cursor (window, widget, NULL);
 }
 
 static void
@@ -4060,6 +4066,7 @@ gtk_window_finalize (GObject *object)
 
   g_clear_object (&priv->constraint_solver);
   g_clear_object (&priv->renderer);
+  g_clear_object (&priv->resize_cursor);
 
   G_OBJECT_CLASS (gtk_window_parent_class)->finalize (object);
 }
@@ -7897,6 +7904,7 @@ update_cursor (GtkWindow *toplevel,
                GtkWidget *grab_widget,
                GtkWidget *target)
 {
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (toplevel);
   GdkCursor *cursor = NULL;
   GdkSurface *surface;
 
@@ -7926,7 +7934,10 @@ update_cursor (GtkWindow *toplevel,
           if (surface != gtk_native_get_surface (gtk_widget_get_native (target)))
             break;
 
-          cursor = gtk_widget_get_cursor (target);
+          if (target == GTK_WIDGET (toplevel) && priv->resize_cursor != NULL)
+            cursor = priv->resize_cursor;
+          else
+            cursor = gtk_widget_get_cursor (target);
 
           if (cursor)
             break;
