@@ -1,0 +1,20 @@
+@import "reset-to-defaults.css";
+
+.one {
+	color: red;
+}
+
+/* Spans without classes can still be siblings */
+.one + span {
+	color: green;
+}
+
+.three {
+	color: blue;
+	text-decoration: underline;
+}
+
+/* Spans may also have children */
+.three > span {
+	color: orange;
+}
