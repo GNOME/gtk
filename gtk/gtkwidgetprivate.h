@@ -266,7 +266,8 @@ void              _gtk_widget_set_device_surface           (GtkWidget *widget,
                                                             GdkSurface *pointer_window);
 GdkSurface *       _gtk_widget_get_device_surface          (GtkWidget *widget,
                                                             GdkDevice *device);
-GList *           _gtk_widget_list_devices                 (GtkWidget *widget);
+GdkDevice **       _gtk_widget_list_devices                 (GtkWidget *widget,
+                                                             guint     *out_n_devices);
 
 void              _gtk_widget_synthesize_crossing          (GtkWidget       *from,
                                                             GtkWidget       *to,
