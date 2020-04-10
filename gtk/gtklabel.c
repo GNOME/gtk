@@ -2219,8 +2219,7 @@ parse_uri_markup (GtkLabel      *label,
                   GError       **error)
 {
   GMarkupParseContext *context = NULL;
-  const gchar *p, *end;
-  gboolean needs_root = TRUE;
+  const char *p, *end;
   gsize length;
   UriParserData pdata;
 
@@ -2236,22 +2235,21 @@ parse_uri_markup (GtkLabel      *label,
   while (p != end && xml_isspace (*p))
     p++;
 
-  if (end - p >= 8 && strncmp (p, "<markup>", 8) == 0)
-    needs_root = FALSE;
-
   context = g_markup_parse_context_new (&markup_parser, 0, &pdata, NULL);
 
-  if (needs_root)
+  if (end - p >= 8 && strncmp (p, "<markup>", 8) == 0)
+    {
+      if (!g_markup_parse_context_parse (context, str, length, error))
+        goto failed;
+    }
+  else
     {
       if (!g_markup_parse_context_parse (context, "<markup>", -1, error))
         goto failed;
-    }
 
-  if (!g_markup_parse_context_parse (context, str, length, error))
-    goto failed;
+      if (!g_markup_parse_context_parse (context, str, length, error))
+        goto failed;
 
-  if (needs_root)
-    {
       if (!g_markup_parse_context_parse (context, "</markup>", -1, error))
         goto failed;
     }
