@@ -442,24 +442,17 @@ on_entry_icon_release (GtkEntry            *entry,
 
 #define EPSILON (1e-10)
 
-static gboolean
-on_scale_button_query_tooltip (GtkWidget  *button,
-                               gint        x,
-                               gint        y,
-                               gboolean    keyboard_mode,
-                               GtkTooltip *tooltip,
-                               gpointer    user_data)
+static void
+on_scale_button_value_changed (GtkScaleButton *button,
+                               gdouble         value,
+                               gpointer        user_data)
 {
-  GtkScaleButton *scale_button = GTK_SCALE_BUTTON (button);
   GtkAdjustment *adjustment;
   gdouble val;
   gchar *str;
-  AtkImage *image;
 
-  image = ATK_IMAGE (gtk_widget_get_accessible (button));
-
-  adjustment = gtk_scale_button_get_adjustment (scale_button);
-  val = gtk_scale_button_get_value (scale_button);
+  adjustment = gtk_scale_button_get_adjustment (button);
+  val = gtk_scale_button_get_value (button);
 
   if (val < (gtk_adjustment_get_lower (adjustment) + EPSILON))
     {
@@ -478,19 +471,10 @@ on_scale_button_query_tooltip (GtkWidget  *button,
       str = g_strdup_printf (C_("volume percentage", "%d %%"), percent);
     }
 
-  gtk_tooltip_set_text (tooltip, str);
-  atk_image_set_image_description (image, str);
+  gtk_widget_set_tooltip_text (GTK_WIDGET (button), str);
+  atk_object_set_description (gtk_widget_get_accessible (GTK_WIDGET (button)), str);
+
   g_free (str);
-
-  return TRUE;
-}
-
-static void
-on_scale_button_value_changed (GtkScaleButton *button,
-                               gdouble         value,
-                               gpointer        user_data)
-{
-  gtk_widget_trigger_tooltip_query (GTK_WIDGET (button));
 }
 
 static void
@@ -1774,7 +1758,6 @@ activate (GApplication *app)
   gtk_builder_cscope_add_callback_symbols (GTK_BUILDER_CSCOPE (scope),
           "on_entry_icon_release", (GCallback)on_entry_icon_release,
           "on_scale_button_value_changed", (GCallback)on_scale_button_value_changed,
-          "on_scale_button_query_tooltip", (GCallback)on_scale_button_query_tooltip,
           "on_record_button_toggled", (GCallback)on_record_button_toggled,
           "on_page_combo_changed", (GCallback)on_page_combo_changed,
           "on_range_from_changed", (GCallback)on_range_from_changed,

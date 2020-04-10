@@ -1,6 +1,6 @@
 GtkSpinButton GtkText
-GtkVolumeButton
-GtkScaleButton
+GtkToggleButton
+GtkToggleButton
 GtkTextView
 GtkToggleButton
 GtkToggleButton

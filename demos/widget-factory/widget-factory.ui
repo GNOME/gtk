@@ -1510,7 +1510,6 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="valign">center</property>
                                         <property name="value">.5</property>
                                         <property name="halign">center</property>
-                                        <signal name="query-tooltip" handler="on_scale_button_query_tooltip" swapped="no"/>
                                         <signal name="value-changed" handler="on_scale_button_value_changed" swapped="no"/>
                                         <layout>
                                           <property name="left-attach">0</property>
