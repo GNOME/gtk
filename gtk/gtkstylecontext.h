@@ -904,9 +904,6 @@ void gtk_style_context_get_margin           (GtkStyleContext *context,
                                              GtkBorder       *margin);
 
 GDK_AVAILABLE_IN_ALL
-void gtk_style_context_reset_widgets        (GdkDisplay      *display);
-
-GDK_AVAILABLE_IN_ALL
 void        gtk_render_insertion_cursor
                                    (GtkStyleContext     *context,
                                     cairo_t             *cr,

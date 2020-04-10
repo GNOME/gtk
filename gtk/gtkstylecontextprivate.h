@@ -59,6 +59,9 @@ PangoAttrList *_gtk_style_context_get_pango_attributes       (GtkStyleContext *c
 AtkAttributeSet *_gtk_style_context_get_attributes           (AtkAttributeSet    *attributes,
                                                               GtkStyleContext    *context);
 
+GDK_AVAILABLE_IN_ALL
+void gtk_style_context_reset_widgets        (GdkDisplay      *display);
+
 G_END_DECLS
 
 #endif /* __GTK_STYLE_CONTEXT_PRIVATE_H__ */
