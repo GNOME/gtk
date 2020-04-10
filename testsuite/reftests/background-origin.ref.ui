@@ -7,7 +7,6 @@
     <child>
       <object class="GtkButton" id="button">
         <property name="name">reference</property>
-        <property name="can_focus">1</property>
         <property name="receives_default">1</property>
       </object>
     </child>

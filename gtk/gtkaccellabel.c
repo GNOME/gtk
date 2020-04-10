@@ -128,6 +128,9 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   gobject_class->set_property = gtk_accel_label_set_property;
   gobject_class->get_property = gtk_accel_label_get_property;
 
+  widget_class->focus = gtk_widget_focus_none;
+  widget_class->grab_focus = gtk_widget_grab_focus_none;
+
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_ACCEL_LABEL);
 
   props[PROP_LABEL] =

@@ -365,6 +365,9 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   gobject_class->set_property = gtk_calendar_set_property;
   gobject_class->get_property = gtk_calendar_get_property;
 
+  widget_class->focus = gtk_widget_focus_all;
+  widget_class->grab_focus = gtk_widget_grab_focus_self;
+
   /**
    * GtkCalendar:year:
    *

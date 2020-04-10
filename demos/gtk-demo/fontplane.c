@@ -189,8 +189,6 @@ gtk_font_plane_init (GtkFontPlane *plane)
 {
   GtkGesture *gesture;
 
-  gtk_widget_set_can_focus (GTK_WIDGET (plane), TRUE);
-
   gesture = gtk_gesture_drag_new ();
   g_signal_connect (gesture, "drag-begin",
 		    G_CALLBACK (plane_drag_gesture_begin), plane);

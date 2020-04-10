@@ -293,6 +293,36 @@ gtk_widget_accessible_ref_relation_set (AtkObject *obj)
   return relation_set;
 }
 
+static gboolean
+takes_focus (GtkWidget *widget)
+{
+  if (GTK_IS_NOTEBOOK (widget) ||
+      GTK_IS_BUTTON (widget))
+    return TRUE;
+
+  if (GTK_IS_ACCEL_LABEL (widget) ||
+      GTK_IS_CONTAINER(widget) ||
+      GTK_IS_DRAG_ICON (widget) ||
+      GTK_IS_DRAWING_AREA (widget) ||
+      GTK_IS_GL_AREA (widget) ||
+      GTK_IS_IMAGE (widget) ||
+      GTK_IS_LEVEL_BAR (widget) ||
+      GTK_IS_MEDIA_CONTROLS (widget) ||
+      GTK_IS_PICTURE (widget) ||
+      GTK_IS_PROGRESS_BAR (widget) ||
+      GTK_IS_SCROLLBAR (widget) ||
+      GTK_IS_SEPARATOR (widget) ||
+      GTK_IS_SHORTCUT_LABEL (widget) ||
+      GTK_IS_SHORTCUTS_SHORTCUT (widget) ||
+      GTK_IS_SPINNER (widget) ||
+      GTK_IS_STACK_SIDEBAR (widget) ||
+      GTK_IS_STATUSBAR (widget) ||
+      GTK_IS_VIDEO (widget))
+    return FALSE;
+
+  return gtk_widget_get_can_focus (widget);
+}
+
 static AtkStateSet *
 gtk_widget_accessible_ref_state_set (AtkObject *accessible)
 {
@@ -312,7 +342,7 @@ gtk_widget_accessible_ref_state_set (AtkObject *accessible)
           atk_state_set_add_state (state_set, ATK_STATE_ENABLED);
         }
   
-      if (gtk_widget_get_can_focus (widget))
+      if (takes_focus (widget))
         {
           atk_state_set_add_state (state_set, ATK_STATE_FOCUSABLE);
         }

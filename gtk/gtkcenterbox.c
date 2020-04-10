@@ -199,6 +199,9 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
   object_class->get_property = gtk_center_box_get_property;
   object_class->dispose = gtk_center_box_dispose;
 
+  widget_class->grab_focus = gtk_widget_grab_focus_child;
+  widget_class->focus = gtk_widget_focus_child;
+
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
   g_object_class_install_property (object_class, PROP_BASELINE_POSITION,

@@ -95,6 +95,8 @@ gtk_builtin_icon_class_init (GtkBuiltinIconClass *klass)
   wclass->snapshot = gtk_builtin_icon_snapshot;
   wclass->measure = gtk_builtin_icon_measure;
   wclass->css_changed = gtk_builtin_icon_css_changed;
+  wclass->grab_focus = gtk_widget_grab_focus_none;
+  wclass->focus = gtk_widget_focus_none;
 }
 
 static void

@@ -262,6 +262,8 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
 
   widget_class->measure = gtk_drawing_area_measure;
   widget_class->snapshot = gtk_drawing_area_snapshot;
+  widget_class->focus = gtk_widget_focus_none;
+  widget_class->grab_focus = gtk_widget_grab_focus_none;
 
   /**
    * GtkDrawingArea:content-width

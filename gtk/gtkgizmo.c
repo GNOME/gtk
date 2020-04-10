@@ -59,6 +59,29 @@ gtk_gizmo_contains (GtkWidget *widget,
     return GTK_WIDGET_CLASS (gtk_gizmo_parent_class)->contains (widget, x, y);
 }
 
+static gboolean
+gtk_gizmo_focus (GtkWidget        *widget,
+                 GtkDirectionType  direction)
+{
+  GtkGizmo *self = GTK_GIZMO (widget);
+
+  if (self->focus_func)
+    return self->focus_func (self, direction);
+
+  return FALSE;
+}
+
+static gboolean
+gtk_gizmo_grab_focus (GtkWidget *widget)
+{
+  GtkGizmo *self = GTK_GIZMO (widget);
+
+  if (self->grab_focus_func)
+    return self->grab_focus_func (self);
+
+  return FALSE;
+}
+
 static void
 gtk_gizmo_finalize (GObject *object)
 {
@@ -90,6 +113,8 @@ gtk_gizmo_class_init (GtkGizmoClass *klass)
   widget_class->size_allocate = gtk_gizmo_size_allocate;
   widget_class->snapshot = gtk_gizmo_snapshot;
   widget_class->contains = gtk_gizmo_contains;
+  widget_class->grab_focus = gtk_gizmo_grab_focus;
+  widget_class->focus = gtk_gizmo_focus;
 }
 
 static void
@@ -98,11 +123,13 @@ gtk_gizmo_init (GtkGizmo *self)
 }
 
 GtkWidget *
-gtk_gizmo_new (const char              *css_name,
-               GtkGizmoMeasureFunc  measure_func,
-               GtkGizmoAllocateFunc allocate_func,
-               GtkGizmoSnapshotFunc snapshot_func,
-               GtkGizmoContainsFunc contains_func)
+gtk_gizmo_new (const char            *css_name,
+               GtkGizmoMeasureFunc    measure_func,
+               GtkGizmoAllocateFunc   allocate_func,
+               GtkGizmoSnapshotFunc   snapshot_func,
+               GtkGizmoContainsFunc   contains_func,
+               GtkGizmoFocusFunc      focus_func,
+               GtkGizmoGrabFocusFunc  grab_focus_func)
 {
   GtkGizmo *gizmo = GTK_GIZMO (g_object_new (GTK_TYPE_GIZMO,
                                              "css-name", css_name,
@@ -112,6 +139,8 @@ gtk_gizmo_new (const char              *css_name,
   gizmo->allocate_func = allocate_func;
   gizmo->snapshot_func = snapshot_func;
   gizmo->contains_func = contains_func;
+  gizmo->focus_func = focus_func;
+  gizmo->grab_focus_func = grab_focus_func;
 
   return GTK_WIDGET (gizmo);
 }

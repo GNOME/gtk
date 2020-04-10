@@ -481,6 +481,8 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
   widget_class->snapshot = swatch_snapshot;
   widget_class->size_allocate = swatch_size_allocate;
   widget_class->state_flags_changed = swatch_state_flags_changed;
+  widget_class->grab_focus = gtk_widget_grab_focus_self;
+  widget_class->focus = gtk_widget_focus_self;
 
   g_object_class_install_property (object_class, PROP_RGBA,
       g_param_spec_boxed ("rgba", P_("RGBA Color"), P_("Color as RGBA"),

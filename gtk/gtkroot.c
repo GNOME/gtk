@@ -59,18 +59,25 @@ gtk_root_default_get_constraint_solver (GtkRoot *self)
   return NULL;
 }
 
+static GtkWidget *
+gtk_root_default_get_focus (GtkRoot *self)
+{
+  return NULL;
+}
+
+static void
+gtk_root_default_set_focus (GtkRoot   *self,
+                            GtkWidget *focus)
+{
+}
+
 static void
 gtk_root_default_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_root_default_get_display;
   iface->get_constraint_solver = gtk_root_default_get_constraint_solver;
-
-  g_object_interface_install_property (iface,
-      g_param_spec_object ("focus-widget",
-                           P_("Focus widget"),
-                           P_("The focus widget"),
-                           GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  iface->get_focus = gtk_root_default_get_focus;
+  iface->set_focus = gtk_root_default_set_focus;
 }
 
 /**
@@ -123,7 +130,7 @@ gtk_root_set_focus (GtkRoot   *self,
   g_return_if_fail (GTK_IS_ROOT (self));
   g_return_if_fail (focus == NULL || GTK_IS_WIDGET (focus));
 
-  g_object_set (self, "focus-widget", focus, NULL);
+  GTK_ROOT_GET_IFACE (self)->set_focus (self, focus);
 }
 
 /**
@@ -143,22 +150,7 @@ gtk_root_set_focus (GtkRoot   *self,
 GtkWidget *
 gtk_root_get_focus (GtkRoot *self)
 {
-  GtkWidget *focus;
-
   g_return_val_if_fail (GTK_IS_ROOT (self), NULL);
 
-  g_object_get (self, "focus-widget", &focus, NULL);
-
-  if (focus)
-    g_object_unref (focus);
-
-  return focus;
-}
-
-guint
-gtk_root_install_properties (GObjectClass *object_class,
-                             guint         first_prop)
-{
-  g_object_class_override_property (object_class, first_prop + GTK_ROOT_PROP_FOCUS_WIDGET, "focus-widget");
-  return GTK_ROOT_NUM_PROPERTIES;
+  return GTK_ROOT_GET_IFACE (self)->get_focus (self);
 }

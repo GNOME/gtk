@@ -7,7 +7,6 @@
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkLabel" id="label1">
-            <property name="can_focus">1</property>
             <property name="label" translatable="yes">A &lt;a href=&quot;http://www.gnome.org&quot;&gt;link&lt;/a&gt; to the &lt;a href=&quot;http://www.gnome.org&quot;&gt;GNOME&lt;/a&gt; website</property>
             <property name="use_markup">1</property>
           </object>
@@ -15,7 +14,6 @@
         <child>
           <object class="GtkLinkButton" id="linkbutton1">
             <property name="label" translatable="yes">A normal link</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="relief">none</property>
             <property name="uri">http://gnome.org</property>
@@ -24,7 +22,6 @@
         <child>
           <object class="GtkLinkButton" id="linkbutton2">
             <property name="label" translatable="yes">A visited link</property>
-            <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <property name="relief">none</property>
             <property name="uri">http://gnome.org</property>

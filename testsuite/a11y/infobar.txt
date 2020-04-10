@@ -56,7 +56,7 @@ window1
             parent: unnamed-GtkContainerAccessible-3
             index: 0
             name: Some important info
-            state: enabled multi-line sensitive showing visible
+            state: enabled focusable multi-line sensitive showing visible
             toolkit: gtk
             <AtkComponent>
             layer: widget

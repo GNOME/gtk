@@ -41,7 +41,7 @@ window1
       "scroll bar"
       parent: grid1
       index: 1
-      state: enabled focusable horizontal sensitive showing visible
+      state: enabled horizontal sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget

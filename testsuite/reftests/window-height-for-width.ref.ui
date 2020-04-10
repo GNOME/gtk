@@ -44,7 +44,6 @@ Ts</property>
             </child>
             <child>
               <object class="GtkSwitch" id="screen_reader_switch">
-                <property name="can_focus">1</property>
                 <property name="halign">end</property>
                 <layout>
                   <property name="left_attach">1</property>

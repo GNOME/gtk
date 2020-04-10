@@ -6,7 +6,6 @@
     <property name="page-increment">0.2</property>
   </object>
   <template class="GtkVolumeButton" parent="GtkScaleButton">
-    <property name="can-focus">1</property>
     <property name="receives-default">1</property>
     <property name="has-tooltip">1</property>
     <property name="relief">none</property>

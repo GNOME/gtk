@@ -21,17 +21,14 @@ struct _GtkRootInterface
   GdkDisplay * (* get_display)  (GtkRoot *self);
 
   GtkConstraintSolver * (* get_constraint_solver) (GtkRoot *self);
+
+  GtkWidget *  (* get_focus)    (GtkRoot   *self);
+  void         (* set_focus)    (GtkRoot   *self,
+                                 GtkWidget *focus);
+
 };
 
 GtkConstraintSolver *   gtk_root_get_constraint_solver  (GtkRoot *self);
-
-typedef enum {
-  GTK_ROOT_PROP_FOCUS_WIDGET,
-  GTK_ROOT_NUM_PROPERTIES
-} GtkRootProperties;
-
-guint gtk_root_install_properties (GObjectClass *object_class,
-                                   guint         first_prop);
 
 G_END_DECLS
 

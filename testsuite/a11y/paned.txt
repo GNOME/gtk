@@ -18,7 +18,7 @@ window1
     "split pane"
     parent: window1
     index: 0
-    state: enabled focusable horizontal sensitive showing visible
+    state: enabled horizontal sensitive showing visible
     toolkit: gtk
     <AtkComponent>
     layer: widget
@@ -32,7 +32,7 @@ window1
       parent: paned1
       index: 0
       name: Left
-      state: enabled multi-line sensitive showing visible
+      state: enabled focusable multi-line sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
@@ -72,7 +72,7 @@ window1
       parent: paned1
       index: 1
       name: Right
-      state: enabled multi-line sensitive showing visible
+      state: enabled focusable multi-line sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget

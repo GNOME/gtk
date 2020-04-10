@@ -11,11 +11,9 @@
           <object class="GtkPaned" id="paned1">
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <property name="position_set">1</property>
             <child>
               <object class="GtkCheckButton" id="checkbutton1">
-                <property name="can_focus">1</property>
                 <child>
                   <object class="GtkLabel" id="label1">
                     <property name="label" translatable="yes">Hello
@@ -38,11 +36,9 @@ World</property>
           <object class="GtkPaned" id="paned2">
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <property name="position_set">1</property>
             <child>
               <object class="GtkRadioButton" id="radiobutton1">
-                <property name="can_focus">1</property>
                 <property name="active">1</property>
                 <child>
                   <object class="GtkLabel" id="label2">
@@ -66,11 +62,9 @@ World</property>
           <object class="GtkPaned" id="paned3">
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <property name="position_set">1</property>
             <child>
               <object class="GtkToggleButton" id="togglebutton1">
-                <property name="can_focus">1</property>
                 <property name="receives_default">1</property>
                 <child>
                   <object class="GtkLabel" id="label3">
@@ -94,11 +88,9 @@ World</property>
           <object class="GtkPaned" id="paned4">
             <property name="shrink-child1">0</property>
             <property name="resize-child1">0</property>
-            <property name="can_focus">1</property>
             <property name="position_set">1</property>
             <child>
               <object class="GtkButton" id="button1">
-                <property name="can_focus">1</property>
                 <property name="receives_default">1</property>
                 <child>
                   <object class="GtkLabel" id="label4">

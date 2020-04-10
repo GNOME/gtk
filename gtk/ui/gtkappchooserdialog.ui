@@ -59,14 +59,12 @@
   <object class="GtkButton" id="show_more_button">
     <property name="label" translatable="yes">_View All Applications</property>
     <property name="use-underline">1</property>
-    <property name="can-focus">1</property>
     <property name="receives-default">1</property>
     <signal name="clicked" handler="show_more_button_clicked_cb" swapped="no"/>
   </object>
   <object class="GtkButton" id="software_button">
     <property name="label" translatable="yes">_Find New Applications</property>
     <property name="use-underline">1</property>
-    <property name="can-focus">1</property>
     <property name="receives-default">1</property>
     <signal name="clicked" handler="software_button_clicked_cb" swapped="no"/>
   </object>

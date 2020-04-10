@@ -6,7 +6,6 @@
     <child>
       <object class="GtkPaned" id="paned1">
         <property name="resize-child1">0</property>
-        <property name="can_focus">1</property>
         <property name="orientation">vertical</property>
         <property name="position">10</property>
         <child>

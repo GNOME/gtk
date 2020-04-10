@@ -27,7 +27,7 @@ window1
       "filler"
       parent: box1
       index: 0
-      state: enabled sensitive showing visible
+      state: enabled focusable sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget

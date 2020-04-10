@@ -18,7 +18,7 @@ window1
     "text"
     parent: window1
     index: 0
-    state: editable enabled focusable focused multi-line sensitive showing visible
+    state: editable enabled focused multi-line sensitive showing visible
     toolkit: gtk
     <AtkComponent>
     layer: widget

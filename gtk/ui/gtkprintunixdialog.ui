@@ -52,7 +52,6 @@
             <property name="vexpand">1</property>
             <child>
               <object class="GtkNotebook" id="notebook">
-                <property name="can-focus">1</property>
                 <property name="show-border">0</property>
                 <child>
                   <object class="GtkNotebookPage">
@@ -70,12 +69,10 @@
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkScrolledWindow" id="printer_swin">
-                                <property name="can-focus">1</property>
                                 <property name="shadow-type">in</property>
                                 <property name="vexpand">1</property>
                                 <child>
                                   <object class="GtkTreeView" id="printer_treeview">
-                                    <property name="can-focus">1</property>
                                     <property name="model">printer_list_filter</property>
                                     <signal name="row-activated" handler="emit_ok_response" swapped="no"/>
                                     <child internal-child="selection">
@@ -169,7 +166,6 @@
                                     <child>
                                       <object class="GtkRadioButton" id="all_pages_radio">
                                         <property name="label" translatable="yes">_All Pages</property>
-                                        <property name="can-focus">1</property>
                                         <property name="use-underline">1</property>
                                         <property name="active">1</property>
                                         <layout>
@@ -183,7 +179,6 @@
                                       <object class="GtkRadioButton" id="current_page_radio">
                                         <property name="label" translatable="yes">C_urrent Page</property>
                                         <property name="sensitive">0</property>
-                                        <property name="can-focus">1</property>
                                         <property name="use-underline">1</property>
                                         <property name="group">all_pages_radio</property>
                                         <layout>
@@ -197,7 +192,6 @@
                                       <object class="GtkRadioButton" id="selection_radio">
                                         <property name="label" translatable="yes">Se_lection</property>
                                         <property name="sensitive">0</property>
-                                        <property name="can-focus">1</property>
                                         <property name="use-underline">1</property>
                                         <property name="group">all_pages_radio</property>
                                         <layout>
@@ -210,7 +204,6 @@
                                     <child>
                                       <object class="GtkRadioButton" id="page_range_radio">
                                         <property name="label" translatable="yes">Pag_es:</property>
-                                        <property name="can-focus">1</property>
                                         <property name="tooltip-text" translatable="yes">Specify one or more page ranges,
  e.g. 1–3, 7, 11</property>
                                         <property name="use-underline">1</property>
@@ -224,7 +217,6 @@
                                     </child>
                                     <child>
                                       <object class="GtkEntry" id="page_range_entry">
-                                        <property name="can-focus">1</property>
                                         <property name="tooltip-text" translatable="yes">Specify one or more page ranges,
  e.g. 1–3, 7, 11</property>
                                         <property name="activates-default">1</property>
@@ -287,7 +279,6 @@
                                     </child>
                                     <child>
                                       <object class="GtkSpinButton" id="copies_spin">
-                                        <property name="can-focus">1</property>
                                         <property name="valign">baseline</property>
                                         <property name="adjustment">copies_spin_adjustment</property>
                                         <signal name="changed" handler="update_dialog_from_capabilities" object="GtkPrintUnixDialog" swapped="yes"/>
@@ -301,7 +292,6 @@
                                     <child>
                                       <object class="GtkCheckButton" id="collate_check">
                                         <property name="label" translatable="yes">C_ollate</property>
-                                        <property name="can-focus">1</property>
                                         <property name="use-underline">1</property>
                                         <signal name="toggled" handler="update_collate_icon" swapped="no"/>
                                         <layout>
@@ -313,7 +303,6 @@
                                     <child>
                                       <object class="GtkCheckButton" id="reverse_check">
                                         <property name="label" translatable="yes">_Reverse</property>
-                                        <property name="can-focus">1</property>
                                         <property name="use-underline">1</property>
                                         <signal name="toggled" handler="update_collate_icon" swapped="no"/>
                                         <layout>
@@ -506,7 +495,6 @@
                                         <child>
                                           <object class="GtkSpinButton" id="scale_spin">
                                             <property name="valign">baseline</property>
-                                            <property name="can-focus">1</property>
                                             <property name="adjustment">scale_spin_adjustment</property>
                                             <property name="digits">1</property>
                                           </object>
@@ -817,7 +805,6 @@
                                 <child>
                                   <object class="GtkRadioButton" id="print_now_radio">
                                     <property name="label" translatable="yes" comments="this is one of the choices for the print at option in the print dialog">_Now</property>
-                                    <property name="can-focus">1</property>
                                     <property name="use-underline">1</property>
                                     <property name="active">1</property>
                                     <signal name="toggled" handler="update_print_at_option" object="GtkPrintUnixDialog" swapped="yes"/>
@@ -832,7 +819,6 @@
                                   <object class="GtkRadioButton" id="print_at_radio">
                                     <property name="sensitive">0</property>
                                     <property name="label" translatable="yes" comments="this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.">A_t:</property>
-                                    <property name="can-focus">1</property>
                                     <property name="has-tooltip">1</property>
                                     <property name="tooltip-markup" translatable="yes">Specify the time of print,
  e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
@@ -851,7 +837,6 @@
                                 <child>
                                   <object class="GtkEntry" id="print_at_entry">
                                     <property name="sensitive">0</property>
-                                    <property name="can-focus">1</property>
                                     <property name="has-tooltip">1</property>
                                     <property name="tooltip-markup" translatable="yes">Specify the time of print,
  e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
@@ -875,7 +860,6 @@
                                   <object class="GtkRadioButton" id="print_hold_radio">
                                     <property name="sensitive">0</property>
                                     <property name="label" translatable="yes" comments="this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets &apos;released&apos;.">On _hold</property>
-                                    <property name="can-focus">1</property>
                                     <property name="has-tooltip">1</property>
                                     <property name="tooltip-markup" translatable="yes">Hold the job until it is explicitly released</property>
                                     <property name="tooltip-text" translatable="yes">Hold the job until it is explicitly released</property>
@@ -989,7 +973,6 @@
                     <property name="position">3</property>
                     <property name="child">
                       <object class="GtkScrolledWindow" id="image_quality_page">
-                        <property name="can-focus">1</property>
                         <property name="hscrollbar-policy">never</property>
                         <property name="hexpand">1</property>
                         <child>
@@ -1021,7 +1004,6 @@
                     <property name="position">4</property>
                     <property name="child">
                       <object class="GtkScrolledWindow" id="color_page">
-                        <property name="can-focus">1</property>
                         <property name="hscrollbar-policy">never</property>
                         <child>
                           <object class="GtkViewport" id="viewport2">
@@ -1052,7 +1034,6 @@
                     <property name="position">5</property>
                     <property name="child">
                       <object class="GtkScrolledWindow" id="finishing_page">
-                        <property name="can-focus">1</property>
                         <property name="hscrollbar-policy">never</property>
                         <child>
                           <object class="GtkViewport" id="viewport3">
@@ -1083,7 +1064,6 @@
                     <property name="position">6</property>
                     <property name="child">
                       <object class="GtkScrolledWindow" id="advanced_page">
-                        <property name="can-focus">1</property>
                         <property name="hscrollbar-policy">never</property>
                         <child>
                           <object class="GtkViewport" id="viewport4">

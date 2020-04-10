@@ -18,7 +18,7 @@ window1
     "layered pane"
     parent: window1
     index: 0
-    state: enabled focusable focused sensitive showing visible
+    state: enabled focused sensitive showing visible
     toolkit: gtk
     <AtkComponent>
     layer: widget

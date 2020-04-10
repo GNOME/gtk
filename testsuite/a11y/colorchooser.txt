@@ -29,7 +29,7 @@ window1
         "filler"
         parent: dialog-vbox1
         index: 0
-        state: enabled sensitive showing visible
+        state: enabled focusable sensitive showing visible
         toolkit: gtk
         <AtkComponent>
         layer: widget
@@ -678,7 +678,7 @@ window1
             parent: unnamed-GtkContainerAccessible-0
             index: 2
             name: Custom
-            state: enabled multi-line sensitive showing visible
+            state: enabled focusable multi-line sensitive showing visible
             toolkit: gtk
             <AtkComponent>
             layer: widget
@@ -787,7 +787,7 @@ window1
                 "radio button"
                 parent: grid
                 index: 1
-                state: enabled focusable sensitive visible
+                state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
@@ -902,7 +902,7 @@ window1
                   parent: grid2
                   index: 0
                   name: S
-                  state: enabled multi-line sensitive visible
+                  state: enabled focusable multi-line sensitive visible
                   toolkit: gtk
                   <AtkComponent>
                   layer: widget
@@ -942,7 +942,7 @@ window1
                   parent: grid2
                   index: 1
                   name: V
-                  state: enabled multi-line sensitive visible
+                  state: enabled focusable multi-line sensitive visible
                   toolkit: gtk
                   <AtkComponent>
                   layer: widget
@@ -982,7 +982,7 @@ window1
                   parent: grid2
                   index: 2
                   name: Saturation
-                  state: enabled horizontal sensitive visible
+                  state: enabled focusable horizontal sensitive visible
                   toolkit: gtk
                   <AtkComponent>
                   layer: widget
@@ -996,7 +996,7 @@ window1
                   parent: grid2
                   index: 3
                   name: Value
-                  state: enabled horizontal sensitive visible
+                  state: enabled focusable horizontal sensitive visible
                   toolkit: gtk
                   <AtkComponent>
                   layer: widget
@@ -1028,7 +1028,7 @@ window1
                   parent: grid3
                   index: 0
                   name: H
-                  state: enabled multi-line sensitive visible
+                  state: enabled focusable multi-line sensitive visible
                   toolkit: gtk
                   <AtkComponent>
                   layer: widget
@@ -1068,7 +1068,7 @@ window1
                   parent: grid3
                   index: 1
                   name: Hue
-                  state: enabled horizontal sensitive visible
+                  state: enabled focusable horizontal sensitive visible
                   toolkit: gtk
                   <AtkComponent>
                   layer: widget
@@ -1100,7 +1100,7 @@ window1
                   parent: grid4
                   index: 0
                   name: A
-                  state: enabled multi-line sensitive visible
+                  state: enabled focusable multi-line sensitive visible
                   toolkit: gtk
                   <AtkComponent>
                   layer: widget
@@ -1140,7 +1140,7 @@ window1
                   parent: grid4
                   index: 1
                   name: Alpha
-                  state: enabled horizontal sensitive visible
+                  state: enabled focusable horizontal sensitive visible
                   toolkit: gtk
                   <AtkComponent>
                   layer: widget
