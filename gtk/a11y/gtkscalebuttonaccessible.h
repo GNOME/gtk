@@ -39,14 +39,14 @@ typedef struct _GtkScaleButtonAccessiblePrivate GtkScaleButtonAccessiblePrivate;
 
 struct _GtkScaleButtonAccessible
 {
-  GtkButtonAccessible parent;
+  GtkWidgetAccessible parent;
 
   GtkScaleButtonAccessiblePrivate *priv;
 };
 
 struct _GtkScaleButtonAccessibleClass
 {
-  GtkButtonAccessibleClass parent_class;
+  GtkWidgetAccessibleClass parent_class;
 };
 
 GDK_AVAILABLE_IN_ALL
