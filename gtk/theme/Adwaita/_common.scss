@@ -42,7 +42,8 @@ dnd {
  * Outlines *
  ********/
 
-label:focus(visible),
+:focus(visible) link,
+label:focus(visible):not(.link),
 row:focus(visible),
 flowboxchild:focus(visible) {
   // We use the outline properties to signal the focus properties

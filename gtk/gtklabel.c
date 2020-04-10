@@ -95,7 +95,7 @@
  *
  * If the label has links, there is one subnode per link. These subnodes
  * carry the link or visited state depending on whether they have been
- * visited.
+ * visited. In this case, label node also gets a .link style class.
  *
  * # GtkLabel as GtkBuildable
  *
@@ -2325,6 +2325,7 @@ gtk_label_set_markup_internal (GtkLabel    *label,
       priv->select_info->links = g_list_reverse (links);
       _gtk_label_accessible_update_links (label);
       gtk_label_ensure_has_tooltip (label);
+      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (label)), "link");
     }
 
   if (with_uline)
@@ -3677,12 +3678,16 @@ gtk_label_snapshot (GtkWidget   *widget,
               range[0] = focus_link->start;
               range[1] = focus_link->end;
 
+              gtk_style_context_save_to_node (context, focus_link->cssnode);
+
               range_clip = gdk_pango_layout_get_clip_region (priv->layout, lx, ly, range, 1);
               cairo_region_get_extents (range_clip, &rect);
 
               gtk_snapshot_render_focus (snapshot, context, rect.x, rect.y, rect.width, rect.height);
 
               cairo_region_destroy (range_clip);
+
+              gtk_style_context_restore (context);
             }
         }
     }
@@ -5795,6 +5800,7 @@ gtk_label_clear_links (GtkLabel *label)
   g_list_free_full (priv->select_info->links, (GDestroyNotify) link_free);
   priv->select_info->links = NULL;
   priv->select_info->active_link = NULL;
+  gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (label)), "link");
 
   _gtk_label_accessible_update_links (label);
 }
