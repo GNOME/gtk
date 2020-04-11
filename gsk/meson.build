@@ -60,7 +60,6 @@ gsk_public_headers = files([
 ])
 install_headers(gsk_public_headers, 'gsk.h', subdir: 'gtk-4.0/gsk')
 
-
 gsk_public_gl_headers = files([
   'gl/gskglrenderer.h'
 ])
@@ -70,20 +69,14 @@ gsk_public_headers += gsk_public_gl_headers
 gsk_public_broadway_headers = files([
   'broadway/gskbroadwayrenderer.h'
 ])
-
-if get_variable('broadway_enabled')
-  install_headers(gsk_public_broadway_headers, subdir: 'gtk-4.0/gsk/broadway')
-  gsk_public_headers += gsk_public_broadway_headers
-endif
+install_headers(gsk_public_broadway_headers, subdir: 'gtk-4.0/gsk/broadway')
+gsk_public_headers += gsk_public_broadway_headers
 
 gsk_public_vulkan_headers = files([
   'vulkan/gskvulkanrenderer.h'
 ])
-
-if have_vulkan
-  install_headers(gsk_public_vulkan_headers, subdir: 'gtk-4.0/gsk/vulkan')
-  gsk_public_headers += gsk_public_vulkan_headers
-endif
+install_headers(gsk_public_vulkan_headers, subdir: 'gtk-4.0/gsk/vulkan')
+gsk_public_headers += gsk_public_vulkan_headers
 
 gsk_private_vulkan_shaders = []
 # This is an odd split because we use configure_file() below to workaround
