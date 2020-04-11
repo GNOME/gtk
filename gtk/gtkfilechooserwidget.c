@@ -1502,7 +1502,7 @@ open_folder_cb (GSimpleAction *action,
       gchar *uri;
 
       uri = g_file_get_uri (file);
-      gtk_show_uri_on_window (GTK_WINDOW (toplevel), uri, gtk_get_current_event_time (), NULL);
+      gtk_show_uri_on_window (GTK_WINDOW (toplevel), uri, GDK_CURRENT_TIME, NULL);
       g_free (uri);
     }
 

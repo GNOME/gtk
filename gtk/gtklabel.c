@@ -5816,13 +5816,12 @@ gtk_label_activate_link (GtkLabel    *label,
 {
   GtkWidget *widget = GTK_WIDGET (label);
   GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
-  guint32 timestamp = gtk_get_current_event_time ();
   GError *error = NULL;
 
   if (!GTK_IS_WINDOW (toplevel))
     return FALSE;
 
-  if (!gtk_show_uri_on_window (GTK_WINDOW (toplevel), uri, timestamp, &error))
+  if (!gtk_show_uri_on_window (GTK_WINDOW (toplevel), uri, GDK_CURRENT_TIME, &error))
     {
       g_warning ("Unable to show '%s': %s", uri, error->message);
       g_error_free (error);
