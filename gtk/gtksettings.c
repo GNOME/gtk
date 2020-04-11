@@ -1643,7 +1643,7 @@ settings_update_theme (GtkSettings *settings)
 
   theme_name = get_theme_name (settings);
 
-  gtk_css_provider_load_named (settings->theme_provider, theme_name, NULL);
+  gtk_css_provider_load_named (settings->theme_provider, theme_name);
 
   /* reload per-theme settings */
   theme_dir = _gtk_css_provider_get_theme_dir (settings->theme_provider);
