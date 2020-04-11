@@ -62,7 +62,6 @@ struct _GtkInspectorVisualPrivate
   GtkWidget *box;
   GtkWidget *visual_box;
   GtkWidget *theme_combo;
-  GtkWidget *dark_switch;
   GtkWidget *icon_combo;
   GtkWidget *cursor_combo;
   GtkWidget *cursor_size_spin;
@@ -584,25 +583,6 @@ init_theme (GtkInspectorVisual *vis)
 }
 
 static void
-init_dark (GtkInspectorVisual *vis)
-{
-  g_object_bind_property (gtk_settings_get_for_display (vis->priv->display),
-                          "gtk-application-prefer-dark-theme",
-                          vis->priv->dark_switch, "active",
-                          G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-
-  if (g_getenv ("GTK_THEME") != NULL)
-    {
-      GtkWidget *row;
-
-      /* theme is hardcoded, nothing we can do */
-      gtk_widget_set_sensitive (vis->priv->dark_switch, FALSE);
-      row = gtk_widget_get_ancestor (vis->priv->theme_combo, GTK_TYPE_LIST_BOX_ROW);
-      gtk_widget_set_tooltip_text (row, _("Theme is hardcoded by GTK_THEME"));
-    }
-}
-
-static void
 fill_icons (const gchar *path,
             GHashTable  *t)
 {
@@ -959,12 +939,7 @@ row_activated (GtkListBox         *box,
                GtkListBoxRow      *row,
                GtkInspectorVisual *vis)
 {
-  if (gtk_widget_is_ancestor (vis->priv->dark_switch, GTK_WIDGET (row)))
-    {
-      GtkSwitch *sw = GTK_SWITCH (vis->priv->dark_switch);
-      gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
-    }
-  else if (gtk_widget_is_ancestor (vis->priv->animation_switch, GTK_WIDGET (row)))
+  if (gtk_widget_is_ancestor (vis->priv->animation_switch, GTK_WIDGET (row)))
     {
       GtkSwitch *sw = GTK_SWITCH (vis->priv->animation_switch);
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
@@ -1125,7 +1100,6 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, direction_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, theme_combo);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, dark_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, cursor_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, cursor_size_spin);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, cursor_size_adjustment);
@@ -1172,7 +1146,6 @@ gtk_inspector_visual_set_display  (GtkInspectorVisual *vis,
 
   init_direction (vis);
   init_theme (vis);
-  init_dark (vis);
   init_icons (vis);
   init_cursors (vis);
   init_cursor_size (vis);
