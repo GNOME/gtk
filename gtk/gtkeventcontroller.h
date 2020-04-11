@@ -72,6 +72,15 @@ GDK_AVAILABLE_IN_ALL
 void                gtk_event_controller_set_name              (GtkEventController *controller,
                                                                 const char         *name);
 
+GDK_AVAILABLE_IN_ALL
+GdkEvent *          gtk_event_controller_get_current_event    (GtkEventController *controller);
+GDK_AVAILABLE_IN_ALL
+guint32             gtk_event_controller_get_current_event_time   (GtkEventController *controller);
+GDK_AVAILABLE_IN_ALL
+GdkDevice *         gtk_event_controller_get_current_event_device (GtkEventController *controller);
+GDK_AVAILABLE_IN_ALL
+GdkModifierType     gtk_event_controller_get_current_event_state (GtkEventController *controller);
+
 G_END_DECLS
 
 #endif /* __GTK_EVENT_CONTROLLER_H__ */
