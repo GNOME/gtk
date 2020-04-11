@@ -59,7 +59,7 @@ for f in funcs:
     file_output += ['#ifdef GDK_WINDOWING_X11']
     file_output += ['*tp++ = {0}();'.format(f)]
     file_output += ['#endif']
-  elif f.startswith('gdk_broadway'):
+  elif f.startswith('gdk_broadway') or f.startswith('gsk_broadway'):
     file_output += ['#ifdef GDK_WINDOWING_BROADWAY']
     file_output += ['*tp++ = {0}();'.format(f)]
     file_output += ['#endif']
@@ -73,6 +73,10 @@ for f in funcs:
     file_output += ['#endif']
   elif f.startswith('gdk_quartz'):
     file_output += ['#ifdef GDK_WINDOWING_QUARTZ']
+    file_output += ['*tp++ = {0}();'.format(f)]
+    file_output += ['#endif']
+  elif f.startswith('gsk_vulkan'):
+    file_output += ['#ifdef GDK_RENDERING_VULKAN']
     file_output += ['*tp++ = {0}();'.format(f)]
     file_output += ['#endif']
   else:
