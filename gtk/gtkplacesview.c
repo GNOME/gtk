@@ -2330,12 +2330,53 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_listbox_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_recent_servers_listbox_row_activated);
 
+  /**
+   * GtkPlacesView|location.open:
+   *
+   * Opens the location in the current window.
+   */
   gtk_widget_class_install_action (widget_class, "location.open", NULL, open_cb);
+
+  /**
+   * GtkPlacesView|location.open-tab:
+   *
+   * Opens the location in a new tab.
+   */
   gtk_widget_class_install_action (widget_class, "location.open-tab", NULL, open_cb);
+
+  /**
+   * GtkPlacesView|location.open-window:
+   *
+   * Opens the location in a new window.
+   */
   gtk_widget_class_install_action (widget_class, "location.open-window", NULL, open_cb);
+
+  /**
+   * GtkPlacesView|location.mount:
+   *
+   * Mount the location.
+   */
   gtk_widget_class_install_action (widget_class, "location.mount", NULL, mount_cb);
+
+  /**
+   * GtkPlacesView|location.connect:
+   *
+   * Connect the location.
+   */
   gtk_widget_class_install_action (widget_class, "location.connect", NULL, mount_cb);
+
+  /**
+   * GtkPlacesView|location.unmount:
+   *
+   * Unmount the location.
+   */
   gtk_widget_class_install_action (widget_class, "location.unmount", NULL, unmount_cb);
+
+  /**
+   * GtkPlacesView|location.disconnect:
+   *
+   * Disconnect the location.
+   */
   gtk_widget_class_install_action (widget_class, "location.disconnect", NULL, unmount_cb);
 
   gtk_widget_class_set_css_name (widget_class, I_("placesview"));

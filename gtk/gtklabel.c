@@ -1023,6 +1023,11 @@ gtk_label_class_init (GtkLabelClass *class)
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, label_props);
 
+  /**
+   * GtkLabel|menu.popup:
+   *
+   * Opens the context menu. 
+   */
   gtk_widget_class_install_action (widget_class, "menu.popup", NULL, gtk_label_popup_menu);
 
   /*

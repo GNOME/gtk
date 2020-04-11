@@ -347,7 +347,8 @@ static void
 test_introspection (void)
 {
   GtkWidgetClass *class = g_type_class_ref (GTK_TYPE_TEXT);
-  guint i;
+  guint i, j;
+  guint found;
   GType owner;
   const char *name;
   const GVariantType *params;
@@ -370,21 +371,32 @@ test_introspection (void)
     { GTK_TYPE_TEXT, "text.undo", NULL, NULL },
   };
 
-  i = 0;
+  j = 0;
+  found = 0;
   while (gtk_widget_class_query_action (class,
-                                        i,
+                                        j,
                                         &owner,
                                         &name,
                                         &params,
                                         &property))
     {
-      g_assert (expected[i].owner == owner);
-      g_assert_cmpstr (expected[i].name, ==, name);
-      g_assert_cmpstr (expected[i].params, ==, params ? g_variant_type_peek_string (params) : NULL);
-      g_assert_cmpstr (expected[i].property, ==, property);
-      i++;
+      for (i = 0; i < G_N_ELEMENTS (expected); i++)
+        {
+          if (strcmp (expected[i].name, name) == 0)
+            {
+              found++;
+              g_assert (expected[i].owner == owner);
+              g_assert_cmpstr (expected[i].name, ==, name);
+              g_assert_cmpstr (expected[i].params, ==, params ? g_variant_type_peek_string (params) : NULL);
+              g_assert_cmpstr (expected[i].property, ==, property);
+              break;
+            }
+        }
+      if (i == G_N_ELEMENTS (expected))
+        g_error ("Unexpected GtkText action: %s", name);
+      j++;
     }
-  g_assert (i == G_N_ELEMENTS (expected));
+  g_assert (found == G_N_ELEMENTS (expected));
 
   g_type_class_unref (class);
 }

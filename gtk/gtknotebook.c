@@ -1304,6 +1304,11 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                               G_TYPE_FROM_CLASS (gobject_class),
                               _gtk_marshal_OBJECT__OBJECTv);
 
+  /**
+   * GtkNotebook|menu.popup:
+   *
+   * Opens the context menu. 
+   */
   gtk_widget_class_install_action (widget_class, "menu.popup", NULL, gtk_notebook_popup_menu);
 
   gtk_widget_class_add_binding_signal (widget_class,
