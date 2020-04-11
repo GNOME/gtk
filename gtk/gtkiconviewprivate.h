@@ -63,7 +63,9 @@ struct _GtkIconViewClass
   void    (* toggle_cursor_item)     (GtkIconView      *icon_view);
   gboolean (* move_cursor)           (GtkIconView      *icon_view,
                                       GtkMovementStep   step,
-                                      gint              count);
+                                      gint              count,
+                                      gboolean          extend,
+                                      gboolean          modify);
   gboolean (* activate_cursor_item)  (GtkIconView      *icon_view);
 };
 

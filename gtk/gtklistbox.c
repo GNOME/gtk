@@ -147,7 +147,9 @@ struct _GtkListBoxClass
   void (*toggle_cursor_row)   (GtkListBox      *box);
   void (*move_cursor)         (GtkListBox      *box,
                                GtkMovementStep  step,
-                               gint             count);
+                               gint             count,
+                               gboolean         extend,
+                               gboolean         modify);
   void (*selected_rows_changed) (GtkListBox    *box);
   void (*select_all)            (GtkListBox    *box);
   void (*unselect_all)          (GtkListBox    *box);
@@ -261,7 +263,9 @@ static void                 gtk_list_box_activate_cursor_row          (GtkListBo
 static void                 gtk_list_box_toggle_cursor_row            (GtkListBox          *box);
 static void                 gtk_list_box_move_cursor                  (GtkListBox          *box,
                                                                        GtkMovementStep      step,
-                                                                       gint                 count);
+                                                                       gint                 count,
+                                                                       gboolean             extend,
+                                                                       gboolean             modify);
 static void                 gtk_list_box_finalize                     (GObject             *obj);
 static void                 gtk_list_box_parent_cb                    (GObject             *object,
                                                                        GParamSpec          *pspec,
@@ -594,12 +598,12 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkListBoxClass, move_cursor),
                   NULL, NULL,
-                  _gtk_marshal_VOID__ENUM_INT,
-                  G_TYPE_NONE, 2,
-                  GTK_TYPE_MOVEMENT_STEP, G_TYPE_INT);
+                  _gtk_marshal_VOID__ENUM_INT_BOOLEAN_BOOLEAN,
+                  G_TYPE_NONE, 4,
+                  GTK_TYPE_MOVEMENT_STEP, G_TYPE_INT, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
   g_signal_set_va_marshaller (signals[MOVE_CURSOR],
                               G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_VOID__ENUM_INTv);
+                              _gtk_marshal_VOID__ENUM_INT_BOOLEAN_BOOLEANv);
 
   widget_class->activate_signal = signals[ACTIVATE_CURSOR_ROW];
 
@@ -1426,25 +1430,22 @@ gtk_list_box_add_move_binding (GtkWidgetClass  *widget_class,
                                GtkMovementStep  step,
                                gint             count)
 {
-  GdkModifierType extend_mod_mask = GDK_SHIFT_MASK;
-  GdkModifierType modify_mod_mask = GDK_CONTROL_MASK;
-
   gtk_widget_class_add_binding_signal (widget_class,
                                        keyval, modmask,
                                        "move-cursor",
-                                       "(ii)", step, count);
+                                       "(iibb)", step, count, FALSE, FALSE);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       keyval, modmask | extend_mod_mask,
+                                       keyval, modmask | GDK_SHIFT_MASK,
                                        "move-cursor",
-                                       "(ii)", step, count);
+                                       "(iibb)", step, count, TRUE, FALSE);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       keyval, modmask | modify_mod_mask,
+                                       keyval, modmask | GDK_CONTROL_MASK,
                                        "move-cursor",
-                                       "(ii)", step, count);
+                                       "(iibb)", step, count, FALSE, TRUE);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       keyval, modmask | extend_mod_mask | modify_mod_mask,
-                                       "move-cursor",
-                                       "(ii)", step, count);
+                                       keyval, modmask | GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+                                       "move-cursor", 
+                                       "(iibb)", step, count, TRUE, TRUE);
 }
 
 static void
@@ -1765,28 +1766,6 @@ gtk_list_box_click_gesture_pressed (GtkGestureClick *gesture,
 }
 
 static void
-get_current_selection_modifiers (GtkWidget *widget,
-                                 gboolean  *modify,
-                                 gboolean  *extend)
-{
-  GdkModifierType state = 0;
-  GdkModifierType mask;
-
-  *modify = FALSE;
-  *extend = FALSE;
-
-  if (gtk_get_current_event_state (&state))
-    {
-      mask = GDK_CONTROL_MASK;
-      if ((state & mask) == mask)
-        *modify = TRUE;
-      mask = GDK_SHIFT_MASK;
-      if ((state & mask) == mask)
-        *extend = TRUE;
-    }
-}
-
-static void
 gtk_list_box_click_unpaired_release (GtkGestureClick  *gesture,
                                      gdouble           x,
                                      gdouble           y,
@@ -1829,16 +1808,19 @@ gtk_list_box_click_gesture_released (GtkGestureClick *gesture,
           GdkEventSequence *sequence;
           GdkInputSource source;
           GdkEvent *event;
-          gboolean modify;
+          GdkModifierType state;
           gboolean extend;
+          gboolean modify;
 
-          get_current_selection_modifiers (GTK_WIDGET (box), &modify, &extend);
           /* With touch, we default to modifying the selection.
            * You can still clear the selection and start over
            * by holding Ctrl.
            */
           sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
           event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+          state = gdk_event_get_modifier_state (event);
+          extend = (state & GDK_SHIFT_MASK) != 0;
+          modify = (state & GDK_CONTROL_MASK) != 0;
           source = gdk_device_get_source (gdk_event_get_source_device (event));
 
           if (source == GDK_SOURCE_TOUCHSCREEN)
@@ -2730,10 +2712,10 @@ gtk_list_box_toggle_cursor_row (GtkListBox *box)
 static void
 gtk_list_box_move_cursor (GtkListBox      *box,
                           GtkMovementStep  step,
-                          gint             count)
+                          gint             count,
+                          gboolean         extend,
+                          gboolean         modify)
 {
-  gboolean modify;
-  gboolean extend;
   GtkListBoxRow *row;
   gint page_size;
   GSequenceIter *iter;
@@ -2851,8 +2833,6 @@ gtk_list_box_move_cursor (GtkListBox      *box,
       return;
     }
 
-  get_current_selection_modifiers (GTK_WIDGET (box), &modify, &extend);
-
   gtk_list_box_update_cursor (box, row, TRUE);
   if (!modify)
     gtk_list_box_update_selection (box, row, FALSE, extend);
@@ -2876,18 +2856,11 @@ static void
 gtk_list_box_row_set_focus (GtkListBoxRow *row)
 {
   GtkListBox *box = gtk_list_box_row_get_box (row);
-  gboolean modify;
-  gboolean extend;
 
   if (!box)
     return;
 
-  get_current_selection_modifiers (GTK_WIDGET (row), &modify, &extend);
-
-  if (modify)
-    gtk_list_box_update_cursor (box, row, TRUE);
-  else
-    gtk_list_box_update_selection (box, row, FALSE, FALSE);
+  gtk_list_box_update_selection (box, row, FALSE, FALSE);
 }
 
 static gboolean
