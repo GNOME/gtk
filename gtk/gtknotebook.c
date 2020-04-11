@@ -2877,8 +2877,7 @@ gtk_notebook_motion (GtkEventController *controller,
   if (!page)
     return;
 
-  if (!gtk_get_current_event_state (&state))
-    return;
+  state = gtk_event_controller_get_current_event_state (controller);
 
   if (!(state & GDK_BUTTON1_MASK) &&
       notebook->pressed_button != 0)
@@ -2905,7 +2904,7 @@ gtk_notebook_motion (GtkEventController *controller,
       notebook->detached_tab = notebook->cur_page;
 
       surface = gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (notebook)));
-      device = gtk_get_current_event_device ();
+      device = gtk_event_controller_get_current_event_device (controller);
 
       content = gdk_content_provider_new_union ((GdkContentProvider *[2]) {
                                                   gtk_notebook_root_content_new (notebook),

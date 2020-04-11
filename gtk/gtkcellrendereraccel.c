@@ -539,8 +539,10 @@ key_controller_key_pressed (GtkEventControllerKey *key,
   gboolean cleared = FALSE;
   GdkModifierType accel_mods = 0;
   guint accel_key;
+  GdkEvent *event;
 
-  if (!gdk_key_event_get_match (gtk_get_current_event (), &accel_key, &accel_mods))
+  event = gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (key));
+  if (!gdk_key_event_get_match (event, &accel_key, &accel_mods))
     return FALSE;
     
   if (accel_mods == 0)

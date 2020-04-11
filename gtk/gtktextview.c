@@ -8142,7 +8142,7 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
   if (gtk_gesture_is_active (priv->drag_gesture))
     {
       GdkEvent *current_event;
-      current_event = gtk_get_current_event ();
+      current_event = gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (priv->drag_gesture));
       if (current_event != NULL)
         {
           if (gdk_event_get_event_type (current_event) == GDK_SCROLL)
@@ -8621,19 +8621,13 @@ gtk_text_view_get_menu_model (GtkTextView *text_view)
 }
 
 static void
-gtk_text_view_do_popup (GtkTextView    *text_view,
-                        GdkEvent       *event)
+gtk_text_view_do_popup (GtkTextView *text_view,
+                        GdkEvent    *trigger_event)
 {
   GtkTextViewPrivate *priv = text_view->priv;
-  GdkEvent *trigger_event;
 
   if (!gtk_widget_get_realized (GTK_WIDGET (text_view)))
     return;
-
-  if (event)
-    trigger_event = (GdkEvent *)event;
-  else
-    trigger_event = gtk_get_current_event ();
 
   gtk_text_view_update_clipboard_actions (text_view);
 
@@ -8709,9 +8703,6 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
     }
 
   gtk_popover_popup (GTK_POPOVER (priv->popup_menu));
-
-  if (trigger_event && trigger_event != event)
-    gdk_event_unref (trigger_event);
 }
 
 static void
