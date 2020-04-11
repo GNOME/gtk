@@ -4287,12 +4287,6 @@ gtk_init_check
 <SUBSECTION>
 GTK_PRIORITY_RESIZE
 
-<SUBSECTION>
-gtk_get_current_event
-gtk_get_current_event_time
-gtk_get_current_event_state
-gtk_get_current_event_device
-
 <SUBSECTION Private>
 gtk_init_abi_check
 gtk_init_check_abi_check
