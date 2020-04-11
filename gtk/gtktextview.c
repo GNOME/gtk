@@ -1464,8 +1464,77 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                   NULL,
                   G_TYPE_NONE, 0);
 
+  /*
+   * Actions
+   */
+
+  /**
+   * GtkTextView|clipboard.cut:
+   *
+   * Copies the contents to the clipboard and deletes it from the widget.
+   */
+  gtk_widget_class_install_action (widget_class, "clipboard.cut", NULL,
+                                   gtk_text_view_activate_clipboard_cut);
+
+  /**
+   * GtkTextView|clipboard.copy:
+   *
+   * Copies the contents to the clipboard.
+   */
+  gtk_widget_class_install_action (widget_class, "clipboard.copy", NULL,
+                                   gtk_text_view_activate_clipboard_copy);
+
+  /**
+   * GtkTextView|clipboard.paste:
+   *
+   * Inserts the contents of the clipboard into the widget.
+   */
+  gtk_widget_class_install_action (widget_class, "clipboard.paste", NULL,
+                                   gtk_text_view_activate_clipboard_paste);
+
+  /**
+   * GtkTextView|selection.delete:
+   *
+   * Deletes the current selection. 
+   */
+  gtk_widget_class_install_action (widget_class, "selection.delete", NULL,
+                                   gtk_text_view_activate_selection_delete);
+
+  /**
+   * GtkTextView|selection.select-all:
+   *
+   * Selects all of the widgets content.
+   */
+  gtk_widget_class_install_action (widget_class, "selection.select-all", NULL,
+                                   gtk_text_view_activate_selection_select_all);
+
+  /**
+   * GtkTextView|misc.insert-emoji:
+   *
+   * Opens the Emoji chooser.
+   */
+  gtk_widget_class_install_action (widget_class, "misc.insert-emoji", NULL,
+                                   gtk_text_view_activate_misc_insert_emoji);
+
+  /**
+   * GtkTextView|text.undo:
+   *
+   * Undoes the last change to the contents.
+   */
   gtk_widget_class_install_action (widget_class, "text.undo", NULL, gtk_text_view_real_undo);
+
+  /**
+   * GtkTextView|text.redo:
+   *
+   * Redoes the last change to the contents.
+   */
   gtk_widget_class_install_action (widget_class, "text.redo", NULL, gtk_text_view_real_redo);
+
+  /**
+   * GtkTextView|menu.popup:
+   *
+   * Opens the context menu. 
+   */
   gtk_widget_class_install_action (widget_class, "menu.popup", NULL, gtk_text_view_popup_menu);
 
   /*
@@ -1755,19 +1824,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   quark_text_selection_data = g_quark_from_static_string ("gtk-text-view-text-selection-data");
   quark_gtk_signal = g_quark_from_static_string ("gtk-signal");
   quark_text_view_child = g_quark_from_static_string ("gtk-text-view-child");
-
-  gtk_widget_class_install_action (widget_class, "clipboard.cut", NULL,
-                                   gtk_text_view_activate_clipboard_cut);
-  gtk_widget_class_install_action (widget_class, "clipboard.copy", NULL,
-                                   gtk_text_view_activate_clipboard_copy);
-  gtk_widget_class_install_action (widget_class, "clipboard.paste", NULL,
-                                   gtk_text_view_activate_clipboard_paste);
-  gtk_widget_class_install_action (widget_class, "selection.delete", NULL,
-                                   gtk_text_view_activate_selection_delete);
-  gtk_widget_class_install_action (widget_class, "selection.select-all", NULL,
-                                   gtk_text_view_activate_selection_select_all);
-  gtk_widget_class_install_action (widget_class, "misc.insert-emoji", NULL,
-                                   gtk_text_view_activate_misc_insert_emoji);
 }
 
 static void

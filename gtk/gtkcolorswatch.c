@@ -497,6 +497,11 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
       g_param_spec_boolean ("can-drop", P_("Can Drop"), P_("Whether the swatch should accept drops"),
                             FALSE, GTK_PARAM_READWRITE));
 
+  /**
+   * GtkColorSwatch|menu.popup:
+   *
+   * Opens the context menu. 
+   */
   gtk_widget_class_install_action (widget_class, "menu.popup", NULL, swatch_popup_menu);
 
   gtk_widget_class_add_binding_action (widget_class,

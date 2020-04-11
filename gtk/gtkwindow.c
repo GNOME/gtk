@@ -1057,6 +1057,11 @@ gtk_window_class_init (GtkWindowClass *klass)
    * Key bindings
    */
 
+  /**
+   * GtkWindow|default.activate:
+   *
+   * Activate the default widget.
+   */
   gtk_widget_class_install_action (widget_class, "default.activate", NULL,
                                    gtk_window_activate_default_activate);
 
