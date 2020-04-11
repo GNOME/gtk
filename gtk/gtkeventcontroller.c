@@ -59,6 +59,7 @@ struct _GtkEventControllerPrivate
   GtkPropagationLimit limit;
   char *name;
   GtkWidget *target;
+  GdkEvent *event;
 };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkEventController, gtk_event_controller, G_TYPE_OBJECT)
@@ -337,13 +338,15 @@ gtk_event_controller_handle_event (GtkEventController *controller,
 
   controller_class = GTK_EVENT_CONTROLLER_GET_CLASS (controller);
 
-  priv->target = target;
+  priv->target = g_object_ref (target);
+  priv->event = gdk_event_ref (event);
 
   g_object_ref (controller);
   retval = controller_class->handle_event (controller, event, x, y);
   g_object_unref (controller);
 
-  priv->target = NULL;
+  g_clear_object (&priv->target);
+  g_clear_pointer (&priv->event, gdk_event_unref);
 
   return retval;
 }
@@ -530,6 +533,83 @@ gtk_event_controller_get_target (GtkEventController *controller)
   GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (controller);
 
   return priv->target;
+}
+
+/**
+ * gtk_event_controller_get_current_event:
+ * @controller: a #GtkEventController
+ *
+ * Returns the event that is currently being handled by the
+ * controller, and %NULL at other times.
+ *
+ * Returns: (nullable) the event is current handled by @controller
+ */
+GdkEvent *
+gtk_event_controller_get_current_event (GtkEventController *controller)
+{
+  GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (controller);
+
+  return priv->event;
+}
+
+/**
+ * gtk_event_controller_get_current_event_time:
+ * @controller: a #GtkEventController
+ *
+ * Returns the timestamp of the event that is currently being
+ * handled by the controller, and 0 otherwise.
+ *
+ * Returns: timestamp of the event is current handled by @controller
+ */
+guint32
+gtk_event_controller_get_current_event_time (GtkEventController *controller)
+{
+  GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (controller);
+
+  if (priv->event)
+    return gdk_event_get_time (priv->event);
+
+  return 0;
+}
+
+/**
+ * gtk_event_controller_get_current_event_device:
+ * @controller: a #GtkEventController
+ *
+ * Returns the device of the event that is currently being
+ * handled by the controller, and %NULL otherwise.
+ *
+ * Returns: (nullable): device of the event is current handled by @controller
+ */
+GdkDevice *
+gtk_event_controller_get_current_event_device (GtkEventController *controller)
+{
+  GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (controller);
+
+  if (priv->event)
+    return gdk_event_get_device (priv->event);
+
+  return NULL;
+}
+
+/**
+ * gtk_event_controller_get_current_event_device:
+ * @controller: a #GtkEventController
+ *
+ * Returns the modifier state of the event that is currently being
+ * handled by the controller, and 0 otherwise.
+ *
+ * Returns: (nullable): modifier state of the event is current handled by @controller
+ */
+GdkModifierType
+gtk_event_controller_get_current_event_state (GtkEventController *controller)
+{
+  GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (controller);
+
+  if (priv->event)
+    return gdk_event_get_modifier_state (priv->event);
+
+  return 0;
 }
 
 static GtkCrossingData *

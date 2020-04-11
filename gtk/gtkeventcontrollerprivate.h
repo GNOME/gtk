@@ -100,7 +100,8 @@ struct _GtkEventControllerClass
   gpointer padding[10];
 };
 
-GtkWidget *gtk_event_controller_get_target (GtkEventController *controller);
+GtkWidget * gtk_event_controller_get_target (GtkEventController *controller);
+
 
 gboolean   gtk_event_controller_handle_event   (GtkEventController *controller,
                                                 GdkEvent           *event,

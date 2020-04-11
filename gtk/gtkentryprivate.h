@@ -104,8 +104,6 @@ struct _GtkEntryCompletionPrivate
   gchar *completion_prefix;
 
   GSource *check_completion_idle;
-
-  GdkDevice *device;
 };
 
 void     _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion);

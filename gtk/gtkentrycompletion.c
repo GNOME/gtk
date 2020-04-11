@@ -2233,7 +2233,6 @@ gtk_entry_completion_changed (GtkWidget *widget,
                               gpointer   user_data)
 {
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
-  GdkDevice *device;
 
   if (!completion->priv->popup_completion)
     return;
@@ -2256,14 +2255,6 @@ gtk_entry_completion_changed (GtkWidget *widget,
         _gtk_entry_completion_popdown (completion);
       return;
     }
-
-  device = gtk_get_current_event_device ();
-
-  if (device && gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-    device = gdk_device_get_associated_device (device);
-
-  if (device)
-    completion->priv->device = device;
 
   completion->priv->completion_timeout =
     g_timeout_add (COMPLETION_TIMEOUT,

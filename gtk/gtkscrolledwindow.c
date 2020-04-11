@@ -30,6 +30,7 @@
 #include "gtkadjustmentprivate.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerscroll.h"
+#include "gtkeventcontrollerprivate.h"
 #include "gtkgesturedrag.h"
 #include "gtkgesturelongpress.h"
 #include "gtkgesturepan.h"
@@ -1171,9 +1172,10 @@ captured_scroll_cb (GtkEventControllerScroll *scroll,
 }
 
 static void
-captured_motion (GtkScrolledWindow *sw,
-                 gdouble            x,
-                 gdouble            y)
+captured_motion (GtkEventController *controller,
+                 double              x,
+                 double              y,
+                 GtkScrolledWindow  *sw)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (sw);
   GdkDevice *source_device;
@@ -1185,7 +1187,10 @@ captured_motion (GtkScrolledWindow *sw,
   if (!priv->use_indicators)
     return;
 
-  event = gtk_get_current_event ();
+  target = gtk_event_controller_get_target (controller);
+  state = gtk_event_controller_get_current_event_state (controller);
+  event = gtk_event_controller_get_current_event (controller);
+
   source_device = gdk_event_get_source_device (event);
   input_source = gdk_device_get_source (source_device);
 
@@ -1193,10 +1198,6 @@ captured_motion (GtkScrolledWindow *sw,
     indicator_start_fade (&priv->hindicator, 1.0);
   if (priv->vscrollbar_visible)
     indicator_start_fade (&priv->vindicator, 1.0);
-
-  state = gdk_event_get_modifier_state (event);
-
-  target = gtk_widget_pick (GTK_WIDGET (sw), x, y, GTK_PICK_DEFAULT);
 
   if (!target &&
       (state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK)) != 0)
@@ -1218,8 +1219,6 @@ captured_motion (GtkScrolledWindow *sw,
       else
         indicator_set_over (&priv->hindicator, FALSE);
     }
-
-  gdk_event_unref (event);
 }
 
 static gboolean
@@ -1259,9 +1258,7 @@ scroll_controller_scroll (GtkEventControllerScroll *scroll,
   gboolean shifted;
   GdkModifierType state;
 
-  if (!gtk_get_current_event_state (&state))
-    return GDK_EVENT_PROPAGATE;
-
+  state = gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (scroll));
   shifted = (state & GDK_SHIFT_MASK) != 0;
 
   gtk_scrolled_window_invalidate_overshoot (scrolled_window);
@@ -1343,8 +1340,8 @@ scroll_controller_decelerate (GtkEventControllerScroll *scroll,
   gboolean shifted;
   GdkModifierType state;
 
-  if (!gtk_get_current_event_state (&state))
-    return;
+
+  state = gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (scroll));
 
   shifted = (state & GDK_SHIFT_MASK) != 0;
 
@@ -1970,8 +1967,8 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
 
   controller = gtk_event_controller_motion_new ();
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
-  g_signal_connect_swapped (controller, "motion",
-                            G_CALLBACK (captured_motion), scrolled_window);
+  g_signal_connect (controller, "motion",
+                    G_CALLBACK (captured_motion), scrolled_window);
   gtk_widget_add_controller (widget, controller);
 
   widget_node = gtk_widget_get_css_node (widget);

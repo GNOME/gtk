@@ -3420,7 +3420,7 @@ on_row_released (GtkGestureClick *gesture,
                 NULL);
 
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
-  gtk_get_current_event_state (&state);
+  state = gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (gesture));
 
   if (row)
     {

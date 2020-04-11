@@ -40,7 +40,6 @@ static void
 on_button_toggle (GtkWidget *button, gpointer data)
 {
   GdkSurface *surface = GDK_SURFACE (data);
-  GdkEvent *event;
 
   if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
     {
@@ -49,8 +48,7 @@ on_button_toggle (GtkWidget *button, gpointer data)
     }
 
   gtk_check_button_set_inconsistent (GTK_CHECK_BUTTON (button), TRUE);
-  event = gtk_get_current_event ();
-  gdk_toplevel_inhibit_system_shortcuts (GDK_TOPLEVEL (surface), event);
+  gdk_toplevel_inhibit_system_shortcuts (GDK_TOPLEVEL (surface), NULL);
 }
 
 static void
