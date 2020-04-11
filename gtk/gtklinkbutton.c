@@ -228,9 +228,19 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LINK_BUTTON_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("button"));
 
+  /**
+   * GtkLinkButton|clipboard.copy:
+   *
+   * Copies the url to the clipboard.
+   */
   gtk_widget_class_install_action (widget_class, "clipboard.copy", NULL,
                                    gtk_link_button_activate_clipboard_copy);
 
+  /**
+   * GtkLinkButton|menu.popup:
+   *
+   * Opens the context menu. 
+   */
   gtk_widget_class_install_action (widget_class, "menu.popup", NULL, gtk_link_button_popup_menu);
 
   gtk_widget_class_add_binding_action (widget_class,
