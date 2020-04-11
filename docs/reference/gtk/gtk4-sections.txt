@@ -4293,6 +4293,13 @@ gtk_get_current_event_time
 gtk_get_current_event_state
 gtk_get_current_event_device
 
+<SUBSECTION>
+gtk_set_supported_themes
+gtk_set_unsupported_themes
+gtk_set_prefer_dark_theme
+gtk_get_current_theme
+gtk_theme_is_dark
+
 <SUBSECTION Private>
 gtk_init_abi_check
 gtk_init_check_abi_check

@@ -1343,6 +1343,7 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
     {
       gtk_css_provider_load_from_resource (provider, resource_path);
       g_free (resource_path);
+      gtk_set_current_theme (name, variant);
       return;
     }
   g_free (resource_path);
@@ -1370,6 +1371,8 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
       priv->path = dir;
 
       g_free (path);
+
+      gtk_set_current_theme (name, variant);
     }
   else
     {
