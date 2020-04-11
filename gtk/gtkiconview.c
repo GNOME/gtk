@@ -241,7 +241,9 @@ static void                 gtk_icon_view_add_move_binding               (GtkWid
 									  gint                    count);
 static gboolean             gtk_icon_view_real_move_cursor               (GtkIconView            *icon_view,
 									  GtkMovementStep         step,
-									  gint                    count);
+									  gint                    count,
+                                                                          gboolean                extend,
+                                                                          gboolean                modify);
 static void                 gtk_icon_view_move_cursor_up_down            (GtkIconView            *icon_view,
 									  gint                    count);
 static void                 gtk_icon_view_move_cursor_page_up_down       (GtkIconView            *icon_view,
@@ -776,6 +778,8 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * @iconview: the object which received the signal
    * @step: the granularity of the move, as a #GtkMovementStep
    * @count: the number of @step units to move
+   * @extend: whether to extend the selection
+   * @modify: whether to modify the selection
    *
    * The ::move-cursor signal is a
    * [keybinding signal][GtkBindingSignal]
@@ -798,13 +802,15 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkIconViewClass, move_cursor),
 		  NULL, NULL,
-		  _gtk_marshal_BOOLEAN__ENUM_INT,
-		  G_TYPE_BOOLEAN, 2,
+		  _gtk_marshal_BOOLEAN__ENUM_INT_BOOLEAN_BOOLEAN,
+		  G_TYPE_BOOLEAN, 4,
 		  GTK_TYPE_MOVEMENT_STEP,
-		  G_TYPE_INT);
+		  G_TYPE_INT,
+                  G_TYPE_BOOLEAN,
+                  G_TYPE_BOOLEAN);
   g_signal_set_va_marshaller (icon_view_signals[MOVE_CURSOR],
                               G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__ENUM_INTv);
+                              _gtk_marshal_BOOLEAN__ENUM_INT_BOOLEAN_BOOLEANv);
 
   /* Key bindings */
   gtk_widget_class_add_binding_signal (widget_class,
@@ -1823,7 +1829,7 @@ gtk_icon_view_motion (GtkEventController *controller,
   icon_view->priv->mouse_x = x;
   icon_view->priv->mouse_y = y;
 
-  device = gtk_get_current_event_device (); /* FIXME: controller device */
+  device = gtk_event_controller_get_current_event_device (controller);
   gtk_icon_view_maybe_begin_drag (icon_view, x, y, device);
 
   if (icon_view->priv->doing_rubberband)
@@ -3421,12 +3427,12 @@ gtk_icon_view_add_move_binding (GtkWidgetClass *widget_class,
   gtk_widget_class_add_binding_signal (widget_class,
                                        keyval, modmask,
                                        I_("move-cursor"),
-                                       "(ii)", step, count);
+                                       "(iibb)", step, count, FALSE, FALSE);
 
   gtk_widget_class_add_binding_signal (widget_class,
                                        keyval, GDK_SHIFT_MASK,
                                        "move-cursor",
-                                       "(ii)", step, count);
+                                       "(iibb)", step, count, TRUE, FALSE);
 
   if ((modmask & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
    return;
@@ -3434,21 +3440,21 @@ gtk_icon_view_add_move_binding (GtkWidgetClass *widget_class,
   gtk_widget_class_add_binding_signal (widget_class,
                                        keyval, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
                                        "move-cursor",
-                                       "(ii)", step, count);
+                                       "(iibb)", step, count, TRUE, TRUE);
 
   gtk_widget_class_add_binding_signal (widget_class,
                                        keyval, GDK_CONTROL_MASK,
                                        "move-cursor",
-                                       "(ii)", step, count);
+                                       "(iibb)", step, count, FALSE, TRUE);
 }
 
 static gboolean
 gtk_icon_view_real_move_cursor (GtkIconView     *icon_view,
 				GtkMovementStep  step,
-				gint             count)
+				gint             count,
+                                gboolean         extend,
+                                gboolean         modify)
 {
-  GdkModifierType state;
-
   g_return_val_if_fail (GTK_ICON_VIEW (icon_view), FALSE);
   g_return_val_if_fail (step == GTK_MOVEMENT_LOGICAL_POSITIONS ||
 			step == GTK_MOVEMENT_VISUAL_POSITIONS ||
@@ -3462,17 +3468,8 @@ gtk_icon_view_real_move_cursor (GtkIconView     *icon_view,
   gtk_cell_area_stop_editing (icon_view->priv->cell_area, FALSE);
   gtk_widget_grab_focus (GTK_WIDGET (icon_view));
 
-  if (gtk_get_current_event_state (&state))
-    {
-      GdkModifierType extend_mod_mask = GDK_SHIFT_MASK;
-      GdkModifierType modify_mod_mask = GDK_CONTROL_MASK;
-
-      if ((state & modify_mod_mask) == modify_mod_mask)
-        icon_view->priv->modify_selection_pressed = TRUE;
-      if ((state & extend_mod_mask) == extend_mod_mask)
-        icon_view->priv->extend_selection_pressed = TRUE;
-    }
-  /* else we assume not pressed */
+  icon_view->priv->extend_selection_pressed = extend;
+  icon_view->priv->modify_selection_pressed = modify;
 
   switch (step)
     {
