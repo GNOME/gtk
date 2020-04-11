@@ -978,7 +978,7 @@ gtk_about_dialog_activate_link (GtkAboutDialog *about,
 {
   GError *error = NULL;
 
-  if (!gtk_show_uri_on_window (GTK_WINDOW (about), uri, gtk_get_current_event_time (), &error))
+  if (!gtk_show_uri_on_window (GTK_WINDOW (about), uri, GDK_CURRENT_TIME, &error))
     {
       GtkWidget *dialog;
 
