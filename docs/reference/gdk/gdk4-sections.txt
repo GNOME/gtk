@@ -515,6 +515,9 @@ gdk_key_event_get_consumed_modifiers
 gdk_key_event_get_layout
 gdk_key_event_get_level
 gdk_key_event_is_modifier
+GdkEventMatch
+gdk_key_event_matches
+gdk_key_event_get_match
 gdk_focus_event_get_in
 gdk_touch_event_get_emulating_pointer
 gdk_crossing_event_get_mode
@@ -536,11 +539,6 @@ gdk_event_get_motion_history
 gdk_events_get_angle
 gdk_events_get_center
 gdk_events_get_distance
-
-<SUBSECTION>
-GdkEventMatch
-gdk_event_matches
-gdk_event_get_match
 
 <SUBSECTION Standard>
 GDK_TYPE_EVENT
@@ -657,8 +655,6 @@ gdk_toplevel_set_transient_for
 gdk_toplevel_set_modal
 gdk_toplevel_set_icon_list
 gdk_toplevel_show_window_menu
-gdk_toplevel_set_accept_focus
-gdk_toplevel_set_focus_on_map
 gdk_toplevel_set_decorated
 gdk_toplevel_set_deletable
 gdk_toplevel_supports_edge_constraints
