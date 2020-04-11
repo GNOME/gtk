@@ -462,12 +462,6 @@ static void     get_shadow_width                      (GtkWindow    *window,
 static gboolean    gtk_window_activate_menubar        (GtkWidget    *widget,
                                                        GVariant     *args,
                                                        gpointer      unused);
-#ifdef GDK_WINDOWING_X11
-static void        gtk_window_on_theme_variant_changed (GtkSettings *settings,
-                                                        GParamSpec  *pspec,
-                                                        GtkWindow   *window);
-#endif
-static void        gtk_window_set_theme_variant         (GtkWindow  *window);
 
 static void gtk_window_activate_default_activate (GtkWidget *widget,
                                                   const char *action_name,
@@ -1706,12 +1700,6 @@ gtk_window_init (GtkWindow *window)
 
   g_object_ref_sink (window);
   priv->has_user_ref_count = TRUE;
-
-#ifdef GDK_WINDOWING_X11
-  g_signal_connect (gtk_settings_get_for_display (priv->display),
-                    "notify::gtk-application-prefer-dark-theme",
-                    G_CALLBACK (gtk_window_on_theme_variant_changed), window);
-#endif
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (window));
   priv->decoration_node = gtk_css_node_new ();
@@ -4055,12 +4043,6 @@ gtk_window_finalize (GObject *object)
                                         device_removed_cb,
                                         window);
 
-#ifdef GDK_WINDOWING_X11
-  g_signal_handlers_disconnect_by_func (gtk_settings_get_for_display (priv->display),
-                                        gtk_window_on_theme_variant_changed,
-                                        window);
-#endif
-
   g_free (priv->startup_id);
 
   if (priv->mnemonics_display_timeout_id)
@@ -4330,8 +4312,6 @@ gtk_window_map (GtkWidget *widget)
 
   if (priv->minimize_initially)
     gdk_toplevel_minimize (GDK_TOPLEVEL (priv->surface));
-
-  gtk_window_set_theme_variant (window);
 
   /* No longer use the default settings */
   priv->need_default_size = FALSE;
@@ -7081,14 +7061,6 @@ gtk_window_set_display (GtkWindow  *window,
   if (priv->transient_parent && gtk_widget_get_display (GTK_WIDGET (priv->transient_parent)) != display)
     gtk_window_set_transient_for (window, NULL);
 
-#ifdef GDK_WINDOWING_X11
-  g_signal_handlers_disconnect_by_func (gtk_settings_get_for_display (priv->display),
-                                        gtk_window_on_theme_variant_changed, window);
-  g_signal_connect (gtk_settings_get_for_display (display),
-                    "notify::gtk-application-prefer-dark-theme",
-                    G_CALLBACK (gtk_window_on_theme_variant_changed), window);
-#endif
-
   gtk_widget_unroot (widget);
   priv->display = display;
 
@@ -7101,33 +7073,6 @@ gtk_window_set_display (GtkWindow  *window,
 
   check_scale_changed (window);
 }
-
-static void
-gtk_window_set_theme_variant (GtkWindow *window)
-{
-#ifdef GDK_WINDOWING_X11
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  gboolean   dark_theme_requested;
-
-  g_object_get (gtk_settings_get_for_display (priv->display),
-                "gtk-application-prefer-dark-theme", &dark_theme_requested,
-                NULL);
-
-  if (GDK_IS_X11_SURFACE (priv->surface))
-    gdk_x11_surface_set_theme_variant (priv->surface,
-                                       dark_theme_requested ? "dark" : NULL);
-#endif
-}
-
-#ifdef GDK_WINDOWING_X11
-static void
-gtk_window_on_theme_variant_changed (GtkSettings *settings,
-                                     GParamSpec  *pspec,
-                                     GtkWindow   *window)
-{
-  gtk_window_set_theme_variant (window);
-}
-#endif
 
 /**
  * gtk_window_is_active:
