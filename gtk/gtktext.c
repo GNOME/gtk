@@ -1194,9 +1194,82 @@ gtk_text_class_init (GtkTextClass *class)
                   NULL, NULL,
                   NULL,
                   G_TYPE_NONE, 0);
+  
+  /*
+   * Actions
+   */
 
+  /**
+   * GtkText|clipboard.cut:
+   *
+   * Copies the contents to the clipboard and deletes it from the widget.
+   */
+  gtk_widget_class_install_action (widget_class, "clipboard.cut", NULL,
+                                   gtk_text_activate_clipboard_cut);
+
+  /**
+   * GtkText|clipboard.copy:
+   *
+   * Copies the contents to the clipboard.
+   */
+  gtk_widget_class_install_action (widget_class, "clipboard.copy", NULL,
+                                   gtk_text_activate_clipboard_copy);
+
+  /**
+   * GtkText|clipboard.copy:
+   *
+   * Inserts the contents of the clipboard into the widget.
+   */
+  gtk_widget_class_install_action (widget_class, "clipboard.paste", NULL,
+                                   gtk_text_activate_clipboard_paste);
+
+  /**
+   * GtkText|selection.delete:
+   *
+   * Deletes the current selection. 
+   */
+  gtk_widget_class_install_action (widget_class, "selection.delete", NULL,
+                                   gtk_text_activate_selection_delete);
+
+  /**
+   * GtkText|selection.select-all:
+   *
+   * Selects all of the widgets content.
+   */
+  gtk_widget_class_install_action (widget_class, "selection.select-all", NULL,
+                                   gtk_text_activate_selection_select_all);
+
+  /**
+   * GtkText|misc.insert-emoji:
+   *
+   * Opens the Emoji chooser.
+   */
+  gtk_widget_class_install_action (widget_class, "misc.insert-emoji", NULL,
+                                   gtk_text_activate_misc_insert_emoji);
+
+  gtk_widget_class_install_property_action (widget_class,
+                                            "misc.toggle-visibility",
+                                            "visibility");
+
+  /**
+   * GtkText|text.undo:
+   *
+   * Undoes the last change to the contents.
+   */ 
   gtk_widget_class_install_action (widget_class, "text.undo", NULL, gtk_text_real_undo);
+
+  /**
+   * GtkText|text.redo:
+   *
+   * Redoes the last change to the contents.
+   */
   gtk_widget_class_install_action (widget_class, "text.redo", NULL, gtk_text_real_redo);
+
+  /**
+   * GtkText|menu.popup:
+   *
+   * Opens the context menu. 
+   */ 
   gtk_widget_class_install_action (widget_class, "menu.popup", NULL, gtk_text_popup_menu);
 
   /*
@@ -1411,22 +1484,6 @@ gtk_text_class_init (GtkTextClass *class)
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TEXT_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("text"));
-
-  gtk_widget_class_install_action (widget_class, "clipboard.cut", NULL,
-                                   gtk_text_activate_clipboard_cut);
-  gtk_widget_class_install_action (widget_class, "clipboard.copy", NULL,
-                                   gtk_text_activate_clipboard_copy);
-  gtk_widget_class_install_action (widget_class, "clipboard.paste", NULL,
-                                   gtk_text_activate_clipboard_paste);
-  gtk_widget_class_install_action (widget_class, "selection.delete", NULL,
-                                   gtk_text_activate_selection_delete);
-  gtk_widget_class_install_action (widget_class, "selection.select-all", NULL,
-                                   gtk_text_activate_selection_select_all);
-  gtk_widget_class_install_action (widget_class, "misc.insert-emoji", NULL,
-                                   gtk_text_activate_misc_insert_emoji);
-  gtk_widget_class_install_property_action (widget_class,
-                                            "misc.toggle-visibility",
-                                            "visibility");
 }
 
 static void
