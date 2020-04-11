@@ -340,6 +340,15 @@
     </section>
 
     <section>
+      <title>Stop using gtk_get_current_... APIs</title>
+      <para>
+        The function gtk_get_current_event() and its variants have been
+        replaced by equivalent event controller APIs:
+        gtk_event_controller_get_current_event(), etc.
+      </para>
+    </section>
+
+    <section>
       <title>Adapt to surface API changes</title>
       <para>
         In GTK 4, the two roles of a standalone toplevel window

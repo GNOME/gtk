@@ -91,6 +91,8 @@ void       gtk_main_do_event       (GdkEvent           *event);
 
 GtkWidget *gtk_get_event_widget         (GdkEvent  *event);
 
+guint32    gtk_get_current_event_time   (void);
+
 void check_crossing_invariants (GtkWidget       *widget,
                                 GtkCrossingData *crossing);
 

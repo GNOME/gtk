@@ -107,15 +107,6 @@ PangoLanguage *gtk_get_default_language (void);
 GDK_AVAILABLE_IN_ALL
 GtkTextDirection gtk_get_locale_direction (void);
 
-GDK_AVAILABLE_IN_ALL
-GdkEvent * gtk_get_current_event        (void);
-GDK_AVAILABLE_IN_ALL
-guint32    gtk_get_current_event_time   (void);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_get_current_event_state  (GdkModifierType *state);
-GDK_AVAILABLE_IN_ALL
-GdkDevice *gtk_get_current_event_device (void);
-
 
 G_END_DECLS
 
