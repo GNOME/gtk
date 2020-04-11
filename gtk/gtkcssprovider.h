@@ -63,8 +63,7 @@ void             gtk_css_provider_load_from_resource (GtkCssProvider *css_provid
 
 GDK_AVAILABLE_IN_ALL
 void             gtk_css_provider_load_named     (GtkCssProvider  *provider,
-                                                  const char      *name,
-                                                  const char      *variant);
+                                                  const char      *name);
 
 G_END_DECLS
 
