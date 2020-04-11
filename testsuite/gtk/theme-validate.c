@@ -5,7 +5,6 @@ typedef struct _Theme Theme;
 struct _Theme
 {
   const char *name;
-  const char *variant;
 };
 
 static void
@@ -34,7 +33,7 @@ test_theme (gconstpointer data)
   provider = gtk_css_provider_new ();
   g_signal_connect (provider, "parsing-error",
                     G_CALLBACK (theme_parsing_error), NULL);
-  gtk_css_provider_load_named (provider, theme->name, theme->variant);
+  gtk_css_provider_load_named (provider, theme->name);
   g_object_unref (provider);
 }
 
@@ -42,10 +41,10 @@ int
 main (int argc, char *argv[])
 {
   const Theme themes[] = {
-    { "Adwaita", NULL },
-    { "Adwaita", "dark" },
-    { "HighContrast", NULL },
-    { "HighContrast", "dark" }
+    { "Adwaita" },
+    { "Adwaita-dark" },
+    { "HighContrast" },
+    { "HighContrastInverse" }
   };
   guint i;
 
@@ -56,10 +55,7 @@ main (int argc, char *argv[])
     {
       char *testname;
 
-      if (themes[i].variant == NULL)
-        testname = g_strdup_printf ("/theme-validate/%s", themes[i].name);
-      else
-        testname = g_strdup_printf ("/theme-validate/%s-%s", themes[i].name, themes[i].variant);
+      testname = g_strdup_printf ("/theme-validate/%s", themes[i].name);
 
       g_test_add_data_func (testname, &themes[i], test_theme);
 
