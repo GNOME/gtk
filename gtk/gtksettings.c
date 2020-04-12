@@ -123,6 +123,8 @@ struct _GtkSettings
 struct _GtkSettingsClass
 {
   GObjectClass parent_class;
+
+  char * (* theme_change) (GtkSettings *settings);
 };
 
 struct _GtkSettingsValuePrivate
@@ -136,6 +138,13 @@ struct _GtkSettingsPropertyValue
   GValue value;
   GtkSettingsSource source;
 };
+
+enum {
+  THEME_CHANGE,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
 
 enum {
   PROP_0,
@@ -224,6 +233,7 @@ static void gtk_settings_load_from_key_file      (GtkSettings           *setting
 static void settings_update_provider             (GdkDisplay            *display,
                                                   GtkCssProvider       **old,
                                                   GtkCssProvider        *new);
+static char *gtk_settings_theme_change (GtkSettings *settings);
 
 /* --- variables --- */
 static GQuark            quark_gtk_settings = 0;
@@ -321,6 +331,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
   gobject_class->get_property = gtk_settings_get_property;
   gobject_class->set_property = gtk_settings_set_property;
   gobject_class->notify = gtk_settings_notify;
+
+  class->theme_change = gtk_settings_theme_change;
 
   quark_gtk_settings = g_quark_from_static_string ("gtk-settings");
 
@@ -950,6 +962,33 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    TRUE,
                                                                    GTK_PARAM_READWRITE));
   g_assert (result == PROP_OVERLAY_SCROLLING);
+
+  /**
+   * GtkSettings::theme-change:
+   * @settings: the #GtkSettings object
+   *
+   * The ::theme-change signal is emitted whenever the
+   * #GtkSettings:gtk-theme-name or #GtkSettings:gtk-user-theme-preference
+   * settings change. A handler for this signal can inspect the
+   * values of these properties, and return the name of the theme
+   * to load.
+   *
+   * The default handler will try to find a light or dark variant
+   * of the theme named by :gtk-theme-name, depending on the value
+   * of :gtk-user-theme-preference.
+   *
+   * Returns: (transfer full): a newly allocated string naming the
+   *     theme to load
+   */
+  signals[THEME_CHANGE] =
+    g_signal_new (I_("theme-change"),
+                  G_TYPE_FROM_CLASS (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkSettingsClass, theme_change),
+                  g_signal_accumulator_first_wins, NULL,
+                  NULL,
+                  G_TYPE_STRING, 0);
+
 }
 
 static GtkSettings *
@@ -966,6 +1005,7 @@ gtk_settings_provider_iface_init (GtkStyleProviderInterface *iface)
 
 static void
 gtk_settings_finalize (GObject *object)
+
 {
   GtkSettings *settings = GTK_SETTINGS (object);
   guint i;
@@ -1637,7 +1677,7 @@ settings_update_provider (GdkDisplay      *display,
  */
 
 static char *
-get_theme_name (GtkSettings  *settings)
+gtk_settings_theme_change (GtkSettings  *settings)
 {
   char *theme_name = NULL;
   char *theme;
@@ -1675,11 +1715,11 @@ get_theme_name (GtkSettings  *settings)
 static void
 settings_update_theme (GtkSettings *settings)
 {
-  gchar *theme_name;
-  const gchar *theme_dir;
-  gchar *path;
+  char *theme_name;
+  const char *theme_dir;
+  char *path;
 
-  theme_name = get_theme_name (settings);
+  g_signal_emit (settings, signals[THEME_CHANGE], 0, &theme_name);
 
   gtk_css_provider_load_named (settings->theme_provider, theme_name);
 
