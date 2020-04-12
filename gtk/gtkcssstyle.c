@@ -412,11 +412,16 @@ add_pango_attr (PangoAttrList  *attrs,
 }
 
 static void
-append_separated (GString *s, const char *text)
+append_separated (GString    **s,
+                  const char  *text)
 {
-  if (s->len > 0)
-    g_string_append (s, ", ");
-  g_string_append (s, text);
+  if (G_UNLIKELY (!*s))
+    *s = g_string_new (NULL);
+
+  if ((*s)->len > 0)
+    g_string_append (*s, ", ");
+
+  g_string_append (*s, text);
 }
 
 PangoAttrList *
@@ -472,15 +477,15 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
 
   /* OpenType features */
 
-  s = g_string_new ("");
+  s = NULL;
 
   switch (_gtk_css_font_kerning_value_get (style->font_variant->font_kerning))
     {
     case GTK_CSS_FONT_KERNING_NORMAL:
-      append_separated (s, "kern 1");
+      append_separated (&s, "kern 1");
       break;
     case GTK_CSS_FONT_KERNING_NONE:
-      append_separated (s, "kern 0");
+      append_separated (&s, "kern 0");
       break;
     case GTK_CSS_FONT_KERNING_AUTO:
     default:
@@ -493,34 +498,34 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
       /* all defaults */
     }
   else if (ligatures == GTK_CSS_FONT_VARIANT_LIGATURE_NONE)
-    append_separated (s, "liga 0, clig 0, dlig 0, hlig 0, calt 0");
+    append_separated (&s, "liga 0, clig 0, dlig 0, hlig 0, calt 0");
   else
     {
       if (ligatures & GTK_CSS_FONT_VARIANT_LIGATURE_COMMON_LIGATURES)
-        append_separated (s, "liga 1, clig 1");
+        append_separated (&s, "liga 1, clig 1");
       if (ligatures & GTK_CSS_FONT_VARIANT_LIGATURE_NO_COMMON_LIGATURES)
-        append_separated (s, "liga 0, clig 0");
+        append_separated (&s, "liga 0, clig 0");
       if (ligatures & GTK_CSS_FONT_VARIANT_LIGATURE_DISCRETIONARY_LIGATURES)
-        append_separated (s, "dlig 1");
+        append_separated (&s, "dlig 1");
       if (ligatures & GTK_CSS_FONT_VARIANT_LIGATURE_NO_DISCRETIONARY_LIGATURES)
-        append_separated (s, "dlig 0");
+        append_separated (&s, "dlig 0");
       if (ligatures & GTK_CSS_FONT_VARIANT_LIGATURE_HISTORICAL_LIGATURES)
-        append_separated (s, "hlig 1");
+        append_separated (&s, "hlig 1");
       if (ligatures & GTK_CSS_FONT_VARIANT_LIGATURE_NO_HISTORICAL_LIGATURES)
-        append_separated (s, "hlig 0");
+        append_separated (&s, "hlig 0");
       if (ligatures & GTK_CSS_FONT_VARIANT_LIGATURE_CONTEXTUAL)
-        append_separated (s, "calt 1");
+        append_separated (&s, "calt 1");
       if (ligatures & GTK_CSS_FONT_VARIANT_LIGATURE_NO_CONTEXTUAL)
-        append_separated (s, "calt 0");
+        append_separated (&s, "calt 0");
     }
 
   switch (_gtk_css_font_variant_position_value_get (style->font_variant->font_variant_position))
     {
     case GTK_CSS_FONT_VARIANT_POSITION_SUB:
-      append_separated (s, "subs 1");
+      append_separated (&s, "subs 1");
       break;
     case GTK_CSS_FONT_VARIANT_POSITION_SUPER:
-      append_separated (s, "sups 1");
+      append_separated (&s, "sups 1");
       break;
     case GTK_CSS_FONT_VARIANT_POSITION_NORMAL:
     default:
@@ -530,22 +535,22 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   switch (_gtk_css_font_variant_caps_value_get (style->font_variant->font_variant_caps))
     {
     case GTK_CSS_FONT_VARIANT_CAPS_SMALL_CAPS:
-      append_separated (s, "smcp 1");
+      append_separated (&s, "smcp 1");
       break;
     case GTK_CSS_FONT_VARIANT_CAPS_ALL_SMALL_CAPS:
-      append_separated (s, "c2sc 1, smcp 1");
+      append_separated (&s, "c2sc 1, smcp 1");
       break;
     case GTK_CSS_FONT_VARIANT_CAPS_PETITE_CAPS:
-      append_separated (s, "pcap 1");
+      append_separated (&s, "pcap 1");
       break;
     case GTK_CSS_FONT_VARIANT_CAPS_ALL_PETITE_CAPS:
-      append_separated (s, "c2pc 1, pcap 1");
+      append_separated (&s, "c2pc 1, pcap 1");
       break;
     case GTK_CSS_FONT_VARIANT_CAPS_UNICASE:
-      append_separated (s, "unic 1");
+      append_separated (&s, "unic 1");
       break;
     case GTK_CSS_FONT_VARIANT_CAPS_TITLING_CAPS:
-      append_separated (s, "titl 1");
+      append_separated (&s, "titl 1");
       break;
     case GTK_CSS_FONT_VARIANT_CAPS_NORMAL:
     default:
@@ -560,27 +565,27 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   else
     {
       if (numeric & GTK_CSS_FONT_VARIANT_NUMERIC_LINING_NUMS)
-        append_separated (s, "lnum 1");
+        append_separated (&s, "lnum 1");
       if (numeric & GTK_CSS_FONT_VARIANT_NUMERIC_OLDSTYLE_NUMS)
-        append_separated (s, "onum 1");
+        append_separated (&s, "onum 1");
       if (numeric & GTK_CSS_FONT_VARIANT_NUMERIC_PROPORTIONAL_NUMS)
-        append_separated (s, "pnum 1");
+        append_separated (&s, "pnum 1");
       if (numeric & GTK_CSS_FONT_VARIANT_NUMERIC_TABULAR_NUMS)
-        append_separated (s, "tnum 1");
+        append_separated (&s, "tnum 1");
       if (numeric & GTK_CSS_FONT_VARIANT_NUMERIC_DIAGONAL_FRACTIONS)
-        append_separated (s, "frac 1");
+        append_separated (&s, "frac 1");
       if (numeric & GTK_CSS_FONT_VARIANT_NUMERIC_STACKED_FRACTIONS)
-        append_separated (s, "afrc 1");
+        append_separated (&s, "afrc 1");
       if (numeric & GTK_CSS_FONT_VARIANT_NUMERIC_ORDINAL)
-        append_separated (s, "ordn 1");
+        append_separated (&s, "ordn 1");
       if (numeric & GTK_CSS_FONT_VARIANT_NUMERIC_SLASHED_ZERO)
-        append_separated (s, "zero 1");
+        append_separated (&s, "zero 1");
     }
 
   switch (_gtk_css_font_variant_alternate_value_get (style->font_variant->font_variant_alternates))
     {
     case GTK_CSS_FONT_VARIANT_ALTERNATE_HISTORICAL_FORMS:
-      append_separated (s, "hist 1");
+      append_separated (&s, "hist 1");
       break;
     case GTK_CSS_FONT_VARIANT_ALTERNATE_NORMAL:
     default:
@@ -595,34 +600,37 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   else
     {
       if (east_asian & GTK_CSS_FONT_VARIANT_EAST_ASIAN_JIS78)
-        append_separated (s, "jp78 1");
+        append_separated (&s, "jp78 1");
       if (east_asian & GTK_CSS_FONT_VARIANT_EAST_ASIAN_JIS83)
-        append_separated (s, "jp83 1");
+        append_separated (&s, "jp83 1");
       if (east_asian & GTK_CSS_FONT_VARIANT_EAST_ASIAN_JIS90)
-        append_separated (s, "jp90 1");
+        append_separated (&s, "jp90 1");
       if (east_asian & GTK_CSS_FONT_VARIANT_EAST_ASIAN_JIS04)
-        append_separated (s, "jp04 1");
+        append_separated (&s, "jp04 1");
       if (east_asian & GTK_CSS_FONT_VARIANT_EAST_ASIAN_SIMPLIFIED)
-        append_separated (s, "smpl 1");
+        append_separated (&s, "smpl 1");
       if (east_asian & GTK_CSS_FONT_VARIANT_EAST_ASIAN_TRADITIONAL)
-        append_separated (s, "trad 1");
+        append_separated (&s, "trad 1");
       if (east_asian & GTK_CSS_FONT_VARIANT_EAST_ASIAN_FULL_WIDTH)
-        append_separated (s, "fwid 1");
+        append_separated (&s, "fwid 1");
       if (east_asian & GTK_CSS_FONT_VARIANT_EAST_ASIAN_PROPORTIONAL)
-        append_separated (s, "pwid 1");
+        append_separated (&s, "pwid 1");
       if (east_asian & GTK_CSS_FONT_VARIANT_EAST_ASIAN_RUBY)
-        append_separated (s, "ruby 1");
+        append_separated (&s, "ruby 1");
     }
 
   settings = gtk_css_font_features_value_get_features (style->font->font_feature_settings);
   if (settings)
     {
-      append_separated (s, settings);
+      append_separated (&s, settings);
       g_free (settings);
     }
 
-  attrs = add_pango_attr (attrs, pango_attr_font_features_new (s->str));
-  g_string_free (s, TRUE);
+  if (s)
+    {
+      attrs = add_pango_attr (attrs, pango_attr_font_features_new (s->str));
+      g_string_free (s, TRUE);
+    }
 
   return attrs;
 }
@@ -672,7 +680,8 @@ gtk_css_style_get_pango_font (GtkCssStyle *style)
 
   v = style->font->font_variation_settings;
   str = gtk_css_font_variations_value_get_variations (v);
-  pango_font_description_set_variations (description, str);
+  if (str)
+    pango_font_description_set_variations (description, str);
   g_free (str);
 
   return description;
