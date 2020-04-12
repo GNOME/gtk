@@ -1043,7 +1043,6 @@ static void create_labels (GtkWidget *widget)
       label = gtk_label_new ("This label is underlined!\n"
 			     "This one is underlined (\343\201\223\343\202\223\343\201\253\343\201\241\343\201\257) in quite a funky fashion");
       gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-      gtk_label_set_pattern (GTK_LABEL (label), "_________________________ _ _________ _ _____ _ __ __  ___ ____ _____");
       gtk_container_add (GTK_CONTAINER (frame), label);
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
