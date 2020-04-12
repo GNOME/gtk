@@ -517,10 +517,6 @@ static void     gtk_label_buildable_custom_finished  (GtkBuildable       *builda
                                                       GObject            *child,
                                                       const gchar        *tagname,
                                                       gpointer            user_data);
-
-
-
-static void connect_mnemonics_visible_notify    (GtkLabel   *label);
 static gboolean      separate_uline_pattern     (const gchar  *str,
                                                  guint        *accel_key,
                                                  gchar       **new_str,
@@ -1505,12 +1501,26 @@ gtk_label_mnemonic_activate (GtkWidget *widget,
 }
 
 static void
+label_mnemonics_visible_changed (GtkWidget  *widget,
+                                 GParamSpec *pspec,
+                                 gpointer    data)
+{
+  gboolean visible;
+
+  g_object_get (widget, "mnemonics-visible", &visible, NULL);
+  _gtk_label_mnemonics_visible_apply_recursively (widget, visible);
+}
+
+static void
 gtk_label_setup_mnemonic (GtkLabel *label)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
   GtkWidget *widget = GTK_WIDGET (label);
   GtkShortcut *shortcut;
-  
+  GtkNative *native;
+  gboolean connected;
+  gboolean mnemonics_visible;
+
   if (priv->mnemonic_keyval == GDK_KEY_VoidSymbol)
     {
       if (priv->mnemonic_controller)
@@ -1538,7 +1548,28 @@ gtk_label_setup_mnemonic (GtkLabel *label)
       g_object_unref (shortcut);
     }
 
-  connect_mnemonics_visible_notify (GTK_LABEL (widget));
+  /* Connect to notify::mnemonics-visible of the root */
+  native = gtk_widget_get_native (GTK_WIDGET (label));
+  if (!GTK_IS_WINDOW (native) && !GTK_IS_POPOVER (native))
+    return;
+
+  /* always set up this widgets initial value */
+  g_object_get (native, "mnemonics-visible", &mnemonics_visible, NULL);
+  priv->mnemonics_visible = mnemonics_visible;
+
+  connected =
+    GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (native), quark_mnemonics_visible_connected));
+
+  if (!connected)
+    {
+      g_signal_connect (native,
+                        "notify::mnemonics-visible",
+                        G_CALLBACK (label_mnemonics_visible_changed),
+                        label);
+      g_object_set_qdata (G_OBJECT (native),
+                          quark_mnemonics_visible_connected,
+                          GINT_TO_POINTER (1));
+    }
 }
 
 static void
@@ -1649,18 +1680,6 @@ _gtk_label_mnemonics_visible_apply_recursively (GtkWidget *widget,
         }
     }
 }
-
-static void
-label_mnemonics_visible_changed (GtkWidget  *widget,
-                                 GParamSpec *pspec,
-                                 gpointer    data)
-{
-  gboolean visible;
-
-  g_object_get (widget, "mnemonics-visible", &visible, NULL);
-  _gtk_label_mnemonics_visible_apply_recursively (widget, visible);
-}
-
 static void
 label_mnemonic_widget_weak_notify (gpointer      data,
 				   GObject      *where_the_object_was)
@@ -4254,38 +4273,6 @@ gtk_label_click_gesture_released (GtkGestureClick *gesture,
     {
       emit_activate_link (label, info->active_link);
       info->link_clicked = FALSE;
-    }
-}
-
-static void
-connect_mnemonics_visible_notify (GtkLabel *label)
-{
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  GtkNative *native;
-  gboolean connected;
-  gboolean mnemonics_visible;
-
-  native = gtk_widget_get_native (GTK_WIDGET (label));
-
-  if (!GTK_IS_WINDOW (native) && !GTK_IS_POPOVER (native))
-    return;
-
-  /* always set up this widgets initial value */
-  g_object_get (native, "mnemonics-visible", &mnemonics_visible, NULL);
-  priv->mnemonics_visible = mnemonics_visible;
-
-  connected =
-    GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (native), quark_mnemonics_visible_connected));
-
-  if (!connected)
-    {
-      g_signal_connect (native,
-                        "notify::mnemonics-visible",
-                        G_CALLBACK (label_mnemonics_visible_changed),
-                        label);
-      g_object_set_qdata (G_OBJECT (native),
-                          quark_mnemonics_visible_connected,
-                          GINT_TO_POINTER (1));
     }
 }
 
