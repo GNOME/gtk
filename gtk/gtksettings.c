@@ -146,6 +146,7 @@ enum {
   PROP_SPLIT_CURSOR,
   PROP_CURSOR_ASPECT_RATIO,
   PROP_THEME_NAME,
+  PROP_USER_THEME_PREFERENCE,
   PROP_ICON_THEME_NAME,
   PROP_DND_DRAG_THRESHOLD,
   PROP_FONT_NAME,
@@ -399,6 +400,14 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   DEFAULT_THEME_NAME,
                                                                   GTK_PARAM_READWRITE));
   g_assert (result == PROP_THEME_NAME);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_int ("gtk-user-theme-preference",
+                                                               P_("User theme preference"),
+                                                               P_("User theme preference, 0=light, 1=dark, -1=default"),
+                                                               -1, 1, -1,
+                                                               GTK_PARAM_READWRITE));
+  g_assert (result == PROP_USER_THEME_PREFERENCE);
 
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-icon-theme-name",
@@ -1224,6 +1233,7 @@ gtk_settings_notify (GObject    *object,
       gtk_style_context_reset_widgets (settings->display);
       break;
     case PROP_THEME_NAME:
+    case PROP_USER_THEME_PREFERENCE:
       settings_update_theme (settings);
       break;
     case PROP_XFT_DPI:
@@ -1613,10 +1623,83 @@ settings_update_provider (GdkDisplay      *display,
     }
 }
 
+/* Implement the user theme preference, as well as we can
+ * without proper theme apis. We treat the builting themes
+ * as light/dark pairs:
+ * 
+ * Adwaita/Adwaita-dark
+ * HighContrast/HighContrastInverse
+ *
+ * and we also look for theme pairs of the form
+ *
+ * NAME/NAME-dark
+ */
+
+extern char *_gtk_css_find_theme (const char *theme);
+
+static gboolean
+theme_exists (const char *theme)
+{
+  char *path;
+
+  path = _gtk_css_find_theme (theme);
+  if (path)
+    {
+      g_free (path);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static char *
+get_light_theme_variant (const char *theme)
+{
+  if (g_str_equal (theme, "HighContrastInverse"))
+    return g_strdup ("HighContrast");
+
+  if (g_str_equal (theme, "Adwaita-dark"))
+    return g_strdup ("Adwaita");
+
+  if (g_str_has_suffix (theme, "-dark"))
+    {
+      char *light = g_strndup (theme, strlen (theme) - strlen ("-dark"));
+      if (theme_exists (light))
+        return light;
+
+      g_free (light);   
+    }
+
+  return g_strdup (theme);
+}
+
+static char *
+get_dark_theme_variant (const char *theme)
+{
+  if (g_str_equal (theme, "HighContrast"))
+    return g_strdup ("HighContrastInverse");
+
+  if (g_str_equal (theme, "Adwaita"))
+    return g_strdup ("Adwaita-dark");
+
+  if (!g_str_has_suffix (theme, "-dark"))
+    {
+      char *dark = g_strconcat (theme, "-dark", NULL);
+      if (theme_exists (dark))
+        return dark;
+
+      g_free (dark);   
+    }
+
+  return g_strdup (theme);
+}
+
 static char *
 get_theme_name (GtkSettings  *settings)
 {
   char *theme_name = NULL;
+  char *theme;
+  int user_pref;
 
   if (g_getenv ("GTK_THEME"))
     theme_name = g_strdup (g_getenv ("GTK_THEME"));
@@ -1626,12 +1709,25 @@ get_theme_name (GtkSettings  *settings)
 
   g_object_get (settings,
                 "gtk-theme-name", &theme_name,
+                "gtk-user-theme-preference", &user_pref,
                 NULL);
 
-  if (theme_name)
-    return theme_name;
+  switch (user_pref)
+    {
+    case 0:
+      theme = get_light_theme_variant (theme_name);
+      g_free (theme_name);
+      break;
+    case 1:
+      theme = get_dark_theme_variant (theme_name);
+      g_free (theme_name);
+      break;
+    default:
+      theme = theme_name;
+      break;
+    }
 
-  return g_strdup (DEFAULT_THEME_NAME);
+  return theme;
 }
 
 static void
