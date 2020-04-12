@@ -1351,6 +1351,7 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (PANGO_IS_LAYOUT (layout));
   g_return_if_fail (index >= 0);
+  g_return_if_fail (index <= strlen (pango_layout_get_text (layout)));
 
   g_object_get (gtk_settings_get_for_display (priv->display),
                 "gtk-split-cursor", &split_cursor,
