@@ -174,7 +174,7 @@ ul.images li {
         <div class="failures">
           <h4><a name="{{ suite_result.suite_name }}-failed">Failures</a></h4>
           <ul class="failed">
-            {% for failure in suite_result.failures if failure.result in [ 'FAIL', 'UNEXPECTEDPASS' ] %}
+            {% for failure in suite_result.failures if failure.result in [ 'ERROR', 'FAIL', 'UNEXPECTEDPASS' ] %}
             <li><a name="{{ failure.name }}">{{ failure.name }}</a> - result: <span class="result fail">{{ failure.result }}</span><br/>
               {% if failure.stdout %}
               Output: <pre>{{ failure.stdout }}</pre>
@@ -207,24 +207,6 @@ ul.images li {
         </div>
 
         <div class="successes">
-          <h4><a name="{{ suite_result.suite_name }}-skipped">Skipped</a></h4>
-          <ul>
-            {% for success in suite_result.successes if success.result == 'SKIP' %}
-            <li>{{ success.name }} - result: <span class="result skip">{{ success.result }}</li>
-            {% else %}
-            <li>None</li>
-            {% endfor %}
-          </ul>
-
-          <h4><a name="{{ suite_result.suite_name }}-passed">Passed</a></h4>
-          <ul class="passed">
-            {% for success in suite_result.successes if success.result == 'OK' %}
-            <li>{{ success.name }} - result: <span class="result pass">{{ success.result }}</li>
-            {% else %}
-            <li>None</li>
-            {% endfor %}
-          </ul>
-
           <h4><a name="{{ suite_result.suite_name }}-expected-fail">Expected failures</a></h4>
           <ul>
           {% for success in suite_result.successes if success.result == 'EXPECTEDFAIL' %}
@@ -243,6 +225,24 @@ ul.images li {
           {% else %}
             <li>None</li>
           {% endfor %}
+          </ul>
+
+          <h4><a name="{{ suite_result.suite_name }}-skipped">Skipped</a></h4>
+          <ul>
+            {% for success in suite_result.successes if success.result == 'SKIP' %}
+            <li>{{ success.name }} - result: <span class="result skip">{{ success.result }}</li>
+            {% else %}
+            <li>None</li>
+            {% endfor %}
+          </ul>
+
+          <h4><a name="{{ suite_result.suite_name }}-passed">Passed</a></h4>
+          <ul class="passed">
+            {% for success in suite_result.successes if success.result == 'OK' %}
+            <li>{{ success.name }} - result: <span class="result pass">{{ success.result }}</li>
+            {% else %}
+            <li>None</li>
+            {% endfor %}
           </ul>
         </div>
 
@@ -331,7 +331,7 @@ for name, units in suites.items():
     print('Processing {} suite {}:'.format(project_name, suite_name))
 
     def if_failed(unit):
-        if unit['result'] in ['FAIL', 'UNEXPECTEDPASS', 'TIMEOUT']:
+        if unit['result'] in ['FAIL', 'UNEXPECTEDPASS', 'TIMEOUT', 'ERROR',]:
             return True
         return False
 
