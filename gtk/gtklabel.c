@@ -5804,7 +5804,6 @@ emit_activate_link (GtkLabel     *label,
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
   gboolean handled;
-  GtkStateFlags state;
 
   g_signal_emit (label, signals[ACTIVATE_LINK], 0, link->uri, &handled);
 
@@ -5816,10 +5815,7 @@ emit_activate_link (GtkLabel     *label,
       priv->select_info && priv->select_info->links)
     {
       link->visited = TRUE;
-      state = gtk_css_node_get_state (link->cssnode);
-      gtk_css_node_set_state (link->cssnode, (state & ~GTK_STATE_FLAG_LINK) | GTK_STATE_FLAG_VISITED);
-      /* FIXME: shouldn't have to redo everything here */
-      gtk_label_clear_layout (label);
+      update_link_state (label);
     }
 }
 
