@@ -399,32 +399,6 @@ check_for_selection_change (GtkLabelAccessible *accessible,
   return ret_val;
 }
 
-static void
-gtk_label_accessible_notify_gtk (GObject    *obj,
-                                 GParamSpec *pspec)
-{
-  GtkWidget *widget = GTK_WIDGET (obj);
-  AtkObject* atk_obj = gtk_widget_get_accessible (widget);
-  GtkLabelAccessible *accessible;
-
-  accessible = GTK_LABEL_ACCESSIBLE (atk_obj);
-
-  if (g_strcmp0 (pspec->name, "cursor-position") == 0)
-    {
-      g_signal_emit_by_name (atk_obj, "text-caret-moved",
-                             _gtk_label_get_cursor_position (GTK_LABEL (widget)));
-      if (check_for_selection_change (accessible, GTK_LABEL (widget)))
-        g_signal_emit_by_name (atk_obj, "text-selection-changed");
-    }
-  else if (g_strcmp0 (pspec->name, "selection-bound") == 0)
-    {
-      if (check_for_selection_change (accessible, GTK_LABEL (widget)))
-        g_signal_emit_by_name (atk_obj, "text-selection-changed");
-    }
-  else
-    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_label_accessible_parent_class)->notify_gtk (obj, pspec);
-}
-
 /* atkobject.h */
 
 static AtkStateSet *
@@ -574,7 +548,6 @@ gtk_label_accessible_class_init (GtkLabelAccessibleClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-  GtkWidgetAccessibleClass *widget_class = GTK_WIDGET_ACCESSIBLE_CLASS (klass);
 
   object_class->finalize = gtk_label_accessible_finalize;
 
@@ -585,11 +558,38 @@ gtk_label_accessible_class_init (GtkLabelAccessibleClass *klass)
 
   class->get_n_children = gtk_label_accessible_get_n_children;
   class->ref_child = gtk_label_accessible_ref_child;
-
-  widget_class->notify_gtk = gtk_label_accessible_notify_gtk;
 }
 
 /* 'Public' API {{{2 */
+
+
+void
+_gtk_label_accessible_selection_bound_changed (GtkLabel *label)
+{
+  AtkObject *obj;
+
+  obj = _gtk_widget_peek_accessible (GTK_WIDGET (label));
+  if (obj == NULL)
+    return;
+
+  if (check_for_selection_change (GTK_LABEL_ACCESSIBLE (obj), label))
+    g_signal_emit_by_name (obj, "text-selection-changed");
+}
+
+void
+_gtk_label_accessible_cursor_position_changed (GtkLabel *label)
+{
+  AtkObject *obj;
+
+  obj = _gtk_widget_peek_accessible (GTK_WIDGET (label));
+  if (obj == NULL)
+    return;
+
+  g_signal_emit_by_name (obj, "text-caret-moved", _gtk_label_get_cursor_position (label));
+
+  if (check_for_selection_change (GTK_LABEL_ACCESSIBLE (obj), label))
+    g_signal_emit_by_name (obj, "text-selection-changed");
+}
 
 void
 _gtk_label_accessible_text_deleted (GtkLabel *label)
