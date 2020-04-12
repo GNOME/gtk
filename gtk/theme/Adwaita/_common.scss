@@ -1085,8 +1085,6 @@ button:link,
 button:visited {
   @extend %undecorated_button;
 
-  @extend %link;
-
   text-shadow: none;
 
   &:hover,
