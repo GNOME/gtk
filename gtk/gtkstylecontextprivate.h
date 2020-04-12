@@ -53,8 +53,6 @@ void           _gtk_style_context_get_cursor_color           (GtkStyleContext   
                                                               GdkRGBA            *primary_color,
                                                               GdkRGBA            *secondary_color);
 
-PangoAttrList *_gtk_style_context_get_pango_attributes       (GtkStyleContext *context);
-
 /* Accessibility support */
 AtkAttributeSet *_gtk_style_context_get_attributes           (AtkAttributeSet    *attributes,
                                                               GtkStyleContext    *context);
