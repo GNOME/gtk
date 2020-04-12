@@ -663,7 +663,6 @@
   <object class="GtkSizeGroup">
     <widgets>
       <widget name="theme_label"/>
-      <widget name="dark_label"/>
       <widget name="icon_label"/>
       <widget name="cursor_label"/>
       <widget name="cursor_size_label"/>
