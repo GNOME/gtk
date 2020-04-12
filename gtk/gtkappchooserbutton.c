@@ -365,12 +365,28 @@ gtk_app_chooser_button_populate (GtkAppChooserButton *self)
 
       if (default_app != NULL)
         {
-          get_first_iter (priv->store, &iter);
-          cycled_recommended = TRUE;
+          /* The default app matches all types and sub-types of the
+           * content type we're looking at, whereas the recomended
+           * apps match the content type exactly. If the default app
+           * does not appear in the recommended apps then we might
+           * end up showing a text editor for calendar-related files,
+           * which is not helpful.
+           *
+           * See: https://gitlab.gnome.org/GNOME/gtk/issues/377
+           */
+          if (g_list_find (recommended_apps, default_app) != NULL)
+            {
+              get_first_iter (priv->store, &iter);
+              cycled_recommended = TRUE;
 
-          insert_one_application (self, default_app, &iter);
+              insert_one_application (self, default_app, &iter);
 
-          g_object_unref (default_app);
+              g_object_unref (default_app);
+            }
+          else
+            {
+              g_clear_object (&default_app);
+            }
         }
     }
 
