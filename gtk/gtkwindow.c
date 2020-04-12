@@ -1425,7 +1425,7 @@ drag_gesture_update_cb (GtkGestureDrag *gesture,
                                    gtk_gesture_get_device (GTK_GESTURE (gesture)),
                                    gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)),
                                    (int)start_x, (int)start_y,
-                                   gdk_event_get_time (gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (gesture))));
+                                   gtk_event_controller_get_current_event_time (GTK_EVENT_CONTROLLER (gesture)));
 
       gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
       gtk_event_controller_reset (GTK_EVENT_CONTROLLER (priv->click_gesture));

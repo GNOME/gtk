@@ -3359,8 +3359,8 @@ gdk_wayland_toplevel_set_transient_for (GdkWaylandToplevel *toplevel,
                                         GdkSurface         *parent)
 {
   g_return_if_fail (!parent || GDK_IS_WAYLAND_TOPLEVEL (parent));
-  g_return_if_fail (gdk_surface_get_display (GDK_SURFACE (toplevel)) ==
-                    gdk_surface_get_display (parent));
+  g_return_if_fail (!parent ||
+                    gdk_surface_get_display (GDK_SURFACE (toplevel)) == gdk_surface_get_display (parent));
 
   if (parent)
     {
