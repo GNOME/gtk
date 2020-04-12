@@ -5105,7 +5105,9 @@ gtk_mount_operation_set_parent
 gtk_mount_operation_get_parent
 gtk_mount_operation_set_display
 gtk_mount_operation_get_display
-gtk_show_uri_on_window
+gtk_show_uri_full
+gtk_show_uri_full_finish
+gtk_show_uri
 <SUBSECTION Standard>
 GTK_IS_MOUNT_OPERATION
 GTK_IS_MOUNT_OPERATION_CLASS
