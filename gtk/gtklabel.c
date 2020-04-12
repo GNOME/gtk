@@ -465,8 +465,6 @@ static gboolean gtk_label_set_use_markup_internal    (GtkLabel  *label,
                                                       gboolean   val);
 static gboolean gtk_label_set_use_underline_internal (GtkLabel  *label,
                                                       gboolean   val);
-static void gtk_label_set_uline_text_internal    (GtkLabel      *label,
-						  const gchar   *str);
 static void gtk_label_set_markup_internal        (GtkLabel      *label,
 						  const gchar   *str,
 						  gboolean       with_uline);
@@ -510,11 +508,6 @@ static void     gtk_label_buildable_custom_finished  (GtkBuildable       *builda
                                                       GObject            *child,
                                                       const gchar        *tagname,
                                                       gpointer            user_data);
-static gboolean      separate_uline_pattern     (const gchar  *str,
-                                                 guint        *accel_key,
-                                                 gchar       **new_str,
-                                                 gchar       **pattern);
-
 
 /* For selectable labels: */
 static void gtk_label_move_cursor        (GtkLabel        *label,
@@ -1457,7 +1450,6 @@ label_mnemonics_visible_changed (GtkWidget  *widget,
 {
   gboolean visible;
 
-  g_message (__FUNCTION__);
   g_object_get (widget, "mnemonics-visible", &visible, NULL);
   _gtk_label_mnemonics_visible_apply_recursively (widget, visible);
 }
@@ -1815,10 +1807,8 @@ gtk_label_recalculate (GtkLabel *label)
   gtk_label_clear_layout (label);
   gtk_label_clear_select_info (label);
 
-  if (priv->use_markup)
+  if (priv->use_markup || priv->use_underline)
     gtk_label_set_markup_internal (label, priv->label, priv->use_underline);
-  else if (priv->use_underline)
-    gtk_label_set_uline_text_internal (label, priv->label);
   else
     {
       g_clear_pointer (&priv->markup_attrs, pango_attr_list_unref);
@@ -2264,6 +2254,79 @@ gtk_label_ensure_has_tooltip (GtkLabel *label)
   gtk_widget_set_has_tooltip (GTK_WIDGET (label), has_tooltip);
 }
 
+/* Reads @text and extracts the accel key, if any.
+ * @new_text will be set to the given text with the first _ removed.
+ *
+ * Returned will be the one underline attribute used for the mnemonic
+ * */
+static void
+extract_mnemonic_keyval (const char      *text,
+                         guint           *out_accel_key,
+                         char           **out_new_text,
+                         PangoAttribute **out_mnemonic_attribute)
+{
+  const gsize text_len = strlen (text);
+  gunichar c;
+  const char *p;
+
+  p = text;
+  for (;;)
+    {
+      const char *_index;
+
+      c = g_utf8_get_char (p);
+
+      if (c == '\0')
+        break;
+
+      if (c != '_')
+        {
+          p = g_utf8_next_char (p);
+          continue;
+        }
+
+      _index = p;
+
+      p = g_utf8_next_char (p);
+      c = g_utf8_get_char (p);
+
+      if (c != '_' && c != '0')
+        {
+          const gsize byte_index = p - text - 1; /* Of the _ */
+
+          /* c is the accel key */
+          if (out_accel_key)
+            *out_accel_key = gdk_keyval_to_lower (gdk_unicode_to_keyval (c));
+          if (out_new_text)
+            {
+              *out_new_text = g_malloc (text_len);
+              memcpy (*out_new_text, text, byte_index);
+              memcpy (*out_new_text + byte_index, p, text_len - byte_index);
+            }
+
+          if (out_mnemonic_attribute)
+            {
+              PangoAttribute *attr = pango_attr_underline_new (PANGO_UNDERLINE_LOW);
+              attr->start_index = _index - text;
+              attr->end_index = p - text;
+              *out_mnemonic_attribute = attr;
+            }
+
+          return;
+        }
+
+      p = g_utf8_next_char (p);
+    }
+
+  /* No accel key found */
+  if (out_accel_key)
+    *out_accel_key = GDK_KEY_VoidSymbol;
+  if (out_new_text)
+    *out_new_text = NULL;
+  if (out_mnemonic_attribute)
+    *out_mnemonic_attribute = NULL;
+}
+
 static void
 gtk_label_set_markup_internal (GtkLabel    *label,
                                const gchar *str,
@@ -2273,20 +2336,13 @@ gtk_label_set_markup_internal (GtkLabel    *label,
   gchar *text = NULL;
   GError *error = NULL;
   PangoAttrList *attrs = NULL;
-  gunichar accel_char = 0;
   gchar *str_for_display = NULL;
-  gchar *str_for_accel = NULL;
   GtkLabelLink *links = NULL;
   guint n_links = 0;
+  PangoAttribute *mnemonic_attr = NULL;
 
   if (!parse_uri_markup (label, str, &str_for_display, &links, &n_links, &error))
-    {
-      g_warning ("Failed to set text '%s' from markup due to error parsing markup: %s",
-                 str, error->message);
-      g_error_free (error);
-      return;
-    }
-
+    goto error_set;
 
   if (links)
     {
@@ -2298,68 +2354,57 @@ gtk_label_set_markup_internal (GtkLabel    *label,
       gtk_widget_add_css_class (GTK_WIDGET (label), "link");
     }
 
-  if (with_uline)
-    {
-      gboolean enable_mnemonics = TRUE;
+  if (!with_uline)
+   {
+no_uline:
+      /* Extract the text to display */
+      if (!pango_parse_markup (str_for_display, -1, 0, &attrs, &text, NULL, &error))
+        goto error_set;
+   }
+  else /* Underline AND markup is a little more complicated... */
+   {
+      char *new_text = NULL;
+      guint accel_keyval;
       gboolean auto_mnemonics = TRUE;
+      gboolean do_mnemonics = priv->mnemonics_visible &&
+                              (!auto_mnemonics || gtk_widget_is_sensitive (GTK_WIDGET (label))) &&
+                              (!priv->mnemonic_widget || gtk_widget_is_sensitive (priv->mnemonic_widget));
 
-      str_for_accel = g_strdup (str_for_display);
+      /* Remove the mnemonic underline */
+      extract_mnemonic_keyval (str_for_display,
+                               &accel_keyval,
+                               &new_text,
+                               NULL);
+      if (!new_text) /* No underline found anyway */
+        goto no_uline;
 
-      if (!(enable_mnemonics && priv->mnemonics_visible &&
-            (!auto_mnemonics ||
-             (gtk_widget_is_sensitive (GTK_WIDGET (label)) &&
-              (!priv->mnemonic_widget ||
-               gtk_widget_is_sensitive (priv->mnemonic_widget))))))
+      priv->mnemonic_keyval = accel_keyval;
+
+      /* Extract the text to display */
+      if (!pango_parse_markup (new_text, -1, '_', &attrs, &text, NULL, &error))
+        goto error_set;
+
+      if (do_mnemonics)
         {
-          gchar *tmp;
-          gchar *pattern;
-          guint key;
+          /* text is now the final text, but we need to parse str_for_display once again
+           * *with* the mnemonic underline so we can remove the markup tags and get the
+           * proper attribute indices */
+          char *text_for_accel;
 
-          if (separate_uline_pattern (str_for_display, &key, &tmp, &pattern))
-            {
-              g_free (str_for_display);
-              str_for_display = tmp;
-              g_free (pattern);
-            }
+          if (!pango_parse_markup (str_for_display, -1, 0, NULL, &text_for_accel, NULL, &error))
+            goto error_set;
+
+          extract_mnemonic_keyval (text_for_accel,
+                                   NULL,
+                                   NULL,
+                                   &mnemonic_attr);
+          g_free (text_for_accel);
         }
-    }
 
-  /* Extract the text to display */
-  if (!pango_parse_markup (str_for_display,
-                           -1,
-                           with_uline ? '_' : 0,
-                           &attrs,
-                           &text,
-                           NULL,
-                           &error))
-    {
-      g_warning ("Failed to set text '%s' from markup due to error parsing markup: %s",
-                 str_for_display, error->message);
-      g_free (str_for_display);
-      g_free (str_for_accel);
-      g_error_free (error);
-      return;
-    }
-
-  /* Extract the accelerator character */
-  if (with_uline && !pango_parse_markup (str_for_accel,
-					 -1,
-					 '_',
-					 NULL,
-					 NULL,
-					 &accel_char,
-					 &error))
-    {
-      g_warning ("Failed to set text from markup due to error parsing markup: %s",
-                 error->message);
-      g_free (str_for_display);
-      g_free (str_for_accel);
-      g_error_free (error);
-      return;
-    }
+      g_free (new_text);
+   }
 
   g_free (str_for_display);
-  g_free (str_for_accel);
 
   if (text)
     gtk_label_set_text_internal (label, text);
@@ -2368,12 +2413,18 @@ gtk_label_set_markup_internal (GtkLabel    *label,
     {
       g_clear_pointer (&priv->markup_attrs, pango_attr_list_unref);
       priv->markup_attrs = attrs;
+
+      if (mnemonic_attr)
+        pango_attr_list_insert_before (priv->markup_attrs, mnemonic_attr);
     }
 
-  if (accel_char != 0)
-    priv->mnemonic_keyval = gdk_keyval_to_lower (gdk_unicode_to_keyval (accel_char));
-  else
-    priv->mnemonic_keyval = GDK_KEY_VoidSymbol;
+  return;
+
+error_set:
+  g_warning ("Failed to set text '%s' from markup due to error parsing markup: %s",
+             str, error->message);
+  g_error_free (error);
+
 }
 
 /**
@@ -2476,47 +2527,6 @@ gtk_label_get_text (GtkLabel *label)
   g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
 
   return priv->text;
-}
-
-static PangoAttrList *
-gtk_label_pattern_to_attrs (GtkLabel      *label,
-			    const gchar   *pattern)
-{
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  const char *start;
-  const char *p = priv->text;
-  const char *q = pattern;
-  PangoAttrList *attrs;
-
-  attrs = pango_attr_list_new ();
-
-  while (1)
-    {
-      while (*p && *q && *q != '_')
-	{
-	  p = g_utf8_next_char (p);
-	  q++;
-	}
-      start = p;
-      while (*p && *q && *q == '_')
-	{
-	  p = g_utf8_next_char (p);
-	  q++;
-	}
-      
-      if (p > start)
-	{
-	  PangoAttribute *attr = pango_attr_underline_new (PANGO_UNDERLINE_LOW);
-	  attr->start_index = start - priv->text;
-	  attr->end_index = p - priv->text;
-	  
-	  pango_attr_list_insert (attrs, attr);
-	}
-      else
-	break;
-    }
-
-  return attrs;
 }
 
 /**
@@ -3614,122 +3624,6 @@ gtk_label_snapshot (GtkWidget   *widget,
             }
         }
     }
-}
-
-static gboolean
-separate_uline_pattern (const gchar  *str,
-                        guint        *accel_key,
-                        gchar       **new_str,
-                        gchar       **pattern)
-{
-  gboolean underscore;
-  const gchar *src;
-  gchar *dest;
-  gchar *pattern_dest;
-
-  *accel_key = GDK_KEY_VoidSymbol;
-  *new_str = g_new (gchar, strlen (str) + 1);
-  *pattern = g_new (gchar, g_utf8_strlen (str, -1) + 1);
-
-  underscore = FALSE;
-
-  src = str;
-  dest = *new_str;
-  pattern_dest = *pattern;
-
-  while (*src)
-    {
-      gunichar c;
-      const gchar *next_src;
-
-      c = g_utf8_get_char (src);
-      if (c == (gunichar)-1)
-	{
-	  g_warning ("Invalid input string");
-	  g_free (*new_str);
-	  g_free (*pattern);
-
-	  return FALSE;
-	}
-      next_src = g_utf8_next_char (src);
-
-      if (underscore)
-	{
-	  if (c == '_')
-	    *pattern_dest++ = ' ';
-	  else
-	    {
-	      *pattern_dest++ = '_';
-	      if (*accel_key == GDK_KEY_VoidSymbol)
-		*accel_key = gdk_keyval_to_lower (gdk_unicode_to_keyval (c));
-	    }
-
-	  while (src < next_src)
-	    *dest++ = *src++;
-
-	  underscore = FALSE;
-	}
-      else
-	{
-	  if (c == '_')
-	    {
-	      underscore = TRUE;
-	      src = next_src;
-	    }
-	  else
-	    {
-	      while (src < next_src)
-		*dest++ = *src++;
-
-	      *pattern_dest++ = ' ';
-	    }
-	}
-    }
-
-  *dest = 0;
-  *pattern_dest = 0;
-
-  return TRUE;
-}
-
-static void
-gtk_label_set_uline_text_internal (GtkLabel   *label,
-                                   const char *str)
-{
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  guint accel_key = GDK_KEY_VoidSymbol;
-  gboolean auto_mnemonics = TRUE;
-  PangoAttrList *attrs;
-  char *new_str;
-  char *pattern;
-
-  g_return_if_fail (GTK_IS_LABEL (label));
-  g_return_if_fail (str != NULL);
-
-  /* Split text into the base text and a separate pattern
-   * of underscores.
-   */
-  if (!separate_uline_pattern (str, &accel_key, &new_str, &pattern))
-    return;
-
-  gtk_label_set_text_internal (label, new_str);
-
-  if (priv->mnemonics_visible && pattern &&
-      (!auto_mnemonics ||
-       (gtk_widget_is_sensitive (GTK_WIDGET (label)) &&
-        (!priv->mnemonic_widget ||
-         gtk_widget_is_sensitive (priv->mnemonic_widget)))))
-    attrs = gtk_label_pattern_to_attrs (label, pattern);
-  else
-    attrs = NULL;
-
-  if (priv->markup_attrs)
-    pango_attr_list_unref (priv->markup_attrs);
-  priv->markup_attrs = attrs;
-
-  priv->mnemonic_keyval = accel_key;
-
-  g_free (pattern);
 }
 
 /**
