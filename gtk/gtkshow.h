@@ -30,10 +30,22 @@
 G_BEGIN_DECLS
 
 GDK_AVAILABLE_IN_ALL
-gboolean gtk_show_uri_on_window (GtkWindow   *parent,
-                                 const char  *uri,
-                                 guint32      timestamp,
-                                 GError     **error);
+void gtk_show_uri_full (GtkWindow           *parent,
+                        const char          *uri,
+                        guint32              timestamp,
+                        GCancellable        *cancellable,
+                        GAsyncReadyCallback  callback,
+                        gpointer             user_data);
+
+GDK_AVAILABLE_IN_ALL
+gboolean gtk_show_uri_full_finish (GtkWindow     *parent,
+                                   GAsyncResult  *result,
+                                   GError       **error);
+
+GDK_AVAILABLE_IN_ALL
+void gtk_show_uri (GtkWindow  *parent,
+                   const char *uri,
+                   guint32     timestamp);
 
 G_END_DECLS
 
