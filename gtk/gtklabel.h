@@ -152,11 +152,6 @@ gboolean     gtk_label_get_single_line_mode  (GtkLabel *label);
 
 GDK_AVAILABLE_IN_ALL
 const gchar *gtk_label_get_current_uri (GtkLabel *label);
-GDK_AVAILABLE_IN_ALL
-void         gtk_label_set_track_visited_links  (GtkLabel *label,
-                                                 gboolean  track_links);
-GDK_AVAILABLE_IN_ALL
-gboolean     gtk_label_get_track_visited_links  (GtkLabel *label);
 
 GDK_AVAILABLE_IN_ALL
 void         gtk_label_set_xalign (GtkLabel *label,
