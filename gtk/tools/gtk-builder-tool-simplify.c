@@ -726,9 +726,10 @@ maybe_rename_property (Element *element, MyParserData *data)
     const char *new_name;
     const char *alt_names[3];
   } props[] = {
+    /* the "replacement" property is placed *after* the "added" properties */
     { "GtkPopover", "modal", GTK_TYPE_POPOVER, PROP_KIND_OBJECT, "autohide", { NULL, NULL, NULL } },
-    { "GtkWidget", "expand", GTK_TYPE_WIDGET, PROP_KIND_OBJECT, "hexpand", { "vexpand", NULL, NULL } },
-    { "GtkWidget", "margin", GTK_TYPE_WIDGET, PROP_KIND_OBJECT, "margin-left", { "margin-top", "margin-right", "margin-bottom" } },
+    { "GtkWidget", "expand", GTK_TYPE_WIDGET, PROP_KIND_OBJECT, "vexpand", { "hexpand", NULL, NULL } },
+    { "GtkWidget", "margin", GTK_TYPE_WIDGET, PROP_KIND_OBJECT, "margin-bottom", { "margin-start", "margin-end", "margin-top" } },
     { "GtkHeaderBar", "show-close-button", GTK_TYPE_HEADER_BAR, PROP_KIND_OBJECT, "show-title-buttons", { NULL, NULL, NULL } }
   };
   int i, k, l;
