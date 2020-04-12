@@ -1050,6 +1050,7 @@ list > row button.image-button:not(.flat) {
 button:link,
 link:link {
   color: $link_color;
+  text-decoration: underline;
 
   &:visited {
     color: $link_visited_color;
@@ -1097,9 +1098,6 @@ button:visited {
 
   > label {
     @extend %link;
-
-    text-decoration-line: underline;
-
   }
 }
 

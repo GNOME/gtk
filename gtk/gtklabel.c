@@ -2988,8 +2988,6 @@ gtk_label_update_layout_attributes (GtkLabel *label)
 
   if (priv->select_info && priv->select_info->links)
     {
-      const GdkRGBA *link_color;
-      PangoAttribute *attribute;
       guint i;
 
       attrs = pango_attr_list_new ();
@@ -2997,21 +2995,36 @@ gtk_label_update_layout_attributes (GtkLabel *label)
       for (i = 0; i < priv->select_info->n_links; i++)
         {
           const GtkLabelLink *link = &priv->select_info->links[i];
-
-          attribute = pango_attr_underline_new (TRUE);
-          attribute->start_index = link->start;
-          attribute->end_index = link->end;
-          pango_attr_list_insert (attrs, attribute);
+          const GdkRGBA *link_color;
+          PangoAttrList *link_attrs;
+          PangoAttribute *attr;
+          GSList *attributes;
+          GSList *l;
 
           style = gtk_css_node_get_style (link->cssnode);
-          link_color = gtk_css_color_value_get_rgba (style->core->color);
+          link_attrs = gtk_css_style_get_pango_attributes (style);
 
-          attribute = pango_attr_foreground_new (link_color->red * 65535,
-                                                 link_color->green * 65535,
-                                                 link_color->blue * 65535);
-          attribute->start_index = link->start;
-          attribute->end_index = link->end;
-          pango_attr_list_insert (attrs, attribute);
+          attributes = pango_attr_list_get_attributes (link_attrs);
+          for (l = attributes; l; l = l->next)
+            {
+              attr = l->data;
+
+              attr->start_index = link->start;
+              attr->end_index = link->end;
+              pango_attr_list_insert (attrs, attr);
+            }
+
+          g_slist_free (attributes);
+
+          link_color = gtk_css_color_value_get_rgba (style->core->color);
+          attr = pango_attr_foreground_new (link_color->red * 65535,
+                                            link_color->green * 65535,
+                                            link_color->blue * 65535);
+          attr->start_index = link->start;
+          attr->end_index = link->end;
+          pango_attr_list_insert (attrs, attr);
+
+          pango_attr_list_unref (link_attrs);
         }
     }
   else if (priv->markup_attrs && priv->attrs)
