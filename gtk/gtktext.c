@@ -2714,6 +2714,7 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
       gboolean have_selection;
       gboolean is_touchscreen, extend_selection;
       GdkDevice *source;
+      guint state;
 
       sel_start = priv->selection_bound;
       sel_end = priv->current_pos;
@@ -2729,7 +2730,9 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
       priv->select_words = FALSE;
       priv->select_lines = FALSE;
 
-      extend_selection = GDK_SHIFT_MASK;
+      state = gdk_event_get_modifier_state (event);
+
+      extend_selection = (state & GDK_SHIFT_MASK) != 0;
 
       /* Always emit reset when preedit is shown */
       priv->need_im_reset = TRUE;
@@ -4561,7 +4564,7 @@ gtk_text_draw_cursor (GtkText     *self,
 
   context = gtk_widget_get_style_context (widget);
 
-  layout = gtk_text_ensure_layout (self, TRUE);
+  layout = g_object_ref (gtk_text_ensure_layout (self, TRUE));
   text = pango_layout_get_text (layout);
   gtk_text_get_layout_offsets (self, &x, &y);
 
@@ -4601,6 +4604,8 @@ gtk_text_draw_cursor (GtkText     *self,
 
       gtk_style_context_restore (context);
     }
+
+  g_object_unref (layout);
 }
 
 static void

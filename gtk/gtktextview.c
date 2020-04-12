@@ -8147,8 +8147,6 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
         {
           if (gdk_event_get_event_type (current_event) == GDK_SCROLL)
             move_mark_to_pointer_and_scroll (text_view, "insert");
-
-          gdk_event_unref (current_event);
         }
     }
 
