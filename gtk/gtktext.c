@@ -4555,6 +4555,7 @@ gtk_text_draw_cursor (GtkText     *self,
   GtkWidget *widget = GTK_WIDGET (self);
   GtkStyleContext *context;
   PangoRectangle cursor_rect;
+  int cursor_pos;
   int cursor_index;
   gboolean block;
   gboolean block_at_line_end;
@@ -4569,9 +4570,15 @@ gtk_text_draw_cursor (GtkText     *self,
   gtk_text_get_layout_offsets (self, &x, &y);
 
   if (type == CURSOR_DND)
-    cursor_index = g_utf8_offset_to_pointer (text, priv->dnd_position) - text;
+    cursor_pos = priv->dnd_position;
   else
-    cursor_index = g_utf8_offset_to_pointer (text, priv->current_pos + priv->preedit_cursor) - text;
+    cursor_pos = priv->current_pos + priv->preedit_cursor;
+
+  g_assert (0 <= cursor_pos);
+  g_assert (cursor_pos <= g_utf8_strlen (text, -1));
+  cursor_index = g_utf8_offset_to_pointer (text, cursor_pos) - text;
+  g_assert (0 <= cursor_index);
+  g_assert (cursor_index <= strlen (text));
 
   if (!priv->overwrite_mode)
     block = FALSE;
