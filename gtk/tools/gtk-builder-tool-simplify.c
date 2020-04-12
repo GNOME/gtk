@@ -756,12 +756,12 @@ maybe_rename_property (Element *element, MyParserData *data)
 
   if (property_name == NULL)
     return;
- 
+
   type = g_type_from_name (class_name);
 
   canonical_name = g_strdup (property_name);
   g_strdelimit (canonical_name, "_", '-');
-  
+
   for (k = 0; k < G_N_ELEMENTS (props); k++)
     {
       if (g_type_is_a (type, props[k].type) &&
@@ -840,7 +840,7 @@ rewrite_stack_child (Element *child, MyParserData *data)
   prop->children = g_list_append (prop->children, object);
   prop->parent = new_object;
   new_object->children = g_list_append (new_object->children, prop);
-      
+
   g_list_free (child->children);
   child->children = g_list_append (NULL, new_object);
 
@@ -907,7 +907,7 @@ rewrite_assistant_child (Element *child, MyParserData *data)
   prop->children = g_list_append (prop->children, object);
   prop->parent = new_object;
   new_object->children = g_list_append (new_object->children, prop);
-      
+
   g_list_free (child->children);
   child->children = g_list_append (NULL, new_object);
 
@@ -1112,7 +1112,7 @@ rewrite_pack_type (Element *element,
     {
       Element *elt = l->data;
       if (g_str_equal (elt->element_name, "child"))
-        rewrite_pack_type_child (elt, data); 
+        rewrite_pack_type_child (elt, data);
     }
 }
 
@@ -1192,7 +1192,7 @@ rewrite_child_prop_to_prop (Element *element,
     {
       Element *elt = l->data;
       if (g_str_equal (elt->element_name, "child"))
-        rewrite_child_prop_to_prop_child (elt, data, child_prop, prop); 
+        rewrite_child_prop_to_prop_child (elt, data, child_prop, prop);
     }
 }
 
