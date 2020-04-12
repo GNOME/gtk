@@ -3003,23 +3003,23 @@ gtk_label_update_layout_attributes (GtkLabel *label)
           const GdkRGBA *link_color;
           PangoAttrList *link_attrs;
           PangoAttribute *attr;
-          GSList *attributes;
-          GSList *l;
 
           style = gtk_css_node_get_style (link->cssnode);
           link_attrs = gtk_css_style_get_pango_attributes (style);
-
-          attributes = pango_attr_list_get_attributes (link_attrs);
-          for (l = attributes; l; l = l->next)
+          if (link_attrs)
             {
-              attr = l->data;
+              GSList *attributes = pango_attr_list_get_attributes (link_attrs);
+              GSList *l;
+              for (l = attributes; l; l = l->next)
+                {
+                  attr = l->data;
 
-              attr->start_index = link->start;
-              attr->end_index = link->end;
-              pango_attr_list_insert (attrs, attr);
+                  attr->start_index = link->start;
+                  attr->end_index = link->end;
+                  pango_attr_list_insert (attrs, attr);
+                }
+              g_slist_free (attributes);
             }
-
-          g_slist_free (attributes);
 
           link_color = gtk_css_color_value_get_rgba (style->core->color);
 
@@ -3040,9 +3040,11 @@ gtk_label_update_layout_attributes (GtkLabel *label)
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
   style_attrs = gtk_css_style_get_pango_attributes (style);
-  attrs = _gtk_pango_attr_list_merge (attrs, style_attrs);
   if (style_attrs)
-    pango_attr_list_unref (style_attrs);
+    {
+      attrs = _gtk_pango_attr_list_merge (attrs, style_attrs);
+      pango_attr_list_unref (style_attrs);
+    }
 
   attrs = _gtk_pango_attr_list_merge (attrs, priv->markup_attrs);
   attrs = _gtk_pango_attr_list_merge (attrs, priv->attrs);
