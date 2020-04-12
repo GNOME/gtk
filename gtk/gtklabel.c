@@ -740,7 +740,7 @@ gtk_label_class_init (GtkLabelClass *class)
      *
      * The signal which gets emitted to activate a URI.
      * Applications may connect to it to override the default behaviour,
-     * which is to call gtk_show_uri_on_window().
+     * which is to call gtk_show_uri().
      *
      * Returns: %TRUE if the link has been activated
      */
@@ -5816,16 +5816,11 @@ gtk_label_activate_link (GtkLabel    *label,
 {
   GtkWidget *widget = GTK_WIDGET (label);
   GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
-  GError *error = NULL;
 
   if (!GTK_IS_WINDOW (toplevel))
     return FALSE;
 
-  if (!gtk_show_uri_on_window (GTK_WINDOW (toplevel), uri, GDK_CURRENT_TIME, &error))
-    {
-      g_warning ("Unable to show '%s': %s", uri, error->message);
-      g_error_free (error);
-    }
+  gtk_show_uri (GTK_WINDOW (toplevel), uri, GDK_CURRENT_TIME);
 
   return TRUE;
 }
