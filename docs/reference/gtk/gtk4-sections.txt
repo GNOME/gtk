@@ -4287,12 +4287,6 @@ gtk_init_check
 <SUBSECTION>
 GTK_PRIORITY_RESIZE
 
-<SUBSECTION>
-gtk_get_current_event
-gtk_get_current_event_time
-gtk_get_current_event_state
-gtk_get_current_event_device
-
 <SUBSECTION Private>
 gtk_init_abi_check
 gtk_init_check_abi_check
@@ -5814,6 +5808,12 @@ gtk_event_controller_get_propagation_limit
 gtk_event_controller_set_propagation_limit
 gtk_event_controller_get_widget
 gtk_event_controller_reset
+
+<SUBSECTION>
+gtk_event_controller_get_current_event
+gtk_event_controller_get_current_event_device
+gtk_event_controller_get_current_event_state
+gtk_event_controller_get_current_event_time
 
 <SUBSECTION Standard>
 GTK_TYPE_EVENT_CONTROLLER

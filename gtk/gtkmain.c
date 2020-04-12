@@ -2014,37 +2014,6 @@ gtk_grab_remove (GtkWidget *widget)
     }
 }
 
-/**
- * gtk_get_current_event:
- *
- * Obtains a reference of the event currently being processed by GTK.
- *
- * For example, if you are handling a #GtkButton::clicked signal,
- * the current event will be the #GdkEventButton that triggered
- * the ::clicked signal.
- *
- * Returns: (transfer full) (nullable): a reference of the current event, or
- *     %NULL if there is no current event. The returned event must be
- *     freed with g_object_unref().
- */
-GdkEvent*
-gtk_get_current_event (void)
-{
-  if (current_events)
-    return gdk_event_ref (current_events->data);
-  else
-    return NULL;
-}
-
-/**
- * gtk_get_current_event_time:
- *
- * If there is a current event and it has a timestamp,
- * return that timestamp, otherwise return %GDK_CURRENT_TIME.
- *
- * Returns: the timestamp from the current event,
- *     or %GDK_CURRENT_TIME.
- */
 guint32
 gtk_get_current_event_time (void)
 {
@@ -2052,51 +2021,6 @@ gtk_get_current_event_time (void)
     return gdk_event_get_time (current_events->data);
   else
     return GDK_CURRENT_TIME;
-}
-
-/**
- * gtk_get_current_event_state:
- * @state: (out): a location to store the state of the current event
- *
- * If there is a current event and it has a state field, place
- * that state field in @state and return %TRUE, otherwise return
- * %FALSE.
- *
- * Returns: %TRUE if there was a current event and it
- *     had a state field
- */
-gboolean
-gtk_get_current_event_state (GdkModifierType *state)
-{
-  g_return_val_if_fail (state != NULL, FALSE);
-
-  if (current_events)
-    {
-      *state = gdk_event_get_modifier_state (current_events->data);
-      return TRUE;
-    }
-  else
-    {
-      *state = 0;
-      return FALSE;
-    }
-}
-
-/**
- * gtk_get_current_event_device:
- *
- * If there is a current event and it has a device, return that
- * device, otherwise return %NULL.
- *
- * Returns: (transfer none) (nullable): a #GdkDevice, or %NULL
- */
-GdkDevice *
-gtk_get_current_event_device (void)
-{
-  if (current_events)
-    return gdk_event_get_device (current_events->data);
-  else
-    return NULL;
 }
 
 /**
