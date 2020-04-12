@@ -263,6 +263,7 @@ gtk/gtkshortcutssection.c
 gtk/gtkshortcutsshortcut.c
 gtk/gtkshortcutswindow.c
 gtk/gtkshortcuttrigger.c
+gtk/gtkshow.c
 gtk/gtksidebarrow.c
 gtk/gtksingleselection.c
 gtk/gtksizegroup.c
