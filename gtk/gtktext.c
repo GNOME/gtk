@@ -4334,7 +4334,6 @@ gtk_text_create_layout (GtkText  *self,
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   GtkWidget *widget = GTK_WIDGET (self);
-  GtkStyleContext *context;
   PangoLayout *layout;
   PangoAttrList *tmp_attrs;
   char *preedit_string = NULL;
@@ -4343,12 +4342,10 @@ gtk_text_create_layout (GtkText  *self,
   char *display_text;
   guint n_bytes;
 
-  context = gtk_widget_get_style_context (widget);
-
   layout = gtk_widget_create_pango_layout (widget, NULL);
   pango_layout_set_single_paragraph_mode (layout, TRUE);
 
-  tmp_attrs = _gtk_style_context_get_pango_attributes (context);
+  tmp_attrs = gtk_css_style_get_pango_attributes (gtk_css_node_get_style (gtk_widget_get_css_node (widget)));
   tmp_attrs = _gtk_pango_attr_list_merge (tmp_attrs, priv->attrs);
   if (!tmp_attrs)
     tmp_attrs = pango_attr_list_new ();
