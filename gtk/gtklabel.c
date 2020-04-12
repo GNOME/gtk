@@ -397,8 +397,6 @@ enum {
   PROP_SELECTABLE,
   PROP_MNEMONIC_KEYVAL,
   PROP_MNEMONIC_WIDGET,
-  PROP_CURSOR_POSITION,
-  PROP_SELECTION_BOUND,
   PROP_ELLIPSIZE,
   PROP_WIDTH_CHARS,
   PROP_SINGLE_LINE_MODE,
@@ -876,22 +874,6 @@ gtk_label_class_init (GtkLabelClass *class)
                            GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE);
 
-  label_props[PROP_CURSOR_POSITION] =
-      g_param_spec_int ("cursor-position",
-                        P_("Cursor Position"),
-                        P_("The current position of the insertion cursor in chars"),
-                        0, G_MAXINT,
-                        0,
-                        GTK_PARAM_READABLE);
-
-  label_props[PROP_SELECTION_BOUND] =
-      g_param_spec_int ("selection-bound",
-                        P_("Selection Bound"),
-                        P_("The position of the opposite end of the selection from the cursor in chars"),
-                        0, G_MAXINT,
-                        0,
-                        GTK_PARAM_READABLE);
-
   /**
    * GtkLabel:ellipsize:
    *
@@ -1268,12 +1250,6 @@ gtk_label_get_property (GObject     *object,
       break;
     case PROP_MNEMONIC_WIDGET:
       g_value_set_object (value, (GObject*) priv->mnemonic_widget);
-      break;
-    case PROP_CURSOR_POSITION:
-      g_value_set_int (value, _gtk_label_get_cursor_position (label));
-      break;
-    case PROP_SELECTION_BOUND:
-      g_value_set_int (value, _gtk_label_get_selection_bound (label));
       break;
     case PROP_ELLIPSIZE:
       g_value_set_enum (value, priv->ellipsize);
@@ -4780,8 +4756,8 @@ gtk_label_set_selectable (GtkLabel *label,
     {
       g_object_freeze_notify (G_OBJECT (label));
       g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_SELECTABLE]);
-      g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_CURSOR_POSITION]);
-      g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_SELECTION_BOUND]);
+      _gtk_label_accessible_selection_bound_changed (label);
+      _gtk_label_accessible_cursor_position_changed (label);
       g_object_thaw_notify (G_OBJECT (label));
       gtk_widget_queue_draw (GTK_WIDGET (label));
     }
@@ -4879,9 +4855,9 @@ gtk_label_select_region_index (GtkLabel *label,
       g_object_freeze_notify (G_OBJECT (label));
 
       if (priv->select_info->selection_anchor != anchor_index)
-        g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_SELECTION_BOUND]);
+        _gtk_label_accessible_selection_bound_changed (label);
       if (priv->select_info->selection_end != end_index)
-        g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_CURSOR_POSITION]);
+        _gtk_label_accessible_cursor_position_changed (label);
 
       priv->select_info->selection_anchor = anchor_index;
       priv->select_info->selection_end = end_index;
