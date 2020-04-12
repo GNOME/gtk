@@ -392,7 +392,6 @@ enum {
   PROP_USE_MARKUP,
   PROP_USE_UNDERLINE,
   PROP_JUSTIFY,
-  PROP_PATTERN,
   PROP_WRAP,
   PROP_WRAP_MODE,
   PROP_SELECTABLE,
@@ -837,13 +836,6 @@ gtk_label_class_init (GtkLabelClass *class)
                           0.5,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  label_props[PROP_PATTERN] =
-      g_param_spec_string ("pattern",
-                           P_("Pattern"),
-                           P_("A string with _ characters in positions correspond to characters in the text to underline"),
-                           NULL,
-                           GTK_PARAM_WRITABLE);
-
   label_props[PROP_WRAP] =
       g_param_spec_boolean ("wrap",
                             P_("Line wrap"),
@@ -1194,9 +1186,6 @@ gtk_label_set_property (GObject      *object,
       break;
     case PROP_JUSTIFY:
       gtk_label_set_justify (label, g_value_get_enum (value));
-      break;
-    case PROP_PATTERN:
-      gtk_label_set_pattern (label, g_value_get_string (value));
       break;
     case PROP_WRAP:
       gtk_label_set_wrap (label, g_value_get_boolean (value));
@@ -2594,39 +2583,6 @@ gtk_label_set_pattern_internal (GtkLabel    *label,
     pango_attr_list_unref (priv->markup_attrs);
   priv->markup_attrs = attrs;
 }
-
-/**
- * gtk_label_set_pattern:
- * @label: The #GtkLabel you want to set the pattern to.
- * @pattern: The pattern as described above.
- *
- * The pattern of underlines you want under the existing text within the
- * #GtkLabel widget.  For example if the current text of the label says
- * “FooBarBaz” passing a pattern of “___   ___” will underline
- * “Foo” and “Baz” but not “Bar”.
- */
-void
-gtk_label_set_pattern (GtkLabel	   *label,
-		       const gchar *pattern)
-{
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-
-  g_return_if_fail (GTK_IS_LABEL (label));
-
-  priv->pattern_set = FALSE;
-
-  if (pattern)
-    {
-      gtk_label_set_pattern_internal (label, pattern, FALSE);
-      priv->pattern_set = TRUE;
-    }
-  else
-    gtk_label_recalculate (label);
-
-  gtk_label_clear_layout (label);
-  gtk_widget_queue_resize (GTK_WIDGET (label));
-}
-
 
 /**
  * gtk_label_set_justify:
