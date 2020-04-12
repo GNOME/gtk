@@ -1340,7 +1340,7 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
 {
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
   gboolean split_cursor;
-  float aspect_ratio;
+  float aspect_ratio = 0.04;
   PangoRectangle strong_pos, weak_pos;
   PangoRectangle *cursor1, *cursor2;
   GdkDevice *keyboard;
@@ -1355,7 +1355,6 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
 
   g_object_get (gtk_settings_get_for_display (priv->display),
                 "gtk-split-cursor", &split_cursor,
-                "gtk-cursor-aspect-ratio", &aspect_ratio,
                 NULL);
 
   keyboard = gdk_seat_get_keyboard (gdk_display_get_default_seat (priv->display));
