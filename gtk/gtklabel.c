@@ -302,7 +302,6 @@ struct _GtkLabelPrivate
   guint    wrap_mode          : 3;
   guint    single_line_mode   : 1;
   guint    in_click           : 1;
-  guint    pattern_set        : 1;
   guint    track_links        : 1;
 
   guint    mnemonic_keyval;
@@ -468,9 +467,6 @@ static gboolean gtk_label_set_use_underline_internal (GtkLabel  *label,
                                                       gboolean   val);
 static void gtk_label_set_uline_text_internal    (GtkLabel      *label,
 						  const gchar   *str);
-static void gtk_label_set_pattern_internal       (GtkLabel      *label,
-				                  const gchar   *pattern,
-                                                  gboolean       is_mnemonic);
 static void gtk_label_set_markup_internal        (GtkLabel      *label,
 						  const gchar   *str,
 						  gboolean       with_uline);
@@ -1461,6 +1457,7 @@ label_mnemonics_visible_changed (GtkWidget  *widget,
 {
   gboolean visible;
 
+  g_message (__FUNCTION__);
   g_object_get (widget, "mnemonics-visible", &visible, NULL);
   _gtk_label_mnemonics_visible_apply_recursively (widget, visible);
 }
@@ -2520,34 +2517,6 @@ gtk_label_pattern_to_attrs (GtkLabel      *label,
     }
 
   return attrs;
-}
-
-static void
-gtk_label_set_pattern_internal (GtkLabel    *label,
-				const gchar *pattern,
-                                gboolean     is_mnemonic)
-{
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  PangoAttrList *attrs;
-  gboolean auto_mnemonics = TRUE;
-
-  if (is_mnemonic)
-    {
-      if (priv->mnemonics_visible && pattern &&
-          (!auto_mnemonics ||
-           (gtk_widget_is_sensitive (GTK_WIDGET (label)) &&
-            (!priv->mnemonic_widget ||
-             gtk_widget_is_sensitive (priv->mnemonic_widget)))))
-        attrs = gtk_label_pattern_to_attrs (label, pattern);
-      else
-        attrs = NULL;
-    }
-  else
-    attrs = gtk_label_pattern_to_attrs (label, pattern);
-
-  if (priv->markup_attrs)
-    pango_attr_list_unref (priv->markup_attrs);
-  priv->markup_attrs = attrs;
 }
 
 /**
@@ -3724,13 +3693,15 @@ separate_uline_pattern (const gchar  *str,
 }
 
 static void
-gtk_label_set_uline_text_internal (GtkLabel    *label,
-				   const gchar *str)
+gtk_label_set_uline_text_internal (GtkLabel   *label,
+                                   const char *str)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
   guint accel_key = GDK_KEY_VoidSymbol;
-  gchar *new_str;
-  gchar *pattern;
+  gboolean auto_mnemonics = TRUE;
+  PangoAttrList *attrs;
+  char *new_str;
+  char *pattern;
 
   g_return_if_fail (GTK_IS_LABEL (label));
   g_return_if_fail (str != NULL);
@@ -3742,7 +3713,20 @@ gtk_label_set_uline_text_internal (GtkLabel    *label,
     return;
 
   gtk_label_set_text_internal (label, new_str);
-  gtk_label_set_pattern_internal (label, pattern, TRUE);
+
+  if (priv->mnemonics_visible && pattern &&
+      (!auto_mnemonics ||
+       (gtk_widget_is_sensitive (GTK_WIDGET (label)) &&
+        (!priv->mnemonic_widget ||
+         gtk_widget_is_sensitive (priv->mnemonic_widget)))))
+    attrs = gtk_label_pattern_to_attrs (label, pattern);
+  else
+    attrs = NULL;
+
+  if (priv->markup_attrs)
+    pango_attr_list_unref (priv->markup_attrs);
+  priv->markup_attrs = attrs;
+
   priv->mnemonic_keyval = accel_key;
 
   g_free (pattern);
