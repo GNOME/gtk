@@ -1266,8 +1266,8 @@ _gtk_css_find_theme_dir (const gchar *dir,
 
 #undef MINOR
 
-static gchar *
-_gtk_css_find_theme (const gchar *name)
+char *
+_gtk_css_find_theme (const char *name)
 {
   gchar *path;
   const char *const *dirs;
