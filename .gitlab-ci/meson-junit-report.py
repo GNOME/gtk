@@ -70,7 +70,7 @@ for name, units in suites.items():
     print('Processing suite {} (units: {})'.format(name, len(units)))
 
     def if_failed(unit):
-        if unit['result'] in ['FAIL', 'UNEXPECTEDPASS', 'TIMEOUT']:
+        if unit['result'] in ['ERROR', 'FAIL', 'UNEXPECTEDPASS', 'TIMEOUT']:
             return True
         return False
 
