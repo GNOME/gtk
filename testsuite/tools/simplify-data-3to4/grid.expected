@@ -10,10 +10,10 @@
             <property name="receives_default">1</property>
             <property name="vexpand">1</property>
             <property name="hexpand">1</property>
+            <property name="margin-start">10</property>
+            <property name="margin-end">10</property>
             <property name="margin-top">10</property>
-            <property name="margin-right">10</property>
             <property name="margin-bottom">10</property>
-            <property name="margin-left">10</property>
             <layout>
               <property name="left_attach">0</property>
               <property name="top_attach">0</property>
