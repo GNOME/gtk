@@ -813,14 +813,13 @@ error_creating_folder_dialog (GtkFileChooserWidget *impl,
  */
 static void
 error_creating_folder_over_existing_file_dialog (GtkFileChooserWidget *impl,
-                                                 GFile                 *file,
-                                                 GError                *error)
+                                                 GFile                 *file)
 {
-  error_dialog (impl,
-                _("The folder could not be created, as a file with the same "
-                  "name already exists.  Try using a different name for the "
-                  "folder, or rename the file first."),
-                error);
+  error_message (impl,
+                 _("The folder could not be created, as a file with the same "
+                   "name already exists."),
+                 _("Try using a different name for the folder, or rename the "
+                   "file first."));
 }
 
 static void
@@ -6843,8 +6842,7 @@ file_exists_get_info_cb (GCancellable *cancellable,
           /* Oops, the user typed the name of an existing path which is not
            * a folder
            */
-          error_creating_folder_over_existing_file_dialog (impl, data->file,
-                                                           g_error_copy (error));
+          error_creating_folder_over_existing_file_dialog (impl, data->file);
         }
       else
         {
