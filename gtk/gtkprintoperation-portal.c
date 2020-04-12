@@ -672,6 +672,6 @@ gtk_print_operation_portal_launch_preview (GtkPrintOperation *op,
   char *uri;
 
   uri = g_filename_to_uri (filename, NULL, NULL);
-  gtk_show_uri_on_window (parent, uri, GDK_CURRENT_TIME, NULL);
+  gtk_show_uri (parent, uri, GDK_CURRENT_TIME);
   g_free (uri);
 }
