@@ -24,6 +24,7 @@
 #include "reftest-module.h"
 #include "reftest-snapshot.h"
 
+#include <execinfo.h>
 #include <string.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
@@ -384,6 +385,28 @@ add_test_for_file (GFile *file)
   g_list_free_full (files, g_object_unref);
 }
 
+static GLogWriterOutput
+log_writer (GLogLevelFlags   log_level,
+            const GLogField *fields,
+            gsize            n_fields,
+            gpointer         user_data)
+{
+  if (log_level & G_LOG_LEVEL_CRITICAL)
+    {
+      void *buffer[1024];
+      int size, i;
+      char **symbols;
+
+      size = backtrace (buffer, 1024);
+      symbols = backtrace_symbols (buffer, size);
+      for (i = 0; i < size; i++)
+        g_print ("%s\n", symbols[i]);
+      free (symbols);
+    }
+
+  return g_log_writer_standard_streams (log_level, fields, n_fields, user_data);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -433,6 +456,8 @@ main (int argc, char **argv)
    * "file" property of GtkImage as a relative path in builder files.
    */
   chdir (basedir);
+
+  g_log_set_writer_func (log_writer, NULL, NULL);
 
   result = g_test_run ();
 
