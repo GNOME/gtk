@@ -1406,12 +1406,6 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
     }
 }
 
-PangoAttrList *
-_gtk_style_context_get_pango_attributes (GtkStyleContext *context)
-{
-  return gtk_css_style_get_pango_attributes (gtk_style_context_lookup_style (context));
-}
-
 static AtkAttributeSet *
 add_attribute (AtkAttributeSet  *attributes,
                AtkTextAttribute  attr,
