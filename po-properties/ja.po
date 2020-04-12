@@ -1,5 +1,5 @@
 # gtk+-properties ja.po.
-# Copyright (C) 1998,2000-2010 Free Software Foundation, Inc.
+# Copyright (C) 1998, 2000-2010, 2019-2020 Free Software Foundation, Inc.
 # Yasuhiro SHIRASAKI <yasuhiro@awa.tohoku.ac.jp>, 1998.
 # Yukihiro Nakai <nakai@gnome.gr.jp>, 2000-2001.
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2002, 2009-2010.
@@ -7,14 +7,15 @@
 # Takeshi AIHANA <takeshi.aihana@gmail.com>, 2003-2009.
 # KAMAGASAKO Masatoshi <emerald@gnome.gr.jp>, 2003.
 # Satoru SATOH <ss@gnome.gr.jp>, 2006.
+# sicklylife translation@sicklylife.jp>, 2019-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties gtk-2-22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-22 12:38+0000\n"
-"PO-Revision-Date: 2012-10-08 00:25+0900\n"
-"Last-Translator: OKANO Takayoshi <kano@na.rim.or.jp>\n"
+"POT-Creation-Date: 2020-03-18 22:15+0000\n"
+"PO-Revision-Date: 2020-04-14 17:30+0900\n"
+"Last-Translator: sicklylife translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -129,16 +130,12 @@ msgid "Axes"
 msgstr ""
 
 #: gdk/gdkdevice.c:328
-#, fuzzy
-#| msgid "Tooltip"
 msgid "Tool"
-msgstr "ツールチップ"
+msgstr "ツール"
 
 #: gdk/gdkdevice.c:329
-#, fuzzy
-#| msgid "The GdkFont that is currently selected"
 msgid "The tool that is currently used with this device"
-msgstr "現在選択されている GdkFont 型のオブジェクトです"
+msgstr ""
 
 #: gdk/gdkdevicemanager.c:186
 msgid "Display for the device manager"
@@ -165,10 +162,8 @@ msgid "The GDK window bound to the GL context"
 msgstr ""
 
 #: gdk/gdkglcontext.c:349
-#, fuzzy
-#| msgid "Font style set"
 msgid "Shared context"
-msgstr "フォントスタイルの設定"
+msgstr ""
 
 #: gdk/gdkglcontext.c:350
 msgid "The GL context this context shares data with"
@@ -195,10 +190,8 @@ msgid "Cursor"
 msgstr "カーソル"
 
 #: gdk/x11/gdkdevicemanager-xi2.c:132
-#, fuzzy
-#| msgid "mode"
 msgid "Opcode"
-msgstr "モード"
+msgstr ""
 
 #: gdk/x11/gdkdevicemanager-xi2.c:133
 msgid "Opcode for XInput2 requests"
@@ -213,10 +206,8 @@ msgid "Major version number"
 msgstr ""
 
 #: gdk/x11/gdkdevicemanager-xi2.c:146
-#, fuzzy
-#| msgid "Monitor"
 msgid "Minor"
-msgstr "モニター"
+msgstr ""
 
 #: gdk/x11/gdkdevicemanager-xi2.c:147
 msgid "Minor version number"
@@ -569,16 +560,12 @@ msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "現在使用する色の透明度 (0 :完全透明、65535: 完全不透明)"
 
 #: gtk/deprecated/gtkcolorsel.c:369
-#, fuzzy
-#| msgid "Current Alpha"
 msgid "Current RGBA"
-msgstr "現在のアルファ値"
+msgstr "現在の RGBA 値"
 
 #: gtk/deprecated/gtkcolorsel.c:370
-#, fuzzy
-#| msgid "The current color"
 msgid "The current RGBA color"
-msgstr "現在使用する色"
+msgstr "現在使用する RGBA 色"
 
 #: gtk/deprecated/gtkcolorseldialog.c:136
 msgid "Color Selection"
@@ -2322,16 +2309,12 @@ msgid "Cell background color as a GdkColor"
 msgstr "セルの背景色を示す GdkColor 形式の文字列です"
 
 #: gtk/gtkcellrenderer.c:424
-#, fuzzy
-#| msgid "Cell background color"
 msgid "Cell background RGBA color"
-msgstr "セルの背景色"
+msgstr "セルの RGBA 背景色"
 
 #: gtk/gtkcellrenderer.c:425
-#, fuzzy
-#| msgid "Cell background color as a GdkColor"
 msgid "Cell background color as a GdkRGBA"
-msgstr "セルの背景色を示す GdkColor 形式の文字列です"
+msgstr "セルの背景色を示す GdkRGBA 形式の文字列です"
 
 #: gtk/gtkcellrenderer.c:432
 msgid "Editing"
@@ -2575,16 +2558,12 @@ msgid "Background color as a GdkColor"
 msgstr "背景色を示す GdkColor 形式の文字列です"
 
 #: gtk/gtkcellrenderertext.c:313
-#, fuzzy
-#| msgid "Background color name"
 msgid "Background color as RGBA"
-msgstr "背景色の名前"
+msgstr "RGBA 背景色"
 
 #: gtk/gtkcellrenderertext.c:314 gtk/gtkcellview.c:249 gtk/gtktexttag.c:247
-#, fuzzy
-#| msgid "Background color as a GdkColor"
 msgid "Background color as a GdkRGBA"
-msgstr "背景色を示す GdkColor 形式の文字列です"
+msgstr "背景色を示す GdkRGBA 形式の文字列です"
 
 #: gtk/gtkcellrenderertext.c:319 gtk/gtktexttag.c:262
 msgid "Foreground color name"
@@ -2599,16 +2578,12 @@ msgid "Foreground color as a GdkColor"
 msgstr "前景色を示す GdkColor 形式の文字列です"
 
 #: gtk/gtkcellrenderertext.c:349
-#, fuzzy
-#| msgid "Foreground color name"
 msgid "Foreground color as RGBA"
-msgstr "前景色の名前"
+msgstr "RGBA 前景色"
 
 #: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:293
-#, fuzzy
-#| msgid "Foreground color as a GdkColor"
 msgid "Foreground color as a GdkRGBA"
-msgstr "前景色を示す GdkColor 形式の文字列です"
+msgstr "前景色を示す GdkRGBA 形式の文字列です"
 
 #: gtk/gtkcellrenderertext.c:357 gtk/gtkentry.c:861 gtk/gtktexttag.c:309
 #: gtk/gtktextview.c:825
@@ -2955,10 +2930,8 @@ msgid "Size of check or radio indicator"
 msgstr "チェックボタンまたはラジオボタンの表示部の大きさ"
 
 #: gtk/gtkcellview.c:248
-#, fuzzy
-#| msgid "Background color"
 msgid "Background RGBA color"
-msgstr "背景色"
+msgstr "RGBA 背景色"
 
 #: gtk/gtkcellview.c:263
 msgid "CellView model"
@@ -3061,16 +3034,12 @@ msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "選択した色の透明度 (0 :完全透明、65535: 完全不透明)"
 
 #: gtk/gtkcolorbutton.c:232
-#, fuzzy
-#| msgid "Current Color"
 msgid "Current RGBA Color"
-msgstr "現在の色"
+msgstr "現在の RGBA 色"
 
 #: gtk/gtkcolorbutton.c:233
-#, fuzzy
-#| msgid "The selected color"
 msgid "The selected RGBA color"
-msgstr "選択した色"
+msgstr "選択した RGBA 色"
 
 #: gtk/gtkcolorbutton.c:274
 #, fuzzy
@@ -3115,10 +3084,8 @@ msgid "Scale type"
 msgstr "ページの種類"
 
 #: gtk/gtkcolorswatch.c:719
-#, fuzzy
-#| msgid "Current Color"
 msgid "RGBA Color"
-msgstr "現在の色"
+msgstr "RGBA 色"
 
 #: gtk/gtkcolorswatch.c:719
 #, fuzzy
@@ -8512,10 +8479,8 @@ msgid "Name used to refer to the text tag. NULL for anonymous tags"
 msgstr "テキストタグの参照に使用する名前 (匿名タグの場合は NULL)"
 
 #: gtk/gtktexttag.c:246
-#, fuzzy
-#| msgid "Background color"
 msgid "Background RGBA"
-msgstr "背景色"
+msgstr "RGBA 背景色"
 
 #: gtk/gtktexttag.c:254
 msgid "Background full height"
@@ -8529,10 +8494,8 @@ msgstr ""
 "背景色で行の高さ分塗りつぶすか、またはタグされた文字の高さ分塗りつぶすか"
 
 #: gtk/gtktexttag.c:292
-#, fuzzy
-#| msgid "Foreground color name"
 msgid "Foreground RGBA"
-msgstr "前景色の名前"
+msgstr "RGBA 前景色"
 
 #: gtk/gtktexttag.c:301
 msgid "Text direction, e.g. right-to-left or left-to-right"
@@ -8642,28 +8605,20 @@ msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "段落でラップした行間との間に挿入する空白のピクセル数"
 
 #: gtk/gtktexttag.c:545
-#, fuzzy
-#| msgid "Underline"
 msgid "Underline RGBA"
-msgstr "下線"
+msgstr "下線の RGBA 色"
 
 #: gtk/gtktexttag.c:546
-#, fuzzy
-#| msgid "Style of underline for this text"
 msgid "Color of underline for this text"
-msgstr "このテキストの下線のスタイル"
+msgstr "このテキストの下線の色"
 
 #: gtk/gtktexttag.c:561
-#, fuzzy
-#| msgid "Strikethrough"
 msgid "Strikethrough RGBA"
-msgstr "打ち消し"
+msgstr "打ち消し線の RGBA 色"
 
 #: gtk/gtktexttag.c:562
-#, fuzzy
-#| msgid "Whether to strike through the text"
 msgid "Color of strikethrough for this text"
-msgstr "テキストに打ち消し線を引くかどうか"
+msgstr "このテキストの打ち消し線の色"
 
 #: gtk/gtktexttag.c:570 gtk/gtktextview.c:834
 msgid ""
@@ -8701,10 +8656,8 @@ msgid "Paragraph background color as a GdkColor"
 msgstr "段落の背景色を示す文字列です"
 
 #: gtk/gtktexttag.c:645
-#, fuzzy
-#| msgid "Paragraph background set"
 msgid "Paragraph background RGBA"
-msgstr "段落の背景色設定"
+msgstr "段落の RGBA 背景色"
 
 #: gtk/gtktexttag.c:646
 #, fuzzy
@@ -8713,16 +8666,12 @@ msgid "Paragraph background RGBA as a GdkRGBA"
 msgstr "段落の背景色を示す文字列です"
 
 #: gtk/gtktexttag.c:663
-#, fuzzy
-#| msgid "Use alpha"
 msgid "Fallback"
-msgstr "アルファ値を使う"
+msgstr "フォールバック"
 
 #: gtk/gtktexttag.c:664
-#, fuzzy
-#| msgid "Whether the action is enabled."
 msgid "Whether font fallback is enabled."
-msgstr "アクションが有効かどうか。"
+msgstr "フォントのフォールバックが有効かどうか。"
 
 #: gtk/gtktexttag.c:678
 #, fuzzy
@@ -8813,28 +8762,20 @@ msgid "Whether this tag affects the right margin"
 msgstr "このタグが右マージンに影響するかどうか"
 
 #: gtk/gtktexttag.c:817
-#, fuzzy
-#| msgid "Underline set"
 msgid "Underline RGBA set"
-msgstr "下線の設定"
+msgstr "下線の RGBA 設定"
 
 #: gtk/gtktexttag.c:818
-#, fuzzy
-#| msgid "Whether this tag affects underlining"
 msgid "Whether this tag affects underlining color"
-msgstr "このタグが下線に影響するかどうか"
+msgstr "このタグが下線の色に影響するかどうか"
 
 #: gtk/gtktexttag.c:828
-#, fuzzy
-#| msgid "Strikethrough set"
 msgid "Strikethrough RGBA set"
-msgstr "打ち消し線の設定"
+msgstr "打ち消し線の RGBA 設定"
 
 #: gtk/gtktexttag.c:829
-#, fuzzy
-#| msgid "Whether this tag affects strikethrough"
 msgid "Whether this tag affects strikethrough color"
-msgstr "このタグが打ち消し線に影響するかどうか"
+msgstr "このタグが打ち消し線の色に影響するかどうか"
 
 #: gtk/gtktexttag.c:832
 msgid "Wrap mode set"
@@ -10110,7 +10051,7 @@ msgstr "startup-notification が使用するウィンドウ固有の (起動用�
 
 #: gtk/gtkwindow.c:783
 msgid "If TRUE, users can resize the window"
-msgstr "TRUE にすると、ユーザーはウィンドウのサイズを変更できる"
+msgstr "TRUE にすると、ユーザーはウィンドウのサイズを変更できます"
 
 #: gtk/gtkwindow.c:790
 msgid ""
