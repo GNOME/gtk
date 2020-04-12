@@ -4567,8 +4567,11 @@ gtk_text_draw_cursor (GtkText     *self,
 
   layout = gtk_text_ensure_layout (self, TRUE);
   g_object_ref (layout);
+  printf ("# 1 layout refcount %d\n", G_OBJECT (layout)->ref_count);
   text = pango_layout_get_text (layout);
+  printf ("# 2 layout refcount %d\n", G_OBJECT (layout)->ref_count);
   gtk_text_get_layout_offsets (self, &x, &y);
+  printf ("# 3 layout refcount %d\n", G_OBJECT (layout)->ref_count);
 
   if (type == CURSOR_DND)
     cursor_pos = priv->dnd_position;
@@ -4581,11 +4584,13 @@ gtk_text_draw_cursor (GtkText     *self,
   g_assert (0 <= cursor_index);
   g_assert (cursor_index <= strlen (text));
 
+  printf ("# 4 layout refcount %d\n", G_OBJECT (layout)->ref_count);
   if (!priv->overwrite_mode)
     block = FALSE;
   else
     block = _gtk_text_util_get_block_cursor_location (layout,
                                                       cursor_index, &cursor_rect, &block_at_line_end);
+  printf ("# 5 layout refcount %d\n", G_OBJECT (layout)->ref_count);
   if (!block)
     {
       gtk_snapshot_render_insertion_cursor (snapshot, context,
