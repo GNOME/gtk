@@ -29,6 +29,7 @@
 #include "gtkstyleproviderprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkversion.h"
+#include "gtktheme.h"
 #include "gtkwidget.h"
 
 #include "gdk/gdk-private.h"
@@ -1635,65 +1636,6 @@ settings_update_provider (GdkDisplay      *display,
  * NAME/NAME-dark
  */
 
-extern char *_gtk_css_find_theme (const char *theme);
-
-static gboolean
-theme_exists (const char *theme)
-{
-  char *path;
-
-  path = _gtk_css_find_theme (theme);
-  if (path)
-    {
-      g_free (path);
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static char *
-get_light_theme_variant (const char *theme)
-{
-  if (g_str_equal (theme, "HighContrastInverse"))
-    return g_strdup ("HighContrast");
-
-  if (g_str_equal (theme, "Adwaita-dark"))
-    return g_strdup ("Adwaita");
-
-  if (g_str_has_suffix (theme, "-dark"))
-    {
-      char *light = g_strndup (theme, strlen (theme) - strlen ("-dark"));
-      if (theme_exists (light))
-        return light;
-
-      g_free (light);   
-    }
-
-  return g_strdup (theme);
-}
-
-static char *
-get_dark_theme_variant (const char *theme)
-{
-  if (g_str_equal (theme, "HighContrast"))
-    return g_strdup ("HighContrastInverse");
-
-  if (g_str_equal (theme, "Adwaita"))
-    return g_strdup ("Adwaita-dark");
-
-  if (!g_str_has_suffix (theme, "-dark"))
-    {
-      char *dark = g_strconcat (theme, "-dark", NULL);
-      if (theme_exists (dark))
-        return dark;
-
-      g_free (dark);   
-    }
-
-  return g_strdup (theme);
-}
-
 static char *
 get_theme_name (GtkSettings  *settings)
 {
@@ -1715,11 +1657,11 @@ get_theme_name (GtkSettings  *settings)
   switch (user_pref)
     {
     case 0:
-      theme = get_light_theme_variant (theme_name);
+      theme = gtk_theme_get_light_variant (theme_name);
       g_free (theme_name);
       break;
     case 1:
-      theme = get_dark_theme_variant (theme_name);
+      theme = gtk_theme_get_dark_variant (theme_name);
       g_free (theme_name);
       break;
     default:

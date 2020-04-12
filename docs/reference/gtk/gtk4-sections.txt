@@ -2304,6 +2304,12 @@ GtkSettingsValue
 gtk_settings_get_default
 gtk_settings_get_for_display
 gtk_settings_reset_property
+
+<SUBSECTION>
+gtk_theme_get_dark_variant
+gtk_theme_get_light_variant
+gtk_theme_get_available_themes
+
 <SUBSECTION Standard>
 GtkSettingsClass
 GTK_IS_SETTINGS
