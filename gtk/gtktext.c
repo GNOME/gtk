@@ -4566,6 +4566,7 @@ gtk_text_draw_cursor (GtkText     *self,
   context = gtk_widget_get_style_context (widget);
 
   layout = gtk_text_ensure_layout (self, TRUE);
+  g_object_ref (layout);
   text = pango_layout_get_text (layout);
   gtk_text_get_layout_offsets (self, &x, &y);
 
@@ -4611,6 +4612,8 @@ gtk_text_draw_cursor (GtkText     *self,
 
       gtk_style_context_restore (context);
     }
+
+  g_object_unref (layout);
 }
 
 static void
