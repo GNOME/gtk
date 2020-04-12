@@ -1251,6 +1251,7 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
   gboolean split_cursor;
+  float aspect_ratio;
   PangoRectangle strong_pos, weak_pos;
   PangoRectangle *cursor1, *cursor2;
   GdkDevice *keyboard;
@@ -1264,6 +1265,7 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
 
   g_object_get (gtk_settings_get_for_display (priv->display),
                 "gtk-split-cursor", &split_cursor,
+                "gtk-cursor-aspect-ratio", &aspect_ratio,
                 NULL);
 
   keyboard = gdk_seat_get_keyboard (gdk_display_get_default_seat (priv->display));
@@ -1296,7 +1298,7 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
                          x + PANGO_PIXELS (cursor1->x),
                          y + PANGO_PIXELS (cursor1->y),
                          PANGO_PIXELS (cursor1->height),
-                         0.04,
+                         aspect_ratio,
                          TRUE,
                          direction,
                          direction2 != PANGO_DIRECTION_NEUTRAL);
@@ -1308,7 +1310,7 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
                              x + PANGO_PIXELS (cursor2->x),
                              y + PANGO_PIXELS (cursor2->y),
                              PANGO_PIXELS (cursor2->height),
-                             0.04,
+                             aspect_ratio,
                              FALSE,
                              direction2,
                              TRUE);
