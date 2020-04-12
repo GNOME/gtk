@@ -114,9 +114,6 @@ void     gtk_label_set_lines                      (GtkLabel         *label,
 GDK_AVAILABLE_IN_ALL
 gint     gtk_label_get_lines                      (GtkLabel         *label);
 GDK_AVAILABLE_IN_ALL
-void     gtk_label_set_pattern                    (GtkLabel         *label,
-						   const gchar      *pattern);
-GDK_AVAILABLE_IN_ALL
 void     gtk_label_set_wrap                       (GtkLabel         *label,
                                                    gboolean          wrap);
 GDK_AVAILABLE_IN_ALL
