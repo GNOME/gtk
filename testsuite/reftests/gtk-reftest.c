@@ -24,6 +24,9 @@
 #include "reftest-module.h"
 #include "reftest-snapshot.h"
 
+#ifndef G_OS_WIN32
+#include <execinfo.h>
+#endif
 #include <string.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
@@ -285,6 +288,8 @@ test_ui_file (GFile *file)
 
   ui_file = g_file_get_path (file);
 
+  g_critical ("Oops in %s", ui_file);
+
   provider = add_extra_css (ui_file, ".css");
 
   ui_image = reftest_snapshot_ui_file (ui_file);
@@ -384,6 +389,53 @@ add_test_for_file (GFile *file)
   g_list_free_full (files, g_object_unref);
 }
 
+static GLogWriterOutput
+log_writer (GLogLevelFlags   log_level,
+            const GLogField *fields,
+            gsize            n_fields,
+            gpointer         user_data)
+{
+#ifndef G_OS_WIN32
+  if (log_level & G_LOG_LEVEL_CRITICAL)
+    {
+      void *buffer[1024];
+      int size, i;
+      char **symbols;
+      GString *s;
+      GLogField *my_fields;
+
+      my_fields = g_alloca (sizeof (GLogField) * n_fields);
+
+      s = g_string_new ("");
+
+      size = backtrace (buffer, 1024);
+      symbols = backtrace_symbols (buffer, size);
+      for (i = 0; i < size; i++)
+        {
+          g_string_append (s, symbols[i]);
+          g_string_append_c (s, '\n');
+        }
+      free (symbols);
+
+      for (i = 0; i < n_fields; i++)
+        {
+          my_fields[i] = fields[i];
+
+          if (strcmp (fields[i].key, "MESSAGE") == 0)
+            {
+              my_fields[i].value = g_strconcat (fields[i].value, "\nBacktrace:\n", s->str, NULL);
+              my_fields[i].length = strlen (my_fields[i].value);
+            }
+        }
+      g_string_free (s, TRUE);
+
+      fields = my_fields;
+    }
+#endif
+
+  return g_log_writer_standard_streams (log_level, fields, n_fields, user_data);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -433,6 +485,8 @@ main (int argc, char **argv)
    * "file" property of GtkImage as a relative path in builder files.
    */
   chdir (basedir);
+
+  g_log_set_writer_func (log_writer, NULL, NULL);
 
   result = g_test_run ();
 
