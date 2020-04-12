@@ -1134,7 +1134,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                              20, GTK_PARAM_READWRITE));
 
   /**
-   * GtkWindow:set-focus:
+   * GtkWindow::set-focus:
    * @window: the window which received the signal
    * @widget: (nullable): the newly focused widget (or %NULL for no focus)
    *
