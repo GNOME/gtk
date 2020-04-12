@@ -1802,7 +1802,6 @@ gtk_label_set_use_markup_internal (GtkLabel *label,
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
 
-  val = val != FALSE;
   if (priv->use_markup != val)
     {
       priv->use_markup = val;
@@ -1821,7 +1820,6 @@ gtk_label_set_use_underline_internal (GtkLabel *label,
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
 
-  val = val != FALSE;
   if (priv->use_underline != val)
     {
       priv->use_underline = val;
@@ -5106,7 +5104,7 @@ gtk_label_set_use_markup (GtkLabel *label,
 
   g_object_freeze_notify (G_OBJECT (label));
 
-  if (gtk_label_set_use_markup_internal (label, setting))
+  if (gtk_label_set_use_markup_internal (label, !!setting))
     gtk_label_recalculate (label);
 
   g_object_thaw_notify (G_OBJECT (label));
@@ -5148,7 +5146,7 @@ gtk_label_set_use_underline (GtkLabel *label,
 
   g_object_freeze_notify (G_OBJECT (label));
 
-  if (gtk_label_set_use_underline_internal (label, setting))
+  if (gtk_label_set_use_underline_internal (label, !!setting))
     gtk_label_recalculate (label);
 
   g_object_thaw_notify (G_OBJECT (label));
