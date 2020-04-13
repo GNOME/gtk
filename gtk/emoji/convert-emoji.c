@@ -55,35 +55,6 @@ parse_code (GVariantBuilder *b,
   return TRUE;
 }
 
-static const char *blacklist[] = {
-  "child",
-  "adult",
-  "older adult",
-  "woman with headscarf",
-  "bearded person",
-  "breast-feeding",
-  "mage",
-  "fairy",
-  "vampire",
-  "merperson",
-  "merman",
-  "mermaid",
-  " elf", // avoid matching selfie
-  "genie",
-  "zombie",
-  "in steamy room",
-  "climbing",
-  "in lotus position",
-  "person in bed",
-  "man in suit levitating",
-  "horse racing",
-  "snowboarder",
-  "golfing",
-  "love-you gesture",
-  "palms up together",
-  NULL
-};
-
 int
 main (int argc, char *argv[])
 {
@@ -170,18 +141,6 @@ main (int argc, char *argv[])
 
       name = json_object_get_string_member (obj, "name");
       code = g_strdup (json_object_get_string_member (obj, "code"));
-
-      if (strcmp (name, "world map") == 0)
-        continue;
-
-      skip = FALSE;
-      for (j = 0; blacklist[j]; j++)
-        {
-          if (strstr (name, blacklist[j]) != 0)
-            skip = TRUE;
-        }
-      if (skip)
-        continue;
 
       has_variations = FALSE;
       while (i < length)
