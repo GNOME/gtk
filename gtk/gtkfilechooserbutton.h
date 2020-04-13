@@ -51,6 +51,11 @@ gint                  gtk_file_chooser_button_get_width_chars  (GtkFileChooserBu
 GDK_AVAILABLE_IN_ALL
 void                  gtk_file_chooser_button_set_width_chars  (GtkFileChooserButton *button,
 								gint                  n_chars);
+GDK_AVAILABLE_IN_ALL
+gboolean              gtk_file_chooser_button_get_modal        (GtkFileChooserButton *button);
+GDK_AVAILABLE_IN_ALL
+void                  gtk_file_chooser_button_set_modal        (GtkFileChooserButton *button,
+								gboolean              modal);
 
 G_END_DECLS
 
