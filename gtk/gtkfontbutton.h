@@ -54,6 +54,11 @@ GDK_AVAILABLE_IN_ALL
 void                  gtk_font_button_set_title      (GtkFontButton *font_button,
                                                       const gchar   *title);
 GDK_AVAILABLE_IN_ALL
+gboolean              gtk_font_button_get_modal      (GtkFontButton *font_button);
+GDK_AVAILABLE_IN_ALL
+void                  gtk_font_button_set_modal      (GtkFontButton *font_button,
+                                                      gboolean       modal);
+GDK_AVAILABLE_IN_ALL
 gboolean              gtk_font_button_get_use_font   (GtkFontButton *font_button);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_font_button_set_use_font   (GtkFontButton *font_button,

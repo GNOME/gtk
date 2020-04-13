@@ -599,6 +599,8 @@ gtk_color_button_new
 gtk_color_button_new_with_rgba
 gtk_color_button_set_title
 gtk_color_button_get_title
+gtk_color_button_set_modal
+gtk_color_button_get_modal
 <SUBSECTION Standard>
 GTK_COLOR_BUTTON
 GTK_IS_COLOR_BUTTON
@@ -1155,6 +1157,8 @@ gtk_file_chooser_button_get_title
 gtk_file_chooser_button_set_title
 gtk_file_chooser_button_get_width_chars
 gtk_file_chooser_button_set_width_chars
+gtk_file_chooser_button_get_modal
+gtk_file_chooser_button_set_modal
 
 <SUBSECTION Standard>
 GTK_FILE_CHOOSER_BUTTON
@@ -1269,6 +1273,8 @@ gtk_font_button_set_use_size
 gtk_font_button_get_use_size
 gtk_font_button_set_title
 gtk_font_button_get_title
+gtk_font_button_set_modal
+gtk_font_button_get_modal
 <SUBSECTION Standard>
 GTK_FONT_BUTTON
 GTK_IS_FONT_BUTTON
@@ -5337,6 +5343,8 @@ gtk_app_chooser_button_get_show_dialog_item
 gtk_app_chooser_button_set_show_dialog_item
 gtk_app_chooser_button_get_heading
 gtk_app_chooser_button_set_heading
+gtk_app_chooser_button_get_modal
+gtk_app_chooser_button_set_modal
 
 <SUBSECTION Standard>
 GTK_TYPE_APP_CHOOSER_BUTTON

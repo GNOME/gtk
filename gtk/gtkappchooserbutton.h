@@ -71,6 +71,12 @@ void     gtk_app_chooser_button_set_show_default_item (GtkAppChooserButton *self
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_app_chooser_button_get_show_default_item (GtkAppChooserButton *self);
 
+GDK_AVAILABLE_IN_ALL
+gboolean gtk_app_chooser_button_get_modal             (GtkAppChooserButton *self);
+GDK_AVAILABLE_IN_ALL
+void     gtk_app_chooser_button_set_modal             (GtkAppChooserButton *self,
+                                                       gboolean             modal);
+
 G_END_DECLS
 
 #endif /* __GTK_APP_CHOOSER_BUTTON_H__ */
