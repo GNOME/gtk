@@ -66,6 +66,7 @@ enum {
   PROP_SHOW_DIALOG_ITEM = 1,
   PROP_SHOW_DEFAULT_ITEM,
   PROP_HEADING,
+  PROP_MODAL,
   NUM_PROPERTIES,
 
   PROP_CONTENT_TYPE = NUM_PROPERTIES
@@ -129,6 +130,7 @@ typedef struct
   gint last_active;
   gboolean show_dialog_item;
   gboolean show_default_item;
+  gboolean modal;
 
   GHashTable *custom_item_names;
 } GtkAppChooserButtonPrivate;
@@ -280,7 +282,7 @@ other_application_item_activated_cb (GtkAppChooserButton *self)
   dialog = gtk_app_chooser_dialog_new_for_content_type (GTK_WINDOW (root),
                                                         GTK_DIALOG_DESTROY_WITH_PARENT,
                                                         priv->content_type);
-  gtk_window_set_modal (GTK_WINDOW (dialog), gtk_window_get_modal (GTK_WINDOW (root)));
+  gtk_window_set_modal (GTK_WINDOW (dialog), priv->modal | gtk_window_get_modal (GTK_WINDOW (root)));
   gtk_app_chooser_dialog_set_heading (GTK_APP_CHOOSER_DIALOG (dialog), priv->heading);
 
   widget = gtk_app_chooser_dialog_get_widget (GTK_APP_CHOOSER_DIALOG (dialog));
@@ -569,6 +571,9 @@ gtk_app_chooser_button_set_property (GObject      *obj,
     case PROP_HEADING:
       gtk_app_chooser_button_set_heading (self, g_value_get_string (value));
       break;
+    case PROP_MODAL:
+      gtk_app_chooser_button_set_modal (self, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
       break;
@@ -597,6 +602,9 @@ gtk_app_chooser_button_get_property (GObject    *obj,
       break;
     case PROP_HEADING:
       g_value_set_string (value, priv->heading);
+      break;
+    case PROP_MODAL:
+      g_value_set_boolean (value, priv->modal);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
@@ -714,6 +722,12 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
                          NULL,
                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
+  properties[PROP_MODAL] =
+    g_param_spec_boolean ("modal",
+                          P_("Modal"),
+                          P_("Whether the dialog should be modal"),
+                          TRUE,
+                          G_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_properties (oclass, NUM_PROPERTIES, properties);
 
   signals[SIGNAL_CHANGED] =
@@ -752,6 +766,8 @@ static void
 gtk_app_chooser_button_init (GtkAppChooserButton *self)
 {
   GtkAppChooserButtonPrivate *priv = gtk_app_chooser_button_get_instance_private (self);
+
+  priv->modal = TRUE;
 
   priv->custom_item_names = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   priv->store = gtk_list_store_new (NUM_COLUMNS,
@@ -1069,3 +1085,45 @@ gtk_app_chooser_button_get_heading (GtkAppChooserButton *self)
 
   return priv->heading;
 }
+
+/**
+ * gtk_app_chooser_button_set_modal:
+ * @self: a #GtkAppChooserButton
+ * @modal: %TRUE to make the dialog modal
+ *
+ * Sets whether the dialog should be modal.
+ */
+void
+gtk_app_chooser_button_set_modal (GtkAppChooserButton *self,
+                                  gboolean             modal)
+{
+  GtkAppChooserButtonPrivate *priv = gtk_app_chooser_button_get_instance_private (self);
+
+  g_return_if_fail (GTK_IS_APP_CHOOSER_BUTTON (self));
+
+  if (priv->modal == modal)
+    return;
+
+  priv->modal = modal;
+
+  g_object_notify (G_OBJECT (self), "modal");
+}
+
+/**
+ * gtk_app_chooser_button_get_modal:
+ * @self: a #GtkAppChooserButton
+ *
+ * Gets whether the dialog is modal.
+ *
+ * Returns: %TRUE if the dialog is modal
+ */
+gboolean
+gtk_app_chooser_button_get_modal (GtkAppChooserButton *self)
+{
+  GtkAppChooserButtonPrivate *priv = gtk_app_chooser_button_get_instance_private (self);
+
+  g_return_val_if_fail (GTK_IS_APP_CHOOSER_BUTTON (self), FALSE);
+
+  return priv->modal;
+}
+

@@ -5343,6 +5343,8 @@ gtk_app_chooser_button_get_show_dialog_item
 gtk_app_chooser_button_set_show_dialog_item
 gtk_app_chooser_button_get_heading
 gtk_app_chooser_button_set_heading
+gtk_app_chooser_button_get_modal
+gtk_app_chooser_button_set_modal
 
 <SUBSECTION Standard>
 GTK_TYPE_APP_CHOOSER_BUTTON
