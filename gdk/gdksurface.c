@@ -473,6 +473,9 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
    * @height: the new height
    *
    * Emitted when the size of @surface is changed.
+   *
+   * Surface size is reported in ”application pixels”, not
+   * ”device pixels” (see gdk_surface_get_scale_factor()).
    */
   signals[SIZE_CHANGED] =
     g_signal_new (g_intern_static_string ("size-changed"),
@@ -1981,9 +1984,8 @@ gdk_surface_get_geometry (GdkSurface *surface,
  *
  * Returns the width of the given @surface.
  *
- * On the X11 platform the returned size is the size reported in the
- * most-recently-processed configure event, rather than the current
- * size on the X server.
+ * Surface size is reported in ”application pixels”, not
+ * ”device pixels” (see gdk_surface_get_scale_factor()).
  *
  * Returns: The width of @surface
  */
@@ -2001,9 +2003,8 @@ gdk_surface_get_width (GdkSurface *surface)
  *
  * Returns the height of the given @surface.
  *
- * On the X11 platform the returned size is the size reported in the
- * most-recently-processed configure event, rather than the current
- * size on the X server.
+ * Surface size is reported in ”application pixels”, not
+ * ”device pixels” (see gdk_surface_get_scale_factor()).
  *
  * Returns: The height of @surface
  */
