@@ -3,8 +3,9 @@ if get_option('gtk_doc')
     error('Building the GTK documentation requires Meson 0.52.0')
   endif
 
-  # Use gtk-doc as a sub-project if the version isn't new enough
-  dependency('gtk-doc', version: '>=1.32',
+  # Use gtk-doc as a sub-project from the gtk-doc-for-gtk4 branch
+  # for the time being
+  dependency('gtk-doc', version: '>=1.99',
     fallback: ['gtk-doc', 'dummy_dep'],
     default_options: ['tests=false'])
 
