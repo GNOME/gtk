@@ -1516,47 +1516,9 @@ gtk_label_setup_mnemonic (GtkLabel *label)
 }
 
 static void
-label_shortcut_setting_apply (GtkLabel *label)
-{
-  gtk_label_recalculate (label);
-}
-
-static void
-label_shortcut_setting_traverse_container (GtkWidget *widget,
-                                           gpointer   data)
-{
-  if (GTK_IS_LABEL (widget))
-    label_shortcut_setting_apply (GTK_LABEL (widget));
-  else if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget),
-                          label_shortcut_setting_traverse_container, data);
-}
-
-static void
-label_shortcut_setting_changed (GtkSettings *settings)
-{
-  GList *list, *l;
-
-  list = gtk_window_list_toplevels ();
-
-  for (l = list; l ; l = l->next)
-    {
-      GtkWidget *widget = l->data;
-
-      if (gtk_widget_get_settings (widget) == settings)
-        gtk_container_forall (GTK_CONTAINER (widget),
-                              label_shortcut_setting_traverse_container, NULL);
-    }
-
-  g_list_free (list);
-}
-
-static void
 gtk_label_root (GtkWidget *widget)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkSettings *settings;
-  gboolean shortcuts_connected;
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->root (widget);
 
@@ -1564,23 +1526,6 @@ gtk_label_root (GtkWidget *widget)
 
   /* The PangoContext is replaced when the display changes, so clear the layouts */
   gtk_label_clear_layout (GTK_LABEL (widget));
-
-  settings = gtk_widget_get_settings (widget);
-
-  shortcuts_connected =
-    GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (settings), quark_shortcuts_connected));
-
-  if (! shortcuts_connected)
-    {
-      g_signal_connect (settings, "notify::gtk-enable-accels",
-                        G_CALLBACK (label_shortcut_setting_changed),
-                        NULL);
-
-      g_object_set_qdata (G_OBJECT (settings), quark_shortcuts_connected,
-                         GINT_TO_POINTER (TRUE));
-    }
-
-  label_shortcut_setting_apply (GTK_LABEL (widget));
 }
 
 static void
