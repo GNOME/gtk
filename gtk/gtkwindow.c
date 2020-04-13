@@ -7915,7 +7915,7 @@ update_cursor (GtkWindow *toplevel,
 
   surface = gtk_native_get_surface (gtk_widget_get_native (target));
 
-  if (grab_widget && !gtk_widget_is_ancestor (target, grab_widget))
+  if (grab_widget && !gtk_widget_is_ancestor (target, grab_widget) && target != grab_widget)
     {
       /* Outside the grab widget, cursor stays to whatever the grab
        * widget says.
@@ -7932,9 +7932,6 @@ update_cursor (GtkWindow *toplevel,
        */
       while (target)
         {
-          if (grab_widget && target == grab_widget)
-            break;
-
           /* Don't inherit cursors across surfaces */
           if (surface != gtk_native_get_surface (gtk_widget_get_native (target)))
             break;
@@ -7945,6 +7942,9 @@ update_cursor (GtkWindow *toplevel,
             cursor = gtk_widget_get_cursor (target);
 
           if (cursor)
+            break;
+
+          if (grab_widget && target == grab_widget)
             break;
 
           target = _gtk_widget_get_parent (target);

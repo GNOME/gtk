@@ -1,4 +1,4 @@
-/* OpenGL Area
+/* OpenGL/OpenGL Area
  *
  * GtkGLArea is a widget that allows custom drawing using OpenGL calls.
  */
