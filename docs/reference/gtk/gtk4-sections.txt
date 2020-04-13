@@ -1155,6 +1155,8 @@ gtk_file_chooser_button_get_title
 gtk_file_chooser_button_set_title
 gtk_file_chooser_button_get_width_chars
 gtk_file_chooser_button_set_width_chars
+gtk_file_chooser_button_get_modal
+gtk_file_chooser_button_set_modal
 
 <SUBSECTION Standard>
 GTK_FILE_CHOOSER_BUTTON
