@@ -61,6 +61,9 @@ G_DEFINE_BOXED_TYPE (GdkToplevelLayout, gdk_toplevel_layout,
  * Used together with gdk_toplevel_present() to describe
  * how a toplevel surface should be placed and behave on-screen.
  *
+ * The size is in ”application pixels”, not
+ * ”device pixels” (see gdk_surface_get_scale_factor()).
+ *
  * Returns: (transfer full): newly created instance of #GdkToplevelLayout
  */
 GdkToplevelLayout *
