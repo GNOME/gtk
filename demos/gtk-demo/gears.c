@@ -1,4 +1,4 @@
-/* Gears
+/* OpenGL/Gears
  *
  * This is a classic OpenGL demo, running in a GtkGLArea.
  */
