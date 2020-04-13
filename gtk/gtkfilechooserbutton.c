@@ -534,7 +534,7 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
 				   g_param_spec_boolean ("modal",
 						         P_("Modal"),
 						         P_("Whether to make the dialog modal"),
-						         FALSE,
+						         TRUE,
 						         GTK_PARAM_READWRITE));
 
   _gtk_file_chooser_install_properties (gobject_class);
@@ -871,12 +871,13 @@ gtk_file_chooser_button_constructed (GObject *object)
   if (!button->dialog)
     {
       button->native = gtk_file_chooser_native_new (NULL,
-                                                  NULL,
-						  GTK_FILE_CHOOSER_ACTION_OPEN,
-						  NULL,
-						  NULL);
+                                                    NULL,
+                                                    GTK_FILE_CHOOSER_ACTION_OPEN,
+                                                    NULL,
+                                                    NULL);
       button->chooser = GTK_FILE_CHOOSER (button->native);
       gtk_file_chooser_button_set_title (button, _(DEFAULT_TITLE));
+      gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (button->native), TRUE);
 
       g_signal_connect (button->native, "response",
                         G_CALLBACK (native_response_cb), object);
@@ -2404,15 +2405,11 @@ open_dialog (GtkFileChooserButton *button)
         {
           if (GTK_IS_WINDOW (toplevel))
             {
-              gboolean modal;
-
               if (GTK_WINDOW (toplevel) != gtk_window_get_transient_for (GTK_WINDOW (button->dialog)))
                 gtk_window_set_transient_for (GTK_WINDOW (button->dialog),
                                               GTK_WINDOW (toplevel));
-
-              g_object_get (button->dialog, "modal", &modal, NULL);
-              gtk_window_set_modal (GTK_WINDOW (button->dialog),
-                                    modal | gtk_window_get_modal (GTK_WINDOW (toplevel)));
+              if (gtk_window_get_modal (GTK_WINDOW (toplevel)))
+                gtk_window_set_modal (GTK_WINDOW (button->dialog), TRUE);
             }
         }
     }
@@ -2422,15 +2419,12 @@ open_dialog (GtkFileChooserButton *button)
         {
           if (GTK_IS_WINDOW (toplevel))
             {
-              gboolean modal;
-
               if (GTK_WINDOW (toplevel) != gtk_native_dialog_get_transient_for (GTK_NATIVE_DIALOG (button->native)))
                 gtk_native_dialog_set_transient_for (GTK_NATIVE_DIALOG (button->native),
                                                      GTK_WINDOW (toplevel));
 
-              g_object_get (button->native, "modal", &modal, NULL);
-              gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (button->native),
-                                           modal | gtk_window_get_modal (GTK_WINDOW (toplevel)));
+              if (gtk_window_get_modal (GTK_WINDOW (toplevel)))
+                gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (button->native), TRUE);
             }
         }
     }
