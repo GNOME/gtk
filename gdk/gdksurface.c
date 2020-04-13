@@ -76,6 +76,8 @@ enum {
   SIZE_CHANGED,
   RENDER,
   EVENT,
+  ENTER_MONITOR,
+  LEAVE_MONITOR,
   LAST_SIGNAL
 };
 
@@ -471,6 +473,9 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
    * @height: the new height
    *
    * Emitted when the size of @surface is changed.
+   *
+   * Surface size is reported in ”application pixels”, not
+   * ”device pixels” (see gdk_surface_get_scale_factor()).
    */
   signals[SIZE_CHANGED] =
     g_signal_new (g_intern_static_string ("size-changed"),
@@ -532,6 +537,44 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   g_signal_set_va_marshaller (signals[EVENT],
                               G_OBJECT_CLASS_TYPE (object_class),
                               _gdk_marshal_BOOLEAN__BOXEDv);
+
+  /**
+   * GdkSurface::enter-montor:
+   * @surface: the #GdkSurface
+   * @monitor: the monitor
+   *
+   * Emitted when @surface starts being present on the monitor.
+   */ 
+  signals[ENTER_MONITOR] =
+    g_signal_new (g_intern_static_string ("enter-monitor"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_FIRST,
+                  0,
+                  NULL,
+                  NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  1,
+                  GDK_TYPE_MONITOR);
+
+  /**
+   * GdkSurface::leave-montor:
+   * @surface: the #GdkSurface
+   * @monitor: the monitor
+   *
+   * Emitted when @surface stops being present on the monitor.
+   */ 
+  signals[LEAVE_MONITOR] =
+    g_signal_new (g_intern_static_string ("leave-monitor"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_FIRST,
+                  0,
+                  NULL,
+                  NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  1,
+                  GDK_TYPE_MONITOR);
 }
 
 static void
@@ -1941,9 +1984,8 @@ gdk_surface_get_geometry (GdkSurface *surface,
  *
  * Returns the width of the given @surface.
  *
- * On the X11 platform the returned size is the size reported in the
- * most-recently-processed configure event, rather than the current
- * size on the X server.
+ * Surface size is reported in ”application pixels”, not
+ * ”device pixels” (see gdk_surface_get_scale_factor()).
  *
  * Returns: The width of @surface
  */
@@ -1961,9 +2003,8 @@ gdk_surface_get_width (GdkSurface *surface)
  *
  * Returns the height of the given @surface.
  *
- * On the X11 platform the returned size is the size reported in the
- * most-recently-processed configure event, rather than the current
- * size on the X server.
+ * Surface size is reported in ”application pixels”, not
+ * ”device pixels” (see gdk_surface_get_scale_factor()).
  *
  * Returns: The height of @surface
  */
@@ -3034,4 +3075,18 @@ gdk_surface_get_seat_from_event (GdkSurface *surface,
         return seat;
     }
   return gdk_display_get_default_seat (surface->display);
+}
+
+void
+gdk_surface_enter_monitor (GdkSurface *surface,
+                           GdkMonitor *monitor)
+{
+  g_signal_emit (surface, signals[ENTER_MONITOR], 0, monitor);
+}
+
+void
+gdk_surface_leave_monitor (GdkSurface *surface,
+                           GdkMonitor *monitor)
+{
+  g_signal_emit (surface, signals[LEAVE_MONITOR], 0, monitor);
 }

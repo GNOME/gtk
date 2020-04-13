@@ -549,6 +549,7 @@ populate_display (GdkDisplay *display, GtkInspectorGeneral *gen)
       gchar *value;
       GdkRectangle rect;
       gint scale;
+      char *scale_str = NULL;
       const char *manufacturer;
       const char *model;
       GdkMonitor *monitor;
@@ -568,13 +569,16 @@ populate_display (GdkDisplay *display, GtkInspectorGeneral *gen)
 
       gdk_monitor_get_geometry (monitor, &rect);
       scale = gdk_monitor_get_scale_factor (monitor);
+      if (scale != 1)
+        scale_str = g_strdup_printf (" @ %d", scale);
 
       value = g_strdup_printf ("%d × %d%s at %d, %d",
                                rect.width, rect.height,
-                               scale == 2 ? " @ 2" : "",
+                               scale_str ? scale_str : "",
                                rect.x, rect.y);
       add_label_row (gen, list, "Geometry", value, 10);
       g_free (value);
+      g_free (scale_str);
 
       value = g_strdup_printf ("%d × %d mm²",
                                gdk_monitor_get_width_mm (monitor),

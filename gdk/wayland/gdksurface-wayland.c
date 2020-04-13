@@ -1201,6 +1201,8 @@ surface_enter (void              *data,
 {
   GdkSurface *surface = GDK_SURFACE (data);
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkMonitor *monitor;
 
   GDK_DISPLAY_NOTE (gdk_surface_get_display (surface), EVENTS,
             g_message ("surface enter, surface %p output %p", surface, output));
@@ -1208,6 +1210,9 @@ surface_enter (void              *data,
   impl->display_server.outputs = g_slist_prepend (impl->display_server.outputs, output);
 
   gdk_wayland_surface_update_scale (surface);
+
+  monitor = gdk_wayland_display_get_monitor_for_output (display, output);
+  gdk_surface_enter_monitor (surface, monitor);
 }
 
 static void
@@ -1217,6 +1222,8 @@ surface_leave (void              *data,
 {
   GdkSurface *surface = GDK_SURFACE (data);
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkMonitor *monitor;
 
   GDK_DISPLAY_NOTE (gdk_surface_get_display (surface), EVENTS,
             g_message ("surface leave, surface %p output %p", surface, output));
@@ -1225,6 +1232,9 @@ surface_leave (void              *data,
 
   if (impl->display_server.outputs)
     gdk_wayland_surface_update_scale (surface);
+
+  monitor = gdk_wayland_display_get_monitor_for_output (display, output);
+  gdk_surface_leave_monitor (surface, monitor);
 }
 
 static const struct wl_surface_listener surface_listener = {
