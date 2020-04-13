@@ -104,6 +104,10 @@
     <file>gtkfishbowl.c</file>
     <file>gtkfishbowl.h</file>
   </gresource>
+  <gresource prefix="/gears">
+    <file>gtkgears.c</file>
+    <file>gtkgears.h</file>
+  </gresource>
   <gresource prefix="/iconscroll">
     <file>iconscroll.ui</file>
   </gresource>
@@ -176,6 +180,7 @@
     <file>font_features.c</file>
     <file>fontplane.c</file>
     <file>fontrendering.c</file>
+    <file>gears.c</file>
     <file>gestures.c</file>
     <file>glarea.c</file>
     <file>headerbar.c</file>
