@@ -85,6 +85,7 @@ typedef struct
   guint         use_font : 1;
   guint         use_size : 1;
   guint         show_preview_entry : 1;
+  guint         modal    : 1;
 
   GtkWidget     *button;
   GtkWidget     *font_dialog;
@@ -119,6 +120,7 @@ enum
 {
   PROP_0,
   PROP_TITLE,
+  PROP_MODAL,
   PROP_USE_FONT,
   PROP_USE_SIZE
 };
@@ -532,6 +534,14 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
+  g_object_class_install_property (gobject_class,
+                                   PROP_MODAL,
+                                   g_param_spec_boolean ("modal",
+                                                         P_("Modal"),
+                                                         P_("Whether the dialog is modal"),
+                                                         TRUE,
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   /**
    * GtkFontButton::font-set:
    * @widget: the object which received the signal.
@@ -580,6 +590,7 @@ gtk_font_button_init (GtkFontButton *font_button)
   gtk_widget_set_parent (priv->button, GTK_WIDGET (font_button));
 
   /* Initialize fields */
+  priv->modal = TRUE;
   priv->use_font = FALSE;
   priv->use_size = FALSE;
   priv->show_preview_entry = TRUE;
@@ -640,6 +651,9 @@ gtk_font_button_set_property (GObject      *object,
     case PROP_TITLE:
       gtk_font_button_set_title (font_button, g_value_get_string (value));
       break;
+    case PROP_MODAL:
+      gtk_font_button_set_modal (font_button, g_value_get_boolean (value));
+      break;
     case GTK_FONT_CHOOSER_PROP_FONT_DESC:
       gtk_font_button_take_font_desc (font_button, g_value_dup_boxed (value));
       break;
@@ -683,6 +697,9 @@ gtk_font_button_get_property (GObject    *object,
       break;
     case PROP_TITLE:
       g_value_set_string (value, gtk_font_button_get_title (font_button));
+      break;
+    case PROP_MODAL:
+      g_value_set_boolean (value, gtk_font_button_get_modal (font_button));
       break;
     case GTK_FONT_CHOOSER_PROP_FONT_DESC:
       g_value_set_boxed (value, gtk_font_button_get_font_desc (font_button));
@@ -781,6 +798,50 @@ gtk_font_button_get_title (GtkFontButton *font_button)
 
   return priv->title;
 } 
+
+/**
+ * gtk_font_button_set_modal:
+ * @font_button: a #GtkFontButton
+ * @modal: %TRUE to make the dialog modal
+ *
+ * Sets whether the dialog should be modal.
+ */
+void
+gtk_font_button_set_modal (GtkFontButton *font_button,
+                           gboolean       modal)
+{
+  GtkFontButtonPrivate *priv = gtk_font_button_get_instance_private (font_button);
+
+  g_return_if_fail (GTK_IS_FONT_BUTTON (font_button));
+
+  if (priv->modal == modal)
+    return;
+
+  priv->modal = modal;
+
+  if (priv->font_dialog)
+    gtk_window_set_modal (GTK_WINDOW (priv->font_dialog), priv->modal);
+
+  g_object_notify (G_OBJECT (font_button), "modal");
+}
+
+/**
+ * gtk_font_button_get_modal:
+ * @font_button: a #GtkFontButton
+ *
+ * Gets whether the dialog is modal.
+ *
+ * Returns: %TRUE if the dialog is modal
+ */
+gboolean
+gtk_font_button_get_modal (GtkFontButton *font_button)
+{
+  GtkFontButtonPrivate *priv = gtk_font_button_get_instance_private (font_button);
+
+  g_return_val_if_fail (GTK_IS_FONT_BUTTON (font_button), FALSE);
+
+  return priv->modal;
+}
 
 /**
  * gtk_font_button_get_use_font:
@@ -907,6 +968,7 @@ gtk_font_button_clicked (GtkButton *button,
 
       priv->font_dialog = gtk_font_chooser_dialog_new (priv->title, NULL);
       gtk_window_set_hide_on_close (GTK_WINDOW (priv->font_dialog), TRUE);
+      gtk_window_set_modal (GTK_WINDOW (priv->font_dialog), priv->modal);
 
       font_dialog = GTK_FONT_CHOOSER (priv->font_dialog);
 
@@ -940,8 +1002,8 @@ gtk_font_button_clicked (GtkButton *button,
           if (GTK_WINDOW (parent) != gtk_window_get_transient_for (GTK_WINDOW (font_dialog)))
             gtk_window_set_transient_for (GTK_WINDOW (font_dialog), GTK_WINDOW (parent));
 
-          gtk_window_set_modal (GTK_WINDOW (font_dialog),
-                                gtk_window_get_modal (GTK_WINDOW (parent)));
+          if (gtk_window_get_modal (GTK_WINDOW (parent)))
+            gtk_window_set_modal (GTK_WINDOW (font_dialog), TRUE);
         }
 
       g_signal_connect (font_dialog, "notify",

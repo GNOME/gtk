@@ -1273,6 +1273,8 @@ gtk_font_button_set_use_size
 gtk_font_button_get_use_size
 gtk_font_button_set_title
 gtk_font_button_get_title
+gtk_font_button_set_modal
+gtk_font_button_get_modal
 <SUBSECTION Standard>
 GTK_FONT_BUTTON
 GTK_IS_FONT_BUTTON
