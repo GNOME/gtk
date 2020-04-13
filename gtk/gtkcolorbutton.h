@@ -58,6 +58,12 @@ void         gtk_color_button_set_title     (GtkColorButton *button,
 GDK_AVAILABLE_IN_ALL
 const gchar *gtk_color_button_get_title     (GtkColorButton *button);
 
+GDK_AVAILABLE_IN_ALL
+gboolean     gtk_color_button_get_modal        (GtkColorButton *button);
+GDK_AVAILABLE_IN_ALL
+void         gtk_color_button_set_modal        (GtkColorButton *button,
+                                                gboolean        modal);
+
 G_END_DECLS
 
 #endif  /* __GTK_COLOR_BUTTON_H__ */

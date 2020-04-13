@@ -84,8 +84,9 @@ typedef struct
   gchar *title;         /* Title for the color selection window */
   GdkRGBA rgba;
 
-  guint use_alpha : 1;  /* Use alpha or not */
+  guint use_alpha   : 1;  /* Use alpha or not */
   guint show_editor : 1;
+  guint modal       : 1;
 } GtkColorButtonPrivate;
 
 /* Properties */
@@ -95,7 +96,8 @@ enum
   PROP_USE_ALPHA,
   PROP_TITLE,
   PROP_RGBA,
-  PROP_SHOW_EDITOR
+  PROP_SHOW_EDITOR,
+  PROP_MODAL
 };
 
 /* Signals */
@@ -226,6 +228,14 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
+  g_object_class_install_property (gobject_class,
+                                   PROP_MODAL,
+                                   g_param_spec_boolean ("modal", P_("Modal"),
+                                                         P_("Whether the dialog is modal"),
+                                                         TRUE,
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, "colorbutton");
 }
@@ -286,6 +296,7 @@ gtk_color_button_init (GtkColorButton *button)
   priv->rgba.blue = 0;
   priv->rgba.alpha = 1;
   priv->use_alpha = FALSE;
+  priv->modal = TRUE;
 
   dest = gtk_drop_target_new (GDK_TYPE_RGBA, GDK_ACTION_COPY);
   g_signal_connect (dest, "drop", G_CALLBACK (gtk_color_button_drop), button);
@@ -401,14 +412,15 @@ ensure_dialog (GtkColorButton *button)
 
   priv->cs_dialog = dialog = gtk_color_chooser_dialog_new (priv->title, NULL);
   gtk_window_set_hide_on_close (GTK_WINDOW (dialog), TRUE);
+  gtk_window_set_modal (GTK_WINDOW (dialog), priv->modal);
 
   if (GTK_IS_WINDOW (parent))
   {
     if (GTK_WINDOW (parent) != gtk_window_get_transient_for (GTK_WINDOW (dialog)))
       gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 
-    gtk_window_set_modal (GTK_WINDOW (dialog),
-                          gtk_window_get_modal (GTK_WINDOW (parent)));
+    if (gtk_window_get_modal (GTK_WINDOW (parent)))
+      gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   }
 
   g_signal_connect (dialog, "response",
@@ -528,6 +540,50 @@ gtk_color_button_get_title (GtkColorButton *button)
   return priv->title;
 }
 
+/**
+ * gtk_color_button_set_modal:
+ * @button: a #GtkColorButton
+ * @modal: %TRUE to make the dialog modal
+ *
+ * Sets whether the dialog should be modal.
+ */
+void
+gtk_color_button_set_modal (GtkColorButton *button,
+                            gboolean        modal)
+{
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
+
+  g_return_if_fail (GTK_IS_COLOR_BUTTON (button));
+
+  if (priv->modal == modal)
+    return;
+
+  priv->modal = modal;
+
+  if (priv->cs_dialog)
+    gtk_window_set_modal (GTK_WINDOW (priv->cs_dialog), priv->modal);
+
+  g_object_notify (G_OBJECT (button), "modal");
+}
+
+/**
+ * gtk_color_button_get_modal:
+ * @button: a #GtkColorButton
+ *
+ * Gets whether the dialog is modal.
+ *
+ * Returns: %TRUE if the dialog is modal
+ */
+gboolean
+gtk_color_button_get_modal (GtkColorButton *button)
+{
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
+
+  g_return_val_if_fail (GTK_IS_COLOR_BUTTON (button), FALSE);
+
+  return priv->modal;
+}
+
 static void
 gtk_color_button_set_property (GObject      *object,
                                guint         param_id,
@@ -557,6 +613,9 @@ gtk_color_button_set_property (GObject      *object,
             g_object_notify (object, "show-editor");
           }
       }
+      break;
+    case PROP_MODAL:
+      gtk_color_button_set_modal (button, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -591,6 +650,9 @@ gtk_color_button_get_property (GObject    *object,
       break;
     case PROP_SHOW_EDITOR:
       g_value_set_boolean (value, priv->show_editor);
+      break;
+    case PROP_MODAL:
+      g_value_set_boolean (value, priv->modal);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
