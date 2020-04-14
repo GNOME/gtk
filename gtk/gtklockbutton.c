@@ -70,17 +70,7 @@
 struct _GtkLockButton
 {
   GtkButton parent_instance;
-};
 
-typedef struct _GtkLockButtonClass   GtkLockButtonClass;
-struct _GtkLockButtonClass
-{
-  GtkButtonClass parent_class;
-};
-
-typedef struct _GtkLockButtonPrivate GtkLockButtonPrivate;
-struct _GtkLockButtonPrivate
-{
   GPermission *permission;
   GCancellable *cancellable;
 
@@ -95,6 +85,12 @@ struct _GtkLockButtonPrivate
   GtkWidget *stack;
   GtkWidget *label_lock;
   GtkWidget *label_unlock;
+};
+
+typedef struct _GtkLockButtonClass   GtkLockButtonClass;
+struct _GtkLockButtonClass
+{
+  GtkButtonClass parent_class;
 };
 
 enum
@@ -115,33 +111,32 @@ static void on_permission_changed (GPermission *permission,
                                    GParamSpec  *pspec,
                                    gpointer     user_data);
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkLockButton, gtk_lock_button, GTK_TYPE_BUTTON)
+G_DEFINE_TYPE (GtkLockButton, gtk_lock_button, GTK_TYPE_BUTTON)
 
 static void
 gtk_lock_button_finalize (GObject *object)
 {
   GtkLockButton *button = GTK_LOCK_BUTTON (object);
-  GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (button);
 
-  g_free (priv->tooltip_lock);
-  g_free (priv->tooltip_unlock);
-  g_free (priv->tooltip_not_authorized);
+  g_free (button->tooltip_lock);
+  g_free (button->tooltip_unlock);
+  g_free (button->tooltip_not_authorized);
 
-  g_object_unref (priv->icon_lock);
-  g_object_unref (priv->icon_unlock);
+  g_object_unref (button->icon_lock);
+  g_object_unref (button->icon_unlock);
 
-  if (priv->cancellable != NULL)
+  if (button->cancellable != NULL)
     {
-      g_cancellable_cancel (priv->cancellable);
-      g_object_unref (priv->cancellable);
+      g_cancellable_cancel (button->cancellable);
+      g_object_unref (button->cancellable);
     }
 
-  if (priv->permission)
+  if (button->permission)
     {
-      g_signal_handlers_disconnect_by_func (priv->permission,
+      g_signal_handlers_disconnect_by_func (button->permission,
                                             on_permission_changed,
                                             button);
-      g_object_unref (priv->permission);
+      g_object_unref (button->permission);
     }
 
   G_OBJECT_CLASS (gtk_lock_button_parent_class)->finalize (object);
@@ -154,32 +149,31 @@ gtk_lock_button_get_property (GObject    *object,
                               GParamSpec *pspec)
 {
   GtkLockButton *button = GTK_LOCK_BUTTON (object);
-  GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (button);
 
   switch (property_id)
     {
     case PROP_PERMISSION:
-      g_value_set_object (value, priv->permission);
+      g_value_set_object (value, button->permission);
       break;
 
     case PROP_TEXT_LOCK:
-      g_value_set_string (value, gtk_label_get_text (GTK_LABEL (priv->label_lock)));
+      g_value_set_string (value, gtk_label_get_text (GTK_LABEL (button->label_lock)));
       break;
 
     case PROP_TEXT_UNLOCK:
-      g_value_set_string (value, gtk_label_get_text (GTK_LABEL (priv->label_unlock)));
+      g_value_set_string (value, gtk_label_get_text (GTK_LABEL (button->label_unlock)));
       break;
 
     case PROP_TOOLTIP_LOCK:
-      g_value_set_string (value, priv->tooltip_lock);
+      g_value_set_string (value, button->tooltip_lock);
       break;
 
     case PROP_TOOLTIP_UNLOCK:
-      g_value_set_string (value, priv->tooltip_unlock);
+      g_value_set_string (value, button->tooltip_unlock);
       break;
 
     case PROP_TOOLTIP_NOT_AUTHORIZED:
-      g_value_set_string (value, priv->tooltip_not_authorized);
+      g_value_set_string (value, button->tooltip_not_authorized);
       break;
 
     default:
@@ -195,7 +189,6 @@ gtk_lock_button_set_property (GObject      *object,
                               GParamSpec   *pspec)
 {
   GtkLockButton *button = GTK_LOCK_BUTTON (object);
-  GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (button);
 
   switch (property_id)
     {
@@ -204,28 +197,28 @@ gtk_lock_button_set_property (GObject      *object,
       break;
 
     case PROP_TEXT_LOCK:
-      gtk_label_set_text (GTK_LABEL (priv->label_lock), g_value_get_string (value));
+      gtk_label_set_text (GTK_LABEL (button->label_lock), g_value_get_string (value));
       _gtk_lock_button_accessible_name_changed (button);
       break;
 
     case PROP_TEXT_UNLOCK:
-      gtk_label_set_text (GTK_LABEL (priv->label_unlock), g_value_get_string (value));
+      gtk_label_set_text (GTK_LABEL (button->label_unlock), g_value_get_string (value));
       _gtk_lock_button_accessible_name_changed (button);
       break;
 
     case PROP_TOOLTIP_LOCK:
-      g_free (priv->tooltip_lock);
-      priv->tooltip_lock = g_value_dup_string (value);
+      g_free (button->tooltip_lock);
+      button->tooltip_lock = g_value_dup_string (value);
       break;
 
     case PROP_TOOLTIP_UNLOCK:
-      g_free (priv->tooltip_unlock);
-      priv->tooltip_unlock = g_value_dup_string (value);
+      g_free (button->tooltip_unlock);
+      button->tooltip_unlock = g_value_dup_string (value);
       break;
 
     case PROP_TOOLTIP_NOT_AUTHORIZED:
-      g_free (priv->tooltip_not_authorized);
-      priv->tooltip_not_authorized = g_value_dup_string (value);
+      g_free (button->tooltip_not_authorized);
+      button->tooltip_not_authorized = g_value_dup_string (value);
       break;
 
     default:
@@ -239,7 +232,6 @@ gtk_lock_button_set_property (GObject      *object,
 static void
 gtk_lock_button_init (GtkLockButton *button)
 {
-  GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (button);
   const char *names[3];
 
   gtk_widget_init_template (GTK_WIDGET (button));
@@ -247,12 +239,12 @@ gtk_lock_button_init (GtkLockButton *button)
   names[0] = "changes-allow-symbolic";
   names[1] = "changes-allow";
   names[2] = NULL;
-  priv->icon_unlock = g_themed_icon_new_from_names ((char **) names, -1);
+  button->icon_unlock = g_themed_icon_new_from_names ((char **) names, -1);
 
   names[0] = "changes-prevent-symbolic";
   names[1] = "changes-prevent";
   names[2] = NULL;
-  priv->icon_lock = g_themed_icon_new_from_names ((char **) names, -1);
+  button->icon_lock = g_themed_icon_new_from_names ((char **) names, -1);
 
   update_state (button);
 
@@ -328,11 +320,11 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
   /* Bind class to template
    */
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtklockbutton.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, GtkLockButton, box);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkLockButton, image);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkLockButton, label_lock);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkLockButton, label_unlock);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkLockButton, stack);
+  gtk_widget_class_bind_template_child (widget_class, GtkLockButton, box);
+  gtk_widget_class_bind_template_child (widget_class, GtkLockButton, image);
+  gtk_widget_class_bind_template_child (widget_class, GtkLockButton, label_lock);
+  gtk_widget_class_bind_template_child (widget_class, GtkLockButton, label_unlock);
+  gtk_widget_class_bind_template_child (widget_class, GtkLockButton, stack);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LOCK_BUTTON_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("button"));
@@ -341,7 +333,6 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
 static void
 update_state (GtkLockButton *button)
 {
-  GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (button);
   gboolean allowed;
   gboolean can_acquire;
   gboolean can_release;
@@ -350,11 +341,11 @@ update_state (GtkLockButton *button)
   GIcon *icon;
   const gchar *tooltip;
 
-  if (priv->permission)
+  if (button->permission)
     {
-      allowed = g_permission_get_allowed (priv->permission);
-      can_acquire = g_permission_get_can_acquire (priv->permission);
-      can_release = g_permission_get_can_release (priv->permission);
+      allowed = g_permission_get_allowed (button->permission);
+      can_acquire = g_permission_get_can_acquire (button->permission);
+      can_release = g_permission_get_can_release (button->permission);
     }
   else
     {
@@ -367,38 +358,38 @@ update_state (GtkLockButton *button)
     {
       visible = TRUE;
       sensitive = TRUE;
-      icon = priv->icon_lock;
-      tooltip = priv->tooltip_lock;
+      icon = button->icon_lock;
+      tooltip = button->tooltip_lock;
     }
   else if (allowed && !can_release)
     {
       visible = FALSE;
       sensitive = TRUE;
-      icon = priv->icon_lock;
-      tooltip = priv->tooltip_lock;
+      icon = button->icon_lock;
+      tooltip = button->tooltip_lock;
     }
   else if (!allowed && can_acquire)
     {
       visible = TRUE;
       sensitive = TRUE;
-      icon = priv->icon_unlock;
-      tooltip = priv->tooltip_unlock;
+      icon = button->icon_unlock;
+      tooltip = button->tooltip_unlock;
     }
   else if (!allowed && !can_acquire)
     {
       visible = TRUE;
       sensitive = FALSE;
-      icon = priv->icon_unlock;
-      tooltip = priv->tooltip_not_authorized;
+      icon = button->icon_unlock;
+      tooltip = button->tooltip_not_authorized;
     }
   else
     {
       g_assert_not_reached ();
     }
 
-  gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon);
-  gtk_stack_set_visible_child (GTK_STACK (priv->stack),
-                               allowed ? priv->label_lock : priv->label_unlock);
+  gtk_image_set_from_gicon (GTK_IMAGE (button->image), icon);
+  gtk_stack_set_visible_child (GTK_STACK (button->stack),
+                               allowed ? button->label_lock : button->label_unlock);
   _gtk_lock_button_accessible_name_changed (button);
   gtk_widget_set_tooltip_markup (GTK_WIDGET (button), tooltip);
   gtk_widget_set_sensitive (GTK_WIDGET (button), sensitive);
@@ -421,18 +412,17 @@ acquire_cb (GObject      *source,
             gpointer      user_data)
 {
   GtkLockButton *button = GTK_LOCK_BUTTON (user_data);
-  GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (button);
   GError *error;
 
   error = NULL;
-  if (!g_permission_acquire_finish (priv->permission, result, &error))
+  if (!g_permission_acquire_finish (button->permission, result, &error))
     {
       g_warning ("Error acquiring permission: %s", error->message);
       g_error_free (error);
     }
 
-  g_object_unref (priv->cancellable);
-  priv->cancellable = NULL;
+  g_object_unref (button->cancellable);
+  button->cancellable = NULL;
 
   update_state (button);
 }
@@ -443,53 +433,52 @@ release_cb (GObject      *source,
             gpointer      user_data)
 {
   GtkLockButton *button = GTK_LOCK_BUTTON (user_data);
-  GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (button);
   GError *error;
 
   error = NULL;
-  if (!g_permission_release_finish (priv->permission, result, &error))
+  if (!g_permission_release_finish (button->permission, result, &error))
     {
       g_warning ("Error releasing permission: %s", error->message);
       g_error_free (error);
     }
 
-  g_object_unref (priv->cancellable);
-  priv->cancellable = NULL;
+  g_object_unref (button->cancellable);
+  button->cancellable = NULL;
 
   update_state (button);
 }
 
 static void
-gtk_lock_button_clicked (GtkButton *button)
+gtk_lock_button_clicked (GtkButton *widget)
 {
-  GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (GTK_LOCK_BUTTON (button));
+  GtkLockButton *button = GTK_LOCK_BUTTON (widget);
 
   /* if we already have a pending interactive check or permission is not set,
    * then do nothing
    */
-  if (priv->cancellable != NULL || priv->permission == NULL)
+  if (button->cancellable != NULL || button->permission == NULL)
     return;
 
-  if (g_permission_get_allowed (priv->permission))
+  if (g_permission_get_allowed (button->permission))
     {
-      if (g_permission_get_can_release (priv->permission))
+      if (g_permission_get_can_release (button->permission))
         {
-          priv->cancellable = g_cancellable_new ();
+          button->cancellable = g_cancellable_new ();
 
-          g_permission_release_async (priv->permission,
-                                      priv->cancellable,
+          g_permission_release_async (button->permission,
+                                      button->cancellable,
                                       release_cb,
                                       button);
         }
     }
   else
     {
-      if (g_permission_get_can_acquire (priv->permission))
+      if (g_permission_get_can_acquire (button->permission))
         {
-          priv->cancellable = g_cancellable_new ();
+          button->cancellable = g_cancellable_new ();
 
-          g_permission_acquire_async (priv->permission,
-                                      priv->cancellable,
+          g_permission_acquire_async (button->permission,
+                                      button->cancellable,
                                       acquire_cb,
                                       button);
         }
@@ -523,11 +512,9 @@ gtk_lock_button_new (GPermission *permission)
 GPermission *
 gtk_lock_button_get_permission (GtkLockButton *button)
 {
-  GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (button);
-
   g_return_val_if_fail (GTK_IS_LOCK_BUTTON (button), NULL);
 
-  return priv->permission;
+  return button->permission;
 }
 
 /**
@@ -541,27 +528,25 @@ void
 gtk_lock_button_set_permission (GtkLockButton *button,
                                 GPermission   *permission)
 {
-  GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (button);
-
   g_return_if_fail (GTK_IS_LOCK_BUTTON (button));
   g_return_if_fail (permission == NULL || G_IS_PERMISSION (permission));
 
-  if (priv->permission != permission)
+  if (button->permission != permission)
     {
-      if (priv->permission)
+      if (button->permission)
         {
-          g_signal_handlers_disconnect_by_func (priv->permission,
+          g_signal_handlers_disconnect_by_func (button->permission,
                                                 on_permission_changed,
                                                 button);
-          g_object_unref (priv->permission);
+          g_object_unref (button->permission);
         }
 
-      priv->permission = permission;
+      button->permission = permission;
 
-      if (priv->permission)
+      if (button->permission)
         {
-          g_object_ref (priv->permission);
-          g_signal_connect (priv->permission, "notify",
+          g_object_ref (button->permission);
+          g_signal_connect (button->permission, "notify",
                             G_CALLBACK (on_permission_changed), button);
         }
 
@@ -574,12 +559,11 @@ gtk_lock_button_set_permission (GtkLockButton *button,
 const char *
 _gtk_lock_button_get_current_text (GtkLockButton *button)
 {
-  GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (button);
   GtkWidget *label;
 
   g_return_val_if_fail (GTK_IS_LOCK_BUTTON (button), NULL);
 
-  label = gtk_stack_get_visible_child (GTK_STACK (priv->stack));
+  label = gtk_stack_get_visible_child (GTK_STACK (button->stack));
 
   return gtk_label_get_text (GTK_LABEL (label));
 }
