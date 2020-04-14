@@ -2798,12 +2798,12 @@ gtk_label_get_measuring_layout (GtkLabel    *self,
 }
 
 static void
-gtk_label_update_layout_attributes (GtkLabel *self)
+gtk_label_update_layout_attributes (GtkLabel      *self,
+                                    PangoAttrList *style_attrs)
 {
   GtkWidget *widget = GTK_WIDGET (self);
   GtkCssStyle *style;
   PangoAttrList *attrs;
-  PangoAttrList *style_attrs;
 
   if (self->layout == NULL)
     return;
@@ -2855,7 +2855,9 @@ gtk_label_update_layout_attributes (GtkLabel *self)
     attrs = NULL;
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
-  style_attrs = gtk_css_style_get_pango_attributes (style);
+  if (!style_attrs)
+    style_attrs = gtk_css_style_get_pango_attributes (style);
+
   if (style_attrs)
     {
       attrs = _gtk_pango_attr_list_merge (attrs, style_attrs);
@@ -2884,7 +2886,7 @@ gtk_label_ensure_layout (GtkLabel *self)
   rtl = _gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL;
   self->layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), self->text);
 
-  gtk_label_update_layout_attributes (self);
+  gtk_label_update_layout_attributes (self, NULL);
 
   switch (self->jtype)
     {
@@ -3292,12 +3294,22 @@ gtk_label_css_changed (GtkWidget         *widget,
                        GtkCssStyleChange *change)
 {
   GtkLabel *self = GTK_LABEL (widget);
+  gboolean attrs_affected;
+  PangoAttrList *new_attrs = NULL;
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->css_changed (widget, change);
 
-  if (change == NULL || gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_ATTRS) ||
-      (self->select_info && self->select_info->links))
-    gtk_label_update_layout_attributes (self);
+  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_ATTRS))
+    {
+      new_attrs = gtk_css_style_get_pango_attributes (gtk_css_style_change_get_new_style (change));
+      attrs_affected = (self->layout && pango_layout_get_attributes (self->layout)) ||
+                       new_attrs;
+    }
+  else
+    attrs_affected = FALSE;
+
+  if (change == NULL || attrs_affected  || (self->select_info && self->select_info->links))
+    gtk_label_update_layout_attributes (self, new_attrs);
 }
 
 static PangoDirection
