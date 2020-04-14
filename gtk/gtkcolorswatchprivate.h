@@ -24,34 +24,10 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_COLOR_SWATCH                  (gtk_color_swatch_get_type ())
 #define GTK_COLOR_SWATCH(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_COLOR_SWATCH, GtkColorSwatch))
-#define GTK_COLOR_SWATCH_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_COLOR_SWATCH, GtkColorSwatchClass))
 #define GTK_IS_COLOR_SWATCH(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_COLOR_SWATCH))
-#define GTK_IS_COLOR_SWATCH_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_COLOR_SWATCH))
-#define GTK_COLOR_SWATCH_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_COLOR_SWATCH, GtkColorSwatchClass))
 
 
 typedef struct _GtkColorSwatch        GtkColorSwatch;
-typedef struct _GtkColorSwatchClass   GtkColorSwatchClass;
-
-struct _GtkColorSwatch
-{
-  GtkWidget parent_instance;
-};
-
-struct _GtkColorSwatchClass
-{
-  GtkWidgetClass parent_class;
-
-  void ( * activate)  (GtkColorSwatch *swatch);
-  void ( * customize) (GtkColorSwatch *swatch);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
-
 
 GType       gtk_color_swatch_get_type         (void) G_GNUC_CONST;
 GtkWidget * gtk_color_swatch_new              (void);
