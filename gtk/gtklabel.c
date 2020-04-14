@@ -519,7 +519,6 @@ static void          gtk_label_clear_links      (GtkLabel  *self);
 static gboolean      gtk_label_activate_link    (GtkLabel    *self,
                                                  const gchar *uri);
 static void          gtk_label_activate_current_link (GtkLabel *self);
-static GtkLabelLink *gtk_label_get_current_link (GtkLabel  *self);
 static void          emit_activate_link         (GtkLabel     *self,
                                                  GtkLabelLink *link);
 
@@ -5469,22 +5468,6 @@ gtk_label_activate_current_link (GtkLabel *self)
     gtk_widget_activate_default (widget);
 }
 
-static GtkLabelLink *
-gtk_label_get_current_link (GtkLabel *self)
-{
-  GtkLabelLink *link;
-
-  if (!self->select_info)
-    return NULL;
-
-  if (self->select_info->link_clicked)
-    link = self->select_info->active_link;
-  else
-    link = gtk_label_get_focus_link (self, NULL);
-
-  return link;
-}
-
 /**
  * gtk_label_get_current_uri:
  * @label: a #GtkLabel
@@ -5503,11 +5486,17 @@ gtk_label_get_current_link (GtkLabel *self)
 const gchar *
 gtk_label_get_current_uri (GtkLabel *self)
 {
-  GtkLabelLink *link;
+  const GtkLabelLink *link;
 
   g_return_val_if_fail (GTK_IS_LABEL (self), NULL);
 
-  link = gtk_label_get_current_link (self);
+  if (!self->select_info)
+    return NULL;
+
+  if (self->select_info->link_clicked)
+    link = self->select_info->active_link;
+  else
+    link = gtk_label_get_focus_link (self, NULL);
 
   if (link)
     return link->uri;
