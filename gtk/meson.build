@@ -987,6 +987,7 @@ endif
 # Library
 libgtk = library('gtk-4',
                  soversion: gtk_soversion,
+                 version: gtk_library_version,
                  sources: [typefuncs, gtk_sources, gtkmarshal_h, gtkprivatetypebuiltins_h],
                  c_args: gtk_cargs + common_cflags,
                  include_directories: [confinc, gdkinc, gskinc, gtkinc],
