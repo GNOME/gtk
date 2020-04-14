@@ -18,6 +18,15 @@
 /* Build with gcc -o convert-emoji convert-emoji.c `pkg-config --cflags --libs json-glib-1.0`
  */
 
+/* The format of the generated data is: a(auss).
+ * Each member of the array has the following fields:
+ * au - sequence of unicode codepoints. If the
+ *      sequence contains a 0, it marks the point
+ *      where skin tone modifiers should be inserted
+ * s -  name, e.g. "man worker"
+ * s -  shortname, for completion. This includes
+ *      colons to mark the ends, e.g. ":guardsman:"
+ */
 #include <json-glib/json-glib.h>
 #include <string.h>
 
@@ -70,7 +79,6 @@ main (int argc, char *argv[])
   GVariantBuilder builder;
   GVariant *v;
   GString *s;
-  GBytes *bytes;
   GHashTable *names;
   GString *name_key;
 
@@ -175,11 +183,29 @@ main (int argc, char *argv[])
     }
 
   v = g_variant_builder_end (&builder);
-  bytes = g_variant_get_data_as_bytes (v);
-  if (!g_file_set_contents (argv[3], g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes), &error))
+  if (g_str_has_suffix (argv[3], ".json"))
     {
-      g_error ("%s", error->message);
-      return 1;
+      JsonNode *node;
+      char *out;
+
+      node = json_gvariant_serialize (v);
+      out = json_to_string (node, TRUE);
+      if (!g_file_set_contents (argv[3], out, -1, &error))
+        {
+          g_error ("%s", error->message);
+          return 1;
+        }
+    }
+  else
+    {
+      GBytes *bytes;
+
+      bytes = g_variant_get_data_as_bytes (v);
+      if (!g_file_set_contents (argv[3], g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes), &error))
+        {
+          g_error ("%s", error->message);
+          return 1;
+        }
     }
 
   return 0;
