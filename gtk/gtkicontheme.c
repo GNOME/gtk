@@ -1499,7 +1499,7 @@ gtk_icon_theme_add_search_path (GtkIconTheme *self,
  
   len = g_strv_length (self->search_path);
   paths = g_new (char *, len + 2);
-  memcpy (paths, self->resource_path, sizeof (char *) * len);
+  memcpy (paths, self->search_path, sizeof (char *) * len);
   paths[len] = (char *)path;
   paths[len + 1] = NULL;
 
