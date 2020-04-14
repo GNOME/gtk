@@ -2284,7 +2284,8 @@ no_uline:
       self->mnemonic_keyval = accel_keyval;
 
       /* Extract the text to display */
-      if (!pango_parse_markup (new_text, -1, '_', &attrs, &text, NULL, &error))
+      if (!pango_parse_markup (new_text, -1, '_',
+                               do_mnemonics ? &attrs : NULL, &text, NULL, &error))
         goto error_set;
 
       if (do_mnemonics)
@@ -2312,14 +2313,12 @@ no_uline:
   if (text)
     gtk_label_set_text_internal (self, text);
 
-  if (attrs)
-    {
-      g_clear_pointer (&self->markup_attrs, pango_attr_list_unref);
-      self->markup_attrs = attrs;
 
-      if (mnemonic_attr)
-        pango_attr_list_insert_before (self->markup_attrs, mnemonic_attr);
-    }
+  g_clear_pointer (&self->markup_attrs, pango_attr_list_unref);
+  self->markup_attrs = attrs;
+
+  if (mnemonic_attr)
+    pango_attr_list_insert_before (self->markup_attrs, mnemonic_attr);
 
   return;
 
