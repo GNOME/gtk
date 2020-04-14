@@ -426,7 +426,6 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
 static void
 gtk_flow_box_child_init (GtkFlowBoxChild *child)
 {
-  gtk_widget_set_can_focus (GTK_WIDGET (child), TRUE);
 }
 
 /* Public API {{{2 */
@@ -2903,12 +2902,6 @@ gtk_flow_box_focus (GtkWidget        *widget,
   GSequenceIter *iter;
   GtkFlowBoxChild *next_focus_child;
 
-  /* Without "can-focus" flag fall back to the default behavior immediately */
-  if (!gtk_widget_get_can_focus (widget))
-    {
-      return GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->focus (widget, direction);
-    }
-
   focus_child = gtk_widget_get_focus_child (widget);
   next_focus_child = NULL;
 
@@ -3029,10 +3022,6 @@ gtk_flow_box_move_cursor (GtkFlowBox      *box,
   gint start;
   GtkAdjustment *adjustment;
   gboolean vertical;
-
-  /* Without "can-focus" flag fall back to the default behavior immediately */
-  if (!gtk_widget_get_can_focus (GTK_WIDGET (box)))
-    return FALSE;
 
   vertical = priv->orientation == GTK_ORIENTATION_VERTICAL;
 
