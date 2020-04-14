@@ -36,6 +36,7 @@
 #include "gtkstylecontext.h"
 #include "gtktext.h"
 #include "gtknative.h"
+#include "gtkwidgetprivate.h"
 #include "gdk/gdkprofilerprivate.h"
 
 /**
@@ -221,15 +222,13 @@ gtk_emoji_chooser_finalize (GObject *object)
 }
 
 static void
-scroll_to_section (GtkButton *button,
-                   gpointer   data)
+scroll_to_section (EmojiSection *section)
 {
-  EmojiSection *section = data;
   GtkEmojiChooser *chooser;
   GtkAdjustment *adj;
   GtkAllocation alloc = { 0, 0, 0, 0 };
 
-  chooser = GTK_EMOJI_CHOOSER (gtk_widget_get_ancestor (GTK_WIDGET (button), GTK_TYPE_EMOJI_CHOOSER));
+  chooser = GTK_EMOJI_CHOOSER (gtk_widget_get_ancestor (section->box, GTK_TYPE_EMOJI_CHOOSER));
 
   adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (chooser->scrolled_window));
   if (section->heading)
@@ -745,7 +744,7 @@ setup_section (GtkEmojiChooser *chooser,
 
   gtk_container_set_focus_vadjustment (GTK_CONTAINER (section->box), adj);
   gtk_flow_box_set_filter_func (GTK_FLOW_BOX (section->box), filter_func, section, NULL);
-  g_signal_connect (section->button, "clicked", G_CALLBACK (scroll_to_section), section);
+  g_signal_connect_swapped (section->button, "clicked", G_CALLBACK (scroll_to_section), section);
 }
 
 static void
@@ -815,6 +814,56 @@ gtk_emoji_chooser_show (GtkWidget *widget)
   adj_value_changed (adj, chooser);
 
   gtk_editable_set_text (GTK_EDITABLE (chooser->search_entry), "");
+}
+
+static void
+gtk_emoji_chooser_scroll_section (GtkWidget  *widget,
+                                  const char *action_name,
+                                  GVariant   *parameter)
+{
+  GtkEmojiChooser *chooser = GTK_EMOJI_CHOOSER (widget);
+  int direction = g_variant_get_int32 (parameter);
+  GtkWidget *focus;
+  GtkWidget *box;
+  EmojiSection *next;
+
+  focus = gtk_root_get_focus (gtk_widget_get_root (widget));
+  if (focus == NULL)
+    return;
+
+  if (gtk_widget_is_ancestor (focus, chooser->search_entry))
+    box = chooser->recent.box;
+  else
+    box = gtk_widget_get_ancestor (focus, GTK_TYPE_FLOW_BOX);
+
+  if (box == chooser->recent.box)
+    next = direction > 0 ? &chooser->people : NULL;
+  else if (box == chooser->people.box)
+    next = direction > 0 ? &chooser->body : &chooser->recent;
+  else if (box == chooser->body.box)
+    next = direction > 0 ? &chooser->nature : &chooser->people;
+  else if (box == chooser->nature.box)
+    next = direction > 0 ? &chooser->food : &chooser->body;
+  else if (box == chooser->food.box)
+    next = direction > 0 ? &chooser->travel : &chooser->nature;
+  else if (box == chooser->travel.box)
+    next = direction > 0 ? &chooser->activities : &chooser->food;
+  else if (box == chooser->activities.box)
+    next = direction > 0 ? &chooser->objects : &chooser->travel;
+  else if (box == chooser->objects.box)
+    next = direction > 0 ? &chooser->symbols : &chooser->activities;
+  else if (box == chooser->symbols.box)
+    next = direction > 0 ? &chooser->flags : &chooser->objects;
+  else if (box == chooser->flags.box)
+    next = direction > 0 ? NULL : &chooser->symbols;
+  else
+    next = NULL;
+
+  if (next)
+    {
+      scroll_to_section (next);
+      gtk_widget_child_focus (next->box, GTK_DIR_TAB_FORWARD);
+    }
 }
 
 static void
@@ -892,6 +941,14 @@ gtk_emoji_chooser_class_init (GtkEmojiChooserClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, stop_search);
   gtk_widget_class_bind_template_callback (widget_class, pressed_cb);
   gtk_widget_class_bind_template_callback (widget_class, long_pressed_cb);
+
+  gtk_widget_class_install_action (widget_class, "scroll.section", "i",
+                                   gtk_emoji_chooser_scroll_section);
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_n, GDK_CONTROL_MASK,
+                                       "scroll.section", "i", 1);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_p, GDK_CONTROL_MASK,
+                                       "scroll.section", "i", -1);
 }
 
 /**
