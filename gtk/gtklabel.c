@@ -3306,7 +3306,12 @@ gtk_label_css_changed (GtkWidget         *widget,
     attrs_affected = FALSE;
 
   if (change == NULL || attrs_affected  || (self->select_info && self->select_info->links))
-    gtk_label_update_layout_attributes (self, new_attrs);
+    {
+      gtk_label_update_layout_attributes (self, new_attrs);
+
+      if (attrs_affected)
+        gtk_widget_queue_draw (widget);
+    }
 }
 
 static PangoDirection
