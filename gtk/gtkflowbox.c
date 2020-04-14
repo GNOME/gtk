@@ -76,6 +76,7 @@
 #include <config.h>
 
 #include "gtkflowbox.h"
+#include "gtkflowboxprivate.h"
 
 #include "gtkadjustment.h"
 #include "gtkcontainerprivate.h"
@@ -640,6 +641,8 @@ struct _GtkFlowBoxPrivate {
   GtkFlowBoxCreateWidgetFunc  create_widget_func;
   gpointer                    create_widget_func_data;
   GDestroyNotify              create_widget_func_data_destroy;
+
+  gboolean           disable_move_cursor;
 };
 
 #define BOX_PRIV(box) ((GtkFlowBoxPrivate*)gtk_flow_box_get_instance_private ((GtkFlowBox*)(box)))
@@ -3005,6 +3008,14 @@ gtk_flow_box_toggle_cursor_child (GtkFlowBox *box)
     gtk_flow_box_select_and_activate (box, priv->cursor_child);
 }
 
+void
+gtk_flow_box_disable_move_cursor (GtkFlowBox *box)
+{
+  GtkFlowBoxPrivate *priv = BOX_PRIV (box);
+  
+  priv->disable_move_cursor = TRUE;
+}
+
 static gboolean
 gtk_flow_box_move_cursor (GtkFlowBox      *box,
                           GtkMovementStep  step,
@@ -3022,6 +3033,9 @@ gtk_flow_box_move_cursor (GtkFlowBox      *box,
   gint start;
   GtkAdjustment *adjustment;
   gboolean vertical;
+
+  if (priv->disable_move_cursor)
+    return FALSE;
 
   vertical = priv->orientation == GTK_ORIENTATION_VERTICAL;
 

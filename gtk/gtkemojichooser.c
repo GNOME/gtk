@@ -766,6 +766,8 @@ stop_search (GtkEntry *entry,
   gtk_popover_popdown (GTK_POPOVER (data));
 }
 
+extern void gtk_flow_box_disable_move_cursor (GtkFlowBox *box);
+
 static void
 setup_section (GtkEmojiChooser *chooser,
                EmojiSection   *section,
@@ -781,6 +783,7 @@ setup_section (GtkEmojiChooser *chooser,
   adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (chooser->scrolled_window));
 
   gtk_container_set_focus_vadjustment (GTK_CONTAINER (section->box), adj);
+  gtk_flow_box_disable_move_cursor (GTK_FLOW_BOX (section->box));
   gtk_flow_box_set_filter_func (GTK_FLOW_BOX (section->box), filter_func, section, NULL);
   g_signal_connect_swapped (section->button, "clicked", G_CALLBACK (scroll_to_section), section);
 }
