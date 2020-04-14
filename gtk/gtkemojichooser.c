@@ -120,6 +120,16 @@ gtk_emoji_chooser_child_focus (GtkWidget        *widget,
   return GTK_WIDGET_CLASS (gtk_emoji_chooser_child_parent_class)->focus (widget, direction);
 }
 
+static void scroll_to_child (GtkWidget *child);
+
+static gboolean
+gtk_emoji_chooser_child_grab_focus (GtkWidget *widget)
+{
+  gtk_widget_grab_focus_self (widget);
+  scroll_to_child (widget);
+  return TRUE;
+}
+
 static void show_variations (GtkEmojiChooser *chooser,
                              GtkWidget       *child);
 
@@ -141,6 +151,7 @@ gtk_emoji_chooser_child_class_init (GtkEmojiChooserChildClass *class)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   widget_class->size_allocate = gtk_emoji_chooser_child_size_allocate;
   widget_class->focus = gtk_emoji_chooser_child_focus;
+  widget_class->grab_focus = gtk_emoji_chooser_child_grab_focus;
 
   gtk_widget_class_install_action (widget_class, "menu.popup", NULL, gtk_emoji_chooser_child_popup_menu);
 
@@ -234,6 +245,33 @@ scroll_to_section (EmojiSection *section)
   if (section->heading)
     gtk_widget_get_allocation (section->heading, &alloc);
   gtk_adjustment_animate_to_value (adj, alloc.y - BOX_SPACE);
+}
+
+static void
+scroll_to_child (GtkWidget *child)
+{
+  GtkEmojiChooser *chooser;
+  GtkAdjustment *adj;
+  GtkAllocation alloc;
+  int pos;
+  double value;
+  double page_size;
+
+  chooser = GTK_EMOJI_CHOOSER (gtk_widget_get_ancestor (child, GTK_TYPE_EMOJI_CHOOSER));
+
+  adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (chooser->scrolled_window));
+
+  gtk_widget_get_allocation (child, &alloc);
+
+  value = gtk_adjustment_get_value (adj);
+  page_size = gtk_adjustment_get_page_size (adj);
+
+  gtk_widget_translate_coordinates (child, gtk_widget_get_parent (chooser->recent.box), 0, 0, NULL, &pos);
+
+  if (pos < value)
+    gtk_adjustment_animate_to_value (adj, pos);
+  else if (pos + alloc.height >= value + page_size)
+    gtk_adjustment_animate_to_value (adj, value + ((pos + alloc.height) - (value + page_size)));
 }
 
 static void
