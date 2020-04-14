@@ -2848,8 +2848,6 @@ gtk_label_update_layout_attributes (GtkLabel      *self,
           pango_attr_list_unref (link_attrs);
         }
     }
-  else if (self->markup_attrs && self->attrs)
-    attrs = pango_attr_list_new ();
   else
     attrs = NULL;
 
