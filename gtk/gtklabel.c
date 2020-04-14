@@ -3292,11 +3292,14 @@ gtk_label_css_changed (GtkWidget         *widget,
                        GtkCssStyleChange *change)
 {
   GtkLabel *self = GTK_LABEL (widget);
+  gboolean attrs_affected;
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->css_changed (widget, change);
 
-  if (change == NULL || gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_ATTRS) ||
-      (self->select_info && self->select_info->links))
+  attrs_affected = (self->attrs || self->markup_attrs) &&
+                   gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_ATTRS);
+
+  if (change == NULL || attrs_affected  || (self->select_info && self->select_info->links))
     gtk_label_update_layout_attributes (self);
 }
 
