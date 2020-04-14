@@ -361,6 +361,7 @@ struct _GtkFileChooserWidget
   guint create_folders : 1;
   guint auto_selecting_first_row : 1;
   guint starting_search : 1;
+  guint browse_files_interaction_frozen : 1;
 };
 
 struct _GtkFileChooserWidgetClass
@@ -2029,6 +2030,32 @@ files_list_clicked (GtkGesture           *gesture,
   list_popup_menu_cb (NULL, NULL, impl);
 }
 
+static void
+files_list_restrict_clicking (GtkGestureClick      *gesture,
+                              int                   n_press,
+                              double                x,
+                              double                y,
+                              GtkFileChooserWidget *impl)
+{
+  if (impl->browse_files_interaction_frozen)
+    gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
+}
+
+static gboolean
+files_list_restrict_key_presses (GtkEventControllerKey *controller,
+                                 guint                  keyval,
+                                 guint                  keycode,
+                                 GdkModifierType        state,
+                                 GtkFileChooserWidget  *impl)
+{
+  if (impl->browse_files_interaction_frozen) {
+    gtk_event_controller_reset (GTK_EVENT_CONTROLLER (controller));
+    return GDK_EVENT_STOP;
+  }
+
+  return GDK_EVENT_PROPAGATE;
+}
+
 /* Callback used when a button is pressed on the file list.  We trap button 3 to
  * bring up a popup menu.
  */
@@ -3437,6 +3464,8 @@ gtk_file_chooser_widget_map (GtkWidget *widget)
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (widget);
 
   profile_start ("start", NULL);
+
+  impl->browse_files_interaction_frozen = FALSE;
 
   GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->map (widget);
 
@@ -5726,6 +5755,11 @@ confirm_dialog_should_accept_filename (GtkFileChooserWidget *impl,
 
   response = gtk_dialog_run (GTK_DIALOG (dialog));
 
+  if (response == GTK_RESPONSE_ACCEPT)
+    /* Dialog is now going to be closed, so prevent any button/key presses to
+     * file list (will be restablished on next map()). Fixes data loss bug #2288 */
+    impl->browse_files_interaction_frozen = TRUE;
+
   gtk_widget_destroy (dialog);
 
   return (response == GTK_RESPONSE_ACCEPT);
@@ -7749,6 +7783,20 @@ post_process_ui (GtkFileChooserWidget *impl)
   shortcut = gtk_shortcut_new (trigger, action);
   gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
   gtk_widget_add_controller (GTK_WIDGET (impl->browse_files_tree_view), controller);
+
+  /* Add ability to restrict interaction on file list (click and key_press events),
+   * needed to prevent data loss bug #2288 */
+  gesture = gtk_gesture_click_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (gesture), TRUE);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture), GTK_PHASE_CAPTURE);
+  g_signal_connect (gesture, "pressed", G_CALLBACK (files_list_restrict_clicking), impl);
+  gtk_widget_add_controller (impl->browse_files_tree_view, GTK_EVENT_CONTROLLER (gesture));
+
+  controller = gtk_event_controller_key_new ();
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+  g_signal_connect (controller, "key-pressed", G_CALLBACK (files_list_restrict_key_presses), impl);
+  gtk_widget_add_controller (impl->browse_files_tree_view, controller);
 }
 
 void
