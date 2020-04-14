@@ -42,6 +42,7 @@
                                 <property name="homogeneous">1</property>
                                 <property name="selection-mode">none</property>
                                 <signal name="child-activated" handler="emoji_activated"/>
+                                <signal name="keynav-failed" handler="keynav_failed"/>
                                 <child>
                                   <object class="GtkGestureLongPress">
                                     <signal name="pressed" handler="long_pressed_cb"/>
@@ -66,6 +67,7 @@
                                 <property name="homogeneous">1</property>
                                 <property name="selection-mode">none</property>
                                 <signal name="child-activated" handler="emoji_activated"/>
+                                <signal name="keynav-failed" handler="keynav_failed"/>
                                 <child>
                                   <object class="GtkGestureLongPress">
                                     <signal name="pressed" handler="long_pressed_cb"/>
@@ -90,6 +92,7 @@
                                 <property name="homogeneous">1</property>
                                 <property name="selection-mode">none</property>
                                 <signal name="child-activated" handler="emoji_activated"/>
+                                <signal name="keynav-failed" handler="keynav_failed"/>
                                 <child>
                                   <object class="GtkGestureLongPress">
                                     <signal name="pressed" handler="long_pressed_cb"/>
@@ -114,6 +117,7 @@
                                 <property name="homogeneous">1</property>
                                 <property name="selection-mode">none</property>
                                 <signal name="child-activated" handler="emoji_activated"/>
+                                <signal name="keynav-failed" handler="keynav_failed"/>
                               </object>
                             </child>
                             <child>
@@ -127,6 +131,7 @@
                                 <property name="homogeneous">1</property>
                                 <property name="selection-mode">none</property>
                                 <signal name="child-activated" handler="emoji_activated"/>
+                                <signal name="keynav-failed" handler="keynav_failed"/>
                               </object>
                             </child>
                             <child>
@@ -140,6 +145,7 @@
                                 <property name="homogeneous">1</property>
                                 <property name="selection-mode">none</property>
                                 <signal name="child-activated" handler="emoji_activated"/>
+                                <signal name="keynav-failed" handler="keynav_failed"/>
                               </object>
                             </child>
                             <child>
@@ -153,6 +159,7 @@
                                 <property name="homogeneous">1</property>
                                 <property name="selection-mode">none</property>
                                 <signal name="child-activated" handler="emoji_activated"/>
+                                <signal name="keynav-failed" handler="keynav_failed"/>
                               </object>
                             </child>
                             <child>
@@ -166,6 +173,7 @@
                                 <property name="homogeneous">1</property>
                                 <property name="selection-mode">none</property>
                                 <signal name="child-activated" handler="emoji_activated"/>
+                                <signal name="keynav-failed" handler="keynav_failed"/>
                               </object>
                             </child>
                             <child>
@@ -179,6 +187,7 @@
                                 <property name="homogeneous">1</property>
                                 <property name="selection-mode">none</property>
                                 <signal name="child-activated" handler="emoji_activated"/>
+                                <signal name="keynav-failed" handler="keynav_failed"/>
                               </object>
                             </child>
                             <child>
@@ -192,6 +201,7 @@
                                 <property name="homogeneous">1</property>
                                 <property name="selection-mode">none</property>
                                 <signal name="child-activated" handler="emoji_activated"/>
+                                <signal name="keynav-failed" handler="keynav_failed"/>
                               </object>
                             </child>
                           </object>
