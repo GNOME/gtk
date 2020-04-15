@@ -1,3 +1,57 @@
+Overview of Changes in GTK 3.98.3
+=================================
+
+* GtkEntry:
+ - Support setting attributes in ui files
+
+* GtkScaleButton:
+ - Don't derive from GtkButton
+
+* GtkAboutDialog:
+ - Support more common licenses
+
+* GtkEmojiChooser:
+ - Improve keyboard navigation
+
+* Chooser buttons:
+ - Make dialogs modal by default
+
+* Focus handling
+ - Fix crossing event generation
+ - Fix focus handling in various widgets
+ - Change :can-focus to be recursive
+ - Fix GtkWindow:is-active setting
+
+* Accessibility:
+ - Add a cursor-aspect-ratio setting
+ - Set focus-related states properly
+
+* Themes:
+ - Use blue focus outlines more
+ - Numerous minor improvements
+
+* Wayland:
+ - Fix .Compose file loading
+ - Support popup repositioning
+
+* GDK:
+ - Remove GdkKeymap from public API, replaced by
+   GdkDevice properties
+ - Add full keyboard translation state to key events
+ - Simplify modifier support, drop GdkModifierIntent
+ - Move key event matching to GDK
+ - Add GdkSurface::enter/leave-monitor signals
+
+* GSK:
+ - Turn GskRenderNode into a derivable type, and make
+   it introspectable
+
+* Translation updates:
+ - Japanese
+ - Lithuanian
+ - Turkish
+
+
 Overview of Changes in GTK 3.98.2
 =================================
 
