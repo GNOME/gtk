@@ -143,6 +143,7 @@ main (int argc, char *argv[])
       gboolean has_variations;
       JsonObject *obj2;
       JsonArray *kw;
+      char **name_tokens;
 
       i++;
 
@@ -179,16 +180,39 @@ main (int argc, char *argv[])
         return 1;
 
       g_variant_builder_init (&b2, G_VARIANT_TYPE ("as"));
+      name_tokens = g_str_tokenize_and_fold (name, "en", NULL);
+      for (j = 0; j < g_strv_length (name_tokens); j++)
+        g_variant_builder_add (&b2, "s", name_tokens[j]);
+
       obj2 = g_hash_table_lookup (names, name_key->str);
       if (obj2)
         {
           shortname = json_object_get_string_member (obj2, "shortname");
           kw = json_object_get_array_member (obj2, "keywords");
           for (k = 0; k < json_array_get_length (kw); k++)
-            g_variant_builder_add (&b2, "s", json_array_get_string_element (kw, k));
+            {
+              char **folded;
+              char **ascii;
+
+              folded = g_str_tokenize_and_fold (json_array_get_string_element (kw, k), "en", &ascii);
+              for (j = 0; j < g_strv_length (folded); j++)
+                {
+                  if (!g_strv_contains ((const char * const *)name_tokens, folded[j]))
+                    g_variant_builder_add (&b2, "s", folded[j]);
+                }
+              for (j = 0; j < g_strv_length (ascii); j++)
+                {
+                  if (!g_strv_contains ((const char * const *)name_tokens, ascii[j]))
+                    g_variant_builder_add (&b2, "s", ascii[j]);
+                }
+              g_strfreev (folded);
+              g_strfreev (ascii);
+            }
         }
       else
         shortname = "";
+
+      g_strfreev (name_tokens);
 
       g_variant_builder_add (&builder, "(aussas)", &b1, name, shortname, &b2);
     }

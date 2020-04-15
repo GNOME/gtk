@@ -711,6 +711,31 @@ adj_value_changed (GtkAdjustment *adj,
 }
 
 static gboolean
+match_tokens (const char **term_tokens,
+              const char **hit_tokens)
+{
+  int i, j;
+  gboolean matched;
+
+  matched = TRUE;
+
+  for (i = 0; term_tokens[i]; i++)
+    {
+      for (j = 0; hit_tokens[j]; j++)
+        if (g_str_has_prefix (hit_tokens[j], term_tokens[i]))
+          goto one_matched;
+
+      matched = FALSE;
+      break;
+
+one_matched:
+      continue;
+    }
+
+  return matched;
+}
+
+static gboolean
 filter_func (GtkFlowBoxChild *child,
              gpointer         data)
 {
@@ -720,8 +745,9 @@ filter_func (GtkFlowBoxChild *child,
   const char *text;
   const char *name;
   const char **keywords;
+  char **term_tokens;
+  char **name_tokens;
   gboolean res;
-  int i;
 
   res = TRUE;
 
@@ -735,12 +761,17 @@ filter_func (GtkFlowBoxChild *child,
   if (!emoji_data)
     goto out;
 
+  term_tokens = g_str_tokenize_and_fold (text, "en", NULL);
+  
   g_variant_get_child (emoji_data, 1, "&s", &name);
-  res = g_str_match_string (text, name, TRUE);
-
+  name_tokens = g_str_tokenize_and_fold (name, "en", NULL);
   g_variant_get_child (emoji_data, 3, "^a&s", &keywords);
-  for (i = 0; !res && keywords[i]; i++)
-    res = g_str_match_string (text, keywords[i], TRUE);
+
+  res = match_tokens ((const char **)term_tokens, (const char **)name_tokens) ||
+        match_tokens ((const char **)term_tokens, keywords);
+
+  g_strfreev (term_tokens);
+  g_strfreev (name_tokens);
 
 out:
   if (res)
