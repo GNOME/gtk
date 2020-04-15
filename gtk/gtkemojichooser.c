@@ -337,8 +337,8 @@ add_recent_item (GtkEmojiChooser *chooser,
 
   g_variant_ref (item);
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a((aussas)u)"));
-  g_variant_builder_add (&builder, "(@(aussas)u)", item, modifier);
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a((ausas)u)"));
+  g_variant_builder_add (&builder, "(@(ausas)u)", item, modifier);
 
   children = NULL;
   for (child = gtk_widget_get_last_child (chooser->recent.box);
@@ -363,7 +363,7 @@ add_recent_item (GtkEmojiChooser *chooser,
           continue;
         }
 
-      g_variant_builder_add (&builder, "(@(aussas)u)", item2, modifier2);
+      g_variant_builder_add (&builder, "(@(ausas)u)", item2, modifier2);
     }
   g_list_free (children);
 
@@ -603,7 +603,7 @@ populate_emoji_chooser (gpointer data)
   if (!chooser->data)
     {
       GBytes *bytes = g_resources_lookup_data ("/org/gtk/libgtk/emoji/emoji.data", 0, NULL);
-      chooser->data = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(aussas)"), bytes, TRUE));
+      chooser->data = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(ausas)"), bytes, TRUE));
       g_bytes_unref (bytes);
     }
 
@@ -765,7 +765,7 @@ filter_func (GtkFlowBoxChild *child,
   
   g_variant_get_child (emoji_data, 1, "&s", &name);
   name_tokens = g_str_tokenize_and_fold (name, "en", NULL);
-  g_variant_get_child (emoji_data, 3, "^a&s", &keywords);
+  g_variant_get_child (emoji_data, 2, "^a&s", &keywords);
 
   res = match_tokens ((const char **)term_tokens, (const char **)name_tokens) ||
         match_tokens ((const char **)term_tokens, keywords);
