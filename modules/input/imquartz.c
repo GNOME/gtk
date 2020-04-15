@@ -25,6 +25,8 @@
 #include "gtk/gtkintl.h"
 #include "gtk/gtkimmodule.h"
 
+#include <AvailabilityMacros.h>
+
 #define GTK_COMPILATION 1 // For gdkquartz-gtk-only.h
 
 #include "gdk/quartz/gdkinternal-quartz.h"
@@ -34,6 +36,12 @@
 #define GTK_IM_CONTEXT_TYPE_QUARTZ (type_quartz)
 #define GTK_IM_CONTEXT_QUARTZ(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_IM_CONTEXT_TYPE_QUARTZ, GtkIMContextQuartz))
 #define GTK_IM_CONTEXT_QUARTZ_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_IM_CONTEXT_TYPE_QUARTZ, GtkIMContextQuartzClass))
+
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 10120
+#define NS_EVENT_KEY_DOWN NSKeyDown
+#else
+#define NS_EVENT_KEY_DOWN NSEventTypeKeyDown
+#endif
 
 typedef struct _GtkIMContextQuartz
 {
@@ -235,7 +243,7 @@ quartz_filter_keypress (GtkIMContext *context,
     return FALSE;
 
   NSEventType etype = [nsevent type];
-  if (etype == NSKeyDown)
+  if (etype == NS_EVENT_KEY_DOWN)
     {
        g_object_set_data (G_OBJECT (win), TIC_IN_KEY_DOWN,
                                           GUINT_TO_POINTER (TRUE));
