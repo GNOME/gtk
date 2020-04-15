@@ -2,7 +2,7 @@
 <schemalist>
 
   <schema id='org.gtk.Settings.EmojiChooser' path='/org/gtk/settings/emoji-chooser/'>
-    <key name='recent-emoji' type='a((auss)u)'>
+    <key name='recent-emoji' type='a((aussas)u)'>
       <default>[]</default>
       <summary>Recently used Emoji</summary>
       <description>
@@ -10,6 +10,9 @@
         specified as an array of codepoints, name and shortname. The extra integer after this
         pair is the code of the Fitzpatrick modifier to use in place of a 0 in the
         codepoint array.
+        specified as an array of codepoints, name, shortname and keywords. The extra
+        integer after this pair is the code of the Fitzpatrick modifier to use in
+        place of a 0 in the codepoint array.
       </description>
     </key>
   </schema>

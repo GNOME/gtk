@@ -23,9 +23,10 @@
  * au - sequence of unicode codepoints. If the
  *      sequence contains a 0, it marks the point
  *      where skin tone modifiers should be inserted
- * s -  name, e.g. "man worker"
- * s -  shortname, for completion. This includes
+ * s  - name, e.g. "man worker"
+ * s  - shortname, for completion. This includes
  *      colons to mark the ends, e.g. ":guardsman:"
+ * as - keywords, e.g. "man", "worker"
  */
 #include <json-glib/json-glib.h>
 #include <string.h>
@@ -100,19 +101,16 @@ main (int argc, char *argv[])
   ro = json_node_get_object (root);
   json_object_iter_init (&iter, ro);
 
-  names = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+  names = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify)json_object_unref);
   name_key = g_string_new ("");
 
   while (json_object_iter_next (&iter, &name, &node))
     {
       JsonObject *obj = json_node_get_object (node);
       const char *unicode;
-      const char *shortname;
 
       unicode = json_object_get_string_member (obj, "unicode");
-      shortname = json_object_get_string_member (obj, "shortname");
-
-      g_hash_table_insert (names, g_strdup (unicode), g_strdup (shortname));
+      g_hash_table_insert (names, g_strdup (unicode), json_object_ref (obj));
     }
 
   g_object_unref (parser);
@@ -129,19 +127,22 @@ main (int argc, char *argv[])
   array = json_node_get_array (root);
   length = json_array_get_length (array);
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(auss)"));
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(aussas)"));
   i = 0;
   while (i < length)
     {
       JsonNode *node = json_array_get_element (array, i);
       JsonObject *obj = json_node_get_object (node);
       GVariantBuilder b1;
+      GVariantBuilder b2;
       const char *name;
       const char *shortname;
       char *code;
-      int j;
+      int j, k;
       gboolean skip;
       gboolean has_variations;
+      JsonObject *obj2;
+      JsonArray *kw;
 
       i++;
 
@@ -177,9 +178,19 @@ main (int argc, char *argv[])
       if (!parse_code (&b1, code, name_key))
         return 1;
 
-      shortname = g_hash_table_lookup (names, name_key->str);
+      g_variant_builder_init (&b2, G_VARIANT_TYPE ("as"));
+      obj2 = g_hash_table_lookup (names, name_key->str);
+      if (obj2)
+        {
+          shortname = json_object_get_string_member (obj2, "shortname");
+          kw = json_object_get_array_member (obj2, "keywords");
+          for (k = 0; k < json_array_get_length (kw); k++)
+            g_variant_builder_add (&b2, "s", json_array_get_string_element (kw, k));
+        }
+      else
+        shortname = "";
 
-      g_variant_builder_add (&builder, "(auss)", &b1, name, shortname ? shortname : "");
+      g_variant_builder_add (&builder, "(aussas)", &b1, name, shortname, &b2);
     }
 
   v = g_variant_builder_end (&builder);
