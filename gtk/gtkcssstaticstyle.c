@@ -1085,7 +1085,27 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
     }
   else
     {
-      value = _gtk_css_initial_value_new_compute (id, provider, (GtkCssStyle *)style, parent_style);
+      /* We store currentcolor as NULL in the values structs,
+       * this gets resolved to the value of color in the style
+       * using the values struct - it needs to be resolved late
+       * since values structs are shared between styles.
+       */
+      switch (id)
+        {
+        case GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR:
+        case GTK_CSS_PROPERTY_BORDER_TOP_COLOR:
+        case GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR:
+        case GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR:
+        case GTK_CSS_PROPERTY_BORDER_LEFT_COLOR:
+        case GTK_CSS_PROPERTY_OUTLINE_COLOR:
+        case GTK_CSS_PROPERTY_CARET_COLOR:
+        case GTK_CSS_PROPERTY_SECONDARY_CARET_COLOR:
+          value = NULL;
+          break;
+        default:
+          value = _gtk_css_initial_value_new_compute (id, provider, (GtkCssStyle *)style, parent_style);
+          break;
+        }
     }
 
   gtk_css_static_style_set_value (style, id, value, section);
