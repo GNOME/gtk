@@ -270,9 +270,12 @@ discard_preedit (GtkIMContext *context)
 
   /* reset any partial input for this NSView */
   [(GdkQuartzView *)nsview unmarkText];
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 1060
   NSInputManager *currentInputManager = [NSInputManager currentInputManager];
   [currentInputManager markedTextAbandoned:nsview];
-
+#else
+  [[NSTextInputContext currentInputContext] discardMarkedText];
+#endif
   if (qc->preedit_str && strlen (qc->preedit_str) > 0)
     {
       g_signal_emit_by_name (context, "commit", qc->preedit_str);
