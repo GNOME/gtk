@@ -92,12 +92,12 @@ gtk_event_controller_legacy_class_init (GtkEventControllerLegacyClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0, _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__OBJECT,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT);
 
   g_signal_set_va_marshaller (signals[EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__OBJECTv);
+                              _gtk_marshal_BOOLEAN__BOXEDv);
 }
 
 static void

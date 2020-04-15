@@ -2823,53 +2823,6 @@ check_autohide (GdkEvent *event)
   return FALSE;
 }
 
-static gboolean
-is_keyboard_event (GdkEvent *event)
-{
-  switch ((guint) gdk_event_get_event_type (event))
-    {
-    case GDK_KEY_PRESS:
-    case GDK_KEY_RELEASE:
-    case GDK_FOCUS_CHANGE:
-      return TRUE;
-    default:;
-    }
-
-  return FALSE;
-}
-
-static GdkEvent *
-rewrite_event_for_toplevel (GdkEvent *event)
-{
-  GdkSurface *surface;
-
-  surface = gdk_event_get_surface (event);
-  if (!surface->parent)
-    return gdk_event_ref (event);
-
-  while (surface->parent)
-    surface = surface->parent;
-
-  if (gdk_event_get_event_type (event) == GDK_FOCUS_CHANGE)
-    return gdk_event_focus_new (surface,
-                                gdk_event_get_device (event),
-                                gdk_event_get_source_device (event),
-                                gdk_focus_event_get_in (event));
-  else
-    {
-      return gdk_event_key_new (gdk_event_get_event_type (event),
-                                surface,
-                                gdk_event_get_device (event),
-                                gdk_event_get_source_device (event),
-                                gdk_event_get_time (event),
-                                gdk_key_event_get_keycode (event),
-                                gdk_event_get_modifier_state (event),
-                                gdk_key_event_is_modifier (event),
-                                &event->key.translated[0],
-                                &event->key.translated[1]);
-    }
-}
-
 static void
 add_event_mark (GdkEvent *event,
                 gint64    time,
@@ -2985,15 +2938,7 @@ gdk_surface_handle_event (GdkEvent *event)
     }
   else
     {
-      GdkEvent *emitted;
-
-      if (is_keyboard_event (event))
-        emitted = rewrite_event_for_toplevel (event);
-      else
-        emitted = gdk_event_ref (event);
-
-      g_signal_emit (gdk_event_get_surface (emitted), signals[EVENT], 0, emitted, &handled);
-      gdk_event_unref (emitted);
+      g_signal_emit (gdk_event_get_surface (event), signals[EVENT], 0, event, &handled);
     }
 
   if (GDK_PROFILER_IS_RUNNING)

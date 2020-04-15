@@ -40,7 +40,7 @@
 #include "gtkcssshadowvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkdroptargetasync.h"
-#include "gtkeventcontrollerfocus.h"
+#include "gtkeventcontrollerlegacy.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkgesturedrag.h"
@@ -370,8 +370,10 @@ static void gtk_window_size_allocate      (GtkWidget         *widget,
                                            int                height,
                                            int                  baseline);
 static gboolean gtk_window_close_request  (GtkWindow         *window);
-static void gtk_window_focus_in           (GtkWidget         *widget);
-static void gtk_window_focus_out          (GtkWidget         *widget);
+static gboolean gtk_window_handle_focus   (GtkWidget         *widget,
+                                           GdkEvent          *event,
+                                           double             x,
+                                           double             y);
 static gboolean gtk_window_key_pressed    (GtkWidget         *widget,
                                            guint              keyval,
                                            guint              keycode,
@@ -1748,11 +1750,11 @@ gtk_window_init (GtkWindow *window)
   g_signal_connect_swapped (priv->key_controller, "key-released",
                             G_CALLBACK (gtk_window_key_released), window);
   gtk_widget_add_controller (widget, priv->key_controller);
-  controller = gtk_event_controller_focus_new ();
-  g_signal_connect_swapped (controller, "enter",
-                            G_CALLBACK (gtk_window_focus_in), window);
-  g_signal_connect_swapped (controller, "leave",
-                            G_CALLBACK (gtk_window_focus_out), window);
+
+  controller = gtk_event_controller_legacy_new ();
+  gtk_event_controller_set_name (controller, "gtk-window-toplevel-focus");
+  g_signal_connect_swapped (controller, "event",
+                            G_CALLBACK (gtk_window_handle_focus), window);
   gtk_widget_add_controller (widget, controller);
 
   /* Shared constraint solver */
@@ -5317,34 +5319,32 @@ gtk_window_has_mnemonic_modifier_pressed (GtkWindow *window)
   return retval;
 }
 
-static void
-gtk_window_focus_in (GtkWidget *widget)
+static gboolean
+gtk_window_handle_focus (GtkWidget *widget,
+                         GdkEvent  *event,
+                         double     x,
+                         double     y)
 {
   GtkWindow *window = GTK_WINDOW (widget);
 
-  /* It appears spurious focus in events can occur when
-   * the window is hidden. So we'll just check to see if
-   * the window is visible before actually handling the
-   * event
-   */
-  if (gtk_widget_get_visible (widget))
+  if (gdk_event_get_event_type (event) != GDK_FOCUS_CHANGE)
+    return FALSE;
+
+  if (gdk_focus_event_get_in (event))
     {
       _gtk_window_set_is_active (window, TRUE);
 
       if (gtk_window_has_mnemonic_modifier_pressed (window))
         _gtk_window_schedule_mnemonics_visible (window);
     }
-}
+  else
+    {
+      _gtk_window_set_is_active (window, FALSE);
 
-static void
-gtk_window_focus_out (GtkWidget *widget)
-{
-  GtkWindow *window = GTK_WINDOW (widget);
+      gtk_window_set_mnemonics_visible (window, FALSE);
+    }
 
-  _gtk_window_set_is_active (window, FALSE);
-
-  /* set the mnemonic-visible property to false */
-  gtk_window_set_mnemonics_visible (window, FALSE);
+  return TRUE;
 }
 
 static void
