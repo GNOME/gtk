@@ -74,6 +74,12 @@
      gdk_event_get_event_type().
     </para>
     <para>
+      Some events, such as touch events or button press-release pairs,
+      are connected in to each other in an “event sequence” that
+      univocally identifies events that are related to the same
+      interaction.
+    </para>
+    <para>
       When GTK creates a GdkSurface, it connects to the #GdkSurface::event
       signal on it, which receives all of these input events. Surfaces have
       have signals and properties, e.g. to deal with window management
@@ -178,17 +184,6 @@
       when the gesture claims the event touch sequence (or the
       pointer events) for its own. See the “gesture states” section
       below to learn more about gestures and sequences.
-    </para>
-  </refsect2>
-
-  <refsect2>
-    <title>Touch events</title>
-
-    <para>
-      Touch events are emitted as events of type %GDK_TOUCH_BEGIN,
-      %GDK_TOUCH_UPDATE or %GDK_TOUCH_END, those events contain an
-      “event sequence” that univocally identifies the physical touch
-      until it is lifted from the device.
     </para>
   </refsect2>
 
