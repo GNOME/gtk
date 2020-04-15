@@ -123,17 +123,6 @@
   @else { @return darken($c, 10%); }
 }
 
-@function _text_shadow_color ($tc: $fg_color, $bg: $bg_color) {
-//
-// calculate the color of text shadows
-//
-// $tc is the text color
-// $bg is the background color
-//
-  $_lbg: lightness($bg)/100%;
-  @if lightness($tc)<50% { @return transparentize(white, 1-$_lbg/($_lbg*1.3)); }
-  @else { @return transparentize(black, $_lbg*0.8); }
-}
 
 @function _button_hilight_color($c) {
 //
@@ -149,26 +138,7 @@
   @else { @return transparentize(white, 0.98); }
 }
 
-@mixin _button_text_shadow ($tc:$fg_color, $bg:$bg_color) {
-//
-// helper function for the text emboss effect
-//
-// $tc is the optional text color, not the shadow color
-//
-// TODO: this functions needs a way to deal with special cases
-//
 
-  $_shadow: _text_shadow_color($tc, $bg);
-
-  @if lightness($tc)<50% {
-    text-shadow: 0 1px $_shadow;
-    -gtk-icon-shadow: 0 1px $_shadow;
-  }
-  @else {
-    text-shadow: 0 -1px $_shadow;
-    -gtk-icon-shadow: 0 -1px $_shadow;
-  }
-}
 
 @mixin button($t, $c:$bg_color, $tc:$fg_color, $edge: none) {
 //
@@ -202,7 +172,6 @@
     $button_fill: if($variant == 'light', linear-gradient(to top, darken($c, 4%) 2px, $c),
                                           linear-gradient(to top, darken($c,1%) 2px, $c)) !global;
     background-image: $button_fill;
-    @include _button_text_shadow($tc, $c);
     @include _shadows(inset 0 1px $_hilight_color, $_button_edge, $_button_shadow);
   }
 
@@ -215,12 +184,10 @@
     border-bottom-color: if($c != $bg_color, _border_color($c, true), $alt_borders_color);
     @if $variant == 'light' {
       $button_fill: linear-gradient(to top, $c, lighten($c, 1%) 1px) !global;
-      @include _button_text_shadow($tc, lighten($c, 6%));
       @include _shadows(inset 0 1px _button_hilight_color(lighten($c, 6%)), $_button_edge, $_button_shadow);
     }
     @else {
       $button_fill: linear-gradient(to top, darken($c,1%), lighten($c, 1%) 1px) !global;
-      @include _button_text_shadow($tc,lighten($c, 6%));
       @include _shadows(inset 0 1px _button_hilight_color(darken($c, 2%)), $_button_edge, $_button_shadow);
     }
     background-image: $button_fill;
@@ -232,7 +199,6 @@
   //
     color: $tc;
     border-color: if($c != $bg_color, _border_color($c, true), $alt_borders_color);
-    @include _button_text_shadow($tc, $c);
     @if $variant == 'light' {
       background-image: linear-gradient(to bottom, lighten($c, 5%) 20%, $c 90%);
       @include _shadows(inset 0 1px _button_hilight_color(lighten($c, 6%)),
