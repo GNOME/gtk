@@ -585,7 +585,8 @@
   }
 
   @if $t==active {
-    box-shadow: inset 0 1px 1px 0px if($variant == 'light', rgba(0, 0, 0, 0.2), black);
+    box-shadow: inset 0 1px if($variant == 'light', rgba(0, 0, 0, 0.2), black);
+    background-image: if($c == white, image(darken($c, 15%)), image(darken($c, 5%)));
   }
 
   @if $t==insensitive {
