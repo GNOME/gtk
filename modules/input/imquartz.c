@@ -231,6 +231,9 @@ quartz_filter_keypress (GtkIMContext *context,
   if (event->hardware_keycode == 55)	/* Command */
     return FALSE;
 
+  if (event->hardware_keycode == 53) /* Escape */
+    return FALSE;
+
   NSEventType etype = [nsevent type];
   if (etype == NSKeyDown)
     {
