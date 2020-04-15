@@ -76,6 +76,7 @@
 #include <config.h>
 
 #include "gtkflowbox.h"
+#include "gtkflowboxprivate.h"
 
 #include "gtkadjustment.h"
 #include "gtkcontainerprivate.h"
@@ -426,7 +427,6 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
 static void
 gtk_flow_box_child_init (GtkFlowBoxChild *child)
 {
-  gtk_widget_set_can_focus (GTK_WIDGET (child), TRUE);
 }
 
 /* Public API {{{2 */
@@ -641,6 +641,8 @@ struct _GtkFlowBoxPrivate {
   GtkFlowBoxCreateWidgetFunc  create_widget_func;
   gpointer                    create_widget_func_data;
   GDestroyNotify              create_widget_func_data_destroy;
+
+  gboolean           disable_move_cursor;
 };
 
 #define BOX_PRIV(box) ((GtkFlowBoxPrivate*)gtk_flow_box_get_instance_private ((GtkFlowBox*)(box)))
@@ -2903,12 +2905,6 @@ gtk_flow_box_focus (GtkWidget        *widget,
   GSequenceIter *iter;
   GtkFlowBoxChild *next_focus_child;
 
-  /* Without "can-focus" flag fall back to the default behavior immediately */
-  if (!gtk_widget_get_can_focus (widget))
-    {
-      return GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->focus (widget, direction);
-    }
-
   focus_child = gtk_widget_get_focus_child (widget);
   next_focus_child = NULL;
 
@@ -3012,6 +3008,14 @@ gtk_flow_box_toggle_cursor_child (GtkFlowBox *box)
     gtk_flow_box_select_and_activate (box, priv->cursor_child);
 }
 
+void
+gtk_flow_box_disable_move_cursor (GtkFlowBox *box)
+{
+  GtkFlowBoxPrivate *priv = BOX_PRIV (box);
+  
+  priv->disable_move_cursor = TRUE;
+}
+
 static gboolean
 gtk_flow_box_move_cursor (GtkFlowBox      *box,
                           GtkMovementStep  step,
@@ -3030,8 +3034,7 @@ gtk_flow_box_move_cursor (GtkFlowBox      *box,
   GtkAdjustment *adjustment;
   gboolean vertical;
 
-  /* Without "can-focus" flag fall back to the default behavior immediately */
-  if (!gtk_widget_get_can_focus (GTK_WIDGET (box)))
+  if (priv->disable_move_cursor)
     return FALSE;
 
   vertical = priv->orientation == GTK_ORIENTATION_VERTICAL;
