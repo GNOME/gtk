@@ -3285,6 +3285,7 @@ bad things might happen.</property>
     </child>
   </object>
   <object class="GtkPopover" id="new_style_menu">
+    <style><class name="menu"/></style>
     <child>
       <object class="GtkStack">
         <child>
