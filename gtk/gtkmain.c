@@ -1226,6 +1226,30 @@ rewrite_event_for_grabs (GdkEvent *event)
     return NULL;
 }
 
+static GdkEvent *
+rewrite_event_for_toplevel (GdkEvent *event)
+{
+  GdkSurface *surface;
+
+  surface = gdk_event_get_surface (event);
+  if (!surface->parent)
+    return NULL;
+
+  while (surface->parent)
+    surface = surface->parent;
+
+  return gdk_event_key_new (gdk_event_get_event_type (event),
+                            surface,
+                            gdk_event_get_device (event),
+                            gdk_event_get_source_device (event),
+                            gdk_event_get_time (event),
+                            gdk_key_event_get_keycode (event),
+                            gdk_event_get_modifier_state (event),
+                            gdk_key_event_is_modifier (event),
+                            &event->key.translated[0],
+                            &event->key.translated[1]);
+}
+
 static gboolean
 translate_event_coordinates (GdkEvent  *event,
                              double    *x,
@@ -1430,19 +1454,6 @@ is_key_event (GdkEvent *event)
     }
 }
 
-static gboolean
-is_focus_event (GdkEvent *event)
-{
-  switch ((guint) gdk_event_get_event_type (event))
-    {
-    case GDK_FOCUS_CHANGE:
-      return TRUE;
-      break;
-    default:
-      return FALSE;
-    }
-}
-
 static inline void
 set_widget_active_state (GtkWidget       *target,
                          const gboolean   release)
@@ -1620,10 +1631,16 @@ gtk_main_do_event (GdkEvent *event)
 
   target_widget = event_widget;
 
-  /* If pointer or keyboard grabs are in effect, munge the events
+  /* We propagate key events from the root, even if they are
+   * delivered to a popup surface.
+   *
+   * If pointer or keyboard grabs are in effect, munge the events
    * so that each window group looks like a separate app.
    */
-  rewritten_event = rewrite_event_for_grabs (event);
+  if (is_key_event (event))
+    rewritten_event = rewrite_event_for_toplevel (event);
+  else
+    rewritten_event = rewrite_event_for_grabs (event);
   if (rewritten_event)
     {
       event = rewritten_event;
@@ -1642,14 +1659,6 @@ gtk_main_do_event (GdkEvent *event)
   else if (is_key_event (event))
     {
       target_widget = handle_key_event (event);
-    }
-  else if (is_focus_event (event))
-    {
-      if (!GTK_IS_WINDOW (target_widget))
-        {
-          g_message ("Ignoring an unexpected focus event from GDK on a non-toplevel surface.");
-          goto cleanup;
-        }
     }
 
   if (!target_widget)
