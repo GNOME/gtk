@@ -24,8 +24,6 @@
  *      sequence contains a 0, it marks the point
  *      where skin tone modifiers should be inserted
  * s  - name, e.g. "man worker"
- * s  - shortname, for completion. This includes
- *      colons to mark the ends, e.g. ":guardsman:"
  * as - keywords, e.g. "man", "worker"
  */
 #include <json-glib/json-glib.h>
@@ -127,7 +125,7 @@ main (int argc, char *argv[])
   array = json_node_get_array (root);
   length = json_array_get_length (array);
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(aussas)"));
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(ausas)"));
   i = 0;
   while (i < length)
     {
@@ -136,7 +134,6 @@ main (int argc, char *argv[])
       GVariantBuilder b1;
       GVariantBuilder b2;
       const char *name;
-      const char *shortname;
       char *code;
       int j, k;
       gboolean skip;
@@ -187,7 +184,6 @@ main (int argc, char *argv[])
       obj2 = g_hash_table_lookup (names, name_key->str);
       if (obj2)
         {
-          shortname = json_object_get_string_member (obj2, "shortname");
           kw = json_object_get_array_member (obj2, "keywords");
           for (k = 0; k < json_array_get_length (kw); k++)
             {
@@ -209,12 +205,10 @@ main (int argc, char *argv[])
               g_strfreev (ascii);
             }
         }
-      else
-        shortname = "";
 
       g_strfreev (name_tokens);
 
-      g_variant_builder_add (&builder, "(aussas)", &b1, name, shortname, &b2);
+      g_variant_builder_add (&builder, "(ausas)", &b1, name, &b2);
     }
 
   v = g_variant_builder_end (&builder);
