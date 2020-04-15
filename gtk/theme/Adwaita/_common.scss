@@ -90,8 +90,9 @@ checkbutton:focus(visible),
 radiobutton:focus(visible) {
   outline-color: $focus_border_color;
   outline-style: solid;
-  outline-offset: 1px;
+  outline-offset: 2px;
   outline-width: 2px;
+  border-radius: $button_radius;
   row:selected & , treeview:selected & { outline-color: $alt_focus_border_color; }
 }
 
