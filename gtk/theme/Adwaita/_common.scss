@@ -903,10 +903,8 @@ button {
   // the dot is drawn by using two radial gradient, the first one is the actuall dot, the other
   // simulates the shadow labels and icons normally have in buttons.
   animation: needs_attention 150ms ease-in;
-  $_dot_shadow: _text_shadow_color(); // shadow color
 
-  background-image: radial-gradient(farthest-side, $_dot_color 96%, transparentize($_dot_color,1 )),
-                    radial-gradient(farthest-side, $_dot_shadow 95%, transparentize($_dot_shadow, 1));
+  background-image: radial-gradient(farthest-side, $_dot_color 96%, transparentize($_dot_color,1 ));
   background-size: 6px 6px, 6px 6px;
   background-repeat: no-repeat;
 
@@ -1017,7 +1015,7 @@ button.color {
     &, > overlay { border-radius: 0; }
 
     @if $variant == 'light' {
-      box-shadow: 0 1px _text_shadow_color();
+      box-shadow: 0 1px $shadow_color;
 
       .osd & { box-shadow: none; }
     }
@@ -4165,7 +4163,6 @@ button.titlebutton {
 
   @extend %button_basic_flat;
 
-  @include _button_text_shadow;
 
   &:not(.menu) {
     border-radius: 9999px;
