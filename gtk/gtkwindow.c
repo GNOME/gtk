@@ -5163,8 +5163,6 @@ surface_state_changed (GtkWidget *widget)
 
       ensure_state_flag_backdrop (widget);
 
-      _gtk_window_set_is_active (window, focused);
-
       if (!focused)
         gtk_window_set_mnemonics_visible (window, FALSE);
     }
