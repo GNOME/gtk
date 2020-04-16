@@ -4174,9 +4174,8 @@ gtk_tree_view_snapshot_grid_line (GtkTreeView            *tree_view,
   const GdkRGBA *grid_line_color;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
-  grid_line_color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context,
-                                                                                    GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
-
+  grid_line_color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR),
+                                                  _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
   if (!gdk_rgba_equal (grid_line_color, &tree_view->grid_line_color) ||
       (orientation == GTK_ORIENTATION_HORIZONTAL && !tree_view->horizontal_grid_line_texture) ||
       (orientation == GTK_ORIENTATION_VERTICAL && !tree_view->vertical_grid_line_texture))
@@ -4248,9 +4247,8 @@ gtk_tree_view_snapshot_tree_line (GtkTreeView            *tree_view,
   const GdkRGBA *tree_line_color;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
-  tree_line_color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context,
-                                                                                    GTK_CSS_PROPERTY_BORDER_LEFT_COLOR));
-
+  tree_line_color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_COLOR),
+                                                  _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
   if (!gdk_rgba_equal (tree_line_color, &tree_view->tree_line_color) ||
       (orientation == GTK_ORIENTATION_HORIZONTAL && !tree_view->horizontal_tree_line_texture) ||
       (orientation == GTK_ORIENTATION_VERTICAL && !tree_view->vertical_tree_line_texture))

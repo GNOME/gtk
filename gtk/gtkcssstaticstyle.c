@@ -757,10 +757,10 @@ gtk_css_border_create_initial_values (void)
   values->border_top_right_radius = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS, NULL, NULL, NULL);
   values->border_bottom_left_radius = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS, NULL, NULL, NULL);
   values->border_bottom_right_radius = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS, NULL, NULL, NULL);
-  values->border_top_color = NULL;
-  values->border_right_color = NULL;
-  values->border_bottom_color = NULL;
-  values->border_left_color = NULL;
+  values->border_top_color = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_TOP_COLOR, NULL, NULL, NULL);
+  values->border_right_color = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR, NULL, NULL, NULL);
+  values->border_bottom_color = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR, NULL, NULL, NULL);
+  values->border_left_color = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_LEFT_COLOR, NULL, NULL, NULL);
   values->border_image_source = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_IMAGE_SOURCE, NULL, NULL, NULL);
   values->border_image_repeat = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_IMAGE_REPEAT, NULL, NULL, NULL);
   values->border_image_slice = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_IMAGE_SLICE, NULL, NULL, NULL);
@@ -779,7 +779,7 @@ gtk_css_outline_create_initial_values (void)
   values->outline_style = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_STYLE, NULL, NULL, NULL);
   values->outline_width = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_WIDTH, NULL, NULL, NULL);
   values->outline_offset = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_OFFSET, NULL, NULL, NULL);
-  values->outline_color = NULL;
+  values->outline_color = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_COLOR, NULL, NULL, NULL);
 
   return (GtkCssValues *)values;
 }
@@ -804,7 +804,7 @@ gtk_css_font_variant_create_initial_values (void)
   values = (GtkCssFontVariantValues *)gtk_css_values_new (GTK_CSS_FONT_VARIANT_INITIAL_VALUES);
 
   values->text_decoration_line = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TEXT_DECORATION_LINE, NULL, NULL, NULL);
-  values->text_decoration_color = NULL;
+  values->text_decoration_color = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR, NULL, NULL, NULL);
   values->text_decoration_style = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TEXT_DECORATION_STYLE, NULL, NULL, NULL);
   values->font_kerning = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FONT_KERNING, NULL, NULL, NULL);
   values->font_variant_ligatures = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FONT_VARIANT_LIGATURES, NULL, NULL, NULL);

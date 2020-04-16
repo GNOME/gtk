@@ -383,7 +383,7 @@ gtk_do_render_line (GtkStyleContext *context,
 
   cairo_save (cr);
 
-  color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
+  color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR), NULL);
 
   cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
   cairo_set_line_width (cr, 1);

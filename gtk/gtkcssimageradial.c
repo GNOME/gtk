@@ -206,7 +206,7 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
 
           stop = &radial->color_stops[last];
 
-          rgba = gtk_css_color_value_get_rgba (stop->color);
+          rgba = gtk_css_color_value_get_rgba (stop->color, NULL);
           offset += step;
 
           cairo_pattern_add_color_stop_rgba (pattern,

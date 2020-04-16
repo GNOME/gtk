@@ -929,7 +929,7 @@ gtk_style_context_resolve_color (GtkStyleContext    *context,
   if (val == NULL)
     return FALSE;
 
-  *result = *gtk_css_color_value_get_rgba (val);
+  *result = *gtk_css_color_value_get_rgba (val, NULL);
   _gtk_css_value_unref (val);
   return TRUE;
 }
@@ -980,7 +980,7 @@ gtk_style_context_get_color (GtkStyleContext *context,
   g_return_if_fail (color != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  *color = *gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
+  *color = *gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR), NULL);
 }
 
 /**
@@ -1072,10 +1072,10 @@ _gtk_style_context_get_cursor_color (GtkStyleContext *context,
   style = gtk_style_context_lookup_style (context);
 
   if (primary_color)
-    *primary_color = *gtk_css_color_value_get_rgba (style->font->caret_color ? style->font->caret_color : style->core->color);
+    *primary_color = *gtk_css_color_value_get_rgba (style->font->caret_color, style->core->color);
 
   if (secondary_color)
-    *secondary_color = *gtk_css_color_value_get_rgba (style->font->secondary_caret_color ? style->font->secondary_caret_color : style->core->color);
+    *secondary_color = *gtk_css_color_value_get_rgba (style->font->secondary_caret_color, style->core->color);
 }
 
 static void
@@ -1449,14 +1449,15 @@ _gtk_style_context_get_attributes (AtkAttributeSet *attributes,
   const GdkRGBA *color; 
   gchar *value;
 
-  color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+  color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR),
+                                        _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
   value = g_strdup_printf ("%u,%u,%u",
                            (guint) ceil (color->red * 65536 - color->red),
                            (guint) ceil (color->green * 65536 - color->green),
                            (guint) ceil (color->blue * 65536 - color->blue));
   attributes = add_attribute (attributes, ATK_TEXT_ATTR_BG_COLOR, value);
 
-  color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
+  color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR), NULL);
   value = g_strdup_printf ("%u,%u,%u",
                            (guint) ceil (color->red * 65536 - color->red),
                            (guint) ceil (color->green * 65536 - color->green),

@@ -72,7 +72,7 @@ gtk_css_image_fallback_snapshot (GtkCssImage *image,
     {
       if (fallback->color)
         {
-          const GdkRGBA *color = gtk_css_color_value_get_rgba (fallback->color);
+          const GdkRGBA *color = gtk_css_color_value_get_rgba (fallback->color, NULL);
           if (!gdk_rgba_is_clear (color))
             gtk_snapshot_append_color (snapshot, color,
                                        &GRAPHENE_RECT_INIT (0, 0, width, height));

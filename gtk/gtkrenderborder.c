@@ -687,10 +687,10 @@ gtk_css_style_snapshot_border (GtkCssBoxes *boxes,
                                gtk_css_boxes_get_padding_rect (boxes)))
         return;
 
-      colors[0] = *gtk_css_color_value_get_rgba (border->border_top_color ? border->border_top_color : boxes->style->core->color);
-      colors[1] = *gtk_css_color_value_get_rgba (border->border_right_color ? border->border_right_color : boxes->style->core->color);
-      colors[2] = *gtk_css_color_value_get_rgba (border->border_bottom_color ? border->border_bottom_color : boxes->style->core->color);
-      colors[3] = *gtk_css_color_value_get_rgba (border->border_left_color ? border->border_left_color : boxes->style->core->color);
+      colors[0] = *gtk_css_color_value_get_rgba (border->border_top_color, boxes->style->core->color);
+      colors[1] = *gtk_css_color_value_get_rgba (border->border_right_color, boxes->style->core->color);
+      colors[2] = *gtk_css_color_value_get_rgba (border->border_bottom_color, boxes->style->core->color);
+      colors[3] = *gtk_css_color_value_get_rgba (border->border_left_color, boxes->style->core->color);
 
       alpha_test_vector = graphene_simd4f_init (colors[0].alpha, colors[1].alpha, colors[2].alpha, colors[3].alpha);
       if (graphene_simd4f_is_zero4 (alpha_test_vector))
@@ -745,7 +745,7 @@ gtk_css_style_snapshot_outline (GtkCssBoxes *boxes,
       border_style[1] = border_style[2] = border_style[3] = border_style[0];
       border_width[0] = _gtk_css_number_value_get (outline->outline_width, 100);
       border_width[3] = border_width[2] = border_width[1] = border_width[0];
-      colors[0] = *gtk_css_color_value_get_rgba (outline->outline_color ? outline->outline_color : boxes->style->core->color);
+      colors[0] = *gtk_css_color_value_get_rgba (outline->outline_color, boxes->style->core->color);
       colors[3] = colors[2] = colors[1] = colors[0];
 
       snapshot_border (snapshot,
