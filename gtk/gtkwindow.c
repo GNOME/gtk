@@ -476,7 +476,7 @@ static void gtk_window_activate_default_activate (GtkWidget *widget,
                                                   GVariant *parameter);
 
 static void        gtk_window_do_popup                  (GtkWindow      *window,
-                                                         GdkEventButton *event);
+                                                         GdkEvent       *event);
 static void        gtk_window_css_changed               (GtkWidget      *widget,
                                                          GtkCssStyleChange *change);
 static void gtk_window_state_flags_changed (GtkWidget     *widget,
@@ -1211,7 +1211,7 @@ gtk_window_titlebar_action (GtkWindow      *window,
   else if (g_str_equal (action, "minimize"))
     gdk_toplevel_minimize (GDK_TOPLEVEL (priv->surface));
   else if (g_str_equal (action, "menu"))
-    gtk_window_do_popup (window, (GdkEventButton*) event);
+    gtk_window_do_popup (window, event);
   else
     {
       g_warning ("Unsupported titlebar action %s", action);
@@ -5895,8 +5895,8 @@ close_window_clicked (GtkModelButton *button,
 }
 
 static void
-gtk_window_do_popup_fallback (GtkWindow      *window,
-                              GdkEventButton *event)
+gtk_window_do_popup_fallback (GtkWindow *window,
+                              GdkEvent  *event)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *menuitem;
@@ -6005,12 +6005,12 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
 }
 
 static void
-gtk_window_do_popup (GtkWindow      *window,
-                     GdkEventButton *event)
+gtk_window_do_popup (GtkWindow *window,
+                     GdkEvent  *event)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-  if (!gdk_toplevel_show_window_menu (GDK_TOPLEVEL (priv->surface), (GdkEvent *) event))
+  if (!gdk_toplevel_show_window_menu (GDK_TOPLEVEL (priv->surface), event))
     gtk_window_do_popup_fallback (window, event);
 }
 

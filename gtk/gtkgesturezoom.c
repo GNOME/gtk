@@ -104,7 +104,7 @@ _gtk_gesture_zoom_get_distance (GtkGestureZoom *zoom,
       double scale;
       /* Touchpad pinch */
 
-      scale = gdk_touchpad_pinch_event_get_scale (last_event);
+      scale = gdk_touchpad_event_get_pinch_scale (last_event);
       *distance = scale;
     }
   else

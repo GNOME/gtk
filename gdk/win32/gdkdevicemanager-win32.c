@@ -1063,7 +1063,7 @@ gdk_input_other_event (GdkDisplay *display,
                             | GDK_BUTTON3_MASK | GDK_BUTTON4_MASK
                             | GDK_BUTTON5_MASK));
 
-          event = gdk_event_button_new (event_type,
+          event = gdk_button_event_new (event_type,
                                         window,
                                         device_manager->core_pointer,
                                         GDK_DEVICE (source_device),
@@ -1077,10 +1077,11 @@ gdk_input_other_event (GdkDisplay *display,
                                           
           GDK_NOTE (EVENTS_OR_INPUT,
                     g_print ("WINTAB button %s:%d %g,%g\n",
-                             (event->any.type == GDK_BUTTON_PRESS ?
+                             (event->event_type == GDK_BUTTON_PRESS ?
                               "press" : "release"),
-                             event->button.button,
-                             event->button.x, event->button.y));
+                             ((GdkButtonEvent *) event)->button,
+                             ((GdkButtonEvent *) event)->x,
+                             ((GdkButtonEvent *) event)->y));
         }
       else
         {
@@ -1097,7 +1098,7 @@ gdk_input_other_event (GdkDisplay *display,
                             | GDK_BUTTON3_MASK | GDK_BUTTON4_MASK
                             | GDK_BUTTON5_MASK));
 
-          event = gdk_event_motion_new (window,
+          event = gdk_motion_event_new (window,
                                         device_manager->core_pointer,
                                         GDK_DEVICE (source_device),
                                         NULL,
@@ -1108,7 +1109,8 @@ gdk_input_other_event (GdkDisplay *display,
                                         axes);
           GDK_NOTE (EVENTS_OR_INPUT,
                     g_print ("WINTAB motion: %g,%g\n",
-                             event->motion.x, event->motion.y));
+                             ((GdkMotionEvent *) event)->x,
+                             ((GdkMotionEvent *) event)->y));
         }
       return event;
 

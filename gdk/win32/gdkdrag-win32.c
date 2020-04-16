@@ -2515,7 +2515,8 @@ gdk_win32_drag_handle_event (GdkDrag  *drag,
   if (!drag_win32->handle_events)
     {
       /* FIXME: remove this functionality once gtk no longer calls DnD after drag_done() */
-      g_warning ("Got an event %d for drag context %p, even though it's done!", event->any.type, drag);
+      g_warning ("Got an event %d for drag context %p, even though it's done!",
+                 event->event_type, drag);
       return FALSE;
     }
 

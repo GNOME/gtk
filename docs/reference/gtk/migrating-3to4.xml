@@ -299,8 +299,9 @@
         in GTK 4.
       </para>
       <para>
-        GdkEvent is now a strictly read-only boxed type, and you
-        can no longer change any of its fields.
+        GdkEvent is now a strictly read-only type, and you
+        can no longer change any of its fields, or construct new
+        events.
       </para>
     </section>
 
@@ -308,7 +309,7 @@
       <title>Stop using gdk_surface_set_event_compression</title>
       <para>
         Event compression is now always enabled. If you need to see the uncoalesced
-        motion history, use gdk_event_get_motion_history().
+        motion history, use gdk_motion_event_get_history() on the latest motion event.
       </para>
     </section>
 
@@ -318,8 +319,8 @@
         Warping the pointer is disorienting and unfriendly to users.
         GTK 4 does not support it. In special circumstances (such as when
         implementing remote connection UIs) it can be necessary to
-        warp the pointer; in this case, use platform APIs such as XWarpPointer
-        directly.
+        warp the pointer; in this case, use platform APIs such as
+        <function>XWarpPointer()</function> directly.
       </para>
     </section>
 

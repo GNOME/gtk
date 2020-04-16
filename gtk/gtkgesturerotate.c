@@ -206,7 +206,7 @@ gtk_gesture_rotate_handle_event (GtkEventController *controller,
   if (gdk_event_get_event_type (event) == GDK_TOUCHPAD_PINCH)
     {
       phase = gdk_touchpad_event_get_gesture_phase (event);
-      delta = gdk_touchpad_pinch_event_get_angle_delta (event);
+      delta = gdk_touchpad_event_get_pinch_angle_delta (event);
       if (phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN ||
           phase == GDK_TOUCHPAD_GESTURE_PHASE_END)
         priv->accum_touchpad_angle = 0;
