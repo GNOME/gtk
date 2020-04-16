@@ -110,6 +110,10 @@ static void     set_wm_name                       (GdkDisplay  *display,
 						   const gchar *name);
 static void     move_to_current_desktop           (GdkSurface *surface);
 static void     gdk_x11_toplevel_state_callback   (GdkSurface *surface);
+static void     gdk_x11_surface_on_monitor_added   (GdkSurface *surface,
+                                                    GdkMonitor *monitor);
+static void     gdk_x11_surface_on_monitor_removed (GdkSurface *surface,
+                                                    GdkMonitor *monitor);
 
 /* Return whether time1 is considered later than time2 as far as xserver
  * time is concerned.  Accounts for wraparound.
@@ -134,6 +138,7 @@ gdk_x11_surface_init (GdkX11Surface *impl)
 {  
   impl->surface_scale = 1;
   impl->frame_sync_enabled = TRUE;
+  impl->surface_is_on_monitor = NULL;
 }
 
 GdkToplevelX11 *
@@ -462,7 +467,16 @@ gdk_x11_surface_finalize (GObject *object)
       _gdk_x11_display_remove_window (display, impl->xid);
       if (impl->toplevel && impl->toplevel->focus_window)
         _gdk_x11_display_remove_window (display, impl->toplevel->focus_window);
+
+      g_signal_handlers_disconnect_by_func (display,
+                                            gdk_x11_surface_on_monitor_added,
+                                            GDK_SURFACE (object));
+      g_signal_handlers_disconnect_by_func (display,
+                                            gdk_x11_surface_on_monitor_removed,
+                                            GDK_SURFACE (object));
     }
+
+  g_clear_pointer (&impl->surface_is_on_monitor, g_list_free);
 
   g_free (impl->toplevel);
 
@@ -973,6 +987,13 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
   connect_frame_clock (surface);
 
   gdk_surface_freeze_updates (surface);
+
+  g_signal_connect_swapped (surface->display, "monitor-added",
+                            G_CALLBACK (gdk_x11_surface_on_monitor_added),
+                            surface);
+  g_signal_connect_swapped (surface->display, "monitor-removed",
+                            G_CALLBACK (gdk_x11_surface_on_monitor_removed),
+                            surface);
 
   return surface;
 }
@@ -1555,6 +1576,86 @@ gdk_x11_surface_update_popups (GdkSurface *parent)
         x11_surface_move (popup, new_x, new_y);
       gdk_x11_surface_restack_toplevel (popup, parent, TRUE);
     }
+}
+
+static void
+gdk_x11_surface_set_is_on_monitor (GdkSurface *surface,
+                                   GdkMonitor *monitor,
+                                   gboolean    is_on_monitor)
+{
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
+  GList *was_on_monitor;
+
+  was_on_monitor = g_list_find (impl->surface_is_on_monitor, monitor);
+
+  if (!was_on_monitor && is_on_monitor)
+    {
+      impl->surface_is_on_monitor = g_list_append (impl->surface_is_on_monitor,
+                                                   monitor);
+      gdk_surface_enter_monitor (surface, monitor);
+    }
+  else if (was_on_monitor && !is_on_monitor)
+    {
+      impl->surface_is_on_monitor = g_list_remove (impl->surface_is_on_monitor,
+                                                   monitor);
+      gdk_surface_leave_monitor (surface, monitor);
+    }
+}
+
+static void
+gdk_x11_surface_check_monitor (GdkSurface *surface,
+                               GdkMonitor *monitor)
+{
+  GdkRectangle monitor_geometry;
+  GdkRectangle surface_geometry;
+  gboolean is_on_monitor;
+
+  gdk_monitor_get_geometry (monitor, &monitor_geometry);
+  gdk_surface_get_geometry (surface,
+                            &surface_geometry.x,
+                            &surface_geometry.y,
+                            &surface_geometry.width,
+                            &surface_geometry.height);
+
+  is_on_monitor = gdk_rectangle_intersect (&surface_geometry,
+                                           &monitor_geometry,
+                                           NULL);
+
+  gdk_x11_surface_set_is_on_monitor (surface, monitor, is_on_monitor);
+}
+
+void
+gdk_x11_surface_enter_leave_monitors (GdkSurface *surface)
+{
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  int n_monitors, i;
+
+  n_monitors = gdk_display_get_n_monitors (display);
+  for (i = 0; i < n_monitors; i++)
+    {
+      GdkMonitor *monitor = gdk_display_get_monitor (display, i);
+      gdk_x11_surface_check_monitor (surface, monitor);
+    }
+}
+
+static void
+gdk_x11_surface_on_monitor_added (GdkSurface *surface,
+                                  GdkMonitor *monitor)
+{
+  gdk_x11_surface_check_monitor (surface, monitor);
+  g_signal_connect_swapped (G_OBJECT (monitor), "notify::geometry",
+                            G_CALLBACK (gdk_x11_surface_check_monitor),
+                            surface);
+}
+
+static void
+gdk_x11_surface_on_monitor_removed (GdkSurface *surface,
+                                    GdkMonitor *monitor)
+{
+  gdk_x11_surface_check_monitor (surface, monitor);
+  g_signal_handlers_disconnect_by_func (G_OBJECT (monitor),
+                                        gdk_x11_surface_check_monitor,
+                                        monitor);
 }
 
 static void gdk_x11_surface_set_geometry_hints (GdkSurface         *surface,
