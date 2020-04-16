@@ -13,7 +13,7 @@ hc_theme_deps = [
     command: [
       sassc, sassc_opts, '@INPUT@', '@OUTPUT@',
     ],
-    depend_files: hc_scss_files,
+    depend_files: [ hc_scss_files, adwaita_scss_files ],
   )
 ]
 
@@ -24,6 +24,6 @@ foreach variant: hc_theme_variants
     command: [
       sassc, sassc_opts, '@INPUT@', '@OUTPUT@',
     ],
-    depend_files: hc_scss_files,
+    depend_files: [ hc_scss_files, adwaita_scss_files ],
   )
 endforeach
