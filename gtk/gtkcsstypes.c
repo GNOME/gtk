@@ -232,7 +232,8 @@ gtk_css_pseudoclass_name (GtkStateFlags state)
     "visited",
     "checked",
     "drop(active)",
-    "focus(visible)"
+    "focus-visible",
+    "focus-within"
   };
   guint i;
 

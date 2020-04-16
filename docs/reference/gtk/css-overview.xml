@@ -273,8 +273,9 @@ notebook tab:first-child label {
       :disabled, :selected, :focus, :indeterminate, :checked and :backdrop.
       In addition, the following pseudo-classes don't have a direct equivalent
       as a widget state: :dir(ltr) and :dir(rtl) (for text direction), :link and
-      :visited (for links) and :drop(active) (for highlighting drop targets).
-      Widget state pseudo-classes may only apply to the last element in a selector.
+      :visited (for links), :drop(active) (for highlighting drop targets) and
+      :focus-visible (for visible focus indication). Widget state pseudo-classes
+      may only apply to the last element in a selector.
     </para>
 
     <example>

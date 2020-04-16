@@ -1282,6 +1282,8 @@ gtk_css_selector_parse_selector_pseudo_class (GtkCssParser   *parser,
         { "link",           GTK_STATE_FLAG_LINK, },
         { "visited",        GTK_STATE_FLAG_VISITED, },
         { "checked",        GTK_STATE_FLAG_CHECKED, },
+        { "focus-visible",  GTK_STATE_FLAG_FOCUS_VISIBLE, },
+        { "focus-within",   GTK_STATE_FLAG_FOCUS_WITHIN, },
       };
       guint i;
 
@@ -1447,19 +1449,6 @@ gtk_css_selector_parse_selector_pseudo_class (GtkCssParser   *parser,
                                                   : &GTK_CSS_SELECTOR_PSEUDOCLASS_STATE,
                                            selector);
           selector->state.state = GTK_STATE_FLAG_DROP_ACTIVE;
-        }
-      else if (gtk_css_token_is_function (token, "focus"))
-        {
-          if (!gtk_css_parser_consume_function (parser, 1, 1, parse_identifier_arg, (gpointer) "visible"))
-            {
-              if (selector)
-                _gtk_css_selector_free (selector);
-              return NULL;
-            }
-          selector = gtk_css_selector_new (negate ? &GTK_CSS_SELECTOR_NOT_PSEUDOCLASS_STATE
-                                                  : &GTK_CSS_SELECTOR_PSEUDOCLASS_STATE,
-                                           selector);
-          selector->state.state = GTK_STATE_FLAG_FOCUS_VISIBLE;
         }
       else
         {
