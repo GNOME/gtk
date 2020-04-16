@@ -772,15 +772,10 @@ setup_section (GtkEmojiChooser *chooser,
                const char     *first,
                const char     *icon)
 {
-  GtkAdjustment *adj;
-
   section->first = first;
 
   gtk_button_set_icon_name (GTK_BUTTON (section->button), icon);
 
-  adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (chooser->scrolled_window));
-
-  gtk_container_set_focus_vadjustment (GTK_CONTAINER (section->box), adj);
   gtk_flow_box_disable_move_cursor (GTK_FLOW_BOX (section->box));
   gtk_flow_box_set_filter_func (GTK_FLOW_BOX (section->box), filter_func, section, NULL);
   g_signal_connect_swapped (section->button, "clicked", G_CALLBACK (scroll_to_section), section);
