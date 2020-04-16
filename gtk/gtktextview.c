@@ -4354,7 +4354,7 @@ gtk_text_view_get_gutter (GtkTextView       *text_view,
 
   childp = find_child_for_window_type (text_view, win);
 
-  if (*childp != NULL)
+  if (childp != NULL && *childp != NULL)
     return GTK_WIDGET (*childp);
 
   return NULL;
@@ -4388,6 +4388,9 @@ gtk_text_view_set_gutter (GtkTextView       *text_view,
                     win == GTK_TEXT_WINDOW_BOTTOM);
 
   childp = find_child_for_window_type (text_view, win);
+  if (childp == NULL)
+    return;
+
   old_child = *childp;
 
   if ((GtkWidget *)old_child == widget)
