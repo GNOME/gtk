@@ -384,7 +384,7 @@ gtk_drop_target_handle_event (GtkEventController *controller,
         GdkDragAction preferred;
 
         /* sanity check */
-        g_return_val_if_fail (self->drop == gdk_drag_event_get_drop (event), FALSE);
+        g_return_val_if_fail (self->drop == gdk_dnd_event_get_drop (event), FALSE);
 
         graphene_point_init (&self->coords, x, y);
         g_signal_emit (self, signals[MOTION], 0, x, y, &preferred);
@@ -403,7 +403,7 @@ gtk_drop_target_handle_event (GtkEventController *controller,
     case GDK_DROP_START:
       {
         /* sanity check */
-        g_return_val_if_fail (self->drop == gdk_drag_event_get_drop (event), FALSE);
+        g_return_val_if_fail (self->drop == gdk_dnd_event_get_drop (event), FALSE);
 
         graphene_point_init (&self->coords, x, y);
         self->dropping = TRUE;

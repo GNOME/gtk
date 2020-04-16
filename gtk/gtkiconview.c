@@ -2275,11 +2275,10 @@ gtk_icon_view_button_press (GtkGestureClick *gesture,
 }
 
 static gboolean
-button_event_modifies_selection (GdkEventButton *event)
+button_event_modifies_selection (GdkEvent *event)
 {
-  guint state;
+  guint state = gdk_event_get_modifier_state (event);
 
-  state = gdk_event_get_modifier_state ((GdkEvent *) event);
   return (state & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) != 0;
 }
 
@@ -2293,7 +2292,7 @@ gtk_icon_view_button_release (GtkGestureClick *gesture,
   GtkIconView *icon_view = user_data;
   int button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
   GdkEventSequence *sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-  GdkEventButton *event = (GdkEventButton *)gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+  GdkEvent *event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
 
   if (icon_view->priv->pressed_button == button)
     icon_view->priv->pressed_button = -1;

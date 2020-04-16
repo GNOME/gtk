@@ -806,7 +806,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
           translated.consumed = 0;
           translated.layout = 0;
           translated.level = 0;
-          GdkEvent *tmp_event = gdk_event_key_new (GDK_KEY_PRESS,
+          GdkEvent *tmp_event = gdk_key_event_new (GDK_KEY_PRESS,
                                                    gdk_event_get_surface (event),
                                                    gdk_event_get_device (event),
                                                    gdk_event_get_source_device (event),

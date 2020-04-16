@@ -207,7 +207,7 @@ generate_focus_event (GdkDeviceManagerWin32 *device_manager,
   device = GDK_DEVICE_MANAGER_WIN32 (device_manager)->core_keyboard;
   source_device = GDK_DEVICE_MANAGER_WIN32 (device_manager)->system_keyboard;
 
-  event = gdk_event_focus_new (window, device, source_device, in);
+  event = gdk_focus_event_new (window, device, source_device, in);
 
   _gdk_win32_append_event (event);
 }
@@ -233,7 +233,7 @@ generate_grab_broken_event (GdkDeviceManagerWin32 *device_manager,
       source_device = device_manager->system_pointer;
     }
 
-  event = gdk_event_grab_broken_new (window,
+  event = gdk_grab_broken_event_new (window,
                                      device,
                                      source_device,
                                      grab_window,
@@ -885,12 +885,8 @@ decode_key_lparam (LPARAM lParam)
 static void
 fixup_event (GdkEvent *event)
 {
-  if (event->any.surface)
-    g_object_ref (event->any.surface);
-  if (((event->any.type == GDK_ENTER_NOTIFY) ||
-       (event->any.type == GDK_LEAVE_NOTIFY)) &&
-      (event->crossing.child_surface != NULL))
-    g_object_ref (event->crossing.child_surface);
+  if (event->surface)
+    g_object_ref (event->surface);
 }
 
 void
@@ -1080,7 +1076,7 @@ send_crossing_event (GdkDisplay                 *display,
   pt = *screen_pt;
   ScreenToClient (GDK_SURFACE_HWND (window), &pt);
 
-  event = gdk_event_crossing_new (type,
+  event = gdk_crossing_event_new (type,
                                   window,
                                   device_manager->core_pointer,
                                   device_manager->system_pointer,
@@ -1589,7 +1585,7 @@ generate_button_event (GdkEventType      type,
   current_x = (gint16) GET_X_LPARAM (msg->lParam) / impl->surface_scale;
   current_y = (gint16) GET_Y_LPARAM (msg->lParam) / impl->surface_scale;
 
-  event = gdk_event_button_new (type,
+  event = gdk_button_event_new (type,
                                 window,
                                 device_manager->core_pointer,
                                 device_manager->system_pointer,
@@ -2133,7 +2129,7 @@ gdk_event_translate (MSG  *msg,
       translated.consumed = 0;
       translated.layout = 0;
       translated.level = 0;
-      event = gdk_event_key_new (GDK_KEY_PRESS,
+      event = gdk_key_event_new (GDK_KEY_PRESS,
                                  window,
                                  device_manager_win32->core_keyboard,
                                  device_manager_win32->system_keyboard,
@@ -2336,7 +2332,7 @@ gdk_event_translate (MSG  *msg,
       translated.consumed = 0;
       translated.layout = group;
       translated.level = 0;
-      event = gdk_event_key_new ((msg->message == WM_KEYDOWN || msg->message == WM_SYSKEYDOWN)
+      event = gdk_key_event_new ((msg->message == WM_KEYDOWN || msg->message == WM_SYSKEYDOWN)
                                    ? GDK_KEY_PRESS
                                    : GDK_KEY_RELEASE,
                                  window,
@@ -2413,7 +2409,7 @@ gdk_event_translate (MSG  *msg,
           translated.consumed = 0;
           translated.layout = get_active_group ();
           translated.level = 0;
-          event = gdk_event_key_new (GDK_KEY_PRESS,
+          event = gdk_key_event_new (GDK_KEY_PRESS,
                                      window,
                                      device_manager_win32->core_keyboard,
                                      device_manager_win32->system_keyboard,
@@ -2427,7 +2423,7 @@ gdk_event_translate (MSG  *msg,
           _gdk_win32_append_event (event);
 
           /* Build a key release event.  */
-          event = gdk_event_key_new (GDK_KEY_RELEASE,
+          event = gdk_key_event_new (GDK_KEY_RELEASE,
                                      window,
                                      device_manager_win32->core_keyboard,
                                      device_manager_win32->system_keyboard,
@@ -2641,7 +2637,7 @@ gdk_event_translate (MSG  *msg,
 	  current_x = (gint16) GET_X_LPARAM (msg->lParam) / impl->surface_scale;
 	  current_y = (gint16) GET_Y_LPARAM (msg->lParam) / impl->surface_scale;
 
-	  event = gdk_event_motion_new (window,
+	  event = gdk_motion_event_new (window,
 	                                device_manager_win32->core_pointer,
 	                                device_manager_win32->system_pointer,
                                         NULL,
@@ -2767,7 +2763,7 @@ gdk_event_translate (MSG  *msg,
        */
       delta_y *= -1.0;
 
-      event = gdk_event_scroll_new (window,
+      event = gdk_scroll_event_new (window,
                                     device_manager_win32->core_pointer,
                                     device_manager_win32->system_pointer,
                                     NULL,
@@ -2790,7 +2786,7 @@ gdk_event_translate (MSG  *msg,
                       ? GDK_SCROLL_RIGHT
                       : GDK_SCROLL_LEFT;
 
-      event = gdk_event_discrete_scroll_new (window,
+      event = gdk_scroll_event_new_discrete (window,
                                              device_manager_win32->core_pointer,
                                              device_manager_win32->system_pointer,
                                              NULL,
@@ -3425,7 +3421,7 @@ gdk_event_translate (MSG  *msg,
       if (GDK_SURFACE_DESTROYED (window))
 	break;
 
-      event = gdk_event_delete_new (window);
+      event = gdk_delete_event_new (window);
 
       _gdk_win32_append_event (event);
 
@@ -3459,7 +3455,7 @@ gdk_event_translate (MSG  *msg,
       if (window == NULL || GDK_SURFACE_DESTROYED (window))
 	break;
 
-      event = gdk_event_delete_new (window);
+      event = gdk_delete_event_new (window);
 
       _gdk_win32_append_event (event);
 

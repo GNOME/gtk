@@ -1,86 +1,5 @@
 #include <gtk/gtk.h>
 
-typedef struct _GdkEventAny GdkEventAny;
-typedef struct _GdkEventKey GdkEventKey;
-
-struct _GdkEventAny
-{
-  int ref_count;
-  GdkEventType type;
-  GdkSurface *surface;
-  guint32 time;
-  guint16 flags;
-  guint pointer_emulated  : 1;
-  guint touch_emulating   : 1;
-  guint scroll_is_stop    : 1;
-  guint key_is_modifier   : 1;
-  guint focus_in          : 1;
-  GdkDevice *device;
-  GdkDevice *source_device;
-};
-
-typedef struct {
-  guint keyval;
-  GdkModifierType consumed;
-  guint layout;
-  guint level;
-} GdkTranslatedKey;
-
-struct _GdkEventKey
-{
-  GdkEventAny any;
-  GdkModifierType state;
-  guint32 keycode;
-  GdkTranslatedKey translated[2];
-};
-
-
-static GdkEvent *
-gdk_event_key_new (GdkEventType     type,
-                   GdkSurface      *surface,
-                   GdkDevice       *device,
-                   GdkDevice       *source_device,
-                   guint32          time,
-                   guint            keycode,
-                   GdkModifierType  state,
-                   gboolean         is_modifier,
-                   GdkTranslatedKey *translated,
-                   GdkTranslatedKey *no_lock);
-
-static GdkEvent *
-gdk_event_key_new (GdkEventType     type,
-                   GdkSurface      *surface,
-                   GdkDevice       *device,
-                   GdkDevice       *source_device,
-                   guint32          time,
-                   guint            keycode,
-                   GdkModifierType  state,
-                   gboolean         is_modifier,
-                   GdkTranslatedKey *translated,
-                   GdkTranslatedKey *no_lock)
-{
-  GdkEventKey *event;
-
-  g_return_val_if_fail (type == GDK_KEY_PRESS ||
-                        type == GDK_KEY_RELEASE, NULL);
-
-  event = g_new0 (GdkEventKey, 1);
-
-  event->any.ref_count = 1;
-  event->any.type = type;
-  event->any.time = time;
-  event->any.surface = g_object_ref (surface);
-  event->any.device = g_object_ref (device);
-  event->any.source_device = g_object_ref (source_device);
-  event->keycode = keycode;
-  event->state = state;
-  event->any.key_is_modifier = is_modifier;
-  event->translated[0] = *translated;
-  event->translated[1] = *no_lock;
-
-  return (GdkEvent *)event;
-}
-
 static void
 test_trigger_basic (void)
 {
@@ -332,6 +251,8 @@ test_trigger_parse_invalid (void)
     }
 }
 
+#if 0
+/* FIXME: Needs access to the event constructors */
 static void
 test_trigger_trigger (void)
 {
@@ -378,7 +299,7 @@ test_trigger_trigger (void)
       translated.consumed = 0;
       translated.layout = keys[0].group;
       translated.level = keys[0].level;
-      event = gdk_event_key_new (GDK_KEY_PRESS,
+      event = gdk_key_event_new (GDK_KEY_PRESS,
                                  surface,
                                  device,
                                  device,
@@ -403,6 +324,7 @@ test_trigger_trigger (void)
   g_object_unref (trigger[2]);
   g_object_unref (trigger[3]);
 }
+#endif
 
 static gboolean
 callback (GtkWidget *widget,
@@ -488,7 +410,9 @@ main (int argc, char *argv[])
   g_test_add_func ("/shortcuts/trigger/parse/mnemonic", test_trigger_parse_mnemonic);
   g_test_add_func ("/shortcuts/trigger/parse/alternative", test_trigger_parse_alternative);
   g_test_add_func ("/shortcuts/trigger/parse/invalid", test_trigger_parse_invalid);
+#if 0
   g_test_add_func ("/shortcuts/trigger/trigger", test_trigger_trigger);
+#endif
   g_test_add_func ("/shortcuts/action/basic", test_action_basic);
   g_test_add_func ("/shortcuts/action/activate", test_action_activate);
   g_test_add_func ("/shortcuts/action/parse", test_action_parse);
