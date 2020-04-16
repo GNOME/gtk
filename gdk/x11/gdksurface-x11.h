@@ -80,6 +80,8 @@ struct _GdkX11Surface
   int abs_y;
 
   guint64 map_time;
+
+  GList *surface_is_on_monitor;
 };
  
 struct _GdkX11SurfaceClass 
