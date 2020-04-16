@@ -736,6 +736,7 @@ typedef enum
  * @GTK_STATE_FLAG_CHECKED: Widget is checked
  * @GTK_STATE_FLAG_DROP_ACTIVE: Widget is highlighted as a drop target for DND
  * @GTK_STATE_FLAG_FOCUS_VISIBLE: Widget has the visible focus
+ * @GTK_STATE_FLAG_FOCUS_WITHIN: Widget contains the keyboard focus
  *
  * Describes a widget state. Widget states are used to match the widget
  * against CSS pseudo-classes. Note that GTK extends the regular CSS
@@ -757,7 +758,8 @@ typedef enum
   GTK_STATE_FLAG_VISITED       = 1 << 10,
   GTK_STATE_FLAG_CHECKED       = 1 << 11,
   GTK_STATE_FLAG_DROP_ACTIVE   = 1 << 12,
-  GTK_STATE_FLAG_FOCUS_VISIBLE = 1 << 13
+  GTK_STATE_FLAG_FOCUS_VISIBLE = 1 << 13,
+  GTK_STATE_FLAG_FOCUS_WITHIN  = 1 << 14
 } GtkStateFlags;
 
 /**

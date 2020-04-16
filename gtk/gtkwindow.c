@@ -5612,7 +5612,13 @@ synthesize_focus_change_events (GtkWindow *window,
       gtk_widget_set_focus_child (widget, NULL);
       prev = widget;
       widget = gtk_widget_get_parent (widget);
+
+      flags = (flags & ~GTK_STATE_FLAG_FOCUSED) | GTK_STATE_FLAG_FOCUS_WITHIN;
     }
+
+  flags = GTK_STATE_FLAG_FOCUS_WITHIN;
+  if (gtk_window_get_focus_visible (GTK_WINDOW (window)))
+    flags |= GTK_STATE_FLAG_FOCUS_VISIBLE;
 
   list = NULL;
   for (widget = new_focus; widget; widget = gtk_widget_get_parent (widget))
@@ -5652,6 +5658,10 @@ synthesize_focus_change_events (GtkWindow *window,
         }
       check_crossing_invariants (widget, &crossing);
       gtk_widget_handle_crossing (widget, &crossing, 0, 0);
+
+      if (l->next == NULL)
+        flags = (flags & ~GTK_STATE_FLAG_FOCUS_WITHIN) | GTK_STATE_FLAG_FOCUSED;
+
       gtk_widget_set_state_flags (widget, flags, FALSE);
       gtk_widget_set_focus_child (widget, focus_child);
     }
