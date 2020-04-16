@@ -891,7 +891,7 @@ gdk_wayland_surface_resize (GdkSurface *surface,
   GdkDisplay *display;
   GdkEvent *event;
 
-  event = gdk_event_configure_new (surface, width, height);
+  event = gdk_configure_event_new (surface, width, height);
 
   gdk_wayland_surface_update_size (surface, width, height, scale);
   _gdk_surface_update_size (surface);
@@ -1461,7 +1461,7 @@ gdk_wayland_surface_handle_close (GdkSurface *surface)
 
   GDK_DISPLAY_NOTE (display, EVENTS, g_message ("close %p", surface));
 
-  event = gdk_event_delete_new (surface);
+  event = gdk_delete_event_new (surface);
 
   _gdk_wayland_display_deliver_event (display, event);
 }
@@ -3817,7 +3817,8 @@ gdk_wayland_surface_show_window_menu (GdkSurface *surface,
   double x, y;
   uint32_t serial;
 
-  switch ((guint) event->any.type)
+  GdkEventType event_type = gdk_event_get_event_type (event);
+  switch ((guint) event_type)
     {
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:

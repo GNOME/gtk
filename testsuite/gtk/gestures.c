@@ -23,7 +23,7 @@ inject_event (GdkEvent *event)
 {
   gboolean handled;
 
-  g_signal_emit_by_name (event->any.surface, "event", event, &handled);
+  g_signal_emit_by_name (event->surface, "event", event, &handled);
 }
 
 static void
@@ -44,7 +44,7 @@ point_press (PointState *point,
 
   if (point == &mouse_state)
     {
-      ev = gdk_event_button_new (GDK_BUTTON_PRESS,
+      ev = gdk_button_event_new (GDK_BUTTON_PRESS,
                                  surface,
                                  device,
                                  device,
@@ -59,7 +59,7 @@ point_press (PointState *point,
     }
   else
     {
-      ev = gdk_event_touch_new (GDK_TOUCH_BEGIN,
+      ev = gdk_touch_event_new (GDK_TOUCH_BEGIN,
                                 EVENT_SEQUENCE (point),
                                 surface,
                                 device,
@@ -100,7 +100,7 @@ point_update (PointState *point,
 
   if (point == &mouse_state)
     {
-      ev = gdk_event_motion_new (surface,
+      ev = gdk_motion_event_new (surface,
                                  device,
                                  device,
                                  NULL,
@@ -114,7 +114,7 @@ point_update (PointState *point,
       if (!point->widget || widget != point->widget)
         return;
 
-      ev = gdk_event_touch_new (GDK_TOUCH_UPDATE,
+      ev = gdk_touch_event_new (GDK_TOUCH_UPDATE,
                                 EVENT_SEQUENCE (point),
                                 surface,
                                 device,
@@ -157,7 +157,7 @@ point_release (PointState *point,
       if ((point->state & (GDK_BUTTON1_MASK << (button - 1))) == 0)
         return;
 
-      ev = gdk_event_button_new (GDK_BUTTON_RELEASE,
+      ev = gdk_button_event_new (GDK_BUTTON_RELEASE,
                                  surface,
                                  device,
                                  device,
@@ -172,7 +172,7 @@ point_release (PointState *point,
     }
   else
     {
-      ev = gdk_event_touch_new (GDK_TOUCH_END,
+      ev = gdk_touch_event_new (GDK_TOUCH_END,
                                 EVENT_SEQUENCE (point),
                                 surface,
                                 device,

@@ -1,84 +1,36 @@
 #include <gtk/gtk.h>
 
-typedef struct _GdkEventAny GdkEventAny;
-typedef struct _GdkEventKey GdkEventKey;
-
-struct _GdkEventAny
-{
-  int ref_count;
-  GdkEventType type;
-  GdkSurface *surface;
-  guint32 time;
-  guint16 flags;
-  guint pointer_emulated  : 1;
-  guint touch_emulating   : 1;
-  guint scroll_is_stop    : 1;
-  guint key_is_modifier   : 1;
-  guint focus_in          : 1;
-  GdkDevice *device;
-  GdkDevice *source_device;
-};
-
-typedef struct {
-  guint keyval;
-  GdkModifierType consumed;
-  guint layout;
-  guint level;
-} GdkTranslatedKey;
-
-struct _GdkEventKey
-{
-  GdkEventAny any;
-  GdkModifierType state;
-  guint32 keycode;
-  GdkTranslatedKey translated[2];
-};
-
+#define GTK_COMPILATION
+#include "gdk/gdkeventsprivate.h"
 
 static GdkEvent *
-gdk_event_key_new (GdkEventType     type,
-                   GdkSurface      *surface,
-                   GdkDevice       *device,
-                   GdkDevice       *source_device,
-                   guint32          time,
-                   guint            keycode,
-                   GdkModifierType  state,
-                   gboolean         is_modifier,
-                   GdkTranslatedKey *translated,
-                   GdkTranslatedKey *no_lock);
-
-static GdkEvent *
-gdk_event_key_new (GdkEventType     type,
-                   GdkSurface      *surface,
-                   GdkDevice       *device,
-                   GdkDevice       *source_device,
-                   guint32          time,
-                   guint            keycode,
-                   GdkModifierType  state,
-                   gboolean         is_modifier,
-                   GdkTranslatedKey *translated,
-                   GdkTranslatedKey *no_lock)
+key_event_new (GdkEventType      event_type,
+               GdkSurface       *surface,
+               GdkDevice        *device,
+               GdkDevice        *source_device,
+               guint32           time_,
+               guint             keycode,
+               GdkModifierType   state,
+               gboolean          is_modifier,
+               GdkTranslatedKey *translated,
+               GdkTranslatedKey *no_lock)
 {
-  GdkEventKey *event;
+  GdkKeyEvent *key_event = (GdkKeyEvent *) g_type_create_instance (GDK_TYPE_KEY_EVENT);
+  GdkEvent *event = (GdkEvent *) key_event;
 
-  g_return_val_if_fail (type == GDK_KEY_PRESS ||
-                        type == GDK_KEY_RELEASE, NULL);
+  event->event_type = event_type;
+  event->surface = g_object_ref (surface);
+  event->device = g_object_ref (device);
+  event->source_device = g_object_ref (source_device);
+  event->time = time_;
 
-  event = g_new0 (GdkEventKey, 1);
+  key_event->keycode = keycode;
+  key_event->state = state;
+  key_event->key_is_modifier = is_modifier;
+  key_event->translated[0] = *translated;
+  key_event->translated[1] = *no_lock;
 
-  event->any.ref_count = 1;
-  event->any.type = type;
-  event->any.time = time;
-  event->any.surface = g_object_ref (surface);
-  event->any.device = g_object_ref (device);
-  event->any.source_device = g_object_ref (source_device);
-  event->keycode = keycode;
-  event->state = state;
-  event->any.key_is_modifier = is_modifier;
-  event->translated[0] = *translated;
-  event->translated[1] = *no_lock;
-
-  return (GdkEvent *)event;
+  return event;
 }
 
 static void
@@ -378,16 +330,16 @@ test_trigger_trigger (void)
       translated.consumed = 0;
       translated.layout = keys[0].group;
       translated.level = keys[0].level;
-      event = gdk_event_key_new (GDK_KEY_PRESS,
-                                 surface,
-                                 device,
-                                 device,
-                                 GDK_CURRENT_TIME,
-                                 keys[0].keycode,
-                                 tests[i].state,
-                                 FALSE,
-                                 &translated,
-                                 &translated);
+      event = key_event_new (GDK_KEY_PRESS,
+                             surface,
+                             device,
+                             device,
+                             GDK_CURRENT_TIME,
+                             keys[0].keycode,
+                             tests[i].state,
+                             FALSE,
+                             &translated,
+                             &translated);
       for (j = 0; j < 4; j++)
         {
           g_assert_cmpint (gtk_shortcut_trigger_trigger (trigger[j], event, tests[i].mnemonic), ==, tests[i].result[j]);
