@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkWindow" id="window1">
+    <property name="decorated">0</property>
+    <child>
+      <object class="GtkLabel" id="label1">
+        <property name="label" translatable="yes">plain one two three four</property>
+        <property name="use_markup">1</property>
+        <attributes>
+          <attribute name="foreground" value="red" start="6" end="10"></attribute>
+          <attribute name="foreground" value="green" start="10" end="14"></attribute>
+          <attribute name="foreground" value="blue" start="14" end="20"></attribute>
+          <attribute name="foreground" value="orange" start="20" end="24"></attribute>
+          <attribute name="underline" value="True" start="14" end="24"></attribute>
+          <attribute name="underline-color" value="blue" start="14" end="24"></attribute>
+        </attributes>
+      </object>
+    </child>
+  </object>
+</interface>
