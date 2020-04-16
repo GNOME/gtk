@@ -86,6 +86,34 @@ done:
   return diff;
 }
 
+static void
+check_focus_states (GtkWidget *focus_widget)
+{
+  GtkStateFlags state;
+  GtkWidget *parent;
+
+  if (focus_widget == NULL)
+    return;
+
+  /* Check that we set :focus and :focus-within on the focus_widget,
+   * and :focus-within on its ancestors
+   */
+
+  state = gtk_widget_get_state_flags (focus_widget);
+  g_assert_true ((state & (GTK_STATE_FLAG_FOCUSED|GTK_STATE_FLAG_FOCUS_WITHIN)) ==
+                  (GTK_STATE_FLAG_FOCUSED|GTK_STATE_FLAG_FOCUS_WITHIN));
+
+  parent = gtk_widget_get_parent (focus_widget);
+  while (parent)
+    {
+      state = gtk_widget_get_state_flags (parent);
+      g_assert_true ((state & GTK_STATE_FLAG_FOCUS_WITHIN) == GTK_STATE_FLAG_FOCUS_WITHIN);
+      g_assert_true ((state & GTK_STATE_FLAG_FOCUSED) == 0);
+
+      parent = gtk_widget_get_parent (parent);
+    }
+}
+
 static char *
 generate_focus_chain (GtkWidget        *window,
                       GtkDirectionType  dir)
@@ -108,6 +136,8 @@ generate_focus_chain (GtkWidget        *window,
       g_signal_emit_by_name (window, "move-focus", dir);
 
       focus = gtk_window_get_focus (GTK_WINDOW (window));
+
+      check_focus_states (focus);
 
       if (focus)
         {
