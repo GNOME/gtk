@@ -26,7 +26,7 @@
 
 #include "gtkviewport.h"
 
-#include "gtkadjustment.h"
+#include "gtkadjustmentprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
@@ -81,6 +81,9 @@ struct _GtkViewportPrivate
    * driving the scrollable adjustment values */
   guint hscroll_policy : 1;
   guint vscroll_policy : 1;
+  guint scroll_to_focus : 1;
+
+  gulong focus_handler;
 };
 
 struct _GtkViewportClass
@@ -94,7 +97,8 @@ enum {
   PROP_VADJUSTMENT,
   PROP_HSCROLL_POLICY,
   PROP_VSCROLL_POLICY,
-  PROP_SHADOW_TYPE
+  PROP_SHADOW_TYPE,
+  PROP_SCROLL_TO_FOCUS
 };
 
 
@@ -116,6 +120,9 @@ static void gtk_viewport_adjustment_value_changed (GtkAdjustment    *adjustment,
 static void viewport_set_adjustment               (GtkViewport      *viewport,
                                                    GtkOrientation    orientation,
                                                    GtkAdjustment    *adjustment);
+
+static void setup_focus_change_handler (GtkViewport *viewport);
+static void clear_focus_change_handler (GtkViewport *viewport);
 
 G_DEFINE_TYPE_WITH_CODE (GtkViewport, gtk_viewport, GTK_TYPE_BIN,
                          G_ADD_PRIVATE (GtkViewport)
@@ -231,6 +238,39 @@ gtk_viewport_measure (GtkWidget      *widget,
 }
 
 static void
+gtk_viewport_dispose (GObject *object)
+{
+  clear_focus_change_handler (GTK_VIEWPORT (object));
+
+  G_OBJECT_CLASS (gtk_viewport_parent_class)->dispose (object);
+
+}
+
+static void
+gtk_viewport_root (GtkWidget *widget)
+{
+  GtkViewport *viewport = GTK_VIEWPORT (widget);
+  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
+
+  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->root (widget);
+
+  if (priv->scroll_to_focus)
+    setup_focus_change_handler (viewport);
+}
+
+static void
+gtk_viewport_unroot (GtkWidget *widget)
+{
+  GtkViewport *viewport = GTK_VIEWPORT (widget);
+  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
+
+  if (priv->scroll_to_focus)
+    clear_focus_change_handler (viewport);
+
+  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->unroot (widget);
+}
+
+static void
 gtk_viewport_class_init (GtkViewportClass *class)
 {
   GObjectClass   *gobject_class;
@@ -239,12 +279,15 @@ gtk_viewport_class_init (GtkViewportClass *class)
   gobject_class = G_OBJECT_CLASS (class);
   widget_class = (GtkWidgetClass*) class;
 
+  gobject_class->dispose = gtk_viewport_dispose;
   gobject_class->set_property = gtk_viewport_set_property;
   gobject_class->get_property = gtk_viewport_get_property;
 
   widget_class->destroy = gtk_viewport_destroy;
   widget_class->size_allocate = gtk_viewport_size_allocate;
   widget_class->measure = gtk_viewport_measure;
+  widget_class->root = gtk_viewport_root;
+  widget_class->unroot = gtk_viewport_unroot;
   
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_VIEWPORT);
 
@@ -262,6 +305,14 @@ gtk_viewport_class_init (GtkViewportClass *class)
 						      GTK_TYPE_SHADOW_TYPE,
 						      GTK_SHADOW_IN,
 						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_SCROLL_TO_FOCUS,
+                                   g_param_spec_boolean ("scroll-to-focus",
+                                                         P_("Scroll to focus"),
+                                                         P_("Whether to scroll when the focus changes"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   gtk_widget_class_set_css_name (widget_class, I_("viewport"));
 }
@@ -302,6 +353,9 @@ gtk_viewport_set_property (GObject         *object,
     case PROP_SHADOW_TYPE:
       gtk_viewport_set_shadow_type (viewport, g_value_get_enum (value));
       break;
+    case PROP_SCROLL_TO_FOCUS:
+      gtk_viewport_set_scroll_to_focus (viewport, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -333,6 +387,9 @@ gtk_viewport_get_property (GObject         *object,
       break;
     case PROP_SHADOW_TYPE:
       g_value_set_enum (value, priv->shadow_type);
+      break;
+    case PROP_SCROLL_TO_FOCUS:
+      g_value_set_boolean (value, priv->scroll_to_focus);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -528,4 +585,109 @@ gtk_viewport_adjustment_value_changed (GtkAdjustment *adjustment,
                                        gpointer       data)
 {
   gtk_widget_queue_allocate (GTK_WIDGET (data));
+}
+
+gboolean
+gtk_viewport_get_scroll_to_focus (GtkViewport *viewport)
+{
+  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
+
+  g_return_val_if_fail (GTK_IS_VIEWPORT (viewport), FALSE);
+
+  return priv->scroll_to_focus;
+}
+
+void
+gtk_viewport_set_scroll_to_focus (GtkViewport *viewport,
+                                  gboolean     scroll_to_focus)
+{
+  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
+
+  g_return_if_fail (GTK_IS_VIEWPORT (viewport));
+
+  if (priv->scroll_to_focus == scroll_to_focus)
+    return;
+
+  priv->scroll_to_focus = scroll_to_focus;
+
+  if (gtk_widget_get_root (GTK_WIDGET (viewport)))
+    {
+      if (scroll_to_focus)
+        setup_focus_change_handler (viewport);
+      else
+        clear_focus_change_handler (viewport);
+    }
+
+  g_object_notify (G_OBJECT (viewport), "scroll-to-focus");
+}
+
+static void
+scroll_to_view (GtkAdjustment *adj,
+                double         pos,
+                double         size)
+{
+  double value, page_size;
+
+  value = gtk_adjustment_get_value (adj);
+  page_size = gtk_adjustment_get_page_size (adj);
+
+  if (pos < value)
+    gtk_adjustment_animate_to_value (adj, pos);
+  else if (pos + size >= value + page_size)
+    gtk_adjustment_animate_to_value (adj, value + ((pos + size) - (value + page_size)));
+}
+
+static void
+focus_change_handler (GtkWidget *widget)
+{
+  GtkViewport *viewport = GTK_VIEWPORT (widget);
+  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
+  GtkRoot *root;
+  GtkWidget *focus_widget;
+  GtkWidget *child;
+  GtkAllocation alloc;
+  int x, y;
+
+  if ((gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_FOCUS_WITHIN) == 0)
+    return;
+
+  root = gtk_widget_get_root (widget);
+  focus_widget = gtk_root_get_focus (root);
+
+  if (!focus_widget)
+    return;
+
+  child = gtk_bin_get_child (GTK_BIN (viewport));
+  gtk_widget_get_allocation (focus_widget, &alloc);
+  gtk_widget_translate_coordinates (focus_widget, child, 0, 0, &x, &y);
+
+  scroll_to_view (priv->hadjustment, x, alloc.width);  
+  scroll_to_view (priv->vadjustment, y, alloc.height);  
+}
+
+static void
+setup_focus_change_handler (GtkViewport *viewport)
+{
+  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
+  GtkRoot *root;
+
+  root = gtk_widget_get_root (GTK_WIDGET (viewport));
+
+  priv->focus_handler = g_signal_connect_swapped (root, "notify::focus-widget",
+                                                  G_CALLBACK (focus_change_handler), viewport);
+}
+
+static void
+clear_focus_change_handler (GtkViewport *viewport)
+{
+  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
+  GtkRoot *root;
+
+  root = gtk_widget_get_root (GTK_WIDGET (viewport));
+
+  if (priv->focus_handler)
+    {
+      g_signal_handler_disconnect (root, priv->focus_handler);
+      priv->focus_handler = 0;
+    }
 }

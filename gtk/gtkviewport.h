@@ -56,6 +56,11 @@ void           gtk_viewport_set_shadow_type (GtkViewport   *viewport,
 GDK_AVAILABLE_IN_ALL
 GtkShadowType  gtk_viewport_get_shadow_type (GtkViewport   *viewport);
 
+GDK_AVAILABLE_IN_ALL
+gboolean       gtk_viewport_get_scroll_to_focus (GtkViewport *viewport);
+GDK_AVAILABLE_IN_ALL
+void           gtk_viewport_set_scroll_to_focus (GtkViewport *viewport,
+                                                 gboolean     scroll_to_focus);
 
 G_END_DECLS
 
