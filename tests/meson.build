@@ -94,6 +94,7 @@ gtk_tests = [
   ['testvolumebutton'],
   ['testscrolledwindow'],
   ['testscrolledge'],
+  ['testscrolltofocus'],
   ['testcellarea'],
   ['testswitch'],
   ['testnoscreen'],
