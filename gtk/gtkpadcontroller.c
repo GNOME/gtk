@@ -243,13 +243,13 @@ gtk_pad_controller_handle_event (GtkEventController *controller,
     {
     case GDK_PAD_BUTTON_PRESS:
       type = GTK_PAD_ACTION_BUTTON;
-      index = gdk_pad_button_event_get_button (event);
+      index = gdk_pad_event_get_button (event);
       break;
     case GDK_PAD_RING:
     case GDK_PAD_STRIP:
       type = event_type == GDK_PAD_RING ?
         GTK_PAD_ACTION_RING : GTK_PAD_ACTION_STRIP;
-      gdk_pad_axis_event_get_value (event, &index, &value);
+      gdk_pad_event_get_axis_value (event, &index, &value);
       break;
     default:
       return GDK_EVENT_PROPAGATE;

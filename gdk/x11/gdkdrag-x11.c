@@ -1023,7 +1023,7 @@ send_client_message_async (GdkDrag      *drag,
 
 static void
 xdnd_send_xevent (GdkX11Drag *drag_x11,
-                  XEvent            *event_send)
+                  XEvent     *event_send)
 {
   GdkDrag *drag = GDK_DRAG (drag_x11);
   GdkDisplay *display = gdk_drag_get_display (drag);
@@ -2184,15 +2184,15 @@ gdk_drag_update (GdkDrag         *drag,
 }
 
 static gboolean
-gdk_dnd_handle_motion_event (GdkDrag        *drag,
-                             GdkEvent       *event)
+gdk_dnd_handle_motion_event (GdkDrag  *drag,
+                             GdkEvent *event)
 {
   double x, y;
   int x_root, y_root;
 
   gdk_event_get_position (event, &x, &y);
-  x_root = event->any.surface->x + x;
-  y_root = event->any.surface->y + y;
+  x_root = event->surface->x + x;
+  y_root = event->surface->y + y;
   gdk_drag_update (drag, x_root, y_root,
                    gdk_event_get_modifier_state (event),
                    gdk_event_get_time (event));
@@ -2200,8 +2200,8 @@ gdk_dnd_handle_motion_event (GdkDrag        *drag,
 }
 
 static gboolean
-gdk_dnd_handle_key_event (GdkDrag           *drag,
-                          GdkEventKey       *event)
+gdk_dnd_handle_key_event (GdkDrag  *drag,
+                          GdkEvent *event)
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
   GdkModifierType state;
@@ -2209,12 +2209,14 @@ gdk_dnd_handle_key_event (GdkDrag           *drag,
   gint dx, dy;
 
   dx = dy = 0;
-  state = event->state;
-  pointer = gdk_device_get_associated_device (gdk_event_get_device ((GdkEvent *) event));
+  state = gdk_event_get_modifier_state (event);
+  pointer = gdk_device_get_associated_device (gdk_event_get_device (event));
 
-  if (event->any.type == GDK_KEY_PRESS)
+  if (event->event_type == GDK_KEY_PRESS)
     {
-      switch (event->translated[0].keyval)
+      guint keyval = gdk_key_event_get_keyval (event);
+
+      switch (keyval)
         {
         case GDK_KEY_Escape:
           gdk_drag_cancel (drag, GDK_DRAG_CANCEL_USER_CANCELLED);
@@ -2287,37 +2289,40 @@ gdk_dnd_handle_key_event (GdkDrag           *drag,
     }
 
   gdk_drag_update (drag, x11_drag->last_x, x11_drag->last_y, state,
-                   gdk_event_get_time ((GdkEvent *) event));
+                   gdk_event_get_time (event));
 
   return TRUE;
 }
 
 static gboolean
-gdk_dnd_handle_grab_broken_event (GdkDrag                  *drag,
-                                  GdkEventGrabBroken       *event)
+gdk_dnd_handle_grab_broken_event (GdkDrag  *drag,
+                                  GdkEvent *event)
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
+
+  gboolean is_implicit = gdk_grab_broken_event_get_implicit (event);
+  GdkSurface *grab_surface = gdk_grab_broken_event_get_grab_surface (event);
 
   /* Don't cancel if we break the implicit grab from the initial button_press.
    * Also, don't cancel if we re-grab on the widget or on our IPC window, for
    * example, when changing the drag cursor.
    */
-  if (event->implicit ||
-      event->grab_surface == x11_drag->drag_surface ||
-      event->grab_surface == x11_drag->ipc_surface)
+  if (is_implicit ||
+      grab_surface == x11_drag->drag_surface ||
+      grab_surface == x11_drag->ipc_surface)
     return FALSE;
 
-  if (gdk_event_get_device ((GdkEvent *) event) !=
-      gdk_drag_get_device (drag))
+  if (gdk_event_get_device (event) != gdk_drag_get_device (drag))
     return FALSE;
 
   gdk_drag_cancel (drag, GDK_DRAG_CANCEL_ERROR);
+
   return TRUE;
 }
 
 static gboolean
-gdk_dnd_handle_button_event (GdkDrag              *drag,
-                             GdkEventButton       *event)
+gdk_dnd_handle_button_event (GdkDrag  *drag,
+                             GdkEvent *event)
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
 
@@ -2347,17 +2352,21 @@ gdk_x11_drag_handle_event (GdkDrag        *drag,
   if (!x11_drag->grab_seat)
     return FALSE;
 
-  switch ((guint) event->any.type)
+  switch ((guint) event->event_type)
     {
     case GDK_MOTION_NOTIFY:
       return gdk_dnd_handle_motion_event (drag, event);
+
     case GDK_BUTTON_RELEASE:
-      return gdk_dnd_handle_button_event (drag, &event->button);
+      return gdk_dnd_handle_button_event (drag, event);
+
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
-      return gdk_dnd_handle_key_event (drag, &event->key);
+      return gdk_dnd_handle_key_event (drag, event);
+
     case GDK_GRAB_BROKEN:
-      return gdk_dnd_handle_grab_broken_event (drag, &event->grab_broken);
+      return gdk_dnd_handle_grab_broken_event (drag, event);
+
     default:
       break;
     }

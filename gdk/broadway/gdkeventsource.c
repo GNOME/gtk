@@ -100,7 +100,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
     surface = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.event_surface_id));
     if (surface)
       {
-        event = gdk_event_crossing_new (GDK_ENTER_NOTIFY,
+        event = gdk_crossing_event_new (GDK_ENTER_NOTIFY,
                                         surface,
                                         gdk_seat_get_pointer (seat),
                                         gdk_seat_get_pointer (seat),
@@ -119,7 +119,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
     surface = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.event_surface_id));
     if (surface)
       {
-        event = gdk_event_crossing_new (GDK_LEAVE_NOTIFY,
+        event = gdk_crossing_event_new (GDK_LEAVE_NOTIFY,
                                         surface,
                                         gdk_seat_get_pointer (seat),
                                         gdk_seat_get_pointer (seat),
@@ -141,7 +141,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
     surface = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.event_surface_id));
     if (surface)
       {
-        event = gdk_event_motion_new (surface,
+        event = gdk_motion_event_new (surface,
                                       gdk_seat_get_pointer (seat),
                                       gdk_seat_get_pointer (seat),
                                       NULL,
@@ -165,7 +165,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
     surface = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.event_surface_id));
     if (surface)
       {
-        event = gdk_event_button_new (message->base.type == BROADWAY_EVENT_BUTTON_PRESS
+        event = gdk_button_event_new (message->base.type == BROADWAY_EVENT_BUTTON_PRESS
                                         ? GDK_BUTTON_PRESS
                                         : GDK_BUTTON_RELEASE,
                                       surface,
@@ -188,7 +188,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
     surface = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.event_surface_id));
     if (surface)
       {
-        event = gdk_event_discrete_scroll_new (surface,
+        event = gdk_discrete_scroll_event_new (surface,
                                                gdk_seat_get_pointer (seat),
                                                gdk_seat_get_pointer (seat),
                                                NULL,
@@ -243,7 +243,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
         if (event_type == GDK_TOUCH_BEGIN || event_type == GDK_TOUCH_UPDATE)
           state |= GDK_BUTTON1_MASK;
 
-        event = gdk_event_touch_new (event_type,
+        event = gdk_touch_event_new (event_type,
                                      GUINT_TO_POINTER (message->touch.sequence_id),
                                      surface,
                                      gdk_seat_get_pointer (seat),
@@ -271,7 +271,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
         translated.consumed = 0;
         translated.layout = 0;
         translated.level = 0;
-        event = gdk_event_key_new (message->base.type == BROADWAY_EVENT_KEY_PRESS
+        event = gdk_key_event_new (message->base.type == BROADWAY_EVENT_KEY_PRESS
                                      ? GDK_KEY_PRESS
                                      : GDK_KEY_RELEASE,
                                    surface,
@@ -298,7 +298,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
     surface = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->configure_notify.id));
     if (surface)
       {
-        event = gdk_event_configure_new (surface,
+        event = gdk_configure_event_new (surface,
                                          message->configure_notify.width,
                                          message->configure_notify.height);
 
@@ -329,7 +329,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
     surface = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->focus.old_id));
     if (surface)
       {
-        event = gdk_event_focus_new (surface,
+        event = gdk_focus_event_new (surface,
                                      gdk_seat_get_keyboard (seat),
                                      gdk_seat_get_keyboard (seat),
                                      FALSE);
@@ -340,7 +340,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
     surface = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->focus.new_id));
     if (surface)
       {
-        event = gdk_event_focus_new (surface,
+        event = gdk_focus_event_new (surface,
                                      gdk_seat_get_keyboard (seat),
                                      gdk_seat_get_keyboard (seat),
                                      TRUE);

@@ -105,7 +105,7 @@ handle_focus_change (GdkEvent *event)
 
   toplevel->has_pointer = focus_in;
 
-  if (!event->crossing.focus || toplevel->has_focus_window)
+  if (!gdk_crossing_event_get_focus (event) || toplevel->has_focus_window)
     return;
 
   had_focus = HAS_FOCUS (toplevel);
@@ -115,7 +115,7 @@ handle_focus_change (GdkEvent *event)
     {
       GdkEvent *focus_event;
 
-      focus_event = gdk_event_focus_new (gdk_event_get_surface (event),
+      focus_event = gdk_focus_event_new (gdk_event_get_surface (event),
                                          gdk_event_get_device (event),
                                          gdk_event_get_source_device (event),
                                          focus_in);
@@ -135,7 +135,7 @@ create_synth_crossing_event (GdkEventType     evtype,
   g_assert (evtype == GDK_ENTER_NOTIFY || evtype == GDK_LEAVE_NOTIFY);
 
   gdk_event_get_position (real_event, &x, &y);
-  event = gdk_event_crossing_new (evtype,
+  event = gdk_crossing_event_new (evtype,
                                   gdk_event_get_surface (real_event),
                                   gdk_event_get_device (real_event),
                                   gdk_event_get_source_device (real_event),

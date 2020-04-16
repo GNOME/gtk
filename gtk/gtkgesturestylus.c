@@ -290,8 +290,8 @@ gtk_gesture_stylus_get_backlog (GtkGestureStylus  *gesture,
 
   event = gesture_get_current_event (gesture);
 
-  if (event)
-    history = gdk_event_get_motion_history (event);
+  if (event && GDK_IS_EVENT_TYPE (event, GDK_MOTION_NOTIFY))
+    history = gdk_motion_event_get_history (event);
   if (!history)
     return FALSE;
 

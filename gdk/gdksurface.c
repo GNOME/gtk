@@ -530,13 +530,13 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                   0,
                   g_signal_accumulator_true_handled,
                   NULL,
-                  _gdk_marshal_BOOLEAN__BOXED,
+                  _gdk_marshal_BOOLEAN__POINTER,
                   G_TYPE_BOOLEAN,
                   1,
                   GDK_TYPE_EVENT);
   g_signal_set_va_marshaller (signals[EVENT],
                               G_OBJECT_CLASS_TYPE (object_class),
-                              _gdk_marshal_BOOLEAN__BOXEDv);
+                              _gdk_marshal_BOOLEAN__POINTERv);
 
   /**
    * GdkSurface::enter-montor:
@@ -2840,7 +2840,7 @@ add_event_mark (GdkEvent *event,
   g_type_class_unref (class);
   kind = value ? value->value_nick : "event";
 
-  switch (event_type)
+  switch ((int) event_type)
     {
     case GDK_MOTION_NOTIFY:
       {
@@ -2932,8 +2932,11 @@ gdk_surface_handle_event (GdkEvent *event)
 
   if (gdk_event_get_event_type (event) == GDK_CONFIGURE)
     {
+      int width, height;
+
+      gdk_configure_event_get_size (event, &width, &height);
       g_signal_emit (gdk_event_get_surface (event), signals[SIZE_CHANGED], 0,
-                     event->configure.width, event->configure.height);
+                     width, height);
       handled = TRUE;
     }
   else

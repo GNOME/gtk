@@ -1963,7 +1963,7 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_UPDATE:
     case GDK_TOUCH_END:
-      press = gdk_event_touch_new (GDK_TOUCH_BEGIN,
+      press = gdk_touch_event_new (GDK_TOUCH_BEGIN,
                                    gdk_event_get_event_sequence (event),
                                    gdk_event_get_surface (event),
                                    gdk_event_get_device (event),
@@ -1976,7 +1976,7 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
       break;
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
-      press = gdk_event_button_new (GDK_BUTTON_PRESS,
+      press = gdk_button_event_new (GDK_BUTTON_PRESS,
                                     gdk_event_get_surface (event),
                                     gdk_event_get_device (event),
                                     gdk_event_get_source_device (event),
@@ -2002,7 +2002,7 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
             button = 1;
           }
 
-        press = gdk_event_button_new (GDK_BUTTON_PRESS,
+        press = gdk_button_event_new (GDK_BUTTON_PRESS,
                                       gdk_event_get_surface (event),
                                       gdk_event_get_device (event),
                                       gdk_event_get_source_device (event),
