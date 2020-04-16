@@ -542,7 +542,7 @@ gtk_event_controller_get_target (GtkEventController *controller)
  * Returns the event that is currently being handled by the
  * controller, and %NULL at other times.
  *
- * Returns: (nullable) the event is current handled by @controller
+ * Returns: (nullable) (transfer none): the event is current handled by @controller
  */
 GdkEvent *
 gtk_event_controller_get_current_event (GtkEventController *controller)
@@ -579,7 +579,7 @@ gtk_event_controller_get_current_event_time (GtkEventController *controller)
  * Returns the device of the event that is currently being
  * handled by the controller, and %NULL otherwise.
  *
- * Returns: (nullable): device of the event is current handled by @controller
+ * Returns: (nullable) (transfer none): device of the event is current handled by @controller
  */
 GdkDevice *
 gtk_event_controller_get_current_event_device (GtkEventController *controller)
@@ -593,13 +593,13 @@ gtk_event_controller_get_current_event_device (GtkEventController *controller)
 }
 
 /**
- * gtk_event_controller_get_current_event_device:
+ * gtk_event_controller_get_current_event_state:
  * @controller: a #GtkEventController
  *
  * Returns the modifier state of the event that is currently being
  * handled by the controller, and 0 otherwise.
  *
- * Returns: (nullable): modifier state of the event is current handled by @controller
+ * Returns: modifier state of the event is current handled by @controller
  */
 GdkModifierType
 gtk_event_controller_get_current_event_state (GtkEventController *controller)
