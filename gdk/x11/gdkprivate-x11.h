@@ -217,6 +217,8 @@ void _gdk_x11_surface_register_dnd (GdkSurface *window);
 
 void gdk_x11_surface_update_popups (GdkSurface *surface);
 
+void gdk_x11_surface_enter_leave_monitors (GdkSurface *surface);
+
 GdkDrag        * _gdk_x11_surface_drag_begin (GdkSurface          *window,
                                               GdkDevice          *device,
                                               GdkContentProvider *content,
