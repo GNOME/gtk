@@ -3501,10 +3501,6 @@ gtk_scrolled_window_add (GtkContainer *container,
   else
     {
       scrollable_child = gtk_viewport_new (hadj, vadj);
-      gtk_container_set_focus_hadjustment (GTK_CONTAINER (scrollable_child),
-                                           gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
-      gtk_container_set_focus_vadjustment (GTK_CONTAINER (scrollable_child),
-                                           gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
       gtk_container_add (GTK_CONTAINER (scrollable_child), child);
       priv->auto_added_viewport = TRUE;
     }
