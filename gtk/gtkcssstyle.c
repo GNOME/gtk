@@ -122,7 +122,7 @@ gtk_css_style_get_value (GtkCssStyle *style,
     case GTK_CSS_PROPERTY_TEXT_DECORATION_LINE:
       return style->font_variant->text_decoration_line;
     case GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR:
-      return style->font_variant->text_decoration_color ? style->font_variant->text_decoration_color : style->core->color;
+      return style->font_variant->text_decoration_color;
     case GTK_CSS_PROPERTY_TEXT_DECORATION_STYLE:
       return style->font_variant->text_decoration_style;
     case GTK_CSS_PROPERTY_FONT_KERNING:
@@ -198,15 +198,15 @@ gtk_css_style_get_value (GtkCssStyle *style,
     case GTK_CSS_PROPERTY_BACKGROUND_POSITION:
       return style->background->background_position;
     case GTK_CSS_PROPERTY_BORDER_TOP_COLOR:
-      return style->border->border_top_color ? style->border->border_top_color : style->core->color;
+      return style->border->border_top_color;
     case GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR:
-      return style->border->border_right_color ? style->border->border_right_color : style->core->color;
+      return style->border->border_right_color;
     case GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR:
-      return style->border->border_bottom_color ? style->border->border_bottom_color : style->core->color;
+      return style->border->border_bottom_color;
     case GTK_CSS_PROPERTY_BORDER_LEFT_COLOR:
-      return style->border->border_left_color ? style->border->border_left_color: style->core->color;
+      return style->border->border_left_color;
     case GTK_CSS_PROPERTY_OUTLINE_COLOR:
-      return style->outline->outline_color ? style->outline->outline_color : style->core->color;
+      return style->outline->outline_color;
     case GTK_CSS_PROPERTY_BACKGROUND_REPEAT:
       return style->background->background_repeat;
     case GTK_CSS_PROPERTY_BACKGROUND_IMAGE:
@@ -270,9 +270,9 @@ gtk_css_style_get_value (GtkCssStyle *style,
     case GTK_CSS_PROPERTY_FILTER:
       return style->other->filter;
     case GTK_CSS_PROPERTY_CARET_COLOR:
-      return style->font->caret_color ? style->font->caret_color : style->core->color;
+      return style->font->caret_color;
     case GTK_CSS_PROPERTY_SECONDARY_CARET_COLOR:
-      return style->font->secondary_caret_color ? style->font->secondary_caret_color : style->core->color;
+      return style->font->secondary_caret_color;
     case GTK_CSS_PROPERTY_FONT_FEATURE_SETTINGS:
       return style->font->font_feature_settings;
     case GTK_CSS_PROPERTY_FONT_VARIATION_SETTINGS:
@@ -437,10 +437,8 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   /* text-decoration */
   decoration_line = _gtk_css_text_decoration_line_value_get (style->font_variant->text_decoration_line);
   decoration_style = _gtk_css_text_decoration_style_value_get (style->font_variant->text_decoration_style);
-  color = gtk_css_color_value_get_rgba (style->core->color);
-  decoration_color = gtk_css_color_value_get_rgba (style->font_variant->text_decoration_color
-                                                   ? style->font_variant->text_decoration_color
-                                                   : style->core->color);
+  color = gtk_css_color_value_get_rgba (style->core->color, NULL);
+  decoration_color = gtk_css_color_value_get_rgba (style->font_variant->text_decoration_color, style->core->color);
 
   switch (decoration_line)
     {

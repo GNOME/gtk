@@ -156,6 +156,10 @@ gtk_css_value_color_compute (GtkCssValue      *value,
                                                current,
                                                NULL);
     }
+  else if (value->type == COLOR_TYPE_CURRENT_COLOR)
+    {
+      resolved = _gtk_css_value_ref (value);
+    }
   else if (value->type == COLOR_TYPE_LITERAL)
     {
       resolved = _gtk_css_value_ref (value);
@@ -388,7 +392,7 @@ _gtk_css_color_value_resolve (GtkCssValue      *color,
         val = _gtk_css_color_value_resolve (color->sym_col.shade.color, provider, current, cycle_list);
         if (val == NULL)
           return NULL;
-        c = gtk_css_color_value_get_rgba (val);
+        c = gtk_css_color_value_get_rgba (val, current);
 
         apply_shade (c, &shade, color->sym_col.shade.factor);
 
@@ -406,7 +410,7 @@ _gtk_css_color_value_resolve (GtkCssValue      *color,
         val = _gtk_css_color_value_resolve (color->sym_col.alpha.color, provider, current, cycle_list);
         if (val == NULL)
           return NULL;
-        c = gtk_css_color_value_get_rgba (val);
+        c = gtk_css_color_value_get_rgba (val, current);
 
         apply_alpha (c, &alpha, color->sym_col.alpha.factor);
 
@@ -424,12 +428,12 @@ _gtk_css_color_value_resolve (GtkCssValue      *color,
         val1 = _gtk_css_color_value_resolve (color->sym_col.mix.color1, provider, current, cycle_list);
         if (val1 == NULL)
           return NULL;
-        color1 = gtk_css_color_value_get_rgba (val1);
+        color1 = gtk_css_color_value_get_rgba (val1, current);
 
         val2 = _gtk_css_color_value_resolve (color->sym_col.mix.color2, provider, current, cycle_list);
         if (val2 == NULL)
           return NULL;
-        color2 = gtk_css_color_value_get_rgba (val2);
+        color2 = gtk_css_color_value_get_rgba (val2, current);
 
         apply_mix (color1, color2, &res, color->sym_col.mix.factor);
 
@@ -781,11 +785,32 @@ _gtk_css_color_value_parse (GtkCssParser *parser)
     return NULL;
 }
 
-const GdkRGBA *
-gtk_css_color_value_get_rgba (const GtkCssValue *color)
+static inline const GdkRGBA *
+get_rgba (const GtkCssValue *color)
 {
   g_assert (color->class == &GTK_CSS_VALUE_COLOR);
   g_assert (color->type == COLOR_TYPE_LITERAL);
 
   return &color->sym_col.rgba;
+}
+
+static GdkRGBA fallback;
+
+const GdkRGBA *
+gtk_css_color_value_get_rgba (const GtkCssValue *value,
+                              const GtkCssValue *color)
+{
+  if (value->type == COLOR_TYPE_CURRENT_COLOR)
+    {
+      if (color)
+        return get_rgba (color);
+      else
+        {
+          fallback = GDK_RGBA("FF69B4");
+          return &fallback;
+        }
+    }
+  else
+    return get_rgba (value);
+
 }

@@ -1732,7 +1732,7 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
   gtk_snapshot_save (snapshot);
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
 
-  fg_color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
+  fg_color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR), NULL);
 
   shadows_value = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_TEXT_SHADOW);
   has_shadow = gtk_css_shadow_value_push_snapshot (shadows_value, snapshot);

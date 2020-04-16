@@ -351,7 +351,7 @@ gtk_css_palette_value_get_color (GtkCssValue *value,
   for (i = 0; i < value->n_colors; i ++)
     {
       if (strcmp (value->color_names[i], name) == 0)
-        return gtk_css_color_value_get_rgba (value->color_values[i]);
+        return gtk_css_color_value_get_rgba (value->color_values[i], NULL);
     }
 
   return NULL;

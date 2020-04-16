@@ -131,7 +131,7 @@ gtk_text_util_create_drag_icon (GtkWidget *widget,
   snapshot = gtk_snapshot_new ();
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
-  color = gtk_css_color_value_get_rgba (style->core->color);
+  color = gtk_css_color_value_get_rgba (style->core->color, NULL);
 
   gtk_snapshot_append_layout (snapshot, layout, color);
 
@@ -157,8 +157,8 @@ set_attributes_from_style (GtkWidget         *widget,
   context = gtk_widget_get_style_context (widget);
   style = gtk_style_context_lookup_style (context);
 
-  *values->appearance.bg_rgba = *gtk_css_color_value_get_rgba (style->background->background_color);
-  *values->appearance.fg_rgba = *gtk_css_color_value_get_rgba (style->core->color);
+  *values->appearance.bg_rgba = *gtk_css_color_value_get_rgba (style->background->background_color, style->core->color);
+  *values->appearance.fg_rgba = *gtk_css_color_value_get_rgba (style->core->color, NULL);
 
   if (values->font)
     pango_font_description_free (values->font);

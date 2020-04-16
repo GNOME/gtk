@@ -2523,7 +2523,7 @@ gtk_icon_theme_lookup_symbolic_colors (GtkCssStyle *style,
 
   color = style->core->color;
   palette = style->core->icon_palette;
-  *color_out = *gtk_css_color_value_get_rgba (color);
+  *color_out = *gtk_css_color_value_get_rgba (color, NULL);
 
   lookup = gtk_css_palette_value_get_color (palette, "success");
   if (lookup)

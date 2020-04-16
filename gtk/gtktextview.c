@@ -7541,9 +7541,10 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
 
   context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
 
-  color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+  color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR),
+                                        _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
   *values->appearance.bg_rgba = *color;
-  color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
+  color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR), NULL);
   *values->appearance.fg_rgba = *color;
 
   if (values->font)

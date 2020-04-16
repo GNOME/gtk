@@ -2380,7 +2380,7 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
           cairo_append_path (cr, path);
           cairo_path_destroy (path);
 
-          border_color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
+          border_color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR), _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
           gtk_style_context_get_border (context, &border);
 
           cairo_set_line_width (cr, border.left);

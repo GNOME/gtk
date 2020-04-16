@@ -193,7 +193,7 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
           const GtkCssImageLinearColorStop *stop = &linear->color_stops[linear->n_stops - 1];
 
           gtk_snapshot_append_color (snapshot,
-                                     gtk_css_color_value_get_rgba (stop->color),
+                                     gtk_css_color_value_get_rgba (stop->color, NULL),
                                      &GRAPHENE_RECT_INIT (0, 0, width, height));
           return;
         }
@@ -237,7 +237,7 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
           offset += step;
 
           stops[last].offset = (offset - start) / (end - start);
-          stops[last].color = *gtk_css_color_value_get_rgba (stop->color);
+          stops[last].color = *gtk_css_color_value_get_rgba (stop->color, NULL);
         }
 
       offset = pos;

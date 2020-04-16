@@ -3977,7 +3977,8 @@ render_para (GskPangoRenderer   *crenderer,
       GtkCssNode *selection_node = gtk_text_view_get_selection_node ((GtkTextView*)crenderer->widget);
       gtk_style_context_save_to_node (context, selection_node);
 
-      selection = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+      selection = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR),
+                                                _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
 
       gtk_style_context_restore (context);
     }
