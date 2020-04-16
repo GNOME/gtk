@@ -1283,6 +1283,7 @@ gtk_css_selector_parse_selector_pseudo_class (GtkCssParser   *parser,
         { "visited",        GTK_STATE_FLAG_VISITED, },
         { "checked",        GTK_STATE_FLAG_CHECKED, },
         { "focus-visible",  GTK_STATE_FLAG_FOCUS_VISIBLE, },
+        { "focus-within",   GTK_STATE_FLAG_FOCUS_WITHIN, },
       };
       guint i;
 

@@ -45,7 +45,7 @@ typedef gboolean (*GtkSurfaceTransformChangedCallback) (GtkWidget               
                                                         const graphene_matrix_t *surface_transform,
                                                         gpointer                 user_data);
 
-#define GTK_STATE_FLAGS_BITS 14
+#define GTK_STATE_FLAGS_BITS 15
 
 typedef struct _GtkWidgetSurfaceTransformData
 {
