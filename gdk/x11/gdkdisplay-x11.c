@@ -990,6 +990,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 		}
 
               gdk_x11_surface_update_popups (surface);
+              gdk_x11_surface_enter_leave_monitors (surface);
 	    }
         }
       break;
