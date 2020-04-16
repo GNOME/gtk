@@ -915,12 +915,12 @@ gdk_drop_emit_enter_event (GdkDrop  *self,
 
   g_warn_if_fail (!priv->entered);
 
-  event = gdk_event_drag_new (GDK_DRAG_ENTER,
-                              priv->surface,
-                              priv->device,
-                              self,
-                              time,
-                              0, 0);
+  event = gdk_dnd_event_new (GDK_DRAG_ENTER,
+                             priv->surface,
+                             priv->device,
+                             self,
+                             time,
+                             0, 0);
 
   priv->entered = TRUE;
 
@@ -939,12 +939,12 @@ gdk_drop_emit_motion_event (GdkDrop  *self,
 
   g_warn_if_fail (priv->entered);
 
-  event = gdk_event_drag_new (GDK_DRAG_MOTION,
-                              priv->surface,
-                              priv->device,
-                              self,
-                              time,
-                              x, y);
+  event = gdk_dnd_event_new (GDK_DRAG_MOTION,
+                             priv->surface,
+                             priv->device,
+                             self,
+                             time,
+                             x, y);
 
   gdk_drop_do_emit_event (event, dont_queue);
 }
@@ -959,12 +959,12 @@ gdk_drop_emit_leave_event (GdkDrop  *self,
 
   g_warn_if_fail (priv->entered);
 
-  event = gdk_event_drag_new (GDK_DRAG_LEAVE,
-                              priv->surface,
-                              priv->device,
-                              self,
-                              time,
-                              0, 0);
+  event = gdk_dnd_event_new (GDK_DRAG_LEAVE,
+                             priv->surface,
+                             priv->device,
+                             self,
+                             time,
+                             0, 0);
 
   priv->entered = FALSE;
 
@@ -984,12 +984,12 @@ gdk_drop_emit_drop_event (GdkDrop  *self,
   g_warn_if_fail (priv->entered);
   g_warn_if_fail (priv->state == GDK_DROP_STATE_NONE);
 
-  event = gdk_event_drag_new (GDK_DROP_START,
-                              priv->surface,
-                              priv->device,
-                              self,
-                              time,
-                              x, y);
+  event = gdk_dnd_event_new (GDK_DROP_START,
+                             priv->surface,
+                             priv->device,
+                             self,
+                             time,
+                             x, y);
 
   priv->state = GDK_DROP_STATE_DROPPING;
 

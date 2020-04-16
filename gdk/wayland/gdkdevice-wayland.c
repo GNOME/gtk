@@ -589,7 +589,7 @@ emulate_crossing (GdkSurface       *surface,
   double x, y;
 
   gdk_surface_get_device_position (surface, device, &x, &y, &state);
-  event = gdk_event_crossing_new (type,
+  event = gdk_crossing_event_new (type,
                                   surface,
                                   device,
                                   device,
@@ -614,7 +614,7 @@ emulate_touch_crossing (GdkSurface           *surface,
 {
   GdkEvent *event;
 
-  event = gdk_event_crossing_new (type,
+  event = gdk_crossing_event_new (type,
                                   surface,
                                   device,
                                   source,
@@ -633,7 +633,7 @@ emulate_focus (GdkSurface *surface,
                gboolean   focus_in,
                guint32    time_)
 {
-  GdkEvent *event = gdk_event_focus_new (surface, device, device, focus_in);
+  GdkEvent *event = gdk_focus_event_new (surface, device, device, focus_in);
 
   _gdk_wayland_display_deliver_event (gdk_surface_get_display (surface), event);
 }
@@ -1360,7 +1360,7 @@ flush_discrete_scroll_event (GdkWaylandSeat     *seat,
   GdkDevice *source;
 
   source = get_scroll_device (seat, seat->pointer_info.frame.source);
-  event = gdk_event_discrete_scroll_new (seat->pointer_info.focus,
+  event = gdk_scroll_event_new_discrete (seat->pointer_info.focus,
                                          seat->master_pointer,
                                          source,
                                          NULL,
@@ -1382,7 +1382,7 @@ flush_smooth_scroll_event (GdkWaylandSeat *seat,
   GdkDevice *source;
 
   source = get_scroll_device (seat, seat->pointer_info.frame.source);
-  event = gdk_event_scroll_new (seat->pointer_info.focus,
+  event = gdk_scroll_event_new (seat->pointer_info.focus,
                                 seat->master_pointer,
                                 source,
                                 NULL,
@@ -1498,7 +1498,7 @@ pointer_handle_enter (void              *data,
   seat->pointer_info.surface_y = wl_fixed_to_double (sy);
   seat->pointer_info.enter_serial = serial;
 
-  event = gdk_event_crossing_new (GDK_ENTER_NOTIFY,
+  event = gdk_crossing_event_new (GDK_ENTER_NOTIFY,
                                   seat->pointer_info.focus,
                                   seat->master_pointer,
                                   seat->pointer,
@@ -1541,7 +1541,7 @@ pointer_handle_leave (void              *data,
 
   _gdk_wayland_display_update_serial (display_wayland, serial);
 
-  event = gdk_event_crossing_new (GDK_LEAVE_NOTIFY,
+  event = gdk_crossing_event_new (GDK_LEAVE_NOTIFY,
                                   seat->pointer_info.focus,
                                   seat->master_pointer,
                                   seat->pointer,
@@ -1586,7 +1586,7 @@ pointer_handle_motion (void              *data,
   seat->pointer_info.surface_x = wl_fixed_to_double (sx);
   seat->pointer_info.surface_y = wl_fixed_to_double (sy);
 
-  event = gdk_event_motion_new (seat->pointer_info.focus,
+  event = gdk_motion_event_new (seat->pointer_info.focus,
                                 seat->master_pointer,
                                 seat->pointer,
                                 NULL,
@@ -1649,7 +1649,7 @@ pointer_handle_button (void              *data,
   if (state)
     seat->pointer_info.press_serial = serial;
 
-  event = gdk_event_button_new (state ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE,
+  event = gdk_button_event_new (state ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE,
                                 seat->pointer_info.focus,
                                 seat->master_pointer,
                                 seat->pointer,
@@ -1914,7 +1914,7 @@ keyboard_handle_enter (void               *data,
   g_object_ref (seat->keyboard_focus);
   seat->repeat_key = 0;
 
-  event = gdk_event_focus_new (seat->keyboard_focus,
+  event = gdk_focus_event_new (seat->keyboard_focus,
                                seat->master_keyboard,
                                seat->keyboard,
                                TRUE);
@@ -1949,7 +1949,7 @@ keyboard_handle_leave (void               *data,
 
   _gdk_wayland_display_update_serial (display, serial);
 
-  event = gdk_event_focus_new (seat->keyboard_focus,
+  event = gdk_focus_event_new (seat->keyboard_focus,
                                seat->master_keyboard,
                                seat->keyboard,
                                FALSE);
@@ -2075,7 +2075,7 @@ deliver_key_event (GdkWaylandSeat *seat,
       no_lock = translated;
     }
 
-  event = gdk_event_key_new (state ? GDK_KEY_PRESS : GDK_KEY_RELEASE,
+  event = gdk_key_event_new (state ? GDK_KEY_PRESS : GDK_KEY_RELEASE,
                              seat->keyboard_focus,
                              seat->master_keyboard,
                              seat->keyboard,
@@ -2375,7 +2375,7 @@ touch_handle_down (void              *data,
   touch->y = wl_fixed_to_double (y);
   touch->touch_down_serial = serial;
 
-  event = gdk_event_touch_new (GDK_TOUCH_BEGIN,
+  event = gdk_touch_event_new (GDK_TOUCH_BEGIN,
                                GDK_SLOT_TO_EVENT_SEQUENCE (touch->id),
                                touch->surface,
                                seat->touch_master,
@@ -2418,7 +2418,7 @@ touch_handle_up (void            *data,
   _gdk_wayland_display_update_serial (display, serial);
 
   touch = gdk_wayland_seat_get_touch (seat, id);
-  event = gdk_event_touch_new (GDK_TOUCH_END,
+  event = gdk_touch_event_new (GDK_TOUCH_END,
                                GDK_SLOT_TO_EVENT_SEQUENCE (touch->id),
                                touch->surface,
                                seat->touch_master,
@@ -2463,7 +2463,7 @@ touch_handle_motion (void            *data,
   if (touch->initial_touch)
     mimic_pointer_emulating_touch_info (seat->touch_master, touch);
 
-  event = gdk_event_touch_new (GDK_TOUCH_UPDATE,
+  event = gdk_touch_event_new (GDK_TOUCH_UPDATE,
                                GDK_SLOT_TO_EVENT_SEQUENCE (touch->id),
                                touch->surface,
                                seat->touch_master,
@@ -2509,7 +2509,7 @@ touch_handle_cancel (void            *data,
 
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &touch))
     {
-      event = gdk_event_touch_new (GDK_TOUCH_CANCEL,
+      event = gdk_touch_event_new (GDK_TOUCH_CANCEL,
                                    GDK_SLOT_TO_EVENT_SEQUENCE (touch->id),
                                    touch->surface,
                                    seat->touch_master,
@@ -2541,7 +2541,7 @@ emit_gesture_swipe_event (GdkWaylandSeat          *seat,
 
   seat->pointer_info.time = _time;
 
-  event = gdk_event_touchpad_swipe_new (seat->pointer_info.focus,
+  event = gdk_touchpad_event_new_swipe (seat->pointer_info.focus,
                                         seat->master_pointer,
                                         seat->pointer,
                                         _time,
@@ -2638,7 +2638,7 @@ emit_gesture_pinch_event (GdkWaylandSeat          *seat,
 
   seat->pointer_info.time = _time;
 
-  event = gdk_event_touchpad_pinch_new (seat->pointer_info.focus,
+  event = gdk_touchpad_event_new_pinch (seat->pointer_info.focus,
                                         seat->master_pointer,
                                         seat->pointer,
                                         _time,
@@ -3469,7 +3469,7 @@ tablet_tool_handle_proximity_in (void                      *data,
   gdk_wayland_device_tablet_clone_tool_axes (tablet, tool->tool);
   gdk_wayland_mimic_device_axes (tablet->master, tablet->current_device);
 
-  event = gdk_event_proximity_new (GDK_PROXIMITY_IN,
+  event = gdk_proximity_event_new (GDK_PROXIMITY_IN,
                                    tablet->pointer_info.focus,
                                    tablet->master,
                                    tablet->current_device,
@@ -3500,7 +3500,7 @@ tablet_tool_handle_proximity_out (void                      *data,
             g_message ("proximity out, seat %p, tool %d", tool->seat,
                        gdk_device_tool_get_tool_type (tool->tool)));
 
-  event = gdk_event_proximity_new (GDK_PROXIMITY_OUT,
+  event = gdk_proximity_event_new (GDK_PROXIMITY_OUT,
                                    tablet->pointer_info.focus,
                                    tablet->master,
                                    tablet->current_device,
@@ -3537,7 +3537,7 @@ tablet_create_button_event_frame (GdkWaylandTabletData *tablet,
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (tablet->seat);
   GdkEvent *event;
 
-  event = gdk_event_button_new (evtype,
+  event = gdk_button_event_new (evtype,
                                 tablet->pointer_info.focus,
                                 tablet->master,
                                 tablet->current_device,
@@ -3603,7 +3603,7 @@ tablet_tool_handle_motion (void                      *data,
                        tablet->pointer_info.surface_x,
                        tablet->pointer_info.surface_y));
 
-  event = gdk_event_motion_new (tablet->pointer_info.focus,
+  event = gdk_motion_event_new (tablet->pointer_info.focus,
                                 tablet->master,
                                 tablet->current_device,
                                 tool->tool,
@@ -3765,7 +3765,7 @@ tablet_tool_handle_wheel (void                      *data,
     return;
 
   /* Send smooth event */
-  event = gdk_event_scroll_new (tablet->pointer_info.focus,
+  event = gdk_scroll_event_new (tablet->pointer_info.focus,
                                 tablet->master,
                                 tablet->current_device,
                                 tablet->current_tool->tool,
@@ -3777,7 +3777,7 @@ tablet_tool_handle_wheel (void                      *data,
   _gdk_wayland_display_deliver_event (seat->display, event);
 
   /* Send discrete event */
-  event = gdk_event_discrete_scroll_new (tablet->pointer_info.focus,
+  event = gdk_scroll_event_new_discrete (tablet->pointer_info.focus,
                                          tablet->master,
                                          tablet->current_device,
                                          tablet->current_tool->tool,
@@ -3888,7 +3888,7 @@ tablet_pad_ring_handle_frame (void                          *data,
   GDK_SEAT_NOTE (seat, EVENTS,
             g_message ("tablet pad ring handle frame, ring = %p", wp_tablet_pad_ring));
 
-  event = gdk_event_pad_ring_new (seat->keyboard_focus,
+  event = gdk_pad_event_new_ring (seat->keyboard_focus,
                                   pad->device,
                                   pad->device,
                                   time,
@@ -3963,7 +3963,7 @@ tablet_pad_strip_handle_frame (void                           *data,
             g_message ("tablet pad strip handle frame, strip = %p",
                        wp_tablet_pad_strip));
 
-  event = gdk_event_pad_strip_new (seat->keyboard_focus,
+  event = gdk_pad_event_new_strip (seat->keyboard_focus,
                                    pad->device,
                                    pad->device,
                                    time,
@@ -4089,7 +4089,7 @@ tablet_pad_group_handle_mode (void                           *data,
   group->current_mode = mode;
   n_group = g_list_index (pad->mode_groups, group);
 
-  event = gdk_event_pad_group_mode_new (seat->keyboard_focus,
+  event = gdk_pad_event_new_group_mode (seat->keyboard_focus,
                                         pad->device,
                                         pad->device,
                                         time,
@@ -4201,7 +4201,7 @@ tablet_pad_handle_button (void                     *data,
   g_assert (group != NULL);
   n_group = g_list_index (pad->mode_groups, group);
 
-  event = gdk_event_pad_button_new (state == ZWP_TABLET_PAD_V2_BUTTON_STATE_PRESSED
+  event = gdk_pad_event_new_button (state == ZWP_TABLET_PAD_V2_BUTTON_STATE_PRESSED
                                        ? GDK_PAD_BUTTON_PRESS
                                        : GDK_PAD_BUTTON_RELEASE,
                                     GDK_WAYLAND_SEAT (pad->seat)->keyboard_focus,
@@ -5031,7 +5031,7 @@ gdk_wayland_device_unset_touch_grab (GdkDevice        *gdk_device,
                               GDK_CURRENT_TIME);
     }
 
-  event = gdk_event_touch_new (GDK_TOUCH_CANCEL,
+  event = gdk_touch_event_new (GDK_TOUCH_CANCEL,
                                GDK_SLOT_TO_EVENT_SEQUENCE (touch->id),
                                touch->surface,
                                seat->touch_master,

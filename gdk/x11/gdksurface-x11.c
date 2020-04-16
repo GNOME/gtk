@@ -4574,7 +4574,9 @@ gdk_x11_surface_show_window_menu (GdkSurface *surface,
   int x_root, y_root;
   XClientMessageEvent xclient = { 0 };
 
-  switch ((guint) event->any.type)
+  GdkEventType event_type = gdk_event_get_event_type (event);
+
+  switch ((guint) event_type)
     {
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:

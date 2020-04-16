@@ -33,9 +33,10 @@
 #include "gdkkeysprivate.h"
 #include "gdk-private.h"
 
+#include <gobject/gvaluecollector.h>
+
 #include <string.h>
 #include <math.h>
-
 
 /**
  * SECTION:events
@@ -51,7 +52,7 @@
  */
 
 /**
- * GdkEvent:
+ * GdkEvent: (ref-func gdk_event_ref) (unref-func gdk_event_unref)
  *
  * The GdkEvent struct contains only private fields and
  * should not be accessed directly.
@@ -64,27 +65,432 @@
  * of related touch events.
  */
 
+static void
+value_event_init (GValue *value)
+{
+  value->data[0].v_pointer = NULL;
+}
 
-G_DEFINE_BOXED_TYPE (GdkEvent, gdk_event,
-                     gdk_event_ref,
-                     gdk_event_unref)
+static void
+value_event_free_value (GValue *value)
+{
+  if (value->data[0].v_pointer != NULL)
+    gdk_event_unref (value->data[0].v_pointer);
+}
 
+static void
+value_event_copy_value (const GValue *src,
+                        GValue       *dst)
+{
+  if (src->data[0].v_pointer != NULL)
+    dst->data[0].v_pointer = gdk_event_ref (src->data[0].v_pointer);
+  else
+    dst->data[0].v_pointer = NULL;
+}
+
+static gpointer
+value_event_peek_pointer (const GValue *value)
+{
+  return value->data[0].v_pointer;
+}
+
+static char *
+value_event_collect_value (GValue      *value,
+                           guint        n_collect_values,
+                           GTypeCValue *collect_values,
+                           guint        collect_flags)
+{
+  GdkEvent *event = collect_values[0].v_pointer;
+
+  if (event == NULL)
+    {
+      value->data[0].v_pointer = NULL;
+      return NULL;
+    }
+
+  if (event->parent_instance.g_class == NULL)
+    return g_strconcat ("invalid unclassed GdkEvent pointer for "
+                        "value type '",
+                        G_VALUE_TYPE_NAME (value),
+                        "'",
+                        NULL);
+
+  value->data[0].v_pointer = gdk_event_ref (event);
+
+  return NULL;
+}
+
+static gchar *
+value_event_lcopy_value (const GValue *value,
+                         guint         n_collect_values,
+                         GTypeCValue  *collect_values,
+                         guint         collect_flags)
+{
+  GdkEvent **event_p = collect_values[0].v_pointer;
+
+  if (event_p == NULL)
+    return g_strconcat ("value location for '",
+                        G_VALUE_TYPE_NAME (value),
+                        "' passed as NULL",
+                        NULL);
+
+  if (value->data[0].v_pointer == NULL)
+    *event_p = NULL;
+  else if (collect_flags & G_VALUE_NOCOPY_CONTENTS)
+    *event_p = value->data[0].v_pointer;
+  else
+    *event_p = gdk_event_ref (value->data[0].v_pointer);
+
+  return NULL;
+}
+
+static void
+gdk_event_finalize (GdkEvent *self)
+{
+  GdkDisplay *display = gdk_event_get_display (self);
+  if (display != NULL)
+    _gdk_display_event_data_free (display, self);
+
+  g_clear_object (&self->surface);
+  g_clear_object (&self->device);
+  g_clear_object (&self->source_device);
+
+  g_type_free_instance ((GTypeInstance *) self);
+}
+
+static GdkModifierType
+gdk_event_real_get_state (GdkEvent *self)
+{
+  return 0;
+}
+
+static gboolean
+gdk_event_real_get_position (GdkEvent *self,
+                             double   *x,
+                             double   *y)
+{
+  *x = NAN;
+  *y = NAN;
+
+  return FALSE;
+}
+
+static GdkEventSequence *
+gdk_event_real_get_sequence (GdkEvent *self)
+{
+  return NULL;
+}
+
+static GdkDeviceTool *
+gdk_event_real_get_tool (GdkEvent *self)
+{
+  return NULL;
+}
+
+static gboolean
+gdk_event_real_get_axes (GdkEvent  *self,
+                         double   **axes,
+                         guint     *n_axes)
+{
+  return FALSE;
+}
+
+static void
+gdk_event_class_init (GdkEventClass *klass)
+{
+  klass->finalize = gdk_event_finalize;
+  klass->get_state = gdk_event_real_get_state;
+  klass->get_position = gdk_event_real_get_position;
+  klass->get_sequence = gdk_event_real_get_sequence;
+  klass->get_tool = gdk_event_real_get_tool;
+  klass->get_axes = gdk_event_real_get_axes;
+}
+
+static void
+gdk_event_init (GdkEvent *self)
+{
+  g_ref_count_init (&self->ref_count);
+}
+
+GType
+gdk_event_get_type (void)
+{
+  static volatile gsize event_type__volatile;
+
+  if (g_once_init_enter (&event_type__volatile))
+    {
+      static const GTypeFundamentalInfo finfo = {
+        (G_TYPE_FLAG_CLASSED |
+         G_TYPE_FLAG_INSTANTIATABLE |
+         G_TYPE_FLAG_DERIVABLE |
+         G_TYPE_FLAG_DEEP_DERIVABLE),
+      };
+
+      static const GTypeValueTable value_table = {
+        value_event_init,
+        value_event_free_value,
+        value_event_copy_value,
+        value_event_peek_pointer,
+        "p",
+        value_event_collect_value,
+        "p",
+        value_event_lcopy_value,
+      };
+
+      const GTypeInfo event_info = {
+        /* Class */
+        sizeof (GdkEventClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gdk_event_class_init,
+        (GClassFinalizeFunc) NULL,
+        NULL,
+
+        /* Instance */
+        sizeof (GdkEvent),
+        0,
+        (GInstanceInitFunc) gdk_event_init,
+
+        /* GValue */
+        &value_table,
+      };
+
+      GType event_type =
+        g_type_register_fundamental (g_type_fundamental_next (),
+                                     g_intern_static_string ("GdkEvent"),
+                                     &event_info, &finfo,
+                                     G_TYPE_FLAG_ABSTRACT);
+
+      g_once_init_leave (&event_type__volatile, event_type);
+    }
+
+  return event_type__volatile;
+}
+
+/*< private >
+ * GdkEventTypeInfo:
+ * @instance_size: the size of the instance of a GdkEvent subclass
+ * @instance_init: (nullable): the function to initialize the instance data
+ * @finalize: (nullable): the function to free the instance data
+ * @get_state: (nullable): the function to retrieve the #GdkModifierType
+ *   associated to the event
+ * @get_position: (nullable): the function to retrieve the event coordinates
+ * @get_sequence: (nullable): the function to retrieve the event sequence
+ * @get_tool: (nullable): the function to retrieve the event's device tool
+ * @get_axes: (nullable): the function to retrieve the event's axes
+ *
+ * A structure used when registering a new GdkEvent type.
+ */
+typedef struct {
+  gsize instance_size;
+
+  void (* instance_init) (GdkEvent *event);
+  void (* finalize) (GdkEvent *event);
+
+  GdkModifierType (* get_state) (GdkEvent *event);
+
+  gboolean (* get_position) (GdkEvent *event,
+                             double *x,
+                             double *y);
+
+  GdkEventSequence *(* get_sequence) (GdkEvent *event);
+
+  GdkDeviceTool *(* get_tool) (GdkEvent *event);
+
+  gboolean (* get_axes) (GdkEvent  *event,
+                         double   **axes,
+                         guint     *n_axes);
+} GdkEventTypeInfo;
+
+static void
+gdk_event_generic_class_init (gpointer g_class,
+                              gpointer class_data)
+{
+  GdkEventTypeInfo *info = class_data;
+  GdkEventClass *event_class = g_class;
+
+  /* Optional */
+  if (info->finalize != NULL)
+    event_class->finalize = info->finalize;
+  if (info->get_state != NULL)
+    event_class->get_state = info->get_state;
+  if (info->get_position != NULL)
+    event_class->get_position = info->get_position;
+  if (info->get_sequence != NULL)
+    event_class->get_sequence = info->get_sequence;
+  if (info->get_tool != NULL)
+    event_class->get_tool = info->get_tool;
+  if (info->get_axes != NULL)
+    event_class->get_axes = info->get_axes;
+
+  g_free (info);
+}
+
+static GType
+gdk_event_type_register_static (const char             *type_name,
+                                const GdkEventTypeInfo *type_info)
+{
+  GTypeInfo info;
+
+  info.class_size = sizeof (GdkEventClass);
+  info.base_init = NULL;
+  info.base_finalize = NULL;
+  info.class_init = gdk_event_generic_class_init;
+  info.class_finalize = NULL;
+  info.class_data = g_memdup (type_info, sizeof (GdkEventTypeInfo));
+
+  info.instance_size = type_info->instance_size;
+  info.n_preallocs = 0;
+  info.instance_init = (GInstanceInitFunc) type_info->instance_init;
+  info.value_table = NULL;
+
+  return g_type_register_static (GDK_TYPE_EVENT, type_name, &info, 0);
+}
+
+/* Map GdkEventType to the appropriate GType */
+static GType gdk_event_types[GDK_EVENT_LAST];
+
+/*< private >
+ * GDK_EVENT_TYPE_SLOT:
+ * @ETYPE: a #GdkEventType
+ *
+ * Associates a #GdkEvent type with the given #GdkEventType enumeration.
+ *
+ * This macro can only be used with %GDK_DEFINE_EVENT_TYPE.
+ */
+#define GDK_EVENT_TYPE_SLOT(ETYPE) { gdk_event_types[ETYPE] = gdk_define_event_type_id; }
+
+/*< private >
+ * GDK_DEFINE_EVENT_TYPE:
+ * @TypeName: the type name, in camel case
+ * @type_name: the type name, in snake case
+ * @type_info: the address of the #GdkEventTypeInfo for the event type
+ * @_C_: custom code to call after registering the event type
+ *
+ * Registers a new #GdkEvent subclass with the given @TypeName and @type_info.
+ *
+ * Similarly to %G_DEFINE_TYPE_WITH_CODE, this macro will generate a `get_type()`
+ * function that registers the event type.
+ *
+ * You can specify code to be run after the type registration; the #GType of
+ * the event is available in the `gdk_define_event_type_id` variable.
+ */
+#define GDK_DEFINE_EVENT_TYPE(TypeName, type_name, type_info, _C_) \
+GType \
+type_name ## _get_type (void) \
+{ \
+  static volatile gsize gdk_define_event_type_id__volatile; \
+  if (g_once_init_enter (&gdk_define_event_type_id__volatile)) \
+    { \
+      GType gdk_define_event_type_id = \
+        gdk_event_type_register_static (g_intern_static_string (#TypeName), type_info); \
+      { _C_ } \
+      g_once_init_leave (&gdk_define_event_type_id__volatile, gdk_define_event_type_id); \
+    } \
+  return gdk_define_event_type_id__volatile; \
+}
+
+#define GDK_EVENT_SUPER(event) \
+  ((GdkEventClass *) g_type_class_peek (g_type_parent (G_TYPE_FROM_INSTANCE (event))))
+
+/*< private >
+ * gdk_event_alloc:
+ * @event_type: the #GdkEventType to allocate
+ * @surface: (nullable): the #GdkSurface of the event
+ * @device: (nullable): the #GdkDevice of the event
+ * @source_device: (nullable): the source #GdkDevice of the event
+ * @time_: the event serial
+ *
+ * Allocates a #GdkEvent for the given @event_type, and sets its
+ * common fields with the given parameters.
+ *
+ * Returns: (transfer full): the newly allocated #GdkEvent instance
+ */
+static gpointer
+gdk_event_alloc (GdkEventType event_type,
+                 GdkSurface   *surface,
+                 GdkDevice    *device,
+                 GdkDevice    *source_device,
+                 guint32       time_)
+{
+  g_assert (event_type >= GDK_DELETE && event_type < GDK_EVENT_LAST);
+  g_assert (gdk_event_types[event_type] != G_TYPE_INVALID);
+
+  GdkEvent *event = (GdkEvent *) g_type_create_instance (gdk_event_types[event_type]);
+
+  GDK_NOTE (EVENTS, {
+            char *str = g_enum_to_string (GDK_TYPE_EVENT_TYPE, event_type);
+            g_message ("Allocating a new %s for event type %s",
+                       g_type_name (gdk_event_types[event_type]), str);
+            g_free (str);
+            });
+
+  event->event_type = event_type;
+  event->surface = surface != NULL ? g_object_ref (surface) : NULL;
+  event->device = device != NULL ? g_object_ref (device) : NULL;
+  event->source_device = source_device != NULL ? g_object_ref (source_device) : NULL;
+  event->time = time_;
+
+  return event;
+}
+
+static void
+gdk_event_init_types_once (void)
+{
+  g_type_ensure (GDK_TYPE_BUTTON_EVENT);
+  g_type_ensure (GDK_TYPE_CONFIGURE_EVENT);
+  g_type_ensure (GDK_TYPE_CROSSING_EVENT);
+  g_type_ensure (GDK_TYPE_DELETE_EVENT);
+  g_type_ensure (GDK_TYPE_DND_EVENT);
+  g_type_ensure (GDK_TYPE_FOCUS_EVENT);
+  g_type_ensure (GDK_TYPE_GRAB_BROKEN_EVENT);
+  g_type_ensure (GDK_TYPE_KEY_EVENT);
+  g_type_ensure (GDK_TYPE_MOTION_EVENT);
+  g_type_ensure (GDK_TYPE_PAD_EVENT);
+  g_type_ensure (GDK_TYPE_PROXIMITY_EVENT);
+  g_type_ensure (GDK_TYPE_SCROLL_EVENT);
+  g_type_ensure (GDK_TYPE_TOUCH_EVENT);
+  g_type_ensure (GDK_TYPE_TOUCHPAD_EVENT);
+}
+
+/*< private >
+ * gdk_event_init_types:
+ *
+ * Initializes all GdkEvent types.
+ */
+void
+gdk_event_init_types (void)
+{
+  static volatile gsize event_types__volatile;
+
+  if (g_once_init_enter (&event_types__volatile))
+    {
+      gboolean initialized = FALSE;
+
+      gdk_event_init_types_once ();
+      initialized = TRUE;
+
+      g_once_init_leave (&event_types__volatile, initialized);
+    }
+}
+
+#ifdef G_ENABLE_DEBUG
 static gboolean
 check_event_sanity (GdkEvent *event)
 {
-  if (event->any.device != NULL &&
-      gdk_surface_get_display (event->any.surface) != gdk_device_get_display (event->any.device))
+  if (event->device != NULL &&
+      gdk_surface_get_display (event->surface) != gdk_device_get_display (event->device))
     {
-      char *type = g_enum_to_string (GDK_TYPE_EVENT_TYPE, event->any.type);
+      char *type = g_enum_to_string (GDK_TYPE_EVENT_TYPE, event->event_type);
       g_warning ("Event of type %s with mismatched device display", type);
       g_free (type);
       return FALSE;
     }
 
-  if (event->any.source_device != NULL &&
-      gdk_surface_get_display (event->any.surface) != gdk_device_get_display (event->any.source_device))
+  if (event->source_device != NULL &&
+      gdk_surface_get_display (event->surface) != gdk_device_get_display (event->source_device))
     {
-      char *type = g_enum_to_string (GDK_TYPE_EVENT_TYPE, event->any.type);
+      char *type = g_enum_to_string (GDK_TYPE_EVENT_TYPE, event->event_type);
       g_warning ("Event of type %s with mismatched source device display", type);
       g_free (type);
       return FALSE;
@@ -92,12 +498,15 @@ check_event_sanity (GdkEvent *event)
 
   return TRUE;
 }
+#endif
 
 void
 _gdk_event_emit (GdkEvent *event)
 {
+#ifdef G_ENABLE_DEBUG
   if (!check_event_sanity (event))
     return;
+#endif
 
   if (gdk_drag_handle_source_event (event))
     return;
@@ -132,13 +541,13 @@ _gdk_event_queue_find_first (GdkDisplay *display)
     {
       GdkEvent *event = tmp_list->data;
 
-      if ((event->any.flags & GDK_EVENT_PENDING) == 0 &&
-	  (!paused || (event->any.flags & GDK_EVENT_FLUSHED) != 0))
+      if ((event->flags & GDK_EVENT_PENDING) == 0 &&
+	  (!paused || (event->flags & GDK_EVENT_FLUSHED) != 0))
         {
           if (pending_motion)
             return pending_motion;
 
-          if (event->any.type == GDK_MOTION_NOTIFY && (event->any.flags & GDK_EVENT_FLUSHED) == 0)
+          if (event->event_type == GDK_MOTION_NOTIFY && (event->flags & GDK_EVENT_FLUSHED) == 0)
             pending_motion = tmp_list;
           else
             return tmp_list;
@@ -258,15 +667,16 @@ _gdk_event_unqueue (GdkDisplay *display)
 }
 
 static void
-gdk_event_push_history (GdkEvent *event,
-                        GdkEvent *history_event)
+gdk_motion_event_push_history (GdkEvent *event,
+                               GdkEvent *history_event)
 {
+  GdkMotionEvent *self = (GdkMotionEvent *) event;
   GdkTimeCoord *hist;
   GdkDevice *device;
   gint i, n_axes;
 
-  g_assert (event->any.type == GDK_MOTION_NOTIFY);
-  g_assert (history_event->any.type == GDK_MOTION_NOTIFY);
+  g_assert (GDK_IS_EVENT_TYPE (event, GDK_MOTION_NOTIFY));
+  g_assert (GDK_IS_EVENT_TYPE (history_event, GDK_MOTION_NOTIFY));
 
   hist = g_new0 (GdkTimeCoord, 1);
 
@@ -276,7 +686,7 @@ gdk_event_push_history (GdkEvent *event,
   for (i = 0; i <= MIN (n_axes, GDK_MAX_TIMECOORD_AXES); i++)
     gdk_event_get_axis (history_event, i, &hist->axes[i]);
 
-  event->motion.history = g_list_prepend (event->motion.history, hist);
+  self->history = g_list_prepend (self->history, hist);
 }
 
 void
@@ -297,25 +707,25 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
     {
       GdkEvent *event = tmp_list->data;
 
-      if (event->any.flags & GDK_EVENT_PENDING)
+      if (event->flags & GDK_EVENT_PENDING)
         break;
 
-      if (event->any.type != GDK_MOTION_NOTIFY)
+      if (event->event_type != GDK_MOTION_NOTIFY)
         break;
 
       if (pending_motion_surface != NULL &&
-          pending_motion_surface != event->any.surface)
+          pending_motion_surface != event->surface)
         break;
 
       if (pending_motion_device != NULL &&
-          pending_motion_device != event->any.device)
+          pending_motion_device != event->device)
         break;
 
       if (!last_motion)
         last_motion = event;
 
-      pending_motion_surface = event->any.surface;
-      pending_motion_device = event->any.device;
+      pending_motion_surface = event->surface;
+      pending_motion_device = event->device;
       pending_motions = tmp_list;
 
       tmp_list = tmp_list->prev;
@@ -325,11 +735,15 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
     {
       GList *next = pending_motions->next;
 
-      if (last_motion &&
-          (last_motion->motion.state &
-           (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK |
-            GDK_BUTTON4_MASK | GDK_BUTTON5_MASK)))
-        gdk_event_push_history (last_motion, pending_motions->data);
+      if (last_motion != NULL)
+        {
+          GdkModifierType state = gdk_event_get_modifier_state (last_motion);
+
+          if (state &
+              (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK |
+               GDK_BUTTON4_MASK | GDK_BUTTON5_MASK))
+           gdk_motion_event_push_history (last_motion, pending_motions->data);
+        }
 
       gdk_event_unref (pending_motions->data);
       g_queue_delete_link (&display->queued_events, pending_motions);
@@ -353,7 +767,7 @@ _gdk_event_queue_flush (GdkDisplay *display)
   for (tmp_list = display->queued_events.head; tmp_list; tmp_list = tmp_list->next)
     {
       GdkEvent *event = tmp_list->data;
-      event->any.flags |= GDK_EVENT_FLUSHED;
+      event->flags |= GDK_EVENT_FLUSHED;
     }
 }
 
@@ -363,20 +777,21 @@ _gdk_event_queue_flush (GdkDisplay *display)
  *
  * Increase the ref count of @event.
  *
- * Returns: @event
+ * Returns: (transfer full): @event
  */
 GdkEvent *
 gdk_event_ref (GdkEvent *event)
 {
-  event->any.ref_count++;
+  g_return_val_if_fail (GDK_IS_EVENT (event), NULL);
+
+  g_ref_count_inc (&event->ref_count);
+
   return event;
 }
 
-static void gdk_event_free (GdkEvent *event);
-
 /**
  * gdk_event_unref:
- * @event: a #GdkEvent
+ * @event: (transfer full): a #GdkEvent
  *
  * Decrease the ref count of @event, and free it
  * if the last reference is dropped.
@@ -384,9 +799,10 @@ static void gdk_event_free (GdkEvent *event);
 void
 gdk_event_unref (GdkEvent *event)
 {
-  event->any.ref_count--;
-  if (event->any.ref_count == 0)
-    gdk_event_free (event);
+  g_return_if_fail (GDK_IS_EVENT (event));
+
+  if (g_ref_count_dec (&event->ref_count))
+    GDK_EVENT_GET_CLASS (event)->finalize (event);
 }
 
 /**
@@ -401,71 +817,31 @@ gdk_event_unref (GdkEvent *event)
 gboolean
 gdk_event_get_pointer_emulated (GdkEvent *event)
 {
-  return event->any.pointer_emulated;
-}
-
-static void
-gdk_event_free (GdkEvent *event)
-{
-  GdkDisplay *display;
-
-  switch ((guint) event->any.type)
+  switch ((int) event->event_type)
     {
-    case GDK_ENTER_NOTIFY:
-    case GDK_LEAVE_NOTIFY:
-      g_clear_object (&event->crossing.child_surface);
-      break;
-
-    case GDK_DRAG_ENTER:
-    case GDK_DRAG_LEAVE:
-    case GDK_DRAG_MOTION:
-    case GDK_DROP_START:
-      g_clear_object (&event->dnd.drop);
-      break;
-
-    case GDK_BUTTON_PRESS:
-    case GDK_BUTTON_RELEASE:
-      g_clear_object (&event->button.tool);
-      g_free (event->button.axes);
-      break;
-
     case GDK_TOUCH_BEGIN:
-    case GDK_TOUCH_UPDATE:
     case GDK_TOUCH_END:
+    case GDK_TOUCH_UPDATE:
     case GDK_TOUCH_CANCEL:
-      g_free (event->touch.axes);
-      break;
+      {
+        GdkTouchEvent *tevent = (GdkTouchEvent *) event;
 
-    case GDK_MOTION_NOTIFY:
-      g_clear_object (&event->motion.tool);
-      g_free (event->motion.axes);
-      g_list_free_full (event->motion.history, g_free);
-      break;
-
-    case GDK_PROXIMITY_IN:
-    case GDK_PROXIMITY_OUT:
-      g_clear_object (&event->proximity.tool);
-      break;
+        return tevent->pointer_emulated;
+      }
 
     case GDK_SCROLL:
-      g_clear_object (&event->scroll.tool);
-      break;
+    case GDK_SCROLL_SMOOTH:
+      {
+        GdkScrollEvent *sevent = (GdkScrollEvent *) event;
+
+        return sevent->pointer_emulated;
+      }
 
     default:
       break;
     }
 
-  display = gdk_event_get_display (event);
-  if (display)
-    _gdk_display_event_data_free (display, event);
-
-  if (event->any.surface)
-    g_object_unref (event->any.surface);
-
-  g_clear_object (&event->any.device);
-  g_clear_object (&event->any.source_device);
-
-  g_free (event);
+  return FALSE;
 }
 
 /**
@@ -485,65 +861,32 @@ gdk_event_get_axis (GdkEvent   *event,
 		    double     *value)
 {
   double *axes;
+  guint n_axes;
+
+  g_return_val_if_fail (GDK_IS_EVENT (event), FALSE);
 
   if (axis_use == GDK_AXIS_X || axis_use == GDK_AXIS_Y)
     {
-      gdouble x, y;
+      double x, y;
 
-      switch ((guint) event->any.type)
-	{
-        case GDK_MOTION_NOTIFY:
-	  x = event->motion.x;
-	  y = event->motion.y;
-	  break;
-	case GDK_BUTTON_PRESS:
-	case GDK_BUTTON_RELEASE:
-	  x = event->button.x;
-	  y = event->button.y;
-	  break;
-        case GDK_TOUCH_BEGIN:
-        case GDK_TOUCH_UPDATE:
-        case GDK_TOUCH_END:
-        case GDK_TOUCH_CANCEL:
-	  x = event->touch.x;
-	  y = event->touch.y;
-	  break;
-	case GDK_ENTER_NOTIFY:
-	case GDK_LEAVE_NOTIFY:
-	  x = event->crossing.x;
-	  y = event->crossing.y;
-	  break;
-	default:
-	  return FALSE;
-	}
+      if (!gdk_event_get_position (event, &x, &y))
+        return FALSE;
 
-      if (axis_use == GDK_AXIS_X && value)
+      if (axis_use == GDK_AXIS_X && value != NULL)
 	*value = x;
-      if (axis_use == GDK_AXIS_Y && value)
+      if (axis_use == GDK_AXIS_Y && value != NULL)
 	*value = y;
 
       return TRUE;
     }
-  else if (event->any.type == GDK_BUTTON_PRESS ||
-	   event->any.type == GDK_BUTTON_RELEASE)
-    {
-      axes = event->button.axes;
-    }
-  else if (event->any.type == GDK_TOUCH_BEGIN ||
-           event->any.type == GDK_TOUCH_UPDATE ||
-           event->any.type == GDK_TOUCH_END ||
-           event->any.type == GDK_TOUCH_CANCEL)
-    {
-      axes = event->touch.axes;
-    }
-  else if (event->any.type == GDK_MOTION_NOTIFY)
-    {
-      axes = event->motion.axes;
-    }
-  else
+
+  if (!gdk_event_get_axes (event, &axes, &n_axes))
     return FALSE;
 
-  return gdk_device_get_axis (event->any.device, axes, axis_use, value);
+  if (axis_use >= gdk_device_get_n_axes (event->device))
+    return FALSE;
+
+  return gdk_device_get_axis (event->device, axes, axis_use, value);
 }
 
 /**
@@ -564,11 +907,11 @@ gdk_event_triggers_context_menu (GdkEvent *event)
 {
   g_return_val_if_fail (event != NULL, FALSE);
 
-  if (event->any.type == GDK_BUTTON_PRESS)
+  if (event->event_type == GDK_BUTTON_PRESS)
     {
-      GdkEventButton *bevent = (GdkEventButton *) event;
+      GdkButtonEvent *bevent = (GdkButtonEvent *) event;
 
-      g_return_val_if_fail (GDK_IS_SURFACE (bevent->any.surface), FALSE);
+      g_return_val_if_fail (GDK_IS_SURFACE (event->surface), FALSE);
 
       if (bevent->button == GDK_BUTTON_SECONDARY &&
           ! (bevent->state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK)))
@@ -736,588 +1079,9 @@ gdk_event_get_axes (GdkEvent  *event,
                     double   **axes,
                     guint     *n_axes)
 {
-  GdkDevice *source_device;
+  g_return_val_if_fail (GDK_IS_EVENT (event), FALSE);
 
-  if (!event)
-    return FALSE;
-
-  source_device = gdk_event_get_source_device (event);
-
-  if (!source_device)
-    return FALSE;
-
-  if (event->any.type == GDK_MOTION_NOTIFY)
-    {
-      *axes = event->motion.axes;
-      *n_axes = gdk_device_get_n_axes (source_device);
-      return TRUE;
-    }
-  else if (event->any.type == GDK_BUTTON_PRESS ||
-           event->any.type == GDK_BUTTON_RELEASE)
-    {
-      *axes = event->button.axes;
-      *n_axes = gdk_device_get_n_axes (source_device);
-      return TRUE;
-    }
-  else if (event->any.type == GDK_TOUCH_BEGIN ||
-           event->any.type == GDK_TOUCH_UPDATE ||
-           event->any.type == GDK_TOUCH_END ||
-           event->any.type == GDK_TOUCH_CANCEL)
-    {
-      *axes = event->touch.axes;
-      *n_axes = gdk_device_get_n_axes (source_device);
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-/**
- * gdk_event_get_motion_history:
- * @event: a #GdkEvent of type %GDK_MOTION_NOTIFY
- *
- * Retrieves the history of the @event motion, as a list of time and
- * coordinates.
- *
- * Returns: (transfer container) (element-type GdkTimeCoord) (nullable): a list
- *   of time and coordinates
- */
-GList *
-gdk_event_get_motion_history (GdkEvent       *event)
-{
-  if (event->any.type != GDK_MOTION_NOTIFY)
-    return NULL;
-  return g_list_reverse (g_list_copy (event->motion.history));
-}
-
-GdkEvent *
-gdk_event_button_new (GdkEventType     type,
-                      GdkSurface      *surface,
-                      GdkDevice       *device,
-                      GdkDevice       *source_device,
-                      GdkDeviceTool   *tool,
-                      guint32          time,
-                      GdkModifierType  state,
-                      guint            button,
-                      double           x,
-                      double           y,
-                      double          *axes)
-{
-  GdkEventButton *event;
-
-  g_return_val_if_fail (type == GDK_BUTTON_PRESS || 
-                        type == GDK_BUTTON_RELEASE, NULL);
-
-  event = g_new0 (GdkEventButton, 1);
-  event->any.ref_count = 1;
-  event->any.type = type;
-  event->any.time = time;
-  event->any.surface = g_object_ref (surface);
-  event->any.device = g_object_ref (device);
-  event->any.source_device = g_object_ref (source_device);
-  event->tool = tool ? g_object_ref (tool) : NULL;
-  event->axes = NULL;
-  event->state = state;
-  event->button = button;
-  event->x = x;
-  event->y = y;
-  event->axes = axes;
-
-  return (GdkEvent *)event;
-}
-
-GdkEvent *
-gdk_event_motion_new (GdkSurface      *surface,
-                      GdkDevice       *device,
-                      GdkDevice       *source_device,
-                      GdkDeviceTool   *tool,
-                      guint32          time,
-                      GdkModifierType  state,
-                      double           x,
-                      double           y,
-                      double          *axes)
-{
-  GdkEventMotion *event = g_new0 (GdkEventMotion, 1);
-
-  event->any.ref_count = 1;
-  event->any.type = GDK_MOTION_NOTIFY;
-  event->any.time = time;
-  event->any.surface = g_object_ref (surface);
-  event->any.device = g_object_ref (device);
-  event->any.source_device = g_object_ref (source_device);
-  event->tool = tool ? g_object_ref (tool) : NULL;
-  event->state = state;
-  event->x = x;
-  event->y = y;
-  event->axes = axes;
-  event->state = state;
-
-  return (GdkEvent *)event;
-}
-
-GdkEvent *
-gdk_event_crossing_new (GdkEventType     type,
-                        GdkSurface      *surface,
-                        GdkDevice       *device,
-                        GdkDevice       *source_device,
-                        guint32          time,
-                        GdkModifierType  state,
-                        double           x,
-                        double           y,
-                        GdkCrossingMode  mode,
-                        GdkNotifyType    detail)
-{
-  GdkEventCrossing *event;
-
-  g_return_val_if_fail (type == GDK_ENTER_NOTIFY ||
-                        type == GDK_LEAVE_NOTIFY, NULL);
-
-  event = g_new0 (GdkEventCrossing, 1);
-
-  event->any.ref_count = 1;
-  event->any.type = type;
-  event->any.time = time;
-  event->any.surface = g_object_ref (surface);
-  event->any.device = g_object_ref (device);
-  event->any.source_device = g_object_ref (source_device);
-  event->state = state;
-  event->x = x;
-  event->y = y;
-  event->mode = mode;
-  event->detail = detail;
-
-  return (GdkEvent *)event;
-}
-
-GdkEvent *
-gdk_event_proximity_new (GdkEventType   type,
-                         GdkSurface    *surface,
-                         GdkDevice     *device,
-                         GdkDevice     *source_device,
-                         GdkDeviceTool *tool,
-                         guint32        time)
-{
-  GdkEventProximity *event;
-
-  g_return_val_if_fail (type == GDK_PROXIMITY_IN ||
-                        type == GDK_PROXIMITY_OUT, NULL);
-
-  event = g_new0 (GdkEventProximity, 1);
-
-  event->any.ref_count = 1;
-  event->any.type = type;
-  event->any.time = time;
-  event->any.surface = g_object_ref (surface);
-  event->any.device = g_object_ref (device);
-  event->any.source_device = g_object_ref (source_device);
-  event->tool = tool ? g_object_ref (tool) : NULL;
-
-  return (GdkEvent *)event;
-}
-
-GdkEvent *
-gdk_event_key_new (GdkEventType      type,
-                   GdkSurface       *surface,
-                   GdkDevice        *device,
-                   GdkDevice        *source_device,
-                   guint32           time,
-                   guint             keycode,
-                   GdkModifierType   state,
-                   gboolean          is_modifier,
-                   GdkTranslatedKey *translated,
-                   GdkTranslatedKey *no_lock)
-{
-  GdkEventKey *event;
-
-  g_return_val_if_fail (type == GDK_KEY_PRESS ||
-                        type == GDK_KEY_RELEASE, NULL);
-
-  event = g_new0 (GdkEventKey, 1);
-  
-  event->any.ref_count = 1;
-  event->any.type = type;
-  event->any.time = time;
-  event->any.surface = g_object_ref (surface);
-  event->any.device = g_object_ref (device);
-  event->any.source_device = g_object_ref (source_device);
-  event->keycode = keycode;
-  event->state = state;
-  event->any.key_is_modifier = is_modifier;
-  event->translated[0] = *translated;
-  event->translated[1] = *no_lock;
-
-  return (GdkEvent *)event;
-}
-
-GdkEvent *
-gdk_event_configure_new (GdkSurface *surface,
-                         int         width,
-                         int         height)
-{
-  GdkEventConfigure *event = g_new0 (GdkEventConfigure, 1);
-
-  event->any.ref_count = 1;
-  event->any.type = GDK_CONFIGURE;
-  event->any.time = GDK_CURRENT_TIME;
-  event->any.surface = g_object_ref (surface);
-  event->width = width;
-  event->height = height;
-
-  return (GdkEvent *)event;
-}
-
-GdkEvent *
-gdk_event_delete_new (GdkSurface *surface)
-{
-  GdkEventAny *event = g_new0 (GdkEventAny, 1);
-
-  event->ref_count = 1;
-  event->type = GDK_DELETE;
-  event->time = GDK_CURRENT_TIME;
-  event->surface = g_object_ref (surface);
-
-  return (GdkEvent *)event;
-}
-
-GdkEvent *
-gdk_event_focus_new (GdkSurface *surface,
-                     GdkDevice  *device,
-                     GdkDevice  *source_device,
-                     gboolean    focus_in)
-{
-  GdkEventFocus *event = g_new0 (GdkEventFocus, 1);
-
-  event->any.ref_count = 1;
-  event->any.type = GDK_FOCUS_CHANGE;
-  event->any.time = GDK_CURRENT_TIME;
-  event->any.surface = g_object_ref (surface);
-  event->any.device = g_object_ref (device);
-  event->any.source_device = g_object_ref (source_device);
-  event->any.focus_in = focus_in;
-
-  return  (GdkEvent *)event;
-}
-
-GdkEvent *
-gdk_event_scroll_new (GdkSurface      *surface,
-                      GdkDevice       *device,
-                      GdkDevice       *source_device,
-                      GdkDeviceTool   *tool,
-                      guint32          time,
-                      GdkModifierType  state,
-                      double           delta_x,
-                      double           delta_y,
-                      gboolean         is_stop)
-{
-  GdkEventScroll *event = g_new0 (GdkEventScroll, 1);
-
-  event->any.ref_count = 1;
-  event->any.type = GDK_SCROLL;
-  event->any.time = time;
-  event->any.surface = g_object_ref (surface);
-  event->any.device = g_object_ref (device);
-  event->any.source_device = g_object_ref (source_device);
-  event->tool = tool ? g_object_ref (tool) : NULL;
-  event->state = state;
-  event->x = NAN;
-  event->y = NAN;
-  event->direction = GDK_SCROLL_SMOOTH;
-  event->delta_x = delta_x;
-  event->delta_y = delta_y;
-  event->any.scroll_is_stop = is_stop;
-
-  return (GdkEvent *)event;
-}
-
-GdkEvent *
-gdk_event_discrete_scroll_new (GdkSurface         *surface,
-                               GdkDevice          *device,
-                               GdkDevice          *source_device,
-                               GdkDeviceTool      *tool,
-                               guint32             time,
-                               GdkModifierType     state,
-                               GdkScrollDirection  direction,
-                               gboolean            emulated)
-{
-  GdkEventScroll *event = g_new0 (GdkEventScroll, 1);
-
-  event->any.ref_count = 1;
-  event->any.type = GDK_SCROLL;
-  event->any.time = time;
-  event->any.surface = g_object_ref (surface);
-  event->any.device = g_object_ref (device);
-  event->any.source_device = g_object_ref (source_device);
-  event->tool = tool ? g_object_ref (tool) : NULL;
-  event->state = state;
-  event->x = NAN;
-  event->y = NAN;
-  event->direction = direction;
-  event->any.pointer_emulated = emulated;
-
-  return (GdkEvent *)event;
-}
-
-GdkEvent *
-gdk_event_touch_new (GdkEventType      type,
-                     GdkEventSequence *sequence,
-                     GdkSurface       *surface,
-                     GdkDevice        *device,
-                     GdkDevice        *source_device,
-                     guint32           time,
-                     GdkModifierType   state,
-                     double            x,
-                     double            y,
-                     double           *axes,
-                     gboolean          emulating)
-{
-  GdkEventTouch *event;
-
-  g_return_val_if_fail (type == GDK_TOUCH_BEGIN ||
-                        type == GDK_TOUCH_END ||
-                        type == GDK_TOUCH_UPDATE ||
-                        type == GDK_TOUCH_CANCEL, NULL);
-
-  event = g_new0 (GdkEventTouch, 1);
-
-  event->any.ref_count = 1;
-  event->any.type = type;
-  event->any.time = time;
-  event->any.surface = g_object_ref (surface);
-  event->any.device = g_object_ref (device);
-  event->any.source_device = g_object_ref (source_device);
-  event->sequence = sequence;
-  event->state = state;
-  event->x = x;
-  event->y = y;
-  event->axes = axes;
-  event->any.touch_emulating = emulating;
-  event->any.pointer_emulated = emulating;
-
-  return (GdkEvent *)event;
-}
-
-GdkEvent *
-gdk_event_touchpad_swipe_new (GdkSurface *surface,
-                              GdkDevice  *device,
-                              GdkDevice  *source_device,
-                              guint32     time,
-                              GdkModifierType state,
-                              GdkTouchpadGesturePhase phase,
-                              double      x,
-                              double      y,
-                              int         n_fingers,
-                              double      dx,
-                              double      dy)
-{
-  GdkEventTouchpadSwipe *event = g_new0 (GdkEventTouchpadSwipe, 1);
-
-  event->any.ref_count = 1;
-  event->any.type = GDK_TOUCHPAD_SWIPE;
-  event->any.time = time;
-  event->any.surface = g_object_ref (surface);
-  event->any.device = g_object_ref (device);
-  event->any.source_device = g_object_ref (source_device);
-  event->state = state;
-  event->phase = phase;
-  event->x = x;
-  event->y = y;
-  event->dx = dx;
-  event->dy = dy;
-  event->n_fingers = n_fingers;
-
-  return (GdkEvent *)event;
-}
-
-GdkEvent *
-gdk_event_touchpad_pinch_new (GdkSurface *surface,
-                              GdkDevice  *device,
-                              GdkDevice  *source_device,
-                              guint32     time,
-                              GdkModifierType state,
-                              GdkTouchpadGesturePhase phase,
-                              double      x,
-                              double      y,
-                              int         n_fingers,
-                              double      dx,
-                              double      dy,
-                              double      scale,
-                              double      angle_delta)
-{
-  GdkEventTouchpadPinch *event = g_new0 (GdkEventTouchpadPinch, 1);
-
-  event->any.ref_count = 1;
-  event->any.type = GDK_TOUCHPAD_PINCH;
-  event->any.time = time;
-  event->any.surface = g_object_ref (surface);
-  event->any.device = g_object_ref (device);
-  event->any.source_device = g_object_ref (source_device);
-  event->state = state;
-  event->phase = phase;
-  event->x = x;
-  event->y = y;
-  event->dx = dx;
-  event->dy = dy;
-  event->n_fingers = n_fingers;
-  event->scale = scale;
-  event->angle_delta = angle_delta;
-
-  return (GdkEvent *)event;
-}
-
-GdkEvent *
-gdk_event_pad_ring_new (GdkSurface *surface,
-                        GdkDevice  *device,
-                        GdkDevice  *source_device,
-                        guint32     time,
-                        guint       group,
-                        guint       index,
-                        guint       mode,
-                        double      value)
-{
-  GdkEventPadAxis *event = g_new0 (GdkEventPadAxis, 1);
-
-  event->any.ref_count = 1;
-  event->any.type = GDK_PAD_RING;
-  event->any.time = time;
-  event->any.surface = g_object_ref (surface);
-  event->any.device = g_object_ref (device);
-  event->any.source_device = g_object_ref (source_device);
-  event->group = group;
-  event->index = index;
-  event->mode = mode;
-  event->value = value;
-
-  return (GdkEvent *)event;
-}
-
-GdkEvent *
-gdk_event_pad_strip_new (GdkSurface *surface,
-                         GdkDevice  *device,
-                         GdkDevice  *source_device,
-                         guint32     time,
-                         guint       group,
-                         guint       index,
-                         guint       mode,
-                         double      value)
-{
-  GdkEventPadAxis *event = g_new0 (GdkEventPadAxis, 1);
-
-  event->any.ref_count = 1;
-  event->any.type = GDK_PAD_STRIP;
-  event->any.time = time;
-  event->any.surface = g_object_ref (surface);
-  event->any.device = g_object_ref (device);
-  event->any.source_device = g_object_ref (source_device);
-  event->group = group;
-  event->index = index;
-  event->mode = mode;
-  event->value = value;
-
-  return (GdkEvent *)event;
-}
-
-GdkEvent *
-gdk_event_pad_button_new (GdkEventType  type,
-                          GdkSurface   *surface,
-                          GdkDevice    *device,
-                          GdkDevice    *source_device,
-                          guint32       time,
-                          guint         group,
-                          guint         button,
-                          guint         mode)
-{
-  GdkEventPadButton *event;
-
-  g_return_val_if_fail (type == GDK_PAD_BUTTON_PRESS ||
-                        type == GDK_PAD_BUTTON_RELEASE, NULL);
-
-  event = g_new0 (GdkEventPadButton, 1);
-
-  event->any.ref_count = 1;
-  event->any.type = type;
-  event->any.time = time;
-  event->any.surface = g_object_ref (surface);
-  event->any.device = g_object_ref (device);
-  event->any.source_device = g_object_ref (source_device);
-  event->group = group;
-  event->button = button;
-  event->mode = mode;
-
-  return (GdkEvent *)event;
-}
-
-GdkEvent *
-gdk_event_pad_group_mode_new (GdkSurface *surface,
-                              GdkDevice  *device,
-                              GdkDevice  *source_device,
-                              guint32     time,
-                              guint       group,
-                              guint       mode)
-{
-  GdkEventPadGroupMode *event = g_new0 (GdkEventPadGroupMode, 1);
-
-  event->any.ref_count = 1;
-  event->any.type = GDK_PAD_GROUP_MODE;
-  event->any.time = time;
-  event->any.surface = g_object_ref (surface);
-  event->any.device = g_object_ref (device);
-  event->any.source_device = g_object_ref (source_device);
-  event->group = group;
-  event->mode = mode;
-
-  return (GdkEvent *)event;
-}
-
-GdkEvent *
-gdk_event_drag_new (GdkEventType  type,
-                    GdkSurface   *surface,
-                    GdkDevice    *device,
-                    GdkDrop      *drop,
-                    guint32       time,
-                    double        x,
-                    double        y)
-{
-  GdkEventDND *event;
-
-  g_return_val_if_fail (type == GDK_DRAG_ENTER ||
-                        type == GDK_DRAG_MOTION ||
-                        type == GDK_DRAG_LEAVE ||
-                        type == GDK_DROP_START, NULL);
-
-  event = g_new0 (GdkEventDND, 1);
-
-  event->any.ref_count = 1;
-  event->any.type = type;
-  event->any.time = time;
-  event->any.surface = g_object_ref (surface);
-  event->any.device = g_object_ref (device);
-  event->drop = g_object_ref (drop);
-  event->x = x;
-  event->y = y;
-
-  return (GdkEvent *)event;
-}
-
-GdkEvent *
-gdk_event_grab_broken_new (GdkSurface *surface,
-                           GdkDevice  *device,
-                           GdkDevice  *source_device,
-                           GdkSurface *grab_surface,
-                           gboolean    implicit)
-{
-  GdkEventGrabBroken *event = g_new0 (GdkEventGrabBroken, 1);
-
-  event->any.ref_count = 1;
-  event->any.type = GDK_GRAB_BROKEN;
-  event->any.time = GDK_CURRENT_TIME;
-  event->any.surface = g_object_ref (surface);
-  event->any.device = g_object_ref (device);
-  event->any.source_device = g_object_ref (source_device);
-  event->grab_surface = grab_surface;
-  event->implicit = implicit;
-  event->keyboard = gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD;
-
-  return (GdkEvent *)event;
+  return GDK_EVENT_GET_CLASS (event)->get_axes (event, axes, n_axes);
 }
 
 /**
@@ -1331,7 +1095,9 @@ gdk_event_grab_broken_new (GdkSurface *surface,
 GdkEventType
 gdk_event_get_event_type (GdkEvent *event)
 {
-  return event->any.type;
+  g_return_val_if_fail (GDK_IS_EVENT (event), 0);
+
+  return event->event_type;
 }
 
 /**
@@ -1345,7 +1111,9 @@ gdk_event_get_event_type (GdkEvent *event)
 GdkSurface *
 gdk_event_get_surface (GdkEvent *event)
 {
-  return event->any.surface;
+  g_return_val_if_fail (GDK_IS_EVENT (event), NULL);
+
+  return event->surface;
 }
 
 /**
@@ -1354,12 +1122,14 @@ gdk_event_get_surface (GdkEvent *event)
  *
  * Returns the device of an event.
  *
- * Returns: (nullable) (transfer none): a #GdkDevice, or %NULL.
- **/
+ * Returns: (nullable) (transfer none): a #GdkDevice.
+ */
 GdkDevice *
 gdk_event_get_device (GdkEvent *event)
 {
-  return event->any.device;
+  g_return_val_if_fail (GDK_IS_EVENT (event), NULL);
+
+  return event->device;
 }
 
 /**
@@ -1381,10 +1151,12 @@ gdk_event_get_device (GdkEvent *event)
 GdkDevice *
 gdk_event_get_source_device (GdkEvent *event)
 {
-  if (event->any.source_device)
-    return event->any.source_device;
+  g_return_val_if_fail (GDK_IS_EVENT (event), NULL);
 
-  return event->any.device;
+  if (event->source_device)
+    return event->source_device;
+
+  return event->device;
 }
 
 /**
@@ -1400,38 +1172,31 @@ gdk_event_get_source_device (GdkEvent *event)
  * the application lifetime, if settings must be stored
  * persistently across runs, see gdk_device_tool_get_serial()
  *
- * Returns: (transfer none): The current device tool, or %NULL
+ * Returns: (transfer none) (nullable): The current device tool, or %NULL
  **/
 GdkDeviceTool *
 gdk_event_get_device_tool (GdkEvent *event)
 {
-  if (event->any.type == GDK_BUTTON_PRESS ||
-      event->any.type == GDK_BUTTON_RELEASE)
-    return event->button.tool;
-  else if (event->any.type == GDK_MOTION_NOTIFY)
-    return event->motion.tool;
-  else if (event->any.type == GDK_PROXIMITY_IN ||
-           event->any.type == GDK_PROXIMITY_OUT)
-    return event->proximity.tool;
-  else if (event->any.type == GDK_SCROLL)
-    return event->scroll.tool;
+  g_return_val_if_fail (GDK_IS_EVENT (event), NULL);
 
-  return NULL;
+  return GDK_EVENT_GET_CLASS (event)->get_tool (event);
 }
 
 /**
  * gdk_event_get_time:
  * @event: a #GdkEvent
- * 
+ *
  * Returns the time stamp from @event, if there is one; otherwise
  * returns #GDK_CURRENT_TIME.
- * 
+ *
  * Returns: time stamp field from @event
  **/
 guint32
 gdk_event_get_time (GdkEvent *event)
 {
-  return event->any.time;
+  g_return_val_if_fail (GDK_IS_EVENT (event), GDK_CURRENT_TIME);
+
+  return event->time;
 }
 
 /**
@@ -1445,8 +1210,10 @@ gdk_event_get_time (GdkEvent *event)
 GdkDisplay *
 gdk_event_get_display (GdkEvent *event)
 {
-  if (event->any.surface)
-    return gdk_surface_get_display (event->any.surface);
+  g_return_val_if_fail (GDK_IS_EVENT (event), NULL);
+
+  if (event->surface)
+    return gdk_surface_get_display (event->surface);
 
   return NULL;
 }
@@ -1463,23 +1230,9 @@ gdk_event_get_display (GdkEvent *event)
 GdkEventSequence *
 gdk_event_get_event_sequence (GdkEvent *event)
 {
-  switch ((int) event->any.type)
-    {
-    case GDK_TOUCH_BEGIN:
-    case GDK_TOUCH_UPDATE:
-    case GDK_TOUCH_END:
-    case GDK_TOUCH_CANCEL:
-      return event->touch.sequence;
+  g_return_val_if_fail (GDK_IS_EVENT (event), NULL);
 
-    case GDK_DRAG_ENTER:
-    case GDK_DRAG_LEAVE:
-    case GDK_DRAG_MOTION:
-    case GDK_DROP_START:
-      return (GdkEventSequence *) event->dnd.drop;
-
-    default:
-      return NULL;
-    }
+  return GDK_EVENT_GET_CLASS (event)->get_sequence (event);
 }
 
 /**
@@ -1493,53 +1246,9 @@ gdk_event_get_event_sequence (GdkEvent *event)
 GdkModifierType
 gdk_event_get_modifier_state (GdkEvent *event)
 {
-#if 0
-  g_return_val_if_fail (event->any.type == GDK_ENTER_NOTIFY ||
-                        event->any.type == GDK_LEAVE_NOTIFY ||
-                        event->any.type == GDK_BUTTON_PRESS ||
-                        event->any.type == GDK_BUTTON_RELEASE ||
-                        event->any.type == GDK_MOTION_NOTIFY ||
-                        event->any.type == GDK_TOUCH_BEGIN ||
-                        event->any.type == GDK_TOUCH_UPDATE ||
-                        event->any.type == GDK_TOUCH_END ||
-                        event->any.type == GDK_TOUCH_CANCEL ||
-                        event->any.type == GDK_TOUCHPAD_SWIPE ||
-                        event->any.type == GDK_TOUCHPAD_PINCH||
-                        event->any.type == GDK_SCROLL ||
-                        event->any.type == GDK_KEY_PRESS ||
-                        event->any.type == GDK_KEY_RELEASE, 0);
-#endif
+  g_return_val_if_fail (GDK_IS_EVENT (event), 0);
 
-  switch ((int)event->any.type)
-    {
-    case GDK_ENTER_NOTIFY:
-    case GDK_LEAVE_NOTIFY:
-      return event->crossing.state;
-    case GDK_BUTTON_PRESS:
-    case GDK_BUTTON_RELEASE:
-      return event->button.state;
-    case GDK_MOTION_NOTIFY:
-      return event->motion.state;
-    case GDK_TOUCH_BEGIN:
-    case GDK_TOUCH_UPDATE:
-    case GDK_TOUCH_END:
-    case GDK_TOUCH_CANCEL:
-      return event->touch.state;
-    case GDK_TOUCHPAD_SWIPE:
-      return event->touchpad_swipe.state;
-    case GDK_TOUCHPAD_PINCH:
-      return event->touchpad_pinch.state;
-    case GDK_SCROLL:
-      return event->scroll.state;
-    case GDK_KEY_PRESS:
-    case GDK_KEY_RELEASE:
-      return event->key.state;
-    default:
-      /* no state field */
-      break;
-    }
-
-  return 0;
+  return GDK_EVENT_GET_CLASS (event)->get_state (event);
 }
 
 /**
@@ -1555,75 +1264,117 @@ gdk_event_get_position (GdkEvent *event,
                         double   *x,
                         double   *y)
 {
-#if 0
-  g_return_if_fail (event->any.type == GDK_ENTER_NOTIFY ||
-                    event->any.type == GDK_LEAVE_NOTIFY ||
-                    event->any.type == GDK_BUTTON_PRESS ||
-                    event->any.type == GDK_BUTTON_RELEASE ||
-                    event->any.type == GDK_MOTION_NOTIFY ||
-                    event->any.type == GDK_TOUCH_BEGIN ||
-                    event->any.type == GDK_TOUCH_UPDATE ||
-                    event->any.type == GDK_TOUCH_END ||
-                    event->any.type == GDK_TOUCH_CANCEL ||
-                    event->any.type == GDK_TOUCHPAD_SWIPE ||
-                    event->any.type == GDK_TOUCHPAD_PINCH||
-                    event->any.type == GDK_DRAG_ENTER ||
-                    event->any.type == GDK_DRAG_LEAVE ||
-                    event->any.type == GDK_DRAG_MOTION ||
-                    event->any.type == GDK_DROP_START);
-#endif
+  g_return_val_if_fail (GDK_IS_EVENT (event), FALSE);
 
-  switch ((int)event->any.type)
-    {
-    case GDK_ENTER_NOTIFY:
-    case GDK_LEAVE_NOTIFY:
-      *x = event->crossing.x;
-      *y = event->crossing.y;
-      break;
-    case GDK_BUTTON_PRESS:
-    case GDK_BUTTON_RELEASE:
-      *x = event->button.x;
-      *y = event->button.y;
-      break;
-    case GDK_MOTION_NOTIFY:
-      *x = event->motion.x;
-      *y = event->motion.y;
-      break;
-    case GDK_TOUCH_BEGIN:
-    case GDK_TOUCH_UPDATE:
-    case GDK_TOUCH_END:
-    case GDK_TOUCH_CANCEL:
-      *x = event->touch.x;
-      *y = event->touch.y;
-      break;
-    case GDK_TOUCHPAD_SWIPE:
-      *x = event->touchpad_swipe.x;
-      *y = event->touchpad_swipe.y;
-      break;
-    case GDK_TOUCHPAD_PINCH:
-      *x = event->touchpad_pinch.x;
-      *y = event->touchpad_pinch.y;
-      break;
-    case GDK_DRAG_ENTER:
-    case GDK_DRAG_LEAVE:
-    case GDK_DRAG_MOTION:
-    case GDK_DROP_START:
-      *x = event->dnd.x;
-      *y = event->dnd.y;
-      break;
-    default:
-      /* no position */
-      *x = NAN;
-      *y = NAN;
-      return FALSE;
-    }
+  return GDK_EVENT_GET_CLASS (event)->get_position (event, x, y);
+}
+
+/* {{{ GdkButtonEvent */
+
+static void
+gdk_button_event_finalize (GdkEvent *event)
+{
+  GdkButtonEvent *self = (GdkButtonEvent *) event;
+
+  g_clear_object (&self->tool);
+  g_clear_pointer (&self->axes, g_free);
+
+  GDK_EVENT_SUPER (event)->finalize (event);
+}
+
+static GdkModifierType
+gdk_button_event_get_state (GdkEvent *event)
+{
+  GdkButtonEvent *self = (GdkButtonEvent *) event;
+
+  return self->state;
+}
+
+static gboolean
+gdk_button_event_get_position (GdkEvent *event,
+                               double   *x,
+                               double   *y)
+{
+  GdkButtonEvent *self = (GdkButtonEvent *) event;
+
+  *x = self->x;
+  *y = self->y;
 
   return TRUE;
 }
 
+static GdkDeviceTool *
+gdk_button_event_get_tool (GdkEvent *event)
+{
+  GdkButtonEvent *self = (GdkButtonEvent *) event;
+
+  return self->tool;
+}
+
+static gboolean
+gdk_button_event_get_axes (GdkEvent  *event,
+                           double   **axes,
+                           guint     *n_axes)
+{
+  GdkButtonEvent *self = (GdkButtonEvent *) event;
+  GdkDevice *source_device = gdk_event_get_source_device (event);
+
+  if (source_device == NULL)
+    return FALSE;
+
+  *axes = self->axes;
+  *n_axes = gdk_device_get_n_axes (source_device);
+
+  return TRUE;
+}
+
+static const GdkEventTypeInfo gdk_button_event_info = {
+  sizeof (GdkButtonEvent),
+  NULL,
+  gdk_button_event_finalize,
+  gdk_button_event_get_state,
+  gdk_button_event_get_position,
+  NULL,
+  gdk_button_event_get_tool,
+  gdk_button_event_get_axes,
+};
+
+GDK_DEFINE_EVENT_TYPE (GdkButtonEvent, gdk_button_event,
+                       &gdk_button_event_info,
+                       GDK_EVENT_TYPE_SLOT (GDK_BUTTON_PRESS)
+                       GDK_EVENT_TYPE_SLOT (GDK_BUTTON_RELEASE))
+
+GdkEvent *
+gdk_button_event_new (GdkEventType     type,
+                      GdkSurface      *surface,
+                      GdkDevice       *device,
+                      GdkDevice       *source_device,
+                      GdkDeviceTool   *tool,
+                      guint32          time,
+                      GdkModifierType  state,
+                      guint            button,
+                      double           x,
+                      double           y,
+                      double          *axes)
+{
+  g_return_val_if_fail (type == GDK_BUTTON_PRESS ||
+                        type == GDK_BUTTON_RELEASE, NULL);
+
+  GdkButtonEvent *self = gdk_event_alloc (type, surface, device, source_device, time);
+
+  self->tool = tool != NULL ? g_object_ref (tool) : NULL;
+  self->axes = axes;
+  self->state = state;
+  self->button = button;
+  self->x = x;
+  self->y = y;
+
+  return (GdkEvent *) self;
+}
+
 /**
  * gdk_button_event_get_button:
- * @event: a button event
+ * @event: (type GdkButtonEvent): a button event
  *
  * Extract the button number from a button event.
  *
@@ -1632,15 +1383,90 @@ gdk_event_get_position (GdkEvent *event,
 guint
 gdk_button_event_get_button (GdkEvent *event)
 {
-  g_return_val_if_fail (event->any.type == GDK_BUTTON_PRESS ||
-                        event->any.type == GDK_BUTTON_RELEASE, 0);
-  
-  return event->button.button;
+  GdkButtonEvent *self = (GdkButtonEvent *) event;
+
+  g_return_val_if_fail (GDK_IS_EVENT (event), 0);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_BUTTON_PRESS) ||
+                        GDK_IS_EVENT_TYPE (event, GDK_BUTTON_RELEASE), 0);
+
+  return self->button;
+}
+
+/* }}} */
+
+/* {{{ GdkKeyEvent */
+
+static GdkModifierType
+gdk_key_event_get_state (GdkEvent *event)
+{
+  GdkKeyEvent *self = (GdkKeyEvent *) event;
+
+  return self->state;
+}
+
+static const GdkEventTypeInfo gdk_key_event_info = {
+  sizeof (GdkKeyEvent),
+  NULL,
+  NULL,
+  gdk_key_event_get_state,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+};
+
+GDK_DEFINE_EVENT_TYPE (GdkKeyEvent, gdk_key_event,
+                       &gdk_key_event_info,
+                       GDK_EVENT_TYPE_SLOT (GDK_KEY_PRESS)
+                       GDK_EVENT_TYPE_SLOT (GDK_KEY_RELEASE))
+
+/*< private >
+ * gdk_key_event_new:
+ * @type: the event type, either %GDK_KEY_PRESS or %GDK_KEY_RELEASE
+ * @surface: the #GdkSurface of the event
+ * @device: the #GdkDevice related to the event
+ * @source_device: the source #GdkDevice related to the event
+ * @time: the event's timestamp
+ * @keycode: the keycode of the event
+ * @state: the modifiers state
+ * @is_modifier: whether the event is a modifiers only event
+ * @translated: the translated key data for the given @state
+ * @no_lock: the translated key data without the given @state
+ *
+ * Creates a new #GdkKeyEvent.
+ *
+ * Returns: (transfer full) (type GdkKeyEvent): the newly created #GdkEvent
+ */
+GdkEvent *
+gdk_key_event_new (GdkEventType      type,
+                   GdkSurface       *surface,
+                   GdkDevice        *device,
+                   GdkDevice        *source_device,
+                   guint32           time,
+                   guint             keycode,
+                   GdkModifierType   state,
+                   gboolean          is_modifier,
+                   GdkTranslatedKey *translated,
+                   GdkTranslatedKey *no_lock)
+{
+  g_return_val_if_fail (type == GDK_KEY_PRESS ||
+                        type == GDK_KEY_RELEASE, NULL);
+
+  GdkKeyEvent *self = gdk_event_alloc (type, surface, device, source_device, time);
+  GdkEvent *event = (GdkEvent *) self;
+
+  self->keycode = keycode;
+  self->state = state;
+  self->key_is_modifier = is_modifier;
+  self->translated[0] = *translated;
+  self->translated[1] = *no_lock;
+
+  return event;
 }
 
 /**
  * gdk_key_event_get_keyval:
- * @event: a key event
+ * @event: (type GdkKeyEvent): a key event
  *
  * Extracts the keyval from a key event.
  *
@@ -1649,15 +1475,18 @@ gdk_button_event_get_button (GdkEvent *event)
 guint
 gdk_key_event_get_keyval (GdkEvent *event)
 {
-  g_return_val_if_fail (event->any.type == GDK_KEY_PRESS ||
-                        event->any.type == GDK_KEY_RELEASE, 0);
+  GdkKeyEvent *self = (GdkKeyEvent *) event;
 
-  return event->key.translated[0].keyval;
+  g_return_val_if_fail (GDK_IS_EVENT (event), 0);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_KEY_PRESS) ||
+                        GDK_IS_EVENT_TYPE (event, GDK_KEY_RELEASE), 0);
+
+  return self->translated[0].keyval;
 }
 
 /**
  * gdk_key_event_get_keycode:
- * @event: a key event
+ * @event: (type GdkKeyEvent): a key event
  *
  * Extracts the keycode from a key event.
  *
@@ -1666,15 +1495,18 @@ gdk_key_event_get_keyval (GdkEvent *event)
 guint
 gdk_key_event_get_keycode (GdkEvent *event)
 {
-  g_return_val_if_fail (event->any.type == GDK_KEY_PRESS ||
-                        event->any.type == GDK_KEY_RELEASE, 0);
+  GdkKeyEvent *self = (GdkKeyEvent *) event;
 
-  return event->key.keycode;
+  g_return_val_if_fail (GDK_IS_EVENT (event), 0);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_KEY_PRESS) ||
+                        GDK_IS_EVENT_TYPE (event, GDK_KEY_RELEASE), 0);
+
+  return self->keycode;
 }
 
 /**
  * gdk_key_event_get_level:
- * @event: a key event
+ * @event: (type GdkKeyEvent): a key event
  *
  * Extracts the shift level from a key event.
  *
@@ -1683,15 +1515,18 @@ gdk_key_event_get_keycode (GdkEvent *event)
 guint
 gdk_key_event_get_level (GdkEvent *event)
 {
-  g_return_val_if_fail (event->any.type == GDK_KEY_PRESS ||
-                        event->any.type == GDK_KEY_RELEASE, 0);
+  GdkKeyEvent *self = (GdkKeyEvent *) event;
 
-  return event->key.translated[0].level;
+  g_return_val_if_fail (GDK_IS_EVENT (event), 0);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_KEY_PRESS) ||
+                        GDK_IS_EVENT_TYPE (event, GDK_KEY_RELEASE), 0);
+
+  return self->translated[0].level;
 }
 
 /**
  * gdk_key_event_get_layout:
- * @event: a key event
+ * @event: (type GdkKeyEvent): a key event
  *
  * Extracts the layout from a key event.
  *
@@ -1700,15 +1535,18 @@ gdk_key_event_get_level (GdkEvent *event)
 guint
 gdk_key_event_get_layout (GdkEvent *event)
 {
-  g_return_val_if_fail (event->any.type == GDK_KEY_PRESS ||
-                        event->any.type == GDK_KEY_RELEASE, 0);
+  GdkKeyEvent *self = (GdkKeyEvent *) event;
 
-  return event->key.translated[0].layout;
+  g_return_val_if_fail (GDK_IS_EVENT (event), 0);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_KEY_PRESS) ||
+                        GDK_IS_EVENT_TYPE (event, GDK_KEY_RELEASE), 0);
+
+  return self->translated[0].layout;
 }
 
 /**
  * gdk_key_event_get_consumed_modifiers:
- * @event: a key event
+ * @event: (type GdkKeyEvent): a key event
  *
  * Extracts the consumed modifiers from a key event.
  *
@@ -1717,15 +1555,18 @@ gdk_key_event_get_layout (GdkEvent *event)
 GdkModifierType
 gdk_key_event_get_consumed_modifiers (GdkEvent *event)
 {
-  g_return_val_if_fail (event->any.type == GDK_KEY_PRESS ||
-                        event->any.type == GDK_KEY_RELEASE, 0);
+  GdkKeyEvent *self = (GdkKeyEvent *) event;
 
-  return event->key.translated[0].consumed;
+  g_return_val_if_fail (GDK_IS_EVENT (event), 0);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_KEY_PRESS) ||
+                        GDK_IS_EVENT_TYPE (event, GDK_KEY_RELEASE), 0);
+
+  return self->translated[0].consumed;
 }
 
 /**
  * gdk_key_event_is_modifier:
- * @event: a key event
+ * @event: (type GdkKeyEvent): a key event
  *
  * Extracts whether the key event is for a modifier key.
  *
@@ -1734,386 +1575,18 @@ gdk_key_event_get_consumed_modifiers (GdkEvent *event)
 gboolean
 gdk_key_event_is_modifier (GdkEvent *event)
 {
-  g_return_val_if_fail (event->any.type == GDK_KEY_PRESS ||
-                        event->any.type == GDK_KEY_RELEASE, FALSE);
+  GdkKeyEvent *self = (GdkKeyEvent *) event;
 
-  return event->any.key_is_modifier;
-}
+  g_return_val_if_fail (GDK_IS_EVENT (event), 0);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_KEY_PRESS) ||
+                        GDK_IS_EVENT_TYPE (event, GDK_KEY_RELEASE), FALSE);
 
-/**
- * gdk_configure_event_get_size:
- * @event: a configure event
- * @width: (out): return location for surface width
- * @height: (out): return location for surface height
- *
- * Extracts the surface size from a configure event.
- */
-void
-gdk_configure_event_get_size (GdkEvent *event,
-                              int      *width,
-                              int      *height)
-{
-  g_return_if_fail (event->any.type == GDK_CONFIGURE);
-
-  *width = event->configure.width;
-  *height = event->configure.height;
-}
-
-/**
- * gdk_touch_event_get_emulating_pointer:
- * @event: a touch event
- *
- * Extracts whether a touch event is emulating a pointer event.
- *
- * Returns: %TRUE if @event is emulating
- **/
-gboolean
-gdk_touch_event_get_emulating_pointer (GdkEvent *event)
-{
-  g_return_val_if_fail (event->any.type == GDK_TOUCH_BEGIN ||
-                        event->any.type == GDK_TOUCH_UPDATE ||
-                        event->any.type == GDK_TOUCH_END ||
-                        event->any.type == GDK_TOUCH_CANCEL, FALSE);
-
-  return event->any.touch_emulating;
-}
-
-/**
- * gdk_crossing_event_get_mode:
- * @event: a crossing event
- *
- * Extracts the crossing mode from a crossing event.
- *
- * Returns: the mode of @event
- */
-GdkCrossingMode
-gdk_crossing_event_get_mode (GdkEvent *event)
-{
-  g_return_val_if_fail (event->any.type == GDK_ENTER_NOTIFY ||
-                        event->any.type == GDK_LEAVE_NOTIFY, 0);
-
-  return event->crossing.mode;
-}
-
-/**
- * gdk_crossing_event_get_detail:
- * @event: a crossing event
- *
- * Extracts the notify detail from a crossing event.
- *
- * Returns: the notify detail of @event
- */
-GdkNotifyType
-gdk_crossing_event_get_detail (GdkEvent *event)
-{
-  g_return_val_if_fail (event->any.type == GDK_ENTER_NOTIFY ||
-                        event->any.type == GDK_LEAVE_NOTIFY, 0);
-
-  return event->crossing.detail;
-}
-
-/**
- * gdk_focus_event_get_in:
- * @event: a focus change event
- *
- * Extracts whether this event is about focus entering or
- * leaving the surface.
- *
- * Returns: %TRUE of the focus is entering
- */
-gboolean
-gdk_focus_event_get_in (GdkEvent *event)
-{
-  g_return_val_if_fail (event->any.type == GDK_FOCUS_CHANGE, FALSE);
-
-  return event->any.focus_in;
-}
-
-/**
- * gdk_scroll_event_get_direction:
- * @event: a scroll event
- *
- * Extracts the direction of a scroll event.
- *
- * Returns: the scroll direction of @event
- */
-GdkScrollDirection
-gdk_scroll_event_get_direction (GdkEvent *event)
-{
-  g_return_val_if_fail (event->any.type == GDK_SCROLL, 0);
-
-  return event->scroll.direction;
-}
-
-/**
- * gdk_scroll_event_get_deltas:
- * @event: a scroll event
- * @delta_x: (out): return location for x scroll delta
- * @delta_y: (out): return location for y scroll delta
- *
- * Extracts the scroll deltas of a scroll event.
- *
- * The deltas will be zero unless the scroll direction
- * is %GDK_SCROLL_SMOOTH.
- */
-void
-gdk_scroll_event_get_deltas (GdkEvent *event,
-                             double   *delta_x,
-                             double   *delta_y)
-{
-  g_return_if_fail (event->any.type == GDK_SCROLL);
-
-  *delta_x = event->scroll.delta_x;
-  *delta_y = event->scroll.delta_y;
-}
-
-/**
- * gdk_scroll_event_is_stop:
- * @event: a scroll event
- *
- * Check whether a scroll event is a stop scroll event. Scroll sequences
- * with smooth scroll information may provide a stop scroll event once the
- * interaction with the device finishes, e.g. by lifting a finger. This
- * stop scroll event is the signal that a widget may trigger kinetic
- * scrolling based on the current velocity.
- *
- * Stop scroll events always have a delta of 0/0.
- *
- * Returns: %TRUE if the event is a scroll stop event
- */
-gboolean
-gdk_scroll_event_is_stop (GdkEvent *event)
-{
-  g_return_val_if_fail (event->any.type == GDK_SCROLL, FALSE);
-
-  return event->any.scroll_is_stop;
-}
-
-/**
- * gdk_touchpad_event_get_gesture_phase:
- * @event: a touchpad #GdkEvent
- *
- * Extracts the touchpad gesture phase from a touchpad event.
- *
- * Returns: the gesture phase of @event
- **/
-GdkTouchpadGesturePhase
-gdk_touchpad_event_get_gesture_phase (GdkEvent *event)
-{
-  g_return_val_if_fail (event->any.type == GDK_TOUCHPAD_PINCH ||
-                        event->any.type == GDK_TOUCHPAD_SWIPE, 0);
-
-  if (event->any.type == GDK_TOUCHPAD_PINCH)
-    return event->touchpad_pinch.phase;
-  else if (event->any.type == GDK_TOUCHPAD_SWIPE)
-    return event->touchpad_swipe.phase;
-
-  return 0;
-}
-
-/**
- * gdk_touchpad_event_get_n_fingers:
- * @event: a touchpad event
- *
- * Extracts the number of fingers from a touchpad event.
- *
- * Returns: the number of fingers for @event
- **/
-guint
-gdk_touchpad_event_get_n_fingers (GdkEvent *event)
-{
-  g_return_val_if_fail (event->any.type == GDK_TOUCHPAD_PINCH ||
-                        event->any.type == GDK_TOUCHPAD_SWIPE, 0);
-
-  if (event->any.type == GDK_TOUCHPAD_PINCH)
-    return event->touchpad_pinch.n_fingers;
-  else if (event->any.type == GDK_TOUCHPAD_SWIPE)
-    return event->touchpad_swipe.n_fingers;
-
-  return 0;
-}
-
-/**
- * gdk_touchpad_event_get_deltas:
- * @event: a touchpad event
- * @dx: (out): return location for x
- * @dy: (out): return location for y
- *
- * Extracts delta information from a touchpad event.
- **/
-void
-gdk_touchpad_event_get_deltas (GdkEvent *event,
-                               double   *dx,
-                               double   *dy)
-{
-  g_return_if_fail (event->any.type == GDK_TOUCHPAD_PINCH ||
-                    event->any.type == GDK_TOUCHPAD_SWIPE);
-
-  if (event->any.type == GDK_TOUCHPAD_PINCH)
-    {
-      *dx = event->touchpad_pinch.dx;
-      *dy = event->touchpad_pinch.dy;
-    }
-  else if (event->any.type == GDK_TOUCHPAD_SWIPE)
-    {
-      *dx = event->touchpad_swipe.dx;
-      *dy = event->touchpad_swipe.dy;
-    }
-  else
-    {
-      *dx = NAN;
-      *dy = NAN;
-    }
-}
-
-/**
- * gdk_touchpad_pinch_event_get_angle_delta:
- * @event: a touchpad pinch event
- *
- * Extracts the angle delta from a touchpad pinch event.
- *
- * Returns: the angle delta of @event
- */
-double
-gdk_touchpad_pinch_event_get_angle_delta (GdkEvent *event)
-{
-  g_return_val_if_fail (event->any.type == GDK_TOUCHPAD_PINCH, 0);
-
-  return event->touchpad_pinch.angle_delta;
-}
-
-/**
- * gdk_touchpad_pinch_event_get_scale:
- * @event: a touchpad pinch event
- *
- * Extracts the scale from a touchpad pinch event.
- *
- * Returns: the scale of @event
- **/
-double
-gdk_touchpad_pinch_event_get_scale (GdkEvent *event)
-{
-  g_return_val_if_fail (event->any.type == GDK_TOUCHPAD_PINCH, 0);
-
-  return event->touchpad_pinch.scale;
-}
-
-/**
- * gdk_pad_button_event_get_button:
- * @event: a pad button event
- *
- * Extracts information about the pressed button from
- * a pad event.
- *
- * Returns: the button of @event
- **/
-guint
-gdk_pad_button_event_get_button (GdkEvent *event)
-{
-  g_return_val_if_fail (event->any.type == GDK_PAD_BUTTON_PRESS ||
-                        event->any.type == GDK_PAD_BUTTON_RELEASE, 0);
-
-  return  event->pad_button.button;
-}
-
-/**
- * gdk_pad_axis_event_get_value:
- * @event: a pad strip or ring event
- * @index: (out): Return location for the axis index
- * @value: (out): Return location for the axis value
- *
- * Extracts the information from a pad strip or ring event.
- **/
-void
-gdk_pad_axis_event_get_value (GdkEvent       *event,
-                              guint          *index,
-                              gdouble        *value)
-{
-  g_return_if_fail (event->any.type == GDK_PAD_RING ||
-                    event->any.type == GDK_PAD_STRIP);
-
-  *index = event->pad_axis.index;
-  *value = event->pad_axis.value;
-}
-
-/**
- * gdk_pad_event_get_group_mode:
- * @event: a pad event
- * @group: (out): return location for the group
- * @mode: (out): return location for the mode
- *
- * Extracts group and mode information from a pad event.
- **/
-void
-gdk_pad_event_get_group_mode (GdkEvent *event,
-                              guint    *group,
-                              guint    *mode)
-{
-  g_return_if_fail (event->any.type == GDK_PAD_GROUP_MODE ||
-                    event->any.type == GDK_PAD_BUTTON_PRESS ||
-                    event->any.type == GDK_PAD_BUTTON_RELEASE ||
-                    event->any.type == GDK_PAD_RING ||
-                    event->any.type == GDK_PAD_STRIP);
-
-  switch ((guint)event->any.type)
-    {
-    case GDK_PAD_GROUP_MODE:
-      *group = event->pad_group_mode.group;
-      *mode = event->pad_group_mode.mode;
-      break;
-    case GDK_PAD_BUTTON_PRESS:
-    case GDK_PAD_BUTTON_RELEASE:
-      *group = event->pad_button.group;
-      *mode = event->pad_button.mode;
-      break;
-    case GDK_PAD_RING:
-    case GDK_PAD_STRIP:
-      *group = event->pad_axis.group;
-      *mode = event->pad_axis.mode;
-      break;
-    default:
-      g_assert_not_reached ();
-    }
-}
-
-/**
- * gdk_drag_event_get_drop:
- * @event: a DND event
- *
- * Gets the #GdkDrop from a DND event.
- *
- * Returns: (transfer none) (nullable): the drop
- **/
-GdkDrop *
-gdk_drag_event_get_drop (GdkEvent *event)
-{
-  g_return_val_if_fail (event->any.type == GDK_DRAG_ENTER ||
-                        event->any.type == GDK_DRAG_LEAVE ||
-                        event->any.type == GDK_DRAG_MOTION ||
-                        event->any.type == GDK_DROP_START, NULL);
-
-  return event->dnd.drop;
-}
-
-/**
- * gdk_grab_broken_event_get_grab_surface:
- * @event: a grab broken event
- *
- * Extracts the grab surface from a grab broken event.
- *
- * Returns: (transfer none): the grab surface of @event
- **/
-GdkSurface *
-gdk_grab_broken_event_get_grab_surface (GdkEvent *event)
-{
-  g_return_val_if_fail (event->any.type == GDK_GRAB_BROKEN, NULL);
-
-  return event->grab_broken.grab_surface;
+  return self->key_is_modifier;
 }
 
 /**
  * gdk_key_event_matches:
- * @event: a key #GdkEvent
+ * @event: (type GdkKeyEvent): a key #GdkEvent
  * @keyval: the keyval to match
  * @modifiers: the modifiers to match
  *
@@ -2130,28 +1603,32 @@ gdk_key_event_matches (GdkEvent        *event,
                        guint            keyval,
                        GdkModifierType  modifiers)
 {
+  GdkKeyEvent *self = (GdkKeyEvent *) event;
   guint keycode;
   GdkModifierType state;
-  GdkModifierType mask;
   guint ev_keyval;
   int layout;
   int level;
   GdkModifierType consumed_modifiers;
   GdkModifierType shift_group_mask;
   gboolean group_mod_is_accel_mod = FALSE;
+  const GdkModifierType mask = GDK_CONTROL_MASK |
+                               GDK_SHIFT_MASK |
+                               GDK_ALT_MASK |
+                               GDK_SUPER_MASK |
+                               GDK_HYPER_MASK |
+                               GDK_META_MASK;
 
-  g_return_val_if_fail (event->any.type == GDK_KEY_PRESS ||
-                        event->any.type == GDK_KEY_RELEASE, GDK_KEY_MATCH_NONE);
+  g_return_val_if_fail (GDK_IS_EVENT (event), GDK_KEY_MATCH_NONE);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_KEY_PRESS) ||
+                        GDK_IS_EVENT_TYPE (event, GDK_KEY_RELEASE), GDK_KEY_MATCH_NONE);
 
-  keycode = event->key.keycode;
-  state = event->key.state & ~GDK_LOCK_MASK;
-  ev_keyval = event->key.translated[1].keyval;
-  layout = event->key.translated[1].layout;
-  level = event->key.translated[1].level;
-  consumed_modifiers = event->key.translated[1].consumed;
-
-  mask = GDK_CONTROL_MASK|GDK_SHIFT_MASK|GDK_ALT_MASK|
-         GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK;
+  keycode = self->keycode;
+  state = self->state & ~GDK_LOCK_MASK;
+  ev_keyval = self->translated[1].keyval;
+  layout = self->translated[1].layout;
+  level = self->translated[1].level;
+  consumed_modifiers = self->translated[1].consumed;
 
   /* if the group-toggling modifier is part of the default accel mod
    * mask, and it is active, disable it for matching
@@ -2209,13 +1686,12 @@ gdk_key_event_matches (GdkEvent        *event,
       g_free (keys);
     }
 
-
   return GDK_KEY_MATCH_NONE;
 }
 
 /**
  * gdk_key_event_get_match:
- * @event: a key #GdkEvent
+ * @event: (type GdkKeyEvent): a key #GdkEvent
  * @keyval: (out): return location for a keyval
  * @modifiers: (out): return location for modifiers
  *
@@ -2229,21 +1705,25 @@ gdk_key_event_get_match (GdkEvent        *event,
                          guint           *keyval,
                          GdkModifierType *modifiers)
 {
-  GdkModifierType mask;
+  GdkKeyEvent *self = (GdkKeyEvent *) event;
   guint key;
   guint accel_key;
   GdkModifierType accel_mods;
   GdkModifierType consumed_modifiers;
+  const GdkModifierType mask = GDK_CONTROL_MASK |
+                               GDK_SHIFT_MASK |
+                               GDK_ALT_MASK |
+                               GDK_SUPER_MASK |
+                               GDK_HYPER_MASK |
+                               GDK_META_MASK;
 
-  g_return_val_if_fail (event->any.type == GDK_KEY_PRESS ||
-                        event->any.type == GDK_KEY_RELEASE, FALSE);
+  g_return_val_if_fail (GDK_IS_EVENT (event), FALSE);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_KEY_PRESS) ||
+                        GDK_IS_EVENT_TYPE (event, GDK_KEY_RELEASE), FALSE);
 
-  mask = GDK_CONTROL_MASK|GDK_SHIFT_MASK|GDK_ALT_MASK|
-         GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK;
-
-  accel_key = event->key.translated[1].keyval;
-  accel_mods = event->key.state;
-  consumed_modifiers = event->key.translated[1].consumed;
+  accel_key = self->translated[1].keyval;
+  accel_mods = self->state;
+  consumed_modifiers = self->translated[1].consumed;
 
   if (accel_key == GDK_KEY_Sys_Req &&
       (accel_mods & GDK_ALT_MASK) != 0)
@@ -2271,3 +1751,1324 @@ gdk_key_event_get_match (GdkEvent        *event,
 
   return TRUE;
 }
+
+/* }}} */
+
+/* {{{ GdkConfigureEvent */
+
+static gboolean
+gdk_configure_event_get_position (GdkEvent *event,
+                                  double   *x,
+                                  double   *y)
+{
+  GdkConfigureEvent *self = (GdkConfigureEvent *) event;
+
+  *x = self->x;
+  *y = self->y;
+
+  return TRUE;
+}
+
+static const GdkEventTypeInfo gdk_configure_event_info = {
+  sizeof (GdkConfigureEvent),
+  NULL,
+  NULL,
+  NULL,
+  gdk_configure_event_get_position,
+  NULL,
+  NULL,
+  NULL,
+};
+
+GDK_DEFINE_EVENT_TYPE (GdkConfigureEvent, gdk_configure_event,
+                       &gdk_configure_event_info,
+                       GDK_EVENT_TYPE_SLOT (GDK_CONFIGURE))
+
+GdkEvent *
+gdk_configure_event_new (GdkSurface *surface,
+                         int         width,
+                         int         height)
+{
+  GdkConfigureEvent *self;
+
+  g_return_val_if_fail (width >= 0 && height >= 0, NULL);
+
+  self = gdk_event_alloc (GDK_CONFIGURE, surface, NULL, NULL, GDK_CURRENT_TIME);
+  self->width = width;
+  self->height = height;
+
+  return (GdkEvent *) self;
+}
+
+/**
+ * gdk_configure_event_get_size:
+ * @event: (type GdkConfigureEvent): a configure event
+ * @width: (out): return location for surface width
+ * @height: (out): return location for surface height
+ *
+ * Extracts the surface size from a configure event.
+ */
+void
+gdk_configure_event_get_size (GdkEvent *event,
+                              int      *width,
+                              int      *height)
+{
+  GdkConfigureEvent *self = (GdkConfigureEvent *) event;
+
+  g_return_if_fail (GDK_IS_EVENT (event));
+  g_return_if_fail (GDK_IS_EVENT_TYPE (event, GDK_CONFIGURE));
+
+  *width = self->width;
+  *height = self->height;
+}
+
+/* }}} */
+
+/* {{{ GdkTouchEvent */
+
+static void
+gdk_touch_event_finalize (GdkEvent *event)
+{
+  GdkTouchEvent *self = (GdkTouchEvent *) event;
+
+  g_clear_pointer (&self->axes, g_free);
+
+  GDK_EVENT_SUPER (event)->finalize (event);
+}
+
+static GdkModifierType
+gdk_touch_event_get_state (GdkEvent *event)
+{
+  GdkTouchEvent *self = (GdkTouchEvent *) event;
+
+  return self->state;
+}
+
+static gboolean
+gdk_touch_event_get_position (GdkEvent *event,
+                              double   *x,
+                              double   *y)
+{
+  GdkTouchEvent *self = (GdkTouchEvent *) event;
+
+  *x = self->x;
+  *y = self->y;
+
+  return TRUE;
+}
+
+static GdkEventSequence *
+gdk_touch_event_get_sequence (GdkEvent *event)
+{
+  GdkTouchEvent *self = (GdkTouchEvent *) event;
+
+  return self->sequence;
+}
+
+static gboolean
+gdk_touch_event_get_axes (GdkEvent  *event,
+                          double   **axes,
+                          guint     *n_axes)
+{
+  GdkTouchEvent *self = (GdkTouchEvent *) event;
+  GdkDevice *source_device = gdk_event_get_source_device (event);
+
+  if (source_device == NULL)
+    return FALSE;
+
+  *axes = self->axes;
+  *n_axes = gdk_device_get_n_axes (source_device);
+
+  return TRUE;
+}
+
+static const GdkEventTypeInfo gdk_touch_event_info = {
+  sizeof (GdkTouchEvent),
+  NULL,
+  gdk_touch_event_finalize,
+  gdk_touch_event_get_state,
+  gdk_touch_event_get_position,
+  gdk_touch_event_get_sequence,
+  NULL,
+  gdk_touch_event_get_axes,
+};
+
+GDK_DEFINE_EVENT_TYPE (GdkTouchEvent, gdk_touch_event,
+                       &gdk_touch_event_info,
+                       GDK_EVENT_TYPE_SLOT (GDK_TOUCH_BEGIN)
+                       GDK_EVENT_TYPE_SLOT (GDK_TOUCH_END)
+                       GDK_EVENT_TYPE_SLOT (GDK_TOUCH_UPDATE)
+                       GDK_EVENT_TYPE_SLOT (GDK_TOUCH_CANCEL))
+
+GdkEvent *
+gdk_touch_event_new (GdkEventType      type,
+                     GdkEventSequence *sequence,
+                     GdkSurface       *surface,
+                     GdkDevice        *device,
+                     GdkDevice        *source_device,
+                     guint32           time,
+                     GdkModifierType   state,
+                     double            x,
+                     double            y,
+                     double           *axes,
+                     gboolean          emulating)
+{
+  GdkTouchEvent *self;
+
+  g_return_val_if_fail (type == GDK_TOUCH_BEGIN ||
+                        type == GDK_TOUCH_END ||
+                        type == GDK_TOUCH_UPDATE ||
+                        type == GDK_TOUCH_CANCEL, NULL);
+
+  self = gdk_event_alloc (type, surface, device, source_device, time);
+  self->sequence = sequence;
+  self->state = state;
+  self->x = x;
+  self->y = y;
+  self->axes = axes;
+  self->touch_emulating = emulating;
+  self->pointer_emulated = emulating;
+
+  return (GdkEvent *) self;
+}
+
+/**
+ * gdk_touch_event_get_emulating_pointer:
+ * @event: (type GdkTouchEvent): a touch event
+ *
+ * Extracts whether a touch event is emulating a pointer event.
+ *
+ * Returns: %TRUE if @event is emulating
+ **/
+gboolean
+gdk_touch_event_get_emulating_pointer (GdkEvent *event)
+{
+  GdkTouchEvent *self = (GdkTouchEvent *) event;
+
+  g_return_val_if_fail (GDK_IS_EVENT (event), FALSE);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_TOUCH_BEGIN) ||
+                        GDK_IS_EVENT_TYPE (event, GDK_TOUCH_UPDATE) ||
+                        GDK_IS_EVENT_TYPE (event, GDK_TOUCH_END) ||
+                        GDK_IS_EVENT_TYPE (event, GDK_TOUCH_CANCEL), FALSE);
+
+  return self->touch_emulating;
+}
+
+/* }}} */
+
+/* {{{ GdkCrossingEvent */
+
+static void
+gdk_crossing_event_finalize (GdkEvent *event)
+{
+  GdkCrossingEvent *self = (GdkCrossingEvent *) event;
+
+  g_clear_object (&self->child_surface);
+
+  GDK_EVENT_SUPER (self)->finalize (event);
+}
+
+static GdkModifierType
+gdk_crossing_event_get_state (GdkEvent *event)
+{
+  GdkCrossingEvent *self = (GdkCrossingEvent *) event;
+
+  return self->state;
+}
+
+static gboolean
+gdk_crossing_event_get_position (GdkEvent *event,
+                                 double   *x,
+                                 double   *y)
+{
+  GdkCrossingEvent *self = (GdkCrossingEvent *) event;
+
+  *x = self->x;
+  *y = self->y;
+
+  return TRUE;
+}
+
+static const GdkEventTypeInfo gdk_crossing_event_info = {
+  sizeof (GdkCrossingEvent),
+  NULL,
+  gdk_crossing_event_finalize,
+  gdk_crossing_event_get_state,
+  gdk_crossing_event_get_position,
+  NULL,
+  NULL,
+  NULL,
+};
+
+GDK_DEFINE_EVENT_TYPE (GdkCrossingEvent, gdk_crossing_event,
+                       &gdk_crossing_event_info,
+                       GDK_EVENT_TYPE_SLOT (GDK_ENTER_NOTIFY)
+                       GDK_EVENT_TYPE_SLOT (GDK_LEAVE_NOTIFY))
+
+GdkEvent *
+gdk_crossing_event_new (GdkEventType     type,
+                        GdkSurface      *surface,
+                        GdkDevice       *device,
+                        GdkDevice       *source_device,
+                        guint32          time,
+                        GdkModifierType  state,
+                        double           x,
+                        double           y,
+                        GdkCrossingMode  mode,
+                        GdkNotifyType    detail)
+{
+  GdkCrossingEvent *self;
+
+  g_return_val_if_fail (type == GDK_ENTER_NOTIFY ||
+                        type == GDK_LEAVE_NOTIFY, NULL);
+
+  self = gdk_event_alloc (type, surface, device, source_device, time);
+
+  self->state = state;
+  self->x = x;
+  self->y = y;
+  self->mode = mode;
+  self->detail = detail;
+
+  return (GdkEvent *) self;
+}
+
+/**
+ * gdk_crossing_event_get_mode:
+ * @event: (type GdkCrossingEvent): a crossing event
+ *
+ * Extracts the crossing mode from a crossing event.
+ *
+ * Returns: the mode of @event
+ */
+GdkCrossingMode
+gdk_crossing_event_get_mode (GdkEvent *event)
+{
+  GdkCrossingEvent *self = (GdkCrossingEvent *) event;
+
+  g_return_val_if_fail (GDK_IS_EVENT (event), 0);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_ENTER_NOTIFY) ||
+                        GDK_IS_EVENT_TYPE (event, GDK_LEAVE_NOTIFY), 0);
+
+  return self->mode;
+}
+
+/**
+ * gdk_crossing_event_get_focus:
+ * @event: (type GdkCrossingEvent): a crossing event
+ *
+ * Checks if the @event surface is the focus surface.
+ *
+ * Returns: %TRUE if the surface is the focus surface
+ */
+gboolean
+gdk_crossing_event_get_focus (GdkEvent *event)
+{
+  GdkCrossingEvent *self = (GdkCrossingEvent *) event;
+
+  g_return_val_if_fail (GDK_IS_EVENT (event), FALSE);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_ENTER_NOTIFY) ||
+                        GDK_IS_EVENT_TYPE (event, GDK_LEAVE_NOTIFY), FALSE);
+
+  return self->focus;
+}
+
+/**
+ * gdk_crossing_event_get_detail:
+ * @event: (type GdkCrossingEvent): a crossing event
+ *
+ * Extracts the notify detail from a crossing event.
+ *
+ * Returns: the notify detail of @event
+ */
+GdkNotifyType
+gdk_crossing_event_get_detail (GdkEvent *event)
+{
+  GdkCrossingEvent *self = (GdkCrossingEvent *) event;
+
+  g_return_val_if_fail (GDK_IS_EVENT (event), 0);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_ENTER_NOTIFY) ||
+                        GDK_IS_EVENT_TYPE (event, GDK_LEAVE_NOTIFY), 0);
+
+  return self->detail;
+}
+
+/* }}} */
+
+/* {{{ GdkDeleteEvent */
+
+static const GdkEventTypeInfo gdk_delete_event_info = {
+  sizeof (GdkDeleteEvent),
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+};
+
+GDK_DEFINE_EVENT_TYPE (GdkDeleteEvent, gdk_delete_event,
+                       &gdk_delete_event_info,
+                       GDK_EVENT_TYPE_SLOT (GDK_DELETE))
+
+GdkEvent *
+gdk_delete_event_new (GdkSurface *surface)
+{
+  return gdk_event_alloc (GDK_DELETE, surface, NULL, NULL, GDK_CURRENT_TIME);
+}
+
+/* }}} */
+
+/* {{{ GdkFocusEvent */
+
+static const GdkEventTypeInfo gdk_focus_event_info = {
+  sizeof (GdkFocusEvent),
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+};
+
+GDK_DEFINE_EVENT_TYPE (GdkFocusEvent, gdk_focus_event,
+                       &gdk_focus_event_info,
+                       GDK_EVENT_TYPE_SLOT (GDK_FOCUS_CHANGE))
+
+GdkEvent *
+gdk_focus_event_new (GdkSurface *surface,
+                     GdkDevice  *device,
+                     GdkDevice  *source_device,
+                     gboolean    focus_in)
+{
+  GdkFocusEvent *self = gdk_event_alloc (GDK_FOCUS_CHANGE, surface, device, source_device, GDK_CURRENT_TIME);
+
+  self->focus_in = focus_in;
+
+  return (GdkEvent *) self;
+}
+
+/**
+ * gdk_focus_event_get_in:
+ * @event: (type GdkScrollEvent): a focus change event
+ *
+ * Extracts whether this event is about focus entering or
+ * leaving the surface.
+ *
+ * Returns: %TRUE of the focus is entering
+ */
+gboolean
+gdk_focus_event_get_in (GdkEvent *event)
+{
+  GdkFocusEvent *self = (GdkFocusEvent *) event;
+
+  g_return_val_if_fail (GDK_IS_EVENT (event), FALSE);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_FOCUS_CHANGE), FALSE);
+
+  return self->focus_in;
+}
+
+/* }}} */
+
+/* {{{ GdkScrollEvent */
+
+static void
+gdk_scroll_event_init (GdkEvent *event)
+{
+  GdkScrollEvent *self = (GdkScrollEvent *) event;
+
+  self->x = NAN;
+  self->y = NAN;
+}
+
+static void
+gdk_scroll_event_finalize (GdkEvent *event)
+{
+  GdkScrollEvent *self = (GdkScrollEvent *) event;
+
+  g_clear_object (&self->tool);
+
+  GDK_EVENT_SUPER (self)->finalize (event);
+}
+
+static GdkModifierType
+gdk_scroll_event_get_state (GdkEvent *event)
+{
+  GdkScrollEvent *self = (GdkScrollEvent *) event;
+
+  return self->state;
+}
+
+static gboolean
+gdk_scroll_event_get_position (GdkEvent *event,
+                               double   *x,
+                               double   *y)
+{
+  GdkScrollEvent *self = (GdkScrollEvent *) event;
+
+  *x = self->x;
+  *y = self->y;
+
+  return TRUE;
+}
+
+static GdkDeviceTool *
+gdk_scroll_event_get_tool (GdkEvent *event)
+{
+  GdkScrollEvent *self = (GdkScrollEvent *) event;
+
+  return self->tool;
+}
+
+static const GdkEventTypeInfo gdk_scroll_event_info = {
+  sizeof (GdkScrollEvent),
+  gdk_scroll_event_init,
+  gdk_scroll_event_finalize,
+  gdk_scroll_event_get_state,
+  gdk_scroll_event_get_position,
+  NULL,
+  gdk_scroll_event_get_tool,
+  NULL,
+};
+
+GDK_DEFINE_EVENT_TYPE (GdkScrollEvent, gdk_scroll_event,
+                       &gdk_scroll_event_info,
+                       GDK_EVENT_TYPE_SLOT (GDK_SCROLL))
+
+GdkEvent *
+gdk_scroll_event_new (GdkSurface      *surface,
+                      GdkDevice       *device,
+                      GdkDevice       *source_device,
+                      GdkDeviceTool   *tool,
+                      guint32          time,
+                      GdkModifierType  state,
+                      double           delta_x,
+                      double           delta_y,
+                      gboolean         is_stop)
+{
+  GdkScrollEvent *self = gdk_event_alloc (GDK_SCROLL, surface, device, source_device, time);
+
+  self->tool = tool != NULL ? g_object_ref (tool) : NULL;
+  self->state = state;
+  self->direction = GDK_SCROLL_SMOOTH;
+  self->delta_x = delta_x;
+  self->delta_y = delta_y;
+  self->is_stop = is_stop;
+
+  return (GdkEvent *) self;
+}
+
+GdkEvent *
+gdk_scroll_event_new_discrete (GdkSurface         *surface,
+                               GdkDevice          *device,
+                               GdkDevice          *source_device,
+                               GdkDeviceTool      *tool,
+                               guint32             time,
+                               GdkModifierType     state,
+                               GdkScrollDirection  direction,
+                               gboolean            emulated)
+{
+  GdkScrollEvent *self = gdk_event_alloc (GDK_SCROLL, surface, device, source_device, time);
+
+  self->tool = tool != NULL ? g_object_ref (tool) : NULL;
+  self->state = state;
+  self->direction = direction;
+  self->pointer_emulated = emulated;
+
+  return (GdkEvent *) self;
+}
+
+/**
+ * gdk_scroll_event_get_direction:
+ * @event: (type GdkScrollEvent): a scroll event
+ *
+ * Extracts the direction of a scroll event.
+ *
+ * Returns: the scroll direction of @event
+ */
+GdkScrollDirection
+gdk_scroll_event_get_direction (GdkEvent *event)
+{
+  GdkScrollEvent *self = (GdkScrollEvent *) event;
+
+  g_return_val_if_fail (GDK_IS_EVENT (event), 0);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_SCROLL), 0);
+
+  return self->direction;
+}
+
+/**
+ * gdk_scroll_event_get_deltas:
+ * @event: (type GdkScrollEvent): a scroll event
+ * @delta_x: (out): return location for x scroll delta
+ * @delta_y: (out): return location for y scroll delta
+ *
+ * Extracts the scroll deltas of a scroll event.
+ *
+ * The deltas will be zero unless the scroll direction
+ * is %GDK_SCROLL_SMOOTH.
+ */
+void
+gdk_scroll_event_get_deltas (GdkEvent *event,
+                             double   *delta_x,
+                             double   *delta_y)
+{
+  GdkScrollEvent *self = (GdkScrollEvent *) event;
+
+  g_return_if_fail (GDK_IS_EVENT (event));
+  g_return_if_fail (GDK_IS_EVENT_TYPE (event, GDK_SCROLL));
+
+  *delta_x = self->delta_x;
+  *delta_y = self->delta_y;
+}
+
+/**
+ * gdk_scroll_event_is_stop:
+ * @event: (type GdkScrollEvent): a scroll event
+ *
+ * Check whether a scroll event is a stop scroll event. Scroll sequences
+ * with smooth scroll information may provide a stop scroll event once the
+ * interaction with the device finishes, e.g. by lifting a finger. This
+ * stop scroll event is the signal that a widget may trigger kinetic
+ * scrolling based on the current velocity.
+ *
+ * Stop scroll events always have a delta of 0/0.
+ *
+ * Returns: %TRUE if the event is a scroll stop event
+ */
+gboolean
+gdk_scroll_event_is_stop (GdkEvent *event)
+{
+  GdkScrollEvent *self = (GdkScrollEvent *) event;
+
+  g_return_val_if_fail (GDK_IS_EVENT (event), FALSE);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_SCROLL), FALSE);
+
+  return self->is_stop;
+}
+
+/* }}} */
+
+/* {{{ GdkTouchpadEvent */
+
+static GdkModifierType
+gdk_touchpad_event_get_state (GdkEvent *event)
+{
+  GdkTouchpadEvent *self = (GdkTouchpadEvent *) event;
+
+  return self->state;
+}
+
+static gboolean
+gdk_touchpad_event_get_position (GdkEvent *event,
+                                 double   *x,
+                                 double   *y)
+{
+  GdkTouchpadEvent *self = (GdkTouchpadEvent *) event;
+
+  *x = self->x;
+  *y = self->y;
+
+  return TRUE;
+}
+
+static const GdkEventTypeInfo gdk_touchpad_event_info = {
+  sizeof (GdkTouchpadEvent),
+  NULL,
+  NULL,
+  gdk_touchpad_event_get_state,
+  gdk_touchpad_event_get_position,
+  NULL,
+  NULL,
+  NULL,
+};
+
+GDK_DEFINE_EVENT_TYPE (GdkTouchpadEvent, gdk_touchpad_event,
+                       &gdk_touchpad_event_info,
+                       GDK_EVENT_TYPE_SLOT (GDK_TOUCHPAD_SWIPE)
+                       GDK_EVENT_TYPE_SLOT (GDK_TOUCHPAD_PINCH))
+
+GdkEvent *
+gdk_touchpad_event_new_swipe (GdkSurface *surface,
+                              GdkDevice  *device,
+                              GdkDevice  *source_device,
+                              guint32     time,
+                              GdkModifierType state,
+                              GdkTouchpadGesturePhase phase,
+                              double      x,
+                              double      y,
+                              int         n_fingers,
+                              double      dx,
+                              double      dy)
+{
+  GdkTouchpadEvent *self = gdk_event_alloc (GDK_TOUCHPAD_SWIPE, surface, device, source_device, time);
+
+  self->state = state;
+  self->phase = phase;
+  self->x = x;
+  self->y = y;
+  self->dx = dx;
+  self->dy = dy;
+  self->n_fingers = n_fingers;
+
+  return (GdkEvent *) self;
+}
+
+GdkEvent *
+gdk_touchpad_event_new_pinch (GdkSurface *surface,
+                              GdkDevice  *device,
+                              GdkDevice  *source_device,
+                              guint32     time,
+                              GdkModifierType state,
+                              GdkTouchpadGesturePhase phase,
+                              double      x,
+                              double      y,
+                              int         n_fingers,
+                              double      dx,
+                              double      dy,
+                              double      scale,
+                              double      angle_delta)
+{
+  GdkTouchpadEvent *self = gdk_event_alloc (GDK_TOUCHPAD_PINCH, surface, device, source_device, time);
+
+  self->state = state;
+  self->phase = phase;
+  self->x = x;
+  self->y = y;
+  self->dx = dx;
+  self->dy = dy;
+  self->n_fingers = n_fingers;
+  self->scale = scale;
+  self->angle_delta = angle_delta;
+
+  return (GdkEvent *) self;
+}
+
+/**
+ * gdk_touchpad_event_get_gesture_phase:
+ * @event: (type GdkTouchpadEvent): a touchpad #GdkEvent
+ *
+ * Extracts the touchpad gesture phase from a touchpad event.
+ *
+ * Returns: the gesture phase of @event
+ **/
+GdkTouchpadGesturePhase
+gdk_touchpad_event_get_gesture_phase (GdkEvent *event)
+{
+  GdkTouchpadEvent *self = (GdkTouchpadEvent *) event;
+
+  g_return_val_if_fail (GDK_IS_EVENT (event), 0);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_TOUCHPAD_PINCH) ||
+                        GDK_IS_EVENT_TYPE (event, GDK_TOUCHPAD_SWIPE), 0);
+
+  return self->phase;
+}
+
+/**
+ * gdk_touchpad_event_get_n_fingers:
+ * @event: (type GdkTouchpadEvent): a touchpad event
+ *
+ * Extracts the number of fingers from a touchpad event.
+ *
+ * Returns: the number of fingers for @event
+ **/
+guint
+gdk_touchpad_event_get_n_fingers (GdkEvent *event)
+{
+  GdkTouchpadEvent *self = (GdkTouchpadEvent *) event;
+
+  g_return_val_if_fail (GDK_IS_EVENT (event), 0);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_TOUCHPAD_PINCH) ||
+                        GDK_IS_EVENT_TYPE (event, GDK_TOUCHPAD_SWIPE), 0);
+
+  return self->n_fingers;
+}
+
+/**
+ * gdk_touchpad_event_get_deltas:
+ * @event: (type GdkTouchpadEvent): a touchpad event
+ * @dx: (out): return location for x
+ * @dy: (out): return location for y
+ *
+ * Extracts delta information from a touchpad event.
+ **/
+void
+gdk_touchpad_event_get_deltas (GdkEvent *event,
+                               double   *dx,
+                               double   *dy)
+{
+  GdkTouchpadEvent *self = (GdkTouchpadEvent *) event;
+
+  g_return_if_fail (GDK_IS_EVENT (event));
+  g_return_if_fail (GDK_IS_EVENT_TYPE (event, GDK_TOUCHPAD_PINCH) ||
+                    GDK_IS_EVENT_TYPE (event, GDK_TOUCHPAD_SWIPE));
+
+  *dx = self->dx;
+  *dy = self->dy;
+}
+
+/**
+ * gdk_touchpad_event_get_pinch_angle_delta:
+ * @event: (type GdkTouchpadEvent): a touchpad pinch event
+ *
+ * Extracts the angle delta from a touchpad pinch event.
+ *
+ * Returns: the angle delta of @event
+ */
+double
+gdk_touchpad_event_get_pinch_angle_delta (GdkEvent *event)
+{
+  GdkTouchpadEvent *self = (GdkTouchpadEvent *) event;
+
+  g_return_val_if_fail (GDK_IS_EVENT (event), 0.0);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_TOUCHPAD_PINCH), 0.0);
+
+  return self->angle_delta;
+}
+
+/**
+ * gdk_touchpad_event_get_pinch_scale:
+ * @event: (type GdkTouchpadEvent): a touchpad pinch event
+ *
+ * Extracts the scale from a touchpad pinch event.
+ *
+ * Returns: the scale of @event
+ **/
+double
+gdk_touchpad_event_get_pinch_scale (GdkEvent *event)
+{
+  GdkTouchpadEvent *self = (GdkTouchpadEvent *) event;
+
+  g_return_val_if_fail (GDK_IS_EVENT (event), 0.0);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_TOUCHPAD_PINCH), 0.0);
+
+  return self->scale;
+}
+
+/* }}} */
+
+/* {{{ GdkPadEvent */
+
+static const GdkEventTypeInfo gdk_pad_event_info = {
+  sizeof (GdkPadEvent),
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+};
+
+GDK_DEFINE_EVENT_TYPE (GdkPadEvent, gdk_pad_event,
+                       &gdk_pad_event_info,
+                       GDK_EVENT_TYPE_SLOT (GDK_PAD_BUTTON_PRESS)
+                       GDK_EVENT_TYPE_SLOT (GDK_PAD_BUTTON_RELEASE)
+                       GDK_EVENT_TYPE_SLOT (GDK_PAD_RING)
+                       GDK_EVENT_TYPE_SLOT (GDK_PAD_STRIP)
+                       GDK_EVENT_TYPE_SLOT (GDK_PAD_GROUP_MODE))
+
+GdkEvent *
+gdk_pad_event_new_ring (GdkSurface *surface,
+                        GdkDevice  *device,
+                        GdkDevice  *source_device,
+                        guint32     time,
+                        guint       group,
+                        guint       index,
+                        guint       mode,
+                        double      value)
+{
+  GdkPadEvent *self = gdk_event_alloc (GDK_PAD_RING, surface, device, source_device, time);
+
+  self->group = group;
+  self->index = index;
+  self->mode = mode;
+  self->value = value;
+
+  return (GdkEvent *) self;
+}
+
+GdkEvent *
+gdk_pad_event_new_strip (GdkSurface *surface,
+                         GdkDevice  *device,
+                         GdkDevice  *source_device,
+                         guint32     time,
+                         guint       group,
+                         guint       index,
+                         guint       mode,
+                         double      value)
+{
+  GdkPadEvent *self = gdk_event_alloc (GDK_PAD_STRIP, surface, device, source_device, time);
+
+  self->group = group;
+  self->index = index;
+  self->mode = mode;
+  self->value = value;
+
+  return (GdkEvent *) self;
+}
+
+GdkEvent *
+gdk_pad_event_new_button (GdkEventType  type,
+                          GdkSurface   *surface,
+                          GdkDevice    *device,
+                          GdkDevice    *source_device,
+                          guint32       time,
+                          guint         group,
+                          guint         button,
+                          guint         mode)
+{
+  GdkPadEvent *self;
+
+  g_return_val_if_fail (type == GDK_PAD_BUTTON_PRESS ||
+                        type == GDK_PAD_BUTTON_RELEASE, NULL);
+
+  self = gdk_event_alloc (type, surface, device, source_device, time);
+
+  self->group = group;
+  self->button = button;
+  self->mode = mode;
+
+  return (GdkEvent *) self;
+}
+
+GdkEvent *
+gdk_pad_event_new_group_mode (GdkSurface *surface,
+                              GdkDevice  *device,
+                              GdkDevice  *source_device,
+                              guint32     time,
+                              guint       group,
+                              guint       mode)
+{
+  GdkPadEvent *self = gdk_event_alloc (GDK_PAD_GROUP_MODE, surface, device, source_device, time);
+
+  self->group = group;
+  self->mode = mode;
+
+  return (GdkEvent *) self;
+}
+/**
+ * gdk_pad_event_get_button:
+ * @event: (type GdkPadEvent): a pad button event
+ *
+ * Extracts information about the pressed button from
+ * a pad event.
+ *
+ * Returns: the button of @event
+ **/
+guint
+gdk_pad_event_get_button (GdkEvent *event)
+{
+  GdkPadEvent *self = (GdkPadEvent *) event;
+
+  g_return_val_if_fail (GDK_IS_EVENT (event), 0);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_PAD_BUTTON_PRESS) ||
+                        GDK_IS_EVENT_TYPE (event, GDK_PAD_BUTTON_RELEASE), 0);
+
+  return self->button;
+}
+
+/**
+ * gdk_pad_event_get_axis_value:
+ * @event: (type GdkPadEvent): a pad strip or ring event
+ * @index: (out): Return location for the axis index
+ * @value: (out): Return location for the axis value
+ *
+ * Extracts the information from a pad strip or ring event.
+ **/
+void
+gdk_pad_event_get_axis_value (GdkEvent *event,
+                              guint    *index,
+                              double   *value)
+{
+  GdkPadEvent *self = (GdkPadEvent *) event;
+
+  g_return_if_fail (GDK_IS_EVENT (event));
+  g_return_if_fail (GDK_IS_EVENT_TYPE (event, GDK_PAD_RING) ||
+                    GDK_IS_EVENT_TYPE (event, GDK_PAD_STRIP));
+
+  *index = self->index;
+  *value = self->value;
+}
+
+/**
+ * gdk_pad_event_get_group_mode:
+ * @event: (type GdkPadEvent): a pad event
+ * @group: (out): return location for the group
+ * @mode: (out): return location for the mode
+ *
+ * Extracts group and mode information from a pad event.
+ **/
+void
+gdk_pad_event_get_group_mode (GdkEvent *event,
+                              guint    *group,
+                              guint    *mode)
+{
+  GdkPadEvent *self = (GdkPadEvent *) event;
+
+  g_return_if_fail (GDK_IS_EVENT (event));
+  g_return_if_fail (GDK_IS_EVENT_TYPE (event, GDK_PAD_GROUP_MODE) ||
+                    GDK_IS_EVENT_TYPE (event, GDK_PAD_BUTTON_PRESS) ||
+                    GDK_IS_EVENT_TYPE (event, GDK_PAD_BUTTON_RELEASE) ||
+                    GDK_IS_EVENT_TYPE (event, GDK_PAD_RING) ||
+                    GDK_IS_EVENT_TYPE (event, GDK_PAD_STRIP));
+
+  *group = self->group;
+  *mode = self->mode;
+}
+
+/* }}} */
+
+/* {{{ GdkMotionEvent */
+
+static void
+gdk_motion_event_finalize (GdkEvent *event)
+{
+  GdkMotionEvent *self = (GdkMotionEvent *) event;
+
+  g_clear_object (&self->tool);
+  g_clear_pointer (&self->axes, g_free);
+  g_list_free_full (self->history, g_free);
+
+  GDK_EVENT_SUPER (event)->finalize (event);
+}
+
+static GdkModifierType
+gdk_motion_event_get_state (GdkEvent *event)
+{
+  GdkMotionEvent *self = (GdkMotionEvent *) event;
+
+  return self->state;
+}
+
+static gboolean
+gdk_motion_event_get_position (GdkEvent *event,
+                               double   *x,
+                               double   *y)
+{
+  GdkMotionEvent *self = (GdkMotionEvent *) event;
+
+  *x = self->x;
+  *y = self->y;
+
+  return TRUE;
+}
+
+static GdkDeviceTool *
+gdk_motion_event_get_tool (GdkEvent *event)
+{
+  GdkMotionEvent *self = (GdkMotionEvent *) event;
+
+  return self->tool;
+}
+
+static gboolean
+gdk_motion_event_get_axes (GdkEvent  *event,
+                           double   **axes,
+                           guint     *n_axes)
+{
+  GdkMotionEvent *self = (GdkMotionEvent *) event;
+  GdkDevice *source_device = gdk_event_get_source_device (event);
+
+  if (source_device == NULL)
+    return FALSE;
+
+  *axes = self->axes;
+  *n_axes = gdk_device_get_n_axes (source_device);
+
+  return TRUE;
+}
+
+static const GdkEventTypeInfo gdk_motion_event_info = {
+  sizeof (GdkMotionEvent),
+  NULL,
+  gdk_motion_event_finalize,
+  gdk_motion_event_get_state,
+  gdk_motion_event_get_position,
+  NULL,
+  gdk_motion_event_get_tool,
+  gdk_motion_event_get_axes,
+};
+
+GDK_DEFINE_EVENT_TYPE (GdkMotionEvent, gdk_motion_event,
+                       &gdk_motion_event_info,
+                       GDK_EVENT_TYPE_SLOT (GDK_MOTION_NOTIFY))
+
+GdkEvent *
+gdk_motion_event_new (GdkSurface      *surface,
+                      GdkDevice       *device,
+                      GdkDevice       *source_device,
+                      GdkDeviceTool   *tool,
+                      guint32          time,
+                      GdkModifierType  state,
+                      double           x,
+                      double           y,
+                      double          *axes)
+{
+  GdkMotionEvent *self = gdk_event_alloc (GDK_MOTION_NOTIFY, surface, device, source_device, time);
+
+  self->tool = tool ? g_object_ref (tool) : NULL;
+  self->state = state;
+  self->x = x;
+  self->y = y;
+  self->axes = axes;
+  self->state = state;
+
+  return (GdkEvent *) self;
+}
+
+/**
+ * gdk_motion_event_get_history:
+ * @event: (type GdkMotionEvent): a motion #GdkEvent
+ *
+ * Retrieves the history of the @event motion, as a list of time and
+ * coordinates.
+ *
+ * Returns: (transfer container) (element-type GdkTimeCoord) (nullable): a list
+ *   of time and coordinates
+ */
+GList *
+gdk_motion_event_get_history (GdkEvent *event)
+{
+  GdkMotionEvent *self = (GdkMotionEvent *) event;
+
+  g_return_val_if_fail (GDK_IS_EVENT (event), NULL);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_MOTION_NOTIFY), NULL);
+
+  return g_list_reverse (g_list_copy (self->history));
+}
+
+/* }}} */
+
+/* {{{ GdkProximityEvent */
+
+static void
+gdk_proximity_event_finalize (GdkEvent *event)
+{
+  GdkProximityEvent *self = (GdkProximityEvent *) event;
+
+  g_clear_object (&self->tool);
+
+  GDK_EVENT_SUPER (event)->finalize (event);
+}
+
+static GdkDeviceTool *
+gdk_proximity_event_get_tool (GdkEvent *event)
+{
+  GdkProximityEvent *self = (GdkProximityEvent *) event;
+
+  return self->tool;
+}
+
+static const GdkEventTypeInfo gdk_proximity_event_info = {
+  sizeof (GdkProximityEvent),
+  NULL,
+  gdk_proximity_event_finalize,
+  NULL,
+  NULL,
+  NULL,
+  gdk_proximity_event_get_tool,
+  NULL,
+};
+
+GDK_DEFINE_EVENT_TYPE (GdkProximityEvent, gdk_proximity_event,
+                       &gdk_proximity_event_info,
+                       GDK_EVENT_TYPE_SLOT (GDK_PROXIMITY_IN)
+                       GDK_EVENT_TYPE_SLOT (GDK_PROXIMITY_OUT))
+
+GdkEvent *
+gdk_proximity_event_new (GdkEventType   type,
+                         GdkSurface    *surface,
+                         GdkDevice     *device,
+                         GdkDevice     *source_device,
+                         GdkDeviceTool *tool,
+                         guint32        time)
+{
+  GdkProximityEvent *self;
+
+  g_return_val_if_fail (type == GDK_PROXIMITY_IN ||
+                        type == GDK_PROXIMITY_OUT, NULL);
+
+  self = gdk_event_alloc (type, surface, device, source_device, time);
+
+  self->tool = tool ? g_object_ref (tool) : NULL;
+
+  return (GdkEvent *) self;
+}
+
+/* }}} */
+
+/* {{{ GdkDNDEvent */
+
+static void
+gdk_dnd_event_finalize (GdkEvent *event)
+{
+  GdkDNDEvent *self = (GdkDNDEvent *) event;
+
+  g_clear_object (&self->drop);
+
+  GDK_EVENT_SUPER (event)->finalize (event);
+}
+
+static gboolean
+gdk_dnd_event_get_position (GdkEvent *event,
+                            double   *x,
+                            double   *y)
+{
+  GdkDNDEvent *self = (GdkDNDEvent *) event;
+
+  *x = self->x;
+  *y = self->y;
+
+  return TRUE;
+}
+
+static GdkEventSequence *
+gdk_dnd_event_get_sequence (GdkEvent *event)
+{
+  GdkDNDEvent *self = (GdkDNDEvent *) event;
+
+  return (GdkEventSequence *) self->drop;
+}
+
+static const GdkEventTypeInfo gdk_dnd_event_info = {
+  sizeof (GdkDNDEvent),
+  NULL,
+  gdk_dnd_event_finalize,
+  NULL,
+  gdk_dnd_event_get_position,
+  gdk_dnd_event_get_sequence,
+  NULL,
+  NULL,
+};
+
+GDK_DEFINE_EVENT_TYPE (GdkDNDEvent, gdk_dnd_event,
+                       &gdk_dnd_event_info,
+                       GDK_EVENT_TYPE_SLOT (GDK_DRAG_ENTER)
+                       GDK_EVENT_TYPE_SLOT (GDK_DRAG_MOTION)
+                       GDK_EVENT_TYPE_SLOT (GDK_DRAG_LEAVE)
+                       GDK_EVENT_TYPE_SLOT (GDK_DROP_START))
+
+GdkEvent *
+gdk_dnd_event_new (GdkEventType  type,
+                   GdkSurface   *surface,
+                   GdkDevice    *device,
+                   GdkDrop      *drop,
+                   guint32       time,
+                   double        x,
+                   double        y)
+{
+  GdkDNDEvent *self;
+
+  g_return_val_if_fail (type == GDK_DRAG_ENTER ||
+                        type == GDK_DRAG_MOTION ||
+                        type == GDK_DRAG_LEAVE ||
+                        type == GDK_DROP_START, NULL);
+
+  self = gdk_event_alloc (type, surface, device, NULL, time);
+
+  self->drop = drop != NULL ? g_object_ref (drop) : NULL;
+  self->x = x;
+  self->y = y;
+
+  return (GdkEvent *) self;
+}
+
+/**
+ * gdk_dnd_event_get_drop:
+ * @event: (type GdkDNDEvent): a DND event
+ *
+ * Gets the #GdkDrop from a DND event.
+ *
+ * Returns: (transfer none) (nullable): the drop
+ **/
+GdkDrop *
+gdk_dnd_event_get_drop (GdkEvent *event)
+{
+  GdkDNDEvent *self = (GdkDNDEvent *) event;
+
+  g_return_val_if_fail (GDK_IS_EVENT (event), NULL);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_DRAG_ENTER) ||
+                        GDK_IS_EVENT_TYPE (event, GDK_DRAG_MOTION) ||
+                        GDK_IS_EVENT_TYPE (event, GDK_DRAG_LEAVE) ||
+                        GDK_IS_EVENT_TYPE (event, GDK_DROP_START), NULL);
+
+  return self->drop;
+}
+
+/* }}} */
+
+/* {{{ GdkGrabBrokenEvent */
+
+static const GdkEventTypeInfo gdk_grab_broken_event_info = {
+  sizeof (GdkGrabBrokenEvent),
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+};
+
+GDK_DEFINE_EVENT_TYPE (GdkGrabBrokenEvent, gdk_grab_broken_event,
+                       &gdk_grab_broken_event_info,
+                       GDK_EVENT_TYPE_SLOT (GDK_GRAB_BROKEN))
+
+GdkEvent *
+gdk_grab_broken_event_new (GdkSurface *surface,
+                           GdkDevice  *device,
+                           GdkDevice  *source_device,
+                           GdkSurface *grab_surface,
+                           gboolean    implicit)
+{
+  GdkGrabBrokenEvent *self = gdk_event_alloc (GDK_GRAB_BROKEN, surface, device, source_device, GDK_CURRENT_TIME);
+
+  self->grab_surface = grab_surface;
+  self->implicit = implicit;
+  self->keyboard = gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD;
+
+  return (GdkEvent *) self;
+}
+
+/**
+ * gdk_grab_broken_event_get_grab_surface:
+ * @event: (type GdkGrabBrokenEvent): a grab broken event
+ *
+ * Extracts the grab surface from a grab broken event.
+ *
+ * Returns: (transfer none): the grab surface of @event
+ **/
+GdkSurface *
+gdk_grab_broken_event_get_grab_surface (GdkEvent *event)
+{
+  GdkGrabBrokenEvent *self = (GdkGrabBrokenEvent *) event;
+
+  g_return_val_if_fail (GDK_IS_EVENT (event), NULL);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_GRAB_BROKEN), NULL);
+
+  return self->grab_surface;
+}
+
+/**
+ * gdk_grab_broken_event_get_implicit:
+ * @event: (type GdkGrabBrokenEvent): a grab broken event
+ *
+ * Checks whether the grab broken event is for an implicit grab.
+ *
+ * Returns: %TRUE if the an implicit grab was broken
+ */
+gboolean
+gdk_grab_broken_event_get_implicit (GdkEvent *event)
+{
+  GdkGrabBrokenEvent *self = (GdkGrabBrokenEvent *) event;
+
+  g_return_val_if_fail (GDK_IS_EVENT (event), FALSE);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_GRAB_BROKEN), FALSE);
+
+  return self->implicit;
+}
+
+/* }}} */

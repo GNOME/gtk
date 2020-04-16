@@ -1448,7 +1448,7 @@ _gdk_device_manager_xi2_handle_focus (GdkSurface *surface,
     {
       GdkEvent *event;
 
-      event = gdk_event_focus_new (surface, device, source_device, focus_in);
+      event = gdk_focus_event_new (surface, device, source_device, focus_in);
       gdk_display_put_event (gdk_surface_get_display (surface), event);
       gdk_event_unref (event);
     }
@@ -1584,7 +1584,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
           {
             no_lock = translated;
           }
-        event = gdk_event_key_new (xev->evtype == XI_KeyPress
+        event = gdk_key_event_new (xev->evtype == XI_KeyPress
                                      ? GDK_KEY_PRESS
                                      : GDK_KEY_RELEASE,
                                    surface,
@@ -1654,7 +1654,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             source_device = g_hash_table_lookup (device_manager->id_table,
                                                  GUINT_TO_POINTER (xev->sourceid));
 
-            event = gdk_event_discrete_scroll_new (surface,
+            event = gdk_scroll_event_new_discrete (surface,
                                                    device,
                                                    source_device,
                                                    NULL,
@@ -1684,7 +1684,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
              x = (double) xev->event_x / scale;
              y = (double) xev->event_y / scale;
 
-            event = gdk_event_button_new (ev->evtype == XI_ButtonPress
+            event = gdk_button_event_new (ev->evtype == XI_ButtonPress
                                             ? GDK_BUTTON_PRESS
                                             : GDK_BUTTON_RELEASE,
                                           surface,
@@ -1739,7 +1739,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                 xev->deviceid, xev->sourceid,
                                 xev->event, delta_x, delta_y));
 
-            event = gdk_event_scroll_new (surface,
+            event = gdk_scroll_event_new (surface,
                                           device,
                                           source_device,
                                           NULL,
@@ -1760,7 +1760,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         x = (double) xev->event_x / scale;
         y = (double) xev->event_y / scale;
 
-        event = gdk_event_motion_new (surface,
+        event = gdk_motion_event_new (surface,
                                       device,
                                       source_device,
                                       source_device->last_tool,
@@ -1808,7 +1808,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         x = (double) xev->event_x / scale;
         y = (double) xev->event_y / scale;
  
-        event = gdk_event_touch_new (ev->evtype == XI_TouchBegin
+        event = gdk_touch_event_new (ev->evtype == XI_TouchBegin
                                        ? GDK_TOUCH_BEGIN
                                        : GDK_TOUCH_END,
                                      GUINT_TO_POINTER (xev->detail),
@@ -1858,7 +1858,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         x = (double) xev->event_x / scale;
         y = (double) xev->event_y / scale;
 
-        event = gdk_event_touch_new (GDK_TOUCH_UPDATE,
+        event = gdk_touch_event_new (GDK_TOUCH_UPDATE,
                                      GUINT_TO_POINTER (xev->detail),
                                      surface,
                                      device,
@@ -1911,7 +1911,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
               }
           }
 
-        event = gdk_event_crossing_new (ev->evtype == XI_Enter
+        event = gdk_crossing_event_new (ev->evtype == XI_Enter
                                           ? GDK_ENTER_NOTIFY
                                           : GDK_LEAVE_NOTIFY,
                                         surface,

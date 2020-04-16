@@ -220,7 +220,7 @@ gtk_drop_target_async_handle_event (GtkEventController *controller,
         GtkWidget *widget = gtk_event_controller_get_widget (controller);
         GdkDragAction preferred_action;
 
-        drop = gdk_drag_event_get_drop (event);
+        drop = gdk_dnd_event_get_drop (event);
         /* sanity check */
         g_return_val_if_fail (self->drop == drop, FALSE);
         if (self->rejected)
@@ -243,7 +243,7 @@ gtk_drop_target_async_handle_event (GtkEventController *controller,
       {
         gboolean handled;
 
-        drop = gdk_drag_event_get_drop (event);
+        drop = gdk_dnd_event_get_drop (event);
         /* sanity check */
         g_return_val_if_fail (self->drop == drop, FALSE);
         if (self->rejected)

@@ -30,74 +30,98 @@
 #include <gdk/gdkdevice.h>
 #include <gdk/gdkdevicetool.h>
 
+G_BEGIN_DECLS
 
-typedef struct _GdkEventAny         GdkEventAny;
-typedef struct _GdkEventMotion      GdkEventMotion;
-typedef struct _GdkEventButton      GdkEventButton;
-typedef struct _GdkEventTouch       GdkEventTouch;
-typedef struct _GdkEventScroll      GdkEventScroll;
-typedef struct _GdkEventKey         GdkEventKey;
-typedef struct _GdkEventFocus       GdkEventFocus;
-typedef struct _GdkEventCrossing    GdkEventCrossing;
-typedef struct _GdkEventConfigure   GdkEventConfigure;
-typedef struct _GdkEventProximity   GdkEventProximity;
-typedef struct _GdkEventDND         GdkEventDND;
-typedef struct _GdkEventSetting     GdkEventSetting;
-typedef struct _GdkEventGrabBroken  GdkEventGrabBroken;
-typedef struct _GdkEventTouchpadSwipe GdkEventTouchpadSwipe;
-typedef struct _GdkEventTouchpadPinch GdkEventTouchpadPinch;
-typedef struct _GdkEventPadButton   GdkEventPadButton;
-typedef struct _GdkEventPadAxis     GdkEventPadAxis;
-typedef struct _GdkEventPadGroupMode GdkEventPadGroupMode;
+#define GDK_EVENT_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_EVENT, GdkEventClass))
 
-/*
- * GdkEventAny:
- * @type: the type of the event.
- * @surface: the surface which received the event.
- * @send_event: %TRUE if the event was sent explicitly.
+typedef struct _GdkEventClass   GdkEventClass;
+
+/*< private >
+ * GdkEvent:
+ * @ref_count: the reference count of the event
+ * @event_type: the specialized event type
+ * @surface: the surface of the event
+ * @device: the device of the event
+ * @source_device: the source device
+ * @time: a serial identifier of the event that can be used to order
+ *   two events
+ * @flags: event flags
  *
- * Contains the fields which are common to all event structs.
- * Any event pointer can safely be cast to a pointer to a #GdkEventAny to
- * access these fields.
+ * The abstract type for all windowing system events.
  */
-struct _GdkEventAny
+struct _GdkEvent
 {
-  int ref_count;
-  GdkEventType type;
+  GTypeInstance parent_instance;
+
+  grefcount ref_count;
+
+  /* Specialised event type */
+  GdkEventType event_type;
+
+  /* The surface of the event */
   GdkSurface *surface;
-  guint32 time;
-  guint16 flags;
-  guint pointer_emulated  : 1;
-  guint touch_emulating   : 1;
-  guint scroll_is_stop    : 1;
-  guint key_is_modifier   : 1;
-  guint focus_in          : 1;
+
+  /* The devices associated to the event */
   GdkDevice *device;
   GdkDevice *source_device;
+
+  guint32 time;
+  guint16 flags;
+};
+
+/*< private >
+ * GdkEventClass:
+ * @finalize: a function called when the last reference held on an event is
+ *   released; implementations of GdkEvent must chain up to the parent class
+ *
+ * The base class for events.
+ */
+struct _GdkEventClass
+{
+  GTypeClass parent_class;
+
+  void                  (* finalize)            (GdkEvent *event);
+
+  GdkModifierType       (* get_state)           (GdkEvent *event);
+  gboolean              (* get_position)        (GdkEvent *event,
+                                                 double   *x,
+                                                 double   *y);
+  GdkEventSequence *    (* get_sequence)        (GdkEvent *event);
+  GdkDeviceTool *       (* get_tool)            (GdkEvent *event);
+  gboolean              (* get_axes)            (GdkEvent *event,
+                                                 double  **axes,
+                                                 guint    *n_axes);
 };
 
 /*
- * GdkEventMotion:
- * @type: the type of the event.
- * @surface: the surface which received the event.
- * @send_event: %TRUE if the event was sent explicitly.
- * @time: the time of the event in milliseconds.
+ * GdkDeleteEvent:
+ *
+ * Generated when a surface is deleted.
+ */
+struct _GdkDeleteEvent
+{
+  GdkEvent parent_instance;
+};
+
+/*
+ * GdkMotionEvent:
+ * @state: (type GdkModifierType): a bit-mask representing the state of
+ *   the modifier keys (e.g. Control, Shift and Alt) set during the motion
+ *   event. See #GdkModifierType.
  * @x: the x coordinate of the pointer relative to the surface.
  * @y: the y coordinate of the pointer relative to the surface.
  * @axes: @x, @y translated to the axes of @device, or %NULL if @device is
  *   the mouse.
- * @state: (type GdkModifierType): a bit-mask representing the state of
- *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
- *   buttons. See #GdkModifierType.
- * @device: the master device that the event originated from. Use
- * gdk_event_get_source_device() to get the slave device.
- *   screen.
+ * @history: (element-type GdkTimeCoord): a list of time and coordinates
+ *   for other motion events that were compressed before delivering the
+ *   current event
  *
  * Generated when the pointer moves.
  */
-struct _GdkEventMotion
+struct _GdkMotionEvent
 {
-  GdkEventAny any;
+  GdkEvent parent_instance;
+
   GdkModifierType state;
   double x;
   double y;
@@ -107,15 +131,7 @@ struct _GdkEventMotion
 };
 
 /*
- * GdkEventButton:
- * @type: the type of the event (%GDK_BUTTON_PRESS or %GDK_BUTTON_RELEASE).
- * @surface: the surface which received the event.
- * @send_event: %TRUE if the event was sent explicitly.
- * @time: the time of the event in milliseconds.
- * @x: the x coordinate of the pointer relative to the surface.
- * @y: the y coordinate of the pointer relative to the surface.
- * @axes: @x, @y translated to the axes of @device, or %NULL if @device is
- *   the mouse.
+ * GdkButtonEvent:
  * @state: (type GdkModifierType): a bit-mask representing the state of
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
  *   buttons. See #GdkModifierType.
@@ -123,16 +139,19 @@ struct _GdkEventMotion
  *   Normally button 1 is the left mouse button, 2 is the middle button,
  *   and 3 is the right button. On 2-button mice, the middle button can
  *   often be simulated by pressing both mouse buttons together.
- * @device: the master device that the event originated from. Use
- * gdk_event_get_source_device() to get the slave device.
- *   screen.
+ * @x: the x coordinate of the pointer relative to the surface.
+ * @y: the y coordinate of the pointer relative to the surface.
+ * @axes: @x, @y translated to the axes of @device, or %NULL if @device is
+ *   the mouse.
+ * @tool: a #GdkDeviceTool
  *
  * Used for button press and button release events. The
  * @type field will be one of %GDK_BUTTON_PRESS or %GDK_BUTTON_RELEASE,
  */
-struct _GdkEventButton
+struct _GdkButtonEvent
 {
-  GdkEventAny any;
+  GdkEvent parent_instance;
+
   GdkModifierType state;
   guint button;
   double x;
@@ -142,25 +161,16 @@ struct _GdkEventButton
 };
 
 /*
- * GdkEventTouch:
- * @type: the type of the event (%GDK_TOUCH_BEGIN, %GDK_TOUCH_UPDATE,
- *   %GDK_TOUCH_END, %GDK_TOUCH_CANCEL)
- * @surface: the surface which received the event
- * @send_event: %TRUE if the event was sent explicitly.
- * @time: the time of the event in milliseconds.
- * @x: the x coordinate of the pointer relative to the surface
- * @y: the y coordinate of the pointer relative to the surface
- * @axes: @x, @y translated to the axes of @device, or %NULL if @device is
- *   the mouse
+ * GdkTouchEvent:
  * @state: (type GdkModifierType): a bit-mask representing the state of
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
  *   buttons. See #GdkModifierType
+ * @x: the x coordinate of the pointer relative to the surface
+ * @y: the y coordinate of the pointer relative to the surface
+ * @axes: @x, @y translated to the axes of the event's device, or %NULL
+ *   if @device is the mouse
  * @sequence: the event sequence that the event belongs to
- * @emulating_pointer: whether the event should be used for emulating
- *   pointer event
- * @device: the master device that the event originated from. Use
- * gdk_event_get_source_device() to get the slave device.
- *   screen
+ * @emulated: whether the event is the result of a pointer emulation
  *
  * Used for touch events.
  * @type field will be one of %GDK_TOUCH_BEGIN, %GDK_TOUCH_UPDATE,
@@ -173,22 +183,21 @@ struct _GdkEventButton
  * (or %GDK_TOUCH_CANCEL) event. With multitouch devices, there may be
  * several active sequences at the same time.
  */
-struct _GdkEventTouch
+struct _GdkTouchEvent
 {
-  GdkEventAny any;
+  GdkEvent parent_instance;
+
   GdkModifierType state;
   double x;
   double y;
   double *axes;
   GdkEventSequence *sequence;
+  gboolean touch_emulating;
+  gboolean pointer_emulated;
 };
 
 /*
- * GdkEventScroll:
- * @type: the type of the event (%GDK_SCROLL).
- * @surface: the surface which received the event.
- * @send_event: %TRUE if the event was sent explicitly.
- * @time: the time of the event in milliseconds.
+ * GdkScrollEvent:
  * @x: the x coordinate of the pointer relative to the surface.
  * @y: the y coordinate of the pointer relative to the surface.
  * @state: (type GdkModifierType): a bit-mask representing the state of
@@ -197,10 +206,11 @@ struct _GdkEventTouch
  * @direction: the direction to scroll to (one of %GDK_SCROLL_UP,
  *   %GDK_SCROLL_DOWN, %GDK_SCROLL_LEFT, %GDK_SCROLL_RIGHT or
  *   %GDK_SCROLL_SMOOTH).
- * @device: the master device that the event originated from. Use
- * gdk_event_get_source_device() to get the slave device.
  * @delta_x: the x coordinate of the scroll delta
  * @delta_y: the y coordinate of the scroll delta
+ * @pointer_emulated: whether the scroll event was the result of
+ *   a pointer emulation
+ * @tool: a #GdkDeviceTool
  *
  * Generated from button presses for the buttons 4 to 7. Wheel mice are
  * usually configured to generate button press events for buttons 4 and 5
@@ -211,18 +221,30 @@ struct _GdkEventTouch
  * these, the scroll deltas can be obtained with
  * gdk_event_get_scroll_deltas().
  */
-struct _GdkEventScroll
+struct _GdkScrollEvent
 {
-  GdkEventAny any;
+  GdkEvent parent_instance;
+
   double x;
   double y;
   GdkModifierType state;
   GdkScrollDirection direction;
   double delta_x;
   double delta_y;
+  gboolean pointer_emulated;
+  gboolean is_stop;
   GdkDeviceTool *tool;
 };
 
+/*
+ * GdkTranslatedKey:
+ * @keyval: the translated key symbol
+ * @consumed: the consumed modifiers
+ * @layout: the keyboard layout
+ * @level: the layout level
+ *
+ * Describes a translated key code.
+ */
 typedef struct {
   guint keyval;
   GdkModifierType consumed;
@@ -231,11 +253,7 @@ typedef struct {
 } GdkTranslatedKey;
 
 /*
- * GdkEventKey:
- * @type: the type of the event (%GDK_KEY_PRESS or %GDK_KEY_RELEASE).
- * @surface: the surface which received the event.
- * @send_event: %TRUE if the event was sent explicitly.
- * @time: the time of the event in milliseconds.
+ * GdkKeyEvent:
  * @state: (type GdkModifierType): a bit-mask representing the state of
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
  *   buttons. See #GdkModifierType.
@@ -245,41 +263,40 @@ typedef struct {
  *
  * Describes a key press or key release event.
  */
-struct _GdkEventKey
+struct _GdkKeyEvent
 {
-  GdkEventAny any;
+  GdkEvent parent_instance;
+
   GdkModifierType state;
   guint32 keycode;
+  gboolean key_is_modifier;
   GdkTranslatedKey translated[2];
 };
 
 /*
- * GdkEventCrossing:
- * @type: the type of the event (%GDK_ENTER_NOTIFY or %GDK_LEAVE_NOTIFY).
- * @surface: the surface which received the event.
- * @send_event: %TRUE if the event was sent explicitly.
- * @child_surface: the surface that was entered or left.
- * @time: the time of the event in milliseconds.
- * @x: the x coordinate of the pointer relative to the surface.
- * @y: the y coordinate of the pointer relative to the surface.
+ * GdkCrossingEvent:
+ * @state: (type GdkModifierType): a bit-mask representing the state of
+ *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
+ *   buttons. See #GdkModifierType.
  * @mode: the crossing mode (%GDK_CROSSING_NORMAL, %GDK_CROSSING_GRAB,
  *  %GDK_CROSSING_UNGRAB, %GDK_CROSSING_GTK_GRAB, %GDK_CROSSING_GTK_UNGRAB or
  *  %GDK_CROSSING_STATE_CHANGED).  %GDK_CROSSING_GTK_GRAB, %GDK_CROSSING_GTK_UNGRAB,
  *  and %GDK_CROSSING_STATE_CHANGED were added in 2.14 and are always synthesized,
  *  never native.
+ * @x: the x coordinate of the pointer relative to the surface.
+ * @y: the y coordinate of the pointer relative to the surface.
  * @detail: the kind of crossing that happened (%GDK_NOTIFY_INFERIOR,
  *  %GDK_NOTIFY_ANCESTOR, %GDK_NOTIFY_VIRTUAL, %GDK_NOTIFY_NONLINEAR or
  *  %GDK_NOTIFY_NONLINEAR_VIRTUAL).
  * @focus: %TRUE if @surface is the focus surface or an inferior.
- * @state: (type GdkModifierType): a bit-mask representing the state of
- *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
- *   buttons. See #GdkModifierType.
+ * @child_surface: the surface that was entered or left.
  *
  * Generated when the pointer enters or leaves a surface.
  */
-struct _GdkEventCrossing
+struct _GdkCrossingEvent
 {
-  GdkEventAny any;
+  GdkEvent parent_instance;
+
   GdkModifierType state;
   GdkCrossingMode mode;
   double x;
@@ -290,10 +307,7 @@ struct _GdkEventCrossing
 };
 
 /*
- * GdkEventFocus:
- * @type: the type of the event (%GDK_FOCUS_CHANGE).
- * @surface: the surface which received the event.
- * @send_event: %TRUE if the event was sent explicitly.
+ * GdkFocusEvent:
  * @in: %TRUE if the surface has gained the keyboard focus, %FALSE if
  *   it has lost the focus.
  * @mode: the crossing mode
@@ -301,19 +315,15 @@ struct _GdkEventCrossing
  *
  * Describes a change of keyboard focus.
  */
-struct _GdkEventFocus
+struct _GdkFocusEvent
 {
-  GdkEventAny any;
-  gint16 in;
-  GdkCrossingMode mode;
-  GdkNotifyType detail;
+  GdkEvent parent_instance;
+
+  gboolean focus_in;
 };
 
 /*
- * GdkEventConfigure:
- * @type: the type of the event (%GDK_CONFIGURE).
- * @surface: the surface which received the event.
- * @send_event: %TRUE if the event was sent explicitly.
+ * GdkConfigureEvent:
  * @x: the new x coordinate of the surface, relative to its parent.
  * @y: the new y coordinate of the surface, relative to its parent.
  * @width: the new width of the surface.
@@ -321,9 +331,10 @@ struct _GdkEventFocus
  *
  * Generated when a surface size or position has changed.
  */
-struct _GdkEventConfigure
+struct _GdkConfigureEvent
 {
-  GdkEventAny any;
+  GdkEvent parent_instance;
+
   int x;
   int y;
   int width;
@@ -331,36 +342,23 @@ struct _GdkEventConfigure
 };
 
 /*
- * GdkEventProximity:
- * @type: the type of the event (%GDK_PROXIMITY_IN or %GDK_PROXIMITY_OUT).
- * @surface: the surface which received the event.
- * @send_event: %TRUE if the event was sent explicitly.
- * @time: the time of the event in milliseconds.
- * @device: the master device that the event originated from. Use
- * gdk_event_get_source_device() to get the slave device.
+ * GdkProximityEvent:
+ * @tool: the #GdkDeviceTool associated to the event 
  *
- * Proximity events are generated when using GDK’s wrapper for the
- * XInput extension. The XInput extension is an add-on for standard X
- * that allows you to use nonstandard devices such as graphics tablets.
- * A proximity event indicates that the stylus has moved in or out of
- * contact with the tablet, or perhaps that the user’s finger has moved
- * in or out of contact with a touch screen.
- *
- * This event type will be used pretty rarely. It only is important for
- * XInput aware programs that are drawing their own cursor.
+ * A proximity event indicates that a tool of a graphic tablet, or similar
+ * devices that report proximity, has moved in or out of contact with the
+ * tablet, or perhaps that the user’s finger has moved in or out of contact
+ * with a touch screen.
  */
-struct _GdkEventProximity
+struct _GdkProximityEvent
 {
-  GdkEventAny any;
+  GdkEvent parent_instance;
+
   GdkDeviceTool *tool;
 };
 
 /*
- * GdkEventGrabBroken:
- * @type: the type of the event (%GDK_GRAB_BROKEN)
- * @surface: the surface which received the event, i.e. the surface
- *   that previously owned the grab
- * @send_event: %TRUE if the event was sent explicitly.
+ * GdkGrabBrokenEvent:
  * @keyboard: %TRUE if a keyboard grab was broken, %FALSE if a pointer
  *   grab was broken
  * @implicit: %TRUE if the broken grab was implicit
@@ -372,67 +370,39 @@ struct _GdkEventProximity
  * when the grab surface becomes unviewable (i.e. it or one of its ancestors
  * is unmapped), or if the same application grabs the pointer or keyboard
  * again. Note that implicit grabs (which are initiated by button presses)
- * can also cause #GdkEventGrabBroken events.
+ * can also cause #GdkGrabBrokenEvent events.
  */
-struct _GdkEventGrabBroken {
-  GdkEventAny any;
+struct _GdkGrabBrokenEvent
+{
+  GdkEvent parent_instance;
+
   gboolean keyboard;
   gboolean implicit;
   GdkSurface *grab_surface;
 };
 
 /*
- * GdkEventDND:
- * @type: the type of the event (%GDK_DRAG_ENTER, %GDK_DRAG_LEAVE,
- *   %GDK_DRAG_MOTION or %GDK_DROP_START)
- * @surface: the surface which received the event.
- * @send_event: %TRUE if the event was sent explicitly.
+ * GdkDNDEvent:
  * @drop: the #GdkDrop for the current DND operation.
- * @time: the time of the event in milliseconds.
+ * @x: the X coordinate of the pointer
+ * @y: the Y coordinate of the pointer
  *
  * Generated during DND operations.
  */
-struct _GdkEventDND {
-  GdkEventAny any;
+struct _GdkDNDEvent
+{
+  GdkEvent parent_instance;
+
   GdkDrop *drop;
   double x;
   double y;
 };
 
 /*
- * GdkEventTouchpadSwipe:
- * @type: the type of the event (%GDK_TOUCHPAD_SWIPE)
- * @surface: the surface which received the event
- * @send_event: %TRUE if the event was sent explicitly
- * @phase: (type GdkTouchpadGesturePhase): the current phase of the gesture
- * @n_fingers: The number of fingers triggering the swipe
- * @time: the time of the event in milliseconds
- * @x: The X coordinate of the pointer
- * @y: The Y coordinate of the pointer
- * @dx: Movement delta in the X axis of the swipe focal point
- * @dy: Movement delta in the Y axis of the swipe focal point
+ * GdkTouchpadEvent:
  * @state: (type GdkModifierType): a bit-mask representing the state of
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
  *   buttons. See #GdkModifierType.
- *
- * Generated during touchpad swipe gestures.
- */
-struct _GdkEventTouchpadSwipe {
-  GdkEventAny any;
-  GdkModifierType state;
-  gint8 phase;
-  gint8 n_fingers;
-  double x;
-  double y;
-  double dx;
-  double dy;
-};
-
-/*
- * GdkEventTouchpadPinch:
- * @type: the type of the event (%GDK_TOUCHPAD_PINCH)
- * @surface: the surface which received the event
- * @send_event: %TRUE if the event was sent explicitly
  * @phase: (type GdkTouchpadGesturePhase): the current phase of the gesture
  * @n_fingers: The number of fingers triggering the pinch
  * @time: the time of the event in milliseconds
@@ -440,18 +410,17 @@ struct _GdkEventTouchpadSwipe {
  * @y: The Y coordinate of the pointer
  * @dx: Movement delta in the X axis of the swipe focal point
  * @dy: Movement delta in the Y axis of the swipe focal point
- * @angle_delta: The angle change in radians, negative angles
+ * @angle_delta: For pinch events, the angle change in radians, negative angles
  *   denote counter-clockwise movements
- * @scale: The current scale, relative to that at the time of
+ * @scale: For pinch events, the current scale, relative to that at the time of
  *   the corresponding %GDK_TOUCHPAD_GESTURE_PHASE_BEGIN event
- * @state: (type GdkModifierType): a bit-mask representing the state of
- *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
- *   buttons. See #GdkModifierType.
  *
- * Generated during touchpad swipe gestures.
+ * Generated during touchpad gestures.
  */
-struct _GdkEventTouchpadPinch {
-  GdkEventAny any;
+struct _GdkTouchpadEvent
+{
+  GdkEvent parent_instance;
+
   GdkModifierType state;
   gint8 phase;
   gint8 n_fingers;
@@ -463,99 +432,20 @@ struct _GdkEventTouchpadPinch {
   double scale;
 };
 
-/*
- * GdkEventPadButton:
- * @type: the type of the event (%GDK_PAD_BUTTON_PRESS or %GDK_PAD_BUTTON_RELEASE).
- * @surface: the surface which received the event.
- * @send_event: %TRUE if the event was sent explicitly.
- * @time: the time of the event in milliseconds.
- * @group: the pad group the button belongs to. A %GDK_SOURCE_TABLET_PAD device
- *   may have one or more groups containing a set of buttons/rings/strips each.
- * @button: The pad button that was pressed.
- * @mode: The current mode of @group. Different groups in a %GDK_SOURCE_TABLET_PAD
- *   device may have different current modes.
- *
- * Generated during %GDK_SOURCE_TABLET_PAD button presses and releases.
- */
-struct _GdkEventPadButton {
-  GdkEventAny any;
-  guint group;
-  guint button;
-  guint mode;
-};
+struct _GdkPadEvent
+{
+  GdkEvent parent_instance;
 
-/*
- * GdkEventPadAxis:
- * @type: the type of the event (%GDK_PAD_RING or %GDK_PAD_STRIP).
- * @surface: the surface which received the event.
- * @send_event: %TRUE if the event was sent explicitly.
- * @time: the time of the event in milliseconds.
- * @group: the pad group the ring/strip belongs to. A %GDK_SOURCE_TABLET_PAD
- *   device may have one or more groups containing a set of buttons/rings/strips
- *   each.
- * @index: number of strip/ring that was interacted. This number is 0-indexed.
- * @mode: The current mode of @group. Different groups in a %GDK_SOURCE_TABLET_PAD
- *   device may have different current modes.
- * @value: The current value for the given axis.
- *
- * Generated during %GDK_SOURCE_TABLET_PAD interaction with tactile sensors.
- */
-struct _GdkEventPadAxis {
-  GdkEventAny any;
   guint group;
-  guint index;
   guint mode;
+  guint button;
+  guint index;
   double value;
 };
 
-/*
- * GdkEventPadGroupMode:
- * @type: the type of the event (%GDK_PAD_GROUP_MODE).
- * @surface: the surface which received the event.
- * @send_event: %TRUE if the event was sent explicitly.
- * @time: the time of the event in milliseconds.
- * @group: the pad group that is switching mode. A %GDK_SOURCE_TABLET_PAD
- *   device may have one or more groups containing a set of buttons/rings/strips
- *   each.
- * @mode: The new mode of @group. Different groups in a %GDK_SOURCE_TABLET_PAD
- *   device may have different current modes.
- *
- * Generated during %GDK_SOURCE_TABLET_PAD mode switches in a group.
- */
-struct _GdkEventPadGroupMode {
-  GdkEventAny any;
-  guint group;
-  guint mode;
-};
+void gdk_event_init_types (void);
 
-/*
- * GdkEvent:
- *
- * The GdkEvent struct is private and should only be accessed
- * using the accessor functions.
- */
-union _GdkEvent
-{
-  GdkEventAny		    any;
-  GdkEventMotion	    motion;
-  GdkEventButton	    button;
-  GdkEventTouch             touch;
-  GdkEventScroll            scroll;
-  GdkEventKey		    key;
-  GdkEventCrossing	    crossing;
-  GdkEventFocus		    focus_change;
-  GdkEventConfigure	    configure;
-  GdkEventProximity	    proximity;
-  GdkEventDND               dnd;
-  GdkEventGrabBroken        grab_broken;
-  GdkEventTouchpadSwipe     touchpad_swipe;
-  GdkEventTouchpadPinch     touchpad_pinch;
-  GdkEventPadButton         pad_button;
-  GdkEventPadAxis           pad_axis;
-  GdkEventPadGroupMode      pad_group_mode;
-};
-
-GdkEvent * gdk_event_button_new         (GdkEventType     type,
+GdkEvent * gdk_button_event_new         (GdkEventType     type,
                                          GdkSurface      *surface,
                                          GdkDevice       *device,
                                          GdkDevice       *source_device,
@@ -567,7 +457,7 @@ GdkEvent * gdk_event_button_new         (GdkEventType     type,
                                          double           y,
                                          double          *axes);
                              
-GdkEvent * gdk_event_motion_new         (GdkSurface      *surface,
+GdkEvent * gdk_motion_event_new         (GdkSurface      *surface,
                                          GdkDevice       *device,
                                          GdkDevice       *source_device,
                                          GdkDeviceTool   *tool,
@@ -577,7 +467,7 @@ GdkEvent * gdk_event_motion_new         (GdkSurface      *surface,
                                          double           y,
                                          double          *axes);
 
-GdkEvent * gdk_event_crossing_new       (GdkEventType     type,
+GdkEvent * gdk_crossing_event_new       (GdkEventType     type,
                                          GdkSurface      *surface,
                                          GdkDevice       *device,
                                          GdkDevice       *source_device,
@@ -588,14 +478,14 @@ GdkEvent * gdk_event_crossing_new       (GdkEventType     type,
                                          GdkCrossingMode  mode,
                                          GdkNotifyType    notify);
                                           
-GdkEvent * gdk_event_proximity_new      (GdkEventType     type,
+GdkEvent * gdk_proximity_event_new      (GdkEventType     type,
                                          GdkSurface      *surface,
                                          GdkDevice       *device,
                                          GdkDevice       *source_device,
                                          GdkDeviceTool   *tool,
                                          guint32          time);
 
-GdkEvent * gdk_event_key_new            (GdkEventType      type,
+GdkEvent * gdk_key_event_new            (GdkEventType      type,
                                          GdkSurface       *surface,
                                          GdkDevice        *device,
                                          GdkDevice        *source_device,
@@ -606,18 +496,18 @@ GdkEvent * gdk_event_key_new            (GdkEventType      type,
                                          GdkTranslatedKey *translated,
                                          GdkTranslatedKey *no_lock);
 
-GdkEvent * gdk_event_focus_new          (GdkSurface      *surface,
+GdkEvent * gdk_focus_event_new          (GdkSurface      *surface,
                                          GdkDevice       *device,
                                          GdkDevice       *source_device,
                                          gboolean         focus_in);
 
-GdkEvent * gdk_event_configure_new      (GdkSurface      *surface,
+GdkEvent * gdk_configure_event_new      (GdkSurface      *surface,
                                          int              width,
                                          int              height);
 
-GdkEvent * gdk_event_delete_new         (GdkSurface      *surface);
+GdkEvent * gdk_delete_event_new         (GdkSurface      *surface);
 
-GdkEvent * gdk_event_scroll_new         (GdkSurface      *surface,
+GdkEvent * gdk_scroll_event_new         (GdkSurface      *surface,
                                          GdkDevice       *device,
                                          GdkDevice       *source_device,
                                          GdkDeviceTool   *tool,
@@ -627,7 +517,7 @@ GdkEvent * gdk_event_scroll_new         (GdkSurface      *surface,
                                          double           delta_y,
                                          gboolean         is_stop);
 
-GdkEvent * gdk_event_discrete_scroll_new (GdkSurface         *surface,
+GdkEvent * gdk_scroll_event_new_discrete (GdkSurface         *surface,
                                           GdkDevice          *device,
                                           GdkDevice          *source_device,
                                           GdkDeviceTool      *tool,
@@ -636,7 +526,7 @@ GdkEvent * gdk_event_discrete_scroll_new (GdkSurface         *surface,
                                           GdkScrollDirection  direction,
                                           gboolean            emulated);
 
-GdkEvent * gdk_event_touch_new          (GdkEventType      type,
+GdkEvent * gdk_touch_event_new          (GdkEventType      type,
                                          GdkEventSequence *sequence,
                                          GdkSurface       *surface,
                                          GdkDevice        *device,
@@ -648,7 +538,7 @@ GdkEvent * gdk_event_touch_new          (GdkEventType      type,
                                          double           *axes,
                                          gboolean          emulating);
  
-GdkEvent * gdk_event_touchpad_swipe_new (GdkSurface      *surface,
+GdkEvent * gdk_touchpad_event_new_swipe (GdkSurface      *surface,
                                          GdkDevice       *device,
                                          GdkDevice       *source_device,
                                          guint32          time,
@@ -660,7 +550,7 @@ GdkEvent * gdk_event_touchpad_swipe_new (GdkSurface      *surface,
                                          double           dx,
                                          double           dy);
 
-GdkEvent * gdk_event_touchpad_pinch_new (GdkSurface              *surface,
+GdkEvent * gdk_touchpad_event_new_pinch (GdkSurface              *surface,
                                          GdkDevice               *device,
                                          GdkDevice               *source_device,
                                          guint32                  time,
@@ -674,7 +564,7 @@ GdkEvent * gdk_event_touchpad_pinch_new (GdkSurface              *surface,
                                          double                   scale,
                                          double                   angle_delta);
 
-GdkEvent * gdk_event_pad_ring_new       (GdkSurface      *surface,
+GdkEvent * gdk_pad_event_new_ring       (GdkSurface      *surface,
                                          GdkDevice       *device,
                                          GdkDevice       *source_device,
                                          guint32          time,
@@ -683,7 +573,7 @@ GdkEvent * gdk_event_pad_ring_new       (GdkSurface      *surface,
                                          guint            mode,
                                          double           value);
 
-GdkEvent * gdk_event_pad_strip_new      (GdkSurface      *surface,
+GdkEvent * gdk_pad_event_new_strip      (GdkSurface      *surface,
                                          GdkDevice       *device,
                                          GdkDevice       *source_device,
                                          guint32          time,
@@ -692,7 +582,7 @@ GdkEvent * gdk_event_pad_strip_new      (GdkSurface      *surface,
                                          guint            mode,
                                          double           value);
 
-GdkEvent * gdk_event_pad_button_new     (GdkEventType     type,
+GdkEvent * gdk_pad_event_new_button     (GdkEventType     type,
                                          GdkSurface      *surface,
                                          GdkDevice       *device,
                                          GdkDevice       *source_device,
@@ -701,14 +591,14 @@ GdkEvent * gdk_event_pad_button_new     (GdkEventType     type,
                                          guint            button,
                                          guint            mode);
 
-GdkEvent * gdk_event_pad_group_mode_new (GdkSurface      *surface,
+GdkEvent * gdk_pad_event_new_group_mode (GdkSurface      *surface,
                                          GdkDevice       *device,
                                          GdkDevice       *source_device,
                                          guint32          time,
                                          guint            group,
                                          guint            mode);
 
-GdkEvent * gdk_event_drag_new           (GdkEventType     type,
+GdkEvent * gdk_dnd_event_new            (GdkEventType     type,
                                          GdkSurface      *surface,
                                          GdkDevice       *device,
                                          GdkDrop         *drop,
@@ -716,12 +606,12 @@ GdkEvent * gdk_event_drag_new           (GdkEventType     type,
                                          double           x,
                                          double           y);
 
-GdkEvent * gdk_event_grab_broken_new    (GdkSurface      *surface,
+GdkEvent * gdk_grab_broken_event_new    (GdkSurface      *surface,
                                          GdkDevice       *device,
                                          GdkDevice       *source_device,
                                          GdkSurface      *grab_surface,
                                          gboolean         implicit);
 
+G_END_DECLS
 
 #endif /* __GDK_EVENTS_PRIVATE_H__ */
-

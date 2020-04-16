@@ -660,6 +660,7 @@ do_post_parse_initialization (void)
 
   gtk_widget_set_default_direction (gtk_get_locale_direction ());
 
+  gdk_event_init_types ();
   gsk_ensure_resources ();
   gsk_render_node_init_types ();
   _gtk_ensure_resources ();
@@ -1109,7 +1110,7 @@ rewrite_event_for_surface (GdkEvent  *event,
     {
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
-      return gdk_event_button_new (type,
+      return gdk_button_event_new (type,
                                    new_surface,
                                    gdk_event_get_device (event),
                                    gdk_event_get_source_device (event),
@@ -1120,7 +1121,7 @@ rewrite_event_for_surface (GdkEvent  *event,
                                    x, y,
                                    NULL); // FIXME copy axes
     case GDK_MOTION_NOTIFY:
-      return gdk_event_motion_new (new_surface,
+      return gdk_motion_event_new (new_surface,
                                    gdk_event_get_device (event),
                                    gdk_event_get_source_device (event),
                                    gdk_event_get_device_tool (event),
@@ -1132,7 +1133,7 @@ rewrite_event_for_surface (GdkEvent  *event,
     case GDK_TOUCH_UPDATE:
     case GDK_TOUCH_END:
     case GDK_TOUCH_CANCEL:
-      return gdk_event_touch_new (type,
+      return gdk_touch_event_new (type,
                                   gdk_event_get_event_sequence (event),
                                   new_surface,
                                   gdk_event_get_device (event),
@@ -1144,7 +1145,7 @@ rewrite_event_for_surface (GdkEvent  *event,
                                   gdk_touch_event_get_emulating_pointer (event));
     case GDK_TOUCHPAD_SWIPE:
       gdk_touchpad_event_get_deltas (event, &dx, &dy);
-      return gdk_event_touchpad_swipe_new (new_surface,
+      return gdk_touchpad_event_new_swipe (new_surface,
                                            gdk_event_get_device (event),
                                            gdk_event_get_source_device (event),
                                            gdk_event_get_time (event),
@@ -1155,7 +1156,7 @@ rewrite_event_for_surface (GdkEvent  *event,
                                            dx, dy);
     case GDK_TOUCHPAD_PINCH:
       gdk_touchpad_event_get_deltas (event, &dx, &dy);
-      return gdk_event_touchpad_pinch_new (new_surface,
+      return gdk_touchpad_event_new_pinch (new_surface,
                                            gdk_event_get_device (event),
                                            gdk_event_get_source_device (event),
                                            gdk_event_get_time (event),
@@ -1164,8 +1165,8 @@ rewrite_event_for_surface (GdkEvent  *event,
                                            x, y,
                                            gdk_touchpad_event_get_n_fingers (event),
                                            dx, dy,
-                                           gdk_touchpad_pinch_event_get_scale (event),
-                                           gdk_touchpad_pinch_event_get_angle_delta (event));
+                                           gdk_touchpad_event_get_pinch_scale (event),
+                                           gdk_touchpad_event_get_pinch_angle_delta (event));
     default:
       break;
     }
@@ -1230,6 +1231,7 @@ static GdkEvent *
 rewrite_event_for_toplevel (GdkEvent *event)
 {
   GdkSurface *surface;
+  GdkKeyEvent *key_event;
 
   surface = gdk_event_get_surface (event);
   if (!surface->parent)
@@ -1238,7 +1240,10 @@ rewrite_event_for_toplevel (GdkEvent *event)
   while (surface->parent)
     surface = surface->parent;
 
-  return gdk_event_key_new (gdk_event_get_event_type (event),
+  key_event = (GdkKeyEvent *) event;
+
+  /* FIXME: Avoid direct access to the translated[] field */
+  return gdk_key_event_new (gdk_event_get_event_type (event),
                             surface,
                             gdk_event_get_device (event),
                             gdk_event_get_source_device (event),
@@ -1246,8 +1251,8 @@ rewrite_event_for_toplevel (GdkEvent *event)
                             gdk_key_event_get_keycode (event),
                             gdk_event_get_modifier_state (event),
                             gdk_key_event_is_modifier (event),
-                            &event->key.translated[0],
-                            &event->key.translated[1]);
+                            &key_event->translated[0],
+                            &key_event->translated[1]);
 }
 
 static gboolean
@@ -1505,7 +1510,7 @@ handle_pointing_event (GdkEvent *event)
       break;
     case GDK_DRAG_LEAVE:
       {
-        GdkDrop *drop = gdk_drag_event_get_drop (event);
+        GdkDrop *drop = gdk_dnd_event_get_drop (event);
         old_target = update_pointer_focus_state (toplevel, event, NULL);
         gtk_drop_begin_event (drop, GDK_DRAG_LEAVE);
         gtk_synthesize_crossing_events (GTK_ROOT (toplevel), GTK_CROSSING_DROP, old_target, NULL,
@@ -1544,10 +1549,10 @@ handle_pointing_event (GdkEvent *event)
       else if ((old_target != target) &&
                (type == GDK_DRAG_ENTER || type == GDK_DRAG_MOTION || type == GDK_DROP_START))
         {
-          GdkDrop *drop = gdk_drag_event_get_drop (event);
+          GdkDrop *drop = gdk_dnd_event_get_drop (event);
           gtk_drop_begin_event (drop, type);
           gtk_synthesize_crossing_events (GTK_ROOT (toplevel), GTK_CROSSING_DROP, old_target, target,
-                                          event, GDK_CROSSING_NORMAL, gdk_drag_event_get_drop (event));
+                                          event, GDK_CROSSING_NORMAL, gdk_dnd_event_get_drop (event));
           gtk_drop_end_event (drop);
         }
       else if (type == GDK_TOUCH_BEGIN)
@@ -1740,7 +1745,7 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
       {
-        GdkDrop *drop = gdk_drag_event_get_drop (event);
+        GdkDrop *drop = gdk_dnd_event_get_drop (event);
         gtk_drop_begin_event (drop, gdk_event_get_event_type (event));
         gtk_propagate_event (target_widget, event);
         gtk_drop_end_event (drop);
