@@ -47,7 +47,7 @@ const char *css =
 "  background-color: white;"
 "  box-shadow: none;"
 "}"
-"focuswidget button:focus(visible) {"
+"focuswidget button:focus-visible {"
 "  outline-width: 4px;"
 "  outline-color: yellow;"
 "}"

@@ -42,10 +42,10 @@ dnd {
  * Outlines *
  ********/
 
-:focus(visible) link,
-label:focus(visible):not(.link),
-row:focus(visible),
-flowboxchild:focus(visible) {
+:focus-visible link,
+label:focus-visible:not(.link),
+row:focus-visible,
+flowboxchild:focus-visible {
   // We use the outline properties to signal the focus properties
   // to the adwaita engine: using real CSS properties is faster,
   // and we don't use any outlines for now.
@@ -58,15 +58,15 @@ flowboxchild:focus(visible) {
 }
 
 // Widgets that draw their focus indicator outset and not inset
-plane:focus(visible),
-scale:focus(visible) > trough {
+plane:focus-visible,
+scale:focus-visible > trough {
   outline-color: $focus_border_color;
   outline-style: solid;
   outline-offset: 10px;
   outline-width: 2px;
 }
 
-button:focus(visible), modelbutton:focus(visible) {
+button:focus-visible, modelbutton:focus-visible {
   outline-color: $focus_border_color;
   outline-style: solid;
   outline-offset: -2px;
@@ -78,7 +78,7 @@ button:focus(visible), modelbutton:focus(visible) {
 }
 
 // Draw the "outline" around the whole switch not the slider
-switch:focus(visible) {
+switch:focus-visible {
   &, &:hover { slider { outline-color: transparent; } }
   &:focus {
     box-shadow: 0 0 0 3px if($variant=='light', lighten(opacify($focus_border_color, 1), 20%), $focus_border_color);
@@ -86,8 +86,8 @@ switch:focus(visible) {
   row:selected & { outline-color: $alt_focus_border_color; }
 }
 
-checkbutton:focus(visible),
-radiobutton:focus(visible) {
+checkbutton:focus-visible,
+radiobutton:focus-visible {
   outline-color: $focus_border_color;
   outline-style: solid;
   outline-offset: 2px;
@@ -96,7 +96,7 @@ radiobutton:focus(visible) {
   row:selected & , treeview:selected & { outline-color: $alt_focus_border_color; }
 }
 
-row:focus(visible) {
+row:focus-visible {
   outline-color: $focus_border_color;
   outline-offset: -2px;
   outline-style: solid;
@@ -105,7 +105,7 @@ row:focus(visible) {
   }
 }
 
-treeview:focus(visible) {
+treeview:focus-visible {
   outline-color: $focus_border_color;
   outline-style: solid;
   outline-width: 2px;
@@ -114,7 +114,7 @@ treeview:focus(visible) {
   }
 }
 
-notebook:focus(visible) {
+notebook:focus-visible {
   outline-color: $focus_border_color;
   outline-style: solid;
   outline-offset: -1px;
@@ -3979,7 +3979,7 @@ colorswatch {
     }
   }
 
-  &:focus(visible) {
+  &:focus-visible {
     outline-offset: -2px;
     outline-width: 2px;
     outline-style: solid;
