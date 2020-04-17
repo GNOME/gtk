@@ -1,7 +1,7 @@
 /*************************** Check and Radio buttons * */
-* { padding: 0; -GtkToolButton-icon-spacing: 4; -GtkTextView-error-underline-color: #cc0000; -GtkScrolledWindow-scrollbar-spacing: 0; -GtkToolItemGroup-expander-size: 11; -GtkWidget-text-handle-width: 20; -GtkWidget-text-handle-height: 24; -GtkDialog-button-spacing: 4; -GtkDialog-action-area-border: 0; outline-color: rgba(53, 132, 228, 0.7); outline-style: solid; outline-offset: -2px; outline-width: 2px; -gtk-outline-radius: 5px; -gtk-secondary-caret-color: #3584e4; }
+* { padding: 0; -GtkToolButton-icon-spacing: 4; -GtkTextView-error-underline-color: #cc0000; -GtkScrolledWindow-scrollbar-spacing: 0; -GtkToolItemGroup-expander-size: 11; -GtkWidget-text-handle-width: 20; -GtkWidget-text-handle-height: 24; -GtkDialog-button-spacing: 4; -GtkDialog-action-area-border: 0; outline-color: rgba(53, 132, 228, 0.5); outline-style: solid; outline-offset: -2px; outline-width: 2px; -gtk-outline-radius: 5px; -gtk-secondary-caret-color: #3584e4; }
 
-:selected * { outline-color: rgba(255, 255, 255, 0.7); }
+:selected * { outline-color: rgba(255, 255, 255, 0.5); }
 
 /*************** Base States * */
 .background { color: #2e3436; background-color: #f6f5f4; }
@@ -114,7 +114,7 @@ spinbutton:not(.vertical) image.right, entry image.right { margin-left: 6px; }
 
 spinbutton.flat:not(.vertical), entry.flat:focus, entry.flat:backdrop, entry.flat:disabled, entry.flat { min-height: 0; padding: 2px; background-color: transparent; border-color: transparent; border-radius: 0; }
 
-spinbutton:focus:not(.vertical), entry:focus { box-shadow: inset 0 0 0 1px rgba(53, 132, 228, 0.7); border-color: rgba(53, 132, 228, 0.7); }
+spinbutton:focus:not(.vertical), entry:focus { box-shadow: inset 0 0 0 1px rgba(53, 132, 228, 0.5); border-color: rgba(53, 132, 228, 0.5); }
 
 spinbutton:disabled:not(.vertical), entry:disabled { color: #929595; border-color: #cdc7c2; background-color: #faf9f8; box-shadow: none; }
 
@@ -146,7 +146,7 @@ spinbutton:drop(active):not(.vertical), entry:drop(active):focus, entry:drop(act
 
 .osd spinbutton:not(.vertical), .osd entry { color: white; border-color: rgba(0, 0, 0, 0.7); background-color: rgba(0, 0, 0, 0.5); background-clip: padding-box; box-shadow: none; text-shadow: 0 1px black; -gtk-icon-shadow: 0 1px black; }
 
-.osd spinbutton:focus:not(.vertical), .osd entry:focus { color: white; border-color: #3584e4; background-color: rgba(0, 0, 0, 0.5); background-clip: padding-box; box-shadow: inset 0 0 0 1px rgba(53, 132, 228, 0.7); text-shadow: 0 1px black; -gtk-icon-shadow: 0 1px black; }
+.osd spinbutton:focus:not(.vertical), .osd entry:focus { color: white; border-color: #3584e4; background-color: rgba(0, 0, 0, 0.5); background-clip: padding-box; box-shadow: inset 0 0 0 1px rgba(53, 132, 228, 0.5); text-shadow: 0 1px black; -gtk-icon-shadow: 0 1px black; }
 
 .osd spinbutton:backdrop:not(.vertical), .osd entry:backdrop { color: white; border-color: rgba(0, 0, 0, 0.7); background-color: rgba(0, 0, 0, 0.5); background-clip: padding-box; box-shadow: none; text-shadow: none; -gtk-icon-shadow: none; }
 
@@ -156,7 +156,7 @@ spinbutton:not(.vertical) progress, entry progress { margin: 2px -6px; backgroun
 
 spinbutton:not(.vertical) progress:backdrop, entry progress:backdrop { background-color: transparent; }
 
-.linked:not(.vertical) > spinbutton:focus:not(.vertical) + spinbutton:not(.vertical), .linked:not(.vertical) > spinbutton:focus:not(.vertical) + button, .linked:not(.vertical) > spinbutton:focus:not(.vertical) + combobox > box > button.combo, .linked:not(.vertical) > spinbutton:focus:not(.vertical) + entry, .linked:not(.vertical) > entry:focus + button, .linked:not(.vertical) > entry:focus + combobox > box > button.combo, .linked:not(.vertical) > entry:focus + spinbutton:not(.vertical), .linked:not(.vertical) > entry:focus + entry { border-left-color: rgba(53, 132, 228, 0.7); }
+.linked:not(.vertical) > spinbutton:focus:not(.vertical) + spinbutton:not(.vertical), .linked:not(.vertical) > spinbutton:focus:not(.vertical) + button, .linked:not(.vertical) > spinbutton:focus:not(.vertical) + combobox > box > button.combo, .linked:not(.vertical) > spinbutton:focus:not(.vertical) + entry, .linked:not(.vertical) > entry:focus + button, .linked:not(.vertical) > entry:focus + combobox > box > button.combo, .linked:not(.vertical) > entry:focus + spinbutton:not(.vertical), .linked:not(.vertical) > entry:focus + entry { border-left-color: rgba(53, 132, 228, 0.5); }
 
 .linked:not(.vertical) > spinbutton:focus.error:not(.vertical) + spinbutton:not(.vertical), .linked:not(.vertical) > spinbutton:focus.error:not(.vertical) + button, .linked:not(.vertical) > spinbutton:focus.error:not(.vertical) + combobox > box > button.combo, .linked:not(.vertical) > spinbutton:focus.error:not(.vertical) + entry, .linked:not(.vertical) > entry:focus.error + button, .linked:not(.vertical) > entry:focus.error + combobox > box > button.combo, .linked:not(.vertical) > entry:focus.error + spinbutton:not(.vertical), .linked:not(.vertical) > entry:focus.error + entry { border-left-color: #cc0000; }
 
@@ -168,13 +168,13 @@ spinbutton:not(.vertical) progress:backdrop, entry progress:backdrop { backgroun
 
 .linked.vertical > spinbutton:disabled:not(.vertical) + spinbutton:disabled:not(.vertical), .linked.vertical > spinbutton:disabled:not(.vertical) + entry:disabled, .linked.vertical > entry:disabled + spinbutton:disabled:not(.vertical), .linked.vertical > entry:disabled + entry:disabled { border-top-color: #f0eeed; }
 
-.linked.vertical > spinbutton:not(.vertical) + spinbutton:focus:not(:only-child):not(.vertical), .linked.vertical > spinbutton:not(.vertical) + entry:focus:not(:only-child), .linked.vertical > entry + spinbutton:focus:not(:only-child):not(.vertical), .linked.vertical > entry + entry:focus:not(:only-child) { border-top-color: rgba(53, 132, 228, 0.7); }
+.linked.vertical > spinbutton:not(.vertical) + spinbutton:focus:not(:only-child):not(.vertical), .linked.vertical > spinbutton:not(.vertical) + entry:focus:not(:only-child), .linked.vertical > entry + spinbutton:focus:not(:only-child):not(.vertical), .linked.vertical > entry + entry:focus:not(:only-child) { border-top-color: rgba(53, 132, 228, 0.5); }
 
 .linked.vertical > spinbutton:not(.vertical) + spinbutton:focus.error:not(:only-child):not(.vertical), .linked.vertical > spinbutton:not(.vertical) + entry:focus.error:not(:only-child), .linked.vertical > entry + spinbutton:focus.error:not(:only-child):not(.vertical), .linked.vertical > entry + entry:focus.error:not(:only-child) { border-top-color: #cc0000; }
 
 .linked.vertical > spinbutton:not(.vertical) + spinbutton:drop(active):not(:only-child):not(.vertical), .linked.vertical > spinbutton:not(.vertical) + entry:drop(active):not(:only-child), .linked.vertical > entry + spinbutton:drop(active):not(:only-child):not(.vertical), .linked.vertical > entry + entry:drop(active):not(:only-child) { border-top-color: #4e9a06; }
 
-.linked.vertical > spinbutton:focus:not(:only-child):not(.vertical) + spinbutton:not(.vertical), .linked.vertical > spinbutton:focus:not(:only-child):not(.vertical) + entry, .linked.vertical > spinbutton:focus:not(:only-child):not(.vertical) + button, .linked.vertical > spinbutton:focus:not(:only-child):not(.vertical) + combobox > box > button.combo, .linked.vertical > entry:focus:not(:only-child) + spinbutton:not(.vertical), .linked.vertical > entry:focus:not(:only-child) + entry, .linked.vertical > entry:focus:not(:only-child) + button, .linked.vertical > entry:focus:not(:only-child) + combobox > box > button.combo { border-top-color: rgba(53, 132, 228, 0.7); }
+.linked.vertical > spinbutton:focus:not(:only-child):not(.vertical) + spinbutton:not(.vertical), .linked.vertical > spinbutton:focus:not(:only-child):not(.vertical) + entry, .linked.vertical > spinbutton:focus:not(:only-child):not(.vertical) + button, .linked.vertical > spinbutton:focus:not(:only-child):not(.vertical) + combobox > box > button.combo, .linked.vertical > entry:focus:not(:only-child) + spinbutton:not(.vertical), .linked.vertical > entry:focus:not(:only-child) + entry, .linked.vertical > entry:focus:not(:only-child) + button, .linked.vertical > entry:focus:not(:only-child) + combobox > box > button.combo { border-top-color: rgba(53, 132, 228, 0.5); }
 
 .linked.vertical > spinbutton:focus.error:not(:only-child):not(.vertical) + spinbutton:not(.vertical), .linked.vertical > spinbutton:focus.error:not(:only-child):not(.vertical) + entry, .linked.vertical > spinbutton:focus.error:not(:only-child):not(.vertical) + button, .linked.vertical > spinbutton:focus.error:not(:only-child):not(.vertical) + combobox > box > button.combo, .linked.vertical > entry:focus.error:not(:only-child) + spinbutton:not(.vertical), .linked.vertical > entry:focus.error:not(:only-child) + entry, .linked.vertical > entry:focus.error:not(:only-child) + button, .linked.vertical > entry:focus.error:not(:only-child) + combobox > box > button.combo { border-top-color: #cc0000; }
 
@@ -1966,29 +1966,29 @@ popover.emoji-completion contents row box { padding: 2px 10px; }
 popover.emoji-completion .emoji:hover { background: white; }
 
 /********* Outlines * */
-button { outline-color: rgba(53, 132, 228, 0.7); outline-style: solid; outline-offset: -2px; outline-width: 2px; -gtk-outline-radius: 5px; }
+button { outline-color: rgba(53, 132, 228, 0.5); outline-style: solid; outline-offset: -2px; outline-width: 2px; -gtk-outline-radius: 5px; }
 
-row:selected button { outline-color: rgba(255, 255, 255, 0.7); }
+row:selected button { outline-color: rgba(255, 255, 255, 0.5); }
 
-button.suggested-action, button.suggested-action:hover, button.suggested-action:active, button.destructive-action, button.destructive-action:hover, button.destructive-action:active { outline-color: rgba(255, 255, 255, 0.7); }
+button.suggested-action, button.suggested-action:hover, button.suggested-action:active, button.destructive-action, button.destructive-action:hover, button.destructive-action:active { outline-color: rgba(255, 255, 255, 0.5); }
 
 switch slider, switch:hover slider { outline-color: transparent; }
 
 switch:focus { box-shadow: 0 0 0 3px #8fbbf0; }
 
-row:selected switch { outline-color: rgba(255, 255, 255, 0.7); }
+row:selected switch { outline-color: rgba(255, 255, 255, 0.5); }
 
-checkbutton, radiobutton { outline-color: rgba(53, 132, 228, 0.7); outline-offset: 1px; outline-width: 2px; }
+checkbutton, radiobutton { outline-color: rgba(53, 132, 228, 0.5); outline-offset: 1px; outline-width: 2px; }
 
-row:selected checkbutton, treeview:selected checkbutton, row:selected radiobutton, treeview:selected radiobutton { outline-color: rgba(255, 255, 255, 0.7); }
+row:selected checkbutton, treeview:selected checkbutton, row:selected radiobutton, treeview:selected radiobutton { outline-color: rgba(255, 255, 255, 0.5); }
 
-row { outline-color: rgba(53, 132, 228, 0.7); outline-offset: -2px; -gtk-outline-radius: 0px; }
+row { outline-color: rgba(53, 132, 228, 0.5); outline-offset: -2px; -gtk-outline-radius: 0px; }
 
-row:selected { outline-color: rgba(255, 255, 255, 0.7); }
+row:selected { outline-color: rgba(255, 255, 255, 0.5); }
 
-treeview { outline-color: rgba(53, 132, 228, 0.7); -gtk-outline-radius: 0px; }
+treeview { outline-color: rgba(53, 132, 228, 0.5); -gtk-outline-radius: 0px; }
 
-treeview:selected { outline-color: rgba(255, 255, 255, 0.7); }
+treeview:selected { outline-color: rgba(255, 255, 255, 0.5); }
 
 /* GTK NAMED COLORS ---------------- use responsibly! */
 /*

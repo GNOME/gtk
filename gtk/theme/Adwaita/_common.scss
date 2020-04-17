@@ -51,7 +51,7 @@ $_switch_margin: if($_sizevariant=='default', 10px, 7px);
   outline-offset: -2px;
   outline-width: 2px;
   -gtk-outline-radius: $button-radius;
-  :selected & { outline-color: $coloured_focus_border_color; }
+  :selected & { outline-color: $alt_focus_border_color; }
   -gtk-secondary-caret-color: $selected_bg_color
 }
 
@@ -4880,9 +4880,9 @@ button {
   outline-width: 2px;
   -gtk-outline-radius: $button-radius;
 
-  row:selected & { outline-color: $coloured_focus_border_color; }
+  row:selected & { outline-color: $alt_focus_border_color; }
 
-  &.suggested-action, &.destructive-action{ &, &:hover, &:active { outline-color: $coloured_focus_border_color; } }
+  &.suggested-action, &.destructive-action{ &, &:hover, &:active { outline-color: $alt_focus_border_color; } }
 }
 
 switch {
@@ -4890,7 +4890,7 @@ switch {
   &:focus {
     box-shadow: 0 0 0 3px if($variant=='light', lighten(opacify($focus_border_color, 1), 20%), $focus_border_color);
   }
-  row:selected & { outline-color: $coloured_focus_border_color; }
+  row:selected & { outline-color: $alt_focus_border_color; }
 }
 
 checkbutton,
@@ -4898,7 +4898,7 @@ radiobutton {
   outline-color: $focus_border_color;
   outline-offset: 1px;
   outline-width: 2px;
-  row:selected & , treeview:selected & { outline-color: $coloured_focus_border_color; }
+  row:selected & , treeview:selected & { outline-color: $alt_focus_border_color; }
 }
 
 row {
@@ -4907,7 +4907,7 @@ row {
   -gtk-outline-radius: 0px;
 
   &:selected {
-    outline-color: $coloured_focus_border_color;
+    outline-color: $alt_focus_border_color;
   }
 }
 
@@ -4916,6 +4916,6 @@ treeview {
   -gtk-outline-radius: 0px;
 
   &:selected {
-    outline-color: $coloured_focus_border_color;
+    outline-color: $alt_focus_border_color;
   }
 }
