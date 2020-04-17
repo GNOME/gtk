@@ -26,10 +26,10 @@
 #include <time.h>
 
 /* Cups 1.6 deprecates ppdFindAttr(), ppdFindCustomOption(),
- * ppdFirstCustomParam(), and ppdNextCustomParam() among others. This
- * turns off the warning so that it will compile.
+ * ppdFirstCustomParam(), and ppdNextCustomParam() among others.
+ * The replacement is to use the Job Ticket API, but that requires
+ * a larger refactoring of this backend.
  */
-#define _PPD_DEPRECATED
 
 #include <cups/cups.h>
 #include <cups/language.h>
@@ -396,6 +396,8 @@ cups_printer_create_cairo_surface (GtkPrinter       *printer,
   gchar           *res_string = NULL;
   gint             level = 2;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
   if (gtk_printer_accepts_pdf (printer))
     surface = cairo_pdf_surface_create_for_stream (_cairo_write_to_cups, cache_io, width, height);
   else
@@ -465,6 +467,8 @@ cups_printer_create_cairo_surface (GtkPrinter       *printer,
   cairo_surface_set_fallback_resolution (surface,
                                          2.0 * gtk_print_settings_get_printer_lpi (settings),
                                          2.0 * gtk_print_settings_get_printer_lpi (settings));
+
+  G_GNUC_END_IGNORE_DEPRECATIONS
 
   return surface;
 }
@@ -568,6 +572,8 @@ add_cups_options (const gchar *key,
 
   key = key + strlen ("cups-");
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
   if (printer && printer->ppd_file && !g_str_has_prefix (value, "Custom."))
     {
       ppd_coption_t *coption;
@@ -651,6 +657,8 @@ add_cups_options (const gchar *key,
             }
         }
     }
+
+  G_GNUC_END_IGNORE_DEPRECATIONS
 
   /* Add "Custom." prefix to custom values if not already added. */
   if (custom_value)
@@ -3809,11 +3817,15 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
 
   if (!gtk_cups_result_is_error (result))
     {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
       /* let ppdOpenFd take over the ownership of the open file */
       g_io_channel_seek_position (data->ppd_io, 0, G_SEEK_SET, NULL);
       data->printer->ppd_file = ppdOpenFd (dup (g_io_channel_unix_get_fd (data->ppd_io)));
       ppdLocalize (data->printer->ppd_file);
       ppdMarkDefaults (data->printer->ppd_file);
+
+      G_GNUC_END_IGNORE_DEPRECATIONS
     }
 
   fstat (g_io_channel_unix_get_fd (data->ppd_io), &data_info);
@@ -4772,6 +4784,8 @@ available_choices (ppd_file_t     *ppd,
 	}
     }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
   for (i = ppd->num_consts, constraint = ppd->consts; i > 0; i--, constraint++)
     {
       option1 = ppdFindOption (ppd, constraint->option1);
@@ -4830,6 +4844,8 @@ available_choices (ppd_file_t     *ppd,
 	    }
 	}
     }
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   num_conflicts = 0;
   all_default = TRUE;
@@ -4919,6 +4935,8 @@ create_pickone_option (ppd_file_t   *ppd_file,
   g_assert (ppd_option->ui == PPD_UI_PICKONE);
 
   option = NULL;
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
   n_choices = available_choices (ppd_file, ppd_option, &available, g_str_has_prefix (gtk_name, "gtk-"));
   if (n_choices > 0)
@@ -5020,6 +5038,9 @@ create_pickone_option (ppd_file_t   *ppd_file,
   else
     g_warning ("CUPS Backend: Ignoring pickone %s\n", ppd_option->text);
 #endif
+
+G_GNUC_END_IGNORE_DEPRECATIONS
+
   g_free (available);
 
   return option;
@@ -5638,6 +5659,8 @@ cups_printer_get_options (GtkPrinter           *printer,
       ppd_option_t *ppd_option;
       const gchar *ppd_name;
 
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
       ppdMarkDefaults (ppd_file);
 
       paper_size = gtk_page_setup_get_paper_size (page_setup);
@@ -5675,6 +5698,7 @@ cups_printer_get_options (GtkPrinter           *printer,
 	      g_free (custom_name);
 	    }
 	}
+      G_GNUC_END_IGNORE_DEPRECATIONS
 
       for (i = 0; i < ppd_file->num_groups; i++)
         handle_group (set, ppd_file, &ppd_file->groups[i], &ppd_file->groups[i], settings);
@@ -5820,10 +5844,14 @@ mark_option_from_set (GtkPrinterOptionSet *set,
   GtkPrinterOption *option;
   char *name = get_ppd_option_name (ppd_option->keyword);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
   option = gtk_printer_option_set_lookup (set, name);
 
   if (option)
     ppdMarkOption (ppd_file, ppd_option->keyword, option->value);
+
+  G_GNUC_END_IGNORE_DEPRECATIONS
 
   g_free (name);
 }
@@ -5894,6 +5922,8 @@ cups_printer_mark_conflicts (GtkPrinter          *printer,
   if (ppd_file == NULL)
     return FALSE;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
   ppdMarkDefaults (ppd_file);
 
   for (i = 0; i < ppd_file->num_groups; i++)
@@ -5906,6 +5936,8 @@ cups_printer_mark_conflicts (GtkPrinter          *printer,
       for (i = 0; i < ppd_file->num_groups; i++)
 	set_conflicts_from_group (options, ppd_file, &ppd_file->groups[i]);
     }
+
+  G_GNUC_END_IGNORE_DEPRECATIONS
 
   return num_conflicts > 0;
 }
@@ -6540,12 +6572,14 @@ cups_printer_prepare_for_print (GtkPrinter       *printer,
 static GtkPageSetup *
 create_page_setup (ppd_file_t *ppd_file,
 		   ppd_size_t *size)
- {
-   char *display_name;
-   GtkPageSetup *page_setup;
-   GtkPaperSize *paper_size;
-   ppd_option_t *option;
-   ppd_choice_t *choice;
+{
+  char *display_name;
+  GtkPageSetup *page_setup;
+  GtkPaperSize *paper_size;
+  ppd_option_t *option;
+  ppd_choice_t *choice;
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
   display_name = NULL;
   option = ppdFindOption (ppd_file, "PageSize");
@@ -6555,6 +6589,8 @@ create_page_setup (ppd_file_t *ppd_file,
       if (choice)
 	display_name = ppd_text_to_utf8 (ppd_file, choice->text);
     }
+
+  G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (display_name == NULL)
     display_name = g_strdup (size->name);
@@ -6681,6 +6717,8 @@ cups_printer_get_default_page_size (GtkPrinter *printer)
   ppd_file = gtk_printer_cups_get_ppd (GTK_PRINTER_CUPS (printer));
   if (ppd_file != NULL)
     {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
       option = ppdFindOption (ppd_file, "PageSize");
       if (option == NULL)
         return NULL;
@@ -6688,6 +6726,8 @@ cups_printer_get_default_page_size (GtkPrinter *printer)
       size = ppdPageSize (ppd_file, option->defchoice);
       if (size == NULL)
         return NULL;
+
+      G_GNUC_END_IGNORE_DEPRECATIONS
 
       result = create_page_setup (ppd_file, size);
     }
