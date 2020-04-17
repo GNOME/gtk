@@ -1721,6 +1721,7 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
                             gdouble          y,
                             PangoLayout     *layout)
 {
+  const bool needs_translate = (x != 0 || y != 0);
   const GdkRGBA *fg_color;
   GtkCssValue *shadows_value;
   gboolean has_shadow;
@@ -1729,20 +1730,24 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (PANGO_IS_LAYOUT (layout));
 
-  gtk_snapshot_save (snapshot);
-  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
+  if (needs_translate)
+    {
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
+    }
 
   fg_color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
 
   shadows_value = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_TEXT_SHADOW);
-  has_shadow = gtk_css_shadow_value_push_snapshot (shadows_value, snapshot);
+    has_shadow = gtk_css_shadow_value_push_snapshot (shadows_value, snapshot);
 
   gtk_snapshot_append_layout (snapshot, layout, fg_color);
 
   if (has_shadow)
     gtk_snapshot_pop (snapshot);
 
-  gtk_snapshot_restore (snapshot);
+  if (needs_translate)
+    gtk_snapshot_restore (snapshot);
 }
 
 void
