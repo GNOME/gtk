@@ -548,8 +548,6 @@ gtk_entry_completion_constructed (GObject *object)
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->scrolled_window),
                                   GTK_POLICY_NEVER,
                                   GTK_POLICY_AUTOMATIC);
-  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (priv->scrolled_window),
-                                       GTK_SHADOW_NONE);
 
   /* a nasty hack to get the completions treeview to size nicely */
   gtk_widget_set_size_request (gtk_scrolled_window_get_vscrollbar (GTK_SCROLLED_WINDOW (priv->scrolled_window)),

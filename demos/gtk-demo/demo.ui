@@ -166,7 +166,7 @@
         </child>
         <child>
           <object class="GtkScrolledWindow" id="scrolledwindow1">
-            <property name="shadow-type">in</property>
+            <property name="has-frame">1</property>
             <property name="hexpand">1</property>
             <property name="vexpand">1</property>
             <child>

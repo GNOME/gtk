@@ -3768,7 +3768,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sidebar->swin),
                                   GTK_POLICY_NEVER,
                                   GTK_POLICY_AUTOMATIC);
-  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sidebar->swin), GTK_SHADOW_IN);
+  gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (sidebar->swin), TRUE);
 
   gtk_widget_add_css_class (GTK_WIDGET (sidebar), "sidebar");
 
