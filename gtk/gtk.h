@@ -230,6 +230,7 @@
 #include <gtk/gtktexttag.h>
 #include <gtk/gtktexttagtable.h>
 #include <gtk/gtktextview.h>
+#include <gtk/gtktheme.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtktooltip.h>
 #include <gtk/gtktestutils.h>

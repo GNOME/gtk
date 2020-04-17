@@ -42,6 +42,7 @@
 #include "gskrendererprivate.h"
 #include "gtknative.h"
 #include "gtkbinlayout.h"
+#include "gtktheme.h"
 
 #include "fallback-c89.c"
 
@@ -62,7 +63,6 @@ struct _GtkInspectorVisualPrivate
   GtkWidget *box;
   GtkWidget *visual_box;
   GtkWidget *theme_combo;
-  GtkWidget *dark_switch;
   GtkWidget *icon_combo;
   GtkWidget *cursor_combo;
   GtkWidget *cursor_size_spin;
@@ -474,30 +474,6 @@ focus_activate (GtkSwitch          *sw,
   redraw_everything ();
 }
 
-static void
-fill_gtk (const gchar *path,
-          GHashTable  *t)
-{
-  const gchar *dir_entry;
-  GDir *dir = g_dir_open (path, 0, NULL);
-
-  if (!dir)
-    return;
-
-  while ((dir_entry = g_dir_read_name (dir)))
-    {
-      gchar *filename = g_build_filename (path, dir_entry, "gtk-4.0", "gtk.css", NULL);
-
-      if (g_file_test (filename, G_FILE_TEST_IS_REGULAR) &&
-          !g_hash_table_contains (t, dir_entry))
-        g_hash_table_add (t, g_strdup (dir_entry));
-
-      g_free (filename);
-    }
-
-  g_dir_close (dir);
-}
-
 static gchar*
 get_data_path (const gchar *subdir)
 {
@@ -515,57 +491,14 @@ get_data_path (const gchar *subdir)
 static void
 init_theme (GtkInspectorVisual *vis)
 {
-  GHashTable *t;
-  GHashTableIter iter;
-  gchar *theme, *path;
-  gchar **builtin_themes;
-  GList *list, *l;
-  guint i;
-  const gchar * const *dirs;
+  char **themes;
+  int i;
 
-  t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-  /* Builtin themes */
-  builtin_themes = g_resources_enumerate_children ("/org/gtk/libgtk/theme", 0, NULL);
-  for (i = 0; builtin_themes[i] != NULL; i++)
-    {
-      if (g_str_has_suffix (builtin_themes[i], "/"))
-        g_hash_table_add (t, g_strndup (builtin_themes[i], strlen (builtin_themes[i]) - 1));
-    }
-  g_strfreev (builtin_themes);
+  themes = gtk_theme_get_available_themes ();
+  for (i = 0; themes[i]; i++)
+    gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (vis->priv->theme_combo), themes[i], themes[i]);
 
-  path = _gtk_get_theme_dir ();
-  fill_gtk (path, t);
-  g_free (path);
-
-  path = g_build_filename (g_get_user_data_dir (), "themes", NULL);
-  fill_gtk (path, t);
-  g_free (path);
-
-  path = g_build_filename (g_get_home_dir (), ".themes", NULL);
-  fill_gtk (path, t);
-  g_free (path);
-
-  dirs = g_get_system_data_dirs ();
-  for (i = 0; dirs[i]; i++)
-    {
-      path = g_build_filename (dirs[i], "themes", NULL);
-      fill_gtk (path, t);
-      g_free (path);
-    }
-
-  list = NULL;
-  g_hash_table_iter_init (&iter, t);
-  while (g_hash_table_iter_next (&iter, (gpointer *)&theme, NULL))
-    list = g_list_insert_sorted (list, theme, (GCompareFunc)strcmp);
-
-  for (l = list; l; l = l->next)
-    {
-      theme = l->data;
-      gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (vis->priv->theme_combo), theme, theme);
-    }
-
-  g_list_free (list);
-  g_hash_table_destroy (t);
+  g_strfreev (themes);
 
   g_object_bind_property (gtk_settings_get_for_display (vis->priv->display),
                           "gtk-theme-name",
@@ -578,25 +511,6 @@ init_theme (GtkInspectorVisual *vis)
 
       /* theme is hardcoded, nothing we can do */
       gtk_widget_set_sensitive (vis->priv->theme_combo, FALSE);
-      row = gtk_widget_get_ancestor (vis->priv->theme_combo, GTK_TYPE_LIST_BOX_ROW);
-      gtk_widget_set_tooltip_text (row, _("Theme is hardcoded by GTK_THEME"));
-    }
-}
-
-static void
-init_dark (GtkInspectorVisual *vis)
-{
-  g_object_bind_property (gtk_settings_get_for_display (vis->priv->display),
-                          "gtk-application-prefer-dark-theme",
-                          vis->priv->dark_switch, "active",
-                          G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-
-  if (g_getenv ("GTK_THEME") != NULL)
-    {
-      GtkWidget *row;
-
-      /* theme is hardcoded, nothing we can do */
-      gtk_widget_set_sensitive (vis->priv->dark_switch, FALSE);
       row = gtk_widget_get_ancestor (vis->priv->theme_combo, GTK_TYPE_LIST_BOX_ROW);
       gtk_widget_set_tooltip_text (row, _("Theme is hardcoded by GTK_THEME"));
     }
@@ -959,12 +873,7 @@ row_activated (GtkListBox         *box,
                GtkListBoxRow      *row,
                GtkInspectorVisual *vis)
 {
-  if (gtk_widget_is_ancestor (vis->priv->dark_switch, GTK_WIDGET (row)))
-    {
-      GtkSwitch *sw = GTK_SWITCH (vis->priv->dark_switch);
-      gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
-    }
-  else if (gtk_widget_is_ancestor (vis->priv->animation_switch, GTK_WIDGET (row)))
+  if (gtk_widget_is_ancestor (vis->priv->animation_switch, GTK_WIDGET (row)))
     {
       GtkSwitch *sw = GTK_SWITCH (vis->priv->animation_switch);
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
@@ -1125,7 +1034,6 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, direction_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, theme_combo);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, dark_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, cursor_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, cursor_size_spin);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, cursor_size_adjustment);
@@ -1172,7 +1080,6 @@ gtk_inspector_visual_set_display  (GtkInspectorVisual *vis,
 
   init_direction (vis);
   init_theme (vis);
-  init_dark (vis);
   init_icons (vis);
   init_cursors (vis);
   init_cursor_size (vis);

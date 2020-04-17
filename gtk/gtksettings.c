@@ -29,6 +29,7 @@
 #include "gtkstyleproviderprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkversion.h"
+#include "gtktheme.h"
 #include "gtkwidget.h"
 
 #include "gdk/gdk-private.h"
@@ -122,6 +123,8 @@ struct _GtkSettings
 struct _GtkSettingsClass
 {
   GObjectClass parent_class;
+
+  char * (* theme_change) (GtkSettings *settings);
 };
 
 struct _GtkSettingsValuePrivate
@@ -137,6 +140,13 @@ struct _GtkSettingsPropertyValue
 };
 
 enum {
+  THEME_CHANGE,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
+
+enum {
   PROP_0,
   PROP_DOUBLE_CLICK_TIME,
   PROP_DOUBLE_CLICK_DISTANCE,
@@ -146,6 +156,7 @@ enum {
   PROP_SPLIT_CURSOR,
   PROP_CURSOR_ASPECT_RATIO,
   PROP_THEME_NAME,
+  PROP_USER_THEME_PREFERENCE,
   PROP_ICON_THEME_NAME,
   PROP_DND_DRAG_THRESHOLD,
   PROP_FONT_NAME,
@@ -170,7 +181,6 @@ enum {
   PROP_ENABLE_INPUT_FEEDBACK_SOUNDS,
   PROP_ENABLE_EVENT_SOUNDS,
   PROP_PRIMARY_BUTTON_WARPS_SLIDER,
-  PROP_APPLICATION_PREFER_DARK_THEME,
   PROP_ENTRY_SELECT_ON_FOCUS,
   PROP_ENTRY_PASSWORD_HINT_TIMEOUT,
   PROP_LABEL_SELECT_ON_FOCUS,
@@ -223,6 +233,7 @@ static void gtk_settings_load_from_key_file      (GtkSettings           *setting
 static void settings_update_provider             (GdkDisplay            *display,
                                                   GtkCssProvider       **old,
                                                   GtkCssProvider        *new);
+static char *gtk_settings_theme_change (GtkSettings *settings);
 
 /* --- variables --- */
 static GQuark            quark_gtk_settings = 0;
@@ -321,6 +332,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
   gobject_class->set_property = gtk_settings_set_property;
   gobject_class->notify = gtk_settings_notify;
 
+  class->theme_change = gtk_settings_theme_change;
+
   quark_gtk_settings = g_quark_from_static_string ("gtk-settings");
 
   result = settings_install_property_parser (class,
@@ -400,6 +413,14 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   DEFAULT_THEME_NAME,
                                                                   GTK_PARAM_READWRITE));
   g_assert (result == PROP_THEME_NAME);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_int ("gtk-user-theme-preference",
+                                                               P_("User theme preference"),
+                                                               P_("User theme preference, 0=light, 1=dark, -1=default"),
+                                                               -1, 1, -1,
+                                                               GTK_PARAM_READWRITE));
+  g_assert (result == PROP_USER_THEME_PREFERENCE);
 
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-icon-theme-name",
@@ -715,29 +736,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    GTK_PARAM_READWRITE));
   g_assert (result == PROP_PRIMARY_BUTTON_WARPS_SLIDER);
 
-  /**
-   * GtkSettings:gtk-application-prefer-dark-theme:
-   *
-   * Whether the application prefers to use a dark theme. If a GTK theme
-   * includes a dark variant, it will be used instead of the configured
-   * theme.
-   *
-   * Some applications benefit from minimizing the amount of light pollution that
-   * interferes with the content. Good candidates for dark themes are photo and
-   * video editors that make the actual content get all the attention and minimize
-   * the distraction of the chrome.
-   *
-   * Dark themes should not be used for documents, where large spaces are white/light
-   * and the dark chrome creates too much contrast (web browser, text editor...).
-   */
-  result = settings_install_property_parser (class,
-                                             g_param_spec_boolean ("gtk-application-prefer-dark-theme",
-                                                                 P_("Application prefers a dark theme"),
-                                                                 P_("Whether the application prefers to have a dark theme."),
-                                                                 FALSE,
-                                                                 GTK_PARAM_READWRITE));
-  g_assert (result == PROP_APPLICATION_PREFER_DARK_THEME);
-
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-entry-select-on-focus",
                                                                    P_("Select on focus"),
@@ -964,6 +962,33 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    TRUE,
                                                                    GTK_PARAM_READWRITE));
   g_assert (result == PROP_OVERLAY_SCROLLING);
+
+  /**
+   * GtkSettings::theme-change:
+   * @settings: the #GtkSettings object
+   *
+   * The ::theme-change signal is emitted whenever the
+   * #GtkSettings:gtk-theme-name or #GtkSettings:gtk-user-theme-preference
+   * settings change. A handler for this signal can inspect the
+   * values of these properties, and return the name of the theme
+   * to load.
+   *
+   * The default handler will try to find a light or dark variant
+   * of the theme named by :gtk-theme-name, depending on the value
+   * of :gtk-user-theme-preference.
+   *
+   * Returns: (transfer full): a newly allocated string naming the
+   *     theme to load
+   */
+  signals[THEME_CHANGE] =
+    g_signal_new (I_("theme-change"),
+                  G_TYPE_FROM_CLASS (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkSettingsClass, theme_change),
+                  g_signal_accumulator_first_wins, NULL,
+                  NULL,
+                  G_TYPE_STRING, 0);
+
 }
 
 static GtkSettings *
@@ -980,6 +1005,7 @@ gtk_settings_provider_iface_init (GtkStyleProviderInterface *iface)
 
 static void
 gtk_settings_finalize (GObject *object)
+
 {
   GtkSettings *settings = GTK_SETTINGS (object);
   guint i;
@@ -1248,7 +1274,7 @@ gtk_settings_notify (GObject    *object,
       gtk_style_context_reset_widgets (settings->display);
       break;
     case PROP_THEME_NAME:
-    case PROP_APPLICATION_PREFER_DARK_THEME:
+    case PROP_USER_THEME_PREFERENCE:
       settings_update_theme (settings);
       break;
     case PROP_XFT_DPI:
@@ -1638,62 +1664,64 @@ settings_update_provider (GdkDisplay      *display,
     }
 }
 
-static void
-get_theme_name (GtkSettings  *settings,
-                gchar       **theme_name,
-                gchar       **theme_variant)
-{
-  gboolean prefer_dark;
+/* Implement the user theme preference, as well as we can
+ * without proper theme apis. We treat the builting themes
+ * as light/dark pairs:
+ * 
+ * Adwaita/Adwaita-dark
+ * HighContrast/HighContrastInverse
+ *
+ * and we also look for theme pairs of the form
+ *
+ * NAME/NAME-dark
+ */
 
-  *theme_name = NULL;
-  *theme_variant = NULL;
+static char *
+gtk_settings_theme_change (GtkSettings  *settings)
+{
+  char *theme_name = NULL;
+  char *theme;
+  int user_pref;
 
   if (g_getenv ("GTK_THEME"))
-    *theme_name = g_strdup (g_getenv ("GTK_THEME"));
+    theme_name = g_strdup (g_getenv ("GTK_THEME"));
 
-  if (*theme_name && **theme_name)
-    {
-      char *p;
-      p = strrchr (*theme_name, ':');
-      if (p) {
-        *p = '\0';
-        p++;
-        *theme_variant = g_strdup (p);
-      }
-
-      return;
-    }
-
-  g_free (*theme_name);
+  if (theme_name)
+    return theme_name;
 
   g_object_get (settings,
-                "gtk-theme-name", theme_name,
-                "gtk-application-prefer-dark-theme", &prefer_dark,
+                "gtk-theme-name", &theme_name,
+                "gtk-user-theme-preference", &user_pref,
                 NULL);
 
-  if (prefer_dark)
-    *theme_variant = g_strdup ("dark");
+  switch (user_pref)
+    {
+    case 0:
+      theme = gtk_theme_get_light_variant (theme_name);
+      g_free (theme_name);
+      break;
+    case 1:
+      theme = gtk_theme_get_dark_variant (theme_name);
+      g_free (theme_name);
+      break;
+    default:
+      theme = theme_name;
+      break;
+    }
 
-  if (*theme_name && **theme_name)
-    return;
-
-  g_free (*theme_name);
-  *theme_name = g_strdup (DEFAULT_THEME_NAME);
+  return theme;
 }
 
 static void
 settings_update_theme (GtkSettings *settings)
 {
-  gchar *theme_name;
-  gchar *theme_variant;
-  const gchar *theme_dir;
-  gchar *path;
+  char *theme_name;
+  const char *theme_dir;
+  char *path;
 
-  get_theme_name (settings, &theme_name, &theme_variant);
+  g_signal_emit (settings, signals[THEME_CHANGE], 0, &theme_name);
 
-  gtk_css_provider_load_named (settings->theme_provider,
-                               theme_name,
-                               theme_variant);
+  gtk_css_provider_load_named (settings->theme_provider, theme_name);
 
   /* reload per-theme settings */
   theme_dir = _gtk_css_provider_get_theme_dir (settings->theme_provider);
@@ -1706,7 +1734,6 @@ settings_update_theme (GtkSettings *settings)
     }
 
   g_free (theme_name);
-  g_free (theme_variant);
 }
 
 const cairo_font_options_t *

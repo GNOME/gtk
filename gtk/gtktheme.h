@@ -1,5 +1,5 @@
 /* GTK - The GIMP Toolkit
- * Copyright (C) 2011 Red Hat, Inc.
+ * Copyright (C) 2020 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,21 +15,24 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_CSS_PROVIDER_PRIVATE_H__
-#define __GTK_CSS_PROVIDER_PRIVATE_H__
+#ifndef __GTK_THEME_H__
+#define __GTK_THEME_H__
 
-#include "gtkcssprovider.h"
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
+#include <gtk/gtktypes.h>
 
 G_BEGIN_DECLS
 
-gchar *_gtk_get_theme_dir (void);
-
-const gchar *_gtk_css_provider_get_theme_dir (GtkCssProvider *provider);
-
-char *_gtk_css_find_theme (const char *theme);
-
-void   gtk_css_provider_set_keep_css_sections (void);
+GDK_AVAILABLE_IN_ALL
+char * gtk_theme_get_dark_variant     (const char *theme);
+GDK_AVAILABLE_IN_ALL
+char * gtk_theme_get_light_variant    (const char *theme);
+GDK_AVAILABLE_IN_ALL
+char **gtk_theme_get_available_themes (void);
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_PROVIDER_PRIVATE_H__ */
+#endif /* __GTK_THEME_H__ */
