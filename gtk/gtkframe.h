@@ -92,12 +92,6 @@ void       gtk_frame_set_label_align  (GtkFrame      *frame,
 				       gfloat         xalign);
 GDK_AVAILABLE_IN_ALL
 gfloat     gtk_frame_get_label_align  (GtkFrame      *frame);
-GDK_AVAILABLE_IN_ALL
-void       gtk_frame_set_shadow_type  (GtkFrame      *frame,
-				       GtkShadowType  type);
-GDK_AVAILABLE_IN_ALL
-GtkShadowType gtk_frame_get_shadow_type (GtkFrame    *frame);
-
 
 G_END_DECLS
 

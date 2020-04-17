@@ -15,7 +15,7 @@
           <object class="GtkLinkButton" id="linkbutton1">
             <property name="label" translatable="yes">A normal link</property>
             <property name="receives_default">1</property>
-            <property name="relief">none</property>
+            <property name="has-frame">0</property>
             <property name="uri">http://gnome.org</property>
           </object>
         </child>
@@ -23,7 +23,7 @@
           <object class="GtkLinkButton" id="linkbutton2">
             <property name="label" translatable="yes">A visited link</property>
             <property name="receives_default">1</property>
-            <property name="relief">none</property>
+            <property name="has-frame">0</property>
             <property name="uri">http://gnome.org</property>
             <property name="visited">1</property>
           </object>

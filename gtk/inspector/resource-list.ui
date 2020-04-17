@@ -204,7 +204,7 @@
                           <object class="GtkScrolledWindow">
                             <property name="hexpand">1</property>
                             <property name="vexpand">1</property>
-                            <property name="shadow-type">in</property>
+                            <property name="has-frame">1</property>
                             <style>
                               <class name="view"/>
                             </style>
@@ -225,7 +225,7 @@
                           <object class="GtkScrolledWindow">
                             <property name="hexpand">1</property>
                             <property name="vexpand">1</property>
-                            <property name="shadow-type">in</property>
+                            <property name="has-frame">1</property>
                             <style>
                               <class name="view"/>
                             </style>

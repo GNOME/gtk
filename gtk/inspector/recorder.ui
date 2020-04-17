@@ -13,7 +13,7 @@
             <property name="margin-bottom">6</property>
             <child>
               <object class="GtkToggleButton">
-                <property name="relief">none</property>
+                <property name="has-frame">0</property>
                 <property name="icon-name">media-record-symbolic</property>
                 <property name="tooltip-text" translatable="yes">Record frames</property>
                 <property name="active" bind-source="GtkInspectorRecorder" bind-property="recording" bind-flags="bidirectional|sync-create"/>
@@ -21,7 +21,7 @@
             </child>
             <child>
               <object class="GtkButton">
-                <property name="relief">none</property>
+                <property name="has-frame">0</property>
                 <property name="icon-name">edit-clear-all-symbolic</property>
                 <property name="tooltip-text" translatable="yes">Clear recorded frames</property>
                 <signal name="clicked" handler="recordings_clear_all"/>
@@ -29,7 +29,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
-                <property name="relief">none</property>
+                <property name="has-frame">0</property>
                 <property name="icon-name">insert-object-symbolic</property>
                 <property name="tooltip-text" translatable="yes">Add debug nodes</property>
                 <property name="active" bind-source="GtkInspectorRecorder" bind-property="debug-nodes" bind-flags="bidirectional|sync-create"/>
@@ -39,7 +39,7 @@
             </child>
             <child>
               <object class="GtkButton" id="render_node_save_button">
-                <property name="relief">none</property>
+                <property name="has-frame">0</property>
                 <property name="sensitive">0</property>
                 <property name="icon-name">document-save-as-symbolic</property>
                 <property name="tooltip-text" translatable="yes">Save selected node</property>

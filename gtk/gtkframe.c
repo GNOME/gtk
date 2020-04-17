@@ -71,7 +71,7 @@
  * # CSS nodes
  *
  * |[<!-- language="plain" -->
- * frame[.flat]
+ * frame
  * ├── <label widget>
  * ╰── <child>
  * ]|
@@ -79,11 +79,6 @@
  * GtkFrame has a main CSS node with name “frame”, which is used to draw the
  * visible border. You can set the appearance of the border using CSS properties
  * like “border-style” on this node.
- *
- * The node can be given the style class “.flat”, which is used by themes to
- * disable drawing of the border. To do this from code, call
- * gtk_frame_set_shadow_type() with %GTK_SHADOW_NONE to add the “.flat” class or
- * any other shadow type to remove it.
  */
 
 typedef struct
@@ -91,7 +86,7 @@ typedef struct
   /* Properties */
   GtkWidget *label_widget;
 
-  gint16 shadow_type;
+  guint has_frame : 1;
   gfloat label_xalign;
 } GtkFramePrivate;
 
@@ -99,7 +94,6 @@ enum {
   PROP_0,
   PROP_LABEL,
   PROP_LABEL_XALIGN,
-  PROP_SHADOW_TYPE,
   PROP_LABEL_WIDGET,
   LAST_PROP
 };
@@ -177,14 +171,6 @@ gtk_frame_class_init (GtkFrameClass *class)
                           0.0,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  frame_props[PROP_SHADOW_TYPE] =
-      g_param_spec_enum ("shadow-type",
-                         P_("Frame shadow"),
-                         P_("Appearance of the frame"),
-			GTK_TYPE_SHADOW_TYPE,
-			GTK_SHADOW_ETCHED_IN,
-                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
   frame_props[PROP_LABEL_WIDGET] =
       g_param_spec_object ("label-widget",
                            P_("Label widget"),
@@ -234,7 +220,7 @@ gtk_frame_init (GtkFrame *frame)
   GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
 
   priv->label_widget = NULL;
-  priv->shadow_type = GTK_SHADOW_ETCHED_IN;
+  priv->has_frame = TRUE;
   priv->label_xalign = 0.0;
 }
 
@@ -254,9 +240,6 @@ gtk_frame_set_property (GObject         *object,
     case PROP_LABEL_XALIGN:
       gtk_frame_set_label_align (frame, g_value_get_float (value));
      break;
-    case PROP_SHADOW_TYPE:
-      gtk_frame_set_shadow_type (frame, g_value_get_enum (value));
-      break;
     case PROP_LABEL_WIDGET:
       gtk_frame_set_label_widget (frame, g_value_get_object (value));
       break;
@@ -282,9 +265,6 @@ gtk_frame_get_property (GObject         *object,
       break;
     case PROP_LABEL_XALIGN:
       g_value_set_float (value, priv->label_xalign);
-      break;
-    case PROP_SHADOW_TYPE:
-      g_value_set_enum (value, priv->shadow_type);
       break;
     case PROP_LABEL_WIDGET:
       g_value_set_object (value,
@@ -509,56 +489,6 @@ gtk_frame_get_label_align (GtkFrame *frame)
   g_return_val_if_fail (GTK_IS_FRAME (frame), 0.0);
 
   return priv->label_xalign;
-}
-
-/**
- * gtk_frame_set_shadow_type:
- * @frame: a #GtkFrame
- * @type: the new #GtkShadowType
- * 
- * Sets the #GtkFrame:shadow-type for @frame, i.e. whether it is drawn without
- * (%GTK_SHADOW_NONE) or with (other values) a visible border. Values other than
- * %GTK_SHADOW_NONE are treated identically by GtkFrame. The chosen type is
- * applied by removing or adding the .flat class to the main CSS node, frame.
- **/
-void
-gtk_frame_set_shadow_type (GtkFrame      *frame,
-			   GtkShadowType  type)
-{
-  GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
-
-  g_return_if_fail (GTK_IS_FRAME (frame));
-
-  if ((GtkShadowType) priv->shadow_type != type)
-    {
-      priv->shadow_type = type;
-
-      if (type == GTK_SHADOW_NONE)
-        gtk_widget_add_css_class (GTK_WIDGET (frame), "flat");
-      else
-        gtk_widget_remove_css_class (GTK_WIDGET (frame), "flat");
-
-      g_object_notify_by_pspec (G_OBJECT (frame), frame_props[PROP_SHADOW_TYPE]);
-    }
-}
-
-/**
- * gtk_frame_get_shadow_type:
- * @frame: a #GtkFrame
- *
- * Retrieves the shadow type of the frame. See
- * gtk_frame_set_shadow_type().
- *
- * Returns: the current shadow type of the frame.
- **/
-GtkShadowType
-gtk_frame_get_shadow_type (GtkFrame *frame)
-{
-  GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
-
-  g_return_val_if_fail (GTK_IS_FRAME (frame), GTK_SHADOW_ETCHED_IN);
-
-  return priv->shadow_type;
 }
 
 static void

@@ -4229,7 +4229,6 @@ create_panes (GtkWidget *widget)
       gtk_paned_add1 (GTK_PANED (vpaned), hpaned);
 
       frame = gtk_frame_new (NULL);
-      gtk_frame_set_shadow_type (GTK_FRAME(frame), GTK_SHADOW_IN);
       gtk_widget_set_size_request (frame, 60, 60);
       gtk_paned_add1 (GTK_PANED (hpaned), frame);
       
@@ -4237,12 +4236,10 @@ create_panes (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER(frame), button);
 
       frame = gtk_frame_new (NULL);
-      gtk_frame_set_shadow_type (GTK_FRAME(frame), GTK_SHADOW_IN);
       gtk_widget_set_size_request (frame, 80, 60);
       gtk_paned_add2 (GTK_PANED (hpaned), frame);
 
       frame = gtk_frame_new (NULL);
-      gtk_frame_set_shadow_type (GTK_FRAME(frame), GTK_SHADOW_IN);
       gtk_widget_set_size_request (frame, 60, 80);
       gtk_paned_add2 (GTK_PANED (vpaned), frame);
 
@@ -4307,7 +4304,6 @@ paned_keyboard_window1 (GtkWidget *widget)
 
   frame1 = gtk_frame_new (NULL);
   gtk_paned_pack1 (GTK_PANED (hpaned1), frame1, FALSE, TRUE);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame1), GTK_SHADOW_IN);
 
   vbox1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (frame1), vbox1);
@@ -4326,7 +4322,6 @@ paned_keyboard_window1 (GtkWidget *widget)
 
   frame2 = gtk_frame_new (NULL);
   gtk_paned_pack1 (GTK_PANED (vpaned1), frame2, FALSE, TRUE);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame2), GTK_SHADOW_IN);
 
   frame5 = gtk_frame_new (NULL);
   gtk_container_add (GTK_CONTAINER (frame2), frame5);
@@ -4342,7 +4337,6 @@ paned_keyboard_window1 (GtkWidget *widget)
 
   frame3 = gtk_frame_new (NULL);
   gtk_paned_pack2 (GTK_PANED (vpaned1), frame3, TRUE, TRUE);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame3), GTK_SHADOW_IN);
 
   frame4 = gtk_frame_new ("Buttons");
   gtk_container_add (GTK_CONTAINER (frame3), frame4);
@@ -4391,7 +4385,6 @@ paned_keyboard_window2 (GtkWidget *widget)
 
   frame6 = gtk_frame_new (NULL);
   gtk_paned_pack1 (GTK_PANED (hpaned2), frame6, FALSE, TRUE);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame6), GTK_SHADOW_IN);
 
   button13 = gtk_button_new_with_label ("button13");
   gtk_container_add (GTK_CONTAINER (frame6), button13);
@@ -4404,14 +4397,12 @@ paned_keyboard_window2 (GtkWidget *widget)
 
   frame7 = gtk_frame_new (NULL);
   gtk_paned_pack1 (GTK_PANED (vpaned2), frame7, FALSE, TRUE);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame7), GTK_SHADOW_IN);
 
   button12 = gtk_button_new_with_label ("button12");
   gtk_container_add (GTK_CONTAINER (frame7), button12);
 
   frame8 = gtk_frame_new (NULL);
   gtk_paned_pack2 (GTK_PANED (vpaned2), frame8, TRUE, TRUE);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame8), GTK_SHADOW_IN);
 
   button11 = gtk_button_new_with_label ("button11");
   gtk_container_add (GTK_CONTAINER (frame8), button11);
@@ -4459,7 +4450,6 @@ paned_keyboard_window3 (GtkWidget *widget)
 
   frame9 = gtk_frame_new (NULL);
   gtk_paned_pack1 (GTK_PANED (hpaned3), frame9, FALSE, TRUE);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame9), GTK_SHADOW_IN);
 
   button14 = gtk_button_new_with_label ("button14");
   gtk_container_add (GTK_CONTAINER (frame9), button14);
@@ -4469,7 +4459,6 @@ paned_keyboard_window3 (GtkWidget *widget)
 
   frame10 = gtk_frame_new (NULL);
   gtk_paned_pack1 (GTK_PANED (hpaned4), frame10, FALSE, TRUE);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame10), GTK_SHADOW_IN);
 
   button15 = gtk_button_new_with_label ("button15");
   gtk_container_add (GTK_CONTAINER (frame10), button15);
@@ -4479,14 +4468,12 @@ paned_keyboard_window3 (GtkWidget *widget)
 
   frame11 = gtk_frame_new (NULL);
   gtk_paned_pack1 (GTK_PANED (hpaned5), frame11, FALSE, TRUE);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame11), GTK_SHADOW_IN);
 
   button16 = gtk_button_new_with_label ("button16");
   gtk_container_add (GTK_CONTAINER (frame11), button16);
 
   frame12 = gtk_frame_new (NULL);
   gtk_paned_pack2 (GTK_PANED (hpaned5), frame12, TRUE, TRUE);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame12), GTK_SHADOW_IN);
 
   button17 = gtk_button_new_with_label ("button17");
   gtk_container_add (GTK_CONTAINER (frame12), button17);
