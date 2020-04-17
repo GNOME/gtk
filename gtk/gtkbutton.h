@@ -86,10 +86,10 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_button_new_with_mnemonic (const gchar    *label);
 
 GDK_AVAILABLE_IN_ALL
-void                  gtk_button_set_relief         (GtkButton      *button,
-						     GtkReliefStyle  relief);
+void                  gtk_button_set_has_frame      (GtkButton      *button,
+						     gboolean        has_frame);
 GDK_AVAILABLE_IN_ALL
-GtkReliefStyle        gtk_button_get_relief         (GtkButton      *button);
+gboolean              gtk_button_get_has_frame      (GtkButton      *button);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_button_set_label          (GtkButton      *button,
 						     const gchar    *label);

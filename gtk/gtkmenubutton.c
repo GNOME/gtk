@@ -946,12 +946,15 @@ void
 gtk_menu_button_set_relief (GtkMenuButton  *menu_button,
                             GtkReliefStyle  relief)
 {
+  gboolean has_frame;
+
   g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
 
-  if (relief == gtk_button_get_relief (GTK_BUTTON (menu_button->button)))
+  has_frame = relief == GTK_RELIEF_NORMAL;
+  if (gtk_button_get_has_frame (GTK_BUTTON (menu_button->button)) == has_frame)
     return;
 
-  gtk_button_set_relief (GTK_BUTTON (menu_button->button), relief);
+  gtk_button_set_has_frame (GTK_BUTTON (menu_button->button), has_frame);
   g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_RELIEF]);
 }
 
@@ -968,7 +971,8 @@ gtk_menu_button_get_relief (GtkMenuButton *menu_button)
 {
   g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), GTK_RELIEF_NORMAL);
 
-  return gtk_button_get_relief (GTK_BUTTON (menu_button->button));
+  return gtk_button_get_has_frame (GTK_BUTTON (menu_button->button))
+         ? GTK_RELIEF_NORMAL : GTK_RELIEF_NONE;
 }
 
 /**

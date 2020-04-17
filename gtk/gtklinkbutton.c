@@ -345,7 +345,7 @@ gtk_link_button_init (GtkLinkButton *link_button)
   GdkContentProvider *content;
   GtkDragSource *source;
 
-  gtk_button_set_relief (GTK_BUTTON (link_button), GTK_RELIEF_NONE);
+  gtk_button_set_has_frame (GTK_BUTTON (link_button), FALSE);
   gtk_widget_set_state_flags (GTK_WIDGET (link_button), GTK_STATE_FLAG_LINK, FALSE);
   gtk_widget_set_has_tooltip (GTK_WIDGET (link_button), TRUE);
 

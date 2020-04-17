@@ -610,7 +610,7 @@ populate_servers (GtkPlacesView *view)
       button = gtk_button_new_from_icon_name ("window-close-symbolic");
       gtk_widget_set_halign (button, GTK_ALIGN_END);
       gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-      gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+      gtk_button_set_has_frame (GTK_BUTTON (button), FALSE);
       gtk_widget_add_css_class (button, "sidebar-button");
       gtk_grid_attach (GTK_GRID (grid), button, 1, 0, 1, 2);
 
