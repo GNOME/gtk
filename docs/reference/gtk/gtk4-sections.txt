@@ -4542,7 +4542,6 @@ GtkReliefStyle
 GtkScrollStep
 GtkScrollType
 GtkSelectionMode
-GtkShadowType
 GtkStateFlags
 GtkSortType
 GtkIconSize
