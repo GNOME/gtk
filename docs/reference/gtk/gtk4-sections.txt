@@ -520,8 +520,8 @@ gtk_button_new
 gtk_button_new_with_label
 gtk_button_new_with_mnemonic
 gtk_button_new_from_icon_name
-gtk_button_set_relief
-gtk_button_get_relief
+gtk_button_set_has_frame
+gtk_button_get_has_frame
 gtk_button_get_label
 gtk_button_set_label
 gtk_button_get_use_underline

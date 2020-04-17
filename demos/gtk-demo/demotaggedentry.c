@@ -472,7 +472,7 @@ demo_tagged_entry_tag_set_has_close_button (DemoTaggedEntryTag *tag,
       gtk_container_add (GTK_CONTAINER (tag->button), image);
       gtk_widget_set_halign (tag->button, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (tag->button, GTK_ALIGN_CENTER);
-      gtk_button_set_relief (GTK_BUTTON (tag->button), GTK_RELIEF_NONE);
+      gtk_button_set_has_frame (GTK_BUTTON (tag->button), FALSE);
       gtk_container_add (GTK_CONTAINER (tag->box), tag->button);
       g_signal_connect (tag->button, "clicked", G_CALLBACK (on_button_clicked), tag);
     }

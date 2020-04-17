@@ -324,7 +324,7 @@ create_widget_for_render_node (gpointer row_item,
       child = g_object_new (GTK_TYPE_BOX, "css-name", "expander", NULL);
 
       title = g_object_new (GTK_TYPE_TOGGLE_BUTTON, "css-name", "title", NULL);
-      gtk_button_set_relief (GTK_BUTTON (title), GTK_RELIEF_NONE);
+      gtk_button_set_has_frame (GTK_BUTTON (title), FALSE);
       g_object_bind_property (row_item, "expanded", title, "active", G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
       gtk_container_add (GTK_CONTAINER (child), title);
       g_object_set_data_full (G_OBJECT (row), "make-sure-its-not-unreffed", g_object_ref (row_item), g_object_unref);
@@ -1117,7 +1117,7 @@ gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
       gtk_container_add (GTK_CONTAINER (hbox), label);
 
       button = gtk_toggle_button_new ();
-      gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+      gtk_button_set_has_frame (GTK_BUTTON (button), FALSE);
       gtk_button_set_icon_name (GTK_BUTTON (button), "view-more-symbolic");
 
       gtk_container_add (GTK_CONTAINER (hbox), button);

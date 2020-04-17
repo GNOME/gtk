@@ -102,7 +102,7 @@ enum {
 enum {
   PROP_0,
   PROP_LABEL,
-  PROP_RELIEF,
+  PROP_HAS_FRAME,
   PROP_USE_UNDERLINE,
   PROP_ICON_NAME,
 
@@ -228,13 +228,12 @@ gtk_button_class_init (GtkButtonClass *klass)
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  props[PROP_RELIEF] =
-    g_param_spec_enum ("relief",
-                       P_("Border relief"),
-                       P_("The border relief style"),
-                       GTK_TYPE_RELIEF_STYLE,
-                       GTK_RELIEF_NORMAL,
-                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+  props[PROP_HAS_FRAME] =
+    g_param_spec_boolean ("has-frame",
+                          P_("Has Frame"),
+                          P_("Whether the button has a frame"),
+                          TRUE,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   props[PROP_ICON_NAME] =
     g_param_spec_string ("icon-name",
@@ -484,8 +483,8 @@ gtk_button_set_property (GObject         *object,
     case PROP_LABEL:
       gtk_button_set_label (button, g_value_get_string (value));
       break;
-    case PROP_RELIEF:
-      gtk_button_set_relief (button, g_value_get_enum (value));
+    case PROP_HAS_FRAME:
+      gtk_button_set_has_frame (button, g_value_get_boolean (value));
       break;
     case PROP_USE_UNDERLINE:
       gtk_button_set_use_underline (button, g_value_get_boolean (value));
@@ -519,8 +518,8 @@ gtk_button_get_property (GObject         *object,
     case PROP_LABEL:
       g_value_set_string (value, gtk_button_get_label (button));
       break;
-    case PROP_RELIEF:
-      g_value_set_enum (value, gtk_button_get_relief (button));
+    case PROP_HAS_FRAME:
+      g_value_set_boolean (value, gtk_button_get_has_frame (button));
       break;
     case PROP_USE_UNDERLINE:
       g_value_set_boolean (value, priv->use_underline);
@@ -641,51 +640,44 @@ gtk_button_new_with_mnemonic (const gchar *label)
 }
 
 /**
- * gtk_button_set_relief:
- * @button: The #GtkButton you want to set relief styles of
- * @relief: The GtkReliefStyle as described above
+ * gtk_Button_set_has_frame:
+ * @button: a #GtkButton
+ * @has_frame: whether the button should have a visible frame
  *
- * Sets the relief style of the edges of the given #GtkButton widget.
- * Two styles exist, %GTK_RELIEF_NORMAL and %GTK_RELIEF_NONE.
- * The default style is, as one can guess, %GTK_RELIEF_NORMAL.
+ * Sets the style of the button.
  */
 void
-gtk_button_set_relief (GtkButton      *button,
-                       GtkReliefStyle  relief)
+gtk_button_set_has_frame (GtkButton *button,
+                          gboolean   has_frame)
 {
-  GtkReliefStyle old_relief;
 
   g_return_if_fail (GTK_IS_BUTTON (button));
 
-  old_relief = gtk_button_get_relief (button);
-  if (old_relief != relief)
-    {
-      if (relief == GTK_RELIEF_NONE)
-        gtk_widget_add_css_class (GTK_WIDGET (button), GTK_STYLE_CLASS_FLAT);
-      else
-        gtk_widget_remove_css_class (GTK_WIDGET (button), GTK_STYLE_CLASS_FLAT);
+  if (gtk_button_get_has_frame (button) == has_frame)
+    return;
 
-      g_object_notify_by_pspec (G_OBJECT (button), props[PROP_RELIEF]);
-    }
+  if (has_frame)
+    gtk_widget_remove_css_class (GTK_WIDGET (button), GTK_STYLE_CLASS_FLAT);
+  else
+    gtk_widget_add_css_class (GTK_WIDGET (button), GTK_STYLE_CLASS_FLAT);
+
+  g_object_notify_by_pspec (G_OBJECT (button), props[PROP_HAS_FRAME]);
 }
 
 /**
- * gtk_button_get_relief:
- * @button: The #GtkButton you want the #GtkReliefStyle from.
+ * gtk_button_get_has_frame:
+ * @button: a #GtkButton
  *
- * Returns the current relief style of the given #GtkButton.
+ * Returns whether the button has a frame.
  *
- * Returns: The current #GtkReliefStyle
+ * Returns: %TRUE if the button has a frame
  */
-GtkReliefStyle
-gtk_button_get_relief (GtkButton *button)
+gboolean
+gtk_button_get_has_frame (GtkButton *button)
 {
-  g_return_val_if_fail (GTK_IS_BUTTON (button), GTK_RELIEF_NORMAL);
+  g_return_val_if_fail (GTK_IS_BUTTON (button), TRUE);
 
-  if (gtk_widget_has_css_class (GTK_WIDGET (button), GTK_STYLE_CLASS_FLAT))
-    return GTK_RELIEF_NONE;
-  else
-    return GTK_RELIEF_NORMAL;
+  return !gtk_widget_has_css_class (GTK_WIDGET (button), GTK_STYLE_CLASS_FLAT);
 }
 
 static void
