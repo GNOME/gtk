@@ -59,30 +59,22 @@ get_color (GskPangoRenderer *crenderer,
            PangoRenderPart   part,
            GdkRGBA          *rgba)
 {
-  PangoColor *color = pango_renderer_get_color ((PangoRenderer *) (crenderer), part);
-  guint16 a = pango_renderer_get_alpha ((PangoRenderer *) (crenderer), part);
-  gdouble red, green, blue, alpha;
-
-  red = crenderer->fg_color.red;
-  green = crenderer->fg_color.green;
-  blue = crenderer->fg_color.blue;
-  alpha = crenderer->fg_color.alpha;
+  const PangoColor *color = pango_renderer_get_color ((PangoRenderer *) (crenderer), part);
+  const guint16 a = pango_renderer_get_alpha ((PangoRenderer *) (crenderer), part);
 
   if (color)
     {
-      red = color->red / 65535.;
-      green = color->green / 65535.;
-      blue = color->blue / 65535.;
-      alpha = 1.;
+      rgba->red = color->red / 65535.;
+      rgba->green = color->green / 65535.;
+      rgba->blue = color->blue / 65535.;
+      rgba->alpha = a ? a  / 65535. : crenderer->fg_color.alpha;
     }
-
-  if (a)
-    alpha = a / 65535.;
-
-  rgba->red = red;
-  rgba->green = green;
-  rgba->blue = blue;
-  rgba->alpha = alpha;
+  else
+    {
+      *rgba = crenderer->fg_color;
+      if (a)
+        rgba->alpha = a / 65535.;
+    }
 }
 
 static void
