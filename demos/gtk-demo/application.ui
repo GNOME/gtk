@@ -61,7 +61,7 @@
         </child>
         <child>
           <object class="GtkScrolledWindow">
-            <property name="shadow-type">in</property>
+            <property name="has-frame">1</property>
             <child>
               <object class="GtkTextView">
                 <property name="hexpand">1</property>

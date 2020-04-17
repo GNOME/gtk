@@ -26,7 +26,7 @@
         <child>
           <object class="GtkScrolledWindow" id="scrolledwindow">
             <property name="vexpand">1</property>
-            <property name="shadow-type">in</property>
+            <property name="has-frame">1</property>
             <property name="min-content-width">150</property>
             <layout>
               <property name="left-attach">0</property>

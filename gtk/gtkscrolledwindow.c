@@ -246,8 +246,7 @@ typedef struct
   Indicator vindicator;
 
   GtkCornerType  window_placement;
-  guint16  shadow_type;
-
+  guint    has_frame                : 1;
   guint    hscrollbar_policy        : 2;
   guint    vscrollbar_policy        : 2;
   guint    hscrollbar_visible       : 1;
@@ -307,7 +306,7 @@ enum {
   PROP_HSCROLLBAR_POLICY,
   PROP_VSCROLLBAR_POLICY,
   PROP_WINDOW_PLACEMENT,
-  PROP_SHADOW_TYPE,
+  PROP_HAS_FRAME,
   PROP_MIN_CONTENT_WIDTH,
   PROP_MIN_CONTENT_HEIGHT,
   PROP_KINETIC_SCROLLING,
@@ -578,13 +577,12 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 			GTK_CORNER_TOP_LEFT,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  properties[PROP_SHADOW_TYPE] =
-      g_param_spec_enum ("shadow-type",
-                         P_("Shadow Type"),
-                         P_("Style of bevel around the contents"),
-			GTK_TYPE_SHADOW_TYPE,
-			GTK_SHADOW_NONE,
-                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+  properties[PROP_HAS_FRAME] =
+      g_param_spec_boolean ("has-frame",
+                         P_("Has Frame"),
+                         P_("Whether to draw a frame around the contents"),
+			 FALSE,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkScrolledWindow:min-content-width:
@@ -2408,52 +2406,50 @@ gtk_scrolled_window_unset_placement (GtkScrolledWindow *scrolled_window)
 }
 
 /**
- * gtk_scrolled_window_set_shadow_type:
+ * gtk_scrolled_window_set_has_frame:
  * @scrolled_window: a #GtkScrolledWindow
- * @type: kind of shadow to draw around scrolled window contents
+ * @type: whether to draw a frame around scrolled window contents
  *
- * Changes the type of shadow drawn around the contents of
- * @scrolled_window.
+ * Changes the frame drawn around the contents of @scrolled_window.
  **/
 void
-gtk_scrolled_window_set_shadow_type (GtkScrolledWindow *scrolled_window,
-                                     GtkShadowType      type)
+gtk_scrolled_window_set_has_frame (GtkScrolledWindow *scrolled_window,
+                                   gboolean           has_frame)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
 
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
-  g_return_if_fail (type >= GTK_SHADOW_NONE && type <= GTK_SHADOW_ETCHED_OUT);
 
-  if (priv->shadow_type != type)
-    {
-      priv->shadow_type = type;
+  if (priv->has_frame == has_frame)
+    return;
 
-      if (type != GTK_SHADOW_NONE)
-        gtk_widget_add_css_class (GTK_WIDGET (scrolled_window), GTK_STYLE_CLASS_FRAME);
-      else
-        gtk_widget_remove_css_class (GTK_WIDGET (scrolled_window), GTK_STYLE_CLASS_FRAME);
+  priv->has_frame = has_frame;
 
-      g_object_notify_by_pspec (G_OBJECT (scrolled_window), properties[PROP_SHADOW_TYPE]);
-    }
+  if (has_frame)
+    gtk_widget_add_css_class (GTK_WIDGET (scrolled_window), GTK_STYLE_CLASS_FRAME);
+  else
+    gtk_widget_remove_css_class (GTK_WIDGET (scrolled_window), GTK_STYLE_CLASS_FRAME);
+
+  g_object_notify_by_pspec (G_OBJECT (scrolled_window), properties[PROP_HAS_FRAME]);
 }
 
 /**
- * gtk_scrolled_window_get_shadow_type:
+ * gtk_scrolled_window_get_has_frame:
  * @scrolled_window: a #GtkScrolledWindow
  *
- * Gets the shadow type of the scrolled window. See 
- * gtk_scrolled_window_set_shadow_type().
+ * Gets whether the scrolled window draws a frame.
+ * See  gtk_scrolled_window_set_has_frame().
  *
- * Returns: the current shadow type
+ * Returns: %TRUE if the @scrolled_window has a frame
  **/
-GtkShadowType
-gtk_scrolled_window_get_shadow_type (GtkScrolledWindow *scrolled_window)
+gboolean
+gtk_scrolled_window_get_has_frame (GtkScrolledWindow *scrolled_window)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
 
-  g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window), GTK_SHADOW_NONE);
+  g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window), FALSE);
 
-  return priv->shadow_type;
+  return priv->has_frame;
 }
 
 /**
@@ -2645,9 +2641,9 @@ gtk_scrolled_window_set_property (GObject      *object,
       gtk_scrolled_window_set_placement (scrolled_window,
                                          g_value_get_enum (value));
       break;
-    case PROP_SHADOW_TYPE:
-      gtk_scrolled_window_set_shadow_type (scrolled_window,
-					   g_value_get_enum (value));
+    case PROP_HAS_FRAME:
+      gtk_scrolled_window_set_has_frame (scrolled_window,
+					 g_value_get_boolean (value));
       break;
     case PROP_MIN_CONTENT_WIDTH:
       gtk_scrolled_window_set_min_content_width (scrolled_window,
@@ -2709,8 +2705,8 @@ gtk_scrolled_window_get_property (GObject    *object,
     case PROP_WINDOW_PLACEMENT:
       g_value_set_enum (value, priv->window_placement);
       break;
-    case PROP_SHADOW_TYPE:
-      g_value_set_enum (value, priv->shadow_type);
+    case PROP_HAS_FRAME:
+      g_value_set_enum (value, priv->has_frame);
       break;
     case PROP_HSCROLLBAR_POLICY:
       g_value_set_enum (value, priv->hscrollbar_policy);

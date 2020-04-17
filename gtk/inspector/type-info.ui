@@ -17,7 +17,7 @@
         </child>
         <child>
           <object class="GtkScrolledWindow">
-            <property name="shadow-type">etched-in</property>
+            <property name="has-frame">1</property>
             <property name="min-content-width">200</property>
             <property name="max-content-height">200</property>
             <property name="propagate-natural-width">1</property>
@@ -38,7 +38,7 @@
         </child>
         <child>
           <object class="GtkScrolledWindow">
-            <property name="shadow-type">etched-in</property>
+            <property name="has-frame">1</property>
             <property name="min-content-width">200</property>
             <property name="max-content-height">150</property>
             <property name="propagate-natural-width">1</property>
