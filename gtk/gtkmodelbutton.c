@@ -975,8 +975,6 @@ gtk_model_button_clicked (GtkGestureClick *gesture,
                           double           y,
                           GtkModelButton  *self)
 {
-  g_signal_emit (self, signals[SIGNAL_CLICKED], 0);
-
   if (self->menu_name != NULL)
     {
       switch_menu (self);
@@ -997,6 +995,7 @@ gtk_model_button_clicked (GtkGestureClick *gesture,
       close_menu (self);
     }
 
+  g_signal_emit (self, signals[SIGNAL_CLICKED], 0);
 
   if (self->action_helper)
     gtk_action_helper_activate (self->action_helper);
