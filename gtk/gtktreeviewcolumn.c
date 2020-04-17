@@ -25,7 +25,6 @@
 #include "gtkcellareacontext.h"
 #include "gtkcelllayout.h"
 #include "gtkdragsource.h"
-#include "gtkframe.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
@@ -869,8 +868,7 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
   g_signal_connect (controller, "enter", G_CALLBACK (focus_in), tree_column);
   gtk_widget_add_controller (priv->button, controller);
 
-  priv->frame = gtk_frame_new (NULL);
-  gtk_frame_set_shadow_type (GTK_FRAME (priv->frame), GTK_SHADOW_NONE);
+  priv->frame = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_hexpand (priv->frame, TRUE);
   gtk_widget_set_halign (priv->frame, GTK_ALIGN_START);
 
@@ -880,9 +878,7 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
   if (priv->child)
     child = priv->child;
   else
-    {
-      child = gtk_label_new (priv->title);
-    }
+    child = gtk_label_new (priv->title);
 
   g_signal_connect (child, "mnemonic-activate",
 		    G_CALLBACK (gtk_tree_view_column_mnemonic_activate),
@@ -923,7 +919,7 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
   hbox = gtk_bin_get_child (GTK_BIN (priv->button));
   frame = priv->frame;
   arrow = priv->arrow;
-  current_child = gtk_bin_get_child (GTK_BIN (frame));
+  current_child = gtk_widget_get_first_child (frame);
 
   /* Set up the actual button */
   if (priv->child)
