@@ -376,6 +376,7 @@ struct _GtkFileChooserWidgetPrivate {
   guint show_type_column : 1;
   guint create_folders : 1;
   guint auto_selecting_first_row : 1;
+  guint browse_files_interaction_frozen : 1;
 };
 
 #define MAX_LOADING_TIME 500
@@ -1347,6 +1348,9 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
 {
   GtkFileChooserWidget *impl = (GtkFileChooserWidget *) data;
   GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  if (priv->browse_files_interaction_frozen)
+    return GDK_EVENT_STOP;
 
   if (should_trigger_location_entry (impl, event) &&
       (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
@@ -2436,6 +2440,9 @@ list_button_press_event_cb (GtkWidget            *widget,
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   static gboolean in_press = FALSE;
+
+  if (priv->browse_files_interaction_frozen)
+    return GDK_EVENT_STOP;
 
   if (in_press)
     return FALSE;
@@ -4079,6 +4086,8 @@ gtk_file_chooser_widget_map (GtkWidget *widget)
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
   profile_start ("start", NULL);
+
+  priv->browse_files_interaction_frozen = FALSE;
 
   GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->map (widget);
 
@@ -6564,6 +6573,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     gtk_window_group_add_window (gtk_window_get_group (toplevel), GTK_WINDOW (dialog));
 
   response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+  if (response == GTK_RESPONSE_ACCEPT)
+    /* Dialog is now going to be closed, so prevent any button/key presses to
+     * file list (will be restablished on next map()). Fixes data loss bug #2288 */
+    impl->priv->browse_files_interaction_frozen = TRUE;
 
   gtk_widget_destroy (dialog);
 
