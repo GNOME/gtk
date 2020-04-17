@@ -279,7 +279,8 @@ start_puzzle (GdkPaintable *paintable)
   aspect_ratio = gdk_paintable_get_intrinsic_aspect_ratio (paintable);
   if (aspect_ratio == 0.0)
     aspect_ratio = 1.0;
-  gtk_aspect_frame_set (GTK_ASPECT_FRAME (frame), 0.5, 0.5, aspect_ratio, FALSE);
+  gtk_aspect_frame_set_ratio (GTK_ASPECT_FRAME (frame), aspect_ratio);
+  gtk_aspect_frame_set_obey_child (GTK_ASPECT_FRAME (frame), FALSE);
 
   /* Add shortcuts so people can use the arrow
    * keys to move the puzzle */
@@ -466,7 +467,7 @@ do_sliding_puzzle (GtkWidget *do_widget)
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
-      frame = gtk_aspect_frame_new (NULL, 0.5, 0.5, (float) gdk_paintable_get_intrinsic_aspect_ratio (puzzle), FALSE);
+      frame = gtk_aspect_frame_new (0.5, 0.5, (float) gdk_paintable_get_intrinsic_aspect_ratio (puzzle), FALSE);
       gtk_container_add (GTK_CONTAINER (window), frame);
 
       start_puzzle (puzzle);

@@ -30,7 +30,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkframe.h>
+#include <gtk/gtkwidget.h>
 
 
 G_BEGIN_DECLS
@@ -44,18 +44,34 @@ typedef struct _GtkAspectFrame      GtkAspectFrame;
 GDK_AVAILABLE_IN_ALL
 GType      gtk_aspect_frame_get_type   (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_aspect_frame_new        (const gchar     *label,
-					gfloat           xalign,
-					gfloat           yalign,
-					gfloat           ratio,
-					gboolean         obey_child);
-GDK_AVAILABLE_IN_ALL
-void       gtk_aspect_frame_set        (GtkAspectFrame  *aspect_frame,
-					gfloat           xalign,
-					gfloat           yalign,
-					gfloat           ratio,
+GtkWidget* gtk_aspect_frame_new        (float            xalign,
+					float            yalign,
+					float            ratio,
 					gboolean         obey_child);
 
+GDK_AVAILABLE_IN_ALL
+void       gtk_aspect_frame_set_xalign (GtkAspectFrame *self,
+                                        float           xalign);
+GDK_AVAILABLE_IN_ALL
+float      gtk_aspect_frame_get_xalign (GtkAspectFrame *self);
+
+GDK_AVAILABLE_IN_ALL
+void       gtk_aspect_frame_set_yalign (GtkAspectFrame *self,
+                                        float           yalign);
+GDK_AVAILABLE_IN_ALL
+float      gtk_aspect_frame_get_yalign (GtkAspectFrame *self);
+
+GDK_AVAILABLE_IN_ALL
+void       gtk_aspect_frame_set_ratio  (GtkAspectFrame *self,
+                                        float           ratio);
+GDK_AVAILABLE_IN_ALL
+float      gtk_aspect_frame_get_ratio  (GtkAspectFrame *self);
+
+GDK_AVAILABLE_IN_ALL
+void       gtk_aspect_frame_set_obey_child (GtkAspectFrame *self,
+                                            gboolean        obey_child);
+GDK_AVAILABLE_IN_ALL
+gboolean   gtk_aspect_frame_get_obey_child (GtkAspectFrame *self);
 
 G_END_DECLS
 
