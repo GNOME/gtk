@@ -613,19 +613,19 @@ create_widget_func (gpointer item,
   if (GTK_IS_CONSTRAINT (item) || GTK_IS_CONSTRAINT_GUIDE (item))
     {
       button = gtk_button_new_from_icon_name ("document-edit-symbolic");
-      gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+      gtk_button_set_has_frame (GTK_BUTTON (button), FALSE);
       g_signal_connect (button, "clicked", G_CALLBACK (row_edit), win);
       g_object_set_data (G_OBJECT (row), "edit", button);
       gtk_container_add (GTK_CONTAINER (box), button);
       button = gtk_button_new_from_icon_name ("edit-delete-symbolic");
-      gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+      gtk_button_set_has_frame (GTK_BUTTON (button), FALSE);
       g_signal_connect (button, "clicked", G_CALLBACK (row_delete), win);
       gtk_container_add (GTK_CONTAINER (box), button);
     }
   else if (GTK_IS_WIDGET (item))
     {
       button = gtk_button_new_from_icon_name ("edit-delete-symbolic");
-      gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+      gtk_button_set_has_frame (GTK_BUTTON (button), FALSE);
       g_signal_connect (button, "clicked", G_CALLBACK (row_delete), win);
       gtk_container_add (GTK_CONTAINER (box), button);
     }
