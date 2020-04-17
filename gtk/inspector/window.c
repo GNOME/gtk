@@ -46,6 +46,7 @@
 #include "general.h"
 #include "logs.h"
 
+#include "gdkmarshalers.h"
 #include "gdk-private.h"
 #include "gskrendererprivate.h"
 #include "gtkbutton.h"
@@ -69,6 +70,14 @@ enum {
 };
 
 static GParamSpec *properties[NUM_PROPERTIES];
+
+enum {
+  EVENT,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
+
 
 G_DEFINE_TYPE (GtkInspectorWindow, gtk_inspector_window, GTK_TYPE_WINDOW)
 
@@ -392,16 +401,19 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
-  g_signal_new (g_intern_static_string ("event"),
-                G_OBJECT_CLASS_TYPE (object_class),
-                G_SIGNAL_RUN_LAST,
-                0,
-                g_signal_accumulator_true_handled,
-                NULL,
-                NULL,
-                G_TYPE_BOOLEAN,
-                1,
-                GDK_TYPE_EVENT);
+  signals[EVENT] = g_signal_new (g_intern_static_string ("event"),
+                                 G_OBJECT_CLASS_TYPE (object_class),
+                                 G_SIGNAL_RUN_LAST,
+                                 0,
+                                 g_signal_accumulator_true_handled,
+                                 NULL,
+                                 _gdk_marshal_BOOLEAN__POINTER,
+                                 G_TYPE_BOOLEAN,
+                                 1,
+                                 GDK_TYPE_EVENT);
+  g_signal_set_va_marshaller (signals[EVENT],
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              _gdk_marshal_BOOLEAN__POINTERv);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/window.ui");
 
@@ -623,7 +635,7 @@ gtk_inspector_handle_event (GdkEvent *event)
   if (iw == NULL)
     return FALSE;
 
-  g_signal_emit_by_name (iw, "event", event, &handled);
+  g_signal_emit (iw, signals[EVENT], 0, event, &handled);
 
   return handled;
 }
