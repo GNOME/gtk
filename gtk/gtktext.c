@@ -4347,8 +4347,6 @@ gtk_text_create_layout (GtkText  *self,
 
   tmp_attrs = gtk_css_style_get_pango_attributes (gtk_css_node_get_style (gtk_widget_get_css_node (widget)));
   tmp_attrs = _gtk_pango_attr_list_merge (tmp_attrs, priv->attrs);
-  if (!tmp_attrs)
-    tmp_attrs = pango_attr_list_new ();
 
   display_text = gtk_text_get_display_text (self, 0, -1);
 
@@ -4369,7 +4367,10 @@ gtk_text_create_layout (GtkText  *self,
       pos = g_utf8_offset_to_pointer (display_text, priv->current_pos) - display_text;
       g_string_insert (tmp_string, pos, preedit_string);
       pango_layout_set_text (layout, tmp_string->str, tmp_string->len);
-      pango_attr_list_splice (tmp_attrs, preedit_attrs, pos, preedit_length);
+      if (tmp_attrs)
+        pango_attr_list_splice (tmp_attrs, preedit_attrs, pos, preedit_length);
+      else
+        tmp_attrs = pango_attr_list_ref (preedit_attrs);
       g_string_free (tmp_string, TRUE);
     }
   else
