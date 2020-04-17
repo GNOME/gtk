@@ -3597,6 +3597,7 @@ bad things might happen.</property>
       </submenu>
     </section>
     <section>
+      <attribute name="label" translatable="yes">Size</attribute>
       <item>
         <attribute name="label" translatable="yes">Large</attribute>
         <attribute name="action">app.size</attribute>
