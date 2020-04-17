@@ -360,7 +360,6 @@ do_images (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (vbox), label);
 
       frame = gtk_frame_new (NULL);
-      gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
       gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
       gtk_container_add (GTK_CONTAINER (vbox), frame);
@@ -379,7 +378,6 @@ do_images (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (vbox), label);
 
       frame = gtk_frame_new (NULL);
-      gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
       gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
       gtk_container_add (GTK_CONTAINER (vbox), frame);
@@ -396,7 +394,6 @@ do_images (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (vbox), label);
 
       frame = gtk_frame_new (NULL);
-      gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
       gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
       gtk_container_add (GTK_CONTAINER (vbox), frame);
@@ -418,7 +415,6 @@ do_images (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (vbox), label);
 
       frame = gtk_frame_new (NULL);
-      gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
       gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
       gtk_container_add (GTK_CONTAINER (vbox), frame);
@@ -441,7 +437,6 @@ do_images (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (vbox), label);
 
       frame = gtk_frame_new (NULL);
-      gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
       gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
       gtk_container_add (GTK_CONTAINER (vbox), frame);
