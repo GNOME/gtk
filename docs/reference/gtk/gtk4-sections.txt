@@ -3843,8 +3843,8 @@ gtk_list_store_get_type
 <TITLE>GtkViewport</TITLE>
 GtkViewport
 gtk_viewport_new
-gtk_viewport_set_shadow_type
-gtk_viewport_get_shadow_type
+gtk_viewport_set_has_frame
+gtk_viewport_get_has_frame
 <SUBSECTION Standard>
 GTK_VIEWPORT
 GTK_IS_VIEWPORT

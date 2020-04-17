@@ -51,10 +51,10 @@ GtkWidget*     gtk_viewport_new             (GtkAdjustment *hadjustment,
 					     GtkAdjustment *vadjustment);
 
 GDK_AVAILABLE_IN_ALL
-void           gtk_viewport_set_shadow_type (GtkViewport   *viewport,
-					     GtkShadowType  type);
+void           gtk_viewport_set_has_frame (GtkViewport   *viewport,
+					   gboolean       has_frame);
 GDK_AVAILABLE_IN_ALL
-GtkShadowType  gtk_viewport_get_shadow_type (GtkViewport   *viewport);
+gboolean       gtk_viewport_get_has_frame (GtkViewport   *viewport);
 
 
 G_END_DECLS

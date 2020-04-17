@@ -153,7 +153,7 @@
                     <property name="min-content-height">200</property>
                     <child>
                       <object class="GtkViewport">
-                        <property name="shadow-type">none</property>
+                        <property name="has-frame">0</property>
                         <child>
                           <object class="GtkListBox" id="recent_servers_listbox">
                             <property name="selection-mode">none</property>
@@ -189,7 +189,7 @@
                     <property name="vexpand">1</property>
                     <child>
                       <object class="GtkViewport">
-                        <property name="shadow-type">none</property>
+                        <property name="has-frame">0</property>
                         <child>
                           <object class="GtkListBox" id="listbox">
                             <property name="selection-mode">none</property>
