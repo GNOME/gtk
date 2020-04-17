@@ -2410,7 +2410,7 @@ gtk_scrolled_window_unset_placement (GtkScrolledWindow *scrolled_window)
 /**
  * gtk_scrolled_window_set_has_frame:
  * @scrolled_window: a #GtkScrolledWindow
- * @type: whether to draw a frame around scrolled window contents
+ * @has_frame: whether to draw a frame around scrolled window contents
  *
  * Changes the frame drawn around the contents of @scrolled_window.
  **/
@@ -2422,7 +2422,7 @@ gtk_scrolled_window_set_has_frame (GtkScrolledWindow *scrolled_window,
 
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
 
-  if (priv->has_frame == has_frame)
+  if (priv->has_frame == !!has_frame)
     return;
 
   priv->has_frame = has_frame;
