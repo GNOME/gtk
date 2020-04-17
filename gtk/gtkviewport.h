@@ -50,13 +50,6 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_viewport_new             (GtkAdjustment *hadjustment,
 					     GtkAdjustment *vadjustment);
 
-GDK_AVAILABLE_IN_ALL
-void           gtk_viewport_set_shadow_type (GtkViewport   *viewport,
-					     GtkShadowType  type);
-GDK_AVAILABLE_IN_ALL
-GtkShadowType  gtk_viewport_get_shadow_type (GtkViewport   *viewport);
-
-
 G_END_DECLS
 
 

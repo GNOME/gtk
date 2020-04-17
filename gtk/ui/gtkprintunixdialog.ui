@@ -977,7 +977,6 @@
                         <property name="hexpand">1</property>
                         <child>
                           <object class="GtkViewport" id="viewport1">
-                            <property name="shadow-type">none</property>
                             <child>
                               <object class="GtkGrid" id="image_quality_table">
                                 <property name="row-spacing">6</property>
@@ -1007,7 +1006,6 @@
                         <property name="hscrollbar-policy">never</property>
                         <child>
                           <object class="GtkViewport" id="viewport2">
-                            <property name="shadow-type">none</property>
                             <child>
                               <object class="GtkGrid" id="color_table">
                                 <property name="row-spacing">6</property>
@@ -1037,7 +1035,6 @@
                         <property name="hscrollbar-policy">never</property>
                         <child>
                           <object class="GtkViewport" id="viewport3">
-                            <property name="shadow-type">none</property>
                             <child>
                               <object class="GtkGrid" id="finishing_table">
                                 <property name="row-spacing">6</property>
@@ -1067,7 +1064,6 @@
                         <property name="hscrollbar-policy">never</property>
                         <child>
                           <object class="GtkViewport" id="viewport4">
-                            <property name="shadow-type">none</property>
                             <child>
                               <object class="GtkBox" id="advanced_vbox">
                                 <property name="orientation">vertical</property>
