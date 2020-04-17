@@ -1372,13 +1372,13 @@ GtkFrame
 GtkFrameClass
 gtk_frame_new
 gtk_frame_set_label
-gtk_frame_set_label_widget
-gtk_frame_set_label_align
-gtk_frame_set_shadow_type
 gtk_frame_get_label
-gtk_frame_get_label_align
+gtk_frame_set_label_widget
 gtk_frame_get_label_widget
-gtk_frame_get_shadow_type
+gtk_frame_set_label_align
+gtk_frame_get_label_align
+gtk_frame_set_has_frame
+gtk_frame_get_has_frame
 <SUBSECTION Standard>
 GTK_FRAME
 GTK_IS_FRAME

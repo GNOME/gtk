@@ -155,7 +155,7 @@ create_frame (const char *caption,
                 "halign", halign,
                 "valign", valign,
                 NULL);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
+  gtk_frame_set_has_frame (GTK_FRAME (frame), FALSE);
   gtk_label_set_markup (GTK_LABEL (label), caption);
 
   gtk_container_add (GTK_CONTAINER (frame), child);

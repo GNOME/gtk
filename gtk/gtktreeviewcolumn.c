@@ -870,7 +870,7 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
   gtk_widget_add_controller (priv->button, controller);
 
   priv->frame = gtk_frame_new (NULL);
-  gtk_frame_set_shadow_type (GTK_FRAME (priv->frame), GTK_SHADOW_NONE);
+  gtk_frame_set_has_frame (GTK_FRAME (priv->frame), FALSE);
   gtk_widget_set_hexpand (priv->frame, TRUE);
   gtk_widget_set_halign (priv->frame, GTK_ALIGN_START);
 

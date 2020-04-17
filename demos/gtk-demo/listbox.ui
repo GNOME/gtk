@@ -185,7 +185,7 @@
                     <property name="spacing">8</property>
                     <child>
                       <object class="GtkFrame" id="frame1">
-                        <property name="shadow-type">none</property>
+                        <property name="has-frame">0</property>
                         <child>
                           <object class="GtkLabel" id="n_reshares_label">
                             <property name="label" translatable="0">&lt;b&gt;2&lt;/b&gt;
@@ -198,7 +198,7 @@ Reshares</property>
                     </child>
                     <child>
                       <object class="GtkFrame" id="frame2">
-                        <property name="shadow-type">none</property>
+                        <property name="has-frame">0</property>
                         <child>
                           <object class="GtkLabel" id="n_favorites_label">
                             <property name="label" translatable="0">&lt;b&gt;2&lt;/b&gt;

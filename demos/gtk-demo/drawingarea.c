@@ -214,7 +214,6 @@ do_drawingarea (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (vbox), label);
 
       frame = gtk_frame_new (NULL);
-      gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
       gtk_widget_set_vexpand (frame, TRUE);
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
@@ -235,7 +234,6 @@ do_drawingarea (GtkWidget *do_widget)
 
       frame = gtk_frame_new (NULL);
       gtk_widget_set_vexpand (frame, TRUE);
-      gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       da = gtk_drawing_area_new ();
