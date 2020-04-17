@@ -618,6 +618,7 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_widget_set_valign (separator, GTK_ALIGN_CENTER);
       gtk_container_add (GTK_CONTAINER (box->separator), separator);
+      gtk_size_group_add_widget (box->indicators, separator);
 
       title = gtk_label_new (label);
       g_object_bind_property (item, "label", title, "label", G_BINDING_SYNC_CREATE);
@@ -627,6 +628,7 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
 
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_widget_set_valign (separator, GTK_ALIGN_CENTER);
+      gtk_widget_set_hexpand (separator, TRUE);
       gtk_container_add (GTK_CONTAINER (box->separator), separator);
     }
   else
