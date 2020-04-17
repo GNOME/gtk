@@ -563,6 +563,12 @@
         and always use the context's current state. Update all callers
         to omit the state argument.
       </para>
+      <para>
+        The most commonly used GtkStyleContext API, gtk_style_context_add_class(),
+        has been moved to GtkWidget as gtk_widget_add_css_class(), as have the
+        corresponding gtk_style_context_remove_class() and
+        gtk_style_context_has_class() APIs.
+      </para>
     </section>
 
     <section>
@@ -588,6 +594,17 @@
     </section>
 
     <section>
+      <title>Stop using GtkShadowType and GtkRelief properties</title>
+      <para>
+        The shadow-type properties in GtkScrolledWindow, GtkViewport,
+        and GtkFrame, as well as the relief properties in GtkButton
+        and its subclasses have been removed. GtkScrolledWindow, GtkButton
+        and GtkMenuButton have instead gained a boolean has-frame
+        property.
+      </para>
+    </section>
+
+    <sectionh>
       <title>Adapt to GtkWidget's size request changes</title>
       <para>
         GTK 3 used five different virtual functions in GtkWidget to
@@ -1034,6 +1051,15 @@
       </para>
       <para>
         Toolbars should be replaced by using a GtkBox with regular widgets instead.
+      </para>
+    </section>
+
+    <section>
+      <title>GtkAspectFrame is no longer a frame</title>
+      <para>
+        GtkAspectFrame is no longer derived from GtkFrame and does not
+        place a label and frame around its child anymore. It still lets
+        you control the aspect ratio of its child.
       </para>
     </section>
 
