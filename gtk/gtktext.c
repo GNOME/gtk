@@ -4335,7 +4335,7 @@ gtk_text_create_layout (GtkText  *self,
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   GtkWidget *widget = GTK_WIDGET (self);
   PangoLayout *layout;
-  PangoAttrList *tmp_attrs;
+  PangoAttrList *tmp_attrs = NULL;
   char *preedit_string = NULL;
   int preedit_length = 0;
   PangoAttrList *preedit_attrs = NULL;
@@ -4419,9 +4419,7 @@ gtk_text_create_layout (GtkText  *self,
   g_free (preedit_string);
   g_free (display_text);
 
-  if (preedit_attrs)
-    pango_attr_list_unref (preedit_attrs);
-
+  pango_attr_list_unref (preedit_attrs);
   pango_attr_list_unref (tmp_attrs);
 
   return layout;
