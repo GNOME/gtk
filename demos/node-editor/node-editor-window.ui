@@ -83,6 +83,7 @@
     <property name="title" translatable="yes">GTK Node Editor</property>
     <property name="default-width">1024</property>
     <property name="default-height">768</property>
+    <property name="focus-widget">text_view</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header">
         <property name="title" translatable="yes">GTK Node Editor</property>
@@ -139,7 +140,6 @@
               <object class="GtkTextView" id="text_view">
                 <property name="wrap-mode">word</property>
                 <property name="monospace">1</property>
-                <property name="has-focus">1</property>
                 <property name="top-margin">6</property>
                 <property name="left-margin">6</property>
                 <property name="right-margin">6</property>
