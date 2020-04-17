@@ -3,7 +3,6 @@
   <template class="GtkStatusbar" parent="GtkWidget">
     <child>
       <object class="GtkFrame" id="frame">
-        <property name="shadow-type">none</property>
         <property name="hexpand">1</property>
         <child>
           <object class="GtkBox" id="message_area">

@@ -71,7 +71,6 @@ populate_flowbox_focus (GtkFlowBox *flowbox)
     {
       sensitive = TRUE;
       frame = gtk_frame_new (NULL);
-      gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
       gtk_container_add (GTK_CONTAINER (frame), box);

@@ -311,7 +311,6 @@ main (int   argc,
   gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (win))), vbox);
 
   frame = gtk_frame_new ("<b>GtkFileChooserButton</b>");
-  gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
   gtk_label_set_use_markup (GTK_LABEL (gtk_frame_get_label_widget (GTK_FRAME (frame))), TRUE);
   gtk_container_add (GTK_CONTAINER (vbox), frame);
 

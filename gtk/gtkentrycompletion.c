@@ -600,8 +600,6 @@ gtk_entry_completion_constructed (GObject *object)
   gtk_widget_add_controller (priv->popup_window, controller);
 
   popup_frame = gtk_frame_new (NULL);
-  gtk_frame_set_shadow_type (GTK_FRAME (popup_frame),
-                             GTK_SHADOW_ETCHED_IN);
   gtk_container_add (GTK_CONTAINER (priv->popup_window), popup_frame);
 
   priv->vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);

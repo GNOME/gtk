@@ -182,7 +182,6 @@
             <property name="name">browse</property>
             <property name="child">
               <object class="GtkFrame">
-                <property name="shadow-type">none</property>
                 <child>
                   <object class="GtkScrolledWindow">
                     <property name="hexpand">1</property>

@@ -172,7 +172,6 @@ do_panes (GtkWidget *do_widget)
       gtk_paned_add1 (GTK_PANED (vpaned), hpaned);
 
       frame = gtk_frame_new (NULL);
-      gtk_frame_set_shadow_type (GTK_FRAME(frame), GTK_SHADOW_IN);
       gtk_widget_set_size_request (frame, 60, 60);
       gtk_paned_add1 (GTK_PANED (hpaned), frame);
 
@@ -180,12 +179,10 @@ do_panes (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER(frame), button);
 
       frame = gtk_frame_new (NULL);
-      gtk_frame_set_shadow_type (GTK_FRAME(frame), GTK_SHADOW_IN);
       gtk_widget_set_size_request (frame, 80, 60);
       gtk_paned_add2 (GTK_PANED (hpaned), frame);
 
       frame = gtk_frame_new (NULL);
-      gtk_frame_set_shadow_type (GTK_FRAME(frame), GTK_SHADOW_IN);
       gtk_widget_set_size_request (frame, 60, 80);
       gtk_paned_add2 (GTK_PANED (vpaned), frame);
 
