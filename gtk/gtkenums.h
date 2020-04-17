@@ -470,29 +470,6 @@ typedef enum
   GTK_SELECTION_MULTIPLE
 } GtkSelectionMode;
 
-/**
- * GtkShadowType:
- * @GTK_SHADOW_NONE: No outline.
- * @GTK_SHADOW_IN: The outline is bevelled inwards.
- * @GTK_SHADOW_OUT: The outline is bevelled outwards like a button.
- * @GTK_SHADOW_ETCHED_IN: The outline has a sunken 3d appearance.
- * @GTK_SHADOW_ETCHED_OUT: The outline has a raised 3d appearance.
- *
- * Used to change the appearance of an outline typically provided by a #GtkFrame.
- *
- * Note that many themes do not differentiate the appearance of the
- * various shadow types: Either there is no visible shadow (@GTK_SHADOW_NONE),
- * or there is (any other value).
- */
-typedef enum
-{
-  GTK_SHADOW_NONE,
-  GTK_SHADOW_IN,
-  GTK_SHADOW_OUT,
-  GTK_SHADOW_ETCHED_IN,
-  GTK_SHADOW_ETCHED_OUT
-} GtkShadowType;
-
 /* Widget states */
 
 /**
