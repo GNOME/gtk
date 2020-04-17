@@ -7,7 +7,7 @@ project('gtk', 'c',
           # https://github.com/mesonbuild/meson/issues/2289
           'c_std=gnu99',
         ],
-        meson_version : '>= 0.50.1',
+        meson_version : '>= 0.53',
         license: 'LGPLv2.1+')
 
 glib_major_req = 2
@@ -821,32 +821,30 @@ if host_machine.system() != 'windows'
     install_dir : join_paths(gtk_datadir, 'gtk-4.0', 'valgrind'))
 endif
 
-summary = [
-  '',
-  '------',
-  'GTK @0@ (@1@)'.format(gtk_version, gtk_api_version),
-  '',
-  '  Display backends: @0@'.format(pkg_targets.strip()),
-  '    Print backends: @0@'.format(' '.join(print_backends)),
-  '    Media backends: @0@'.format(' '.join(media_backends)),
-  '    Vulkan support: @0@'.format(have_vulkan),
-  '     Cloud support: @0@'.format(get_option('cloudproviders')),
-  '    Colord support: @0@'.format(get_option('colord')),
-  '          Profiler: @0@'.format(get_option('profiler')),
-  '     Introspection: @0@'.format(get_option('introspection')),
-  '     Documentation: @0@'.format(get_option('gtk_doc')),
-  '         Man pages: @0@'.format(get_option('man-pages')),
-  '       Build tests: @0@'.format(get_option('build-tests')),
-  '     Install tests: @0@'.format(get_option('install-tests')),
-  '             Demos: @0@'.format(get_option('demos')),
-  '          Examples: @0@'.format(get_option('build-examples')),
-  'Directories:',
-  '            prefix: @0@'.format(gtk_prefix),
-  '        includedir: @0@'.format(gtk_includedir),
-  '            libdir: @0@'.format(gtk_libdir),
-  '           datadir: @0@'.format(gtk_datadir),
-  '------',
-  ''
-]
 
-message('\n'.join(summary))
+#### Summary ####
+
+summary('Display backends', pkg_targets.strip())
+summary('Print backends', print_backends)
+summary('Media backends', media_backends)
+summary('Vulkan support', have_vulkan)
+summary('Cloud support', get_option('cloudproviders'))
+summary('Profiler', get_option('profiler'))
+summary('Colord support', get_option('colord'))
+
+# Build
+summary('Debugging', get_option('debug'), section: 'Build')
+summary('Optimization', get_option('optimization'), section: 'Build')
+summary('Introspection', get_option('introspection'), section: 'Build')
+summary('Documentation', get_option('gtk_doc'), section: 'Build')
+summary('Man pages', get_option('man-pages'), section: 'Build')
+summary('Tests', get_option('build-tests'), section: 'Build')
+summary('Install tests', get_option('install-tests'), section: 'Build')
+summary('Demos', get_option('demos'), section: 'Build')
+summary('Examples', get_option('build-examples'), section: 'Build')
+
+# Directories
+summary('prefix', gtk_prefix, section: 'Directories')
+summary('includedir', gtk_includedir, section: 'Directories')
+summary('libdir', gtk_libdir, section: 'Directories')
+summary('datadir', gtk_datadir, section: 'Directories')
