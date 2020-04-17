@@ -3468,6 +3468,13 @@ calendar {
       }
     }
 
+    > label:focus {
+      outline-color: $focus_border_color;
+      outline-offset: -2px;
+      outline-width: 2px;
+      outline-style: solid;
+    }
+
     > label.day-number {
       padding: 4px;
 

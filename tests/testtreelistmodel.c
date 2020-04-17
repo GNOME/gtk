@@ -192,7 +192,7 @@ create_widget_for_model (gpointer item,
       child = g_object_new (GTK_TYPE_BOX, "css-name", "expander", NULL);
       
       title = g_object_new (GTK_TYPE_TOGGLE_BUTTON, "css-name", "title", NULL);
-      gtk_button_set_relief (GTK_BUTTON (title), GTK_RELIEF_NONE);
+      gtk_button_set_has_frame (GTK_BUTTON (title), FALSE);
       g_object_bind_property (item, "expanded", title, "active", G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
       g_object_set_data_full (G_OBJECT (title), "make-sure-its-not-unreffed", g_object_ref (item), g_object_unref);
       gtk_container_add (GTK_CONTAINER (child), title);

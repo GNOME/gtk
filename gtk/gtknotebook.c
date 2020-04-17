@@ -5545,7 +5545,7 @@ gtk_notebook_menu_item_create (GtkNotebook *notebook,
     }
 
   menu_item = gtk_button_new ();
-  gtk_button_set_relief (GTK_BUTTON (menu_item), GTK_RELIEF_NONE);
+  gtk_button_set_has_frame (GTK_BUTTON (menu_item), FALSE);
   gtk_container_add (GTK_CONTAINER (menu_item), page->menu_label);
   gtk_container_add (GTK_CONTAINER (notebook->menu_box), menu_item);
   g_signal_connect (menu_item, "clicked",

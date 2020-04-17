@@ -49,7 +49,7 @@
         <child type="end">
           <object class="GtkToggleButton" id="changes_allow">
             <property name="icon-name">changes-allow</property>
-            <property name="relief">none</property>
+            <property name="has-frame">0</property>
             <signal name="notify::active" handler="fishbowl_changes_toggled_cb"/>
           </object>
         </child>

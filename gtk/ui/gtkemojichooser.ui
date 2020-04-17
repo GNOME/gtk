@@ -215,7 +215,7 @@
                         </style>
                         <child>
                           <object class="GtkButton" id="recent.button">
-                            <property name="relief">none</property>
+                            <property name="has-frame">0</property>
                             <property name="tooltip-text" translatable="yes" context="emoji category">Recent</property>
                             <style>
                               <class name="emoji-section"/>
@@ -224,7 +224,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="people.button">
-                            <property name="relief">none</property>
+                            <property name="has-frame">0</property>
                             <property name="tooltip-text" translatable="yes" context="emoji category">Smileys &amp; People</property>
                             <style>
                               <class name="emoji-section"/>
@@ -233,7 +233,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="body.button">
-                            <property name="relief">none</property>
+                            <property name="has-frame">0</property>
                             <property name="tooltip-text" translatable="yes" context="emoji category">Body &amp; Clothing</property>
                             <style>
                               <class name="emoji-section"/>
@@ -242,7 +242,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="nature.button">
-                            <property name="relief">none</property>
+                            <property name="has-frame">0</property>
                             <property name="tooltip-text" translatable="yes" context="emoji category">Animals &amp; Nature</property>
                             <style>
                               <class name="emoji-section"/>
@@ -251,7 +251,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="food.button">
-                            <property name="relief">none</property>
+                            <property name="has-frame">0</property>
                             <property name="tooltip-text" translatable="yes" context="emoji category">Food &amp; Drink</property>
                             <style>
                               <class name="emoji-section"/>
@@ -260,7 +260,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="travel.button">
-                            <property name="relief">none</property>
+                            <property name="has-frame">0</property>
                             <property name="tooltip-text" translatable="yes" context="emoji category">Travel &amp; Places</property>
                             <style>
                               <class name="emoji-section"/>
@@ -269,7 +269,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="activities.button">
-                            <property name="relief">none</property>
+                            <property name="has-frame">0</property>
                             <property name="tooltip-text" translatable="yes" context="emoji category">Activities</property>
                             <style>
                               <class name="emoji-section"/>
@@ -278,7 +278,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="objects.button">
-                            <property name="relief">none</property>
+                            <property name="has-frame">0</property>
                             <property name="tooltip-text" translatable="yes" context="emoji category">Objects</property>
                             <style>
                               <class name="emoji-section"/>
@@ -287,7 +287,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="symbols.button">
-                            <property name="relief">none</property>
+                            <property name="has-frame">0</property>
                             <property name="tooltip-text" translatable="yes" context="emoji category">Symbols</property>
                             <style>
                               <class name="emoji-section"/>
@@ -296,7 +296,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="flags.button">
-                            <property name="relief">none</property>
+                            <property name="has-frame">0</property>
                             <property name="tooltip-text" translatable="yes" context="emoji category">Flags</property>
                             <style>
                               <class name="emoji-section"/>

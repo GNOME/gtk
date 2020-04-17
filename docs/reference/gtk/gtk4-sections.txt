@@ -520,8 +520,8 @@ gtk_button_new
 gtk_button_new_with_label
 gtk_button_new_with_mnemonic
 gtk_button_new_from_icon_name
-gtk_button_set_relief
-gtk_button_get_relief
+gtk_button_set_has_frame
+gtk_button_get_has_frame
 gtk_button_get_label
 gtk_button_set_label
 gtk_button_get_use_underline
@@ -1372,13 +1372,11 @@ GtkFrame
 GtkFrameClass
 gtk_frame_new
 gtk_frame_set_label
-gtk_frame_set_label_widget
-gtk_frame_set_label_align
-gtk_frame_set_shadow_type
 gtk_frame_get_label
-gtk_frame_get_label_align
+gtk_frame_set_label_widget
 gtk_frame_get_label_widget
-gtk_frame_get_shadow_type
+gtk_frame_set_label_align
+gtk_frame_get_label_align
 <SUBSECTION Standard>
 GTK_FRAME
 GTK_IS_FRAME
@@ -1712,8 +1710,8 @@ gtk_menu_button_set_icon_name
 gtk_menu_button_get_icon_name
 gtk_menu_button_set_label
 gtk_menu_button_get_label
-gtk_menu_button_set_relief
-gtk_menu_button_get_relief
+gtk_menu_button_set_has_frame
+gtk_menu_button_get_has_frame
 gtk_menu_button_popup
 gtk_menu_button_popdown
 GtkMenuButtonCreatePopupFunc
@@ -2205,8 +2203,8 @@ GtkCornerType
 gtk_scrolled_window_get_placement
 gtk_scrolled_window_set_placement
 gtk_scrolled_window_unset_placement
-gtk_scrolled_window_get_shadow_type
-gtk_scrolled_window_set_shadow_type
+gtk_scrolled_window_get_has_frame
+gtk_scrolled_window_set_has_frame
 gtk_scrolled_window_get_kinetic_scrolling
 gtk_scrolled_window_set_kinetic_scrolling
 gtk_scrolled_window_get_capture_button_press
@@ -3843,8 +3841,6 @@ gtk_list_store_get_type
 <TITLE>GtkViewport</TITLE>
 GtkViewport
 gtk_viewport_new
-gtk_viewport_set_shadow_type
-gtk_viewport_get_shadow_type
 <SUBSECTION Standard>
 GTK_VIEWPORT
 GTK_IS_VIEWPORT
@@ -4538,11 +4534,9 @@ GtkMovementStep
 GtkOrientation
 GtkPackType
 GtkPositionType
-GtkReliefStyle
 GtkScrollStep
 GtkScrollType
 GtkSelectionMode
-GtkShadowType
 GtkStateFlags
 GtkSortType
 GtkIconSize

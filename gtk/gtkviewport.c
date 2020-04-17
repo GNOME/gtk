@@ -75,8 +75,7 @@ struct _GtkViewportPrivate
 {
   GtkAdjustment  *hadjustment;
   GtkAdjustment  *vadjustment;
-  GtkShadowType   shadow_type;
-
+ 
   /* GtkScrollablePolicy needs to be checked when
    * driving the scrollable adjustment values */
   guint hscroll_policy : 1;
@@ -93,8 +92,7 @@ enum {
   PROP_HADJUSTMENT,
   PROP_VADJUSTMENT,
   PROP_HSCROLL_POLICY,
-  PROP_VSCROLL_POLICY,
-  PROP_SHADOW_TYPE
+  PROP_VSCROLL_POLICY
 };
 
 
@@ -254,15 +252,6 @@ gtk_viewport_class_init (GtkViewportClass *class)
   g_object_class_override_property (gobject_class, PROP_HSCROLL_POLICY, "hscroll-policy");
   g_object_class_override_property (gobject_class, PROP_VSCROLL_POLICY, "vscroll-policy");
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_SHADOW_TYPE,
-                                   g_param_spec_enum ("shadow-type",
-						      P_("Shadow type"),
-						      P_("Determines how the shadowed box around the viewport is drawn"),
-						      GTK_TYPE_SHADOW_TYPE,
-						      GTK_SHADOW_IN,
-						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-
   gtk_widget_class_set_css_name (widget_class, I_("viewport"));
 }
 
@@ -299,9 +288,6 @@ gtk_viewport_set_property (GObject         *object,
           g_object_notify_by_pspec (object, pspec);
         }
       break;
-    case PROP_SHADOW_TYPE:
-      gtk_viewport_set_shadow_type (viewport, g_value_get_enum (value));
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -331,9 +317,6 @@ gtk_viewport_get_property (GObject         *object,
     case PROP_VSCROLL_POLICY:
       g_value_set_enum (value, priv->vscroll_policy);
       break;
-    case PROP_SHADOW_TYPE:
-      g_value_set_enum (value, priv->shadow_type);
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -350,7 +333,6 @@ gtk_viewport_init (GtkViewport *viewport)
 
   gtk_widget_set_overflow (widget, GTK_OVERFLOW_HIDDEN);
 
-  priv->shadow_type = GTK_SHADOW_IN;
   priv->hadjustment = NULL;
   priv->vadjustment = NULL;
 
@@ -439,53 +421,6 @@ viewport_set_adjustment (GtkViewport    *viewport,
 		    viewport);
 
   gtk_viewport_adjustment_value_changed (adjustment, viewport);
-}
-
-/** 
- * gtk_viewport_set_shadow_type:
- * @viewport: a #GtkViewport.
- * @type: the new shadow type.
- *
- * Sets the shadow type of the viewport.
- **/ 
-void
-gtk_viewport_set_shadow_type (GtkViewport   *viewport,
-                              GtkShadowType  type)
-{
-  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
-
-  g_return_if_fail (GTK_IS_VIEWPORT (viewport));
-
-  if ((GtkShadowType) priv->shadow_type != type)
-    {
-      priv->shadow_type = type;
-
-      if (type != GTK_SHADOW_NONE)
-        gtk_widget_add_css_class (GTK_WIDGET (viewport), GTK_STYLE_CLASS_FRAME);
-      else
-        gtk_widget_remove_css_class (GTK_WIDGET (viewport), GTK_STYLE_CLASS_FRAME);
-
-      g_object_notify (G_OBJECT (viewport), "shadow-type");
-    }
-}
-
-/**
- * gtk_viewport_get_shadow_type:
- * @viewport: a #GtkViewport
- *
- * Gets the shadow type of the #GtkViewport. See
- * gtk_viewport_set_shadow_type().
- *
- * Returns: the shadow type 
- **/
-GtkShadowType
-gtk_viewport_get_shadow_type (GtkViewport *viewport)
-{
-  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
-
-  g_return_val_if_fail (GTK_IS_VIEWPORT (viewport), GTK_SHADOW_NONE);
-
-  return priv->shadow_type;
 }
 
 static void

@@ -757,8 +757,7 @@ activate (GApplication *app)
                                   GTK_POLICY_AUTOMATIC,
                                   GTK_POLICY_AUTOMATIC);
 
-  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
-                                       GTK_SHADOW_IN);
+  gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (sw), TRUE);
 
   gtk_widget_set_vexpand (sw, TRUE);
   gtk_container_add (GTK_CONTAINER (box), sw);

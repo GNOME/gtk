@@ -16,7 +16,7 @@ aaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aa
   <object class="GtkWindow" id="window1">
     <child>
       <object class="GtkScrolledWindow" id="scrolledwindow1">
-        <property name="shadow_type">in</property>
+        <property name="has-frame">1</property>
         <child>
           <object class="GtkTreeView" id="treeview1">
             <property name="model">liststore1</property>
