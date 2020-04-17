@@ -1793,6 +1793,11 @@ gtk_label_set_attributes (GtkLabel         *self,
 {
   g_return_if_fail (GTK_IS_LABEL (self));
 
+  if (!attrs && !self->attrs)
+    return;
+
+  if (attrs == self->attrs) g_error ("Z");
+
   if (attrs)
     pango_attr_list_ref (attrs);
 
