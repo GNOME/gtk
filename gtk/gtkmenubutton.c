@@ -166,7 +166,7 @@ enum
   PROP_ICON_NAME,
   PROP_LABEL,
   PROP_USE_UNDERLINE,
-  PROP_RELIEF,
+  PROP_HAS_FRAME,
   LAST_PROP
 };
 
@@ -207,8 +207,8 @@ gtk_menu_button_set_property (GObject      *object,
       case PROP_USE_UNDERLINE:
         gtk_menu_button_set_use_underline (self, g_value_get_boolean (value));
         break;
-      case PROP_RELIEF:
-        gtk_menu_button_set_relief (self, g_value_get_enum (value));
+      case PROP_HAS_FRAME:
+        gtk_menu_button_set_has_frame (self, g_value_get_boolean (value));
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -246,8 +246,8 @@ gtk_menu_button_get_property (GObject    *object,
       case PROP_USE_UNDERLINE:
         g_value_set_boolean (value, gtk_menu_button_get_use_underline (GTK_MENU_BUTTON (object)));
         break;
-      case PROP_RELIEF:
-        g_value_set_enum (value, gtk_menu_button_get_relief (GTK_MENU_BUTTON (object)));
+      case PROP_HAS_FRAME:
+        g_value_set_boolean (value, gtk_menu_button_get_has_frame (GTK_MENU_BUTTON (object)));
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -431,13 +431,12 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                            FALSE,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  menu_button_props[PROP_RELIEF] =
-    g_param_spec_enum ("relief",
-                       P_("Border relief"),
-                       P_("The border relief style"),
-                       GTK_TYPE_RELIEF_STYLE,
-                       GTK_RELIEF_NORMAL,
-                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+  menu_button_props[PROP_HAS_FRAME] =
+    g_param_spec_boolean ("has-frame",
+                          P_("Has frame"),
+                          P_("Whether the button has a frame"),
+                          TRUE,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, menu_button_props);
 
@@ -932,47 +931,39 @@ gtk_menu_button_get_label (GtkMenuButton *menu_button)
 }
 
 /**
- * gtk_menu_button_set_relief:
- * @menu_button: The #GtkMenuButton you want to set relief styles of
- * @relief: The GtkReliefStyle as described above
+ * gtk_menu_button_set_has_frame:
+ * @menu_button: a #GtkMenuButton
+ * @has_frame: whether the button should have a visible frame
  *
- * Sets the relief style of the edges of the given
- * #GtkMenuButton widget.
- *
- * Two styles exist, %GTK_RELIEF_NORMAL and %GTK_RELIEF_NONE.
- * The default style is, as one can guess, %GTK_RELIEF_NORMAL.
+ * Sets the style of the button.
  */
 void
-gtk_menu_button_set_relief (GtkMenuButton  *menu_button,
-                            GtkReliefStyle  relief)
+gtk_menu_button_set_has_frame (GtkMenuButton *menu_button,
+                               gboolean       has_frame)
 {
-  gboolean has_frame;
-
   g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
 
-  has_frame = relief == GTK_RELIEF_NORMAL;
   if (gtk_button_get_has_frame (GTK_BUTTON (menu_button->button)) == has_frame)
     return;
 
   gtk_button_set_has_frame (GTK_BUTTON (menu_button->button), has_frame);
-  g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_RELIEF]);
+  g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_HAS_FRAME]);
 }
 
 /**
- * gtk_menu_button_get_relief:
- * @menu_button: The #GtkMenuButton you want the #GtkReliefStyle from.
+ * gtk_menu_button_get_has_frame:
+ * @menu_button: a #GtkMenuButton
  *
- * Returns the current relief style of the given #GtkMenuButton.
+ * Returns whether the button has a frame.
  *
- * Returns: The current #GtkReliefStyle
+ * Returns: %TRUE if the button has a frame
  */
-GtkReliefStyle
-gtk_menu_button_get_relief (GtkMenuButton *menu_button)
+gboolean
+gtk_menu_button_get_has_frame (GtkMenuButton *menu_button)
 {
-  g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), GTK_RELIEF_NORMAL);
+  g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), TRUE);
 
-  return gtk_button_get_has_frame (GTK_BUTTON (menu_button->button))
-         ? GTK_RELIEF_NORMAL : GTK_RELIEF_NONE;
+  return gtk_button_get_has_frame (GTK_BUTTON (menu_button->button));
 }
 
 /**

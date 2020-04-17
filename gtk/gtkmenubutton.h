@@ -96,10 +96,10 @@ GDK_AVAILABLE_IN_ALL
 gboolean     gtk_menu_button_get_use_underline (GtkMenuButton *menu_button);
 
 GDK_AVAILABLE_IN_ALL
-void           gtk_menu_button_set_relief   (GtkMenuButton  *menu_button,
-                                             GtkReliefStyle  relief);
+void           gtk_menu_button_set_has_frame (GtkMenuButton  *menu_button,
+                                              gboolean        has_frame);
 GDK_AVAILABLE_IN_ALL
-GtkReliefStyle gtk_menu_button_get_relief   (GtkMenuButton  *menu_button);
+gboolean       gtk_menu_button_get_has_frame (GtkMenuButton  *menu_button);
 
 GDK_AVAILABLE_IN_ALL
 void          gtk_menu_button_popup (GtkMenuButton *menu_button);
