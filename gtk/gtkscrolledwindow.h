@@ -125,10 +125,10 @@ void           gtk_scrolled_window_unset_placement   (GtkScrolledWindow *scrolle
 GDK_AVAILABLE_IN_ALL
 GtkCornerType  gtk_scrolled_window_get_placement     (GtkScrolledWindow *scrolled_window);
 GDK_AVAILABLE_IN_ALL
-void           gtk_scrolled_window_set_shadow_type   (GtkScrolledWindow *scrolled_window,
-						      GtkShadowType      type);
+void           gtk_scrolled_window_set_has_frame     (GtkScrolledWindow *scrolled_window,
+						      gboolean           has_frame);
 GDK_AVAILABLE_IN_ALL
-GtkShadowType  gtk_scrolled_window_get_shadow_type   (GtkScrolledWindow *scrolled_window);
+gboolean       gtk_scrolled_window_get_has_frame     (GtkScrolledWindow *scrolled_window);
 
 GDK_AVAILABLE_IN_ALL
 gint           gtk_scrolled_window_get_min_content_width  (GtkScrolledWindow *scrolled_window);

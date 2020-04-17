@@ -69,7 +69,7 @@
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkScrolledWindow" id="printer_swin">
-                                <property name="shadow-type">in</property>
+                                <property name="has-frame">1</property>
                                 <property name="vexpand">1</property>
                                 <child>
                                   <object class="GtkTreeView" id="printer_treeview">
