@@ -1796,8 +1796,6 @@ gtk_label_set_attributes (GtkLabel         *self,
   if (!attrs && !self->attrs)
     return;
 
-  if (attrs == self->attrs) g_error ("Z");
-
   if (attrs)
     pango_attr_list_ref (attrs);
 
