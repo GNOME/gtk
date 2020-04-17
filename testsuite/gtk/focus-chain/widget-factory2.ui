@@ -1452,7 +1452,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <child>
                                   <object class="GtkButton" id="page2dismiss">
                                     <property name="focus-on-click">0</property>
-                                    <property name="relief">none</property>
+                                    <property name="has-frame">0</property>
                                     <property name="icon-name">window-close-symbolic</property>
                                   </object>
                                 </child>
@@ -2659,7 +2659,7 @@ microphone-sensitivity-medium-symbolic</property>
                                                 </child>
                                                 <child>
                                                   <object class="GtkButton">
-                                                    <property name="relief">none</property>
+                                                    <property name="has-frame">0</property>
                                                     <property name="focus-on-click">0</property>
                                                     <property name="icon-name">window-close-symbolic</property>
                                                     <style>
@@ -2690,7 +2690,7 @@ microphone-sensitivity-medium-symbolic</property>
                                                 </child>
                                                 <child>
                                                   <object class="GtkButton">
-                                                    <property name="relief">none</property>
+                                                    <property name="has-frame">0</property>
                                                     <property name="focus-on-click">0</property>
                                                     <property name="icon-name">window-close-symbolic</property>
                                                     <style>

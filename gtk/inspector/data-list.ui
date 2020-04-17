@@ -10,7 +10,7 @@
         <property name="margin-bottom">6</property>
         <child>
           <object class="GtkToggleButton" id="show_button">
-            <property name="relief">none</property>
+            <property name="has-frame">0</property>
             <property name="tooltip-text" translatable="yes">Show data</property>
             <property name="icon-name">view-refresh-symbolic</property>
             <signal name="toggled" handler="toggle_show"/>
