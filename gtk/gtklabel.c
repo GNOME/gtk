@@ -668,7 +668,7 @@ gtk_label_class_init (GtkLabelClass *class)
 
    /**
    * GtkLabel::copy-clipboard:
-   * @label: the object which received the signal
+   * @self: the object which received the signal
    *
    * The ::copy-clipboard signal is a
    * [keybinding signal][GtkBindingSignal]
@@ -687,7 +687,7 @@ gtk_label_class_init (GtkLabelClass *class)
   
     /**
      * GtkLabel::activate-current-link:
-     * @label: The label on which the signal was emitted
+     * @self: The label on which the signal was emitted
      *
      * A [keybinding signal][GtkBindingSignal]
      * which gets emitted when the user activates a link in the label.
@@ -708,7 +708,7 @@ gtk_label_class_init (GtkLabelClass *class)
 
     /**
      * GtkLabel::activate-link:
-     * @label: The label on which the signal was emitted
+     * @self: The label on which the signal was emitted
      * @uri: the URI that is activated
      *
      * The signal which gets emitted to activate a URI.
@@ -1562,7 +1562,7 @@ label_mnemonic_widget_weak_notify (gpointer      data,
 
 /**
  * gtk_label_set_mnemonic_widget:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @widget: (nullable): the target #GtkWidget, or %NULL to unset
  *
  * If the label has been set so that it has a mnemonic key (using
@@ -1610,7 +1610,7 @@ gtk_label_set_mnemonic_widget (GtkLabel  *self,
 
 /**
  * gtk_label_get_mnemonic_widget:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  *
  * Retrieves the target of the mnemonic (keyboard shortcut) of this
  * label. See gtk_label_set_mnemonic_widget().
@@ -1628,7 +1628,7 @@ gtk_label_get_mnemonic_widget (GtkLabel *self)
 
 /**
  * gtk_label_get_mnemonic_keyval:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  *
  * If the label has been set so that it has a mnemonic key this function
  * returns the keyval used for the mnemonic accelerator. If there is no
@@ -1741,7 +1741,7 @@ gtk_label_recalculate (GtkLabel *self)
 
 /**
  * gtk_label_set_text:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @str: The text you want to set
  *
  * Sets the text within the #GtkLabel widget. It overwrites any text that
@@ -1774,7 +1774,7 @@ gtk_label_set_text (GtkLabel    *self,
 
 /**
  * gtk_label_set_attributes:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @attrs: (nullable): a #PangoAttrList, or %NULL
  *
  * Sets a #PangoAttrList; the attributes in the list are applied to the
@@ -1813,7 +1813,7 @@ gtk_label_set_attributes (GtkLabel         *self,
 
 /**
  * gtk_label_get_attributes:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  *
  * Gets the attribute list that was set on the label using
  * gtk_label_set_attributes(), if any. This function does
@@ -1835,7 +1835,7 @@ gtk_label_get_attributes (GtkLabel *self)
 
 /**
  * gtk_label_set_label:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @str: the new text to set for the label
  *
  * Sets the text of the label. The label is interpreted as
@@ -1859,7 +1859,7 @@ gtk_label_set_label (GtkLabel    *self,
 
 /**
  * gtk_label_get_label:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  *
  * Fetches the text from a label widget including any embedded
  * underlines indicating mnemonics and Pango markup. (See
@@ -2336,7 +2336,7 @@ error_set:
 
 /**
  * gtk_label_set_markup:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @str: a markup string (see [Pango markup format][PangoMarkupFormat])
  *
  * Parses @str which is marked up with the
@@ -2385,7 +2385,7 @@ gtk_label_set_markup (GtkLabel    *self,
 
 /**
  * gtk_label_set_markup_with_mnemonic:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @str: a markup string (see
  *     [Pango markup format][PangoMarkupFormat])
  *
@@ -2417,7 +2417,7 @@ gtk_label_set_markup_with_mnemonic (GtkLabel    *self,
 
 /**
  * gtk_label_get_text:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * 
  * Fetches the text from a label widget, as displayed on the
  * screen. This does not include any embedded underlines
@@ -2436,7 +2436,7 @@ gtk_label_get_text (GtkLabel *self)
 
 /**
  * gtk_label_set_justify:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @jtype: a #GtkJustification
  *
  * Sets the alignment of the lines in the text of the label relative to
@@ -2467,7 +2467,7 @@ gtk_label_set_justify (GtkLabel        *self,
 
 /**
  * gtk_label_get_justify:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  *
  * Returns the justification of the label. See gtk_label_set_justify().
  *
@@ -2483,7 +2483,7 @@ gtk_label_get_justify (GtkLabel *self)
 
 /**
  * gtk_label_set_ellipsize:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @mode: a #PangoEllipsizeMode
  *
  * Sets the mode used to ellipsize (add an ellipsis: "...") to the text 
@@ -2510,7 +2510,7 @@ gtk_label_set_ellipsize (GtkLabel          *self,
 
 /**
  * gtk_label_get_ellipsize:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  *
  * Returns the ellipsizing position of the label. See gtk_label_set_ellipsize().
  *
@@ -2526,7 +2526,7 @@ gtk_label_get_ellipsize (GtkLabel *self)
 
 /**
  * gtk_label_set_width_chars:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @n_chars: the new desired width, in characters.
  * 
  * Sets the desired width in characters of @label to @n_chars.
@@ -2547,7 +2547,7 @@ gtk_label_set_width_chars (GtkLabel *self,
 
 /**
  * gtk_label_get_width_chars:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * 
  * Retrieves the desired width of @label, in characters. See
  * gtk_label_set_width_chars().
@@ -2564,7 +2564,7 @@ gtk_label_get_width_chars (GtkLabel *self)
 
 /**
  * gtk_label_set_max_width_chars:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @n_chars: the new desired maximum width, in characters.
  * 
  * Sets the desired maximum width in characters of @label to @n_chars.
@@ -2586,7 +2586,7 @@ gtk_label_set_max_width_chars (GtkLabel *self,
 
 /**
  * gtk_label_get_max_width_chars:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * 
  * Retrieves the desired maximum width of @label, in characters. See
  * gtk_label_set_width_chars().
@@ -2603,7 +2603,7 @@ gtk_label_get_max_width_chars (GtkLabel *self)
 
 /**
  * gtk_label_set_wrap:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @wrap: the setting
  *
  * Toggles line wrapping within the #GtkLabel widget. %TRUE makes it break
@@ -2636,7 +2636,7 @@ gtk_label_set_wrap (GtkLabel *self,
 
 /**
  * gtk_label_get_wrap:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  *
  * Returns whether lines in the label are automatically wrapped.
  * See gtk_label_set_wrap().
@@ -2653,7 +2653,7 @@ gtk_label_get_wrap (GtkLabel *self)
 
 /**
  * gtk_label_set_wrap_mode:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @wrap_mode: the line wrapping mode
  *
  * If line wrapping is on (see gtk_label_set_wrap()) this controls how
@@ -2677,7 +2677,7 @@ gtk_label_set_wrap_mode (GtkLabel *self,
 
 /**
  * gtk_label_get_wrap_mode:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  *
  * Returns line wrap mode used by the label. See gtk_label_set_wrap_mode().
  *
@@ -2733,7 +2733,7 @@ gtk_label_clear_layout (GtkLabel *self)
 
 /**
  * gtk_label_get_measuring_layout:
- * @label: the label
+ * @self: the label
  * @existing_layout: %NULL or an existing layout already in use.
  * @width: the width to measure with in pango units, or -1 for infinite
  *
@@ -3506,7 +3506,7 @@ gtk_label_snapshot (GtkWidget   *widget,
 
 /**
  * gtk_label_set_text_with_mnemonic:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @str: a string
  * 
  * Sets the label’s text from the string @str.
@@ -4427,7 +4427,7 @@ gtk_label_clear_select_info (GtkLabel *self)
 
 /**
  * gtk_label_set_selectable:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @setting: %TRUE to allow selecting text in the label
  *
  * Selectable labels allow the user to select text from the label, for
@@ -4474,7 +4474,7 @@ gtk_label_set_selectable (GtkLabel *self,
 
 /**
  * gtk_label_get_selectable:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * 
  * Gets the value set by gtk_label_set_selectable().
  * 
@@ -4608,7 +4608,7 @@ gtk_label_select_region_index (GtkLabel *self,
 
 /**
  * gtk_label_select_region:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @start_offset: start offset (in characters not bytes)
  * @end_offset: end offset (in characters not bytes)
  *
@@ -4640,7 +4640,7 @@ gtk_label_select_region  (GtkLabel *self,
 
 /**
  * gtk_label_get_selection_bounds:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @start: (out): return location for start of selection, as a character offset
  * @end: (out): return location for end of selection, as a character offset
  * 
@@ -4708,7 +4708,7 @@ gtk_label_get_selection_bounds (GtkLabel  *self,
 
 /**
  * gtk_label_get_layout:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * 
  * Gets the #PangoLayout used to display the label.
  * The layout is useful to e.g. convert text positions to
@@ -4731,7 +4731,7 @@ gtk_label_get_layout (GtkLabel *self)
 
 /**
  * gtk_label_get_layout_offsets:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @x: (out) (optional): location to store X offset of layout, or %NULL
  * @y: (out) (optional): location to store Y offset of layout, or %NULL
  *
@@ -4756,7 +4756,7 @@ gtk_label_get_layout_offsets (GtkLabel *self,
 
 /**
  * gtk_label_set_use_markup:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @setting: %TRUE if the label’s text should be parsed for markup.
  *
  * Sets whether the text of the label contains markup in
@@ -4779,7 +4779,7 @@ gtk_label_set_use_markup (GtkLabel *self,
 
 /**
  * gtk_label_get_use_markup:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  *
  * Returns whether the label’s text is interpreted as marked up with
  * the [Pango text markup language][PangoMarkupFormat].
@@ -4797,7 +4797,7 @@ gtk_label_get_use_markup (GtkLabel *self)
 
 /**
  * gtk_label_set_use_underline:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @setting: %TRUE if underlines in the text indicate mnemonics
  *
  * If true, an underline in the text indicates the next character should be
@@ -4819,7 +4819,7 @@ gtk_label_set_use_underline (GtkLabel *self,
 
 /**
  * gtk_label_get_use_underline:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  *
  * Returns whether an embedded underline in the label indicates a
  * mnemonic. See gtk_label_set_use_underline().
@@ -4837,7 +4837,7 @@ gtk_label_get_use_underline (GtkLabel *self)
 
 /**
  * gtk_label_set_single_line_mode:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @single_line_mode: %TRUE if the label should be in single line mode
  *
  * Sets whether the label is in single line mode.
@@ -4863,7 +4863,7 @@ gtk_label_set_single_line_mode (GtkLabel *self,
 
 /**
  * gtk_label_get_single_line_mode:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  *
  * Returns whether the label is in single line mode.
  *
@@ -5489,7 +5489,7 @@ gtk_label_activate_current_link (GtkLabel *self)
 
 /**
  * gtk_label_get_current_uri:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  *
  * Returns the URI for the currently active link in the label.
  * The active link is the one under the mouse pointer or, in a
@@ -5591,7 +5591,7 @@ _gtk_label_get_selection_bound (GtkLabel *self)
 
 /**
  * gtk_label_set_lines:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @lines: the desired number of lines, or -1
  *
  * Sets the number of lines to which an ellipsized, wrapping label
@@ -5616,7 +5616,7 @@ gtk_label_set_lines (GtkLabel *self,
 
 /**
  * gtk_label_get_lines:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  *
  * Gets the number of lines to which an ellipsized, wrapping
  * label should be limited. See gtk_label_set_lines().
@@ -5738,7 +5738,7 @@ _gtk_label_get_link_focused (GtkLabel *self,
 
 /**
  * gtk_label_set_xalign:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @xalign: the new xalign value, between 0 and 1
  *
  * Sets the #GtkLabel:xalign property for @label.
@@ -5762,7 +5762,7 @@ gtk_label_set_xalign (GtkLabel *self,
 
 /**
  * gtk_label_get_xalign:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  *
  * Gets the #GtkLabel:xalign property for @label.
  *
@@ -5778,7 +5778,7 @@ gtk_label_get_xalign (GtkLabel *self)
 
 /**
  * gtk_label_set_yalign:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @yalign: the new yalign value, between 0 and 1
  *
  * Sets the #GtkLabel:yalign property for @label.
@@ -5802,7 +5802,7 @@ gtk_label_set_yalign (GtkLabel *self,
 
 /**
  * gtk_label_get_yalign:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  *
  * Gets the #GtkLabel:yalign property for @label.
  *
@@ -5818,7 +5818,7 @@ gtk_label_get_yalign (GtkLabel *self)
 
 /**
  * gtk_label_set_extra_menu:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  * @model: (allow-none): a #GMenuModel
  *
  * Sets a menu model to add when constructing
@@ -5839,7 +5839,7 @@ gtk_label_set_extra_menu (GtkLabel   *self,
 
 /**
  * gtk_label_get_extra_menu:
- * @label: a #GtkLabel
+ * @self: a #GtkLabel
  *
  * Gets the menu model set with gtk_label_set_extra_menu().
  *
