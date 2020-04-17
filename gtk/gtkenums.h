@@ -392,19 +392,6 @@ typedef enum
 } GtkPositionType;
 
 /**
- * GtkReliefStyle:
- * @GTK_RELIEF_NORMAL: Draw a normal relief.
- * @GTK_RELIEF_NONE: No relief.
- *
- * Indicated the relief to be drawn around a #GtkButton.
- */
-typedef enum
-{
-  GTK_RELIEF_NORMAL,
-  GTK_RELIEF_NONE
-} GtkReliefStyle;
-
-/**
  * GtkScrollType:
  * @GTK_SCROLL_NONE: No scrolling.
  * @GTK_SCROLL_JUMP: Jump to new location.
