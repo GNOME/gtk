@@ -90,11 +90,11 @@ gtk_library_version = '0.@0@.@1@'.format(gtk_binary_age - gtk_interface_age, gtk
 
 gtk_api_version = '4.0'
 
-x11_enabled            = get_option('x11-backend')
-wayland_enabled        = get_option('wayland-backend')
-broadway_enabled       = get_option('broadway-backend')
-quartz_enabled         = get_option('quartz-backend')
-win32_enabled          = get_option('win32-backend')
+x11_enabled      = get_option('x11-backend')
+wayland_enabled  = get_option('wayland-backend')
+broadway_enabled = get_option('broadway-backend')
+quartz_enabled   = get_option('quartz-backend')
+win32_enabled    = get_option('win32-backend')
 
 os_unix   = false
 os_linux  = false
