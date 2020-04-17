@@ -50,7 +50,11 @@
               G_STMT_START{\
                 programs->program_name ## _program.program_name.uniform_basename ## _location = \
                               glGetUniformLocation(programs->program_name ## _program.id, "u_" #uniform_basename);\
-                g_assert_cmpint (programs->program_name ## _program.program_name.uniform_basename ## _location, >, -1); \
+                if (programs->program_name ## _program.program_name.uniform_basename ## _location == -1) \
+                  { \
+                    g_clear_pointer (&programs, gsk_gl_renderer_programs_unref); \
+                    goto out; \
+                  } \
               }G_STMT_END
 
 #define INIT_COMMON_UNIFORM_LOCATION(program_ptr, uniform_basename) \
