@@ -106,8 +106,6 @@
  * GtkWidget *hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
  * GtkWidget *frame1 = gtk_frame_new (NULL);
  * GtkWidget *frame2 = gtk_frame_new (NULL);
- * gtk_frame_set_shadow_type (GTK_FRAME (frame1), GTK_SHADOW_IN);
- * gtk_frame_set_shadow_type (GTK_FRAME (frame2), GTK_SHADOW_IN);
  *
  * gtk_widget_set_size_request (hpaned, 200, -1);
  *

@@ -455,7 +455,6 @@ create_text_view (void)
   GtkWidget *text_view;
 
   widget = gtk_frame_new (NULL);
-  gtk_frame_set_shadow_type (GTK_FRAME (widget), GTK_SHADOW_IN);
   text_view = gtk_text_view_new ();
   gtk_container_add (GTK_CONTAINER (widget), text_view);
   /* Bad hack to add some size to the widget */
@@ -476,7 +475,6 @@ create_tree_view (void)
   WidgetInfo *info;
 
   widget = gtk_frame_new (NULL);
-  gtk_frame_set_shadow_type (GTK_FRAME (widget), GTK_SHADOW_IN);
   store = gtk_tree_store_new (3, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_STRING);
   gtk_tree_store_append (store, &iter, NULL);
   gtk_tree_store_set (store, &iter, 0, "Line One", 1, FALSE, 2, "A", -1);
@@ -520,7 +518,6 @@ create_icon_view (void)
   WidgetInfo *info;
 
   widget = gtk_frame_new (NULL);
-  gtk_frame_set_shadow_type (GTK_FRAME (widget), GTK_SHADOW_IN);
   list_store = gtk_list_store_new (2, G_TYPE_STRING, GDK_TYPE_PIXBUF);
   gtk_list_store_append (list_store, &iter);
   pixbuf = gdk_pixbuf_new_from_file ("folder.png", NULL);
@@ -665,27 +662,19 @@ create_panes (void)
   gtk_box_set_homogeneous (GTK_BOX (hbox), TRUE);
   pane = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_paned_pack1 (GTK_PANED (pane),
-		   g_object_new (GTK_TYPE_FRAME,
-				 "shadow-type", GTK_SHADOW_IN,
-				 NULL),
+		   g_object_new (GTK_TYPE_FRAME, NULL),
 		   FALSE, FALSE);
   gtk_paned_pack2 (GTK_PANED (pane),
-		   g_object_new (GTK_TYPE_FRAME,
-				 "shadow-type", GTK_SHADOW_IN,
-				 NULL),
+		   g_object_new (GTK_TYPE_FRAME, NULL),
 		   FALSE, FALSE);
   gtk_container_add (GTK_CONTAINER (hbox),
 		      pane);
   pane = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
   gtk_paned_pack1 (GTK_PANED (pane),
-		   g_object_new (GTK_TYPE_FRAME,
-				 "shadow-type", GTK_SHADOW_IN,
-				 NULL),
+		   g_object_new (GTK_TYPE_FRAME, NULL),
 		   FALSE, FALSE);
   gtk_paned_pack2 (GTK_PANED (pane),
-		   g_object_new (GTK_TYPE_FRAME,
-				 "shadow-type", GTK_SHADOW_IN,
-				 NULL),
+		   g_object_new (GTK_TYPE_FRAME, NULL),
 		   FALSE, FALSE);
   gtk_container_add (GTK_CONTAINER (hbox),
 		      pane);
@@ -1259,7 +1248,6 @@ create_list_box (void)
   WidgetInfo *info;
 
   widget = gtk_frame_new (NULL);
-  gtk_frame_set_shadow_type (GTK_FRAME (widget), GTK_SHADOW_IN);
 
   list = gtk_list_box_new ();
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (list), GTK_SELECTION_BROWSE);
@@ -1312,7 +1300,6 @@ create_flow_box (void)
   WidgetInfo *info;
 
   widget = gtk_frame_new (NULL);
-  gtk_frame_set_shadow_type (GTK_FRAME (widget), GTK_SHADOW_IN);
 
   box = gtk_flow_box_new ();
   gtk_flow_box_set_min_children_per_line (GTK_FLOW_BOX (box), 2);
@@ -1351,7 +1338,6 @@ create_gl_area (void)
   GtkWidget *gears;
 
   widget = gtk_frame_new (NULL);
-  gtk_frame_set_shadow_type (GTK_FRAME (widget), GTK_SHADOW_IN);
 
   gears = gtk_gears_new ();
   gtk_container_add (GTK_CONTAINER (widget), gears);
