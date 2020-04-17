@@ -2810,7 +2810,10 @@ gtk_label_update_layout_attributes (GtkLabel      *self,
   PangoAttrList *attrs;
 
   if (self->layout == NULL)
-    return;
+    {
+      pango_attr_list_unref (style_attrs);
+      return;
+    }
 
   if (self->select_info && self->select_info->links)
     {
@@ -2871,8 +2874,7 @@ gtk_label_update_layout_attributes (GtkLabel      *self,
 
   pango_layout_set_attributes (self->layout, attrs);
 
-  if (attrs)
-    pango_attr_list_unref (attrs);
+  pango_attr_list_unref (attrs);
 }
 
 static void
