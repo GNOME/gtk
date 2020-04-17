@@ -90,8 +90,6 @@ struct _GtkInspectorVisualPrivate
   GtkWidget *touchscreen_switch;
   GtkWidget *software_gl_switch;
 
-  GtkAdjustment *focus_adjustment;
-
   GtkInspectorOverlay *fps_overlay;
   GtkInspectorOverlay *updates_overlay;
   GtkInspectorOverlay *layout_overlay;
@@ -912,7 +910,6 @@ static gboolean
 keynav_failed (GtkWidget *widget, GtkDirectionType direction, GtkInspectorVisual *vis)
 {
   GtkWidget *next;
-  gdouble value, lower, upper, page;
 
   if (direction == GTK_DIR_DOWN &&
       widget == vis->priv->visual_box)
@@ -932,22 +929,6 @@ keynav_failed (GtkWidget *widget, GtkDirectionType direction, GtkInspectorVisual
   if (next)
     {
       gtk_widget_child_focus (next, direction);
-      return TRUE;
-    }
-
-  value = gtk_adjustment_get_value (vis->priv->focus_adjustment);
-  lower = gtk_adjustment_get_lower (vis->priv->focus_adjustment);
-  upper = gtk_adjustment_get_upper (vis->priv->focus_adjustment);
-  page  = gtk_adjustment_get_page_size (vis->priv->focus_adjustment);
-
-  if (direction == GTK_DIR_UP && value > lower)
-    {
-      gtk_adjustment_set_value (vis->priv->focus_adjustment, lower);
-      return TRUE;
-    }
-  else if (direction == GTK_DIR_DOWN && value < upper - page)
-    {
-      gtk_adjustment_set_value (vis->priv->focus_adjustment, upper - page);
       return TRUE;
     }
 
@@ -1069,10 +1050,6 @@ gtk_inspector_visual_constructed (GObject *object)
   GtkInspectorVisual *vis = GTK_INSPECTOR_VISUAL (object);
 
   G_OBJECT_CLASS (gtk_inspector_visual_parent_class)->constructed (object);
-
-  vis->priv->focus_adjustment = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (vis->priv->swin));
-  gtk_container_set_focus_vadjustment (GTK_CONTAINER (vis->priv->box),
-                                       vis->priv->focus_adjustment);
 
    g_signal_connect (vis->priv->visual_box, "keynav-failed", G_CALLBACK (keynav_failed), vis);
    g_signal_connect (vis->priv->debug_box, "keynav-failed", G_CALLBACK (keynav_failed), vis);
