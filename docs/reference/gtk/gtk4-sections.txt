@@ -187,7 +187,14 @@ gtk_assistant_get_type
 <TITLE>GtkAspectFrame</TITLE>
 GtkAspectFrame
 gtk_aspect_frame_new
-gtk_aspect_frame_set
+gtk_aspect_frame_set_xalign
+gtk_aspect_frame_get_xalign
+gtk_aspect_frame_set_yalign
+gtk_aspect_frame_get_yalign
+gtk_aspect_frame_set_ratio
+gtk_aspect_frame_get_ratio
+gtk_aspect_frame_set_obey_child
+gtk_aspect_frame_get_obey_child
 <SUBSECTION Standard>
 GTK_ASPECT_FRAME
 GTK_IS_ASPECT_FRAME
@@ -196,7 +203,6 @@ GTK_ASPECT_FRAME_CLASS
 GTK_IS_ASPECT_FRAME_CLASS
 GTK_ASPECT_FRAME_GET_CLASS
 <SUBSECTION Private>
-GtkAspectFramePrivate
 gtk_aspect_frame_get_type
 </SECTION>
 
