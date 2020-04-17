@@ -4534,7 +4534,6 @@ GtkMovementStep
 GtkOrientation
 GtkPackType
 GtkPositionType
-GtkReliefStyle
 GtkScrollStep
 GtkScrollType
 GtkSelectionMode
