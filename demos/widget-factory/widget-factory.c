@@ -1736,6 +1736,7 @@ activate (GApplication *app)
   gint i;
   GPermission *permission;
   GAction *action;
+  GError *error = NULL;
 
   g_object_get (gtk_settings_get_default (),
                 "gtk-theme-name", &current_theme,
@@ -1768,7 +1769,11 @@ activate (GApplication *app)
           NULL);
   gtk_builder_set_scope (builder, scope);
   g_object_unref (scope);
-  gtk_builder_add_from_resource (builder, "/org/gtk/WidgetFactory4/widget-factory.ui", NULL);
+  if (!gtk_builder_add_from_resource (builder, "/org/gtk/WidgetFactory4/widget-factory.ui", &error))
+    {
+      g_critical ("%s", error->message);
+      g_clear_error (&error);
+    }
 
   window = (GtkWindow *)gtk_builder_get_object (builder, "window");
   gtk_application_add_window (GTK_APPLICATION (app), window);

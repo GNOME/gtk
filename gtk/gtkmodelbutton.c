@@ -572,6 +572,9 @@ update_visibility (GtkModelButton *self)
   gtk_widget_set_hexpand (self->label,
                           gtk_widget_get_visible (self->label) && !has_icon);
 
+  if (self->accel_label)
+    gtk_widget_set_visible (self->accel_label, has_text && (!self->iconic || !has_icon));
+
   if (self->image)
     {
       gtk_widget_set_visible (self->image, has_icon && (self->iconic || !has_text));
@@ -792,6 +795,7 @@ gtk_model_button_set_accel (GtkModelButton *button,
   g_free (button->accel);
   button->accel = g_strdup (accel);
   update_accel (button, button->accel);
+  update_visibility (button);
 
   g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_ACCEL]);
 }
