@@ -1181,13 +1181,31 @@ gtk_calendar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
 
 static void
 move_focus (GtkCalendar *calendar,
-            gint         direction)
+            int          direction,
+            int          updown)
 {
   GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
   GtkTextDirection text_dir = gtk_widget_get_direction (GTK_WIDGET (calendar));
+  int x, y;
 
-  if ((text_dir == GTK_TEXT_DIR_LTR && direction == -1) ||
-      (text_dir == GTK_TEXT_DIR_RTL && direction == 1))
+  if (updown == 1)
+    {
+      if (priv->focus_row > 0)
+        priv->focus_row--;
+      if (priv->focus_row < 0)
+        priv->focus_row = 5;
+      if (priv->focus_col < 0)
+        priv->focus_col = 6;
+    }
+  else if (updown == -1)
+    {
+      if (priv->focus_row < 5)
+        priv->focus_row++;
+      if (priv->focus_col < 0)
+        priv->focus_col = 0;
+    }
+  else if ((text_dir == GTK_TEXT_DIR_LTR && direction == -1) ||
+           (text_dir == GTK_TEXT_DIR_RTL && direction == 1))
     {
       if (priv->focus_col > 0)
           priv->focus_col--;
@@ -1217,6 +1235,17 @@ move_focus (GtkCalendar *calendar,
       if (priv->focus_row < 0)
         priv->focus_row = 0;
     }
+
+  for (y = 0; y < 6; y ++)
+    for (x = 0; x < 7; x ++)
+      {
+        GtkWidget *label = priv->day_number_labels[y][x];
+
+        if (priv->focus_row == y && priv->focus_col == x)
+          gtk_widget_set_state_flags (label, GTK_STATE_FLAG_FOCUSED, FALSE);
+        else
+          gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_FOCUSED);
+      }
 }
 
 static gboolean
@@ -1247,10 +1276,9 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
         calendar_set_month_prev (calendar);
       else
         {
-          move_focus (calendar, -1);
+          move_focus (calendar, -1, 0);
           calendar_invalidate_day (calendar, old_focus_row, old_focus_col);
-          calendar_invalidate_day (calendar, priv->focus_row,
-                                   priv->focus_col);
+          calendar_invalidate_day (calendar, priv->focus_row, priv->focus_col);
         }
       break;
     case GDK_KEY_KP_Right:
@@ -1260,10 +1288,9 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
         calendar_set_month_next (calendar);
       else
         {
-          move_focus (calendar, 1);
+          move_focus (calendar, 1, 0);
           calendar_invalidate_day (calendar, old_focus_row, old_focus_col);
-          calendar_invalidate_day (calendar, priv->focus_row,
-                                   priv->focus_col);
+          calendar_invalidate_day (calendar, priv->focus_row, priv->focus_col);
         }
       break;
     case GDK_KEY_KP_Up:
@@ -1273,15 +1300,9 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
         calendar_set_year_prev (calendar);
       else
         {
-          if (priv->focus_row > 0)
-            priv->focus_row--;
-          if (priv->focus_row < 0)
-            priv->focus_row = 5;
-          if (priv->focus_col < 0)
-            priv->focus_col = 6;
+          move_focus (calendar, 0, 1);
           calendar_invalidate_day (calendar, old_focus_row, old_focus_col);
-          calendar_invalidate_day (calendar, priv->focus_row,
-                                   priv->focus_col);
+          calendar_invalidate_day (calendar, priv->focus_row, priv->focus_col);
         }
       break;
     case GDK_KEY_KP_Down:
@@ -1291,13 +1312,9 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
         calendar_set_year_next (calendar);
       else
         {
-          if (priv->focus_row < 5)
-            priv->focus_row++;
-          if (priv->focus_col < 0)
-            priv->focus_col = 0;
+          move_focus (calendar, 0, -1);
           calendar_invalidate_day (calendar, old_focus_row, old_focus_col);
-          calendar_invalidate_day (calendar, priv->focus_row,
-                                   priv->focus_col);
+          calendar_invalidate_day (calendar, priv->focus_row, priv->focus_col);
         }
       break;
     case GDK_KEY_KP_Space:
@@ -1459,6 +1476,11 @@ gtk_calendar_select_day (GtkCalendar *self,
           gtk_widget_set_state_flags (label, GTK_STATE_FLAG_SELECTED, FALSE);
         else
           gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_SELECTED);
+
+        if (priv->focus_row == y && priv->focus_col == x)
+          gtk_widget_set_state_flags (label, GTK_STATE_FLAG_FOCUSED, FALSE);
+        else
+          gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_FOCUSED);
 
         if (day == today_day &&
             priv->day_month[y][x] == MONTH_CURRENT)
