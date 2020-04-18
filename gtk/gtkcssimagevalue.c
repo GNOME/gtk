@@ -136,11 +136,11 @@ static const GtkCssValueClass GTK_CSS_VALUE_IMAGE = {
 GtkCssValue *
 _gtk_css_image_value_new (GtkCssImage *image)
 {
-  static GtkCssValue none_singleton = { &GTK_CSS_VALUE_IMAGE, 1, TRUE, NULL };
+  static GtkCssValue image_none_singleton = { &GTK_CSS_VALUE_IMAGE, 1, TRUE, NULL };
   GtkCssValue *value;
 
   if (image == NULL)
-    return _gtk_css_value_ref (&none_singleton);
+    return _gtk_css_value_ref (&image_none_singleton);
 
   value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_IMAGE);
   value->image = image;
