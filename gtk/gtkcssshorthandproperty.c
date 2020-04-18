@@ -67,12 +67,13 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
                                         GtkCssParser     *parser)
 {
   GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (property);
+  const guint n_props = shorthand->subproperties->len;
   GtkCssValue **data;
   GtkCssValue *result;
   guint i;
 
-  data = g_newa (GtkCssValue *, shorthand->subproperties->len);
-  memset (data, 0, sizeof (GtkCssValue *) * shorthand->subproperties->len);
+  data = g_newa (GtkCssValue *, n_props);
+  memset (data, 0, sizeof (GtkCssValue *) * n_props);
 
   if (gtk_css_parser_try_ident (parser, "initial"))
     {
@@ -101,7 +102,7 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
     }
   else if (!shorthand->parse (shorthand, data, parser))
     {
-      for (i = 0; i < shorthand->subproperties->len; i++)
+      for (i = 0; i < n_props; i++)
         {
           if (data[i] != NULL)
             _gtk_css_value_unref (data[i]);
@@ -112,13 +113,13 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
   /* All values that aren't set by the parse func are set to their
    * default values here.
    * XXX: Is the default always initial or can it be inherit? */
-  for (i = 0; i < shorthand->subproperties->len; i++)
+  for (i = 0; i < n_props; i++)
     {
       if (data[i] == NULL)
         data[i] = _gtk_css_initial_value_new ();
     }
 
-  result = _gtk_css_array_value_new_from_array (data, shorthand->subproperties->len);
+  result = _gtk_css_array_value_new_from_array (data, n_props);
 
   return result;
 }
