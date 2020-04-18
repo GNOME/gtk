@@ -65,7 +65,7 @@
 
 /**
  * SECTION:gtkfilechooserbutton
- * @Short_description: A button to launch a file selection dialog
+ * @Short_description: A button to launch a file chooser dialog
  * @Title: GtkFileChooserButton
  * @See_also:#GtkFileChooserDialog
  *

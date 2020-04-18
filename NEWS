@@ -13,8 +13,22 @@ Overview of Changes in GTK 3.98.3
 * GtkEmojiChooser:
  - Improve keyboard navigation
 
+* GtkLabel:
+ - Remove pattern API
+
+* GtkAspectFrame:
+ - Modernize and simplify
+
 * Chooser buttons:
  - Make dialogs modal by default
+
+* Various widgets:
+ - Replace shadow-type and relief properties by
+   a simpler has-frame
+
+* CSS:
+ - Use :focus-visible instead of :focus(visible)
+ - Add support for :focus-within
 
 * Focus handling
  - Fix crossing event generation
@@ -41,10 +55,13 @@ Overview of Changes in GTK 3.98.3
  - Simplify modifier support, drop GdkModifierIntent
  - Move key event matching to GDK
  - Add GdkSurface::enter/leave-monitor signals
+ - Turn GskEvent into a derivable type, and make
+   it introspectable
 
 * GSK:
  - Turn GskRenderNode into a derivable type, and make
    it introspectable
+ - Fall back to cairo if compiling shaders fails
 
 * Translation updates:
  - Japanese

@@ -371,7 +371,6 @@
   <part id="theming">
     <title>Theming in GTK</title>
     <xi:include href="css-overview.xml" />
-    <xi:include href="css-properties.xml" />
     <xi:include href="xml/gtkstylecontext.xml" />
     <xi:include href="xml/gtkcssprovider.xml" />
     <xi:include href="xml/gtkstyleprovider.xml" />

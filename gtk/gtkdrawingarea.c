@@ -52,7 +52,7 @@ static GParamSpec *props[LAST_PROP] = { NULL, };
 
 /**
  * SECTION:gtkdrawingarea
- * @Short_description: A simple widget for custom user interface elements
+ * @Short_description: A simple widget for drawing with cairo
  * @Title: GtkDrawingArea
  * @See_also: #GtkImage
  *
