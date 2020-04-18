@@ -4,6 +4,7 @@
     <property name="visible">True</property>
     <property name="margin-top">1</property>
     <property name="margin-bottom">1</property>
+    <property name="focus-on-click">False</property>
     <style>
       <class name="sidebar-row"/>
     </style>
