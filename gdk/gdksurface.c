@@ -2783,6 +2783,18 @@ gdk_synthesize_surface_state (GdkSurface     *surface,
   gdk_surface_set_state (surface, (surface->state | set_flags) & ~unset_flags);
 }
 
+static void
+hide_popup_chain (GdkSurface *surface)
+{
+  GdkSurface *parent;
+
+  gdk_surface_hide (surface);
+
+  parent = surface->parent;
+  if (parent->autohide)
+    hide_popup_chain (parent);
+}
+
 static gboolean
 check_autohide (GdkEvent *event)
 {
@@ -2812,7 +2824,7 @@ check_autohide (GdkEvent *event)
           if (grab_surface != gdk_event_get_surface (event) &&
               grab_surface->autohide)
             {
-              gdk_surface_hide (grab_surface);
+              hide_popup_chain (grab_surface);
               return TRUE;
             }
         }
