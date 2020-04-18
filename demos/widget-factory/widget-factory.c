@@ -839,6 +839,7 @@ overshot (GtkScrolledWindow *sw, GtkPositionType pos, GtkWidget *widget)
   gdk_rgba_parse (&rgba, color);
   swatch = g_object_new (g_type_from_name ("GtkColorSwatch"),
                          "rgba", &rgba,
+                         "can-focus", FALSE,
                          "selectable", FALSE,
                          "halign", GTK_ALIGN_END,
                          "valign", GTK_ALIGN_CENTER,
@@ -957,6 +958,7 @@ populate_colors (GtkWidget *widget, GtkWidget *chooser)
       swatch = g_object_new (g_type_from_name ("GtkColorSwatch"),
                              "rgba", &rgba,
                              "selectable", FALSE,
+                             "can-focus", FALSE,
                              "halign", GTK_ALIGN_END,
                              "valign", GTK_ALIGN_CENTER,
                              "margin-start", 6,
