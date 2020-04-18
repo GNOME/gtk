@@ -472,6 +472,7 @@ static void
 gtk_sidebar_row_init (GtkSidebarRow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+  gtk_widget_set_focus_on_click (GTK_WIDGET (self), FALSE);
 }
 
 static void
