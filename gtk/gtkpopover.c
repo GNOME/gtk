@@ -1272,11 +1272,8 @@ gtk_popover_fill_border_path (GtkPopover *popover,
                               cairo_t    *cr)
 {
   GtkWidget *widget = GTK_WIDGET (popover);
-  GtkAllocation allocation;
   int x, y, w, h;
   GskRoundedRect box;
-
-  gtk_widget_get_allocation (widget, &allocation);
 
   cairo_set_source_rgba (cr, 0, 0, 0, 1);
 
