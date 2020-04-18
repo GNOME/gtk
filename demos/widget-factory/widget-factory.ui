@@ -879,6 +879,26 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="halign">center</property>
                               </object>
                             </child>
+                            <child>
+                              <object class="GtkBox">
+                                <child>
+                                  <object class="GtkToggleButton" id="cache_invalidation_test">
+                                    <property name="label">Test</property>
+                                    <property name="halign">fill</property>
+                                    <property name="hexpand">True</property>
+                                    <signal name="toggled" handler="on_cache_invalidation_test_toggled" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkButton">
+                                    <property name="halign">end</property>
+                                    <style>
+                                      <class name="cache-invalidation-test"/>
+                                    </style>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                         </child>
                         <child>

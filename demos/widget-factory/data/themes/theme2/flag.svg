@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="161" height="161">
+  <rect x="102.67" y="19" fill="#777777" stroke="#000000" stroke-width="3" width="36.67" height="8"/>
+  <rect x="98.67" y="60" fill="#777777" stroke="#000000" stroke-width="3" width="42.31" height="8"/>
+  <rect x="94.67" y="99" fill="#777777" stroke="#000000" stroke-width="3" width="50.9" height="8"/>
+  <polygon fill="#404040" points="151.64,126.87 144.6,126.87 132.03,27.19 139.07,27.19"/>
+  <polygon fill="#777777" points="148.1,127.17 144.6,126.87 132.03,27.19 135.53,27.48"/>
+  <polygon fill="none" stroke="#000000" stroke-width="3" points="151.64,126.87 144.6,126.87 132.03,27.19 139.07,27.19"/>
+  <polygon fill="#404040" points="90.86,126.87 97.9,126.87 110.47,27.19 103.43,27.19"/>
+  <polygon fill="#777777" points="90.86,126.87 94.9,126.87 107.47,27.19 103.43,27.19"/>
+  <polygon fill="none" stroke="#000000" stroke-width="3" points="90.86,126.87 97.9,126.87 110.47,27.19 103.43,27.19"/>
+  <path fill="#404040" stroke="#404040" d="M154.18,121.94h-5.24c0,0,0.98,24.81-4.89,24.81c-5.87,0-44.99,0-50.86,0c-4.33,0-4.93-13.47-4.95-20.56c-0.02,8.28,0.51,25.81,5.38,25.81c6.38,0,48.87,0,55.24,0C155.25,152,154.18,121.94,154.18,121.94z"/>
+  <path fill="#777777" stroke="#777777" d="M93.2,146.75c5.87,0,44.99,0,50.86,0c5.87,0,4.89-24.81,4.89-24.81H88.32h-0.01c0,0-0.07,1.72-0.06,4.25C88.27,133.27,88.88,146.75,93.2,146.75z"/>
+  <path fill="none" stroke="#000000" stroke-width="3.5" d="M93.63,152c6.38,0,48.87,0,55.24,0c6.37,0,5.31-30.06,5.31-30.06H88.32C88.32,121.94,87.25,152,93.63,152z"/>
+  <rect x="118.5" y="23" fill="#777777" stroke="#000000" stroke-width="2" width="7" height="80"/>
+  <path fill="#FFFFFF" d="M91.57,137.06c-1.31-13.13-1.31-13.43,24.89-11.81C91.57,127.16,93.48,125.55,91.57,137.06z"/>
+  <linearGradient id="paint" gradientUnits="userSpaceOnUse" x1="14.5" y1="99" x2="119.5" y2="99">
+    <stop offset="0" style="stop-color:#DA1800"/>
+    <stop offset="0.33" style="stop-color:#B42D2D"/>
+    <stop offset="0.66" style="stop-color:#FA1818"/>
+    <stop offset="1" style="stop-color:#B42D2D"/>
+  </linearGradient>
+  <path fill="url(#paint)" stroke="#000000" stroke-width="6" d="M67.35,13.97c-13.99,13.43-51.85,0-51.85,0V60.6v47.93c0,0,37.86,13.43,51.85,0c14-13.43,53.15,0,53.15,0V60.6V13.97C120.5,13.97,81.35,0.54,67.35,13.97z"/>
+</svg>

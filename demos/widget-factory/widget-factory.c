@@ -1689,6 +1689,43 @@ set_up_context_popover (GtkWidget *widget,
 }
 
 static void
+cache_invalidation_test_first_init ()
+{
+  GdkDisplay    *display;
+  GtkIconTheme  *icon_theme;
+
+  display = gdk_display_get_default ();
+  icon_theme = gtk_icon_theme_get_for_display (display);
+
+  gtk_icon_theme_add_resource_path (icon_theme, "/org/gtk/WidgetFactory4/theme1");
+}
+
+static void
+on_cache_invalidation_test_toggled (GtkToggleButton *button,
+                                    gpointer         user_data)
+{
+  GdkDisplay    *display;
+  GtkIconTheme  *icon_theme;
+  char        ***icon_resource_path;
+  guint          length;
+  char         **theme_path;
+
+  display = gdk_display_get_default ();
+  icon_theme = gtk_icon_theme_get_for_display (display);
+  icon_resource_path = gtk_icon_theme_get_resource_path (icon_theme);
+  length = g_strv_length (icon_resource_path);
+  theme_path = icon_resource_path [length - 1];
+
+  if (g_strcmp0 (theme_path, "/org/gtk/WidgetFactory4/theme2") == 0)
+    theme_path = "/org/gtk/WidgetFactory4/theme1";
+  else
+    theme_path = "/org/gtk/WidgetFactory4/theme2";
+
+  icon_resource_path[length - 1] = theme_path;
+  gtk_icon_theme_set_resource_path (icon_theme, icon_resource_path);
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
@@ -1752,9 +1789,12 @@ activate (GApplication *app)
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   g_object_unref (provider);
 
+  cache_invalidation_test_first_init ();
+
   builder = gtk_builder_new ();
   scope = gtk_builder_cscope_new ();
   gtk_builder_cscope_add_callback_symbols (GTK_BUILDER_CSCOPE (scope),
+          "on_cache_invalidation_test_toggled", (GCallback)on_cache_invalidation_test_toggled,
           "on_entry_icon_release", (GCallback)on_entry_icon_release,
           "on_scale_button_value_changed", (GCallback)on_scale_button_value_changed,
           "on_record_button_toggled", (GCallback)on_record_button_toggled,
