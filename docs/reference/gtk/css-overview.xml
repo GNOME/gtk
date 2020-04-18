@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
                "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 ]>
@@ -12,49 +12,25 @@
 <refnamediv>
 <refname>GTK CSS Overview</refname>
 <refpurpose>
-Overview of CSS in GTK
+The language used for style information in GTK
 </refpurpose>
 </refnamediv>
 
-
-<!--
-Formatting conventions:
-We use
-
-〈 U+2329 Left-pointing Angle Bracket
-〉 U+232A Right-pointing Angle Bracket
-
-for indicating non-terminals in syntax productions.
-
-We use <literallayout> for syntax productions, and each line is put in a <code>
-(the latter is a workaround for deficiences in the developer.gnome.org post-processing).
--->
-
-<refsect1 id="css-overview">
-  <title>Overview of CSS in GTK</title>
+<refsect1 id="css">
+  <title>CSS in GTK</title>
 
   <para>
-    This chapter describes in detail how GTK uses CSS for styling
-    and layout.
+    This chapter describes how GTK uses CSS for styling and layout. 
+    It is not meant to be an explanation of CSS from first principles,
+    but focuses on listing supported CSS features and differences
+    between Web CSS and GTK.
   </para>
 
   <para>
-    We loosely follow the CSS
-    <ulink url="https://www.w3.org/TR/css-values/#value-defs">value definition</ulink>
-    specification in the formatting of syntax productions.
-    <simplelist>
-      <member>Nonterminals are enclosed in angle backets (〈〉), all other strings that are not listed here are literals</member>
-      <member>Juxtaposition means all components must occur, in the given order</member>
-      <member>A double ampersand (&amp;&amp;) means all components must occur, in any order</member>
-      <member>A double bar (||) means one or more of the components must occur, in any order</member>
-      <member>A single bar (|) indicates an alternative; exactly one of the components must occur</member>
-      <member>Brackets ([]) are used for grouping</member>
-      <member>A question mark (?) means that the preceding component is optional</member>
-      <member>An asterisk (*) means zero or more copies of the preceding component</member>
-      <member>A plus (+) means one or more copies of the preceding component</member>
-      <member>A number in curly braces ({n}) means that the preceding component occurs exactly n times</member>
-      <member>Two numbers in curly braces ({m,n}) mean that the preceding component occurs at least m times and at most n times</member>
-    </simplelist>
+    There is plenty of introductory documentation available that
+    can be used to learn about CSS in general. In the tables below
+    we include links to the official specs that can be used to look
+    up the definition of individual selectors and properties.
   </para>
 
   <refsect2>
@@ -96,69 +72,10 @@ scale[.fine-tune]
   </refsect2>
 
   <refsect2>
-    <title>Style sheets</title>
-
-    <para>
-      The basic structure of the style sheets understood by GTK is
-      a series of statements, which are either rule sets or “@-rules”,
-      separated by whitespace.
-    </para>
-
-    <para>
-      A rule set consists of a selector and a declaration block, which is
-      a series of declarations enclosed in curly braces. The declarations
-      are separated by semicolons. Multiple selectors can share the same
-      declaration block, by putting all the separators in front of the block,
-      separated by commas.
-    </para>
-
-    <example>
-      <title>A rule set with two selectors</title>
-      <programlisting><![CDATA[
-button, entry {
-  color: #ff00ea;
-  font: 12px "Comic Sans";
-}
-]]></programlisting>
-    </example>
-
-  </refsect2>
-
-  <refsect2>
-    <title>Importing style sheets</title>
-
-    <para>
-      GTK supports the CSS @import rule, in order to load another
-      style sheet in addition to the currently parsed one.
-    </para>
-
-    <para>
-      The syntax for @import rules is as follows:
-    </para>
-
-<literallayout><code>〈import rule〉 = @import [ 〈url〉 | 〈string〉 ]</code>
-<code>〈url〉 = url( 〈string〉 )</code>
-</literallayout>
-
-    <example><title>An example for using the @import rule</title>
-      <programlisting><![CDATA[
-@import url("path/to/common.css");
-]]></programlisting>
-    </example>
-
-    <para>
-      To learn more about the @import rule, you can read the
-      <ulink url="https://www.w3.org/TR/css3-cascade/#at-import">Cascading</ulink>
-      module of the CSS specification.
-    </para>
-
-  </refsect2>
-
-  <refsect2>
     <title>Selectors</title>
 
     <para>
-      Selectors work very similar to the way they do in CSS.
+      Selectors work very similar to the way they do on the web.
     </para>
 
     <para>
@@ -168,730 +85,1100 @@ button, entry {
       in a selector, widget names must be prefixed with a &num; character.
     </para>
 
-    <para>
-      In more complicated situations, selectors can be combined in various ways.
-      To require that a node satisfies several conditions, combine several selectors
-      into one by concatenating them. To only match a node when it occurs inside some
-      other node, write the two selectors after each other, separated by whitespace.
-      To restrict the match to direct children of the parent node, insert a &gt;
-      character between the two selectors.
-    </para>
-
-    <example>
-      <title>Theme labels that are descendants of a window</title>
-      <programlisting><![CDATA[
-window label {
-  background-color: #898989;
-}
-]]></programlisting>
-    </example>
-
-    <example>
-      <title>Theme notebooks, and anything within</title>
-      <programlisting><![CDATA[
-notebook {
-  background-color: #a939f0;
-}
-]]></programlisting>
-    </example>
- 
-    <example>
-      <title>Theme combo boxes, and entries that are direct children of a notebook</title>
-      <programlisting><![CDATA[
-combobox,
-notebook > entry {
-  color: @fg_color;
-  background-color: #1209a2;
-}
-]]></programlisting>
-    </example>
-
-    <example>
-      <title>Theme any widget within a GtkBox</title>
-      <programlisting><![CDATA[
-box * {
-  font: 20px Sans;
-}
-]]></programlisting>
-    </example>
-
-    <example>
-      <title>Theme a label named title-label</title>
-      <programlisting><![CDATA[
-label#title-label {
-  font: 15px Sans;
-}
-]]></programlisting>
-    </example>
-
-    <example>
-      <title>Theme any widget named main-entry</title>
-      <programlisting><![CDATA[
-#main-entry {
-  background-color: #f0a810;
-}
-]]></programlisting>
-    </example>
-
-    <example>
-      <title>Theme all widgets with the style class entry</title>
-      <programlisting><![CDATA[
-.entry {
-  color: #39f1f9;
-}
-]]></programlisting>
-    </example>
-
-    <example>
-      <title>Theme the entry of a GtkSpinButton</title>
-      <programlisting><![CDATA[
-spinbutton entry {
-  color: #900185;
-}
-]]></programlisting>
-    </example>
-
-    <para>
-      It is possible to select CSS nodes depending on their position amongst
-      their siblings by applying pseudo-classes to the selector, like :first-child,
-      :last-child or :nth-child(even). When used in selectors, pseudo-classes
-      must be prefixed with a : character.
-    </para>
-
-    <example>
-      <title>Theme labels in the first notebook tab</title>
-      <programlisting><![CDATA[
-notebook tab:first-child label {
-  color: #89d012;
-}
-]]></programlisting>
-    </example>
-
-    <para>
-      Another use of pseudo-classes is to match widgets depending on their
-      state. The available pseudo-classes for widget states are :active, :hover
-      :disabled, :selected, :focus, :indeterminate, :checked and :backdrop.
-      In addition, the following pseudo-classes don't have a direct equivalent
-      as a widget state: :dir(ltr) and :dir(rtl) (for text direction), :link and
-      :visited (for links), :drop(active) (for highlighting drop targets) and
-      :focus-visible (for visible focus indication). Widget state pseudo-classes
-      may only apply to the last element in a selector.
-    </para>
-
-    <example>
-      <title>Theme pressed buttons</title>
-      <programlisting><![CDATA[
-button:active {
-  background-color: #0274d9;
-}
-]]></programlisting>
-    </example>
-
-    <example>
-      <title>Theme buttons with the mouse pointer over it</title>
-      <programlisting><![CDATA[
-button:hover {
-  background-color: #3085a9;
-}
-]]></programlisting>
-    </example>
-
-    <example>
-      <title>Theme insensitive widgets</title>
-      <programlisting><![CDATA[
-*:disabled {
-  background-color: #320a91;
-}
-]]></programlisting>
-    </example>
-
-    <example>
-      <title>Theme checkbuttons that are checked</title>
-      <programlisting><![CDATA[
-checkbutton:checked {
-  background-color: #56f9a0;
-}
-]]></programlisting>
-    </example>
-
-    <example>
-      <title>Theme focused labels</title>
-        <programlisting><![CDATA[
-label:focus {
-  background-color: #b4940f;
-}
-]]></programlisting>
-    </example>
-
-    <example>
-      <title>Theme indeterminate checkbuttons</title>
-      <programlisting><![CDATA[
-checkbutton:indeterminate {
-  background-color: #20395a;
-}
-]]></programlisting>
-    </example>
-
-    <para>
-      To determine the effective style for a widget, all the matching rule
-      sets are merged. As in CSS, rules apply by specificity, so the rules
-      whose selectors more closely match a node will take precedence
-      over the others.
-    </para>
-
-    <para>
-      The full syntax for selectors understood by GTK can be found in the
-      table below. The main difference to CSS is that GTK does not currently
-      support attribute selectors.
-    </para>
-
     <table>
-      <title>Selector syntax</title>
-      <tgroup cols="4">
+      <title>GTK CSS Selectors</title>
+      <tgroup cols="3">
         <thead>
-          <row><entry>Pattern</entry><entry>Matches</entry><entry>Reference</entry><entry>Notes</entry></row>
+          <row><entry>Pattern</entry><entry>Reference</entry><entry>Notes</entry></row>
         </thead>
         <tbody>
           <row>
-            <entry><phrase role="nowrap">*</phrase></entry>
-            <entry>any node</entry>
-            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#universal-selector">CSS</ulink></entry>
+            <entry>*</entry>
+            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#universal-selector">CSS Selectors Level 3</ulink></entry>
             <entry></entry>
           </row>
           <row>
-            <entry><phrase role="nowrap">E</phrase></entry>
-            <entry>any node with name E</entry>
-            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#type-selectors">CSS</ulink></entry>
+            <entry>E</entry>
+            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#type-selectors">CSS Selectors Level 3</ulink></entry>
             <entry></entry>
           </row>
           <row>
-            <entry><phrase role="nowrap">E.class</phrase></entry>
-            <entry>any E node with the given style class</entry>
-            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#class-html">CSS</ulink></entry>
+            <entry>E.class</entry>
+            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#class-html">CSS Selectors Level 3</ulink></entry>
             <entry></entry>
           </row>
+
           <row>
-            <entry><phrase role="nowrap">E#id</phrase></entry>
-            <entry>any E node with the given ID</entry>
-            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#id-selectors">CSS</ulink></entry>
+            <entry>E#id</entry>
+            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#id-selectors">CSS Selectors Level 3</ulink></entry>
             <entry>GTK uses the widget name as ID</entry>
           </row>
           <row>
-            <entry><phrase role="nowrap">E:nth-child(〈nth-child〉)</phrase></entry>
-            <entry>any E node which is the n-th child of its parent node</entry>
-            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#structural-pseudos">CSS</ulink></entry>
+            <entry>E:nth-child(nth-child)</entry>
+            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#structural-pseudos">CSS Selectors Level 3</ulink></entry>
             <entry></entry>
           </row>
           <row>
-            <entry><phrase role="nowrap">E:nth-last-child(〈nth-child〉)</phrase></entry>
-            <entry>any E node which is the n-th child of its parent node, counting from the end</entry>
-            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#structural-pseudos">CSS</ulink></entry>
+            <entry>E:nth-last-child(nth-child)</entry>
+            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#structural-pseudos">CSS Selectors Level 3</ulink></entry>
             <entry></entry>
           </row>
           <row>
-            <entry><phrase role="nowrap">E:first-child</phrase></entry>
-            <entry>any E node which is the first child of its parent node</entry>
-            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#structural-pseudos">CSS</ulink></entry>
+            <entry>E:first-child</entry>
+            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#structural-pseudos">CSS Selectors Level 3</ulink></entry>
             <entry></entry>
           </row>
           <row>
-            <entry><phrase role="nowrap">E:last-child</phrase></entry>
-            <entry>any E node which is the last child of its parent node</entry>
-            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#structural-pseudos">CSS</ulink></entry>
+            <entry>E:last-child</entry>
+            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#structural-pseudos">CSS Selectors Level 3</ulink></entry>
             <entry></entry>
           </row>
           <row>
-            <entry><phrase role="nowrap">E:only-child</phrase></entry>
-            <entry>any E node which is the only child of its parent node</entry>
-            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#structural-pseudos">CSS</ulink></entry>
+            <entry>E:only-child</entry>
+            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#structural-pseudos">CSS Selectors Level 3</ulink></entry>
             <entry>Equivalent to E:first-child:last-child</entry>
           </row>
           <row>
-            <entry><phrase role="nowrap">E:link, E:visited</phrase></entry>
-            <entry>any E node which represents a hyperlink, not yet visited (:link) or already visited (:visited)</entry>
-            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#link">CSS</ulink></entry>
+            <entry>E:link, E:visited</entry>
+            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#link">CSS Selectors Level 3</ulink></entry>
             <entry>Corresponds to GTK_STATE_FLAG_LINK and GTK_STATE_FLAGS_VISITED</entry>
           </row>
           <row>
-            <entry><phrase role="nowrap">E:active, E:hover, E:focus</phrase></entry>
-            <entry>any E node which is part of a widget with the corresponding state</entry>
-            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#useraction-pseudos">CSS</ulink></entry>
-            <entry>Correspond to GTK_STATE_FLAG_ACTIVE, GTK_STATE_FLAG_PRELIGHT and GTK_STATE_FLAGS_FOCUSED respectively</entry>
+            <entry>E:active, E:hover, E:focus</entry>
+            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#useraction-pseudos">CSS Selectors Level 3</ulink></entry>
+            <entry>Correspond to GTK_STATE_FLAG_ACTIVE, GTK_STATE_FLAG_PRELIGHT, GTK_STATE_FLAGS_FOCUSED</entry>
           </row>
           <row>
-            <entry><phrase role="nowrap">E:disabled</phrase></entry>
-            <entry>any E node which is part of a widget which is disabled</entry>
-            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#UIstates">CSS</ulink></entry>
+            <entry>E:focus-within</entry>
+            <entry><ulink url="https://drafts.csswg.org/selectors/#focus-within-pseudo">CSS Selectors Level 4</ulink></entry>
+            <entry>Set on all ancestors of the focus widget, unlike CSS</entry>
+          </row>
+          <row>
+            <entry>E:focus-visible</entry>
+            <entry><ulink url="https://drafts.csswg.org/selectors/#the-focus-visible-pseudo">CSS Selectors Level 4</ulink></entry>
+            <entry>Set on focus widget and all ancestors, unlike CSS</entry>
+          </row>
+          <row>
+            <entry>E:disabled</entry>
+            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#UIstates">CSS Selectors Level 3</ulink></entry>
             <entry>Corresponds to GTK_STATE_FLAG_INSENSITIVE</entry>
           </row>
           <row>
-            <entry><phrase role="nowrap">E:checked</phrase></entry>
-            <entry>any E node which is part of a widget (e.g. radio- or checkbuttons) which is checked</entry>
-            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#UIstates">CSS</ulink></entry>
+            <entry>E:checked</entry>
+            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#UIstates">CSS Selectors Level 3</ulink></entry>
             <entry>Corresponds to GTK_STATE_FLAG_CHECKED</entry>
           </row>
           <row>
-            <entry><phrase role="nowrap">E:indeterminate</phrase></entry>
-            <entry>any E node which is part of a widget (e.g. radio- or checkbuttons) which is in an indeterminate state</entry>
-            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#indeterminate">CSS3</ulink>,
-                   <ulink url="https://drafts.csswg.org/selectors/#indeterminate">CSS4</ulink></entry>
+            <entry>E:indeterminate</entry>
+            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#indeterminate">CSS3 Selectors Level 3</ulink></entry>
             <entry>Corresponds to GTK_STATE_FLAG_INCONSISTENT</entry>
           </row>
           <row>
-            <entry><phrase role="nowrap">E:backdrop, E:selected</phrase></entry>
-            <entry>any E node which is part of a widget with the corresponding state</entry>
+            <entry>E:backdrop, E:selected</entry>
             <entry></entry>
             <entry>Corresponds to GTK_STATE_FLAG_BACKDROP, GTK_STATE_FLAG_SELECTED</entry>
           </row>
           <row>
-            <entry><phrase role="nowrap">E:not(〈selector〉)</phrase></entry>
-            <entry>any E node which does not match the simple selector 〈selector〉</entry>
-            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#negation">CSS</ulink></entry>
+            <entry>E:not(selector)</entry>
+            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#negation">CSS Selectors Level 3</ulink></entry>
             <entry></entry>
           </row>
           <row>
-            <entry><phrase role="nowrap">E:dir(ltr), E:dir(rtl)</phrase></entry>
-            <entry>any E node that has the corresponding text direction</entry>
-            <entry><ulink url="https://drafts.csswg.org/selectors/#the-dir-pseudo">CSS4</ulink></entry>
+            <entry>E:dir(ltr), E:dir(rtl)</entry>
+            <entry><ulink url="https://drafts.csswg.org/selectors/#the-dir-pseudo">CSS Selectors Level 4</ulink></entry>
             <entry></entry>
           </row>
           <row>
-            <entry><phrase role="nowrap">E:drop(active)</phrase></entry>
-            <entry>any E node that is an active drop target for a current DND operation</entry>
-            <entry><ulink url="https://drafts.csswg.org/selectors/#drag-pseudos">CSS4</ulink></entry>
+            <entry>E:drop(active)</entry>
+            <entry><ulink url="https://drafts.csswg.org/selectors/#drag-pseudos">CSS Selectors Level 4</ulink></entry>
             <entry></entry>
           </row>
           <row>
-            <entry><phrase role="nowrap">E F</phrase></entry>
-            <entry>any F node which is a descendent of an E node</entry>
-            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#descendent-combinators">CSS</ulink></entry>
+            <entry>E F</entry>
+            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#descendent-combinators">CSS Selectors Level 3</ulink></entry>
             <entry></entry>
           </row>
           <row>
-            <entry><phrase role="nowrap">E > F</phrase></entry>
-            <entry>any F node which is a child of an E node</entry>
-            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#child-combinators">CSS</ulink></entry>
+            <entry>E > F</entry>
+            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#child-combinators">CSS Selectors Level 3</ulink></entry>
             <entry></entry>
           </row>
           <row>
-            <entry><phrase role="nowrap">E ~ F</phrase></entry>
-            <entry>any F node which is preceded by an E node</entry>
-            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#general-sibling-combinators">CSS</ulink></entry>
+            <entry>E ~ F</entry>
+            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#general-sibling-combinators">CSS Selectors Level 3</ulink></entry>
             <entry></entry>
           </row>
           <row>
-            <entry><phrase role="nowrap">E + F</phrase></entry>
-            <entry>any F node which is immediately preceded by an E node</entry>
-            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#adjacent-sibling-combinators">CSS</ulink></entry>
+            <entry>E + F</entry>
+            <entry><ulink url="https://www.w3.org/TR/css3-selectors/#adjacent-sibling-combinators">CSS Selectors Level 3</ulink></entry>
             <entry></entry>
           </row>
         </tbody>
       </tgroup>
     </table>
 
-<literallayout><code>〈nth-child〉 = even | odd | 〈integer〉 | 〈integer〉n | 〈integer〉n [ + | - ] 〈integer〉</code>
-</literallayout>
-
-    <para>
-      To learn more about selectors in CSS, read the
-      <ulink url="https://www.w3.org/TR/css3-selectors/">Selectors</ulink>
-      module of the CSS specification.
-    </para>
-
   </refsect2>
 
-  <refsect2>
-    <title>Colors</title>
+</refsect1>
+
+<refsect1 id="css-properties">
+  <title>GTK CSS Properties</title>
 
     <para>
-      CSS allows to specify colors in various ways, using numeric
-      values or names from a predefined list of colors.
+      GTK supports CSS properties and shorthands as far as they can be applied
+      in the context of widgets, and adds its own properties only when needed.
+      All GTK-specific properties have a -gtk prefix.
     </para>
 
-<literallayout><code>〈color〉 = currentColor | transparent | 〈color name〉 | 〈rgb color〉 | 〈rgba color〉 | 〈hex color〉 | 〈gtk color〉</code>
-<code>〈rgb color〉 = rgb( 〈number〉, 〈number〉, 〈number〉 ) | rgb( 〈percentage〉, 〈percentage〉, 〈percentage〉 )</code>
-<code>〈rgba color〉 = rgba( 〈number〉, 〈number〉, 〈number〉, 〈alpha value〉 ) | rgba( 〈percentage〉, 〈percentage〉, 〈percentage〉, 〈alpha value〉 )</code>
-<code>〈hex color〉 = #〈hex digits〉</code>
-<code>〈alpha value〉 = 〈number〉</code>, clamped to values between 0 and 1
-</literallayout>
+    <refsect2>
+      <title>Basic types</title>
 
     <para>
-      The keyword currentColor resolves to the current value of the
-      color property when used in another property, and to the inherited value
-      of the color property when used in the color property itself.
-    </para>
-
-    <para>
-      The keyword transparent can be considered a shorthand for rgba(0,0,0,0).
+      All properties support the following keywords: inherit, initial, unset, with
+      the same meaning as defined in the <ulink url="https://www.w3.org/TR/css3-cascade/#defaulting-keywords">CSS Cascading and Inheritance</ulink> spec.
     </para>
 
     <para>
-      For a list of valid color names and for more background on colors in
-      CSS, see the <ulink url="https://www.w3.org/TR/css3-color/#svg-color">Color</ulink>
-      module of the CSS specification.
+      The following units are supported for basic datatypes:
     </para>
 
-    <example>
-      <title>Specifying colors in various ways</title>
-      <programlisting><![CDATA[
-  color: transparent;
-  background-color: red;
-  border-top-color: rgb(128,57,0);
-  border-left-color: rgba(10%,20%,30%,0.5);
-  border-right-color: #ff00cc;
-  border-bottom-color: #ffff0000cccc;
-]]></programlisting>
-    </example>
+      <variablelist>
+        <varlistentry>
+          <term>Length</term><listitem> px, pt, em, ex, rem, pc, in, cm, mm, calc()</listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Percentage</term><listitem> %, calc()</listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Angle</term><listitem> deg | grad | turn, calc()</listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Time </term><listitem> s | ms, calc()</listitem>
+        </varlistentry>
+      </variablelist>
 
     <para>
-      GTK adds several additional ways to specify colors.
-    </para>
-
-<literallayout><code>〈gtk color〉 = 〈symbolic color〉 | 〈color expression〉</code>
-</literallayout>
-
-    <para>
-      The first is a reference to a color defined via a @define-color rule.
-      The syntax for @define-color rules is as follows:
-    </para>
-
-<literallayout><code>〈define color rule〉 = @define-color 〈name〉 〈color〉</code>
-</literallayout>
-
-    <para>
-      To refer to the color defined by a @define-color rule,
-      use the name from the rule, prefixed with @.
-    </para>
-
-<literallayout><code>〈symbolic color〉 = @〈name〉</code>
-</literallayout>
-
-    <example><title>An example for defining colors</title>
-      <programlisting><![CDATA[
-@define-color bg_color #f9a039;
-
-* {
-  background-color: @bg_color;
-}
-]]></programlisting>
-    </example>
-
-    <para>
-      GTK also supports color expressions, which allow colors to be transformed
-      to new ones and can be nested, providing a rich language to define colors.
-      Color expressions resemble functions, taking 1 or more colors and in some
-      cases a number as arguments.
-    </para>
-    <para>
-      shade() leaves the color unchanged when the number is 1 and transforms it
-      to black or white as the number approaches 0 or 2 respectively. For mix(),
-      0 or 1 return the unaltered 1st or 2nd color respectively; numbers between
-      0 and 1 return blends of the two; and numbers below 0 or above 1 intensify
-      the RGB components of the 1st or 2nd color respectively. alpha() takes a
-      number from 0 to 1 and applies that as the opacity of the supplied color.
-    </para>
-
-<literallayout><code>〈color expression〉 = lighter( 〈color〉 ) | darker( 〈color〉 ) | shade( 〈color〉, 〈number〉 ) |</code>
-<code>                     alpha( 〈color〉, 〈number〉 ) | mix( 〈color〉, 〈color〉, 〈number〉 )</code>
-</literallayout>
-
-  </refsect2>
-
-  <refsect2>
-    <title>Images</title>
-
-    <para>
-      CSS allows to specify images in various ways, for backgrounds
-      and borders.
-    </para>
-
-<literallayout><code>〈image〉 = 〈url〉 | 〈crossfade〉 | 〈alternatives〉 | 〈gradient〉 | 〈gtk image〉</code>
-<code>〈crossfade〉 = cross-fade( 〈percentage〉, 〈image〉, 〈image〉 )</code>
-<code>〈alternatives〉 = image([ 〈image〉, ]* [ 〈image〉 | 〈color〉 ] )</code>
-<code>〈gradient〉 = 〈linear gradient〉 | 〈radial gradient〉</code>
-<code>〈linear gradient〉 = [ linear-gradient | repeating-linear-gradient ] (</code>
-<code>                      [ [ 〈angle〉 | to 〈side or corner〉 ] , ]?</code>
-<code>                      〈color stops〉 )</code>
-<code>〈radial gradient〉 = [ radial-gradient | repeating-radial-gradient ] (</code>
-<code>                      [ [ 〈shape〉 || 〈size〉 ] [ at 〈position〉 ]? , | at 〈position〉, ]?</code>
-<code>                      〈color stops〉 )</code>
-<code>〈side or corner〉 = [ left | right ] || [ top | bottom ]</code>
-<code>〈color stops〉 =  〈color stop〉 [ , 〈color stop〉 ]+</code>
-<code>〈color stop〉 = 〈color〉 [ 〈percentage〉 | 〈length〉 ]?</code>
-<code>〈shape〉 = circle | ellipse</code>
-<code>〈size〉 = 〈extent keyword〉 | 〈length〉 | [ 〈length〉 | 〈percentage〉 ]{1,2}</code>
-<code>〈extent keyword〉 = closest-size | farthest-side | closest-corner | farthest-corner</code>
-</literallayout>
-
-    <para>
-      The simplest way to specify an image in CSS is to load an image
-      file from a URL. CSS does not specify anything about supported file
-      formats; within GTK, you can expect at least PNG, JPEG and SVG to
-      work. The full list of supported image formats is determined by the
-      available gdk-pixbuf image loaders and may vary between systems.
-    </para>
-
-    <example>
-      <title>Loading an image file</title>
-      <programlisting><![CDATA[
-button {
-  background-image: url("water-lily.png");
-}
-]]></programlisting>
-    </example>
-
-    <para>
-      A crossfade lets you specify an image as an intermediate between two
-      images. Crossfades are specified in the draft of the level 4
-      <ulink url="https://www.w3.org/TR/css4-images">Image</ulink>
-      module of the CSS specification.
+      Length values with the em or ex units are resolved using the font
+      size value, unless they occur in setting the font-size itself, in
+      which case they are resolved using the inherited font size value.
     </para>
 
     <para>
-    </para>
-
-    <example>
-      <title>Crossfading two images</title>
-      <programlisting><![CDATA[
-button {
-  background-image: cross-fade(50%, url("water-lily.png"), url("buffalo.jpg"));
-}
-]]></programlisting>
-    </example>
-
-    <para>
-      The image() syntax provides a way to specify fallbacks in case an image
-      format may not be supported. Multiple fallback images can be specified,
-      and will be tried in turn until one can be loaded successfully. The
-      last fallback may be a color, which will be rendered as a solid color
-      image.
-    </para>
-
-    <example>
-      <title>Image fallback</title>
-      <programlisting><![CDATA[
-button {
-  background-image: image(url("fancy.svg"), url("plain.png"), green);
-}
-]]></programlisting>
-    </example>
-
-    <para>
-      Gradients are images that smoothly fades from one color to another. CSS
-      provides ways to specify repeating and non-repeating linear and radial
-      gradients. Radial gradients can be circular, or axis-aligned ellipses.
+      The rem unit is resolved using the initial font size value, which is
+      not quite the same as the CSS definition of rem.
     </para>
 
     <para>
-      A linear gradient is created by specifying a gradient line and then several
-      colors placed along that line. The gradient line may be specified using
-      an angle, or by using direction keywords.
+      The calc() notation adds considerable expressive power. There are limits
+      on what types can be combined in such an expression (e.g. it does not make
+      sense to add a number and a time). For the full details, see the
+      <ulink url="https://www.w3.org/TR/css3-values/#calc-notation">CSS3 Values and
+      Units</ulink> spec.
     </para>
-
-    <example>
-      <title>Linear gradients</title>
-      <programlisting><![CDATA[
-button {
-  background-image: linear-gradient(45deg, yellow, blue);
-}
-label {
-  background-image: linear-gradient(to top right, blue 20%, #f0f 80%);
-}
-]]></programlisting>
-    </example>
 
     <para>
-      A radial gradient is created by specifying a center point and one or two
-      radii. The radii may be given explicitly as lengths or percentages or
-      indirectly, by keywords that specify how the end circle or ellipsis
-      should be positioned relative to the area it is derawn in.
+      A common pattern among shorthand properties (called 'four sides') is one
+      where one to four values can be specified, to determine a value for each
+      side of an area. In this case, the specified values are interpreted as
+      follows:
+      <variablelist>
+        <varlistentry>
+          <term>4 values: </term><listitem>top right bottom left</listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>3 values: </term><listitem>top horizontal bottom</listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>2 values: </term><listitem>vertical horizontal</listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>1 value: </term><listitem>all</listitem>
+        </varlistentry>
+      </variablelist>
     </para>
 
-    <example>
-      <title>Radial gradients</title>
-      <programlisting><![CDATA[
-button {
-  background-image: radial-gradient(ellipse at center, yellow 0%, green 100%);
-}
-label {
-  background-image: radial-gradient(circle farthest-side at left bottom, red, yellow 50px, green);
-}
-]]></programlisting>
-    </example>
+   </refsect2>
 
-    <para>
-      To learn more about gradients in CSS, including details of how color stops
-      are placed on the gradient line and keywords for specifying radial sizes,
-      you can read the
-      <ulink url="https://www.w3.org/TR/css3-images/#gradients">Image</ulink>
-      module of the CSS specification.
-    </para>
+   <refsect2>
+     <title>Colors</title>
 
+     <para>
+       GTK extends the CSS syntax with several additional ways to specify colors.
+     </para>
+     <para>
+       The first is a reference to a color defined via a @define-color rule in CSS.
+       The syntax for @define-color rules is as follows:
+       <simplelist>
+         <member><literal>@define-color <replaceable>Name</replaceable> <replaceable>Color</replaceable></literal></member>
+       </simplelist>
+     </para>
+     <para>
+       To refer to the color defined by a @define-color rule, prefix the name with @.
+     </para>
+     <para>
+       GTK also supports color expressions, which allow colors to be transformed to
+       new ones. Color expressions can be nested, providing a rich language to
+       define colors. Color expressions resemble functions, taking 1 or more colors
+       and in some cases a number as arguments.
+       <simplelist>
+         <member><literal>lighter(<replaceable>Color</replaceable>)</literal> produces a brigher variant of Color</member>
+         <member><literal>darker(<replaceable>Color</replaceable>)</literal> produces a darker variant of Color</member>
+         <member><literal>shade(<replaceable>Color</replaceable>, <replaceable>Number</replaceable>)</literal> changes the lightness of Color. The number ranges from 0 for black to 2 for white.</member>
+         <member><literal>alpha(<replaceable>Color</replaceable>, <replaceable>Number</replaceable>)</literal> replaces the alpha value of color with number (between 0 and 1)</member>
+         <member><literal>mix(<replaceable>Color1</replaceable>, <replaceable>Color2</replaceable>, <replaceable>Number</replaceable>)</literal> interpolates between the two colors</member>
+       </simplelist>
+     </para>
+   </refsect2>
+
+   <refsect2>
+     <title>Images</title>
     <para>
       GTK extends the CSS syntax for images and also uses it for specifying icons.
+      To load a themed icon, use
+      <simplelist>
+        <member><literal>-gtk-icontheme(<replaceable>Name</replaceable>)</literal></member>
+      </simplelist>
+      The specified icon name is used to look up a themed icon, while taking into
+      account the values of the -gtk-icon-theme and -gtk-icon-palette properties.
+      This kind of image is mainly used as value of the -gtk-icon-source property. 
     </para>
-
-<literallayout><code>〈gtk image〉 = 〈themed icon〉 | 〈scaled image〉 | 〈recolored image〉</code>
-</literallayout>
-
-    <para>
-      GTK has extensive support for loading icons from icon themes. It is
-      accessible from CSS with the -gtk-icontheme syntax.
-    </para>
-
-<literallayout><code>〈themed icon〉 = -gtk-icontheme( 〈icon name〉 )</code>
-</literallayout>
-
-    <para>
-      The specified icon name is used to look up a themed icon, while taking
-      into account the values of the -gtk-icon-theme and -gtk-icon-palette
-      properties. This kind of image is mainly used as value of the
-      -gtk-icon-source property.
-    </para>
-
-    <example>
-      <title>Using themed icons in CSS</title>
-      <programlisting><![CDATA[
-spinner {
-  -gtk-icon-source: -gtk-icontheme('process-working-symbolic');
-  -gtk-icon-palette: success blue, warning #fc3, error magenta;
-}
-arrow.fancy {
-  -gtk-icon-source: -gtk-icontheme('pan-down');
-  -gtk-icon-theme: 'Oxygen';
-}
-]]></programlisting>
-    </example>
-
-    <para>
-      GTK supports scaled rendering on hi-resolution displays. This works
-      best if images can specify normal and hi-resolution variants. From
-      CSS, this can be done with the -gtk-scaled syntax.
-    </para>
-
-<literallayout><code>〈scaled image〉 = -gtk-scaled( 〈image〉[ , 〈image〉 ]* )</code>
-</literallayout>
-
-    <para>
-      While -gtk-scaled accepts multiple higher-resolution variants, in
-      practice, it will mostly be used to specify a regular image and one
-      variant for scale 2.
-    </para>
-
-    <example>
-      <title>Scaled images in CSS</title>
-      <programlisting><![CDATA[
-arrow {
-  -gtk-icon-source: -gtk-scaled(url('my-arrow.png'),
-                                url('my-arrow@2.png'));
-}
-]]></programlisting>
-    </example>
-
-<literallayout><code>〈recolored image〉 = -gtk-recolor( 〈url〉 [ , 〈color palette〉 ] )</code>
-</literallayout>
-
     <para>
       Symbolic icons from the icon theme are recolored according to the
-      -gtk-icon-palette property. The recoloring is sometimes needed for images
-      that are not part of an icon theme, and the -gtk-recolor syntax makes
-      this available. -gtk-recolor requires a url as first argument. The
-      remaining arguments specify the color palette to use. If the palette
-      is not explicitly specified, the current value of the -gtk-icon-palette
-      property is used.
+      -gtk-icon-palette property, which defines a list of named colors.
+      The recognized names for colors in symbolic icons are error, warning
+      and success. The default palette maps these three names to symbolic
+      colors with the names @error_color, @warning_color and @success_color
+      respectively. The syntax for defining a custom palette is a comma-separated
+      list of name-color pairs, e.g.
+      <simplelist>
+        <member><literal>success blue, warning #fc3, error magenta</literal></member>
+      </simplelist>
     </para>
-
-    <example>
-      <title>Recoloring an image</title>
-      <programlisting><![CDATA[
-arrow {
-  -gtk-icon-source: -gtk-recolor(url('check.svg'), success blue, error rgb(255,0,0));
-}
-]]></programlisting>
-    </example>
-
-  </refsect2>
-
-  <refsect2>
-    <title>Transitions</title>
-
     <para>
-      CSS defines a mechanism by which changes in CSS property values can
-      be made to take effect gradually, instead of all at once. GTK supports
-      these transitions as well.
+      Recoloring is sometimes needed for images that are not part of an icon theme,
+      and the
+      <simplelist>
+        <member><literal>-gtk-recolor(<replaceable>uri</replaceable>, <replaceable>palette</replaceable>)</literal></member>
+      </simplelist>
+      syntax makes this available. -gtk-recolor requires a url as first argument.
+      The remaining arguments specify the color palette to use. If the palette is
+      not explicitly specified, the current value of the -gtk-icon-palette property
+      is used. 
     </para>
-
     <para>
-      To enable a transition for a property when a rule set takes effect, it
-      needs to be listed in the transition-property property in that rule set.
-      Only animatable properties can be listed in the transition-property.
+      GTK supports scaled rendering on hi-resolution displays. This works best if
+      images can specify normal and hi-resolution variants. From CSS, this can be
+      done with
+      <simplelist>
+        <member><literal>-gtk-scaled(<replaceable>Image1</replaceable>, <replaceable>Image2</replaceable>)</literal></member>
+      </simplelist>
     </para>
 
-    <para>
-      The details of a transition can modified with the transition-duration,
-      transition-timing-function and transition-delay properties.
-    </para>
+   </refsect2>
 
-    <para>
-      To learn more about transitions, you can read the
-      <ulink url="www.w3.org/TR/css3-transitions/">Transitions</ulink>
-      module of the CSS specification.
-    </para>
+      <table pgwide="1">
+        <title>GTK CSS Properties</title>
+        <tgroup cols="3">
+          <colspec align="left" colnum="1" colname="name"/>
+          <colspec align="left" colnum="2" colname="references"/>
+          <colspec align="left" colnum="3" colname="notes"/>
+          <spanspec namest="name" nameend="notes" spanname="span"/>
+          <thead>
+            <row><entry spanname="span">Color and Filter Properties</entry></row>
+            <row><entry>Name</entry><entry>Reference</entry><entry>Notes</entry></row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>color</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-color/#foreground">CSS Color Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>opacity</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-color/#opacity">CSS Color Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>filter</entry>
+              <entry>
+                <ulink url="https://drafts.fxtf.org/filters/#FilterProperty">CSS Filter Effects Level 1</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row style="title"><?dbhtml class="subhead"?><entry spanname="span">Font Properties</entry></row>
+            <row>
+              <entry>font-family</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-fonts/#font-family-prop">CSS Fonts Level 3</ulink>
+              </entry>
+              <entry>defaults to gtk-font-name setting</entry>
+            </row>
+            <row>
+              <entry>font-size</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-fonts/#font-size-prop">CSS Fonts Level 3</ulink>
+              </entry>
+              <entry>defaults to gtk-font-name setting</entry>
+            </row>
+            <row>
+              <entry>font-style</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-fonts/#font-style-prop">CSS Fonts Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>font-variant</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-fonts/#descdef-font-variant">CSS Fonts Level 3</ulink>
+              </entry>
+              <entry>only CSS2 values supported</entry>
+            </row>
+            <row>
+              <entry>font-weight</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-fonts/#font-weight-prop">CSS Fonts Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>font-stretch</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-fonts/#font-stretch-prop">CSS Fonts Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>font-kerning</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-fonts/#font-kerning-prop">CSS Fonts Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>font-variant-ligatures</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-fonts/#font-variant-ligatures-prop">CSS Fonts Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>font-variant-position</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-fonts/#font-variant-position-prop">CSS Fonts Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>font-variant-caps</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-fonts/#font-variant-position-prop">CSS Fonts Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>font-variant-numeric</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-fonts/#font-variant-numeric-prop">CSS Fonts Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>font-variant-alternates</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-fonts/#font-variant-alternates-prop">CSS Fonts Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>font-variant-east-asian</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-fonts/#font-variant-east-asian-prop">CSS Fonts Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>font-feature-settings</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-fonts/#font-feature-settings-prop">CSS Fonts Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>font-variation-settings</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css-fonts-4/#font-variation-settings-def">CSS Fonts Level 4</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>-gtk-dpi</entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-values/#number-value">Number</ulink></entry>
+              <entry>defaults to screen resolution</entry>
+            </row>
 
-  </refsect2>
+            <row style="title"><?dbhtml class="subhead"?><entry namest="name" nameend="notes">Font Shorthands</entry></row>
+            <row>
+              <entry>font</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-fonts/#font-prop">CSS Fonts Level 3</ulink>
+              </entry>
+              <entry>CSS allows line-height, etc</entry>
+            </row>
+            <row>
+              <entry>font-variant</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-fonts/#font-variant-prop">CSS Fonts Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row><?dbhtml class="subhead"?><entry spanname="span">Text Caret Properties</entry></row>
+            <row>
+              <entry>caret-color</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-ui/#caret-color">CSS Basic User Interface Level 3</ulink>
+              </entry>
+              <entry>CSS allows an auto value</entry>
+            </row>
+            <row>
+              <entry>-gtk-secondary-caret-color</entry>
+              <entry><ulink url="https://www.w3.org/TR/css-color-3/#valuea-def-color">Color</ulink></entry>
+              <entry>used for the secondary caret in bidirectional text</entry>
+            </row>
+            <row><?dbhtml class="subhead"?><entry spanname="span">Text Decoration Properties</entry></row>
+            <row>
+              <entry>letter-spacing</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-text/#letter-spacing">CSS Text Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>text-decoration-line</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css-text-decor-3/#text-decoration-line-property">CSS Text Decoration Level 3</ulink>
+              </entry>
+              <entry>CSS allows overline</entry>
+            </row>
+            <row>
+              <entry>text-decoration-color</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css-text-decor-3/#text-decoration-color-property">CSS Text Decoration Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>text-decoration-style</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css-text-decor-3/#text-decoration-style-property">CSS Text Decoration Level 3</ulink>
+              </entry>
+              <entry>CSS allows dashed and dotted</entry>
+            </row>
+            <row>
+              <entry>text-shadow</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css-text-decor-3/#text-shadow-property">CSS  Text Decoration Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row><?dbhtml class="subhead"?><entry spanname="span">Text Decoration Shorthands</entry></row>
+            <row>
+              <entry>text-decoration</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css-text-decor-3/#text-decoration-property">CSS Text Decoration Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row><?dbhtml class="subhead"?><entry spanname="span">Icon Properties</entry></row>
+            <row>
+              <entry>-gtk-icon-source</entry>
+              <entry><ulink url="https://www.w3.org/TR/css-backgrounds-3/#typedef-image">Image</ulink>, <literal>builtin</literal> or <literal>none</literal></entry>
+              <entry>used for builtin icons in buttons and expanders</entry>
+            </row>
+            <row>
+              <entry>-gtk-icon-theme</entry>
+              <entry>Theme name</entry>
+              <entry>icon theme to use with -gtk-icontheme()</entry>
+            </row>
+            <row>
+              <entry>-gtk-icon-size</entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-values/#length-value">Length</ulink></entry>
+              <entry>size used for builtin icons in buttons and expanders</entry>
+            </row>
+            <row>
+              <entry>-gtk-icon-style</entry>
+              <entry><literal>requested</literal>, <literal>regular</literal> or <literal>symbolic</literal></entry>
+              <entry>preferred style for application-loaded icons</entry>
+            </row>
+            <row>
+              <entry>-gtk-icon-transform</entry>
+              <entry>
+                <ulink url="https://drafts.csswg.org/css-transforms-1/#typedef-transform-list">Transform list</ulink> or <literal>none</literal>
+              </entry>
+              <entry>applied to builtin and application-loaded icons</entry>
+            </row>
+            <row>
+              <entry>-gtk-icon-palette</entry>
+              <entry>Color palette, as explained above</entry>
+              <entry>used to recolor symbolic icons</entry>
+            </row>
+            <row>
+              <entry>-gtk-icon-shadow</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css-backgrounds-3/#typedef-shadow">Shadow</ulink> or <literal>none</literal>
+              </entry>
+              <entry>applied to builtin and application-loaded icons</entry>
+            </row>
+            <row>
+              <entry>-gtk-icon-filter</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/filter-effects-1/#typedef-filter-value-list">Filter value list</ulink> or <literal>none</literal>
+              </entry>
+              <entry>applied to builtin and application-loaded icons</entry>
+            </row>
 
-  <refsect2>
-    <title>Animations</title>
+            <row><?dbhtml class="subhead"?><entry spanname="span">Box Properties</entry></row>
+            <row>
+              <entry>transform</entry>
+              <entry>
+                <ulink url="https://drafts.csswg.org/css-transforms-2/">CSS Transforms Level 2</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>min-width</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-box/#min-width">CSS Box Model Level 3</ulink>
+              </entry>
+              <entry>CSS allows percentages</entry>
+            </row>
+            <row>
+              <entry>min-height</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-box/#min-height">CSS Box Model Level 3</ulink>
+              </entry>
+              <entry>CSS allows percentages</entry>
+            </row>
+            <row>
+              <entry>margin-top</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-box/#margin-top">CSS Box Model Level 3</ulink>
+              </entry>
+              <entry>CSS allows percentages or auto</entry>
+            </row>
+            <row>
+              <entry>margin-right</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-box/#margin-right">CSS Box Model Level 3</ulink>
+              </entry>
+              <entry>CSS allows percentages or auto</entry>
+            </row>
+            <row>
+              <entry>margin-bottom</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-box/#margin-bottom">CSS Box Model Level 3</ulink>
+              </entry>
+              <entry>CSS allows percentages or auto</entry>
+            </row>
+            <row>
+              <entry>margin-left</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-box/#margin-left">CSS Box Model Level 3</ulink>
+              </entry>
+              <entry>CSS allows percentages or auto</entry>
+            </row>
+            <row>
+              <entry>padding-top</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-box/#padding-top">CSS Box Model Level 3</ulink>
+              </entry>
+              <entry>CSS allows percentages</entry>
+            </row>
+            <row>
+              <entry>padding-right</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-box/#padding-right">CSS Box Model Level 3</ulink>
+              </entry>
+              <entry>CSS allows percentages</entry>
+            </row>
+            <row>
+              <entry>padding-bottom</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-box/#padding-bottom">CSS Box Model Level 3</ulink>
+              </entry>
+              <entry>CSS allows percentages</entry>
+            </row>
+            <row>
+              <entry>padding-left</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-box/#padding-left">CSS Box Model Level 3</ulink>
+              </entry>
+              <entry>CSS allows percentages</entry>
+            </row>
 
-    <para>
-      In addition to transitions, which are triggered by changes of the underlying
-      node tree, CSS also supports defined animations. While transitions specify how
-      property values change from one value to a new value, animations explicitly
-      define intermediate property values in keyframes.
-    </para>
+            <row><?dbhtml class="subhead"?><entry spanname="span">Box Shorthands</entry></row>
+            <row>
+              <entry>margin</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-box/#margin">CSS Box Model Level 3</ulink>
+              </entry>
+              <entry>a 'four sides' property</entry>
+            </row>
+            <row>
+              <entry>padding</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-box/#padding">CSS Box Model Level 3</ulink>
+              </entry>
+              <entry>a 'four sides' property</entry>
+            </row>
 
-    <para>
-      Keyframes are defined with an @-rule which contains one or more of rule sets
-      with special selectors. Property declarations for nonanimatable properties
-      are ignored in these rule sets (with the exception of animation properties).
-    </para>
+            <row><?dbhtml class="subhead"?><entry spanname="span">Border Properties</entry></row>
+            <row>
+              <entry>border-top-width</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#the-border-width">CSS Backgrounds and Borders Level 3</ulink></entry>
+              <entry>CSS allows other values</entry>
+            </row>
+            <row>
+              <entry>border-right-width</entry>
+              <entry>
+                <ulink url="https://www.w3.org/css3-background/#the-border-width">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry>CSS allows other values</entry>
+            </row>
+            <row>
+              <entry>border-bottom-width</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#the-border-width">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry>CSS allows other values</entry>
+            </row>
+            <row>
+              <entry>border-left-width</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#the-border-width">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry>CSS allows other values</entry>
+            </row>
+            <row>
+              <entry>border-top-style</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#the-border-style">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>border-right-style</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#the-border-style">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>border-bottom-style</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#the-border-style">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>border-left-style</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#the-border-style">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>border-top-right-radius</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#the-border-radius">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>border-bottom-right-radius</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#the-border-radius">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>border-bottom-left-radius</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#the-border-radius">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>border-top-left-radius</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#the-border-radius">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>border-top-color</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#the-border-color">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>border-right-color</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#the-border-color">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>border-bottom-color</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#the-border-color">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>border-left-color</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#the-border-color">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>border-image-source</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#the-border-image-source">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>border-image-repeat</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#the-border-image-repeat">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>border-image-slice</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#the-border-image-slice">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry>a 'four sides' property</entry>
+            </row>
+            <row>
+              <entry>border-image-width</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR//css3-background/#the-border-image-width">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry>a 'four sides' property</entry>
+            </row>
 
-<literallayout><code>〈keyframe rule〉 = @keyframes 〈name〉 { 〈animation rule〉 }</code>
-<code>〈animation rule〉 = 〈animation selector〉 { 〈declaration〉* }</code>
-<code>〈animation selector〉 = 〈single animation selector〉 [ , 〈single animation selector〉 ]*</code>
-<code>〈single animation selector〉 = from | to | 〈percentage〉</code>
-</literallayout>
+            <row><?dbhtml class="subhead"?><entry spanname="span">Border Shorthands</entry></row>
+            <row>
+              <entry>border-width</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#the-border-width">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry>a 'four sides' property</entry>
+            </row>
+            <row>
+              <entry>border-style</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#the-border-style">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry>a 'four sides' property</entry>
+            </row>
+            <row>
+              <entry>border-color</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#border-color">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry>a 'four sides' property</entry>
+            </row>
+            <row>
+              <entry>border-top</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#border-top">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>border-right</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#border-right">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>border-bottom</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#border-bottom">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>border-left</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#border-left">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>border</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#border">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>border-radius</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#border-radius">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>border-image</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#border-image">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
 
-    <para>
-      To enable an animation, the name of the keyframes must be set as the value
-      of the animation-name property. The details of the animation can modified
-      with the animation-duration, animation-timing-function, animation-iteration-count
-      and other animation properties.
-    </para>
+            <row><?dbhtml class="subhead"?><entry spanname="span">Outline Properties</entry></row>
+            <row>
+              <entry>outline-style</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-ui/#outline-style">CSS Basic User Interface Level 3</ulink>
+              </entry>
+              <entry>initial value is none, auto is not supported</entry>
+            </row>
+            <row>
+              <entry>outline-width</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-ui/#outline-width">CSS Basic User Interface Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>outline-color</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-ui/#outline-color">CSS Basic User Interface Level 3</ulink>
+              </entry>
+              <entry>initial value is currentColor, invert is not supported</entry>
+            </row>
+            <row>
+              <entry>outline-offset</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-ui/#outline-offset">CSS Basic User Interface Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
 
-    <example>
-      <title>A CSS animation</title>
-      <programlisting><![CDATA[
-@keyframes spin {
-  to { -gtk-icon-transform: rotate(1turn); }
-}
+            <row><?dbhtml class="subhead"?><entry spanname="span">Outline Shorthands</entry></row>
+            <row>
+              <entry>outline</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-ui/#propdef-outline">CSS Basic User Interface Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
 
-spinner {
-  animation-name: spin;
-  animation-duration: 1s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-]]></programlisting>
-    </example>
+            <row><?dbhtml class="subhead"?><entry spanname="span">Background Properties</entry></row>
+            <row>
+              <entry>background-color</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#background-color">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>background-clip</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#background-clip">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>background-origin</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#background-origin">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>background-size</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#background-size">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>background-position</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#background-position">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>background-repeat</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#background-repeat">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>background-image</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#background-image">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry>not supported: urls without quotes, colors in crossfades</entry>
+            </row>
+            <row>
+              <entry>box-shadow</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#box-shadow">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>background-blend-mode</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/compositing-1/#propdef-background-blend-mode">CSS Compositing and Blending Level 1</ulink>
+              </entry>
+              <entry>only affects multiple backgrounds</entry>
+            </row>
 
-    <para>
-      To learn more about animations, you can read the
-      <ulink url="www.w3.org/TR/css3-animations/">Animations</ulink>
-      module of the CSS specification.
-    </para>
+            <row><?dbhtml class="subhead"?><entry spanname="span">Background Shorthands</entry></row>
+            <row>
+              <entry>background</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-background/#background">CSS Backgrounds and Borders Level 3</ulink>
+              </entry>
+              <entry></entry>
+            </row>
 
-  </refsect2>
+            <row><?dbhtml class="subhead"?><entry spanname="span">Transition Properties</entry></row>
+            <row>
+              <entry>transition-property</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-transitions/#transition-property">CSS Transitions</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>transition-duration</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-transitions/#transition-duration">CSS Transitions</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>transition-timing-function</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-transitions/#transition-timing-function">CSS Transitions</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>transition-delay</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-transitions/#transition-delay">CSS Transitions</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+
+            <row><?dbhtml class="subhead"?><entry spanname="span">Transition Shorthands</entry></row>
+            <row>
+              <entry>transition</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-transitions/#transition">CSS Transitions</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+
+            <row><?dbhtml class="subhead"?><entry spanname="span">Animation Properties</entry></row>
+            <row>
+              <entry>animation-name</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-animations/#animation-name">CSS Animations Level 1</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>animation-duration</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-animations/#animation-duration">CSS Animations Level 1</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>animation-timing-function</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-animations/#animation-timing-function">CSS Animations Level 1</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>animation-iteration-count</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-animations/#animation-iteration-count">CSS Animations Level 1</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>animation-direction</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-animations/#animation-direction">CSS Animations Level 1</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>animation-play-state</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-animations/#animation-play-state">CSS Animations Level 1</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>animation-delay</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-animations/#animation-delay">CSS Animations Level 1</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>animation-fill-mode</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-animations/#animation-fill-mode">CSS Animations Level 1</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+
+            <row><?dbhtml class="subhead"?><entry spanname="span">Animation Shorthands</entry></row>
+            <row>
+              <entry>animation</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css3-animations/#animation">CSS Animations Level 1</ulink>
+              </entry>
+              <entry></entry>
+            </row>
+
+            <row><?dbhtml class="subhead"?><entry spanname="span">Table-related Properties</entry></row>
+            <row>
+              <entry>border-spacing</entry>
+              <entry>
+                <ulink url="https://www.w3.org/TR/css-tables-3/#border-spacing-property">CSS Table Level 3</ulink>
+              </entry>
+              <entry>respected by GtkBox and GtkGrid</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
 
 </refsect1>
 </refentry>

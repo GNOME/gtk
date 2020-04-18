@@ -343,7 +343,6 @@ content_files = [
   'building.xml',
   'compiling.xml',
   'css-overview.xml',
-  'css-properties.xml',
   'drawing-model.xml',
   'glossary.xml',
   'gtk4-broadwayd.xml',
