@@ -79,10 +79,7 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
       /* the initial value can be explicitly specified with the
        * ‘initial’ keyword which all properties accept.
        */
-      for (i = 0; i < shorthand->subproperties->len; i++)
-        {
-          data[i] = _gtk_css_initial_value_new ();
-        }
+      return _gtk_css_initial_value_new ();
     }
   else if (gtk_css_parser_try_ident (parser, "inherit"))
     {
@@ -92,10 +89,7 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
        * strengthen inherited values in the cascade, and it can
        * also be used on properties that are not normally inherited.
        */
-      for (i = 0; i < shorthand->subproperties->len; i++)
-        {
-          data[i] = _gtk_css_inherit_value_new ();
-        }
+      return _gtk_css_inherit_value_new ();
     }
   else if (gtk_css_parser_try_ident (parser, "unset"))
     {
@@ -103,10 +97,7 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
        * then if it is an inherited property, this is treated as
        * inherit, and if it is not, this is treated as initial.
        */
-      for (i = 0; i < shorthand->subproperties->len; i++)
-        {
-          data[i] = _gtk_css_unset_value_new ();
-        }
+      return _gtk_css_unset_value_new ();
     }
   else if (!shorthand->parse (shorthand, data, parser))
     {
