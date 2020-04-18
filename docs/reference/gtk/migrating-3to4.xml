@@ -494,6 +494,12 @@
         The recommended way to influence focus behavior of custom widgets
         in GTK 4 is to override the focus() and grab_focus() vfuncs.
       </para>
+      <para>
+        The feature to automatically keep the focus widget scrolled into view
+        with gtk_container_set_focus_vadjustment() has been removed from
+        GtkContainer, and is provided by scrollables instead. In the common case
+        that the scrollable is a #GtkViewport, use #GtkViewport:scroll-to-focus.
+      </para>
     </section>
 
     <section>
