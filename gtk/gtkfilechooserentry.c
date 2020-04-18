@@ -25,6 +25,7 @@
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
 #include "gtkentry.h"
+#include "gtkentryprivate.h"
 #include "gtkfilesystemmodel.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
@@ -269,6 +270,7 @@ _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
   g_object_set (chooser_entry, "truncate-multiline", TRUE, NULL);
 
   comp = gtk_entry_completion_new ();
+  _gtk_entry_completion_set_accept_on_activate (comp, FALSE);
   gtk_entry_completion_set_popup_single_match (comp, FALSE);
   gtk_entry_completion_set_minimum_key_length (comp, 0);
   /* see docs for gtk_entry_completion_set_text_column() */
