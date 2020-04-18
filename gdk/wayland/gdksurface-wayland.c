@@ -2334,7 +2334,7 @@ can_map_grabbing_popup (GdkSurface *surface,
   return top_most_popup == parent;
 }
 
-static void
+static gboolean
 gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
                                       GdkSurface     *parent,
                                       GdkWaylandSeat *grab_input_seat,
@@ -2348,27 +2348,27 @@ gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
   gpointer positioner;
 
   if (!impl->display_server.wl_surface)
-    return;
+    return FALSE;
 
   if (!is_realized_shell_surface (parent))
-    return;
+    return FALSE;
 
   if (is_realized_toplevel (surface))
     {
       g_warning ("Can't map popup, already mapped as toplevel");
-      return;
+      return FALSE;
     }
   if (is_realized_popup (surface))
     {
       g_warning ("Can't map popup, already mapped");
-      return;
+      return FALSE;
     }
 
   if (grab_input_seat &&
       !can_map_grabbing_popup (surface, parent))
     {
       g_warning ("Tried to map a grabbing popup with a non-top most parent");
-      return;
+      return FALSE;
     }
 
   gdk_surface_freeze_updates (surface);
@@ -2453,6 +2453,8 @@ gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
       display->current_grabbing_popups =
         g_list_prepend (display->current_grabbing_popups, surface);
     }
+
+  return TRUE;
 }
 
 static GdkWaylandSeat *
@@ -2827,11 +2829,13 @@ gdk_wayland_surface_map_popup (GdkSurface     *surface,
     grab_input_seat = find_grab_input_seat (surface, parent);
   else
     grab_input_seat = NULL;
-  gdk_wayland_surface_create_xdg_popup (surface,
-                                        parent,
-                                        grab_input_seat,
-                                        width, height,
-                                        layout);
+
+  if (!gdk_wayland_surface_create_xdg_popup (surface,
+                                             parent,
+                                             grab_input_seat,
+                                             width, height,
+                                             layout))
+    return;
 
   impl->popup.layout = gdk_popup_layout_copy (layout);
   impl->popup.unconstrained_width = width;

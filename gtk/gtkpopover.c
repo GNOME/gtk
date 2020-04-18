@@ -550,9 +550,9 @@ present_popup (GtkPopover *popover)
   layout = create_popup_layout (popover);
   gtk_widget_get_preferred_size (GTK_WIDGET (popover), NULL, &req);
   if (gdk_popup_present (GDK_POPUP (priv->surface),
-                                 MAX (req.width, 1),
-                                 MAX (req.height, 1),
-                                 layout))
+                         MAX (req.width, 1),
+                         MAX (req.height, 1),
+                         layout))
     update_popover_layout (popover, layout);
 }
 
