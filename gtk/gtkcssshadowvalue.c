@@ -288,12 +288,12 @@ static const GtkCssValueClass GTK_CSS_VALUE_SHADOW = {
   gtk_css_value_shadow_print
 };
 
-static GtkCssValue none_singleton = { &GTK_CSS_VALUE_SHADOW, 1, TRUE, 0 };
+static GtkCssValue shadow_none_singleton = { &GTK_CSS_VALUE_SHADOW, 1, TRUE, 0 };
 
 GtkCssValue *
 gtk_css_shadow_value_new_none (void)
 {
-  return _gtk_css_value_ref (&none_singleton);
+  return _gtk_css_value_ref (&shadow_none_singleton);
 }
 
 static GtkCssValue *

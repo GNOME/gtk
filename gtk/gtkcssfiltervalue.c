@@ -703,7 +703,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_FILTER = {
   gtk_css_value_filter_print
 };
 
-static GtkCssValue none_singleton = { &GTK_CSS_VALUE_FILTER, 1, TRUE, 0, {  { GTK_CSS_FILTER_NONE } } };
+static GtkCssValue filter_none_singleton = { &GTK_CSS_VALUE_FILTER, 1, TRUE, 0, {  { GTK_CSS_FILTER_NONE } } };
 
 static GtkCssValue *
 gtk_css_filter_value_alloc (guint n_filters)
@@ -721,7 +721,7 @@ gtk_css_filter_value_alloc (guint n_filters)
 GtkCssValue *
 gtk_css_filter_value_new_none (void)
 {
-  return _gtk_css_value_ref (&none_singleton);
+  return _gtk_css_value_ref (&filter_none_singleton);
 }
 
 static gboolean
