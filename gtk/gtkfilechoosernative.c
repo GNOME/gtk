@@ -43,12 +43,12 @@
 
 /**
  * SECTION:gtkfilechoosernative
- * @Short_description: A native file chooser dialog, suitable for “File/Open” or “File/Save” commands
+ * @Short_description: A native file chooser dialog, suitable for “File Open” or “File Save” commands
  * @Title: GtkFileChooserNative
  * @See_also: #GtkFileChooser, #GtkNativeDialog, #GtkFileChooserDialog
  *
  * #GtkFileChooserNative is an abstraction of a dialog box suitable
- * for use with “File/Open” or “File/Save as” commands. By default, this
+ * for use with “File Open” or “File Save as” commands. By default, this
  * just uses a #GtkFileChooserDialog to implement the actual dialog.
  * However, on certain platforms, such as Windows and macOS, the native platform
  * file chooser is used instead. When the application is running in a
@@ -56,10 +56,13 @@
  * #GtkFileChooserNative may call the proper APIs (portals) to let the user
  * choose a file and make it available to the application.
  *
- * While the API of #GtkFileChooserNative closely mirrors #GtkFileChooserDialog, the main
- * difference is that there is no access to any #GtkWindow or #GtkWidget for the dialog.
- * This is required, as there may not be one in the case of a platform native dialog.
- * Showing, hiding and running the dialog is handled by the #GtkNativeDialog functions.
+ * While the API of #GtkFileChooserNative closely mirrors #GtkFileChooserDialog,
+ * the main difference is that there is no access to any #GtkWindow or #GtkWidget
+ * for the dialog. This is required, as there may not be one in the case of a
+ * platform native dialog.
+ *
+ * Showing, hiding and running the dialog is handled by the #GtkNativeDialog
+ * functions.
  *
  * ## Typical usage ## {#gtkfilechoosernative-typical-usage}
  *
