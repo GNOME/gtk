@@ -71,7 +71,8 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
   GtkCssValue *result;
   guint i;
 
-  data = g_new0 (GtkCssValue *, shorthand->subproperties->len);
+  data = g_newa (GtkCssValue *, shorthand->subproperties->len);
+  memset (data, 0, sizeof (GtkCssValue *) * shorthand->subproperties->len);
 
   if (gtk_css_parser_try_ident (parser, "initial"))
     {
@@ -114,7 +115,6 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
           if (data[i] != NULL)
             _gtk_css_value_unref (data[i]);
         }
-      g_free (data);
       return NULL;
     }
 
@@ -128,8 +128,7 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
     }
 
   result = _gtk_css_array_value_new_from_array (data, shorthand->subproperties->len);
-  g_free (data);
-  
+
   return result;
 }
 
