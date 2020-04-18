@@ -2629,9 +2629,8 @@ scale {
   $_marks_length: 6px;
   $_marks_distance: 6px;
 
-  min-height: 10px;
-  min-width: 10px;
-  padding: 12px;
+  min-height: 34px;
+  min-width: 34px;
 
   // those are inside the trough node, I need them to show their own border over the trough one, so negative margin
   > trough {
@@ -2649,20 +2648,16 @@ scale {
 
   // click-and-hold the slider to activate
   &.fine-tune {
-    &.horizontal {
-      padding-top: 9px;
-      padding-bottom: 9px;
-      min-height: 16px;
-    }
-
-    &.vertical {
-      padding-left: 9px;
-      padding-right: 9px;
-      min-width: 16px;
-    }
-
     // to make the trough grow in fine-tune mode
-    > trough > slider { margin: -6px; }
+    &.horizontal > trough > slider {
+      margin-top: -6px;
+      margin-bottom: -6px;
+    }
+
+    &.vertical > trough > slider {
+      margin-left: -6px;
+      margin-right: -6px;
+    }
 
     > trough > fill,
     > trough > highlight,
@@ -2767,10 +2762,23 @@ scale {
   > value { color: gtkalpha(currentColor, 0.55); }
 
   &.horizontal {
+    > trough {
+      margin-left: 12px;
+      margin-right: 12px;
+    }
+
     > marks {
       color: gtkalpha(currentColor, 0.55);
-      &.top    { margin-bottom: $_marks_distance; }
-      &.bottom { margin-top: $_marks_distance; }
+
+      &.top {
+        margin-top: -($_marks_distance + $_marks_length);
+        margin-bottom: $_marks_distance;
+      }
+
+      &.bottom {
+        margin-top: $_marks_distance;
+        margin-bottom: -($_marks_distance + $_marks_length);
+      }
 
       indicator {
         background-color: currentColor;
@@ -2779,22 +2787,32 @@ scale {
       }
     }
 
-    > value.left  { margin-right: 9px; }
-    > value.right { margin-left: 9px; }
-
     &.fine-tune >marks {
-      &.top { margin-top: 3px; }
-      &.bottom { margin-bottom: 3px; }
+      &.top { margin-top: -($_marks_distance + ($_marks_length - 3px)); }
+      &.bottom { margin-bottom: -($_marks_distance + ($_marks_length - 3px)); }
 
       indicator { min-height: ($_marks_length - 3px); }
     }
   }
 
   &.vertical {
+    > trough {
+      margin-top: 12px;
+      margin-bottom: 12px;
+    }
+
     > marks {
       color: gtkalpha(currentColor, 0.55);
-      &.top    { margin-right: $_marks_distance; }
-      &.bottom { margin-left: $_marks_distance; }
+
+      &.top {
+        margin-left: -($_marks_distance + $_marks_length);
+        margin-right: $_marks_distance;
+      }
+
+      &.bottom {
+        margin-left: $_marks_distance;
+        margin-right: -($_marks_distance + $_marks_length);
+      }
 
       indicator {
         background-color: currentColor;
@@ -2803,12 +2821,9 @@ scale {
       }
     }
 
-    > value.top    { margin-bottom: 9px; }
-    > value.bottom { margin-top: 9px; }
-
     &.fine-tune >marks {
-      &.top { margin-left: 3px; }
-      &.bottom { margin-right: 3px; }
+      &.top { margin-left: -($_marks_distance + ($_marks_length - 3px)); }
+      &.bottom { margin-right: -($_marks_distance + ($_marks_length - 3px)); }
 
       indicator { min-height: ($_marks_length - 3px); }
     }
