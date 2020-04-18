@@ -29,7 +29,6 @@
 #include "gtkstatusbarprivate.h"
 
 #include "gtkbinlayout.h"
-#include "gtkframe.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
@@ -87,7 +86,6 @@ struct _GtkStatusbar
 {
   GtkWidget parent_instance;
 
-  GtkWidget     *frame;
   GtkWidget     *label;
   GtkWidget     *message_area;
 
@@ -138,7 +136,7 @@ gtk_statusbar_dispose (GObject *object)
 {
   GtkStatusbar *self = GTK_STATUSBAR (object);
 
-  g_clear_pointer (&self->frame, gtk_widget_unparent);
+  g_clear_pointer (&self->message_area, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_statusbar_parent_class)->dispose (object);
 }
@@ -200,7 +198,6 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
    */
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkstatusbar.ui");
   gtk_widget_class_bind_template_child_internal (widget_class, GtkStatusbar, message_area);
-  gtk_widget_class_bind_template_child (widget_class, GtkStatusbar, frame);
   gtk_widget_class_bind_template_child (widget_class, GtkStatusbar, label);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_STATUSBAR_ACCESSIBLE);
