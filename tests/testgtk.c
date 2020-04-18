@@ -1991,10 +1991,7 @@ create_scrolled_windows (GtkWidget *widget)
       gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
       gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
       gtk_container_add (GTK_CONTAINER (scrolled_window), grid);
-      gtk_container_set_focus_hadjustment (GTK_CONTAINER (grid),
-					   gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
-      gtk_container_set_focus_vadjustment (GTK_CONTAINER (grid),
-					   gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
+      gtk_viewport_set_scroll_to_focus (GTK_VIEWPORT (gtk_widget_get_parent (grid)), TRUE);
       gtk_widget_show (grid);
 
       for (i = 0; i < 20; i++)
@@ -6074,6 +6071,7 @@ create_main_window (void)
 
   box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (scrolled_window), box2);
+  gtk_viewport_set_scroll_to_focus (GTK_VIEWPORT (gtk_widget_get_parent (box2)), TRUE);
   gtk_widget_show (box2);
 
   for (i = 0; i < nbuttons; i++)

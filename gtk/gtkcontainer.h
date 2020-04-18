@@ -108,18 +108,6 @@ void     gtk_container_foreach      (GtkContainer       *container,
 GDK_AVAILABLE_IN_ALL
 GList*   gtk_container_get_children     (GtkContainer       *container);
 
-/* Widget-level methods */
-GDK_AVAILABLE_IN_ALL
-void   gtk_container_set_focus_vadjustment (GtkContainer     *container,
-					    GtkAdjustment    *adjustment);
-GDK_AVAILABLE_IN_ALL
-GtkAdjustment *gtk_container_get_focus_vadjustment (GtkContainer *container);
-GDK_AVAILABLE_IN_ALL
-void   gtk_container_set_focus_hadjustment (GtkContainer     *container,
-					    GtkAdjustment    *adjustment);
-GDK_AVAILABLE_IN_ALL
-GtkAdjustment *gtk_container_get_focus_hadjustment (GtkContainer *container);
-
 GDK_AVAILABLE_IN_ALL
 GType   gtk_container_child_type	   (GtkContainer     *container);
 

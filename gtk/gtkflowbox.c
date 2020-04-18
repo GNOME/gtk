@@ -3963,7 +3963,6 @@ gtk_flow_box_set_hadjustment (GtkFlowBox    *box,
   if (priv->hadjustment)
     g_object_unref (priv->hadjustment);
   priv->hadjustment = adjustment;
-  gtk_container_set_focus_hadjustment (GTK_CONTAINER (box), adjustment);
 }
 
 /**
@@ -3998,7 +3997,6 @@ gtk_flow_box_set_vadjustment (GtkFlowBox    *box,
   if (priv->vadjustment)
     g_object_unref (priv->vadjustment);
   priv->vadjustment = adjustment;
-  gtk_container_set_focus_vadjustment (GTK_CONTAINER (box), adjustment);
 }
 
 static void
