@@ -119,8 +119,6 @@ static GtkSizeRequestMode gtk_container_get_request_mode (GtkWidget   *widget);
 static void gtk_container_buildable_init           (GtkBuildableIface *iface);
 static GtkBuildableIface    *parent_buildable_iface;
 
-static GQuark                vadjustment_key_id;
-static GQuark                hadjustment_key_id;
 static guint                 container_signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkContainer, gtk_container, GTK_TYPE_WIDGET,
@@ -133,9 +131,6 @@ gtk_container_class_init (GtkContainerClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-
-  vadjustment_key_id = g_quark_from_static_string ("gtk-vadjustment");
-  hadjustment_key_id = g_quark_from_static_string ("gtk-hadjustment");
 
   widget_class->destroy = gtk_container_destroy;
   widget_class->compute_expand = gtk_container_compute_expand;
@@ -611,40 +606,6 @@ static void
 gtk_container_real_set_focus_child (GtkContainer *container,
                                     GtkWidget    *focus_child)
 {
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-  g_return_if_fail (focus_child == NULL || GTK_IS_WIDGET (focus_child));
-
-  /* Check for h/v adjustments and scroll to show the focus child if possible */
-  if (focus_child)
-    {
-      GtkAdjustment *hadj;
-      GtkAdjustment *vadj;
-      gint x, y;
-
-      hadj = g_object_get_qdata (G_OBJECT (container), hadjustment_key_id);
-      vadj = g_object_get_qdata (G_OBJECT (container), vadjustment_key_id);
-      if (hadj || vadj)
-        {
-          GtkWidget *child = focus_child;
-          graphene_rect_t child_bounds;
-
-          while (gtk_widget_get_focus_child (child))
-            child = gtk_widget_get_focus_child (child);
-
-          if (!gtk_widget_translate_coordinates (child, focus_child,
-                                                 0, 0, &x, &y))
-            return;
-
-          if (!gtk_widget_compute_bounds (child, child, &child_bounds))
-            return;
-
-          if (vadj)
-            gtk_adjustment_clamp_page (vadj, y, y + child_bounds.size.height);
-
-          if (hadj)
-            gtk_adjustment_clamp_page (hadj, x, x + child_bounds.size.width);
-        }
-    }
 }
 
 static void
@@ -656,114 +617,3 @@ gtk_container_children_callback (GtkWidget *widget,
   children = (GList**) client_data;
   *children = g_list_prepend (*children, widget);
 }
-
-/**
- * gtk_container_set_focus_vadjustment:
- * @container: a #GtkContainer
- * @adjustment: an adjustment which should be adjusted when the focus
- *   is moved among the descendents of @container
- *
- * Hooks up an adjustment to focus handling in a container, so when a
- * child of the container is focused, the adjustment is scrolled to
- * show that widget. This function sets the vertical alignment. See
- * gtk_scrolled_window_get_vadjustment() for a typical way of obtaining
- * the adjustment and gtk_container_set_focus_hadjustment() for setting
- * the horizontal adjustment.
- *
- * The adjustments have to be in pixel units and in the same coordinate
- * system as the allocation for immediate children of the container.
- */
-void
-gtk_container_set_focus_vadjustment (GtkContainer  *container,
-                                     GtkAdjustment *adjustment)
-{
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-  if (adjustment)
-    g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
-
-  if (adjustment)
-    g_object_ref (adjustment);
-
-  g_object_set_qdata_full (G_OBJECT (container),
-                           vadjustment_key_id,
-                           adjustment,
-                           g_object_unref);
-}
-
-/**
- * gtk_container_get_focus_vadjustment:
- * @container: a #GtkContainer
- *
- * Retrieves the vertical focus adjustment for the container. See
- * gtk_container_set_focus_vadjustment().
- *
- * Returns: (nullable) (transfer none): the vertical focus adjustment, or
- *   %NULL if none has been set.
- **/
-GtkAdjustment *
-gtk_container_get_focus_vadjustment (GtkContainer *container)
-{
-  GtkAdjustment *vadjustment;
-
-  g_return_val_if_fail (GTK_IS_CONTAINER (container), NULL);
-
-  vadjustment = g_object_get_qdata (G_OBJECT (container), vadjustment_key_id);
-
-  return vadjustment;
-}
-
-/**
- * gtk_container_set_focus_hadjustment:
- * @container: a #GtkContainer
- * @adjustment: an adjustment which should be adjusted when the focus is
- *   moved among the descendents of @container
- *
- * Hooks up an adjustment to focus handling in a container, so when a child
- * of the container is focused, the adjustment is scrolled to show that
- * widget. This function sets the horizontal alignment.
- * See gtk_scrolled_window_get_hadjustment() for a typical way of obtaining
- * the adjustment and gtk_container_set_focus_vadjustment() for setting
- * the vertical adjustment.
- *
- * The adjustments have to be in pixel units and in the same coordinate
- * system as the allocation for immediate children of the container.
- */
-void
-gtk_container_set_focus_hadjustment (GtkContainer  *container,
-                                     GtkAdjustment *adjustment)
-{
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-  if (adjustment)
-    g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
-
-  if (adjustment)
-    g_object_ref (adjustment);
-
-  g_object_set_qdata_full (G_OBJECT (container),
-                           hadjustment_key_id,
-                           adjustment,
-                           g_object_unref);
-}
-
-/**
- * gtk_container_get_focus_hadjustment:
- * @container: a #GtkContainer
- *
- * Retrieves the horizontal focus adjustment for the container. See
- * gtk_container_set_focus_hadjustment ().
- *
- * Returns: (nullable) (transfer none): the horizontal focus adjustment, or %NULL if
- *   none has been set.
- **/
-GtkAdjustment *
-gtk_container_get_focus_hadjustment (GtkContainer *container)
-{
-  GtkAdjustment *hadjustment;
-
-  g_return_val_if_fail (GTK_IS_CONTAINER (container), NULL);
-
-  hadjustment = g_object_get_qdata (G_OBJECT (container), hadjustment_key_id);
-
-  return hadjustment;
-}
-

@@ -700,10 +700,6 @@ gtk_container_add
 gtk_container_remove
 gtk_container_foreach
 gtk_container_get_children
-gtk_container_get_focus_vadjustment
-gtk_container_set_focus_vadjustment
-gtk_container_get_focus_hadjustment
-gtk_container_set_focus_hadjustment
 gtk_container_child_type
 gtk_container_forall
 
