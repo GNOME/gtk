@@ -6135,7 +6135,7 @@ gtk_file_chooser_widget_should_respond (GtkFileChooserEmbed *chooser_embed)
 
     file_list:
 
-      g_assert (impl->action >= GTK_FILE_CHOOSER_ACTION_OPEN && impl->action < GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+      g_assert (impl->action >= GTK_FILE_CHOOSER_ACTION_OPEN && impl->action <= GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 
       if (impl->operation_mode == OPERATION_MODE_RECENT)
         {
