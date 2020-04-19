@@ -3463,41 +3463,41 @@ gtk_widget_realize (GtkWidget *widget)
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (!_gtk_widget_get_realized (widget))
+  if (priv->realized)
+    return;
+
+  gtk_widget_push_verify_invariants (widget);
+
+  /*
+    if (GTK_IS_CONTAINER (widget) && _gtk_widget_get_has_surface (widget))
+    g_message ("gtk_widget_realize(%s)", G_OBJECT_TYPE_NAME (widget));
+  */
+
+  if (priv->parent == NULL && !GTK_IS_ROOT (widget))
+    g_warning ("Calling gtk_widget_realize() on a widget that isn't "
+               "inside a toplevel window is not going to work very well. "
+               "Widgets must be inside a toplevel container before realizing them.");
+
+  if (priv->parent && !_gtk_widget_get_realized (priv->parent))
+    gtk_widget_realize (priv->parent);
+
+  g_signal_emit (widget, widget_signals[REALIZE], 0);
+
+  if (priv->multidevice)
     {
-      gtk_widget_push_verify_invariants (widget);
+      GdkSurface *surface = gtk_widget_get_surface (widget);
 
-      /*
-	if (GTK_IS_CONTAINER (widget) && _gtk_widget_get_has_surface (widget))
-	  g_message ("gtk_widget_realize(%s)", G_OBJECT_TYPE_NAME (widget));
-      */
-
-      if (priv->parent == NULL && !GTK_IS_ROOT (widget))
-        g_warning ("Calling gtk_widget_realize() on a widget that isn't "
-                   "inside a toplevel window is not going to work very well. "
-                   "Widgets must be inside a toplevel container before realizing them.");
-
-      if (priv->parent && !_gtk_widget_get_realized (priv->parent))
-	gtk_widget_realize (priv->parent);
-
-      g_signal_emit (widget, widget_signals[REALIZE], 0);
-
-      if (priv->multidevice)
-        {
-          GdkSurface *surface = gtk_widget_get_surface (widget);
-
-          gdk_surface_set_support_multidevice (surface, TRUE);
-        }
-
-      gtk_widget_update_alpha (widget);
-
-      if (priv->context)
-	gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
-      else
-        gtk_widget_get_style_context (widget);
-
-      gtk_widget_pop_verify_invariants (widget);
+      gdk_surface_set_support_multidevice (surface, TRUE);
     }
+
+  gtk_widget_update_alpha (widget);
+
+  if (priv->context)
+    gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
+  else
+    gtk_widget_get_style_context (widget);
+
+  gtk_widget_pop_verify_invariants (widget);
 }
 
 /**
