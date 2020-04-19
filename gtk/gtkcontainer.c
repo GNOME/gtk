@@ -109,8 +109,6 @@ static void     gtk_container_remove_unimplemented (GtkContainer      *container
 static void     gtk_container_compute_expand       (GtkWidget         *widget,
                                                     gboolean          *hexpand_p,
                                                     gboolean          *vexpand_p);
-static void     gtk_container_real_set_focus_child (GtkContainer      *container,
-                                                    GtkWidget         *widget);
 static void     gtk_container_children_callback    (GtkWidget         *widget,
                                                     gpointer           client_data);
 static GtkSizeRequestMode gtk_container_get_request_mode (GtkWidget   *widget);
@@ -141,7 +139,6 @@ gtk_container_class_init (GtkContainerClass *class)
   class->add = gtk_container_add_unimplemented;
   class->remove = gtk_container_remove_unimplemented;
   class->forall = NULL;
-  class->set_focus_child = gtk_container_real_set_focus_child;
   class->child_type = NULL;
 
   container_signals[ADD] =
@@ -525,31 +522,6 @@ gtk_container_foreach (GtkContainer *container,
 }
 
 /**
- * gtk_container_set_focus_child:
- * @container: a #GtkContainer
- * @child: (allow-none): a #GtkWidget, or %NULL
- *
- * Sets, or unsets if @child is %NULL, the focused child of @container.
- *
- * This function emits the GtkContainer::set_focus_child signal of
- * @container. Implementations of #GtkContainer can override the
- * default behaviour by overriding the class closure of this signal.
- *
- * This is function is mostly meant to be used by widgets. Applications can use
- * gtk_widget_grab_focus() to manually set the focus to a specific widget.
- */
-void
-gtk_container_set_focus_child (GtkContainer *container,
-                               GtkWidget    *child)
-{
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-  if (child)
-    g_return_if_fail (GTK_IS_WIDGET (child));
-
-  GTK_CONTAINER_GET_CLASS (container)->set_focus_child (container, child);
-}
-
-/**
  * gtk_container_get_children:
  * @container: a #GtkContainer
  *
@@ -600,12 +572,6 @@ gtk_container_compute_expand (GtkWidget *widget,
 
   *hexpand_p = hexpand;
   *vexpand_p = vexpand;
-}
-
-static void
-gtk_container_real_set_focus_child (GtkContainer *container,
-                                    GtkWidget    *focus_child)
-{
 }
 
 static void
