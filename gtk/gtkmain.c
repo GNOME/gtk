@@ -24,29 +24,28 @@
 
 /**
  * SECTION:gtkmain
- * @Short_description: Library initialization, main event loop, and events
- * @Title: Main loop and Events
- * @See_also:See the GLib manual, especially #GMainLoop and signal-related
+ * @Short_description: Library initialization and main loop
+ * @Title: Initialization
+ * @See_also: See the GLib manual, especially #GMainLoop and signal-related
  *    functions such as g_signal_connect()
  *
- * Before using GTK, you need to initialize it; initialization connects to the
- * window system display, and parses some standard command line arguments. The
- * gtk_init() macro initializes GTK. gtk_init() exits the application if errors
- * occur; to avoid this, use gtk_init_check(). gtk_init_check() allows you to
- * recover from a failed GTK initialization - you might start up your
- * application in text mode instead.
+ * Before using GTK, you need to initialize it using gtk_init(); this
+ * connects to the windowing system, sets up the locale and performs other
+ * initialization tasks. gtk_init() exits the application if errors occur;
+ * to avoid this, you can use gtk_init_check(), which allows you to recover
+ * from a failed GTK initialization - you might start up your application
+ * in text mode instead.
  *
  * Like all GUI toolkits, GTK uses an event-driven programming model. When the
- * user is doing nothing, GTK sits in the “main loop” and
- * waits for input. If the user performs some action - say, a mouse click - then
- * the main loop “wakes up” and delivers an event to GTK. GTK forwards the
- * event to one or more widgets.
+ * user is doing nothing, GTK sits in the “main loop” and waits for input.
+ * If the user performs some action - say, a mouse click - then the main loop
+ * “wakes up” and delivers an event to GTK. GTK forwards the event to one or
+ * more widgets.
  *
- * When widgets receive an event, they frequently emit one or more
- * “signals”. Signals notify your program that "something
- * interesting happened" by invoking functions you’ve connected to the signal
- * with g_signal_connect(). Functions connected to a signal are often termed
- * “callbacks”.
+ * When widgets receive an event, they frequently emit one or more “signals”.
+ * Signals notify your program that "something interesting happened" by invoking
+ * functions you’ve connected to the signal with g_signal_connect(). Functions
+ * connected to a signal are often called “callbacks”.
  *
  * When your callbacks are invoked, you would typically take some action - for
  * example, when an Open button is clicked you might display a
@@ -59,7 +58,7 @@
  * int
  * main (int argc, char **argv)
  * {
- *  GtkWidget *mainwin;
+ *  GtkWidget *window;
  *   // Initialize i18n support with bindtextdomain(), etc.
  *
  *   // ...
@@ -68,14 +67,14 @@
  *   gtk_init ();
  *
  *   // Create the main window
- *   mainwin = gtk_window_new ();
+ *   window = gtk_window_new ();
  *
  *   // Set up our GUI elements
  *
  *   // ...
  *
  *   // Show the application window
- *   gtk_widget_show (mainwin);
+ *   gtk_widget_show (window);
  *
  *   // Enter the main event loop, and wait for user interaction
  *   while (!done)
