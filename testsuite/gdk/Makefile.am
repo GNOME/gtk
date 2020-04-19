@@ -34,6 +34,7 @@ CLEANFILES = 			\
 	$(NULL)
 
 EXTRA_DIST += \
+	check-gdk-cairo.c	\
 	meson.build
 
 if BUILDOPT_INSTALL_TESTS

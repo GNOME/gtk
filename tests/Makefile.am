@@ -549,6 +549,8 @@ testglblending_SOURCES =	\
 listmodel_SOURCES = listmodel.c
 
 EXTRA_DIST += 			\
+	apple-red.png		\
+	dialog.ui		\
 	gradient1.png		\
 	testgtk.1 		\
 	testgtk.css		\
@@ -573,7 +575,15 @@ EXTRA_DIST += 			\
 	mydialog.ui		\
 	mydialog2.ui		\
 	popover.ui		\
+	popover2.ui		\
+	popupat.ui		\
 	selectionmode.ui	\
-	meson.build
+	meson.build		\
+	testapplication.desktop	\
+	testcolorchooser2.ui	\
+	testplacesview.c	\
+	testrc.c		\
+	testthreads.c		\
+	testtreeview-plan.txt
 
 -include $(top_srcdir)/git.mk

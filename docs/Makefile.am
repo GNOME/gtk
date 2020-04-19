@@ -8,6 +8,7 @@ EXTRA_DIST += \
 	developers.txt			\
 	dnd_internals.txt		\
 	focus_tracking.txt		\
+	iconcache.txt			\
 	RELEASE-HOWTO			\
 	sizing-test.txt			\
 	styles.txt			\

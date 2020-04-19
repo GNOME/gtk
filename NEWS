@@ -1,3 +1,18 @@
+Overview of Changes in GTK+ 3.24.18
+===================================
+
+* Wayland:
+ - Fix more sizing regressions in Epiphany and LibreOffice
+   menus, and popups in general
+
+* Build:
+ - Make resource build reproducible
+
+* Translation updates
+ Basque
+ Latvian
+
+
 Overview of Changes in GTK+ 3.24.17
 ===================================
 

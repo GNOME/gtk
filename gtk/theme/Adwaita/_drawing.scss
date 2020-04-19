@@ -193,6 +193,7 @@
   // normal button
   //
     color: $tc;
+    outline-color: if($c != $bg_color, $alt_focus_border_color, $focus_border_color);
     border-color: if($c != $bg_color, _border_color($c), $borders_color);
     border-bottom-color: if($c != $bg_color, _border_color($c, true), $alt_borders_color);
     $button_fill: if($variant == 'light', linear-gradient(to top, darken($c, 4%) 2px, $c),
@@ -227,6 +228,7 @@
   // normal button alternative look
   //
     color: $tc;
+    outline-color: if($c != $bg_color, $alt_focus_border_color, $focus_border_color);
     border-color: if($c != $bg_color, _border_color($c, true), $alt_borders_color);
     @include _button_text_shadow($tc, $c);
     @if $variant == 'light' {
@@ -386,6 +388,7 @@
     box-shadow: inset 0 1px transparentize(white, 0.9);
     text-shadow: 0 1px black;
     -gtk-icon-shadow: 0 1px black;
+    outline-color: if($c != $bg_color, $alt_focus_border_color, $focus_border_color);
   }
 
   @else if $t==osd-hover {

@@ -376,6 +376,7 @@ struct _GtkFileChooserWidgetPrivate {
   guint show_type_column : 1;
   guint create_folders : 1;
   guint auto_selecting_first_row : 1;
+  guint browse_files_interaction_frozen : 1;
 };
 
 #define MAX_LOADING_TIME 500
@@ -813,14 +814,13 @@ error_creating_folder_dialog (GtkFileChooserWidget *impl,
  */
 static void
 error_creating_folder_over_existing_file_dialog (GtkFileChooserWidget *impl,
-                                                 GFile                 *file,
-                                                 GError                *error)
+                                                 GFile                 *file)
 {
-  error_dialog (impl,
-                _("The folder could not be created, as a file with the same "
-                  "name already exists.  Try using a different name for the "
-                  "folder, or rename the file first."),
-                error);
+  error_message (impl,
+                 _("The folder could not be created, as a file with the same "
+                   "name already exists."),
+                 _("Try using a different name for the folder, or rename the "
+                   "file first."));
 }
 
 static void
@@ -1348,6 +1348,9 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
 {
   GtkFileChooserWidget *impl = (GtkFileChooserWidget *) data;
   GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  if (priv->browse_files_interaction_frozen)
+    return GDK_EVENT_STOP;
 
   if (should_trigger_location_entry (impl, event) &&
       (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
@@ -2437,6 +2440,9 @@ list_button_press_event_cb (GtkWidget            *widget,
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   static gboolean in_press = FALSE;
+
+  if (priv->browse_files_interaction_frozen)
+    return GDK_EVENT_STOP;
 
   if (in_press)
     return FALSE;
@@ -4080,6 +4086,8 @@ gtk_file_chooser_widget_map (GtkWidget *widget)
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
   profile_start ("start", NULL);
+
+  priv->browse_files_interaction_frozen = FALSE;
 
   GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->map (widget);
 
@@ -6566,6 +6574,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   response = gtk_dialog_run (GTK_DIALOG (dialog));
 
+  if (response == GTK_RESPONSE_ACCEPT)
+    /* Dialog is now going to be closed, so prevent any button/key presses to
+     * file list (will be restablished on next map()). Fixes data loss bug #2288 */
+    impl->priv->browse_files_interaction_frozen = TRUE;
+
   gtk_widget_destroy (dialog);
 
   return (response == GTK_RESPONSE_ACCEPT);
@@ -6843,8 +6856,7 @@ file_exists_get_info_cb (GCancellable *cancellable,
           /* Oops, the user typed the name of an existing path which is not
            * a folder
            */
-          error_creating_folder_over_existing_file_dialog (impl, data->file,
-                                                           g_error_copy (error));
+          error_creating_folder_over_existing_file_dialog (impl, data->file);
         }
       else
         {

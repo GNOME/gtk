@@ -471,7 +471,7 @@ stamp-gc-h: $(top_builddir)/config.status
 # Resources
 #
 
-glsl_sources := $(wildcard $(srcdir)/resources/glsl/*.glsl)
+glsl_sources := $(sort $(wildcard $(srcdir)/resources/glsl/*.glsl))
 
 gdk.gresource.xml: Makefile.am
 	$(AM_V_GEN) echo "<?xml version='1.0' encoding='UTF-8'?>" > $@; \

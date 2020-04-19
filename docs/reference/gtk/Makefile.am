@@ -385,6 +385,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/pagesetupdialog.png				\
 	$(srcdir)/images/placessidebar.png				\
 	$(srcdir)/images/popup-anchors.png				\
+	$(srcdir)/images/popup-at.svg					\
 	$(srcdir)/images/popup-flip.png					\
 	$(srcdir)/images/popup-slide.png				\
 	$(srcdir)/images/printdialog.png				\

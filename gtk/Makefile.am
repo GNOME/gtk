@@ -1752,10 +1752,15 @@ EXTRA_DIST +=                   \
 	$(gesture_sources)	\
 	$(theme_sources)	\
 	$(gsettings_SCHEMAS)	\
+	compose-parse.py	\
 	emoji/convert-emoji.c	\
 	emoji/emoji.json	\
+	emoji/emoji1.json	\
 	a11y/Makefile.inc	\
 	deprecated/Makefile.inc	\
+	glade/README.glade	\
+	glade/gtk-private-widgets.xml \
+	gtk-compose-lookaside.txt \
 	inspector/Makefile.inc	\
 	libgtk3.manifest.in	\
 	gtk-win32.rc.body.in	\
@@ -1784,7 +1789,13 @@ EXTRA_DIST +=                   \
 	deprecated/meson.build \
 	inspector/meson.build \
 	theme/Adwaita/meson.build \
-	theme/HighContrast/meson.build
+	theme/Adwaita/parse-sass.sh \
+	theme/Adwaita/render-assets.sh \
+	theme/HighContrast/assets.svg \
+	theme/HighContrast/assets.txt \
+	theme/HighContrast/meson.build \
+	theme/HighContrast/parse-sass.sh \
+	theme/HighContrast/render-assets.sh
 
 
 -include $(top_srcdir)/git.mk

@@ -46,12 +46,10 @@ $_switch_margin: if($_sizevariant=='default', 10px, 7px);
   // to the adwaita engine: using real CSS properties is faster,
   // and we don't use any outlines for now.
 
-  outline-color: $focus_border_color;
-  outline-style: solid;
+  outline: 2px solid $focus_border_color;
   outline-offset: -2px;
-  outline-width: 2px;
   -gtk-outline-radius: $button-radius;
-  :selected & { outline-color: $alt_focus_border_color; }
+
   -gtk-secondary-caret-color: $selected_bg_color
 }
 
@@ -126,6 +124,7 @@ $_switch_margin: if($_sizevariant=='default', 10px, 7px);
       @extend %selected_items;
 
       border-radius: 3px;
+      outline-color: $alt_focus_border_color;
     }
   }
 }
@@ -154,11 +153,12 @@ flowbox {
 
   flowboxchild {
     padding: 3px;
+    outline-offset: -4px;
 
     &:selected {
       @extend %selected_items;
 
-      outline-offset: -2px;
+      outline-color: $alt_focus_border_color;
     }
   }
 }
@@ -673,13 +673,18 @@ button {
   @at-root %button_selected, & {
     row:selected & {
       @if $variant == 'light' { border-color: $selected_borders_color; }
+
+      &:not(:active):not(:checked):not(:hover):not(:disabled) {
+        outline-color: $alt_focus_border_color;
+      }
     }
 
     @at-root %button_selected_flat, &.flat {
       row:selected & {
-        &:not(:active):not(:checked):not(:hover):not(disabled) {
+        &:not(:active):not(:checked):not(:hover):not(:disabled) {
           color: $selected_fg_color;
           border-color: transparent;
+          outline-color: $alt_focus_border_color;
 
           &:backdrop { color: if($variant=='light', $backdrop_base_color, $backdrop_fg_color); }
         }
@@ -836,8 +841,6 @@ button {
     // to position the needs attention dot, padding is added to the button
     // child, a label needs just lateral padding while an icon needs vertical
     // padding added too.
-
-    outline-offset: -3px; // needs to be set or it gets overriden by GtkRadioButton outline-offset
 
     > label {
       padding-left: 6px;  // label padding
@@ -1126,7 +1129,6 @@ modelbutton.flat,
   padding-left: 5px;
   padding-right: 5px;
   border-radius: $button_radius;
-  outline-offset: -2px;
 
   @extend %undecorated_button;
 
@@ -2518,7 +2520,7 @@ notebook {
       min-width: 30px;
       padding: 3px 12px;
 
-      outline-offset: -5px;
+      outline-offset: -7px;
 
       color: $insensitive_fg_color;
       font-weight: bold;
@@ -2827,8 +2829,6 @@ treeview ~ scrollbar.vertical {
  * Switch *
  **********/
 switch {
-  outline-offset: -4px;
-
   // similar to the .scale
   border: 1px solid $borders_color;
   border-radius: 14px;
@@ -2879,7 +2879,7 @@ switch {
     border: 1px solid;
     border-radius: 50%;
     transition: $button_transition;
-    -gtk-outline-radius: 20px;
+    -gtk-outline-radius: 50%;
 
     @if $variant == 'light' {
       @include button(normal-alt, $edge: $shadow_color);
@@ -3148,7 +3148,11 @@ treeview.view radio:selected { &:focus, & { @extend %radio; }} // This is a work
   }
 
   // ...on selected list rows
-  row:selected & { &:disabled, & { border-color: $selected_borders_color; }}
+  row:selected & {
+    outline-color: $alt_focus_border_color;
+
+    &:disabled, & { border-color: $selected_borders_color; }
+  }
 
   // OSD
   .osd & {
@@ -3231,7 +3235,7 @@ scale {
     highlight,
     trough {
       border-radius: 5px;
-      -gtk-outline-radius: 7px;
+      -gtk-outline-radius: 9px;
     }
   }
 
@@ -3240,7 +3244,7 @@ scale {
     @extend %scale_trough;
 
     outline-offset: 2px;
-    -gtk-outline-radius: 5px;
+    -gtk-outline-radius: 6px;
   }
 
   // the colored part of the backing bit
@@ -3853,6 +3857,7 @@ list {
 
 row {
   transition: all 150ms $ease-out-quad;
+  outline-offset: -4px;
 
   &:hover { transition: none; }
 
@@ -3877,7 +3882,11 @@ row {
     }
   }
 
-  &:selected { @extend %selected_items; }
+  &:selected {
+    @extend %selected_items;
+
+    outline-color: $alt_focus_border_color;
+  }
 }
 
 
@@ -4394,6 +4403,8 @@ colorswatch {
   // is colorswatch overlay {}, colorswatch has the programmatically set background, so most of the style is
   // applied to the overlay box.
 
+  outline-offset: -4px;
+
   &:drop(active), & { border-style: none; } // FIXME: implement a proper drop(active) state
 
   $_colorswatch_radius: 5px;
@@ -4827,7 +4838,7 @@ button.emoji-section {
   box-shadow: none;
   text-shadow: none;
 
-  outline-offset: -5px;
+  outline-offset: -7px;
 
   &:first-child { margin-left: 7px; }
   &:last-child { margin-right: 7px; }

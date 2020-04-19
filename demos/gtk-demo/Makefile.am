@@ -116,6 +116,7 @@ EXTRA_DIST += 				\
 	data/symbolic-source.svg	\
 	demo.gresource.xml		\
 	$(resource_files)		\
+	makefile.msc.in			\
 	org.gtk.Demo.gschema.xml	\
 	demos.h.win32	\
 	meson.build	\

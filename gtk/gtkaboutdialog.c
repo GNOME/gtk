@@ -125,7 +125,10 @@ static const LicenseInfo gtk_license_info [] = {
   { N_("GNU Lesser General Public License, version 2.1 only"), "https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html" },
   { N_("GNU Lesser General Public License, version 3 only"), "https://www.gnu.org/licenses/lgpl-3.0.html" },
   { N_("GNU Affero General Public License, version 3 or later"), "https://www.gnu.org/licenses/agpl-3.0.html" },
-  { N_("GNU Affero General Public License, version 3 only"), "https://www.gnu.org/licenses/agpl-3.0.html" }
+  { N_("GNU Affero General Public License, version 3 only"), "https://www.gnu.org/licenses/agpl-3.0.html" },
+  { N_("BSD 3-Clause License"), "https://opensource.org/licenses/BSD-3-Clause" },
+  { N_("Apache License, Version 2.0"), "https://opensource.org/licenses/Apache-2.0" },
+  { N_("Mozilla Public License 2.0"), "https://opensource.org/licenses/MPL-2.0" }
 };
 
 typedef struct
