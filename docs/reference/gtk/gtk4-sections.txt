@@ -6454,8 +6454,8 @@ GTK_SHORTCUTS_SHORTCUT_GET_CLASS
 GtkShortcutLabel
 gtk_shortcut_label_new
 gtk_shortcut_label_get_accelerator
-gtk_shortcut_label_get_disabled_text
 gtk_shortcut_label_set_accelerator
+gtk_shortcut_label_get_disabled_text
 gtk_shortcut_label_set_disabled_text
 
 <SUBSECTION Private>

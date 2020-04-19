@@ -285,6 +285,7 @@
       <xi:include href="xml/gtkshortcutssection.xml" />
       <xi:include href="xml/gtkshortcutsgroup.xml" />
       <xi:include href="xml/gtkshortcutsshortcut.xml" />
+      <xi:include href="xml/gtkshortcutlabel.xml" />
     </chapter>
 
     <chapter id="MiscObjects">
