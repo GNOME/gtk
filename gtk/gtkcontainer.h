@@ -59,8 +59,6 @@ struct _GtkContainer
  * @forall: Invokes callback on each child of container. The callback handler
  *    may remove the child.
  * @child_type: Returns the type of the children supported by the container.
- * @set_child_property: Set a property on a child of container.
- * @get_child_property: Get a property from a child of container.
  *
  * Base class for containers.
  */
