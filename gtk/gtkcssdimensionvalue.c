@@ -248,10 +248,10 @@ gtk_css_value_dimension_transition (GtkCssValue *start,
                                     guint        property_id,
                                     double       progress)
 {
-  if (start->unit != end->unit)
-    return NULL;
+  if (start->unit == end->unit)
+    return gtk_css_dimension_value_new (start->value + (end->value - start->value) * progress, start->unit);
 
-  return gtk_css_dimension_value_new (start->value + (end->value - start->value) * progress, start->unit);
+  return gtk_css_number_value_transition (start, end, property_id, progress);
 }
 
 static const GtkCssNumberValueClass GTK_CSS_VALUE_DIMENSION = {
