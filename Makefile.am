@@ -84,6 +84,7 @@ DISTCLEANFILES = \
 dist-hook:
 	mkdir $(distdir)/subprojects
 	cp -p $(srcdir)/subprojects/*.wrap $(distdir)/subprojects
+	$(top_srcdir)/check-version.py $(top_srcdir)/configure.ac $(top_srcdir)/meson.build
 
 distclean-local:
 	if test "$(srcdir)" = "."; then :; else \
