@@ -71,7 +71,6 @@
 
 #include "gtkfixed.h"
 
-#include "gtkcontainerprivate.h"
 #include "gtkfixedlayout.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"

@@ -19,7 +19,6 @@
 
 #include "gtkcsswidgetnodeprivate.h"
 
-#include "gtkcontainerprivate.h"
 #include "gtkcssanimatedstyleprivate.h"
 #include "gtkprivate.h"
 #include "gtksettingsprivate.h"
@@ -46,7 +45,7 @@ gtk_css_widget_node_queue_callback (GtkWidget     *widget,
   GtkCssNode *node = user_data;
 
   gtk_css_node_invalidate_frame_clock (node, TRUE);
-  _gtk_container_queue_restyle (GTK_CONTAINER (widget));
+  gtk_widget_queue_restyle (widget);
 
   return G_SOURCE_CONTINUE;
 }

@@ -27,7 +27,6 @@
 #include "gtkbox.h"
 #include "gtkrevealer.h"
 #include "gtkwidgetprivate.h"
-#include "gtkcontainerprivate.h"
 #include "gtkprivate.h"
 #include "gtkcenterbox.h"
 #include "gtkbinlayout.h"

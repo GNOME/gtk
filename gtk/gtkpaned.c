@@ -26,7 +26,6 @@
 
 #include "gtkpaned.h"
 
-#include "gtkcontainerprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkeventcontrollermotion.h"
