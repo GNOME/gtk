@@ -38,44 +38,6 @@
 
 G_BEGIN_DECLS
 
-/* Size restriction enumeration.
- */
-/**
- * GdkSurfaceHints:
- * @GDK_HINT_POS: indicates that the program has positioned the surface
- * @GDK_HINT_MIN_SIZE: min size fields are set
- * @GDK_HINT_MAX_SIZE: max size fields are set
- * @GDK_HINT_BASE_SIZE: base size fields are set
- * @GDK_HINT_ASPECT: aspect ratio fields are set
- * @GDK_HINT_RESIZE_INC: resize increment fields are set
- * @GDK_HINT_WIN_GRAVITY: surface gravity field is set
- * @GDK_HINT_USER_POS: indicates that the surface’s position was explicitly set
- *  by the user
- * @GDK_HINT_USER_SIZE: indicates that the surface’s size was explicitly set by
- *  the user
- *
- * Used to indicate which fields of a #GdkGeometry struct should be paid
- * attention to. Also, the presence/absence of @GDK_HINT_POS,
- * @GDK_HINT_USER_POS, and @GDK_HINT_USER_SIZE is significant, though they don't
- * directly refer to #GdkGeometry fields. @GDK_HINT_USER_POS will be set
- * automatically by #GtkWindow if you call gtk_window_move().
- * @GDK_HINT_USER_POS and @GDK_HINT_USER_SIZE should be set if the user
- * specified a size/position using a --geometry command-line argument;
- * gtk_window_parse_geometry() automatically sets these flags.
- */
-typedef enum
-{
-  GDK_HINT_POS	       = 1 << 0,
-  GDK_HINT_MIN_SIZE    = 1 << 1,
-  GDK_HINT_MAX_SIZE    = 1 << 2,
-  GDK_HINT_BASE_SIZE   = 1 << 3,
-  GDK_HINT_ASPECT      = 1 << 4,
-  GDK_HINT_RESIZE_INC  = 1 << 5,
-  GDK_HINT_WIN_GRAVITY = 1 << 6,
-  GDK_HINT_USER_POS    = 1 << 7,
-  GDK_HINT_USER_SIZE   = 1 << 8
-} GdkSurfaceHints;
-
 /**
  * GdkSurfaceEdge:
  * @GDK_SURFACE_EDGE_NORTH_WEST: the top left corner.
@@ -114,97 +76,6 @@ typedef enum
   GDK_FULLSCREEN_ON_CURRENT_MONITOR,
   GDK_FULLSCREEN_ON_ALL_MONITORS
 } GdkFullscreenMode;
-
-/**
- * GdkGeometry:
- * @min_width: minimum width of surface (or -1 to use requisition, with
- *  #GtkWindow only)
- * @min_height: minimum height of surface (or -1 to use requisition, with
- *  #GtkWindow only)
- * @max_width: maximum width of surface (or -1 to use requisition, with
- *  #GtkWindow only)
- * @max_height: maximum height of surface (or -1 to use requisition, with
- *  #GtkWindow only)
- * @base_width: allowed surface widths are @base_width + @width_inc * N where N
- *  is any integer (-1 allowed with #GtkWindow)
- * @base_height: allowed surface widths are @base_height + @height_inc * N where
- *  N is any integer (-1 allowed with #GtkWindow)
- * @width_inc: width resize increment
- * @height_inc: height resize increment
- * @min_aspect: minimum width/height ratio
- * @max_aspect: maximum width/height ratio
- * @win_gravity: surface gravity, see gtk_window_set_gravity()
- *
- * The #GdkGeometry struct gives the window manager information about
- * a surface’s geometry constraints. Normally you would set these on
- * the GTK+ level using gtk_window_set_geometry_hints(). #GtkWindow
- * then sets the hints on the #GdkSurface it creates.
- *
- * gdk_surface_set_geometry_hints() expects the hints to be fully valid already
- * and simply passes them to the window manager; in contrast,
- * gtk_window_set_geometry_hints() performs some interpretation. For example,
- * #GtkWindow will apply the hints to the geometry widget instead of the
- * toplevel window, if you set a geometry widget. Also, the
- * @min_width/@min_height/@max_width/@max_height fields may be set to -1, and
- * #GtkWindow will substitute the size request of the surface or geometry widget.
- * If the minimum size hint is not provided, #GtkWindow will use its requisition
- * as the minimum size. If the minimum size is provided and a geometry widget is
- * set, #GtkWindow will take the minimum size as the minimum size of the
- * geometry widget rather than the entire surface. The base size is treated
- * similarly.
- *
- * The canonical use-case for gtk_window_set_geometry_hints() is to get a
- * terminal widget to resize properly. Here, the terminal text area should be
- * the geometry widget; #GtkWindow will then automatically set the base size to
- * the size of other widgets in the terminal window, such as the menubar and
- * scrollbar. Then, the @width_inc and @height_inc fields should be set to the
- * size of one character in the terminal. Finally, the base size should be set
- * to the size of one character. The net effect is that the minimum size of the
- * terminal will have a 1x1 character terminal area, and only terminal sizes on
- * the “character grid” will be allowed.
- *
- * Here’s an example of how the terminal example would be implemented, assuming
- * a terminal area widget called “terminal” and a toplevel window “toplevel”:
- *
- * |[<!-- language="C" -->
- * 	GdkGeometry hints;
- *
- * 	hints.base_width = terminal->char_width;
- *         hints.base_height = terminal->char_height;
- *         hints.min_width = terminal->char_width;
- *         hints.min_height = terminal->char_height;
- *         hints.width_inc = terminal->char_width;
- *         hints.height_inc = terminal->char_height;
- *
- *  gtk_window_set_geometry_hints (GTK_WINDOW (toplevel),
- *                                 GTK_WIDGET (terminal),
- *                                 &hints,
- *                                 GDK_HINT_RESIZE_INC |
- *                                 GDK_HINT_MIN_SIZE |
- *                                 GDK_HINT_BASE_SIZE);
- * ]|
- *
- * The other useful fields are the @min_aspect and @max_aspect fields; these
- * contain a width/height ratio as a floating point number. If a geometry widget
- * is set, the aspect applies to the geometry widget rather than the entire
- * window. The most common use of these hints is probably to set @min_aspect and
- * @max_aspect to the same value, thus forcing the window to keep a constant
- * aspect ratio.
- */
-struct _GdkGeometry
-{
-  gint min_width;
-  gint min_height;
-  gint max_width;
-  gint max_height;
-  gint base_width;
-  gint base_height;
-  gint width_inc;
-  gint height_inc;
-  gdouble min_aspect;
-  gdouble max_aspect;
-  GdkGravity win_gravity;
-};
 
 /**
  * GdkSurfaceState:
@@ -361,14 +232,6 @@ GDK_AVAILABLE_IN_ALL
 void       gdk_surface_freeze_updates      (GdkSurface    *surface);
 GDK_AVAILABLE_IN_ALL
 void       gdk_surface_thaw_updates        (GdkSurface    *surface);
-
-GDK_AVAILABLE_IN_ALL
-void       gdk_surface_constrain_size      (GdkGeometry    *geometry,
-                                            GdkSurfaceHints  flags,
-                                            gint            width,
-                                            gint            height,
-                                            gint           *new_width,
-                                            gint           *new_height);
 
 GDK_AVAILABLE_IN_ALL
 void       gdk_surface_set_support_multidevice (GdkSurface *surface,

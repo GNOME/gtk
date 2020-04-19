@@ -171,8 +171,6 @@ gdk_rgba_get_type
 <TITLE>GdkSurface</TITLE>
 <FILE>gdksurface</FILE>
 GdkSurface
-GdkSurfaceHints
-GdkGeometry
 GdkGravity
 GdkSurfaceEdge
 GdkSurfaceTypeHint
@@ -190,7 +188,6 @@ gdk_surface_get_height
 gdk_surface_translate_coordinates
 gdk_surface_begin_resize_drag
 gdk_surface_begin_move_drag
-gdk_surface_constrain_size
 gdk_surface_beep
 gdk_surface_get_scale_factor
 gdk_surface_set_opaque_region

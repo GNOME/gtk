@@ -301,6 +301,41 @@ void gdk_surface_get_geometry (GdkSurface *surface,
 
 GdkGLContext *gdk_surface_get_shared_data_gl_context (GdkSurface *surface);
 
+typedef enum
+{
+  GDK_HINT_POS         = 1 << 0,
+  GDK_HINT_MIN_SIZE    = 1 << 1,
+  GDK_HINT_MAX_SIZE    = 1 << 2,
+  GDK_HINT_BASE_SIZE   = 1 << 3,
+  GDK_HINT_ASPECT      = 1 << 4,
+  GDK_HINT_RESIZE_INC  = 1 << 5,
+  GDK_HINT_WIN_GRAVITY = 1 << 6,
+  GDK_HINT_USER_POS    = 1 << 7,
+  GDK_HINT_USER_SIZE   = 1 << 8
+} GdkSurfaceHints;
+
+struct _GdkGeometry
+{
+  gint min_width;
+  gint min_height;
+  gint max_width;
+  gint max_height;
+  gint base_width;
+  gint base_height;
+  gint width_inc;
+  gint height_inc;
+  gdouble min_aspect;
+  gdouble max_aspect;
+  GdkGravity win_gravity;
+};
+
+GDK_AVAILABLE_IN_ALL
+void       gdk_surface_constrain_size      (GdkGeometry    *geometry,
+                                            GdkSurfaceHints  flags,
+                                            gint            width,
+                                            gint            height,
+                                            gint           *new_width,
+                                            gint           *new_height);
 
 /*
  * GdkSeatGrabPrepareFunc:
