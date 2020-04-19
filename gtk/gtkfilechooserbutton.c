@@ -2550,7 +2550,8 @@ update_label_and_image (GtkFileChooserButton *button)
 	    }
         }
 
-      if (g_file_is_native (file))
+      if (g_file_is_native (file) ||
+          !_gtk_bookmarks_manager_has_bookmark (button->priv->bookmarks_manager, file))
         {
           priv->update_button_cancellable =
             _gtk_file_system_get_info (priv->fs, file,
