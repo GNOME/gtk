@@ -186,11 +186,9 @@ struct _GtkWidget
  *   %FALSE, and just grabs the focus if @group_cycling is %TRUE.
  * @grab_focus: Causes @widget to have the keyboard focus for the
  *   #GtkWindow it’s inside.
- * @focus:
+ * @focus: Vfunc for gtk_widget_child_focus()
  * @move_focus: Signal emitted when a change of focus is requested
  * @keynav_failed: Signal emitted if keyboard navigation fails.
- * @popup_menu: Signal emitted whenever a widget should pop up a
- *   context menu.
  * @get_accessible: Returns the accessible object that describes the
  *   widget to an assistive technology.
  * @can_activate_accel: Signal allows applications and derived widgets
@@ -201,7 +199,7 @@ struct _GtkWidget
  *   widget; or emitted when widget got focus in keyboard mode.
  * @compute_expand: Computes whether a container should give this
  *   widget extra space when possible.
- * @css_changed: Signal emitted when the CSS used by widget was changed. Widgets
+ * @css_changed: Vfunc called when the CSS used by widget was changed. Widgets
  *   should then discard their caches that depend on CSS and queue resizes or
  *   redraws accordingly. The default implementation will take care of this for
  *   all the default CSS properties, so implementations must chain up.
