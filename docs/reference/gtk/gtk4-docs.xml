@@ -19,11 +19,15 @@
   </bookinfo>
 
   <part id="gtk">
-    <title>GTK Overview</title>
+    <title>Introduction</title>
     <xi:include href="overview.xml"/>
     <xi:include href="xml/getting_started.xml"/>
     <xi:include href="resources.xml" />
     <xi:include href="xml/question_index.xml" />
+  </part>
+
+  <part id="concepts">
+    <title>GTK Concepts</title>
     <xi:include href="xml/drawing-model.xml" />
     <xi:include href="xml/input-handling.xml" />
     <xi:include href="xml/actions.xml" />
