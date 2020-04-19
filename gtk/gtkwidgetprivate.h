@@ -111,6 +111,8 @@ struct _GtkWidgetPrivate
   guint   halign              : 4;
   guint   valign              : 4;
 
+  guint   restyle_pending     : 1;
+
   GtkOverflow overflow;
   guint8 alpha;
   guint8 user_alpha;
@@ -127,6 +129,8 @@ struct _GtkWidgetPrivate
   /* Animations and other things to update on clock ticks */
   guint clock_tick_id;
   GList *tick_callbacks;
+
+  guint resize_handler;
 
   /* Surface relative transform updates callbacks */
   GtkWidgetSurfaceTransformData *surface_transform_data;
@@ -360,6 +364,11 @@ guint             gtk_widget_add_surface_transform_changed_callback (GtkWidget  
 
 void              gtk_widget_remove_surface_transform_changed_callback (GtkWidget *widget,
                                                                         guint      id);
+
+/* resize machinery */
+void     gtk_widget_queue_restyle    (GtkWidget        *widget);
+void     gtk_widget_stop_idle_sizer  (GtkWidget        *widget);
+void     gtk_widget_start_idle_sizer (GtkWidget        *widget);
 
 /* focus vfuncs for non-focusable non-containers */
 gboolean gtk_widget_grab_focus_none  (GtkWidget        *widget);

@@ -114,7 +114,6 @@
 
 #include "gtkbox.h"
 #include "gtkbuildable.h"
-#include "gtkcontainerprivate.h"
 #include "gtkdropcontrollermotion.h"
 #include "gtkbuiltiniconprivate.h"
 #include "gtkgestureclick.h"

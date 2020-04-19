@@ -22,7 +22,6 @@
 
 #include "gtkgrid.h"
 
-#include "gtkcontainerprivate.h"
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkgridlayout.h"
 #include "gtkorientableprivate.h"

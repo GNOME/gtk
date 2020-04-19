@@ -25,7 +25,6 @@
 #include "gtkstack.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkcontainerprivate.h"
 #include "gtkprogresstrackerprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtksnapshot.h"
