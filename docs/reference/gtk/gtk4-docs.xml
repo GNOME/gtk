@@ -117,9 +117,10 @@
       <xi:include href="xml/gtklayoutchild.xml" />
       <xi:include href="xml/gtkbinlayout.xml" />
       <xi:include href="xml/gtkboxlayout.xml" />
-      <xi:include href="xml/gtkcustomlayout.xml" />
+      <xi:include href="xml/gtkcenterlayout.xml" />
       <xi:include href="xml/gtkfixedlayout.xml" />
       <xi:include href="xml/gtkgridlayout.xml" />
+      <xi:include href="xml/gtkcustomlayout.xml" />
       <xi:include href="xml/gtkconstraintlayout.xml" />
       <xi:include href="xml/gtkconstraint.xml" />
       <xi:include href="xml/gtkconstraintguide.xml" />
