@@ -301,31 +301,6 @@ void gdk_surface_get_geometry (GdkSurface *surface,
 
 GdkGLContext *gdk_surface_get_shared_data_gl_context (GdkSurface *surface);
 
-/* Size restriction enumeration.
- */
-/**
- * GdkSurfaceHints:
- * @GDK_HINT_POS: indicates that the program has positioned the surface
- * @GDK_HINT_MIN_SIZE: min size fields are set
- * @GDK_HINT_MAX_SIZE: max size fields are set
- * @GDK_HINT_BASE_SIZE: base size fields are set
- * @GDK_HINT_ASPECT: aspect ratio fields are set
- * @GDK_HINT_RESIZE_INC: resize increment fields are set
- * @GDK_HINT_WIN_GRAVITY: surface gravity field is set
- * @GDK_HINT_USER_POS: indicates that the surface’s position was explicitly set
- *  by the user
- * @GDK_HINT_USER_SIZE: indicates that the surface’s size was explicitly set by
- *  the user
- *
- * Used to indicate which fields of a #GdkGeometry struct should be paid
- * attention to. Also, the presence/absence of @GDK_HINT_POS,
- * @GDK_HINT_USER_POS, and @GDK_HINT_USER_SIZE is significant, though they don't
- * directly refer to #GdkGeometry fields. @GDK_HINT_USER_POS will be set
- * automatically by #GtkWindow if you call gtk_window_move().
- * @GDK_HINT_USER_POS and @GDK_HINT_USER_SIZE should be set if the user
- * specified a size/position using a --geometry command-line argument;
- * gtk_window_parse_geometry() automatically sets these flags.
- */
 typedef enum
 {
   GDK_HINT_POS         = 1 << 0,
@@ -338,6 +313,21 @@ typedef enum
   GDK_HINT_USER_POS    = 1 << 7,
   GDK_HINT_USER_SIZE   = 1 << 8
 } GdkSurfaceHints;
+
+struct _GdkGeometry
+{
+  gint min_width;
+  gint min_height;
+  gint max_width;
+  gint max_height;
+  gint base_width;
+  gint base_height;
+  gint width_inc;
+  gint height_inc;
+  gdouble min_aspect;
+  gdouble max_aspect;
+  GdkGravity win_gravity;
+};
 
 GDK_AVAILABLE_IN_ALL
 void       gdk_surface_constrain_size      (GdkGeometry    *geometry,

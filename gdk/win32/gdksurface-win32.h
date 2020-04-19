@@ -30,6 +30,7 @@
 #include "gdk/win32/gdkwin32surface.h"
 #include "gdk/gdksurfaceprivate.h"
 #include "gdk/gdkcursor.h"
+#include "gdk/gdkinternals.h"
 
 #include <windows.h>
 
