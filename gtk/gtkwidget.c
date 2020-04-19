@@ -31,7 +31,6 @@
 #include "gtkapplicationprivate.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
-#include "gtkcontainerprivate.h"
 #include "gtkcssboxesprivate.h"
 #include "gtkcssfiltervalueprivate.h"
 #include "gtkcsstransformvalueprivate.h"
@@ -3104,9 +3103,6 @@ gtk_widget_connect_frame_clock (GtkWidget *widget)
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkFrameClock *frame_clock;
 
-  if (GTK_IS_CONTAINER (widget) && GTK_IS_ROOT (widget))
-    gtk_container_start_idle_sizer (GTK_CONTAINER (widget));
-
   frame_clock = gtk_widget_get_frame_clock (widget);
 
   if (priv->tick_callbacks != NULL && !priv->clock_tick_id)
@@ -3124,9 +3120,6 @@ static void
 gtk_widget_disconnect_frame_clock (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  if (GTK_IS_CONTAINER (widget) && GTK_IS_ROOT (widget))
-    gtk_container_stop_idle_sizer (GTK_CONTAINER (widget));
 
   gtk_css_node_invalidate_frame_clock (priv->cssnode, FALSE);
 
@@ -10444,9 +10437,9 @@ gtk_widget_set_alloc_needed (GtkWidget *widget)
       if (!priv->visible)
         break;
 
-      if (GTK_IS_ROOT (widget))
+      if (GTK_IS_WINDOW (widget))
         {
-          gtk_container_start_idle_sizer (GTK_CONTAINER (widget));
+          gtk_window_start_layout (GTK_WINDOW (widget));
           break;
         }
 

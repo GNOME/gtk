@@ -32,7 +32,6 @@
 #include "gtkbuildable.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"
-#include "gtkcontainerprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtklabel.h"
