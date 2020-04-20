@@ -3211,6 +3211,13 @@ frame,
   &:backdrop { border-color: $backdrop_borders_color; }
 }
 
+statusbar {
+  padding: 6px 10px;
+  border-top: 1px solid $borders_color;
+
+  &:backdrop { border-color: $backdrop_borders_color; }
+}
+
 actionbar > revealer >  box {
   padding: 6px;
   border-top: 1px solid $borders_color;
@@ -4451,8 +4458,4 @@ popover.menu {
     font-weight: bold;
     padding: 4px ($_menu-padding + 20px); //this will fall apart with font sizing
   }
-}
-
-statusbar {
-  padding: 6px 10px 6px 10px;
 }
