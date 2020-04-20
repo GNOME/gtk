@@ -1,5 +1,6 @@
 /* GTK - The GIMP Toolkit
  * Copyright 2001 Sun Microsystems Inc.
+ * Copyright 2020 GNOME Foundation
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -40,12 +41,13 @@
  * in #GtkWidgetClass.
  */
 
-struct _GtkAccessiblePrivate
+typedef struct
 {
   GtkWidget *widget;
-};
+} GtkAccessiblePrivate;
 
-enum {
+enum
+{
   PROP_0,
   PROP_WIDGET
 };
@@ -78,7 +80,7 @@ gtk_accessible_get_property (GObject    *object,
                              GParamSpec *pspec)
 {
   GtkAccessible *accessible = GTK_ACCESSIBLE (object);
-  GtkAccessiblePrivate *priv = accessible->priv;
+  GtkAccessiblePrivate *priv = gtk_accessible_get_instance_private (accessible);
 
   switch (prop_id)
     {
@@ -94,18 +96,18 @@ gtk_accessible_get_property (GObject    *object,
 static void
 gtk_accessible_init (GtkAccessible *accessible)
 {
-  accessible->priv = gtk_accessible_get_instance_private (accessible);
 }
 
 static AtkStateSet *
 gtk_accessible_ref_state_set (AtkObject *object)
 {
   GtkAccessible *accessible = GTK_ACCESSIBLE (object);
+  GtkAccessiblePrivate *priv = gtk_accessible_get_instance_private (accessible);
   AtkStateSet *state_set;
 
   state_set = ATK_OBJECT_CLASS (gtk_accessible_parent_class)->ref_state_set (object);
 
-  if (accessible->priv->widget == NULL)
+  if (priv->widget == NULL)
     atk_state_set_add_state (state_set, ATK_STATE_DEFUNCT);
 
   return state_set;
@@ -172,23 +174,20 @@ void
 gtk_accessible_set_widget (GtkAccessible *accessible,
                            GtkWidget     *widget)
 {
-  GtkAccessiblePrivate *priv;
+  GtkAccessiblePrivate *priv = gtk_accessible_get_instance_private (accessible);
   GtkAccessibleClass *klass;
 
   g_return_if_fail (GTK_IS_ACCESSIBLE (accessible));
 
-  priv = accessible->priv;
-  klass = GTK_ACCESSIBLE_GET_CLASS (accessible);
-
   if (priv->widget == widget)
     return;
 
+  klass = GTK_ACCESSIBLE_GET_CLASS (accessible);
   if (priv->widget)
     klass->widget_unset (accessible);
 
   priv->widget = widget;
-
-  if (widget)
+  if (priv->widget)
     klass->widget_set (accessible);
 
   g_object_notify (G_OBJECT (accessible), "widget");
@@ -208,8 +207,9 @@ gtk_accessible_set_widget (GtkAccessible *accessible,
 GtkWidget*
 gtk_accessible_get_widget (GtkAccessible *accessible)
 {
+  GtkAccessiblePrivate *priv = gtk_accessible_get_instance_private (accessible);
+
   g_return_val_if_fail (GTK_IS_ACCESSIBLE (accessible), NULL);
 
-  return accessible->priv->widget;
+  return priv->widget;
 }
-
