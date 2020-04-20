@@ -23,7 +23,6 @@ private_headers = [
   'gtkcolorscaleprivate.h',
   'gtkcolorswatchprivate.h',
   'gtkcomboboxprivate.h',
-  'gtkcontainerprivate.h',
   'gtkconstraintexpressionprivate.h',
   'gtkconstraintguideprivate.h',
   'gtkconstraintlayoutprivate.h',

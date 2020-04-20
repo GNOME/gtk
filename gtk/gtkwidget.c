@@ -31,7 +31,6 @@
 #include "gtkapplicationprivate.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
-#include "gtkcontainerprivate.h"
 #include "gtkcssboxesprivate.h"
 #include "gtkcssfiltervalueprivate.h"
 #include "gtkcsstransformvalueprivate.h"
@@ -594,6 +593,8 @@ static gboolean gtk_widget_real_query_tooltip    (GtkWidget         *widget,
 static void     gtk_widget_real_css_changed      (GtkWidget         *widget,
                                                   GtkCssStyleChange *change);
 
+static void             gtk_widget_real_set_focus_child         (GtkWidget        *widget,
+                                                                 GtkWidget        *child);
 static void             gtk_widget_real_move_focus              (GtkWidget        *widget,
                                                                  GtkDirectionType  direction);
 static gboolean		gtk_widget_real_keynav_failed		(GtkWidget        *widget,
@@ -905,6 +906,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->mnemonic_activate = gtk_widget_real_mnemonic_activate;
   klass->grab_focus = gtk_widget_grab_focus_self;
   klass->focus = gtk_widget_focus_all;
+  klass->set_focus_child = gtk_widget_real_set_focus_child;
   klass->move_focus = gtk_widget_real_move_focus;
   klass->keynav_failed = gtk_widget_real_keynav_failed;
   klass->query_tooltip = gtk_widget_real_query_tooltip;
@@ -3101,9 +3103,6 @@ gtk_widget_connect_frame_clock (GtkWidget *widget)
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkFrameClock *frame_clock;
 
-  if (GTK_IS_CONTAINER (widget) && GTK_IS_ROOT (widget))
-    gtk_container_start_idle_sizer (GTK_CONTAINER (widget));
-
   frame_clock = gtk_widget_get_frame_clock (widget);
 
   if (priv->tick_callbacks != NULL && !priv->clock_tick_id)
@@ -3121,9 +3120,6 @@ static void
 gtk_widget_disconnect_frame_clock (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  if (GTK_IS_CONTAINER (widget) && GTK_IS_ROOT (widget))
-    gtk_container_stop_idle_sizer (GTK_CONTAINER (widget));
 
   gtk_css_node_invalidate_frame_clock (priv->cssnode, FALSE);
 
@@ -10441,9 +10437,9 @@ gtk_widget_set_alloc_needed (GtkWidget *widget)
       if (!priv->visible)
         break;
 
-      if (GTK_IS_ROOT (widget))
+      if (GTK_IS_WINDOW (widget))
         {
-          gtk_container_start_idle_sizer (GTK_CONTAINER (widget));
+          gtk_window_start_layout (GTK_WINDOW (widget));
           break;
         }
 
@@ -12000,8 +11996,6 @@ void
 gtk_widget_set_focus_child (GtkWidget *widget,
                             GtkWidget *child)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (child != NULL)
@@ -12009,6 +12003,15 @@ gtk_widget_set_focus_child (GtkWidget *widget,
       g_return_if_fail (GTK_IS_WIDGET (child));
       g_return_if_fail (gtk_widget_get_parent (child) == widget);
     }
+
+  GTK_WIDGET_GET_CLASS (widget)->set_focus_child (widget, child);
+}
+
+static void
+gtk_widget_real_set_focus_child (GtkWidget *widget,
+                                 GtkWidget *child)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_set_object (&priv->focus_child, child);
 }
