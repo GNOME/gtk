@@ -25,6 +25,8 @@ G_BEGIN_DECLS
 void _gtk_widget_accessible_set_layer (GtkWidgetAccessible *accessible,
                                        AtkLayer             layer);
 
+void gtk_widget_accessible_update_bounds (GtkWidgetAccessible *self);
+
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_ACCESSIBLE_PRIVATE_H__ */
