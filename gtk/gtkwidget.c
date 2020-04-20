@@ -74,7 +74,7 @@
 #include "gtknativeprivate.h"
 #include "gtkconstraint.h"
 
-#include "a11y/gtkwidgetaccessible.h"
+#include "a11y/gtkwidgetaccessibleprivate.h"
 #include "inspector/window.h"
 
 #include "gdk/gdkeventsprivate.h"
@@ -4122,6 +4122,9 @@ gtk_widget_allocate (GtkWidget    *widget,
   priv->alloc_needed_on_child = FALSE;
 
   gtk_widget_update_paintables (widget);
+
+  if (priv->accessible != NULL)
+    gtk_widget_accessible_update_bounds (GTK_WIDGET_ACCESSIBLE (priv->accessible));
 
 skip_allocate:
   if (size_changed || baseline_changed)
