@@ -36,6 +36,10 @@ Overview of Changes in GTK 3.98.3
  - Change :can-focus to be recursive
  - Fix GtkWindow:is-active setting
 
+* Scrolling
+ - gtk_container_set_focus_[hv]adjustment has been removed
+ - gtk_viewport_set_scroll_to_focus has been added
+
 * Accessibility:
  - Add a cursor-aspect-ratio setting
  - Set focus-related states properly
@@ -47,6 +51,7 @@ Overview of Changes in GTK 3.98.3
 * Wayland:
  - Fix .Compose file loading
  - Support popup repositioning
+ - Fix problems with autohide popovers
 
 * GDK:
  - Remove GdkKeymap from public API, replaced by
