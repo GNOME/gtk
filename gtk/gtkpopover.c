@@ -920,12 +920,20 @@ gtk_popover_show (GtkWidget *widget)
     {
       if (!gtk_widget_get_focus_child (widget))
         gtk_widget_child_focus (widget, GTK_DIR_TAB_FORWARD);
+
+      gtk_grab_add (widget);
     }
 }
 
 static void
 gtk_popover_hide (GtkWidget *widget)
 {
+  GtkPopover *popover = GTK_POPOVER (widget);
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  if (priv->autohide)
+    gtk_grab_remove (widget);
+
   gtk_popover_set_mnemonics_visible (GTK_POPOVER (widget), FALSE);
   _gtk_widget_set_visible_flag (widget, FALSE);
   gtk_widget_unmap (widget);
