@@ -1086,18 +1086,60 @@ gtk_label_class_init (GtkLabelClass *class)
 
   quark_mnemonics_visible_connected = g_quark_from_static_string ("gtk-label-mnemonics-visible-connected");
 
+  /**
+   * GtkLabel|clipboard.cut:
+   *
+   * Doesn't do anything, since text in labels can't be deleted.
+   */
   gtk_widget_class_install_action (widget_class, "clipboard.cut", NULL,
                                    gtk_label_nop);
+
+  /**
+   * GtkLabel|clipboard.copy:
+   *
+   * Copies the text to the clipboard.
+   */
   gtk_widget_class_install_action (widget_class, "clipboard.copy", NULL,
                                    gtk_label_activate_clipboard_copy);
+
+  /**
+   * GtkLabel|clipboard.paste:
+   *
+   * Doesn't do anything, since text in labels can't be edited.
+   */
   gtk_widget_class_install_action (widget_class, "clipboard.paste", NULL,
                                    gtk_label_nop);
+
+  /**
+   * GtkLabel|selection.delete:
+   *
+   * Doesn't do anything, since text in labels can't be deleted.
+   */
   gtk_widget_class_install_action (widget_class, "selection.delete", NULL,
                                    gtk_label_nop);
+
+  /**
+   * GtkLabel|selection.select-all:
+   *
+   * Selects all of the text, if the label allows selection.
+   */
   gtk_widget_class_install_action (widget_class, "selection.select-all", NULL,
                                    gtk_label_activate_selection_select_all);
+
+  /**
+   * GtkLabel|link.open:
+   *
+   * Opens the link, when activated on a link inside the label.
+   */
   gtk_widget_class_install_action (widget_class, "link.open", NULL,
                                    gtk_label_activate_link_open);
+
+  /**
+   * GtkLabel|link.copy:
+   *
+   * Copies the link to the clipboard, when activated on a link
+   * inside the label.
+   */
   gtk_widget_class_install_action (widget_class, "link.copy", NULL,
                                    gtk_label_activate_link_copy);
 }

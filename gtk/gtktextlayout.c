@@ -318,7 +318,7 @@ free_style_cache (GtkTextLayout *text_layout)
     }
 }
 
-/**
+/*
  * gtk_text_layout_set_buffer:
  * @buffer: (allow-none):
  */
@@ -724,7 +724,7 @@ gtk_text_layout_wrap (GtkTextLayout *layout,
 }
 
 
-/**
+/*
  * gtk_text_layout_get_lines:
  *
  * Returns: (element-type GtkTextLine) (transfer container):

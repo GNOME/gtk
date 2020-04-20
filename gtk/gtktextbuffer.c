@@ -4941,6 +4941,14 @@ gtk_text_buffer_real_redo (GtkTextBuffer *buffer)
     gtk_text_history_redo (buffer->priv->history);
 }
 
+/**
+ * gtk_text_buffer_get_can_undo:
+ * @buffer: a #GtkTextBuffer
+ *
+ * Gets whether there is an undoable action in the history.
+ *
+ * Returns: %TRUE if there is an undoable action
+ */
 gboolean
 gtk_text_buffer_get_can_undo (GtkTextBuffer *buffer)
 {
@@ -4949,6 +4957,14 @@ gtk_text_buffer_get_can_undo (GtkTextBuffer *buffer)
   return gtk_text_history_get_can_undo (buffer->priv->history);
 }
 
+/**
+ * gtk_text_buffer_get_can_redo:
+ * @buffer: a #GtkTextBuffer
+ *
+ * Gets whether there is a redoable action in the history.
+ *
+ * Returns: %TRUE if there is an redoable action
+ */
 gboolean
 gtk_text_buffer_get_can_redo (GtkTextBuffer *buffer)
 {
@@ -5080,6 +5096,7 @@ gtk_text_buffer_get_enable_undo (GtkTextBuffer *buffer)
 /**
  * gtk_text_buffer_set_enable_undo:
  * @buffer: a #GtkTextBuffer
+ * @enable_undo: %TRUE to enable undo
  *
  * Sets whether or not to enable undoable actions in the text buffer. If
  * enabled, the user will be able to undo the last number of actions up to
@@ -5091,13 +5108,13 @@ gtk_text_buffer_get_enable_undo (GtkTextBuffer *buffer)
  */
 void
 gtk_text_buffer_set_enable_undo (GtkTextBuffer *buffer,
-                                 gboolean       enabled)
+                                 gboolean       enable_undo)
 {
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
 
-  if (enabled != gtk_text_history_get_enabled (buffer->priv->history))
+  if (enable_undo != gtk_text_history_get_enabled (buffer->priv->history))
     {
-      gtk_text_history_set_enabled (buffer->priv->history, enabled);
+      gtk_text_history_set_enabled (buffer->priv->history, enable_undo);
       g_object_notify_by_pspec (G_OBJECT (buffer),
                                 text_buffer_props[PROP_ENABLE_UNDO]);
     }

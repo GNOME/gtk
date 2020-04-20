@@ -568,6 +568,7 @@ gtk_center_layout_set_orientation (GtkCenterLayout *self,
  * gtk_center_layout_get_orientation:
  * @self: a #GtkCenterLayout
  *
+ * Gets the current orienration of the layout manager.
  *
  * Returns: The current orientation of @self
  */
@@ -599,6 +600,8 @@ gtk_center_layout_set_baseline_position (GtkCenterLayout     *self,
  * gtk_center_layout_get_baseline_position:
  * @self: a #GtkCenterLayout
  *
+ * Returns the baseline position of the layout.
+ *
  * Returns: The current baseline position of @self.
  */
 GtkBaselinePosition
@@ -624,6 +627,8 @@ gtk_center_layout_set_start_widget (GtkCenterLayout *self,
 /**
  * gtk_center_layout_get_start_widget:
  * @self: a #GtkCenterLayout
+ *
+ * Returns the start widget fo the layout.
  *
  * Returns: (transfer none): The current start widget of @self
  */
@@ -651,6 +656,8 @@ gtk_center_layout_set_center_widget (GtkCenterLayout *self,
  * gtk_center_layout_get_center_widget:
  * @self: a #GtkCenterLayout
  *
+ * Returns the center widget of the layout.
+ *
  * Returns: (transfer none): the current center widget of @self
  */
 GtkWidget *
@@ -676,6 +683,8 @@ gtk_center_layout_set_end_widget (GtkCenterLayout *self,
 /**
  * gtk_center_layout_get_end_widget:
  * @self: a #GtkCenterLayout
+ *
+ * Returns the end widget of the layout.
  *
  * Returns: (transfer none): the current end widget of @self
  */

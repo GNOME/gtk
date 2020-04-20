@@ -191,9 +191,6 @@ struct _GtkWidget
  * @keynav_failed: Signal emitted if keyboard navigation fails.
  * @get_accessible: Returns the accessible object that describes the
  *   widget to an assistive technology.
- * @can_activate_accel: Signal allows applications and derived widgets
- *   to override the default GtkWidget handling for determining whether
- *   an accelerator can be activated.
  * @query_tooltip: Signal emitted when “has-tooltip” is %TRUE and the
  *   hover timeout has expired with the cursor hovering “above”
  *   widget; or emitted when widget got focus in keyboard mode.
@@ -263,10 +260,6 @@ struct _GtkWidgetClass
   /* accessibility support
    */
   AtkObject *  (* get_accessible)     (GtkWidget       *widget);
-
-  gboolean     (* can_activate_accel) (GtkWidget *widget,
-                                       guint      signal_id);
-
 
   gboolean     (* query_tooltip)      (GtkWidget  *widget,
                                        gint        x,
@@ -397,9 +390,6 @@ GDK_AVAILABLE_IN_ALL
 void       gtk_widget_class_add_shortcut  (GtkWidgetClass      *widget_class,
                                            GtkShortcut         *shortcut);
 
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_widget_can_activate_accel  (GtkWidget           *widget,
-                                           guint                signal_id);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_mnemonic_activate   (GtkWidget           *widget,
                                            gboolean             group_cycling);

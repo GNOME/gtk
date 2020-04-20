@@ -203,12 +203,12 @@
       <title>Hierarchical drawing</title>
 
       <para>
-        During the Paint phase GTK receives a single ::render signal on the toplevel
-        window. The signal handler will create a snapshot object (which is a
-        helper for creating a scene graph) and emit a GtkWidget::snapshot() signal,
-        which will propagate down the widget hierarchy. This lets each widget
-        snapshot its content at the right place and time, correctly handling things
-        like partial transparencies and overlapping widgets.
+        During the Paint phase GTK receives a single #GdkSurface::render signal on
+        the toplevel surface. The signal handler will create a snapshot object
+        (which is a helper for creating a scene graph) and call the
+        #GtkWidget::snapshot() vfunc, which will propagate down the widget hierarchy. 
+        This lets each widget snapshot its content at the right place and time,
+        correctly handling things like partial transparencies and overlapping widgets.
       </para>
 
       <para>
@@ -217,7 +217,7 @@
         the render nodes of children, and grandchildren, and so on), and will reuse
         that node during the Paint phase. Invalidating a widget (by calling
         gtk_widget_queue_draw()) discards the cached render node, forcing the widget
-        to regenerate it the next time it needs to handle a ::snapshot.
+        to regenerate it the next time it needs to produce a snapshot.
       </para>
     </refsect2>
 
