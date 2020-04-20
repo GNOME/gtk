@@ -1741,12 +1741,29 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   gtk_widget_class_set_css_name (widget_class, "popover");
 }
 
+/**
+ * gtk_popover_new:
+ *
+ * Creates a new popover.
+ *
+ * Returns: the new popover
+ */
 GtkWidget *
 gtk_popover_new (void)
 {
   return g_object_new (GTK_TYPE_POPOVER, NULL);
 }
 
+/**
+ * gtk_popover_set_default_widget:
+ * @popover: a #GtkPopover
+ * @widget: (allow-none): a child widget of @popover to set as
+ *     the default, or %NULL to unset the default widget for the popover
+ *
+ * The default widget is the widget that’s activated when the user
+ * presses Enter in a dialog (for example). This function sets or
+ * unsets the default widget for a #GtkPopover.
+ */
 void
 gtk_popover_set_default_widget (GtkPopover *popover,
                                 GtkWidget  *widget)

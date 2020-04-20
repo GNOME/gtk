@@ -12335,7 +12335,7 @@ gtk_widget_class_add_action (GtkWidgetClass  *widget_class,
   priv->actions = action;
 }
 
-/*
+/**
  * gtk_widget_class_install_action:
  * @widget_class: a #GtkWidgetClass
  * @action_name: a prefixed action name, such as "clipboard.paste"

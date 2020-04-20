@@ -476,6 +476,14 @@ gtk_event_controller_set_propagation_phase (GtkEventController  *controller,
   g_object_notify_by_pspec (G_OBJECT (controller), properties[PROP_PROPAGATION_PHASE]);
 }
 
+/**
+ * gtk_event_controller_get_propagation_limit:
+ * @controller: a #GtkEventController
+ *
+ * Gets the propagation limit of the event controller.
+ *
+ * Returns: the propagation limit
+ */
 GtkPropagationLimit
 gtk_event_controller_get_propagation_limit (GtkEventController *controller)
 {
@@ -487,6 +495,18 @@ gtk_event_controller_get_propagation_limit (GtkEventController *controller)
 
   return priv->limit;
 }
+
+/**
+ * gtk_event_controller_set_propagation_limit:
+ * @controller: a #GtkEventController
+ * @limit: the propagation limit
+ *
+ * Sets the event propagation limit on the event controller.
+ *
+ * If the limit is set to %@GTK_LIMIT_SAME_NATIVE, the controller
+ * won't handle events that are targeted at widgets on a different
+ * surface, such as popovers.
+ */
 void
 gtk_event_controller_set_propagation_limit (GtkEventController  *controller,
                                             GtkPropagationLimit  limit)
@@ -505,6 +525,12 @@ gtk_event_controller_set_propagation_limit (GtkEventController  *controller,
   g_object_notify_by_pspec (G_OBJECT (controller), properties[PROP_PROPAGATION_LIMIT]);
 }
 
+/**
+ * gtk_event_controller_get_name:
+ * @controller: a #GtkEventController
+ *
+ * Gets the name of @controller.
+ */
 const char *
 gtk_event_controller_get_name (GtkEventController *controller)
 {
@@ -515,6 +541,14 @@ gtk_event_controller_get_name (GtkEventController *controller)
   return priv->name;
 }
 
+/**
+ * gtk_event_controller_set_name:
+ * @controller: a #GtkEventController
+ * @name: a name for @controller
+ *
+ * Sets a name on the controller that can be used for
+ * debugging.
+ */
 void
 gtk_event_controller_set_name (GtkEventController *controller,
                                const char         *name)
