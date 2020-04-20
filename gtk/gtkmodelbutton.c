@@ -37,7 +37,6 @@
 #include "gtkcssnodeprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkstylecontextprivate.h"
-#include "gtkcontainerprivate.h"
 #include "gtkbuiltiniconprivate.h"
 #include "gtksizegroup.h"
 #include "gtkaccellabelprivate.h"

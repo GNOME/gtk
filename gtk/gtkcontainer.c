@@ -24,8 +24,6 @@
 
 #include "config.h"
 
-#include "gtkcontainerprivate.h"
-
 #include "gtkadjustment.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
@@ -86,14 +84,6 @@
  * See more about implementing custom widgets at https://wiki.gnome.org/HowDoI/CustomWidgets
  */
 
-
-struct _GtkContainerPrivate
-{
-  guint resize_handler;
-
-  guint restyle_pending    : 1;
-};
-
 enum {
   ADD,
   REMOVE,
@@ -109,8 +99,6 @@ static void     gtk_container_remove_unimplemented (GtkContainer      *container
 static void     gtk_container_compute_expand       (GtkWidget         *widget,
                                                     gboolean          *hexpand_p,
                                                     gboolean          *vexpand_p);
-static void     gtk_container_real_set_focus_child (GtkContainer      *container,
-                                                    GtkWidget         *widget);
 static void     gtk_container_children_callback    (GtkWidget         *widget,
                                                     gpointer           client_data);
 static GtkSizeRequestMode gtk_container_get_request_mode (GtkWidget   *widget);
@@ -122,7 +110,6 @@ static GtkBuildableIface    *parent_buildable_iface;
 static guint                 container_signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkContainer, gtk_container, GTK_TYPE_WIDGET,
-                                  G_ADD_PRIVATE (GtkContainer)
                                   G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                          gtk_container_buildable_init))
 
@@ -141,7 +128,6 @@ gtk_container_class_init (GtkContainerClass *class)
   class->add = gtk_container_add_unimplemented;
   class->remove = gtk_container_remove_unimplemented;
   class->forall = NULL;
-  class->set_focus_child = gtk_container_real_set_focus_child;
   class->child_type = NULL;
 
   container_signals[ADD] =
@@ -239,10 +225,6 @@ static void
 gtk_container_destroy (GtkWidget *widget)
 {
   GtkContainer *container = GTK_CONTAINER (widget);
-  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
-
-  if (priv->restyle_pending)
-    priv->restyle_pending = FALSE;
 
   gtk_container_foreach (container, (GtkCallback) gtk_widget_destroy, NULL);
 
@@ -325,113 +307,6 @@ gtk_container_remove (GtkContainer *container,
 
   g_object_unref (widget);
   g_object_unref (container);
-}
-
-static gboolean
-gtk_container_needs_idle_sizer (GtkContainer *container)
-{
-  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
-
-  if (priv->restyle_pending)
-    return TRUE;
-
-  return gtk_widget_needs_allocate (GTK_WIDGET (container));
-}
-
-static void
-gtk_container_idle_sizer (GdkFrameClock *clock,
-			  GtkContainer  *container)
-{
-  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
-
-  /* We validate the style contexts in a single loop before even trying
-   * to handle resizes instead of doing validations inline.
-   * This is mostly necessary for compatibility reasons with old code,
-   * because both css_changed and size_allocate functions often change
-   * styles and so could cause infinite loops in this function.
-   *
-   * It's important to note that even an invalid style context returns
-   * sane values. So the result of an invalid style context will never be
-   * a program crash, but only a wrong layout or rendering.
-   */
-  if (priv->restyle_pending)
-    {
-      priv->restyle_pending = FALSE;
-      gtk_css_node_validate (gtk_widget_get_css_node (GTK_WIDGET (container)));
-    }
-
-  /* we may be invoked with a container_resize_queue of NULL, because
-   * queue_resize could have been adding an extra idle function while
-   * the queue still got processed. we better just ignore such case
-   * than trying to explicitly work around them with some extra flags,
-   * since it doesn't cause any actual harm.
-   */
-  if (gtk_widget_needs_allocate (GTK_WIDGET (container)))
-    {
-      if (GTK_IS_ROOT (container))
-        gtk_native_check_resize (GTK_NATIVE (container));
-      else
-        g_warning ("gtk_container_idle_sizer() called on a non-native non-window");
-    }
-
-  if (!gtk_container_needs_idle_sizer (container))
-    {
-      gtk_container_stop_idle_sizer (container);
-    }
-  else
-    {
-      gdk_frame_clock_request_phase (clock,
-                                     GDK_FRAME_CLOCK_PHASE_LAYOUT);
-    }
-}
-
-void
-gtk_container_start_idle_sizer (GtkContainer *container)
-{
-  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
-  GdkFrameClock *clock;
-
-  if (priv->resize_handler != 0)
-    return;
-
-  if (!gtk_container_needs_idle_sizer (container))
-    return;
-
-  clock = gtk_widget_get_frame_clock (GTK_WIDGET (container));
-  if (clock == NULL)
-    return;
-
-  priv->resize_handler = g_signal_connect (clock, "layout",
-                                           G_CALLBACK (gtk_container_idle_sizer), container);
-  gdk_frame_clock_request_phase (clock,
-                                 GDK_FRAME_CLOCK_PHASE_LAYOUT);
-}
-
-void
-gtk_container_stop_idle_sizer (GtkContainer *container)
-{
-  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
-
-  if (priv->resize_handler == 0)
-    return;
-
-  g_signal_handler_disconnect (gtk_widget_get_frame_clock (GTK_WIDGET (container)),
-                               priv->resize_handler);
-  priv->resize_handler = 0;
-}
-
-void
-_gtk_container_queue_restyle (GtkContainer *container)
-{
-  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
-
-  g_return_if_fail (GTK_CONTAINER (container));
-
-  if (priv->restyle_pending)
-    return;
-
-  priv->restyle_pending = TRUE;
-  gtk_container_start_idle_sizer (container);
 }
 
 static GtkSizeRequestMode 
@@ -525,31 +400,6 @@ gtk_container_foreach (GtkContainer *container,
 }
 
 /**
- * gtk_container_set_focus_child:
- * @container: a #GtkContainer
- * @child: (allow-none): a #GtkWidget, or %NULL
- *
- * Sets, or unsets if @child is %NULL, the focused child of @container.
- *
- * This function emits the GtkContainer::set_focus_child signal of
- * @container. Implementations of #GtkContainer can override the
- * default behaviour by overriding the class closure of this signal.
- *
- * This is function is mostly meant to be used by widgets. Applications can use
- * gtk_widget_grab_focus() to manually set the focus to a specific widget.
- */
-void
-gtk_container_set_focus_child (GtkContainer *container,
-                               GtkWidget    *child)
-{
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-  if (child)
-    g_return_if_fail (GTK_IS_WIDGET (child));
-
-  GTK_CONTAINER_GET_CLASS (container)->set_focus_child (container, child);
-}
-
-/**
  * gtk_container_get_children:
  * @container: a #GtkContainer
  *
@@ -600,12 +450,6 @@ gtk_container_compute_expand (GtkWidget *widget,
 
   *hexpand_p = hexpand;
   *vexpand_p = vexpand;
-}
-
-static void
-gtk_container_real_set_focus_child (GtkContainer *container,
-                                    GtkWidget    *focus_child)
-{
 }
 
 static void
