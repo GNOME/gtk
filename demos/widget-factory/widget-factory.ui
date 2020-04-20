@@ -1989,9 +1989,6 @@ microphone-sensitivity-medium-symbolic</property>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkSeparator"/>
-                                    </child>
-                                    <child>
                                       <object class="GtkStatusbar" id="statusbar"/>
                                     </child>
                                   </object>
