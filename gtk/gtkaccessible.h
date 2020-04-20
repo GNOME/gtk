@@ -1,5 +1,6 @@
 /* GTK - The GIMP Toolkit
  * Copyright 2001 Sun Microsystems Inc.
+ * Copyright 2020 GNOME Foundation
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,37 +29,23 @@
 G_BEGIN_DECLS
 
 #define GTK_TYPE_ACCESSIBLE                  (gtk_accessible_get_type ())
-#define GTK_ACCESSIBLE(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ACCESSIBLE, GtkAccessible))
-#define GTK_ACCESSIBLE_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ACCESSIBLE, GtkAccessibleClass))
-#define GTK_IS_ACCESSIBLE(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ACCESSIBLE))
-#define GTK_IS_ACCESSIBLE_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ACCESSIBLE))
-#define GTK_ACCESSIBLE_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ACCESSIBLE, GtkAccessibleClass))
 
-typedef struct _GtkAccessible        GtkAccessible;
-typedef struct _GtkAccessiblePrivate GtkAccessiblePrivate;
-typedef struct _GtkAccessibleClass   GtkAccessibleClass;
+#if !ATK_CHECK_VERSION(2, 36, 0)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(AtkObject, g_object_unref)
+#endif
 
-struct _GtkAccessible
-{
-  AtkObject parent;
-
-  /*< private >*/
-  GtkAccessiblePrivate *priv;
-};
+GDK_AVAILABLE_IN_ALL
+G_DECLARE_DERIVABLE_TYPE (GtkAccessible, gtk_accessible, GTK, ACCESSIBLE, AtkObject)
 
 struct _GtkAccessibleClass
 {
   AtkObjectClass parent_class;
 
-  void (*widget_set)               (GtkAccessible *accessible);
-  void (*widget_unset)             (GtkAccessible *accessible);
-  /* Padding for future expansion */
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
+  void (* widget_set)   (GtkAccessible *accessible);
+  void (* widget_unset) (GtkAccessible *accessible);
 
-GDK_AVAILABLE_IN_ALL
-GType      gtk_accessible_get_type                 (void) G_GNUC_CONST;
+  gpointer _padding[8];
+};
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_accessible_set_widget               (GtkAccessible *accessible,
@@ -69,5 +56,3 @@ GtkWidget *gtk_accessible_get_widget               (GtkAccessible *accessible);
 G_END_DECLS
 
 #endif /* __GTK_ACCESSIBLE_H__ */
-
-
