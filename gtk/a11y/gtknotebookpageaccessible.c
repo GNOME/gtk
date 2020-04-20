@@ -311,18 +311,10 @@ gtk_notebook_page_accessible_get_extents (AtkComponent *component,
   label = get_label_from_notebook_page (GTK_NOTEBOOK_PAGE_ACCESSIBLE (component));
   if (!label)
     {
-      AtkObject *child;
-
-      *width = 0;
-      *height = 0;
-
-      child = atk_object_ref_accessible_child (ATK_OBJECT (component), 0);
-      if (!child)
-        return;
-
-      atk_component_get_extents (ATK_COMPONENT (child), x, y, NULL, NULL,
-                                 coord_type);
-      g_object_unref (child);
+      *x = -1;
+      *y = -1;
+      *width = -1;
+      *height = -1;
     }
   else
     {
