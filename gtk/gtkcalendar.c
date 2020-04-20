@@ -1635,8 +1635,12 @@ gtk_calendar_unmark_day (GtkCalendar *calendar,
  * gtk_calendar_get_date:
  * @self: a #GtkCalendar
  *
- * Returns: (transfer full): A #GDateTime representing the shown
- *   year, month and the selected day, in the local time zone.
+ * Returns a #GDateTime representing the shown
+ * year, month and the selected day, in the local
+ * time zone.
+ *
+ * Returns: (transfer full): the #GDate representing
+ *     the shown date.
  */
 GDateTime *
 gtk_calendar_get_date (GtkCalendar *self)
@@ -1649,9 +1653,9 @@ gtk_calendar_get_date (GtkCalendar *self)
 }
 
 /**
- * gtk_calendar_set_show_week_numbers
+ * gtk_calendar_set_show_week_numbers:
  * @self: a #GtkCalendar
- * @value: Whether to show week numbers on the left of the days
+ * @value: whether to show week numbers on the left of the days
  *
  * Sets whether week numbers are shown in the calendar.
  */
@@ -1680,8 +1684,11 @@ gtk_calendar_set_show_week_numbers (GtkCalendar *self,
  * gtk_calendar_get_show_week_numbers:
  * @self: a #GtkCalendar
  *
- * Returns: Whether @self is showing week numbers right now,
- *   i.e. the value of the #GtkCalendar:show-week-numbers property.
+ * Returns whether @self is showing week numbers right
+ * now, i.e. the value of the #GtkCalendar:show-week-numbers
+ * property.
+ *
+ * Return: Whether the calendar is showing week numbers.
  */
 gboolean
 gtk_calendar_get_show_week_numbers (GtkCalendar *self)
@@ -1696,9 +1703,11 @@ gtk_calendar_get_show_week_numbers (GtkCalendar *self)
 /**
  * gtk_calendar_set_show_heading:
  * @self: a #GtkCalendar
- * @value: Whether to show the heading in the calendar,
- *   containing the current year and month as well as
- *   buttons for changing both.
+ * @value: Whether to show the heading in the calendar
+ *
+ * Sets whether the calendar should show a heading
+ * containing the current year and month as well as
+ * buttons for changing both.
  */
 void
 gtk_calendar_set_show_heading (GtkCalendar *self,
@@ -1722,8 +1731,10 @@ gtk_calendar_set_show_heading (GtkCalendar *self,
  * gtk_calendar_get_show_heading:
  * @self: a #GtkCalendar
  *
- * Returns: Whether @self is currently showing the heading,
- *   i.e. the value of the #GtkCalendar:show-heading property.
+ * Returns whether @self is currently showing the heading,
+ * i.e. the value of the #GtkCalendar:show-heading property.
+ *
+ * Return: Whether the calendar is showing a heading.
  */
 gboolean
 gtk_calendar_get_show_heading (GtkCalendar *self)
@@ -1738,8 +1749,9 @@ gtk_calendar_get_show_heading (GtkCalendar *self)
 /**
  * gtk_calendar_set_show_day_names:
  * @self: a #GtkCalendar
- * @value: Whether to show week day names above the
- *   day numbers
+ * @value: Whether to show day names above the day numbers
+ *
+ * Sets whether the calendar shows day names.
  */
 void
 gtk_calendar_set_show_day_names (GtkCalendar *self,
@@ -1763,12 +1775,14 @@ gtk_calendar_set_show_day_names (GtkCalendar *self,
 }
 
 /**
- * gtk_calendar_get_day_names:
+ * gtk_calendar_get_show_day_names:
  * @self: a #GtkCalendar
  *
- * Returns: Whether @self is currently showing the names
- *   of the week days above the day numbers, i.e. the value
- *   of the #GtkCalendar:show-day-names property.
+ * Returns whether @self is currently showing the names
+ * of the week days above the day numbers, i.e. the value
+ * of the #GtkCalendar:show-day-names property.
+ *
+ * Returns: Whether the calendar shows day names.
  */
 gboolean
 gtk_calendar_get_show_day_names (GtkCalendar *self)

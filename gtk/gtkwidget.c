@@ -12335,7 +12335,7 @@ gtk_widget_class_add_action (GtkWidgetClass  *widget_class,
   priv->actions = action;
 }
 
-/*
+/**
  * gtk_widget_class_install_action:
  * @widget_class: a #GtkWidgetClass
  * @action_name: a prefixed action name, such as "clipboard.paste"
@@ -12409,11 +12409,18 @@ determine_type (GParamSpec *pspec)
  * Installs an action called @action_name on @widget_class and binds its
  * state to the value of the @property_name property.
  *
- * This function will perform a few santity checks on the property selected via
- * @property_name. Namely, the property must exist, must be readable, writable and
- * must not be construct-only. There are also certain restrictions on the type of
- * the given property. If any of these conditions are not met, a critical
+ * This function will perform a few santity checks on the property selected
+ * via @property_name. Namely, the property must exist, must be readable,
+ * writable and must not be construct-only. There are also restrictions
+ * on the type of the given property, it must be boolean, int, unsigned int,
+ * double or string. If any of these conditions are not met, a critical
  * warning will be printed and no action will be added.
+ *
+ * The state type of the action matches the property type.
+ *
+ * If the property is boolean, the action will have no parameter and
+ * toggle the property value. Otherwise, the action will have a parameter
+ * of the same type as the property.
  */
 void
 gtk_widget_class_install_property_action (GtkWidgetClass *widget_class,

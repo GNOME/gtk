@@ -74,6 +74,8 @@ gtk_accel_label_get_accel
 gtk_accel_label_refetch
 gtk_accel_label_set_label
 gtk_accel_label_get_label
+gtk_accel_label_get_use_underline
+gtk_accel_label_set_use_underline
 <SUBSECTION Standard>
 GTK_ACCEL_LABEL
 GTK_IS_ACCEL_LABEL
@@ -180,6 +182,7 @@ GTK_ASSISTANT_GET_CLASS
 <SUBSECTION Private>
 GtkAssistantPrivate
 gtk_assistant_get_type
+gtk_assistant_page_get_type
 </SECTION>
 
 <SECTION>
@@ -559,6 +562,12 @@ gtk_calendar_mark_day
 gtk_calendar_unmark_day
 gtk_calendar_get_day_is_marked
 gtk_calendar_clear_marks
+gtk_calendar_get_show_day_names
+gtk_calendar_set_show_day_names
+gtk_calendar_get_show_heading
+gtk_calendar_set_show_heading
+gtk_calendar_get_show_week_numbers
+gtk_calendar_set_show_week_numbers
 
 <SUBSECTION>
 gtk_calendar_get_date
@@ -1591,7 +1600,6 @@ gtk_label_set_text
 gtk_label_set_attributes
 gtk_label_set_markup
 gtk_label_set_markup_with_mnemonic
-gtk_label_set_pattern
 gtk_label_set_justify
 gtk_label_set_xalign
 gtk_label_set_yalign
@@ -1632,8 +1640,6 @@ gtk_label_set_use_markup
 gtk_label_set_use_underline
 gtk_label_set_single_line_mode
 gtk_label_get_current_uri
-gtk_label_set_track_visited_links
-gtk_label_get_track_visited_links
 gtk_label_set_extra_menu
 gtk_label_get_extra_menu
 
@@ -1714,6 +1720,8 @@ gtk_menu_button_set_label
 gtk_menu_button_get_label
 gtk_menu_button_set_has_frame
 gtk_menu_button_get_has_frame
+gtk_menu_button_get_use_underline
+gtk_menu_button_set_use_underline
 gtk_menu_button_popup
 gtk_menu_button_popdown
 GtkMenuButtonCreatePopupFunc
@@ -3843,6 +3851,8 @@ gtk_list_store_get_type
 <TITLE>GtkViewport</TITLE>
 GtkViewport
 gtk_viewport_new
+gtk_viewport_set_scroll_to_focus
+gtk_viewport_get_scroll_to_focus
 <SUBSECTION Standard>
 GTK_VIEWPORT
 GTK_IS_VIEWPORT
@@ -3971,6 +3981,9 @@ gtk_widget_allocate
 gtk_widget_class_add_shortcut
 gtk_widget_class_add_binding
 gtk_widget_class_add_binding_signal
+gtk_widget_class_add_binding_action
+gtk_widget_class_set_layout_manager_type
+gtk_widget_class_get_layout_manager_type
 gtk_widget_activate
 gtk_widget_is_focus
 gtk_widget_grab_focus
@@ -5813,6 +5826,8 @@ gtk_event_controller_get_propagation_limit
 gtk_event_controller_set_propagation_limit
 gtk_event_controller_get_widget
 gtk_event_controller_reset
+gtk_event_controller_get_name
+gtk_event_controller_set_name
 
 <SUBSECTION>
 gtk_event_controller_get_current_event
@@ -5987,6 +6002,7 @@ gtk_mnemonic_trigger_get_keyval
 GtkAlternativeTrigger
 gtk_alternative_trigger_new
 gtk_alternative_trigger_get_first
+gtk_alternative_trigger_get_second
 
 <SUBSECTION>
 GtkNeverTrigger
@@ -6072,7 +6088,7 @@ GtkShortcutManagerInterface
 <TITLE>GtkShortcutController</TITLE>
 GtkShortcutController
 gtk_shortcut_controller_new
-gtk_shortcut_controller_new_with_model
+gtk_shortcut_controller_new_for_model
 GtkShortcutScope
 GtkShortcutManager
 GtkShortcutManagerInterface

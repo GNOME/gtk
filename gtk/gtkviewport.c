@@ -523,6 +523,15 @@ gtk_viewport_adjustment_value_changed (GtkAdjustment *adjustment,
   gtk_widget_queue_allocate (GTK_WIDGET (data));
 }
 
+/**
+ * gtk_viewport_get_scroll_to_focus:
+ * @viewport: a #GtkViewport
+ *
+ * Gets whether the viewport is scrolling to keep the focused
+ * child in view. See gtk_viewport_set_scroll_to_focus().
+ *
+ * Returns: %TRUE if the viewport keeps the focus child scrolled to view
+ */
 gboolean
 gtk_viewport_get_scroll_to_focus (GtkViewport *viewport)
 {
@@ -533,6 +542,14 @@ gtk_viewport_get_scroll_to_focus (GtkViewport *viewport)
   return priv->scroll_to_focus;
 }
 
+/**
+ * gtk_viewport_set_scroll_to_focus:
+ * @viewport: a #GtkViewport
+ * @scroll_to_focus: whether to keep the focus widget scrolled to view
+ *
+ * Sets whether the viewport should automatically scroll
+ * to keep the focused child in view.
+ */
 void
 gtk_viewport_set_scroll_to_focus (GtkViewport *viewport,
                                   gboolean     scroll_to_focus)

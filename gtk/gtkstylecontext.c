@@ -1467,6 +1467,8 @@ _gtk_style_context_get_attributes (AtkAttributeSet *attributes,
  *     CSS nodes starting at the style context's node
  * @GTK_STYLE_CONTEXT_PRINT_SHOW_STYLE: Show the values of the
  *     CSS properties for each node
+ * @GTK_STYLE_CONTEXT_PRINT_SHOW_CHANGE: Show information about 
+ *     what changes affect the styles
  *
  * Flags that modify the behavior of gtk_style_context_to_string().
  * New values may be added to this enumeration.

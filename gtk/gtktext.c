@@ -1216,7 +1216,7 @@ gtk_text_class_init (GtkTextClass *class)
                                    gtk_text_activate_clipboard_copy);
 
   /**
-   * GtkText|clipboard.copy:
+   * GtkText|clipboard.paste:
    *
    * Inserts the contents of the clipboard into the widget.
    */
@@ -1247,6 +1247,11 @@ gtk_text_class_init (GtkTextClass *class)
   gtk_widget_class_install_action (widget_class, "misc.insert-emoji", NULL,
                                    gtk_text_activate_misc_insert_emoji);
 
+  /**
+   * GtkText|misc.toggle-visibility:
+   *
+   * Toggles the #GtkText:visibility property.
+   */ 
   gtk_widget_class_install_property_action (widget_class,
                                             "misc.toggle-visibility",
                                             "visibility");

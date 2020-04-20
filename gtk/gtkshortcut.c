@@ -361,6 +361,14 @@ gtk_shortcut_set_trigger (GtkShortcut *self,
     }
 }
 
+/**
+ * gtk_shortcut_get_arguments:
+ * @self: a #GtkShortcut
+ *
+ * Gets the arguments that are passed when activating the shortcut.
+ *
+ * Returns: (transfer none) (nullable): the arguments
+ */
 GVariant *
 gtk_shortcut_get_arguments (GtkShortcut *self)
 {
@@ -369,6 +377,13 @@ gtk_shortcut_get_arguments (GtkShortcut *self)
   return self->args;
 }
 
+/**
+ * gtk_shortcut_set_arguments:
+ * @self: a #GtkShortcut
+ * @args: (nullable): arguments to pass when activating @self
+ *
+ * Sets the arguments to pass when activating the shortcut.
+ */
 void
 gtk_shortcut_set_arguments (GtkShortcut *self,
                             GVariant    *args)

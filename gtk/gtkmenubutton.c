@@ -1046,6 +1046,14 @@ gtk_menu_button_set_create_popup_func (GtkMenuButton                *menu_button
   update_sensitivity (menu_button);
 }
 
+/**
+ * gtk_menu_button_set_use_underline:
+ * @menu_button: a #GtkMenuButton
+ * @use_underline: %TRUE if underlines in the text indicate mnemonics
+ *
+ * If true, an underline in the text indicates the next character should be
+ * used for the mnemonic accelerator key.
+ */
 void
 gtk_menu_button_set_use_underline (GtkMenuButton *menu_button,
                                    gboolean       use_underline)
@@ -1062,6 +1070,16 @@ gtk_menu_button_set_use_underline (GtkMenuButton *menu_button,
   g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_USE_UNDERLINE]);
 }
 
+/**
+ * gtk_menu_button_get_use_underline:
+ * @menu_button: a #GtkMenuButton
+ *
+ * Returns whether an embedded underline in the text indicates a
+ * mnemonic. See gtk_menu_button_set_use_underline().
+ *
+ * Returns: %TRUE whether an embedded underline in the text indicates
+ *     the mnemonic accelerator keys.
+ */
 gboolean
 gtk_menu_button_get_use_underline (GtkMenuButton *menu_button)
 {
