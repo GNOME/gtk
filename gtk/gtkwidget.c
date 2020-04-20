@@ -2615,9 +2615,6 @@ gtk_widget_destroy (GtkWidget *widget)
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (priv->restyle_pending)
-    priv->restyle_pending = FALSE;
-
   if (!priv->in_destruction)
     g_object_run_dispose (G_OBJECT (widget));
 }
@@ -2887,112 +2884,6 @@ gtk_widget_unmap (GtkWidget *widget)
     }
 }
 
-static gboolean
-gtk_widget_needs_idle_sizer (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  if (priv->restyle_pending)
-    return TRUE;
-
-  return gtk_widget_needs_allocate (widget);
-}
-
-static void
-gtk_widget_idle_sizer (GdkFrameClock *clock,
-                       GtkWidget     *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  /* We validate the style contexts in a single loop before even trying
-   * to handle resizes instead of doing validations inline.
-   * This is mostly necessary for compatibility reasons with old code,
-   * because both css_changed and size_allocate functions often change
-   * styles and so could cause infinite loops in this function.
-   *
-   * It's important to note that even an invalid style context returns
-   * sane values. So the result of an invalid style context will never be
-   * a program crash, but only a wrong layout or rendering.
-   */
-  if (priv->restyle_pending)
-    {
-      priv->restyle_pending = FALSE;
-      gtk_css_node_validate (gtk_widget_get_css_node (widget));
-    }
-
-  /* we may be invoked with a container_resize_queue of NULL, because
-   * queue_resize could have been adding an extra idle function while
-   * the queue still got processed. we better just ignore such case
-   * than trying to explicitly work around them with some extra flags,
-   * since it doesn't cause any actual harm.
-   */
-  if (gtk_widget_needs_allocate (widget))
-    {
-      if (GTK_IS_ROOT (widget))
-        gtk_native_check_resize (GTK_NATIVE (widget));
-      else
-        g_warning ("gtk_widget_idle_sizer() called on a non-native non-window");
-    }
-
-  if (!gtk_widget_needs_idle_sizer (widget))
-    {
-      gtk_widget_stop_idle_sizer (widget);
-    }
-  else
-    {
-      gdk_frame_clock_request_phase (clock,
-                                     GDK_FRAME_CLOCK_PHASE_LAYOUT);
-    }
-}
-
-void
-gtk_widget_start_idle_sizer (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GdkFrameClock *clock;
-
-  if (priv->resize_handler != 0)
-    return;
-
-  if (!gtk_widget_needs_idle_sizer (widget))
-    return;
-
-  clock = gtk_widget_get_frame_clock (widget);
-  if (clock == NULL)
-    return;
-  
-  priv->resize_handler = g_signal_connect (clock, "layout",
-                                           G_CALLBACK (gtk_widget_idle_sizer), widget);
-  gdk_frame_clock_request_phase (clock,
-                                 GDK_FRAME_CLOCK_PHASE_LAYOUT);
-}
-
-void
-gtk_widget_stop_idle_sizer (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  if (priv->resize_handler == 0)
-    return;
-
-  g_signal_handler_disconnect (gtk_widget_get_frame_clock (widget),
-                               priv->resize_handler);
-  priv->resize_handler = 0;
-}
-
-void
-gtk_widget_queue_restyle (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  if (priv->restyle_pending)
-    return;
-
-  priv->restyle_pending = TRUE;
-  gtk_widget_start_idle_sizer (widget);
-}
-
-
 typedef struct _GtkTickCallbackInfo GtkTickCallbackInfo;
 
 struct _GtkTickCallbackInfo
@@ -3212,9 +3103,6 @@ gtk_widget_connect_frame_clock (GtkWidget *widget)
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkFrameClock *frame_clock;
 
-  if (GTK_IS_ROOT (widget))
-    gtk_widget_start_idle_sizer (widget);
-
   frame_clock = gtk_widget_get_frame_clock (widget);
 
   if (priv->tick_callbacks != NULL && !priv->clock_tick_id)
@@ -3232,9 +3120,6 @@ static void
 gtk_widget_disconnect_frame_clock (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  if (GTK_IS_ROOT (widget))
-    gtk_widget_stop_idle_sizer (widget);
 
   gtk_css_node_invalidate_frame_clock (priv->cssnode, FALSE);
 
@@ -10552,9 +10437,9 @@ gtk_widget_set_alloc_needed (GtkWidget *widget)
       if (!priv->visible)
         break;
 
-      if (GTK_IS_ROOT (widget))
+      if (GTK_IS_WINDOW (widget))
         {
-          gtk_widget_start_idle_sizer (widget);
+          gtk_window_start_layout (GTK_WINDOW (widget));
           break;
         }
 

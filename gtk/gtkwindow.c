@@ -238,7 +238,11 @@ typedef struct
   guint    hide_on_close             : 1;
   guint    in_emit_close_request     : 1;
 
+  guint    restyle_pending           : 1;
+
   GdkSurfaceTypeHint type_hint;
+
+  guint resize_handler;
 
   GtkGesture *click_gesture;
   GtkGesture *drag_gesture;
@@ -3996,6 +4000,9 @@ gtk_window_destroy (GtkWidget *widget)
   if (priv->group)
     gtk_window_group_remove_window (priv->group, window);
 
+  if (priv->restyle_pending)
+    priv->restyle_pending = FALSE;
+
   GTK_WIDGET_CLASS (gtk_window_parent_class)->destroy (widget);
 }
 
@@ -4797,6 +4804,8 @@ gtk_window_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->realize (widget);
 
+  gtk_window_start_layout (window);
+
   if (priv->renderer == NULL)
     priv->renderer = gsk_renderer_new_for_surface (surface);
 
@@ -4911,6 +4920,8 @@ gtk_window_unrealize (GtkWidget *widget)
   g_signal_handlers_disconnect_by_func (surface, surface_size_changed, widget);
   g_signal_handlers_disconnect_by_func (surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (surface, surface_event, widget);
+
+  gtk_window_stop_layout (window);
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unrealize (widget);
 
@@ -8006,4 +8017,101 @@ gtk_window_maybe_update_cursor (GtkWindow *window,
       if (device)
         break;
     }
+}
+
+static gboolean
+gtk_window_needs_layout (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  if (priv->restyle_pending)
+    return TRUE;
+
+  return gtk_widget_needs_allocate (GTK_WIDGET (window));
+}
+
+static void
+gtk_window_layout_cb (GdkFrameClock *clock,
+                      GtkWindow     *window)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  GtkWidget *widget = GTK_WIDGET (window);
+
+  /* We validate the style contexts in a single loop before even trying
+   * to handle resizes instead of doing validations inline.
+   * This is mostly necessary for compatibility reasons with old code,
+   * because both css_changed and size_allocate functions often change
+   * styles and so could cause infinite loops in this function.
+   *
+   * It's important to note that even an invalid style context returns
+   * sane values. So the result of an invalid style context will never be
+   * a program crash, but only a wrong layout or rendering.
+   */
+  if (priv->restyle_pending)
+    {
+      priv->restyle_pending = FALSE;
+      gtk_css_node_validate (gtk_widget_get_css_node (widget));
+    }
+
+  /* we may be invoked with a container_resize_queue of NULL, because
+   * queue_resize could have been adding an extra idle function while
+   * the queue still got processed. we better just ignore such case
+   * than trying to explicitly work around them with some extra flags,
+   * since it doesn't cause any actual harm.
+   */
+  if (gtk_widget_needs_allocate (widget))
+    gtk_native_check_resize (GTK_NATIVE (window));
+
+  if (!gtk_window_needs_layout (window))
+    gtk_window_stop_layout (window);
+  else
+    gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_LAYOUT);
+}
+
+void
+gtk_window_start_layout (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  GdkFrameClock *clock;
+
+  if (priv->resize_handler != 0)
+    return;
+
+  if (!gtk_window_needs_layout (window))
+    return;
+
+  clock = gtk_widget_get_frame_clock (GTK_WIDGET (window));
+  if (clock == NULL)
+    return;
+
+  priv->resize_handler = g_signal_connect (clock, "layout",
+                                           G_CALLBACK (gtk_window_layout_cb), window);
+  gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_LAYOUT);
+}
+
+void
+gtk_window_stop_layout (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  GdkFrameClock *clock;
+
+  if (priv->resize_handler == 0)
+    return;
+
+  clock = gtk_widget_get_frame_clock (GTK_WIDGET (window));
+  g_signal_handler_disconnect (clock, priv->resize_handler);
+  priv->resize_handler = 0;
+}
+
+void
+gtk_window_queue_restyle (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  if (priv->restyle_pending)
+    return;
+
+  priv->restyle_pending = TRUE;
+
+  gtk_window_start_layout (window);
 }
