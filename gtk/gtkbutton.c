@@ -640,7 +640,7 @@ gtk_button_new_with_mnemonic (const gchar *label)
 }
 
 /**
- * gtk_Button_set_has_frame:
+ * gtk_button_set_has_frame:
  * @button: a #GtkButton
  * @has_frame: whether the button should have a visible frame
  *

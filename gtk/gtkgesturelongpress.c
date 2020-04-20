@@ -334,13 +334,12 @@ gtk_gesture_long_press_new (void)
 }
 
 /**
- * gtk_gesture_long_press_set_property:
+ * gtk_gesture_long_press_set_delay_factor:
  * @gesture: A #GtkGestureLongPress
  * @delay_factor: The delay factor to apply
  *
  * Applies the given delay factor. The default long press time will be
- * multiplied by this value.
- * Valid values are in the range [0.5..2.0].
+ * multiplied by this value. Valid values are in the range [0.5..2.0].
  */
 void
 gtk_gesture_long_press_set_delay_factor (GtkGestureLongPress *gesture,
@@ -358,10 +357,12 @@ gtk_gesture_long_press_set_delay_factor (GtkGestureLongPress *gesture,
 }
 
 /**
- * gtk_gesture_long_press_get_property:
+ * gtk_gesture_long_press_get_delay_factor:
  * @gesture: A #GtkGestureLongPress
  *
  * Returns the delay factor as set by gtk_gesture_long_press_set_delay_factor().
+ *
+ * Returns: the delay factor
  */
 double
 gtk_gesture_long_press_get_delay_factor (GtkGestureLongPress *gesture)

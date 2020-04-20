@@ -601,7 +601,7 @@ gtk_popover_menu_new_from_model_full (GMenuModel          *model,
 }
 
 /**
- * gtk_popover_menu_set_model:
+ * gtk_popover_menu_set_menu_model:
  * @popover: a #GtkPopoverMenu
  * @model: (nullable): a #GtkMenuModel, or %NULL
  *

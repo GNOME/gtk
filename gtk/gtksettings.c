@@ -74,14 +74,16 @@
  * On the X window system, this sharing is realized by an
  * [XSettings](http://www.freedesktop.org/wiki/Specifications/xsettings-spec)
  * manager that is usually part of the desktop environment, along with
- * utilities that let the user change these settings. In the absence of
- * an Xsettings manager, GTK reads default values for settings from
- * `settings.ini` files in
- * `/etc/gtk-4.0`, `$XDG_CONFIG_DIRS/gtk-4.0`
- * and `$XDG_CONFIG_HOME/gtk-4.0`.
- * These files must be valid key files (see #GKeyFile), and have
- * a section called Settings. Themes can also provide default values
- * for settings by installing a `settings.ini` file
+ * utilities that let the user change these settings.
+ *
+ * On Wayland, the settings are obtained either via a settings portal,
+ * or by reading desktop settings from DConf.
+ *
+ * In the absence of these sharing mechanisms, GTK reads default values for
+ * settings from `settings.ini` files in `/etc/gtk-4.0`, `$XDG_CONFIG_DIRS/gtk-4.0`
+ * and `$XDG_CONFIG_HOME/gtk-4.0`. These files must be valid key files (see
+ * #GKeyFile), and have a section called Settings. Themes can also provide
+ * default values for settings by installing a `settings.ini` file
  * next to their `gtk.css` file.
  *
  * Applications can override system-wide settings by setting the property
@@ -91,8 +93,7 @@
  *
  * There is one GtkSettings instance per display. It can be obtained with
  * gtk_settings_get_for_display(), but in many cases, it is more convenient
- * to use gtk_widget_get_settings(). gtk_settings_get_default() returns the
- * GtkSettings instance for the default display.
+ * to use gtk_widget_get_settings().
  */
 
 

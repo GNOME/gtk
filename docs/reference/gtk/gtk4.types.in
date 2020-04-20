@@ -41,6 +41,7 @@ gtk_cell_renderer_spinner_get_type
 gtk_cell_renderer_text_get_type
 gtk_cell_renderer_toggle_get_type
 gtk_cell_view_get_type
+gtk_center_layout_get_type
 gtk_check_button_get_type
 gtk_color_button_get_type
 gtk_color_chooser_get_type

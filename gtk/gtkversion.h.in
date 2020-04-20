@@ -31,10 +31,10 @@
 
 /**
  * SECTION:gtkfeatures
- * @Short_description: Variables and functions to check the GTK+ version
+ * @Short_description: Variables and functions to check the GTK version
  * @Title: Version Information
  *
- * GTK+ provides version information, primarily useful in configure checks
+ * GTK provides version information, primarily useful in configure checks
  * for builds that have a configure script. Applications will not typically
  * use the features described here.
  */

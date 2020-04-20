@@ -1058,6 +1058,12 @@ gtk_emoji_chooser_class_init (GtkEmojiChooserClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, long_pressed_cb);
   gtk_widget_class_bind_template_callback (widget_class, keynav_failed);
 
+  /**
+   * GtkEmojiChooser|scroll.section:
+   * @direction: 1 to scroll forward, -1 to scroll back
+   *
+   * Scrolls to the next or previous section.
+   */ 
   gtk_widget_class_install_action (widget_class, "scroll.section", "i",
                                    gtk_emoji_chooser_scroll_section);
 
