@@ -29,7 +29,7 @@
 #include "gtkstyleproviderprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkversion.h"
-#include "gtkwidget.h"
+#include "gtkwidgetprivate.h"
 
 #include "gdk/gdk-private.h"
 
@@ -1246,32 +1246,28 @@ gtk_settings_notify (GObject    *object,
     case PROP_FONT_NAME:
       settings_update_font_values (settings);
       settings_invalidate_style (settings);
-      gtk_style_context_reset_widgets (settings->display);
+      gtk_system_setting_changed (settings->display, GTK_SYSTEM_SETTING_FONT_NAME);
       break;
     case PROP_THEME_NAME:
     case PROP_APPLICATION_PREFER_DARK_THEME:
       settings_update_theme (settings);
       break;
     case PROP_XFT_DPI:
-      /* This is a hack because with gtk_rc_reset_styles() doesn't get
-       * widgets with gtk_widget_style_set(), and also causes more
-       * recomputation than necessary.
-       */
-      gtk_style_context_reset_widgets (settings->display);
+      gtk_system_setting_changed (settings->display, GTK_SYSTEM_SETTING_DPI);
       break;
     case PROP_XFT_ANTIALIAS:
     case PROP_XFT_HINTING:
     case PROP_XFT_HINTSTYLE:
     case PROP_XFT_RGBA:
       settings_update_font_options (settings);
-      gtk_style_context_reset_widgets (settings->display);
+      gtk_system_setting_changed (settings->display, GTK_SYSTEM_SETTING_FONT_CONFIG);
       break;
     case PROP_FONTCONFIG_TIMESTAMP:
       if (settings_update_fontconfig (settings))
-        gtk_style_context_reset_widgets (settings->display);
+        gtk_system_setting_changed (settings->display, GTK_SYSTEM_SETTING_FONT_CONFIG);
       break;
     case PROP_ENABLE_ANIMATIONS:
-      gtk_style_context_reset_widgets (settings->display);
+      settings_invalidate_style (settings);
       break;
     case PROP_CURSOR_THEME_NAME:
     case PROP_CURSOR_THEME_SIZE:
