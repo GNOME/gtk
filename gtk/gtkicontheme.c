@@ -47,6 +47,7 @@
 #include "gtkmain.h"
 #include "gtksettingsprivate.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkstyleproviderprivate.h"
 #include "gtkprivate.h"
 #include "gtksnapshot.h"
 #include "gdkpixbufutilsprivate.h"
@@ -1308,6 +1309,8 @@ theme_changed_idle__mainthread_unlocked (gpointer user_data)
 
       if (display)
         {
+          GtkSettings *settings = gtk_settings_get_for_display (self->display);
+          gtk_style_provider_changed (GTK_STYLE_PROVIDER (settings));
           gtk_style_context_reset_widgets (self->display);
           g_object_unref (display);
         }
@@ -1344,7 +1347,6 @@ do_theme_change (GtkIconTheme *self)
   blow_themes (self);
 
   queue_theme_changed (self);
-
 }
 
 static void
