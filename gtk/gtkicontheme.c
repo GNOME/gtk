@@ -1311,7 +1311,6 @@ theme_changed_idle__mainthread_unlocked (gpointer user_data)
         {
           GtkSettings *settings = gtk_settings_get_for_display (self->display);
           gtk_style_provider_changed (GTK_STYLE_PROVIDER (settings));
-          gtk_style_context_reset_widgets (self->display);
           g_object_unref (display);
         }
 
