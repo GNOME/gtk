@@ -407,8 +407,6 @@ gtk_places_view_destroy (GtkWidget *widget)
   g_cancellable_cancel (priv->cancellable);
   g_cancellable_cancel (priv->networks_fetching_cancellable);
 
-  g_clear_pointer (&priv->server_adresses_popover, gtk_widget_unparent);
-
   GTK_WIDGET_CLASS (gtk_places_view_parent_class)->destroy (widget);
 }
 
@@ -1951,6 +1949,8 @@ on_address_entry_show_help_pressed (GtkPlacesView        *view,
   gtk_entry_get_icon_area (GTK_ENTRY (priv->address_entry),
                            GTK_ENTRY_ICON_SECONDARY,
                            &rect);
+  gtk_widget_translate_coordinates (priv->address_entry, GTK_WIDGET (view),
+                                    rect.x, rect.y, &rect.x, &rect.y);
 
   gtk_popover_set_pointing_to (GTK_POPOVER (priv->server_adresses_popover), &rect);
   gtk_widget_set_visible (priv->server_adresses_popover, TRUE);
@@ -2400,6 +2400,8 @@ gtk_places_view_init (GtkPlacesView *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
+  
+  gtk_widget_set_parent (priv->server_adresses_popover, GTK_WIDGET (self));
   controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "key-pressed", G_CALLBACK (on_key_press_event), self);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
