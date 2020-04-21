@@ -4874,6 +4874,15 @@ gtk_widget_real_system_setting_changed (GtkWidget        *widget,
 {
   GtkWidget *child;
 
+  if (setting == GTK_SYSTEM_SETTING_DPI ||
+      setting == GTK_SYSTEM_SETTING_FONT_NAME ||
+      setting == GTK_SYSTEM_SETTING_FONT_CONFIG)
+    {
+      gtk_widget_update_pango_context (widget);
+      if (gtk_widget_peek_pango_context (widget))
+        gtk_widget_queue_resize (widget);
+    }
+
   for (child = _gtk_widget_get_first_child (widget);
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
