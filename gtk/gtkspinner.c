@@ -139,6 +139,14 @@ gtk_spinner_css_changed (GtkWidget         *widget,
     }
 }
 
+static void
+gtk_spinner_system_setting_changed (GtkWidget        *widget,
+                                    GtkSystemSetting  setting)
+{
+  if (setting == GTK_SYSTEM_SETTING_ANIMATIONS)
+    gtk_widget_reset_style (widget);
+}
+
 /**
  * gtk_spinner_get_spinning:
  * @spinner: a #GtkSpinner
@@ -229,6 +237,7 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
   widget_class->snapshot = gtk_spinner_snapshot;
   widget_class->measure = gtk_spinner_measure;
   widget_class->css_changed = gtk_spinner_css_changed;
+  widget_class->system_setting_changed = gtk_spinner_system_setting_changed;
   widget_class->grab_focus = gtk_widget_grab_focus_none;
   widget_class->focus = gtk_widget_focus_none;
 
