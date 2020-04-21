@@ -112,6 +112,10 @@
         </child>
         <child>
           <object class="GtkBox" id="toolbar1">
+            <style>
+              <class name="toolbar"/>
+              <class name="top"/>
+            </style>
             <child internal-child="accessible">
               <object class="AtkObject" id="a11y-toolbar">
                 <property name="AtkObject::accessible-name">The toolbar</property>
