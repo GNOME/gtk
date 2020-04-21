@@ -24,7 +24,6 @@
 #include <math.h>
 
 #include "gtkcssenumvalueprivate.h"
-#include "gtkcssiconthemevalueprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssstyleprivate.h"
