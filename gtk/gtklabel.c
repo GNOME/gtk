@@ -4536,6 +4536,8 @@ gtk_label_select_region_index (GtkLabel *self,
                                gint      end_index)
 {
   g_return_if_fail (GTK_IS_LABEL (self));
+  gboolean anchor_changed;
+  gboolean bound_changed;
 
   if (self->select_info && self->select_info->selectable)
     {
@@ -4601,13 +4603,16 @@ gtk_label_select_region_index (GtkLabel *self,
 
       g_object_freeze_notify (G_OBJECT (self));
 
-      if (self->select_info->selection_anchor != anchor_index)
-        _gtk_label_accessible_selection_bound_changed (self);
-      if (self->select_info->selection_end != end_index)
-        _gtk_label_accessible_cursor_position_changed (self);
+      anchor_changed = self->select_info->selection_anchor != anchor_index;
+      bound_changed = self->select_info->selection_end != end_index;
 
       self->select_info->selection_anchor = anchor_index;
       self->select_info->selection_end = end_index;
+
+      if (anchor_changed)
+        _gtk_label_accessible_selection_bound_changed (self);
+      if (bound_changed)
+        _gtk_label_accessible_cursor_position_changed (self);
 
       clipboard = gtk_widget_get_primary_clipboard (GTK_WIDGET (self));
 
