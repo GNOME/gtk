@@ -4450,6 +4450,11 @@ popover.menu {
 
     &:selected { @extend %selected_items; }
   }
+
+  & label.title {
+    font-weight: bold;
+    padding: 4px 20px;
+  }
 }
 
 statusbar {
