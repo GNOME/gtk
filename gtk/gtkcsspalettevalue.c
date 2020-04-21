@@ -19,7 +19,6 @@
 
 #include "gtkcsspalettevalueprivate.h"
 
-#include "gtkcssiconthemevalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkprivate.h"
