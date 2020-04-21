@@ -43,7 +43,6 @@
 #include "gtkcsseasevalueprivate.h"
 #include "gtkcssfiltervalueprivate.h"
 #include "gtkcssfontfeaturesvalueprivate.h"
-#include "gtkcssiconthemevalueprivate.h"
 #include "gtkcssimageprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssinitialvalueprivate.h"
@@ -794,13 +793,6 @@ background_position_parse (GtkCssStyleProperty *property,
   return _gtk_css_array_value_parse (parser, _gtk_css_position_value_parse);
 }
 
-static GtkCssValue *
-icon_theme_value_parse (GtkCssStyleProperty *property,
-		        GtkCssParser        *parser)
-{
-  return gtk_css_icon_theme_value_parse (parser);
-}
-
 /*** REGISTRATION ***/
 
 G_STATIC_ASSERT (GTK_CSS_PROPERTY_COLOR == 0);
@@ -831,12 +823,6 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_TEXT_SIZE,
                                           font_size_parse,
                                           _gtk_css_font_size_value_new (GTK_CSS_FONT_SIZE_MEDIUM));
-  gtk_css_style_property_register        ("-gtk-icon-theme",
-                                          GTK_CSS_PROPERTY_ICON_THEME,
-                                          GTK_STYLE_PROPERTY_INHERIT,
-                                          GTK_CSS_AFFECTS_ICON_TEXTURE,
-                                          icon_theme_value_parse,
-                                          gtk_css_icon_theme_value_new (NULL));
   gtk_css_style_property_register        ("-gtk-icon-palette",
 					  GTK_CSS_PROPERTY_ICON_PALETTE,
 					  GTK_STYLE_PROPERTY_ANIMATED | GTK_STYLE_PROPERTY_INHERIT,
