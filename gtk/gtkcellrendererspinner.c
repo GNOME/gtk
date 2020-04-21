@@ -28,7 +28,6 @@
 #include "config.h"
 
 #include "gtkcellrendererspinner.h"
-#include "gtkiconhelperprivate.h"
 #include "gtkintl.h"
 #include "gtksettings.h"
 #include "gtksnapshot.h"
