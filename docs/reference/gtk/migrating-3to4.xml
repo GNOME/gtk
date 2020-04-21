@@ -428,8 +428,8 @@
       <para>
         If you need to do forward or backward mapping between key codes
         and key values, use gdk_display_map_keycode() and gdk_display_map_keyval(),
-        which is the replacement for gdk_keymap_get_entries_for_keycode()
-        and gdk_keymap_get_entries_for_keycode().
+        which are the replacements for gdk_keymap_get_entries_for_keycode()
+        and gdk_keymap_get_entries_for_keyval().
       </para>
     </section>
 
