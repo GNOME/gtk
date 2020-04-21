@@ -592,6 +592,8 @@ static gboolean gtk_widget_real_query_tooltip    (GtkWidget         *widget,
 						  GtkTooltip        *tooltip);
 static void     gtk_widget_real_css_changed      (GtkWidget         *widget,
                                                   GtkCssStyleChange *change);
+static void     gtk_widget_real_system_setting_changed (GtkWidget         *widget,
+                                                        GtkSystemSetting   setting);
 
 static void             gtk_widget_real_set_focus_child         (GtkWidget        *widget,
                                                                  GtkWidget        *child);
@@ -911,6 +913,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->keynav_failed = gtk_widget_real_keynav_failed;
   klass->query_tooltip = gtk_widget_real_query_tooltip;
   klass->css_changed = gtk_widget_real_css_changed;
+  klass->system_setting_changed = gtk_widget_real_system_setting_changed;
 
   /* Accessibility support */
   klass->priv->accessible_type = GTK_TYPE_ACCESSIBLE;
@@ -4862,6 +4865,20 @@ gtk_widget_real_css_changed (GtkWidget         *widget,
 
       if (priv->root)
         gtk_widget_queue_resize (widget);
+    }
+}
+
+static void
+gtk_widget_real_system_setting_changed (GtkWidget        *widget,
+                                        GtkSystemSetting  setting)
+{
+  GtkWidget *child;
+
+  for (child = _gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
+    {
+      gtk_widget_system_setting_changed (child, setting);
     }
 }
 
@@ -10625,6 +10642,13 @@ gtk_widget_css_changed (GtkWidget         *widget,
                         GtkCssStyleChange *change)
 {
   GTK_WIDGET_GET_CLASS (widget)->css_changed (widget, change);
+}
+
+void
+gtk_widget_system_setting_changed (GtkWidget        *widget,
+                                   GtkSystemSetting  setting)
+{
+  GTK_WIDGET_GET_CLASS (widget)->system_setting_changed (widget, setting);
 }
 
 GtkCssNode *

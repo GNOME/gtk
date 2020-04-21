@@ -282,6 +282,8 @@ gboolean          _gtk_widget_captured_event               (GtkWidget *widget,
 
 void              gtk_widget_css_changed                   (GtkWidget           *widget,
                                                             GtkCssStyleChange   *change);
+void              gtk_widget_system_setting_changed        (GtkWidget           *widget,
+                                                            GtkSystemSetting     setting);
 
 void              _gtk_widget_update_parent_muxer          (GtkWidget    *widget);
 GtkActionMuxer *  _gtk_widget_get_action_muxer             (GtkWidget    *widget,
