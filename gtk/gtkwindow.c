@@ -7110,6 +7110,8 @@ gtk_window_set_display (GtkWindow  *window,
     gtk_widget_map (widget);
 
   check_scale_changed (window);
+
+  gtk_widget_system_setting_changed (GTK_WIDGET (window), GTK_SYSTEM_SETTING_DISPLAY);
 }
 
 static void
