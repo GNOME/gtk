@@ -2312,6 +2312,7 @@ GtkSettingsValue
 gtk_settings_get_default
 gtk_settings_get_for_display
 gtk_settings_reset_property
+GtkSystemSetting
 <SUBSECTION Standard>
 GtkSettingsClass
 GTK_IS_SETTINGS
