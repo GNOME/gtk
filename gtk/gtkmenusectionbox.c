@@ -612,24 +612,21 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
       GtkWidget *separator;
       GtkWidget *title;
 
-      box->separator = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
+      box->separator = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       g_object_ref_sink (box->separator);
-
-      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_widget_set_valign (separator, GTK_ALIGN_CENTER);
-      gtk_container_add (GTK_CONTAINER (box->separator), separator);
-      gtk_size_group_add_widget (box->indicators, separator);
-
-      title = gtk_label_new (label);
-      g_object_bind_property (item, "label", title, "label", G_BINDING_SYNC_CREATE);
-      gtk_widget_add_css_class (title, GTK_STYLE_CLASS_SEPARATOR);
-      gtk_widget_set_halign (title, GTK_ALIGN_START);
-      gtk_container_add (GTK_CONTAINER (box->separator), title);
 
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_widget_set_valign (separator, GTK_ALIGN_CENTER);
       gtk_widget_set_hexpand (separator, TRUE);
       gtk_container_add (GTK_CONTAINER (box->separator), separator);
+
+      title = gtk_label_new (label);
+      g_object_bind_property (item, "label", title, "label", G_BINDING_SYNC_CREATE);
+      gtk_widget_add_css_class (title, GTK_STYLE_CLASS_SEPARATOR);
+      gtk_widget_set_halign (title, GTK_ALIGN_START);
+      gtk_label_set_xalign (GTK_LABEL (title), 0.0);
+      gtk_widget_add_css_class (title, GTK_STYLE_CLASS_TITLE);
+      gtk_container_add (GTK_CONTAINER (box->separator), title);
     }
   else
     {
