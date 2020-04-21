@@ -1914,6 +1914,10 @@ microphone-sensitivity-medium-symbolic</property>
                                     </child>
                                     <child>
                                       <object class="GtkBox" id="toolbar">
+                                        <style>
+                                          <class name="toolbar"/>
+                                          <class name="top"/>
+                                        </style>
                                         <child>
                                           <object class="GtkButton">
                                             <property name="label" translatable="yes">New</property>
@@ -1970,9 +1974,6 @@ microphone-sensitivity-medium-symbolic</property>
                                           </object>
                                         </child>
                                       </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkSeparator"/>
                                     </child>
                                     <child>
                                       <object class="GtkScrolledWindow">
@@ -2579,13 +2580,16 @@ microphone-sensitivity-medium-symbolic</property>
                             </child>
                           </object>
                         </child>
+                        <child>
+                          <object class="GtkFrame">
                             <child>
                               <object class="GtkBox">
                                 <child>
                                   <object class="GtkBox">
                                     <property name="orientation">vertical</property>
                                     <style>
-                                      <class name="linked"/>
+                                      <class name="toolbar"/>
+                                      <class name="start"/>
                                     </style>
                                     <child>
                                       <object class="GtkButton" id="toolbutton1">
@@ -2619,7 +2623,6 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                                 <child>
                                   <object class="GtkScrolledWindow">
-                                    <property name="has-frame">1</property>
                                     <property name="hexpand">1</property>
                                     <child>
                                       <object class="GtkTextView" id="tooltextview"/>
@@ -2629,6 +2632,10 @@ microphone-sensitivity-medium-symbolic</property>
                                 <child>
                                   <object class="GtkBox">
                                     <property name="orientation">vertical</property>
+                                    <style>
+                                      <class name="toolbar"/>
+                                      <class name="end"/>
+                                    </style>
                                     <child>
                                       <object class="GtkBox">
                                         <property name="orientation">vertical</property>
@@ -2674,6 +2681,8 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                               </object>
                             </child>
+                          </object>
+                        </child>
                         <child>
                           <object class="GtkOverlay">
                             <child type="overlay">
@@ -2686,6 +2695,7 @@ microphone-sensitivity-medium-symbolic</property>
                                 <property name="margin-bottom">20</property>
                                 <property name="valign">end</property>
                                 <style>
+                                  <class name="toolbar"/>
                                   <class name="osd"/>
                                 </style>
                                 <child>
