@@ -176,10 +176,6 @@ gtk_css_animated_style_set_animated_value (GtkCssAnimatedStyle *animated,
       unshare_core (animated);
       gtk_css_take_value (&style->core->font_size, value);
       break;
-    case GTK_CSS_PROPERTY_ICON_THEME:
-      unshare_core (animated);
-      gtk_css_take_value (&style->core->icon_theme, value);
-      break;
     case GTK_CSS_PROPERTY_ICON_PALETTE:
       unshare_core (animated);
       gtk_css_take_value (&style->core->icon_palette, value);

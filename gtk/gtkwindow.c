@@ -5739,9 +5739,6 @@ gtk_window_css_changed (GtkWidget         *widget,
 
       update_opaque_region (window, &window_border, &allocation);
     }
-
-  if (change == NULL || gtk_css_style_change_changes_property (change, GTK_CSS_PROPERTY_ICON_THEME))
-    update_themed_icon (window);
 }
 
 /**
