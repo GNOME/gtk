@@ -110,6 +110,8 @@ static void gtk_image_measure (GtkWidget      *widget,
 
 static void gtk_image_css_changed          (GtkWidget    *widget,
                                             GtkCssStyleChange *change);
+static void gtk_image_system_setting_changed (GtkWidget        *widget,
+                                              GtkSystemSetting  seting);
 static void gtk_image_finalize             (GObject      *object);
 
 static void gtk_image_set_property         (GObject      *object,
@@ -157,6 +159,7 @@ gtk_image_class_init (GtkImageClass *class)
   widget_class->measure = gtk_image_measure;
   widget_class->unrealize = gtk_image_unrealize;
   widget_class->css_changed = gtk_image_css_changed;
+  widget_class->system_setting_changed = gtk_image_system_setting_changed;
   widget_class->grab_focus = gtk_widget_grab_focus_none;
   widget_class->focus = gtk_widget_focus_none;
 
@@ -1262,6 +1265,18 @@ gtk_image_css_changed (GtkWidget         *widget,
   GTK_WIDGET_CLASS (gtk_image_parent_class)->css_changed (widget, change);
 
   image->baseline_align = 0.0;
+}
+
+static void
+gtk_image_system_setting_changed (GtkWidget        *widget,
+                                  GtkSystemSetting  setting)
+{
+  GtkImage *image = GTK_IMAGE (widget);
+
+  if (setting == GTK_SYSTEM_SETTING_ICON_THEME)
+    gtk_icon_helper_invalidate (image->icon_helper);
+
+  GTK_WIDGET_CLASS (gtk_image_parent_class)->system_setting_changed (widget, setting);
 }
 
 /**
