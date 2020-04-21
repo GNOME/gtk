@@ -8,5 +8,6 @@ $variant: 'light';
 
 @import '../Adwaita/colors';
 @import 'colors-hc';
+@import '../Adwaita/colors-public'; // export public colors
 @import '../Adwaita/drawing';
 @import '../Adwaita/common';
