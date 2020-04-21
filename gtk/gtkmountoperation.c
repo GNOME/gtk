@@ -1206,8 +1206,6 @@ add_pid_to_process_list_store (GtkMountOperation              *mount_operation,
       GtkIconPaintable *icon;
 
       theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (mount_operation->priv->dialog)));
-        (_gtk_style_context_peek_property (gtk_widget_get_style_context (GTK_WIDGET (mount_operation->priv->dialog)),
-                                           GTK_CSS_PROPERTY_ICON_THEME));
       icon = gtk_icon_theme_lookup_icon (theme,
                                          "application-x-executable",
                                          NULL,

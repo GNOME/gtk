@@ -103,8 +103,6 @@ gtk_css_style_get_value (GtkCssStyle *style,
       return style->core->dpi;
     case GTK_CSS_PROPERTY_FONT_SIZE:
       return style->core->font_size;
-    case GTK_CSS_PROPERTY_ICON_THEME:
-      return style->core->icon_theme;
     case GTK_CSS_PROPERTY_ICON_PALETTE:
       return style->core->icon_palette;
     case GTK_CSS_PROPERTY_BACKGROUND_COLOR:

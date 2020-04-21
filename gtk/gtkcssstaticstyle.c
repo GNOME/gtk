@@ -50,7 +50,6 @@ static const int core_props[] = {
   GTK_CSS_PROPERTY_COLOR,
   GTK_CSS_PROPERTY_DPI,
   GTK_CSS_PROPERTY_FONT_SIZE,
-  GTK_CSS_PROPERTY_ICON_THEME,
   GTK_CSS_PROPERTY_ICON_PALETTE
 };
 
@@ -395,9 +394,6 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *sstyle,
       break;
     case GTK_CSS_PROPERTY_FONT_SIZE:
       gtk_css_take_value (&style->core->font_size, value);
-      break;
-    case GTK_CSS_PROPERTY_ICON_THEME:
-      gtk_css_take_value (&style->core->icon_theme, value);
       break;
     case GTK_CSS_PROPERTY_ICON_PALETTE:
       gtk_css_take_value (&style->core->icon_palette, value);
