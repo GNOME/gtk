@@ -36,7 +36,6 @@
 #include "gtkcellrenderertext.h"
 #include "gtkcellrendererpixbuf.h"
 #include "gtkcombobox.h"
-#include "gtkcssiconthemevalueprivate.h"
 #include "gtkdroptarget.h"
 #include "gtkicontheme.h"
 #include "gtkimage.h"

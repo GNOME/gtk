@@ -34,7 +34,6 @@
 #include "gtkbutton.h"
 #include "gtkcheckbutton.h"
 #include "gtkcsscornervalueprivate.h"
-#include "gtkcssiconthemevalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssshadowvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
@@ -3363,17 +3362,13 @@ icon_list_from_theme (GtkWindow   *window,
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GList *list;
-  GtkStyleContext *context;
-  GtkCssValue *value;
   GtkIconTheme *icon_theme;
   GtkIconPaintable *info;
   GdkTexture *texture;
   gint *sizes;
   gint i;
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (window));
-  value = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_THEME);
-  icon_theme = gtk_css_icon_theme_value_get_icon_theme (value);
+  icon_theme = gtk_icon_theme_get_for_display (priv->display);
 
   sizes = gtk_icon_theme_get_icon_sizes (icon_theme, name);
 
