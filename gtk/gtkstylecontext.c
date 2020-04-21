@@ -416,36 +416,6 @@ gtk_style_context_remove_provider (GtkStyleContext  *context,
 }
 
 /**
- * gtk_style_context_reset_widgets:
- * @display: a #GdkDisplay
- *
- * This function recomputes the styles for all widgets under a particular
- * #GdkDisplay. This is useful when some global parameter has changed that
- * affects the appearance of all widgets, because when a widget gets a new
- * style, it will both redraw and recompute any cached information about
- * its appearance. As an example, it is used when the color scheme changes
- * in the related #GtkSettings object.
- **/
-void
-gtk_style_context_reset_widgets (GdkDisplay *display)
-{
-  GList *list, *toplevels;
-
-  toplevels = gtk_window_list_toplevels ();
-  g_list_foreach (toplevels, (GFunc) g_object_ref, NULL);
-
-  for (list = toplevels; list; list = list->next)
-    {
-      if (gtk_widget_get_display (list->data) == display)
-        gtk_widget_reset_style (list->data);
-
-      g_object_unref (list->data);
-    }
-
-  g_list_free (toplevels);
-}
-
-/**
  * gtk_style_context_add_provider_for_display:
  * @display: a #GdkDisplay
  * @provider: a #GtkStyleProvider
