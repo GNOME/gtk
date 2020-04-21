@@ -191,12 +191,15 @@ typedef struct
 
   guint    mnemonics_display_timeout_id;
 
+  guint    focus_visible_timeout;
+
   gint     scale;
 
   gint title_height;
   GtkWidget *title_box;
   GtkWidget *titlebar;
   GtkWidget *popup_menu;
+  GtkWidget *key_press_focus;
 
   GdkMonitor *initial_fullscreen_monitor;
   guint      edge_constraints;
@@ -4068,6 +4071,12 @@ gtk_window_finalize (GObject *object)
       priv->mnemonics_display_timeout_id = 0;
     }
 
+  if (priv->focus_visible_timeout)
+    {
+      g_source_remove (priv->focus_visible_timeout);
+      priv->focus_visible_timeout = 0;
+    }
+
   g_clear_object (&priv->constraint_solver);
   g_clear_object (&priv->renderer);
   g_clear_object (&priv->resize_cursor);
@@ -5362,6 +5371,36 @@ update_mnemonics_visible (GtkWindow       *window,
     }
 }
 
+static void
+update_focus_visible (GtkWindow       *window,
+                      guint            keyval,
+                      GdkModifierType  state,
+                      gboolean         visible)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  if (visible)
+    {
+      if (priv->focus_visible)
+        priv->key_press_focus = NULL;
+      else
+        priv->key_press_focus = priv->focus_widget;
+
+      if ((keyval == GDK_KEY_Alt_L || keyval == GDK_KEY_Alt_R) &&
+               ((state & (gtk_accelerator_get_default_mod_mask ()) & ~(GDK_ALT_MASK)) == 0))
+        gtk_window_set_focus_visible (window, TRUE);
+    }
+  else
+    {
+      if (priv->key_press_focus == priv->focus_widget)
+        gtk_window_set_focus_visible (window, FALSE);
+      else
+        gtk_window_set_focus_visible (window, TRUE);
+
+      priv->key_press_focus = NULL;
+    }
+}
+
 static gboolean
 gtk_window_key_pressed (GtkWidget       *widget,
                         guint            keyval,
@@ -5371,8 +5410,7 @@ gtk_window_key_pressed (GtkWidget       *widget,
 {
   GtkWindow *window = GTK_WINDOW (widget);
 
-  gtk_window_set_focus_visible (window, TRUE);
-
+  update_focus_visible (window, keyval, state, TRUE);
   update_mnemonics_visible (window, keyval, state, TRUE);
 
   return FALSE;
@@ -5387,6 +5425,7 @@ gtk_window_key_released (GtkWidget       *widget,
 {
   GtkWindow *window = GTK_WINDOW (widget);
 
+  update_focus_visible (window, keyval, state, FALSE);
   update_mnemonics_visible (window, keyval, state, FALSE);
 
   return FALSE;
@@ -7406,6 +7445,19 @@ gtk_window_get_focus_visible (GtkWindow *window)
   return priv->focus_visible;
 }
 
+static gboolean
+unset_focus_visible (gpointer data)
+{
+  GtkWindow *window = data;
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  priv->focus_visible_timeout = 0;
+
+  gtk_window_set_focus_visible (window, FALSE);
+
+  return G_SOURCE_REMOVE;
+}
+
 /**
  * gtk_window_set_focus_visible:
  * @window: a #GtkWindow
@@ -7417,15 +7469,39 @@ void
 gtk_window_set_focus_visible (GtkWindow *window,
                               gboolean   setting)
 {
+  gboolean changed;
+
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  setting = setting != FALSE;
+  changed = priv->focus_visible != setting;
 
-  if (priv->focus_visible != setting)
+  priv->focus_visible = setting;
+
+  if (priv->focus_visible_timeout)
     {
-      priv->focus_visible = setting;
+      g_source_remove (priv->focus_visible_timeout);
+      priv->focus_visible_timeout = 0;
+    }
+
+  if (priv->focus_visible)
+    priv->focus_visible_timeout = g_timeout_add_seconds (5, unset_focus_visible, window);
+
+  if (changed)
+    {
+      if (priv->focus_widget)
+        {
+          GtkWidget *widget;
+
+          for (widget = priv->focus_widget; widget; widget = gtk_widget_get_parent (widget))
+            {
+              if (priv->focus_visible)
+                gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_FOCUS_VISIBLE, FALSE);
+              else
+                gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_FOCUS_VISIBLE);
+            }
+        }
       g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_FOCUS_VISIBLE]);
     }
 }
