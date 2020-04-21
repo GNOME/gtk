@@ -2086,51 +2086,62 @@ microphone-sensitivity-medium-symbolic</property>
                               <object class="GtkExpander" id="expander1">
                                 <property name="expanded">1</property>
                                 <child>
-                                  <object class="GtkBox">
-                                    <property name="orientation">vertical</property>
+                                  <object class="GtkFrame" id="expander1frame">
+                                    <property name="margin-top">6</property>
                                     <child>
-                                      <object class="GtkScrolledWindow" id="scrolledwindow3">
-                                        <property name="has-frame">1</property>
-                                        <property name="margin-top">6</property>
-                                        <property name="height-request">226</property>
+                                      <object class="GtkBox">
+                                        <property name="orientation">vertical</property>
                                         <child>
-                                          <object class="GtkIconView" id="iconview1">
-                                            <property name="selection-mode">multiple</property>
-                                            <property name="model">iconsmodel</property>
+                                          <object class="GtkScrolledWindow" id="scrolledwindow3">
+                                            <property name="height-request">226</property>
                                             <child>
-                                              <object class="GtkCellRendererPixbuf" id="iconviewcell"/>
-                                              <attributes>
-                                                <attribute name="icon-name">0</attribute>
-                                              </attributes>
+                                              <object class="GtkIconView" id="iconview1">
+                                                <property name="selection-mode">multiple</property>
+                                                <property name="model">iconsmodel</property>
+                                                <child>
+                                                  <object class="GtkCellRendererPixbuf" id="iconviewcell"/>
+                                                  <attributes>
+                                                    <attribute name="icon-name">0</attribute>
+                                                  </attributes>
+                                                </child>
+                                              </object>
                                             </child>
                                           </object>
                                         </child>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkBox">
-                                        <style>
-                                          <class name="linked"/>
-                                        </style>
                                         <child>
-                                          <object class="GtkButton" id="decrease_button">
-                                            <property name="icon-name">zoom-out-symbolic</property>
-                                            <property name="tooltip-text">Normal icons</property>
-                                            <signal name="clicked" handler="decrease_icon_size" object="iconview1" swapped="yes"/>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkButton" id="increase_button">
-                                            <property name="icon-name">zoom-in-symbolic</property>
-                                            <property name="tooltip-text">Large icons</property>
-                                            <signal name="clicked" handler="increase_icon_size" object="iconview1" swapped="yes"/>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkButton" id="reset_button">
-                                            <property name="icon-name">zoom-original-symbolic</property>
-                                            <property name="tooltip-text">Inherited icon size</property>
-                                            <signal name="clicked" handler="reset_icon_size" object="iconview1" swapped="yes"/>
+                                          <object class="GtkBox">
+                                            <style>
+                                              <class name="toolbar"/>
+                                              <class name="bottom"/>
+                                            </style>
+                                            <child>
+                                              <object class="GtkBox">
+                                                <style>
+                                                  <class name="linked"/>
+                                                </style>
+                                                <child>
+                                                  <object class="GtkButton" id="decrease_button">
+                                                    <property name="icon-name">zoom-out-symbolic</property>
+                                                    <property name="tooltip-text">Normal icons</property>
+                                                    <signal name="clicked" handler="decrease_icon_size" object="iconview1" swapped="yes"/>
+                                                  </object>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkButton" id="increase_button">
+                                                    <property name="icon-name">zoom-in-symbolic</property>
+                                                    <property name="tooltip-text">Large icons</property>
+                                                    <signal name="clicked" handler="increase_icon_size" object="iconview1" swapped="yes"/>
+                                                  </object>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkButton" id="reset_button">
+                                                    <property name="icon-name">zoom-original-symbolic</property>
+                                                    <property name="tooltip-text">Inherited icon size</property>
+                                                    <signal name="clicked" handler="reset_icon_size" object="iconview1" swapped="yes"/>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                            </child>
                                           </object>
                                         </child>
                                       </object>
