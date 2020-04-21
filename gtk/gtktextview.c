@@ -6048,7 +6048,7 @@ gtk_text_view_check_cursor_blink (GtkTextView *text_view)
 {
   GtkTextViewPrivate *priv = text_view->priv;
 
-  if (cursor_blinks (text_view))
+  if (cursor_blinks (text_view) && cursor_visible (text_view))
     {
       if (!priv->blink_tick)
         add_blink_timeout (text_view, FALSE);
