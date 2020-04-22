@@ -275,7 +275,7 @@ _gtk_header_bar_update_separator_visibility (GtkHeaderBar *bar)
     gtk_widget_set_visible (priv->titlebar_end_separator, have_visible_at_end);
 }
 
-void
+static void
 _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
@@ -1006,8 +1006,18 @@ gtk_header_bar_realize (GtkWidget *widget)
   root = GTK_WIDGET (gtk_widget_get_root (widget));
 
   if (GTK_IS_WINDOW (root))
-    g_signal_connect_swapped (root, "notify::icon-name",
-                              G_CALLBACK (_gtk_header_bar_update_window_buttons), widget);
+    {
+      g_signal_connect_swapped (root, "notify::modal",
+                                G_CALLBACK (_gtk_header_bar_update_window_buttons), widget);
+      g_signal_connect_swapped (root, "notify::transient-for",
+                                G_CALLBACK (_gtk_header_bar_update_window_buttons), widget);
+      g_signal_connect_swapped (root, "notify::resizable",
+                                G_CALLBACK (_gtk_header_bar_update_window_buttons), widget);
+      g_signal_connect_swapped (root, "notify::deletable",
+                                G_CALLBACK (_gtk_header_bar_update_window_buttons), widget);
+      g_signal_connect_swapped (root, "notify::icon-name",
+                                G_CALLBACK (_gtk_header_bar_update_window_buttons), widget);
+    }
 
   _gtk_header_bar_update_window_buttons (GTK_HEADER_BAR (widget));
 }
