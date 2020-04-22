@@ -297,6 +297,16 @@ extern UINT		 _gdk_input_codepage;
 
 extern guint		 _gdk_keymap_serial;
 
+extern GPtrArray *_gdk_window_stack;
+extern GPtrArray *_gdk_tmp_stack;
+
+void gdk_win32_window_stack_add    (GdkWindow *window,
+                                    GdkWindow *insert_after);
+void gdk_win32_window_stack_remove (GdkWindow *window);
+void gdk_win32_window_stack_raise  (GdkWindow *window);
+void gdk_win32_window_stack_lower  (GdkWindow *window);
+
+
 /* The singleton selection object pointer */
 extern GdkWin32Selection *_win32_selection;
 

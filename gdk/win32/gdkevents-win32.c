@@ -2005,57 +2005,15 @@ ensure_stacking_on_activate_app (MSG       *msg,
   GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
   HWND rover;
   gboolean window_ontop;
+  gint i;
 
-  if (impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
-      impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
-      impl->transient_owner != NULL)
+  for (i = 0; i < _gdk_window_stack->len; i++)
     {
-      SetWindowPos (msg->hwnd, HWND_TOP, 0, 0, 0, 0,
+      GdkWindow *item = g_ptr_array_index (_gdk_window_stack, i);
+      SetWindowPos (GDK_WINDOW_HWND (item),
+                    should_window_be_always_on_top (item) ? HWND_TOPMOST : HWND_TOP,
+                    0, 0, 0, 0,
 		    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER);
-      return;
-    }
-
-  if (!IsWindowVisible (msg->hwnd) ||
-      msg->hwnd != GetActiveWindow ())
-    return;
-
-
-  /* This window is not a transient-type window and it is the
-   * activated window. Make sure this window is as visible as
-   * possible, just below the lowest transient-type window of this
-   * app.
-   */
-
-  window_ontop = should_window_be_always_on_top (window);
-
-  for (rover = GetNextWindow (msg->hwnd, GW_HWNDPREV);
-       rover;
-       rover = GetNextWindow (rover, GW_HWNDPREV))
-    {
-      GdkWindow *rover_gdkw = gdk_win32_handle_table_lookup (rover);
-      GdkWindowImplWin32 *rover_impl;
-      gboolean rover_ontop;
-
-      /* Checking window group not implemented yet */
-      if (rover_gdkw == NULL)
-        continue;
-
-      rover_ontop = should_window_be_always_on_top (rover_gdkw);
-      rover_impl = GDK_WINDOW_IMPL_WIN32 (rover_gdkw->impl);
-
-      if (GDK_WINDOW_IS_MAPPED (rover_gdkw) &&
-          (rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
-           rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
-           rover_impl->transient_owner != NULL) &&
-          ((window_ontop && rover_ontop) || (!window_ontop && !rover_ontop)))
-        {
-	  GDK_NOTE (EVENTS,
-		    g_print (" restacking %p above %p",
-			     msg->hwnd, rover));
-	  SetWindowPos (msg->hwnd, rover, 0, 0, 0, 0,
-			SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER);
-          break;
-	}
     }
 }
 

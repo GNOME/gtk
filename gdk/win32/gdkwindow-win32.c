@@ -995,6 +995,8 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
     gdk_window_set_cursor (window, attributes->cursor);
 
   _gdk_win32_window_enable_transparency (window);
+
+  gdk_win32_window_stack_add (window, NULL);
 }
 
 GdkWindow *
@@ -1007,6 +1009,7 @@ gdk_win32_window_foreign_new_for_display (GdkDisplay *display,
   HANDLE parent;
   RECT rect;
   POINT point;
+  HANDLE below;
 
   if ((window = gdk_win32_window_lookup_for_display (display, anid)) != NULL)
     return g_object_ref (window);
@@ -1018,6 +1021,7 @@ gdk_win32_window_foreign_new_for_display (GdkDisplay *display,
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
   impl->wrapper = window;
   parent = GetParent (anid);
+  below = GetWindow (anid, GW_HWNDNEXT);
 
   window->parent = gdk_win32_handle_table_lookup (parent);
   if (!window->parent || GDK_WINDOW_TYPE (window->parent) == GDK_WINDOW_FOREIGN)
@@ -1064,6 +1068,8 @@ gdk_win32_window_foreign_new_for_display (GdkDisplay *display,
 			   _gdk_win32_window_description (window),
 			   window->x, window->y));
 
+  gdk_win32_window_stack_add (window, below ? gdk_win32_handle_table_lookup (below) : NULL);
+
   return window;
 }
 
@@ -1080,6 +1086,8 @@ gdk_win32_window_destroy (GdkWindow *window,
 
   GDK_NOTE (MISC, g_print ("gdk_win32_window_destroy: %p\n",
 			   GDK_WINDOW_HWND (window)));
+
+  gdk_win32_window_stack_remove (window);
 
   /* Remove ourself from the modal stack */
   _gdk_remove_modal_window (window);
@@ -1126,6 +1134,7 @@ gdk_win32_window_destroy_foreign (GdkWindow *window)
   /* It's somebody else's window, but in our hierarchy, so reparent it
    * to the desktop, and then try to destroy it.
    */
+  gdk_win32_window_stack_remove (window);
   gdk_window_hide (window);
   gdk_window_reparent (window, NULL, 0, 0);
 
@@ -1735,7 +1744,9 @@ gdk_win32_window_reparent (GdkWindow *window,
   gboolean new_parent_is_root;
   gboolean was_toplevel;
   LONG style;
+  HANDLE below;
 
+  gdk_win32_window_stack_remove (window);
   screen = gdk_window_get_screen (window);
 
   if (!new_parent)
@@ -1810,6 +1821,9 @@ gdk_win32_window_reparent (GdkWindow *window,
   /* Move window into desired position while keeping the same client area */
   gdk_win32_window_move_resize (window, TRUE, x, y, window->width, window->height);
 
+  below = GetWindow (GDK_WINDOW_HWND (window), GW_HWNDNEXT);
+  gdk_win32_window_stack_add (window, below ? gdk_win32_handle_table_lookup (below) : NULL);
+
   return FALSE;
 }
 
@@ -1818,23 +1832,27 @@ gdk_win32_window_raise (GdkWindow *window)
 {
   if (!GDK_WINDOW_DESTROYED (window))
     {
-      GDK_NOTE (MISC, g_print ("gdk_win32_window_raise: %p\n",
-			       GDK_WINDOW_HWND (window)));
+      gint i;
 
-      if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
-        API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), HWND_TOPMOST,
-	                         0, 0, 0, 0,
-				 SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER));
-      else if (window->accept_focus)
-        /* Do not wrap this in an API_CALL macro as SetForegroundWindow might
-         * fail when for example dragging a window belonging to a different
-         * application at the time of a gtk_window_present() call due to focus
-         * stealing prevention. */
-        SetForegroundWindow (GDK_WINDOW_HWND (window));
-      else
-        API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), HWND_TOP,
-  			         0, 0, 0, 0,
-			         SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER));
+      gdk_win32_window_stack_raise (window);
+
+      for (i = 0; i < _gdk_tmp_stack->len; i++)
+        {
+          GdkWindow *item = g_ptr_array_index (_gdk_tmp_stack, i);
+          GDK_NOTE (MISC, g_print ("gdk_win32_window_raise: %s%p\n",
+                                   item == window ? "anchor " : "", GDK_WINDOW_HWND (item)));
+          if (item->accept_focus)
+            /* Do not wrap this in an API_CALL macro as SetForegroundWindow might
+             * fail when for example dragging a window belonging to a different
+             * application at the time of a gtk_window_present() call due to focus
+             * stealing prevention. */
+            SetForegroundWindow (GDK_WINDOW_HWND (item));
+          else
+            API_CALL (SetWindowPos, (GDK_WINDOW_HWND (item),
+                                     item->state & GDK_WINDOW_STATE_ABOVE ? HWND_TOPMOST : HWND_TOP,
+                                     0, 0, 0, 0,
+                                     SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER));
+        }
     }
 }
 
@@ -1843,15 +1861,22 @@ gdk_win32_window_lower (GdkWindow *window)
 {
   if (!GDK_WINDOW_DESTROYED (window))
     {
-      GDK_NOTE (MISC, g_print ("gdk_win32_window_lower: %p\n"
-			       "... SetWindowPos(%p,HWND_BOTTOM,0,0,0,0,"
-			       "NOACTIVATE|NOMOVE|NOSIZE)\n",
-			       GDK_WINDOW_HWND (window),
-			       GDK_WINDOW_HWND (window)));
+      gint i;
 
-      API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), HWND_BOTTOM,
-			       0, 0, 0, 0,
-			       SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER));
+      gdk_win32_window_stack_lower (window);
+
+      for (i = 0; i < _gdk_tmp_stack->len; i++)
+        {
+          GdkWindow *item = g_ptr_array_index (_gdk_tmp_stack, i);
+          GDK_NOTE (MISC, g_print ("gdk_win32_window_lower: %s%p\n"
+                                   "... SetWindowPos(%p,HWND_BOTTOM,0,0,0,0,"
+                                   "NOACTIVATE|NOMOVE|NOSIZE)\n",
+                                   item == window ? "anchor " : "", GDK_WINDOW_HWND (item),
+                                   GDK_WINDOW_HWND (item)));
+          API_CALL (SetWindowPos, (GDK_WINDOW_HWND (item), HWND_BOTTOM,
+                                   0, 0, 0, 0,
+                                   SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER));
+        }
     }
 }
 
@@ -6314,6 +6339,155 @@ gdk_win32_window_get_handle (GdkWindow *window)
     }
 
   return GDK_WINDOW_HWND (window);
+}
+
+static gint
+_gdk_win32_window_stack_find_window (GdkWindow *window)
+{
+  gint i;
+
+  if (window == NULL)
+    return -1;
+
+  for (i = 0; i < _gdk_window_stack->len; i++)
+    {
+      GdkWindow *item = g_ptr_array_index (_gdk_window_stack, i);
+
+      if (item == window)
+        return i;
+    }
+
+  return -1;
+}
+
+void
+gdk_win32_window_stack_add (GdkWindow *window,
+                            GdkWindow *insert_after)
+{
+  gint pos = -1;
+
+  if (insert_after != NULL)
+    pos = _gdk_win32_window_stack_find_window (insert_after);
+
+  g_ptr_array_insert (_gdk_window_stack, pos, window);
+}
+
+void
+gdk_win32_window_stack_remove (GdkWindow *window)
+{
+  gint pos = _gdk_win32_window_stack_find_window (window);
+
+  if (pos < 0)
+    return;
+
+  g_ptr_array_steal_index (_gdk_window_stack, pos);
+}
+
+static gboolean
+stack_window_is_transient (gconstpointer a,
+                           gconstpointer b)
+{
+  GdkWindow *possibly_transient_parent = (GdkWindow *) a;
+  GdkWindow *item = (GdkWindow *) b;
+
+  return (item->transient_for == possibly_transient_parent);
+}
+
+static void
+clear_tmp_stack ()
+{
+  while (_gdk_tmp_stack->len > 0)
+    g_ptr_array_steal_index_fast (_gdk_tmp_stack, 0);
+}
+
+void
+gdk_win32_window_stack_raise (GdkWindow *window)
+{
+  gint move_count;
+  gint i;
+
+  clear_tmp_stack ();
+
+  /* Find any transients that this window has (including transients
+   * of transients)
+   */
+  for (i = 0; i < _gdk_window_stack->len; i++)
+    {
+      GdkWindow *item = g_ptr_array_index (_gdk_window_stack, i);
+
+      if (item == window ||
+          g_ptr_array_find_with_equal_func (_gdk_tmp_stack,
+                                            item,
+                                            stack_window_is_transient,
+                                            NULL))
+        g_ptr_array_insert (_gdk_tmp_stack, -1, item);
+    }
+
+  if (_gdk_tmp_stack->len == 0)
+    return;
+
+  /* Move the window and any transients to the top in the same order
+   * that they appear in the stack.
+   */
+  for (move_count = _gdk_tmp_stack->len, i = 0;
+       move_count > 0 && i < _gdk_window_stack->len;
+       i++)
+    {
+      GdkWindow *item = g_ptr_array_index (_gdk_window_stack, i);
+
+      if (!g_ptr_array_find (_gdk_tmp_stack, item, NULL))
+        continue;
+
+      g_ptr_array_insert (_gdk_window_stack,
+                          -1,
+                          g_ptr_array_steal_index (_gdk_window_stack, i--));
+      move_count -= 1;
+    }
+}
+
+void
+gdk_win32_window_stack_lower (GdkWindow *window)
+{
+  gint move_count;
+  gint i;
+
+  clear_tmp_stack ();
+
+  /* Find any transients that this window has (including transients
+   * of transients)
+   */
+  for (i = _gdk_window_stack->len - 1; i >= 0; i--)
+    {
+      GdkWindow *item = g_ptr_array_index (_gdk_window_stack, i);
+
+      if (item == window ||
+          g_ptr_array_find_with_equal_func (_gdk_tmp_stack,
+                                            item,
+                                            stack_window_is_transient,
+                                            NULL))
+        g_ptr_array_insert (_gdk_tmp_stack, 0, item);
+    }
+
+  if (_gdk_tmp_stack->len == 0)
+    return;
+
+  /* Move the window and any transients to the bottom in the same order
+   * that they appear in the stack.
+   */
+  for (move_count = _gdk_tmp_stack->len, i = _gdk_window_stack->len - 1;
+       move_count > 0 && i >= 0;
+       i--)
+    {
+      GdkWindow *item = g_ptr_array_index (_gdk_window_stack, i);
+
+      if (!g_ptr_array_find (_gdk_tmp_stack, item, NULL))
+        continue;
+
+      g_ptr_array_insert (_gdk_window_stack,
+                          0,
+                          g_ptr_array_steal_index (_gdk_window_stack, i++));
+      move_count -= 1;
+    }
 }
 
 #ifdef GDK_WIN32_ENABLE_EGL
