@@ -275,7 +275,7 @@ _gtk_header_bar_update_separator_visibility (GtkHeaderBar *bar)
     gtk_widget_set_visible (priv->titlebar_end_separator, have_visible_at_end);
 }
 
-void
+static void
 _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
