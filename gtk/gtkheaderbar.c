@@ -275,7 +275,7 @@ _gtk_header_bar_update_separator_visibility (GtkHeaderBar *bar)
     gtk_widget_set_visible (priv->titlebar_end_separator, have_visible_at_end);
 }
 
-void
+static void
 _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
@@ -989,6 +989,10 @@ gtk_header_bar_child_type (GtkContainer *container)
 
 static void surface_state_changed (GtkWidget *widget);
 
+static void window_notify_cb (GtkHeaderBar *header_bar,
+                              GParamSpec   *pspec,
+                              GtkWindow    *window);
+
 static void
 gtk_header_bar_realize (GtkWidget *widget)
 {
@@ -1006,8 +1010,8 @@ gtk_header_bar_realize (GtkWidget *widget)
   root = GTK_WIDGET (gtk_widget_get_root (widget));
 
   if (GTK_IS_WINDOW (root))
-    g_signal_connect_swapped (root, "notify::icon-name",
-                              G_CALLBACK (_gtk_header_bar_update_window_buttons), widget);
+    g_signal_connect_swapped (root, "notify",
+                              G_CALLBACK (window_notify_cb), widget);
 
   _gtk_header_bar_update_window_buttons (GTK_HEADER_BAR (widget));
 }
@@ -1021,7 +1025,7 @@ gtk_header_bar_unrealize (GtkWidget *widget)
 
   g_signal_handlers_disconnect_by_func (settings, _gtk_header_bar_update_window_buttons, widget);
   g_signal_handlers_disconnect_by_func (gtk_native_get_surface (gtk_widget_get_native (widget)), surface_state_changed, widget);
-  g_signal_handlers_disconnect_by_func (gtk_widget_get_root (widget), _gtk_header_bar_update_window_buttons, widget);
+  g_signal_handlers_disconnect_by_func (gtk_widget_get_root (widget), window_notify_cb, widget);
 
   GTK_WIDGET_CLASS (gtk_header_bar_parent_class)->unrealize (widget);
 }
@@ -1045,6 +1049,19 @@ surface_state_changed (GtkWidget *widget)
                  GDK_SURFACE_STATE_BOTTOM_TILED |
                  GDK_SURFACE_STATE_LEFT_TILED))
     _gtk_header_bar_update_window_buttons (bar);
+}
+
+static void
+window_notify_cb (GtkHeaderBar *header_bar,
+                  GParamSpec   *pspec,
+                  GtkWindow    *window)
+{
+  if (pspec->name == I_("deletable") ||
+      pspec->name == I_("icon-name") ||
+      pspec->name == I_("modal") ||
+      pspec->name == I_("resizable") ||
+      pspec->name == I_("transient-for"))
+    _gtk_header_bar_update_window_buttons (header_bar);
 }
 
 static void
