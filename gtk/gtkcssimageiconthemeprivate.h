@@ -44,7 +44,8 @@ struct _GtkCssImageIconTheme
   GdkRGBA success;
   GdkRGBA warning;
   GdkRGBA error;
-  gint scale;
+  int serial;
+  int scale;
   char *name;
 
   int cached_size;
