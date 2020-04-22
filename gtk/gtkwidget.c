@@ -2760,10 +2760,15 @@ gtk_widget_map (GtkWidget *widget)
 
   if (!_gtk_widget_get_mapped (widget))
     {
+      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
       gtk_widget_push_verify_invariants (widget);
 
       if (!_gtk_widget_get_realized (widget))
         gtk_widget_realize (widget);
+
+      if (priv->accessible != NULL)
+        gtk_widget_accessible_notify_showing (GTK_WIDGET_ACCESSIBLE (priv->accessible));
 
       g_signal_emit (widget, widget_signals[MAP], 0);
 
@@ -2789,6 +2794,8 @@ gtk_widget_unmap (GtkWidget *widget)
 
   if (_gtk_widget_get_mapped (widget))
     {
+      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
       g_object_ref (widget);
       gtk_widget_push_verify_invariants (widget);
 
@@ -2796,6 +2803,9 @@ gtk_widget_unmap (GtkWidget *widget)
       _gtk_tooltip_hide (widget);
 
       g_signal_emit (widget, widget_signals[UNMAP], 0);
+
+      if (priv->accessible != NULL)
+        gtk_widget_accessible_notify_showing (GTK_WIDGET_ACCESSIBLE (priv->accessible));
 
       update_cursor_on_state_change (widget);
 
