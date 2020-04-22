@@ -126,8 +126,6 @@ struct _GtkHeaderBarPrivate
   GtkWidget *titlebar_start_separator;
   GtkWidget *titlebar_end_separator;
 
-  GtkWidget *titlebar_icon;
-
   GdkSurfaceState state;
 };
 
@@ -221,25 +219,22 @@ create_title_box (const char *title,
   return label_box;
 }
 
-gboolean
-_gtk_header_bar_update_window_icon (GtkHeaderBar *bar,
-                                    GtkWindow    *window)
+static gboolean
+update_window_icon (GtkHeaderBar *bar,
+                    GtkWindow    *window,
+                    GtkWidget    *icon)
 {
-  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GdkPaintable *paintable;
   gint scale;
 
-  if (priv->titlebar_icon == NULL)
-    return FALSE;
-
-  scale = gtk_widget_get_scale_factor (priv->titlebar_icon);
+  scale = gtk_widget_get_scale_factor (icon);
   paintable = gtk_window_get_icon_for_size (window, 20 * scale);
 
   if (paintable)
     {
-      gtk_image_set_from_paintable (GTK_IMAGE (priv->titlebar_icon), paintable);
+      gtk_image_set_from_paintable (GTK_IMAGE (icon), paintable);
       g_object_unref (paintable);
-      gtk_widget_show (priv->titlebar_icon);
+      gtk_widget_show (icon);
 
       return TRUE;
     }
@@ -311,8 +306,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
       priv->titlebar_end_separator = NULL;
     }
 
-  priv->titlebar_icon = NULL;
-
   if (!priv->show_title_buttons)
     return;
 
@@ -361,15 +354,13 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                 {
                   button = gtk_image_new ();
                   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-                  priv->titlebar_icon = button;
                   gtk_widget_add_css_class (button, "titlebutton");
                   gtk_widget_add_css_class (button, "icon");
 
-                  if (!_gtk_header_bar_update_window_icon (bar, window))
+                  if (!update_window_icon (bar, window, button))
                     {
                       g_object_ref_sink (button);
                       g_object_unref (button);
-                      priv->titlebar_icon = NULL;
                       button = NULL;
                     }
                 }

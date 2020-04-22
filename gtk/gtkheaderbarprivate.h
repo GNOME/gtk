@@ -26,8 +26,6 @@ G_BEGIN_DECLS
 
 void         _gtk_header_bar_track_default_decoration (GtkHeaderBar *bar);
 void         _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar);
-gboolean     _gtk_header_bar_update_window_icon    (GtkHeaderBar *bar,
-                                                    GtkWindow    *window);
 
 G_END_DECLS
 
