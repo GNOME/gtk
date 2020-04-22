@@ -166,7 +166,8 @@ gtk_css_image_icon_theme_equal (GtkCssImage *image1,
   GtkCssImageIconTheme *icon_theme1 = (GtkCssImageIconTheme *) image1;
   GtkCssImageIconTheme *icon_theme2 = (GtkCssImageIconTheme *) image2;
 
-  return g_str_equal (icon_theme1->name, icon_theme2->name);
+  return icon_theme1->serial == icon_theme2->serial &&
+         g_str_equal (icon_theme1->name, icon_theme2->name);
 }
 
 static void
