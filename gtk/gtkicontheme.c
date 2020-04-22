@@ -551,9 +551,16 @@ gtk_icon_theme_ref_aquire (GtkIconThemeRef *ref)
 static void
 gtk_icon_theme_ref_release (GtkIconThemeRef *ref)
 {
-  if (ref->theme)
-    g_object_unref (ref->theme);
+  GtkIconTheme *theme;
+
+  /* Get a pointer to the theme, becuse when we unlock it could become NULLed by dispose, this pointer still owns a ref */
+  theme = ref->theme;
   g_mutex_unlock (&ref->lock);
+
+  /* Then unref outside the lock, because otherwis if this is the last ref the dispose handler would deadlock trying to NULL ref->theme */
+  if (theme)
+    g_object_unref (theme);
+
 }
 
 static void
