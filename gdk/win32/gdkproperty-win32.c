@@ -33,6 +33,7 @@
 #include "gdkproperty.h"
 #include "gdkselection.h"
 #include "gdkprivate-win32.h"
+#include "gdkmonitor-win32.h"
 #include "gdkwin32.h"
 
 GdkAtom
@@ -368,8 +369,11 @@ _gdk_win32_screen_get_setting (GdkScreen   *screen,
     }
   else if (strcmp ("gtk-xft-antialias", name) == 0)
     {
-      GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : 1\n", name));
-      g_value_set_int (value, 1);
+      BOOL val = TRUE;
+      SystemParametersInfoW (SPI_GETFONTSMOOTHING, 0, &val, 0);
+      g_value_set_int (value, val ? 1 : 0);
+
+      GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : %u\n", name, val));
       return TRUE;
     }
   else if (strcmp ("gtk-xft-hintstyle", name) == 0)
@@ -380,18 +384,11 @@ _gdk_win32_screen_get_setting (GdkScreen   *screen,
     }
   else if (strcmp ("gtk-xft-rgba", name) == 0)
     {
-      unsigned int orientation = 0;
-      if (SystemParametersInfoW (SPI_GETFONTSMOOTHINGORIENTATION, 0, &orientation, 0))
-        {
-          if (orientation == FE_FONTSMOOTHINGORIENTATIONRGB)
-            g_value_set_static_string (value, "rgb");
-          else if (orientation == FE_FONTSMOOTHINGORIENTATIONBGR)
-            g_value_set_static_string (value, "bgr");
-          else
-            g_value_set_static_string (value, "none");
-        }
-      else
-        g_value_set_static_string (value, "none");
+      const gchar *rgb_value;
+      GdkMonitor *monitor;
+      monitor = gdk_display_get_monitor (gdk_display_get_default (), 0);
+      rgb_value = _gdk_win32_monitor_get_pixel_structure (monitor);
+      g_value_set_static_string (value, rgb_value);
 
       GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : %s\n", name, g_value_get_string (value)));
       return TRUE;

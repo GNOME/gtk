@@ -26,6 +26,36 @@
 
 #include "gdkwin32monitor.h"
 
+/*
+ * The number is the degrees the display is rotated clockwise
+ * from its natural position.
+ * I.e. most displays will have 0. A normal display
+ * that is rotated by 90 degrees will
+ * have 90. The same display rotated counter-clockwise
+ * will have 270. The same display
+ * rotated by 180 degrees (i.e. upside-down)
+ * will have 180.
+ * Accordingly, 0 mode
+ * fontsmoothing is used as-is - i.e. it is assumed that
+ * subpixel structure is horizontal (ClearType does not support
+ * vertical subpixels; if the display has naturally vertical
+ * subpixel structure, ClearType should be disabled altogether).
+ * In 90 subpixel structure has
+ * its verticality flipped (rgb -> vrgb; bgr -> vbgr).
+ * In 180 subpixel structure is
+ * horizontally flipped (rgb -> bgr; bgr -> rgb).
+ * In 270 subpixel structure is
+ * flipped both horizontally and vertically
+ * (rgb -> vbgr; bgr -> vrgb).
+ */
+typedef enum _GdkWin32MonitorRotation {
+  GDK_WIN32_MONITOR_ROTATION_UNKNOWN = 0,
+  GDK_WIN32_MONITOR_ROTATION_0 = 1,
+  GDK_WIN32_MONITOR_ROTATION_90 = 2,
+  GDK_WIN32_MONITOR_ROTATION_180 = 3,
+  GDK_WIN32_MONITOR_ROTATION_270 = 4,
+} GdkWin32MonitorRotation;
+
 struct _GdkWin32Monitor
 {
   GdkMonitor parent;
@@ -35,6 +65,11 @@ struct _GdkWin32Monitor
 
   /* Device instance path (used to match GdkWin32Monitor to monitor device) */
   gchar *instance_path;
+
+  /* Indicates display rotation and its normal proportions.
+   * Used to determine pixel structure for subpixel smoothing.
+   */
+  GdkWin32MonitorRotation orientation;
 
   /* TRUE if monitor is made up by us
    * (this happens when system has logical monitors, but no physical ones).
@@ -53,5 +88,7 @@ struct _GdkWin32MonitorClass {
 };
 
 int        _gdk_win32_monitor_compare  (GdkWin32Monitor *a, GdkWin32Monitor *b);
+
+const gchar *_gdk_win32_monitor_get_pixel_structure (GdkMonitor *monitor);
 
 #endif
