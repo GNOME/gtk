@@ -55,5 +55,5 @@ main (int   argc,
 
   g_test_add_func ("/tooltips/widget-accessors", test_tooltips_widget_accessors);
 
-  return g_test_run();
+  return g_test_run ();
 }
