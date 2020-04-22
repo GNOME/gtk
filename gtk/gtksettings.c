@@ -1268,6 +1268,7 @@ gtk_settings_notify (GObject    *object,
         gtk_system_setting_changed (settings->display, GTK_SYSTEM_SETTING_FONT_CONFIG);
       break;
     case PROP_ENABLE_ANIMATIONS:
+      settings_invalidate_style (settings);
       gtk_system_setting_changed (settings->display, GTK_SYSTEM_SETTING_ANIMATIONS);
       break;
     case PROP_CURSOR_THEME_NAME:
