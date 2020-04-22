@@ -538,9 +538,6 @@ static void             gtk_window_native_interface_init  (GtkNativeInterface  *
 
 static void ensure_state_flag_backdrop (GtkWidget *widget);
 static void unset_titlebar (GtkWindow *window);
-static void on_titlebar_title_notify (GtkHeaderBar *titlebar,
-                                      GParamSpec   *pspec,
-                                      GtkWindow    *self);
 static GtkWindowRegion get_active_region_type (GtkWindow   *window,
                                                gint         x,
                                                gint         y);
@@ -3053,9 +3050,6 @@ unset_titlebar (GtkWindow *window)
 
   if (priv->title_box != NULL)
     {
-      g_signal_handlers_disconnect_by_func (priv->title_box,
-                                            on_titlebar_title_notify,
-                                            window);
       gtk_widget_unparent (priv->title_box);
       priv->title_box = NULL;
       priv->titlebar = NULL;
@@ -3101,17 +3095,6 @@ gtk_window_enable_csd (GtkWindow *window)
     gtk_widget_add_css_class (widget, "solid-csd");
 
   priv->client_decorated = TRUE;
-}
-
-static void
-on_titlebar_title_notify (GtkHeaderBar *titlebar,
-                          GParamSpec   *pspec,
-                          GtkWindow    *self)
-{
-  const gchar *title;
-
-  title = gtk_header_bar_get_title (titlebar);
-  gtk_window_set_title_internal (self, title, FALSE);
 }
 
 /**
@@ -3172,12 +3155,6 @@ gtk_window_set_titlebar (GtkWindow *window,
                               NULL);
 
   gtk_widget_set_parent (priv->title_box, widget);
-  if (GTK_IS_HEADER_BAR (titlebar))
-    {
-      g_signal_connect (titlebar, "notify::title",
-                        G_CALLBACK (on_titlebar_title_notify), window);
-      on_titlebar_title_notify (GTK_HEADER_BAR (titlebar), NULL, window);
-    }
 
   gtk_widget_add_css_class (titlebar, GTK_STYLE_CLASS_TITLEBAR);
 
