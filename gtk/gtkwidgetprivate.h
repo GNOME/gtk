@@ -193,6 +193,10 @@ struct _GtkWidgetPrivate
 
   /* Pointer cursor */
   GdkCursor *cursor;
+
+  /* Tooltip */
+  char *tooltip_markup;
+  char *tooltip_text;
 };
 
 typedef struct

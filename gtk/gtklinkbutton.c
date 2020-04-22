@@ -591,7 +591,7 @@ gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
 {
   GtkLinkButton *link_button = GTK_LINK_BUTTON (widget);
   const gchar *label, *uri;
-  gchar *text, *markup;
+  const char *text, *markup;
 
   label = gtk_button_get_label (GTK_BUTTON (link_button));
   uri = link_button->uri;
@@ -605,9 +605,6 @@ gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
       gtk_tooltip_set_text (tooltip, uri);
       return TRUE;
     }
-
-  g_free (text);
-  g_free (markup);
 
   return FALSE;
 }

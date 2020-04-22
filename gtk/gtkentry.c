@@ -2939,7 +2939,7 @@ static void
 ensure_has_tooltip (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-  gchar *text = gtk_widget_get_tooltip_text (GTK_WIDGET (entry));
+  const char *text = gtk_widget_get_tooltip_text (GTK_WIDGET (entry));
   gboolean has_tooltip = text != NULL;
 
   if (!has_tooltip)
@@ -2956,10 +2956,6 @@ ensure_has_tooltip (GtkEntry *entry)
               break;
             }
         }
-    }
-  else
-    {
-      g_free (text);
     }
 
   gtk_widget_set_has_tooltip (GTK_WIDGET (entry), has_tooltip);
