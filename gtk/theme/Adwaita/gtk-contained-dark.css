@@ -1830,15 +1830,15 @@ colorchooser .popover.osd { border-radius: 5px; }
 .scale-popup button:hover { background-color: rgba(238, 238, 236, 0.1); border-radius: 5px; }
 
 /********************** Window Decorations * */
-decoration { border-radius: 8px 8px 0 0; border-width: 0px; box-shadow: 0 3px 9px 1px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(27, 27, 27, 0.9); margin: 10px; }
+decoration { border-radius: 8px 8px 0 0; border-width: 0px; background-color: black; /* transparent makes gtk3 leak light on the corners #2537 */ box-shadow: 0 3px 9px 1px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(27, 27, 27, 0.9); margin: 10px; }
 
 decoration:backdrop { box-shadow: 0 3px 9px 1px transparent, 0 2px 6px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(27, 27, 27, 0.9); transition: 200ms ease-out; }
 
 .maximized decoration, .fullscreen decoration, .tiled decoration, .tiled-top decoration, .tiled-right decoration, .tiled-bottom decoration, .tiled-left decoration { border-radius: 0; }
 
-.popup decoration { box-shadow: none; }
+.popup decoration { box-shadow: none; background: none; }
 
-.ssd decoration { box-shadow: 0 0 0 1px rgba(27, 27, 27, 0.9); }
+.ssd decoration { background: none; box-shadow: 0 0 0 1px rgba(27, 27, 27, 0.9); }
 
 .csd.popup decoration { border-radius: 5px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(27, 27, 27, 0.8); }
 
@@ -1849,8 +1849,6 @@ messagedialog.csd decoration { border-radius: 8px; box-shadow: 0 1px 2px rgba(0,
 .solid-csd decoration { margin: 0; padding: 4px; background-color: #1b1b1b; border: solid 1px #1b1b1b; border-radius: 0; box-shadow: inset 0 0 0 3px #2d2d2d, inset 0 1px rgba(238, 238, 236, 0.07); }
 
 .solid-csd decoration:backdrop { box-shadow: inset 0 0 0 3px #353535, inset 0 1px rgba(238, 238, 236, 0.07); }
-
-window.csd decoration { background: black; /* transparent makes gtk3 leak light on the corners #2537 */ }
 
 button.titlebutton { text-shadow: 0 -1px rgba(0, 0, 0, 0.834353); -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.834353); }
 

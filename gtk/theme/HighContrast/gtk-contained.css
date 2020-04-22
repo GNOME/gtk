@@ -1854,6 +1854,8 @@ decoration:backdrop { box-shadow: 0 3px 9px 1px transparent, 0 2px 6px 2px rgba(
 
 .popup decoration { box-shadow: none; }
 
+.csd decoration { background-color: black; }
+
 .ssd decoration { box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.23); }
 
 .csd.popup decoration { border-radius: 5px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.13); }
@@ -1865,8 +1867,6 @@ messagedialog.csd decoration { border-radius: 8px; box-shadow: 0 1px 2px rgba(0,
 .solid-csd decoration { margin: 0; padding: 4px; background-color: #877b6e; border: solid 1px #877b6e; border-radius: 0; box-shadow: inset 0 0 0 3px white, inset 0 1px rgba(255, 255, 255, 0.8); }
 
 .solid-csd decoration:backdrop { box-shadow: inset 0 0 0 3px #f6f5f4, inset 0 1px rgba(255, 255, 255, 0.8); }
-
-window.csd decoration { background: black; /* transparent makes gtk3 leak light on the corners #2537 */ }
 
 button.titlebutton { text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); }
 
