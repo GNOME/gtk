@@ -144,12 +144,6 @@ struct _GtkWidgetPrivate
    */
   GtkRoot *root;
 
-  /* The list of attached windows to this widget.
-   * We keep a list in order to call reset_style to all of them,
-   * recursively.
-   */
-  GList *attached_windows;
-
   /* The style for the widget. The style contains the
    * colors the widget should be drawn in for each state
    * along with graphics contexts used to draw with and
@@ -242,11 +236,6 @@ void         _gtk_widget_add_sizegroup         (GtkWidget    *widget,
 void         _gtk_widget_remove_sizegroup      (GtkWidget    *widget,
 						gpointer      group);
 GSList      *_gtk_widget_get_sizegroups        (GtkWidget    *widget);
-
-void         _gtk_widget_add_attached_window    (GtkWidget    *widget,
-                                                 GtkWindow    *window);
-void         _gtk_widget_remove_attached_window (GtkWidget    *widget,
-                                                 GtkWindow    *window);
 
 AtkObject *       _gtk_widget_peek_accessible              (GtkWidget *widget);
 
