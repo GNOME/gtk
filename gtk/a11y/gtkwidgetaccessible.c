@@ -26,8 +26,6 @@ struct _GtkWidgetAccessiblePrivate
   AtkLayer layer;
 };
 
-#define TOOLTIP_KEY "tooltip"
-
 extern GtkWidget *_focus_widget;
 
 
@@ -91,16 +89,6 @@ map_cb (GtkWidget *widget)
 }
 
 static void
-gtk_widget_accessible_update_tooltip (GtkWidgetAccessible *accessible,
-                                      GtkWidget *widget)
-{
-  g_object_set_data_full (G_OBJECT (accessible),
-                          TOOLTIP_KEY,
-                          gtk_widget_get_tooltip_text (widget),
-                          g_free);
-}
-
-static void
 gtk_widget_accessible_initialize (AtkObject *obj,
                                   gpointer   data)
 {
@@ -114,11 +102,9 @@ gtk_widget_accessible_initialize (AtkObject *obj,
 
   GTK_WIDGET_ACCESSIBLE (obj)->priv->layer = ATK_LAYER_WIDGET;
   obj->role = ATK_ROLE_UNKNOWN;
-
-  gtk_widget_accessible_update_tooltip (GTK_WIDGET_ACCESSIBLE (obj), widget);
 }
 
-static const gchar *
+static const char *
 gtk_widget_accessible_get_description (AtkObject *accessible)
 {
   GtkWidget *widget;
@@ -127,10 +113,10 @@ gtk_widget_accessible_get_description (AtkObject *accessible)
   if (widget == NULL)
     return NULL;
 
-  if (accessible->description)
+  if (accessible->description != NULL)
     return accessible->description;
 
-  return g_object_get_data (G_OBJECT (accessible), TOOLTIP_KEY);
+  return gtk_widget_get_tooltip_text (widget);
 }
 
 static AtkObject *
@@ -469,9 +455,6 @@ gtk_widget_accessible_notify_gtk (GObject    *obj,
     }
   else if (g_strcmp0 (pspec->name, "tooltip-text") == 0)
     {
-      gtk_widget_accessible_update_tooltip (GTK_WIDGET_ACCESSIBLE (atk_obj),
-                                            widget);
-
       if (atk_obj->description == NULL)
         g_object_notify (G_OBJECT (atk_obj), "accessible-description");
       return;
