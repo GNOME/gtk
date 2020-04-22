@@ -3431,8 +3431,6 @@ gtk_window_realize_icon (GtkWindow *window)
   info->realized = TRUE;
 
   gdk_toplevel_set_icon_list (GDK_TOPLEVEL (priv->surface), icon_list);
-  if (GTK_IS_HEADER_BAR (priv->title_box))
-    _gtk_header_bar_update_window_buttons (GTK_HEADER_BAR (priv->title_box));
 
   if (info->using_themed_icon)
     g_list_free_full (icon_list, g_object_unref);

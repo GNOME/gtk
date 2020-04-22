@@ -992,6 +992,7 @@ static void
 gtk_header_bar_realize (GtkWidget *widget)
 {
   GtkSettings *settings;
+  GtkWidget *root;
 
   GTK_WIDGET_CLASS (gtk_header_bar_parent_class)->realize (widget);
 
@@ -1000,6 +1001,13 @@ gtk_header_bar_realize (GtkWidget *widget)
                             G_CALLBACK (_gtk_header_bar_update_window_buttons), widget);
   g_signal_connect_swapped (gtk_native_get_surface (gtk_widget_get_native (widget)), "notify::state",
                             G_CALLBACK (surface_state_changed), widget);
+
+  root = GTK_WIDGET (gtk_widget_get_root (widget));
+
+  if (GTK_IS_WINDOW (root))
+    g_signal_connect_swapped (root, "notify::icon-name",
+                              G_CALLBACK (_gtk_header_bar_update_window_buttons), widget);
+
   _gtk_header_bar_update_window_buttons (GTK_HEADER_BAR (widget));
 }
 
@@ -1012,6 +1020,7 @@ gtk_header_bar_unrealize (GtkWidget *widget)
 
   g_signal_handlers_disconnect_by_func (settings, _gtk_header_bar_update_window_buttons, widget);
   g_signal_handlers_disconnect_by_func (gtk_native_get_surface (gtk_widget_get_native (widget)), surface_state_changed, widget);
+  g_signal_handlers_disconnect_by_func (gtk_widget_get_root (widget), _gtk_header_bar_update_window_buttons, widget);
 
   GTK_WIDGET_CLASS (gtk_header_bar_parent_class)->unrealize (widget);
 }
