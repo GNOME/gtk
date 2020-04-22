@@ -721,22 +721,22 @@ void   gtk_widget_remove_mnemonic_label (GtkWidget *widget,
                                          GtkWidget *label);
 
 GDK_AVAILABLE_IN_ALL
-void       gtk_widget_trigger_tooltip_query (GtkWidget   *widget);
+void            gtk_widget_trigger_tooltip_query        (GtkWidget   *widget);
 GDK_AVAILABLE_IN_ALL
-void       gtk_widget_set_tooltip_text      (GtkWidget   *widget,
-                                             const gchar *text);
+void            gtk_widget_set_tooltip_text             (GtkWidget   *widget,
+                                                         const char  *text);
 GDK_AVAILABLE_IN_ALL
-gchar *    gtk_widget_get_tooltip_text      (GtkWidget   *widget);
+const char *    gtk_widget_get_tooltip_text             (GtkWidget   *widget);
 GDK_AVAILABLE_IN_ALL
-void       gtk_widget_set_tooltip_markup    (GtkWidget   *widget,
-                                             const gchar *markup);
+void            gtk_widget_set_tooltip_markup           (GtkWidget   *widget,
+                                                         const char  *markup);
 GDK_AVAILABLE_IN_ALL
-gchar *    gtk_widget_get_tooltip_markup    (GtkWidget   *widget);
+const char *    gtk_widget_get_tooltip_markup           (GtkWidget   *widget);
 GDK_AVAILABLE_IN_ALL
-void       gtk_widget_set_has_tooltip       (GtkWidget   *widget,
-                                             gboolean     has_tooltip);
+void            gtk_widget_set_has_tooltip              (GtkWidget   *widget,
+                                                         gboolean     has_tooltip);
 GDK_AVAILABLE_IN_ALL
-gboolean   gtk_widget_get_has_tooltip       (GtkWidget   *widget);
+gboolean        gtk_widget_get_has_tooltip              (GtkWidget   *widget);
 
 GDK_AVAILABLE_IN_ALL
 GType           gtk_requisition_get_type (void) G_GNUC_CONST;
