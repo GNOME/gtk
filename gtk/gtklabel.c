@@ -6608,6 +6608,8 @@ copy_link_activate_cb (GtkMenuItem *menuitem,
   GtkClipboard *clipboard;
 
   link = g_object_get_qdata (G_OBJECT (menuitem), quark_link);
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (label), GDK_SELECTION_PRIMARY);
+  gtk_clipboard_set_text (clipboard, link->uri, -1);
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (label), GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_set_text (clipboard, link->uri, -1);
 }
