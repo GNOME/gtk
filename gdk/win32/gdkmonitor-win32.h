@@ -26,6 +26,46 @@
 
 #include "gdkwin32monitor.h"
 
+/*
+ * LANDSCAPE means that the display is naturally landscape
+ * (i.e. what almost all displays in the world use).
+ * PORTRAIT means that the display is naturally portrait
+ * (almost unheard of).
+ * The number is the degrees the display is rotated clockwise
+ * from its natural position.
+ * I.e. most displays will have LANDSCAPE_0. A normal display
+ * that is rotated by 90 degrees into portrait mode will
+ * have LANDSCAPE_90. The same display rotated counter-clockwise
+ * into portrait mode will have LANDSCAPE_270. The same display
+ * rotated by 180 degrees (landscape again, but upside-down)
+ * will have LANDSCAPE_180.
+ * PORTRAIT is the same, but for displays that are normally
+ * in portrait mode.
+ * Accordingly, in LANDSCAPE_0 and PORTRAIT_0 modes
+ * fontsmoothing is used as-is - i.e. it is assumed that
+ * subpixes structure is horizontal (ClearType does not support
+ * vertical subpixels; if the display has naturally vertical
+ * subpixel structure, ClearType should be disabled altogether).
+ * In LANDSCAPE_90 and PORTRAIT_90 subpixel structure has
+ * its verticality flipped (rgb -> vrgb; bgr -> vbgr).
+ * In LANDSCAPE_180 and PORTRAIT_180 subpixel structure is
+ * horizontally flipped (rgb -> bgr; bgr -> rgb).
+ * In LANDSCAPE_270 and PORTRAIT_270 subpixel structure is
+ * flipped both horizontally and vertically
+ * (rgb -> vbgr; bgr -> vrgb).
+ */
+typedef enum _GdkWin32MonitorOrientation {
+  GDK_WIN32_DISPLAY_UNKNOWN = 0,
+  GDK_WIN32_DISPLAY_LANDSCAPE_0 = 1,
+  GDK_WIN32_DISPLAY_LANDSCAPE_90 = 2,
+  GDK_WIN32_DISPLAY_LANDSCAPE_180 = 3,
+  GDK_WIN32_DISPLAY_LANDSCAPE_270 = 4,
+  GDK_WIN32_DISPLAY_PORTRAIT_0 = 5,
+  GDK_WIN32_DISPLAY_PORTRAIT_90 = 6,
+  GDK_WIN32_DISPLAY_PORTRAIT_180 = 7,
+  GDK_WIN32_DISPLAY_PORTRAIT_270 = 8,
+} GdkWin32MonitorOrientation;
+
 struct _GdkWin32Monitor
 {
   GdkMonitor parent;
@@ -35,6 +75,11 @@ struct _GdkWin32Monitor
 
   /* Device instance path (used to match GdkWin32Monitor to monitor device) */
   gchar *instance_path;
+
+  /* Indicates display rotation and its normal proportions.
+   * Used to determine pixel structure for subpixel smoothing.
+   */
+  GdkWin32MonitorOrientation orientation;
 
   /* TRUE if monitor is made up by us
    * (this happens when system has logical monitors, but no physical ones).
@@ -53,5 +98,7 @@ struct _GdkWin32MonitorClass {
 };
 
 int        _gdk_win32_monitor_compare  (GdkWin32Monitor *a, GdkWin32Monitor *b);
+
+const gchar *_gdk_win32_monitor_get_pixel_structure (GdkMonitor *monitor);
 
 #endif

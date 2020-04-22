@@ -559,6 +559,7 @@ enum_monitor (HMONITOR hmonitor,
       DEVMODEW dm;
       DWORD i_monitor;
       DWORD frequency;
+      GdkWin32MonitorOrientation orientation;
 
       memset (&dd, 0, sizeof (dd));
       dd.cb = sizeof (dd);
@@ -577,12 +578,68 @@ enum_monitor (HMONITOR hmonitor,
         continue;
 
       dm.dmSize = sizeof (dm);
+      dm.dmDriverExtra = 0;
+      frequency = 0;
+      orientation = GDK_WIN32_DISPLAY_UNKNOWN;
 
       /* Grab refresh rate for this adapter while we're at it */
-      if (EnumDisplaySettingsW (dd.DeviceName, ENUM_CURRENT_SETTINGS, &dm))
-        frequency = dm.dmDisplayFrequency;
-      else
-        frequency = 0;
+      if (EnumDisplaySettingsExW (dd.DeviceName, ENUM_CURRENT_SETTINGS, &dm, 0))
+        {
+          DWORD needed_fields = DM_DISPLAYORIENTATION | DM_PELSWIDTH | DM_PELSHEIGHT;
+
+          if ((dm.dmFields & needed_fields) == needed_fields)
+            {
+              if (dm.dmDisplayOrientation == DMDO_90 ||
+                  dm.dmDisplayOrientation == DMDO_270)
+                {
+                  DWORD tmp = dm.dmPelsWidth;
+                  dm.dmPelsWidth = dm.dmPelsHeight;
+                  dm.dmPelsHeight = tmp;
+                }
+
+              if (dm.dmPelsWidth >= dm.dmPelsHeight)
+                {
+                  switch (dm.dmDisplayOrientation)
+                    {
+                    default:
+                    case DMDO_DEFAULT:
+                      orientation = GDK_WIN32_DISPLAY_LANDSCAPE_0;
+                      break;
+                    case DMDO_90:
+                      orientation = GDK_WIN32_DISPLAY_LANDSCAPE_90;
+                      break;
+                    case DMDO_180:
+                      orientation = GDK_WIN32_DISPLAY_LANDSCAPE_180;
+                      break;
+                    case DMDO_270:
+                      orientation = GDK_WIN32_DISPLAY_LANDSCAPE_270;
+                      break;
+                    }
+                }
+              else
+                {
+                  switch (dm.dmDisplayOrientation)
+                    {
+                    default:
+                    case DMDO_DEFAULT:
+                      orientation = GDK_WIN32_DISPLAY_PORTRAIT_0;
+                      break;
+                    case DMDO_90:
+                      orientation = GDK_WIN32_DISPLAY_PORTRAIT_90;
+                      break;
+                    case DMDO_180:
+                      orientation = GDK_WIN32_DISPLAY_PORTRAIT_180;
+                      break;
+                    case DMDO_270:
+                      orientation = GDK_WIN32_DISPLAY_PORTRAIT_270;
+                      break;
+                    }
+                }
+            }
+
+          if ((dm.dmFields & DM_DISPLAYFREQUENCY) == DM_DISPLAYFREQUENCY)
+            frequency = dm.dmDisplayFrequency;
+        }
 
       /* Enumerate monitors connected to this display adapter */
       for (i_monitor = 0; TRUE; i_monitor++)
@@ -744,6 +801,7 @@ enum_monitor (HMONITOR hmonitor,
            * keep remove == TRUE and be removed further up the stack.
            */
           w32mon->remove = FALSE;
+          w32mon->orientation = orientation;
 
           /* One virtual monitor per display adapter */
           if (w32mon->madeup)
@@ -768,6 +826,67 @@ prune_monitors (EnumMonitorData *data)
       if (m->remove)
         g_ptr_array_remove_index (data->monitors, i--);
     }
+}
+
+const gchar *
+_gdk_win32_monitor_get_pixel_structure (GdkMonitor *monitor)
+{
+  GdkWin32Monitor *w32_m;
+  unsigned int enabled = 1;
+  unsigned int smoothing_orientation = FE_FONTSMOOTHINGORIENTATIONRGB;
+  BOOL cleartype = TRUE;
+
+  g_return_val_if_fail (monitor != NULL, NULL);
+
+  w32_m = GDK_WIN32_MONITOR (monitor);
+
+  SystemParametersInfoW (SPI_GETFONTSMOOTHING, 0, &enabled, 0);
+  SystemParametersInfoW (SPI_GETCLEARTYPE, 0, &cleartype, 0);
+
+  if (enabled == 0 || !cleartype)
+    return "none";
+
+  if (!SystemParametersInfoW (SPI_GETFONTSMOOTHINGORIENTATION, 0, &smoothing_orientation, 0))
+    return "none";
+
+  if (smoothing_orientation == FE_FONTSMOOTHINGORIENTATIONBGR)
+    switch (w32_m->orientation)
+      {
+      default:
+      case GDK_WIN32_DISPLAY_UNKNOWN:
+        return "none";
+      case GDK_WIN32_DISPLAY_LANDSCAPE_0:
+      case GDK_WIN32_DISPLAY_PORTRAIT_0:
+        return "bgr";
+      case GDK_WIN32_DISPLAY_LANDSCAPE_90:
+      case GDK_WIN32_DISPLAY_PORTRAIT_90:
+        return "vbgr";
+      case GDK_WIN32_DISPLAY_LANDSCAPE_180:
+      case GDK_WIN32_DISPLAY_PORTRAIT_180:
+        return "rgb";
+      case GDK_WIN32_DISPLAY_LANDSCAPE_270:
+      case GDK_WIN32_DISPLAY_PORTRAIT_270:
+        return "vrgb";
+      }
+  else
+    switch (w32_m->orientation)
+      {
+      default:
+      case GDK_WIN32_DISPLAY_UNKNOWN:
+        return "none";
+      case GDK_WIN32_DISPLAY_LANDSCAPE_0:
+      case GDK_WIN32_DISPLAY_PORTRAIT_0:
+        return "rgb";
+      case GDK_WIN32_DISPLAY_LANDSCAPE_90:
+      case GDK_WIN32_DISPLAY_PORTRAIT_90:
+        return "vrgb";
+      case GDK_WIN32_DISPLAY_LANDSCAPE_180:
+      case GDK_WIN32_DISPLAY_PORTRAIT_180:
+        return "bgr";
+      case GDK_WIN32_DISPLAY_LANDSCAPE_270:
+      case GDK_WIN32_DISPLAY_PORTRAIT_270:
+        return "vbgr";
+      }
 }
 
 GPtrArray *
