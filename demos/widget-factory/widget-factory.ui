@@ -434,6 +434,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
       <class name="devel"/>
     </style>
     <property name="title">GTK Widget Factory</property>
+    <property name="icon-name">weather-snow-symbolic</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="headerbar1">
         <property name="show-title-buttons">1</property>
@@ -458,6 +459,63 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
         <property name="margin-end">10</property>
         <property name="margin-top">10</property>
         <property name="margin-bottom">10</property>
+        <child>
+          <object class="GtkHeaderBar" id="headerbar2">
+            <property name="show-title-buttons">1</property>
+            <style>
+              <class name="titlebar"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <child>
+              <object class="GtkHeaderBar">
+                <property name="width-request">360</property>
+                <child type="start">
+                  <object class="GtkWindowControls">
+                    <property name="pack-type">start</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSeparator">
+                <style>
+                  <class name="sidebar"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkHeaderBar">
+                <property name="hexpand">True</property>
+                <child type="end">
+                  <object class="GtkWindowControls">
+                    <property name="pack-type">end</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <child>
+              <object class="GtkWindowControls">
+                <property name="pack-type">start</property>
+                <property name="halign">start</property>
+                <property name="hexpand">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkWindowControls">
+                <property name="pack-type">end</property>
+                <property name="halign">end</property>
+                <property name="hexpand">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
         <child>
           <object class="GtkStack" id="toplevel_stack">
             <property name="transition-duration">1000</property>
@@ -1821,8 +1879,23 @@ microphone-sensitivity-medium-symbolic</property>
                                   <object class="GtkBox">
                                     <property name="orientation">vertical</property>
                                     <child>
-                                      <object class="GtkPopoverMenuBar">
-                                        <property name="menu-model">menu_bar_model</property>
+                                      <object class="GtkBox">
+                                        <child>
+                                          <object class="GtkWindowControls">
+                                            <property name="pack-type">start</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkPopoverMenuBar">
+                                            <property name="menu-model">menu_bar_model</property>
+                                            <property name="hexpand">True</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkWindowControls">
+                                            <property name="pack-type">end</property>
+                                          </object>
+                                        </child>
                                       </object>
                                     </child>
                                     <child>
