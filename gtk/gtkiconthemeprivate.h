@@ -41,4 +41,6 @@ void gtk_icon_paintable_snapshot_with_colors (GtkIconPaintable *icon,
                                               const GdkRGBA    *warning_color,
                                               const GdkRGBA    *error_color);
 
+int gtk_icon_theme_get_serial (GtkIconTheme *self);
+
 #endif /* __GTK_ICON_THEME_PRIVATE_H__ */

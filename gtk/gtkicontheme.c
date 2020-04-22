@@ -331,6 +331,8 @@ struct _GtkIconTheme
   GList *dir_mtimes;
 
   gulong theme_changed_idle;
+
+  int serial;
 };
 
 struct _GtkIconThemeClass
@@ -1367,6 +1369,13 @@ blow_themes (GtkIconTheme *self)
   self->unthemed_icons = NULL;
   self->dir_mtimes = NULL;
   self->themes_valid = FALSE;
+  self->serial++;
+}
+
+int
+gtk_icon_theme_get_serial (GtkIconTheme *self)
+{
+  return self->serial;
 }
 
 static void
