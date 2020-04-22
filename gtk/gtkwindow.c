@@ -27,6 +27,7 @@
 #include "gtkwindowprivate.h"
 
 #include "gtkaccelgroupprivate.h"
+#include "gtkactionable.h"
 #include "gtkapplicationprivate.h"
 #include "gtkbox.h"
 #include "gtkbuildable.h"
@@ -460,7 +461,7 @@ static GList   *icon_list_from_theme                  (GtkWindow    *window,
 						       const gchar  *name);
 static void     gtk_window_realize_icon               (GtkWindow    *window);
 static void     gtk_window_unrealize_icon             (GtkWindow    *window);
-static void     update_window_buttons                 (GtkWindow    *window);
+static void     update_window_actions                 (GtkWindow    *window);
 static void     get_shadow_width                      (GtkWindow    *window,
                                                        GtkBorder    *shadow_width);
 
@@ -477,6 +478,15 @@ static void        gtk_window_set_theme_variant         (GtkWindow  *window);
 static void gtk_window_activate_default_activate (GtkWidget *widget,
                                                   const char *action_name,
                                                   GVariant *parameter);
+static void gtk_window_activate_minimize (GtkWidget  *widget,
+                                          const char *action_name,
+                                          GVariant   *parameter);
+static void gtk_window_activate_toggle_maximized (GtkWidget  *widget,
+                                                  const char *name,
+                                                  GVariant   *parameter);
+static void gtk_window_activate_close (GtkWidget  *widget,
+                                       const char *action_name,
+                                       GVariant   *parameter);
 
 static void        gtk_window_do_popup                  (GtkWindow      *window,
                                                          GdkEvent       *event);
@@ -1070,6 +1080,30 @@ gtk_window_class_init (GtkWindowClass *klass)
   gtk_widget_class_install_action (widget_class, "default.activate", NULL,
                                    gtk_window_activate_default_activate);
 
+  /**
+   * GtkWindow|window.minimize:
+   *
+   * Close the window.
+   */
+  gtk_widget_class_install_action (widget_class, "window.minimize", NULL,
+                                   gtk_window_activate_minimize);
+
+  /**
+   * GtkWindow|window.toggle-maximized:
+   *
+   * Maximize or restore the window.
+   */
+  gtk_widget_class_install_action (widget_class, "window.toggle-maximized", NULL,
+                                   gtk_window_activate_toggle_maximized);
+
+  /**
+   * GtkWindow|window.close:
+   *
+   * Close the window.
+   */
+  gtk_widget_class_install_action (widget_class, "window.close", NULL,
+                                   gtk_window_activate_close);
+
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_space, 0,
                                        "activate-focus", NULL);
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Space, 0,
@@ -1660,6 +1694,30 @@ gtk_window_activate_default_activate (GtkWidget  *widget,
                                       GVariant   *parameter)
 {
   gtk_window_real_activate_default (GTK_WINDOW (widget));
+}
+
+static void
+gtk_window_activate_minimize (GtkWidget  *widget,
+                              const char *name,
+                              GVariant   *parameter)
+{
+  gtk_window_minimize (GTK_WINDOW (widget));
+}
+
+static void
+gtk_window_activate_toggle_maximized (GtkWidget  *widget,
+                                      const char *name,
+                                      GVariant   *parameter)
+{
+  _gtk_window_toggle_maximized (GTK_WINDOW (widget));
+}
+
+static void
+gtk_window_activate_close (GtkWidget  *widget,
+                           const char *name,
+                           GVariant   *parameter)
+{
+  gtk_window_close (GTK_WINDOW (widget));
 }
 
 static gboolean
@@ -2470,7 +2528,7 @@ gtk_window_set_modal (GtkWindow *window,
 	gtk_grab_remove (widget);
     }
 
-  update_window_buttons (window);
+  update_window_actions (window);
 
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_MODAL]);
 }
@@ -2746,7 +2804,7 @@ gtk_window_set_transient_for  (GtkWindow *window,
 	}
     }
 
-  update_window_buttons (window);
+  update_window_actions (window);
 
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_TRANSIENT_FOR]);
 }
@@ -3187,7 +3245,7 @@ gtk_window_set_decorated (GtkWindow *window,
   if (priv->surface)
     gdk_toplevel_set_decorated (GDK_TOPLEVEL (priv->surface), priv->decorated && !priv->client_decorated);
 
-  update_window_buttons (window);
+  update_window_actions (window);
   gtk_widget_queue_resize (GTK_WIDGET (window));
 
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_DECORATED]);
@@ -3246,7 +3304,7 @@ gtk_window_set_deletable (GtkWindow *window,
   if (priv->surface)
     gdk_toplevel_set_deletable (GDK_TOPLEVEL (priv->surface), priv->deletable);
 
-  update_window_buttons (window);
+  update_window_actions (window);
 
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_DELETABLE]);
 }
@@ -4104,9 +4162,17 @@ update_csd_visibility (GtkWindow *window)
 }
 
 static void
-update_window_buttons (GtkWindow *window)
+update_window_actions (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  gboolean is_sovereign_window = !priv->modal && !priv->transient_parent;
+
+  gtk_widget_action_set_enabled (GTK_WIDGET (window), "window.minimize",
+                                 is_sovereign_window);
+  gtk_widget_action_set_enabled (GTK_WIDGET (window), "window.toggle-maximized",
+                                 priv->resizable && is_sovereign_window);
+  gtk_widget_action_set_enabled (GTK_WIDGET (window), "window.close",
+                                 priv->deletable);
 
   if (!update_csd_visibility (window))
     return;
@@ -4196,7 +4262,7 @@ create_decoration (GtkWidget *widget)
       priv->title_box = priv->titlebar;
     }
 
-  update_window_buttons (window);
+  update_window_actions (window);
 }
 
 static void
@@ -5185,10 +5251,11 @@ surface_state_changed (GtkWidget *widget)
                       GDK_SURFACE_STATE_TOP_TILED |
                       GDK_SURFACE_STATE_RIGHT_TILED |
                       GDK_SURFACE_STATE_BOTTOM_TILED |
-                      GDK_SURFACE_STATE_LEFT_TILED))
+                      GDK_SURFACE_STATE_LEFT_TILED |
+                      GDK_SURFACE_STATE_MINIMIZED))
     {
       update_window_style_classes (window);
-      update_window_buttons (window);
+      update_window_actions (window);
       gtk_widget_queue_resize (widget);
     }
 }
@@ -7022,7 +7089,7 @@ gtk_window_set_resizable (GtkWindow *window,
     {
       priv->resizable = resizable;
 
-      update_window_buttons (window);
+      update_window_actions (window);
 
       gtk_widget_queue_resize (GTK_WIDGET (window));
 

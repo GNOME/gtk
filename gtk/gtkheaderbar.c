@@ -21,6 +21,7 @@
 
 #include "gtkheaderbarprivate.h"
 
+#include "gtkactionable.h"
 #include "gtkbox.h"
 #include "gtkbutton.h"
 #include "gtkbuildable.h"
@@ -375,8 +376,8 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   g_object_set (image, "use-fallback", TRUE, NULL);
                   gtk_container_add (GTK_CONTAINER (button), image);
                   gtk_widget_set_can_focus (button, FALSE);
-                  g_signal_connect_swapped (button, "clicked",
-                                            G_CALLBACK (gtk_window_minimize), window);
+                  gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
+                                                  "window.minimize");
 
                   accessible = gtk_widget_get_accessible (button);
                   if (GTK_IS_ACCESSIBLE (accessible))
@@ -398,8 +399,8 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   g_object_set (image, "use-fallback", TRUE, NULL);
                   gtk_container_add (GTK_CONTAINER (button), image);
                   gtk_widget_set_can_focus (button, FALSE);
-                  g_signal_connect_swapped (button, "clicked",
-                                            G_CALLBACK (_gtk_window_toggle_maximized), window);
+                  gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
+                                                  "window.toggle-maximized");
 
                   accessible = gtk_widget_get_accessible (button);
                   if (GTK_IS_ACCESSIBLE (accessible))
@@ -416,8 +417,8 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   g_object_set (image, "use-fallback", TRUE, NULL);
                   gtk_container_add (GTK_CONTAINER (button), image);
                   gtk_widget_set_can_focus (button, FALSE);
-                  g_signal_connect_swapped (button, "clicked",
-                                            G_CALLBACK (gtk_window_close), window);
+                  gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
+                                                  "window.close");
 
                   accessible = gtk_widget_get_accessible (button);
                   if (GTK_IS_ACCESSIBLE (accessible))
