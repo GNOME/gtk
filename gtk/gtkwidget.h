@@ -680,8 +680,6 @@ void         gtk_widget_add_controller        (GtkWidget          *widget,
 GDK_AVAILABLE_IN_ALL
 void         gtk_widget_remove_controller     (GtkWidget          *widget,
                                                GtkEventController *controller);
-GDK_AVAILABLE_IN_ALL
-void       gtk_widget_reset_style       (GtkWidget      *widget);
 
 GDK_AVAILABLE_IN_ALL
 PangoContext *gtk_widget_create_pango_context (GtkWidget   *widget);

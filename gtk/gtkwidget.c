@@ -6027,38 +6027,6 @@ gtk_widget_real_direction_changed (GtkWidget        *widget,
   gtk_widget_queue_resize (widget);
 }
 
-static void
-reset_style_recurse (GtkWidget *widget, gpointer user_data)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  gtk_css_node_invalidate (priv->cssnode, GTK_CSS_CHANGE_ANY);
-
-  gtk_widget_forall (widget, reset_style_recurse, user_data);
-}
-
-/**
- * gtk_widget_reset_style:
- * @widget: a #GtkWidget
- *
- * Updates the style context of @widget and all descendants
- * by updating its widget path. #GtkContainers may want
- * to use this on a child when reordering it in a way that a different
- * style might apply to it.
- */
-void
-gtk_widget_reset_style (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  reset_style_recurse (widget, NULL);
-
-  g_list_foreach (priv->attached_windows,
-                  (GFunc) reset_style_recurse, NULL);
-}
-
 #ifdef G_ENABLE_CONSISTENCY_CHECKS
 
 /* Verify invariants, see docs/widget_system.txt for notes on much of
@@ -9214,8 +9182,6 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
       for (l = style_data->classes; l; l = l->next)
         gtk_widget_add_css_class (GTK_WIDGET (buildable), (const char *)l->data);
 
-      gtk_widget_reset_style (GTK_WIDGET (buildable));
-
       g_slist_free_full (style_data->classes, g_free);
       g_slice_free (StyleParserData, style_data);
     }
@@ -10579,24 +10545,6 @@ _gtk_widget_get_sizegroups (GtkWidget    *widget)
     return g_object_get_qdata (G_OBJECT (widget), quark_size_groups);
 
   return NULL;
-}
-
-void
-_gtk_widget_add_attached_window (GtkWidget    *widget,
-                                 GtkWindow    *window)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  priv->attached_windows = g_list_prepend (priv->attached_windows, window);
-}
-
-void
-_gtk_widget_remove_attached_window (GtkWidget    *widget,
-                                    GtkWindow    *window)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  priv->attached_windows = g_list_remove (priv->attached_windows, window);
 }
 
 /**

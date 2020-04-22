@@ -2550,11 +2550,7 @@ remove_attach_widget (GtkWindow *window)
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
   if (priv->attach_widget)
-    {
-      _gtk_widget_remove_attached_window (priv->attach_widget, window);
-
-      priv->attach_widget = NULL;
-    }
+    priv->attach_widget = NULL;
 }
 
 static void
