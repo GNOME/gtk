@@ -76,16 +76,23 @@ gtk_widget_accessible_update_bounds (GtkWidgetAccessible *self)
   g_signal_emit_by_name (self, "bounds-changed", &rect);
 }
 
-/* Translate GtkWidget mapped state into AtkObject showing */
-static gint
-map_cb (GtkWidget *widget)
+/*< private >
+ * gtk_widget_accessible_notify_showing:
+ * @self: a #GtkWidgetAccessible
+ *
+ * Translates the #GtkWidget mapped state into the #AtkObject
+ * showing state.
+ */
+void
+gtk_widget_accessible_notify_showing (GtkWidgetAccessible *self)
 {
-  AtkObject *accessible;
+  g_return_if_fail (GTK_IS_WIDGET_ACCESSIBLE (self));
 
-  accessible = gtk_widget_get_accessible (widget);
-  atk_object_notify_state_change (accessible, ATK_STATE_SHOWING,
+  GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (self));
+
+  atk_object_notify_state_change (ATK_OBJECT (self),
+                                  ATK_STATE_SHOWING,
                                   gtk_widget_get_mapped (widget));
-  return 1;
 }
 
 static void
@@ -97,8 +104,6 @@ gtk_widget_accessible_initialize (AtkObject *obj,
   widget = GTK_WIDGET (data);
 
   g_signal_connect (widget, "notify", G_CALLBACK (notify_cb), NULL);
-  g_signal_connect (widget, "map", G_CALLBACK (map_cb), NULL);
-  g_signal_connect (widget, "unmap", G_CALLBACK (map_cb), NULL);
 
   GTK_WIDGET_ACCESSIBLE (obj)->priv->layer = ATK_LAYER_WIDGET;
   obj->role = ATK_ROLE_UNKNOWN;
