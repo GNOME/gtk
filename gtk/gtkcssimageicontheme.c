@@ -145,10 +145,14 @@ gtk_css_image_icon_theme_compute (GtkCssImage      *image,
 {
   GtkCssImageIconTheme *icon_theme = GTK_CSS_IMAGE_ICON_THEME (image);
   GtkCssImageIconTheme *copy;
+  GtkSettings *settings;
+  GdkDisplay *display;
 
   copy = g_object_new (GTK_TYPE_CSS_IMAGE_ICON_THEME, NULL);
   copy->name = g_strdup (icon_theme->name);
-  copy->icon_theme = icon_theme->icon_theme;
+  settings = gtk_style_provider_get_settings (provider);
+  display = _gtk_settings_get_display (settings);
+  copy->icon_theme = g_object_ref (gtk_icon_theme_get_for_display (display));
   copy->scale = gtk_style_provider_get_scale (provider);
   gtk_icon_theme_lookup_symbolic_colors (style, &copy->color, &copy->success, &copy->warning, &copy->error);
 
@@ -173,6 +177,7 @@ gtk_css_image_icon_theme_dispose (GObject *object)
   g_free (icon_theme->name);
   icon_theme->name = NULL;
 
+  g_clear_object (&icon_theme->icon_theme);
   g_clear_object (&icon_theme->cached_icon);
 
   G_OBJECT_CLASS (_gtk_css_image_icon_theme_parent_class)->dispose (object);
@@ -197,7 +202,7 @@ _gtk_css_image_icon_theme_class_init (GtkCssImageIconThemeClass *klass)
 static void
 _gtk_css_image_icon_theme_init (GtkCssImageIconTheme *icon_theme)
 {
-  icon_theme->icon_theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
+  icon_theme->icon_theme = g_object_ref (gtk_icon_theme_get_for_display (gdk_display_get_default ()));
   icon_theme->scale = 1;
   icon_theme->cached_size = -1;
   icon_theme->cached_icon = NULL;
