@@ -153,6 +153,7 @@ gtk_css_image_icon_theme_compute (GtkCssImage      *image,
   settings = gtk_style_provider_get_settings (provider);
   display = _gtk_settings_get_display (settings);
   copy->icon_theme = gtk_icon_theme_get_for_display (display);
+  copy->serial = gtk_icon_theme_get_serial (copy->icon_theme);
   copy->scale = gtk_style_provider_get_scale (provider);
   gtk_icon_theme_lookup_symbolic_colors (style, &copy->color, &copy->success, &copy->warning, &copy->error);
 
@@ -166,7 +167,9 @@ gtk_css_image_icon_theme_equal (GtkCssImage *image1,
   GtkCssImageIconTheme *icon_theme1 = (GtkCssImageIconTheme *) image1;
   GtkCssImageIconTheme *icon_theme2 = (GtkCssImageIconTheme *) image2;
 
-  return g_str_equal (icon_theme1->name, icon_theme2->name);
+  return icon_theme1->serial == icon_theme2->serial &&
+         icon_theme1->icon_theme == icon_theme2->icon_theme &&
+         g_str_equal (icon_theme1->name, icon_theme2->name);
 }
 
 static void
