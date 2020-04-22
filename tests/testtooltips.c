@@ -292,7 +292,7 @@ main (int argc, char *argv[])
   GtkTextIter iter;
   GtkTextTag *tag;
 
-  gchar *text, *markup;
+  const char *text, *markup;
   gboolean done = FALSE;
 
   gtk_init ();
@@ -318,9 +318,8 @@ main (int argc, char *argv[])
 
   text = gtk_widget_get_tooltip_text (button);
   markup = gtk_widget_get_tooltip_markup (button);
-  g_assert (g_str_equal ("Hello, I am a static tooltip.", text));
-  g_assert (g_str_equal ("Hello, I am a static tooltip.", markup));
-  g_free (text); g_free (markup);
+  g_assert_true (g_str_equal ("Hello, I am a static tooltip.", text));
+  g_assert_true (g_str_equal ("Hello, I am a static tooltip.", markup));
 
   /* A check button using the query-tooltip signal */
   button = gtk_check_button_new_with_label ("I use the query-tooltip signal");
@@ -337,9 +336,8 @@ main (int argc, char *argv[])
 
   text = gtk_widget_get_tooltip_text (button);
   markup = gtk_widget_get_tooltip_markup (button);
-  g_assert (g_str_equal ("Label & and tooltip", text));
-  g_assert (g_str_equal ("Label &amp; and tooltip", markup));
-  g_free (text); g_free (markup);
+  g_assert_true (g_str_equal ("Label & and tooltip", text));
+  g_assert_true (g_str_equal ("Label &amp; and tooltip", markup));
 
   /* A selectable label */
   button = gtk_label_new ("I am a selectable label");
@@ -349,9 +347,8 @@ main (int argc, char *argv[])
 
   text = gtk_widget_get_tooltip_text (button);
   markup = gtk_widget_get_tooltip_markup (button);
-  g_assert (g_str_equal ("Another Label tooltip", text));
-  g_assert (g_str_equal ("<b>Another</b> Label tooltip", markup));
-  g_free (text); g_free (markup);
+  g_assert_true (g_str_equal ("Another Label tooltip", text));
+  g_assert_true (g_str_equal ("<b>Another</b> Label tooltip", markup));
 
   /* An insensitive button */
   button = gtk_button_new_with_label ("This one is insensitive");
