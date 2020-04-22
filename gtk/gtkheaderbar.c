@@ -275,8 +275,8 @@ _gtk_header_bar_update_separator_visibility (GtkHeaderBar *bar)
     gtk_widget_set_visible (priv->titlebar_end_separator, have_visible_at_end);
 }
 
-void
-_gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
+static void
+update_window_buttons (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GtkWidget *widget = GTK_WIDGET (bar);
@@ -989,6 +989,10 @@ gtk_header_bar_child_type (GtkContainer *container)
 
 static void surface_state_changed (GtkWidget *widget);
 
+static void window_notify_cb (GtkHeaderBar *header_bar,
+                              GParamSpec   *pspec,
+                              GtkWindow    *window);
+
 static void
 gtk_header_bar_realize (GtkWidget *widget)
 {
@@ -999,17 +1003,17 @@ gtk_header_bar_realize (GtkWidget *widget)
 
   settings = gtk_widget_get_settings (widget);
   g_signal_connect_swapped (settings, "notify::gtk-decoration-layout",
-                            G_CALLBACK (_gtk_header_bar_update_window_buttons), widget);
+                            G_CALLBACK (update_window_buttons), widget);
   g_signal_connect_swapped (gtk_native_get_surface (gtk_widget_get_native (widget)), "notify::state",
                             G_CALLBACK (surface_state_changed), widget);
 
   root = GTK_WIDGET (gtk_widget_get_root (widget));
 
   if (GTK_IS_WINDOW (root))
-    g_signal_connect_swapped (root, "notify::icon-name",
-                              G_CALLBACK (_gtk_header_bar_update_window_buttons), widget);
+    g_signal_connect_swapped (root, "notify",
+                              G_CALLBACK (window_notify_cb), widget);
 
-  _gtk_header_bar_update_window_buttons (GTK_HEADER_BAR (widget));
+  update_window_buttons (GTK_HEADER_BAR (widget));
 }
 
 static void
@@ -1019,9 +1023,9 @@ gtk_header_bar_unrealize (GtkWidget *widget)
 
   settings = gtk_widget_get_settings (widget);
 
-  g_signal_handlers_disconnect_by_func (settings, _gtk_header_bar_update_window_buttons, widget);
+  g_signal_handlers_disconnect_by_func (settings, update_window_buttons, widget);
   g_signal_handlers_disconnect_by_func (gtk_native_get_surface (gtk_widget_get_native (widget)), surface_state_changed, widget);
-  g_signal_handlers_disconnect_by_func (gtk_widget_get_root (widget), _gtk_header_bar_update_window_buttons, widget);
+  g_signal_handlers_disconnect_by_func (gtk_widget_get_root (widget), window_notify_cb, widget);
 
   GTK_WIDGET_CLASS (gtk_header_bar_parent_class)->unrealize (widget);
 }
@@ -1044,7 +1048,20 @@ surface_state_changed (GtkWidget *widget)
                  GDK_SURFACE_STATE_RIGHT_TILED |
                  GDK_SURFACE_STATE_BOTTOM_TILED |
                  GDK_SURFACE_STATE_LEFT_TILED))
-    _gtk_header_bar_update_window_buttons (bar);
+    update_window_buttons (bar);
+}
+
+static void
+window_notify_cb (GtkHeaderBar *header_bar,
+                  GParamSpec   *pspec,
+                  GtkWindow    *window)
+{
+  if (pspec->name == I_("deletable") ||
+      pspec->name == I_("icon-name") ||
+      pspec->name == I_("modal") ||
+      pspec->name == I_("resizable") ||
+      pspec->name == I_("transient-for"))
+    update_window_buttons (header_bar);
 }
 
 static void
@@ -1054,7 +1071,7 @@ gtk_header_bar_root (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_header_bar_parent_class)->root (widget);
 
-  _gtk_header_bar_update_window_buttons (bar);
+  update_window_buttons (bar);
 }
 
 static void
@@ -1307,7 +1324,7 @@ gtk_header_bar_set_show_title_buttons (GtkHeaderBar *bar,
     return;
 
   priv->show_title_buttons = setting;
-  _gtk_header_bar_update_window_buttons (bar);
+  update_window_buttons (bar);
   g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_SHOW_TITLE_BUTTONS]);
 }
 
@@ -1401,7 +1418,7 @@ gtk_header_bar_set_decoration_layout (GtkHeaderBar *bar,
   priv->decoration_layout = g_strdup (layout);
   priv->decoration_layout_set = (layout != NULL);
 
-  _gtk_header_bar_update_window_buttons (bar);
+  update_window_buttons (bar);
 
   g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_DECORATION_LAYOUT]);
   g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_DECORATION_LAYOUT_SET]);

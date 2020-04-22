@@ -46,7 +46,7 @@
 #include "gtkgesturedrag.h"
 #include "gtkgestureclick.h"
 #include "gtkgestureprivate.h"
-#include "gtkheaderbarprivate.h"
+#include "gtkheaderbar.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
@@ -4174,11 +4174,7 @@ update_window_actions (GtkWindow *window)
   gtk_widget_action_set_enabled (GTK_WIDGET (window), "window.close",
                                  priv->deletable);
 
-  if (!update_csd_visibility (window))
-    return;
-
-  if (GTK_IS_HEADER_BAR (priv->title_box))
-    _gtk_header_bar_update_window_buttons (GTK_HEADER_BAR (priv->title_box));
+  update_csd_visibility (window);
 }
 
 static GtkWidget *
