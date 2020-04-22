@@ -3151,17 +3151,6 @@ gtk_window_get_titlebar (GtkWindow *window)
   return priv->title_box;
 }
 
-gboolean
-_gtk_window_titlebar_shows_app_menu (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  if (GTK_IS_HEADER_BAR (priv->title_box))
-    return _gtk_header_bar_shows_app_menu (GTK_HEADER_BAR (priv->title_box));
-
-  return FALSE;
-}
-
 /**
  * gtk_window_set_decorated:
  * @window: a #GtkWindow

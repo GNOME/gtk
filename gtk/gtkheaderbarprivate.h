@@ -24,7 +24,6 @@
 
 G_BEGIN_DECLS
 
-gboolean     _gtk_header_bar_shows_app_menu        (GtkHeaderBar *bar);
 void         _gtk_header_bar_track_default_decoration (GtkHeaderBar *bar);
 void         _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar);
 gboolean     _gtk_header_bar_update_window_icon    (GtkHeaderBar *bar,

@@ -29,7 +29,6 @@
 #include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
-#include "gtkmenubutton.h"
 #include "gtkprivate.h"
 #include "gtkseparator.h"
 #include "gtksizerequest.h"
@@ -37,7 +36,6 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 #include "gtknative.h"
-#include "gtkmenubuttonprivate.h"
 
 #include "a11y/gtkcontaineraccessible.h"
 
@@ -72,7 +70,6 @@
  * ├── box.start
  * │   ╰── box
  * │       ├── [image.titlebutton.icon]
- * │       ├── [menubutton.titlebutton.menu]
  * │       ├── [button.titlebutton.minimize]
  * │       ├── [button.titlebutton.maximize]
  * │       ╰── [button.titlebutton.close]
@@ -132,8 +129,6 @@ struct _GtkHeaderBarPrivate
   GtkWidget *titlebar_icon;
 
   GdkSurfaceState state;
-
-  guint shows_app_menu : 1;
 };
 
 enum {
@@ -238,10 +233,7 @@ _gtk_header_bar_update_window_icon (GtkHeaderBar *bar,
     return FALSE;
 
   scale = gtk_widget_get_scale_factor (priv->titlebar_icon);
-  if (GTK_IS_BUTTON (gtk_widget_get_parent (priv->titlebar_icon)))
-    paintable = gtk_window_get_icon_for_size (window, 16 * scale);
-  else
-    paintable = gtk_window_get_icon_for_size (window, 20 * scale);
+  paintable = gtk_window_get_icon_for_size (window, 20 * scale);
 
   if (paintable)
     {
@@ -297,8 +289,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
   gchar *layout_desc;
   gchar **tokens, **t;
   gint i, j;
-  GMenuModel *menu;
-  gboolean shown_by_shell;
   gboolean is_sovereign_window;
 
   if (!gtk_widget_get_realized (widget))
@@ -322,13 +312,11 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
     }
 
   priv->titlebar_icon = NULL;
-  priv->shows_app_menu = FALSE;
 
   if (!priv->show_title_buttons)
     return;
 
   g_object_get (gtk_widget_get_settings (widget),
-                "gtk-shell-shows-app-menu", &shown_by_shell,
                 "gtk-decoration-layout", &layout_desc,
                 NULL);
 
@@ -339,11 +327,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
     }
 
   window = GTK_WINDOW (toplevel);
-
-  if (!shown_by_shell && gtk_window_get_application (window))
-    menu = gtk_application_get_app_menu (gtk_window_get_application (window));
-  else
-    menu = NULL;
 
   is_sovereign_window = !gtk_window_get_modal (window) &&
                          gtk_window_get_transient_for (window) == NULL;
@@ -389,29 +372,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                       priv->titlebar_icon = NULL;
                       button = NULL;
                     }
-                }
-              else if (strcmp (t[j], "menu") == 0 &&
-                       menu != NULL &&
-                       is_sovereign_window)
-                {
-                  button = gtk_menu_button_new ();
-                  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-                  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button), menu);
-                  gtk_widget_add_css_class (button, "titlebutton");
-                  gtk_widget_add_css_class (button, "menu");
-                  image = gtk_image_new ();
-                  gtk_menu_button_add_child (GTK_MENU_BUTTON (button), image);
-                  gtk_widget_set_can_focus (button, FALSE);
-
-                  accessible = gtk_widget_get_accessible (button);
-                  if (GTK_IS_ACCESSIBLE (accessible))
-                    atk_object_set_name (accessible, _("Application menu"));
-
-                  priv->titlebar_icon = image;
-                  if (!_gtk_header_bar_update_window_icon (bar, window))
-                    gtk_image_set_from_icon_name (GTK_IMAGE (priv->titlebar_icon), "application-x-executable-symbolic");
-
-                  priv->shows_app_menu = TRUE;
                 }
               else if (strcmp (t[j], "minimize") == 0 &&
                        is_sovereign_window)
@@ -517,14 +477,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
   g_free (layout_desc);
 
   _gtk_header_bar_update_separator_visibility (bar);
-}
-
-gboolean
-_gtk_header_bar_shows_app_menu (GtkHeaderBar *bar)
-{
-  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
-
-  return priv->show_title_buttons && priv->shows_app_menu;
 }
 
 static void
@@ -1053,8 +1005,6 @@ gtk_header_bar_realize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_header_bar_parent_class)->realize (widget);
 
   settings = gtk_widget_get_settings (widget);
-  g_signal_connect_swapped (settings, "notify::gtk-shell-shows-app-menu",
-                            G_CALLBACK (_gtk_header_bar_update_window_buttons), widget);
   g_signal_connect_swapped (settings, "notify::gtk-decoration-layout",
                             G_CALLBACK (_gtk_header_bar_update_window_buttons), widget);
   g_signal_connect_swapped (gtk_native_get_surface (gtk_widget_get_native (widget)), "notify::state",
@@ -1226,7 +1176,6 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   priv->has_subtitle = TRUE;
   priv->decoration_layout = NULL;
   priv->decoration_layout_set = FALSE;
-  priv->shows_app_menu = FALSE;
   priv->state = GDK_SURFACE_STATE_WITHDRAWN;
 
   layout = gtk_widget_get_layout_manager (GTK_WIDGET (bar));
@@ -1432,10 +1381,9 @@ gtk_header_bar_get_has_subtitle (GtkHeaderBar *bar)
  * The format of the string is button names, separated by commas.
  * A colon separates the buttons that should appear on the left
  * from those on the right. Recognized button names are minimize,
- * maximize, close, icon (the window icon) and menu (a menu button
- * for the fallback app menu).
+ * maximize, close and icon (the window icon).
  *
- * For example, “menu:minimize,maximize,close” specifies a menu
+ * For example, “icon:minimize,maximize,close” specifies a icon
  * on the left, and minimize, maximize and close buttons on the right.
  */
 void
