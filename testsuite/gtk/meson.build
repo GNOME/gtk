@@ -57,6 +57,7 @@ tests = [
   ['textbuffer'],
   ['textiter'],
   ['theme-validate'],
+  ['tooltips'],
   ['treelistmodel'],
   ['treemodel', ['treemodel.c', 'liststore.c', 'treestore.c', 'filtermodel.c',
                  'modelrefcount.c', 'sortmodel.c', 'gtktreemodelrefcount.c']],
