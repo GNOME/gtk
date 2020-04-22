@@ -434,32 +434,38 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
       <class name="devel"/>
     </style>
     <property name="title">GTK Widget Factory</property>
+    <property name="icon-name">weather-snow-symbolic</property>
     <child type="titlebar">
-      <object class="GtkHeaderBar" id="headerbar1">
-        <property name="show-title-buttons">1</property>
-        <child type="title">
-          <object class="GtkStackSwitcher" id="stack_switcher">
-            <property name="stack">toplevel_stack</property>
-          </object>
-        </child>
-        <child type="end">
-          <object class="GtkMenuButton" id="gear_menu_button">
-            <property name="valign">center</property>
-            <property name="menu-model">gear_menu</property>
-            <property name="icon-name">open-menu-symbolic</property>
-          </object>
-        </child>
+      <object class="GtkBox">
+        <property name="visible">0</property>
       </object>
     </child>
     <child>
       <object class="GtkBox" id="box1">
         <property name="orientation">vertical</property>
-        <property name="margin-start">10</property>
-        <property name="margin-end">10</property>
-        <property name="margin-top">10</property>
-        <property name="margin-bottom">10</property>
+        <child>
+          <object class="GtkHeaderBar" id="headerbar1">
+            <property name="show-title-buttons">1</property>
+            <child type="title">
+              <object class="GtkStackSwitcher" id="stack_switcher">
+                <property name="stack">toplevel_stack</property>
+              </object>
+            </child>
+            <child type="end">
+              <object class="GtkMenuButton" id="gear_menu_button">
+                <property name="valign">center</property>
+                <property name="menu-model">gear_menu</property>
+                <property name="icon-name">open-menu-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
         <child>
           <object class="GtkStack" id="toplevel_stack">
+            <property name="margin-start">10</property>
+            <property name="margin-end">10</property>
+            <property name="margin-top">10</property>
+            <property name="margin-bottom">10</property>
             <property name="transition-duration">250</property>
             <property name="transition-type">crossfade</property>
             <child>
@@ -1915,6 +1921,7 @@ microphone-sensitivity-medium-symbolic</property>
                                     <child>
                                       <object class="GtkPopoverMenuBar">
                                         <property name="menu-model">menu_bar_model</property>
+                                        <property name="hexpand">True</property>
                                       </object>
                                     </child>
                                     <child>

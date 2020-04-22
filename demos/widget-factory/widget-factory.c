@@ -159,6 +159,12 @@ activate_search (GSimpleAction *action,
 
   searchbar = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "searchbar"));
   gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (searchbar), TRUE);
+  static int i = 0;
+  if (i == 0)
+    gtk_window_set_icon_name (GTK_WINDOW (window), "go-previous-symbolic");
+  else
+    gtk_window_set_icon_name (GTK_WINDOW (window), "go-next-symbolic");
+  i = (i == 0 ? 1 : 0);
 }
 
 static void
