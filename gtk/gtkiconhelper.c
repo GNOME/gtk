@@ -24,7 +24,6 @@
 #include <math.h>
 
 #include "gtkcssenumvalueprivate.h"
-#include "gtkcssiconthemevalueprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssstyleprivate.h"
@@ -96,7 +95,7 @@ ensure_paintable_for_gicon (GtkIconHelper    *self,
   GtkIconPaintable *icon;
   GtkIconLookupFlags flags;
 
-  icon_theme = gtk_css_icon_theme_value_get_icon_theme (style->core->icon_theme);
+  icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (self->owner));
   flags = get_icon_lookup_flags (self, style);
   if (preload)
     flags |= GTK_ICON_LOOKUP_PRELOAD;

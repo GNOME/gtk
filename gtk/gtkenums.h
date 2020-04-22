@@ -1088,4 +1088,33 @@ typedef enum {
   GTK_CONSTRAINT_VFL_PARSER_ERROR_INVALID_RELATION
 } GtkConstraintVflParserError;
 
+/**
+ * GtkSystemSetting:
+ * @GTK_SYSTEM_SETTING_DPI: the #GtkSettings:gtk-xft-dpi setting has changed
+ * @GTK_SYSTEM_SETTING_FONT_NAME: The #GtkSettings:gtk-font-name setting has changed
+ * @GTK_SYSTEM_SETTING_FONT_CONFIG: The font configuration has changed in a way that
+ *     requires text to be redrawn. This can be any of the
+ *     #GtkSettings:gtk-xft-antialias, #GtkSettings:gtk-xft-hinting,
+ *     #GtkSettings:gtk-xft-hintstyle, #GtkSettings:gtk-xft-rgba or
+ *     #GtkSettings:gtk-fontconfig-timestamp settings
+ * @GTK_SYSTEM_SETTING_DISPLAY: The display has changed
+ * @GTK_SYSTEM_SETTING_ICON_THEME: The icon theme has changed in a way that requires
+ *     icons to be looked up again
+ *
+ * Values that can be passed to the GtkWidgetClass.system_setting_changed
+ * vfunc to indicate that a system setting has changed and widgets may
+ * need to drop caches, or react otherwise.
+ *
+ * Most of the values correspond to #GtkSettings properties.
+ *
+ * More values may be added over time.
+ */
+typedef enum {
+  GTK_SYSTEM_SETTING_DPI,
+  GTK_SYSTEM_SETTING_FONT_NAME,
+  GTK_SYSTEM_SETTING_FONT_CONFIG,
+  GTK_SYSTEM_SETTING_DISPLAY,
+  GTK_SYSTEM_SETTING_ICON_THEME
+} GtkSystemSetting;
+
 #endif /* __GTK_ENUMS_H__ */

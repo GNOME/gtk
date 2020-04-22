@@ -36,7 +36,6 @@
 #include "gtkcellrenderertext.h"
 #include "gtkcellrendererpixbuf.h"
 #include "gtkcombobox.h"
-#include "gtkcssiconthemevalueprivate.h"
 #include "gtkdroptarget.h"
 #include "gtkicontheme.h"
 #include "gtkimage.h"
@@ -273,8 +272,6 @@ static void     gtk_file_chooser_button_root               (GtkWidget *widget);
 static void     gtk_file_chooser_button_map                (GtkWidget        *widget);
 static gboolean gtk_file_chooser_button_mnemonic_activate  (GtkWidget        *widget,
 							    gboolean          group_cycling);
-static void     gtk_file_chooser_button_css_changed             (GtkWidget              *widget,
-                                                                 GtkCssStyleChange      *change);
 static void     gtk_file_chooser_button_state_flags_changed     (GtkWidget       *widget,
                                                                  GtkStateFlags    previous_state);
 
@@ -468,7 +465,6 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   widget_class->show = gtk_file_chooser_button_show;
   widget_class->hide = gtk_file_chooser_button_hide;
   widget_class->map = gtk_file_chooser_button_map;
-  widget_class->css_changed = gtk_file_chooser_button_css_changed;
   widget_class->root = gtk_file_chooser_button_root;
   widget_class->mnemonic_activate = gtk_file_chooser_button_mnemonic_activate;
   widget_class->state_flags_changed = gtk_file_chooser_button_state_flags_changed;
@@ -1345,18 +1341,6 @@ change_icon_theme (GtkFileChooserButton *button)
   g_object_set (button->icon_cell,
 		"width", width,
 		NULL);
-}
-
-static void
-gtk_file_chooser_button_css_changed (GtkWidget         *widget,
-                                     GtkCssStyleChange *change)
-{
-  GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->css_changed (widget, change);
-
-  /* We need to update the icon surface, but only in case
-   * the icon theme really changed. */
-  if (!change || gtk_css_style_change_changes_property (change, GTK_CSS_PROPERTY_ICON_THEME))
-    change_icon_theme (GTK_FILE_CHOOSER_BUTTON (widget));
 }
 
 static void

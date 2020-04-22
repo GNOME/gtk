@@ -47,8 +47,10 @@
 #include "gtkmain.h"
 #include "gtksettingsprivate.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkstyleproviderprivate.h"
 #include "gtkprivate.h"
 #include "gtksnapshot.h"
+#include "gtkwidgetprivate.h"
 #include "gdkpixbufutilsprivate.h"
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdkprofilerprivate.h"
@@ -331,6 +333,8 @@ struct _GtkIconTheme
   GList *dir_mtimes;
 
   gulong theme_changed_idle;
+
+  int serial;
 };
 
 struct _GtkIconThemeClass
@@ -549,9 +553,16 @@ gtk_icon_theme_ref_aquire (GtkIconThemeRef *ref)
 static void
 gtk_icon_theme_ref_release (GtkIconThemeRef *ref)
 {
-  if (ref->theme)
-    g_object_unref (ref->theme);
+  GtkIconTheme *theme;
+
+  /* Get a pointer to the theme, becuse when we unlock it could become NULLed by dispose, this pointer still owns a ref */
+  theme = ref->theme;
   g_mutex_unlock (&ref->lock);
+
+  /* Then unref outside the lock, because otherwis if this is the last ref the dispose handler would deadlock trying to NULL ref->theme */
+  if (theme)
+    g_object_unref (theme);
+
 }
 
 static void
@@ -1308,7 +1319,9 @@ theme_changed_idle__mainthread_unlocked (gpointer user_data)
 
       if (display)
         {
-          gtk_style_context_reset_widgets (self->display);
+          GtkSettings *settings = gtk_settings_get_for_display (self->display);
+          gtk_style_provider_changed (GTK_STYLE_PROVIDER (settings));
+          gtk_system_setting_changed (display, GTK_SYSTEM_SETTING_ICON_THEME);
           g_object_unref (display);
         }
 
@@ -1344,7 +1357,6 @@ do_theme_change (GtkIconTheme *self)
   blow_themes (self);
 
   queue_theme_changed (self);
-
 }
 
 static void
@@ -1360,6 +1372,13 @@ blow_themes (GtkIconTheme *self)
   self->unthemed_icons = NULL;
   self->dir_mtimes = NULL;
   self->themes_valid = FALSE;
+  self->serial++;
+}
+
+int
+gtk_icon_theme_get_serial (GtkIconTheme *self)
+{
+  return self->serial;
 }
 
 static void

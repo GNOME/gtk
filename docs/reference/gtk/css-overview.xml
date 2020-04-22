@@ -339,7 +339,7 @@ scale[.fine-tune]
         <member><literal>-gtk-icontheme(<replaceable>Name</replaceable>)</literal></member>
       </simplelist>
       The specified icon name is used to look up a themed icon, while taking into
-      account the values of the -gtk-icon-theme and -gtk-icon-palette properties.
+      account the values of the -gtk-icon-palette property.
       This kind of image is mainly used as value of the -gtk-icon-source property. 
     </para>
     <para>
@@ -598,11 +598,6 @@ scale[.fine-tune]
               <entry>-gtk-icon-source</entry>
               <entry><ulink url="https://www.w3.org/TR/css-backgrounds-3/#typedef-image">Image</ulink>, <literal>builtin</literal> or <literal>none</literal></entry>
               <entry>used for builtin icons in buttons and expanders</entry>
-            </row>
-            <row>
-              <entry>-gtk-icon-theme</entry>
-              <entry>Theme name</entry>
-              <entry>icon theme to use with -gtk-icontheme()</entry>
             </row>
             <row>
               <entry>-gtk-icon-size</entry>

@@ -201,6 +201,7 @@ struct _GtkWidget
  *   should then discard their caches that depend on CSS and queue resizes or
  *   redraws accordingly. The default implementation will take care of this for
  *   all the default CSS properties, so implementations must chain up.
+ * @system_setting_changed: Emitted when a system setting was changed. Must chain up.
  * @snapshot: Vfunc for gtk_widget_snapshot().
  * @contains: Vfunc for gtk_widget_contains().
  */
@@ -276,6 +277,9 @@ struct _GtkWidgetClass
 
   void         (* css_changed)                 (GtkWidget            *widget,
                                                 GtkCssStyleChange    *change);
+
+  void         (* system_setting_changed)      (GtkWidget            *widget,
+                                                GtkSystemSetting      settings);
 
   void         (* snapshot)                    (GtkWidget            *widget,
                                                 GtkSnapshot          *snapshot);
@@ -676,8 +680,6 @@ void         gtk_widget_add_controller        (GtkWidget          *widget,
 GDK_AVAILABLE_IN_ALL
 void         gtk_widget_remove_controller     (GtkWidget          *widget,
                                                GtkEventController *controller);
-GDK_AVAILABLE_IN_ALL
-void       gtk_widget_reset_style       (GtkWidget      *widget);
 
 GDK_AVAILABLE_IN_ALL
 PangoContext *gtk_widget_create_pango_context (GtkWidget   *widget);

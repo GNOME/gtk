@@ -27,7 +27,6 @@
 #include <glib/gi18n-lib.h>
 
 #include "gtkfilechooser.h"
-#include "gtkcssiconthemevalueprivate.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkstylecontextprivate.h"
