@@ -198,7 +198,7 @@
   // normal button alternative look
   //
     color: $tc;
-    border-color: if($c != $bg_color, _border_color($c, true), $alt_borders_color);
+    border-color: if($c != $bg_color, _border_color($c, true), $alt_borders_color); //colored buttons
     @if $variant == 'light' {
       background-image: linear-gradient(to bottom, lighten($c, 5%) 20%, $c 90%);
       @include _shadows(inset 0 1px _button_hilight_color(lighten($c, 6%)),

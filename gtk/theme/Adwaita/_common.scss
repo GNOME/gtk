@@ -2337,15 +2337,11 @@ switch {
     min-width: 24px;
     min-height: 24px;
     border: 1px solid;
+    border-color: $borders_color;
     border-radius: 50%;
     transition: $button_transition;
 
-    @if $variant == 'light' {
-      @include button(normal-alt, $edge: $shadow_color);
-    } 
-    @else {
-      @include button(normal-alt, $c: lighten($bg_color,6%), $edge: $shadow_color);
-    }
+    @include button(normal, $edge: $shadow_color);
   }
   
   > image { color: transparent; } /* only show i / o for the accessible theme */
