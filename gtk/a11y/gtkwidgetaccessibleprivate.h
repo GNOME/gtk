@@ -25,9 +25,19 @@ G_BEGIN_DECLS
 void _gtk_widget_accessible_set_layer (GtkWidgetAccessible *accessible,
                                        AtkLayer             layer);
 
-void    gtk_widget_accessible_update_bounds     (GtkWidgetAccessible *self);
+void    gtk_widget_accessible_update_bounds             (GtkWidgetAccessible *self);
 
-void    gtk_widget_accessible_notify_showing    (GtkWidgetAccessible *self);
+void    gtk_widget_accessible_notify_showing            (GtkWidgetAccessible *self);
+
+void    gtk_widget_accessible_notify_tooltip            (GtkWidgetAccessible *self);
+
+void    gtk_widget_accessible_notify_visible            (GtkWidgetAccessible *self);
+
+void    gtk_widget_accessible_notify_sensitive          (GtkWidgetAccessible *self);
+
+void    gtk_widget_accessible_notify_focus              (GtkWidgetAccessible *self);
+
+void    gtk_widget_accessible_notify_orientation        (GtkWidgetAccessible *self);
 
 G_END_DECLS
 
