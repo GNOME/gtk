@@ -1813,7 +1813,7 @@ gtk_tree_store_iter_depth (GtkTreeStore *tree_store,
 
 /* Remove the direct children of the root node */
 static void
-gtk_tree_store_clear_traverse (GNode *node,
+gtk_tree_store_clear_traverse (GNode        *node,
                                GtkTreeStore *store)
 {
   node = node->children;
