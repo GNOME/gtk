@@ -31,7 +31,6 @@
 #include "gtkadjustment.h"
 #include "gtkintl.h"
 #include "gtkorientable.h"
-#include "gtkorientableprivate.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkboxlayout.h"
@@ -162,8 +161,7 @@ gtk_scrollbar_set_property (GObject      *object,
             gtk_orientable_set_orientation (GTK_ORIENTABLE (layout), orientation);
             gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->range), orientation);
             priv->orientation = orientation;
-            _gtk_orientable_set_style_classes (GTK_ORIENTABLE (self));
-
+            gtk_widget_update_orientation (GTK_WIDGET (self), priv->orientation);
             gtk_widget_queue_resize (GTK_WIDGET (self));
             g_object_notify_by_pspec (object, pspec);
           }
@@ -226,8 +224,7 @@ gtk_scrollbar_init (GtkScrollbar *self)
   gtk_widget_set_hexpand (priv->range, TRUE);
   gtk_widget_set_vexpand (priv->range, TRUE);
   gtk_widget_set_parent (priv->range, GTK_WIDGET (self));
-
-  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (self));
+  gtk_widget_update_orientation (GTK_WIDGET (self), priv->orientation);
 }
 
 /**

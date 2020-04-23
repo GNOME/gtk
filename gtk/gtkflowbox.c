@@ -75,19 +75,19 @@
 
 #include <config.h>
 
-#include "gtkflowbox.h"
 #include "gtkflowboxprivate.h"
 
 #include "gtkadjustment.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssnodeprivate.h"
-#include "gtkgesturedrag.h"
+#include "gtkeventcontrollerkey.h"
 #include "gtkgestureclick.h"
+#include "gtkgesturedrag.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
+#include "gtkorientable.h"
 #include "gtkprivate.h"
-#include "gtkorientableprivate.h"
 #include "gtkrender.h"
 #include "gtksizerequest.h"
 #include "gtksnapshot.h"
@@ -95,7 +95,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkviewport.h"
 #include "gtkwidgetprivate.h"
-#include "gtkeventcontrollerkey.h"
 
 #include "a11y/gtkflowboxaccessibleprivate.h"
 #include "a11y/gtkflowboxchildaccessible.h"
@@ -3278,14 +3277,20 @@ gtk_flow_box_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      if (priv->orientation != g_value_get_enum (value))
-        {
-          priv->orientation = g_value_get_enum (value);
-          _gtk_orientable_set_style_classes (GTK_ORIENTABLE (box));
-          /* Re-box the children in the new orientation */
-          gtk_widget_queue_resize (GTK_WIDGET (box));
-          g_object_notify_by_pspec (object, pspec);
-        }
+      {
+        GtkOrientation orientation = g_value_get_enum (value);
+
+        if (priv->orientation != orientation)
+          {
+            priv->orientation = orientation;
+
+            gtk_widget_update_orientation (GTK_WIDGET (box), priv->orientation);
+
+            /* Re-box the children in the new orientation */
+            gtk_widget_queue_resize (GTK_WIDGET (box));
+            g_object_notify_by_pspec (object, pspec);
+          }
+      }
       break;
     case PROP_HOMOGENEOUS:
       gtk_flow_box_set_homogeneous (box, g_value_get_boolean (value));
@@ -3697,7 +3702,7 @@ gtk_flow_box_init (GtkFlowBox *box)
   priv->row_spacing = 0;
   priv->activate_on_single_click = TRUE;
 
-  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (box));
+  gtk_widget_update_orientation (GTK_WIDGET (box), priv->orientation);
 
   priv->children = g_sequence_new (NULL);
 
