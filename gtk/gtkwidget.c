@@ -5093,10 +5093,10 @@ gtk_widget_has_focus (GtkWidget *widget)
  * @widget: a #GtkWidget
  *
  * Determines if the widget should show a visible indication that
- * it has the global input focus. This is a convenience function for
- * use in ::draw handlers that takes into account whether focus
- * indication should currently be shown in the toplevel window of
- * @widget. See gtk_window_get_focus_visible() for more information
+ * it has the global input focus. This is a convenience function
+ * that takes into account whether focus indication should currently
+ * be shown in the toplevel window of @widget.
+ * See gtk_window_get_focus_visible() for more information
  * about focus indication.
  *
  * To find out if the widget has the global input focus, use
@@ -5281,7 +5281,7 @@ gtk_widget_get_receives_default (GtkWidget *widget)
   return priv->receives_default;
 }
 
-/**
+/*< private >
  * gtk_widget_has_grab:
  * @widget: a #GtkWidget
  *

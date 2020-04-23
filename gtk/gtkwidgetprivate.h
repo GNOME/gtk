@@ -244,6 +244,7 @@ void              _gtk_widget_set_has_default              (GtkWidget *widget,
 void              _gtk_widget_set_has_grab                 (GtkWidget *widget,
                                                             gboolean   has_grab);
 
+gboolean          gtk_widget_has_grab                      (GtkWidget *widget);
 void              _gtk_widget_grab_notify                  (GtkWidget *widget,
                                                             gboolean   was_grabbed);
 
