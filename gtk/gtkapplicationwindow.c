@@ -311,13 +311,10 @@ gtk_application_window_update_shell_shows_app_menu (GtkApplicationWindow *window
 {
   GtkApplicationWindowPrivate *priv = gtk_application_window_get_instance_private (window);
   gboolean shown_by_shell;
-  gboolean shown_by_titlebar;
 
   g_object_get (settings, "gtk-shell-shows-app-menu", &shown_by_shell, NULL);
 
-  shown_by_titlebar = _gtk_window_titlebar_shows_app_menu (GTK_WINDOW (window));
-
-  if (shown_by_shell || shown_by_titlebar)
+  if (shown_by_shell)
     {
       /* the shell shows it, so don't show it locally */
       if (g_menu_model_get_n_items (G_MENU_MODEL (priv->app_menu_section)) != 0)
