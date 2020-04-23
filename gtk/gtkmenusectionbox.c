@@ -393,6 +393,26 @@ gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
       gtk_box_reorder_child_after (GTK_BOX (box->item_box), widget, sibling);
     }
 
+  if (box->circular)
+    {
+      GtkWidget *c1, *c2, *c3;
+
+      /* special-case the n > 2 case */
+      c1 = gtk_widget_get_first_child (GTK_WIDGET (box->item_box));
+      if ((c2 = gtk_widget_get_next_sibling (c1)) != NULL &&
+          (c3 = gtk_widget_get_next_sibling (c2)) != NULL)
+        {
+          gtk_widget_set_halign (c1, GTK_ALIGN_START);
+          while (c3 != NULL)
+            {
+              gtk_widget_set_halign (c2, GTK_ALIGN_CENTER);
+              c2 = c3;
+              c3 = gtk_widget_get_next_sibling (c3);
+            }
+          gtk_widget_set_halign (c2, GTK_ALIGN_END);
+        }
+    }
+
   gtk_menu_section_box_schedule_separator_sync (box);
 }
 
