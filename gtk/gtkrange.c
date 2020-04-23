@@ -673,6 +673,15 @@ gtk_range_set_adjustment (GtkRange      *range,
 
       gtk_range_adjustment_changed (adjustment, range);
       gtk_range_adjustment_value_changed (adjustment, range);
+
+      {
+        GtkRangeAccessible *accessible =
+          GTK_RANGE_ACCESSIBLE (_gtk_widget_peek_accessible (GTK_WIDGET (range)));
+
+        if (accessible != NULL)
+          gtk_range_accessible_update_adjustment (accessible);
+      }
+
       g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_ADJUSTMENT]);
     }
 }
