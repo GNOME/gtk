@@ -41,7 +41,7 @@
 
 typedef struct _Deserializer Deserializer;
 
-struct _Deserializer 
+struct _Deserializer
 {
   const char *                    mime_type; /* interned */
   GType                           type;
@@ -424,7 +424,7 @@ lookup_deserializer (const char *mime_type,
           deserializer->type == type)
         return deserializer;
     }
-  
+
   return NULL;
 }
 
@@ -835,8 +835,8 @@ init (void)
   for (f = formats; f; f = f->next)
     {
       GdkPixbufFormat *fmt = f->data;
-      gchar *name; 
- 
+      gchar *name;
+
       name = gdk_pixbuf_format_get_name (fmt);
       if (g_str_equal (name, "png"))
 	{
@@ -849,7 +849,7 @@ init (void)
 	}
 
       g_free (name);
-    }  
+    }
 
   for (f = formats; f; f = f->next)
     {
@@ -875,7 +875,7 @@ init (void)
 
   g_slist_free (formats);
 
-#ifdef G_OS_UNIX
+#if defined(G_OS_UNIX) && !defined(__APPLE__)
   file_transfer_portal_register ();
 #endif
 
