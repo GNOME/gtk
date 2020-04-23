@@ -61,7 +61,6 @@
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkintl.h"
 #include "gtkorientable.h"
-#include "gtkorientableprivate.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtksizerequest.h"
@@ -117,7 +116,7 @@ gtk_box_set_property (GObject      *object,
             priv->orientation = orientation;
             gtk_orientable_set_orientation (GTK_ORIENTABLE (box_layout),
                                             priv->orientation);
-            _gtk_orientable_set_style_classes (GTK_ORIENTABLE (box));
+            gtk_widget_update_orientation (GTK_WIDGET (box), priv->orientation);
             g_object_notify (object, "orientation");
           }
       }
@@ -259,7 +258,7 @@ gtk_box_init (GtkBox *box)
   GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
-  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (box));
+  gtk_widget_update_orientation (GTK_WIDGET (box), priv->orientation);
 }
 
 /**

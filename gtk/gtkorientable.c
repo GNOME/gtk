@@ -21,9 +21,10 @@
 
 #include "config.h"
 
-#include "gtkorientableprivate.h"
+#include "gtkorientable.h"
 
 #include "gtkprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
@@ -81,7 +82,7 @@ gtk_orientable_set_orientation (GtkOrientable  *orientable,
                 NULL);
 
   if (GTK_IS_WIDGET (orientable))
-    _gtk_orientable_set_style_classes (orientable);
+    gtk_widget_update_orientation (GTK_WIDGET (orientable), orientation);
 }
 
 /**
@@ -105,26 +106,4 @@ gtk_orientable_get_orientation (GtkOrientable *orientable)
                 NULL);
 
   return orientation;
-}
-
-void
-_gtk_orientable_set_style_classes (GtkOrientable *orientable)
-{
-  GtkOrientation orientation;
-
-  g_return_if_fail (GTK_IS_ORIENTABLE (orientable));
-  g_return_if_fail (GTK_IS_WIDGET (orientable));
-
-  orientation = gtk_orientable_get_orientation (orientable);
-
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      gtk_widget_add_css_class (GTK_WIDGET (orientable), GTK_STYLE_CLASS_HORIZONTAL);
-      gtk_widget_remove_css_class (GTK_WIDGET (orientable), GTK_STYLE_CLASS_VERTICAL);
-    }
-  else
-    {
-      gtk_widget_add_css_class (GTK_WIDGET (orientable), GTK_STYLE_CLASS_VERTICAL);
-      gtk_widget_remove_css_class (GTK_WIDGET (orientable), GTK_STYLE_CLASS_HORIZONTAL);
-    }
 }

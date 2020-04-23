@@ -58,7 +58,6 @@
 #include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkorientable.h"
-#include "gtkorientableprivate.h"
 #include "gtkbuildable.h"
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
@@ -140,7 +139,7 @@ gtk_center_box_set_property (GObject      *object,
         if (current != orientation)
           {
             gtk_center_layout_set_orientation (GTK_CENTER_LAYOUT (layout), orientation);
-            _gtk_orientable_set_style_classes (GTK_ORIENTABLE (self));
+            gtk_widget_update_orientation (GTK_WIDGET (self), orientation);
             gtk_widget_queue_resize (GTK_WIDGET (self));
             g_object_notify (object, "orientation");
           }

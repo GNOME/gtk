@@ -381,6 +381,9 @@ gboolean gtk_widget_focus_self       (GtkWidget        *widget,
 gboolean gtk_widget_focus_all        (GtkWidget        *widget,
                                       GtkDirectionType  direction);
 
+void    gtk_widget_update_orientation   (GtkWidget      *widget,
+                                         GtkOrientation  orientation);
+
 /* inline getters */
 
 static inline GtkWidget *

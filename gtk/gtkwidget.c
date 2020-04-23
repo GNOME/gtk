@@ -31,6 +31,7 @@
 #include "gtkapplicationprivate.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
+#include "gtkconstraint.h"
 #include "gtkcssboxesprivate.h"
 #include "gtkcssfiltervalueprivate.h"
 #include "gtkcsstransformvalueprivate.h"
@@ -48,12 +49,13 @@
 #include "gtklayoutmanagerprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
+#include "gtknativeprivate.h"
+#include "gtkorientable.h"
 #include "gtkpopover.h"
 #include "gtkprivate.h"
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkrenderborderprivate.h"
 #include "gtkrootprivate.h"
-#include "gtknativeprivate.h"
 #include "gtkscrollable.h"
 #include "gtksettingsprivate.h"
 #include "gtkshortcut.h"
@@ -71,8 +73,6 @@
 #include "gtkwidgetpaintableprivate.h"
 #include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
-#include "gtknativeprivate.h"
-#include "gtkconstraint.h"
 
 #include "a11y/gtkwidgetaccessibleprivate.h"
 #include "inspector/window.h"
@@ -12724,4 +12724,31 @@ gtk_widget_set_css_classes (GtkWidget   *widget,
 
   gtk_css_node_set_classes (priv->cssnode, classes);
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CSS_CLASSES]);
+}
+
+/*< private >
+ * gtk_widget_update_orientation:
+ * @widget: a #GtkWidget implementing #GtkOrientable
+ * @orientation: the orientation
+ *
+ * Update the internal state associated to the given @orientation of a
+ * #GtkWidget implementing the #GtkOrientable interface.
+ */
+void
+gtk_widget_update_orientation (GtkWidget      *widget,
+                               GtkOrientation  orientation)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_IS_ORIENTABLE (widget));
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_HORIZONTAL);
+      gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_VERTICAL);
+    }
+  else
+    {
+      gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_VERTICAL);
+      gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_HORIZONTAL);
+    }
 }
