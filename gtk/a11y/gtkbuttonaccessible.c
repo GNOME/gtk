@@ -178,6 +178,20 @@ gtk_button_accessible_ref_state_set (AtkObject *obj)
   return state_set;
 }
 
+void
+gtk_button_accessible_update_label (GtkButtonAccessible *self)
+{
+  g_return_if_fail (GTK_IS_BUTTON_ACCESSIBLE (self));
+
+  /* If we don't have an overridden name, we use the label as the
+   * accessible name
+   */
+  if (atk_object_get_name (ATK_OBJECT (self)) == NULL)
+    g_object_notify (G_OBJECT (self), "accessible-name");
+
+  g_signal_emit_by_name (self, "visible-data-changed");
+}
+
 static void
 gtk_button_accessible_notify_gtk (GObject    *obj,
                                   GParamSpec *pspec)
