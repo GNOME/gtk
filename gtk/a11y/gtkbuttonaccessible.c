@@ -171,37 +171,30 @@ gtk_button_accessible_ref_state_set (AtkObject *obj)
   return state_set;
 }
 
-static void
-gtk_button_accessible_notify_gtk (GObject    *obj,
-                                  GParamSpec *pspec)
+void
+gtk_button_accessible_update_label (GtkButtonAccessible *self)
 {
-  GtkWidget *widget = GTK_WIDGET (obj);
-  AtkObject *atk_obj = gtk_widget_get_accessible (widget);
+  g_return_if_fail (GTK_IS_BUTTON_ACCESSIBLE (self));
 
-  if (strcmp (pspec->name, "label") == 0)
-    {
-      if (atk_obj->name == NULL)
-        g_object_notify (G_OBJECT (atk_obj), "accessible-name");
+  /* If we don't have an overridden name, we use the label as the
+   * accessible name
+   */
+  if (atk_object_get_name (ATK_OBJECT (self)) == NULL)
+    g_object_notify (G_OBJECT (self), "accessible-name");
 
-      g_signal_emit_by_name (atk_obj, "visible-data-changed");
-    }
-  else
-    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_button_accessible_parent_class)->notify_gtk (obj, pspec);
+  g_signal_emit_by_name (self, "visible-data-changed");
 }
 
 static void
 gtk_button_accessible_class_init (GtkButtonAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
 
   class->get_name = gtk_button_accessible_get_name;
   class->get_n_children = gtk_button_accessible_get_n_children;
   class->ref_child = gtk_button_accessible_ref_child;
   class->ref_state_set = gtk_button_accessible_ref_state_set;
   class->initialize = gtk_button_accessible_initialize;
-
-  widget_class->notify_gtk = gtk_button_accessible_notify_gtk;
 }
 
 static void
