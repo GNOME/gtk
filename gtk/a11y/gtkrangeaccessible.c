@@ -73,6 +73,13 @@ gtk_range_accessible_widget_unset (GtkAccessible *accessible)
     }
 }
 
+void
+gtk_range_accessible_update_adjustment (GtkRangeAccessible *self)
+{
+  gtk_range_accessible_widget_unset (GTK_ACCESSIBLE (self));
+  gtk_range_accessible_widget_set (GTK_ACCESSIBLE (self));
+}
+
 static void
 gtk_range_accessible_initialize (AtkObject *obj,
                                  gpointer   data)
@@ -82,36 +89,15 @@ gtk_range_accessible_initialize (AtkObject *obj,
 }
 
 static void
-gtk_range_accessible_notify_gtk (GObject    *obj,
-                                 GParamSpec *pspec)
-{
-  GtkWidget *widget = GTK_WIDGET (obj);
-  AtkObject *range;
-
-  if (strcmp (pspec->name, "adjustment") == 0)
-    {
-      range = gtk_widget_get_accessible (widget);
-      gtk_range_accessible_widget_unset (GTK_ACCESSIBLE (range));
-      gtk_range_accessible_widget_set (GTK_ACCESSIBLE (range));
-    }
-  else
-    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_range_accessible_parent_class)->notify_gtk (obj, pspec);
-}
-
-
-static void
 gtk_range_accessible_class_init (GtkRangeAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
   GtkAccessibleClass *accessible_class = (GtkAccessibleClass*)klass;
-  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
 
   class->initialize = gtk_range_accessible_initialize;
 
   accessible_class->widget_set = gtk_range_accessible_widget_set;
   accessible_class->widget_unset = gtk_range_accessible_widget_unset;
-
-  widget_class->notify_gtk = gtk_range_accessible_notify_gtk;
 }
 
 static void

@@ -52,6 +52,9 @@ struct _GtkRangeAccessibleClass
 GDK_AVAILABLE_IN_ALL
 GType gtk_range_accessible_get_type (void);
 
+/*< private >*/
+void    gtk_range_accessible_update_adjustment  (GtkRangeAccessible *self);
+
 G_END_DECLS
 
 #endif /* __GTK_RANGE_ACCESSIBLE_H__ */
