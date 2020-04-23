@@ -30,6 +30,7 @@
 
 #include "gtklabel.h"
 #include "gtkaccellabelprivate.h"
+#include "gtkaccelgroup.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkprivate.h"

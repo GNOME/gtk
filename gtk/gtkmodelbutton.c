@@ -21,6 +21,7 @@
 
 #include "gtkmodelbuttonprivate.h"
 
+#include "gtkaccelgroup.h"
 #include "gtkactionhelperprivate.h"
 #include "gtkboxlayout.h"
 #include "gtkgestureclick.h"

@@ -97,6 +97,7 @@
 
 #include "config.h"
 
+#include "gtkaccelgroup.h"
 #include "gtkpopoverprivate.h"
 #include "gtkpopovermenuprivate.h"
 #include "gtknative.h"
