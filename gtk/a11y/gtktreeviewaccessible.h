@@ -35,13 +35,10 @@ G_BEGIN_DECLS
 
 typedef struct _GtkTreeViewAccessible        GtkTreeViewAccessible;
 typedef struct _GtkTreeViewAccessibleClass   GtkTreeViewAccessibleClass;
-typedef struct _GtkTreeViewAccessiblePrivate GtkTreeViewAccessiblePrivate;
 
 struct _GtkTreeViewAccessible
 {
   GtkWidgetAccessible parent;
-
-  GtkTreeViewAccessiblePrivate *priv;
 };
 
 struct _GtkTreeViewAccessibleClass
