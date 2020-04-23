@@ -26,6 +26,7 @@
 
 #include "gtkpaned.h"
 
+#include "gtkcssboxesprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkeventcontrollermotion.h"
@@ -34,7 +35,7 @@
 #include "gtkgizmoprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
-#include "gtkorientableprivate.h"
+#include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkrendericonprivate.h"
 #include "gtkstylecontextprivate.h"
@@ -387,6 +388,30 @@ gtk_paned_get_request_mode (GtkWidget *widget)
     return wfh > hfw ?
         GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT :
         GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+}
+
+static void
+gtk_paned_set_orientation (GtkPaned       *self,
+                           GtkOrientation  orientation)
+{
+  if (self->orientation != orientation)
+    {
+      static const char *cursor_name[2] = {
+        "col-resize",
+        "row-resize",
+      };
+
+      self->orientation = orientation;
+
+      gtk_widget_update_orientation (GTK_WIDGET (self), self->orientation);
+      gtk_widget_set_cursor_from_name (self->handle_widget,
+                                       cursor_name[orientation]);
+      gtk_gesture_pan_set_orientation (GTK_GESTURE_PAN (self->pan_gesture),
+                                       orientation);
+
+      gtk_widget_queue_resize (GTK_WIDGET (self));
+      g_object_notify (G_OBJECT (self), "orientation");
+    }
 }
 
 static void
@@ -919,29 +944,7 @@ gtk_paned_set_property (GObject        *object,
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      if (paned->orientation != g_value_get_enum (value))
-        {
-          paned->orientation = g_value_get_enum (value);
-          _gtk_orientable_set_style_classes (GTK_ORIENTABLE (paned));
-
-          if (paned->orientation == GTK_ORIENTATION_HORIZONTAL)
-            {
-              gtk_gesture_pan_set_orientation (GTK_GESTURE_PAN (paned->pan_gesture),
-                                               GTK_ORIENTATION_HORIZONTAL);
-              gtk_widget_set_cursor_from_name (paned->handle_widget,
-                                               "col-resize");
-            }
-          else
-            {
-              gtk_gesture_pan_set_orientation (GTK_GESTURE_PAN (paned->pan_gesture),
-                                               GTK_ORIENTATION_VERTICAL);
-              gtk_widget_set_cursor_from_name (paned->handle_widget,
-                                               "row-resize");
-            }
-
-          gtk_widget_queue_resize (GTK_WIDGET (paned));
-          g_object_notify_by_pspec (object, pspec);
-        }
+      gtk_paned_set_orientation (paned, g_value_get_enum (value));
       break;
     case PROP_POSITION:
       gtk_paned_set_position (paned, g_value_get_int (value));
@@ -1450,7 +1453,7 @@ gtk_paned_init (GtkPaned *paned)
   paned->shrink_start_child = TRUE;
   paned->shrink_end_child = TRUE;
 
-  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (paned));
+  gtk_widget_update_orientation (GTK_WIDGET (paned), paned->orientation);
 
   /* Touch gesture */
   gesture = gtk_gesture_pan_new (GTK_ORIENTATION_HORIZONTAL);

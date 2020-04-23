@@ -22,19 +22,19 @@
 #include "gtklistbaseprivate.h"
 
 #include "gtkadjustment.h"
+#include "gtkgesturedrag.h"
+#include "gtkgizmoprivate.h"
 #include "gtkintl.h"
 #include "gtklistitemwidgetprivate.h"
-#include "gtkorientableprivate.h"
-#include "gtkscrollable.h"
-#include "gtksingleselection.h"
-#include "gtktypebuiltins.h"
-#include "gtkgesturedrag.h"
-#include "gtkwidgetprivate.h"
-#include "gtkstylecontextprivate.h"
-#include "gtksnapshot.h"
 #include "gtkmultiselection.h"
-#include "gtkgizmoprivate.h"
+#include "gtkorientable.h"
+#include "gtkscrollable.h"
 #include "gtkset.h"
+#include "gtksingleselection.h"
+#include "gtksnapshot.h"
+#include "gtkstylecontextprivate.h"
+#include "gtktypebuiltins.h"
+#include "gtkwidgetprivate.h"
 
 typedef struct _RubberbandData RubberbandData;
 
@@ -708,7 +708,7 @@ gtk_list_base_set_property (GObject      *object,
         if (priv->orientation != orientation)
           {
             priv->orientation = orientation;
-            _gtk_orientable_set_style_classes (GTK_ORIENTABLE (self));
+            gtk_widget_update_orientation (GTK_WIDGET (self), priv->orientation);
             gtk_widget_queue_resize (GTK_WIDGET (self));
             g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ORIENTATION]);
           }
