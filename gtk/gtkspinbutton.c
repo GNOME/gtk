@@ -47,7 +47,6 @@
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkorientable.h"
-#include "gtkorientableprivate.h"
 #include "gtkprivate.h"
 #include "gtksettings.h"
 #include "gtkstylecontextprivate.h"
@@ -922,7 +921,8 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
 
   spin_button->orientation = GTK_ORIENTATION_HORIZONTAL;
 
-  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (spin_button));
+  gtk_widget_update_orientation (GTK_WIDGET (spin_button),
+                                 spin_button->orientation);
 
   spin_button->entry = gtk_text_new ();
   gtk_editable_init_delegate (GTK_EDITABLE (spin_button));
@@ -1089,7 +1089,7 @@ gtk_spin_button_set_orientation (GtkSpinButton  *spin,
     return;
 
   spin->orientation = orientation;
-  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (spin));
+  gtk_widget_update_orientation (GTK_WIDGET (spin), spin->orientation);
 
   /* change alignment if it's the default */
   if (spin->orientation == GTK_ORIENTATION_VERTICAL &&

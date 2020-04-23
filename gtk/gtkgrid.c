@@ -25,8 +25,8 @@
 #include "gtkbuildable.h"
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkgridlayout.h"
-#include "gtkorientableprivate.h"
 #include "gtkintl.h"
+#include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtksizerequest.h"
 #include "gtkstylecontextprivate.h"
@@ -135,7 +135,8 @@ gtk_grid_set_orientation (GtkGrid        *grid,
   if (priv->orientation != orientation)
     {
       priv->orientation = orientation;
-      _gtk_orientable_set_style_classes (GTK_ORIENTABLE (grid));
+
+      gtk_widget_update_orientation (GTK_WIDGET (grid), priv->orientation);
 
       g_object_notify (G_OBJECT (grid), "orientation");
     }
@@ -435,7 +436,7 @@ gtk_grid_init (GtkGrid *grid)
   priv->layout_manager = gtk_widget_get_layout_manager (GTK_WIDGET (grid));
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
-  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (grid));
+  gtk_widget_update_orientation (GTK_WIDGET (grid), priv->orientation);
 }
 
 /**
