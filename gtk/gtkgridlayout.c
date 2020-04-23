@@ -48,7 +48,7 @@
 #include "gtkdebug.h"
 #include "gtkintl.h"
 #include "gtklayoutchild.h"
-#include "gtkorientableprivate.h"
+#include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtksizerequest.h"
 #include "gtkstylecontextprivate.h"

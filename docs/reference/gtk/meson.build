@@ -138,7 +138,6 @@ private_headers = [
   'gtkmountoperationprivate.h',
   'gtknativedialogprivate.h',
   'gtknomediafileprivate.h',
-  'gtkorientableprivate.h',
   'gtkplacessidebarprivate.h',
   'gtkplacesviewprivate.h',
   'gtkplacesviewrowprivate.h',

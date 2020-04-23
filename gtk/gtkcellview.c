@@ -16,19 +16,22 @@
  */
 
 #include "config.h"
-#include <string.h>
+
 #include "gtkcellview.h"
+
+#include "gtkbuildable.h"
 #include "gtkcelllayout.h"
 #include "gtkcellareabox.h"
-#include "gtkintl.h"
-#include "gtkcellrenderertext.h"
 #include "gtkcellrendererpixbuf.h"
+#include "gtkcellrenderertext.h"
+#include "gtkintl.h"
+#include "gtkorientable.h"
 #include "gtkprivate.h"
-#include "gtkorientableprivate.h"
 #include "gtkwidgetprivate.h"
-#include <gobject/gmarshal.h>
-#include "gtkbuildable.h"
 
+#include <gobject/gmarshal.h>
+
+#include <string.h>
 
 /**
  * SECTION:gtkcellview
@@ -385,7 +388,7 @@ gtk_cell_view_set_property (GObject      *object,
           priv->orientation = g_value_get_enum (value);
           if (priv->context)
             gtk_cell_area_context_reset (priv->context);
-          _gtk_orientable_set_style_classes (GTK_ORIENTABLE (object));
+          gtk_widget_update_orientation (GTK_WIDGET (object), priv->orientation);
           g_object_notify_by_pspec (object, pspec);
         }
       break;

@@ -26,8 +26,8 @@
 
 #include "gtkseparator.h"
 
-#include "gtkorientableprivate.h"
 #include "gtkintl.h"
+#include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
 
@@ -85,7 +85,8 @@ gtk_separator_set_property (GObject      *object,
       if (separator->orientation != g_value_get_enum (value))
         {
           separator->orientation = g_value_get_enum (value);
-          _gtk_orientable_set_style_classes (GTK_ORIENTABLE (object));
+          gtk_widget_update_orientation (GTK_WIDGET (object),
+                                         separator->orientation);
           gtk_widget_queue_resize (GTK_WIDGET (object));
           g_object_notify_by_pspec (object, pspec);
         }
@@ -120,7 +121,7 @@ gtk_separator_init (GtkSeparator *separator)
 {
   separator->orientation = GTK_ORIENTATION_HORIZONTAL;
 
-  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (separator));
+  gtk_widget_update_orientation (GTK_WIDGET (separator), separator->orientation);
 }
 
 static void

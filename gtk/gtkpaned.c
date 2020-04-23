@@ -26,6 +26,7 @@
 
 #include "gtkpaned.h"
 
+#include "gtkcssboxesprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkeventcontrollermotion.h"
@@ -34,7 +35,7 @@
 #include "gtkgizmoprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
-#include "gtkorientableprivate.h"
+#include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkrendericonprivate.h"
 #include "gtkstylecontextprivate.h"
@@ -922,7 +923,7 @@ gtk_paned_set_property (GObject        *object,
       if (paned->orientation != g_value_get_enum (value))
         {
           paned->orientation = g_value_get_enum (value);
-          _gtk_orientable_set_style_classes (GTK_ORIENTABLE (paned));
+          gtk_widget_update_orientation (GTK_WIDGET (paned), paned->orientation);
 
           if (paned->orientation == GTK_ORIENTATION_HORIZONTAL)
             {
@@ -1450,7 +1451,7 @@ gtk_paned_init (GtkPaned *paned)
   paned->shrink_start_child = TRUE;
   paned->shrink_end_child = TRUE;
 
-  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (paned));
+  gtk_widget_update_orientation (GTK_WIDGET (paned), paned->orientation);
 
   /* Touch gesture */
   gesture = gtk_gesture_pan_new (GTK_ORIENTATION_HORIZONTAL);
