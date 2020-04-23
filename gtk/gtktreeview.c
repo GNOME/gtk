@@ -10303,10 +10303,18 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 
   gtk_tree_view_real_set_cursor (tree_view, NULL, CURSOR_INVALID);
 
+  {
+    GtkTreeViewAccessible *accessible =
+      GTK_TREE_VIEW_ACCESSIBLE (_gtk_widget_peek_accessible (GTK_WIDGET (tree_view)));
+
+    if (accessible != NULL)
+      gtk_tree_view_accessible_update_model (accessible, tree_view->model);
+  }
+
   g_object_notify_by_pspec (G_OBJECT (tree_view), tree_view_props[PROP_MODEL]);
 
   if (tree_view->selection)
-  _gtk_tree_selection_emit_changed (tree_view->selection);
+    _gtk_tree_selection_emit_changed (tree_view->selection);
 
   if (gtk_widget_get_realized (GTK_WIDGET (tree_view)))
     gtk_widget_queue_resize (GTK_WIDGET (tree_view));
