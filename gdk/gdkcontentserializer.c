@@ -43,7 +43,7 @@
 
 typedef struct _Serializer Serializer;
 
-struct _Serializer 
+struct _Serializer
 {
   const char *                    mime_type; /* interned */
   GType                           type;
@@ -427,7 +427,7 @@ lookup_serializer (const char *mime_type,
           serializer->type == type)
         return serializer;
     }
-  
+
   return NULL;
 }
 
@@ -606,7 +606,7 @@ pixbuf_serializer (GdkContentSerializer *serializer)
   const GValue *value;
   GdkPixbuf *pixbuf;
   const char *name;
-  
+
   name = gdk_content_serializer_get_user_data (serializer);
   value = gdk_content_serializer_get_value (serializer);
 
@@ -732,7 +732,7 @@ file_uri_serializer (GdkContentSerializer *serializer)
   else if (G_VALUE_HOLDS (value, GDK_TYPE_FILE_LIST))
     {
       GSList *l;
-      
+
       for (l = g_value_get_boxed (value); l; l = l->next)
         {
           uri = g_file_get_uri (l->data);
@@ -776,7 +776,7 @@ file_text_serializer (GdkContentSerializer *serializer)
     {
       GString *str;
       GSList *l;
-      
+
       str = g_string_new (NULL);
 
       for (l = g_value_get_boxed (value); l; l = l->next)
@@ -864,8 +864,8 @@ init (void)
   for (f = formats; f; f = f->next)
     {
       GdkPixbufFormat *fmt = f->data;
-      gchar *name; 
- 
+      gchar *name;
+
       name = gdk_pixbuf_format_get_name (fmt);
       if (g_str_equal (name, "png"))
 	{
@@ -878,7 +878,7 @@ init (void)
 	}
 
       g_free (name);
-    }  
+    }
 
   for (f = formats; f; f = f->next)
     {
@@ -907,7 +907,7 @@ init (void)
 
   g_slist_free (formats);
 
-#ifdef G_OS_UNIX
+#if defined(G_OS_UNIX) && !defined(__APPLE__)
   file_transfer_portal_register ();
 #endif
 

@@ -143,6 +143,7 @@ gdkconfig_cdata.set('GDK_WINDOWING_X11', x11_enabled)
 gdkconfig_cdata.set('GDK_WINDOWING_WAYLAND', wayland_enabled)
 gdkconfig_cdata.set('GDK_WINDOWING_WIN32', win32_enabled)
 gdkconfig_cdata.set('GDK_WINDOWING_BROADWAY', broadway_enabled)
+gdkconfig_cdata.set('GDK_WINDOWING_MACOS', macos_enabled)
 gdkconfig_cdata.set('GDK_RENDERING_VULKAN', have_vulkan)
 
 gdkconfig = configure_file(
@@ -216,9 +217,14 @@ if wayland_enabled or broadway_enabled
   endif
 endif
 
+libgdk_c_args = [
+  '-DGTK_COMPILATION',
+  '-DG_LOG_DOMAIN="Gdk"',
+]
+
 gdk_backends = []
 gdk_backends_gen_headers = []  # non-public generated headers
-foreach backend : ['broadway', 'quartz', 'wayland', 'win32', 'x11']
+foreach backend : ['broadway', 'quartz', 'wayland', 'win32', 'x11', 'macos']
   if get_variable('@0@_enabled'.format(backend))
     subdir(backend)
     gdk_deps += get_variable('gdk_@0@_deps'.format(backend))
@@ -235,16 +241,12 @@ if gdk_backends.length() == 0
   error('No backends enabled')
 endif
 
-# FIXME: might have to add '-xobjective-c' to c_args for quartz backend?
 libgdk = static_library('gdk',
   sources: [gdk_sources, gdk_backends_gen_headers, gdkconfig],
   dependencies: gdk_deps + [libgtk_css_dep],
   link_with: [libgtk_css, ],
   include_directories: [confinc, gdkx11_inc, wlinc],
-  c_args: [
-    '-DGTK_COMPILATION',
-    '-DG_LOG_DOMAIN="Gdk"',
-  ] + common_cflags,
+  c_args: libgdk_c_args + common_cflags,
   link_whole: gdk_backends,
   link_args: common_ldflags)
 
