@@ -83,7 +83,6 @@ struct _GtkCssCoreValues {
   GtkCssValue *color;
   GtkCssValue *dpi;
   GtkCssValue *font_size;
-  GtkCssValue *icon_theme;
   GtkCssValue *icon_palette;
 };
 

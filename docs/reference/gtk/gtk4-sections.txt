@@ -2312,6 +2312,7 @@ GtkSettingsValue
 gtk_settings_get_default
 gtk_settings_get_for_display
 gtk_settings_reset_property
+GtkSystemSetting
 <SUBSECTION Standard>
 GtkSettingsClass
 GTK_IS_SETTINGS
@@ -4102,7 +4103,6 @@ gtk_widget_set_css_classes
 
 <SUBSECTION>
 gtk_widget_get_style_context
-gtk_widget_reset_style
 gtk_widget_class_get_css_name
 gtk_widget_class_set_css_name
 

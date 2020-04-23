@@ -592,6 +592,8 @@ static gboolean gtk_widget_real_query_tooltip    (GtkWidget         *widget,
 						  GtkTooltip        *tooltip);
 static void     gtk_widget_real_css_changed      (GtkWidget         *widget,
                                                   GtkCssStyleChange *change);
+static void     gtk_widget_real_system_setting_changed (GtkWidget         *widget,
+                                                        GtkSystemSetting   setting);
 
 static void             gtk_widget_real_set_focus_child         (GtkWidget        *widget,
                                                                  GtkWidget        *child);
@@ -911,6 +913,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->keynav_failed = gtk_widget_real_keynav_failed;
   klass->query_tooltip = gtk_widget_real_query_tooltip;
   klass->css_changed = gtk_widget_real_css_changed;
+  klass->system_setting_changed = gtk_widget_real_system_setting_changed;
 
   /* Accessibility support */
   klass->priv->accessible_type = GTK_TYPE_ACCESSIBLE;
@@ -4865,6 +4868,29 @@ gtk_widget_real_css_changed (GtkWidget         *widget,
     }
 }
 
+static void
+gtk_widget_real_system_setting_changed (GtkWidget        *widget,
+                                        GtkSystemSetting  setting)
+{
+  GtkWidget *child;
+
+  if (setting == GTK_SYSTEM_SETTING_DPI ||
+      setting == GTK_SYSTEM_SETTING_FONT_NAME ||
+      setting == GTK_SYSTEM_SETTING_FONT_CONFIG)
+    {
+      gtk_widget_update_pango_context (widget);
+      if (gtk_widget_peek_pango_context (widget))
+        gtk_widget_queue_resize (widget);
+    }
+
+  for (child = _gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
+    {
+      gtk_widget_system_setting_changed (child, setting);
+    }
+}
+
 static gboolean
 direction_is_forward (GtkDirectionType direction)
 {
@@ -5999,38 +6025,6 @@ gtk_widget_real_direction_changed (GtkWidget        *widget,
                                    GtkTextDirection  previous_direction)
 {
   gtk_widget_queue_resize (widget);
-}
-
-static void
-reset_style_recurse (GtkWidget *widget, gpointer user_data)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  gtk_css_node_invalidate (priv->cssnode, GTK_CSS_CHANGE_ANY);
-
-  gtk_widget_forall (widget, reset_style_recurse, user_data);
-}
-
-/**
- * gtk_widget_reset_style:
- * @widget: a #GtkWidget
- *
- * Updates the style context of @widget and all descendants
- * by updating its widget path. #GtkContainers may want
- * to use this on a child when reordering it in a way that a different
- * style might apply to it.
- */
-void
-gtk_widget_reset_style (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  reset_style_recurse (widget, NULL);
-
-  g_list_foreach (priv->attached_windows,
-                  (GFunc) reset_style_recurse, NULL);
 }
 
 #ifdef G_ENABLE_CONSISTENCY_CHECKS
@@ -9188,8 +9182,6 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
       for (l = style_data->classes; l; l = l->next)
         gtk_widget_add_css_class (GTK_WIDGET (buildable), (const char *)l->data);
 
-      gtk_widget_reset_style (GTK_WIDGET (buildable));
-
       g_slist_free_full (style_data->classes, g_free);
       g_slice_free (StyleParserData, style_data);
     }
@@ -10555,24 +10547,6 @@ _gtk_widget_get_sizegroups (GtkWidget    *widget)
   return NULL;
 }
 
-void
-_gtk_widget_add_attached_window (GtkWidget    *widget,
-                                 GtkWindow    *window)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  priv->attached_windows = g_list_prepend (priv->attached_windows, window);
-}
-
-void
-_gtk_widget_remove_attached_window (GtkWidget    *widget,
-                                    GtkWindow    *window)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  priv->attached_windows = g_list_remove (priv->attached_windows, window);
-}
-
 /**
  * gtk_widget_class_set_css_name:
  * @widget_class: class to set the name on
@@ -10625,6 +10599,32 @@ gtk_widget_css_changed (GtkWidget         *widget,
                         GtkCssStyleChange *change)
 {
   GTK_WIDGET_GET_CLASS (widget)->css_changed (widget, change);
+}
+
+void
+gtk_widget_system_setting_changed (GtkWidget        *widget,
+                                   GtkSystemSetting  setting)
+{
+  GTK_WIDGET_GET_CLASS (widget)->system_setting_changed (widget, setting);
+}
+
+void
+gtk_system_setting_changed (GdkDisplay       *display,
+                            GtkSystemSetting  setting)
+{
+  GList *list, *toplevels;
+
+  toplevels = gtk_window_list_toplevels ();
+  g_list_foreach (toplevels, (GFunc) g_object_ref, NULL);
+
+  for (list = toplevels; list; list = list->next)
+    {
+      if (gtk_widget_get_display (list->data) == display)
+        gtk_widget_system_setting_changed (list->data, setting);
+      g_object_unref (list->data);
+    }
+
+  g_list_free (toplevels);
 }
 
 GtkCssNode *
