@@ -438,9 +438,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean  gtk_widget_get_receives_default (GtkWidget           *widget);
 
 GDK_AVAILABLE_IN_ALL
-gboolean   gtk_widget_has_grab            (GtkWidget           *widget);
-
-GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_device_is_shadowed  (GtkWidget           *widget,
                                            GdkDevice           *device);
 

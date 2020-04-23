@@ -4070,7 +4070,6 @@ gtk_widget_get_state_flags
 gtk_widget_has_default
 gtk_widget_has_focus
 gtk_widget_has_visible_focus
-gtk_widget_has_grab
 gtk_widget_is_drawable
 gtk_widget_set_receives_default
 gtk_widget_get_receives_default
