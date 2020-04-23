@@ -2535,11 +2535,16 @@ calculate_moved_to_rect_result (GdkWindow    *window,
                                 gboolean     *flipped_x,
                                 gboolean     *flipped_y)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkWindowImplWayland *impl;
   GdkWindow *parent;
   gint window_x, window_y;
   gint window_width, window_height;
   GdkRectangle best_rect;
+
+  g_return_if_fail (GDK_IS_WAYLAND_WINDOW (window));
+  g_return_if_fail (GDK_IS_WINDOW_IMPL_WAYLAND (window->impl));
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   parent = translate_from_real_parent_window_geometry (window, &x, &y);
   *final_rect = (GdkRectangle) {
@@ -5328,9 +5333,15 @@ void
 gdk_wayland_window_restore_shortcuts (GdkWindow *window,
                                       GdkSeat   *gdk_seat)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  struct wl_seat *seat = gdk_wayland_seat_get_wl_seat (gdk_seat);
+  GdkWindowImplWayland *impl;
+  struct wl_seat *seat;
   struct zwp_keyboard_shortcuts_inhibitor_v1 *inhibitor;
+
+  g_return_if_fail (GDK_IS_WAYLAND_WINDOW (window));
+  g_return_if_fail (GDK_IS_WINDOW_IMPL_WAYLAND (window->impl));
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  seat = gdk_wayland_seat_get_wl_seat (gdk_seat);
 
   inhibitor = gdk_wayland_window_get_inhibitor (impl, seat);
   if (inhibitor == NULL)
