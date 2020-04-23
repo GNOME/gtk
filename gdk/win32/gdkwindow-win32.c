@@ -3254,6 +3254,36 @@ discard_snapinfo (GdkWindow *window)
   g_clear_pointer (&impl->snap_stash_int, g_free);
 }
 
+#define ANY_EDGE_TILED (GDK_WINDOW_STATE_LEFT_TILED | \
+                        GDK_WINDOW_STATE_RIGHT_TILED | \
+                        GDK_WINDOW_STATE_TOP_TILED | \
+                        GDK_WINDOW_STATE_BOTTOM_TILED)
+/*
+static void
+snap_emit_window_state_event (GdkWindow *window,
+                              GdkWindowState tiled_edge)
+{
+  if (GDK_WINDOW_DESTROYED (window) ||
+      gdk_window_get_window_type (window) != GDK_WINDOW_TOPLEVEL)
+    return;
+
+  set = GDK_WINDOW_STATE_TILED | tiled_edge;
+  unset = ANY_EDGE_TILED ~ tiled_edge; /*TODO also remove maximized?
+  gdk_synthesize_window_state (window, set, unset);
+}
+
+static void
+unsnap_emit_window_state_event (GdkWindow *window)
+{
+  if (GDK_WINDOW_DESTROYED (window) ||
+      gdk_window_get_window_type (window) != GDK_WINDOW_TOPLEVEL)
+    return;
+
+  set = 0;
+  unset = GDK_WINDOW_STATE_TILED | ANY_EDGE_TILED; /*TODO also remove maximized?
+  gdk_synthesize_window_state (window, set, unset);
+}
+*/
 static void
 unsnap (GdkWindow  *window,
         GdkScreen  *screen,
@@ -3327,6 +3357,8 @@ unsnap (GdkWindow  *window,
 
   gdk_window_move_resize (window, rect.x, rect.y,
                           rect.width, rect.height);
+  /* Unset all tiled states */
+  gdk_synthesize_window_state (window, GDK_WINDOW_STATE_TILED | ANY_EDGE_TILED, 0);
 
   g_clear_pointer (&impl->snap_stash, g_free);
   g_clear_pointer (&impl->snap_stash_int, g_free);
@@ -3436,6 +3468,9 @@ snap_up (GdkWindow *window,
   height += impl->margins_y;
 
   gdk_window_move_resize (window, x, y, width, height);
+  gdk_synthesize_window_state (window,
+                               ANY_EDGE_TILED & ~GDK_WINDOW_STATE_RIGHT_TILED,
+                               GDK_WINDOW_STATE_TILED | GDK_WINDOW_STATE_RIGHT_TILED);
 }
 
 static void
@@ -3463,6 +3498,9 @@ snap_left (GdkWindow *window,
   rect.height = rect.height + impl->margins_y;
 
   gdk_window_move_resize (window, rect.x, rect.y, rect.width, rect.height);
+  gdk_synthesize_window_state (window,
+                               ANY_EDGE_TILED & ~GDK_WINDOW_STATE_LEFT_TILED,
+                               GDK_WINDOW_STATE_TILED | GDK_WINDOW_STATE_LEFT_TILED);
 }
 
 static void
@@ -3491,6 +3529,9 @@ snap_right (GdkWindow *window,
   rect.height = rect.height + impl->margins_y;
 
   gdk_window_move_resize (window, rect.x, rect.y, rect.width, rect.height);
+  gdk_synthesize_window_state (window,
+                               ANY_EDGE_TILED & ~GDK_WINDOW_STATE_TOP_TILED,
+                               GDK_WINDOW_STATE_TILED | GDK_WINDOW_STATE_TOP_TILED);
 }
 
 void
