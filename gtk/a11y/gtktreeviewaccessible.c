@@ -32,10 +32,10 @@
 #include "gtkcellaccessibleparent.h"
 #include "gtkcellaccessibleprivate.h"
 
-struct _GtkTreeViewAccessiblePrivate
+typedef struct
 {
   GHashTable *cell_infos;
-};
+} GtkTreeViewAccessiblePrivate;
 
 typedef struct _GtkTreeViewAccessibleCellInfo  GtkTreeViewAccessibleCellInfo;
 struct _GtkTreeViewAccessibleCellInfo
@@ -138,89 +138,80 @@ static void
 gtk_tree_view_accessible_initialize (AtkObject *obj,
                                      gpointer   data)
 {
-  GtkTreeViewAccessible *accessible;
-  GtkTreeView *tree_view;
+  GtkTreeViewAccessible *self = GTK_TREE_VIEW_ACCESSIBLE (obj);
+  GtkTreeViewAccessiblePrivate *priv = gtk_tree_view_accessible_get_instance_private (self);
+  GtkTreeView *tree_view = data;
   GtkTreeModel *tree_model;
-  GtkWidget *widget;
 
   ATK_OBJECT_CLASS (gtk_tree_view_accessible_parent_class)->initialize (obj, data);
 
-  accessible = GTK_TREE_VIEW_ACCESSIBLE (obj);
+  priv->cell_infos = g_hash_table_new_full (cell_info_hash, cell_info_equal,
+                                            NULL,
+                                            (GDestroyNotify) cell_info_free);
 
-  accessible->priv->cell_infos = g_hash_table_new_full (cell_info_hash,
-      cell_info_equal, NULL, (GDestroyNotify) cell_info_free);
-
-  widget = GTK_WIDGET (data);
-  tree_view = GTK_TREE_VIEW (widget);
   tree_model = gtk_tree_view_get_model (tree_view);
 
-  if (tree_model)
+  if (tree_model != NULL)
     {
-      if (gtk_tree_model_get_flags (tree_model) & GTK_TREE_MODEL_LIST_ONLY)
-        obj->role = ATK_ROLE_TABLE;
+      AtkRole role;
+
+      if ((gtk_tree_model_get_flags (tree_model) & GTK_TREE_MODEL_LIST_ONLY) != 0)
+        role = ATK_ROLE_TABLE;
       else
-        obj->role = ATK_ROLE_TREE_TABLE;
+        role = ATK_ROLE_TREE_TABLE;
+
+      atk_object_set_role (obj, role);
     }
 }
 
 static void
 gtk_tree_view_accessible_finalize (GObject *object)
 {
-  GtkTreeViewAccessible *accessible = GTK_TREE_VIEW_ACCESSIBLE (object);
+  GtkTreeViewAccessible *self = GTK_TREE_VIEW_ACCESSIBLE (object);
+  GtkTreeViewAccessiblePrivate *priv = gtk_tree_view_accessible_get_instance_private (self);
 
-  if (accessible->priv->cell_infos)
-    g_hash_table_destroy (accessible->priv->cell_infos);
+  g_clear_pointer (&priv->cell_infos, g_hash_table_unref);
 
   G_OBJECT_CLASS (gtk_tree_view_accessible_parent_class)->finalize (object);
 }
 
-static void
-gtk_tree_view_accessible_notify_gtk (GObject    *obj,
-                                     GParamSpec *pspec)
+void
+gtk_tree_view_accessible_update_model (GtkTreeViewAccessible *self,
+                                       GtkTreeModel          *model)
 {
-  GtkWidget *widget;
-  GtkTreeView *tree_view;
-  GtkTreeViewAccessible *accessible;
+  GtkTreeViewAccessiblePrivate *priv = gtk_tree_view_accessible_get_instance_private (self);
 
-  widget = GTK_WIDGET (obj);
-  accessible = GTK_TREE_VIEW_ACCESSIBLE (gtk_widget_get_accessible (widget));
-  tree_view = GTK_TREE_VIEW (widget);
+  g_return_if_fail (GTK_IS_TREE_VIEW_ACCESSIBLE (self));
+  g_return_if_fail (model == NULL || GTK_IS_TREE_MODEL (model));
 
-  if (g_strcmp0 (pspec->name, "model") == 0)
+  g_hash_table_remove_all (priv->cell_infos);
+
+  if (model != NULL)
     {
-      GtkTreeModel *tree_model;
+      AtkObject *object = ATK_OBJECT (self);
       AtkRole role;
 
-      tree_model = gtk_tree_view_get_model (tree_view);
-      g_hash_table_remove_all (accessible->priv->cell_infos);
-
-      if (tree_model)
-        {
-          if (gtk_tree_model_get_flags (tree_model) & GTK_TREE_MODEL_LIST_ONLY)
-            role = ATK_ROLE_TABLE;
-          else
-            role = ATK_ROLE_TREE_TABLE;
-        }
+      if ((gtk_tree_model_get_flags (model) & GTK_TREE_MODEL_LIST_ONLY) != 0)
+        role = ATK_ROLE_TABLE;
       else
-        {
-          role = ATK_ROLE_UNKNOWN;
-        }
-      atk_object_set_role (ATK_OBJECT (accessible), role);
-      g_object_freeze_notify (G_OBJECT (accessible));
-      g_signal_emit_by_name (accessible, "model-changed");
-      g_signal_emit_by_name (accessible, "visible-data-changed");
-      g_object_thaw_notify (G_OBJECT (accessible));
+        role = ATK_ROLE_TREE_TABLE;
+
+      atk_object_set_role (object, role);
+
+      g_object_freeze_notify (G_OBJECT (self));
+      g_signal_emit_by_name (self, "model-changed");
+      g_signal_emit_by_name (self, "visible-data-changed");
+      g_object_thaw_notify (G_OBJECT (self));
     }
-  else
-    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_tree_view_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 static void
 gtk_tree_view_accessible_widget_unset (GtkAccessible *gtkaccessible)
 {
-  GtkTreeViewAccessible *accessible = GTK_TREE_VIEW_ACCESSIBLE (gtkaccessible);
+  GtkTreeViewAccessible *self = GTK_TREE_VIEW_ACCESSIBLE (gtkaccessible);
+  GtkTreeViewAccessiblePrivate *priv = gtk_tree_view_accessible_get_instance_private (self);
 
-  g_hash_table_remove_all (accessible->priv->cell_infos);
+  g_hash_table_remove_all (priv->cell_infos);
 
   GTK_ACCESSIBLE_CLASS (gtk_tree_view_accessible_parent_class)->widget_unset (gtkaccessible);
 }
@@ -338,18 +329,19 @@ set_cell_data (GtkTreeView           *treeview,
 }
 
 static GtkCellAccessible *
-peek_cell (GtkTreeViewAccessible *accessible,
+peek_cell (GtkTreeViewAccessible *self,
            GtkTreeRBTree         *tree,
            GtkTreeRBNode         *node,
            GtkTreeViewColumn     *column)
 {
+  GtkTreeViewAccessiblePrivate *priv = gtk_tree_view_accessible_get_instance_private (self);
   GtkTreeViewAccessibleCellInfo lookup, *cell_info;
 
   lookup.tree = tree;
   lookup.node = node;
   lookup.cell_col_ref = column;
 
-  cell_info = g_hash_table_lookup (accessible->priv->cell_infos, &lookup);
+  cell_info = g_hash_table_lookup (priv->cell_infos, &lookup);
   if (cell_info == NULL)
     return NULL;
 
@@ -490,15 +482,12 @@ gtk_tree_view_accessible_class_init (GtkTreeViewAccessibleClass *klass)
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkAccessibleClass *accessible_class = (GtkAccessibleClass*)klass;
-  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
   GtkContainerAccessibleClass *container_class = (GtkContainerAccessibleClass*)klass;
 
   class->get_n_children = gtk_tree_view_accessible_get_n_children;
   class->ref_child = gtk_tree_view_accessible_ref_child;
   class->ref_state_set = gtk_tree_view_accessible_ref_state_set;
   class->initialize = gtk_tree_view_accessible_initialize;
-
-  widget_class->notify_gtk = gtk_tree_view_accessible_notify_gtk;
 
   accessible_class->widget_unset = gtk_tree_view_accessible_widget_unset;
 
@@ -515,7 +504,6 @@ gtk_tree_view_accessible_class_init (GtkTreeViewAccessibleClass *klass)
 static void
 gtk_tree_view_accessible_init (GtkTreeViewAccessible *view)
 {
-  view->priv = gtk_tree_view_accessible_get_instance_private (view);
 }
 
 /* atkcomponent.h */
@@ -1507,27 +1495,28 @@ cell_info_get_index (GtkTreeView                     *tree_view,
 }
 
 static void
-cell_info_new (GtkTreeViewAccessible *accessible,
+cell_info_new (GtkTreeViewAccessible *self,
                GtkTreeRBTree         *tree,
                GtkTreeRBNode         *node,
                GtkTreeViewColumn     *tv_col,
                GtkCellAccessible     *cell)
 {
+  GtkTreeViewAccessiblePrivate *priv = gtk_tree_view_accessible_get_instance_private (self);
   GtkTreeViewAccessibleCellInfo *cell_info;
 
   cell_info = g_new (GtkTreeViewAccessibleCellInfo, 1);
 
+  cell_info->view = self;
   cell_info->tree = tree;
   cell_info->node = node;
   cell_info->cell_col_ref = tv_col;
   cell_info->cell = cell;
-  cell_info->view = accessible;
 
   g_object_set_qdata (G_OBJECT (cell), 
                       gtk_tree_view_accessible_get_data_quark (),
                       cell_info);
 
-  g_hash_table_replace (accessible->priv->cell_infos, cell_info, cell_info);
+  g_hash_table_replace (priv->cell_infos, cell_info, cell_info);
 }
 
 /* Returns the column number of the specified GtkTreeViewColumn
@@ -1676,11 +1665,14 @@ _gtk_tree_view_accessible_remove (GtkTreeView   *treeview,
   GtkTreeViewAccessibleCellInfo *cell_info;
   GHashTableIter iter;
   GtkTreeViewAccessible *accessible;
+  GtkTreeViewAccessiblePrivate *priv;
   guint row, n_rows, n_cols, i;
 
   accessible = GTK_TREE_VIEW_ACCESSIBLE (_gtk_widget_peek_accessible (GTK_WIDGET (treeview)));
   if (accessible == NULL)
     return;
+
+  priv = gtk_tree_view_accessible_get_instance_private (accessible);
 
   /* if this shows up in profiles, special-case node->children == NULL */
 
@@ -1708,7 +1700,7 @@ _gtk_tree_view_accessible_remove (GtkTreeView   *treeview,
           g_signal_emit_by_name (accessible, "children-changed::remove", i, NULL, NULL);
         }
 
-      g_hash_table_iter_init (&iter, accessible->priv->cell_infos);
+      g_hash_table_iter_init (&iter, priv->cell_infos);
       while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&cell_info))
         {
           if (node == cell_info->node ||
@@ -1813,18 +1805,19 @@ _gtk_tree_view_accessible_add_column (GtkTreeView       *treeview,
 }
 
 static void
-gtk_tree_view_accessible_do_remove_column (GtkTreeViewAccessible *accessible,
+gtk_tree_view_accessible_do_remove_column (GtkTreeViewAccessible *self,
                                            GtkTreeView           *treeview,
                                            GtkTreeViewColumn     *column,
                                            guint                  id)
 {
+  GtkTreeViewAccessiblePrivate *priv = gtk_tree_view_accessible_get_instance_private (self);
   GtkTreeViewAccessibleCellInfo *cell_info;
   GHashTableIter iter;
   gpointer value;
   guint row, n_rows, n_cols;
 
   /* Clean column from cache */
-  g_hash_table_iter_init (&iter, accessible->priv->cell_infos);
+  g_hash_table_iter_init (&iter, priv->cell_infos);
   while (g_hash_table_iter_next (&iter, NULL, &value))
     {
       cell_info = value;
@@ -1833,7 +1826,7 @@ gtk_tree_view_accessible_do_remove_column (GtkTreeViewAccessible *accessible,
     }
 
   /* Generate column-deleted signal */
-  g_signal_emit_by_name (accessible, "column-deleted", id, 1);
+  g_signal_emit_by_name (self, "column-deleted", id, 1);
 
   n_rows = get_n_rows (treeview);
   n_cols = get_n_columns (treeview);
@@ -1842,7 +1835,7 @@ gtk_tree_view_accessible_do_remove_column (GtkTreeViewAccessible *accessible,
   for (row = 0; row <= n_rows; row++)
     {
       /* Pass NULL as the child object, 4th argument */
-      g_signal_emit_by_name (accessible, "children-changed::remove",
+      g_signal_emit_by_name (self, "children-changed::remove",
                              (row * n_cols) + id, NULL, NULL);
     }
 }
