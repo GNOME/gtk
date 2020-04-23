@@ -72,8 +72,6 @@ void            _gtk_window_schedule_mnemonics_visible (GtkWindow *window);
 
 void            _gtk_window_notify_keys_changed (GtkWindow *window);
 
-gboolean        _gtk_window_titlebar_shows_app_menu (GtkWindow *window);
-
 void            _gtk_window_get_shadow_width (GtkWindow *window,
                                               GtkBorder *border);
 

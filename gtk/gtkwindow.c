@@ -27,6 +27,7 @@
 #include "gtkwindowprivate.h"
 
 #include "gtkaccelgroupprivate.h"
+#include "gtkactionable.h"
 #include "gtkapplicationprivate.h"
 #include "gtkbox.h"
 #include "gtkbuildable.h"
@@ -44,7 +45,7 @@
 #include "gtkgesturedrag.h"
 #include "gtkgestureclick.h"
 #include "gtkgestureprivate.h"
-#include "gtkheaderbarprivate.h"
+#include "gtkheaderbar.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
@@ -462,7 +463,7 @@ static GList   *icon_list_from_theme                  (GtkWindow    *window,
 						       const gchar  *name);
 static void     gtk_window_realize_icon               (GtkWindow    *window);
 static void     gtk_window_unrealize_icon             (GtkWindow    *window);
-static void     update_window_buttons                 (GtkWindow    *window);
+static void     update_window_actions                 (GtkWindow    *window);
 static void     get_shadow_width                      (GtkWindow    *window,
                                                        GtkBorder    *shadow_width);
 
@@ -479,6 +480,15 @@ static void        gtk_window_set_theme_variant         (GtkWindow  *window);
 static void gtk_window_activate_default_activate (GtkWidget *widget,
                                                   const char *action_name,
                                                   GVariant *parameter);
+static void gtk_window_activate_minimize (GtkWidget  *widget,
+                                          const char *action_name,
+                                          GVariant   *parameter);
+static void gtk_window_activate_toggle_maximized (GtkWidget  *widget,
+                                                  const char *name,
+                                                  GVariant   *parameter);
+static void gtk_window_activate_close (GtkWidget  *widget,
+                                       const char *action_name,
+                                       GVariant   *parameter);
 
 static void        gtk_window_do_popup                  (GtkWindow      *window,
                                                          GdkEvent       *event);
@@ -530,9 +540,6 @@ static void             gtk_window_native_interface_init  (GtkNativeInterface  *
 
 static void ensure_state_flag_backdrop (GtkWidget *widget);
 static void unset_titlebar (GtkWindow *window);
-static void on_titlebar_title_notify (GtkHeaderBar *titlebar,
-                                      GParamSpec   *pspec,
-                                      GtkWindow    *self);
 static GtkWindowRegion get_active_region_type (GtkWindow   *window,
                                                gint         x,
                                                gint         y);
@@ -1071,6 +1078,30 @@ gtk_window_class_init (GtkWindowClass *klass)
    */
   gtk_widget_class_install_action (widget_class, "default.activate", NULL,
                                    gtk_window_activate_default_activate);
+
+  /**
+   * GtkWindow|window.minimize:
+   *
+   * Close the window.
+   */
+  gtk_widget_class_install_action (widget_class, "window.minimize", NULL,
+                                   gtk_window_activate_minimize);
+
+  /**
+   * GtkWindow|window.toggle-maximized:
+   *
+   * Maximize or restore the window.
+   */
+  gtk_widget_class_install_action (widget_class, "window.toggle-maximized", NULL,
+                                   gtk_window_activate_toggle_maximized);
+
+  /**
+   * GtkWindow|window.close:
+   *
+   * Close the window.
+   */
+  gtk_widget_class_install_action (widget_class, "window.close", NULL,
+                                   gtk_window_activate_close);
 
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_space, 0,
                                        "activate-focus", NULL);
@@ -1662,6 +1693,30 @@ gtk_window_activate_default_activate (GtkWidget  *widget,
                                       GVariant   *parameter)
 {
   gtk_window_real_activate_default (GTK_WINDOW (widget));
+}
+
+static void
+gtk_window_activate_minimize (GtkWidget  *widget,
+                              const char *name,
+                              GVariant   *parameter)
+{
+  gtk_window_minimize (GTK_WINDOW (widget));
+}
+
+static void
+gtk_window_activate_toggle_maximized (GtkWidget  *widget,
+                                      const char *name,
+                                      GVariant   *parameter)
+{
+  _gtk_window_toggle_maximized (GTK_WINDOW (widget));
+}
+
+static void
+gtk_window_activate_close (GtkWidget  *widget,
+                           const char *name,
+                           GVariant   *parameter)
+{
+  gtk_window_close (GTK_WINDOW (widget));
 }
 
 static gboolean
@@ -2472,7 +2527,7 @@ gtk_window_set_modal (GtkWindow *window,
 	gtk_grab_remove (widget);
     }
 
-  update_window_buttons (window);
+  update_window_actions (window);
 
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_MODAL]);
 }
@@ -2744,7 +2799,7 @@ gtk_window_set_transient_for  (GtkWindow *window,
 	}
     }
 
-  update_window_buttons (window);
+  update_window_actions (window);
 
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_TRANSIENT_FOR]);
 }
@@ -2993,9 +3048,6 @@ unset_titlebar (GtkWindow *window)
 
   if (priv->title_box != NULL)
     {
-      g_signal_handlers_disconnect_by_func (priv->title_box,
-                                            on_titlebar_title_notify,
-                                            window);
       gtk_widget_unparent (priv->title_box);
       priv->title_box = NULL;
       priv->titlebar = NULL;
@@ -3041,17 +3093,6 @@ gtk_window_enable_csd (GtkWindow *window)
     gtk_widget_add_css_class (widget, "solid-csd");
 
   priv->client_decorated = TRUE;
-}
-
-static void
-on_titlebar_title_notify (GtkHeaderBar *titlebar,
-                          GParamSpec   *pspec,
-                          GtkWindow    *self)
-{
-  const gchar *title;
-
-  title = gtk_header_bar_get_title (titlebar);
-  gtk_window_set_title_internal (self, title, FALSE);
 }
 
 /**
@@ -3112,12 +3153,6 @@ gtk_window_set_titlebar (GtkWindow *window,
                               NULL);
 
   gtk_widget_set_parent (priv->title_box, widget);
-  if (GTK_IS_HEADER_BAR (titlebar))
-    {
-      g_signal_connect (titlebar, "notify::title",
-                        G_CALLBACK (on_titlebar_title_notify), window);
-      on_titlebar_title_notify (GTK_HEADER_BAR (titlebar), NULL, window);
-    }
 
   gtk_widget_add_css_class (titlebar, GTK_STYLE_CLASS_TITLEBAR);
 
@@ -3147,17 +3182,6 @@ gtk_window_get_titlebar (GtkWindow *window)
     return NULL;
 
   return priv->title_box;
-}
-
-gboolean
-_gtk_window_titlebar_shows_app_menu (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  if (GTK_IS_HEADER_BAR (priv->title_box))
-    return _gtk_header_bar_shows_app_menu (GTK_HEADER_BAR (priv->title_box));
-
-  return FALSE;
 }
 
 /**
@@ -3196,7 +3220,7 @@ gtk_window_set_decorated (GtkWindow *window,
   if (priv->surface)
     gdk_toplevel_set_decorated (GDK_TOPLEVEL (priv->surface), priv->decorated && !priv->client_decorated);
 
-  update_window_buttons (window);
+  update_window_actions (window);
   gtk_widget_queue_resize (GTK_WIDGET (window));
 
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_DECORATED]);
@@ -3255,7 +3279,7 @@ gtk_window_set_deletable (GtkWindow *window,
   if (priv->surface)
     gdk_toplevel_set_deletable (GDK_TOPLEVEL (priv->surface), priv->deletable);
 
-  update_window_buttons (window);
+  update_window_actions (window);
 
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_DELETABLE]);
 }
@@ -3436,8 +3460,6 @@ gtk_window_realize_icon (GtkWindow *window)
   info->realized = TRUE;
 
   gdk_toplevel_set_icon_list (GDK_TOPLEVEL (priv->surface), icon_list);
-  if (GTK_IS_HEADER_BAR (priv->title_box))
-    _gtk_header_bar_update_window_icon (GTK_HEADER_BAR (priv->title_box), window);
 
   if (info->using_themed_icon)
     g_list_free_full (icon_list, g_object_unref);
@@ -4117,15 +4139,19 @@ update_csd_visibility (GtkWindow *window)
 }
 
 static void
-update_window_buttons (GtkWindow *window)
+update_window_actions (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  gboolean is_sovereign_window = !priv->modal && !priv->transient_parent;
 
-  if (!update_csd_visibility (window))
-    return;
+  gtk_widget_action_set_enabled (GTK_WIDGET (window), "window.minimize",
+                                 is_sovereign_window);
+  gtk_widget_action_set_enabled (GTK_WIDGET (window), "window.toggle-maximized",
+                                 priv->resizable && is_sovereign_window);
+  gtk_widget_action_set_enabled (GTK_WIDGET (window), "window.close",
+                                 priv->deletable);
 
-  if (GTK_IS_HEADER_BAR (priv->title_box))
-    _gtk_header_bar_update_window_buttons (GTK_HEADER_BAR (priv->title_box));
+  update_csd_visibility (window);
 }
 
 static GtkWidget *
@@ -4209,7 +4235,7 @@ create_decoration (GtkWidget *widget)
       priv->title_box = priv->titlebar;
     }
 
-  update_window_buttons (window);
+  update_window_actions (window);
 }
 
 static void
@@ -5198,10 +5224,11 @@ surface_state_changed (GtkWidget *widget)
                       GDK_SURFACE_STATE_TOP_TILED |
                       GDK_SURFACE_STATE_RIGHT_TILED |
                       GDK_SURFACE_STATE_BOTTOM_TILED |
-                      GDK_SURFACE_STATE_LEFT_TILED))
+                      GDK_SURFACE_STATE_LEFT_TILED |
+                      GDK_SURFACE_STATE_MINIMIZED))
     {
       update_window_style_classes (window);
-      update_window_buttons (window);
+      update_window_actions (window);
       gtk_widget_queue_resize (widget);
     }
 }
@@ -7062,7 +7089,7 @@ gtk_window_set_resizable (GtkWindow *window,
     {
       priv->resizable = resizable;
 
-      update_window_buttons (window);
+      update_window_actions (window);
 
       gtk_widget_queue_resize (GTK_WIDGET (window));
 
