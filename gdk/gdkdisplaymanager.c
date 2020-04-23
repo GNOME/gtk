@@ -50,6 +50,10 @@
 #include "broadway/gdkprivate-broadway.h"
 #endif
 
+#ifdef GDK_WINDOWING_MACOS
+#include "macos/gdkmacos-private.h"
+#endif
+
 #ifdef GDK_WINDOWING_WIN32
 #include "win32/gdkwin32.h"
 #include "win32/gdkprivate-win32.h"
@@ -261,6 +265,9 @@ struct _GdkBackend {
 static GdkBackend gdk_backends[] = {
 #ifdef GDK_WINDOWING_QUARTZ
   { "quartz",   _gdk_quartz_display_open },
+#endif
+#ifdef GDK_WINDOWING_MACOS
+  { "macos",   _gdk_macos_display_open },
 #endif
 #ifdef GDK_WINDOWING_WIN32
   { "win32",    _gdk_win32_display_open },
