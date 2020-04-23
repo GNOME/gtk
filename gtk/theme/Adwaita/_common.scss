@@ -4390,7 +4390,7 @@ popover.menu {
   }
 
   & box.circular-buttons {
-    padding: 6px 0;
+    padding: 6px 20px;
 
     button.circular.image-button.model {
       @extend %list_button;
