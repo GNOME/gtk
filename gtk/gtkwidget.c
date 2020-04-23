@@ -2640,6 +2640,9 @@ gtk_widget_show (GtkWidget *widget)
       g_signal_emit (widget, widget_signals[SHOW], 0);
       g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_VISIBLE]);
 
+      if (priv->accessible != NULL)
+        gtk_widget_accessible_notify_visible (GTK_WIDGET_ACCESSIBLE (priv->accessible));
+
       gtk_widget_pop_verify_invariants (widget);
       g_object_unref (widget);
     }
@@ -2699,6 +2702,9 @@ gtk_widget_hide (GtkWidget *widget)
 
       g_signal_emit (widget, widget_signals[HIDE], 0);
       g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_VISIBLE]);
+
+      if (priv->accessible != NULL)
+        gtk_widget_accessible_notify_visible (GTK_WIDGET_ACCESSIBLE (priv->accessible));
 
       parent = gtk_widget_get_parent (widget);
       if (parent)
@@ -5693,6 +5699,9 @@ gtk_widget_set_sensitive (GtkWidget *widget,
       gtk_widget_propagate_state (widget, &data);
       update_cursor_on_state_change (widget);
     }
+
+  if (priv->accessible != NULL)
+    gtk_widget_accessible_notify_sensitive (GTK_WIDGET_ACCESSIBLE (priv->accessible));
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_SENSITIVE]);
 }
@@ -9786,6 +9795,9 @@ gtk_widget_set_has_tooltip (GtkWidget *widget,
     {
       priv->has_tooltip = has_tooltip;
 
+      if (priv->accessible != NULL)
+        gtk_widget_accessible_notify_tooltip (GTK_WIDGET_ACCESSIBLE (priv->accessible));
+
       g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HAS_TOOLTIP]);
     }
 }
@@ -10411,6 +10423,10 @@ gtk_widget_set_has_focus (GtkWidget *widget,
     return;
 
   priv->has_focus = has_focus;
+
+  if (priv->accessible != NULL)
+    gtk_widget_accessible_notify_focus (GTK_WIDGET_ACCESSIBLE (priv->accessible));
+
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HAS_FOCUS]);
 }
 
@@ -12788,6 +12804,8 @@ void
 gtk_widget_update_orientation (GtkWidget      *widget,
                                GtkOrientation  orientation)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -12800,4 +12818,7 @@ gtk_widget_update_orientation (GtkWidget      *widget,
       gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_VERTICAL);
       gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_HORIZONTAL);
     }
+
+  if (priv->accessible != NULL)
+    gtk_widget_accessible_notify_orientation (GTK_WIDGET_ACCESSIBLE (priv->accessible));
 }
