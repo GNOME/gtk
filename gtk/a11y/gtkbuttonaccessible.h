@@ -52,6 +52,9 @@ struct _GtkButtonAccessibleClass
 GDK_AVAILABLE_IN_ALL
 GType gtk_button_accessible_get_type (void);
 
+/*< private >*/
+void    gtk_button_accessible_update_label      (GtkButtonAccessible *self);
+
 G_END_DECLS
 
 #endif /* __GTK_BUTTON_ACCESSIBLE_H__ */
