@@ -985,6 +985,12 @@ if cc.has_header('langinfo.h')
   endforeach
 endif
 
+# Maintain compatibility with autotools
+gtk_ldflags = []
+if os_darwin
+  gtk_ldflags += [ '-compatibility_version 1', '-current_version 1.0', ]
+endif
+
 # Library
 libgtk = library('gtk-4',
                  soversion: gtk_soversion,
@@ -994,7 +1000,7 @@ libgtk = library('gtk-4',
                  include_directories: [confinc, gdkinc, gskinc, gtkinc],
                  dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep],
                  link_with: [libgtk_css, libgdk, libgsk, ],
-                 link_args: common_ldflags,
+                 link_args: common_ldflags + gtk_ldflags,
                  install: true)
 
 gtk_dep_sources = [gtkversion, gtktypebuiltins_h]
