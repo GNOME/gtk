@@ -646,6 +646,7 @@ gdk_offscreen_window_set_wmfunctions (GdkWindow	    *window,
 
 static void
 gdk_offscreen_window_begin_move_drag (GdkWindow *window,
+                                      GdkDevice *device,
                                       gint       button,
                                       gint       root_x,
                                       gint       root_y,
