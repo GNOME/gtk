@@ -9,6 +9,8 @@ option('win32-backend', type: 'boolean', value: true,
   description : 'Enable the Windows gdk backend (only when building on Windows)')
 option('quartz-backend', type: 'boolean', value: true,
   description : 'Enable the macOS gdk backend (only when building on macOS)')
+option('macos-backend', type: 'boolean', value: true,
+  description : 'Enable the macOS gdk backend (only when building on macOS)')
 
 # Media backends
 option('media', type: 'string', value: 'gstreamer',
