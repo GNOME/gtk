@@ -93,6 +93,7 @@ gtk_api_version = '4.0'
 x11_enabled      = get_option('x11-backend')
 wayland_enabled  = get_option('wayland-backend')
 broadway_enabled = get_option('broadway-backend')
+macos_enabled    = get_option('macos-backend')
 quartz_enabled   = get_option('quartz-backend')
 win32_enabled    = get_option('win32-backend')
 
@@ -118,6 +119,7 @@ if os_darwin
   wayland_enabled = false
 else
   quartz_enabled = false
+  macos_enabled = false
 endif
 
 if os_win32
@@ -791,7 +793,7 @@ pkgs = [ 'gtk4.pc' ]
 
 pkg_targets = ''
 display_backends = []
-foreach backend: [ 'broadway', 'quartz', 'wayland', 'win32', 'x11', ]
+foreach backend: [ 'broadway', 'quartz', 'macos', 'wayland', 'win32', 'x11', ]
   if get_variable('@0@_enabled'.format(backend))
     pkgs += ['gtk4-@0@.pc'.format(backend)]
     pkg_targets += ' ' + backend
