@@ -4610,6 +4610,8 @@ decoration {
 
   .popup & { box-shadow: none; }
 
+  .csd & { background-color: black; } // transparent makes gtk3 leak light on the corners #2537
+
   // server-side decorations as used by mutter
   .ssd & { box-shadow: 0 0 0 1px $_wm_border; } //just doing borders, wm draws actual shadows
 
@@ -4639,10 +4641,6 @@ decoration {
     box-shadow: inset 0 0 0 3px $headerbar_color, inset 0 1px $top_hilight;
 
     &:backdrop { box-shadow: inset 0 0 0 3px $backdrop_bg_color, inset 0 1px $top_hilight; }
-  }
-
-  window.csd & {
-   background: black; /* transparent makes gtk3 leak light on the corners #2537 */
   }
 }
 
