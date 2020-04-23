@@ -49,27 +49,6 @@ gtk_toggle_button_accessible_initialize (AtkObject *obj,
   obj->role = ATK_ROLE_TOGGLE_BUTTON;
 }
 
-static void
-gtk_toggle_button_accessible_notify_gtk (GObject    *obj,
-                                         GParamSpec *pspec)
-{
-  GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (obj);
-  AtkObject *atk_obj;
-  gboolean sensitive;
-
-  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (toggle_button));
-  sensitive = gtk_widget_get_sensitive (GTK_WIDGET (toggle_button));
-
-  if (strcmp (pspec->name, "sensitive") == 0)
-    {
-      /* Need to override gailwidget behavior of notifying for ENABLED */
-      atk_object_notify_state_change (atk_obj, ATK_STATE_SENSITIVE, sensitive);
-      atk_object_notify_state_change (atk_obj, ATK_STATE_ENABLED, sensitive);
-    }
-  else
-    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_toggle_button_accessible_parent_class)->notify_gtk (obj, pspec);
-}
-
 static AtkStateSet*
 gtk_toggle_button_accessible_ref_state_set (AtkObject *accessible)
 {
@@ -94,9 +73,6 @@ static void
 gtk_toggle_button_accessible_class_init (GtkToggleButtonAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
-
-  widget_class->notify_gtk = gtk_toggle_button_accessible_notify_gtk;
 
   class->ref_state_set = gtk_toggle_button_accessible_ref_state_set;
   class->initialize = gtk_toggle_button_accessible_initialize;
