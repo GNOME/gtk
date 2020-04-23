@@ -93,6 +93,7 @@ gtk_api_version = '4.0'
 x11_enabled      = get_option('x11-backend')
 wayland_enabled  = get_option('wayland-backend')
 broadway_enabled = get_option('broadway-backend')
+macos_enabled    = get_option('macos-backend')
 quartz_enabled   = get_option('quartz-backend')
 win32_enabled    = get_option('win32-backend')
 
@@ -118,6 +119,7 @@ if os_darwin
   wayland_enabled = false
 else
   quartz_enabled = false
+  macos_enabled = false
 endif
 
 if os_win32
@@ -242,6 +244,8 @@ if cc.get_id() == 'msvc'
 elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
   test_cflags = [
     '-fno-strict-aliasing',
+    '-Wno-c++11-extensions',
+    '-Wno-missing-include-dirs',
     '-Wno-typedef-redefinition',
     '-Wcast-align',
     '-Wduplicated-branches',
@@ -317,11 +321,6 @@ if os_unix and not os_darwin
   endforeach
 endif
 
-# Maintain compatibility with autotools
-if os_darwin
-  common_ldflags += [ '-compatibility_version 1', '-current_version 1.0', ]
-endif
-
 confinc = include_directories('.')
 gdkinc = include_directories('gdk')
 gskinc = include_directories('gsk')
@@ -368,8 +367,10 @@ pangocairo_dep = dependency('pangocairo', version: cairo_req,
 pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
                             fallback : ['gdk-pixbuf', 'gdkpixbuf_dep'])
 epoxy_dep      = dependency('epoxy', version: epoxy_req,
-                            fallback: ['libepoxy', 'libepoxy_dep'])
-atk_dep        = dependency('atk', version: atk_req)
+                            fallback: ['libepoxy', 'libepoxy_dep'],
+                            static: false)
+atk_dep        = dependency('atk', version: atk_req,
+                            fallback : ['atk', 'libatk_dep'])
 harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false)
 xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
 graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
@@ -775,7 +776,7 @@ pkg_install_dir = join_paths(get_option('libdir'), 'pkgconfig')
 pkgs = [ 'gtk4.pc' ]
 
 pkg_targets = ''
-foreach backend: [ 'broadway', 'quartz', 'wayland', 'win32', 'x11', ]
+foreach backend: [ 'broadway', 'quartz', 'macos', 'wayland', 'win32', 'x11', ]
   if get_variable('@0@_enabled'.format(backend))
     pkgs += ['gtk4-@0@.pc'.format(backend)]
     pkg_targets += ' ' + backend
