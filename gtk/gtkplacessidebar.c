@@ -31,6 +31,7 @@
 #endif
 
 #include "gtkplacessidebarprivate.h"
+#include "gtkaccelgroup.h"
 #include "gtksidebarrowprivate.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkbookmarksmanagerprivate.h"

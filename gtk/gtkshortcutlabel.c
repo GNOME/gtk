@@ -23,6 +23,7 @@
 #include "gtklabel.h"
 #include "gtkframe.h"
 #include "gtkwidgetprivate.h"
+#include "gtkaccelgroup.h"
 #include "gtkintl.h"
 
 /**

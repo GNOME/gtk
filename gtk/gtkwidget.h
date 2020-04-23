@@ -31,10 +31,10 @@
 
 #include <gdk/gdk.h>
 #include <gsk/gsk.h>
-#include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkborder.h>
 #include <gtk/gtkshortcut.h>
 #include <gtk/gtkshortcutaction.h>
+#include <gtk/gtkenums.h>
 #include <gtk/gtktypes.h>
 #include <atk/atk.h>
 

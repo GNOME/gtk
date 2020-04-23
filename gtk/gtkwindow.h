@@ -31,7 +31,6 @@
 #endif
 
 #include <gtk/gtkapplication.h>
-#include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkbin.h>
 
 G_BEGIN_DECLS
