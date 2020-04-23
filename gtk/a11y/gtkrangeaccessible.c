@@ -21,10 +21,12 @@
 #include <gtk/gtk.h>
 #include "gtkrangeaccessible.h"
 
-struct _GtkRangeAccessiblePrivate
+typedef struct
 {
   GtkAdjustment *adjustment;
-};
+
+  gulong value_changed_id;
+} GtkRangeAccessiblePrivate;
 
 static void atk_value_interface_init  (AtkValueIface  *iface);
 
@@ -42,35 +44,44 @@ gtk_range_accessible_value_changed (GtkAdjustment *adjustment,
 static void
 gtk_range_accessible_widget_set (GtkAccessible *accessible)
 {
-  GtkRangeAccessiblePrivate *priv = GTK_RANGE_ACCESSIBLE (accessible)->priv;
+  GtkRangeAccessible *self = GTK_RANGE_ACCESSIBLE (accessible);
+  GtkRangeAccessiblePrivate *priv = gtk_range_accessible_get_instance_private (self);
   GtkWidget *range;
   GtkAdjustment *adj;
 
   range = gtk_accessible_get_widget (accessible);
   adj = gtk_range_get_adjustment (GTK_RANGE (range));
-  if (adj)
+  if (adj != NULL)
     {
-      priv->adjustment = adj;
-      g_object_ref (priv->adjustment);
-      g_signal_connect (priv->adjustment, "value-changed",
-                        G_CALLBACK (gtk_range_accessible_value_changed),
-                        accessible);
+      priv->adjustment = g_object_ref (adj);
+      priv->value_changed_id =
+        g_signal_connect (priv->adjustment, "value-changed",
+                          G_CALLBACK (gtk_range_accessible_value_changed),
+                          self);
     }
 }
 
 static void
 gtk_range_accessible_widget_unset (GtkAccessible *accessible)
 {
-  GtkRangeAccessiblePrivate *priv = GTK_RANGE_ACCESSIBLE (accessible)->priv;
+  GtkRangeAccessible *self = GTK_RANGE_ACCESSIBLE (accessible);
+  GtkRangeAccessiblePrivate *priv = gtk_range_accessible_get_instance_private (self);
 
-  if (priv->adjustment)
+  if (priv->adjustment != NULL &&
+      priv->value_changed_id != 0)
     {
-      g_signal_handlers_disconnect_by_func (priv->adjustment,
-                                            G_CALLBACK (gtk_range_accessible_value_changed),
-                                            accessible);
-      g_object_unref (priv->adjustment);
-      priv->adjustment = NULL;
+      g_signal_handler_disconnect (priv->adjustment, priv->value_changed_id);
+      priv->value_changed_id = 0;
     }
+
+  g_clear_object (&priv->adjustment);
+}
+
+void
+gtk_range_accessible_update_adjustment (GtkRangeAccessible *self)
+{
+  gtk_range_accessible_widget_unset (GTK_ACCESSIBLE (self));
+  gtk_range_accessible_widget_set (GTK_ACCESSIBLE (self));
 }
 
 static void
@@ -82,42 +93,40 @@ gtk_range_accessible_initialize (AtkObject *obj,
 }
 
 static void
-gtk_range_accessible_notify_gtk (GObject    *obj,
-                                 GParamSpec *pspec)
+gtk_range_accessible_dispose (GObject *gobject)
 {
-  GtkWidget *widget = GTK_WIDGET (obj);
-  AtkObject *range;
+  GtkRangeAccessible *self = GTK_RANGE_ACCESSIBLE (gobject);
+  GtkRangeAccessiblePrivate *priv = gtk_range_accessible_get_instance_private (self);
 
-  if (strcmp (pspec->name, "adjustment") == 0)
+  if (priv->adjustment != NULL && priv->value_changed_id != 0)
     {
-      range = gtk_widget_get_accessible (widget);
-      gtk_range_accessible_widget_unset (GTK_ACCESSIBLE (range));
-      gtk_range_accessible_widget_set (GTK_ACCESSIBLE (range));
+      g_signal_handler_disconnect (priv->adjustment, priv->value_changed_id);
+      priv->value_changed_id = 0;
     }
-  else
-    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_range_accessible_parent_class)->notify_gtk (obj, pspec);
-}
 
+  g_clear_object (&priv->adjustment);
+
+  G_OBJECT_CLASS (gtk_range_accessible_parent_class)->dispose (gobject);
+}
 
 static void
 gtk_range_accessible_class_init (GtkRangeAccessibleClass *klass)
 {
-  AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  AtkObjectClass *atkobject_class = ATK_OBJECT_CLASS (klass);
   GtkAccessibleClass *accessible_class = (GtkAccessibleClass*)klass;
-  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
 
-  class->initialize = gtk_range_accessible_initialize;
+  gobject_class->dispose = gtk_range_accessible_dispose;
+
+  atkobject_class->initialize = gtk_range_accessible_initialize;
 
   accessible_class->widget_set = gtk_range_accessible_widget_set;
   accessible_class->widget_unset = gtk_range_accessible_widget_unset;
-
-  widget_class->notify_gtk = gtk_range_accessible_notify_gtk;
 }
 
 static void
 gtk_range_accessible_init (GtkRangeAccessible *range)
 {
-  range->priv = gtk_range_accessible_get_instance_private (range);
 }
 
 static void

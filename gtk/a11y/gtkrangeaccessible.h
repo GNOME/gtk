@@ -35,13 +35,10 @@ G_BEGIN_DECLS
 
 typedef struct _GtkRangeAccessible        GtkRangeAccessible;
 typedef struct _GtkRangeAccessibleClass   GtkRangeAccessibleClass;
-typedef struct _GtkRangeAccessiblePrivate GtkRangeAccessiblePrivate;
 
 struct _GtkRangeAccessible
 {
   GtkWidgetAccessible parent;
-
-  GtkRangeAccessiblePrivate *priv;
 };
 
 struct _GtkRangeAccessibleClass
@@ -51,6 +48,9 @@ struct _GtkRangeAccessibleClass
 
 GDK_AVAILABLE_IN_ALL
 GType gtk_range_accessible_get_type (void);
+
+/*< private >*/
+void    gtk_range_accessible_update_adjustment  (GtkRangeAccessible *self);
 
 G_END_DECLS
 
