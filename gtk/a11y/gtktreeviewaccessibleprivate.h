@@ -60,6 +60,9 @@ void            _gtk_tree_view_accessible_remove_state  (GtkTreeView       *tree
                                                          GtkTreeRBNode     *node,
                                                          GtkCellRendererState state);
 
+void            gtk_tree_view_accessible_update_model   (GtkTreeViewAccessible *self,
+                                                         GtkTreeModel          *model);
+
 G_END_DECLS
 
 #endif /* __GTK_TREE_VIEW_ACCESSIBLE_PRIVATE_H__ */
