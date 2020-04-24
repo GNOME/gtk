@@ -452,8 +452,6 @@ gtk_pad_controller_add_entry (GtkPadController        *controller,
    .action_name = g_strdup (entry->action_name)
   };
 
-  g_array_set_size (controller->action_entries, controller->action_entries->len + 1);
-
   for (i = 0; i < controller->action_entries->len; i++)
     {
       if (entry_compare_func (&new_entry,
