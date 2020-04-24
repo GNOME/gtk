@@ -1418,6 +1418,41 @@ searchbar {
 }
 
 
+/*****************
+ * Title buttons *
+ *****************/
+
+windowcontrols {
+  border-spacing: 6px;
+
+  &.start:dir(ltr),
+  &.end:dir(rtl) {
+    margin-right: 7px;
+  }
+
+  &.start:dir(rtl),
+  &.end:dir(ltr) {
+    margin-left: 7px;
+  }
+
+  button {
+    @extend %button_basic;
+
+    @extend %button_basic_flat;
+
+    &:not(.menu) {
+      border-radius: 9999px;
+      padding: 6px;
+      margin: 0 2px;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    &:backdrop { -gtk-icon-shadow: none; }
+  }
+}
+
+
 /***************
  * Header bars *
  ***************/
@@ -1489,19 +1524,21 @@ headerbar {
     min-height: 28px;
     padding: 4px;
 
-    button.titlebutton,
-    menubutton.titlebutton {
-      min-height: 26px;
-      min-width: 26px;
-      margin: 0;
-      padding: 0;
-    }
+    windowcontrols {
+      button,
+      menubutton {
+        min-height: 26px;
+        min-width: 26px;
+        margin: 0;
+        padding: 0;
+      }
 
-    menubutton.titlebutton button {
-      min-height: 20px;
-      min-width: 20px;
-      margin: 0;
-      padding: 4px;
+      menubutton button {
+        min-height: 20px;
+        min-width: 20px;
+        margin: 0;
+        padding: 4px;
+      }
     }
   }
 
@@ -4112,24 +4149,6 @@ decoration {
 
     &:backdrop { box-shadow: inset 0 0 0 3px $backdrop_bg_color, inset 0 1px $top_hilight; }
   }
-}
-
-// Window Close button
-button.titlebutton {
-  @extend %button_basic;
-
-  @extend %button_basic_flat;
-
-
-  &:not(.menu) {
-    border-radius: 9999px;
-    padding: 6px;
-    margin: 0 2px;
-    min-width: 0;
-    min-height: 0;
-  }
-
-  &:backdrop { -gtk-icon-shadow: none; }
 }
 
 // catch all extend :)
