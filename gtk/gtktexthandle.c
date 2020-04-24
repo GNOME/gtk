@@ -459,10 +459,14 @@ gtk_text_handle_init (GtkTextHandle *widget)
 GtkTextHandle *
 gtk_text_handle_new (GtkWidget *parent)
 {
-  return g_object_new (GTK_TYPE_TEXT_HANDLE,
-                       "parent", parent,
-                       "css-name", I_("cursor-handle"),
-                       NULL);
+  GtkTextHandle *handle;
+
+  handle = g_object_new (GTK_TYPE_TEXT_HANDLE,
+                         "css-name", I_("cursor-handle"),
+                         NULL);
+  gtk_widget_set_parent (GTK_WIDGET (handle), parent);
+
+  return handle;
 }
 
 void
