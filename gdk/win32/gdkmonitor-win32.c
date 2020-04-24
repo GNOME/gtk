@@ -832,7 +832,7 @@ const gchar *
 _gdk_win32_monitor_get_pixel_structure (GdkMonitor *monitor)
 {
   GdkWin32Monitor *w32_m;
-  unsigned int enabled = 1;
+  BOOL enabled = TRUE;
   unsigned int smoothing_orientation = FE_FONTSMOOTHINGORIENTATIONRGB;
   BOOL cleartype = TRUE;
 
