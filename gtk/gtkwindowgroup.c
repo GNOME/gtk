@@ -202,7 +202,7 @@ gtk_window_group_list_windows (GtkWindowGroup *window_group)
     {
       GtkWindow *window = toplevel->data;
 
-      if (window_group == _gtk_window_get_window_group (window))
+      if (window_group == gtk_window_get_group (window))
         group_windows = g_list_prepend (group_windows, window);
     }
 
