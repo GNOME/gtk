@@ -1505,8 +1505,6 @@ headerbar {
     }
   }
 
-  separator.titlebutton { opacity: 0; } /* hide the close button separator */
-
   .solid-csd & {
     &:backdrop, & {
       &:dir(rtl), &:dir(ltr) { // specificity bump
