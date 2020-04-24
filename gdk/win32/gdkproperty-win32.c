@@ -369,9 +369,9 @@ _gdk_win32_screen_get_setting (GdkScreen   *screen,
     }
   else if (strcmp ("gtk-xft-antialias", name) == 0)
     {
-      unsigned int val = 0;
+      BOOL val = TRUE;
       SystemParametersInfoW (SPI_GETFONTSMOOTHING, 0, &val, 0);
-      g_value_set_int (value, val == 0 ? 0 : 1);
+      g_value_set_int (value, val ? 1 : 0);
 
       GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : %u\n", name, val));
       return TRUE;
