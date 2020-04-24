@@ -323,10 +323,112 @@ gtk_action_muxer_parent_action_state_changed (GActionGroup *action_group,
 }
 
 static void
+notify_observers_added (GtkActionMuxer *muxer,
+                        GtkActionMuxer *parent)
+{
+  GHashTableIter iter;
+  const char *action_name;
+  Action *action;
+
+  g_hash_table_iter_init (&iter, muxer->observed_actions);
+  while (g_hash_table_iter_next (&iter, (gpointer *)&action_name, (gpointer *)&action))
+    {
+      const GVariantType *parameter_type;
+      gboolean enabled;
+      GVariant *state;
+      GSList *node;
+
+      if (!action->watchers)
+        continue;
+
+      if (!g_action_group_query_action (G_ACTION_GROUP (parent), action_name,
+                                        &enabled, &parameter_type, NULL, NULL, &state))
+        continue;
+
+      for (node = action->watchers; node; node = node->next)
+        gtk_action_observer_action_added (node->data,
+                                          GTK_ACTION_OBSERVABLE (muxer),
+                                          action_name, parameter_type, enabled, state);
+
+      if (state)
+        g_variant_unref (state);
+    }
+}
+
+static void
+emit_action_added (GtkActionMuxer *muxer,
+                   GtkActionMuxer *parent)
+{
+  static guint signal_id = 0;
+
+  if (signal_id == 0)
+    signal_id = g_signal_lookup ("action-added", G_OBJECT_TYPE (muxer));
+
+  if (g_signal_has_handler_pending (muxer, signal_id, 0, FALSE))
+    { 
+      gchar **actions;
+      gchar **it;
+
+      actions = g_action_group_list_actions (G_ACTION_GROUP (parent));
+
+      for (it = actions; *it; it++)
+        g_action_group_action_added (G_ACTION_GROUP (muxer), *it);
+
+      g_strfreev (actions);
+    }
+}
+
+static void
+notify_observers_removed (GtkActionMuxer *muxer,
+                          GtkActionMuxer *parent)
+{
+  GHashTableIter iter;
+  const char *action_name;
+  Action *action;
+
+  g_hash_table_iter_init (&iter, muxer->observed_actions);
+  while (g_hash_table_iter_next (&iter, (gpointer *)&action_name, (gpointer *)&action)) 
+    {
+      GSList *node;
+
+      if (!action->watchers)
+        continue;
+
+      for (node = action->watchers; node; node = node->next)
+        gtk_action_observer_action_removed (node->data,
+                                            GTK_ACTION_OBSERVABLE (muxer),
+                                            action_name);
+    }
+}
+
+static void
+emit_action_removed (GtkActionMuxer *muxer,
+                     GtkActionMuxer *parent)
+{
+  static guint signal_id = 0;
+
+  if (signal_id == 0)
+    signal_id = g_signal_lookup ("action-removed", G_OBJECT_TYPE (muxer));
+
+  if (g_signal_has_handler_pending (muxer, signal_id, 0, FALSE))
+    { 
+      gchar **actions;
+      gchar **it;
+
+      actions = g_action_group_list_actions (G_ACTION_GROUP (parent));
+
+      for (it = actions; *it; it++)
+        g_action_group_action_removed (G_ACTION_GROUP (muxer), *it);
+
+      g_strfreev (actions);
+    }
+}
+
+static void
 gtk_action_muxer_action_added (GtkActionMuxer *muxer,
                                const gchar    *action_name,
                                GActionGroup   *original_group,
-                               const gchar    *orignal_action_name)
+                               const gchar    *original_action_name)
 {
   const GVariantType *parameter_type;
   gboolean enabled;
@@ -336,7 +438,7 @@ gtk_action_muxer_action_added (GtkActionMuxer *muxer,
   action = g_hash_table_lookup (muxer->observed_actions, action_name);
 
   if (action && action->watchers &&
-      g_action_group_query_action (original_group, orignal_action_name,
+      g_action_group_query_action (original_group, original_action_name,
                                    &enabled, &parameter_type, NULL, NULL, &state))
     {
       GSList *node;
@@ -1135,14 +1237,8 @@ gtk_action_muxer_set_parent (GtkActionMuxer *muxer,
 
   if (muxer->parent != NULL)
     {
-      gchar **actions;
-      gchar **it;
-
-      actions = g_action_group_list_actions (G_ACTION_GROUP (muxer->parent));
-      for (it = actions; *it; it++)
-        gtk_action_muxer_action_removed (muxer, *it);
-      g_strfreev (actions);
-
+      notify_observers_removed (muxer, muxer->parent);
+      emit_action_removed (muxer, muxer->parent);
       emit_changed_accels (muxer, muxer->parent);
 
       g_signal_handlers_disconnect_by_func (muxer->parent, gtk_action_muxer_action_added_to_parent, muxer);
@@ -1158,16 +1254,10 @@ gtk_action_muxer_set_parent (GtkActionMuxer *muxer,
 
   if (muxer->parent != NULL)
     {
-      gchar **actions;
-      gchar **it;
-
       g_object_ref (muxer->parent);
 
-      actions = g_action_group_list_actions (G_ACTION_GROUP (muxer->parent));
-      for (it = actions; *it; it++)
-        gtk_action_muxer_action_added (muxer, *it, G_ACTION_GROUP (muxer->parent), *it);
-      g_strfreev (actions);
-
+      notify_observers_added (muxer, muxer->parent);
+      emit_action_added (muxer, muxer->parent);
       emit_changed_accels (muxer, muxer->parent);
 
       g_signal_connect (muxer->parent, "action-added",
