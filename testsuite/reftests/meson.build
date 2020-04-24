@@ -422,7 +422,6 @@ testdata = [
 
 # These need to be fixed but the issue hasn't been tracked down.
 xfails = [
-  'background-color-transparent.ui',
   'background-image-multiple.ui',
   'background-origin.ui',
   # see above
