@@ -117,7 +117,6 @@ struct _GtkHeaderBarPrivate
 
   gboolean show_title_buttons;
   gchar *decoration_layout;
-  gboolean decoration_layout_set;
   gboolean track_default_decoration;
 
   GtkWidget *titlebar_start_box;
@@ -134,7 +133,6 @@ enum {
   PROP_CUSTOM_TITLE,
   PROP_SHOW_TITLE_BUTTONS,
   PROP_DECORATION_LAYOUT,
-  PROP_DECORATION_LAYOUT_SET,
   LAST_PROP
 };
 
@@ -272,15 +270,12 @@ update_window_buttons (GtkHeaderBar *bar)
   if (!priv->show_title_buttons)
     return;
 
-  g_object_get (gtk_widget_get_settings (widget),
-                "gtk-decoration-layout", &layout_desc,
-                NULL);
-
-  if (priv->decoration_layout_set)
-    {
-      g_free (layout_desc);
-      layout_desc = g_strdup (priv->decoration_layout);
-    }
+  if (priv->decoration_layout)
+    layout_desc = g_strdup (priv->decoration_layout);
+  else
+    g_object_get (gtk_widget_get_settings (widget),
+                  "gtk-decoration-layout", &layout_desc,
+                  NULL);
 
   window = GTK_WINDOW (toplevel);
 
@@ -752,10 +747,6 @@ gtk_header_bar_get_property (GObject    *object,
       g_value_set_string (value, gtk_header_bar_get_decoration_layout (bar));
       break;
 
-    case PROP_DECORATION_LAYOUT_SET:
-      g_value_set_boolean (value, priv->decoration_layout_set);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -769,7 +760,6 @@ gtk_header_bar_set_property (GObject      *object,
                              GParamSpec   *pspec)
 {
   GtkHeaderBar *bar = GTK_HEADER_BAR (object);
-  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
 
   switch (prop_id)
     {
@@ -795,10 +785,6 @@ gtk_header_bar_set_property (GObject      *object,
 
     case PROP_DECORATION_LAYOUT:
       gtk_header_bar_set_decoration_layout (bar, g_value_get_string (value));
-      break;
-
-    case PROP_DECORATION_LAYOUT_SET:
-      priv->decoration_layout_set = g_value_get_boolean (value);
       break;
 
     default:
@@ -1081,18 +1067,6 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkHeaderBar:decoration-layout-set:
-   *
-   * Set to %TRUE if #GtkHeaderBar:decoration-layout is set.
-   */
-  header_bar_props[PROP_DECORATION_LAYOUT_SET] =
-      g_param_spec_boolean ("decoration-layout-set",
-                            P_("Decoration Layout Set"),
-                            P_("Whether the decoration-layout property has been set"),
-                            FALSE,
-                            GTK_PARAM_READWRITE);
-
-  /**
    * GtkHeaderBar:has-subtitle:
    *
    * If %TRUE, reserve space for a subtitle, even if none
@@ -1123,7 +1097,6 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   priv->custom_title = NULL;
   priv->has_subtitle = TRUE;
   priv->decoration_layout = NULL;
-  priv->decoration_layout_set = FALSE;
   priv->state = GDK_SURFACE_STATE_WITHDRAWN;
 
   layout = gtk_widget_get_layout_manager (GTK_WIDGET (bar));
@@ -1346,12 +1319,10 @@ gtk_header_bar_set_decoration_layout (GtkHeaderBar *bar,
 
   g_free (priv->decoration_layout);
   priv->decoration_layout = g_strdup (layout);
-  priv->decoration_layout_set = (layout != NULL);
 
   update_window_buttons (bar);
 
   g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_DECORATION_LAYOUT]);
-  g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_DECORATION_LAYOUT_SET]);
 }
 
 /**
