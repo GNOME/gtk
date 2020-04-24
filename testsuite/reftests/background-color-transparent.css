@@ -1,4 +1,6 @@
-* {
+@import "reset-to-defaults.css";
+
+window {
   background-image: none;
   border-radius: 0;
   background-color: purple;
