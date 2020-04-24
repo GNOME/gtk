@@ -94,6 +94,9 @@ static GParamSpec *properties[NUM_PROPERTIES];
 
 guint accel_signal;
 
+static guint action_added_signal;
+static guint action_removed_signal;
+
 typedef struct
 {
   GtkActionMuxer *muxer;
@@ -359,12 +362,7 @@ static void
 emit_action_added (GtkActionMuxer *muxer,
                    GtkActionMuxer *parent)
 {
-  static guint signal_id = 0;
-
-  if (signal_id == 0)
-    signal_id = g_signal_lookup ("action-added", G_OBJECT_TYPE (muxer));
-
-  if (g_signal_has_handler_pending (muxer, signal_id, 0, FALSE))
+  if (g_signal_has_handler_pending (muxer, action_added_signal, 0, FALSE))
     { 
       gchar **actions;
       gchar **it;
@@ -405,12 +403,7 @@ static void
 emit_action_removed (GtkActionMuxer *muxer,
                      GtkActionMuxer *parent)
 {
-  static guint signal_id = 0;
-
-  if (signal_id == 0)
-    signal_id = g_signal_lookup ("action-removed", G_OBJECT_TYPE (muxer));
-
-  if (g_signal_has_handler_pending (muxer, signal_id, 0, FALSE))
+  if (g_signal_has_handler_pending (muxer, action_removed_signal, 0, FALSE))
     { 
       gchar **actions;
       gchar **it;
@@ -461,12 +454,14 @@ gtk_action_muxer_action_added_to_group (GActionGroup *action_group,
                                         gpointer      user_data)
 {
   Group *group = user_data;
-  gchar *fullname;
 
-  fullname = g_strconcat (group->prefix, ".", action_name, NULL);
-  gtk_action_muxer_action_added (group->muxer, fullname, action_group, action_name);
-
-  g_free (fullname);
+  if (g_hash_table_size (group->muxer->observed_actions) > 0 ||
+      g_signal_has_handler_pending (group->muxer, action_added_signal, 0, FALSE))
+    {
+      char *fullname = g_strconcat (group->prefix, ".", action_name, NULL);
+      gtk_action_muxer_action_added (group->muxer, fullname, action_group, action_name);
+      g_free (fullname);
+    }
 }
 
 static void
@@ -498,12 +493,14 @@ gtk_action_muxer_action_removed_from_group (GActionGroup *action_group,
                                             gpointer      user_data)
 {
   Group *group = user_data;
-  gchar *fullname;
 
-  fullname = g_strconcat (group->prefix, ".", action_name, NULL);
-  gtk_action_muxer_action_removed (group->muxer, fullname);
-
-  g_free (fullname);
+  if (g_hash_table_size (group->muxer->observed_actions) > 0 ||
+      g_signal_has_handler_pending (group->muxer, action_removed_signal, 0, FALSE))
+    {
+      char *fullname = g_strconcat (group->prefix, ".", action_name, NULL);
+      gtk_action_muxer_action_removed (group->muxer, fullname);
+      g_free (fullname);
+    }
 }
 
 static void
@@ -1054,6 +1051,9 @@ gtk_action_muxer_class_init (GObjectClass *class)
   class->constructed = gtk_action_muxer_constructed;
   class->finalize = gtk_action_muxer_finalize;
   class->dispose = gtk_action_muxer_dispose;
+
+  action_added_signal = g_signal_lookup ("action-added", GTK_TYPE_ACTION_MUXER);
+  action_removed_signal = g_signal_lookup ("action-removed", GTK_TYPE_ACTION_MUXER);
 
   accel_signal = g_signal_new (I_("primary-accel-changed"),
                                GTK_TYPE_ACTION_MUXER,
