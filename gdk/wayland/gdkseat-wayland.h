@@ -43,4 +43,7 @@ GType gdk_wayland_seat_get_type (void) G_GNUC_CONST;
 
 void gdk_wayland_seat_update_cursor_scale (GdkWaylandSeat *seat);
 
+void gdk_wayland_seat_clear_touchpoints (GdkWaylandSeat *seat,
+                                         GdkSurface     *surface);
+
 #endif /* __GDK_WAYLAND_SEAT_H__ */

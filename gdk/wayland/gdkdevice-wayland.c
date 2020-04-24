@@ -2313,6 +2313,22 @@ gdk_wayland_seat_remove_touch (GdkWaylandSeat *seat,
   g_hash_table_remove (seat->touches, GUINT_TO_POINTER (id));
 }
 
+void
+gdk_wayland_seat_clear_touchpoints (GdkWaylandSeat *seat,
+                                    GdkSurface     *surface)
+{
+  GHashTableIter iter;
+  GdkWaylandTouchData *touch;
+
+  g_hash_table_iter_init (&iter, seat->touches);
+
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &touch))
+    {
+      if (touch->surface == surface)
+        g_hash_table_iter_remove (&iter);
+    }
+}
+
 static void
 mimic_pointer_emulating_touch_info (GdkDevice           *device,
                                     GdkWaylandTouchData *touch)
