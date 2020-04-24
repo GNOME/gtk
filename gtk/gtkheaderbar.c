@@ -31,7 +31,6 @@
 #include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkprivate.h"
-#include "gtkseparator.h"
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
@@ -123,9 +122,6 @@ struct _GtkHeaderBarPrivate
 
   GtkWidget *titlebar_start_box;
   GtkWidget *titlebar_end_box;
-
-  GtkWidget *titlebar_start_separator;
-  GtkWidget *titlebar_end_separator;
 
   GdkSurfaceState state;
 };
@@ -244,38 +240,6 @@ update_window_icon (GtkHeaderBar *bar,
 }
 
 static void
-_gtk_header_bar_update_separator_visibility (GtkHeaderBar *bar)
-{
-  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
-  gboolean have_visible_at_start = FALSE;
-  gboolean have_visible_at_end = FALSE;
-  GList *l;
-  GList *children;
-
-  children = gtk_container_get_children (GTK_CONTAINER (priv->start_box));
-  for (l = children; l; l = l->next)
-    {
-      if (l->data != priv->titlebar_start_box && gtk_widget_get_visible (l->data))
-        have_visible_at_start = TRUE;
-    }
-  g_list_free (children);
-
-  children = gtk_container_get_children (GTK_CONTAINER (priv->end_box));
-  for (l = children; l; l = l->next)
-    {
-      if (l->data != priv->titlebar_end_box && gtk_widget_get_visible (l->data))
-        have_visible_at_end = TRUE;
-    }
-  g_list_free (children);
-
-  if (priv->titlebar_start_separator != NULL)
-    gtk_widget_set_visible (priv->titlebar_start_separator, have_visible_at_start);
-
-  if (priv->titlebar_end_separator != NULL)
-    gtk_widget_set_visible (priv->titlebar_end_separator, have_visible_at_end);
-}
-
-static void
 update_window_buttons (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
@@ -298,13 +262,11 @@ update_window_buttons (GtkHeaderBar *bar)
     {
       gtk_widget_unparent (priv->titlebar_start_box);
       priv->titlebar_start_box = NULL;
-      priv->titlebar_start_separator = NULL;
     }
   if (priv->titlebar_end_box)
     {
       gtk_widget_unparent (priv->titlebar_end_box);
       priv->titlebar_end_box = NULL;
-      priv->titlebar_end_separator = NULL;
     }
 
   if (!priv->show_title_buttons)
@@ -331,16 +293,12 @@ update_window_buttons (GtkHeaderBar *bar)
       for (i = 0; i < 2; i++)
         {
           GtkWidget *box;
-          GtkWidget *separator;
           int n_children = 0;
 
           if (tokens[i] == NULL)
             break;
 
           t = g_strsplit (tokens[i], ",", -1);
-
-          separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-          gtk_widget_add_css_class (separator, "titlebutton");
 
           box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
@@ -437,14 +395,8 @@ update_window_buttons (GtkHeaderBar *bar)
             {
               g_object_ref_sink (box);
               g_object_unref (box);
-              g_object_ref_sink (separator);
-              g_object_unref (separator);
               continue;
             }
-
-          gtk_container_add (GTK_CONTAINER (box), separator);
-          if (i == 1)
-            gtk_box_reorder_child_after (GTK_BOX (box), separator, NULL);
 
           if (i == 0)
             gtk_widget_add_css_class (box, GTK_STYLE_CLASS_LEFT);
@@ -454,21 +406,17 @@ update_window_buttons (GtkHeaderBar *bar)
           if (i == 0)
             {
               priv->titlebar_start_box = box;
-              priv->titlebar_start_separator = separator;
               gtk_container_add (GTK_CONTAINER (priv->start_box), box);
             }
           else
             {
               priv->titlebar_end_box = box;
-              priv->titlebar_end_separator = separator;
               gtk_container_add (GTK_CONTAINER (priv->end_box), box);
             }
         }
       g_strfreev (tokens);
     }
   g_free (layout_desc);
-
-  _gtk_header_bar_update_separator_visibility (bar);
 }
 
 static void
@@ -860,14 +808,6 @@ gtk_header_bar_set_property (GObject      *object,
 }
 
 static void
-notify_child_cb (GObject      *child,
-                 GParamSpec   *pspec,
-                 GtkHeaderBar *bar)
-{
-  _gtk_header_bar_update_separator_visibility (bar);
-}
-
-static void
 gtk_header_bar_pack (GtkHeaderBar *bar,
                      GtkWidget    *widget,
                      GtkPackType   pack_type)
@@ -885,9 +825,6 @@ gtk_header_bar_pack (GtkHeaderBar *bar,
       gtk_container_add (GTK_CONTAINER (priv->end_box), widget);
       gtk_box_reorder_child_after (GTK_BOX (priv->end_box), widget, NULL);
     }
-
-  g_signal_connect (widget, "notify::visible", G_CALLBACK (notify_child_cb), bar);
-  _gtk_header_bar_update_separator_visibility (bar);
 
   if (priv->track_default_decoration)
     update_default_decoration (bar);
@@ -914,13 +851,11 @@ gtk_header_bar_remove (GtkContainer *container,
 
   if (parent == priv->start_box)
     {
-      g_signal_handlers_disconnect_by_func (widget, notify_child_cb, bar);
       gtk_container_remove (GTK_CONTAINER (priv->start_box), widget);
       removed = TRUE;
     }
   else if (parent == priv->end_box)
     {
-      g_signal_handlers_disconnect_by_func (widget, notify_child_cb, bar);
       gtk_container_remove (GTK_CONTAINER (priv->end_box), widget);
       removed = TRUE;
     }
@@ -931,13 +866,8 @@ gtk_header_bar_remove (GtkContainer *container,
       removed = TRUE;
     }
 
-  if (removed)
-    {
-      _gtk_header_bar_update_separator_visibility (bar);
-
-      if (priv->track_default_decoration)
-        update_default_decoration (bar);
-    }
+  if (removed && priv->track_default_decoration)
+    update_default_decoration (bar);
 }
 
 static void
