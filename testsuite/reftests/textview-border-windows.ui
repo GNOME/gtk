@@ -8,6 +8,7 @@
         <property name="width_request">160</property>
         <property name="height_request">160</property>
         <property name="wrap_mode">word</property>
+        <property name="cursor_visible">0</property>
         <signal name="map" handler="reftest:add_border_windows" swapped="no"/>
       </object>
     </child>
