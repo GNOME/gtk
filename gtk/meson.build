@@ -390,6 +390,7 @@ gtk_public_sources = files([
   'gtkwidgetfocus.c',
   'gtkwidgetpaintable.c',
   'gtkwindow.c',
+  'gtkwindowcontrols.c',
   'gtkwindowgroup.c',
 ])
 
@@ -620,6 +621,7 @@ gtk_public_headers = files([
   'gtkwidget.h',
   'gtkwidgetpaintable.h',
   'gtkwindow.h',
+  'gtkwindowcontrols.h',
   'gtkwindowgroup.h',
   'gtk-a11y.h',
   'gtk-autocleanups.h',
