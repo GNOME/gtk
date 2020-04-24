@@ -233,6 +233,7 @@
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtktooltip.h>
 #include <gtk/gtktestutils.h>
+#include <gtk/gtktitlebuttons.h>
 #include <gtk/gtktreednd.h>
 #include <gtk/gtktreelistmodel.h>
 #include <gtk/gtktreemodel.h>
