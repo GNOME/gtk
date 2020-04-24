@@ -7989,7 +7989,7 @@ gtk_window_maybe_revoke_implicit_grab (GtkWindow *window,
       if (focus->toplevel != window)
         continue;
 
-      if (device && focus->device == device &&
+      if ((!device || focus->device == device) &&
           focus->target != grab_widget &&
           !gtk_widget_is_ancestor (focus->target, grab_widget))
         gtk_window_set_pointer_focus_grab (window,

@@ -540,7 +540,7 @@ create_popup_layout (GtkPopover *popover)
   return layout;
 }
 
-static void
+static gboolean
 present_popup (GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
@@ -553,7 +553,12 @@ present_popup (GtkPopover *popover)
                          MAX (req.width, 1),
                          MAX (req.height, 1),
                          layout))
-    update_popover_layout (popover, layout);
+    {
+      update_popover_layout (popover, layout);
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static void
@@ -913,7 +918,9 @@ gtk_popover_show (GtkWidget *widget)
 
   _gtk_widget_set_visible_flag (widget, TRUE);
   gtk_widget_realize (widget);
-  present_popup (popover);
+  if (!present_popup (popover))
+    return;
+
   gtk_widget_map (widget);
 
   if (priv->autohide)

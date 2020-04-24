@@ -339,6 +339,7 @@ drawing_area_init (DrawingArea *area)
   gtk_widget_add_controller (GTK_WIDGET (area), GTK_EVENT_CONTROLLER (gesture));
 
   area->draw_color = (GdkRGBA) { 0, 0, 0, 1 };
+  area->brush_size = 1;
 }
 
 static GtkWidget *
