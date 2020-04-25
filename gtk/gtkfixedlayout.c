@@ -251,12 +251,25 @@ gtk_fixed_layout_measure (GtkLayoutManager *layout_manager,
                           &child_min_opp, &child_nat_opp,
                           NULL, NULL);
 
-      gsk_transform_transform_bounds (child_info->transform,
-                                      &GRAPHENE_RECT_INIT (0.f, 0.f, child_min, child_min_opp),
-                                      &min_rect);
-      gsk_transform_transform_bounds (child_info->transform,
-                                      &GRAPHENE_RECT_INIT (0.f, 0.f, child_nat, child_nat_opp),
-                                      &nat_rect);
+      min_rect.origin.x = min_rect.origin.y = 0;
+      nat_rect.origin.x = nat_rect.origin.y = 0;
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          min_rect.size.width = child_min;
+          min_rect.size.height = child_min_opp;
+          nat_rect.size.width = child_nat;
+          nat_rect.size.height = child_nat_opp;
+        }
+      else
+       {
+          min_rect.size.width = child_min_opp;
+          min_rect.size.height = child_min;
+          nat_rect.size.width = child_nat_opp;
+          nat_rect.size.height = child_nat;
+       }
+
+      gsk_transform_transform_bounds (child_info->transform, &min_rect, &min_rect);
+      gsk_transform_transform_bounds (child_info->transform, &nat_rect, &nat_rect);
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
