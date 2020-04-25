@@ -2683,6 +2683,14 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
 static void
 gdk_wayland_surface_hide (GdkSurface *surface)
 {
+  GdkSeat *seat;
+
+  seat = gdk_display_get_default_seat (surface->display);
+
+  if (surface->autohide)
+    gdk_seat_ungrab (seat);
+
+  gdk_wayland_seat_clear_touchpoints (GDK_WAYLAND_SEAT (seat), surface);
   gdk_wayland_surface_hide_surface (surface);
   _gdk_surface_clear_update_area (surface);
 }

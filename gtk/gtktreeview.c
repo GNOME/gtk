@@ -832,6 +832,7 @@ static void     column_sizing_notify                         (GObject           
                                                               GParamSpec         *pspec,
                                                               gpointer            data);
 static void     gtk_tree_view_stop_rubber_band               (GtkTreeView        *tree_view);
+static void     ensure_unprelighted                          (GtkTreeView        *tree_view);
 static void     update_prelight                              (GtkTreeView        *tree_view,
                                                               int                 x,
                                                               int                 y);
@@ -2788,6 +2789,7 @@ gtk_tree_view_click_gesture_pressed (GtkGestureClick *gesture,
 
   gtk_tree_view_stop_editing (tree_view, FALSE);
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
   if (button > 3)
     {
@@ -2812,6 +2814,9 @@ gtk_tree_view_click_gesture_pressed (GtkGestureClick *gesture,
       grab_focus_and_unset_draw_keyfocus (tree_view);
       return;
     }
+
+  if (sequence)
+    update_prelight (tree_view, x, y);
 
   /* are we in an arrow? */
   if (tree_view->prelight_node &&
@@ -2913,7 +2918,6 @@ gtk_tree_view_click_gesture_pressed (GtkGestureClick *gesture,
 
   _gtk_tree_view_set_focus_column (tree_view, column);
 
-  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
   modifiers = gdk_event_get_modifier_state (event);
 
@@ -3270,10 +3274,12 @@ gtk_tree_view_click_gesture_released (GtkGestureClick *gesture,
                                       gdouble          y,
                                       GtkTreeView     *tree_view)
 {
+  GdkEventSequence *sequence;
   gboolean modify, extend;
   guint button;
 
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
   if (button != GDK_BUTTON_PRIMARY ||
       tree_view->button_pressed_node == NULL ||
@@ -3312,6 +3318,9 @@ gtk_tree_view_click_gesture_released (GtkGestureClick *gesture,
 
   tree_view->button_pressed_tree = NULL;
   tree_view->button_pressed_node = NULL;
+
+  if (sequence)
+    ensure_unprelighted (tree_view);
 }
 
 /* GtkWidget::motion_event function set.
