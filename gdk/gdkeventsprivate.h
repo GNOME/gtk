@@ -127,7 +127,7 @@ struct _GdkMotionEvent
   double y;
   double *axes;
   GdkDeviceTool *tool;
-  GList *history;
+  GArray *history; /* <GdkTimeCoord> */
 };
 
 /*
@@ -343,7 +343,7 @@ struct _GdkConfigureEvent
 
 /*
  * GdkProximityEvent:
- * @tool: the #GdkDeviceTool associated to the event 
+ * @tool: the #GdkDeviceTool associated to the event
  *
  * A proximity event indicates that a tool of a graphic tablet, or similar
  * devices that report proximity, has moved in or out of contact with the
@@ -456,7 +456,7 @@ GdkEvent * gdk_button_event_new         (GdkEventType     type,
                                          double           x,
                                          double           y,
                                          double          *axes);
-                             
+
 GdkEvent * gdk_motion_event_new         (GdkSurface      *surface,
                                          GdkDevice       *device,
                                          GdkDevice       *source_device,
@@ -477,7 +477,7 @@ GdkEvent * gdk_crossing_event_new       (GdkEventType     type,
                                          double           y,
                                          GdkCrossingMode  mode,
                                          GdkNotifyType    notify);
-                                          
+
 GdkEvent * gdk_proximity_event_new      (GdkEventType     type,
                                          GdkSurface      *surface,
                                          GdkDevice       *device,
@@ -537,7 +537,7 @@ GdkEvent * gdk_touch_event_new          (GdkEventType      type,
                                          double            y,
                                          double           *axes,
                                          gboolean          emulating);
- 
+
 GdkEvent * gdk_touchpad_event_new_swipe (GdkSurface      *surface,
                                          GdkDevice       *device,
                                          GdkDevice       *source_device,
