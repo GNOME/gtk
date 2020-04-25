@@ -336,6 +336,12 @@ gtk_popover_menu_focus (GtkWidget        *widget,
             return TRUE;
           if (direction == GTK_DIR_LEFT)
             {
+              if (menu->open_submenu)
+                {
+                  gtk_popover_popdown (GTK_POPOVER (menu->open_submenu));
+                  menu->open_submenu = NULL;
+                }
+
               gtk_widget_grab_focus (menu->active_item);
 
               return TRUE;
