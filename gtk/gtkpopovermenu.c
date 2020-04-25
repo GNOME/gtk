@@ -193,7 +193,8 @@ leave_cb (GtkEventController   *controller,
 
   target = gtk_event_controller_get_widget (controller);
 
-  gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (target), NULL);
+  if (mode == GDK_CROSSING_NORMAL)
+    gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (target), NULL);
 }
 
 static void
