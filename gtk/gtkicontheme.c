@@ -330,7 +330,7 @@ struct _GtkIconTheme
 
   /* time when we last stat:ed for theme changes */
   glong last_stat_time;
-  GList *dir_mtimes;
+  GArray *dir_mtimes;
 
   gulong theme_changed_idle;
 
@@ -1240,6 +1240,16 @@ pixbuf_supports_svg (void)
 }
 
 static void
+free_dir_mtime (IconThemeDirMtime *dir_mtime)
+{
+  if (dir_mtime->cache)
+    gtk_icon_cache_unref (dir_mtime->cache);
+
+  g_free (dir_mtime->dir);
+  g_slice_free (IconThemeDirMtime, dir_mtime);
+}
+
+static void
 gtk_icon_theme_init (GtkIconTheme *self)
 {
   const gchar * const *xdg_data_dirs;
@@ -1252,6 +1262,8 @@ gtk_icon_theme_init (GtkIconTheme *self)
                                             (GDestroyNotify)icon_uncached_cb);
 
   self->custom_theme = FALSE;
+  self->dir_mtimes = g_array_new (FALSE, TRUE, sizeof (IconThemeDirMtime));
+  g_array_set_clear_func (self->dir_mtimes, (GDestroyNotify)free_dir_mtime);
 
   xdg_data_dirs = g_get_system_data_dirs ();
   for (i = 0; xdg_data_dirs[i]; i++) ;
@@ -1281,16 +1293,6 @@ gtk_icon_theme_init (GtkIconTheme *self)
   self->unthemed_icons = NULL;
 
   self->pixbuf_supports_svg = pixbuf_supports_svg ();
-}
-
-static void
-free_dir_mtime (IconThemeDirMtime *dir_mtime)
-{
-  if (dir_mtime->cache)
-    gtk_icon_cache_unref (dir_mtime->cache);
-
-  g_free (dir_mtime->dir);
-  g_slice_free (IconThemeDirMtime, dir_mtime);
 }
 
 static gboolean
@@ -1365,12 +1367,11 @@ blow_themes (GtkIconTheme *self)
   if (self->themes_valid)
     {
       g_list_free_full (self->themes, (GDestroyNotify) theme_destroy);
-      g_list_free_full (self->dir_mtimes, (GDestroyNotify) free_dir_mtime);
+      g_array_set_size (self->dir_mtimes, 0);
       g_hash_table_destroy (self->unthemed_icons);
     }
   self->themes = NULL;
   self->unthemed_icons = NULL;
-  self->dir_mtimes = NULL;
   self->themes_valid = FALSE;
   self->serial++;
 }
@@ -1424,6 +1425,7 @@ gtk_icon_theme_finalize (GObject *object)
   g_strfreev (self->resource_path);
 
   blow_themes (self);
+  g_array_free (self->dir_mtimes, TRUE);
 
   gtk_icon_theme_ref_unref (self->ref);
 
@@ -1750,7 +1752,6 @@ insert_theme (GtkIconTheme *self,
   gchar *path;
   GKeyFile *theme_file;
   GError *error = NULL;
-  IconThemeDirMtime *dir_mtime;
   GStatBuf stat_buf;
 
   for (l = self->themes; l != NULL; l = l->next)
@@ -1762,22 +1763,23 @@ insert_theme (GtkIconTheme *self,
 
   for (i = 0; self->search_path[i]; i++)
     {
+      IconThemeDirMtime dir_mtime;
+
       path = g_build_filename (self->search_path[i], theme_name, NULL);
-      dir_mtime = g_slice_new (IconThemeDirMtime);
-      dir_mtime->cache = NULL;
-      dir_mtime->dir = path;
+      dir_mtime.cache = NULL;
+      dir_mtime.dir = path;
       if (g_stat (path, &stat_buf) == 0 && S_ISDIR (stat_buf.st_mode))
         {
-          dir_mtime->mtime = stat_buf.st_mtime;
-          dir_mtime->exists = TRUE;
+          dir_mtime.mtime = stat_buf.st_mtime;
+          dir_mtime.exists = TRUE;
         }
       else
         {
-          dir_mtime->mtime = 0;
-          dir_mtime->exists = FALSE;
+          dir_mtime.mtime = 0;
+          dir_mtime.exists = FALSE;
         }
 
-      self->dir_mtimes = g_list_prepend (self->dir_mtimes, dir_mtime);
+      g_array_insert_val (self->dir_mtimes, 0, dir_mtime);
     }
 
   theme_file = NULL;
@@ -1963,7 +1965,6 @@ load_themes (GtkIconTheme *self)
   gchar *dir;
   const gchar *file;
   GTimeVal tv;
-  IconThemeDirMtime *dir_mtime;
   GStatBuf stat_buf;
   int j;
 
@@ -1978,10 +1979,11 @@ load_themes (GtkIconTheme *self)
 
   for (base = 0; self->search_path[base]; base++)
     {
+      IconThemeDirMtime *dir_mtime;
       dir = self->search_path[base];
 
-      dir_mtime = g_slice_new (IconThemeDirMtime);
-      self->dir_mtimes = g_list_prepend (self->dir_mtimes, dir_mtime);
+      g_array_set_size (self->dir_mtimes, self->dir_mtimes->len + 1);
+      dir_mtime = &g_array_index (self->dir_mtimes, IconThemeDirMtime, self->dir_mtimes->len - 1);
 
       dir_mtime->dir = g_strdup (dir);
       dir_mtime->mtime = 0;
@@ -2006,7 +2008,6 @@ load_themes (GtkIconTheme *self)
 
       g_dir_close (gdir);
     }
-  self->dir_mtimes = g_list_reverse (self->dir_mtimes);
 
   for (j = 0; self->resource_path[j]; j++)
     {
@@ -2747,15 +2748,14 @@ gtk_icon_theme_get_icon_names (GtkIconTheme *self)
 static gboolean
 rescan_themes (GtkIconTheme *self)
 {
-  IconThemeDirMtime *dir_mtime;
-  GList *d;
   gint stat_res;
   GStatBuf stat_buf;
   GTimeVal tv;
+  guint i;
 
-  for (d = self->dir_mtimes; d != NULL; d = d->next)
+  for (i = 0; i < self->dir_mtimes->len; i++)
     {
-      dir_mtime = d->data;
+      const IconThemeDirMtime *dir_mtime = &g_array_index (self->dir_mtimes, IconThemeDirMtime, i);
 
       stat_res = g_stat (dir_mtime->dir, &stat_buf);
 
@@ -3296,7 +3296,6 @@ theme_subdir_load (GtkIconTheme *self,
                    GKeyFile     *theme_file,
                    gchar        *subdir)
 {
-  GList *d;
   gchar *type_string;
   IconThemeDirType type;
   gint size;
@@ -3304,10 +3303,10 @@ theme_subdir_load (GtkIconTheme *self,
   gint max_size;
   gint threshold;
   GError *error = NULL;
-  IconThemeDirMtime *dir_mtime;
   guint32 dir_size_index;
   IconThemeDirSize *dir_size;
   gint scale;
+  guint i;
 
   size = g_key_file_get_integer (theme_file, subdir, "Size", &error);
   if (error)
@@ -3355,10 +3354,10 @@ theme_subdir_load (GtkIconTheme *self,
   dir_size_index = theme_ensure_dir_size (theme, type, size, min_size, max_size, threshold, scale);
   dir_size = &g_array_index (theme->dir_sizes, IconThemeDirSize, dir_size_index);
 
-  for (d = self->dir_mtimes; d; d = d->next)
+  for (i = 0; i < self->dir_mtimes->len; i++)
     {
+      IconThemeDirMtime *dir_mtime = &g_array_index (self->dir_mtimes, IconThemeDirMtime, i);
       gchar *full_dir;
-      dir_mtime = (IconThemeDirMtime *)d->data;
 
       if (!dir_mtime->exists)
         continue; /* directory doesn't exist */
@@ -3397,14 +3396,14 @@ theme_subdir_load (GtkIconTheme *self,
 
   if (strcmp (theme->name, FALLBACK_ICON_THEME) == 0)
     {
-      int i;
-      for (i = 0; self->resource_path[i]; i++)
+      int r;
+      for (r = 0; self->resource_path[r]; r++)
         {
           GHashTable *icons;
           gchar *full_dir;
 
           /* Force a trailing / here, to avoid extra copies in GResource */
-          full_dir = g_build_filename (self->resource_path[i], subdir, " ", NULL);
+          full_dir = g_build_filename (self->resource_path[r], subdir, " ", NULL);
           full_dir[strlen (full_dir) - 1] = '\0';
 
           icons = scan_resource_directory (self, full_dir, &theme->icons);
