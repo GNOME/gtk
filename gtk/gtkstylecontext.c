@@ -781,34 +781,6 @@ gtk_style_context_has_class (GtkStyleContext *context,
   return gtk_css_node_has_class (priv->cssnode, class_quark);
 }
 
-/**
- * gtk_style_context_list_classes:
- * @context: a #GtkStyleContext
- *
- * Returns the list of classes currently defined in @context.
- *
- * Returns: (transfer container) (element-type utf8): a #GList of
- *          strings with the currently defined classes. The contents
- *          of the list are owned by GTK+, but you must free the list
- *          itself with g_list_free() when you are done with it.
- **/
-GList *
-gtk_style_context_list_classes (GtkStyleContext *context)
-{
-  GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
-  GList *classes_list = NULL;
-  const GQuark *classes;
-  guint n_classes, i;
-
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
-
-  classes = gtk_css_node_list_classes (priv->cssnode, &n_classes);
-  for (i = n_classes; i > 0; i--)
-    classes_list = g_list_prepend (classes_list, (gchar *)g_quark_to_string (classes[i - 1]));
-
-  return classes_list;
-}
-
 GtkCssValue *
 _gtk_style_context_peek_property (GtkStyleContext *context,
                                   guint            property_id)
