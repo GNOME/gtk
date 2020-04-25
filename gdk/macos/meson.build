@@ -3,6 +3,7 @@ gdk_macos_sources = files([
   'gdkmacoskeymap.c',
   'gdkmacosmonitor.c',
   'gdkmacossurface.c',
+  'GdkMacosWindow.c',
 
   # 'gdkapplaunchcontext-macos.c',
   # 'gdkcairocontext-macos.c',

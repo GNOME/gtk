@@ -264,7 +264,7 @@ gdk_macos_display_create_surface (GdkDisplay     *display,
   g_assert (GDK_IS_MACOS_DISPLAY (display));
   g_assert (!parent || GDK_IS_MACOS_SURFACE (parent));
 
-  return NULL;
+  return _gdk_macos_surface_new (display, surface_type, parent, x, y, width, height);
 }
 
 static GdkKeymap *

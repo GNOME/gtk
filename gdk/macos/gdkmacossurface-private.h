@@ -20,17 +20,26 @@
 #ifndef __GDK_MACOS_SURFACE_PRIVATE_H__
 #define __GDK_MACOS_SURFACE_PRIVATE_H__
 
+#include "gdksurfaceprivate.h"
+
 #include "gdkmacosdisplay.h"
 #include "gdkmacossurface.h"
 
 G_BEGIN_DECLS
 
-GdkMacosSurface *_gdk_macos_surface_new (GdkMacosDisplay *display,
-                                         GdkSurfaceType   surface_type,
-                                         int              x,
-                                         int              y,
-                                         int              width,
-                                         int              height);
+GdkMacosSurface *_gdk_macos_surface_new              (GdkMacosDisplay *display,
+                                                      GdkSurfaceType   surface_type,
+                                                      GdkSurface      *parent,
+                                                      int              x,
+                                                      int              y,
+                                                      int              width,
+                                                      int              height);
+GdkSurfaceType   _gdk_macos_surface_get_surface_type (GdkMacosSurface *self);
+void             _gdk_macos_surface_get_shadow       (GdkMacosSurface *self,
+                                                      gint            *top,
+                                                      gint            *right,
+                                                      gint            *bottom,
+                                                      gint            *left);
 
 G_END_DECLS
 
