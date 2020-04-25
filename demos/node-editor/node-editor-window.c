@@ -24,6 +24,13 @@
 #include "gtkrendererpaintableprivate.h"
 
 #include "gsk/gskrendernodeparserprivate.h"
+#include "gsk/gl/gskglrenderer.h"
+#ifdef GDK_WINDOWING_BROADWAY
+#include "gsk/broadway/gskbroadwayrenderer.h"
+#endif
+#ifdef GDK_RENDERING_VULKAN
+#include "gsk/vulkan/gskvulkanrenderer.h"
+#endif
 
 #ifndef NODE_EDITOR_SOURCE_DIR
 #define NODE_EDITOR_SOURCE_DIR "." /* Fallback */
