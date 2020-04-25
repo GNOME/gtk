@@ -40,9 +40,6 @@ change_dark_state (GSimpleAction *action,
   g_simple_action_set_state (action, state);
 }
 
-static char *current_theme;
-static gboolean current_dark;
-
 static void
 change_theme_state (GSimpleAction *action,
                     GVariant      *state,
@@ -52,6 +49,8 @@ change_theme_state (GSimpleAction *action,
   const char *s;
   const char *theme;
   gboolean prefer_dark = FALSE;
+
+  g_simple_action_set_state (action, state);
 
   s = g_variant_get_string (state, NULL);
 
@@ -77,8 +76,9 @@ change_theme_state (GSimpleAction *action,
     }
   else if (strcmp (s, "current") == 0)
     {
-      theme = current_theme;
-      prefer_dark = current_dark;
+      gtk_settings_reset_property (settings, "gtk-theme-name");
+      gtk_settings_reset_property (settings, "gtk-application-prefer-dark-theme");
+      return;
     }
   else
     return;
@@ -87,8 +87,6 @@ change_theme_state (GSimpleAction *action,
                 "gtk-theme-name", theme,
                 "gtk-application-prefer-dark-theme", prefer_dark,
                 NULL);
-
-  g_simple_action_set_state (action, state);
 }
 
 static GtkWidget *page_stack;
@@ -1739,11 +1737,6 @@ activate (GApplication *app)
   GPermission *permission;
   GAction *action;
   GError *error = NULL;
-
-  g_object_get (gtk_settings_get_default (),
-                "gtk-theme-name", &current_theme,
-                "gtk-application-prefer-dark-theme", &current_dark,
-                NULL);
 
   g_type_ensure (my_text_view_get_type ());
 
