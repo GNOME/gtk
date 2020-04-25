@@ -193,7 +193,8 @@ leave_cb (GtkEventController   *controller,
 
   target = gtk_event_controller_get_widget (controller);
 
-  gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (target), NULL);
+  if (mode == GDK_CROSSING_NORMAL)
+    gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (target), NULL);
 }
 
 static void
@@ -321,19 +322,28 @@ static gboolean
 gtk_popover_menu_focus (GtkWidget        *widget,
                         GtkDirectionType  direction)
 {
+  GtkPopoverMenu *menu = GTK_POPOVER_MENU (widget);
+
   if (gtk_widget_get_first_child (widget) == NULL)
     {
       return FALSE;
     }
   else
     {
-      if (GTK_POPOVER_MENU (widget)->open_submenu)
+      if (menu->open_submenu)
         {
-          if (gtk_widget_child_focus (GTK_POPOVER_MENU (widget)->open_submenu, direction))
+          if (gtk_widget_child_focus (menu->open_submenu, direction))
             return TRUE;
           if (direction == GTK_DIR_LEFT)
             {
-              gtk_widget_grab_focus (GTK_POPOVER_MENU (widget)->active_item);
+              if (menu->open_submenu)
+                {
+                  gtk_popover_popdown (GTK_POPOVER (menu->open_submenu));
+                  menu->open_submenu = NULL;
+                }
+
+              gtk_widget_grab_focus (menu->active_item);
+
               return TRUE;
             }
           return FALSE;
@@ -349,7 +359,7 @@ gtk_popover_menu_focus (GtkWidget        *widget,
            * we eat them.
            */
           if (gtk_widget_get_ancestor (widget, GTK_TYPE_POPOVER_MENU_BAR) ||
-              (gtk_popover_menu_get_parent_menu (GTK_POPOVER_MENU (widget)) &&
+              (gtk_popover_menu_get_parent_menu (menu) &&
                direction == GTK_DIR_LEFT))
             return FALSE;
           else
@@ -360,7 +370,7 @@ gtk_popover_menu_focus (GtkWidget        *widget,
           GtkWidget *p;
 
           /* cycle around */
-          for (p = gtk_window_get_focus (GTK_WINDOW (gtk_widget_get_root (widget)));
+          for (p = gtk_root_get_focus (gtk_widget_get_root (widget));
                p != widget;
                p = gtk_widget_get_parent (p))
             {
