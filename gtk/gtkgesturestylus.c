@@ -283,7 +283,8 @@ gtk_gesture_stylus_get_backlog (GtkGestureStylus  *gesture,
 {
   GdkEvent *event;
   GArray *backlog_array;
-  GList *history = NULL, *l;
+  GdkTimeCoord *history = NULL;
+  guint n_coords = 0, i;
 
   g_return_val_if_fail (GTK_IS_GESTURE_STYLUS (gesture), FALSE);
   g_return_val_if_fail (backlog != NULL && n_elems != NULL, FALSE);
@@ -291,14 +292,15 @@ gtk_gesture_stylus_get_backlog (GtkGestureStylus  *gesture,
   event = gesture_get_current_event (gesture);
 
   if (event && GDK_IS_EVENT_TYPE (event, GDK_MOTION_NOTIFY))
-    history = gdk_motion_event_get_history (event);
+    history = gdk_motion_event_get_history (event, &n_coords);
+
   if (!history)
     return FALSE;
 
   backlog_array = g_array_new (FALSE, FALSE, sizeof (GdkTimeCoord));
-  for (l = history; l; l = l->next)
+  for (i = 0; i < n_coords; i++)
     {
-      GdkTimeCoord *time_coord = l->data;
+      GdkTimeCoord *time_coord = &history[i];
       graphene_point_t p;
 
       g_array_append_val (backlog_array, *time_coord);
@@ -320,7 +322,7 @@ gtk_gesture_stylus_get_backlog (GtkGestureStylus  *gesture,
 
   *n_elems = backlog_array->len;
   *backlog = (GdkTimeCoord *) g_array_free (backlog_array, FALSE);
-  g_list_free (history);
+  g_free (history);
 
   return TRUE;
 }

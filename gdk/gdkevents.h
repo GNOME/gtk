@@ -471,7 +471,8 @@ gboolean                gdk_grab_broken_event_get_implicit     (GdkEvent *event)
 GDK_AVAILABLE_IN_ALL
 GType                   gdk_motion_event_get_type       (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GList *                 gdk_motion_event_get_history    (GdkEvent *event);
+GdkTimeCoord *          gdk_motion_event_get_history    (GdkEvent *event,
+                                                         guint    *out_n_coords);
 
 GDK_AVAILABLE_IN_ALL
 GType                   gdk_delete_event_get_type       (void) G_GNUC_CONST;
