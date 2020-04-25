@@ -1202,26 +1202,36 @@ gtk_file_system_model_got_files (GObject *object, GAsyncResult *res, gpointer da
     }
 }
 
+/* Helper for gtk_file_system_model_query_done and
+ * gtk_file_system_model_one_query_done */
 static void
-gtk_file_system_model_query_done (GObject *     object,
-                                  GAsyncResult *res,
-                                  gpointer      data)
+query_done_helper (GtkFileSystemModel *model,
+                   GFile              *file,
+                   GFileInfo          *info)
 {
-  GtkFileSystemModel *model = data; /* only a valid pointer if not cancelled */
-  GFile *file = G_FILE (object);
-  GFileInfo *info;
   guint id;
-
-  info = g_file_query_info_finish (file, res, NULL);
-  if (info == NULL)
-    return;
 
   _gtk_file_system_model_update_file (model, file, info);
 
   id = node_get_for_file (model, file);
   gtk_file_system_model_sort_node (model, id);
+}
 
-  g_object_unref (info);
+static void
+gtk_file_system_model_query_done (GObject *     object,
+                                  GAsyncResult *res,
+                                  gpointer      data)
+{
+  GFile *file = G_FILE (object);
+  GFileInfo *info;
+
+  info = g_file_query_info_finish (file, res, NULL);
+
+  if (info != NULL)
+    {
+      query_done_helper (GTK_FILE_SYSTEM_MODEL (data), file, info);
+      g_object_unref (info);
+    }
 }
 
 static void
@@ -2140,10 +2150,19 @@ gtk_file_system_model_one_query_done (GObject *     object,
                                       GAsyncResult *res,
                                       gpointer      data)
 {
-  GtkFileSystemModel *model = data; /* only a valid pointer if not cancelled */
+  GFile *file = G_FILE (object);
+  GFileInfo *info;
 
-  gtk_file_system_model_query_done (object, res, data);
-  thaw_updates (model);
+  info = g_file_query_info_finish (file, res, NULL);
+
+  if (info != NULL)
+    {
+      GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (data);
+
+      query_done_helper (model, file, info);
+      g_object_unref (info);
+      thaw_updates (model);
+    }
 }
 
 void
