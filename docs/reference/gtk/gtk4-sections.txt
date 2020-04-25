@@ -4292,6 +4292,27 @@ gtk_window_group_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkwindowcontrols</FILE>
+<TITLE>GtkWindowControls</TITLE>
+GtkWindowControls
+gtk_window_controls_new
+gtk_window_controls_get_side
+gtk_window_controls_set_side
+gtk_window_controls_get_decoration_layout
+gtk_window_controls_set_decoration_layout
+gtk_window_controls_get_empty
+<SUBSECTION Standard>
+GTK_WINDOW_CONTROLS
+GTK_IS_WINDOW_CONTROLS
+GTK_TYPE_WINDOW_CONTROLS
+GTK_WINDOW_CONTROLS_CLASS
+GTK_IS_WINDOW_CONTROLS_CLASS
+GTK_WINDOW_CONTROLS_GET_CLASS
+<SUBSECTION Private>
+gtk_window_controls_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkmain</FILE>
 <TITLE>General</TITLE>
 gtk_disable_setlocale
