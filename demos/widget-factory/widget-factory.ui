@@ -2482,6 +2482,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <child>
                                               <object class="GtkButton" id="print_button">
                                                 <property name="label">Print</property>
+                                                <property name="action-name">app.print</property>
                                               </object>
                                             </child>
                                           </object>
