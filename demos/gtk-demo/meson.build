@@ -90,6 +90,7 @@ extra_demo_sources = files(['main.c',
                             'gtkgears.c',
                             'puzzlepiece.c',
                             'bluroverlay.c',
+                            'demoimage.c',
                             'demotaggedentry.c'])
 
 if harfbuzz_dep.found() and pangoft_dep.found()
