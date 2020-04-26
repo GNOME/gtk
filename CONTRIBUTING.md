@@ -22,12 +22,7 @@ Please, do not use the issue tracker for support questions. If you have
 questions on how to use GTK effectively, you can use:
 
  - the `#gtk` IRC channel on irc.gnome.org
- - the [gtk](https://mail.gnome.org/mailman/listinfo/gtk-list) mailing list,
-   for general questions on GTK
- - the [gtk-app-devel](https://mail.gnome.org/mailman/listinfo/gtk-app-devel-list)
-   mailing list, for questions on application development with GTK
- - the [gtk-devel](https://mail.gnome.org/mailman/listinfo/gtk-devel-list)
-   mailing list, for questions on developing GTK itself
+ - the https://discourse.gnome.org
 
 You can also look at the GTK tag on [Stack
 Overflow](https://stackoverflow.com/questions/tagged/gtk).
