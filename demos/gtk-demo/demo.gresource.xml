@@ -281,9 +281,6 @@
   <gresource prefix="/modelbutton">
     <file>modelbutton.ui</file>
   </gresource>
-  <gresource prefix="/dnd">
-    <file>dnd.css</file>
-  </gresource>
   <gresource prefix="/tagged_entry">
     <file>demotaggedentry.c</file>
     <file>demotaggedentry.h</file>
