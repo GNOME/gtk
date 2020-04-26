@@ -12,6 +12,10 @@
   <gresource prefix="/builder">
     <file>demo.ui</file>
   </gresource>
+  <gresource prefix="/clipboard">
+    <file>demoimage.c</file>
+    <file>demoimage.h</file>
+  </gresource>
   <gresource prefix="/css_accordion">
     <file>css_accordion.css</file>
     <file>reset.css</file>
