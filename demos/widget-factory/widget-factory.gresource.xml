@@ -35,4 +35,7 @@
     <file>icons/16x16/emotes/face-monkey-symbolic.symbolic.png</file>
     <file>icons/16x16/apps/preferences-desktop-locale-symbolic.symbolic.png</file>
   </gresource>
+  <gresource prefix="/org/gtk/WidgetFactory4">
+    <file>gtk-logo.webm</file>
+  </gresource>
 </gresources>

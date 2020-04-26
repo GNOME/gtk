@@ -162,6 +162,8 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
                                 int               *height,
                                 int               *scale)
 {
+  GdkTexture *texture;
+
   if (gdk_cursor_get_name (cursor))
     {
       struct wl_cursor *c;
@@ -199,10 +201,12 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
     }
   else
     {
-      GdkTexture *texture = gdk_cursor_get_texture (cursor);
       cairo_surface_t *surface;
       struct wl_buffer *buffer;
 
+      texture = gdk_cursor_get_texture (cursor);
+
+from_texture:
       surface = g_hash_table_lookup (display->cursor_surface_cache, cursor);
       if (surface == NULL)
         {
@@ -241,6 +245,11 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
                                            hotspot_x, hotspot_y,
                                            width, height,
                                            scale);
+  else
+    {
+      texture = gdk_texture_new_from_resource ("/org/gtk/libgdk/cursor/default");
+      goto from_texture;
+    }
 
 none:
   *hotspot_x = 0;

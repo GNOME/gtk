@@ -324,6 +324,97 @@ activate_inspector (GSimpleAction *action,
 }
 
 static void
+print_operation_done (GtkPrintOperation       *op,
+                      GtkPrintOperationResult  res,
+                      gpointer                 data)
+{
+  GError *error = NULL;
+
+  switch (res)
+    {
+    case GTK_PRINT_OPERATION_RESULT_ERROR:
+      gtk_print_operation_get_error (op, &error);
+      g_print ("Printing failed: %s\n", error->message);
+      g_clear_error (&error);
+      break;
+    case GTK_PRINT_OPERATION_RESULT_APPLY:
+      break; 
+    case GTK_PRINT_OPERATION_RESULT_CANCEL:
+      g_print ("Printing was canceled\n");
+      break;
+    case GTK_PRINT_OPERATION_RESULT_IN_PROGRESS:
+      return;
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+
+  g_object_unref (op);
+}
+
+static void
+print_operation_begin (GtkPrintOperation *op,
+                       GtkPrintContext   *context,
+                       gpointer           data)
+{
+  gtk_print_operation_set_n_pages (op, 1);
+}
+
+static void
+print_operation_page (GtkPrintOperation *op,
+                      GtkPrintContext   *context,
+                      int                page,
+                      gpointer           data)
+{
+  cairo_t *cr;
+  double width;
+  double aspect_ratio;
+  GdkSnapshot *snapshot;
+  GdkPaintable *paintable;
+  GskRenderNode *node;
+
+  g_print ("Save the trees!\n");
+
+  cr = gtk_print_context_get_cairo_context (context);
+  width = gtk_print_context_get_width (context);
+
+  snapshot = gtk_snapshot_new ();
+  paintable = gtk_widget_paintable_new (GTK_WIDGET (data));
+  aspect_ratio = gdk_paintable_get_intrinsic_aspect_ratio (paintable);
+  gdk_paintable_snapshot (paintable, snapshot, width, width / aspect_ratio);
+  node = gtk_snapshot_free_to_node (snapshot);
+
+  gsk_render_node_draw (node, cr);
+
+  gsk_render_node_unref (node);
+
+  g_object_unref (paintable);
+}
+
+static void
+activate_print (GSimpleAction *action,
+                GVariant      *parameter,
+                gpointer       user_data)
+{
+  GtkWindow *window = GTK_WINDOW (user_data);
+  GtkPrintOperation *op;
+  GtkPrintOperationResult res;
+
+  op = gtk_print_operation_new ();
+  gtk_print_operation_set_allow_async (op, TRUE);
+  g_signal_connect (op, "begin-print", G_CALLBACK (print_operation_begin), NULL);
+  g_signal_connect (op, "draw-page", G_CALLBACK (print_operation_page), window);
+  g_signal_connect (op, "done", G_CALLBACK (print_operation_done), NULL);
+
+  res = gtk_print_operation_run (op, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, window, NULL);
+
+  if (res == GTK_PRINT_OPERATION_RESULT_IN_PROGRESS)
+    return;
+
+  print_operation_done (op, res, NULL);
+}
+
+static void
 spin_value_changed (GtkAdjustment *adjustment, GtkWidget *label)
 {
   GtkWidget *w;
@@ -1714,6 +1805,7 @@ activate (GApplication *app)
     { "open", activate_open, NULL, NULL, NULL },
     { "record", activate_record, NULL, NULL, NULL },
     { "lock", activate_lock, NULL, NULL, NULL },
+    { "print", activate_print, NULL, NULL, NULL },
   };
   struct {
     const gchar *action_and_target;
@@ -2077,7 +2169,6 @@ main (int argc, char *argv[])
     { "water", NULL, NULL, "true", NULL },
     { "dessert", NULL, "s", "'bars'", NULL },
     { "pay", NULL, "s", NULL, NULL },
-    { "print", activate_action, NULL, NULL, NULL },
     { "share", activate_action, NULL, NULL, NULL },
     { "labels", activate_action, NULL, NULL, NULL },
     { "new", activate_action, NULL, NULL, NULL },
