@@ -230,7 +230,7 @@
                               <class name="view"/>
                             </style>
                             <child>
-                              <object class="GtkImage" id="image">
+                              <object class="GtkPicture" id="image">
                                 <property name="halign">center</property>
                                 <property name="valign">center</property>
                               </object>

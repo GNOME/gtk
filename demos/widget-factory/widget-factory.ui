@@ -1042,57 +1042,28 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         <child>
                           <object class="GtkBox" id="box26">
                             <property name="orientation">vertical</property>
-                            <property name="homogeneous">1</property>
                             <property name="spacing">6</property>
                             <property name="hexpand">1</property>
                             <child>
                               <object class="GtkFrame" id="frame1">
-                                <style>
-                                  <class name="border-inset"/>
-                                </style>
+                                <property name="valign">start</property>
                                 <child type="label">
                                   <object class="GtkLabel" id="label1">
-                                    <property name="label" translatable="yes">&lt;b&gt;Inset&lt;/b&gt;</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;Video&lt;/b&gt;</property>
                                     <property name="use-markup">1</property>
                                   </object>
                                 </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkFrame" id="frame2">
-                                <style>
-                                  <class name="border-outset"/>
-                                </style>
-                                <child type="label">
-                                  <object class="GtkLabel" id="label2">
-                                    <property name="label" translatable="yes">&lt;b&gt;Outset&lt;/b&gt;</property>
-                                    <property name="use-markup">1</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkFrame" id="frame3">
-                                <style>
-                                  <class name="border-groove"/>
-                                </style>
-                                <child type="label">
-                                  <object class="GtkLabel" id="label17">
-                                    <property name="label" translatable="yes">&lt;b&gt;Groove&lt;/b&gt;</property>
-                                    <property name="use-markup">1</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkFrame" id="frame4">
-                                <style>
-                                  <class name="border-ridge"/>
-                                </style>
-                                <child type="label">
-                                  <object class="GtkLabel" id="label18">
-                                    <property name="label" translatable="yes">&lt;b&gt;Ridge&lt;/b&gt;</property>
-                                    <property name="use-markup">1</property>
+                                <child>
+                                  <object class="GtkVideo">
+                                    <property name="halign">center</property>
+                                    <property name="valign">center</property>
+                                    <property name="margin-start">6</property>
+                                    <property name="margin-end">6</property>
+                                    <property name="margin-top">6</property>
+                                    <property name="margin-bottom">6</property>
+                                    <property name="autoplay">0</property>
+                                    <property name="loop">1</property>
+                                    <property name="file">resource:///org/gtk/WidgetFactory4/gtk-logo.webm</property>
                                   </object>
                                 </child>
                               </object>
@@ -2482,6 +2453,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <child>
                                               <object class="GtkButton" id="print_button">
                                                 <property name="label">Print</property>
+                                                <property name="action-name">win.print</property>
                                               </object>
                                             </child>
                                           </object>
@@ -2754,15 +2726,17 @@ microphone-sensitivity-medium-symbolic</property>
                         <property name="spacing">10</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="halign">center</property>
+                            <property name="halign">fill</property>
                             <child>
                               <object class="GtkEntry">
+                                <property name="hexpand">1</property>
                                 <property name="placeholder-text" translatable="yes">Name…</property>
                                 <property name="completion">name_completion</property>
                               </object>
                             </child>
                             <child>
                               <object class="GtkEntry">
+                                <property name="hexpand">1</property>
                                 <property name="show-emoji-icon">1</property>
                                 <property name="placeholder-text" translatable="yes">Age…</property>
                               </object>
@@ -3307,7 +3281,7 @@ bad things might happen.</property>
                           </object>
                         </property>
                         <property name="iconic">1</property>
-                        <property name="action-name">app.print</property>
+                        <property name="action-name">win.print</property>
                         <property name="hexpand">1</property>
                         <property name="halign">center</property>
                         <style>
@@ -3530,7 +3504,7 @@ bad things might happen.</property>
       <attribute name="display-hint">circular-buttons</attribute>
       <item>
         <attribute name="verb-icon">printer-symbolic</attribute>
-        <attribute name="action">app.print</attribute>
+        <attribute name="action">win.print</attribute>
       </item>
       <item>
         <attribute name="verb-icon">emblem-shared-symbolic</attribute>
