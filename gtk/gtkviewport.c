@@ -70,10 +70,7 @@ typedef struct _GtkViewportClass         GtkViewportClass;
 struct _GtkViewport
 {
   GtkBin parent_instance;
-};
 
-struct _GtkViewportPrivate
-{
   GtkAdjustment  *hadjustment;
   GtkAdjustment  *vadjustment;
  
@@ -124,7 +121,6 @@ static void setup_focus_change_handler (GtkViewport *viewport);
 static void clear_focus_change_handler (GtkViewport *viewport);
 
 G_DEFINE_TYPE_WITH_CODE (GtkViewport, gtk_viewport, GTK_TYPE_BIN,
-                         G_ADD_PRIVATE (GtkViewport)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
 
 static void
@@ -132,7 +128,6 @@ viewport_set_adjustment_values (GtkViewport    *viewport,
                                 GtkOrientation  orientation)
 {
   GtkBin *bin = GTK_BIN (viewport);
-  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
   GtkAdjustment *adjustment;
   GtkScrollablePolicy scroll_policy;
   GtkScrollablePolicy other_scroll_policy;
@@ -147,21 +142,21 @@ viewport_set_adjustment_values (GtkViewport    *viewport,
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      adjustment = priv->hadjustment;
+      adjustment = viewport->hadjustment;
       other_orientation = GTK_ORIENTATION_VERTICAL;
       viewport_size = view_width;
       other_viewport_size = view_height;
-      scroll_policy = priv->hscroll_policy;
-      other_scroll_policy = priv->vscroll_policy;
+      scroll_policy = viewport->hscroll_policy;
+      other_scroll_policy = viewport->vscroll_policy;
     }
   else /* VERTICAL */
     {
-      adjustment = priv->vadjustment;
+      adjustment = viewport->vadjustment;
       other_orientation = GTK_ORIENTATION_HORIZONTAL;
       viewport_size = view_height;
       other_viewport_size = view_width;
-      scroll_policy = priv->vscroll_policy;
-      other_scroll_policy = priv->hscroll_policy;
+      scroll_policy = viewport->vscroll_policy;
+      other_scroll_policy = viewport->hscroll_policy;
     }
 
 
@@ -249,11 +244,10 @@ static void
 gtk_viewport_root (GtkWidget *widget)
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
-  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
 
   GTK_WIDGET_CLASS (gtk_viewport_parent_class)->root (widget);
 
-  if (priv->scroll_to_focus)
+  if (viewport->scroll_to_focus)
     setup_focus_change_handler (viewport);
 }
 
@@ -261,9 +255,8 @@ static void
 gtk_viewport_unroot (GtkWidget *widget)
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
-  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
 
-  if (priv->scroll_to_focus)
+  if (viewport->scroll_to_focus)
     clear_focus_change_handler (viewport);
 
   GTK_WIDGET_CLASS (gtk_viewport_parent_class)->unroot (widget);
@@ -314,7 +307,6 @@ gtk_viewport_set_property (GObject         *object,
 			   GParamSpec      *pspec)
 {
   GtkViewport *viewport = GTK_VIEWPORT (object);
-  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
 
   switch (prop_id)
     {
@@ -325,17 +317,17 @@ gtk_viewport_set_property (GObject         *object,
       viewport_set_adjustment (viewport, GTK_ORIENTATION_VERTICAL, g_value_get_object (value));
       break;
     case PROP_HSCROLL_POLICY:
-      if (priv->hscroll_policy != g_value_get_enum (value))
+      if (viewport->hscroll_policy != g_value_get_enum (value))
         {
-          priv->hscroll_policy = g_value_get_enum (value);
+          viewport->hscroll_policy = g_value_get_enum (value);
           gtk_widget_queue_resize (GTK_WIDGET (viewport));
           g_object_notify_by_pspec (object, pspec);
         }
       break;
     case PROP_VSCROLL_POLICY:
-      if (priv->vscroll_policy != g_value_get_enum (value))
+      if (viewport->vscroll_policy != g_value_get_enum (value))
         {
-          priv->vscroll_policy = g_value_get_enum (value);
+          viewport->vscroll_policy = g_value_get_enum (value);
           gtk_widget_queue_resize (GTK_WIDGET (viewport));
           g_object_notify_by_pspec (object, pspec);
         }
@@ -356,24 +348,23 @@ gtk_viewport_get_property (GObject         *object,
 			   GParamSpec      *pspec)
 {
   GtkViewport *viewport = GTK_VIEWPORT (object);
-  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
 
   switch (prop_id)
     {
     case PROP_HADJUSTMENT:
-      g_value_set_object (value, priv->hadjustment);
+      g_value_set_object (value, viewport->hadjustment);
       break;
     case PROP_VADJUSTMENT:
-      g_value_set_object (value, priv->vadjustment);
+      g_value_set_object (value, viewport->vadjustment);
       break;
     case PROP_HSCROLL_POLICY:
-      g_value_set_enum (value, priv->hscroll_policy);
+      g_value_set_enum (value, viewport->hscroll_policy);
       break;
     case PROP_VSCROLL_POLICY:
-      g_value_set_enum (value, priv->vscroll_policy);
+      g_value_set_enum (value, viewport->vscroll_policy);
       break;
     case PROP_SCROLL_TO_FOCUS:
-      g_value_set_boolean (value, priv->scroll_to_focus);
+      g_value_set_boolean (value, viewport->scroll_to_focus);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -385,14 +376,13 @@ static void
 gtk_viewport_init (GtkViewport *viewport)
 {
   GtkWidget *widget;
-  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
 
   widget = GTK_WIDGET (viewport);
 
   gtk_widget_set_overflow (widget, GTK_OVERFLOW_HIDDEN);
 
-  priv->hadjustment = NULL;
-  priv->vadjustment = NULL;
+  viewport->hadjustment = NULL;
+  viewport->vadjustment = NULL;
 
   gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_FRAME);
   viewport_set_adjustment (viewport, GTK_ORIENTATION_HORIZONTAL, NULL);
@@ -425,13 +415,12 @@ gtk_viewport_new (GtkAdjustment *hadjustment,
 
 #define ADJUSTMENT_POINTER(orientation)            \
   (((orientation) == GTK_ORIENTATION_HORIZONTAL) ? \
-     &priv->hadjustment : &priv->vadjustment)
+     &viewport->hadjustment : &viewport->vadjustment)
 
 static void
 viewport_disconnect_adjustment (GtkViewport    *viewport,
 				GtkOrientation  orientation)
 {
-  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
   GtkAdjustment **adjustmentp = ADJUSTMENT_POINTER (orientation);
 
   if (*adjustmentp)
@@ -460,7 +449,6 @@ viewport_set_adjustment (GtkViewport    *viewport,
 			 GtkOrientation  orientation,
 			 GtkAdjustment  *adjustment)
 {
-  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
   GtkAdjustment **adjustmentp = ADJUSTMENT_POINTER (orientation);
 
   if (adjustment && adjustment == *adjustmentp)
@@ -488,9 +476,8 @@ gtk_viewport_size_allocate (GtkWidget *widget,
                             int        baseline)
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
-  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
-  GtkAdjustment *hadjustment = priv->hadjustment;
-  GtkAdjustment *vadjustment = priv->vadjustment;
+  GtkAdjustment *hadjustment = viewport->hadjustment;
+  GtkAdjustment *vadjustment = viewport->vadjustment;
   GtkWidget *child;
 
   g_object_freeze_notify (G_OBJECT (hadjustment));
@@ -535,11 +522,9 @@ gtk_viewport_adjustment_value_changed (GtkAdjustment *adjustment,
 gboolean
 gtk_viewport_get_scroll_to_focus (GtkViewport *viewport)
 {
-  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
-
   g_return_val_if_fail (GTK_IS_VIEWPORT (viewport), FALSE);
 
-  return priv->scroll_to_focus;
+  return viewport->scroll_to_focus;
 }
 
 /**
@@ -554,14 +539,12 @@ void
 gtk_viewport_set_scroll_to_focus (GtkViewport *viewport,
                                   gboolean     scroll_to_focus)
 {
-  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
-
   g_return_if_fail (GTK_IS_VIEWPORT (viewport));
 
-  if (priv->scroll_to_focus == scroll_to_focus)
+  if (viewport->scroll_to_focus == scroll_to_focus)
     return;
 
-  priv->scroll_to_focus = scroll_to_focus;
+  viewport->scroll_to_focus = scroll_to_focus;
 
   if (gtk_widget_get_root (GTK_WIDGET (viewport)))
     {
@@ -594,7 +577,6 @@ static void
 focus_change_handler (GtkWidget *widget)
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
-  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
   GtkRoot *root;
   GtkWidget *focus_widget;
   GtkWidget *child;
@@ -623,33 +605,31 @@ focus_change_handler (GtkWidget *widget)
                                     (int)rect.origin.y,
                                      &x, &y);
 
-  scroll_to_view (priv->hadjustment, x, rect.size.width);
-  scroll_to_view (priv->vadjustment, y, rect.size.height);
+  scroll_to_view (viewport->hadjustment, x, rect.size.width);
+  scroll_to_view (viewport->vadjustment, y, rect.size.height);
 }
 
 static void
 setup_focus_change_handler (GtkViewport *viewport)
 {
-  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
   GtkRoot *root;
 
   root = gtk_widget_get_root (GTK_WIDGET (viewport));
 
-  priv->focus_handler = g_signal_connect_swapped (root, "notify::focus-widget",
+  viewport->focus_handler = g_signal_connect_swapped (root, "notify::focus-widget",
                                                   G_CALLBACK (focus_change_handler), viewport);
 }
 
 static void
 clear_focus_change_handler (GtkViewport *viewport)
 {
-  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
   GtkRoot *root;
 
   root = gtk_widget_get_root (GTK_WIDGET (viewport));
 
-  if (priv->focus_handler)
+  if (viewport->focus_handler)
     {
-      g_signal_handler_disconnect (root, priv->focus_handler);
-      priv->focus_handler = 0;
+      g_signal_handler_disconnect (root, viewport->focus_handler);
+      viewport->focus_handler = 0;
     }
 }

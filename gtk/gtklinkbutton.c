@@ -73,12 +73,15 @@
 #include <string.h>
 
 typedef struct _GtkLinkButtonClass GtkLinkButtonClass;
-typedef struct _GtkLinkButtonPrivate GtkLinkButtonPrivate;
 
 struct _GtkLinkButton
 {
   /*< private >*/
   GtkButton parent_instance;
+
+  char *uri;
+  gboolean visited;
+  GtkWidget *popup_menu;
 };
 
 struct _GtkLinkButtonClass
@@ -88,15 +91,6 @@ struct _GtkLinkButtonClass
 
   /*< public >*/
   gboolean (* activate_link) (GtkLinkButton *button);
-};
-
-struct _GtkLinkButtonPrivate
-{
-  gchar *uri;
-
-  gboolean visited;
-
-  GtkWidget *popup_menu;
 };
 
 enum
@@ -147,7 +141,7 @@ static const char *link_drop_types[] = {
 
 static guint link_signals[LAST_SIGNAL] = { 0, };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkLinkButton, gtk_link_button, GTK_TYPE_BUTTON)
+G_DEFINE_TYPE (GtkLinkButton, gtk_link_button, GTK_TYPE_BUTTON)
 
 static void
 gtk_link_button_activate_clipboard_copy (GtkWidget  *widget,
@@ -155,9 +149,8 @@ gtk_link_button_activate_clipboard_copy (GtkWidget  *widget,
                                          GVariant   *parameter)
 {
   GtkLinkButton *link_button = GTK_LINK_BUTTON (widget);
-  GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (link_button);
 
-  gdk_clipboard_set_text (gtk_widget_get_clipboard (widget), priv->uri);
+  gdk_clipboard_set_text (gtk_widget_get_clipboard (widget), link_button->uri);
 }
 
 static void
@@ -311,10 +304,9 @@ gtk_link_content_get_value (GdkContentProvider  *provider,
   if (G_VALUE_HOLDS (value, G_TYPE_STRING) &&
       content->link != NULL)
     {
-      GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (content->link);
       char *uri;
   
-      uri = g_strdup_printf ("%s\r\n", priv->uri);
+      uri = g_strdup_printf ("%s\r\n", content->link->uri);
       g_value_set_string (value, uri);
       g_free (uri);
 
@@ -376,11 +368,10 @@ static void
 gtk_link_button_finalize (GObject *object)
 {
   GtkLinkButton *link_button = GTK_LINK_BUTTON (object);
-  GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (link_button);
 
-  g_free (priv->uri);
+  g_free (link_button->uri);
 
-  g_clear_pointer (&priv->popup_menu, gtk_widget_unparent);
+  g_clear_pointer (&link_button->popup_menu, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_link_button_parent_class)->finalize (object);
 }
@@ -392,15 +383,14 @@ gtk_link_button_get_property (GObject    *object,
 			      GParamSpec *pspec)
 {
   GtkLinkButton *link_button = GTK_LINK_BUTTON (object);
-  GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (link_button);
   
   switch (prop_id)
     {
     case PROP_URI:
-      g_value_set_string (value, priv->uri);
+      g_value_set_string (value, link_button->uri);
       break;
     case PROP_VISITED:
-      g_value_set_boolean (value, priv->visited);
+      g_value_set_boolean (value, link_button->visited);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -435,19 +425,17 @@ gtk_link_button_do_popup (GtkLinkButton *link_button,
                           double         x,
                           double         y)
 {
-  GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (link_button);
-
-  if (!priv->popup_menu)
+  if (!link_button->popup_menu)
     {
       GMenuModel *model;
 
       model = gtk_link_button_get_menu_model ();
-      priv->popup_menu = gtk_popover_menu_new_from_model (model);
-      gtk_widget_set_parent (priv->popup_menu, GTK_WIDGET (link_button));
-      gtk_popover_set_position (GTK_POPOVER (priv->popup_menu), GTK_POS_BOTTOM);
+      link_button->popup_menu = gtk_popover_menu_new_from_model (model);
+      gtk_widget_set_parent (link_button->popup_menu, GTK_WIDGET (link_button));
+      gtk_popover_set_position (GTK_POPOVER (link_button->popup_menu), GTK_POS_BOTTOM);
 
-      gtk_popover_set_has_arrow (GTK_POPOVER (priv->popup_menu), FALSE);
-      gtk_widget_set_halign (priv->popup_menu, GTK_ALIGN_START);
+      gtk_popover_set_has_arrow (GTK_POPOVER (link_button->popup_menu), FALSE);
+      gtk_widget_set_halign (link_button->popup_menu, GTK_ALIGN_START);
 
       g_object_unref (model);
     }
@@ -455,12 +443,12 @@ gtk_link_button_do_popup (GtkLinkButton *link_button,
   if (x != -1 && y != -1)
     {
       GdkRectangle rect = { x, y, 1, 1 };
-      gtk_popover_set_pointing_to (GTK_POPOVER (priv->popup_menu), &rect);
+      gtk_popover_set_pointing_to (GTK_POPOVER (link_button->popup_menu), &rect);
     }
   else
-    gtk_popover_set_pointing_to (GTK_POPOVER (priv->popup_menu), NULL);
+    gtk_popover_set_pointing_to (GTK_POPOVER (link_button->popup_menu), NULL);
 
-  gtk_popover_popup (GTK_POPOVER (priv->popup_menu));
+  gtk_popover_popup (GTK_POPOVER (link_button->popup_menu));
 }
 
 static void
@@ -471,7 +459,6 @@ gtk_link_button_pressed_cb (GtkGestureClick *gesture,
                             gpointer         user_data)
 {
   GtkLinkButton *link_button = user_data;
-  GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (link_button);
   GdkEventSequence *sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   GdkEvent *event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
 
@@ -479,7 +466,7 @@ gtk_link_button_pressed_cb (GtkGestureClick *gesture,
     gtk_widget_grab_focus (GTK_WIDGET (link_button));
 
   if (gdk_event_triggers_context_menu (event) &&
-      priv->uri != NULL)
+      link_button->uri != NULL)
     {
       gtk_link_button_do_popup (link_button, x, y);
       gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
@@ -493,12 +480,11 @@ gtk_link_button_pressed_cb (GtkGestureClick *gesture,
 static gboolean
 gtk_link_button_activate_link (GtkLinkButton *link_button)
 {
-  GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (link_button);
   GtkWidget *toplevel;
 
   toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (link_button)));
 
-  gtk_show_uri (GTK_WINDOW (toplevel), priv->uri, GDK_CURRENT_TIME);
+  gtk_show_uri (GTK_WINDOW (toplevel), link_button->uri, GDK_CURRENT_TIME);
   gtk_link_button_set_visited (link_button, TRUE);
 
   return TRUE;
@@ -604,12 +590,11 @@ gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
                                   gpointer      data)
 {
   GtkLinkButton *link_button = GTK_LINK_BUTTON (widget);
-  GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (link_button);
   const gchar *label, *uri;
   gchar *text, *markup;
 
   label = gtk_button_get_label (GTK_BUTTON (link_button));
-  uri = priv->uri;
+  uri = link_button->uri;
   text = gtk_widget_get_tooltip_text (widget);
   markup = gtk_widget_get_tooltip_markup (widget);
 
@@ -641,13 +626,11 @@ void
 gtk_link_button_set_uri (GtkLinkButton *link_button,
 			 const gchar   *uri)
 {
-  GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (link_button);
-
   g_return_if_fail (GTK_IS_LINK_BUTTON (link_button));
   g_return_if_fail (uri != NULL);
 
-  g_free (priv->uri);
-  priv->uri = g_strdup (uri);
+  g_free (link_button->uri);
+  link_button->uri = g_strdup (uri);
 
   g_object_notify (G_OBJECT (link_button), "uri");
 
@@ -666,11 +649,9 @@ gtk_link_button_set_uri (GtkLinkButton *link_button,
 const gchar *
 gtk_link_button_get_uri (GtkLinkButton *link_button)
 {
-  GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (link_button);
-
   g_return_val_if_fail (GTK_IS_LINK_BUTTON (link_button), NULL);
 
-  return priv->uri;
+  return link_button->uri;
 }
 
 /**
@@ -685,15 +666,13 @@ void
 gtk_link_button_set_visited (GtkLinkButton *link_button,
                              gboolean       visited)
 {
-  GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (link_button);
-
   g_return_if_fail (GTK_IS_LINK_BUTTON (link_button));
 
   visited = visited != FALSE;
 
-  if (priv->visited != visited)
+  if (link_button->visited != visited)
     {
-      priv->visited = visited;
+      link_button->visited = visited;
 
       if (visited)
         {
@@ -725,9 +704,7 @@ gtk_link_button_set_visited (GtkLinkButton *link_button,
 gboolean
 gtk_link_button_get_visited (GtkLinkButton *link_button)
 {
-  GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (link_button);
-
   g_return_val_if_fail (GTK_IS_LINK_BUTTON (link_button), FALSE);
 
-  return priv->visited;
+  return link_button->visited;
 }
