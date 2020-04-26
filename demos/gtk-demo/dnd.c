@@ -1,202 +1,126 @@
 /* Drag-and-Drop
  *
- * I can't believe its not glade!
- *
- * Try right-clicking in the window.
+ * This demo shows dragging colors and widgets.
+ * The items in this demo can be moved, recolored
+ * and rotated.
  */
 
-#include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <string.h>
 
-typedef struct _GtkDemoWidget GtkDemoWidget;
-struct _GtkDemoWidget
+static GdkContentProvider *
+prepare (GtkDragSource *source,
+         double         x,
+         double         y)
 {
-  GType type;
-  union {
-    char *text;
-    gboolean active;
-  };
-};
+  GtkWidget *canvas;
+  GtkWidget *item;
 
-static gpointer
-copy_demo_widget (gpointer data)
-{
-  GtkDemoWidget *demo = g_memdup (data, sizeof (GtkDemoWidget));
+  canvas = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
+  item = gtk_widget_pick (canvas, x, y, GTK_PICK_DEFAULT);
 
-  if (demo->type == GTK_TYPE_LABEL)
-    demo->text = g_strdup (demo->text);
+  if (!GTK_IS_LABEL (item))
+    return NULL;
 
-  return demo;
+  g_object_set_data (G_OBJECT (canvas), "dragged-item", item);
+
+  return gdk_content_provider_new_typed (GTK_TYPE_WIDGET, item);
 }
 
 static void
-free_demo_widget (gpointer data)
+drag_begin (GtkDragSource *source,
+            GdkDrag       *drag)
 {
-  GtkDemoWidget *demo = data;
+  GtkWidget *canvas;
+  GtkWidget *item;
 
-  if (demo->type == GTK_TYPE_LABEL)
-    g_free (demo->text);
+  canvas = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
+  item = g_object_get_data (G_OBJECT (canvas), "dragged-item");
 
-  g_free (demo);
+  gtk_widget_set_opacity (item, 0.5);
 }
 
-#define GTK_TYPE_DEMO_WIDGET (gtk_demo_widget_get_type ())
-static GType gtk_demo_widget_get_type (void);
-G_DEFINE_BOXED_TYPE (GtkDemoWidget, gtk_demo_widget, copy_demo_widget, free_demo_widget)
-
-static GtkDemoWidget *
-serialize_widget (GtkWidget *widget)
+static void
+drag_end (GtkDragSource *source,
+          GdkDrag       *drag)
 {
-  GtkDemoWidget *demo;
+  GtkWidget *canvas;
+  GtkWidget *item;
 
-  demo = g_new0 (GtkDemoWidget, 1);
-  demo->type = G_OBJECT_TYPE (widget);
+  canvas = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
+  item = g_object_get_data (G_OBJECT (canvas), "dragged-item");
+  g_object_set_data (G_OBJECT (canvas), "dragged-item", NULL);
 
-  if (GTK_IS_LABEL (widget))
-    {
-      demo->text = g_strdup (gtk_label_get_text (GTK_LABEL (widget)));
-    }
-  else if (GTK_IS_SPINNER (widget))
-    {
-      g_object_get (widget, "spinning", &demo->active, NULL);
-    }
-  else
-    {
-      g_print ("Type %s not supported\n", g_type_name (demo->type));
-    }
-
-  return demo;
+  gtk_widget_set_opacity (item, 1.0);
 }
 
-static GtkWidget *
-deserialize_widget (GtkDemoWidget *demo)
+static void
+drag_cancel (GtkDragSource       *source,
+             GdkDrag             *drag,
+             GdkDragCancelReason  reason)
 {
-  GtkWidget *widget = NULL;
+  drag_end (source, drag);
+}
 
-  if (demo->type == GTK_TYPE_LABEL)
-    {
-      widget = gtk_label_new (demo->text);
-    }
-  else if (demo->type == GTK_TYPE_SPINNER)
-    {
-      widget = g_object_new (demo->type, "spinning", demo->active, NULL);
-      gtk_widget_add_css_class (widget, "demo");
-    }
-  else
-    {
-      g_print ("Type %s not supported\n", g_type_name (demo->type));
-    }
+typedef struct {
+  double x, y;
+  double angle;
+  double delta;
+} TransformData;
 
-  return widget;
+static void
+apply_transform (GtkWidget *item)
+{
+  GtkWidget *canvas = gtk_widget_get_parent (item);
+  TransformData *data;
+  GskTransform *transform;
+
+  data = g_object_get_data (G_OBJECT (item), "transform-data");
+  transform = gsk_transform_rotate (gsk_transform_translate (NULL, &(graphene_point_t){data->x, data->y}),
+                                    data->angle + data->delta);
+  gtk_fixed_set_child_transform (GTK_FIXED (canvas), item, transform);
+  gsk_transform_unref (transform);
+}
+
+static gboolean
+drag_drop (GtkDropTarget *target,
+           const GValue  *value,
+           double         x,
+           double         y)
+{
+  GtkWidget *item;
+  TransformData *transform_data;
+  GtkWidget *canvas;
+  GtkWidget *last_child;
+
+  item = g_value_get_object (value);
+  transform_data = g_object_get_data (G_OBJECT (item), "transform-data");
+
+  transform_data->x = x;
+  transform_data->y = y;
+
+  canvas = gtk_widget_get_parent (item);
+  last_child = gtk_widget_get_last_child (canvas);
+  if (item != last_child)
+    gtk_widget_insert_after (item, canvas, last_child);
+
+  apply_transform (item);
+
+  return TRUE;
 }
 
 static double pos_x, pos_y;
 
-static void
-new_label_cb (GtkWidget *button,
-              gpointer     data)
-{
-  GtkFixed *fixed = data;
-  GtkWidget *widget;
-
-  widget = gtk_label_new ("Label");
-  gtk_fixed_put (fixed, widget, pos_x, pos_y);
-
-  gtk_popover_popdown (GTK_POPOVER (gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER)));
-}
+static GtkWidget * canvas_item_new (double x, double y);
 
 static void
-new_spinner_cb (GtkWidget *button,
-                gpointer     data)
+new_item_cb (GtkWidget *button, gpointer data)
 {
-  GtkFixed *fixed = data;
-  GtkWidget *widget;
+  GtkWidget *canvas = data;
+  GtkWidget *item;
 
-  widget = gtk_spinner_new ();
-  gtk_widget_add_css_class (widget, "demo");
-  gtk_spinner_start (GTK_SPINNER (widget));
-  gtk_fixed_put (fixed, widget, pos_x, pos_y);
-
-  gtk_popover_popdown (GTK_POPOVER (gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER)));
-}
-
-static void
-copy_cb (GtkWidget *button, GtkWidget *child)
-{
-  GdkClipboard *clipboard;
-  GtkDemoWidget *demo;
-
-  demo = serialize_widget (child);
-
-  clipboard = gdk_display_get_clipboard (gdk_display_get_default ());
-  gdk_clipboard_set (clipboard, GTK_TYPE_DEMO_WIDGET, demo);
-
-  gtk_popover_popdown (GTK_POPOVER (gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER)));
-}
-
-static void
-delete_cb (GtkWidget *button, GtkWidget *child)
-{
-  gtk_widget_destroy (child);
-
-  gtk_popover_popdown (GTK_POPOVER (gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER)));
-}
-
-static void
-cut_cb (GtkWidget *button, GtkWidget *child)
-{
-  copy_cb (button, child);
-  delete_cb (button, child);
-
-  gtk_popover_popdown (GTK_POPOVER (gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER)));
-}
-
-static void
-value_read (GObject      *source,
-            GAsyncResult *res,
-            gpointer      data)
-{
-  GdkClipboard *clipboard = GDK_CLIPBOARD (source);
-  GError *error = NULL;
-  const GValue *value;
-  GtkDemoWidget *demo;
-  GtkWidget *widget = NULL;
-
-  value = gdk_clipboard_read_value_finish (clipboard, res, &error);
-
-  if (value == NULL)
-    {
-      g_print ("error: %s\n", error->message);
-      g_error_free (error);
-      return;
-    }
-
-  if (!G_VALUE_HOLDS (value, GTK_TYPE_DEMO_WIDGET))
-    {
-      g_print ("can't handle clipboard contents\n");
-      return;
-    }
-
-  demo = g_value_get_boxed (value);
-  widget = deserialize_widget (demo);
-
-  gtk_fixed_put (GTK_FIXED (data), widget, pos_x, pos_y);
-}
-
-static void
-paste_cb (GtkWidget *button, GtkWidget *fixed)
-{
-  GdkClipboard *clipboard;
-
-  clipboard = gdk_display_get_clipboard (gdk_display_get_default ());
-  if (gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (clipboard), GTK_TYPE_DEMO_WIDGET))
-    {
-      g_print ("Paste %s\n", g_type_name (GTK_TYPE_DEMO_WIDGET));
-      gdk_clipboard_read_value_async (clipboard, GTK_TYPE_DEMO_WIDGET, 0, NULL, value_read, fixed);
-    }
-  else
-    g_print ("Don't know how to handle clipboard contents\n");
+  item = canvas_item_new (pos_x, pos_y);
+  gtk_container_add (GTK_CONTAINER (canvas), item);
+  apply_transform (item);
 
   gtk_popover_popdown (GTK_POPOVER (gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER)));
 }
@@ -204,14 +128,15 @@ paste_cb (GtkWidget *button, GtkWidget *fixed)
 static void
 edit_label_done (GtkWidget *entry, gpointer data)
 {
-  GtkWidget *fixed = gtk_widget_get_parent (entry);
+  GtkWidget *canvas = gtk_widget_get_parent (entry);
   GtkWidget *label;
   int x, y;
 
-  gtk_fixed_get_child_position (GTK_FIXED (fixed), entry, &x, &y);
+  gtk_fixed_get_child_position (GTK_FIXED (canvas), entry, &x, &y);
 
   label = GTK_WIDGET (g_object_get_data (G_OBJECT (entry), "label"));
   gtk_label_set_text (GTK_LABEL (label), gtk_editable_get_text (GTK_EDITABLE (entry)));
+  gtk_widget_show (label);
 
   gtk_widget_destroy (entry);
 }
@@ -219,10 +144,10 @@ edit_label_done (GtkWidget *entry, gpointer data)
 static void
 edit_cb (GtkWidget *button, GtkWidget *child)
 {
-  GtkWidget *fixed = gtk_widget_get_parent (child);
+  GtkWidget *canvas = gtk_widget_get_parent (child);
   int x, y;
 
-  gtk_fixed_get_child_position (GTK_FIXED (fixed), child, &x, &y);
+  gtk_fixed_get_child_position (GTK_FIXED (canvas), child, &x, &y);
 
   if (GTK_IS_LABEL (child))
     {
@@ -233,19 +158,21 @@ edit_cb (GtkWidget *button, GtkWidget *child)
       gtk_editable_set_text (GTK_EDITABLE (entry), gtk_label_get_text (GTK_LABEL (child)));
       gtk_editable_set_width_chars (GTK_EDITABLE (entry), 12);
       g_signal_connect (entry, "activate", G_CALLBACK (edit_label_done), NULL);
-      gtk_fixed_put (GTK_FIXED (fixed), entry, x, y);
+      gtk_fixed_put (GTK_FIXED (canvas), entry, x, y);
       gtk_widget_grab_focus (entry);
-    }
-  else if (GTK_IS_SPINNER (child))
-    {
-      gboolean active;
-
-      g_object_get (child, "spinning", &active, NULL);
-      g_object_set (child, "spinning", !active, NULL);
+      gtk_widget_hide (child);
     }
 
   if (button)
     gtk_popover_popdown (GTK_POPOVER (gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER)));
+}
+
+static void
+delete_cb (GtkWidget *button, GtkWidget *child)
+{
+  gtk_widget_destroy (child);
+
+  gtk_popover_popdown (GTK_POPOVER (gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER)));
 }
 
 static void
@@ -266,7 +193,6 @@ pressed_cb (GtkGesture *gesture,
       GtkWidget *menu;
       GtkWidget *box;
       GtkWidget *item;
-      GdkClipboard *clipboard;
 
       pos_x = x;
       pos_y = y;
@@ -278,13 +204,9 @@ pressed_cb (GtkGesture *gesture,
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_container_add (GTK_CONTAINER (menu), box);
 
-      item = gtk_button_new_with_label ("New Label");
+      item = gtk_button_new_with_label ("New");
       gtk_button_set_has_frame (GTK_BUTTON (item), FALSE);
-      g_signal_connect (item, "clicked", G_CALLBACK (new_label_cb), widget);
-      gtk_container_add (GTK_CONTAINER (box), item);
-      item = gtk_button_new_with_label ("New Spinner");
-      gtk_button_set_has_frame (GTK_BUTTON (item), FALSE);
-      g_signal_connect (item, "clicked", G_CALLBACK (new_spinner_cb), widget);
+      g_signal_connect (item, "clicked", G_CALLBACK (new_item_cb), widget);
       gtk_container_add (GTK_CONTAINER (box), item);
 
       item = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
@@ -299,23 +221,6 @@ pressed_cb (GtkGesture *gesture,
       item = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_container_add (GTK_CONTAINER (box), item);
 
-      item = gtk_button_new_with_label ("Cut");
-      gtk_button_set_has_frame (GTK_BUTTON (item), FALSE);
-      gtk_widget_set_sensitive (item, child != NULL && child != widget);
-      g_signal_connect (item, "clicked", G_CALLBACK (cut_cb), child);
-      gtk_container_add (GTK_CONTAINER (box), item);
-      item = gtk_button_new_with_label ("Copy");
-      gtk_button_set_has_frame (GTK_BUTTON (item), FALSE);
-      gtk_widget_set_sensitive (item, child != NULL && child != widget);
-      g_signal_connect (item, "clicked", G_CALLBACK (copy_cb), child);
-      gtk_container_add (GTK_CONTAINER (box), item);
-      item = gtk_button_new_with_label ("Paste");
-      gtk_button_set_has_frame (GTK_BUTTON (item), FALSE);
-      clipboard = gdk_display_get_clipboard (gdk_display_get_default ());
-      gtk_widget_set_sensitive (item,
-                                gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (clipboard), GTK_TYPE_DEMO_WIDGET));
-      g_signal_connect (item, "clicked", G_CALLBACK (paste_cb), widget);
-      gtk_container_add (GTK_CONTAINER (box), item);
       item = gtk_button_new_with_label ("Delete");
       gtk_button_set_has_frame (GTK_BUTTON (item), FALSE);
       gtk_widget_set_sensitive (item, child != NULL && child != widget);
@@ -346,6 +251,165 @@ released_cb (GtkGesture *gesture,
     }
 }
 
+static GtkWidget *
+canvas_new (void)
+{
+  GtkWidget *canvas;
+  GtkDragSource *source;
+  GtkDropTarget *dest;
+  GtkGesture *gesture;
+
+  canvas = gtk_fixed_new ();
+  gtk_widget_set_hexpand (canvas, TRUE);
+  gtk_widget_set_vexpand (canvas, TRUE);
+  gtk_widget_add_css_class (canvas, "frame");
+
+  source = gtk_drag_source_new ();
+  gtk_drag_source_set_actions (source, GDK_ACTION_MOVE);
+  g_signal_connect (source, "prepare", G_CALLBACK (prepare), NULL);
+  g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), NULL);
+  g_signal_connect (source, "drag-end", G_CALLBACK (drag_end), NULL);
+  g_signal_connect (source, "drag-cancel", G_CALLBACK (drag_cancel), NULL);
+  gtk_widget_add_controller (canvas, GTK_EVENT_CONTROLLER (source));
+
+  dest = gtk_drop_target_new (GTK_TYPE_WIDGET, GDK_ACTION_MOVE);
+  g_signal_connect (dest, "drop", G_CALLBACK (drag_drop), NULL);
+  gtk_widget_add_controller (canvas, GTK_EVENT_CONTROLLER (dest));
+
+  gesture = gtk_gesture_click_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  g_signal_connect (gesture, "pressed", G_CALLBACK (pressed_cb), NULL);
+  g_signal_connect (gesture, "released", G_CALLBACK (released_cb), NULL);
+  gtk_widget_add_controller (canvas, GTK_EVENT_CONTROLLER (gesture));
+
+  return canvas;
+}
+
+static void
+set_color (GtkWidget *item,
+           GdkRGBA   *color)
+{
+  char *css;
+  char *str;
+  GtkStyleContext *context;
+  GtkCssProvider *provider;
+
+  str = gdk_rgba_to_string (color);
+  css = g_strdup_printf ("* { background: %s; padding: 10px; }", str);
+
+  context = gtk_widget_get_style_context (item);
+  provider = g_object_get_data (G_OBJECT (context), "style-provider");
+  if (provider)
+    gtk_style_context_remove_provider (context, GTK_STYLE_PROVIDER (provider));
+
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (provider, css, -1);
+  gtk_style_context_add_provider (gtk_widget_get_style_context (item), GTK_STYLE_PROVIDER (provider), 800);
+  g_object_set_data_full (G_OBJECT (context), "style-provider", provider, g_object_unref);
+
+  g_free (str);
+  g_free (css);
+}
+
+static gboolean
+item_drag_drop (GtkDropTarget *dest,
+                const GValue  *value,
+                double         x,
+                double         y)
+{
+  GtkWidget *item = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
+
+  set_color (item, g_value_get_boxed (value));
+
+  return TRUE;
+}
+
+static void
+angle_changed (GtkGestureRotate *gesture,
+               double            angle,
+               double            delta)
+{
+  GtkWidget *item = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+  TransformData *data = g_object_get_data (G_OBJECT (item), "transform-data");
+
+  data->delta = angle / M_PI * 180.0;
+
+  apply_transform (item);
+}
+
+static void
+rotate_done (GtkGesture *gesture)
+{
+  GtkWidget *item = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+  TransformData *data = g_object_get_data (G_OBJECT (item), "transform-data");
+
+  data->angle = data->angle + data->delta;
+  data->delta = 0;
+}
+
+static void
+click_done (GtkGesture *gesture)
+{
+  GtkWidget *item = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+  GtkWidget *canvas = gtk_widget_get_parent (item);
+  GtkWidget *last_child;
+
+  last_child = gtk_widget_get_last_child (canvas);
+  if (item != last_child)
+    gtk_widget_insert_after (item, canvas, last_child);
+}
+
+static int n_items = 0;
+
+static GtkWidget *
+canvas_item_new (double x,
+                 double y)
+{
+  GtkWidget *widget;
+  char *label;
+  char *id;
+  TransformData *transform_data;
+  GdkRGBA rgba;
+  GtkDropTarget *dest;
+  GtkGesture *gesture;
+
+  n_items++;
+
+  label = g_strdup_printf ("Item %d", n_items);
+  id = g_strdup_printf ("item%d", n_items);
+
+  gdk_rgba_parse (&rgba, "yellow");
+
+  widget = gtk_label_new (label);
+  gtk_widget_add_css_class (widget, "frame");
+  gtk_widget_set_name (widget, id);
+
+  set_color (widget, &rgba);
+  transform_data = g_new0 (TransformData, 1);
+  transform_data->x = x;
+  transform_data->y = y;
+  transform_data->angle = 0.0;
+  g_object_set_data_full (G_OBJECT (widget), "transform-data", transform_data, g_free);
+
+  g_free (label);
+  g_free (id);
+
+  dest = gtk_drop_target_new (GDK_TYPE_RGBA, GDK_ACTION_COPY);
+  g_signal_connect (dest, "drop", G_CALLBACK (item_drag_drop), NULL);
+  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (dest));
+
+  gesture = gtk_gesture_rotate_new ();
+  g_signal_connect (gesture, "angle-changed", G_CALLBACK (angle_changed), NULL);
+  g_signal_connect (gesture, "end", G_CALLBACK (rotate_done), NULL);
+  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture));
+
+  gesture = gtk_gesture_click_new ();
+  g_signal_connect (gesture, "released", G_CALLBACK (click_done), NULL);
+  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture));
+  
+  return widget;
+}
+
 static GtkWidget *window = NULL;
 
 GtkWidget *
@@ -353,37 +417,78 @@ do_dnd (GtkWidget *do_widget)
 {
   if (!window)
     {
-      GtkWidget *vbox, *fixed;
-      GtkGesture *multipress;
-      GtkCssProvider *provider;
+      GtkWidget *sw;
+      GtkWidget *canvas;
+      GtkWidget *widget;
+      GtkWidget *box, *box2, *box3;
+      const char *colors[] = {
+        "red", "green", "blue", "magenta", "orange", "gray", "black", "yellow",
+        "white", "gray", "brown", "pink",  "cyan", "bisque", "gold", "maroon",
+        "navy", "orchid", "olive", "peru", "salmon", "silver", "wheat",
+        NULL
+      };
+      int i;
+      int x, y;
 
+      widget = gtk_color_button_new ();
+      gtk_widget_destroy (widget);
+  
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
-      gtk_window_set_title (GTK_WINDOW (window), "Drag-and-drop");
+      gtk_window_set_title (GTK_WINDOW (window), "Drag-and-Drop");
+      gtk_window_set_default_size (GTK_WINDOW (window), 640, 480);
 
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
-      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), vbox);
+      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      gtk_container_add (GTK_CONTAINER (window), box);
 
-      fixed = gtk_fixed_new ();
-      gtk_container_add (GTK_CONTAINER (vbox), fixed);
-      gtk_widget_set_hexpand (fixed, TRUE);
-      gtk_widget_set_vexpand (fixed, TRUE);
+      box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+      gtk_container_add (GTK_CONTAINER (box), box2);
 
-      multipress = gtk_gesture_click_new ();
-      gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (multipress), 0);
-      g_signal_connect (multipress, "pressed", G_CALLBACK (pressed_cb), NULL);
-      g_signal_connect (multipress, "released", G_CALLBACK (released_cb), NULL);
-      gtk_widget_add_controller (fixed, GTK_EVENT_CONTROLLER (multipress));
+      canvas = canvas_new ();
+      gtk_container_add (GTK_CONTAINER (box2), canvas);
 
-      provider = gtk_css_provider_new ();
-      gtk_css_provider_load_from_resource (provider, "/dnd/dnd.css");
-      gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                                  GTK_STYLE_PROVIDER (provider),
-                                                  800);
+      n_items = 0;
+
+      x = y = 40;
+      for (i = 0; i < 4; i++)
+        {
+          GtkWidget *item;
+
+          item = canvas_item_new (x, y);
+          gtk_container_add (GTK_CONTAINER (canvas), item);
+          apply_transform (item);
+
+          x += 150;
+          y += 100;
+        }
+
+      sw = gtk_scrolled_window_new (NULL, NULL);
+      gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
+                                      GTK_POLICY_AUTOMATIC,
+                                      GTK_POLICY_NEVER);
+      gtk_container_add (GTK_CONTAINER (box), sw);
+
+      box3 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+      gtk_widget_add_css_class (box3, "linked");
+      gtk_container_add (GTK_CONTAINER (sw), box3);
+
+      for (i = 0; colors[i]; i++)
+        {
+          GdkRGBA rgba;
+          GtkWidget *swatch;
+
+          gdk_rgba_parse (&rgba, colors[i]);
+
+          swatch = g_object_new (g_type_from_name ("GtkColorSwatch"),
+                                 "rgba", &rgba,
+                                 "selectable", FALSE,
+                                 NULL);
+          gtk_container_add (GTK_CONTAINER (box3), swatch);
+        }
     }
 
   if (!gtk_widget_get_visible (window))

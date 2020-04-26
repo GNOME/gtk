@@ -44,7 +44,6 @@ do_infobar (GtkWidget *do_widget)
   GtkWidget *frame;
   GtkWidget *bar;
   GtkWidget *vbox;
-  GtkWidget *vbox2;
   GtkWidget *label;
   GtkWidget *actions;
   GtkWidget *button;
@@ -52,11 +51,13 @@ do_infobar (GtkWidget *do_widget)
   if (!window)
     {
       actions = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+      gtk_widget_add_css_class (actions, "linked");
 
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Info Bars");
+      gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
 
@@ -131,23 +132,18 @@ do_infobar (GtkWidget *do_widget)
       g_object_bind_property (bar, "revealed", button, "active", G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
       gtk_container_add (GTK_CONTAINER (actions), button);
 
-      frame = gtk_frame_new ("Info bars");
+      frame = gtk_frame_new ("An example of different info bars");
       gtk_widget_set_margin_top (frame, 8);
       gtk_widget_set_margin_bottom (frame, 8);
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
-      vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
-      gtk_widget_set_margin_start (vbox2, 8);
-      gtk_widget_set_margin_end (vbox2, 8);
-      gtk_widget_set_margin_top (vbox2, 8);
-      gtk_widget_set_margin_bottom (vbox2, 8);
-      gtk_container_add (GTK_CONTAINER (frame), vbox2);
+      gtk_widget_set_halign (actions, GTK_ALIGN_CENTER);
 
-      /* Standard message dialog */
-      label = gtk_label_new ("An example of different info bars");
-      gtk_container_add (GTK_CONTAINER (vbox2), label);
-
-      gtk_container_add (GTK_CONTAINER (vbox2), actions);
+      gtk_widget_set_margin_start (actions, 8);
+      gtk_widget_set_margin_end (actions, 8);
+      gtk_widget_set_margin_top (actions, 8);
+      gtk_widget_set_margin_bottom (actions, 8);
+      gtk_container_add (GTK_CONTAINER (frame), actions);
     }
 
   if (!gtk_widget_get_visible (window))

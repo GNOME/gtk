@@ -20,6 +20,7 @@
   </object>
   <object class="GtkWindow" id="window1">
     <property name="title" translatable="yes">Scales</property>
+    <property name="resizable">0</property>
     <child>
       <object class="GtkGrid" id="grid1">
         <property name="row-spacing">10</property>

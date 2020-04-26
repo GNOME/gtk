@@ -2,6 +2,7 @@
 <interface>
   <object class="GtkWindow" id="window1">
     <property name="title" translatable="yes">Stack</property>
+    <property name="resizable">0</property>
     <child>
       <object class="GtkGrid">
         <child>
@@ -25,6 +26,7 @@
                   <object class="GtkImage">
                     <property name="margin-top">20</property>
                     <property name="margin-bottom">20</property>
+                    <property name="pixel-size">100</property>
                     <property name="icon-name">org.gtk.Demo4</property>
                   </object>
                 </property>
