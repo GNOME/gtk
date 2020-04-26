@@ -90,7 +90,7 @@ totem_time_to_string (gint64   usecs,
 	if (hour > 0 || force_hour) {
 		if (!remaining) {
 			/* hour:minutes:seconds */
-			/* Translators: This is a time format, like "-9:05:02" for 9
+			/* Translators: This is a time format, like "9:05:02" for 9
 			 * hours, 5 minutes, and 2 seconds. You may change ":" to
 			 * the separator that your locale uses or use "%Id" instead
 			 * of "%d" if your locale uses localized digits.
