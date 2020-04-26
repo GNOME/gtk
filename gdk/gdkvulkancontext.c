@@ -97,7 +97,7 @@ gdk_vulkan_strerror (VkResult result)
 {
   /* If your compiler brought you here with a warning about missing
    * enumeration values, you're running a newer Vulkan version than
-   * the GTK developers )or you are a GTK developer) and have
+   * the GTK developers (or you are a GTK developer) and have
    * encountered a newly added Vulkan error message.
    * You want to add it to this enum now.
    *
@@ -208,6 +208,20 @@ gdk_vulkan_strerror (VkResult result)
 #if VK_HEADER_VERSION >= 131
     case VK_ERROR_UNKNOWN:
       return "An unknown error has occurred; either the application has provided invalid input, or an implementation failure has occurred.";
+#endif
+#if VK_HEADER_VERSION >= 135
+    case VK_ERROR_INCOMPATIBLE_VERSION_KHR:
+      return "Acceleration structure serialized with version as the version information is not compatible with device.";
+    case VK_THREAD_IDLE_KHR:
+      return "A deferred operation is not complete but there is currently no work for this thread to do at the time of this call.";
+    case VK_THREAD_DONE_KHR:
+      return "A deferred operation is not complete but there is no work remaining to assign to additional threads.";
+    case VK_OPERATION_DEFERRED_KHR:
+      return "A deferred operation was requested and at least some of the work was deferred.";
+    case VK_OPERATION_NOT_DEFERRED_KHR:
+      return "A deferred operation was requested and no operations were deferred.";
+    case VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT:
+      return "A requested pipeline creation would have required compilation, but the application requested compilation to not be performed.";
 #endif
     case VK_RESULT_RANGE_SIZE:
     case VK_RESULT_MAX_ENUM:
