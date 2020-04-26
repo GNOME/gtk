@@ -1425,14 +1425,16 @@ searchbar {
 windowcontrols {
   border-spacing: 6px;
 
-  &.start:dir(ltr),
-  &.end:dir(rtl) {
-    margin-right: 7px;
-  }
+  &:not(.empty) {
+    &.start:dir(ltr),
+    &.end:dir(rtl) {
+      margin-right: 7px;
+    }
 
-  &.start:dir(rtl),
-  &.end:dir(ltr) {
-    margin-left: 7px;
+    &.start:dir(rtl),
+    &.end:dir(ltr) {
+      margin-left: 7px;
+    }
   }
 
   button {
