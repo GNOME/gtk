@@ -47,24 +47,19 @@
  * gets one of the .horizontal or .vertical style classes.
  */
 
-typedef struct _GtkSeparatorClass         GtkSeparatorClass;
+typedef struct _GtkSeparatorClass GtkSeparatorClass;
 
 struct _GtkSeparator
 {
   GtkWidget parent_instance;
+
+  GtkOrientation orientation;
 };
 
 struct _GtkSeparatorClass
 {
   GtkWidgetClass parent_class;
 };
-
-typedef struct _GtkSeparatorPrivate GtkSeparatorPrivate;
-struct _GtkSeparatorPrivate
-{
-  GtkOrientation orientation;
-};
-
 
 enum {
   PROP_0,
@@ -73,7 +68,6 @@ enum {
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkSeparator, gtk_separator, GTK_TYPE_WIDGET,
-                         G_ADD_PRIVATE (GtkSeparator)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
 
 
@@ -84,14 +78,13 @@ gtk_separator_set_property (GObject      *object,
                             GParamSpec   *pspec)
 {
   GtkSeparator *separator = GTK_SEPARATOR (object);
-  GtkSeparatorPrivate *priv = gtk_separator_get_instance_private (separator);
 
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      if (priv->orientation != g_value_get_enum (value))
+      if (separator->orientation != g_value_get_enum (value))
         {
-          priv->orientation = g_value_get_enum (value);
+          separator->orientation = g_value_get_enum (value);
           _gtk_orientable_set_style_classes (GTK_ORIENTABLE (object));
           gtk_widget_queue_resize (GTK_WIDGET (object));
           g_object_notify_by_pspec (object, pspec);
@@ -110,12 +103,11 @@ gtk_separator_get_property (GObject    *object,
                             GParamSpec *pspec)
 {
   GtkSeparator *separator = GTK_SEPARATOR (object);
-  GtkSeparatorPrivate *priv = gtk_separator_get_instance_private (separator);
 
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      g_value_set_enum (value, priv->orientation);
+      g_value_set_enum (value, separator->orientation);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -126,9 +118,7 @@ gtk_separator_get_property (GObject    *object,
 static void
 gtk_separator_init (GtkSeparator *separator)
 {
-  GtkSeparatorPrivate *priv = gtk_separator_get_instance_private (separator);
-
-  priv->orientation = GTK_ORIENTATION_HORIZONTAL;
+  separator->orientation = GTK_ORIENTATION_HORIZONTAL;
 
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (separator));
 }
