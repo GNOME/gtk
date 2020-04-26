@@ -10429,9 +10429,9 @@ gtk_widget_set_alloc_needed (GtkWidget *widget)
       if (!priv->visible)
         break;
 
-      if (GTK_IS_WINDOW (widget))
+      if (GTK_IS_ROOT (widget))
         {
-          gtk_window_start_layout (GTK_WINDOW (widget));
+          gtk_root_start_layout (GTK_ROOT (widget));
           break;
         }
 

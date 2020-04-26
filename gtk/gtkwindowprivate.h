@@ -139,10 +139,6 @@ GtkWidget *      gtk_window_pick_popover (GtkWindow   *window,
 void             gtk_window_set_extra_input_region (GtkWindow      *window,
                                                     cairo_region_t *region);
 
-void             gtk_window_start_layout  (GtkWindow *window);
-void             gtk_window_stop_layout   (GtkWindow *window);
-void             gtk_window_queue_restyle (GtkWindow *window);
-
 
 G_END_DECLS
 
