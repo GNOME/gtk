@@ -1042,57 +1042,28 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         <child>
                           <object class="GtkBox" id="box26">
                             <property name="orientation">vertical</property>
-                            <property name="homogeneous">1</property>
                             <property name="spacing">6</property>
                             <property name="hexpand">1</property>
                             <child>
                               <object class="GtkFrame" id="frame1">
-                                <style>
-                                  <class name="border-inset"/>
-                                </style>
+                                <property name="valign">start</property>
                                 <child type="label">
                                   <object class="GtkLabel" id="label1">
-                                    <property name="label" translatable="yes">&lt;b&gt;Inset&lt;/b&gt;</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;Video&lt;/b&gt;</property>
                                     <property name="use-markup">1</property>
                                   </object>
                                 </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkFrame" id="frame2">
-                                <style>
-                                  <class name="border-outset"/>
-                                </style>
-                                <child type="label">
-                                  <object class="GtkLabel" id="label2">
-                                    <property name="label" translatable="yes">&lt;b&gt;Outset&lt;/b&gt;</property>
-                                    <property name="use-markup">1</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkFrame" id="frame3">
-                                <style>
-                                  <class name="border-groove"/>
-                                </style>
-                                <child type="label">
-                                  <object class="GtkLabel" id="label17">
-                                    <property name="label" translatable="yes">&lt;b&gt;Groove&lt;/b&gt;</property>
-                                    <property name="use-markup">1</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkFrame" id="frame4">
-                                <style>
-                                  <class name="border-ridge"/>
-                                </style>
-                                <child type="label">
-                                  <object class="GtkLabel" id="label18">
-                                    <property name="label" translatable="yes">&lt;b&gt;Ridge&lt;/b&gt;</property>
-                                    <property name="use-markup">1</property>
+                                <child>
+                                  <object class="GtkVideo">
+                                    <property name="halign">center</property>
+                                    <property name="valign">center</property>
+                                    <property name="margin-start">6</property>
+                                    <property name="margin-end">6</property>
+                                    <property name="margin-top">6</property>
+                                    <property name="margin-bottom">6</property>
+                                    <property name="autoplay">0</property>
+                                    <property name="loop">1</property>
+                                    <property name="file">resource:///org/gtk/WidgetFactory4/gtk-logo.webm</property>
                                   </object>
                                 </child>
                               </object>
