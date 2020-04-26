@@ -21,22 +21,18 @@
 
 #include "gtkheaderbarprivate.h"
 
-#include "gtkactionable.h"
 #include "gtkbox.h"
-#include "gtkbutton.h"
 #include "gtkbuildable.h"
 #include "gtkcenterlayout.h"
 #include "gtkcssnodeprivate.h"
-#include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
+#include "gtknative.h"
 #include "gtkprivate.h"
-#include "gtkseparator.h"
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
-#include "gtkwindowprivate.h"
-#include "gtknative.h"
+#include "gtkwindowcontrols.h"
 
 #include "a11y/gtkcontaineraccessible.h"
 
@@ -69,21 +65,20 @@
  * |[<!-- language="plain" -->
  * headerbar
  * ├── box.start
- * │   ╰── box
- * │       ├── [image.titlebutton.icon]
- * │       ├── [button.titlebutton.minimize]
- * │       ├── [button.titlebutton.maximize]
- * │       ╰── [button.titlebutton.close]
+ * │   ├── windowcontrols.start
+ * │   ╰── [other children]
  * ├── [Custom Title]
  * ╰── box.end
+ *     ├── [other children]
+ *     ╰── windowcontrols.end
  * ]|
  *
- * A #GtkHeaderBar's CSS node is called headerbar. It contains two box subnodes at the start
- * and end of the headerbar, as well as a center node that represents the title.
+ * A #GtkHeaderBar's CSS node is called headerbar. It contains two box subnodes
+ * at the start and end of the headerbar, as well as a center node that
+ * represents the title.
  *
- * The titlebuttons get their own box subnode, either in the start box or in the end box.
- * Which of the title buttons exist and where they are placed exactly depends on the
- * desktop environment.
+ * Each of the boxes contains a windowcontrols subnode, see #GtkWindowControls
+ * for details, as well as other children.
  */
 
 #define MIN_TITLE_CHARS 5
@@ -118,14 +113,10 @@ struct _GtkHeaderBarPrivate
 
   gboolean show_title_buttons;
   gchar *decoration_layout;
-  gboolean decoration_layout_set;
   gboolean track_default_decoration;
 
-  GtkWidget *titlebar_start_box;
-  GtkWidget *titlebar_end_box;
-
-  GtkWidget *titlebar_start_separator;
-  GtkWidget *titlebar_end_separator;
+  GtkWidget *start_window_controls;
+  GtkWidget *end_window_controls;
 
   GdkSurfaceState state;
 };
@@ -138,7 +129,6 @@ enum {
   PROP_CUSTOM_TITLE,
   PROP_SHOW_TITLE_BUTTONS,
   PROP_DECORATION_LAYOUT,
-  PROP_DECORATION_LAYOUT_SET,
   LAST_PROP
 };
 
@@ -220,255 +210,31 @@ create_title_box (const char *title,
   return label_box;
 }
 
-static gboolean
-update_window_icon (GtkHeaderBar *bar,
-                    GtkWindow    *window,
-                    GtkWidget    *icon)
-{
-  GdkPaintable *paintable;
-  gint scale;
-
-  scale = gtk_widget_get_scale_factor (icon);
-  paintable = gtk_window_get_icon_for_size (window, 20 * scale);
-
-  if (paintable)
-    {
-      gtk_image_set_from_paintable (GTK_IMAGE (icon), paintable);
-      g_object_unref (paintable);
-      gtk_widget_show (icon);
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
 static void
-_gtk_header_bar_update_separator_visibility (GtkHeaderBar *bar)
+create_window_controls (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
-  gboolean have_visible_at_start = FALSE;
-  gboolean have_visible_at_end = FALSE;
-  GList *l;
-  GList *children;
+  GtkWidget *controls;
 
-  children = gtk_container_get_children (GTK_CONTAINER (priv->start_box));
-  for (l = children; l; l = l->next)
-    {
-      if (l->data != priv->titlebar_start_box && gtk_widget_get_visible (l->data))
-        have_visible_at_start = TRUE;
-    }
-  g_list_free (children);
+  controls = gtk_window_controls_new (GTK_PACK_START);
+  g_object_bind_property (bar, "decoration-layout",
+                          controls, "decoration-layout",
+                          G_BINDING_SYNC_CREATE);
+  g_object_bind_property (controls, "empty",
+                          controls, "visible",
+                          G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
+  gtk_container_add (GTK_CONTAINER (priv->start_box), controls);
+  priv->start_window_controls = controls;
 
-  children = gtk_container_get_children (GTK_CONTAINER (priv->end_box));
-  for (l = children; l; l = l->next)
-    {
-      if (l->data != priv->titlebar_end_box && gtk_widget_get_visible (l->data))
-        have_visible_at_end = TRUE;
-    }
-  g_list_free (children);
-
-  if (priv->titlebar_start_separator != NULL)
-    gtk_widget_set_visible (priv->titlebar_start_separator, have_visible_at_start);
-
-  if (priv->titlebar_end_separator != NULL)
-    gtk_widget_set_visible (priv->titlebar_end_separator, have_visible_at_end);
-}
-
-static void
-update_window_buttons (GtkHeaderBar *bar)
-{
-  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
-  GtkWidget *widget = GTK_WIDGET (bar);
-  GtkWidget *toplevel;
-  GtkWindow *window;
-  gchar *layout_desc;
-  gchar **tokens, **t;
-  gint i, j;
-  gboolean is_sovereign_window;
-
-  if (!gtk_widget_get_realized (widget))
-    return;
-
-  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
-  if (!GTK_IS_WINDOW (toplevel))
-    return;
-
-  if (priv->titlebar_start_box)
-    {
-      gtk_widget_unparent (priv->titlebar_start_box);
-      priv->titlebar_start_box = NULL;
-      priv->titlebar_start_separator = NULL;
-    }
-  if (priv->titlebar_end_box)
-    {
-      gtk_widget_unparent (priv->titlebar_end_box);
-      priv->titlebar_end_box = NULL;
-      priv->titlebar_end_separator = NULL;
-    }
-
-  if (!priv->show_title_buttons)
-    return;
-
-  g_object_get (gtk_widget_get_settings (widget),
-                "gtk-decoration-layout", &layout_desc,
-                NULL);
-
-  if (priv->decoration_layout_set)
-    {
-      g_free (layout_desc);
-      layout_desc = g_strdup (priv->decoration_layout);
-    }
-
-  window = GTK_WINDOW (toplevel);
-
-  is_sovereign_window = !gtk_window_get_modal (window) &&
-                         gtk_window_get_transient_for (window) == NULL;
-
-  tokens = g_strsplit (layout_desc, ":", 2);
-  if (tokens)
-    {
-      for (i = 0; i < 2; i++)
-        {
-          GtkWidget *box;
-          GtkWidget *separator;
-          int n_children = 0;
-
-          if (tokens[i] == NULL)
-            break;
-
-          t = g_strsplit (tokens[i], ",", -1);
-
-          separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-          gtk_widget_add_css_class (separator, "titlebutton");
-
-          box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-
-          for (j = 0; t[j]; j++)
-            {
-              GtkWidget *button = NULL;
-              GtkWidget *image = NULL;
-              AtkObject *accessible;
-
-              if (strcmp (t[j], "icon") == 0 &&
-                  is_sovereign_window)
-                {
-                  button = gtk_image_new ();
-                  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-                  gtk_widget_add_css_class (button, "titlebutton");
-                  gtk_widget_add_css_class (button, "icon");
-
-                  if (!update_window_icon (bar, window, button))
-                    {
-                      g_object_ref_sink (button);
-                      g_object_unref (button);
-                      button = NULL;
-                    }
-                }
-              else if (strcmp (t[j], "minimize") == 0 &&
-                       is_sovereign_window)
-                {
-                  button = gtk_button_new ();
-                  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-                  gtk_widget_add_css_class (button, "titlebutton");
-                  gtk_widget_add_css_class (button, "minimize");
-                  image = gtk_image_new_from_icon_name ("window-minimize-symbolic");
-                  g_object_set (image, "use-fallback", TRUE, NULL);
-                  gtk_container_add (GTK_CONTAINER (button), image);
-                  gtk_widget_set_can_focus (button, FALSE);
-                  gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
-                                                  "window.minimize");
-
-                  accessible = gtk_widget_get_accessible (button);
-                  if (GTK_IS_ACCESSIBLE (accessible))
-                    atk_object_set_name (accessible, _("Minimize"));
-                }
-              else if (strcmp (t[j], "maximize") == 0 &&
-                       gtk_window_get_resizable (window) &&
-                       is_sovereign_window)
-                {
-                  const gchar *icon_name;
-                  gboolean maximized = gtk_window_is_maximized (window);
-
-                  icon_name = maximized ? "window-restore-symbolic" : "window-maximize-symbolic";
-                  button = gtk_button_new ();
-                  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-                  gtk_widget_add_css_class (button, "titlebutton");
-                  gtk_widget_add_css_class (button, "maximize");
-                  image = gtk_image_new_from_icon_name (icon_name);
-                  g_object_set (image, "use-fallback", TRUE, NULL);
-                  gtk_container_add (GTK_CONTAINER (button), image);
-                  gtk_widget_set_can_focus (button, FALSE);
-                  gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
-                                                  "window.toggle-maximized");
-
-                  accessible = gtk_widget_get_accessible (button);
-                  if (GTK_IS_ACCESSIBLE (accessible))
-                    atk_object_set_name (accessible, maximized ? _("Restore") : _("Maximize"));
-                }
-              else if (strcmp (t[j], "close") == 0 &&
-                       gtk_window_get_deletable (window))
-                {
-                  button = gtk_button_new ();
-                  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-                  image = gtk_image_new_from_icon_name ("window-close-symbolic");
-                  gtk_widget_add_css_class (button, "titlebutton");
-                  gtk_widget_add_css_class (button, "close");
-                  g_object_set (image, "use-fallback", TRUE, NULL);
-                  gtk_container_add (GTK_CONTAINER (button), image);
-                  gtk_widget_set_can_focus (button, FALSE);
-                  gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
-                                                  "window.close");
-
-                  accessible = gtk_widget_get_accessible (button);
-                  if (GTK_IS_ACCESSIBLE (accessible))
-                    atk_object_set_name (accessible, _("Close"));
-                }
-
-              if (button)
-                {
-                  gtk_container_add (GTK_CONTAINER (box), button);
-                  n_children ++;
-                }
-            }
-          g_strfreev (t);
-
-          if (n_children == 0)
-            {
-              g_object_ref_sink (box);
-              g_object_unref (box);
-              g_object_ref_sink (separator);
-              g_object_unref (separator);
-              continue;
-            }
-
-          gtk_container_add (GTK_CONTAINER (box), separator);
-          if (i == 1)
-            gtk_box_reorder_child_after (GTK_BOX (box), separator, NULL);
-
-          if (i == 0)
-            gtk_widget_add_css_class (box, GTK_STYLE_CLASS_LEFT);
-          else
-            gtk_widget_add_css_class (box, GTK_STYLE_CLASS_RIGHT);
-
-          if (i == 0)
-            {
-              priv->titlebar_start_box = box;
-              priv->titlebar_start_separator = separator;
-              gtk_container_add (GTK_CONTAINER (priv->start_box), box);
-            }
-          else
-            {
-              priv->titlebar_end_box = box;
-              priv->titlebar_end_separator = separator;
-              gtk_container_add (GTK_CONTAINER (priv->end_box), box);
-            }
-        }
-      g_strfreev (tokens);
-    }
-  g_free (layout_desc);
-
-  _gtk_header_bar_update_separator_visibility (bar);
+  controls = gtk_window_controls_new (GTK_PACK_END);
+  g_object_bind_property (bar, "decoration-layout",
+                          controls, "decoration-layout",
+                          G_BINDING_SYNC_CREATE);
+  g_object_bind_property (controls, "empty",
+                          controls, "visible",
+                          G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
+  gtk_container_add (GTK_CONTAINER (priv->end_box), controls);
+  priv->end_window_controls = controls;
 }
 
 static void
@@ -491,7 +257,7 @@ update_default_decoration (GtkHeaderBar *bar)
            w != NULL;
            w = _gtk_widget_get_next_sibling (w))
         {
-          if (w != priv->titlebar_start_box)
+          if (w != priv->start_window_controls)
             {
               have_children = TRUE;
               break;
@@ -503,7 +269,7 @@ update_default_decoration (GtkHeaderBar *bar)
              w != NULL;
              w = _gtk_widget_get_next_sibling (w))
           {
-            if (w != priv->titlebar_end_box)
+            if (w != priv->end_window_controls)
               {
                 have_children = TRUE;
                 break;
@@ -804,10 +570,6 @@ gtk_header_bar_get_property (GObject    *object,
       g_value_set_string (value, gtk_header_bar_get_decoration_layout (bar));
       break;
 
-    case PROP_DECORATION_LAYOUT_SET:
-      g_value_set_boolean (value, priv->decoration_layout_set);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -821,7 +583,6 @@ gtk_header_bar_set_property (GObject      *object,
                              GParamSpec   *pspec)
 {
   GtkHeaderBar *bar = GTK_HEADER_BAR (object);
-  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
 
   switch (prop_id)
     {
@@ -849,22 +610,10 @@ gtk_header_bar_set_property (GObject      *object,
       gtk_header_bar_set_decoration_layout (bar, g_value_get_string (value));
       break;
 
-    case PROP_DECORATION_LAYOUT_SET:
-      priv->decoration_layout_set = g_value_get_boolean (value);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-}
-
-static void
-notify_child_cb (GObject      *child,
-                 GParamSpec   *pspec,
-                 GtkHeaderBar *bar)
-{
-  _gtk_header_bar_update_separator_visibility (bar);
 }
 
 static void
@@ -885,9 +634,6 @@ gtk_header_bar_pack (GtkHeaderBar *bar,
       gtk_container_add (GTK_CONTAINER (priv->end_box), widget);
       gtk_box_reorder_child_after (GTK_BOX (priv->end_box), widget, NULL);
     }
-
-  g_signal_connect (widget, "notify::visible", G_CALLBACK (notify_child_cb), bar);
-  _gtk_header_bar_update_separator_visibility (bar);
 
   if (priv->track_default_decoration)
     update_default_decoration (bar);
@@ -914,13 +660,11 @@ gtk_header_bar_remove (GtkContainer *container,
 
   if (parent == priv->start_box)
     {
-      g_signal_handlers_disconnect_by_func (widget, notify_child_cb, bar);
       gtk_container_remove (GTK_CONTAINER (priv->start_box), widget);
       removed = TRUE;
     }
   else if (parent == priv->end_box)
     {
-      g_signal_handlers_disconnect_by_func (widget, notify_child_cb, bar);
       gtk_container_remove (GTK_CONTAINER (priv->end_box), widget);
       removed = TRUE;
     }
@@ -931,13 +675,8 @@ gtk_header_bar_remove (GtkContainer *container,
       removed = TRUE;
     }
 
-  if (removed)
-    {
-      _gtk_header_bar_update_separator_visibility (bar);
-
-      if (priv->track_default_decoration)
-        update_default_decoration (bar);
-    }
+  if (removed && priv->track_default_decoration)
+    update_default_decoration (bar);
 }
 
 static void
@@ -956,7 +695,7 @@ gtk_header_bar_forall (GtkContainer *container,
         {
           GtkWidget *next = _gtk_widget_get_next_sibling (w);
 
-          if (w != priv->titlebar_start_box)
+          if (w != priv->start_window_controls)
             (* callback) (w, callback_data);
 
           w = next;
@@ -973,7 +712,7 @@ gtk_header_bar_forall (GtkContainer *container,
         {
           GtkWidget *next = _gtk_widget_get_next_sibling (w);
 
-          if (w != priv->titlebar_end_box)
+          if (w != priv->end_window_controls)
             (* callback) (w, callback_data);
 
           w = next;
@@ -987,93 +726,6 @@ gtk_header_bar_child_type (GtkContainer *container)
   return GTK_TYPE_WIDGET;
 }
 
-static void surface_state_changed (GtkWidget *widget);
-
-static void window_notify_cb (GtkHeaderBar *header_bar,
-                              GParamSpec   *pspec,
-                              GtkWindow    *window);
-
-static void
-gtk_header_bar_realize (GtkWidget *widget)
-{
-  GtkSettings *settings;
-  GtkWidget *root;
-
-  GTK_WIDGET_CLASS (gtk_header_bar_parent_class)->realize (widget);
-
-  settings = gtk_widget_get_settings (widget);
-  g_signal_connect_swapped (settings, "notify::gtk-decoration-layout",
-                            G_CALLBACK (update_window_buttons), widget);
-  g_signal_connect_swapped (gtk_native_get_surface (gtk_widget_get_native (widget)), "notify::state",
-                            G_CALLBACK (surface_state_changed), widget);
-
-  root = GTK_WIDGET (gtk_widget_get_root (widget));
-
-  if (GTK_IS_WINDOW (root))
-    g_signal_connect_swapped (root, "notify",
-                              G_CALLBACK (window_notify_cb), widget);
-
-  update_window_buttons (GTK_HEADER_BAR (widget));
-}
-
-static void
-gtk_header_bar_unrealize (GtkWidget *widget)
-{
-  GtkSettings *settings;
-
-  settings = gtk_widget_get_settings (widget);
-
-  g_signal_handlers_disconnect_by_func (settings, update_window_buttons, widget);
-  g_signal_handlers_disconnect_by_func (gtk_native_get_surface (gtk_widget_get_native (widget)), surface_state_changed, widget);
-  g_signal_handlers_disconnect_by_func (gtk_widget_get_root (widget), window_notify_cb, widget);
-
-  GTK_WIDGET_CLASS (gtk_header_bar_parent_class)->unrealize (widget);
-}
-
-static void
-surface_state_changed (GtkWidget *widget)
-{
-  GtkHeaderBar *bar = GTK_HEADER_BAR (widget);
-  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
-  GdkSurfaceState changed, new_state;
-
-  new_state = gdk_toplevel_get_state (GDK_TOPLEVEL (gtk_native_get_surface (gtk_widget_get_native (widget))));
-  changed = new_state ^ priv->state;
-  priv->state = new_state;
-
-  if (changed & (GDK_SURFACE_STATE_FULLSCREEN |
-                 GDK_SURFACE_STATE_MAXIMIZED |
-                 GDK_SURFACE_STATE_TILED |
-                 GDK_SURFACE_STATE_TOP_TILED |
-                 GDK_SURFACE_STATE_RIGHT_TILED |
-                 GDK_SURFACE_STATE_BOTTOM_TILED |
-                 GDK_SURFACE_STATE_LEFT_TILED))
-    update_window_buttons (bar);
-}
-
-static void
-window_notify_cb (GtkHeaderBar *header_bar,
-                  GParamSpec   *pspec,
-                  GtkWindow    *window)
-{
-  if (pspec->name == I_("deletable") ||
-      pspec->name == I_("icon-name") ||
-      pspec->name == I_("modal") ||
-      pspec->name == I_("resizable") ||
-      pspec->name == I_("transient-for"))
-    update_window_buttons (header_bar);
-}
-
-static void
-gtk_header_bar_root (GtkWidget *widget)
-{
-  GtkHeaderBar *bar = GTK_HEADER_BAR (widget);
-
-  GTK_WIDGET_CLASS (gtk_header_bar_parent_class)->root (widget);
-
-  update_window_buttons (bar);
-}
-
 static void
 gtk_header_bar_class_init (GtkHeaderBarClass *class)
 {
@@ -1085,10 +737,6 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   object_class->finalize = gtk_header_bar_finalize;
   object_class->get_property = gtk_header_bar_get_property;
   object_class->set_property = gtk_header_bar_set_property;
-
-  widget_class->realize = gtk_header_bar_realize;
-  widget_class->unrealize = gtk_header_bar_unrealize;
-  widget_class->root = gtk_header_bar_root;
 
   container_class->add = gtk_header_bar_add;
   container_class->remove = gtk_header_bar_remove;
@@ -1151,18 +799,6 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkHeaderBar:decoration-layout-set:
-   *
-   * Set to %TRUE if #GtkHeaderBar:decoration-layout is set.
-   */
-  header_bar_props[PROP_DECORATION_LAYOUT_SET] =
-      g_param_spec_boolean ("decoration-layout-set",
-                            P_("Decoration Layout Set"),
-                            P_("Whether the decoration-layout property has been set"),
-                            FALSE,
-                            GTK_PARAM_READWRITE);
-
-  /**
    * GtkHeaderBar:has-subtitle:
    *
    * If %TRUE, reserve space for a subtitle, even if none
@@ -1193,7 +829,6 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   priv->custom_title = NULL;
   priv->has_subtitle = TRUE;
   priv->decoration_layout = NULL;
-  priv->decoration_layout_set = FALSE;
   priv->state = GDK_SURFACE_STATE_WITHDRAWN;
 
   layout = gtk_widget_get_layout_manager (GTK_WIDGET (bar));
@@ -1324,7 +959,15 @@ gtk_header_bar_set_show_title_buttons (GtkHeaderBar *bar,
     return;
 
   priv->show_title_buttons = setting;
-  update_window_buttons (bar);
+
+  if (setting)
+    create_window_controls (bar);
+  else
+    {
+      g_clear_pointer (&priv->start_window_controls, gtk_widget_unparent);
+      g_clear_pointer (&priv->end_window_controls, gtk_widget_unparent);
+    }
+
   g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_SHOW_TITLE_BUTTONS]);
 }
 
@@ -1416,12 +1059,8 @@ gtk_header_bar_set_decoration_layout (GtkHeaderBar *bar,
 
   g_free (priv->decoration_layout);
   priv->decoration_layout = g_strdup (layout);
-  priv->decoration_layout_set = (layout != NULL);
-
-  update_window_buttons (bar);
 
   g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_DECORATION_LAYOUT]);
-  g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_DECORATION_LAYOUT_SET]);
 }
 
 /**

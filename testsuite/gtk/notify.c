@@ -26,8 +26,8 @@
 static void
 assert_notifies (GObject    *object,
                  const char *property,
-                 guint       expected,
-                 guint       counted)
+                 guint       counted,
+                 guint       expected)
 {
   if (expected == counted)
     return;

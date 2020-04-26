@@ -214,4 +214,5 @@ gtk_viewport_get_type
 gtk_volume_button_get_type
 gtk_widget_get_type
 gtk_window_get_type
+gtk_window_controls_get_type
 gtk_window_group_get_type

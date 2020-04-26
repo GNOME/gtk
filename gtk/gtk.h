@@ -252,6 +252,7 @@
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkwidgetpaintable.h>
 #include <gtk/gtkwindow.h>
+#include <gtk/gtkwindowcontrols.h>
 #include <gtk/gtkwindowgroup.h>
 
 #include <gtk/gtk-autocleanups.h>
