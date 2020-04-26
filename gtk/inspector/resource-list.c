@@ -30,6 +30,8 @@
 #include "gtktreeselection.h"
 #include "gtktreestore.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtkpicture.h"
+#include "gtkmediafile.h"
 
 #include <glib/gi18n-lib.h>
 
@@ -51,6 +53,7 @@ struct _GtkInspectorResourceListPrivate
 {
   GtkTreeStore *model;
   GtkTextBuffer *buffer;
+  GtkWidget *video;
   GtkWidget *image;
   GtkWidget *content;
   GtkWidget *name_label;
@@ -193,9 +196,11 @@ populate_details (GtkInspectorResourceList *rl,
       gchar *text;
       gchar *content_image;
       gchar *content_text;
+      gchar *content_video;
 
       content_image = g_content_type_from_mime_type ("image/*");
       content_text = g_content_type_from_mime_type ("text/*");
+      content_video = g_content_type_from_mime_type ("video/*");
 
       data = g_bytes_get_data (bytes, &size);
       type = g_content_type_guess (name, data, size, NULL);
@@ -215,8 +220,19 @@ populate_details (GtkInspectorResourceList *rl,
         }
       else if (g_content_type_is_a (type, content_image))
         {
-          gtk_image_set_from_resource (GTK_IMAGE (rl->priv->image), path);
+          gtk_picture_set_resource (GTK_PICTURE (rl->priv->image), path);
           gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "image");
+        }
+      else if (g_content_type_is_a (type, content_video))
+        {
+          GtkMediaStream *stream;
+
+          stream = gtk_media_file_new_for_resource (path);
+          gtk_media_stream_set_loop (GTK_MEDIA_STREAM (stream), TRUE);
+          gtk_picture_set_paintable (GTK_PICTURE (rl->priv->image), GDK_PAINTABLE (stream));
+          gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "image");
+          gtk_media_stream_play (GTK_MEDIA_STREAM (stream));
+          g_object_unref (stream);
         }
       else
         {
