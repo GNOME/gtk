@@ -75,7 +75,7 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 static void gtk_overlay_buildable_init (GtkBuildableIface *iface);
 
-typedef struct _GtkOverlayClass    GtkOverlayClass;
+typedef struct _GtkOverlayClass GtkOverlayClass;
 
 struct _GtkOverlay
 {
@@ -91,12 +91,7 @@ struct _GtkOverlayClass
                                   GtkAllocation *allocation);
 };
 
-typedef struct {
-  GtkLayoutManager *layout;
-} GtkOverlayPrivate;
-
 G_DEFINE_TYPE_WITH_CODE (GtkOverlay, gtk_overlay, GTK_TYPE_BIN,
-                         G_ADD_PRIVATE (GtkOverlay)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_overlay_buildable_init))
 
@@ -331,9 +326,6 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
 static void
 gtk_overlay_init (GtkOverlay *overlay)
 {
-  GtkOverlayPrivate *priv = gtk_overlay_get_instance_private (overlay);
-
-  priv->layout = gtk_widget_get_layout_manager (GTK_WIDGET (overlay));
 }
 
 static GtkBuildableIface *parent_buildable_iface;
@@ -424,13 +416,14 @@ gtk_overlay_set_measure_overlay (GtkOverlay *overlay,
 				 GtkWidget  *widget,
 				 gboolean    measure)
 {
-  GtkOverlayPrivate *priv = gtk_overlay_get_instance_private (overlay);
+  GtkLayoutManager *layout;
   GtkOverlayLayoutChild *child;
 
   g_return_if_fail (GTK_IS_OVERLAY (overlay));
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  child = GTK_OVERLAY_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (priv->layout, widget));
+  layout = gtk_widget_get_layout_manager (GTK_WIDGET (overlay));
+  child = GTK_OVERLAY_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (layout, widget));
   gtk_overlay_layout_child_set_measure (child, measure);
 }
 
@@ -448,13 +441,14 @@ gboolean
 gtk_overlay_get_measure_overlay (GtkOverlay *overlay,
 				 GtkWidget  *widget)
 {
-  GtkOverlayPrivate *priv = gtk_overlay_get_instance_private (overlay);
+  GtkLayoutManager *layout;
   GtkOverlayLayoutChild *child;
 
   g_return_val_if_fail (GTK_IS_OVERLAY (overlay), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  child = GTK_OVERLAY_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (priv->layout, widget));
+  layout = gtk_widget_get_layout_manager (GTK_WIDGET (overlay));
+  child = GTK_OVERLAY_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (layout, widget));
   return gtk_overlay_layout_child_get_measure (child);
 }
 
@@ -472,13 +466,14 @@ gtk_overlay_set_clip_overlay (GtkOverlay *overlay,
                               GtkWidget  *widget,
                               gboolean    clip_overlay)
 {
-  GtkOverlayPrivate *priv = gtk_overlay_get_instance_private (overlay);
+  GtkLayoutManager *layout;
   GtkOverlayLayoutChild *child;
 
   g_return_if_fail (GTK_IS_OVERLAY (overlay));
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  child = GTK_OVERLAY_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (priv->layout, widget));
+  layout = gtk_widget_get_layout_manager (GTK_WIDGET (overlay));
+  child = GTK_OVERLAY_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (layout, widget));
   gtk_overlay_layout_child_set_clip_overlay (child, clip_overlay);
 }
 
@@ -496,13 +491,14 @@ gboolean
 gtk_overlay_get_clip_overlay (GtkOverlay *overlay,
                               GtkWidget  *widget)
 {
-  GtkOverlayPrivate *priv = gtk_overlay_get_instance_private (overlay);
+  GtkLayoutManager *layout;
   GtkOverlayLayoutChild *child;
 
   g_return_val_if_fail (GTK_IS_OVERLAY (overlay), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  child = GTK_OVERLAY_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (priv->layout, widget));
+  layout = gtk_widget_get_layout_manager (GTK_WIDGET (overlay));
+  child = GTK_OVERLAY_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (layout, widget));
 
   return gtk_overlay_layout_child_get_clip_overlay (child);
 }
