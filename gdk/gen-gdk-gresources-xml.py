@@ -25,7 +25,7 @@ srcdir = sys.argv[1]
 xml = '''<?xml version='1.0' encoding='UTF-8'?>
 <gresources>
   <gresource prefix='/org/gtk/libgdk'>
-
+    <file alias='cursor/default'>default_cursor.png</file>
 '''
 
 def get_files(subdir,extension):
