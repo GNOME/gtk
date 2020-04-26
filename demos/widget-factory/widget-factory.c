@@ -324,6 +324,14 @@ activate_inspector (GSimpleAction *action,
 }
 
 static void
+activate_print (GSimpleAction *action,
+                GVariant      *parameter,
+                gpointer       user_data)
+{
+  g_print ("Activate action %s\n", g_action_get_name (G_ACTION (action)));
+}
+
+static void
 spin_value_changed (GtkAdjustment *adjustment, GtkWidget *label)
 {
   GtkWidget *w;
@@ -1714,6 +1722,7 @@ activate (GApplication *app)
     { "open", activate_open, NULL, NULL, NULL },
     { "record", activate_record, NULL, NULL, NULL },
     { "lock", activate_lock, NULL, NULL, NULL },
+    { "print", activate_print, NULL, NULL, NULL },
   };
   struct {
     const gchar *action_and_target;
@@ -2077,7 +2086,6 @@ main (int argc, char *argv[])
     { "water", NULL, NULL, "true", NULL },
     { "dessert", NULL, "s", "'bars'", NULL },
     { "pay", NULL, "s", NULL, NULL },
-    { "print", activate_action, NULL, NULL, NULL },
     { "share", activate_action, NULL, NULL, NULL },
     { "labels", activate_action, NULL, NULL, NULL },
     { "new", activate_action, NULL, NULL, NULL },

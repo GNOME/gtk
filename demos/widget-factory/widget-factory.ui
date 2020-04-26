@@ -2482,7 +2482,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <child>
                                               <object class="GtkButton" id="print_button">
                                                 <property name="label">Print</property>
-                                                <property name="action-name">app.print</property>
+                                                <property name="action-name">win.print</property>
                                               </object>
                                             </child>
                                           </object>
@@ -3310,7 +3310,7 @@ bad things might happen.</property>
                           </object>
                         </property>
                         <property name="iconic">1</property>
-                        <property name="action-name">app.print</property>
+                        <property name="action-name">win.print</property>
                         <property name="hexpand">1</property>
                         <property name="halign">center</property>
                         <style>
@@ -3533,7 +3533,7 @@ bad things might happen.</property>
       <attribute name="display-hint">circular-buttons</attribute>
       <item>
         <attribute name="verb-icon">printer-symbolic</attribute>
-        <attribute name="action">app.print</attribute>
+        <attribute name="action">win.print</attribute>
       </item>
       <item>
         <attribute name="verb-icon">emblem-shared-symbolic</attribute>
