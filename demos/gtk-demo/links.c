@@ -1,7 +1,7 @@
 /* Links
  *
  * GtkLabel can show hyperlinks. The default action is to call
- * gtk_show_uri_on_window() on their URI, but it is possible to override
+ * gtk_show_uri() on their URI, but it is possible to override
  * this with a custom handler.
  */
 
@@ -30,6 +30,8 @@ activate_link (GtkWidget   *label,
                  GTK_DIALOG_DESTROY_WITH_PARENT,
                  GTK_MESSAGE_INFO,
                  GTK_BUTTONS_OK,
+                 "Keyboard navigation");
+      gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog),
                  "The term <i>keynav</i> is a shorthand for "
                  "keyboard navigation and refers to the process of using "
                  "a program (exclusively) via keyboard input.");
@@ -56,21 +58,29 @@ do_links (GtkWidget *do_widget)
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Links");
+      gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       label = gtk_label_new ("Some <a href=\"http://en.wikipedia.org/wiki/Text\""
-                             "title=\"plain text\">text</a> may be marked up\n"
-                             "as hyperlinks, which can be clicked\n"
-                             "or activated via <a href=\"keynav\">keynav</a>\n"
-                             "and they work fine with other markup, like when\n"
+                             "title=\"plain text\">text</a> may be marked up "
+                             "as hyperlinks, which can be clicked "
+                             "or activated via <a href=\"keynav\">keynav</a> "
+                             "and they work fine with other markup, like when "
                              "searching on <a href=\"http://www.google.com/\">"
                              "<span color=\"#0266C8\">G</span><span color=\"#F90101\">o</span>"
                              "<span color=\"#F2B50F\">o</span><span color=\"#0266C8\">g</span>"
                              "<span color=\"#00933B\">l</span><span color=\"#F90101\">e</span>"
                              "</a>.");
       gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+      gtk_label_set_max_width_chars (GTK_LABEL (label), 40);
+      gtk_label_set_wrap (GTK_LABEL (label), TRUE);
+      gtk_label_set_wrap_mode (GTK_LABEL (label), PANGO_WRAP_WORD);
       g_signal_connect (label, "activate-link", G_CALLBACK (activate_link), NULL);
+      gtk_widget_set_margin_start (label, 20);
+      gtk_widget_set_margin_end (label, 20);
+      gtk_widget_set_margin_top (label, 20);
+      gtk_widget_set_margin_bottom (label, 20);
       gtk_container_add (GTK_CONTAINER (window), label);
       gtk_widget_show (label);
     }
