@@ -425,7 +425,6 @@ xfails = [
   'background-origin.ui',
   # see above
   #'sizegroups-evolution-identity-page.ui',
-  'window-show-contents-on-map.ui',
   # these depend on details of text layout
   'label-sizing.ui',
 ]
