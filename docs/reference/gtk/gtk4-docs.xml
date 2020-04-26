@@ -297,6 +297,7 @@
       <xi:include href="xml/gtksnapshot.xml" />
       <xi:include href="xml/gtktooltip.xml" />
       <xi:include href="xml/gtkwidgetpaintable.xml" />
+      <xi:include href="xml/gtkwindowcontrols.xml" />
     </chapter>
 
     <chapter id="AbstractObjects">
