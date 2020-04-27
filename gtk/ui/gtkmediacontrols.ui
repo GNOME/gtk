@@ -30,7 +30,11 @@
         <child>
           <object class="GtkBox" id="time_box">
             <child>
-              <object class="GtkLabel" id="time_label"/>
+              <object class="GtkLabel" id="time_label">
+                <attributes>
+                  <attribute name="font-features" value="tnum=1"/>
+                </attributes>
+              </object>
             </child>
             <child>
               <object class="GtkScale" id="seek_scale">
@@ -41,7 +45,11 @@
               </object>
             </child>
             <child>
-              <object class="GtkLabel" id="duration_label"/>
+              <object class="GtkLabel" id="duration_label">
+                <attributes>
+                  <attribute name="font-features" value="tnum=1"/>
+                </attributes>
+              </object>
             </child>
           </object>
         </child>
