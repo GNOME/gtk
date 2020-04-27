@@ -17,14 +17,14 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GDK_MACOS_DEVICE_PRIVATE_H__
-#define __GDK_MACOS_DEVICE_PRIVATE_H__
+#ifndef __GDK_MACOS_DEVICE_H__
+#define __GDK_MACOS_DEVICE_H__
 
 #if !defined (__GDKMACOS_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/macos/gdkmacos.h> can be included directly."
 #endif
 
-#include "gdkdeviceprivate.h"
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
@@ -35,8 +35,9 @@ typedef struct _GdkMacosDeviceClass GdkMacosDeviceClass;
 #define GDK_MACOS_DEVICE(object)    (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_MACOS_DEVICE, GdkMacosDevice))
 #define GDK_IS_MACOS_DEVICE(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_MACOS_DEVICE))
 
+GDK_AVAILABLE_IN_ALL
 GType gdk_macos_device_get_type (void);
 
 G_END_DECLS
 
-#endif /* __GDK_MACOS_DEVICE_PRIVATE_H__ */
+#endif /* __GDK_MACOS_DEVICE_H__ */

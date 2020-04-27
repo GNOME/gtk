@@ -24,7 +24,7 @@
 #include "gdkdeviceprivate.h"
 #include "gdkseatdefaultprivate.h"
 
-#include "gdkmacosdevice-private.h"
+#include "gdkmacosdevice.h"
 #include "gdkmacosseat-private.h"
 
 GdkSeat *

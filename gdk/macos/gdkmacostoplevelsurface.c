@@ -28,6 +28,11 @@ struct _GdkMacosToplevelSurface
   GdkMacosSurface parent_instance;
 };
 
+struct _GdkMacosToplevelSurfaceClass
+{
+  GdkMacosSurfaceClass parent_instance;
+};
+
 static void
 toplevel_iface_init (GdkToplevelInterface *iface)
 {
@@ -53,7 +58,7 @@ _gdk_macos_toplevel_surface_class_init (GdkMacosToplevelSurfaceClass *klass)
 }
 
 static void
-_gdk_macos_toplevel_surface_init (Gdkmacostoplevelsurface *self)
+_gdk_macos_toplevel_surface_init (GdkMacosToplevelSurface *self)
 {
 }
 

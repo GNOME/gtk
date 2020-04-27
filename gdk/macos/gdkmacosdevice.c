@@ -21,7 +21,9 @@
 
 #include <gdk/gdk.h>
 
-#include "gdkmacosdevice-private.h"
+#include "gdkdeviceprivate.h"
+
+#include "gdkmacosdevice.h"
 
 struct _GdkMacosDevice
 {

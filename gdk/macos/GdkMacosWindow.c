@@ -26,6 +26,7 @@
 #import "GdkMacosWindow.h"
 
 #include "gdkmacossurface-private.h"
+
 #include "gdksurfaceprivate.h"
 
 @implementation GdkMacosWindow
@@ -305,10 +306,7 @@
 
 -(BOOL)canBecomeMainWindow
 {
-  GdkMacosSurface *surface = self->gdkSurface;
-  GdkSurfaceType surface_type = _gdk_macos_surface_get_surface_type (surface);
-
-  return surface_type == GDK_SURFACE_TOPLEVEL;
+  return GDK_IS_TOPLEVEL (self->gdkSurface);
 }
 
 -(BOOL)canBecomeKeyWindow

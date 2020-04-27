@@ -28,6 +28,11 @@ struct _GdkMacosDragSurface
   GdkMacosSurface parent_instance;
 };
 
+struct _GdkMacosDragSurfaceClass
+{
+  GdkMacosSurfaceClass parent_instance;
+};
+
 static void
 drag_surface_iface_init (GdkDragSurfaceInterface *iface)
 {
@@ -51,17 +56,17 @@ _gdk_macos_drag_surface_class_init (GdkMacosDragSurfaceClass *klass)
 }
 
 static void
-_gdk_macos_drag_surface_init (Gdkmacosdragsurface *self)
+_gdk_macos_drag_surface_init (GdkMacosDragSurface *self)
 {
 }
 
 GdkMacosSurface *
 _gdk_macos_drag_surface_new (GdkMacosDisplay *display,
-                                 GdkSurface      *parent,
-                                 int              x,
-                                 int              y,
-                                 int              width,
-                                 int              height)
+                             GdkSurface      *parent,
+                             int              x,
+                             int              y,
+                             int              width,
+                             int              height)
 {
   g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (display), NULL);
   g_return_val_if_fail (!parent || GDK_IS_MACOS_SURFACE (parent), NULL);

@@ -28,6 +28,11 @@ struct _GdkMacosPopupSurface
   GdkMacosSurface parent_instance;
 };
 
+struct _GdkMacosPopupSurfaceClass
+{
+  GdkMacosSurfaceClass parent_class;
+};
+
 static void
 popup_interface_init (GdkPopupInterface *iface)
 {
@@ -53,7 +58,7 @@ _gdk_macos_popup_surface_class_init (GdkMacosPopupSurfaceClass *klass)
 }
 
 static void
-_gdk_macos_popup_surface_init (Gdkmacospopupsurface *self)
+_gdk_macos_popup_surface_init (GdkMacosPopupSurface *self)
 {
 }
 

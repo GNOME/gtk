@@ -37,11 +37,18 @@ struct _GdkMacosSurfaceClass
   GdkSurfaceClass parent_class;
 };
 
-void _gdk_macos_surface_get_shadow (GdkMacosSurface *self,
-                                    gint            *top,
-                                    gint            *right,
-                                    gint            *bottom,
-                                    gint            *left);
+GdkMacosSurface *_gdk_macos_surface_new        (GdkMacosDisplay *display,
+                                                GdkSurfaceType   surface_type,
+                                                GdkSurface      *parent,
+                                                int              x,
+                                                int              y,
+                                                int              width,
+                                                int              height);
+void             _gdk_macos_surface_get_shadow (GdkMacosSurface *self,
+                                                gint            *top,
+                                                gint            *right,
+                                                gint            *bottom,
+                                                gint            *left);
 
 G_END_DECLS
 
