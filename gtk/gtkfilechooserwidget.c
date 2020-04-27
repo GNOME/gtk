@@ -7658,6 +7658,26 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
 
+static gboolean
+captured_key (GtkEventControllerKey *controller,
+              guint                  keyval,
+              guint                  keycode,
+              GdkModifierType        state,
+              gpointer               data)
+{
+  GtkFileChooserWidget *impl = data;
+  gboolean handled;
+
+  if (impl->operation_mode == OPERATION_MODE_SEARCH)
+    return GDK_EVENT_PROPAGATE;
+
+  handled = gtk_event_controller_key_forward (controller, GTK_WIDGET (impl->search_entry));
+  if (handled == GDK_EVENT_STOP)
+    operation_mode_set (impl, OPERATION_MODE_SEARCH);
+
+  return handled;
+}
+
 static void
 post_process_ui (GtkFileChooserWidget *impl)
 {
@@ -7734,6 +7754,12 @@ post_process_ui (GtkFileChooserWidget *impl)
                                   impl->item_actions);
 
   gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (impl->search_entry), impl->search_entry);
+
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed", G_CALLBACK (captured_key), impl);
+  g_signal_connect (controller, "key-released", G_CALLBACK (captured_key), impl);
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+  gtk_widget_add_controller (GTK_WIDGET (impl), controller);
 
   gtk_widget_set_parent (impl->rename_file_popover, GTK_WIDGET (impl));
 
