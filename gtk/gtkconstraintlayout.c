@@ -2172,8 +2172,8 @@ gtk_constraint_layout_add_constraints_from_description (GtkConstraintLayout *lay
  * Applications should try hard to avoid calling this function
  * because of the slowdowns.
  *
- * Returns: (transfer full): a #GListModel tracking @layout's
- *     constraints 
+ * Returns: (transfer full) (attributes element-type=GtkConstraint): a
+ *   #GListModel tracking @layout's constraints
  */
 GListModel *
 gtk_constraint_layout_observe_constraints (GtkConstraintLayout *layout)
@@ -2212,8 +2212,8 @@ gtk_constraint_layout_observe_constraints (GtkConstraintLayout *layout)
  * Applications should try hard to avoid calling this function
  * because of the slowdowns.
  *
- * Returns: (transfer full): a #GListModel tracking @layout's
- *     guides
+ * Returns: (transfer full) (attributes element-type=GtkConstraintGuide): a
+ *   #GListModel tracking @layout's guides
  */
 GListModel *
 gtk_constraint_layout_observe_guides (GtkConstraintLayout *layout)
