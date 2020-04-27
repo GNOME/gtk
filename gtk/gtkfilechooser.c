@@ -647,14 +647,14 @@ gtk_file_chooser_remove_shortcut_folder (GtkFileChooser  *chooser,
 /**
  * gtk_file_chooser_add_filter:
  * @chooser: a #GtkFileChooser
- * @filter: (transfer full): a #GtkFileFilter
+ * @filter: (transfer none): a #GtkFileFilter
  * 
  * Adds @filter to the list of filters that the user can select between.
  * When a filter is selected, only files that are passed by that
  * filter are displayed. 
  * 
- * Note that the @chooser takes ownership of the filter, so you have to 
- * ref and sink it if you want to keep a reference.
+ * Note that the @chooser takes ownership of the filter if it is floating,
+ * so you have to ref and sink it if you want to keep a reference.
  **/
 void
 gtk_file_chooser_add_filter (GtkFileChooser *chooser,

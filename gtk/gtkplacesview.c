@@ -1649,8 +1649,9 @@ populate_available_protocols_grid (GtkGrid *grid)
     attach_protocol_row_to_grid (grid, _("AppleTalk"), "afp://");
 
   if (g_strv_contains (supported_protocols, "ftp"))
-    /* Translators: do not translate ftp:// and ftps:// */
-    attach_protocol_row_to_grid (grid, _("File Transfer Protocol"), _("ftp:// or ftps://"));
+    attach_protocol_row_to_grid (grid, _("File Transfer Protocol"),
+                                 /* Translators: do not translate ftp:// and ftps:// */
+                                 _("ftp:// or ftps://"));
 
   if (g_strv_contains (supported_protocols, "nfs"))
     attach_protocol_row_to_grid (grid, _("Network File System"), "nfs://");
@@ -1659,12 +1660,14 @@ populate_available_protocols_grid (GtkGrid *grid)
     attach_protocol_row_to_grid (grid, _("Samba"), "smb://");
 
   if (g_strv_contains (supported_protocols, "ssh"))
-    /* Translators: do not translate sftp:// and ssh:// */
-    attach_protocol_row_to_grid (grid, _("SSH File Transfer Protocol"), _("sftp:// or ssh://"));
+    attach_protocol_row_to_grid (grid, _("SSH File Transfer Protocol"),
+                                 /* Translators: do not translate sftp:// and ssh:// */
+                                 _("sftp:// or ssh://"));
 
   if (g_strv_contains (supported_protocols, "dav"))
-    /* Translators: do not translate dav:// and davs:// */
-    attach_protocol_row_to_grid (grid, _("WebDAV"), _("dav:// or davs://"));
+    attach_protocol_row_to_grid (grid, _("WebDAV"),
+                                 /* Translators: do not translate dav:// and davs:// */
+                                 _("dav:// or davs://"));
 }
 
 static GMenuModel *
