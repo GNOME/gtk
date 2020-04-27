@@ -1,35 +1,25 @@
 gdk_macos_sources = files([
+  'GdkMacosWindow.c',
   'gdkmacosdevice.c',
   'gdkmacosdisplay.c',
+  'gdkmacosdragsurface.c',
   'gdkmacoseventsource.c',
   'gdkmacoskeymap.c',
   'gdkmacosmonitor.c',
+  'gdkmacospopupsurface.c',
   'gdkmacosseat.c',
   'gdkmacossurface.c',
-  # 'GdkMacosView.c',
-  'GdkMacosWindow.c',
+  'gdkmacostoplevelsurface.c',
 
-  # 'gdkapplaunchcontext-macos.c',
-  # 'gdkcairocontext-macos.c',
-  # 'gdkclipboard-macos.c',
-  # 'gdkcursor-macos.c',
-  # 'gdkdevice-macos.c',
-  # 'gdkdrag-macos.c',
-  # 'gdkdrop-macos.c',
-  # 'gdkeventsource.c',
-  # 'gdkglcontext-macos.c',
-  # 'gdkkeys-macos.c',
-  # 'gdkprimary-macos.c',
-  # 'gdksurface-macos.c',
+  # 'GdkMacosView.c',
 ])
 
 gdk_macos_public_headers = files([
+  'gdkmacosdevice.h',
   'gdkmacosdisplay.h',
-  'gdkmacosmonitor.h',
   'gdkmacoskeymap.h',
-
-  # 'gdkmacosdevice.h',
-  # 'gdkmacosglcontext.h',
+  'gdkmacosmonitor.h',
+  'gdkmacossurface.h',
 ])
 
 install_headers(gdk_macos_public_headers, 'gdkmacos.h', subdir: 'gtk-4.0/gdk/macos/')

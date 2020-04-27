@@ -23,26 +23,21 @@
 #include <gdk/gdk.h>
 
 #include "gdksurfaceprivate.h"
+
+#include "gdkmacosdragsurface-private.h"
+#include "gdkmacospopupsurface-private.h"
 #include "gdkmacossurface-private.h"
+#include "gdkmacostoplevelsurface-private.h"
 
-struct _GdkMacosSurface
+typedef struct
 {
-  GdkSurface     parent_instance;
+  gint shadow_top;
+  gint shadow_right;
+  gint shadow_bottom;
+  gint shadow_left;
+} GdkMacosSurfacePrivate;
 
-  GdkSurfaceType surface_type;
-
-  gint           shadow_top;
-  gint           shadow_right;
-  gint           shadow_bottom;
-  gint           shadow_left;
-};
-
-struct _GdkMacosSurfaceClass
-{
-  GdkSurfaceClass parent_class;
-};
-
-G_DEFINE_TYPE (GdkMacosSurface, gdk_macos_surface, GDK_TYPE_SURFACE)
+G_DEFINE_TYPE_WITH_PRIVATE (GdkMacosSurface, gdk_macos_surface, GDK_TYPE_SURFACE)
 
 static void
 gdk_macos_surface_finalize (GObject *object)
@@ -79,26 +74,17 @@ _gdk_macos_surface_new (GdkMacosDisplay   *display,
   switch (surface_type)
     {
     case GDK_SURFACE_TOPLEVEL:
+      return _gdk_macos_toplevel_surface_new (display, parent, x, y, width, height);
+
     case GDK_SURFACE_POPUP:
+      return _gdk_macos_popup_surface_new (display, parent, x, y, width, height);
+
     case GDK_SURFACE_TEMP:
-      break;
+      return _gdk_macos_drag_surface_new (display, parent, x, y, width, height);
 
     default:
       return NULL;
     }
-
-  return g_object_new (GDK_TYPE_MACOS_SURFACE,
-                       "display", display,
-                       "surface-type", surface_type,
-                       NULL);
-}
-
-GdkSurfaceType
-_gdk_macos_surface_get_surface_type (GdkMacosSurface *self)
-{
-  g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), 0);
-
-  return self->surface_type;
 }
 
 void
@@ -108,17 +94,19 @@ _gdk_macos_surface_get_shadow (GdkMacosSurface *self,
                                gint            *bottom,
                                gint            *left)
 {
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+
   g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
 
   if (top)
-    *top = self->shadow_top;
+    *top = priv->shadow_top;
 
   if (left)
-    *left = self->shadow_left;
+    *left = priv->shadow_left;
 
   if (bottom)
-    *bottom = self->shadow_bottom;
+    *bottom = priv->shadow_bottom;
 
   if (right)
-    *right = self->shadow_right;
+    *right = priv->shadow_right;
 }

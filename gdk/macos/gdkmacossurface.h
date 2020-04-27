@@ -28,7 +28,7 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GdkMacosSurface      GdkMacosSurface;
+typedef struct _GdkMacosSurface GdkMacosSurface;
 typedef struct _GdkMacosSurfaceClass GdkMacosSurfaceClass;
 
 #define GDK_TYPE_MACOS_SURFACE       (gdk_macos_surface_get_type())
