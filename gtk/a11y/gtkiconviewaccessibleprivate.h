@@ -19,12 +19,14 @@
 #define __GTK_ICON_VIEW_ACCESSIBLE_PRIVATE_H__
 
 #include <gtk/a11y/gtkiconviewaccessible.h>
-
 #include <gtk/gtkiconview.h>
 
 G_BEGIN_DECLS
 
-void _gtk_icon_view_accessible_adjustment_changed  (GtkIconView *icon_view);
+void gtk_icon_view_accessible_adjustment_changed (GtkIconViewAccessible *self);
+
+void gtk_icon_view_accessible_update_model (GtkIconViewAccessible *self,
+                                            GtkTreeModel          *model);
 
 G_END_DECLS
 
