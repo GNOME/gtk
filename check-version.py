@@ -73,6 +73,26 @@ CONFIGURE_MICRO_VERSION_RE = re.compile(
     re.UNICODE | re.VERBOSE
 )
 
+CONFIGURE_INTERFACE_AGE_RE = re.compile(
+    r'''
+    ^
+    \s*
+    m4_define\(
+    \s*
+    \[gtk_interface_age\]
+    \s*
+    ,
+    \s*
+    \[
+    (?P<age>[0-9]+)
+    \]
+    \s*
+    \)
+    $
+    ''',
+    re.UNICODE | re.VERBOSE
+)
+
 MESON_VERSION_RE = re.compile(
     r'''
     ^
@@ -91,6 +111,13 @@ MESON_VERSION_RE = re.compile(
     \s*
     ,?
     $
+    ''',
+    re.UNICODE | re.VERBOSE
+)
+
+MESON_INTERFACE_AGE_RE = re.compile(
+    r'''
+    ^\s*gtk_interface_age\s*={1}\s*(?P<age>[0-9]+)\s*$
     ''',
     re.UNICODE | re.VERBOSE
 )
@@ -124,11 +151,19 @@ with open(configure_ac, 'r') as f:
             version['micro'] = res.group('version')
             line = f.readline()
             continue
-        if ('major', 'minor', 'micro') in version:
+        res = CONFIGURE_INTERFACE_AGE_RE.match(line)
+        if res:
+            if 'age' in version:
+                print(f'Redefinition of interface age; age is already set to {version["age"]}')
+                sys.exit(1)
+            version['age'] = res.group('age')
+            line = f.readline()
+            continue
+        if ('major', 'minor', 'micro', 'age') in version:
             break
         line = f.readline()
 
-print(f'GTK version defined in {configure_ac}: {version["major"]}.{version["minor"]}.{version["micro"]}')
+print(f'GTK version defined in {configure_ac}: {version["major"]}.{version["minor"]}.{version["micro"]} (age: {version["age"]})')
 
 configure_version = version
 version = {}
@@ -139,16 +174,22 @@ with open(meson_build, 'r') as f:
     while line:
         if line.startswith('project('):
             inside_project = True
-        elif inside_project:
+        if inside_project:
             res = MESON_VERSION_RE.match(line)
             if res:
                 version['major'] = res.group('major')
                 version['minor'] = res.group('minor')
                 version['micro'] = res.group('micro')
-                break
+        if inside_project and line.endswith(')'):
+            inside_project = False
+        res = MESON_INTERFACE_AGE_RE.match(line)
+        if res:
+            version['age'] = res.group('age')
+        if ('major', 'minor', 'micro', 'age') in version:
+            break
         line = f.readline()
 
-print(f'GTK version defined in {meson_build}: {version["major"]}.{version["minor"]}.{version["micro"]}')
+print(f'GTK version defined in {meson_build}: {version["major"]}.{version["minor"]}.{version["micro"]} (age: {version["age"]})')
 
 meson_version = version
 
