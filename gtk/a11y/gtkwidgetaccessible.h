@@ -26,25 +26,10 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_WIDGET_ACCESSIBLE                     (gtk_widget_accessible_get_type ())
-#define GTK_WIDGET_ACCESSIBLE(obj)                     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_WIDGET_ACCESSIBLE, GtkWidgetAccessible))
-#define GTK_WIDGET_ACCESSIBLE_CLASS(klass)             (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_WIDGET_ACCESSIBLE, GtkWidgetAccessibleClass))
-#define GTK_IS_WIDGET_ACCESSIBLE(obj)                  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_WIDGET_ACCESSIBLE))
-#define GTK_IS_WIDGET_ACCESSIBLE_CLASS(klass)          (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WIDGET_ACCESSIBLE))
-#define GTK_WIDGET_ACCESSIBLE_GET_CLASS(obj)           (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_WIDGET_ACCESSIBLE, GtkWidgetAccessibleClass))
+#define GTK_TYPE_WIDGET_ACCESSIBLE (gtk_widget_accessible_get_type())
 
-typedef struct _GtkWidgetAccessible        GtkWidgetAccessible;
-typedef struct _GtkWidgetAccessibleClass   GtkWidgetAccessibleClass;
-typedef struct _GtkWidgetAccessiblePrivate GtkWidgetAccessiblePrivate;
-
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWidgetAccessible, g_object_unref)
-
-struct _GtkWidgetAccessible
-{
-  GtkAccessible parent;
-
-  GtkWidgetAccessiblePrivate *priv;
-};
+GDK_AVAILABLE_IN_ALL
+G_DECLARE_DERIVABLE_TYPE (GtkWidgetAccessible, gtk_widget_accessible, GTK, WIDGET_ACCESSIBLE, GtkAccessible)
 
 struct _GtkWidgetAccessibleClass
 {
@@ -57,9 +42,6 @@ struct _GtkWidgetAccessibleClass
                                         GParamSpec          *pspec);
 
 };
-
-GDK_AVAILABLE_IN_ALL
-GType gtk_widget_accessible_get_type (void);
 
 G_END_DECLS
 
