@@ -6668,6 +6668,11 @@ gtk_box_layout_get_spacing
 gtk_box_layout_set_baseline_position
 gtk_box_layout_get_baseline_position
 
+<SUBSECTION>
+GtkBoxLayoutChild
+gtk_box_layout_child_set_expand
+gtk_box_layout_child_get_expand
+
 <SUBSECTION Standard>
 GTK_TYPE_BOX_LAYOUT
 gtk_box_layout_get_type
