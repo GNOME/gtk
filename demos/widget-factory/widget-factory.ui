@@ -2581,37 +2581,47 @@ microphone-sensitivity-medium-symbolic</property>
                             </child>
                           </object>
                         </child>
-                        <child>
-                          <object class="GtkFrame">
                             <child>
                               <object class="GtkBox">
                                 <child>
                                   <object class="GtkBox">
                                     <property name="orientation">vertical</property>
+                                    <style>
+                                      <class name="linked"/>
+                                    </style>
                                     <child>
                                       <object class="GtkButton" id="toolbutton1">
                                         <property name="icon-name">document-open-symbolic</property>
+                                        <property name="focus-on-click">0</property>
+                                        <property name="tooltip-text" translatable="yes">Insert ⌘</property>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkButton" id="toolbutton2">
                                         <property name="icon-name">send-to-symbolic</property>
+                                        <property name="focus-on-click">0</property>
+                                        <property name="tooltip-text" translatable="yes">Insert ⚽</property>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkButton" id="toolbutton3">
                                         <property name="icon-name">view-fullscreen-symbolic</property>
+                                        <property name="focus-on-click">0</property>
+                                        <property name="tooltip-text" translatable="yes">Insert ⤢</property>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkButton" id="toolbutton4">
                                         <property name="icon-name">star-new-symbolic</property>
+                                        <property name="focus-on-click">0</property>
+                                        <property name="tooltip-text" translatable="yes">Insert ☆</property>
                                       </object>
                                     </child>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkScrolledWindow">
+                                    <property name="has-frame">1</property>
                                     <property name="hexpand">1</property>
                                     <child>
                                       <object class="GtkTextView" id="tooltextview"/>
@@ -2621,10 +2631,6 @@ microphone-sensitivity-medium-symbolic</property>
                                 <child>
                                   <object class="GtkBox">
                                     <property name="orientation">vertical</property>
-                                    <property name="margin-start">6</property>
-                                    <property name="margin-end">6</property>
-                                    <property name="margin-top">6</property>
-                                    <property name="margin-bottom">6</property>
                                     <child>
                                       <object class="GtkBox">
                                         <property name="orientation">vertical</property>
@@ -2635,18 +2641,24 @@ microphone-sensitivity-medium-symbolic</property>
                                           <object class="GtkButton" id="cutbutton">
                                             <property name="sensitive">0</property>
                                             <property name="icon-name">edit-cut-symbolic</property>
+                                            <property name="focus-on-click">0</property>
+                                            <property name="tooltip-text" translatable="yes">Cut</property>
                                           </object>
                                         </child>
                                         <child>
                                           <object class="GtkButton" id="copybutton">
                                             <property name="sensitive">0</property>
                                             <property name="icon-name">edit-copy-symbolic</property>
+                                            <property name="focus-on-click">0</property>
+                                            <property name="tooltip-text" translatable="yes">Copy</property>
                                           </object>
                                         </child>
                                         <child>
                                           <object class="GtkButton" id="pastebutton">
                                             <property name="sensitive">0</property>
                                             <property name="icon-name">edit-paste-symbolic</property>
+                                            <property name="focus-on-click">0</property>
+                                            <property name="tooltip-text" translatable="yes">Paste</property>
                                           </object>
                                         </child>
                                       </object>
@@ -2656,14 +2668,14 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="sensitive">0</property>
                                         <property name="valign">end</property>
                                         <property name="icon-name">edit-delete-symbolic</property>
+                                        <property name="focus-on-click">0</property>
+                                        <property name="tooltip-text" translatable="yes">Delete</property>
                                       </object>
                                     </child>
                                   </object>
                                 </child>
                               </object>
                             </child>
-                          </object>
-                        </child>
                         <child>
                           <object class="GtkOverlay">
                             <child type="overlay">
