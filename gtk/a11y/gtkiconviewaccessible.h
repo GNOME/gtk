@@ -35,13 +35,10 @@ G_BEGIN_DECLS
 
 typedef struct _GtkIconViewAccessible        GtkIconViewAccessible;
 typedef struct _GtkIconViewAccessibleClass   GtkIconViewAccessibleClass;
-typedef struct _GtkIconViewAccessiblePrivate GtkIconViewAccessiblePrivate;
 
 struct _GtkIconViewAccessible
 {
   GtkContainerAccessible parent;
-
-  GtkIconViewAccessiblePrivate *priv;
 };
 
 struct _GtkIconViewAccessibleClass
