@@ -49,6 +49,117 @@
  * you can use the #GtkBoxLayout:spacing property.
  */
 
+struct _GtkBoxLayoutChild
+{
+  GtkLayoutChild parent_instance;
+
+  guint droppable;
+};
+
+enum {
+  PROP_CHILD_DROPPABLE = 1,
+
+  N_CHILD_PROPERTIES
+};
+
+static GParamSpec *child_props[N_CHILD_PROPERTIES];
+
+G_DEFINE_TYPE (GtkBoxLayoutChild, gtk_box_layout_child, GTK_TYPE_LAYOUT_CHILD)
+
+static void
+gtk_box_layout_child_set_property (GObject      *gobject,
+                                   guint         prop_id,
+                                   const GValue *value,
+                                   GParamSpec   *pspec)
+{
+  GtkBoxLayoutChild *self = GTK_BOX_LAYOUT_CHILD (gobject);
+
+  switch (prop_id)
+    {
+    case PROP_CHILD_DROPPABLE:
+      gtk_box_layout_child_set_droppable (self, g_value_get_uint (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_box_layout_child_get_property (GObject    *gobject,
+                                   guint       prop_id,
+                                   GValue     *value,
+                                   GParamSpec *pspec)
+{
+  GtkBoxLayoutChild *self = GTK_BOX_LAYOUT_CHILD (gobject);
+
+  switch (prop_id)
+    {
+    case PROP_CHILD_DROPPABLE:
+      g_value_set_uint (value, self->droppable);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_box_layout_child_class_init (GtkBoxLayoutChildClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->set_property = gtk_box_layout_child_set_property;
+  gobject_class->get_property = gtk_box_layout_child_get_property;
+
+  /**
+   * GtkBoxLayoutChild:droppable:
+   *
+   * The priority for dropping this child when there is not enough
+   * space. 0 means the child cannot be dropped, higher priorities
+   * make the child get dropped earlier.
+   */
+  child_props[PROP_CHILD_DROPPABLE] =
+    g_param_spec_uint ("droppable",
+                       P_("Drop Priority"),
+                       P_("Whether to drop this child when there is not enough space"),
+                       0, G_MAXUINT, 0,
+                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, N_CHILD_PROPERTIES, child_props);
+}
+
+static void
+gtk_box_layout_child_init (GtkBoxLayoutChild *self)
+{
+}
+
+void
+gtk_box_layout_child_set_droppable (GtkBoxLayoutChild *self,
+                                    int                droppable)
+{
+  g_return_if_fail (GTK_IS_BOX_LAYOUT_CHILD (self));
+
+  if (self->droppable == droppable)
+    return;
+
+  self->droppable = droppable;
+
+  gtk_layout_manager_layout_changed (gtk_layout_child_get_layout_manager (GTK_LAYOUT_CHILD (self)));
+
+  g_object_notify_by_pspec (G_OBJECT (self), child_props[PROP_CHILD_DROPPABLE]);
+}
+
+int
+gtk_box_layout_child_get_droppable (GtkBoxLayoutChild *self)
+{
+  g_return_val_if_fail (GTK_IS_BOX_LAYOUT_CHILD (self), 0);
+
+  return self->droppable;
+}
+
 struct _GtkBoxLayout
 {
   GtkLayoutManager parent_instance;
@@ -61,6 +172,15 @@ struct _GtkBoxLayout
 
 G_DEFINE_TYPE_WITH_CODE (GtkBoxLayout, gtk_box_layout, GTK_TYPE_LAYOUT_MANAGER,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
+
+static inline GtkBoxLayoutChild *
+get_box_child (GtkBoxLayout *self,
+               GtkWidget    *child)
+{
+  GtkLayoutManager *manager = GTK_LAYOUT_MANAGER (self);
+
+  return GTK_BOX_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (manager, child));
+}
 
 enum {
   PROP_HOMOGENEOUS = 1,
@@ -210,6 +330,7 @@ gtk_box_layout_compute_size (GtkBoxLayout *self,
 {
   GtkWidget *child;
   int n_visible_children = 0;
+  int n_droppable_children = 0;
   int required_min = 0, required_nat = 0;
   int largest_min = 0, largest_nat = 0;
   int spacing = get_spacing (self, gtk_widget_get_css_node (widget));
@@ -220,6 +341,8 @@ gtk_box_layout_compute_size (GtkBoxLayout *self,
     {
       int child_min = 0;
       int child_nat = 0;
+
+      gtk_widget_set_child_visible (child, TRUE);
 
       if (!gtk_widget_should_layout (child))
         continue;
@@ -232,6 +355,12 @@ gtk_box_layout_compute_size (GtkBoxLayout *self,
       largest_min = MAX (largest_min, child_min);
       largest_nat = MAX (largest_nat, child_nat);
 
+      if (get_box_child (self, child)->droppable > 0)
+        {
+          n_droppable_children++;
+          child_min = 0;
+        }
+
       required_min += child_min;
       required_nat += child_nat;
 
@@ -242,11 +371,11 @@ gtk_box_layout_compute_size (GtkBoxLayout *self,
     {
       if (self->homogeneous)
         {
-          required_min = largest_min * n_visible_children;
-          required_nat = largest_nat * n_visible_children;
+          required_min = largest_min * (n_visible_children - n_droppable_children);
+          required_nat = largest_nat * (n_visible_children - n_droppable_children);
         }
 
-      required_min += (n_visible_children - 1) * spacing;
+      required_min += (n_visible_children - n_droppable_children - 1) * spacing;
       required_nat += (n_visible_children - 1) * spacing;
     }
 
@@ -481,6 +610,15 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
   gint x = 0, y = 0, i;
   gint child_size;
   gint spacing;
+  int n_children;
+
+  n_children = 0;
+  for (child = _gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    n_children++;
+
+  sizes = g_newa (GtkRequestedSize, n_children);
 
   count_expand_children (widget, self->orientation, &nvis_children, &nexpand_children);
 
@@ -489,7 +627,6 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
     return;
 
   direction = _gtk_widget_get_direction (widget);
-  sizes = g_newa (GtkRequestedSize, nvis_children);
   spacing = get_spacing (self, gtk_widget_get_css_node (widget));
 
   if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -504,8 +641,11 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
   /* Retrieve desired size for visible children. */
   for (i = 0, child = _gtk_widget_get_first_child (widget);
        child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
+       child = _gtk_widget_get_next_sibling (child), i++)
     {
+      sizes[i].data = child;
+      sizes[i].minimum_size = sizes[i].natural_size = 0;
+
       if (!gtk_widget_should_layout (child))
         continue;
 
@@ -516,10 +656,6 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
                           NULL, NULL);
 
       children_minimum_size += sizes[i].minimum_size;
-
-      sizes[i].data = child;
-
-      i++;
     }
 
   if (self->homogeneous)
@@ -553,10 +689,10 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
     }
 
   /* Allocate child sizes. */
-  for (i = 0, child = _gtk_widget_get_first_child (widget);
-       child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
+  for (i = 0; i < n_children; i++)
     {
+      child = sizes[i].data;
+
       if (!gtk_widget_should_layout (child))
         continue;
 
@@ -613,8 +749,6 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
               natural_above = MAX (natural_above, child_natural_baseline);
             }
         }
-
-      i++;
     }
 
   if (self->orientation == GTK_ORIENTATION_VERTICAL)
@@ -657,10 +791,10 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
       y = 0;
     }
 
-  for (i = 0, child = _gtk_widget_get_first_child (widget);
-       child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
+  for (i = 0; i < n_children; i++)
     {
+      child = sizes[i].data;
+
       if (!gtk_widget_should_layout (child))
         continue;
 
@@ -687,8 +821,6 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
         }
 
       gtk_widget_size_allocate (child, &child_allocation, baseline);
-
-      i++;
     }
 }
 
@@ -701,6 +833,7 @@ gtk_box_layout_class_init (GtkBoxLayoutClass *klass)
   gobject_class->set_property = gtk_box_layout_set_property;
   gobject_class->get_property = gtk_box_layout_get_property;
 
+  layout_manager_class->layout_child_type = GTK_TYPE_BOX_LAYOUT_CHILD;
   layout_manager_class->measure = gtk_box_layout_measure;
   layout_manager_class->allocate = gtk_box_layout_allocate;
 
