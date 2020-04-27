@@ -119,8 +119,6 @@ typedef struct
   GtkScrollType autoscroll_step;
   gboolean autoscrolling;
 
-  guint click_id;
-
   gchar **icon_list;
 
   GtkAdjustment *adjustment; /* needed because it must be settable in init() */
@@ -409,7 +407,6 @@ gtk_scale_button_init (GtkScaleButton *button)
   GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
   GtkEventController *controller;
 
-  priv->click_id = 0;
   priv->orientation = GTK_ORIENTATION_VERTICAL;
   priv->applied_orientation = GTK_ORIENTATION_VERTICAL;
 
@@ -541,12 +538,6 @@ gtk_scale_button_dispose (GObject *object)
 
   g_clear_pointer (&priv->dock, gtk_widget_unparent);
   g_clear_pointer (&priv->button, gtk_widget_unparent);
-
-  if (priv->click_id != 0)
-    {
-      g_source_remove (priv->click_id);
-      priv->click_id = 0;
-    }
 
   G_OBJECT_CLASS (gtk_scale_button_parent_class)->dispose (object);
 }
