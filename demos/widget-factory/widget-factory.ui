@@ -1075,6 +1075,72 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="placeholder-text" translatable="yes">Password…</property>
                               </object>
                             </child>
+                            <child>
+                              <object class="GtkScrolledWindow">
+                                <property name="hscrollbar-policy">never</property>
+                                <property name="vscrollbar-policy">automatic</property>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="orientation">vertical</property>
+                                    <property name="spacing">10</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label">Large Title</property>
+                                        <style><class name="large-title"/></style>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label">Title 1</property>
+                                        <style><class name="title-1"/></style>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label">Title 2</property>
+                                        <style><class name="title-2"/></style>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label">Title 3</property>
+                                        <style><class name="title-3"/></style>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label">Title 4</property>
+                                        <style><class name="title-4"/></style>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label">Heading</property>
+                                        <style><class name="heading"/></style>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label">Body</property>
+                                        <style><class name="body"/></style>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label">Caption Heading</property>
+                                        <style><class name="caption-heading"/></style>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label">Caption</property>
+                                        <style><class name="Caption"/></style>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                         </child>
                         <child>
