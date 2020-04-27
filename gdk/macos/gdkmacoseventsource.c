@@ -19,8 +19,15 @@
 
 #include "config.h"
 
+#include <errno.h>
+#include <fcntl.h>
+#include <mach/mach.h>
 #include <mach/mach.h>
 #include <mach/port.h>
+#include <mach/port.h>
+#include <sys/event.h>
+#include <sys/time.h>
+#include <unistd.h>
 
 #include "gdkinternals.h"
 
@@ -30,23 +37,19 @@
 /* See https://daurnimator.com/post/147024385399/using-your-own-main-loop-on-osx
  * for more information on integrating Cocoa's CFRunLoop using an FD.
  */
-extern void _dispatch_main_queue_callback_4CF (void);
+extern mach_port_t _dispatch_get_main_queue_port_4CF (void);
+extern void        _dispatch_main_queue_callback_4CF (void);
 
 typedef struct _GdkMacosEventSource
 {
-  GSource          source;
-  GPollFD          pfd;
-  GdkMacosDisplay *display;
+  GSource source;
+  GPollFD pfd;
 } GdkMacosEventSource;
 
 static gboolean
 gdk_macos_event_source_check (GSource *base)
 {
   GdkMacosEventSource *source = (GdkMacosEventSource *)base;
-
-  g_assert (source != NULL);
-  g_assert (GDK_IS_MACOS_DISPLAY (source->display));
-
   return (source->pfd.revents & G_IO_IN) != 0;
 }
 
@@ -58,53 +61,74 @@ gdk_macos_event_source_dispatch (GSource     *base,
   GdkMacosEventSource *source = (GdkMacosEventSource *)base;
 
   g_assert (source != NULL);
-  g_assert (GDK_IS_MACOS_DISPLAY (source->display));
 
+  source->pfd.revents = 0;
   _dispatch_main_queue_callback_4CF ();
 
   return G_SOURCE_CONTINUE;
-}
-
-static void
-gdk_macos_event_source_finalize (GSource *base)
-{
-  GdkMacosEventSource *source = (GdkMacosEventSource *)base;
-  source->display = NULL;
 }
 
 static GSourceFuncs macos_event_source_funcs = {
   .prepare = NULL,
   .check = gdk_macos_event_source_check,
   .dispatch = gdk_macos_event_source_dispatch,
-  .finalize = gdk_macos_event_source_finalize,
+  .finalize = NULL,
 };
 
+static int
+gdk_macos_event_source_get_fd (void)
+{
+  int fd = kqueue ();
+
+  if (fd != -1)
+    {
+      mach_port_t port;
+      mach_port_t portset;
+
+      fcntl (fd, F_SETFD, FD_CLOEXEC);
+      port = _dispatch_get_main_queue_port_4CF ();
+
+      if (KERN_SUCCESS == mach_port_allocate (mach_task_self (),
+                                              MACH_PORT_RIGHT_PORT_SET,
+                                              &portset))
+        {
+          struct kevent64_s event;
+
+          EV_SET64 (&event, portset, EVFILT_MACHPORT, EV_ADD|EV_CLEAR, MACH_RCV_MSG, 0, 0, 0, 0);
+
+          if (kevent64 (fd, &event, 1, NULL, 0, 0, &(struct timespec){0,0}) == 0)
+            {
+              if (KERN_SUCCESS == mach_port_insert_member (mach_task_self (), port, portset))
+                return fd;
+            }
+        }
+
+      close (fd);
+    }
+
+  return -1;
+}
+
 GSource *
-_gdk_macos_event_source_new (GdkMacosDisplay *display)
+_gdk_macos_event_source_new (void)
 {
   GdkMacosEventSource *macos_source;
   GSource *source;
-  gchar *name;
+  int fd;
 
-  g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (display), NULL);
+  if ((fd = gdk_macos_event_source_get_fd ()) == -1)
+    return NULL;
 
   source = g_source_new (&macos_event_source_funcs, sizeof (GdkMacosEventSource));
-
-  macos_source = (GdkMacosEventSource *)source;
-  macos_source->display = display;
-  macos_source->pfd.fd = _gdk_macos_display_get_fd (display);
-  macos_source->pfd.events = G_IO_IN;
-  g_source_add_poll (source, &macos_source->pfd);
-
-  name = g_strdup_printf ("GDK macOS Event Source (%s)",
-                          gdk_display_get_name (GDK_DISPLAY (display)));
-
-  g_source_set_name (source, name);
+  g_source_set_name (source, "GDK macOS Event Source");
   g_source_set_priority (source, GDK_PRIORITY_EVENTS);
   g_source_set_can_recurse (source, TRUE);
-  g_source_attach (source, NULL);
 
-  g_free (name);
+  macos_source = (GdkMacosEventSource *)source;
+  macos_source->pfd.fd = fd;
+  macos_source->pfd.events = G_IO_IN;
+  macos_source->pfd.revents = 0;
+  g_source_add_poll (source, &macos_source->pfd);
 
   return source;
 }

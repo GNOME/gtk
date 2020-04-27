@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-GSource *_gdk_macos_event_source_new (GdkMacosDisplay *display);
+GSource *_gdk_macos_event_source_new (void);
 
 G_END_DECLS
 
