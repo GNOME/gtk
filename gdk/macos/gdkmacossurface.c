@@ -44,6 +44,15 @@ typedef struct
 G_DEFINE_TYPE_WITH_PRIVATE (GdkMacosSurface, gdk_macos_surface, GDK_TYPE_SURFACE)
 
 static void
+gdk_macos_surface_set_input_region (GdkSurface     *surface,
+                                    cairo_region_t *region)
+{
+  g_assert (GDK_IS_MACOS_SURFACE (surface));
+
+  /* TODO: */
+}
+
+static void
 gdk_macos_surface_finalize (GObject *object)
 {
   GdkMacosSurface *self = (GdkMacosSurface *)object;
@@ -58,8 +67,11 @@ static void
 gdk_macos_surface_class_init (GdkMacosSurfaceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GdkSurfaceClass *surface_class = GDK_SURFACE_CLASS (klass);
 
   object_class->finalize = gdk_macos_surface_finalize;
+
+  surface_class->set_input_region = gdk_macos_surface_set_input_region;
 }
 
 static void
