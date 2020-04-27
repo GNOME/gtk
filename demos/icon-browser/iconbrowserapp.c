@@ -1,3 +1,4 @@
+#include "config.h"
 #include <gtk/gtk.h>
 
 #include "iconbrowserapp.h"
@@ -28,9 +29,75 @@ quit_activated (GSimpleAction *action,
   g_application_quit (G_APPLICATION (app));
 }
 
+static void
+inspector_activated (GSimpleAction *action,
+                     GVariant      *parameter,
+                     gpointer       app)
+{
+  gtk_window_set_interactive_debugging (TRUE);
+}
+
+static void
+about_activated (GSimpleAction *action,
+                 GVariant      *parameter,
+                 gpointer       user_data)
+{
+  GtkApplication *app = user_data;
+  const gchar *authors[] = {
+    "The GTK Team",
+    NULL
+  };
+  char *icon_theme;
+  char *version;
+  GString *s;
+
+  g_object_get (gtk_settings_get_default (),
+                "gtk-icon-theme-name", &icon_theme,
+                NULL);
+
+  s = g_string_new ("");
+
+  g_string_append (s, "System libraries\n");
+  g_string_append_printf (s, "\tGLib\t%d.%d.%d\n",
+                          glib_major_version,
+                          glib_minor_version,
+                          glib_micro_version);
+  g_string_append_printf (s, "\tPango\t%s\n",
+                          pango_version_string ());
+  g_string_append_printf (s, "\tGTK\t%d.%d.%d\n",
+                          gtk_get_major_version (),
+                          gtk_get_minor_version (),
+                          gtk_get_micro_version ());
+  g_string_append_printf (s, "\nIcon theme\n\t%s", icon_theme);
+  version = g_strdup_printf ("%s\nRunning against GTK %d.%d.%d",
+                             PACKAGE_VERSION,
+                             gtk_get_major_version (),
+                             gtk_get_minor_version (),
+                             gtk_get_micro_version ());
+
+  gtk_show_about_dialog (GTK_WINDOW (gtk_application_get_active_window (app)),
+                         "program-name", "GTK Icon Browser",
+                         "version", version,
+                         "copyright", "© 1997—2020 The GTK Team",
+                         "license-type", GTK_LICENSE_LGPL_2_1,
+                         "website", "http://www.gtk.org",
+                         "comments", "Program to browse themed icons",
+                         "authors", authors,
+                         "logo-icon-name", "org.gtk.Demo4",
+                         "title", "About GTK Icon Browser",
+                         "system-information", s->str,
+                         NULL);
+
+  g_string_free (s, TRUE);
+  g_free (version);
+  g_free (icon_theme);
+}
+
 static GActionEntry app_entries[] =
 {
-  { "quit", quit_activated, NULL, NULL, NULL }
+  { "quit", quit_activated, NULL, NULL, NULL },
+  { "inspector", inspector_activated, NULL, NULL, NULL },
+  { "about", about_activated, NULL, NULL, NULL }
 };
 
 static void

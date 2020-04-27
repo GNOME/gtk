@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
+  <menu id="gear_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Inspector</attribute>
+        <attribute name="action">app.inspector</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_About GTK Icon Browser</attribute>
+        <attribute name="action">app.about</attribute>
+      </item>
+    </section>
+  </menu>
   <object class="IconStore" id="store"/>
   <object class="GtkTreeModelFilter" id="filter_model">
     <property name="child-model">store</property>
@@ -34,6 +46,13 @@
                 <signal name="toggled" handler="symbolic_toggled"/>
               </object>
             </child>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkMenuButton" id="gear_menu_button">
+            <property name="valign">center</property>
+            <property name="menu-model">gear_menu</property>
+            <property name="icon-name">open-menu-symbolic</property>
           </object>
         </child>
         <child type="end">
