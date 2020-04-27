@@ -119,6 +119,7 @@ if os_darwin
   wayland_enabled = false
 else
   quartz_enabled = false
+  macos_enabled = false
 endif
 
 if os_win32
