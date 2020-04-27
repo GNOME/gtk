@@ -37,18 +37,24 @@ struct _GdkMacosSurfaceClass
   GdkSurfaceClass parent_class;
 };
 
-GdkMacosSurface *_gdk_macos_surface_new        (GdkMacosDisplay *display,
-                                                GdkSurfaceType   surface_type,
-                                                GdkSurface      *parent,
-                                                int              x,
-                                                int              y,
-                                                int              width,
-                                                int              height);
-void             _gdk_macos_surface_get_shadow (GdkMacosSurface *self,
-                                                gint            *top,
-                                                gint            *right,
-                                                gint            *bottom,
-                                                gint            *left);
+GdkMacosSurface *_gdk_macos_surface_new            (GdkMacosDisplay *display,
+                                                    GdkSurfaceType   surface_type,
+                                                    GdkSurface      *parent,
+                                                    int              x,
+                                                    int              y,
+                                                    int              width,
+                                                    int              height);
+const char      *_gdk_macos_surface_get_title      (GdkMacosSurface *self);
+void             _gdk_macos_surface_set_title      (GdkMacosSurface *self,
+                                                    const gchar     *title);
+void             _gdk_macos_surface_get_shadow     (GdkMacosSurface *self,
+                                                    gint            *top,
+                                                    gint            *right,
+                                                    gint            *bottom,
+                                                    gint            *left);
+gboolean         _gdk_macos_surface_get_modal_hint (GdkMacosSurface *self);
+void             _gdk_macos_surface_set_modal_hint (GdkMacosSurface *self,
+                                                    gboolean         modal_hint);
 
 G_END_DECLS
 

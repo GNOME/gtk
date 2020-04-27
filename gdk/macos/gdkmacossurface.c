@@ -31,10 +31,14 @@
 
 typedef struct
 {
+  char *title;
+
   gint shadow_top;
   gint shadow_right;
   gint shadow_bottom;
   gint shadow_left;
+
+  guint modal_hint : 1;
 } GdkMacosSurfacePrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GdkMacosSurface, gdk_macos_surface, GDK_TYPE_SURFACE)
@@ -43,6 +47,9 @@ static void
 gdk_macos_surface_finalize (GObject *object)
 {
   GdkMacosSurface *self = (GdkMacosSurface *)object;
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+
+  g_clear_pointer (&priv->title, g_free);
 
   G_OBJECT_CLASS (gdk_macos_surface_parent_class)->finalize (object);
 }
@@ -109,4 +116,46 @@ _gdk_macos_surface_get_shadow (GdkMacosSurface *self,
 
   if (right)
     *right = priv->shadow_right;
+}
+
+const char *
+_gdk_macos_surface_get_title (GdkMacosSurface *self)
+{
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+
+  return priv->title;
+}
+
+void
+_gdk_macos_surface_set_title (GdkMacosSurface *self,
+                              const gchar     *title)
+{
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+
+  if (g_strcmp0 (priv->title, title) != 0)
+    {
+      g_free (priv->title);
+      priv->title = g_strdup (title);
+    }
+}
+
+gboolean
+_gdk_macos_surface_get_modal_hint (GdkMacosSurface *self)
+{
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+
+  g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), FALSE);
+
+  return priv->modal_hint;
+}
+
+void
+_gdk_macos_surface_set_modal_hint (GdkMacosSurface *self,
+                                   gboolean         modal_hint)
+{
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
+
+  priv->modal_hint = !!modal_hint;
 }

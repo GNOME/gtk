@@ -22,6 +22,7 @@
 #include <AppKit/AppKit.h>
 #include <gdk/gdk.h>
 
+#include "gdkmacoscairocontext-private.h"
 #include "gdkdisplayprivate.h"
 #include "gdkmacoseventsource-private.h"
 #include "gdkmacosdisplay-private.h"
@@ -320,6 +321,8 @@ gdk_macos_display_class_init (GdkMacosDisplayClass *klass)
   GdkDisplayClass *display_class = GDK_DISPLAY_CLASS (klass);
 
   object_class->finalize = gdk_macos_display_finalize;
+
+  display_class->cairo_context_type = GDK_TYPE_MACOS_CAIRO_CONTEXT;
 
   display_class->beep = gdk_macos_display_beep;
   display_class->create_surface = gdk_macos_display_create_surface;

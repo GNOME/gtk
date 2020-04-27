@@ -1,5 +1,6 @@
 gdk_macos_sources = files([
   'GdkMacosWindow.c',
+  'gdkmacoscairocontext.c',
   'gdkmacosdevice.c',
   'gdkmacosdisplay.c',
   'gdkmacosdragsurface.c',
