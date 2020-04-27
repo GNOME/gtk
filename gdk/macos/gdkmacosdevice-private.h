@@ -17,21 +17,26 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GDK_MACOS_MONITOR_PRIVATE_H__
-#define __GDK_MACOS_MONITOR_PRIVATE_H__
+#ifndef __GDK_MACOS_DEVICE_PRIVATE_H__
+#define __GDK_MACOS_DEVICE_PRIVATE_H__
 
-#include <AppKit/AppKit.h>
+#if !defined (__GDKMACOS_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gdk/macos/gdkmacos.h> can be included directly."
+#endif
 
-#include "gdkmacosdisplay.h"
-#include "gdkmacosmonitor.h"
-
-#include "gdkmonitorprivate.h"
+#include "gdkdeviceprivate.h"
 
 G_BEGIN_DECLS
 
-GdkMacosMonitor *_gdk_macos_monitor_new (GdkMacosDisplay   *display,
-                                         CGDirectDisplayID  monitor_id);
+typedef struct _GdkMacosDevice      GdkMacosDevice;
+typedef struct _GdkMacosDeviceClass GdkMacosDeviceClass;
+
+#define GDK_TYPE_MACOS_DEVICE       (gdk_macos_device_get_type())
+#define GDK_MACOS_DEVICE(object)    (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_MACOS_DEVICE, GdkMacosDevice))
+#define GDK_IS_MACOS_DEVICE(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_MACOS_DEVICE))
+
+GType gdk_macos_device_get_type (void);
 
 G_END_DECLS
 
-#endif /* __GDK_MACOS_MONITOR_PRIVATE_H__ */
+#endif /* __GDK_MACOS_DEVICE_PRIVATE_H__ */

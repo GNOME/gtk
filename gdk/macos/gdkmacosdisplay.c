@@ -27,6 +27,7 @@
 #include "gdkmacosdisplay-private.h"
 #include "gdkmacoskeymap-private.h"
 #include "gdkmacosmonitor-private.h"
+#include "gdkmacosseat-private.h"
 #include "gdkmacossurface-private.h"
 #include "gdkmacosutils-private.h"
 
@@ -172,6 +173,18 @@ gdk_macos_display_load_monitors (GdkMacosDisplay *self)
     }
 
   GDK_END_MACOS_ALLOC_POOL;
+}
+
+static void
+gdk_macos_display_load_seat (GdkMacosDisplay *self)
+{
+  GdkSeat *seat;
+
+  g_assert (GDK_IS_MACOS_DISPLAY (self));
+
+  seat = _gdk_macos_seat_new (self);
+  gdk_display_add_seat (GDK_DISPLAY (self), seat);
+  g_object_unref (seat);
 }
 
 static const gchar *
@@ -353,6 +366,7 @@ _gdk_macos_display_open (const gchar *display_name)
   self->name = g_strdup (display_name);
   self->keymap = _gdk_macos_keymap_new (self);
 
+  gdk_macos_display_load_seat (self);
   gdk_macos_display_load_monitors (self);
 
   if (event_source == NULL)

@@ -17,21 +17,19 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GDK_MACOS_MONITOR_PRIVATE_H__
-#define __GDK_MACOS_MONITOR_PRIVATE_H__
+#ifndef __GDK_MACOS_SEAT_PRIVATE_H__
+#define __GDK_MACOS_SEAT_PRIVATE_H__
 
 #include <AppKit/AppKit.h>
 
 #include "gdkmacosdisplay.h"
-#include "gdkmacosmonitor.h"
 
-#include "gdkmonitorprivate.h"
+#include "gdkseatprivate.h"
 
 G_BEGIN_DECLS
 
-GdkMacosMonitor *_gdk_macos_monitor_new (GdkMacosDisplay   *display,
-                                         CGDirectDisplayID  monitor_id);
+GdkSeat *_gdk_macos_seat_new (GdkMacosDisplay *display);
 
 G_END_DECLS
 
-#endif /* __GDK_MACOS_MONITOR_PRIVATE_H__ */
+#endif /* __GDK_MACOS_SEAT_PRIVATE_H__ */

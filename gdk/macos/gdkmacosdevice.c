@@ -21,48 +21,35 @@
 
 #include <gdk/gdk.h>
 
-#include "gdkmacosmonitor-private.h"
+#include "gdkmacosdevice-private.h"
 
-struct _GdkMacosMonitor
+struct _GdkMacosDevice
 {
-  GdkMonitor parent_instance;
+  GdkDevice parent_instance;
 };
 
-struct _GdkMacosMonitorClass
+struct _GdkMacosDeviceClass
 {
-  GdkMonitorClass parent_class;
+  GdkDeviceClass parent_class;
 };
 
-G_DEFINE_TYPE (GdkMacosMonitor, gdk_macos_monitor, GDK_TYPE_MONITOR)
+G_DEFINE_TYPE (GdkMacosDevice, gdk_macos_device, GDK_TYPE_DEVICE)
 
 static void
-gdk_macos_monitor_finalize (GObject *object)
+gdk_macos_device_finalize (GObject *object)
 {
-  GdkMacosMonitor *self = (GdkMacosMonitor *)object;
-
-  G_OBJECT_CLASS (gdk_macos_monitor_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_macos_device_parent_class)->finalize (object);
 }
 
 static void
-gdk_macos_monitor_class_init (GdkMacosMonitorClass *klass)
+gdk_macos_device_class_init (GdkMacosDeviceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = gdk_macos_monitor_finalize;
+  object_class->finalize = gdk_macos_device_finalize;
 }
 
 static void
-gdk_macos_monitor_init (GdkMacosMonitor *self)
+gdk_macos_device_init (GdkMacosDevice *self)
 {
-}
-
-GdkMacosMonitor *
-_gdk_macos_monitor_new (GdkMacosDisplay   *display,
-                        CGDirectDisplayID  screen_id)
-{
-  g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (display), NULL);
-
-  return g_object_new (GDK_TYPE_MACOS_MONITOR,
-                       "display", display,
-                       NULL);
 }
