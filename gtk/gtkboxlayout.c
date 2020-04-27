@@ -585,6 +585,20 @@ gtk_box_layout_measure (GtkLayoutManager *layout_manager,
     }
 }
 
+typedef struct {
+  int index;
+  int droppable;
+} DroppableData;
+
+static int
+sort_by_droppable (const void *p1, const void *p2)
+{
+  const DroppableData *d1 = p1;
+  const DroppableData *d2 = p2;
+
+  return d2->droppable - d1->droppable;
+}
+
 static void
 gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
                          GtkWidget        *widget,
@@ -611,32 +625,25 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
   gint child_size;
   gint spacing;
   int n_children;
+  int size;
+  DroppableData *droppable;
+
+  direction = _gtk_widget_get_direction (widget);
+  spacing = get_spacing (self, gtk_widget_get_css_node (widget));
 
   n_children = 0;
   for (child = _gtk_widget_get_first_child (widget);
        child != NULL;
        child = gtk_widget_get_next_sibling (child))
-    n_children++;
+    {
+      gtk_widget_set_child_visible (child, TRUE);
+      n_children++;
+    }
 
   sizes = g_newa (GtkRequestedSize, n_children);
+  droppable = g_newa (DroppableData, n_children);
 
-  count_expand_children (widget, self->orientation, &nvis_children, &nexpand_children);
-
-  /* If there is no visible child, simply return. */
-  if (nvis_children <= 0)
-    return;
-
-  direction = _gtk_widget_get_direction (widget);
-  spacing = get_spacing (self, gtk_widget_get_css_node (widget));
-
-  if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
-    extra_space = width - (nvis_children - 1) * spacing;
-  else
-    extra_space = height - (nvis_children - 1) * spacing;
-
-  have_baseline = FALSE;
-  minimum_above = natural_above = 0;
-  minimum_below = natural_below = 0;
+  nvis_children = 0;
 
   /* Retrieve desired size for visible children. */
   for (i = 0, child = _gtk_widget_get_first_child (widget);
@@ -646,8 +653,13 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
       sizes[i].data = child;
       sizes[i].minimum_size = sizes[i].natural_size = 0;
 
+      droppable[i].index = i;
+      droppable[i].droppable = 0;
+
       if (!gtk_widget_should_layout (child))
         continue;
+
+      droppable[i].droppable = get_box_child (self, child)->droppable;
 
       gtk_widget_measure (child,
                           self->orientation,
@@ -656,7 +668,47 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
                           NULL, NULL);
 
       children_minimum_size += sizes[i].minimum_size;
+      nvis_children++;
     }
+
+  if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
+    size = width;
+  else
+    size = height;
+
+  if (children_minimum_size + (nvis_children - 1) * spacing > size)
+    {
+      qsort (droppable, n_children, sizeof (DroppableData), sort_by_droppable);
+
+      for (i = 0; i < n_children; i++)
+        {
+          if (droppable[i].droppable == 0)
+            break;
+
+          child = sizes[droppable[i].index].data;
+          gtk_widget_set_child_visible (child, FALSE);
+          nvis_children--;
+          children_minimum_size -= sizes[droppable[i].index].minimum_size;
+
+          if (children_minimum_size + (nvis_children - 1) * spacing <= size)
+            break;
+        }
+    }
+
+  count_expand_children (widget, self->orientation, &nvis_children, &nexpand_children);
+
+  /* If there is no visible child, simply return. */
+  if (nvis_children <= 0)
+    return;
+
+  if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
+    extra_space = width - (nvis_children - 1) * spacing;
+  else
+    extra_space = height - (nvis_children - 1) * spacing;
+
+  have_baseline = FALSE;
+  minimum_above = natural_above = 0;
+  minimum_below = natural_below = 0;
 
   if (self->homogeneous)
     {
