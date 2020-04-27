@@ -540,6 +540,13 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               </object>
                             </child>
                             <child>
+                              <object class="GtkPasswordEntry">
+                                <property name="halign">fill</property>
+                                <property name="show-peek-icon">1</property>
+                                <property name="placeholder-text" translatable="yes">Password…</property>
+                              </object>
+                            </child>
+                            <child>
                               <object class="GtkBox">
                                 <property name="hexpand">0</property>
                                 <style>
@@ -1066,13 +1073,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="file">resource:///org/gtk/WidgetFactory4/gtk-logo.webm</property>
                                   </object>
                                 </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkPasswordEntry">
-                                <property name="halign">fill</property>
-                                <property name="show-peek-icon">1</property>
-                                <property name="placeholder-text" translatable="yes">Password…</property>
                               </object>
                             </child>
                             <child>
