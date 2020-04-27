@@ -1799,7 +1799,7 @@ activate (GApplication *app)
   static GActionEntry win_entries[] = {
     { "dark", NULL, NULL, "false", change_dark_state },
     { "theme", NULL, "s", "'current'", change_theme_state }, 
-    { "transition", NULL, NULL, "false", change_transition_state },
+    { "transition", NULL, NULL, "true", change_transition_state },
     { "search", activate_search, NULL, NULL, NULL },
     { "delete", activate_delete, NULL, NULL, NULL },
     { "busy", get_busy, NULL, NULL, NULL },

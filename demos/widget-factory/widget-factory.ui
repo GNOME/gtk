@@ -461,6 +461,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
         <child>
           <object class="GtkStack" id="toplevel_stack">
             <property name="transition-duration">250</property>
+            <property name="transition-type">crossfade</property>
             <child>
               <object class="GtkStackPage">
                 <property name="name">page1</property>
