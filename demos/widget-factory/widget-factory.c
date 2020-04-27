@@ -99,7 +99,7 @@ change_transition_state (GSimpleAction *action,
   GtkStackTransitionType transition;
 
   if (g_variant_get_boolean (state))
-    transition = GTK_STACK_TRANSITION_TYPE_ROTATE_LEFT_RIGHT;
+    transition = GTK_STACK_TRANSITION_TYPE_CROSSFADE;
   else
     transition = GTK_STACK_TRANSITION_TYPE_NONE;
 

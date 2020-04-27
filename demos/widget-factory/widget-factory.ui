@@ -37,7 +37,7 @@
         </section>
       </submenu> 
       <item>
-        <attribute name="label" translatable="yes">Slide Pages</attribute>
+        <attribute name="label" translatable="yes">Transition Pages</attribute>
         <attribute name="action">win.transition</attribute>
       </item>
     </section>
@@ -460,7 +460,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
         <property name="margin-bottom">10</property>
         <child>
           <object class="GtkStack" id="toplevel_stack">
-            <property name="transition-duration">1000</property>
+            <property name="transition-duration">250</property>
             <child>
               <object class="GtkStackPage">
                 <property name="name">page1</property>
@@ -1576,8 +1576,8 @@ microphone-sensitivity-medium-symbolic</property>
                                     <property name="orientation">vertical</property>
                                     <child>
                                       <object class="GtkStack" id="stack">
-                                        <property name="transition-type">crossfade</property>
-                                        <property name="transition-duration">1000</property>
+                                        <property name="transition-type">rotate-left-right</property>
+                                        <property name="transition-duration">250</property>
                                         <child>
                                           <object class="GtkStackPage">
                                             <property name="name">page1</property>
