@@ -1186,6 +1186,14 @@ main (int argc, char **argv)
     { "quit", activate_quit, NULL, NULL, NULL },
     { "inspector", activate_inspector, NULL, NULL, NULL },
   };
+  struct {
+    const gchar *action_and_target;
+    const gchar *accelerators[2];
+  } accels[] = {
+    { "app.about", { "F1", NULL } },
+    { "app.quit", { "<Control>q", NULL } },
+  };
+  int i;
 
   /* Most code in gtk-demo is intended to be exemplary, but not
    * these few lines, which are just a hack so gtk-demo will work
@@ -1202,6 +1210,9 @@ main (int argc, char **argv)
   g_action_map_add_action_entries (G_ACTION_MAP (app),
                                    app_entries, G_N_ELEMENTS (app_entries),
                                    app);
+
+  for (i = 0; i < G_N_ELEMENTS (accels); i++)
+    gtk_application_set_accels_for_action (app, accels[i].action_and_target, accels[i].accelerators);
 
   g_application_add_main_option (G_APPLICATION (app), "version", 0, 0, G_OPTION_ARG_NONE, "Show program version", NULL);
   g_application_add_main_option (G_APPLICATION (app), "run", 0, 0, G_OPTION_ARG_STRING, "Run an example", "EXAMPLE");
