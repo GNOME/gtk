@@ -1202,12 +1202,15 @@ gtk_file_system_model_got_files (GObject *object, GAsyncResult *res, gpointer da
     }
 }
 
+/* Helper for gtk_file_system_model_query_done and
+ * gtk_file_system_model_one_query_done */
 static void
-gtk_file_system_model_query_done (GObject *     object,
-                                  GAsyncResult *res,
-                                  gpointer      data)
+query_done_helper (GObject *     object,
+                   GAsyncResult *res,
+                   gpointer      data,
+                   gboolean      do_thaw_updates)
 {
-  GtkFileSystemModel *model = data; /* only a valid pointer if not cancelled */
+  GtkFileSystemModel *model;
   GFile *file = G_FILE (object);
   GFileInfo *info;
   guint id;
@@ -1216,12 +1219,25 @@ gtk_file_system_model_query_done (GObject *     object,
   if (info == NULL)
     return;
 
+  model = GTK_FILE_SYSTEM_MODEL (data);
+
   _gtk_file_system_model_update_file (model, file, info);
 
   id = node_get_for_file (model, file);
   gtk_file_system_model_sort_node (model, id);
 
+  if (do_thaw_updates)
+    thaw_updates (model);
+
   g_object_unref (info);
+}
+
+static void
+gtk_file_system_model_query_done (GObject *     object,
+                                  GAsyncResult *res,
+                                  gpointer      data)
+{
+  query_done_helper (object, res, data, FALSE);
 }
 
 static void
@@ -2140,10 +2156,7 @@ gtk_file_system_model_one_query_done (GObject *     object,
                                       GAsyncResult *res,
                                       gpointer      data)
 {
-  GtkFileSystemModel *model = data; /* only a valid pointer if not cancelled */
-
-  gtk_file_system_model_query_done (object, res, data);
-  thaw_updates (model);
+  query_done_helper (object, res, data, TRUE);
 }
 
 void
