@@ -17,17 +17,42 @@
 
 #include "config.h"
 
-#include <gtk/gtk.h>
 #include "gtkwidgetaccessibleprivate.h"
-#include "gtknotebookpageaccessible.h"
 
-struct _GtkWidgetAccessiblePrivate
+#include "gtkaccellabel.h"
+#include "gtkadjustment.h"
+#include "gtkbox.h"
+#include "gtkbutton.h"
+#include "gtkcombobox.h"
+#include "gtkdragicon.h"
+#include "gtkdrawingarea.h"
+#include "gtkglarea.h"
+#include "gtkimage.h"
+#include "gtklevelbar.h"
+#include "gtkmediacontrols.h"
+#include "gtknotebookpageaccessible.h"
+#include "gtknotebook.h"
+#include "gtkorientable.h"
+#include "gtkpicture.h"
+#include "gtkprogressbar.h"
+#include "gtkscrollable.h"
+#include "gtkscrollbar.h"
+#include "gtkseparator.h"
+#include "gtkshortcutlabel.h"
+#include "gtkshortcutsshortcut.h"
+#include "gtkspinner.h"
+#include "gtkstacksidebar.h"
+#include "gtkstatusbar.h"
+#include "gtkvideo.h"
+#include "gtkviewport.h"
+#include "gtkwidgetprivate.h"
+
+typedef struct
 {
   AtkLayer layer;
-};
+} GtkWidgetAccessiblePrivate;
 
 extern GtkWidget *_focus_widget;
-
 
 static gboolean gtk_widget_accessible_on_screen           (GtkWidget *widget);
 static gboolean gtk_widget_accessible_all_parents_visible (GtkWidget *widget);
@@ -170,10 +195,12 @@ gtk_widget_accessible_initialize (AtkObject *object,
                                   gpointer   data)
 {
   GtkWidgetAccessible *self = GTK_WIDGET_ACCESSIBLE (object);
+  GtkWidgetAccessiblePrivate *priv = gtk_widget_accessible_get_instance_private (self);
   GtkWidget *widget = data;
 
-  self->priv->layer = ATK_LAYER_WIDGET;
-  object->role = ATK_ROLE_UNKNOWN;
+  priv->layer = ATK_LAYER_WIDGET;
+
+  atk_object_set_role (object, ATK_ROLE_UNKNOWN);
 
   /* XXX: This will go away once we move all GtkWidgetAccessibleClass.notify_gtk()
    * implementations to explicit API on their respective classes
@@ -550,7 +577,6 @@ gtk_widget_accessible_class_init (GtkWidgetAccessibleClass *klass)
 static void
 gtk_widget_accessible_init (GtkWidgetAccessible *accessible)
 {
-  accessible->priv = gtk_widget_accessible_get_instance_private (accessible);
 }
 
 static void
@@ -593,9 +619,10 @@ gtk_widget_accessible_get_extents (AtkComponent   *component,
 static AtkLayer
 gtk_widget_accessible_get_layer (AtkComponent *component)
 {
-  GtkWidgetAccessible *accessible = GTK_WIDGET_ACCESSIBLE (component);
+  GtkWidgetAccessible *self = GTK_WIDGET_ACCESSIBLE (component);
+  GtkWidgetAccessiblePrivate *priv = gtk_widget_accessible_get_instance_private (self);
 
-  return accessible->priv->layer;
+  return priv->layer;
 }
 
 static gboolean
@@ -727,10 +754,11 @@ gtk_widget_accessible_all_parents_visible (GtkWidget *widget)
   GtkWidget *iter_parent = NULL;
   gboolean result = TRUE;
 
-  for (iter_parent = gtk_widget_get_parent (widget); iter_parent;
-       iter_parent = gtk_widget_get_parent (iter_parent))
+  for (iter_parent = _gtk_widget_get_parent (widget);
+       iter_parent != NULL;
+       iter_parent = _gtk_widget_get_parent (iter_parent))
     {
-      if (!gtk_widget_get_visible (iter_parent))
+      if (!_gtk_widget_get_visible (iter_parent))
         {
           result = FALSE;
           break;
@@ -741,8 +769,10 @@ gtk_widget_accessible_all_parents_visible (GtkWidget *widget)
 }
 
 void
-_gtk_widget_accessible_set_layer (GtkWidgetAccessible *accessible,
+_gtk_widget_accessible_set_layer (GtkWidgetAccessible *self,
                                   AtkLayer             layer)
 {
-  accessible->priv->layer = layer;
+  GtkWidgetAccessiblePrivate *priv = gtk_widget_accessible_get_instance_private (self);
+
+  priv->layer = layer;
 }
