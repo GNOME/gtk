@@ -12318,6 +12318,9 @@ gtk_widget_should_layout (GtkWidget *widget)
   if (!_gtk_widget_get_visible (widget))
     return FALSE;
 
+  if (!_gtk_widget_get_child_visible (widget))
+    return FALSE;
+
   if (GTK_IS_NATIVE (widget))
     return FALSE;
 
