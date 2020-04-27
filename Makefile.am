@@ -16,6 +16,7 @@ EXTRA_DIST +=			\
 	NEWS.pre-1-0		\
 	README.commits		\
 	README.win32		\
+	check-version.py	\
 	config.h.win32		\
 	makefile.msc		\
 	gtk-zip.sh.in		\
