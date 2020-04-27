@@ -694,6 +694,13 @@ if graphene_has_sse2 or graphene_has_gcc
   endif
 endif
 
+introspection_enabled = get_option('introspection')
+if introspection_enabled and meson.version().version_compare('>= 0.54.0')
+  gi_dep = dependency('gobject-introspection-1.0', required: true,
+    fallback: ['gobject-introspection', 'girepo_dep'],
+  )
+endif
+
 subdir('gtk/css')
 subdir('gdk')
 subdir('gsk')
