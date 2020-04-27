@@ -21,11 +21,17 @@
 
 #include "gdkconfig.h"
 
+#include <cairo-quartz.h>
+
 #include "gdkmacoscairocontext-private.h"
+#include "gdkmacossurface-private.h"
 
 struct _GdkMacosCairoContext
 {
   GdkCairoContext parent_instance;
+
+  cairo_surface_t *window_surface;
+  cairo_surface_t *paint_surface;
 };
 
 struct _GdkMacosCairoContextClass
@@ -35,6 +41,26 @@ struct _GdkMacosCairoContextClass
 
 G_DEFINE_TYPE (GdkMacosCairoContext, _gdk_macos_cairo_context, GDK_TYPE_CAIRO_CONTEXT)
 
+static cairo_surface_t *
+create_cairo_surface_for_surface (GdkSurface *surface)
+{
+  cairo_surface_t *cairo_surface;
+  GdkDisplay *display;
+  int scale;
+
+  g_assert (GDK_IS_MACOS_SURFACE (surface));
+ 
+  display = gdk_surface_get_display (surface);
+  scale = gdk_surface_get_scale_factor (surface);
+
+  cairo_surface = cairo_quartz_surface_create (CAIRO_FORMAT_ARGB32,
+                                               gdk_surface_get_width (surface) * scale,
+                                               gdk_surface_get_height (surface) * scale);
+  cairo_surface_set_device_scale (cairo_surface, scale, scale);
+
+  return cairo_surface;
+}
+
 static cairo_t *
 _gdk_macos_cairo_context_cairo_create (GdkCairoContext *cairo_context)
 {
@@ -42,7 +68,7 @@ _gdk_macos_cairo_context_cairo_create (GdkCairoContext *cairo_context)
 
   g_assert (GDK_IS_MACOS_CAIRO_CONTEXT (self));
 
-  return NULL;
+  return cairo_create (self->paint_surface);
 }
 
 static void
@@ -50,19 +76,50 @@ _gdk_macos_cairo_context_begin_frame (GdkDrawContext *draw_context,
                                       cairo_region_t *region)
 {
   GdkMacosCairoContext *self = (GdkMacosCairoContext *)draw_context;
+  GdkRectangle clip_box;
+  GdkSurface *surface;
+  double sx, sy;
 
   g_assert (GDK_IS_MACOS_CAIRO_CONTEXT (self));
 
+  surface = gdk_draw_context_get_surface (draw_context);
+  cairo_region_get_extents (region, &clip_box);
+
+  self->window_surface = create_cairo_surface_for_surface (surface);
+  self->paint_surface = gdk_surface_create_similar_surface (surface,
+                                                            cairo_surface_get_content (self->window_surface),
+                                                            MAX (clip_box.width, 1),
+                                                            MAX (clip_box.height, 1));
+
+  sx = sy = 1;
+  cairo_surface_get_device_scale (self->paint_surface, &sx, &sy);
+  cairo_surface_set_device_offset (self->paint_surface, -clip_box.x*sx, -clip_box.y*sy);
 }
 
 static void
 _gdk_macos_cairo_context_end_frame (GdkDrawContext *draw_context,
-                                   cairo_region_t  *painted)
+                                    cairo_region_t *painted)
 {
   GdkMacosCairoContext *self = (GdkMacosCairoContext *)draw_context;
+  cairo_t *cr;
 
   g_assert (GDK_IS_MACOS_CAIRO_CONTEXT (self));
 
+  cr = cairo_create (self->window_surface);
+
+  cairo_set_source_surface (cr, self->paint_surface, 0, 0);
+  gdk_cairo_region (cr, painted);
+  cairo_clip (cr);
+
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+  cairo_paint (cr);
+
+  cairo_destroy (cr);
+
+  cairo_surface_flush (self->window_surface);
+
+  g_clear_pointer (&self->paint_surface, cairo_surface_destroy);
+  g_clear_pointer (&self->window_surface, cairo_surface_destroy);
 }
 
 static void
@@ -75,21 +132,10 @@ _gdk_macos_cairo_context_surface_resized (GdkDrawContext *draw_context)
 }
 
 static void
-_gdk_macos_cairo_context_dispose (GObject *object)
-{
-  GdkMacosCairoContext *self = (GdkMacosCairoContext *)object;
-
-  G_OBJECT_CLASS (_gdk_macos_cairo_context_parent_class)->dispose (object);
-}
-
-static void
 _gdk_macos_cairo_context_class_init (GdkMacosCairoContextClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkCairoContextClass *cairo_context_class = GDK_CAIRO_CONTEXT_CLASS (klass);
   GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
-
-  object_class->dispose = _gdk_macos_cairo_context_dispose;
 
   draw_context_class->begin_frame = _gdk_macos_cairo_context_begin_frame;
   draw_context_class->end_frame = _gdk_macos_cairo_context_end_frame;
