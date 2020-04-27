@@ -17,16 +17,15 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GDK_MACOS_DISPLAY_PRIVATE_H__
-#define __GDK_MACOS_DISPLAY_PRIVATE_H__
+#ifndef __GDK_MACOS_EVENT_SOURCE_PRIVATE_H__
+#define __GDK_MACOS_EVENT_SOURCE_PRIVATE_H__
 
 #include "gdkmacosdisplay.h"
 
 G_BEGIN_DECLS
 
-GdkDisplay *_gdk_macos_display_open   (const gchar     *display_name);
-int         _gdk_macos_display_get_fd (GdkMacosDisplay *self);
+GSource *_gdk_macos_event_source_new (GdkMacosDisplay *display);
 
 G_END_DECLS
 
-#endif /* __GDK_MACOS_DISPLAY_PRIVATE_H__ */
+#endif /* __GDK_MACOS_EVENT_SOURCE_PRIVATE_H__ */

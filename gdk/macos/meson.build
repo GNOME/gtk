@@ -1,8 +1,10 @@
 gdk_macos_sources = files([
   'gdkmacosdisplay.c',
+  'gdkmacoseventsource.c',
   'gdkmacoskeymap.c',
   'gdkmacosmonitor.c',
   'gdkmacossurface.c',
+  # 'GdkMacosView.c',
   'GdkMacosWindow.c',
 
   # 'gdkapplaunchcontext-macos.c',

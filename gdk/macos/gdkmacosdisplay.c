@@ -20,7 +20,16 @@
 #include "config.h"
 
 #include <AppKit/AppKit.h>
+#include <fcntl.h>
 #include <gdk/gdk.h>
+#include <unistd.h>
+
+#include <dispatch/dispatch.h>
+#include <errno.h>
+#include <mach/mach.h>
+#include <mach/port.h>
+#include <sys/event.h>
+#include <sys/time.h>
 
 #include "gdkdisplayprivate.h"
 #include "gdkmacosdisplay-private.h"
@@ -28,6 +37,11 @@
 #include "gdkmacosmonitor-private.h"
 #include "gdkmacossurface-private.h"
 #include "gdkmacosutils-private.h"
+
+/* See https://daurnimator.com/post/147024385399/using-your-own-main-loop-on-osx
+ * for more information on integrating Cocoa's CFRunLoop using an FD.
+ */
+extern mach_port_t _dispatch_get_main_queue_port_4CF (void);
 
 /**
  * SECTION:macos_interaction
@@ -66,9 +80,12 @@
 struct _GdkMacosDisplay
 {
   GdkDisplay      parent_instance;
+
   gchar          *name;
   GPtrArray      *monitors;
   GdkMacosKeymap *keymap;
+
+  int             fd;
 };
 
 struct _GdkMacosDisplayClass
@@ -261,10 +278,18 @@ gdk_macos_display_create_surface (GdkDisplay     *display,
                                   int             width,
                                   int             height)
 {
+  GdkMacosSurface *surface;
+
   g_assert (GDK_IS_MACOS_DISPLAY (display));
   g_assert (!parent || GDK_IS_MACOS_SURFACE (parent));
 
-  return _gdk_macos_surface_new (display, surface_type, parent, x, y, width, height);
+  surface = _gdk_macos_surface_new (GDK_MACOS_DISPLAY (display),
+                                    surface_type,
+                                    parent,
+                                    x, y,
+                                    width, height);
+
+  return GDK_SURFACE (surface);
 }
 
 static GdkKeymap *
@@ -284,6 +309,12 @@ gdk_macos_display_finalize (GObject *object)
 
   g_clear_pointer (&self->monitors, g_ptr_array_unref);
   g_clear_pointer (&self->name, g_free);
+
+  if (self->fd != -1)
+    {
+      close (self->fd);
+      self->fd = -1;
+    }
 
   G_OBJECT_CLASS (gdk_macos_display_parent_class)->finalize (object);
 }
@@ -320,6 +351,7 @@ static void
 gdk_macos_display_init (GdkMacosDisplay *self)
 {
   self->monitors = g_ptr_array_new_with_free_func (g_object_unref);
+  self->fd = -1;
 }
 
 GdkDisplay *
@@ -346,4 +378,46 @@ _gdk_macos_display_open (const gchar *display_name)
   gdk_display_emit_opened (GDK_DISPLAY (self));
 
   return GDK_DISPLAY (self);
+}
+
+int
+_gdk_macos_display_get_fd (GdkMacosDisplay *self)
+{
+  g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (self), -1);
+
+  if (self->fd == -1)
+    {
+      int fd = kqueue ();
+
+      if (fd != -1)
+        {
+          mach_port_t port;
+          mach_port_t portset;
+
+          fcntl (fd, F_SETFD, FD_CLOEXEC);
+          port = _dispatch_get_main_queue_port_4CF ();
+
+          if (KERN_SUCCESS == mach_port_allocate (mach_task_self (),
+                                                  MACH_PORT_RIGHT_PORT_SET,
+                                                  &portset))
+            {
+              struct kevent64_s event;
+
+              EV_SET64 (&event, portset, EVFILT_MACHPORT, EV_ADD|EV_CLEAR, MACH_RCV_MSG, 0, 0, 0, 0);
+
+              if (kevent64 (fd, &event, 1, NULL, 0, 0, &(struct timespec){0,0}) != 0)
+                {
+                  if (KERN_SUCCESS == mach_port_insert_member (mach_task_self (), port, portset))
+                    {
+                      self->fd = fd;
+                      return fd;
+                    }
+                }
+            }
+
+          close (fd);
+        }
+    }
+
+  return self->fd;
 }
