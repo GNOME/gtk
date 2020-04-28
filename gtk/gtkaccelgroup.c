@@ -579,12 +579,12 @@ gtk_accelerator_name (guint           accelerator_key,
     const char *text;
     gsize text_len;
   } mask_text[] = {
-    { GDK_SHIFT_MASK,   "<Shift>",   strlen ("<Shift>") },
-    { GDK_CONTROL_MASK, "<Control>", strlen ("<Control>") },
-    { GDK_ALT_MASK,     "<Alt>",     strlen ("<Alt>") },
-    { GDK_META_MASK,    "<Meta>",    strlen ("<Meta>") },
-    { GDK_SUPER_MASK,   "<Super>",   strlen ("<Super>") },
-    { GDK_HYPER_MASK,   "<Hyper>",   strlen ("<Hyper>") }
+    { GDK_SHIFT_MASK,   "<Shift>",   sizeof ("<Shift>") },
+    { GDK_CONTROL_MASK, "<Control>", sizeof ("<Control>") },
+    { GDK_ALT_MASK,     "<Alt>",     sizeof ("<Alt>") },
+    { GDK_META_MASK,    "<Meta>",    sizeof ("<Meta>") },
+    { GDK_SUPER_MASK,   "<Super>",   sizeof ("<Super>") },
+    { GDK_HYPER_MASK,   "<Hyper>",   sizeof ("<Hyper>") }
   };
   GdkModifierType saved_mods;
   guint l;
