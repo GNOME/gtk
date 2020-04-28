@@ -123,6 +123,29 @@ gdk_macos_display_get_primary_monitor (GdkDisplay *display)
   return g_ptr_array_index (self->monitors, 0);
 }
 
+static GdkMonitor *
+gdk_macos_display_get_monitor_at_surface (GdkDisplay *display,
+                                          GdkSurface *surface)
+{
+  GdkMacosDisplay *self = (GdkMacosDisplay *)display;
+  CGDirectDisplayID screen_id;
+
+  g_assert (GDK_IS_MACOS_DISPLAY (self));
+  g_assert (GDK_IS_MACOS_SURFACE (surface));
+
+  screen_id = _gdk_macos_surface_get_screen_id (GDK_MACOS_SURFACE (surface));
+
+  for (guint i = 0; i < self->monitors->len; i++)
+    {
+      GdkMacosMonitor *monitor = g_ptr_array_index (self->monitors, i);
+
+      if (screen_id == _gdk_macos_monitor_get_screen_id (monitor))
+        return GDK_MONITOR (monitor);
+    }
+
+  return gdk_macos_display_get_primary_monitor (display);
+}
+
 static void
 gdk_macos_display_add_monitor (GdkMacosDisplay *self,
                                GdkMacosMonitor *monitor)
@@ -331,6 +354,7 @@ gdk_macos_display_class_init (GdkMacosDisplayClass *klass)
   display_class->flush = gdk_macos_display_flush;
   display_class->get_keymap = gdk_macos_display_get_keymap;
   display_class->get_monitor = gdk_macos_display_get_monitor;
+  display_class->get_monitor_at_surface = gdk_macos_display_get_monitor_at_surface;
   display_class->get_next_serial = gdk_macos_display_get_next_serial;
   display_class->get_n_monitors = gdk_macos_display_get_n_monitors;
   display_class->get_name = gdk_macos_display_get_name;

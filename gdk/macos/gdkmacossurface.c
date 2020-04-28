@@ -171,3 +171,11 @@ _gdk_macos_surface_set_modal_hint (GdkMacosSurface *self,
 
   priv->modal_hint = !!modal_hint;
 }
+
+CGDirectDisplayID
+_gdk_macos_surface_get_screen_id (GdkMacosSurface *self)
+{
+  g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), 0);
+
+  return GDK_MACOS_SURFACE_GET_CLASS (self)->get_screen_id (self);
+}

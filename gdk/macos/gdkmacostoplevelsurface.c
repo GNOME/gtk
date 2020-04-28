@@ -53,6 +53,20 @@ enum {
 G_DEFINE_TYPE_WITH_CODE (GdkMacosToplevelSurface, _gdk_macos_toplevel_surface, GDK_TYPE_MACOS_SURFACE,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_TOPLEVEL, toplevel_iface_init))
 
+static CGDirectDisplayID
+_gdk_macos_toplevel_surface_get_screen_id (GdkMacosSurface *base)
+{
+  GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)base;
+
+  if (self->window != NULL)
+    {
+      NSScreen *screen = [self->window screen];
+      return [[[screen deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue];
+    }
+
+  return 0;
+}
+
 static void
 _gdk_macos_toplevel_surface_set_transient_for (GdkMacosToplevelSurface *self,
                                                GdkMacosSurface         *parent)
@@ -217,11 +231,14 @@ _gdk_macos_toplevel_surface_class_init (GdkMacosToplevelSurfaceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkSurfaceClass *surface_class = GDK_SURFACE_CLASS (klass);
+  GdkMacosSurfaceClass *base_class = GDK_MACOS_SURFACE_CLASS (klass);
 
   object_class->get_property = _gdk_macos_toplevel_surface_get_property;
   object_class->set_property = _gdk_macos_toplevel_surface_set_property;
 
   surface_class->destroy = _gdk_macos_toplevel_surface_destroy;
+
+  base_class->get_screen_id = _gdk_macos_toplevel_surface_get_screen_id;
 
   gdk_toplevel_install_properties (object_class, LAST_PROP);
 }

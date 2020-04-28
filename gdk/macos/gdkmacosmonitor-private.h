@@ -29,8 +29,9 @@
 
 G_BEGIN_DECLS
 
-GdkMacosMonitor *_gdk_macos_monitor_new (GdkMacosDisplay   *display,
-                                         CGDirectDisplayID  monitor_id);
+GdkMacosMonitor   *_gdk_macos_monitor_new           (GdkMacosDisplay   *display,
+                                                     CGDirectDisplayID  screen_id);
+CGDirectDisplayID  _gdk_macos_monitor_get_screen_id (GdkMacosMonitor   *self);
 
 G_END_DECLS
 

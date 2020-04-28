@@ -20,12 +20,18 @@
 #ifndef __GDK_MACOS_SURFACE_PRIVATE_H__
 #define __GDK_MACOS_SURFACE_PRIVATE_H__
 
+#include <AppKit/AppKit.h>
+
 #include "gdksurfaceprivate.h"
 
 #include "gdkmacosdisplay.h"
 #include "gdkmacossurface.h"
 
 G_BEGIN_DECLS
+
+#define GDK_MACOS_SURFACE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_MACOS_SURFACE, GdkMacosSurfaceClass))
+#define GDK_IS_MACOS_SURFACE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_MACOS_SURFACE))
+#define GDK_MACOS_SURFACE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_MACOS_SURFACE, GdkMacosSurfaceClass))
 
 struct _GdkMacosSurface
 {
@@ -35,26 +41,29 @@ struct _GdkMacosSurface
 struct _GdkMacosSurfaceClass
 {
   GdkSurfaceClass parent_class;
+
+  CGDirectDisplayID (*get_screen_id) (GdkMacosSurface *self);
 };
 
-GdkMacosSurface *_gdk_macos_surface_new            (GdkMacosDisplay *display,
-                                                    GdkSurfaceType   surface_type,
-                                                    GdkSurface      *parent,
-                                                    int              x,
-                                                    int              y,
-                                                    int              width,
-                                                    int              height);
-const char      *_gdk_macos_surface_get_title      (GdkMacosSurface *self);
-void             _gdk_macos_surface_set_title      (GdkMacosSurface *self,
-                                                    const gchar     *title);
-void             _gdk_macos_surface_get_shadow     (GdkMacosSurface *self,
-                                                    gint            *top,
-                                                    gint            *right,
-                                                    gint            *bottom,
-                                                    gint            *left);
-gboolean         _gdk_macos_surface_get_modal_hint (GdkMacosSurface *self);
-void             _gdk_macos_surface_set_modal_hint (GdkMacosSurface *self,
-                                                    gboolean         modal_hint);
+GdkMacosSurface   *_gdk_macos_surface_new            (GdkMacosDisplay *display,
+                                                      GdkSurfaceType   surface_type,
+                                                      GdkSurface      *parent,
+                                                      int              x,
+                                                      int              y,
+                                                      int              width,
+                                                      int              height);
+CGDirectDisplayID  _gdk_macos_surface_get_screen_id  (GdkMacosSurface *self);
+const char        *_gdk_macos_surface_get_title      (GdkMacosSurface *self);
+void               _gdk_macos_surface_set_title      (GdkMacosSurface *self,
+                                                      const gchar     *title);
+void               _gdk_macos_surface_get_shadow     (GdkMacosSurface *self,
+                                                      gint            *top,
+                                                      gint            *right,
+                                                      gint            *bottom,
+                                                      gint            *left);
+gboolean           _gdk_macos_surface_get_modal_hint (GdkMacosSurface *self);
+void               _gdk_macos_surface_set_modal_hint (GdkMacosSurface *self,
+                                                      gboolean         modal_hint);
 
 G_END_DECLS
 

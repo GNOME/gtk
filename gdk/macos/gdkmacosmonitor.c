@@ -25,7 +25,8 @@
 
 struct _GdkMacosMonitor
 {
-  GdkMonitor parent_instance;
+  GdkMonitor        parent_instance;
+  CGDirectDisplayID screen_id;
 };
 
 struct _GdkMacosMonitorClass
@@ -60,9 +61,22 @@ GdkMacosMonitor *
 _gdk_macos_monitor_new (GdkMacosDisplay   *display,
                         CGDirectDisplayID  screen_id)
 {
+  GdkMacosMonitor *self;
+
   g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (display), NULL);
 
-  return g_object_new (GDK_TYPE_MACOS_MONITOR,
+  self = g_object_new (GDK_TYPE_MACOS_MONITOR,
                        "display", display,
                        NULL);
+  self->screen_id = screen_id;
+
+  return g_steal_pointer (&self);
+}
+
+CGDirectDisplayID
+_gdk_macos_monitor_get_screen_id (GdkMacosMonitor *self)
+{
+  g_return_val_if_fail (GDK_IS_MACOS_MONITOR (self), 0);
+
+  return self->screen_id;
 }
