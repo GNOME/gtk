@@ -81,6 +81,11 @@ static gboolean
 gtk_video_hide_controls (gpointer data)
 {
   GtkVideo *self = data;
+  gboolean active;
+
+  g_object_get (self->controls, "active", &active, NULL);
+  if (active)
+    return G_SOURCE_CONTINUE;
 
   gtk_revealer_set_reveal_child (GTK_REVEALER (self->controls_revealer), FALSE);
 
