@@ -135,6 +135,13 @@ gtk_menu_section_box_sync_separators (GtkMenuSectionBox *box,
 
   gtk_widget_set_margin_top (GTK_WIDGET (box->item_box), should_have_top_margin ? 10 : 0);
 
+  if (has_label)
+    {
+      GtkWidget *separator = gtk_widget_get_first_child (box->separator);
+
+      gtk_widget_set_visible (separator, n_items_before > 0);
+    }
+
   if (should_have_separator == has_separator)
     return;
 
