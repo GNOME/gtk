@@ -32,6 +32,7 @@
 #include "gtkadjustment.h"
 #include "gtkbox.h"
 #include "gtkbinlayout.h"
+#include "gtkmediafileprivate.h"
 
 
 #ifdef GDK_WINDOWING_X11
@@ -74,6 +75,7 @@ struct _GtkInspectorGeneralPrivate
   GtkWidget *gdk_backend;
   GtkWidget *gsk_renderer;
   GtkWidget *pango_fontmap;
+  GtkWidget *media_backend;
   GtkWidget *gl_version;
   GtkWidget *gl_vendor;
   GtkWidget *vk_device;
@@ -646,6 +648,17 @@ init_pango (GtkInspectorGeneral *gen)
   gtk_label_set_label (GTK_LABEL (gen->priv->pango_fontmap), name);
 }
 
+static void
+init_media (GtkInspectorGeneral *gen)
+{
+  GIOExtension *e;
+  const char *name;
+
+  e = gtk_media_file_get_extension ();
+  name = g_io_extension_get_name (e);
+  gtk_label_set_label (GTK_LABEL (gen->priv->media_backend), name);
+}
+
 static void populate_seats (GtkInspectorGeneral *gen);
 
 static void
@@ -894,6 +907,7 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gdk_backend);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gsk_renderer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, pango_fontmap);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, media_backend);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gl_version);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gl_vendor);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, vk_device);
@@ -925,6 +939,7 @@ gtk_inspector_general_set_display (GtkInspectorGeneral *gen,
   init_env (gen);
   init_display (gen);
   init_pango (gen);
+  init_media (gen);
   init_gl (gen);
   init_vulkan (gen);
   init_device (gen);
