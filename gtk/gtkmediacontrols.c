@@ -51,12 +51,14 @@ struct _GtkMediaControls
   GtkWidget *time_label;
   GtkWidget *seek_scale;
   GtkWidget *duration_label;
+  GtkWidget *volume_button;
 };
 
 enum
 {
   PROP_0,
   PROP_MEDIA_STREAM,
+  PROP_ACTIVE,
 
   N_PROPS
 };
@@ -226,6 +228,14 @@ gtk_media_controls_get_property (GObject    *object,
       g_value_set_object (value, controls->stream);
       break;
 
+    case PROP_ACTIVE:
+      {
+        gboolean active;
+        g_object_get (controls->volume_button, "active", &active, NULL);
+        g_value_set_boolean (value, active);
+      }
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -279,6 +289,13 @@ gtk_media_controls_class_init (GtkMediaControlsClass *klass)
                          GTK_TYPE_MEDIA_STREAM,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
+  properties[PROP_ACTIVE] =
+    g_param_spec_boolean ("active",
+                          P_("Active"),
+                          P_("Active"),
+                          FALSE,
+                          G_PARAM_READABLE);
+
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkmediacontrols.ui");
@@ -290,6 +307,7 @@ gtk_media_controls_class_init (GtkMediaControlsClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkMediaControls, time_label);
   gtk_widget_class_bind_template_child (widget_class, GtkMediaControls, seek_scale);
   gtk_widget_class_bind_template_child (widget_class, GtkMediaControls, duration_label);
+  gtk_widget_class_bind_template_child (widget_class, GtkMediaControls, volume_button);
 
   gtk_widget_class_bind_template_callback (widget_class, play_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, time_adjustment_changed);
@@ -299,9 +317,19 @@ gtk_media_controls_class_init (GtkMediaControlsClass *klass)
 }
 
 static void
+notify_active (GObject    *object,
+               GParamSpec *pspec,
+               GObject    *controls)
+{
+  g_object_notify (controls, "active");
+}
+
+static void
 gtk_media_controls_init (GtkMediaControls *controls)
 {
   gtk_widget_init_template (GTK_WIDGET (controls));
+  g_signal_connect (controls->volume_button, "notify::active",
+                    G_CALLBACK (notify_active), controls);
 }
 
 /**
