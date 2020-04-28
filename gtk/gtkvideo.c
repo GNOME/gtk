@@ -60,6 +60,7 @@ struct _GtkVideo
 
   guint autoplay : 1;
   guint loop : 1;
+  guint grabbed : 1;
 };
 
 enum
@@ -81,6 +82,9 @@ static gboolean
 gtk_video_hide_controls (gpointer data)
 {
   GtkVideo *self = data;
+
+  if (self->grabbed)
+    return G_SOURCE_CONTINUE;
 
   gtk_revealer_set_reveal_child (GTK_REVEALER (self->controls_revealer), FALSE);
 
@@ -164,6 +168,17 @@ gtk_video_unmap (GtkWidget *widget)
   /* XXX: pause video here? */
 
   GTK_WIDGET_CLASS (gtk_video_parent_class)->unmap (widget);
+}
+
+static void
+gtk_video_grab_notify (GtkWidget *widget,
+                       gboolean   was_grabbed)
+{
+  GtkVideo *self = GTK_VIDEO (widget);
+
+  self->grabbed = !was_grabbed;
+
+  GTK_WIDGET_CLASS (gtk_video_parent_class)->grab_notify (widget, was_grabbed);
 }
 
 static void
@@ -255,6 +270,7 @@ gtk_video_class_init (GtkVideoClass *klass)
   widget_class->unmap = gtk_video_unmap;
   widget_class->grab_focus = gtk_widget_grab_focus_none;
   widget_class->focus = gtk_widget_focus_child;
+  widget_class->grab_notify = gtk_video_grab_notify;
 
   gobject_class->dispose = gtk_video_dispose;
   gobject_class->get_property = gtk_video_get_property;
@@ -318,7 +334,7 @@ gtk_video_class_init (GtkVideoClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkVideo, controls_revealer);
   gtk_widget_class_bind_template_callback (widget_class, gtk_video_motion);
 
-  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
+ gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("video"));
 }
 
@@ -326,6 +342,7 @@ static void
 gtk_video_init (GtkVideo *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+  
 }
 
 /**
