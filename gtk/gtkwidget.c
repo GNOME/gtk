@@ -2325,7 +2325,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
    * subclasses have access to it with the proper actions registered (even
    * though they don't have the g_class pointer available).
    */
-  (void)_gtk_widget_get_action_muxer (widget, g_class, FALSE);
+  _gtk_widget_get_action_muxer (widget, g_class, FALSE);
 
   /* this will be set to TRUE if the widget gets a child or if the
    * expand flag is set on the widget, but until one of those happen
@@ -10724,7 +10724,7 @@ _gtk_widget_get_action_muxer (GtkWidget      *widget,
 
   if (create || priv->actions)
     {
-      muxer = gtk_action_muxer_new (widget);
+      muxer = gtk_action_muxer_new (widget, G_TYPE_FROM_CLASS (widget_class));
       g_object_set_qdata_full (G_OBJECT (widget),
                                quark_action_muxer,
                                muxer,
