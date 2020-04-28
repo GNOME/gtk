@@ -41,10 +41,57 @@ popup_interface_init (GdkPopupInterface *iface)
 G_DEFINE_TYPE_WITH_CODE (GdkMacosPopupSurface, _gdk_macos_popup_surface, GDK_TYPE_MACOS_SURFACE,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_POPUP, popup_interface_init))
 
+enum {
+  PROP_0,
+  LAST_PROP,
+};
+
 static void
 _gdk_macos_popup_surface_finalize (GObject *object)
 {
   G_OBJECT_CLASS (_gdk_macos_popup_surface_parent_class)->finalize (object);
+}
+
+static void
+_gdk_macos_popup_surface_get_property (GObject    *object,
+                                       guint       prop_id,
+                                       GValue     *value,
+                                       GParamSpec *pspec)
+{
+  GdkMacosPopupSurface *self = GDK_MACOS_POPUP_SURFACE (object);
+
+  switch (prop_id)
+    {
+    case LAST_PROP + GDK_POPUP_PROP_PARENT:
+      break;
+
+    case LAST_PROP + GDK_POPUP_PROP_AUTOHIDE:
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+_gdk_macos_popup_surface_set_property (GObject      *object,
+                                       guint         prop_id,
+                                       const GValue *value,
+                                       GParamSpec   *pspec)
+{
+  GdkMacosPopupSurface *self = GDK_MACOS_POPUP_SURFACE (object);
+
+  switch (prop_id)
+    {
+    case LAST_PROP + GDK_POPUP_PROP_PARENT:
+      break;
+
+    case LAST_PROP + GDK_POPUP_PROP_AUTOHIDE:
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
 }
 
 static void
@@ -53,6 +100,8 @@ _gdk_macos_popup_surface_class_init (GdkMacosPopupSurfaceClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = _gdk_macos_popup_surface_finalize;
+  object_class->get_property = _gdk_macos_popup_surface_get_property;
+  object_class->set_property = _gdk_macos_popup_surface_set_property;
 
   gdk_popup_install_properties (object_class, 1);
 }
