@@ -5901,11 +5901,7 @@ gtk_widget_reposition_after (GtkWidget *widget,
   if (prev_parent == NULL)
     g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_PARENT]);
 
-  /* Enforce realized/mapped invariants
-   */
-  if (_gtk_widget_get_realized (priv->parent))
-    gtk_widget_realize (widget);
-
+  /* Enforce mapped invariants */
   if (_gtk_widget_get_visible (priv->parent) &&
       _gtk_widget_get_visible (widget))
     {
