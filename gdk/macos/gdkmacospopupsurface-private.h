@@ -34,6 +34,7 @@ typedef struct _GdkMacosPopupSurfaceClass GdkMacosPopupSurfaceClass;
 GType            _gdk_macos_popup_surface_get_type (void);
 GdkMacosSurface *_gdk_macos_popup_surface_new      (GdkMacosDisplay *display,
                                                     GdkSurface      *parent,
+                                                    GdkFrameClock   *frame_clock,
                                                     int              x,
                                                     int              y,
                                                     int              width,

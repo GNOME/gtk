@@ -64,16 +64,19 @@ _gdk_macos_popup_surface_init (GdkMacosPopupSurface *self)
 
 GdkMacosSurface *
 _gdk_macos_popup_surface_new (GdkMacosDisplay *display,
-                                 GdkSurface      *parent,
-                                 int              x,
-                                 int              y,
-                                 int              width,
-                                 int              height)
+                              GdkSurface      *parent,
+                              GdkFrameClock   *frame_clock,
+                              int              x,
+                              int              y,
+                              int              width,
+                              int              height)
 {
   g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (display), NULL);
+  g_return_val_if_fail (!frame_clock || GDK_IS_FRAME_CLOCK (frame_clock), NULL);
   g_return_val_if_fail (!parent || GDK_IS_MACOS_SURFACE (parent), NULL);
 
   return g_object_new (GDK_TYPE_MACOS_POPUP_SURFACE,
                        "display", display,
+                       "frame-clock", frame_clock,
                        NULL);
 }

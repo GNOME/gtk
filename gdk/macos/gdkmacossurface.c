@@ -22,6 +22,7 @@
 #include <AppKit/AppKit.h>
 #include <gdk/gdk.h>
 
+#include "gdkframeclockidleprivate.h"
 #include "gdksurfaceprivate.h"
 
 #include "gdkmacosdragsurface-private.h"
@@ -88,22 +89,34 @@ _gdk_macos_surface_new (GdkMacosDisplay   *display,
                         int                width,
                         int                height)
 {
+  GdkFrameClock *frame_clock;
+  GdkMacosSurface *ret;
+
   g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (display), NULL);
+
+  if (parent != NULL)
+    frame_clock = g_object_ref (gdk_surface_get_frame_clock (parent));
+  else
+    frame_clock = _gdk_frame_clock_idle_new ();
 
   switch (surface_type)
     {
     case GDK_SURFACE_TOPLEVEL:
-      return _gdk_macos_toplevel_surface_new (display, parent, x, y, width, height);
+      ret = _gdk_macos_toplevel_surface_new (display, parent, frame_clock, x, y, width, height);
 
     case GDK_SURFACE_POPUP:
-      return _gdk_macos_popup_surface_new (display, parent, x, y, width, height);
+      ret = _gdk_macos_popup_surface_new (display, parent, frame_clock, x, y, width, height);
 
     case GDK_SURFACE_TEMP:
-      return _gdk_macos_drag_surface_new (display, parent, x, y, width, height);
+      ret = _gdk_macos_drag_surface_new (display, parent, frame_clock, x, y, width, height);
 
     default:
-      return NULL;
+      ret = NULL;
     }
+
+  g_object_unref (frame_clock);
+
+  return g_steal_pointer (&ret);
 }
 
 void

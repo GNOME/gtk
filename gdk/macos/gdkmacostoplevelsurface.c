@@ -22,6 +22,7 @@
 #import "GdkMacosWindow.h"
 
 #include "gdktoplevelprivate.h"
+
 #include "gdkmacostoplevelsurface-private.h"
 #include "gdkmacosutils-private.h"
 
@@ -252,15 +253,18 @@ _gdk_macos_toplevel_surface_init (GdkMacosToplevelSurface *self)
 GdkMacosSurface *
 _gdk_macos_toplevel_surface_new (GdkMacosDisplay *display,
                                  GdkSurface      *parent,
+                                 GdkFrameClock   *frame_clock,
                                  int              x,
                                  int              y,
                                  int              width,
                                  int              height)
 {
   g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (display), NULL);
+  g_return_val_if_fail (!frame_clock || GDK_IS_FRAME_CLOCK (frame_clock), NULL);
   g_return_val_if_fail (!parent || GDK_IS_MACOS_SURFACE (parent), NULL);
 
   return g_object_new (GDK_TYPE_MACOS_TOPLEVEL_SURFACE,
                        "display", display,
+                       "frame-clock", frame_clock,
                        NULL);
 }
