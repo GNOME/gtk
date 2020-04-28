@@ -577,14 +577,13 @@ gtk_accelerator_name (guint           accelerator_key,
   static const struct {
     guint mask;
     const char *text;
-    gsize text_len;
   } mask_text[] = {
-    { GDK_SHIFT_MASK,   "<Shift>",   strlen ("<Shift>") },
-    { GDK_CONTROL_MASK, "<Control>", strlen ("<Control>") },
-    { GDK_ALT_MASK,     "<Alt>",     strlen ("<Alt>") },
-    { GDK_META_MASK,    "<Meta>",    strlen ("<Meta>") },
-    { GDK_SUPER_MASK,   "<Super>",   strlen ("<Super>") },
-    { GDK_HYPER_MASK,   "<Hyper>",   strlen ("<Hyper>") }
+    { GDK_SHIFT_MASK,   "<Shift>" },
+    { GDK_CONTROL_MASK, "<Control>" },
+    { GDK_ALT_MASK,     "<Alt>" },
+    { GDK_META_MASK,    "<Meta>" },
+    { GDK_SUPER_MASK,   "<Super>" },
+    { GDK_HYPER_MASK,   "<Hyper>" }
   };
   GdkModifierType saved_mods;
   guint l;
@@ -605,7 +604,7 @@ gtk_accelerator_name (guint           accelerator_key,
   for (i = 0; i < G_N_ELEMENTS (mask_text); i++)
     {
       if (accelerator_mods & mask_text[i].mask)
-        name_len += mask_text[i].text_len;
+        name_len += strlen(mask_text[i].text);
     }
 
   if (name_len == 0)
@@ -621,7 +620,7 @@ gtk_accelerator_name (guint           accelerator_key,
       if (accelerator_mods & mask_text[i].mask)
         {
           strcpy (accelerator + l, mask_text[i].text);
-          l += mask_text[i].text_len;
+          l += strlen(mask_text[i].text);
         }
     }
 
