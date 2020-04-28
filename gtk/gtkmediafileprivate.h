@@ -24,6 +24,7 @@
 
 
 void            gtk_media_file_extension_init                   (void);
+GIOExtension *  gtk_media_file_get_extension                    (void);
 
 
 #endif /* __GTK_MEDIA_FILE_PRIVATE_H__ */
