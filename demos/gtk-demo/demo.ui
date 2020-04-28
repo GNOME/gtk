@@ -127,6 +127,7 @@
                 <property name="label" translatable="yes">New</property>
                 <property name="tooltip-text" translatable="yes">Create a new file</property>
                 <property name="icon-name">document-new</property>
+                <property name="has-frame">0</property>
               </object>
             </child>
             <child>
@@ -134,6 +135,7 @@
                 <property name="label" translatable="yes">Open</property>
                 <property name="tooltip-text" translatable="yes">Open a file</property>
                 <property name="icon-name">document-open</property>
+                <property name="has-frame">0</property>
               </object>
             </child>
             <child>
@@ -141,6 +143,7 @@
                 <property name="label" translatable="yes">Save</property>
                 <property name="tooltip-text" translatable="yes">Save a file</property>
                 <property name="icon-name">document-save</property>
+                <property name="has-frame">0</property>
               </object>
             </child>
             <child>
@@ -151,6 +154,7 @@
                 <property name="label" translatable="yes">Copy</property>
                 <property name="tooltip-text" translatable="yes">Copy selected object into the clipboard</property>
                 <property name="icon-name">edit-copy</property>
+                <property name="has-frame">0</property>
               </object>
             </child>
             <child>
@@ -158,6 +162,7 @@
                 <property name="label" translatable="yes">Cut</property>
                 <property name="tooltip-text" translatable="yes">Cut selected object into the clipboard</property>
                 <property name="icon-name">edit-cut</property>
+                <property name="has-frame">0</property>
               </object>
             </child>
             <child>
@@ -165,6 +170,7 @@
                 <property name="label" translatable="yes">Paste</property>
                 <property name="tooltip-text" translatable="yes">Paste object from the clipboard</property>
                 <property name="icon-name">edit-paste</property>
+                <property name="has-frame">0</property>
               </object>
             </child>
           </object>
