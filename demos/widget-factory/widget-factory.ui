@@ -1923,6 +1923,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="label" translatable="yes">New</property>
                                             <property name="icon-name">document-new</property>
                                             <property name="tooltip-text" translatable="yes">Create a new document</property>
+                                            <property name="has-frame">0</property>
                                           </object>
                                         </child>
                                         <child>
@@ -1930,6 +1931,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="label" translatable="yes">Save</property>
                                             <property name="icon-name">document-save</property>
                                             <property name="tooltip-text" translatable="yes">Save the current document</property>
+                                            <property name="has-frame">0</property>
                                           </object>
                                         </child>
                                         <child>
@@ -1941,6 +1943,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="icon-name">edit-find</property>
                                             <property name="action-name">win.search</property>
                                             <property name="tooltip-text" translatable="yes">Search for it</property>
+                                            <property name="has-frame">0</property>
                                           </object>
                                         </child>
                                         <child>
@@ -1949,6 +1952,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="label" translatable="yes">Insert</property>
                                             <property name="icon-name">insert-image</property>
                                             <property name="tooltip-text" translatable="yes">Insert something</property>
+                                            <property name="has-frame">0</property>
                                           </object>
                                         </child>
                                       </object>
@@ -2607,6 +2611,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="icon-name">document-open-symbolic</property>
                                         <property name="focus-on-click">0</property>
                                         <property name="tooltip-text" translatable="yes">Insert ⌘</property>
+                                        <property name="has-frame">0</property>
                                       </object>
                                     </child>
                                     <child>
@@ -2614,6 +2619,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="icon-name">send-to-symbolic</property>
                                         <property name="focus-on-click">0</property>
                                         <property name="tooltip-text" translatable="yes">Insert ⚽</property>
+                                        <property name="has-frame">0</property>
                                       </object>
                                     </child>
                                     <child>
@@ -2621,6 +2627,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="icon-name">view-fullscreen-symbolic</property>
                                         <property name="focus-on-click">0</property>
                                         <property name="tooltip-text" translatable="yes">Insert ⤢</property>
+                                        <property name="has-frame">0</property>
                                       </object>
                                     </child>
                                     <child>
@@ -2628,6 +2635,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="icon-name">star-new-symbolic</property>
                                         <property name="focus-on-click">0</property>
                                         <property name="tooltip-text" translatable="yes">Insert ☆</property>
+                                        <property name="has-frame">0</property>
                                       </object>
                                     </child>
                                   </object>
