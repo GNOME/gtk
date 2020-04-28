@@ -11677,7 +11677,8 @@ gtk_widget_child_observer_destroyed (gpointer widget)
  * Applications should try hard to avoid calling this function because of
  * the slowdowns.
  *
- * Returns: (transfer full): a #GListModel tracking @widget's children
+ * Returns: (transfer full) (attributes element-type=GtkWidget): a #GListModel
+ *   tracking @widget's children
  **/
 GListModel *
 gtk_widget_observe_children (GtkWidget *widget)
@@ -11749,7 +11750,8 @@ gtk_widget_controller_list_get_item (gpointer item,
  * Applications should try hard to avoid calling this function because of
  * the slowdowns.
  *
- * Returns: (transfer full): a #GListModel tracking @widget's controllers
+ * Returns: (transfer full) (attributes element-type=GtkEventController): a
+ *   #GListModel tracking @widget's controllers
  **/
 GListModel *
 gtk_widget_observe_controllers (GtkWidget *widget)

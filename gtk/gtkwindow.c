@@ -2556,7 +2556,8 @@ gtk_window_get_modal (GtkWindow *window)
  * callbacks that might destroy the widgets or add new ones, be aware that
  * the list of toplevels will change and emit the "items-changed" signal.
  *
- * Returns: (element-type GtkWidget) (transfer none): the list of toplevel widgets
+ * Returns: (transfer none) (attributes element-type=GtkWindow): the list
+ *   of toplevel widgets
  */
 GListModel *
 gtk_window_get_toplevels (void)
