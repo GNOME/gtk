@@ -183,19 +183,15 @@ gtk_media_file_init (GtkMediaFile *self)
 {
 }
 
-static GType
-gtk_media_file_get_impl_type (void)
+GIOExtension *
+gtk_media_file_get_extension (void)
 {
-  static GType impl_type = G_TYPE_NONE;
   const char *extension_name;
   GIOExtension *e;
   GIOExtensionPoint *ep;
 
-  if (G_LIKELY (impl_type != G_TYPE_NONE))
-    return impl_type;
-
   GTK_NOTE (MODULES, g_print ("Looking up MediaFile extension\n"));
-  
+
   ep = g_io_extension_point_lookup (GTK_MEDIA_FILE_EXTENSION_POINT_NAME);
   e = NULL;
 
@@ -239,6 +235,19 @@ gtk_media_file_get_impl_type (void)
       e = l->data;
     }
 
+  return e;
+}
+
+static GType
+gtk_media_file_get_impl_type (void)
+{
+  static GType impl_type = G_TYPE_NONE;
+  GIOExtension *e;
+
+  if (G_LIKELY (impl_type != G_TYPE_NONE))
+    return impl_type;
+
+  e = gtk_media_file_get_extension ();
   impl_type = g_io_extension_get_type (e);
 
   GTK_NOTE (MODULES, g_print ("Using %s from \"%s\" extension\n", g_type_name (impl_type), g_io_extension_get_name (e)));
