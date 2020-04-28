@@ -27,7 +27,8 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_BOX_LAYOUT (gtk_box_layout_get_type())
+#define GTK_TYPE_BOX_LAYOUT       (gtk_box_layout_get_type())
+#define GTK_TYPE_BOX_LAYOUT_CHILD (gtk_box_layout_child_get_type())
 
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkBoxLayout, gtk_box_layout, GTK, BOX_LAYOUT, GtkLayoutManager)
@@ -50,5 +51,13 @@ void                    gtk_box_layout_set_baseline_position    (GtkBoxLayout   
                                                                  GtkBaselinePosition  position);
 GDK_AVAILABLE_IN_ALL
 GtkBaselinePosition     gtk_box_layout_get_baseline_position    (GtkBoxLayout        *box_layout);
+
+GDK_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (GtkBoxLayoutChild, gtk_box_layout_child, GTK, BOX_LAYOUT_CHILD, GtkLayoutChild)
+
+void                    gtk_box_layout_child_set_droppable      (GtkBoxLayoutChild  *child,
+                                                                 int                 priority);
+GDK_AVAILABLE_IN_ALL
+int                     gtk_box_layout_child_get_droppable      (GtkBoxLayoutChild  *child);
 
 G_END_DECLS
