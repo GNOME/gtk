@@ -5219,35 +5219,6 @@ surface_event (GdkSurface *surface,
   return TRUE;
 }
 
-/* the accel_key and accel_mods fields of the key have to be setup
- * upon calling this function. it’ll then return whether that key
- * is at all used as accelerator, and if so will OR in the
- * accel_flags member of the key.
- */
-gboolean
-_gtk_window_query_nonaccels (GtkWindow      *window,
-			     guint           accel_key,
-			     GdkModifierType accel_mods)
-{
-  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
-
-  /* movement keys are considered locked accels */
-  if (!accel_mods)
-    {
-      static const guint bindings[] = {
-	GDK_KEY_space, GDK_KEY_KP_Space, GDK_KEY_Return, GDK_KEY_ISO_Enter, GDK_KEY_KP_Enter, GDK_KEY_Up, GDK_KEY_KP_Up, GDK_KEY_Down, GDK_KEY_KP_Down,
-	GDK_KEY_Left, GDK_KEY_KP_Left, GDK_KEY_Right, GDK_KEY_KP_Right, GDK_KEY_Tab, GDK_KEY_KP_Tab, GDK_KEY_ISO_Left_Tab,
-      };
-      guint i;
-      
-      for (i = 0; i < G_N_ELEMENTS (bindings); i++)
-	if (bindings[i] == accel_key)
-	  return TRUE;
-    }
-
-  return FALSE;
-}
-
 static GtkWindowRegion
 get_active_region_type (GtkWindow *window, gint x, gint y)
 {
