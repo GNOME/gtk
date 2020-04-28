@@ -864,14 +864,10 @@ gtk_action_muxer_dispose (GObject *object)
     ->dispose (object);
 }
 
-static void
-gtk_action_muxer_constructed (GObject *object)
+void
+gtk_action_muxer_connect_class_actions (GtkActionMuxer *muxer)
 {
-  GtkActionMuxer *muxer = GTK_ACTION_MUXER (object);
-
   prop_actions_connect (muxer);
-
-  G_OBJECT_CLASS (gtk_action_muxer_parent_class)->constructed (object);
 }
 
 static void
@@ -949,7 +945,6 @@ gtk_action_muxer_class_init (GObjectClass *class)
 {
   class->get_property = gtk_action_muxer_get_property;
   class->set_property = gtk_action_muxer_set_property;
-  class->constructed = gtk_action_muxer_constructed;
   class->finalize = gtk_action_muxer_finalize;
   class->dispose = gtk_action_muxer_dispose;
 
