@@ -64,10 +64,6 @@ gboolean gtk_window_configure    (GtkWindow         *window,
                                   guint              height);
 
 /* --- internal (GtkAcceleratable) --- */
-gboolean        _gtk_window_query_nonaccels     (GtkWindow      *window,
-                                                 guint           accel_key,
-                                                 GdkModifierType accel_mods);
-
 void            _gtk_window_schedule_mnemonics_visible (GtkWindow *window);
 
 void            _gtk_window_notify_keys_changed (GtkWindow *window);
