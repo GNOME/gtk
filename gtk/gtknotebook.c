@@ -7190,7 +7190,8 @@ gtk_notebook_pages_new (GtkNotebook *notebook)
  * Returns a #GListModel that contains the pages of the notebook,
  * and can be used to keep an up-to-date view.
  * 
- * Returns: (transfer full): a #GListModel for the notebook's children
+ * Returns: (transfer full) (attributes element-type=GtkNotebookPage): a
+ *   #GListModel for the notebook's children
  */
 GListModel *
 gtk_notebook_get_pages (GtkNotebook *notebook)
