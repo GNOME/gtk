@@ -217,6 +217,11 @@ if wayland_enabled or broadway_enabled
   endif
 endif
 
+libgdk_c_args = [
+  '-DGTK_COMPILATION',
+  '-DG_LOG_DOMAIN="Gdk"',
+]
+
 gdk_backends = []
 gdk_backends_gen_headers = []  # non-public generated headers
 foreach backend : ['broadway', 'quartz', 'wayland', 'win32', 'x11', 'macos']
@@ -236,16 +241,12 @@ if gdk_backends.length() == 0
   error('No backends enabled')
 endif
 
-# FIXME: might have to add '-xobjective-c' to c_args for quartz backend?
 libgdk = static_library('gdk',
   sources: [gdk_sources, gdk_backends_gen_headers, gdkconfig],
   dependencies: gdk_deps + [libgtk_css_dep],
   link_with: [libgtk_css, ],
   include_directories: [confinc, gdkx11_inc, wlinc],
-  c_args: [
-    '-DGTK_COMPILATION',
-    '-DG_LOG_DOMAIN="Gdk"',
-  ] + common_cflags,
+  c_args: libgdk_c_args + common_cflags,
   link_whole: gdk_backends,
   link_args: common_ldflags)
 

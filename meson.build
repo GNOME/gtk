@@ -321,11 +321,6 @@ if os_unix and not os_darwin
   endforeach
 endif
 
-# Maintain compatibility with autotools
-if os_darwin
-  common_ldflags += [ '-compatibility_version 1', '-current_version 1.0', ]
-endif
-
 confinc = include_directories('.')
 gdkinc = include_directories('gdk')
 gskinc = include_directories('gsk')
