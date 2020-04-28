@@ -2321,6 +2321,12 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
       break;
     }
 
+  /* Create the action muxer early if it is necessary so that all GtkWidget
+   * subclasses have access to it with the proper actions registered (even
+   * though they don't have the g_class pointer available).
+   */
+  (void)_gtk_widget_get_action_muxer (widget, g_class, FALSE);
+
   /* this will be set to TRUE if the widget gets a child or if the
    * expand flag is set on the widget, but until one of those happen
    * we know the expand is already properly FALSE.
@@ -10685,7 +10691,7 @@ gtk_widget_get_parent_muxer (GtkWidget *widget,
   parent = _gtk_widget_get_parent (widget);
 
   if (parent)
-    return _gtk_widget_get_action_muxer (parent, create);
+    return _gtk_widget_get_action_muxer (parent, NULL, create);
 
   return NULL;
 }
@@ -10704,11 +10710,12 @@ _gtk_widget_update_parent_muxer (GtkWidget *widget)
 }
 
 GtkActionMuxer *
-_gtk_widget_get_action_muxer (GtkWidget *widget,
-                              gboolean   create)
+_gtk_widget_get_action_muxer (GtkWidget      *widget,
+                              GtkWidgetClass *g_class,
+                              gboolean        create)
 {
   GtkActionMuxer *muxer;
-  GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (widget);
+  GtkWidgetClass *widget_class = g_class ? g_class : GTK_WIDGET_GET_CLASS (widget);
   GtkWidgetClassPrivate *priv = widget_class->priv;
 
   muxer = (GtkActionMuxer*)g_object_get_qdata (G_OBJECT (widget), quark_action_muxer);
@@ -10758,7 +10765,7 @@ gtk_widget_insert_action_group (GtkWidget    *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (name != NULL);
 
-  muxer = _gtk_widget_get_action_muxer (widget, TRUE);
+  muxer = _gtk_widget_get_action_muxer (widget, NULL, TRUE);
 
   if (group)
     gtk_action_muxer_insert (muxer, name, group);
@@ -11242,7 +11249,7 @@ gtk_widget_activate_action_variant (GtkWidget  *widget,
 {
   GtkActionMuxer *muxer;
 
-  muxer = _gtk_widget_get_action_muxer (widget, FALSE);
+  muxer = _gtk_widget_get_action_muxer (widget, NULL, FALSE);
   if (muxer == NULL)
     return FALSE;
 
@@ -12487,7 +12494,7 @@ gtk_widget_action_set_enabled (GtkWidget  *widget,
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  muxer = _gtk_widget_get_action_muxer (widget, TRUE);
+  muxer = _gtk_widget_get_action_muxer (widget, NULL, TRUE);
   gtk_action_muxer_action_enabled_changed (muxer, action_name, enabled);
 }
 

@@ -431,7 +431,7 @@ update_accel (GtkShortcut *shortcut,
       !GTK_IS_KEYVAL_TRIGGER (trigger))
     return;
 
-  muxer = _gtk_widget_get_action_muxer (widget, set);
+  muxer = _gtk_widget_get_action_muxer (widget, NULL, set);
   if (!muxer)
     return;
 

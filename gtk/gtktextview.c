@@ -8795,7 +8795,7 @@ append_bubble_item (GtkTextView *text_view,
   action_name = g_variant_get_string (att, NULL);
   g_variant_unref (att);
 
-  group = G_ACTION_GROUP (_gtk_widget_get_action_muxer (GTK_WIDGET (text_view), FALSE));
+  group = G_ACTION_GROUP (_gtk_widget_get_action_muxer (GTK_WIDGET (text_view), NULL, FALSE));
   if (group)
     {
       g_action_group_query_action (group, action_name, &enabled, &param_type, &state_type, NULL, NULL);
