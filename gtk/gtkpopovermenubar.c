@@ -657,7 +657,7 @@ gtk_popover_menu_bar_set_menu_model (GtkPopoverMenuBar *bar,
 
       if (model)
         {
-          muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (bar), TRUE);
+          muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (bar), NULL, TRUE);
           bar->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (muxer),
                                                model,
                                                FALSE,

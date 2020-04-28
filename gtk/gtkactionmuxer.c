@@ -74,6 +74,7 @@ struct _GtkActionMuxer
   GtkActionMuxer *parent;
 
   GtkWidget *widget;
+  GType widget_type;
 
   GtkBitmask *widget_actions_disabled;
 };
@@ -87,6 +88,7 @@ enum
   PROP_0,
   PROP_PARENT,
   PROP_WIDGET,
+  PROP_WIDGET_TYPE,
   NUM_PROPERTIES
 };
 
@@ -556,16 +558,15 @@ prop_action_notify (GObject    *object,
 }
 
 static void
-prop_actions_connect (GtkActionMuxer *muxer)
+prop_actions_connect (GtkActionMuxer *muxer,
+                      GtkWidgetClass *klass)
 {
   GtkWidgetClassPrivate *priv;
   GtkWidgetAction *action;
-  GtkWidgetClass *klass;
 
   if (!muxer->widget)
     return;
 
-  klass = GTK_WIDGET_GET_CLASS (muxer->widget);
   priv = klass->priv;
   if (!priv->actions)
     return;
@@ -869,7 +870,12 @@ gtk_action_muxer_constructed (GObject *object)
 {
   GtkActionMuxer *muxer = GTK_ACTION_MUXER (object);
 
-  prop_actions_connect (muxer);
+  if (muxer->widget && muxer->widget_type)
+    {
+      GtkWidgetClass *widget_class = g_type_class_ref (muxer->widget_type);
+      prop_actions_connect (muxer, widget_class);
+      g_type_class_unref (widget_class);
+    }
 
   G_OBJECT_CLASS (gtk_action_muxer_parent_class)->constructed (object);
 }
@@ -890,6 +896,10 @@ gtk_action_muxer_get_property (GObject    *object,
 
     case PROP_WIDGET:
       g_value_set_object (value, muxer->widget);
+      break;
+
+    case PROP_WIDGET_TYPE:
+      g_value_set_gtype (value, muxer->widget_type);
       break;
 
     default:
@@ -913,6 +923,10 @@ gtk_action_muxer_set_property (GObject      *object,
 
     case PROP_WIDGET:
       muxer->widget = g_value_get_object (value);
+      break;
+
+    case PROP_WIDGET_TYPE:
+      muxer->widget_type = g_value_get_gtype (value);
       break;
 
     default:
@@ -976,6 +990,13 @@ gtk_action_muxer_class_init (GObjectClass *class)
                                                  G_PARAM_READWRITE |
                                                  G_PARAM_CONSTRUCT_ONLY |
                                                  G_PARAM_STATIC_STRINGS);
+
+  properties[PROP_WIDGET_TYPE] = g_param_spec_gtype ("widget-type", "Widget Type",
+                                                     "The widget type that owns the muxer",
+                                                     GTK_TYPE_WIDGET,
+                                                     G_PARAM_READWRITE |
+                                                     G_PARAM_CONSTRUCT_ONLY |
+                                                     G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (class, NUM_PROPERTIES, properties);
 }
@@ -1075,10 +1096,25 @@ gtk_action_muxer_remove (GtkActionMuxer *muxer,
  * Creates a new #GtkActionMuxer.
  */
 GtkActionMuxer *
-gtk_action_muxer_new (GtkWidget *widget)
+gtk_action_muxer_new (GtkWidget *widget,
+                      GType      widget_type)
 {
+  g_return_val_if_fail (!widget || GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (widget_type == G_TYPE_INVALID ||
+                        g_type_is_a (widget_type, GTK_TYPE_WIDGET),
+                        NULL);
+
+  if (widget_type == G_TYPE_INVALID)
+    {
+      if (widget != NULL)
+        widget_type = G_OBJECT_TYPE (widget);
+      else
+        widget_type = GTK_TYPE_WIDGET;
+    }
+
   return g_object_new (GTK_TYPE_ACTION_MUXER,
                        "widget", widget,
+                       "widget-type", widget_type,
                        NULL);
 }
 

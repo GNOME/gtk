@@ -1069,7 +1069,7 @@ gtk_named_action_activate (GtkShortcutAction      *action,
   GActionGroup *action_group;
   gboolean enabled;
 
-  action_group = G_ACTION_GROUP (_gtk_widget_get_action_muxer (widget, FALSE));
+  action_group = G_ACTION_GROUP (_gtk_widget_get_action_muxer (widget, NULL, FALSE));
   if (action_group == NULL)
     return FALSE;
 

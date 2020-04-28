@@ -512,7 +512,7 @@ gtk_menu_section_box_new_toplevel (GtkPopoverMenu      *popover,
 
   gtk_popover_menu_add_submenu (popover, GTK_WIDGET (box), "main");
 
-  box->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (_gtk_widget_get_action_muxer (GTK_WIDGET (box), TRUE)),
+  box->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (_gtk_widget_get_action_muxer (GTK_WIDGET (box), NULL, TRUE)),
                                        model, TRUE, FALSE, FALSE, NULL,
                                        gtk_menu_section_box_insert_func,
                                        gtk_menu_section_box_remove_func, box);

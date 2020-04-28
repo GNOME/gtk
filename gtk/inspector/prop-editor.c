@@ -1280,7 +1280,7 @@ find_action_owner (GtkActionable *actionable)
     {
       GtkActionMuxer *muxer;
 
-      muxer = _gtk_widget_get_action_muxer (widget, FALSE);
+      muxer = _gtk_widget_get_action_muxer (widget, NULL, FALSE);
       if (muxer && gtk_action_muxer_find (muxer, full_name, NULL))
         return (GObject *)widget;
 

@@ -6008,7 +6008,7 @@ append_bubble_item (GtkText    *self,
   action_name = g_variant_get_string (att, NULL);
   g_variant_unref (att);
 
-  muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (self), FALSE);
+  muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (self), NULL, FALSE);
   if (!g_action_group_get_action_enabled (G_ACTION_GROUP (muxer), action_name))
     return;
 

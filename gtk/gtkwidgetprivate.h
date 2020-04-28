@@ -278,8 +278,9 @@ void              gtk_system_setting_changed               (GdkDisplay          
                                                             GtkSystemSetting     setting);
 
 void              _gtk_widget_update_parent_muxer          (GtkWidget    *widget);
-GtkActionMuxer *  _gtk_widget_get_action_muxer             (GtkWidget    *widget,
-                                                            gboolean      create);
+GtkActionMuxer *  _gtk_widget_get_action_muxer             (GtkWidget      *widget,
+                                                            GtkWidgetClass *widget_clsas,
+                                                            gboolean        create);
 
 gboolean          _gtk_widget_consumes_motion              (GtkWidget           *widget,
                                                             GdkEventSequence    *sequence);

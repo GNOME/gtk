@@ -398,7 +398,7 @@ gtk_action_helper_new (GtkActionable *widget)
   if (pspec && G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_BOOLEAN)
     g_object_get (G_OBJECT (helper->widget), "active", &helper->active, NULL);
 
-  helper->action_context = _gtk_widget_get_action_muxer (GTK_WIDGET (widget), TRUE);
+  helper->action_context = _gtk_widget_get_action_muxer (GTK_WIDGET (widget), NULL, TRUE);
 
   return helper;
 }

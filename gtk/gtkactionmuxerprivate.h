@@ -49,7 +49,8 @@ struct _GtkWidgetAction
 };
 
 GType                   gtk_action_muxer_get_type                       (void);
-GtkActionMuxer *        gtk_action_muxer_new                            (GtkWidget      *widget);
+GtkActionMuxer *        gtk_action_muxer_new                            (GtkWidget      *widget,
+                                                                         GType           widget_type);
 
 void                    gtk_action_muxer_insert                         (GtkActionMuxer *muxer,
                                                                          const gchar    *prefix,

@@ -320,7 +320,7 @@ gtk_inspector_actions_set_object (GtkInspectorActions *sl,
     {
       GtkActionMuxer *muxer;
 
-      muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (object), FALSE);
+      muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (object), NULL, FALSE);
       if (muxer)
         add_group (sl, page, G_ACTION_GROUP (muxer));
     }
