@@ -271,10 +271,12 @@ do_iconview (GtkWidget *do_widget)
       gtk_box_append (GTK_BOX (vbox), tool_bar);
 
       up_button = gtk_button_new_with_mnemonic ("_Up");
+      gtk_button_set_has_frame (GTK_BUTTON (up_button), FALSE);
       gtk_widget_set_sensitive (GTK_WIDGET (up_button), FALSE);
       gtk_box_append (GTK_BOX (tool_bar), up_button);
 
       home_button = gtk_button_new_with_mnemonic ("_Home");
+      gtk_button_set_has_frame (GTK_BUTTON (home_button), FALSE);
       gtk_box_append (GTK_BOX (tool_bar), home_button);
 
 
