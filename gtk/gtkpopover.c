@@ -379,11 +379,6 @@ update_popover_layout (GtkPopover     *popover,
     did_flip_vertically (gdk_popup_layout_get_surface_anchor (layout),
                          gdk_popup_get_surface_anchor (popup));
 
-  gtk_widget_allocate (GTK_WIDGET (popover),
-                       gdk_surface_get_width (priv->surface),
-                       gdk_surface_get_height (priv->surface),
-                       -1, NULL);
-
   priv->final_rect = final_rect;
 
   switch (priv->position)
@@ -404,6 +399,11 @@ update_popover_layout (GtkPopover     *popover,
       g_assert_not_reached ();
       break;
     }
+
+  gtk_widget_allocate (GTK_WIDGET (popover),
+                       gdk_surface_get_width (priv->surface),
+                       gdk_surface_get_height (priv->surface),
+                       -1, NULL);
 
   g_clear_pointer (&priv->arrow_render_node, gsk_render_node_unref);
   gtk_widget_queue_draw (GTK_WIDGET (popover));
