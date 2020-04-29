@@ -73,6 +73,7 @@ gtk_tests = [
   ['testprint', ['testprintfileoperation.c']],
   ['testscale'],
   ['testselectionmode'],
+  ['testsounds'],
   ['testspinbutton'],
   ['testtoolbar2'],
   ['testtreechanging'],
