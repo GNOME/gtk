@@ -41,6 +41,58 @@ struct _GdkMacosToplevelSurfaceClass
   GdkMacosSurfaceClass parent_instance;
 };
 
+static void
+_gdk_macos_toplevel_surface_fullscreen (GdkMacosToplevelSurface *self)
+{
+  NSWindow *window;
+
+  g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
+
+  window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
+
+  if (([window styleMask] & NSWindowStyleMaskFullScreen) == 0)
+    [window toggleFullScreen:window];
+}
+
+static void
+_gdk_macos_toplevel_surface_unfullscreen (GdkMacosToplevelSurface *self)
+{
+  NSWindow *window;
+
+  g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
+
+  window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
+
+  if (([window styleMask] & NSWindowStyleMaskFullScreen) != 0)
+    [window toggleFullScreen:window];
+}
+
+static void
+_gdk_macos_toplevel_surface_maximize (GdkMacosToplevelSurface *self)
+{
+  NSWindow *window;
+
+  g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
+
+  window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
+
+  if (![window isZoomed])
+    [window zoom:window];
+}
+
+static void
+_gdk_macos_toplevel_surface_unmaximize (GdkMacosToplevelSurface *self)
+{
+  NSWindow *window;
+
+  g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
+
+  window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
+
+  if ([window isZoomed])
+    [window zoom:window];
+}
+
 static gboolean
 _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
                                      int                width,
@@ -49,7 +101,19 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
 {
   GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)toplevel;
   NSWindow *window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
+
   [window makeKeyAndOrderFront:window];
+
+  if (gdk_toplevel_layout_get_maximized (layout))
+    _gdk_macos_toplevel_surface_maximize (self);
+  else
+    _gdk_macos_toplevel_surface_unmaximize (self);
+
+  if (gdk_toplevel_layout_get_fullscreen (layout))
+    _gdk_macos_toplevel_surface_fullscreen (self);
+  else
+    _gdk_macos_toplevel_surface_unfullscreen (self);
+
   return TRUE;
 }
 
@@ -259,7 +323,6 @@ _gdk_macos_toplevel_surface_class_init (GdkMacosToplevelSurfaceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkSurfaceClass *surface_class = GDK_SURFACE_CLASS (klass);
-  GdkMacosSurfaceClass *base_class = GDK_MACOS_SURFACE_CLASS (klass);
 
   object_class->constructed = _gdk_macos_toplevel_surface_constructed;
   object_class->get_property = _gdk_macos_toplevel_surface_get_property;
