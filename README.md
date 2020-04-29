@@ -27,9 +27,9 @@ The official developers blog
 
   - https://blog.gtk.org
 
-Information about mailing lists can be found at
+Discussion forum
 
-  - http://www.gtk.org/mailing-lists.php
+  - https://discourse.gnome.org/c/platform/core/
 
 Nightly documentation can be found at
   - Gtk: https://gnome.pages.gitlab.gnome.org/gtk/gtk/
@@ -140,6 +140,12 @@ In the bug report please include:
 * Further information such as stack traces may be useful, but
   is not necessary.
 
+Contributing to GTK
+-------------------
+
+Please, follow the [contribution guide](./CONTRIBUTING.md) to know how to
+start contributing to GTK.
+
 Release notes
 -------------
 
@@ -156,4 +162,4 @@ GTK is released under the terms of the GNU Lesser General Public License,
 version 2.1 or, at your option, any later version, as published by the Free
 Software Foundation.
 
-Please, see the `COPYING` file for further information.
+Please, see the [`COPYING`](./COPYING) file for further information.
