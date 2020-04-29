@@ -96,5 +96,14 @@ gtk_array_free (GtkArray       *self,
   g_ptr_array_free (self->ptr_array, TRUE);
 }
 
+static inline void **
+gtk_array_get_data (GtkArray *self)
+{
+  if (G_LIKELY (!self->ptr_array))
+    return self->stack_space;
+
+  return self->ptr_array->pdata;
+}
+
 
 #endif
