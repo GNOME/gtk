@@ -53,6 +53,7 @@
 -(void)hide;
 -(BOOL)isInManualResizeOrMove;
 -(BOOL)isInMove;
+-(void)setGdkSurface:(GdkMacosSurface *)surface;
 -(void)setStyleMask:(NSWindowStyleMask)styleMask;
 -(void)showAndMakeKey:(BOOL)makeKey;
 -(BOOL)trackManualMove;

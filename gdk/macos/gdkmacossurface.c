@@ -125,6 +125,7 @@ gdk_macos_surface_set_property (GObject      *object,
     {
     case PROP_NATIVE:
       priv->window = g_value_get_pointer (value);
+      [priv->window setGdkSurface:self];
       break;
 
     default:
@@ -239,10 +240,19 @@ _gdk_macos_surface_set_title (GdkMacosSurface *self,
 {
   GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
 
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
+
+  if (title == NULL)
+    title = "";
+
   if (g_strcmp0 (priv->title, title) != 0)
     {
       g_free (priv->title);
       priv->title = g_strdup (title);
+
+      GDK_BEGIN_MACOS_ALLOC_POOL;
+      [priv->window setTitle:[NSString stringWithUTF8String:title]];
+      GDK_END_MACOS_ALLOC_POOL;
     }
 }
 

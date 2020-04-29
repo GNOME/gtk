@@ -293,12 +293,10 @@
 	                  styleMask:styleMask
 	                    backing:backingType
 	                      defer:flag
-                             screen:screen];
+                       screen:screen];
 
   [self setAcceptsMouseMovedEvents:YES];
-#if 0
   [self setDelegate:self];
-#endif
   [self setReleasedWhenClosed:YES];
 
   return self;
@@ -337,14 +335,14 @@
     case GDK_SURFACE_TYPE_HINT_POPUP_MENU:
     case GDK_SURFACE_TYPE_HINT_COMBO:
       return YES;
-      
+
     case GDK_SURFACE_TYPE_HINT_SPLASHSCREEN:
     case GDK_SURFACE_TYPE_HINT_TOOLTIP:
     case GDK_SURFACE_TYPE_HINT_NOTIFICATION:
     case GDK_SURFACE_TYPE_HINT_DND:
       return NO;
     }
-  
+
   return YES;
 #endif
 
@@ -640,6 +638,11 @@
 -(void)windowWillExitFullScreen:(NSNotification *)aNotification
 {
   [self setFrame:lastUnfullscreenFrame display:YES];
+}
+
+-(void)setGdkSurface:(GdkMacosSurface *)surface
+{
+  self->gdkSurface = surface;
 }
 
 @end
