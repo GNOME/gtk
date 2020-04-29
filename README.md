@@ -140,6 +140,12 @@ In the bug report please include:
 * Further information such as stack traces may be useful, but
   is not necessary.
 
+Contributing to GTK
+-------------------
+
+Please, follow the [contribution guide](./CONTRIBUTING.md) to know how to
+start contributing to GTK.
+
 Release notes
 -------------
 
