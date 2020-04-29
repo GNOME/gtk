@@ -509,7 +509,8 @@ add_emoji (GtkWidget          *list,
   g_object_set_data (G_OBJECT (child), "base", label);
 
   stack = gtk_stack_new ();
-  gtk_stack_set_homogeneous (GTK_STACK (stack), TRUE);
+  gtk_stack_set_hhomogeneous (GTK_STACK (stack), TRUE);
+  gtk_stack_set_vhomogeneous (GTK_STACK (stack), TRUE);
   gtk_stack_set_transition_type (GTK_STACK (stack), GTK_STACK_TRANSITION_TYPE_OVER_RIGHT_LEFT);
   gtk_container_add (GTK_CONTAINER (box), stack);
   g_object_set_data (G_OBJECT (child), "stack", stack);

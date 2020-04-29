@@ -242,7 +242,8 @@
                                     </child>
                                     <child>
                                       <object class="GtkStack" id="object_start_stack">
-                                        <property name="homogeneous">0</property>
+                                        <property name="hhomogeneous">0</property>
+                                        <property name="vhomogeneous">0</property>
                                         <child>
                                           <object class="GtkStackPage">
                                             <property name="name">empty</property>
@@ -299,7 +300,8 @@
                                     <property name="transition-type">crossfade</property>
                                     <property name="hexpand">1</property>
                                     <property name="halign">center</property>
-                                    <property name="homogeneous">0</property>
+                                    <property name="hhomogeneous">0</property>
+                                    <property name="vhomogeneous">0</property>
                                     <child>
                                       <object class="GtkStackPage">
                                         <property name="name">title</property>

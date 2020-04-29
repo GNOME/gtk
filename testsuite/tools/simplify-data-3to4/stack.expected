@@ -10,6 +10,8 @@
         </child>
         <child>
           <object class="GtkStack" id="stack1">
+            <property name="vhomogeneous">0</property>
+            <property name="hhomogeneous">0</property>
             <child>
               <object class="GtkStackPage">
                 <property name="name">page1</property>
