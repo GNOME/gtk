@@ -149,7 +149,7 @@ gdk_x11_window_invalidate_for_new_frame (GdkWindow      *window,
 
 
   invalidate_all = FALSE;
-  if (buffer_age == 0 || buffer_age >= 4)
+  if (buffer_age >= 4)
     {
       cairo_rectangle_int_t whole_window = { 0, 0, gdk_window_get_width (window), gdk_window_get_height (window) };
 
