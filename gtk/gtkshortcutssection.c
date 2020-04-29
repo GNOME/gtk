@@ -418,7 +418,8 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
   gtk_box_set_spacing (GTK_BOX (self), 22);
 
   self->stack = g_object_new (GTK_TYPE_STACK,
-                              "homogeneous", TRUE,
+                              "hhomogeneous", TRUE,
+                              "vhomogeneous", TRUE,
                               "transition-type", GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT,
                               "vexpand", TRUE,
                               "visible", TRUE,
