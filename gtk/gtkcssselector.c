@@ -24,6 +24,7 @@
 
 #include "gtkcssprovider.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkarrayimplprivate.h"
 
 #include <errno.h>
 #if defined(_MSC_VER) && _MSC_VER >= 1500
@@ -2119,7 +2120,8 @@ subdivide_infos (GByteArray                 *array,
   GHashTableIter iter;
   guint max_count;
   gpointer key, value;
-  GPtrArray *exact_matches;
+  void *exact_matches_stack[8];
+  GtkArray exact_matches_array;
   gint32 res;
   guint i;
 
@@ -2161,7 +2163,7 @@ subdivide_infos (GByteArray                 *array,
   matched_infos = g_alloca (sizeof (GtkCssSelectorRuleSetInfo *) * n_infos);
   remaining_infos = g_alloca (sizeof (GtkCssSelectorRuleSetInfo *) * n_infos);
 
-  exact_matches = NULL;
+  gtk_array_init (&exact_matches_array, (void**)exact_matches_stack, 8);
   for (i = 0; i < n_infos; i++)
     {
       GtkCssSelectorRuleSetInfo *info = infos[i];
@@ -2172,9 +2174,7 @@ subdivide_infos (GByteArray                 *array,
 	  if (info->current_selector == NULL)
 	    {
 	      /* Matches current node */
-	      if (exact_matches == NULL)
-		exact_matches = g_ptr_array_new ();
-	      g_ptr_array_add (exact_matches, info->match);
+              gtk_array_add (&exact_matches_array, info->match);
 	      if (info->selector_match != NULL)
 		*info->selector_match = GUINT_TO_POINTER (tree_offset);
 	    }
@@ -2191,13 +2191,14 @@ subdivide_infos (GByteArray                 *array,
 	}
     }
 
-  if (exact_matches)
+  if (exact_matches_array.len > 0)
     {
-      g_ptr_array_add (exact_matches, NULL); /* Null terminate */
+      gtk_array_add (&exact_matches_array, NULL); /* Null terminate */
       res = array->len;
-      g_byte_array_append (array, (guint8 *)exact_matches->pdata,
-			   exact_matches->len * sizeof (gpointer));
-      g_ptr_array_free (exact_matches, TRUE);
+      g_byte_array_append (array, (guint8 *)gtk_array_get_data (&exact_matches_array),
+                           exact_matches_array.len * sizeof (gpointer));
+
+      gtk_array_free (&exact_matches_array, NULL);
     }
   else
     res = GTK_CSS_SELECTOR_TREE_EMPTY_OFFSET;
