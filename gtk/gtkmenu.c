@@ -140,6 +140,8 @@
 
 #include "a11y/gtkmenuaccessible.h"
 #include "gdk/gdk-private.h"
+#include "gdk/wayland/gdkwayland.h"
+#include "gdk/x11/gdkx.h"
 
 #define NAVIGATION_REGION_OVERSHOOT 50  /* How much the navigation region
                                          * extends below the submenu
@@ -1774,12 +1776,35 @@ popup_grab_on_window (GdkWindow *window,
                       GdkDevice *pointer)
 {
   GdkGrabStatus status;
+  GdkDisplay *display;
   GdkSeat *seat;
 
+  display = gdk_window_get_display (window);
   seat = gdk_device_get_seat (pointer);
-  status = gdk_seat_grab (seat, window,
-                          GDK_SEAT_CAPABILITY_ALL, TRUE,
-                          NULL, NULL, NULL, NULL);
+
+/* Let GtkMenu use pointer emulation instead of touch events under X11. */
+#define GDK_SEAT_CAPABILITY_NO_TOUCH (GDK_SEAT_CAPABILITY_POINTER | \
+                                      GDK_SEAT_CAPABILITY_TABLET_STYLUS | \
+                                      GDK_SEAT_CAPABILITY_KEYBOARD)
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (display))
+    {
+      status = gdk_seat_grab (seat, window,
+                              GDK_SEAT_CAPABILITY_ALL, TRUE,
+                              NULL, NULL, NULL, NULL);
+    }
+  else
+#endif
+#ifdef GDK_WINDOWING_X11
+  if (GDK_IS_X11_DISPLAY (display))
+    {
+      status = gdk_seat_grab (seat, window,
+                              GDK_SEAT_CAPABILITY_NO_TOUCH, TRUE,
+                              NULL, NULL, NULL, NULL);
+    }
+  else
+#endif
+  g_error ("Unsupported GDK backend");
 
   return status == GDK_GRAB_SUCCESS;
 }
