@@ -2101,12 +2101,12 @@ propagate_event_up (GtkWidget *widget,
        * to have children of the viewport eat the scroll
        * event
        */
-      if (!gtk_widget_is_sensitive (widget))
+      if (!_gtk_widget_is_sensitive (widget))
         handled_event = gdk_event_get_event_type (event) != GDK_SCROLL;
-      else if (gtk_widget_get_realized (widget))
+      else if (_gtk_widget_get_realized (widget))
         handled_event = gtk_widget_event (widget, event, target);
 
-      handled_event |= !gtk_widget_get_realized (widget);
+      handled_event |= !_gtk_widget_get_realized (widget);
 
       tmp = gtk_widget_get_parent (widget);
       g_object_unref (widget);
