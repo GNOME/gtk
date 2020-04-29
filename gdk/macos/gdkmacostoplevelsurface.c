@@ -21,6 +21,7 @@
 
 #import "GdkMacosWindow.h"
 
+#include "gdkinternals.h"
 #include "gdktoplevelprivate.h"
 
 #include "gdkmacosdisplay-private.h"
@@ -101,18 +102,43 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
 {
   GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)toplevel;
   NSWindow *window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
+  GdkGeometry geometry;
+  GdkSurfaceHints mask;
 
-  [window makeKeyAndOrderFront:window];
+  g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
+  g_assert (window != NULL);
 
+  if (gdk_toplevel_layout_get_resizable (layout))
+    {
+      geometry.min_width = gdk_toplevel_layout_get_min_width (layout);
+      geometry.min_height = gdk_toplevel_layout_get_min_height (layout);
+      mask = GDK_HINT_MIN_SIZE;
+    }
+  else
+    {
+      geometry.max_width = geometry.min_width = width;
+      geometry.max_height = geometry.min_height = height;
+      mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE;
+    }
+
+  _gdk_macos_surface_set_geometry_hints (GDK_MACOS_SURFACE (self), &geometry, mask);
+  gdk_surface_constrain_size (&geometry, mask, width, height, &width, &height);
+  _gdk_macos_surface_resize (GDK_MACOS_SURFACE (self), width, height, -1);
+
+  /* Maximized state */
   if (gdk_toplevel_layout_get_maximized (layout))
     _gdk_macos_toplevel_surface_maximize (self);
   else
     _gdk_macos_toplevel_surface_unmaximize (self);
 
+  /* Fullscreen state */
   if (gdk_toplevel_layout_get_fullscreen (layout))
     _gdk_macos_toplevel_surface_fullscreen (self);
   else
     _gdk_macos_toplevel_surface_unfullscreen (self);
+
+  /* Now present the window */
+  [window makeKeyAndOrderFront:window];
 
   return TRUE;
 }

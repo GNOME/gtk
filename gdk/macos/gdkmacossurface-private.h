@@ -22,6 +22,7 @@
 
 #include <AppKit/AppKit.h>
 
+#include "gdkinternals.h"
 #include "gdksurfaceprivate.h"
 
 #include "gdkmacosdisplay.h"
@@ -43,26 +44,33 @@ struct _GdkMacosSurfaceClass
   GdkSurfaceClass parent_class;
 };
 
-GdkMacosSurface   *_gdk_macos_surface_new            (GdkMacosDisplay *display,
-                                                      GdkSurfaceType   surface_type,
-                                                      GdkSurface      *parent,
-                                                      int              x,
-                                                      int              y,
-                                                      int              width,
-                                                      int              height);
-NSWindow          *_gdk_macos_surface_get_native     (GdkMacosSurface *self);
-CGDirectDisplayID  _gdk_macos_surface_get_screen_id  (GdkMacosSurface *self);
-const char        *_gdk_macos_surface_get_title      (GdkMacosSurface *self);
-void               _gdk_macos_surface_set_title      (GdkMacosSurface *self,
-                                                      const gchar     *title);
-void               _gdk_macos_surface_get_shadow     (GdkMacosSurface *self,
-                                                      gint            *top,
-                                                      gint            *right,
-                                                      gint            *bottom,
-                                                      gint            *left);
-gboolean           _gdk_macos_surface_get_modal_hint (GdkMacosSurface *self);
-void               _gdk_macos_surface_set_modal_hint (GdkMacosSurface *self,
-                                                      gboolean         modal_hint);
+GdkMacosSurface   *_gdk_macos_surface_new                (GdkMacosDisplay    *display,
+                                                          GdkSurfaceType      surface_type,
+                                                          GdkSurface         *parent,
+                                                          int                 x,
+                                                          int                 y,
+                                                          int                 width,
+                                                          int                 height);
+NSWindow          *_gdk_macos_surface_get_native         (GdkMacosSurface    *self);
+CGDirectDisplayID  _gdk_macos_surface_get_screen_id      (GdkMacosSurface    *self);
+const char        *_gdk_macos_surface_get_title          (GdkMacosSurface    *self);
+void               _gdk_macos_surface_set_title          (GdkMacosSurface    *self,
+                                                          const gchar        *title);
+void               _gdk_macos_surface_get_shadow         (GdkMacosSurface    *self,
+                                                          gint               *top,
+                                                          gint               *right,
+                                                          gint               *bottom,
+                                                          gint               *left);
+gboolean           _gdk_macos_surface_get_modal_hint     (GdkMacosSurface    *self);
+void               _gdk_macos_surface_set_modal_hint     (GdkMacosSurface    *self,
+                                                          gboolean            modal_hint);
+void               _gdk_macos_surface_set_geometry_hints (GdkMacosSurface    *self,
+                                                          const GdkGeometry  *geometry,
+                                                          GdkSurfaceHints     geom_mask);
+void               _gdk_macos_surface_resize             (GdkMacosSurface    *self,
+                                                          int                 width,
+                                                          int                 height,
+                                                          int                 scale);
 
 G_END_DECLS
 

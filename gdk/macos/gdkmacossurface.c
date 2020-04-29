@@ -20,13 +20,16 @@
 #include "config.h"
 
 #include <AppKit/AppKit.h>
+#include <float.h>
 #include <gdk/gdk.h>
 
 #import "GdkMacosWindow.h"
 
 #include "gdkframeclockidleprivate.h"
+#include "gdkinternals.h"
 #include "gdksurfaceprivate.h"
 
+#include "gdkmacosdisplay-private.h"
 #include "gdkmacosdragsurface-private.h"
 #include "gdkmacospopupsurface-private.h"
 #include "gdkmacossurface-private.h"
@@ -39,10 +42,12 @@ typedef struct
 
   char *title;
 
-  gint shadow_top;
-  gint shadow_right;
-  gint shadow_bottom;
-  gint shadow_left;
+  int shadow_top;
+  int shadow_right;
+  int shadow_bottom;
+  int shadow_left;
+
+  int scale;
 
   guint modal_hint : 1;
 } GdkMacosSurfacePrivate;
@@ -286,4 +291,58 @@ _gdk_macos_surface_get_native (GdkMacosSurface *self)
   g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), NULL);
 
   return (NSWindow *)priv->window;
+}
+
+void
+_gdk_macos_surface_set_geometry_hints (GdkMacosSurface   *self,
+                                       const GdkGeometry *geometry,
+                                       GdkSurfaceHints    geom_mask)
+{
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+  NSSize max_size;
+  NSSize min_size;
+
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
+  g_return_if_fail (geometry != NULL);
+  g_return_if_fail (priv->window != NULL);
+
+  if (geom_mask & GDK_HINT_MAX_SIZE)
+    max_size = NSMakeSize (geometry->max_width, geometry->max_height);
+  else
+    max_size = NSMakeSize (FLT_MAX, FLT_MAX);
+
+  if (geom_mask & GDK_HINT_MIN_SIZE)
+    min_size = NSMakeSize (geometry->min_width, geometry->min_height);
+  else
+    min_size = NSMakeSize (0, 0);
+
+  [priv->window setMaxSize:max_size];
+  [priv->window setMinSize:min_size];
+}
+
+void
+_gdk_macos_surface_resize (GdkMacosSurface *self,
+                           int              width,
+                           int              height,
+                           int              scale)
+{
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+  GdkSurface *surface = (GdkSurface *)self;
+  GdkDisplay *display;
+  NSRect content_rect;
+  NSRect frame_rect;
+  int gx;
+  int gy;
+
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (surface));
+
+  display = gdk_surface_get_display (surface);
+  _gdk_macos_display_to_display_coords (GDK_MACOS_DISPLAY (display),
+                                        surface->x,
+                                        surface->y + surface->height,
+                                        &gx,
+                                        &gy);
+  content_rect = NSMakeRect (gx, gy, width, height);
+  frame_rect = [priv->window frameRectForContentRect:content_rect];
+  [priv->window setFrame:frame_rect display:YES];
 }
