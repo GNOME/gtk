@@ -49,11 +49,7 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
                                      GdkToplevelLayout *layout)
 {
   GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)toplevel;
-
-  g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
-
   [self->window makeKeyAndOrderFront:self->window];
-
   return TRUE;
 }
 
@@ -61,11 +57,15 @@ static gboolean
 _gdk_macos_toplevel_surface_minimize (GdkToplevel *toplevel)
 {
   GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)toplevel;
-
-  g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
-
   [self->window miniaturize:self->window];
+  return TRUE;
+}
 
+static gboolean
+_gdk_macos_toplevel_surface_lower (GdkToplevel *toplevel)
+{
+  GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)toplevel;
+  [self->window orderBack:self->window];
   return TRUE;
 }
 
@@ -74,9 +74,6 @@ _gdk_macos_toplevel_surface_focus (GdkToplevel *toplevel,
                                    guint32      timestamp)
 {
   GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)toplevel;
-
-  g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
-
   [self->window makeKeyAndOrderFront:self->window];
 }
 
@@ -85,6 +82,7 @@ toplevel_iface_init (GdkToplevelInterface *iface)
 {
   iface->present = _gdk_macos_toplevel_surface_present;
   iface->minimize = _gdk_macos_toplevel_surface_minimize;
+  iface->lower = _gdk_macos_toplevel_surface_lower;
   iface->focus = _gdk_macos_toplevel_surface_focus;
 }
 
