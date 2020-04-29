@@ -6053,7 +6053,7 @@ gtk_widget_get_native (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  return GTK_NATIVE (gtk_widget_get_ancestor (widget, GTK_TYPE_NATIVE));
+  return (GtkNative *)gtk_widget_get_ancestor (widget, GTK_TYPE_NATIVE);
 }
 
 static void
