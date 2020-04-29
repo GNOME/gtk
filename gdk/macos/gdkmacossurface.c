@@ -22,6 +22,8 @@
 #include <AppKit/AppKit.h>
 #include <gdk/gdk.h>
 
+#import "GdkMacosWindow.h"
+
 #include "gdkframeclockidleprivate.h"
 #include "gdksurfaceprivate.h"
 
@@ -29,9 +31,12 @@
 #include "gdkmacospopupsurface-private.h"
 #include "gdkmacossurface-private.h"
 #include "gdkmacostoplevelsurface-private.h"
+#include "gdkmacosutils-private.h"
 
 typedef struct
 {
+  GdkMacosWindow *window;
+
   char *title;
 
   gint shadow_top;
@@ -44,6 +49,14 @@ typedef struct
 
 G_DEFINE_TYPE_WITH_PRIVATE (GdkMacosSurface, gdk_macos_surface, GDK_TYPE_SURFACE)
 
+enum {
+  PROP_0,
+  PROP_NATIVE,
+  LAST_PROP
+};
+
+static GParamSpec *properties [LAST_PROP];
+
 static void
 gdk_macos_surface_set_input_region (GdkSurface     *surface,
                                     cairo_region_t *region)
@@ -54,14 +67,64 @@ gdk_macos_surface_set_input_region (GdkSurface     *surface,
 }
 
 static void
-gdk_macos_surface_finalize (GObject *object)
+gdk_macos_surface_destroy (GdkSurface *surface,
+                           gboolean    foreign_destroy)
 {
-  GdkMacosSurface *self = (GdkMacosSurface *)object;
+  GDK_BEGIN_MACOS_ALLOC_POOL;
+
+  GdkMacosSurface *self = (GdkMacosSurface *)surface;
   GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+  GdkMacosWindow *window = g_steal_pointer (&priv->window);
 
   g_clear_pointer (&priv->title, g_free);
 
-  G_OBJECT_CLASS (gdk_macos_surface_parent_class)->finalize (object);
+  if (window != NULL)
+    [window close];
+
+  GDK_SURFACE_CLASS (gdk_macos_surface_parent_class)->destroy (surface, foreign_destroy);
+
+  GDK_END_MACOS_ALLOC_POOL;
+}
+
+
+static void
+gdk_macos_surface_get_property (GObject    *object,
+                                guint       prop_id,
+                                GValue     *value,
+                                GParamSpec *pspec)
+{
+  GdkMacosSurface *self = GDK_MACOS_SURFACE (object);
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+
+  switch (prop_id)
+    {
+    case PROP_NATIVE:
+      g_value_set_pointer (value, priv->window);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+gdk_macos_surface_set_property (GObject      *object,
+                                guint         prop_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
+{
+  GdkMacosSurface *self = GDK_MACOS_SURFACE (object);
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+
+  switch (prop_id)
+    {
+    case PROP_NATIVE:
+      priv->window = g_value_get_pointer (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
 }
 
 static void
@@ -70,9 +133,19 @@ gdk_macos_surface_class_init (GdkMacosSurfaceClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkSurfaceClass *surface_class = GDK_SURFACE_CLASS (klass);
 
-  object_class->finalize = gdk_macos_surface_finalize;
+  object_class->get_property = gdk_macos_surface_get_property;
+  object_class->set_property = gdk_macos_surface_set_property;
 
+  surface_class->destroy = gdk_macos_surface_destroy;
   surface_class->set_input_region = gdk_macos_surface_set_input_region;
+
+  properties [PROP_NATIVE] =
+    g_param_spec_pointer ("native",
+                          "Native",
+                          "The native NSWindow",
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
@@ -192,7 +265,25 @@ _gdk_macos_surface_set_modal_hint (GdkMacosSurface *self,
 CGDirectDisplayID
 _gdk_macos_surface_get_screen_id (GdkMacosSurface *self)
 {
-  g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), 0);
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
 
-  return GDK_MACOS_SURFACE_GET_CLASS (self)->get_screen_id (self);
+  g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), (CGDirectDisplayID)-1);
+
+  if (priv->window != NULL)
+    {
+      NSScreen *screen = [priv->window screen];
+      return [[[screen deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue];
+    }
+
+  return (CGDirectDisplayID)-1;
+}
+
+NSWindow *
+_gdk_macos_surface_get_native (GdkMacosSurface *self)
+{
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+
+  g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), NULL);
+
+  return (NSWindow *)priv->window;
 }

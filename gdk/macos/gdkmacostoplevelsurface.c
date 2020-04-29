@@ -32,7 +32,6 @@ struct _GdkMacosToplevelSurface
   GdkMacosSurface  parent_instance;
 
   GdkMacosSurface *transient_for;
-  GdkMacosWindow  *window;
 
   guint            decorated : 1;
 };
@@ -49,7 +48,8 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
                                      GdkToplevelLayout *layout)
 {
   GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)toplevel;
-  [self->window makeKeyAndOrderFront:self->window];
+  NSWindow *window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
+  [window makeKeyAndOrderFront:window];
   return TRUE;
 }
 
@@ -57,7 +57,8 @@ static gboolean
 _gdk_macos_toplevel_surface_minimize (GdkToplevel *toplevel)
 {
   GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)toplevel;
-  [self->window miniaturize:self->window];
+  NSWindow *window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
+  [window miniaturize:window];
   return TRUE;
 }
 
@@ -65,7 +66,8 @@ static gboolean
 _gdk_macos_toplevel_surface_lower (GdkToplevel *toplevel)
 {
   GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)toplevel;
-  [self->window orderBack:self->window];
+  NSWindow *window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
+  [window orderBack:window];
   return TRUE;
 }
 
@@ -74,7 +76,8 @@ _gdk_macos_toplevel_surface_focus (GdkToplevel *toplevel,
                                    guint32      timestamp)
 {
   GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)toplevel;
-  [self->window makeKeyAndOrderFront:self->window];
+  NSWindow *window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
+  [window makeKeyAndOrderFront:window];
 }
 
 static void
@@ -91,25 +94,8 @@ G_DEFINE_TYPE_WITH_CODE (GdkMacosToplevelSurface, _gdk_macos_toplevel_surface, G
 
 enum {
   PROP_0,
-  PROP_NATIVE,
   LAST_PROP
 };
-
-static GParamSpec *properties [LAST_PROP];
-
-static CGDirectDisplayID
-_gdk_macos_toplevel_surface_get_screen_id (GdkMacosSurface *base)
-{
-  GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)base;
-
-  if (self->window != NULL)
-    {
-      NSScreen *screen = [self->window screen];
-      return [[[screen deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue];
-    }
-
-  return 0;
-}
 
 static void
 _gdk_macos_toplevel_surface_set_transient_for (GdkMacosToplevelSurface *self,
@@ -131,8 +117,9 @@ _gdk_macos_toplevel_surface_set_decorated (GdkMacosToplevelSurface *self,
 
   if (decorated != self->decorated)
     {
+      NSWindow *window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
       self->decorated = decorated;
-      [self->window setHasShadow:decorated ? YES : NO];
+      [window setHasShadow:decorated ? YES : NO];
     }
 }
 
@@ -141,18 +128,6 @@ _gdk_macos_toplevel_surface_destroy (GdkSurface *surface,
                                      gboolean    foreign_destroy)
 {
   GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)surface;
-
-  if (self->window != NULL)
-    {
-      GDK_BEGIN_MACOS_ALLOC_POOL;
-
-      GdkMacosWindow *window = g_steal_pointer (&self->window);
-
-      if (window != NULL)
-        [window close];
-
-      GDK_END_MACOS_ALLOC_POOL;
-    }
 
   g_clear_object (&self->transient_for);
 
@@ -180,10 +155,6 @@ _gdk_macos_toplevel_surface_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_NATIVE:
-      g_value_set_pointer (value, toplevel->window);
-      break;
-
     case LAST_PROP + GDK_TOPLEVEL_PROP_STATE:
       g_value_set_flags (value, surface->state);
       break;
@@ -241,10 +212,6 @@ _gdk_macos_toplevel_surface_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_NATIVE:
-      toplevel->window = g_value_get_pointer (value);
-      break;
-
     case LAST_PROP + GDK_TOPLEVEL_PROP_TITLE:
       _gdk_macos_surface_set_title (base, g_value_get_string (value));
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
@@ -300,17 +267,7 @@ _gdk_macos_toplevel_surface_class_init (GdkMacosToplevelSurfaceClass *klass)
 
   surface_class->destroy = _gdk_macos_toplevel_surface_destroy;
 
-  base_class->get_screen_id = _gdk_macos_toplevel_surface_get_screen_id;
-
   gdk_toplevel_install_properties (object_class, LAST_PROP);
-
-  properties [PROP_NATIVE] =
-    g_param_spec_pointer ("native",
-                          "Native",
-                          "The native NSWindow",
-                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
-
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
