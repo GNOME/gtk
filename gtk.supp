@@ -11,19 +11,22 @@
 }
 
 {
+   GIO modules
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   ...
+   fun:_g_io_module_get_default
+}
+
+{
    GTK media extension gio modules
    Memcheck:Leak
    match-leak-kinds: definite
    fun:malloc
-   fun:g_malloc
-   fun:g_slice_alloc
-   fun:g_slice_alloc0
-   fun:g_type_create_instance
-   fun:g_object_new_internal
-   fun:g_object_new_with_properties
-   fun:g_object_new
-   fun:g_io_module_new
-   fun:g_io_modules_scan_all_in_directory_with_scope
+   ...
+   fun:gio_module_new
+   ...
    fun:gtk_media_file_extension_init
 }
 
@@ -32,6 +35,13 @@
   radeonsi_dri general
   Memcheck:Leak
   fun:calloc
+  ...
+  obj:/usr/lib*/dri/radeonsi_dri.so
+}
+{
+  radeonsi_dri general
+  Memcheck:Leak
+  fun:malloc
   ...
   obj:/usr/lib*/dri/radeonsi_dri.so
 }
@@ -115,6 +125,14 @@
    obj:*
    obj:*
    obj:*
+   fun:epoxy_eglInitialize_global_rewrite_ptr
+}
+
+{
+   epoxy strncmp
+   Memcheck:Addr8
+   fun:strncmp
+   ...
    fun:epoxy_eglInitialize_global_rewrite_ptr
 }
 
@@ -244,10 +262,10 @@
 
 # GLib
 {
-  glib 1
+  glib GQuark
   Memcheck:Leak
   match-leak-kinds: definite
   fun:malloc
-  fun:g_malloc
-  fun:g_quark_init
+  ...
+  fun:g_quark_*
 }
