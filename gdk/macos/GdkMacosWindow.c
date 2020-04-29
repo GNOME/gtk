@@ -296,7 +296,7 @@
                        screen:screen];
 
   [self setAcceptsMouseMovedEvents:YES];
-  [self setDelegate:self];
+  [self setDelegate:nil];
   [self setReleasedWhenClosed:YES];
 
   return self;
@@ -351,35 +351,25 @@
 
 - (void)showAndMakeKey:(BOOL)makeKey
 {
-#if 0
-  GdkSurface *window = [[self contentView] gdkSurface];
-  GdkSurfaceImplQuartz *impl = GDK_SURFACE_IMPL_QUARTZ (window->impl);
-
   inShowOrHide = YES;
 
   if (makeKey)
-    [impl->toplevel makeKeyAndOrderFront:impl->toplevel];
+    [self makeKeyAndOrderFront:nil];
   else
-    [impl->toplevel orderFront:nil];
+    [self orderFront:nil];
 
   inShowOrHide = NO;
 
   [self checkSendEnterNotify];
-#endif
 }
 
 - (void)hide
 {
-#if 0
-  GdkSurface *window = [[self contentView] gdkSurface];
-  GdkSurfaceImplQuartz *impl = GDK_SURFACE_IMPL_QUARTZ (window->impl);
-
   inShowOrHide = YES;
-  [impl->toplevel orderOut:nil];
+  [self orderOut:nil];
   inShowOrHide = NO;
 
   initialPositionKnown = NO;
-#endif
 }
 
 - (BOOL)trackManualMove

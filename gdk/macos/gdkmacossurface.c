@@ -72,6 +72,17 @@ gdk_macos_surface_set_input_region (GdkSurface     *surface,
 }
 
 static void
+gdk_macos_surface_hide (GdkSurface *surface)
+{
+  GdkMacosSurface *self = (GdkMacosSurface *)surface;
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+
+  g_assert (GDK_IS_MACOS_SURFACE (self));
+
+  [priv->window hide];
+}
+
+static void
 gdk_macos_surface_destroy (GdkSurface *surface,
                            gboolean    foreign_destroy)
 {
@@ -143,6 +154,7 @@ gdk_macos_surface_class_init (GdkMacosSurfaceClass *klass)
   object_class->set_property = gdk_macos_surface_set_property;
 
   surface_class->destroy = gdk_macos_surface_destroy;
+  surface_class->hide = gdk_macos_surface_hide;
   surface_class->set_input_region = gdk_macos_surface_set_input_region;
 
   properties [PROP_NATIVE] =
