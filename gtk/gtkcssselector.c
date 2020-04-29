@@ -152,21 +152,23 @@ gtk_css_selector_tree_get_matches (const GtkCssSelectorTree *tree)
 }
 
 static void
-g_ptr_array_insert_sorted (GPtrArray *array,
-                           gpointer   data)
+gtk_array_insert_sorted (GtkArray *array,
+                         gpointer  data)
 {
-  gint i;
+  guint i;
 
   for (i = 0; i < array->len; i++)
     {
-      if (data == array->pdata[i])
+      gpointer elem = gtk_array_index (array, i);
+
+      if (data == elem)
         return;
 
-      if (data < array->pdata[i])
+      if (data < elem)
         break;
     }
 
-  g_ptr_array_insert (array, i, data);
+  gtk_array_insert (array, i, data);
 }
 
 static inline gboolean
@@ -1875,7 +1877,7 @@ gtk_css_selector_tree_get_change (const GtkCssSelectorTree     *tree,
 
 static void
 gtk_css_selector_tree_found_match (const GtkCssSelectorTree  *tree,
-				   GPtrArray                **results)
+                                   GtkArray                  *results)
 {
   int i;
   gpointer *matches;
@@ -1884,11 +1886,8 @@ gtk_css_selector_tree_found_match (const GtkCssSelectorTree  *tree,
   if (!matches)
     return;
 
-  if (*results == NULL)
-    *results = g_ptr_array_sized_new (16);
-
   for (i = 0; matches[i] != NULL; i++)
-    g_ptr_array_insert_sorted (*results, matches[i]);
+    gtk_array_insert_sorted (results, matches[i]);
 }
 
 static gboolean
@@ -1896,7 +1895,7 @@ gtk_css_selector_tree_match (const GtkCssSelectorTree      *tree,
                              const GtkCountingBloomFilter  *filter,
                              gboolean                       match_filter,
                              GtkCssNode                    *node,
-                             GPtrArray                    **results)
+                             GtkArray                      *results)
 {
   const GtkCssSelectorTree *prev;
   GtkCssNode *child;
@@ -1929,22 +1928,20 @@ gtk_css_selector_tree_match (const GtkCssSelectorTree      *tree,
   return TRUE;
 }
 
-GPtrArray *
+void
 _gtk_css_selector_tree_match_all (const GtkCssSelectorTree     *tree,
                                   const GtkCountingBloomFilter *filter,
-                                  GtkCssNode                   *node)
+                                  GtkCssNode                   *node,
+                                  GtkArray                     *out_tree_rules)
 {
   const GtkCssSelectorTree *iter;
-  GPtrArray *results = NULL;
 
   for (iter = tree;
        iter != NULL;
        iter = gtk_css_selector_tree_get_sibling (iter))
     {
-      gtk_css_selector_tree_match (iter, filter, FALSE, node, &results);
+      gtk_css_selector_tree_match (iter, filter, FALSE, node, out_tree_rules);
     }
-
-  return results;
 }
 
 gboolean
