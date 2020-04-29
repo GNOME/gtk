@@ -2335,9 +2335,9 @@ switch {
 
   &:checked {
     color: $selected_fg_color;
-    border-color: $checkradio_borders_color;
-    background-color: $checkradio_bg_color;
-    text-shadow: 0 1px transparentize($selected_borders_color, 0.5),
+    border-color: $switch_borders_color;
+    background-color: $switch_bg_color;
+    text-shadow: 0 1px transparentize($switch_borders_color, 0.5),
                  0 0 2px transparentize(white, 0.4);
   }
 
@@ -2357,9 +2357,9 @@ switch {
 
     &:checked {
       @if $variant == 'light' { color: $backdrop_bg_color; }
-      border-color: if($variant == 'light', $checkradio_borders_color,
-                                            $selected_borders_color);
-      background-color: $checkradio_bg_color;
+      border-color: if($variant == 'light', $switch_borders_color,
+                                            $switch_borders_color);
+      background-color: $switch_bg_color;
     }
 
     &:disabled {
@@ -2392,7 +2392,7 @@ switch {
     }
   }
 
-  &:checked > slider { border: 1px solid $checkradio_borders_color; }
+  &:checked > slider { border: 1px solid $switch_borders_color; }
 
   &:disabled > slider { @include button(insensitive); }
 
@@ -2403,7 +2403,7 @@ switch {
       @include button(backdrop);
     }
 
-    &:checked > slider { border-color: $checkradio_borders_color; }
+    &:checked > slider { border-color: $switch_borders_color; }
 
     &:disabled > slider { @include button(backdrop-insensitive); }
   }
@@ -2411,11 +2411,11 @@ switch {
   row:selected & {
     @if $variant == 'light' {
       box-shadow: none;
-      border-color: $checkradio_borders_color;
+      border-color: $switch_borders_color;
 
-      &:backdrop { border-color: $checkradio_borders_color; }
+      &:backdrop { border-color: $switch_borders_color; }
 
-      > slider { &:checked, & { border-color: $checkradio_borders_color; } }
+      > slider { &:checked, & { border-color: $switch_borders_color; } }
     }
   }
 }
@@ -2547,31 +2547,6 @@ radio {
 
   &:indeterminate { -gtk-icon-source: -gtk-scaled(-gtk-recolor(url("assets/dash-symbolic.symbolic.png")),
                                                   -gtk-recolor(url("assets/dash@2-symbolic.symbolic.png"))); }
-}
-
-// ANIMATION:
-// this is made with those pretty convoluted transitions, since checks and radios have to animate only on state changes,
-// the transformation is set on the active state and it get reset on the checked state.
-radio:not(:indeterminate):not(:checked):active:not(:backdrop) { -gtk-icon-transform: scale(0); }
-
-check:not(:indeterminate):not(:checked):active:not(:backdrop) { -gtk-icon-transform: translate(6px, -3px) rotate(-45deg) scaleY(0.2) rotate(45deg) scaleX(0); }
-
-radio,
-check {
-  &:active { -gtk-icon-transform: scale(0, 1); } // should tackle the indeterminate state, untested
-
-  &:checked:not(:backdrop), &:indeterminate:not(:backdrop) {
-    -gtk-icon-transform: unset;
-    transition: 400ms;
-  }
-}
-
-menu menuitem {
-  @at-root %menu_check_radio,
-  radio,
-  check {
-     &:checked:not(:backdrop), &:indeterminate:not(:backdrop) { transition: none; }
-  }
 }
 
 treeview.view check,
@@ -4393,7 +4368,7 @@ $_menu-padding: 12px;
 popover.menu {
   padding: 0px;
 
-  & box.inline-buttons {
+  box.inline-buttons {
     padding: 0 $_menu-padding;
 
     button.image-button.model {
@@ -4410,7 +4385,7 @@ popover.menu {
     }
   }
 
-  & box.circular-buttons {
+  box.circular-buttons {
     padding: 6px $_menu-padding;
 
     button.circular.image-button.model {
@@ -4433,33 +4408,40 @@ popover.menu {
     margin: 6px 0;
   }
 
-  & accelerator {
+  accelerator {
     color: gtkalpha(currentColor,0.55);
 
     &:dir(ltr) { margin-left: $_menu-padding; }
     &:dir(rtl) { margin-right: $_menu-padding; }
   }
 
-  & check,
-  & radio {
-    @extend %menu_check_radio;
+  check,
+  radio {
+    @include check('menu');
+
+    &:hover, &:active {
+      @include check('menu-active');
+    }
   }
 
-  & arrow.left,
-  & radio.left,
-  & check.left {
-    margin-left: 0;
-    margin-right: 8px;
+  //temporary border for radios
+  radio { border-color: $borders_color; }
+
+  arrow.left,
+  radio.left,
+  check.left {
+    margin-left: -2px;
+    margin-right: 6px;
   }
 
-  & arrow.right,
-  & radio.right,
-  & check.right {
-    margin-left: 8px;
-    margin-right: 0;
+  arrow.right,
+  radio.right,
+  check.right {
+    margin-left: 6px;
+    margin-right: -2px;
   }
 
-  & modelbutton {
+  modelbutton {
     min-height: 30px;
     min-width: 40px;
     padding: 0 $_menu-padding;
@@ -4468,9 +4450,9 @@ popover.menu {
     &:selected { @extend %selected_items; }
   }
 
-  & label.title {
+  label.title {
     font-weight: bold;
-    padding: 4px $_menu-padding;
+    padding: 4px ($_menu-padding + 20px); //this will fall apart with font sizing
   }
 }
 
