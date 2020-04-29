@@ -27,9 +27,9 @@ The official developers blog
 
   - https://blog.gtk.org
 
-Information about mailing lists can be found at
+Discussion forum
 
-  - http://www.gtk.org/mailing-lists.php
+  - https://discourse.gnome.org/c/platform/core/
 
 Nightly documentation can be found at
   - Gtk: https://gnome.pages.gitlab.gnome.org/gtk/gtk/
