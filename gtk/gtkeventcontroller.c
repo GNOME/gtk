@@ -250,14 +250,14 @@ static gboolean
 same_native (GtkWidget *widget,
              GtkWidget *target)
 {
-  GtkWidget *native;
-  GtkWidget *native2;
+  GtkNative *native;
+  GtkNative *native2;
 
   if (!widget || !target)
     return TRUE;
 
-  native = GTK_WIDGET (gtk_widget_get_native (widget));
-  native2 = GTK_WIDGET (gtk_widget_get_native (target));
+  native = gtk_widget_get_native (widget);
+  native2 = gtk_widget_get_native (target);
 
   return native == native2;
 }
