@@ -901,9 +901,9 @@ modelbutton.flat arrow {
 
   &:hover { background: none; }
 
-  &.left { -gtk-icon-source: -gtk-icontheme("pan-start-symbolic"); }
+  &.left { -gtk-icon-source: -gtk-icontheme("go-previous-symbolic"); }
 
-  &.right { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
+  &.right { -gtk-icon-source: -gtk-icontheme("go-next-symbolic"); }
 }
 
 /* oldstyle toolbar buttons */
