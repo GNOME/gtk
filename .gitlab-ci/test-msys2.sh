@@ -34,7 +34,7 @@ pacman --noconfirm -S --needed \
     mingw-w64-$MSYS2_ARCH-shared-mime-info
 
 # https://gitlab.gnome.org/GNOME/gtk/issues/2243
-wget "https://gitlab.gnome.org/creiter/gitlab-ci-win32-runner/raw/master/pango/mingw-w64-$MSYS2_ARCH-pango-1.44.7-1-any.pkg.tar.xz"
+wget "https://gitlab.gnome.org/creiter/gitlab-ci-win32-runner-v2/raw/master/pango/mingw-w64-$MSYS2_ARCH-pango-1.44.7-1-any.pkg.tar.xz"
 pacman --noconfirm -U "mingw-w64-$MSYS2_ARCH-pango-1.44.7-1-any.pkg.tar.xz"
 
 mkdir -p _ccache
