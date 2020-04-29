@@ -533,24 +533,15 @@ prop_action_notify (GObject    *object,
                     GParamSpec *pspec,
                     gpointer    user_data)
 {
-  GtkActionMuxer *muxer = user_data;
-  GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (muxer->widget);
-  GtkWidgetClassPrivate *priv = klass->priv;
-  GtkWidgetAction *action = NULL;
+  GtkWidget *widget = GTK_WIDGET (object);
+  GtkWidgetAction *action = user_data;
+  GtkActionMuxer *muxer = _gtk_widget_get_action_muxer (widget, TRUE);
   GVariant *state;
 
-  g_assert ((GObject *)muxer->widget == object);
-
-  for (action = priv->actions; action; action = action->next)
-    {
-      if (action->pspec == pspec)
-        break;
-    }
-
-  g_assert (action != NULL);
+  g_assert (muxer->widget == widget);
   g_assert (action->pspec == pspec);
 
-  state = prop_action_get_state (muxer->widget, action);
+  state = prop_action_get_state (widget, action);
   gtk_action_muxer_action_state_changed (muxer, action->name, state);
   g_variant_unref (state);
 }
@@ -561,6 +552,7 @@ prop_actions_connect (GtkActionMuxer *muxer)
   GtkWidgetClassPrivate *priv;
   GtkWidgetAction *action;
   GtkWidgetClass *klass;
+  guint signal_id;
 
   if (!muxer->widget)
     return;
@@ -570,17 +562,20 @@ prop_actions_connect (GtkActionMuxer *muxer)
   if (!priv->actions)
     return;
 
+  signal_id = g_signal_lookup ("notify", G_TYPE_OBJECT);
+
   for (action = priv->actions; action; action = action->next)
     {
-      char *detailed;
-
       if (!action->pspec)
         continue;
 
-      detailed = g_strconcat ("notify::", action->pspec->name, NULL);
-      g_signal_connect (muxer->widget, detailed,
-                        G_CALLBACK (prop_action_notify), muxer);
-      g_free (detailed);
+      g_signal_connect_closure_by_id (muxer->widget,
+                                      signal_id,
+                                      g_param_spec_get_name_quark (action->pspec),
+                                      g_cclosure_new (G_CALLBACK (prop_action_notify),
+                                                                  action,
+                                                                  NULL),
+                                      FALSE);
     }
 }
 
@@ -864,14 +859,10 @@ gtk_action_muxer_dispose (GObject *object)
     ->dispose (object);
 }
 
-static void
-gtk_action_muxer_constructed (GObject *object)
+void
+gtk_action_muxer_connect_class_actions (GtkActionMuxer *muxer)
 {
-  GtkActionMuxer *muxer = GTK_ACTION_MUXER (object);
-
   prop_actions_connect (muxer);
-
-  G_OBJECT_CLASS (gtk_action_muxer_parent_class)->constructed (object);
 }
 
 static void
@@ -949,7 +940,6 @@ gtk_action_muxer_class_init (GObjectClass *class)
 {
   class->get_property = gtk_action_muxer_get_property;
   class->set_property = gtk_action_muxer_set_property;
-  class->constructed = gtk_action_muxer_constructed;
   class->finalize = gtk_action_muxer_finalize;
   class->dispose = gtk_action_muxer_dispose;
 

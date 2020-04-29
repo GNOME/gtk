@@ -81,6 +81,7 @@ gtk_action_muxer_action_state_changed (GtkActionMuxer *muxer,
                                        const gchar    *action_name,
                                        GVariant       *state);
 
+void gtk_action_muxer_connect_class_actions (GtkActionMuxer *muxer);
 
 /* No better place for these... */
 gchar *                 gtk_print_action_and_target                     (const gchar    *action_namespace,
