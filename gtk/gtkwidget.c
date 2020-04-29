@@ -866,6 +866,20 @@ gtk_widget_real_unroot (GtkWidget *widget)
 }
 
 static void
+gtk_widget_constructed (GObject *object)
+{
+  G_OBJECT_CLASS (gtk_widget_parent_class)->constructed (object);
+
+  if (GTK_WIDGET_GET_CLASS (object)->priv->actions)
+    {
+      GtkActionMuxer *muxer;
+
+      muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (object), TRUE);
+      gtk_action_muxer_connect_class_actions (muxer);
+    }
+}
+
+static void
 gtk_widget_class_init (GtkWidgetClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -882,6 +896,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_font_options = g_quark_from_static_string ("gtk-widget-font-options");
   quark_font_map = g_quark_from_static_string ("gtk-widget-font-map");
 
+  gobject_class->constructed = gtk_widget_constructed;
   gobject_class->dispose = gtk_widget_dispose;
   gobject_class->finalize = gtk_widget_finalize;
   gobject_class->set_property = gtk_widget_set_property;
