@@ -524,7 +524,7 @@
  * Check and Radio buttons *
  ***************************/
 
- @mixin check($t, $c:$bg_color, $tc:$fg_color, $checked: false) {
+ @mixin check($t, $c:$checkradio_bg_color, $tc:$checkradio_fg_color, $checked: false) {
   // Check/Radio drawing function
   //
   // $t:        check/radio type,
@@ -533,9 +533,9 @@
   // $checked:  bool to chose between checked/unchecked
   //
   // possible $t values:
-  // normal, hover, active, insensitive, backdrop, backdrop-insensitive
+  // normal, hover, active, insensitive, backdrop, backdrop-insensitive, menu
 
-  $_border_color: if($c==$checkradio_bg_color, $c, $alt_borders_color);
+  $_border_color: if($c==$checkradio_bg_color, $checkradio_borders_color, $alt_borders_color);
   $_dim_border_color: transparentize($_border_color, if($variant == 'light', 0.3, 0.7));
 
   @if $t==normal  {
@@ -569,5 +569,22 @@
   @if $t==backdrop-insensitive {
     box-shadow: none;
     color: transparentize($tc, 0.3);
+  }
+
+  @if $t==menu {
+   transform: scale(0.8);
+   border-width: 1.2px;
+   border-color: transparent;
+   box-shadow: none;
+   background-image: image(transparent);
+   color: $tc;
+  }
+
+  @if $t==menu-active {
+   transform: scale(0.8);
+   border-width: 1.2px;
+   color: $tc;
+   box-shadow: none;
+   background-image: image(transparent);
   }
 }
