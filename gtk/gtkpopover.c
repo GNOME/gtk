@@ -357,6 +357,7 @@ update_popover_layout (GtkPopover     *popover,
   gboolean flipped_x;
   gboolean flipped_y;
   GdkPopup *popup = GDK_POPUP (priv->surface);
+  GtkPositionType position;
 
   g_clear_pointer (&priv->layout, gdk_popup_layout_unref);
   priv->layout = layout;
@@ -381,6 +382,8 @@ update_popover_layout (GtkPopover     *popover,
 
   priv->final_rect = final_rect;
 
+  position = priv->final_position;
+
   switch (priv->position)
     {
     case GTK_POS_LEFT:
@@ -399,6 +402,9 @@ update_popover_layout (GtkPopover     *popover,
       g_assert_not_reached ();
       break;
     }
+
+  if (priv->final_position != position)
+    gtk_widget_queue_allocate (GTK_WIDGET (popover));
 
   gtk_widget_allocate (GTK_WIDGET (popover),
                        gdk_surface_get_width (priv->surface),
