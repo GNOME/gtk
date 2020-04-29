@@ -70,9 +70,14 @@ struct _GdkMacosDisplay
 {
   GdkDisplay           parent_instance;
 
-  gchar               *name;
+  char                *name;
   GPtrArray           *monitors;
   GdkMacosKeymap      *keymap;
+
+  int                  width;
+  int                  height;
+  int                  min_x;
+  int                  min_y;
 };
 
 struct _GdkMacosDisplayClass
@@ -178,6 +183,8 @@ gdk_macos_display_load_monitors (GdkMacosDisplay *self)
   GDK_BEGIN_MACOS_ALLOC_POOL;
 
   NSArray *screens;
+  int max_x = 0;
+  int max_y = 0;
 
   g_assert (GDK_IS_MACOS_DISPLAY (self));
 
@@ -187,6 +194,13 @@ gdk_macos_display_load_monitors (GdkMacosDisplay *self)
     {
       CGDirectDisplayID screen_id;
       GdkMacosMonitor *monitor;
+      NSRect geom;
+
+      geom = [obj frame];
+      self->min_x = MIN (self->min_x, geom.origin.x);
+      self->min_y = MIN (self->min_y, geom.origin.y);
+      max_x = MAX (max_x, geom.origin.x + geom.size.width);
+      max_y = MAX (max_y, geom.origin.y + geom.size.height);
 
       screen_id = [[[obj deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue];
       monitor = _gdk_macos_monitor_new (self, screen_id);
@@ -195,6 +209,9 @@ gdk_macos_display_load_monitors (GdkMacosDisplay *self)
 
       g_object_unref (monitor);
     }
+
+  self->width = max_x - self->min_x;
+  self->height = max_y - self->min_y;
 
   GDK_END_MACOS_ALLOC_POOL;
 }
@@ -405,4 +422,51 @@ _gdk_macos_display_open (const gchar *display_name)
   gdk_display_emit_opened (GDK_DISPLAY (self));
 
   return GDK_DISPLAY (self);
+}
+
+void
+_gdk_macos_display_to_display_coords (GdkMacosDisplay *self,
+                                      int              x,
+                                      int              y,
+                                      int             *out_x,
+                                      int             *out_y)
+{
+  g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
+
+  if (out_y)
+    *out_y = self->height - y + self->min_y;
+
+  if (out_x)
+    *out_x = x + self->min_x;
+}
+
+NSScreen *
+_gdk_macos_display_get_screen_at_display_coords (GdkMacosDisplay *self,
+                                                 int              x,
+                                                 int              y)
+{
+  GDK_BEGIN_MACOS_ALLOC_POOL;
+
+  NSArray *screens;
+  NSScreen *screen = NULL;
+
+  g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (self), NULL);
+
+  screens = [NSScreen screens];
+
+  for (id obj in screens)
+    {
+      NSRect geom = [obj frame];
+
+      if (x >= geom.origin.x && x <= geom.origin.x + geom.size.width &&
+          y >= geom.origin.y && y <= geom.origin.y + geom.size.height)
+        {
+          screen = obj;
+          break;
+        }
+    }
+
+  GDK_END_MACOS_ALLOC_POOL;
+
+  return screen;
 }

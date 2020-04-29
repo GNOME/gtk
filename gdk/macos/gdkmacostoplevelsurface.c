@@ -23,6 +23,7 @@
 
 #include "gdktoplevelprivate.h"
 
+#include "gdkmacosdisplay-private.h"
 #include "gdkmacostoplevelsurface-private.h"
 #include "gdkmacosutils-private.h"
 
@@ -31,7 +32,7 @@ struct _GdkMacosToplevelSurface
   GdkMacosSurface  parent_instance;
 
   GdkMacosSurface *transient_for;
-  NSWindow        *window;
+  GdkMacosWindow  *window;
 
   guint            decorated : 1;
 };
@@ -41,18 +42,62 @@ struct _GdkMacosToplevelSurfaceClass
   GdkMacosSurfaceClass parent_instance;
 };
 
+static gboolean
+_gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
+                                     int                width,
+                                     int                height,
+                                     GdkToplevelLayout *layout)
+{
+  GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)toplevel;
+
+  g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
+
+  [self->window makeKeyAndOrderFront:self->window];
+
+  return TRUE;
+}
+
+static gboolean
+_gdk_macos_toplevel_surface_minimize (GdkToplevel *toplevel)
+{
+  GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)toplevel;
+
+  g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
+
+  [self->window miniaturize:self->window];
+
+  return TRUE;
+}
+
+static void
+_gdk_macos_toplevel_surface_focus (GdkToplevel *toplevel,
+                                   guint32      timestamp)
+{
+  GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)toplevel;
+
+  g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
+
+  [self->window makeKeyAndOrderFront:self->window];
+}
+
 static void
 toplevel_iface_init (GdkToplevelInterface *iface)
 {
+  iface->present = _gdk_macos_toplevel_surface_present;
+  iface->minimize = _gdk_macos_toplevel_surface_minimize;
+  iface->focus = _gdk_macos_toplevel_surface_focus;
 }
-
-enum {
-  PROP_0,
-  LAST_PROP
-};
 
 G_DEFINE_TYPE_WITH_CODE (GdkMacosToplevelSurface, _gdk_macos_toplevel_surface, GDK_TYPE_MACOS_SURFACE,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_TOPLEVEL, toplevel_iface_init))
+
+enum {
+  PROP_0,
+  PROP_NATIVE,
+  LAST_PROP
+};
+
+static GParamSpec *properties [LAST_PROP];
 
 static CGDirectDisplayID
 _gdk_macos_toplevel_surface_get_screen_id (GdkMacosSurface *base)
@@ -117,6 +162,15 @@ _gdk_macos_toplevel_surface_destroy (GdkSurface *surface,
 }
 
 static void
+_gdk_macos_toplevel_surface_constructed (GObject *object)
+{
+  //GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)object;
+
+  G_OBJECT_CLASS (_gdk_macos_toplevel_surface_parent_class)->constructed (object);
+
+}
+
+static void
 _gdk_macos_toplevel_surface_get_property (GObject    *object,
                                           guint       prop_id,
                                           GValue     *value,
@@ -128,6 +182,10 @@ _gdk_macos_toplevel_surface_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_NATIVE:
+      g_value_set_pointer (value, toplevel->window);
+      break;
+
     case LAST_PROP + GDK_TOPLEVEL_PROP_STATE:
       g_value_set_flags (value, surface->state);
       break;
@@ -185,6 +243,10 @@ _gdk_macos_toplevel_surface_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_NATIVE:
+      toplevel->window = g_value_get_pointer (value);
+      break;
+
     case LAST_PROP + GDK_TOPLEVEL_PROP_TITLE:
       _gdk_macos_surface_set_title (base, g_value_get_string (value));
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
@@ -234,6 +296,7 @@ _gdk_macos_toplevel_surface_class_init (GdkMacosToplevelSurfaceClass *klass)
   GdkSurfaceClass *surface_class = GDK_SURFACE_CLASS (klass);
   GdkMacosSurfaceClass *base_class = GDK_MACOS_SURFACE_CLASS (klass);
 
+  object_class->constructed = _gdk_macos_toplevel_surface_constructed;
   object_class->get_property = _gdk_macos_toplevel_surface_get_property;
   object_class->set_property = _gdk_macos_toplevel_surface_set_property;
 
@@ -242,6 +305,14 @@ _gdk_macos_toplevel_surface_class_init (GdkMacosToplevelSurfaceClass *klass)
   base_class->get_screen_id = _gdk_macos_toplevel_surface_get_screen_id;
 
   gdk_toplevel_install_properties (object_class, LAST_PROP);
+
+  properties [PROP_NATIVE] =
+    g_param_spec_pointer ("native",
+                          "Native",
+                          "The native NSWindow",
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
@@ -259,12 +330,47 @@ _gdk_macos_toplevel_surface_new (GdkMacosDisplay *display,
                                  int              width,
                                  int              height)
 {
+  GDK_BEGIN_MACOS_ALLOC_POOL;
+
+  GdkMacosWindow *window;
+  GdkMacosSurface *self;
+  NSScreen *screen;
+  NSUInteger style_mask;
+  NSRect content_rect;
+  NSRect screen_rect;
+  int nx;
+  int ny;
+
   g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (display), NULL);
   g_return_val_if_fail (!frame_clock || GDK_IS_FRAME_CLOCK (frame_clock), NULL);
   g_return_val_if_fail (!parent || GDK_IS_MACOS_SURFACE (parent), NULL);
 
-  return g_object_new (GDK_TYPE_MACOS_TOPLEVEL_SURFACE,
+  style_mask = (NSWindowStyleMaskTitled |
+                NSWindowStyleMaskClosable |
+                NSWindowStyleMaskMiniaturizable |
+                NSWindowStyleMaskResizable);
+
+  _gdk_macos_display_to_display_coords (display, x, y, &nx, &ny);
+
+  screen = _gdk_macos_display_get_screen_at_display_coords (display, nx, ny);
+  screen_rect = [screen frame];
+  nx -= screen_rect.origin.x;
+  ny -= screen_rect.origin.y;
+  content_rect = NSMakeRect (nx, ny - height, width, height);
+
+  window = [[GdkMacosWindow alloc] initWithContentRect:content_rect
+                                             styleMask:style_mask
+                                               backing:NSBackingStoreBuffered
+                                                 defer:NO
+                                                screen:screen];
+
+  self = g_object_new (GDK_TYPE_MACOS_TOPLEVEL_SURFACE,
                        "display", display,
                        "frame-clock", frame_clock,
+                       "native", window,
                        NULL);
+
+  GDK_END_MACOS_ALLOC_POOL;
+
+  return g_steal_pointer (&self);
 }

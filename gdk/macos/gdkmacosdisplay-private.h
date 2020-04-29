@@ -20,12 +20,22 @@
 #ifndef __GDK_MACOS_DISPLAY_PRIVATE_H__
 #define __GDK_MACOS_DISPLAY_PRIVATE_H__
 
+#include <AppKit/AppKit.h>
+
 #include "gdkmacosdisplay.h"
 
 G_BEGIN_DECLS
 
-GdkDisplay *_gdk_macos_display_open   (const gchar     *display_name);
-int         _gdk_macos_display_get_fd (GdkMacosDisplay *self);
+GdkDisplay *_gdk_macos_display_open                         (const gchar     *display_name);
+int         _gdk_macos_display_get_fd                       (GdkMacosDisplay *self);
+void        _gdk_macos_display_to_display_coords            (GdkMacosDisplay *self,
+                                                             int              x,
+                                                             int              y,
+                                                             int             *out_x,
+                                                             int             *out_y);
+NSScreen   *_gdk_macos_display_get_screen_at_display_coords (GdkMacosDisplay *self,
+                                                             int              x,
+                                                             int              y);
 
 G_END_DECLS
 
