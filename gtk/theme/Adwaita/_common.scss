@@ -4388,11 +4388,13 @@ menubar {
   .csd.popup decoration { border-radius:0; }
 }
 
+$_menu-padding: 12px;
+
 popover.menu {
   padding: 0px;
 
   & box.inline-buttons {
-    padding: 0 20px;
+    padding: 0 $_menu-padding;
 
     button.image-button.model {
       @include button(undecorated);
@@ -4409,7 +4411,7 @@ popover.menu {
   }
 
   & box.circular-buttons {
-    padding: 6px 20px;
+    padding: 6px $_menu-padding;
 
     button.circular.image-button.model {
       @extend %list_button;
@@ -4434,8 +4436,8 @@ popover.menu {
   & accelerator {
     color: gtkalpha(currentColor,0.55);
 
-    &:dir(ltr) { margin-left: 20px; }
-    &:dir(rtl) { margin-right: 20px; }
+    &:dir(ltr) { margin-left: $_menu-padding; }
+    &:dir(rtl) { margin-right: $_menu-padding; }
   }
 
   & check,
@@ -4460,7 +4462,7 @@ popover.menu {
   & modelbutton {
     min-height: 30px;
     min-width: 40px;
-    padding: 0 20px;
+    padding: 0 $_menu-padding;
     border-radius: 0;
 
     &:selected { @extend %selected_items; }
@@ -4468,7 +4470,7 @@ popover.menu {
 
   & label.title {
     font-weight: bold;
-    padding: 4px 20px;
+    padding: 4px $_menu-padding;
   }
 }
 
