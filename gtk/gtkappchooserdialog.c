@@ -244,7 +244,7 @@ set_dialog_properties (GtkAppChooserDialog *self)
       gtk_widget_add_css_class (label, GTK_STYLE_CLASS_SUBTITLE);
       gtk_widget_set_parent (label, box);
 
-      gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header), box);
+      gtk_header_bar_set_title_widget (GTK_HEADER_BAR (header), box);
     }
   else
     {

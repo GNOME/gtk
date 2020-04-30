@@ -40,10 +40,10 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget   *gtk_header_bar_new               (void);
 
 GDK_AVAILABLE_IN_ALL
-void         gtk_header_bar_set_custom_title  (GtkHeaderBar *bar,
+void         gtk_header_bar_set_title_widget  (GtkHeaderBar *bar,
                                                GtkWidget    *title_widget);
 GDK_AVAILABLE_IN_ALL
-GtkWidget   *gtk_header_bar_get_custom_title  (GtkHeaderBar *bar);
+GtkWidget   *gtk_header_bar_get_title_widget  (GtkHeaderBar *bar);
 GDK_AVAILABLE_IN_ALL
 void         gtk_header_bar_pack_start        (GtkHeaderBar *bar,
                                                GtkWidget    *child);
