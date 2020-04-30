@@ -2,9 +2,8 @@
  *
  * GtkHeaderBar is a container that is suitable for implementing
  * window titlebars. One of its features is that it can position
- * a title (and optional subtitle) centered with regard to the
- * full width, regardless of variable-width content at the left
- * or right.
+ * a title centered with regard to the full width, regardless of
+ * variable-width content at the left or right.
  *
  * It is commonly used with gtk_window_set_titlebar()
  */
