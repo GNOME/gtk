@@ -819,15 +819,12 @@ gdk_x11_keymap_get_modifier_state (GdkKeymap *keymap)
 }
 
 static gboolean
-gdk_x11_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
-                                       guint          keyval,
-                                       GdkKeymapKey **keys,
-                                       gint          *n_keys)
+gdk_x11_keymap_get_entries_for_keyval (GdkKeymap *keymap,
+                                       guint      keyval,
+                                       GArray    *retval)
 {
   GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
-  GArray *retval;
-
-  retval = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
+  guint len = retval->len;
 
 #ifdef HAVE_XKB
   if (KEYMAP_USE_XKB (keymap))
@@ -870,8 +867,7 @@ gdk_x11_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
 
                   g_array_append_val (retval, key);
 
-                  g_assert (XkbKeySymEntry (xkb, keycode, level, group) ==
-                            keyval);
+                  g_assert (XkbKeySymEntry (xkb, keycode, level, group) == keyval);
                 }
 
               ++level;
@@ -923,20 +919,7 @@ gdk_x11_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
         }
     }
 
-  if (retval->len > 0)
-    {
-      *keys = (GdkKeymapKey*) retval->data;
-      *n_keys = retval->len;
-    }
-  else
-    {
-      *keys = NULL;
-      *n_keys = 0;
-    }
-
-  g_array_free (retval, retval->len > 0 ? FALSE : TRUE);
-
-  return *n_keys > 0;
+  return retval->len > len;
 }
 
 static gboolean

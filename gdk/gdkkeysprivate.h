@@ -43,8 +43,7 @@ struct _GdkKeymapClass
   gboolean (* get_scroll_lock_state)    (GdkKeymap *keymap);
   gboolean (* get_entries_for_keyval)   (GdkKeymap     *keymap,
                                          guint          keyval,
-                                         GdkKeymapKey **keys,
-                                         gint          *n_keys);
+                                         GArray        *array);
   gboolean (* get_entries_for_keycode)  (GdkKeymap     *keymap,
                                          guint          hardware_keycode,
                                          GdkKeymapKey **keys,
@@ -73,6 +72,9 @@ struct _GdkKeymap
 {
   GObject     parent_instance;
   GdkDisplay *display;
+
+  GArray *cached_keys;
+  GHashTable *cache;
 };
 
 GType gdk_keymap_get_type (void) G_GNUC_CONST;
@@ -105,6 +107,9 @@ gboolean       gdk_keymap_get_caps_lock_state      (GdkKeymap           *keymap)
 gboolean       gdk_keymap_get_num_lock_state       (GdkKeymap           *keymap);
 gboolean       gdk_keymap_get_scroll_lock_state    (GdkKeymap           *keymap);
 guint          gdk_keymap_get_modifier_state       (GdkKeymap           *keymap);
+
+GdkKeymapKey * gdk_keymap_get_cached_entries_for_keyval (GdkKeymap *keymap,
+                                                         guint      keyval);
 
 G_END_DECLS
 

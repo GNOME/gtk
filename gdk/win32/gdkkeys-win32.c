@@ -1283,18 +1283,13 @@ gdk_win32_keymap_get_scroll_lock_state (GdkKeymap *keymap)
 static gboolean
 gdk_win32_keymap_get_entries_for_keyval (GdkKeymap     *gdk_keymap,
                                          guint          keyval,
-                                         GdkKeymapKey **keys,
-                                         gint          *n_keys)
+                                         GArray        *retval)
 {
-  GArray *retval;
   GdkKeymap *default_keymap = gdk_display_get_keymap (gdk_display_get_default ());
+  guint len = retval->len;
 
   g_return_val_if_fail (gdk_keymap == NULL || GDK_IS_KEYMAP (gdk_keymap), FALSE);
-  g_return_val_if_fail (keys != NULL, FALSE);
-  g_return_val_if_fail (n_keys != NULL, FALSE);
   g_return_val_if_fail (keyval != 0, FALSE);
-
-  retval = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
 
   /* Accept only the default keymap */
   if (gdk_keymap == NULL || gdk_keymap == default_keymap)
@@ -1344,7 +1339,7 @@ gdk_win32_keymap_get_entries_for_keyval (GdkKeymap     *gdk_keymap,
 
       g_print ("gdk_keymap_get_entries_for_keyval: %#.04x (%s):",
                keyval, gdk_keyval_name (keyval));
-      for (i = 0; i < retval->len; i++)
+      for (i = len; i < retval->len; i++)
         {
           GdkKeymapKey *entry = (GdkKeymapKey *) retval->data + i;
           g_print ("  %#.02x %d %d", entry->keycode, entry->group, entry->level);
@@ -1353,20 +1348,7 @@ gdk_win32_keymap_get_entries_for_keyval (GdkKeymap     *gdk_keymap,
     }
 #endif
 
-  if (retval->len > 0)
-    {
-      *keys = (GdkKeymapKey*) retval->data;
-      *n_keys = retval->len;
-    }
-  else
-    {
-      *keys = NULL;
-      *n_keys = 0;
-    }
-
-  g_array_free (retval, retval->len > 0 ? FALSE : TRUE);
-
-  return *n_keys > 0;
+  return len < retval->len
 }
 
 static gboolean
