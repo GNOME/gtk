@@ -657,4 +657,9 @@
   [self setStyleMask:style_mask];
 }
 
+-(GdkMacosSurface *)getGdkSurface
+{
+  return self->gdkSurface;
+}
+
 @end
