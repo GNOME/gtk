@@ -184,6 +184,7 @@ enum
   CHILD_PROP_ICON_NAME,
   CHILD_PROP_NEEDS_ATTENTION,
   CHILD_PROP_VISIBLE,
+  CHILD_PROP_USE_UNDERLINE,
   LAST_CHILD_PROP
 };
 
@@ -195,9 +196,10 @@ struct _GtkStackPage
   char *name;
   char *title;
   char *icon_name;
-  gboolean needs_attention;
-  gboolean visible;
   GtkWidget *last_focus;
+  guint needs_attention : 1;
+  guint visible         : 1;
+  guint use_underline   : 1;
 };
 
 typedef struct _GtkStackPageClass GtkStackPageClass;
@@ -266,6 +268,10 @@ gtk_stack_page_get_property (GObject      *object,
 
     case CHILD_PROP_VISIBLE:
       g_value_set_boolean (value, gtk_stack_page_get_visible (info));
+      break;
+
+    case CHILD_PROP_USE_UNDERLINE:
+      g_value_set_boolean (value, info->use_underline);
       break;
 
     default:
@@ -348,6 +354,14 @@ gtk_stack_page_set_property (GObject      *object,
       gtk_stack_page_set_visible (info, g_value_get_boolean (value));
       break;
 
+    case CHILD_PROP_USE_UNDERLINE:
+      if (info->use_underline != g_value_get_boolean (value))
+        {
+          info->use_underline = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -410,6 +424,13 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
                          P_("Visible"),
                          P_("Whether this page is visible"),
                          TRUE,
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  stack_child_props[CHILD_PROP_USE_UNDERLINE] =
+    g_param_spec_boolean ("use-underline",
+                         P_("Use underline"),
+                         P_("If set, an underline in the title indicates the next character should be used for the mnemonic accelerator key"),
+                         FALSE,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_CHILD_PROP, stack_child_props);
