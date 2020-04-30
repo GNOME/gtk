@@ -58,5 +58,6 @@
 -(void)showAndMakeKey:(BOOL)makeKey;
 -(BOOL)trackManualMove;
 -(BOOL)trackManualResize;
+-(void)setDecorated:(BOOL)decorated;
 
 @end

@@ -138,7 +138,7 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
     _gdk_macos_toplevel_surface_unfullscreen (self);
 
   /* Now present the window */
-  [window showAndMakeKey:YES];
+  [(GdkMacosWindow *)window showAndMakeKey:YES];
 
   return TRUE;
 }
@@ -209,7 +209,7 @@ _gdk_macos_toplevel_surface_set_decorated (GdkMacosToplevelSurface *self,
     {
       NSWindow *window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
       self->decorated = decorated;
-      [window setHasShadow:decorated ? YES : NO];
+      [(GdkMacosWindow *)window setDecorated:(BOOL)decorated];
     }
 }
 

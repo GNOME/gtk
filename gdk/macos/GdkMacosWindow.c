@@ -553,6 +553,17 @@
 
 -(void)setStyleMask:(NSWindowStyleMask)styleMask
 {
+  gboolean was_fullscreen;
+  gboolean is_fullscreen;
+
+  was_fullscreen = (([self styleMask] & NSWindowStyleMaskFullScreen) != 0);
+
+  [super setStyleMask:styleMask];
+
+  is_fullscreen = (([self styleMask] & NSWindowStyleMaskFullScreen) != 0);
+
+  if (was_fullscreen != is_fullscreen)
+    _gdk_macos_surface_update_fullscreen_state (self->gdkSurface);
 }
 
 -(NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen
@@ -630,6 +641,20 @@
 -(void)setGdkSurface:(GdkMacosSurface *)surface
 {
   self->gdkSurface = surface;
+}
+
+-(void)setDecorated:(BOOL)decorated
+{
+  NSWindowStyleMask style_mask = [self styleMask];
+
+  [self setHasShadow:decorated];
+
+  if (decorated)
+    style_mask |= NSWindowStyleMaskTitled;
+  else
+    style_mask &= ~NSWindowStyleMaskTitled;
+
+  [self setStyleMask:style_mask];
 }
 
 @end

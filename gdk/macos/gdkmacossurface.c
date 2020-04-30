@@ -62,6 +62,16 @@ enum {
 
 static GParamSpec *properties [LAST_PROP];
 
+static gboolean
+window_is_fullscreen (GdkMacosSurface *self)
+{
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+
+  g_assert (GDK_IS_MACOS_SURFACE (self));
+
+  return ([priv->window styleMask] & NSWindowStyleMaskFullScreen) != 0;
+}
+
 static void
 gdk_macos_surface_set_input_region (GdkSurface     *surface,
                                     cairo_region_t *region)
@@ -377,4 +387,26 @@ _gdk_macos_surface_resize (GdkMacosSurface *self,
   content_rect = NSMakeRect (gx, gy, width, height);
   frame_rect = [priv->window frameRectForContentRect:content_rect];
   [priv->window setFrame:frame_rect display:YES];
+}
+
+void
+_gdk_macos_surface_update_fullscreen_state (GdkMacosSurface *self)
+{
+  GdkSurfaceState state;
+  gboolean is_fullscreen;
+  gboolean was_fullscreen;
+
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
+
+  state = GDK_SURFACE (self)->state;
+  is_fullscreen = window_is_fullscreen (self);
+  was_fullscreen = (state & GDK_SURFACE_STATE_FULLSCREEN) != 0;
+
+  if (is_fullscreen != was_fullscreen)
+    {
+      if (is_fullscreen)
+        gdk_synthesize_surface_state (GDK_SURFACE (self), 0, GDK_SURFACE_STATE_FULLSCREEN);
+      else
+        gdk_synthesize_surface_state (GDK_SURFACE (self), GDK_SURFACE_STATE_FULLSCREEN, 0);
+    }
 }
