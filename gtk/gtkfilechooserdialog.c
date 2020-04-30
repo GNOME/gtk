@@ -37,6 +37,7 @@
 #include "gtkdialogprivate.h"
 #include "gtklabel.h"
 #include "gtkfilechooserentry.h"
+#include "gtkbox.h"
 
 #include <stdarg.h>
 
@@ -431,6 +432,20 @@ add_button (GtkWidget *button, gpointer data)
 }
 
 static void
+subtitle_changed_cb (GtkWidget  *widget,
+                     GParamSpec *pspec,
+                     GtkWidget  *label)
+{
+  const gchar *subtitle;
+
+  g_object_get (widget, "subtitle", &subtitle, NULL);
+  g_object_set (label,
+                "label", subtitle,
+                "visible", subtitle != NULL,
+                NULL);
+}
+
+static void
 setup_search (GtkFileChooserDialog *dialog)
 {
   GtkFileChooserDialogPrivate *priv = gtk_file_chooser_dialog_get_instance_private (dialog);
@@ -446,6 +461,8 @@ setup_search (GtkFileChooserDialog *dialog)
     {
       GtkWidget *button;
       GtkWidget *header;
+      GtkWidget *box;
+      GtkWidget *label;
 
       button = gtk_toggle_button_new ();
       gtk_widget_set_focus_on_click (button, FALSE);
@@ -459,9 +476,37 @@ setup_search (GtkFileChooserDialog *dialog)
       g_object_bind_property (button, "active",
                               priv->widget, "search-mode",
                               G_BINDING_BIDIRECTIONAL);
-      g_object_bind_property (priv->widget, "subtitle",
-                              header, "subtitle",
+
+      box = g_object_new (GTK_TYPE_BOX,
+                          "orientation", GTK_ORIENTATION_VERTICAL,
+                          "valign", GTK_ALIGN_CENTER,
+                          NULL);
+
+      label = g_object_new (GTK_TYPE_LABEL,
+                            "halign", GTK_ALIGN_CENTER,
+                            "single-line-mode", TRUE,
+                            "ellipsize", PANGO_ELLIPSIZE_END,
+                            "width-chars", 5,
+                            NULL);
+      gtk_widget_add_css_class (label, GTK_STYLE_CLASS_TITLE);
+      gtk_widget_set_parent (label, box);
+
+      g_object_bind_property (dialog, "title",
+                              label, "label",
                               G_BINDING_SYNC_CREATE);
+
+      label = g_object_new (GTK_TYPE_LABEL,
+                            "halign", GTK_ALIGN_CENTER,
+                            "single-line-mode", TRUE,
+                            "ellipsize", PANGO_ELLIPSIZE_END,
+                            NULL);
+      gtk_widget_add_css_class (label, GTK_STYLE_CLASS_SUBTITLE);
+      gtk_widget_set_parent (label, box);
+
+      g_signal_connect (priv->widget, "notify::subtitle",
+                        G_CALLBACK (subtitle_changed_cb), label);
+
+      gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header), box);
 
       gtk_container_forall (GTK_CONTAINER (header), add_button, dialog);
     }
