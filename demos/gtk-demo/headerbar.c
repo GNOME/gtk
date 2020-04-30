@@ -32,7 +32,6 @@ do_headerbar (GtkWidget *do_widget)
       header = gtk_header_bar_new ();
       gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), TRUE);
       gtk_header_bar_set_title (GTK_HEADER_BAR (header), "Welcome to Facebook - Log in, sign up or learn more");
-      gtk_header_bar_set_has_subtitle (GTK_HEADER_BAR (header), FALSE);
 
       button = gtk_button_new ();
       icon = g_themed_icon_new ("mail-send-receive-symbolic");
