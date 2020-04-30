@@ -82,6 +82,17 @@ gdk_macos_surface_hide (GdkSurface *surface)
   [priv->window hide];
 }
 
+static gint
+gdk_macos_surface_get_scale_factor (GdkSurface *surface)
+{
+  GdkMacosSurface *self = (GdkMacosSurface *)surface;
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+
+  g_assert (GDK_IS_MACOS_SURFACE (self));
+
+  return [priv->window backingScaleFactor];
+}
+
 static void
 gdk_macos_surface_destroy (GdkSurface *surface,
                            gboolean    foreign_destroy)
@@ -156,6 +167,7 @@ gdk_macos_surface_class_init (GdkMacosSurfaceClass *klass)
   surface_class->destroy = gdk_macos_surface_destroy;
   surface_class->hide = gdk_macos_surface_hide;
   surface_class->set_input_region = gdk_macos_surface_set_input_region;
+  surface_class->get_scale_factor = gdk_macos_surface_get_scale_factor;
 
   properties [PROP_NATIVE] =
     g_param_spec_pointer ("native",
