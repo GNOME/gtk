@@ -123,17 +123,16 @@ gdk_broadway_keymap_get_scroll_lock_state (GdkKeymap *keymap)
 
 static gboolean
 gdk_broadway_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
-					    guint          keyval,
-					    GdkKeymapKey **keys,
-					    gint          *n_keys)
+                                            guint          keyval,
+                                            GArray        *retval)
 {
-  if (n_keys)
-    *n_keys = 1;
-  if (keys)
-    {
-      *keys = g_new0 (GdkKeymapKey, 1);
-      (*keys)->keycode = keyval;
-    }
+  GdkKeymapKey key;
+
+  key.keycode = keyval;
+  key.group = 0;
+  key.level = 0;
+
+  g_array_append_val (retval, key);
 
   return TRUE;
 }
