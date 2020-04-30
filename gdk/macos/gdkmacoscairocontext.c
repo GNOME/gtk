@@ -21,6 +21,7 @@
 
 #include "gdkconfig.h"
 
+#include <CoreGraphics/CoreGraphics.h>
 #include <cairo-quartz.h>
 
 #include "gdkmacoscairocontext-private.h"
@@ -45,18 +46,24 @@ static cairo_surface_t *
 create_cairo_surface_for_surface (GdkSurface *surface)
 {
   cairo_surface_t *cairo_surface;
+  CGContextRef cg;
   GdkDisplay *display;
   int scale;
+  int width;
+  int height;
 
   g_assert (GDK_IS_MACOS_SURFACE (surface));
- 
+
+  cg = NSGraphicsContext.currentContext.graphicsPort;
   display = gdk_surface_get_display (surface);
   scale = gdk_surface_get_scale_factor (surface);
+  width = scale * gdk_surface_get_width (surface);
+  height = scale * gdk_surface_get_height (surface);
 
-  cairo_surface = cairo_quartz_surface_create (CAIRO_FORMAT_ARGB32,
-                                               gdk_surface_get_width (surface) * scale,
-                                               gdk_surface_get_height (surface) * scale);
-  cairo_surface_set_device_scale (cairo_surface, scale, scale);
+  cairo_surface = cairo_quartz_surface_create_for_cg_context (cg, width, height);
+
+  if (cairo_surface != NULL)
+    cairo_surface_set_device_scale (cairo_surface, scale, scale);
 
   return cairo_surface;
 }
@@ -123,15 +130,6 @@ _gdk_macos_cairo_context_end_frame (GdkDrawContext *draw_context,
 }
 
 static void
-_gdk_macos_cairo_context_surface_resized (GdkDrawContext *draw_context)
-{
-  GdkMacosCairoContext *self = (GdkMacosCairoContext *)draw_context;
-
-  g_assert (GDK_IS_MACOS_CAIRO_CONTEXT (self));
-
-}
-
-static void
 _gdk_macos_cairo_context_class_init (GdkMacosCairoContextClass *klass)
 {
   GdkCairoContextClass *cairo_context_class = GDK_CAIRO_CONTEXT_CLASS (klass);
@@ -139,7 +137,6 @@ _gdk_macos_cairo_context_class_init (GdkMacosCairoContextClass *klass)
 
   draw_context_class->begin_frame = _gdk_macos_cairo_context_begin_frame;
   draw_context_class->end_frame = _gdk_macos_cairo_context_end_frame;
-  draw_context_class->surface_resized = _gdk_macos_cairo_context_surface_resized;
 
   cairo_context_class->cairo_create = _gdk_macos_cairo_context_cairo_create;
 }
