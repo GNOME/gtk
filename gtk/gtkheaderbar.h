@@ -43,12 +43,6 @@ void         gtk_header_bar_set_title         (GtkHeaderBar *bar,
                                                const gchar  *title);
 GDK_AVAILABLE_IN_ALL
 const gchar *gtk_header_bar_get_title         (GtkHeaderBar *bar);
-GDK_AVAILABLE_IN_ALL
-void         gtk_header_bar_set_subtitle      (GtkHeaderBar *bar,
-                                               const gchar  *subtitle);
-GDK_AVAILABLE_IN_ALL
-const gchar *gtk_header_bar_get_subtitle      (GtkHeaderBar *bar);
-
 
 GDK_AVAILABLE_IN_ALL
 void         gtk_header_bar_set_custom_title  (GtkHeaderBar *bar,

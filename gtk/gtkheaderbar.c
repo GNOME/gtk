@@ -45,10 +45,10 @@
  * @See_also: #GtkBox, #GtkActionBar
  *
  * GtkHeaderBar is similar to a horizontal #GtkBox. It allows children to 
- * be placed at the start or the end. In addition, it allows a title and
- * subtitle to be displayed. The title will be centered with respect to
- * the width of the box, even if the children at either side take up
- * different amounts of space.
+ * be placed at the start or the end. In addition, it allows a title to be
+ * displayed. The title will be centered with respect to the width of the
+ * box, even if the children at either side take up different amounts of
+ * space.
  *
  * GtkHeaderBar can add typical window frame controls, such as minimize,
  * maximize and close buttons, or the window icon.
@@ -99,10 +99,7 @@ struct _GtkHeaderBarPrivate
   GtkWidget *end_box;
 
   gchar *title;
-  gchar *subtitle;
   GtkWidget *title_label;
-  GtkWidget *subtitle_label;
-  GtkWidget *label_box;
   GtkWidget *custom_title;
 
   gboolean show_title_buttons;
@@ -118,7 +115,6 @@ struct _GtkHeaderBarPrivate
 enum {
   PROP_0,
   PROP_TITLE,
-  PROP_SUBTITLE,
   PROP_CUSTOM_TITLE,
   PROP_SHOW_TITLE_BUTTONS,
   PROP_DECORATION_LAYOUT,
@@ -133,43 +129,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkHeaderBar, gtk_header_bar, GTK_TYPE_CONTAINER,
                          G_ADD_PRIVATE (GtkHeaderBar)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_header_bar_buildable_init));
-
-static GtkWidget *
-create_title_box (const char *title,
-                  const char *subtitle,
-                  GtkWidget **ret_title_label,
-                  GtkWidget **ret_subtitle_label)
-{
-  GtkWidget *label_box;
-  GtkWidget *title_label;
-  GtkWidget *subtitle_label;
-
-  label_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_widget_set_valign (label_box, GTK_ALIGN_CENTER);
-
-  title_label = gtk_label_new (title);
-  gtk_widget_add_css_class (title_label, GTK_STYLE_CLASS_TITLE);
-  gtk_label_set_wrap (GTK_LABEL (title_label), FALSE);
-  gtk_label_set_single_line_mode (GTK_LABEL (title_label), TRUE);
-  gtk_label_set_ellipsize (GTK_LABEL (title_label), PANGO_ELLIPSIZE_END);
-  gtk_container_add (GTK_CONTAINER (label_box), title_label);
-  gtk_label_set_width_chars (GTK_LABEL (title_label), MIN_TITLE_CHARS);
-
-  subtitle_label = gtk_label_new (subtitle);
-  gtk_widget_add_css_class (subtitle_label, GTK_STYLE_CLASS_SUBTITLE);
-  gtk_label_set_wrap (GTK_LABEL (subtitle_label), FALSE);
-  gtk_label_set_single_line_mode (GTK_LABEL (subtitle_label), TRUE);
-  gtk_label_set_ellipsize (GTK_LABEL (subtitle_label), PANGO_ELLIPSIZE_END);
-  gtk_container_add (GTK_CONTAINER (label_box), subtitle_label);
-  gtk_widget_set_visible (subtitle_label, subtitle && subtitle[0]);
-
-  if (ret_title_label)
-    *ret_title_label = title_label;
-  if (ret_subtitle_label)
-    *ret_subtitle_label = subtitle_label;
-
-  return label_box;
-}
 
 static void
 create_window_controls (GtkHeaderBar *bar)
@@ -255,19 +214,26 @@ _gtk_header_bar_track_default_decoration (GtkHeaderBar *bar)
 }
 
 static void
-construct_label_box (GtkHeaderBar *bar)
+construct_title_label (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GtkLayoutManager *layout = gtk_widget_get_layout_manager (GTK_WIDGET (bar));
+  GtkWidget *label;
 
-  g_assert (priv->label_box == NULL);
+  g_assert (priv->title_label == NULL);
 
-  priv->label_box = create_title_box (priv->title,
-                                      priv->subtitle,
-                                      &priv->title_label,
-                                      &priv->subtitle_label);
-  gtk_widget_insert_after (priv->label_box, GTK_WIDGET (bar), priv->start_box);
-  gtk_center_layout_set_center_widget (GTK_CENTER_LAYOUT (layout), priv->label_box);
+  label = gtk_label_new (priv->title);
+  gtk_widget_add_css_class (label, GTK_STYLE_CLASS_TITLE);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+  gtk_label_set_wrap (GTK_LABEL (label), FALSE);
+  gtk_label_set_single_line_mode (GTK_LABEL (label), TRUE);
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+  gtk_label_set_width_chars (GTK_LABEL (label), MIN_TITLE_CHARS);
+
+  gtk_widget_insert_after (label, GTK_WIDGET (bar), priv->start_box);
+  gtk_center_layout_set_center_widget (GTK_CENTER_LAYOUT (layout), label);
+
+  priv->title_label = label;
 }
 
 /**
@@ -322,57 +288,6 @@ gtk_header_bar_get_title (GtkHeaderBar *bar)
 }
 
 /**
- * gtk_header_bar_set_subtitle:
- * @bar: a #GtkHeaderBar
- * @subtitle: (allow-none): a subtitle, or %NULL
- *
- * Sets the subtitle of the #GtkHeaderBar. The title should give a user
- * an additional detail to help him identify the current view.
- */
-void
-gtk_header_bar_set_subtitle (GtkHeaderBar *bar,
-                             const gchar  *subtitle)
-{
-  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
-  gchar *new_subtitle;
-
-  g_return_if_fail (GTK_IS_HEADER_BAR (bar));
-
-  new_subtitle = g_strdup (subtitle);
-  g_free (priv->subtitle);
-  priv->subtitle = new_subtitle;
-
-  if (priv->subtitle_label != NULL)
-    {
-      gtk_label_set_label (GTK_LABEL (priv->subtitle_label), priv->subtitle);
-      gtk_widget_set_visible (priv->subtitle_label, priv->subtitle && priv->subtitle[0]);
-      gtk_widget_queue_resize (GTK_WIDGET (bar));
-    }
-
-  g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_SUBTITLE]);
-}
-
-/**
- * gtk_header_bar_get_subtitle:
- * @bar: a #GtkHeaderBar
- *
- * Retrieves the subtitle of the header. See gtk_header_bar_set_subtitle().
- *
- * Returns: (nullable): the subtitle of the header, or %NULL if none has
- *    been set explicitly. The returned string is owned by the widget
- *    and must not be modified or freed.
- */
-const gchar *
-gtk_header_bar_get_subtitle (GtkHeaderBar *bar)
-{
-  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
-
-  g_return_val_if_fail (GTK_IS_HEADER_BAR (bar), NULL);
-
-  return priv->subtitle;
-}
-
-/**
  * gtk_header_bar_set_custom_title:
  * @bar: a #GtkHeaderBar
  * @title_widget: (allow-none): a custom widget to use for a title
@@ -380,10 +295,9 @@ gtk_header_bar_get_subtitle (GtkHeaderBar *bar)
  * Sets a custom title for the #GtkHeaderBar.
  *
  * The title should help a user identify the current view. This
- * supersedes any title set by gtk_header_bar_set_title() or
- * gtk_header_bar_set_subtitle(). To achieve the same style as
- * the builtin title and subtitle, use the “title” and “subtitle”
- * style classes.
+ * supersedes any title set by gtk_header_bar_set_title(). To
+ * achieve the same style as the builtin title, use the “title”
+ * style class.
  *
  * You should set the custom title to %NULL, for the header title
  * label to be visible again.
@@ -418,21 +332,12 @@ gtk_header_bar_set_custom_title (GtkHeaderBar *bar,
       gtk_widget_insert_after (priv->custom_title, GTK_WIDGET (bar), priv->start_box);
       gtk_center_layout_set_center_widget (GTK_CENTER_LAYOUT (layout), title_widget);
 
-      if (priv->label_box != NULL)
-        {
-          GtkWidget *label_box = priv->label_box;
-
-          priv->label_box = NULL;
-          priv->title_label = NULL;
-          priv->subtitle_label = NULL;
-          gtk_widget_unparent (label_box);
-        }
-
+      g_clear_pointer (&priv->title_label, gtk_widget_unparent);
     }
   else
     {
-      if (priv->label_box == NULL)
-        construct_label_box (bar);
+      if (priv->title_label == NULL)
+        construct_title_label (bar);
     }
 
   g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_CUSTOM_TITLE]);
@@ -464,7 +369,7 @@ gtk_header_bar_dispose (GObject *object)
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (object));
 
   g_clear_pointer (&priv->custom_title, gtk_widget_unparent);
-  g_clear_pointer (&priv->label_box, gtk_widget_unparent);
+  g_clear_pointer (&priv->title_label, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_header_bar_parent_class)->dispose (object);
 
@@ -478,7 +383,6 @@ gtk_header_bar_finalize (GObject *object)
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (object));
 
   g_free (priv->title);
-  g_free (priv->subtitle);
   g_free (priv->decoration_layout);
 
   G_OBJECT_CLASS (gtk_header_bar_parent_class)->finalize (object);
@@ -497,10 +401,6 @@ gtk_header_bar_get_property (GObject    *object,
     {
     case PROP_TITLE:
       g_value_set_string (value, priv->title);
-      break;
-
-    case PROP_SUBTITLE:
-      g_value_set_string (value, priv->subtitle);
       break;
 
     case PROP_CUSTOM_TITLE:
@@ -533,10 +433,6 @@ gtk_header_bar_set_property (GObject      *object,
     {
     case PROP_TITLE:
       gtk_header_bar_set_title (bar, g_value_get_string (value));
-      break;
-
-    case PROP_SUBTITLE:
-      gtk_header_bar_set_subtitle (bar, g_value_get_string (value));
       break;
 
     case PROP_CUSTOM_TITLE:
@@ -691,13 +587,6 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
                            NULL,
                            G_PARAM_READWRITE);
 
-  header_bar_props[PROP_SUBTITLE] =
-      g_param_spec_string ("subtitle",
-                           P_("Subtitle"),
-                           P_("The subtitle to display"),
-                           NULL,
-                           G_PARAM_READWRITE);
-
   header_bar_props[PROP_CUSTOM_TITLE] =
       g_param_spec_object ("custom-title",
                            P_("Custom Title"),
@@ -753,7 +642,6 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   GtkLayoutManager *layout;
 
   priv->title = NULL;
-  priv->subtitle = NULL;
   priv->custom_title = NULL;
   priv->decoration_layout = NULL;
   priv->state = GDK_SURFACE_STATE_WITHDRAWN;
@@ -768,7 +656,7 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   gtk_widget_set_parent (priv->end_box, GTK_WIDGET (bar));
   gtk_center_layout_set_end_widget (GTK_CENTER_LAYOUT (layout), priv->end_box);
 
-  construct_label_box (bar);
+  construct_title_label (bar);
 }
 
 static GtkBuildableIface *parent_buildable_iface;

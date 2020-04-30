@@ -3,7 +3,6 @@
     <child>
       <object class="GtkHeaderBar" id="headerbar1">
         <property name="title">Title</property>
-        <property name="subtitle">Subtitle</property>
         <child type="start">
           <object class="GtkButton" id="button1">
             <property name="label" translatable="yes">Yes</property>
