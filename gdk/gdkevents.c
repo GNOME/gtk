@@ -1604,6 +1604,7 @@ gdk_key_event_matches (GdkEvent        *event,
                        GdkModifierType  modifiers)
 {
   GdkKeyEvent *self = (GdkKeyEvent *) event;
+  GdkKeymap *keymap;
   guint keycode;
   GdkModifierType state;
   guint ev_keyval;
@@ -1644,7 +1645,6 @@ gdk_key_event_matches (GdkEvent        *event,
     {
       /* modifier match */
       GdkKeymapKey *keys;
-      int n_keys;
       int i;
       guint key;
 
@@ -1667,23 +1667,19 @@ gdk_key_event_matches (GdkEvent        *event,
           return GDK_KEY_MATCH_EXACT;
         }
 
-      gdk_display_map_keyval (gdk_event_get_display (event), keyval, &keys, &n_keys);
+      keymap = gdk_display_get_keymap (gdk_event_get_display (event));
+      keys = gdk_keymap_get_cached_entries_for_keyval (keymap, keyval);
 
-      for (i = 0; i < n_keys; i++)
+      for (i = 0; keys[i].keycode != 0; i++)
         {
           if (keys[i].keycode == keycode &&
               keys[i].level == level &&
               /* Only match for group if it's an accel mod */
               (!group_mod_is_accel_mod || keys[i].group == layout))
             {
-              /* partial match */
-              g_free (keys);
-
               return GDK_KEY_MATCH_PARTIAL;
             }
         }
-
-      g_free (keys);
     }
 
   return GDK_KEY_MATCH_NONE;
