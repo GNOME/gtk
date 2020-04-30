@@ -48,6 +48,7 @@
 #include "gtkmessagedialog.h"
 #include "gtksettings.h"
 #include "gtklabel.h"
+#include "gtkbox.h"
 #include "gtkbutton.h"
 #include "gtkentry.h"
 #include "gtktogglebutton.h"
@@ -55,6 +56,7 @@
 #include "gtkdialogprivate.h"
 #include "gtksearchbar.h"
 #include "gtksizegroup.h"
+#include "gtkstylecontext.h"
 
 #include <string.h>
 #include <glib/gi18n-lib.h>
@@ -220,9 +222,35 @@ set_dialog_properties (GtkAppChooserDialog *self)
   g_object_get (self, "use-header-bar", &use_header, NULL); 
   if (use_header)
     {
+      GtkWidget *box, *label;
+
       header = gtk_dialog_get_header_bar (GTK_DIALOG (self));
-      gtk_header_bar_set_title (GTK_HEADER_BAR (header), title);
-      gtk_header_bar_set_subtitle (GTK_HEADER_BAR (header), subtitle);
+
+      box = g_object_new (GTK_TYPE_BOX,
+                          "orientation", GTK_ORIENTATION_VERTICAL,
+                          "valign", GTK_ALIGN_CENTER,
+                          NULL);
+
+      label = g_object_new (GTK_TYPE_LABEL,
+                            "label", title,
+                            "halign", GTK_ALIGN_CENTER,
+                            "single-line-mode", TRUE,
+                            "ellipsize", PANGO_ELLIPSIZE_END,
+                            "width-chars", 5,
+                            NULL);
+      gtk_widget_add_css_class (label, GTK_STYLE_CLASS_TITLE);
+      gtk_widget_set_parent (label, box);
+
+      label = g_object_new (GTK_TYPE_LABEL,
+                            "label", subtitle,
+                            "halign", GTK_ALIGN_CENTER,
+                            "single-line-mode", TRUE,
+                            "ellipsize", PANGO_ELLIPSIZE_END,
+                            NULL);
+      gtk_widget_add_css_class (label, GTK_STYLE_CLASS_SUBTITLE);
+      gtk_widget_set_parent (label, box);
+
+      gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header), box);
     }
   else
     {
