@@ -65,10 +65,10 @@ show_dialog (void)
   gtk_widget_realize (dialog);
   g_signal_connect (gtk_native_get_surface (GTK_NATIVE (dialog)), "size-changed",
                     G_CALLBACK (size_changed_cb), label);
-
-  gtk_dialog_run (GTK_DIALOG (dialog));
-
-  gtk_window_destroy (GTK_WINDOW (dialog));
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (gtk_window_destroy),
+                    NULL);
+  gtk_widget_show (dialog);
 }
 
 static void
@@ -127,6 +127,16 @@ create_window (void)
   gtk_grid_attach (GTK_GRID (grid), button, 2, 4, 1, 1);
 
   gtk_widget_show (window);
+
+  GMainLoop *loop = g_main_loop_new (NULL, FALSE);
+
+  g_signal_connect_swapped (window, "destroy",
+                            G_CALLBACK (g_main_loop_quit),
+                            loop);
+
+  g_main_loop_run (loop);
+
+  g_main_loop_unref (loop);
 }
 
 int
@@ -135,9 +145,6 @@ main (int argc, char *argv[])
   gtk_init ();
 
   create_window ();
-
-  while (TRUE)
-    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }
