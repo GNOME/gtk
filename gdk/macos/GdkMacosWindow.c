@@ -346,7 +346,7 @@
   return NO;
 }
 
-- (void)showAndMakeKey:(BOOL)makeKey
+-(void)showAndMakeKey:(BOOL)makeKey
 {
   inShowOrHide = YES;
 
@@ -360,7 +360,7 @@
   [self checkSendEnterNotify];
 }
 
-- (void)hide
+-(void)hide
 {
   inShowOrHide = YES;
   [self orderOut:nil];
@@ -369,7 +369,7 @@
   initialPositionKnown = NO;
 }
 
-- (BOOL)trackManualMove
+-(BOOL)trackManualMove
 {
 #if 0
   GdkSurface *window = [[self contentView] gdkSurface];
@@ -419,7 +419,7 @@
   initialMoveLocation.y -= frame.origin.y;
 }
 
-- (BOOL)trackManualResize
+-(BOOL)trackManualResize
 {
   NSPoint mouse_location;
   NSRect new_frame;
@@ -519,43 +519,43 @@
   initialResizeLocation = [self convertBaseToScreen:[self mouseLocationOutsideOfEventStream]];
 }
 
-- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
+-(NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {
   return NSDragOperationNone;
 }
 
-- (void)draggingEnded:(id <NSDraggingInfo>)sender
+-(void)draggingEnded:(id <NSDraggingInfo>)sender
 {
 }
 
-- (void)draggingExited:(id <NSDraggingInfo>)sender
+-(void)draggingExited:(id <NSDraggingInfo>)sender
 {
 }
 
-- (NSDragOperation)draggingUpdated:(id <NSDraggingInfo>)sender
+-(NSDragOperation)draggingUpdated:(id <NSDraggingInfo>)sender
 {
   return NSDragOperationNone;
 }
 
-- (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
+-(BOOL)performDragOperation:(id <NSDraggingInfo>)sender
 {
   return YES;
 }
 
-- (BOOL)wantsPeriodicDraggingUpdates
+-(BOOL)wantsPeriodicDraggingUpdates
 {
   return NO;
 }
 
-- (void)draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
+-(void)draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
 {
 }
 
-- (void)setStyleMask:(NSWindowStyleMask)styleMask
+-(void)setStyleMask:(NSWindowStyleMask)styleMask
 {
 }
 
-- (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen
+-(NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen
 {
   GdkMacosSurface *surface = self->gdkSurface;
   NSRect rect;
@@ -572,8 +572,8 @@
   return rect;
 }
 
-- (NSRect)windowWillUseStandardFrame:(NSWindow *)nsWindow
-                        defaultFrame:(NSRect)newFrame
+-(NSRect)windowWillUseStandardFrame:(NSWindow *)nsWindow
+                       defaultFrame:(NSRect)newFrame
 {
   NSRect screenFrame = [[self screen] visibleFrame];
   GdkMacosSurface *surface = self->gdkSurface;
@@ -585,8 +585,8 @@
     return lastUnmaximizedFrame;
 }
 
-- (BOOL)windowShouldZoom:(NSWindow *)nsWindow
-                 toFrame:(NSRect)newFrame
+-(BOOL)windowShouldZoom:(NSWindow *)nsWindow
+                toFrame:(NSRect)newFrame
 {
   GdkMacosSurface *surface = self->gdkSurface;
   GdkSurfaceState state = GDK_SURFACE (surface)->state;
