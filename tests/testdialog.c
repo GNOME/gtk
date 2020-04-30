@@ -16,15 +16,14 @@ show_message_dialog1 (GtkWindow *parent)
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                             "Unhandled error message: SSH program unexpectedly exited");
 
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  gtk_widget_show (dialog);
+  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
 }
 
 static void
 show_message_dialog1a (GtkWindow *parent)
 {
   GtkWidget *dialog;
-  GtkWidget *image;
 
   dialog = GTK_WIDGET (gtk_message_dialog_new (parent,
                                                GTK_DIALOG_MODAL|
@@ -34,11 +33,8 @@ show_message_dialog1a (GtkWindow *parent)
                                                GTK_BUTTONS_OK,
                                                "The system network services are not compatible with this version."));
 
-  image = gtk_image_new_from_icon_name ("computer-fail");
-  gtk_widget_show (image);
-
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  gtk_widget_show (dialog);
+  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
 }
 
 static void
@@ -60,8 +56,8 @@ show_message_dialog2 (GtkWindow *parent)
                           "Empty Wastebasket", GTK_RESPONSE_OK,
                           NULL);  
 
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  gtk_widget_show (dialog);
+  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
 }
 
 static void
@@ -70,9 +66,8 @@ show_color_chooser (GtkWindow *parent)
   GtkWidget *dialog;
 
   dialog = gtk_color_chooser_dialog_new ("Builtin", parent);
-
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  gtk_widget_show (dialog);
+  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
 }
 
 static void
@@ -85,8 +80,8 @@ show_color_chooser_generic (GtkWindow *parent)
                          "transient-for", parent,
                          NULL);
 
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  gtk_widget_show (dialog);
+  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
 }
 
 static void
@@ -122,9 +117,9 @@ show_dialog (GtkWindow *parent)
                                         NULL);
 
   add_content (dialog);
+  gtk_widget_show (dialog);
 
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
 }
 
 static void
@@ -138,9 +133,9 @@ show_dialog_with_header (GtkWindow *parent)
                                         NULL);
 
   add_content (dialog);
+  gtk_widget_show (dialog);
 
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
 }
 
 static void
@@ -155,9 +150,9 @@ show_dialog_with_buttons (GtkWindow *parent)
                                         NULL);
 
   add_content (dialog);
+  gtk_widget_show (dialog);
 
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
 }
 
 static void
@@ -172,9 +167,9 @@ show_dialog_with_header_buttons (GtkWindow *parent)
                                         NULL);
 
   add_content (dialog);
+  gtk_widget_show (dialog);
 
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
 }
 
 static void
@@ -187,9 +182,9 @@ show_dialog_with_header_buttons2 (GtkWindow *parent)
   gtk_builder_add_from_file (builder, "dialog.ui", NULL);
   dialog = (GtkWidget *)gtk_builder_get_object (builder, "dialog");
   g_object_unref (builder);
+  gtk_widget_show (dialog);
 
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
 }
 
 typedef struct {
@@ -235,9 +230,9 @@ show_dialog_from_template (GtkWindow *parent)
                          NULL);
 
   add_content (dialog);
+  gtk_widget_show (dialog);
 
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
 }
 
 static void
@@ -256,9 +251,9 @@ show_dialog_flex_template (GtkWindow *parent)
                          NULL);
 
   add_content (dialog);
+  gtk_widget_show (dialog);
 
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
 }
 
 typedef struct {
@@ -309,9 +304,9 @@ show_dialog_from_template_with_header (GtkWindow *parent)
 
   add_buttons (dialog);
   add_content (dialog);
+  gtk_widget_show (dialog);
 
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
 }
 
 int

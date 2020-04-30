@@ -126,11 +126,31 @@ display_dialog (void)
 }
 
 static void
+on_open_response (GtkWidget *file_chooser,
+                  int        response)
+{
+  if (response == GTK_RESPONSE_ACCEPT)
+    {
+      char *path;
+
+      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (file_chooser));
+      path = g_file_get_path (file);
+
+      gtk_button_set_label (GTK_BUTTON (file_l), path);
+
+      g_free (path);
+    }
+
+  gtk_widget_destroy (file_chooser);
+
+  gtk_widget_set_sensitive (open, TRUE);
+}
+
+static void
 button_clicked (GtkButton *b,
                 gpointer   user_data)
 {
   GtkWidget *w;
-  gchar *path;
 
   w = gtk_file_chooser_dialog_new ("Select file",
                                    GTK_WINDOW (toplevel),
@@ -139,16 +159,13 @@ button_clicked (GtkButton *b,
                                    "_Open", GTK_RESPONSE_ACCEPT,
                                    NULL);
 
-  gtk_dialog_run (GTK_DIALOG (w));
-  file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (w));
-  path = g_file_get_path (file);
-  gtk_button_set_label (GTK_BUTTON (file_l), path);
+  gtk_window_set_modal (GTK_WINDOW (w), TRUE);
 
-  gtk_widget_destroy (w);
+  g_signal_connect (w, "response",
+                    G_CALLBACK (on_open_response),
+                    NULL);
 
-  gtk_widget_set_sensitive (open, TRUE);
-
-  g_free (path);
+  gtk_widget_show (w);
 }
 
 static void
@@ -180,7 +197,7 @@ main (int argc, char **argv)
                    w1, 0, 0, 1, 1);
 
   file_l = gtk_button_new ();
-  path = g_build_filename (g_get_current_dir (), "apple-red.png", NULL);
+  path = g_build_filename (GTK_SRCDIR, "apple-red.png", NULL);
   file = g_file_new_for_path (path);
   gtk_button_set_label (GTK_BUTTON (file_l), path);
   g_free (path);

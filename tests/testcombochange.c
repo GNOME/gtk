@@ -71,14 +71,10 @@ combochange_log (const char *fmt,
 }
 
 static GtkWidget *
-create_combo (const char *name,
-	      gboolean is_list)
+create_combo (const char *name)
 {
   GtkCellRenderer *cell_renderer;
   GtkWidget *combo;
-  GtkCssProvider *provider;
-  GtkStyleContext *context;
-  gchar *css_data;
 
   combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (model));
   cell_renderer = gtk_cell_renderer_text_new ();
@@ -87,18 +83,6 @@ create_combo (const char *name,
 				  "text", 0, NULL);
 
   gtk_widget_set_name (combo, name);
-
-  context = gtk_widget_get_style_context (combo);
-
-  provider = gtk_css_provider_new ();
-  css_data = g_strdup_printf ("#%s { -GtkComboBox-appears-as-list: %s }",
-                              name, is_list ? "true" : "false");
-  gtk_css_provider_load_from_data (provider, css_data, -1);
-  g_free (css_data);
-
-  gtk_style_context_add_provider (context,
-                                  GTK_STYLE_PROVIDER (provider),
-                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   return combo;
 }
@@ -224,7 +208,7 @@ int
 main (int argc, char **argv)
 {
   GtkWidget *content_area;
-  GtkWidget *dialog;
+  GtkWidget *window;
   GtkWidget *scrolled_window;
   GtkWidget *hbox;
   GtkWidget *button_vbox;
@@ -232,7 +216,6 @@ main (int argc, char **argv)
   GtkWidget *button;
   GtkWidget *menu_combo;
   GtkWidget *label;
-  GtkWidget *list_combo;
   
   test_init ();
 
@@ -240,15 +223,15 @@ main (int argc, char **argv)
 
   model = gtk_list_store_new (1, G_TYPE_STRING);
   contents = g_array_new (FALSE, FALSE, sizeof (char));
-  
-  dialog = gtk_dialog_new_with_buttons ("GtkComboBox model changes",
-					NULL, 0,
-					"_Close", GTK_RESPONSE_CLOSE,
-					NULL);
 
-  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+  window = gtk_window_new ();
+  gtk_window_set_title (GTK_WINDOW (window), "ComboBox Change");
+
+  content_area = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
+  gtk_container_add (GTK_CONTAINER (window), content_area);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+  gtk_widget_set_vexpand (hbox, TRUE);
   gtk_container_add (GTK_CONTAINER (content_area), hbox);
 
   combo_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
@@ -258,17 +241,9 @@ main (int argc, char **argv)
   gtk_label_set_markup (GTK_LABEL (label), "<b>Menu mode</b>");
   gtk_container_add (GTK_CONTAINER (combo_vbox), label);
 
-  menu_combo = create_combo ("menu-combo", FALSE);
+  menu_combo = create_combo ("menu-combo");
   gtk_widget_set_margin_start (menu_combo, 12);
   gtk_container_add (GTK_CONTAINER (combo_vbox), menu_combo);
-
-  label = gtk_label_new (NULL);
-  gtk_label_set_markup (GTK_LABEL (label), "<b>List mode</b>");
-  gtk_container_add (GTK_CONTAINER (combo_vbox), label);
-
-  list_combo = create_combo ("list-combo", TRUE);
-  gtk_widget_set_margin_start (list_combo, 12);
-  gtk_container_add (GTK_CONTAINER (combo_vbox), list_combo);
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_hexpand (scrolled_window, TRUE);
@@ -285,7 +260,7 @@ main (int argc, char **argv)
   button_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
   gtk_container_add (GTK_CONTAINER (hbox), button_vbox);
 
-  gtk_window_set_default_size (GTK_WINDOW (dialog), 500, 300);
+  gtk_window_set_default_size (GTK_WINDOW (window), 500, 300);
 
   button = gtk_button_new_with_label ("Insert");
   gtk_container_add (GTK_CONTAINER (button_vbox), button);
@@ -303,8 +278,24 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (button_vbox), button);
   g_signal_connect (button, "clicked", G_CALLBACK (on_animate), NULL);
 
-  gtk_widget_show (dialog);
-  gtk_dialog_run (GTK_DIALOG (dialog));
+  GtkWidget *close_button = gtk_button_new_with_mnemonic ("_Close");
+  gtk_widget_set_hexpand (close_button, TRUE);
+  gtk_container_add (GTK_CONTAINER (content_area), close_button);
+
+  gtk_widget_show (window);
+
+  GMainLoop *loop = g_main_loop_new (NULL, FALSE);
+
+  g_signal_connect_swapped (close_button, "clicked",
+                            G_CALLBACK (gtk_widget_destroy),
+                            window);
+  g_signal_connect_swapped (window, "destroy",
+                            G_CALLBACK (g_main_loop_quit),
+                            loop);
+
+  g_main_loop_run (loop);
+
+  g_main_loop_unref (loop);
 
   return 0;
 }
