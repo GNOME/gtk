@@ -94,6 +94,7 @@
   <object class="GtkAboutDialog" id="aboutdialog1">
     <property name="program-name" translatable="yes">Builder demo</property>
     <property name="logo-icon-name" translatable="yes">gtk3-demo</property>
+    <property name="modal">True</property>
     <accessibility>
       <relation target="window1" type="subwindow-of"/>
     </accessibility>

@@ -26,8 +26,10 @@ about_activate (GSimpleAction *action,
 
   builder = g_object_get_data (G_OBJECT (window), "builder");
   about_dlg = GTK_WIDGET (gtk_builder_get_object (builder, "aboutdialog1"));
-  gtk_dialog_run (GTK_DIALOG (about_dlg));
-  gtk_widget_hide (about_dlg);
+  gtk_window_set_transient_for (GTK_WINDOW (about_dlg), GTK_WINDOW (window));
+  gtk_window_set_hide_on_close (GTK_WINDOW (about_dlg), TRUE);
+  g_signal_connect (about_dlg, "response", G_CALLBACK (gtk_widget_hide), NULL);
+  gtk_widget_show (about_dlg);
 }
 
 static void
