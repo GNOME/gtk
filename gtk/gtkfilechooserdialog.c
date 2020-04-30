@@ -507,7 +507,7 @@ setup_search (GtkFileChooserDialog *dialog)
                                    translate_subtitle_to_visible,
                                    NULL, NULL, NULL);
 
-      gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header), box);
+      gtk_header_bar_set_title_widget (GTK_HEADER_BAR (header), box);
 
       gtk_container_forall (GTK_CONTAINER (header), add_button, dialog);
     }
@@ -549,12 +549,12 @@ setup_save_entry (GtkFileChooserDialog *dialog)
       gtk_container_add (GTK_CONTAINER (box), label);
       gtk_container_add (GTK_CONTAINER (box), entry);
 
-      gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header), box);
+      gtk_header_bar_set_title_widget (GTK_HEADER_BAR (header), box);
       gtk_file_chooser_widget_set_save_entry (GTK_FILE_CHOOSER_WIDGET (priv->widget), entry);
     }
   else if (!need_entry && priv->has_entry)
     {
-      gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header), NULL);
+      gtk_header_bar_set_title_widget (GTK_HEADER_BAR (header), NULL);
       gtk_file_chooser_widget_set_save_entry (GTK_FILE_CHOOSER_WIDGET (priv->widget), NULL);
     }
 

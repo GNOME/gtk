@@ -921,7 +921,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
 
   priv->title_stack = g_object_new (GTK_TYPE_STACK,
                                     NULL);
-  gtk_header_bar_set_custom_title (priv->header_bar, GTK_WIDGET (priv->title_stack));
+  gtk_header_bar_set_title_widget (priv->header_bar, GTK_WIDGET (priv->title_stack));
 
   /* Translators: This is the window title for the shortcuts window in normal mode */
   label = gtk_label_new (_("Shortcuts"));
