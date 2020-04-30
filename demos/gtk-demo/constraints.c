@@ -257,9 +257,9 @@ do_constraints (GtkWidget *do_widget)
 
      window = gtk_window_new ();
      gtk_window_set_display (GTK_WINDOW (window), gtk_widget_get_display (do_widget));
+     gtk_window_set_title (GTK_WINDOW (window), "Constraints");
 
      header = gtk_header_bar_new ();
-     gtk_header_bar_set_title (GTK_HEADER_BAR (header), "Constraints");
      gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), FALSE);
      gtk_window_set_titlebar (GTK_WINDOW (window), header);
      g_signal_connect (window, "destroy",

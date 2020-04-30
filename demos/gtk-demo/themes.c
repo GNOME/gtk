@@ -97,7 +97,6 @@ change_theme (GtkWidget *widget,
               gpointer data)
 {
   GtkBuilder *builder = data;
-  GtkWidget *header;
   GtkWidget *label;
   Theme next = themes[theme++ % G_N_ELEMENTS (themes)];
   char *name;
@@ -107,9 +106,8 @@ change_theme (GtkWidget *widget,
                 "gtk-application-prefer-dark-theme", next.dark,
                 NULL);
 
-  header = GTK_WIDGET (gtk_builder_get_object (builder, "header"));
   name = g_strconcat (next.name, next.dark ? " (dark)" : NULL, NULL);
-  gtk_header_bar_set_title (GTK_HEADER_BAR (header), name);
+  gtk_window_set_title (GTK_WINDOW (widget), name);
   g_free (name);
 
   label = GTK_WIDGET (gtk_builder_get_object (builder, "fps"));

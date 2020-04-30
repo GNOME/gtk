@@ -2231,9 +2231,6 @@ gtk_window_set_title_internal (GtkWindow   *window,
   if (_gtk_widget_get_realized (GTK_WIDGET (window)))
     gdk_toplevel_set_title (GDK_TOPLEVEL (priv->surface), new_title != NULL ? new_title : "");
 
-  if (update_titlebar && GTK_IS_HEADER_BAR (priv->title_box))
-    gtk_header_bar_set_title (GTK_HEADER_BAR (priv->title_box), new_title != NULL ? new_title : "");
-
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_TITLE]);
 }
 
@@ -4100,21 +4097,6 @@ gtk_window_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_window_parent_class)->finalize (object);
 }
 
-/* copied from gdksurface-x11.c */
-static const gchar *
-get_default_title (void)
-{
-  const gchar *title;
-
-  title = g_get_application_name ();
-  if (!title)
-    title = g_get_prgname ();
-  if (!title)
-    title = "";
-
-  return title;
-}
-
 static gboolean
 update_csd_visibility (GtkWindow *window)
 {
@@ -4151,14 +4133,8 @@ update_window_actions (GtkWindow *window)
 static GtkWidget *
 create_titlebar (GtkWindow *window)
 {
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWidget *titlebar;
-
-  titlebar = gtk_header_bar_new ();
-  g_object_set (titlebar,
-                "title", priv->title ? priv->title : get_default_title (),
-                "show-title-buttons", TRUE,
-                NULL);
+  GtkWidget *titlebar = gtk_header_bar_new ();
+  gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (titlebar), TRUE);
   gtk_widget_add_css_class (titlebar, GTK_STYLE_CLASS_TITLEBAR);
   gtk_widget_add_css_class (titlebar, "default-decoration");
 

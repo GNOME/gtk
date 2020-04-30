@@ -16,9 +16,9 @@
     <property name="type_hint">dialog</property>
     <property name="default_width">500</property>
     <property name="use_header_bar">1</property>
+    <property name="title" translatable="yes">Join Chat Room</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="titlebar">
-        <property name="title" translatable="yes">Join Chat Room</property>
         <child>
           <object class="GtkButton" id="back_button">
             <property name="visible">0</property>

@@ -67,9 +67,9 @@ do_tagged_entry (GtkWidget *do_widget)
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       header = gtk_header_bar_new ();
-      gtk_header_bar_set_title (GTK_HEADER_BAR (header), "A tagged entry");
       gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), FALSE);
       gtk_window_set_titlebar (GTK_WINDOW (window), header);
+      gtk_window_set_title (GTK_WINDOW (window), "A tagged entry");
       gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
       gtk_window_set_deletable (GTK_WINDOW (window), FALSE);
       g_signal_connect (window, "destroy",

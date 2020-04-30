@@ -86,7 +86,6 @@
     <property name="focus-widget">text_view</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header">
-        <property name="title" translatable="yes">GTK Node Editor</property>
         <property name="show-title-buttons">1</property>
         <child type="start">
           <object class="GtkButton">
@@ -118,11 +117,6 @@
           <object class="GtkMenuButton">
             <property name="label">Save Testcase</property>
             <property name="popover">testcase_popover</property>
-          </object>
-        </child>
-        <child type="title">
-          <object class="GtkLabel">
-            <property name="label" translatable="yes">GTK Node Editor</property>
           </object>
         </child>
       </object>
