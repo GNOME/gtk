@@ -2,6 +2,24 @@
 
 // generic drawing of more complex things
 
+//
+// Helper mixin for drawing visible focus rings
+//
+// If $target is specified, the focus ring is applied to the specified child element.
+// If $outer is true, the focus ring extends outward. Otherwise, it extends inward.
+//
+@mixin focus-ring($target: null, $width: 2px, $offset: -$width, $outer: false) {
+  & #{$target} {
+    outline: 0 solid $focus_border_color;
+    outline-offset: if($outer, $offset, $offset + $width);
+  }
+
+  &:focus:focus-visible #{$target} {
+    outline-width: $width;
+    outline-offset: $offset;
+  }
+}
+
 @function _widget_edge($c:$borders_edge) {
 // outer highlight "used" on most widgets
   @if $c == none { @return none; }
@@ -167,6 +185,7 @@
   // normal button
   //
     color: $tc;
+    outline-color: if($c != $bg_color, $alt_focus_border_color, $focus_border_color);
     border-color: if($c != $bg_color, _border_color($c), $borders_color);
     border-bottom-color: if($c != $bg_color, _border_color($c, true), $alt_borders_color);
     $button_fill: if($variant == 'light', linear-gradient(to top, darken($c, 4%) 2px, $c),
@@ -198,6 +217,7 @@
   // normal button alternative look
   //
     color: $tc;
+    outline-color: if($c != $bg_color, $alt_focus_border_color, $focus_border_color);
     border-color: if($c != $bg_color, _border_color($c, true), $alt_borders_color); //colored buttons
     @if $variant == 'light' {
       background-image: linear-gradient(to bottom, lighten($c, 5%) 20%, $c 90%);
@@ -348,6 +368,7 @@
     $_bg: if($c != $bg_color, transparentize($c, 0.5), $osd_bg_color);
 
     color: $osd_fg_color;
+    outline-color: if($c != $bg_color, $alt_focus_border_color, $focus_border_color);
     border-color: $osd_borders_color;
     background-color: transparent;
     $button_fill: image($_bg) !global;
