@@ -83,12 +83,6 @@
  * a dialog receives a delete event, the #GtkDialog::response signal will
  * be emitted with a response ID of #GTK_RESPONSE_DELETE_EVENT.
  *
- * If you want to block waiting for a dialog to return before returning
- * control flow to your code, you can call gtk_dialog_run(). This function
- * enters a recursive main loop and waits for the user to respond to the
- * dialog, returning the response ID corresponding to the button the user
- * clicked.
- *
  * For the simple dialog in the following example, in reality you’d probably
  * use #GtkMessageDialog to save yourself some effort. But you’d need to
  * create the dialog contents manually if you had more than a simple message
@@ -602,7 +596,6 @@ gtk_dialog_buildable_interface_init (GtkBuildableIface *iface)
 static gboolean
 gtk_dialog_close_request (GtkWindow *window)
 {
-  /* emit response signal, this will shut down the loop if we are in gtk_dialog_run */
   gtk_dialog_response (GTK_DIALOG (window), GTK_RESPONSE_DELETE_EVENT);
 
   return GTK_WINDOW_CLASS (gtk_dialog_parent_class)->close_request (window);
@@ -1037,9 +1030,8 @@ gtk_dialog_set_default_response (GtkDialog *dialog,
  * @response_id: response ID
  *
  * Emits the #GtkDialog::response signal with the given response ID.
- * Used to indicate that the user has responded to the dialog in some way;
- * typically either you or gtk_dialog_run() will be monitoring the
- * ::response signal and take appropriate action.
+ *
+ * Used to indicate that the user has responded to the dialog in some way.
  **/
 void
 gtk_dialog_response (GtkDialog *dialog,
@@ -1051,166 +1043,6 @@ gtk_dialog_response (GtkDialog *dialog,
 		 dialog_signals[RESPONSE],
 		 0,
 		 response_id);
-}
-
-typedef struct
-{
-  GtkDialog *dialog;
-  gint response_id;
-  GMainLoop *loop;
-  gboolean destroyed;
-} RunInfo;
-
-static void
-shutdown_loop (RunInfo *ri)
-{
-  if (g_main_loop_is_running (ri->loop))
-    g_main_loop_quit (ri->loop);
-}
-
-static void
-run_unmap_handler (GtkDialog *dialog, gpointer data)
-{
-  RunInfo *ri = data;
-
-  shutdown_loop (ri);
-}
-
-static void
-run_response_handler (GtkDialog *dialog,
-                      gint response_id,
-                      gpointer data)
-{
-  RunInfo *ri;
-
-  ri = data;
-
-  ri->response_id = response_id;
-
-  shutdown_loop (ri);
-}
-
-static void
-run_destroy_handler (GtkDialog *dialog, gpointer data)
-{
-  RunInfo *ri = data;
-
-  /* shutdown_loop will be called by run_unmap_handler */
-
-  ri->destroyed = TRUE;
-}
-
-/**
- * gtk_dialog_run:
- * @dialog: a #GtkDialog
- *
- * Blocks in a recursive main loop until the @dialog either emits the
- * #GtkDialog::response signal, or is destroyed. If the dialog is
- * destroyed during the call to gtk_dialog_run(), gtk_dialog_run() returns
- * #GTK_RESPONSE_NONE. Otherwise, it returns the response ID from the
- * ::response signal emission.
- *
- * Before entering the recursive main loop, gtk_dialog_run() calls
- * gtk_widget_show() on the dialog for you. Note that you still
- * need to show any children of the dialog yourself.
- *
- * During gtk_dialog_run(), the default behavior of delete events
- * is disabled; if the dialog receives a delete event, it will not be
- * destroyed as windows usually are, and gtk_dialog_run() will return
- * #GTK_RESPONSE_DELETE_EVENT. Also, during gtk_dialog_run() the dialog
- * will be modal. You can force gtk_dialog_run() to return at any time by
- * calling gtk_dialog_response() to emit the ::response signal. Destroying
- * the dialog during gtk_dialog_run() is a very bad idea, because your
- * post-run code won’t know whether the dialog was destroyed or not.
- *
- * After gtk_dialog_run() returns, you are responsible for hiding or
- * destroying the dialog if you wish to do so.
- *
- * Typical usage of this function might be:
- * |[<!-- language="C" -->
- *   GtkWidget *dialog = gtk_dialog_new ();
- *   // Set up dialog...
- *
- *   int result = gtk_dialog_run (GTK_DIALOG (dialog));
- *   switch (result)
- *     {
- *       case GTK_RESPONSE_ACCEPT:
- *          // do_application_specific_something ();
- *          break;
- *       default:
- *          // do_nothing_since_dialog_was_cancelled ();
- *          break;
- *     }
- *   gtk_widget_destroy (dialog);
- * ]|
- *
- * Note that even though the recursive main loop gives the effect of a
- * modal dialog (it prevents the user from interacting with other
- * windows in the same window group while the dialog is run), callbacks
- * such as timeouts, IO channel watches, DND drops, etc, will
- * be triggered during a gtk_dialog_run() call.
- *
- * Returns: response ID
- **/
-gint
-gtk_dialog_run (GtkDialog *dialog)
-{
-  RunInfo ri = { NULL, GTK_RESPONSE_NONE, NULL, FALSE };
-  gboolean was_modal;
-  gboolean was_hide_on_close;
-  gulong response_handler;
-  gulong unmap_handler;
-  gulong destroy_handler;
-
-  g_return_val_if_fail (GTK_IS_DIALOG (dialog), -1);
-
-  g_object_ref (dialog);
-
-  was_modal = gtk_window_get_modal (GTK_WINDOW (dialog));
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  was_hide_on_close = gtk_window_get_hide_on_close (GTK_WINDOW (dialog));
-  gtk_window_set_hide_on_close (GTK_WINDOW (dialog), TRUE);
-
-  if (!gtk_widget_get_visible (GTK_WIDGET (dialog)))
-    gtk_widget_show (GTK_WIDGET (dialog));
-
-  response_handler =
-    g_signal_connect (dialog,
-                      "response",
-                      G_CALLBACK (run_response_handler),
-                      &ri);
-
-  unmap_handler =
-    g_signal_connect (dialog,
-                      "unmap",
-                      G_CALLBACK (run_unmap_handler),
-                      &ri);
-
-  destroy_handler =
-    g_signal_connect (dialog,
-                      "destroy",
-                      G_CALLBACK (run_destroy_handler),
-                      &ri);
-
-  ri.loop = g_main_loop_new (NULL, FALSE);
-  g_main_loop_run (ri.loop);
-  g_main_loop_unref (ri.loop);
-
-  ri.loop = NULL;
-
-  if (!ri.destroyed)
-    {
-      gtk_window_set_modal (GTK_WINDOW (dialog), was_modal);
-      gtk_window_set_hide_on_close (GTK_WINDOW (dialog), was_hide_on_close);
-
-      g_signal_handler_disconnect (dialog, response_handler);
-      g_signal_handler_disconnect (dialog, unmap_handler);
-      g_signal_handler_disconnect (dialog, destroy_handler);
-    }
-
-  g_object_unref (dialog);
-
-  return ri.response_id;
 }
 
 /**

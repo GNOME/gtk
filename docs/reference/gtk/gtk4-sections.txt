@@ -721,7 +721,6 @@ GtkDialogFlags
 GtkResponseType
 gtk_dialog_new
 gtk_dialog_new_with_buttons
-gtk_dialog_run
 gtk_dialog_response
 gtk_dialog_add_button
 gtk_dialog_add_buttons
