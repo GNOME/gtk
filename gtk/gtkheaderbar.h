@@ -70,12 +70,6 @@ void         gtk_header_bar_set_show_title_buttons (GtkHeaderBar *bar,
                                                     gboolean      setting);
 
 GDK_AVAILABLE_IN_ALL
-void         gtk_header_bar_set_has_subtitle (GtkHeaderBar *bar,
-                                              gboolean      setting);
-GDK_AVAILABLE_IN_ALL
-gboolean     gtk_header_bar_get_has_subtitle (GtkHeaderBar *bar);
-
-GDK_AVAILABLE_IN_ALL
 void         gtk_header_bar_set_decoration_layout (GtkHeaderBar *bar,
                                                    const gchar  *layout);
 GDK_AVAILABLE_IN_ALL

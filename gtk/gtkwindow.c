@@ -4157,7 +4157,6 @@ create_titlebar (GtkWindow *window)
   titlebar = gtk_header_bar_new ();
   g_object_set (titlebar,
                 "title", priv->title ? priv->title : get_default_title (),
-                "has-subtitle", FALSE,
                 "show-title-buttons", TRUE,
                 NULL);
   gtk_widget_add_css_class (titlebar, GTK_STYLE_CLASS_TITLEBAR);
