@@ -3849,7 +3849,13 @@ gtk_label_focus (GtkWidget        *widget,
       int new_index = -1;
       int i;
 
+      if (info->n_links == 0)
+        goto out;
+
       focus_link = gtk_label_get_focus_link (self, &focus_link_index);
+
+      if (!focus_link)
+        goto out;
 
       switch (direction)
         {
