@@ -496,22 +496,9 @@ activate_preview (GSimpleAction *action,
 }
 
 static void
-activate_save_as (GSimpleAction *action,
-                  GVariant      *parameter,
-                  gpointer       user_data)
+on_save_response (GtkWidget *dialog,
+                  int        response)
 {
-  GtkWidget *dialog;
-  gint response;
-
-  dialog = gtk_file_chooser_dialog_new ("Select file",
-                                        GTK_WINDOW (main_window),
-                                        GTK_FILE_CHOOSER_ACTION_SAVE,
-                                        "_Cancel", GTK_RESPONSE_CANCEL,
-                                        "_Save", GTK_RESPONSE_OK,
-                                        NULL);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-
   if (response == GTK_RESPONSE_OK)
     {
       GFile *save_filename = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
@@ -520,6 +507,28 @@ activate_save_as (GSimpleAction *action,
     }
 
   gtk_widget_destroy (dialog);
+}
+
+static void
+activate_save_as (GSimpleAction *action,
+                  GVariant      *parameter,
+                  gpointer       user_data)
+{
+  GtkWidget *dialog;
+
+  dialog = gtk_file_chooser_dialog_new ("Select file",
+                                        GTK_WINDOW (main_window),
+                                        GTK_FILE_CHOOSER_ACTION_SAVE,
+                                        "_Cancel", GTK_RESPONSE_CANCEL,
+                                        "_Save", GTK_RESPONSE_OK,
+                                        NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  gtk_widget_show (dialog);
+
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (on_save_response),
+                    NULL);
 }
 
 static void
@@ -534,22 +543,9 @@ activate_save (GSimpleAction *action,
 }
 
 static void
-activate_open (GSimpleAction *action,
-               GVariant      *parameter,
-               gpointer       user_data)
+on_open_response (GtkWidget *dialog,
+                  int        response)
 {
-  GtkWidget *dialog;
-  gint response;
-
-  dialog = gtk_file_chooser_dialog_new ("Select file",
-                                        GTK_WINDOW (main_window),
-                                        GTK_FILE_CHOOSER_ACTION_OPEN,
-                                        "_Cancel", GTK_RESPONSE_CANCEL,
-                                        "_Open", GTK_RESPONSE_OK,
-                                        NULL);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-
   if (response == GTK_RESPONSE_OK)
     {
       GFile *open_filename = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
@@ -558,6 +554,28 @@ activate_open (GSimpleAction *action,
     }
 
   gtk_widget_destroy (dialog);
+}
+
+static void
+activate_open (GSimpleAction *action,
+               GVariant      *parameter,
+               gpointer       user_data)
+{
+  GtkWidget *dialog;
+
+  dialog = gtk_file_chooser_dialog_new ("Select file",
+                                        GTK_WINDOW (main_window),
+                                        GTK_FILE_CHOOSER_ACTION_OPEN,
+                                        "_Cancel", GTK_RESPONSE_CANCEL,
+                                        "_Open", GTK_RESPONSE_OK,
+                                        NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  gtk_widget_show (dialog);
+
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (on_open_response),
+                    NULL);
 }
 
 static void
