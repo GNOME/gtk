@@ -17,7 +17,7 @@ static gchar *current_file = NULL;
 
 static GtkWidget *notebook;
 static GtkWidget *treeview;
-static GtkWidget *headerbar;
+static GtkWidget *toplevel;
 
 enum {
   NAME_COLUMN,
@@ -915,7 +915,7 @@ selection_cb (GtkTreeSelection *selection,
   if (filename)
     load_file (name, filename);
 
-  gtk_header_bar_set_title (GTK_HEADER_BAR (headerbar), title);
+  gtk_window_set_title (GTK_WINDOW (toplevel), title);
 
   g_free (name);
   g_free (title);
@@ -1030,9 +1030,9 @@ activate (GApplication *app)
 
   info_view = (GtkWidget *)gtk_builder_get_object (builder, "info-textview");
   source_view = (GtkWidget *)gtk_builder_get_object (builder, "source-textview");
-  headerbar = (GtkWidget *)gtk_builder_get_object (builder, "headerbar");
   treeview = (GtkWidget *)gtk_builder_get_object (builder, "treeview");
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (treeview));
+  toplevel = GTK_WIDGET (window);
 
   load_file (gtk_demos[0].name, gtk_demos[0].filename);
 
