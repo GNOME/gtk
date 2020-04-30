@@ -1809,7 +1809,6 @@ gtk_native_dialog_set_title
 gtk_native_dialog_get_title
 gtk_native_dialog_set_transient_for
 gtk_native_dialog_get_transient_for
-gtk_native_dialog_run
 <SUBSECTION Standard>
 GtkNativeDialog
 <SUBSECTION Private>
