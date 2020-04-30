@@ -1344,6 +1344,18 @@ update_process_list_store (GtkMountOperation *mount_operation,
 }
 
 static void
+on_dialog_response (GtkDialog *dialog,
+                    int        response)
+{
+  /* GTK_RESPONSE_NONE means the dialog were programmatically destroy, e.g. that
+   * GTK_DIALOG_DESTROY_WITH_PARENT kicked in - so it would trigger a warning to
+   * destroy the dialog in that case
+   */
+  if (response != GTK_RESPONSE_NONE)
+    gtk_window_destroy (GTK_WINDOW (dialog));
+}
+
+static void
 on_end_process_activated (GtkModelButton *button,
                           gpointer user_data)
 {
@@ -1379,7 +1391,6 @@ on_end_process_activated (GtkModelButton *button,
   if (!_gtk_mount_operation_kill_process (pid_to_kill, &error))
     {
       GtkWidget *dialog;
-      gint response;
 
       /* Use GTK_DIALOG_DESTROY_WITH_PARENT here since the parent dialog can be
        * indeed be destroyed via the GMountOperation::abort signal... for example,
@@ -1396,14 +1407,8 @@ on_end_process_activated (GtkModelButton *button,
                                                 error->message);
 
       gtk_widget_show (dialog);
-      response = gtk_dialog_run (GTK_DIALOG (dialog));
 
-      /* GTK_RESPONSE_NONE means the dialog were programmatically destroy, e.g. that
-       * GTK_DIALOG_DESTROY_WITH_PARENT kicked in - so it would trigger a warning to
-       * destroy the dialog in that case
-       */
-      if (response != GTK_RESPONSE_NONE)
-        gtk_window_destroy (GTK_WINDOW (dialog));
+      g_signal_connect (dialog, "response", G_CALLBACK (on_dialog_response), NULL);
 
       g_error_free (error);
     }
