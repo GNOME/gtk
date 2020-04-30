@@ -4,10 +4,10 @@
   <object class="GtkWindow" id="window">
     <property name="default-width">600</property>
     <property name="default-height">500</property>
+    <property name="title">Font Explorer</property>
     <child type="titlebar">
       <object class="GtkHeaderBar">
         <property name="show-title-buttons">1</property>
-        <property name="title">Font Explorer</property>
         <child>
           <object class="GtkButton" id="reset">
             <property name="receives-default">1</property>

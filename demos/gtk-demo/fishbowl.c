@@ -194,7 +194,7 @@ static void
 set_widget_type (GtkFishbowl *fishbowl,
                  int          widget_type_index)
 {
-  GtkWidget *window, *headerbar;
+  GtkWidget *window;
 
   if (widget_type_index == selected_widget_type)
     return;
@@ -205,9 +205,8 @@ set_widget_type (GtkFishbowl *fishbowl,
                                   widget_types[selected_widget_type].create_func);
 
   window = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (fishbowl)));
-  headerbar = gtk_window_get_titlebar (GTK_WINDOW (window));
-  gtk_header_bar_set_title (GTK_HEADER_BAR (headerbar),
-                            widget_types[selected_widget_type].name);
+  gtk_window_set_title (GTK_WINDOW (window),
+                        widget_types[selected_widget_type].name);
 }
 
 void

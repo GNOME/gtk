@@ -25,7 +25,6 @@
     <property name="default-height">768</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header">
-        <property name="title" translatable="yes">Icon Browser</property>
         <property name="show-title-buttons">1</property>
         <child type="title">
           <object class="GtkBox">

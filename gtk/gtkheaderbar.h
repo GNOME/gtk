@@ -38,11 +38,6 @@ GDK_AVAILABLE_IN_ALL
 GType        gtk_header_bar_get_type          (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget   *gtk_header_bar_new               (void);
-GDK_AVAILABLE_IN_ALL
-void         gtk_header_bar_set_title         (GtkHeaderBar *bar,
-                                               const gchar  *title);
-GDK_AVAILABLE_IN_ALL
-const gchar *gtk_header_bar_get_title         (GtkHeaderBar *bar);
 
 GDK_AVAILABLE_IN_ALL
 void         gtk_header_bar_set_custom_title  (GtkHeaderBar *bar,

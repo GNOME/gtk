@@ -5579,8 +5579,6 @@ gtk_action_bar_get_type
 <TITLE>GtkHeaderBar</TITLE>
 GtkHeaderBar
 gtk_header_bar_new
-gtk_header_bar_set_title
-gtk_header_bar_get_title
 gtk_header_bar_set_custom_title
 gtk_header_bar_get_custom_title
 gtk_header_bar_pack_start
