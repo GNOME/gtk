@@ -765,8 +765,9 @@ error_message (GtkFileChooserWidget *impl,
     gtk_window_group_add_window (gtk_window_get_group (parent),
                                  GTK_WINDOW (dialog));
 
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (gtk_widget_destroy),
+                    NULL);
 
 }
 
@@ -1231,14 +1232,42 @@ add_to_shortcuts_cb (GSimpleAction *action,
                                        impl);
 }
 
-static gboolean
+typedef struct {
+  GtkFileChooserWidget *impl;
+  GFile *file;
+} ConfirmDeleteData;
+
+static void
+on_confirm_delete_response (GtkWidget *dialog,
+                            int        response,
+                            gpointer   user_data)
+{
+  ConfirmDeleteData *data = user_data;
+
+  gtk_widget_destroy (dialog);
+
+  if (response == GTK_RESPONSE_ACCEPT)
+    {
+      GError *error = NULL;
+
+      if (!g_file_delete (data->file, NULL, &error))
+        error_deleting_file (data->impl, data->file, error);
+    }
+
+  g_object_unref (data->impl);
+  g_object_unref (data->file);
+  g_free (data);
+}
+
+static void
 confirm_delete (GtkFileChooserWidget *impl,
+                GFile                *file,
                 GFileInfo            *info)
 {
   GtkWindow *toplevel;
   GtkWidget *dialog;
-  gint response;
-  const gchar *name;
+  const char *name;
+  ConfirmDeleteData *data;
 
   name = g_file_info_get_display_name (info);
 
@@ -1259,11 +1288,15 @@ confirm_delete (GtkFileChooserWidget *impl,
   if (gtk_window_has_group (toplevel))
     gtk_window_group_add_window (gtk_window_get_group (toplevel), GTK_WINDOW (dialog));
 
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_show (dialog);
 
-  gtk_widget_destroy (dialog);
+  data = g_new (ConfirmDeleteData, 1);
+  data->impl = g_object_ref (impl);
+  data->file = g_object_ref (file);
 
-  return (response == GTK_RESPONSE_ACCEPT);
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (on_confirm_delete_response),
+                    data);
 }
 
 static void
@@ -1275,16 +1308,11 @@ delete_selected_cb (GtkTreeModel *model,
   GtkFileChooserWidget *impl = data;
   GFile *file;
   GFileInfo *info;
-  GError *error = NULL;
 
   file = _gtk_file_system_model_get_file (GTK_FILE_SYSTEM_MODEL (model), iter);
   info = _gtk_file_system_model_get_info (GTK_FILE_SYSTEM_MODEL (model), iter);
 
-  if (confirm_delete (impl, info))
-    {
-      if (!g_file_delete (file, NULL, &error))
-        error_deleting_file (impl, file, error);
-    }
+  confirm_delete (impl, file, info);
 }
 
 static void
@@ -5722,17 +5750,43 @@ add_custom_button_to_dialog (GtkDialog   *dialog,
   gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, response_id);
 }
 
-/* Presents an overwrite confirmation dialog; returns whether we should accept
- * the filename.
+/* Every time we request a response explicitly, we need to save the selection to
+ * the recently-used list, as requesting a response means, “the dialog is confirmed”.
  */
-static gboolean
+static void
+request_response_and_add_to_recent_list (GtkFileChooserWidget *impl)
+{
+  g_signal_emit_by_name (impl, "response-requested");
+  add_selection_to_recent_list (impl);
+}
+
+static void
+on_confirm_overwrite_response (GtkWidget *dialog,
+                               int        response,
+                               gpointer   user_data)
+{
+  GtkFileChooserWidget *impl = user_data;
+
+  if (response == GTK_RESPONSE_ACCEPT)
+    {
+      /* Dialog is now going to be closed, so prevent any button/key presses to
+       * file list (will be restablished on next map()). Fixes data loss bug #2288 */
+      impl->browse_files_interaction_frozen = TRUE;
+
+      request_response_and_add_to_recent_list (impl);
+    }
+
+  gtk_widget_destroy (dialog);
+}
+
+/* Presents an overwrite confirmation dialog */
+static void
 confirm_dialog_should_accept_filename (GtkFileChooserWidget *impl,
                                        const gchar           *file_part,
                                        const gchar           *folder_display_name)
 {
   GtkWindow *toplevel;
   GtkWidget *dialog;
-  int response;
 
   toplevel = get_toplevel (GTK_WIDGET (impl));
 
@@ -5754,16 +5808,9 @@ confirm_dialog_should_accept_filename (GtkFileChooserWidget *impl,
   if (gtk_window_has_group (toplevel))
     gtk_window_group_add_window (gtk_window_get_group (toplevel), GTK_WINDOW (dialog));
 
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-
-  if (response == GTK_RESPONSE_ACCEPT)
-    /* Dialog is now going to be closed, so prevent any button/key presses to
-     * file list (will be restablished on next map()). Fixes data loss bug #2288 */
-    impl->browse_files_interaction_frozen = TRUE;
-
-  gtk_widget_destroy (dialog);
-
-  return (response == GTK_RESPONSE_ACCEPT);
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (on_confirm_overwrite_response),
+                    impl);
 }
 
 struct GetDisplayNameData
@@ -5772,16 +5819,6 @@ struct GetDisplayNameData
   gchar *file_part;
 };
 
-/* Every time we request a response explicitly, we need to save the selection to
- * the recently-used list, as requesting a response means, “the dialog is confirmed”.
- */
-static void
-request_response_and_add_to_recent_list (GtkFileChooserWidget *impl)
-{
-  g_signal_emit_by_name (impl, "response-requested");
-  add_selection_to_recent_list (impl);
-}
-
 static void
 confirmation_confirm_get_info_cb (GCancellable *cancellable,
                                   GFileInfo    *info,
@@ -5789,7 +5826,6 @@ confirmation_confirm_get_info_cb (GCancellable *cancellable,
                                   gpointer      user_data)
 {
   gboolean cancelled = g_cancellable_is_cancelled (cancellable);
-  gboolean should_respond = FALSE;
   struct GetDisplayNameData *data = user_data;
 
   if (cancellable != data->impl->should_respond_get_info_cancellable)
@@ -5801,14 +5837,12 @@ confirmation_confirm_get_info_cb (GCancellable *cancellable,
     goto out;
 
   if (error)
-    /* Huh?  Did the folder disappear?  Let the caller deal with it */
-    should_respond = TRUE;
-  else
-    should_respond = confirm_dialog_should_accept_filename (data->impl, data->file_part, g_file_info_get_display_name (info));
+    goto out;
+
+  confirm_dialog_should_accept_filename (data->impl, data->file_part,
+                                         g_file_info_get_display_name (info));
 
   set_busy_cursor (data->impl, FALSE);
-  if (should_respond)
-    request_response_and_add_to_recent_list (data->impl);
 
 out:
   g_object_unref (data->impl);
