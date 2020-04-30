@@ -880,7 +880,7 @@ modelbutton.flat {
 
   @extend %undecorated_button;
 
-  &:hover { background-color: $popover_hover_color; }
+  &:hover { background-color: $menu_selected_color; }
 
   &:disabled {
     color: $insensitive_fg_color;
@@ -898,6 +898,7 @@ modelbutton.flat arrow {
   background: none;
   min-width: 16px;
   min-height: 16px;
+  opacity: 0.3; //dim icon
 
   &:hover { background: none; }
 
@@ -1828,7 +1829,7 @@ popover.background {
   > contents {
     $_popover_border: if($variant=='light', transparentize(black, 0.77), transparentize($borders_color, 0.1));
 
-    background-color: $popover_bg_color;
+    background-color: $menu_color;
     background-clip: padding-box;
     border: 1px solid $_popover_border;
     box-shadow: 0 1px 2px transparentize(black, 0.7);
@@ -4304,7 +4305,7 @@ emoji-completion-row:hover {
 
 emoji-completion-row emoji:focus,
 emoji-completion-row emoji:hover {
-  background-color: $popover_hover_color;
+  background-color: $menu_selected_color;
 }
 
 popover.entry-completion > contents {
@@ -4334,6 +4335,11 @@ menubar {
   }
   // remove padding and rounding from menubar submenu decoration
   .csd.popup decoration { border-radius:0; }
+  // only bottom part rounded for menubar menus
+  & > item popover.menu.background > contents {
+    margin-top: -1px; //nudge it into the menubar
+    border-radius: 0; //would have kept it at the bottom, but the shadow is wonky
+  }
 }
 
 $_menu-padding: 12px;
@@ -4354,7 +4360,7 @@ popover.menu {
       outline: none;
       transition: none;
 
-      &:selected { @extend %selected_items; }
+      &:selected { background: image($menu_selected_color); }
     }
   }
 
@@ -4392,16 +4398,13 @@ popover.menu {
   radio {
     @include check('menu', 'transparent', $text_color);
 
-    &:hover, &:active {
-      @include check('menu-active', 'transparent', $selected_fg_color);
-    }
+    &:hover { @include check('menu-active', 'transparent', $text_color); }
+    &:active { @include check('menu-active', 'transparent', $text_color); }
   }
 
   //only menu radios have a border
   radio { border-color: $borders_color;
-    &:active, &:hover {
-       border-color: transparentize($selected_fg_color,0.5);
-    }
+    &:active { border-color: transparentize($borders_color,0.5); }
   }
 
   arrow.left,
@@ -4421,10 +4424,18 @@ popover.menu {
   modelbutton {
     min-height: 30px;
     min-width: 40px;
+    margin: 0 $_menu-padding/2;
     padding: 0 $_menu-padding;
-    border-radius: 0;
 
-    &:selected { @extend %selected_items; }
+    &:selected {
+      color: $text-color;
+      background-color: $menu_selected_color;
+    }
+    &:selected:active {
+      //@extend %selected_items;
+      //color: $selected_fg_color;
+      background-color: darken($bg_color,14%); // matching buttons
+    }
   }
 
   label.title {
