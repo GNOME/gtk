@@ -104,6 +104,26 @@ gdk_macos_surface_get_scale_factor (GdkSurface *surface)
 }
 
 static void
+gdk_macos_surface_begin_resize_drag (GdkSurface     *surface,
+                                     GdkSurfaceEdge  edge,
+                                     GdkDevice      *device,
+                                     int             button,
+                                     int             root_x,
+                                     int             root_y,
+                                     guint32         timestamp)
+{
+  GdkMacosSurface *self = (GdkMacosSurface *)surface;
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+
+  g_assert (GDK_IS_MACOS_SURFACE (self));
+
+  if (GDK_SURFACE_DESTROYED (surface))
+    return;
+
+  [priv->window beginManualResize:edge];
+}
+
+static void
 gdk_macos_surface_destroy (GdkSurface *surface,
                            gboolean    foreign_destroy)
 {
@@ -173,6 +193,7 @@ gdk_macos_surface_class_init (GdkMacosSurfaceClass *klass)
   object_class->set_property = gdk_macos_surface_set_property;
 
   surface_class->destroy = gdk_macos_surface_destroy;
+  surface_class->begin_resize_drag = gdk_macos_surface_begin_resize_drag;
   surface_class->hide = gdk_macos_surface_hide;
   surface_class->set_input_region = gdk_macos_surface_set_input_region;
   surface_class->get_scale_factor = gdk_macos_surface_get_scale_factor;
