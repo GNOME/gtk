@@ -76,6 +76,9 @@
  * menu, then it will automatically be included in the menubar or in the
  * windows client-side decorations.
  *
+ * See #GtkPopoverMenu for information about the XML language
+ * used by #GtkBuilder for menu models.
+ *
  * ## A GtkApplicationWindow with a menubar
  *
  * |[<!-- language="C" -->
@@ -101,48 +104,6 @@
  *
  * GtkWidget *window = gtk_application_window_new (app);
  * ]|
- *
- * ## Handling fallback yourself
- *
- * [A simple example](https://gitlab.gnome.org/GNOME/gtk/tree/master/examples/sunny.c)
- *
- * The XML format understood by #GtkBuilder for #GMenuModel consists
- * of a toplevel `<menu>` element, which contains one or more `<item>`
- * elements. Each `<item>` element contains `<attribute>` and `<link>`
- * elements with a mandatory name attribute. `<link>` elements have the
- * same content model as `<menu>`. Instead of `<link name="submenu>` or
- * `<link name="section">`, you can use `<submenu>` or `<section>`
- * elements.
- *
- * Attribute values can be translated using gettext, like other #GtkBuilder
- * content. `<attribute>` elements can be marked for translation with a
- * `translatable="yes"` attribute. It is also possible to specify message
- * context and translator comments, using the context and comments attributes.
- * To make use of this, the #GtkBuilder must have been given the gettext
- * domain to use.
- *
- * The following attributes are used when constructing menu items:
- * - "label": a user-visible string to display
- * - "action": the prefixed name of the action to trigger
- * - "target": the parameter to use when activating the action
- * - "icon" and "verb-icon": names of icons that may be displayed
- * - "submenu-action": name of an action that may be used to determine
- *      if a submenu can be opened
- * - "hidden-when": a string used to determine when the item will be hidden.
- *      Possible values include "action-disabled", "action-missing", "macos-menubar".
- *
- * The following attributes are used when constructing sections:
- * - "label": a user-visible string to use as section heading
- * - "display-hint": a string used to determine special formatting for the section.
- *     Possible values include "horizontal-buttons", "circular-buttons" and "inline-buttons". They all indicate that section should be
- *     displayed as a horizontal row of buttons.
- * - "text-direction": a string used to determine the #GtkTextDirection to use
- *     when "display-hint" is set to "horizontal-buttons". Possible values
- *     include "rtl", "ltr", and "none".
- *
- * The following attributes are used when constructing submenus:
- * - "label": a user-visible string to display
- * - "icon": icon name to display
  */
 
 typedef GSimpleActionGroupClass GtkApplicationWindowActionsClass;
