@@ -20,11 +20,21 @@
 #ifndef __GDK_MACOS_EVENT_SOURCE_PRIVATE_H__
 #define __GDK_MACOS_EVENT_SOURCE_PRIVATE_H__
 
+#include <AppKit/AppKit.h>
+
 #include "gdkmacosdisplay.h"
 
 G_BEGIN_DECLS
 
-GSource *_gdk_macos_event_source_new (void);
+typedef enum
+{
+  GDK_MACOS_EVENT_SUBTYPE_EVENTLOOP,
+} GdkMacosEventSubType;
+
+GSource  *_gdk_macos_event_source_new           (GdkMacosDisplay *display);
+void      _gdk_macos_event_source_release_event (NSEvent         *event);
+NSEvent  *_gdk_macos_event_source_get_pending   (void);
+gboolean  _gdk_macos_event_source_check_pending (void);
 
 G_END_DECLS
 

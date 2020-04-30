@@ -20,7 +20,8 @@
 #include "config.h"
 
 #include <AppKit/AppKit.h>
-#include <gdk/gdk.h>
+
+#include "gdkeventsprivate.h"
 
 #include "gdkmacoscairocontext-private.h"
 #include "gdkdisplayprivate.h"
@@ -415,7 +416,7 @@ _gdk_macos_display_open (const gchar *display_name)
 
   if (event_source == NULL)
     {
-      event_source = _gdk_macos_event_source_new ();
+      event_source = _gdk_macos_event_source_new (self);
       g_source_attach (event_source, NULL);
     }
 
@@ -469,4 +470,40 @@ _gdk_macos_display_get_screen_at_display_coords (GdkMacosDisplay *self,
   GDK_END_MACOS_ALLOC_POOL;
 
   return screen;
+}
+
+static GdkEvent *
+gdk_macos_display_translate (GdkMacosDisplay *self,
+                             NSEvent         *event)
+{
+  g_assert (GDK_IS_MACOS_DISPLAY (self));
+  g_assert (event != NULL);
+
+  /* TODO: Event translation */
+
+  return NULL;
+}
+
+void
+_gdk_macos_display_queue_events (GdkMacosDisplay *self)
+{
+  NSEvent *nsevent;
+  GdkEvent *event;
+  GList *node;
+
+  g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
+
+  if (!(nsevent = _gdk_macos_event_source_get_pending ()))
+    return;
+
+  if (!(event = gdk_macos_display_translate (self, nsevent)))
+    {
+      [NSApp sendEvent:nsevent];
+      _gdk_macos_event_source_release_event (nsevent);
+      return;
+    }
+
+  node = _gdk_event_queue_append (GDK_DISPLAY (self), event);
+  _gdk_windowing_got_event (GDK_DISPLAY (self), node, event, 0);
+  _gdk_macos_event_source_release_event (nsevent);
 }
