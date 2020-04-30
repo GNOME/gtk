@@ -342,10 +342,16 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
             widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (model));
         }
 
+      if (!_gtk_widget_is_sensitive (widget) ||
+          !_gtk_widget_get_mapped (widget))
+        {
+          g_object_unref (shortcut);
+          continue;
+        }
+
       native = gtk_widget_get_native (widget);
-      if (!gtk_widget_is_sensitive (widget) ||
-          !gtk_widget_get_mapped (widget) ||
-          !gdk_surface_is_viewable (gtk_native_get_surface (native)))
+      if (!native ||
+          !gdk_surface_is_viewable(gtk_native_get_surface (native)))
         {
           g_object_unref (shortcut);
           continue;
