@@ -42,17 +42,13 @@
 
 -(BOOL)windowShouldClose:(id)sender
 {
-#if 0
-  GdkSurface *window = [[self contentView] gdkSurface];
+  GdkDisplay *display;
   GdkEvent *event;
 
-  event = gdk_event_new (GDK_DELETE);
+  display = gdk_surface_get_display (GDK_SURFACE (self->gdkSurface));
+  event = gdk_delete_event_new (GDK_SURFACE (self->gdkSurface));
 
-  event->any.surface = g_object_ref (window);
-  event->any.send_event = FALSE;
-
-  _gdk_event_queue_append (gdk_display_get_default (), event);
-#endif
+  _gdk_event_queue_append (display, event);
 
   return NO;
 }

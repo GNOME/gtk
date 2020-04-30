@@ -108,8 +108,6 @@ gdk_macos_surface_destroy (GdkSurface *surface,
   if (window != NULL)
     [window close];
 
-  GDK_SURFACE_CLASS (gdk_macos_surface_parent_class)->destroy (surface, foreign_destroy);
-
   GDK_END_MACOS_ALLOC_POOL;
 }
 
