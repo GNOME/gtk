@@ -4338,6 +4338,8 @@ menubar {
 
 $_menu-padding: 12px;
 
+/* Popover menu is a popover more than it is a menu */
+
 popover.menu {
   padding: 0px;
 
@@ -4392,16 +4394,13 @@ popover.menu {
   radio {
     @include check('menu', 'transparent', $text_color);
 
-    &:hover, &:active {
-      @include check('menu-active', 'transparent', $selected_fg_color);
-    }
+    &:hover { @include check('menu-active', 'transparent', $text_color); }
+    &:active { @include check('menu-active', 'transparent', $text_color); }
   }
 
   //only menu radios have a border
   radio { border-color: $borders_color;
-    &:active, &:hover {
-       border-color: transparentize($selected_fg_color,0.5);
-    }
+    &:active { border-color: transparentize($borders_color,0.5); }
   }
 
   arrow.left,
@@ -4421,10 +4420,18 @@ popover.menu {
   modelbutton {
     min-height: 30px;
     min-width: 40px;
+    margin: 0 $_menu-padding/2;
     padding: 0 $_menu-padding;
-    border-radius: 0;
 
-    &:selected { @extend %selected_items; }
+    &:selected {
+      color: $text-color;
+      background-color: $menu_selected_color;
+    }
+    &:selected:active {
+      //@extend %selected_items;
+      //color: $selected_fg_color;
+      background-color: darken($bg_color,14%); // matching buttons
+    }
   }
 
   label.title {
