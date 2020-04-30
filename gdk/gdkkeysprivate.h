@@ -43,8 +43,7 @@ struct _GdkKeymapClass
   gboolean (* get_scroll_lock_state)    (GdkKeymap *keymap);
   gboolean (* get_entries_for_keyval)   (GdkKeymap     *keymap,
                                          guint          keyval,
-                                         GdkKeymapKey **keys,
-                                         gint          *n_keys);
+                                         GArray        *array);
   gboolean (* get_entries_for_keycode)  (GdkKeymap     *keymap,
                                          guint          hardware_keycode,
                                          GdkKeymapKey **keys,
@@ -73,6 +72,17 @@ struct _GdkKeymap
 {
   GObject     parent_instance;
   GdkDisplay *display;
+
+  /* We cache an array of GdkKeymapKey entries for keyval -> keycode
+   * lookup. Position 0 is unused.
+   *
+   * The hash table maps keyvals to values that have the number of keys
+   * in the low 8 bits, and the position in the array in the rest.
+   *
+   * The cache is cleared before ::keys-changed is emitted.
+   */
+  GArray *cached_keys;
+  GHashTable *cache;
 };
 
 GType gdk_keymap_get_type (void) G_GNUC_CONST;
@@ -105,6 +115,11 @@ gboolean       gdk_keymap_get_caps_lock_state      (GdkKeymap           *keymap)
 gboolean       gdk_keymap_get_num_lock_state       (GdkKeymap           *keymap);
 gboolean       gdk_keymap_get_scroll_lock_state    (GdkKeymap           *keymap);
 guint          gdk_keymap_get_modifier_state       (GdkKeymap           *keymap);
+
+void           gdk_keymap_get_cached_entries_for_keyval (GdkKeymap     *keymap,
+                                                         guint          keyval,
+                                                         GdkKeymapKey **keys,
+                                                         guint         *n_keys);
 
 G_END_DECLS
 
