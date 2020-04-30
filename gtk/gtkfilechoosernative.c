@@ -69,63 +69,79 @@
  * In the simplest of cases, you can the following code to use
  * #GtkFileChooserDialog to select a file for opening:
  *
- * |[
- * GtkFileChooserNative *native;
- * GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
- * gint res;
+ * |[<!-- language="C" -->
+ * static void
+ * on_response (GtkNativeDialog *dialog,
+ *              int              response)
+ * {
+ *   if (response == GTK_RESPONSE_ACCEPT)
+ *     {
+ *       GtkFileChooser *chooser = GTK_FILE_CHOOSER (native);
+ *       GFile *file = gtk_file_chooser_get_file (chooser);
  *
- * native = gtk_file_chooser_native_new ("Open File",
- *                                       parent_window,
- *                                       action,
- *                                       "_Open",
- *                                       "_Cancel");
+ *       open_file (file);
  *
- * res = gtk_native_dialog_run (GTK_NATIVE_DIALOG (native));
- * if (res == GTK_RESPONSE_ACCEPT)
- *   {
- *     char *filename;
- *     GtkFileChooser *chooser = GTK_FILE_CHOOSER (native);
- *     filename = gtk_file_chooser_get_filename (chooser);
- *     open_file (filename);
- *     g_free (filename);
- *   }
+ *       g_object_unref (file);
+ *     }
  *
- * g_object_unref (native);
+ *   g_object_unref (native);
+ * }
+ *
+ *   // ...
+ *   GtkFileChooserNative *native;
+ *   GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
+ *
+ *   native = gtk_file_chooser_native_new ("Open File",
+ *                                         parent_window,
+ *                                         action,
+ *                                         "_Open",
+ *                                         "_Cancel");
+ *
+ *   g_signal_connect (native, "response", G_CALLBACK (on_response), NULL);
+ *   gtk_native_dialog_show (GTK_NATIVE_DIALOG (native));
  * ]|
  *
  * To use a dialog for saving, you can use this:
  *
- * |[
- * GtkFileChooserNative *native;
- * GtkFileChooser *chooser;
- * GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
- * gint res;
+ * |[<!-- language="C" -->
+ * static void
+ * on_response (GtkNativeDialog *dialog,
+ *              int              response)
+ * {
+ *   if (response == GTK_RESPONSE_ACCEPT)
+ *     {
+ *       GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialog);
+ *       GFile *file = gtk_file_chooser_get_file (chooser);
  *
- * native = gtk_file_chooser_native_new ("Save File",
- *                                       parent_window,
- *                                       action,
- *                                       "_Save",
- *                                       "_Cancel");
- * chooser = GTK_FILE_CHOOSER (native);
+ *       save_to_file (file);
  *
- * if (user_edited_a_new_document)
- *   gtk_file_chooser_set_current_name (chooser,
+ *       g_object_unref (file);
+ *     }
+ *
+ *   g_object_unref (native);
+ * }
+ *
+ *   // ...
+ *   GtkFileChooserNative *native;
+ *   GtkFileChooser *chooser;
+ *   GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
+ *
+ *   native = gtk_file_chooser_native_new ("Save File",
+ *                                         parent_window,
+ *                                         action,
+ *                                         "_Save",
+ *                                         "_Cancel");
+ *   chooser = GTK_FILE_CHOOSER (native);
+ *
+ *   if (user_edited_a_new_document)
+ *     gtk_file_chooser_set_current_name (chooser,
  *                                      _("Untitled document"));
- * else
- *   gtk_file_chooser_set_filename (chooser,
- *                                  existing_filename);
+ *   else
+ *     gtk_file_chooser_set_filename (chooser,
+ *                                    existing_filename);
  *
- * res = gtk_native_dialog_run (GTK_NATIVE_DIALOG (native));
- * if (res == GTK_RESPONSE_ACCEPT)
- *   {
- *     char *filename;
- *
- *     filename = gtk_file_chooser_get_filename (chooser);
- *     save_to_file (filename);
- *     g_free (filename);
- *   }
- *
- * g_object_unref (native);
+ *   g_signal_connect (native, "response", G_CALLBACK (on_response), NULL);
+ *   gtk_native_dialog_show (GTK_NATIVE_DIALOG (native));
  * ]|
  *
  * For more information on how to best set up a file dialog, see #GtkFileChooserDialog.
