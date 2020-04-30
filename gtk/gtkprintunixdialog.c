@@ -150,7 +150,7 @@ static void     printer_status_cb                  (GtkPrintBackend    *backend,
                                                     GtkPrintUnixDialog *dialog);
 static void     update_collate_icon                (GtkToggleButton    *toggle_button,
                                                     GtkPrintUnixDialog *dialog);
-static gboolean error_dialogs                      (GtkPrintUnixDialog *print_dialog,
+static void     error_dialogs                      (GtkPrintUnixDialog *print_dialog,
 						    gint                print_dialog_response_id,
 						    gpointer            data);
 static void     emit_ok_response                   (GtkTreeView        *tree_view,
@@ -603,31 +603,42 @@ set_busy_cursor (GtkPrintUnixDialog *dialog,
     gtk_widget_set_cursor (widget, NULL);
 }
 
+typedef struct {
+  GMainLoop *loop;
+  int response;
+} ConfirmationData;
+
+static void
+on_confirmation_dialog_response (GtkWidget *dialog,
+                                 int        response,
+                                 gpointer   user_data)
+{
+  ConfirmationData *data = user_data;
+
+  data->response = response;
+
+  g_main_loop_quit (data->loop);
+
+  gtk_widget_destroy (dialog);
+}
+
 /* This function handles error messages before printing.
  */
-static gboolean
+static void
 error_dialogs (GtkPrintUnixDialog *dialog,
                gint                dialog_response_id,
                gpointer            data)
 {
-  GtkPrinterOption          *option = NULL;
-  GtkPrinter                *printer = NULL;
-  GtkWindow                 *toplevel = NULL;
-  GFile                     *file = NULL;
-  gchar                     *basename = NULL;
-  gchar                     *dirname = NULL;
-  int                        response;
-
   if (dialog != NULL && dialog_response_id == GTK_RESPONSE_OK)
     {
-      printer = gtk_print_unix_dialog_get_selected_printer (dialog);
+      GtkPrinter *printer = gtk_print_unix_dialog_get_selected_printer (dialog);
 
       if (printer != NULL)
         {
           if (dialog->request_details_tag || !gtk_printer_is_accepting_jobs (printer))
             {
               g_signal_stop_emission_by_name (dialog, "response");
-              return TRUE;
+              return;
             }
 
           /* Shows overwrite confirmation dialog in the case of printing
@@ -635,18 +646,22 @@ error_dialogs (GtkPrintUnixDialog *dialog,
            */
           if (gtk_printer_is_virtual (printer))
             {
-              option = gtk_printer_option_set_lookup (dialog->options,
-                                                      "gtk-main-page-custom-input");
+              GtkPrinterOption *option =
+                gtk_printer_option_set_lookup (dialog->options,
+                                               "gtk-main-page-custom-input");
 
               if (option != NULL &&
                   option->type == GTK_PRINTER_OPTION_TYPE_FILESAVE)
                 {
-                  file = g_file_new_for_uri (option->value);
+                  GFile *file = g_file_new_for_uri (option->value);
 
                   if (g_file_query_exists (file, NULL))
                     {
-                      GFile *parent;
                       GtkWidget *message_dialog;
+                      GtkWindow *toplevel;
+                      char *basename;
+                      char *dirname;
+                      GFile *parent;
 
                       toplevel = get_toplevel (GTK_WIDGET (dialog));
 
@@ -681,19 +696,29 @@ error_dialogs (GtkPrintUnixDialog *dialog,
                         gtk_window_group_add_window (gtk_window_get_group (toplevel),
                                                      GTK_WINDOW (message_dialog));
 
-                      response = gtk_dialog_run (GTK_DIALOG (message_dialog));
+                      gtk_window_present (GTK_WINDOW (message_dialog));
 
-                      gtk_widget_destroy (message_dialog);
+                      /* Block on the confirmation dialog until we have a response,
+                       * so that we can stop the "response" signal emission on the
+                       * print dialog
+                       */
+                      ConfirmationData cdata;
+
+                      cdata.loop = g_main_loop_new (NULL, FALSE);
+                      cdata.response = 0;
+
+                      g_signal_connect (message_dialog, "response",
+                                        G_CALLBACK (on_confirmation_dialog_response),
+                                        &cdata);
+
+                      g_main_loop_run (cdata.loop);
+                      g_main_loop_unref (cdata.loop);
 
                       g_free (dirname);
                       g_free (basename);
 
-                      if (response != GTK_RESPONSE_ACCEPT)
-                        {
-                          g_signal_stop_emission_by_name (dialog, "response");
-                          g_object_unref (file);
-                          return TRUE;
-                        }
+                      if (cdata.response != GTK_RESPONSE_ACCEPT)
+                        g_signal_stop_emission_by_name (dialog, "response");
                     }
 
                   g_object_unref (file);
@@ -701,7 +726,6 @@ error_dialogs (GtkPrintUnixDialog *dialog,
             }
         }
     }
-  return FALSE;
 }
 
 static void
