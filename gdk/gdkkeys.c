@@ -196,12 +196,42 @@ gdk_keymap_set_property (GObject      *object,
 }
 
 static void
+gdk_keymap_finalize (GObject *object)
+{
+  GdkKeymap *keymap = GDK_KEYMAP (object);
+
+  g_array_free (keymap->cached_keys, TRUE);
+  g_hash_table_unref (keymap->cache);
+
+  G_OBJECT_CLASS (gdk_keymap_parent_class)->finalize (object);
+}
+
+static void
+gdk_keymap_keys_changed (GdkKeymap *keymap)
+{
+  GdkKeymapKey key;
+
+  g_array_set_size (keymap->cached_keys, 0);
+
+  key.keycode = 0;
+  key.group = 0;
+  key.level = 0;
+
+  g_array_append_val (keymap->cached_keys, key);
+
+  g_hash_table_remove_all (keymap->cache);
+}
+
+static void
 gdk_keymap_class_init (GdkKeymapClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->finalize = gdk_keymap_finalize;
   object_class->get_property = gdk_keymap_get_property;
   object_class->set_property = gdk_keymap_set_property;
+
+  klass->keys_changed = gdk_keymap_keys_changed;
 
   props[PROP_DISPLAY] =
     g_param_spec_object ("display",
@@ -237,13 +267,13 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
    */
   signals[KEYS_CHANGED] =
     g_signal_new (g_intern_static_string ("keys-changed"),
-		  G_OBJECT_CLASS_TYPE (object_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GdkKeymapClass, keys_changed),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE,
-		  0);
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (GdkKeymapClass, keys_changed),
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  0);
 
   /**
    * GdkKeymap::state-changed:
@@ -267,6 +297,17 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
 static void
 gdk_keymap_init (GdkKeymap *keymap)
 {
+  GdkKeymapKey key;
+
+  keymap->cached_keys = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
+
+  key.keycode = 0;
+  key.group = 0;
+  key.level = 0;
+
+  g_array_append_val (keymap->cached_keys, key);
+
+  keymap->cache = g_hash_table_new (g_direct_hash, g_direct_equal);
 }
 
 /**
@@ -502,13 +543,62 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
                                    GdkKeymapKey **keys,
                                    gint          *n_keys)
 {
+  GArray *array;
+
   g_return_val_if_fail (GDK_IS_KEYMAP (keymap), FALSE);
   g_return_val_if_fail (keys != NULL, FALSE);
   g_return_val_if_fail (n_keys != NULL, FALSE);
   g_return_val_if_fail (keyval != 0, FALSE);
 
-  return GDK_KEYMAP_GET_CLASS (keymap)->get_entries_for_keyval (keymap, keyval,
-                                                                keys, n_keys);
+  array = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
+
+  GDK_KEYMAP_GET_CLASS (keymap)->get_entries_for_keyval (keymap, keyval, array);
+
+  *n_keys = array->len;
+  *keys = (GdkKeymapKey *)g_array_free (array, FALSE);
+
+  return TRUE;
+}
+
+void
+gdk_keymap_get_cached_entries_for_keyval (GdkKeymap     *keymap,
+                                          guint          keyval,
+                                          GdkKeymapKey **keys,
+                                          guint         *n_keys)
+{
+  guint cached;
+  guint offset;
+  guint len;
+
+  /* avoid using the first entry in cached_keys, so we can
+   * use 0 to mean 'not cached'
+   */
+  cached = GPOINTER_TO_UINT (g_hash_table_lookup (keymap->cache, GUINT_TO_POINTER (keyval)));
+  if (cached == 0)
+    {
+      GdkKeymapKey key;
+
+      offset = keymap->cached_keys->len;
+
+      GDK_KEYMAP_GET_CLASS (keymap)->get_entries_for_keyval (keymap, keyval, keymap->cached_keys);
+
+      g_array_append_val (keymap->cached_keys, key);
+
+      len = keymap->cached_keys->len - offset;
+      g_assert (len <= 255);
+
+      cached = (offset << 8) | len;
+
+      g_hash_table_insert (keymap->cache, GUINT_TO_POINTER (keyval), GUINT_TO_POINTER (cached));
+    }
+  else
+    {
+      len = cached & 255;
+      offset = cached >> 8;
+    }
+
+  *n_keys = len;
+  *keys = (GdkKeymapKey *)&g_array_index (keymap->cached_keys, GdkKeymapKey, offset);
 }
 
 /**

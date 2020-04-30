@@ -126,17 +126,14 @@ gdk_wayland_keymap_get_scroll_lock_state (GdkKeymap *keymap)
 }
 
 static gboolean
-gdk_wayland_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
-					   guint          keyval,
-					   GdkKeymapKey **keys,
-					   gint          *n_keys)
+gdk_wayland_keymap_get_entries_for_keyval (GdkKeymap *keymap,
+                                           guint      keyval,
+                                           GArray    *retval)
 {
   struct xkb_keymap *xkb_keymap = GDK_WAYLAND_KEYMAP (keymap)->xkb_keymap;
-  GArray *retval;
   guint keycode;
   xkb_keycode_t min_keycode, max_keycode;
-
-  retval = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
+  guint len = retval->len;
 
   min_keycode = xkb_keymap_min_keycode (xkb_keymap);
   max_keycode = xkb_keymap_max_keycode (xkb_keymap);
@@ -170,10 +167,7 @@ gdk_wayland_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
         }
     }
 
-  *n_keys = retval->len;
-  *keys = (GdkKeymapKey*) g_array_free (retval, FALSE);
-
-  return TRUE;
+  return retval->len > len;
 }
 
 static gboolean
