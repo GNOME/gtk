@@ -156,8 +156,10 @@ set_current_folder (GtkFileChooser *chooser,
 				       GTK_BUTTONS_CLOSE,
 				       "Could not set the folder to %s",
 				       name);
-      gtk_dialog_run (GTK_DIALOG (dialog));
-      gtk_window_destroy (GTK_WINDOW (dialog));
+      gtk_widget_show (dialog);
+      g_signal_connect (dialog, "response",
+                        G_CALLBACK (gtk_window_destroy),
+                        NULL);
     }
   g_object_unref (file);
 }
@@ -191,8 +193,10 @@ set_filename (GtkFileChooser *chooser,
 				       GTK_BUTTONS_CLOSE,
 				       "Could not select %s",
 				       name);
-      gtk_dialog_run (GTK_DIALOG (dialog));
-      gtk_window_destroy (GTK_WINDOW (dialog));
+      gtk_widget_show (dialog);
+      g_signal_connect (dialog, "response",
+                        G_CALLBACK (gtk_window_destroy),
+                        NULL);
     }
   g_object_unref (file);
 }
