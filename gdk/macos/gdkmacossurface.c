@@ -82,6 +82,15 @@ gdk_macos_surface_set_input_region (GdkSurface     *surface,
 }
 
 static void
+gdk_macos_surface_set_opaque_region (GdkSurface     *surface,
+                                     cairo_region_t *region)
+{
+  g_assert (GDK_IS_MACOS_SURFACE (surface));
+
+  /* TODO: */
+}
+
+static void
 gdk_macos_surface_hide (GdkSurface *surface)
 {
   GdkMacosSurface *self = (GdkMacosSurface *)surface;
@@ -101,6 +110,27 @@ gdk_macos_surface_get_scale_factor (GdkSurface *surface)
   g_assert (GDK_IS_MACOS_SURFACE (self));
 
   return [priv->window backingScaleFactor];
+}
+
+static void
+gdk_macos_surface_set_shadow_width (GdkSurface *surface,
+                                    int         left,
+                                    int         right,
+                                    int         top,
+                                    int         bottom)
+{
+  GdkMacosSurface *self = (GdkMacosSurface *)surface;
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+
+  g_assert (GDK_IS_MACOS_SURFACE (self));
+
+  priv->shadow_top = top;
+  priv->shadow_right = right;
+  priv->shadow_bottom = bottom;
+  priv->shadow_left = left;
+
+  if (top || right || bottom || left)
+    [priv->window setHasShadow:NO];
 }
 
 static void
@@ -211,12 +241,14 @@ gdk_macos_surface_class_init (GdkMacosSurfaceClass *klass)
   object_class->get_property = gdk_macos_surface_get_property;
   object_class->set_property = gdk_macos_surface_set_property;
 
-  surface_class->destroy = gdk_macos_surface_destroy;
-  surface_class->begin_resize_drag = gdk_macos_surface_begin_resize_drag;
   surface_class->begin_move_drag = gdk_macos_surface_begin_move_drag;
+  surface_class->begin_resize_drag = gdk_macos_surface_begin_resize_drag;
+  surface_class->destroy = gdk_macos_surface_destroy;
+  surface_class->get_scale_factor = gdk_macos_surface_get_scale_factor;
   surface_class->hide = gdk_macos_surface_hide;
   surface_class->set_input_region = gdk_macos_surface_set_input_region;
-  surface_class->get_scale_factor = gdk_macos_surface_get_scale_factor;
+  surface_class->set_opaque_region = gdk_macos_surface_set_opaque_region;
+  surface_class->set_shadow_width = gdk_macos_surface_set_shadow_width;
 
   properties [PROP_NATIVE] =
     g_param_spec_pointer ("native",
