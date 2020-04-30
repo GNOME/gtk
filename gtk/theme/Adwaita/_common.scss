@@ -6,6 +6,7 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 $asset_suffix: if($variant=='dark', '-dark', '');
 $backdrop_transition: 200ms ease-out;
 $button_transition: all 200ms $ease-out-quad;
+$focus_transition: outline-width 200ms $ease-out-quad, outline-offset 200ms $ease-out-quad;
 $button_radius: 5px;
 $menu_radius: 5px;
 $window_radius: $button_radius + 3;
@@ -36,90 +37,6 @@ dnd {
 
 .large-icons {
   -gtk-icon-size: 32px;
-}
-
-/*********
- * Outlines *
- ********/
-
-expander-widget:focus:focus-visible,
-:focus-visible link,
-plane:focus-visible,
-label:focus-visible:not(.link),
-row:focus-visible,
-flowboxchild:focus-visible {
-  // We use the outline properties to signal the focus properties
-  // to the adwaita engine: using real CSS properties is faster,
-  // and we don't use any outlines for now.
-
-  outline-color: $focus_border_color;
-  outline-style: solid;
-  outline-offset: -1px;
-  outline-width: 2px;
-  :selected & { outline-color: $alt_focus_border_color; }
-}
-
-// Widgets that draw their focus indicator outset and not inset
-scale:focus-visible > trough {
-  outline-color: $focus_border_color;
-  outline-style: solid;
-  outline-offset: 10px;
-  outline-width: 2px;
-}
-
-button:focus-visible, modelbutton:focus-visible {
-  outline-color: $focus_border_color;
-  outline-style: solid;
-  outline-offset: -2px;
-  outline-width: 2px;
-
-  row:selected & { outline-color: $alt_focus_border_color; }
-
-  &.suggested-action, &.destructive-action { &, &:hover, &:active { outline-color: $alt_focus_border_color; } }
-}
-
-// Draw the "outline" around the whole switch not the slider
-switch:focus-visible {
-  &, &:hover { slider { outline-color: transparent; } }
-  &:focus {
-    box-shadow: 0 0 0 3px if($variant=='light', lighten(opacify($focus_border_color, 1), 20%), $focus_border_color);
-  }
-  row:selected & { outline-color: $alt_focus_border_color; }
-}
-
-checkbutton:focus-visible,
-radiobutton:focus-visible {
-  outline-color: $focus_border_color;
-  outline-style: solid;
-  outline-offset: 2px;
-  outline-width: 2px;
-  border-radius: $button_radius;
-  row:selected & , treeview:selected & { outline-color: $alt_focus_border_color; }
-}
-
-row:focus-visible {
-  outline-color: $focus_border_color;
-  outline-offset: -2px;
-  outline-style: solid;
-  &:selected {
-    outline-color: $alt_focus_border_color;
-  }
-}
-
-treeview:focus-visible {
-  outline-color: $focus_border_color;
-  outline-style: solid;
-  outline-width: 2px;
-  &:selected {
-    outline-color: $alt_focus_border_color;
-  }
-}
-
-notebook:focus:focus-visible {
-  outline-color: $focus_border_color;
-  outline-style: solid;
-  outline-offset: -1px;
-  outline-width: 2px;
 }
 
 /*
@@ -161,12 +78,7 @@ treeview.expander:disabled { -gtk-icon-filter: opacity(0.5); }
   }
 }
 
-.view {
-  outline: none;
-}
-
 textview {
-  outline: none;
   > text {
     @extend %view;
 
@@ -180,8 +92,10 @@ textview {
 
 textview > border { background-color: mix($bg_color, $base_color, 50%); }
 
-iconview { 
+iconview {
   @extend .view;
+
+  @include focus-ring();
 
   &:drop(active) {
     box-shadow: none;
@@ -204,8 +118,13 @@ flowbox {
 
   > flowboxchild {
     padding: 3px;
+    transition: $focus_transition;
+
+    @include focus-ring();
 
     &:selected {
+      outline-color: $alt_focus_border_color;
+
       @extend %selected_items;
     }
   }
@@ -223,6 +142,8 @@ flowbox {
 }
 
 label {
+  @include focus-ring();
+
   &.separator {
     @extend .dim-label;
   }
@@ -580,6 +501,8 @@ button {
     transition: $button_transition;
 
     @include button(normal);
+
+    @include focus-ring();
 
     @at-root %button_basic_flat,
     &.flat {
@@ -1078,6 +1001,10 @@ link {
   @at-root %link_selected,
   &:selected,
   *:selected & { color: mix($selected_fg_color, $link_color, 80%); }
+}
+
+link {
+  @include focus-ring();
 }
 
 button.link {
@@ -1698,11 +1625,14 @@ treeview.view {
   border-left-color:  $_treeview_borders_color; // this is actually the tree lines color,
   border-top-color: $_treeview_borders_color;                         // while this is the grid lines color, better then nothing
 
+  @include focus-ring();
+
   > rubberband { @extend rubberband; } // to avoid borders being overridden by the previously set props
 
   &:selected {
     &:focus, & {
       border-radius: 0;
+      outline-color: $alt_focus_border_color;
 
       @extend %selected_items;
     }
@@ -1962,6 +1892,8 @@ popover.background {
  * Notebooks *
  *************/
 notebook {
+  @include focus-ring("> header > tabs > tab", $offset: -7px);
+
   > header {
     padding: 1px;
     border-color: $borders_color;
@@ -2098,6 +2030,7 @@ notebook {
     }
 
     > tabs > tab {
+      transition: $focus_transition;
       min-height: 30px;
       min-width: 30px;
       padding: 3px 12px;
@@ -2124,6 +2057,10 @@ notebook {
           border-color: transparent;
           background-color: transparent;
         }
+      }
+
+      &:not(:checked) {
+        outline-color: transparent;
       }
 
       &:checked {
@@ -2332,6 +2269,9 @@ switch {
   color: $fg_color;
   background-color: $dark_fill;
   text-shadow: 0 1px transparentize(black, 0.9);
+  transition: $focus_transition;
+
+  @include focus-ring($offset: 0, $outer: true);
 
   &:checked {
     color: $selected_fg_color;
@@ -2409,6 +2349,8 @@ switch {
   }
 
   row:selected & {
+    outline-color: $alt_focus_border_color;
+
     @if $variant == 'light' {
       box-shadow: none;
       border-color: $checkradio_borders_color;
@@ -2456,10 +2398,18 @@ switch {
   }
 }
 
-checkbutton.text-button, radiobutton.text-button {
-  // this is for a nice focus on check and radios text
-  padding: 2px 0;
+checkbutton,
+radiobutton {
   border-spacing: 4px;
+  border-radius: $button_radius;
+  transition: $focus_transition;
+
+  @include focus-ring();
+
+  &.text-button {
+    // this is for a nice focus on check and radios text
+    padding: 4px 2px;
+  }
 }
 
 check,
@@ -2613,7 +2563,12 @@ treeview.view radio:selected { &:focus, & { @extend %radio; }} // This is a work
   }
 
   // ...on selected list rows
-  row:selected & { &:disabled, & { border-color: $selected_borders_color; }}
+  row:selected & {
+    &:disabled, & {
+      outline-color: $alt_focus_border_color;
+      border-color: $selected_borders_color;
+    }
+  }
 
   // OSD
   .osd & {
@@ -2663,8 +2618,12 @@ scale {
   min-width: 10px;
   padding: 12px;
 
+  @include focus-ring("> trough", $offset: 10px);
+
   // those are inside the trough node, I need them to show their own border over the trough one, so negative margin
   > trough {
+    transition: $focus_transition;
+
     > fill,
     > highlight { margin: -1px; }
 
@@ -3385,6 +3344,8 @@ list {
 row {
   transition: all 150ms $ease-out-quad;
 
+  @include focus-ring();
+
   &:hover { transition: none; }
 
   &:backdrop { transition: $backdrop_transition; }
@@ -3408,7 +3369,11 @@ row {
     }
   }
 
-  &:selected { @extend %selected_items; }
+  &:selected {
+    outline-color: $alt_focus_border_color;
+
+    @extend %selected_items;
+  }
 }
 
 
@@ -3452,8 +3417,17 @@ expander {
   &:checked { -gtk-icon-source: -gtk-icontheme('pan-down-symbolic'); }
 }
 
-expander-widget title:hover > expander {
-  color: lighten($fg_color,30%); //only lightens the icon 
+expander-widget {
+  @include focus-ring("> box > title");
+
+  > box > title {
+    transition: $focus_transition;
+    border-radius: $button_radius;
+
+    &:hover > expander {
+      color: lighten($fg_color,30%); //only lightens the icon
+    }
+  }
 }
 
 placessidebar,
@@ -3900,6 +3874,10 @@ colorswatch {
   // is colorswatch overlay {}, colorswatch has the programmatically set background, so most of the style is
   // applied to the overlay box.
 
+  transition: $focus_transition;
+
+  @include focus-ring();
+
   &:drop(active), & { border-style: none; } // FIXME: implement a proper drop(active) state
 
   $_colorswatch_radius: 5px;
@@ -3975,12 +3953,6 @@ colorswatch {
     }
   }
 
-  &:focus-visible {
-    outline-offset: -2px;
-    outline-width: 2px;
-    outline-style: solid;
-  }
-
   &:drop(active) {
     box-shadow: none;
 
@@ -4041,6 +4013,12 @@ colorswatch {
 
     > overlay { border-radius: 4.5px; }
   }
+}
+
+plane {
+  transition: $focus_transition;
+
+  @include focus-ring($offset: 2px, $outer: true);
 }
 
 // colorscale popup
