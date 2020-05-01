@@ -575,7 +575,7 @@ flags_changed (GObject *object, GParamSpec *pspec, gpointer data)
   popover = gtk_menu_button_get_popover (GTK_MENU_BUTTON (data));
   sw =  gtk_bin_get_child (GTK_BIN (popover));
   viewport = gtk_bin_get_child (GTK_BIN (sw));
-  box = gtk_bin_get_child (GTK_BIN (viewport));
+  box = gtk_viewport_get_child (GTK_VIEWPORT (viewport));
   children = gtk_container_get_children (GTK_CONTAINER (box));
 
   for (c = children; c; c = c->next)
