@@ -97,9 +97,4 @@
     [self updateTrackingRect];
 }
 
--(BOOL)isOpaque
-{
-  return NO;
-}
-
 @end

@@ -33,4 +33,14 @@
   [super dealloc];
 }
 
+-(BOOL)isOpaque
+{
+  return NO;
+}
+
+-(BOOL)isFlipped
+{
+  return YES;
+}
+
 @end
