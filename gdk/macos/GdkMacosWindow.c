@@ -294,6 +294,7 @@
 
   view = [[GdkMacosCairoView alloc] initWithFrame:contentRect];
   [self setContentView:view];
+  [view release];
 
   return self;
 }
