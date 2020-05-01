@@ -2,9 +2,8 @@
  *
  * GtkHeaderBar is a container that is suitable for implementing
  * window titlebars. One of its features is that it can position
- * a title (and optional subtitle) centered with regard to the
- * full width, regardless of variable-width content at the left
- * or right.
+ * a title centered with regard to the full width, regardless of
+ * variable-width content at the left or right.
  *
  * It is commonly used with gtk_window_set_titlebar()
  */
@@ -25,14 +24,13 @@ do_headerbar (GtkWidget *do_widget)
     {
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),  gtk_widget_get_display (do_widget));
+      gtk_window_set_title (GTK_WINDOW (window), "Welcome to Facebook - Log in, sign up or learn more");
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
       gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
 
       header = gtk_header_bar_new ();
       gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), TRUE);
-      gtk_header_bar_set_title (GTK_HEADER_BAR (header), "Welcome to Facebook - Log in, sign up or learn more");
-      gtk_header_bar_set_has_subtitle (GTK_HEADER_BAR (header), FALSE);
 
       button = gtk_button_new ();
       icon = g_themed_icon_new ("mail-send-receive-symbolic");

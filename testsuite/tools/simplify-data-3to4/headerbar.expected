@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkWindow" id="window1">
+    <child type="titlebar">
+      <object class="GtkHeaderBar" id="headerbar1">
+        <property name="show-title-buttons">1</property>
+        <property name="title-widget">box1</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkBox" id="box1"/>
+</interface>

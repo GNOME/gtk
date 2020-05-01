@@ -37,22 +37,6 @@ on_bookmark_clicked (GtkButton *button, gpointer data)
 static GtkWidget *header;
 
 static void
-change_subtitle (GtkButton *button, gpointer data)
-{
-  if (!GTK_IS_HEADER_BAR (header))
-    return;
-
-  if (gtk_header_bar_get_subtitle (GTK_HEADER_BAR (header)) == NULL)
-    {
-      gtk_header_bar_set_subtitle (GTK_HEADER_BAR (header), "(subtle subtitle)");
-    }
-  else
-    {
-      gtk_header_bar_set_subtitle (GTK_HEADER_BAR (header), NULL);
-    }
-}
-
-static void
 toggle_fullscreen (GtkButton *button, gpointer data)
 {
   GtkWidget *window = GTK_WIDGET (data);
@@ -111,7 +95,6 @@ change_header (GtkButton *button, gpointer data)
     {
       header = gtk_header_bar_new ();
       gtk_widget_add_css_class (header, "titlebar");
-      gtk_header_bar_set_title (GTK_HEADER_BAR (header), "Example header");
 
       widget = gtk_button_new_with_label ("_Close");
       gtk_button_set_use_underline (GTK_BUTTON (widget), TRUE);
@@ -168,9 +151,6 @@ main (int argc, char *argv[])
   button = gtk_toggle_button_new_with_label ("Custom");
   g_signal_connect (button, "clicked", G_CALLBACK (change_header), window);
   gtk_action_bar_pack_start (GTK_ACTION_BAR (footer), button);
-  button = gtk_button_new_with_label ("Subtitle");
-  g_signal_connect (button, "clicked", G_CALLBACK (change_subtitle), NULL);
-  gtk_action_bar_pack_end (GTK_ACTION_BAR (footer), button);
   button = gtk_button_new_with_label ("Fullscreen");
   gtk_action_bar_pack_end (GTK_ACTION_BAR (footer), button);
   g_signal_connect (button, "clicked", G_CALLBACK (toggle_fullscreen), window);

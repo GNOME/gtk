@@ -276,13 +276,12 @@ do_peg_solitaire (GtkWidget *do_widget)
       g_signal_connect (restart, "clicked", G_CALLBACK (restart), NULL);
 
       header = gtk_header_bar_new ();
-      gtk_header_bar_set_title (GTK_HEADER_BAR (header), "Peg Solitaire");
       gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), TRUE);
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), restart);
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
-      gtk_window_set_title (GTK_WINDOW (window), "Sliding Puzzle");
+      gtk_window_set_title (GTK_WINDOW (window), "Peg Solitaire");
       gtk_window_set_titlebar (GTK_WINDOW (window), header);
       gtk_window_set_default_size (GTK_WINDOW (window), 400, 300);
       g_signal_connect (window, "destroy",
