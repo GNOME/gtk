@@ -483,3 +483,22 @@ _gdk_macos_surface_update_fullscreen_state (GdkMacosSurface *self)
         gdk_synthesize_surface_state (GDK_SURFACE (self), GDK_SURFACE_STATE_FULLSCREEN, 0);
     }
 }
+
+void
+_gdk_macos_surface_update_position (GdkMacosSurface *self)
+{
+  GDK_BEGIN_MACOS_ALLOC_POOL;
+
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+  GdkSurface *surface = GDK_SURFACE (self);
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  NSRect frame_rect = [priv->window frame];
+  NSRect content_rect = [priv->window contentRectForFrameRect:frame_rect];
+
+  _gdk_macos_display_from_display_coords (GDK_MACOS_DISPLAY (display),
+                                          content_rect.origin.x,
+                                          content_rect.origin.y + content_rect.size.height,
+                                          &surface->x, &surface->y);
+
+  GDK_END_MACOS_ALLOC_POOL;
+}

@@ -12,6 +12,9 @@ gdk_macos_sources = files([
   'gdkmacossurface.c',
   'gdkmacostoplevelsurface.c',
 
+  'GdkMacosBaseView.c',
+  'GdkMacosCairoView.c',
+
   # 'GdkMacosView.c',
 ])
 

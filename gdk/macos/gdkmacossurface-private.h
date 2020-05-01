@@ -71,7 +71,8 @@ void               _gdk_macos_surface_resize                  (GdkMacosSurface  
                                                                int                 width,
                                                                int                 height,
                                                                int                 scale);
-void               _gdk_macos_surface_update_fullscreen_state (GdkMacosSurface *self);
+void               _gdk_macos_surface_update_fullscreen_state (GdkMacosSurface    *self);
+void               _gdk_macos_surface_update_position         (GdkMacosSurface    *self);
 
 G_END_DECLS
 

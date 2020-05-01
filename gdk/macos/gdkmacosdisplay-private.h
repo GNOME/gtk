@@ -34,6 +34,11 @@ void        _gdk_macos_display_to_display_coords            (GdkMacosDisplay *se
                                                              int              y,
                                                              int             *out_x,
                                                              int             *out_y);
+void        _gdk_macos_display_from_display_coords          (GdkMacosDisplay *self,
+                                                             int              x,
+                                                             int              y,
+                                                             int             *out_x,
+                                                             int             *out_y);
 NSScreen   *_gdk_macos_display_get_screen_at_display_coords (GdkMacosDisplay *self,
                                                              int              x,
                                                              int              y);

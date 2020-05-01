@@ -23,6 +23,8 @@
 
 #include <gdk/gdk.h>
 
+#import "GdkMacosBaseView.h"
+#import "GdkMacosCairoView.h"
 #import "GdkMacosWindow.h"
 
 #include "gdkmacossurface-private.h"
@@ -145,9 +147,8 @@
     {
     case NSEventTypeLeftMouseUp:
     {
-      double time = ((double)[event timestamp]) * 1000.0;
-
 #if 0
+      double time = ((double)[event timestamp]) * 1000.0;
       _gdk_quartz_events_break_all_grabs (time);
 #endif
 
@@ -176,13 +177,9 @@
 
 -(void)checkSendEnterNotify
 {
-#if 0
-  GdkSurface *window = [[self contentView] gdkSurface];
-  GdkSurfaceImplQuartz *impl = GDK_SURFACE_IMPL_QUARTZ (window->impl);
-
-  /* When a new window has been created, and the mouse
-   * is in the window area, we will not receive an NSMouseEntered
-   * event.  Therefore, we synthesize an enter notify event manually.
+  /* When a new window has been created, and the mouse is in the window
+   * area, we will not receive an NSEventTypeMouseEntered event.
+   * Therefore, we synthesize an enter notify event manually.
    */
   if (!initialPositionKnown)
     {
@@ -190,22 +187,22 @@
 
       if (NSPointInRect ([NSEvent mouseLocation], [self frame]))
         {
+          GdkMacosBaseView *view = (GdkMacosBaseView *)[self contentView];
           NSEvent *event;
 
-          event = [NSEvent enterExitEventWithType: NSMouseEntered
+          event = [NSEvent enterExitEventWithType: NSEventTypeMouseEntered
                                          location: [self mouseLocationOutsideOfEventStream]
                                     modifierFlags: 0
                                         timestamp: [[NSApp currentEvent] timestamp]
-                                     windowNumber: [impl->toplevel windowNumber]
+                                     windowNumber: [self windowNumber]
                                           context: NULL
                                       eventNumber: 0
-                                   trackingNumber: [impl->view trackingRect]
+                                   trackingNumber: [view trackingRect]
                                          userData: nil];
 
           [NSApp postEvent:event atStart:NO];
         }
     }
-#endif
 }
 
 -(void)windowDidMove:(NSNotification *)aNotification
@@ -243,49 +240,48 @@
 
 -(void)windowDidResize:(NSNotification *)aNotification
 {
-#if 0
-  NSRect content_rect = [self contentRectForFrameRect:[self frame]];
-  GdkSurface *window = [[self contentView] gdkSurface];
+  NSRect content_rect;
+  GdkSurface *surface;
+  GdkDisplay *display;
   GdkEvent *event;
-  GdkSurfaceImplQuartz *impl = GDK_SURFACE_IMPL_QUARTZ (window->impl);
-  gboolean maximized = gdk_surface_get_state (window) & GDK_SURFACE_STATE_MAXIMIZED;
+  gboolean maximized;
+
+  surface = GDK_SURFACE (self->gdkSurface);
+  display = gdk_surface_get_display (surface);
+
+  content_rect = [self contentRectForFrameRect:[self frame]];
+  maximized = (surface->state & GDK_SURFACE_STATE_MAXIMIZED) != 0;
 
   /* see same in windowDidMove */
   if (maximized && !inMaximizeTransition && !NSEqualRects (lastMaximizedFrame, [self frame]))
-    {
-      gdk_synthesize_surface_state (window,
-                                   GDK_SURFACE_STATE_MAXIMIZED,
-                                   0);
-    }
+    gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_MAXIMIZED, 0);
 
-  window->width = content_rect.size.width;
-  window->height = content_rect.size.height;
+  surface->width = content_rect.size.width;
+  surface->height = content_rect.size.height;
 
   /* Certain resize operations (e.g. going fullscreen), also move the
    * origin of the window.
    */
-  _gdk_quartz_surface_update_position (window);
+  _gdk_macos_surface_update_position (GDK_MACOS_SURFACE (surface));
 
-  [[self contentView] setFrame:NSMakeRect (0, 0, window->width, window->height)];
+  [[self contentView] setFrame:NSMakeRect (0, 0, surface->width, surface->height)];
 
-  _gdk_surface_update_size (window);
+  _gdk_surface_update_size (surface);
 
   /* Synthesize a configure event */
-  event = gdk_event_new (GDK_CONFIGURE);
-  event->configure.window = g_object_ref (window);
-  event->configure.x = window->x;
-  event->configure.y = window->y;
-  event->configure.width = window->width;
-  event->configure.height = window->height;
+  event = gdk_configure_event_new (surface,
+                                   content_rect.size.width,
+                                   content_rect.size.height);
 
-  _gdk_event_queue_append (gdk_display_get_default (), event);
+  _gdk_event_queue_append (display, event);
 
   [self checkSendEnterNotify];
-#endif
 }
 
 -(id)initWithContentRect:(NSRect)contentRect styleMask:(NSWindowStyleMask)styleMask backing:(NSBackingStoreType)backingType defer:(BOOL)flag screen:(NSScreen *)screen
 {
+  GdkMacosCairoView *view;
+
   self = [super initWithContentRect:contentRect
 	                  styleMask:styleMask
 	                    backing:backingType
@@ -295,6 +291,9 @@
   [self setAcceptsMouseMovedEvents:YES];
   [self setDelegate:nil];
   [self setReleasedWhenClosed:YES];
+
+  view = [[GdkMacosCairoView alloc] initWithFrame:contentRect];
+  [self setContentView:view];
 
   return self;
 }
