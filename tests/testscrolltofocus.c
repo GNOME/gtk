@@ -21,7 +21,7 @@ int main (int argc, char *argv[])
   gtk_widget_set_margin_end (grid, 20);
   gtk_widget_set_margin_top (grid, 20);
   gtk_widget_set_margin_bottom (grid, 20);
-  gtk_container_add (GTK_CONTAINER (viewport), grid);
+  gtk_viewport_set_child (GTK_VIEWPORT (viewport), grid);
 
   for (i = 0; i < 20; i++)
     for (j = 0; j < 20; j++)

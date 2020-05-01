@@ -138,7 +138,7 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (scrolled_window), viewport);
 
   grid = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (viewport), grid);
+  gtk_viewport_set_child (GTK_VIEWPORT (viewport), grid);
 
   for (i = 0; i < 4; i++)
     {
