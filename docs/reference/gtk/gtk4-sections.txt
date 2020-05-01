@@ -1382,6 +1382,8 @@ gtk_font_chooser_dialog_get_type
 GtkFrame
 GtkFrameClass
 gtk_frame_new
+gtk_frame_set_child
+gtk_frame_get_child
 gtk_frame_set_label
 gtk_frame_get_label
 gtk_frame_set_label_widget
