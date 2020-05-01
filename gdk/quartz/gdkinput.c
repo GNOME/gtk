@@ -606,7 +606,8 @@ _gdk_input_window_crossing (GdkWindow *window,
 void
 _gdk_input_quartz_tablet_proximity (NSPointingDeviceType deviceType)
 {
-  if (deviceType == NSPenPointingDevice)
+  /* some tablets report NSPointingDeviceTypeUnknown */
+  if ((deviceType == NSPenPointingDevice) || (deviceType == NSUnknownPointingDevice))
     active_device = _gdk_quartz_pen;
   else if (deviceType == NSCursorPointingDevice)
     active_device = _gdk_quartz_cursor;
