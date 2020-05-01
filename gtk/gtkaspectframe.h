@@ -45,9 +45,9 @@ GDK_AVAILABLE_IN_ALL
 GType      gtk_aspect_frame_get_type   (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_aspect_frame_new        (float            xalign,
-					float            yalign,
-					float            ratio,
-					gboolean         obey_child);
+                                        float            yalign,
+                                        float            ratio,
+                                        gboolean         obey_child);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_aspect_frame_set_xalign (GtkAspectFrame *self,
@@ -72,6 +72,12 @@ void       gtk_aspect_frame_set_obey_child (GtkAspectFrame *self,
                                             gboolean        obey_child);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_aspect_frame_get_obey_child (GtkAspectFrame *self);
+
+GDK_AVAILABLE_IN_ALL
+void       gtk_aspect_frame_set_child  (GtkAspectFrame *self,
+                                        GtkWidget      *child);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *gtk_aspect_frame_get_child  (GtkAspectFrame *self);
 
 G_END_DECLS
 

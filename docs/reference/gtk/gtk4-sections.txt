@@ -198,6 +198,8 @@ gtk_aspect_frame_set_ratio
 gtk_aspect_frame_get_ratio
 gtk_aspect_frame_set_obey_child
 gtk_aspect_frame_get_obey_child
+gtk_aspect_frame_set_child
+gtk_aspect_frame_get_child
 <SUBSECTION Standard>
 GTK_ASPECT_FRAME
 GTK_IS_ASPECT_FRAME
