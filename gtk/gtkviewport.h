@@ -48,13 +48,19 @@ GDK_AVAILABLE_IN_ALL
 GType          gtk_viewport_get_type        (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_viewport_new             (GtkAdjustment *hadjustment,
-					     GtkAdjustment *vadjustment);
+                                             GtkAdjustment *vadjustment);
 
 GDK_AVAILABLE_IN_ALL
 gboolean       gtk_viewport_get_scroll_to_focus (GtkViewport *viewport);
 GDK_AVAILABLE_IN_ALL
 void           gtk_viewport_set_scroll_to_focus (GtkViewport *viewport,
                                                  gboolean     scroll_to_focus);
+
+GDK_AVAILABLE_IN_ALL
+void           gtk_viewport_set_child           (GtkViewport *viewport,
+                                                 GtkWidget   *child);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *    gtk_viewport_get_child           (GtkViewport *viewport);
 
 G_END_DECLS
 
