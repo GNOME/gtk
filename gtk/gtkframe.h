@@ -84,14 +84,21 @@ const gchar * gtk_frame_get_label (GtkFrame    *frame);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_frame_set_label_widget (GtkFrame      *frame,
-				       GtkWidget     *label_widget);
+                                       GtkWidget     *label_widget);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_frame_get_label_widget (GtkFrame      *frame);
 GDK_AVAILABLE_IN_ALL
 void       gtk_frame_set_label_align  (GtkFrame      *frame,
-				       gfloat         xalign);
+                                       gfloat         xalign);
 GDK_AVAILABLE_IN_ALL
 gfloat     gtk_frame_get_label_align  (GtkFrame      *frame);
+
+GDK_AVAILABLE_IN_ALL
+void       gtk_frame_set_child        (GtkFrame      *frame,
+                                       GtkWidget     *child);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *gtk_frame_get_child        (GtkFrame      *frame);
+
 
 G_END_DECLS
 
