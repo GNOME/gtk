@@ -143,7 +143,7 @@ do_infobar (GtkWidget *do_widget)
       gtk_widget_set_margin_end (actions, 8);
       gtk_widget_set_margin_top (actions, 8);
       gtk_widget_set_margin_bottom (actions, 8);
-      gtk_container_add (GTK_CONTAINER (frame), actions);
+      gtk_frame_set_child (GTK_FRAME (frame), actions);
     }
 
   if (!gtk_widget_get_visible (window))

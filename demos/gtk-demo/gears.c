@@ -103,7 +103,7 @@ do_gears (GtkWidget *do_widget)
 
       fps_label = gtk_label_new ("");
       gtk_widget_set_halign (fps_label, GTK_ALIGN_START);
-      gtk_container_add (GTK_CONTAINER (frame), fps_label);
+      gtk_frame_set_child (GTK_FRAME (frame), fps_label);
 
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE);
       gtk_box_set_spacing (GTK_BOX (box), 6);

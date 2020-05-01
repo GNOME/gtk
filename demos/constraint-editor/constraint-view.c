@@ -216,7 +216,7 @@ constraint_view_add_child (ConstraintView *view,
   frame = gtk_frame_new (NULL);
   gtk_widget_add_css_class (frame, "child");
   gtk_widget_set_name (frame, name);
-  gtk_container_add (GTK_CONTAINER (frame), label);
+  gtk_frame_set_child (GTK_FRAME (frame), label);
   gtk_widget_set_parent (frame, GTK_WIDGET (view));
 
   update_weak_position (view, frame, 100, 100);
@@ -259,7 +259,7 @@ constraint_view_add_guide (ConstraintView *view,
   frame = gtk_frame_new (NULL);
   gtk_widget_add_css_class (frame, "guide");
   g_object_set_data (G_OBJECT (frame), "internal", (char *)"yes");
-  gtk_container_add (GTK_CONTAINER (frame), label);
+  gtk_frame_set_child (GTK_FRAME (frame), label);
   gtk_widget_insert_after (frame, GTK_WIDGET (view), NULL);
 
   g_object_set_data (G_OBJECT (guide), "frame", frame);

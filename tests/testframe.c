@@ -154,7 +154,7 @@ int main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (frame));
 
   widget = gtk_button_new_with_label ("Hello!");
-  gtk_container_add (GTK_CONTAINER (frame), widget);
+  gtk_frame_set_child (GTK_FRAME (frame), widget);
 
   grid = GTK_GRID (gtk_grid_new ());
   gtk_grid_set_row_spacing (grid, 12);

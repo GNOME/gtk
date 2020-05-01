@@ -125,7 +125,7 @@ do_dialog (GtkWidget *do_widget)
       gtk_widget_set_margin_end (vbox, 8);
       gtk_widget_set_margin_top (vbox, 8);
       gtk_widget_set_margin_bottom (vbox, 8);
-      gtk_container_add (GTK_CONTAINER (frame), vbox);
+      gtk_frame_set_child (GTK_FRAME (frame), vbox);
 
       /* Standard message dialog */
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);

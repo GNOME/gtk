@@ -337,7 +337,7 @@ do_combobox (GtkWidget *do_widget)
     gtk_widget_set_margin_end (box, 5);
     gtk_widget_set_margin_top (box, 5);
     gtk_widget_set_margin_bottom (box, 5);
-    gtk_container_add (GTK_CONTAINER (frame), box);
+    gtk_frame_set_child (GTK_FRAME (frame), box);
 
     model = create_icon_store ();
     combo = gtk_combo_box_new_with_model (model);
@@ -381,7 +381,7 @@ do_combobox (GtkWidget *do_widget)
     gtk_widget_set_margin_end (box, 5);
     gtk_widget_set_margin_top (box, 5);
     gtk_widget_set_margin_bottom (box, 5);
-    gtk_container_add (GTK_CONTAINER (frame), box);
+    gtk_frame_set_child (GTK_FRAME (frame), box);
 
     model = create_capital_store ();
     combo = gtk_combo_box_new_with_model (model);
@@ -412,7 +412,7 @@ do_combobox (GtkWidget *do_widget)
     gtk_widget_set_margin_end (box, 5);
     gtk_widget_set_margin_top (box, 5);
     gtk_widget_set_margin_bottom (box, 5);
-    gtk_container_add (GTK_CONTAINER (frame), box);
+    gtk_frame_set_child (GTK_FRAME (frame), box);
 
     combo = gtk_combo_box_text_new_with_entry ();
     fill_combo_entry (combo);
@@ -433,7 +433,7 @@ do_combobox (GtkWidget *do_widget)
     gtk_widget_set_margin_end (box, 5);
     gtk_widget_set_margin_top (box, 5);
     gtk_widget_set_margin_bottom (box, 5);
-    gtk_container_add (GTK_CONTAINER (frame), box);
+    gtk_frame_set_child (GTK_FRAME (frame), box);
 
     combo = gtk_combo_box_text_new ();
     gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "never", "Not visible");
