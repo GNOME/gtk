@@ -22,7 +22,7 @@
 #include "gtkframeaccessible.h"
 
 
-G_DEFINE_TYPE (GtkFrameAccessible, gtk_frame_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE)
+G_DEFINE_TYPE (GtkFrameAccessible, gtk_frame_accessible, GTK_TYPE_WIDGET_ACCESSIBLE)
 
 static void
 gtk_frame_accessible_initialize (AtkObject *accessible,
