@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkWindow" id="window1">
+    <property name="title" translatable="yes">Model Button</property>
     <property name="resizable">0</property>
     <child type="titlebar">
       <object class="GtkHeaderBar">
         <property name="show-title-buttons">1</property>
-        <property name="title" translatable="yes">Model Button</property>
       </object>
     </child>
     <child>

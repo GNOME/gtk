@@ -9,7 +9,6 @@
     <property name="default-height">768</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header">
-        <property name="title" translatable="yes">GTK Constraint Editor</property>
         <property name="show-title-buttons">1</property>
         <child type="start">
           <object class="GtkButton">
