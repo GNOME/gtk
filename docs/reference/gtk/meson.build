@@ -214,6 +214,7 @@ images = [
   'images/box-packing.png',
   'images/builder-shortcuts.png',
   'images/button.png',
+  'images/capture-bubble.png',
   'images/check-button.png',
   'images/checks.png',
   'images/clocks-shortcuts.png',

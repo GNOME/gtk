@@ -61,16 +61,9 @@
     </para>
     <para>
      GDK translates these raw windowing system events into #GdkEvents.
-     Typical input events are:
-     <simplelist>
-       <member>button clicks</member>
-       <member>pointer motion</member>
-       <member>key presses</member>
-       <member>focus changes</member>
-       <member>touch events</member>
-     </simplelist>
-     These are all represented as #GdkEvents, but you can differentiate
-     between different events by looking at their type, using
+     Typical input events are button clicks, pointer motion, key presses
+     or touch events. These are all represented as #GdkEvents, but you can
+     differentiate between different events by looking at their type, using
      gdk_event_get_event_type().
     </para>
     <para>
@@ -103,34 +96,7 @@
         location change from one widget to another.
       </para></listitem>
       <listitem><para>
-        Then the event is pushed onto a stack so you can query the currently
-        handled event with gtk_get_current_event().
-      </para></listitem>
-      <listitem><para>
-        The event is sent to a widget. If a grab is active all events for widgets
-        that are not in the contained in the grab widget are sent to the latter
-        with a few exceptions:
-        <itemizedlist>
-          <listitem><para>
-            Deletion and destruction events are still sent to the event widget for
-            obvious reasons.
-          </para></listitem>
-          <listitem><para>
-            Events which directly relate to the visual representation of the event
-            widget.
-          </para></listitem>
-          <listitem><para>
-            Leave events are delivered to the event widget if there was an enter
-            event delivered to it before without the paired leave event.
-          </para></listitem>
-          <listitem><para>
-            Drag events are not redirected because it is unclear what the semantics
-            of that would be.
-          </para></listitem>
-        </itemizedlist>
-      </para></listitem>
-      <listitem><para>
-        After finishing the delivery the event is popped from the event stack.
+        The event is sent to widgets.
       </para></listitem>
     </orderedlist>
 
@@ -138,6 +104,14 @@
       An event is propagated down and up the widget hierarchy in three phases
       (see #GtkPropagationPhase) towards a target widget.
     </para>
+
+    <informalfigure>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="capture-bubble.png" format="PNG"/>
+        </imageobject>
+      </mediaobject>
+    </informalfigure>
 
     <para>
       For key events, the top-level window gets a first shot at activating
@@ -225,6 +199,14 @@
       GTK has traditionally supported different kinds of shortcuts:
       <variablelist>
         <varlistentry>
+          <term>Accelerators</term>
+          <listitem><para>
+            Accelerators are any other shortcuts that can be activated regardless
+            of where the focus is, and typically trigger global actions, such as
+            Ctrl-Q to quit an application.
+          </para></listitem>
+        </varlistentry>
+        <varlistentry>
           <term>Mnmemonics</term>
           <listitem><para>
             Mnemonics are usually triggered using Alt as a modifier for a letter.
@@ -242,15 +224,11 @@
             triggered when the widget has focus.
           </para></listitem>
         </varlistentry>
-        <varlistentry>
-          <term>Accelerators</term>
-          <listitem><para>
-            Accelerators are any other shortcuts that can be activated regardless
-            of where the focus is, and typically trigger global actions, such as
-            Ctrl-Q to quit an application.
-          </para></listitem>
-        </varlistentry>
       </variablelist>
+    </para>
+    <para>
+      GTK traditionally handles accelerators and mnemonics in a global scope,
+      during the capture phase, and key bindings locally, during the target phase.
     </para>
     <para>
       Under the hood, all shortcuts are represented as instances of #GtkShortcut,
