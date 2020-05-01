@@ -3858,6 +3858,8 @@ GtkViewport
 gtk_viewport_new
 gtk_viewport_set_scroll_to_focus
 gtk_viewport_get_scroll_to_focus
+gtk_viewport_set_child
+gtk_viewport_get_child
 <SUBSECTION Standard>
 GTK_VIEWPORT
 GTK_IS_VIEWPORT
