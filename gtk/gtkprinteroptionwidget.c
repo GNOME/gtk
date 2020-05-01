@@ -508,8 +508,6 @@ dialog_response_callback (GtkDialog              *dialog,
           g_free (filename_short);
           g_object_unref (info);
         }
-
-      g_object_unref (new_location);
     }
 
   gtk_widget_destroy (GTK_WIDGET (dialog));
@@ -572,11 +570,10 @@ filesave_choose_cb (GtkWidget              *button,
     }
 
   g_signal_connect (dialog, "response",
-                    G_CALLBACK (dialog_response_callback), widget);
+                    G_CALLBACK (dialog_response_callback),
+                    widget);
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_window_present (GTK_WINDOW (dialog));
-  G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static gchar *
