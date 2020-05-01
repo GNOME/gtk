@@ -270,12 +270,12 @@ start_puzzle (GdkPaintable *paintable)
   /* Remove the old grid (if there is one) */
   grid = gtk_bin_get_child (GTK_BIN (frame));
   if (grid)
-    gtk_container_remove (GTK_CONTAINER (frame), grid);
+    gtk_aspect_frame_set_child (GTK_ASPECT_FRAME (frame), NULL);
 
   /* Create a new grid */
   grid = gtk_grid_new ();
   gtk_widget_set_can_focus (grid, TRUE);
-  gtk_container_add (GTK_CONTAINER (frame), grid);
+  gtk_aspect_frame_set_child (GTK_ASPECT_FRAME (frame), grid);
   aspect_ratio = gdk_paintable_get_intrinsic_aspect_ratio (paintable);
   if (aspect_ratio == 0.0)
     aspect_ratio = 1.0;
