@@ -3501,7 +3501,7 @@ gtk_scrolled_window_add (GtkContainer *container,
   else
     {
       scrollable_child = gtk_viewport_new (hadj, vadj);
-      gtk_container_add (GTK_CONTAINER (scrollable_child), child);
+      gtk_viewport_set_child (GTK_VIEWPORT (scrollable_child), child);
       priv->auto_added_viewport = TRUE;
     }
 
