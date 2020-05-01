@@ -851,6 +851,7 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
 
   priv->button = gtk_button_new ();
   g_object_ref_sink (priv->button);
+  gtk_widget_set_focus_on_click (priv->button, FALSE);
 
   g_signal_connect (priv->button, "clicked",
 		    G_CALLBACK (gtk_tree_view_column_button_clicked),
