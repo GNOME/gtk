@@ -118,7 +118,7 @@ scrollable_policy (void)
 
   gtk_widget_show (label);
   gtk_widget_show (viewport);
-  gtk_container_add (GTK_CONTAINER (viewport), label);
+  gtk_viewport_set_child (GTK_VIEWPORT (viewport), label);
   gtk_container_add (GTK_CONTAINER (swindow), viewport);
 
   /* Add controls here */
