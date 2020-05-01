@@ -5344,6 +5344,10 @@ set_list_model (GtkFileChooserWidget  *impl,
   g_signal_connect (priv->browse_files_model, "row-changed",
                     G_CALLBACK (browse_files_model_row_changed_cb), impl);
 
+  g_signal_connect_data (priv->browse_files_model, "rows-reordered",
+                         G_CALLBACK (browse_files_center_selected_row),
+                         impl, NULL, G_CONNECT_AFTER | G_CONNECT_SWAPPED);
+
   _gtk_file_system_model_set_filter (priv->browse_files_model, priv->current_filter);
 
   profile_end ("end", NULL);
