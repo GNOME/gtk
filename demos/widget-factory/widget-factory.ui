@@ -465,7 +465,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
             <child>
               <object class="GtkStackPage">
                 <property name="name">page1</property>
-                <property name="title" translatable="yes">Page 1</property>
+                <property name="title" translatable="yes">Page _1</property>
+                <property name="use-underline">1</property>
                 <property name="child">
                   <object class="GtkBox" id="page1">
                     <property name="orientation">vertical</property>
@@ -1459,7 +1460,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
             <child>
               <object class="GtkStackPage">
                 <property name="name">page2</property>
-                <property name="title" translatable="yes">Page 2</property>
+                <property name="title" translatable="yes">Page _2</property>
+                <property name="use-underline">1</property>
                 <property name="child">
                   <object class="GtkOverlay" id="page2">
                     <child type="overlay">
@@ -2175,7 +2177,8 @@ microphone-sensitivity-medium-symbolic</property>
             <child>
               <object class="GtkStackPage">
                 <property name="name">page3</property>
-                <property name="title" translatable="yes">Page 3</property>
+                <property name="title" translatable="yes">Page _3</property>
+                <property name="use-underline">1</property>
                 <property name="child">
                   <object class="GtkBox">
                     <property name="spacing">10</property>
