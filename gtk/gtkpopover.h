@@ -63,6 +63,12 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_popover_new             (void);
 
 GDK_AVAILABLE_IN_ALL
+void            gtk_popover_set_child       (GtkPopover         *popover,
+                                             GtkWidget          *child);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *     gtk_popover_get_child       (GtkPopover         *popover);
+
+GDK_AVAILABLE_IN_ALL
 void            gtk_popover_set_pointing_to (GtkPopover         *popover,
                                              const GdkRectangle *rect);
 GDK_AVAILABLE_IN_ALL

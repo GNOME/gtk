@@ -174,6 +174,7 @@ enum {
   PROP_DEFAULT_WIDGET,
   PROP_HAS_ARROW,
   PROP_MNEMONICS_VISIBLE,
+  PROP_CHILD,
   NUM_PROPERTIES
 };
 
@@ -1545,6 +1546,10 @@ gtk_popover_set_property (GObject      *object,
       gtk_popover_set_mnemonics_visible (popover, g_value_get_boolean (value));
       break;
 
+    case PROP_CHILD:
+      gtk_popover_set_child (popover, g_value_get_object (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1584,6 +1589,10 @@ gtk_popover_get_property (GObject      *object,
 
     case PROP_MNEMONICS_VISIBLE:
       g_value_set_boolean (value, priv->mnemonics_visible);
+      break;
+
+    case PROP_CHILD:
+      g_value_set_object (value, gtk_popover_get_child (popover));
       break;
 
     default:
@@ -1720,6 +1729,13 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  properties[PROP_CHILD] =
+      g_param_spec_object ("child",
+                           P_("Child"),
+                           P_("The child widget"),
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
   signals[CLOSED] =
@@ -1774,6 +1790,41 @@ gtk_popover_new (void)
 {
   return g_object_new (GTK_TYPE_POPOVER, NULL);
 }
+
+/**
+ * gtk_popover_set_child:
+ * @popover: a #GtkPopover
+ * @child: (allow-none): the child widget
+ *
+ * Sets the child widget of @popover.
+ */
+void
+gtk_popover_set_child (GtkPopover *popover,
+                       GtkWidget  *child)
+{
+  g_return_if_fail (GTK_IS_POPOVER (popover));
+  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+
+  _gtk_bin_set_child (GTK_BIN (popover), child);
+  g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_CHILD]);
+}
+
+/**
+ * gtk_popover_get_child:
+ * @popover: a #GtkPopover
+ *
+ * Gets the child widget of @popover.
+ *
+ * Returns: (nullable) (transfer none): the child widget of @popover
+ */
+GtkWidget *
+gtk_popover_get_child (GtkPopover *popover)
+{
+  g_return_val_if_fail (GTK_IS_POPOVER (popover), NULL);
+
+  return gtk_bin_get_child (GTK_BIN (popover));
+}
+
 
 /**
  * gtk_popover_set_default_widget:
