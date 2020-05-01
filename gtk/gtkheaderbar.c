@@ -57,6 +57,31 @@
  * titlebar widget of a #GtkWindow (see gtk_window_set_titlebar()), as it gives
  * features typical of titlebars while allowing the addition of child widgets.
  *
+ * The GtkHeaderBar implementation of the #GtkBuildable interface supports
+ * adding children at the start or end sides by specifying “start” or “end” as
+ * the “type” attribute of a <child> element, or setting the title widget by
+ * specifying “title” value.
+ *
+ * By default the GtkHeaderBar uses a #GtkLabel displaying the title of the
+ * window it is contained in as the title widget, equivalent to the following
+ * UI definition:
+ *
+ * |[
+ * <object class="GtkHeaderBar">
+ *   <child type="title">
+ *     <object class="GtkLabel">
+ *       <property name="label" translatable="yes">Label</property>
+ *       <property name="single-line-mode">True</property>
+ *       <property name="ellipsize">end</property>
+ *       <property name="width-chars">5</property>
+ *       <style>
+ *         <class name="title"/>
+ *       </style>
+ *     </object>
+ *   </child>
+ * </object>
+ * ]|
+ *
  * # CSS nodes
  *
  * |[<!-- language="plain" -->
