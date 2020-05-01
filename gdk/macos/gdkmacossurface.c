@@ -173,6 +173,60 @@ gdk_macos_surface_begin_move_drag (GdkSurface     *surface,
 }
 
 static void
+gdk_macos_surface_predict_presentation_time (GdkMacosSurface *self)
+{
+  g_assert (GDK_IS_MACOS_SURFACE (self));
+
+}
+
+static void
+gdk_macos_surface_begin_frame (GdkMacosSurface *self)
+{
+  g_assert (GDK_IS_MACOS_SURFACE (self));
+
+  g_print ("%s: begin_frame\n", G_OBJECT_TYPE_NAME (self));
+}
+
+static void
+gdk_macos_surface_end_frame (GdkMacosSurface *self)
+{
+  g_assert (GDK_IS_MACOS_SURFACE (self));
+
+  g_print ("%s: end_frame\n", G_OBJECT_TYPE_NAME (self));
+}
+
+static void
+gdk_macos_surface_before_paint (GdkMacosSurface *self,
+                                GdkFrameClock   *frame_clock)
+{
+  GdkSurface *surface = (GdkSurface *)self;
+
+  g_assert (GDK_IS_MACOS_SURFACE (self));
+  g_assert (GDK_IS_FRAME_CLOCK (frame_clock));
+
+  if (surface->update_freeze_count > 0)
+    return;
+
+  gdk_macos_surface_predict_presentation_time (self);
+  gdk_macos_surface_begin_frame (self);
+}
+
+static void
+gdk_macos_surface_after_paint (GdkMacosSurface *self,
+                               GdkFrameClock   *frame_clock)
+{
+  GdkSurface *surface = (GdkSurface *)self;
+
+  g_assert (GDK_IS_MACOS_SURFACE (self));
+  g_assert (GDK_IS_FRAME_CLOCK (frame_clock));
+
+  if (surface->update_freeze_count > 0)
+    return;
+
+  gdk_macos_surface_end_frame (self);
+}
+
+static void
 gdk_macos_surface_destroy (GdkSurface *surface,
                            gboolean    foreign_destroy)
 {
@@ -190,6 +244,29 @@ gdk_macos_surface_destroy (GdkSurface *surface,
   GDK_END_MACOS_ALLOC_POOL;
 }
 
+static void
+gdk_macos_surface_constructed (GObject *object)
+{
+  GdkMacosSurface *self = (GdkMacosSurface *)object;
+  GdkFrameClock *frame_clock;
+
+  g_assert (GDK_IS_MACOS_SURFACE (self));
+
+  G_OBJECT_CLASS (gdk_macos_surface_parent_class)->constructed (object);
+
+  frame_clock = gdk_surface_get_frame_clock (GDK_SURFACE (self));
+
+  g_signal_connect_object (frame_clock,
+                           "before-paint",
+                           G_CALLBACK (gdk_macos_surface_before_paint),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (frame_clock,
+                           "after-paint",
+                           G_CALLBACK (gdk_macos_surface_after_paint),
+                           self,
+                           G_CONNECT_SWAPPED);
+}
 
 static void
 gdk_macos_surface_get_property (GObject    *object,
@@ -238,6 +315,7 @@ gdk_macos_surface_class_init (GdkMacosSurfaceClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkSurfaceClass *surface_class = GDK_SURFACE_CLASS (klass);
 
+  object_class->constructed = gdk_macos_surface_constructed;
   object_class->get_property = gdk_macos_surface_get_property;
   object_class->set_property = gdk_macos_surface_set_property;
 
@@ -301,6 +379,9 @@ _gdk_macos_surface_new (GdkMacosDisplay   *display,
       g_warn_if_reached ();
       ret = NULL;
     }
+
+  if (ret != NULL)
+    gdk_surface_freeze_updates (GDK_SURFACE (ret));
 
   g_object_unref (frame_clock);
 
