@@ -48,7 +48,7 @@ typedef struct _GtkFrameClass         GtkFrameClass;
 
 struct _GtkFrame
 {
-  GtkBin parent_instance;
+  GtkWidget parent_instance;
 };
 
 /**
@@ -58,7 +58,7 @@ struct _GtkFrame
  */
 struct _GtkFrameClass
 {
-  GtkBinClass parent_class;
+  GtkWidgetClass parent_class;
 
   /*< public >*/
 
