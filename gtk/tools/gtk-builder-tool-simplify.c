@@ -733,6 +733,7 @@ maybe_rename_property (Element *element, MyParserData *data)
     { "GtkWidget", "margin-left", GTK_TYPE_WIDGET, PROP_KIND_OBJECT, "margin-start", { NULL, NULL, NULL } },
     { "GtkWidget", "margin-right", GTK_TYPE_WIDGET, PROP_KIND_OBJECT, "margin-end", { NULL, NULL, NULL } },
     { "GtkHeaderBar", "show-close-button", GTK_TYPE_HEADER_BAR, PROP_KIND_OBJECT, "show-title-buttons", { NULL, NULL, NULL } },
+    { "GtkHeaderBar", "custom-title", GTK_TYPE_HEADER_BAR, PROP_KIND_OBJECT, "title-widget", { NULL, NULL, NULL } },
     { "GtkStack", "homogeneous", GTK_TYPE_STACK, PROP_KIND_OBJECT, "hhomogeneous", { "vhomogeneous", NULL, NULL } }
   };
   int i, k, l;
