@@ -142,7 +142,7 @@ int main (int argc, char *argv[])
   scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0, 100, 1);
   scales = g_slist_prepend (scales, scale);
   gtk_scale_set_draw_value (GTK_SCALE (scale), FALSE);
-  gtk_container_add (GTK_CONTAINER (frame), scale);
+  gtk_frame_set_child (GTK_FRAME (frame), scale);
   gtk_container_add (GTK_CONTAINER (box), frame);
 
   frame = gtk_frame_new ("With fill level");
@@ -151,7 +151,7 @@ int main (int argc, char *argv[])
   gtk_scale_set_draw_value (GTK_SCALE (scale), FALSE);
   gtk_range_set_show_fill_level (GTK_RANGE (scale), TRUE);
   gtk_range_set_fill_level (GTK_RANGE (scale), 50);
-  gtk_container_add (GTK_CONTAINER (frame), scale);
+  gtk_frame_set_child (GTK_FRAME (frame), scale);
   gtk_container_add (GTK_CONTAINER (box), frame);
 
   frame = gtk_frame_new ("Simple marks");
@@ -161,7 +161,7 @@ int main (int argc, char *argv[])
   gtk_scale_add_mark (GTK_SCALE (scale), marks[0], GTK_POS_BOTTOM, NULL);
   gtk_scale_add_mark (GTK_SCALE (scale), marks[1], GTK_POS_BOTTOM, NULL);
   gtk_scale_add_mark (GTK_SCALE (scale), marks[2], GTK_POS_BOTTOM, NULL);
-  gtk_container_add (GTK_CONTAINER (frame), scale);
+  gtk_frame_set_child (GTK_FRAME (frame), scale);
   gtk_container_add (GTK_CONTAINER (box), frame);
 
   frame = gtk_frame_new ("Simple marks up");
@@ -171,7 +171,7 @@ int main (int argc, char *argv[])
   gtk_scale_add_mark (GTK_SCALE (scale), marks[0], GTK_POS_TOP, NULL);
   gtk_scale_add_mark (GTK_SCALE (scale), marks[1], GTK_POS_TOP, NULL);
   gtk_scale_add_mark (GTK_SCALE (scale), marks[2], GTK_POS_TOP, NULL);
-  gtk_container_add (GTK_CONTAINER (frame), scale);
+  gtk_frame_set_child (GTK_FRAME (frame), scale);
   gtk_container_add (GTK_CONTAINER (box), frame);
 
   frame = gtk_frame_new ("Labeled marks");
@@ -183,7 +183,7 @@ int main (int argc, char *argv[])
   gtk_scale_add_mark (GTK_SCALE (scale), marks[0], GTK_POS_BOTTOM, labels[0]);
   gtk_scale_add_mark (GTK_SCALE (scale), marks[1], GTK_POS_BOTTOM, labels[1]);
   gtk_scale_add_mark (GTK_SCALE (scale), marks[2], GTK_POS_BOTTOM, labels[2]);
-  gtk_container_add (GTK_CONTAINER (frame), scale);
+  gtk_frame_set_child (GTK_FRAME (frame), scale);
   gtk_container_add (GTK_CONTAINER (box), frame);
 
   frame = gtk_frame_new ("Some labels");
@@ -193,7 +193,7 @@ int main (int argc, char *argv[])
   gtk_scale_add_mark (GTK_SCALE (scale), marks[0], GTK_POS_TOP, labels[0]);
   gtk_scale_add_mark (GTK_SCALE (scale), marks[1], GTK_POS_TOP, NULL);
   gtk_scale_add_mark (GTK_SCALE (scale), marks[2], GTK_POS_TOP, labels[2]);
-  gtk_container_add (GTK_CONTAINER (frame), scale);
+  gtk_frame_set_child (GTK_FRAME (frame), scale);
   gtk_container_add (GTK_CONTAINER (box), frame);
 
   frame = gtk_frame_new ("Above and below");
@@ -204,7 +204,7 @@ int main (int argc, char *argv[])
   gtk_scale_add_mark (GTK_SCALE (scale), bath_marks[1], GTK_POS_BOTTOM, bath_labels[1]);
   gtk_scale_add_mark (GTK_SCALE (scale), bath_marks[2], GTK_POS_BOTTOM, bath_labels[2]);
   gtk_scale_add_mark (GTK_SCALE (scale), bath_marks[3], GTK_POS_TOP, bath_labels[3]);
-  gtk_container_add (GTK_CONTAINER (frame), scale);
+  gtk_frame_set_child (GTK_FRAME (frame), scale);
   gtk_container_add (GTK_CONTAINER (box), frame);
 
   frame = gtk_frame_new ("Positions");
@@ -215,7 +215,7 @@ int main (int argc, char *argv[])
   gtk_scale_add_mark (GTK_SCALE (scale), pos_marks[1], GTK_POS_RIGHT, pos_labels[1]);
   gtk_scale_add_mark (GTK_SCALE (scale), pos_marks[2], GTK_POS_TOP, pos_labels[2]);
   gtk_scale_add_mark (GTK_SCALE (scale), pos_marks[3], GTK_POS_BOTTOM, pos_labels[3]);
-  gtk_container_add (GTK_CONTAINER (frame), scale);
+  gtk_frame_set_child (GTK_FRAME (frame), scale);
   gtk_container_add (GTK_CONTAINER (box), frame);
 
   box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);

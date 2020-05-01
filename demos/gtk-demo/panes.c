@@ -103,7 +103,7 @@ create_pane_options (GtkPaned    *paned,
   gtk_widget_set_margin_bottom (frame, 4);
 
   table = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (frame), table);
+  gtk_frame_set_child (GTK_FRAME (frame), table);
 
   label = gtk_label_new (label1);
   gtk_grid_attach (GTK_GRID (table), label, 0, 0, 1, 1);
@@ -176,7 +176,7 @@ do_panes (GtkWidget *do_widget)
       gtk_paned_add1 (GTK_PANED (hpaned), frame);
 
       button = gtk_button_new_with_mnemonic ("_Hi there");
-      gtk_container_add (GTK_CONTAINER(frame), button);
+      gtk_frame_set_child (GTK_FRAME (frame), button);
 
       frame = gtk_frame_new (NULL);
       gtk_widget_set_size_request (frame, 80, 60);

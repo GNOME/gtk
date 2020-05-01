@@ -147,8 +147,7 @@ main (int argc, char *argv[])
   revealer = gtk_revealer_new ();
   gtk_widget_set_halign (revealer, GTK_ALIGN_END);
   gtk_widget_set_valign (revealer, GTK_ALIGN_START);
-  gtk_overlay_add_overlay (GTK_OVERLAY (overlay),
-			   revealer);
+  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), revealer);
   gtk_widget_show (revealer);
 
   frame = gtk_frame_new (NULL);
@@ -158,7 +157,7 @@ main (int argc, char *argv[])
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE);
   gtk_box_set_spacing (GTK_BOX (hbox), 6);
-  gtk_container_add (GTK_CONTAINER (frame), hbox);
+  gtk_frame_set_child (GTK_FRAME (frame), hbox);
   gtk_widget_show (hbox);
 
   label = gtk_label_new ("This is a transparent overlay widget!!!!\nAmazing, eh?");

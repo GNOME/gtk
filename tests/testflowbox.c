@@ -51,7 +51,7 @@ populate_flowbox_simple (GtkFlowBox *flowbox)
       gtk_widget_show (widget);
       gtk_widget_show (frame);
 
-      gtk_container_add (GTK_CONTAINER (frame), widget);
+      gtk_frame_set_child (GTK_FRAME (frame), widget);
 
       g_object_set_data_full (G_OBJECT (frame), "id", (gpointer)g_strdup (text), g_free);
       gtk_container_add (GTK_CONTAINER (flowbox), frame);
@@ -73,7 +73,7 @@ populate_flowbox_focus (GtkFlowBox *flowbox)
       frame = gtk_frame_new (NULL);
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-      gtk_container_add (GTK_CONTAINER (frame), box);
+      gtk_frame_set_child (GTK_FRAME (frame), box);
 
       widget = gtk_label_new ("Label");
       gtk_container_add (GTK_CONTAINER (box), widget);
@@ -146,7 +146,7 @@ populate_flowbox_wrappy (GtkFlowBox *flowbox)
       gtk_widget_show (widget);
       gtk_widget_show (frame);
 
-      gtk_container_add (GTK_CONTAINER (frame), widget);
+      gtk_frame_set_child (GTK_FRAME (frame), widget);
 
       gtk_label_set_wrap (GTK_LABEL (widget), TRUE);
       gtk_label_set_wrap_mode (GTK_LABEL (widget), PANGO_WRAP_WORD);

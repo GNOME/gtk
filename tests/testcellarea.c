@@ -193,7 +193,7 @@ simple_cell_area (void)
   gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
   gtk_widget_set_halign (frame, GTK_ALIGN_FILL);
 
-  gtk_container_add (GTK_CONTAINER (frame), iconview);
+  gtk_frame_set_child (GTK_FRAME (frame), iconview);
 
   /* Now add some controls */
   vbox  = gtk_box_new (GTK_ORIENTATION_VERTICAL, 4);
@@ -437,7 +437,7 @@ focus_cell_area (void)
   gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
   gtk_widget_set_halign (frame, GTK_ALIGN_FILL);
 
-  gtk_container_add (GTK_CONTAINER (frame), iconview);
+  gtk_frame_set_child (GTK_FRAME (frame), iconview);
 
   /* Now add some controls */
   vbox  = gtk_box_new (GTK_ORIENTATION_VERTICAL, 4);
@@ -536,8 +536,7 @@ background_area (void)
   gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
   gtk_widget_set_halign (frame, GTK_ALIGN_FILL);
 
-  gtk_container_add (GTK_CONTAINER (frame), iconview);
-
+  gtk_frame_set_child (GTK_FRAME (frame), iconview);
 
   /* Now add some controls */
   vbox  = gtk_box_new (GTK_ORIENTATION_VERTICAL, 4);

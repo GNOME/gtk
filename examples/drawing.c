@@ -149,7 +149,7 @@ activate (GtkApplication *app,
   /* set a minimum size */
   gtk_widget_set_size_request (drawing_area, 100, 100);
 
-  gtk_container_add (GTK_CONTAINER (frame), drawing_area);
+  gtk_frame_set_child (GTK_FRAME (frame), drawing_area);
 
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (drawing_area), draw_cb, NULL, NULL);
 
