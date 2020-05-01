@@ -603,7 +603,7 @@ compute_hint (GdkPixbuf *pixbuf,
 	  if (r != *(p++) ||
 	      g != *(p++) ||
 	      b != *(p++) ||
-	      (n_channels != 4 && a != *(p++)))
+	      (n_channels == 4 && a != *(p++)))
 	    {
 	      hints &= ~THEME_CONSTANT_ROWS;
 	      if (!(hints & THEME_MISSING))
