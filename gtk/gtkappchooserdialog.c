@@ -200,16 +200,18 @@ set_dialog_properties (GtkAppChooserDialog *self)
       unknown = g_content_type_is_unknown (self->content_type);
     }
 
+  title = g_strdup (_("Select Application"));
+  subtitle = NULL;
+  string = NULL;
+
   if (name != NULL)
     {
-      title = g_strdup (_("Select Application"));
       /* Translators: %s is a filename */
       subtitle = g_strdup_printf (_("Opening “%s”."), name);
       string = g_strdup_printf (_("No applications found for “%s”"), name);
     }
-  else
+  else if (self->content_type)
     {
-      title = g_strdup (_("Select Application"));
       /* Translators: %s is a file type description */
       subtitle = g_strdup_printf (_("Opening “%s” files."), 
                                   unknown ? self->content_type : description);
