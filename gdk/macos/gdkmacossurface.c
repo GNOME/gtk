@@ -227,6 +227,50 @@ gdk_macos_surface_after_paint (GdkMacosSurface *self,
 }
 
 static void
+gdk_macos_surface_get_root_coords (GdkSurface *surface,
+                                   int         x,
+                                   int         y,
+                                   int        *root_x,
+                                   int        *root_y)
+{
+  GdkMacosSurface *self = (GdkMacosSurface *)surface;
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+  GdkDisplay *display;
+  NSRect content_rect;
+  int tmp_x = 0;
+  int tmp_y = 0;
+
+  g_assert (GDK_IS_MACOS_SURFACE (self));
+
+  if (GDK_SURFACE_DESTROYED (surface))
+    {
+      if (root_x)
+        *root_x = 0;
+      if (root_y)
+        *root_y = 0;
+
+      return;
+    }
+
+  content_rect = [priv->window contentRectForFrameRect:[priv->window frame]];
+
+  display = gdk_surface_get_display (surface);
+  _gdk_macos_display_from_display_coords (GDK_MACOS_DISPLAY (display),
+                                          content_rect.origin.x,
+                                          content_rect.origin.y + content_rect.size.height,
+                                          &tmp_x, &tmp_y);
+
+  tmp_x += x;
+  tmp_y += y;
+
+  if (root_x)
+    *root_x = tmp_x;
+
+  if (root_y)
+    *root_y = tmp_y;
+}
+
+static void
 gdk_macos_surface_destroy (GdkSurface *surface,
                            gboolean    foreign_destroy)
 {
@@ -322,6 +366,7 @@ gdk_macos_surface_class_init (GdkMacosSurfaceClass *klass)
   surface_class->begin_move_drag = gdk_macos_surface_begin_move_drag;
   surface_class->begin_resize_drag = gdk_macos_surface_begin_resize_drag;
   surface_class->destroy = gdk_macos_surface_destroy;
+  surface_class->get_root_coords = gdk_macos_surface_get_root_coords;
   surface_class->get_scale_factor = gdk_macos_surface_get_scale_factor;
   surface_class->hide = gdk_macos_surface_hide;
   surface_class->set_input_region = gdk_macos_surface_set_input_region;
