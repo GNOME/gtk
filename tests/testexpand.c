@@ -81,7 +81,7 @@ create_box_window (void)
   gtk_widget_set_margin_bottom (toggle, 5);
   g_signal_connect (G_OBJECT (toggle), "toggled",
                     G_CALLBACK (on_toggle_hexpand), NULL);
-  gtk_container_add (GTK_CONTAINER (colorbox), toggle);
+  gtk_frame_set_child (GTK_FRAME (colorbox), toggle);
 
   gtk_container_add (GTK_CONTAINER (box3), colorbox);
 
@@ -96,7 +96,7 @@ create_box_window (void)
   gtk_widget_set_margin_bottom (toggle, 5);
   g_signal_connect (G_OBJECT (toggle), "toggled",
                     G_CALLBACK (on_toggle_vexpand), NULL);
-  gtk_container_add (GTK_CONTAINER (colorbox), toggle);
+  gtk_frame_set_child (GTK_FRAME (colorbox), toggle);
   gtk_container_add (GTK_CONTAINER (box3), colorbox);
   gtk_container_add (GTK_CONTAINER (box3),
                      gtk_label_new ("VBox 3 Bottom"));
@@ -134,7 +134,7 @@ create_grid_window (void)
   gtk_widget_set_margin_bottom (toggle, 5);
   g_signal_connect (G_OBJECT (toggle), "toggled",
                     G_CALLBACK (on_toggle_hexpand), NULL);
-  gtk_container_add (GTK_CONTAINER (colorbox), toggle);
+  gtk_frame_set_child (GTK_FRAME (colorbox), toggle);
 
   gtk_grid_attach (GTK_GRID (grid), colorbox, 1, 1, 1, 1);
 
@@ -149,7 +149,7 @@ create_grid_window (void)
   gtk_widget_set_margin_bottom (toggle, 5);
   g_signal_connect (G_OBJECT (toggle), "toggled",
                     G_CALLBACK (on_toggle_vexpand), NULL);
-  gtk_container_add (GTK_CONTAINER (colorbox), toggle);
+  gtk_frame_set_child (GTK_FRAME (colorbox), toggle);
 
   gtk_grid_attach (GTK_GRID (grid), colorbox, 1, 2, 1, 1); 
 
