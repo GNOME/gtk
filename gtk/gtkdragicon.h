@@ -35,7 +35,7 @@ G_BEGIN_DECLS
 #define GTK_TYPE_DRAG_ICON (gtk_drag_icon_get_type ())
 
 GDK_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (GtkDragIcon, gtk_drag_icon, GTK, DRAG_ICON, GtkContainer)
+G_DECLARE_FINAL_TYPE (GtkDragIcon, gtk_drag_icon, GTK, DRAG_ICON, GtkWidget)
 
 GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_drag_icon_get_for_drag                      (GdkDrag                *drag);
