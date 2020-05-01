@@ -310,6 +310,7 @@ gtk/gtkvolumebutton.c
 gtk/gtkwidget.c
 gtk/gtkwidgetpaintable.c
 gtk/gtkwindow.c
+gtk/gtkwindowcontrols.c
 gtk/inspector/action-editor.c
 gtk/inspector/controllers.c
 gtk/inspector/css-editor.c

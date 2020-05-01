@@ -9,6 +9,7 @@ demos/gtk-demo/changedisplay.c
 demos/gtk-demo/clipboard.c
 demos/gtk-demo/combobox.c
 demos/gtk-demo/cursors.ui
+demos/gtk-demo/demoimage.c
 demos/gtk-demo/demo.ui
 demos/gtk-demo/dialog.c
 demos/gtk-demo/entry_buffer.c
