@@ -367,7 +367,7 @@ do_images (GtkWidget *do_widget)
       image = gtk_image_new_from_icon_name ("gtk3-demo");
       gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
 
-      gtk_container_add (GTK_CONTAINER (frame), image);
+      gtk_frame_set_child (GTK_FRAME (frame), image);
 
 
       /* Animation */
@@ -384,7 +384,7 @@ do_images (GtkWidget *do_widget)
 
       picture = gtk_picture_new_for_resource ("/images/floppybuddy.gif");
 
-      gtk_container_add (GTK_CONTAINER (frame), picture);
+      gtk_frame_set_child (GTK_FRAME (frame), picture);
 
       /* Symbolic icon */
 
@@ -402,7 +402,7 @@ do_images (GtkWidget *do_widget)
       image = gtk_image_new_from_gicon (gicon);
       gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
 
-      gtk_container_add (GTK_CONTAINER (frame), image);
+      gtk_frame_set_child (GTK_FRAME (frame), image);
 
 
       /* Progressive */
@@ -423,7 +423,7 @@ do_images (GtkWidget *do_widget)
        * will create the pixbuf and fill it in.
        */
       picture = gtk_picture_new ();
-      gtk_container_add (GTK_CONTAINER (frame), picture);
+      gtk_frame_set_child (GTK_FRAME (frame), picture);
 
       start_progressive_loading (picture);
 
@@ -443,7 +443,7 @@ do_images (GtkWidget *do_widget)
 
       video = gtk_video_new_for_resource ("/images/gtk-logo.webm");
       gtk_media_stream_set_loop (gtk_video_get_media_stream (GTK_VIDEO (video)), TRUE);
-      gtk_container_add (GTK_CONTAINER (frame), video);
+      gtk_frame_set_child (GTK_FRAME (frame), video);
 
       /* Widget paintables */
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);

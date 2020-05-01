@@ -1232,7 +1232,7 @@ create_sidebar (void)
   gtk_container_add (GTK_CONTAINER (hbox), sidebar);
   gtk_container_add (GTK_CONTAINER (hbox), gtk_separator_new (GTK_ORIENTATION_VERTICAL));
   gtk_container_add (GTK_CONTAINER (hbox), stack);
-  gtk_container_add (GTK_CONTAINER (frame), hbox);
+  gtk_frame_set_child (GTK_FRAME (frame), hbox);
 
   return new_widget_info ("sidebar", frame, ASIS);
 }

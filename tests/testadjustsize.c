@@ -347,7 +347,7 @@ open_valigned_label_window (void)
 
   frame  = gtk_frame_new (NULL);
   gtk_widget_show (frame);
-  gtk_container_add (GTK_CONTAINER (frame), label);
+  gtk_frame_set_child (GTK_FRAME (frame), label);
 
   gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
   gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);

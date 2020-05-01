@@ -157,7 +157,7 @@ create_frame (const char *caption,
                 NULL);
   gtk_label_set_markup (GTK_LABEL (label), caption);
 
-  gtk_container_add (GTK_CONTAINER (frame), child);
+  gtk_frame_set_child (GTK_FRAME (frame), child);
 
   return frame;
 }

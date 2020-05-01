@@ -547,7 +547,7 @@ recursive_attach_view (int                 depth,
 
   /* Frame is to add a black border around each child view */
   frame = gtk_frame_new (NULL);
-  gtk_container_add (GTK_CONTAINER (frame), child_view);
+  gtk_frame_set_child (GTK_FRAME (frame), child_view);
 
   gtk_text_view_add_child_at_anchor (view, frame, anchor);
 
