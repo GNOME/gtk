@@ -123,7 +123,8 @@ on_button_toggled (GtkWidget        *button,
 static void
 rebuild_child (GtkWidget   *self,
                const gchar *icon_name,
-               const gchar *title)
+               const gchar *title,
+               gboolean     use_underline)
 {
   GtkWidget *button_child;
 
@@ -145,6 +146,7 @@ rebuild_child (GtkWidget   *self,
   else if (title != NULL)
     {
       button_child = gtk_label_new (title);
+      gtk_label_set_use_underline (GTK_LABEL (button_child), use_underline);
 
       gtk_widget_set_tooltip_text (GTK_WIDGET (self), NULL);
 
@@ -168,15 +170,17 @@ update_button (GtkStackSwitcher *self,
   gchar *icon_name;
   gboolean needs_attention;
   gboolean visible;
+  gboolean use_underline;
 
   g_object_get (page,
                 "title", &title,
                 "icon-name", &icon_name,
                 "needs-attention", &needs_attention,
                 "visible", &visible,
+                "use-underline", &use_underline,
                 NULL);
 
-  rebuild_child (button, icon_name, title);
+  rebuild_child (button, icon_name, title, use_underline);
 
   gtk_widget_set_visible (button, visible && (title != NULL || icon_name != NULL));
 

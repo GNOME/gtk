@@ -1816,21 +1816,27 @@ activate (GApplication *app)
     { "app.about", { "F1", NULL } },
     { "app.quit", { "<Control>q", NULL } },
     { "app.open-in", { "<Control>n", NULL } },
-    { "app.cut", { "<Control>x", NULL } },
-    { "app.copy", { "<Control>c", NULL } },
-    { "app.paste", { "<Control>v", NULL } },
     { "win.dark", { "<Control>d", NULL } },
     { "win.search", { "<Control>s", NULL } },
-    { "win.delete", { "Delete", NULL } },
     { "win.background", { "<Control>b", NULL } },
     { "win.open", { "<Control>o", NULL } },
     { "win.record", { "<Control>r", NULL } },
     { "win.lock", { "<Control>l", NULL } },
   };
+  struct {
+    const gchar *action_and_target;
+    const gchar *accelerators[2];
+  } late_accels[] = {
+    { "app.cut", { "<Control>x", NULL } },
+    { "app.copy", { "<Control>c", NULL } },
+    { "app.paste", { "<Control>v", NULL } },
+    { "win.delete", { "Delete", NULL } },
+  };
   gint i;
   GPermission *permission;
   GAction *action;
   GError *error = NULL;
+  GtkEventController *controller;
 
   g_type_ensure (my_text_view_get_type ());
 
@@ -1869,6 +1875,24 @@ activate (GApplication *app)
   g_action_map_add_action_entries (G_ACTION_MAP (window),
                                    win_entries, G_N_ELEMENTS (win_entries),
                                    window);
+
+  controller = gtk_shortcut_controller_new ();
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+
+  for (i = 0; i < G_N_ELEMENTS (late_accels); i++)
+    {
+      guint key;
+      GdkModifierType mods;
+      GtkShortcutTrigger *trigger;
+      GtkShortcutAction *ac;
+
+      gtk_accelerator_parse (late_accels[i].accelerators[0], &key, &mods);
+      trigger = gtk_keyval_trigger_new (key, mods);
+      ac = gtk_named_action_new (late_accels[i].action_and_target);
+      gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller),
+                                            gtk_shortcut_new (trigger, ac));
+    }
+  gtk_widget_add_controller (GTK_WIDGET (window), controller);
 
   for (i = 0; i < G_N_ELEMENTS (accels); i++)
     gtk_application_set_accels_for_action (GTK_APPLICATION (app), accels[i].action_and_target, accels[i].accelerators);
