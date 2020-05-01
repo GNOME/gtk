@@ -231,7 +231,7 @@ add_size_group (GtkInspectorSizeGroups *sl,
   gtk_container_add (GTK_CONTAINER (sl), frame);
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_add_css_class (box, GTK_STYLE_CLASS_VIEW);
-  gtk_container_add (GTK_CONTAINER (frame), box);
+  gtk_frame_set_child (GTK_FRAME (frame), box);
 
   box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_container_add (GTK_CONTAINER (box), box2);

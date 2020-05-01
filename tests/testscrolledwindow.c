@@ -101,7 +101,7 @@ scrollable_policy (void)
                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
   gtk_widget_show (swindow);
-  gtk_container_add (GTK_CONTAINER (frame), swindow);
+  gtk_frame_set_child (GTK_FRAME (frame), swindow);
 
   viewport = gtk_viewport_new (NULL, NULL);
   label = gtk_label_new ("Here is a wrapping label with a minimum width-chars of 40 and "

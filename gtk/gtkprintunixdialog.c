@@ -1292,13 +1292,13 @@ wrap_in_frame (const gchar *label,
   g_free (bold_text);
 
   frame = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_container_add (GTK_CONTAINER (frame), label_widget);
+  gtk_frame_set_child (GTK_FRAME (frame), label_widget);
 
   gtk_widget_set_margin_start (child, 12);
   gtk_widget_set_halign (child, GTK_ALIGN_FILL);
   gtk_widget_set_valign (child, GTK_ALIGN_FILL);
 
-  gtk_container_add (GTK_CONTAINER (frame), child);
+  gtk_frame_set_child (GTK_FRAME (frame), child);
 
   gtk_widget_show (frame);
 

@@ -321,7 +321,7 @@ main (int   argc,
   label_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
   group_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_container_add (GTK_CONTAINER (frame), group_box);
+  gtk_frame_set_child (GTK_FRAME (frame), group_box);
 
   /* OPEN */
   add_new_filechooser_button ("_Open:", "Select A File",
