@@ -1405,8 +1405,8 @@ headerbar {
     transition: $backdrop_transition;
   }
 
-  > box.start,
-  > box.end {
+  box.start,
+  box.end {
     border-spacing: 6px;
   }
 
