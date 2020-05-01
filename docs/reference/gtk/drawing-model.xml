@@ -206,9 +206,15 @@
         During the Paint phase GTK receives a single #GdkSurface::render signal on
         the toplevel surface. The signal handler will create a snapshot object
         (which is a helper for creating a scene graph) and call the
-        #GtkWidget::snapshot() vfunc, which will propagate down the widget hierarchy. 
+        #GtkWidget::snapshot() vfunc, which will propagate down the widget hierarchy.
         This lets each widget snapshot its content at the right place and time,
         correctly handling things like partial transparencies and overlapping widgets.
+      </para>
+
+      <para>
+        During the snapshotting of each widget, GTK automatically handles the CSS
+        rendering according to the CSS box model. It snapshots first the background,
+        then the border, then the widget content itself, and finally the outline.
       </para>
 
       <para>
