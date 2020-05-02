@@ -2296,7 +2296,7 @@ create_rename_popover (GtkPlacesSidebar *sidebar)
   g_signal_connect (popover, "destroy", G_CALLBACK (on_rename_popover_destroy), sidebar);
   gtk_popover_set_position (GTK_POPOVER (popover), GTK_POS_RIGHT);
   grid = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (popover), grid);
+  gtk_popover_set_child (GTK_POPOVER (popover), grid);
   g_object_set (grid,
                 "margin-start", 10,
                 "margin-end", 10,

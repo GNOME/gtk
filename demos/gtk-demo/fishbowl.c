@@ -161,7 +161,7 @@ create_menu_button (void)
   GtkWidget *w = gtk_menu_button_new ();
   GtkWidget *popover = gtk_popover_new ();
 
-  gtk_container_add (GTK_CONTAINER (popover), gtk_button_new_with_label ("Hey!"));
+  gtk_popover_set_child (GTK_POPOVER (popover), gtk_button_new_with_label ("Hey!"));
   gtk_popover_set_autohide (GTK_POPOVER (popover), FALSE);
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (w), popover);
   g_signal_connect (w, "map", G_CALLBACK (mapped), NULL);
