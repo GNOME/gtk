@@ -4674,7 +4674,6 @@ _gtk_window_set_allocation (GtkWindow           *window,
   GtkWidget *widget = (GtkWidget *)window;
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkAllocation child_allocation;
-  GtkBorder window_border = { 0 };
 
   g_assert (allocation_out != NULL);
 
@@ -4683,10 +4682,13 @@ _gtk_window_set_allocation (GtkWindow           *window,
   child_allocation.width = width;
   child_allocation.height = height;
 
-  get_shadow_width (window, &window_border);
-
   if (_gtk_widget_get_realized (widget))
-    update_realized_window_properties (window, &child_allocation, &window_border);
+    {
+      GtkBorder shadow;
+
+      get_shadow_width (window, &shadow);
+      update_realized_window_properties (window, &child_allocation, &shadow);
+    }
 
   priv->title_height = 0;
 
@@ -4698,9 +4700,9 @@ _gtk_window_set_allocation (GtkWindow           *window,
     {
       GtkAllocation title_allocation;
 
-      title_allocation.x = window_border.left;
-      title_allocation.y = window_border.top;
-      title_allocation.width = MAX (1, width - window_border.left - window_border.right);
+      title_allocation.x = 0;
+      title_allocation.y = 0;
+      title_allocation.width = width;
 
       gtk_widget_measure (priv->title_box, GTK_ORIENTATION_VERTICAL,
                           title_allocation.width,
@@ -4715,11 +4717,8 @@ _gtk_window_set_allocation (GtkWindow           *window,
   if (priv->decorated &&
       !priv->fullscreen)
     {
-      child_allocation.x += window_border.left;
-      child_allocation.y += window_border.top + priv->title_height;
-      child_allocation.width -= window_border.left + window_border.right;
-      child_allocation.height -= window_border.top + window_border.bottom +
-                                 priv->title_height;
+      child_allocation.y += priv->title_height;
+      child_allocation.height -= priv->title_height;
     }
 
   *allocation_out = child_allocation;
