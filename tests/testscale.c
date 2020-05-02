@@ -136,7 +136,7 @@ int main (int argc, char *argv[])
   gtk_widget_set_hexpand (flipbox, TRUE);
   gtk_widget_set_vexpand (flipbox, TRUE);
   gtk_container_add (GTK_CONTAINER (box1), box);
-  gtk_container_add (GTK_CONTAINER (window), box1);
+  gtk_window_set_child (GTK_WINDOW (window), box1);
 
   frame = gtk_frame_new ("No marks");
   scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0, 100, 1);

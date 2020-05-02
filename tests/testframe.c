@@ -147,7 +147,7 @@ int main (int argc, char **argv)
   gtk_widget_set_margin_end (GTK_WIDGET (vbox), 12);
   gtk_widget_set_margin_top (GTK_WIDGET (vbox), 12);
   gtk_widget_set_margin_bottom (GTK_WIDGET (vbox), 12);
-  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (vbox));
+  gtk_window_set_child (GTK_WINDOW (window), GTK_WIDGET (vbox));
 
   frame = GTK_FRAME (gtk_frame_new ("Test GtkFrame"));
   gtk_widget_set_vexpand (GTK_WIDGET (frame), TRUE);

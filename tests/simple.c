@@ -53,7 +53,7 @@ main (int argc, char *argv[])
   gtk_button_set_label (GTK_BUTTON (button), "hello world");
   g_signal_connect (button, "clicked", G_CALLBACK (hello), NULL);
 
-  gtk_container_add (GTK_CONTAINER (window), button);
+  gtk_window_set_child (GTK_WINDOW (window), button);
 
   gtk_widget_show (window);
 

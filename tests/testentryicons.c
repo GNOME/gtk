@@ -111,7 +111,7 @@ main (int argc, char **argv)
 		    G_CALLBACK (quit_cb), &done);
 
   grid = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (window), grid);
+  gtk_window_set_child (GTK_WINDOW (window), grid);
   gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
   gtk_widget_set_margin_start (grid, 10);

@@ -49,7 +49,7 @@ int main (int argc, char *argv[])
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_widget_set_halign (box, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (box, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
 
   button = gtk_button_new_with_label ("Α");
   g_signal_connect (button, "clicked", G_CALLBACK (enter), NULL);

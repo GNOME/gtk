@@ -101,7 +101,7 @@ create_box_window (void)
   gtk_container_add (GTK_CONTAINER (box3),
                      gtk_label_new ("VBox 3 Bottom"));
 
-  gtk_container_add (GTK_CONTAINER (window), box1);
+  gtk_window_set_child (GTK_WINDOW (window), box1);
   gtk_widget_show (window);
 }
 

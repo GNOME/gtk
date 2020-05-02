@@ -486,7 +486,7 @@ do_textview (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "Multiple Views");
 
       vpaned = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
-      gtk_container_add (GTK_CONTAINER (window), vpaned);
+      gtk_window_set_child (GTK_WINDOW (window), vpaned);
 
       /* For convenience, we just use the autocreated buffer from
        * the first text view; you could also create the buffer

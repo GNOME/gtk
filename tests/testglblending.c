@@ -28,7 +28,7 @@ main (int argc, char *argv[])
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   fixed = gtk_fixed_new ();
-  gtk_container_add (GTK_CONTAINER (window), fixed);
+  gtk_window_set_child (GTK_WINDOW (window), fixed);
 
   spinner = gtk_spinner_new ();
   gtk_spinner_start (GTK_SPINNER (spinner));

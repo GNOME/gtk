@@ -99,7 +99,7 @@ do_css_shadows (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       paned = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
-      gtk_container_add (GTK_CONTAINER (window), paned);
+      gtk_window_set_child (GTK_WINDOW (window), paned);
 
       child = create_toolbar ();
       gtk_container_add (GTK_CONTAINER (paned), child);

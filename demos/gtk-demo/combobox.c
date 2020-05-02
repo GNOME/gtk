@@ -324,7 +324,7 @@ do_combobox (GtkWidget *do_widget)
     gtk_widget_set_margin_end (vbox, 10);
     gtk_widget_set_margin_top (vbox, 10);
     gtk_widget_set_margin_bottom (vbox, 10);
-    gtk_container_add (GTK_CONTAINER (window), vbox);
+    gtk_window_set_child (GTK_WINDOW (window), vbox);
 
     /* A combobox demonstrating cell renderers, separators and
      *  insensitive rows

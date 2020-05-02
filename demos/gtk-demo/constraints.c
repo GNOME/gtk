@@ -266,7 +266,7 @@ do_constraints (GtkWidget *do_widget)
                        G_CALLBACK (gtk_widget_destroyed), &window);
 
      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
-     gtk_container_add (GTK_CONTAINER (window), box);
+     gtk_window_set_child (GTK_WINDOW (window), box);
 
      grid = g_object_new (simple_grid_get_type (), NULL);
      gtk_widget_set_hexpand (grid, TRUE);

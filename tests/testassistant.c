@@ -719,7 +719,7 @@ main (int argc, gchar *argv[])
   g_signal_connect (G_OBJECT (window), "destroy", G_CALLBACK (quit_cb), &done);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
 
   for (i = 0; i < G_N_ELEMENTS (buttons); i++)
     {
