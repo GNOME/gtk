@@ -25,7 +25,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkbin.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
@@ -41,12 +41,12 @@ typedef struct _GtkPopoverClass  GtkPopoverClass;
 
 struct _GtkPopover
 {
-  GtkBin parent;
+  GtkWidget parent;
 };
 
 struct _GtkPopoverClass
 {
-  GtkBinClass parent_class;
+  GtkWidgetClass parent_class;
 
   void (* closed)           (GtkPopover *popover);
   void (* activate_default) (GtkPopover *popover);
