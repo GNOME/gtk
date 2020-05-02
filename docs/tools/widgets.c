@@ -1130,7 +1130,7 @@ create_headerbar (void)
   bar = gtk_header_bar_new ();
   gtk_window_set_titlebar (GTK_WINDOW (window), bar);
   button = gtk_button_new ();
-  gtk_container_add (GTK_CONTAINER (button), gtk_image_new_from_icon_name ("bookmark-new-symbolic"));
+  gtk_button_set_child (GTK_BUTTON (button), gtk_image_new_from_icon_name ("bookmark-new-symbolic"));
   gtk_header_bar_pack_end (GTK_HEADER_BAR (bar), button);
 
   return new_widget_info ("headerbar", window, ASIS);

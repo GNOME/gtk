@@ -32,7 +32,7 @@ do_transparent (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (window), overlay);
 
       button = gtk_button_new_with_label ("Don't click this button!");
-      label = gtk_bin_get_child (GTK_BIN (button));
+      label = gtk_button_get_child (GTK_BUTTON (button));
       gtk_widget_set_margin_start (label, 50);
       gtk_widget_set_margin_end (label, 50);
       gtk_widget_set_margin_top (label, 50);
@@ -45,7 +45,7 @@ do_transparent (GtkWidget *do_widget)
       blur_overlay_add_overlay (BLUR_OVERLAY (overlay), button, 5.0);
 
       button = gtk_button_new_with_label ("Maybe this one?");
-      label = gtk_bin_get_child (GTK_BIN (button));
+      label = gtk_button_get_child (GTK_BUTTON (button));
       gtk_widget_set_margin_start (label, 50);
       gtk_widget_set_margin_end (label, 50);
       gtk_widget_set_margin_top (label, 50);

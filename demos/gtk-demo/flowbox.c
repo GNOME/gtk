@@ -37,7 +37,7 @@ color_swatch_new (const gchar *color)
   gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (area), 24);
   gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (area), 24);
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (area), draw_color, (gpointer) color, NULL);
-  gtk_container_add (GTK_CONTAINER (button), area);
+  gtk_button_set_child (GTK_BUTTON (button), area);
 
   return button;
 }
