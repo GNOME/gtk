@@ -591,7 +591,7 @@ gtk_application_window_real_size_allocate (GtkWidget *widget,
 
       child_allocation.y += menubar_height;
       child_allocation.height -= menubar_height;
-      child = gtk_bin_get_child (GTK_BIN (window));
+      child = gtk_window_get_child (GTK_WINDOW (window));
       if (child != NULL && gtk_widget_get_visible (child))
         gtk_widget_size_allocate (child, &child_allocation, baseline);
     }
@@ -666,21 +666,6 @@ gtk_application_window_real_unmap (GtkWidget *widget)
     gtk_widget_unmap (priv->menubar);
 
   GTK_WIDGET_CLASS (gtk_application_window_parent_class)->unmap (widget);
-}
-
-static void
-gtk_application_window_real_forall_internal (GtkContainer *container,
-                                             GtkCallback   callback,
-                                             gpointer      user_data)
-{
-  GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (container);
-  GtkApplicationWindowPrivate *priv = gtk_application_window_get_instance_private (window);
-
-  if (priv->menubar)
-    callback (priv->menubar, user_data);
-
-  GTK_CONTAINER_CLASS (gtk_application_window_parent_class)
-    ->forall (container, callback, user_data);
 }
 
 static void
@@ -782,11 +767,8 @@ gtk_application_window_init (GtkApplicationWindow *window)
 static void
 gtk_application_window_class_init (GtkApplicationWindowClass *class)
 {
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GObjectClass *object_class = G_OBJECT_CLASS (class);
-
-  container_class->forall = gtk_application_window_real_forall_internal;
 
   widget_class->measure = gtk_application_window_measure;
   widget_class->size_allocate = gtk_application_window_real_size_allocate;
