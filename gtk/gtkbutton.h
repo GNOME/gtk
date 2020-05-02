@@ -48,7 +48,7 @@ typedef struct _GtkButtonClass        GtkButtonClass;
 struct _GtkButton
 {
   /*< private >*/
-  GtkBin parent_instance;
+  GtkWidget parent_instance;
 };
 
 /**
@@ -61,7 +61,7 @@ struct _GtkButton
  */
 struct _GtkButtonClass
 {
-  GtkBinClass        parent_class;
+  GtkWidgetClass        parent_class;
 
   /*< public >*/
 
