@@ -4052,8 +4052,8 @@ colorchooser .popover.osd { border-radius: 5px; }
 /**********************
  * Window Decorations *
  *********************/
-decoration,
-window {
+window,
+dialog {
   border-radius: $window_radius $window_radius 0 0;
   // lamefun trick to get rounded borders regardless of CSD use
   border-width: 0px;
@@ -4063,13 +4063,23 @@ window {
   $_wm_border: if($variant=='light', transparentize(black, 0.77), transparentize($borders_color, 0.1));
   $_wm_border_backdrop: if($variant=='light', transparentize(black, 0.82), transparentize($borders_color, 0.1));
 
-  box-shadow: 0 3px 9px 1px transparentize(black, 0.5),
-              0 0 0 1px $_wm_border; //doing borders with box-shadow
+  &.csd {
+    box-shadow: 0 3px 9px 1px transparentize(black, 0.5),
+                0 0 0 1px $_wm_border; //doing borders with box-shadow
+    //margin: 10px;
+  }
+
+  &.solid-csd {
+    margin: 0;
+    padding: 14px;
+    border: solid 1px $borders_color;
+    border-radius: 0;
+    box-shadow: inset 0 0 0 3px $headerbar_color, inset 0 1px $top_hilight;
+
+    &:backdrop { box-shadow: inset 0 0 0 3px $backdrop_bg_color, inset 0 1px $top_hilight; }
+  }
 
   // FIXME rationalize shadows
-
-  // this is used for the resize cursor area
-  //margin: 10px;
 
   &:backdrop {
     // the transparent shadow here is to enforce that the shadow extents don't
@@ -4112,16 +4122,6 @@ window {
                 0 0 0 1px transparentize($_wm_border, 0.1);
   }
 
-  .solid-csd > & {
-    margin: 0;
-    padding: 4px;
-    background-color: $borders_color;
-    border: solid 1px $borders_color;
-    border-radius: 0;
-    box-shadow: inset 0 0 0 3px $headerbar_color, inset 0 1px $top_hilight;
-
-    &:backdrop { box-shadow: inset 0 0 0 3px $backdrop_bg_color, inset 0 1px $top_hilight; }
-  }
 }
 
 // catch all extend :)
