@@ -26,7 +26,7 @@
 static void atk_action_interface_init (AtkActionIface *iface);
 static void atk_image_interface_init  (AtkImageIface  *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkButtonAccessible, gtk_button_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkButtonAccessible, gtk_button_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_IMAGE, atk_image_interface_init))
 
@@ -60,7 +60,7 @@ get_image_from_button (GtkWidget *button)
 {
   GtkWidget *image;
 
-  image = gtk_bin_get_child (GTK_BIN (button));
+  image = gtk_button_get_child (GTK_BUTTON (button));
   if (GTK_IS_IMAGE (image))
     return image;
 
@@ -99,7 +99,7 @@ get_label_from_button (GtkWidget *button)
 {
   GtkWidget *child;
 
-  child = gtk_bin_get_child (GTK_BIN (button));
+  child = gtk_button_get_child (GTK_BUTTON (button));
 
   if (GTK_IS_CONTAINER (child))
     child = find_label_child (GTK_CONTAINER (child));
