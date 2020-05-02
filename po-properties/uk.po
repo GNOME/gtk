@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-01 12:04+0000\n"
-"PO-Revision-Date: 2020-05-01 18:54+0300\n"
+"POT-Creation-Date: 2020-05-01 19:39+0000\n"
+"PO-Revision-Date: 2020-05-02 09:23+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -578,11 +578,11 @@ msgstr "Показати типові об'єкти"
 msgid "Whether the combobox should show the default application on top"
 msgstr "Чи списку слід показувати типові програми зверху"
 
-#: gtk/gtkappchooserbutton.c:700 gtk/gtkappchooserdialog.c:588
+#: gtk/gtkappchooserbutton.c:700 gtk/gtkappchooserdialog.c:612
 msgid "Heading"
 msgstr "Заголовок"
 
-#: gtk/gtkappchooserbutton.c:701 gtk/gtkappchooserdialog.c:589
+#: gtk/gtkappchooserbutton.c:701 gtk/gtkappchooserdialog.c:613
 msgid "The text to show at the top of the dialog"
 msgstr "Текст на вершині вікна"
 
@@ -604,11 +604,11 @@ msgstr "Тип вмісту"
 msgid "The content type used by the open with object"
 msgstr "Тип вмісту для відкриття за допомогою об'єкта"
 
-#: gtk/gtkappchooserdialog.c:574
+#: gtk/gtkappchooserdialog.c:598
 msgid "GFile"
 msgstr "GFile"
 
-#: gtk/gtkappchooserdialog.c:575
+#: gtk/gtkappchooserdialog.c:599
 msgid "The GFile used by the app chooser dialog"
 msgstr "GFile для вікна вибору програми"
 
@@ -1820,10 +1820,9 @@ msgid "Whether to give the color an alpha value"
 msgstr "Чи надавати надавати кольору прозорості"
 
 #: gtk/gtkcolorbutton.c:171 gtk/gtkfilechooserbutton.c:512
-#: gtk/gtkfontbutton.c:477 gtk/gtkheaderbar.c:748 gtk/gtkprintjob.c:144
-#: gtk/gtkshortcutsgroup.c:306 gtk/gtkshortcutssection.c:360
-#: gtk/gtkshortcutsshortcut.c:620 gtk/gtkstack.c:395
-#: gtk/gtktreeviewcolumn.c:343
+#: gtk/gtkfontbutton.c:477 gtk/gtkprintjob.c:144 gtk/gtkshortcutsgroup.c:306
+#: gtk/gtkshortcutssection.c:360 gtk/gtkshortcutsshortcut.c:620
+#: gtk/gtkstack.c:395 gtk/gtktreeviewcolumn.c:343
 msgid "Title"
 msgstr "Заголовок"
 
@@ -2834,7 +2833,7 @@ msgid "Search mode"
 msgstr "Режим пошуку"
 
 #: gtk/gtkfilechooserwidget.c:7617 gtk/gtkfilechooserwidget.c:7618
-#: gtk/gtkheaderbar.c:755 gtk/gtkshortcutsshortcut.c:636
+#: gtk/gtkshortcutsshortcut.c:636
 msgid "Subtitle"
 msgstr "Підзаголовок"
 
@@ -3187,45 +3186,31 @@ msgstr "Кількість рядків"
 msgid "The number of rows that a child spans"
 msgstr "Кількість рядків, які займає дочірній об'єкт"
 
-#: gtk/gtkheaderbar.c:749
-msgid "The title to display"
-msgstr "Заголовок для показу"
+#: gtk/gtkheaderbar.c:597
+#| msgid "Edit Widget"
+msgid "Title Widget"
+msgstr "Віджет заголовка"
 
-#: gtk/gtkheaderbar.c:756
-msgid "The subtitle to display"
-msgstr "Підзаголовок для показу"
+#: gtk/gtkheaderbar.c:598
+#| msgid "Custom title widget to display"
+msgid "Title widget to display"
+msgstr "Віджет заголовка, який слід показати"
 
-#: gtk/gtkheaderbar.c:762
-msgid "Custom Title"
-msgstr "Нетиповий заголовок"
-
-#: gtk/gtkheaderbar.c:763
-msgid "Custom title widget to display"
-msgstr "Віджет для показу нетипового заголовка"
-
-#: gtk/gtkheaderbar.c:779
+#: gtk/gtkheaderbar.c:614
 msgid "Show title buttons"
 msgstr "Показувати кнопки заголовка"
 
-#: gtk/gtkheaderbar.c:780
+#: gtk/gtkheaderbar.c:615
 msgid "Whether to show title buttons"
 msgstr "Чи слід показувати кнопки заголовка"
 
-#: gtk/gtkheaderbar.c:796 gtk/gtksettings.c:827 gtk/gtkwindowcontrols.c:516
+#: gtk/gtkheaderbar.c:631 gtk/gtksettings.c:827 gtk/gtkwindowcontrols.c:516
 msgid "Decoration Layout"
 msgstr "Компонування оформлення"
 
-#: gtk/gtkheaderbar.c:797 gtk/gtksettings.c:828 gtk/gtkwindowcontrols.c:517
+#: gtk/gtkheaderbar.c:632 gtk/gtksettings.c:828 gtk/gtkwindowcontrols.c:517
 msgid "The layout for window decorations"
 msgstr "Компонування оформлення вікон"
-
-#: gtk/gtkheaderbar.c:809
-msgid "Has Subtitle"
-msgstr "Має підзаголовок"
-
-#: gtk/gtkheaderbar.c:810
-msgid "Whether to reserve space for a subtitle"
-msgstr "Чи резервувати місце для підзаголовка"
 
 #: gtk/gtkicontheme.c:1002 gtk/gtkicontheme.c:1003
 msgid "Supported icon names"
@@ -5915,16 +5900,12 @@ msgid "Whether this page is visible"
 msgstr "Чи є ця сторінка видимою"
 
 #: gtk/gtkstack.c:432
-#| msgid ""
-#| "If set, an underline in the text indicates the next character should be "
-#| "used for the mnemonic accelerator key"
 msgid ""
 "If set, an underline in the title indicates the next character should be "
 "used for the mnemonic accelerator key"
 msgstr ""
-"Якщо встановлено, то підкреслення у заголовку означає, що наступний символ"
-" має "
-"використовуватися в комбінації клавіш."
+"Якщо встановлено, то підкреслення у заголовку означає, що наступний символ "
+"має використовуватися в комбінації клавіш."
 
 #: gtk/gtkstack.c:761
 msgid "Horizontally homogeneous"
@@ -7408,18 +7389,16 @@ msgid "Side"
 msgstr "Бік"
 
 #: gtk/gtkwindowcontrols.c:500
-#| msgid "Whether widget wants to expand in both directions"
 msgid "Whether the widget shows start or end portion of the decoration layout"
 msgstr ""
-"Визначає, чи буде віджет показано у початковій чи кінцевій частині"
-" компонування обрамлення"
+"Визначає, чи буде віджет показано у початковій чи кінцевій частині "
+"компонування обрамлення"
 
 #: gtk/gtkwindowcontrols.c:528
 msgid "Empty"
 msgstr "Порожній"
 
 #: gtk/gtkwindowcontrols.c:529
-#| msgid "Whether the widget has the input focus"
 msgid "Whether the widget has any window buttons"
 msgstr "Чи має віджет якісь кнопки керування вікном"
 
@@ -7454,6 +7433,21 @@ msgstr "Назва профілю кольору"
 #: modules/printbackends/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "Заголовок вікна вибору профілю кольору"
+
+#~ msgid "The title to display"
+#~ msgstr "Заголовок для показу"
+
+#~ msgid "The subtitle to display"
+#~ msgstr "Підзаголовок для показу"
+
+#~ msgid "Custom Title"
+#~ msgstr "Нетиповий заголовок"
+
+#~ msgid "Has Subtitle"
+#~ msgstr "Має підзаголовок"
+
+#~ msgid "Whether to reserve space for a subtitle"
+#~ msgstr "Чи резервувати місце для підзаголовка"
 
 #~ msgid "Decoration Layout Set"
 #~ msgstr "Компонування оформлення встановлено"
