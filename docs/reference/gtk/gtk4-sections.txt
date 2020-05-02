@@ -539,6 +539,8 @@ gtk_button_get_use_underline
 gtk_button_set_use_underline
 gtk_button_set_icon_name
 gtk_button_get_icon_name
+gtk_button_set_child
+gtk_button_get_child
 
 <SUBSECTION Standard>
 GTK_BUTTON
