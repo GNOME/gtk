@@ -159,15 +159,11 @@ struct _GtkAssistantPrivate
   guint committed : 1;
 };
 
-static void     gtk_assistant_destroy            (GtkWidget         *widget);
+static void     gtk_assistant_dispose            (GObject           *object);
 static void     gtk_assistant_map                (GtkWidget         *widget);
 static void     gtk_assistant_unmap              (GtkWidget         *widget);
 static gboolean gtk_assistant_close_request      (GtkWindow         *window);
 
-static void     gtk_assistant_add                (GtkContainer      *container,
-                                                  GtkWidget         *page);
-static void     gtk_assistant_remove             (GtkContainer      *container,
-                                                  GtkWidget         *page);
 static void     gtk_assistant_page_set_property  (GObject           *object,
                                                   guint              property_id,
                                                   const GValue      *value,
@@ -208,10 +204,6 @@ static void     on_assistant_cancel                      (GtkWidget          *wi
                                                           GtkAssistant       *assistant);
 static void     on_assistant_last                        (GtkWidget          *widget,
                                                           GtkAssistant       *assistant);
-static void     assistant_remove_page_cb                 (GtkContainer       *container,
-                                                          GtkWidget          *page,
-                                                          GtkAssistant       *assistant);
-
 
 static int        gtk_assistant_add_page                 (GtkAssistant     *assistant,
                                                           GtkAssistantPage *page_info,
@@ -507,27 +499,22 @@ gtk_assistant_class_init (GtkAssistantClass *class)
 {
   GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
-  GtkContainerClass *container_class;
   GtkWindowClass *window_class;
 
   gobject_class   = (GObjectClass *) class;
   widget_class    = (GtkWidgetClass *) class;
-  container_class = (GtkContainerClass *) class;
   window_class    = (GtkWindowClass *) class;
 
+  gobject_class->dispose = gtk_assistant_dispose;
   gobject_class->finalize = gtk_assistant_finalize;
   gobject_class->constructed  = gtk_assistant_constructed;
   gobject_class->set_property = gtk_assistant_set_property;
   gobject_class->get_property = gtk_assistant_get_property;
 
-  widget_class->destroy = gtk_assistant_destroy;
   widget_class->map = gtk_assistant_map;
   widget_class->unmap = gtk_assistant_unmap;
 
   gtk_widget_class_set_accessible_type (widget_class, _gtk_assistant_accessible_get_type ());
-
-  container_class->add = gtk_assistant_add;
-  container_class->remove = gtk_assistant_remove;
 
   window_class->close_request = gtk_assistant_close_request;
 
@@ -665,7 +652,6 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, button_size_group);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, title_size_group);
 
-  gtk_widget_class_bind_template_callback (widget_class, assistant_remove_page_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_assistant_close);
   gtk_widget_class_bind_template_callback (widget_class, on_assistant_apply);
   gtk_widget_class_bind_template_callback (widget_class, on_assistant_forward);
@@ -1134,9 +1120,8 @@ on_page_notify (GtkAssistantPage *page,
 }
 
 static void
-assistant_remove_page_cb (GtkContainer *container,
-                          GtkWidget    *page,
-                          GtkAssistant *assistant)
+assistant_remove_page (GtkAssistant *assistant,
+                       GtkWidget    *page)
 {
   GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
   GtkAssistantPage *page_info;
@@ -1337,9 +1322,9 @@ gtk_assistant_page_get_property (GObject      *object,
 }
 
 static void
-gtk_assistant_destroy (GtkWidget *widget)
+gtk_assistant_dispose (GObject *object)
 {
-  GtkAssistant *assistant = GTK_ASSISTANT (widget);
+  GtkAssistant *assistant = GTK_ASSISTANT (object);
   GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
 
   if (priv->model)
@@ -1352,27 +1337,14 @@ gtk_assistant_destroy (GtkWidget *widget)
 
   if (priv->content)
     {
-      GList *children, *l;
-
-      children = gtk_container_get_children (GTK_CONTAINER (priv->content));
-      for (l = children; l; l = l->next)
-        {
-          GtkWidget *page = l->data;
-          gtk_container_remove (GTK_CONTAINER (priv->content), page);
-        }
-      g_list_free (children);
-
-      /* Our GtkAssistantPage list should be empty now. */
-      g_warn_if_fail (priv->pages == NULL);
+      while (priv->pages)
+        gtk_assistant_remove_page (assistant, 0);
 
       priv->content = NULL;
     }
 
-  if (priv->sidebar)
-    priv->sidebar = NULL;
-
-  if (priv->action_area)
-    priv->action_area = NULL;
+  priv->sidebar = NULL;
+  priv->action_area = NULL;
 
   if (priv->forward_function)
     {
@@ -1391,8 +1363,7 @@ gtk_assistant_destroy (GtkWidget *widget)
       priv->visited_pages = NULL;
     }
 
-  gtk_window_set_titlebar (GTK_WINDOW (widget), NULL);
-  GTK_WIDGET_CLASS (gtk_assistant_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_assistant_parent_class)->dispose (object);
 }
 
 static GList*
@@ -1476,47 +1447,6 @@ gtk_assistant_close_request (GtkWindow *window)
     g_signal_emit (assistant, signals [CANCEL], 0, NULL);
 
   return TRUE;
-}
-
-static void
-gtk_assistant_add (GtkContainer *container,
-                   GtkWidget    *page)
-{
-  GtkAssistant *assistant = GTK_ASSISTANT (container);
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
-
-  /* A bit tricky here, GtkAssistant doesnt exactly play by 
-   * the rules by allowing gtk_container_add() to insert pages.
-   *
-   * For the first invocation (from the builder template invocation),
-   * let's make sure we add the actual direct container content properly.
-   */
-  if (!priv->constructed)
-    {
-      gtk_widget_set_parent (page, GTK_WIDGET (container));
-      _gtk_bin_set_child (GTK_BIN (container), page);
-      return;
-    }
-
-  gtk_assistant_append_page (GTK_ASSISTANT (container), page);
-}
-
-static void
-gtk_assistant_remove (GtkContainer *container,
-                      GtkWidget    *page)
-{
-  GtkAssistant *assistant = GTK_ASSISTANT (container);
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
-
-  /* Forward this removal to the content stack */
-  if (gtk_widget_get_parent (page) == priv->content)
-    {
-      gtk_container_remove (GTK_CONTAINER (priv->content), page);
-    }
-  else
-    {
-      GTK_CONTAINER_CLASS (gtk_assistant_parent_class)->remove (container, page);
-    }
 }
 
 /**
@@ -1875,9 +1805,8 @@ gtk_assistant_remove_page (GtkAssistant *assistant,
   g_return_if_fail (GTK_IS_ASSISTANT (assistant));
 
   page = gtk_assistant_get_nth_page (assistant, page_num);
-
   if (page)
-    gtk_container_remove (GTK_CONTAINER (assistant), page);
+    assistant_remove_page (assistant, page);
 
   if (priv->model)
     g_list_model_items_changed (priv->model, page_num, 1, 0);
@@ -2322,6 +2251,7 @@ static void
 gtk_assistant_buildable_interface_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
+
   iface->custom_tag_start = gtk_assistant_buildable_custom_tag_start;
   iface->custom_finished = gtk_assistant_buildable_custom_finished;
   iface->add_child = gtk_assistant_buildable_add_child;
@@ -2342,10 +2272,8 @@ gtk_assistant_buildable_add_child (GtkBuildable *buildable,
       priv->headerbar = GTK_WIDGET (child);
       gtk_window_set_titlebar (GTK_WINDOW (buildable), priv->headerbar);
     }
-  else if (GTK_IS_WIDGET (child))
-    gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
   else
-    g_warning ("Can't add a child of type '%s' to '%s'", G_OBJECT_TYPE_NAME (child), G_OBJECT_TYPE_NAME (buildable));
+    parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 gboolean
