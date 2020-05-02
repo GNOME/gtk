@@ -65,7 +65,7 @@ do_shortcut_triggers (GtkWidget *do_widget)
       gtk_widget_set_margin_bottom (list, 6);
       gtk_widget_set_margin_start (list, 6);
       gtk_widget_set_margin_end (list, 6);
-      gtk_container_add (GTK_CONTAINER (window), list);
+      gtk_window_set_child (GTK_WINDOW (window), list);
 
       for (i = 0; i < G_N_ELEMENTS (shortcuts); i++)
         {

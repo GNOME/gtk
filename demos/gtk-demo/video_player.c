@@ -71,7 +71,7 @@ do_video_player (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       video = gtk_video_new ();
-      gtk_container_add (GTK_CONTAINER (window), video);
+      gtk_window_set_child (GTK_WINDOW (window), video);
 
       title = gtk_header_bar_new ();
       gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (title), TRUE);

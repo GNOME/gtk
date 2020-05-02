@@ -327,7 +327,7 @@ main (int argc, char *argv[])
   g_signal_connect (win, "destroy", G_CALLBACK (quit_cb), &done);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (win), vbox);
+  gtk_window_set_child (GTK_WINDOW (win), vbox);
 
   search_entry = gtk_search_entry_new ();
   gtk_container_add (GTK_CONTAINER (vbox), search_entry);

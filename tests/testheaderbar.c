@@ -139,7 +139,7 @@ main (int argc, char *argv[])
   change_header (NULL, window);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
 
   content = gtk_image_new_from_icon_name ("start-here-symbolic");
   gtk_image_set_pixel_size (GTK_IMAGE (content), 512);

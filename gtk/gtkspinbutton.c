@@ -144,7 +144,7 @@
  *
  *   // creates the spinbutton, with no decimal places
  *   button = gtk_spin_button_new (adjustment, 1.0, 0);
- *   gtk_container_add (GTK_CONTAINER (window), button);
+ *   gtk_window_set_child (GTK_WINDOW (window), button);
  *
  *   gtk_widget_show (window);
  * }
@@ -175,7 +175,7 @@
  *
  *   // creates the spinbutton, with three decimal places
  *   button = gtk_spin_button_new (adjustment, 0.001, 3);
- *   gtk_container_add (GTK_CONTAINER (window), button);
+ *   gtk_window_set_child (GTK_WINDOW (window), button);
  *
  *   gtk_widget_show (window);
  * }

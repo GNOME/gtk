@@ -53,7 +53,7 @@ simple_grid (void)
   window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Orientation");
   grid = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (window), grid);
+  gtk_window_set_child (GTK_WINDOW (window), grid);
 
   gesture = gtk_gesture_click_new ();
   g_signal_connect (gesture, "pressed", G_CALLBACK (toggle_orientation), grid);
@@ -98,7 +98,7 @@ text_grid (void)
   window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Height-for-Width");
   paned1 = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_container_add (GTK_CONTAINER (window), paned1);
+  gtk_window_set_child (GTK_WINDOW (window), paned1);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_paned_pack1 (GTK_PANED (paned1), box, TRUE, FALSE);
@@ -140,7 +140,7 @@ box_comparison (void)
   window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Grid vs. Box");
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_window_set_child (GTK_WINDOW (window), vbox);
 
   gtk_container_add (GTK_CONTAINER (vbox), gtk_label_new ("Above"));
   gtk_container_add (GTK_CONTAINER (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
@@ -203,7 +203,7 @@ empty_line (void)
   window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Empty row");
   grid = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (window), grid);
+  gtk_window_set_child (GTK_WINDOW (window), grid);
 
   gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
@@ -231,7 +231,7 @@ empty_grid (void)
   window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Empty grid");
   grid = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (window), grid);
+  gtk_window_set_child (GTK_WINDOW (window), grid);
 
   gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
@@ -262,7 +262,7 @@ scrolling (void)
   viewport = gtk_viewport_new (NULL, NULL);
   grid = gtk_grid_new ();
 
-  gtk_container_add (GTK_CONTAINER (window), sw);
+  gtk_window_set_child (GTK_WINDOW (window), sw);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), viewport);
   gtk_viewport_set_child (GTK_VIEWPORT (viewport), grid);
 
@@ -301,7 +301,7 @@ insert_cb (GtkButton *button, GtkWidget *window)
   GtkWidget *child;
   gboolean inserted;
 
-  g = GTK_GRID (gtk_bin_get_child (GTK_BIN (window)));
+  g = GTK_GRID (gtk_window_get_child (GTK_WINDOW (window)));
   g1 = GTK_GRID (gtk_grid_get_child_at (g, 0, 0));
   g2 = GTK_GRID (gtk_grid_get_child_at (g, 1, 0));
   g3 = GTK_GRID (gtk_grid_get_child_at (g, 0, 1));
@@ -358,7 +358,7 @@ insert (void)
   g = gtk_grid_new ();
   gtk_grid_set_row_spacing (GTK_GRID (g), 10);
   gtk_grid_set_column_spacing (GTK_GRID (g), 10);
-  gtk_container_add (GTK_CONTAINER (window), g);
+  gtk_window_set_child (GTK_WINDOW (window), g);
 
   grid = gtk_grid_new ();
   gtk_grid_attach (GTK_GRID (g), grid, 0, 0, 1, 1);
@@ -421,7 +421,7 @@ spanning_grid (void)
   gtk_window_set_title (GTK_WINDOW (window), "Spanning");
 
   g = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (window), g);
+  gtk_window_set_child (GTK_WINDOW (window), g);
 
   c = test_widget ("0", "blue");
   gtk_widget_set_hexpand (c, TRUE);

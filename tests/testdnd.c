@@ -538,7 +538,7 @@ main (int argc, char **argv)
 
   
   grid = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (window), grid);
+  gtk_window_set_child (GTK_WINDOW (window), grid);
 
   drag_icon = gdk_pixbuf_new_from_xpm_data (drag_icon_xpm);
   texture = gdk_texture_new_for_pixbuf (drag_icon);

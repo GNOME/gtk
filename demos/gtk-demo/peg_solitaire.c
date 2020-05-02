@@ -294,7 +294,7 @@ do_peg_solitaire (GtkWidget *do_widget)
       gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
       gtk_grid_set_row_homogeneous (GTK_GRID (grid), TRUE);
       gtk_grid_set_column_homogeneous (GTK_GRID (grid), TRUE);
-      gtk_container_add (GTK_CONTAINER (window), grid);
+      gtk_window_set_child (GTK_WINDOW (window), grid);
 
       for (x = 0; x < 7; x++)
         {

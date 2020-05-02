@@ -23,7 +23,7 @@ activate (GtkApplication *app,
   grid = gtk_grid_new ();
 
   /* Pack the container in the window */
-  gtk_container_add (GTK_CONTAINER (window), grid);
+  gtk_window_set_child (GTK_WINDOW (window), grid);
 
   button = gtk_button_new_with_label ("Button 1");
   g_signal_connect (button, "clicked", G_CALLBACK (print_hello), NULL);

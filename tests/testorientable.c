@@ -91,7 +91,7 @@ main (int argc, char **argv)
   g_signal_connect (button, "toggled",
                   G_CALLBACK (orient_toggled), orientables);
 
-  gtk_container_add (GTK_CONTAINER (window), grid);
+  gtk_window_set_child (GTK_WINDOW (window), grid);
   gtk_widget_show (window);
 
   g_signal_connect (window, "destroy",

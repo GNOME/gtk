@@ -38,7 +38,7 @@ main (int argc, char *argv[])
   grid = gtk_grid_new ();
   gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
-  gtk_container_add (GTK_CONTAINER (window), grid);
+  gtk_window_set_child (GTK_WINDOW (window), grid);
   label = gtk_label_new ("Default font options");
   gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 2, 1);
   demo = gtk_label_new ("Custom font options");

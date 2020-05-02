@@ -101,7 +101,7 @@ new_window (GApplication *app)
 
   /* widget creation */
   grid = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (window), grid);
+  gtk_window_set_child (GTK_WINDOW (window), grid);
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_hexpand (GTK_WIDGET (sw), true);
   gtk_widget_set_vexpand (GTK_WIDGET (sw), true);

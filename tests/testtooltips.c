@@ -302,7 +302,7 @@ main (int argc, char *argv[])
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
 
   tooltip = g_object_new (my_tooltip_get_type (), NULL);
   gtk_widget_set_margin_top (tooltip, 20);

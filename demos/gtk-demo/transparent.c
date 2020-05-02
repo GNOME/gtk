@@ -29,7 +29,7 @@ do_transparent (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "Transparency");
 
       overlay = blur_overlay_new ();
-      gtk_container_add (GTK_CONTAINER (window), overlay);
+      gtk_window_set_child (GTK_WINDOW (window), overlay);
 
       button = gtk_button_new_with_label ("Don't click this button!");
       label = gtk_button_get_child (GTK_BUTTON (button));
