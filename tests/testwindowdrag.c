@@ -108,7 +108,7 @@ main (int argc, char *argv[])
   gtk_window_set_titlebar (GTK_WINDOW (window), gtk_header_bar_new ());
 
   grid = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (window), grid);
+  gtk_window_set_child (GTK_WINDOW (window), grid);
 
   gtk_grid_attach (GTK_GRID (grid),
                    resize_button (GDK_SURFACE_EDGE_NORTH_WEST), 

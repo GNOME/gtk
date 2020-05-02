@@ -97,7 +97,7 @@ main (int argc, char *argv[])
   gtk_widget_set_margin_top (box, 20);
   gtk_widget_set_margin_bottom (box, 20);
   bar = create_level_bar ();
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
   gtk_container_add (GTK_CONTAINER (box), bar);
   box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_container_add (GTK_CONTAINER (box), box2);

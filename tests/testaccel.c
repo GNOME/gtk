@@ -74,7 +74,7 @@ key_test (void)
         gtk_widget_set_hexpand (sw, TRUE);
         box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
         gtk_widget_show (box);
-	gtk_container_add (GTK_CONTAINER (window), box);
+        gtk_window_set_child (GTK_WINDOW (window), box);
         gtk_container_add (GTK_CONTAINER (box), sw);
 
 	store = gtk_list_store_new (3, G_TYPE_INT, G_TYPE_UINT, G_TYPE_UINT);

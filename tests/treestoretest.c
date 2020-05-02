@@ -345,7 +345,7 @@ make_window (gint view_type)
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), tree_view);
   gtk_widget_set_vexpand (scrolled_window, TRUE);
   gtk_container_add (GTK_CONTAINER (vbox), scrolled_window);
-  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_window_set_child (GTK_WINDOW (window), vbox);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
 				  GTK_POLICY_AUTOMATIC,
 				  GTK_POLICY_AUTOMATIC);

@@ -26,7 +26,7 @@ test_9d6da33ff5c5e41e3521e1afd63d2d67bc915753 (void)
 
   window = gtk_window_new ();
   label = gtk_label_new ("I am sensitive.");
-  gtk_container_add (GTK_CONTAINER (window), label);
+  gtk_window_set_child (GTK_WINDOW (window), label);
 
   gtk_widget_set_sensitive (label, FALSE);
   gtk_widget_set_sensitive (window, FALSE);
@@ -45,7 +45,7 @@ test_94f00eb04dd1433cf1cc9a3341f485124e38abd1 (void)
 
   window = gtk_window_new ();
   label = gtk_label_new ("I am insensitive.");
-  gtk_container_add (GTK_CONTAINER (window), label);
+  gtk_window_set_child (GTK_WINDOW (window), label);
 
   gtk_widget_set_sensitive (window, FALSE);
   gtk_widget_set_sensitive (label, FALSE);

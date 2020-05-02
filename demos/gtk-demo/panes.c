@@ -159,7 +159,7 @@ do_panes (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "Paned Widgets");
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), vbox);
+      gtk_window_set_child (GTK_WINDOW (window), vbox);
 
       vpaned = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
       gtk_widget_set_margin_start (vpaned, 5);

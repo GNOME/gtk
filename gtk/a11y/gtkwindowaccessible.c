@@ -122,14 +122,6 @@ gtk_window_accessible_get_name (AtkObject *accessible)
       GtkWindow *window = GTK_WINDOW (widget);
 
       name = gtk_window_get_title (window);
-      if (name == NULL && accessible->role == ATK_ROLE_TOOL_TIP)
-        {
-          GtkWidget *child;
-
-          child = find_label_child (GTK_CONTAINER (window));
-          if (GTK_IS_LABEL (child))
-            name = gtk_label_get_text (GTK_LABEL (child));
-        }
     }
   return name;
 }

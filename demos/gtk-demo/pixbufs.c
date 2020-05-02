@@ -212,7 +212,7 @@ do_pixbufs (GtkWidget *do_widget)
           gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (da), back_height);
           gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), draw_func, NULL, NULL);
 
-          gtk_container_add (GTK_CONTAINER (window), da);
+          gtk_window_set_child (GTK_WINDOW (window), da);
 
           gtk_widget_add_tick_callback (da, on_tick, NULL, NULL);
         }

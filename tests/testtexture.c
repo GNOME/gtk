@@ -143,7 +143,7 @@ main (int argc, char **argv)
   view = g_object_new (GTK_TYPE_TEXTURE_VIEW, NULL);
   ((GtkTextureView*)view)->texture = g_steal_pointer (&texture);
 
-  gtk_container_add (GTK_CONTAINER (window), view);
+  gtk_window_set_child (GTK_WINDOW (window), view);
 
   gtk_widget_show (window);
 

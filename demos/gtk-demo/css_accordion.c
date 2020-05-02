@@ -34,7 +34,7 @@ do_css_accordion (GtkWidget *do_widget)
       container = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_widget_set_halign (container, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (container, GTK_ALIGN_CENTER);
-      gtk_container_add (GTK_CONTAINER (window), container);
+      gtk_window_set_child (GTK_WINDOW (window), container);
 
       child = gtk_button_new_with_label ("This");
       gtk_container_add (GTK_CONTAINER (container), child);
