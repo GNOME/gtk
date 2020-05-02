@@ -34,6 +34,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowcontrols.h"
+#include "gtkwindowhandle.h"
 
 #include "a11y/gtkcontaineraccessible.h"
 
@@ -87,19 +88,21 @@
  *
  * |[<!-- language="plain" -->
  * headerbar
- * ╰── box
- *     ├── box.start
- *     │   ├── windowcontrols.start
- *     │   ╰── [other children]
- *     ├── [Title Widget]
- *     ╰── box.end
- *         ├── [other children]
- *         ╰── windowcontrols.end
+ * ╰── windowhandle
+ *     ╰── box
+ *         ├── box.start
+ *         │   ├── windowcontrols.start
+ *         │   ╰── [other children]
+ *         ├── [Title Widget]
+ *         ╰── box.end
+ *             ├── [other children]
+ *             ╰── windowcontrols.end
  * ]|
  *
- * A #GtkHeaderBar's CSS node is called headerbar. It contains a box subnode,
- * which contains two box subnodes at the start and end of the headerbar, as
- * well as a center node that represents the title.
+ * A #GtkHeaderBar's CSS node is called headerbar. It contains a windowhandle
+ * subnode, which contains a box subnode, which contains two box subnodes at
+ * the start and end of the headerbar, as well as a center node that represents
+ * the title.
  *
  * Each of the boxes contains a windowcontrols subnode, see #GtkWindowControls
  * for details, as well as other children.
@@ -122,6 +125,7 @@ struct _GtkHeaderBarClass
 
 struct _GtkHeaderBarPrivate
 {
+  GtkWidget *handle;
   GtkWidget *center_box;
   GtkWidget *start_box;
   GtkWidget *end_box;
@@ -388,7 +392,7 @@ gtk_header_bar_dispose (GObject *object)
   priv->start_box = NULL;
   priv->end_box = NULL;
 
-  g_clear_pointer (&priv->center_box, gtk_widget_unparent);
+  g_clear_pointer (&priv->handle, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_header_bar_parent_class)->dispose (object);
 }
@@ -646,8 +650,11 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   priv->decoration_layout = NULL;
   priv->state = GDK_SURFACE_STATE_WITHDRAWN;
 
+  priv->handle = gtk_window_handle_new ();
+  gtk_widget_set_parent (priv->handle, GTK_WIDGET (bar));
+
   priv->center_box = gtk_center_box_new ();
-  gtk_widget_set_parent (priv->center_box, GTK_WIDGET (bar));
+  gtk_window_handle_set_child (GTK_WINDOW_HANDLE (priv->handle), priv->center_box);
 
   priv->start_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_add_css_class (priv->start_box, "start");
