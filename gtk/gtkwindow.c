@@ -243,8 +243,6 @@ typedef struct
   GtkEventController *key_controller;
   GtkEventController *application_shortcut_controller;
 
-  GtkCssNode *decoration_node;
-
   GdkSurface  *surface;
   GskRenderer *renderer;
 
@@ -401,8 +399,6 @@ static void gtk_window_real_activate_focus   (GtkWindow         *window);
 static void gtk_window_keys_changed          (GtkWindow         *window);
 static gboolean gtk_window_enable_debugging  (GtkWindow         *window,
                                               gboolean           toggle);
-static void gtk_window_snapshot                    (GtkWidget   *widget,
-                                                    GtkSnapshot *snapshot);
 static void gtk_window_unset_transient_for         (GtkWindow  *window);
 static void gtk_window_transient_parent_realized   (GtkWidget  *parent,
 						    GtkWidget  *window);
@@ -476,8 +472,6 @@ static void gtk_window_activate_close (GtkWidget  *widget,
 
 static void        gtk_window_css_changed               (GtkWidget      *widget,
                                                          GtkCssStyleChange *change);
-static void gtk_window_state_flags_changed (GtkWidget     *widget,
-					     GtkStateFlags  previous_state);
 static void _gtk_window_set_is_active (GtkWindow *window,
 			               gboolean   is_active);
 static void gtk_window_present_toplevel (GtkWindow *window);
@@ -738,12 +732,11 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->realize = gtk_window_realize;
   widget_class->unrealize = gtk_window_unrealize;
   widget_class->size_allocate = gtk_window_size_allocate;
-  widget_class->measure = gtk_window_measure;
   widget_class->compute_expand = gtk_window_compute_expand;
   widget_class->get_request_mode = gtk_window_get_request_mode;
   widget_class->focus = gtk_window_focus;
   widget_class->move_focus = gtk_window_move_focus;
-  widget_class->state_flags_changed = gtk_window_state_flags_changed;
+  widget_class->measure = gtk_window_measure;
   widget_class->css_changed = gtk_window_css_changed;
 
   klass->activate_default = gtk_window_real_activate_default;
@@ -1244,17 +1237,6 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
 }
 
 static void
-node_style_changed_cb (GtkCssNode        *node,
-                       GtkCssStyleChange *change,
-                       GtkWidget         *widget)
-{
-  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE))
-    gtk_widget_queue_resize (widget);
-  else
-    gtk_widget_queue_draw (widget);
-}
-
-static void
 device_removed_cb (GdkSeat   *seat,
                    GdkDevice *device,
                    gpointer   user_data)
@@ -1339,7 +1321,7 @@ edge_under_coordinates (GtkWindow     *window,
 
   gtk_widget_get_allocation (GTK_WIDGET (window), &allocation);
   context = _gtk_widget_get_style_context (GTK_WIDGET (window));
-  gtk_style_context_save_to_node (context, priv->decoration_node);
+  /*gtk_style_context_save_to_node (context, priv->decoration_node);*/
 
   if (priv->use_client_shadow)
     {
@@ -1354,7 +1336,7 @@ edge_under_coordinates (GtkWindow     *window,
       gtk_style_context_get_padding (context, &border);
     }
 
-  gtk_style_context_restore (context);
+  /*gtk_style_context_restore (context);*/
 
   /* Check whether the click falls outside the handle area */
   if (x >= allocation.x + border.left &&
@@ -1548,13 +1530,6 @@ gtk_window_init (GtkWindow *window)
 #endif
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (window));
-  priv->decoration_node = gtk_css_node_new ();
-  gtk_css_node_set_name (priv->decoration_node, g_quark_from_static_string ("decoration"));
-  gtk_css_node_set_parent (priv->decoration_node, widget_node);
-  gtk_css_node_set_state (priv->decoration_node, gtk_css_node_get_state (widget_node));
-  g_signal_connect_object (priv->decoration_node, "style-changed", G_CALLBACK (node_style_changed_cb), window, 0);
-  g_object_unref (priv->decoration_node);
-
   gtk_css_node_add_class (widget_node, g_quark_from_static_string (GTK_STYLE_CLASS_BACKGROUND));
 
   priv->scale = gtk_widget_get_scale_factor (widget);
@@ -1920,14 +1895,12 @@ gtk_window_native_get_surface_transform (GtkNative *native,
                                          double    *x,
                                          double    *y)
 {
-  const graphene_rect_t *margin_rect;
-  GtkCssBoxes boxes;
+  GtkBorder shadow;
 
-  gtk_css_boxes_init (&boxes, GTK_WIDGET (native));
-  margin_rect = gtk_css_boxes_get_margin_rect (&boxes);
+  get_shadow_width (GTK_WINDOW (native), &shadow);
 
-  *x = - margin_rect->origin.x;
-  *y = - margin_rect->origin.y;
+  *x = shadow.left;
+  *y = shadow.right;
 }
 
 static void
@@ -4240,8 +4213,6 @@ get_shadow_width (GtkWindow *window,
 
   context = _gtk_widget_get_style_context (GTK_WIDGET (window));
 
-  gtk_style_context_save_to_node (context, priv->decoration_node);
-
   /* Always sum border + padding */
   gtk_style_context_get_border (context, &border);
   gtk_style_context_get_padding (context, &d);
@@ -4257,8 +4228,6 @@ get_shadow_width (GtkWindow *window,
 
   sum_borders (&d, &border);
   *shadow_width = d;
-
-  gtk_style_context_restore (context);
 }
 
 static void
@@ -4276,13 +4245,13 @@ update_csd_shape (GtkWindow *window)
 
   context = _gtk_widget_get_style_context (widget);
 
-  gtk_style_context_save_to_node (context, priv->decoration_node);
+  /*gtk_style_context_save_to_node (context, priv->decoration_node);*/
   gtk_style_context_get_margin (context, &border);
   gtk_style_context_get_border (context, &tmp);
   sum_borders (&border, &tmp);
   gtk_style_context_get_padding (context, &tmp);
   sum_borders (&border, &tmp);
-  gtk_style_context_restore (context);
+  /*gtk_style_context_restore (context);*/
   get_shadow_width (window, &window_border);
 
   /* update the input shape, which makes it so that clicks
@@ -4342,7 +4311,7 @@ subtract_decoration_corners_from_region (cairo_region_t        *region,
       priv->maximized)
     return;
 
-  gtk_style_context_save_to_node (context, priv->decoration_node);
+  /*gtk_style_context_save_to_node (context, priv->decoration_node);*/
 
   corner_rect (&rect, _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS));
   rect.x = extents->x;
@@ -4364,7 +4333,7 @@ subtract_decoration_corners_from_region (cairo_region_t        *region,
   rect.y = extents->y + extents->height - rect.height;
   cairo_region_subtract_rectangle (region, &rect);
 
-  gtk_style_context_restore (context);
+  /*gtk_style_context_restore (context);*/
 }
 
 static void
@@ -4437,10 +4406,12 @@ gtk_window_realize (GtkWidget *widget)
   GtkAllocation allocation;
   GtkAllocation child_allocation;
   GdkSurface *surface;
-  GtkBorder window_border;
+  GtkBorder shadow;
 
   if (!priv->client_decorated && gtk_window_should_use_csd (window))
     create_decoration (widget);
+
+  get_shadow_width (window, &shadow);
 
   /* ensure widget tree is properly size allocated */
   if (_gtk_widget_get_alloc_needed (widget))
@@ -4449,10 +4420,10 @@ gtk_window_realize (GtkWidget *widget)
 
       gtk_window_compute_configure_request (window, &request, NULL, NULL);
 
-      allocation.x = 0;
-      allocation.y = 0;
-      allocation.width = request.width;
-      allocation.height = request.height;
+      allocation.x = shadow.left;
+      allocation.y = shadow.top;
+      allocation.width = request.width - shadow.left - shadow.right;
+      allocation.height = request.height - shadow.top - shadow.bottom;
       gtk_widget_size_allocate (widget, &allocation, -1);
 
       gtk_widget_queue_resize (widget);
@@ -4463,8 +4434,8 @@ gtk_window_realize (GtkWidget *widget)
   gtk_widget_get_allocation (widget, &allocation);
 
   surface = gdk_surface_new_toplevel (gtk_widget_get_display (widget),
-                                      MAX (1, allocation.width),
-                                      MAX (1, allocation.height));
+                                      MAX (1, allocation.width + shadow.left + shadow.right),
+                                      MAX (1, allocation.height + shadow.top + shadow.bottom));
   priv->surface = surface;
   gdk_surface_set_widget (surface, widget);
 
@@ -4527,9 +4498,8 @@ gtk_window_realize (GtkWidget *widget)
   child_allocation.width = allocation.width;
   child_allocation.height = allocation.height;
 
-  get_shadow_width (window, &window_border);
 
-  update_realized_window_properties (window, &child_allocation, &window_border);
+  update_realized_window_properties (window, &child_allocation, &shadow);
 
   if (priv->application)
     gtk_application_handle_window_realize (priv->application, window);
@@ -5323,20 +5293,6 @@ gtk_window_set_focus (GtkWindow *window,
 }
 
 static void
-gtk_window_state_flags_changed (GtkWidget     *widget,
-                                GtkStateFlags  previous_state)
-{
-  GtkWindow *window = GTK_WINDOW (widget);
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkStateFlags state;
-
-  state = gtk_widget_get_state_flags (widget);
-  gtk_css_node_set_state (priv->decoration_node, state);
-
-  GTK_WIDGET_CLASS (gtk_window_parent_class)->state_flags_changed (widget, previous_state);
-}
-
-static void
 gtk_window_css_changed (GtkWidget         *widget,
                         GtkCssStyleChange *change)
 {
@@ -5429,7 +5385,6 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
   /* Preconditions:
    *  - we've done a size request
    */
-  
   info = gtk_window_get_geometry_info (window, FALSE);
 
   if (priv->need_default_size)
@@ -5456,6 +5411,12 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
           if (info->default_height > 0)
             *height = default_height_csd;
         }
+
+      GtkBorder shadow = {0, };
+      get_shadow_width (window, &shadow);
+
+      *width = *width + shadow.left + shadow.right;
+      *height = *height + shadow.top + shadow.bottom;
     }
   else
     {
@@ -5469,19 +5430,20 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
       /* Unless we are maximized or fullscreen */
       gtk_window_get_remembered_size (window, width, height);
     }
-  else if (info)
-    {
-      gint resize_width_csd = info->resize_width;
-      gint resize_height_csd = info->resize_height;
-      gtk_window_update_csd_size (window,
-                                  &resize_width_csd, &resize_height_csd,
-                                  INCLUDE_CSD_SIZE);
 
-      if (info->resize_width > 0)
-        *width = resize_width_csd;
-      if (info->resize_height > 0)
-        *height = resize_height_csd;
-    }
+  /*else if (info)*/
+    /*{*/
+      /*gint resize_width_csd = info->resize_width;*/
+      /*gint resize_height_csd = info->resize_height;*/
+      /*gtk_window_update_csd_size (window,*/
+                                  /*&resize_width_csd, &resize_height_csd,*/
+                                  /*INCLUDE_CSD_SIZE);*/
+
+      /*if (info->resize_width > 0)*/
+        /**width = resize_width_csd;*/
+      /*if (info->resize_height > 0)*/
+        /**height = resize_height_csd;*/
+    /*}*/
 
   /* Don't ever request zero width or height, it's not supported by
      gdk. The size allocation code will round it to 1 anyway but if
@@ -5489,6 +5451,7 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
      not comparable to the size allocation read from the GtkWindow. */
   *width = MAX (*width, 1);
   *height = MAX (*height, 1);
+
 }
 
 static void
@@ -5527,10 +5490,14 @@ gtk_window_compute_configure_request (GtkWindow    *window,
       y = 0;
     }
 
+  GtkBorder shadow = {0, };
+
+  /*get_shadow_width (window, &shadow);*/
+
   request->x = x;
   request->y = y;
-  request->width = w;
-  request->height = h;
+  request->width = w + shadow.left + shadow.right;
+  request->height = h + shadow.top + shadow.bottom;
 
   if (geometry)
     *geometry = new_geometry;
@@ -5597,7 +5564,6 @@ gtk_window_move_resize (GtkWindow *window)
 
   g_clear_pointer (&priv->layout, gdk_toplevel_layout_unref);
   priv->layout = gtk_window_compute_layout (window, new_geometry.min_width, new_geometry.min_height);
-
 
   /* This check implies the invariant that we never set info->last
    * without setting the hints and sending off a configure request.
@@ -5686,6 +5652,7 @@ gtk_window_move_resize (GtkWindow *window)
   if (priv->configure_notify_received)
     {
       GtkAllocation allocation;
+      GtkBorder shadow;
       int min;
 
       /* If we have received a configure event since
@@ -5701,8 +5668,10 @@ gtk_window_move_resize (GtkWindow *window)
        */
       priv->configure_notify_received = FALSE;
 
-      allocation.x = 0;
-      allocation.y = 0;
+      get_shadow_width (window, &shadow);
+
+      allocation.x = shadow.left;
+      allocation.y = shadow.top;
 
       gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
                           &min, NULL, NULL, NULL);
@@ -5803,31 +5772,37 @@ gtk_window_move_resize (GtkWindow *window)
         g_warning ("configure request position changed. This should not happen. Ignoring the position");
 
       gdk_toplevel_present (GDK_TOPLEVEL (priv->surface),
-			    new_request.width, new_request.height,
+                            new_request.width, new_request.height,
                             priv->layout);
     }
   else
     {
       GtkAllocation allocation;
+      GtkBorder shadow;
       int min_width, min_height;
+
+      get_shadow_width (window, &shadow);
+
+      allocation.x = shadow.left;
+      allocation.y = shadow.top;
 
       /* Handle any position changes.
        */
       if (configure_request_pos_changed)
         g_warning ("configure request position changed. This should not happen. Ignoring the position");
 
-      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, current_height,
+      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, current_height - shadow.top - shadow.bottom,
                           &min_width, NULL, NULL, NULL);
-      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, current_width,
+      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, current_width - shadow.left - shadow.right,
                           &min_height, NULL, NULL, NULL);
 
       /* Our configure request didn't change size, but maybe some of
        * our child widgets have. Run a size allocate with our current
        * size to make sure that we re-layout our child widgets. */
-      allocation.x = 0;
-      allocation.y = 0;
-      allocation.width = MAX (current_width, min_width);
-      allocation.height = MAX (current_height, min_height);
+      allocation.x = shadow.left;
+      allocation.y = shadow.top;
+      allocation.width = MAX (current_width - shadow.left - shadow.right, min_width);
+      allocation.height = MAX (current_height - shadow.top - shadow.bottom, min_height);
 
       gtk_widget_size_allocate (widget, &allocation, -1);
     }

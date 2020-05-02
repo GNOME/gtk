@@ -4030,7 +4030,8 @@ colorchooser .popover.osd { border-radius: 5px; }
 /**********************
  * Window Decorations *
  *********************/
-decoration {
+decoration,
+window {
   border-radius: $window_radius $window_radius 0 0;
   // lamefun trick to get rounded borders regardless of CSD use
   border-width: 0px;
@@ -4046,7 +4047,7 @@ decoration {
   // FIXME rationalize shadows
 
   // this is used for the resize cursor area
-  margin: 10px;
+  //margin: 10px;
 
   &:backdrop {
     // the transparent shadow here is to enforce that the shadow extents don't
