@@ -644,7 +644,7 @@ main (int argc, char *argv[])
   window = gtk_window_new ();
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
 
   bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
 

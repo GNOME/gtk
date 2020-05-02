@@ -93,7 +93,7 @@ do_gears (GtkWidget *do_widget)
       gtk_widget_set_margin_top (overlay, 12);
       gtk_widget_set_margin_bottom (overlay, 12);
 
-      gtk_container_add (GTK_CONTAINER (window), overlay);
+      gtk_window_set_child (GTK_WINDOW (window), overlay);
 
       frame = gtk_frame_new (NULL);
       gtk_widget_set_halign (frame, GTK_ALIGN_START);

@@ -12,7 +12,7 @@ main (gint argc,
   gtk_widget_set_size_request (window, 300, 300);
 
   box = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
 
   widget = gtk_label_new ("Some filler text to avoid\nresizing of the window");
   gtk_widget_set_margin_top (widget, 10);

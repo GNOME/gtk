@@ -74,7 +74,7 @@ do_sidebar (GtkWidget *do_widget)
           g_object_set (gtk_stack_get_page (GTK_STACK (stack), widget), "title", c, NULL);
         }
 
-       gtk_container_add (GTK_CONTAINER (window), box);
+      gtk_window_set_child (GTK_WINDOW (window), box);
     }
 
   if (!gtk_widget_get_visible (window))

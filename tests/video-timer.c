@@ -402,7 +402,7 @@ main(int argc, char **argv)
 
   da = gtk_drawing_area_new ();
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), on_draw, NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (window), da);
+  gtk_window_set_child (GTK_WINDOW (window), da);
 
   gtk_widget_show (window);
 

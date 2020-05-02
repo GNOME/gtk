@@ -114,7 +114,7 @@ test_simple_row (void)
 
   window = gtk_window_new ();
   parent = g_object_new (GTK_TYPE_GIZMO, NULL);
-  gtk_container_add (GTK_CONTAINER (window), parent);
+  gtk_window_set_child (GTK_WINDOW (window), parent);
 
   layout = gtk_grid_layout_new ();
   gtk_widget_set_layout_manager (parent, layout);
@@ -207,7 +207,7 @@ test_simple_column (void)
 
   window = gtk_window_new ();
   parent = g_object_new (GTK_TYPE_GIZMO, NULL);
-  gtk_container_add (GTK_CONTAINER (window), parent);
+  gtk_window_set_child (GTK_WINDOW (window), parent);
 
   layout = gtk_grid_layout_new ();
   gtk_widget_set_layout_manager (parent, layout);
@@ -311,7 +311,7 @@ test_spans (void)
 
   window = gtk_window_new ();
   parent = g_object_new (GTK_TYPE_GIZMO, NULL);
-  gtk_container_add (GTK_CONTAINER (window), parent);
+  gtk_window_set_child (GTK_WINDOW (window), parent);
 
   layout = gtk_grid_layout_new ();
   gtk_widget_set_layout_manager (parent, layout);
@@ -427,7 +427,7 @@ test_homogeneous (void)
 
   window = gtk_window_new ();
   parent = g_object_new (GTK_TYPE_GIZMO, NULL);
-  gtk_container_add (GTK_CONTAINER (window), parent);
+  gtk_window_set_child (GTK_WINDOW (window), parent);
 
   layout = gtk_grid_layout_new ();
   gtk_grid_layout_set_row_homogeneous (GTK_GRID_LAYOUT (layout), TRUE);
@@ -552,7 +552,7 @@ test_simple_layout (void)
 
   window = gtk_window_new ();
   parent = g_object_new (GTK_TYPE_GIZMO, NULL);
-  gtk_container_add (GTK_CONTAINER (window), parent);
+  gtk_window_set_child (GTK_WINDOW (window), parent);
 
   layout = gtk_grid_layout_new ();
   gtk_grid_layout_set_row_homogeneous (GTK_GRID_LAYOUT (layout), TRUE);

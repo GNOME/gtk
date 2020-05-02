@@ -84,5 +84,5 @@ swap_child (GtkWidget *window)
 
   image = gtk_image_new_from_icon_name ("go-next");
   gtk_widget_show (image);
-  gtk_container_add (GTK_CONTAINER (window), image);
+  gtk_window_set_child (GTK_WINDOW (window), image);
 }

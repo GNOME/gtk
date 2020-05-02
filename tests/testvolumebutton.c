@@ -95,7 +95,7 @@ main (int    argc,
                     G_CALLBACK (value_changed),
                     NULL);
 
-  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_window_set_child (GTK_WINDOW (window), vbox);
   gtk_container_add (GTK_CONTAINER (vbox), box);
   gtk_container_add (GTK_CONTAINER (box), button);
   gtk_container_add (GTK_CONTAINER (box), button2);

@@ -218,7 +218,7 @@ main (int argc, char **argv)
 
       gtk_container_add (GTK_CONTAINER (box), nodeview);
       gtk_container_add (GTK_CONTAINER (box), image);
-      gtk_container_add (GTK_CONTAINER (window), box);
+      gtk_window_set_child (GTK_WINDOW (window), box);
 
       gsk_renderer_unrealize (renderer);
       g_object_unref (texture);
@@ -227,7 +227,7 @@ main (int argc, char **argv)
     }
   else
     {
-      gtk_container_add (GTK_CONTAINER (window), nodeview);
+      gtk_window_set_child (GTK_WINDOW (window), nodeview);
     }
 
   gsk_render_node_get_bounds (GTK_NODE_VIEW (nodeview)->node, &node_bounds);

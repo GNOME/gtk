@@ -222,7 +222,7 @@ new_window (GApplication *app,
   gtk_window_set_title (GTK_WINDOW (window), "Bloatpad");
 
   grid = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (window), grid);
+  gtk_window_set_child (GTK_WINDOW (window), grid);
 
   toolbar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   button = gtk_toggle_button_new ();

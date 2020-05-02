@@ -190,7 +190,7 @@ main (int argc, char **argv)
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_window_set_child (GTK_WINDOW (window), vbox);
 
   /* Option menu contents */
   combo_box = gtk_combo_box_text_new ();

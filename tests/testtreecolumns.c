@@ -762,7 +762,7 @@ main (int argc, char *argv[])
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
   gtk_window_set_title (GTK_WINDOW (window), "Top Window");
   swindow = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (window), swindow);
+  gtk_window_set_child (GTK_WINDOW (window), swindow);
   gtk_container_add (GTK_CONTAINER (swindow), sample_tree_view_top);
   gtk_widget_show (window);
 
@@ -771,7 +771,7 @@ main (int argc, char *argv[])
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
   gtk_window_set_title (GTK_WINDOW (window), "Bottom Window");
   swindow = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (window), swindow);
+  gtk_window_set_child (GTK_WINDOW (window), swindow);
   gtk_container_add (GTK_CONTAINER (swindow), sample_tree_view_bottom);
   gtk_widget_show (window);
 
@@ -780,7 +780,7 @@ main (int argc, char *argv[])
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   gtk_window_set_default_size (GTK_WINDOW (window), 500, 300);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
-  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_window_set_child (GTK_WINDOW (window), vbox);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
   gtk_container_add (GTK_CONTAINER (vbox), hbox);

@@ -279,7 +279,7 @@ create_buttons (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "GtkButton");
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_window_set_child (GTK_WINDOW (window), box1);
 
       grid = gtk_grid_new ();
       gtk_grid_set_row_spacing (GTK_GRID (grid), 5);
@@ -354,7 +354,7 @@ create_toggle_buttons (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "GtkToggleButton");
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_window_set_child (GTK_WINDOW (window), box1);
 
       box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_container_add (GTK_CONTAINER (box1), box2);
@@ -725,7 +725,7 @@ create_statusbar (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "statusbar");
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_window_set_child (GTK_WINDOW (window), box1);
 
       box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_container_add (GTK_CONTAINER (box1), box2);
@@ -941,7 +941,7 @@ static void create_labels (GtkWidget *widget)
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-      gtk_container_add (GTK_CONTAINER (window), vbox);
+      gtk_window_set_child (GTK_WINDOW (window), vbox);
 
 
       button = create_sensitivity_control (hbox);
@@ -1235,7 +1235,7 @@ create_pixbuf (GtkWidget *widget)
       gtk_widget_realize(window);
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_window_set_child (GTK_WINDOW (window), box1);
 
       box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_container_add (GTK_CONTAINER (box1), box2);
@@ -1310,7 +1310,7 @@ create_tooltips (GtkWidget *widget)
 			      gtk_widget_get_display (widget));
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_window_set_child (GTK_WINDOW (window), box1);
 
       box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_container_add (GTK_CONTAINER (box1), box2);
@@ -1418,7 +1418,7 @@ create_image (GtkWidget *widget)
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
 
-      gtk_container_add (GTK_CONTAINER (window), vbox);
+      gtk_window_set_child (GTK_WINDOW (window), vbox);
 
       pack_image (vbox, "Stock Warning Dialog", gtk_image_new_from_icon_name ("dialog-warning"));
 
@@ -1541,7 +1541,7 @@ create_listbox (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "listbox");
 
       hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), hbox);
+      gtk_window_set_child (GTK_WINDOW (window), hbox);
 
       scrolled = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
@@ -1786,7 +1786,7 @@ create_modal_window (GtkWidget *widget)
   btnClose = gtk_button_new_with_label ("Close");
 
   /* Pack widgets */
-  gtk_container_add (GTK_CONTAINER (window), box1);
+  gtk_window_set_child (GTK_WINDOW (window), box1);
   gtk_container_add (GTK_CONTAINER (box1), frame1);
   gtk_frame_set_child (GTK_FRAME (frame1), box2);
   gtk_container_add (GTK_CONTAINER (box2), btnColor);
@@ -2130,7 +2130,7 @@ create_entry (GtkWidget *widget)
 
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_window_set_child (GTK_WINDOW (window), box1);
 
 
       box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
@@ -2226,7 +2226,7 @@ create_expander (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "expander");
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_window_set_child (GTK_WINDOW (window), box1);
 
       expander = gtk_expander_new ("The Hidden");
 
@@ -2621,7 +2621,7 @@ create_spins (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "GtkSpinButton");
 
       main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-      gtk_container_add (GTK_CONTAINER (window), main_vbox);
+      gtk_window_set_child (GTK_WINDOW (window), main_vbox);
 
       frame = gtk_frame_new ("Not accelerated");
       gtk_container_add (GTK_CONTAINER (main_vbox), frame);
@@ -3063,7 +3063,7 @@ create_cursors (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "Cursors");
 
       main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-      gtk_container_add (GTK_CONTAINER (window), main_vbox);
+      gtk_window_set_child (GTK_WINDOW (window), main_vbox);
 
       vbox = g_object_new (GTK_TYPE_BOX,
                            "orientation", GTK_ORIENTATION_VERTICAL,
@@ -3190,7 +3190,7 @@ create_color_selection (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "GtkColorButton");
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
-      gtk_container_add (GTK_CONTAINER (window), hbox);
+      gtk_window_set_child (GTK_WINDOW (window), hbox);
       
       label = gtk_label_new ("Pick a color");
       gtk_container_add (GTK_CONTAINER (hbox), label);
@@ -3367,7 +3367,7 @@ create_font_selection (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "GtkFontButton");
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
-      gtk_container_add (GTK_CONTAINER (window), hbox);
+      gtk_window_set_child (GTK_WINDOW (window), hbox);
       
       label = gtk_label_new ("Pick a font");
       gtk_container_add (GTK_CONTAINER (hbox), label);
@@ -3553,7 +3553,7 @@ create_display_screen (GtkWidget *widget)
 		    G_CALLBACK (gtk_widget_destroy), NULL);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_window_set_child (GTK_WINDOW (window), vbox);
   
   frame = gtk_frame_new ("Select display");
   gtk_container_add (GTK_CONTAINER (vbox), frame);
@@ -3637,7 +3637,7 @@ create_range_controls (GtkWidget *widget)
 
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_window_set_child (GTK_WINDOW (window), box1);
       gtk_widget_show (box1);
 
 
@@ -4017,7 +4017,7 @@ create_notebook (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "notebook");
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_window_set_child (GTK_WINDOW (window), box1);
 
       sample_notebook = gtk_notebook_new ();
       g_signal_connect (sample_notebook, "switch_page",
@@ -4216,7 +4216,7 @@ create_panes (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "Panes");
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), vbox);
+      gtk_window_set_child (GTK_WINDOW (window), vbox);
 
       vpaned = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
       gtk_container_add (GTK_CONTAINER (vbox), vpaned);
@@ -4669,7 +4669,7 @@ create_wmhints (GtkWidget *widget)
       g_object_unref (pixbuf);
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_window_set_child (GTK_WINDOW (window), box1);
       gtk_widget_show (box1);
 
       label = gtk_label_new ("Try iconizing me!");
@@ -4901,7 +4901,7 @@ create_surface_states (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "Window states");
       
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_window_set_child (GTK_WINDOW (window), box1);
 
       iconified = gtk_window_new ();
 
@@ -5885,7 +5885,7 @@ create_native_dialogs (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW(window), "Native dialog parent");
 
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-      gtk_container_add (GTK_CONTAINER (window), box);
+      gtk_window_set_child (GTK_WINDOW (window), box);
 
       label = gtk_label_new ("");
       gtk_container_add (GTK_CONTAINER (box), label);
@@ -6043,7 +6043,7 @@ create_main_window (void)
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (window), box1);
+  gtk_window_set_child (GTK_WINDOW (window), box1);
 
   if (gtk_get_micro_version () > 0)
     sprintf (buffer,

@@ -386,7 +386,7 @@ create_window (void)
 
   gtk_widget_show (vbox);
   gtk_widget_show (hbox);
-  gtk_container_add (GTK_CONTAINER (window), hbox);
+  gtk_window_set_child (GTK_WINDOW (window), hbox);
   gtk_container_add (GTK_CONTAINER (hbox), vbox);
 
   swindow = gtk_scrolled_window_new (NULL, NULL);

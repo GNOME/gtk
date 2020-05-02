@@ -341,7 +341,7 @@ main (int argc, char **argv)
   gtk_widget_set_vexpand (transform_tester, TRUE);
   gtk_container_add (GTK_CONTAINER (box), transform_tester);
   gtk_container_add (GTK_CONTAINER (box), matrix_chooser);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
 
   gtk_window_set_default_size ((GtkWindow *)window, 200, 200);
   g_signal_connect (window, "close-request", G_CALLBACK (quit_cb), &done);
