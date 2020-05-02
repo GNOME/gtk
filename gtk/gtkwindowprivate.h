@@ -59,9 +59,6 @@ typedef void (*GtkWindowKeysForeachFunc) (GtkWindow      *window,
                                           gpointer        data);
 
 gboolean gtk_window_emit_close_request (GtkWindow *window);
-gboolean gtk_window_configure    (GtkWindow         *window,
-                                  guint              width,
-                                  guint              height);
 
 /* --- internal (GtkAcceleratable) --- */
 void            _gtk_window_schedule_mnemonics_visible (GtkWindow *window);
@@ -131,10 +128,6 @@ GtkWidget *      gtk_window_pick_popover (GtkWindow   *window,
                                           double       x,
                                           double       y,
                                           GtkPickFlags flags);
-
-void             gtk_window_set_extra_input_region (GtkWindow      *window,
-                                                    cairo_region_t *region);
-
 
 G_END_DECLS
 
