@@ -15,7 +15,7 @@ int main (int argc, char **argv)
 	grid = gtk_grid_new ();
 	gtk_grid_set_row_spacing (GTK_GRID (grid), 12);
 	gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
-	gtk_container_add (GTK_CONTAINER (window), grid);
+        gtk_window_set_child (GTK_WINDOW (window), grid);
 
         icon = g_themed_icon_new ("folder");
         button = gtk_image_new_from_gicon (icon);

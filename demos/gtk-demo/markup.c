@@ -63,7 +63,7 @@ do_markup (GtkWidget *do_widget)
 
       stack = gtk_stack_new ();
       gtk_widget_show (stack);
-      gtk_container_add (GTK_CONTAINER (window), stack);
+      gtk_window_set_child (GTK_WINDOW (window), stack);
 
       show_source = gtk_check_button_new_with_label ("Source");
       gtk_widget_set_valign (show_source, GTK_ALIGN_CENTER);

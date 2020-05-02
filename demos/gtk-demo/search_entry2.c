@@ -78,7 +78,7 @@ do_search_entry2 (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), vbox);
+      gtk_window_set_child (GTK_WINDOW (window), vbox);
 
       entry = gtk_search_entry_new ();
       container = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);

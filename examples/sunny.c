@@ -21,7 +21,7 @@ new_window (GApplication *app,
   gtk_window_set_titlebar (GTK_WINDOW (window), header);
 
   overlay = gtk_overlay_new ();
-  gtk_container_add (GTK_CONTAINER (window), overlay);
+  gtk_window_set_child (GTK_WINDOW (window), overlay);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_hexpand (scrolled, TRUE);

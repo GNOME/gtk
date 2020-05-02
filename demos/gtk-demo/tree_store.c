@@ -402,7 +402,7 @@ do_tree_store (GtkWidget *do_widget)
       gtk_widget_set_margin_end (vbox, 8);
       gtk_widget_set_margin_top (vbox, 8);
       gtk_widget_set_margin_bottom (vbox, 8);
-      gtk_container_add (GTK_CONTAINER (window), vbox);
+      gtk_window_set_child (GTK_WINDOW (window), vbox);
 
       gtk_container_add (GTK_CONTAINER (vbox),
                           gtk_label_new ("Jonathan's Holiday Card Planning Sheet"));

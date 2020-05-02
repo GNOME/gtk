@@ -77,7 +77,7 @@ test_default_size (void)
 
   da = gtk_drawing_area_new ();
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), on_draw, NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (window), da);
+  gtk_window_set_child (GTK_WINDOW (window), da);
 
   /* check that default size is unset initially */
   gtk_window_get_default_size (GTK_WINDOW (window), &w, &h);
@@ -165,7 +165,7 @@ test_resize (void)
 
   da = gtk_drawing_area_new ();
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), on_draw, NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (window), da);
+  gtk_window_set_child (GTK_WINDOW (window), da);
 
   /* test that resize before show overrides default size */
   gtk_window_set_default_size (GTK_WINDOW (window), 500, 500);

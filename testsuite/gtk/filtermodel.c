@@ -4690,7 +4690,7 @@ specific_append_after_collapse (void)
 
   window = gtk_window_new ();
   tree_view = gtk_tree_view_new_with_model (sort);
-  gtk_container_add (GTK_CONTAINER (window), tree_view);
+  gtk_window_set_child (GTK_WINDOW (window), tree_view);
   gtk_widget_realize (tree_view);
 
   while (g_main_context_pending (NULL))
@@ -4810,7 +4810,7 @@ specific_sort_filter_remove_node (void)
 
   window = gtk_window_new ();
   tree_view = gtk_tree_view_new_with_model (filter);
-  gtk_container_add (GTK_CONTAINER (window), tree_view);
+  gtk_window_set_child (GTK_WINDOW (window), tree_view);
   gtk_widget_realize (tree_view);
 
   while (g_main_context_pending (NULL))

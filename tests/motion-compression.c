@@ -62,7 +62,7 @@ main (int argc, char **argv)
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_window_set_child (GTK_WINDOW (window), vbox);
 
   da = gtk_drawing_area_new ();
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), on_draw, NULL, NULL);

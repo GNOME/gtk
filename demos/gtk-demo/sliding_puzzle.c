@@ -463,7 +463,7 @@ do_sliding_puzzle (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       frame = gtk_aspect_frame_new (0.5, 0.5, (float) gdk_paintable_get_intrinsic_aspect_ratio (puzzle), FALSE);
-      gtk_container_add (GTK_CONTAINER (window), frame);
+      gtk_window_set_child (GTK_WINDOW (window), frame);
 
       start_puzzle (puzzle);
     }

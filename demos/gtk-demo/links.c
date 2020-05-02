@@ -81,7 +81,7 @@ do_links (GtkWidget *do_widget)
       gtk_widget_set_margin_end (label, 20);
       gtk_widget_set_margin_top (label, 20);
       gtk_widget_set_margin_bottom (label, 20);
-      gtk_container_add (GTK_CONTAINER (window), label);
+      gtk_window_set_child (GTK_WINDOW (window), label);
       gtk_widget_show (label);
     }
 

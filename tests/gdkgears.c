@@ -140,7 +140,7 @@ main (int argc, char *argv[])
   gtk_widget_set_margin_top (overlay, 12);
   gtk_widget_set_margin_bottom (overlay, 12);
 
-  gtk_container_add (GTK_CONTAINER (window), overlay);
+  gtk_window_set_child (GTK_WINDOW (window), overlay);
   gtk_widget_show (overlay);
 
   revealer = gtk_revealer_new ();

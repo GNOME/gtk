@@ -143,7 +143,7 @@ activate (GtkApplication *app,
   g_signal_connect (window, "destroy", G_CALLBACK (close_window), NULL);
 
   frame = gtk_frame_new (NULL);
-  gtk_container_add (GTK_CONTAINER (window), frame);
+  gtk_window_set_child (GTK_WINDOW (window), frame);
 
   drawing_area = gtk_drawing_area_new ();
   /* set a minimum size */

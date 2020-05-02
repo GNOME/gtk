@@ -203,7 +203,7 @@ gtk_fps_overlay_snapshot (GtkInspectorOverlay *overlay,
 
   if (GTK_IS_WINDOW (widget))
     {
-      GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
+      GtkWidget *child = gtk_window_get_child (GTK_WINDOW (widget));
       if (!child ||
           !gtk_widget_compute_bounds (child, widget, &bounds))
         has_bounds = gtk_widget_compute_bounds (widget, widget, &bounds);

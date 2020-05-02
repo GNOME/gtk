@@ -365,7 +365,7 @@ main (int argc, char *argv[])
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
   gtk_container_add (GTK_CONTAINER (vbox), gtk_label_new ("Jonathan's Holiday Card Planning Sheet"));
-  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_window_set_child (GTK_WINDOW (window), vbox);
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (scrolled_window), TRUE);
@@ -480,7 +480,7 @@ main (int argc, char *argv[])
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
   gtk_container_add (GTK_CONTAINER (vbox), gtk_label_new ("The model revealed"));
-  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_window_set_child (GTK_WINDOW (window), vbox);
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (scrolled_window), TRUE);
