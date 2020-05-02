@@ -37,6 +37,7 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkradiobutton.h"
 #include "gtkbuiltiniconprivate.h"
+#include "gtkcustomlayout.h"
 
 
 /**
@@ -110,7 +111,7 @@ gtk_check_button_update_node_state (GtkWidget *widget)
 
 static void
 gtk_check_button_state_flags_changed (GtkWidget     *widget,
-				      GtkStateFlags  previous_state_flags)
+                                      GtkStateFlags  previous_state_flags)
 {
   gtk_check_button_update_node_state (widget);
 
@@ -127,24 +128,15 @@ gtk_check_button_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_check_button_parent_class)->finalize (object);
 }
 
-static void
-gtk_check_button_add (GtkContainer *container,
-                      GtkWidget    *widget)
+static GtkSizeRequestMode
+gtk_check_button_request_mode (GtkWidget *widget)
 {
-  _gtk_bin_set_child (GTK_BIN (container), widget);
+  GtkWidget *child = gtk_button_get_child (GTK_BUTTON (widget));
 
-  if (gtk_widget_get_direction (GTK_WIDGET (container)) == GTK_TEXT_DIR_RTL)
-    gtk_widget_insert_after (widget, GTK_WIDGET (container), NULL);
+  if (child)
+    return gtk_widget_get_request_mode (child);
   else
-    gtk_widget_set_parent (widget, GTK_WIDGET (container));
-}
-
-static void
-gtk_check_button_remove (GtkContainer *container,
-                         GtkWidget    *widget)
-{
-  _gtk_bin_set_child (GTK_BIN (container), NULL);
-  gtk_widget_unparent (widget);
+    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
 }
 
 static void
@@ -173,7 +165,7 @@ gtk_check_button_measure (GtkWidget      *widget,
                           &indicator_min, &indicator_nat, NULL, NULL);
     }
 
-  child = gtk_bin_get_child (GTK_BIN (widget));
+  child = gtk_button_get_child (GTK_BUTTON (widget));
 
   if (child)
     {
@@ -228,7 +220,7 @@ gtk_check_button_size_allocate (GtkWidget *widget,
       gtk_widget_size_allocate (priv->indicator_widget, &child_alloc, baseline);
     }
 
-  child = gtk_bin_get_child (GTK_BIN (widget));
+  child = gtk_button_get_child (GTK_BUTTON (widget));
   if (child)
     {
       child_alloc.x = x;
@@ -311,19 +303,13 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
 
   object_class->finalize = gtk_check_button_finalize;
   object_class->set_property = gtk_check_button_set_property;
   object_class->get_property = gtk_check_button_get_property;
 
-  widget_class->measure = gtk_check_button_measure;
-  widget_class->size_allocate = gtk_check_button_size_allocate;
   widget_class->state_flags_changed = gtk_check_button_state_flags_changed;
   widget_class->direction_changed = gtk_check_button_direction_changed;
-
-  container_class->add = gtk_check_button_add;
-  container_class->remove = gtk_check_button_remove;
 
   props[PROP_DRAW_INDICATOR] =
       g_param_spec_boolean ("draw-indicator",
@@ -399,6 +385,11 @@ gtk_check_button_init (GtkCheckButton *check_button)
   priv->draw_indicator = TRUE;
   draw_indicator_changed (check_button);
   gtk_check_button_update_node_state (GTK_WIDGET (check_button));
+
+  gtk_widget_set_layout_manager (GTK_WIDGET (check_button),
+                                 gtk_custom_layout_new (gtk_check_button_request_mode,
+                                                        gtk_check_button_measure,
+                                                        gtk_check_button_size_allocate));
 }
 
 /**
