@@ -199,7 +199,7 @@ main (int argc, char *argv[])
   gtk_menu_button_set_direction (GTK_MENU_BUTTON (button), GTK_ARROW_UP);
   popover = gtk_popover_new ();
   label = gtk_label_new ("Popovers work too!");
-  gtk_container_add (GTK_CONTAINER (popover), label);
+  gtk_popover_set_child (GTK_POPOVER (popover), label);
 
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), popover);
   gtk_container_add (GTK_CONTAINER (hbox), button);

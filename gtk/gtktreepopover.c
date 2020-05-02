@@ -25,7 +25,6 @@
 #include "gtkcellarea.h"
 #include "gtkcelllayout.h"
 #include "gtkcellview.h"
-#include "gtkbin.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkgizmoprivate.h"
@@ -231,7 +230,7 @@ gtk_tree_popover_add_submenu (GtkTreePopover *popover,
                               GtkWidget      *submenu,
                               const char     *name)
 {
-  GtkWidget *stack = gtk_bin_get_child (GTK_BIN (popover));
+  GtkWidget *stack = gtk_popover_get_child (GTK_POPOVER (popover));
   gtk_stack_add_named (GTK_STACK (stack), submenu, name);
 }
 
@@ -239,8 +238,7 @@ static GtkWidget *
 gtk_tree_popover_get_submenu (GtkTreePopover *popover,
                               const char     *name)
 {
-  GtkWidget *stack = gtk_bin_get_child (GTK_BIN (popover));
-
+  GtkWidget *stack = gtk_popover_get_child (GTK_POPOVER (popover));
   return gtk_stack_get_child_by_name (GTK_STACK (stack), name);
 }
 
@@ -248,7 +246,7 @@ void
 gtk_tree_popover_open_submenu (GtkTreePopover *popover,
                                const char     *name)
 {
-  GtkWidget *stack = gtk_bin_get_child (GTK_BIN (popover));
+  GtkWidget *stack = gtk_popover_get_child (GTK_POPOVER (popover));
   gtk_stack_set_visible_child_name (GTK_STACK (stack), name);
 }
 
@@ -261,7 +259,7 @@ gtk_tree_popover_init (GtkTreePopover *popover)
   gtk_stack_set_vhomogeneous (GTK_STACK (stack), FALSE);
   gtk_stack_set_transition_type (GTK_STACK (stack), GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT);
   gtk_stack_set_interpolate_size (GTK_STACK (stack), TRUE);
-  gtk_container_add (GTK_CONTAINER (popover), stack);
+  gtk_popover_set_child (GTK_POPOVER (popover), stack);
 
   gtk_widget_add_css_class (GTK_WIDGET (popover), GTK_STYLE_CLASS_MENU);
 }
@@ -466,7 +464,7 @@ static GtkWidget *
 gtk_tree_popover_get_path_item (GtkTreePopover *popover,
                                 GtkTreePath    *search)
 {
-  GtkWidget *stack = gtk_bin_get_child (GTK_BIN (popover));
+  GtkWidget *stack = gtk_popover_get_child (GTK_POPOVER (popover));
   GtkWidget *item = NULL;
   GList *children, *l;
 
@@ -733,7 +731,9 @@ gtk_tree_popover_populate (GtkTreePopover *popover)
 static void
 rebuild_menu (GtkTreePopover *popover)
 {
-  GtkWidget *stack = gtk_bin_get_child (GTK_BIN (popover));
+  GtkWidget *stack;
+
+  stack = gtk_popover_get_child (GTK_POPOVER (popover));
   gtk_container_foreach (GTK_CONTAINER (stack), (GtkCallback) gtk_widget_destroy, NULL);
 
   if (popover->model)
