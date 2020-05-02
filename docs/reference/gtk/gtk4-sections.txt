@@ -2204,6 +2204,8 @@ gtk_scrollbar_get_type
 <TITLE>GtkScrolledWindow</TITLE>
 GtkScrolledWindow
 gtk_scrolled_window_new
+gtk_scrolled_window_get_child
+gtk_scrolled_window_set_child
 gtk_scrolled_window_get_hadjustment
 gtk_scrolled_window_set_hadjustment
 gtk_scrolled_window_get_vadjustment
