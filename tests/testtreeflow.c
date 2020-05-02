@@ -174,7 +174,7 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
   button = gtk_button_new_with_mnemonic ("<b>_Futz!!</b>");
   gtk_container_add (GTK_CONTAINER (hbox), button);
-  gtk_label_set_use_markup (GTK_LABEL (gtk_bin_get_child (GTK_BIN (button))), TRUE);
+  gtk_label_set_use_markup (GTK_LABEL (gtk_button_get_child (GTK_BUTTON (button))), TRUE);
   g_signal_connect (button, "clicked", G_CALLBACK (futz), NULL);
   g_signal_connect (button, "realize", G_CALLBACK (gtk_widget_grab_focus), NULL);
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 400);
