@@ -240,6 +240,12 @@ void            gtk_window_set_application      (GtkWindow          *window,
                                                  GtkApplication     *application);
 
 GDK_AVAILABLE_IN_ALL
+void     gtk_window_set_child              (GtkWindow    *window,
+                                            GtkWidget    *child);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *gtk_window_get_child            (GtkWindow    *window);
+
+GDK_AVAILABLE_IN_ALL
 void     gtk_window_set_titlebar           (GtkWindow    *window,
                                             GtkWidget    *titlebar);
 GDK_AVAILABLE_IN_ALL
