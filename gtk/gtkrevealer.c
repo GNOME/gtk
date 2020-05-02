@@ -81,6 +81,7 @@ enum  {
   PROP_TRANSITION_DURATION,
   PROP_REVEAL_CHILD,
   PROP_CHILD_REVEALED,
+  PROP_CHILD,
   LAST_PROP
 };
 
@@ -175,6 +176,9 @@ gtk_revealer_get_property (GObject    *object,
     case PROP_CHILD_REVEALED:
       g_value_set_boolean (value, gtk_revealer_get_child_revealed (revealer));
       break;
+    case PROP_CHILD:
+      g_value_set_object (value, gtk_revealer_get_child (revealer));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -199,6 +203,9 @@ gtk_revealer_set_property (GObject      *object,
       break;
     case PROP_REVEAL_CHILD:
       gtk_revealer_set_reveal_child (revealer, g_value_get_boolean (value));
+      break;
+    case PROP_CHILD:
+      gtk_revealer_set_child (revealer, g_value_get_object (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -271,6 +278,14 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
                           FALSE,
                           GTK_PARAM_READABLE);
 
+  props[PROP_CHILD] =
+    g_param_spec_object ("child",
+                         P_("Child"),
+                         P_("The child widget"),
+                         GTK_TYPE_WIDGET,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
   gtk_widget_class_set_css_name (widget_class, I_("revealer"));
@@ -317,7 +332,6 @@ gtk_revealer_real_add (GtkContainer *container,
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
 
   g_return_if_fail (child != NULL);
-
   gtk_widget_set_child_visible (child, priv->current_pos != 0.0);
 
   GTK_CONTAINER_CLASS (gtk_revealer_parent_class)->add (container, child);
@@ -765,4 +779,37 @@ gtk_revealer_set_transition_type (GtkRevealer               *revealer,
   priv->transition_type = transition;
   gtk_widget_queue_resize (GTK_WIDGET (revealer));
   g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_TRANSITION_TYPE]);
+}
+
+/**
+ * gtk_revealer_set_child:
+ * @revealer: a #GtkRevealer
+ * @child: (allow-none): the child widget
+ *
+ * Sets the child widget of @revealer.
+ */
+void
+gtk_revealer_set_child (GtkRevealer *revealer,
+                        GtkWidget   *child)
+{
+  if (!child)
+    gtk_container_remove (GTK_CONTAINER (revealer), gtk_bin_get_child (GTK_BIN (revealer)));
+  else
+    gtk_container_add (GTK_CONTAINER (revealer), child);
+
+  g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_CHILD]);
+}
+
+/**
+ * gtk_revealer_get_child:
+ * @revealer: a #GtkRevealer
+ *
+ * Gets the child widget of @revealer.
+ *
+ * Returns: (nullable) (transfer none): the child widget of @revealer
+ */
+GtkWidget *
+gtk_revealer_get_child (GtkRevealer *revealer)
+{
+  return gtk_bin_get_child (GTK_BIN (revealer));
 }
