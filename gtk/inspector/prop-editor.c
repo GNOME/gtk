@@ -573,7 +573,7 @@ flags_changed (GObject *object, GParamSpec *pspec, gpointer data)
   g_free (str);
 
   popover = gtk_menu_button_get_popover (GTK_MENU_BUTTON (data));
-  sw =  gtk_bin_get_child (GTK_BIN (popover));
+  sw =  gtk_popover_get_child (GTK_POPOVER (popover));
   viewport = gtk_bin_get_child (GTK_BIN (sw));
   box = gtk_viewport_get_child (GTK_VIEWPORT (viewport));
   children = gtk_container_get_children (GTK_CONTAINER (box));
@@ -943,12 +943,12 @@ property_editor (GObject                *object,
         GFlagsClass *fclass;
         gint j;
 
-        popover = gtk_popover_new ();        
+        popover = gtk_popover_new ();
         prop_edit = gtk_menu_button_new ();
         gtk_menu_button_set_popover (GTK_MENU_BUTTON (prop_edit), popover);
 
         sw = gtk_scrolled_window_new (NULL, NULL);
-        gtk_container_add (GTK_CONTAINER (popover), sw);
+        gtk_popover_set_child (GTK_POPOVER (popover), sw);
         g_object_set (sw,
                       "hexpand", TRUE,
                       "vexpand", TRUE,
@@ -1006,17 +1006,17 @@ property_editor (GObject                *object,
   else if (type == G_TYPE_PARAM_OBJECT &&
            g_type_is_a (G_PARAM_SPEC_VALUE_TYPE (spec), G_TYPE_LIST_MODEL))
     {
-      GtkWidget *popover; 
-      GtkWidget *box; 
-      GtkWidget *sw; 
+      GtkWidget *popover;
+      GtkWidget *box;
+      GtkWidget *sw;
       GListModel *model;
 
-      popover = gtk_popover_new ();        
+      popover = gtk_popover_new ();
       prop_edit = gtk_menu_button_new ();
       gtk_menu_button_set_popover (GTK_MENU_BUTTON (prop_edit), popover);
 
       sw = gtk_scrolled_window_new (NULL, NULL);
-      gtk_container_add (GTK_CONTAINER (popover), sw);
+      gtk_popover_set_child (GTK_POPOVER (popover), sw);
       g_object_set (sw,
                     "hexpand", TRUE,
                     "vexpand", TRUE,

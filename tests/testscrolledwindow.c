@@ -221,7 +221,7 @@ scrollable_policy (void)
   gtk_container_add (GTK_CONTAINER (cntl), widget);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_container_add (GTK_CONTAINER (popover), vbox);
+  gtk_popover_set_child (GTK_POPOVER (popover), vbox);
 
   /* Popover's scrolled window */
   swindow = gtk_scrolled_window_new (NULL, NULL);
