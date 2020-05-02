@@ -30,6 +30,7 @@
 #include "gtksettingsprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
+#include "gtkbuildable.h"
 
 #include "fallback-c89.c"
 
@@ -88,14 +89,16 @@ enum  {
 typedef struct _GtkRevealerClass GtkRevealerClass;
 
 struct _GtkRevealer {
-  GtkBin parent_instance;
+  GtkWidget parent_instance;
 };
 
 struct _GtkRevealerClass {
-  GtkBinClass parent_class;
+  GtkWidgetClass parent_class;
 };
 
 typedef struct {
+  GtkWidget *child;
+
   GtkRevealerTransitionType transition_type;
   guint transition_duration;
 
@@ -109,12 +112,10 @@ typedef struct {
 
 static GParamSpec *props[LAST_PROP] = { NULL, };
 
-static void     gtk_revealer_real_add                            (GtkContainer  *widget,
-                                                                  GtkWidget     *child);
-static void     gtk_revealer_real_size_allocate                  (GtkWidget     *widget,
-                                                                  int            width,
-                                                                  int            height,
-                                                                  int            baseline);
+static void gtk_revealer_size_allocate (GtkWidget     *widget,
+                                        int            width,
+                                        int            height,
+                                        int            baseline);
 static void gtk_revealer_measure (GtkWidget      *widget,
                                   GtkOrientation  orientation,
                                   int             for_size,
@@ -126,7 +127,34 @@ static void gtk_revealer_measure (GtkWidget      *widget,
 static void     gtk_revealer_set_position (GtkRevealer *revealer,
                                            gdouble      pos);
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkRevealer, gtk_revealer, GTK_TYPE_BIN)
+static void gtk_revealer_buildable_iface_init (GtkBuildableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GtkRevealer, gtk_revealer, GTK_TYPE_WIDGET,
+                         G_ADD_PRIVATE (GtkRevealer)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_revealer_buildable_iface_init))
+
+static GtkBuildableIface *parent_buildable_iface;
+
+static void
+gtk_revealer_buildable_add_child (GtkBuildable *buildable,
+                                  GtkBuilder   *builder,
+                                  GObject      *child,
+                                  const gchar  *type)
+{
+  if (GTK_IS_WIDGET (child))
+    gtk_revealer_set_child (GTK_REVEALER (buildable), GTK_WIDGET (child));
+  else
+    parent_buildable_iface->add_child (buildable, builder, child, type);
+}
+
+static void
+gtk_revealer_buildable_iface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
+  iface->add_child = gtk_revealer_buildable_add_child;
+}
 
 static void
 gtk_revealer_init (GtkRevealer *revealer)
@@ -139,6 +167,17 @@ gtk_revealer_init (GtkRevealer *revealer)
   priv->target_pos = 0.0;
 
   gtk_widget_set_overflow (GTK_WIDGET (revealer), GTK_OVERFLOW_HIDDEN);
+}
+
+static void
+gtk_revealer_dispose (GObject *obj)
+{
+  GtkRevealer *revealer = GTK_REVEALER (obj);
+  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
+
+  g_clear_pointer (&priv->child, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (gtk_revealer_parent_class)->dispose (obj);
 }
 
 static void
@@ -233,21 +272,55 @@ gtk_revealer_unmap (GtkWidget *widget)
 }
 
 static void
+gtk_revealer_compute_expand (GtkWidget *widget,
+                             gboolean  *hexpand,
+                             gboolean  *vexpand)
+{
+  GtkRevealer *revealer = GTK_REVEALER (widget);
+  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
+
+  if (priv->child)
+    {
+      *hexpand = gtk_widget_compute_expand (priv->child, GTK_ORIENTATION_HORIZONTAL);
+      *vexpand = gtk_widget_compute_expand (priv->child, GTK_ORIENTATION_VERTICAL);
+    }
+  else
+    {
+      *hexpand = FALSE;
+      *vexpand = FALSE;
+    }
+}
+
+static GtkSizeRequestMode
+gtk_revealer_get_request_mode (GtkWidget *widget)
+{
+  GtkRevealer *revealer = GTK_REVEALER (widget);
+  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
+
+  if (priv->child)
+    return gtk_widget_get_request_mode (priv->child);
+  else
+    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+}
+
+static void
 gtk_revealer_class_init (GtkRevealerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
+  object_class->dispose = gtk_revealer_dispose;
+  object_class->finalize = gtk_revealer_finalize;
   object_class->get_property = gtk_revealer_get_property;
   object_class->set_property = gtk_revealer_set_property;
-  object_class->finalize = gtk_revealer_finalize;
 
   widget_class->unmap = gtk_revealer_unmap;
-  widget_class->size_allocate = gtk_revealer_real_size_allocate;
+  widget_class->size_allocate = gtk_revealer_size_allocate;
   widget_class->measure = gtk_revealer_measure;
-
-  container_class->add = gtk_revealer_real_add;
+  widget_class->compute_expand = gtk_revealer_compute_expand;
+  widget_class->get_request_mode = gtk_revealer_get_request_mode;
+  widget_class->grab_focus = gtk_widget_grab_focus_none;
+  widget_class->focus = gtk_widget_focus_child;
 
   props[PROP_TRANSITION_TYPE] =
     g_param_spec_enum ("transition-type",
@@ -324,19 +397,6 @@ effective_transition (GtkRevealer *revealer)
   return priv->transition_type;
 }
 
-static void
-gtk_revealer_real_add (GtkContainer *container,
-                       GtkWidget    *child)
-{
-  GtkRevealer *revealer = GTK_REVEALER (container);
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-
-  g_return_if_fail (child != NULL);
-  gtk_widget_set_child_visible (child, priv->current_pos != 0.0);
-
-  GTK_CONTAINER_CLASS (gtk_revealer_parent_class)->add (container, child);
-}
-
 static double
 get_child_size_scale (GtkRevealer    *revealer,
                       GtkOrientation  orientation)
@@ -381,25 +441,23 @@ get_child_size_scale (GtkRevealer    *revealer,
 }
 
 static void
-gtk_revealer_real_size_allocate (GtkWidget *widget,
-                                 int        width,
-                                 int        height,
-                                 int        baseline)
+gtk_revealer_size_allocate (GtkWidget *widget,
+                            int        width,
+                            int        height,
+                            int        baseline)
 {
   GtkRevealer *revealer = GTK_REVEALER (widget);
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-  GtkWidget *child;
   GskTransform *transform;
   double hscale, vscale;
   int child_width, child_height;
 
-  child = gtk_bin_get_child (GTK_BIN (revealer));
-  if (child == NULL || !gtk_widget_get_visible (child))
+  if (priv->child == NULL || !gtk_widget_get_visible (priv->child))
     return;
 
   if (priv->current_pos >= 1.0)
     {
-      gtk_widget_allocate (child, width, height, baseline, NULL);
+      gtk_widget_allocate (priv->child, width, height, baseline, NULL);
       return;
     }
 
@@ -493,7 +551,7 @@ gtk_revealer_real_size_allocate (GtkWidget *widget,
       break;
     }
 
-  gtk_widget_allocate (child, child_width, child_height, -1, transform);
+  gtk_widget_allocate (priv->child, child_width, child_height, -1, transform);
 }
 
 static void
@@ -502,18 +560,16 @@ gtk_revealer_set_position (GtkRevealer *revealer,
 {
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
   gboolean new_visible;
-  GtkWidget *child;
   GtkRevealerTransitionType transition;
 
   priv->current_pos = pos;
 
   new_visible = priv->current_pos != 0.0;
 
-  child = gtk_bin_get_child (GTK_BIN (revealer));
-  if (child != NULL &&
-      new_visible != gtk_widget_get_child_visible (child))
+  if (priv->child != NULL &&
+      new_visible != gtk_widget_get_child_visible (priv->child))
     {
-      gtk_widget_set_child_visible (child, new_visible);
+      gtk_widget_set_child_visible (priv->child, new_visible);
       gtk_widget_queue_resize (GTK_WIDGET (revealer));
     }
 
@@ -673,6 +729,7 @@ gtk_revealer_measure (GtkWidget      *widget,
                       int            *natural_baseline)
 {
   GtkRevealer *self = GTK_REVEALER (widget);
+  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (self);
   double scale;
 
   scale = get_child_size_scale (self, OPPOSITE_ORIENTATION (orientation));
@@ -685,11 +742,19 @@ gtk_revealer_measure (GtkWidget      *widget,
         for_size = MIN (G_MAXINT, ceil (for_size / scale));
     }
 
-  GTK_WIDGET_CLASS (gtk_revealer_parent_class)->measure (widget,
-                                                         orientation,
-                                                         for_size,
-                                                         minimum, natural,
-                                                         NULL, NULL);
+  if (priv->child != NULL && _gtk_widget_get_visible (priv->child))
+    {
+      gtk_widget_measure (priv->child,
+                          orientation,
+                          for_size,
+                          minimum, natural,
+                          NULL, NULL);
+    }
+  else
+    {
+      *minimum = 0;
+      *natural = 0;
+    }
 
   scale = get_child_size_scale (self, orientation);
   *minimum = ceil (*minimum * scale);
@@ -792,10 +857,19 @@ void
 gtk_revealer_set_child (GtkRevealer *revealer,
                         GtkWidget   *child)
 {
-  if (!child)
-    gtk_container_remove (GTK_CONTAINER (revealer), gtk_bin_get_child (GTK_BIN (revealer)));
-  else
-    gtk_container_add (GTK_CONTAINER (revealer), child);
+  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
+
+  g_return_if_fail (GTK_IS_REVEALER (revealer));
+  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+
+  g_clear_pointer (&priv->child, gtk_widget_unparent);
+
+  if (child)
+    {
+      gtk_widget_set_parent (child, GTK_WIDGET (revealer));
+      gtk_widget_set_child_visible (child, priv->current_pos != 0.0);
+      priv->child = child;
+   }
 
   g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_CHILD]);
 }
@@ -811,5 +885,9 @@ gtk_revealer_set_child (GtkRevealer *revealer,
 GtkWidget *
 gtk_revealer_get_child (GtkRevealer *revealer)
 {
-  return gtk_bin_get_child (GTK_BIN (revealer));
+  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
+
+  g_return_val_if_fail (GTK_IS_REVEALER (revealer), NULL);
+
+  return priv->child;
 }
