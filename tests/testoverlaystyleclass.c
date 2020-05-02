@@ -77,7 +77,7 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (overlay), sw);
 
   main_child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (sw), main_child);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), main_child);
   gtk_widget_set_hexpand (main_child, TRUE);
   gtk_widget_set_vexpand (main_child, TRUE);
   label = gtk_label_new ("Main child");

@@ -957,7 +957,7 @@ property_editor (GObject                *object,
                       NULL);
         box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
         gtk_widget_show (box);
-        gtk_container_add (GTK_CONTAINER (sw), box);
+        gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), box);
 
         fclass = G_FLAGS_CLASS (g_type_class_ref (spec->value_type));
 
@@ -1034,7 +1034,7 @@ property_editor (GObject                *object,
       gtk_list_box_bind_model (GTK_LIST_BOX (box), model, create_row, editor, NULL);
       g_object_unref (model);
 
-      gtk_container_add (GTK_CONTAINER (sw), box);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), box);
     }
   else if (type == G_TYPE_PARAM_OBJECT)
     {

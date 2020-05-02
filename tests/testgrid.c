@@ -263,7 +263,7 @@ scrolling (void)
   grid = gtk_grid_new ();
 
   gtk_container_add (GTK_CONTAINER (window), sw);
-  gtk_container_add (GTK_CONTAINER (sw), viewport);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), viewport);
   gtk_viewport_set_child (GTK_VIEWPORT (viewport), grid);
 
   child = oriented_test_widget ("#800080", "#800080");

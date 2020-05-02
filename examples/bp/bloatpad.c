@@ -259,7 +259,7 @@ new_window (GApplication *app,
 
   g_object_set_data ((GObject*)window, "bloatpad-text", view);
 
-  gtk_container_add (GTK_CONTAINER (scrolled), view);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled), view);
 
   gtk_grid_attach (GTK_GRID (grid), scrolled, 0, 1, 1, 1);
 

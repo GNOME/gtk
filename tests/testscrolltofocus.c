@@ -15,7 +15,7 @@ int main (int argc, char *argv[])
   viewport = gtk_viewport_new (gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (sw)),
                                gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (sw)));
   gtk_viewport_set_scroll_to_focus (GTK_VIEWPORT (viewport), TRUE);
-  gtk_container_add (GTK_CONTAINER (sw), viewport);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), viewport);
   grid = gtk_grid_new ();
   gtk_widget_set_margin_start (grid, 20);
   gtk_widget_set_margin_end (grid, 20);
