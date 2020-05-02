@@ -281,8 +281,9 @@ void              _gtk_widget_update_parent_muxer          (GtkWidget    *widget
 GtkActionMuxer *  _gtk_widget_get_action_muxer             (GtkWidget    *widget,
                                                             gboolean      create);
 
-gboolean          _gtk_widget_consumes_motion              (GtkWidget           *widget,
-                                                            GdkEventSequence    *sequence);
+gboolean          gtk_widget_consumes_motion               (GtkWidget        *widget,
+                                                            GtkWidget        *parent,
+                                                            GdkEventSequence *sequence);
 
 gboolean          gtk_widget_has_tick_callback             (GtkWidget *widget);
 
