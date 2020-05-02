@@ -1548,7 +1548,7 @@ create_listbox (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (hbox), scrolled);
 
       scrolled_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (scrolled), scrolled_box);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled), scrolled_box);
 
       label = gtk_label_new ("This is \na LABEL\nwith rows");
       gtk_container_add (GTK_CONTAINER (scrolled_box), label);
@@ -1882,7 +1882,7 @@ scrolled_windows_delete_cb (GtkWidget *widget,
 {
   g_object_ref (scrollwin);
   gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (scrollwin)), scrollwin);
-  gtk_container_add (GTK_CONTAINER (sw_parent), scrollwin);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw_parent), scrollwin);
   g_object_unref (scrollwin);
 
   g_signal_handler_disconnect (sw_parent, sw_destroyed_handler);
@@ -1916,7 +1916,7 @@ scrolled_windows_remove (GtkWidget *dialog, gint response, GtkWidget *scrollwin)
     {
       g_object_ref (scrollwin);
       gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (scrollwin)), scrollwin);
-      gtk_container_add (GTK_CONTAINER (sw_parent), scrollwin);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw_parent), scrollwin);
       g_object_unref (scrollwin);
 
 
@@ -1938,7 +1938,7 @@ scrolled_windows_remove (GtkWidget *dialog, gint response, GtkWidget *scrollwin)
       
       g_object_ref (scrollwin);
       gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (scrollwin)), scrollwin);
-      gtk_container_add (GTK_CONTAINER (sw_float_parent), scrollwin);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw_float_parent), scrollwin);
       g_object_unref (scrollwin);
 
 
@@ -1990,7 +1990,7 @@ create_scrolled_windows (GtkWidget *widget)
       grid = gtk_grid_new ();
       gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
       gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
-      gtk_container_add (GTK_CONTAINER (scrolled_window), grid);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), grid);
       gtk_viewport_set_scroll_to_focus (GTK_VIEWPORT (gtk_widget_get_parent (grid)), TRUE);
       gtk_widget_show (grid);
 
@@ -6070,7 +6070,7 @@ create_main_window (void)
   gtk_container_add (GTK_CONTAINER (box1), scrolled_window);
 
   box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (scrolled_window), box2);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), box2);
   gtk_viewport_set_scroll_to_focus (GTK_VIEWPORT (gtk_widget_get_parent (box2)), TRUE);
   gtk_widget_show (box2);
 

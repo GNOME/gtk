@@ -274,13 +274,13 @@ main (int argc, char **argv)
   gtk_widget_set_hexpand (scrolled_window, TRUE);
   gtk_container_add (GTK_CONTAINER (hbox), scrolled_window);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
-				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+                                  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
   text_view = gtk_text_view_new ();
   gtk_text_view_set_editable (GTK_TEXT_VIEW (text_view), FALSE);
   gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (text_view), FALSE);
 
-  gtk_container_add (GTK_CONTAINER (scrolled_window), text_view);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), text_view);
 
   button_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
   gtk_container_add (GTK_CONTAINER (hbox), button_vbox);

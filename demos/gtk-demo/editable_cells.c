@@ -387,7 +387,7 @@ do_editable_cells (GtkWidget *do_widget)
       g_object_unref (numbers_model);
       g_object_unref (items_model);
 
-      gtk_container_add (GTK_CONTAINER (sw), treeview);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), treeview);
 
       /* some buttons */
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);

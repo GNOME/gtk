@@ -68,7 +68,7 @@ main (int argc, char *argv[])
                             "A second paragraph will contain even more "
                             "innuendo, just to make you scroll down or "
                             "resize the window. Do it already !", -1);
-  gtk_container_add (GTK_CONTAINER (sw), tv);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), tv);
   gtk_container_add (GTK_CONTAINER (expander), sw);
   gtk_widget_set_hexpand (expander, TRUE);
   gtk_widget_set_vexpand (expander, TRUE);
