@@ -496,7 +496,7 @@ gtk_info_bar_init (GtkInfoBar *info_bar)
   gtk_widget_set_parent (info_bar->revealer, widget);
 
   main_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (info_bar->revealer), main_box);
+  gtk_revealer_set_child (GTK_REVEALER (info_bar->revealer), main_box);
 
   info_bar->content_area = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_hexpand (info_bar->content_area, TRUE);
