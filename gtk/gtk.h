@@ -254,6 +254,7 @@
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkwindowcontrols.h>
 #include <gtk/gtkwindowgroup.h>
+#include <gtk/gtkwindowhandle.h>
 
 #include <gtk/gtk-autocleanups.h>
 
