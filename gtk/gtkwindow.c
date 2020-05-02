@@ -774,7 +774,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->move_focus = gtk_window_move_focus;
   widget_class->state_flags_changed = gtk_window_state_flags_changed;
   widget_class->css_changed = gtk_window_css_changed;
-  widget_class->snapshot = gtk_window_snapshot;
 
   klass->activate_default = gtk_window_real_activate_default;
   klass->activate_focus = gtk_window_real_activate_focus;
@@ -6587,98 +6586,6 @@ gtk_window_compute_hints (GtkWindow   *window,
 
 #undef INCLUDE_CSD_SIZE
 #undef EXCLUDE_CSD_SIZE
-
-/***********************
- * Redrawing functions *
- ***********************/
-
-static void
-gtk_window_snapshot (GtkWidget   *widget,
-                     GtkSnapshot *snapshot)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (widget));
-  GtkStyleContext *context;
-  GtkBorder window_border;
-  gint title_height;
-  int width, height;
-  GtkWidget *child;
-
-  context = gtk_widget_get_style_context (widget);
-
-  get_shadow_width (GTK_WINDOW (widget), &window_border);
-  width = gtk_widget_get_width (widget);
-  height = gtk_widget_get_height (widget);
-
-  if (priv->client_decorated &&
-      priv->decorated &&
-      !priv->fullscreen &&
-      !priv->maximized)
-    {
-      gtk_style_context_save_to_node (context, priv->decoration_node);
-
-      if (priv->use_client_shadow)
-        {
-          GtkBorder padding, border;
-
-          gtk_style_context_get_padding (context, &padding);
-          gtk_style_context_get_border (context, &border);
-          sum_borders (&border, &padding);
-
-          gtk_snapshot_render_background (snapshot, context,
-                                          window_border.left - border.left, window_border.top - border.top,
-                                          width -
-                                            (window_border.left + window_border.right - border.left - border.right),
-                                          height -
-                                            (window_border.top + window_border.bottom - border.top - border.bottom));
-          gtk_snapshot_render_frame (snapshot, context,
-                                     window_border.left - border.left, window_border.top - border.top,
-                                     width -
-                                       (window_border.left + window_border.right - border.left - border.right),
-                                     height -
-                                       (window_border.top + window_border.bottom - border.top - border.bottom));
-        }
-      else
-        {
-          gtk_snapshot_render_background (snapshot, context, 0, 0,
-                                          width, height);
-
-          gtk_snapshot_render_frame (snapshot, context, 0, 0,
-                                     width, height);
-        }
-      gtk_style_context_restore (context);
-    }
-
-  if (priv->title_box &&
-      gtk_widget_get_visible (priv->title_box) &&
-      gtk_widget_get_child_visible (priv->title_box))
-    title_height = priv->title_height;
-  else
-    title_height = 0;
-
-  gtk_snapshot_render_background (snapshot, context,
-                                  window_border.left,
-                                  window_border.top + title_height,
-                                  width -
-                                    (window_border.left + window_border.right),
-                                  height -
-                                    (window_border.top + window_border.bottom + title_height));
-  gtk_snapshot_render_frame (snapshot, context,
-                             window_border.left,
-                             window_border.top + title_height,
-                             width -
-                               (window_border.left + window_border.right),
-                             height -
-                               (window_border.top + window_border.bottom + title_height));
-
-  for (child = _gtk_widget_get_first_child (widget);
-       child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
-    {
-      /* Handle popovers separately until their stacking order is fixed */
-      if (!GTK_IS_POPOVER (child))
-        gtk_widget_snapshot_child (widget, child, snapshot);
-    }
-}
 
 /**
  * gtk_window_present:
