@@ -124,7 +124,7 @@ main (int argc, char **argv)
   g_signal_connect (scale, "value-changed", G_CALLBACK (value_changed_cb2), value_label);
 
   gtk_container_add (GTK_CONTAINER (blur_box), scale);
-  gtk_container_add (GTK_CONTAINER (window), blur_box);
+  gtk_window_set_child (GTK_WINDOW (window), blur_box);
 
   gtk_widget_show (window);
 

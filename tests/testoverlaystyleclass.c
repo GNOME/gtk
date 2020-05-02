@@ -150,7 +150,7 @@ main (int argc, char *argv[])
                     G_CALLBACK (overlay_get_child_position), child);
 
   gtk_grid_attach (GTK_GRID (grid), overlay, 1, 0, 1, 3);
-  gtk_container_add (GTK_CONTAINER (win), grid);
+  gtk_window_set_child (GTK_WINDOW (win), grid);
 
   g_print ("\n");
 

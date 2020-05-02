@@ -34,7 +34,7 @@ on_activate (GApplication *app,
 
       /* content */
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), hbox);
+      gtk_window_set_child (GTK_WINDOW (window), hbox);
 
       revealer = gtk_revealer_new ();
       gtk_revealer_set_transition_type (GTK_REVEALER (revealer),

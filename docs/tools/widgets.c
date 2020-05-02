@@ -1126,7 +1126,7 @@ create_headerbar (void)
   view = gtk_text_view_new ();
   gtk_widget_show (view);
   gtk_widget_set_size_request (window, 220, 150);
-  gtk_container_add (GTK_CONTAINER (window), view);
+  gtk_window_set_child (GTK_WINDOW (window), view);
   bar = gtk_header_bar_new ();
   gtk_window_set_titlebar (GTK_WINDOW (window), bar);
   button = gtk_button_new ();

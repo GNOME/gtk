@@ -125,7 +125,7 @@ main (int argc, char *argv[])
   list = gtk_list_box_new ();
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (list), GTK_SELECTION_NONE);
 
-  gtk_container_add (GTK_CONTAINER (win), overlay);
+  gtk_window_set_child (GTK_WINDOW (win), overlay);
   gtk_container_add (GTK_CONTAINER (overlay), sw);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), list);
   populate_list (GTK_LIST_BOX (list));

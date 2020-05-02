@@ -52,7 +52,7 @@ do_headerbar (GtkWidget *do_widget)
 
       gtk_window_set_titlebar (GTK_WINDOW (window), header);
 
-      gtk_container_add (GTK_CONTAINER (window), gtk_text_view_new ());
+      gtk_window_set_child (GTK_WINDOW (window), gtk_text_view_new ());
     }
 
   if (!gtk_widget_get_visible (window))

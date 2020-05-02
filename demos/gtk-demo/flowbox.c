@@ -736,7 +736,7 @@ do_flowbox (GtkWidget *do_widget)
       gtk_flow_box_set_selection_mode (GTK_FLOW_BOX (flowbox), GTK_SELECTION_NONE);
 
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled), flowbox);
-      gtk_container_add (GTK_CONTAINER (window), scrolled);
+      gtk_window_set_child (GTK_WINDOW (window), scrolled);
 
       for (i = 0; colors[i]; i++)
         gtk_container_add (GTK_CONTAINER (flowbox), color_swatch_new (colors[i]));

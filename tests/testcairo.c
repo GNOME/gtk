@@ -209,7 +209,7 @@ main (int argc, char **argv)
   gtk_window_set_title (GTK_WINDOW (window), "cairo: Knockout Groups");
 
   darea = gtk_drawing_area_new ();
-  gtk_container_add (GTK_CONTAINER (window), darea);
+  gtk_window_set_child (GTK_WINDOW (window), darea);
 
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (darea), on_draw, NULL, NULL);
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);

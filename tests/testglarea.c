@@ -422,7 +422,7 @@ main (int argc, char *argv[])
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE);
   gtk_box_set_spacing (GTK_BOX (box), 6);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
   gtk_widget_show (box);
 
   gl_area = gtk_gl_area_new ();

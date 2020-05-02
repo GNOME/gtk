@@ -426,7 +426,7 @@ edit_constraint (ConstraintEditorWindow *win,
 
   editor = constraint_editor_new (model, constraint);
 
-  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (editor));
+  gtk_window_set_child (GTK_WINDOW (window), GTK_WIDGET (editor));
 
   g_signal_connect (editor, "done", G_CALLBACK (constraint_editor_done), win);
 
@@ -460,7 +460,7 @@ edit_guide (ConstraintEditorWindow *win,
   gtk_window_set_title (GTK_WINDOW (window), "Edit Guide");
 
   editor = guide_editor_new (guide);
-  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (editor));
+  gtk_window_set_child (GTK_WINDOW (window), GTK_WIDGET (editor));
 
   g_signal_connect (editor, "done", G_CALLBACK (guide_editor_done), win);
   gtk_widget_show (window);

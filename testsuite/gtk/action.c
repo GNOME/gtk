@@ -58,7 +58,7 @@ test_action (void)
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   button = gtk_button_new ();
 
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
   gtk_container_add (GTK_CONTAINER (box), button);
 
   win_actions = g_simple_action_group_new ();
@@ -210,7 +210,7 @@ test_overlap (void)
   window = gtk_window_new ();
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
 
   win_actions = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (win_actions),

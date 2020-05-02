@@ -954,7 +954,7 @@ main (int argc, char **argv)
         g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
         mainbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
-        gtk_container_add (GTK_CONTAINER (window), mainbox);
+        gtk_window_set_child (GTK_WINDOW (window), mainbox);
 
         /* GtkCellView */
         tmp = gtk_frame_new ("GtkCellView");

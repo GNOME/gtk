@@ -69,7 +69,7 @@ do_textmask (GtkWidget *do_widget)
 
       da = gtk_drawing_area_new ();
 
-      gtk_container_add (GTK_CONTAINER (window), da);
+      gtk_window_set_child (GTK_WINDOW (window), da);
       gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), draw_text, NULL, NULL);
     }
 
