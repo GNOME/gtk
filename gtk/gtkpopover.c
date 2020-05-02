@@ -121,6 +121,7 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtksnapshot.h"
 #include "gtkshortcutmanager.h"
+#include "gtkbuildable.h"
 
 #include "gtkrender.h"
 #include "gtkstylecontextprivate.h"
@@ -150,6 +151,7 @@ typedef struct {
 
   guint mnemonics_display_timeout_id;
 
+  GtkWidget *child;
   GtkWidget *contents_widget;
   GtkCssNode *arrow_node;
   GskRenderNode *arrow_render_node;
@@ -180,11 +182,15 @@ enum {
 
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL };
 
+static void gtk_popover_buildable_init (GtkBuildableIface *iface);
+
 static void gtk_popover_shortcut_manager_interface_init (GtkShortcutManagerInterface *iface);
 static void gtk_popover_native_interface_init (GtkNativeInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkPopover, gtk_popover, GTK_TYPE_BIN,
+G_DEFINE_TYPE_WITH_CODE (GtkPopover, gtk_popover, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkPopover)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_popover_buildable_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_SHORTCUT_MANAGER,
                                                 gtk_popover_shortcut_manager_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_NATIVE,
@@ -982,7 +988,6 @@ gtk_popover_map (GtkWidget *widget)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GtkWidget *child;
   GtkWidget *parent;
 
   present_popup (popover);
@@ -995,10 +1000,6 @@ gtk_popover_map (GtkWidget *widget)
                                                        unset_surface_transform_changed_cb);
 
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->map (widget);
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
-  if (child != NULL && gtk_widget_get_visible (child))
-    gtk_widget_map (child);
 }
 
 static void
@@ -1006,7 +1007,6 @@ gtk_popover_unmap (GtkWidget *widget)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GtkWidget *child;
   GtkWidget *parent;
 
   parent = gtk_widget_get_parent (widget);
@@ -1016,10 +1016,6 @@ gtk_popover_unmap (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->unmap (widget);
   gdk_surface_hide (priv->surface);
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
-  if (child != NULL)
-    gtk_widget_unmap (child);
 }
 
 static void
@@ -1027,15 +1023,6 @@ gtk_popover_dispose (GObject *object)
 {
   GtkPopover *popover = GTK_POPOVER (object);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GtkWidget *child;
-
-  child = gtk_bin_get_child (GTK_BIN (popover));
-
-  if (child)
-    {
-      gtk_widget_unparent (child);
-      _gtk_bin_set_child (GTK_BIN (popover), NULL);
-    }
 
   g_clear_pointer (&priv->contents_widget, gtk_widget_unparent);
   g_clear_pointer (&priv->arrow_render_node, gsk_render_node_unref);
@@ -1602,27 +1589,6 @@ gtk_popover_get_property (GObject      *object,
 }
 
 static void
-gtk_popover_add (GtkContainer *container,
-                 GtkWidget    *child)
-{
-  GtkPopover *popover = GTK_POPOVER (container);
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-
-  _gtk_bin_set_child (GTK_BIN (popover), child);
-  gtk_widget_set_parent (child, priv->contents_widget);
-}
- 
-static void
-gtk_popover_remove (GtkContainer *container,
-                    GtkWidget    *child)
-{
-  GtkPopover *popover = GTK_POPOVER (container);
-
-  _gtk_bin_set_child (GTK_BIN (popover), NULL);
-  gtk_widget_unparent (child);
-}
-
-static void
 add_tab_bindings (GtkWidgetClass   *widget_class,
                   GdkModifierType   modifiers,
                   GtkDirectionType  direction)
@@ -1661,11 +1627,42 @@ add_arrow_bindings (GtkWidgetClass   *widget_class,
 }
 
 static void
+gtk_popover_compute_expand (GtkWidget *widget,
+                            gboolean  *hexpand,
+                            gboolean  *vexpand)
+{
+  GtkPopover *popover = GTK_POPOVER (widget);
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  if (priv->child)
+    {
+      *hexpand = gtk_widget_compute_expand (priv->child, GTK_ORIENTATION_HORIZONTAL);
+      *vexpand = gtk_widget_compute_expand (priv->child, GTK_ORIENTATION_VERTICAL);
+    }
+  else
+    {
+      *hexpand = FALSE;
+      *vexpand = FALSE;
+    }
+}
+
+static GtkSizeRequestMode
+gtk_popover_get_request_mode (GtkWidget *widget)
+{
+  GtkPopover *popover = GTK_POPOVER (widget);
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  if (priv->child)
+    return gtk_widget_get_request_mode (priv->child);
+  else
+    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+}
+
+static void
 gtk_popover_class_init (GtkPopoverClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->dispose = gtk_popover_dispose;
   object_class->finalize = gtk_popover_finalize;
@@ -1681,9 +1678,10 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   widget_class->measure = gtk_popover_measure;
   widget_class->size_allocate = gtk_popover_size_allocate;
   widget_class->snapshot = gtk_popover_snapshot;
-
-  container_class->add = gtk_popover_add;
-  container_class->remove = gtk_popover_remove;
+  widget_class->compute_expand = gtk_popover_compute_expand;
+  widget_class->get_request_mode = gtk_popover_get_request_mode;
+  widget_class->grab_focus = gtk_widget_grab_focus_none;
+  widget_class->focus = gtk_widget_focus_child;
 
   klass->activate_default = gtk_popover_activate_default;
 
@@ -1802,10 +1800,22 @@ void
 gtk_popover_set_child (GtkPopover *popover,
                        GtkWidget  *child)
 {
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
   g_return_if_fail (GTK_IS_POPOVER (popover));
   g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
 
-  _gtk_bin_set_child (GTK_BIN (popover), child);
+  if (priv->child == child)
+    return;
+
+  g_clear_pointer (&priv->child, gtk_widget_unparent);
+
+  if (child)
+    {
+      priv->child = child;
+      gtk_widget_set_parent (child, priv->contents_widget);
+    }
+
   g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_CHILD]);
 }
 
@@ -1820,9 +1830,11 @@ gtk_popover_set_child (GtkPopover *popover,
 GtkWidget *
 gtk_popover_get_child (GtkPopover *popover)
 {
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
   g_return_val_if_fail (GTK_IS_POPOVER (popover), NULL);
 
-  return gtk_bin_get_child (GTK_BIN (popover));
+  return priv->child;
 }
 
 
@@ -1878,6 +1890,28 @@ gtk_popover_native_interface_init (GtkNativeInterface *iface)
   iface->get_renderer = gtk_popover_native_get_renderer;
   iface->get_surface_transform = gtk_popover_native_get_surface_transform;
   iface->check_resize = gtk_popover_native_check_resize;
+}
+
+static GtkBuildableIface *parent_buildable_iface;
+
+static void
+gtk_popover_buildable_add_child (GtkBuildable *buildable,
+                                 GtkBuilder   *builder,
+                                 GObject      *child,
+                                 const gchar  *type)
+{
+  if (GTK_IS_WIDGET (child))
+    gtk_popover_set_child (GTK_POPOVER(buildable), GTK_WIDGET (child));
+  else
+    parent_buildable_iface->add_child (buildable, builder, child, type);
+}
+
+static void
+gtk_popover_buildable_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
+  iface->add_child = gtk_popover_buildable_add_child;
 }
 
 /**
