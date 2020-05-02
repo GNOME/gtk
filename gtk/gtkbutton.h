@@ -107,6 +107,11 @@ void                  gtk_button_set_icon_name      (GtkButton      *button,
 GDK_AVAILABLE_IN_ALL
 const char *          gtk_button_get_icon_name      (GtkButton      *button);
 
+GDK_AVAILABLE_IN_ALL
+void                  gtk_button_set_child          (GtkButton      *button,
+                                                     GtkWidget      *child);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *           gtk_button_get_child          (GtkButton      *button);
 
 G_END_DECLS
 
