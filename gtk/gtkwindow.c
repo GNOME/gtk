@@ -495,7 +495,6 @@ static void gtk_window_state_flags_changed (GtkWidget     *widget,
 static void _gtk_window_set_is_active (GtkWindow *window,
 			               gboolean   is_active);
 static void gtk_window_present_toplevel (GtkWindow *window);
-static void gtk_window_update_toplevel (GtkWindow *window);
 static GdkToplevelLayout * gtk_window_compute_layout (GtkWindow *window,
                                                       int        min_width,
                                                       int        min_height);
@@ -4275,7 +4274,7 @@ gtk_window_present_toplevel (GtkWindow *window)
                         priv->layout);
 }
 
-static void
+void
 gtk_window_update_toplevel (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
