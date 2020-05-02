@@ -181,7 +181,7 @@ create_tree (gboolean rtl)
 
   treeview = gtk_tree_view_new_with_model (GTK_TREE_MODEL (list_store));
   gtk_widget_set_direction (treeview, rtl ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR);
-  gtk_container_add (GTK_CONTAINER (sw), treeview);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), treeview);
 
   /* Line number */
 

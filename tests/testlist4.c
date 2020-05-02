@@ -110,7 +110,7 @@ new_window (GApplication *app)
   list = gtk_list_box_new ();
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (list), GTK_SELECTION_NONE);
   gtk_list_box_set_header_func (GTK_LIST_BOX (list), add_separator, NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (sw), list);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), list);
 
   label = gtk_label_new ("No row activated");
   gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);

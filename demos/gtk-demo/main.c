@@ -571,7 +571,7 @@ display_image (const char *resource)
   gtk_widget_set_halign (image, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (image, GTK_ALIGN_CENTER);
   sw = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (sw), image);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), image);
 
   return sw;
 }
@@ -614,7 +614,7 @@ display_text (const char *resource)
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_AUTOMATIC,
                                   GTK_POLICY_AUTOMATIC);
-  gtk_container_add (GTK_CONTAINER (sw), textview);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), textview);
 
   return sw;
 }

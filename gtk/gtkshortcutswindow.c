@@ -972,14 +972,13 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
-                           NULL);
+  scroller = gtk_scrolled_window_new (NULL, NULL);
   box = g_object_new (GTK_TYPE_BOX,
                       "halign", GTK_ALIGN_CENTER,
                       "orientation", GTK_ORIENTATION_VERTICAL,
                       NULL);
   gtk_widget_add_css_class (GTK_WIDGET (box), "shortcuts-search-results");
-  gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (box));
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scroller), GTK_WIDGET (box));
   gtk_stack_add_named (priv->stack, scroller, "internal-search");
 
   priv->search_shortcuts = g_object_new (GTK_TYPE_BOX,

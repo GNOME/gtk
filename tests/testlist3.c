@@ -158,7 +158,7 @@ main (int argc, char *argv[])
   gtk_widget_set_hexpand (sw, TRUE);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
   gtk_container_add (GTK_CONTAINER (hbox), sw);
-  gtk_container_add (GTK_CONTAINER (sw), list);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), list);
 
   button = gtk_check_button_new_with_label ("Activate on single click");
   g_object_bind_property (list, "activate-on-single-click",

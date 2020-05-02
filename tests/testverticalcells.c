@@ -377,8 +377,8 @@ main (gint argc, gchar **argv)
 
   gtk_tree_view_expand_all (GTK_TREE_VIEW (tree_view));
 
-  gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
-  
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), tree_view);
+
   gtk_window_set_default_size (GTK_WINDOW (window),
 			       800, 400);
 
