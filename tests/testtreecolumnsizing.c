@@ -213,7 +213,7 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (vbox), sw);
 
   tree_view = gtk_tree_view_new_with_model (create_model ());
-  gtk_container_add (GTK_CONTAINER (sw), tree_view);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), tree_view);
 
   for (i = 0; i < 5; i++)
     {

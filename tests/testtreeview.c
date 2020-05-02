@@ -755,7 +755,7 @@ main (int    argc,
   
   gtk_container_add (GTK_CONTAINER (box), sw);
   
-  gtk_container_add (GTK_CONTAINER (sw), tv);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), tv);
   
   gtk_widget_show (window);
   

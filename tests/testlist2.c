@@ -123,7 +123,7 @@ int main (int argc, char *argv[])
   gtk_list_box_set_header_func (GTK_LIST_BOX (list), add_separator, NULL, NULL);
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_container_add (GTK_CONTAINER (window), sw);
-  gtk_container_add (GTK_CONTAINER (sw), list);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), list);
 
   for (i = 0; i < 20; i++)
     {

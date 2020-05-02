@@ -86,7 +86,7 @@ do_markup (GtkWidget *do_widget)
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                       GTK_POLICY_AUTOMATIC,
                                       GTK_POLICY_AUTOMATIC);
-      gtk_container_add (GTK_CONTAINER (sw), view);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), view);
 
       gtk_stack_add_named (GTK_STACK (stack), sw, "formatted");
 
@@ -99,7 +99,7 @@ do_markup (GtkWidget *do_widget)
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                       GTK_POLICY_AUTOMATIC,
                                       GTK_POLICY_AUTOMATIC);
-      gtk_container_add (GTK_CONTAINER (sw), view2);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), view2);
 
       gtk_stack_add_named (GTK_STACK (stack), sw, "source");
 

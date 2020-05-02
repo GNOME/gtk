@@ -1591,7 +1591,7 @@ create_show_processes_dialog (GtkMountOperation *op,
                                   GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (scrolled_window), TRUE);
 
-  gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), tree_view);
   gtk_container_add (GTK_CONTAINER (vbox), scrolled_window);
 
   controller = gtk_shortcut_controller_new ();
