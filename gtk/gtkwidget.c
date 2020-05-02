@@ -11549,12 +11549,15 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   gtk_css_style_snapshot_border (&boxes, snapshot);
 
   if (priv->overflow == GTK_OVERFLOW_HIDDEN)
-    gtk_snapshot_push_rounded_clip (snapshot, gtk_css_boxes_get_padding_box (&boxes));
-
-  klass->snapshot (widget, snapshot);
-
-  if (priv->overflow == GTK_OVERFLOW_HIDDEN)
-    gtk_snapshot_pop (snapshot);
+    {
+      gtk_snapshot_push_rounded_clip (snapshot, gtk_css_boxes_get_padding_box (&boxes));
+      klass->snapshot (widget, snapshot);
+      gtk_snapshot_pop (snapshot);
+    }
+  else
+    {
+      klass->snapshot (widget, snapshot);
+    }
 
   gtk_css_style_snapshot_outline (&boxes, snapshot);
 
