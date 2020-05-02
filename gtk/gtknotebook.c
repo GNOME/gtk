@@ -4245,8 +4245,9 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
     {
       GtkWidget *parent = gtk_widget_get_parent (page->menu_label);
 
-      gtk_notebook_menu_label_unparent (parent, NULL);
-      gtk_container_remove (GTK_CONTAINER (notebook->menu), parent);
+      if (parent)
+        gtk_notebook_menu_label_unparent (parent, NULL);
+      gtk_popover_set_child (GTK_POPOVER (notebook->menu), NULL);
 
       gtk_widget_queue_resize (notebook->menu);
     }
@@ -6370,6 +6371,7 @@ gtk_notebook_popup_enable (GtkNotebook *notebook)
   gtk_widget_set_parent (notebook->menu, notebook->tabs_widget);
 
   notebook->menu_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  g_object_ref_sink (notebook->menu_box);
   gtk_popover_menu_add_submenu (GTK_POPOVER_MENU (notebook->menu), notebook->menu_box, "main");
 
   for (list = gtk_notebook_search_page (notebook, NULL, STEP_NEXT, FALSE);

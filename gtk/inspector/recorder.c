@@ -1175,7 +1175,7 @@ node_property_activated (GtkTreeView *tv,
   gtk_widget_set_margin_end (image, 20);
   gtk_widget_set_margin_top (image, 20);
   gtk_widget_set_margin_bottom (image, 20);
-  gtk_container_add (GTK_CONTAINER (popover), image);
+  gtk_popover_set_child (GTK_POPOVER (popover), image);
   gtk_popover_popup (GTK_POPOVER (popover));
 
   g_signal_connect (popover, "unmap", G_CALLBACK (gtk_widget_destroy), NULL);
