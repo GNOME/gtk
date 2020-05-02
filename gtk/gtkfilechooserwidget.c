@@ -5028,7 +5028,7 @@ get_category_from_content_type (const char *content_type)
         {
           if (strcmp (mime_type_map[i].icon_name, icon_name) == 0)
             {
-              basic_type = g_strdup (gettext (mime_type_map[i].display_name));
+              basic_type = g_strdup (_(mime_type_map[i].display_name));
               break;
             }
         }
