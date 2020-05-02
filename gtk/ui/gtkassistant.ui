@@ -21,7 +21,6 @@
             <child>
               <object class="GtkStack" id="content">
                 <property name="vexpand">1</property>
-                <signal name="remove" handler="assistant_remove_page_cb" swapped="no"/>
                 <child type="tab"/>
               </object>
             </child>
