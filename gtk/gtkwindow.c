@@ -29,10 +29,8 @@
 #include "gtkaccelgroupprivate.h"
 #include "gtkactionable.h"
 #include "gtkapplicationprivate.h"
-#include "gtkbox.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
-#include "gtkbutton.h"
 #include "gtkcheckbutton.h"
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
@@ -42,9 +40,7 @@
 #include "gtkeventcontrollerlegacy.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollermotion.h"
-#include "gtkgesturedrag.h"
 #include "gtkgestureclick.h"
-#include "gtkgestureprivate.h"
 #include "gtkheaderbar.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
@@ -52,9 +48,6 @@
 #include "gtkmarshalers.h"
 #include "gtkmessagedialog.h"
 #include "gtkpointerfocusprivate.h"
-#include "gtkpopovermenuprivate.h"
-#include "gtkmodelbuttonprivate.h"
-#include "gtkseparator.h"
 #include "gtkprivate.h"
 #include "gtkroot.h"
 #include "gtknative.h"
@@ -249,8 +242,6 @@ typedef struct
   GdkSurfaceTypeHint type_hint;
 
   GtkGesture *click_gesture;
-  GtkGesture *drag_gesture;
-  GtkGesture *bubble_drag_gesture;
   GtkEventController *key_controller;
   GtkEventController *application_shortcut_controller;
 
@@ -328,7 +319,6 @@ typedef enum
   GTK_WINDOW_REGION_EDGE_S,
   GTK_WINDOW_REGION_EDGE_SE,
   GTK_WINDOW_REGION_CONTENT,
-  GTK_WINDOW_REGION_TITLE,
 } GtkWindowRegion;
 
 typedef struct
@@ -486,8 +476,6 @@ static void gtk_window_activate_close (GtkWidget  *widget,
                                        const char *action_name,
                                        GVariant   *parameter);
 
-static void        gtk_window_do_popup                  (GtkWindow      *window,
-                                                         GdkEvent       *event);
 static void        gtk_window_css_changed               (GtkWidget      *widget,
                                                          GtkCssStyleChange *change);
 static void gtk_window_state_flags_changed (GtkWidget     *widget,
@@ -1222,66 +1210,6 @@ gtk_window_close (GtkWindow *window)
   g_object_unref (window);
 }
 
-static gboolean
-gtk_window_titlebar_action (GtkWindow      *window,
-                            GdkEvent       *event,
-                            guint           button,
-                            gint            n_press)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkSettings *settings;
-  gchar *action = NULL;
-  gboolean retval = TRUE;
-
-  settings = gtk_widget_get_settings (GTK_WIDGET (window));
-  switch (button)
-    {
-    case GDK_BUTTON_PRIMARY:
-      if (n_press == 2)
-        g_object_get (settings, "gtk-titlebar-double-click", &action, NULL);
-      break;
-    case GDK_BUTTON_MIDDLE:
-      g_object_get (settings, "gtk-titlebar-middle-click", &action, NULL);
-      break;
-    case GDK_BUTTON_SECONDARY:
-      g_object_get (settings, "gtk-titlebar-right-click", &action, NULL);
-      break;
-    default:
-      break;
-    }
-
-  if (action == NULL)
-    retval = FALSE;
-  else if (g_str_equal (action, "none"))
-    retval = FALSE;
-    /* treat all maximization variants the same */
-  else if (g_str_has_prefix (action, "toggle-maximize"))
-    {
-      /*
-       * gtk header bar won't show the maximize button if the following
-       * properties are not met, apply the same to title bar actions for
-       * consistency.
-       */
-      if (gtk_window_get_resizable (window))
-        _gtk_window_toggle_maximized (window);
-    }
-  else if (g_str_equal (action, "lower"))
-    gdk_toplevel_lower (GDK_TOPLEVEL (priv->surface));
-  else if (g_str_equal (action, "minimize"))
-    gdk_toplevel_minimize (GDK_TOPLEVEL (priv->surface));
-  else if (g_str_equal (action, "menu"))
-    gtk_window_do_popup (window, event);
-  else
-    {
-      g_warning ("Unsupported titlebar action %s", action);
-      retval = FALSE;
-    }
-
-  g_free (action);
-
-  return retval;
-}
-
 static void
 click_gesture_pressed_cb (GtkGestureClick *gesture,
                           gint             n_press,
@@ -1290,14 +1218,12 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
                           GtkWindow       *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWidget *event_widget, *widget;
   GdkEventSequence *sequence;
   GtkWindowRegion region;
   GdkEvent *event;
   guint button;
-  gboolean window_drag = FALSE;
+  double tx, ty;
 
-  widget = GTK_WIDGET (window);
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
@@ -1305,192 +1231,32 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
   if (!event)
     return;
 
-  if (n_press > 1)
-    gtk_gesture_set_state (priv->drag_gesture, GTK_EVENT_SEQUENCE_DENIED);
-
-  if (gdk_display_device_is_grabbed (gtk_widget_get_display (widget),
-                                     gtk_gesture_get_device (GTK_GESTURE (gesture))))
-    {
-      gtk_gesture_set_state (priv->drag_gesture, GTK_EVENT_SEQUENCE_DENIED);
-      return;
-    }
-
-  region = get_active_region_type (window, x, y);
-
-  if (button == GDK_BUTTON_SECONDARY && region == GTK_WINDOW_REGION_TITLE)
-    {
-      if (gtk_window_titlebar_action (window, event, button, n_press))
-        gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
-                                        sequence, GTK_EVENT_SEQUENCE_CLAIMED);
-
-      gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
-      gtk_event_controller_reset (GTK_EVENT_CONTROLLER (priv->drag_gesture));
-      return;
-    }
-  else if (button == GDK_BUTTON_MIDDLE && region == GTK_WINDOW_REGION_TITLE)
-    {
-      if (gtk_window_titlebar_action (window, event, button, n_press))
-        gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
-                                        sequence, GTK_EVENT_SEQUENCE_CLAIMED);
-      return;
-    }
-  else if (button != GDK_BUTTON_PRIMARY)
+  if (button != GDK_BUTTON_PRIMARY)
     return;
 
-  event_widget = gtk_get_event_widget ((GdkEvent *) event);
+  if (priv->maximized)
+    return;
 
-  if (region == GTK_WINDOW_REGION_TITLE)
-    gtk_window_update_toplevel (window);
-
-  switch (region)
-    {
-    case GTK_WINDOW_REGION_CONTENT:
-      if (event_widget != widget)
-        {
-          /* TODO: Have some way of enabling/disabling window-dragging on random widgets */
-        }
-
-      if (!window_drag)
-        {
-          gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
-                                          sequence, GTK_EVENT_SEQUENCE_DENIED);
-          return;
-        }
-      G_GNUC_FALLTHROUGH;
-
-    case GTK_WINDOW_REGION_TITLE:
-      if (n_press == 2)
-        gtk_window_titlebar_action (window, event, button, n_press);
-
-      if (gtk_widget_has_grab (widget))
-        gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
-                                        sequence, GTK_EVENT_SEQUENCE_CLAIMED);
-      break;
-    case GTK_WINDOW_REGION_EDGE_NW:
-    case GTK_WINDOW_REGION_EDGE_N:
-    case GTK_WINDOW_REGION_EDGE_NE:
-    case GTK_WINDOW_REGION_EDGE_W:
-    case GTK_WINDOW_REGION_EDGE_E:
-    case GTK_WINDOW_REGION_EDGE_SW:
-    case GTK_WINDOW_REGION_EDGE_S:
-    case GTK_WINDOW_REGION_EDGE_SE:
-    default:
-      if (!priv->maximized)
-        {
-          double tx, ty;
-          gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
-
-          gdk_event_get_position (event, &tx, &ty);
-          gdk_surface_begin_resize_drag (priv->surface,
-                                         (GdkSurfaceEdge) region,
-                                         gdk_event_get_device ((GdkEvent *) event),
-                                         GDK_BUTTON_PRIMARY,
-                                         tx, ty,
-                                         gdk_event_get_time (event));
-
-          gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
-          gtk_event_controller_reset (GTK_EVENT_CONTROLLER (priv->drag_gesture));
-        }
-
-      break;
-    }
-}
-
-static void
-drag_gesture_begin_cb (GtkGestureDrag *gesture,
-                       gdouble         x,
-                       gdouble         y,
-                       GtkWindow      *window)
-{
-  GtkWindowRegion region;
-  gboolean widget_drag = FALSE;
+  if (gdk_display_device_is_grabbed (gtk_widget_get_display (GTK_WIDGET (window)),
+                                     gtk_gesture_get_device (GTK_GESTURE (gesture))))
+    return;
 
   region = get_active_region_type (window, x, y);
 
-  switch (region)
-    {
-      case GTK_WINDOW_REGION_TITLE:
-        /* Claim it */
-        break;
-      case GTK_WINDOW_REGION_CONTENT:
-          /* TODO: Have some way of enabling/disabling window-dragging on random widgets */
+  if (region == GTK_WINDOW_REGION_CONTENT)
+    return;
 
-        if (!widget_drag)
-          gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
-        break;
+  gdk_event_get_position (event, &tx, &ty);
+  gdk_surface_begin_resize_drag (priv->surface,
+                                 (GdkSurfaceEdge) region,
+                                 gdk_event_get_device ((GdkEvent *) event),
+                                 GDK_BUTTON_PRIMARY,
+                                 tx, ty,
+                                 gdk_event_get_time (event));
 
-      case GTK_WINDOW_REGION_EDGE_NW:
-      case GTK_WINDOW_REGION_EDGE_N:
-      case GTK_WINDOW_REGION_EDGE_NE:
-      case GTK_WINDOW_REGION_EDGE_W:
-      case GTK_WINDOW_REGION_EDGE_E:
-      case GTK_WINDOW_REGION_EDGE_SW:
-      case GTK_WINDOW_REGION_EDGE_S:
-      case GTK_WINDOW_REGION_EDGE_SE:
-      default:
-        gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
-    }
-}
-
-static void
-drag_gesture_update_cb (GtkGestureDrag *gesture,
-                        gdouble         offset_x,
-                        gdouble         offset_y,
-                        GtkWindow      *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  gint double_click_distance;
-  GtkSettings *settings;
-
-  settings = gtk_widget_get_settings (GTK_WIDGET (window));
-  g_object_get (settings,
-                "gtk-double-click-distance", &double_click_distance,
-                NULL);
-
-  if (ABS (offset_x) > double_click_distance ||
-      ABS (offset_y) > double_click_distance)
-    {
-      GdkEventSequence *sequence;
-      gdouble start_x, start_y;
-
-      sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-
-      if (gtk_event_controller_get_propagation_phase (GTK_EVENT_CONTROLLER (gesture)) == GTK_PHASE_CAPTURE)
-        {
-          GtkWidget *event_widget = gtk_gesture_get_last_target (GTK_GESTURE (gesture), sequence);
-
-          /* Check whether the target widget should be left alone at handling
-           * the sequence, this is better done late to give room for gestures
-           * there to go denied.
-           *
-           * Besides claiming gestures, we must bail out too if there's gestures
-           * in the "none" state at this point, as those are still handling events
-           * and can potentially go claimed, and we don't want to stop the target
-           * widget from doing anything.
-           */
-          if (event_widget != GTK_WIDGET (window) &&
-              !gtk_widget_has_grab (event_widget) &&
-              gtk_widget_consumes_motion (event_widget, GTK_WIDGET (window), sequence))
-            {
-              gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
-              return;
-            }
-        }
-
-      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
-
-      gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
-
-      gdk_surface_begin_move_drag (priv->surface,
-                                   gtk_gesture_get_device (GTK_GESTURE (gesture)),
-                                   gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)),
-                                   (int)start_x, (int)start_y,
-                                   gtk_event_controller_get_current_event_time (GTK_EVENT_CONTROLLER (gesture)));
-
-      gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
-      gtk_event_controller_reset (GTK_EVENT_CONTROLLER (priv->click_gesture));
-    }
+  gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
 }
 
 static void
@@ -1853,21 +1619,6 @@ gtk_window_init (GtkWindow *window)
   gtk_widget_add_controller (widget, controller);
 }
 
-static GtkGesture *
-create_drag_gesture (GtkWindow *window)
-{
-  GtkGesture *gesture;
-
-  gesture = gtk_gesture_drag_new ();
-  g_signal_connect (gesture, "drag-begin",
-                    G_CALLBACK (drag_gesture_begin_cb), window);
-  g_signal_connect (gesture, "drag-update",
-                    G_CALLBACK (drag_gesture_update_cb), window);
-  gtk_widget_add_controller (GTK_WIDGET (window), GTK_EVENT_CONTROLLER (gesture));
-
-  return gesture;
-}
-
 static void
 gtk_window_constructed (GObject *object)
 {
@@ -1883,14 +1634,6 @@ gtk_window_constructed (GObject *object)
   g_signal_connect (priv->click_gesture, "pressed",
                     G_CALLBACK (click_gesture_pressed_cb), object);
   gtk_widget_add_controller (GTK_WIDGET (object), GTK_EVENT_CONTROLLER (priv->click_gesture));
-
-  priv->drag_gesture = create_drag_gesture (window);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture),
-                                              GTK_PHASE_CAPTURE);
-
-  priv->bubble_drag_gesture = create_drag_gesture (window);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->bubble_drag_gesture),
-                                              GTK_PHASE_BUBBLE);
 
   g_list_store_append (toplevel_list, window);
   g_object_unref (window);
@@ -4887,12 +4630,6 @@ gtk_window_unrealize (GtkWidget *widget)
 
   gsk_renderer_unrealize (priv->renderer);
 
-  if (priv->popup_menu)
-    {
-      gtk_widget_destroy (priv->popup_menu);
-      priv->popup_menu = NULL;
-    }
-
   /* Icons */
   gtk_window_unrealize_icon (window);
 
@@ -5230,7 +4967,6 @@ static GtkWindowRegion
 get_active_region_type (GtkWindow *window, gint x, gint y)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkAllocation allocation;
   gint i;
 
   if (priv->client_decorated)
@@ -5240,16 +4976,6 @@ get_active_region_type (GtkWindow *window, gint x, gint y)
           if (edge_under_coordinates (window, x, y, i))
             return i;
         }
-    }
-
-  if (priv->title_box != NULL &&
-      gtk_widget_get_visible (priv->title_box) &&
-      gtk_widget_get_child_visible (priv->title_box))
-    {
-      gtk_widget_get_allocation (priv->title_box, &allocation);
-      if (allocation.x <= x && allocation.x + allocation.width > x &&
-          allocation.y <= y && allocation.y + allocation.height > y)
-        return GTK_WINDOW_REGION_TITLE;
     }
 
   return GTK_WINDOW_REGION_CONTENT;
@@ -5747,236 +5473,6 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
   
   g_object_unref (widget);
   g_object_unref (window);
-}
-
-static void
-popup_menu_closed (GtkPopover *popover,
-                   GtkWindow  *widget)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (widget));
-
-  g_clear_pointer (&priv->popup_menu, gtk_widget_unparent);
-}
-
-static GdkSurfaceState
-gtk_window_get_state (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  if (priv->surface)
-    return gdk_toplevel_get_state (GDK_TOPLEVEL (priv->surface));
-
-  return 0;
-}
-
-static void
-restore_window_clicked (GtkModelButton *button,
-                        gpointer        user_data)
-{
-  GtkWindow *window = GTK_WINDOW (user_data);
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GdkSurfaceState state;
-
-  if (priv->maximized)
-    {
-      gtk_window_unmaximize (window);
-
-      return;
-    }
-
-  state = gtk_window_get_state (window);
-
-  if (state & GDK_SURFACE_STATE_MINIMIZED)
-    gtk_window_unminimize (window);
-}
-
-static void
-move_window_clicked (GtkModelButton *button,
-                     gpointer        user_data)
-{
-  GtkWindow *window = GTK_WINDOW (user_data);
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  gdk_surface_begin_move_drag (priv->surface,
-                               NULL,
-                               0, /* 0 means "use keyboard" */
-                               0, 0,
-                               GDK_CURRENT_TIME);
-}
-
-static void
-resize_window_clicked (GtkModelButton *button,
-                       gpointer        user_data)
-{
-  GtkWindow *window = GTK_WINDOW (user_data);
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  gdk_surface_begin_resize_drag (priv->surface,
-                                 0,
-                                 NULL,
-                                 0, /* 0 means "use keyboard" */
-                                 0, 0,
-                                 GDK_CURRENT_TIME);
-}
-
-static void
-minimize_window_clicked (GtkModelButton *button,
-                         gpointer        user_data)
-{
-  GtkWindow *window = GTK_WINDOW (user_data);
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  /* Turns out, we can't minimize a maximized window */
-  if (priv->maximized)
-    gtk_window_unmaximize (window);
-
-  gtk_window_minimize (window);
-}
-
-static void
-maximize_window_clicked (GtkModelButton *button,
-                         gpointer        user_data)
-{
-  gtk_window_maximize (GTK_WINDOW (user_data));
-}
-
-static void
-ontop_window_clicked (GtkModelButton *button,
-                      gpointer        user_data)
-{
-  GtkWindow *window = (GtkWindow *)user_data;
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  gtk_popover_popdown (GTK_POPOVER (priv->popup_menu));
-}
-
-static void
-close_window_clicked (GtkModelButton *button,
-                      gpointer        user_data)
-{
-  GtkWindow *window = (GtkWindow *)user_data;
-
-  gtk_window_close (window);
-}
-
-static void
-gtk_window_do_popup_fallback (GtkWindow *window,
-                              GdkEvent  *event)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWidget *menuitem;
-  GdkSurfaceState state;
-  gboolean maximized, minimized;
-  GtkWidget *box;
-
-  if (priv->popup_menu)
-    gtk_widget_destroy (priv->popup_menu);
-
-  state = gtk_window_get_state (window);
-
-  minimized = (state & GDK_SURFACE_STATE_MINIMIZED) == GDK_SURFACE_STATE_MINIMIZED;
-  maximized = priv->maximized && !minimized;
-
-  priv->popup_menu = gtk_popover_menu_new ();
-  gtk_widget_set_parent (priv->popup_menu, priv->title_box);
-
-  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_popover_menu_add_submenu (GTK_POPOVER_MENU (priv->popup_menu), box, "main");
-
-  menuitem = gtk_model_button_new ();
-  g_object_set (menuitem, "text", _("Restore"), NULL);
-
-  /* "Restore" means "Unmaximize" or "Unminimize"
-   * (yes, some WMs allow window menu to be shown for minimized windows).
-   * Not restorable:
-   *   - visible windows that are not maximized or minimized
-   *   - non-resizable windows that are not minimized
-   *   - non-normal windows
-   */
-  if ((gtk_widget_is_visible (GTK_WIDGET (window)) &&
-       !(maximized || minimized)) ||
-      (!minimized && !priv->resizable))
-    gtk_widget_set_sensitive (menuitem, FALSE);
-  g_signal_connect (G_OBJECT (menuitem), "clicked",
-                    G_CALLBACK (restore_window_clicked), window);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
-
-  menuitem = gtk_model_button_new ();
-  g_object_set (menuitem, "text", _("Move"), NULL);
-
-  if (maximized || minimized)
-    gtk_widget_set_sensitive (menuitem, FALSE);
-  g_signal_connect (G_OBJECT (menuitem), "clicked",
-                    G_CALLBACK (move_window_clicked), window);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
-
-  menuitem = gtk_model_button_new ();
-  g_object_set (menuitem, "text", _("Resize"), NULL);
-
-  if (!priv->resizable || maximized || minimized)
-    gtk_widget_set_sensitive (menuitem, FALSE);
-  g_signal_connect (G_OBJECT (menuitem), "clicked",
-                    G_CALLBACK (resize_window_clicked), window);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
-
-  menuitem = gtk_model_button_new ();
-  g_object_set (menuitem, "text", _("Minimize"), NULL);
-
-  if (minimized)
-    gtk_widget_set_sensitive (menuitem, FALSE);
-  g_signal_connect (G_OBJECT (menuitem), "clicked",
-                    G_CALLBACK (minimize_window_clicked), window);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
-
-  menuitem = gtk_model_button_new ();
-  g_object_set (menuitem, "text", _("Maximize"), NULL);
-
-  if (maximized || !priv->resizable)
-    gtk_widget_set_sensitive (menuitem, FALSE);
-  g_signal_connect (G_OBJECT (menuitem), "clicked",
-                    G_CALLBACK (maximize_window_clicked), window);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
-
-  menuitem = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
-
-  menuitem = gtk_model_button_new ();
-  g_object_set (menuitem,
-                "text", _("Always on Top"),
-                "role", GTK_BUTTON_ROLE_CHECK,
-                NULL);
-
-  if (maximized)
-    gtk_widget_set_sensitive (menuitem, FALSE);
-  g_signal_connect (G_OBJECT (menuitem), "clicked",
-                    G_CALLBACK (ontop_window_clicked), window);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
-
-  menuitem = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
-
-  menuitem = gtk_model_button_new ();
-  g_object_set (menuitem, "text", _("Close"), NULL);
-
-  if (!priv->deletable)
-    gtk_widget_set_sensitive (menuitem, FALSE);
-  g_signal_connect (G_OBJECT (menuitem), "clicked",
-                    G_CALLBACK (close_window_clicked), window);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
-
-  g_signal_connect (priv->popup_menu, "closed",
-                    G_CALLBACK (popup_menu_closed), window);
-  gtk_popover_popup (GTK_POPOVER (priv->popup_menu));
-}
-
-static void
-gtk_window_do_popup (GtkWindow *window,
-                     GdkEvent  *event)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  if (!gdk_toplevel_show_window_menu (GDK_TOPLEVEL (priv->surface), event))
-    gtk_window_do_popup_fallback (window, event);
 }
 
 /*********************************
