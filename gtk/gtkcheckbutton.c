@@ -128,26 +128,6 @@ gtk_check_button_finalize (GObject *object)
 }
 
 static void
-gtk_check_button_add (GtkContainer *container,
-                      GtkWidget    *widget)
-{
-  _gtk_bin_set_child (GTK_BIN (container), widget);
-
-  if (gtk_widget_get_direction (GTK_WIDGET (container)) == GTK_TEXT_DIR_RTL)
-    gtk_widget_insert_after (widget, GTK_WIDGET (container), NULL);
-  else
-    gtk_widget_set_parent (widget, GTK_WIDGET (container));
-}
-
-static void
-gtk_check_button_remove (GtkContainer *container,
-                         GtkWidget    *widget)
-{
-  _gtk_bin_set_child (GTK_BIN (container), NULL);
-  gtk_widget_unparent (widget);
-}
-
-static void
 gtk_check_button_measure (GtkWidget      *widget,
                           GtkOrientation  orientation,
                           int             for_size,
@@ -173,7 +153,7 @@ gtk_check_button_measure (GtkWidget      *widget,
                           &indicator_min, &indicator_nat, NULL, NULL);
     }
 
-  child = gtk_bin_get_child (GTK_BIN (widget));
+  child = gtk_button_get_child (GTK_BUTTON (widget));
 
   if (child)
     {
@@ -228,7 +208,7 @@ gtk_check_button_size_allocate (GtkWidget *widget,
       gtk_widget_size_allocate (priv->indicator_widget, &child_alloc, baseline);
     }
 
-  child = gtk_bin_get_child (GTK_BIN (widget));
+  child = gtk_button_get_child (GTK_BUTTON (widget));
   if (child)
     {
       child_alloc.x = x;
@@ -311,7 +291,6 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
 
   object_class->finalize = gtk_check_button_finalize;
   object_class->set_property = gtk_check_button_set_property;
@@ -321,9 +300,6 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   widget_class->size_allocate = gtk_check_button_size_allocate;
   widget_class->state_flags_changed = gtk_check_button_state_flags_changed;
   widget_class->direction_changed = gtk_check_button_direction_changed;
-
-  container_class->add = gtk_check_button_add;
-  container_class->remove = gtk_check_button_remove;
 
   props[PROP_DRAW_INDICATOR] =
       g_param_spec_boolean ("draw-indicator",
@@ -340,6 +316,8 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
+
+  gtk_widget_class_set_layout_manager_type (widget_class, G_TYPE_NONE);
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_CHECK_BOX);
   gtk_widget_class_set_css_name (widget_class, I_("checkbutton"));
