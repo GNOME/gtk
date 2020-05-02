@@ -645,18 +645,9 @@ gtk_window_measure (GtkWidget      *widget,
   int title_nat_size = 0;
   int child_min_size = 0;
   int child_nat_size = 0;
-  GtkBorder window_border = { 0 };
-
 
   if (priv->decorated && !priv->fullscreen)
     {
-      get_shadow_width (window, &window_border);
-
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        for_size -= window_border.left + window_border.right;
-      else
-        for_size -= window_border.top + window_border.bottom;
-
       if (priv->title_box != NULL &&
           gtk_widget_get_visible (priv->title_box) &&
           gtk_widget_get_child_visible (priv->title_box))
@@ -695,17 +686,13 @@ gtk_window_measure (GtkWidget      *widget,
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      title_min_size += window_border.left + window_border.right;
-      title_nat_size += window_border.left + window_border.right;
-      child_min_size += window_border.left + window_border.right;
-      child_nat_size += window_border.left + window_border.right;
       *minimum = MAX (title_min_size, child_min_size);
       *natural = MAX (title_nat_size, child_nat_size);
     }
   else
     {
-      *minimum = title_min_size + child_min_size + window_border.top + window_border.bottom;
-      *natural = title_nat_size + child_nat_size + window_border.top + window_border.bottom;
+      *minimum = title_min_size + child_min_size;
+      *natural = title_nat_size + child_nat_size;
     }
 }
 
