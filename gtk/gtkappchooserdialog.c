@@ -433,7 +433,7 @@ setup_search (GtkAppChooserDialog *self)
       button = gtk_toggle_button_new ();
       gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
       image = gtk_image_new_from_icon_name ("edit-find-symbolic");
-      gtk_container_add (GTK_CONTAINER (button), image);
+      gtk_button_set_child (GTK_BUTTON (button), image);
       gtk_widget_add_css_class (button, "image-button");
       gtk_widget_remove_css_class (button, "text-button");
 

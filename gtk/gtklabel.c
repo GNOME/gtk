@@ -140,7 +140,7 @@
  *   // Pressing Alt+H will activate this button
  *   GtkWidget *button = gtk_button_new ();
  *   GtkWidget *label = gtk_label_new_with_mnemonic ("_Hello");
- *   gtk_container_add (GTK_CONTAINER (button), label);
+ *   gtk_button_set_child (GTK_BUTTON (button), label);
  * ]|
  *
  * There’s a convenience function to create buttons with a mnemonic label

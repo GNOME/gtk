@@ -558,7 +558,7 @@ gtk_font_button_init (GtkFontButton *font_button)
   gtk_container_add (GTK_CONTAINER (font_button->font_size_box), font_button->size_label);
   gtk_container_add (GTK_CONTAINER (box), font_button->font_size_box);
 
-  gtk_container_add (GTK_CONTAINER (font_button->button), box);
+  gtk_button_set_child (GTK_BUTTON (font_button->button), box);
   gtk_widget_set_parent (font_button->button, GTK_WIDGET (font_button));
 
   /* Initialize fields */
