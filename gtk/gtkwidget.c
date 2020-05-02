@@ -2366,7 +2366,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
     gtk_shortcut_manager_create_controllers (widget);
 
   layout_manager_type = gtk_widget_class_get_layout_manager_type (g_class);
-  if (layout_manager_type != G_TYPE_INVALID)
+  if (g_type_is_a (layout_manager_type, GTK_TYPE_LAYOUT_MANAGER))
     gtk_widget_set_layout_manager (widget, g_object_new (layout_manager_type, NULL));
 
   if (g_list_model_get_n_items (G_LIST_MODEL (GTK_WIDGET_CLASS (g_class)->priv->shortcuts)) > 0)
@@ -12230,7 +12230,7 @@ gtk_widget_class_set_layout_manager_type (GtkWidgetClass *widget_class,
   GtkWidgetClassPrivate *priv;
 
   g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
-  g_return_if_fail (g_type_is_a (type, GTK_TYPE_LAYOUT_MANAGER));
+  g_return_if_fail (type == G_TYPE_NONE || g_type_is_a (type, GTK_TYPE_LAYOUT_MANAGER));
 
   priv = widget_class->priv;
 
