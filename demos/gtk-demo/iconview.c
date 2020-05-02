@@ -312,7 +312,7 @@ do_iconview (GtkWidget *do_widget)
       /* Connect to the "item-activated" signal */
       g_signal_connect (icon_view, "item-activated",
                         G_CALLBACK (item_activated), store);
-      gtk_container_add (GTK_CONTAINER (sw), icon_view);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), icon_view);
 
       gtk_widget_grab_focus (icon_view);
     }

@@ -232,7 +232,7 @@ main (int argc, char *argv[])
 
   extra_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE);
   gtk_box_set_spacing (GTK_BOX (extra_hbox), 6);
-  gtk_container_add (GTK_CONTAINER (scrolled), extra_hbox);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled), extra_hbox);
   gtk_widget_show (extra_hbox);
 
   bbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);

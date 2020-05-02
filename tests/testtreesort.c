@@ -235,7 +235,7 @@ main (int argc, char *argv[])
 					WORD_COLUMN_1,
 					GTK_SORT_ASCENDING);*/
 
-  gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), tree_view);
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
   gtk_widget_show (window);
 
@@ -299,9 +299,8 @@ main (int argc, char *argv[])
       gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (smodel),
 					    WORD_COLUMN_1,
 					    GTK_SORT_DESCENDING);*/
-      
-      
-      gtk_container_add (GTK_CONTAINER (scrolled_window2), tree_view2);
+
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window2), tree_view2);
       gtk_window_set_default_size (GTK_WINDOW (window2), 400, 400);
       gtk_widget_show (window2);
     }
@@ -367,8 +366,8 @@ main (int argc, char *argv[])
       gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (ssmodel),
 					    WORD_COLUMN_1,
 					    GTK_SORT_ASCENDING);*/
-      
-      gtk_container_add (GTK_CONTAINER (scrolled_window3), tree_view3);
+
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window3), tree_view3);
       gtk_window_set_default_size (GTK_WINDOW (window3), 400, 400);
       gtk_widget_show (window3);
     }

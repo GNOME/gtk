@@ -474,7 +474,7 @@ do_dnd (GtkWidget *do_widget)
 
       box3 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_widget_add_css_class (box3, "linked");
-      gtk_container_add (GTK_CONTAINER (sw), box3);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), box3);
 
       for (i = 0; colors[i]; i++)
         {
