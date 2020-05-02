@@ -4052,8 +4052,8 @@ colorchooser .popover.osd { border-radius: 5px; }
 /**********************
  * Window Decorations *
  *********************/
-decoration,
-window {
+window,
+dialog {
   border-radius: $window_radius $window_radius 0 0;
   // lamefun trick to get rounded borders regardless of CSD use
   border-width: 0px;
