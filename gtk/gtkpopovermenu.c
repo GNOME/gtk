@@ -265,7 +265,7 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
   gtk_stack_set_vhomogeneous (GTK_STACK (stack), FALSE);
   gtk_stack_set_transition_type (GTK_STACK (stack), GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT);
   gtk_stack_set_interpolate_size (GTK_STACK (stack), TRUE);
-  gtk_container_add (GTK_CONTAINER (popover), stack);
+  gtk_popover_set_child (GTK_POPOVER (popover), stack);
   g_signal_connect (stack, "notify::visible-child-name",
                     G_CALLBACK (visible_submenu_changed), popover);
 
@@ -328,9 +328,7 @@ gtk_popover_menu_get_property (GObject    *object,
                                GValue     *value,
                                GParamSpec *pspec)
 {
-  GtkWidget *stack;
-
-  stack = gtk_bin_get_child (GTK_BIN (object));
+  GtkWidget *stack = gtk_popover_get_child (GTK_POPOVER (object));
 
   switch (property_id)
     {
@@ -354,9 +352,7 @@ gtk_popover_menu_set_property (GObject      *object,
                                const GValue *value,
                                GParamSpec   *pspec)
 {
-  GtkWidget *stack;
-
-  stack = gtk_bin_get_child (GTK_BIN (object));
+  GtkWidget *stack = gtk_popover_get_child (GTK_POPOVER (object));
 
   switch (property_id)
     {
@@ -588,7 +584,7 @@ gtk_popover_menu_open_submenu (GtkPopoverMenu *popover,
 
   g_return_if_fail (GTK_IS_POPOVER_MENU (popover));
 
-  stack = gtk_bin_get_child (GTK_BIN (popover));
+  stack = gtk_popover_get_child (GTK_POPOVER (popover));
   gtk_stack_set_visible_child_name (GTK_STACK (stack), name);
 }
 
@@ -597,9 +593,7 @@ gtk_popover_menu_add_submenu (GtkPopoverMenu *popover,
                               GtkWidget      *submenu,
                               const char     *name)
 {
-  GtkWidget *stack;
-
-  stack = gtk_bin_get_child (GTK_BIN (popover));
+  GtkWidget *stack = gtk_popover_get_child (GTK_POPOVER (popover));
   gtk_stack_add_named (GTK_STACK (stack), submenu, name);
 }
 
@@ -689,7 +683,7 @@ gtk_popover_menu_set_menu_model (GtkPopoverMenu *popover,
       GtkWidget *stack;
       GtkWidget *child;
 
-      stack = gtk_bin_get_child (GTK_BIN (popover));
+      stack = gtk_popover_get_child (GTK_POPOVER (popover));
       while ((child = gtk_widget_get_first_child (stack)))
         gtk_container_remove (GTK_CONTAINER (stack), child);
 
