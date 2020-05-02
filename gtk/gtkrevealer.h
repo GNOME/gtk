@@ -22,7 +22,7 @@
 #ifndef __GTK_REVEALER_H__
 #define __GTK_REVEALER_H__
 
-#include <gtk/gtkbin.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
