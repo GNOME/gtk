@@ -424,7 +424,7 @@ main (int argc, char *argv[])
   popover = gtk_popover_new ();
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), popover);
   box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (popover), box2);
+  gtk_popover_set_child (GTK_POPOVER (popover), box2);
 
   button = gtk_label_new ("Hidden here");
   custom = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
