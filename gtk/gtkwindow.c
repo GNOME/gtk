@@ -1471,7 +1471,7 @@ drag_gesture_update_cb (GtkGestureDrag *gesture,
            */
           if (event_widget != GTK_WIDGET (window) &&
               !gtk_widget_has_grab (event_widget) &&
-              _gtk_widget_consumes_motion (event_widget, sequence))
+              gtk_widget_consumes_motion (event_widget, GTK_WIDGET (window), sequence))
             {
               gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
               return;
