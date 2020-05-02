@@ -173,7 +173,7 @@ int main (int argc, char *argv[])
   gtk_widget_show (window);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
-  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_window_set_child (GTK_WINDOW (window), vbox);
 
   hbox = make_switch (FALSE, TRUE);
   gtk_container_add (GTK_CONTAINER (vbox), hbox);

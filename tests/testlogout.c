@@ -86,7 +86,7 @@ activate (GtkApplication *app,
   gtk_widget_set_margin_end (box, 12);
   gtk_widget_set_margin_top (box, 12);
   gtk_widget_set_margin_bottom (box, 12);
-  gtk_container_add (GTK_CONTAINER (win), box);
+  gtk_window_set_child (GTK_WINDOW (win), box);
 
   grid = gtk_grid_new ();
   gtk_grid_set_row_spacing (GTK_GRID (grid), 6);

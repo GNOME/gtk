@@ -27,7 +27,7 @@ main (int argc, char *argv[])
 
   view = gtk_places_view_new ();
 
-  gtk_container_add (GTK_CONTAINER (win), view);
+  gtk_window_set_child (GTK_WINDOW (win), view);
   gtk_widget_show (win);
 
   g_signal_connect (win, "destroy", G_CALLBACK (quit_cb), &done);

@@ -83,7 +83,7 @@ new_window (GApplication *app,
   gtk_window_set_title (GTK_WINDOW (window), "Plugman");
 
   grid = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (window), grid);
+  gtk_window_set_child (GTK_WINDOW (window), grid);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_hexpand (scrolled, TRUE);

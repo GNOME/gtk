@@ -89,7 +89,7 @@ open_test_window (void)
 
   grid = gtk_grid_new ();
 
-  gtk_container_add (GTK_CONTAINER (test_window), grid);
+  gtk_window_set_child (GTK_WINDOW (test_window), grid);
 
   for (i = 0; i < TEST_WIDGET_LAST; ++i)
     {
@@ -146,7 +146,7 @@ open_control_window (void)
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
 
   toggle =
     gtk_toggle_button_new_with_label ("Set small size requests");
@@ -253,7 +253,7 @@ open_alignment_window (void)
   gtk_grid_set_row_homogeneous (GTK_GRID (grid), TRUE);
   gtk_grid_set_column_homogeneous (GTK_GRID (grid), TRUE);
 
-  gtk_container_add (GTK_CONTAINER (test_window), grid);
+  gtk_window_set_child (GTK_WINDOW (test_window), grid);
 
   for (i = 0; i < align_class->n_values; ++i)
     {
@@ -308,7 +308,7 @@ open_margin_window (void)
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
-  gtk_container_add (GTK_CONTAINER (test_window), box);
+  gtk_window_set_child (GTK_WINDOW (test_window), box);
 
   for (i = 0; i < (int) G_N_ELEMENTS (margins); ++i)
     {
@@ -332,7 +332,7 @@ open_valigned_label_window (void)
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_show (box);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
 
   label = gtk_label_new ("Both labels expand");
   gtk_widget_show (label);

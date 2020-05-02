@@ -904,7 +904,6 @@ test_children (void)
 {
   GtkBuilder * builder;
   GtkWidget *content_area;
-  GList *children;
   const gchar buffer1[] =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window1\">"
@@ -934,7 +933,9 @@ test_children (void)
 
   GObject *window, *button;
   GObject *dialog, *vbox, *action_area;
-  
+  GtkWidget *child;
+  int count;
+
   builder = builder_new_from_string (buffer1, -1, NULL);
   window = gtk_builder_get_object (builder, "window1");
   g_assert (window != NULL);
@@ -948,15 +949,18 @@ test_children (void)
 
   gtk_widget_destroy (GTK_WIDGET (window));
   g_object_unref (builder);
-  
+
   builder = builder_new_from_string (buffer2, -1, NULL);
   dialog = gtk_builder_get_object (builder, "dialog1");
   g_assert (dialog != NULL);
   g_assert (GTK_IS_DIALOG (dialog));
-  children = gtk_container_get_children (GTK_CONTAINER (dialog));
-  g_assert_cmpint (g_list_length (children), ==, 2);
-  g_list_free (children);
-  
+  count = 0;
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (dialog));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    count++;
+  g_assert_cmpint (count, ==, 2);
+
   vbox = gtk_builder_get_object (builder, "dialog1-vbox");
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   g_assert (vbox != NULL);

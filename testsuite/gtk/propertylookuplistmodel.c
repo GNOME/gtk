@@ -112,7 +112,7 @@ create_widget_tree (void)
   widgets = g_slist_prepend (widgets, window);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
 
   grid = gtk_grid_new ();
   gtk_container_add (GTK_CONTAINER (box), grid);

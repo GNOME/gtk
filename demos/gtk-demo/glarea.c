@@ -401,7 +401,7 @@ create_glarea_window (GtkWidget *do_widget)
   gtk_widget_set_margin_top (box, 12);
   gtk_widget_set_margin_bottom (box, 12);
   gtk_box_set_spacing (GTK_BOX (box), 6);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
 
   gl_area = gtk_gl_area_new ();
   gtk_widget_set_hexpand (gl_area, TRUE);

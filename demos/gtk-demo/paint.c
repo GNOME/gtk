@@ -389,7 +389,7 @@ do_paint (GtkWidget *toplevel)
       window = gtk_window_new ();
 
       draw_area = drawing_area_new ();
-      gtk_container_add (GTK_CONTAINER (window), draw_area);
+      gtk_window_set_child (GTK_WINDOW (window), draw_area);
 
       headerbar = gtk_header_bar_new ();
       gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (headerbar), TRUE);
