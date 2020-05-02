@@ -249,7 +249,7 @@ gtk_action_bar_init (GtkActionBar *self)
   gtk_center_box_set_start_widget (GTK_CENTER_BOX (self->center_box), self->start_box);
   gtk_center_box_set_end_widget (GTK_CENTER_BOX (self->center_box), self->end_box);
 
-  gtk_container_add (GTK_CONTAINER (self->revealer), self->center_box);
+  gtk_revealer_set_child (GTK_REVEALER (self->revealer), self->center_box);
 }
 
 static GtkBuildableIface *parent_buildable_iface;

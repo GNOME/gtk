@@ -151,7 +151,7 @@ main (int argc, char *argv[])
 
   frame = gtk_frame_new (NULL);
   gtk_widget_add_css_class (frame, "app-notification");
-  gtk_container_add (GTK_CONTAINER (revealer), frame);
+  gtk_revealer_set_child (GTK_REVEALER (revealer), frame);
   gtk_widget_show (frame);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE);

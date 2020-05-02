@@ -63,7 +63,7 @@ main(int argc, char **argv)
   gtk_window_set_child (GTK_WINDOW (window), revealer);
 
   grid = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (revealer), grid);
+  gtk_revealer_set_child (GTK_REVEALER (revealer), grid);
 
   cssprovider = gtk_css_provider_new ();
   gtk_css_provider_load_from_data (cssprovider, "* { padding: 2px; text-shadow: 5px 5px 2px grey; }", -1);
