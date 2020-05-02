@@ -295,7 +295,7 @@ main(int argc, char **argv)
   window = gtk_window_new ();
   widget = g_object_new (GTK_TYPE_FOCUS_WIDGET, NULL);
 
-  gtk_window_set_decorated (GTK_WINDOW (window), FALSE);
+  /*gtk_window_set_decorated (GTK_WINDOW (window), FALSE);*/
 
   gtk_window_set_child (GTK_WINDOW (window), widget);
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
