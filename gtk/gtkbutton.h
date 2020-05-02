@@ -30,7 +30,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkbin.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
@@ -48,7 +48,7 @@ typedef struct _GtkButtonClass        GtkButtonClass;
 struct _GtkButton
 {
   /*< private >*/
-  GtkBin parent_instance;
+  GtkWidget parent_instance;
 };
 
 /**
@@ -61,7 +61,7 @@ struct _GtkButton
  */
 struct _GtkButtonClass
 {
-  GtkBinClass        parent_class;
+  GtkWidgetClass        parent_class;
 
   /*< public >*/
 
