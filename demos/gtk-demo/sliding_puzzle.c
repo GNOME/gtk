@@ -267,11 +267,6 @@ start_puzzle (GdkPaintable *paintable)
   guint x, y;
   float aspect_ratio;
 
-  /* Remove the old grid (if there is one) */
-  grid = gtk_bin_get_child (GTK_BIN (frame));
-  if (grid)
-    gtk_aspect_frame_set_child (GTK_ASPECT_FRAME (frame), NULL);
-
   /* Create a new grid */
   grid = gtk_grid_new ();
   gtk_widget_set_can_focus (grid, TRUE);
@@ -345,7 +340,7 @@ reshuffle (void)
 {
   GtkWidget *grid;
 
-  grid = gtk_bin_get_child (GTK_BIN (frame));
+  grid = gtk_aspect_frame_get_child (GTK_ASPECT_FRAME (frame));
   if (solved)
     start_puzzle (puzzle);
   else
@@ -378,7 +373,7 @@ reconfigure (void)
   start_puzzle (puzzle); 
   popover = gtk_widget_get_ancestor (size_spin, GTK_TYPE_POPOVER);
   gtk_popover_popdown (GTK_POPOVER (popover));
-  grid = gtk_bin_get_child (GTK_BIN (frame));
+  grid = gtk_aspect_frame_get_child (GTK_ASPECT_FRAME (frame));
   gtk_widget_grab_focus (grid);
 }
 
