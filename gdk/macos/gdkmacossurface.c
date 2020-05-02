@@ -23,12 +23,14 @@
 #include <float.h>
 #include <gdk/gdk.h>
 
+#import "GdkMacosCairoView.h"
 #import "GdkMacosWindow.h"
 
 #include "gdkframeclockidleprivate.h"
 #include "gdkinternals.h"
 #include "gdksurfaceprivate.h"
 
+#include "gdkmacosdevice.h"
 #include "gdkmacosdisplay-private.h"
 #include "gdkmacosdragsurface-private.h"
 #include "gdkmacospopupsurface-private.h"
@@ -184,7 +186,6 @@ gdk_macos_surface_begin_frame (GdkMacosSurface *self)
 {
   g_assert (GDK_IS_MACOS_SURFACE (self));
 
-  g_print ("%s: begin_frame\n", G_OBJECT_TYPE_NAME (self));
 }
 
 static void
@@ -192,7 +193,6 @@ gdk_macos_surface_end_frame (GdkMacosSurface *self)
 {
   g_assert (GDK_IS_MACOS_SURFACE (self));
 
-  g_print ("%s: end_frame\n", G_OBJECT_TYPE_NAME (self));
 }
 
 static void
@@ -268,6 +268,39 @@ gdk_macos_surface_get_root_coords (GdkSurface *surface,
 
   if (root_y)
     *root_y = tmp_y;
+}
+
+static gboolean
+gdk_macos_surface_get_device_state (GdkSurface      *surface,
+                                    GdkDevice       *device,
+                                    gdouble         *x,
+                                    gdouble         *y,
+                                    GdkModifierType *mask)
+{
+  GdkDisplay *display;
+  NSWindow *nswindow;
+  NSPoint point;
+  int x_tmp;
+  int y_tmp;
+
+  g_assert (GDK_IS_MACOS_SURFACE (surface));
+  g_assert (GDK_IS_MACOS_DEVICE (device));
+  g_assert (x != NULL);
+  g_assert (y != NULL);
+  g_assert (mask != NULL);
+
+  display = gdk_surface_get_display (surface);
+  nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (surface));
+  point = [nswindow mouseLocationOutsideOfEventStream];
+
+  _gdk_macos_display_from_display_coords (GDK_MACOS_DISPLAY (display),
+                                          point.x, point.y,
+                                          &x_tmp, &y_tmp);
+
+  *x = x_tmp;
+  *y = x_tmp;
+
+  return TRUE;
 }
 
 static void
@@ -366,6 +399,7 @@ gdk_macos_surface_class_init (GdkMacosSurfaceClass *klass)
   surface_class->begin_move_drag = gdk_macos_surface_begin_move_drag;
   surface_class->begin_resize_drag = gdk_macos_surface_begin_resize_drag;
   surface_class->destroy = gdk_macos_surface_destroy;
+  surface_class->get_device_state = gdk_macos_surface_get_device_state;
   surface_class->get_root_coords = gdk_macos_surface_get_root_coords;
   surface_class->get_scale_factor = gdk_macos_surface_get_scale_factor;
   surface_class->hide = gdk_macos_surface_hide;
@@ -424,9 +458,6 @@ _gdk_macos_surface_new (GdkMacosDisplay   *display,
       g_warn_if_reached ();
       ret = NULL;
     }
-
-  if (ret != NULL)
-    gdk_surface_freeze_updates (GDK_SURFACE (ret));
 
   g_object_unref (frame_clock);
 
@@ -627,4 +658,20 @@ _gdk_macos_surface_update_position (GdkMacosSurface *self)
                                           &surface->x, &surface->y);
 
   GDK_END_MACOS_ALLOC_POOL;
+}
+
+void
+_gdk_macos_surface_damage_cairo (GdkMacosSurface *self,
+                                 cairo_surface_t *surface,
+                                 cairo_region_t  *painted)
+{
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+  GdkMacosCairoView *view;
+
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
+  g_return_if_fail (surface != NULL);
+
+  view = (GdkMacosCairoView *)[priv->window contentView];
+  [view setCairoSurfaceWithRegion:surface
+                      cairoRegion:painted];
 }

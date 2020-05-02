@@ -21,6 +21,9 @@
 
 #include "config.h"
 
+#include <CoreGraphics/CoreGraphics.h>
+#include <cairo-quartz.h>
+
 #import "GdkMacosCairoView.h"
 
 #include "gdkinternals.h"
@@ -41,6 +44,64 @@
 -(BOOL)isFlipped
 {
   return YES;
+}
+
+-(void)setCairoSurfaceWithRegion:(cairo_surface_t *)cairoSurface
+                     cairoRegion:(cairo_region_t *)cairoRegion
+{
+  guint n_rects;
+
+  g_clear_pointer (&self->surface, cairo_surface_destroy);
+  g_clear_pointer (&self->region, cairo_region_destroy);
+
+  self->surface = cairoSurface;
+  self->region = cairoRegion;
+
+  n_rects = cairo_region_num_rectangles (cairoRegion);
+  for (guint i = 0; i < n_rects; i++)
+    {
+      cairo_rectangle_int_t rect;
+
+      cairo_region_get_rectangle (cairoRegion, i, &rect);
+      [self setNeedsDisplayInRect:NSMakeRect (rect.x, rect.y, rect.width, rect.height)];
+    }
+}
+
+-(void)drawRect:(NSRect)rect
+{
+  cairo_surface_t *dest;
+  cairo_t *cr;
+  guint n_rects;
+
+  if (self->surface == NULL || self->region == NULL)
+    return;
+
+  dest = cairo_quartz_surface_create_for_cg_context (NSGraphicsContext.currentContext.CGContext,
+                                                     self.bounds.size.width,
+                                                     self.bounds.size.height);
+  cr = cairo_create (dest);
+
+  n_rects = cairo_region_num_rectangles (self->region);
+  for (guint i = 0; i < n_rects; i++)
+    {
+      cairo_rectangle_int_t r;
+
+      cairo_region_get_rectangle (self->region, i, &r);
+      cairo_rectangle (cr, r.x, r.y, r.width, r.height);
+    }
+
+  cairo_set_source_surface (cr, self->surface, 0, 0);
+  cairo_rectangle (cr, rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
+  cairo_paint (cr);
+
+  cairo_rectangle (cr, 0, 0, self.bounds.size.width, self.bounds.size.height);
+  cairo_set_source_rgb (cr, 0, 0, 0);
+  cairo_fill (cr);
+
+  cairo_destroy (cr);
+
+  cairo_surface_flush (dest);
+  cairo_surface_destroy (dest);
 }
 
 @end

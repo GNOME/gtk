@@ -21,6 +21,7 @@
 #define __GDK_MACOS_SURFACE_PRIVATE_H__
 
 #include <AppKit/AppKit.h>
+#include <cairo.h>
 
 #include "gdkinternals.h"
 #include "gdksurfaceprivate.h"
@@ -73,6 +74,9 @@ void               _gdk_macos_surface_resize                  (GdkMacosSurface  
                                                                int                 scale);
 void               _gdk_macos_surface_update_fullscreen_state (GdkMacosSurface    *self);
 void               _gdk_macos_surface_update_position         (GdkMacosSurface    *self);
+void               _gdk_macos_surface_damage_cairo            (GdkMacosSurface    *self,
+                                                               cairo_surface_t    *surface,
+                                                               cairo_region_t     *painted);
 
 G_END_DECLS
 

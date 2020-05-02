@@ -23,7 +23,9 @@
 
 #include "gdkdeviceprivate.h"
 
+#include "gdkmacoscursor-private.h"
 #include "gdkmacosdevice.h"
+#include "gdkmacossurface.h"
 
 struct _GdkMacosDevice
 {
@@ -38,6 +40,26 @@ struct _GdkMacosDeviceClass
 G_DEFINE_TYPE (GdkMacosDevice, gdk_macos_device, GDK_TYPE_DEVICE)
 
 static void
+gdk_macos_device_set_surface_cursor (GdkDevice  *device,
+                                     GdkSurface *surface,
+                                     GdkCursor  *cursor)
+{
+  NSCursor *nscursor;
+
+  g_assert (GDK_IS_MACOS_DEVICE (device));
+  g_assert (GDK_IS_MACOS_SURFACE (surface));
+  g_assert (!cursor || GDK_IS_CURSOR (cursor));
+
+  nscursor = _gdk_macos_cursor_get_ns_cursor (cursor);
+
+  if (nscursor != NULL)
+    {
+      [nscursor set];
+      [nscursor release];
+    }
+}
+
+static void
 gdk_macos_device_finalize (GObject *object)
 {
   G_OBJECT_CLASS (gdk_macos_device_parent_class)->finalize (object);
@@ -47,8 +69,11 @@ static void
 gdk_macos_device_class_init (GdkMacosDeviceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
   object_class->finalize = gdk_macos_device_finalize;
+
+  device_class->set_surface_cursor = gdk_macos_device_set_surface_cursor;
 }
 
 static void

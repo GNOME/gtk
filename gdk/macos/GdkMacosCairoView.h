@@ -26,6 +26,10 @@
 @interface GdkMacosCairoView : GdkMacosBaseView
 {
   cairo_surface_t *surface;
+  cairo_region_t  *region;
 }
+
+-(void)setCairoSurfaceWithRegion:(cairo_surface_t *)cairoSurface
+                     cairoRegion:(cairo_region_t *)region;
 
 @end

@@ -288,27 +288,26 @@ gdk_macos_display_notify_startup_complete (GdkDisplay  *display,
 static void
 gdk_macos_display_queue_events (GdkDisplay *display)
 {
-  g_warning ("Queue events");
-}
+  GdkMacosDisplay *self = (GdkMacosDisplay *)display;
+  NSEvent *nsevent;
+  GdkEvent *event;
+  GList *node;
 
-static void
-gdk_macos_display_event_data_copy (GdkDisplay *display,
-                                   GdkEvent   *event,
-                                   GdkEvent   *new_event)
-{
-  g_assert (GDK_IS_MACOS_DISPLAY (display));
-  g_assert (event != NULL);
-  g_assert (new_event != NULL);
+  g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
 
-}
+  if (!(nsevent = _gdk_macos_event_source_get_pending ()))
+    return;
 
-static void
-gdk_macos_display_event_data_free (GdkDisplay *display,
-                                   GdkEvent   *event)
-{
-  g_assert (GDK_IS_MACOS_DISPLAY (display));
-  g_assert (event != NULL);
+  if (!(event = _gdk_macos_display_translate (self, nsevent)))
+    {
+      [NSApp sendEvent:nsevent];
+      _gdk_macos_event_source_release_event (nsevent);
+      return;
+    }
 
+  node = _gdk_event_queue_append (GDK_DISPLAY (self), event);
+  _gdk_windowing_got_event (GDK_DISPLAY (self), node, event, 0);
+  _gdk_macos_event_source_release_event (nsevent);
 }
 
 static GdkSurface *
@@ -367,8 +366,6 @@ gdk_macos_display_class_init (GdkMacosDisplayClass *klass)
 
   display_class->beep = gdk_macos_display_beep;
   display_class->create_surface = gdk_macos_display_create_surface;
-  display_class->event_data_copy = gdk_macos_display_event_data_copy;
-  display_class->event_data_free = gdk_macos_display_event_data_free;
   display_class->flush = gdk_macos_display_flush;
   display_class->get_keymap = gdk_macos_display_get_keymap;
   display_class->get_monitor = gdk_macos_display_get_monitor;
@@ -486,38 +483,41 @@ _gdk_macos_display_get_screen_at_display_coords (GdkMacosDisplay *self,
   return screen;
 }
 
-static GdkEvent *
-gdk_macos_display_translate (GdkMacosDisplay *self,
-                             NSEvent         *event)
+void
+_gdk_macos_display_break_all_grabs (GdkMacosDisplay *self,
+                                    guint32          time)
 {
-  g_assert (GDK_IS_MACOS_DISPLAY (self));
-  g_assert (event != NULL);
+  GList *devices = NULL;
+  GdkSeat *seat;
 
-  /* TODO: Event translation */
+  g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
 
-  return NULL;
+  seat = gdk_display_get_default_seat (GDK_DISPLAY (self));
+
+  devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
+  devices = g_list_prepend (devices, gdk_seat_get_pointer (seat));
+
+  for (const GList *l = devices; l; l = l->next)
+    {
+      GdkDevice *device = l->data;
+      GdkDeviceGrabInfo *grab;
+
+      grab = _gdk_display_get_last_device_grab (GDK_DISPLAY (self), device);
+
+      if (grab != NULL)
+        {
+          grab->serial_end = 0;
+          grab->implicit_ungrab = TRUE;
+        }
+
+      _gdk_display_device_grab_update (GDK_DISPLAY (self), device, NULL, 0);
+    }
+
+  g_list_free (devices);
 }
 
 void
 _gdk_macos_display_queue_events (GdkMacosDisplay *self)
 {
-  NSEvent *nsevent;
-  GdkEvent *event;
-  GList *node;
-
-  g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
-
-  if (!(nsevent = _gdk_macos_event_source_get_pending ()))
-    return;
-
-  if (!(event = gdk_macos_display_translate (self, nsevent)))
-    {
-      [NSApp sendEvent:nsevent];
-      _gdk_macos_event_source_release_event (nsevent);
-      return;
-    }
-
-  node = _gdk_event_queue_append (GDK_DISPLAY (self), event);
-  _gdk_windowing_got_event (GDK_DISPLAY (self), node, event, 0);
-  _gdk_macos_event_source_release_event (nsevent);
+  gdk_macos_display_queue_events (GDK_DISPLAY (self));
 }

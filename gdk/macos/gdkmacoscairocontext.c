@@ -108,6 +108,7 @@ _gdk_macos_cairo_context_end_frame (GdkDrawContext *draw_context,
                                     cairo_region_t *painted)
 {
   GdkMacosCairoContext *self = (GdkMacosCairoContext *)draw_context;
+  GdkSurface *surface;
   cairo_t *cr;
 
   g_assert (GDK_IS_MACOS_CAIRO_CONTEXT (self));
@@ -124,6 +125,12 @@ _gdk_macos_cairo_context_end_frame (GdkDrawContext *draw_context,
   cairo_destroy (cr);
 
   cairo_surface_flush (self->window_surface);
+
+  surface = gdk_draw_context_get_surface (draw_context);
+  if (GDK_IS_MACOS_SURFACE (surface))
+    _gdk_macos_surface_damage_cairo (GDK_MACOS_SURFACE (surface),
+                                     g_steal_pointer (&self->window_surface),
+                                     painted);
 
   g_clear_pointer (&self->paint_surface, cairo_surface_destroy);
   g_clear_pointer (&self->window_surface, cairo_surface_destroy);

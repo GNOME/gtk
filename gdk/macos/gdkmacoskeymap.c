@@ -86,7 +86,7 @@ macroman2ucs (unsigned char c)
   /* Precalculated table mapping MacRoman-128 to Unicode. Generated
      by creating single element CFStringRefs then extracting the
      first character. */
-  
+
   static const unsigned short table[128] = {
     0xc4, 0xc5, 0xc7, 0xc9, 0xd1, 0xd6, 0xdc, 0xe1,
     0xe0, 0xe2, 0xe4, 0xe3, 0xe5, 0xe7, 0xe9, 0xe8,
@@ -590,7 +590,7 @@ gdk_macos_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
       GdkKeymapKey key;
 
       if (keyval_array[i] != keyval)
-	continue;
+        continue;
 
       (*n_keys)++;
 
@@ -602,7 +602,7 @@ gdk_macos_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
     }
 
   *keys = (GdkKeymapKey *)(gpointer)g_array_free (keys_array, FALSE);
-  
+
   return *n_keys > 0;
 }
 
@@ -641,29 +641,29 @@ gdk_macos_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
     keyvals_array = NULL;
 
   p = keyval_array + hardware_keycode * KEYVALS_PER_KEYCODE;
-  
+
   for (i = 0; i < KEYVALS_PER_KEYCODE; i++)
     {
       if (!p[i])
-	continue;
+        continue;
 
       (*n_entries)++;
-      
+
       if (keyvals_array)
-	g_array_append_val (keyvals_array, p[i]);
+        g_array_append_val (keyvals_array, p[i]);
 
       if (keys_array)
-	{
-	  GdkKeymapKey key;
+        {
+          GdkKeymapKey key;
 
-	  key.keycode = hardware_keycode;
-	  key.group = i >= 2;
-	  key.level = i % 2;
+          key.keycode = hardware_keycode;
+          key.group = i >= 2;
+          key.level = i % 2;
 
-	  g_array_append_val (keys_array, key);
-	}
+          g_array_append_val (keys_array, key);
+        }
     }
-  
+
   if (keys)
     *keys = (GdkKeymapKey *)(gpointer)g_array_free (keys_array, FALSE);
 
@@ -719,7 +719,7 @@ gdk_macos_keymap_translate_keyboard_state (GdkKeymap       *keymap,
     }
 
   if (keyval)
-    *keyval = tmp_keyval; 
+    *keyval = tmp_keyval;
 
   return TRUE;
 }
@@ -734,7 +734,7 @@ input_sources_changed_notification (CFNotificationCenterRef  center,
   GdkMacosKeymap *self = observer;
 
   g_assert (GDK_IS_MACOS_KEYMAP (self));
-  
+
   gdk_macos_keymap_update (self);
 }
 
@@ -788,4 +788,46 @@ _gdk_macos_keymap_new (GdkMacosDisplay *display)
   return g_object_new (GDK_TYPE_MACOS_KEYMAP,
                        "display", display,
                        NULL);
+}
+
+/* What sort of key event is this? Returns one of
+ * GDK_KEY_PRESS, GDK_KEY_RELEASE, GDK_NOTHING (should be ignored)
+ */
+GdkEventType
+_gdk_macos_keymap_get_event_type (NSEvent *event)
+{
+  unsigned short keycode;
+  unsigned int flags;
+
+  switch ([event type])
+    {
+    case NSKeyDown:
+      return GDK_KEY_PRESS;
+    case NSKeyUp:
+      return GDK_KEY_RELEASE;
+    case NSFlagsChanged:
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  /* For flags-changed events, we have to find the special key that caused the
+   * event, and see if it's in the modifier mask. */
+  keycode = [event keyCode];
+  flags = [event modifierFlags];
+
+  for (guint i = 0; i < G_N_ELEMENTS (modifier_keys); i++)
+    {
+      if (modifier_keys[i].keycode == keycode)
+        {
+          if (flags & modifier_keys[i].modmask)
+            return GDK_KEY_PRESS;
+          else
+            return GDK_KEY_RELEASE;
+        }
+    }
+
+  /* Some keypresses (eg: Expose' activations) seem to trigger flags-changed
+   * events for no good reason. Ignore them! */
+  return 0;
 }
