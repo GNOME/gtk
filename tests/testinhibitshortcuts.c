@@ -80,7 +80,7 @@ main (int argc, char *argv[])
   surface = gtk_native_get_surface (gtk_widget_get_native (window));
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
-  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_window_set_child (GTK_WINDOW (window), vbox);
 
   text_view = gtk_text_view_new ();
   gtk_widget_set_hexpand (text_view, TRUE);

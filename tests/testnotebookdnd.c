@@ -72,7 +72,7 @@ window_creation_function (GtkNotebook *source_notebook,
   gtk_notebook_set_group_name (GTK_NOTEBOOK (notebook),
                                gtk_notebook_get_group_name (source_notebook));
 
-  gtk_container_add (GTK_CONTAINER (window), notebook);
+  gtk_window_set_child (GTK_WINDOW (window), notebook);
 
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
   gtk_widget_show (window);
@@ -317,7 +317,7 @@ main (gint argc, gchar *argv[])
                    create_trash_button (),
                    1, 2, 1, 1);
 
-  gtk_container_add (GTK_CONTAINER (window), grid);
+  gtk_window_set_child (GTK_WINDOW (window), grid);
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
 
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);

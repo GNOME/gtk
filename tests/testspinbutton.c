@@ -45,7 +45,7 @@ prepare_window_for_orientation (GtkOrientation orientation)
   g_signal_connect (window, "close-request", G_CALLBACK (on_delete), NULL);
 
   mainbox = gtk_box_new (GTK_ORIENTATION_VERTICAL ^ orientation, 2);
-  gtk_container_add (GTK_CONTAINER (window), mainbox);
+  gtk_window_set_child (GTK_WINDOW (window), mainbox);
 
   wrap_button = gtk_toggle_button_new_with_label ("Wrap");
   gtk_container_add (GTK_CONTAINER (mainbox), wrap_button);

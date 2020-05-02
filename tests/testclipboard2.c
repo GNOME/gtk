@@ -448,7 +448,7 @@ main (int argc, char **argv)
 
   window = gtk_window_new ();
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
-  gtk_container_add (GTK_CONTAINER (window),
+  gtk_window_set_child (GTK_WINDOW (window),
                      get_window_contents (gtk_widget_get_display (window),
                                           alt_display));
 

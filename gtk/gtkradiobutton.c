@@ -114,7 +114,7 @@
  *    // Pack them into a box, then show all the widgets
  *    gtk_container_add (GTK_CONTAINER (box), radio1);
  *    gtk_container_add (GTK_CONTAINER (box), radio2);
- *    gtk_container_add (GTK_CONTAINER (window), box);
+      gtk_window_set_child (GTK_WINDOW (window),box);
  *    gtk_widget_show (window);
  *    return;
  * }

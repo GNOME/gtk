@@ -80,7 +80,7 @@ main (int argc, char *argv[])
   window = gtk_window_new ();
   gtk_widget_set_size_request (window, 600, 600);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
   gtk_container_add (GTK_CONTAINER (box), fontchooser);
 
   gtk_widget_show (window);

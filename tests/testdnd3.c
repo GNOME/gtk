@@ -272,7 +272,7 @@ int main (int argc, char *argv[])
   gtk_window_set_default_size (GTK_WINDOW (window), 640, 480);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
 
   box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (box), box2);

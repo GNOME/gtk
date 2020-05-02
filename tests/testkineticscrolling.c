@@ -131,7 +131,7 @@ kinetic_scrolling (void)
   gtk_widget_set_vexpand (swindow, TRUE);
   gtk_widget_show (swindow);
 
-  gtk_container_add (GTK_CONTAINER (window), grid);
+  gtk_window_set_child (GTK_WINDOW (window), grid);
   gtk_widget_show (grid);
 
   gtk_widget_show (window);

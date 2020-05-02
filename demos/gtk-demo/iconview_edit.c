@@ -146,7 +146,7 @@ do_iconview_edit (GtkWidget *do_widget)
                                       "text", COL_TEXT,
                                       NULL);
 
-      gtk_container_add (GTK_CONTAINER (window), icon_view);
+      gtk_window_set_child (GTK_WINDOW (window), icon_view);
     }
 
   if (!gtk_widget_get_visible (window))

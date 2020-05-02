@@ -139,7 +139,7 @@ main (int argc, char *argv[])
   gtk_window_set_default_size (GTK_WINDOW (window), -1, 300);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  gtk_container_add (GTK_CONTAINER (window), hbox);
+  gtk_window_set_child (GTK_WINDOW (window), hbox);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_widget_set_margin_start (vbox, 12);
   gtk_widget_set_margin_end (vbox, 12);

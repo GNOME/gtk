@@ -252,7 +252,7 @@ simple_cell_area (void)
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (expand_cell_3_toggled), iconview);
 
-  gtk_container_add (GTK_CONTAINER (window), hbox);
+  gtk_window_set_child (GTK_WINDOW (window), hbox);
 
   gtk_widget_show (window);
 }

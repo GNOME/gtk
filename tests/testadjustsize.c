@@ -146,7 +146,7 @@ open_control_window (void)
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
 
   toggle =
     gtk_toggle_button_new_with_label ("Set small size requests");

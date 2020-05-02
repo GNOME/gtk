@@ -26,7 +26,7 @@ main (int argc, char *argv[])
   gtk_window_set_default_size (GTK_WINDOW (win), 640, 480);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-  gtk_container_add (GTK_CONTAINER (win), box);
+  gtk_window_set_child (GTK_WINDOW (win), box);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
