@@ -35,7 +35,7 @@ main (gint argc,
   gtk_widget_set_valign (revealer, GTK_ALIGN_START);
   entry = gtk_entry_new ();
   gtk_editable_set_text (GTK_EDITABLE (entry), "00000");
-  gtk_container_add (GTK_CONTAINER (revealer), entry);
+  gtk_revealer_set_child (GTK_REVEALER (revealer), entry);
   g_object_bind_property (widget, "active", revealer, "reveal-child", 0);
   gtk_revealer_set_transition_type (GTK_REVEALER (revealer), GTK_REVEALER_TRANSITION_TYPE_NONE);
   gtk_revealer_set_transition_duration (GTK_REVEALER (revealer), 2000);
@@ -48,7 +48,7 @@ main (gint argc,
   gtk_widget_set_valign (revealer, GTK_ALIGN_END);
   entry = gtk_entry_new ();
   gtk_editable_set_text (GTK_EDITABLE (entry), "00000");
-  gtk_container_add (GTK_CONTAINER (revealer), entry);
+  gtk_revealer_set_child (GTK_REVEALER (revealer), entry);
   g_object_bind_property (widget, "active", revealer, "reveal-child", 0);
   gtk_revealer_set_transition_type (GTK_REVEALER (revealer), GTK_REVEALER_TRANSITION_TYPE_CROSSFADE);
   gtk_revealer_set_transition_duration (GTK_REVEALER (revealer), 2000);
@@ -61,7 +61,7 @@ main (gint argc,
   gtk_widget_set_halign (revealer, GTK_ALIGN_START);
   entry = gtk_entry_new ();
   gtk_editable_set_text (GTK_EDITABLE (entry), "12345");
-  gtk_container_add (GTK_CONTAINER (revealer), entry);
+  gtk_revealer_set_child (GTK_REVEALER (revealer), entry);
   g_object_bind_property (widget, "active", revealer, "reveal-child", 0);
   gtk_revealer_set_transition_type (GTK_REVEALER (revealer), GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT);
   gtk_revealer_set_transition_duration (GTK_REVEALER (revealer), 2000);
@@ -76,7 +76,7 @@ main (gint argc,
   gtk_widget_set_valign (revealer, GTK_ALIGN_START);
   entry = gtk_entry_new ();
   gtk_editable_set_text (GTK_EDITABLE (entry), "12345");
-  gtk_container_add (GTK_CONTAINER (revealer), entry);
+  gtk_revealer_set_child (GTK_REVEALER (revealer), entry);
   g_object_bind_property (widget, "active", revealer, "reveal-child", 0);
   gtk_revealer_set_transition_type (GTK_REVEALER (revealer), GTK_REVEALER_TRANSITION_TYPE_SWING_RIGHT);
   gtk_revealer_set_transition_duration (GTK_REVEALER (revealer), 2000);
@@ -89,7 +89,7 @@ main (gint argc,
   gtk_widget_set_valign (revealer, GTK_ALIGN_START);
   entry = gtk_entry_new ();
   gtk_editable_set_text (GTK_EDITABLE (entry), "23456");
-  gtk_container_add (GTK_CONTAINER (revealer), entry);
+  gtk_revealer_set_child (GTK_REVEALER (revealer), entry);
   g_object_bind_property (widget, "active", revealer, "reveal-child", 0);
   gtk_revealer_set_transition_type (GTK_REVEALER (revealer), GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN);
   gtk_revealer_set_transition_duration (GTK_REVEALER (revealer), 2000);
@@ -102,7 +102,7 @@ main (gint argc,
   gtk_widget_set_valign (revealer, GTK_ALIGN_START);
   entry = gtk_entry_new ();
   gtk_editable_set_text (GTK_EDITABLE (entry), "23456");
-  gtk_container_add (GTK_CONTAINER (revealer), entry);
+  gtk_revealer_set_child (GTK_REVEALER (revealer), entry);
   g_object_bind_property (widget, "active", revealer, "reveal-child", 0);
   gtk_revealer_set_transition_type (GTK_REVEALER (revealer), GTK_REVEALER_TRANSITION_TYPE_SWING_DOWN);
   gtk_revealer_set_transition_duration (GTK_REVEALER (revealer), 2000);
@@ -115,7 +115,7 @@ main (gint argc,
   gtk_widget_set_halign (revealer, GTK_ALIGN_END);
   entry = gtk_entry_new ();
   gtk_editable_set_text (GTK_EDITABLE (entry), "34567");
-  gtk_container_add (GTK_CONTAINER (revealer), entry);
+  gtk_revealer_set_child (GTK_REVEALER (revealer), entry);
   g_object_bind_property (widget, "active", revealer, "reveal-child", 0);
   gtk_revealer_set_transition_type (GTK_REVEALER (revealer), GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT);
   gtk_revealer_set_transition_duration (GTK_REVEALER (revealer), 2000);
@@ -130,7 +130,7 @@ main (gint argc,
   gtk_widget_set_valign (revealer, GTK_ALIGN_START);
   entry = gtk_entry_new ();
   gtk_editable_set_text (GTK_EDITABLE (entry), "34567");
-  gtk_container_add (GTK_CONTAINER (revealer), entry);
+  gtk_revealer_set_child (GTK_REVEALER (revealer), entry);
   g_object_bind_property (widget, "active", revealer, "reveal-child", 0);
   gtk_revealer_set_transition_type (GTK_REVEALER (revealer), GTK_REVEALER_TRANSITION_TYPE_SWING_LEFT);
   gtk_revealer_set_transition_duration (GTK_REVEALER (revealer), 2000);
@@ -143,7 +143,7 @@ main (gint argc,
   gtk_widget_set_valign (revealer, GTK_ALIGN_END);
   entry = gtk_entry_new ();
   gtk_editable_set_text (GTK_EDITABLE (entry), "45678");
-  gtk_container_add (GTK_CONTAINER (revealer), entry);
+  gtk_revealer_set_child (GTK_REVEALER (revealer), entry);
   g_object_bind_property (widget, "active", revealer, "reveal-child", 0);
   gtk_revealer_set_transition_type (GTK_REVEALER (revealer), GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP);
   gtk_revealer_set_transition_duration (GTK_REVEALER (revealer), 2000);
@@ -156,7 +156,7 @@ main (gint argc,
   gtk_widget_set_valign (revealer, GTK_ALIGN_END);
   entry = gtk_entry_new ();
   gtk_editable_set_text (GTK_EDITABLE (entry), "45678");
-  gtk_container_add (GTK_CONTAINER (revealer), entry);
+  gtk_revealer_set_child (GTK_REVEALER (revealer), entry);
   g_object_bind_property (widget, "active", revealer, "reveal-child", 0);
   gtk_revealer_set_transition_type (GTK_REVEALER (revealer), GTK_REVEALER_TRANSITION_TYPE_SWING_UP);
   gtk_revealer_set_transition_duration (GTK_REVEALER (revealer), 2000);
