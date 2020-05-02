@@ -247,7 +247,7 @@ test_scrolling (void)
 
   gtk_widget_set_hexpand (text, TRUE);
   gtk_widget_set_vexpand (text, TRUE);
-  gtk_container_add (GTK_CONTAINER (sw), text);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), text);
 
   child = gtk_label_new ("This should be visible");
   gtk_widget_set_halign (child, GTK_ALIGN_CENTER);
@@ -393,7 +393,7 @@ test_chase (void)
 
   gtk_widget_set_hexpand (text, TRUE);
   gtk_widget_set_vexpand (text, TRUE);
-  gtk_container_add (GTK_CONTAINER (sw), text);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), text);
 
   child = gtk_label_new ("Try to enter");
   gtk_widget_set_halign (child, GTK_ALIGN_START);

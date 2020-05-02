@@ -605,7 +605,8 @@ gtk_entry_completion_constructed (GObject *object)
   priv->vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_frame_set_child (GTK_FRAME (popup_frame), priv->vbox);
 
-  gtk_container_add (GTK_CONTAINER (priv->scrolled_window), priv->tree_view);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (priv->scrolled_window),
+                                 priv->tree_view);
   gtk_widget_set_hexpand (priv->scrolled_window, TRUE);
   gtk_widget_set_vexpand (priv->scrolled_window, TRUE);
   gtk_container_add (GTK_CONTAINER (priv->vbox), priv->scrolled_window);

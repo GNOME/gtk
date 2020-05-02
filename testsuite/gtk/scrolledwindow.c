@@ -29,7 +29,7 @@ test_size (gboolean       overlay,
   gtk_scrolled_window_set_propagate_natural_height (GTK_SCROLLED_WINDOW (scrolledwindow), TRUE);
   gtk_scrolled_window_set_overlay_scrolling (GTK_SCROLLED_WINDOW (scrolledwindow), overlay);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow), policy, policy);
-  gtk_container_add (GTK_CONTAINER (scrolledwindow), box);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolledwindow), box);
 
   /* Testing the content-width property */
   if (orientation == GTK_ORIENTATION_HORIZONTAL)

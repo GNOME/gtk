@@ -368,7 +368,7 @@ do_listbox (GtkWidget *do_widget)
       gtk_widget_set_vexpand (scrolled, TRUE);
       gtk_container_add (GTK_CONTAINER (vbox), scrolled);
       listbox = gtk_list_box_new ();
-      gtk_container_add (GTK_CONTAINER (scrolled), listbox);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled), listbox);
 
       gtk_list_box_set_sort_func (GTK_LIST_BOX (listbox), (GtkListBoxSortFunc)gtk_message_row_sort, listbox, NULL);
       gtk_list_box_set_activate_on_single_click (GTK_LIST_BOX (listbox), FALSE);

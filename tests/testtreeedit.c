@@ -358,7 +358,7 @@ main (gint argc, gchar **argv)
 					       "value", PROGRESS_COLUMN,
 					       NULL);
 
-  gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), tree_view);
 
   gtk_window_set_default_size (GTK_WINDOW (window),
 			       800, 250);
