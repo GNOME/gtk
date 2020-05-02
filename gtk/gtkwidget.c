@@ -11425,12 +11425,13 @@ gtk_widget_remove_controller (GtkWidget          *widget,
 }
 
 gboolean
-_gtk_widget_consumes_motion (GtkWidget        *widget,
-                             GdkEventSequence *sequence)
+gtk_widget_consumes_motion (GtkWidget        *widget,
+                            GtkWidget        *parent,
+                            GdkEventSequence *sequence)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  while (widget != NULL && !GTK_IS_WINDOW (widget))
+  while (widget != NULL && widget != parent)
     {
       GList *l;
 
