@@ -108,7 +108,7 @@ show_node_prop_editor (NodePropEditor *npe)
 
   editor = gtk_inspector_prop_editor_new (G_OBJECT (npe->node), npe->prop_name, NULL);
 
-  gtk_container_add (GTK_CONTAINER (popover), editor);
+  gtk_popover_set_child (GTK_POPOVER (popover), editor);
 
   gtk_popover_popup (GTK_POPOVER (popover));
 

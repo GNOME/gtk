@@ -952,7 +952,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                            G_CALLBACK (gtk_shortcuts_window__list_box__row_activated),
                            self,
                            G_CONNECT_SWAPPED);
-  gtk_container_add (GTK_CONTAINER (priv->popover), GTK_WIDGET (priv->list_box));
+  gtk_popover_set_child (GTK_POPOVER (priv->popover), GTK_WIDGET (priv->list_box));
 
   priv->search_entry = GTK_SEARCH_ENTRY (gtk_search_entry_new ());
   gtk_container_add (GTK_CONTAINER (priv->search_bar), GTK_WIDGET (priv->search_entry));
