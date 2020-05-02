@@ -3447,7 +3447,7 @@ gtk_widget_get_surface_allocation (GtkWidget     *widget,
 {
   GtkWidget *parent;
   graphene_rect_t bounds;
-  int nx, ny;
+  int native_x, native_y;
 
   /* Don't consider the parent == widget case here. */
   parent = _gtk_widget_get_parent (widget);
@@ -3455,13 +3455,13 @@ gtk_widget_get_surface_allocation (GtkWidget     *widget,
     parent = _gtk_widget_get_parent (parent);
 
   g_assert (GTK_IS_WINDOW (parent) || GTK_IS_POPOVER (parent));
-  gtk_native_get_surface_transform (GTK_NATIVE (parent), &nx, &ny);
+  gtk_native_get_surface_transform (GTK_NATIVE (parent), &native_x, &native_y);
 
   if (gtk_widget_compute_bounds (widget, parent, &bounds))
     {
       *allocation = (GtkAllocation){
-        floorf (bounds.origin.x) + nx,
-        floorf (bounds.origin.y) + ny,
+        floorf (bounds.origin.x) + native_x,
+        floorf (bounds.origin.y) + native_y,
         ceilf (bounds.size.width),
         ceilf (bounds.size.height)
       };
@@ -4551,8 +4551,6 @@ translate_event_coordinates (GdkEvent  *event,
   GtkWidget *event_widget;
   graphene_point_t p;
   double event_x, event_y;
-  GtkNative *native;
-  int nx, ny;
 
   *x = *y = 0;
 
@@ -4560,16 +4558,22 @@ translate_event_coordinates (GdkEvent  *event,
     return FALSE;
 
   event_widget = gtk_get_event_widget (event);
-  native = gtk_widget_get_native (event_widget);
-  gtk_native_get_surface_transform (native, &nx, &ny);
-  event_x -= nx;
-  event_y -= ny;
-
   if (!gtk_widget_compute_point (event_widget,
                                  widget,
                                  &GRAPHENE_POINT_INIT (event_x, event_y),
                                  &p))
     return FALSE;
+
+  /* POAH */
+  if (G_LIKELY (GTK_IS_NATIVE (event_widget)))
+    {
+      int transform_x, transform_y;
+
+      gtk_native_get_surface_transform (GTK_NATIVE (event_widget), &transform_x, &transform_y);
+
+      p.x -= transform_x;
+      p.y -= transform_y;
+    }
 
   *x = p.x;
   *y = p.y;
@@ -11647,10 +11651,10 @@ gtk_widget_render (GtkWidget            *widget,
                    GdkSurface           *surface,
                    const cairo_region_t *region)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkSnapshot *snapshot;
   GskRenderer *renderer;
   GskRenderNode *root;
-  int x, y;
   gint64 before_snapshot = g_get_monotonic_time ();
   gint64 before_render = 0;
 
@@ -11662,9 +11666,12 @@ gtk_widget_render (GtkWidget            *widget,
     return;
 
   snapshot = gtk_snapshot_new ();
-  gtk_native_get_surface_transform (GTK_NATIVE (widget), &x, &y);
-  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
+
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_transform (snapshot, priv->transform);
   gtk_widget_snapshot (widget, snapshot);
+  gtk_snapshot_restore (snapshot);
+
   root = gtk_snapshot_free_to_node (snapshot);
 
   if (GDK_PROFILER_IS_RUNNING)
