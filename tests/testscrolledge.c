@@ -127,7 +127,7 @@ main (int argc, char *argv[])
 
   gtk_container_add (GTK_CONTAINER (win), overlay);
   gtk_container_add (GTK_CONTAINER (overlay), sw);
-  gtk_container_add (GTK_CONTAINER (sw), list);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), list);
   populate_list (GTK_LIST_BOX (list));
 
   g_signal_connect (sw, "edge-overshot", G_CALLBACK (edge_overshot), list);

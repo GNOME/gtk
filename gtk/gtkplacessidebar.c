@@ -3810,7 +3810,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   sidebar->row_placeholder = NULL;
   sidebar->dragging_over = FALSE;
 
-  gtk_container_add (GTK_CONTAINER (sidebar->swin), sidebar->list_box);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sidebar->swin), sidebar->list_box);
 
   sidebar->hostname = g_strdup (_("Computer"));
   sidebar->hostnamed_cancellable = g_cancellable_new ();

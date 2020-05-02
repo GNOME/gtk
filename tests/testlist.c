@@ -290,7 +290,7 @@ main (int argc, char *argv[])
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-  gtk_container_add (GTK_CONTAINER (scrolled), list);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled), list);
   gtk_container_add (GTK_CONTAINER (hbox), scrolled);
 
   g_signal_connect (list, "row-activated", G_CALLBACK (row_activated_cb), NULL);

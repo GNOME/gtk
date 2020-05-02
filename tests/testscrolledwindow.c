@@ -119,7 +119,7 @@ scrollable_policy (void)
   gtk_widget_show (label);
   gtk_widget_show (viewport);
   gtk_viewport_set_child (GTK_VIEWPORT (viewport), label);
-  gtk_container_add (GTK_CONTAINER (swindow), viewport);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), viewport);
 
   /* Add controls here */
   expander = gtk_expander_new ("Controls");
@@ -232,7 +232,7 @@ scrollable_policy (void)
 
   /* Listbox */
   listbox = gtk_list_box_new ();
-  gtk_container_add (GTK_CONTAINER (swindow), listbox);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), listbox);
   gtk_widget_show (listbox);
 
   /* Min content */

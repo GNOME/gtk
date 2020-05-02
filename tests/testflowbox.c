@@ -407,7 +407,7 @@ create_window (void)
   gtk_flow_box_set_min_children_per_line (GTK_FLOW_BOX (flowbox), INITIAL_MINIMUM_LENGTH);
   gtk_flow_box_set_max_children_per_line (GTK_FLOW_BOX (flowbox), INITIAL_MAXIMUM_LENGTH);
   gtk_widget_show (flowbox);
-  gtk_container_add (GTK_CONTAINER (swindow), flowbox);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), flowbox);
 
   gtk_flow_box_set_hadjustment (GTK_FLOW_BOX (flowbox),
                                 gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (swindow)));

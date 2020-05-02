@@ -41,6 +41,7 @@
 #include "gtkspinbutton.h"
 #include "gtksettingsprivate.h"
 #include "gtktogglebutton.h"
+#include "gtkviewport.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtklistbox.h"
@@ -574,7 +575,7 @@ flags_changed (GObject *object, GParamSpec *pspec, gpointer data)
 
   popover = gtk_menu_button_get_popover (GTK_MENU_BUTTON (data));
   sw =  gtk_popover_get_child (GTK_POPOVER (popover));
-  viewport = gtk_bin_get_child (GTK_BIN (sw));
+  viewport = gtk_scrolled_window_get_child (GTK_SCROLLED_WINDOW (sw));
   box = gtk_viewport_get_child (GTK_VIEWPORT (viewport));
   children = gtk_container_get_children (GTK_CONTAINER (box));
 
@@ -957,7 +958,7 @@ property_editor (GObject                *object,
                       NULL);
         box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
         gtk_widget_show (box);
-        gtk_container_add (GTK_CONTAINER (sw), box);
+        gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), box);
 
         fclass = G_FLAGS_CLASS (g_type_class_ref (spec->value_type));
 
@@ -1034,7 +1035,7 @@ property_editor (GObject                *object,
       gtk_list_box_bind_model (GTK_LIST_BOX (box), model, create_row, editor, NULL);
       g_object_unref (model);
 
-      gtk_container_add (GTK_CONTAINER (sw), box);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), box);
     }
   else if (type == G_TYPE_PARAM_OBJECT)
     {

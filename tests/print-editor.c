@@ -765,7 +765,7 @@ activate (GApplication *app)
   contents = gtk_text_view_new ();
   gtk_widget_grab_focus (contents);
 
-  gtk_container_add (GTK_CONTAINER (sw),
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw),
                      contents);
 
   /* Create statusbar */

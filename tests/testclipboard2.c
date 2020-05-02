@@ -253,7 +253,7 @@ get_formats_list (GdkClipboard *clipboard)
   list = gtk_list_box_new ();
   g_signal_connect_object (clipboard, "notify::formats", G_CALLBACK (clipboard_formats_change_cb), list, 0);
   clipboard_formats_change_cb (clipboard, NULL, list);
-  gtk_container_add (GTK_CONTAINER (sw), list);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), list);
 
   return sw;
 }

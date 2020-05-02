@@ -503,7 +503,7 @@ do_textview (GtkWidget *do_widget)
                                       GTK_POLICY_AUTOMATIC);
       gtk_paned_add1 (GTK_PANED (vpaned), sw);
 
-      gtk_container_add (GTK_CONTAINER (sw), view1);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), view1);
 
       sw = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
@@ -511,7 +511,7 @@ do_textview (GtkWidget *do_widget)
                                       GTK_POLICY_AUTOMATIC);
       gtk_paned_add2 (GTK_PANED (vpaned), sw);
 
-      gtk_container_add (GTK_CONTAINER (sw), view2);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), view2);
 
       create_tags (buffer);
       insert_text (GTK_TEXT_VIEW (view1));
@@ -595,7 +595,7 @@ easter_egg_callback (GtkWidget *button,
                                   GTK_POLICY_AUTOMATIC);
 
   gtk_container_add (GTK_CONTAINER (window), sw);
-  gtk_container_add (GTK_CONTAINER (sw), view);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), view);
 
   window_ptr = &window;
   g_object_add_weak_pointer (G_OBJECT (window), window_ptr);
