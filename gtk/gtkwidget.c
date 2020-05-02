@@ -4645,11 +4645,29 @@ translate_event_coordinates (GdkEvent  *event,
 
   event_widget = gtk_get_event_widget (event);
 
+
   if (!gtk_widget_compute_point (event_widget,
                                  widget,
                                  &GRAPHENE_POINT_INIT (event_x, event_y),
                                  &p))
     return FALSE;
+  /* POAH */
+  if (G_LIKELY (GTK_IS_NATIVE (event_widget)))
+    {
+      int transform_x, transform_y;
+
+      gtk_native_get_surface_transform (GTK_NATIVE (event_widget), &transform_x, &transform_y);
+
+      p.x -= transform_x;
+      p.y -= transform_y;
+    }
+
+  g_message ("Translating event from %s to %s: (%f, %f) -> (%f, %f)",
+             G_OBJECT_TYPE_NAME (event_widget), G_OBJECT_TYPE_NAME (widget),
+             event_x, event_y,
+             p.x, p.y);
+
+
 
   *x = p.x;
   *y = p.y;
@@ -9987,6 +10005,18 @@ gtk_widget_pick (GtkWidget    *widget,
   if (!gtk_widget_can_be_picked (widget, flags))
     return NULL;
 
+  if (GTK_IS_NATIVE (widget))
+    {
+      int nx, ny;
+
+      gtk_native_get_surface_transform (GTK_NATIVE (widget), &nx, &ny);
+
+      g_message ("%s is a GtkNative, so subtracting %d/%d from the picking coordinates",
+                 G_OBJECT_TYPE_NAME (widget), nx, ny);
+      x -= nx;
+      y -= ny;
+    }
+
   return gtk_widget_do_pick (widget, x, y, flags);
 }
 
@@ -11645,6 +11675,7 @@ gtk_widget_render (GtkWidget            *widget,
                    GdkSurface           *surface,
                    const cairo_region_t *region)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkSnapshot *snapshot;
   GskRenderer *renderer;
   GskRenderNode *root;
@@ -11660,9 +11691,19 @@ gtk_widget_render (GtkWidget            *widget,
     return;
 
   snapshot = gtk_snapshot_new ();
-  gtk_native_get_surface_transform (GTK_NATIVE (widget), &x, &y);
-  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
-  gtk_widget_snapshot (widget, snapshot);
+  /*gtk_native_get_surface_transform (GTK_NATIVE (widget), &x, &y);*/
+  /*gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));*/
+
+    /*{*/
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_transform (snapshot, priv->transform);
+
+      gtk_widget_snapshot (widget, snapshot);
+
+      gtk_snapshot_restore (snapshot);
+
+
+  /*gtk_widget_snapshot (widget, snapshot);*/
   root = gtk_snapshot_free_to_node (snapshot);
 
   if (GDK_PROFILER_IS_RUNNING)
