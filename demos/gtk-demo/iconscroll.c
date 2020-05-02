@@ -137,7 +137,7 @@ set_widget_type (int type)
   if (tick_cb)
     gtk_widget_remove_tick_callback (window, tick_cb);
 
-  if (gtk_bin_get_child (GTK_BIN (scrolledwindow)))
+  if (gtk_scrolled_window_get_child (GTK_SCROLLED_WINDOW (scrolledwindow)))
     gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolledwindow), NULL);
 
   selected = type;
