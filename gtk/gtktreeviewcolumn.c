@@ -897,7 +897,7 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
     }
 
   gtk_container_add (GTK_CONTAINER (priv->frame), child);
-  gtk_container_add (GTK_CONTAINER (priv->button), hbox);
+  gtk_button_set_child (GTK_BUTTON (priv->button), hbox);
 }
 
 static void 
@@ -917,7 +917,7 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
   else
     model = NULL;
 
-  hbox = gtk_bin_get_child (GTK_BIN (priv->button));
+  hbox = gtk_button_get_child (GTK_BUTTON (priv->button));
   frame = priv->frame;
   arrow = priv->arrow;
   current_child = gtk_widget_get_first_child (frame);

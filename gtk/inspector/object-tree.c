@@ -1025,7 +1025,7 @@ gtk_inspector_object_tree_create_list_widget (gpointer row_item,
       gtk_container_add (GTK_CONTAINER (child), title);
 
       arrow = gtk_builtin_icon_new ("expander");
-      gtk_container_add (GTK_CONTAINER (title), arrow);
+      gtk_button_set_child (GTK_BUTTON (title), arrow);
     }
   else
     {

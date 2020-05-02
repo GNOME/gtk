@@ -477,7 +477,7 @@ add_arrow (GtkMenuButton *self)
 
   arrow = gtk_image_new ();
   set_arrow_type (GTK_IMAGE (arrow), self->arrow_type);
-  gtk_container_add (GTK_CONTAINER (self->button), arrow);
+  gtk_button_set_child (GTK_BUTTON (self->button), arrow);
   self->arrow_widget = arrow;
 }
 
@@ -697,8 +697,6 @@ void
 gtk_menu_button_set_direction (GtkMenuButton *menu_button,
                                GtkArrowType   direction)
 {
-  GtkWidget *child;
-
   g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
 
   if (menu_button->arrow_type == direction)
@@ -708,11 +706,10 @@ gtk_menu_button_set_direction (GtkMenuButton *menu_button,
   g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_DIRECTION]);
 
   /* Is it custom content? We don't change that */
-  child = gtk_bin_get_child (GTK_BIN (menu_button->button));
-  if (menu_button->arrow_widget != child)
+  if (menu_button->arrow_widget != gtk_button_get_child (GTK_BUTTON (menu_button->button)))
     return;
 
-  set_arrow_type (GTK_IMAGE (child), menu_button->arrow_type);
+  set_arrow_type (GTK_IMAGE (menu_button->arrow_widget), menu_button->arrow_type);
   update_popover_direction (menu_button);
 }
 
@@ -878,16 +875,11 @@ void
 gtk_menu_button_set_label (GtkMenuButton *menu_button,
                            const char    *label)
 {
-  GtkWidget *child;
   GtkWidget *box;
   GtkWidget *label_widget;
   GtkWidget *image;
 
   g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
-
-  child = gtk_bin_get_child (GTK_BIN (menu_button->button));
-  if (child)
-    gtk_container_remove (GTK_CONTAINER (menu_button->button), child);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   label_widget = gtk_label_new (label);
@@ -899,7 +891,7 @@ gtk_menu_button_set_label (GtkMenuButton *menu_button,
   image = gtk_image_new_from_icon_name ("pan-down-symbolic");
   gtk_container_add (GTK_CONTAINER (box), label_widget);
   gtk_container_add (GTK_CONTAINER (box), image);
-  gtk_container_add (GTK_CONTAINER (menu_button->button), box);
+  gtk_button_set_child (GTK_BUTTON (menu_button->button), box);
   menu_button->label_widget = label_widget;
 
   g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_LABEL]);
@@ -920,7 +912,7 @@ gtk_menu_button_get_label (GtkMenuButton *menu_button)
 
   g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), NULL);
 
-  child = gtk_bin_get_child (GTK_BIN (menu_button->button));
+  child = gtk_button_get_child (GTK_BUTTON (menu_button->button));
   if (GTK_IS_BOX (child))
     {
       child = gtk_widget_get_first_child (child);
@@ -998,13 +990,7 @@ void
 gtk_menu_button_add_child (GtkMenuButton *menu_button,
                            GtkWidget     *new_child)
 {
-  GtkWidget *child;
-
-  child = gtk_bin_get_child (GTK_BIN (menu_button->button));
-  if (child)
-    gtk_container_remove (GTK_CONTAINER (menu_button->button), child);
-
-  gtk_container_add (GTK_CONTAINER (menu_button->button), new_child);
+  gtk_button_set_child (GTK_BUTTON (menu_button->button), new_child);
 }
 
 /**
