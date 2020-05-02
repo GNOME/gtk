@@ -355,8 +355,7 @@ gtk_search_bar_init (GtkSearchBar *bar)
   gtk_center_box_set_end_widget (GTK_CENTER_BOX (priv->box_center), priv->close_button);
   gtk_widget_hide (priv->close_button);
 
-  gtk_container_add (GTK_CONTAINER (priv->revealer), priv->box_center);
-
+  gtk_revealer_set_child (GTK_REVEALER (priv->revealer), priv->box_center);
 
   g_signal_connect (priv->revealer, "notify::reveal-child",
                     G_CALLBACK (reveal_child_changed_cb), bar);
