@@ -169,7 +169,7 @@ main (int argc, char *argv[])
 					       gtk_cell_renderer_text_new (),
 					       "text", TEXT_COLUMN,
 					       NULL);
-  gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), tree_view);
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
   button = gtk_button_new_with_mnemonic ("<b>_Futz!!</b>");

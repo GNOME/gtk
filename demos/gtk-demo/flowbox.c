@@ -735,7 +735,7 @@ do_flowbox (GtkWidget *do_widget)
       gtk_flow_box_set_max_children_per_line (GTK_FLOW_BOX (flowbox), 30);
       gtk_flow_box_set_selection_mode (GTK_FLOW_BOX (flowbox), GTK_SELECTION_NONE);
 
-      gtk_container_add (GTK_CONTAINER (scrolled), flowbox);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled), flowbox);
       gtk_container_add (GTK_CONTAINER (window), scrolled);
 
       for (i = 0; colors[i]; i++)
