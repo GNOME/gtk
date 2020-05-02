@@ -66,7 +66,7 @@ do_infobar (GtkWidget *do_widget)
       gtk_widget_set_margin_end (vbox, 8);
       gtk_widget_set_margin_top (vbox, 8);
       gtk_widget_set_margin_bottom (vbox, 8);
-      gtk_container_add (GTK_CONTAINER (window), vbox);
+      gtk_window_set_child (GTK_WINDOW (window), vbox);
 
       bar = gtk_info_bar_new ();
       gtk_container_add (GTK_CONTAINER (vbox), bar);

@@ -297,7 +297,7 @@ main(int argc, char **argv)
 
   gtk_window_set_decorated (GTK_WINDOW (window), FALSE);
 
-  gtk_container_add (GTK_CONTAINER (window), widget);
+  gtk_window_set_child (GTK_WINDOW (window), widget);
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   gtk_widget_show (window);

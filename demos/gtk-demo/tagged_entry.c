@@ -80,7 +80,7 @@ do_tagged_entry (GtkWidget *do_widget)
       gtk_widget_set_margin_end (box, 18);
       gtk_widget_set_margin_top (box, 18);
       gtk_widget_set_margin_bottom (box, 18);
-      gtk_container_add (GTK_CONTAINER (window), box);
+      gtk_window_set_child (GTK_WINDOW (window), box);
 
       entry = demo_tagged_entry_new ();
       gtk_container_add (GTK_CONTAINER (box), entry);

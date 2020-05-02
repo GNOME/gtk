@@ -82,7 +82,7 @@ main (int argc, char *argv[])
   gtk_widget_insert_action_group (win, "top", G_ACTION_GROUP (actions));
 
   overlay = gtk_overlay_new ();
-  gtk_container_add (GTK_CONTAINER (win), overlay);
+  gtk_window_set_child (GTK_WINDOW (win), overlay);
 
   grid = gtk_grid_new ();
   gtk_widget_set_halign (grid, GTK_ALIGN_FILL);

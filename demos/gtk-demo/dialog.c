@@ -118,7 +118,7 @@ do_dialog (GtkWidget *do_widget)
       gtk_widget_set_margin_end (frame, 8);
       gtk_widget_set_margin_top (frame, 8);
       gtk_widget_set_margin_bottom (frame, 8);
-      gtk_container_add (GTK_CONTAINER (window), frame);
+      gtk_window_set_child (GTK_WINDOW (window), frame);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
       gtk_widget_set_margin_start (vbox, 8);

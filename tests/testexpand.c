@@ -101,7 +101,7 @@ create_box_window (void)
   gtk_container_add (GTK_CONTAINER (box3),
                      gtk_label_new ("VBox 3 Bottom"));
 
-  gtk_container_add (GTK_CONTAINER (window), box1);
+  gtk_window_set_child (GTK_WINDOW (window), box1);
   gtk_widget_show (window);
 }
 
@@ -153,7 +153,7 @@ create_grid_window (void)
 
   gtk_grid_attach (GTK_GRID (grid), colorbox, 1, 2, 1, 1); 
 
-  gtk_container_add (GTK_CONTAINER (window), grid);
+  gtk_window_set_child (GTK_WINDOW (window), grid);
   gtk_widget_show (window);
 }
 

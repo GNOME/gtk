@@ -46,7 +46,7 @@ test_show_popover (void)
   popover = gtk_popover_new ();
   gtk_popover_set_child (GTK_POPOVER (popover), gtk_label_new ("Nu?"));
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), popover);
-  gtk_container_add (GTK_CONTAINER (window), button);
+  gtk_window_set_child (GTK_WINDOW (window), button);
 
   gtk_window_present (GTK_WINDOW (window));
 

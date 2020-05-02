@@ -93,7 +93,7 @@
  *                     NULL);
  *   gtk_container_add (GTK_CONTAINER (box), toggle2);
  *
- *   gtk_container_add (GTK_CONTAINER (window), box);
+ *   gtk_window_set_child (GTK_WINDOW (window), box);
  *   gtk_widget_show (window);
  * }
  * ]|

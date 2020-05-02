@@ -346,7 +346,7 @@ do_images (GtkWidget *do_widget)
       gtk_widget_set_margin_end (base_vbox, 16);
       gtk_widget_set_margin_top (base_vbox, 16);
       gtk_widget_set_margin_bottom (base_vbox, 16);
-      gtk_container_add (GTK_CONTAINER (window), base_vbox);
+      gtk_window_set_child (GTK_WINDOW (window), base_vbox);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 16);
       gtk_container_add (GTK_CONTAINER (base_vbox), hbox);
