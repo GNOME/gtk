@@ -301,7 +301,7 @@ update_window_buttons (GtkWindowControls *self)
           gtk_widget_add_css_class (button, "minimize");
           image = gtk_image_new_from_icon_name ("window-minimize-symbolic");
           g_object_set (image, "use-fallback", TRUE, NULL);
-          gtk_container_add (GTK_CONTAINER (button), image);
+          gtk_button_set_child (GTK_BUTTON (button), image);
           gtk_widget_set_can_focus (button, FALSE);
           gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
                                           "window.minimize");
@@ -322,7 +322,7 @@ update_window_buttons (GtkWindowControls *self)
           gtk_widget_add_css_class (button, "maximize");
           image = gtk_image_new_from_icon_name (icon_name);
           g_object_set (image, "use-fallback", TRUE, NULL);
-          gtk_container_add (GTK_CONTAINER (button), image);
+          gtk_button_set_child (GTK_BUTTON (button), image);
           gtk_widget_set_can_focus (button, FALSE);
           gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
                                           "window.toggle-maximized");
@@ -339,7 +339,7 @@ update_window_buttons (GtkWindowControls *self)
           image = gtk_image_new_from_icon_name ("window-close-symbolic");
           gtk_widget_add_css_class (button, "close");
           g_object_set (image, "use-fallback", TRUE, NULL);
-          gtk_container_add (GTK_CONTAINER (button), image);
+          gtk_button_set_child (GTK_BUTTON (button), image);
           gtk_widget_set_can_focus (button, FALSE);
           gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
                                           "window.close");

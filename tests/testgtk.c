@@ -1190,7 +1190,7 @@ create_rotated_text (GtkWidget *widget)
       g_signal_connect (drawing_area, "unrealize",
 			G_CALLBACK (on_rotated_text_unrealize), NULL);
 
-      gtk_widget_show (gtk_bin_get_child (GTK_BIN (window)));
+      gtk_widget_show (gtk_button_get_child (GTK_BUTTON (window)));
 
       gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (drawing_area), DEFAULT_TEXT_RADIUS * 2);
       gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (drawing_area), DEFAULT_TEXT_RADIUS * 2);
@@ -1251,7 +1251,7 @@ create_pixbuf (GtkWidget *widget)
       box3 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_add (GTK_CONTAINER (box3), pixbufwid);
       gtk_container_add (GTK_CONTAINER (box3), label);
-      gtk_container_add (GTK_CONTAINER (button), box3);
+      gtk_button_set_child (GTK_BUTTON (button), box3);
 
       button = gtk_button_new ();
       gtk_container_add (GTK_CONTAINER (box2), button);
@@ -1262,7 +1262,7 @@ create_pixbuf (GtkWidget *widget)
       box3 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_add (GTK_CONTAINER (box3), pixbufwid);
       gtk_container_add (GTK_CONTAINER (box3), label);
-      gtk_container_add (GTK_CONTAINER (button), box3);
+      gtk_button_set_child (GTK_BUTTON (button), box3);
 
       gtk_widget_set_sensitive (button, FALSE);
 
@@ -1629,8 +1629,7 @@ accel_button_new (const gchar *text,
 
   label = gtk_accel_label_new (text);
   gtk_accel_label_set_accel (GTK_ACCEL_LABEL (label), keyval, modifiers);
-  
-  gtk_container_add (GTK_CONTAINER (button), label);
+  gtk_button_set_child (GTK_BUTTON (button), label);
 
   return button;
 }
@@ -2159,7 +2158,7 @@ create_entry (GtkWidget *widget)
       gtk_combo_box_text_append_text (cb, "item8 item8 item8");
       gtk_combo_box_text_append_text (cb, "item9 item9");
 
-      cb_entry = gtk_bin_get_child (GTK_BIN (cb));
+      cb_entry = gtk_button_get_child (GTK_BUTTON (cb));
       gtk_editable_set_text (GTK_EDITABLE (cb_entry), "hello world \n\n\n foo");
       gtk_editable_select_region (GTK_EDITABLE (cb_entry), 0, -1);
       gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (cb));
@@ -2255,7 +2254,7 @@ static void
 size_group_hsize_changed (GtkSpinButton *spin_button,
 			  GtkWidget     *button)
 {
-  gtk_widget_set_size_request (gtk_bin_get_child (GTK_BIN (button)),
+  gtk_widget_set_size_request (gtk_button_get_child (GTK_BUTTON (button)),
 			       gtk_spin_button_get_value_as_int (spin_button),
 			       -1);
 }
@@ -2264,7 +2263,7 @@ static void
 size_group_vsize_changed (GtkSpinButton *spin_button,
 			  GtkWidget     *button)
 {
-  gtk_widget_set_size_request (gtk_bin_get_child (GTK_BIN (button)),
+  gtk_widget_set_size_request (gtk_button_get_child (GTK_BUTTON (button)),
 			       -1,
 			       gtk_spin_button_get_value_as_int (spin_button));
 }
@@ -2323,7 +2322,7 @@ create_size_group_window (GdkDisplay   *display,
   gtk_size_group_add_widget (master_size_group, main_button);
   gtk_size_group_add_widget (hgroup1, main_button);
   gtk_size_group_add_widget (vgroup1, main_button);
-  gtk_widget_set_size_request (gtk_bin_get_child (GTK_BIN (main_button)),
+  gtk_widget_set_size_request (gtk_button_get_child (GTK_BUTTON (main_button)),
 			       SIZE_GROUP_INITIAL_SIZE,
 			       SIZE_GROUP_INITIAL_SIZE);
 
@@ -3569,7 +3568,7 @@ create_display_screen (GtkWidget *widget)
   combo_dpy = gtk_combo_box_text_new_with_entry ();
   gtk_widget_set_hexpand (combo_dpy, TRUE);
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_dpy), "diabolo:0.0");
-  gtk_editable_set_text (GTK_EDITABLE (gtk_bin_get_child (GTK_BIN (combo_dpy))),
+  gtk_editable_set_text (GTK_EDITABLE (gtk_button_get_child (GTK_BUTTON (combo_dpy))),
                          "<hostname>:<X Server Num>.<Screen Num>");
 
   gtk_grid_attach (GTK_GRID (grid), label_dpy, 0, 0, 1, 1);
@@ -3587,7 +3586,7 @@ create_display_screen (GtkWidget *widget)
 
   scr_dpy_data = g_new0 (ScreenDisplaySelection, 1);
 
-  scr_dpy_data->entry = gtk_bin_get_child (GTK_BIN (combo_dpy));
+  scr_dpy_data->entry = gtk_button_get_child (GTK_BUTTON (combo_dpy));
   scr_dpy_data->toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
   scr_dpy_data->dialog_window = window;
 

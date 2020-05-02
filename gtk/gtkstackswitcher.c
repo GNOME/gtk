@@ -128,7 +128,7 @@ rebuild_child (GtkWidget   *self,
 {
   GtkWidget *button_child;
 
-  button_child = gtk_bin_get_child (GTK_BIN (self));
+  button_child = gtk_button_get_child (GTK_BUTTON (self));
   if (button_child != NULL)
     gtk_container_remove (GTK_CONTAINER (self), button_child);
 
@@ -157,7 +157,7 @@ rebuild_child (GtkWidget   *self,
   if (button_child)
     {
       gtk_widget_set_halign (GTK_WIDGET (button_child), GTK_ALIGN_CENTER);
-      gtk_container_add (GTK_CONTAINER (self), button_child);
+      gtk_button_set_child (GTK_BUTTON (self), button_child);
     }
 }
 
