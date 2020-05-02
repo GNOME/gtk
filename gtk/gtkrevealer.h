@@ -68,6 +68,11 @@ void                       gtk_revealer_set_transition_type     (GtkRevealer    
 GDK_AVAILABLE_IN_ALL
 GtkRevealerTransitionType  gtk_revealer_get_transition_type     (GtkRevealer               *revealer);
 
+GDK_AVAILABLE_IN_ALL
+void                       gtk_revealer_set_child               (GtkRevealer               *revealer,
+                                                                 GtkWidget                 *child);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *                gtk_revealer_get_child               (GtkRevealer               *revealer);
 
 G_END_DECLS
 
