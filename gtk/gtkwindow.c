@@ -4656,8 +4656,8 @@ update_opaque_region (GtkWindow           *window,
   GtkStyleContext *context;
   gboolean is_opaque = FALSE;
 
-  if (!_gtk_widget_get_realized (widget))
-      return;
+  /*if (!_gtk_widget_get_realized (widget))*/
+  return;
 
   context = gtk_widget_get_style_context (widget);
 
@@ -5962,7 +5962,6 @@ gtk_window_do_popup (GtkWindow *window,
 /* This function doesn't constrain to geometry hints */
 static void
 gtk_window_compute_configure_request_size (GtkWindow   *window,
-                                           GdkGeometry *geometry,
                                            guint        flags,
                                            gint        *width,
                                            gint        *height)
@@ -6057,7 +6056,7 @@ gtk_window_compute_configure_request (GtkWindow    *window,
 
   gtk_window_compute_hints (window, &new_geometry, &new_flags);
   gtk_window_compute_configure_request_size (window,
-                                             &new_geometry, new_flags,
+                                             new_flags,
                                              &w, &h);
   gtk_window_update_fixed_size (window, &new_geometry, w, h);
   gtk_window_constrain_size (window,
@@ -6079,14 +6078,10 @@ gtk_window_compute_configure_request (GtkWindow    *window,
       y = 0;
     }
 
-  GtkBorder shadow = {0, };
-
-  /*get_shadow_width (window, &shadow);*/
-
   request->x = x;
   request->y = y;
-  request->width = w + shadow.left + shadow.right;
-  request->height = h + shadow.top + shadow.bottom;
+  request->width = w;
+  request->height = h;
 
   if (geometry)
     *geometry = new_geometry;
