@@ -32,7 +32,7 @@
 
 #include <gtk/gtkapplication.h>
 #include <gtk/gtkaccelgroup.h>
-#include <gtk/gtkbin.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
@@ -51,7 +51,7 @@ typedef struct _GtkWindowGroupPrivate GtkWindowGroupPrivate;
 
 struct _GtkWindow
 {
-  GtkBin parent_instance;
+  GtkWidget parent_instance;
 };
 
 /**
@@ -67,7 +67,7 @@ struct _GtkWindow
  */
 struct _GtkWindowClass
 {
-  GtkBinClass parent_class;
+  GtkWidgetClass parent_class;
 
   /*< public >*/
 
