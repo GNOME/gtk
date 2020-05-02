@@ -80,7 +80,7 @@ gtk_inspector_controllers_init (GtkInspectorControllers *sl)
                 "margin-top", 60,
                 "margin-bottom", 30,
                 NULL);
-  gtk_container_add (GTK_CONTAINER (sw), box);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), box);
   gtk_widget_set_hexpand (box, TRUE);
   gtk_widget_set_vexpand (box, TRUE);
 

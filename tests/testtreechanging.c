@@ -515,7 +515,7 @@ main (int    argc,
                                                NULL);
   for (i = 0; i < (MIN_ROWS + MAX_ROWS) / 2; i++)
     add (GTK_TREE_VIEW (treeview));
-  gtk_container_add (GTK_CONTAINER (sw), treeview);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), treeview);
 
   gtk_widget_show (window);
 

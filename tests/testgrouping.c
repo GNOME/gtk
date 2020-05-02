@@ -129,7 +129,7 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (window), sw);
 
   tv = gtk_tree_view_new_with_model (model);
-  gtk_container_add (GTK_CONTAINER (sw), tv);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), tv);
 
   g_signal_connect (tv, "row-activated",
 		    G_CALLBACK (tree_view_row_activated), tv);

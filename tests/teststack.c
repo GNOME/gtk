@@ -177,7 +177,7 @@ main (gint argc,
 
   tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
 
-  gtk_container_add (GTK_CONTAINER (scrolled_win), tree_view);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_win), tree_view);
   w3 = scrolled_win;
 
   renderer = gtk_cell_renderer_text_new ();

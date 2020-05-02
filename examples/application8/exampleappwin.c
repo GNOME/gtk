@@ -35,7 +35,7 @@ search_text_changed (GtkEntry         *entry,
     return;
 
   tab = gtk_stack_get_visible_child (GTK_STACK (win->stack));
-  view = gtk_bin_get_child (GTK_BIN (tab));
+  view = gtk_scrolled_window_get_child (GTK_SCROLLED_WINDOW (tab));
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
   /* Very simple-minded search implementation */
@@ -75,7 +75,7 @@ update_words (ExampleAppWindow *win)
   if (tab == NULL)
     return;
 
-  view = gtk_bin_get_child (GTK_BIN (tab));
+  view = gtk_scrolled_window_get_child (GTK_SCROLLED_WINDOW (tab));
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
   strings = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
@@ -229,7 +229,7 @@ example_app_window_open (ExampleAppWindow *win,
   view = gtk_text_view_new ();
   gtk_text_view_set_editable (GTK_TEXT_VIEW (view), FALSE);
   gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (view), FALSE);
-  gtk_container_add (GTK_CONTAINER (scrolled), view);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled), view);
   gtk_stack_add_titled (GTK_STACK (win->stack), scrolled, basename, basename);
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));

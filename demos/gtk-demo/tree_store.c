@@ -426,7 +426,7 @@ do_tree_store (GtkWidget *do_widget)
 
       add_columns (GTK_TREE_VIEW (treeview));
 
-      gtk_container_add (GTK_CONTAINER (sw), treeview);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), treeview);
 
       /* expand all rows after the treeview widget has been realized */
       g_signal_connect (treeview, "realize",

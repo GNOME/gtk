@@ -289,7 +289,7 @@ do_list_store (GtkWidget *do_widget)
 
       g_object_unref (model);
 
-      gtk_container_add (GTK_CONTAINER (sw), treeview);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), treeview);
 
       /* add columns to the tree view */
       add_columns (GTK_TREE_VIEW (treeview));

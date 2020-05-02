@@ -1045,7 +1045,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
 
   gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
 
-  gtk_container_add (GTK_CONTAINER (scrolled), treeview);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled), treeview);
   gtk_widget_show (treeview);
 
   toolbar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);

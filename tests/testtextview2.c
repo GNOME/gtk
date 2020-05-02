@@ -203,7 +203,7 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (box), sw);
 
   tv = gtk_text_view_new ();
-  gtk_container_add (GTK_CONTAINER (sw), tv);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), tv);
 
   buffer = gtk_text_buffer_new (NULL);
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (tv), buffer);
