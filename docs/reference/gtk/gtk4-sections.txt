@@ -4203,6 +4203,8 @@ gtk_requisition_get_type
 GtkWindow
 GtkWindowClass
 gtk_window_new
+gtk_window_get_child
+gtk_window_set_child
 gtk_window_set_title
 gtk_window_set_resizable
 gtk_window_get_resizable

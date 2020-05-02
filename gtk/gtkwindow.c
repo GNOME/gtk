@@ -293,6 +293,7 @@ enum {
   PROP_APPLICATION,
   PROP_DEFAULT_WIDGET,
   PROP_FOCUS_WIDGET,
+  PROP_CHILD,
 
   /* Readonly properties */
   PROP_IS_ACTIVE,
@@ -960,6 +961,14 @@ gtk_window_class_init (GtkWindowClass *klass)
                            P_("The focus widget"),
                            GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+
+  window_props[PROP_CHILD] =
+      g_param_spec_object ("child",
+                           P_("Child"),
+                           P_("The child widget"),
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+
 
   g_object_class_install_properties (gobject_class, LAST_ARG, window_props);
 
@@ -1937,6 +1946,9 @@ gtk_window_set_property (GObject      *object,
     case PROP_FOCUS_WIDGET:
       gtk_window_set_focus (window, g_value_get_object (value));
       break;
+    case PROP_CHILD:
+      gtk_window_set_child (window, g_value_get_object (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -2019,6 +2031,9 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_FOCUS_WIDGET:
       g_value_set_object (value, gtk_window_get_focus (window));
+      break;
+    case PROP_CHILD:
+      g_value_set_object (value, gtk_window_get_child (window));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -8069,4 +8084,38 @@ gtk_window_maybe_update_cursor (GtkWindow *window,
       if (device)
         break;
     }
+}
+
+/**
+ * gtk_window_set_child:
+ * @window: a #GtkWindow
+ * @child: (allow-none): the child widget
+ *
+ * Sets the child widget of @window.
+ */
+void
+gtk_window_set_child (GtkWindow *window,
+                      GtkWidget *child)
+{
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+
+  gtk_window_add (GTK_CONTAINER (window), child);
+  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_CHILD]);
+}
+
+/**
+ * gtk_window_get_child:
+ * @window: a #GtkWindow
+ *
+ * Gets the child widget of @window.
+ *
+ * Returns: (nullable) (transfer none): the child widget of @window
+ */
+GtkWidget *
+gtk_window_get_child (GtkWindow *window)
+{
+  g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
+
+  return gtk_bin_get_child (GTK_BIN (window));
 }
