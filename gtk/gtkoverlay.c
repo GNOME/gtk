@@ -73,6 +73,10 @@ enum {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
+enum {
+  PROP_CHILD = 1
+};
+
 static void gtk_overlay_buildable_init (GtkBuildableIface *iface);
 
 typedef struct _GtkOverlayClass GtkOverlayClass;
@@ -267,11 +271,54 @@ gtk_overlay_snapshot (GtkWidget   *widget,
 }
 
 static void
+gtk_overlay_get_property (GObject    *object,
+                          guint       prop_id,
+                          GValue     *value,
+                          GParamSpec *pspec)
+{
+  GtkOverlay *overlay = GTK_OVERLAY (object);
+
+  switch (prop_id)
+    {
+    case PROP_CHILD:
+      g_value_set_object (value, gtk_overlay_get_child (overlay));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_overlay_set_property (GObject      *object,
+                          guint         prop_id,
+                          const GValue *value,
+                          GParamSpec   *pspec)
+{
+  GtkOverlay *overlay = GTK_OVERLAY (object);
+
+  switch (prop_id)
+    {
+    case PROP_CHILD:
+      gtk_overlay_set_child (overlay, g_value_get_object (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_overlay_class_init (GtkOverlayClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
+
+  object_class->get_property = gtk_overlay_get_property;
+  object_class->set_property = gtk_overlay_set_property;
 
   widget_class->snapshot = gtk_overlay_snapshot;
 
@@ -280,6 +327,14 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
   container_class->forall = gtk_overlay_forall;
 
   klass->get_child_position = gtk_overlay_get_child_position;
+
+  g_object_class_install_property (object_class,
+                                   PROP_CHILD,
+                                   g_param_spec_object ("child",
+                                                        P_("Child"),
+                                                        P_("The child widget"),
+                                                        GTK_TYPE_WIDGET,
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkOverlay::get-child-position:
@@ -501,4 +556,41 @@ gtk_overlay_get_clip_overlay (GtkOverlay *overlay,
   child = GTK_OVERLAY_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (layout, widget));
 
   return gtk_overlay_layout_child_get_clip_overlay (child);
+}
+
+/**
+ * gtk_overlay_set_child:
+ * @overlay: a #GtkOverlay
+ * @child: (allow-none): the child widget
+ *
+ * Sets the child widget of @overlay.
+ */
+void
+gtk_overlay_set_child (GtkOverlay *overlay,
+                       GtkWidget  *child)
+{
+  g_return_if_fail (GTK_IS_OVERLAY (overlay));
+  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+
+  if (gtk_bin_get_child (GTK_BIN (overlay)))
+    gtk_container_remove (GTK_CONTAINER (overlay), gtk_bin_get_child (GTK_BIN (overlay)));
+  else
+    gtk_container_add (GTK_CONTAINER (overlay), child);
+  g_object_notify (G_OBJECT (overlay), "child");
+}
+
+/**
+ * gtk_overlay_get_child:
+ * @overlay: a #GtkOverlay
+ *
+ * Gets the child widget of @overlay.
+ *
+ * Returns: (nullable) (transfer none): the child widget of @overlay
+ */
+GtkWidget *
+gtk_overlay_get_child (GtkOverlay *overlay)
+{
+  g_return_val_if_fail (GTK_IS_OVERLAY (overlay), NULL);
+
+  return gtk_bin_get_child (GTK_BIN (overlay));
 }

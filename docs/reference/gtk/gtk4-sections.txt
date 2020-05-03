@@ -5482,6 +5482,8 @@ GtkLockButtonPrivate
 GtkOverlay
 
 gtk_overlay_new
+gtk_overlay_set_child
+gtk_overlay_get_child
 gtk_overlay_add_overlay
 gtk_overlay_get_measure_overlay
 gtk_overlay_set_measure_overlay
