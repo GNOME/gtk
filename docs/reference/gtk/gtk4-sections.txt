@@ -212,24 +212,6 @@ gtk_aspect_frame_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkbin</FILE>
-<TITLE>GtkBin</TITLE>
-GtkBin
-GtkBinClass
-gtk_bin_get_child
-<SUBSECTION Standard>
-GTK_BIN
-GTK_IS_BIN
-GTK_TYPE_BIN
-GTK_BIN_CLASS
-GTK_IS_BIN_CLASS
-GTK_BIN_GET_CLASS
-<SUBSECTION Private>
-GtkBinPrivate
-gtk_bin_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkbox</FILE>
 <TITLE>GtkBox</TITLE>
 GtkBox

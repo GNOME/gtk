@@ -23,7 +23,6 @@
 #include "gtksizegroup.h"
 #include "gtktogglebutton.h"
 #include "gtkentry.h"
-#include "gtkbin.h"
 #include "gtklabel.h"
 
 struct _GtkInspectorActionEditorPrivate
