@@ -112,6 +112,7 @@ enum {
   PROP_0,
   PROP_SEARCH_MODE_ENABLED,
   PROP_SHOW_CLOSE_BUTTON,
+  PROP_CHILD,
   LAST_PROPERTY
 };
 
@@ -209,6 +210,9 @@ gtk_search_bar_set_property (GObject      *object,
     case PROP_SHOW_CLOSE_BUTTON:
       gtk_search_bar_set_show_close_button (bar, g_value_get_boolean (value));
       break;
+    case PROP_CHILD:
+      gtk_search_bar_set_child (bar, g_value_get_object (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -230,6 +234,9 @@ gtk_search_bar_get_property (GObject    *object,
       break;
     case PROP_SHOW_CLOSE_BUTTON:
       g_value_set_boolean (value, gtk_search_bar_get_show_close_button (bar));
+      break;
+    case PROP_CHILD:
+      g_value_set_object (value, gtk_search_bar_get_child (bar));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -331,6 +338,12 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
                                                                P_("Whether to show the close button in the toolbar"),
                                                                FALSE,
                                                                GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
+
+  widget_props[PROP_CHILD] = g_param_spec_object ("child",
+                                                  P_("Child"),
+                                                  P_("The child widget"),
+                                                  GTK_TYPE_WIDGET,
+                                                  GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROPERTY, widget_props);
 
@@ -657,3 +670,36 @@ gtk_search_bar_get_key_capture_widget (GtkSearchBar *bar)
 
   return priv->capture_widget;
 }
+
+/**
+ * gtk_search_bar_set_child:
+ * @bar: a #GtkSearchBar
+ * @child: (allow-none): the child widget
+ *
+ * Sets the child widget of @bar.
+ */
+void
+gtk_search_bar_set_child (GtkSearchBar *bar,
+                          GtkWidget    *child)
+{
+  if (gtk_bin_get_child (GTK_BIN (bar)))
+    gtk_search_bar_remove (GTK_CONTAINER (bar), gtk_bin_get_child (GTK_BIN (bar)));
+  if (child)
+    gtk_search_bar_add (GTK_CONTAINER (bar), child);
+  g_object_notify_by_pspec (G_OBJECT (bar), widget_props[PROP_CHILD]);
+}
+
+/**
+ * gtk_search_bar_get_child:
+ * @bar: a #GtkSearchBar
+ *
+ * Gets the child widget of @bar.
+ *
+ * Returns: (nullable) (transfer none): the child widget of @bar
+ */
+GtkWidget *
+gtk_search_bar_get_child (GtkSearchBar *bar)
+{
+  return gtk_bin_get_child (GTK_BIN (bar));
+}
+
