@@ -16,8 +16,7 @@ gdk_macos_sources = files([
 
   'GdkMacosBaseView.c',
   'GdkMacosCairoView.c',
-
-  # 'GdkMacosView.c',
+  # 'GdkMacosGLView.c',
 ])
 
 gdk_macos_public_headers = files([
