@@ -372,7 +372,7 @@ emoji_activated (GtkFlowBox      *box,
 
   gtk_popover_popdown (GTK_POPOVER (chooser));
 
-  label = gtk_bin_get_child (GTK_BIN (child));
+  label = gtk_flow_box_child_get_child (child);
   text = g_strdup (gtk_label_get_label (GTK_LABEL (label)));
 
   item = (GVariant*) g_object_get_data (G_OBJECT (child), "emoji-data");
@@ -542,7 +542,7 @@ add_emoji (GtkWidget    *box,
   if (modifier != 0)
     g_object_set_data (G_OBJECT (child), "modifier", GUINT_TO_POINTER (modifier));
 
-  gtk_container_add (GTK_CONTAINER (child), label);
+  gtk_flow_box_child_set_child (GTK_FLOW_BOX_CHILD (child), label);
   gtk_flow_box_insert (GTK_FLOW_BOX (box), child, prepend ? 0 : -1);
 }
 
