@@ -1112,7 +1112,7 @@ main (int argc, char **argv)
         displayed_row_changed (GTK_COMBO_BOX (combobox), GTK_CELL_VIEW (tmp));
         g_signal_connect (combobox, "changed", G_CALLBACK (displayed_row_changed), tmp);
 
-        gtk_container_add (GTK_CONTAINER (combobox), tmp);
+        gtk_combo_box_set_child (GTK_COMBO_BOX (combobox), tmp);
 
         /* GtkComboBox tree */
         tmp = gtk_frame_new ("GtkComboBox (tree)");

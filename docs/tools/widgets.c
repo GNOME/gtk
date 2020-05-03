@@ -307,13 +307,13 @@ create_combo_box_entry (void)
 
   model = (GtkTreeModel *)gtk_list_store_new (1, G_TYPE_STRING);
   widget = g_object_new (GTK_TYPE_COMBO_BOX,
-			 "has-entry", TRUE,
-			 "model", model,
-			 "entry-text-column", 0,
-			 NULL);
+                         "has-entry", TRUE,
+                         "model", model,
+                         "entry-text-column", 0,
+                         NULL);
   g_object_unref (model);
 
-  child = gtk_bin_get_child (GTK_BIN (widget));
+  child = gtk_combo_box_get_child (GTK_COMBO_BOX (widget));
   gtk_editable_set_text (GTK_EDITABLE (child), "Combo Box Entry");
   gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
