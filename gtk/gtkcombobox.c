@@ -190,7 +190,8 @@ enum {
   PROP_ENTRY_TEXT_COLUMN,
   PROP_POPUP_FIXED_WIDTH,
   PROP_ID_COLUMN,
-  PROP_ACTIVE_ID
+  PROP_ACTIVE_ID,
+  PROP_CHILD
 };
 
 static guint combo_box_signals[LAST_SIGNAL] = {0,};
@@ -791,6 +792,14 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                           TRUE,
                                                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
+   g_object_class_install_property (object_class,
+                                    PROP_CHILD,
+                                    g_param_spec_object ("child",
+                                                         P_("Child"),
+                                                         P_("The child_widget"),
+                                                         GTK_TYPE_WIDGET,
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkcombobox.ui");
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkComboBox, box);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkComboBox, button);
@@ -971,6 +980,10 @@ gtk_combo_box_set_property (GObject      *object,
       gtk_combo_box_set_active_id (combo_box, g_value_get_string (value));
       break;
 
+    case PROP_CHILD:
+      gtk_combo_box_set_child (combo_box, g_value_get_object (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1030,6 +1043,10 @@ gtk_combo_box_get_property (GObject    *object,
 
       case PROP_ACTIVE_ID:
         g_value_set_string (value, gtk_combo_box_get_active_id (combo_box));
+        break;
+
+      case PROP_CHILD:
+        g_value_set_object (value, gtk_combo_box_get_child (combo_box));
         break;
 
       default:
@@ -2995,3 +3012,41 @@ gtk_combo_box_get_popup (GtkComboBox *combo_box)
 
   return priv->popup_widget;
 }
+
+/**
+ * gtk_combo_box_set_child:
+ * @combo_box: a #GtkComboBox
+ * @child: (allow-none): the child widget
+ *
+ * Sets the child widget of @combo_box.
+ */
+void
+gtk_combo_box_set_child (GtkComboBox *combo_box,
+                         GtkWidget   *child)
+{
+  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
+  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+
+  if (gtk_bin_get_child (GTK_BIN (combo_box)))
+    gtk_container_remove (GTK_CONTAINER (combo_box), gtk_bin_get_child (GTK_BIN (combo_box)));
+  if (child)
+    gtk_container_add (GTK_CONTAINER (combo_box), child);
+  g_object_notify (G_OBJECT (combo_box), "child");
+}
+
+/**
+ * gtk_combo_box_get_child:
+ * @combo_box: a #GtkComboBox
+ *
+ * Gets the child widget of @combo_box.
+ *
+ * Returns: (nullable) (transfer none): the child widget of @combo_box
+ */
+GtkWidget *
+gtk_combo_box_get_child (GtkComboBox *combo_box)
+{
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), NULL);
+
+  return gtk_bin_get_child (GTK_BIN (combo_box));
+}
+
