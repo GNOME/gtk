@@ -214,7 +214,7 @@ add_widget (GtkInspectorSizeGroups *sl,
   gtk_widget_set_margin_bottom (label, 10);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_container_add (GTK_CONTAINER (row), label);
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), label);
   gtk_container_add (GTK_CONTAINER (listbox), row);
 }
 

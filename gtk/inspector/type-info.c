@@ -68,7 +68,7 @@ add_row (GtkContainer *box,
                         "xalign", 0.0,
                         NULL);
 
-  gtk_container_add (GTK_CONTAINER (row), label);
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), label);
   gtk_container_add (box, row);
 }
 

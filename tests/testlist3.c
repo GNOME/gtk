@@ -68,7 +68,7 @@ create_row (const gchar *text)
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   g_object_set (box, "margin-start", 10, "margin-end", 10, NULL);
   label = gtk_label_new (text);
-  gtk_container_add (GTK_CONTAINER (row), box);
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), box);
   gtk_widget_set_hexpand (label, TRUE);
   gtk_container_add (GTK_CONTAINER (box), label);
   gtk_container_add (GTK_CONTAINER (box), image);
@@ -91,7 +91,7 @@ on_row_activated (GtkListBox *self,
                   GtkWidget  *child)
 {
   const char *id;
-  id = g_object_get_data (G_OBJECT (gtk_bin_get_child (GTK_BIN (child))), "id");
+  id = g_object_get_data (G_OBJECT (gtk_list_box_row_get_child (GTK_LIST_BOX_ROW (child))), "id");
   g_message ("Row activated %p: %s", child, id);
 }
 
