@@ -393,7 +393,7 @@ combo_box_get (GtkWidget *combo, gboolean *custom)
     {
       if (gtk_combo_box_get_has_entry (GTK_COMBO_BOX (combo)))
         {
-          value = g_strdup (gtk_editable_get_text (GTK_EDITABLE (gtk_bin_get_child (GTK_BIN (combo)))));
+          value = g_strdup (gtk_editable_get_text (GTK_EDITABLE (gtk_combo_box_get_child (GTK_COMBO_BOX (combo)))));
           *custom = TRUE;
         }
 
@@ -672,7 +672,7 @@ combo_changed_cb (GtkWidget              *combo,
         {
           GtkEntry *entry;
 	  
-	  entry = GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo)));
+	  entry = GTK_ENTRY (gtk_combo_box_get_child (GTK_COMBO_BOX (combo)));
 
           gtk_editable_set_text (GTK_EDITABLE (entry), filtered_val);
 	}
@@ -808,7 +808,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
 	    {
               GtkEntry *entry;
 
-	      entry = GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->combo)));
+	      entry = GTK_ENTRY (gtk_combo_box_get_child (GTK_COMBO_BOX (priv->combo)));
 
               gtk_entry_set_visibility (entry, FALSE); 
 	    }
@@ -981,7 +981,7 @@ update_widgets (GtkPrinterOptionWidget *widget)
       {
         GtkEntry *entry;
 
-        entry = GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->combo)));
+        entry = GTK_ENTRY (gtk_combo_box_get_child (GTK_COMBO_BOX (priv->combo)));
         if (gtk_printer_option_has_choice (source, source->value))
           combo_box_set (priv->combo, source->value);
         else
