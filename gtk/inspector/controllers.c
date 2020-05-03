@@ -122,7 +122,7 @@ create_controller_widget (gpointer item,
   row = gtk_list_box_row_new ();
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
-  gtk_container_add (GTK_CONTAINER (row), box);
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), box);
   gtk_widget_set_margin_start (box, 10);
   gtk_widget_set_margin_end (box, 10);
   gtk_widget_set_margin_top (box, 10);
