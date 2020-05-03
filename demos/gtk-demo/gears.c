@@ -107,7 +107,7 @@ do_gears (GtkWidget *do_widget)
 
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE);
       gtk_box_set_spacing (GTK_BOX (box), 6);
-      gtk_container_add (GTK_CONTAINER (overlay), box);
+      gtk_overlay_set_child (GTK_OVERLAY (overlay), box);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE);
       gtk_box_set_spacing (GTK_BOX (box), 6);

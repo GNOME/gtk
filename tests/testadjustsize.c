@@ -166,7 +166,7 @@ open_control_window (void)
   gtk_widget_show (window);
 }
 
-#define TEST_WIDGET(outer) (gtk_bin_get_child (GTK_BIN (gtk_bin_get_child (GTK_BIN(outer)))))
+#define TEST_WIDGET(outer) (gtk_overlay_get_child (GTK_OVERLAY (gtk_overlay_get_child (GTK_OVERLAY (outer)))))
 
 static GtkWidget*
 create_widget_visible_border (const char *text)
