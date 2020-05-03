@@ -593,7 +593,7 @@ gtk_combo_box_text_get_active_text (GtkComboBoxText *combo_box)
    {
      GtkWidget *entry;
 
-     entry = gtk_bin_get_child (GTK_BIN (combo_box));
+     entry = gtk_combo_box_get_child (GTK_COMBO_BOX (combo_box));
      text = g_strdup (gtk_editable_get_text (GTK_EDITABLE (entry)));
    }
   else if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo_box), &iter))
