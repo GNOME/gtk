@@ -461,16 +461,12 @@ gtk_frame_set_label_align (GtkFrame *frame,
   g_return_if_fail (GTK_IS_FRAME (frame));
 
   xalign = CLAMP (xalign, 0.0, 1.0);
+  if (priv->label_xalign == xalign)
+    return;
 
-  g_object_freeze_notify (G_OBJECT (frame));
-  if (xalign != priv->label_xalign)
-    {
-      priv->label_xalign = xalign;
-      g_object_notify_by_pspec (G_OBJECT (frame), frame_props[PROP_LABEL_XALIGN]);
-    }
-
-  g_object_thaw_notify (G_OBJECT (frame));
-  gtk_widget_queue_resize (GTK_WIDGET (frame));
+  priv->label_xalign = xalign;
+  g_object_notify_by_pspec (G_OBJECT (frame), frame_props[PROP_LABEL_XALIGN]);
+  gtk_widget_queue_allocate (GTK_WIDGET (frame));
 }
 
 /**
