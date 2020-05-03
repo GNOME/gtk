@@ -2259,6 +2259,8 @@ GtkScrolledWindowPrivate
 <TITLE>GtkSearchBar</TITLE>
 GtkSearchBar
 gtk_search_bar_new
+gtk_search_bar_set_child
+gtk_search_bar_get_child
 gtk_search_bar_connect_entry
 gtk_search_bar_get_search_mode
 gtk_search_bar_set_search_mode
