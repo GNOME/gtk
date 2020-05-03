@@ -87,7 +87,7 @@ do_search_entry2 (GtkWidget *do_widget)
       searchbar = gtk_search_bar_new ();
       gtk_search_bar_connect_entry (GTK_SEARCH_BAR (searchbar), GTK_EDITABLE (entry));
       gtk_search_bar_set_show_close_button (GTK_SEARCH_BAR (searchbar), FALSE);
-      gtk_container_add (GTK_CONTAINER (searchbar), container);
+      gtk_search_bar_set_child (GTK_SEARCH_BAR (searchbar), container);
       gtk_container_add (GTK_CONTAINER (vbox), searchbar);
 
       /* Hook the search bar to key presses */
