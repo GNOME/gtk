@@ -21,6 +21,7 @@
 
 #include "gtkactionhelperprivate.h"
 #include "gtkadjustmentprivate.h"
+#include "gtkbinlayout.h"
 #include "gtkbuildable.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkgestureclick.h"
@@ -156,6 +157,7 @@ struct _GtkListBoxClass
 
 typedef struct
 {
+  GtkWidget *child;
   GSequenceIter *iter;
   GtkWidget *header;
   GtkActionHelper *action_helper;
@@ -197,6 +199,7 @@ enum {
   ROW_PROP_0,
   ROW_PROP_ACTIVATABLE,
   ROW_PROP_SELECTABLE,
+  ROW_PROP_CHILD,
 
   /* actionable properties */
   ROW_PROP_ACTION_NAME,
@@ -211,13 +214,16 @@ static GtkBuildableIface *parent_buildable_iface;
 
 static void     gtk_list_box_buildable_interface_init   (GtkBuildableIface *iface);
 
+static void     gtk_list_box_row_buildable_iface_init (GtkBuildableIface *iface);
 static void     gtk_list_box_row_actionable_iface_init  (GtkActionableInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkListBox, gtk_list_box, GTK_TYPE_CONTAINER,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_list_box_buildable_interface_init))
-G_DEFINE_TYPE_WITH_CODE (GtkListBoxRow, gtk_list_box_row, GTK_TYPE_BIN,
+G_DEFINE_TYPE_WITH_CODE (GtkListBoxRow, gtk_list_box_row, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkListBoxRow)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_list_box_row_buildable_iface_init )
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIONABLE, gtk_list_box_row_actionable_iface_init))
 
 static void                 gtk_list_box_apply_filter_all             (GtkListBox          *box);
@@ -327,6 +333,29 @@ static GParamSpec *properties[LAST_PROPERTY] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *row_properties[LAST_ROW_PROPERTY] = { NULL, };
 static guint row_signals[ROW__LAST_SIGNAL] = { 0 };
+
+
+static GtkBuildableIface *parent_row_buildable_iface;
+
+static void
+gtk_list_box_row_buildable_add_child (GtkBuildable *buildable,
+                                      GtkBuilder   *builder,
+                                      GObject      *child,
+                                      const gchar  *type)
+{
+  if (GTK_IS_WIDGET (child))
+    gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (buildable), GTK_WIDGET (child));
+  else
+    parent_row_buildable_iface->add_child (buildable, builder, child, type);
+}
+
+static void
+gtk_list_box_row_buildable_iface_init (GtkBuildableIface *iface)
+{
+  parent_row_buildable_iface = g_type_interface_peek_parent (iface);
+
+  iface->add_child = gtk_list_box_row_buildable_add_child;
+}
 
 /**
  * gtk_list_box_new:
@@ -2605,7 +2634,7 @@ gtk_list_box_insert (GtkListBox *box,
   else
     {
       row = GTK_LIST_BOX_ROW (gtk_list_box_row_new ());
-      gtk_container_add (GTK_CONTAINER (row), child);
+      gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), child);
     }
 
   if (box->sort_func != NULL)
@@ -2851,6 +2880,42 @@ gtk_list_box_row_new (void)
   return g_object_new (GTK_TYPE_LIST_BOX_ROW, NULL);
 }
 
+/**
+ * gtk_list_box_row_set_child:
+ * @row: a #GtkListBoxRow
+ * @child: (allow-none): the child widget
+ *
+ * Sets the child widget of @self.
+ */
+void
+gtk_list_box_row_set_child (GtkListBoxRow *row,
+                            GtkWidget     *child)
+{
+  GtkListBoxRowPrivate *priv = ROW_PRIV (row);
+
+  g_clear_pointer (&priv->child, gtk_widget_unparent);
+
+  priv->child = child;
+  if (child)
+    gtk_widget_set_parent (child, GTK_WIDGET (row));
+
+  g_object_notify_by_pspec (G_OBJECT (row), row_properties[ROW_PROP_CHILD]);
+}
+
+/**
+ * gtk_list_box_row_get_child:
+ * @row: a #GtkListBoxRow
+ *
+ * Gets the child widget of @row.
+ *
+ * Returns: (nullable) (transfer none): the child widget of @row
+ */
+GtkWidget *
+gtk_list_box_row_get_child (GtkListBoxRow *row)
+{
+  return ROW_PRIV (row)->child;
+}
+
 static void
 gtk_list_box_row_set_focus (GtkListBoxRow *row)
 {
@@ -2868,9 +2933,7 @@ gtk_list_box_row_focus (GtkWidget        *widget,
 {
   GtkListBoxRow *row = GTK_LIST_BOX_ROW (widget);
   gboolean had_focus = FALSE;
-  GtkWidget *child;
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
+  GtkWidget *child = ROW_PRIV (row)->child;
 
   g_object_get (widget, "has-focus", &had_focus, NULL);
   if (had_focus)
@@ -3233,6 +3296,9 @@ gtk_list_box_row_get_property (GObject    *obj,
     case ROW_PROP_ACTION_TARGET:
       g_value_set_variant (value, gtk_action_helper_get_action_target_value (ROW_PRIV (row)->action_helper));
       break;
+    case ROW_PROP_CHILD:
+      g_value_set_object (value, gtk_list_box_row_get_child (row));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
       break;
@@ -3260,6 +3326,9 @@ gtk_list_box_row_set_property (GObject      *obj,
       break;
     case ROW_PROP_ACTION_TARGET:
       gtk_list_box_row_set_action_target_value (GTK_ACTIONABLE (row), g_value_get_variant (value));
+      break;
+    case ROW_PROP_CHILD:
+      gtk_list_box_row_set_child (row, g_value_get_object (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
@@ -3307,6 +3376,7 @@ gtk_list_box_row_dispose (GObject *object)
   GtkListBoxRowPrivate *priv = ROW_PRIV (row);
 
   g_clear_object (&priv->action_helper);
+  g_clear_pointer (&priv->child, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_list_box_row_parent_class)->dispose (object);
 }
@@ -3332,8 +3402,6 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LIST_BOX_ROW_ACCESSIBLE);
 
   object_class->get_property = gtk_list_box_row_get_property;
   object_class->set_property = gtk_list_box_row_set_property;
@@ -3391,11 +3459,20 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
+  row_properties[ROW_PROP_CHILD] =
+    g_param_spec_object ("child",
+                         P_("Child"),
+                         P_("The child widget"),
+                         GTK_TYPE_WIDGET,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (object_class, LAST_ROW_PROPERTY, row_properties);
 
   g_object_class_override_property (object_class, ROW_PROP_ACTION_NAME, "action-name");
   g_object_class_override_property (object_class, ROW_PROP_ACTION_TARGET, "action-target");
 
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LIST_BOX_ROW_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("row"));
 }
 
