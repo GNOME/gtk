@@ -243,7 +243,7 @@ gtk_overlay_layout_measure (GtkLayoutManager *layout_manager,
   int min, nat;
   GtkWidget *main_widget;
 
-  main_widget = gtk_bin_get_child (GTK_BIN (widget));
+  main_widget = gtk_overlay_get_child (GTK_OVERLAY (widget));
 
   min = 0;
   nat = 0;
@@ -397,7 +397,7 @@ gtk_overlay_layout_allocate (GtkLayoutManager *layout_manager,
   GtkWidget *child;
   GtkWidget *main_widget;
 
-  main_widget = gtk_bin_get_child (GTK_BIN (widget));
+  main_widget = gtk_overlay_get_child (GTK_OVERLAY (widget));
   if (main_widget && gtk_widget_get_visible (main_widget))
     gtk_widget_size_allocate (main_widget,
                               &(GtkAllocation) { 0, 0, width, height },
