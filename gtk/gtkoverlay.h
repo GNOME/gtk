@@ -42,13 +42,20 @@ GtkWidget *gtk_overlay_new         (void);
 GDK_AVAILABLE_IN_ALL
 void       gtk_overlay_add_overlay (GtkOverlay *overlay,
                                     GtkWidget  *widget);
+
+GDK_AVAILABLE_IN_ALL
+void                  gtk_overlay_set_child (GtkOverlay *overlay,
+                                             GtkWidget  *child);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *           gtk_overlay_get_child (GtkOverlay *overlay);
+
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_overlay_get_measure_overlay (GtkOverlay *overlay,
-					    GtkWidget  *widget);
+                                            GtkWidget  *widget);
 GDK_AVAILABLE_IN_ALL
 void       gtk_overlay_set_measure_overlay (GtkOverlay *overlay,
-					    GtkWidget  *widget,
-					    gboolean    measure);
+                                            GtkWidget  *widget,
+                                            gboolean    measure);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_overlay_get_clip_overlay    (GtkOverlay *overlay,
                                             GtkWidget  *widget);
