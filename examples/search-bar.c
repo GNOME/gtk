@@ -19,7 +19,7 @@ activate_cb (GtkApplication *app,
   gtk_widget_show (search_bar);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_container_add (GTK_CONTAINER (search_bar), box);
+  gtk_search_bar_set_child (GTK_SEARCH_BAR (search_bar), box);
 
   entry = gtk_search_entry_new ();
   gtk_widget_set_hexpand (entry, TRUE);
