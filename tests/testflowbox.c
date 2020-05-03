@@ -304,7 +304,7 @@ on_child_activated (GtkFlowBox *self,
                     GtkWidget  *child)
 {
   const char *id;
-  id = g_object_get_data (G_OBJECT (gtk_bin_get_child (GTK_BIN (child))), "id");
+  id = g_object_get_data (G_OBJECT (gtk_flow_box_child_get_child (GTK_FLOW_BOX_CHILD (child))), "id");
   g_message ("Child activated %p: %s", child, id);
 }
 
@@ -316,7 +316,7 @@ selection_foreach (GtkFlowBox      *self,
   const char *id;
   GtkWidget *child;
 
-  child = gtk_bin_get_child (GTK_BIN (child_info));
+  child = gtk_flow_box_child_get_child (child_info);
   id = g_object_get_data (G_OBJECT (child), "id");
   g_message ("Child selected %p: %s", child, id);
 }
@@ -357,8 +357,8 @@ sort_func (GtkFlowBoxChild *a,
 {
   gchar *ida, *idb;
 
-  ida = (gchar *)g_object_get_data (G_OBJECT (gtk_bin_get_child (GTK_BIN (a))), "id");
-  idb = (gchar *)g_object_get_data (G_OBJECT (gtk_bin_get_child (GTK_BIN (b))), "id");
+  ida = (gchar *)g_object_get_data (G_OBJECT (gtk_flow_box_child_get_child (a)), "id");
+  idb = (gchar *)g_object_get_data (G_OBJECT (gtk_flow_box_child_get_child (b)), "id");
   return g_strcmp0 (ida, idb);
 }
 

@@ -367,10 +367,11 @@ reconfigure (void)
       child = selected->data;
       g_list_free (selected);
     }
-  image = gtk_bin_get_child (GTK_BIN (child));
+
+  image = gtk_flow_box_child_get_child (GTK_FLOW_BOX_CHILD (child));
   puzzle = gtk_image_get_paintable (GTK_IMAGE (image));
 
-  start_puzzle (puzzle); 
+  start_puzzle (puzzle);
   popover = gtk_widget_get_ancestor (size_spin, GTK_TYPE_POPOVER);
   gtk_popover_popdown (GTK_POPOVER (popover));
   grid = gtk_aspect_frame_get_child (GTK_ASPECT_FRAME (frame));

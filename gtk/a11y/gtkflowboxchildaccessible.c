@@ -22,7 +22,7 @@
 #include "gtk/gtkflowbox.h"
 
 
-G_DEFINE_TYPE (GtkFlowBoxChildAccessible, gtk_flow_box_child_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE)
+G_DEFINE_TYPE (GtkFlowBoxChildAccessible, gtk_flow_box_child_accessible, GTK_TYPE_WIDGET_ACCESSIBLE)
 
 static void
 gtk_flow_box_child_accessible_init (GtkFlowBoxChildAccessible *accessible)
