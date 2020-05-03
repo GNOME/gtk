@@ -22,7 +22,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkbin.h>
+#include <gtk/gtkwidget.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreeview.h>
 
@@ -40,7 +40,7 @@ typedef struct _GtkComboBoxClass   GtkComboBoxClass;
 
 struct _GtkComboBox
 {
-  GtkBin parent_instance;
+  GtkWidget parent_instance;
 };
 
 /**
@@ -52,7 +52,7 @@ struct _GtkComboBox
  */
 struct _GtkComboBoxClass
 {
-  GtkBinClass parent_class;
+  GtkWidgetClass parent_class;
 
   /*< public >*/
 

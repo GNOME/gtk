@@ -110,6 +110,8 @@
 
 typedef struct
 {
+  GtkWidget *child;
+
   GtkTreeModel *model;
 
   GtkCellArea *area;
@@ -217,10 +219,6 @@ static void     gtk_combo_box_get_property         (GObject         *object,
 static gboolean gtk_combo_box_grab_focus           (GtkWidget       *widget);
 static void     gtk_combo_box_button_toggled       (GtkWidget       *widget,
                                                     gpointer         data);
-static void     gtk_combo_box_add                  (GtkContainer    *container,
-                                                    GtkWidget       *widget);
-static void     gtk_combo_box_remove               (GtkContainer    *container,
-                                                    GtkWidget       *widget);
 
 static void     gtk_combo_box_menu_show            (GtkWidget        *menu,
                                                     gpointer          user_data);
@@ -229,9 +227,6 @@ static void     gtk_combo_box_menu_hide            (GtkWidget        *menu,
 
 static void     gtk_combo_box_unset_model          (GtkComboBox      *combo_box);
 
-static void     gtk_combo_box_forall               (GtkContainer     *container,
-                                                    GtkCallback       callback,
-                                                    gpointer          callback_data);
 static void     gtk_combo_box_set_active_internal  (GtkComboBox      *combo_box,
                                                     GtkTreePath      *path);
 
@@ -322,7 +317,7 @@ static GObject *gtk_combo_box_buildable_get_internal_child   (GtkBuildable      
 static void     gtk_combo_box_start_editing                  (GtkCellEditable *cell_editable,
                                                               GdkEvent        *event);
 
-G_DEFINE_TYPE_WITH_CODE (GtkComboBox, gtk_combo_box, GTK_TYPE_BIN,
+G_DEFINE_TYPE_WITH_CODE (GtkComboBox, gtk_combo_box, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkComboBox)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
                                                 gtk_combo_box_cell_layout_init)
@@ -390,9 +385,8 @@ gtk_combo_box_compute_expand (GtkWidget *widget,
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
   GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
-  GtkWidget *child;
+  GtkWidget *child = priv->child;
 
-  child = gtk_bin_get_child (GTK_BIN (combo_box));
   if (child && child != priv->cell_view)
     {
       *hexpand = gtk_widget_compute_expand (child, GTK_ORIENTATION_HORIZONTAL);
@@ -409,20 +403,14 @@ static void
 gtk_combo_box_class_init (GtkComboBoxClass *klass)
 {
   GObjectClass *object_class;
-  GtkContainerClass *container_class;
   GtkWidgetClass *widget_class;
 
-  container_class = (GtkContainerClass *)klass;
-  container_class->forall = gtk_combo_box_forall;
-  container_class->add = gtk_combo_box_add;
-  container_class->remove = gtk_combo_box_remove;
-
   widget_class = (GtkWidgetClass *)klass;
-  widget_class->size_allocate = gtk_combo_box_size_allocate;
   widget_class->mnemonic_activate = gtk_combo_box_mnemonic_activate;
   widget_class->grab_focus = gtk_combo_box_grab_focus;
   widget_class->focus = gtk_widget_focus_child;
   widget_class->measure = gtk_combo_box_measure;
+  widget_class->size_allocate = gtk_combo_box_size_allocate;
   widget_class->unmap = gtk_combo_box_unmap;
   widget_class->destroy = gtk_combo_box_destroy;
   widget_class->compute_expand = gtk_combo_box_compute_expand;
@@ -933,8 +921,7 @@ gtk_combo_box_set_property (GObject      *object,
         {
           priv->has_frame = g_value_get_boolean (value);
           if (priv->has_entry)
-            gtk_entry_set_has_frame (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo_box))),
-                                     priv->has_frame);
+            gtk_entry_set_has_frame (GTK_ENTRY (priv->child), priv->has_frame);
           g_object_notify (object, "has-frame");
         }
       break;
@@ -1077,14 +1064,13 @@ static void
 gtk_combo_box_create_child (GtkComboBox *combo_box)
 {
   GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
-  GtkWidget *child;
 
   if (priv->has_entry)
     {
       GtkWidget *entry;
 
       entry = gtk_entry_new ();
-      gtk_container_add (GTK_CONTAINER (combo_box), entry);
+      gtk_combo_box_set_child (combo_box, entry);
 
       gtk_widget_add_css_class (GTK_WIDGET (entry), "combo");
 
@@ -1093,26 +1079,24 @@ gtk_combo_box_create_child (GtkComboBox *combo_box)
     }
   else
     {
-      child = gtk_cell_view_new_with_context (priv->area, NULL);
-      priv->cell_view = child;
-      gtk_widget_set_hexpand (child, TRUE);
+      priv->cell_view = gtk_cell_view_new_with_context (priv->area, NULL);
+      gtk_widget_set_hexpand (priv->cell_view, TRUE);
       gtk_cell_view_set_fit_model (GTK_CELL_VIEW (priv->cell_view), TRUE);
       gtk_cell_view_set_model (GTK_CELL_VIEW (priv->cell_view), priv->model);
       gtk_box_insert_child_after (GTK_BOX (gtk_widget_get_parent (priv->arrow)), priv->cell_view, NULL);
-      _gtk_bin_set_child (GTK_BIN (combo_box), priv->cell_view);
+      priv->child = priv->cell_view;
     }
 }
 
 static void
-gtk_combo_box_add (GtkContainer *container,
+gtk_combo_box_add (GtkComboBox *combo_box,
                    GtkWidget    *widget)
 {
-  GtkComboBox *combo_box = GTK_COMBO_BOX (container);
   GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
 
   if (priv->box == NULL)
     {
-      gtk_widget_set_parent (widget, GTK_WIDGET (container));
+      gtk_widget_set_parent (widget, GTK_WIDGET (combo_box));
       return;
     }
 
@@ -1124,17 +1108,12 @@ gtk_combo_box_add (GtkContainer *container,
       return;
     }
 
-  if (priv->cell_view)
-    {
-      gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (priv->cell_view)),
-                            priv->cell_view);
-      _gtk_bin_set_child (GTK_BIN (container), NULL);
-      priv->cell_view = NULL;
-    }
+  g_clear_pointer (&priv->cell_view, gtk_widget_unparent);
 
   gtk_widget_set_hexpand (widget, TRUE);
   gtk_box_insert_child_after (GTK_BOX (priv->box), widget, NULL);
-  _gtk_bin_set_child (GTK_BIN (container), widget);
+
+  priv->child = widget;
 
   if (priv->has_entry)
     {
@@ -1147,32 +1126,28 @@ gtk_combo_box_add (GtkContainer *container,
 }
 
 static void
-gtk_combo_box_remove (GtkContainer *container,
-                      GtkWidget    *widget)
+gtk_combo_box_remove (GtkComboBox *combo_box,
+                      GtkWidget   *widget)
 {
-  GtkComboBox *combo_box = GTK_COMBO_BOX (container);
   GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
   GtkTreePath *path;
+
   if (priv->has_entry)
     {
-      GtkWidget *child_widget;
-
-      child_widget = gtk_bin_get_child (GTK_BIN (container));
-      if (widget && widget == child_widget)
-        {
-          g_signal_handlers_disconnect_by_func (widget,
-                                                gtk_combo_box_entry_contents_changed,
-                                                container);
-        }
+      if (widget && widget == priv->child)
+        g_signal_handlers_disconnect_by_func (widget,
+                                              gtk_combo_box_entry_contents_changed,
+                                              combo_box);
     }
 
   gtk_container_remove (GTK_CONTAINER (priv->box), widget);
-  _gtk_bin_set_child (GTK_BIN (container), NULL);
+
+  priv->child = NULL;
 
   if (gtk_widget_in_destruction (GTK_WIDGET (combo_box)))
     return;
 
-  gtk_widget_queue_resize (GTK_WIDGET (container));
+  gtk_widget_queue_resize (GTK_WIDGET (combo_box));
 
   gtk_combo_box_create_child (combo_box);
 
@@ -1498,20 +1473,6 @@ gtk_combo_box_unset_model (GtkComboBox *combo_box)
 
   if (priv->cell_view)
     gtk_cell_view_set_model (GTK_CELL_VIEW (priv->cell_view), NULL);
-}
-
-static void
-gtk_combo_box_forall (GtkContainer *container,
-                      GtkCallback   callback,
-                      gpointer      callback_data)
-{
-  GtkComboBox *combo_box = GTK_COMBO_BOX (container);
-  GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
-  GtkWidget *child;
-
-  child = gtk_bin_get_child (GTK_BIN (container));
-  if (child && child != priv->cell_view)
-    (* callback) (child, callback_data);
 }
 
 static void
@@ -2290,11 +2251,8 @@ gtk_combo_box_mnemonic_activate (GtkWidget *widget,
 
   if (priv->has_entry)
     {
-      GtkWidget* child;
-
-      child = gtk_bin_get_child (GTK_BIN (combo_box));
-      if (child)
-        gtk_widget_grab_focus (child);
+      if (priv->child)
+        gtk_widget_grab_focus (priv->child);
     }
   else
     gtk_widget_grab_focus (priv->button);
@@ -2310,11 +2268,8 @@ gtk_combo_box_grab_focus (GtkWidget *widget)
 
   if (priv->has_entry)
     {
-      GtkWidget *child;
-
-      child = gtk_bin_get_child (GTK_BIN (combo_box));
-      if (child)
-        return gtk_widget_grab_focus (child);
+      if (priv->child)
+        return gtk_widget_grab_focus (priv->child);
       else
         return FALSE;
     }
@@ -2351,7 +2306,8 @@ gtk_combo_box_destroy (GtkWidget *widget)
       priv->box = NULL;
       priv->button = NULL;
       priv->arrow = NULL;
-      _gtk_bin_set_child (GTK_BIN (combo_box), NULL);
+      priv->child = NULL;
+      priv->cell_view = NULL;
     }
 
   if (priv->row_separator_destroy)
@@ -2386,12 +2342,13 @@ static void
 gtk_combo_box_entry_active_changed (GtkComboBox *combo_box,
                                     gpointer     user_data)
 {
+  GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
   GtkTreeModel *model;
   GtkTreeIter iter;
 
   if (gtk_combo_box_get_active_iter (combo_box, &iter))
     {
-      GtkEntry *entry = GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo_box)));
+      GtkEntry *entry = GTK_ENTRY (priv->child);
 
       if (entry)
         {
@@ -2523,7 +2480,6 @@ gtk_combo_box_start_editing (GtkCellEditable *cell_editable,
   GtkComboBox *combo_box = GTK_COMBO_BOX (cell_editable);
   GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
   GtkEventController *controller;
-  GtkWidget *child;
 
   priv->is_cell_renderer = TRUE;
 
@@ -2539,10 +2495,9 @@ gtk_combo_box_start_editing (GtkCellEditable *cell_editable,
     }
   else
     {
-      child = gtk_bin_get_child (GTK_BIN (combo_box));
-      gtk_widget_add_controller (child, controller);
+      gtk_widget_add_controller (priv->child, controller);
 
-      gtk_widget_grab_focus (child);
+      gtk_widget_grab_focus (priv->child);
       gtk_widget_set_can_focus (priv->button, FALSE);
     }
 }
@@ -2796,6 +2751,8 @@ gtk_combo_box_buildable_add_child (GtkBuildable *buildable,
 {
   if (GTK_IS_CELL_RENDERER (child))
     _gtk_cell_layout_buildable_add_child (buildable, builder, child, type);
+  else if (GTK_IS_WIDGET (child))
+    gtk_combo_box_set_child (GTK_COMBO_BOX (buildable), GTK_WIDGET (child));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
@@ -2836,7 +2793,7 @@ gtk_combo_box_buildable_get_internal_child (GtkBuildable *buildable,
   GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
 
   if (priv->has_entry && strcmp (childname, "entry") == 0)
-    return G_OBJECT (gtk_bin_get_child (GTK_BIN (buildable)));
+    return G_OBJECT (priv->child);
 
   return parent_buildable_iface->get_internal_child (buildable, builder, childname);
 }
@@ -3024,13 +2981,17 @@ void
 gtk_combo_box_set_child (GtkComboBox *combo_box,
                          GtkWidget   *child)
 {
+  GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
+
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
   g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
 
-  if (gtk_bin_get_child (GTK_BIN (combo_box)))
-    gtk_container_remove (GTK_CONTAINER (combo_box), gtk_bin_get_child (GTK_BIN (combo_box)));
+  if (priv->child)
+    gtk_combo_box_remove (combo_box, priv->child);
+
   if (child)
-    gtk_container_add (GTK_CONTAINER (combo_box), child);
+    gtk_combo_box_add (combo_box, child);
+
   g_object_notify (G_OBJECT (combo_box), "child");
 }
 
@@ -3045,8 +3006,10 @@ gtk_combo_box_set_child (GtkComboBox *combo_box,
 GtkWidget *
 gtk_combo_box_get_child (GtkComboBox *combo_box)
 {
+  GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
+
   g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), NULL);
 
-  return gtk_bin_get_child (GTK_BIN (combo_box));
+  return priv->child;
 }
 
