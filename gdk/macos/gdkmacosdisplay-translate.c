@@ -314,6 +314,35 @@ fill_key_event (GdkMacosDisplay *display,
 #endif
 }
 
+static GdkEvent *
+fill_motion_event (GdkMacosDisplay *display,
+                   GdkMacosSurface *surface,
+                   NSEvent         *nsevent,
+                   int              x,
+                   int              y)
+{
+  GdkSeat *seat;
+  GdkModifierType state;
+
+  g_assert (GDK_IS_MACOS_SURFACE (surface));
+  g_assert (nsevent != NULL);
+
+  seat = gdk_display_get_default_seat (GDK_DISPLAY (display));
+  state = get_keyboard_modifiers_from_ns_event (nsevent) |
+          _gdk_macos_display_get_current_mouse_modifiers (display);
+
+  return gdk_motion_event_new (GDK_SURFACE (surface),
+                               gdk_seat_get_pointer (seat),
+                               NULL,
+                               NULL,
+                               get_time_from_ns_event (nsevent),
+                               state,
+                               x,
+                               y,
+                               NULL);
+}
+
+
 GdkEvent *
 _gdk_macos_display_translate (GdkMacosDisplay *self,
                               NSEvent         *nsevent)
@@ -417,6 +446,13 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
       ret = fill_button_event (self, surface, nsevent, x, y);
       break;
 
+    case NSLeftMouseDragged:
+    case NSRightMouseDragged:
+    case NSOtherMouseDragged:
+    case NSMouseMoved:
+      ret = fill_motion_event (self, surface, nsevent, x, y);
+      break;
+
     case NSMouseExited:
       [[NSCursor arrowCursor] set];
       /* fall through */
@@ -442,21 +478,6 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
 #if 0
   switch (event_type)
     {
-    case NSLeftMouseDown:
-    case NSRightMouseDown:
-    case NSOtherMouseDown:
-    case NSLeftMouseUp:
-    case NSRightMouseUp:
-    case NSOtherMouseUp:
-      fill_button_event (window, event, nsevent, x, y, x_root, y_root);
-      break;
-
-    case NSLeftMouseDragged:
-    case NSRightMouseDragged:
-    case NSOtherMouseDragged:
-    case NSMouseMoved:
-      fill_motion_event (window, event, nsevent, x, y, x_root, y_root);
-      break;
 
     case NSScrollWheel:
       {
