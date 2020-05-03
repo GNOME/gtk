@@ -433,8 +433,28 @@ gtk_overlay_add_overlay (GtkOverlay *overlay,
 {
   g_return_if_fail (GTK_IS_OVERLAY (overlay));
   g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (widget != overlay->child);
 
   gtk_widget_insert_before (widget, GTK_WIDGET (overlay), NULL);
+}
+
+/**
+ * gtk_overlay_remove_overlay:
+ * @overlay: a #GtkOverlay
+ * @widget: a #GtkWidget to be removed
+ *
+ * Removes an overlay that was added with gtk_overlay_add_overlay().
+ */
+void
+gtk_overlay_remove_overlay (GtkOverlay *overlay,
+                            GtkWidget  *widget)
+{
+  g_return_if_fail (GTK_IS_OVERLAY (overlay));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (gtk_widget_get_parent (widget) == GTK_WIDGET (overlay));
+  g_return_if_fail (widget != overlay->child);
+
+  gtk_widget_unparent (widget);
 }
 
 /**
