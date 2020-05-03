@@ -3548,7 +3548,7 @@ create_display_screen (GtkWidget *widget)
   window = g_object_new (gtk_window_get_type (),
 			 "display", display,
 			 "title", "Screen or Display selection",
-                         10, NULL);
+                         NULL);
   g_signal_connect (window, "destroy", 
 		    G_CALLBACK (gtk_widget_destroy), NULL);
 
