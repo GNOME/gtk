@@ -149,6 +149,13 @@ GDK_AVAILABLE_IN_ALL
 gboolean      gtk_combo_box_set_active_id        (GtkComboBox *combo_box,
                                                   const gchar *active_id);
 
+GDK_AVAILABLE_IN_ALL
+void          gtk_combo_box_set_child            (GtkComboBox *combo_box,
+                                                  GtkWidget   *child);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *   gtk_combo_box_get_child            (GtkComboBox *combo_box);
+
+
 G_END_DECLS
 
 #endif /* __GTK_COMBO_BOX_H__ */
