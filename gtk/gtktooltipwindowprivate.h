@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_TOOLTIP_WINDOW (gtk_tooltip_window_get_type ())
 
-G_DECLARE_FINAL_TYPE (GtkTooltipWindow, gtk_tooltip_window, GTK, TOOLTIP_WINDOW, GtkWindow)
+G_DECLARE_FINAL_TYPE (GtkTooltipWindow, gtk_tooltip_window, GTK, TOOLTIP_WINDOW, GtkWidget)
 
 GtkWidget *     gtk_tooltip_window_new                          (void);
 
