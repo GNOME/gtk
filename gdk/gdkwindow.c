@@ -9403,7 +9403,8 @@ proxy_pointer_event (GdkDisplay                 *display,
 				     &event->touch.y_root);
 
 	  event->touch.axes = g_memdup (source_event->touch.axes,
-					sizeof (gdouble) * gdk_device_get_n_axes (source_event->touch.device));
+					sizeof (gdouble) *
+					gdk_device_get_n_axes (gdk_event_get_source_device(source_event)));
 	}
       else
 	{
@@ -9420,10 +9421,12 @@ proxy_pointer_event (GdkDisplay                 *display,
 
 	  if (is_touch_type (source_event->type))
 	    event->motion.axes = g_memdup (source_event->touch.axes,
-					   sizeof (gdouble) * gdk_device_get_n_axes (source_event->touch.device));
+					   sizeof (gdouble) *
+					   gdk_device_get_n_axes (gdk_event_get_source_device(source_event)));
 	  else
 	    event->motion.axes = g_memdup (source_event->motion.axes,
-					   sizeof (gdouble) * gdk_device_get_n_axes (source_event->motion.device));
+					   sizeof (gdouble) *
+					   gdk_device_get_n_axes (gdk_event_get_source_device(source_event)));
 	}
 
       /* Just insert the event */
@@ -9637,13 +9640,15 @@ proxy_button_event (GdkEvent *source_event,
             event->button.state |= GDK_BUTTON1_MASK;
 	  event->button.button = 1;
 	  event->button.axes = g_memdup (source_event->touch.axes,
-					 sizeof (gdouble) * gdk_device_get_n_axes (source_event->touch.device));
+					 sizeof (gdouble) *
+					 gdk_device_get_n_axes (gdk_event_get_source_device(source_event)));
 	}
       else
 	{
 	  event->button.button = source_event->button.button;
 	  event->button.axes = g_memdup (source_event->button.axes,
-					 sizeof (gdouble) * gdk_device_get_n_axes (source_event->button.device));
+					 sizeof (gdouble) *
+					 gdk_device_get_n_axes (gdk_event_get_source_device(source_event)));
 	}
 
       if (type == GDK_BUTTON_PRESS)
@@ -9680,7 +9685,8 @@ proxy_button_event (GdkEvent *source_event,
       event->touch.state = state;
       event->touch.device = source_event->touch.device;
       event->touch.axes = g_memdup (source_event->touch.axes,
-                                     sizeof (gdouble) * gdk_device_get_n_axes (source_event->touch.device));
+                                    sizeof (gdouble) *
+                                    gdk_device_get_n_axes (gdk_event_get_source_device(source_event)));
       event->touch.sequence = source_event->touch.sequence;
       event->touch.emulating_pointer = source_event->touch.emulating_pointer;
 
