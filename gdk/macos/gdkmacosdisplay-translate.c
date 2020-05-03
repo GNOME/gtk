@@ -597,22 +597,22 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
       break;
     }
 
+    case NSScrollWheel:
+      //ret = fill_scroll_event (self, surface, nsevent, x, y);
+      break;
+
     default:
       break;
     }
 
 #if 0
-  switch (event_type)
-    {
-
     case NSScrollWheel:
       {
         GdkScrollDirection direction;
         float dx;
         float dy;
-#ifdef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
-        if (gdk_quartz_osx_version() >= GDK_OSX_LION &&
-            [nsevent hasPreciseScrollingDeltas])
+
+        if ([nsevent hasPreciseScrollingDeltas])
           {
             dx = [nsevent scrollingDeltaX];
             dy = [nsevent scrollingDeltaY];
@@ -623,7 +623,7 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
 
             /* Fall through for scroll buttons emulation */
           }
-#endif
+
         dx = [nsevent deltaX];
         dy = [nsevent deltaY];
 
@@ -650,9 +650,7 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
 
         if (dx != 0.0 || dy != 0.0)
           {
-#ifdef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
-            if (gdk_quartz_osx_version() >= GDK_OSX_LION &&
-                [nsevent hasPreciseScrollingDeltas])
+            if ([nsevent hasPreciseScrollingDeltas])
               {
                 GdkEvent *emulated_event;
 
@@ -664,68 +662,14 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
                 append_event (emulated_event, TRUE);
               }
             else
-#endif
-              fill_scroll_event (window, event, nsevent,
-                                 x, y, x_root, y_root,
-                                 dx, dy, direction);
+              {
+                fill_scroll_event (window, event, nsevent,
+                                   x, y, x_root, y_root,
+                                   dx, dy, direction);
+              }
           }
       }
       break;
-#ifdef AVAILABLE_MAC_OS_X_VERSION_10_8_AND_LATER
-    case NSEventTypeMagnify:
-    case NSEventTypeRotate:
-      /* Event handling requires [NSEvent phase] which was introduced in 10.7 */
-      /* However - Tests on 10.7 showed that phase property does not work     */
-      if (gdk_quartz_osx_version () >= GDK_OSX_MOUNTAIN_LION)
-        fill_pinch_event (window, event, nsevent, x, y, x_root, y_root);
-      else
-        return_val = FALSE;
-      break;
-#endif
-    case NSMouseExited:
-      if (SURFACE_IS_TOPLEVEL (window))
-          [[NSCursor arrowCursor] set];
-      /* fall through */
-    case NSMouseEntered:
-      return_val = synthesize_crossing_event (window, event, nsevent, x, y, x_root, y_root);
-      break;
-
-    case NSKeyDown:
-    case NSKeyUp:
-    case NSFlagsChanged:
-      {
-        GdkEventType type;
-
-        type = _gdk_quartz_keys_event_type (nsevent);
-        if (type == GDK_NOTHING)
-          return_val = FALSE;
-        else
-          fill_key_event (window, event, nsevent, type);
-      }
-      break;
-
-    default:
-      /* Ignore everything elsee. */
-      return_val = FALSE;
-      break;
-    }
-
- done:
-  if (return_val)
-    {
-      if (event->any.surface)
-        g_object_ref (event->any.surface);
-      if (((event->any.type == GDK_ENTER_NOTIFY) ||
-           (event->any.type == GDK_LEAVE_NOTIFY)) &&
-          (event->crossing.child_window != NULL))
-        g_object_ref (event->crossing.child_window);
-    }
-  else
-    {
-      /* Mark this event as having no resources to be freed */
-      event->any.surface = NULL;
-      event->any.type = GDK_NOTHING;
-    }
 #endif
 
   return ret;
