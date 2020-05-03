@@ -19,6 +19,7 @@
 
 #include "recorder.h"
 
+#include <gtk/gtkbinlayout.h>
 #include <gtk/gtkbox.h>
 #include <gtk/gtkfilechooserdialog.h>
 #include <gtk/gtklabel.h>
@@ -72,7 +73,7 @@ enum
 
 static GParamSpec *props[LAST_PROP] = { NULL, };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorRecorder, gtk_inspector_recorder, GTK_TYPE_BIN)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorRecorder, gtk_inspector_recorder, GTK_TYPE_WIDGET)
 
 static GListModel *
 create_render_node_list_model (GskRenderNode **nodes,
@@ -330,7 +331,7 @@ create_widget_for_render_node (gpointer row_item,
       g_object_set_data_full (G_OBJECT (row), "make-sure-its-not-unreffed", g_object_ref (row_item), g_object_unref);
 
       arrow = gtk_builtin_icon_new ("expander");
-      gtk_container_add (GTK_CONTAINER (title), arrow);
+      gtk_button_set_child (GTK_BUTTON (title), arrow);
     }
   else
     {
@@ -1282,6 +1283,8 @@ gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, render_node_list_selection_changed);
   gtk_widget_class_bind_template_callback (widget_class, render_node_save);
   gtk_widget_class_bind_template_callback (widget_class, node_property_activated);
+
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
 
 static void
