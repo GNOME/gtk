@@ -663,6 +663,8 @@ gtk_combo_box_set_entry_text_column
 gtk_combo_box_get_entry_text_column
 gtk_combo_box_set_popup_fixed_width
 gtk_combo_box_get_popup_fixed_width
+gtk_combo_box_set_child
+gtk_combo_box_get_child
 <SUBSECTION Standard>
 GTK_TYPE_COMBO_BOX
 GTK_COMBO_BOX
