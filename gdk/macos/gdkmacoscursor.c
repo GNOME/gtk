@@ -36,11 +36,11 @@
 
 @implementation gdkCoreCursor
 
-- (int)_coreCursorType
+- (long long)_coreCursorType
 {
-        if (self->override)
-                return self->type;
-        return [super _coreCursorType];
+  if (self->override)
+    return self->type;
+  return [super _coreCursorType];
 }
 
 #define CUSTOM_CURSOR_CTOR(name, id) \
@@ -77,6 +77,7 @@ CUSTOM_CURSOR_CTOR(gdkNESWResizeCursor, 30)
 CUSTOM_CURSOR_CTOR(gdkNWSEResizeCursor, 34)
 CUSTOM_CURSOR_CTOR(gdkZoomInCursor, 42)
 CUSTOM_CURSOR_CTOR(gdkZoomOutCursor, 43)
+#undef CUSTOM_CURSOR_CTOR
 
 @end
 
