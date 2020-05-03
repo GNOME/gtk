@@ -507,7 +507,7 @@ gtk_frame_size_allocate (GtkWidget *widget,
       gtk_widget_measure (priv->label_widget, GTK_ORIENTATION_VERTICAL, width,
                           &label_height, NULL, NULL, NULL);
 
-      label_allocation.x = new_allocation.x + (new_allocation.width - width) * xalign;
+      label_allocation.x = new_allocation.x + (new_allocation.width - label_width) * xalign;
       label_allocation.y = new_allocation.y - label_height;
       label_allocation.height = label_height;
       label_allocation.width = label_width;
