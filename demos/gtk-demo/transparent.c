@@ -58,7 +58,7 @@ do_transparent (GtkWidget *do_widget)
       blur_overlay_add_overlay (BLUR_OVERLAY (overlay), button, 5.0);
 
       picture = gtk_picture_new_for_resource ("/transparent/portland-rose.jpg");
-      gtk_overlay_set_child (GTK_OVERLAY (overlay), picture);
+      blur_overlay_set_child (BLUR_OVERLAY (overlay), picture);
     }
 
   if (!gtk_widget_get_visible (window))
