@@ -18,7 +18,7 @@
 #ifndef _GTK_INSPECTOR_RECORDER_H_
 #define _GTK_INSPECTOR_RECORDER_H_
 
-#include <gtk/gtkbin.h>
+#include <gtk/gtkwidget.h>
 
 #define GTK_TYPE_INSPECTOR_RECORDER            (gtk_inspector_recorder_get_type())
 #define GTK_INSPECTOR_RECORDER(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_RECORDER, GtkInspectorRecorder))
@@ -32,12 +32,12 @@ typedef struct _GtkInspectorRecorderPrivate GtkInspectorRecorderPrivate;
 
 typedef struct _GtkInspectorRecorder
 {
-  GtkBin parent;
+  GtkWidget parent;
 } GtkInspectorRecorder;
 
 typedef struct _GtkInspectorRecorderClass
 {
-  GtkBinClass parent;
+  GtkWidgetClass parent;
 } GtkInspectorRecorderClass;
 
 G_BEGIN_DECLS
