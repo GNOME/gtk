@@ -27,7 +27,7 @@ new_window (GApplication *app,
   view = gtk_text_view_new ();
 
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled), view);
-  gtk_container_add (GTK_CONTAINER (overlay), scrolled);
+  gtk_overlay_set_child (GTK_OVERLAY (overlay), scrolled);
 
   if (file != NULL)
     {

@@ -37,7 +37,7 @@ do_overlay (GtkWidget *do_widget)
 
       overlay = gtk_overlay_new ();
       grid = gtk_grid_new ();
-      gtk_container_add (GTK_CONTAINER (overlay), grid);
+      gtk_overlay_set_child (GTK_OVERLAY (overlay), grid);
 
       entry = gtk_entry_new ();
 

@@ -204,7 +204,7 @@ blur_overlay_size_allocate (GtkWidget *widget,
   GtkWidget *child;
   GtkWidget *main_widget;
 
-  main_widget = gtk_bin_get_child (GTK_BIN (overlay));
+  main_widget = gtk_overlay_get_child (GTK_OVERLAY (overlay));
   if (main_widget && gtk_widget_get_visible (main_widget))
     gtk_widget_size_allocate (main_widget,
                               &(GtkAllocation) {
