@@ -37,14 +37,14 @@ typedef struct _BlurOverlayClass    BlurOverlayClass;
 
 struct _BlurOverlay
 {
-  GtkBin parent_instance;
+  GtkWidget parent_instance;
 
   GtkWidget *main_widget;
 };
 
 struct _BlurOverlayClass
 {
-  GtkBinClass parent_class;
+  GtkWidgetClass parent_class;
 
   gboolean (*get_child_position) (BlurOverlay   *overlay,
                                   GtkWidget     *widget,
@@ -59,6 +59,9 @@ GDK_AVAILABLE_IN_ALL
 void       blur_overlay_add_overlay (BlurOverlay *overlay,
                                      GtkWidget   *widget,
                                      double       blur);
+GDK_AVAILABLE_IN_ALL
+void       blur_overlay_set_child   (BlurOverlay *overlay,
+                                     GtkWidget   *widget);
 
 G_END_DECLS
 
