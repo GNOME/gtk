@@ -89,7 +89,7 @@ main (int argc, char *argv[])
   gtk_widget_set_valign (grid, GTK_ALIGN_FILL);
   gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
-  gtk_container_add (GTK_CONTAINER (overlay), grid);
+  gtk_overlay_set_child (GTK_OVERLAY (overlay), grid);
 
   label = gtk_label_new ("");
   gtk_widget_set_hexpand (label, TRUE);

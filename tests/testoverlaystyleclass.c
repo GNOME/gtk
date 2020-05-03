@@ -74,7 +74,7 @@ main (int argc, char *argv[])
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_ALWAYS,
                                   GTK_POLICY_ALWAYS);
-  gtk_container_add (GTK_CONTAINER (overlay), sw);
+  gtk_overlay_set_child (GTK_OVERLAY (overlay), sw);
 
   main_child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), main_child);

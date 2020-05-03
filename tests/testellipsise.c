@@ -139,7 +139,7 @@ main (int argc, char *argv[])
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), overlay_draw, label, NULL);
 
   overlay = gtk_overlay_new ();
-  gtk_container_add (GTK_CONTAINER (overlay), da);
+  gtk_overlay_set_child (GTK_OVERLAY (overlay), da);
   gtk_widget_set_vexpand (overlay, TRUE);
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), label);
 
