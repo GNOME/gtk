@@ -307,7 +307,7 @@ create_widget_for_render_node (gpointer row_item,
   node = gtk_render_node_paintable_get_render_node (GTK_RENDER_NODE_PAINTABLE (paintable));
   row = gtk_list_box_row_new ();
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
-  gtk_container_add (GTK_CONTAINER (row), box);
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), box);
 
   /* expander */
   depth = gtk_tree_list_row_get_depth (row_item);
