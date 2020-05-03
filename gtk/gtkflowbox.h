@@ -51,12 +51,12 @@ typedef struct _GtkFlowBoxChildClass  GtkFlowBoxChildClass;
 
 struct _GtkFlowBoxChild
 {
-  GtkBin parent_instance;
+  GtkWidget parent_instance;
 };
 
 struct _GtkFlowBoxChildClass
 {
-  GtkBinClass parent_class;
+  GtkWidgetClass parent_class;
 
   void (* activate) (GtkFlowBoxChild *child);
 
@@ -80,6 +80,13 @@ GDK_AVAILABLE_IN_ALL
 GType                 gtk_flow_box_child_get_type            (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget*            gtk_flow_box_child_new                 (void);
+
+GDK_AVAILABLE_IN_ALL
+void                  gtk_flow_box_child_set_child          (GtkFlowBoxChild *self,
+                                                             GtkWidget       *child);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *           gtk_flow_box_child_get_child          (GtkFlowBoxChild *self);
+
 GDK_AVAILABLE_IN_ALL
 gint                  gtk_flow_box_child_get_index           (GtkFlowBoxChild *child);
 GDK_AVAILABLE_IN_ALL
