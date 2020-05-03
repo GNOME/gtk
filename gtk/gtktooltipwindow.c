@@ -44,7 +44,7 @@
 
 struct _GtkTooltipWindow
 {
-  GtkWindow parent_instance;
+  GtkWidget parent_instance;
 
   GdkSurface *surface;
   GskRenderer *renderer;
@@ -67,12 +67,12 @@ struct _GtkTooltipWindow
 
 struct _GtkTooltipWindowClass
 {
-  GtkWindowClass parent_class;
+  GtkWidgetClass parent_class;
 };
 
 static void gtk_tooltip_window_native_init (GtkNativeInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkTooltipWindow, gtk_tooltip_window, GTK_TYPE_BIN,
+G_DEFINE_TYPE_WITH_CODE (GtkTooltipWindow, gtk_tooltip_window, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_NATIVE,
                                                 gtk_tooltip_window_native_init))
 
@@ -150,7 +150,9 @@ gtk_tooltip_window_native_check_resize (GtkNative *native)
   GtkWidget *widget = GTK_WIDGET (native);
 
   if (!_gtk_widget_get_alloc_needed (widget))
-    gtk_widget_ensure_allocate (widget);
+    {
+      gtk_widget_ensure_allocate (widget);
+    }
   else if (gtk_widget_get_visible (widget))
     {
       gtk_tooltip_window_relayout (window);
@@ -281,7 +283,6 @@ gtk_tooltip_window_map (GtkWidget *widget)
 {
   GtkTooltipWindow *window = GTK_TOOLTIP_WINDOW (widget);
   GdkPopupLayout *layout;
-  GtkWidget *child;
 
   layout = create_popup_layout (window);
   gdk_popup_present (GDK_POPUP (window->surface),
@@ -298,16 +299,14 @@ gtk_tooltip_window_map (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_tooltip_window_parent_class)->map (widget);
 
-  child = gtk_bin_get_child (GTK_BIN (widget));
-  if (child != NULL && gtk_widget_get_visible (child))
-    gtk_widget_map (child);
+  if (gtk_widget_get_visible (window->box))
+    gtk_widget_map (window->box);
 }
 
 static void
 gtk_tooltip_window_unmap (GtkWidget *widget)
 {
   GtkTooltipWindow *window = GTK_TOOLTIP_WINDOW (widget);
-  GtkWidget *child;
 
   gtk_widget_remove_surface_transform_changed_callback (window->relative_to,
                                                         window->surface_transform_changed_cb);
@@ -316,9 +315,7 @@ gtk_tooltip_window_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_tooltip_window_parent_class)->unmap (widget);
   gdk_surface_hide (window->surface);
 
-  child = gtk_bin_get_child (GTK_BIN (widget));
-  if (child != NULL)
-    gtk_widget_unmap (child);
+  gtk_widget_unmap (window->box);
 }
 
 static void
@@ -330,12 +327,10 @@ gtk_tooltip_window_measure (GtkWidget      *widget,
                             int            *minimum_baseline,
                             int            *natural_baseline)
 {
-  GtkWidget *child;
+  GtkTooltipWindow *window = GTK_TOOLTIP_WINDOW (widget);
 
-  child = gtk_bin_get_child (GTK_BIN (widget));
-
-  if (child)
-    gtk_widget_measure (child,
+  if (window->box)
+    gtk_widget_measure (window->box,
                         orientation, for_size,
                         minimum, natural,
                         minimum_baseline, natural_baseline);
@@ -348,12 +343,9 @@ gtk_tooltip_window_size_allocate (GtkWidget *widget,
                                   int        baseline)
 {
   GtkTooltipWindow *window = GTK_TOOLTIP_WINDOW (widget);
-  GtkWidget *child;
 
-  child = gtk_bin_get_child (GTK_BIN (window));
-
-  if (child)
-    gtk_widget_allocate (child, width, height, baseline, NULL);
+  if (window->box)
+    gtk_widget_allocate (window->box, width, height, baseline, NULL);
 }
 
 static void
@@ -382,12 +374,14 @@ static void
 gtk_tooltip_window_dispose (GObject *object)
 {
   GtkTooltipWindow *window = GTK_TOOLTIP_WINDOW (object);
-  
+
   if (window->relative_to)
     {
       g_signal_handlers_disconnect_by_func (window->relative_to, size_changed, window);
       gtk_widget_unparent (GTK_WIDGET (window));
     }
+
+  g_clear_pointer (&window->box, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_tooltip_window_parent_class)->dispose (object);
 }
@@ -405,8 +399,8 @@ gtk_tooltip_window_class_init (GtkTooltipWindowClass *klass)
   widget_class->unmap = gtk_tooltip_window_unmap;
   widget_class->measure = gtk_tooltip_window_measure;
   widget_class->size_allocate = gtk_tooltip_window_size_allocate;
-  widget_class->show = gtk_tooltip_window_show; 
-  widget_class->hide = gtk_tooltip_window_hide; 
+  widget_class->show = gtk_tooltip_window_show;
+  widget_class->hide = gtk_tooltip_window_hide;
 
   gtk_widget_class_set_css_name (widget_class, I_("tooltip"));
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_TOOL_TIP);
@@ -465,7 +459,6 @@ void
 gtk_tooltip_window_set_image_icon (GtkTooltipWindow *window,
                                    GdkPaintable     *paintable)
 {
-
   if (paintable != NULL)
     {
       gtk_image_set_from_paintable (GTK_IMAGE (window->image), paintable);
@@ -597,4 +590,3 @@ gtk_tooltip_window_position (GtkTooltipWindow *window,
 
   gtk_tooltip_window_relayout (window);
 }
-

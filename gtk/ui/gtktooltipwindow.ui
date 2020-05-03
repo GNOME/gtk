@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <template class="GtkTooltipWindow" parent="GtkBin">
+  <template class="GtkTooltipWindow" parent="GtkWidget">
     <style>
       <class name="background"/>
     </style>
