@@ -529,7 +529,7 @@ gtk_inspector_prop_list_create_row (GtkInspectorPropList *pl,
   g_object_set_data (G_OBJECT (row), "pspec", prop);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (row), box);
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), box);
 
   label = gtk_label_new (prop->name);
   gtk_widget_add_css_class (label, "cell");
