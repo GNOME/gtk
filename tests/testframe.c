@@ -18,78 +18,6 @@
 #include <gtk/gtk.h>
 #include <math.h>
 
-static void
-spin_hpadding_cb (GtkSpinButton *spin, gpointer user_data)
-{
-  GtkWidget *frame = user_data;
-  GtkCssProvider *provider;
-  GtkStyleContext *context;
-  gchar *data;
-  GtkBorder pad;
-
-  context = gtk_widget_get_style_context (frame);
-  provider = g_object_get_data (G_OBJECT (frame), "provider");
-  if (provider == NULL)
-    {
-      provider = gtk_css_provider_new ();
-      g_object_set_data (G_OBJECT (frame), "provider", provider);
-      gtk_style_context_add_provider (context,
-                                      GTK_STYLE_PROVIDER (provider),
-                                      GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    }
-
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, GTK_STATE_FLAG_NORMAL);
-  gtk_style_context_get_padding (context, &pad);
-  gtk_style_context_restore (context);
-
-
-  data = g_strdup_printf ("frame { padding: %dpx %dpx }",
-                          pad.top,
-                          (gint)gtk_spin_button_get_value (spin));
-
-  gtk_css_provider_load_from_data (provider, data, -1);
-  g_free (data);
-
-  gtk_widget_queue_resize (frame);
-}
-
-static void
-spin_vpadding_cb (GtkSpinButton *spin, gpointer user_data)
-{
-  GtkWidget *frame = user_data;
-  GtkCssProvider *provider;
-  GtkStyleContext *context;
-  gchar *data;
-  GtkBorder pad;
-
-  context = gtk_widget_get_style_context (frame);
-  provider = g_object_get_data (G_OBJECT (frame), "provider");
-  if (provider == NULL)
-    {
-      provider = gtk_css_provider_new ();
-      g_object_set_data (G_OBJECT (frame), "provider", provider);
-      gtk_style_context_add_provider (context,
-                                      GTK_STYLE_PROVIDER (provider),
-                                      GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    }
-
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, GTK_STATE_FLAG_NORMAL);
-  gtk_style_context_get_padding (context, &pad);
-  gtk_style_context_restore (context);
-
-
-  data = g_strdup_printf ("frame { padding: %dpx %dpx }",
-                          (gint)gtk_spin_button_get_value (spin),
-                          pad.left);
-
-  gtk_css_provider_load_from_data (provider, data, -1);
-  g_free (data);
-
-  gtk_widget_queue_resize (frame);
-}
-
 /* Function to normalize rounding errors in FP arithmetic to
    our desired limits */
 
@@ -171,24 +99,6 @@ int main (int argc, char **argv)
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), xalign);
   g_signal_connect (widget, "value-changed", G_CALLBACK (spin_xalign_cb), frame);
   gtk_grid_attach (grid, widget, 1, 0, 1, 1);
-
-  /* Spin to control vertical padding */
-  widget = gtk_label_new ("vertical padding:");
-  gtk_grid_attach (grid, widget, 0, 1, 1, 1);
-
-  widget = gtk_spin_button_new_with_range (0, 250, 1);
-  g_signal_connect (widget, "value-changed", G_CALLBACK (spin_vpadding_cb), frame);
-  gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 0);
-  gtk_grid_attach (grid, widget, 1, 1, 1, 1);
-
-  /* Spin to control horizontal padding */
-  widget = gtk_label_new ("horizontal padding:");
-  gtk_grid_attach (grid, widget, 0, 2, 1, 1);
-
-  widget = gtk_spin_button_new_with_range (0, 250, 1);
-  g_signal_connect (widget, "value-changed", G_CALLBACK (spin_hpadding_cb), frame);
-  gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 0);
-  gtk_grid_attach (grid, widget, 1, 2, 1, 1);
 
   gtk_widget_show (window);
 
