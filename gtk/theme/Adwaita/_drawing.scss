@@ -10,11 +10,12 @@
 //
 @mixin focus-ring($target: null, $width: 2px, $offset: -$width, $outer: false) {
   & #{$target} {
-    outline: 0 solid $focus_border_color;
-    outline-offset: if($outer, $offset, $offset + $width);
+    outline: 0 solid transparent;
+    outline-offset: if($outer, $offset + 10px, $offset + $width + 10px);
   }
 
   &:focus:focus-visible #{$target} {
+    outline-color: $focus_border_color;
     outline-width: $width;
     outline-offset: $offset;
   }

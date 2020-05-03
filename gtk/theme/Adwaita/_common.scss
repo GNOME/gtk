@@ -3876,7 +3876,7 @@ colorswatch {
 
   transition: $focus_transition;
 
-  @include focus-ring();
+  @include focus-ring($width: 4px, $offset: -2px);
 
   &:drop(active), & { border-style: none; } // FIXME: implement a proper drop(active) state
 
