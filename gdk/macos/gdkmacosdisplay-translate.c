@@ -315,6 +315,127 @@ fill_key_event (GdkMacosDisplay *display,
 }
 
 static GdkEvent *
+fill_pinch_event (GdkMacosDisplay *display,
+                  GdkMacosSurface *surface,
+                  NSEvent         *nsevent,
+                  int              x,
+                  int              y)
+{
+  static double last_scale = 1.0;
+  static enum {
+    FP_STATE_IDLE,
+    FP_STATE_UPDATE
+  } last_state = FP_STATE_IDLE;
+  GdkSeat *seat;
+  GdkTouchpadGesturePhase phase;
+  gdouble angle_delta = 0.0;
+
+  g_assert (GDK_IS_MACOS_DISPLAY (display));
+  g_assert (GDK_IS_MACOS_SURFACE (surface));
+
+  /* fill_pinch_event handles the conversion from the two OSX gesture events
+   * NSEventTypeMagnfiy and NSEventTypeRotate to the GDK_TOUCHPAD_PINCH event.
+   * The normal behavior of the OSX events is that they produce as sequence of
+   *   1 x NSEventPhaseBegan,
+   *   n x NSEventPhaseChanged,
+   *   1 x NSEventPhaseEnded
+   * This can happen for both the Magnify and the Rotate events independently.
+   * As both events are summarized in one GDK_TOUCHPAD_PINCH event sequence, a
+   * little state machine handles the case of two NSEventPhaseBegan events in
+   * a sequence, e.g. Magnify(Began), Magnify(Changed)..., Rotate(Began)...
+   * such that PINCH(STARTED), PINCH(UPDATE).... will not show a second
+   * PINCH(STARTED) event.
+   */
+
+  switch ([nsevent phase])
+    {
+    case NSEventPhaseBegan:
+      switch (last_state)
+        {
+        case FP_STATE_IDLE:
+          phase = GDK_TOUCHPAD_GESTURE_PHASE_BEGIN;
+          last_state = FP_STATE_UPDATE;
+          last_scale = 1.0;
+          break;
+        case FP_STATE_UPDATE:
+          /* We have already received a PhaseBegan event but no PhaseEnded
+             event. This can happen, e.g. Magnify(Began), Magnify(Change)...
+             Rotate(Began), Rotate (Change),...., Magnify(End) Rotate(End)
+          */
+          phase = GDK_TOUCHPAD_GESTURE_PHASE_UPDATE;
+          break;
+        }
+      break;
+
+    case NSEventPhaseChanged:
+      phase = GDK_TOUCHPAD_GESTURE_PHASE_UPDATE;
+      break;
+
+    case NSEventPhaseEnded:
+      phase = GDK_TOUCHPAD_GESTURE_PHASE_END;
+      switch (last_state)
+        {
+        case FP_STATE_IDLE:
+          /* We are idle but have received a second PhaseEnded event.
+             This can happen because we have Magnify and Rotate OSX
+             event sequences. We just send a second end GDK_PHASE_END.
+          */
+          break;
+        case FP_STATE_UPDATE:
+          last_state = FP_STATE_IDLE;
+          break;
+        }
+      break;
+
+    case NSEventPhaseCancelled:
+      phase = GDK_TOUCHPAD_GESTURE_PHASE_CANCEL;
+      last_state = FP_STATE_IDLE;
+      break;
+
+    case NSEventPhaseMayBegin:
+    case NSEventPhaseStationary:
+      phase = GDK_TOUCHPAD_GESTURE_PHASE_CANCEL;
+      break;
+
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+
+  switch ([nsevent type])
+    {
+    case NSEventTypeMagnify:
+      last_scale *= [nsevent magnification] + 1.0;
+      angle_delta = 0.0;
+      break;
+
+    case NSEventTypeRotate:
+      angle_delta = - [nsevent rotation] * G_PI / 180.0;
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  seat = gdk_display_get_default_seat (GDK_DISPLAY (display));
+
+  return gdk_touchpad_event_new_pinch (GDK_SURFACE (surface),
+                                       gdk_seat_get_pointer (seat),
+                                       NULL,
+                                       get_time_from_ns_event (nsevent),
+                                       get_keyboard_modifiers_from_ns_event (nsevent),
+                                       phase,
+                                       x,
+                                       y,
+                                       2,
+                                       0.0,
+                                       0.0,
+                                       last_scale,
+                                       angle_delta);
+
+}
+
+static GdkEvent *
 fill_motion_event (GdkMacosDisplay *display,
                    GdkMacosSurface *surface,
                    NSEvent         *nsevent,
@@ -451,6 +572,11 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
     case NSOtherMouseDragged:
     case NSMouseMoved:
       ret = fill_motion_event (self, surface, nsevent, x, y);
+      break;
+
+    case NSEventTypeMagnify:
+    case NSEventTypeRotate:
+      ret = fill_pinch_event (self, surface, nsevent, x, y);
       break;
 
     case NSMouseExited:
