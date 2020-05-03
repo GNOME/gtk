@@ -5752,6 +5752,8 @@ gtk_flow_box_bind_model
 <SUBSECTION GtkFlowBoxChild>
 GtkFlowBoxChild
 gtk_flow_box_child_new
+gtk_flow_box_child_set_child
+gtk_flow_box_child_get_child
 gtk_flow_box_child_get_index
 gtk_flow_box_child_is_selected
 gtk_flow_box_child_changed
