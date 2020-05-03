@@ -42,6 +42,9 @@ GtkWidget *gtk_overlay_new         (void);
 GDK_AVAILABLE_IN_ALL
 void       gtk_overlay_add_overlay (GtkOverlay *overlay,
                                     GtkWidget  *widget);
+GDK_AVAILABLE_IN_ALL
+void       gtk_overlay_remove_overlay (GtkOverlay *overlay,
+                                       GtkWidget  *widget);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_overlay_set_child (GtkOverlay *overlay,
