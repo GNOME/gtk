@@ -365,7 +365,7 @@ gtk_shortcuts_window_add_section (GtkShortcutsWindow  *self,
                         "xalign", 0.5f,
                         NULL);
   g_object_set_data (G_OBJECT (section), "gtk-shortcuts-title", label);
-  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (label));
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), GTK_WIDGET (label));
   gtk_container_add (GTK_CONTAINER (priv->list_box), GTK_WIDGET (row));
 
   update_title_stack (self);

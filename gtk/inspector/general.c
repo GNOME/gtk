@@ -184,7 +184,7 @@ add_check_row (GtkInspectorGeneral *gen,
   gtk_container_add (GTK_CONTAINER (box), check);
 
   row = gtk_list_box_row_new ();
-  gtk_container_add (GTK_CONTAINER (row), box);
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), box);
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
 
   gtk_widget_set_hexpand (box, FALSE);
@@ -227,7 +227,7 @@ add_label_row (GtkInspectorGeneral *gen,
   gtk_container_add (GTK_CONTAINER (box), label);
 
   row = gtk_list_box_row_new ();
-  gtk_container_add (GTK_CONTAINER (row), box);
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), box);
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
 
   gtk_widget_set_hexpand (box, FALSE);

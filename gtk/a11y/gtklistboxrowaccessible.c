@@ -22,7 +22,7 @@
 #include "gtk/gtklistbox.h"
 
 
-G_DEFINE_TYPE (GtkListBoxRowAccessible, gtk_list_box_row_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE)
+G_DEFINE_TYPE (GtkListBoxRowAccessible, gtk_list_box_row_accessible, GTK_TYPE_WIDGET_ACCESSIBLE)
 
 static void
 gtk_list_box_row_accessible_init (GtkListBoxRowAccessible *accessible)
@@ -50,7 +50,7 @@ gtk_list_box_row_accessible_ref_state_set (AtkObject *obj)
   if (widget != NULL)
     {
       parent = gtk_widget_get_parent (widget);
-      if (parent != NULL && 
+      if (parent != NULL &&
           GTK_IS_LIST_BOX (parent) &&
           gtk_list_box_get_selection_mode (GTK_LIST_BOX (parent)) != GTK_SELECTION_NONE)
         atk_state_set_add_state (state_set, ATK_STATE_SELECTABLE);
