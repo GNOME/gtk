@@ -910,7 +910,8 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   gtk_popover_set_child (GTK_POPOVER (priv->popover), GTK_WIDGET (priv->list_box));
 
   priv->search_entry = GTK_SEARCH_ENTRY (gtk_search_entry_new ());
-  gtk_container_add (GTK_CONTAINER (priv->search_bar), GTK_WIDGET (priv->search_entry));
+  gtk_search_bar_set_child (GTK_SEARCH_BAR (priv->search_bar), GTK_WIDGET (priv->search_entry));
+
   g_object_set (priv->search_entry,
                 /* Translators: This is placeholder text for the search entry in the shortcuts window */
                 "placeholder-text", _("Search Shortcuts"),
