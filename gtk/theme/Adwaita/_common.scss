@@ -3902,7 +3902,7 @@ colorswatch {
   }
 
   &.dark {
-    outline-color: transparentize(white, 0.4);
+
 
     > overlay {
       color: white;
@@ -3914,7 +3914,7 @@ colorswatch {
   }
 
   &.light {
-    outline-color: transparentize(black, 0.4);
+
 
     > overlay {
       color: black;
