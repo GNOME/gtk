@@ -296,6 +296,8 @@
   inShowOrHide = NO;
 
   [self checkSendEnterNotify];
+
+  [[self contentView] updateTrackingRect];
 }
 
 -(void)hide
