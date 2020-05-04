@@ -278,15 +278,15 @@ gtk_check_button_get_property (GObject      *object,
 }
 
 static void
-gtk_check_button_direction_changed (GtkWidget        *widget,
-                                    GtkTextDirection  previous_direction)
+apply_direction (GtkWidget *widget)
 {
-  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
+  GtkCheckButton *button = GTK_CHECK_BUTTON (widget);
+  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (button);
 
   if (!priv->indicator_widget)
     return;
 
-  if (previous_direction == GTK_TEXT_DIR_LTR)
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     {
       /* Now RTL -> Move the indicator to the right */
       gtk_widget_insert_before (priv->indicator_widget, widget, NULL);
@@ -299,6 +299,24 @@ gtk_check_button_direction_changed (GtkWidget        *widget,
 }
 
 static void
+gtk_check_button_direction_changed (GtkWidget        *widget,
+                                    GtkTextDirection  previous_direction)
+{
+  apply_direction (widget);
+}
+
+static void
+gtk_check_button_notify (GObject    *object,
+                         GParamSpec *pspec)
+{
+  if (strcmp (pspec->name, "child") == 0)
+    apply_direction (GTK_WIDGET (object));
+
+  if (G_OBJECT_CLASS (gtk_check_button_parent_class)->notify)
+    G_OBJECT_CLASS (gtk_check_button_parent_class)->notify (object, pspec);
+}
+
+static void
 gtk_check_button_class_init (GtkCheckButtonClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -307,6 +325,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   object_class->finalize = gtk_check_button_finalize;
   object_class->set_property = gtk_check_button_set_property;
   object_class->get_property = gtk_check_button_get_property;
+  object_class->notify = gtk_check_button_notify;
 
   widget_class->state_flags_changed = gtk_check_button_state_flags_changed;
   widget_class->direction_changed = gtk_check_button_direction_changed;
