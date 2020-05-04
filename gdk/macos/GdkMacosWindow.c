@@ -253,7 +253,11 @@
   [self checkSendEnterNotify];
 }
 
--(id)initWithContentRect:(NSRect)contentRect styleMask:(NSWindowStyleMask)styleMask backing:(NSBackingStoreType)backingType defer:(BOOL)flag screen:(NSScreen *)screen
+-(id)initWithContentRect:(NSRect)contentRect
+               styleMask:(NSWindowStyleMask)styleMask
+                 backing:(NSBackingStoreType)backingType
+                   defer:(BOOL)flag
+                  screen:(NSScreen *)screen
 {
   GdkMacosCairoView *view;
 
