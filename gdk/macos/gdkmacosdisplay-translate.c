@@ -186,6 +186,11 @@ _gdk_macos_display_get_current_mouse_modifiers (GdkMacosDisplay *self)
   return get_mouse_button_modifiers_from_ns_buttons ([NSEvent pressedMouseButtons]);
 }
 
+GdkModifierType
+_gdk_macos_display_get_current_keyboard_modifiers (GdkMacosDisplay *self)
+{
+  return get_keyboard_modifiers_from_ns_flags ([NSEvent modifierFlags]);
+}
 
 static GdkEvent *
 fill_button_event (GdkMacosDisplay *display,

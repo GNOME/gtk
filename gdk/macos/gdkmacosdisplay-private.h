@@ -23,30 +23,40 @@
 #include <AppKit/AppKit.h>
 
 #include "gdkmacosdisplay.h"
+#include "gdkmacossurface.h"
 
 G_BEGIN_DECLS
 
-GdkDisplay      *_gdk_macos_display_open                         (const gchar     *display_name);
-int              _gdk_macos_display_get_fd                       (GdkMacosDisplay *self);
-void             _gdk_macos_display_queue_events                 (GdkMacosDisplay *self);
-void             _gdk_macos_display_to_display_coords            (GdkMacosDisplay *self,
-                                                                  int              x,
-                                                                  int              y,
-                                                                  int             *out_x,
-                                                                  int             *out_y);
-void             _gdk_macos_display_from_display_coords          (GdkMacosDisplay *self,
-                                                                  int              x,
-                                                                  int              y,
-                                                                  int             *out_x,
-                                                                  int             *out_y);
-NSScreen        *_gdk_macos_display_get_screen_at_display_coords (GdkMacosDisplay *self,
-                                                                  int              x,
-                                                                  int              y);
-GdkEvent        *_gdk_macos_display_translate                    (GdkMacosDisplay *self,
-                                                                  NSEvent         *event);
-void             _gdk_macos_display_break_all_grabs              (GdkMacosDisplay *self,
-                                                                  guint32          time);
-GdkModifierType  _gdk_macos_display_get_current_mouse_modifiers  (GdkMacosDisplay *self);
+GdkDisplay      *_gdk_macos_display_open                           (const gchar     *display_name);
+int              _gdk_macos_display_get_fd                         (GdkMacosDisplay *self);
+void             _gdk_macos_display_queue_events                   (GdkMacosDisplay *self);
+void             _gdk_macos_display_to_display_coords              (GdkMacosDisplay *self,
+                                                                    int              x,
+                                                                    int              y,
+                                                                    int             *out_x,
+                                                                    int             *out_y);
+void             _gdk_macos_display_from_display_coords            (GdkMacosDisplay *self,
+                                                                    int              x,
+                                                                    int              y,
+                                                                    int             *out_x,
+                                                                    int             *out_y);
+NSScreen        *_gdk_macos_display_get_screen_at_display_coords   (GdkMacosDisplay *self,
+                                                                    int              x,
+                                                                    int              y);
+GdkEvent        *_gdk_macos_display_translate                      (GdkMacosDisplay *self,
+                                                                    NSEvent         *event);
+void             _gdk_macos_display_break_all_grabs                (GdkMacosDisplay *self,
+                                                                    guint32          time);
+GdkModifierType  _gdk_macos_display_get_current_keyboard_modifiers (GdkMacosDisplay *self);
+GdkModifierType  _gdk_macos_display_get_current_mouse_modifiers    (GdkMacosDisplay *self);
+GdkMacosSurface *_gdk_macos_display_get_surface_at_display_coords  (GdkMacosDisplay *self,
+                                                                    double           x,
+                                                                    double           y,
+                                                                    int             *surface_x,
+                                                                    int             *surface_y);
+void             _gdk_macos_display_stacking_changed               (GdkMacosDisplay *self);
+void             _gdk_macos_display_surface_removed                (GdkMacosDisplay *self,
+                                                                    GdkMacosSurface *surface);
 
 G_END_DECLS
 

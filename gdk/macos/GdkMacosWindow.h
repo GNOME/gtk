@@ -26,6 +26,8 @@
 
 #include "gdkmacossurface.h"
 
+#define GDK_IS_MACOS_WINDOW(obj) ([obj isKindOfClass:[GdkMacosWindow class]])
+
 @interface GdkMacosWindow : NSWindow {
   GdkMacosSurface *gdkSurface;
 

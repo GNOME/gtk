@@ -40,6 +40,8 @@
 
 typedef struct
 {
+  GList stacking;
+
   GdkMacosWindow *window;
 
   char *title;
@@ -63,6 +65,16 @@ enum {
 };
 
 static GParamSpec *properties [LAST_PROP];
+
+GList *
+_gdk_macos_surface_get_stacking (GdkMacosSurface *self)
+{
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+
+  g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), NULL);
+
+  return &priv->stacking;
+}
 
 static gboolean
 window_is_fullscreen (GdkMacosSurface *self)
@@ -318,6 +330,11 @@ gdk_macos_surface_destroy (GdkSurface *surface,
   if (window != NULL)
     [window close];
 
+  _gdk_macos_display_surface_removed (GDK_MACOS_DISPLAY (surface->display), self);
+
+  g_assert (priv->stacking.prev == NULL);
+  g_assert (priv->stacking.next == NULL);
+
   GDK_END_MACOS_ALLOC_POOL;
 }
 
@@ -419,6 +436,9 @@ gdk_macos_surface_class_init (GdkMacosSurfaceClass *klass)
 static void
 gdk_macos_surface_init (GdkMacosSurface *self)
 {
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+
+  priv->stacking.data = self;
 }
 
 GdkMacosSurface *

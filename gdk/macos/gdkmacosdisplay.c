@@ -21,6 +21,8 @@
 
 #include <AppKit/AppKit.h>
 
+#import "GdkMacosWindow.h"
+
 #include "gdkeventsprivate.h"
 
 #include "gdkmacoscairocontext-private.h"
@@ -72,8 +74,10 @@ struct _GdkMacosDisplay
   GdkDisplay           parent_instance;
 
   char                *name;
-  GPtrArray           *monitors;
   GdkMacosKeymap      *keymap;
+
+  GPtrArray           *monitors;
+  GQueue               surfaces;
 
   int                  width;
   int                  height;
@@ -310,6 +314,62 @@ gdk_macos_display_queue_events (GdkDisplay *display)
   _gdk_macos_event_source_release_event (nsevent);
 }
 
+void
+_gdk_macos_display_surface_removed (GdkMacosDisplay *self,
+                                    GdkMacosSurface *surface)
+{
+  GList *stacking;
+
+  g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (surface));
+
+  stacking = _gdk_macos_surface_get_stacking (surface);
+
+  g_queue_unlink (&self->surfaces, stacking);
+
+  stacking->prev = NULL;
+  stacking->next = NULL;
+}
+
+void
+_gdk_macos_display_stacking_changed (GdkMacosDisplay *self)
+{
+  GDK_BEGIN_MACOS_ALLOC_POOL;
+
+  NSArray *ordered;
+  GQueue sorted = G_QUEUE_INIT;
+
+  g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
+
+  /* "orderedWindows" gives us the stacking order starting from front-to-back.
+   * We maintain this so that we can resolve X,Y coordinates in the topmost
+   * surfaces while processing GDK operations from devices, etc.
+   */
+
+  ordered = [NSApp orderedWindows];
+
+  for (id nswindow in ordered)
+    {
+      GdkMacosSurface *surface;
+      GList *link;
+
+      if (!GDK_IS_MACOS_WINDOW (nswindow))
+        continue;
+
+      surface = [(GdkMacosWindow *)nswindow getGdkSurface];
+      link = _gdk_macos_surface_get_stacking (surface);
+
+      link->prev = NULL;
+      link->next = NULL;
+
+      g_queue_push_tail_link (&sorted, link);
+    }
+
+  self->surfaces = sorted;
+
+  GDK_END_MACOS_ALLOC_POOL;
+}
+
 static GdkSurface *
 gdk_macos_display_create_surface (GdkDisplay     *display,
                                   GdkSurfaceType  surface_type,
@@ -319,16 +379,21 @@ gdk_macos_display_create_surface (GdkDisplay     *display,
                                   int             width,
                                   int             height)
 {
+  GdkMacosDisplay *self = (GdkMacosDisplay *)display;
   GdkMacosSurface *surface;
 
-  g_assert (GDK_IS_MACOS_DISPLAY (display));
+  g_assert (GDK_IS_MACOS_DISPLAY (self));
   g_assert (!parent || GDK_IS_MACOS_SURFACE (parent));
 
-  surface = _gdk_macos_surface_new (GDK_MACOS_DISPLAY (display),
-                                    surface_type,
-                                    parent,
-                                    x, y,
-                                    width, height);
+  surface = _gdk_macos_surface_new (self, surface_type, parent, x, y, width, height);
+
+  if (surface != NULL)
+    {
+      GList *stacking = _gdk_macos_surface_get_stacking (surface);
+
+      g_queue_push_head_link (&self->surfaces, stacking);
+      _gdk_macos_display_stacking_changed (self);
+    }
 
   return GDK_SURFACE (surface);
 }
@@ -519,5 +584,7 @@ _gdk_macos_display_break_all_grabs (GdkMacosDisplay *self,
 void
 _gdk_macos_display_queue_events (GdkMacosDisplay *self)
 {
+  g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
+
   gdk_macos_display_queue_events (GDK_DISPLAY (self));
 }

@@ -27,11 +27,23 @@
 #import "GdkMacosCairoView.h"
 #import "GdkMacosWindow.h"
 
+#include "gdkmacosdisplay-private.h"
 #include "gdkmacossurface-private.h"
 
 #include "gdksurfaceprivate.h"
 
 @implementation GdkMacosWindow
+
+-(void)invalidateStacking
+{
+  if (gdkSurface != NULL)
+    {
+      GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (gdkSurface));
+
+      if (GDK_IS_MACOS_DISPLAY (display))
+        _gdk_macos_display_stacking_changed (GDK_MACOS_DISPLAY (display));
+    }
+}
 
 -(void)windowWillClose:(NSNotification*)notification
 {
@@ -71,6 +83,8 @@
 
   gdk_synthesize_surface_state (window, 0, GDK_SURFACE_STATE_MINIMIZED);
 #endif
+
+  [self invalidateStacking];
 }
 
 -(void)windowDidDeminiaturize:(NSNotification *)aNotification
@@ -82,6 +96,8 @@
 
   gdk_synthesize_surface_state (window, GDK_SURFACE_STATE_MINIMIZED, 0);
 #endif
+
+  [self invalidateStacking];
 }
 
 -(void)windowDidBecomeKey:(NSNotification *)aNotification
@@ -106,9 +122,6 @@
 
 -(void)windowDidBecomeMain:(NSNotification *)aNotification
 {
-#if 0
-  GdkSurface *window = [[self contentView] gdkSurface];
-
   if (![self isVisible])
     {
       /* Note: This is a hack needed because for unknown reasons, hidden
@@ -119,18 +132,12 @@
       return;
     }
 
-  _gdk_quartz_surface_did_become_main (window);
-#endif
+  [self invalidateStacking];
 }
 
 -(void)windowDidResignMain:(NSNotification *)aNotification
 {
-#if 0
-  GdkSurface *window;
-
-  window = [[self contentView] gdkSurface];
-  _gdk_quartz_surface_did_resign_main (window);
-#endif
+  [self invalidateStacking];
 }
 
 /* Used in combination with NSLeftMouseUp in sendEvent to keep track
@@ -633,9 +640,19 @@
   lastUnfullscreenFrame = [self frame];
 }
 
+-(void)windowDidEnterFullScreen:(NSNotification *)aNotification
+{
+  [self invalidateStacking];
+}
+
 -(void)windowWillExitFullScreen:(NSNotification *)aNotification
 {
   [self setFrame:lastUnfullscreenFrame display:YES];
+}
+
+-(void)windowDidExitFullScreen:(NSNotification *)aNotification
+{
+  [self invalidateStacking];
 }
 
 -(void)setGdkSurface:(GdkMacosSurface *)surface
