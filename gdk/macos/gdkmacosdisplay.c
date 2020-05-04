@@ -510,10 +510,12 @@ _gdk_macos_display_from_display_coords (GdkMacosDisplay *self,
                                         int             *out_x,
                                         int             *out_y)
 {
-  if (out_y)
+  g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
+
+  if (out_y != NULL)
     *out_y = self->height - y + self->min_y;
 
-  if (out_x)
+  if (out_x != NULL)
     *out_x = x - self->min_x;
 }
 
