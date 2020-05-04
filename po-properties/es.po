@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-30 01:35+0000\n"
-"PO-Revision-Date: 2020-04-30 12:19+0200\n"
+"POT-Creation-Date: 2020-05-03 01:21+0000\n"
+"PO-Revision-Date: 2020-05-04 13:36+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -61,7 +61,7 @@ msgid "Vertical offset of the cursor hotspot"
 msgstr "Desplazamiento vertical del punto de acceso del cursor"
 
 #: gdk/gdkcursor.c:204 gtk/gtkcssnode.c:612 gtk/gtkeventcontroller.c:231
-#: gtk/gtkfilefilter.c:187 gtk/gtkprinter.c:121 gtk/gtkstack.c:374
+#: gtk/gtkfilefilter.c:187 gtk/gtkprinter.c:121 gtk/gtkstack.c:388
 #: gtk/gtktextmark.c:135
 msgid "Name"
 msgstr "Nombre"
@@ -168,7 +168,6 @@ msgid "Has bidi layouts"
 msgstr "Tiene distribuciones bidireccionales"
 
 #: gdk/gdkdevice.c:301
-#| msgid "Whether the mark has left gravity"
 msgid "Whether the keyboard has bidi layouts"
 msgstr "Indica si el teclado tiene distribuciones bidireccionales"
 
@@ -474,7 +473,7 @@ msgid "The text displayed next to the accelerator"
 msgstr "El texto mostrado junto al acelerador"
 
 #: gtk/gtkaccellabel.c:145 gtk/gtkbutton.c:225 gtk/gtkexpander.c:323
-#: gtk/gtklabel.c:767 gtk/gtkmenubutton.c:429
+#: gtk/gtklabel.c:767 gtk/gtkmenubutton.c:429 gtk/gtkstack.c:431
 msgid "Use underline"
 msgstr "Utilizar subrayado"
 
@@ -591,11 +590,11 @@ msgstr ""
 "Indica si la caja combinada debería mostrar la aplicación predeterminada en "
 "la parte superior"
 
-#: gtk/gtkappchooserbutton.c:700 gtk/gtkappchooserdialog.c:588
+#: gtk/gtkappchooserbutton.c:700 gtk/gtkappchooserdialog.c:615
 msgid "Heading"
 msgstr "Encabezado"
 
-#: gtk/gtkappchooserbutton.c:701 gtk/gtkappchooserdialog.c:589
+#: gtk/gtkappchooserbutton.c:701 gtk/gtkappchooserdialog.c:616
 msgid "The text to show at the top of the dialog"
 msgstr "El texto que mostrar en la parte superior del diálogo"
 
@@ -617,11 +616,11 @@ msgstr "Tipo de contenido"
 msgid "The content type used by the open with object"
 msgstr "El tipo de contenido usado para abrir con un objeto"
 
-#: gtk/gtkappchooserdialog.c:574
+#: gtk/gtkappchooserdialog.c:601
 msgid "GFile"
 msgstr "GFile"
 
-#: gtk/gtkappchooserdialog.c:575
+#: gtk/gtkappchooserdialog.c:602
 msgid "The GFile used by the app chooser dialog"
 msgstr "El GFile usado por el diálogo de selección de aplicaciones"
 
@@ -795,7 +794,7 @@ msgstr "Usar barra de cabecera"
 msgid "Use Header Bar for actions."
 msgstr "Usar barra de cabecera para las acciones."
 
-#: gtk/gtkassistant.c:645 gtk/gtknotebook.c:1124 gtk/gtkstack.c:779
+#: gtk/gtkassistant.c:645 gtk/gtknotebook.c:1124 gtk/gtkstack.c:800
 msgid "Pages"
 msgstr "Páginas"
 
@@ -1844,10 +1843,9 @@ msgstr "Indica si se debe dar un valor alfa al color"
 
 # components/music/nautilus-music-view.c:198
 #: gtk/gtkcolorbutton.c:171 gtk/gtkfilechooserbutton.c:512
-#: gtk/gtkfontbutton.c:477 gtk/gtkheaderbar.c:748 gtk/gtkprintjob.c:144
-#: gtk/gtkshortcutsgroup.c:306 gtk/gtkshortcutssection.c:360
-#: gtk/gtkshortcutsshortcut.c:620 gtk/gtkstack.c:381
-#: gtk/gtktreeviewcolumn.c:343
+#: gtk/gtkfontbutton.c:477 gtk/gtkprintjob.c:144 gtk/gtkshortcutsgroup.c:306
+#: gtk/gtkshortcutssection.c:360 gtk/gtkshortcutsshortcut.c:620
+#: gtk/gtkstack.c:395 gtk/gtktreeviewcolumn.c:343
 msgid "Title"
 msgstr "Título"
 
@@ -2095,7 +2093,7 @@ msgstr "ID único"
 msgid "State flags"
 msgstr "Indicadores de estado"
 
-#: gtk/gtkcssnode.c:623 gtk/gtknativedialog.c:236 gtk/gtkstack.c:410
+#: gtk/gtkcssnode.c:623 gtk/gtknativedialog.c:236 gtk/gtkstack.c:424
 #: gtk/gtktreeviewcolumn.c:273 gtk/gtkwidget.c:985
 msgid "Visible"
 msgstr "Visible"
@@ -2148,7 +2146,7 @@ msgstr "Valor inicial"
 msgid "The initial specified value used for this property"
 msgstr "El valor inicial especificado para esta propiedad"
 
-#: gtk/gtkdragicon.c:374 gtk/gtknotebook.c:570 gtk/gtkstack.c:367
+#: gtk/gtkdragicon.c:374 gtk/gtknotebook.c:570 gtk/gtkstack.c:381
 msgid "Child"
 msgstr "Hijo"
 
@@ -2218,13 +2216,12 @@ msgstr "Formatos"
 
 #: gtk/gtkdroptarget.c:579
 msgid "The actions supported by this drop target"
-msgstr ""
+msgstr "Las acciones soportadas por este objetivo de soltar"
 
 #: gtk/gtkdroptarget.c:591
-#, fuzzy
 #| msgid "Current Color"
 msgid "Current drop"
-msgstr "Color actual"
+msgstr "Acción de soltar actual"
 
 #: gtk/gtkdroptarget.c:603
 msgid "The supported formats"
@@ -2235,12 +2232,10 @@ msgid "Preload"
 msgstr "Precargar"
 
 #: gtk/gtkdroptarget.c:631
-#, fuzzy
 #| msgid "Whether activatable icons should prelight when hovered"
 msgid "Whether drop data should be preloaded while hovering"
 msgstr ""
-"Indica si los iconos activables deben iluminarse al pasar el ratón sobre "
-"ellos"
+"Indica si los datos que soltar se deben cargar previamente al pasar por enima"
 
 #: gtk/gtkdroptarget.c:648
 msgid "The value for this drop operation"
@@ -2860,7 +2855,7 @@ msgstr "Modo de búsqueda"
 
 # components/music/nautilus-music-view.c:198
 #: gtk/gtkfilechooserwidget.c:7617 gtk/gtkfilechooserwidget.c:7618
-#: gtk/gtkheaderbar.c:755 gtk/gtkshortcutsshortcut.c:636
+#: gtk/gtkshortcutsshortcut.c:636
 msgid "Subtitle"
 msgstr "Subtítulo"
 
@@ -3213,46 +3208,31 @@ msgstr "Espaciado entre filas"
 msgid "The number of rows that a child spans"
 msgstr "El número de filas que un hijo engendra"
 
-#: gtk/gtkheaderbar.c:749
-msgid "The title to display"
-msgstr "El título que mostrar"
+#: gtk/gtkheaderbar.c:597
+#| msgid "Edit Widget"
+msgid "Title Widget"
+msgstr "Widget de título"
 
-#: gtk/gtkheaderbar.c:756
-msgid "The subtitle to display"
-msgstr "El subtítulo que mostrar"
+#: gtk/gtkheaderbar.c:598
+#| msgid "Custom title widget to display"
+msgid "Title widget to display"
+msgstr "El widget de título que mostrar"
 
-#: gtk/gtkheaderbar.c:762
-msgid "Custom Title"
-msgstr "Título personalizado"
-
-#: gtk/gtkheaderbar.c:763
-msgid "Custom title widget to display"
-msgstr "Título personalizado del widget que mostrar"
-
-#: gtk/gtkheaderbar.c:779
+#: gtk/gtkheaderbar.c:614
 msgid "Show title buttons"
 msgstr "Mostrar botones de título"
 
-#: gtk/gtkheaderbar.c:780
+#: gtk/gtkheaderbar.c:615
 msgid "Whether to show title buttons"
 msgstr "Indica si se deben mostrar los botones de título"
 
-#: gtk/gtkheaderbar.c:796 gtk/gtksettings.c:827
+#: gtk/gtkheaderbar.c:631 gtk/gtksettings.c:827 gtk/gtkwindowcontrols.c:516
 msgid "Decoration Layout"
 msgstr "Distribución la decoración"
 
-#: gtk/gtkheaderbar.c:797 gtk/gtksettings.c:828
+#: gtk/gtkheaderbar.c:632 gtk/gtksettings.c:828 gtk/gtkwindowcontrols.c:517
 msgid "The layout for window decorations"
 msgstr "La distribución par ala decoración de las ventanas"
-
-# components/music/nautilus-music-view.c:198
-#: gtk/gtkheaderbar.c:809
-msgid "Has Subtitle"
-msgstr "Tiene subtítulo"
-
-#: gtk/gtkheaderbar.c:810
-msgid "Whether to reserve space for a subtitle"
-msgstr "Indica si se debe reservar espacio para un subtítulo"
 
 #: gtk/gtkicontheme.c:1002 gtk/gtkicontheme.c:1003
 msgid "Supported icon names"
@@ -3278,7 +3258,7 @@ msgstr "archivo"
 msgid "The file representing the icon"
 msgstr "El archivo que representa el icono"
 
-#: gtk/gtkicontheme.c:3589 gtk/gtkstack.c:388
+#: gtk/gtkicontheme.c:3589 gtk/gtkstack.c:402
 msgid "Icon name"
 msgstr "Nombre del icono"
 
@@ -3545,7 +3525,7 @@ msgstr "Widget nemónico"
 #: gtk/gtklabel.c:852
 msgid "The widget to be activated when the label’s mnemonic key is pressed"
 msgstr ""
-"El widget que se activará cuando se presione la tecla mnemotécnica de la "
+"El widget que se activará cuando se presione la tecla nemotécnica de la "
 "etiqueta"
 
 #: gtk/gtklabel.c:874
@@ -4517,12 +4497,12 @@ msgstr "Indica si se debe dibujar una flecha"
 
 #: gtk/gtkpopover.c:1718
 msgid "Mnemonics visible"
-msgstr "Mnemónicos visibles"
+msgstr "Nemónicos visibles"
 
 #: gtk/gtkpopover.c:1719
 msgid "Whether mnemonics are currently visible in this popover"
 msgstr ""
-"Indica si los mnemónicos son visibles actualmente en esta ventana emergente"
+"Indica si los nemónicos son visibles actualmente en esta ventana emergente"
 
 #: gtk/gtkpopovermenubar.c:596
 msgid "The model from which the bar is made."
@@ -4961,19 +4941,19 @@ msgstr "La ruta completa al archivo a usar para almacenar y leer la lista"
 msgid "The size of the recently used resources list"
 msgstr "El tamaño de la lista de recursos usados recientemente"
 
-#: gtk/gtkrevealer.c:247 gtk/gtkstack.c:766
+#: gtk/gtkrevealer.c:247 gtk/gtkstack.c:787
 msgid "Transition type"
 msgstr "Tipo de transición"
 
-#: gtk/gtkrevealer.c:248 gtk/gtkstack.c:766
+#: gtk/gtkrevealer.c:248 gtk/gtkstack.c:787
 msgid "The type of animation used to transition"
 msgstr "El tipo de animación usado en la transición"
 
-#: gtk/gtkrevealer.c:255 gtk/gtkstack.c:762
+#: gtk/gtkrevealer.c:255 gtk/gtkstack.c:783
 msgid "Transition duration"
 msgstr "Duración de la transición"
 
-#: gtk/gtkrevealer.c:256 gtk/gtkstack.c:762
+#: gtk/gtkrevealer.c:256 gtk/gtkstack.c:783
 msgid "The animation duration, in milliseconds"
 msgstr "La duración de la animación, en milisegundos"
 
@@ -5123,10 +5103,9 @@ msgstr ""
 "Indica si el contenido se coloca respecto a las barras de desplazamiento."
 
 #: gtk/gtkscrolledwindow.c:585
-#, fuzzy
 #| msgid "Whether the combo box draws a frame around the child"
 msgid "Whether to draw a frame around the contents"
-msgstr "Indica si el ComboBox dibuja un marco alrededor del hijo"
+msgstr "Indica si se debe dibujar un marco alrededor del contenido"
 
 #: gtk/gtkscrolledwindow.c:596
 msgid "Minimum Content Width"
@@ -5268,10 +5247,9 @@ msgid "Cursor Aspect Ratio"
 msgstr "Relación de aspecto del cursor"
 
 #: gtk/gtksettings.c:392
-#, fuzzy
 #| msgid "The orientation of the orientable"
 msgid "The aspect ratio of the text caret"
-msgstr "La orientación del orientable"
+msgstr "La relación de aspecto del cursor de texto"
 
 #: gtk/gtksettings.c:399
 msgid "Theme Name"
@@ -5651,26 +5629,23 @@ msgid "Whether to use overlay scrollbars"
 msgstr "Indica si se deben usar barras de desplazamiento superpuestas"
 
 #: gtk/gtkshortcutaction.c:936
-#, fuzzy
 #| msgid "Section Name"
 msgid "Signal Name"
-msgstr "Nombre de la sección"
+msgstr "Nombre de la señal"
 
 #: gtk/gtkshortcutaction.c:937
-#, fuzzy
 #| msgid "The name of the widget"
 msgid "The name of the signal to emit"
-msgstr "El nombre del widget"
+msgstr "El nombre de la señal que emitir"
 
 #: gtk/gtkshortcutaction.c:1175 gtk/gtkshortcutsshortcut.c:720
 msgid "Action Name"
 msgstr "Nombre de la acción"
 
 #: gtk/gtkshortcutaction.c:1176
-#, fuzzy
 #| msgid "The name of the action"
 msgid "The name of the action to activate"
-msgstr "El nombre de la acción"
+msgstr "El nombre de la acción que activar"
 
 #: gtk/gtkshortcut.c:162
 msgid "The action activated by this shortcut"
@@ -5689,10 +5664,9 @@ msgid "Trigger"
 msgstr "Disparador"
 
 #: gtk/gtkshortcut.c:189
-#, fuzzy
 #| msgid "The tab widget for this page"
 msgid "The trigger for this shortcut"
-msgstr "La pestaña para esta página"
+msgstr "El disparador para este atajo"
 
 #: gtk/gtkshortcutcontroller.c:513
 msgid "Mnemonic modifers"
@@ -5700,17 +5674,16 @@ msgstr "Modificadores de nemónicos"
 
 #: gtk/gtkshortcutcontroller.c:514
 msgid "The modifiers to be pressed to allow mnemonics activation"
-msgstr ""
+msgstr "Los modificadores que pulsar para permitir la activación de nemónicos"
 
 #: gtk/gtkshortcutcontroller.c:527
-#, fuzzy
 #| msgid "Child model to take slice from"
 msgid "A list model to take shortcuts from"
-msgstr "Modelo de hijo del que tomar la parte"
+msgstr "Un modelo de lista del que tomar los atajos"
 
 #: gtk/gtkshortcutcontroller.c:539
 msgid "What scope the shortcuts will be handled in"
-msgstr ""
+msgstr "Qué ámbito se manejará en los atajos"
 
 #: gtk/gtkshortcutlabel.c:488 gtk/gtkshortcutsshortcut.c:581
 msgid "Accelerator"
@@ -5804,20 +5777,18 @@ msgid "Key value"
 msgstr "Valor de la clave"
 
 #: gtk/gtkshortcuttrigger.c:650 gtk/gtkshortcuttrigger.c:906
-#, fuzzy
 #| msgid "The model for the tree view"
 msgid "The key value for the trigger"
-msgstr "El modelo para la vista de árbol"
+msgstr "El valor de la clave para el disparador"
 
 #: gtk/gtkshortcuttrigger.c:664
 msgid "Modifiers"
 msgstr "Modificadores"
 
 #: gtk/gtkshortcuttrigger.c:665
-#, fuzzy
 #| msgid "The model for the tree view"
 msgid "The key modifiers for the trigger"
-msgstr "El modelo para la vista de árbol"
+msgstr "Las teclas modificadoras para el disparador"
 
 #: gtk/gtkshortcuttrigger.c:1151
 msgid "First"
@@ -5971,79 +5942,90 @@ msgstr "Girando"
 msgid "Whether the spinner is spinning"
 msgstr "Indica si el contador incremental está girando"
 
-#: gtk/gtkstack.c:368
+#: gtk/gtkstack.c:382
 msgid "The child of the page"
 msgstr "El hijo de la página"
 
-#: gtk/gtkstack.c:375
+#: gtk/gtkstack.c:389
 msgid "The name of the child page"
 msgstr "El nombre de la página hija"
 
-#: gtk/gtkstack.c:382
+#: gtk/gtkstack.c:396
 msgid "The title of the child page"
 msgstr "El título de la página hija"
 
-#: gtk/gtkstack.c:389
+#: gtk/gtkstack.c:403
 msgid "The icon name of the child page"
 msgstr "El nombre del icono de la página hija"
 
-#: gtk/gtkstack.c:403
+#: gtk/gtkstack.c:417
 msgid "Needs Attention"
 msgstr "Requiere atención"
 
-#: gtk/gtkstack.c:404
+#: gtk/gtkstack.c:418
 msgid "Whether this page needs attention"
 msgstr "Indica si la página necesita atención"
 
-#: gtk/gtkstack.c:411
+#: gtk/gtkstack.c:425
 msgid "Whether this page is visible"
 msgstr "Indica si esta página es visible"
 
-#: gtk/gtkstack.c:740
+#: gtk/gtkstack.c:432
+#| msgid ""
+#| "If set, an underline in the text indicates the next character should be "
+#| "used for the mnemonic accelerator key"
+msgid ""
+"If set, an underline in the title indicates the next character should be "
+"used for the mnemonic accelerator key"
+msgstr ""
+"Si se establece, un subrayado en el texto indica que el siguiente carácter "
+"se utiliza como el nemotécnico de la teclas aceleradora"
+
+#: gtk/gtkstack.c:761
 msgid "Horizontally homogeneous"
 msgstr "Homogéneo horizontalmente"
 
-#: gtk/gtkstack.c:740
+#: gtk/gtkstack.c:761
 msgid "Horizontally homogeneous sizing"
 msgstr "Tamaño horizontal homogéneo"
 
-#: gtk/gtkstack.c:750
+#: gtk/gtkstack.c:771
 msgid "Vertically homogeneous"
 msgstr "Homogéneo verticalmente"
 
-#: gtk/gtkstack.c:750
+#: gtk/gtkstack.c:771
 msgid "Vertically homogeneous sizing"
 msgstr "Tamaño vertical homogéneo"
 
-#: gtk/gtkstack.c:754
+#: gtk/gtkstack.c:775
 msgid "Visible child"
 msgstr "Hijo visible"
 
-#: gtk/gtkstack.c:754
+#: gtk/gtkstack.c:775
 msgid "The widget currently visible in the stack"
 msgstr "El widget actualmente visible en la pila"
 
-#: gtk/gtkstack.c:758
+#: gtk/gtkstack.c:779
 msgid "Name of visible child"
 msgstr "Nombre del hijo visible"
 
-#: gtk/gtkstack.c:758
+#: gtk/gtkstack.c:779
 msgid "The name of the widget currently visible in the stack"
 msgstr "El nombre del widget actualmente visible en la pila"
 
-#: gtk/gtkstack.c:770
+#: gtk/gtkstack.c:791
 msgid "Transition running"
 msgstr "Transición en ejecución"
 
-#: gtk/gtkstack.c:770
+#: gtk/gtkstack.c:791
 msgid "Whether or not the transition is currently running"
 msgstr "Indica si la transición está o no en ejecución"
 
-#: gtk/gtkstack.c:774
+#: gtk/gtkstack.c:795
 msgid "Interpolate size"
 msgstr "Interpolar tamaño"
 
-#: gtk/gtkstack.c:774
+#: gtk/gtkstack.c:795
 msgid ""
 "Whether or not the size should smoothly change when changing between "
 "differently sized children"
@@ -6051,12 +6033,12 @@ msgstr ""
 "Indica si el tamaño debe o no cambiar suavemente al cambiar entre hijos de "
 "distinto tamaño"
 
-#: gtk/gtkstack.c:779
+#: gtk/gtkstack.c:800
 msgid "A selection model with the stacks pages"
 msgstr "Un modelo de selección con páginas apiladas"
 
-#: gtk/gtkstacksidebar.c:397 gtk/gtkstackswitcher.c:500
-#: gtk/gtkstackswitcher.c:501
+#: gtk/gtkstacksidebar.c:397 gtk/gtkstackswitcher.c:504
+#: gtk/gtkstackswitcher.c:505
 msgid "Stack"
 msgstr "Pila"
 
@@ -6364,28 +6346,24 @@ msgid "Color of underline for this text"
 msgstr "Color del subrayado para este texto"
 
 #: gtk/gtktexttag.c:521
-#, fuzzy
 #| msgid "Underline"
 msgid "Overline"
-msgstr "Subrayado"
+msgstr "Superrayado"
 
 #: gtk/gtktexttag.c:522
-#, fuzzy
 #| msgid "Style of underline for this text"
 msgid "Style of overline for this text"
-msgstr "Estilo de subrayado de este texto"
+msgstr "Estilo de superrayado de este texto"
 
 #: gtk/gtktexttag.c:530
-#, fuzzy
 #| msgid "Underline RGBA"
 msgid "Overline RGBA"
-msgstr "Subrayado RGBA"
+msgstr "Superrayado RGBA"
 
 #: gtk/gtktexttag.c:531
-#, fuzzy
 #| msgid "Color of underline for this text"
 msgid "Color of overline for this text"
-msgstr "Color del subrayado para este texto"
+msgstr "Color del superrayado para este texto"
 
 #: gtk/gtktexttag.c:545
 msgid "Strikethrough RGBA"
@@ -6451,36 +6429,32 @@ msgid "OpenType Font Features to use"
 msgstr "Características de la tipografía OpenType que usar"
 
 #: gtk/gtktexttag.c:656
-#, fuzzy
 #| msgid "Allow Rules"
 msgid "Allow Breaks"
-msgstr "Permitir reglas"
+msgstr "Permitir rupturas"
 
 #: gtk/gtktexttag.c:657
-#, fuzzy
 #| msgid "Whether font fallback is enabled."
 msgid "Whether breaks are allowed."
-msgstr "Indica si la tipografía alternativa está activada."
+msgstr "Indica si se permiten rupturas."
 
 #: gtk/gtktexttag.c:664
 msgid "Show spaces"
 msgstr "Mostrar espacios"
 
 #: gtk/gtktexttag.c:665
-#, fuzzy
 #| msgid "Invisible character"
 msgid "How to render invisible characters."
-msgstr "Carácter invisible"
+msgstr "Cómo renderizar los caracteres invisibles"
 
 #: gtk/gtktexttag.c:673
 msgid "Insert hyphens"
-msgstr ""
+msgstr "Insertar guiones"
 
 #: gtk/gtktexttag.c:674
-#, fuzzy
 #| msgid "Whether to center the contents"
 msgid "Whether to insert hyphens at breaks."
-msgstr "Indica si se debe centrar el contenido"
+msgstr "Indica si se deben insertar guiones en las rupturas"
 
 #: gtk/gtktexttag.c:690
 msgid "Margin Accumulates"
@@ -6561,28 +6535,24 @@ msgid "Whether this tag affects underlining color"
 msgstr "Indica si esta etiqueta afecta al color del subrayado"
 
 #: gtk/gtktexttag.c:798
-#, fuzzy
 #| msgid "Underline set"
 msgid "Overline set"
-msgstr "Establece el subrayado"
+msgstr "Establece el superrayado"
 
 #: gtk/gtktexttag.c:799
-#, fuzzy
 #| msgid "Whether this tag affects underlining"
 msgid "Whether this tag affects overlining"
-msgstr "Indica si esta etiqueta afecta el subrayado"
+msgstr "Indica si esta etiqueta afecta al superrayado"
 
 #: gtk/gtktexttag.c:802
-#, fuzzy
 #| msgid "Underline RGBA set"
 msgid "Overline RGBA set"
-msgstr "Subrayado RGBA establecido"
+msgstr "Subrayado RGBA superrayado"
 
 #: gtk/gtktexttag.c:803
-#, fuzzy
 #| msgid "Whether this tag affects underlining color"
 msgid "Whether this tag affects overlining color"
-msgstr "Indica si esta etiqueta afecta al color del subrayado"
+msgstr "Indica si esta etiqueta afecta al color del superrayado"
 
 #: gtk/gtktexttag.c:812
 msgid "Strikethrough RGBA set"
@@ -6606,7 +6576,7 @@ msgstr "Tabuladores establecidos"
 
 #: gtk/gtktexttag.c:821
 msgid "Whether this tag affects tabs"
-msgstr "Indica si esta etiqueta afecta las tabulaciones"
+msgstr "Indica si esta etiqueta afecta a las tabulaciones"
 
 #: gtk/gtktexttag.c:824
 msgid "Invisible set"
@@ -6649,38 +6619,33 @@ msgid "Whether this tag affects font features"
 msgstr "Indica si esta etiqueta afecta a las características de la tipografía"
 
 #: gtk/gtktexttag.c:844
-#, fuzzy
 #| msgid "Fallback set"
 msgid "Allow breaks set"
-msgstr "Alternativa establecida"
+msgstr "Permitir rupturas establecido"
 
 #: gtk/gtktexttag.c:845
-#, fuzzy
 #| msgid "Whether this tag affects line wrap mode"
 msgid "Whether this tag affects line breaks"
-msgstr "Indica si esta etiqueta afecta el modo de ajuste de línea"
+msgstr "Indica si esta etiqueta afecta a las rupturas de línea"
 
 #: gtk/gtktexttag.c:848
-#, fuzzy
 #| msgid "Show Expanders"
 msgid "Show spaces set"
-msgstr "Mostrar expansores"
+msgstr "Mostrar espacios establecido"
 
 #: gtk/gtktexttag.c:849
-#, fuzzy
 #| msgid "Whether this tag affects underlining color"
 msgid "Whether this tag affects rendering of invisible characters"
-msgstr "Indica si esta etiqueta afecta al color del subrayado"
+msgstr "Indica si esta etiqueta afecta al renderizado de caracteres invisibles"
 
 #: gtk/gtktexttag.c:852
 msgid "Insert hyphens set"
-msgstr ""
+msgstr "Insertar guiones establecido"
 
 #: gtk/gtktexttag.c:853
-#, fuzzy
 #| msgid "Whether this tag affects indentation"
 msgid "Whether this tag affects insertion of hyphens"
-msgstr "Indica si esta etiqueta afecta al sangrado"
+msgstr "Indica si esta etiqueta afecta a la inserción de guiones"
 
 #: gtk/gtktextview.c:851
 msgid "Pixels Above Lines"
@@ -7124,10 +7089,9 @@ msgid "Scroll to focus"
 msgstr "Desplazar para dar el foco"
 
 #: gtk/gtkviewport.c:296
-#, fuzzy
 #| msgid "Whether to center the contents"
 msgid "Whether to scroll when the focus changes"
-msgstr "Indica si se debe centrar el contenido"
+msgstr "Indica si se debe desplazar cuando el foco cambia"
 
 #: gtk/gtkvolumebutton.c:174
 msgid "Use symbolic icons"
@@ -7530,6 +7494,26 @@ msgstr "Widget de foco"
 msgid "The focus widget"
 msgstr "El widget de foco"
 
+#: gtk/gtkwindowcontrols.c:499
+msgid "Side"
+msgstr "Lado"
+
+#: gtk/gtkwindowcontrols.c:500
+#| msgid "Whether widget wants to expand in both directions"
+msgid "Whether the widget shows start or end portion of the decoration layout"
+msgstr ""
+"Indica si el widget muestra el fragmento inicial o final de la capa de "
+"decoración"
+
+#: gtk/gtkwindowcontrols.c:528
+msgid "Empty"
+msgstr "Vacío"
+
+#: gtk/gtkwindowcontrols.c:529
+#| msgid "Whether the widget has the input focus"
+msgid "Whether the widget has any window buttons"
+msgstr "Indica si el widget tiene algún botón"
+
 #: modules/media/gtkgstsink.c:241
 msgid "paintable"
 msgstr "se puede dibujar"
@@ -7561,6 +7545,22 @@ msgstr "Título del perfil de color"
 #: modules/printbackends/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "El título del perfil de color que usar"
+
+#~ msgid "The title to display"
+#~ msgstr "El título que mostrar"
+
+#~ msgid "The subtitle to display"
+#~ msgstr "El subtítulo que mostrar"
+
+#~ msgid "Custom Title"
+#~ msgstr "Título personalizado"
+
+# components/music/nautilus-music-view.c:198
+#~ msgid "Has Subtitle"
+#~ msgstr "Tiene subtítulo"
+
+#~ msgid "Whether to reserve space for a subtitle"
+#~ msgstr "Indica si se debe reservar espacio para un subtítulo"
 
 #~ msgid "Decoration Layout Set"
 #~ msgstr "Distribución la decoración establecida"
@@ -7866,9 +7866,6 @@ msgstr "El título del perfil de color que usar"
 
 #~ msgid "Expand Both"
 #~ msgstr "Expandir en ambas"
-
-#~ msgid "Whether widget wants to expand in both directions"
-#~ msgstr "Indica si el widget quiere expandirse en ambas direcciones"
 
 #~ msgid "The type of the window"
 #~ msgstr "El tipo de la ventana"
