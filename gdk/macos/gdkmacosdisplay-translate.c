@@ -507,7 +507,7 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
     return NULL;
 
   /* Ignore unless it is for a GdkMacosWindow */
-  if (!GDK_IS_MACOS_WIDNOW (nswindow))
+  if (!GDK_IS_MACOS_WINDOW (nswindow))
     return NULL;
 
   window = (GdkMacosWindow *)nswindow;
