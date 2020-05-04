@@ -102,22 +102,12 @@
 
 -(void)windowDidBecomeKey:(NSNotification *)aNotification
 {
-#if 0
-  GdkSurface *window = [[self contentView] gdkSurface];
-
-  gdk_synthesize_surface_state (window, 0, GDK_SURFACE_STATE_FOCUSED);
-  _gdk_quartz_events_update_focus_window (window, TRUE);
-#endif
+  _gdk_macos_surface_set_is_key (gdkSurface, TRUE);
 }
 
 -(void)windowDidResignKey:(NSNotification *)aNotification
 {
-#if 0
-  GdkSurface *window = [[self contentView] gdkSurface];
-
-  _gdk_quartz_events_update_focus_window (window, FALSE);
-  gdk_synthesize_surface_state (window, GDK_SURFACE_STATE_FOCUSED, 0);
-#endif
+  _gdk_macos_surface_set_is_key (gdkSurface, FALSE);
 }
 
 -(void)windowDidBecomeMain:(NSNotification *)aNotification

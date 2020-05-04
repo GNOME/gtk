@@ -54,6 +54,7 @@ typedef struct
   int scale;
 
   guint modal_hint : 1;
+  guint is_key : 1;
 } GdkMacosSurfacePrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GdkMacosSurface, gdk_macos_surface, GDK_TYPE_SURFACE)
@@ -109,8 +110,12 @@ gdk_macos_surface_hide (GdkSurface *surface)
 {
   GdkMacosSurface *self = (GdkMacosSurface *)surface;
   GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+  GdkSeat *seat;
 
   g_assert (GDK_IS_MACOS_SURFACE (self));
+
+  seat = gdk_display_get_default_seat (surface->display);
+  gdk_seat_ungrab (seat);
 
   [priv->window hide];
 }
@@ -694,4 +699,34 @@ _gdk_macos_surface_damage_cairo (GdkMacosSurface *self,
   view = (GdkMacosCairoView *)[priv->window contentView];
   [view setCairoSurfaceWithRegion:surface
                       cairoRegion:painted];
+}
+
+void
+_gdk_macos_surface_set_is_key (GdkMacosSurface *self,
+                               gboolean         is_key)
+{
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+  GdkMacosDisplay *display;
+
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
+
+  display = GDK_MACOS_DISPLAY (GDK_SURFACE (self)->display);
+  is_key = !!is_key;
+
+  if (is_key != priv->is_key)
+    {
+      GdkSeat *seat = gdk_display_get_default_seat (GDK_DISPLAY (display));
+      GdkDevice *keyboard = gdk_seat_get_keyboard (seat);
+      GdkEvent *event;
+
+      priv->is_key = is_key;
+
+      if (is_key)
+        gdk_synthesize_surface_state (GDK_SURFACE (self), 0, GDK_SURFACE_STATE_FOCUSED);
+      else
+        gdk_synthesize_surface_state (GDK_SURFACE (self), GDK_SURFACE_STATE_FOCUSED, 0);
+
+      event = gdk_focus_event_new (GDK_SURFACE (self), keyboard, NULL, is_key);
+      _gdk_event_queue_append (display, event);
+    }
 }
