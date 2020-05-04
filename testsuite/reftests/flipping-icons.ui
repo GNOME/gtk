@@ -20,26 +20,6 @@
         </child>
         <child>
           <object class="GtkImage">
-            <property name="icon-name">media-skip-forward</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkImage">
-            <property name="icon-name">media-skip-backward</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkImage">
-            <property name="icon-name">media-seek-forward</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkImage">
-            <property name="icon-name">media-seek-backward</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkImage">
             <property name="icon-name">pan-start-symbolic</property>
           </object>
         </child>
