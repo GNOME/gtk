@@ -1263,6 +1263,7 @@ combobox {
   background-color: $bg_color;
 }
 
+.toolbar,
 toolbar {
   @extend %toolbar;
 
