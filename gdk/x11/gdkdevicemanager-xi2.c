@@ -1601,7 +1601,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             gdk_event_set_seat (event, gdk_device_get_seat (device));
             gdk_event_set_device_tool (event, source_device->last_tool);
 
-            event->button.axes = translate_axes (event->button.device,
+            event->button.axes = translate_axes (source_device,
                                                  event->button.x,
                                                  event->button.y,
                                                  event->button.window,
@@ -1720,7 +1720,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         /* There doesn't seem to be motion hints in XI */
         event->motion.is_hint = FALSE;
 
-        event->motion.axes = translate_axes (event->motion.device,
+        event->motion.axes = translate_axes (source_device,
                                              event->motion.x,
                                              event->motion.y,
                                              event->motion.window,
@@ -1769,7 +1769,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         gdk_event_set_source_device (event, source_device);
         gdk_event_set_seat (event, gdk_device_get_seat (device));
 
-        event->touch.axes = translate_axes (event->touch.device,
+        event->touch.axes = translate_axes (source_device,
                                             event->touch.x,
                                             event->touch.y,
                                             event->touch.window,
@@ -1849,7 +1849,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             gdk_event_set_pointer_emulated (event, TRUE);
           }
 
-        event->touch.axes = translate_axes (event->touch.device,
+        event->touch.axes = translate_axes (source_device,
                                             event->touch.x,
                                             event->touch.y,
                                             event->touch.window,
