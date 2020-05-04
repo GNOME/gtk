@@ -78,6 +78,8 @@ void               _gdk_macos_surface_update_position         (GdkMacosSurface  
 void               _gdk_macos_surface_damage_cairo            (GdkMacosSurface    *self,
                                                                cairo_surface_t    *surface,
                                                                cairo_region_t     *painted);
+void               _gdk_macos_surface_set_is_key              (GdkMacosSurface    *self,
+                                                               gboolean            is_key);
 
 G_END_DECLS
 
