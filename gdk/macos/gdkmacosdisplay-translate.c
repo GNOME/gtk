@@ -473,10 +473,11 @@ GdkEvent *
 _gdk_macos_display_translate (GdkMacosDisplay *self,
                               NSEvent         *nsevent)
 {
-  GdkEvent *ret = NULL;
+  GdkMacosSurface *surface;
+  GdkMacosWindow *window;
   NSEventType event_type;
   NSWindow *nswindow;
-  GdkMacosSurface *surface;
+  GdkEvent *ret = NULL;
   NSPoint point;
   int x, y;
 
@@ -501,21 +502,21 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
       return NULL;
     }
 
-  nswindow = [nsevent window];
-
-  /* Ignore events for windows not created by GDK. */
-  if (nswindow && ![[nswindow contentView] isKindOfClass:[GdkMacosBaseView class]])
+  /* Make sure the event has a window */
+  if (!(nswindow = [nsevent window]))
     return NULL;
 
-  /* Ignore events for ones with no windows */
-  if (!nswindow)
+  /* Ignore unless it is for a GdkMacosWindow */
+  if (!GDK_IS_MACOS_WIDNOW (nswindow))
     return NULL;
+
+  window = (GdkMacosWindow *)nswindow;
 
   /* Ignore events and break grabs while the window is being
    * dragged. This is a workaround for the window getting events for
    * the window title.
    */
-  if ([(GdkMacosWindow *)nswindow isInMove])
+  if ([window isInMove])
     {
       _gdk_macos_display_break_all_grabs (self, get_time_from_ns_event (nsevent));
       return NULL;
@@ -524,20 +525,18 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
   /* Also when in a manual resize or move , we ignore events so that
    * these are pushed to GdkMacosNSWindow's sendEvent handler.
    */
-  if ([(GdkMacosWindow *)nswindow isInManualResizeOrMove])
+  if ([window isInManualResizeOrMove])
+    return NULL;
+
+  /* Make sure we have a GdkSurface */
+  if (!(surface = [window getGdkSurface]))
     return NULL;
 
   /* Get the location of the event within the toplevel */
   point = [nsevent locationInWindow];
   _gdk_macos_display_from_display_coords (self, point.x, point.y, &x, &y);
 
-  /* Find the right GDK surface to send the event to, taking grabs and
-   * event masks into consideration.
-   */
-  if (!(surface = [(GdkMacosWindow *)nswindow getGdkSurface]))
-    return NULL;
-
-  /* Quartz handles resizing on its own, so we want to stay out of the way. */
+  /* Quartz handles resizing on its own, so stay out of the way. */
   if (test_resize (nsevent, surface, x, y))
     return NULL;
 
@@ -561,21 +560,31 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
         }
     }
 
+#if 0
+  g_print ("Type: %d Surface: %s %d,%d %dx%d\n",
+           event_type,
+           G_OBJECT_TYPE_NAME (surface),
+           GDK_SURFACE (surface)->x,
+           GDK_SURFACE (surface)->y,
+           GDK_SURFACE (surface)->width,
+           GDK_SURFACE (surface)->height);
+#endif
+
   switch (event_type)
     {
-    case NSLeftMouseDown:
-    case NSRightMouseDown:
-    case NSOtherMouseDown:
-    case NSLeftMouseUp:
-    case NSRightMouseUp:
-    case NSOtherMouseUp:
+    case NSEventTypeLeftMouseDown:
+    case NSEventTypeRightMouseDown:
+    case NSEventTypeOtherMouseDown:
+    case NSEventTypeLeftMouseUp:
+    case NSEventTypeRightMouseUp:
+    case NSEventTypeOtherMouseUp:
       ret = fill_button_event (self, surface, nsevent, x, y);
       break;
 
-    case NSLeftMouseDragged:
-    case NSRightMouseDragged:
-    case NSOtherMouseDragged:
-    case NSMouseMoved:
+    case NSEventTypeLeftMouseDragged:
+    case NSEventTypeRightMouseDragged:
+    case NSEventTypeOtherMouseDragged:
+    case NSEventTypeMouseMoved:
       ret = fill_motion_event (self, surface, nsevent, x, y);
       break;
 
@@ -584,16 +593,16 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
       ret = fill_pinch_event (self, surface, nsevent, x, y);
       break;
 
-    case NSMouseExited:
+    case NSEventTypeMouseExited:
       [[NSCursor arrowCursor] set];
       /* fall through */
-    case NSMouseEntered:
+    case NSEventTypeMouseEntered:
       ret = synthesize_crossing_event (self, surface, nsevent, x, y);
       break;
 
-    case NSKeyDown:
-    case NSKeyUp:
-    case NSFlagsChanged: {
+    case NSEventTypeKeyDown:
+    case NSEventTypeKeyUp:
+    case NSEventTypeFlagsChanged: {
       GdkEventType type = _gdk_macos_keymap_get_event_type (nsevent);
 
       if (type)
@@ -602,7 +611,7 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
       break;
     }
 
-    case NSScrollWheel:
+    case NSEventTypeScrollWheel:
       //ret = fill_scroll_event (self, surface, nsevent, x, y);
       break;
 
