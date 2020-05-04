@@ -299,44 +299,7 @@
 
 -(BOOL)canBecomeKeyWindow
 {
-#if 0
-  jdkSurface *window = [[self contentView] gdkSurface];
-  GdkSurfaceImplQuartz *impl = GDK_SURFACE_IMPL_QUARTZ (window->impl);
-
-  if (!window->accept_focus)
-    return NO;
-
-  /* Popup windows should not be able to get focused in the window
-   * manager sense, it's only handled through grabs.
-   */
-  if (window->surface_type == GDK_SURFACE_TEMP)
-    return NO;
-
-  switch (impl->type_hint)
-    {
-    case GDK_SURFACE_TYPE_HINT_NORMAL:
-    case GDK_SURFACE_TYPE_HINT_DIALOG:
-    case GDK_SURFACE_TYPE_HINT_MENU:
-    case GDK_SURFACE_TYPE_HINT_TOOLBAR:
-    case GDK_SURFACE_TYPE_HINT_UTILITY:
-    case GDK_SURFACE_TYPE_HINT_DOCK:
-    case GDK_SURFACE_TYPE_HINT_DESKTOP:
-    case GDK_SURFACE_TYPE_HINT_DROPDOWN_MENU:
-    case GDK_SURFACE_TYPE_HINT_POPUP_MENU:
-    case GDK_SURFACE_TYPE_HINT_COMBO:
-      return YES;
-
-    case GDK_SURFACE_TYPE_HINT_SPLASHSCREEN:
-    case GDK_SURFACE_TYPE_HINT_TOOLTIP:
-    case GDK_SURFACE_TYPE_HINT_NOTIFICATION:
-    case GDK_SURFACE_TYPE_HINT_DND:
-      return NO;
-    }
-
-  return YES;
-#endif
-
-  return NO;
+  return GDK_IS_TOPLEVEL (gdkSurface);
 }
 
 -(void)showAndMakeKey:(BOOL)makeKey
