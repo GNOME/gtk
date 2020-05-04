@@ -29,6 +29,7 @@
 
 #include "gdkmacosdisplay-private.h"
 #include "gdkmacossurface-private.h"
+#include "gdkmacostoplevelsurface-private.h"
 
 #include "gdksurfaceprivate.h"
 
@@ -69,33 +70,23 @@
 
 -(void)windowWillMiniaturize:(NSNotification *)aNotification
 {
-#if 0
-  GdkSurface *window = [[self contentView] gdkSurface];
-
-  _gdk_quartz_surface_detach_from_parent (window);
-#endif
+  if (GDK_IS_MACOS_TOPLEVEL_SURFACE (gdkSurface))
+    _gdk_macos_toplevel_surface_detach_from_parent (GDK_MACOS_TOPLEVEL_SURFACE (gdkSurface));
 }
 
 -(void)windowDidMiniaturize:(NSNotification *)aNotification
 {
-#if 0
-  GdkSurface *window = [[self contentView] gdkSurface];
-
-  gdk_synthesize_surface_state (window, 0, GDK_SURFACE_STATE_MINIMIZED);
-#endif
+  gdk_synthesize_surface_state (GDK_SURFACE (gdkSurface), 0, GDK_SURFACE_STATE_MINIMIZED);
 
   [self invalidateStacking];
 }
 
 -(void)windowDidDeminiaturize:(NSNotification *)aNotification
 {
-#if 0
-  GdkSurface *window = [[self contentView] gdkSurface];
+  if (GDK_IS_MACOS_TOPLEVEL_SURFACE (gdkSurface))
+    _gdk_macos_toplevel_surface_attach_to_parent (GDK_MACOS_TOPLEVEL_SURFACE (gdkSurface));
 
-  _gdk_quartz_surface_attach_to_parent (window);
-
-  gdk_synthesize_surface_state (window, GDK_SURFACE_STATE_MINIMIZED, 0);
-#endif
+  gdk_synthesize_surface_state (GDK_SURFACE (gdkSurface), GDK_SURFACE_STATE_MINIMIZED, 0);
 
   [self invalidateStacking];
 }
