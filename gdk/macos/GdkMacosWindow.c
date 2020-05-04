@@ -327,13 +327,11 @@
 
 -(BOOL)trackManualMove
 {
-#if 0
-  GdkSurface *window = [[self contentView] gdkSurface];
-  GdkSurfaceImplQuartz *impl = GDK_SURFACE_IMPL_QUARTZ (window->impl);
-  NSPoint currentLocation;
-  NSPoint newOrigin;
   NSRect screenFrame = [[NSScreen mainScreen] visibleFrame];
   NSRect windowFrame = [self frame];
+  NSPoint currentLocation;
+  NSPoint newOrigin;
+  int shadow_top = 0;
 
   if (!inManualMove)
     return NO;
@@ -342,12 +340,13 @@
   newOrigin.x = currentLocation.x - initialMoveLocation.x;
   newOrigin.y = currentLocation.y - initialMoveLocation.y;
 
+  _gdk_macos_surface_get_shadow (gdkSurface, &shadow_top, NULL, NULL, NULL);
+
   /* Clamp vertical position to below the menu bar. */
-  if (newOrigin.y + windowFrame.size.height - impl->shadow_top > screenFrame.origin.y + screenFrame.size.height)
-    newOrigin.y = screenFrame.origin.y + screenFrame.size.height - windowFrame.size.height + impl->shadow_top;
+  if (newOrigin.y + windowFrame.size.height - shadow_top > screenFrame.origin.y + screenFrame.size.height)
+    newOrigin.y = screenFrame.origin.y + screenFrame.size.height - windowFrame.size.height + shadow_top;
 
   [self setFrameOrigin:newOrigin];
-#endif
 
   return YES;
 }
