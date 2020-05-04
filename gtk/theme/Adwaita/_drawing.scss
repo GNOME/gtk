@@ -11,7 +11,7 @@
 @mixin focus-ring($target: null, $width: 2px, $offset: -$width, $outer: false) {
   & #{$target} {
     outline: 0 solid transparent;
-    outline-offset: if($outer, $offset + 10px, $offset + $width + 10px);
+    outline-offset: if($outer, $offset + 4px, $offset + $width + 4px);
   }
 
   &:focus:focus-visible #{$target} {
