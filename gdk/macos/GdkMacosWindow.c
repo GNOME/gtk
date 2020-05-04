@@ -282,7 +282,7 @@
                        screen:screen];
 
   [self setAcceptsMouseMovedEvents:YES];
-  [self setDelegate:nil];
+  [self setDelegate:self];
   [self setReleasedWhenClosed:YES];
 
   view = [[GdkMacosCairoView alloc] initWithFrame:contentRect];
