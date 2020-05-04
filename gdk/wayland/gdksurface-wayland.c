@@ -3439,6 +3439,18 @@ gdk_wayland_surface_minimize (GdkSurface *surface)
 #endif
 }
 
+static gboolean
+gdk_wayland_surface_lower (GdkSurface *surface)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  if (!impl->display_server.gtk_surface)
+    return FALSE;
+
+  gtk_surface1_lower (impl->display_server.gtk_surface);
+  return TRUE;
+}
+
 static void
 gdk_wayland_surface_maximize (GdkSurface *surface)
 {
@@ -4683,7 +4695,7 @@ gdk_wayland_toplevel_minimize (GdkToplevel *toplevel)
 static gboolean
 gdk_wayland_toplevel_lower (GdkToplevel *toplevel)
 {
-  return FALSE;
+  return gdk_wayland_surface_lower (GDK_SURFACE (toplevel));
 }
 
 static void
