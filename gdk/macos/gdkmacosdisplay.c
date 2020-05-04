@@ -278,8 +278,8 @@ gdk_macos_display_get_next_serial (GdkDisplay *display)
 static gboolean
 gdk_macos_display_has_pending (GdkDisplay *display)
 {
-  g_warning ("Has pending");
-  return FALSE;
+  return _gdk_event_queue_find_first (display) ||
+         _gdk_macos_event_source_check_pending ();
 }
 
 static void
