@@ -29,23 +29,23 @@ typedef struct _MyTooltipClass MyTooltipClass;
 
 struct _MyTooltip
 {
-  GtkBin parent_instance;
+  GtkWidget parent_instance;
 };
 
 struct _MyTooltipClass
 {
-  GtkBinClass parent_class;
+  GtkWidgetClass parent_class;
 };
 
 static GType my_tooltip_get_type (void);
-G_DEFINE_TYPE (MyTooltip, my_tooltip, GTK_TYPE_BIN)
+G_DEFINE_TYPE (MyTooltip, my_tooltip, GTK_TYPE_WIDGET)
 
 static void
 my_tooltip_init (MyTooltip *tt)
 {
   GtkWidget *label = gtk_label_new ("Some text in a tooltip");
 
-  gtk_container_add (GTK_CONTAINER (tt), label);
+  gtk_widget_set_parent (label, GTK_WIDGET (tt));
 
   gtk_widget_add_css_class (GTK_WIDGET (tt), "background");
 }
@@ -53,6 +53,7 @@ my_tooltip_init (MyTooltip *tt)
 static void
 my_tooltip_class_init (MyTooltipClass *tt_class)
 {
+  gtk_widget_class_set_layout_manager_type (GTK_WIDGET_CLASS (tt_class), GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (tt_class), "tooltip");
 }
 
