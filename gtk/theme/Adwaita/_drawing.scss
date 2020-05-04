@@ -7,15 +7,18 @@
 //
 // If $target is specified, the focus ring is applied to the specified child element.
 // If $outer is true, the focus ring extends outward. Otherwise, it extends inward.
+// If $within is true, use focus-within instead of focus:focus-visible
 //
-@mixin focus-ring($target: null, $width: 2px, $offset: -$width, $outer: false) {
+@mixin focus-ring($target: null, $width: 2px, $offset: -$width, $outer: false, $within: false, $fc: $focus_border_color) {
   & #{$target} {
     outline: 0 solid transparent;
     outline-offset: if($outer, $offset + 4px, $offset + $width + 4px);
   }
 
-  &:focus:focus-visible #{$target} {
-    outline-color: $focus_border_color;
+  $focus-state: if($within, "focus-within", "focus:focus-visible");
+
+  &:#{$focus-state} #{$target} {
+    outline-color: $fc;
     outline-width: $width;
     outline-offset: $offset;
   }
@@ -41,11 +44,6 @@
 }
 
 // entries
-@function entry_focus_border($fc:$focus_border_color) {
-  @return $fc;
-}
-
-@function entry_focus_shadow($fc:$focus_border_color) { @return inset 0 0 0 1px $fc; }
 
 @mixin entry($t, $fc:$focus_border_color, $edge: none) {
 //
@@ -67,13 +65,7 @@
     color: $text_color;
     border-color: $borders_color;
     background-color: $base_color;
-    @include _shadows(entry_focus_shadow(transparentize($fc, 1)), $_entry_edge);
     // for the transition to work the number of shadows in different states needs to match, hence the transparent shadow here.
-  }
-  @if $t==focus {
-    @include _shadows(entry_focus_shadow($fc), $_entry_edge);
-    border-color: entry_focus_border($fc);
-    outline: none;
   }
   @if $t==insensitive {
     color: $insensitive_fg_color;
@@ -107,7 +99,6 @@
     border-color: $selected_bg_color;
     background-color: transparentize(opacify($osd_borders_color, 1), 0.5);
     background-clip: padding-box;
-    box-shadow: entry_focus_shadow($fc);
     text-shadow: 0 1px black;
     -gtk-icon-shadow: 0 1px black;
   }

@@ -291,6 +291,8 @@ entry {
 
     @include entry(normal);
 
+    @include focus-ring($within: true);
+
     > image { // icons inside the entry
       &.left { margin-right: 6px; }
       &.right { margin-left: 6px; }
@@ -338,7 +340,8 @@ entry {
                                (warning, $warning_color) {
       &.#{$e_type} {
         color: $e_color;
-        border-color: entry_focus_border($e_color);
+
+        @include focus-ring($within: true, $fc: $e_color);
 
         &:focus-within { @include entry(focus, $e_color); }
 
@@ -396,13 +399,6 @@ entry {
 
    // linked entries
   .linked:not(.vertical) > & { @extend %linked; }
-  .linked:not(.vertical) > &:focus-within + &,
-  .linked:not(.vertical) > &:focus-within + button,
-  .linked:not(.vertical) > &:focus-within + combobox > box > button.combo { border-left-color: entry_focus_border(); }
-
-  .linked:not(.vertical) > &:focus-within.error + &,
-  .linked:not(.vertical) > &:focus-within.error + button,
-  .linked:not(.vertical) > &:focus-within.error + combobox > box > button.combo { border-left-color: entry_focus_border($error_color); }
 
   .linked:not(.vertical) > &:drop(active) + &,
   .linked:not(.vertical) > &:drop(active) + button,
@@ -425,32 +421,8 @@ entry {
     &:disabled + %entry:disabled,
     &:disabled + entry:disabled { border-top-color: mix($borders_color, $base_color, 30%); }
 
-    // color back the top border of a linked focused entry following another entry.
-    // :not(:only-child) is a specificity bump hack.
-    + %entry:focus-within:not(:only-child),
-    + entry:focus-within:not(:only-child) { border-top-color: entry_focus_border(); }
-
-    + %entry:focus-within.error:not(:only-child),
-    + entry:focus-within.error:not(:only-child) { border-top-color: entry_focus_border($error_color); }
-
     + %entry:drop(active):not(:only-child),
     + entry:drop(active):not(:only-child) { border-top-color: $drop_target_color; }
-
-    // this takes care of coloring the top border of the focused entry subsequent widget.
-    // :not(:only-child) is a specificity bump hack.
-    &:focus-within:not(:only-child) {
-      + %entry,
-      + entry,
-      + button,
-      + combobox > box > button.combo { border-top-color: entry_focus_border(); }
-    }
-
-    &:focus-within.error:not(:only-child) {
-      + %entry,
-      + entry,
-      + button,
-      + combobox > box > button.combo { border-top-color: entry_focus_border($error_color); }
-    }
 
     &:drop(active):not(:only-child) {
       + %entry,
