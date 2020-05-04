@@ -25,7 +25,8 @@
 
 #include "gdkmacoscursor-private.h"
 #include "gdkmacosdevice.h"
-#include "gdkmacossurface.h"
+#include "gdkmacosdisplay-private.h"
+#include "gdkmacossurface-private.h"
 
 struct _GdkMacosDevice
 {
@@ -59,21 +60,45 @@ gdk_macos_device_set_surface_cursor (GdkDevice  *device,
     }
 }
 
-static void
-gdk_macos_device_finalize (GObject *object)
+static GdkSurface *
+gdk_macos_device_surface_at_position (GdkDevice       *device,
+                                      gdouble         *win_x,
+                                      gdouble         *win_y,
+                                      GdkModifierType *state,
+                                      gboolean         get_toplevel)
 {
-  G_OBJECT_CLASS (gdk_macos_device_parent_class)->finalize (object);
+  GdkMacosDisplay *display;
+  GdkMacosSurface *surface;
+  NSPoint point;
+  gint x;
+  gint y;
+
+  g_assert (GDK_IS_MACOS_DEVICE (device));
+  g_assert (win_x != NULL);
+  g_assert (win_y != NULL);
+
+  point = [NSEvent mouseLocation];
+  display = GDK_MACOS_DISPLAY (gdk_device_get_display (device));
+
+  if (state != NULL)
+    *state = (_gdk_macos_display_get_current_keyboard_modifiers (display) |
+              _gdk_macos_display_get_current_mouse_modifiers (display));
+
+  surface = _gdk_macos_display_get_surface_at_display_coords (display, point.x, point.y, &x, &y);
+
+  *win_x = x;
+  *win_y = y;
+
+  return GDK_SURFACE (surface);
 }
 
 static void
 gdk_macos_device_class_init (GdkMacosDeviceClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
-  object_class->finalize = gdk_macos_device_finalize;
-
   device_class->set_surface_cursor = gdk_macos_device_set_surface_cursor;
+  device_class->surface_at_position = gdk_macos_device_surface_at_position;
 }
 
 static void
