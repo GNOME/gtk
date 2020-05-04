@@ -214,35 +214,21 @@
 
 -(void)windowDidMove:(NSNotification *)aNotification
 {
-#if 0
-  GdkSurface *window = [[self contentView] gdkSurface];
+  GdkSurface *surface = GDK_SURFACE (gdkSurface);
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  gboolean maximized = !!(surface->state & GDK_SURFACE_STATE_MAXIMIZED);
   GdkEvent *event;
-
-  GdkSurfaceImplQuartz *impl = GDK_SURFACE_IMPL_QUARTZ (window->impl);
-  gboolean maximized = gdk_surface_get_state (window) & GDK_SURFACE_STATE_MAXIMIZED;
 
   /* In case the window is changed when maximized remove the maximized state */
   if (maximized && !inMaximizeTransition && !NSEqualRects (lastMaximizedFrame, [self frame]))
-    {
-      gdk_synthesize_surface_state (window,
-                                   GDK_SURFACE_STATE_MAXIMIZED,
-                                   0);
-    }
+    gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_MAXIMIZED, 0);
 
-  _gdk_quartz_surface_update_position (window);
+  _gdk_macos_surface_update_position (gdkSurface);
 
-  /* Synthesize a configure event */
-  event = gdk_event_new (GDK_CONFIGURE);
-  event->configure.window = g_object_ref (window);
-  event->configure.x = window->x;
-  event->configure.y = window->y;
-  event->configure.width = window->width;
-  event->configure.height = window->height;
-
-  _gdk_event_queue_append (gdk_display_get_default (), event);
+  event = gdk_configure_event_new (surface, surface->width, surface->height);
+  _gdk_event_queue_append (GDK_DISPLAY (display), event);
 
   [self checkSendEnterNotify];
-#endif
 }
 
 -(void)windowDidResize:(NSNotification *)aNotification
