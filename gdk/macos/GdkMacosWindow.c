@@ -305,6 +305,8 @@
   inShowOrHide = NO;
 
   initialPositionKnown = NO;
+
+  [self invalidateStacking];
 }
 
 -(BOOL)trackManualMove
