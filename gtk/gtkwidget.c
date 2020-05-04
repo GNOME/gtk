@@ -4085,7 +4085,7 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
 
       press->button.axes = g_memdup (event->motion.axes,
                                      sizeof (gdouble) *
-                                     gdk_device_get_n_axes (event->motion.device));
+                                     gdk_device_get_n_axes (gdk_event_get_source_device(event)));
 
       if (event->motion.state & GDK_BUTTON3_MASK)
         press->button.button = 3;
@@ -7215,7 +7215,8 @@ gtk_widget_real_touch_event (GtkWidget     *widget,
       bevent->motion.device = event->device;
       bevent->motion.is_hint = FALSE;
       bevent->motion.axes = g_memdup (event->axes,
-                                      sizeof (gdouble) * gdk_device_get_n_axes (event->device));
+                                      sizeof (gdouble) *
+                                      gdk_device_get_n_axes (gdk_event_get_source_device(event)));
       gdk_event_set_source_device (bevent, gdk_event_get_source_device ((GdkEvent*)event));
 
       if (event->type == GDK_TOUCH_UPDATE)
@@ -7254,7 +7255,8 @@ gtk_widget_real_touch_event (GtkWidget     *widget,
       bevent->button.y = event->y;
       bevent->button.device = event->device;
       bevent->button.axes = g_memdup (event->axes,
-                                      sizeof (gdouble) * gdk_device_get_n_axes (event->device));
+                                      sizeof (gdouble) *
+                                      gdk_device_get_n_axes (gdk_event_get_source_device(event)));
       gdk_event_set_source_device (bevent, gdk_event_get_source_device ((GdkEvent*)event));
 
       if (event->type == GDK_TOUCH_END)

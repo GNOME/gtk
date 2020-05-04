@@ -703,7 +703,7 @@ gdk_event_copy (const GdkEvent *event)
     case GDK_BUTTON_RELEASE:
       if (event->button.axes)
         new_event->button.axes = g_memdup (event->button.axes,
-                                           sizeof (gdouble) * gdk_device_get_n_axes (event->button.device));
+                                           sizeof (gdouble) * gdk_device_get_n_axes (gdk_event_get_source_device(event)));
       break;
 
     case GDK_TOUCH_BEGIN:
@@ -712,13 +712,13 @@ gdk_event_copy (const GdkEvent *event)
     case GDK_TOUCH_CANCEL:
       if (event->touch.axes)
         new_event->touch.axes = g_memdup (event->touch.axes,
-                                           sizeof (gdouble) * gdk_device_get_n_axes (event->touch.device));
+                                           sizeof (gdouble) * gdk_device_get_n_axes (gdk_event_get_source_device(event)));
       break;
 
     case GDK_MOTION_NOTIFY:
       if (event->motion.axes)
         new_event->motion.axes = g_memdup (event->motion.axes,
-                                           sizeof (gdouble) * gdk_device_get_n_axes (event->motion.device));
+                                           sizeof (gdouble) * gdk_device_get_n_axes (gdk_event_get_source_device(event)));
       break;
 
     case GDK_OWNER_CHANGE:
