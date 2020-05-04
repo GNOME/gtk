@@ -590,3 +590,43 @@ _gdk_macos_display_queue_events (GdkMacosDisplay *self)
 
   gdk_macos_display_queue_events (GDK_DISPLAY (self));
 }
+
+GdkMacosSurface *
+_gdk_macos_display_get_surface_at_display_coords (GdkMacosDisplay *self,
+                                                  double           x,
+                                                  double           y,
+                                                  int             *surface_x,
+                                                  int             *surface_y)
+{
+  int x_gdk;
+  int y_gdk;
+
+  g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (self), NULL);
+  g_return_val_if_fail (surface_x != NULL, NULL);
+  g_return_val_if_fail (surface_y != NULL, NULL);
+
+  _gdk_macos_display_from_display_coords (self, x, y, &x_gdk, &y_gdk);
+
+  for (const GList *iter = self->surfaces.head; iter; iter = iter->next)
+    {
+      GdkSurface *surface = iter->data;
+
+      g_assert (GDK_IS_MACOS_SURFACE (surface));
+
+      if (x_gdk >= surface->x &&
+          y_gdk >= surface->y &&
+          x_gdk <= (surface->x + surface->width) &&
+          y_gdk >= (surface->y + surface->height))
+        {
+          *surface_x = x_gdk - surface->x;
+          *surface_y = y_gdk - surface->y;
+
+          return GDK_MACOS_SURFACE (surface);
+        }
+    }
+
+  *surface_x = 0;
+  *surface_y = 0;
+
+  return NULL;
+}
