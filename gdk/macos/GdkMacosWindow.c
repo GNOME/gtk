@@ -144,14 +144,15 @@
     {
     case NSEventTypeLeftMouseUp:
     {
-#if 0
+      GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (gdkSurface));
       double time = ((double)[event timestamp]) * 1000.0;
-      _gdk_quartz_events_break_all_grabs (time);
-#endif
+
+      _gdk_macos_display_break_all_grabs (display, time);
 
       inManualMove = NO;
       inManualResize = NO;
       inMove = NO;
+
       break;
     }
 
