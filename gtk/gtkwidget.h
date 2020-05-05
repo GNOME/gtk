@@ -409,6 +409,11 @@ void       gtk_widget_set_can_focus       (GtkWidget           *widget,
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_get_can_focus       (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
+void       gtk_widget_set_focusable       (GtkWidget           *widget,
+                                           gboolean             focusable);
+GDK_AVAILABLE_IN_ALL
+gboolean   gtk_widget_get_focusable       (GtkWidget           *widget);
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_has_focus           (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_is_focus            (GtkWidget           *widget);

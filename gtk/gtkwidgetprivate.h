@@ -77,6 +77,7 @@ struct _GtkWidgetPrivate
   guint visible               : 1;
   guint sensitive             : 1;
   guint can_focus             : 1;
+  guint focusable             : 1;
   guint has_focus             : 1;
   guint focus_on_click        : 1;
   guint has_default           : 1;
