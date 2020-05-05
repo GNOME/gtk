@@ -58,6 +58,7 @@
   self->region = cairoRegion;
 
   n_rects = cairo_region_num_rectangles (cairoRegion);
+
   for (guint i = 0; i < n_rects; i++)
     {
       cairo_rectangle_int_t rect;
@@ -81,7 +82,11 @@
                                                      self.bounds.size.height);
   cr = cairo_create (dest);
 
+#if 0
   n_rects = cairo_region_num_rectangles (self->region);
+
+  g_print ("drawRect: %d rects\n", n_rects);
+
   for (guint i = 0; i < n_rects; i++)
     {
       cairo_rectangle_int_t r;
@@ -93,6 +98,7 @@
   cairo_set_source_surface (cr, self->surface, 0, 0);
   cairo_rectangle (cr, rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
   cairo_paint (cr);
+#endif
 
   cairo_rectangle (cr, 0, 0, self.bounds.size.width, self.bounds.size.height);
   cairo_set_source_rgb (cr, 0, 0, 0);
