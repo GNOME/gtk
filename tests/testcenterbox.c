@@ -26,7 +26,7 @@ main (int argc, char *argv[])
 
   window = gtk_window_new ();
   box = gtk_center_box_new ();
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
 
   child = gtk_label_new ("Start Start Start Start Start");
   gtk_label_set_ellipsize (GTK_LABEL (child), PANGO_ELLIPSIZE_END);

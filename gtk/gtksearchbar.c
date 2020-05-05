@@ -29,6 +29,8 @@
 
 #include "gtksearchbar.h"
 
+#include "gtkbinlayout.h"
+#include "gtkbuildable.h"
 #include "gtkbutton.h"
 #include "gtkcenterbox.h"
 #include "gtkentryprivate.h"
@@ -39,6 +41,7 @@
 #include "gtksearchentryprivate.h"
 #include "gtksnapshot.h"
 #include "gtkstylecontext.h"
+#include "gtkwidgetprivate.h"
 
 /**
  * SECTION:gtksearchbar
@@ -86,15 +89,16 @@ typedef struct _GtkSearchBarClass   GtkSearchBarClass;
 
 struct _GtkSearchBar
 {
-  GtkBin parent;
+  GtkWidget parent;
 };
 
 struct _GtkSearchBarClass
 {
-  GtkBinClass parent_class;
+  GtkWidgetClass parent_class;
 };
 
 typedef struct {
+  GtkWidget   *child;
   GtkWidget   *revealer;
   GtkWidget   *box_center;
   GtkWidget   *close_button;
@@ -106,16 +110,44 @@ typedef struct {
   GtkEventController *capture_widget_controller;
 } GtkSearchBarPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkSearchBar, gtk_search_bar, GTK_TYPE_BIN)
+static void gtk_search_bar_buildable_iface_init (GtkBuildableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GtkSearchBar, gtk_search_bar, GTK_TYPE_WIDGET,
+                         G_ADD_PRIVATE (GtkSearchBar)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_search_bar_buildable_iface_init))
 
 enum {
   PROP_0,
   PROP_SEARCH_MODE_ENABLED,
   PROP_SHOW_CLOSE_BUTTON,
+  PROP_CHILD,
   LAST_PROPERTY
 };
 
 static GParamSpec *widget_props[LAST_PROPERTY] = { NULL, };
+
+static GtkBuildableIface *parent_buildable_iface;
+
+static void
+gtk_search_bar_buildable_add_child (GtkBuildable *buildable,
+                                    GtkBuilder   *builder,
+                                    GObject      *child,
+                                    const gchar  *type)
+{
+  if (GTK_IS_WIDGET (child))
+    gtk_search_bar_set_child (GTK_SEARCH_BAR (buildable), GTK_WIDGET (child));
+  else
+    parent_buildable_iface->add_child (buildable, builder, child, type);
+}
+
+static void
+gtk_search_bar_buildable_iface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
+  iface->add_child = gtk_search_bar_buildable_add_child;
+}
 
 static void
 stop_search_cb (GtkWidget    *entry,
@@ -163,37 +195,6 @@ close_button_clicked_cb (GtkWidget    *button,
 }
 
 static void
-gtk_search_bar_add (GtkContainer *container,
-                    GtkWidget    *child)
-{
-  GtkSearchBar *bar = GTK_SEARCH_BAR (container);
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
-
-  gtk_center_box_set_center_widget (GTK_CENTER_BOX (priv->box_center), child);
-  /* If an entry is the only child, save the developer a couple of
-   * lines of code
-   */
-  if (GTK_IS_EDITABLE (child))
-    gtk_search_bar_connect_entry (bar, GTK_EDITABLE (child));
-
-  _gtk_bin_set_child (GTK_BIN (container), child);
-}
-
-static void
-gtk_search_bar_remove (GtkContainer *container,
-                       GtkWidget    *child)
-{
-  GtkSearchBar *bar = GTK_SEARCH_BAR (container);
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
-
-  if (GTK_IS_EDITABLE (child))
-    gtk_search_bar_connect_entry (bar, NULL);
-
-  gtk_center_box_set_center_widget (GTK_CENTER_BOX (priv->box_center), NULL);
-  _gtk_bin_set_child (GTK_BIN (container), NULL);
-}
-
-static void
 gtk_search_bar_set_property (GObject      *object,
                              guint         prop_id,
                              const GValue *value,
@@ -208,6 +209,9 @@ gtk_search_bar_set_property (GObject      *object,
       break;
     case PROP_SHOW_CLOSE_BUTTON:
       gtk_search_bar_set_show_close_button (bar, g_value_get_boolean (value));
+      break;
+    case PROP_CHILD:
+      gtk_search_bar_set_child (bar, g_value_get_object (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -231,6 +235,9 @@ gtk_search_bar_get_property (GObject    *object,
     case PROP_SHOW_CLOSE_BUTTON:
       g_value_set_boolean (value, gtk_search_bar_get_show_close_button (bar));
       break;
+    case PROP_CHILD:
+      g_value_set_object (value, gtk_search_bar_get_child (bar));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -246,49 +253,36 @@ gtk_search_bar_dispose (GObject *object)
   GtkSearchBar *bar = GTK_SEARCH_BAR (object);
   GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
 
-  if (gtk_bin_get_child (GTK_BIN (bar)) != NULL)
-    {
-      gtk_center_box_set_center_widget (GTK_CENTER_BOX (priv->box_center), NULL);
-      _gtk_bin_set_child (GTK_BIN (bar), NULL);
-    }
+  gtk_search_bar_set_key_capture_widget (bar, NULL);
+  gtk_search_bar_set_entry (bar, NULL);
 
   g_clear_pointer (&priv->revealer, gtk_widget_unparent);
 
-  gtk_search_bar_set_entry (bar, NULL);
-  gtk_search_bar_set_key_capture_widget (bar, NULL);
+  priv->child = NULL;
+  priv->box_center = NULL;
+  priv->close_button = NULL;
 
   G_OBJECT_CLASS (gtk_search_bar_parent_class)->dispose (object);
 }
 
 static void
-gtk_search_bar_measure (GtkWidget      *widget,
-                        GtkOrientation  orientation,
-                        int             for_size,
-                        int            *minimum,
-                        int            *natural,
-                        int            *minimum_baseline,
-                        int            *natural_baseline)
+gtk_search_bar_compute_expand (GtkWidget *widget,
+                               gboolean  *hexpand,
+                               gboolean  *vexpand)
 {
   GtkSearchBar *bar = GTK_SEARCH_BAR (widget);
   GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
 
-  gtk_widget_measure (priv->revealer, orientation, for_size, minimum, natural, minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_search_bar_size_allocate (GtkWidget *widget,
-                              int        width,
-                              int        height,
-                              int        baseline)
-{
-  GtkSearchBar *bar = GTK_SEARCH_BAR (widget);
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
-
-  gtk_widget_size_allocate (priv->revealer,
-                            &(GtkAllocation) {
-                              0, 0,
-                              width, height
-                            }, baseline);
+  if (priv->child)
+    {
+      *hexpand = gtk_widget_compute_expand (priv->child, GTK_ORIENTATION_HORIZONTAL);
+      *vexpand = gtk_widget_compute_expand (priv->child, GTK_ORIENTATION_VERTICAL);
+    }
+  else
+    {
+      *hexpand = FALSE;
+      *vexpand = FALSE;
+    }
 }
 
 static void
@@ -296,17 +290,14 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->dispose = gtk_search_bar_dispose;
   object_class->set_property = gtk_search_bar_set_property;
   object_class->get_property = gtk_search_bar_get_property;
 
-  widget_class->measure = gtk_search_bar_measure;
-  widget_class->size_allocate = gtk_search_bar_size_allocate;
-
-  container_class->add = gtk_search_bar_add;
-  container_class->remove = gtk_search_bar_remove;
+  widget_class->compute_expand = gtk_search_bar_compute_expand;
+  widget_class->grab_focus = gtk_widget_grab_focus_none;
+  widget_class->focus = gtk_widget_focus_child;
 
   /**
    * GtkSearchBar:search-mode-enabled:
@@ -332,8 +323,15 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
                                                                FALSE,
                                                                GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
+  widget_props[PROP_CHILD] = g_param_spec_object ("child",
+                                                  P_("Child"),
+                                                  P_("The child widget"),
+                                                  GTK_TYPE_WIDGET,
+                                                  GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (object_class, LAST_PROPERTY, widget_props);
 
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("searchbar"));
 }
 
@@ -355,8 +353,7 @@ gtk_search_bar_init (GtkSearchBar *bar)
   gtk_center_box_set_end_widget (GTK_CENTER_BOX (priv->box_center), priv->close_button);
   gtk_widget_hide (priv->close_button);
 
-  gtk_container_add (GTK_CONTAINER (priv->revealer), priv->box_center);
-
+  gtk_revealer_set_child (GTK_REVEALER (priv->revealer), priv->box_center);
 
   g_signal_connect (priv->revealer, "notify::reveal-child",
                     G_CALLBACK (reveal_child_changed_cb), bar);
@@ -657,4 +654,54 @@ gtk_search_bar_get_key_capture_widget (GtkSearchBar *bar)
   g_return_val_if_fail (GTK_IS_SEARCH_BAR (bar), NULL);
 
   return priv->capture_widget;
+}
+
+/**
+ * gtk_search_bar_set_child:
+ * @bar: a #GtkSearchBar
+ * @child: (allow-none): the child widget
+ *
+ * Sets the child widget of @bar.
+ */
+void
+gtk_search_bar_set_child (GtkSearchBar *bar,
+                          GtkWidget    *child)
+{
+  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
+
+  if (priv->child)
+    {
+      if (GTK_IS_EDITABLE (priv->child))
+        gtk_search_bar_connect_entry (bar, NULL);
+
+      gtk_center_box_set_center_widget (GTK_CENTER_BOX (priv->box_center), NULL);
+    }
+
+   priv->child = child;
+
+  if (priv->child)
+    {
+      gtk_center_box_set_center_widget (GTK_CENTER_BOX (priv->box_center), child);
+
+      if (GTK_IS_EDITABLE (child))
+        gtk_search_bar_connect_entry (bar, GTK_EDITABLE (child));
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (bar), widget_props[PROP_CHILD]);
+}
+
+/**
+ * gtk_search_bar_get_child:
+ * @bar: a #GtkSearchBar
+ *
+ * Gets the child widget of @bar.
+ *
+ * Returns: (nullable) (transfer none): the child widget of @bar
+ */
+GtkWidget *
+gtk_search_bar_get_child (GtkSearchBar *bar)
+{
+  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
+
+  return priv->child;
 }

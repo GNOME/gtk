@@ -1,5 +1,0 @@
-/* an example of a complex selector */
-
-window grid > box ~ button box > checkbutton box + label {
-  color: red;
-}

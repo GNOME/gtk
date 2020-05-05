@@ -31,7 +31,7 @@ struct _GtkComboBoxAccessiblePrivate
 static void atk_action_interface_init    (AtkActionIface    *iface);
 static void atk_selection_interface_init (AtkSelectionIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkComboBoxAccessible, gtk_combo_box_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkComboBoxAccessible, gtk_combo_box_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_ADD_PRIVATE (GtkComboBoxAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init))
@@ -80,7 +80,7 @@ gtk_combo_box_accessible_initialize (AtkObject *obj,
       accessible->priv->popup_set = TRUE;
     }
   if (gtk_combo_box_get_has_entry (combo_box))
-    atk_object_set_parent (gtk_widget_get_accessible (gtk_bin_get_child (GTK_BIN (combo_box))), obj);
+    atk_object_set_parent (gtk_widget_get_accessible (gtk_combo_box_get_child (GTK_COMBO_BOX (combo_box))), obj);
 
   obj->role = ATK_ROLE_COMBO_BOX;
 }
@@ -181,7 +181,7 @@ gtk_combo_box_accessible_ref_child (AtkObject *obj,
     }
   else if (i == 1 && gtk_combo_box_get_has_entry (GTK_COMBO_BOX (widget)))
     {
-      child = gtk_widget_get_accessible (gtk_bin_get_child (GTK_BIN (widget)));
+      child = gtk_widget_get_accessible (gtk_combo_box_get_child (GTK_COMBO_BOX (widget)));
     }
   else
     {

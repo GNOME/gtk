@@ -57,9 +57,9 @@ do_overlay2 (GtkWidget *do_widget)
       gtk_text_iter_forward_word_end (&end);
       gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
 
-      gtk_container_add (GTK_CONTAINER (window), overlay);
-      gtk_container_add (GTK_CONTAINER (overlay), sw);
-      gtk_container_add (GTK_CONTAINER (sw), text);
+      gtk_window_set_child (GTK_WINDOW (window), overlay);
+      gtk_overlay_set_child (GTK_OVERLAY (overlay), sw);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), text);
 
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);

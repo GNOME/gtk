@@ -198,6 +198,8 @@ gtk_aspect_frame_set_ratio
 gtk_aspect_frame_get_ratio
 gtk_aspect_frame_set_obey_child
 gtk_aspect_frame_get_obey_child
+gtk_aspect_frame_set_child
+gtk_aspect_frame_get_child
 <SUBSECTION Standard>
 GTK_ASPECT_FRAME
 GTK_IS_ASPECT_FRAME
@@ -207,24 +209,6 @@ GTK_IS_ASPECT_FRAME_CLASS
 GTK_ASPECT_FRAME_GET_CLASS
 <SUBSECTION Private>
 gtk_aspect_frame_get_type
-</SECTION>
-
-<SECTION>
-<FILE>gtkbin</FILE>
-<TITLE>GtkBin</TITLE>
-GtkBin
-GtkBinClass
-gtk_bin_get_child
-<SUBSECTION Standard>
-GTK_BIN
-GTK_IS_BIN
-GTK_TYPE_BIN
-GTK_BIN_CLASS
-GTK_IS_BIN_CLASS
-GTK_BIN_GET_CLASS
-<SUBSECTION Private>
-GtkBinPrivate
-gtk_bin_get_type
 </SECTION>
 
 <SECTION>
@@ -537,6 +521,8 @@ gtk_button_get_use_underline
 gtk_button_set_use_underline
 gtk_button_set_icon_name
 gtk_button_get_icon_name
+gtk_button_set_child
+gtk_button_get_child
 
 <SUBSECTION Standard>
 GTK_BUTTON
@@ -659,6 +645,8 @@ gtk_combo_box_set_entry_text_column
 gtk_combo_box_get_entry_text_column
 gtk_combo_box_set_popup_fixed_width
 gtk_combo_box_get_popup_fixed_width
+gtk_combo_box_set_child
+gtk_combo_box_get_child
 <SUBSECTION Standard>
 GTK_TYPE_COMBO_BOX
 GTK_COMBO_BOX
@@ -1382,6 +1370,8 @@ gtk_font_chooser_dialog_get_type
 GtkFrame
 GtkFrameClass
 gtk_frame_new
+gtk_frame_set_child
+gtk_frame_get_child
 gtk_frame_set_label
 gtk_frame_get_label
 gtk_frame_set_label_widget
@@ -2200,6 +2190,8 @@ gtk_scrollbar_get_type
 <TITLE>GtkScrolledWindow</TITLE>
 GtkScrolledWindow
 gtk_scrolled_window_new
+gtk_scrolled_window_get_child
+gtk_scrolled_window_set_child
 gtk_scrolled_window_get_hadjustment
 gtk_scrolled_window_set_hadjustment
 gtk_scrolled_window_get_vadjustment
@@ -2251,6 +2243,8 @@ GtkScrolledWindowPrivate
 <TITLE>GtkSearchBar</TITLE>
 GtkSearchBar
 gtk_search_bar_new
+gtk_search_bar_set_child
+gtk_search_bar_get_child
 gtk_search_bar_connect_entry
 gtk_search_bar_get_search_mode
 gtk_search_bar_set_search_mode
@@ -3854,6 +3848,8 @@ GtkViewport
 gtk_viewport_new
 gtk_viewport_set_scroll_to_focus
 gtk_viewport_get_scroll_to_focus
+gtk_viewport_set_child
+gtk_viewport_get_child
 <SUBSECTION Standard>
 GTK_VIEWPORT
 GTK_IS_VIEWPORT
@@ -4193,6 +4189,8 @@ gtk_requisition_get_type
 GtkWindow
 GtkWindowClass
 gtk_window_new
+gtk_window_get_child
+gtk_window_set_child
 gtk_window_set_title
 gtk_window_set_resizable
 gtk_window_get_resizable
@@ -5468,7 +5466,10 @@ GtkLockButtonPrivate
 GtkOverlay
 
 gtk_overlay_new
+gtk_overlay_set_child
+gtk_overlay_get_child
 gtk_overlay_add_overlay
+gtk_overlay_remove_overlay
 gtk_overlay_get_measure_overlay
 gtk_overlay_set_measure_overlay
 gtk_overlay_get_clip_overlay
@@ -5669,6 +5670,8 @@ gtk_stack_switcher_get_type
 <TITLE>GtkRevealer</TITLE>
 GtkRevealer
 gtk_revealer_new
+gtk_revealer_get_child
+gtk_revealer_set_child
 gtk_revealer_get_reveal_child
 gtk_revealer_set_reveal_child
 gtk_revealer_get_child_revealed
@@ -5738,6 +5741,8 @@ gtk_flow_box_bind_model
 <SUBSECTION GtkFlowBoxChild>
 GtkFlowBoxChild
 gtk_flow_box_child_new
+gtk_flow_box_child_set_child
+gtk_flow_box_child_get_child
 gtk_flow_box_child_get_index
 gtk_flow_box_child_is_selected
 gtk_flow_box_child_changed
@@ -5768,6 +5773,8 @@ GtkPopover
 gtk_popover_new
 gtk_popover_popup
 gtk_popover_popdown
+gtk_popover_set_child
+gtk_popover_get_child
 gtk_popover_set_pointing_to
 gtk_popover_get_pointing_to
 gtk_popover_set_position

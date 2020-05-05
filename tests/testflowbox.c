@@ -51,7 +51,7 @@ populate_flowbox_simple (GtkFlowBox *flowbox)
       gtk_widget_show (widget);
       gtk_widget_show (frame);
 
-      gtk_container_add (GTK_CONTAINER (frame), widget);
+      gtk_frame_set_child (GTK_FRAME (frame), widget);
 
       g_object_set_data_full (G_OBJECT (frame), "id", (gpointer)g_strdup (text), g_free);
       gtk_container_add (GTK_CONTAINER (flowbox), frame);
@@ -73,7 +73,7 @@ populate_flowbox_focus (GtkFlowBox *flowbox)
       frame = gtk_frame_new (NULL);
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-      gtk_container_add (GTK_CONTAINER (frame), box);
+      gtk_frame_set_child (GTK_FRAME (frame), box);
 
       widget = gtk_label_new ("Label");
       gtk_container_add (GTK_CONTAINER (box), widget);
@@ -146,7 +146,7 @@ populate_flowbox_wrappy (GtkFlowBox *flowbox)
       gtk_widget_show (widget);
       gtk_widget_show (frame);
 
-      gtk_container_add (GTK_CONTAINER (frame), widget);
+      gtk_frame_set_child (GTK_FRAME (frame), widget);
 
       gtk_label_set_wrap (GTK_LABEL (widget), TRUE);
       gtk_label_set_wrap_mode (GTK_LABEL (widget), PANGO_WRAP_WORD);
@@ -304,7 +304,7 @@ on_child_activated (GtkFlowBox *self,
                     GtkWidget  *child)
 {
   const char *id;
-  id = g_object_get_data (G_OBJECT (gtk_bin_get_child (GTK_BIN (child))), "id");
+  id = g_object_get_data (G_OBJECT (gtk_flow_box_child_get_child (GTK_FLOW_BOX_CHILD (child))), "id");
   g_message ("Child activated %p: %s", child, id);
 }
 
@@ -316,7 +316,7 @@ selection_foreach (GtkFlowBox      *self,
   const char *id;
   GtkWidget *child;
 
-  child = gtk_bin_get_child (GTK_BIN (child_info));
+  child = gtk_flow_box_child_get_child (child_info);
   id = g_object_get_data (G_OBJECT (child), "id");
   g_message ("Child selected %p: %s", child, id);
 }
@@ -357,8 +357,8 @@ sort_func (GtkFlowBoxChild *a,
 {
   gchar *ida, *idb;
 
-  ida = (gchar *)g_object_get_data (G_OBJECT (gtk_bin_get_child (GTK_BIN (a))), "id");
-  idb = (gchar *)g_object_get_data (G_OBJECT (gtk_bin_get_child (GTK_BIN (b))), "id");
+  ida = (gchar *)g_object_get_data (G_OBJECT (gtk_flow_box_child_get_child (a)), "id");
+  idb = (gchar *)g_object_get_data (G_OBJECT (gtk_flow_box_child_get_child (b)), "id");
   return g_strcmp0 (ida, idb);
 }
 
@@ -386,7 +386,7 @@ create_window (void)
 
   gtk_widget_show (vbox);
   gtk_widget_show (hbox);
-  gtk_container_add (GTK_CONTAINER (window), hbox);
+  gtk_window_set_child (GTK_WINDOW (window), hbox);
   gtk_container_add (GTK_CONTAINER (hbox), vbox);
 
   swindow = gtk_scrolled_window_new (NULL, NULL);
@@ -407,7 +407,7 @@ create_window (void)
   gtk_flow_box_set_min_children_per_line (GTK_FLOW_BOX (flowbox), INITIAL_MINIMUM_LENGTH);
   gtk_flow_box_set_max_children_per_line (GTK_FLOW_BOX (flowbox), INITIAL_MAXIMUM_LENGTH);
   gtk_widget_show (flowbox);
-  gtk_container_add (GTK_CONTAINER (swindow), flowbox);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), flowbox);
 
   gtk_flow_box_set_hadjustment (GTK_FLOW_BOX (flowbox),
                                 gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (swindow)));

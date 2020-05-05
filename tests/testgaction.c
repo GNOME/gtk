@@ -142,7 +142,7 @@ int main (int argc, char **argv)
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button1), "win.change-label-button");
   gtk_container_add (GTK_CONTAINER (box), button1);
 
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
 
   gtk_widget_show (window);
   while (TRUE)

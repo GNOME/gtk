@@ -2296,7 +2296,7 @@ create_rename_popover (GtkPlacesSidebar *sidebar)
   g_signal_connect (popover, "destroy", G_CALLBACK (on_rename_popover_destroy), sidebar);
   gtk_popover_set_position (GTK_POPOVER (popover), GTK_POS_RIGHT);
   grid = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (popover), grid);
+  gtk_popover_set_child (GTK_POPOVER (popover), grid);
   g_object_set (grid,
                 "margin-start", 10,
                 "margin-end", 10,
@@ -3810,7 +3810,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   sidebar->row_placeholder = NULL;
   sidebar->dragging_over = FALSE;
 
-  gtk_container_add (GTK_CONTAINER (sidebar->swin), sidebar->list_box);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sidebar->swin), sidebar->list_box);
 
   sidebar->hostname = g_strdup (_("Computer"));
   sidebar->hostnamed_cancellable = g_cancellable_new ();

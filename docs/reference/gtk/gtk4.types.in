@@ -16,7 +16,6 @@ gtk_application_window_get_type
 gtk_aspect_frame_get_type
 gtk_assistant_get_type
 gtk_assistant_page_get_type
-gtk_bin_get_type
 gtk_bin_layout_get_type
 gtk_box_get_type
 gtk_box_layout_get_type

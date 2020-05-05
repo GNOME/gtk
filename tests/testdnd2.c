@@ -177,7 +177,7 @@ ask_actions (GdkDrop *drop,
       g_object_set_data (G_OBJECT (image), "popover", popover);
 
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (popover), box);
+      gtk_popover_set_child (GTK_POPOVER (popover), box);
       button = gtk_button_new_with_label ("Copy");
       g_signal_connect (button, "clicked", G_CALLBACK (do_copy), NULL);
       gtk_container_add (GTK_CONTAINER (box), button);
@@ -415,7 +415,7 @@ main (int argc, char *Argv[])
                 "row-spacing", 20,
                 "column-spacing", 20,
                 NULL);
-  gtk_container_add (GTK_CONTAINER (window), grid);
+  gtk_window_set_child (GTK_WINDOW (window), grid);
   gtk_grid_attach (GTK_GRID (grid), make_image ("dialog-warning", TOP_LEFT), 0, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), make_image ("process-stop", BOTTOM_RIGHT), 1, 0, 1, 1);
 

@@ -29,23 +29,23 @@ typedef struct _MyTooltipClass MyTooltipClass;
 
 struct _MyTooltip
 {
-  GtkBin parent_instance;
+  GtkWidget parent_instance;
 };
 
 struct _MyTooltipClass
 {
-  GtkBinClass parent_class;
+  GtkWidgetClass parent_class;
 };
 
 static GType my_tooltip_get_type (void);
-G_DEFINE_TYPE (MyTooltip, my_tooltip, GTK_TYPE_BIN)
+G_DEFINE_TYPE (MyTooltip, my_tooltip, GTK_TYPE_WIDGET)
 
 static void
 my_tooltip_init (MyTooltip *tt)
 {
   GtkWidget *label = gtk_label_new ("Some text in a tooltip");
 
-  gtk_container_add (GTK_CONTAINER (tt), label);
+  gtk_widget_set_parent (label, GTK_WIDGET (tt));
 
   gtk_widget_add_css_class (GTK_WIDGET (tt), "background");
 }
@@ -53,6 +53,7 @@ my_tooltip_init (MyTooltip *tt)
 static void
 my_tooltip_class_init (MyTooltipClass *tt_class)
 {
+  gtk_widget_class_set_layout_manager_type (GTK_WIDGET_CLASS (tt_class), GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (tt_class), "tooltip");
 }
 
@@ -302,7 +303,7 @@ main (int argc, char *argv[])
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
 
   tooltip = g_object_new (my_tooltip_get_type (), NULL);
   gtk_widget_set_margin_top (tooltip, 20);
@@ -424,7 +425,7 @@ main (int argc, char *argv[])
   popover = gtk_popover_new ();
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), popover);
   box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (popover), box2);
+  gtk_popover_set_child (GTK_POPOVER (popover), box2);
 
   button = gtk_label_new ("Hidden here");
   custom = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);

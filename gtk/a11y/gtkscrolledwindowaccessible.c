@@ -21,7 +21,7 @@
 #include "gtkscrolledwindowaccessible.h"
 
 
-G_DEFINE_TYPE (GtkScrolledWindowAccessible, gtk_scrolled_window_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE)
+G_DEFINE_TYPE (GtkScrolledWindowAccessible, gtk_scrolled_window_accessible, GTK_TYPE_WIDGET_ACCESSIBLE)
 
 static void
 visibility_changed (GObject    *object,
@@ -33,7 +33,6 @@ visibility_changed (GObject    *object,
       gint index;
       gint n_children;
       gboolean child_added = FALSE;
-      GList *children;
       AtkObject *child;
       GtkWidget *widget;
       GtkScrolledWindow *scrolled_window;
@@ -45,9 +44,7 @@ visibility_changed (GObject    *object,
         return;
 
       scrolled_window = GTK_SCROLLED_WINDOW (widget);
-      children = gtk_container_get_children (GTK_CONTAINER (widget));
-      index = n_children = g_list_length (children);
-      g_list_free (children);
+      index = n_children = 1;
 
       hscrollbar = gtk_scrolled_window_get_hscrollbar (scrolled_window);
       vscrollbar = gtk_scrolled_window_get_vscrollbar (scrolled_window);

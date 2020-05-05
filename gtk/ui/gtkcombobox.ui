@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <template class="GtkComboBox" parent="GtkBin">
+  <template class="GtkComboBox" parent="GtkWidget">
     <child>
       <object class="GtkBox" id="box">
         <style>

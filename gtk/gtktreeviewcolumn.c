@@ -25,6 +25,7 @@
 #include "gtkcellareacontext.h"
 #include "gtkcelllayout.h"
 #include "gtkdragsource.h"
+#include "gtkframe.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
@@ -896,7 +897,7 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
     }
 
   gtk_container_add (GTK_CONTAINER (priv->frame), child);
-  gtk_container_add (GTK_CONTAINER (priv->button), hbox);
+  gtk_button_set_child (GTK_BUTTON (priv->button), hbox);
 }
 
 static void 
@@ -916,7 +917,7 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
   else
     model = NULL;
 
-  hbox = gtk_bin_get_child (GTK_BIN (priv->button));
+  hbox = gtk_button_get_child (GTK_BUTTON (priv->button));
   frame = priv->frame;
   arrow = priv->arrow;
   current_child = gtk_widget_get_first_child (frame);
@@ -925,22 +926,16 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
   if (priv->child)
     {
       if (current_child != priv->child)
-	{
-          gtk_container_remove (GTK_CONTAINER (frame),
-				current_child);
-          gtk_container_add (GTK_CONTAINER (frame),
-			     priv->child);
-	}
+        gtk_frame_set_child (GTK_FRAME (frame), priv->child);
     }
-  else 
+  else
     {
       if (current_child == NULL)
-	{
-	  current_child = gtk_label_new (NULL);
-	  gtk_widget_show (current_child);
-          gtk_container_add (GTK_CONTAINER (frame),
-			     current_child);
-	}
+        {
+          current_child = gtk_label_new (NULL);
+          gtk_widget_show (current_child);
+          gtk_frame_set_child (GTK_FRAME (frame), current_child);
+        }
 
       g_return_if_fail (GTK_IS_LABEL (current_child));
 

@@ -307,13 +307,13 @@ create_combo_box_entry (void)
 
   model = (GtkTreeModel *)gtk_list_store_new (1, G_TYPE_STRING);
   widget = g_object_new (GTK_TYPE_COMBO_BOX,
-			 "has-entry", TRUE,
-			 "model", model,
-			 "entry-text-column", 0,
-			 NULL);
+                         "has-entry", TRUE,
+                         "model", model,
+                         "entry-text-column", 0,
+                         NULL);
   g_object_unref (model);
 
-  child = gtk_bin_get_child (GTK_BIN (widget));
+  child = gtk_combo_box_get_child (GTK_COMBO_BOX (widget));
   gtk_editable_set_text (GTK_EDITABLE (child), "Combo Box Entry");
   gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
@@ -876,7 +876,7 @@ create_scrolledwindow (void)
                                   GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
   label = gtk_label_new ("Scrolled Window");
 
-  gtk_container_add (GTK_CONTAINER (scrolledwin), label);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolledwin), label);
 
   return new_widget_info ("scrolledwindow", scrolledwin, MEDIUM);
 }
@@ -1122,15 +1122,15 @@ create_headerbar (void)
   GtkWidget *button;
 
   window = gtk_window_new ();
-  gtk_window_set_title (GTK_WINDOW (bar), "Header Bar");
+  gtk_window_set_title (GTK_WINDOW (window), "Header Bar");
   view = gtk_text_view_new ();
   gtk_widget_show (view);
   gtk_widget_set_size_request (window, 220, 150);
-  gtk_container_add (GTK_CONTAINER (window), view);
+  gtk_window_set_child (GTK_WINDOW (window), view);
   bar = gtk_header_bar_new ();
   gtk_window_set_titlebar (GTK_WINDOW (window), bar);
   button = gtk_button_new ();
-  gtk_container_add (GTK_CONTAINER (button), gtk_image_new_from_icon_name ("bookmark-new-symbolic"));
+  gtk_button_set_child (GTK_BUTTON (button), gtk_image_new_from_icon_name ("bookmark-new-symbolic"));
   gtk_header_bar_pack_end (GTK_HEADER_BAR (bar), button);
 
   return new_widget_info ("headerbar", window, ASIS);
@@ -1232,7 +1232,7 @@ create_sidebar (void)
   gtk_container_add (GTK_CONTAINER (hbox), sidebar);
   gtk_container_add (GTK_CONTAINER (hbox), gtk_separator_new (GTK_ORIENTATION_VERTICAL));
   gtk_container_add (GTK_CONTAINER (hbox), stack);
-  gtk_container_add (GTK_CONTAINER (frame), hbox);
+  gtk_frame_set_child (GTK_FRAME (frame), hbox);
 
   return new_widget_info ("sidebar", frame, ASIS);
 }

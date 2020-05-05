@@ -41,17 +41,14 @@ kinetic_scrolling (void)
   label = gtk_label_new ("Non scrollable widget using viewport");
   gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
   gtk_widget_set_hexpand (label, TRUE);
-  gtk_widget_show (label);
 
   label = gtk_label_new ("Scrollable widget: TreeView");
   gtk_grid_attach (GTK_GRID (grid), label, 1, 0, 1, 1);
   gtk_widget_set_hexpand (label, TRUE);
-  gtk_widget_show (label);
 
   label = gtk_label_new ("Scrollable widget: TextView");
   gtk_grid_attach (GTK_GRID (grid), label, 2, 0, 1, 1);
   gtk_widget_set_hexpand (label, TRUE);
-  gtk_widget_show (label);
 
   button_grid = gtk_grid_new ();
   for (i = 0; i < 80; i++)
@@ -61,7 +58,6 @@ kinetic_scrolling (void)
       button = gtk_button_new_with_label (button_label);
       gtk_grid_attach (GTK_GRID (button_grid), button, 0, i, 1, 1);
       gtk_widget_set_hexpand (button, TRUE);
-      gtk_widget_show (button);
       g_signal_connect (button, "clicked",
                         G_CALLBACK (on_button_clicked),
                         GINT_TO_POINTER (i));
@@ -71,11 +67,9 @@ kinetic_scrolling (void)
   swindow = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_kinetic_scrolling (GTK_SCROLLED_WINDOW (swindow), TRUE);
   gtk_scrolled_window_set_capture_button_press (GTK_SCROLLED_WINDOW (swindow), TRUE);
-  gtk_container_add (GTK_CONTAINER (swindow), button_grid);
-  gtk_widget_show (button_grid);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), button_grid);
 
   gtk_grid_attach (GTK_GRID (grid), swindow, 0, 1, 1, 1);
-  gtk_widget_show (swindow);
 
   treeview = gtk_tree_view_new ();
   targets = gdk_content_formats_new_for_gtype (GTK_TYPE_TREE_ROW_DATA);
@@ -103,7 +97,7 @@ kinetic_scrolling (void)
 
       gtk_list_store_append (store, &iter);
       gtk_list_store_set (store, &iter, 0, iter_label, -1);
-      g_free (label);
+      g_free (iter_label);
     }
   gtk_tree_view_set_model (GTK_TREE_VIEW (treeview), GTK_TREE_MODEL (store));
   g_object_unref (store);
@@ -111,28 +105,23 @@ kinetic_scrolling (void)
   swindow = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_kinetic_scrolling (GTK_SCROLLED_WINDOW (swindow), TRUE);
   gtk_scrolled_window_set_capture_button_press (GTK_SCROLLED_WINDOW (swindow), TRUE);
-  gtk_container_add (GTK_CONTAINER (swindow), treeview);
-  gtk_widget_show (treeview);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), treeview);
 
   gtk_grid_attach (GTK_GRID (grid), swindow, 1, 1, 1, 1);
   gtk_widget_set_hexpand (swindow, TRUE);
   gtk_widget_set_vexpand (swindow, TRUE);
-  gtk_widget_show (swindow);
 
   textview = gtk_text_view_new ();
   swindow = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_kinetic_scrolling (GTK_SCROLLED_WINDOW (swindow), TRUE);
   gtk_scrolled_window_set_capture_button_press (GTK_SCROLLED_WINDOW (swindow), TRUE);
-  gtk_container_add (GTK_CONTAINER (swindow), textview);
-  gtk_widget_show (textview);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), textview);
 
   gtk_grid_attach (GTK_GRID (grid), swindow, 2, 1, 1, 1);
   gtk_widget_set_hexpand (swindow, TRUE);
   gtk_widget_set_vexpand (swindow, TRUE);
-  gtk_widget_show (swindow);
 
-  gtk_container_add (GTK_CONTAINER (window), grid);
-  gtk_widget_show (grid);
+  gtk_window_set_child (GTK_WINDOW (window), grid);
 
   gtk_widget_show (window);
 }

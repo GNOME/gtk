@@ -62,7 +62,7 @@ int main (int argc, char *argv[])
 
   window = gtk_window_new ();
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
 
   w = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 15);
   gtk_container_add (GTK_CONTAINER (box), w);

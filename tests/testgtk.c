@@ -279,7 +279,7 @@ create_buttons (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "GtkButton");
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_window_set_child (GTK_WINDOW (window), box1);
 
       grid = gtk_grid_new ();
       gtk_grid_set_row_spacing (GTK_GRID (grid), 5);
@@ -354,7 +354,7 @@ create_toggle_buttons (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "GtkToggleButton");
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_window_set_child (GTK_WINDOW (window), box1);
 
       box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_container_add (GTK_CONTAINER (box1), box2);
@@ -725,7 +725,7 @@ create_statusbar (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "statusbar");
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_window_set_child (GTK_WINDOW (window), box1);
 
       box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_container_add (GTK_CONTAINER (box1), box2);
@@ -941,7 +941,7 @@ static void create_labels (GtkWidget *widget)
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-      gtk_container_add (GTK_CONTAINER (window), vbox);
+      gtk_window_set_child (GTK_WINDOW (window), vbox);
 
 
       button = create_sensitivity_control (hbox);
@@ -960,27 +960,27 @@ static void create_labels (GtkWidget *widget)
       frame = gtk_frame_new ("Normal Label");
       label = gtk_label_new ("This is a Normal label");
       gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_START);
-      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_frame_set_child (GTK_FRAME (frame), label);
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       frame = gtk_frame_new ("Multi-line Label");
       label = gtk_label_new ("This is a Multi-line label.\nSecond line\nThird line");
       gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_frame_set_child (GTK_FRAME (frame), label);
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       frame = gtk_frame_new ("Left Justified Label");
       label = gtk_label_new ("This is a Left-Justified\nMulti-line label.\nThird      line");
       gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_MIDDLE);
       gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_frame_set_child (GTK_FRAME (frame), label);
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       frame = gtk_frame_new ("Right Justified Label");
       gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_START);
       label = gtk_label_new ("This is a Right-Justified\nMulti-line label.\nFourth line, (j/k)");
       gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_RIGHT);
-      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_frame_set_child (GTK_FRAME (frame), label);
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       frame = gtk_frame_new ("Internationalized Label");
@@ -993,13 +993,13 @@ static void create_labels (GtkWidget *widget)
 			    "Chinese (Traditional) <span lang=\"zh-tw\">\345\205\203\346\260\243	\351\226\213\347\231\274</span>\n"
 			    "Japanese <span lang=\"ja\">\345\205\203\346\260\227	\351\226\213\347\231\272</span>");
       gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_frame_set_child (GTK_FRAME (frame), label);
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       frame = gtk_frame_new ("Bidirection Label");
       label = gtk_label_new ("\342\200\217Arabic	\330\247\331\204\330\263\331\204\330\247\331\205 \330\271\331\204\331\212\331\203\331\205\n"
 			     "\342\200\217Hebrew	\327\251\327\234\327\225\327\235");
-      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_frame_set_child (GTK_FRAME (frame), label);
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       frame = gtk_frame_new ("Links in a label");
@@ -1007,7 +1007,7 @@ static void create_labels (GtkWidget *widget)
                              "as hyperlinks, which can be clicked\n"
                              "or activated via <a href=\"keynav\">keynav</a>");
       gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_frame_set_child (GTK_FRAME (frame), label);
       gtk_container_add (GTK_CONTAINER (vbox), frame);
       g_signal_connect (label, "activate-link", G_CALLBACK (activate_link), NULL);
 
@@ -1023,7 +1023,7 @@ static void create_labels (GtkWidget *widget)
 			     "many          extra  spaces. ");
 
       gtk_label_set_wrap (GTK_LABEL (label), TRUE);
-      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_frame_set_child (GTK_FRAME (frame), label);
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       frame = gtk_frame_new ("Filled, wrapped label");
@@ -1036,14 +1036,14 @@ static void create_labels (GtkWidget *widget)
 			     "unfortunately.");
       gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_FILL);
       gtk_label_set_wrap (GTK_LABEL (label), TRUE);
-      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_frame_set_child (GTK_FRAME (frame), label);
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       frame = gtk_frame_new ("Underlined label");
       label = gtk_label_new ("This label is underlined!\n"
 			     "This one is underlined (\343\201\223\343\202\223\343\201\253\343\201\241\343\201\257) in quite a funky fashion");
       gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_frame_set_child (GTK_FRAME (frame), label);
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       frame = gtk_frame_new ("Markup label");
@@ -1070,7 +1070,7 @@ static void create_labels (GtkWidget *widget)
 
       g_assert (gtk_label_get_mnemonic_keyval (GTK_LABEL (label)) == GDK_KEY_s);
 
-      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_frame_set_child (GTK_FRAME (frame), label);
       gtk_container_add (GTK_CONTAINER (vbox), frame);
     }
 
@@ -1190,7 +1190,7 @@ create_rotated_text (GtkWidget *widget)
       g_signal_connect (drawing_area, "unrealize",
 			G_CALLBACK (on_rotated_text_unrealize), NULL);
 
-      gtk_widget_show (gtk_bin_get_child (GTK_BIN (window)));
+      gtk_widget_show (gtk_button_get_child (GTK_BUTTON (window)));
 
       gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (drawing_area), DEFAULT_TEXT_RADIUS * 2);
       gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (drawing_area), DEFAULT_TEXT_RADIUS * 2);
@@ -1235,7 +1235,7 @@ create_pixbuf (GtkWidget *widget)
       gtk_widget_realize(window);
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_window_set_child (GTK_WINDOW (window), box1);
 
       box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_container_add (GTK_CONTAINER (box1), box2);
@@ -1251,7 +1251,7 @@ create_pixbuf (GtkWidget *widget)
       box3 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_add (GTK_CONTAINER (box3), pixbufwid);
       gtk_container_add (GTK_CONTAINER (box3), label);
-      gtk_container_add (GTK_CONTAINER (button), box3);
+      gtk_button_set_child (GTK_BUTTON (button), box3);
 
       button = gtk_button_new ();
       gtk_container_add (GTK_CONTAINER (box2), button);
@@ -1262,7 +1262,7 @@ create_pixbuf (GtkWidget *widget)
       box3 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_add (GTK_CONTAINER (box3), pixbufwid);
       gtk_container_add (GTK_CONTAINER (box3), label);
-      gtk_container_add (GTK_CONTAINER (button), box3);
+      gtk_button_set_child (GTK_BUTTON (button), box3);
 
       gtk_widget_set_sensitive (button, FALSE);
 
@@ -1310,7 +1310,7 @@ create_tooltips (GtkWidget *widget)
 			      gtk_widget_get_display (widget));
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_window_set_child (GTK_WINDOW (window), box1);
 
       box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_container_add (GTK_CONTAINER (box1), box2);
@@ -1352,7 +1352,7 @@ create_tooltips (GtkWidget *widget)
 			      "label_xalign", (double) 0.5,
 			      NULL);
       gtk_container_add (GTK_CONTAINER (box2), frame);
-      gtk_container_add (GTK_CONTAINER (frame), box3);
+      gtk_frame_set_child (GTK_FRAME (frame), box3);
 
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_container_add (GTK_CONTAINER (box1), separator);
@@ -1418,7 +1418,7 @@ create_image (GtkWidget *widget)
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
 
-      gtk_container_add (GTK_CONTAINER (window), vbox);
+      gtk_window_set_child (GTK_WINDOW (window), vbox);
 
       pack_image (vbox, "Stock Warning Dialog", gtk_image_new_from_icon_name ("dialog-warning"));
 
@@ -1541,14 +1541,14 @@ create_listbox (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "listbox");
 
       hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), hbox);
+      gtk_window_set_child (GTK_WINDOW (window), hbox);
 
       scrolled = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
       gtk_container_add (GTK_CONTAINER (hbox), scrolled);
 
       scrolled_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (scrolled), scrolled_box);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled), scrolled_box);
 
       label = gtk_label_new ("This is \na LABEL\nwith rows");
       gtk_container_add (GTK_CONTAINER (scrolled_box), label);
@@ -1629,8 +1629,7 @@ accel_button_new (const gchar *text,
 
   label = gtk_accel_label_new (text);
   gtk_accel_label_set_accel (GTK_ACCEL_LABEL (label), keyval, modifiers);
-  
-  gtk_container_add (GTK_CONTAINER (button), label);
+  gtk_button_set_child (GTK_BUTTON (button), label);
 
   return button;
 }
@@ -1787,9 +1786,9 @@ create_modal_window (GtkWidget *widget)
   btnClose = gtk_button_new_with_label ("Close");
 
   /* Pack widgets */
-  gtk_container_add (GTK_CONTAINER (window), box1);
+  gtk_window_set_child (GTK_WINDOW (window), box1);
   gtk_container_add (GTK_CONTAINER (box1), frame1);
-  gtk_container_add (GTK_CONTAINER (frame1), box2);
+  gtk_frame_set_child (GTK_FRAME (frame1), box2);
   gtk_container_add (GTK_CONTAINER (box2), btnColor);
   gtk_container_add (GTK_CONTAINER (box2), btnFile);
   gtk_container_add (GTK_CONTAINER (box1), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
@@ -1882,7 +1881,7 @@ scrolled_windows_delete_cb (GtkWidget *widget,
 {
   g_object_ref (scrollwin);
   gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (scrollwin)), scrollwin);
-  gtk_container_add (GTK_CONTAINER (sw_parent), scrollwin);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw_parent), scrollwin);
   g_object_unref (scrollwin);
 
   g_signal_handler_disconnect (sw_parent, sw_destroyed_handler);
@@ -1916,7 +1915,7 @@ scrolled_windows_remove (GtkWidget *dialog, gint response, GtkWidget *scrollwin)
     {
       g_object_ref (scrollwin);
       gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (scrollwin)), scrollwin);
-      gtk_container_add (GTK_CONTAINER (sw_parent), scrollwin);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw_parent), scrollwin);
       g_object_unref (scrollwin);
 
 
@@ -1938,7 +1937,7 @@ scrolled_windows_remove (GtkWidget *dialog, gint response, GtkWidget *scrollwin)
       
       g_object_ref (scrollwin);
       gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (scrollwin)), scrollwin);
-      gtk_container_add (GTK_CONTAINER (sw_float_parent), scrollwin);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw_float_parent), scrollwin);
       g_object_unref (scrollwin);
 
 
@@ -1990,7 +1989,7 @@ create_scrolled_windows (GtkWidget *widget)
       grid = gtk_grid_new ();
       gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
       gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
-      gtk_container_add (GTK_CONTAINER (scrolled_window), grid);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), grid);
       gtk_viewport_set_scroll_to_focus (GTK_VIEWPORT (gtk_widget_get_parent (grid)), TRUE);
       gtk_widget_show (grid);
 
@@ -2131,7 +2130,7 @@ create_entry (GtkWidget *widget)
 
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_window_set_child (GTK_WINDOW (window), box1);
 
 
       box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
@@ -2159,7 +2158,7 @@ create_entry (GtkWidget *widget)
       gtk_combo_box_text_append_text (cb, "item8 item8 item8");
       gtk_combo_box_text_append_text (cb, "item9 item9");
 
-      cb_entry = gtk_bin_get_child (GTK_BIN (cb));
+      cb_entry = gtk_button_get_child (GTK_BUTTON (cb));
       gtk_editable_set_text (GTK_EDITABLE (cb_entry), "hello world \n\n\n foo");
       gtk_editable_select_region (GTK_EDITABLE (cb_entry), 0, -1);
       gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (cb));
@@ -2227,7 +2226,7 @@ create_expander (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "expander");
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_window_set_child (GTK_WINDOW (window), box1);
 
       expander = gtk_expander_new ("The Hidden");
 
@@ -2255,7 +2254,7 @@ static void
 size_group_hsize_changed (GtkSpinButton *spin_button,
 			  GtkWidget     *button)
 {
-  gtk_widget_set_size_request (gtk_bin_get_child (GTK_BIN (button)),
+  gtk_widget_set_size_request (gtk_button_get_child (GTK_BUTTON (button)),
 			       gtk_spin_button_get_value_as_int (spin_button),
 			       -1);
 }
@@ -2264,7 +2263,7 @@ static void
 size_group_vsize_changed (GtkSpinButton *spin_button,
 			  GtkWidget     *button)
 {
-  gtk_widget_set_size_request (gtk_bin_get_child (GTK_BIN (button)),
+  gtk_widget_set_size_request (gtk_button_get_child (GTK_BUTTON (button)),
 			       -1,
 			       gtk_spin_button_get_value_as_int (spin_button));
 }
@@ -2323,7 +2322,7 @@ create_size_group_window (GdkDisplay   *display,
   gtk_size_group_add_widget (master_size_group, main_button);
   gtk_size_group_add_widget (hgroup1, main_button);
   gtk_size_group_add_widget (vgroup1, main_button);
-  gtk_widget_set_size_request (gtk_bin_get_child (GTK_BIN (main_button)),
+  gtk_widget_set_size_request (gtk_button_get_child (GTK_BUTTON (main_button)),
 			       SIZE_GROUP_INITIAL_SIZE,
 			       SIZE_GROUP_INITIAL_SIZE);
 
@@ -2622,13 +2621,13 @@ create_spins (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "GtkSpinButton");
 
       main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-      gtk_container_add (GTK_CONTAINER (window), main_vbox);
+      gtk_window_set_child (GTK_WINDOW (window), main_vbox);
 
       frame = gtk_frame_new ("Not accelerated");
       gtk_container_add (GTK_CONTAINER (main_vbox), frame);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (frame), vbox);
+      gtk_frame_set_child (GTK_FRAME (frame), vbox);
 
       /* Time, month, hex spinners */
 
@@ -2706,7 +2705,7 @@ create_spins (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (main_vbox), frame);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (frame), vbox);
+      gtk_frame_set_child (GTK_FRAME (frame), vbox);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_add (GTK_CONTAINER (vbox), hbox);
@@ -2783,7 +2782,7 @@ create_spins (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (main_vbox), frame);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_container_add (GTK_CONTAINER (frame), hbox);
+      gtk_frame_set_child (GTK_FRAME (frame), vbox);
 
       val_label = gtk_label_new ("0.0");
 
@@ -3064,7 +3063,7 @@ create_cursors (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "Cursors");
 
       main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-      gtk_container_add (GTK_CONTAINER (window), main_vbox);
+      gtk_window_set_child (GTK_WINDOW (window), main_vbox);
 
       vbox = g_object_new (GTK_TYPE_BOX,
                            "orientation", GTK_ORIENTATION_VERTICAL,
@@ -3134,7 +3133,7 @@ create_cursors (GtkWidget *widget)
       gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (darea), 80);
       gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (darea), 80);
       gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (darea), cursor_draw, NULL, NULL);
-      gtk_container_add (GTK_CONTAINER (frame), darea);
+      gtk_frame_set_child (GTK_FRAME (frame), darea);
       gesture = gtk_gesture_click_new ();
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
       g_signal_connect (gesture, "pressed", G_CALLBACK (cursor_pressed_cb), entry);
@@ -3191,7 +3190,7 @@ create_color_selection (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "GtkColorButton");
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
-      gtk_container_add (GTK_CONTAINER (window), hbox);
+      gtk_window_set_child (GTK_WINDOW (window), hbox);
       
       label = gtk_label_new ("Pick a color");
       gtk_container_add (GTK_CONTAINER (hbox), label);
@@ -3277,7 +3276,7 @@ create_forward_back (const char       *title,
   GtkWidget *back_button = gtk_button_new_with_label ("Back");
   GtkWidget *forward_button = gtk_button_new_with_label ("Forward");
 
-  gtk_container_add (GTK_CONTAINER (frame), bbox);
+  gtk_frame_set_child (GTK_FRAME (frame), bbox);
   gtk_container_add (GTK_CONTAINER (bbox), back_button);
   gtk_container_add (GTK_CONTAINER (bbox), forward_button);
 
@@ -3368,7 +3367,7 @@ create_font_selection (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "GtkFontButton");
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
-      gtk_container_add (GTK_CONTAINER (window), hbox);
+      gtk_window_set_child (GTK_WINDOW (window), hbox);
       
       label = gtk_label_new ("Pick a font");
       gtk_container_add (GTK_CONTAINER (hbox), label);
@@ -3549,12 +3548,12 @@ create_display_screen (GtkWidget *widget)
   window = g_object_new (gtk_window_get_type (),
 			 "display", display,
 			 "title", "Screen or Display selection",
-                         10, NULL);
+                         NULL);
   g_signal_connect (window, "destroy", 
 		    G_CALLBACK (gtk_widget_destroy), NULL);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_window_set_child (GTK_WINDOW (window), vbox);
   
   frame = gtk_frame_new ("Select display");
   gtk_container_add (GTK_CONTAINER (vbox), frame);
@@ -3563,13 +3562,13 @@ create_display_screen (GtkWidget *widget)
   gtk_grid_set_row_spacing (GTK_GRID (grid), 3);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 3);
 
-  gtk_container_add (GTK_CONTAINER (frame), grid);
+  gtk_frame_set_child (GTK_FRAME (frame), grid);
 
   label_dpy = gtk_label_new ("move to another X display");
   combo_dpy = gtk_combo_box_text_new_with_entry ();
   gtk_widget_set_hexpand (combo_dpy, TRUE);
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_dpy), "diabolo:0.0");
-  gtk_editable_set_text (GTK_EDITABLE (gtk_bin_get_child (GTK_BIN (combo_dpy))),
+  gtk_editable_set_text (GTK_EDITABLE (gtk_button_get_child (GTK_BUTTON (combo_dpy))),
                          "<hostname>:<X Server Num>.<Screen Num>");
 
   gtk_grid_attach (GTK_GRID (grid), label_dpy, 0, 0, 1, 1);
@@ -3587,7 +3586,7 @@ create_display_screen (GtkWidget *widget)
 
   scr_dpy_data = g_new0 (ScreenDisplaySelection, 1);
 
-  scr_dpy_data->entry = gtk_bin_get_child (GTK_BIN (combo_dpy));
+  scr_dpy_data->entry = gtk_button_get_child (GTK_BUTTON (combo_dpy));
   scr_dpy_data->toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
   scr_dpy_data->dialog_window = window;
 
@@ -3638,7 +3637,7 @@ create_range_controls (GtkWidget *widget)
 
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_window_set_child (GTK_WINDOW (window), box1);
       gtk_widget_show (box1);
 
 
@@ -4018,7 +4017,7 @@ create_notebook (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "notebook");
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_window_set_child (GTK_WINDOW (window), box1);
 
       sample_notebook = gtk_notebook_new ();
       g_signal_connect (sample_notebook, "switch_page",
@@ -4152,7 +4151,7 @@ create_pane_options (GtkPaned    *paned,
   frame = gtk_frame_new (frame_label);
   
   grid = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (frame), grid);
+  gtk_frame_set_child (GTK_FRAME (frame), grid);
   
   label = gtk_label_new (label1);
   gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
@@ -4217,7 +4216,7 @@ create_panes (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "Panes");
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), vbox);
+      gtk_window_set_child (GTK_WINDOW (window), vbox);
 
       vpaned = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
       gtk_container_add (GTK_CONTAINER (vbox), vpaned);
@@ -4230,7 +4229,7 @@ create_panes (GtkWidget *widget)
       gtk_paned_add1 (GTK_PANED (hpaned), frame);
       
       button = gtk_button_new_with_label ("Hi there");
-      gtk_container_add (GTK_CONTAINER(frame), button);
+      gtk_frame_set_child (GTK_FRAME (frame), button);
 
       frame = gtk_frame_new (NULL);
       gtk_widget_set_size_request (frame, 80, 60);
@@ -4297,13 +4296,13 @@ paned_keyboard_window1 (GtkWidget *widget)
 			  gtk_widget_get_display (widget));
 
   hpaned1 = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_container_add (GTK_CONTAINER (window1), hpaned1);
+  gtk_window_set_child (GTK_WINDOW (window1), hpaned1);
 
   frame1 = gtk_frame_new (NULL);
   gtk_paned_pack1 (GTK_PANED (hpaned1), frame1, FALSE, TRUE);
 
   vbox1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (frame1), vbox1);
+  gtk_frame_set_child (GTK_FRAME (frame1), vbox1);
 
   button7 = gtk_button_new_with_label ("button7");
   gtk_container_add (GTK_CONTAINER (vbox1), button7);
@@ -4321,10 +4320,10 @@ paned_keyboard_window1 (GtkWidget *widget)
   gtk_paned_pack1 (GTK_PANED (vpaned1), frame2, FALSE, TRUE);
 
   frame5 = gtk_frame_new (NULL);
-  gtk_container_add (GTK_CONTAINER (frame2), frame5);
+  gtk_frame_set_child (GTK_FRAME (frame2), frame5);
 
   hbox1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (frame5), hbox1);
+  gtk_frame_set_child (GTK_FRAME (frame5), hbox1);
 
   button5 = gtk_button_new_with_label ("button5");
   gtk_container_add (GTK_CONTAINER (hbox1), button5);
@@ -4336,10 +4335,10 @@ paned_keyboard_window1 (GtkWidget *widget)
   gtk_paned_pack2 (GTK_PANED (vpaned1), frame3, TRUE, TRUE);
 
   frame4 = gtk_frame_new ("Buttons");
-  gtk_container_add (GTK_CONTAINER (frame3), frame4);
+  gtk_frame_set_child (GTK_FRAME (frame3), frame4);
 
   grid1 = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (frame4), grid1);
+  gtk_frame_set_child (GTK_FRAME (frame4), grid1);
 
   button1 = gtk_button_new_with_label ("button1");
   gtk_grid_attach (GTK_GRID (grid1), button1, 0, 0, 1, 1);
@@ -4378,13 +4377,13 @@ paned_keyboard_window2 (GtkWidget *widget)
 			  gtk_widget_get_display (widget));
 
   hpaned2 = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_container_add (GTK_CONTAINER (window2), hpaned2);
+  gtk_window_set_child (GTK_WINDOW (window2), hpaned2);
 
   frame6 = gtk_frame_new (NULL);
   gtk_paned_pack1 (GTK_PANED (hpaned2), frame6, FALSE, TRUE);
 
   button13 = gtk_button_new_with_label ("button13");
-  gtk_container_add (GTK_CONTAINER (frame6), button13);
+  gtk_frame_set_child (GTK_FRAME (frame6), button13);
 
   hbox2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_paned_pack2 (GTK_PANED (hpaned2), hbox2, TRUE, TRUE);
@@ -4396,13 +4395,13 @@ paned_keyboard_window2 (GtkWidget *widget)
   gtk_paned_pack1 (GTK_PANED (vpaned2), frame7, FALSE, TRUE);
 
   button12 = gtk_button_new_with_label ("button12");
-  gtk_container_add (GTK_CONTAINER (frame7), button12);
+  gtk_frame_set_child (GTK_FRAME (frame7), button12);
 
   frame8 = gtk_frame_new (NULL);
   gtk_paned_pack2 (GTK_PANED (vpaned2), frame8, TRUE, TRUE);
 
   button11 = gtk_button_new_with_label ("button11");
-  gtk_container_add (GTK_CONTAINER (frame8), button11);
+  gtk_frame_set_child (GTK_FRAME (frame8), button11);
 
   button10 = gtk_button_new_with_label ("button10");
   gtk_container_add (GTK_CONTAINER (hbox2), button10);
@@ -4437,7 +4436,7 @@ paned_keyboard_window3 (GtkWidget *widget)
 
 
   vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (window3), vbox2);
+  gtk_window_set_child (GTK_WINDOW (window3), vbox2);
 
   label1 = gtk_label_new ("Three panes nested inside each other");
   gtk_container_add (GTK_CONTAINER (vbox2), label1);
@@ -4449,7 +4448,7 @@ paned_keyboard_window3 (GtkWidget *widget)
   gtk_paned_pack1 (GTK_PANED (hpaned3), frame9, FALSE, TRUE);
 
   button14 = gtk_button_new_with_label ("button14");
-  gtk_container_add (GTK_CONTAINER (frame9), button14);
+  gtk_frame_set_child (GTK_FRAME (frame9), button14);
 
   hpaned4 = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_paned_pack2 (GTK_PANED (hpaned3), hpaned4, TRUE, TRUE);
@@ -4458,7 +4457,7 @@ paned_keyboard_window3 (GtkWidget *widget)
   gtk_paned_pack1 (GTK_PANED (hpaned4), frame10, FALSE, TRUE);
 
   button15 = gtk_button_new_with_label ("button15");
-  gtk_container_add (GTK_CONTAINER (frame10), button15);
+  gtk_frame_set_child (GTK_FRAME (frame10), button15);
 
   hpaned5 = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_paned_pack2 (GTK_PANED (hpaned4), hpaned5, TRUE, TRUE);
@@ -4467,13 +4466,13 @@ paned_keyboard_window3 (GtkWidget *widget)
   gtk_paned_pack1 (GTK_PANED (hpaned5), frame11, FALSE, TRUE);
 
   button16 = gtk_button_new_with_label ("button16");
-  gtk_container_add (GTK_CONTAINER (frame11), button16);
+  gtk_frame_set_child (GTK_FRAME (frame11), button16);
 
   frame12 = gtk_frame_new (NULL);
   gtk_paned_pack2 (GTK_PANED (hpaned5), frame12, TRUE, TRUE);
 
   button17 = gtk_button_new_with_label ("button17");
-  gtk_container_add (GTK_CONTAINER (frame12), button17);
+  gtk_frame_set_child (GTK_FRAME (frame12), button17);
 
   return window3;
 }
@@ -4507,7 +4506,7 @@ paned_keyboard_window4 (GtkWidget *widget)
 			 gtk_widget_get_display (widget));
 
   vbox3 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (window4), vbox3);
+  gtk_window_set_child (GTK_WINDOW (window4), vbox3);
 
   label2 = gtk_label_new ("Widget tree:\n\nhpaned \n - vpaned\n - hbox\n    - vpaned\n    - vpaned\n    - vpaned\n");
   gtk_container_add (GTK_CONTAINER (vbox3), label2);
@@ -4670,7 +4669,7 @@ create_wmhints (GtkWidget *widget)
       g_object_unref (pixbuf);
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_window_set_child (GTK_WINDOW (window), box1);
       gtk_widget_show (box1);
 
       label = gtk_label_new ("Try iconizing me!");
@@ -4902,7 +4901,7 @@ create_surface_states (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "Window states");
       
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_window_set_child (GTK_WINDOW (window), box1);
 
       iconified = gtk_window_new ();
 
@@ -5407,7 +5406,7 @@ create_progress_bar (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-      gtk_container_add (GTK_CONTAINER (frame), vbox2);
+      gtk_frame_set_child (GTK_FRAME (frame), vbox2);
 
       pdata->pbar = gtk_progress_bar_new ();
       gtk_progress_bar_set_ellipsize (GTK_PROGRESS_BAR (pdata->pbar),
@@ -5429,7 +5428,7 @@ create_progress_bar (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-      gtk_container_add (GTK_CONTAINER (frame), vbox2);
+      gtk_frame_set_child (GTK_FRAME (frame), vbox2);
 
       grid = gtk_grid_new ();
       gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
@@ -5886,7 +5885,7 @@ create_native_dialogs (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW(window), "Native dialog parent");
 
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-      gtk_container_add (GTK_CONTAINER (window), box);
+      gtk_window_set_child (GTK_WINDOW (window), box);
 
       label = gtk_label_new ("");
       gtk_container_add (GTK_CONTAINER (box), label);
@@ -6044,7 +6043,7 @@ create_main_window (void)
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (window), box1);
+  gtk_window_set_child (GTK_WINDOW (window), box1);
 
   if (gtk_get_micro_version () > 0)
     sprintf (buffer,
@@ -6070,7 +6069,7 @@ create_main_window (void)
   gtk_container_add (GTK_CONTAINER (box1), scrolled_window);
 
   box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (scrolled_window), box2);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), box2);
   gtk_viewport_set_scroll_to_focus (GTK_VIEWPORT (gtk_widget_get_parent (box2)), TRUE);
   gtk_widget_show (box2);
 

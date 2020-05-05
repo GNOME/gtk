@@ -50,7 +50,7 @@ test_nonzerox (void)
   gtk_widget_set_margin_top (grid, 5);
   gtk_widget_set_margin_bottom (grid, 5);
 
-  gtk_container_add (GTK_CONTAINER (win), grid);
+  gtk_window_set_child (GTK_WINDOW (win), grid);
   gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Above"), 1, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Below"), 1, 2, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Left"), 0, 1, 1, 1);
@@ -63,7 +63,7 @@ test_nonzerox (void)
   gtk_widget_set_size_request (text, 200, 200);
   gtk_widget_set_hexpand (text, TRUE);
   gtk_widget_set_vexpand (text, TRUE);
-  gtk_container_add (GTK_CONTAINER (overlay), text);
+  gtk_overlay_set_child (GTK_OVERLAY (overlay), text);
 
   child = gtk_label_new ("I'm the overlay");
   gtk_widget_set_halign (child, GTK_ALIGN_START);
@@ -98,7 +98,7 @@ get_child_position (GtkOverlay    *overlay,
   GtkAllocation main_alloc;
   gint x, y;
 
-  child = gtk_bin_get_child (GTK_BIN (overlay));
+  child = gtk_overlay_get_child (GTK_OVERLAY (overlay));
 
   gtk_widget_translate_coordinates (relative, child, 0, 0, &x, &y);
   main_alloc.x = x;
@@ -135,10 +135,10 @@ test_relative (void)
   gtk_window_set_title (GTK_WINDOW (win), "Custom positioning");
 
   overlay = gtk_overlay_new ();
-  gtk_container_add (GTK_CONTAINER (win), overlay);
+  gtk_window_set_child (GTK_WINDOW (win), overlay);
 
   grid = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (overlay), grid);
+  gtk_overlay_set_child (GTK_OVERLAY (overlay), grid);
   gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Above"), 1, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Below"), 1, 2, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Left"), 0, 1, 1, 1);
@@ -190,13 +190,13 @@ test_fullwidth (void)
   gtk_window_set_title (GTK_WINDOW (win), "Full-width");
 
   overlay = gtk_overlay_new ();
-  gtk_container_add (GTK_CONTAINER (win), overlay);
+  gtk_window_set_child (GTK_WINDOW (win), overlay);
 
   text = gtk_text_view_new ();
   gtk_widget_set_size_request (text, 200, 200);
   gtk_widget_set_hexpand (text, TRUE);
   gtk_widget_set_vexpand (text, TRUE);
-  gtk_container_add (GTK_CONTAINER (overlay), text);
+  gtk_overlay_set_child (GTK_OVERLAY (overlay), text);
 
   child = gtk_label_new ("Fullwidth top overlay");
   gtk_widget_set_halign (child, GTK_ALIGN_FILL);
@@ -227,12 +227,12 @@ test_scrolling (void)
   gtk_window_set_title (GTK_WINDOW (win), "Scrolling");
 
   overlay = gtk_overlay_new ();
-  gtk_container_add (GTK_CONTAINER (win), overlay);
+  gtk_window_set_child (GTK_WINDOW (win), overlay);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_min_content_width (GTK_SCROLLED_WINDOW (sw), 200);
   gtk_scrolled_window_set_min_content_height (GTK_SCROLLED_WINDOW (sw), 200);
-  gtk_container_add (GTK_CONTAINER (overlay), sw);
+  gtk_overlay_set_child (GTK_OVERLAY (overlay), sw);
 
   text = gtk_text_view_new ();
   buffer = gtk_text_buffer_new (NULL);
@@ -247,7 +247,7 @@ test_scrolling (void)
 
   gtk_widget_set_hexpand (text, TRUE);
   gtk_widget_set_vexpand (text, TRUE);
-  gtk_container_add (GTK_CONTAINER (sw), text);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), text);
 
   child = gtk_label_new ("This should be visible");
   gtk_widget_set_halign (child, GTK_ALIGN_CENTER);
@@ -373,12 +373,12 @@ test_chase (void)
   gtk_window_set_title (GTK_WINDOW (win), "Chase");
 
   overlay = gtk_overlay_new ();
-  gtk_container_add (GTK_CONTAINER (win), overlay);
+  gtk_window_set_child (GTK_WINDOW (win), overlay);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_min_content_width (GTK_SCROLLED_WINDOW (sw), 200);
   gtk_scrolled_window_set_min_content_height (GTK_SCROLLED_WINDOW (sw), 200);
-  gtk_container_add (GTK_CONTAINER (overlay), sw);
+  gtk_overlay_set_child (GTK_OVERLAY (overlay), sw);
 
   text = gtk_text_view_new ();
   text_buffer = gtk_text_buffer_new (NULL);
@@ -393,7 +393,7 @@ test_chase (void)
 
   gtk_widget_set_hexpand (text, TRUE);
   gtk_widget_set_vexpand (text, TRUE);
-  gtk_container_add (GTK_CONTAINER (sw), text);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), text);
 
   child = gtk_label_new ("Try to enter");
   gtk_widget_set_halign (child, GTK_ALIGN_START);
@@ -443,10 +443,10 @@ test_stacking (void)
   check2 = gtk_check_button_new_with_label ("Show overlay");
   g_object_bind_property (child, "visible", check2, "active", G_BINDING_BIDIRECTIONAL);
   gtk_container_add (GTK_CONTAINER (main_child), label);
-  gtk_container_add (GTK_CONTAINER (overlay), main_child);
+  gtk_overlay_set_child (GTK_OVERLAY (overlay), main_child);
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
   gtk_grid_attach (GTK_GRID (grid), overlay, 1, 0, 1, 3);
-  gtk_container_add (GTK_CONTAINER (win), grid);
+  gtk_window_set_child (GTK_WINDOW (win), grid);
 
   gtk_grid_attach (GTK_GRID (grid), check1, 0, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), check2, 0, 1, 1, 1);
@@ -473,7 +473,7 @@ test_input_stacking (void)
 
   overlay = gtk_overlay_new ();
   grid = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (overlay), grid);
+  gtk_overlay_set_child (GTK_OVERLAY (overlay), grid);
 
   for (j = 0; j < 5; j++)
     {
@@ -505,7 +505,7 @@ test_input_stacking (void)
   gtk_container_add (GTK_CONTAINER (vbox), entry);
 
 
-  gtk_container_add (GTK_CONTAINER (win), overlay);
+  gtk_window_set_child (GTK_WINDOW (win), overlay);
 
   return win;
 }

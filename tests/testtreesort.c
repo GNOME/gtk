@@ -123,7 +123,7 @@ main (int argc, char *argv[])
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
   gtk_container_add (GTK_CONTAINER (vbox), gtk_label_new ("Jonathan and Kristian's list of cool words. (And Anders' cool list of numbers) \n\nThis is just a GtkTreeStore"));
-  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_window_set_child (GTK_WINDOW (window), vbox);
 
   entry = gtk_entry_new ();
   gtk_container_add (GTK_CONTAINER (vbox), entry);
@@ -235,7 +235,7 @@ main (int argc, char *argv[])
 					WORD_COLUMN_1,
 					GTK_SORT_ASCENDING);*/
 
-  gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), tree_view);
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
   gtk_widget_show (window);
 
@@ -252,7 +252,7 @@ main (int argc, char *argv[])
       vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
       gtk_container_add (GTK_CONTAINER (vbox2), 
 			  gtk_label_new ("Jonathan and Kristian's list of words.\n\nA GtkTreeModelSort wrapping the GtkTreeStore of window 1"));
-      gtk_container_add (GTK_CONTAINER (window2), vbox2);
+      gtk_window_set_child (GTK_WINDOW (window2), vbox2);
       
       scrolled_window2 = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (scrolled_window2), TRUE);
@@ -299,9 +299,8 @@ main (int argc, char *argv[])
       gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (smodel),
 					    WORD_COLUMN_1,
 					    GTK_SORT_DESCENDING);*/
-      
-      
-      gtk_container_add (GTK_CONTAINER (scrolled_window2), tree_view2);
+
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window2), tree_view2);
       gtk_window_set_default_size (GTK_WINDOW (window2), 400, 400);
       gtk_widget_show (window2);
     }
@@ -320,7 +319,7 @@ main (int argc, char *argv[])
       vbox3 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
       gtk_container_add (GTK_CONTAINER (vbox3), 
 			  gtk_label_new ("Jonathan and Kristian's list of words.\n\nA GtkTreeModelSort wrapping the GtkTreeModelSort of window 2"));
-      gtk_container_add (GTK_CONTAINER (window3), vbox3);
+      gtk_window_set_child (GTK_WINDOW (window3), vbox3);
       
       scrolled_window3 = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (scrolled_window3), TRUE);
@@ -367,8 +366,8 @@ main (int argc, char *argv[])
       gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (ssmodel),
 					    WORD_COLUMN_1,
 					    GTK_SORT_ASCENDING);*/
-      
-      gtk_container_add (GTK_CONTAINER (scrolled_window3), tree_view3);
+
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window3), tree_view3);
       gtk_window_set_default_size (GTK_WINDOW (window3), 400, 400);
       gtk_widget_show (window3);
     }

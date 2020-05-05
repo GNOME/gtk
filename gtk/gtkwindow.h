@@ -32,7 +32,7 @@
 
 #include <gtk/gtkapplication.h>
 #include <gtk/gtkaccelgroup.h>
-#include <gtk/gtkbin.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
@@ -51,7 +51,7 @@ typedef struct _GtkWindowGroupPrivate GtkWindowGroupPrivate;
 
 struct _GtkWindow
 {
-  GtkBin parent_instance;
+  GtkWidget parent_instance;
 };
 
 /**
@@ -67,7 +67,7 @@ struct _GtkWindow
  */
 struct _GtkWindowClass
 {
-  GtkBinClass parent_class;
+  GtkWidgetClass parent_class;
 
   /*< public >*/
 
@@ -238,6 +238,12 @@ GtkApplication *gtk_window_get_application      (GtkWindow          *window);
 GDK_AVAILABLE_IN_ALL
 void            gtk_window_set_application      (GtkWindow          *window,
                                                  GtkApplication     *application);
+
+GDK_AVAILABLE_IN_ALL
+void     gtk_window_set_child              (GtkWindow    *window,
+                                            GtkWidget    *child);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *gtk_window_get_child            (GtkWindow    *window);
 
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_set_titlebar           (GtkWindow    *window,

@@ -106,7 +106,7 @@ main (int argc, char *argv[])
       image = gtk_image_new ();
       gtk_image_set_from_paintable (GTK_IMAGE (image), GDK_PAINTABLE (icon));
       g_object_unref (icon);
-      gtk_container_add (GTK_CONTAINER (window), image);
+      gtk_window_set_child (GTK_WINDOW (window), image);
       g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
       gtk_widget_show (window);
 

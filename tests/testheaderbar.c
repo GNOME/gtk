@@ -106,7 +106,7 @@ change_header (GtkButton *button, gpointer data)
       widget= gtk_button_new ();
       image = gtk_image_new_from_icon_name ("bookmark-new-symbolic");
       g_signal_connect (widget, "clicked", G_CALLBACK (on_bookmark_clicked), window);
-      gtk_container_add (GTK_CONTAINER (widget), image);
+      gtk_button_set_child (GTK_BUTTON (widget), image);
 
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), widget);
     }
@@ -139,7 +139,7 @@ main (int argc, char *argv[])
   change_header (NULL, window);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
 
   content = gtk_image_new_from_icon_name ("start-here-symbolic");
   gtk_image_set_pixel_size (GTK_IMAGE (content), 512);

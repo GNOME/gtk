@@ -149,7 +149,7 @@ main (int argc, char *argv[])
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
   gtk_container_add (GTK_CONTAINER (vbox), gtk_label_new ("Incremental Reflow Test"));
-  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_window_set_child (GTK_WINDOW (window), vbox);
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
 				  GTK_POLICY_AUTOMATIC,
@@ -169,12 +169,12 @@ main (int argc, char *argv[])
 					       gtk_cell_renderer_text_new (),
 					       "text", TEXT_COLUMN,
 					       NULL);
-  gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), tree_view);
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
   button = gtk_button_new_with_mnemonic ("<b>_Futz!!</b>");
   gtk_container_add (GTK_CONTAINER (hbox), button);
-  gtk_label_set_use_markup (GTK_LABEL (gtk_bin_get_child (GTK_BIN (button))), TRUE);
+  gtk_label_set_use_markup (GTK_LABEL (gtk_button_get_child (GTK_BUTTON (button))), TRUE);
   g_signal_connect (button, "clicked", G_CALLBACK (futz), NULL);
   g_signal_connect (button, "realize", G_CALLBACK (gtk_widget_grab_focus), NULL);
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 400);

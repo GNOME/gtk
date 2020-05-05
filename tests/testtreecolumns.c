@@ -762,8 +762,8 @@ main (int argc, char *argv[])
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
   gtk_window_set_title (GTK_WINDOW (window), "Top Window");
   swindow = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (window), swindow);
-  gtk_container_add (GTK_CONTAINER (swindow), sample_tree_view_top);
+  gtk_window_set_child (GTK_WINDOW (window), swindow);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), sample_tree_view_top);
   gtk_widget_show (window);
 
   window = gtk_window_new ();
@@ -771,8 +771,8 @@ main (int argc, char *argv[])
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
   gtk_window_set_title (GTK_WINDOW (window), "Bottom Window");
   swindow = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (window), swindow);
-  gtk_container_add (GTK_CONTAINER (swindow), sample_tree_view_bottom);
+  gtk_window_set_child (GTK_WINDOW (window), swindow);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), sample_tree_view_bottom);
   gtk_widget_show (window);
 
   /* Set up the main window */
@@ -780,7 +780,7 @@ main (int argc, char *argv[])
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   gtk_window_set_default_size (GTK_WINDOW (window), 500, 300);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
-  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_window_set_child (GTK_WINDOW (window), vbox);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
@@ -791,7 +791,7 @@ main (int argc, char *argv[])
   swindow = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   left_tree_view = gtk_tree_view_new_with_model (left_tree_model);
-  gtk_container_add (GTK_CONTAINER (swindow), left_tree_view);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), left_tree_view);
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (left_tree_view), -1,
 					       "Unattached Columns", cell, "text", 0, NULL);
   cell = gtk_cell_renderer_toggle_new ();
@@ -857,7 +857,7 @@ main (int argc, char *argv[])
   gtk_tree_view_column_set_cell_data_func (column, cell, get_visible, NULL, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (top_right_tree_view), column);
 
-  gtk_container_add (GTK_CONTAINER (swindow), top_right_tree_view);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), top_right_tree_view);
   gtk_container_add (GTK_CONTAINER (vbox2), swindow);
 
   swindow = gtk_scrolled_window_new (NULL, NULL);
@@ -871,7 +871,7 @@ main (int argc, char *argv[])
   column = gtk_tree_view_column_new_with_attributes (NULL, cell, NULL);
   gtk_tree_view_column_set_cell_data_func (column, cell, get_visible, NULL, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (bottom_right_tree_view), column);
-  gtk_container_add (GTK_CONTAINER (swindow), bottom_right_tree_view);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), bottom_right_tree_view);
   gtk_container_add (GTK_CONTAINER (vbox2), swindow);
 
 

@@ -39,7 +39,7 @@ enum {
 static guint signals[LAST_SIGNAL] = { 0 };
 static GQuark child_data_quark = 0;
 
-G_DEFINE_TYPE (BlurOverlay, blur_overlay, GTK_TYPE_BIN)
+G_DEFINE_TYPE (BlurOverlay, blur_overlay, GTK_TYPE_WIDGET)
 
 static void
 blur_overlay_set_overlay_child (GtkWidget       *widget,
@@ -204,7 +204,7 @@ blur_overlay_size_allocate (GtkWidget *widget,
   GtkWidget *child;
   GtkWidget *main_widget;
 
-  main_widget = gtk_bin_get_child (GTK_BIN (overlay));
+  main_widget = overlay->main_widget;
   if (main_widget && gtk_widget_get_visible (main_widget))
     gtk_widget_size_allocate (main_widget,
                               &(GtkAllocation) {
@@ -288,43 +288,6 @@ blur_overlay_get_child_position (BlurOverlay    *overlay,
     }
 
   return TRUE;
-}
-
-static void
-blur_overlay_add (GtkContainer *container,
-                  GtkWidget    *widget)
-{
-  BlurOverlay *overlay = BLUR_OVERLAY (container);
-  gtk_widget_insert_after (widget, GTK_WIDGET (container), NULL);
-  overlay->main_widget = widget;  
-}
-
-static void
-blur_overlay_remove (GtkContainer *container,
-                     GtkWidget    *widget)
-{
-  BlurOverlay *overlay = BLUR_OVERLAY (container);
-  gtk_widget_unparent (widget);
-  if (overlay->main_widget == widget)
-    overlay->main_widget = NULL;
-}
-
-static void
-blur_overlay_forall (GtkContainer *overlay,
-                    GtkCallback   callback,
-                    gpointer      callback_data)
-{
-  GtkWidget *child;
-
-  child = gtk_widget_get_first_child (GTK_WIDGET (overlay));
-  while (child != NULL)
-    {
-      GtkWidget *next = gtk_widget_get_next_sibling (child);
-
-      (* callback) (child, callback_data);
-
-      child = next;
-    }
 }
 
 static void
@@ -421,19 +384,30 @@ blur_overlay_snapshot (GtkWidget   *widget,
 }
 
 static void
+blur_overlay_dispose (GObject *object)
+{
+  BlurOverlay *overlay = BLUR_OVERLAY (object);
+  GtkWidget *child;
+
+  g_clear_pointer (&overlay->main_widget, gtk_widget_unparent);
+
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (overlay))))
+    gtk_widget_unparent (child);
+
+  G_OBJECT_CLASS (blur_overlay_parent_class)->dispose (object);
+}
+
+static void
 blur_overlay_class_init (BlurOverlayClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
+
+  object_class->dispose = blur_overlay_dispose;
 
   widget_class->measure = blur_overlay_measure;
   widget_class->size_allocate = blur_overlay_size_allocate;
   widget_class->snapshot = blur_overlay_snapshot;
-
-  container_class->add = blur_overlay_add;
-  container_class->remove = blur_overlay_remove;
-  container_class->forall = blur_overlay_forall;
 
   klass->get_child_position = blur_overlay_get_child_position;
 
@@ -476,4 +450,12 @@ blur_overlay_add_overlay (BlurOverlay *overlay,
   child->blur = blur;
 
   blur_overlay_set_overlay_child (widget, child);
+}
+
+void
+blur_overlay_set_child (BlurOverlay *overlay,
+                        GtkWidget   *widget)
+{
+  gtk_widget_insert_after (widget, GTK_WIDGET (overlay), NULL);
+  overlay->main_widget = widget;
 }

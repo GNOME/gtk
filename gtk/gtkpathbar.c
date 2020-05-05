@@ -1061,7 +1061,7 @@ make_directory_button (GtkPathBar  *path_bar,
   button_data->file = g_object_ref (file);
   button_data->file_is_hidden = file_is_hidden;
 
-  gtk_container_add (GTK_CONTAINER (button_data->button), child);
+  gtk_button_set_child (GTK_BUTTON (button_data->button), child);
 
   gtk_path_bar_update_button_appearance (path_bar, button_data, current_dir);
 

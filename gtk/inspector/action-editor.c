@@ -23,7 +23,6 @@
 #include "gtksizegroup.h"
 #include "gtktogglebutton.h"
 #include "gtkentry.h"
-#include "gtkbin.h"
 #include "gtklabel.h"
 
 struct _GtkInspectorActionEditorPrivate
@@ -133,10 +132,10 @@ variant_editor_set_value (GtkWidget *editor,
       GtkWidget *child;
 
       gtk_toggle_button_set_active (tb, g_variant_get_boolean (value));
-      child = gtk_bin_get_child (GTK_BIN (tb));
+      child = gtk_button_get_child (GTK_BUTTON (tb));
       gtk_label_set_text (GTK_LABEL (child),
-                          g_variant_get_boolean (value) ? "TRUE" : "FALSE");    
-    }   
+                          g_variant_get_boolean (value) ? "TRUE" : "FALSE");
+    }
   else if (g_variant_type_equal (type, G_VARIANT_TYPE_STRING))
     {
       GtkEntry *entry = GTK_ENTRY (editor);

@@ -92,7 +92,7 @@ do_css_basics (GtkWidget *do_widget)
       provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
 
       container = gtk_scrolled_window_new (NULL, NULL);
-      gtk_container_add (GTK_CONTAINER (window), container);
+      gtk_window_set_child (GTK_WINDOW (window), container);
       child = gtk_text_view_new_with_buffer (text);
       gtk_container_add (GTK_CONTAINER (container), child);
       g_signal_connect (text, "changed",

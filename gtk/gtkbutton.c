@@ -56,9 +56,11 @@
 #include "gtkbuttonprivate.h"
 
 #include "gtkactionhelperprivate.h"
+#include "gtkbuildable.h"
 #include "gtkcheckbutton.h"
 #include "gtkgestureclick.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtkbinlayout.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
@@ -80,6 +82,8 @@
 
 struct _GtkButtonPrivate
 {
+  GtkWidget             *child;
+
   GtkActionHelper       *action_helper;
 
   GtkGesture            *gesture;
@@ -104,6 +108,7 @@ enum {
   PROP_HAS_FRAME,
   PROP_USE_UNDERLINE,
   PROP_ICON_NAME,
+  PROP_CHILD,
 
   /* actionable properties */
   PROP_ACTION_NAME,
@@ -139,41 +144,18 @@ static void gtk_button_grab_notify     (GtkWidget             *widget,
 					gboolean               was_grabbed);
 static void gtk_button_do_release      (GtkButton             *button,
                                         gboolean               emit_clicked);
-
-static void gtk_button_actionable_iface_init     (GtkActionableInterface *iface);
-
 static void gtk_button_set_child_type (GtkButton *button, guint child_type);
+
+static void gtk_button_buildable_iface_init      (GtkBuildableIface *iface);
+static void gtk_button_actionable_iface_init     (GtkActionableInterface *iface);
 
 static GParamSpec *props[LAST_PROP] = { NULL, };
 static guint button_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE_WITH_CODE (GtkButton, gtk_button, GTK_TYPE_BIN,
+G_DEFINE_TYPE_WITH_CODE (GtkButton, gtk_button, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkButton)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gtk_button_buildable_iface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIONABLE, gtk_button_actionable_iface_init))
-
-static void
-gtk_button_add (GtkContainer *container, GtkWidget *child)
-{
-  GtkButton *button = GTK_BUTTON (container);
-  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
-
-  if (priv->child_type != WIDGET_CHILD)
-    gtk_container_remove (container, gtk_bin_get_child (GTK_BIN (button)));
-
-  gtk_button_set_child_type (button, WIDGET_CHILD);
-
-  GTK_CONTAINER_CLASS (gtk_button_parent_class)->add (container, child);
-}
-
-static void
-gtk_button_remove (GtkContainer *container, GtkWidget *child)
-{
-  GtkButton *button = GTK_BUTTON (container);
-
-  gtk_button_set_child_type (button, WIDGET_CHILD);
-
-  GTK_CONTAINER_CLASS (gtk_button_parent_class)->remove (container, child);
-}
 
 static void
 gtk_button_unmap (GtkWidget *widget)
@@ -186,15 +168,43 @@ gtk_button_unmap (GtkWidget *widget)
 }
 
 static void
+gtk_button_compute_expand (GtkWidget *widget,
+                           gboolean  *hexpand,
+                           gboolean  *vexpand)
+{
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (GTK_BUTTON (widget));
+
+  if (priv->child)
+    {
+      *hexpand = gtk_widget_compute_expand (priv->child, GTK_ORIENTATION_HORIZONTAL);
+      *vexpand = gtk_widget_compute_expand (priv->child, GTK_ORIENTATION_VERTICAL);
+    }
+  else
+    {
+      *hexpand = FALSE;
+      *vexpand = FALSE;
+    }
+}
+
+static GtkSizeRequestMode
+gtk_button_get_request_mode (GtkWidget *widget)
+{
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (GTK_BUTTON (widget));
+
+  if (priv->child)
+    return gtk_widget_get_request_mode (priv->child);
+  else
+    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+}
+
+static void
 gtk_button_class_init (GtkButtonClass *klass)
 {
   GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
-  GtkContainerClass *container_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
   widget_class = (GtkWidgetClass*) klass;
-  container_class = GTK_CONTAINER_CLASS (klass);
 
   gobject_class->dispose      = gtk_button_dispose;
   gobject_class->set_property = gtk_button_set_property;
@@ -206,9 +216,8 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->unmap = gtk_button_unmap;
   widget_class->grab_focus = gtk_widget_grab_focus_self;
   widget_class->focus = gtk_widget_focus_self;
-
-  container_class->add    = gtk_button_add;
-  container_class->remove = gtk_button_remove;
+  widget_class->compute_expand = gtk_button_compute_expand;
+  widget_class->get_request_mode = gtk_button_get_request_mode;
 
   klass->clicked = NULL;
   klass->activate = gtk_real_button_activate;
@@ -241,6 +250,12 @@ gtk_button_class_init (GtkButtonClass *klass)
                          NULL,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  props[PROP_CHILD] =
+    g_param_spec_object ("child",
+                         P_("Child"),
+                         P_("The child widget"),
+                         GTK_TYPE_WIDGET,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, props);
 
@@ -281,6 +296,7 @@ gtk_button_class_init (GtkButtonClass *klass)
 		  G_TYPE_NONE, 0);
   widget_class->activate_signal = button_signals[ACTIVATE];
 
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_BUTTON_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("button"));
 }
@@ -434,6 +450,7 @@ gtk_button_dispose (GObject *object)
   GtkButton *button = GTK_BUTTON (object);
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
+  g_clear_pointer (&priv->child, gtk_widget_unparent);
   g_clear_object (&priv->action_helper);
 
   G_OBJECT_CLASS (gtk_button_parent_class)->dispose (object);
@@ -491,6 +508,9 @@ gtk_button_set_property (GObject         *object,
     case PROP_ICON_NAME:
       gtk_button_set_icon_name (button, g_value_get_string (value));
       break;
+    case PROP_CHILD:
+      gtk_button_set_child (button, g_value_get_object (value));
+      break;
     case PROP_ACTION_NAME:
       gtk_button_set_action_name (GTK_ACTIONABLE (button), g_value_get_string (value));
       break;
@@ -525,6 +545,9 @@ gtk_button_get_property (GObject         *object,
       break;
     case PROP_ICON_NAME:
       g_value_set_string (value, gtk_button_get_icon_name (button));
+      break;
+    case PROP_CHILD:
+      g_value_set_object (value, priv->child);
       break;
     case PROP_ACTION_NAME:
       g_value_set_string (value, gtk_action_helper_get_action_name (priv->action_helper));
@@ -563,6 +586,28 @@ gtk_button_actionable_iface_init (GtkActionableInterface *iface)
   iface->set_action_name = gtk_button_set_action_name;
   iface->get_action_target_value = gtk_button_get_action_target_value;
   iface->set_action_target_value = gtk_button_set_action_target_value;
+}
+
+static GtkBuildableIface *parent_buildable_iface;
+
+static void
+gtk_button_buildable_add_child (GtkBuildable *buildable,
+                                GtkBuilder   *builder,
+                                GObject      *child,
+                                const gchar  *type)
+{
+  if (GTK_IS_WIDGET (child))
+    gtk_button_set_child (GTK_BUTTON (buildable), GTK_WIDGET (child));
+  else
+    parent_buildable_iface->add_child (buildable, builder, child, type);
+}
+
+static void
+gtk_button_buildable_iface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
+  iface->add_child = gtk_button_buildable_add_child;
 }
 
 /**
@@ -774,13 +819,8 @@ gtk_button_set_label (GtkButton   *button,
 
   g_return_if_fail (GTK_IS_BUTTON (button));
 
-  child = gtk_bin_get_child (GTK_BIN (button));
-
-  if (priv->child_type != LABEL_CHILD || child == NULL)
+  if (priv->child_type != LABEL_CHILD || priv->child == NULL)
     {
-      if (child != NULL)
-        gtk_container_remove (GTK_CONTAINER (button), child);
-
       child = gtk_label_new (NULL);
       if (priv->use_underline)
         {
@@ -788,15 +828,14 @@ gtk_button_set_label (GtkButton   *button,
           gtk_label_set_mnemonic_widget (GTK_LABEL (child), GTK_WIDGET (button));
         }
       if (GTK_IS_CHECK_BUTTON (button))
-        {
-          gtk_label_set_xalign (GTK_LABEL (child), 0.0);
-        }
-      gtk_container_add (GTK_CONTAINER (button), child);
+        gtk_label_set_xalign (GTK_LABEL (child), 0.0);
+
+      gtk_button_set_child (button,  child);
       gtk_widget_remove_css_class (GTK_WIDGET (button), "image-button");
       gtk_widget_add_css_class (GTK_WIDGET (button), "text-button");
     }
 
-  gtk_label_set_label (GTK_LABEL (child), label);
+  gtk_label_set_label (GTK_LABEL (priv->child), label);
   gtk_button_set_child_type (button, LABEL_CHILD);
   g_object_notify_by_pspec (G_OBJECT (button), props[PROP_LABEL]);
 }
@@ -822,10 +861,7 @@ gtk_button_get_label (GtkButton *button)
   g_return_val_if_fail (GTK_IS_BUTTON (button), NULL);
 
   if (priv->child_type == LABEL_CHILD)
-    {
-      GtkWidget *child = gtk_bin_get_child (GTK_BIN (button));
-      return gtk_label_get_label (GTK_LABEL (child));
-    }
+    return gtk_label_get_label (GTK_LABEL (priv->child));
 
   return NULL;
 }
@@ -840,7 +876,7 @@ gtk_button_get_label (GtkButton *button)
  */
 void
 gtk_button_set_use_underline (GtkButton *button,
-			      gboolean   use_underline)
+                              gboolean   use_underline)
 {
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
@@ -852,11 +888,8 @@ gtk_button_set_use_underline (GtkButton *button,
     {
       if (priv->child_type == LABEL_CHILD)
         {
-          GtkWidget *child;
-          child = gtk_bin_get_child (GTK_BIN (button));
-
-          gtk_label_set_use_underline (GTK_LABEL (child), use_underline);
-          gtk_label_set_mnemonic_widget (GTK_LABEL (child), GTK_WIDGET (button));
+          gtk_label_set_use_underline (GTK_LABEL (priv->child), use_underline);
+          gtk_label_set_mnemonic_widget (GTK_LABEL (priv->child), GTK_WIDGET (button));
         }
 
       priv->use_underline = use_underline;
@@ -924,26 +957,20 @@ gtk_button_set_icon_name (GtkButton  *button,
                           const char *icon_name)
 {
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
-  GtkWidget *child;
 
   g_return_if_fail (GTK_IS_BUTTON (button));
   g_return_if_fail (icon_name != NULL);
 
-  child = gtk_bin_get_child (GTK_BIN (button));
-
-  if (priv->child_type != ICON_CHILD || child == NULL)
+  if (priv->child_type != ICON_CHILD || priv->child == NULL)
     {
-      if (child != NULL)
-        gtk_container_remove (GTK_CONTAINER (button), child);
-
-      child = gtk_image_new_from_icon_name (icon_name);
-      gtk_container_add (GTK_CONTAINER (button), child);
+      GtkWidget *child = gtk_image_new_from_icon_name (icon_name);
+      gtk_button_set_child (GTK_BUTTON (button), child);
       gtk_widget_remove_css_class (GTK_WIDGET (button), "text-button");
       gtk_widget_add_css_class (GTK_WIDGET (button), "image-button");
     }
   else
     {
-      gtk_image_set_from_icon_name (GTK_IMAGE (child), icon_name);
+      gtk_image_set_from_icon_name (GTK_IMAGE (priv->child), icon_name);
     }
 
   gtk_button_set_child_type (button, ICON_CHILD);
@@ -966,11 +993,7 @@ gtk_button_get_icon_name (GtkButton *button)
   g_return_val_if_fail (GTK_IS_BUTTON (button), NULL);
 
   if (priv->child_type == ICON_CHILD)
-    {
-      GtkWidget *child = gtk_bin_get_child (GTK_BIN (button));
-
-      return gtk_image_get_icon_name (GTK_IMAGE (child));
-    }
+    return gtk_image_get_icon_name (GTK_IMAGE (priv->child));
 
   return NULL;
 }
@@ -982,3 +1005,49 @@ gtk_button_get_gesture (GtkButton *button)
 
   return priv->gesture;
 }
+
+/**
+ * gtk_button_set_child:
+ * @button: a #GtkButton
+ * @child: (allow-none): the child widget
+ *
+ * Sets the child widget of @button.
+ */
+void
+gtk_button_set_child (GtkButton *button,
+                      GtkWidget *child)
+{
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
+
+  g_return_if_fail (GTK_IS_BUTTON (button));
+  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+
+  g_clear_pointer (&priv->child, gtk_widget_unparent);
+
+  priv->child = child;
+
+  if (priv->child)
+    gtk_widget_set_parent (priv->child, GTK_WIDGET (button));
+
+  gtk_button_set_child_type (button, WIDGET_CHILD);
+  g_object_notify (G_OBJECT (button), "child");
+}
+
+/**
+ * gtk_button_get_child:
+ * @button: a #GtkButton
+ *
+ * Gets the child widget of @button.
+ *
+ * Returns: (nullable) (transfer none): the child widget of @button
+ */
+GtkWidget *
+gtk_button_get_child (GtkButton *button)
+{
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
+
+  g_return_val_if_fail (GTK_IS_BUTTON (button), NULL);
+
+  return priv->child;
+}
+

@@ -11,10 +11,10 @@ sort_list (GtkListBoxRow *row1,
 
   (*count)++;
 
-  label1 = gtk_bin_get_child (GTK_BIN (row1));
+  label1 = gtk_list_box_row_get_child (row1);
   n1 = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (label1), "data"));
 
-  label2 = gtk_bin_get_child (GTK_BIN (row2));
+  label2 = gtk_list_box_row_get_child (row2);
   n2 = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (label2), "data"));
 
   return (n1 - n2);
@@ -34,7 +34,7 @@ check_sorted (GtkListBox *list)
     {
       row = l->data;
       n1 = n2;
-      label = gtk_bin_get_child (GTK_BIN (row));
+      label = gtk_list_box_row_get_child (GTK_LIST_BOX_ROW (row));
       n2 = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (label), "data"));
       g_assert_cmpint (n1, <=, n2);
     }
@@ -274,7 +274,7 @@ filter_func (GtkListBoxRow *row,
 
   (*count)++;
 
-  child = gtk_bin_get_child (GTK_BIN (row));
+  child = gtk_list_box_row_get_child (row);
   i = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (child), "data"));
 
   return (i % 2) == 0;
@@ -356,7 +356,7 @@ header_func (GtkListBoxRow *row,
 
   (*count)++;
 
-  child = gtk_bin_get_child (GTK_BIN (row));
+  child = gtk_list_box_row_get_child (row);
   i = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (child), "data"));
 
   if (i % 2 == 0)

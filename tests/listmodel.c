@@ -192,7 +192,7 @@ main (int argc, char *argv[])
 
   window = gtk_window_new ();
   grid = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (window), grid);
+  gtk_window_set_child (GTK_WINDOW (window), grid);
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_AUTOMATIC,
@@ -203,7 +203,7 @@ main (int argc, char *argv[])
 
   box = gtk_list_box_new ();
   gtk_list_box_bind_model (GTK_LIST_BOX (box), G_LIST_MODEL (store), create_widget, NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (sw), box);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), box);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
@@ -215,7 +215,7 @@ main (int argc, char *argv[])
 
   box = gtk_flow_box_new ();
   gtk_flow_box_bind_model (GTK_FLOW_BOX (box), G_LIST_MODEL (store), create_widget, NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (sw), box);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), box);
 
   button = gtk_button_new_with_label ("Add some");
   g_signal_connect (button, "clicked", G_CALLBACK (add_some), store);

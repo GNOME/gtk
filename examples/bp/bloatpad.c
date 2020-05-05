@@ -222,7 +222,7 @@ new_window (GApplication *app,
   gtk_window_set_title (GTK_WINDOW (window), "Bloatpad");
 
   grid = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (window), grid);
+  gtk_window_set_child (GTK_WINDOW (window), grid);
 
   toolbar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   button = gtk_toggle_button_new ();
@@ -259,7 +259,7 @@ new_window (GApplication *app,
 
   g_object_set_data ((GObject*)window, "bloatpad-text", view);
 
-  gtk_container_add (GTK_CONTAINER (scrolled), view);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled), view);
 
   gtk_grid_attach (GTK_GRID (grid), scrolled, 0, 1, 1, 1);
 

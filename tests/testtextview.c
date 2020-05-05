@@ -192,8 +192,8 @@ main (int argc, char **argv)
   create_tags (buffer);
   anchor = insert_text (buffer);
 
-  gtk_container_add (GTK_CONTAINER (window), sw);
-  gtk_container_add (GTK_CONTAINER (sw), textview);
+  gtk_window_set_child (GTK_WINDOW (window), sw);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), textview);
   gtk_text_view_add_overlay (GTK_TEXT_VIEW (textview),
                              button,
                              50, 150);

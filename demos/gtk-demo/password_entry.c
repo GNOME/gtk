@@ -53,7 +53,7 @@ do_password_entry (GtkWidget *do_widget)
       gtk_widget_set_margin_end (box, 18);
       gtk_widget_set_margin_top (box, 18);
       gtk_widget_set_margin_bottom (box, 18);
-      gtk_container_add (GTK_CONTAINER (window), box);
+      gtk_window_set_child (GTK_WINDOW (window), box);
 
       entry = gtk_password_entry_new ();
       gtk_password_entry_set_show_peek_icon (GTK_PASSWORD_ENTRY (entry), TRUE);

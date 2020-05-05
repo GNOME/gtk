@@ -954,7 +954,7 @@ main (int argc, char **argv)
         g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
         mainbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
-        gtk_container_add (GTK_CONTAINER (window), mainbox);
+        gtk_window_set_child (GTK_WINDOW (window), mainbox);
 
         /* GtkCellView */
         tmp = gtk_frame_new ("GtkCellView");
@@ -1112,7 +1112,7 @@ main (int argc, char **argv)
         displayed_row_changed (GTK_COMBO_BOX (combobox), GTK_CELL_VIEW (tmp));
         g_signal_connect (combobox, "changed", G_CALLBACK (displayed_row_changed), tmp);
 
-        gtk_container_add (GTK_CONTAINER (combobox), tmp);
+        gtk_combo_box_set_child (GTK_COMBO_BOX (combobox), tmp);
 
         /* GtkComboBox tree */
         tmp = gtk_frame_new ("GtkComboBox (tree)");

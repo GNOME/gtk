@@ -131,10 +131,10 @@ create_demo_window (GtkWidget *do_widget)
   g_signal_connect (window, "destroy", G_CALLBACK (close_window), NULL);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (window), sw);
+  gtk_window_set_child (GTK_WINDOW (window), sw);
 
   fixed = gtk_fixed_new ();
-  gtk_container_add (GTK_CONTAINER (sw), fixed);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), fixed);
   gtk_widget_set_halign (GTK_WIDGET (fixed), GTK_ALIGN_CENTER);
   gtk_widget_set_valign (GTK_WIDGET (fixed), GTK_ALIGN_CENTER);
 
