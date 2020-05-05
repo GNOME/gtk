@@ -138,7 +138,7 @@
       GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (gdkSurface));
       double time = ((double)[event timestamp]) * 1000.0;
 
-      _gdk_macos_display_break_all_grabs (display, time);
+      _gdk_macos_display_break_all_grabs (GDK_MACOS_DISPLAY (display), time);
 
       inManualMove = NO;
       inManualResize = NO;
@@ -267,7 +267,7 @@
                        screen:screen];
 
   [self setAcceptsMouseMovedEvents:YES];
-  [self setDelegate:self];
+  [self setDelegate:(id<NSWindowDelegate>)self];
   [self setReleasedWhenClosed:YES];
 
   view = [[GdkMacosCairoView alloc] initWithFrame:contentRect];
@@ -300,7 +300,7 @@
 
   [self checkSendEnterNotify];
 
-  [[self contentView] updateTrackingRect];
+  [(GdkMacosBaseView *)[self contentView] updateTrackingRect];
 }
 
 -(void)hide
