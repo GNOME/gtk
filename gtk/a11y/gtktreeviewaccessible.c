@@ -78,7 +78,7 @@ static void atk_selection_interface_init              (AtkSelectionIface        
 static void atk_component_interface_init              (AtkComponentIface            *iface);
 static void gtk_cell_accessible_parent_interface_init (GtkCellAccessibleParentIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkTreeViewAccessible, gtk_tree_view_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkTreeViewAccessible, gtk_tree_view_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_ADD_PRIVATE (GtkTreeViewAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TABLE, atk_table_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init)

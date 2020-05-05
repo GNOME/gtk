@@ -322,7 +322,7 @@ typedef struct _GtkTreeViewClass      GtkTreeViewClass;
 
 struct _GtkTreeViewClass
 {
-  GtkContainerClass parent_class;
+  GtkWidgetClass parent_class;
 
   void     (* row_activated)              (GtkTreeView       *tree_view,
                                            GtkTreePath       *path,
@@ -364,7 +364,7 @@ struct _GtkTreeViewClass
 
 struct _GtkTreeView
 {
-  GtkContainer parent;
+  GtkWidget parent;
 
   GtkTreeModel *model;
 
@@ -683,12 +683,8 @@ static gboolean gtk_tree_view_grab_focus           (GtkWidget        *widget);
 static void     gtk_tree_view_css_changed          (GtkWidget        *widget,
                                                     GtkCssStyleChange *change);
 
-/* container signals */
-static void     gtk_tree_view_remove               (GtkContainer     *container,
-						    GtkWidget        *widget);
-static void     gtk_tree_view_forall               (GtkContainer     *container,
-						    GtkCallback       callback,
-						    gpointer          callback_data);
+static void     gtk_tree_view_remove               (GtkTreeView      *tree_view,
+                                                    GtkWidget        *widget);
 
 /* Source side drag signals */
 static void gtk_tree_view_dnd_finished_cb  (GdkDrag          *drag,
@@ -998,10 +994,10 @@ static GParamSpec *tree_view_props [LAST_PROP] = { NULL };
 /* GType Methods
  */
 
-G_DEFINE_TYPE_WITH_CODE (GtkTreeView, gtk_tree_view, GTK_TYPE_CONTAINER,
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-						gtk_tree_view_buildable_init)
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE,
+G_DEFINE_TYPE_WITH_CODE (GtkTreeView, gtk_tree_view, GTK_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_tree_view_buildable_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE,
                                                 gtk_tree_view_scrollable_init))
 
 static void
@@ -1009,7 +1005,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 {
   GObjectClass *o_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
 
   /* GObject signals */
   o_class->set_property = gtk_tree_view_set_property;
@@ -1027,10 +1022,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->focus = gtk_tree_view_focus;
   widget_class->grab_focus = gtk_tree_view_grab_focus;
   widget_class->css_changed = gtk_tree_view_css_changed;
-
-  /* GtkContainer signals */
-  container_class->remove = gtk_tree_view_remove;
-  container_class->forall = gtk_tree_view_forall;
 
   class->move_cursor = gtk_tree_view_real_move_cursor;
   class->select_all = gtk_tree_view_real_select_all;
@@ -7442,10 +7433,9 @@ gtk_tree_view_drag_data_received (GObject      *source,
 
 
 static void
-gtk_tree_view_remove (GtkContainer *container,
-		      GtkWidget    *widget)
+gtk_tree_view_remove (GtkTreeView  *tree_view,
+                      GtkWidget    *widget)
 {
-  GtkTreeView *tree_view = GTK_TREE_VIEW (container);
   GtkTreeViewChild *child = NULL;
   GList *tmp_list;
 
@@ -7482,25 +7472,6 @@ gtk_tree_view_remove (GtkContainer *container,
 	  return;
 	}
       tmp_list = tmp_list->next;
-    }
-}
-
-static void
-gtk_tree_view_forall (GtkContainer *container,
-		      GtkCallback   callback,
-		      gpointer      callback_data)
-{
-  GtkTreeView *tree_view = GTK_TREE_VIEW (container);
-  GtkTreeViewChild *child = NULL;
-  GList *tmp_list;
-
-  tmp_list = tree_view->children;
-  while (tmp_list)
-    {
-      child = tmp_list->data;
-      tmp_list = tmp_list->next;
-
-      (* callback) (child->widget, callback_data);
     }
 }
 
