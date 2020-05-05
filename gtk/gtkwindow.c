@@ -2642,10 +2642,9 @@ gtk_window_dispose (GObject *object)
   remove_attach_widget (window);
 
   g_clear_pointer (&priv->child, gtk_widget_unparent);
+  unset_titlebar (window);
 
   G_OBJECT_CLASS (gtk_window_parent_class)->dispose (object);
-
-  unset_titlebar (window);
 }
 
 static void
