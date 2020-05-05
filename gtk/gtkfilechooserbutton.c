@@ -254,6 +254,7 @@ static gboolean gtk_file_chooser_button_remove_shortcut_folder  (GtkFileChooser 
 
 /* GObject Functions */
 static void     gtk_file_chooser_button_constructed        (GObject          *object);
+static void     gtk_file_chooser_button_dispose            (GObject          *object);
 static void     gtk_file_chooser_button_set_property       (GObject          *object,
 							    guint             param_id,
 							    const GValue     *value,
@@ -265,7 +266,6 @@ static void     gtk_file_chooser_button_get_property       (GObject          *ob
 static void     gtk_file_chooser_button_finalize           (GObject          *object);
 
 /* GtkWidget Functions */
-static void     gtk_file_chooser_button_destroy            (GtkWidget        *widget);
 static void     gtk_file_chooser_button_show               (GtkWidget        *widget);
 static void     gtk_file_chooser_button_hide               (GtkWidget        *widget);
 static void     gtk_file_chooser_button_root               (GtkWidget *widget);
@@ -460,8 +460,8 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   gobject_class->set_property = gtk_file_chooser_button_set_property;
   gobject_class->get_property = gtk_file_chooser_button_get_property;
   gobject_class->finalize = gtk_file_chooser_button_finalize;
+  gobject_class->dispose = gtk_file_chooser_button_dispose;
 
-  widget_class->destroy = gtk_file_chooser_button_destroy;
   widget_class->show = gtk_file_chooser_button_show;
   widget_class->hide = gtk_file_chooser_button_hide;
   widget_class->map = gtk_file_chooser_button_map;
@@ -1083,9 +1083,9 @@ gtk_file_chooser_button_state_flags_changed (GtkWidget     *widget,
 }
 
 static void
-gtk_file_chooser_button_destroy (GtkWidget *widget)
+gtk_file_chooser_button_dispose (GObject *object)
 {
-  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (widget);
+  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (object);
   GSList *l;
 
   if (button->model)
@@ -1126,7 +1126,7 @@ gtk_file_chooser_button_destroy (GtkWidget *widget)
 
   g_clear_pointer (&button->bookmarks_manager, _gtk_bookmarks_manager_free);
 
-  GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->dispose (object);
 }
 
 static void
