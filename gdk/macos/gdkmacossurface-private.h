@@ -38,6 +38,8 @@ G_BEGIN_DECLS
 struct _GdkMacosSurface
 {
   GdkSurface parent_instance;
+  GList      stacking;
+  GList      frame_link;
 };
 
 struct _GdkMacosSurfaceClass
@@ -54,7 +56,6 @@ GdkMacosSurface   *_gdk_macos_surface_new                     (GdkMacosDisplay  
                                                                int                 height);
 NSWindow          *_gdk_macos_surface_get_native              (GdkMacosSurface    *self);
 CGDirectDisplayID  _gdk_macos_surface_get_screen_id           (GdkMacosSurface    *self);
-GList             *_gdk_macos_surface_get_stacking            (GdkMacosSurface    *self);
 const char        *_gdk_macos_surface_get_title               (GdkMacosSurface    *self);
 void               _gdk_macos_surface_set_title               (GdkMacosSurface    *self,
                                                                const gchar        *title);
@@ -80,6 +81,9 @@ void               _gdk_macos_surface_damage_cairo            (GdkMacosSurface  
                                                                cairo_region_t     *painted);
 void               _gdk_macos_surface_set_is_key              (GdkMacosSurface    *self,
                                                                gboolean            is_key);
+void               _gdk_macos_surface_thaw                    (GdkMacosSurface    *self,
+                                                               gint64              predicted_presentation_time,
+                                                               gint64              refresh_interval);
 
 G_END_DECLS
 

@@ -1,4 +1,5 @@
 gdk_macos_sources = files([
+  'gdkdisplaylinksource.c',
   'GdkMacosWindow.c',
   'gdkmacoscairocontext.c',
   'gdkmacoscursor.c',
@@ -32,6 +33,7 @@ install_headers(gdk_macos_public_headers, 'gdkmacos.h', subdir: 'gtk-4.0/gdk/mac
 gdk_macos_frameworks = [
   'AppKit',
   'Carbon',
+  'CoreVideo',
   'CoreServices',
 ]
 

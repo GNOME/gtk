@@ -247,7 +247,6 @@
   event = gdk_configure_event_new (surface,
                                    content_rect.size.width,
                                    content_rect.size.height);
-
   _gdk_event_queue_append (display, event);
 
   [self checkSendEnterNotify];

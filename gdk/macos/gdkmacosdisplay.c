@@ -23,10 +23,11 @@
 
 #import "GdkMacosWindow.h"
 
+#include "gdkdisplayprivate.h"
 #include "gdkeventsprivate.h"
 
+#include "gdkdisplaylinksource.h"
 #include "gdkmacoscairocontext-private.h"
-#include "gdkdisplayprivate.h"
 #include "gdkmacoseventsource-private.h"
 #include "gdkmacosdisplay-private.h"
 #include "gdkmacoskeymap-private.h"
@@ -71,18 +72,22 @@
 
 struct _GdkMacosDisplay
 {
-  GdkDisplay           parent_instance;
+  GdkDisplay      parent_instance;
 
-  char                *name;
-  GdkMacosKeymap      *keymap;
+  char           *name;
+  GdkMacosKeymap *keymap;
 
-  GPtrArray           *monitors;
-  GQueue               surfaces;
+  GPtrArray      *monitors;
 
-  int                  width;
-  int                  height;
-  int                  min_x;
-  int                  min_y;
+  GQueue          surfaces;
+
+  GSource        *frame_source;
+  GQueue          awaiting_frames;
+
+  int             width;
+  int             height;
+  int             min_x;
+  int             min_y;
 };
 
 struct _GdkMacosDisplayClass
@@ -233,6 +238,52 @@ gdk_macos_display_load_seat (GdkMacosDisplay *self)
   g_object_unref (seat);
 }
 
+static gboolean
+gdk_macos_display_frame_cb (gpointer data)
+{
+  GdkMacosDisplay *self = data;
+  GdkDisplayLinkSource *source;
+  gint64 presentation_time;
+  gint64 now;
+  GList *iter;
+
+  g_assert (GDK_IS_MACOS_DISPLAY (self));
+
+  source = (GdkDisplayLinkSource *)self->frame_source;
+
+  presentation_time = source->presentation_time;
+  now = g_source_get_time ((GSource *)source);
+
+  iter = self->awaiting_frames.head;
+
+  while (iter != NULL)
+    {
+      GdkMacosSurface *surface = iter->data;
+
+      g_assert (GDK_IS_MACOS_SURFACE (surface));
+
+      iter = iter->next;
+
+      _gdk_macos_display_remove_frame_callback (self, surface);
+      _gdk_macos_surface_thaw (surface,
+                               source->presentation_time,
+                               source->refresh_interval);
+    }
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+gdk_macos_display_load_display_link (GdkMacosDisplay *self)
+{
+  self->frame_source = gdk_display_link_source_new ();
+  g_source_set_callback (self->frame_source,
+                         gdk_macos_display_frame_cb,
+                         self,
+                         NULL);
+  g_source_attach (self->frame_source, NULL);
+}
+
 static const gchar *
 gdk_macos_display_get_name (GdkDisplay *display)
 {
@@ -318,17 +369,11 @@ void
 _gdk_macos_display_surface_removed (GdkMacosDisplay *self,
                                     GdkMacosSurface *surface)
 {
-  GList *stacking;
-
   g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
   g_return_if_fail (GDK_IS_MACOS_SURFACE (surface));
 
-  stacking = _gdk_macos_surface_get_stacking (surface);
-
-  g_queue_unlink (&self->surfaces, stacking);
-
-  stacking->prev = NULL;
-  stacking->next = NULL;
+  g_queue_unlink (&self->surfaces, &surface->stacking);
+  g_queue_unlink (&self->awaiting_frames, &surface->frame_link);
 }
 
 void
@@ -357,8 +402,8 @@ _gdk_macos_display_stacking_changed (GdkMacosDisplay *self)
         continue;
 
       surface = [(GdkMacosWindow *)nswindow getGdkSurface];
-      link = _gdk_macos_surface_get_stacking (surface);
 
+      link = &surface->stacking;
       link->prev = NULL;
       link->next = NULL;
 
@@ -389,9 +434,7 @@ gdk_macos_display_create_surface (GdkDisplay     *display,
 
   if (surface != NULL)
     {
-      GList *stacking = _gdk_macos_surface_get_stacking (surface);
-
-      g_queue_push_head_link (&self->surfaces, stacking);
+      g_queue_push_head_link (&self->surfaces, &surface->stacking);
       _gdk_macos_display_stacking_changed (self);
     }
 
@@ -413,6 +456,7 @@ gdk_macos_display_finalize (GObject *object)
 {
   GdkMacosDisplay *self = (GdkMacosDisplay *)object;
 
+  g_clear_pointer (&self->frame_source, g_source_unref);
   g_clear_pointer (&self->monitors, g_ptr_array_unref);
   g_clear_pointer (&self->name, g_free);
 
@@ -475,6 +519,7 @@ _gdk_macos_display_open (const gchar *display_name)
 
   gdk_macos_display_load_seat (self);
   gdk_macos_display_load_monitors (self);
+  gdk_macos_display_load_display_link (self);
 
   if (event_source == NULL)
     {
@@ -629,4 +674,30 @@ _gdk_macos_display_get_surface_at_display_coords (GdkMacosDisplay *self,
   *surface_y = 0;
 
   return NULL;
+}
+
+void
+_gdk_macos_display_add_frame_callback (GdkMacosDisplay *self,
+                                       GdkMacosSurface *surface)
+{
+  g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (surface));
+
+  g_queue_push_tail_link (&self->awaiting_frames, &surface->frame_link);
+
+  if (self->awaiting_frames.length == 1)
+    gdk_display_link_source_unpause ((GdkDisplayLinkSource *)self->frame_source);
+}
+
+void
+_gdk_macos_display_remove_frame_callback (GdkMacosDisplay *self,
+                                          GdkMacosSurface *surface)
+{
+  g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (surface));
+
+  g_queue_unlink (&self->awaiting_frames, &surface->frame_link);
+
+  if (self->awaiting_frames.length == 0)
+    gdk_display_link_source_pause ((GdkDisplayLinkSource *)self->frame_source);
 }

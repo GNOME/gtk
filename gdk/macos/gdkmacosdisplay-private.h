@@ -57,6 +57,10 @@ GdkMacosSurface *_gdk_macos_display_get_surface_at_display_coords  (GdkMacosDisp
 void             _gdk_macos_display_stacking_changed               (GdkMacosDisplay *self);
 void             _gdk_macos_display_surface_removed                (GdkMacosDisplay *self,
                                                                     GdkMacosSurface *surface);
+void             _gdk_macos_display_add_frame_callback             (GdkMacosDisplay *self,
+                                                                    GdkMacosSurface *surface);
+void             _gdk_macos_display_remove_frame_callback          (GdkMacosDisplay *self,
+                                                                    GdkMacosSurface *surface);
 
 G_END_DECLS
 
