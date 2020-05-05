@@ -3953,11 +3953,6 @@ gtk_window_resize (GtkWindow *window,
  * stored across sessions; use gtk_window_set_default_size() to
  * restore them when before showing the window.
  *
- * To avoid potential race conditions, you should only call this
- * function in response to a size change notification, for instance
- * inside a handler for the #GtkWidget::size-allocate signal, or
- * inside a handler for the #GtkWidget::configure-event signal:
- *
  * |[<!-- language="C" -->
  * static void
  * on_size_allocate (GtkWidget *widget,
@@ -3971,12 +3966,6 @@ gtk_window_resize (GtkWindow *window,
  *   // ...
  * }
  * ]|
- *
- * Note that, if you connect to the #GtkWidget::size-allocate signal,
- * you should not use the dimensions of the #GtkAllocation passed to
- * the signal handler, as the allocation may contain client side
- * decorations added by GTK+, depending on the windowing system in
- * use.
  *
  * If you are getting a window size in order to position the window
  * on the screen, you should, instead, simply set the window’s semantic
