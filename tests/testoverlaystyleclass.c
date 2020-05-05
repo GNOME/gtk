@@ -1,22 +1,5 @@
 #include <gtk/gtk.h>
 
-static void
-child_size_allocate (GtkWidget    *child,
-                     GdkRectangle *allocation,
-                     gint          baseline,
-                     gpointer      user_data)
-{
-  GtkStyleContext *context;
-  context = gtk_widget_get_style_context (child);
-
-  g_print ("Child %p\nHas left? %d\nHas right? %d\nHas top? %d\nHas bottom? %d\n",
-           child,
-           gtk_style_context_has_class (context, "left"),
-           gtk_style_context_has_class (context, "right"),
-           gtk_style_context_has_class (context, "top"),
-           gtk_style_context_has_class (context, "bottom"));
-}
-
 static gboolean
 overlay_get_child_position (GtkOverlay *overlay,
                             GtkWidget *child,
@@ -94,9 +77,6 @@ main (int argc, char *argv[])
   gtk_widget_set_valign (child, GTK_ALIGN_END);
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
 
-  g_signal_connect (child, "size-allocate",
-                    G_CALLBACK (child_size_allocate), overlay);
-
   child = gtk_label_new (NULL);
   str = g_strdup_printf ("%p", child);
   gtk_label_set_text (GTK_LABEL (child), str);
@@ -106,9 +86,6 @@ main (int argc, char *argv[])
   gtk_widget_set_valign (child, GTK_ALIGN_START);
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
 
-  g_signal_connect (child, "size-allocate",
-                    G_CALLBACK (child_size_allocate), overlay);
-
   child = gtk_label_new (NULL);
   str = g_strdup_printf ("%p", child);
   gtk_label_set_text (GTK_LABEL (child), str);
@@ -117,9 +94,6 @@ main (int argc, char *argv[])
   gtk_widget_set_halign (child, GTK_ALIGN_END);
   gtk_widget_set_valign (child, GTK_ALIGN_CENTER);
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
-
-  g_signal_connect (child, "size-allocate",
-                    G_CALLBACK (child_size_allocate), overlay);
 
   child = gtk_label_new (NULL);
   str = g_strdup_printf ("%p", child);
@@ -132,9 +106,6 @@ main (int argc, char *argv[])
   gtk_widget_set_valign (child, GTK_ALIGN_START);
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
 
-  g_signal_connect (child, "size-allocate",
-                    G_CALLBACK (child_size_allocate), overlay);
-
   child = gtk_label_new (NULL);
   str = g_strdup_printf ("%p", child);
   gtk_label_set_text (GTK_LABEL (child), str);
@@ -144,8 +115,6 @@ main (int argc, char *argv[])
   gtk_widget_set_valign (child, GTK_ALIGN_START);
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
 
-  g_signal_connect (child, "size-allocate",
-                    G_CALLBACK (child_size_allocate), overlay);
   g_signal_connect (overlay, "get-child-position",
                     G_CALLBACK (overlay_get_child_position), child);
 
