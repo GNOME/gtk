@@ -360,7 +360,7 @@ static GQuark quark_text_selection_data = 0;
 static GQuark quark_gtk_signal = 0;
 static GQuark quark_text_view_child = 0;
 
-static void gtk_text_view_finalize             (GObject          *object);
+static void gtk_text_view_finalize             (GObject         *object);
 static void gtk_text_view_set_property         (GObject         *object,
 						guint            prop_id,
 						const GValue    *value,
@@ -369,7 +369,7 @@ static void gtk_text_view_get_property         (GObject         *object,
 						guint            prop_id,
 						GValue          *value,
 						GParamSpec      *pspec);
-static void gtk_text_view_destroy              (GtkWidget        *widget);
+static void gtk_text_view_dispose              (GObject         *object);
 static void gtk_text_view_measure (GtkWidget      *widget,
                                    GtkOrientation  orientation,
                                    int             for_size,
@@ -810,8 +810,8 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   gobject_class->set_property = gtk_text_view_set_property;
   gobject_class->get_property = gtk_text_view_get_property;
   gobject_class->finalize = gtk_text_view_finalize;
+  gobject_class->dispose = gtk_text_view_dispose;
 
-  widget_class->destroy = gtk_text_view_destroy;
   widget_class->realize = gtk_text_view_realize;
   widget_class->unrealize = gtk_text_view_unrealize;
   widget_class->map = gtk_text_view_map;
@@ -3776,12 +3776,12 @@ gtk_text_view_remove_validate_idles (GtkTextView *text_view)
 }
 
 static void
-gtk_text_view_destroy (GtkWidget *widget)
+gtk_text_view_dispose (GObject *object)
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
 
-  text_view = GTK_TEXT_VIEW (widget);
+  text_view = GTK_TEXT_VIEW (object);
   priv = text_view->priv;
 
   gtk_text_view_remove_validate_idles (text_view);
@@ -3806,7 +3806,7 @@ gtk_text_view_destroy (GtkWidget *widget)
   g_clear_pointer ((GtkWidget **) &priv->text_handles[TEXT_HANDLE_CURSOR], gtk_widget_unparent);
   g_clear_pointer ((GtkWidget **) &priv->text_handles[TEXT_HANDLE_SELECTION_BOUND], gtk_widget_unparent);
 
-  GTK_WIDGET_CLASS (gtk_text_view_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_text_view_parent_class)->dispose (object);
 }
 
 static void
