@@ -2801,6 +2801,7 @@ gtk_text_view_backward_display_line_start
 gtk_text_view_starts_display_line
 gtk_text_view_move_visually
 gtk_text_view_add_child_at_anchor
+gtk_text_view_remove
 GtkTextChildAnchor
 gtk_text_child_anchor_new
 gtk_text_child_anchor_get_widgets
