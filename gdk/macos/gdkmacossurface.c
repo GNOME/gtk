@@ -762,3 +762,27 @@ _gdk_macos_surface_thaw (GdkMacosSurface *self,
       timings->predicted_presentation_time = presentation_time;
     }
 }
+
+void
+_gdk_macos_surface_show (GdkMacosSurface *self)
+{
+  gboolean was_mapped;
+
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
+
+  if (GDK_SURFACE_DESTROYED (self))
+    return;
+
+  was_mapped = GDK_SURFACE_IS_MAPPED (GDK_SURFACE (self));
+
+  if (!was_mapped)
+    gdk_synthesize_surface_state (GDK_SURFACE (self), GDK_SURFACE_STATE_WITHDRAWN, 0);
+
+  _gdk_surface_update_viewable (GDK_SURFACE (self));
+
+  if (!was_mapped)
+    {
+      if (gdk_surface_is_viewable (GDK_SURFACE (self)))
+        gdk_surface_invalidate_rect (GDK_SURFACE (self), NULL);
+    }
+}

@@ -81,6 +81,7 @@ void               _gdk_macos_surface_damage_cairo            (GdkMacosSurface  
                                                                cairo_region_t     *painted);
 void               _gdk_macos_surface_set_is_key              (GdkMacosSurface    *self,
                                                                gboolean            is_key);
+void               _gdk_macos_surface_show                    (GdkMacosSurface    *self);
 void               _gdk_macos_surface_thaw                    (GdkMacosSurface    *self,
                                                                gint64              predicted_presentation_time,
                                                                gint64              refresh_interval);
