@@ -130,7 +130,7 @@ _gdk_macos_cairo_context_end_frame (GdkDrawContext *draw_context,
   if (GDK_IS_MACOS_SURFACE (surface))
     _gdk_macos_surface_damage_cairo (GDK_MACOS_SURFACE (surface),
                                      g_steal_pointer (&self->window_surface),
-                                     painted);
+                                     cairo_region_reference (painted));
 
   g_clear_pointer (&self->paint_surface, cairo_surface_destroy);
   g_clear_pointer (&self->window_surface, cairo_surface_destroy);
