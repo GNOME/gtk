@@ -54,30 +54,6 @@ notify_cb (GObject    *obj,
     klass->notify_gtk (obj, pspec);
 }
 
-/* Translate GtkWidget::size-allocate to AtkComponent::bounds-changed */
-static void
-size_allocate_cb (GtkWidget *widget,
-                  int        width,
-                  int        height)
-{
-  AtkObject* accessible;
-  AtkRectangle rect;
-
-  accessible = gtk_widget_get_accessible (widget);
-  if (ATK_IS_COMPONENT (accessible))
-    {
-      GtkAllocation alloc;
-      gtk_widget_get_allocation (widget, &alloc);
-
-      rect.x = alloc.x;
-      rect.y = alloc.y;
-      rect.width = alloc.width;
-      rect.height = alloc.height;
-
-      g_signal_emit_by_name (accessible, "bounds-changed", &rect);
-    }
-}
-
 /* Translate GtkWidget mapped state into AtkObject showing */
 static gint
 map_cb (GtkWidget *widget)
@@ -109,7 +85,6 @@ gtk_widget_accessible_initialize (AtkObject *obj,
   widget = GTK_WIDGET (data);
 
   g_signal_connect (widget, "notify", G_CALLBACK (notify_cb), NULL);
-  g_signal_connect (widget, "size-allocate", G_CALLBACK (size_allocate_cb), NULL);
   g_signal_connect (widget, "map", G_CALLBACK (map_cb), NULL);
   g_signal_connect (widget, "unmap", G_CALLBACK (map_cb), NULL);
 
