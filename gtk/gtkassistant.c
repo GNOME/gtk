@@ -107,26 +107,12 @@ struct _GtkAssistantPageClass
   GObjectClass parent_class;
 };
 
-typedef struct _GtkAssistantPrivate GtkAssistantPrivate;
 typedef struct _GtkAssistantClass   GtkAssistantClass;
 
 struct _GtkAssistant
 {
   GtkWindow  parent;
-};
 
-struct _GtkAssistantClass
-{
-  GtkWindowClass parent_class;
-
-  void (* prepare) (GtkAssistant *assistant, GtkWidget *page);
-  void (* apply)   (GtkAssistant *assistant);
-  void (* close)   (GtkAssistant *assistant);
-  void (* cancel)  (GtkAssistant *assistant);
-};
-
-struct _GtkAssistantPrivate
-{
   GtkWidget *cancel;
   GtkWidget *forward;
   GtkWidget *back;
@@ -157,6 +143,16 @@ struct _GtkAssistantPrivate
   gint extra_buttons;
 
   guint committed : 1;
+};
+
+struct _GtkAssistantClass
+{
+  GtkWindowClass parent_class;
+
+  void (* prepare) (GtkAssistant *assistant, GtkWidget *page);
+  void (* apply)   (GtkAssistant *assistant);
+  void (* close)   (GtkAssistant *assistant);
+  void (* cancel)  (GtkAssistant *assistant);
 };
 
 static void     gtk_assistant_dispose            (GObject           *object);
@@ -318,7 +314,6 @@ enum {
 static guint signals [LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkAssistant, gtk_assistant, GTK_TYPE_WINDOW,
-                         G_ADD_PRIVATE (GtkAssistant)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_assistant_buildable_interface_init))
 
@@ -326,12 +321,10 @@ static void
 set_use_header_bar (GtkAssistant *assistant,
                     gint          use_header_bar)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
-
   if (use_header_bar == -1)
     return;
 
-  priv->use_header_bar = use_header_bar;
+  assistant->use_header_bar = use_header_bar;
 }
 
 static void
@@ -361,12 +354,11 @@ gtk_assistant_get_property (GObject      *object,
                             GParamSpec   *pspec)
 {
   GtkAssistant *assistant = GTK_ASSISTANT (object);
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
 
   switch (prop_id)
     {
     case PROP_USE_HEADER_BAR:
-      g_value_set_int (value, priv->use_header_bar);
+      g_value_set_int (value, assistant->use_header_bar);
       break;
 
     case PROP_PAGES:
@@ -384,9 +376,7 @@ add_cb (GtkContainer *container,
         GtkWidget    *widget,
         GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
-
-  if (priv->use_header_bar)
+  if (assistant->use_header_bar)
     g_warning ("Content added to the action area of an assistant using header bars");
 
   gtk_widget_show (GTK_WIDGET (container));
@@ -395,40 +385,35 @@ add_cb (GtkContainer *container,
 static void
 apply_use_header_bar (GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
-
-  gtk_widget_set_visible (priv->action_area, !priv->use_header_bar);
-  gtk_widget_set_visible (priv->headerbar, priv->use_header_bar);
-  if (!priv->use_header_bar)
+  gtk_widget_set_visible (assistant->action_area, !assistant->use_header_bar);
+  gtk_widget_set_visible (assistant->headerbar, assistant->use_header_bar);
+  if (!assistant->use_header_bar)
     gtk_window_set_titlebar (GTK_WINDOW (assistant), NULL);
   else
-    g_signal_connect (priv->action_area, "add", G_CALLBACK (add_cb), assistant);
+    g_signal_connect (assistant->action_area, "add", G_CALLBACK (add_cb), assistant);
 }
 
 static void
 add_to_header_bar (GtkAssistant *assistant,
                    GtkWidget    *child)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
-
   gtk_widget_set_valign (child, GTK_ALIGN_CENTER);
 
-  if (child == priv->back || child == priv->cancel)
-    gtk_header_bar_pack_start (GTK_HEADER_BAR (priv->headerbar), child);
+  if (child == assistant->back || child == assistant->cancel)
+    gtk_header_bar_pack_start (GTK_HEADER_BAR (assistant->headerbar), child);
   else
-    gtk_header_bar_pack_end (GTK_HEADER_BAR (priv->headerbar), child);
+    gtk_header_bar_pack_end (GTK_HEADER_BAR (assistant->headerbar), child);
 }
 
 static void
 add_action_widgets (GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
   GList *children;
   GList *l;
 
-  if (priv->use_header_bar)
+  if (assistant->use_header_bar)
     {
-      children = gtk_container_get_children (GTK_CONTAINER (priv->action_area));
+      children = gtk_container_get_children (GTK_CONTAINER (assistant->action_area));
       for (l = children; l != NULL; l = l->next)
         {
           GtkWidget *child = l->data;
@@ -437,7 +422,7 @@ add_action_widgets (GtkAssistant *assistant)
           has_default = gtk_widget_has_default (child);
 
           g_object_ref (child);
-          gtk_container_remove (GTK_CONTAINER (priv->action_area), child);
+          gtk_container_remove (GTK_CONTAINER (assistant->action_area), child);
           add_to_header_bar (assistant, child);
           g_object_unref (child);
 
@@ -455,13 +440,12 @@ static void
 gtk_assistant_constructed (GObject *object)
 {
   GtkAssistant *assistant = GTK_ASSISTANT (object);
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
 
   G_OBJECT_CLASS (gtk_assistant_parent_class)->constructed (object);
 
-  priv->constructed = TRUE;
-  if (priv->use_header_bar == -1)
-    priv->use_header_bar = FALSE;
+  assistant->constructed = TRUE;
+  if (assistant->use_header_bar == -1)
+    assistant->use_header_bar = FALSE;
 
   add_action_widgets (assistant);
   apply_use_header_bar (assistant);
@@ -470,12 +454,10 @@ gtk_assistant_constructed (GObject *object)
 static void
 escape_cb (GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
-
   /* Do not allow cancelling in the middle of a progress page */
-  if (priv->current_page &&
-      (priv->current_page->type != GTK_ASSISTANT_PAGE_PROGRESS ||
-       priv->current_page->complete))
+  if (assistant->current_page &&
+      (assistant->current_page->type != GTK_ASSISTANT_PAGE_PROGRESS ||
+       assistant->current_page->complete))
     g_signal_emit (assistant, signals [CANCEL], 0, NULL);
 
   /* don't run any user handlers - this is not a public signal */
@@ -486,10 +468,9 @@ static void
 gtk_assistant_finalize (GObject *object)
 {
   GtkAssistant *assistant = GTK_ASSISTANT (object);
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
 
-  if (priv->model)
-    g_object_remove_weak_pointer (G_OBJECT (priv->model), (gpointer *)&priv->model);
+  if (assistant->model)
+    g_object_remove_weak_pointer (G_OBJECT (assistant->model), (gpointer *)&assistant->model);
 
   G_OBJECT_CLASS (gtk_assistant_parent_class)->finalize (object);
 }
@@ -637,20 +618,20 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   /* Bind class to template
    */
   gtk_widget_class_set_template_from_resource (widget_class,
-					       "/org/gtk/libgtk/ui/gtkassistant.ui");
+                                               "/org/gtk/libgtk/ui/gtkassistant.ui");
 
-  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkAssistant, action_area);
-  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkAssistant, headerbar);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, content);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, cancel);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, forward);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, back);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, apply);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, close);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, last);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, sidebar);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, button_size_group);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, title_size_group);
+  gtk_widget_class_bind_template_child_internal (widget_class, GtkAssistant, action_area);
+  gtk_widget_class_bind_template_child_internal (widget_class, GtkAssistant, headerbar);
+  gtk_widget_class_bind_template_child (widget_class, GtkAssistant, content);
+  gtk_widget_class_bind_template_child (widget_class, GtkAssistant, cancel);
+  gtk_widget_class_bind_template_child (widget_class, GtkAssistant, forward);
+  gtk_widget_class_bind_template_child (widget_class, GtkAssistant, back);
+  gtk_widget_class_bind_template_child (widget_class, GtkAssistant, apply);
+  gtk_widget_class_bind_template_child (widget_class, GtkAssistant, close);
+  gtk_widget_class_bind_template_child (widget_class, GtkAssistant, last);
+  gtk_widget_class_bind_template_child (widget_class, GtkAssistant, sidebar);
+  gtk_widget_class_bind_template_child (widget_class, GtkAssistant, button_size_group);
+  gtk_widget_class_bind_template_child (widget_class, GtkAssistant, title_size_group);
 
   gtk_widget_class_bind_template_callback (widget_class, on_assistant_close);
   gtk_widget_class_bind_template_callback (widget_class, on_assistant_apply);
@@ -666,11 +647,10 @@ static gint
 default_forward_function (gint current_page, gpointer data)
 {
   GtkAssistant *assistant = GTK_ASSISTANT (data);
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
   GtkAssistantPage *page_info;
   GList *page_node;
 
-  page_node = g_list_nth (priv->pages, ++current_page);
+  page_node = g_list_nth (assistant->pages, ++current_page);
 
   if (!page_node)
     return -1;
@@ -692,7 +672,6 @@ default_forward_function (gint current_page, gpointer data)
 static gboolean
 last_button_visible (GtkAssistant *assistant, GtkAssistantPage *page)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
   GtkAssistantPage *page_info;
   gint count, page_num, n_pages;
 
@@ -703,8 +682,8 @@ last_button_visible (GtkAssistant *assistant, GtkAssistantPage *page)
     return FALSE;
 
   count = 0;
-  page_num = g_list_index (priv->pages, page);
-  n_pages  = g_list_length (priv->pages);
+  page_num = g_list_index (assistant->pages, page);
+  n_pages  = g_list_length (assistant->pages);
   page_info = page;
 
   while (page_num >= 0 && page_num < n_pages &&
@@ -712,8 +691,8 @@ last_button_visible (GtkAssistant *assistant, GtkAssistantPage *page)
          (count == 0 || page_info->complete) &&
          count < n_pages)
     {
-      page_num = (priv->forward_function) (page_num, priv->forward_function_data);
-      page_info = g_list_nth_data (priv->pages, page_num);
+      page_num = (assistant->forward_function) (page_num, assistant->forward_function_data);
+      page_info = g_list_nth_data (assistant->pages, page_num);
 
       count++;
     }
@@ -732,12 +711,11 @@ last_button_visible (GtkAssistant *assistant, GtkAssistantPage *page)
 static void
 update_actions_size (GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
   GList *l;
   GtkAssistantPage *page;
   gint buttons, page_buttons;
 
-  if (!priv->current_page)
+  if (!assistant->current_page)
     return;
 
   /* Some heuristics to find out how many buttons we should
@@ -745,7 +723,7 @@ update_actions_size (GtkAssistant *assistant)
    * with page forward functions and invisible pages, etc.
    */
   buttons = 0;
-  for (l = priv->pages; l; l = l->next)
+  for (l = assistant->pages; l; l = l->next)
     {
       page = l->data;
 
@@ -753,7 +731,7 @@ update_actions_size (GtkAssistant *assistant)
         continue;
 
       page_buttons = 2; /* cancel, forward/apply/close */
-      if (l != priv->pages)
+      if (l != assistant->pages)
         page_buttons += 1; /* back */
       if (last_button_visible (assistant, page))
         page_buttons += 1; /* last */
@@ -761,135 +739,129 @@ update_actions_size (GtkAssistant *assistant)
       buttons = MAX (buttons, page_buttons);
     }
 
-  buttons += priv->extra_buttons;
+  buttons += assistant->extra_buttons;
 
-  gtk_widget_set_size_request (priv->action_area,
-                               buttons * gtk_widget_get_allocated_width (priv->cancel) + (buttons - 1) * 6,
+  gtk_widget_set_size_request (assistant->action_area,
+                               buttons * gtk_widget_get_allocated_width (assistant->cancel) + (buttons - 1) * 6,
                                -1);
 }
 
 static void
 compute_last_button_state (GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
-
-  gtk_widget_set_sensitive (priv->last, priv->current_page->complete);
-  if (last_button_visible (assistant, priv->current_page))
-    gtk_widget_show (priv->last);
+  gtk_widget_set_sensitive (assistant->last, assistant->current_page->complete);
+  if (last_button_visible (assistant, assistant->current_page))
+    gtk_widget_show (assistant->last);
   else
-    gtk_widget_hide (priv->last);
+    gtk_widget_hide (assistant->last);
 }
 
 static void
 compute_progress_state (GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
   gint page_num, n_pages;
 
   n_pages = gtk_assistant_get_n_pages (assistant);
   page_num = gtk_assistant_get_current_page (assistant);
 
-  page_num = (priv->forward_function) (page_num, priv->forward_function_data);
+  page_num = (assistant->forward_function) (page_num, assistant->forward_function_data);
 
   if (page_num >= 0 && page_num < n_pages)
-    gtk_widget_show (priv->forward);
+    gtk_widget_show (assistant->forward);
   else
-    gtk_widget_hide (priv->forward);
+    gtk_widget_hide (assistant->forward);
 }
 
 static void
 update_buttons_state (GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
-
-  if (!priv->current_page)
+  if (!assistant->current_page)
     return;
 
-  switch (priv->current_page->type)
+  switch (assistant->current_page->type)
     {
     case GTK_ASSISTANT_PAGE_INTRO:
-      gtk_widget_set_sensitive (priv->cancel, TRUE);
-      gtk_widget_set_sensitive (priv->forward, priv->current_page->complete);
-      gtk_window_set_default_widget (GTK_WINDOW (assistant), priv->forward);
-      gtk_widget_show (priv->forward);
-      gtk_widget_hide (priv->back);
-      gtk_widget_hide (priv->apply);
-      gtk_widget_hide (priv->close);
+      gtk_widget_set_sensitive (assistant->cancel, TRUE);
+      gtk_widget_set_sensitive (assistant->forward, assistant->current_page->complete);
+      gtk_window_set_default_widget (GTK_WINDOW (assistant), assistant->forward);
+      gtk_widget_show (assistant->forward);
+      gtk_widget_hide (assistant->back);
+      gtk_widget_hide (assistant->apply);
+      gtk_widget_hide (assistant->close);
       compute_last_button_state (assistant);
       break;
     case GTK_ASSISTANT_PAGE_CONFIRM:
-      gtk_widget_set_sensitive (priv->cancel, TRUE);
-      gtk_widget_set_sensitive (priv->back, TRUE);
-      gtk_widget_set_sensitive (priv->apply, priv->current_page->complete);
-      gtk_window_set_default_widget (GTK_WINDOW (assistant), priv->apply);
-      gtk_widget_show (priv->back);
-      gtk_widget_show (priv->apply);
-      gtk_widget_hide (priv->forward);
-      gtk_widget_hide (priv->close);
-      gtk_widget_hide (priv->last);
+      gtk_widget_set_sensitive (assistant->cancel, TRUE);
+      gtk_widget_set_sensitive (assistant->back, TRUE);
+      gtk_widget_set_sensitive (assistant->apply, assistant->current_page->complete);
+      gtk_window_set_default_widget (GTK_WINDOW (assistant), assistant->apply);
+      gtk_widget_show (assistant->back);
+      gtk_widget_show (assistant->apply);
+      gtk_widget_hide (assistant->forward);
+      gtk_widget_hide (assistant->close);
+      gtk_widget_hide (assistant->last);
       break;
     case GTK_ASSISTANT_PAGE_CONTENT:
-      gtk_widget_set_sensitive (priv->cancel, TRUE);
-      gtk_widget_set_sensitive (priv->back, TRUE);
-      gtk_widget_set_sensitive (priv->forward, priv->current_page->complete);
-      gtk_window_set_default_widget (GTK_WINDOW (assistant), priv->forward);
-      gtk_widget_show (priv->back);
-      gtk_widget_show (priv->forward);
-      gtk_widget_hide (priv->apply);
-      gtk_widget_hide (priv->close);
+      gtk_widget_set_sensitive (assistant->cancel, TRUE);
+      gtk_widget_set_sensitive (assistant->back, TRUE);
+      gtk_widget_set_sensitive (assistant->forward, assistant->current_page->complete);
+      gtk_window_set_default_widget (GTK_WINDOW (assistant), assistant->forward);
+      gtk_widget_show (assistant->back);
+      gtk_widget_show (assistant->forward);
+      gtk_widget_hide (assistant->apply);
+      gtk_widget_hide (assistant->close);
       compute_last_button_state (assistant);
       break;
     case GTK_ASSISTANT_PAGE_SUMMARY:
-      gtk_widget_set_sensitive (priv->close, priv->current_page->complete);
-      gtk_window_set_default_widget (GTK_WINDOW (assistant), priv->close);
-      gtk_widget_show (priv->close);
-      gtk_widget_hide (priv->back);
-      gtk_widget_hide (priv->forward);
-      gtk_widget_hide (priv->apply);
-      gtk_widget_hide (priv->last);
+      gtk_widget_set_sensitive (assistant->close, assistant->current_page->complete);
+      gtk_window_set_default_widget (GTK_WINDOW (assistant), assistant->close);
+      gtk_widget_show (assistant->close);
+      gtk_widget_hide (assistant->back);
+      gtk_widget_hide (assistant->forward);
+      gtk_widget_hide (assistant->apply);
+      gtk_widget_hide (assistant->last);
       break;
     case GTK_ASSISTANT_PAGE_PROGRESS:
-      gtk_widget_set_sensitive (priv->cancel, priv->current_page->complete);
-      gtk_widget_set_sensitive (priv->back, priv->current_page->complete);
-      gtk_widget_set_sensitive (priv->forward, priv->current_page->complete);
-      gtk_window_set_default_widget (GTK_WINDOW (assistant), priv->forward);
-      gtk_widget_show (priv->back);
-      gtk_widget_hide (priv->apply);
-      gtk_widget_hide (priv->close);
-      gtk_widget_hide (priv->last);
+      gtk_widget_set_sensitive (assistant->cancel, assistant->current_page->complete);
+      gtk_widget_set_sensitive (assistant->back, assistant->current_page->complete);
+      gtk_widget_set_sensitive (assistant->forward, assistant->current_page->complete);
+      gtk_window_set_default_widget (GTK_WINDOW (assistant), assistant->forward);
+      gtk_widget_show (assistant->back);
+      gtk_widget_hide (assistant->apply);
+      gtk_widget_hide (assistant->close);
+      gtk_widget_hide (assistant->last);
       compute_progress_state (assistant);
       break;
     case GTK_ASSISTANT_PAGE_CUSTOM:
-      gtk_widget_hide (priv->cancel);
-      gtk_widget_hide (priv->back);
-      gtk_widget_hide (priv->forward);
-      gtk_widget_hide (priv->apply);
-      gtk_widget_hide (priv->last);
-      gtk_widget_hide (priv->close);
+      gtk_widget_hide (assistant->cancel);
+      gtk_widget_hide (assistant->back);
+      gtk_widget_hide (assistant->forward);
+      gtk_widget_hide (assistant->apply);
+      gtk_widget_hide (assistant->last);
+      gtk_widget_hide (assistant->close);
       break;
     default:
       g_assert_not_reached ();
     }
 
-  if (priv->committed)
-    gtk_widget_hide (priv->cancel);
-  else if (priv->current_page->type == GTK_ASSISTANT_PAGE_SUMMARY ||
-           priv->current_page->type == GTK_ASSISTANT_PAGE_CUSTOM)
-    gtk_widget_hide (priv->cancel);
+  if (assistant->committed)
+    gtk_widget_hide (assistant->cancel);
+  else if (assistant->current_page->type == GTK_ASSISTANT_PAGE_SUMMARY ||
+           assistant->current_page->type == GTK_ASSISTANT_PAGE_CUSTOM)
+    gtk_widget_hide (assistant->cancel);
   else
-    gtk_widget_show (priv->cancel);
+    gtk_widget_show (assistant->cancel);
 
   /* this is quite general, we don't want to
    * go back if it's the first page
    */
-  if (!priv->visited_pages)
-    gtk_widget_hide (priv->back);
+  if (!assistant->visited_pages)
+    gtk_widget_hide (assistant->back);
 }
 
 static gboolean
 update_page_title_state (GtkAssistant *assistant, GList *list)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
   GtkAssistantPage *page, *other;
   gboolean visible;
   GList *l;
@@ -901,7 +873,7 @@ update_page_title_state (GtkAssistant *assistant, GList *list)
   else
     visible = gtk_widget_get_visible (page->page);
 
-  if (page == priv->current_page)
+  if (page == assistant->current_page)
     {
       gtk_widget_set_visible (page->regular_title, FALSE);
       gtk_widget_set_visible (page->current_title, visible);
@@ -925,7 +897,7 @@ update_page_title_state (GtkAssistant *assistant, GList *list)
           if (g_strcmp0 (page->title, other->title) != 0)
             break;
 
-          if (other == priv->current_page)
+          if (other == assistant->current_page)
             {
               visible = FALSE;
               break;
@@ -942,56 +914,53 @@ update_page_title_state (GtkAssistant *assistant, GList *list)
 static void
 update_title_state (GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
   GList *l;
   gboolean show_titles;
 
   show_titles = FALSE;
-  for (l = priv->pages; l != NULL; l = l->next)
+  for (l = assistant->pages; l != NULL; l = l->next)
     {
       if (update_page_title_state (assistant, l))
         show_titles = TRUE;
     }
 
-  gtk_widget_set_visible (priv->sidebar, show_titles);
+  gtk_widget_set_visible (assistant->sidebar, show_titles);
 }
 
 static void
 set_current_page (GtkAssistant *assistant,
                   gint          page_num)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
+  assistant->current_page = (GtkAssistantPage *)g_list_nth_data (assistant->pages, page_num);
 
-  priv->current_page = (GtkAssistantPage *)g_list_nth_data (priv->pages, page_num);
-
-  g_signal_emit (assistant, signals [PREPARE], 0, priv->current_page->page);
+  g_signal_emit (assistant, signals [PREPARE], 0, assistant->current_page->page);
   /* do not continue if the prepare signal handler has already changed the
    * current page */
-  if (priv->current_page != (GtkAssistantPage *)g_list_nth_data (priv->pages, page_num))
+  if (assistant->current_page != (GtkAssistantPage *)g_list_nth_data (assistant->pages, page_num))
     return;
 
   update_title_state (assistant);
 
-  gtk_window_set_title (GTK_WINDOW (assistant), priv->current_page->title);
+  gtk_window_set_title (GTK_WINDOW (assistant), assistant->current_page->title);
 
-  gtk_stack_set_visible_child (GTK_STACK (priv->content), priv->current_page->page);
+  gtk_stack_set_visible_child (GTK_STACK (assistant->content), assistant->current_page->page);
 
   /* update buttons state, flow may have changed */
   if (gtk_widget_get_mapped (GTK_WIDGET (assistant)))
     update_buttons_state (assistant);
 
-  if (!gtk_widget_child_focus (priv->current_page->page, GTK_DIR_TAB_FORWARD))
+  if (!gtk_widget_child_focus (assistant->current_page->page, GTK_DIR_TAB_FORWARD))
     {
       GtkWidget *button[6];
       gint i;
 
       /* find the best button to focus */
-      button[0] = priv->apply;
-      button[1] = priv->close;
-      button[2] = priv->forward;
-      button[3] = priv->back;
-      button[4] = priv->cancel;
-      button[5] = priv->last;
+      button[0] = assistant->apply;
+      button[1] = assistant->close;
+      button[2] = assistant->forward;
+      button[3] = assistant->back;
+      button[4] = assistant->cancel;
+      button[5] = assistant->last;
       for (i = 0; i < 6; i++)
         {
           if (gtk_widget_get_visible (button[i]) &&
@@ -1007,20 +976,19 @@ set_current_page (GtkAssistant *assistant,
 static gint
 compute_next_step (GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
   GtkAssistantPage *page_info;
   gint current_page, n_pages, next_page;
 
   current_page = gtk_assistant_get_current_page (assistant);
-  page_info = priv->current_page;
+  page_info = assistant->current_page;
   n_pages = gtk_assistant_get_n_pages (assistant);
 
-  next_page = (priv->forward_function) (current_page,
-                                        priv->forward_function_data);
+  next_page = (assistant->forward_function) (current_page,
+                                        assistant->forward_function_data);
 
   if (next_page >= 0 && next_page < n_pages)
     {
-      priv->visited_pages = g_slist_prepend (priv->visited_pages, page_info);
+      assistant->visited_pages = g_slist_prepend (assistant->visited_pages, page_info);
       set_current_page (assistant, next_page);
 
       return TRUE;
@@ -1078,10 +1046,8 @@ static void
 on_assistant_last (GtkWidget    *widget,
                    GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
-
-  while (priv->current_page->type == GTK_ASSISTANT_PAGE_CONTENT &&
-         priv->current_page->complete)
+  while (assistant->current_page->type == GTK_ASSISTANT_PAGE_CONTENT &&
+         assistant->current_page->complete)
     compute_next_step (assistant);
 }
 
@@ -1123,7 +1089,6 @@ static void
 assistant_remove_page (GtkAssistant *assistant,
                        GtkWidget    *page)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
   GtkAssistantPage *page_info;
   GList *page_node;
   GList *element;
@@ -1135,14 +1100,14 @@ assistant_remove_page (GtkAssistant *assistant,
   page_info = element->data;
 
   /* If this is the current page, we need to switch away. */
-  if (page_info == priv->current_page)
+  if (page_info == assistant->current_page)
     {
       if (!compute_next_step (assistant))
         {
           /* The best we can do at this point is probably to pick
            * the first visible page.
            */
-          page_node = priv->pages;
+          page_node = assistant->pages;
 
           while (page_node &&
                  !gtk_widget_get_visible (((GtkAssistantPage *) page_node->data)->page))
@@ -1152,23 +1117,23 @@ assistant_remove_page (GtkAssistant *assistant,
             page_node = page_node->next;
 
           if (page_node)
-            priv->current_page = page_node->data;
+            assistant->current_page = page_node->data;
           else
-            priv->current_page = NULL;
+            assistant->current_page = NULL;
         }
     }
 
   g_signal_handlers_disconnect_by_func (page_info->page, on_page_page_notify, assistant);
   g_signal_handlers_disconnect_by_func (page_info, on_page_notify, assistant);
 
-  gtk_size_group_remove_widget (priv->title_size_group, page_info->regular_title);
-  gtk_size_group_remove_widget (priv->title_size_group, page_info->current_title);
+  gtk_size_group_remove_widget (assistant->title_size_group, page_info->regular_title);
+  gtk_size_group_remove_widget (assistant->title_size_group, page_info->current_title);
 
-  gtk_container_remove (GTK_CONTAINER (priv->sidebar), page_info->regular_title);
-  gtk_container_remove (GTK_CONTAINER (priv->sidebar), page_info->current_title);
+  gtk_container_remove (GTK_CONTAINER (assistant->sidebar), page_info->regular_title);
+  gtk_container_remove (GTK_CONTAINER (assistant->sidebar), page_info->current_title);
 
-  priv->pages = g_list_remove_link (priv->pages, element);
-  priv->visited_pages = g_slist_remove_all (priv->visited_pages, page_info);
+  assistant->pages = g_list_remove_link (assistant->pages, element);
+  assistant->visited_pages = g_slist_remove_all (assistant->visited_pages, page_info);
 
   g_object_unref (page_info);
 
@@ -1184,18 +1149,16 @@ assistant_remove_page (GtkAssistant *assistant,
 static void
 gtk_assistant_init (GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
+  assistant->pages = NULL;
+  assistant->current_page = NULL;
+  assistant->visited_pages = NULL;
 
-  priv->pages = NULL;
-  priv->current_page = NULL;
-  priv->visited_pages = NULL;
-
-  priv->forward_function = default_forward_function;
-  priv->forward_function_data = assistant;
-  priv->forward_data_destroy = NULL;
+  assistant->forward_function = default_forward_function;
+  assistant->forward_function_data = assistant;
+  assistant->forward_data_destroy = NULL;
 
   g_object_get (gtk_widget_get_settings (GTK_WIDGET (assistant)),
-                "gtk-dialogs-use-header", &priv->use_header_bar,
+                "gtk-dialogs-use-header", &assistant->use_header_bar,
                 NULL);
 
   gtk_widget_init_template (GTK_WIDGET (assistant));
@@ -1205,10 +1168,10 @@ gtk_assistant_init (GtkAssistant *assistant)
       GList *buttons, *l;
 
       /* Reverse the action area children for the alternative button order setting */
-      buttons = gtk_container_get_children (GTK_CONTAINER (priv->action_area));
+      buttons = gtk_container_get_children (GTK_CONTAINER (assistant->action_area));
 
       for (l = buttons; l; l = l->next)
-        gtk_box_reorder_child_after (GTK_BOX (priv->action_area), GTK_WIDGET (l->data), NULL);
+        gtk_box_reorder_child_after (GTK_BOX (assistant->action_area), GTK_WIDGET (l->data), NULL);
 
       g_list_free (buttons);
     }
@@ -1325,42 +1288,41 @@ static void
 gtk_assistant_dispose (GObject *object)
 {
   GtkAssistant *assistant = GTK_ASSISTANT (object);
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
 
-  if (priv->model)
-    g_list_model_items_changed (G_LIST_MODEL (priv->model), 0, g_list_length (priv->pages), 0);
+  if (assistant->model)
+    g_list_model_items_changed (G_LIST_MODEL (assistant->model), 0, g_list_length (assistant->pages), 0);
 
   /* We set current to NULL so that the remove code doesn't try
    * to do anything funny
    */
-  priv->current_page = NULL;
+  assistant->current_page = NULL;
 
-  if (priv->content)
+  if (assistant->content)
     {
-      while (priv->pages)
+      while (assistant->pages)
         gtk_assistant_remove_page (assistant, 0);
 
-      priv->content = NULL;
+      assistant->content = NULL;
     }
 
-  priv->sidebar = NULL;
-  priv->action_area = NULL;
+  assistant->sidebar = NULL;
+  assistant->action_area = NULL;
 
-  if (priv->forward_function)
+  if (assistant->forward_function)
     {
-      if (priv->forward_function_data &&
-          priv->forward_data_destroy)
-        priv->forward_data_destroy (priv->forward_function_data);
+      if (assistant->forward_function_data &&
+          assistant->forward_data_destroy)
+        assistant->forward_data_destroy (assistant->forward_function_data);
 
-      priv->forward_function = NULL;
-      priv->forward_function_data = NULL;
-      priv->forward_data_destroy = NULL;
+      assistant->forward_function = NULL;
+      assistant->forward_function_data = NULL;
+      assistant->forward_data_destroy = NULL;
     }
 
-  if (priv->visited_pages)
+  if (assistant->visited_pages)
     {
-      g_slist_free (priv->visited_pages);
-      priv->visited_pages = NULL;
+      g_slist_free (assistant->visited_pages);
+      assistant->visited_pages = NULL;
     }
 
   G_OBJECT_CLASS (gtk_assistant_parent_class)->dispose (object);
@@ -1370,8 +1332,7 @@ static GList*
 find_page (GtkAssistant  *assistant,
            GtkWidget     *page)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
-  GList *child = priv->pages;
+  GList *child = assistant->pages;
 
   while (child)
     {
@@ -1389,7 +1350,6 @@ static void
 gtk_assistant_map (GtkWidget *widget)
 {
   GtkAssistant *assistant = GTK_ASSISTANT (widget);
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
   GList *page_node;
   GtkAssistantPage *page;
   gint page_num;
@@ -1397,9 +1357,9 @@ gtk_assistant_map (GtkWidget *widget)
   /* if there's no default page, pick the first one */
   page = NULL;
   page_num = 0;
-  if (!priv->current_page)
+  if (!assistant->current_page)
     {
-      page_node = priv->pages;
+      page_node = assistant->pages;
 
       while (page_node && !gtk_widget_get_visible (((GtkAssistantPage *) page_node->data)->page))
         {
@@ -1425,11 +1385,10 @@ static void
 gtk_assistant_unmap (GtkWidget *widget)
 {
   GtkAssistant *assistant = GTK_ASSISTANT (widget);
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
 
-  g_slist_free (priv->visited_pages);
-  priv->visited_pages = NULL;
-  priv->current_page  = NULL;
+  g_slist_free (assistant->visited_pages);
+  assistant->visited_pages = NULL;
+  assistant->current_page  = NULL;
 
   GTK_WIDGET_CLASS (gtk_assistant_parent_class)->unmap (widget);
 }
@@ -1438,12 +1397,11 @@ static gboolean
 gtk_assistant_close_request (GtkWindow *window)
 {
   GtkAssistant *assistant = GTK_ASSISTANT (window);
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
 
   /* Do not allow cancelling in the middle of a progress page */
-  if (priv->current_page &&
-      (priv->current_page->type != GTK_ASSISTANT_PAGE_PROGRESS ||
-       priv->current_page->complete))
+  if (assistant->current_page &&
+      (assistant->current_page->type != GTK_ASSISTANT_PAGE_PROGRESS ||
+       assistant->current_page->complete))
     g_signal_emit (assistant, signals [CANCEL], 0, NULL);
 
   return TRUE;
@@ -1479,14 +1437,12 @@ gtk_assistant_new (void)
 gint
 gtk_assistant_get_current_page (GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
-
   g_return_val_if_fail (GTK_IS_ASSISTANT (assistant), -1);
 
-  if (!priv->pages || !priv->current_page)
+  if (!assistant->pages || !assistant->current_page)
     return -1;
 
-  return g_list_index (priv->pages, priv->current_page);
+  return g_list_index (assistant->pages, assistant->current_page);
 }
 
 /**
@@ -1507,22 +1463,21 @@ void
 gtk_assistant_set_current_page (GtkAssistant *assistant,
                                 gint          page_num)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
   GtkAssistantPage *page;
 
   g_return_if_fail (GTK_IS_ASSISTANT (assistant));
 
   if (page_num >= 0)
-    page = (GtkAssistantPage *) g_list_nth_data (priv->pages, page_num);
+    page = (GtkAssistantPage *) g_list_nth_data (assistant->pages, page_num);
   else
     {
-      page = (GtkAssistantPage *) g_list_last (priv->pages)->data;
-      page_num = g_list_length (priv->pages);
+      page = (GtkAssistantPage *) g_list_last (assistant->pages)->data;
+      page_num = g_list_length (assistant->pages);
     }
 
   g_return_if_fail (page != NULL);
 
-  if (priv->current_page == page)
+  if (assistant->current_page == page)
     return;
 
   /* only add the page to the visited list if the assistant is mapped,
@@ -1530,8 +1485,8 @@ gtk_assistant_set_current_page (GtkAssistant *assistant,
    * the initial page is != to 0
    */
   if (gtk_widget_get_mapped (GTK_WIDGET (assistant)))
-    priv->visited_pages = g_slist_prepend (priv->visited_pages,
-                                           priv->current_page);
+    assistant->visited_pages = g_slist_prepend (assistant->visited_pages,
+                                           assistant->current_page);
 
   set_current_page (assistant, page_num);
 }
@@ -1574,7 +1529,6 @@ gtk_assistant_next_page (GtkAssistant *assistant)
 void
 gtk_assistant_previous_page (GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
   GtkAssistantPage *page_info;
   GSList *page_node;
 
@@ -1583,18 +1537,18 @@ gtk_assistant_previous_page (GtkAssistant *assistant)
   /* skip the progress pages when going back */
   do
     {
-      page_node = priv->visited_pages;
+      page_node = assistant->visited_pages;
 
       g_return_if_fail (page_node != NULL);
 
-      priv->visited_pages = priv->visited_pages->next;
+      assistant->visited_pages = assistant->visited_pages->next;
       page_info = (GtkAssistantPage *) page_node->data;
       g_slist_free_1 (page_node);
     }
   while (page_info->type == GTK_ASSISTANT_PAGE_PROGRESS ||
          !gtk_widget_get_visible (page_info->page));
 
-  set_current_page (assistant, g_list_index (priv->pages, page_info));
+  set_current_page (assistant, g_list_index (assistant->pages, page_info));
 }
 
 /**
@@ -1608,11 +1562,9 @@ gtk_assistant_previous_page (GtkAssistant *assistant)
 gint
 gtk_assistant_get_n_pages (GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
-
   g_return_val_if_fail (GTK_IS_ASSISTANT (assistant), 0);
 
-  return g_list_length (priv->pages);
+  return g_list_length (assistant->pages);
 }
 
 /**
@@ -1630,7 +1582,6 @@ GtkWidget*
 gtk_assistant_get_nth_page (GtkAssistant *assistant,
                             gint          page_num)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
   GtkAssistantPage *page;
   GList *elem;
 
@@ -1638,9 +1589,9 @@ gtk_assistant_get_nth_page (GtkAssistant *assistant,
   g_return_val_if_fail (page_num >= -1, NULL);
 
   if (page_num == -1)
-    elem = g_list_last (priv->pages);
+    elem = g_list_last (assistant->pages);
   else
-    elem = g_list_nth (priv->pages, page_num);
+    elem = g_list_nth (assistant->pages, page_num);
 
   if (!elem)
     return NULL;
@@ -1723,7 +1674,6 @@ gtk_assistant_add_page (GtkAssistant *assistant,
                         GtkAssistantPage *page_info,
                         gint position)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
   gint n_pages;
   GtkWidget *sibling;
   char *name;
@@ -1739,8 +1689,8 @@ gtk_assistant_add_page (GtkAssistant *assistant,
 
   gtk_widget_add_css_class (page_info->current_title, GTK_STYLE_CLASS_HIGHLIGHT);
 
-  gtk_size_group_add_widget (priv->title_size_group, page_info->regular_title);
-  gtk_size_group_add_widget (priv->title_size_group, page_info->current_title);
+  gtk_size_group_add_widget (assistant->title_size_group, page_info->regular_title);
+  gtk_size_group_add_widget (assistant->title_size_group, page_info->current_title);
 
   g_signal_connect (G_OBJECT (page_info->page), "notify::visible",
                     G_CALLBACK (on_page_page_notify), assistant);
@@ -1751,28 +1701,28 @@ gtk_assistant_add_page (GtkAssistant *assistant,
   g_signal_connect (G_OBJECT (page_info), "notify::page-type",
                     G_CALLBACK (on_page_notify), assistant);
 
-  n_pages = g_list_length (priv->pages);
+  n_pages = g_list_length (assistant->pages);
 
   if (position < 0 || position > n_pages)
     position = n_pages;
 
-  priv->pages = g_list_insert (priv->pages, g_object_ref (page_info), position);
+  assistant->pages = g_list_insert (assistant->pages, g_object_ref (page_info), position);
 
   if (position == 0)
     sibling = NULL;
   else
     {
       int i;
-      sibling = gtk_widget_get_first_child (priv->sidebar);
+      sibling = gtk_widget_get_first_child (assistant->sidebar);
       for (i = 1; i < 2 * position; i++)
         sibling = gtk_widget_get_next_sibling (sibling);
     }
 
-  gtk_box_insert_child_after (GTK_BOX (priv->sidebar), page_info->current_title, sibling);
-  gtk_box_insert_child_after (GTK_BOX (priv->sidebar), page_info->regular_title, sibling);
+  gtk_box_insert_child_after (GTK_BOX (assistant->sidebar), page_info->current_title, sibling);
+  gtk_box_insert_child_after (GTK_BOX (assistant->sidebar), page_info->regular_title, sibling);
 
   name = g_strdup_printf ("%p", page_info->page);
-  gtk_stack_add_named (GTK_STACK (priv->content), page_info->page, name);
+  gtk_stack_add_named (GTK_STACK (assistant->content), page_info->page, name);
   g_free (name);
 
   if (gtk_widget_get_mapped (GTK_WIDGET (assistant)))
@@ -1781,8 +1731,8 @@ gtk_assistant_add_page (GtkAssistant *assistant,
       update_actions_size (assistant);
     }
 
-  if (priv->model)
-    g_list_model_items_changed (priv->model, position, 0, 1);
+  if (assistant->model)
+    g_list_model_items_changed (assistant->model, position, 0, 1);
 
   return position;
 }
@@ -1799,7 +1749,6 @@ void
 gtk_assistant_remove_page (GtkAssistant *assistant,
                            gint          page_num)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
   GtkWidget *page;
 
   g_return_if_fail (GTK_IS_ASSISTANT (assistant));
@@ -1808,8 +1757,8 @@ gtk_assistant_remove_page (GtkAssistant *assistant,
   if (page)
     assistant_remove_page (assistant, page);
 
-  if (priv->model)
-    g_list_model_items_changed (priv->model, page_num, 1, 0);
+  if (assistant->model)
+    g_list_model_items_changed (assistant->model, page_num, 1, 0);
 }
 
 /**
@@ -1834,25 +1783,23 @@ gtk_assistant_set_forward_page_func (GtkAssistant         *assistant,
                                      gpointer              data,
                                      GDestroyNotify        destroy)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
-
   g_return_if_fail (GTK_IS_ASSISTANT (assistant));
 
-  if (priv->forward_data_destroy &&
-      priv->forward_function_data)
-    (*priv->forward_data_destroy) (priv->forward_function_data);
+  if (assistant->forward_data_destroy &&
+      assistant->forward_function_data)
+    (*assistant->forward_data_destroy) (assistant->forward_function_data);
 
   if (page_func)
     {
-      priv->forward_function = page_func;
-      priv->forward_function_data = data;
-      priv->forward_data_destroy = destroy;
+      assistant->forward_function = page_func;
+      assistant->forward_function_data = data;
+      assistant->forward_data_destroy = destroy;
     }
   else
     {
-      priv->forward_function = default_forward_function;
-      priv->forward_function_data = assistant;
-      priv->forward_data_destroy = NULL;
+      assistant->forward_function = default_forward_function;
+      assistant->forward_function_data = assistant;
+      assistant->forward_data_destroy = NULL;
     }
 
   /* Page flow has possibly changed, so the
@@ -1866,11 +1813,9 @@ static void
 add_to_action_area (GtkAssistant *assistant,
                     GtkWidget    *child)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
-
   gtk_widget_set_valign (child, GTK_ALIGN_BASELINE);
 
-  gtk_container_add (GTK_CONTAINER (priv->action_area), child);
+  gtk_container_add (GTK_CONTAINER (assistant->action_area), child);
 }
 
 /**
@@ -1884,20 +1829,18 @@ void
 gtk_assistant_add_action_widget (GtkAssistant *assistant,
                                  GtkWidget    *child)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
-
   g_return_if_fail (GTK_IS_ASSISTANT (assistant));
   g_return_if_fail (GTK_IS_WIDGET (child));
 
   if (GTK_IS_BUTTON (child))
     {
-      gtk_size_group_add_widget (priv->button_size_group, child);
-      priv->extra_buttons += 1;
+      gtk_size_group_add_widget (assistant->button_size_group, child);
+      assistant->extra_buttons += 1;
       if (gtk_widget_get_mapped (GTK_WIDGET (assistant)))
         update_actions_size (assistant);
     }
 
-  if (priv->constructed && priv->use_header_bar)
+  if (assistant->constructed && assistant->use_header_bar)
     add_to_header_bar (assistant, child);
   else
     add_to_action_area (assistant, child);
@@ -1914,20 +1857,18 @@ void
 gtk_assistant_remove_action_widget (GtkAssistant *assistant,
                                     GtkWidget    *child)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
-
   g_return_if_fail (GTK_IS_ASSISTANT (assistant));
   g_return_if_fail (GTK_IS_WIDGET (child));
 
   if (GTK_IS_BUTTON (child))
     {
-      gtk_size_group_remove_widget (priv->button_size_group, child);
-      priv->extra_buttons -= 1;
+      gtk_size_group_remove_widget (assistant->button_size_group, child);
+      assistant->extra_buttons -= 1;
       if (gtk_widget_get_mapped (GTK_WIDGET (assistant)))
         update_actions_size (assistant);
     }
 
-  gtk_container_remove (GTK_CONTAINER (priv->action_area), child);
+  gtk_container_remove (GTK_CONTAINER (assistant->action_area), child);
 }
 
 /**
@@ -2145,14 +2086,12 @@ gtk_assistant_update_buttons_state (GtkAssistant *assistant)
 void
 gtk_assistant_commit (GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
-
   g_return_if_fail (GTK_IS_ASSISTANT (assistant));
 
-  g_slist_free (priv->visited_pages);
-  priv->visited_pages = NULL;
+  g_slist_free (assistant->visited_pages);
+  assistant->visited_pages = NULL;
 
-  priv->committed = TRUE;
+  assistant->committed = TRUE;
 
   update_buttons_state (assistant);
 }
@@ -2168,16 +2107,15 @@ G_DEFINE_TYPE (GtkAssistantAccessible, _gtk_assistant_accessible, GTK_TYPE_WINDO
 static gint
 gtk_assistant_accessible_get_n_children (AtkObject *accessible)
 {
-  GtkAssistantPrivate *priv;
   GtkWidget *widget;
+  GtkAssistant *assistant;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   if (widget == NULL)
     return 0;
 
-  priv = gtk_assistant_get_instance_private (GTK_ASSISTANT (widget));
-
-  return g_list_length (priv->pages) + 2;
+  assistant = GTK_ASSISTANT (widget);
+  return g_list_length (assistant->pages) + 2;
 }
 
 static AtkObject *
@@ -2185,7 +2123,6 @@ gtk_assistant_accessible_ref_child (AtkObject *accessible,
                                     gint       index)
 {
   GtkAssistant *assistant;
-  GtkAssistantPrivate *priv;
   GtkWidget *widget, *child;
   gint n_pages;
   AtkObject *obj;
@@ -2196,26 +2133,25 @@ gtk_assistant_accessible_ref_child (AtkObject *accessible,
     return NULL;
 
   assistant = GTK_ASSISTANT (widget);
-  priv = gtk_assistant_get_instance_private (assistant);
-  n_pages = g_list_length (priv->pages);
+  n_pages = g_list_length (assistant->pages);
 
   if (index < 0)
     return NULL;
   else if (index < n_pages)
     {
-      GtkAssistantPage *page = g_list_nth_data (priv->pages, index);
+      GtkAssistantPage *page = g_list_nth_data (assistant->pages, index);
 
       child = page->page;
       title = gtk_assistant_get_page_title (assistant, child);
     }
   else if (index == n_pages)
     {
-      child = priv->action_area;
+      child = assistant->action_area;
       title = NULL;
     }
   else if (index == n_pages + 1)
     {
-      child = priv->headerbar;
+      child = assistant->headerbar;
       title = NULL;
     }
   else
@@ -2268,9 +2204,8 @@ gtk_assistant_buildable_add_child (GtkBuildable *buildable,
   else if (type && g_str_equal (type, "titlebar"))
     {
       GtkAssistant *assistant = GTK_ASSISTANT (buildable);
-      GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
-      priv->headerbar = GTK_WIDGET (child);
-      gtk_window_set_titlebar (GTK_WINDOW (buildable), priv->headerbar);
+      assistant->headerbar = GTK_WIDGET (child);
+      gtk_window_set_titlebar (GTK_WINDOW (buildable), assistant->headerbar);
     }
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
@@ -2354,9 +2289,8 @@ static guint
 gtk_assistant_pages_get_n_items (GListModel *model)
 {
   GtkAssistantPages *pages = GTK_ASSISTANT_PAGES (model);
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (pages->assistant);
 
-  return g_list_length (priv->pages);
+  return g_list_length (pages->assistant->pages);
 }
 
 static gpointer
@@ -2364,10 +2298,9 @@ gtk_assistant_pages_get_item (GListModel *model,
                           guint       position)
 {
   GtkAssistantPages *pages = GTK_ASSISTANT_PAGES (model);
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (pages->assistant);
   GtkAssistantPage *page;
 
-  page = g_list_nth_data (priv->pages, position);
+  page = g_list_nth_data (pages->assistant->pages, position);
 
   return g_object_ref (page);
 }
@@ -2414,16 +2347,14 @@ gtk_assistant_pages_new (GtkAssistant *assistant)
 GListModel *
 gtk_assistant_get_pages (GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
-
   g_return_val_if_fail (GTK_IS_ASSISTANT (assistant), NULL);
 
-  if (priv->model)
-    return g_object_ref (priv->model);
+  if (assistant->model)
+    return g_object_ref (assistant->model);
 
-  priv->model = G_LIST_MODEL (gtk_assistant_pages_new (assistant));
+  assistant->model = G_LIST_MODEL (gtk_assistant_pages_new (assistant));
 
-  g_object_add_weak_pointer (G_OBJECT (priv->model), (gpointer *)&priv->model);
+  g_object_add_weak_pointer (G_OBJECT (assistant->model), (gpointer *)&assistant->model);
 
-  return priv->model;
+  return assistant->model;
 }

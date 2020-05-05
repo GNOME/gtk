@@ -163,7 +163,10 @@
 #define MENU_BAR_ACCEL GDK_KEY_F10
 #define RESIZE_HANDLE_SIZE 20
 #define MNEMONICS_DELAY 300 /* ms */
-#define NO_CONTENT_CHILD_NAT 200
+#define NO_CONTENT_CHILD_NAT 200 /* ms */
+#define VISIBLE_FOCUS_DURATION 3 /* s */
+
+
 /* In case the content (excluding header bar and shadows) of the window
  * would be empty, either because there is no visible child widget or only an
  * empty container widget, we use NO_CONTENT_CHILD_NAT as natural width/height
@@ -7470,7 +7473,7 @@ gtk_window_set_focus_visible (GtkWindow *window,
     }
 
   if (priv->focus_visible)
-    priv->focus_visible_timeout = g_timeout_add_seconds (5, unset_focus_visible, window);
+    priv->focus_visible_timeout = g_timeout_add_seconds (VISIBLE_FOCUS_DURATION, unset_focus_visible, window);
 
   if (changed)
     {
