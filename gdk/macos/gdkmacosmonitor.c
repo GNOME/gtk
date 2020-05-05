@@ -37,19 +37,8 @@ struct _GdkMacosMonitorClass
 G_DEFINE_TYPE (GdkMacosMonitor, gdk_macos_monitor, GDK_TYPE_MONITOR)
 
 static void
-gdk_macos_monitor_finalize (GObject *object)
-{
-  GdkMacosMonitor *self = (GdkMacosMonitor *)object;
-
-  G_OBJECT_CLASS (gdk_macos_monitor_parent_class)->finalize (object);
-}
-
-static void
 gdk_macos_monitor_class_init (GdkMacosMonitorClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = gdk_macos_monitor_finalize;
 }
 
 static void
