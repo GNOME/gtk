@@ -35,6 +35,7 @@
 }
 
 -(void)setNeedsInvalidateShadow: (BOOL)invalidate;
+-(void)updateTrackingRect;
 -(NSTrackingRectTag)trackingRect;
 
 @end
