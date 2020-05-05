@@ -188,40 +188,53 @@ gdk_macos_display_remove_monitor (GdkMacosDisplay *self,
 }
 
 static void
-gdk_macos_display_load_monitors (GdkMacosDisplay *self)
+gdk_macos_display_update_bounds (GdkMacosDisplay *self)
 {
   GDK_BEGIN_MACOS_ALLOC_POOL;
 
-  NSArray *screens;
   int max_x = 0;
   int max_y = 0;
 
   g_assert (GDK_IS_MACOS_DISPLAY (self));
 
-  screens = [NSScreen screens];
+  self->min_x = 0;
+  self->min_y = 0;
 
-  for (id obj in screens)
+  for (id obj in [NSScreen screens])
     {
-      CGDirectDisplayID screen_id;
-      GdkMacosMonitor *monitor;
-      NSRect geom;
+      NSRect geom = [(NSScreen *)obj frame];
 
-      geom = [obj frame];
       self->min_x = MIN (self->min_x, geom.origin.x);
       self->min_y = MIN (self->min_y, geom.origin.y);
       max_x = MAX (max_x, geom.origin.x + geom.size.width);
       max_y = MAX (max_y, geom.origin.y + geom.size.height);
-
-      screen_id = [[[obj deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue];
-      monitor = _gdk_macos_monitor_new (self, screen_id);
-
-      gdk_macos_display_add_monitor (self, monitor);
-
-      g_object_unref (monitor);
     }
 
   self->width = max_x - self->min_x;
   self->height = max_y - self->min_y;
+
+  GDK_END_MACOS_ALLOC_POOL;
+}
+
+static void
+gdk_macos_display_load_monitors (GdkMacosDisplay *self)
+{
+  GDK_BEGIN_MACOS_ALLOC_POOL;
+
+  g_assert (GDK_IS_MACOS_DISPLAY (self));
+
+  gdk_macos_display_update_bounds (self);
+
+  for (id obj in [NSScreen screens])
+    {
+      CGDirectDisplayID screen_id;
+      GdkMacosMonitor *monitor;
+
+      screen_id = [[[obj deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue];
+      monitor = _gdk_macos_monitor_new (self, screen_id);
+      gdk_macos_display_add_monitor (self, monitor);
+      g_object_unref (monitor);
+    }
 
   GDK_END_MACOS_ALLOC_POOL;
 }
