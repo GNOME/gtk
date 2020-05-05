@@ -570,40 +570,32 @@ translate_keysym (guint            hardware_keycode,
 }
 
 static gboolean
-gdk_macos_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
-                                         guint          keyval,
-                                         GdkKeymapKey **keys,
-                                         gint          *n_keys)
+gdk_macos_keymap_get_entries_for_keyval (GdkKeymap *keymap,
+                                         guint      keyval,
+                                         GArray    *keys)
 {
-  GArray *keys_array;
-  guint i;
+  gboolean ret = FALSE;
 
   g_assert (GDK_IS_MACOS_KEYMAP (keymap));
   g_assert (keys != NULL);
-  g_assert (n_keys != NULL);
 
-  *n_keys = 0;
-  keys_array = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
-
-  for (i = 0; i < NUM_KEYCODES * KEYVALS_PER_KEYCODE; i++)
+  for (guint i = 0; i < NUM_KEYCODES * KEYVALS_PER_KEYCODE; i++)
     {
       GdkKeymapKey key;
 
       if (keyval_array[i] != keyval)
         continue;
 
-      (*n_keys)++;
-
       key.keycode = i / KEYVALS_PER_KEYCODE;
       key.group = (i % KEYVALS_PER_KEYCODE) >= 2;
       key.level = i % 2;
 
-      g_array_append_val (keys_array, key);
+      g_array_append_val (keys, key);
+
+      ret = TRUE;
     }
 
-  *keys = (GdkKeymapKey *)(gpointer)g_array_free (keys_array, FALSE);
-
-  return *n_keys > 0;
+  return ret;
 }
 
 static gboolean
@@ -801,11 +793,11 @@ _gdk_macos_keymap_get_event_type (NSEvent *event)
 
   switch ([event type])
     {
-    case NSKeyDown:
+    case NSEventTypeKeyDown:
       return GDK_KEY_PRESS;
-    case NSKeyUp:
+    case NSEventTypeKeyUp:
       return GDK_KEY_RELEASE;
-    case NSFlagsChanged:
+    case NSEventTypeFlagsChanged:
       break;
     default:
       g_assert_not_reached ();

@@ -47,7 +47,7 @@ test_resize (NSEvent         *event,
   /* Resizing from the resize indicator only begins if an NSLeftMouseButton
    * event is received in the resizing area.
    */
-  if ([event type] == NSLeftMouseDown &&
+  if ([event type] == NSEventTypeLeftMouseDown &&
       [window showsResizeIndicator])
     {
       NSRect frame;
@@ -81,9 +81,9 @@ test_resize (NSEvent         *event,
    * window finding code, because there are no GdkSurfaces present in
    * the range [-3, 0].
    */
-  if (([event type] == NSLeftMouseDown ||
-       [event type] == NSRightMouseDown ||
-       [event type] == NSOtherMouseDown))
+  if (([event type] == NSEventTypeLeftMouseDown ||
+       [event type] == NSEventTypeRightMouseDown ||
+       [event type] == NSEventTypeOtherMouseDown))
     {
       if (x < GDK_LION_RESIZE ||
           x > GDK_SURFACE (surface)->width - GDK_LION_RESIZE ||
@@ -160,15 +160,15 @@ get_keyboard_modifiers_from_ns_flags (NSUInteger nsflags)
 {
   GdkModifierType modifiers = 0;
 
-  if (nsflags & NSAlphaShiftKeyMask)
+  if (nsflags & NSEventModifierFlagCapsLock)
     modifiers |= GDK_LOCK_MASK;
-  if (nsflags & NSShiftKeyMask)
+  if (nsflags & NSEventModifierFlagShift)
     modifiers |= GDK_SHIFT_MASK;
-  if (nsflags & NSControlKeyMask)
+  if (nsflags & NSEventModifierFlagControl)
     modifiers |= GDK_CONTROL_MASK;
-  if (nsflags & NSAlternateKeyMask)
+  if (nsflags & NSEventModifierFlagOption)
     modifiers |= GDK_ALT_MASK;
-  if (nsflags & NSCommandKeyMask)
+  if (nsflags & NSEventModifierFlagCommand)
     modifiers |= GDK_SUPER_MASK;
 
   return modifiers;
@@ -212,16 +212,16 @@ fill_button_event (GdkMacosDisplay *display,
 
   switch ([nsevent type])
     {
-    case NSLeftMouseDown:
-    case NSRightMouseDown:
-    case NSOtherMouseDown:
+    case NSEventTypeLeftMouseDown:
+    case NSEventTypeRightMouseDown:
+    case NSEventTypeOtherMouseDown:
       type = GDK_BUTTON_PRESS;
       state &= ~get_mouse_button_modifiers_from_ns_event (nsevent);
       break;
 
-    case NSLeftMouseUp:
-    case NSRightMouseUp:
-    case NSOtherMouseUp:
+    case NSEventTypeLeftMouseUp:
+    case NSEventTypeRightMouseUp:
+    case NSEventTypeOtherMouseUp:
       type = GDK_BUTTON_RELEASE;
       state |= get_mouse_button_modifiers_from_ns_event (nsevent);
       break;
@@ -256,11 +256,11 @@ synthesize_crossing_event (GdkMacosDisplay *display,
 
   switch ([nsevent type])
     {
-    case NSMouseEntered:
+    case NSEventTypeMouseEntered:
       event_type = GDK_ENTER_NOTIFY;
       break;
 
-    case NSMouseExited:
+    case NSEventTypeMouseExited:
       event_type = GDK_LEAVE_NOTIFY;
       break;
 
@@ -273,7 +273,7 @@ synthesize_crossing_event (GdkMacosDisplay *display,
   seat = gdk_display_get_default_seat (GDK_DISPLAY (display));
 
   return gdk_crossing_event_new (event_type,
-                                 surface,
+                                 GDK_SURFACE (surface),
                                  gdk_seat_get_pointer (seat),
                                  NULL,
                                  get_time_from_ns_event (nsevent),
@@ -488,9 +488,9 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
    * grabs when the application loses focus (gets deactivated).
    */
   event_type = [nsevent type];
-  if (event_type == NSAppKitDefined)
+  if (event_type == NSEventTypeAppKitDefined)
     {
-      if ([nsevent subtype] == NSApplicationDeactivatedEventType)
+      if ([nsevent subtype] == NSEventSubtypeApplicationDeactivated)
         _gdk_macos_display_break_all_grabs (self, get_time_from_ns_event (nsevent));
 
       /* This could potentially be used to break grabs when clicking
@@ -545,9 +545,9 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
    * native apps). If the app is active, we focus the window and then handle
    * the event, also to match native apps.
    */
-  if ((event_type == NSRightMouseDown ||
-       event_type == NSOtherMouseDown ||
-       event_type == NSLeftMouseDown))
+  if ((event_type == NSEventTypeRightMouseDown ||
+       event_type == NSEventTypeOtherMouseDown ||
+       event_type == NSEventTypeLeftMouseDown))
     {
       if (![NSApp isActive])
         {
