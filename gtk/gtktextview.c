@@ -155,7 +155,7 @@ enum
   TEXT_HANDLE_N_HANDLES
 };
 
-struct _GtkTextViewPrivate 
+struct _GtkTextViewPrivate
 {
   GtkTextLayout *layout;
   GtkTextBuffer *buffer;
@@ -561,14 +561,6 @@ static void     gtk_text_view_set_vadjustment_values (GtkTextView   *text_view);
 static void gtk_text_view_update_im_spot_location (GtkTextView *text_view);
 static void gtk_text_view_insert_emoji (GtkTextView *text_view);
 
-/* Container methods */
-static void gtk_text_view_add    (GtkContainer *container,
-                                  GtkWidget    *child);
-static void gtk_text_view_remove (GtkContainer *container,
-                                  GtkWidget    *child);
-static void gtk_text_view_forall (GtkContainer *container,
-                                  GtkCallback   callback,
-                                  gpointer      callback_data);
 static void update_node_ordering (GtkWidget    *widget);
 
 /* GtkTextHandle handlers */
@@ -661,7 +653,7 @@ static gint           text_window_get_height      (GtkTextWindow     *win);
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE_WITH_CODE (GtkTextView, gtk_text_view, GTK_TYPE_CONTAINER,
+G_DEFINE_TYPE_WITH_CODE (GtkTextView, gtk_text_view, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkTextView)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
 
@@ -803,7 +795,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   /* Default handlers and virtual methods
    */
@@ -823,10 +814,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->snapshot = gtk_text_view_snapshot;
   widget_class->grab_focus = gtk_widget_grab_focus_self;
   widget_class->focus = gtk_widget_focus_all;
-
-  container_class->add = gtk_text_view_add;
-  container_class->remove = gtk_text_view_remove;
-  container_class->forall = gtk_text_view_forall;
 
   klass->move_cursor = gtk_text_view_move_cursor;
   klass->set_anchor = gtk_text_view_set_anchor;
@@ -5736,26 +5723,10 @@ gtk_text_view_snapshot (GtkWidget   *widget,
     }
 }
 
-/*
- * Container
- */
-
-static void
-gtk_text_view_add (GtkContainer *container,
-                   GtkWidget    *child)
+void
+gtk_text_view_remove (GtkTextView *text_view,
+                      GtkWidget   *child)
 {
-  /* There isn't really a good default for what to do when
-   * using gtk_container_add() for @child. So we default to
-   * placing it at 0,0 in the text window.
-   */
-  gtk_text_view_add_overlay (GTK_TEXT_VIEW (container), child, 0, 0);
-}
-
-static void
-gtk_text_view_remove (GtkContainer *container,
-                      GtkWidget    *child)
-{
-  GtkTextView *text_view = GTK_TEXT_VIEW (container);
   GtkTextViewPrivate *priv = text_view->priv;
   AnchoredChild *ac;
 
@@ -5799,41 +5770,6 @@ gtk_text_view_remove (GtkContainer *container,
   g_queue_unlink (&priv->anchored_children, &ac->link);
   gtk_widget_unparent (ac->widget);
   anchored_child_free (ac);
-}
-
-static void
-gtk_text_view_forall (GtkContainer *container,
-                      GtkCallback   callback,
-                      gpointer      callback_data)
-{
-  const GList *iter;
-  GtkTextView *text_view;
-  GtkTextViewPrivate *priv;
-
-  g_return_if_fail (GTK_IS_TEXT_VIEW (container));
-  g_return_if_fail (callback != NULL);
-
-  text_view = GTK_TEXT_VIEW (container);
-  priv = text_view->priv;
-
-  if (priv->left_child)
-    callback (GTK_WIDGET (priv->left_child), callback_data);
-  if (priv->right_child)
-    callback (GTK_WIDGET (priv->right_child), callback_data);
-  if (priv->top_child)
-    callback (GTK_WIDGET (priv->top_child), callback_data);
-  if (priv->bottom_child)
-    callback (GTK_WIDGET (priv->bottom_child), callback_data);
-  if (priv->center_child)
-    callback (GTK_WIDGET (priv->center_child), callback_data);
-
-  iter = priv->anchored_children.head;
-  while (iter != NULL)
-    {
-      const AnchoredChild *ac = iter->data;
-      iter = iter->next;
-      callback (ac->widget, callback_data);
-    }
 }
 
 #define CURSOR_ON_MULTIPLIER 2
