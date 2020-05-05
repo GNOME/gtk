@@ -42,7 +42,9 @@ create_surface (GtkWidget *widget)
 }
 
 static void
-scribble_size_allocate (GtkWidget *widget)
+scribble_resize (GtkWidget *widget,
+                 int        width,
+                 int        height)
 {
   create_surface (widget);
 }
@@ -242,8 +244,8 @@ do_drawingarea (GtkWidget *do_widget)
       gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), scribble_draw, NULL, NULL);
       gtk_frame_set_child (GTK_FRAME (frame), da);
 
-      g_signal_connect (da, "size-allocate",
-                        G_CALLBACK (scribble_size_allocate), NULL);
+      g_signal_connect (da, "resize",
+                        G_CALLBACK (scribble_resize), NULL);
 
       drag = gtk_gesture_drag_new ();
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (drag), GDK_BUTTON_PRIMARY);
