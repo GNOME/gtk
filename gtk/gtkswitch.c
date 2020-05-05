@@ -622,7 +622,7 @@ gtk_switch_init (GtkSwitch *self)
   GtkLayoutManager *layout;
   GtkGesture *gesture;
 
-  gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
+  gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
 
   gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);

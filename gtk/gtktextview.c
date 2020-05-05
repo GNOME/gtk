@@ -1858,7 +1858,7 @@ gtk_text_view_init (GtkTextView *text_view)
   text_view->priv = gtk_text_view_get_instance_private (text_view);
   priv = text_view->priv;
 
-  gtk_widget_set_can_focus (widget, TRUE);
+  gtk_widget_set_focusable (widget, TRUE);
   gtk_widget_set_overflow (widget, GTK_OVERFLOW_HIDDEN);
 
   gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_VIEW);

@@ -574,7 +574,7 @@ gtk_calendar_init (GtkCalendar *calendar)
   int min_year_width;
   GDateTime *now;
 
-  gtk_widget_set_can_focus (widget, TRUE);
+  gtk_widget_set_focusable (widget, TRUE);
 
   gtk_widget_add_css_class (GTK_WIDGET (calendar), GTK_STYLE_CLASS_VIEW);
 

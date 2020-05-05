@@ -4050,6 +4050,8 @@ GtkPickFlags
 gtk_widget_pick
 gtk_widget_get_can_focus
 gtk_widget_set_can_focus
+gtk_widget_get_focusable
+gtk_widget_set_focusable
 gtk_widget_get_focus_on_click
 gtk_widget_set_focus_on_click
 gtk_widget_set_focus_child

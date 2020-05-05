@@ -383,6 +383,8 @@ gtk_expander_init (GtkExpander *expander)
   expander->expand_timer = 0;
   expander->resize_toplevel = 0;
 
+  gtk_widget_set_focusable (GTK_WIDGET (expander), TRUE);
+
   expander->box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_set_parent (expander->box, GTK_WIDGET (expander));
 

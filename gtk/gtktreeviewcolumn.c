@@ -1019,11 +1019,11 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
   
   if (priv->reorderable || priv->clickable)
     {
-      gtk_widget_set_can_focus (priv->button, TRUE);
+      gtk_widget_set_focusable (priv->button, TRUE);
     }
   else
     {
-      gtk_widget_set_can_focus (priv->button, FALSE);
+      gtk_widget_set_focusable (priv->button, FALSE);
       if (gtk_widget_has_focus (priv->button))
 	{
           GtkRoot *root = gtk_widget_get_root (priv->tree_view);

@@ -528,7 +528,7 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
   swatch->color.blue = 0.25;
   swatch->color.alpha = 1.0;
 
-  gtk_widget_set_can_focus (GTK_WIDGET (swatch), TRUE);
+  gtk_widget_set_focusable (GTK_WIDGET (swatch), TRUE);
   gtk_widget_set_overflow (GTK_WIDGET (swatch), GTK_OVERFLOW_HIDDEN);
 
   gesture = gtk_gesture_long_press_new ();

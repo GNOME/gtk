@@ -244,7 +244,7 @@ gtk_popover_menu_bar_item_init (GtkPopoverMenuBarItem *item)
 {
   GtkEventController *controller;
 
-  gtk_widget_set_can_focus (GTK_WIDGET (item), TRUE);
+  gtk_widget_set_focusable (GTK_WIDGET (item), TRUE);
 
   item->label = g_object_new (GTK_TYPE_LABEL,
                               "use-underline", TRUE,

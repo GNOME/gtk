@@ -1963,7 +1963,7 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   };
   gint i;
 
-  gtk_widget_set_can_focus (widget, TRUE);
+  gtk_widget_set_focusable (widget, TRUE);
 
   /* Instantiated by gtk_scrolled_window_set_[hv]adjustment
    * which are both construct properties
