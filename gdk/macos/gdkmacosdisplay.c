@@ -187,6 +187,23 @@ gdk_macos_display_remove_monitor (GdkMacosDisplay *self,
   g_object_unref (monitor);
 }
 
+static GdkMacosMonitor *
+gdk_macos_display_find_monitor (GdkMacosDisplay   *self,
+                                CGDirectDisplayID  screen_id)
+{
+  g_assert (GDK_IS_MACOS_DISPLAY (self));
+
+  for (guint i = 0; i < self->monitors->len; i++)
+    {
+      GdkMacosMonitor *monitor = g_ptr_array_index (self->monitors, i);
+
+      if (screen_id == _gdk_macos_monitor_get_screen_id (monitor))
+        return monitor;
+    }
+
+  return NULL;
+}
+
 static void
 gdk_macos_display_update_bounds (GdkMacosDisplay *self)
 {
@@ -217,13 +234,31 @@ gdk_macos_display_update_bounds (GdkMacosDisplay *self)
 }
 
 static void
-gdk_macos_display_load_monitors (GdkMacosDisplay *self)
+gdk_macos_display_monitors_changed_cb (CFNotificationCenterRef  center,
+                                       void                    *observer,
+                                       CFStringRef              name,
+                                       const void              *object,
+                                       CFDictionaryRef          userInfo)
+{
+  GdkMacosDisplay *self = observer;
+
+  g_assert (GDK_IS_MACOS_DISPLAY (self));
+
+  _gdk_macos_display_reload_monitors (self);
+}
+
+void
+_gdk_macos_display_reload_monitors (GdkMacosDisplay *self)
 {
   GDK_BEGIN_MACOS_ALLOC_POOL;
+
+  GArray *seen;
 
   g_assert (GDK_IS_MACOS_DISPLAY (self));
 
   gdk_macos_display_update_bounds (self);
+
+  seen = g_array_new (FALSE, FALSE, sizeof (CGDirectDisplayID));
 
   for (id obj in [NSScreen screens])
     {
@@ -231,10 +266,41 @@ gdk_macos_display_load_monitors (GdkMacosDisplay *self)
       GdkMacosMonitor *monitor;
 
       screen_id = [[[obj deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue];
-      monitor = _gdk_macos_monitor_new (self, screen_id);
-      gdk_macos_display_add_monitor (self, monitor);
-      g_object_unref (monitor);
+
+      if ((monitor = gdk_macos_display_find_monitor (self, screen_id)))
+        {
+          _gdk_macos_monitor_reconfigure (monitor);
+        }
+      else
+        {
+          monitor = _gdk_macos_monitor_new (self, screen_id);
+          gdk_macos_display_add_monitor (self, monitor);
+          g_object_unref (monitor);
+        }
+
+      g_array_append_val (seen, screen_id);
     }
+
+  for (guint i = self->monitors->len; i > 0; i--)
+    {
+      GdkMacosMonitor *monitor = g_ptr_array_index (self->monitors, i - 1);
+      CGDirectDisplayID screen_id = _gdk_macos_monitor_get_screen_id (monitor);
+      gboolean found = FALSE;
+
+      for (guint j = 0; j < seen->len; j++)
+        {
+          if (screen_id == g_array_index (seen, CGDirectDisplayID, j))
+            {
+              found = TRUE;
+              break;
+            }
+        }
+
+      if (!found)
+        gdk_macos_display_remove_monitor (self, monitor);
+    }
+
+  g_array_unref (seen);
 
   GDK_END_MACOS_ALLOC_POOL;
 }
@@ -531,8 +597,15 @@ _gdk_macos_display_open (const gchar *display_name)
   self->keymap = _gdk_macos_keymap_new (self);
 
   gdk_macos_display_load_seat (self);
-  gdk_macos_display_load_monitors (self);
+  _gdk_macos_display_reload_monitors (self);
   gdk_macos_display_load_display_link (self);
+
+  CFNotificationCenterAddObserver (CFNotificationCenterGetDistributedCenter (),
+                                   self,
+                                   gdk_macos_display_monitors_changed_cb,
+                                   CFSTR ("NSApplicationDidChangeScreenParametersNotification"),
+                                   NULL,
+                                   CFNotificationSuspensionBehaviorDeliverImmediately);
 
   if (event_source == NULL)
     {

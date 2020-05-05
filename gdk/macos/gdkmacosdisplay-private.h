@@ -55,6 +55,7 @@ GdkMacosSurface *_gdk_macos_display_get_surface_at_display_coords  (GdkMacosDisp
                                                                     int             *surface_x,
                                                                     int             *surface_y);
 void             _gdk_macos_display_stacking_changed               (GdkMacosDisplay *self);
+void             _gdk_macos_display_reload_monitors                (GdkMacosDisplay *self);
 void             _gdk_macos_display_surface_removed                (GdkMacosDisplay *self,
                                                                     GdkMacosSurface *surface);
 void             _gdk_macos_display_add_frame_callback             (GdkMacosDisplay *self,
