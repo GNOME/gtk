@@ -144,7 +144,6 @@ static void             gtk_icon_view_get_property              (GObject        
 								 GValue             *value,
 								 GParamSpec         *pspec);
 /* GtkWidget vfuncs */
-static void             gtk_icon_view_destroy                   (GtkWidget          *widget);
 static GtkSizeRequestMode gtk_icon_view_get_request_mode        (GtkWidget          *widget);
 static void gtk_icon_view_measure (GtkWidget *widget,
                                    GtkOrientation  orientation,
@@ -347,7 +346,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   gobject_class->set_property = gtk_icon_view_set_property;
   gobject_class->get_property = gtk_icon_view_get_property;
 
-  widget_class->destroy = gtk_icon_view_destroy;
   widget_class->get_request_mode = gtk_icon_view_get_request_mode;
   widget_class->measure = gtk_icon_view_measure;
   widget_class->size_allocate = gtk_icon_view_size_allocate;
@@ -1010,6 +1008,28 @@ gtk_icon_view_dispose (GObject *object)
   icon_view = GTK_ICON_VIEW (object);
   priv      = icon_view->priv;
 
+  gtk_icon_view_set_model (icon_view, NULL);
+
+  if (icon_view->priv->scroll_to_path != NULL)
+    {
+      gtk_tree_row_reference_free (icon_view->priv->scroll_to_path);
+      icon_view->priv->scroll_to_path = NULL;
+    }
+
+  remove_scroll_timeout (icon_view);
+
+  if (icon_view->priv->hadjustment != NULL)
+    {
+      g_object_unref (icon_view->priv->hadjustment);
+      icon_view->priv->hadjustment = NULL;
+    }
+
+  if (icon_view->priv->vadjustment != NULL)
+    {
+      g_object_unref (icon_view->priv->vadjustment);
+      icon_view->priv->vadjustment = NULL;
+    }
+
   if (priv->cell_area_context)
     {
       g_object_unref (priv->cell_area_context);
@@ -1239,35 +1259,6 @@ gtk_icon_view_get_property (GObject      *object,
 }
 
 /* GtkWidget methods */
-static void
-gtk_icon_view_destroy (GtkWidget *widget)
-{
-  GtkIconView *icon_view = GTK_ICON_VIEW (widget);
-
-  gtk_icon_view_set_model (icon_view, NULL);
-
-  if (icon_view->priv->scroll_to_path != NULL)
-    {
-      gtk_tree_row_reference_free (icon_view->priv->scroll_to_path);
-      icon_view->priv->scroll_to_path = NULL;
-    }
-
-  remove_scroll_timeout (icon_view);
-
-  if (icon_view->priv->hadjustment != NULL)
-    {
-      g_object_unref (icon_view->priv->hadjustment);
-      icon_view->priv->hadjustment = NULL;
-    }
-
-  if (icon_view->priv->vadjustment != NULL)
-    {
-      g_object_unref (icon_view->priv->vadjustment);
-      icon_view->priv->vadjustment = NULL;
-    }
-
-  GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->destroy (widget);
-}
 
 static gint
 gtk_icon_view_get_n_items (GtkIconView *icon_view)
