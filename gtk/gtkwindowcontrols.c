@@ -411,11 +411,19 @@ gtk_window_controls_unroot (GtkWidget *widget)
 }
 
 static void
-gtk_window_controls_finalize (GObject *object)
+gtk_window_controls_dispose (GObject *object)
 {
   GtkWindowControls *self = GTK_WINDOW_CONTROLS (object);
 
   clear_controls (self);
+
+  G_OBJECT_CLASS (gtk_window_controls_parent_class)->dispose (object);
+}
+
+static void
+gtk_window_controls_finalize (GObject *object)
+{
+  GtkWindowControls *self = GTK_WINDOW_CONTROLS (object);
 
   g_free (self->decoration_layout);
 
@@ -480,6 +488,7 @@ gtk_window_controls_class_init (GtkWindowControlsClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->dispose = gtk_window_controls_dispose;
   object_class->finalize = gtk_window_controls_finalize;
   object_class->get_property = gtk_window_controls_get_property;
   object_class->set_property = gtk_window_controls_set_property;
