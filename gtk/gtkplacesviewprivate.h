@@ -37,30 +37,6 @@ G_BEGIN_DECLS
 
 typedef struct _GtkPlacesView GtkPlacesView;
 typedef struct _GtkPlacesViewClass GtkPlacesViewClass;
-typedef struct _GtkPlacesViewPrivate GtkPlacesViewPrivate;
-
-struct _GtkPlacesViewClass
-{
-  GtkBoxClass parent_class;
-
-  void     (* open_location)        (GtkPlacesView          *view,
-                                     GFile                  *location,
-                                     GtkPlacesOpenFlags  open_flags);
-
-  void    (* show_error_message)     (GtkPlacesSidebar      *sidebar,
-                                      const gchar           *primary,
-                                      const gchar           *secondary);
-
-  /*< private >*/
-
-  /* Padding for future expansion */
-  gpointer reserved[10];
-};
-
-struct _GtkPlacesView
-{
-  GtkBox parent_instance;
-};
 
 GType              gtk_places_view_get_type                      (void) G_GNUC_CONST;
 

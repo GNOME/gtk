@@ -90,14 +90,7 @@ typedef struct _GtkSearchBarClass   GtkSearchBarClass;
 struct _GtkSearchBar
 {
   GtkWidget parent;
-};
 
-struct _GtkSearchBarClass
-{
-  GtkWidgetClass parent_class;
-};
-
-typedef struct {
   GtkWidget   *child;
   GtkWidget   *revealer;
   GtkWidget   *box_center;
@@ -108,12 +101,16 @@ typedef struct {
 
   GtkWidget   *capture_widget;
   GtkEventController *capture_widget_controller;
-} GtkSearchBarPrivate;
+};
+
+struct _GtkSearchBarClass
+{
+  GtkWidgetClass parent_class;
+};
 
 static void gtk_search_bar_buildable_iface_init (GtkBuildableIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkSearchBar, gtk_search_bar, GTK_TYPE_WIDGET,
-                         G_ADD_PRIVATE (GtkSearchBar)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_search_bar_buildable_iface_init))
 
@@ -153,8 +150,7 @@ static void
 stop_search_cb (GtkWidget    *entry,
                 GtkSearchBar *bar)
 {
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
-  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), FALSE);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (bar->revealer), FALSE);
 }
 
 static void
@@ -162,24 +158,23 @@ reveal_child_changed_cb (GObject      *object,
                          GParamSpec   *pspec,
                          GtkSearchBar *bar)
 {
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
   gboolean reveal_child;
 
   g_object_get (object, "reveal-child", &reveal_child, NULL);
 
-  if (reveal_child == priv->reveal_child)
+  if (reveal_child == bar->reveal_child)
     return;
 
-  priv->reveal_child = reveal_child;
+  bar->reveal_child = reveal_child;
 
-  if (priv->entry)
+  if (bar->entry)
     {
-      if (reveal_child && GTK_IS_ENTRY (priv->entry))
-        gtk_entry_grab_focus_without_selecting (GTK_ENTRY (priv->entry));
-      else if (GTK_IS_SEARCH_ENTRY (priv->entry))
-        gtk_widget_grab_focus (priv->entry);
+      if (reveal_child && GTK_IS_ENTRY (bar->entry))
+        gtk_entry_grab_focus_without_selecting (GTK_ENTRY (bar->entry));
+      else if (GTK_IS_SEARCH_ENTRY (bar->entry))
+        gtk_widget_grab_focus (bar->entry);
       else
-        gtk_editable_set_text (GTK_EDITABLE (priv->entry), "");
+        gtk_editable_set_text (GTK_EDITABLE (bar->entry), "");
     }
 
   g_object_notify_by_pspec (G_OBJECT (bar), widget_props[PROP_SEARCH_MODE_ENABLED]);
@@ -189,9 +184,7 @@ static void
 close_button_clicked_cb (GtkWidget    *button,
                          GtkSearchBar *bar)
 {
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
-
-  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), FALSE);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (bar->revealer), FALSE);
 }
 
 static void
@@ -251,16 +244,15 @@ static void
 gtk_search_bar_dispose (GObject *object)
 {
   GtkSearchBar *bar = GTK_SEARCH_BAR (object);
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
 
   gtk_search_bar_set_key_capture_widget (bar, NULL);
   gtk_search_bar_set_entry (bar, NULL);
 
-  g_clear_pointer (&priv->revealer, gtk_widget_unparent);
+  g_clear_pointer (&bar->revealer, gtk_widget_unparent);
 
-  priv->child = NULL;
-  priv->box_center = NULL;
-  priv->close_button = NULL;
+  bar->child = NULL;
+  bar->box_center = NULL;
+  bar->close_button = NULL;
 
   G_OBJECT_CLASS (gtk_search_bar_parent_class)->dispose (object);
 }
@@ -271,12 +263,11 @@ gtk_search_bar_compute_expand (GtkWidget *widget,
                                gboolean  *vexpand)
 {
   GtkSearchBar *bar = GTK_SEARCH_BAR (widget);
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
 
-  if (priv->child)
+  if (bar->child)
     {
-      *hexpand = gtk_widget_compute_expand (priv->child, GTK_ORIENTATION_HORIZONTAL);
-      *vexpand = gtk_widget_compute_expand (priv->child, GTK_ORIENTATION_VERTICAL);
+      *hexpand = gtk_widget_compute_expand (bar->child, GTK_ORIENTATION_HORIZONTAL);
+      *vexpand = gtk_widget_compute_expand (bar->child, GTK_ORIENTATION_VERTICAL);
     }
   else
     {
@@ -338,27 +329,25 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
 static void
 gtk_search_bar_init (GtkSearchBar *bar)
 {
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
+  bar->revealer = gtk_revealer_new ();
+  gtk_revealer_set_reveal_child (GTK_REVEALER (bar->revealer), FALSE);
+  gtk_widget_set_hexpand (bar->revealer, TRUE);
+  gtk_widget_set_parent (bar->revealer, GTK_WIDGET (bar));
 
-  priv->revealer = gtk_revealer_new ();
-  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), FALSE);
-  gtk_widget_set_hexpand (priv->revealer, TRUE);
-  gtk_widget_set_parent (priv->revealer, GTK_WIDGET (bar));
+  bar->box_center = gtk_center_box_new ();
+  gtk_widget_set_hexpand (bar->box_center, TRUE);
 
-  priv->box_center = gtk_center_box_new ();
-  gtk_widget_set_hexpand (priv->box_center, TRUE);
+  bar->close_button = gtk_button_new_from_icon_name ("window-close-symbolic");
+  gtk_widget_add_css_class (bar->close_button, "close");
+  gtk_center_box_set_end_widget (GTK_CENTER_BOX (bar->box_center), bar->close_button);
+  gtk_widget_hide (bar->close_button);
 
-  priv->close_button = gtk_button_new_from_icon_name ("window-close-symbolic");
-  gtk_widget_add_css_class (priv->close_button, "close");
-  gtk_center_box_set_end_widget (GTK_CENTER_BOX (priv->box_center), priv->close_button);
-  gtk_widget_hide (priv->close_button);
+  gtk_revealer_set_child (GTK_REVEALER (bar->revealer), bar->box_center);
 
-  gtk_revealer_set_child (GTK_REVEALER (priv->revealer), priv->box_center);
-
-  g_signal_connect (priv->revealer, "notify::reveal-child",
+  g_signal_connect (bar->revealer, "notify::reveal-child",
                     G_CALLBACK (reveal_child_changed_cb), bar);
 
-  g_signal_connect (priv->close_button, "clicked",
+  g_signal_connect (bar->close_button, "clicked",
                     G_CALLBACK (close_button_clicked_cb), bar);
 }
 
@@ -381,28 +370,26 @@ static void
 gtk_search_bar_set_entry (GtkSearchBar *bar,
                           GtkEditable  *entry)
 {
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
-
-  if (priv->entry != NULL)
+  if (bar->entry != NULL)
     {
-      if (GTK_IS_SEARCH_ENTRY (priv->entry))
+      if (GTK_IS_SEARCH_ENTRY (bar->entry))
         {
-          gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (priv->entry), NULL);
-          g_signal_handlers_disconnect_by_func (priv->entry, stop_search_cb, bar);
+          gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (bar->entry), NULL);
+          g_signal_handlers_disconnect_by_func (bar->entry, stop_search_cb, bar);
         }
-      g_object_remove_weak_pointer (G_OBJECT (priv->entry), (gpointer *) &priv->entry);
+      g_object_remove_weak_pointer (G_OBJECT (bar->entry), (gpointer *) &bar->entry);
     }
 
-  priv->entry = GTK_WIDGET (entry);
+  bar->entry = GTK_WIDGET (entry);
 
-  if (priv->entry != NULL)
+  if (bar->entry != NULL)
     {
-      g_object_add_weak_pointer (G_OBJECT (priv->entry), (gpointer *) &priv->entry);
-      if (GTK_IS_SEARCH_ENTRY (priv->entry))
+      g_object_add_weak_pointer (G_OBJECT (bar->entry), (gpointer *) &bar->entry);
+      if (GTK_IS_SEARCH_ENTRY (bar->entry))
         {
-          g_signal_connect (priv->entry, "stop-search",
+          g_signal_connect (bar->entry, "stop-search",
                             G_CALLBACK (stop_search_cb), bar);
-          gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (priv->entry),
+          gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (bar->entry),
                                                    GTK_WIDGET (bar));
         }
 
@@ -440,11 +427,9 @@ gtk_search_bar_connect_entry (GtkSearchBar *bar,
 gboolean
 gtk_search_bar_get_search_mode (GtkSearchBar *bar)
 {
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
-
   g_return_val_if_fail (GTK_IS_SEARCH_BAR (bar), FALSE);
 
-  return priv->reveal_child;
+  return bar->reveal_child;
 }
 
 /**
@@ -458,11 +443,9 @@ void
 gtk_search_bar_set_search_mode (GtkSearchBar *bar,
                                 gboolean      search_mode)
 {
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
-
   g_return_if_fail (GTK_IS_SEARCH_BAR (bar));
 
-  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), search_mode);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (bar->revealer), search_mode);
 }
 
 /**
@@ -476,11 +459,9 @@ gtk_search_bar_set_search_mode (GtkSearchBar *bar,
 gboolean
 gtk_search_bar_get_show_close_button (GtkSearchBar *bar)
 {
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
-
   g_return_val_if_fail (GTK_IS_SEARCH_BAR (bar), FALSE);
 
-  return gtk_widget_get_visible (priv->close_button);
+  return gtk_widget_get_visible (bar->close_button);
 }
 
 /**
@@ -497,15 +478,13 @@ void
 gtk_search_bar_set_show_close_button (GtkSearchBar *bar,
                                       gboolean      visible)
 {
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
-
   g_return_if_fail (GTK_IS_SEARCH_BAR (bar));
 
   visible = visible != FALSE;
 
-  if (gtk_widget_get_visible (priv->close_button) != visible)
+  if (gtk_widget_get_visible (bar->close_button) != visible)
     {
-      gtk_widget_set_visible (priv->close_button, visible);
+      gtk_widget_set_visible (bar->close_button, visible);
       g_object_notify_by_pspec (G_OBJECT (bar), widget_props[PROP_SHOW_CLOSE_BUTTON]);
     }
 }
@@ -523,22 +502,21 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
                             GdkModifierType        state,
                             GtkSearchBar          *bar)
 {
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
   gboolean handled;
 
   if (!gtk_widget_get_mapped (GTK_WIDGET (bar)))
     return GDK_EVENT_PROPAGATE;
 
-  if (priv->reveal_child)
+  if (bar->reveal_child)
     return GDK_EVENT_PROPAGATE;
 
-  if (priv->entry == NULL)
+  if (bar->entry == NULL)
     {
       g_warning ("The search bar does not have an entry connected to it. Call gtk_search_bar_connect_entry() to connect one.");
       return GDK_EVENT_PROPAGATE;
     }
 
-  if (GTK_IS_SEARCH_ENTRY (priv->entry))
+  if (GTK_IS_SEARCH_ENTRY (bar->entry))
     {
       /* The search entry was told to listen to events from the search bar, so
        * just forward the event to self, so the search entry has an opportunity
@@ -559,9 +537,9 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
 
       if (keyval == GDK_KEY_Escape)
         {
-          if (gtk_revealer_get_reveal_child (GTK_REVEALER (priv->revealer)))
+          if (gtk_revealer_get_reveal_child (GTK_REVEALER (bar->revealer)))
             {
-              stop_search_cb (priv->entry, bar);
+              stop_search_cb (bar->entry, bar);
               return GDK_EVENT_STOP;
             }
 
@@ -570,22 +548,22 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
 
       handled = GDK_EVENT_PROPAGATE;
       preedit_changed = buffer_changed = FALSE;
-      preedit_change_id = g_signal_connect_swapped (priv->entry, "preedit-changed",
+      preedit_change_id = g_signal_connect_swapped (bar->entry, "preedit-changed",
                                                     G_CALLBACK (changed_cb), &preedit_changed);
-      buffer_change_id = g_signal_connect_swapped (priv->entry, "changed",
+      buffer_change_id = g_signal_connect_swapped (bar->entry, "changed",
                                                    G_CALLBACK (changed_cb), &buffer_changed);
 
-      res = gtk_event_controller_key_forward (controller, priv->entry);
+      res = gtk_event_controller_key_forward (controller, bar->entry);
 
-      g_signal_handler_disconnect (priv->entry, preedit_change_id);
-      g_signal_handler_disconnect (priv->entry, buffer_change_id);
+      g_signal_handler_disconnect (bar->entry, preedit_change_id);
+      g_signal_handler_disconnect (bar->entry, buffer_change_id);
 
       if ((res && buffer_changed) || preedit_changed)
         handled = GDK_EVENT_STOP;
     }
 
   if (handled == GDK_EVENT_STOP)
-    gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), TRUE);
+    gtk_revealer_set_reveal_child (GTK_REVEALER (bar->revealer), TRUE);
 
   return handled;
 }
@@ -602,39 +580,37 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
  **/
 void
 gtk_search_bar_set_key_capture_widget (GtkSearchBar *bar,
-				       GtkWidget    *widget)
+                                       GtkWidget    *widget)
 {
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
-
   g_return_if_fail (GTK_IS_SEARCH_BAR (bar));
   g_return_if_fail (!widget || GTK_IS_WIDGET (widget));
 
-  if (priv->capture_widget == widget)
+  if (bar->capture_widget == widget)
     return;
 
-  if (priv->capture_widget)
+  if (bar->capture_widget)
     {
-      gtk_widget_remove_controller (priv->capture_widget,
-                                    priv->capture_widget_controller);
-      g_object_remove_weak_pointer (G_OBJECT (priv->capture_widget),
-                                    (gpointer *) &priv->capture_widget);
+      gtk_widget_remove_controller (bar->capture_widget,
+                                    bar->capture_widget_controller);
+      g_object_remove_weak_pointer (G_OBJECT (bar->capture_widget),
+                                    (gpointer *) &bar->capture_widget);
     }
 
-  priv->capture_widget = widget;
+  bar->capture_widget = widget;
 
   if (widget)
     {
-      g_object_add_weak_pointer (G_OBJECT (priv->capture_widget),
-                                 (gpointer *) &priv->capture_widget);
+      g_object_add_weak_pointer (G_OBJECT (bar->capture_widget),
+                                 (gpointer *) &bar->capture_widget);
 
-      priv->capture_widget_controller = gtk_event_controller_key_new ();
-      gtk_event_controller_set_propagation_phase (priv->capture_widget_controller,
+      bar->capture_widget_controller = gtk_event_controller_key_new ();
+      gtk_event_controller_set_propagation_phase (bar->capture_widget_controller,
                                                   GTK_PHASE_CAPTURE);
-      g_signal_connect (priv->capture_widget_controller, "key-pressed",
+      g_signal_connect (bar->capture_widget_controller, "key-pressed",
                         G_CALLBACK (capture_widget_key_handled), bar);
-      g_signal_connect (priv->capture_widget_controller, "key-released",
+      g_signal_connect (bar->capture_widget_controller, "key-released",
                         G_CALLBACK (capture_widget_key_handled), bar);
-      gtk_widget_add_controller (widget, priv->capture_widget_controller);
+      gtk_widget_add_controller (widget, bar->capture_widget_controller);
     }
 }
 
@@ -649,11 +625,9 @@ gtk_search_bar_set_key_capture_widget (GtkSearchBar *bar,
 GtkWidget *
 gtk_search_bar_get_key_capture_widget (GtkSearchBar *bar)
 {
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
-
   g_return_val_if_fail (GTK_IS_SEARCH_BAR (bar), NULL);
 
-  return priv->capture_widget;
+  return bar->capture_widget;
 }
 
 /**
@@ -667,21 +641,19 @@ void
 gtk_search_bar_set_child (GtkSearchBar *bar,
                           GtkWidget    *child)
 {
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
-
-  if (priv->child)
+  if (bar->child)
     {
-      if (GTK_IS_EDITABLE (priv->child))
+      if (GTK_IS_EDITABLE (bar->child))
         gtk_search_bar_connect_entry (bar, NULL);
 
-      gtk_center_box_set_center_widget (GTK_CENTER_BOX (priv->box_center), NULL);
+      gtk_center_box_set_center_widget (GTK_CENTER_BOX (bar->box_center), NULL);
     }
 
-   priv->child = child;
+   bar->child = child;
 
-  if (priv->child)
+  if (bar->child)
     {
-      gtk_center_box_set_center_widget (GTK_CENTER_BOX (priv->box_center), child);
+      gtk_center_box_set_center_widget (GTK_CENTER_BOX (bar->box_center), child);
 
       if (GTK_IS_EDITABLE (child))
         gtk_search_bar_connect_entry (bar, GTK_EDITABLE (child));
@@ -701,7 +673,5 @@ gtk_search_bar_set_child (GtkSearchBar *bar,
 GtkWidget *
 gtk_search_bar_get_child (GtkSearchBar *bar)
 {
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
-
-  return priv->child;
+  return bar->child;
 }
