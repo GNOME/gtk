@@ -2547,7 +2547,7 @@ gtk_tree_view_size_allocate (GtkWidget *widget,
   GList *tmp_list;
   double page_size;
 
-  /* We size-allocate the columns first because the width of the
+  /* We allocate the columns first because the width of the
    * tree view (used in updating the adjustments below) might change.
    */
   gtk_tree_view_size_allocate_columns (widget);
