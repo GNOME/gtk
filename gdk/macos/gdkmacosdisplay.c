@@ -535,6 +535,11 @@ gdk_macos_display_finalize (GObject *object)
 {
   GdkMacosDisplay *self = (GdkMacosDisplay *)object;
 
+  CFNotificationCenterRemoveObserver (CFNotificationCenterGetDistributedCenter (),
+                                      self,
+                                      CFSTR ("NSApplicationDidChangeScreenParametersNotification"),
+                                      NULL);
+
   g_clear_pointer (&self->frame_source, g_source_unref);
   g_clear_pointer (&self->monitors, g_ptr_array_unref);
   g_clear_pointer (&self->name, g_free);
