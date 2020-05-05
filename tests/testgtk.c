@@ -4956,23 +4956,6 @@ create_surface_states (GtkWidget *widget)
  */
 
 static void
-size_allocate_callback (GtkWidget *widget,
-			int        width,
-                        int        height,
-			int        baseline,
-			gpointer   data)
-{
-  GtkWidget *label = data;
-  gchar *msg;
-
-  msg = g_strdup_printf ("size: %d x %d\n", width, height);
-
-  gtk_label_set_text (GTK_LABEL (label), msg);
-
-  g_free (msg);
-}
-
-static void
 get_ints (GtkWidget *window,
           gint      *a,
           gint      *b)
@@ -5080,8 +5063,6 @@ window_controls (GtkWidget *window)
 
   label = gtk_label_new ("<no size>");
   gtk_container_add (GTK_CONTAINER (vbox), label);
-
-  g_signal_connect_after (window, "size-allocate", G_CALLBACK (size_allocate_callback), label);
 
   adjustment = gtk_adjustment_new (10.0, -2000.0, 2000.0, 1.0, 5.0, 0.0);
   spin = gtk_spin_button_new (adjustment, 0, 0);
