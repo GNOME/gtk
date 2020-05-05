@@ -110,7 +110,7 @@ static void gtk_viewport_get_property             (GObject         *object,
                                                    guint            prop_id,
                                                    GValue          *value,
                                                    GParamSpec      *pspec);
-static void gtk_viewport_destroy                  (GtkWidget       *widget);
+static void gtk_viewport_dispose                  (GObject         *object);
 static void gtk_viewport_size_allocate            (GtkWidget       *widget,
                                                    int              width,
                                                    int              height,
@@ -289,10 +289,33 @@ gtk_viewport_get_request_mode (GtkWidget *widget)
     return GTK_SIZE_REQUEST_CONSTANT_SIZE;
 }
 
+#define ADJUSTMENT_POINTER(orientation)            \
+  (((orientation) == GTK_ORIENTATION_HORIZONTAL) ? \
+     &viewport->hadjustment : &viewport->vadjustment)
+
+static void
+viewport_disconnect_adjustment (GtkViewport    *viewport,
+                                GtkOrientation  orientation)
+{
+  GtkAdjustment **adjustmentp = ADJUSTMENT_POINTER (orientation);
+
+  if (*adjustmentp)
+    {
+      g_signal_handlers_disconnect_by_func (*adjustmentp,
+                                            gtk_viewport_adjustment_value_changed,
+                                            viewport);
+      g_object_unref (*adjustmentp);
+      *adjustmentp = NULL;
+    }
+}
+
 static void
 gtk_viewport_dispose (GObject *object)
 {
   GtkViewport *viewport = GTK_VIEWPORT (object);
+
+  viewport_disconnect_adjustment (viewport, GTK_ORIENTATION_HORIZONTAL);
+  viewport_disconnect_adjustment (viewport, GTK_ORIENTATION_VERTICAL);
 
   clear_focus_change_handler (viewport);
 
@@ -337,7 +360,6 @@ gtk_viewport_class_init (GtkViewportClass *class)
   gobject_class->set_property = gtk_viewport_set_property;
   gobject_class->get_property = gtk_viewport_get_property;
 
-  widget_class->destroy = gtk_viewport_destroy;
   widget_class->size_allocate = gtk_viewport_size_allocate;
   widget_class->measure = gtk_viewport_measure;
   widget_class->root = gtk_viewport_root;
@@ -493,37 +515,6 @@ gtk_viewport_new (GtkAdjustment *hadjustment,
                            NULL);
 
   return viewport;
-}
-
-#define ADJUSTMENT_POINTER(orientation)            \
-  (((orientation) == GTK_ORIENTATION_HORIZONTAL) ? \
-     &viewport->hadjustment : &viewport->vadjustment)
-
-static void
-viewport_disconnect_adjustment (GtkViewport    *viewport,
-                                GtkOrientation  orientation)
-{
-  GtkAdjustment **adjustmentp = ADJUSTMENT_POINTER (orientation);
-
-  if (*adjustmentp)
-    {
-      g_signal_handlers_disconnect_by_func (*adjustmentp,
-                                            gtk_viewport_adjustment_value_changed,
-                                            viewport);
-      g_object_unref (*adjustmentp);
-      *adjustmentp = NULL;
-    }
-}
-
-static void
-gtk_viewport_destroy (GtkWidget *widget)
-{
-  GtkViewport *viewport = GTK_VIEWPORT (widget);
-
-  viewport_disconnect_adjustment (viewport, GTK_ORIENTATION_HORIZONTAL);
-  viewport_disconnect_adjustment (viewport, GTK_ORIENTATION_VERTICAL);
-
-  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->destroy (widget);
 }
 
 static void
