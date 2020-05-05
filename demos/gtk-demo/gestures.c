@@ -153,7 +153,7 @@ do_gestures (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       drawing_area = gtk_drawing_area_new ();
-      gtk_container_add (GTK_CONTAINER (window), drawing_area);
+      gtk_window_set_child (GTK_WINDOW (window), drawing_area);
 
       gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (drawing_area),
                                       drawing_area_draw,

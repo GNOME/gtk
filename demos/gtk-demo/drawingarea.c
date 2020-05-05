@@ -202,7 +202,7 @@ do_drawingarea (GtkWidget *do_widget)
       gtk_widget_set_margin_end (vbox, 16);
       gtk_widget_set_margin_top (vbox, 16);
       gtk_widget_set_margin_bottom (vbox, 16);
-      gtk_container_add (GTK_CONTAINER (window), vbox);
+      gtk_window_set_child (GTK_WINDOW (window), vbox);
 
       /*
        * Create the checkerboard area
@@ -221,7 +221,7 @@ do_drawingarea (GtkWidget *do_widget)
       gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (da), 100);
       gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (da), 100);
       gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), checkerboard_draw, NULL, NULL);
-      gtk_container_add (GTK_CONTAINER (frame), da);
+      gtk_frame_set_child (GTK_FRAME (frame), da);
 
       /*
        * Create the scribble area
@@ -240,7 +240,7 @@ do_drawingarea (GtkWidget *do_widget)
       gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (da), 100);
       gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (da), 100);
       gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), scribble_draw, NULL, NULL);
-      gtk_container_add (GTK_CONTAINER (frame), da);
+      gtk_frame_set_child (GTK_FRAME (frame), da);
 
       g_signal_connect (da, "size-allocate",
                         G_CALLBACK (scribble_size_allocate), NULL);

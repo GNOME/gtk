@@ -141,24 +141,23 @@ main (int argc, char *argv[])
   gtk_widget_set_margin_top (overlay, 12);
   gtk_widget_set_margin_bottom (overlay, 12);
 
-  gtk_container_add (GTK_CONTAINER (window), overlay);
+  gtk_window_set_child (GTK_WINDOW (window), overlay);
   gtk_widget_show (overlay);
 
   revealer = gtk_revealer_new ();
   gtk_widget_set_halign (revealer, GTK_ALIGN_END);
   gtk_widget_set_valign (revealer, GTK_ALIGN_START);
-  gtk_overlay_add_overlay (GTK_OVERLAY (overlay),
-			   revealer);
+  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), revealer);
   gtk_widget_show (revealer);
 
   frame = gtk_frame_new (NULL);
   gtk_widget_add_css_class (frame, "app-notification");
-  gtk_container_add (GTK_CONTAINER (revealer), frame);
+  gtk_revealer_set_child (GTK_REVEALER (revealer), frame);
   gtk_widget_show (frame);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE);
   gtk_box_set_spacing (GTK_BOX (hbox), 6);
-  gtk_container_add (GTK_CONTAINER (frame), hbox);
+  gtk_frame_set_child (GTK_FRAME (frame), hbox);
   gtk_widget_show (hbox);
 
   label = gtk_label_new ("This is a transparent overlay widget!!!!\nAmazing, eh?");
@@ -167,7 +166,7 @@ main (int argc, char *argv[])
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE);
   gtk_box_set_spacing (GTK_BOX (box), 6);
-  gtk_container_add (GTK_CONTAINER (overlay), box);
+  gtk_overlay_set_child (GTK_OVERLAY (overlay), box);
   gtk_widget_show (box);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE);
@@ -200,7 +199,7 @@ main (int argc, char *argv[])
   gtk_menu_button_set_direction (GTK_MENU_BUTTON (button), GTK_ARROW_UP);
   popover = gtk_popover_new ();
   label = gtk_label_new ("Popovers work too!");
-  gtk_container_add (GTK_CONTAINER (popover), label);
+  gtk_popover_set_child (GTK_POPOVER (popover), label);
 
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), popover);
   gtk_container_add (GTK_CONTAINER (hbox), button);
@@ -234,7 +233,7 @@ main (int argc, char *argv[])
 
   extra_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE);
   gtk_box_set_spacing (GTK_BOX (extra_hbox), 6);
-  gtk_container_add (GTK_CONTAINER (scrolled), extra_hbox);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled), extra_hbox);
   gtk_widget_show (extra_hbox);
 
   bbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);

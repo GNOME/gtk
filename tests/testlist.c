@@ -51,7 +51,7 @@ row_new (const gchar* text, gint sort_id) {
   if (text != NULL)
     {
       row->label = gtk_label_new (text);
-      gtk_container_add (GTK_CONTAINER (row), row->label);
+      gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), row->label);
       gtk_widget_show (row->label);
     }
   row->sort_id = sort_id;
@@ -259,7 +259,7 @@ main (int argc, char *argv[])
 
   window = gtk_window_new ();
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (window), hbox);
+  gtk_window_set_child (GTK_WINDOW (window), hbox);
 
   provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_data (provider, css, -1);
@@ -290,7 +290,7 @@ main (int argc, char *argv[])
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-  gtk_container_add (GTK_CONTAINER (scrolled), list);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled), list);
   gtk_container_add (GTK_CONTAINER (hbox), scrolled);
 
   g_signal_connect (list, "row-activated", G_CALLBACK (row_activated_cb), NULL);
@@ -317,14 +317,14 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (row_vbox), row_hbox);
   check = gtk_check_button_new ();
   gtk_container_add (GTK_CONTAINER (row_vbox), check);
-  gtk_container_add (GTK_CONTAINER (row), row_vbox);
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), row_vbox);
   gtk_container_add (GTK_CONTAINER (list), row);
 
   row = row_new (NULL, 0);
   button = gtk_button_new_with_label ("focusable row");
   gtk_widget_set_hexpand (button, FALSE);
   gtk_widget_set_halign (button, GTK_ALIGN_START);
-  gtk_container_add (GTK_CONTAINER (row), button);
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), button);
   gtk_container_add (GTK_CONTAINER (list), row);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);

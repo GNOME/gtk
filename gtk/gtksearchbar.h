@@ -32,8 +32,8 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkbin.h>
-#include <gtk/gtkentry.h>
+#include <gtk/gtkwidget.h>
+#include <gtk/gtkeditable.h>
 
 G_BEGIN_DECLS
 
@@ -70,6 +70,13 @@ void        gtk_search_bar_set_key_capture_widget (GtkSearchBar *bar,
                                                    GtkWidget    *widget);
 GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_search_bar_get_key_capture_widget (GtkSearchBar *bar);
+
+GDK_AVAILABLE_IN_ALL
+void        gtk_search_bar_set_child          (GtkSearchBar *bar,
+                                               GtkWidget    *child);
+GDK_AVAILABLE_IN_ALL
+GtkWidget * gtk_search_bar_get_child          (GtkSearchBar *bar);
+
 
 G_END_DECLS
 

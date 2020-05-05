@@ -14,7 +14,7 @@ int main (int argc, char *argv[])
   window = gtk_window_new ();
   gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
   frame = gtk_frame_new (NULL);
   gtk_container_add (GTK_CONTAINER (box), frame);
   view = gtk_text_view_new ();
@@ -34,7 +34,7 @@ int main (int argc, char *argv[])
   button = gtk_button_new_from_icon_name ("document-save-symbolic");
   gtk_container_add (GTK_CONTAINER (box3), button);
 
-  gtk_container_add (GTK_CONTAINER (frame), box3);
+  gtk_frame_set_child (GTK_FRAME (frame), box3);
   
   gtk_widget_show (GTK_WIDGET (window));
 

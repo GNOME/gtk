@@ -185,7 +185,7 @@ do_rotated_text (GtkWidget *do_widget)
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
-      gtk_container_add (GTK_CONTAINER (window), box);
+      gtk_window_set_child (GTK_WINDOW (window), box);
 
       /* Add a drawing area */
       drawing_area = gtk_drawing_area_new ();

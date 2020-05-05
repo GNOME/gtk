@@ -94,7 +94,7 @@ do_css_multiplebgs (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       container = gtk_overlay_new ();
-      gtk_container_add (GTK_CONTAINER (window), container);
+      gtk_window_set_child (GTK_WINDOW (window), container);
 
       child = gtk_drawing_area_new ();
       gtk_widget_set_name (child, "canvas");

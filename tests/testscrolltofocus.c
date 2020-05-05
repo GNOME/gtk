@@ -11,17 +11,17 @@ int main (int argc, char *argv[])
 
   window = gtk_window_new ();
   sw = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (window), sw);
+  gtk_window_set_child (GTK_WINDOW (window), sw);
   viewport = gtk_viewport_new (gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (sw)),
                                gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (sw)));
   gtk_viewport_set_scroll_to_focus (GTK_VIEWPORT (viewport), TRUE);
-  gtk_container_add (GTK_CONTAINER (sw), viewport);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), viewport);
   grid = gtk_grid_new ();
   gtk_widget_set_margin_start (grid, 20);
   gtk_widget_set_margin_end (grid, 20);
   gtk_widget_set_margin_top (grid, 20);
   gtk_widget_set_margin_bottom (grid, 20);
-  gtk_container_add (GTK_CONTAINER (viewport), grid);
+  gtk_viewport_set_child (GTK_VIEWPORT (viewport), grid);
 
   for (i = 0; i < 20; i++)
     for (j = 0; j < 20; j++)

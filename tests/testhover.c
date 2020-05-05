@@ -109,7 +109,7 @@ test1 (void)
   gtk_window_set_title (GTK_WINDOW (win), "add/remove");
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE);
-  gtk_container_add (GTK_CONTAINER (win), box);
+  gtk_window_set_child (GTK_WINDOW (win), box);
   controller = annoying_event_controller_motion_new ();
   g_signal_connect (controller, "enter", G_CALLBACK (enter1_cb), NULL);
   g_signal_connect (controller, "leave", G_CALLBACK (leave1_cb), NULL);
@@ -153,7 +153,7 @@ test2 (void)
   gtk_window_set_title (GTK_WINDOW (win), "show/hide");
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE);
-  gtk_container_add (GTK_CONTAINER (win), box);
+  gtk_window_set_child (GTK_WINDOW (win), box);
   controller = annoying_event_controller_motion_new ();
   g_signal_connect (controller, "enter", G_CALLBACK (enter2_cb), NULL);
   g_signal_connect (controller, "leave", G_CALLBACK (leave2_cb), NULL);
@@ -197,7 +197,7 @@ test3 (void)
   gtk_window_set_title (GTK_WINDOW (win), "child-visible");
 
   stack = gtk_stack_new ();
-  gtk_container_add (GTK_CONTAINER (win), stack);
+  gtk_window_set_child (GTK_WINDOW (win), stack);
   controller = annoying_event_controller_motion_new ();
   g_signal_connect (controller, "enter", G_CALLBACK (enter3_cb), NULL);
   g_signal_connect (controller, "leave", G_CALLBACK (leave3_cb), NULL);
@@ -243,7 +243,7 @@ test4 (void)
   gtk_window_set_title (GTK_WINDOW (win), "move");
 
   fixed = gtk_fixed_new ();
-  gtk_container_add (GTK_CONTAINER (win), fixed);
+  gtk_window_set_child (GTK_WINDOW (win), fixed);
   controller = annoying_event_controller_motion_new ();
   g_signal_connect (controller, "enter", G_CALLBACK (enter4_cb), NULL);
   g_signal_connect (controller, "leave", G_CALLBACK (leave4_cb), NULL);

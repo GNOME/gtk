@@ -103,7 +103,7 @@ main (int    argc,
   g_signal_connect (G_OBJECT (window), "destroy", G_CALLBACK (quit_cb), &done);
 
   notebook = gtk_notebook_new ();
-  gtk_container_add (GTK_CONTAINER (window), notebook);
+  gtk_window_set_child (GTK_WINDOW (window), notebook);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
@@ -194,7 +194,7 @@ main (int    argc,
 
           gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("│Xyj,Ö"));
           gtk_container_add (GTK_CONTAINER (box), gtk_image_new_from_icon_name ("face-sad"));
-          gtk_container_add (GTK_CONTAINER (button), box);
+          gtk_button_set_child (GTK_BUTTON (button), box);
 
           set_font_size (button, i);
 
@@ -286,7 +286,7 @@ main (int    argc,
 
           gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("│Xyj,Ö"));
           gtk_container_add (GTK_CONTAINER (box), gtk_image_new_from_icon_name ("face-sad"));
-          gtk_container_add (GTK_CONTAINER (button), box);
+          gtk_button_set_child (GTK_BUTTON (button), box);
 
           set_font_size (button, i);
 
@@ -377,7 +377,7 @@ main (int    argc,
           image = gtk_image_new_from_icon_name ("face-sad");
           gtk_image_set_pixel_size (GTK_IMAGE (image), 16);
           gtk_container_add (GTK_CONTAINER (box), image);
-          gtk_container_add (GTK_CONTAINER (button), box);
+          gtk_button_set_child (GTK_BUTTON (button), box);
 
 	  if (i == 0)
 	    g_signal_connect (spin2, "value-changed", (GCallback)image_size_value_changed, image);

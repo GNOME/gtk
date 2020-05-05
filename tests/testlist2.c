@@ -22,7 +22,7 @@ remove_this_row (GtkButton *button, GtkWidget *child)
   gtk_widget_show (revealer);
   g_object_ref (child);
   gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (child)), child);
-  gtk_container_add (GTK_CONTAINER (revealer), child);
+  gtk_revealer_set_child (GTK_REVEALER (revealer), child);
   g_object_unref (child);
   gtk_container_add (GTK_CONTAINER (row), revealer);
   g_signal_connect (revealer, "notify::child-revealed",
@@ -38,9 +38,9 @@ row_revealed (GObject *revealer, GParamSpec *pspec, gpointer data)
   GtkWidget *row, *child;
 
   row = gtk_widget_get_parent (GTK_WIDGET (revealer));
-  child = gtk_bin_get_child (GTK_BIN (revealer));
+  child = gtk_revealer_get_child (GTK_REVEALER (revealer));
   g_object_ref (child);
-  gtk_container_remove (GTK_CONTAINER (revealer), child);
+  gtk_revealer_set_child (GTK_REVEALER (revealer), NULL);
   gtk_widget_destroy (GTK_WIDGET (revealer));
   gtk_container_add (GTK_CONTAINER (row), child);
   g_object_unref (child);
@@ -57,7 +57,7 @@ add_row_below (GtkButton *button, GtkWidget *child)
   list = gtk_widget_get_parent (row);
   row = create_row ("Extra row");
   revealer = gtk_revealer_new ();
-  gtk_container_add (GTK_CONTAINER (revealer), row);
+  gtk_revealer_set_child (GTK_REVEALER (revealer), row);
   g_signal_connect (revealer, "notify::child-revealed",
                     G_CALLBACK (row_revealed), NULL);
   gtk_list_box_insert (GTK_LIST_BOX (list), revealer, index + 1);
@@ -122,8 +122,8 @@ int main (int argc, char *argv[])
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (list), GTK_SELECTION_NONE);
   gtk_list_box_set_header_func (GTK_LIST_BOX (list), add_separator, NULL, NULL);
   sw = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (window), sw);
-  gtk_container_add (GTK_CONTAINER (sw), list);
+  gtk_window_set_child (GTK_WINDOW (window), sw);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), list);
 
   for (i = 0; i < 20; i++)
     {

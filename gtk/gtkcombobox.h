@@ -22,7 +22,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkbin.h>
+#include <gtk/gtkwidget.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreeview.h>
 
@@ -40,7 +40,7 @@ typedef struct _GtkComboBoxClass   GtkComboBoxClass;
 
 struct _GtkComboBox
 {
-  GtkBin parent_instance;
+  GtkWidget parent_instance;
 };
 
 /**
@@ -52,7 +52,7 @@ struct _GtkComboBox
  */
 struct _GtkComboBoxClass
 {
-  GtkBinClass parent_class;
+  GtkWidgetClass parent_class;
 
   /*< public >*/
 
@@ -148,6 +148,13 @@ const gchar * gtk_combo_box_get_active_id        (GtkComboBox *combo_box);
 GDK_AVAILABLE_IN_ALL
 gboolean      gtk_combo_box_set_active_id        (GtkComboBox *combo_box,
                                                   const gchar *active_id);
+
+GDK_AVAILABLE_IN_ALL
+void          gtk_combo_box_set_child            (GtkComboBox *combo_box,
+                                                  GtkWidget   *child);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *   gtk_combo_box_get_child            (GtkComboBox *combo_box);
+
 
 G_END_DECLS
 

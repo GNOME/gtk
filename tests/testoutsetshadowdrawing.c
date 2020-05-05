@@ -162,7 +162,7 @@ main (int argc, char **argv)
 
   gtk_container_add (GTK_CONTAINER (box), top);
   gtk_container_add (GTK_CONTAINER (box), bottom);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   gtk_widget_show (window);
 

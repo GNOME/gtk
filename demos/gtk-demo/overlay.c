@@ -37,7 +37,7 @@ do_overlay (GtkWidget *do_widget)
 
       overlay = gtk_overlay_new ();
       grid = gtk_grid_new ();
-      gtk_container_add (GTK_CONTAINER (overlay), grid);
+      gtk_overlay_set_child (GTK_OVERLAY (overlay), grid);
 
       entry = gtk_entry_new ();
 
@@ -78,7 +78,7 @@ do_overlay (GtkWidget *do_widget)
       gtk_widget_set_margin_bottom (entry, 8);
       gtk_container_add (GTK_CONTAINER (vbox), entry);
 
-      gtk_container_add (GTK_CONTAINER (window), overlay);
+      gtk_window_set_child (GTK_WINDOW (window), overlay);
 
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);

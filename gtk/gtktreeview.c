@@ -9999,7 +9999,7 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
   g_signal_connect (tree_view->search_entry, "changed",
 		    G_CALLBACK (gtk_tree_view_search_changed), tree_view);
 
-  gtk_container_add (GTK_CONTAINER (tree_view->search_popover), tree_view->search_entry);
+  gtk_popover_set_child (GTK_POPOVER (tree_view->search_popover), tree_view->search_entry);
 
   gtk_widget_realize (tree_view->search_entry);
 }

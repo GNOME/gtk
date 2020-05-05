@@ -1,6 +1,6 @@
 <interface domain="gtk40">
   <object class="GListStore" id="recordings"/>
-  <template class="GtkInspectorRecorder" parent="GtkBin">
+  <template class="GtkInspectorRecorder" parent="GtkWidget">
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>

@@ -166,7 +166,7 @@ gtk_stack_sidebar_init (GtkStackSidebar *self)
 
   self->list = GTK_LIST_BOX (gtk_list_box_new ());
 
-  gtk_container_add (GTK_CONTAINER (sw), GTK_WIDGET (self->list));
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), GTK_WIDGET (self->list));
 
   gtk_list_box_set_header_func (self->list, update_header, self, NULL);
 
@@ -194,7 +194,7 @@ update_row (GtkStackSidebar *self,
                 "visible", &visible,
                 NULL);
 
-  item = gtk_bin_get_child (GTK_BIN (row));
+  item = gtk_list_box_row_get_child (GTK_LIST_BOX_ROW (row));
   gtk_label_set_text (GTK_LABEL (item), title);
 
   gtk_widget_set_visible (row, visible && title != NULL);
@@ -231,7 +231,7 @@ add_child (guint            position,
   gtk_widget_set_halign (item, GTK_ALIGN_START);
   gtk_widget_set_valign (item, GTK_ALIGN_CENTER);
   row = gtk_list_box_row_new ();
-  gtk_container_add (GTK_CONTAINER (row), item);
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), item);
 
   page = g_list_model_get_item (G_LIST_MODEL (self->pages), position);
   update_row (self, page, row);

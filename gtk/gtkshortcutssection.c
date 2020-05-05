@@ -739,7 +739,7 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
 
         gtk_widget_add_css_class (w, "circular");
 
-        label = gtk_bin_get_child (GTK_BIN (w));
+        label = gtk_button_get_child (GTK_BUTTON (w));
         gtk_label_set_use_underline (GTK_LABEL (label), TRUE);
       }
 

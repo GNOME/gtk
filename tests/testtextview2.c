@@ -199,11 +199,11 @@ main (int argc, char *argv[])
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_hexpand (sw, TRUE);
   gtk_widget_set_vexpand (sw, TRUE);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
   gtk_container_add (GTK_CONTAINER (box), sw);
 
   tv = gtk_text_view_new ();
-  gtk_container_add (GTK_CONTAINER (sw), tv);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), tv);
 
   buffer = gtk_text_buffer_new (NULL);
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (tv), buffer);

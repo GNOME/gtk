@@ -19,6 +19,7 @@
 
 #include "recorder.h"
 
+#include <gtk/gtkbinlayout.h>
 #include <gtk/gtkbox.h>
 #include <gtk/gtkfilechooserdialog.h>
 #include <gtk/gtklabel.h>
@@ -72,7 +73,7 @@ enum
 
 static GParamSpec *props[LAST_PROP] = { NULL, };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorRecorder, gtk_inspector_recorder, GTK_TYPE_BIN)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorRecorder, gtk_inspector_recorder, GTK_TYPE_WIDGET)
 
 static GListModel *
 create_render_node_list_model (GskRenderNode **nodes,
@@ -307,7 +308,7 @@ create_widget_for_render_node (gpointer row_item,
   node = gtk_render_node_paintable_get_render_node (GTK_RENDER_NODE_PAINTABLE (paintable));
   row = gtk_list_box_row_new ();
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
-  gtk_container_add (GTK_CONTAINER (row), box);
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), box);
 
   /* expander */
   depth = gtk_tree_list_row_get_depth (row_item);
@@ -330,7 +331,7 @@ create_widget_for_render_node (gpointer row_item,
       g_object_set_data_full (G_OBJECT (row), "make-sure-its-not-unreffed", g_object_ref (row_item), g_object_unref);
 
       arrow = gtk_builtin_icon_new ("expander");
-      gtk_container_add (GTK_CONTAINER (title), arrow);
+      gtk_button_set_child (GTK_BUTTON (title), arrow);
     }
   else
     {
@@ -1175,7 +1176,7 @@ node_property_activated (GtkTreeView *tv,
   gtk_widget_set_margin_end (image, 20);
   gtk_widget_set_margin_top (image, 20);
   gtk_widget_set_margin_bottom (image, 20);
-  gtk_container_add (GTK_CONTAINER (popover), image);
+  gtk_popover_set_child (GTK_POPOVER (popover), image);
   gtk_popover_popup (GTK_POPOVER (popover));
 
   g_signal_connect (popover, "unmap", G_CALLBACK (gtk_widget_destroy), NULL);
@@ -1282,6 +1283,8 @@ gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, render_node_list_selection_changed);
   gtk_widget_class_bind_template_callback (widget_class, render_node_save);
   gtk_widget_class_bind_template_callback (widget_class, node_property_activated);
+
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
 
 static void

@@ -132,13 +132,13 @@ main (int argc, char **argv)
   gtk_window_set_default_size (GTK_WINDOW (window), 800, 600);
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (window), scrolled_window);
+  gtk_window_set_child (GTK_WINDOW (window), scrolled_window);
 
   viewport = gtk_viewport_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (scrolled_window), viewport);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), viewport);
 
   grid = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (viewport), grid);
+  gtk_viewport_set_child (GTK_VIEWPORT (viewport), grid);
 
   for (i = 0; i < 4; i++)
     {

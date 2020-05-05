@@ -137,7 +137,7 @@ preview_file (const char *filename,
       g_object_ref (widget);
       if (gtk_widget_get_parent (widget) != NULL)
         gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (widget)), widget);
-      gtk_container_add (GTK_CONTAINER (window), widget);
+      gtk_window_set_child (GTK_WINDOW (window), widget);
       g_object_unref (widget);
     }
 

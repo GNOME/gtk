@@ -417,7 +417,7 @@ main (gint argc, gchar **argv)
   gtk_window_set_default_size (GTK_WINDOW (window), 700, 400);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_window_set_child (GTK_WINDOW (window), vbox);
 
   paned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_widget_set_vexpand (paned, TRUE);
@@ -520,16 +520,16 @@ main (gint argc, gchar **argv)
                                         targets,
 					GDK_ACTION_MOVE);
   gdk_content_formats_unref (targets);
-			      
+
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (scrolled_window), icon_list);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), icon_list);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
   				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
   gtk_paned_add1 (GTK_PANED (paned), scrolled_window);
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (scrolled_window), tv);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), tv);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
   				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
@@ -578,9 +578,9 @@ main (gint argc, gchar **argv)
   icon_list = gtk_icon_view_new ();
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (scrolled_window), icon_list);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), icon_list);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
-				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+                                  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_paned_add2 (GTK_PANED (paned), scrolled_window);
 
   gtk_widget_show (window);

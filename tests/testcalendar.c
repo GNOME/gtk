@@ -157,7 +157,7 @@ create_frame (const char *caption,
                 NULL);
   gtk_label_set_markup (GTK_LABEL (label), caption);
 
-  gtk_container_add (GTK_CONTAINER (frame), child);
+  gtk_frame_set_child (GTK_FRAME (frame), child);
 
   return frame;
 }
@@ -303,7 +303,7 @@ create_calendar(void)
   gtk_container_add (GTK_CONTAINER (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
   gtk_container_add (GTK_CONTAINER (vbox), bbox);
 
-  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_window_set_child (GTK_WINDOW (window), vbox);
 
   gtk_window_set_default_widget (GTK_WINDOW (window), button);
 

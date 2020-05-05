@@ -93,7 +93,7 @@ do_gears (GtkWidget *do_widget)
       gtk_widget_set_margin_top (overlay, 12);
       gtk_widget_set_margin_bottom (overlay, 12);
 
-      gtk_container_add (GTK_CONTAINER (window), overlay);
+      gtk_window_set_child (GTK_WINDOW (window), overlay);
 
       frame = gtk_frame_new (NULL);
       gtk_widget_set_halign (frame, GTK_ALIGN_START);
@@ -103,11 +103,11 @@ do_gears (GtkWidget *do_widget)
 
       fps_label = gtk_label_new ("");
       gtk_widget_set_halign (fps_label, GTK_ALIGN_START);
-      gtk_container_add (GTK_CONTAINER (frame), fps_label);
+      gtk_frame_set_child (GTK_FRAME (frame), fps_label);
 
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE);
       gtk_box_set_spacing (GTK_BOX (box), 6);
-      gtk_container_add (GTK_CONTAINER (overlay), box);
+      gtk_overlay_set_child (GTK_OVERLAY (overlay), box);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE);
       gtk_box_set_spacing (GTK_BOX (box), 6);

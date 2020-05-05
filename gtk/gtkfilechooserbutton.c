@@ -561,7 +561,7 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   gtk_container_add (GTK_CONTAINER (box), button->label);
   gtk_widget_set_valign (icon, GTK_ALIGN_BASELINE);
   gtk_container_add (GTK_CONTAINER (box), icon);
-  gtk_container_add (GTK_CONTAINER (button->button), box);
+  gtk_button_set_child (GTK_BUTTON (button->button), box);
 
   gtk_widget_set_parent (button->button, GTK_WIDGET (button));
 

@@ -35,7 +35,7 @@ int main (int argc, char *argv[])
 
   window = gtk_window_new ();
   button = gtk_button_new ();
-  gtk_container_add (GTK_CONTAINER (window), button);
+  gtk_window_set_child (GTK_WINDOW (window), button);
 
   display = gdk_display_open (NULL);
 

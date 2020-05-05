@@ -30,7 +30,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkbin.h>
+#include <gtk/gtkwidget.h>
 
 
 G_BEGIN_DECLS
@@ -48,7 +48,7 @@ typedef struct _GtkFrameClass         GtkFrameClass;
 
 struct _GtkFrame
 {
-  GtkBin parent_instance;
+  GtkWidget parent_instance;
 };
 
 /**
@@ -58,7 +58,7 @@ struct _GtkFrame
  */
 struct _GtkFrameClass
 {
-  GtkBinClass parent_class;
+  GtkWidgetClass parent_class;
 
   /*< public >*/
 
@@ -84,14 +84,21 @@ const gchar * gtk_frame_get_label (GtkFrame    *frame);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_frame_set_label_widget (GtkFrame      *frame,
-				       GtkWidget     *label_widget);
+                                       GtkWidget     *label_widget);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_frame_get_label_widget (GtkFrame      *frame);
 GDK_AVAILABLE_IN_ALL
 void       gtk_frame_set_label_align  (GtkFrame      *frame,
-				       gfloat         xalign);
+                                       gfloat         xalign);
 GDK_AVAILABLE_IN_ALL
 gfloat     gtk_frame_get_label_align  (GtkFrame      *frame);
+
+GDK_AVAILABLE_IN_ALL
+void       gtk_frame_set_child        (GtkFrame      *frame,
+                                       GtkWidget     *child);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *gtk_frame_get_child        (GtkFrame      *frame);
+
 
 G_END_DECLS
 

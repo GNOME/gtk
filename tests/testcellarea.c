@@ -193,7 +193,7 @@ simple_cell_area (void)
   gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
   gtk_widget_set_halign (frame, GTK_ALIGN_FILL);
 
-  gtk_container_add (GTK_CONTAINER (frame), iconview);
+  gtk_frame_set_child (GTK_FRAME (frame), iconview);
 
   /* Now add some controls */
   vbox  = gtk_box_new (GTK_ORIENTATION_VERTICAL, 4);
@@ -252,7 +252,7 @@ simple_cell_area (void)
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (expand_cell_3_toggled), iconview);
 
-  gtk_container_add (GTK_CONTAINER (window), hbox);
+  gtk_window_set_child (GTK_WINDOW (window), hbox);
 
   gtk_widget_show (window);
 }
@@ -437,7 +437,7 @@ focus_cell_area (void)
   gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
   gtk_widget_set_halign (frame, GTK_ALIGN_FILL);
 
-  gtk_container_add (GTK_CONTAINER (frame), iconview);
+  gtk_frame_set_child (GTK_FRAME (frame), iconview);
 
   /* Now add some controls */
   vbox  = gtk_box_new (GTK_ORIENTATION_VERTICAL, 4);
@@ -462,7 +462,7 @@ focus_cell_area (void)
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (focus_sibling_toggled), iconview);
 
-  gtk_container_add (GTK_CONTAINER (window), hbox);
+  gtk_window_set_child (GTK_WINDOW (window), hbox);
 
   gtk_widget_show (window);
 }
@@ -517,7 +517,7 @@ background_area (void)
   main_vbox  = gtk_box_new (GTK_ORIENTATION_VERTICAL, 4);
   gtk_widget_show (hbox);
   gtk_widget_show (main_vbox);
-  gtk_container_add (GTK_CONTAINER (window), main_vbox);
+  gtk_window_set_child (GTK_WINDOW (window), main_vbox);
 
   gtk_window_set_title (GTK_WINDOW (window), "Background Area");
 
@@ -536,8 +536,7 @@ background_area (void)
   gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
   gtk_widget_set_halign (frame, GTK_ALIGN_FILL);
 
-  gtk_container_add (GTK_CONTAINER (frame), iconview);
-
+  gtk_frame_set_child (GTK_FRAME (frame), iconview);
 
   /* Now add some controls */
   vbox  = gtk_box_new (GTK_ORIENTATION_VERTICAL, 4);

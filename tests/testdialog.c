@@ -335,7 +335,7 @@ main (int argc, char *argv[])
   gtk_widget_set_halign (vbox, GTK_ALIGN_FILL);
   gtk_widget_set_valign (vbox, GTK_ALIGN_CENTER);
   gtk_widget_show (vbox);
-  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_window_set_child (GTK_WINDOW (window), vbox);
   
   box = gtk_flow_box_new ();
   gtk_flow_box_set_selection_mode (GTK_FLOW_BOX (box), GTK_SELECTION_NONE);

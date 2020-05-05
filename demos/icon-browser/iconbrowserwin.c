@@ -228,7 +228,7 @@ selected_context_changed (GtkListBox *list, IconBrowserWindow *win)
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (win->search), FALSE);
 
-  label = gtk_bin_get_child (GTK_BIN (row));
+  label = gtk_list_box_row_get_child (GTK_LIST_BOX_ROW (row));
   win->current_context = g_object_get_data (G_OBJECT (label), "context");
   gtk_tree_model_filter_refilter (win->filter_model);
 }

@@ -214,7 +214,7 @@ add_widget (GtkInspectorSizeGroups *sl,
   gtk_widget_set_margin_bottom (label, 10);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_container_add (GTK_CONTAINER (row), label);
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), label);
   gtk_container_add (GTK_CONTAINER (listbox), row);
 }
 
@@ -231,7 +231,7 @@ add_size_group (GtkInspectorSizeGroups *sl,
   gtk_container_add (GTK_CONTAINER (sl), frame);
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_add_css_class (box, GTK_STYLE_CLASS_VIEW);
-  gtk_container_add (GTK_CONTAINER (frame), box);
+  gtk_frame_set_child (GTK_FRAME (frame), box);
 
   box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_container_add (GTK_CONTAINER (box), box2);

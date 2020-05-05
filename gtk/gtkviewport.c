@@ -34,6 +34,7 @@
 #include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
+#include "gtkbuildable.h"
 #include "gtktext.h"
 
 
@@ -69,7 +70,9 @@ typedef struct _GtkViewportClass         GtkViewportClass;
 
 struct _GtkViewport
 {
-  GtkBin parent_instance;
+  GtkWidget parent_instance;
+
+  GtkWidget *child;
 
   GtkAdjustment  *hadjustment;
   GtkAdjustment  *vadjustment;
@@ -85,7 +88,7 @@ struct _GtkViewport
 
 struct _GtkViewportClass
 {
-  GtkBinClass parent_class;
+  GtkWidgetClass parent_class;
 };
 
 enum {
@@ -94,25 +97,27 @@ enum {
   PROP_VADJUSTMENT,
   PROP_HSCROLL_POLICY,
   PROP_VSCROLL_POLICY,
-  PROP_SCROLL_TO_FOCUS
+  PROP_SCROLL_TO_FOCUS,
+  PROP_CHILD
 };
 
 
 static void gtk_viewport_set_property             (GObject         *object,
-						   guint            prop_id,
-						   const GValue    *value,
-						   GParamSpec      *pspec);
+                                                   guint            prop_id,
+                                                   const GValue    *value,
+                                                   GParamSpec      *pspec);
 static void gtk_viewport_get_property             (GObject         *object,
-						   guint            prop_id,
-						   GValue          *value,
-						   GParamSpec      *pspec);
-static void gtk_viewport_destroy                  (GtkWidget        *widget);
-static void gtk_viewport_size_allocate            (GtkWidget        *widget,
-                                                   int               width,
-                                                   int               height,
-                                                   int               baseline);
+                                                   guint            prop_id,
+                                                   GValue          *value,
+                                                   GParamSpec      *pspec);
+static void gtk_viewport_destroy                  (GtkWidget       *widget);
+static void gtk_viewport_size_allocate            (GtkWidget       *widget,
+                                                   int              width,
+                                                   int              height,
+                                                   int              baseline);
+
 static void gtk_viewport_adjustment_value_changed (GtkAdjustment    *adjustment,
-						   gpointer          data);
+                                                   gpointer          data);
 static void viewport_set_adjustment               (GtkViewport      *viewport,
                                                    GtkOrientation    orientation,
                                                    GtkAdjustment    *adjustment);
@@ -120,19 +125,44 @@ static void viewport_set_adjustment               (GtkViewport      *viewport,
 static void setup_focus_change_handler (GtkViewport *viewport);
 static void clear_focus_change_handler (GtkViewport *viewport);
 
-G_DEFINE_TYPE_WITH_CODE (GtkViewport, gtk_viewport, GTK_TYPE_BIN,
+static void gtk_viewport_buildable_init (GtkBuildableIface *iface);
+
+
+G_DEFINE_TYPE_WITH_CODE (GtkViewport, gtk_viewport, GTK_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_viewport_buildable_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
+
+static GtkBuildableIface *parent_buildable_iface;
+
+static void
+gtk_viewport_buildable_add_child (GtkBuildable *buildable,
+                                  GtkBuilder   *builder,
+                                  GObject      *child,
+                                  const gchar  *type)
+{
+  if (GTK_IS_WIDGET (child))
+    gtk_viewport_set_child (GTK_VIEWPORT (buildable), GTK_WIDGET (child));
+  else
+    parent_buildable_iface->add_child (buildable, builder, child, type);
+}
+
+static void
+gtk_viewport_buildable_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
+  iface->add_child = gtk_viewport_buildable_add_child;
+}
 
 static void
 viewport_set_adjustment_values (GtkViewport    *viewport,
                                 GtkOrientation  orientation)
 {
-  GtkBin *bin = GTK_BIN (viewport);
   GtkAdjustment *adjustment;
   GtkScrollablePolicy scroll_policy;
   GtkScrollablePolicy other_scroll_policy;
   GtkOrientation other_orientation;
-  GtkWidget *child;
   gdouble upper, value;
   int viewport_size, other_viewport_size;
   int view_width, view_height;
@@ -160,20 +190,19 @@ viewport_set_adjustment_values (GtkViewport    *viewport,
     }
 
 
-  child = gtk_bin_get_child (bin);
-  if (child && gtk_widget_get_visible (child))
+  if (viewport->child && gtk_widget_get_visible (viewport->child))
     {
       int min_size, nat_size;
       int scroll_size;
 
       if (other_scroll_policy == GTK_SCROLL_MINIMUM)
-        gtk_widget_measure (child, other_orientation, -1,
+        gtk_widget_measure (viewport->child, other_orientation, -1,
                             &scroll_size, NULL, NULL, NULL);
       else
-        gtk_widget_measure (child, other_orientation, -1,
+        gtk_widget_measure (viewport->child, other_orientation, -1,
                             NULL, &scroll_size, NULL, NULL);
 
-      gtk_widget_measure (child, orientation,
+      gtk_widget_measure (viewport->child, orientation,
                           MAX (other_viewport_size, scroll_size),
                           &min_size, &nat_size, NULL, NULL);
 
@@ -218,13 +247,12 @@ gtk_viewport_measure (GtkWidget      *widget,
                       int            *minimum_baseline,
                       int            *natural_baseline)
 {
-  GtkWidget *child;
+  GtkViewport *viewport = GTK_VIEWPORT (widget);
 
   *minimum = *natural = 0;
 
-  child = gtk_bin_get_child (GTK_BIN (widget));
-  if (child && gtk_widget_get_visible (child))
-    gtk_widget_measure (child,
+  if (viewport->child && gtk_widget_get_visible (viewport->child))
+    gtk_widget_measure (viewport->child,
                         orientation,
                         for_size,
                         minimum, natural,
@@ -232,9 +260,43 @@ gtk_viewport_measure (GtkWidget      *widget,
 }
 
 static void
+gtk_viewport_compute_expand (GtkWidget *widget,
+                             gboolean  *hexpand,
+                             gboolean  *vexpand)
+{
+  GtkViewport *viewport = GTK_VIEWPORT (widget);
+
+  if (viewport->child)
+    {
+      *hexpand = gtk_widget_compute_expand (viewport->child, GTK_ORIENTATION_HORIZONTAL);
+      *vexpand = gtk_widget_compute_expand (viewport->child, GTK_ORIENTATION_VERTICAL);
+    }
+  else
+    {
+      *hexpand = FALSE;
+      *vexpand = FALSE;
+    }
+}
+
+static GtkSizeRequestMode
+gtk_viewport_get_request_mode (GtkWidget *widget)
+{
+  GtkViewport *viewport = GTK_VIEWPORT (widget);
+
+  if (viewport->child)
+    return gtk_widget_get_request_mode (viewport->child);
+  else
+    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+}
+
+static void
 gtk_viewport_dispose (GObject *object)
 {
-  clear_focus_change_handler (GTK_VIEWPORT (object));
+  GtkViewport *viewport = GTK_VIEWPORT (object);
+
+  clear_focus_change_handler (viewport);
+
+  g_clear_pointer (&viewport->child, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_viewport_parent_class)->dispose (object);
 
@@ -280,7 +342,12 @@ gtk_viewport_class_init (GtkViewportClass *class)
   widget_class->measure = gtk_viewport_measure;
   widget_class->root = gtk_viewport_root;
   widget_class->unroot = gtk_viewport_unroot;
-  
+  widget_class->compute_expand = gtk_viewport_compute_expand;
+  widget_class->get_request_mode = gtk_viewport_get_request_mode;
+  widget_class->grab_focus = gtk_widget_grab_focus_none;
+  widget_class->focus = gtk_widget_focus_child;
+
+
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_VIEWPORT);
 
   /* GtkScrollable implementation */
@@ -297,14 +364,23 @@ gtk_viewport_class_init (GtkViewportClass *class)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_CHILD,
+                                   g_param_spec_object ("child",
+                                                        P_("Child"),
+                                                        P_("The child widget"),
+                                                        GTK_TYPE_WIDGET,
+                                                        GTK_PARAM_READWRITE));
+
   gtk_widget_class_set_css_name (widget_class, I_("viewport"));
 }
 
 static void
 gtk_viewport_set_property (GObject         *object,
-			   guint            prop_id,
-			   const GValue    *value,
-			   GParamSpec      *pspec)
+                           guint            prop_id,
+                           const GValue    *value,
+                           GParamSpec      *pspec)
 {
   GtkViewport *viewport = GTK_VIEWPORT (object);
 
@@ -335,6 +411,9 @@ gtk_viewport_set_property (GObject         *object,
     case PROP_SCROLL_TO_FOCUS:
       gtk_viewport_set_scroll_to_focus (viewport, g_value_get_boolean (value));
       break;
+    case PROP_CHILD:
+      gtk_viewport_set_child (viewport, g_value_get_object (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -343,9 +422,9 @@ gtk_viewport_set_property (GObject         *object,
 
 static void
 gtk_viewport_get_property (GObject         *object,
-			   guint            prop_id,
-			   GValue          *value,
-			   GParamSpec      *pspec)
+                           guint            prop_id,
+                           GValue          *value,
+                           GParamSpec      *pspec)
 {
   GtkViewport *viewport = GTK_VIEWPORT (object);
 
@@ -365,6 +444,9 @@ gtk_viewport_get_property (GObject         *object,
       break;
     case PROP_SCROLL_TO_FOCUS:
       g_value_set_boolean (value, viewport->scroll_to_focus);
+      break;
+    case PROP_CHILD:
+      g_value_set_object (value, gtk_viewport_get_child (viewport));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -401,7 +483,7 @@ gtk_viewport_init (GtkViewport *viewport)
  */
 GtkWidget*
 gtk_viewport_new (GtkAdjustment *hadjustment,
-		  GtkAdjustment *vadjustment)
+                  GtkAdjustment *vadjustment)
 {
   GtkWidget *viewport;
 
@@ -419,15 +501,15 @@ gtk_viewport_new (GtkAdjustment *hadjustment,
 
 static void
 viewport_disconnect_adjustment (GtkViewport    *viewport,
-				GtkOrientation  orientation)
+                                GtkOrientation  orientation)
 {
   GtkAdjustment **adjustmentp = ADJUSTMENT_POINTER (orientation);
 
   if (*adjustmentp)
     {
       g_signal_handlers_disconnect_by_func (*adjustmentp,
-					    gtk_viewport_adjustment_value_changed,
-					    viewport);
+                                            gtk_viewport_adjustment_value_changed,
+                                            viewport);
       g_object_unref (*adjustmentp);
       *adjustmentp = NULL;
     }
@@ -446,8 +528,8 @@ gtk_viewport_destroy (GtkWidget *widget)
 
 static void
 viewport_set_adjustment (GtkViewport    *viewport,
-			 GtkOrientation  orientation,
-			 GtkAdjustment  *adjustment)
+                         GtkOrientation  orientation,
+                         GtkAdjustment  *adjustment)
 {
   GtkAdjustment **adjustmentp = ADJUSTMENT_POINTER (orientation);
 
@@ -463,8 +545,8 @@ viewport_set_adjustment (GtkViewport    *viewport,
   viewport_set_adjustment_values (viewport, orientation);
 
   g_signal_connect (adjustment, "value-changed",
-		    G_CALLBACK (gtk_viewport_adjustment_value_changed),
-		    viewport);
+                    G_CALLBACK (gtk_viewport_adjustment_value_changed),
+                    viewport);
 
   gtk_viewport_adjustment_value_changed (adjustment, viewport);
 }
@@ -478,7 +560,6 @@ gtk_viewport_size_allocate (GtkWidget *widget,
   GtkViewport *viewport = GTK_VIEWPORT (widget);
   GtkAdjustment *hadjustment = viewport->hadjustment;
   GtkAdjustment *vadjustment = viewport->vadjustment;
-  GtkWidget *child;
 
   g_object_freeze_notify (G_OBJECT (hadjustment));
   g_object_freeze_notify (G_OBJECT (vadjustment));
@@ -486,8 +567,7 @@ gtk_viewport_size_allocate (GtkWidget *widget,
   viewport_set_adjustment_values (viewport, GTK_ORIENTATION_HORIZONTAL);
   viewport_set_adjustment_values (viewport, GTK_ORIENTATION_VERTICAL);
 
-  child = gtk_bin_get_child (GTK_BIN (widget));
-  if (child && gtk_widget_get_visible (child))
+  if (viewport->child && gtk_widget_get_visible (viewport->child))
     {
       GtkAllocation child_allocation;
 
@@ -496,7 +576,7 @@ gtk_viewport_size_allocate (GtkWidget *widget,
       child_allocation.width = gtk_adjustment_get_upper (hadjustment);
       child_allocation.height = gtk_adjustment_get_upper (vadjustment);
 
-      gtk_widget_size_allocate (child, &child_allocation, -1);
+      gtk_widget_size_allocate (viewport->child, &child_allocation, -1);
     }
 
   g_object_thaw_notify (G_OBJECT (hadjustment));
@@ -579,7 +659,6 @@ focus_change_handler (GtkWidget *widget)
   GtkViewport *viewport = GTK_VIEWPORT (widget);
   GtkRoot *root;
   GtkWidget *focus_widget;
-  GtkWidget *child;
   graphene_rect_t rect;
   int x, y;
 
@@ -595,12 +674,10 @@ focus_change_handler (GtkWidget *widget)
   if (GTK_IS_TEXT (focus_widget))
     focus_widget = gtk_widget_get_parent (focus_widget);
 
-  child = gtk_bin_get_child (GTK_BIN (viewport));
-
-  if (!gtk_widget_compute_bounds (focus_widget, child, &rect))
+  if (!gtk_widget_compute_bounds (focus_widget, viewport->child, &rect))
     return;
 
-  gtk_widget_translate_coordinates (child, widget,
+  gtk_widget_translate_coordinates (viewport->child, widget,
                                     (int)rect.origin.x,
                                     (int)rect.origin.y,
                                      &x, &y);
@@ -633,3 +710,48 @@ clear_focus_change_handler (GtkViewport *viewport)
       viewport->focus_handler = 0;
     }
 }
+
+/**
+ * gtk_viewport_set_child:
+ * @viewport: a #GtkViewport
+ * @child: (allow-none): the child widget
+ *
+ * Sets the child widget of @viewport.
+ */
+void
+gtk_viewport_set_child (GtkViewport *viewport,
+                        GtkWidget   *child)
+{
+  g_return_if_fail (GTK_IS_VIEWPORT (viewport));
+  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+
+  if (viewport->child == child)
+    return;
+
+  g_clear_pointer (&viewport->child, gtk_widget_unparent);
+
+  if (child)
+    {
+      viewport->child = child;
+      gtk_widget_set_parent (child, GTK_WIDGET (viewport));
+    }
+
+  g_object_notify (G_OBJECT (viewport), "child");
+}
+
+/**
+ * gtk_viewport_get_child:
+ * @viewport: a #GtkViewport
+ *
+ * Gets the child widget of @viewport.
+ *
+ * Returns: (nullable) (transfer none): the child widget of @viewport
+ */
+GtkWidget *
+gtk_viewport_get_child (GtkViewport *viewport)
+{
+  g_return_val_if_fail (GTK_IS_VIEWPORT (viewport), NULL);
+
+  return viewport->child;
+}
+

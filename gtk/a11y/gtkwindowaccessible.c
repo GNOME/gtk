@@ -46,7 +46,7 @@ static void atk_window_interface_init (AtkWindowIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkWindowAccessible,
                          gtk_window_accessible,
-                         GTK_TYPE_CONTAINER_ACCESSIBLE,
+                         GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT,
                                                 atk_component_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_WINDOW,
@@ -76,33 +76,6 @@ gtk_window_accessible_notify_gtk (GObject    *obj,
     GTK_WIDGET_ACCESSIBLE_CLASS (gtk_window_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
-static GtkWidget *
-find_label_child (GtkContainer *container)
-{
-  GList *children, *tmp_list;
-  GtkWidget *child;
-
-  children = gtk_container_get_children (container);
-
-  child = NULL;
-  for (tmp_list = children; tmp_list != NULL; tmp_list = tmp_list->next)
-    {
-      if (GTK_IS_LABEL (tmp_list->data))
-        {
-          child = GTK_WIDGET (tmp_list->data);
-          break;
-        }
-      else if (GTK_IS_CONTAINER (tmp_list->data))
-        {
-          child = find_label_child (GTK_CONTAINER (tmp_list->data));
-          if (child)
-            break;
-        }
-   }
-  g_list_free (children);
-  return child;
-}
-
 static const gchar *
 gtk_window_accessible_get_name (AtkObject *accessible)
 {
@@ -122,14 +95,6 @@ gtk_window_accessible_get_name (AtkObject *accessible)
       GtkWindow *window = GTK_WINDOW (widget);
 
       name = gtk_window_get_title (window);
-      if (name == NULL && accessible->role == ATK_ROLE_TOOL_TIP)
-        {
-          GtkWidget *child;
-
-          child = find_label_child (GTK_CONTAINER (window));
-          if (GTK_IS_LABEL (child))
-            name = gtk_label_get_text (GTK_LABEL (child));
-        }
     }
   return name;
 }
@@ -244,29 +209,19 @@ gtk_window_accessible_ref_state_set (AtkObject *accessible)
   return state_set;
 }
 
-static void
-count_widget (GtkWidget *widget,
-              gint      *count)
-{
-  (*count)++;
-}
-
-static void
-prepend_widget (GtkWidget  *widget,
-		GList     **list)
-{
-  *list = g_list_prepend (*list, widget);
-}
-
 static gint
 gtk_window_accessible_get_n_children (AtkObject *object)
 {
   GtkWidget *window;
+  GtkWidget *child;
   gint count = 0;
 
   window = gtk_accessible_get_widget (GTK_ACCESSIBLE (object));
-  gtk_container_forall (GTK_CONTAINER (window),
-			(GtkCallback) count_widget, &count);
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (window));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    count++;
+
   return count;
 }
 
@@ -274,19 +229,19 @@ static AtkObject *
 gtk_window_accessible_ref_child (AtkObject *object,
                                  gint       i)
 {
-  GtkWidget *window, *ref_child;
-  GList *children = NULL;
+  GtkWidget *window, *child;
+  int pos;
 
   window = gtk_accessible_get_widget (GTK_ACCESSIBLE (object));
-  gtk_container_forall (GTK_CONTAINER (window),
-			(GtkCallback) prepend_widget, &children);
-  ref_child = g_list_nth_data (children, i);
-  g_list_free (children);
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (window)), pos = 0;
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child), pos++)
+    {
+      if (pos == i)
+        return g_object_ref (gtk_widget_get_accessible (child));
+    }
 
-  if (!ref_child)
-    return NULL;
-
-  return g_object_ref (gtk_widget_get_accessible (ref_child));
+  return NULL;
 }
 
 static void

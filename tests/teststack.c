@@ -126,7 +126,7 @@ main (gint argc,
   gtk_widget_set_size_request (window, 300, 300);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
 
   switcher = gtk_stack_switcher_new ();
   gtk_container_add (GTK_CONTAINER (box), switcher);
@@ -177,7 +177,7 @@ main (gint argc,
 
   tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
 
-  gtk_container_add (GTK_CONTAINER (scrolled_win), tree_view);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_win), tree_view);
   w3 = scrolled_win;
 
   renderer = gtk_cell_renderer_text_new ();

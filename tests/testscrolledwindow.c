@@ -89,7 +89,7 @@ scrollable_policy (void)
 
   gtk_widget_show (vbox);
   gtk_widget_show (hbox);
-  gtk_container_add (GTK_CONTAINER (window), hbox);
+  gtk_window_set_child (GTK_WINDOW (window), hbox);
   gtk_container_add (GTK_CONTAINER (hbox), vbox);
 
   frame = gtk_frame_new ("Scrolled Window");
@@ -101,7 +101,7 @@ scrollable_policy (void)
                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
   gtk_widget_show (swindow);
-  gtk_container_add (GTK_CONTAINER (frame), swindow);
+  gtk_frame_set_child (GTK_FRAME (frame), swindow);
 
   viewport = gtk_viewport_new (NULL, NULL);
   label = gtk_label_new ("Here is a wrapping label with a minimum width-chars of 40 and "
@@ -118,8 +118,8 @@ scrollable_policy (void)
 
   gtk_widget_show (label);
   gtk_widget_show (viewport);
-  gtk_container_add (GTK_CONTAINER (viewport), label);
-  gtk_container_add (GTK_CONTAINER (swindow), viewport);
+  gtk_viewport_set_child (GTK_VIEWPORT (viewport), label);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), viewport);
 
   /* Add controls here */
   expander = gtk_expander_new ("Controls");
@@ -221,7 +221,7 @@ scrollable_policy (void)
   gtk_container_add (GTK_CONTAINER (cntl), widget);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_container_add (GTK_CONTAINER (popover), vbox);
+  gtk_popover_set_child (GTK_POPOVER (popover), vbox);
 
   /* Popover's scrolled window */
   swindow = gtk_scrolled_window_new (NULL, NULL);
@@ -232,7 +232,7 @@ scrollable_policy (void)
 
   /* Listbox */
   listbox = gtk_list_box_new ();
-  gtk_container_add (GTK_CONTAINER (swindow), listbox);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), listbox);
   gtk_widget_show (listbox);
 
   /* Min content */

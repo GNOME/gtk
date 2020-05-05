@@ -45,7 +45,7 @@ populate_list (GtkListBox *list)
       gtk_widget_set_margin_top (label, 10);
       gtk_widget_set_margin_bottom (label, 10);
       gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_container_add (GTK_CONTAINER (row), label);
+      gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), label);
       gtk_container_add (GTK_CONTAINER (list), row);
     }
 }
@@ -125,9 +125,9 @@ main (int argc, char *argv[])
   list = gtk_list_box_new ();
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (list), GTK_SELECTION_NONE);
 
-  gtk_container_add (GTK_CONTAINER (win), overlay);
-  gtk_container_add (GTK_CONTAINER (overlay), sw);
-  gtk_container_add (GTK_CONTAINER (sw), list);
+  gtk_window_set_child (GTK_WINDOW (win), overlay);
+  gtk_overlay_set_child (GTK_OVERLAY (overlay), sw);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), list);
   populate_list (GTK_LIST_BOX (list));
 
   g_signal_connect (sw, "edge-overshot", G_CALLBACK (edge_overshot), list);

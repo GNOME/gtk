@@ -360,7 +360,7 @@ do_editable_cells (GtkWidget *do_widget)
       gtk_widget_set_margin_end (vbox, 5);
       gtk_widget_set_margin_top (vbox, 5);
       gtk_widget_set_margin_bottom (vbox, 5);
-      gtk_container_add (GTK_CONTAINER (window), vbox);
+      gtk_window_set_child (GTK_WINDOW (window), vbox);
 
       gtk_container_add (GTK_CONTAINER (vbox),
                           gtk_label_new ("Shopping list (you can edit the cells!)"));
@@ -387,7 +387,7 @@ do_editable_cells (GtkWidget *do_widget)
       g_object_unref (numbers_model);
       g_object_unref (items_model);
 
-      gtk_container_add (GTK_CONTAINER (sw), treeview);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), treeview);
 
       /* some buttons */
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);

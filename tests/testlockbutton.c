@@ -227,7 +227,7 @@ main (int argc, char *argv[])
   gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_window_set_child (GTK_WINDOW (window), box);
 
   allowed_button = gtk_check_button_new_with_label ("Allowed");
   gtk_container_add (GTK_CONTAINER (box), allowed_button);

@@ -29,7 +29,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkbin.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
@@ -93,13 +93,13 @@ GDK_AVAILABLE_IN_ALL
 GType          gtk_scrolled_window_get_type          (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_scrolled_window_new               (GtkAdjustment     *hadjustment,
-						      GtkAdjustment     *vadjustment);
+                                                      GtkAdjustment     *vadjustment);
 GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_hadjustment   (GtkScrolledWindow *scrolled_window,
-						      GtkAdjustment     *hadjustment);
+                                                      GtkAdjustment     *hadjustment);
 GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_vadjustment   (GtkScrolledWindow *scrolled_window,
-						      GtkAdjustment     *vadjustment);
+                                                      GtkAdjustment     *vadjustment);
 GDK_AVAILABLE_IN_ALL
 GtkAdjustment* gtk_scrolled_window_get_hadjustment   (GtkScrolledWindow *scrolled_window);
 GDK_AVAILABLE_IN_ALL
@@ -110,15 +110,15 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_scrolled_window_get_vscrollbar    (GtkScrolledWindow *scrolled_window);
 GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_policy        (GtkScrolledWindow *scrolled_window,
-						      GtkPolicyType      hscrollbar_policy,
-						      GtkPolicyType      vscrollbar_policy);
+                                                      GtkPolicyType      hscrollbar_policy,
+                                                      GtkPolicyType      vscrollbar_policy);
 GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_get_policy        (GtkScrolledWindow *scrolled_window,
-						      GtkPolicyType     *hscrollbar_policy,
-						      GtkPolicyType     *vscrollbar_policy);
+                                                      GtkPolicyType     *hscrollbar_policy,
+                                                      GtkPolicyType     *vscrollbar_policy);
 GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_placement     (GtkScrolledWindow *scrolled_window,
-						      GtkCornerType      window_placement);
+                                                      GtkCornerType      window_placement);
 GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_unset_placement   (GtkScrolledWindow *scrolled_window);
 
@@ -126,7 +126,7 @@ GDK_AVAILABLE_IN_ALL
 GtkCornerType  gtk_scrolled_window_get_placement     (GtkScrolledWindow *scrolled_window);
 GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_has_frame     (GtkScrolledWindow *scrolled_window,
-						      gboolean           has_frame);
+                                                      gboolean           has_frame);
 GDK_AVAILABLE_IN_ALL
 gboolean       gtk_scrolled_window_get_has_frame     (GtkScrolledWindow *scrolled_window);
 
@@ -172,15 +172,21 @@ gint           gtk_scrolled_window_get_max_content_height (GtkScrolledWindow *sc
 
 GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_propagate_natural_width  (GtkScrolledWindow *scrolled_window,
-								 gboolean           propagate);
+                                                                 gboolean           propagate);
 GDK_AVAILABLE_IN_ALL
 gboolean       gtk_scrolled_window_get_propagate_natural_width  (GtkScrolledWindow *scrolled_window);
 
 GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_propagate_natural_height (GtkScrolledWindow *scrolled_window,
-								 gboolean           propagate);
+                                                                 gboolean           propagate);
 GDK_AVAILABLE_IN_ALL
 gboolean       gtk_scrolled_window_get_propagate_natural_height (GtkScrolledWindow *scrolled_window);
+
+GDK_AVAILABLE_IN_ALL
+void           gtk_scrolled_window_set_child        (GtkScrolledWindow *scrolled_window,
+                                                     GtkWidget         *child);
+GDK_AVAILABLE_IN_ALL
+GtkWidget     *gtk_scrolled_window_get_child        (GtkScrolledWindow *scrolled_window);
 
 G_END_DECLS
 
