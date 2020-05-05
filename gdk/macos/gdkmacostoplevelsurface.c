@@ -140,6 +140,8 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
   /* Now present the window */
   [(GdkMacosWindow *)window showAndMakeKey:YES];
 
+  gdk_surface_invalidate_rect (GDK_SURFACE (self), NULL);
+
   g_print ("Made window key\n");
 
   return TRUE;
