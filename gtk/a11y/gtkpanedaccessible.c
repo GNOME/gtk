@@ -27,8 +27,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkPanedAccessible, gtk_paned_accessible, GTK_TYPE_CONT
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
 static void
-gtk_paned_accessible_size_allocate_gtk (GtkWidget     *widget,
-                                        GtkAllocation *allocation)
+gtk_paned_accessible_position_changed (GtkWidget *widget)
 {
   AtkObject *obj = gtk_widget_get_accessible (widget);
 
@@ -41,8 +40,8 @@ gtk_paned_accessible_initialize (AtkObject *obj,
 {
   ATK_OBJECT_CLASS (gtk_paned_accessible_parent_class)->initialize (obj, data);
 
-  g_signal_connect (data, "size-allocate",
-                    G_CALLBACK (gtk_paned_accessible_size_allocate_gtk), NULL);
+  g_signal_connect (data, "notify::position",
+                    G_CALLBACK (gtk_paned_accessible_position_changed), NULL);
 
   obj->role = ATK_ROLE_SPLIT_PANE;
 }
