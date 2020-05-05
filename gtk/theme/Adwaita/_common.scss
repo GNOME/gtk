@@ -904,6 +904,19 @@ modelbutton.flat arrow {
   &.right { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
 }
 
+/* oldstyle toolbar buttons */
+
+.toolbar button {
+  margin: 1px;
+  @extend %undecorated_button;
+
+  &:hover { @include button('hover'); }
+  &:active { @include button('active'); }
+  &:disabled { @include button('insensitive'); }
+  &:backdrop { @include button('backdrop'); }
+  &:backdrop:disabled { @include button('backdrop-insensitive'); }
+}
+
 button.color {
   padding: 4px;
 
