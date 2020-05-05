@@ -21,7 +21,9 @@
 
 #include <gdk/gdk.h>
 
+#include "gdkmacosdisplay-private.h"
 #include "gdkmacosmonitor-private.h"
+#include "gdkmacosutils-private.h"
 
 struct _GdkMacosMonitor
 {
@@ -37,8 +39,54 @@ struct _GdkMacosMonitorClass
 G_DEFINE_TYPE (GdkMacosMonitor, gdk_macos_monitor, GDK_TYPE_MONITOR)
 
 static void
+gdk_macos_monitor_get_workarea (GdkMonitor   *monitor,
+                                GdkRectangle *geometry)
+{
+  GDK_BEGIN_MACOS_ALLOC_POOL;
+
+  GdkMacosMonitor *self = (GdkMacosMonitor *)monitor;
+
+  g_assert (GDK_IS_MACOS_MONITOR (self));
+  g_assert (geometry != NULL);
+
+  *geometry = monitor->geometry;
+
+  for (id obj in [NSScreen screens])
+    {
+      CGDirectDisplayID screen_id;
+
+      screen_id = [[[obj deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue];
+
+      if (screen_id == self->screen_id)
+        {
+          NSScreen *screen = (NSScreen *)obj;
+          NSRect visibleFrame = [screen visibleFrame];
+          int x;
+          int y;
+
+          _gdk_macos_display_from_display_coords (GDK_MACOS_DISPLAY (monitor->display),
+                                                  visibleFrame.origin.x,
+                                                  visibleFrame.origin.y,
+                                                  &x, &y);
+
+          geometry->x = x;
+          geometry->y = y;
+          geometry->width = visibleFrame.size.width;
+          geometry->height = visibleFrame.size.height;
+
+          break;
+        }
+    }
+
+  GDK_END_MACOS_ALLOC_POOL;
+}
+
+static void
 gdk_macos_monitor_class_init (GdkMacosMonitorClass *klass)
 {
+  GdkMonitorClass *monitor_class = GDK_MONITOR_CLASS (klass);
+
+  monitor_class->get_workarea = gdk_macos_monitor_get_workarea;
 }
 
 static void
