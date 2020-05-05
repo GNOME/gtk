@@ -107,7 +107,7 @@ typedef struct _GtkTextViewClass   GtkTextViewClass;
 
 struct _GtkTextView
 {
-  GtkContainer parent_instance;
+  GtkWidget parent_instance;
 
   /*< private >*/
 
@@ -150,7 +150,7 @@ struct _GtkTextView
  */
 struct _GtkTextViewClass
 {
-  GtkContainerClass parent_class;
+  GtkWidgetClass parent_class;
 
   /*< public >*/
 
@@ -328,6 +328,10 @@ void       gtk_text_view_move_overlay        (GtkTextView          *text_view,
                                               GtkWidget            *child,
                                               gint                  xpos,
                                               gint                  ypos);
+
+GDK_AVAILABLE_IN_ALL
+void       gtk_text_view_remove              (GtkTextView          *text_view,
+                                              GtkWidget            *child);
 
 /* Default style settings (fallbacks if no tag affects the property) */
 
