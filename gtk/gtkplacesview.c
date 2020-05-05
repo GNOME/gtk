@@ -389,28 +389,6 @@ activate_row (GtkPlacesView      *view,
 static void update_places (GtkPlacesView *view);
 
 static void
-gtk_places_view_destroy (GtkWidget *widget)
-{
-  GtkPlacesView *self = GTK_PLACES_VIEW (widget);
-  GtkPlacesViewPrivate *priv = gtk_places_view_get_instance_private (self);
-
-  priv->destroyed = 1;
-
-  g_signal_handlers_disconnect_by_func (priv->volume_monitor, update_places, widget);
-
-  if (priv->network_monitor)
-    g_signal_handlers_disconnect_by_func (priv->network_monitor, update_places, widget);
-
-  if (priv->server_list_monitor)
-    g_signal_handlers_disconnect_by_func (priv->server_list_monitor, server_file_changed_cb, widget);
-
-  g_cancellable_cancel (priv->cancellable);
-  g_cancellable_cancel (priv->networks_fetching_cancellable);
-
-  GTK_WIDGET_CLASS (gtk_places_view_parent_class)->destroy (widget);
-}
-
-static void
 gtk_places_view_finalize (GObject *object)
 {
   GtkPlacesView *self = (GtkPlacesView *)object;
@@ -438,6 +416,18 @@ gtk_places_view_dispose (GObject *object)
   GtkPlacesView *self = (GtkPlacesView *)object;
   GtkPlacesViewPrivate *priv = gtk_places_view_get_instance_private (self);
 
+  priv->destroyed = 1;
+
+  g_signal_handlers_disconnect_by_func (priv->volume_monitor, update_places, object);
+
+  if (priv->network_monitor)
+    g_signal_handlers_disconnect_by_func (priv->network_monitor, update_places, object);
+
+  if (priv->server_list_monitor)
+    g_signal_handlers_disconnect_by_func (priv->server_list_monitor, server_file_changed_cb, object);
+
+  g_cancellable_cancel (priv->cancellable);
+  g_cancellable_cancel (priv->networks_fetching_cancellable);
   g_clear_pointer (&priv->popup_menu, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_places_view_parent_class)->dispose (object);
@@ -2236,7 +2226,6 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
   object_class->get_property = gtk_places_view_get_property;
   object_class->set_property = gtk_places_view_set_property;
 
-  widget_class->destroy = gtk_places_view_destroy;
   widget_class->map = gtk_places_view_map;
 
   /*
