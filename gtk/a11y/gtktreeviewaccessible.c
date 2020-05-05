@@ -78,7 +78,7 @@ static void atk_selection_interface_init              (AtkSelectionIface        
 static void atk_component_interface_init              (AtkComponentIface            *iface);
 static void gtk_cell_accessible_parent_interface_init (GtkCellAccessibleParentIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkTreeViewAccessible, gtk_tree_view_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkTreeViewAccessible, gtk_tree_view_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_ADD_PRIVATE (GtkTreeViewAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TABLE, atk_table_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init)
@@ -491,7 +491,6 @@ gtk_tree_view_accessible_class_init (GtkTreeViewAccessibleClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkAccessibleClass *accessible_class = (GtkAccessibleClass*)klass;
   GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
-  GtkContainerAccessibleClass *container_class = (GtkContainerAccessibleClass*)klass;
 
   class->get_n_children = gtk_tree_view_accessible_get_n_children;
   class->ref_child = gtk_tree_view_accessible_ref_child;
@@ -501,13 +500,6 @@ gtk_tree_view_accessible_class_init (GtkTreeViewAccessibleClass *klass)
   widget_class->notify_gtk = gtk_tree_view_accessible_notify_gtk;
 
   accessible_class->widget_unset = gtk_tree_view_accessible_widget_unset;
-
-  /* The children of a GtkTreeView are the buttons at the top of the columns
-   * we do not represent these as children so we do not want to report
-   * children added or deleted when these changed.
-   */
-  container_class->add_gtk = NULL;
-  container_class->remove_gtk = NULL;
 
   gobject_class->finalize = gtk_tree_view_accessible_finalize;
 }
