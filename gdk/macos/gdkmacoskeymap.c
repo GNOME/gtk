@@ -791,7 +791,7 @@ _gdk_macos_keymap_get_event_type (NSEvent *event)
   unsigned short keycode;
   unsigned int flags;
 
-  switch ([event type])
+  switch ((int)[event type])
     {
     case NSEventTypeKeyDown:
       return GDK_KEY_PRESS;

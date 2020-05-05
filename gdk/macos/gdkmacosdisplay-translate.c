@@ -210,7 +210,7 @@ fill_button_event (GdkMacosDisplay *display,
   state = get_keyboard_modifiers_from_ns_event (nsevent) |
          _gdk_macos_display_get_current_mouse_modifiers (display);
 
-  switch ([nsevent type])
+  switch ((int)[nsevent type])
     {
     case NSEventTypeLeftMouseDown:
     case NSEventTypeRightMouseDown:
@@ -254,7 +254,7 @@ synthesize_crossing_event (GdkMacosDisplay *display,
   GdkModifierType state;
   GdkSeat *seat;
 
-  switch ([nsevent type])
+  switch ((int)[nsevent type])
     {
     case NSEventTypeMouseEntered:
       event_type = GDK_ENTER_NOTIFY;
@@ -352,7 +352,7 @@ fill_pinch_event (GdkMacosDisplay *display,
    * PINCH(STARTED) event.
    */
 
-  switch ([nsevent phase])
+  switch ((int)[nsevent phase])
     {
     case NSEventPhaseBegan:
       switch (last_state)
@@ -407,7 +407,7 @@ fill_pinch_event (GdkMacosDisplay *display,
       break;
     }
 
-  switch ([nsevent type])
+  switch ((int)[nsevent type])
     {
     case NSEventTypeMagnify:
       last_scale *= [nsevent magnification] + 1.0;
@@ -570,7 +570,7 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
            GDK_SURFACE (surface)->height);
 #endif
 
-  switch (event_type)
+  switch ((int)event_type)
     {
     case NSEventTypeLeftMouseDown:
     case NSEventTypeRightMouseDown:

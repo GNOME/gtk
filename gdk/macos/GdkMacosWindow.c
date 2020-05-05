@@ -325,7 +325,7 @@
   if (!inManualMove)
     return NO;
 
-  currentLocation = [self convertBaseToScreen:[self mouseLocationOutsideOfEventStream]];
+  currentLocation = [self convertPointToScreen:[self mouseLocationOutsideOfEventStream]];
   newOrigin.x = currentLocation.x - initialMoveLocation.x;
   newOrigin.y = currentLocation.y - initialMoveLocation.y;
 
@@ -358,7 +358,7 @@
 
   inManualMove = YES;
 
-  initialMoveLocation = [self convertBaseToScreen:[self mouseLocationOutsideOfEventStream]];
+  initialMoveLocation = [self convertPointToScreen:[self mouseLocationOutsideOfEventStream]];
   initialMoveLocation.x -= frame.origin.x;
   initialMoveLocation.y -= frame.origin.y;
 }
@@ -375,7 +375,7 @@
 
   inTrackManualResize = YES;
 
-  mouse_location = [self convertBaseToScreen:[self mouseLocationOutsideOfEventStream]];
+  mouse_location = [self convertPointToScreen:[self mouseLocationOutsideOfEventStream]];
   mdx = initialResizeLocation.x - mouse_location.x;
   mdy = initialResizeLocation.y - mouse_location.y;
 
@@ -460,7 +460,7 @@
   resizeEdge = edge;
 
   initialResizeFrame = [self frame];
-  initialResizeLocation = [self convertBaseToScreen:[self mouseLocationOutsideOfEventStream]];
+  initialResizeLocation = [self convertPointToScreen:[self mouseLocationOutsideOfEventStream]];
 }
 
 -(NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender

@@ -58,8 +58,6 @@ _gdk_macos_popup_surface_get_property (GObject    *object,
                                        GValue     *value,
                                        GParamSpec *pspec)
 {
-  GdkMacosPopupSurface *self = GDK_MACOS_POPUP_SURFACE (object);
-
   switch (prop_id)
     {
     case LAST_PROP + GDK_POPUP_PROP_PARENT:
@@ -79,8 +77,6 @@ _gdk_macos_popup_surface_set_property (GObject      *object,
                                        const GValue *value,
                                        GParamSpec   *pspec)
 {
-  GdkMacosPopupSurface *self = GDK_MACOS_POPUP_SURFACE (object);
-
   switch (prop_id)
     {
     case LAST_PROP + GDK_POPUP_PROP_PARENT:
