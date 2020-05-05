@@ -13956,8 +13956,7 @@ _gtk_tree_view_remove_editable (GtkTreeView       *tree_view,
   if (gtk_widget_has_focus (GTK_WIDGET (cell_editable)))
     gtk_widget_grab_focus (GTK_WIDGET (tree_view));
 
-  gtk_container_remove (GTK_CONTAINER (tree_view),
-                        GTK_WIDGET (cell_editable));
+  gtk_tree_view_remove (tree_view, GTK_WIDGET (cell_editable));
 
   /* FIXME should only redraw a single node */
   gtk_widget_queue_draw (GTK_WIDGET (tree_view));
