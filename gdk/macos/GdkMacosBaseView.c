@@ -38,6 +38,24 @@
   return self;
 }
 
+-(BOOL)acceptsFirstResponder
+{
+  GDK_NOTE (EVENTS, g_message ("acceptsFirstResponder"));
+  return YES;
+}
+
+-(BOOL)becomeFirstResponder
+{
+  GDK_NOTE (EVENTS, g_message ("becomeFirstResponder"));
+  return YES;
+}
+
+-(BOOL)resignFirstResponder
+{
+  GDK_NOTE (EVENTS, g_message ("resignFirstResponder"));
+  return YES;
+}
+
 -(void)setNeedsInvalidateShadow: (BOOL)invalidate
 {
   needsInvalidateShadow = invalidate;
