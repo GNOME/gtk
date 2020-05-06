@@ -977,3 +977,16 @@ gtk_tooltip_handle_event_internal (GdkEventType   event_type,
 	break;
     }
 }
+
+void
+gtk_tooltip_maybe_allocate (GtkNative *native)
+{
+  GdkDisplay *display = gtk_widget_get_display (GTK_WIDGET (native));
+  GtkTooltip *tooltip;
+
+  tooltip = g_object_get_qdata (G_OBJECT (display), quark_current_tooltip);
+  if (!tooltip || tooltip->native != native)
+    return;
+
+  gtk_native_check_resize (GTK_NATIVE (tooltip->window));
+}

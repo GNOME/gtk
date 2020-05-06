@@ -70,6 +70,7 @@
 #include "gtkwindowgroup.h"
 #include "gtkpopovermenubarprivate.h"
 #include "gtkcssboxesimplprivate.h"
+#include "gtktooltipprivate.h"
 
 #include "a11y/gtkwindowaccessibleprivate.h"
 #include "a11y/gtkcontaineraccessibleprivate.h"
@@ -5076,6 +5077,8 @@ gtk_window_size_allocate (GtkWidget *widget,
 
   if (child && gtk_widget_get_visible (child))
     gtk_widget_size_allocate (child, &child_allocation, -1);
+
+  gtk_tooltip_maybe_allocate (GTK_NATIVE (widget));
 }
 
 gboolean
