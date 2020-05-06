@@ -43,6 +43,7 @@ struct _GtkCssTransition
   GtkCssValue        *start;
   GtkCssValue        *ease;
   GtkProgressTracker  tracker;
+  guint               finished;
 };
 
 struct _GtkCssTransitionClass
