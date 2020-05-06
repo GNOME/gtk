@@ -22,6 +22,7 @@
 #include "config.h"
 
 #import "GdkMacosBaseView.h"
+#import "GdkMacosWindow.h"
 
 #include "gdkinternals.h"
 
@@ -113,6 +114,11 @@
 
   if ([self window])
     [self updateTrackingRect];
+}
+
+-(GdkMacosSurface *)getGdkSurface
+{
+  return [(GdkMacosWindow *)[self window] getGdkSurface];
 }
 
 @end

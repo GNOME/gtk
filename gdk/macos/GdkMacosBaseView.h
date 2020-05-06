@@ -34,6 +34,7 @@
   NSRange selectedRange;
 }
 
+-(GdkMacosSurface *)getGdkSurface;
 -(void)setNeedsInvalidateShadow: (BOOL)invalidate;
 -(void)updateTrackingRect;
 -(NSTrackingRectTag)trackingRect;
