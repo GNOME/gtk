@@ -499,15 +499,27 @@
 {
   gboolean was_fullscreen;
   gboolean is_fullscreen;
+  gboolean was_opaque;
+  gboolean is_opaque;
 
   was_fullscreen = (([self styleMask] & NSWindowStyleMaskFullScreen) != 0);
+  was_opaque = (([self styleMask] & NSWindowStyleMaskTitled) != 0);
 
   [super setStyleMask:styleMask];
 
   is_fullscreen = (([self styleMask] & NSWindowStyleMaskFullScreen) != 0);
+  is_opaque = (([self styleMask] & NSWindowStyleMaskTitled) != 0);
 
   if (was_fullscreen != is_fullscreen)
     _gdk_macos_surface_update_fullscreen_state (self->gdkSurface);
+
+  if (was_opaque != is_opaque)
+    {
+      [self setOpaque:is_opaque];
+
+      if (!is_opaque)
+        [self setBackgroundColor:[NSColor clearColor]];
+    }
 }
 
 -(NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen
