@@ -866,9 +866,6 @@ GDK_AVAILABLE_IN_ALL
 gint          gtk_style_context_get_scale    (GtkStyleContext *context);
 
 GDK_AVAILABLE_IN_ALL
-GList *  gtk_style_context_list_classes (GtkStyleContext *context);
-
-GDK_AVAILABLE_IN_ALL
 void     gtk_style_context_add_class    (GtkStyleContext *context,
                                          const gchar     *class_name);
 GDK_AVAILABLE_IN_ALL

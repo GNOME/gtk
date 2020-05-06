@@ -1838,8 +1838,6 @@ gtk_label_set_attributes (GtkLabel         *self,
   if (!attrs && !self->attrs)
     return;
 
-  if (attrs == self->attrs) g_error ("Z");
-
   if (attrs)
     pango_attr_list_ref (attrs);
 
@@ -2852,7 +2850,10 @@ gtk_label_update_layout_attributes (GtkLabel      *self,
   PangoAttrList *attrs;
 
   if (self->layout == NULL)
-    return;
+    {
+      pango_attr_list_unref (style_attrs);
+      return;
+    }
 
   if (self->select_info && self->select_info->links)
     {
@@ -2913,8 +2914,7 @@ gtk_label_update_layout_attributes (GtkLabel      *self,
 
   pango_layout_set_attributes (self->layout, attrs);
 
-  if (attrs)
-    pango_attr_list_unref (attrs);
+  pango_attr_list_unref (attrs);
 }
 
 static void
@@ -3849,7 +3849,13 @@ gtk_label_focus (GtkWidget        *widget,
       int new_index = -1;
       int i;
 
+      if (info->n_links == 0)
+        goto out;
+
       focus_link = gtk_label_get_focus_link (self, &focus_link_index);
+
+      if (!focus_link)
+        goto out;
 
       switch (direction)
         {

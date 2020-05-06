@@ -671,22 +671,24 @@ gdk_motion_event_push_history (GdkEvent *event,
                                GdkEvent *history_event)
 {
   GdkMotionEvent *self = (GdkMotionEvent *) event;
-  GdkTimeCoord *hist;
+  GdkTimeCoord hist;
   GdkDevice *device;
   gint i, n_axes;
 
   g_assert (GDK_IS_EVENT_TYPE (event, GDK_MOTION_NOTIFY));
   g_assert (GDK_IS_EVENT_TYPE (history_event, GDK_MOTION_NOTIFY));
 
-  hist = g_new0 (GdkTimeCoord, 1);
-
   device = gdk_event_get_device (history_event);
   n_axes = gdk_device_get_n_axes (device);
 
   for (i = 0; i <= MIN (n_axes, GDK_MAX_TIMECOORD_AXES); i++)
-    gdk_event_get_axis (history_event, i, &hist->axes[i]);
+    gdk_event_get_axis (history_event, i, &hist.axes[i]);
 
-  self->history = g_list_prepend (self->history, hist);
+  if (G_UNLIKELY (!self->history))
+    self->history = g_array_new (FALSE, TRUE, sizeof (GdkTimeCoord));
+
+  g_array_append_val (self->history, hist);
+
 }
 
 void
@@ -2727,7 +2729,8 @@ gdk_motion_event_finalize (GdkEvent *event)
 
   g_clear_object (&self->tool);
   g_clear_pointer (&self->axes, g_free);
-  g_list_free_full (self->history, g_free);
+  if (self->history)
+    g_array_free (self->history, TRUE);
 
   GDK_EVENT_SUPER (event)->finalize (event);
 }
@@ -2819,6 +2822,7 @@ gdk_motion_event_new (GdkSurface      *surface,
 /**
  * gdk_motion_event_get_history:
  * @event: (type GdkMotionEvent): a motion #GdkEvent
+ * @out_n_coords: (out): Return location for the length of the returned array
  *
  * Retrieves the history of the @event motion, as a list of time and
  * coordinates.
@@ -2826,15 +2830,31 @@ gdk_motion_event_new (GdkSurface      *surface,
  * Returns: (transfer container) (element-type GdkTimeCoord) (nullable): a list
  *   of time and coordinates
  */
-GList *
-gdk_motion_event_get_history (GdkEvent *event)
+GdkTimeCoord *
+gdk_motion_event_get_history (GdkEvent *event,
+                              guint    *out_n_coords)
 {
   GdkMotionEvent *self = (GdkMotionEvent *) event;
 
   g_return_val_if_fail (GDK_IS_EVENT (event), NULL);
   g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_MOTION_NOTIFY), NULL);
+  g_return_val_if_fail (out_n_coords != NULL, NULL);
 
-  return g_list_reverse (g_list_copy (self->history));
+  if (self->history &&
+      self->history->len > 0)
+    {
+      GdkTimeCoord *result;
+
+      *out_n_coords = self->history->len;
+
+      result = g_malloc (sizeof (GdkTimeCoord) * self->history->len);
+      memcpy (result, self->history->data, sizeof (GdkTimeCoord) * self->history->len);
+
+      return result;
+    }
+
+  *out_n_coords = 0;
+  return NULL;
 }
 
 /* }}} */

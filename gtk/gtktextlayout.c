@@ -2010,8 +2010,9 @@ allocate_child_widgets (GtkTextLayout      *text_layout,
           gint byte_index;
           GtkTextIter text_iter;
           GtkTextChildAnchor *anchor = NULL;
-          GList *widgets = NULL;
-          GList *l;
+          GtkWidget **widgets = NULL;
+          guint n_widgets = 0;
+          guint i;
 
           /* The pango iterator iterates in visual order.
            * We use the byte index to find the child widget.
@@ -2019,13 +2020,13 @@ allocate_child_widgets (GtkTextLayout      *text_layout,
           byte_index = pango_layout_iter_get_index (run_iter);
           line_display_index_to_iter (text_layout, display, &text_iter, byte_index, 0);
           anchor = gtk_text_iter_get_child_anchor (&text_iter);
-	  if (anchor)
-            widgets = gtk_text_child_anchor_get_widgets (anchor);
+          if (anchor)
+            widgets = gtk_text_child_anchor_get_widgets (anchor, &n_widgets);
 
-          for (l = widgets; l; l = l->next)
+          for (i = 0; i < n_widgets; i++)
             {
+              GtkWidget  *child = widgets[i];
               PangoRectangle extents;
-              GtkWidget *child = l->data;
 
               if (_gtk_anchored_child_get_layout (child) == text_layout)
                 {
@@ -2047,7 +2048,7 @@ allocate_child_widgets (GtkTextLayout      *text_layout,
                 }
             }
 
-          g_list_free (widgets);
+          g_free (widgets);
         }
     }
   while (pango_layout_iter_next_run (run_iter));
