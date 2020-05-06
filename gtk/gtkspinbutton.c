@@ -906,6 +906,8 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
 {
   GtkEventController *controller;
   GtkGesture *gesture;
+  GtkLayoutManager *layout;
+  GtkLayoutChild *child;
 
   spin_button->adjustment = NULL;
   spin_button->timer = 0;
@@ -928,10 +930,12 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   gtk_editable_init_delegate (GTK_EDITABLE (spin_button));
   gtk_editable_set_width_chars (GTK_EDITABLE (spin_button->entry), 0);
   gtk_editable_set_max_width_chars (GTK_EDITABLE (spin_button->entry), 0);
-  gtk_widget_set_hexpand (spin_button->entry, TRUE);
-  gtk_widget_set_vexpand (spin_button->entry, TRUE);
   g_signal_connect (spin_button->entry, "activate", G_CALLBACK (gtk_spin_button_activate), spin_button);
   gtk_widget_set_parent (spin_button->entry, GTK_WIDGET (spin_button));
+
+  layout = gtk_widget_get_layout_manager (GTK_WIDGET (spin_button));
+  child = gtk_layout_manager_get_layout_child (layout, spin_button->entry);
+  gtk_box_layout_child_set_expand (GTK_BOX_LAYOUT_CHILD (child), TRUE);
 
   spin_button->down_button = gtk_button_new_from_icon_name ("value-decrease-symbolic");
   gtk_widget_add_css_class (spin_button->down_button, "down");
