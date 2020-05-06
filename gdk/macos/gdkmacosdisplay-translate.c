@@ -479,7 +479,6 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
   NSWindow *nswindow;
   GdkEvent *ret = NULL;
   NSPoint point;
-  int x, y;
 
   g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (self), NULL);
   g_return_val_if_fail (nsevent != NULL, NULL);
@@ -532,12 +531,11 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
   if (!(surface = [window getGdkSurface]))
     return NULL;
 
-  /* Get the location of the event within the toplevel */
-  point = [nsevent locationInWindow];
-  _gdk_macos_display_from_display_coords (self, point.x, point.y, &x, &y);
+  /* Get the location of event within toplevel coordinates */
+  point = [[window contentView] convertPoint:[nsevent locationInWindow] fromView:nil];
 
   /* Quartz handles resizing on its own, so stay out of the way. */
-  if (test_resize (nsevent, surface, x, y))
+  if (test_resize (nsevent, surface, point.x, point.y))
     return NULL;
 
   /* If the app is not active leave the event to AppKit so the window gets
@@ -560,16 +558,6 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
         }
     }
 
-#if 0
-  g_print ("Type: %d Surface: %s %d,%d %dx%d\n",
-           event_type,
-           G_OBJECT_TYPE_NAME (surface),
-           GDK_SURFACE (surface)->x,
-           GDK_SURFACE (surface)->y,
-           GDK_SURFACE (surface)->width,
-           GDK_SURFACE (surface)->height);
-#endif
-
   switch ((int)event_type)
     {
     case NSEventTypeLeftMouseDown:
@@ -578,26 +566,26 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
     case NSEventTypeLeftMouseUp:
     case NSEventTypeRightMouseUp:
     case NSEventTypeOtherMouseUp:
-      ret = fill_button_event (self, surface, nsevent, x, y);
+      ret = fill_button_event (self, surface, nsevent, point.x, point.y);
       break;
 
     case NSEventTypeLeftMouseDragged:
     case NSEventTypeRightMouseDragged:
     case NSEventTypeOtherMouseDragged:
     case NSEventTypeMouseMoved:
-      ret = fill_motion_event (self, surface, nsevent, x, y);
+      ret = fill_motion_event (self, surface, nsevent, point.x, point.y);
       break;
 
     case NSEventTypeMagnify:
     case NSEventTypeRotate:
-      ret = fill_pinch_event (self, surface, nsevent, x, y);
+      ret = fill_pinch_event (self, surface, nsevent, point.x, point.y);
       break;
 
     case NSEventTypeMouseExited:
       [[NSCursor arrowCursor] set];
       /* fall through */
     case NSEventTypeMouseEntered:
-      ret = synthesize_crossing_event (self, surface, nsevent, x, y);
+      ret = synthesize_crossing_event (self, surface, nsevent, point.x, point.y);
       break;
 
     case NSEventTypeKeyDown:
@@ -612,7 +600,7 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
     }
 
     case NSEventTypeScrollWheel:
-      //ret = fill_scroll_event (self, surface, nsevent, x, y);
+      //ret = fill_scroll_event (self, surface, nsevent, point.x, point.y);
       break;
 
     default:
