@@ -46,7 +46,6 @@ static cairo_surface_t *
 create_cairo_surface_for_surface (GdkSurface *surface)
 {
   cairo_surface_t *cairo_surface;
-  CGContextRef cg;
   GdkDisplay *display;
   int scale;
   int width;
@@ -54,7 +53,6 @@ create_cairo_surface_for_surface (GdkSurface *surface)
 
   g_assert (GDK_IS_MACOS_SURFACE (surface));
 
-  cg = NSGraphicsContext.currentContext.CGContext;
   display = gdk_surface_get_display (surface);
   scale = gdk_surface_get_scale_factor (surface);
   width = scale * gdk_surface_get_width (surface);
