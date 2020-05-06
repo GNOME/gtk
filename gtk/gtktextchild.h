@@ -31,7 +31,7 @@
 
 #include <gdk/gdk.h>
 #include <glib-object.h>
-#include <gtkwidget.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
