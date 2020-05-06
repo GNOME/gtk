@@ -25,6 +25,7 @@
 #include "config.h"
 #include "gtkdrawingarea.h"
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtksnapshot.h"
 #include "gtkstylecontext.h"
@@ -50,6 +51,13 @@ enum {
 
 static GParamSpec *props[LAST_PROP] = { NULL, };
 
+enum {
+  RESIZE,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0, };
+
 /**
  * SECTION:gtkdrawingarea
  * @Short_description: A simple widget for drawing with cairo
@@ -64,7 +72,7 @@ static GParamSpec *props[LAST_PROP] = { NULL, };
  *   when the widget is instantiated on a particular display.
  *   (Create GDK resources in response to this signal.)
  *
- * - The #GtkWidget::size-allocate signal to take any necessary
+ * - The #GtkDrawingArea::resize signal to take any necessary
  *   actions when the widget changes size.
  *
  * - Call gtk_drawing_area_set_draw_func() to handle redrawing the
@@ -223,6 +231,15 @@ gtk_drawing_area_measure (GtkWidget      *widget,
 }
 
 static void
+gtk_drawing_area_size_allocate (GtkWidget *widget,
+                                int        width,
+                                int        height,
+                                int        baseline)
+{
+  g_signal_emit (widget, signals[RESIZE], 0, width, height);
+}
+
+static void
 gtk_drawing_area_snapshot (GtkWidget   *widget,
                            GtkSnapshot *snapshot)
 {
@@ -264,6 +281,7 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
   widget_class->snapshot = gtk_drawing_area_snapshot;
   widget_class->focus = gtk_widget_focus_none;
   widget_class->grab_focus = gtk_widget_grab_focus_none;
+  widget_class->size_allocate = gtk_drawing_area_size_allocate;
 
   /**
    * GtkDrawingArea:content-width
@@ -290,6 +308,29 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, props);
+
+  /**
+   * GtkDrawingArea::resize:
+   * @area: the #GtkDrawingArea that emitted the signal
+   * @width: the width of the viewport
+   * @height: the height of the viewport
+   *
+   * The ::resize signal is emitted once when the widget is realized, and
+   * then each time the widget is changed while realized. This is useful
+   * in order to keep state up to date with the widget size, like for
+   * instance a backing surface.
+   */
+  signals[RESIZE] =
+    g_signal_new (I_("resize"),
+                  G_TYPE_FROM_CLASS (class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkDrawingAreaClass, resize),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__INT_INT,
+                  G_TYPE_NONE, 2, G_TYPE_INT, G_TYPE_INT);
+  g_signal_set_va_marshaller (signals[RESIZE],
+                              G_TYPE_FROM_CLASS (class),
+                              _gtk_marshal_VOID__INT_INTv);
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_DRAWING_AREA);
 }
@@ -419,7 +460,7 @@ gtk_drawing_area_get_content_height (GtkDrawingArea *self)
  * @destroy: destroy notifier for @user_data
  *
  * Setting a draw function is the main thing you want to do when using a drawing
- * area. It is called whenever GTK needs to draw the contents of the drawing area 
+ * area. It is called whenever GTK needs to draw the contents of the drawing area
  * to the screen.
  *
  * The draw function will be called during the drawing stage of GTK. In the

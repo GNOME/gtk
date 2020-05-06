@@ -18,10 +18,10 @@ clear_surface (void)
 
 /* Create a new surface of the appropriate size to store our scribbles */
 static void
-size_allocate_cb (GtkWidget     *widget,
-                  GtkAllocation *alloc,
-                  int            baseline,
-                  gpointer       data)
+resize_cb (GtkWidget *widget,
+           int        width,
+           int        height,
+           gpointer   data)
 {
   if (surface)
     {
@@ -153,8 +153,7 @@ activate (GtkApplication *app,
 
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (drawing_area), draw_cb, NULL, NULL);
 
-  g_signal_connect_after (drawing_area, "size-allocate",
-                          G_CALLBACK (size_allocate_cb), NULL);
+  g_signal_connect_after (drawing_area, "resize", G_CALLBACK (resize_cb), NULL);
 
   drag = gtk_gesture_drag_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (drag), GDK_BUTTON_PRIMARY);

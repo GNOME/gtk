@@ -191,13 +191,6 @@ surface_state_changed (GtkWidget *widget)
     }
 }
 
-static void
-surface_size_changed (GtkWidget *widget,
-                      guint      width,
-                      guint      height)
-{
-}
-
 static gboolean
 surface_render (GdkSurface     *surface,
                 cairo_region_t *region,
@@ -228,7 +221,6 @@ gtk_tooltip_window_realize (GtkWidget *widget)
   gdk_surface_set_widget (window->surface, widget);
 
   g_signal_connect_swapped (window->surface, "notify::state", G_CALLBACK (surface_state_changed), widget);
-  g_signal_connect_swapped (window->surface, "size-changed", G_CALLBACK (surface_size_changed), widget);
   g_signal_connect (window->surface, "render", G_CALLBACK (surface_render), widget);
   g_signal_connect (window->surface, "event", G_CALLBACK (surface_event), widget);
 
@@ -248,7 +240,6 @@ gtk_tooltip_window_unrealize (GtkWidget *widget)
   g_clear_object (&window->renderer);
 
   g_signal_handlers_disconnect_by_func (window->surface, surface_state_changed, widget);
-  g_signal_handlers_disconnect_by_func (window->surface, surface_size_changed, widget);
   g_signal_handlers_disconnect_by_func (window->surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (window->surface, surface_event, widget);
   gdk_surface_set_widget (window->surface, NULL);
@@ -364,22 +355,13 @@ gtk_tooltip_window_hide (GtkWidget *widget)
   gtk_widget_unmap (widget);
 }
 
-static void size_changed (GtkWidget        *widget,
-                          int               width,
-                          int               height,
-                          int               baseline,
-                          GtkTooltipWindow *window);
-
 static void
 gtk_tooltip_window_dispose (GObject *object)
 {
   GtkTooltipWindow *window = GTK_TOOLTIP_WINDOW (object);
 
   if (window->relative_to)
-    {
-      g_signal_handlers_disconnect_by_func (window->relative_to, size_changed, window);
-      gtk_widget_unparent (GTK_WIDGET (window));
-    }
+    gtk_widget_unparent (GTK_WIDGET (window));
 
   g_clear_pointer (&window->box, gtk_widget_unparent);
 
@@ -532,16 +514,6 @@ gtk_tooltip_window_set_custom_widget (GtkTooltipWindow *window,
     }
 }
 
-static void
-size_changed (GtkWidget        *widget,
-              int               width,
-              int               height,
-              int               baseline,
-              GtkTooltipWindow *window)
-{
-  gtk_native_check_resize (GTK_NATIVE (window));
-}
-
 void
 gtk_tooltip_window_set_relative_to (GtkTooltipWindow *window,
                                     GtkWidget        *relative_to)
@@ -554,20 +526,12 @@ gtk_tooltip_window_set_relative_to (GtkTooltipWindow *window,
   g_object_ref (window);
 
   if (window->relative_to)
-    {
-      g_signal_handlers_disconnect_by_func (window->relative_to, size_changed, window);
-      gtk_widget_unparent (GTK_WIDGET (window));
-    }
+    gtk_widget_unparent (GTK_WIDGET (window));
 
   window->relative_to = relative_to;
 
   if (window->relative_to)
-    {
-      g_signal_connect (window->relative_to, "size-allocate", G_CALLBACK (size_changed), window);
-      gtk_css_node_set_parent (gtk_widget_get_css_node (GTK_WIDGET (window)),
-                               gtk_widget_get_css_node (relative_to));
-      gtk_widget_set_parent (GTK_WIDGET (window), relative_to);
-    }
+    gtk_widget_set_parent (GTK_WIDGET (window), relative_to);
 
   g_object_unref (window);
 }
