@@ -88,6 +88,16 @@ gtk_array_insert (GtkArray *self,
       return;
     }
 
+  if (G_UNLIKELY (!self->ptr_array))
+    {
+      guint i;
+
+      self->ptr_array = g_ptr_array_new_full (self->reserved_size, NULL);
+
+      for (i = 0; i < self->len; i++)
+        g_ptr_array_add (self->ptr_array, self->stack_space[i]);
+    }
+
   g_assert (self->ptr_array);
   g_ptr_array_insert (self->ptr_array, index, element);
   self->len++;
