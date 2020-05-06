@@ -156,6 +156,8 @@ typedef struct {
   GtkCssNode *arrow_node;
   GskRenderNode *arrow_render_node;
 
+  GtkNative *tooltip;
+
   GdkPopupLayout *layout;
   GdkRectangle final_rect;
   GtkPositionType final_position;
@@ -229,6 +231,16 @@ gtk_popover_native_get_surface_transform (GtkNative *native,
   *y  = _gtk_css_number_value_get (style->size->margin_top, 100) +
         _gtk_css_number_value_get (style->border->border_top_width, 100) +
         _gtk_css_number_value_get (style->size->padding_top, 100);
+}
+
+static void
+gtk_popover_native_set_tooltip (GtkNative *native,
+                                GtkNative *tooltip)
+{
+  GtkPopover *popover = GTK_POPOVER (native);
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  priv->tooltip = tooltip;
 }
 
 static gboolean
@@ -1420,6 +1432,9 @@ gtk_popover_size_allocate (GtkWidget *widget,
       gtk_popover_update_shape (popover);
       g_clear_pointer (&priv->arrow_render_node, gsk_render_node_unref);
     }
+
+  if (priv->tooltip && gtk_widget_get_visible (GTK_WIDGET (priv->tooltip)))
+    gtk_native_check_resize (priv->tooltip);
 }
 
 static void
@@ -1890,6 +1905,7 @@ gtk_popover_native_interface_init (GtkNativeInterface *iface)
   iface->get_renderer = gtk_popover_native_get_renderer;
   iface->get_surface_transform = gtk_popover_native_get_surface_transform;
   iface->check_resize = gtk_popover_native_check_resize;
+  iface->set_tooltip = gtk_popover_native_set_tooltip;
 }
 
 static GtkBuildableIface *parent_buildable_iface;
