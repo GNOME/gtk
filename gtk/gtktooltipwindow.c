@@ -191,13 +191,6 @@ surface_state_changed (GtkWidget *widget)
     }
 }
 
-static void
-surface_size_changed (GtkWidget *widget,
-                      guint      width,
-                      guint      height)
-{
-}
-
 static gboolean
 surface_render (GdkSurface     *surface,
                 cairo_region_t *region,
@@ -228,7 +221,6 @@ gtk_tooltip_window_realize (GtkWidget *widget)
   gdk_surface_set_widget (window->surface, widget);
 
   g_signal_connect_swapped (window->surface, "notify::state", G_CALLBACK (surface_state_changed), widget);
-  g_signal_connect_swapped (window->surface, "size-changed", G_CALLBACK (surface_size_changed), widget);
   g_signal_connect (window->surface, "render", G_CALLBACK (surface_render), widget);
   g_signal_connect (window->surface, "event", G_CALLBACK (surface_event), widget);
 
@@ -248,7 +240,6 @@ gtk_tooltip_window_unrealize (GtkWidget *widget)
   g_clear_object (&window->renderer);
 
   g_signal_handlers_disconnect_by_func (window->surface, surface_state_changed, widget);
-  g_signal_handlers_disconnect_by_func (window->surface, surface_size_changed, widget);
   g_signal_handlers_disconnect_by_func (window->surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (window->surface, surface_event, widget);
   gdk_surface_set_widget (window->surface, NULL);
