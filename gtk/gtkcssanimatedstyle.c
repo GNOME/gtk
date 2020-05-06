@@ -53,7 +53,7 @@ gtk_css_animated_style_get_section (GtkCssStyle *style,
 static gboolean
 gtk_css_animated_style_is_static (GtkCssStyle *style)
 {
-  GtkCssAnimatedStyle *animated = GTK_CSS_ANIMATED_STYLE (style);
+  GtkCssAnimatedStyle *animated = (GtkCssAnimatedStyle *)style;
   guint i;
 
   for (i = 0; i < animated->n_animations; i ++)
