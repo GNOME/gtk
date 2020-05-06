@@ -342,7 +342,7 @@ entry {
       &.#{$e_type} {
         color: $e_color;
 
-        @include focus-ring($within: true, $fc: $e_color);
+        @include focus-ring($within: true, $fc: transparentize($e_color, 0.5));
 
         &:focus-within { @include entry(focus, $e_color); }
 
