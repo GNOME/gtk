@@ -342,7 +342,7 @@ entry {
       &.#{$e_type} {
         color: $e_color;
 
-        @include focus-ring($within: true, $fc: $e_color);
+        @include focus-ring($within: true, $fc: transparentize($e_color, 0.5));
 
         &:focus-within { @include entry(focus, $e_color); }
 
@@ -676,7 +676,7 @@ button {
                              (destructive-action, $destructive_color) {
     &.#{$b_type} {
       @include button(normal, $b_color, white);
-      @include focus-ring($fc: transparentize(white,0.1));
+      @include focus-ring($fc: $alt_focus_border_color);
 
       &.flat {
         @include button(undecorated);
