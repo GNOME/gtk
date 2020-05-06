@@ -31,6 +31,7 @@
 
 #include <gdk/gdk.h>
 #include <glib-object.h>
+#include <gtkwidget.h>
 
 G_BEGIN_DECLS
 
@@ -78,7 +79,8 @@ GDK_AVAILABLE_IN_ALL
 GtkTextChildAnchor* gtk_text_child_anchor_new         (void);
 
 GDK_AVAILABLE_IN_ALL
-GList*              gtk_text_child_anchor_get_widgets (GtkTextChildAnchor *anchor);
+GtkWidget **        gtk_text_child_anchor_get_widgets (GtkTextChildAnchor *anchor,
+                                                       guint              *out_len);
 GDK_AVAILABLE_IN_ALL
 gboolean            gtk_text_child_anchor_get_deleted (GtkTextChildAnchor *anchor);
 

@@ -1287,13 +1287,13 @@ create_shm_pool (struct wl_shm  *shm,
   fd = open_shared_memory ();
 
   if (fd < 0)
-    return NULL;
+    goto fail;
 
   if (ftruncate (fd, size) < 0)
     {
       g_critical (G_STRLOC ": Truncating shared memory file failed: %m");
       close (fd);
-      return NULL;
+      goto fail;
     }
 
   data = mmap (NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
@@ -1302,7 +1302,7 @@ create_shm_pool (struct wl_shm  *shm,
     {
       g_critical (G_STRLOC ": mmap'ping shared memory file failed: %m");
       close (fd);
-      return NULL;
+      goto fail;
     }
 
   pool = wl_shm_create_pool (shm, fd, size);
@@ -1313,6 +1313,11 @@ create_shm_pool (struct wl_shm  *shm,
   *buf_length = size;
 
   return pool;
+
+fail:
+  *data_out = NULL;
+  *buf_length = 0;
+  return NULL;
 }
 
 static void

@@ -174,7 +174,7 @@ struct _GtkWidgetPrivate
 
   GSList *paintables;
 
-  GList *event_controllers;
+  GPtrArray *controllers;
 
   AtkObject *accessible;
 

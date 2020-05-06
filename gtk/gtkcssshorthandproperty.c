@@ -67,21 +67,20 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
                                         GtkCssParser     *parser)
 {
   GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (property);
+  const guint n_props = shorthand->subproperties->len;
   GtkCssValue **data;
   GtkCssValue *result;
   guint i;
 
-  data = g_new0 (GtkCssValue *, shorthand->subproperties->len);
+  data = g_newa (GtkCssValue *, n_props);
+  memset (data, 0, sizeof (GtkCssValue *) * n_props);
 
   if (gtk_css_parser_try_ident (parser, "initial"))
     {
       /* the initial value can be explicitly specified with the
        * ‘initial’ keyword which all properties accept.
        */
-      for (i = 0; i < shorthand->subproperties->len; i++)
-        {
-          data[i] = _gtk_css_initial_value_new ();
-        }
+      return _gtk_css_initial_value_new ();
     }
   else if (gtk_css_parser_try_ident (parser, "inherit"))
     {
@@ -91,10 +90,7 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
        * strengthen inherited values in the cascade, and it can
        * also be used on properties that are not normally inherited.
        */
-      for (i = 0; i < shorthand->subproperties->len; i++)
-        {
-          data[i] = _gtk_css_inherit_value_new ();
-        }
+      return _gtk_css_inherit_value_new ();
     }
   else if (gtk_css_parser_try_ident (parser, "unset"))
     {
@@ -102,34 +98,29 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
        * then if it is an inherited property, this is treated as
        * inherit, and if it is not, this is treated as initial.
        */
-      for (i = 0; i < shorthand->subproperties->len; i++)
-        {
-          data[i] = _gtk_css_unset_value_new ();
-        }
+      return _gtk_css_unset_value_new ();
     }
   else if (!shorthand->parse (shorthand, data, parser))
     {
-      for (i = 0; i < shorthand->subproperties->len; i++)
+      for (i = 0; i < n_props; i++)
         {
           if (data[i] != NULL)
             _gtk_css_value_unref (data[i]);
         }
-      g_free (data);
       return NULL;
     }
 
   /* All values that aren't set by the parse func are set to their
    * default values here.
    * XXX: Is the default always initial or can it be inherit? */
-  for (i = 0; i < shorthand->subproperties->len; i++)
+  for (i = 0; i < n_props; i++)
     {
       if (data[i] == NULL)
         data[i] = _gtk_css_initial_value_new ();
     }
 
-  result = _gtk_css_array_value_new_from_array (data, shorthand->subproperties->len);
-  g_free (data);
-  
+  result = _gtk_css_array_value_new_from_array (data, n_props);
+
   return result;
 }
 

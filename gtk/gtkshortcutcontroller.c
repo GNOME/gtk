@@ -283,7 +283,6 @@ shortcut_data_free (gpointer data)
   ShortcutData *sdata = data;
 
   g_object_unref (sdata->shortcut);
-  g_free (sdata);
 }
 
 static gboolean
@@ -294,13 +293,12 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
                                          gboolean            enable_mnemonics)
 {
   GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (controller);
-  guint i;
-  GSList *shortcuts = NULL;
-  GSList *l;
+  int i, p;
+  GArray *shortcuts = NULL;
   gboolean has_exact = FALSE;
   gboolean retval = FALSE;
 
-  for (i = 0; i < g_list_model_get_n_items (self->shortcuts); i++)
+  for (i = 0, p = g_list_model_get_n_items (self->shortcuts); i < p; i++)
     {
       GtkShortcut *shortcut;
       ShortcutData *data;
@@ -325,8 +323,8 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
         case GDK_KEY_MATCH_EXACT:
           if (!has_exact)
             {
-              g_slist_free_full (shortcuts, shortcut_data_free);
-              shortcuts = NULL;
+              if (shortcuts)
+                g_array_set_size (shortcuts, 0);
             }
           has_exact = TRUE;
           break;
@@ -344,29 +342,43 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
             widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (model));
         }
 
-      native = gtk_widget_get_native (widget);
-      if (!gtk_widget_is_sensitive (widget) ||
-          !gtk_widget_get_mapped (widget) ||
-          !gdk_surface_is_viewable (gtk_native_get_surface (native)))
+      if (!_gtk_widget_is_sensitive (widget) ||
+          !_gtk_widget_get_mapped (widget))
         {
           g_object_unref (shortcut);
           continue;
         }
 
-      data = g_new0 (ShortcutData, 1);
+      native = gtk_widget_get_native (widget);
+      if (!native ||
+          !gdk_surface_is_viewable(gtk_native_get_surface (native)))
+        {
+          g_object_unref (shortcut);
+          continue;
+        }
+
+      if (G_UNLIKELY (!shortcuts))
+        {
+          shortcuts = g_array_sized_new (FALSE, TRUE, sizeof (ShortcutData), 8);
+          g_array_set_clear_func (shortcuts, shortcut_data_free);
+        }
+
+      g_array_set_size (shortcuts, shortcuts->len + 1);
+      data = &g_array_index (shortcuts, ShortcutData, shortcuts->len - 1);
       data->shortcut = shortcut;
       data->index = index;
       data->widget = widget;
-
-      shortcuts = g_slist_append (shortcuts, data);
     }
 
-  for (l = shortcuts; l; l = l->next)
+  if (!shortcuts)
+    return retval;
+
+  for (i = shortcuts->len - 1, p = shortcuts->len; i >= 0; i--)
     {
-      ShortcutData *data = l->data;
+      const ShortcutData *data = &g_array_index (shortcuts, ShortcutData, i);
 
       if (gtk_shortcut_action_activate (gtk_shortcut_get_action (data->shortcut),
-                                        shortcuts->next == NULL ? GTK_SHORTCUT_ACTION_EXCLUSIVE : 0,
+                                        i == p - 1 ? GTK_SHORTCUT_ACTION_EXCLUSIVE : 0,
                                         data->widget,
                                         gtk_shortcut_get_arguments (data->shortcut)))
         {
@@ -376,7 +388,7 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
         }
     }
 
-  g_slist_free_full (shortcuts, shortcut_data_free);
+  g_array_free (shortcuts, TRUE);
 
   return retval;
 }

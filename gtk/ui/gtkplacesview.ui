@@ -180,19 +180,15 @@
           <object class="GtkStackPage">
             <property name="name">browse</property>
             <property name="child">
-              <object class="GtkFrame">
+              <object class="GtkScrolledWindow">
+                <property name="hexpand">1</property>
+                <property name="vexpand">1</property>
                 <child>
-                  <object class="GtkScrolledWindow">
-                    <property name="hexpand">1</property>
-                    <property name="vexpand">1</property>
+                  <object class="GtkViewport">
                     <child>
-                      <object class="GtkViewport">
-                        <child>
-                          <object class="GtkListBox" id="listbox">
-                            <property name="selection-mode">none</property>
-                            <signal name="row-activated" handler="on_listbox_row_activated" object="GtkPlacesView" swapped="yes"/>
-                          </object>
-                        </child>
+                      <object class="GtkListBox" id="listbox">
+                        <property name="selection-mode">none</property>
+                        <signal name="row-activated" handler="on_listbox_row_activated" object="GtkPlacesView" swapped="yes"/>
                       </object>
                     </child>
                   </object>
