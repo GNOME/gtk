@@ -21,84 +21,47 @@
 
 #include "gtkstyleanimationprivate.h"
 
-G_DEFINE_ABSTRACT_TYPE (GtkStyleAnimation, _gtk_style_animation, G_TYPE_OBJECT)
-
-static GtkStyleAnimation *
-gtk_style_animation_real_advance (GtkStyleAnimation    *animation,
-                                  gint64                timestamp)
-{
-  return NULL;
-}
-
-static void
-gtk_style_animation_real_apply_values (GtkStyleAnimation    *animation,
-                                       GtkCssAnimatedStyle  *style)
-{
-}
-
-static gboolean
-gtk_style_animation_real_is_finished (GtkStyleAnimation *animation)
-{
-  return TRUE;
-}
-
-static gboolean
-gtk_style_animation_real_is_static (GtkStyleAnimation *animation)
-{
-  return FALSE;
-}
-
-static void
-_gtk_style_animation_class_init (GtkStyleAnimationClass *klass)
-{
-  klass->advance = gtk_style_animation_real_advance;
-  klass->apply_values = gtk_style_animation_real_apply_values;
-  klass->is_finished = gtk_style_animation_real_is_finished;
-  klass->is_static = gtk_style_animation_real_is_static;
-}
-
-static void
-_gtk_style_animation_init (GtkStyleAnimation *animation)
-{
-}
-
 GtkStyleAnimation *
-_gtk_style_animation_advance (GtkStyleAnimation    *animation,
-                              gint64                timestamp)
+_gtk_style_animation_advance (GtkStyleAnimation *animation,
+                              gint64             timestamp)
 {
-  GtkStyleAnimationClass *klass;
+  g_assert (animation != NULL);
 
-  g_return_val_if_fail (GTK_IS_STYLE_ANIMATION (animation), NULL);
-
-  klass = GTK_STYLE_ANIMATION_GET_CLASS (animation);
-
-  return klass->advance (animation, timestamp);
+  return animation->class->advance (animation, timestamp);
 }
 
 void
 _gtk_style_animation_apply_values (GtkStyleAnimation    *animation,
                                    GtkCssAnimatedStyle  *style)
 {
-  GtkStyleAnimationClass *klass;
-
-  g_return_if_fail (GTK_IS_STYLE_ANIMATION (animation));
-  g_return_if_fail (GTK_IS_CSS_ANIMATED_STYLE (style));
-
-  klass = GTK_STYLE_ANIMATION_GET_CLASS (animation);
-
-  klass->apply_values (animation, style);
+  animation->class->apply_values (animation, style);
 }
 
 gboolean
 _gtk_style_animation_is_finished (GtkStyleAnimation *animation)
 {
-  GtkStyleAnimationClass *klass;
+  return animation->class->is_finished (animation);
+}
 
-  g_return_val_if_fail (GTK_IS_STYLE_ANIMATION (animation), TRUE);
 
-  klass = GTK_STYLE_ANIMATION_GET_CLASS (animation);
+GtkStyleAnimation *
+gtk_style_animation_ref (GtkStyleAnimation *animation)
+{
+  animation->ref_count++;
+  return animation;
+}
 
-  return klass->is_finished (animation);
+GtkStyleAnimation *
+gtk_style_animation_unref (GtkStyleAnimation *animation)
+{
+  animation->ref_count--;
+
+  if (animation->ref_count == 0)
+    {
+      animation->class->free (animation);
+      return NULL;
+    }
+  return animation;
 }
 
 /**
@@ -115,9 +78,5 @@ _gtk_style_animation_is_finished (GtkStyleAnimation *animation)
 gboolean
 _gtk_style_animation_is_static (GtkStyleAnimation *animation)
 {
-  GtkStyleAnimationClass *klass;
-
-  klass = GTK_STYLE_ANIMATION_GET_CLASS (animation);
-
-  return klass->is_static (animation);
+  return animation->class->is_static (animation);
 }

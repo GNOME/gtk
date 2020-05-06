@@ -20,10 +20,13 @@
 #include "config.h"
 
 #include "gtkcssdynamicprivate.h"
-
 #include "gtkprogresstrackerprivate.h"
 
-G_DEFINE_TYPE (GtkCssDynamic, gtk_css_dynamic, GTK_TYPE_STYLE_ANIMATION)
+struct _GtkCssDynamic
+{
+  GtkStyleAnimation parent;
+  gint64            timestamp;
+};
 
 static GtkStyleAnimation *
 gtk_css_dynamic_advance (GtkStyleAnimation    *style_animation,
@@ -36,13 +39,13 @@ static void
 gtk_css_dynamic_apply_values (GtkStyleAnimation    *style_animation,
                               GtkCssAnimatedStyle  *style)
 {
-  GtkCssDynamic *dynamic = GTK_CSS_DYNAMIC (style_animation);
+  GtkCssDynamic *dynamic = (GtkCssDynamic *)style_animation;
   guint i;
 
   for (i = 0; i < GTK_CSS_PROPERTY_N_PROPERTIES; i++)
     {
       GtkCssValue *value, *dynamic_value;
-      
+
       value = gtk_css_style_get_value (GTK_CSS_STYLE (style), i);
       dynamic_value = gtk_css_value_get_dynamic_value (value, dynamic->timestamp);
       if (value != dynamic_value)
@@ -65,30 +68,29 @@ gtk_css_dynamic_is_static (GtkStyleAnimation *style_animation)
 }
 
 static void
-gtk_css_dynamic_class_init (GtkCssDynamicClass *klass)
+gtk_css_dynamic_free (GtkStyleAnimation *animation)
 {
-  GtkStyleAnimationClass *animation_class = GTK_STYLE_ANIMATION_CLASS (klass);
-
-  animation_class->advance = gtk_css_dynamic_advance;
-  animation_class->apply_values = gtk_css_dynamic_apply_values;
-  animation_class->is_finished = gtk_css_dynamic_is_finished;
-  animation_class->is_static = gtk_css_dynamic_is_static;
+  g_slice_free (GtkCssDynamic, (GtkCssDynamic *)animation);
 }
 
-static void
-gtk_css_dynamic_init (GtkCssDynamic *dynamic)
-{
-}
+static const GtkStyleAnimationClass GTK_CSS_DYNAMIC_CLASS = {
+  "GtkCssDynamic",
+  gtk_css_dynamic_free,
+  gtk_css_dynamic_is_finished,
+  gtk_css_dynamic_is_static,
+  gtk_css_dynamic_apply_values,
+  gtk_css_dynamic_advance,
+};
 
 GtkStyleAnimation *
 gtk_css_dynamic_new (gint64 timestamp)
 {
-  GtkCssDynamic *dynamic;
+  GtkCssDynamic *dynamic = g_slice_alloc (sizeof (GtkCssDynamic));
 
-  dynamic = g_object_new (GTK_TYPE_CSS_DYNAMIC, NULL);
-
+  dynamic->parent.class = &GTK_CSS_DYNAMIC_CLASS;
+  dynamic->parent.ref_count = 1;
   dynamic->timestamp = timestamp;
 
-  return GTK_STYLE_ANIMATION (dynamic);
+  return (GtkStyleAnimation *)dynamic;
 }
 

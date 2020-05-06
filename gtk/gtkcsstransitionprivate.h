@@ -25,26 +25,8 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_CSS_TRANSITION           (_gtk_css_transition_get_type ())
-#define GTK_CSS_TRANSITION(obj)           (G_TYPE_CHECK_INSTANCE_CAST (obj, GTK_TYPE_CSS_TRANSITION, GtkCssTransition))
-#define GTK_CSS_TRANSITION_CLASS(cls)     (G_TYPE_CHECK_CLASS_CAST (cls, GTK_TYPE_CSS_TRANSITION, GtkCssTransitionClass))
-#define GTK_IS_CSS_TRANSITION(obj)        (G_TYPE_CHECK_INSTANCE_TYPE (obj, GTK_TYPE_CSS_TRANSITION))
-#define GTK_IS_CSS_TRANSITION_CLASS(obj)  (G_TYPE_CHECK_CLASS_TYPE (obj, GTK_TYPE_CSS_TRANSITION))
-#define GTK_CSS_TRANSITION_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CSS_TRANSITION, GtkCssTransitionClass))
-
-typedef struct _GtkCssTransition           GtkCssTransition;
 typedef struct _GtkCssTransitionClass      GtkCssTransitionClass;
-
-struct _GtkCssTransition
-{
-  GtkStyleAnimation parent;
-
-  guint               property;
-  GtkCssValue        *start;
-  GtkCssValue        *ease;
-  GtkProgressTracker  tracker;
-  guint               finished;
-};
+typedef struct _GtkCssTransition           GtkCssTransition;
 
 struct _GtkCssTransitionClass
 {
@@ -61,6 +43,7 @@ GtkStyleAnimation *     _gtk_css_transition_new             (guint              
                                                              gint64              delay_us);
 
 guint                   _gtk_css_transition_get_property    (GtkCssTransition   *transition);
+gboolean                _gtk_css_transition_is_transition   (GtkStyleAnimation  *animation);
 
 G_END_DECLS
 

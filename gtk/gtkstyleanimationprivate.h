@@ -24,25 +24,19 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_STYLE_ANIMATION           (_gtk_style_animation_get_type ())
-#define GTK_STYLE_ANIMATION(obj)           (G_TYPE_CHECK_INSTANCE_CAST (obj, GTK_TYPE_STYLE_ANIMATION, GtkStyleAnimation))
-#define GTK_STYLE_ANIMATION_CLASS(cls)     (G_TYPE_CHECK_CLASS_CAST (cls, GTK_TYPE_STYLE_ANIMATION, GtkStyleAnimationClass))
-#define GTK_IS_STYLE_ANIMATION(obj)        (G_TYPE_CHECK_INSTANCE_TYPE (obj, GTK_TYPE_STYLE_ANIMATION))
-#define GTK_IS_STYLE_ANIMATION_CLASS(obj)  (G_TYPE_CHECK_CLASS_TYPE (obj, GTK_TYPE_STYLE_ANIMATION))
-#define GTK_STYLE_ANIMATION_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_STYLE_ANIMATION, GtkStyleAnimationClass))
-
 typedef struct _GtkStyleAnimation           GtkStyleAnimation;
 typedef struct _GtkStyleAnimationClass      GtkStyleAnimationClass;
 
 struct _GtkStyleAnimation
 {
-  GObject parent;
+  const GtkStyleAnimationClass *class;
+  guint ref_count;
 };
 
 struct _GtkStyleAnimationClass
 {
-  GObjectClass parent_class;
-
+  const char *type_name;
+  void          (* free)                                (GtkStyleAnimation      *animation);
   gboolean      (* is_finished)                         (GtkStyleAnimation      *animation);
   gboolean      (* is_static)                           (GtkStyleAnimation      *animation);
   void          (* apply_values)                        (GtkStyleAnimation      *animation,
@@ -59,6 +53,9 @@ void            _gtk_style_animation_apply_values       (GtkStyleAnimation      
                                                          GtkCssAnimatedStyle    *style);
 gboolean        _gtk_style_animation_is_finished        (GtkStyleAnimation      *animation);
 gboolean        _gtk_style_animation_is_static          (GtkStyleAnimation      *animation);
+
+GtkStyleAnimation * gtk_style_animation_ref             (GtkStyleAnimation      *animation);
+GtkStyleAnimation * gtk_style_animation_unref           (GtkStyleAnimation      *animation);
 
 
 G_END_DECLS
