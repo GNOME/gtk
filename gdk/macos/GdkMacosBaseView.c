@@ -50,7 +50,8 @@
   if ((self = [super initWithFrame: frameRect]))
     {
       markedRange = NSMakeRange (NSNotFound, 0);
-      selectedRange = NSMakeRange (NSNotFound, 0);
+      selectedRange = NSMakeRange (0, 0);
+      [self setValue: @(YES) forKey: @"postsFrameChangedNotifications"];
     }
 
   return self;
@@ -148,6 +149,16 @@
 
 -(void)keyDown:(NSEvent *)theEvent
 {
+  /* NOTE: When user press Cmd+A, interpretKeyEvents: will call noop:
+   * method. When user press and hold A to show the accented char window,
+   * it consumed repeating key down events for key 'A' do NOT call
+   * any other method. We use this behavior to determine if this key
+   * down event is filtered by interpretKeyEvents.
+   */
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
+                     GUINT_TO_POINTER (GIC_FILTER_FILTERED));
+
   GDK_NOTE (EVENTS, g_message ("keyDown"));
   [self interpretKeyEvents: [NSArray arrayWithObject: theEvent]];
 }
@@ -217,7 +228,9 @@
 {
   GDK_NOTE (EVENTS, g_message ("unmarkText"));
 
-  markedRange = selectedRange = NSMakeRange (NSNotFound, 0);
+  selectedRange = NSMakeRange (0, 0);
+  markedRange = NSMakeRange (NSNotFound, 0);
+
   g_object_set_data_full (G_OBJECT ([self getGdkSurface]), TIC_MARKED_TEXT, NULL, g_free);
 }
 
@@ -244,9 +257,11 @@
     str = [aString UTF8String];
 
   g_object_set_data_full (G_OBJECT ([self getGdkSurface]), TIC_MARKED_TEXT, g_strdup (str), g_free);
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), TIC_SELECTED_POS,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     TIC_SELECTED_POS,
                      GUINT_TO_POINTER (selectedRange.location));
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), TIC_SELECTED_LEN,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     TIC_SELECTED_LEN,
                      GUINT_TO_POINTER (selectedRange.length));
 
   GDK_NOTE (EVENTS, g_message ("setMarkedText: set %s (%p, nsview %p): %s",
@@ -289,8 +304,7 @@
       /* discard invalid text input with Chinese input methods */
       str = "";
       [self unmarkText];
-      NSInputManager *currentInputManager = [NSInputManager currentInputManager];
-      [currentInputManager markedTextAbandoned:self];
+      [[NSTextInputContext currentInputContext] discardMarkedText];
     }
   else
    {
@@ -302,7 +316,8 @@
                                TIC_INSERT_TEXT, [self getGdkSurface], self,
                                str ? str : "(empty)"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_FILTERED));
 
   /* handle text input changes by mouse events */
@@ -314,7 +329,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("deleteBackward"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -322,7 +338,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("deleteForward"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -330,7 +347,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("deleteToBeginningOfLine"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -338,7 +356,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("deleteToEndOfLine"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -346,7 +365,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("deleteWordBackward"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -354,7 +374,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("deleteWordForward"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -362,7 +383,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("insertBacktab"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -370,56 +392,71 @@
 {
   GDK_NOTE (EVENTS, g_message ("insertNewline"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY, GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
+                     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)insertTab:(id)sender
 {
   GDK_NOTE (EVENTS, g_message ("insertTab"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveBackward:(id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveBackward"));
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveBackwardAndModifySelection:(id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveBackwardAndModifySelection"));
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveDown:(id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveDown"));
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveDownAndModifySelection:(id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveDownAndModifySelection"));
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveForward:(id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveForward"));
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveForwardAndModifySelection:(id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveForwardAndModifySelection"));
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -427,7 +464,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("moveLeft"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -435,7 +473,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("moveLeftAndModifySelection"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -443,7 +482,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("moveRight"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -451,7 +491,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("moveRightAndModifySelection"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -459,7 +500,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("moveToBeginningOfDocument"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -467,7 +509,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("moveToBeginningOfDocumentAndModifySelection"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -475,7 +518,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("moveToBeginningOfLine"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -483,7 +527,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("moveToBeginningOfLineAndModifySelection"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -491,7 +536,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("moveToEndOfDocument"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -499,7 +545,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("moveToEndOfDocumentAndModifySelection"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -507,7 +554,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("moveToEndOfLine"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -515,7 +563,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("moveToEndOfLineAndModifySelection"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -523,7 +572,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("moveUp"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -531,7 +581,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("moveUpAndModifySelection"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -539,7 +590,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("moveWordBackward"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -547,7 +599,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("moveWordBackwardAndModifySelection"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -555,7 +608,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("moveWordForward"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -563,7 +617,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("moveWordForwardAndModifySelection"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -571,7 +626,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("moveWordLeft"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -579,7 +635,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("moveWordLeftAndModifySelection"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -587,7 +644,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("moveWordRight"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -595,7 +653,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("moveWordRightAndModifySelection"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -603,7 +662,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("pageDown"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -611,7 +671,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("pageDownAndModifySelection"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -619,7 +680,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("pageUp"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -627,7 +689,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("pageUpAndModifySelection"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -635,7 +698,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("selectAll"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -643,7 +707,8 @@
 {
   GDK_NOTE (EVENTS, g_message ("selectLine"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -651,7 +716,17 @@
 {
   GDK_NOTE (EVENTS, g_message ("selectWord"));
 
-  g_object_set_data (G_OBJECT ([self getGdkSurface]), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
+                     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
+}
+
+-(void)noop: (id)sender
+{
+  GDK_NOTE (EVENTS, g_message ("noop"));
+
+  g_object_set_data (G_OBJECT ([self getGdkSurface]),
+                     GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
