@@ -117,8 +117,6 @@ _gtk_style_animation_is_static (GtkStyleAnimation *animation)
 {
   GtkStyleAnimationClass *klass;
 
-  g_return_val_if_fail (GTK_IS_STYLE_ANIMATION (animation), TRUE);
-
   klass = GTK_STYLE_ANIMATION_GET_CLASS (animation);
 
   return klass->is_static (animation);
