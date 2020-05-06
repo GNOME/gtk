@@ -61,11 +61,18 @@ gtk_native_default_check_resize (GtkNative *self)
 }
 
 static void
+gtk_native_default_set_tooltip (GtkNative *self,
+                                GtkNative *tooltip)
+{
+}
+
+static void
 gtk_native_default_init (GtkNativeInterface *iface)
 {
   iface->get_renderer = gtk_native_default_get_renderer;
   iface->get_surface_transform = gtk_native_default_get_surface_transform;
   iface->check_resize = gtk_native_default_check_resize;
+  iface->set_tooltip = gtk_native_default_set_tooltip;
 }
 
 /**
@@ -148,4 +155,15 @@ gtk_native_get_for_surface (GdkSurface *surface)
     return widget;
 
   return NULL;
+}
+
+void
+gtk_native_set_tooltip (GtkNative *self,
+                        GtkNative *tooltip)
+{
+  g_return_if_fail (GTK_IS_NATIVE (self));
+  g_return_if_fail (tooltip == NULL || GTK_IS_NATIVE (tooltip));
+
+  GTK_NATIVE_GET_IFACE (self)->set_tooltip (self, tooltip);
+
 }

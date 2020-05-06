@@ -53,6 +53,9 @@ struct _GtkNativeInterface
                                            int          *y);
 
   void          (* check_resize)          (GtkNative    *self);
+
+  void          (* set_tooltip)           (GtkNative    *self,
+                                           GtkNative    *tooltip);
 };
 
 GDK_AVAILABLE_IN_ALL
@@ -66,6 +69,10 @@ GdkSurface *gtk_native_get_surface     (GtkNative *self);
 
 GDK_AVAILABLE_IN_ALL
 GskRenderer *gtk_native_get_renderer   (GtkNative *self);
+
+GDK_AVAILABLE_IN_ALL
+void         gtk_native_set_tooltip (GtkNative *self,
+                                     GtkNative *tooltip);
 
 G_END_DECLS
 
