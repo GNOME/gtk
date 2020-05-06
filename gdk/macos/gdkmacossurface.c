@@ -618,8 +618,7 @@ _gdk_macos_surface_set_geometry_hints (GdkMacosSurface   *self,
 void
 _gdk_macos_surface_resize (GdkMacosSurface *self,
                            int              width,
-                           int              height,
-                           int              scale)
+                           int              height)
 {
   GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
   GdkSurface *surface = (GdkSurface *)self;

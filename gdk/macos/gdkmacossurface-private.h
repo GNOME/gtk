@@ -72,8 +72,7 @@ void               _gdk_macos_surface_set_geometry_hints      (GdkMacosSurface  
                                                                GdkSurfaceHints     geom_mask);
 void               _gdk_macos_surface_resize                  (GdkMacosSurface    *self,
                                                                int                 width,
-                                                               int                 height,
-                                                               int                 scale);
+                                                               int                 height);
 void               _gdk_macos_surface_update_fullscreen_state (GdkMacosSurface    *self);
 void               _gdk_macos_surface_update_position         (GdkMacosSurface    *self);
 void               _gdk_macos_surface_damage_cairo            (GdkMacosSurface    *self,

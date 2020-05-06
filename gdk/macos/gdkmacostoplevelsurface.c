@@ -123,7 +123,7 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
 
   _gdk_macos_surface_set_geometry_hints (GDK_MACOS_SURFACE (self), &geometry, mask);
   gdk_surface_constrain_size (&geometry, mask, width, height, &width, &height);
-  _gdk_macos_surface_resize (GDK_MACOS_SURFACE (self), width, height, -1);
+  _gdk_macos_surface_resize (GDK_MACOS_SURFACE (self), width, height);
 
   /* Maximized state */
   if (gdk_toplevel_layout_get_maximized (layout))
