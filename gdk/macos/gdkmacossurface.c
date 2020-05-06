@@ -795,7 +795,6 @@ _gdk_macos_surface_acquire_context (GdkMacosSurface *self,
                                     gboolean         antialias)
 {
   CGContextRef cg_context;
-  NSWindow *native;
 
   g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), NULL);
 
@@ -827,10 +826,37 @@ void
 _gdk_macos_surface_release_context (GdkMacosSurface *self,
                                     CGContextRef     cg_context)
 {
-  NSWindow *native;
-
   g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
 
   CGContextRestoreGState (cg_context);
   CGContextSetAllowsAntialiasing (cg_context, TRUE);
+}
+
+void
+_gdk_macos_surface_synthesize_null_key (GdkMacosSurface *self)
+{
+  GdkTranslatedKey translated = {0};
+  GdkTranslatedKey no_lock = {0};
+  GdkDisplay *display;
+  GdkEvent *event;
+  GdkSeat *seat;
+
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
+
+  translated.keyval = GDK_KEY_VoidSymbol;
+  no_lock.keyval = GDK_KEY_VoidSymbol;
+
+  display = gdk_surface_get_display (GDK_SURFACE (self));
+  seat = gdk_display_get_default_seat (display);
+  event = gdk_key_event_new (GDK_KEY_PRESS,
+                             GDK_SURFACE (self),
+                             gdk_seat_get_keyboard (seat),
+                             NULL,
+                             GDK_CURRENT_TIME,
+                             0,
+                             0,
+                             FALSE,
+                             &translated,
+                             &no_lock);
+  _gdk_event_queue_append (display, event);
 }

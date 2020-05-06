@@ -90,6 +90,7 @@ CGContextRef       _gdk_macos_surface_acquire_context         (GdkMacosSurface  
                                                                gboolean            antialias);
 void               _gdk_macos_surface_release_context         (GdkMacosSurface    *self,
                                                                CGContextRef        cg_context);
+void               _gdk_macos_surface_synthesize_null_key     (GdkMacosSurface    *self);
 
 G_END_DECLS
 

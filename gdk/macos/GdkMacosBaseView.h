@@ -24,6 +24,7 @@
 
 #include <gdk/gdk.h>
 
+#include "gdkmacosdisplay.h"
 #include "gdkmacossurface.h"
 
 @interface GdkMacosBaseView : NSView
@@ -35,6 +36,7 @@
 }
 
 -(GdkMacosSurface *)getGdkSurface;
+-(GdkMacosDisplay *)getGdkDisplay;
 -(void)setNeedsInvalidateShadow: (BOOL)invalidate;
 -(void)updateTrackingRect;
 -(NSTrackingRectTag)trackingRect;
