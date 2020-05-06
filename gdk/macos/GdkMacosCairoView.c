@@ -24,9 +24,11 @@
 #include <CoreGraphics/CoreGraphics.h>
 #include <cairo-quartz.h>
 
+#include "gdkinternals.h"
+
 #import "GdkMacosCairoView.h"
 
-#include "gdkinternals.h"
+#include "gdkmacossurface-private.h"
 
 @implementation GdkMacosCairoView
 
@@ -70,44 +72,38 @@
 
 -(void)drawRect:(NSRect)rect
 {
+  GdkMacosSurface *gdkSurface;
+  CGContextRef cg_context;
   cairo_surface_t *dest;
   cairo_t *cr;
-  guint n_rects;
+  int scale_factor;
 
   if (self->surface == NULL || self->region == NULL)
     return;
 
-  dest = cairo_quartz_surface_create_for_cg_context (NSGraphicsContext.currentContext.CGContext,
-                                                     self.bounds.size.width,
-                                                     self.bounds.size.height);
+  gdkSurface = [self getGdkSurface];
+  cg_context = _gdk_macos_surface_acquire_context (gdkSurface, TRUE, TRUE);
+  scale_factor = gdk_surface_get_scale_factor (GDK_SURFACE (gdkSurface));
+
+  dest = cairo_quartz_surface_create_for_cg_context (cg_context,
+                                                     self.bounds.size.width * scale_factor,
+                                                     self.bounds.size.height * scale_factor);
+  cairo_surface_set_device_scale (dest, scale_factor, scale_factor);
+
   cr = cairo_create (dest);
 
-#if 0
-  n_rects = cairo_region_num_rectangles (self->region);
-
-  g_print ("drawRect: %d rects\n", n_rects);
-
-  for (guint i = 0; i < n_rects; i++)
-    {
-      cairo_rectangle_int_t r;
-
-      cairo_region_get_rectangle (self->region, i, &r);
-      cairo_rectangle (cr, r.x, r.y, r.width, r.height);
-    }
-
   cairo_set_source_surface (cr, self->surface, 0, 0);
-  cairo_rectangle (cr, rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
-  cairo_paint (cr);
-#endif
+  gdk_cairo_region (cr, self->region);
+  cairo_clip (cr);
 
-  cairo_rectangle (cr, 0, 0, self.bounds.size.width, self.bounds.size.height);
-  cairo_set_source_rgb (cr, 0, 0, 0);
-  cairo_fill (cr);
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+  cairo_paint (cr);
 
   cairo_destroy (cr);
-
   cairo_surface_flush (dest);
   cairo_surface_destroy (dest);
+
+  _gdk_macos_surface_release_context (gdkSurface, cg_context);
 }
 
 @end
