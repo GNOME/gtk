@@ -241,13 +241,15 @@
 
   [[self contentView] setFrame:NSMakeRect (0, 0, surface->width, surface->height)];
 
-  _gdk_surface_update_size (surface);
-
   /* Synthesize a configure event */
   event = gdk_configure_event_new (surface,
                                    content_rect.size.width,
                                    content_rect.size.height);
   _gdk_event_queue_append (display, event);
+
+  surface->width = content_rect.size.width;
+  surface->height = content_rect.size.height;
+  _gdk_surface_update_size (surface);
 
   [self checkSendEnterNotify];
 }
