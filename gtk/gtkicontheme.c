@@ -1246,7 +1246,6 @@ free_dir_mtime (IconThemeDirMtime *dir_mtime)
     gtk_icon_cache_unref (dir_mtime->cache);
 
   g_free (dir_mtime->dir);
-  g_slice_free (IconThemeDirMtime, dir_mtime);
 }
 
 static void
