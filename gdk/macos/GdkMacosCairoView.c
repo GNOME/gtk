@@ -54,10 +54,7 @@
   guint n_rects;
 
   g_clear_pointer (&self->surface, cairo_surface_destroy);
-  g_clear_pointer (&self->region, cairo_region_destroy);
-
-  self->surface = cairoSurface;
-  self->region = cairoRegion;
+  self->surface = cairo_surface_reference (cairoSurface);
 
   n_rects = cairo_region_num_rectangles (cairoRegion);
 
@@ -75,10 +72,12 @@
   GdkMacosSurface *gdkSurface;
   CGContextRef cg_context;
   cairo_surface_t *dest;
+  const NSRect *rects = NULL;
+  NSInteger n_rects = 0;
   cairo_t *cr;
   int scale_factor;
 
-  if (self->surface == NULL || self->region == NULL)
+  if (self->surface == NULL)
     return;
 
   gdkSurface = [self getGdkSurface];
@@ -93,7 +92,17 @@
   cr = cairo_create (dest);
 
   cairo_set_source_surface (cr, self->surface, 0, 0);
-  gdk_cairo_region (cr, self->region);
+
+  [self getRectsBeingDrawn:&rects count:&n_rects];
+  for (NSInteger i = 0; i < n_rects; i++)
+    {
+      const NSRect *r = &rects[i];
+      cairo_rectangle (cr,
+                       r->origin.x,
+                       r->origin.y,
+                       r->size.width,
+                       r->size.height);
+    }
   cairo_clip (cr);
 
   cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);

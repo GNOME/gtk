@@ -689,14 +689,16 @@ _gdk_macos_surface_damage_cairo (GdkMacosSurface *self,
                                  cairo_region_t  *painted)
 {
   GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
-  GdkMacosCairoView *view;
+  NSView *view;
 
   g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
   g_return_if_fail (surface != NULL);
 
-  view = (GdkMacosCairoView *)[priv->window contentView];
-  [view setCairoSurfaceWithRegion:surface
-                      cairoRegion:painted];
+  view = [priv->window contentView];
+
+  if (GDK_IS_MACOS_CAIRO_VIEW (view))
+    [(GdkMacosCairoView *)view setCairoSurfaceWithRegion:surface
+                                             cairoRegion:painted];
 }
 
 void

@@ -23,10 +23,11 @@
 
 #import "GdkMacosBaseView.h"
 
+#define GDK_IS_MACOS_CAIRO_VIEW(obj) ([obj isKindOfClass:[GdkMacosCairoView class]])
+
 @interface GdkMacosCairoView : GdkMacosBaseView
 {
   cairo_surface_t *surface;
-  cairo_region_t  *region;
 }
 
 -(void)setCairoSurfaceWithRegion:(cairo_surface_t *)cairoSurface
