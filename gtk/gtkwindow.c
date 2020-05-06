@@ -1359,6 +1359,26 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
       G_GNUC_FALLTHROUGH;
 
     case GTK_WINDOW_REGION_TITLE:
+      if (n_press == 1)
+        {
+          /* Immediately ask the window manager to handle a drag
+           * directly on the titlebar. This improves consistency with
+           * non-decorated windows and also allows the window manager
+           * to handle raising the window if necessary. */
+          double tx, ty;
+          gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+
+          gdk_event_get_position (event, &tx, &ty);
+          gdk_surface_begin_move_drag (priv->surface,
+                                       gtk_gesture_get_device (GTK_GESTURE (gesture)),
+                                       gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)),
+                                       tx, ty,
+                                       gtk_event_controller_get_current_event_time (GTK_EVENT_CONTROLLER (gesture)));
+
+          gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
+          gtk_event_controller_reset (GTK_EVENT_CONTROLLER (priv->drag_gesture));
+        }
+
       if (n_press == 2)
         gtk_window_titlebar_action (window, event, button, n_press);
 
