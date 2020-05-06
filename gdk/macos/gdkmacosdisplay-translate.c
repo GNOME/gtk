@@ -27,6 +27,7 @@
 #include "gdkmacoskeymap-private.h"
 #include "gdkmacossurface-private.h"
 
+#define GDK_MOD2_MASK (1 << 4)
 #define GRIP_WIDTH 15
 #define GRIP_HEIGHT 15
 #define GDK_LION_RESIZE 5
@@ -169,7 +170,7 @@ get_keyboard_modifiers_from_ns_flags (NSUInteger nsflags)
   if (nsflags & NSEventModifierFlagOption)
     modifiers |= GDK_ALT_MASK;
   if (nsflags & NSEventModifierFlagCommand)
-    modifiers |= GDK_SUPER_MASK;
+    modifiers |= GDK_MOD2_MASK;
 
   return modifiers;
 }
@@ -284,27 +285,120 @@ synthesize_crossing_event (GdkMacosDisplay *display,
                                  GDK_NOTIFY_NONLINEAR);
 }
 
+static inline guint
+get_group_from_ns_event (NSEvent *nsevent)
+{
+  return ([nsevent modifierFlags] & NSEventModifierFlagOption) ? 1 : 0;
+}
+
+static void
+add_virtual_modifiers (GdkModifierType *state)
+{
+  if (*state & GDK_MOD2_MASK)
+    *state |= GDK_META_MASK;
+}
+
 static GdkEvent *
 fill_key_event (GdkMacosDisplay *display,
                 GdkMacosSurface *surface,
                 NSEvent         *nsevent,
                 GdkEventType     type)
 {
-#if 1
-  return NULL;
-#else
-  GdkTranslatedKey translated;
-  GdkTranslatedKey no_lock;
-  GdkModifierType modifiers;
+  GdkTranslatedKey translated = {0};
+  GdkTranslatedKey no_lock = {0};
+  GdkModifierType consumed;
+  GdkModifierType state;
+  GdkKeymap *keymap;
   gboolean is_modifier;
   GdkSeat *seat;
   guint keycode;
+  guint keyval;
+  guint group;
+  gint layout;
+  gint level;
 
   g_assert (GDK_IS_MACOS_DISPLAY (display));
   g_assert (GDK_IS_MACOS_SURFACE (surface));
   g_assert (nsevent != NULL);
 
   seat = gdk_display_get_default_seat (GDK_DISPLAY (display));
+  keymap = gdk_display_get_keymap (GDK_DISPLAY (display));
+  keycode = [nsevent keyCode];
+  keyval = GDK_KEY_VoidSymbol;
+  state = get_keyboard_modifiers_from_ns_event (nsevent);
+  group = get_group_from_ns_event (nsevent);
+  is_modifier = _gdk_macos_keymap_is_modifier (keycode);
+
+  gdk_keymap_translate_keyboard_state (keymap, keycode, state, group,
+                                       &keyval, &layout, &level, &consumed);
+
+  /* If the key press is a modifier, the state should include the mask for
+   * that modifier but only for releases, not presses. This matches the
+   * X11 backend behavior.
+   */
+  if (is_modifier)
+    {
+      guint mask = 0;
+
+      switch (keyval)
+        {
+        case GDK_KEY_Meta_R:
+        case GDK_KEY_Meta_L:
+          mask = GDK_MOD2_MASK;
+          break;
+        case GDK_KEY_Shift_R:
+        case GDK_KEY_Shift_L:
+          mask = GDK_SHIFT_MASK;
+          break;
+        case GDK_KEY_Caps_Lock:
+          mask = GDK_LOCK_MASK;
+          break;
+        case GDK_KEY_Alt_R:
+        case GDK_KEY_Alt_L:
+          mask = GDK_ALT_MASK;
+          break;
+        case GDK_KEY_Control_R:
+        case GDK_KEY_Control_L:
+          mask = GDK_CONTROL_MASK;
+          break;
+        default:
+          mask = 0;
+        }
+
+      if (type == GDK_KEY_PRESS)
+        state &= ~mask;
+      else if (type == GDK_KEY_RELEASE)
+        state |= mask;
+    }
+
+  state |= _gdk_macos_display_get_current_mouse_modifiers (display);
+  add_virtual_modifiers (&state);
+
+  translated.keyval = keyval;
+  translated.consumed = consumed;
+  translated.layout = layout;
+  translated.level = level;
+
+  if (state & GDK_LOCK_MASK)
+    {
+      gdk_keymap_translate_keyboard_state (keymap,
+                                           keycode,
+                                           state & ~GDK_LOCK_MASK,
+                                           group,
+                                           &keyval,
+                                           &layout,
+                                           &level,
+                                           &consumed);
+
+      no_lock.keyval = keycode;
+      no_lock.consumed = consumed;
+      no_lock.layout = layout;
+      no_lock.level = level;
+    }
+  else
+    {
+      no_lock = translated;
+    }
 
   return gdk_key_event_new (type,
                             GDK_SURFACE (surface),
@@ -312,11 +406,10 @@ fill_key_event (GdkMacosDisplay *display,
                             NULL,
                             get_time_from_ns_event (nsevent),
                             [nsevent keyCode],
-                            modifiers,
+                            state,
                             is_modifier,
                             &translated,
                             &no_lock);
-#endif
 }
 
 static GdkEvent *
