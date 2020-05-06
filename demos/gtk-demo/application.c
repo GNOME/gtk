@@ -503,13 +503,13 @@ demo_application_window_unrealize (GtkWidget *widget)
 }
 
 static void
-demo_application_window_destroy (GtkWidget *widget)
+demo_application_window_dispose (GObject *object)
 {
-  DemoApplicationWindow *window = (DemoApplicationWindow *)widget;
+  DemoApplicationWindow *window = (DemoApplicationWindow *)object;
 
   demo_application_window_store_state (window);
 
-  GTK_WIDGET_CLASS (demo_application_window_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (demo_application_window_parent_class)->dispose (object);
 }
 
 static void
@@ -519,11 +519,11 @@ demo_application_window_class_init (DemoApplicationWindowClass *class)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
   object_class->constructed = demo_application_window_constructed;
+  object_class->dispose = demo_application_window_dispose;
 
   widget_class->size_allocate = demo_application_window_size_allocate;
   widget_class->realize = demo_application_window_realize;
   widget_class->unrealize = demo_application_window_unrealize;
-  widget_class->destroy = demo_application_window_destroy;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/application_demo/application.ui");
   gtk_widget_class_bind_template_child (widget_class, DemoApplicationWindow, message);

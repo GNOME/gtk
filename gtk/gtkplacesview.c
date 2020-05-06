@@ -396,27 +396,6 @@ activate_row (GtkPlacesView      *view,
 static void update_places (GtkPlacesView *view);
 
 static void
-gtk_places_view_destroy (GtkWidget *widget)
-{
-  GtkPlacesView *view = GTK_PLACES_VIEW (widget);
-
-  view->destroyed = 1;
-
-  g_signal_handlers_disconnect_by_func (view->volume_monitor, update_places, widget);
-
-  if (view->network_monitor)
-    g_signal_handlers_disconnect_by_func (view->network_monitor, update_places, widget);
-
-  if (view->server_list_monitor)
-    g_signal_handlers_disconnect_by_func (view->server_list_monitor, server_file_changed_cb, widget);
-
-  g_cancellable_cancel (view->cancellable);
-  g_cancellable_cancel (view->networks_fetching_cancellable);
-
-  GTK_WIDGET_CLASS (gtk_places_view_parent_class)->destroy (widget);
-}
-
-static void
 gtk_places_view_finalize (GObject *object)
 {
   GtkPlacesView *view = (GtkPlacesView *)object;
@@ -442,6 +421,18 @@ gtk_places_view_dispose (GObject *object)
 {
   GtkPlacesView *view = (GtkPlacesView *)object;
 
+  view->destroyed = 1;
+
+  g_signal_handlers_disconnect_by_func (view->volume_monitor, update_places, object);
+
+  if (view->network_monitor)
+    g_signal_handlers_disconnect_by_func (view->network_monitor, update_places, object);
+
+  if (view->server_list_monitor)
+    g_signal_handlers_disconnect_by_func (view->server_list_monitor, server_file_changed_cb, object);
+
+  g_cancellable_cancel (view->cancellable);
+  g_cancellable_cancel (view->networks_fetching_cancellable);
   g_clear_pointer (&view->popup_menu, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_places_view_parent_class)->dispose (object);
@@ -2169,7 +2160,6 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
   object_class->get_property = gtk_places_view_get_property;
   object_class->set_property = gtk_places_view_set_property;
 
-  widget_class->destroy = gtk_places_view_destroy;
   widget_class->map = gtk_places_view_map;
 
   /*

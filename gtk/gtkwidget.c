@@ -570,8 +570,8 @@ static void	gtk_widget_get_property		 (GObject           *object,
 						  GValue            *value,
 						  GParamSpec        *pspec);
 static void	gtk_widget_dispose		 (GObject	    *object);
-static void	gtk_widget_real_destroy		 (GtkWidget	    *object);
 static void	gtk_widget_finalize		 (GObject	    *object);
+static void     gtk_widget_real_destroy          (GtkWidget         *object);
 static void	gtk_widget_real_show		 (GtkWidget	    *widget);
 static void	gtk_widget_real_hide		 (GtkWidget	    *widget);
 static void	gtk_widget_real_map		 (GtkWidget	    *widget);
@@ -901,8 +901,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   gobject_class->finalize = gtk_widget_finalize;
   gobject_class->set_property = gtk_widget_set_property;
   gobject_class->get_property = gtk_widget_get_property;
-
-  klass->destroy = gtk_widget_real_destroy;
 
   klass->activate_signal = 0;
   klass->show = gtk_widget_real_show;
@@ -1360,7 +1358,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
     g_signal_new (I_("destroy"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_CLEANUP | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
-                  G_STRUCT_OFFSET (GtkWidgetClass, destroy),
+                  0,
                   NULL, NULL,
                   NULL,
                   G_TYPE_NONE, 0);
@@ -7197,6 +7195,7 @@ gtk_widget_dispose (GObject *object)
       priv->in_destruction = TRUE;
       g_signal_emit (object, widget_signals[DESTROY], 0);
       priv->in_destruction = FALSE;
+      gtk_widget_real_destroy (widget);
     }
 
   sizegroups = _gtk_widget_get_sizegroups (widget);

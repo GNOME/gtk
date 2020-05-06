@@ -135,8 +135,6 @@ struct _GtkWidget
  * @activate_signal: The signal to emit when a widget of this class is
  *   activated, gtk_widget_activate() handles the emission.
  *   Implementation of this signal is optional.
- * @destroy: Signals that all holders of a reference to the widget
- *   should release the reference that they hold.
  * @show: Signal emitted when widget is shown
  * @hide: Signal emitted when widget is hidden.
  * @map: Signal emitted when widget is going to be mapped, that is
@@ -214,7 +212,6 @@ struct _GtkWidgetClass
   guint activate_signal;
 
   /* basics */
-  void (* destroy)             (GtkWidget        *widget);
   void (* show)                (GtkWidget        *widget);
   void (* hide)                (GtkWidget        *widget);
   void (* map)                 (GtkWidget        *widget);

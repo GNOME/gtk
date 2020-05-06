@@ -763,7 +763,6 @@ static void gtk_notebook_finalize            (GObject         *object);
 static void gtk_notebook_dispose             (GObject         *object);
 
 /*** GtkWidget Methods ***/
-static void gtk_notebook_destroy             (GtkWidget        *widget);
 static void gtk_notebook_unmap               (GtkWidget        *widget);
 static void gtk_notebook_popup_menu          (GtkWidget        *widget,
                                               const char       *action_name,
@@ -1038,7 +1037,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   gobject_class->finalize = gtk_notebook_finalize;
   gobject_class->dispose = gtk_notebook_dispose;
 
-  widget_class->destroy = gtk_notebook_destroy;
   widget_class->unmap = gtk_notebook_unmap;
   widget_class->grab_notify = gtk_notebook_grab_notify;
   widget_class->state_flags_changed = gtk_notebook_state_flags_changed;
@@ -1887,7 +1885,6 @@ gtk_notebook_get_property (GObject         *object,
 
 /* Private GtkWidget Methods :
  *
- * gtk_notebook_destroy
  * gtk_notebook_map
  * gtk_notebook_unmap
  * gtk_notebook_snapshot
@@ -1899,16 +1896,6 @@ gtk_notebook_get_property (GObject         *object,
  * gtk_notebook_drag_drop
  * gtk_notebook_drag_data_get
  */
-static void
-gtk_notebook_destroy (GtkWidget *widget)
-{
-  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-
-  if (notebook->pages)
-    g_list_model_items_changed (G_LIST_MODEL (notebook->pages), 0, g_list_length (notebook->children), 0);
-
-  GTK_WIDGET_CLASS (gtk_notebook_parent_class)->destroy (widget);
-}
 
 static void
 gtk_notebook_finalize (GObject *object)
@@ -1926,6 +1913,9 @@ gtk_notebook_dispose (GObject *object)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (object);
   GList *l = notebook->children;
+
+  if (notebook->pages)
+    g_list_model_items_changed (G_LIST_MODEL (notebook->pages), 0, g_list_length (notebook->children), 0);
 
   while (l != NULL)
     {

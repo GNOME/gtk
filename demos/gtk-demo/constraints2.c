@@ -22,23 +22,24 @@ struct _InteractiveGrid
 G_DEFINE_TYPE (InteractiveGrid, interactive_grid, GTK_TYPE_WIDGET)
 
 static void
-interactive_grid_destroy (GtkWidget *widget)
+interactive_grid_dispose (GObject *object)
 {
-  InteractiveGrid *self = INTERACTIVE_GRID (widget);
+  InteractiveGrid *self = INTERACTIVE_GRID (object);
 
   g_clear_pointer (&self->button1, gtk_widget_destroy);
   g_clear_pointer (&self->button2, gtk_widget_destroy);
   g_clear_pointer (&self->button3, gtk_widget_destroy);
 
-  GTK_WIDGET_CLASS (interactive_grid_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (interactive_grid_parent_class)->dispose (object);
 }
 
 static void
 interactive_grid_class_init (InteractiveGridClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  widget_class->destroy = interactive_grid_destroy;
+  object_class->dispose = interactive_grid_dispose;
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_CONSTRAINT_LAYOUT);
 }
