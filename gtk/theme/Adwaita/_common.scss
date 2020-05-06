@@ -11,6 +11,7 @@ $button_radius: 5px;
 $menu_radius: 5px;
 $window_radius: $button_radius + 3;
 $popover_radius: $button_radius + 4;
+$button_fill: null; // global var defined within a parameter driven mixin. See issue #2703
 
 /***************
  * Base States *
