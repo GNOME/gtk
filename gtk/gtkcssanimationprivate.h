@@ -27,13 +27,6 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_CSS_ANIMATION           (_gtk_css_animation_get_type ())
-#define GTK_CSS_ANIMATION(obj)           (G_TYPE_CHECK_INSTANCE_CAST (obj, GTK_TYPE_CSS_ANIMATION, GtkCssAnimation))
-#define GTK_CSS_ANIMATION_CLASS(cls)     (G_TYPE_CHECK_CLASS_CAST (cls, GTK_TYPE_CSS_ANIMATION, GtkCssAnimationClass))
-#define GTK_IS_CSS_ANIMATION(obj)        (G_TYPE_CHECK_INSTANCE_TYPE (obj, GTK_TYPE_CSS_ANIMATION))
-#define GTK_IS_CSS_ANIMATION_CLASS(obj)  (G_TYPE_CHECK_CLASS_TYPE (obj, GTK_TYPE_CSS_ANIMATION))
-#define GTK_CSS_ANIMATION_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CSS_ANIMATION, GtkCssAnimationClass))
-
 typedef struct _GtkCssAnimation           GtkCssAnimation;
 typedef struct _GtkCssAnimationClass      GtkCssAnimationClass;
 
@@ -73,6 +66,7 @@ GtkStyleAnimation *     _gtk_css_animation_advance_with_play_state (GtkCssAnimat
                                                                     GtkCssPlayState    play_state);
 
 const char *            _gtk_css_animation_get_name        (GtkCssAnimation   *animation);
+gboolean                _gtk_css_animation_is_animation    (GtkStyleAnimation *animation);
 
 G_END_DECLS
 

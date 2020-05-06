@@ -26,8 +26,6 @@
 
 #include <math.h>
 
-G_DEFINE_TYPE (GtkCssAnimation, _gtk_css_animation, GTK_TYPE_STYLE_ANIMATION)
-
 static gboolean
 gtk_css_animation_is_executing (GtkCssAnimation *animation)
 {
@@ -80,7 +78,7 @@ static GtkStyleAnimation *
 gtk_css_animation_advance (GtkStyleAnimation    *style_animation,
                            gint64                timestamp)
 {
-  GtkCssAnimation *animation = GTK_CSS_ANIMATION (style_animation);
+  GtkCssAnimation *animation = (GtkCssAnimation *)style_animation;
 
   return _gtk_css_animation_advance_with_play_state (animation,
                                                      timestamp,
@@ -91,7 +89,7 @@ static void
 gtk_css_animation_apply_values (GtkStyleAnimation    *style_animation,
                                 GtkCssAnimatedStyle  *style)
 {
-  GtkCssAnimation *animation = GTK_CSS_ANIMATION (style_animation);
+  GtkCssAnimation *animation = (GtkCssAnimation *)style_animation;
   double progress;
   guint i;
 
@@ -125,7 +123,7 @@ gtk_css_animation_is_finished (GtkStyleAnimation *style_animation)
 static gboolean
 gtk_css_animation_is_static (GtkStyleAnimation *style_animation)
 {
-  GtkCssAnimation *animation = GTK_CSS_ANIMATION (style_animation);
+  GtkCssAnimation *animation = (GtkCssAnimation *)style_animation;
 
   if (animation->play_state == GTK_CSS_PLAY_STATE_PAUSED)
     return TRUE;
@@ -134,35 +132,26 @@ gtk_css_animation_is_static (GtkStyleAnimation *style_animation)
 }
 
 static void
-gtk_css_animation_finalize (GObject *object)
+gtk_css_animation_free (GtkStyleAnimation *animation)
 {
-  GtkCssAnimation *animation = GTK_CSS_ANIMATION (object);
+  GtkCssAnimation *self = (GtkCssAnimation *)animation;
 
-  g_free (animation->name);
-  _gtk_css_keyframes_unref (animation->keyframes);
-  _gtk_css_value_unref (animation->ease);
+  g_free (self->name);
+  _gtk_css_keyframes_unref (self->keyframes);
+  _gtk_css_value_unref (self->ease);
 
-  G_OBJECT_CLASS (_gtk_css_animation_parent_class)->finalize (object);
+  g_slice_free (GtkCssAnimation, self);
 }
 
-static void
-_gtk_css_animation_class_init (GtkCssAnimationClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkStyleAnimationClass *animation_class = GTK_STYLE_ANIMATION_CLASS (klass);
+static const GtkStyleAnimationClass GTK_CSS_ANIMATION_CLASS = {
+  "GtkCssAnimation",
+  gtk_css_animation_free,
+  gtk_css_animation_is_finished,
+  gtk_css_animation_is_static,
+  gtk_css_animation_apply_values,
+  gtk_css_animation_advance,
+};
 
-  object_class->finalize = gtk_css_animation_finalize;
-
-  animation_class->advance = gtk_css_animation_advance;
-  animation_class->apply_values = gtk_css_animation_apply_values;
-  animation_class->is_finished = gtk_css_animation_is_finished;
-  animation_class->is_static = gtk_css_animation_is_static;
-}
-
-static void
-_gtk_css_animation_init (GtkCssAnimation *animation)
-{
-}
 
 GtkStyleAnimation *
 _gtk_css_animation_new (const char      *name,
@@ -183,7 +172,9 @@ _gtk_css_animation_new (const char      *name,
   g_return_val_if_fail (ease != NULL, NULL);
   g_return_val_if_fail (iteration_count >= 0, NULL);
 
-  animation = g_object_new (GTK_TYPE_CSS_ANIMATION, NULL);
+  animation = g_slice_alloc (sizeof (GtkCssAnimation));
+  animation->parent.class = &GTK_CSS_ANIMATION_CLASS;
+  animation->parent.ref_count = 1;
 
   animation->name = g_strdup (name);
   animation->keyframes = _gtk_css_keyframes_ref (keyframes);
@@ -198,14 +189,12 @@ _gtk_css_animation_new (const char      *name,
   else
     gtk_progress_tracker_advance_frame (&animation->tracker, timestamp);
 
-  return GTK_STYLE_ANIMATION (animation);
+  return (GtkStyleAnimation *)animation;
 }
 
 const char *
 _gtk_css_animation_get_name (GtkCssAnimation *animation)
 {
-  g_return_val_if_fail (GTK_IS_CSS_ANIMATION (animation), NULL);
-
   return animation->name;
 }
 
@@ -214,11 +203,9 @@ _gtk_css_animation_advance_with_play_state (GtkCssAnimation *source,
                                             gint64           timestamp,
                                             GtkCssPlayState  play_state)
 {
-  GtkCssAnimation *animation;
-
-  g_return_val_if_fail (GTK_IS_CSS_ANIMATION (source), NULL);
-
-  animation = g_object_new (GTK_TYPE_CSS_ANIMATION, NULL);
+  GtkCssAnimation *animation = g_slice_alloc (sizeof (GtkCssAnimation));
+  animation->parent.class = &GTK_CSS_ANIMATION_CLASS;
+  animation->parent.ref_count = 1;
 
   animation->name = g_strdup (source->name);
   animation->keyframes = _gtk_css_keyframes_ref (source->keyframes);
@@ -233,5 +220,11 @@ _gtk_css_animation_advance_with_play_state (GtkCssAnimation *source,
   else
     gtk_progress_tracker_advance_frame (&animation->tracker, timestamp);
 
-  return GTK_STYLE_ANIMATION (animation);
+  return (GtkStyleAnimation *)animation;
+}
+
+gboolean
+_gtk_css_animation_is_animation (GtkStyleAnimation *animation)
+{
+  return animation->class == &GTK_CSS_ANIMATION_CLASS;
 }
