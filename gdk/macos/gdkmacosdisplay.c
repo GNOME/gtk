@@ -585,8 +585,16 @@ gdk_macos_display_init (GdkMacosDisplay *self)
 GdkDisplay *
 _gdk_macos_display_open (const gchar *display_name)
 {
-  GdkMacosDisplay *self;
+  static GdkMacosDisplay *self;
   ProcessSerialNumber psn = { 0, kCurrentProcess };
+
+  /* Until we can have multiple GdkMacosEventSource instances
+   * running concurrently, we can't exactly support multiple
+   * display connections. So just short-circuit if we already
+   * have one active.
+   */
+  if (self != NULL)
+    return NULL;
 
   GDK_NOTE (MISC, g_message ("opening display %s", display_name ? display_name : ""));
 
@@ -617,6 +625,8 @@ _gdk_macos_display_open (const gchar *display_name)
       event_source = _gdk_macos_event_source_new (self);
       g_source_attach (event_source, NULL);
     }
+
+  g_object_add_weak_pointer (G_OBJECT (self), (gpointer *)&self);
 
   gdk_display_emit_opened (GDK_DISPLAY (self));
 
