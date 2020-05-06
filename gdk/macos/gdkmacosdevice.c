@@ -95,6 +95,19 @@ gdk_macos_device_surface_at_position (GdkDevice       *device,
   return GDK_SURFACE (surface);
 }
 
+static GdkGrabStatus
+gdk_macos_device_grab (GdkDevice    *device,
+                       GdkSurface   *window,
+                       gboolean      owner_events,
+                       GdkEventMask  event_mask,
+                       GdkSurface   *confine_to,
+                       GdkCursor    *cursor,
+                       guint32       time_)
+{
+  /* Should remain empty */
+  return GDK_GRAB_SUCCESS;
+}
+
 static void
 gdk_macos_device_ungrab (GdkDevice *device,
                          guint32    time_)
@@ -114,11 +127,85 @@ gdk_macos_device_ungrab (GdkDevice *device,
   _gdk_display_device_grab_update (display, device, NULL, 0);
 }
 
+static gboolean
+gdk_macos_device_get_history (GdkDevice      *device,
+                              GdkSurface     *surface,
+                              guint32         start,
+                              guint32         stop,
+                              GdkTimeCoord ***events,
+                              gint           *n_events)
+{
+  g_assert (GDK_IS_MACOS_DEVICE (device));
+  g_assert (GDK_IS_MACOS_SURFACE (surface));
+
+  return FALSE;
+}
+
+static void
+gdk_macos_device_get_state (GdkDevice       *device,
+                            GdkSurface      *surface,
+                            gdouble         *axes,
+                            GdkModifierType *mask)
+{
+  gdouble x_pos, y_pos;
+
+  g_assert (GDK_IS_MACOS_DEVICE (device));
+  g_assert (GDK_IS_MACOS_SURFACE (surface));
+
+  gdk_surface_get_device_position (surface, device, &x_pos, &y_pos, mask);
+
+  if (axes != NULL)
+    {
+      axes[0] = x_pos;
+      axes[1] = y_pos;
+    }
+}
+
+static void
+gdk_macos_device_query_state (GdkDevice        *device,
+                              GdkSurface       *surface,
+                              GdkSurface      **child_surface,
+                              gdouble          *win_x,
+                              gdouble          *win_y,
+                              GdkModifierType  *mask)
+{
+  GdkDisplay *display;
+  NSPoint point;
+  gint x_tmp;
+  gint y_tmp;
+
+  g_assert (GDK_IS_MACOS_DEVICE (device));
+  g_assert (GDK_IS_MACOS_SURFACE (surface));
+
+  if (child_surface)
+    *child_surface = surface;
+
+  display = gdk_device_get_display (device);
+  point = [NSEvent mouseLocation];
+  _gdk_macos_display_from_display_coords (GDK_MACOS_DISPLAY (display),
+                                          point.x, point.y,
+                                          &x_tmp, &y_tmp);
+
+  if (win_x)
+    *win_x = x_tmp;
+
+  if (win_y)
+    *win_y = y_tmp;
+
+  if (mask)
+    *mask = _gdk_macos_display_get_current_keyboard_modifiers (GDK_MACOS_DISPLAY (display)) |
+            _gdk_macos_display_get_current_mouse_modifiers (GDK_MACOS_DISPLAY (display));
+}
+
 static void
 gdk_macos_device_class_init (GdkMacosDeviceClass *klass)
 {
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
+  device_class->get_history = gdk_macos_device_get_history;
+  device_class->get_state = gdk_macos_device_get_state;
+  device_class->grab = gdk_macos_device_grab;
+  device_class->query_state = gdk_macos_device_query_state;
   device_class->set_surface_cursor = gdk_macos_device_set_surface_cursor;
   device_class->surface_at_position = gdk_macos_device_surface_at_position;
   device_class->ungrab = gdk_macos_device_ungrab;
@@ -127,4 +214,6 @@ gdk_macos_device_class_init (GdkMacosDeviceClass *klass)
 static void
 gdk_macos_device_init (GdkMacosDevice *self)
 {
+  _gdk_device_add_axis (GDK_DEVICE (self), NULL, GDK_AXIS_X, 0, 0, 1);
+  _gdk_device_add_axis (GDK_DEVICE (self), NULL, GDK_AXIS_Y, 0, 0, 1);
 }
