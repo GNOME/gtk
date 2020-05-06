@@ -1359,6 +1359,37 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
       G_GNUC_FALLTHROUGH;
 
     case GTK_WINDOW_REGION_TITLE:
+      if (n_press == 1)
+        {
+          /* Immediately ask the window manager to handle a click when
+           * made directly on the titlebar unless on a child widget
+           * that needs to consume motion.
+           *
+           * This improves window moving consistency with titlebar
+           * clicks on non-decorated windows (handled immediately by
+           * the window manager) and also allows the window manager to
+           * handle raising the window automatically if necessary.
+           *
+           * We are in the bubble phase of event propagation, so we do
+           * not get a "pressed" event if a child widget has already
+           * handled it. To find the widget, we must gtk_widget_pick().
+           */
+          GtkWidget *picked_widget = gtk_widget_pick(widget, x, y, GTK_PICK_DEFAULT);
+          if (!_gtk_widget_consumes_motion (picked_widget, sequence))
+            {
+              gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+
+              gdk_surface_begin_move_drag (priv->surface,
+                                           gtk_gesture_get_device (GTK_GESTURE (gesture)),
+                                           gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)),
+                                           x, y,
+                                           gtk_event_controller_get_current_event_time (GTK_EVENT_CONTROLLER (gesture)));
+
+              gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
+              gtk_event_controller_reset (GTK_EVENT_CONTROLLER (priv->drag_gesture));
+            }
+        }
+
       if (n_press == 2)
         gtk_window_titlebar_action (window, event, button, n_press);
 
