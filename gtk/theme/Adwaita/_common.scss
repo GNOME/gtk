@@ -1359,13 +1359,11 @@ windowcontrols {
 
     @extend %button_basic_flat;
 
-    &:not(.menu) {
-      border-radius: 9999px;
-      padding: 6px;
-      margin: 0 2px;
-      min-width: 0;
-      min-height: 0;
-    }
+    border-radius: 9999px;
+    padding: 6px;
+    margin: 0 2px;
+    min-width: 0;
+    min-height: 0;
 
     &:backdrop { -gtk-icon-shadow: none; }
   }
