@@ -50,21 +50,20 @@ gtk_css_value_calc_free (GtkCssValue *value)
 static GtkCssValue *gtk_css_calc_value_new (gsize n_terms);
 
 static GtkCssValue *
-gtk_css_value_new_from_array (GPtrArray *array)
+gtk_css_value_new_from_array (GtkCssValue **values,
+                              guint         n_values)
 {
   GtkCssValue *result;
-  
-  if (array->len > 1)
+
+  if (n_values > 1)
     {
-      result = gtk_css_calc_value_new (array->len);
-      memcpy (result->terms, array->pdata, array->len * sizeof (GtkCssValue *));
+      result = gtk_css_calc_value_new (n_values);
+      memcpy (result->terms, values, n_values * sizeof (GtkCssValue *));
     }
   else
     {
-      result = g_ptr_array_index (array, 0);
+      result = values[0];
     }
-
-  g_ptr_array_free (array, TRUE);
 
   return result;
 }
@@ -105,26 +104,28 @@ gtk_css_value_calc_compute (GtkCssValue      *value,
                             GtkCssStyle      *parent_style)
 {
   GtkCssValue *result;
-  GPtrArray *array;
   gboolean changed = FALSE;
   gsize i;
+  GtkCssValue **new_values;
 
-  array = g_ptr_array_new ();
+  new_values = g_alloca (sizeof (GtkCssValue *) * value->n_terms);
+
   for (i = 0; i < value->n_terms; i++)
     {
       GtkCssValue *computed = _gtk_css_value_compute (value->terms[i], property_id, provider, style, parent_style);
       changed |= computed != value->terms[i];
-      gtk_css_calc_array_add (array, computed);
+      new_values[i] = computed;
     }
 
   if (changed)
     {
-      result = gtk_css_value_new_from_array (array);
+      result = gtk_css_value_new_from_array (new_values, value->n_terms);
     }
   else
     {
-      g_ptr_array_set_free_func (array, (GDestroyNotify) _gtk_css_value_unref);
-      g_ptr_array_free (array, TRUE);
+      for (i = 0; i < value->n_terms; i++)
+        gtk_css_value_unref (new_values[i]);
+
       result = _gtk_css_value_ref (value);
     }
 
@@ -279,6 +280,7 @@ gtk_css_calc_value_new_sum (GtkCssValue *value1,
                             GtkCssValue *value2)
 {
   GPtrArray *array;
+  GtkCssValue *result;
   gsize i;
 
   array = g_ptr_array_new ();
@@ -307,7 +309,10 @@ gtk_css_calc_value_new_sum (GtkCssValue *value1,
       gtk_css_calc_array_add (array, _gtk_css_value_ref (value2));
     }
 
-  return gtk_css_value_new_from_array (array);
+  result = gtk_css_value_new_from_array ((GtkCssValue **)array->pdata, array->len);
+  g_ptr_array_free (array, TRUE);
+
+  return result;
 }
 
 GtkCssValue *   gtk_css_calc_value_parse_sum (GtkCssParser           *parser,
