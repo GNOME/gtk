@@ -1221,6 +1221,8 @@ spinbutton {
       padding: 1px 2px;
     }
   }
+
+  font-feature-settings: "tnum";
 }
 
 
@@ -1357,15 +1359,11 @@ windowcontrols {
 
     @extend %button_basic_flat;
 
-    &:not(.menu) {
-      border-radius: 9999px;
-      padding: 6px;
-      margin: 0 2px;
-      min-width: 0;
-      min-height: 0;
-    }
-
-    &:backdrop { -gtk-icon-shadow: none; }
+    border-radius: 9999px;
+    padding: 6px;
+    margin: 0 2px;
+    min-width: 0;
+    min-height: 0;
   }
 }
 
@@ -1828,13 +1826,15 @@ popover.background {
 
   > arrow,
   > contents {
+    $_popover_border: if($variant=='light', transparentize(black, 0.77), transparentize($borders_color, 0.1));
+
     background-color: $popover_bg_color;
-    border: 1px solid $borders_color;
+    background-clip: padding-box;
+    border: 1px solid $_popover_border;
     box-shadow: 0 1px 2px transparentize(black, 0.7);
 
     &:backdrop {
       background-color: $backdrop_bg_color;
-      border-color: $backdrop_borders_color;
       box-shadow: none;
     }
   }
@@ -2741,7 +2741,10 @@ scale {
     }
   }
 
-  > value { color: gtkalpha(currentColor, 0.55); }
+  > value {
+    color: gtkalpha(currentColor, 0.55);
+    font-feature-settings: "tnum";
+  }
 
   &.horizontal {
     > marks {
@@ -3025,6 +3028,7 @@ progressbar {
   // FIXME: insensitive state missing and some other state should be set probably
   font-size: smaller;
   color: transparentize($fg_color, 0.6);
+  font-feature-settings: "tnum";
 
   &:backdrop {
     box-shadow: none;
@@ -4251,8 +4255,11 @@ stackswitcher.circular {
 
 /* Drapshadow for large icons */
 .icon-dropshadow {
-  -gtk-icon-shadow: 0 2px 12px rgba(0,0,0,0.2),
-               0 1px 2px rgba(0,0,0,0.7);
+  -gtk-icon-shadow: 0 1px 12px rgba(0,0,0,0.05),
+      0 -1px rgba(0,0,0,0.05),
+      1px 0 rgba(0,0,0,0.1),
+      0 1px rgba(0,0,0,0.3),
+      -1px 0 rgba(0,0,0,0.1);
 }
 
 /*********
