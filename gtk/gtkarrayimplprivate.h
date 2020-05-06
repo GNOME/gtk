@@ -4,7 +4,7 @@
 
 /* This is a dumbed-down GPtrArray, which takes some stack
  * space to use. When using this, the general case should always
- * be that the number of elements is lower than reversed_size.
+ * be that the number of elements is lower than reserved_size.
  * The GPtrArray should only be used in extreme cases.
  */
 
