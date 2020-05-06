@@ -263,11 +263,6 @@ _gtk_css_value_transition (GtkCssValue *start,
   gtk_internal_return_val_if_fail (start != NULL, FALSE);
   gtk_internal_return_val_if_fail (end != NULL, FALSE);
 
-  /* We compare functions here instead of classes so that number
-   * values can all transition to each other */
-  if (start->class->transition != end->class->transition)
-    return NULL;
-
   if (progress == 0)
     return _gtk_css_value_ref (start);
 

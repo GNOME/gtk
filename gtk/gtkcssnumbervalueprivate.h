@@ -51,6 +51,9 @@ struct _GtkCssNumberValueClass {
   gint                  (* get_calc_term_order)     (const GtkCssValue      *value);
 };
 
+GtkCssValue *   gtk_css_dimension_value_new         (double                  value,
+                                                     GtkCssUnit              unit);
+
 GtkCssValue *   _gtk_css_number_value_new           (double                  value,
                                                      GtkCssUnit              unit);
 GtkCssValue *   gtk_css_number_value_transition     (GtkCssValue            *start,
@@ -74,6 +77,7 @@ gint            gtk_css_number_value_get_calc_term_order (const GtkCssValue *val
 double          _gtk_css_number_value_get           (const GtkCssValue      *number,
                                                      double                  one_hundred_percent) G_GNUC_PURE;
 
+gboolean        gtk_css_dimension_value_is_zero     (const GtkCssValue      *value) G_GNUC_PURE;
 
 G_END_DECLS
 
