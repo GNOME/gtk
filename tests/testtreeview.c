@@ -448,7 +448,7 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
       
 #endif
       
-      /* FALL THRU */
+      G_GNUC_FALLTHROUGH;
       
     case COLUMNS_ONE:
       rend = gtk_cell_renderer_text_new ();
