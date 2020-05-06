@@ -46,7 +46,6 @@ typedef struct _GtkGestureClickPrivate GtkGestureClickPrivate;
 
 struct _GtkGestureClickPrivate
 {
-  GdkRectangle rect;
   GdkDevice *current_device;
   gdouble initial_press_x;
   gdouble initial_press_y;
@@ -54,7 +53,6 @@ struct _GtkGestureClickPrivate
   guint n_presses;
   guint n_release;
   guint current_button;
-  guint rect_is_set : 1;
 };
 
 enum {
@@ -179,12 +177,7 @@ _gtk_gesture_click_check_within_threshold (GtkGestureClick *gesture,
 
   if (ABS (priv->initial_press_x - x) < double_click_distance &&
       ABS (priv->initial_press_y - y) < double_click_distance)
-    {
-      if (!priv->rect_is_set ||
-          (x >= priv->rect.x && x < priv->rect.x + priv->rect.width &&
-           y >= priv->rect.y && y < priv->rect.y + priv->rect.height))
-        return TRUE;
-    }
+    return TRUE;
 
   return FALSE;
 }
@@ -459,76 +452,5 @@ gtk_gesture_click_init (GtkGestureClick *gesture)
 GtkGesture *
 gtk_gesture_click_new (void)
 {
-  return g_object_new (GTK_TYPE_GESTURE_CLICK,
-                       NULL);
-}
-
-/**
- * gtk_gesture_click_set_area:
- * @gesture: a #GtkGestureClick
- * @rect: (allow-none): rectangle to receive coordinates on
- *
- * If @rect is non-%NULL, the press area will be checked to be
- * confined within the rectangle, otherwise the button count
- * will be reset so the press is seen as being the first one.
- * If @rect is %NULL, the area will be reset to an unrestricted
- * state.
- *
- * Note: The rectangle is only used to determine whether any
- * non-first click falls within the expected area. This is not
- * akin to an input shape.
- **/
-void
-gtk_gesture_click_set_area (GtkGestureClick    *gesture,
-                            const GdkRectangle *rect)
-{
-  GtkGestureClickPrivate *priv;
-
-  g_return_if_fail (GTK_IS_GESTURE_CLICK (gesture));
-
-  priv = gtk_gesture_click_get_instance_private (gesture);
-
-  if (!rect)
-    priv->rect_is_set = FALSE;
-  else
-    {
-      priv->rect_is_set = TRUE;
-      priv->rect = *rect;
-    }
-}
-
-/**
- * gtk_gesture_click_get_area:
- * @gesture: a #GtkGestureClick
- * @rect: (out): return location for the press area
- *
- * If an area was set through gtk_gesture_click_set_area(),
- * this function will return %TRUE and fill in @rect with the
- * press area. See gtk_gesture_click_set_area() for more
- * details on what the press area represents.
- *
- * Returns: %TRUE if @rect was filled with the press area
- **/
-gboolean
-gtk_gesture_click_get_area (GtkGestureClick *gesture,
-                            GdkRectangle    *rect)
-{
-  GtkGestureClickPrivate *priv;
-
-  g_return_val_if_fail (GTK_IS_GESTURE_CLICK (gesture), FALSE);
-
-  priv = gtk_gesture_click_get_instance_private (gesture);
-
-  if (rect)
-    {
-      if (priv->rect_is_set)
-        *rect = priv->rect;
-      else
-        {
-          rect->x = rect->y = G_MININT;
-          rect->width = rect->height = G_MAXINT;
-        }
-    }
-
-  return priv->rect_is_set;
+  return g_object_new (GTK_TYPE_GESTURE_CLICK, NULL);
 }

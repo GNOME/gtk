@@ -44,13 +44,6 @@ GType        gtk_gesture_click_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkGesture * gtk_gesture_click_new      (void);
 
-GDK_AVAILABLE_IN_ALL
-void         gtk_gesture_click_set_area (GtkGestureClick    *gesture,
-                                         const GdkRectangle *rect);
-GDK_AVAILABLE_IN_ALL
-gboolean     gtk_gesture_click_get_area (GtkGestureClick    *gesture,
-                                         GdkRectangle       *rect);
-
 G_END_DECLS
 
 #endif /* __GTK_GESTURE_CLICK_H__ */
