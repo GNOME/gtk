@@ -122,6 +122,7 @@
 #include "gtksnapshot.h"
 #include "gtkshortcutmanager.h"
 #include "gtkbuildable.h"
+#include "gtktooltipprivate.h"
 
 #include "gtkrender.h"
 #include "gtkstylecontextprivate.h"
@@ -1417,6 +1418,8 @@ gtk_popover_size_allocate (GtkWidget *widget,
       gtk_popover_update_shape (popover);
       g_clear_pointer (&priv->arrow_render_node, gsk_render_node_unref);
     }
+
+  gtk_tooltip_maybe_allocate (GTK_NATIVE (popover));
 }
 
 static void
