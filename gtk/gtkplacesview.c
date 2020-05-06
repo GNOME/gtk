@@ -872,8 +872,8 @@ update_network_state (GtkPlacesView *view)
       gtk_widget_set_margin_bottom (view->network_placeholder_label, 6);
       gtk_widget_set_hexpand (view->network_placeholder_label, TRUE);
       gtk_widget_set_sensitive (view->network_placeholder, FALSE);
-      gtk_container_add (GTK_CONTAINER (view->network_placeholder),
-                         view->network_placeholder_label);
+      gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (view->network_placeholder),
+                                  view->network_placeholder_label);
       g_object_set_data (G_OBJECT (view->network_placeholder),
                          "is-network", GINT_TO_POINTER (TRUE));
       /* mark the row as placeholder, so it always goes first */
