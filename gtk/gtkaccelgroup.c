@@ -574,18 +574,20 @@ char *
 gtk_accelerator_name (guint           accelerator_key,
                       GdkModifierType accelerator_mods)
 {
+#define TXTLEN(s) sizeof (s) - 1
   static const struct {
     guint mask;
     const char *text;
     gsize text_len;
   } mask_text[] = {
-    { GDK_SHIFT_MASK,   "<Shift>",   strlen ("<Shift>") },
-    { GDK_CONTROL_MASK, "<Control>", strlen ("<Control>") },
-    { GDK_ALT_MASK,     "<Alt>",     strlen ("<Alt>") },
-    { GDK_META_MASK,    "<Meta>",    strlen ("<Meta>") },
-    { GDK_SUPER_MASK,   "<Super>",   strlen ("<Super>") },
-    { GDK_HYPER_MASK,   "<Hyper>",   strlen ("<Hyper>") }
+    { GDK_SHIFT_MASK,   "<Shift>",   TXTLEN ("<Shift>") },
+    { GDK_CONTROL_MASK, "<Control>", TXTLEN ("<Control>") },
+    { GDK_ALT_MASK,     "<Alt>",     TXTLEN ("<Alt>") },
+    { GDK_META_MASK,    "<Meta>",    TXTLEN ("<Meta>") },
+    { GDK_SUPER_MASK,   "<Super>",   TXTLEN ("<Super>") },
+    { GDK_HYPER_MASK,   "<Hyper>",   TXTLEN ("<Hyper>") }
   };
+#undef TXTLEN
   GdkModifierType saved_mods;
   guint l;
   guint name_len;
