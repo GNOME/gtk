@@ -75,6 +75,10 @@ struct _GtkDrawingAreaClass
 {
   GtkWidgetClass parent_class;
 
+  void           (* resize)         (GtkDrawingArea *area,
+                                     int             width,
+                                     int             height);
+
   /*< private >*/
 
   gpointer padding[8];

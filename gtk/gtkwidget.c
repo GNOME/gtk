@@ -74,7 +74,7 @@
 #include "gtknativeprivate.h"
 #include "gtkconstraint.h"
 
-#include "a11y/gtkwidgetaccessible.h"
+#include "a11y/gtkwidgetaccessibleprivate.h"
 #include "inspector/window.h"
 
 #include "gdk/gdkeventsprivate.h"
@@ -1484,28 +1484,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  NULL, NULL,
                   NULL,
 		  G_TYPE_NONE, 0);
-
-  /**
-   * GtkWidget::size-allocate:
-   * @widget: the object which received the signal.
-   * @width: the content width of the widget
-   * @height: the content height of the widget
-   * @baseline: the baseline
-   */
-  widget_signals[SIZE_ALLOCATE] =
-    g_signal_new (I_("size-allocate"),
-		  G_TYPE_FROM_CLASS (gobject_class),
-		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, size_allocate),
-		  NULL, NULL,
-                  _gtk_marshal_VOID__INT_INT_INT,
-		  G_TYPE_NONE, 3,
-                  G_TYPE_INT,
-                  G_TYPE_INT,
-                  G_TYPE_INT);
-  g_signal_set_va_marshaller (widget_signals[SIZE_ALLOCATE],
-                              G_TYPE_FROM_CLASS (gobject_class),
-                              _gtk_marshal_VOID__INT_INT_INTv);
 
   /**
    * GtkWidget::state-flags-changed:
@@ -4095,16 +4073,10 @@ gtk_widget_allocate (GtkWidget    *widget,
     }
   else
     {
-      if (g_signal_has_handler_pending (widget, widget_signals[SIZE_ALLOCATE], 0, FALSE))
-        g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0,
-                       priv->width,
-                       priv->height,
-                       baseline);
-      else
-        GTK_WIDGET_GET_CLASS (widget)->size_allocate (widget,
-                                                      priv->width,
-                                                      priv->height,
-                                                      baseline);
+      GTK_WIDGET_GET_CLASS (widget)->size_allocate (widget,
+                                                    priv->width,
+                                                    priv->height,
+                                                    baseline);
     }
 
   /* Size allocation is god... after consulting god, no further requests or allocations are needed */
@@ -4122,6 +4094,9 @@ gtk_widget_allocate (GtkWidget    *widget,
   priv->alloc_needed_on_child = FALSE;
 
   gtk_widget_update_paintables (widget);
+
+  if (priv->accessible != NULL)
+    gtk_widget_accessible_update_bounds (GTK_WIDGET_ACCESSIBLE (priv->accessible));
 
 skip_allocate:
   if (size_changed || baseline_changed)

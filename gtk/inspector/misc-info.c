@@ -139,11 +139,8 @@ state_flags_changed (GtkWidget *w, GtkStateFlags old_flags, GtkInspectorMiscInfo
 }
 
 static void
-allocation_changed (GtkWidget    *w,
-                    int           width,
-                    int           height,
-                    int           baseline,
-                    GtkInspectorMiscInfo *sl)
+update_allocation (GtkWidget            *w,
+                   GtkInspectorMiscInfo *sl)
 {
   GtkAllocation alloc;
   gchar *size_label;
@@ -419,7 +416,6 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
   if (sl->priv->object)
     {
       g_signal_handlers_disconnect_by_func (sl->priv->object, state_flags_changed, sl);
-      g_signal_handlers_disconnect_by_func (sl->priv->object, allocation_changed, sl);
       disconnect_each_other (sl->priv->object, G_OBJECT (sl));
       disconnect_each_other (sl, sl->priv->object);
       sl->priv->object = NULL;
@@ -452,8 +448,7 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
       g_signal_connect_object (object, "state-flags-changed", G_CALLBACK (state_flags_changed), sl, 0);
       state_flags_changed (GTK_WIDGET (sl->priv->object), 0, sl);
 
-      g_signal_connect_object (object, "size-allocate", G_CALLBACK (allocation_changed), sl, 0);
-      allocation_changed (GTK_WIDGET (sl->priv->object), 0, 0, -1, sl);
+      update_allocation (GTK_WIDGET (sl->priv->object), sl);
     }
   else
     {
