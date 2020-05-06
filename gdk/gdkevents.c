@@ -2827,8 +2827,8 @@ gdk_motion_event_new (GdkSurface      *surface,
  * Retrieves the history of the @event motion, as a list of time and
  * coordinates.
  *
- * Returns: (transfer container) (element-type GdkTimeCoord) (nullable): a list
- *   of time and coordinates
+ * Returns: (transfer full) (nullable): a list of time and coordinates
+ *   or %NULL if @out_n_coords is 0.
  */
 GdkTimeCoord *
 gdk_motion_event_get_history (GdkEvent *event,
