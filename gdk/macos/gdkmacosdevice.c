@@ -1,5 +1,7 @@
 /*
- * Copyright © 2020 Red Hat, Inc.
+ * Copyright 2009 Carlos Garnacho <carlosg@gnome.org>
+ * Copyright 2010 Kristian Rietveld <kris@gtk.org>
+ * Copyright 2020 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,6 +24,7 @@
 #include <gdk/gdk.h>
 
 #include "gdkdeviceprivate.h"
+#include "gdkdisplayprivate.h"
 
 #include "gdkmacoscursor-private.h"
 #include "gdkmacosdevice.h"
@@ -93,12 +96,32 @@ gdk_macos_device_surface_at_position (GdkDevice       *device,
 }
 
 static void
+gdk_macos_device_ungrab (GdkDevice *device,
+                         guint32    time_)
+{
+  GdkMacosDevice *self = (GdkMacosDevice *)device;
+  GdkDeviceGrabInfo *grab;
+  GdkDisplay *display;
+
+  g_assert (GDK_IS_MACOS_DEVICE (self));
+
+  display = gdk_device_get_display (device);
+  grab = _gdk_display_get_last_device_grab (display, device);
+
+  if (grab != NULL)
+    grab->serial_end = 0;
+
+  _gdk_display_device_grab_update (display, device, NULL, 0);
+}
+
+static void
 gdk_macos_device_class_init (GdkMacosDeviceClass *klass)
 {
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
   device_class->set_surface_cursor = gdk_macos_device_set_surface_cursor;
   device_class->surface_at_position = gdk_macos_device_surface_at_position;
+  device_class->ungrab = gdk_macos_device_ungrab;
 }
 
 static void
