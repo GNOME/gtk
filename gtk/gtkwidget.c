@@ -1486,28 +1486,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_NONE, 0);
 
   /**
-   * GtkWidget::size-allocate:
-   * @widget: the object which received the signal.
-   * @width: the content width of the widget
-   * @height: the content height of the widget
-   * @baseline: the baseline
-   */
-  widget_signals[SIZE_ALLOCATE] =
-    g_signal_new (I_("size-allocate"),
-		  G_TYPE_FROM_CLASS (gobject_class),
-		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, size_allocate),
-		  NULL, NULL,
-                  _gtk_marshal_VOID__INT_INT_INT,
-		  G_TYPE_NONE, 3,
-                  G_TYPE_INT,
-                  G_TYPE_INT,
-                  G_TYPE_INT);
-  g_signal_set_va_marshaller (widget_signals[SIZE_ALLOCATE],
-                              G_TYPE_FROM_CLASS (gobject_class),
-                              _gtk_marshal_VOID__INT_INT_INTv);
-
-  /**
    * GtkWidget::state-flags-changed:
    * @widget: the object which received the signal.
    * @flags: The previous state flags.
@@ -4095,16 +4073,10 @@ gtk_widget_allocate (GtkWidget    *widget,
     }
   else
     {
-      if (g_signal_has_handler_pending (widget, widget_signals[SIZE_ALLOCATE], 0, FALSE))
-        g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0,
-                       priv->width,
-                       priv->height,
-                       baseline);
-      else
-        GTK_WIDGET_GET_CLASS (widget)->size_allocate (widget,
-                                                      priv->width,
-                                                      priv->height,
-                                                      baseline);
+      GTK_WIDGET_GET_CLASS (widget)->size_allocate (widget,
+                                                    priv->width,
+                                                    priv->height,
+                                                    baseline);
     }
 
   /* Size allocation is god... after consulting god, no further requests or allocations are needed */
