@@ -45,11 +45,14 @@ export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
 ccache --zero-stats
 ccache --show-stats
 export CCACHE_DISABLE=true
+# FIXME: introspection disabled for now because of
+# https://gitlab.gnome.org/GNOME/gobject-introspection/-/issues/340
 meson \
     -Dx11-backend=false \
     -Dwayland-backend=false \
     -Dwin32-backend=true \
     -Dvulkan=no \
+    -Dintrospection=false \
     --werror \
     _build
 unset CCACHE_DISABLE
