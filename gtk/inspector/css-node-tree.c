@@ -103,7 +103,7 @@ show_node_prop_editor (NodePropEditor *npe)
   GtkWidget *editor;
 
   popover = gtk_popover_new ();
-  gtk_widget_set_parent (popover, GTK_WIDGET (npe->cnt->priv->node_tree));
+  gtk_widget_set_parent (popover, GTK_WIDGET (npe->cnt));
   gtk_popover_set_pointing_to (GTK_POPOVER (popover), &npe->rect);
 
   editor = gtk_inspector_prop_editor_new (G_OBJECT (npe->node), npe->prop_name, NULL);
