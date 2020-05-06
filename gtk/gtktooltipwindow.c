@@ -355,12 +355,6 @@ gtk_tooltip_window_hide (GtkWidget *widget)
   gtk_widget_unmap (widget);
 }
 
-static void size_changed (GtkWidget        *widget,
-                          int               width,
-                          int               height,
-                          int               baseline,
-                          GtkTooltipWindow *window);
-
 static void
 gtk_tooltip_window_dispose (GObject *object)
 {
@@ -368,7 +362,7 @@ gtk_tooltip_window_dispose (GObject *object)
 
   if (window->relative_to)
     {
-      g_signal_handlers_disconnect_by_func (window->relative_to, size_changed, window);
+      gtk_native_set_tooltip (GTK_NATIVE (window->relative_to), NULL);
       gtk_widget_unparent (GTK_WIDGET (window));
     }
 
@@ -523,16 +517,6 @@ gtk_tooltip_window_set_custom_widget (GtkTooltipWindow *window,
     }
 }
 
-static void
-size_changed (GtkWidget        *widget,
-              int               width,
-              int               height,
-              int               baseline,
-              GtkTooltipWindow *window)
-{
-  gtk_native_check_resize (GTK_NATIVE (window));
-}
-
 void
 gtk_tooltip_window_set_relative_to (GtkTooltipWindow *window,
                                     GtkWidget        *relative_to)
@@ -546,7 +530,7 @@ gtk_tooltip_window_set_relative_to (GtkTooltipWindow *window,
 
   if (window->relative_to)
     {
-      g_signal_handlers_disconnect_by_func (window->relative_to, size_changed, window);
+      gtk_native_set_tooltip (GTK_NATIVE (window->relative_to), NULL);
       gtk_widget_unparent (GTK_WIDGET (window));
     }
 
@@ -554,9 +538,7 @@ gtk_tooltip_window_set_relative_to (GtkTooltipWindow *window,
 
   if (window->relative_to)
     {
-      g_signal_connect (window->relative_to, "size-allocate", G_CALLBACK (size_changed), window);
-      gtk_css_node_set_parent (gtk_widget_get_css_node (GTK_WIDGET (window)),
-                               gtk_widget_get_css_node (relative_to));
+      gtk_native_set_tooltip (GTK_NATIVE (relative_to), GTK_NATIVE (window));
       gtk_widget_set_parent (GTK_WIDGET (window), relative_to);
     }
 
