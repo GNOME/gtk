@@ -104,7 +104,7 @@ release-build:
     - C:\msys64\usr\bin\pacman --noconfirm -Syyuu
     - C:\msys64\usr\bin\bash -lc "bash -x ./.gitlab-ci/test-msys2.sh"
   cache:
-    key: "${env:CI_JOB_NAME}"
+    key: "$CI_JOB_NAME"
     <<: *cache-paths
 
 msys2-mingw32:
