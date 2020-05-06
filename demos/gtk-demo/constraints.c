@@ -21,23 +21,24 @@ struct _SimpleGrid
 G_DEFINE_TYPE (SimpleGrid, simple_grid, GTK_TYPE_WIDGET)
 
 static void
-simple_grid_destroy (GtkWidget *widget)
+simple_grid_dispose (GObject *object)
 {
-  SimpleGrid *self = SIMPLE_GRID (widget);
+  SimpleGrid *self = SIMPLE_GRID (object);
 
   g_clear_pointer (&self->button1, gtk_widget_destroy);
   g_clear_pointer (&self->button2, gtk_widget_destroy);
   g_clear_pointer (&self->button3, gtk_widget_destroy);
 
-  GTK_WIDGET_CLASS (simple_grid_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (simple_grid_parent_class)->dispose (object);
 }
 
 static void
 simple_grid_class_init (SimpleGridClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  widget_class->destroy = simple_grid_destroy;
+  object_class->dispose = simple_grid_dispose;
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_CONSTRAINT_LAYOUT);
 }

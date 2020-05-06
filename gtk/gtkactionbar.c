@@ -181,9 +181,9 @@ gtk_action_bar_get_property (GObject    *object,
 }
 
 static void
-gtk_action_bar_destroy (GtkWidget *widget)
+gtk_action_bar_dispose (GObject *object)
 {
-  GtkActionBar *self = GTK_ACTION_BAR (widget);
+  GtkActionBar *self = GTK_ACTION_BAR (object);
 
   gtk_center_box_set_start_widget (GTK_CENTER_BOX (self->center_box), NULL);
   gtk_center_box_set_center_widget (GTK_CENTER_BOX (self->center_box), NULL);
@@ -192,7 +192,7 @@ gtk_action_bar_destroy (GtkWidget *widget)
   self->start_box = NULL;
   self->end_box = NULL;
 
-  GTK_WIDGET_CLASS (gtk_action_bar_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_action_bar_parent_class)->dispose (object);
 }
 
 static void
@@ -208,9 +208,8 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
 
   object_class->set_property = gtk_action_bar_set_property;
   object_class->get_property = gtk_action_bar_get_property;
+  object_class->dispose = gtk_action_bar_dispose;
   object_class->finalize = gtk_action_bar_finalize;
-
-  widget_class->destroy = gtk_action_bar_destroy;
 
   container_class->add = gtk_action_bar_add;
   container_class->remove = gtk_action_bar_remove;

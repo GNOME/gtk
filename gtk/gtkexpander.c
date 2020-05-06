@@ -171,6 +171,7 @@ struct _GtkExpanderClass
   void (* activate) (GtkExpander *expander);
 };
 
+static void gtk_expander_dispose      (GObject          *object);
 static void gtk_expander_set_property (GObject          *object,
                                        guint             prop_id,
                                        const GValue     *value,
@@ -180,7 +181,6 @@ static void gtk_expander_get_property (GObject          *object,
                                        GValue           *value,
                                        GParamSpec       *pspec);
 
-static void     gtk_expander_destroy        (GtkWidget        *widget);
 static void     gtk_expander_size_allocate  (GtkWidget        *widget,
                                              int               width,
                                              int               height,
@@ -286,10 +286,10 @@ gtk_expander_class_init (GtkExpanderClass *klass)
   widget_class    = (GtkWidgetClass *) klass;
   container_class = (GtkContainerClass *) klass;
 
+  gobject_class->dispose = gtk_expander_dispose;
   gobject_class->set_property = gtk_expander_set_property;
   gobject_class->get_property = gtk_expander_get_property;
 
-  widget_class->destroy = gtk_expander_destroy;
   widget_class->size_allocate = gtk_expander_size_allocate;
   widget_class->focus = gtk_expander_focus;
   widget_class->grab_focus = gtk_widget_grab_focus_self;
@@ -505,9 +505,9 @@ gtk_expander_get_property (GObject    *object,
 }
 
 static void
-gtk_expander_destroy (GtkWidget *widget)
+gtk_expander_dispose (GObject *object)
 {
-  GtkExpander *expander = GTK_EXPANDER (widget);
+  GtkExpander *expander = GTK_EXPANDER (object);
 
   if (expander->expand_timer)
     {
@@ -524,7 +524,7 @@ gtk_expander_destroy (GtkWidget *widget)
       expander->arrow_widget = NULL;
     }
 
-  GTK_WIDGET_CLASS (gtk_expander_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_expander_parent_class)->dispose (object);
 }
 
 static void

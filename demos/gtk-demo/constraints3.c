@@ -20,23 +20,24 @@ struct _VflGrid
 G_DEFINE_TYPE (VflGrid, vfl_grid, GTK_TYPE_WIDGET)
 
 static void
-vfl_grid_destroy (GtkWidget *widget)
+vfl_grid_dispose (GObject *object)
 {
-  VflGrid *self = VFL_GRID (widget);
+  VflGrid *self = VFL_GRID (object);
 
   g_clear_pointer (&self->button1, gtk_widget_destroy);
   g_clear_pointer (&self->button2, gtk_widget_destroy);
   g_clear_pointer (&self->button3, gtk_widget_destroy);
 
-  GTK_WIDGET_CLASS (vfl_grid_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (vfl_grid_parent_class)->dispose (object);
 }
 
 static void
 vfl_grid_class_init (VflGridClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  widget_class->destroy = vfl_grid_destroy;
+  object_class->dispose = vfl_grid_dispose;
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_CONSTRAINT_LAYOUT);
 }
