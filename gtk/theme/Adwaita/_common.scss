@@ -1828,13 +1828,15 @@ popover.background {
 
   > arrow,
   > contents {
+    $_popover_border: if($variant=='light', transparentize(black, 0.77), transparentize($borders_color, 0.1));
+
     background-color: $popover_bg_color;
-    border: 1px solid $borders_color;
+    background-clip: padding-box;
+    border: 1px solid $_popover_border;
     box-shadow: 0 1px 2px transparentize(black, 0.7);
 
     &:backdrop {
       background-color: $backdrop_bg_color;
-      border-color: $backdrop_borders_color;
       box-shadow: none;
     }
   }
