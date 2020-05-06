@@ -267,6 +267,8 @@ typedef struct
   GdkToplevelLayout *layout;
 
   GdkCursor *resize_cursor;
+
+  GtkNative *tooltip;
 } GtkWindowPrivate;
 
 enum {
@@ -2130,6 +2132,16 @@ gtk_window_native_get_renderer (GtkNative *native)
   return priv->renderer;
 }
 
+static void
+gtk_window_native_set_tooltip (GtkNative *native,
+                               GtkNative *tooltip)
+{
+  GtkWindow *self = GTK_WINDOW (native);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (self);
+
+  priv->tooltip = tooltip;
+}
+
 static GtkConstraintSolver *
 gtk_window_root_get_constraint_solver (GtkRoot *root)
 {
@@ -2222,6 +2234,7 @@ gtk_window_native_interface_init (GtkNativeInterface *iface)
   iface->get_renderer = gtk_window_native_get_renderer;
   iface->get_surface_transform = gtk_window_native_get_surface_transform;
   iface->check_resize = gtk_window_native_check_resize;
+  iface->set_tooltip = gtk_window_native_set_tooltip;
 }
 
 /**
@@ -5080,13 +5093,15 @@ gtk_window_size_allocate (GtkWidget *widget,
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWidget *child = priv->child;
   GtkAllocation child_allocation;
 
   _gtk_window_set_allocation (window, width, height, &child_allocation);
 
-  if (child && gtk_widget_get_visible (child))
-    gtk_widget_size_allocate (child, &child_allocation, -1);
+  if (priv->child && gtk_widget_get_visible (priv->child))
+    gtk_widget_size_allocate (priv->child, &child_allocation, -1);
+
+  if (priv->tooltip && gtk_widget_get_visible (GTK_WIDGET (priv->tooltip)))
+    gtk_native_check_resize (priv->tooltip);
 }
 
 gboolean
