@@ -60,7 +60,7 @@ create_cairo_surface_for_surface (GdkSurface *surface)
   width = scale * gdk_surface_get_width (surface);
   height = scale * gdk_surface_get_height (surface);
 
-  cairo_surface = cairo_quartz_surface_create_for_cg_context (cg, width, height);
+  cairo_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
 
   if (cairo_surface != NULL)
     cairo_surface_set_device_scale (cairo_surface, scale, scale);
