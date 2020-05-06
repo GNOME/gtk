@@ -85,6 +85,11 @@ void               _gdk_macos_surface_show                    (GdkMacosSurface  
 void               _gdk_macos_surface_thaw                    (GdkMacosSurface    *self,
                                                                gint64              predicted_presentation_time,
                                                                gint64              refresh_interval);
+CGContextRef       _gdk_macos_surface_acquire_context         (GdkMacosSurface    *self,
+                                                               gboolean            clear_scale,
+                                                               gboolean            antialias);
+void               _gdk_macos_surface_release_context         (GdkMacosSurface    *self,
+                                                               CGContextRef        cg_context);
 
 G_END_DECLS
 

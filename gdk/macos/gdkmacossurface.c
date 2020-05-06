@@ -786,3 +786,49 @@ _gdk_macos_surface_show (GdkMacosSurface *self)
         gdk_surface_invalidate_rect (GDK_SURFACE (self), NULL);
     }
 }
+
+CGContextRef
+_gdk_macos_surface_acquire_context (GdkMacosSurface *self,
+                                    gboolean         clear_scale,
+                                    gboolean         antialias)
+{
+  CGContextRef cg_context;
+  NSWindow *native;
+
+  g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), NULL);
+
+  if (GDK_SURFACE_DESTROYED (self))
+    return NULL;
+
+  if (!(cg_context = [[NSGraphicsContext currentContext] CGContext]))
+    return NULL;
+
+  CGContextSaveGState (cg_context);
+
+  if (!antialias)
+    CGContextSetAllowsAntialiasing (cg_context, antialias);
+
+  if (clear_scale)
+    {
+      CGSize scale;
+
+      scale = CGSizeMake (1.0, 1.0);
+      scale = CGContextConvertSizeToDeviceSpace (cg_context, scale);
+
+      CGContextScaleCTM (cg_context, 1.0 / scale.width, 1.0 / scale.height);
+    }
+
+  return cg_context;
+}
+
+void
+_gdk_macos_surface_release_context (GdkMacosSurface *self,
+                                    CGContextRef     cg_context)
+{
+  NSWindow *native;
+
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
+
+  CGContextRestoreGState (cg_context);
+  CGContextSetAllowsAntialiasing (cg_context, TRUE);
+}
