@@ -576,13 +576,9 @@ gdk_keymap_get_cached_entries_for_keyval (GdkKeymap     *keymap,
   cached = GPOINTER_TO_UINT (g_hash_table_lookup (keymap->cache, GUINT_TO_POINTER (keyval)));
   if (cached == 0)
     {
-      GdkKeymapKey key;
-
       offset = keymap->cached_keys->len;
 
       GDK_KEYMAP_GET_CLASS (keymap)->get_entries_for_keyval (keymap, keyval, keymap->cached_keys);
-
-      g_array_append_val (keymap->cached_keys, key);
 
       len = keymap->cached_keys->len - offset;
       g_assert (len <= 255);
