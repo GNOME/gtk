@@ -796,7 +796,7 @@ node_editor_window_create_renderer_widget (gpointer item,
   gtk_container_add (GTK_CONTAINER (box), picture);
 
   row = gtk_list_box_row_new ();
-  gtk_container_add (GTK_CONTAINER (row), box);
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), box);
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
 
   return row;
