@@ -26,27 +26,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_CSS_DYNAMIC           (gtk_css_dynamic_get_type ())
-#define GTK_CSS_DYNAMIC(obj)           (G_TYPE_CHECK_INSTANCE_CAST (obj, GTK_TYPE_CSS_DYNAMIC, GtkCssDynamic))
-#define GTK_CSS_DYNAMIC_CLASS(cls)     (G_TYPE_CHECK_CLASS_CAST (cls, GTK_TYPE_CSS_DYNAMIC, GtkCssDynamicClass))
-#define GTK_IS_CSS_DYNAMIC(obj)        (G_TYPE_CHECK_INSTANCE_TYPE (obj, GTK_TYPE_CSS_DYNAMIC))
-#define GTK_IS_CSS_DYNAMIC_CLASS(obj)  (G_TYPE_CHECK_CLASS_TYPE (obj, GTK_TYPE_CSS_DYNAMIC))
-#define GTK_CSS_DYNAMIC_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CSS_DYNAMIC, GtkCssDynamicClass))
-
 typedef struct _GtkCssDynamic           GtkCssDynamic;
-typedef struct _GtkCssDynamicClass      GtkCssDynamicClass;
-
-struct _GtkCssDynamic
-{
-  GtkStyleAnimation   parent;
-
-  gint64              timestamp;
-};
-
-struct _GtkCssDynamicClass
-{
-  GtkStyleAnimationClass parent_class;
-};
 
 GType                   gtk_css_dynamic_get_type        (void) G_GNUC_CONST;
 
