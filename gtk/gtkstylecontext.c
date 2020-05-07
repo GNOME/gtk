@@ -471,42 +471,6 @@ gtk_style_context_remove_provider_for_display (GdkDisplay       *display,
   _gtk_style_cascade_remove_provider (cascade, provider);
 }
 
-/*
- * gtk_style_context_set_id:
- * @context: a #GtkStyleContext
- * @id: (allow-none): the id to use or %NULL for none.
- *
- * Sets the CSS ID to be used when obtaining style information.
- **/
-void
-gtk_style_context_set_id (GtkStyleContext *context,
-                          const char      *id)
-{
-  GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
-
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-
-  gtk_css_node_set_id (priv->cssnode, g_quark_from_string (id));
-}
-
-/*
- * gtk_style_context_get_id:
- * @context: a #GtkStyleContext
- *
- * Returns the CSS ID used when obtaining style information.
- *
- * Returns: (nullable): the ID or %NULL if no ID is set.
- **/
-const char *
-gtk_style_context_get_id (GtkStyleContext *context)
-{
-  GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
-
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
-
-  return g_quark_to_string (gtk_css_node_get_id (priv->cssnode));
-}
-
 /**
  * gtk_style_context_set_state:
  * @context: a #GtkStyleContext
