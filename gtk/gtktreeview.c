@@ -658,6 +658,11 @@ static void     gtk_tree_view_size_allocate        (GtkWidget      *widget,
                                                     int             baseline);
 static void     gtk_tree_view_snapshot             (GtkWidget        *widget,
                                                     GtkSnapshot      *snapshot);
+static gboolean gtk_tree_view_query_tooltip        (GtkWidget        *widget,
+                                                    int               x,
+                                                    int               y,
+                                                    gboolean          keyboard_tip,
+                                                    GtkTooltip       *tooltip);
 
 static gboolean gtk_tree_view_forward_controller_key_pressed  (GtkEventControllerKey *key,
                                                                guint                  keyval,
@@ -1027,6 +1032,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->focus = gtk_tree_view_focus;
   widget_class->grab_focus = gtk_tree_view_grab_focus;
   widget_class->css_changed = gtk_tree_view_css_changed;
+  widget_class->query_tooltip = gtk_tree_view_query_tooltip;
 
   /* GtkContainer signals */
   container_class->remove = gtk_tree_view_remove;
@@ -14588,12 +14594,11 @@ gtk_tree_view_get_tooltip_context (GtkTreeView   *tree_view,
 }
 
 static gboolean
-gtk_tree_view_set_tooltip_query_cb (GtkWidget  *widget,
-				    gint        x,
-				    gint        y,
-				    gboolean    keyboard_tip,
-				    GtkTooltip *tooltip,
-				    gpointer    data)
+gtk_tree_view_query_tooltip (GtkWidget  *widget,
+                             int         x,
+                             int         y,
+                             gboolean    keyboard_tip,
+                             GtkTooltip *tooltip)
 {
   GValue value = G_VALUE_INIT;
   GValue transformed = G_VALUE_INIT;
@@ -14602,10 +14607,13 @@ gtk_tree_view_set_tooltip_query_cb (GtkWidget  *widget,
   GtkTreeModel *model;
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
 
+  if (tree_view->tooltip_column == -1)
+    return FALSE;
+
   if (!gtk_tree_view_get_tooltip_context (GTK_TREE_VIEW (widget),
-					  &x, &y,
-					  keyboard_tip,
-					  &model, &path, &iter))
+                                          &x, &y,
+                                          keyboard_tip,
+                                          &model, &path, &iter))
     return FALSE;
 
   gtk_tree_model_get_value (model, &iter,
@@ -14658,7 +14666,7 @@ gtk_tree_view_set_tooltip_query_cb (GtkWidget  *widget,
  */
 void
 gtk_tree_view_set_tooltip_column (GtkTreeView *tree_view,
-			          gint         column)
+                                  int          column)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
@@ -14666,21 +14674,9 @@ gtk_tree_view_set_tooltip_column (GtkTreeView *tree_view,
     return;
 
   if (column == -1)
-    {
-      g_signal_handlers_disconnect_by_func (tree_view,
-	  				    gtk_tree_view_set_tooltip_query_cb,
-					    NULL);
-      gtk_widget_set_has_tooltip (GTK_WIDGET (tree_view), FALSE);
-    }
-  else
-    {
-      if (tree_view->tooltip_column == -1)
-        {
-          g_signal_connect (tree_view, "query-tooltip",
-		            G_CALLBACK (gtk_tree_view_set_tooltip_query_cb), NULL);
-          gtk_widget_set_has_tooltip (GTK_WIDGET (tree_view), TRUE);
-        }
-    }
+    gtk_widget_set_has_tooltip (GTK_WIDGET (tree_view), FALSE);
+  else if (tree_view->tooltip_column == -1)
+    gtk_widget_set_has_tooltip (GTK_WIDGET (tree_view), TRUE);
 
   tree_view->tooltip_column = column;
   g_object_notify_by_pspec (G_OBJECT (tree_view), tree_view_props[PROP_TOOLTIP_COLUMN]);
