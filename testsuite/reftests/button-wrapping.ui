@@ -9,8 +9,8 @@
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkPaned" id="paned1">
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <property name="position_set">1</property>
             <child>
               <object class="GtkCheckButton" id="checkbutton1">
@@ -34,8 +34,8 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned2">
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <property name="position_set">1</property>
             <child>
               <object class="GtkRadioButton" id="radiobutton1">
@@ -60,8 +60,8 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned3">
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <property name="position_set">1</property>
             <child>
               <object class="GtkToggleButton" id="togglebutton1">
@@ -86,8 +86,8 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned4">
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <property name="position_set">1</property>
             <child>
               <object class="GtkButton" id="button1">
