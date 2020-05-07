@@ -11783,13 +11783,6 @@ gtk_widget_controller_list_get_prev (gpointer item,
   return NULL;
 }
 
-static gpointer
-gtk_widget_controller_list_get_item (gpointer item,
-                                     gpointer widget)
-{
-  return item;
-}
-
 /**
  * gtk_widget_observe_controllers:
  * @widget: a #GtkWidget
@@ -11821,7 +11814,7 @@ gtk_widget_observe_controllers (GtkWidget *widget)
                                                       gtk_widget_controller_list_get_next,
                                                       gtk_widget_controller_list_get_prev,
                                                       NULL,
-                                                      gtk_widget_controller_list_get_item,
+                                                      (gpointer) g_object_ref,
                                                       widget,
                                                       gtk_widget_controller_observer_destroyed);
 
