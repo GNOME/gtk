@@ -2006,6 +2006,11 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
 
   gtk_scrolled_window_set_kinetic_scrolling (scrolled_window, TRUE);
 
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture), GTK_PHASE_BUBBLE);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->swipe_gesture), GTK_PHASE_BUBBLE);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->long_press_gesture), GTK_PHASE_BUBBLE);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->pan_gesture), GTK_PHASE_BUBBLE);
+
   controller = gtk_event_controller_motion_new ();
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
   g_signal_connect (controller, "motion",
@@ -2516,11 +2521,6 @@ gtk_scrolled_window_set_kinetic_scrolling (GtkScrolledWindow *scrolled_window,
 
   if (!priv->kinetic_scrolling)
     gtk_scrolled_window_cancel_deceleration (scrolled_window);
-
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture), GTK_PHASE_BUBBLE);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->swipe_gesture), GTK_PHASE_BUBBLE);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->long_press_gesture), GTK_PHASE_BUBBLE);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->pan_gesture), GTK_PHASE_BUBBLE);
 
   g_object_notify_by_pspec (G_OBJECT (scrolled_window), properties[PROP_KINETIC_SCROLLING]);
 }
