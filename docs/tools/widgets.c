@@ -656,28 +656,38 @@ create_panes (void)
   GtkWidget *hbox;
   GtkWidget *vbox;
   GtkWidget *pane;
+  GtkWidget *frame;
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   gtk_box_set_homogeneous (GTK_BOX (hbox), TRUE);
   pane = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_paned_pack1 (GTK_PANED (pane),
-		   g_object_new (GTK_TYPE_FRAME, NULL),
-		   FALSE, FALSE);
-  gtk_paned_pack2 (GTK_PANED (pane),
-		   g_object_new (GTK_TYPE_FRAME, NULL),
-		   FALSE, FALSE);
-  gtk_container_add (GTK_CONTAINER (hbox),
-		      pane);
+
+  frame = gtk_frame_new ("");
+  gtk_paned_set_start_child (GTK_PANED (pane), frame);
+  gtk_paned_set_resize_start_child (GTK_PANED (pane), FALSE);
+  gtk_paned_set_shrink_start_child (GTK_PANED (pane), FALSE);
+
+  frame = gtk_frame_new ("");
+  gtk_paned_set_end_child (GTK_PANED (pane), frame);
+  gtk_paned_set_resize_end_child (GTK_PANED (pane), FALSE);
+  gtk_paned_set_shrink_end_child (GTK_PANED (pane), FALSE);
+
+  gtk_container_add (GTK_CONTAINER (hbox), pane);
   pane = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
-  gtk_paned_pack1 (GTK_PANED (pane),
-		   g_object_new (GTK_TYPE_FRAME, NULL),
-		   FALSE, FALSE);
-  gtk_paned_pack2 (GTK_PANED (pane),
-		   g_object_new (GTK_TYPE_FRAME, NULL),
-		   FALSE, FALSE);
-  gtk_container_add (GTK_CONTAINER (hbox),
-		      pane);
+
+  frame = gtk_frame_new ("");
+  gtk_paned_set_start_child (GTK_PANED (pane), frame);
+  gtk_paned_set_resize_start_child (GTK_PANED (pane), FALSE);
+  gtk_paned_set_shrink_start_child (GTK_PANED (pane), FALSE);
+
+  frame = gtk_frame_new ("");
+  gtk_paned_set_end_child (GTK_PANED (pane), frame);
+  gtk_paned_set_resize_end_child (GTK_PANED (pane), FALSE);
+  gtk_paned_set_shrink_end_child (GTK_PANED (pane), FALSE);
+
+  gtk_container_add (GTK_CONTAINER (hbox), pane);
+
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
   gtk_container_add (GTK_CONTAINER (vbox),
 		      g_object_new (GTK_TYPE_LABEL,
