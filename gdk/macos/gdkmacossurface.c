@@ -725,6 +725,8 @@ _gdk_macos_surface_set_is_key (GdkMacosSurface *self,
       else
         gdk_synthesize_surface_state (GDK_SURFACE (self), GDK_SURFACE_STATE_FOCUSED, 0);
 
+      _gdk_surface_update_viewable (GDK_SURFACE (self));
+
       event = gdk_focus_event_new (GDK_SURFACE (self), keyboard, NULL, is_key);
       _gdk_event_queue_append (GDK_DISPLAY (display), event);
     }
