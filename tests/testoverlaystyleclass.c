@@ -50,7 +50,7 @@ main (int argc, char *argv[])
   label = gtk_label_new ("Out of overlay");
   gtk_widget_set_hexpand (label, TRUE);
   gtk_widget_set_vexpand (label, TRUE);
-  gtk_container_add (GTK_CONTAINER (grid), label);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
 
   overlay = gtk_overlay_new ();
   sw = gtk_scrolled_window_new (NULL, NULL);
