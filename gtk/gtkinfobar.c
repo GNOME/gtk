@@ -168,7 +168,8 @@ typedef struct _ResponseData ResponseData;
 
 struct _ResponseData
 {
-  gint response_id;
+  int response_id;
+  gulong handler_id;
 };
 
 enum
@@ -286,6 +287,16 @@ get_response_data (GtkWidget *widget,
     }
 
   return ad;
+}
+
+static void
+clear_response_data (GtkWidget *widget)
+{
+  ResponseData *data;
+
+  data = get_response_data (widget, FALSE);
+  g_signal_handler_disconnect (widget, data->handler_id);
+  g_object_set_data (G_OBJECT (widget), "gtk-info-bar-reponse-data", NULL);
 }
 
 static GtkWidget *
@@ -594,12 +605,34 @@ gtk_info_bar_add_action_widget (GtkInfoBar *info_bar,
 
       closure = g_cclosure_new_object (G_CALLBACK (action_widget_activated),
                                        G_OBJECT (info_bar));
-      g_signal_connect_closure_by_id (child, signal_id, 0, closure, FALSE);
+      ad->handler_id = g_signal_connect_closure_by_id (child, signal_id, 0, closure, FALSE);
     }
   else
     g_warning ("Only 'activatable' widgets can be packed into the action area of a GtkInfoBar");
 
   gtk_container_add (GTK_CONTAINER (info_bar->action_area), child);
+}
+
+/**
+ * gtk_info_bar_remove_action_widget:
+ * @info_bar: a #GtkInfoBar
+ * @widget: an action widget to remove
+ *
+ * Removes a widget from the action area of @info_bar, after
+ * it been put there by a call to gtk_info_bar_add_action_widget()
+ * or gtk_info_bar_add_button().
+ */
+void
+gtk_info_bar_remove_action_widget (GtkInfoBar *info_bar,
+                                   GtkWidget  *widget)
+{
+  g_return_if_fail (GTK_IS_INFO_BAR (info_bar));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (gtk_widget_get_parent (widget) == info_bar->action_area);
+
+  clear_response_data (widget);
+
+  gtk_container_remove (GTK_CONTAINER (info_bar->action_area), widget);
 }
 
 /**
