@@ -4037,28 +4037,22 @@ static void
 toggle_resize (GtkWidget *widget, GtkWidget *child)
 {
   GtkPaned *paned = GTK_PANED (gtk_widget_get_parent (child));
-  gboolean is_child1;
-  gboolean resize;
-  const char *prop;
 
-  is_child1 = (child == gtk_paned_get_child1 (paned));
-  prop = is_child1 ? "resize-child1" : "resize-child2";
-  g_object_get (paned, prop, &resize, NULL);
-  g_object_set (paned, prop, !resize, NULL);
+  if (child == gtk_paned_get_start_child (paned))
+    gtk_paned_set_resize_start_child (paned, !gtk_paned_get_resize_start_child (paned));
+  else
+    gtk_paned_set_resize_end_child (paned, !gtk_paned_get_resize_end_child (paned));
 }
 
 static void
 toggle_shrink (GtkWidget *widget, GtkWidget *child)
 {
   GtkPaned *paned = GTK_PANED (gtk_widget_get_parent (child));
-  gboolean is_child1;
-  gboolean resize;
-  const char *prop;
 
-  is_child1 = (child == gtk_paned_get_child1 (paned));
-  prop = is_child1 ? "shrink-child1" : "shrink-child2";
-  g_object_get (paned, prop, &resize, NULL);
-  g_object_set (paned, prop, !resize, NULL);
+  if (child == gtk_paned_get_start_child (paned))
+    gtk_paned_set_shrink_start_child (paned, !gtk_paned_get_shrink_start_child (paned));
+  else
+    gtk_paned_set_shrink_end_child (paned, !gtk_paned_get_shrink_end_child (paned));
 }
 
 static GtkWidget *
@@ -4073,8 +4067,8 @@ create_pane_options (GtkPaned    *paned,
   GtkWidget *label;
   GtkWidget *check_button;
 
-  child1 = gtk_paned_get_child1 (paned);
-  child2 = gtk_paned_get_child2 (paned);
+  child1 = gtk_paned_get_start_child (paned);
+  child2 = gtk_paned_get_end_child (paned);
 
   frame = gtk_frame_new (frame_label);
   
@@ -4147,22 +4141,22 @@ create_panes (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (vbox), vpaned);
 
       hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_paned_add1 (GTK_PANED (vpaned), hpaned);
+      gtk_paned_set_start_child (GTK_PANED (vpaned), hpaned);
 
       frame = gtk_frame_new (NULL);
       gtk_widget_set_size_request (frame, 60, 60);
-      gtk_paned_add1 (GTK_PANED (hpaned), frame);
+      gtk_paned_set_start_child (GTK_PANED (hpaned), frame);
       
       button = gtk_button_new_with_label ("Hi there");
       gtk_frame_set_child (GTK_FRAME (frame), button);
 
       frame = gtk_frame_new (NULL);
       gtk_widget_set_size_request (frame, 80, 60);
-      gtk_paned_add2 (GTK_PANED (hpaned), frame);
+      gtk_paned_set_end_child (GTK_PANED (hpaned), frame);
 
       frame = gtk_frame_new (NULL);
       gtk_widget_set_size_request (frame, 60, 80);
-      gtk_paned_add2 (GTK_PANED (vpaned), frame);
+      gtk_paned_set_end_child (GTK_PANED (vpaned), frame);
 
       /* Now create toggle buttons to control sizing */
 
@@ -4224,7 +4218,9 @@ paned_keyboard_window1 (GtkWidget *widget)
   gtk_window_set_child (GTK_WINDOW (window1), hpaned1);
 
   frame1 = gtk_frame_new (NULL);
-  gtk_paned_pack1 (GTK_PANED (hpaned1), frame1, FALSE, TRUE);
+  gtk_paned_set_start_child (GTK_PANED (hpaned1), frame1);
+  gtk_paned_set_resize_start_child (GTK_PANED (hpaned1), FALSE);
+  gtk_paned_set_shrink_start_child (GTK_PANED (hpaned1), TRUE);
 
   vbox1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_frame_set_child (GTK_FRAME (frame1), vbox1);
@@ -4239,10 +4235,14 @@ paned_keyboard_window1 (GtkWidget *widget)
   gtk_container_add (GTK_CONTAINER (vbox1), button9);
 
   vpaned1 = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
-  gtk_paned_pack2 (GTK_PANED (hpaned1), vpaned1, TRUE, TRUE);
+  gtk_paned_set_end_child (GTK_PANED (hpaned1), vpaned1);
+  gtk_paned_set_resize_end_child (GTK_PANED (hpaned1), TRUE);
+  gtk_paned_set_shrink_end_child (GTK_PANED (hpaned1), TRUE);
 
   frame2 = gtk_frame_new (NULL);
-  gtk_paned_pack1 (GTK_PANED (vpaned1), frame2, FALSE, TRUE);
+  gtk_paned_set_start_child (GTK_PANED (vpaned1), frame2);
+  gtk_paned_set_resize_start_child (GTK_PANED (vpaned1), FALSE);
+  gtk_paned_set_shrink_start_child (GTK_PANED (vpaned1), TRUE);
 
   frame5 = gtk_frame_new (NULL);
   gtk_frame_set_child (GTK_FRAME (frame2), frame5);
@@ -4257,7 +4257,9 @@ paned_keyboard_window1 (GtkWidget *widget)
   gtk_container_add (GTK_CONTAINER (hbox1), button6);
 
   frame3 = gtk_frame_new (NULL);
-  gtk_paned_pack2 (GTK_PANED (vpaned1), frame3, TRUE, TRUE);
+  gtk_paned_set_end_child (GTK_PANED (vpaned1), frame3);
+  gtk_paned_set_resize_end_child (GTK_PANED (vpaned1), TRUE);
+  gtk_paned_set_shrink_end_child (GTK_PANED (vpaned1), TRUE);
 
   frame4 = gtk_frame_new ("Buttons");
   gtk_frame_set_child (GTK_FRAME (frame3), frame4);
@@ -4305,25 +4307,33 @@ paned_keyboard_window2 (GtkWidget *widget)
   gtk_window_set_child (GTK_WINDOW (window2), hpaned2);
 
   frame6 = gtk_frame_new (NULL);
-  gtk_paned_pack1 (GTK_PANED (hpaned2), frame6, FALSE, TRUE);
+  gtk_paned_set_start_child (GTK_PANED (hpaned2), frame6);
+  gtk_paned_set_resize_start_child (GTK_PANED (hpaned2), FALSE);
+  gtk_paned_set_shrink_start_child (GTK_PANED (hpaned2), TRUE);
 
   button13 = gtk_button_new_with_label ("button13");
   gtk_frame_set_child (GTK_FRAME (frame6), button13);
 
   hbox2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_paned_pack2 (GTK_PANED (hpaned2), hbox2, TRUE, TRUE);
+  gtk_paned_set_end_child (GTK_PANED (hpaned2), hbox2);
+  gtk_paned_set_resize_end_child (GTK_PANED (hpaned2), TRUE);
+  gtk_paned_set_shrink_end_child (GTK_PANED (hpaned2), TRUE);
 
   vpaned2 = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
   gtk_container_add (GTK_CONTAINER (hbox2), vpaned2);
 
   frame7 = gtk_frame_new (NULL);
-  gtk_paned_pack1 (GTK_PANED (vpaned2), frame7, FALSE, TRUE);
+  gtk_paned_set_start_child (GTK_PANED (vpaned2), frame7);
+  gtk_paned_set_resize_start_child (GTK_PANED (vpaned2), FALSE);
+  gtk_paned_set_shrink_start_child (GTK_PANED (vpaned2), TRUE);
 
   button12 = gtk_button_new_with_label ("button12");
   gtk_frame_set_child (GTK_FRAME (frame7), button12);
 
   frame8 = gtk_frame_new (NULL);
-  gtk_paned_pack2 (GTK_PANED (vpaned2), frame8, TRUE, TRUE);
+  gtk_paned_set_end_child (GTK_PANED (vpaned2), frame8);
+  gtk_paned_set_resize_end_child (GTK_PANED (vpaned2), TRUE);
+  gtk_paned_set_shrink_end_child (GTK_PANED (vpaned2), TRUE);
 
   button11 = gtk_button_new_with_label ("button11");
   gtk_frame_set_child (GTK_FRAME (frame8), button11);
@@ -4370,31 +4380,43 @@ paned_keyboard_window3 (GtkWidget *widget)
   gtk_container_add (GTK_CONTAINER (vbox2), hpaned3);
 
   frame9 = gtk_frame_new (NULL);
-  gtk_paned_pack1 (GTK_PANED (hpaned3), frame9, FALSE, TRUE);
+  gtk_paned_set_start_child (GTK_PANED (hpaned3), frame9);
+  gtk_paned_set_resize_start_child (GTK_PANED (hpaned3), FALSE);
+  gtk_paned_set_shrink_start_child (GTK_PANED (hpaned3), TRUE);
 
   button14 = gtk_button_new_with_label ("button14");
   gtk_frame_set_child (GTK_FRAME (frame9), button14);
 
   hpaned4 = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_paned_pack2 (GTK_PANED (hpaned3), hpaned4, TRUE, TRUE);
+  gtk_paned_set_end_child (GTK_PANED (hpaned3), hpaned4);
+  gtk_paned_set_resize_end_child (GTK_PANED (hpaned3), TRUE);
+  gtk_paned_set_shrink_end_child (GTK_PANED (hpaned3), TRUE);
 
   frame10 = gtk_frame_new (NULL);
-  gtk_paned_pack1 (GTK_PANED (hpaned4), frame10, FALSE, TRUE);
+  gtk_paned_set_start_child (GTK_PANED (hpaned4), frame10);
+  gtk_paned_set_resize_start_child (GTK_PANED (hpaned4), FALSE);
+  gtk_paned_set_shrink_start_child (GTK_PANED (hpaned4), TRUE);
 
   button15 = gtk_button_new_with_label ("button15");
   gtk_frame_set_child (GTK_FRAME (frame10), button15);
 
   hpaned5 = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_paned_pack2 (GTK_PANED (hpaned4), hpaned5, TRUE, TRUE);
+  gtk_paned_set_end_child (GTK_PANED (hpaned4), hpaned5);
+  gtk_paned_set_resize_end_child (GTK_PANED (hpaned4), TRUE);
+  gtk_paned_set_shrink_end_child (GTK_PANED (hpaned4), TRUE);
 
   frame11 = gtk_frame_new (NULL);
-  gtk_paned_pack1 (GTK_PANED (hpaned5), frame11, FALSE, TRUE);
+  gtk_paned_set_start_child (GTK_PANED (hpaned5), frame11);
+  gtk_paned_set_resize_start_child (GTK_PANED (hpaned5), FALSE);
+  gtk_paned_set_shrink_start_child (GTK_PANED (hpaned5), TRUE);
 
   button16 = gtk_button_new_with_label ("button16");
   gtk_frame_set_child (GTK_FRAME (frame11), button16);
 
   frame12 = gtk_frame_new (NULL);
-  gtk_paned_pack2 (GTK_PANED (hpaned5), frame12, TRUE, TRUE);
+  gtk_paned_set_end_child (GTK_PANED (hpaned5), frame12);
+  gtk_paned_set_resize_end_child (GTK_PANED (hpaned5), TRUE);
+  gtk_paned_set_shrink_end_child (GTK_PANED (hpaned5), TRUE);
 
   button17 = gtk_button_new_with_label ("button17");
   gtk_frame_set_child (GTK_FRAME (frame12), button17);
@@ -4428,7 +4450,7 @@ paned_keyboard_window4 (GtkWidget *widget)
   gtk_window_set_title (GTK_WINDOW (window4), "window4");
 
   gtk_window_set_display (GTK_WINDOW (window4),
-			 gtk_widget_get_display (widget));
+                          gtk_widget_get_display (widget));
 
   vbox3 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_window_set_child (GTK_WINDOW (window4), vbox3);
@@ -4441,43 +4463,63 @@ paned_keyboard_window4 (GtkWidget *widget)
   gtk_container_add (GTK_CONTAINER (vbox3), hpaned6);
 
   vpaned3 = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
-  gtk_paned_pack1 (GTK_PANED (hpaned6), vpaned3, FALSE, TRUE);
+  gtk_paned_set_start_child (GTK_PANED (hpaned6), vpaned3);
+  gtk_paned_set_resize_start_child (GTK_PANED (hpaned6), FALSE);
+  gtk_paned_set_shrink_start_child (GTK_PANED (hpaned6), TRUE);
 
   button19 = gtk_button_new_with_label ("button19");
-  gtk_paned_pack1 (GTK_PANED (vpaned3), button19, FALSE, TRUE);
+  gtk_paned_set_start_child (GTK_PANED (vpaned3), button19);
+  gtk_paned_set_resize_start_child (GTK_PANED (vpaned3), FALSE);
+  gtk_paned_set_shrink_start_child (GTK_PANED (vpaned3), TRUE);
 
   button18 = gtk_button_new_with_label ("button18");
-  gtk_paned_pack2 (GTK_PANED (vpaned3), button18, TRUE, TRUE);
+  gtk_paned_set_end_child (GTK_PANED (vpaned3), button18);
+  gtk_paned_set_resize_end_child (GTK_PANED (vpaned3), TRUE);
+  gtk_paned_set_shrink_end_child (GTK_PANED (vpaned3), TRUE);
 
   hbox3 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_paned_pack2 (GTK_PANED (hpaned6), hbox3, TRUE, TRUE);
+  gtk_paned_set_end_child (GTK_PANED (hpaned6), hbox3);
+  gtk_paned_set_resize_end_child (GTK_PANED (hpaned6), TRUE);
+  gtk_paned_set_shrink_end_child (GTK_PANED (hpaned6), TRUE);
 
   vpaned4 = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
   gtk_container_add (GTK_CONTAINER (hbox3), vpaned4);
 
   button21 = gtk_button_new_with_label ("button21");
-  gtk_paned_pack1 (GTK_PANED (vpaned4), button21, FALSE, TRUE);
+  gtk_paned_set_start_child (GTK_PANED (vpaned4), button21);
+  gtk_paned_set_resize_start_child (GTK_PANED (vpaned4), FALSE);
+  gtk_paned_set_shrink_start_child (GTK_PANED (vpaned4), TRUE);
 
   button20 = gtk_button_new_with_label ("button20");
-  gtk_paned_pack2 (GTK_PANED (vpaned4), button20, TRUE, TRUE);
+  gtk_paned_set_end_child (GTK_PANED (vpaned4), button20);
+  gtk_paned_set_resize_end_child (GTK_PANED (vpaned4), TRUE);
+  gtk_paned_set_shrink_end_child (GTK_PANED (vpaned4), TRUE);
 
   vpaned5 = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
   gtk_container_add (GTK_CONTAINER (hbox3), vpaned5);
 
   button23 = gtk_button_new_with_label ("button23");
-  gtk_paned_pack1 (GTK_PANED (vpaned5), button23, FALSE, TRUE);
+  gtk_paned_set_start_child (GTK_PANED (vpaned5), button23);
+  gtk_paned_set_resize_start_child (GTK_PANED (vpaned5), FALSE);
+  gtk_paned_set_shrink_start_child (GTK_PANED (vpaned5), TRUE);
 
   button22 = gtk_button_new_with_label ("button22");
-  gtk_paned_pack2 (GTK_PANED (vpaned5), button22, TRUE, TRUE);
+  gtk_paned_set_end_child (GTK_PANED (vpaned5), button22);
+  gtk_paned_set_resize_end_child (GTK_PANED (vpaned5), TRUE);
+  gtk_paned_set_shrink_end_child (GTK_PANED (vpaned5), TRUE);
 
   vpaned6 = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
   gtk_container_add (GTK_CONTAINER (hbox3), vpaned6);
 
   button25 = gtk_button_new_with_label ("button25");
-  gtk_paned_pack1 (GTK_PANED (vpaned6), button25, FALSE, TRUE);
+  gtk_paned_set_start_child (GTK_PANED (vpaned6), button25);
+  gtk_paned_set_resize_start_child (GTK_PANED (vpaned6), FALSE);
+  gtk_paned_set_shrink_start_child (GTK_PANED (vpaned6), TRUE);
 
   button24 = gtk_button_new_with_label ("button24");
-  gtk_paned_pack2 (GTK_PANED (vpaned6), button24, TRUE, TRUE);
+  gtk_paned_set_end_child (GTK_PANED (vpaned6), button24);
+  gtk_paned_set_resize_end_child (GTK_PANED (vpaned6), TRUE);
+  gtk_paned_set_shrink_end_child (GTK_PANED (vpaned6), TRUE);
 
   return window4;
 }
