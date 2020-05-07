@@ -24,7 +24,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkcontainer.h>
+#include <gtk/gtkwidget.h>
 
 
 G_BEGIN_DECLS
@@ -43,7 +43,7 @@ typedef struct _GtkGridClass         GtkGridClass;
 struct _GtkGrid
 {
   /*< private >*/
-  GtkContainer parent_instance;
+  GtkWidget parent_instance;
 };
 
 /**
@@ -52,7 +52,7 @@ struct _GtkGrid
  */
 struct _GtkGridClass
 {
-  GtkContainerClass parent_class;
+  GtkWidgetClass parent_class;
 
   /*< private >*/
 
