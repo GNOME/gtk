@@ -78,8 +78,6 @@
 
 static void gtk_fixed_add           (GtkContainer     *container,
                                      GtkWidget        *widget);
-static void gtk_fixed_remove        (GtkContainer     *container,
-                                     GtkWidget        *widget);
 static void gtk_fixed_forall        (GtkContainer     *container,
                                      GtkCallback       callback,
                                      gpointer          callback_data);
@@ -296,10 +294,22 @@ gtk_fixed_add (GtkContainer *container,
   gtk_fixed_put (GTK_FIXED (container), widget, 0, 0);
 }
 
-static void
-gtk_fixed_remove (GtkContainer *container,
-                  GtkWidget    *widget)
+/**
+ * gtk_fixed_remove:
+ * @fixed: a #GtkFixed
+ * @widget: the child widget to remove
+ *
+ * Removes a child from @fixed, after it has been added
+ * with gtk_fixed_put().
+ */
+void
+gtk_fixed_remove (GtkFixed  *fixed,
+                  GtkWidget *widget)
 {
+  g_return_if_fail (GTK_IS_FIXED (fixed));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (gtk_widget_get_parent (widget) == GTK_WIDGET (fixed));
+
   gtk_widget_unparent (widget);
 }
 
