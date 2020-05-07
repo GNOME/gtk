@@ -1210,6 +1210,7 @@ gtk_filter_list_model_get_type
 GtkFixed
 gtk_fixed_new
 gtk_fixed_put
+gtk_fixed_remove
 gtk_fixed_move
 <SUBSECTION Standard>
 GTK_FIXED
