@@ -501,7 +501,9 @@ do_textview (GtkWidget *do_widget)
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                       GTK_POLICY_AUTOMATIC,
                                       GTK_POLICY_AUTOMATIC);
-      gtk_paned_add1 (GTK_PANED (vpaned), sw);
+      gtk_paned_set_start_child (GTK_PANED (vpaned), sw);
+      gtk_paned_set_resize_start_child (GTK_PANED (vpaned), FALSE);
+      gtk_paned_set_shrink_start_child (GTK_PANED (vpaned), TRUE);
 
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), view1);
 
@@ -509,7 +511,9 @@ do_textview (GtkWidget *do_widget)
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                       GTK_POLICY_AUTOMATIC,
                                       GTK_POLICY_AUTOMATIC);
-      gtk_paned_add2 (GTK_PANED (vpaned), sw);
+      gtk_paned_set_end_child (GTK_PANED (vpaned), sw);
+      gtk_paned_set_resize_end_child (GTK_PANED (vpaned), TRUE);
+      gtk_paned_set_shrink_end_child (GTK_PANED (vpaned), TRUE);
 
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), view2);
 
