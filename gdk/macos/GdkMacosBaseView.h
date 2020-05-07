@@ -29,7 +29,7 @@
 
 @interface GdkMacosBaseView : NSView
 {
-  NSTrackingRectTag trackingRect;
+  NSTrackingArea *trackingArea;
   BOOL needsInvalidateShadow;
   NSRange markedRange;
   NSRange selectedRange;
@@ -38,7 +38,6 @@
 -(GdkMacosSurface *)getGdkSurface;
 -(GdkMacosDisplay *)getGdkDisplay;
 -(void)setNeedsInvalidateShadow: (BOOL)invalidate;
--(void)updateTrackingRect;
--(NSTrackingRectTag)trackingRect;
+-(NSTrackingArea *)trackingArea;
 
 @end

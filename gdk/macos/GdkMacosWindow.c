@@ -131,10 +131,11 @@
 
 -(void)sendEvent:(NSEvent *)event
 {
-  switch ((int)[event type])
+  NSEventType event_type = [event type];
+
+  switch ((int)event_type)
     {
-    case NSEventTypeLeftMouseUp:
-    {
+    case NSEventTypeLeftMouseUp: {
       GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (gdkSurface));
       double time = ((double)[event timestamp]) * 1000.0;
 
@@ -186,7 +187,7 @@
                                      windowNumber: [self windowNumber]
                                           context: NULL
                                       eventNumber: 0
-                                   trackingNumber: [view trackingRect]
+                                   trackingNumber: (NSInteger)[view trackingArea]
                                          userData: nil];
 
           [NSApp postEvent:event atStart:NO];
@@ -241,15 +242,13 @@
 
   [[self contentView] setFrame:NSMakeRect (0, 0, surface->width, surface->height)];
 
+  _gdk_surface_update_size (surface);
+
   /* Synthesize a configure event */
   event = gdk_configure_event_new (surface,
                                    content_rect.size.width,
                                    content_rect.size.height);
   _gdk_event_queue_append (display, event);
-
-  surface->width = content_rect.size.width;
-  surface->height = content_rect.size.height;
-  _gdk_surface_update_size (surface);
 
   [self checkSendEnterNotify];
 }
@@ -301,8 +300,6 @@
   inShowOrHide = NO;
 
   [self checkSendEnterNotify];
-
-  [(GdkMacosBaseView *)[self contentView] updateTrackingRect];
 }
 
 -(void)hide
