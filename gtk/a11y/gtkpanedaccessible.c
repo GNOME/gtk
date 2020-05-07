@@ -23,7 +23,7 @@
 
 static void atk_value_interface_init (AtkValueIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkPanedAccessible, gtk_paned_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkPanedAccessible, gtk_paned_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
 static void

@@ -201,6 +201,8 @@ gtk_action_bar_buildable_add_child (GtkBuildable *buildable,
     gtk_action_bar_pack_start (self, GTK_WIDGET (child));
   else if (g_strcmp0 (type, "end") == 0)
     gtk_action_bar_pack_end (self, GTK_WIDGET (child));
+  else if (GTK_IS_WIDGET (child))
+    g_warning ("GtkActionBar only supports <child> with a type attribute of start, center or end");
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
