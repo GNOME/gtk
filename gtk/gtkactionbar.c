@@ -126,14 +126,11 @@ gtk_action_bar_dispose (GObject *object)
 {
   GtkActionBar *self = GTK_ACTION_BAR (object);
 
-  gtk_center_box_set_start_widget (GTK_CENTER_BOX (self->center_box), NULL);
-  gtk_center_box_set_center_widget (GTK_CENTER_BOX (self->center_box), NULL);
-  gtk_center_box_set_end_widget (GTK_CENTER_BOX (self->center_box), NULL);
+  g_clear_pointer (&self->revealer, gtk_widget_unparent);
 
+  self->center_box = NULL;
   self->start_box = NULL;
   self->end_box = NULL;
-
-  gtk_widget_unparent (self->revealer);
 
   G_OBJECT_CLASS (gtk_action_bar_parent_class)->dispose (object);
 }
