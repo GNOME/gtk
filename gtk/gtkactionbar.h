@@ -52,6 +52,10 @@ void         gtk_action_bar_pack_end          (GtkActionBar *action_bar,
                                                GtkWidget    *child);
 
 GDK_AVAILABLE_IN_ALL
+void         gtk_action_bar_remove            (GtkActionBar *action_bar,
+                                               GtkWidget    *child);
+
+GDK_AVAILABLE_IN_ALL
 void        gtk_action_bar_set_revealed       (GtkActionBar *action_bar,
                                                gboolean      revealed);
 GDK_AVAILABLE_IN_ALL
