@@ -302,6 +302,7 @@ gdk_content_provider_union_write_mime_type_async (GdkContentProvider     *provid
                                                       gdk_content_provider_union_write_mime_type_done,
                                                       task);
           gdk_content_formats_unref (formats);
+          return;
         }
       gdk_content_formats_unref (formats);
     }
