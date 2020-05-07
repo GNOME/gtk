@@ -280,7 +280,6 @@ typedef struct
   gdouble drag_start_y;
 
   guint                  kinetic_scrolling         : 1;
-  guint                  capture_button_press      : 1;
   guint                  in_drag                   : 1;
 
   guint                  deceleration_id;
@@ -851,15 +850,11 @@ scrolled_window_drag_begin_cb (GtkScrolledWindow *scrolled_window,
   priv->drag_start_y = priv->unclamped_vadj_value;
   gtk_scrolled_window_cancel_deceleration (scrolled_window);
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-  event_widget = gtk_gesture_get_last_target (gesture, sequence);
 
-  if (event_widget == priv->vscrollbar || event_widget == priv->hscrollbar ||
-      (!may_hscroll (scrolled_window) && !may_vscroll (scrolled_window)))
+  if (!may_hscroll (scrolled_window) && !may_vscroll (scrolled_window))
     state = GTK_EVENT_SEQUENCE_DENIED;
-  else if (priv->capture_button_press)
-    state = GTK_EVENT_SEQUENCE_CLAIMED;
   else
-    return;
+    state = GTK_EVENT_SEQUENCE_CLAIMED;
 
   gtk_gesture_set_sequence_state (gesture, sequence, state);
 }
@@ -894,15 +889,6 @@ scrolled_window_drag_update_cb (GtkScrolledWindow *scrolled_window,
   gdouble dx, dy;
 
   gtk_scrolled_window_invalidate_overshoot (scrolled_window);
-
-  if (!priv->capture_button_press)
-    {
-      GdkEventSequence *sequence;
-
-      sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-      gtk_gesture_set_sequence_state (gesture, sequence,
-                                      GTK_EVENT_SEQUENCE_CLAIMED);
-    }
 
   hadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar));
   if (hadjustment && may_hscroll (scrolled_window))
@@ -1005,7 +991,6 @@ scrolled_window_long_press_cancelled_cb (GtkScrolledWindow *scrolled_window,
 static void
 gtk_scrolled_window_check_attach_pan_gesture (GtkScrolledWindow *sw)
 {
-  GtkPropagationPhase phase = GTK_PHASE_NONE;
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (sw);
 
   if (priv->kinetic_scrolling &&
@@ -1021,10 +1006,9 @@ gtk_scrolled_window_check_attach_pan_gesture (GtkScrolledWindow *sw)
 
       gtk_gesture_pan_set_orientation (GTK_GESTURE_PAN (priv->pan_gesture),
                                        orientation);
-      phase = GTK_PHASE_CAPTURE;
     }
 
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->pan_gesture), phase);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->pan_gesture), GTK_PHASE_BUBBLE);
 }
 
 static void
@@ -1963,7 +1947,6 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   gtk_gesture_group (priv->long_press_gesture, priv->drag_gesture);
 
   gtk_scrolled_window_set_kinetic_scrolling (scrolled_window, TRUE);
-  gtk_scrolled_window_set_capture_button_press (scrolled_window, TRUE);
 
   controller = gtk_event_controller_motion_new ();
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
@@ -2467,7 +2450,6 @@ void
 gtk_scrolled_window_set_kinetic_scrolling (GtkScrolledWindow *scrolled_window,
                                            gboolean           kinetic_scrolling)
 {
-  GtkPropagationPhase phase = GTK_PHASE_NONE;
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
 
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
@@ -2478,15 +2460,13 @@ gtk_scrolled_window_set_kinetic_scrolling (GtkScrolledWindow *scrolled_window,
   priv->kinetic_scrolling = kinetic_scrolling;
   gtk_scrolled_window_check_attach_pan_gesture (scrolled_window);
 
-  if (priv->kinetic_scrolling)
-    phase = GTK_PHASE_CAPTURE;
-  else
+  if (!priv->kinetic_scrolling)
     gtk_scrolled_window_cancel_deceleration (scrolled_window);
 
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture), phase);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->swipe_gesture), phase);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->long_press_gesture), phase);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->pan_gesture), phase);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture), GTK_PHASE_BUBBLE);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->swipe_gesture), GTK_PHASE_BUBBLE);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->long_press_gesture), GTK_PHASE_BUBBLE);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->pan_gesture), GTK_PHASE_BUBBLE);
 
   g_object_notify_by_pspec (G_OBJECT (scrolled_window), properties[PROP_KINETIC_SCROLLING]);
 }
@@ -2507,53 +2487,6 @@ gtk_scrolled_window_get_kinetic_scrolling (GtkScrolledWindow *scrolled_window)
   g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window), FALSE);
 
   return priv->kinetic_scrolling;
-}
-
-/**
- * gtk_scrolled_window_set_capture_button_press:
- * @scrolled_window: a #GtkScrolledWindow
- * @capture_button_press: %TRUE to capture button presses
- *
- * Changes the behaviour of @scrolled_window with regard to the initial
- * event that possibly starts kinetic scrolling. When @capture_button_press
- * is set to %TRUE, the event is captured by the scrolled window, and
- * then later replayed if it is meant to go to the child widget.
- *
- * This should be enabled if any child widgets perform non-reversible
- * actions on button press events. If they don't, and additionally handle
- * #GtkWidget::grab-broken-event, it might be better to set @capture_button_press
- * to %FALSE.
- *
- * This setting only has an effect if kinetic scrolling is enabled.
- */
-void
-gtk_scrolled_window_set_capture_button_press (GtkScrolledWindow *scrolled_window,
-                                              gboolean           capture_button_press)
-{
-  GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
-
-  g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
-
-  priv->capture_button_press = capture_button_press;
-}
-
-/**
- * gtk_scrolled_window_get_capture_button_press:
- * @scrolled_window: a #GtkScrolledWindow
- *
- * Return whether button presses are captured during kinetic
- * scrolling. See gtk_scrolled_window_set_capture_button_press().
- *
- * Returns: %TRUE if button presses are captured during kinetic scrolling
- */
-gboolean
-gtk_scrolled_window_get_capture_button_press (GtkScrolledWindow *scrolled_window)
-{
-  GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
-
-  g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window), FALSE);
-
-  return priv->capture_button_press;
 }
 
 static void
