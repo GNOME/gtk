@@ -1089,12 +1089,12 @@
             </child>
             <child>
               <object class="GtkActionBar" id="conflicts_widget">
-                <child>
+                <child type="start">
                   <object class="GtkImage" id="image1">
                     <property name="icon-name">dialog-warning-symbolic</property>
                   </object>
                 </child>
-                <child>
+                <child type="start">
                   <object class="GtkLabel" id="label24">
                     <property name="label" translatable="yes">Some of the settings in the dialog conflict</property>
                   </object>
