@@ -554,8 +554,6 @@ gtk_stack_pages_new (GtkStack *stack)
 
 static void     gtk_stack_add                            (GtkContainer  *widget,
                                                           GtkWidget     *child);
-static void     gtk_stack_remove                         (GtkContainer  *widget,
-                                                          GtkWidget     *child);
 static void     gtk_stack_forall                         (GtkContainer  *container,
                                                           GtkCallback    callback,
                                                           gpointer       callback_data);
@@ -1496,13 +1494,24 @@ stack_remove (GtkStack  *stack,
     gtk_widget_queue_resize (GTK_WIDGET (stack));
 }
 
-static void
-gtk_stack_remove (GtkContainer *container,
-                  GtkWidget    *child)
+/**
+ * gtk_stack_remove:
+ * @stack: a #GtkStack
+ * @child: the child to remove
+ *
+ * Removes a child widget from @stack.
+ */
+void
+gtk_stack_remove (GtkStack  *stack,
+                  GtkWidget *child)
 {
-  GtkStackPrivate *priv = gtk_stack_get_instance_private (GTK_STACK (container));
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   GList *l;
   guint position;
+
+  g_return_if_fail (GTK_IS_STACK (stack));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (gtk_widget_get_parent (child) == GTK_WIDGET (stack));
 
   for (l = priv->children, position = 0; l; l = l->next, position++)
     {
@@ -1511,7 +1520,7 @@ gtk_stack_remove (GtkContainer *container,
         break;
     }
 
-  stack_remove (GTK_STACK (container), child, FALSE);
+  stack_remove (stack, child, FALSE);
 
   if (priv->pages)
     g_list_model_items_changed (G_LIST_MODEL (priv->pages), position, 1, 0);
