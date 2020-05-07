@@ -22,7 +22,7 @@
 #error "Only <gtk/gtk-a11y.h> can be included directly."
 #endif
 
-#include <gtk/a11y/gtkcontaineraccessible.h>
+#include <gtk/a11y/gtkwidgetaccessible.h>
 
 G_BEGIN_DECLS
 
@@ -39,14 +39,14 @@ typedef struct _GtkExpanderAccessiblePrivate GtkExpanderAccessiblePrivate;
 
 struct _GtkExpanderAccessible
 {
-  GtkContainerAccessible parent;
+  GtkWidgetAccessible parent;
 
   GtkExpanderAccessiblePrivate *priv;
 };
 
 struct _GtkExpanderAccessibleClass
 {
-  GtkContainerAccessibleClass parent_class;
+  GtkWidgetAccessibleClass parent_class;
 };
 
 GDK_AVAILABLE_IN_ALL
