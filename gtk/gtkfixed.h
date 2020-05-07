@@ -70,6 +70,9 @@ void            gtk_fixed_put                   (GtkFixed     *fixed,
                                                  gint          x,
                                                  gint          y);
 GDK_AVAILABLE_IN_ALL
+void            gtk_fixed_remove                (GtkFixed     *fixed,
+                                                 GtkWidget    *widget);
+GDK_AVAILABLE_IN_ALL
 void            gtk_fixed_move                  (GtkFixed     *fixed,
                                                  GtkWidget    *widget,
                                                  gint          x,
