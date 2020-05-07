@@ -68,8 +68,9 @@
  * to add buttons to the action area with gtk_info_bar_add_button() or
  * gtk_info_bar_new_with_buttons(). The sensitivity of action widgets
  * can be controlled with gtk_info_bar_set_response_sensitive().
+ *
  * To add widgets to the main content area of a #GtkInfoBar, use
- * gtk_info_bar_get_content_area() and add your widgets to the container.
+ * gtk_info_bar_add_child().
  *
  * Similar to #GtkMessageDialog, the contents of a #GtkInfoBar can by
  * classified as error message, warning, informational message, etc,
@@ -78,7 +79,8 @@
  *
  * A simple example for using a #GtkInfoBar:
  * |[<!-- language="C" -->
- * GtkWidget *widget, *message_label, *content_area;
+ * GtkWidget *message_label;
+ * GtkWidget *widget;
  * GtkWidget *grid;
  * GtkInfoBar *bar;
  *
@@ -88,9 +90,7 @@
  * grid = gtk_grid_new ();
  *
  * message_label = gtk_label_new ("");
- * content_area = gtk_info_bar_get_content_area (bar);
- * gtk_container_add (GTK_CONTAINER (content_area),
- *                    message_label);
+ * gtk_info_bar_add_child (bar, message_label);
  * gtk_info_bar_add_button (bar,
  *                          _("_OK"),
  *                          GTK_RESPONSE_OK);
@@ -106,8 +106,7 @@
  *
  * // show an error message
  * gtk_label_set_text (GTK_LABEL (message_label), "An error occurred!");
- * gtk_info_bar_set_message_type (bar,
- *                                GTK_MESSAGE_ERROR);
+ * gtk_info_bar_set_message_type (bar, GTK_MESSAGE_ERROR);
  * gtk_widget_show (bar);
  * ]|
  *
@@ -1095,8 +1094,8 @@ gtk_info_bar_buildable_add_child (GtkBuildable *buildable,
 {
   GtkInfoBar *info_bar = GTK_INFO_BAR (buildable);
 
-  if (!type)
-    gtk_container_add (GTK_CONTAINER (info_bar->content_area), GTK_WIDGET (child));
+  if (!type && GTK_IS_WIDGET (child))
+    gtk_info_bar_add_child (GTK_INFO_BAR (info_bar), GTK_WIDGET (child));
   else if (g_strcmp0 (type, "action") == 0)
     gtk_container_add (GTK_CONTAINER (info_bar->action_area), GTK_WIDGET (child));
   else
@@ -1273,3 +1272,39 @@ gtk_info_bar_get_revealed (GtkInfoBar *info_bar)
 
   return gtk_revealer_get_reveal_child (GTK_REVEALER (info_bar->revealer));
 }
+
+/**
+ * gtk_info_bar_add_child:
+ * @info_bar: a #GtkInfoBar
+ * @widget: the child to be added
+ *
+ * Adds a widget to the content area of the info bar.
+ */
+void
+gtk_info_bar_add_child (GtkInfoBar *info_bar,
+                        GtkWidget  *widget)
+{
+  g_return_if_fail (GTK_IS_INFO_BAR (info_bar));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_container_add (GTK_CONTAINER (info_bar->content_area), widget);
+}
+
+/**
+ * gtk_info_bar_remove_child:
+ * @info_bar: a #GtkInfoBar
+ * @widget: a child that has been added to the content area
+ *
+ * Removes a widget from the content area of the info bar,
+ * after it has been added with gtk_info_bar_add_child().
+ */
+void
+gtk_info_bar_remove_child (GtkInfoBar *info_bar,
+                           GtkWidget  *widget)
+{
+  g_return_if_fail (GTK_IS_INFO_BAR (info_bar));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_container_remove (GTK_CONTAINER (info_bar->content_area), widget);
+}
+
