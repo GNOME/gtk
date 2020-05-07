@@ -94,8 +94,8 @@ gtk_action_bar_add (GtkContainer *container,
 }
 
 static void
-gtk_action_bar_remove (GtkContainer *container,
-                       GtkWidget    *child)
+gtk_action_bar_real_remove (GtkContainer *container,
+                            GtkWidget    *child)
 {
   GtkActionBar *self = GTK_ACTION_BAR (container);
 
@@ -212,7 +212,7 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
   object_class->finalize = gtk_action_bar_finalize;
 
   container_class->add = gtk_action_bar_add;
-  container_class->remove = gtk_action_bar_remove;
+  container_class->remove = gtk_action_bar_real_remove;
   container_class->forall = gtk_action_bar_forall;
   container_class->child_type = gtk_action_bar_child_type;
 
@@ -306,6 +306,20 @@ gtk_action_bar_pack_end (GtkActionBar *action_bar,
                          GtkWidget    *child)
 {
   gtk_box_insert_child_after (GTK_BOX (action_bar->end_box), child, NULL);
+}
+
+/**
+ * gtk_action_bar_remove:
+ * @action_bar: a #GtkActionBar
+ * @child: the #GtkWidget to be removed
+ *
+ * Removes a child from @action_bar.
+ */
+void
+gtk_action_bar_remove (GtkActionBar *action_bar,
+                       GtkWidget    *child)
+{
+  gtk_action_bar_real_remove (GTK_CONTAINER (action_bar), child);
 }
 
 /**
