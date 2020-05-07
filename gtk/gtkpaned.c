@@ -118,11 +118,6 @@
 
 #define HANDLE_EXTRA_SIZE 6
 
-enum {
-  CHILD1,
-  CHILD2
-};
-
 typedef struct _GtkPanedClass   GtkPanedClass;
 
 struct _GtkPaned
