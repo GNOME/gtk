@@ -1755,6 +1755,8 @@ gtk_info_bar_get_show_close_button
 gtk_info_bar_set_show_close_button
 gtk_info_bar_get_revealed
 gtk_info_bar_set_revealed
+gtk_info_bar_add_child
+gtk_info_bar_remove_child
 
 <SUBSECTION Standard>
 GTK_TYPE_INFO_BAR
