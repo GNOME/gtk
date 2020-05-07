@@ -1367,14 +1367,16 @@ static gint
 grid_rows (GtkGrid *table)
 {
   gint t0, t1, l, t, w, h;
-  GList *children, *c;
+  GtkWidget *c;
+  gboolean first;
 
-  children = gtk_container_get_children (GTK_CONTAINER (table));
   t0 = t1 = 0;
-  for (c = children; c; c = c->next)
+  for (c = gtk_widget_get_first_child (GTK_WIDGET (table)), first = TRUE;
+       c != NULL;
+       c  = gtk_widget_get_next_sibling (GTK_WIDGET (c)), first = FALSE)
     {
-      gtk_grid_query_child (table, c->data, &l, &t, &w, &h);
-      if (c == children)
+      gtk_grid_query_child (table, c, &l, &t, &w, &h);
+      if (first)
         {
           t0 = t;
           t1 = t + h;
@@ -1387,7 +1389,6 @@ grid_rows (GtkGrid *table)
             t1 = t + h;
         }
     }
-  g_list_free (children);
 
   return t1 - t0;
 }
@@ -1947,11 +1948,11 @@ clear_per_printer_ui (GtkPrintUnixDialog *dialog)
     return;
 
   while ((child = gtk_widget_get_first_child (dialog->finishing_table)))
-    gtk_container_remove (GTK_CONTAINER (dialog->finishing_table), child);
+    gtk_grid_remove (GTK_GRID (dialog->finishing_table), child);
   while ((child = gtk_widget_get_first_child (dialog->image_quality_table)))
-    gtk_container_remove (GTK_CONTAINER (dialog->image_quality_table), child);
+    gtk_grid_remove (GTK_GRID (dialog->image_quality_table), child);
   while ((child = gtk_widget_get_first_child (dialog->color_table)))
-    gtk_container_remove (GTK_CONTAINER (dialog->color_table), child);
+    gtk_grid_remove (GTK_GRID (dialog->color_table), child);
   while ((child = gtk_widget_get_first_child (dialog->advanced_vbox)))
     gtk_container_remove (GTK_CONTAINER (dialog->advanced_vbox), child);
   while ((child = gtk_widget_get_first_child (dialog->extension_point)))

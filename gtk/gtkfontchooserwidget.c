@@ -839,9 +839,9 @@ axis_remove (gpointer key,
   GtkFontChooserWidget *fontchooser = data;
   Axis *a = value;
 
-  gtk_container_remove (GTK_CONTAINER (fontchooser->axis_grid), a->label);
-  gtk_container_remove (GTK_CONTAINER (fontchooser->axis_grid), a->scale);
-  gtk_container_remove (GTK_CONTAINER (fontchooser->axis_grid), a->spin);
+  gtk_grid_remove (GTK_GRID (fontchooser->axis_grid), a->label);
+  gtk_grid_remove (GTK_GRID (fontchooser->axis_grid), a->scale);
+  gtk_grid_remove (GTK_GRID (fontchooser->axis_grid), a->spin);
 }
 
 static void
