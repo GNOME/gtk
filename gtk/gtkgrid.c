@@ -22,6 +22,7 @@
 
 #include "gtkgrid.h"
 
+#include "gtkbuildable.h"
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkgridlayout.h"
 #include "gtkorientableprivate.h"
@@ -77,11 +78,15 @@ enum
   PROP_ORIENTATION
 };
 
+static void gtk_grid_buildable_iface_init (GtkBuildableIface *iface);
+
 static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
 
-G_DEFINE_TYPE_WITH_CODE (GtkGrid, gtk_grid, GTK_TYPE_CONTAINER,
+G_DEFINE_TYPE_WITH_CODE (GtkGrid, gtk_grid, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkGrid)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_grid_buildable_iface_init))
 
 
 static void
@@ -275,53 +280,69 @@ find_attach_position (GtkGrid         *grid,
 }
 
 static void
-gtk_grid_add (GtkContainer *container,
-              GtkWidget    *child)
+gtk_grid_compute_expand (GtkWidget *widget,
+                         gboolean  *hexpand_p,
+                         gboolean  *vexpand_p)
 {
-  GtkGrid *grid = GTK_GRID (container);
-  GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
-  gint pos[2] = { 0, 0 };
+  GtkWidget *w;
+  gboolean hexpand = FALSE;
+  gboolean vexpand = FALSE;
 
-  pos[priv->orientation] = find_attach_position (grid, priv->orientation, 0, 1, TRUE);
-  grid_attach (grid, child, pos[0], pos[1], 1, 1);
+  for (w = gtk_widget_get_first_child (widget);
+       w != NULL;
+       w = gtk_widget_get_next_sibling (w))
+    {
+      hexpand = hexpand || gtk_widget_compute_expand (w, GTK_ORIENTATION_HORIZONTAL);
+      vexpand = vexpand || gtk_widget_compute_expand (w, GTK_ORIENTATION_VERTICAL);
+    }
+
+  *hexpand_p = hexpand;
+  *vexpand_p = vexpand;
+}
+
+static GtkSizeRequestMode
+gtk_grid_get_request_mode (GtkWidget *widget)
+{
+  GtkWidget *w;
+  int wfh = 0, hfw = 0;
+
+  for (w = gtk_widget_get_first_child (widget);
+       w != NULL;
+       w = gtk_widget_get_next_sibling (w))
+    {
+      GtkSizeRequestMode mode = gtk_widget_get_request_mode (w);
+
+      switch (mode)
+        {
+        case GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH:
+          hfw ++;
+          break;
+        case GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT:
+          wfh ++;
+          break;
+        case GTK_SIZE_REQUEST_CONSTANT_SIZE:
+        default:
+          break;
+        }
+    }
+
+  if (hfw == 0 && wfh == 0)
+    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+  else
+    return wfh > hfw ?
+        GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT :
+        GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 }
 
 static void
-gtk_grid_real_remove (GtkContainer *container,
-                      GtkWidget    *child)
-{
-  GtkGrid *grid = GTK_GRID (container);
-  gboolean was_visible;
-
-  was_visible = _gtk_widget_get_visible (child);
-  gtk_widget_unparent (child);
-
-  if (was_visible && _gtk_widget_get_visible (GTK_WIDGET (grid)))
-    gtk_widget_queue_resize (GTK_WIDGET (grid));
-}
-
-static void
-gtk_grid_forall (GtkContainer *container,
-                 GtkCallback   callback,
-                 gpointer      callback_data)
+gtk_grid_dispose (GObject *object)
 {
   GtkWidget *child;
 
-  child = gtk_widget_get_first_child (GTK_WIDGET (container));
-  while (child)
-    {
-      GtkWidget *next = gtk_widget_get_next_sibling (child);
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (object))))
+    gtk_widget_destroy (child);
 
-      (* callback) (child, callback_data);
-
-      child = next;
-    }
-}
-
-static GType
-gtk_grid_child_type (GtkContainer *container)
-{
-  return GTK_TYPE_WIDGET;
+  G_OBJECT_CLASS (gtk_grid_parent_class)->dispose (object);
 }
 
 static void
@@ -329,15 +350,15 @@ gtk_grid_class_init (GtkGridClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
 
+  object_class->dispose = gtk_grid_dispose;
   object_class->get_property = gtk_grid_get_property;
   object_class->set_property = gtk_grid_set_property;
 
-  container_class->add = gtk_grid_add;
-  container_class->remove = gtk_grid_real_remove;
-  container_class->forall = gtk_grid_forall;
-  container_class->child_type = gtk_grid_child_type;
+  widget_class->compute_expand = gtk_grid_compute_expand;
+  widget_class->get_request_mode = gtk_grid_get_request_mode;
+  widget_class->focus = gtk_widget_focus_child;
+  widget_class->grab_focus = gtk_widget_grab_focus_none;
 
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
@@ -381,6 +402,35 @@ gtk_grid_class_init (GtkGridClass *class)
   gtk_widget_class_set_css_name (widget_class, I_("grid"));
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_GRID_LAYOUT);
+}
+
+static GtkBuildableIface *parent_buildable_iface;
+
+static void
+gtk_grid_buildable_add_child (GtkBuildable *buildable,
+                              GtkBuilder   *builder,
+                              GObject      *child,
+                              const gchar  *type)
+{
+  if (GTK_IS_WIDGET (child))
+    {
+      GtkGrid *grid = GTK_GRID ( buildable);
+      GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
+      int pos[2] = { 0, 0 };
+
+      pos[priv->orientation] = find_attach_position (grid, priv->orientation, 0, 1, TRUE);
+      grid_attach (grid, GTK_WIDGET (child), pos[0], pos[1], 1, 1);
+    }
+  else
+    parent_buildable_iface->add_child (buildable, builder, child, type);
+}
+
+static void
+gtk_grid_buildable_iface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
+  iface->add_child = gtk_grid_buildable_add_child;
 }
 
 static void
@@ -594,7 +644,7 @@ gtk_grid_remove (GtkGrid   *grid,
 {
   g_return_if_fail (GTK_IS_GRID (grid));
   g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (gtk_widget_get_parent (child) == grid);
+  g_return_if_fail (gtk_widget_get_parent (child) == GTK_WIDGET (grid));
 
   gtk_widget_unparent (child);
 }
