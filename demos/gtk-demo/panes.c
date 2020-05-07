@@ -19,32 +19,14 @@ toggle_resize (GtkWidget *widget,
 {
   GtkWidget *parent;
   GtkPaned *paned;
-  gboolean is_child1;
-  gboolean resize, shrink;
 
   parent = gtk_widget_get_parent (child);
   paned = GTK_PANED (parent);
 
-  is_child1 = (child == gtk_paned_get_child1 (paned));
-
-  if (is_child1)
-    g_object_get (paned,
-                  "resize-child1", &resize,
-                  "shrink-child1", &shrink,
-                  NULL);
+  if (child == gtk_paned_get_start_child (paned))
+    gtk_paned_set_resize_start_child (paned, !gtk_paned_get_resize_start_child (paned));
   else
-    g_object_get (paned,
-                  "resize-child2", &resize,
-                  "shrink-child2", &shrink,
-                  NULL);
-
-  g_object_ref (child);
-  gtk_container_remove (GTK_CONTAINER (parent), child);
-  if (is_child1)
-    gtk_paned_pack1 (paned, child, !resize, shrink);
-  else
-    gtk_paned_pack2 (paned, child, !resize, shrink);
-  g_object_unref (child);
+    gtk_paned_set_resize_end_child (paned, !gtk_paned_get_resize_end_child (paned));
 }
 
 static void
@@ -53,32 +35,14 @@ toggle_shrink (GtkWidget *widget,
 {
   GtkWidget *parent;
   GtkPaned *paned;
-  gboolean is_child1;
-  gboolean resize, shrink;
 
   parent = gtk_widget_get_parent (child);
   paned = GTK_PANED (parent);
 
-  is_child1 = (child == gtk_paned_get_child1 (paned));
-
-  if (is_child1)
-    g_object_get (paned,
-                  "resize-child1", &resize,
-                  "shrink-child1", &shrink,
-                  NULL);
+  if (child == gtk_paned_get_start_child (paned))
+    gtk_paned_set_shrink_start_child (paned, !gtk_paned_get_shrink_start_child (paned));
   else
-    g_object_get (paned,
-                  "resize-child2", &resize,
-                  "shrink-child2", &shrink,
-                  NULL);
-
-  g_object_ref (child);
-  gtk_container_remove (GTK_CONTAINER (parent), child);
-  if (is_child1)
-    gtk_paned_pack1 (paned, child, resize, !shrink);
-  else
-    gtk_paned_pack2 (paned, child, resize, !shrink);
-  g_object_unref (child);
+    gtk_paned_set_shrink_end_child (paned, !gtk_paned_get_shrink_end_child (paned));
 }
 
 static GtkWidget *
@@ -93,8 +57,8 @@ create_pane_options (GtkPaned    *paned,
   GtkWidget *label;
   GtkWidget *check_button;
 
-  child1 = gtk_paned_get_child1 (paned);
-  child2 = gtk_paned_get_child2 (paned);
+  child1 = gtk_paned_get_start_child (paned);
+  child2 = gtk_paned_get_end_child (paned);
 
   frame = gtk_frame_new (frame_label);
   gtk_widget_set_margin_start (frame, 4);
@@ -169,22 +133,22 @@ do_panes (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (vbox), vpaned);
 
       hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_paned_add1 (GTK_PANED (vpaned), hpaned);
+      gtk_paned_set_start_child (GTK_PANED (vpaned), hpaned);
 
       frame = gtk_frame_new (NULL);
       gtk_widget_set_size_request (frame, 60, 60);
-      gtk_paned_add1 (GTK_PANED (hpaned), frame);
+      gtk_paned_set_start_child (GTK_PANED (hpaned), frame);
 
       button = gtk_button_new_with_mnemonic ("_Hi there");
       gtk_frame_set_child (GTK_FRAME (frame), button);
 
       frame = gtk_frame_new (NULL);
       gtk_widget_set_size_request (frame, 80, 60);
-      gtk_paned_add2 (GTK_PANED (hpaned), frame);
+      gtk_paned_set_end_child (GTK_PANED (hpaned), frame);
 
       frame = gtk_frame_new (NULL);
       gtk_widget_set_size_request (frame, 60, 80);
-      gtk_paned_add2 (GTK_PANED (vpaned), frame);
+      gtk_paned_set_end_child (GTK_PANED (vpaned), frame);
 
       /* Now create toggle buttons to control sizing */
 

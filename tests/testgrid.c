@@ -101,8 +101,12 @@ text_grid (void)
   gtk_window_set_child (GTK_WINDOW (window), paned1);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_paned_pack1 (GTK_PANED (paned1), box, TRUE, FALSE);
-  gtk_paned_pack2 (GTK_PANED (paned1), gtk_label_new ("Space"), TRUE, FALSE);
+  gtk_paned_set_start_child (GTK_PANED (paned1), box);
+  gtk_paned_set_resize_start_child (GTK_PANED (paned1), TRUE);
+  gtk_paned_set_shrink_start_child (GTK_PANED (paned1), FALSE);
+  gtk_paned_set_end_child (GTK_PANED (paned1), gtk_label_new ("Space"));
+  gtk_paned_set_resize_end_child (GTK_PANED (paned1), TRUE);
+  gtk_paned_set_shrink_end_child (GTK_PANED (paned1), FALSE);
 
   grid = gtk_grid_new ();
   gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), GTK_ORIENTATION_VERTICAL);
