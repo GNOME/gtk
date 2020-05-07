@@ -120,12 +120,11 @@ static void     gtk_link_button_clicked      (GtkButton        *button);
 static void     gtk_link_button_popup_menu   (GtkWidget        *widget,
                                               const char       *action_name,
                                               GVariant         *parameters);
-static gboolean gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
-                                                  gint          x,
-                                                  gint          y,
-                                                  gboolean      keyboard_tip,
-                                                  GtkTooltip   *tooltip,
-                                                  gpointer      data);
+static gboolean gtk_link_button_query_tooltip (GtkWidget       *widget,
+                                               gint             x,
+                                               gint             y,
+                                               gboolean         keyboard_tip,
+                                               GtkTooltip      *tooltip);
 static void gtk_link_button_pressed_cb (GtkGestureClick *gesture,
                                         int                   n_press,
                                         double                x,
@@ -163,6 +162,8 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
   gobject_class->set_property = gtk_link_button_set_property;
   gobject_class->get_property = gtk_link_button_get_property;
   gobject_class->finalize = gtk_link_button_finalize;
+
+  widget_class->query_tooltip = gtk_link_button_query_tooltip;
 
   button_class->clicked = gtk_link_button_clicked;
 
@@ -340,9 +341,6 @@ gtk_link_button_init (GtkLinkButton *link_button)
   gtk_button_set_has_frame (GTK_BUTTON (link_button), FALSE);
   gtk_widget_set_state_flags (GTK_WIDGET (link_button), GTK_STATE_FLAG_LINK, FALSE);
   gtk_widget_set_has_tooltip (GTK_WIDGET (link_button), TRUE);
-
-  g_signal_connect (link_button, "query-tooltip",
-                    G_CALLBACK (gtk_link_button_query_tooltip_cb), NULL);
 
   source = gtk_drag_source_new ();
   content = g_object_new (GTK_TYPE_LINK_CONTENT, NULL);
@@ -581,13 +579,12 @@ gtk_link_button_new_with_label (const gchar *uri,
   return retval;
 }
 
-static gboolean 
-gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
-                                  gint          x,
-                                  gint          y,
-                                  gboolean      keyboard_tip,
-                                  GtkTooltip   *tooltip,
-                                  gpointer      data)
+static gboolean
+gtk_link_button_query_tooltip (GtkWidget    *widget,
+                               gint          x,
+                               gint          y,
+                               gboolean      keyboard_tip,
+                               GtkTooltip   *tooltip)
 {
   GtkLinkButton *link_button = GTK_LINK_BUTTON (widget);
   const gchar *label, *uri;
