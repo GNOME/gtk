@@ -69,8 +69,7 @@ gtk_css_widget_node_dequeue_validate (GtkCssNode *node)
   GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
 
   if (widget_node->widget &&
-      GTK_IS_ROOT (widget_node->widget) &&
-      GTK_IS_CONTAINER (widget_node->widget))
+      GTK_IS_ROOT (widget_node->widget))
     gtk_widget_remove_tick_callback (widget_node->widget,
                                      widget_node->validate_cb_id);
 }
