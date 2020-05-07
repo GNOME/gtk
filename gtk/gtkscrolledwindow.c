@@ -907,7 +907,6 @@ scrolled_window_drag_begin_cb (GtkScrolledWindow *scrolled_window,
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
   GtkEventSequenceState state;
   GdkEventSequence *sequence;
-  GtkWidget *event_widget;
 
   priv->in_drag = FALSE;
   priv->drag_start_x = priv->unclamped_hadj_value;
