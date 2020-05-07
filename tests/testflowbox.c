@@ -412,7 +412,7 @@ create_window (void)
   expander = gtk_expander_new ("Flow Box controls");
   gtk_expander_set_expanded (GTK_EXPANDER (expander), TRUE);
   flowbox_cntl = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
-  gtk_container_add (GTK_CONTAINER (expander), flowbox_cntl);
+  gtk_expander_set_child (GTK_EXPANDER (expander), flowbox_cntl);
   gtk_container_add (GTK_CONTAINER (vbox), expander);
 
   widget = gtk_check_button_new_with_label ("Homogeneous");
@@ -570,7 +570,7 @@ create_window (void)
   expander = gtk_expander_new ("Test item controls");
   gtk_expander_set_expanded (GTK_EXPANDER (expander), TRUE);
   items_cntl = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
-  gtk_container_add (GTK_CONTAINER (expander), items_cntl);
+  gtk_expander_set_child (GTK_EXPANDER (expander), items_cntl);
   gtk_container_add (GTK_CONTAINER (vbox), expander);
 
   /* Add Items control */
