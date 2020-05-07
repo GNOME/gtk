@@ -69,6 +69,13 @@ void           gtk_info_bar_add_buttons            (GtkInfoBar     *info_bar,
                                                     const gchar    *first_button_text,
                                                     ...);
 GDK_AVAILABLE_IN_ALL
+void           gtk_info_bar_add_child              (GtkInfoBar     *info_bar,
+                                                    GtkWidget      *widget);
+GDK_AVAILABLE_IN_ALL
+void           gtk_info_bar_remove_child           (GtkInfoBar     *info_bar,
+                                                    GtkWidget      *widget);
+
+GDK_AVAILABLE_IN_ALL
 void           gtk_info_bar_set_response_sensitive (GtkInfoBar     *info_bar,
                                                     gint            response_id,
                                                     gboolean        setting);
