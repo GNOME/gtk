@@ -338,7 +338,7 @@
         <child>
           <object class="GtkActionBar" id="extra_and_filters">
             <property name="visible">0</property>
-            <child>
+            <child type="start">
               <object class="GtkBox" id="extra_align">
                 <property name="spacing">12</property>
               </object>
