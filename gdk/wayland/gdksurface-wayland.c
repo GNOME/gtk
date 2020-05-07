@@ -3447,7 +3447,7 @@ gdk_wayland_surface_lower (GdkSurface *surface)
   if (!impl->display_server.gtk_surface)
     return FALSE;
 
-  if (gtk_surface1_get_version (impl->display_server.gtk_surface) < 4)
+  if (gtk_surface1_get_version(impl->display_server.gtk_surface) < GTK_SURFACE1_LOWER_SINCE_VERSION)
     return FALSE;
 
   gtk_surface1_lower (impl->display_server.gtk_surface);
