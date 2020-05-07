@@ -813,3 +813,37 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
   return ret;
 }
 
+void
+_gdk_macos_display_synthesize_motion (GdkMacosDisplay *self,
+                                      GdkMacosSurface *surface)
+{
+  GdkModifierType state;
+  GdkEvent *event;
+  GdkSeat *seat;
+  NSPoint point;
+  GList *node;
+  int x;
+  int y;
+
+  g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (surface));
+
+  seat = gdk_display_get_default_seat (GDK_DISPLAY (self));
+  point = [NSEvent mouseLocation];
+  _gdk_macos_display_from_display_coords (self, point.x, point.y, &x, &y);
+
+  state = _gdk_macos_display_get_current_keyboard_modifiers (self) |
+          _gdk_macos_display_get_current_mouse_modifiers (self);
+
+  event = gdk_motion_event_new (GDK_SURFACE (surface),
+                                gdk_seat_get_pointer (seat),
+                                NULL,
+                                NULL,
+                                get_time_from_ns_event ([NSApp currentEvent]),
+                                state,
+                                x,
+                                y,
+                                NULL);
+  node = _gdk_event_queue_append (GDK_DISPLAY (self), event);
+  _gdk_windowing_got_event (GDK_DISPLAY (self), node, event, 0);
+}
