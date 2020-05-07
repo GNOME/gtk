@@ -26,6 +26,7 @@
 #include "gtkrendericonprivate.h"
 #include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gtktreeprivate.h"
 
 #include "a11y/gtkbooleancellaccessible.h"
@@ -111,6 +112,7 @@ struct _GtkCellRendererTogglePrivate
   guint activatable  : 1;
   guint inconsistent : 1;
   guint radio        : 1;
+  GtkCssNode *cssnode;
 };
 
 
@@ -126,10 +128,24 @@ gtk_cell_renderer_toggle_init (GtkCellRendererToggle *celltoggle)
   priv->active = FALSE;
   priv->radio = FALSE;
 
+  priv->cssnode = gtk_css_node_new ();
+  gtk_css_node_set_name (priv->cssnode, g_quark_from_static_string ("check"));
+
   g_object_set (celltoggle, "mode", GTK_CELL_RENDERER_MODE_ACTIVATABLE, NULL);
   gtk_cell_renderer_set_padding (GTK_CELL_RENDERER (celltoggle), 2, 2);
 
   priv->inconsistent = FALSE;
+}
+
+static void
+gtk_cell_renderer_toggle_dispose (GObject *object)
+{
+  GtkCellRendererToggle *celltoggle = GTK_CELL_RENDERER_TOGGLE (object);
+  GtkCellRendererTogglePrivate *priv = gtk_cell_renderer_toggle_get_instance_private (celltoggle);
+
+  g_clear_object (&priv->cssnode);
+
+  G_OBJECT_CLASS (gtk_cell_renderer_toggle_parent_class)->dispose (object);
 }
 
 static void
@@ -140,6 +156,7 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 
   object_class->get_property = gtk_cell_renderer_toggle_get_property;
   object_class->set_property = gtk_cell_renderer_toggle_set_property;
+  object_class->dispose = gtk_cell_renderer_toggle_dispose;
 
   cell_class->get_size = gtk_cell_renderer_toggle_get_size;
   cell_class->snapshot = gtk_cell_renderer_toggle_snapshot;
@@ -266,11 +283,7 @@ gtk_cell_renderer_toggle_set_property (GObject      *object,
         }
       break;
     case PROP_RADIO:
-      if (priv->radio != g_value_get_boolean (value))
-        {
-          priv->radio = g_value_get_boolean (value);
-          g_object_notify_by_pspec (object, pspec);
-        }
+      gtk_cell_renderer_toggle_set_radio (celltoggle, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -298,23 +311,32 @@ gtk_cell_renderer_toggle_new (void)
 }
 
 static GtkStyleContext *
-gtk_cell_renderer_toggle_save_context (GtkCellRenderer *cell,
-				       GtkWidget       *widget)
+gtk_cell_renderer_toggle_save_context (GtkCellRendererToggle *cell,
+                                       GtkWidget       *widget)
 {
-  GtkCellRendererTogglePrivate *priv = gtk_cell_renderer_toggle_get_instance_private (GTK_CELL_RENDERER_TOGGLE (cell));
-
+  GtkCellRendererTogglePrivate *priv = gtk_cell_renderer_toggle_get_instance_private (cell);
   GtkStyleContext *context;
 
   context = gtk_widget_get_style_context (widget);
 
-  if (priv->radio)
-    gtk_style_context_save_named (context, "radio");
-  else
-    gtk_style_context_save_named (context, "check");
+  gtk_css_node_set_parent (priv->cssnode, gtk_widget_get_css_node (widget));
+  gtk_style_context_save_to_node (context, priv->cssnode);
 
   return context;
 }
- 
+
+static GtkStyleContext *
+gtk_cell_renderer_toggle_restore_context (GtkCellRendererToggle *cell,
+                                          GtkStyleContext       *context)
+{
+  GtkCellRendererTogglePrivate *priv = gtk_cell_renderer_toggle_get_instance_private (cell);
+
+  gtk_style_context_restore (context);
+  gtk_css_node_set_parent (priv->cssnode, NULL);
+
+  return context;
+}
+
 static int
 calc_indicator_size (GtkStyleContext *context)
 {
@@ -339,7 +361,7 @@ gtk_cell_renderer_toggle_get_size (GtkCellRenderer    *cell,
 
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
 
-  context = gtk_cell_renderer_toggle_save_context (cell, widget);
+  context = gtk_cell_renderer_toggle_save_context (GTK_CELL_RENDERER_TOGGLE (cell), widget);
   gtk_style_context_get_padding (context, &padding);
   gtk_style_context_get_border (context, &border);
 
@@ -347,7 +369,7 @@ gtk_cell_renderer_toggle_get_size (GtkCellRenderer    *cell,
   calc_width += xpad * 2 + padding.left + padding.right + border.left + border.right;
   calc_height += ypad * 2 + padding.top + padding.bottom + border.top + border.bottom;
 
-  gtk_style_context_restore (context);
+  gtk_cell_renderer_toggle_restore_context (GTK_CELL_RENDERER_TOGGLE (cell), context);
 
   if (width)
     *width = calc_width;
@@ -426,7 +448,7 @@ gtk_cell_renderer_toggle_snapshot (GtkCellRenderer      *cell,
                              cell_area->width, cell_area->height
                           ));
 
-  context = gtk_cell_renderer_toggle_save_context (cell, widget);
+  context = gtk_cell_renderer_toggle_save_context (celltoggle, widget);
   gtk_style_context_set_state (context, state);
 
   gtk_snapshot_render_background (snapshot, context,
@@ -448,7 +470,7 @@ gtk_cell_renderer_toggle_snapshot (GtkCellRenderer      *cell,
                                width - padding.left - padding.right - border.left - border.right,
                                height - padding.top - padding.bottom - border.top - border.bottom);
 
-  gtk_style_context_restore (context);
+  gtk_cell_renderer_toggle_restore_context (celltoggle, context);
   gtk_snapshot_pop (snapshot);
 }
 
@@ -495,6 +517,10 @@ gtk_cell_renderer_toggle_set_radio (GtkCellRendererToggle *toggle,
   g_return_if_fail (GTK_IS_CELL_RENDERER_TOGGLE (toggle));
 
   priv->radio = radio;
+  if (radio)
+    gtk_css_node_set_name (priv->cssnode, g_quark_from_static_string ("radio"));
+  else
+    gtk_css_node_set_name (priv->cssnode, g_quark_from_static_string ("check"));
 }
 
 /**
