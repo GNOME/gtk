@@ -4213,7 +4213,7 @@ gtk_scrolled_window_set_child (GtkScrolledWindow *scrolled_window,
         }
 
       priv->child = scrollable_child;
-      gtk_widget_set_parent (scrollable_child, GTK_WIDGET (scrolled_window));
+      gtk_widget_insert_after (scrollable_child, GTK_WIDGET (scrolled_window), NULL);
 
       g_object_set (scrollable_child,
                     "hadjustment", hadj,
