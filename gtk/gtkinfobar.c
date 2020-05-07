@@ -143,7 +143,7 @@ typedef struct _GtkInfoBarClass GtkInfoBarClass;
 
 struct _GtkInfoBar
 {
-  GtkContainer parent_instance;
+  GtkWidget parent_instance;
 
   GtkWidget *content_area;
   GtkWidget *action_area;
@@ -157,7 +157,7 @@ struct _GtkInfoBar
 
 struct _GtkInfoBarClass
 {
-  GtkContainerClass parent_class;
+  GtkWidgetClass parent_class;
 
   void (* response) (GtkInfoBar *info_bar, gint response_id);
   void (* close)    (GtkInfoBar *info_bar);
@@ -208,7 +208,7 @@ static void      gtk_info_bar_buildable_add_child       (GtkBuildable *buildable
 
 
 
-G_DEFINE_TYPE_WITH_CODE (GtkInfoBar, gtk_info_bar, GTK_TYPE_CONTAINER,
+G_DEFINE_TYPE_WITH_CODE (GtkInfoBar, gtk_info_bar, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_info_bar_buildable_interface_init))
 
@@ -335,35 +335,6 @@ gtk_info_bar_close (GtkInfoBar *info_bar)
 }
 
 static void
-gtk_info_bar_add (GtkContainer *container,
-                  GtkWidget    *child)
-{
-  GtkInfoBar *self = GTK_INFO_BAR (container);
-
-  gtk_container_add (GTK_CONTAINER (self->content_area), child);
-}
-
-static void
-gtk_info_bar_remove (GtkContainer *container,
-                     GtkWidget    *child)
-{
-  GtkInfoBar *self = GTK_INFO_BAR (container);
-
-  gtk_container_remove (GTK_CONTAINER (self->content_area), child);
-}
-
-static void
-gtk_info_bar_forall (GtkContainer *container,
-                     GtkCallback   callback,
-                     gpointer      user_data)
-{
-  GtkInfoBar *self = GTK_INFO_BAR (container);
-
-  if (self->revealer)
-    (*callback) (self->revealer, user_data);
-}
-
-static void
 gtk_info_bar_dispose (GObject *object)
 {
   GtkInfoBar *self = GTK_INFO_BAR (object);
@@ -378,15 +349,10 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->get_property = gtk_info_bar_get_property;
   object_class->set_property = gtk_info_bar_set_property;
   object_class->dispose = gtk_info_bar_dispose;
-
-  container_class->add = gtk_info_bar_add;
-  container_class->remove = gtk_info_bar_remove;
-  container_class->forall = gtk_info_bar_forall;
 
   klass->close = gtk_info_bar_close;
 
