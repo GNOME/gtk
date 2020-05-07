@@ -91,14 +91,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned1">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required1">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required1">
@@ -126,9 +126,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural1">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required1">
@@ -198,14 +198,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned2">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required2">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required2">
@@ -235,9 +235,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural2">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required2">
@@ -309,14 +309,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned3">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required3">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required3">
@@ -346,9 +346,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural3">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required3">
@@ -420,14 +420,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned4">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required4">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required4">
@@ -459,9 +459,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural4">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required4">
@@ -535,14 +535,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned5">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required5">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required5">
@@ -572,9 +572,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural5">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required5">
@@ -646,14 +646,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned6">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required6">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required6">
@@ -685,9 +685,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural6">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required6">
@@ -761,14 +761,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned7">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required7">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required7">
@@ -800,9 +800,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural7">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required7">
@@ -876,14 +876,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned8">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required8">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required8">
@@ -917,9 +917,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural8">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required8">
@@ -995,14 +995,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned9">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required9">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required9">
@@ -1032,9 +1032,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural9">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required9">
@@ -1106,14 +1106,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned10">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required10">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required10">
@@ -1145,9 +1145,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural10">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required10">
@@ -1221,14 +1221,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned11">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required11">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required11">
@@ -1260,9 +1260,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural11">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required11">
@@ -1336,14 +1336,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned12">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required12">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required12">
@@ -1377,9 +1377,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural12">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required12">
@@ -1455,14 +1455,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned13">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required13">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required13">
@@ -1492,9 +1492,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural13">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required13">
@@ -1566,14 +1566,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned14">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required14">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required14">
@@ -1605,9 +1605,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural14">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required14">
@@ -1681,14 +1681,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned15">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required15">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required15">
@@ -1720,9 +1720,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural15">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required15">
@@ -1796,14 +1796,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned16">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required16">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required16">
@@ -1837,9 +1837,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural16">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required16">
@@ -1915,14 +1915,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned17">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required17">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required17">
@@ -1952,9 +1952,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural17">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required17">
@@ -2026,14 +2026,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned18">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required18">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required18">
@@ -2065,9 +2065,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural18">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required18">
@@ -2141,14 +2141,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned19">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required19">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required19">
@@ -2180,9 +2180,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural19">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required19">
@@ -2256,14 +2256,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned20">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required20">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required20">
@@ -2297,9 +2297,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural20">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required20">
@@ -2375,14 +2375,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned21">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required21">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required21">
@@ -2414,9 +2414,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural21">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required21">
@@ -2490,14 +2490,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned22">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required22">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required22">
@@ -2531,9 +2531,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural22">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required22">
@@ -2609,14 +2609,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned23">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required23">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required23">
@@ -2650,9 +2650,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural23">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required23">
@@ -2728,14 +2728,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned24">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required24">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required24">
@@ -2771,9 +2771,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural24">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required24">
@@ -2851,14 +2851,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned25">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required25">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required25">
@@ -2890,9 +2890,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural25">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required25">
@@ -2966,14 +2966,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned26">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required26">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required26">
@@ -3007,9 +3007,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural26">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required26">
@@ -3085,14 +3085,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned27">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required27">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required27">
@@ -3126,9 +3126,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural27">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required27">
@@ -3204,14 +3204,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned28">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required28">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required28">
@@ -3247,9 +3247,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural28">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required28">
@@ -3327,14 +3327,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned29">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required29">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required29">
@@ -3366,9 +3366,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural29">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required29">
@@ -3442,14 +3442,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned30">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required30">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required30">
@@ -3483,9 +3483,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural30">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required30">
@@ -3561,14 +3561,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned31">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required31">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required31">
@@ -3602,9 +3602,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural31">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required31">
@@ -3680,14 +3680,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned32">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required32">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required32">
@@ -3723,9 +3723,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural32">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required32">
@@ -3803,14 +3803,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned33">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required33">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required33">
@@ -3840,9 +3840,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural33">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required33">
@@ -3914,14 +3914,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned34">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required34">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required34">
@@ -3953,9 +3953,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural34">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required34">
@@ -4029,14 +4029,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned35">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required35">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required35">
@@ -4068,9 +4068,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural35">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required35">
@@ -4144,14 +4144,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned36">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required36">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required36">
@@ -4185,9 +4185,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural36">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required36">
@@ -4263,14 +4263,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned37">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required37">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required37">
@@ -4302,9 +4302,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural37">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required37">
@@ -4378,14 +4378,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned38">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required38">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required38">
@@ -4419,9 +4419,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural38">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required38">
@@ -4497,14 +4497,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned39">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required39">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required39">
@@ -4538,9 +4538,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural39">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required39">
@@ -4616,14 +4616,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned40">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required40">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required40">
@@ -4659,9 +4659,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural40">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required40">
@@ -4739,14 +4739,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned41">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required41">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required41">
@@ -4778,9 +4778,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural41">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required41">
@@ -4854,14 +4854,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned42">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required42">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required42">
@@ -4895,9 +4895,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural42">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required42">
@@ -4973,14 +4973,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned43">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required43">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required43">
@@ -5014,9 +5014,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural43">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required43">
@@ -5092,14 +5092,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned44">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required44">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required44">
@@ -5135,9 +5135,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural44">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required44">
@@ -5215,14 +5215,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned45">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required45">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required45">
@@ -5254,9 +5254,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural45">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required45">
@@ -5330,14 +5330,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned46">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required46">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required46">
@@ -5371,9 +5371,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural46">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required46">
@@ -5449,14 +5449,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned47">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required47">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required47">
@@ -5490,9 +5490,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural47">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required47">
@@ -5568,14 +5568,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned48">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required48">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required48">
@@ -5611,9 +5611,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural48">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required48">
@@ -5691,14 +5691,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned49">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required49">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required49">
@@ -5728,9 +5728,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural49">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required49">
@@ -5802,14 +5802,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned50">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required50">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required50">
@@ -5841,9 +5841,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural50">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required50">
@@ -5917,14 +5917,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned51">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required51">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required51">
@@ -5956,9 +5956,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural51">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required51">
@@ -6032,14 +6032,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned52">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required52">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required52">
@@ -6073,9 +6073,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural52">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required52">
@@ -6151,14 +6151,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned53">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required53">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required53">
@@ -6190,9 +6190,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural53">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required53">
@@ -6266,14 +6266,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned54">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required54">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required54">
@@ -6307,9 +6307,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural54">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required54">
@@ -6385,14 +6385,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned55">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required55">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required55">
@@ -6426,9 +6426,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural55">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required55">
@@ -6504,14 +6504,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned56">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required56">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required56">
@@ -6547,9 +6547,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural56">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required56">
@@ -6627,14 +6627,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned57">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required57">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required57">
@@ -6666,9 +6666,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural57">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required57">
@@ -6742,14 +6742,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned58">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required58">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required58">
@@ -6783,9 +6783,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural58">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required58">
@@ -6861,14 +6861,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned59">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required59">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required59">
@@ -6902,9 +6902,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural59">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required59">
@@ -6980,14 +6980,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned60">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required60">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required60">
@@ -7023,9 +7023,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural60">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required60">
@@ -7103,14 +7103,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned61">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required61">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required61">
@@ -7142,9 +7142,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural61">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required61">
@@ -7218,14 +7218,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned62">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required62">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required62">
@@ -7259,9 +7259,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural62">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required62">
@@ -7337,14 +7337,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned63">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required63">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required63">
@@ -7378,9 +7378,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural63">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required63">
@@ -7456,14 +7456,14 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned64">
-            <property name="shrink-child2">0</property>
-            <property name="shrink-child1">0</property>
-            <property name="resize-child1">0</property>
+            <property name="shrink-end-child">0</property>
+            <property name="shrink-start-child">0</property>
+            <property name="resize-start-child">0</property>
             <child>
               <object class="GtkPaned" id="required64">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="required-required64">
@@ -7499,9 +7499,9 @@
             </child>
             <child>
               <object class="GtkPaned" id="natural64">
-                <property name="shrink-child2">0</property>
-                <property name="shrink-child1">0</property>
-                <property name="resize-child1">0</property>
+                <property name="shrink-end-child">0</property>
+                <property name="shrink-start-child">0</property>
+                <property name="resize-start-child">0</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="natural-required64">

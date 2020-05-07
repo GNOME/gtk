@@ -205,7 +205,9 @@ create_calendar(void)
 
   calendar_data.calendar_widget = calendar;
   frame = create_frame ("<b>Calendar</b>", calendar, GTK_ALIGN_CENTER, GTK_ALIGN_CENTER);
-  gtk_paned_pack1 (GTK_PANED (hpaned), frame, TRUE, FALSE);
+  gtk_paned_set_start_child (GTK_PANED (hpaned), frame);
+  gtk_paned_set_resize_start_child (GTK_PANED (hpaned), TRUE);
+  gtk_paned_set_shrink_start_child (GTK_PANED (hpaned), FALSE);
 
   gtk_calendar_mark_day (GTK_CALENDAR (calendar), 19);	
 
@@ -226,7 +228,9 @@ create_calendar(void)
 		    &calendar_data);
 
   rpane = gtk_box_new (GTK_ORIENTATION_VERTICAL, DEF_PAD_SMALL);
-  gtk_paned_pack2 (GTK_PANED (hpaned), rpane, FALSE, FALSE);
+  gtk_paned_set_end_child (GTK_PANED (hpaned), rpane);
+  gtk_paned_set_resize_end_child (GTK_PANED (hpaned), FALSE);
+  gtk_paned_set_shrink_end_child (GTK_PANED (hpaned), FALSE);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, DEF_PAD_SMALL);
   frame = create_frame ("<b>Options</b>", vbox, GTK_ALIGN_FILL, GTK_ALIGN_CENTER);
