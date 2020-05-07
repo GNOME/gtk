@@ -30,8 +30,8 @@ gtk_array_init (GtkArray   *self,
 }
 
 static inline void *
-gtk_array_index (const GtkArray *self,
-                 guint           index)
+gtk_array_index (GtkArray *self,
+                 guint     index)
 {
   g_assert (index < self->len);
 
@@ -66,31 +66,6 @@ gtk_array_add (GtkArray *self,
 
   g_ptr_array_add (self->ptr_array, element);
   self->len++; /* We still count self->len */
-}
-
-static inline void
-gtk_array_insert (GtkArray *self,
-                  guint     index,
-                  void     *element)
-{
-  if (index >= self->len)
-    {
-      gtk_array_add (self, element);
-      return;
-    }
-
-  if (G_LIKELY (self->len < self->reserved_size))
-    {
-      memmove (self->stack_space + index + 1, self->stack_space + index,
-               sizeof (void *) * (self->len - index));
-      self->stack_space[index] = element;
-      self->len++;
-      return;
-    }
-
-  g_assert (self->ptr_array);
-  g_ptr_array_insert (self->ptr_array, index, element);
-  self->len++;
 }
 
 static inline void

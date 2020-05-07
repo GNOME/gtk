@@ -391,8 +391,8 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
 
 static void
 verify_tree_match_results (GtkCssProvider *provider,
-                           GtkCssNode     *node,
-                           GtkArray       *tree_rules)
+			   GtkCssNode     *node,
+			   GPtrArray      *tree_rules)
 {
 #ifdef VERIFY_TREE
   GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
@@ -408,7 +408,7 @@ verify_tree_match_results (GtkCssProvider *provider,
 
       for (j = 0; j < tree_rules->len; j++)
 	{
-	  if (ruleset == gtk_array_index (tree_rules, j))
+	  if (ruleset == tree_rules->pdata[j])
 	    {
 	      found = TRUE;
 	      break;
@@ -458,22 +458,19 @@ gtk_css_style_provider_lookup (GtkStyleProvider             *provider,
   GtkCssRuleset *ruleset;
   guint j;
   int i;
-  GtkArray tree_rules_array;
-  GtkCssRuleset *rules_stack[32];
+  GPtrArray *tree_rules;
 
   if (_gtk_css_selector_tree_is_empty (priv->tree))
     return;
 
-  gtk_array_init (&tree_rules_array, (void**)rules_stack, 32);
-  _gtk_css_selector_tree_match_all (priv->tree, filter, node, &tree_rules_array);
-
-  if (tree_rules_array.len > 0)
+  tree_rules = _gtk_css_selector_tree_match_all (priv->tree, filter, node);
+  if (tree_rules)
     {
-      verify_tree_match_results (css_provider, node, &tree_rules_array);
+      verify_tree_match_results (css_provider, node, tree_rules);
 
-      for (i = tree_rules_array.len - 1; i >= 0; i--)
+      for (i = tree_rules->len - 1; i >= 0; i--)
         {
-          ruleset = gtk_array_index (&tree_rules_array, i);
+          ruleset = tree_rules->pdata[i];
 
           if (ruleset->styles == NULL)
             continue;
@@ -493,7 +490,7 @@ gtk_css_style_provider_lookup (GtkStyleProvider             *provider,
             }
         }
 
-      gtk_array_free (&tree_rules_array, NULL);
+      g_ptr_array_free (tree_rules, TRUE);
     }
 
   if (change)
