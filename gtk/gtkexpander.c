@@ -148,7 +148,7 @@ typedef struct _GtkExpanderClass   GtkExpanderClass;
 
 struct _GtkExpander
 {
-  GtkContainer parent_instance;
+  GtkWidget parent_instance;
 
   GtkWidget        *label_widget;
 
@@ -167,7 +167,7 @@ struct _GtkExpander
 
 struct _GtkExpanderClass
 {
-  GtkContainerClass parent_class;
+  GtkWidgetClass parent_class;
 
   void (* activate) (GtkExpander *expander);
 };
@@ -188,11 +188,6 @@ static void     gtk_expander_size_allocate  (GtkWidget        *widget,
                                              int               baseline);
 static gboolean gtk_expander_focus          (GtkWidget        *widget,
                                              GtkDirectionType  direction);
-
-static void gtk_expander_add    (GtkContainer *container,
-                                 GtkWidget    *widget);
-static void gtk_expander_remove (GtkContainer *container,
-                                 GtkWidget    *widget);
 
 static void gtk_expander_activate (GtkExpander *expander);
 
@@ -221,7 +216,7 @@ static void     gesture_click_released_cb (GtkGestureClick *gesture,
                                            gdouble          y,
                                            GtkExpander     *expander);
 
-G_DEFINE_TYPE_WITH_CODE (GtkExpander, gtk_expander, GTK_TYPE_CONTAINER,
+G_DEFINE_TYPE_WITH_CODE (GtkExpander, gtk_expander, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_expander_buildable_init))
 
@@ -262,30 +257,41 @@ gtk_expander_drag_leave (GtkDropControllerMotion *motion,
     }
 }
 
-static void
-gtk_expander_forall (GtkContainer *container,
-                     GtkCallback   callback,
-                     gpointer      user_data)
+static GtkSizeRequestMode
+gtk_expander_get_request_mode (GtkWidget *widget)
 {
-  GtkExpander *expander = GTK_EXPANDER (container);
+  GtkExpander *expander = GTK_EXPANDER (widget);
 
   if (expander->child)
-    (*callback) (expander->child, user_data);
+    return gtk_widget_get_request_mode (expander->child);
+  else
+    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+}
 
-  if (expander->label_widget)
-    (*callback) (expander->label_widget, user_data);
+static void
+gtk_expander_compute_expand (GtkWidget *widget,
+                             gboolean  *hexpand,
+                             gboolean  *vexpand)
+{
+  GtkExpander *expander = GTK_EXPANDER (widget);
+
+  if (expander->child)
+    {
+      *hexpand = gtk_widget_compute_expand (expander->child, GTK_ORIENTATION_HORIZONTAL);
+      *vexpand = gtk_widget_compute_expand (expander->child, GTK_ORIENTATION_VERTICAL);
+    }
+  else
+    {
+      *hexpand = FALSE;
+      *vexpand = FALSE;
+    }
 }
 
 static void
 gtk_expander_class_init (GtkExpanderClass *klass)
 {
-  GObjectClass *gobject_class;
-  GtkWidgetClass *widget_class;
-  GtkContainerClass *container_class;
-
-  gobject_class   = (GObjectClass *) klass;
-  widget_class    = (GtkWidgetClass *) klass;
-  container_class = (GtkContainerClass *) klass;
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gobject_class->dispose = gtk_expander_dispose;
   gobject_class->set_property = gtk_expander_set_property;
@@ -295,10 +301,8 @@ gtk_expander_class_init (GtkExpanderClass *klass)
   widget_class->focus = gtk_expander_focus;
   widget_class->grab_focus = gtk_widget_grab_focus_self;
   widget_class->measure = gtk_expander_measure;
-
-  container_class->add = gtk_expander_add;
-  container_class->remove = gtk_expander_remove;
-  container_class->forall = gtk_expander_forall;
+  widget_class->compute_expand = gtk_expander_compute_expand;
+  widget_class->get_request_mode = gtk_expander_get_request_mode;
 
   klass->activate = gtk_expander_activate;
 
@@ -431,6 +435,8 @@ gtk_expander_buildable_add_child (GtkBuildable  *buildable,
 {
   if (g_strcmp0 (type, "label") == 0)
     gtk_expander_set_label_widget (GTK_EXPANDER (buildable), GTK_WIDGET (child));
+  else if (GTK_IS_WIDGET (child))
+    gtk_expander_set_child (GTK_EXPANDER (buildable), GTK_WIDGET (child));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
@@ -765,59 +771,6 @@ gtk_expander_focus (GtkWidget        *widget,
     }
 
   return TRUE;
-}
-
-static void
-gtk_expander_add (GtkContainer *container,
-                  GtkWidget    *widget)
-{
-  GtkExpander *expander = GTK_EXPANDER (container);
-
-  if (expander->child != NULL)
-    {
-      g_warning ("Attempting to add a widget with type %s to a %s, "
-                 "but a %s can only contain one widget at a time; "
-                 "it already contains a widget of type %s",
-                 g_type_name (G_OBJECT_TYPE (widget)),
-                 g_type_name (G_OBJECT_TYPE (container)),
-                 g_type_name (G_OBJECT_TYPE (container)),
-                 g_type_name (G_OBJECT_TYPE (expander->child)));
-      return;
-    }
-
-  if (expander->expanded)
-    {
-      gtk_container_add (GTK_CONTAINER (expander->box), widget);
-    }
-  else
-    {
-      if (g_object_is_floating (widget))
-        g_object_ref_sink (widget);
-
-      g_object_ref (widget);
-    }
-
-  expander->child = widget;
-}
-
-static void
-gtk_expander_remove (GtkContainer *container,
-                     GtkWidget    *widget)
-{
-  GtkExpander *expander = GTK_EXPANDER (container);
-
-  if (expander->label_widget == widget)
-    gtk_expander_set_label_widget (expander, NULL);
-  else
-    {
-      gtk_container_remove (GTK_CONTAINER (expander->box), widget);
-      if (!expander->expanded)
-        {
-          /* We hold an extra ref */
-          g_object_unref (widget);
-        }
-      GTK_CONTAINER_CLASS (gtk_expander_parent_class)->remove (container, widget);
-    }
 }
 
 static void
@@ -1219,12 +1172,26 @@ gtk_expander_set_child (GtkExpander *expander,
   g_return_if_fail (GTK_IS_EXPANDER (expander));
   g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
 
-  g_clear_pointer (&expander->child, gtk_widget_unparent);
+  if (expander->child)
+    {
+      gtk_container_remove (GTK_CONTAINER (expander->box), expander->child);
+      if (!expander->expanded)
+        g_object_unref (expander->child);
+    }
 
   expander->child = child;
 
   if (expander->child)
-    gtk_widget_set_parent (expander->child, GTK_WIDGET (expander));
+    {
+      if (expander->expanded)
+        gtk_container_add (GTK_CONTAINER (expander->box), expander->child);
+      else
+        {
+          if (g_object_is_floating (expander->child))
+            g_object_ref_sink (expander->child);
+          g_object_ref (expander->child);
+        }
+    }
 
   g_object_notify (G_OBJECT (expander), "child");
 }
