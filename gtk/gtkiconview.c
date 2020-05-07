@@ -181,12 +181,8 @@ static gboolean         gtk_icon_view_key_pressed               (GtkEventControl
                                                                  GdkModifierType        state,
                                                                  GtkWidget             *widget);
 
-/* GtkContainer vfuncs */
-static void             gtk_icon_view_remove                    (GtkContainer       *container,
-								 GtkWidget          *widget);
-static void             gtk_icon_view_forall                    (GtkContainer       *container,
-								 GtkCallback         callback,
-								 gpointer            callback_data);
+static void             gtk_icon_view_remove                    (GtkIconView        *icon_view,
+                                                                 GtkWidget          *widget);
 
 /* GtkIconView vfuncs */
 static void             gtk_icon_view_real_select_all           (GtkIconView        *icon_view);
@@ -326,7 +322,7 @@ static void     gtk_icon_view_buildable_custom_tag_end   (GtkBuildable       *bu
 
 static guint icon_view_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE_WITH_CODE (GtkIconView, gtk_icon_view, GTK_TYPE_CONTAINER,
+G_DEFINE_TYPE_WITH_CODE (GtkIconView, gtk_icon_view, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkIconView)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
 						gtk_icon_view_cell_layout_init)
@@ -339,7 +335,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   gobject_class->constructed = gtk_icon_view_constructed;
   gobject_class->dispose = gtk_icon_view_dispose;
@@ -352,9 +347,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   widget_class->snapshot = gtk_icon_view_snapshot;
   widget_class->focus = gtk_widget_focus_self;
   widget_class->grab_focus = gtk_widget_grab_focus_self;
-
-  container_class->remove = gtk_icon_view_remove;
-  container_class->forall = gtk_icon_view_forall;
 
   klass->select_all = gtk_icon_view_real_select_all;
   klass->unselect_all = gtk_icon_view_real_unselect_all;
@@ -1903,15 +1895,12 @@ gtk_icon_view_leave(GtkEventController   *controller,
 }
 
 static void
-gtk_icon_view_remove (GtkContainer *container,
-		      GtkWidget    *widget)
+gtk_icon_view_remove (GtkIconView *icon_view,
+                      GtkWidget   *widget)
 {
-  GtkIconView *icon_view;
   GtkIconViewChild *child = NULL;
   GList *tmp_list;
 
-  icon_view = GTK_ICON_VIEW (container);
-  
   tmp_list = icon_view->priv->children;
   while (tmp_list)
     {
@@ -1927,27 +1916,6 @@ gtk_icon_view_remove (GtkContainer *container,
 	}
 
       tmp_list = tmp_list->next;
-    }
-}
-
-static void
-gtk_icon_view_forall (GtkContainer *container,
-		      GtkCallback   callback,
-		      gpointer      callback_data)
-{
-  GtkIconView *icon_view;
-  GtkIconViewChild *child = NULL;
-  GList *tmp_list;
-
-  icon_view = GTK_ICON_VIEW (container);
-
-  tmp_list = icon_view->priv->children;
-  while (tmp_list)
-    {
-      child = tmp_list->data;
-      tmp_list = tmp_list->next;
-
-      (* callback) (child->widget, callback_data);
     }
 }
 
@@ -1996,17 +1964,16 @@ gtk_icon_view_add_editable (GtkCellArea            *area,
 
 static void
 gtk_icon_view_remove_editable (GtkCellArea            *area,
-			       GtkCellRenderer        *renderer,
-			       GtkCellEditable        *editable,
-			       GtkIconView            *icon_view)
+                               GtkCellRenderer        *renderer,
+                               GtkCellEditable        *editable,
+                               GtkIconView            *icon_view)
 {
   GtkTreePath *path;
 
   if (gtk_widget_has_focus (GTK_WIDGET (editable)))
     gtk_widget_grab_focus (GTK_WIDGET (icon_view));
-  
-  gtk_container_remove (GTK_CONTAINER (icon_view),
-			GTK_WIDGET (editable));  
+
+  gtk_icon_view_remove (icon_view, GTK_WIDGET (editable));
 
   path = gtk_tree_path_new_from_string (gtk_cell_area_get_current_path_string (area));
   gtk_icon_view_queue_draw_path (icon_view, path);
