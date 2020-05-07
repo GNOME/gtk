@@ -9794,7 +9794,7 @@ bubble_targets_received (GtkClipboard     *clipboard,
   has_clipboard = gtk_selection_data_targets_include_text (data);
   mode = gtk_entry_get_display_mode (entry);
 
-  if (priv->editable && has_selection && mode == DISPLAY_NORMAL)
+  if (mode == DISPLAY_NORMAL)
     append_bubble_action (entry, toolbar, _("Select all"), "edit-select-all-symbolic", "select-all", !all_selected);
 
   if (priv->editable && has_selection && mode == DISPLAY_NORMAL)
