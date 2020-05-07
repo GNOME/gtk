@@ -36,8 +36,6 @@ GtkCssNode     *gtk_style_context_get_node                   (GtkStyleContext *c
 GtkStyleProvider *
                 gtk_style_context_get_style_provider         (GtkStyleContext *context);
 
-void            gtk_style_context_save_named                 (GtkStyleContext *context,
-                                                              const char      *name);
 void            gtk_style_context_save_to_node               (GtkStyleContext *context,
                                                               GtkCssNode      *node);
 
