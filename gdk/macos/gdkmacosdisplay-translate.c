@@ -35,8 +35,8 @@
 static gboolean
 test_resize (NSEvent         *event,
              GdkMacosSurface *surface,
-             gint             x,
-             gint             y)
+             int              x,
+             int              y)
 {
   NSWindow *window;
 
@@ -197,8 +197,8 @@ static GdkEvent *
 fill_button_event (GdkMacosDisplay *display,
                    GdkMacosSurface *surface,
                    NSEvent         *nsevent,
-                   gint             x,
-                   gint             y)
+                   int              x,
+                   int              y)
 {
   GdkSeat *seat;
   GdkEventType type;
@@ -248,8 +248,8 @@ static GdkEvent *
 synthesize_crossing_event (GdkMacosDisplay *display,
                            GdkMacosSurface *surface,
                            NSEvent         *nsevent,
-                           gint             x,
-                           gint             y)
+                           int              x,
+                           int              y)
 {
   GdkEventType event_type;
   GdkModifierType state;
@@ -314,8 +314,8 @@ fill_key_event (GdkMacosDisplay *display,
   guint keycode;
   guint keyval;
   guint group;
-  gint layout;
-  gint level;
+  int layout;
+  int level;
 
   g_assert (GDK_IS_MACOS_DISPLAY (display));
   g_assert (GDK_IS_MACOS_SURFACE (surface));
@@ -561,6 +561,116 @@ fill_motion_event (GdkMacosDisplay *display,
                                NULL);
 }
 
+static GdkEvent *
+fill_scroll_event (GdkMacosDisplay *self,
+                   GdkMacosSurface *surface,
+                   NSEvent         *nsevent,
+                   int              x,
+                   int              y)
+{
+  GdkScrollDirection direction = 0;
+  GdkModifierType state;
+  GdkDevice *pointer;
+  GdkEvent *ret = NULL;
+  GdkSeat *seat;
+  gdouble dx;
+  gdouble dy;
+
+  g_assert (GDK_IS_MACOS_SURFACE (surface));
+  g_assert (nsevent != NULL);
+
+  seat = gdk_display_get_default_seat (GDK_DISPLAY (self));
+  pointer = gdk_seat_get_pointer (seat);
+  state = _gdk_macos_display_get_current_mouse_modifiers (self) |
+          _gdk_macos_display_get_current_keyboard_modifiers (self);
+
+  dx = [nsevent deltaX];
+  dy = [nsevent deltaY];
+
+  if ([nsevent hasPreciseScrollingDeltas])
+    {
+      gdouble sx;
+      gdouble sy;
+
+      /*
+       * TODO: We probably need another event type for the
+       *       high precision scroll events since sx and dy
+       *       are in a unit we don't quite support. For now,
+       *       to slow it down multiply by .1.
+       */
+
+      sx = [nsevent scrollingDeltaX] * .1;
+      sy = [nsevent scrollingDeltaY] * .1;
+
+      if (sx != 0.0 || dx != 0.0)
+        ret = gdk_scroll_event_new (GDK_SURFACE (surface),
+                                    pointer,
+                                    NULL,
+                                    NULL,
+                                    get_time_from_ns_event (nsevent),
+                                    state,
+                                    -sx,
+                                    -sy,
+                                    FALSE);
+
+      /* Fall through for scroll emulation */
+    }
+
+  if (dy != 0.0)
+    {
+      if (dy < 0.0)
+        direction = GDK_SCROLL_DOWN;
+      else
+        direction = GDK_SCROLL_UP;
+
+      dy = fabs (dy);
+      dx = 0.0;
+    }
+  else if (dx != 0.0)
+    {
+      if (dx < 0.0)
+        direction = GDK_SCROLL_RIGHT;
+      else
+        direction = GDK_SCROLL_LEFT;
+
+      dx = fabs (dx);
+      dy = 0.0;
+    }
+
+  if (dx != 0.0 || dy != 0.0)
+    {
+      if ([nsevent hasPreciseScrollingDeltas])
+        {
+          GdkEvent *emulated;
+
+          emulated = gdk_scroll_event_new_discrete (GDK_SURFACE (surface),
+                                                    pointer,
+                                                    NULL,
+                                                    NULL,
+                                                    get_time_from_ns_event (nsevent),
+                                                    state,
+                                                    direction,
+                                                    TRUE);
+          _gdk_event_queue_append (GDK_DISPLAY (self), emulated);
+        }
+      else
+        {
+          g_assert (ret == NULL);
+
+          ret = gdk_scroll_event_new (GDK_SURFACE (surface),
+                                      pointer,
+                                      NULL,
+                                      NULL,
+                                      get_time_from_ns_event (nsevent),
+                                      state,
+                                      dx,
+                                      dy,
+                                      FALSE);
+        }
+    }
+
+  return g_steal_pointer (&ret);
+}
 
 GdkEvent *
 _gdk_macos_display_translate (GdkMacosDisplay *self,
@@ -693,79 +803,12 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
     }
 
     case NSEventTypeScrollWheel:
-      //ret = fill_scroll_event (self, surface, nsevent, point.x, point.y);
+      ret = fill_scroll_event (self, surface, nsevent, point.x, point.y);
       break;
 
     default:
       break;
     }
-
-#if 0
-    case NSScrollWheel:
-      {
-        GdkScrollDirection direction;
-        float dx;
-        float dy;
-
-        if ([nsevent hasPreciseScrollingDeltas])
-          {
-            dx = [nsevent scrollingDeltaX];
-            dy = [nsevent scrollingDeltaY];
-            direction = GDK_SCROLL_SMOOTH;
-
-            fill_scroll_event (window, event, nsevent, x, y, x_root, y_root,
-                               -dx, -dy, direction);
-
-            /* Fall through for scroll buttons emulation */
-          }
-
-        dx = [nsevent deltaX];
-        dy = [nsevent deltaY];
-
-        if (dy != 0.0)
-          {
-            if (dy < 0.0)
-              direction = GDK_SCROLL_DOWN;
-            else
-              direction = GDK_SCROLL_UP;
-
-            dy = fabs (dy);
-            dx = 0.0;
-          }
-        else if (dx != 0.0)
-          {
-            if (dx < 0.0)
-              direction = GDK_SCROLL_RIGHT;
-            else
-              direction = GDK_SCROLL_LEFT;
-
-            dx = fabs (dx);
-            dy = 0.0;
-          }
-
-        if (dx != 0.0 || dy != 0.0)
-          {
-            if ([nsevent hasPreciseScrollingDeltas])
-              {
-                GdkEvent *emulated_event;
-
-                emulated_event = gdk_event_new (GDK_SCROLL);
-                gdk_event_set_pointer_emulated (emulated_event, TRUE);
-                fill_scroll_event (window, emulated_event, nsevent,
-                                   x, y, x_root, y_root,
-                                   dx, dy, direction);
-                append_event (emulated_event, TRUE);
-              }
-            else
-              {
-                fill_scroll_event (window, event, nsevent,
-                                   x, y, x_root, y_root,
-                                   dx, dy, direction);
-              }
-          }
-      }
-      break;
-#endif
 
   return ret;
 }
