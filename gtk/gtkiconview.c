@@ -305,6 +305,11 @@ static gboolean gtk_icon_view_maybe_begin_drag   (GtkIconView      *icon_view,
                                                   double            x,
                                                   double            y,
                                                   GdkDevice        *device);
+static gboolean gtk_icon_view_query_tooltip      (GtkWidget        *widget,
+                                                  int               x,
+                                                  int               y,
+                                                  gboolean          keyboard_tip,
+                                                  GtkTooltip       *tooltip);
 
 static void     remove_scroll_timeout            (GtkIconView *icon_view);
 
@@ -352,6 +357,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   widget_class->snapshot = gtk_icon_view_snapshot;
   widget_class->focus = gtk_widget_focus_self;
   widget_class->grab_focus = gtk_widget_grab_focus_self;
+  widget_class->query_tooltip = gtk_icon_view_query_tooltip;
 
   container_class->remove = gtk_icon_view_remove;
   container_class->forall = gtk_icon_view_forall;
@@ -4407,18 +4413,20 @@ gtk_icon_view_get_tooltip_context (GtkIconView   *icon_view,
 }
 
 static gboolean
-gtk_icon_view_set_tooltip_query_cb (GtkWidget  *widget,
-                                    gint        x,
-                                    gint        y,
-                                    gboolean    keyboard_tip,
-                                    GtkTooltip *tooltip,
-                                    gpointer    data)
+gtk_icon_view_query_tooltip (GtkWidget  *widget,
+                             int         x,
+                             int         y,
+                             gboolean    keyboard_tip,
+                             GtkTooltip *tooltip)
 {
   gchar *str;
   GtkTreeIter iter;
   GtkTreePath *path;
   GtkTreeModel *model;
   GtkIconView *icon_view = GTK_ICON_VIEW (widget);
+
+  if (icon_view->priv->tooltip_column == -1)
+    return FALSE;
 
   if (!gtk_icon_view_get_tooltip_context (GTK_ICON_VIEW (widget),
                                           &x, &y,
@@ -4443,7 +4451,6 @@ gtk_icon_view_set_tooltip_query_cb (GtkWidget  *widget,
   return TRUE;
 }
 
-
 /**
  * gtk_icon_view_set_tooltip_column:
  * @icon_view: a #GtkIconView
@@ -4462,7 +4469,7 @@ gtk_icon_view_set_tooltip_query_cb (GtkWidget  *widget,
  */
 void
 gtk_icon_view_set_tooltip_column (GtkIconView *icon_view,
-                                  gint         column)
+                                  int          column)
 {
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
 
@@ -4470,21 +4477,9 @@ gtk_icon_view_set_tooltip_column (GtkIconView *icon_view,
     return;
 
   if (column == -1)
-    {
-      g_signal_handlers_disconnect_by_func (icon_view,
-                                            gtk_icon_view_set_tooltip_query_cb,
-                                            NULL);
-      gtk_widget_set_has_tooltip (GTK_WIDGET (icon_view), FALSE);
-    }
-  else
-    {
-      if (icon_view->priv->tooltip_column == -1)
-        {
-          g_signal_connect (icon_view, "query-tooltip",
-                            G_CALLBACK (gtk_icon_view_set_tooltip_query_cb), NULL);
-          gtk_widget_set_has_tooltip (GTK_WIDGET (icon_view), TRUE);
-        }
-    }
+    gtk_widget_set_has_tooltip (GTK_WIDGET (icon_view), FALSE);
+  else if (icon_view->priv->tooltip_column == -1)
+    gtk_widget_set_has_tooltip (GTK_WIDGET (icon_view), TRUE);
 
   icon_view->priv->tooltip_column = column;
   g_object_notify (G_OBJECT (icon_view), "tooltip-column");
