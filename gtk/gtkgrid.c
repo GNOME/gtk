@@ -287,8 +287,8 @@ gtk_grid_add (GtkContainer *container,
 }
 
 static void
-gtk_grid_remove (GtkContainer *container,
-                 GtkWidget    *child)
+gtk_grid_real_remove (GtkContainer *container,
+                      GtkWidget    *child)
 {
   GtkGrid *grid = GTK_GRID (container);
   gboolean was_visible;
@@ -335,7 +335,7 @@ gtk_grid_class_init (GtkGridClass *class)
   object_class->set_property = gtk_grid_set_property;
 
   container_class->add = gtk_grid_add;
-  container_class->remove = gtk_grid_remove;
+  container_class->remove = gtk_grid_real_remove;
   container_class->forall = gtk_grid_forall;
   container_class->child_type = gtk_grid_child_type;
 
@@ -578,6 +578,25 @@ gtk_grid_get_child_at (GtkGrid *grid,
     }
 
   return NULL;
+}
+
+/**
+ * gtk_grid_remove:
+ * @grid: a #GtkGrid
+ * @child: the child widget to remove
+ *
+ * Removes a child from @grid, after it has been added
+ * with gtk_grid_attach() or gtk_grid_attach_next_to().
+ */
+void
+gtk_grid_remove (GtkGrid   *grid,
+                 GtkWidget *child)
+{
+  g_return_if_fail (GTK_IS_GRID (grid));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (gtk_widget_get_parent (child) == grid);
+
+  gtk_widget_unparent (child);
 }
 
 /**
