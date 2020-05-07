@@ -246,6 +246,7 @@ typedef struct
 
   GtkCssNode    *overshoot_node[4];
   GtkCssNode    *undershoot_node[4];
+  GtkCssNode    *junction_node;
 
   Indicator hindicator;
   Indicator vindicator;
@@ -1839,7 +1840,7 @@ gtk_scrolled_window_snapshot_scrollbars_junction (GtkScrolledWindow *scrolled_wi
   junction_rect.height = hscr_allocation.height;
 
   context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save_named (context, "junction");
+  gtk_style_context_save_to_node (context, priv->junction_node);
 
   gtk_snapshot_render_background (snapshot, context,
                                   junction_rect.x, junction_rect.y,
@@ -2049,6 +2050,12 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
     }
 
   gtk_scrolled_window_update_use_indicators (scrolled_window);
+
+  priv->junction_node = gtk_css_node_new ();
+  gtk_css_node_set_name (priv->junction_node, g_quark_from_static_string ("junction"));
+  gtk_css_node_set_parent (priv->junction_node, widget_node);
+  gtk_css_node_set_state (priv->junction_node, gtk_css_node_get_state (widget_node));
+  g_object_unref (priv->junction_node);
 
   controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES |
                                                 GTK_EVENT_CONTROLLER_SCROLL_KINETIC);
