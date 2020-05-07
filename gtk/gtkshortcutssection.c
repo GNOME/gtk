@@ -488,28 +488,21 @@ static void
 gtk_shortcuts_section_add_group (GtkShortcutsSection *self,
                                  GtkShortcutsGroup   *group)
 {
-  GList *children;
   GtkWidget *page, *column;
 
-  children = gtk_container_get_children (GTK_CONTAINER (self->stack));
-  if (children)
-    page = g_list_last (children)->data;
-  else
+  page = gtk_widget_get_last_child (GTK_WIDGET (self->stack));
+  if (page == NULL)
     {
       page = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 22);
       gtk_stack_add_named (self->stack, page, "1");
     }
-  g_list_free (children);
 
-  children = gtk_container_get_children (GTK_CONTAINER (page));
-  if (children)
-    column = g_list_last (children)->data;
-  else
+  column = gtk_widget_get_last_child (page);
+  if (column == NULL)
     {
       column = gtk_box_new (GTK_ORIENTATION_VERTICAL, 22);
       gtk_container_add (GTK_CONTAINER (page), column);
     }
-  g_list_free (children);
 
   gtk_container_add (GTK_CONTAINER (column), GTK_WIDGET (group));
   self->groups = g_list_append (self->groups, group);
@@ -565,8 +558,8 @@ gtk_shortcuts_section_filter_groups (GtkShortcutsSection *self)
 static void
 gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
 {
+  GtkWidget *page, *column;
   GList *pages, *p;
-  GList *columns, *c;
   GList *groups, *g;
   GList *children;
   guint n_rows;
@@ -576,22 +569,23 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
 
   /* collect all groups from the current pages */
   groups = NULL;
-  pages = gtk_container_get_children (GTK_CONTAINER (self->stack));
-  for (p = pages; p; p = p->next)
+  for (page = gtk_widget_get_first_child (GTK_WIDGET (self->stack));
+       page != NULL;
+       page = gtk_widget_get_next_sibling (page))
     {
-      columns = gtk_container_get_children (GTK_CONTAINER (p->data));
-      for (c = columns; c; c = c->next)
+      for (column = gtk_widget_get_first_child (page);
+           column != NULL;
+           column = gtk_widget_get_next_sibling (column))
         {
-          children = gtk_container_get_children (GTK_CONTAINER (c->data));
+          children = gtk_container_get_children (GTK_CONTAINER (column));
           groups = g_list_concat (groups, children);
         }
-      g_list_free (columns);
     }
-  g_list_free (pages);
 
   /* create new pages */
   current_page = NULL;
   current_column = NULL;
+
   pages = NULL;
   n_rows = 0;
   n_columns = 0;
@@ -623,8 +617,6 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
 
           if (n_columns % 2 == 0)
             {
-              GtkWidget *page;
-
               page = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 22);
 
               pages = g_list_append (pages, page);
@@ -712,14 +704,14 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
     }
 
   /* replace the current pages with the new pages */
-  children = gtk_container_get_children (GTK_CONTAINER (self->stack));
-  g_list_free_full (children, (GDestroyNotify)gtk_widget_destroy);
+  while ((page = gtk_widget_get_first_child (GTK_WIDGET (self->stack))))
+    gtk_stack_remove (self->stack, page);
 
   for (p = pages, n_pages = 0; p; p = p->next, n_pages++)
     {
-      GtkWidget *page = p->data;
-      gchar *title;
+      char *title;
 
+      page = p->data;
       title = g_strdup_printf ("_%u", n_pages + 1);
       gtk_stack_add_titled (self->stack, page, title, title);
       g_free (title);
