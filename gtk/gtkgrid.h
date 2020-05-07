@@ -82,6 +82,10 @@ GtkWidget *gtk_grid_get_child_at           (GtkGrid         *grid,
                                             gint             left,
                                             gint             top);
 GDK_AVAILABLE_IN_ALL
+void       gtk_grid_remove                 (GtkGrid         *grid,
+                                            GtkWidget       *child);
+
+GDK_AVAILABLE_IN_ALL
 void       gtk_grid_insert_row             (GtkGrid         *grid,
                                             gint             position);
 GDK_AVAILABLE_IN_ALL
@@ -119,14 +123,14 @@ GDK_AVAILABLE_IN_ALL
 guint      gtk_grid_get_column_spacing     (GtkGrid         *grid);
 GDK_AVAILABLE_IN_ALL
 void       gtk_grid_set_row_baseline_position (GtkGrid      *grid,
-					       gint          row,
-					       GtkBaselinePosition pos);
+                                               gint          row,
+                                               GtkBaselinePosition pos);
 GDK_AVAILABLE_IN_ALL
 GtkBaselinePosition gtk_grid_get_row_baseline_position (GtkGrid      *grid,
-							gint          row);
+                                                        gint          row);
 GDK_AVAILABLE_IN_ALL
 void       gtk_grid_set_baseline_row       (GtkGrid         *grid,
-					    gint             row);
+                                            gint             row);
 GDK_AVAILABLE_IN_ALL
 gint       gtk_grid_get_baseline_row       (GtkGrid         *grid);
 
