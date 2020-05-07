@@ -226,7 +226,7 @@ gtk_menu_section_box_remove_func (gint     position,
       stack = gtk_widget_get_ancestor (GTK_WIDGET (box->toplevel), GTK_TYPE_STACK);
       subbox = gtk_stack_get_child_by_name (GTK_STACK (stack), gtk_menu_tracker_item_get_label (item));
       if (subbox != NULL)
-        gtk_container_remove (GTK_CONTAINER (stack), subbox);
+        gtk_stack_remove (GTK_STACK (stack), subbox);
     }
 
   gtk_container_remove (GTK_CONTAINER (box->item_box),
@@ -476,18 +476,14 @@ update_popover_position_cb (GObject    *source,
 {
   GtkPopover *popover = GTK_POPOVER (source);
   GtkMenuSectionBox *box = GTK_MENU_SECTION_BOX (user_data);
+  GtkWidget *w;
 
   GtkPositionType new_pos = gtk_popover_get_position (popover);
 
-  GList *children = gtk_container_get_children (GTK_CONTAINER (gtk_widget_get_parent (GTK_WIDGET (box))));
-  GList *l;
-
-  for (l = children;
-       l != NULL;
-       l = l->next)
+  for (w = gtk_widget_get_first_child (gtk_widget_get_parent (GTK_WIDGET (box)));
+       w != NULL;
+       w = gtk_widget_get_next_sibling (w))
     {
-      GtkWidget *w = l->data;
-
       if (new_pos == GTK_POS_BOTTOM)
         gtk_widget_set_valign (w, GTK_ALIGN_START);
       else if (new_pos == GTK_POS_TOP)
@@ -495,8 +491,6 @@ update_popover_position_cb (GObject    *source,
       else
         gtk_widget_set_valign (w, GTK_ALIGN_CENTER);
     }
-
-  g_list_free (children);
 }
 
 void
