@@ -1291,13 +1291,13 @@ wrap_in_frame (const gchar *label,
   g_free (bold_text);
 
   frame = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_frame_set_child (GTK_FRAME (frame), label_widget);
+  gtk_container_add (GTK_CONTAINER (frame), label_widget);
 
   gtk_widget_set_margin_start (child, 12);
   gtk_widget_set_halign (child, GTK_ALIGN_FILL);
   gtk_widget_set_valign (child, GTK_ALIGN_FILL);
 
-  gtk_frame_set_child (GTK_FRAME (frame), child);
+  gtk_container_add (GTK_CONTAINER (frame), child);
 
   gtk_widget_show (frame);
 
@@ -1355,14 +1355,16 @@ static gint
 grid_rows (GtkGrid *table)
 {
   gint t0, t1, l, t, w, h;
-  GList *children, *c;
+  GtkWidget *c;
+  gboolean first;
 
-  children = gtk_container_get_children (GTK_CONTAINER (table));
   t0 = t1 = 0;
-  for (c = children; c; c = c->next)
+  for (c = gtk_widget_get_first_child (GTK_WIDGET (table)), first = TRUE;
+       c != NULL;
+       c  = gtk_widget_get_next_sibling (GTK_WIDGET (c)), first = FALSE)
     {
-      gtk_grid_query_child (table, c->data, &l, &t, &w, &h);
-      if (c == children)
+      gtk_grid_query_child (table, c, &l, &t, &w, &h);
+      if (first)
         {
           t0 = t;
           t1 = t + h;
@@ -1375,7 +1377,6 @@ grid_rows (GtkGrid *table)
             t1 = t + h;
         }
     }
-  g_list_free (children);
 
   return t1 - t0;
 }
@@ -1946,17 +1947,19 @@ extension_point_clear_children (GtkContainer *container)
 static void
 clear_per_printer_ui (GtkPrintUnixDialog *dialog)
 {
+  GtkWidget *child;
+
   if (dialog->finishing_table == NULL)
     return;
 
-  gtk_container_foreach (GTK_CONTAINER (dialog->finishing_table),
-                         (GtkCallback)gtk_widget_destroy, NULL);
-  gtk_container_foreach (GTK_CONTAINER (dialog->image_quality_table),
-                         (GtkCallback)gtk_widget_destroy, NULL);
-  gtk_container_foreach (GTK_CONTAINER (dialog->color_table),
-                         (GtkCallback)gtk_widget_destroy, NULL);
-  gtk_container_foreach (GTK_CONTAINER (dialog->advanced_vbox),
-                         (GtkCallback)gtk_widget_destroy, NULL);
+  while ((child = gtk_widget_get_first_child (dialog->finishing_table)))
+    gtk_grid_remove (GTK_GRID (dialog->finishing_table), child);
+  while ((child = gtk_widget_get_first_child (dialog->image_quality_table)))
+    gtk_grid_remove (GTK_GRID (dialog->image_quality_table), child);
+  while ((child = gtk_widget_get_first_child (dialog->color_table)))
+    gtk_grid_remove (GTK_GRID (dialog->color_table), child);
+  while ((child = gtk_widget_get_first_child (dialog->advanced_vbox)))
+    gtk_container_remove (GTK_CONTAINER (dialog->advanced_vbox), child);
   extension_point_clear_children (GTK_CONTAINER (dialog->extension_point));
 }
 
