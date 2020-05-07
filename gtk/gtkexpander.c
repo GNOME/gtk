@@ -140,7 +140,8 @@ enum
   PROP_USE_UNDERLINE,
   PROP_USE_MARKUP,
   PROP_LABEL_WIDGET,
-  PROP_RESIZE_TOPLEVEL
+  PROP_RESIZE_TOPLEVEL,
+  PROP_CHILD
 };
 
 typedef struct _GtkExpanderClass   GtkExpanderClass;
@@ -355,6 +356,14 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
+  g_object_class_install_property (gobject_class,
+                                   PROP_CHILD,
+                                   g_param_spec_object ("child",
+                                                        P_("Child"),
+                                                        P_("The child widget"),
+                                                        GTK_TYPE_WIDGET,
+                                                        GTK_PARAM_READWRITE));
+
   widget_class->activate_signal =
     g_signal_new (I_("activate"),
                   G_TYPE_FROM_CLASS (gobject_class),
@@ -462,6 +471,9 @@ gtk_expander_set_property (GObject      *object,
     case PROP_RESIZE_TOPLEVEL:
       gtk_expander_set_resize_toplevel (expander, g_value_get_boolean (value));
       break;
+    case PROP_CHILD:
+      gtk_expander_set_child (expander, g_value_get_object (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -497,6 +509,9 @@ gtk_expander_get_property (GObject    *object,
       break;
     case PROP_RESIZE_TOPLEVEL:
       g_value_set_boolean (value, gtk_expander_get_resize_toplevel (expander));
+      break;
+    case PROP_CHILD:
+      g_value_set_object (value, gtk_expander_get_child (expander));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1189,3 +1204,44 @@ gtk_expander_get_resize_toplevel (GtkExpander *expander)
 
   return expander->resize_toplevel;
 }
+
+/**
+ * gtk_expander_set_child:
+ * @expander: a #GtkExpander
+ * @child: (allow-none): the child widget
+ *
+ * Sets the child widget of @expander.
+ */
+void
+gtk_expander_set_child (GtkExpander *expander,
+                        GtkWidget   *child)
+{
+  g_return_if_fail (GTK_IS_EXPANDER (expander));
+  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+
+  g_clear_pointer (&expander->child, gtk_widget_unparent);
+
+  expander->child = child;
+
+  if (expander->child)
+    gtk_widget_set_parent (expander->child, GTK_WIDGET (expander));
+
+  g_object_notify (G_OBJECT (expander), "child");
+}
+
+/**
+ * gtk_expander_get_child:
+ * @expander: a #GtkExpander
+ *
+ * Gets the child widget of @expander.
+ *
+ * Returns: (nullable) (transfer none): the child widget of @expander
+ */
+GtkWidget *
+gtk_expander_get_child (GtkExpander *expander)
+{
+  g_return_val_if_fail (GTK_IS_EXPANDER (expander), NULL);
+
+  return expander->child;
+}
+

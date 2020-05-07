@@ -16,7 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  *
  * Authors:
- *	Mark McLoughlin <mark@skynet.ie>
+ *      Mark McLoughlin <mark@skynet.ie>
  */
 
 #ifndef __GTK_EXPANDER_H__
@@ -70,7 +70,7 @@ gboolean              gtk_expander_get_use_markup      (GtkExpander *expander);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_expander_set_label_widget    (GtkExpander *expander,
-						        GtkWidget   *label_widget);
+                                                        GtkWidget   *label_widget);
 GDK_AVAILABLE_IN_ALL
 GtkWidget            *gtk_expander_get_label_widget    (GtkExpander *expander);
 GDK_AVAILABLE_IN_ALL
@@ -78,6 +78,13 @@ void                  gtk_expander_set_resize_toplevel (GtkExpander *expander,
                                                         gboolean     resize_toplevel);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_expander_get_resize_toplevel (GtkExpander *expander);
+
+GDK_AVAILABLE_IN_ALL
+void                  gtk_expander_set_child           (GtkExpander *expander,
+                                                        GtkWidget      *child);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *           gtk_expander_get_child           (GtkExpander *expander);
+
 
 G_END_DECLS
 
