@@ -2214,7 +2214,7 @@ create_expander (GtkWidget *widget)
 
       hidden = gtk_label_new ("Revealed!");
 
-      gtk_container_add (GTK_CONTAINER (expander), hidden);
+      gtk_expander_set_child (GTK_EXPANDER (expander), hidden);
     }
 
   if (!gtk_widget_get_visible (window))

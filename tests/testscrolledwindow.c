@@ -120,7 +120,7 @@ scrollable_policy (void)
   expander = gtk_expander_new ("Controls");
   gtk_expander_set_expanded (GTK_EXPANDER (expander), TRUE);
   cntl = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
-  gtk_container_add (GTK_CONTAINER (expander), cntl);
+  gtk_expander_set_child (GTK_EXPANDER (expander), cntl);
   gtk_container_add (GTK_CONTAINER (vbox), expander);
 
   /* Add Horizontal policy control here */
