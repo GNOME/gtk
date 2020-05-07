@@ -78,13 +78,13 @@ enum
   PROP_SYMBOLIC
 };
 
-static gboolean	cb_query_tooltip (GtkWidget       *button,
+static gboolean cb_query_tooltip (GtkWidget       *button,
                                   gint             x,
                                   gint             y,
                                   gboolean         keyboard_mode,
                                   GtkTooltip      *tooltip,
                                   gpointer         user_data);
-static void	cb_value_changed (GtkVolumeButton *button,
+static void     cb_value_changed (GtkVolumeButton *button,
                                   gdouble          value,
                                   gpointer         user_data);
 
@@ -110,9 +110,9 @@ get_symbolic (GtkScaleButton *button)
 
 static void
 gtk_volume_button_set_property (GObject       *object,
-				guint          prop_id,
-				const GValue  *value,
-				GParamSpec    *pspec)
+                                guint          prop_id,
+                                const GValue  *value,
+                                GParamSpec    *pspec)
 {
   GtkScaleButton *button = GTK_SCALE_BUTTON (object);
 
@@ -124,7 +124,7 @@ gtk_volume_button_set_property (GObject       *object,
           if (g_value_get_boolean (value))
             gtk_scale_button_set_icons (button, (const char **) icons_symbolic);
           else
-	    gtk_scale_button_set_icons (button, (const char **) icons);
+            gtk_scale_button_set_icons (button, (const char **) icons);
           g_object_notify_by_pspec (object, pspec);
         }
       break;
@@ -136,9 +136,9 @@ gtk_volume_button_set_property (GObject       *object,
 
 static void
 gtk_volume_button_get_property (GObject     *object,
-			        guint        prop_id,
-			        GValue      *value,
-			        GParamSpec  *pspec)
+                                guint        prop_id,
+                                GValue      *value,
+                                GParamSpec  *pspec)
 {
   switch (prop_id)
     {
@@ -192,7 +192,7 @@ gtk_volume_button_init (GtkVolumeButton *button)
 
   /* The atk action description is not supported by GtkBuilder */
   atk_action_set_description (ATK_ACTION (gtk_widget_get_accessible (GTK_WIDGET (widget))),
-			      1, _("Adjusts the volume"));
+                              1, _("Adjusts the volume"));
 }
 
 /**
@@ -214,19 +214,16 @@ gtk_volume_button_new (void)
 
 static gboolean
 cb_query_tooltip (GtkWidget  *button,
-		  gint        x,
-		  gint        y,
-		  gboolean    keyboard_mode,
-		  GtkTooltip *tooltip,
-		  gpointer    user_data)
+                  gint        x,
+                  gint        y,
+                  gboolean    keyboard_mode,
+                  GtkTooltip *tooltip,
+                  gpointer    user_data)
 {
   GtkScaleButton *scale_button = GTK_SCALE_BUTTON (button);
   GtkAdjustment *adjustment;
   gdouble val;
   char *str;
-  AtkImage *image;
-
-  image = ATK_IMAGE (gtk_widget_get_accessible (button));
 
   adjustment = gtk_scale_button_get_adjustment (scale_button);
   val = gtk_scale_button_get_value (scale_button);
@@ -254,7 +251,6 @@ cb_query_tooltip (GtkWidget  *button,
     }
 
   gtk_tooltip_set_text (tooltip, str);
-  atk_image_set_image_description (image, str);
   g_free (str);
 
   return TRUE;
