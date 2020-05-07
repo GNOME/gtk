@@ -26,7 +26,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkcontainer.h>
+#include <gtk/gtkwidget.h>
 #include <gtk/gtkselectionmodel.h>
 
 G_BEGIN_DECLS
