@@ -377,6 +377,8 @@ struct _GtkPrintUnixDialog
   gchar *format_for_printer;
 
   gint current_page;
+  GtkCssNode *collate_paper_node;
+  GtkCssNode *page_layout_paper_node;
 };
 
 struct _GtkPrintUnixDialogClass
@@ -799,6 +801,18 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 
   gtk_css_node_set_name (gtk_widget_get_css_node (dialog->collate_image), g_quark_from_static_string ("drawing"));
   gtk_css_node_set_name (gtk_widget_get_css_node (dialog->page_layout_preview), g_quark_from_static_string ("drawing"));
+
+  dialog->collate_paper_node = gtk_css_node_new();
+  gtk_css_node_set_name (dialog->collate_paper_node, g_quark_from_static_string ("paper"));
+  gtk_css_node_set_parent (dialog->collate_paper_node,
+                           gtk_widget_get_css_node (dialog->collate_image));
+  g_object_unref (dialog->collate_paper_node);
+
+  dialog->page_layout_paper_node = gtk_css_node_new();
+  gtk_css_node_set_name (dialog->page_layout_paper_node, g_quark_from_static_string ("paper"));
+  gtk_css_node_set_parent (dialog->page_layout_paper_node,
+                           gtk_widget_get_css_node (dialog->page_layout_preview));
+  g_object_unref (dialog->page_layout_paper_node);
 }
 
 static void
@@ -2183,7 +2197,8 @@ update_collate_icon (GtkToggleButton    *toggle_button,
 }
 
 static void
-paint_page (GtkWidget  *widget,
+paint_page (GtkPrintUnixDialog *dialog,
+            GtkWidget  *widget,
             cairo_t    *cr,
             gint        x,
             gint        y,
@@ -2200,7 +2215,7 @@ paint_page (GtkWidget  *widget,
   text_y = 21;
 
   context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save_named (context, "paper");
+  gtk_style_context_save_to_node (context, dialog->collate_paper_node);
 
   gtk_render_background (context, cr, x, y, width, height);
   gtk_render_frame (context, cr, x, y, width, height);
@@ -2259,16 +2274,16 @@ draw_collate (GtkDrawingArea *da,
 
   if (copies == 1)
     {
-      paint_page (widget, cr, x1 + p1, y, reverse ? "1" : "2", text_x);
-      paint_page (widget, cr, x1 + p2, y + 10, reverse ? "2" : "1", text_x);
+      paint_page (dialog, widget, cr, x1 + p1, y, reverse ? "1" : "2", text_x);
+      paint_page (dialog, widget, cr, x1 + p2, y + 10, reverse ? "2" : "1", text_x);
     }
   else
     {
-      paint_page (widget, cr, x1 + p1, y, collate == reverse ? "1" : "2", text_x);
-      paint_page (widget, cr, x1 + p2, y + 10, reverse ? "2" : "1", text_x);
+      paint_page (dialog, widget, cr, x1 + p1, y, collate == reverse ? "1" : "2", text_x);
+      paint_page (dialog, widget, cr, x1 + p2, y + 10, reverse ? "2" : "1", text_x);
 
-      paint_page (widget, cr, x2 + p1, y, reverse ? "1" : "2", text_x);
-      paint_page (widget, cr, x2 + p2, y + 10, collate == reverse ? "2" : "1", text_x);
+      paint_page (dialog, widget, cr, x2 + p1, y, reverse ? "1" : "2", text_x);
+      paint_page (dialog, widget, cr, x2 + p2, y + 10, collate == reverse ? "2" : "1", text_x);
     }
 }
 
@@ -2733,7 +2748,7 @@ draw_page (GtkDrawingArea *da,
     }
 
   context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save_named (context, "paper");
+  gtk_style_context_save_to_node (context, dialog->page_layout_paper_node);
   gtk_style_context_get_color (context, &color);
 
   pos_x = (width - w) / 2;
@@ -2843,6 +2858,7 @@ draw_page (GtkDrawingArea *da,
         break;
     }
 
+  cairo_set_source_rgba (cr, color.red, color.green, color.blue, color.alpha);
   if (horizontal)
     for (y = start_y; y != end_y + dy; y += dy)
       {
