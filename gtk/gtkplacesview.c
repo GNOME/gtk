@@ -587,7 +587,7 @@ populate_servers (GtkPlacesView *view)
       gtk_widget_set_hexpand (label, TRUE);
       gtk_label_set_xalign (GTK_LABEL (label), 0.0);
       gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-      gtk_container_add (GTK_CONTAINER (grid), label);
+      gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
 
       /* the uri itself */
       label = gtk_label_new (uris[i]);
@@ -595,7 +595,7 @@ populate_servers (GtkPlacesView *view)
       gtk_label_set_xalign (GTK_LABEL (label), 0.0);
       gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
       gtk_widget_add_css_class (label, "dim-label");
-      gtk_container_add (GTK_CONTAINER (grid), label);
+      gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
 
       /* remove button */
       button = gtk_button_new_from_icon_name ("window-close-symbolic");
@@ -605,7 +605,7 @@ populate_servers (GtkPlacesView *view)
       gtk_widget_add_css_class (button, "sidebar-button");
       gtk_grid_attach (GTK_GRID (grid), button, 1, 0, 1, 2);
 
-      gtk_container_add (GTK_CONTAINER (row), grid);
+      gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), grid);
       gtk_container_add (GTK_CONTAINER (view->recent_servers_listbox), row);
 
       /* custom data */
