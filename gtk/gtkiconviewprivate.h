@@ -44,14 +44,14 @@ typedef struct _GtkIconViewPrivate    GtkIconViewPrivate;
 
 struct _GtkIconView
 {
-  GtkContainer parent;
+  GtkWidget parent;
 
   GtkIconViewPrivate *priv;
 };
 
 struct _GtkIconViewClass
 {
-  GtkContainerClass parent_class;
+  GtkWidgetClass parent_class;
 
   void    (* item_activated)         (GtkIconView      *icon_view,
                                       GtkTreePath      *path);
