@@ -5619,6 +5619,7 @@ GtkStack
 gtk_stack_new
 gtk_stack_add_named
 gtk_stack_add_titled
+gtk_stack_remove
 gtk_stack_get_child_by_name
 gtk_stack_get_page
 gtk_stack_get_pages
