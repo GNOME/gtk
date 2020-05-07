@@ -118,6 +118,7 @@ create_widget_tree (void)
   gtk_container_add (GTK_CONTAINER (box), grid);
 
   label = gtk_label_new ("Hello World");
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
   gtk_container_add (GTK_CONTAINER (grid), label);
 
   return label;
