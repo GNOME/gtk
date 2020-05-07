@@ -78,12 +78,11 @@ enum
   PROP_SYMBOLIC
 };
 
-static gboolean cb_query_tooltip (GtkWidget       *button,
-                                  gint             x,
-                                  gint             y,
-                                  gboolean         keyboard_mode,
-                                  GtkTooltip      *tooltip,
-                                  gpointer         user_data);
+static gboolean gtk_volume_button_query_tooltip (GtkWidget  *button,
+                                                 int         x,
+                                                 int         y,
+                                                 gboolean    keyboard_mode,
+                                                 GtkTooltip *tooltip);
 static void     cb_value_changed (GtkVolumeButton *button,
                                   gdouble          value,
                                   gpointer         user_data);
@@ -160,6 +159,8 @@ gtk_volume_button_class_init (GtkVolumeButtonClass *klass)
   gobject_class->set_property = gtk_volume_button_set_property;
   gobject_class->get_property = gtk_volume_button_get_property;
 
+  widget_class->query_tooltip = gtk_volume_button_query_tooltip;
+
   /**
    * GtkVolumeButton:use-symbolic:
    *
@@ -179,7 +180,6 @@ gtk_volume_button_class_init (GtkVolumeButtonClass *klass)
   /* Bind class to template
    */
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkvolumebutton.ui");
-  gtk_widget_class_bind_template_callback (widget_class, cb_query_tooltip);
   gtk_widget_class_bind_template_callback (widget_class, cb_value_changed);
 }
 
@@ -213,12 +213,11 @@ gtk_volume_button_new (void)
 }
 
 static gboolean
-cb_query_tooltip (GtkWidget  *button,
-                  gint        x,
-                  gint        y,
-                  gboolean    keyboard_mode,
-                  GtkTooltip *tooltip,
-                  gpointer    user_data)
+gtk_volume_button_query_tooltip (GtkWidget  *button,
+                                 int         x,
+                                 int         y,
+                                 gboolean    keyboard_mode,
+                                 GtkTooltip *tooltip)
 {
   GtkScaleButton *scale_button = GTK_SCALE_BUTTON (button);
   GtkAdjustment *adjustment;
