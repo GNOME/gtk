@@ -210,9 +210,8 @@ static void
 gtk_color_chooser_widget_set_use_alpha (GtkColorChooserWidget *cc,
                                         gboolean               use_alpha)
 {
-  GList *children, *l;
   GList *palettes, *p;
-  GtkWidget *swatch;
+  GtkWidget *child;
   GtkWidget *grid;
 
   if (cc->use_alpha == use_alpha)
@@ -226,16 +225,13 @@ gtk_color_chooser_widget_set_use_alpha (GtkColorChooserWidget *cc,
     {
       grid = p->data;
 
-      if (!GTK_IS_CONTAINER (grid))
-        continue;
-
-      children = gtk_container_get_children (GTK_CONTAINER (grid));
-      for (l = children; l; l = l->next)
+      for (child = gtk_widget_get_first_child (grid);
+           child != NULL;
+           child = gtk_widget_get_next_sibling (child))
         {
-          swatch = l->data;
-          gtk_color_swatch_set_use_alpha (GTK_COLOR_SWATCH (swatch), use_alpha);
+          if (GTK_IS_COLOR_SWATCH (child))
+            gtk_color_swatch_set_use_alpha (GTK_COLOR_SWATCH (child), use_alpha);
         }
-      g_list_free (children);
     }
   g_list_free (palettes);
 
@@ -306,7 +302,12 @@ remove_palette (GtkColorChooserWidget *cc)
       gtk_widget_get_parent (GTK_WIDGET (cc->current)) != cc->custom)
     cc->current = NULL;
 
-  children = gtk_container_get_children (GTK_CONTAINER (cc->palette));
+  children = NULL;
+  for (widget = gtk_widget_get_first_child (cc->palette);
+       widget != NULL;
+       widget = gtk_widget_get_next_sibling (widget))
+    children = g_list_prepend (children, widget);
+
   for (l = children; l; l = l->next)
     {
       widget = l->data;
@@ -818,9 +819,8 @@ gtk_color_chooser_widget_set_rgba (GtkColorChooser *chooser,
                                    const GdkRGBA   *color)
 {
   GtkColorChooserWidget *cc = GTK_COLOR_CHOOSER_WIDGET (chooser);
-  GList *children, *l;
   GList *palettes, *p;
-  GtkColorSwatch *swatch;
+  GtkWidget *swatch;
   GtkWidget *w;
   GdkRGBA c;
 
@@ -831,22 +831,20 @@ gtk_color_chooser_widget_set_rgba (GtkColorChooser *chooser,
       if (!GTK_IS_GRID (w) && !GTK_IS_BOX (w))
         continue;
 
-      children = gtk_container_get_children (GTK_CONTAINER (w));
-      for (l = children; l; l = l->next)
+      for (swatch = gtk_widget_get_first_child (w);
+           swatch != NULL;
+           swatch = gtk_widget_get_next_sibling (swatch))
         {
-          swatch = l->data;
-          gtk_color_swatch_get_rgba (swatch, &c);
+          gtk_color_swatch_get_rgba (GTK_COLOR_SWATCH (swatch), &c);
           if (!cc->use_alpha)
             c.alpha = color->alpha;
           if (gdk_rgba_equal (color, &c))
             {
-              select_swatch (cc, swatch);
-              g_list_free (children);
+              select_swatch (cc, GTK_COLOR_SWATCH (swatch));
               g_list_free (palettes);
               return;
             }
         }
-      g_list_free (children);
     }
   g_list_free (palettes);
 

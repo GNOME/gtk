@@ -62,11 +62,11 @@ simple_grid (void)
   gtk_grid_set_column_spacing (GTK_GRID (grid), 5);
   gtk_grid_set_row_spacing (GTK_GRID (grid), 5);
   test1 = test_widget ("1", "red");
-  gtk_container_add (GTK_CONTAINER (grid), test1);
+  gtk_grid_attach (GTK_GRID (grid), test1, 0, 0, 1, 1);
   test2 = test_widget ("2", "green");
-  gtk_container_add (GTK_CONTAINER (grid), test2);
+  gtk_grid_attach (GTK_GRID (grid), test2, 1, 0, 1, 1);
   test3 = test_widget ("3", "blue");
-  gtk_container_add (GTK_CONTAINER (grid), test3);
+  gtk_grid_attach (GTK_GRID (grid), test3, 2, 0, 1, 1);
   test4 = test_widget ("4", "green");
   gtk_grid_attach (GTK_GRID (grid), test4, 0, 1, 1, 1);
   gtk_widget_set_vexpand (test4, TRUE);
