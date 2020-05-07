@@ -69,7 +69,7 @@ main (int argc, char *argv[])
                             "innuendo, just to make you scroll down or "
                             "resize the window. Do it already !", -1);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), tv);
-  gtk_container_add (GTK_CONTAINER (expander), sw);
+  gtk_expander_set_child (GTK_EXPANDER (expander), sw);
   gtk_widget_set_hexpand (expander, TRUE);
   gtk_widget_set_vexpand (expander, TRUE);
   gtk_container_add (GTK_CONTAINER (area), expander);
