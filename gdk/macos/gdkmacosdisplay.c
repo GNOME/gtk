@@ -700,19 +700,19 @@ void
 _gdk_macos_display_break_all_grabs (GdkMacosDisplay *self,
                                     guint32          time)
 {
-  GList *devices = NULL;
+  GdkDevice *devices[2];
   GdkSeat *seat;
 
   g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
 
   seat = gdk_display_get_default_seat (GDK_DISPLAY (self));
 
-  devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
-  devices = g_list_prepend (devices, gdk_seat_get_pointer (seat));
+  devices[0] = gdk_seat_get_keyboard (seat);
+  devices[1] = gdk_seat_get_pointer (seat);
 
-  for (const GList *l = devices; l; l = l->next)
+  for (guint i = 0; i < G_N_ELEMENTS (devices); i++)
     {
-      GdkDevice *device = l->data;
+      GdkDevice *device = devices[i];
       GdkDeviceGrabInfo *grab;
 
       grab = _gdk_display_get_last_device_grab (GDK_DISPLAY (self), device);
@@ -725,8 +725,6 @@ _gdk_macos_display_break_all_grabs (GdkMacosDisplay *self,
 
       _gdk_display_device_grab_update (GDK_DISPLAY (self), device, NULL, 0);
     }
-
-  g_list_free (devices);
 }
 
 void
