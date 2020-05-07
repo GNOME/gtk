@@ -138,7 +138,7 @@ edit_label_done (GtkWidget *entry, gpointer data)
   gtk_label_set_text (GTK_LABEL (label), gtk_editable_get_text (GTK_EDITABLE (entry)));
   gtk_widget_show (label);
 
-  gtk_container_remove (GTK_CONTAINER (canvas), entry);
+  gtk_fixed_remove (GTK_FIXED (canvas), entry);
 }
 
 static void
@@ -172,7 +172,7 @@ delete_cb (GtkWidget *button, GtkWidget *child)
 {
   GtkWidget *canvas = gtk_widget_get_parent (child);
 
-  gtk_container_remove (GTK_CONTAINER (canvas), child);
+  gtk_fixed_remove (GTK_FIXED (canvas), child);
 
   gtk_popover_popdown (GTK_POPOVER (gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER)));
 }
