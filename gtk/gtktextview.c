@@ -1975,8 +1975,7 @@ _gtk_text_view_ensure_magnifier (GtkTextView *text_view)
   gtk_widget_set_parent (priv->magnifier_popover, GTK_WIDGET (text_view));
   gtk_widget_add_css_class (priv->magnifier_popover, "magnifier");
   gtk_popover_set_autohide (GTK_POPOVER (priv->magnifier_popover), FALSE);
-  gtk_container_add (GTK_CONTAINER (priv->magnifier_popover),
-                     priv->magnifier);
+  gtk_popover_set_child (GTK_POPOVER (priv->magnifier_popover), priv->magnifier);
   gtk_widget_show (priv->magnifier);
 }
 
@@ -8752,7 +8751,7 @@ append_bubble_item (GtkTextView *text_view,
     item = gtk_button_new ();
   gtk_widget_set_focus_on_click (item, FALSE);
   image = gtk_image_new_from_icon_name (icon_name);
-  gtk_container_add (GTK_CONTAINER (item), image);
+  gtk_button_set_child (GTK_BUTTON (item), image);
   gtk_widget_add_css_class (item, "image-button");
   gtk_actionable_set_action_name (GTK_ACTIONABLE (item), action_name);
 
@@ -8791,7 +8790,7 @@ gtk_text_view_selection_bubble_popup_show (gpointer user_data)
   gtk_widget_set_margin_bottom (box, 10);
   toolbar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_add_css_class (toolbar, "linked");
-  gtk_container_add (GTK_CONTAINER (priv->selection_bubble), box);
+  gtk_popover_set_child (GTK_POPOVER (priv->selection_bubble), box);
   gtk_container_add (GTK_CONTAINER (box), toolbar);
 
   model = gtk_text_view_get_menu_model (text_view);
