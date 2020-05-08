@@ -66,7 +66,6 @@
 #include "gtktooltipprivate.h"
 
 #include "a11y/gtkwindowaccessibleprivate.h"
-#include "a11y/gtkcontaineraccessibleprivate.h"
 #include "inspector/window.h"
 
 #include "gdk/gdktextureprivate.h"
