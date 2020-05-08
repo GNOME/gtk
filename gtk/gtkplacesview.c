@@ -1588,32 +1588,54 @@ static void
 populate_available_protocols_grid (GtkGrid *grid)
 {
   const gchar* const *supported_protocols;
+  gboolean has_any = FALSE;
 
   supported_protocols = g_vfs_get_supported_uri_schemes (g_vfs_get_default ());
 
   if (g_strv_contains (supported_protocols, "afp"))
-    attach_protocol_row_to_grid (grid, _("AppleTalk"), "afp://");
+    {
+      attach_protocol_row_to_grid (grid, _("AppleTalk"), "afp://");
+      has_any = TRUE;
+    }
 
   if (g_strv_contains (supported_protocols, "ftp"))
-    attach_protocol_row_to_grid (grid, _("File Transfer Protocol"),
-                                 /* Translators: do not translate ftp:// and ftps:// */
-                                 _("ftp:// or ftps://"));
+    {
+      attach_protocol_row_to_grid (grid, _("File Transfer Protocol"),
+                                   /* Translators: do not translate ftp:// and ftps:// */
+                                   _("ftp:// or ftps://"));
+      has_any = TRUE;
+    }
 
   if (g_strv_contains (supported_protocols, "nfs"))
-    attach_protocol_row_to_grid (grid, _("Network File System"), "nfs://");
+    {
+      attach_protocol_row_to_grid (grid, _("Network File System"), "nfs://");
+      has_any = TRUE;
+    }
 
   if (g_strv_contains (supported_protocols, "smb"))
-    attach_protocol_row_to_grid (grid, _("Samba"), "smb://");
+    {
+      attach_protocol_row_to_grid (grid, _("Samba"), "smb://");
+      has_any = TRUE;
+    }
 
   if (g_strv_contains (supported_protocols, "ssh"))
-    attach_protocol_row_to_grid (grid, _("SSH File Transfer Protocol"),
-                                 /* Translators: do not translate sftp:// and ssh:// */
-                                 _("sftp:// or ssh://"));
+    {
+      attach_protocol_row_to_grid (grid, _("SSH File Transfer Protocol"),
+                                   /* Translators: do not translate sftp:// and ssh:// */
+                                   _("sftp:// or ssh://"));
+      has_any = TRUE;
+    }
 
   if (g_strv_contains (supported_protocols, "dav"))
-    attach_protocol_row_to_grid (grid, _("WebDAV"),
-                                 /* Translators: do not translate dav:// and davs:// */
-                                 _("dav:// or davs://"));
+    {
+      attach_protocol_row_to_grid (grid, _("WebDAV"),
+                                   /* Translators: do not translate dav:// and davs:// */
+                                   _("dav:// or davs://"));
+      has_any = TRUE;
+    }
+
+  if (!has_any)
+    gtk_widget_hide (grid);
 }
 
 static GMenuModel *
