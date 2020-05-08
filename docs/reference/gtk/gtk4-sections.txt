@@ -5712,6 +5712,7 @@ gtk_revealer_get_type
 GtkFlowBox
 gtk_flow_box_new
 gtk_flow_box_insert
+gtk_flow_box_remove
 gtk_flow_box_get_child_at_index
 gtk_flow_box_get_child_at_pos
 gtk_flow_box_set_hadjustment
