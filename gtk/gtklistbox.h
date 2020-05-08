@@ -172,6 +172,9 @@ void           gtk_list_box_insert                       (GtkListBox            
                                                           GtkWidget                     *child,
                                                           gint                           position);
 GDK_AVAILABLE_IN_ALL
+void           gtk_list_box_remove                       (GtkListBox                    *box,
+                                                          GtkWidget                     *child);
+GDK_AVAILABLE_IN_ALL
 GtkListBoxRow* gtk_list_box_get_selected_row             (GtkListBox                    *box);
 GDK_AVAILABLE_IN_ALL
 GtkListBoxRow* gtk_list_box_get_row_at_index             (GtkListBox                    *box,
