@@ -27,7 +27,6 @@
 
 #include <gio/gio.h>
 #include <gtk/gtkwidget.h>
-#include <gtk/gtkcontainer.h>
 
 
 G_BEGIN_DECLS
