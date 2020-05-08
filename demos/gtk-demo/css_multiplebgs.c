@@ -115,7 +115,7 @@ do_css_multiplebgs (GtkWidget *do_widget)
 
       /* Need a filler so we get a handle */
       child = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (paned), child);
+      gtk_paned_set_start_child (GTK_PANED (paned), child);
 
       text = gtk_text_buffer_new (NULL);
       gtk_text_buffer_create_tag (text,
@@ -130,9 +130,9 @@ do_css_multiplebgs (GtkWidget *do_widget)
       provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
 
       container = gtk_scrolled_window_new (NULL, NULL);
-      gtk_container_add (GTK_CONTAINER (paned), container);
+      gtk_paned_set_end_child (GTK_PANED (paned), container);
       child = gtk_text_view_new_with_buffer (text);
-      gtk_container_add (GTK_CONTAINER (container), child);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (container), child);
       g_signal_connect (text,
                         "changed",
                         G_CALLBACK (css_text_changed),

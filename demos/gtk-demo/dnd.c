@@ -119,7 +119,7 @@ new_item_cb (GtkWidget *button, gpointer data)
   GtkWidget *item;
 
   item = canvas_item_new (pos_x, pos_y);
-  gtk_container_add (GTK_CONTAINER (canvas), item);
+  gtk_fixed_put (GTK_FIXED (canvas), item, 0, 0);
   apply_transform (item);
 
   gtk_popover_popdown (GTK_POPOVER (gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER)));
@@ -459,7 +459,7 @@ do_dnd (GtkWidget *do_widget)
           GtkWidget *item;
 
           item = canvas_item_new (x, y);
-          gtk_container_add (GTK_CONTAINER (canvas), item);
+          gtk_fixed_put (GTK_FIXED (canvas), item, 0, 0);
           apply_transform (item);
 
           x += 150;
