@@ -207,6 +207,11 @@ fill_button_event (GdkMacosDisplay *display,
   g_assert (GDK_IS_MACOS_DISPLAY (display));
   g_assert (GDK_IS_MACOS_SURFACE (surface));
 
+  /* Ignore button events outside the window coords */
+  if (x < 0 || x > GDK_SURFACE (surface)->width ||
+      y < 0 || y > GDK_SURFACE (surface)->height)
+    return NULL;
+
   seat = gdk_display_get_default_seat (GDK_DISPLAY (display));
   state = get_keyboard_modifiers_from_ns_event (nsevent) |
          _gdk_macos_display_get_current_mouse_modifiers (display);
