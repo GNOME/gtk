@@ -250,8 +250,6 @@ static GtkListBoxRow       *gtk_list_box_get_first_focusable          (GtkListBo
 static GtkListBoxRow       *gtk_list_box_get_last_focusable           (GtkListBox          *box);
 static void                 gtk_list_box_add                          (GtkContainer        *container,
                                                                        GtkWidget           *widget);
-static void                 gtk_list_box_remove                       (GtkContainer        *container,
-                                                                       GtkWidget           *widget);
 static void                 gtk_list_box_forall                       (GtkContainer        *container,
                                                                        GtkCallback          callback,
                                                                        gpointer             callback_target);
@@ -2270,12 +2268,18 @@ gtk_list_box_add (GtkContainer *container,
   gtk_list_box_insert (GTK_LIST_BOX (container), child, -1);
 }
 
-static void
-gtk_list_box_remove (GtkContainer *container,
+/**
+ * gtk_list_box_remove:
+ * @box: a #GtkListBox
+ * @child: the child to remove
+ *
+ * Removes a child from @box.
+ */
+void
+gtk_list_box_remove (GtkListBox   *box,
                      GtkWidget    *child)
 {
-  GtkWidget *widget = GTK_WIDGET (container);
-  GtkListBox *box = GTK_LIST_BOX (container);
+  GtkWidget *widget = GTK_WIDGET (box);
   gboolean was_visible;
   gboolean was_selected;
   GtkListBoxRow *row;
