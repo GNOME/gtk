@@ -207,7 +207,7 @@ format_list_add_row (GtkWidget         *list,
   gtk_container_add (GTK_CONTAINER (box), gtk_label_new (format_name));
 
   gdk_content_formats_unref (formats);
-  gtk_container_add (GTK_CONTAINER (list), box);
+  gtk_list_box_insert (GTK_LIST_BOX (list), box, -1);
 }
 
 static void
@@ -222,7 +222,7 @@ clipboard_formats_change_cb (GdkClipboard *clipboard,
   gsize i, n;
 
   while ((row = GTK_WIDGET (gtk_list_box_get_row_at_index (GTK_LIST_BOX (list), 0))))
-    gtk_container_remove (GTK_CONTAINER (list), row);
+    gtk_list_box_remove (GTK_LIST_BOX (list), row);
 
   formats = gdk_clipboard_get_formats (clipboard);
   

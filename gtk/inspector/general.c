@@ -523,7 +523,11 @@ populate_display (GdkDisplay *display, GtkInspectorGeneral *gen)
 
   gtk_widget_show (gen->priv->display_composited);
   list = GTK_LIST_BOX (gen->priv->display_box);
-  children = gtk_container_get_children (GTK_CONTAINER (list));
+  children = NULL;
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (list));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    children = g_list_prepend (children, child);
   for (l = children; l; l = l->next)
     {
       child = l->data;
