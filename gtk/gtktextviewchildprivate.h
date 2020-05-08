@@ -24,12 +24,19 @@
 #define GTK_TYPE_TEXT_VIEW_CHILD (gtk_text_view_child_get_type())
 
 G_GNUC_INTERNAL
-G_DECLARE_FINAL_TYPE (GtkTextViewChild, gtk_text_view_child, GTK, TEXT_VIEW_CHILD, GtkContainer)
+G_DECLARE_FINAL_TYPE (GtkTextViewChild, gtk_text_view_child, GTK, TEXT_VIEW_CHILD, GtkWidget)
 
 G_GNUC_INTERNAL
 GtkWidget         *gtk_text_view_child_new             (GtkTextWindowType  window_type);
 G_GNUC_INTERNAL
 GtkTextWindowType  gtk_text_view_child_get_window_type (GtkTextViewChild  *self);
+
+G_GNUC_INTERNAL
+void               gtk_text_view_child_add             (GtkTextViewChild  *self,
+                                                        GtkWidget         *widget);
+G_GNUC_INTERNAL
+void               gtk_text_view_child_remove          (GtkTextViewChild  *self,
+                                                        GtkWidget         *widget);
 G_GNUC_INTERNAL
 void               gtk_text_view_child_add_overlay     (GtkTextViewChild  *self,
                                                         GtkWidget         *widget,
