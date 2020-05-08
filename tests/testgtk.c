@@ -3912,9 +3912,11 @@ rotate_notebook (GtkButton   *button,
 static void
 show_all_pages (GtkButton   *button,
 		GtkNotebook *notebook)
-{  
-  gtk_container_foreach (GTK_CONTAINER (notebook),
-			 (GtkCallback) gtk_widget_show, NULL);
+{
+  int i;
+
+  for (i = 0; i < gtk_notebook_get_n_pages (notebook); i++)
+    gtk_widget_show (gtk_notebook_get_nth_page (notebook, i)); 
 }
 
 static void

@@ -3335,7 +3335,7 @@ gtk_notebook_detach_tab (GtkNotebook *notebook,
                          GtkWidget   *child)
 {
   notebook->remove_in_detach = TRUE;
-  gtk_container_remove (GTK_CONTAINER (notebook), child);
+  gtk_notebook_remove (notebook, child);
   notebook->remove_in_detach = FALSE;
 }
 
@@ -5553,7 +5553,7 @@ gtk_notebook_menu_item_recreate (GtkNotebook *notebook,
   GtkWidget *menu_item = gtk_widget_get_parent (page->menu_label);
 
   gtk_container_remove (GTK_CONTAINER (menu_item), page->menu_label);
-  gtk_container_remove (GTK_CONTAINER (notebook->menu), menu_item);
+  gtk_widget_unparent (menu_item);
   gtk_notebook_menu_item_create (notebook, page);
 }
 
@@ -5808,8 +5808,7 @@ gtk_notebook_remove_page (GtkNotebook *notebook,
     list = g_list_last (notebook->children);
 
   if (list)
-    gtk_container_remove (GTK_CONTAINER (notebook),
-                          ((GtkNotebookPage *) list->data)->child);
+    gtk_notebook_remove (notebook, ((GtkNotebookPage *) list->data)->child);
 }
 
 /* Public GtkNotebook Page Switch Methods :
@@ -6625,8 +6624,7 @@ gtk_notebook_set_menu_label (GtkNotebook *notebook,
   if (page->menu_label)
     {
       if (notebook->menu)
-        gtk_container_remove (GTK_CONTAINER (notebook->menu),
-                              gtk_widget_get_parent (page->menu_label));
+        gtk_widget_destroy (gtk_widget_get_parent (page->menu_label));
 
       g_clear_object (&page->menu_label);
     }
