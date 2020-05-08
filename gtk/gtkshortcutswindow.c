@@ -852,7 +852,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   search_button = g_object_new (GTK_TYPE_TOGGLE_BUTTON,
                                 "icon-name", "edit-find-symbolic",
                                 NULL);
-  gtk_container_add (GTK_CONTAINER (priv->header_bar), search_button);
+  gtk_header_bar_pack_start (GTK_HEADER_BAR (priv->header_bar), search_button);
 
   priv->main_box = g_object_new (GTK_TYPE_BOX,
                            "orientation", GTK_ORIENTATION_VERTICAL,
