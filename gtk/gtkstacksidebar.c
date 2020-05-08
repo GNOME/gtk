@@ -236,7 +236,7 @@ add_child (guint            position,
   page = g_list_model_get_item (G_LIST_MODEL (self->pages), position);
   update_row (self, page, row);
 
-  gtk_container_add (GTK_CONTAINER (self->list), row);
+  gtk_list_box_insert (GTK_LIST_BOX (self->list), row, -1);
 
   g_object_set_data (G_OBJECT (row), "child-index", GUINT_TO_POINTER (position));
   if (gtk_selection_model_is_selected (self->pages, position))
@@ -270,7 +270,7 @@ clear_sidebar (GtkStackSidebar *self)
   g_hash_table_iter_init (&iter, self->rows);
   while (g_hash_table_iter_next (&iter, (gpointer *)&page, (gpointer *)&row))
     {
-      gtk_container_remove (GTK_CONTAINER (self->list), row);
+      gtk_list_box_remove (GTK_LIST_BOX (self->list), row);
       g_hash_table_iter_remove (&iter);
       g_signal_handlers_disconnect_by_func (page, on_page_updated, self);
     }

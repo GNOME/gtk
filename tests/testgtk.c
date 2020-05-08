@@ -1535,7 +1535,7 @@ create_listbox (GtkWidget *widget)
           gint value = g_random_int_range (0, 10000);
           label = gtk_label_new (g_strdup_printf ("Value %u", value));
           gtk_widget_show (label);
-          gtk_container_add (GTK_CONTAINER (list), label);
+          gtk_list_box_insert (GTK_LIST_BOX (list), label, -1);
           g_object_set_data (G_OBJECT (gtk_widget_get_parent (label)), "value", GINT_TO_POINTER (value));
         }
 
