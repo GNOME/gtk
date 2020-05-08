@@ -372,25 +372,12 @@ gtk_assistant_get_property (GObject      *object,
 }
 
 static void
-add_cb (GtkContainer *container,
-        GtkWidget    *widget,
-        GtkAssistant *assistant)
-{
-  if (assistant->use_header_bar)
-    g_warning ("Content added to the action area of an assistant using header bars");
-
-  gtk_widget_show (GTK_WIDGET (container));
-}
-
-static void
 apply_use_header_bar (GtkAssistant *assistant)
 {
   gtk_widget_set_visible (assistant->action_area, !assistant->use_header_bar);
   gtk_widget_set_visible (assistant->headerbar, assistant->use_header_bar);
   if (!assistant->use_header_bar)
     gtk_window_set_titlebar (GTK_WINDOW (assistant), NULL);
-  else
-    g_signal_connect (assistant->action_area, "add", G_CALLBACK (add_cb), assistant);
 }
 
 static void
