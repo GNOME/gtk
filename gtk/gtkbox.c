@@ -34,10 +34,9 @@
  * the #GtkWidget:halign and #GtkWidget:valign properties can be used on
  * the children to influence their allocation.
  *
- * Use repeated calls to gtk_container_add() to pack widgets into a
- * GtkBox from start to end. Use gtk_container_remove() to remove widgets
- * from the GtkBox. gtk_box_insert_child_after() can be used to add a child
- * at a particular position.
+ * Use repeated calls to gtk_box_append() to pack widgets into a GtkBox
+ * from start to end. Use gtk_box_remove() to remove widgets from the GtkBox.
+ * gtk_box_insert_child_after() can be used to add a child at a particular position.
  *
  * Use gtk_box_set_homogeneous() to specify whether or not all children
  * of the GtkBox are forced to get the same amount of space.
@@ -175,8 +174,8 @@ gtk_box_add (GtkContainer *container,
 }
 
 static void
-gtk_box_remove (GtkContainer *container,
-                GtkWidget    *widget)
+gtk_box_real_remove (GtkContainer *container,
+                     GtkWidget    *widget)
 {
   gtk_widget_unparent (widget);
 }
@@ -217,7 +216,7 @@ gtk_box_class_init (GtkBoxClass *class)
   object_class->get_property = gtk_box_get_property;
 
   container_class->add = gtk_box_add;
-  container_class->remove = gtk_box_remove;
+  container_class->remove = gtk_box_real_remove;
   container_class->forall = gtk_box_forall;
   container_class->child_type = gtk_box_child_type;
 
@@ -496,4 +495,60 @@ gtk_box_reorder_child_after (GtkBox    *box,
   gtk_css_node_insert_after (gtk_widget_get_css_node (widget),
                              gtk_widget_get_css_node (child),
                              sibling ? gtk_widget_get_css_node (sibling) : NULL);
+}
+
+/**
+ * gtk_box_append:
+ * @box: a #GtkBox
+ * @child: the #GtkWidget to append
+ *
+ * Adds @child as the last child to @box.
+ */
+void
+gtk_box_append (GtkBox    *box,
+                GtkWidget *child)
+{
+  g_return_if_fail (GTK_IS_BOX (box));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (gtk_widget_get_parent (child) == NULL);
+
+  gtk_widget_insert_before (child, GTK_WIDGET (box), NULL);
+}
+
+/**
+ * gtk_box_prepend:
+ * @box: a #GtkBox
+ * @child: the #GtkWidget to prepend
+ *
+ * Adds @child as the first child to @box.
+ */
+void
+gtk_box_prepend (GtkBox    *box,
+                 GtkWidget *child)
+{
+  g_return_if_fail (GTK_IS_BOX (box));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (gtk_widget_get_parent (child) == NULL);
+
+  gtk_widget_insert_after (child, GTK_WIDGET (box), NULL);
+}
+
+/**
+ * gtk_box_remove:
+ * @box: a #GtkBox
+ * @child: the child to remove
+ *
+ * Removes a child widget from @box, after it has been
+ * added with gtk_box_append(), gtk_box_prepend(), or
+ * gtk_box_insert_child_after().
+ */
+void
+gtk_box_remove (GtkBox    *box,
+                GtkWidget *child)
+{
+  g_return_if_fail (GTK_IS_BOX (box));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (gtk_widget_get_parent (child) == (GtkWidget *)box);
+
+  gtk_widget_unparent (child);
 }
