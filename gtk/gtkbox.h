@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -83,9 +83,19 @@ GDK_AVAILABLE_IN_ALL
 gint        gtk_box_get_spacing         (GtkBox         *box);
 GDK_AVAILABLE_IN_ALL
 void        gtk_box_set_baseline_position (GtkBox             *box,
-					   GtkBaselinePosition position);
+                                           GtkBaselinePosition position);
 GDK_AVAILABLE_IN_ALL
 GtkBaselinePosition gtk_box_get_baseline_position (GtkBox         *box);
+
+GDK_AVAILABLE_IN_ALL
+void        gtk_box_append             (GtkBox         *box,
+                                        GtkWidget      *child);
+GDK_AVAILABLE_IN_ALL
+void        gtk_box_prepend            (GtkBox         *box,
+                                        GtkWidget      *child);
+GDK_AVAILABLE_IN_ALL
+void        gtk_box_remove             (GtkBox         *box,
+                                        GtkWidget      *child);
 
 GDK_AVAILABLE_IN_ALL
 void        gtk_box_insert_child_after (GtkBox         *box,
