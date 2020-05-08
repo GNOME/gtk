@@ -869,3 +869,47 @@ _gdk_macos_surface_synthesize_null_key (GdkMacosSurface *self)
                              &no_lock);
   _gdk_event_queue_append (display, event);
 }
+
+void
+_gdk_macos_surface_move (GdkMacosSurface *self,
+                         int              x,
+                         int              y)
+{
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
+
+  _gdk_macos_surface_move_resize (self, x, y, -1, -1);
+}
+
+void
+_gdk_macos_surface_move_resize (GdkMacosSurface *self,
+                                int              x,
+                                int              y,
+                                int              width,
+                                int              height)
+{
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+  GdkSurface *surface = (GdkSurface *)self;
+  GdkDisplay *display;
+
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
+
+  if ((x == -1 || (x == surface->x)) &&
+      (y == -1 || (y == surface->y)) &&
+      (width == -1 || (width == surface->width)) &&
+      (height == -1 || (height == surface->height)))
+    return;
+
+  display = gdk_surface_get_display (surface);
+
+  _gdk_macos_display_to_display_coords (GDK_MACOS_DISPLAY (display),
+                                        x, y, &x, &y);
+
+  if (width == -1)
+    width = surface->width;
+
+  if (height == -1)
+    height = surface->height;
+
+  [priv->window setFrame:NSMakeRect(x, y, width, height)
+                 display:YES];
+}

@@ -90,6 +90,14 @@ CGContextRef       _gdk_macos_surface_acquire_context         (GdkMacosSurface  
 void               _gdk_macos_surface_release_context         (GdkMacosSurface    *self,
                                                                CGContextRef        cg_context);
 void               _gdk_macos_surface_synthesize_null_key     (GdkMacosSurface    *self);
+void               _gdk_macos_surface_move                    (GdkMacosSurface    *self,
+                                                               int                 x,
+                                                               int                 y);
+void               _gdk_macos_surface_move_resize             (GdkMacosSurface    *self,
+                                                               int                 x,
+                                                               int                 y,
+                                                               int                 width,
+                                                               int                 height);
 
 G_END_DECLS
 
