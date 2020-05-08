@@ -23,7 +23,7 @@
 
 static void atk_action_interface_init (AtkActionIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkExpanderAccessible, gtk_expander_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkExpanderAccessible, gtk_expander_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
 
 static const gchar *
@@ -60,68 +60,33 @@ static gint
 gtk_expander_accessible_get_n_children (AtkObject *obj)
 {
   GtkWidget *widget;
-  GList *children;
-  gint count = 0;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     return 0;
 
-  children = gtk_container_get_children (GTK_CONTAINER(widget));
-  count = g_list_length (children);
-  g_list_free (children);
+  if (gtk_expander_get_child (GTK_EXPANDER (widget)))
+    return 1;
 
-  /* See if there is a label - if there is, reduce our count by 1
-   * since we don't want the label included with the children.
-   */
-  if (gtk_expander_get_label_widget (GTK_EXPANDER (widget)))
-    count -= 1;
-
-  return count;
+  return 0;
 }
 
 static AtkObject *
 gtk_expander_accessible_ref_child (AtkObject *obj,
                                    gint       i)
 {
-  GList *children, *tmp_list;
   AtkObject *accessible;
   GtkWidget *widget;
-  GtkWidget *label;
-  gint index;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     return NULL;
 
-  children = gtk_container_get_children (GTK_CONTAINER (widget));
+  widget = gtk_expander_get_child (GTK_EXPANDER (widget));
+  if (widget == NULL)
+    return NULL;
 
-  /* See if there is a label - if there is, we need to skip it
-   * since we don't want the label included with the children.
-   */
-  label = gtk_expander_get_label_widget (GTK_EXPANDER (widget));
-  if (label)
-    {
-      for (index = 0; index <= i; index++)
-        {
-          tmp_list = g_list_nth (children, index);
-          if (label == GTK_WIDGET (tmp_list->data))
-            {
-              i += 1;
-              break;
-            }
-        }
-    }
-
-  tmp_list = g_list_nth (children, i);
-  if (!tmp_list)
-    {
-      g_list_free (children);
-      return NULL;
-    }
-  accessible = gtk_widget_get_accessible (GTK_WIDGET (tmp_list->data));
-
-  g_list_free (children);
+  accessible = gtk_widget_get_accessible (widget);
   g_object_ref (accessible);
   return accessible;
 }
