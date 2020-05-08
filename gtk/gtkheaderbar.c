@@ -492,32 +492,40 @@ gtk_header_bar_add (GtkContainer *container,
   gtk_header_bar_pack (GTK_HEADER_BAR (container), child, GTK_PACK_START);
 }
 
-static void
-gtk_header_bar_remove (GtkContainer *container,
-                       GtkWidget    *widget)
+/**
+ * gtk_header_bar_remove:
+ * @bar: a #GtkHeaderBar
+ * @child: the child to remove
+ *
+ * Removes a child from @bar, after it has been added
+ * with gtk_header_bar_pack_start(), gtk_header_bar_pack_end()
+ * or gtk_header_bar_set_title_widget().
+ */
+void
+gtk_header_bar_remove (GtkHeaderBar *bar,
+                       GtkWidget    *child)
 {
-  GtkHeaderBar *bar = GTK_HEADER_BAR (container);
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GtkLayoutManager *layout = gtk_widget_get_layout_manager (GTK_WIDGET (bar));
   GtkWidget *parent;
   gboolean removed = FALSE;
 
-  parent = gtk_widget_get_parent (widget);
+  parent = gtk_widget_get_parent (child);
 
   if (parent == priv->start_box)
     {
-      gtk_container_remove (GTK_CONTAINER (priv->start_box), widget);
+      gtk_container_remove (GTK_CONTAINER (priv->start_box), child);
       removed = TRUE;
     }
   else if (parent == priv->end_box)
     {
-      gtk_container_remove (GTK_CONTAINER (priv->end_box), widget);
+      gtk_container_remove (GTK_CONTAINER (priv->end_box), child);
       removed = TRUE;
     }
-  else if (parent == GTK_WIDGET (container) &&
-           gtk_center_layout_get_center_widget (GTK_CENTER_LAYOUT (layout)) == widget)
+  else if (parent == GTK_WIDGET (bar) &&
+           gtk_center_layout_get_center_widget (GTK_CENTER_LAYOUT (layout)) == child)
     {
-      gtk_widget_unparent (widget);
+      gtk_widget_unparent (child);
       removed = TRUE;
     }
 
