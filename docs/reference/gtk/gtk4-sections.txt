@@ -223,6 +223,9 @@ gtk_box_get_spacing
 gtk_box_set_spacing
 gtk_box_get_baseline_position
 gtk_box_set_baseline_position
+gtk_box_append
+gtk_box_prepend
+gtk_box_remove
 gtk_box_insert_child_after
 gtk_box_reorder_child_after
 <SUBSECTION Standard>
