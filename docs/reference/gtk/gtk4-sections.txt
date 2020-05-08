@@ -274,6 +274,7 @@ GtkListBoxUpdateHeaderFunc
 gtk_list_box_new
 gtk_list_box_prepend
 gtk_list_box_insert
+gtk_list_box_remove
 gtk_list_box_select_row
 gtk_list_box_unselect_row
 gtk_list_box_select_all
