@@ -215,7 +215,7 @@ add_widget (GtkInspectorSizeGroups *sl,
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
   gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), label);
-  gtk_container_add (GTK_CONTAINER (listbox), row);
+  gtk_list_box_insert (listbox, row, -1);
 }
 
 static void

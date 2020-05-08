@@ -79,7 +79,7 @@ setup_listbox (GtkBuilder       *builder,
 
   normal_row = NULL;
   listbox = gtk_list_box_new ();
-  gtk_container_add (GTK_CONTAINER (WID ("scrolledwindow")), listbox);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (WID ("scrolledwindow")), listbox);
 
   g_signal_connect (listbox, "row-activated", G_CALLBACK (row_activated), provider);
 
@@ -95,9 +95,8 @@ setup_listbox (GtkBuilder       *builder,
                             "xalign", 0.0,
                             NULL);
 
-      gtk_container_add (GTK_CONTAINER (row), label);
-
-      gtk_container_add (GTK_CONTAINER (listbox), row);
+      gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), label);
+      gtk_list_box_insert (GTK_LIST_BOX (listbox), row, -1);
 
       /* The first selected row is "normal" */
       if (g_strcmp0 (blend_modes[i].id, "normal") == 0)
