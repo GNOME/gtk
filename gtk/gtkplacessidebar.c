@@ -1912,7 +1912,6 @@ dnd_finished_cb (GdkDrag          *drag,
  */
 static void
 drag_leave_callback (GtkDropTarget *dest,
-                     GdkDrop       *drop,
                      gpointer       user_data)
 {
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
