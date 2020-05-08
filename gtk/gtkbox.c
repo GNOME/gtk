@@ -57,6 +57,7 @@
 
 #include "gtkbox.h"
 #include "gtkboxlayout.h"
+#include "gtkbuildable.h"
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkintl.h"
 #include "gtkorientable.h"
@@ -66,7 +67,6 @@
 #include "gtksizerequest.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
-#include "a11y/gtkcontaineraccessible.h"
 
 
 enum {
@@ -91,9 +91,13 @@ typedef struct
 
 static GParamSpec *props[LAST_PROP] = { NULL, };
 
-G_DEFINE_TYPE_WITH_CODE (GtkBox, gtk_box, GTK_TYPE_CONTAINER,
+static void gtk_box_buildable_iface_init (GtkBuildableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GtkBox, gtk_box, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkBox)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_box_buildable_iface_init))
 
 
 static void
@@ -167,42 +171,69 @@ gtk_box_get_property (GObject    *object,
 }
 
 static void
-gtk_box_add (GtkContainer *container,
-             GtkWidget    *child)
+gtk_box_compute_expand (GtkWidget *widget,
+                        gboolean  *hexpand_p,
+                        gboolean  *vexpand_p)
 {
-  gtk_widget_set_parent (child, GTK_WIDGET (container));
+  GtkWidget *w;
+  gboolean hexpand = FALSE;
+  gboolean vexpand = FALSE;
+
+  for (w = gtk_widget_get_first_child (widget);
+       w != NULL;
+       w = gtk_widget_get_next_sibling (w))
+    {
+      hexpand = hexpand || gtk_widget_compute_expand (w, GTK_ORIENTATION_HORIZONTAL);
+      vexpand = vexpand || gtk_widget_compute_expand (w, GTK_ORIENTATION_VERTICAL);
+    }
+
+  *hexpand_p = hexpand;
+  *vexpand_p = vexpand;
+}
+
+static GtkSizeRequestMode
+gtk_box_get_request_mode (GtkWidget *widget)
+{
+  GtkWidget *w;
+  int wfh = 0, hfw = 0;
+
+  for (w = gtk_widget_get_first_child (widget);
+       w != NULL;
+       w = gtk_widget_get_next_sibling (w))
+    {
+      GtkSizeRequestMode mode = gtk_widget_get_request_mode (w);
+
+      switch (mode)
+        {
+        case GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH:
+          hfw ++;
+          break;
+        case GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT:
+          wfh ++;
+          break;
+        case GTK_SIZE_REQUEST_CONSTANT_SIZE:
+        default:
+          break;
+        }
+    }
+
+  if (hfw == 0 && wfh == 0)
+    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+  else
+    return wfh > hfw ?
+        GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT :
+        GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 }
 
 static void
-gtk_box_real_remove (GtkContainer *container,
-                     GtkWidget    *widget)
-{
-  gtk_widget_unparent (widget);
-}
-
-static void
-gtk_box_forall (GtkContainer *container,
-                GtkCallback   callback,
-                gpointer      callback_data)
+gtk_box_dispose (GObject *object)
 {
   GtkWidget *child;
 
-  child = _gtk_widget_get_first_child (GTK_WIDGET (container));
-  while (child)
-    {
-      GtkWidget *next = _gtk_widget_get_next_sibling (child);
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (object))))
+    gtk_widget_unparent (child);
 
-      (* callback) (child, callback_data);
-
-      child = next;
-    }
-
-}
-
-static GType
-gtk_box_child_type (GtkContainer   *container)
-{
-  return GTK_TYPE_WIDGET;
+  G_OBJECT_CLASS (gtk_box_parent_class)->dispose (object);
 }
 
 static void
@@ -210,15 +241,14 @@ gtk_box_class_init (GtkBoxClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
 
   object_class->set_property = gtk_box_set_property;
   object_class->get_property = gtk_box_get_property;
+  object_class->dispose = gtk_box_dispose;
 
-  container_class->add = gtk_box_add;
-  container_class->remove = gtk_box_real_remove;
-  container_class->forall = gtk_box_forall;
-  container_class->child_type = gtk_box_child_type;
+  widget_class->focus = gtk_widget_focus_child;
+  widget_class->compute_expand = gtk_box_compute_expand;
+  widget_class->get_request_mode = gtk_box_get_request_mode;
 
   g_object_class_override_property (object_class,
                                     PROP_ORIENTATION,
@@ -259,6 +289,28 @@ gtk_box_init (GtkBox *box)
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (box));
+}
+
+static GtkBuildableIface *parent_buildable_iface;
+
+static void
+gtk_box_buildable_add_child (GtkBuildable *buildable,
+                             GtkBuilder   *builder,
+                             GObject      *child,
+                             const gchar  *type)
+{
+  if (GTK_IS_WIDGET (child))
+    gtk_box_append (GTK_BOX (buildable), GTK_WIDGET (child));
+  else
+    parent_buildable_iface->add_child (buildable, builder, child, type);
+}
+
+static void
+gtk_box_buildable_iface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
+  iface->add_child = gtk_box_buildable_add_child;
 }
 
 /**
