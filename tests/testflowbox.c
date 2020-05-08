@@ -52,7 +52,7 @@ populate_flowbox_simple (GtkFlowBox *flowbox)
       gtk_frame_set_child (GTK_FRAME (frame), widget);
 
       g_object_set_data_full (G_OBJECT (frame), "id", (gpointer)g_strdup (text), g_free);
-      gtk_container_add (GTK_CONTAINER (flowbox), frame);
+      gtk_flow_box_insert (GTK_FLOW_BOX (flowbox), frame, -1);
 
       g_free (text);
     }
@@ -100,7 +100,7 @@ populate_flowbox_focus (GtkFlowBox *flowbox)
       if (i % 5 == 0)
         gtk_container_add (GTK_CONTAINER (box), gtk_switch_new ());
 
-      gtk_container_add (GTK_CONTAINER (flowbox), frame);
+      gtk_flow_box_insert (GTK_FLOW_BOX (flowbox), frame, -1);
       if (!sensitive)
         gtk_widget_set_sensitive (gtk_widget_get_parent (frame), FALSE);
     }
@@ -115,7 +115,7 @@ populate_flowbox_buttons (GtkFlowBox *flowbox)
   for (i = 0; i < 50; i++)
     {
       widget = gtk_button_new_with_label ("Button");
-      gtk_container_add (GTK_CONTAINER (flowbox), widget);
+      gtk_flow_box_insert (GTK_FLOW_BOX (flowbox), widget, -1);
       widget = gtk_widget_get_parent (widget);
       gtk_widget_set_can_focus (widget, FALSE);
     }
@@ -148,7 +148,7 @@ populate_flowbox_wrappy (GtkFlowBox *flowbox)
       gtk_label_set_width_chars (GTK_LABEL (widget), 10);
       g_object_set_data_full (G_OBJECT (frame), "id", (gpointer)g_strdup (strings[i]), g_free);
 
-      gtk_container_add (GTK_CONTAINER (flowbox), frame);
+      gtk_flow_box_insert (GTK_FLOW_BOX (flowbox), frame, -1);
     }
 }
 
@@ -185,17 +185,10 @@ populate_flowbox_images (GtkFlowBox *flowbox)
 static void
 populate_items (GtkFlowBox *flowbox)
 {
-  GList *children, *l;
+  GtkWidget *child;
 
-  /* Remove all children first */
-  children = gtk_container_get_children (GTK_CONTAINER (flowbox));
-  for (l = children; l; l = l->next)
-    {
-      GtkWidget *child = l->data;
-
-      gtk_container_remove (GTK_CONTAINER (flowbox), child);
-    }
-  g_list_free (children);
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (flowbox))))
+    gtk_flow_box_remove (flowbox, child);
 
   if (items_type == SIMPLE_ITEMS)
     populate_flowbox_simple (flowbox);
