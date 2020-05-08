@@ -2080,55 +2080,10 @@ gtk_get_event_widget (GdkEvent *event)
   return NULL;
 }
 
-static gboolean
-propagate_event_up (GtkWidget *widget,
-                    GdkEvent  *event,
-                    GtkWidget *topmost)
-{
-  gboolean handled_event = FALSE;
-  GtkWidget *target = widget;
-
-  /* Propagate event up the widget tree so that
-   * parents can see the button and motion
-   * events of the children.
-   */
-  while (TRUE)
-    {
-      GtkWidget *tmp;
-
-      g_object_ref (widget);
-
-      /* Scroll events are special cased here because it
-       * feels wrong when scrolling a GtkViewport, say,
-       * to have children of the viewport eat the scroll
-       * event
-       */
-      if (!_gtk_widget_is_sensitive (widget))
-        handled_event = gdk_event_get_event_type (event) != GDK_SCROLL;
-      else if (_gtk_widget_get_realized (widget))
-        handled_event = gtk_widget_event (widget, event, target);
-
-      handled_event |= !_gtk_widget_get_realized (widget);
-
-      tmp = _gtk_widget_get_parent (widget);
-      g_object_unref (widget);
-
-      if (widget == topmost)
-        break;
-
-      widget = tmp;
-
-      if (handled_event || !widget)
-        break;
-    }
-
-  return handled_event;
-}
-
-static gboolean
-propagate_event_down (GtkWidget *widget,
-                      GdkEvent  *event,
-                      GtkWidget *topmost)
+gboolean
+gtk_propagate_event_internal (GtkWidget *widget,
+                              GdkEvent  *event,
+                              GtkWidget *topmost)
 {
   gint handled_event = FALSE;
   GtkWidget *target = widget;
@@ -2136,6 +2091,7 @@ propagate_event_down (GtkWidget *widget,
   GtkWidget *stack_widgets[16];
   int i;
 
+  /* First, propagate event down */
   gtk_array_init (&widget_array, (void**)stack_widgets, 16);
   gtk_array_add (&widget_array, g_object_ref (widget));
 
@@ -2180,24 +2136,36 @@ propagate_event_down (GtkWidget *widget,
       i--;
     }
 
+  /* If not yet handled, also propagate down */
+  if (!handled_event)
+    {
+      /* Propagate event up the widget tree so that
+       * parents can see the button and motion
+       * events of the children.
+       */
+      for (i = 0; i < widget_array.len; i++)
+        {
+          widget = gtk_array_index (&widget_array, i);
+
+          /* Scroll events are special cased here because it
+           * feels wrong when scrolling a GtkViewport, say,
+           * to have children of the viewport eat the scroll
+           * event
+           */
+          if (!_gtk_widget_is_sensitive (widget))
+            handled_event = gdk_event_get_event_type (event) != GDK_SCROLL;
+          else if (_gtk_widget_get_realized (widget))
+            handled_event = gtk_widget_event (widget, event, target);
+
+          handled_event |= !_gtk_widget_get_realized (widget);
+
+          if (handled_event)
+            break;
+        }
+    }
+
   gtk_array_free (&widget_array, g_object_unref);
-
   return handled_event;
-}
-
-gboolean
-gtk_propagate_event_internal (GtkWidget *widget,
-                              GdkEvent  *event,
-                              GtkWidget *topmost)
-{
-  /* Propagate the event down and up */
-  if (propagate_event_down (widget, event, topmost))
-    return TRUE;
-
-  if (propagate_event_up (widget, event, topmost))
-    return TRUE;
-
-  return FALSE;
 }
 
 /**
