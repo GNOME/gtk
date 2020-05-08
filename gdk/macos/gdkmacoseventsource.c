@@ -419,7 +419,8 @@ pollfds_equal (GPollFD *old_pollfds,
  */
 static gint
 select_thread_start_poll (GPollFD *ufds,
-                          guint    nfds,                          gint     timeout)
+                          guint    nfds,
+                          gint     timeout)
 {
   gint n_ready;
   gboolean have_new_pollfds = FALSE;
