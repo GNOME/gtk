@@ -69,21 +69,23 @@ gtk_flow_box_accessible_add_selection (AtkSelection *selection,
                                        gint          idx)
 {
   GtkWidget *box;
-  GList *children;
   GtkWidget *child;
+  int pos;
 
   box = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (box == NULL)
     return FALSE;
 
-  children = gtk_container_get_children (GTK_CONTAINER (box));
-  child = g_list_nth_data (children, idx);
-  g_list_free (children);
-  if (child)
+  for (child = gtk_widget_get_first_child (box), pos = 0;
+       child != NULL && pos < idx;
+       child = gtk_widget_get_next_sibling (child), pos++) ;
+
+  if (child && pos == idx)
     {
       gtk_flow_box_select_child (GTK_FLOW_BOX (box), GTK_FLOW_BOX_CHILD (child));
       return TRUE;
     }
+
   return FALSE;
 }
 
@@ -92,21 +94,23 @@ gtk_flow_box_accessible_remove_selection (AtkSelection *selection,
                                           gint          idx)
 {
   GtkWidget *box;
-  GList *children;
   GtkWidget *child;
+  int pos;
 
   box = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (box == NULL)
     return FALSE;
 
-  children = gtk_container_get_children (GTK_CONTAINER (box));
-  child = g_list_nth_data (children, idx);
-  g_list_free (children);
-  if (child)
+  for (child = gtk_widget_get_first_child (box), pos = 0;
+       child != NULL && pos < idx;
+       child = gtk_widget_get_next_sibling (child), pos++) ;
+
+  if (child && pos == idx)
     {
       gtk_flow_box_unselect_child (GTK_FLOW_BOX (box), GTK_FLOW_BOX_CHILD (child));
       return TRUE;
     }
+
   return FALSE;
 }
 
