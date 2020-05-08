@@ -21,6 +21,7 @@
 #include "gtkshortcutssection.h"
 
 #include "gtkbox.h"
+#include "gtkbuildable.h"
 #include "gtkshortcutsgroup.h"
 #include "gtkbutton.h"
 #include "gtklabel.h"
@@ -81,7 +82,11 @@ struct _GtkShortcutsSectionClass
 
 };
 
-G_DEFINE_TYPE (GtkShortcutsSection, gtk_shortcuts_section, GTK_TYPE_BOX)
+static void gtk_shortcuts_section_buildable_iface_init (GtkBuildableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GtkShortcutsSection, gtk_shortcuts_section, GTK_TYPE_BOX,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_shortcuts_section_buildable_iface_init))
 
 enum {
   PROP_0,
@@ -119,49 +124,26 @@ static void gtk_shortcuts_section_pan_gesture_pan (GtkGesturePan       *gesture,
                                                    gdouble              offset,
                                                    GtkShortcutsSection *self);
 
-static void
-gtk_shortcuts_section_add (GtkContainer *container,
-                           GtkWidget    *child)
-{
-  GtkShortcutsSection *self = GTK_SHORTCUTS_SECTION (container);
+static GtkBuildableIface *parent_buildable_iface;
 
+static void
+gtk_shortcuts_section_buildable_add_child (GtkBuildable *buildable,
+                                           GtkBuilder   *builder,
+                                           GObject      *child,
+                                           const gchar  *type)
+{
   if (GTK_IS_SHORTCUTS_GROUP (child))
-    gtk_shortcuts_section_add_group (self, GTK_SHORTCUTS_GROUP (child));
+    gtk_shortcuts_section_add_group (GTK_SHORTCUTS_SECTION (buildable), GTK_SHORTCUTS_GROUP (child));
   else
-    g_warning ("Can't add children of type %s to %s",
-               G_OBJECT_TYPE_NAME (child),
-               G_OBJECT_TYPE_NAME (container));
+    parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
-gtk_shortcuts_section_remove (GtkContainer *container,
-                              GtkWidget    *child)
+gtk_shortcuts_section_buildable_iface_init (GtkBuildableIface *iface)
 {
-  GtkShortcutsSection *self = (GtkShortcutsSection *)container;
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
 
-  if (GTK_IS_SHORTCUTS_GROUP (child) &&
-      gtk_widget_is_ancestor (child, GTK_WIDGET (container)))
-    {
-      self->groups = g_list_remove (self->groups, child);
-      gtk_box_remove (GTK_BOX (gtk_widget_get_parent (child)), child);
-    }
-  else
-    GTK_CONTAINER_CLASS (gtk_shortcuts_section_parent_class)->remove (container, child);
-}
-
-static void
-gtk_shortcuts_section_forall (GtkContainer *container,
-                              GtkCallback   callback,
-                              gpointer      callback_data)
-{
-  GtkShortcutsSection *self = (GtkShortcutsSection *)container;
-  GList *l;
-
-  for (l = self->groups; l; l = l->next)
-    {
-      GtkWidget *group = l->data;
-      callback (group, callback_data);
-    }
+  iface->add_child = gtk_shortcuts_section_buildable_add_child;
 }
 
 static void
@@ -285,18 +267,11 @@ gtk_shortcuts_section_set_property (GObject      *object,
     }
 }
 
-static GType
-gtk_shortcuts_section_child_type (GtkContainer *container)
-{
-  return GTK_TYPE_SHORTCUTS_GROUP;
-}
-
 static void
 gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->finalize = gtk_shortcuts_section_finalize;
   object_class->dispose = gtk_shortcuts_section_dispose;
@@ -305,11 +280,6 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
 
   widget_class->map = gtk_shortcuts_section_map;
   widget_class->unmap = gtk_shortcuts_section_unmap;
-
-  container_class->add = gtk_shortcuts_section_add;
-  container_class->remove = gtk_shortcuts_section_remove;
-  container_class->forall = gtk_shortcuts_section_forall;
-  container_class->child_type = gtk_shortcuts_section_child_type;
 
   klass->change_current_page = gtk_shortcuts_section_change_current_page;
 
@@ -415,7 +385,7 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
                               "vexpand", TRUE,
                               "visible", TRUE,
                               NULL);
-  GTK_CONTAINER_CLASS (gtk_shortcuts_section_parent_class)->add (GTK_CONTAINER (self), GTK_WIDGET (self->stack));
+  gtk_box_append (GTK_BOX (self), GTK_WIDGET (self->stack));
 
   self->switcher = g_object_new (GTK_TYPE_STACK_SWITCHER,
                                  "halign", GTK_ALIGN_CENTER,
@@ -431,7 +401,7 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
                             G_CALLBACK (gtk_shortcuts_section_show_all), self);
 
   self->footer = gtk_center_box_new ();
-  GTK_CONTAINER_CLASS (gtk_shortcuts_section_parent_class)->add (GTK_CONTAINER (self), self->footer);
+  gtk_box_append (GTK_BOX (self), GTK_WIDGET (self->footer));
 
   gtk_widget_set_hexpand (GTK_WIDGET (self->switcher), TRUE);
   gtk_widget_set_halign (GTK_WIDGET (self->switcher), GTK_ALIGN_CENTER);
