@@ -199,7 +199,7 @@
 {
   GdkSurface *surface = GDK_SURFACE (gdkSurface);
   GdkDisplay *display = gdk_surface_get_display (surface);
-  gboolean maximized = !!(surface->state & GDK_SURFACE_STATE_MAXIMIZED);
+  gboolean maximized = (surface->state & GDK_SURFACE_STATE_MAXIMIZED) != 0;
   GdkEvent *event;
 
   /* In case the window is changed when maximized remove the maximized state */
@@ -560,12 +560,12 @@
   if (state & GDK_SURFACE_STATE_MAXIMIZED)
     {
       lastMaximizedFrame = newFrame;
-      gdk_surface_set_state (GDK_SURFACE (surface), state & ~GDK_SURFACE_STATE_MAXIMIZED);
+      gdk_synthesize_surface_state (GDK_SURFACE (gdkSurface), GDK_SURFACE_STATE_MAXIMIZED, 0);
     }
   else
     {
       lastUnmaximizedFrame = [nsWindow frame];
-      gdk_surface_set_state (GDK_SURFACE (surface), state & GDK_SURFACE_STATE_MAXIMIZED);
+      gdk_synthesize_surface_state (GDK_SURFACE (gdkSurface), 0, GDK_SURFACE_STATE_MAXIMIZED);
     }
 
   inMaximizeTransition = YES;
