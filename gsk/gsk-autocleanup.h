@@ -24,5 +24,6 @@
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskRenderer, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskRenderNode, gsk_render_node_unref)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskTransform, gsk_transform_unref)
 
 #endif
