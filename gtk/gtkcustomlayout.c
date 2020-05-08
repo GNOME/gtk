@@ -4,7 +4,7 @@
  * @Short_description: A convenience layout manager
  *
  * #GtkCustomLayout is a convenience type meant to be used as a transition
- * mechanism between #GtkContainers implementing a layout policy, and
+ * mechanism between #GtkWidgets implementing a layout policy, and
  * #GtkLayoutManager classes.
  *
  * A #GtkCustomLayout uses closures matching to the old #GtkWidget virtual
