@@ -143,13 +143,10 @@ variant_editor_set_value (GtkWidget *editor,
     }
   else
     {
-      GList *children;
-      GtkEntry *entry;
+      GtkWidget *entry;
       gchar *text;
 
-      children = gtk_container_get_children (GTK_CONTAINER (editor));
-      entry = children->data;
-      g_list_free (children);
+      entry = gtk_widget_get_first_child (editor);
 
       text = g_variant_print (value, FALSE);
       gtk_editable_set_text (GTK_EDITABLE (entry), text);
@@ -178,14 +175,11 @@ variant_editor_get_value (GtkWidget *editor)
     }
   else
     {
-      GList *children;
-      GtkEntry *entry;
+      GtkWidget *entry;
       const gchar *text;
 
-      children = gtk_container_get_children (GTK_CONTAINER (editor));
-      entry = children->data;
+      entry = gtk_widget_get_first_child (editor);
       text = gtk_editable_get_text (GTK_EDITABLE (entry));
-      g_list_free (children);
 
       value = g_variant_parse (type, text, NULL, NULL, NULL);
     }

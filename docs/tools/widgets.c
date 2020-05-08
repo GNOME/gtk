@@ -1265,7 +1265,7 @@ create_list_box (void)
   gtk_widget_set_hexpand (button, TRUE);
   gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
   gtk_container_add (GTK_CONTAINER (row), button);
-  gtk_container_add (GTK_CONTAINER (list), row);
+  gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
   row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_container_add (GTK_CONTAINER (row), gtk_label_new ("Line One"));
   button = gtk_check_button_new ();
@@ -1273,7 +1273,7 @@ create_list_box (void)
   gtk_widget_set_hexpand (button, TRUE);
   gtk_widget_set_halign (button, GTK_ALIGN_END);
   gtk_container_add (GTK_CONTAINER (row), button);
-  gtk_container_add (GTK_CONTAINER (list), row);
+  gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
   gtk_list_box_select_row (GTK_LIST_BOX (list), GTK_LIST_BOX_ROW (gtk_widget_get_parent (row)));
   row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_container_add (GTK_CONTAINER (row), gtk_label_new ("Line Two"));
@@ -1281,14 +1281,14 @@ create_list_box (void)
   gtk_widget_set_hexpand (button, TRUE);
   gtk_widget_set_halign (button, GTK_ALIGN_END);
   gtk_container_add (GTK_CONTAINER (row), button);
-  gtk_container_add (GTK_CONTAINER (list), row);
+  gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
   row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_container_add (GTK_CONTAINER (row), gtk_label_new ("Line Three"));
   button = gtk_entry_new ();
   gtk_widget_set_hexpand (button, TRUE);
   gtk_widget_set_halign (button, GTK_ALIGN_END);
   gtk_container_add (GTK_CONTAINER (row), button);
-  gtk_container_add (GTK_CONTAINER (list), row);
+  gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
 
   gtk_container_add (GTK_CONTAINER (widget), list);
 

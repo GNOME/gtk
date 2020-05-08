@@ -123,7 +123,7 @@ add_action (GtkInspectorActions *sl,
   gtk_container_add (GTK_CONTAINER (box), editor);
   g_object_set_data (G_OBJECT (row), "editor", editor);
 
-  gtk_container_add (GTK_CONTAINER (sl->priv->list), row);
+  gtk_list_box_insert (GTK_LIST_BOX (sl->priv->list), row, -1);
 
   g_free (state_string);
 }
@@ -134,12 +134,16 @@ find_row (GtkInspectorActions *sl,
 {
   GtkWidget *row = NULL;
   GtkWidget *widget;
+  const char *key;
 
   for (widget = gtk_widget_get_first_child (sl->priv->list);
        widget;
        widget = gtk_widget_get_next_sibling (widget))
     {
-      const char *key = g_object_get_data (G_OBJECT (widget), "key");
+      if (!GTK_IS_LIST_BOX_ROW (widget))
+        continue;
+
+      key = g_object_get_data (G_OBJECT (widget), "key");
       if (g_str_equal (key, action_name))
         {
           row = widget;
@@ -167,7 +171,7 @@ action_removed_cb (GActionGroup        *group,
 
   row = find_row (sl, action_name);
   if (row)
-    gtk_widget_destroy (row);
+    gtk_list_box_remove (GTK_LIST_BOX (sl->priv->list), row);
 }
 
 static void
@@ -312,7 +316,7 @@ gtk_inspector_actions_set_object (GtkInspectorActions *sl,
     remove_group (sl, page, sl->priv->group);
 
   while ((child = gtk_widget_get_first_child (sl->priv->list)))
-    gtk_widget_destroy (child);
+    gtk_list_box_remove (GTK_LIST_BOX (sl->priv->list), child);
 
   if (GTK_IS_APPLICATION (object))
     add_group (sl, page, G_ACTION_GROUP (object));

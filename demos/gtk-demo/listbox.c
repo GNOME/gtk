@@ -382,7 +382,7 @@ do_listbox (GtkWidget *do_widget)
           message = gtk_message_new (lines[i]);
           row = gtk_message_row_new (message);
           gtk_widget_show (GTK_WIDGET (row));
-          gtk_container_add (GTK_CONTAINER (listbox), GTK_WIDGET (row));
+          gtk_list_box_insert (GTK_LIST_BOX (listbox), GTK_WIDGET (row), -1);
         }
 
       g_strfreev (lines);
