@@ -50,6 +50,9 @@ void         gtk_header_bar_pack_start        (GtkHeaderBar *bar,
 GDK_AVAILABLE_IN_ALL
 void         gtk_header_bar_pack_end          (GtkHeaderBar *bar,
                                                GtkWidget    *child);
+GDK_AVAILABLE_IN_ALL
+void         gtk_header_bar_remove            (GtkHeaderBar *bar,
+                                               GtkWidget    *child);
 
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_header_bar_get_show_title_buttons (GtkHeaderBar *bar);
