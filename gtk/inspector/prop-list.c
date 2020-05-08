@@ -612,7 +612,7 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
         continue;
 
       row = gtk_inspector_prop_list_create_row (pl, prop);
-      gtk_container_add (GTK_CONTAINER (pl->priv->list2), row);
+      gtk_list_box_insert (GTK_LIST_BOX (pl->priv->list2), row, -1);
     }
 
   g_free (props);

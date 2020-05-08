@@ -183,16 +183,10 @@ G_DEFINE_TYPE (GtkInspectorSizeGroups, gtk_inspector_size_groups, GTK_TYPE_BOX)
 static void
 clear_view (GtkInspectorSizeGroups *sl)
 {
-  GList *children, *l;
   GtkWidget *child;
 
-  children = gtk_container_get_children (GTK_CONTAINER (sl));
-  for (l = children; l; l = l->next)
-    {
-      child = l->data;
-      gtk_container_remove (GTK_CONTAINER (sl), child);
-    }
-  g_list_free (children);
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (sl))))
+    gtk_container_remove (GTK_CONTAINER (sl), child);
 }
 
 static void
@@ -215,7 +209,7 @@ add_widget (GtkInspectorSizeGroups *sl,
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
   gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), label);
-  gtk_container_add (GTK_CONTAINER (listbox), row);
+  gtk_list_box_insert (listbox, row, -1);
 }
 
 static void
