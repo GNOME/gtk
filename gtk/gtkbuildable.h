@@ -83,8 +83,8 @@ struct _GtkBuildableParser
  * @get_name: The getter corresponding to @set_name. Implement this
  *  if you implement @set_name.
  * @add_child: Adds a child. The @type parameter can be used to
- *  differentiate the kind of child. #GtkContainer implements this
- *  to add add a child widget to the container, #GtkNotebook uses
+ *  differentiate the kind of child. #GtkWidget implements this
+ *  to add event controllers to the widget, #GtkNotebook uses
  *  the @type to distinguish between page labels (of type "page-label")
  *  and normal children.
  * @set_buildable_property: Sets a property of a buildable object.
