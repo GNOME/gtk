@@ -98,6 +98,8 @@ void               _gdk_macos_surface_move_resize             (GdkMacosSurface  
                                                                int                 y,
                                                                int                 width,
                                                                int                 height);
+gboolean           _gdk_macos_surface_is_tracking             (GdkMacosSurface    *self,
+                                                               NSTrackingArea     *area);
 
 G_END_DECLS
 

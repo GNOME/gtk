@@ -266,7 +266,7 @@ synthesize_crossing_event (GdkMacosDisplay *display,
       break;
 
     default:
-      return NULL;
+      g_return_val_if_reached (NULL);
     }
 
   state = get_keyboard_modifiers_from_ns_event (nsevent) |
@@ -753,7 +753,7 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
       if (![NSApp isActive])
         {
           [NSApp activateIgnoringOtherApps:YES];
-          return FALSE;
+          return NULL;
         }
       else if (![nswindow isKeyWindow])
         {
@@ -785,10 +785,16 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
       break;
 
     case NSEventTypeMouseExited:
-      [[NSCursor arrowCursor] set];
-      /* fall through */
+      if (_gdk_macos_surface_is_tracking (surface, [nsevent trackingArea]))
+        {
+          [[NSCursor arrowCursor] set];
+          ret = synthesize_crossing_event (self, surface, nsevent, point.x, point.y);
+        }
+      break;
+
     case NSEventTypeMouseEntered:
-      ret = synthesize_crossing_event (self, surface, nsevent, point.x, point.y);
+      if (_gdk_macos_surface_is_tracking (surface, [nsevent trackingArea]))
+        ret = synthesize_crossing_event (self, surface, nsevent, point.x, point.y);
       break;
 
     case NSEventTypeKeyDown:

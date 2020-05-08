@@ -913,3 +913,22 @@ _gdk_macos_surface_move_resize (GdkMacosSurface *self,
   [priv->window setFrame:NSMakeRect(x, y, width, height)
                  display:YES];
 }
+
+gboolean
+_gdk_macos_surface_is_tracking (GdkMacosSurface *self,
+                                NSTrackingArea  *area)
+{
+  GdkMacosSurfacePrivate *priv = gdk_macos_surface_get_instance_private (self);
+  GdkMacosBaseView *view;
+
+  g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), FALSE);
+
+  if (priv->window == NULL)
+    return FALSE;
+
+  view = (GdkMacosBaseView *)[priv->window contentView];
+  if (view == NULL)
+    return FALSE;
+
+  return [view trackingArea] == area;
+}
