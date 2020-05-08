@@ -461,6 +461,7 @@ setup_search (GtkFileChooserDialog *dialog)
 {
   GtkFileChooserDialogPrivate *priv = gtk_file_chooser_dialog_get_instance_private (dialog);
   gboolean use_header;
+  GtkWidget *child;
 
   if (priv->search_setup)
     return;
@@ -524,7 +525,10 @@ setup_search (GtkFileChooserDialog *dialog)
           gtk_header_bar_set_title_widget (GTK_HEADER_BAR (header), box);
         }
 
-      gtk_container_forall (GTK_CONTAINER (header), add_button, dialog);
+      for (child = gtk_widget_get_first_child (header);
+           child != NULL;
+           child = gtk_widget_get_next_sibling (child))
+        add_button (child, dialog);
     }
 }
 

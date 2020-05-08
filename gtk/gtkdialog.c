@@ -390,19 +390,17 @@ update_suggested_action (GtkDialog *dialog)
 
   if (priv->use_header_bar)
     {
-      GList *children, *l;
+      GtkWidget *child;
 
-      children = gtk_container_get_children (GTK_CONTAINER (priv->headerbar));
-      for (l = children; l != NULL; l = l->next)
+      for (child = gtk_widget_get_first_child (priv->headerbar);
+           child != NULL;
+           child = gtk_widget_get_next_sibling (child))
         {
-          GtkWidget *child = l->data;
-
           if (gtk_widget_has_css_class (child, GTK_STYLE_CLASS_DEFAULT))
             gtk_widget_add_css_class (child, GTK_STYLE_CLASS_SUGGESTED_ACTION);
           else
             gtk_widget_remove_css_class (child, GTK_STYLE_CLASS_SUGGESTED_ACTION);
         }
-      g_list_free (children);
     }
 }
 
@@ -615,7 +613,15 @@ get_action_children (GtkDialog *dialog)
   GList *children;
 
   if (priv->constructed && priv->use_header_bar)
-    children = gtk_container_get_children (GTK_CONTAINER (priv->headerbar));
+    {
+      GtkWidget *child;
+
+      children = NULL;
+      for (child = gtk_widget_get_first_child (priv->headerbar);
+           child != NULL;
+           child = gtk_widget_get_next_sibling (child))
+        children = g_list_append (children, child);
+    }
   else
     children = gtk_container_get_children (GTK_CONTAINER (priv->action_area));
 
@@ -1513,7 +1519,7 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
           if (is_action)
             {
               g_object_ref (object);
-              gtk_container_remove (GTK_CONTAINER (priv->headerbar), GTK_WIDGET (object));
+              gtk_header_bar_remove (GTK_HEADER_BAR (priv->headerbar), GTK_WIDGET (object));
               add_to_header_bar (dialog, GTK_WIDGET (object), ad->response_id);
               g_object_unref (object);
             }
