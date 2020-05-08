@@ -405,19 +405,6 @@ update_suggested_action (GtkDialog *dialog)
 }
 
 static void
-add_cb (GtkContainer *container,
-        GtkWidget    *widget,
-        GtkDialog    *dialog)
-{
-  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
-
-  if (priv->use_header_bar)
-    g_warning ("Content added to the action area of a dialog using header bars");
-
-  gtk_widget_set_visible (priv->action_box, TRUE);
-}
-
-static void
 gtk_dialog_constructed (GObject *object)
 {
   GtkDialog *dialog = GTK_DIALOG (object);
@@ -464,8 +451,6 @@ gtk_dialog_constructed (GObject *object)
 
       update_suggested_action (dialog);
       _gtk_header_bar_track_default_decoration (GTK_HEADER_BAR (priv->headerbar));
-
-      g_signal_connect (priv->action_area, "add", G_CALLBACK (add_cb), dialog);
     }
   else
     {
