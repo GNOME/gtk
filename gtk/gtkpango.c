@@ -1365,7 +1365,7 @@ gtk_pango_attribute_start_element (GtkBuildableParseContext  *context,
   else
     {
       _gtk_builder_error_unhandled_tag (data->builder, context,
-                                        "GtkContainer", element_name,
+                                        "GtkWidget", element_name,
                                         error);
     }
 }
