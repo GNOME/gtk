@@ -75,11 +75,21 @@ gdk_macos_popup_surface_layout (GdkMacosPopupSurface *self,
 }
 
 static void
+show_popup (GdkMacosPopupSurface *self)
+{
+  NSWindow *nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
+
+  [(GdkMacosWindow *)nswindow showAndMakeKey:NO];
+
+  _gdk_macos_surface_show (GDK_MACOS_SURFACE (self));
+}
+
+static void
 show_grabbing_popup (GdkSeat    *seat,
                      GdkSurface *surface,
                      gpointer    user_data)
 {
-  _gdk_macos_surface_show (GDK_MACOS_SURFACE (surface));
+  show_popup (GDK_MACOS_POPUP_SURFACE (surface));
 }
 
 static gboolean
@@ -112,7 +122,7 @@ gdk_macos_popup_surface_present (GdkPopup       *popup,
     }
   else
     {
-      _gdk_macos_surface_show (GDK_MACOS_SURFACE (self));
+      show_popup (GDK_MACOS_POPUP_SURFACE (self));
     }
 
   return GDK_SURFACE_IS_MAPPED (GDK_SURFACE (self));
@@ -274,6 +284,9 @@ _gdk_macos_popup_surface_new (GdkMacosDisplay *display,
                                                backing:NSBackingStoreBuffered
                                                  defer:NO
                                                 screen:screen];
+
+  [window setOpaque:NO];
+  [window setBackgroundColor:[NSColor clearColor]];
 
   self = g_object_new (GDK_TYPE_MACOS_POPUP_SURFACE,
                        "display", display,
