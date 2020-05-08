@@ -331,8 +331,8 @@ update_info (gpointer data)
       AtkRole role;
       GList *list, *l;
 
-      while ((child = gtk_widget_get_first_child (sl->priv->mnemonic_label)))
-        gtk_container_remove (GTK_CONTAINER (sl->priv->mnemonic_label), child);
+       while ((child = gtk_widget_get_first_child (sl->priv->mnemonic_label)))
+         gtk_widget_unparent (child);
 
       list = gtk_widget_list_mnemonic_labels (GTK_WIDGET (sl->priv->object));
       for (l = list; l; l = l->next)

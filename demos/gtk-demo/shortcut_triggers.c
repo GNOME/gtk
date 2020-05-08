@@ -71,7 +71,7 @@ do_shortcut_triggers (GtkWidget *do_widget)
           GtkWidget *row;
 
           row = gtk_label_new (shortcuts[i].description);
-          gtk_container_add (GTK_CONTAINER (list), row);
+          gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
 
           controller = gtk_shortcut_controller_new ();
           gtk_shortcut_controller_set_scope (GTK_SHORTCUT_CONTROLLER (controller), GTK_SHORTCUT_SCOPE_GLOBAL);

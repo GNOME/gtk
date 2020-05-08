@@ -3614,7 +3614,7 @@ gtk_list_box_bind_model (GtkListBox                 *box,
     {
       GtkWidget *row = g_sequence_get (iter);
       iter = g_sequence_iter_next (iter);
-      gtk_list_box_remove (GTK_CONTAINER (box), row);
+      gtk_list_box_remove (GTK_LIST_BOX (box), row);
     }
 
 

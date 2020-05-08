@@ -551,7 +551,6 @@ flags_to_string (GFlagsClass *flags_class,
 static void
 flags_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
-  GList *children, *c;
   GValue val = G_VALUE_INIT;
   GFlagsClass *fclass;
   guint flags;
@@ -561,6 +560,7 @@ flags_changed (GObject *object, GParamSpec *pspec, gpointer data)
   GtkWidget *viewport;
   GtkWidget *box;
   char *str;
+  GtkWidget *child;
 
   fclass = G_FLAGS_CLASS (g_type_class_peek (pspec->value_type));
 
@@ -577,19 +577,21 @@ flags_changed (GObject *object, GParamSpec *pspec, gpointer data)
   sw =  gtk_popover_get_child (GTK_POPOVER (popover));
   viewport = gtk_scrolled_window_get_child (GTK_SCROLLED_WINDOW (sw));
   box = gtk_viewport_get_child (GTK_VIEWPORT (viewport));
-  children = gtk_container_get_children (GTK_CONTAINER (box));
+  for (child = gtk_widget_get_first_child (box);
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    block_controller (G_OBJECT (child));
 
-  for (c = children; c; c = c->next)
-    block_controller (G_OBJECT (c->data));
-
-  for (c = children, i = 0; c; c = c->next, i++)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (c->data),
+  for (child = gtk_widget_get_first_child (box), i = 0;
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child), i++)
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (child),
                                   (fclass->values[i].value & flags) != 0);
 
-  for (c = children; c; c = c->next)
-    unblock_controller (G_OBJECT (c->data));
-
-  g_list_free (children);
+  for (child = gtk_widget_get_first_child (box);
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    unblock_controller (G_OBJECT (child));
 }
 
 static gunichar
@@ -671,11 +673,9 @@ object_changed (GObject *object, GParamSpec *pspec, gpointer data)
   gchar *str;
   GObject *obj;
 
-  GList *children = gtk_container_get_children (GTK_CONTAINER (data));
-  label = GTK_WIDGET (children->data);
-  button = GTK_WIDGET (children->next->data);
+  label = gtk_widget_get_first_child (GTK_WIDGET (data));
+  button = gtk_widget_get_next_sibling (label);
   g_object_get (object, pspec->name, &obj, NULL);
-  g_list_free (children);
 
   str = object_label (obj, pspec);
 

@@ -200,7 +200,7 @@ add_clicked_cb (GtkButton *button,
   static int new_button_nr = 1;
 
   new_row = row_new( g_strdup_printf ("blah2 new %d", new_button_nr), new_button_nr);
-  gtk_container_add (GTK_CONTAINER (list), new_row);
+  gtk_list_box_insert (GTK_LIST_BOX (list), new_row, -1);
   new_button_nr++;
 }
 
@@ -297,13 +297,13 @@ main (int argc, char *argv[])
   g_signal_connect (list, "row-selected", G_CALLBACK (row_selected_cb), NULL);
 
   row = row_new ("blah4", 4);
-  gtk_container_add (GTK_CONTAINER (list), row);
+  gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
   row3 = row = row_new ("blah3", 3);
-  gtk_container_add (GTK_CONTAINER (list), row);
+  gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
   row = row_new ("blah1", 1);
-  gtk_container_add (GTK_CONTAINER (list), row);
+  gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
   row = row_new ("blah2", 2);
-  gtk_container_add (GTK_CONTAINER (list), row);
+  gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
 
   row = row_new (NULL, 0);
   row_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
@@ -318,14 +318,14 @@ main (int argc, char *argv[])
   check = gtk_check_button_new ();
   gtk_container_add (GTK_CONTAINER (row_vbox), check);
   gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), row_vbox);
-  gtk_container_add (GTK_CONTAINER (list), row);
+  gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
 
   row = row_new (NULL, 0);
   button = gtk_button_new_with_label ("focusable row");
   gtk_widget_set_hexpand (button, FALSE);
   gtk_widget_set_halign (button, GTK_ALIGN_START);
   gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), button);
-  gtk_container_add (GTK_CONTAINER (list), row);
+  gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (hbox), vbox);
