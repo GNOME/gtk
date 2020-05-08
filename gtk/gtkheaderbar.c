@@ -110,12 +110,12 @@ typedef struct _GtkHeaderBarClass         GtkHeaderBarClass;
 
 struct _GtkHeaderBar
 {
-  GtkContainer container;
+  GtkWidget container;
 };
 
 struct _GtkHeaderBarClass
 {
-  GtkContainerClass parent_class;
+  GtkWidgetClass parent_class;
 };
 
 struct _GtkHeaderBarPrivate
@@ -148,7 +148,7 @@ static GParamSpec *header_bar_props[LAST_PROP] = { NULL, };
 
 static void gtk_header_bar_buildable_init (GtkBuildableIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkHeaderBar, gtk_header_bar, GTK_TYPE_CONTAINER,
+G_DEFINE_TYPE_WITH_CODE (GtkHeaderBar, gtk_header_bar, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkHeaderBar)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_header_bar_buildable_init));
@@ -388,11 +388,10 @@ gtk_header_bar_dispose (GObject *object)
 
   g_clear_pointer (&priv->title_widget, gtk_widget_unparent);
   g_clear_pointer (&priv->title_label, gtk_widget_unparent);
-
-  G_OBJECT_CLASS (gtk_header_bar_parent_class)->dispose (object);
-
   g_clear_pointer (&priv->start_box, gtk_widget_unparent);
   g_clear_pointer (&priv->end_box, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (gtk_header_bar_parent_class)->dispose (object);
 }
 
 static void
@@ -485,13 +484,6 @@ gtk_header_bar_pack (GtkHeaderBar *bar,
     update_default_decoration (bar);
 }
 
-static void
-gtk_header_bar_add (GtkContainer *container,
-                    GtkWidget    *child)
-{
-  gtk_header_bar_pack (GTK_HEADER_BAR (container), child, GTK_PACK_START);
-}
-
 /**
  * gtk_header_bar_remove:
  * @bar: a #GtkHeaderBar
@@ -533,51 +525,38 @@ gtk_header_bar_remove (GtkHeaderBar *bar,
     update_default_decoration (bar);
 }
 
-static void
-gtk_header_bar_forall (GtkContainer *container,
-                       GtkCallback   callback,
-                       gpointer      callback_data)
+static GtkSizeRequestMode
+gtk_header_bar_get_request_mode (GtkWidget *widget)
 {
-  GtkHeaderBar *bar = GTK_HEADER_BAR (container);
-  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GtkWidget *w;
+  int wfh = 0, hfw = 0;
 
-  if (priv->start_box)
+  for (w = gtk_widget_get_first_child (widget);
+       w != NULL;
+       w = gtk_widget_get_next_sibling (w))
     {
-      w = _gtk_widget_get_first_child (priv->start_box);
-      while (w != NULL)
+      GtkSizeRequestMode mode = gtk_widget_get_request_mode (w);
+
+      switch (mode)
         {
-          GtkWidget *next = _gtk_widget_get_next_sibling (w);
-
-          if (w != priv->start_window_controls)
-            (* callback) (w, callback_data);
-
-          w = next;
+        case GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH:
+          hfw ++;
+          break;
+        case GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT:
+          wfh ++;
+          break;
+        case GTK_SIZE_REQUEST_CONSTANT_SIZE:
+        default:
+          break;
         }
     }
 
-  if (priv->title_widget != NULL)
-    (* callback) (priv->title_widget, callback_data);
-
-  if (priv->end_box)
-    {
-      w = _gtk_widget_get_first_child (priv->end_box);
-      while (w != NULL)
-        {
-          GtkWidget *next = _gtk_widget_get_next_sibling (w);
-
-          if (w != priv->end_window_controls)
-            (* callback) (w, callback_data);
-
-          w = next;
-        }
-    }
-}
-
-static GType
-gtk_header_bar_child_type (GtkContainer *container)
-{
-  return GTK_TYPE_WIDGET;
+  if (hfw == 0 && wfh == 0)
+    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+  else
+    return wfh > hfw ?
+        GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT :
+        GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 }
 
 static void
@@ -585,7 +564,6 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
 
   object_class->dispose = gtk_header_bar_dispose;
   object_class->finalize = gtk_header_bar_finalize;
@@ -594,11 +572,8 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
 
   widget_class->root = gtk_header_bar_root;
   widget_class->unroot = gtk_header_bar_unroot;
-
-  container_class->add = gtk_header_bar_add;
-  container_class->remove = gtk_header_bar_remove;
-  container_class->forall = gtk_header_bar_forall;
-  container_class->child_type = gtk_header_bar_child_type;
+  widget_class->focus = gtk_widget_focus_child;
+  widget_class->get_request_mode = gtk_header_bar_get_request_mode;
 
   header_bar_props[PROP_TITLE_WIDGET] =
       g_param_spec_object ("title-widget",
