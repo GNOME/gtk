@@ -130,60 +130,6 @@ test_attach (void)
   g_assert_cmpint (height, ==,  3);
 }
 
-static void
-test_add (void)
-{
-  GtkGrid *g;
-  GtkWidget *child;
-  gint left, top, width, height;
-
-  g = (GtkGrid *)gtk_grid_new ();
-
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (g), GTK_ORIENTATION_HORIZONTAL);
-
-  child = gtk_label_new ("a");
-  gtk_container_add (GTK_CONTAINER (g), child);
-  gtk_grid_query_child (g, child,
-                        &left, &top,
-                        &width, &height);
-  g_assert_cmpint (left,   ==, 0);
-  g_assert_cmpint (top,    ==, 0);
-  g_assert_cmpint (width,  ==, 1);
-  g_assert_cmpint (height, ==, 1);
-
-  child = gtk_label_new ("b");
-  gtk_container_add (GTK_CONTAINER (g), child);
-  gtk_grid_query_child (g, child,
-                        &left, &top,
-                        &width, &height);
-  g_assert_cmpint (left,   ==, 1);
-  g_assert_cmpint (top,    ==, 0);
-  g_assert_cmpint (width,  ==, 1);
-  g_assert_cmpint (height, ==, 1);
-
-  child = gtk_label_new ("c");
-  gtk_container_add (GTK_CONTAINER (g), child);
-  gtk_grid_query_child (g, child,
-                        &left, &top,
-                        &width, &height);
-  g_assert_cmpint (left,   ==, 2);
-  g_assert_cmpint (top,    ==, 0);
-  g_assert_cmpint (width,  ==, 1);
-  g_assert_cmpint (height, ==, 1);
-
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (g), GTK_ORIENTATION_VERTICAL);
-
-  child = gtk_label_new ("d");
-  gtk_container_add (GTK_CONTAINER (g), child);
-  gtk_grid_query_child (g, child,
-                        &left, &top,
-                        &width, &height);
-  g_assert_cmpint (left,   ==, 0);
-  g_assert_cmpint (top,    ==, 1);
-  g_assert_cmpint (width,  ==, 1);
-  g_assert_cmpint (height, ==, 1);
-}
-
 int
 main (int   argc,
       char *argv[])
@@ -191,7 +137,6 @@ main (int   argc,
   gtk_test_init (&argc, &argv);
 
   g_test_add_func ("/grid/attach", test_attach);
-  g_test_add_func ("/grid/add", test_add);
 
   return g_test_run();
 }
