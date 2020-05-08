@@ -63,13 +63,11 @@ gdk_macos_monitor_get_workarea (GdkMonitor   *monitor,
         {
           NSScreen *screen = (NSScreen *)obj;
           NSRect visibleFrame = [screen visibleFrame];
-          int x;
-          int y;
+          int x = visibleFrame.origin.x;
+          int y = visibleFrame.origin.y + visibleFrame.size.height;
 
           _gdk_macos_display_from_display_coords (GDK_MACOS_DISPLAY (monitor->display),
-                                                  visibleFrame.origin.x,
-                                                  visibleFrame.origin.y,
-                                                  &x, &y);
+                                                  x, y, &x, &y);
 
           geometry->x = x;
           geometry->y = y;
