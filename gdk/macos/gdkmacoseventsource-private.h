@@ -32,7 +32,6 @@ typedef enum
 } GdkMacosEventSubType;
 
 GSource  *_gdk_macos_event_source_new           (GdkMacosDisplay *display);
-void      _gdk_macos_event_source_release_event (NSEvent         *event);
 NSEvent  *_gdk_macos_event_source_get_pending   (void);
 gboolean  _gdk_macos_event_source_check_pending (void);
 

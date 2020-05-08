@@ -435,13 +435,14 @@ gdk_macos_display_queue_events (GdkDisplay *display)
   if (!(event = _gdk_macos_display_translate (self, nsevent)))
     {
       [NSApp sendEvent:nsevent];
-      _gdk_macos_event_source_release_event (nsevent);
+      [nsevent release];
       return;
     }
 
   node = _gdk_event_queue_append (GDK_DISPLAY (self), event);
   _gdk_windowing_got_event (GDK_DISPLAY (self), node, event, 0);
-  _gdk_macos_event_source_release_event (nsevent);
+
+  [nsevent release];
 }
 
 void

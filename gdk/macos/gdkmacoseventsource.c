@@ -638,12 +638,6 @@ _gdk_macos_event_source_get_pending (void)
   return event;
 }
 
-void
-_gdk_macos_event_source_release_event (NSEvent *event)
-{
-  [event release];
-}
-
 static gboolean
 gdk_macos_event_source_prepare (GSource *source,
                                 gint    *timeout)
