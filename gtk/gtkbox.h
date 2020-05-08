@@ -30,7 +30,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkcontainer.h>
+#include <gtk/gtkwidget.h>
 
 
 G_BEGIN_DECLS
@@ -49,7 +49,7 @@ typedef struct _GtkBoxClass         GtkBoxClass;
 
 struct _GtkBox
 {
-  GtkContainer parent_instance;
+  GtkWidget parent_instance;
 };
 
 /**
@@ -58,7 +58,7 @@ struct _GtkBox
  */
 struct _GtkBoxClass
 {
-  GtkContainerClass parent_class;
+  GtkWidgetClass parent_class;
 
   /*< private >*/
 
