@@ -4391,7 +4391,7 @@ gtk_text_view_set_gutter (GtkTextView       *text_view,
     return;
 
   new_child = GTK_TEXT_VIEW_CHILD (gtk_text_view_child_new (win));
-  gtk_container_add (GTK_CONTAINER (new_child), widget);
+  gtk_text_view_child_add (new_child, widget);
 
   *childp = g_object_ref (new_child);
   gtk_widget_set_parent (GTK_WIDGET (new_child), GTK_WIDGET (text_view));
