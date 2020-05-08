@@ -8,7 +8,7 @@ row_unrevealed (GObject *revealer, GParamSpec *pspec, gpointer data)
   row = gtk_widget_get_parent (GTK_WIDGET (revealer));
   list = gtk_widget_get_parent (row);
 
-  gtk_container_remove (GTK_CONTAINER (list), row);
+  gtk_list_box_remove (GTK_LIST_BOX (list), row);
 }
 
 static void

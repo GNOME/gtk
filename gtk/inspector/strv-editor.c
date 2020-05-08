@@ -128,15 +128,13 @@ void
 gtk_inspector_strv_editor_set_strv (GtkInspectorStrvEditor  *editor,
                                     gchar                  **strv)
 {
-  GList *children, *l;
+  GtkWidget *child;
   gint i;
 
   editor->blocked = TRUE;
 
-  children = gtk_container_get_children (GTK_CONTAINER (editor->box));
-  for (l = children; l; l = l->next)
-    gtk_widget_destroy (GTK_WIDGET (l->data));
-  g_list_free (children);
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (editor->box))))
+    gtk_container_remove (GTK_CONTAINER (editor->box), child);
 
   if (strv)
     {
@@ -152,20 +150,20 @@ gtk_inspector_strv_editor_set_strv (GtkInspectorStrvEditor  *editor,
 gchar **
 gtk_inspector_strv_editor_get_strv (GtkInspectorStrvEditor *editor)
 {
-  GList *children, *l;
+  GtkWidget *child;
   GPtrArray *p;
 
   p = g_ptr_array_new ();
 
-  children = gtk_container_get_children (GTK_CONTAINER (editor->box));
-  for (l = children; l; l = l->next)
+  for (child = gtk_widget_get_first_child (editor->box);
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
     {
       GtkEntry *entry;
 
-      entry = GTK_ENTRY (g_object_get_data (G_OBJECT (l->data), "entry"));
+      entry = GTK_ENTRY (g_object_get_data (G_OBJECT (child), "entry"));
       g_ptr_array_add (p, g_strdup (gtk_editable_get_text (GTK_EDITABLE (entry))));
     }
-  g_list_free (children);
 
   g_ptr_array_add (p, NULL);
 

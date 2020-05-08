@@ -347,9 +347,7 @@ gtk_sidebar_row_set_property (GObject      *object,
             g_clear_object (&self->mount);
             g_clear_object (&self->cloud_provider_account);
 
-            gtk_container_foreach (GTK_CONTAINER (self),
-                                   (GtkCallback) gtk_widget_destroy,
-                                   NULL);
+            gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (self), NULL);
 
             gtk_widget_add_css_class (GTK_WIDGET (self), "sidebar-placeholder-row");
           }
