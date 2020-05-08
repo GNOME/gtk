@@ -44,7 +44,7 @@ create_dark_popup (GtkWidget *parent)
   gtk_window_set_resizable (GTK_WINDOW (popup), FALSE);
   gtk_window_set_hide_on_close (GTK_WINDOW (popup), TRUE);
 
-  gtk_container_add (GTK_CONTAINER (popup), button);
+  gtk_window_set_child (GTK_WINDOW (popup), button);
   g_signal_connect (button, "toggled",
                     G_CALLBACK (dark_button_toggled_cb), NULL);
 
