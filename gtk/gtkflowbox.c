@@ -2987,15 +2987,26 @@ gtk_flow_box_add (GtkContainer *container,
   gtk_flow_box_insert (GTK_FLOW_BOX (container), child, -1);
 }
 
-static void
-gtk_flow_box_remove (GtkContainer *container,
-                     GtkWidget    *widget)
+/**
+ * gtk_flow_box_remove:
+ * @box: a #GtkFlowBox
+ * @widget: the child widget to remove
+ *
+ * Removes a child from @box.
+ */
+void
+gtk_flow_box_remove (GtkFlowBox *box,
+                     GtkWidget  *widget)
 {
-  GtkFlowBox *box = GTK_FLOW_BOX (container);
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
   gboolean was_visible;
   gboolean was_selected;
   GtkFlowBoxChild *child;
+
+  g_return_if_fail (GTK_IS_FLOW_BOX (box));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (gtk_widget_get_parent (widget) == GTK_WIDGET (box) ||
+                    gtk_widget_get_parent (gtk_widget_get_parent (widget)) == GTK_WIDGET (box));
 
   if (GTK_IS_FLOW_BOX_CHILD (widget))
     child = GTK_FLOW_BOX_CHILD (widget);
