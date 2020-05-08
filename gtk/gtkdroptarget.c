@@ -471,7 +471,7 @@ gtk_drop_target_handle_crossing (GtkEventController    *controller,
           crossing->new_target == widget)
         return;
 
-      g_signal_emit (self, signals[LEAVE], 0, self->drop);
+      g_signal_emit (self, signals[LEAVE], 0);
       if (!self->dropping)
         gtk_drop_target_end_drop (self);
       gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_DROP_ACTIVE);
@@ -731,7 +731,6 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
   /**
    * GtkDropTarget::leave:
    * @self: the #GtkDropTarget
-   * @drop: the #GdkDrop
    *
    * The ::leave signal is emitted on the drop site when the pointer
    * leaves the widget. Its main purpose it to undo things done in
