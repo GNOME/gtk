@@ -66,7 +66,7 @@ gdk_keyval_name (guint keyval)
   gdk_key *found;
 
   /* Check for directly encoded 24-bit UCS characters: */
-  if ((keyval & 0xff000000) == 0x01000000)
+  if ((keyval & 0x01000000) == 0x01000000)
     {
       g_sprintf (buf, "U+%.04X", (keyval & 0x00ffffff));
       return buf;

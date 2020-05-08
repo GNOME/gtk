@@ -56,6 +56,7 @@ G_BEGIN_DECLS
 #define GDK_ROOT_WINDOW()             ((guint32) HWND_DESKTOP)
 #define GDK_DISPLAY()                 NULL
 
+#include <gdk/win32/gdkwin32keys.h>
 
 /* These need to be here so gtkstatusicon.c can pick them up if needed. */
 #ifndef WM_XBUTTONDOWN

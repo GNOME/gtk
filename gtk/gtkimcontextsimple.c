@@ -286,62 +286,6 @@ check_table (GtkIMContextSimple    *context_simple,
 #define IS_DEAD_KEY(k) \
     ((k) >= GDK_dead_grave && (k) <= (GDK_dead_dasia+1))
 
-#ifdef GDK_WINDOWING_WIN32
-
-/* On Windows, user expectation is that typing a dead accent followed
- * by space will input the corresponding spacing character. The X
- * compose tables are different for dead acute and diaeresis, which
- * when followed by space produce a plain ASCII apostrophe and double
- * quote respectively. So special-case those.
- */
-
-static gboolean
-check_win32_special_cases (GtkIMContextSimple    *context_simple,
-			   gint                   n_compose)
-{
-  if (n_compose == 2 &&
-      context_simple->compose_buffer[1] == GDK_space)
-    {
-      gunichar value = 0;
-
-      switch (context_simple->compose_buffer[0])
-	{
-	case GDK_dead_acute:
-	  value = 0x00B4; break;
-	case GDK_dead_diaeresis:
-	  value = 0x00A8; break;
-	}
-      if (value > 0)
-	{
-	  gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
-	  context_simple->compose_buffer[0] = 0;
-
-	  GTK_NOTE (MISC, g_print ("win32: U+%04X\n", value));
-	  return TRUE;
-	}
-    }
-  return FALSE;
-}
-
-static void
-check_win32_special_case_after_compact_match (GtkIMContextSimple    *context_simple,
-					      gint                   n_compose,
-					      guint                  value)
-{
-  /* On Windows user expectation is that typing two dead accents will input
-   * two corresponding spacing accents.
-   */
-  if (n_compose == 2 &&
-      context_simple->compose_buffer[0] == context_simple->compose_buffer[1] &&
-      IS_DEAD_KEY (context_simple->compose_buffer[0]))
-    {
-      gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
-      GTK_NOTE (MISC, g_print ("win32: U+%04X ", value));
-    }
-}
-
-#endif
-
 #ifdef GDK_WINDOWING_QUARTZ
 
 static gboolean
@@ -475,9 +419,6 @@ check_compact_table (GtkIMContextSimple    *context_simple,
       value = seq[row_stride - 1];
 
       gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
-#ifdef G_OS_WIN32
-      check_win32_special_case_after_compact_match (context_simple, n_compose, value);
-#endif
       context_simple->compose_buffer[0] = 0;
 
       GTK_NOTE (MISC, g_print ("U+%04X\n", value));
@@ -748,7 +689,8 @@ beep_window (GdkWindow *window)
 static gboolean
 no_sequence_matches (GtkIMContextSimple *context_simple,
                      gint                n_compose,
-                     GdkEventKey        *event)
+                     GdkEventKey        *event,
+                     gboolean            use_full_buffer)
 {
   GtkIMContext *context;
   gunichar ch;
@@ -779,6 +721,20 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
     }
   else
     {
+      if (use_full_buffer)
+	{
+	  gsize i;
+
+	  for (i = 0; i < n_compose; i++)
+	    {
+	      ch = gdk_keyval_to_unicode (context_simple->compose_buffer[i]);
+	      gtk_im_context_simple_commit_char (context, ch);
+	    }
+
+	  context_simple->compose_buffer[0] = 0;
+
+	  return TRUE;
+	}
       context_simple->compose_buffer[0] = 0;
       if (n_compose > 1)		/* Invalid sequence */
 	{
@@ -863,6 +819,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   gboolean is_escape;
   guint hex_keyval;
   int i;
+  gboolean use_full_buffer = FALSE;
 
   while (context_simple->compose_buffer[n_compose] != 0)
     n_compose++;
@@ -1064,13 +1021,33 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   else
     {
 #ifdef GDK_WINDOWING_WIN32
-      guint16  output[2];
-      gsize    output_size = 2;
+      guint32  output[17];
+      gsize    output_size = 17;
+      const guint32 *ligature = NULL;
+      GdkKeymap *keymap = gdk_keymap_get_default ();
+      GdkWin32Keymap *win32_keymap = GDK_WIN32_KEYMAP (keymap);
 
-      switch (gdk_win32_keymap_check_compose (GDK_WIN32_KEYMAP (gdk_keymap_get_default ()),
-                                              context_simple->compose_buffer,
-                                              n_compose,
-                                              output, &output_size))
+      ligature = gdk_win32_keymap_fetch_ligature (win32_keymap, event);
+
+      /* Work around the fact that event->keyval can't hold more
+       * than 1 UCS-4 codepoint.
+       */
+      if (ligature != NULL)
+        {
+          gsize l_i;
+
+          n_compose -= 1;
+          context_simple->compose_buffer[n_compose] = 0;
+          for (l_i = 0; ligature[l_i] != 0 && n_compose < GTK_MAX_COMPOSE_LEN; l_i++)
+            context_simple->compose_buffer[n_compose++] = ligature[l_i];
+
+          use_full_buffer = TRUE;
+        }
+
+      switch (gdk_win32_keymap_check_compose32 (win32_keymap,
+                                                context_simple->compose_buffer,
+                                                n_compose,
+                                                output, &output_size))
         {
         case GDK_WIN32_KEYMAP_MATCH_NONE:
           break;
@@ -1112,11 +1089,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	  g_print ("] ");
 	});
 
-#ifdef GDK_WINDOWING_WIN32
-      if (check_win32_special_cases (context_simple, n_compose))
-	return TRUE;
-#endif
-
 #ifdef GDK_WINDOWING_QUARTZ
       if (check_quartz_special_cases (context_simple, n_compose))
         return TRUE;
@@ -1130,7 +1102,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     }
   
   /* The current compose_buffer doesn't match anything */
-  return no_sequence_matches (context_simple, n_compose, event);
+  return no_sequence_matches (context_simple, n_compose, event, use_full_buffer);
 }
 
 static void
