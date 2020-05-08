@@ -168,8 +168,13 @@ _gdk_macos_toplevel_surface_focus (GdkToplevel *toplevel,
                                    guint32      timestamp)
 {
   GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)toplevel;
-  NSWindow *window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
-  [window makeKeyAndOrderFront:window];
+  NSWindow *nswindow;
+
+  if (GDK_SURFACE_DESTROYED (self))
+    return;
+
+  nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
+  [nswindow makeKeyAndOrderFront:nswindow];
 }
 
 static void
