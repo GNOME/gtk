@@ -729,6 +729,14 @@ _gdk_macos_surface_set_is_key (GdkMacosSurface *self,
 
       event = gdk_focus_event_new (GDK_SURFACE (self), keyboard, NULL, is_key);
       _gdk_event_queue_append (GDK_DISPLAY (display), event);
+
+      /* We just became the active window.  Unlike X11, Mac OS X does
+       * not send us motion events while the window does not have focus
+       * ("is not key").  We send a dummy motion notify event now, so that
+       * everything in the window is set to correct state.
+       */
+      if (is_key)
+        _gdk_macos_display_synthesize_motion (display, self);
     }
 }
 
