@@ -180,7 +180,7 @@ typedef struct _GtkNotebookClass         GtkNotebookClass;
 
 struct _GtkNotebookClass
 {
-  GtkContainerClass parent_class;
+  GtkWidgetClass parent_class;
 
   void (* switch_page)       (GtkNotebook     *notebook,
                               GtkWidget       *page,
@@ -223,7 +223,7 @@ struct _GtkNotebookClass
 
 struct _GtkNotebook
 {
-  GtkContainer container;
+  GtkWidget container;
 
   GtkNotebookDragOperation   operation;
   GtkNotebookPage           *cur_page;
@@ -799,15 +799,8 @@ static gboolean gtk_notebook_drag_drop       (GtkDropTarget    *dest,
                                               double            y,
                                               GtkNotebook      *notebook);
 
-/*** GtkContainer Methods ***/
-static void gtk_notebook_add                 (GtkContainer     *container,
+static void gtk_notebook_remove              (GtkNotebook      *notebook,
                                               GtkWidget        *widget);
-static void gtk_notebook_remove              (GtkContainer     *container,
-                                              GtkWidget        *widget);
-static GType gtk_notebook_child_type       (GtkContainer     *container);
-static void gtk_notebook_forall              (GtkContainer     *container,
-                                              GtkCallback       callback,
-                                              gpointer          callback_data);
 
 /*** GtkNotebook Methods ***/
 static gint gtk_notebook_real_insert_page    (GtkNotebook      *notebook,
@@ -923,7 +916,7 @@ static void gtk_notebook_gesture_released (GtkGestureClick *gesture,
 
 static guint notebook_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE_WITH_CODE (GtkNotebook, gtk_notebook, GTK_TYPE_CONTAINER,
+G_DEFINE_TYPE_WITH_CODE (GtkNotebook, gtk_notebook, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_notebook_buildable_init))
 
@@ -1030,7 +1023,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 {
   GObjectClass   *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
 
   gobject_class->set_property = gtk_notebook_set_property;
   gobject_class->get_property = gtk_notebook_get_property;
@@ -1045,11 +1037,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->grab_focus = gtk_notebook_grab_focus;
   widget_class->set_focus_child = gtk_notebook_set_focus_child;
   widget_class->compute_expand = gtk_notebook_compute_expand;
-
-  container_class->add = gtk_notebook_add;
-  container_class->remove = gtk_notebook_remove;
-  container_class->forall = gtk_notebook_forall;
-  container_class->child_type = gtk_notebook_child_type;
 
   class->switch_page = gtk_notebook_real_switch_page;
   class->insert_page = gtk_notebook_real_insert_page;
@@ -1922,7 +1909,7 @@ gtk_notebook_dispose (GObject *object)
       GtkNotebookPage *page = l->data;
       l = l->next;
 
-      gtk_notebook_remove (GTK_CONTAINER (notebook), page->child);
+      gtk_notebook_remove (notebook, page->child);
     }
 
   G_OBJECT_CLASS (gtk_notebook_parent_class)->dispose (object);
@@ -3398,26 +3385,14 @@ do_detach_tab (GtkNotebook *from,
 
 /* Private GtkContainer Methods :
  *
- * gtk_notebook_add
  * gtk_notebook_remove
  * gtk_notebook_focus
  * gtk_notebook_set_focus_child
- * gtk_notebook_child_type
- * gtk_notebook_forall
  */
 static void
-gtk_notebook_add (GtkContainer *container,
-                  GtkWidget    *widget)
+gtk_notebook_remove (GtkNotebook *notebook,
+                     GtkWidget   *widget)
 {
-  gtk_notebook_insert_page_menu (GTK_NOTEBOOK (container), widget,
-                                 NULL, NULL, -1);
-}
-
-static void
-gtk_notebook_remove (GtkContainer *container,
-                     GtkWidget    *widget)
-{
-  GtkNotebook *notebook = GTK_NOTEBOOK (container);
   GtkNotebookPage *page;
   GList *children, *list;
   gint page_num = 0;
@@ -3778,31 +3753,6 @@ gtk_notebook_set_focus_child (GtkWidget *widget,
     notebook->child_has_focus = FALSE;
 
   GTK_WIDGET_CLASS (gtk_notebook_parent_class)->set_focus_child (widget, child);
-}
-
-static void
-gtk_notebook_forall (GtkContainer *container,
-                     GtkCallback   callback,
-                     gpointer      callback_data)
-{
-  GtkNotebook *notebook = GTK_NOTEBOOK (container);
-  GList *children;
-
-  children = notebook->children;
-  while (children)
-    {
-      GtkNotebookPage *page;
-
-      page = children->data;
-      children = children->next;
-      (* callback) (page->child, callback_data);
-    }
-}
-
-static GType
-gtk_notebook_child_type (GtkContainer     *container)
-{
-  return GTK_TYPE_WIDGET;
 }
 
 /* Private GtkNotebook Methods:
