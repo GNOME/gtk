@@ -58,23 +58,19 @@ add_row (GtkButton  *button,
   GtkWidget *row;
 
   row = g_object_new (GTK_TYPE_LIST_BOX_ROW, NULL);
-  gtk_container_add (GTK_CONTAINER (row), gtk_label_new ("test"));
-  gtk_container_add (GTK_CONTAINER (listbox), row);
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), gtk_label_new ("test"));
+  gtk_list_box_insert (GTK_LIST_BOX (listbox), row, -1);
 }
 
 static void
 remove_row (GtkButton  *button,
             GtkListBox *listbox)
 {
-  GList *children, *last;
+  GtkWidget *last;
 
-  children = gtk_container_get_children (GTK_CONTAINER (listbox));
-  last = g_list_last (children);
-
+  last = gtk_widget_get_last_child (GTK_WIDGET (listbox));
   if (last)
-    gtk_container_remove (GTK_CONTAINER (listbox), last->data);
-
-  g_list_free (children);
+    gtk_list_box_remove (GTK_LIST_BOX (listbox), last);
 }
 
 static void

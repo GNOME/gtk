@@ -39,7 +39,7 @@ selectable_row_add (SelectableRow *row, GtkWidget *child)
 }
 
 static void
-update_selectable (GtkWidget *widget, gpointer data)
+update_selectable (GtkWidget *widget)
 {
   SelectableRow *row = (SelectableRow *)widget;
   GtkListBox *list;
@@ -53,7 +53,7 @@ update_selectable (GtkWidget *widget, gpointer data)
 }
 
 static void
-update_selected (GtkWidget *widget, gpointer data)
+update_selected (GtkWidget *widget)
 {
   SelectableRow *row = (SelectableRow *)widget;
 
@@ -103,6 +103,7 @@ selection_mode_enter (GtkButton *button, GtkBuilder *builder)
   GtkWidget *cancelbutton;
   GtkWidget *selectbutton;
   GtkWidget *titlestack;
+  GtkWidget *child;
 
   header = GTK_WIDGET (gtk_builder_get_object (builder, "header"));
   list = GTK_WIDGET (gtk_builder_get_object (builder, "list"));
@@ -120,7 +121,10 @@ selection_mode_enter (GtkButton *button, GtkBuilder *builder)
 
   gtk_list_box_set_activate_on_single_click (GTK_LIST_BOX (list), FALSE);
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (list), GTK_SELECTION_MULTIPLE);
-  gtk_container_forall (GTK_CONTAINER (list), update_selectable, NULL);
+  for (child = gtk_widget_get_first_child (list);
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    update_selectable (child);
 }
 
 static void
@@ -132,6 +136,7 @@ selection_mode_leave (GtkButton *button, GtkBuilder *builder)
   GtkWidget *cancelbutton;
   GtkWidget *selectbutton;
   GtkWidget *titlestack;
+  GtkWidget *child;
 
   header = GTK_WIDGET (gtk_builder_get_object (builder, "header"));
   list = GTK_WIDGET (gtk_builder_get_object (builder, "list"));
@@ -149,7 +154,10 @@ selection_mode_leave (GtkButton *button, GtkBuilder *builder)
 
   gtk_list_box_set_activate_on_single_click (GTK_LIST_BOX (list), TRUE);
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (list), GTK_SELECTION_NONE);
-  gtk_container_forall (GTK_CONTAINER (list), update_selectable, NULL);
+  for (child = gtk_widget_get_first_child (list);
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    update_selectable (child);
 }
 
 static void
@@ -167,7 +175,12 @@ select_none (GAction *action, GVariant *param, GtkWidget *list)
 static void
 selected_rows_changed (GtkListBox *list)
 {
-  gtk_container_forall (GTK_CONTAINER (list), update_selected, NULL);
+  GtkWidget *child;
+
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (list));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    update_selected (child);
 }
 
 int

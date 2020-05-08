@@ -523,7 +523,14 @@ populate_display (GdkDisplay *display, GtkInspectorGeneral *gen)
 
   gtk_widget_show (gen->priv->display_composited);
   list = GTK_LIST_BOX (gen->priv->display_box);
-  children = gtk_container_get_children (GTK_CONTAINER (list));
+  children = NULL;
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (list));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      if (GTK_IS_LIST_BOX_ROW (child))
+        children = g_list_prepend (children, child);
+    }
   for (l = children; l; l = l->next)
     {
       child = l->data;
@@ -532,7 +539,7 @@ populate_display (GdkDisplay *display, GtkInspectorGeneral *gen)
           gtk_widget_is_ancestor (gen->priv->display_composited, child))
         continue;
 
-      gtk_container_remove (GTK_CONTAINER (list), child);
+      gtk_list_box_remove (list, child);
     }
   g_list_free (children);
 
@@ -792,13 +799,12 @@ add_seat (GtkInspectorGeneral *gen,
 static void
 populate_seats (GtkInspectorGeneral *gen)
 {
+  GtkWidget *child;
   GList *list, *l;
   int i;
 
-  list = gtk_container_get_children (GTK_CONTAINER (gen->priv->device_box));
-  for (l = list; l; l = l->next)
-    gtk_container_remove (GTK_CONTAINER (gen->priv->device_box), GTK_WIDGET (l->data));
-  g_list_free (list);
+  while ((child = gtk_widget_get_first_child (gen->priv->device_box)))
+    gtk_list_box_remove (GTK_LIST_BOX (gen->priv->device_box), child);
 
   list = gdk_display_list_seats (gen->priv->display);
 
