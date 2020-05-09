@@ -79,7 +79,7 @@ int main (int argc, char **argv)
 
   frame = GTK_FRAME (gtk_frame_new ("Test GtkFrame"));
   gtk_widget_set_vexpand (GTK_WIDGET (frame), TRUE);
-  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (frame));
+  gtk_box_append (GTK_BOX (vbox), GTK_WIDGET (frame));
 
   widget = gtk_button_new_with_label ("Hello!");
   gtk_frame_set_child (GTK_FRAME (frame), widget);
@@ -87,7 +87,7 @@ int main (int argc, char **argv)
   grid = GTK_GRID (gtk_grid_new ());
   gtk_grid_set_row_spacing (grid, 12);
   gtk_grid_set_column_spacing (grid, 6);
-  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (grid));
+  gtk_box_append (GTK_BOX (vbox), GTK_WIDGET (grid));
 
   xalign = gtk_frame_get_label_align (frame);
 

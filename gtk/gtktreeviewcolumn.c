@@ -887,16 +887,16 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
 
   if (priv->xalign <= 0.5)
     {
-      gtk_container_add (GTK_CONTAINER (hbox), priv->frame);
-      gtk_container_add (GTK_CONTAINER (hbox), priv->arrow);
+      gtk_box_append (GTK_BOX (hbox), priv->frame);
+      gtk_box_append (GTK_BOX (hbox), priv->arrow);
     }
   else
     {
-      gtk_container_add (GTK_CONTAINER (hbox), priv->arrow);
-      gtk_container_add (GTK_CONTAINER (hbox), priv->frame);
+      gtk_box_append (GTK_BOX (hbox), priv->arrow);
+      gtk_box_append (GTK_BOX (hbox), priv->frame);
     }
 
-  gtk_container_add (GTK_CONTAINER (priv->frame), child);
+  gtk_box_append (GTK_BOX (priv->frame), child);
   gtk_button_set_child (GTK_BUTTON (priv->button), hbox);
 }
 

@@ -62,7 +62,7 @@ do_password_entry (GtkWidget *do_widget)
                     "activates-default", TRUE,
                     NULL);
       g_signal_connect (entry, "notify::text", G_CALLBACK (update_button), NULL);
-      gtk_container_add (GTK_CONTAINER (box), entry);
+      gtk_box_append (GTK_BOX (box), entry);
 
       entry2 = gtk_password_entry_new ();
       gtk_password_entry_set_show_peek_icon (GTK_PASSWORD_ENTRY (entry2), TRUE);
@@ -71,7 +71,7 @@ do_password_entry (GtkWidget *do_widget)
                     "activates-default", TRUE,
                     NULL);
       g_signal_connect (entry2, "notify::text", G_CALLBACK (update_button), NULL);
-      gtk_container_add (GTK_CONTAINER (box), entry2);
+      gtk_box_append (GTK_BOX (box), entry2);
 
       button = gtk_button_new_with_mnemonic ("_Done");
       gtk_widget_add_css_class (button, "suggested-action");

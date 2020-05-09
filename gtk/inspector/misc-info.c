@@ -329,8 +329,11 @@ update_info (gpointer data)
       AtkObject *accessible;
       AtkRole role;
       GList *list, *l;
+      GtkWidget *child;
 
-      gtk_container_forall (GTK_CONTAINER (sl->priv->mnemonic_label), (GtkCallback)gtk_widget_destroy, NULL);
+       while ((child = gtk_widget_get_first_child (sl->priv->mnemonic_label)))
+         gtk_widget_destroy (child);
+
       list = gtk_widget_list_mnemonic_labels (GTK_WIDGET (sl->priv->object));
       for (l = list; l; l = l->next)
         {
@@ -340,7 +343,7 @@ update_info (gpointer data)
           button = gtk_button_new_with_label (tmp);
           g_free (tmp);
           gtk_widget_show (button);
-          gtk_container_add (GTK_CONTAINER (sl->priv->mnemonic_label), button);
+          gtk_box_append (GTK_BOX (sl->priv->mnemonic_label), button);
           g_object_set_data (G_OBJECT (button), "mnemonic-label", l->data);
           g_signal_connect (button, "clicked", G_CALLBACK (show_mnemonic_label), sl);
         }

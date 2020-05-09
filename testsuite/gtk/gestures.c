@@ -424,8 +424,8 @@ test_phases (void)
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
 
-  gtk_container_add (GTK_CONTAINER (A), B);
-  gtk_container_add (GTK_CONTAINER (B), C);
+  gtk_box_append (GTK_BOX (A), B);
+  gtk_box_append (GTK_BOX (B), C);
 
   gtk_widget_show (A);
 
@@ -476,8 +476,8 @@ test_mixed (void)
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
 
-  gtk_container_add (GTK_CONTAINER (A), B);
-  gtk_container_add (GTK_CONTAINER (B), C);
+  gtk_box_append (GTK_BOX (A), B);
+  gtk_box_append (GTK_BOX (B), C);
 
   gtk_widget_show (A);
 
@@ -535,8 +535,8 @@ test_early_exit (void)
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
 
-  gtk_container_add (GTK_CONTAINER (A), B);
-  gtk_container_add (GTK_CONTAINER (B), C);
+  gtk_box_append (GTK_BOX (A), B);
+  gtk_box_append (GTK_BOX (B), C);
 
   gtk_widget_show (A);
 
@@ -590,8 +590,8 @@ test_claim_capture (void)
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
 
-  gtk_container_add (GTK_CONTAINER (A), B);
-  gtk_container_add (GTK_CONTAINER (B), C);
+  gtk_box_append (GTK_BOX (A), B);
+  gtk_box_append (GTK_BOX (B), C);
 
   gtk_widget_show (A);
 
@@ -637,8 +637,8 @@ test_claim_target (void)
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
 
-  gtk_container_add (GTK_CONTAINER (A), B);
-  gtk_container_add (GTK_CONTAINER (B), C);
+  gtk_box_append (GTK_BOX (A), B);
+  gtk_box_append (GTK_BOX (B), C);
 
   gtk_widget_show (A);
 
@@ -684,8 +684,8 @@ test_claim_bubble (void)
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
 
-  gtk_container_add (GTK_CONTAINER (A), B);
-  gtk_container_add (GTK_CONTAINER (B), C);
+  gtk_box_append (GTK_BOX (A), B);
+  gtk_box_append (GTK_BOX (B), C);
 
   gtk_widget_show (A);
 
@@ -738,8 +738,8 @@ test_early_claim_capture (void)
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
 
-  gtk_container_add (GTK_CONTAINER (A), B);
-  gtk_container_add (GTK_CONTAINER (B), C);
+  gtk_box_append (GTK_BOX (A), B);
+  gtk_box_append (GTK_BOX (B), C);
 
   gtk_widget_show (A);
 
@@ -795,8 +795,8 @@ test_late_claim_capture (void)
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
 
-  gtk_container_add (GTK_CONTAINER (A), B);
-  gtk_container_add (GTK_CONTAINER (B), C);
+  gtk_box_append (GTK_BOX (A), B);
+  gtk_box_append (GTK_BOX (B), C);
 
   gtk_widget_show (A);
 
@@ -854,8 +854,8 @@ test_group (void)
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
 
-  gtk_container_add (GTK_CONTAINER (A), B);
-  gtk_container_add (GTK_CONTAINER (B), C);
+  gtk_box_append (GTK_BOX (A), B);
+  gtk_box_append (GTK_BOX (B), C);
 
   gtk_widget_show (A);
 
@@ -905,8 +905,8 @@ test_gestures_outside_grab (void)
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
 
-  gtk_container_add (GTK_CONTAINER (A), B);
-  gtk_container_add (GTK_CONTAINER (B), C);
+  gtk_box_append (GTK_BOX (A), B);
+  gtk_box_append (GTK_BOX (B), C);
 
   gtk_widget_show (A);
 
@@ -965,8 +965,8 @@ test_gestures_inside_grab (void)
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
 
-  gtk_container_add (GTK_CONTAINER (A), B);
-  gtk_container_add (GTK_CONTAINER (B), C);
+  gtk_box_append (GTK_BOX (A), B);
+  gtk_box_append (GTK_BOX (B), C);
 
   gtk_widget_show (A);
 
@@ -1025,8 +1025,8 @@ test_multitouch_on_single (void)
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
 
-  gtk_container_add (GTK_CONTAINER (A), B);
-  gtk_container_add (GTK_CONTAINER (B), C);
+  gtk_box_append (GTK_BOX (A), B);
+  gtk_box_append (GTK_BOX (B), C);
 
   gtk_widget_show (A);
 
@@ -1076,8 +1076,8 @@ test_multitouch_activation (void)
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
 
-  gtk_container_add (GTK_CONTAINER (A), B);
-  gtk_container_add (GTK_CONTAINER (B), C);
+  gtk_box_append (GTK_BOX (A), B);
+  gtk_box_append (GTK_BOX (B), C);
 
   gtk_widget_show (A);
 
@@ -1152,8 +1152,8 @@ test_multitouch_interaction (void)
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
 
-  gtk_container_add (GTK_CONTAINER (A), B);
-  gtk_container_add (GTK_CONTAINER (B), C);
+  gtk_box_append (GTK_BOX (A), B);
+  gtk_box_append (GTK_BOX (B), C);
 
   gtk_widget_show (A);
 

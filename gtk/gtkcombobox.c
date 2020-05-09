@@ -1138,7 +1138,7 @@ gtk_combo_box_remove (GtkComboBox *combo_box,
                                               combo_box);
     }
 
-  gtk_container_remove (GTK_CONTAINER (priv->box), widget);
+  gtk_box_remove (GTK_BOX (priv->box), widget);
 
   priv->child = NULL;
 

@@ -92,49 +92,47 @@ static void
 gtk_shortcuts_group_set_accel_size_group (GtkShortcutsGroup *group,
                                           GtkSizeGroup      *size_group)
 {
-  GList *children, *l;
+  GtkWidget *child;
 
   g_set_object (&group->accel_size_group, size_group);
 
-  children = gtk_container_get_children (GTK_CONTAINER (group));
-  for (l = children; l; l = l->next)
-    gtk_shortcuts_group_apply_accel_size_group (group, GTK_WIDGET (l->data));
-  g_list_free (children);
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (group));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    gtk_shortcuts_group_apply_accel_size_group (group, child);
 }
 
 static void
 gtk_shortcuts_group_set_title_size_group (GtkShortcutsGroup *group,
                                           GtkSizeGroup      *size_group)
 {
-  GList *children, *l;
+  GtkWidget *child;
 
   g_set_object (&group->title_size_group, size_group);
 
-  children = gtk_container_get_children (GTK_CONTAINER (group));
-  for (l = children; l; l = l->next)
-    gtk_shortcuts_group_apply_title_size_group (group, GTK_WIDGET (l->data));
-  g_list_free (children);
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (group));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    gtk_shortcuts_group_apply_title_size_group (group, child);
 }
 
 static guint
 gtk_shortcuts_group_get_height (GtkShortcutsGroup *group)
 {
-  GList *children, *l;
+  GtkWidget *child;
   guint height;
 
   height = 1;
 
-  children = gtk_container_get_children (GTK_CONTAINER (group));
-  for (l = children; l; l = l->next)
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (group));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
     {
-      GtkWidget *child = l->data;
-
       if (!gtk_widget_get_visible (child))
         continue;
       else if (GTK_IS_SHORTCUTS_SHORTCUT (child))
         height += 1;
     }
-  g_list_free (children);
 
   return height;
 }

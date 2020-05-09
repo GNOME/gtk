@@ -47,8 +47,8 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorTypePopover, gtk_inspector_type_popover,
                             GTK_TYPE_POPOVER)
 
 static void
-add_row (GtkContainer *box,
-         const gchar  *name)
+add_row (GtkWidget  *box,
+         const char *name)
 {
   GtkWidget *row;
   GtkWidget *label;
@@ -69,15 +69,7 @@ add_row (GtkContainer *box,
                         NULL);
 
   gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), label);
-  gtk_container_add (box, row);
-}
-
-static void
-remove_row (GtkWidget *item,
-            gpointer   data)
-{
-  if (GTK_IS_LIST_BOX_ROW (item))
-    gtk_container_remove (GTK_CONTAINER (data), item);
+  gtk_list_box_insert (GTK_LIST_BOX (box), row, -1);
 }
 
 void
@@ -91,6 +83,7 @@ gtk_inspector_type_popover_set_gtype (GtkInspectorTypePopover *self,
   GType *interfaces;
   GType tmp;
   gint i;
+  GtkWidget *child;
 
   g_return_if_fail (GTK_IS_INSPECTOR_TYPE_POPOVER (self));
 
@@ -101,10 +94,10 @@ gtk_inspector_type_popover_set_gtype (GtkInspectorTypePopover *self,
 
   priv->type = gtype;
 
-  gtk_container_foreach (GTK_CONTAINER (priv->parents),
-                         remove_row, priv->parents);
-  gtk_container_foreach (GTK_CONTAINER (priv->interfaces),
-                         remove_row, priv->interfaces);
+  while ((child = gtk_widget_get_first_child (priv->parents)))
+    gtk_list_box_remove (GTK_LIST_BOX (priv->parents), child);
+  while ((child = gtk_widget_get_first_child (priv->interfaces)))
+    gtk_list_box_remove (GTK_LIST_BOX (priv->interfaces), child);
 
   implements = g_hash_table_new (g_str_hash, g_str_equal);
 
@@ -112,7 +105,7 @@ gtk_inspector_type_popover_set_gtype (GtkInspectorTypePopover *self,
 
   do
     {
-      add_row (GTK_CONTAINER (priv->parents), g_type_name (tmp));
+      add_row (priv->parents, g_type_name (tmp));
 
       interfaces = g_type_interfaces (tmp, NULL);
 
@@ -126,7 +119,7 @@ gtk_inspector_type_popover_set_gtype (GtkInspectorTypePopover *self,
   g_hash_table_iter_init (&iter, implements);
 
   while (g_hash_table_iter_next (&iter, (gpointer *) &name, NULL))
-    add_row (GTK_CONTAINER (priv->interfaces), name);
+    add_row (priv->interfaces, name);
 
   g_hash_table_unref (implements);
 }

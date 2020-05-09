@@ -317,7 +317,7 @@ construct_appchooser_widget (GtkAppChooserDialog *self)
   /* Need to build the appchooser widget after, because of the content-type construct-only property */
   self->app_chooser_widget = gtk_app_chooser_widget_new (self->content_type);
   gtk_widget_set_vexpand (self->app_chooser_widget, TRUE);
-  gtk_container_add (GTK_CONTAINER (self->inner_box), self->app_chooser_widget);
+  gtk_box_append (GTK_BOX (self->inner_box), self->app_chooser_widget);
 
   g_signal_connect (self->app_chooser_widget, "application-selected",
                     G_CALLBACK (widget_application_selected_cb), self);
@@ -327,10 +327,10 @@ construct_appchooser_widget (GtkAppChooserDialog *self)
                     G_CALLBACK (widget_notify_for_button_cb), self);
 
   /* Add the custom button to the new appchooser */
-  gtk_container_add (GTK_CONTAINER (self->inner_box),
+  gtk_box_append (GTK_BOX (self->inner_box),
                      self->show_more_button);
 
-  gtk_container_add (GTK_CONTAINER (self->inner_box),
+  gtk_box_append (GTK_BOX (self->inner_box),
                      self->software_button);
 
   info = gtk_app_chooser_get_app_info (GTK_APP_CHOOSER (self->app_chooser_widget));

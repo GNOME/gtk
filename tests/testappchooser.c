@@ -230,7 +230,7 @@ main (int argc, char **argv)
   g_signal_connect (open, "clicked",
                     G_CALLBACK (display_dialog), NULL);
 
-  gtk_container_add (GTK_CONTAINER (toplevel), grid);
+  gtk_box_append (GTK_BOX (toplevel), grid);
 
   gtk_widget_show (toplevel);
   g_signal_connect (toplevel, "destroy", G_CALLBACK (quit_cb), &done);

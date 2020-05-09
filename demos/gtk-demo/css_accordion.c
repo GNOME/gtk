@@ -9,9 +9,13 @@
 static void
 apply_css (GtkWidget *widget, GtkStyleProvider *provider)
 {
+  GtkWidget *child;
+
   gtk_style_context_add_provider (gtk_widget_get_style_context (widget), provider, G_MAXUINT);
-  if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget), (GtkCallback) apply_css, provider);
+  for (child = gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    apply_css (child, provider);
 }
 
 GtkWidget *
@@ -37,22 +41,22 @@ do_css_accordion (GtkWidget *do_widget)
       gtk_window_set_child (GTK_WINDOW (window), container);
 
       child = gtk_button_new_with_label ("This");
-      gtk_container_add (GTK_CONTAINER (container), child);
+      gtk_box_append (GTK_BOX (container), child);
 
       child = gtk_button_new_with_label ("Is");
-      gtk_container_add (GTK_CONTAINER (container), child);
+      gtk_box_append (GTK_BOX (container), child);
 
       child = gtk_button_new_with_label ("A");
-      gtk_container_add (GTK_CONTAINER (container), child);
+      gtk_box_append (GTK_BOX (container), child);
 
       child = gtk_button_new_with_label ("CSS");
-      gtk_container_add (GTK_CONTAINER (container), child);
+      gtk_box_append (GTK_BOX (container), child);
 
       child = gtk_button_new_with_label ("Accordion");
-      gtk_container_add (GTK_CONTAINER (container), child);
+      gtk_box_append (GTK_BOX (container), child);
 
       child = gtk_button_new_with_label (":-)");
-      gtk_container_add (GTK_CONTAINER (container), child);
+      gtk_box_append (GTK_BOX (container), child);
 
       provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
       gtk_css_provider_load_from_resource (GTK_CSS_PROVIDER (provider), "/css_accordion/css_accordion.css");

@@ -77,7 +77,7 @@ main (int argc, char *argv[])
                                   GTK_POLICY_NEVER,
                                   GTK_POLICY_AUTOMATIC);
 
-  gtk_container_add (GTK_CONTAINER (box), sw);
+  gtk_box_append (GTK_BOX (box), sw);
 
   content = get_content ();
 
@@ -97,10 +97,10 @@ main (int argc, char *argv[])
   g_signal_connect (combo, "changed", G_CALLBACK (mode_changed), sw);
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 1);
 
-  gtk_container_add (GTK_CONTAINER (box), combo);
+  gtk_box_append (GTK_BOX (box), combo);
 
   sb2 = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, adj);
-  gtk_container_add (GTK_CONTAINER (box), sb2);
+  gtk_box_append (GTK_BOX (box), sb2);
 
   gtk_widget_show (window);
 

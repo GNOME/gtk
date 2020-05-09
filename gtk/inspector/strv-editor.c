@@ -68,17 +68,17 @@ add_string (GtkInspectorStrvEditor *editor,
   entry = gtk_entry_new ();
   gtk_editable_set_text (GTK_EDITABLE (entry), str);
   gtk_widget_show (entry);
-  gtk_container_add (GTK_CONTAINER (box), entry);
+  gtk_box_append (GTK_BOX (box), entry);
   g_object_set_data (G_OBJECT (box), "entry", entry);
   g_signal_connect_swapped (entry, "notify::text", G_CALLBACK (emit_changed), editor);
 
   button = gtk_button_new_from_icon_name ("user-trash-symbolic");
   gtk_widget_add_css_class (button, "image-button");
   gtk_widget_show (button);
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_box_append (GTK_BOX (box), button);
   g_signal_connect (button, "clicked", G_CALLBACK (remove_string), editor);
 
-  gtk_container_add (GTK_CONTAINER (editor->box), box);
+  gtk_box_append (GTK_BOX (editor->box), box);
 
   gtk_widget_grab_focus (entry);
 
@@ -107,8 +107,8 @@ gtk_inspector_strv_editor_init (GtkInspectorStrvEditor *editor)
   gtk_widget_show (editor->button);
   g_signal_connect (editor->button, "clicked", G_CALLBACK (add_cb), editor);
 
-  gtk_container_add (GTK_CONTAINER (editor), editor->box);
-  gtk_container_add (GTK_CONTAINER (editor), editor->button);
+  gtk_box_append (GTK_BOX (editor), editor->box);
+  gtk_box_append (GTK_BOX (editor), editor->button);
 }
 
 static void
@@ -128,15 +128,13 @@ void
 gtk_inspector_strv_editor_set_strv (GtkInspectorStrvEditor  *editor,
                                     gchar                  **strv)
 {
-  GList *children, *l;
+  GtkWidget *child;
   gint i;
 
   editor->blocked = TRUE;
 
-  children = gtk_container_get_children (GTK_CONTAINER (editor->box));
-  for (l = children; l; l = l->next)
-    gtk_widget_destroy (GTK_WIDGET (l->data));
-  g_list_free (children);
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (editor->box))))
+    gtk_box_remove (GTK_BOX (editor->box), child);
 
   if (strv)
     {
@@ -152,20 +150,20 @@ gtk_inspector_strv_editor_set_strv (GtkInspectorStrvEditor  *editor,
 gchar **
 gtk_inspector_strv_editor_get_strv (GtkInspectorStrvEditor *editor)
 {
-  GList *children, *l;
+  GtkWidget *child;
   GPtrArray *p;
 
   p = g_ptr_array_new ();
 
-  children = gtk_container_get_children (GTK_CONTAINER (editor->box));
-  for (l = children; l; l = l->next)
+  for (child = gtk_widget_get_first_child (editor->box);
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
     {
       GtkEntry *entry;
 
-      entry = GTK_ENTRY (g_object_get_data (G_OBJECT (l->data), "entry"));
+      entry = GTK_ENTRY (g_object_get_data (G_OBJECT (child), "entry"));
       g_ptr_array_add (p, g_strdup (gtk_editable_get_text (GTK_EDITABLE (entry))));
     }
-  g_list_free (children);
 
   g_ptr_array_add (p, NULL);
 

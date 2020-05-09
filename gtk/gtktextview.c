@@ -8754,7 +8754,7 @@ append_bubble_item (GtkTextView *text_view,
   gtk_widget_add_css_class (item, "image-button");
   gtk_actionable_set_action_name (GTK_ACTIONABLE (item), action_name);
 
-  gtk_container_add (GTK_CONTAINER (toolbar), item);
+  gtk_box_append (GTK_BOX (toolbar), item);
 }
 
 static gboolean
@@ -8790,7 +8790,7 @@ gtk_text_view_selection_bubble_popup_show (gpointer user_data)
   toolbar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_add_css_class (toolbar, "linked");
   gtk_popover_set_child (GTK_POPOVER (priv->selection_bubble), box);
-  gtk_container_add (GTK_CONTAINER (box), toolbar);
+  gtk_box_append (GTK_BOX (box), toolbar);
 
   model = gtk_text_view_get_menu_model (text_view);
 

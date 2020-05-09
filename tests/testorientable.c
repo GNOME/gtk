@@ -74,11 +74,11 @@ main (int argc, char **argv)
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   orientables = g_list_prepend (orientables, box);
   gtk_grid_attach (GTK_GRID (grid), box, 0, 1, 1, 1);
-  gtk_container_add (GTK_CONTAINER (box),
+  gtk_box_append (GTK_BOX (box),
                   gtk_button_new_with_label ("GtkBox 1"));
-  gtk_container_add (GTK_CONTAINER (box),
+  gtk_box_append (GTK_BOX (box),
                   gtk_button_new_with_label ("GtkBox 2"));
-  gtk_container_add (GTK_CONTAINER (box),
+  gtk_box_append (GTK_BOX (box),
                   gtk_button_new_with_label ("GtkBox 3"));
 
   /* GtkSeparator */

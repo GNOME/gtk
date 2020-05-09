@@ -553,7 +553,7 @@ new_unit_widget (GtkCustomPaperUnixDialog *dialog,
   else
     gtk_spin_button_set_digits (GTK_SPIN_BUTTON (button), 1);
 
-  gtk_container_add (GTK_CONTAINER (hbox), button);
+  gtk_box_append (GTK_BOX (hbox), button);
   gtk_widget_show (button);
 
   data->spin_button = button;
@@ -567,7 +567,7 @@ new_unit_widget (GtkCustomPaperUnixDialog *dialog,
     label = gtk_label_new (_("mm"));
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
 
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_box_append (GTK_BOX (hbox), label);
   gtk_widget_show (label);
   gtk_label_set_mnemonic_widget (GTK_LABEL (mnemonic_label), button);
 
@@ -1012,18 +1012,18 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_widget_set_margin_end (hbox, 20);
   gtk_widget_set_margin_top (hbox, 20);
   gtk_widget_set_margin_bottom (hbox, 20);
-  gtk_container_add (GTK_CONTAINER (content_area), hbox);
+  gtk_box_append (GTK_BOX (content_area), hbox);
   gtk_widget_show (hbox);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (hbox), vbox);
+  gtk_box_append (GTK_BOX (hbox), vbox);
   gtk_widget_show (vbox);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
                                   GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (scrolled), TRUE);
-  gtk_container_add (GTK_CONTAINER (vbox), scrolled);
+  gtk_box_append (GTK_BOX (vbox), scrolled);
   gtk_widget_show (scrolled);
 
   treeview = gtk_tree_view_new_with_model (GTK_TREE_MODEL (priv->custom_paper_list));
@@ -1052,23 +1052,23 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
 
   gtk_widget_add_css_class (toolbar, "linked");
 
-  gtk_container_add (GTK_CONTAINER (vbox), toolbar);
+  gtk_box_append (GTK_BOX (vbox), toolbar);
 
   button = gtk_button_new_from_icon_name ("list-add-symbolic");
   g_signal_connect_swapped (button, "clicked", G_CALLBACK (add_custom_paper), dialog);
 
-  gtk_container_add (GTK_CONTAINER (toolbar), button);
+  gtk_box_append (GTK_BOX (toolbar), button);
 
   button = gtk_button_new_from_icon_name ("list-remove-symbolic");
   g_signal_connect_swapped (button, "clicked", G_CALLBACK (remove_custom_paper), dialog);
 
-  gtk_container_add (GTK_CONTAINER (toolbar), button);
+  gtk_box_append (GTK_BOX (toolbar), button);
 
   user_units = _gtk_print_get_default_user_units ();
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 18);
   priv->values_box = vbox;
-  gtk_container_add (GTK_CONTAINER (hbox), vbox);
+  gtk_box_append (GTK_BOX (hbox), vbox);
   gtk_widget_show (vbox);
 
   grid = gtk_grid_new ();
@@ -1100,7 +1100,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
 
   frame = wrap_in_frame (_("Paper Size"), grid);
   gtk_widget_show (grid);
-  gtk_container_add (GTK_CONTAINER (vbox), frame);
+  gtk_box_append (GTK_BOX (vbox), frame);
   gtk_widget_show (frame);
 
   grid = gtk_grid_new ();
@@ -1173,7 +1173,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
 				      NULL, NULL);
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
-  gtk_container_add (GTK_CONTAINER (hbox), combo);
+  gtk_box_append (GTK_BOX (hbox), combo);
   gtk_widget_show (combo);
 
   g_signal_connect_swapped (combo, "changed",
@@ -1181,7 +1181,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
 
   frame = wrap_in_frame (_("Paper Margins"), grid);
   gtk_widget_show (grid);
-  gtk_container_add (GTK_CONTAINER (vbox), frame);
+  gtk_box_append (GTK_BOX (vbox), frame);
   gtk_widget_show (frame);
 
   update_custom_widgets_from_list (dialog);

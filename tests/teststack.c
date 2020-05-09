@@ -129,7 +129,7 @@ main (gint argc,
   gtk_window_set_child (GTK_WINDOW (window), box);
 
   switcher = gtk_stack_switcher_new ();
-  gtk_container_add (GTK_CONTAINER (box), switcher);
+  gtk_box_append (GTK_BOX (box), switcher);
 
   stack = gtk_stack_new ();
 
@@ -143,11 +143,11 @@ main (gint argc,
   sidebar = gtk_stack_sidebar_new ();
   gtk_stack_sidebar_set_stack (GTK_STACK_SIDEBAR (sidebar), GTK_STACK (stack));
   layout = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (layout), sidebar);
+  gtk_box_append (GTK_BOX (layout), sidebar);
   gtk_widget_set_hexpand (stack, TRUE);
-  gtk_container_add (GTK_CONTAINER (layout), stack);
+  gtk_box_append (GTK_BOX (layout), stack);
 
-  gtk_container_add (GTK_CONTAINER (box), layout);
+  gtk_box_append (GTK_BOX (box), layout);
 
   gtk_stack_switcher_set_stack (GTK_STACK_SWITCHER (switcher), GTK_STACK (stack));
 
@@ -188,47 +188,47 @@ main (gint argc,
   gtk_stack_add_titled (GTK_STACK (stack), w3, "3", "3");
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (box), hbox);
+  gtk_box_append (GTK_BOX (box), hbox);
 
   button = gtk_button_new_with_label ("1");
-  gtk_container_add (GTK_CONTAINER (hbox), button);
+  gtk_box_append (GTK_BOX (hbox), button);
   g_signal_connect (button, "clicked", (GCallback) set_visible_child, w1);
 
   button = gtk_button_new_with_label ("2");
-  gtk_container_add (GTK_CONTAINER (hbox), button);
+  gtk_box_append (GTK_BOX (hbox), button);
   g_signal_connect (button, "clicked", (GCallback) set_visible_child, w2);
 
   button = gtk_button_new_with_label ("3");
-  gtk_container_add (GTK_CONTAINER (hbox), button);
+  gtk_box_append (GTK_BOX (hbox), button);
   g_signal_connect (button, "clicked", (GCallback) set_visible_child, w3);
 
   button = gtk_button_new_with_label ("1");
-  gtk_container_add (GTK_CONTAINER (hbox), button);
+  gtk_box_append (GTK_BOX (hbox), button);
   g_signal_connect (button, "clicked", (GCallback) set_visible_child_name, (gpointer) "1");
 
   button = gtk_button_new_with_label ("2");
-  gtk_container_add (GTK_CONTAINER (hbox), button);
+  gtk_box_append (GTK_BOX (hbox), button);
   g_signal_connect (button, "clicked", (GCallback) set_visible_child_name, (gpointer) "2");
 
   button = gtk_button_new_with_label ("3");
-  gtk_container_add (GTK_CONTAINER (hbox), button);
+  gtk_box_append (GTK_BOX (hbox), button);
   g_signal_connect (button, "clicked", (GCallback) set_visible_child_name, (gpointer) "3");
 
   button = gtk_check_button_new ();
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button),
 				gtk_stack_get_hhomogeneous (GTK_STACK (stack)));
-  gtk_container_add (GTK_CONTAINER (hbox), button);
+  gtk_box_append (GTK_BOX (hbox), button);
   g_signal_connect (button, "clicked", (GCallback) toggle_hhomogeneous, NULL);
 
   button = gtk_check_button_new_with_label ("homogeneous");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button),
 				gtk_stack_get_vhomogeneous (GTK_STACK (stack)));
-  gtk_container_add (GTK_CONTAINER (hbox), button);
+  gtk_box_append (GTK_BOX (hbox), button);
   g_signal_connect (button, "clicked", (GCallback) toggle_vhomogeneous, NULL);
 
   button = gtk_toggle_button_new_with_label ("Add icon");
   g_signal_connect (button, "toggled", (GCallback) toggle_icon_name, NULL);
-  gtk_container_add (GTK_CONTAINER (hbox), button);
+  gtk_box_append (GTK_BOX (hbox), button);
 
   combo = gtk_combo_box_text_new ();
   class = g_type_class_ref (GTK_TYPE_STACK_TRANSITION_TYPE);
@@ -236,21 +236,21 @@ main (gint argc,
     gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), class->values[i].value_nick);
   g_type_class_unref (class);
 
-  gtk_container_add (GTK_CONTAINER (hbox), combo);
+  gtk_box_append (GTK_BOX (hbox), combo);
   g_signal_connect (combo, "changed", (GCallback) toggle_transitions, NULL);
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (box), hbox);
+  gtk_box_append (GTK_BOX (box), hbox);
 
   button = gtk_button_new_with_label ("<");
   g_signal_connect (button, "clicked", (GCallback) on_back_button_clicked, stack);
   g_signal_connect (stack, "notify::visible-child-name",
                     (GCallback)update_back_button_sensitivity, button);
-  gtk_container_add (GTK_CONTAINER (hbox), button);
+  gtk_box_append (GTK_BOX (hbox), button);
 
   button = gtk_button_new_with_label (">");
-  gtk_container_add (GTK_CONTAINER (hbox), button);
+  gtk_box_append (GTK_BOX (hbox), button);
   g_signal_connect (button, "clicked", (GCallback) on_forward_button_clicked, stack);
   g_signal_connect (stack, "notify::visible-child-name",
                     (GCallback)update_forward_button_sensitivity, button);

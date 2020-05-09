@@ -442,7 +442,7 @@ test_stacking (void)
 
   check2 = gtk_check_button_new_with_label ("Show overlay");
   g_object_bind_property (child, "visible", check2, "active", G_BINDING_BIDIRECTIONAL);
-  gtk_container_add (GTK_CONTAINER (main_child), label);
+  gtk_box_append (GTK_BOX (main_child), label);
   gtk_overlay_set_child (GTK_OVERLAY (overlay), main_child);
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
   gtk_grid_attach (GTK_GRID (grid), overlay, 1, 0, 1, 3);
@@ -497,12 +497,12 @@ test_input_stacking (void)
 			 "But the entry does");
   gtk_widget_set_margin_top (label, 8);
   gtk_widget_set_margin_bottom (label, 8);
-  gtk_container_add (GTK_CONTAINER (vbox), label);
+  gtk_box_append (GTK_BOX (vbox), label);
 
   entry = gtk_entry_new ();
   gtk_widget_set_margin_top (entry, 8);
   gtk_widget_set_margin_bottom (entry, 8);
-  gtk_container_add (GTK_CONTAINER (vbox), entry);
+  gtk_box_append (GTK_BOX (vbox), entry);
 
 
   gtk_window_set_child (GTK_WINDOW (win), overlay);

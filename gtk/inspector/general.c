@@ -175,13 +175,13 @@ add_check_row (GtkInspectorGeneral *gen,
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_widget_set_hexpand (label, TRUE);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_box_append (GTK_BOX (box), label);
 
   check = gtk_image_new_from_icon_name ("object-select-symbolic");
   gtk_widget_set_halign (check, GTK_ALIGN_END);
   gtk_widget_set_valign (check, GTK_ALIGN_BASELINE);
   gtk_widget_set_opacity (check, value ? 1.0 : 0.0);
-  gtk_container_add (GTK_CONTAINER (box), check);
+  gtk_box_append (GTK_BOX (box), check);
 
   row = gtk_list_box_row_new ();
   gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), box);
@@ -217,14 +217,14 @@ add_label_row (GtkInspectorGeneral *gen,
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_widget_set_hexpand (label, TRUE);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_box_append (GTK_BOX (box), label);
 
   label = gtk_label_new (value);
   gtk_label_set_selectable (GTK_LABEL (label), TRUE);
   gtk_widget_set_halign (label, GTK_ALIGN_END);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
   gtk_label_set_xalign (GTK_LABEL (label), 1.0);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_box_append (GTK_BOX (box), label);
 
   row = gtk_list_box_row_new ();
   gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), box);
@@ -796,13 +796,12 @@ add_seat (GtkInspectorGeneral *gen,
 static void
 populate_seats (GtkInspectorGeneral *gen)
 {
+  GtkWidget *child;
   GList *list, *l;
   int i;
 
-  list = gtk_container_get_children (GTK_CONTAINER (gen->priv->device_box));
-  for (l = list; l; l = l->next)
-    gtk_widget_destroy (GTK_WIDGET (l->data));
-  g_list_free (list);
+  while ((child = gtk_widget_get_first_child (gen->priv->device_box)))
+    gtk_list_box_remove (GTK_LIST_BOX (gen->priv->device_box), child);
 
   list = gdk_display_list_seats (gen->priv->display);
 

@@ -445,29 +445,6 @@ gtk_label_accessible_ref_relation_set (AtkObject *obj)
           AtkObject *accessible_array[1];
           AtkRelation* relation;
 
-          if (!gtk_widget_get_can_focus (mnemonic_widget))
-            {
-            /*
-             * Handle the case where a GtkFileChooserButton is specified
-             * as the mnemonic widget. use the combobox which is a child of the
-             * GtkFileChooserButton as the mnemonic widget. See bug #359843.
-             */
-             if (GTK_IS_BOX (mnemonic_widget))
-               {
-                  GList *list, *tmpl;
-
-                  list = gtk_container_get_children (GTK_CONTAINER (mnemonic_widget));
-                  if (g_list_length (list) == 2)
-                    {
-                      tmpl = g_list_last (list);
-                      if (GTK_IS_COMBO_BOX(tmpl->data))
-                        {
-                          mnemonic_widget = GTK_WIDGET(tmpl->data);
-                        }
-                    }
-                  g_list_free (list);
-                }
-            }
           accessible_array[0] = gtk_widget_get_accessible (mnemonic_widget);
           relation = atk_relation_new (accessible_array, 1,
                                        ATK_RELATION_LABEL_FOR);

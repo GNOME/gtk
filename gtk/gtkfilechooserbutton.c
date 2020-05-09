@@ -556,11 +556,11 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   icon = gtk_image_new_from_icon_name ("document-open-symbolic");
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_valign (button->image, GTK_ALIGN_BASELINE);
-  gtk_container_add (GTK_CONTAINER (box), button->image);
+  gtk_box_append (GTK_BOX (box), button->image);
   gtk_widget_set_valign (button->label, GTK_ALIGN_BASELINE);
-  gtk_container_add (GTK_CONTAINER (box), button->label);
+  gtk_box_append (GTK_BOX (box), button->label);
   gtk_widget_set_valign (icon, GTK_ALIGN_BASELINE);
-  gtk_container_add (GTK_CONTAINER (box), icon);
+  gtk_box_append (GTK_BOX (box), icon);
   gtk_button_set_child (GTK_BUTTON (button->button), box);
 
   gtk_widget_set_parent (button->button, GTK_WIDGET (button));

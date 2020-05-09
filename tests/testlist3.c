@@ -49,7 +49,7 @@ drag_drop (GtkDropTarget *dest,
     return FALSE;
 
   g_object_ref (source);
-  gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (source)), source);
+  gtk_box_remove (GTK_BOX (gtk_widget_get_parent (source)), source);
   gtk_list_box_insert (GTK_LIST_BOX (gtk_widget_get_parent (target)), source, pos);
   g_object_unref (source);
 
@@ -70,8 +70,8 @@ create_row (const gchar *text)
   label = gtk_label_new (text);
   gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), box);
   gtk_widget_set_hexpand (label, TRUE);
-  gtk_container_add (GTK_CONTAINER (box), label);
-  gtk_container_add (GTK_CONTAINER (box), image);
+  gtk_box_append (GTK_BOX (box), label);
+  gtk_box_append (GTK_BOX (box), image);
 
   source = gtk_drag_source_new ();
   gtk_drag_source_set_actions (source, GDK_ACTION_MOVE);
@@ -145,7 +145,7 @@ main (int argc, char *argv[])
   gtk_widget_set_margin_end (vbox, 12);
   gtk_widget_set_margin_top (vbox, 12);
   gtk_widget_set_margin_bottom (vbox, 12);
-  gtk_container_add (GTK_CONTAINER (hbox), vbox);
+  gtk_box_append (GTK_BOX (hbox), vbox);
 
   list = gtk_list_box_new ();
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (list), GTK_SELECTION_NONE);
@@ -157,14 +157,14 @@ main (int argc, char *argv[])
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_hexpand (sw, TRUE);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
-  gtk_container_add (GTK_CONTAINER (hbox), sw);
+  gtk_box_append (GTK_BOX (hbox), sw);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), list);
 
   button = gtk_check_button_new_with_label ("Activate on single click");
   g_object_bind_property (list, "activate-on-single-click",
                           button, "active",
                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-  gtk_container_add (GTK_CONTAINER (vbox), button);
+  gtk_box_append (GTK_BOX (vbox), button);
 
   combo = gtk_combo_box_text_new ();
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "None");
@@ -172,7 +172,7 @@ main (int argc, char *argv[])
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Browse");
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Multiple");
   g_signal_connect (combo, "changed", G_CALLBACK (selection_mode_changed), list);
-  gtk_container_add (GTK_CONTAINER (vbox), combo);
+  gtk_box_append (GTK_BOX (vbox), combo);
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), gtk_list_box_get_selection_mode (GTK_LIST_BOX (list)));
 
   for (i = 0; i < 20; i++)

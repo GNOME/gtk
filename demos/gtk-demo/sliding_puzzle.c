@@ -387,7 +387,7 @@ add_choice (GtkWidget    *container,
   icon = gtk_image_new_from_paintable (paintable);
   gtk_image_set_icon_size (GTK_IMAGE (icon), GTK_ICON_SIZE_LARGE);
 
-  gtk_container_add (GTK_CONTAINER (container), icon);
+  gtk_box_append (GTK_BOX (container), icon);
 }
 
 GtkWidget *

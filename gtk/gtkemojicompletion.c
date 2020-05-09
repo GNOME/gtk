@@ -474,7 +474,7 @@ add_emoji_variation (GtkWidget *box,
   if (modifier != 0)
     g_object_set_data (G_OBJECT (child), "modifier", GUINT_TO_POINTER (modifier));
 
-  gtk_container_add (GTK_CONTAINER (child), label);
+  gtk_box_append (GTK_BOX (child), label);
   gtk_flow_box_insert (GTK_FLOW_BOX (box), child, -1);
 }
 
@@ -504,15 +504,15 @@ add_emoji (GtkWidget          *list,
   child = g_object_new (GTK_TYPE_LIST_BOX_ROW, "css-name", "emoji-completion-row", NULL);
   gtk_widget_set_focus_on_click (child, FALSE);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (child), box);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_box_append (GTK_BOX (child), box);
+  gtk_box_append (GTK_BOX (box), label);
   g_object_set_data (G_OBJECT (child), "base", label);
 
   stack = gtk_stack_new ();
   gtk_stack_set_hhomogeneous (GTK_STACK (stack), TRUE);
   gtk_stack_set_vhomogeneous (GTK_STACK (stack), TRUE);
   gtk_stack_set_transition_type (GTK_STACK (stack), GTK_STACK_TRANSITION_TYPE_OVER_RIGHT_LEFT);
-  gtk_container_add (GTK_CONTAINER (box), stack);
+  gtk_box_append (GTK_BOX (box), stack);
   g_object_set_data (G_OBJECT (child), "stack", stack);
 
   g_variant_get_child (emoji_data, 2, "&s", &shortname);
@@ -548,11 +548,11 @@ populate_completion (GtkEmojiCompletion *completion,
                      const char         *text,
                      guint               offset)
 {
-  GList *children, *l;
   guint n_matches;
   guint n_added;
   GVariantIter iter;
   GVariant *item;
+  GtkWidget *child;
 
   if (completion->text != text)
     {
@@ -562,10 +562,8 @@ populate_completion (GtkEmojiCompletion *completion,
     }
   completion->offset = offset;
 
-  children = gtk_container_get_children (GTK_CONTAINER (completion->list));
-  for (l = children; l; l = l->next)
-    gtk_widget_destroy (GTK_WIDGET (l->data));
-  g_list_free (children);
+  while ((child = gtk_widget_get_first_child (completion->list)))
+    gtk_list_box_remove (GTK_LIST_BOX (completion->list), child);
 
   completion->active = NULL;
 
