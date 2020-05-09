@@ -32,6 +32,9 @@ check_sorted (GtkListBox *list)
        row != NULL;
        row = gtk_widget_get_next_sibling (row))
     {
+      if (!GTK_IS_LIST_BOX_ROW (row))
+        continue;
+
       index = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (row));
       label = gtk_list_box_row_get_child (GTK_LIST_BOX_ROW (row));
       value = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (label), "data"));
@@ -292,6 +295,9 @@ check_filtered (GtkListBox *list)
        row != NULL;
        row = gtk_widget_get_next_sibling (row))
     {
+      if (!GTK_IS_LIST_BOX_ROW (row))
+        continue;
+
       if (gtk_widget_get_child_visible (row))
         count++;
     }
@@ -381,6 +387,9 @@ check_headers (GtkListBox *list)
        row != NULL;
        row = gtk_widget_get_next_sibling (row))
     {
+      if (!GTK_IS_LIST_BOX_ROW (row))
+        continue;
+
       if (gtk_list_box_row_get_header (GTK_LIST_BOX_ROW (row)) != NULL)
         count++;
     }
