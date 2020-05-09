@@ -129,8 +129,6 @@ do_create_child (STATE *state, gint i)
           return FALSE;
         }
     }
-  else if (gtk_container_child_type (GTK_CONTAINER (state->widget)) == G_TYPE_NONE)
-    return FALSE;
 
   state->child[i] = gtk_label_new ("bla");
   return TRUE;
