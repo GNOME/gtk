@@ -1890,7 +1890,7 @@ out:
   if (scheme && !supported)
     gtk_widget_add_css_class (view->address_entry, GTK_STYLE_CLASS_ERROR);
   else
-    gtk_widget_add_css_class (view->address_entry, GTK_STYLE_CLASS_ERROR);
+    gtk_widget_remove_css_class (view->address_entry, GTK_STYLE_CLASS_ERROR);
 
   g_free (address);
   g_free (scheme);

@@ -2265,7 +2265,7 @@ render_node_print (Printer       *p,
                     if (glyphs[i].glyph == ascii->glyphs[j].glyph &&
                         glyphs[i].geometry.width == ascii->glyphs[j].geometry.width &&
                         glyphs[i].geometry.x_offset == 0 &&
-                        glyphs[i].geometry.x_offset == 0 &&
+                        glyphs[i].geometry.y_offset == 0 &&
                         glyphs[i].attr.is_cluster_start)
                       {
                         g_string_append_c (str, j + MIN_ASCII_GLYPH);
