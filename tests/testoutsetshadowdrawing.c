@@ -116,52 +116,52 @@ main (int argc, char **argv)
   w = gtk_button_new ();
   gtk_widget_set_valign (w, GTK_ALIGN_CENTER);
   gtk_widget_add_css_class (w, "one");
-  gtk_container_add (GTK_CONTAINER (top), w);
+  gtk_box_append (GTK_BOX (top), w);
 
   w = gtk_button_new ();
   gtk_widget_set_valign (w, GTK_ALIGN_CENTER);
   gtk_widget_add_css_class (w, "two");
-  gtk_container_add (GTK_CONTAINER (top), w);
+  gtk_box_append (GTK_BOX (top), w);
 
   w = gtk_button_new ();
   gtk_widget_set_valign (w, GTK_ALIGN_CENTER);
   gtk_widget_add_css_class (w, "three");
   gtk_widget_set_opacity (w, 0.7);
-  gtk_container_add (GTK_CONTAINER (top), w);
+  gtk_box_append (GTK_BOX (top), w);
 
   w = gtk_button_new ();
   gtk_widget_set_valign (w, GTK_ALIGN_CENTER);
   gtk_widget_add_css_class (w, "four");
-  gtk_container_add (GTK_CONTAINER (top), w);
+  gtk_box_append (GTK_BOX (top), w);
 
   w = gtk_button_new ();
   gtk_widget_set_valign (w, GTK_ALIGN_CENTER);
   gtk_widget_add_css_class (w, "five");
-  gtk_container_add (GTK_CONTAINER (top), w);
+  gtk_box_append (GTK_BOX (top), w);
 
   /* Bottom */
   w = gtk_button_new ();
   gtk_widget_set_valign (w, GTK_ALIGN_CENTER);
   gtk_widget_add_css_class (w, "b1");
-  gtk_container_add (GTK_CONTAINER (bottom), w);
+  gtk_box_append (GTK_BOX (bottom), w);
 
   /*w = gtk_button_new ();*/
   /*gtk_widget_set_valign (w, GTK_ALIGN_CENTER);*/
   /*gtk_widget_add_css_class (w, "b2");*/
-  /*gtk_container_add (GTK_CONTAINER (bottom), w);*/
+  /*gtk_box_append (GTK_BOX (bottom), w);*/
 
   /*w = gtk_button_new ();*/
   /*gtk_widget_set_valign (w, GTK_ALIGN_CENTER);*/
   /*gtk_widget_add_css_class (w, "b3");*/
-  /*gtk_container_add (GTK_CONTAINER (bottom), w);*/
+  /*gtk_box_append (GTK_BOX (bottom), w);*/
 
   /*w = gtk_button_new ();*/
   /*gtk_widget_set_valign (w, GTK_ALIGN_CENTER);*/
   /*gtk_widget_add_css_class (w, "b4");*/
-  /*gtk_container_add (GTK_CONTAINER (bottom), w);*/
+  /*gtk_box_append (GTK_BOX (bottom), w);*/
 
-  gtk_container_add (GTK_CONTAINER (box), top);
-  gtk_container_add (GTK_CONTAINER (box), bottom);
+  gtk_box_append (GTK_BOX (box), top);
+  gtk_box_append (GTK_BOX (box), bottom);
   gtk_window_set_child (GTK_WINDOW (window), box);
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   gtk_widget_show (window);

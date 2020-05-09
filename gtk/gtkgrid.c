@@ -44,13 +44,9 @@
  *
  * Children are added using gtk_grid_attach(). They can span multiple
  * rows or columns. It is also possible to add a child next to an
- * existing child, using gtk_grid_attach_next_to(). The behaviour of
- * GtkGrid when several children occupy the same grid cell is undefined.
- *
- * GtkGrid can be used like a #GtkBox by just using gtk_container_add(),
- * which will place children next to each other in the direction determined
- * by the #GtkOrientable:orientation property. However, if all you want is a
- * single row or column, then #GtkBox is the preferred widget.
+ * existing child, using gtk_grid_attach_next_to(). To remove a child
+ * from the grid, use gtk_grid_remove(). The behaviour of GtkGrid when
+ * several children occupy the same grid cell is undefined.
  *
  * # CSS nodes
  *
@@ -724,7 +720,7 @@ gtk_grid_remove_row (GtkGrid *grid,
 
       if (height <= 0)
         {
-          gtk_container_remove (GTK_CONTAINER (grid), child);
+          gtk_grid_remove (grid, child);
         }
       else
         {
@@ -814,7 +810,7 @@ gtk_grid_remove_column (GtkGrid *grid,
 
       if (width <= 0)
         {
-          gtk_container_remove (GTK_CONTAINER (grid), child);
+          gtk_grid_remove (grid, child);
         }
       else
         {

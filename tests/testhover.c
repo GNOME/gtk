@@ -85,8 +85,8 @@ enter1_cb (GtkEventController *controller)
 {
   GtkWidget *box = gtk_event_controller_get_widget (controller);
 
-  gtk_container_remove (GTK_CONTAINER (box), gtk_widget_get_first_child (box));
-  gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("HOVER!"));
+  gtk_box_remove (GTK_BOX (box), gtk_widget_get_first_child (box));
+  gtk_box_append (GTK_BOX (box), gtk_label_new ("HOVER!"));
 }
 
 static void
@@ -94,8 +94,8 @@ leave1_cb (GtkEventController *controller)
 {
   GtkWidget *box = gtk_event_controller_get_widget (controller);
 
-  gtk_container_remove (GTK_CONTAINER (box), gtk_widget_get_first_child (box));
-  gtk_container_add (GTK_CONTAINER (box), gtk_image_new_from_icon_name ("start-here"));
+  gtk_box_remove (GTK_BOX (box), gtk_widget_get_first_child (box));
+  gtk_box_append (GTK_BOX (box), gtk_image_new_from_icon_name ("start-here"));
 }
 
 static void
@@ -115,7 +115,7 @@ test1 (void)
   g_signal_connect (controller, "leave", G_CALLBACK (leave1_cb), NULL);
   gtk_widget_add_controller (box, controller);
 
-  gtk_container_add (GTK_CONTAINER (box), gtk_image_new_from_icon_name ("start-here"));
+  gtk_box_append (GTK_BOX (box), gtk_image_new_from_icon_name ("start-here"));
 
   gtk_widget_show (win);
 
@@ -159,8 +159,8 @@ test2 (void)
   g_signal_connect (controller, "leave", G_CALLBACK (leave2_cb), NULL);
   gtk_widget_add_controller (box, controller);
 
-  gtk_container_add (GTK_CONTAINER (box), gtk_image_new_from_icon_name ("start-here"));
-  gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("HOVER!"));
+  gtk_box_append (GTK_BOX (box), gtk_image_new_from_icon_name ("start-here"));
+  gtk_box_append (GTK_BOX (box), gtk_label_new ("HOVER!"));
   gtk_widget_hide (gtk_widget_get_last_child (box));
 
   gtk_widget_show (win);

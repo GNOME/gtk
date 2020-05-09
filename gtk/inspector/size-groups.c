@@ -86,7 +86,7 @@ size_group_row_widget_destroyed (GtkWidget *widget, SizeGroupRow *row)
 
   parent = gtk_widget_get_parent (GTK_WIDGET (row));
   if (parent)
-    gtk_container_remove (GTK_CONTAINER (parent), GTK_WIDGET (row));
+    gtk_box_remove (GTK_BOX (parent), GTK_WIDGET (row));
 }
 
 static void
@@ -186,7 +186,7 @@ clear_view (GtkInspectorSizeGroups *sl)
   GtkWidget *child;
 
   while ((child = gtk_widget_get_first_child (GTK_WIDGET (sl))))
-    gtk_container_remove (GTK_CONTAINER (sl), child);
+    gtk_box_remove (GTK_BOX (sl), child);
 }
 
 static void
@@ -222,13 +222,13 @@ add_size_group (GtkInspectorSizeGroups *sl,
   GtkWidget *listbox;
 
   frame = gtk_frame_new (NULL);
-  gtk_container_add (GTK_CONTAINER (sl), frame);
+  gtk_box_append (GTK_BOX (sl), frame);
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_add_css_class (box, GTK_STYLE_CLASS_VIEW);
   gtk_frame_set_child (GTK_FRAME (frame), box);
 
   box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-  gtk_container_add (GTK_CONTAINER (box), box2);
+  gtk_box_append (GTK_BOX (box), box2);
 
   label = gtk_label_new (_("Mode"));
   gtk_widget_set_margin_start (label, 10);
@@ -237,7 +237,7 @@ add_size_group (GtkInspectorSizeGroups *sl,
   gtk_widget_set_margin_bottom (label, 10);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_container_add (GTK_CONTAINER (box2), label);
+  gtk_box_append (GTK_BOX (box2), label);
 
   combo = gtk_combo_box_text_new ();
   gtk_widget_set_margin_start (combo, 10);
@@ -253,10 +253,10 @@ add_size_group (GtkInspectorSizeGroups *sl,
   g_object_bind_property (group, "mode",
                           combo, "active",
                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-  gtk_container_add (GTK_CONTAINER (box2), combo);
+  gtk_box_append (GTK_BOX (box2), combo);
 
   listbox = gtk_list_box_new ();
-  gtk_container_add (GTK_CONTAINER (box), listbox);
+  gtk_box_append (GTK_BOX (box), listbox);
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (listbox), GTK_SELECTION_NONE);
 
   widgets = gtk_size_group_get_widgets (group);

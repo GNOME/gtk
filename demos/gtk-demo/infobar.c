@@ -66,73 +66,73 @@ do_infobar (GtkWidget *do_widget)
       gtk_window_set_child (GTK_WINDOW (window), vbox);
 
       bar = gtk_info_bar_new ();
-      gtk_container_add (GTK_CONTAINER (vbox), bar);
+      gtk_box_append (GTK_BOX (vbox), bar);
       gtk_info_bar_set_message_type (GTK_INFO_BAR (bar), GTK_MESSAGE_INFO);
       label = gtk_label_new ("This is an info bar with message type GTK_MESSAGE_INFO");
       gtk_label_set_wrap (GTK_LABEL (label), TRUE);
       gtk_label_set_xalign (GTK_LABEL (label), 0);
-      gtk_container_add (GTK_CONTAINER (bar), label);
+      gtk_box_append (GTK_BOX (bar), label);
 
       button = gtk_toggle_button_new_with_label ("Message");
       g_object_bind_property (bar, "revealed", button, "active", G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-      gtk_container_add (GTK_CONTAINER (actions), button);
+      gtk_box_append (GTK_BOX (actions), button);
 
       bar = gtk_info_bar_new ();
-      gtk_container_add (GTK_CONTAINER (vbox), bar);
+      gtk_box_append (GTK_BOX (vbox), bar);
       gtk_info_bar_set_message_type (GTK_INFO_BAR (bar), GTK_MESSAGE_WARNING);
       label = gtk_label_new ("This is an info bar with message type GTK_MESSAGE_WARNING");
       gtk_label_set_wrap (GTK_LABEL (label), TRUE);
       gtk_label_set_xalign (GTK_LABEL (label), 0);
-      gtk_container_add (GTK_CONTAINER (bar), label);
+      gtk_box_append (GTK_BOX (bar), label);
 
       button = gtk_toggle_button_new_with_label ("Warning");
       g_object_bind_property (bar, "revealed", button, "active", G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-      gtk_container_add (GTK_CONTAINER (actions), button);
+      gtk_box_append (GTK_BOX (actions), button);
 
       bar = gtk_info_bar_new_with_buttons (_("_OK"), GTK_RESPONSE_OK, NULL);
       gtk_info_bar_set_show_close_button (GTK_INFO_BAR (bar), TRUE);
       g_signal_connect (bar, "response", G_CALLBACK (on_bar_response), window);
-      gtk_container_add (GTK_CONTAINER (vbox), bar);
+      gtk_box_append (GTK_BOX (vbox), bar);
       gtk_info_bar_set_message_type (GTK_INFO_BAR (bar), GTK_MESSAGE_QUESTION);
       label = gtk_label_new ("This is an info bar with message type GTK_MESSAGE_QUESTION");
       gtk_label_set_wrap (GTK_LABEL (label), TRUE);
       gtk_label_set_xalign (GTK_LABEL (label), 0);
-      gtk_container_add (GTK_CONTAINER (bar), label);
+      gtk_box_append (GTK_BOX (bar), label);
       gtk_info_bar_set_default_response (GTK_INFO_BAR (bar), GTK_RESPONSE_OK);
 
       button = gtk_toggle_button_new_with_label ("Question");
       g_object_bind_property (bar, "revealed", button, "active", G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-      gtk_container_add (GTK_CONTAINER (actions), button);
+      gtk_box_append (GTK_BOX (actions), button);
 
       bar = gtk_info_bar_new ();
-      gtk_container_add (GTK_CONTAINER (vbox), bar);
+      gtk_box_append (GTK_BOX (vbox), bar);
       gtk_info_bar_set_message_type (GTK_INFO_BAR (bar), GTK_MESSAGE_ERROR);
       label = gtk_label_new ("This is an info bar with message type GTK_MESSAGE_ERROR");
       gtk_label_set_wrap (GTK_LABEL (label), TRUE);
       gtk_label_set_xalign (GTK_LABEL (label), 0);
-      gtk_container_add (GTK_CONTAINER (bar), label);
+      gtk_box_append (GTK_BOX (bar), label);
 
       button = gtk_toggle_button_new_with_label ("Error");
       g_object_bind_property (bar, "revealed", button, "active", G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
 
-      gtk_container_add (GTK_CONTAINER (actions), button);
+      gtk_box_append (GTK_BOX (actions), button);
 
       bar = gtk_info_bar_new ();
-      gtk_container_add (GTK_CONTAINER (vbox), bar);
+      gtk_box_append (GTK_BOX (vbox), bar);
       gtk_info_bar_set_message_type (GTK_INFO_BAR (bar), GTK_MESSAGE_OTHER);
       label = gtk_label_new ("This is an info bar with message type GTK_MESSAGE_OTHER");
       gtk_label_set_wrap (GTK_LABEL (label), TRUE);
       gtk_label_set_xalign (GTK_LABEL (label), 0);
-      gtk_container_add (GTK_CONTAINER (bar), label);
+      gtk_box_append (GTK_BOX (bar), label);
 
       button = gtk_toggle_button_new_with_label ("Other");
       g_object_bind_property (bar, "revealed", button, "active", G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-      gtk_container_add (GTK_CONTAINER (actions), button);
+      gtk_box_append (GTK_BOX (actions), button);
 
       frame = gtk_frame_new ("An example of different info bars");
       gtk_widget_set_margin_top (frame, 8);
       gtk_widget_set_margin_bottom (frame, 8);
-      gtk_container_add (GTK_CONTAINER (vbox), frame);
+      gtk_box_append (GTK_BOX (vbox), frame);
 
       gtk_widget_set_halign (actions, GTK_ALIGN_CENTER);
 

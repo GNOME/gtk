@@ -20,10 +20,10 @@ remove_this_row (GtkButton *button, GtkWidget *child)
   revealer = gtk_revealer_new ();
   gtk_revealer_set_reveal_child (GTK_REVEALER (revealer), TRUE);
   g_object_ref (child);
-  gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (child)), child);
+  gtk_box_remove (GTK_BOX (gtk_widget_get_parent (child)), child);
   gtk_revealer_set_child (GTK_REVEALER (revealer), child);
   g_object_unref (child);
-  gtk_container_add (GTK_CONTAINER (row), revealer);
+  gtk_box_append (GTK_BOX (row), revealer);
   g_signal_connect (revealer, "notify::child-revealed",
                     G_CALLBACK (row_unrevealed), NULL);
   gtk_revealer_set_reveal_child (GTK_REVEALER (revealer), FALSE);
@@ -40,8 +40,9 @@ row_revealed (GObject *revealer, GParamSpec *pspec, gpointer data)
   child = gtk_revealer_get_child (GTK_REVEALER (revealer));
   g_object_ref (child);
   gtk_revealer_set_child (GTK_REVEALER (revealer), NULL);
+
   gtk_widget_unparent (GTK_WIDGET (revealer));
-  gtk_container_add (GTK_CONTAINER (row), child);
+  gtk_box_append (GTK_BOX (row), child);
   g_object_unref (child);
 }
 
@@ -79,16 +80,16 @@ create_row (const gchar *text)
 
   row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   label = gtk_label_new (text);
-  gtk_container_add (GTK_CONTAINER (row), label);
+  gtk_box_append (GTK_BOX (row), label);
   button = gtk_button_new_with_label ("x");
   gtk_widget_set_hexpand (button, TRUE);
   gtk_widget_set_halign (button, GTK_ALIGN_END);
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (row), button);
+  gtk_box_append (GTK_BOX (row), button);
   g_signal_connect (button, "clicked", G_CALLBACK (remove_this_row), row);
   button = gtk_button_new_with_label ("+");
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (row), button);
+  gtk_box_append (GTK_BOX (row), button);
   g_signal_connect (button, "clicked", G_CALLBACK (add_row_below), row);
 
   return row;

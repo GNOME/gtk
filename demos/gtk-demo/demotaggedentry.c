@@ -49,7 +49,7 @@ demo_tagged_entry_init (DemoTaggedEntry *entry)
   gtk_widget_set_vexpand (priv->entry, TRUE);
   gtk_widget_set_hexpand (priv->box, FALSE);
   gtk_widget_set_vexpand (priv->box, FALSE);
-  gtk_container_add (GTK_CONTAINER (priv->box), priv->entry);
+  gtk_box_append (GTK_BOX (priv->box), priv->entry);
   gtk_editable_init_delegate (GTK_EDITABLE (entry));
 }
 
@@ -188,7 +188,7 @@ demo_tagged_entry_add_tag (DemoTaggedEntry *entry,
 
   g_return_if_fail (DEMO_IS_TAGGED_ENTRY (entry));
 
-  gtk_container_add (GTK_CONTAINER (priv->box), tag);
+  gtk_box_append (GTK_BOX (priv->box), tag);
 }
 
 void
@@ -201,7 +201,7 @@ demo_tagged_entry_insert_tag_after (DemoTaggedEntry *entry,
   g_return_if_fail (DEMO_IS_TAGGED_ENTRY (entry));
 
   if (sibling == NULL)
-    gtk_container_add (GTK_CONTAINER (priv->box), tag);
+    gtk_box_append (GTK_BOX (priv->box), tag);
   else
     gtk_box_insert_child_after (GTK_BOX (priv->box), tag, sibling); 
 }
@@ -214,7 +214,7 @@ demo_tagged_entry_remove_tag (DemoTaggedEntry *entry,
 
   g_return_if_fail (DEMO_IS_TAGGED_ENTRY (entry));
 
-  gtk_container_remove (GTK_CONTAINER (priv->box), tag);
+  gtk_box_remove (GTK_BOX (priv->box), tag);
 }
 
 struct _DemoTaggedEntryTag
@@ -268,7 +268,7 @@ demo_tagged_entry_tag_init (DemoTaggedEntryTag *tag)
   tag->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_parent (tag->box, GTK_WIDGET (tag));
   tag->label = gtk_label_new ("");
-  gtk_container_add (GTK_CONTAINER (tag->box), tag->label);
+  gtk_box_append (GTK_BOX (tag->box), tag->label);
 
   gesture = gtk_gesture_click_new ();
   g_signal_connect (gesture, "released", G_CALLBACK (on_released), tag);
@@ -460,7 +460,7 @@ demo_tagged_entry_tag_set_has_close_button (DemoTaggedEntryTag *tag,
 
   if (!has_close_button && tag->button)
     {
-      gtk_container_remove (GTK_CONTAINER (tag->box), tag->button);
+      gtk_box_remove (GTK_BOX (tag->box), tag->button);
       tag->button = NULL;
     }
   else if (has_close_button && tag->button == NULL)
@@ -469,11 +469,11 @@ demo_tagged_entry_tag_set_has_close_button (DemoTaggedEntryTag *tag,
 
       image = gtk_image_new_from_icon_name ("window-close-symbolic");
       tag->button = gtk_button_new ();
-      gtk_container_add (GTK_CONTAINER (tag->button), image);
+      gtk_box_append (GTK_BOX (tag->button), image);
       gtk_widget_set_halign (tag->button, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (tag->button, GTK_ALIGN_CENTER);
       gtk_button_set_has_frame (GTK_BUTTON (tag->button), FALSE);
-      gtk_container_add (GTK_CONTAINER (tag->box), tag->button);
+      gtk_box_append (GTK_BOX (tag->box), tag->button);
       g_signal_connect (tag->button, "clicked", G_CALLBACK (on_button_clicked), tag);
     }
 

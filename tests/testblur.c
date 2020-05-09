@@ -112,7 +112,7 @@ main (int argc, char **argv)
     gtk_label_set_attributes (GTK_LABEL (value_label), attrs);
     pango_attr_list_unref (attrs);
   }
-  gtk_container_add (GTK_CONTAINER (blur_box), value_label);
+  gtk_box_append (GTK_BOX (blur_box), value_label);
 
 
   scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0, 10, 0.05);
@@ -123,7 +123,7 @@ main (int argc, char **argv)
   g_signal_connect (scale, "value-changed", G_CALLBACK (value_changed_cb), blur_box);
   g_signal_connect (scale, "value-changed", G_CALLBACK (value_changed_cb2), value_label);
 
-  gtk_container_add (GTK_CONTAINER (blur_box), scale);
+  gtk_box_append (GTK_BOX (blur_box), scale);
   gtk_window_set_child (GTK_WINDOW (window), blur_box);
 
   gtk_widget_show (window);

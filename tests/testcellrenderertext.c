@@ -278,20 +278,20 @@ main (int argc, char **argv)
   /* LTR */
 
   label = gtk_label_new ("Left to right");
-  gtk_container_add (GTK_CONTAINER (vbox), label);
+  gtk_box_append (GTK_BOX (vbox), label);
 
   tree = create_tree (FALSE);
   gtk_widget_set_vexpand (tree, TRUE);
-  gtk_container_add (GTK_CONTAINER (vbox), tree);
+  gtk_box_append (GTK_BOX (vbox), tree);
 
   /* RTL */
 
   label = gtk_label_new ("Right to left");
-  gtk_container_add (GTK_CONTAINER (vbox), label);
+  gtk_box_append (GTK_BOX (vbox), label);
 
   tree = create_tree (TRUE);
   gtk_widget_set_vexpand (tree, TRUE);
-  gtk_container_add (GTK_CONTAINER (vbox), tree);
+  gtk_box_append (GTK_BOX (vbox), tree);
 
   gtk_widget_show (window);
 

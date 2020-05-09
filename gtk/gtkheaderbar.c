@@ -171,7 +171,7 @@ create_window_controls (GtkHeaderBar *bar)
   g_object_bind_property (controls, "empty",
                           controls, "visible",
                           G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
-  gtk_container_add (GTK_CONTAINER (priv->start_box), controls);
+  gtk_box_append (GTK_BOX (priv->start_box), controls);
   priv->start_window_controls = controls;
 
   controls = gtk_window_controls_new (GTK_PACK_END);
@@ -181,7 +181,7 @@ create_window_controls (GtkHeaderBar *bar)
   g_object_bind_property (controls, "empty",
                           controls, "visible",
                           G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
-  gtk_container_add (GTK_CONTAINER (priv->end_box), controls);
+  gtk_box_append (GTK_BOX (priv->end_box), controls);
   priv->end_window_controls = controls;
 }
 
@@ -474,11 +474,11 @@ gtk_header_bar_pack (GtkHeaderBar *bar,
 
   if (pack_type == GTK_PACK_START)
     {
-      gtk_container_add (GTK_CONTAINER (priv->start_box), widget);
+      gtk_box_append (GTK_BOX (priv->start_box), widget);
     }
   else if (pack_type == GTK_PACK_END)
     {
-      gtk_container_add (GTK_CONTAINER (priv->end_box), widget);
+      gtk_box_append (GTK_BOX (priv->end_box), widget);
       gtk_box_reorder_child_after (GTK_BOX (priv->end_box), widget, NULL);
     }
 
@@ -507,12 +507,12 @@ gtk_header_bar_remove (GtkHeaderBar *bar,
 
   if (parent == priv->start_box)
     {
-      gtk_container_remove (GTK_CONTAINER (priv->start_box), child);
+      gtk_box_remove (GTK_BOX (priv->start_box), child);
       removed = TRUE;
     }
   else if (parent == priv->end_box)
     {
-      gtk_container_remove (GTK_CONTAINER (priv->end_box), child);
+      gtk_box_remove (GTK_BOX (priv->end_box), child);
       removed = TRUE;
     }
   else if (parent == priv->center_box)

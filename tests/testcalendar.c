@@ -235,24 +235,24 @@ create_calendar(void)
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, DEF_PAD_SMALL);
   frame = create_frame ("<b>Options</b>", vbox, GTK_ALIGN_FILL, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (rpane), frame);
+  gtk_box_append (GTK_BOX (rpane), frame);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, DEF_PAD_SMALL);
   gtk_widget_set_halign (hbox, GTK_ALIGN_START);
   gtk_widget_set_valign (hbox, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (vbox), hbox);
+  gtk_box_append (GTK_BOX (vbox), hbox);
 
   /* Build the Right frame with the flags in */
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (rpane), vbox);
+  gtk_box_append (GTK_BOX (rpane), vbox);
 
   for (i = 0; i < G_N_ELEMENTS (flags); i++)
     {
       GtkWidget *toggle = gtk_check_button_new_with_mnemonic (flags[i].label);
       gboolean value;
 
-      gtk_container_add (GTK_CONTAINER (vbox), toggle);
+      gtk_box_append (GTK_BOX (vbox), toggle);
 
       g_object_get (G_OBJECT (calendar), flags[i].prop_name, &value, NULL);
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle), value);
@@ -269,25 +269,25 @@ create_calendar(void)
   frame = create_frame ("<b>Signal Events</b>", vbox, GTK_ALIGN_FILL, GTK_ALIGN_CENTER);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
-  gtk_container_add (GTK_CONTAINER (vbox), hbox);
+  gtk_box_append (GTK_BOX (vbox), hbox);
   label = gtk_label_new ("Signal:");
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_box_append (GTK_BOX (hbox), label);
   calendar_data.last_sig = gtk_label_new ("");
-  gtk_container_add (GTK_CONTAINER (hbox), calendar_data.last_sig);
+  gtk_box_append (GTK_BOX (hbox), calendar_data.last_sig);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
-  gtk_container_add (GTK_CONTAINER (vbox), hbox);
+  gtk_box_append (GTK_BOX (vbox), hbox);
   label = gtk_label_new ("Previous signal:");
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_box_append (GTK_BOX (hbox), label);
   calendar_data.prev_sig = gtk_label_new ("");
-  gtk_container_add (GTK_CONTAINER (hbox), calendar_data.prev_sig);
+  gtk_box_append (GTK_BOX (hbox), calendar_data.prev_sig);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
-  gtk_container_add (GTK_CONTAINER (vbox), hbox);
+  gtk_box_append (GTK_BOX (vbox), hbox);
   label = gtk_label_new ("Second previous signal:");
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_box_append (GTK_BOX (hbox), label);
   calendar_data.prev2_sig = gtk_label_new ("");
-  gtk_container_add (GTK_CONTAINER (hbox), calendar_data.prev2_sig);
+  gtk_box_append (GTK_BOX (hbox), calendar_data.prev2_sig);
 
   /*
    *  Glue everything together
@@ -298,15 +298,15 @@ create_calendar(void)
 
   button = gtk_button_new_with_label ("Close");
   g_signal_connect (button, "clicked", G_CALLBACK (quit_cb), &done);
-  gtk_container_add (GTK_CONTAINER (bbox), button);
+  gtk_box_append (GTK_BOX (bbox), button);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, DEF_PAD_SMALL);
 
-  gtk_container_add (GTK_CONTAINER (vbox), hpaned);
-  gtk_container_add (GTK_CONTAINER (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
-  gtk_container_add (GTK_CONTAINER (vbox), frame);
-  gtk_container_add (GTK_CONTAINER (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
-  gtk_container_add (GTK_CONTAINER (vbox), bbox);
+  gtk_box_append (GTK_BOX (vbox), hpaned);
+  gtk_box_append (GTK_BOX (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+  gtk_box_append (GTK_BOX (vbox), frame);
+  gtk_box_append (GTK_BOX (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+  gtk_box_append (GTK_BOX (vbox), bbox);
 
   gtk_window_set_child (GTK_WINDOW (window), vbox);
 

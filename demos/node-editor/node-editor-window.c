@@ -787,13 +787,13 @@ node_editor_window_create_renderer_widget (gpointer item,
   gtk_widget_set_size_request (box, 120, 90);
 
   label = gtk_label_new (g_object_get_data (G_OBJECT (paintable), "description"));
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_box_append (GTK_BOX (box), label);
 
   picture = gtk_picture_new_for_paintable (paintable);
   /* don't ever scale up, we want to be as accurate as possible */
   gtk_widget_set_halign (picture, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (picture, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (box), picture);
+  gtk_box_append (GTK_BOX (box), picture);
 
   row = gtk_list_box_row_new ();
   gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), box);

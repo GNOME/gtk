@@ -123,7 +123,7 @@
  *
  *  // Add the label, and show everything we’ve added
  *
- *  gtk_container_add (GTK_CONTAINER (content_area), label);
+ *  gtk_box_append (GTK_BOX (content_area), label);
  *  gtk_widget_show (dialog);
  * }
  * ]|
@@ -379,7 +379,7 @@ add_to_action_area (GtkDialog *dialog,
   GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
   gtk_widget_set_valign (child, GTK_ALIGN_BASELINE);
-  gtk_container_add (GTK_CONTAINER (priv->action_area), child);
+  gtk_box_append (GTK_BOX (priv->action_area), child);
   apply_response_for_action_area (dialog, child, response_id);
 }
 
@@ -432,21 +432,28 @@ gtk_dialog_constructed (GObject *object)
   if (priv->use_header_bar)
     {
       GList *children, *l;
+      GtkWidget *child;
 
-      children = gtk_container_get_children (GTK_CONTAINER (priv->action_area));
+      children = NULL;
+      for (child = gtk_widget_get_first_child (priv->action_area);
+           child != NULL;
+           child = gtk_widget_get_next_sibling (child))
+        children = g_list_append (children, child);
+
       for (l = children; l != NULL; l = l->next)
         {
-          GtkWidget *child = l->data;
           gboolean has_default;
           ResponseData *rd;
           gint response_id;
+
+          child = l->data;
 
           has_default = gtk_widget_has_default (child);
           rd = get_response_data (child, FALSE);
           response_id = rd ? rd->response_id : GTK_RESPONSE_NONE;
 
           g_object_ref (child);
-          gtk_container_remove (GTK_CONTAINER (priv->action_area), child);
+          gtk_box_remove (GTK_BOX (priv->action_area), child);
           add_to_header_bar (dialog, child, response_id);
           g_object_unref (child);
 
@@ -610,22 +617,22 @@ static GList *
 get_action_children (GtkDialog *dialog)
 {
   GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
+  GtkWidget *parent;
+  GtkWidget *child;
   GList *children;
 
   if (priv->constructed && priv->use_header_bar)
-    {
-      GtkWidget *child;
-
-      children = NULL;
-      for (child = gtk_widget_get_first_child (priv->headerbar);
-           child != NULL;
-           child = gtk_widget_get_next_sibling (child))
-        children = g_list_append (children, child);
-    }
+    parent = priv->headerbar;
   else
-    children = gtk_container_get_children (GTK_CONTAINER (priv->action_area));
+    parent = priv->action_area;
 
-  return children;
+  children = NULL;
+  for (child = gtk_widget_get_first_child (parent);
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    children = g_list_prepend (children, child);
+
+  return g_list_reverse (children);
 }
 
 /* A far too tricky heuristic for getting the right initial

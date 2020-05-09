@@ -408,21 +408,25 @@ add_to_header_bar (GtkAssistant *assistant,
 static void
 add_action_widgets (GtkAssistant *assistant)
 {
-  GList *children;
-  GList *l;
+  GList *children, *l;
+  GtkWidget *child;
 
   if (assistant->use_header_bar)
     {
-      children = gtk_container_get_children (GTK_CONTAINER (assistant->action_area));
+      children = NULL;
+      for (child = gtk_widget_get_last_child (assistant->action_area);
+           child != NULL;
+           child = gtk_widget_get_prev_sibling (child))
+        children = g_list_prepend (children, child);
       for (l = children; l != NULL; l = l->next)
         {
-          GtkWidget *child = l->data;
           gboolean has_default;
 
+          child = l->data;
           has_default = gtk_widget_has_default (child);
 
           g_object_ref (child);
-          gtk_container_remove (GTK_CONTAINER (assistant->action_area), child);
+          gtk_box_remove (GTK_BOX (assistant->action_area), child);
           add_to_header_bar (assistant, child);
           g_object_unref (child);
 
@@ -1129,8 +1133,8 @@ assistant_remove_page (GtkAssistant *assistant,
   gtk_size_group_remove_widget (assistant->title_size_group, page_info->regular_title);
   gtk_size_group_remove_widget (assistant->title_size_group, page_info->current_title);
 
-  gtk_container_remove (GTK_CONTAINER (assistant->sidebar), page_info->regular_title);
-  gtk_container_remove (GTK_CONTAINER (assistant->sidebar), page_info->current_title);
+  gtk_box_remove (GTK_BOX (assistant->sidebar), page_info->regular_title);
+  gtk_box_remove (GTK_BOX (assistant->sidebar), page_info->current_title);
 
   assistant->pages = g_list_remove_link (assistant->pages, element);
   assistant->visited_pages = g_slist_remove_all (assistant->visited_pages, page_info);
@@ -1166,9 +1170,13 @@ gtk_assistant_init (GtkAssistant *assistant)
   if (alternative_button_order (assistant))
     {
       GList *buttons, *l;
+      GtkWidget *child;
 
-      /* Reverse the action area children for the alternative button order setting */
-      buttons = gtk_container_get_children (GTK_CONTAINER (assistant->action_area));
+      buttons = NULL;
+      for (child = gtk_widget_get_last_child (assistant->action_area);
+           child != NULL;
+           child = gtk_widget_get_prev_sibling (child))
+        buttons = g_list_prepend (buttons, child);
 
       for (l = buttons; l; l = l->next)
         gtk_box_reorder_child_after (GTK_BOX (assistant->action_area), GTK_WIDGET (l->data), NULL);
@@ -1815,7 +1823,7 @@ add_to_action_area (GtkAssistant *assistant,
 {
   gtk_widget_set_valign (child, GTK_ALIGN_BASELINE);
 
-  gtk_container_add (GTK_CONTAINER (assistant->action_area), child);
+  gtk_box_append (GTK_BOX (assistant->action_area), child);
 }
 
 /**
@@ -1868,7 +1876,7 @@ gtk_assistant_remove_action_widget (GtkAssistant *assistant,
         update_actions_size (assistant);
     }
 
-  gtk_container_remove (GTK_CONTAINER (assistant->action_area), child);
+  gtk_box_remove (GTK_BOX (assistant->action_area), child);
 }
 
 /**

@@ -67,15 +67,15 @@ main (int argc, char **argv)
   da = gtk_drawing_area_new ();
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), on_draw, NULL, NULL);
   gtk_widget_set_vexpand (da, TRUE);
-  gtk_container_add (GTK_CONTAINER (vbox), da);
+  gtk_box_append (GTK_BOX (vbox), da);
 
   label = gtk_label_new ("Event processing time (ms):");
   gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (vbox), label);
+  gtk_box_append (GTK_BOX (vbox), label);
 
   adjustment = gtk_adjustment_new (20, 0, 200, 1, 10, 0);
   scale = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, adjustment);
-  gtk_container_add (GTK_CONTAINER (vbox), scale);
+  gtk_box_append (GTK_BOX (vbox), scale);
 
   controller = gtk_event_controller_motion_new ();
   g_signal_connect (controller, "motion",
