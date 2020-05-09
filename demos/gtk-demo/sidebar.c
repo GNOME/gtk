@@ -47,14 +47,14 @@ do_sidebar (GtkWidget *do_widget)
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       sidebar = gtk_stack_sidebar_new ();
-      gtk_container_add (GTK_CONTAINER (box), sidebar);
+      gtk_box_append (GTK_BOX (box), sidebar);
 
       stack = gtk_stack_new ();
       gtk_stack_set_transition_type (GTK_STACK (stack), GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN);
       gtk_stack_sidebar_set_stack (GTK_STACK_SIDEBAR (sidebar), GTK_STACK (stack));
       gtk_widget_set_hexpand (stack, TRUE);
 
-      gtk_container_add (GTK_CONTAINER (box), stack);
+      gtk_box_append (GTK_BOX (box), stack);
 
       for (i=0; (c = *(pages+i)) != NULL; i++ )
         {

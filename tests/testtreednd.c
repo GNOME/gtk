@@ -123,8 +123,8 @@ main (int argc, char *argv[])
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_window_set_child (GTK_WINDOW (window), box);
-  gtk_container_add (GTK_CONTAINER (box), get_dragsource ());
-  gtk_container_add (GTK_CONTAINER (box), get_droptarget ());
+  gtk_box_append (GTK_BOX (box), get_dragsource ());
+  gtk_box_append (GTK_BOX (box), get_droptarget ());
 
   gtk_widget_show (window);
 

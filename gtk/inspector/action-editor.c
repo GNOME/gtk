@@ -102,9 +102,9 @@ variant_editor_new (const GVariantType   *type,
     {
       editor = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       entry = gtk_entry_new ();
-      gtk_container_add (GTK_CONTAINER (editor), entry);
+      gtk_box_append (GTK_BOX (editor), entry);
       label = gtk_label_new (g_variant_type_peek_string (type));
-      gtk_container_add (GTK_CONTAINER (editor), label);
+      gtk_box_append (GTK_BOX (editor), label);
       g_signal_connect (entry, "notify::text", G_CALLBACK (variant_editor_changed_cb), d);
     }
 
@@ -283,24 +283,24 @@ constructed (GObject *object)
 
   row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   activate = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-  gtk_container_add (GTK_CONTAINER (row), activate);
+  gtk_box_append (GTK_BOX (row), activate);
   gtk_size_group_add_widget (r->priv->sg, activate);
 
   r->priv->activate_button = gtk_button_new_with_label (_("Activate"));
   g_signal_connect (r->priv->activate_button, "clicked", G_CALLBACK (activate_action), r);
 
   gtk_widget_set_sensitive (r->priv->activate_button, r->priv->enabled);
-  gtk_container_add (GTK_CONTAINER (activate), r->priv->activate_button);
+  gtk_box_append (GTK_BOX (activate), r->priv->activate_button);
 
   r->priv->parameter_type = g_action_group_get_action_parameter_type (r->priv->group, r->priv->name);
   if (r->priv->parameter_type)
     {
       r->priv->parameter_entry = variant_editor_new (r->priv->parameter_type, parameter_changed, r);
       gtk_widget_set_sensitive (r->priv->parameter_entry, r->priv->enabled);
-      gtk_container_add (GTK_CONTAINER (activate), r->priv->parameter_entry);
+      gtk_box_append (GTK_BOX (activate), r->priv->parameter_entry);
     }
 
-  gtk_container_add (GTK_CONTAINER (r), row);
+  gtk_box_append (GTK_BOX (r), row);
 
   if (state)
     {
@@ -308,11 +308,11 @@ constructed (GObject *object)
       row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       label = gtk_label_new (_("Set State"));
       gtk_size_group_add_widget (r->priv->sg, label);
-      gtk_container_add (GTK_CONTAINER (row), label);
+      gtk_box_append (GTK_BOX (row), label);
       r->priv->state_entry = variant_editor_new (r->priv->state_type, state_changed, r);
       variant_editor_set_value (r->priv->state_entry, state);
-      gtk_container_add (GTK_CONTAINER (row), r->priv->state_entry);
-      gtk_container_add (GTK_CONTAINER (r), row);
+      gtk_box_append (GTK_BOX (row), r->priv->state_entry);
+      gtk_box_append (GTK_BOX (r), row);
     }
 
   g_signal_connect (r->priv->group, "action-enabled-changed",

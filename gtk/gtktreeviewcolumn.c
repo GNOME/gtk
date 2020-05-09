@@ -887,16 +887,16 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
 
   if (priv->xalign <= 0.5)
     {
-      gtk_container_add (GTK_CONTAINER (hbox), priv->frame);
-      gtk_container_add (GTK_CONTAINER (hbox), priv->arrow);
+      gtk_box_append (GTK_BOX (hbox), priv->frame);
+      gtk_box_append (GTK_BOX (hbox), priv->arrow);
     }
   else
     {
-      gtk_container_add (GTK_CONTAINER (hbox), priv->arrow);
-      gtk_container_add (GTK_CONTAINER (hbox), priv->frame);
+      gtk_box_append (GTK_BOX (hbox), priv->arrow);
+      gtk_box_append (GTK_BOX (hbox), priv->frame);
     }
 
-  gtk_container_add (GTK_CONTAINER (priv->frame), child);
+  gtk_box_append (GTK_BOX (priv->frame), child);
   gtk_button_set_child (GTK_BUTTON (priv->button), hbox);
 }
 
@@ -927,8 +927,8 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
     {
       if (current_child != priv->child)
         {
-          gtk_container_remove (GTK_CONTAINER (frame), current_child);
-          gtk_container_add (GTK_CONTAINER (frame), priv->child);
+          gtk_box_remove (GTK_BOX (frame), current_child);
+          gtk_box_append (GTK_BOX (frame), priv->child);
         }
     }
   else
@@ -937,7 +937,7 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
         {
           current_child = gtk_label_new (NULL);
           gtk_widget_show (current_child);
-          gtk_container_add (GTK_CONTAINER (frame), current_child);
+          gtk_box_append (GTK_BOX (frame), current_child);
         }
 
       g_return_if_fail (GTK_IS_LABEL (current_child));

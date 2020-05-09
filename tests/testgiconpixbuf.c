@@ -53,32 +53,32 @@ main (int argc,
   gtk_window_set_child (GTK_WINDOW (toplevel), hbox);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
-  gtk_container_add (GTK_CONTAINER (hbox), vbox);
+  gtk_box_append (GTK_BOX (hbox), vbox);
 
   image = gtk_image_new_from_gicon (G_ICON (pixbuf));
   gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
-  gtk_container_add (GTK_CONTAINER (vbox), image);
+  gtk_box_append (GTK_BOX (vbox), image);
 
   label = gtk_label_new (NULL);
   str = g_strdup_printf ("Normal icon, hash %u", g_icon_hash (G_ICON (pixbuf)));
   gtk_label_set_label (GTK_LABEL (label), str);
-  gtk_container_add (GTK_CONTAINER (vbox), label);
+  gtk_box_append (GTK_BOX (vbox), label);
 
   otherpix = gdk_pixbuf_new_from_file ("gnome-textfile.png", NULL);
   emblem = g_emblem_new (G_ICON (otherpix));
   emblemed = g_emblemed_icon_new (G_ICON (pixbuf), emblem);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
-  gtk_container_add (GTK_CONTAINER (hbox), vbox);
+  gtk_box_append (GTK_BOX (hbox), vbox);
 
   image2 = gtk_image_new_from_gicon (emblemed);
   gtk_image_set_icon_size (GTK_IMAGE (image2), GTK_ICON_SIZE_LARGE);
-  gtk_container_add (GTK_CONTAINER (vbox), image2);
+  gtk_box_append (GTK_BOX (vbox), image2);
 
   label = gtk_label_new (NULL);
   str = g_strdup_printf ("Emblemed icon, hash %u", g_icon_hash (emblemed));
   gtk_label_set_label (GTK_LABEL (label), str);
-  gtk_container_add (GTK_CONTAINER (vbox), label);
+  gtk_box_append (GTK_BOX (vbox), label);
 
   gtk_widget_show (toplevel);
 

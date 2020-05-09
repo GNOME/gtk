@@ -85,11 +85,11 @@ change_header (GtkButton *button, gpointer data)
       gtk_widget_set_margin_top (header, 10);
       gtk_widget_set_margin_bottom (header, 10);
       label = gtk_label_new ("Label");
-      gtk_container_add (GTK_CONTAINER (header), label);
+      gtk_box_append (GTK_BOX (header), label);
       widget = gtk_level_bar_new ();
       gtk_level_bar_set_value (GTK_LEVEL_BAR (widget), 0.4);
       gtk_widget_set_hexpand (widget, TRUE);
-      gtk_container_add (GTK_CONTAINER (header), widget);
+      gtk_box_append (GTK_BOX (header), widget);
     }
   else
     {
@@ -145,7 +145,7 @@ main (int argc, char *argv[])
   gtk_image_set_pixel_size (GTK_IMAGE (content), 512);
   gtk_widget_set_vexpand (content, TRUE);
 
-  gtk_container_add (GTK_CONTAINER (box), content);
+  gtk_box_append (GTK_BOX (box), content);
 
   footer = gtk_action_bar_new ();
   gtk_action_bar_set_center_widget (GTK_ACTION_BAR (footer), gtk_check_button_new_with_label ("Middle"));
@@ -155,7 +155,7 @@ main (int argc, char *argv[])
   button = gtk_button_new_with_label ("Fullscreen");
   gtk_action_bar_pack_end (GTK_ACTION_BAR (footer), button);
   g_signal_connect (button, "clicked", G_CALLBACK (toggle_fullscreen), window);
-  gtk_container_add (GTK_CONTAINER (box), footer);
+  gtk_box_append (GTK_BOX (box), footer);
   gtk_widget_show (window);
 
   while (!done)

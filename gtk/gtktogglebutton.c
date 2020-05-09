@@ -84,14 +84,14 @@
  *   g_signal_connect (toggle1, "toggled",
  *                     G_CALLBACK (output_state),
  *                     NULL);
- *   gtk_container_add (GTK_CONTAINER (box), toggle1);
+ *   gtk_box_append (GTK_BOX (box), toggle1);
  *
  *   text = "Hi, I’m a toggle button.";
  *   toggle2 = gtk_toggle_button_new_with_label (text);
  *   g_signal_connect (toggle2, "toggled",
  *                     G_CALLBACK (output_state),
  *                     NULL);
- *   gtk_container_add (GTK_CONTAINER (box), toggle2);
+ *   gtk_box_append (GTK_BOX (box), toggle2);
  *
  *   gtk_window_set_child (GTK_WINDOW (window), box);
  *   gtk_widget_show (window);

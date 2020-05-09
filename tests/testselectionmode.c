@@ -28,14 +28,14 @@ selectable_row_init (SelectableRow *row)
   gtk_widget_set_margin_bottom (row->check, 10);
 
   gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), row->box);
-  gtk_container_add (GTK_CONTAINER (row->box), row->revealer);
+  gtk_box_append (GTK_BOX (row->box), row->revealer);
   gtk_revealer_set_child (GTK_REVEALER (row->revealer), row->check);
 }
 
 static void
 selectable_row_add (SelectableRow *row, GtkWidget *child)
 {
-  gtk_container_add (GTK_CONTAINER (row->box), child);
+  gtk_box_append (GTK_BOX (row->box), child);
 }
 
 static void

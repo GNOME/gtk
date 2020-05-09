@@ -66,7 +66,7 @@ main (int argc, char *argv[])
   label = gtk_label_new ("Main child");
   gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (main_child), label);
+  gtk_box_append (GTK_BOX (main_child), label);
 
   child = gtk_label_new (NULL);
   str = g_strdup_printf ("%p", child);

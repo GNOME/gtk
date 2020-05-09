@@ -78,9 +78,9 @@ main (int    argc,
                     NULL);
 
   gtk_window_set_child (GTK_WINDOW (window), vbox);
-  gtk_container_add (GTK_CONTAINER (vbox), box);
-  gtk_container_add (GTK_CONTAINER (box), button);
-  gtk_container_add (GTK_CONTAINER (box), button2);
+  gtk_box_append (GTK_BOX (vbox), box);
+  gtk_box_append (GTK_BOX (box), button);
+  gtk_box_append (GTK_BOX (box), button2);
 
   gtk_widget_show (window);
   g_timeout_add (4000, (GSourceFunc) show_error, window);

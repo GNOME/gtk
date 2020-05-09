@@ -43,21 +43,21 @@ on_activate (GApplication *application,
   g_object_bind_property (widget, "active",
                           info_bar, "visible",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  gtk_container_add (GTK_CONTAINER (box), widget);
+  gtk_box_append (GTK_BOX (box), widget);
 
   widget = gtk_toggle_button_new_with_label ("Toggle :revealed");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
   g_object_bind_property (widget, "active",
                           info_bar, "revealed",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  gtk_container_add (GTK_CONTAINER (box), widget);
+  gtk_box_append (GTK_BOX (box), widget);
 
   widget = gtk_toggle_button_new_with_label ("Toggle :show-close-button");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
   g_object_bind_property (widget, "active",
                           info_bar, "show-close-button",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  gtk_container_add (GTK_CONTAINER (box), widget);
+  gtk_box_append (GTK_BOX (box), widget);
 
   widget = gtk_combo_box_text_new ();
   gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (widget),
@@ -74,9 +74,9 @@ on_activate (GApplication *application,
   g_object_bind_property (widget, "active",
                           info_bar, "message-type",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  gtk_container_add (GTK_CONTAINER (box), widget);
+  gtk_box_append (GTK_BOX (box), widget);
 
-  gtk_container_add (GTK_CONTAINER (box), info_bar);
+  gtk_box_append (GTK_BOX (box), info_bar);
 
   widget = gtk_button_new_with_label ("Un-reveal");
   gtk_info_bar_add_action_widget (GTK_INFO_BAR (info_bar), widget,

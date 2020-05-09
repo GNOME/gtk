@@ -2041,18 +2041,18 @@ listbox_header_func (GtkListBoxRow *row,
                                   "spinning",
                                   G_BINDING_SYNC_CREATE);
 
-          gtk_container_add (GTK_CONTAINER (header_name), label);
-          gtk_container_add (GTK_CONTAINER (header_name), network_header_spinner);
-          gtk_container_add (GTK_CONTAINER (header), header_name);
+          gtk_box_append (GTK_BOX (header_name), label);
+          gtk_box_append (GTK_BOX (header_name), network_header_spinner);
+          gtk_box_append (GTK_BOX (header), header_name);
         }
       else
         {
           gtk_widget_set_hexpand (label, TRUE);
           gtk_widget_set_margin_end (label, 12);
-          gtk_container_add (GTK_CONTAINER (header), label);
+          gtk_box_append (GTK_BOX (header), label);
         }
 
-      gtk_container_add (GTK_CONTAINER (header), separator);
+      gtk_box_append (GTK_BOX (header), separator);
 
       gtk_list_box_row_set_header (row, header);
 

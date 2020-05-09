@@ -241,22 +241,22 @@ main (int argc, char **argv)
   button1 = gtk_radio_button_new_with_label (NULL, "Blank");
   gtk_widget_set_valign (button1, GTK_ALIGN_START);
   g_signal_connect (button1, "toggled", G_CALLBACK (set_blank), entry);
-  gtk_container_add (GTK_CONTAINER (box), button1);
+  gtk_box_append (GTK_BOX (box), button1);
   button2 = gtk_radio_button_new_with_label (NULL, "Icon Name");
   gtk_widget_set_valign (button2, GTK_ALIGN_START);
   gtk_radio_button_join_group (GTK_RADIO_BUTTON (button2), GTK_RADIO_BUTTON (button1));
   g_signal_connect (button2, "toggled", G_CALLBACK (set_icon_name), entry);
-  gtk_container_add (GTK_CONTAINER (box), button2);
+  gtk_box_append (GTK_BOX (box), button2);
   button3 = gtk_radio_button_new_with_label (NULL, "GIcon");
   gtk_widget_set_valign (button3, GTK_ALIGN_START);
   gtk_radio_button_join_group (GTK_RADIO_BUTTON (button3), GTK_RADIO_BUTTON (button1));
   g_signal_connect (button3, "toggled", G_CALLBACK (set_gicon), entry);
-  gtk_container_add (GTK_CONTAINER (box), button3);
+  gtk_box_append (GTK_BOX (box), button3);
   button4 = gtk_radio_button_new_with_label (NULL, "Texture");
   gtk_widget_set_valign (button4, GTK_ALIGN_START);
   gtk_radio_button_join_group (GTK_RADIO_BUTTON (button4), GTK_RADIO_BUTTON (button1));
   g_signal_connect (button4, "toggled", G_CALLBACK (set_texture), entry);
-  gtk_container_add (GTK_CONTAINER (box), button4);
+  gtk_box_append (GTK_BOX (box), button4);
 
   label = gtk_label_new ("Emoji:");
   gtk_grid_attach (GTK_GRID (grid), label, 0, 6, 1, 1);
@@ -274,7 +274,7 @@ main (int argc, char **argv)
   gtk_widget_set_cursor_from_name (box, "text");
   entry = gtk_entry_new ();
   gtk_widget_set_hexpand (entry, TRUE);
-  gtk_container_add (GTK_CONTAINER (box), entry);
+  gtk_box_append (GTK_BOX (box), entry);
   image = gtk_image_new_from_icon_name ("edit-find-symbolic");
   gtk_widget_set_cursor_from_name (image, "default");
   gtk_widget_set_margin_start (image, 6);
@@ -287,13 +287,13 @@ main (int argc, char **argv)
   gesture = gtk_gesture_click_new ();
   g_signal_connect (gesture, "pressed", G_CALLBACK (icon_pressed_cb), NULL);
   gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (gesture));
-  gtk_container_add (GTK_CONTAINER (box), image);
+  gtk_box_append (GTK_BOX (box), image);
   image = gtk_image_new_from_icon_name ("document-save-symbolic");
   gtk_widget_set_margin_start (image, 6);
   gtk_widget_set_margin_end (image, 6);
   gtk_widget_set_margin_top (image, 6);
   gtk_widget_set_margin_bottom (image, 6);
-  gtk_container_add (GTK_CONTAINER (box), image);
+  gtk_box_append (GTK_BOX (box), image);
   gtk_grid_attach (GTK_GRID (grid), box, 1, 7, 1, 1);
 
   GtkCssProvider *provider;
