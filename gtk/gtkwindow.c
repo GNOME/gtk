@@ -8021,3 +8021,17 @@ gtk_window_get_child (GtkWindow *window)
 
   return priv->child;
 }
+
+/**
+ * gtk_window_destroy:
+ * @window: The window to destroy
+ *
+ * Drop the internal reference GTK holds on toplevel windows.
+ */
+void
+gtk_window_destroy (GtkWindow *window)
+{
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  gtk_widget_destroy (GTK_WIDGET (window));
+}
