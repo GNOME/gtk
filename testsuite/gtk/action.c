@@ -335,6 +335,7 @@ test_overlap2 (void)
   g_assert_cmpint (act1, ==, 0);
   g_assert_cmpint (act2, ==, 1);
 
+  gtk_widget_unparent (child);
   g_object_unref (g_object_ref_sink (text));
   g_object_unref (group1);
   g_object_unref (group2);
