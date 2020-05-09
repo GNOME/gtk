@@ -175,14 +175,14 @@ create_widget_for_model (gpointer item,
   gtk_widget_set_vexpand (row, TRUE);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-  gtk_container_add (GTK_CONTAINER (row), box);
+  gtk_box_append (GTK_BOX (row), box);
 
   depth = gtk_tree_list_row_get_depth (item);
   if (depth > 0)
     {
       child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_widget_set_size_request (child, 16 * depth, 0);
-      gtk_container_add (GTK_CONTAINER (box), child);
+      gtk_box_append (GTK_BOX (box), child);
     }
 
   if (gtk_tree_list_row_is_expandable (item))
@@ -195,16 +195,16 @@ create_widget_for_model (gpointer item,
       gtk_button_set_has_frame (GTK_BUTTON (title), FALSE);
       g_object_bind_property (item, "expanded", title, "active", G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
       g_object_set_data_full (G_OBJECT (title), "make-sure-its-not-unreffed", g_object_ref (item), g_object_unref);
-      gtk_container_add (GTK_CONTAINER (child), title);
+      gtk_box_append (GTK_BOX (child), title);
 
       arrow = g_object_new (GTK_TYPE_SPINNER, "css-name", "arrow", NULL);
-      gtk_container_add (GTK_CONTAINER (title), arrow);
+      gtk_box_append (GTK_BOX (title), arrow);
     }
   else
     {
       child = gtk_image_new (); /* empty whatever */
     }
-  gtk_container_add (GTK_CONTAINER (box), child);
+  gtk_box_append (GTK_BOX (box), child);
 
   info = gtk_tree_list_row_get_item (item);
 
@@ -212,14 +212,14 @@ create_widget_for_model (gpointer item,
   if (icon)
     {
       child = gtk_image_new_from_gicon (icon);
-      gtk_container_add (GTK_CONTAINER (box), child);
+      gtk_box_append (GTK_BOX (box), child);
     }
 
   file = g_object_get_data (G_OBJECT (info), "file");
   child = gtk_label_new (g_file_get_basename (file));
   g_object_unref (info);
 
-  gtk_container_add (GTK_CONTAINER (box), child);
+  gtk_box_append (GTK_BOX (box), child);
 
   return row;
 }
@@ -330,15 +330,15 @@ main (int argc, char *argv[])
   gtk_window_set_child (GTK_WINDOW (win), vbox);
 
   search_entry = gtk_search_entry_new ();
-  gtk_container_add (GTK_CONTAINER (vbox), search_entry);
+  gtk_box_append (GTK_BOX (vbox), search_entry);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (search_entry), hbox);
-  gtk_container_add (GTK_CONTAINER (vbox), hbox);
+  gtk_box_append (GTK_BOX (vbox), hbox);
 
   listbox = gtk_list_box_new ();
   gtk_widget_set_hexpand (listbox, TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox), listbox);
+  gtk_box_append (GTK_BOX (hbox), listbox);
 
   if (argc > 1)
     root = g_file_new_for_commandline_arg (argv[1]);
@@ -372,14 +372,14 @@ main (int argc, char *argv[])
   g_signal_connect (filter, "items-changed", G_CALLBACK (update_adjustment), adjustment);
 
   scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, adjustment);
-  gtk_container_add (GTK_CONTAINER (hbox), scrollbar);
+  gtk_box_append (GTK_BOX (hbox), scrollbar);
 
   statusbar = gtk_statusbar_new ();
   gtk_widget_add_tick_callback (statusbar, (GtkTickCallback) update_statusbar, NULL, NULL);
   g_object_set_data (G_OBJECT (statusbar), "model", filter);
   g_signal_connect_swapped (filter, "items-changed", G_CALLBACK (update_statusbar), statusbar);
   update_statusbar (GTK_STATUSBAR (statusbar));
-  gtk_container_add (GTK_CONTAINER (vbox), statusbar);
+  gtk_box_append (GTK_BOX (vbox), statusbar);
 
   g_object_unref (tree);
   g_object_unref (filter);

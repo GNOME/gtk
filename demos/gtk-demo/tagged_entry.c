@@ -82,19 +82,19 @@ do_tagged_entry (GtkWidget *do_widget)
       gtk_window_set_child (GTK_WINDOW (window), box);
 
       entry = demo_tagged_entry_new ();
-      gtk_container_add (GTK_CONTAINER (box), entry);
+      gtk_box_append (GTK_BOX (box), entry);
 
       box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
       gtk_widget_set_halign (box2, GTK_ALIGN_END);
-      gtk_container_add (GTK_CONTAINER (box), box2);
+      gtk_box_append (GTK_BOX (box), box2);
 
       button = gtk_button_new_with_mnemonic ("Add _Tag");
       g_signal_connect (button, "clicked", G_CALLBACK (add_tag), entry);
-      gtk_container_add (GTK_CONTAINER (box2), button);
+      gtk_box_append (GTK_BOX (box2), button);
 
       button = gtk_check_button_new_with_mnemonic ("_Spinner");
       g_signal_connect (button, "toggled", G_CALLBACK (toggle_spinner), entry);
-      gtk_container_add (GTK_CONTAINER (box2), button);
+      gtk_box_append (GTK_BOX (box2), button);
       
       button = gtk_button_new_with_mnemonic ("_Done");
       gtk_widget_add_css_class (button, "suggested-action");

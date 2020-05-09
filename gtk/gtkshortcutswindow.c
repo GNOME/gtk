@@ -284,18 +284,23 @@ gtk_shortcuts_window_add_search_item (GtkWidget *child, gpointer data)
 
       g_hash_table_insert (priv->keywords, item, keywords);
       if (shortcut_type == GTK_SHORTCUT_ACCELERATOR)
-        gtk_container_add (GTK_CONTAINER (priv->search_shortcuts), item);
+        gtk_box_append (GTK_BOX (priv->search_shortcuts), item);
       else
-        gtk_container_add (GTK_CONTAINER (priv->search_gestures), item);
+        gtk_box_append (GTK_BOX (priv->search_gestures), item);
 
       g_free (title);
       g_free (accelerator);
       g_free (str);
       g_free (action_name);
     }
-  else if (GTK_IS_CONTAINER (child))
+  else
     {
-      gtk_container_foreach (GTK_CONTAINER (child), gtk_shortcuts_window_add_search_item, self);
+      GtkWidget *widget;
+
+      for (widget = gtk_widget_get_first_child (child);
+           widget != NULL;
+           widget = gtk_widget_get_next_sibling (widget))
+        gtk_shortcuts_window_add_search_item (widget, self);
     }
 }
 
@@ -337,8 +342,12 @@ gtk_shortcuts_window_add_section (GtkShortcutsWindow  *self,
   gchar *name;
   const gchar *visible_section;
   GtkWidget *label;
+  GtkWidget *child;
 
-  gtk_container_foreach (GTK_CONTAINER (section), gtk_shortcuts_window_add_search_item, self);
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (section));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    gtk_shortcuts_window_add_search_item (child, self);
 
   g_object_get (section,
                 "section-name", &name,
@@ -445,8 +454,15 @@ update_accels_cb (GtkWidget *widget,
 
   if (GTK_IS_SHORTCUTS_SHORTCUT (widget))
     gtk_shortcuts_shortcut_update_accel (GTK_SHORTCUTS_SHORTCUT (widget), priv->window);
-  else if (GTK_IS_CONTAINER (widget))
-    gtk_container_foreach (GTK_CONTAINER (widget), update_accels_cb, self);
+  else
+    {
+      GtkWidget *child;
+
+      for (child = gtk_widget_get_first_child (GTK_WIDGET (widget));
+           child != NULL;
+           child = gtk_widget_get_next_sibling (child ))
+        update_accels_cb (child, self);
+    }
 }
 
 static void
@@ -863,7 +879,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   g_object_bind_property (priv->search_bar, "search-mode-enabled",
                           search_button, "active",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  gtk_container_add (GTK_CONTAINER (priv->main_box), GTK_WIDGET (priv->search_bar));
+  gtk_box_append (GTK_BOX (priv->main_box), GTK_WIDGET (priv->search_bar));
   gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (priv->search_bar),
                                          GTK_WIDGET (self));
 
@@ -874,7 +890,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                               "vhomogeneous", TRUE,
                               "transition-type", GTK_STACK_TRANSITION_TYPE_CROSSFADE,
                               NULL);
-  gtk_container_add (GTK_CONTAINER (priv->main_box), GTK_WIDGET (priv->stack));
+  gtk_box_append (GTK_BOX (priv->main_box), GTK_WIDGET (priv->stack));
 
   priv->title_stack = g_object_new (GTK_TYPE_STACK,
                                     NULL);
@@ -944,14 +960,14 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                                          "spacing", 6,
                                          "orientation", GTK_ORIENTATION_VERTICAL,
                                          NULL);
-  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (priv->search_shortcuts));
+  gtk_box_append (GTK_BOX (box), GTK_WIDGET (priv->search_shortcuts));
 
   priv->search_gestures = g_object_new (GTK_TYPE_BOX,
                                         "halign", GTK_ALIGN_CENTER,
                                         "spacing", 6,
                                         "orientation", GTK_ORIENTATION_VERTICAL,
                                         NULL);
-  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (priv->search_gestures));
+  gtk_box_append (GTK_BOX (box), GTK_WIDGET (priv->search_gestures));
 
   empty = g_object_new (GTK_TYPE_GRID,
                         "row-spacing", 12,

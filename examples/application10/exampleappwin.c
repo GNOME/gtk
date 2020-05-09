@@ -69,8 +69,8 @@ update_words (ExampleAppWindow *win)
   GtkWidget *tab, *view, *row;
   GtkTextBuffer *buffer;
   GtkTextIter start, end;
-  GList *children, *l;
   gchar *word, *key;
+  GtkWidget *child;
 
   tab = gtk_stack_get_visible_child (GTK_STACK (win->stack));
 
@@ -100,10 +100,8 @@ update_words (ExampleAppWindow *win)
     }
 
 done:
-  children = gtk_container_get_children (GTK_CONTAINER (win->words));
-  for (l = children; l; l = l->next)
-    gtk_container_remove (GTK_CONTAINER (win->words), GTK_WIDGET (l->data));
-  g_list_free (children);
+  while ((child = gtk_widget_get_first_child (win->words)))
+    gtk_list_box_remove (GTK_LIST_BOX (win->words), child);
 
   g_hash_table_iter_init (&iter, strings);
   while (g_hash_table_iter_next (&iter, (gpointer *)&key, NULL))
@@ -111,7 +109,7 @@ done:
       row = gtk_button_new_with_label (key);
       g_signal_connect (row, "clicked",
                         G_CALLBACK (find_word), win);
-      gtk_container_add (GTK_CONTAINER (win->words), row);
+      gtk_box_append (GTK_BOX (win->words), row);
     }
 
   g_hash_table_unref (strings);

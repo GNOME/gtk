@@ -7099,9 +7099,7 @@ gtk_widget_dispose (GObject *object)
   if (priv->controller_observer)
     gtk_list_list_model_clear (priv->controller_observer);
 
-  if (priv->parent && GTK_IS_CONTAINER (priv->parent))
-    gtk_container_remove (GTK_CONTAINER (priv->parent), widget);
-  else if (priv->parent)
+  if (priv->parent)
     gtk_widget_unparent (widget);
   else if (_gtk_widget_get_visible (widget))
     gtk_widget_hide (widget);

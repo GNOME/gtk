@@ -114,8 +114,8 @@ main (int argc, char *argv[])
   gtk_widget_set_margin_bottom (popup, 40);
   label = gtk_label_new ("Getting more rows...");
   spinner = gtk_spinner_new ();
-  gtk_container_add (GTK_CONTAINER (popup), label);
-  gtk_container_add (GTK_CONTAINER (popup), spinner);
+  gtk_box_append (GTK_BOX (popup), label);
+  gtk_box_append (GTK_BOX (popup), spinner);
 
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), popup);
   gtk_widget_hide (popup);

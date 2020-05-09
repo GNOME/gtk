@@ -104,7 +104,7 @@
  *    // Create a radio button with a GtkEntry widget
  *    radio1 = gtk_radio_button_new (NULL);
  *    entry = gtk_entry_new ();
- *    gtk_container_add (GTK_CONTAINER (radio1), entry);
+ *    gtk_box_append (GTK_BOX (radio1), entry);
  *
  *
  *    // Create a radio button with a label
@@ -112,8 +112,8 @@
  *                                                          "I’m the second radio button.");
  *
  *    // Pack them into a box, then show all the widgets
- *    gtk_container_add (GTK_CONTAINER (box), radio1);
- *    gtk_container_add (GTK_CONTAINER (box), radio2);
+ *    gtk_box_append (GTK_BOX (box), radio1);
+ *    gtk_box_append (GTK_BOX (box), radio2);
       gtk_window_set_child (GTK_WINDOW (window),box);
  *    gtk_widget_show (window);
  *    return;

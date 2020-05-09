@@ -106,11 +106,11 @@ main (int argc, char *argv[])
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   button = gtk_menu_button_new ();
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_box_append (GTK_BOX (box), button);
   button1 = gtk_menu_button_new ();
-  gtk_container_add (GTK_CONTAINER (box), button1);
+  gtk_box_append (GTK_BOX (box), button1);
   button2 = gtk_menu_button_new ();
-  gtk_container_add (GTK_CONTAINER (box), button2);
+  gtk_box_append (GTK_BOX (box), button2);
 
   gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button), model);
   popover = GTK_WIDGET (gtk_menu_button_get_popover (GTK_MENU_BUTTON (button)));

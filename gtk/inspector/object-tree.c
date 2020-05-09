@@ -1003,7 +1003,7 @@ gtk_inspector_object_tree_create_list_widget (gpointer row_item,
 
   column = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_size_group_add_widget (wt->priv->type_size_group, column);
-  gtk_container_add (GTK_CONTAINER (box), column);
+  gtk_box_append (GTK_BOX (box), column);
 
   /* expander */
   depth = gtk_tree_list_row_get_depth (row_item);
@@ -1011,7 +1011,7 @@ gtk_inspector_object_tree_create_list_widget (gpointer row_item,
     {
       child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_widget_set_size_request (child, 16 * depth, 0);
-      gtk_container_add (GTK_CONTAINER (column), child);
+      gtk_box_append (GTK_BOX (column), child);
     }
   if (gtk_tree_list_row_is_expandable (row_item))
     {
@@ -1022,7 +1022,7 @@ gtk_inspector_object_tree_create_list_widget (gpointer row_item,
       title = g_object_new (GTK_TYPE_TOGGLE_BUTTON, "css-name", "title", NULL);
       gtk_button_set_has_frame (GTK_BUTTON (title), FALSE);
       g_object_bind_property (row_item, "expanded", title, "active", G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-      gtk_container_add (GTK_CONTAINER (child), title);
+      gtk_box_append (GTK_BOX (child), title);
 
       arrow = gtk_builtin_icon_new ("expander");
       gtk_button_set_child (GTK_BUTTON (title), arrow);
@@ -1031,20 +1031,20 @@ gtk_inspector_object_tree_create_list_widget (gpointer row_item,
     {
       child = gtk_image_new (); /* empty whatever */
     }
-  gtk_container_add (GTK_CONTAINER (column), child);
+  gtk_box_append (GTK_BOX (column), child);
 
   /* 1st column: type name */
   child = gtk_label_new (G_OBJECT_TYPE_NAME (item));
   gtk_label_set_width_chars (GTK_LABEL (child), 30);
   gtk_label_set_xalign (GTK_LABEL (child), 0.0);
-  gtk_container_add (GTK_CONTAINER (column), child);
+  gtk_box_append (GTK_BOX (column), child);
 
   /* 2nd column: name */
   child = gtk_label_new (gtk_inspector_get_object_name (item));
   gtk_label_set_width_chars (GTK_LABEL (child), 15);
   gtk_label_set_xalign (GTK_LABEL (child), 0.0);
   gtk_size_group_add_widget (wt->priv->name_size_group, child);
-  gtk_container_add (GTK_CONTAINER (box), child);
+  gtk_box_append (GTK_BOX (box), child);
 
   /* 3rd column: label */
   child = gtk_label_new (NULL);
@@ -1059,7 +1059,7 @@ gtk_inspector_object_tree_create_list_widget (gpointer row_item,
   gtk_label_set_width_chars (GTK_LABEL (child), 15);
   gtk_label_set_xalign (GTK_LABEL (child), 0.0);
   gtk_size_group_add_widget (wt->priv->label_size_group, child);
-  gtk_container_add (GTK_CONTAINER (box), child);
+  gtk_box_append (GTK_BOX (box), child);
 
   g_object_unref (item);
 

@@ -687,12 +687,12 @@ request_password (GtkPrintBackend  *backend,
 
   /* Packing */
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-  gtk_container_add (GTK_CONTAINER (content_area), main_box);
+  gtk_box_append (GTK_BOX (content_area), main_box);
 
-  gtk_container_add (GTK_CONTAINER (main_box), icon);
-  gtk_container_add (GTK_CONTAINER (main_box), vbox);
+  gtk_box_append (GTK_BOX (main_box), icon);
+  gtk_box_append (GTK_BOX (main_box), vbox);
 
-  gtk_container_add (GTK_CONTAINER (vbox), label);
+  gtk_box_append (GTK_BOX (vbox), label);
 
   /* Right - 2. */
   for (i = 0; i < length; i++)
@@ -718,10 +718,10 @@ request_password (GtkPrintBackend  *backend,
           gtk_entry_set_visibility (GTK_ENTRY (entry), ai_visible[i]);
           gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
 
-          gtk_container_add (GTK_CONTAINER (vbox), box);
+          gtk_box_append (GTK_BOX (vbox), box);
 
-          gtk_container_add (GTK_CONTAINER (box), label);
-          gtk_container_add (GTK_CONTAINER (box), entry);
+          gtk_box_append (GTK_BOX (box), label);
+          gtk_box_append (GTK_BOX (box), entry);
 
           g_signal_connect (entry, "changed",
                             G_CALLBACK (store_entry), &(priv->auth_info[i]));
@@ -734,7 +734,7 @@ request_password (GtkPrintBackend  *backend,
       gtk_widget_set_margin_top (chkbtn, 6);
       gtk_widget_set_margin_bottom (chkbtn, 6);
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (chkbtn), FALSE);
-      gtk_container_add (GTK_CONTAINER (vbox), chkbtn);
+      gtk_box_append (GTK_BOX (vbox), chkbtn);
       g_signal_connect (chkbtn, "toggled",
                         G_CALLBACK (store_auth_info_toggled),
                         &(priv->store_auth_info));
