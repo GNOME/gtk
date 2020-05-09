@@ -376,7 +376,7 @@ row_deleted_cb (GtkTreeModel   *model,
 
   if (item)
     {
-      gtk_widget_destroy (item);
+      gtk_widget_unparent (item);
       gtk_cell_area_context_reset (popover->context);
     }
 }
@@ -405,9 +405,9 @@ row_changed_cb (GtkTreeModel   *model,
 
   if (is_separator != GTK_IS_SEPARATOR (item))
     {
-      GtkWidget *box= gtk_widget_get_parent (item);
+      GtkWidget *box = gtk_widget_get_parent (item);
 
-      gtk_widget_destroy (item);
+      gtk_container_remove (GTK_CONTAINER (box), item);
 
       item = gtk_tree_popover_create_item (popover, path, iter, FALSE);
 
@@ -732,9 +732,11 @@ static void
 rebuild_menu (GtkTreePopover *popover)
 {
   GtkWidget *stack;
+  GtkWidget *child;
 
   stack = gtk_popover_get_child (GTK_POPOVER (popover));
-  gtk_container_foreach (GTK_CONTAINER (stack), (GtkCallback) gtk_widget_destroy, NULL);
+  while ((child = gtk_widget_get_first_child (stack)))
+    gtk_container_remove (GTK_CONTAINER (stack), child);
 
   if (popover->model)
     gtk_tree_popover_populate (popover);

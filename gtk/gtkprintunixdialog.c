@@ -1612,16 +1612,14 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
 
       nrows = grid_rows (GTK_GRID (table));
       if (nrows == 0)
-        gtk_widget_destroy (table);
+        {
+          g_object_unref (g_object_ref_sink (table));
+        }
       else
         {
           has_advanced = TRUE;
           frame = wrap_in_frame (group, table);
-          gtk_widget_show (table);
-          gtk_widget_show (frame);
-
-          gtk_container_add (GTK_CONTAINER (dialog->advanced_vbox),
-                              frame);
+          gtk_container_add (GTK_CONTAINER (dialog->advanced_vbox), frame);
         }
     }
 
@@ -1929,35 +1927,23 @@ options_changed_cb (GtkPrintUnixDialog *dialog)
 }
 
 static void
-remove_custom_widget (GtkWidget    *widget,
-                      GtkContainer *container)
-{
-  gtk_container_remove (container, widget);
-}
-
-static void
-extension_point_clear_children (GtkContainer *container)
-{
-  gtk_container_foreach (container,
-                         (GtkCallback)remove_custom_widget,
-                         container);
-}
-
-static void
 clear_per_printer_ui (GtkPrintUnixDialog *dialog)
 {
+  GtkWidget *child;
+
   if (dialog->finishing_table == NULL)
     return;
 
-  gtk_container_foreach (GTK_CONTAINER (dialog->finishing_table),
-                         (GtkCallback)gtk_widget_destroy, NULL);
-  gtk_container_foreach (GTK_CONTAINER (dialog->image_quality_table),
-                         (GtkCallback)gtk_widget_destroy, NULL);
-  gtk_container_foreach (GTK_CONTAINER (dialog->color_table),
-                         (GtkCallback)gtk_widget_destroy, NULL);
-  gtk_container_foreach (GTK_CONTAINER (dialog->advanced_vbox),
-                         (GtkCallback)gtk_widget_destroy, NULL);
-  extension_point_clear_children (GTK_CONTAINER (dialog->extension_point));
+  while ((child = gtk_widget_get_first_child (dialog->finishing_table)))
+    gtk_container_remove (GTK_CONTAINER (dialog->finishing_table), child);
+  while ((child = gtk_widget_get_first_child (dialog->image_quality_table)))
+    gtk_container_remove (GTK_CONTAINER (dialog->image_quality_table), child);
+  while ((child = gtk_widget_get_first_child (dialog->color_table)))
+    gtk_container_remove (GTK_CONTAINER (dialog->color_table), child);
+  while ((child = gtk_widget_get_first_child (dialog->advanced_vbox)))
+    gtk_container_remove (GTK_CONTAINER (dialog->advanced_vbox), child);
+  while ((child = gtk_widget_get_first_child (dialog->extension_point)))
+    gtk_container_remove (GTK_CONTAINER (dialog->extension_point), child);
 }
 
 static void

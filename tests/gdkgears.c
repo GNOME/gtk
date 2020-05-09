@@ -104,7 +104,7 @@ less_gears (GtkButton *button, gpointer data)
 
   gears = gtk_widget_get_last_child (GTK_WIDGET (container));
   if (gears)
-    gtk_widget_destroy (gears);
+    gtk_container_remove (container, gears);
 }
 
 static void

@@ -330,6 +330,8 @@ gtk_sidebar_row_set_property (GObject      *object,
         self->placeholder = g_value_get_boolean (value);
         if (self->placeholder)
           {
+            GtkWidget *child;
+
             g_clear_object (&self->start_icon);
             g_clear_object (&self->end_icon);
             g_free (self->label);
@@ -347,9 +349,8 @@ gtk_sidebar_row_set_property (GObject      *object,
             g_clear_object (&self->mount);
             g_clear_object (&self->cloud_provider_account);
 
-            gtk_container_foreach (GTK_CONTAINER (self),
-                                   (GtkCallback) gtk_widget_destroy,
-                                   NULL);
+            while ((child = gtk_widget_get_first_child (GTK_WIDGET (self))))
+              gtk_container_remove (GTK_CONTAINER (self), child);
 
             gtk_widget_add_css_class (GTK_WIDGET (self), "sidebar-placeholder-row");
           }

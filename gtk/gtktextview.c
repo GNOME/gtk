@@ -2069,7 +2069,7 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
       while (priv->anchored_children.length)
         {
           AnchoredChild *ac = g_queue_peek_head (&priv->anchored_children);
-          gtk_widget_destroy (ac->widget);
+          gtk_widget_unparent (ac->widget);
           /* ac is now invalid! */
         }
 
@@ -3806,6 +3806,9 @@ gtk_text_view_dispose (GObject *object)
   g_clear_pointer ((GtkWidget **) &priv->text_handles[TEXT_HANDLE_CURSOR], gtk_widget_unparent);
   g_clear_pointer ((GtkWidget **) &priv->text_handles[TEXT_HANDLE_SELECTION_BOUND], gtk_widget_unparent);
 
+  g_clear_pointer (&priv->selection_bubble, gtk_widget_unparent);
+  g_clear_pointer (&priv->magnifier_popover, gtk_widget_unparent);
+
   G_OBJECT_CLASS (gtk_text_view_parent_class)->dispose (object);
 }
 
@@ -3844,10 +3847,6 @@ gtk_text_view_finalize (GObject *object)
 
   text_window_free (priv->text_window);
 
-  g_clear_pointer (&priv->selection_bubble, gtk_widget_unparent);
-
-  if (priv->magnifier_popover)
-    gtk_widget_destroy (priv->magnifier_popover);
   g_object_unref (priv->im_context);
 
   g_free (priv->im_module);

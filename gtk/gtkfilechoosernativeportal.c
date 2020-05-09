@@ -75,7 +75,7 @@ filechooser_portal_data_free (FilechooserPortalData *data)
   if (data->grab_widget)
     {
       gtk_grab_remove (data->grab_widget);
-      gtk_widget_destroy (data->grab_widget);
+      g_object_unref (data->grab_widget);
     }
 
   g_clear_object (&data->self);
@@ -397,7 +397,7 @@ window_handle_exported (GtkWindow  *window,
 
   if (data->modal)
     {
-      data->grab_widget = gtk_label_new ("");
+      data->grab_widget = g_object_ref_sink (gtk_label_new (""));
       gtk_grab_add (GTK_WIDGET (data->grab_widget));
     }
 

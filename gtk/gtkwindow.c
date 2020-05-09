@@ -2674,7 +2674,7 @@ gtk_window_transient_parent_destroyed (GtkWindow *parent,
   GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (window));
 
   if (priv->destroy_with_parent)
-    gtk_widget_destroy (GTK_WIDGET (window));
+    gtk_window_destroy (window);
   else
     priv->transient_parent = NULL;
 }
@@ -4845,11 +4845,7 @@ gtk_window_unrealize (GtkWidget *widget)
 
   gsk_renderer_unrealize (priv->renderer);
 
-  if (priv->popup_menu)
-    {
-      gtk_widget_destroy (priv->popup_menu);
-      priv->popup_menu = NULL;
-    }
+  g_clear_pointer (&priv->popup_menu, gtk_widget_unparent);
 
   /* Icons */
   gtk_window_unrealize_icon (window);
@@ -5827,8 +5823,7 @@ gtk_window_do_popup_fallback (GtkWindow *window,
   gboolean maximized, minimized;
   GtkWidget *box;
 
-  if (priv->popup_menu)
-    gtk_widget_destroy (priv->popup_menu);
+  g_clear_pointer (&priv->popup_menu, gtk_widget_unparent);
 
   state = gtk_window_get_state (window);
 

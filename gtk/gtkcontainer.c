@@ -223,11 +223,18 @@ gtk_container_init (GtkContainer *container)
 }
 
 static void
+gtk_container_remove_cb (GtkWidget    *child,
+                         GtkContainer *container)
+{
+  gtk_container_remove (container, child);
+}
+
+static void
 gtk_container_dispose (GObject *object)
 {
   GtkContainer *container = GTK_CONTAINER (object);
 
-  gtk_container_foreach (container, (GtkCallback) gtk_widget_destroy, NULL);
+  gtk_container_foreach (container, (GtkCallback) gtk_container_remove_cb, container);
 
   G_OBJECT_CLASS (gtk_container_parent_class)->dispose (object);
 }

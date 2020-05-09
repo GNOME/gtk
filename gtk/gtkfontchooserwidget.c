@@ -838,11 +838,12 @@ axis_remove (gpointer key,
              gpointer value,
              gpointer data)
 {
+  GtkFontChooserWidget *fontchooser = data;
   Axis *a = value;
 
-  gtk_widget_destroy (a->label);
-  gtk_widget_destroy (a->scale);
-  gtk_widget_destroy (a->spin);
+  gtk_container_remove (GTK_CONTAINER (fontchooser->axis_grid), a->label);
+  gtk_container_remove (GTK_CONTAINER (fontchooser->axis_grid), a->scale);
+  gtk_container_remove (GTK_CONTAINER (fontchooser->axis_grid), a->spin);
 }
 
 static void
@@ -1608,7 +1609,7 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
   if (fontchooser->updating_variations)
     return FALSE;
 
-  g_hash_table_foreach (fontchooser->axes, axis_remove, NULL);
+  g_hash_table_foreach (fontchooser->axes, axis_remove, fontchooser);
   g_hash_table_remove_all (fontchooser->axes);
 
   if ((fontchooser->level & GTK_FONT_CHOOSER_LEVEL_VARIATIONS) == 0)

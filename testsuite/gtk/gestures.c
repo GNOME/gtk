@@ -457,7 +457,7 @@ test_phases (void)
 
   g_string_free (str, TRUE);
 
-  gtk_widget_destroy (A);
+  gtk_window_destroy (A);
 }
 
 static void
@@ -516,7 +516,7 @@ test_mixed (void)
 
   g_string_free (str, TRUE);
 
-  gtk_widget_destroy (A);
+  gtk_window_destroy (A);
 }
 
 static void
@@ -571,7 +571,7 @@ test_early_exit (void)
 
   g_string_free (str, TRUE);
 
-  gtk_widget_destroy (A);
+  gtk_window_destroy (A);
 }
 
 static void
@@ -618,7 +618,7 @@ test_claim_capture (void)
 
   g_string_free (str, TRUE);
 
-  gtk_widget_destroy (A);
+  gtk_window_destroy (A);
 }
 
 static void
@@ -665,7 +665,7 @@ test_claim_target (void)
 
   g_string_free (str, TRUE);
 
-  gtk_widget_destroy (A);
+  gtk_window_destroy (A);
 }
 
 static void
@@ -718,7 +718,7 @@ test_claim_bubble (void)
 
   g_string_free (str, TRUE);
 
-  gtk_widget_destroy (A);
+  gtk_window_destroy (A);
 }
 
 static void
@@ -775,7 +775,7 @@ test_early_claim_capture (void)
   point_release (&mouse_state, 1);
 
   g_string_free (str, TRUE);
-  gtk_widget_destroy (A);
+  gtk_window_destroy (A);
 }
 
 static void
@@ -834,7 +834,7 @@ test_late_claim_capture (void)
   point_release (&mouse_state, 1);
 
   g_string_free (str, TRUE);
-  gtk_widget_destroy (A);
+  gtk_window_destroy (A);
 }
 
 static void
@@ -886,7 +886,7 @@ test_group (void)
 
   g_string_free (str, TRUE);
 
-  gtk_widget_destroy (A);
+  gtk_window_destroy (A);
 }
 
 static void
@@ -945,8 +945,8 @@ test_gestures_outside_grab (void)
 
   g_string_free (str, TRUE);
 
-  gtk_widget_destroy (A);
-  gtk_widget_destroy (D);
+  gtk_window_destroy (A);
+  gtk_window_destroy (D);
 }
 
 static void
@@ -1006,7 +1006,7 @@ test_gestures_inside_grab (void)
 
   g_string_free (str, TRUE);
 
-  gtk_widget_destroy (A);
+  gtk_window_destroy (A);
 }
 
 static void
@@ -1057,7 +1057,7 @@ test_multitouch_on_single (void)
 
   g_string_free (str, TRUE);
 
-  gtk_widget_destroy (A);
+  gtk_window_destroy (A);
 }
 
 static void
@@ -1132,7 +1132,7 @@ test_multitouch_activation (void)
 
   g_string_free (str, TRUE);
 
-  gtk_widget_destroy (A);
+  gtk_window_destroy (A);
 }
 
 static void
@@ -1225,7 +1225,7 @@ test_multitouch_interaction (void)
 
   g_string_free (str, TRUE);
 
-  gtk_widget_destroy (A);
+  gtk_window_destroy (A);
 }
 
 int
