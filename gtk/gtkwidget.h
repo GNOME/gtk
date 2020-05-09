@@ -300,8 +300,6 @@ GtkWidget* gtk_widget_new                 (GType                type,
                                            const gchar         *first_property_name,
                                            ...);
 GDK_AVAILABLE_IN_ALL
-void       gtk_widget_destroy             (GtkWidget           *widget);
-GDK_AVAILABLE_IN_ALL
 void       gtk_widget_unparent            (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_show                (GtkWidget           *widget);
