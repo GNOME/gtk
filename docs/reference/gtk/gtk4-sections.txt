@@ -693,30 +693,6 @@ gtk_combo_box_text_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkcontainer</FILE>
-<TITLE>GtkContainer</TITLE>
-GtkContainer
-GtkContainerClass
-gtk_container_add
-gtk_container_remove
-gtk_container_foreach
-gtk_container_get_children
-gtk_container_child_type
-gtk_container_forall
-
-<SUBSECTION Standard>
-GTK_CONTAINER
-GTK_IS_CONTAINER
-GTK_TYPE_CONTAINER
-GTK_CONTAINER_CLASS
-GTK_IS_CONTAINER_CLASS
-GTK_CONTAINER_GET_CLASS
-<SUBSECTION Private>
-GtkContainerPrivate
-gtk_container_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkdialog</FILE>
 <TITLE>GtkDialog</TITLE>
 GtkDialog

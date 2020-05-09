@@ -52,7 +52,6 @@ gtk_constraint_get_type
 gtk_constraint_guide_get_type
 gtk_constraint_layout_get_type
 gtk_constraint_target_get_type
-gtk_container_get_type
 gtk_css_provider_get_type
 gtk_dialog_get_type
 gtk_drag_icon_get_type
