@@ -990,3 +990,17 @@ gtk_tooltip_maybe_allocate (GtkNative *native)
 
   gtk_native_check_resize (GTK_NATIVE (tooltip->window));
 }
+
+void
+gtk_tooltip_unset_surface (GtkNative *native)
+{
+  GdkDisplay *display = gtk_widget_get_display (GTK_WIDGET (native));
+  GtkTooltip *tooltip;
+
+  tooltip = g_object_get_qdata (G_OBJECT (display), quark_current_tooltip);
+  if (!tooltip || GTK_NATIVE (tooltip->native) != native)
+    return;
+
+  gtk_tooltip_set_surface (tooltip, NULL);
+}
+
