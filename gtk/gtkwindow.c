@@ -2367,30 +2367,11 @@ gtk_window_dispose (GObject *object)
 {
   GtkWindow *window = GTK_WINDOW (object);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  guint i;
 
   gtk_window_release_application (window);
 
-  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (toplevel_list)); i++)
-    {
-      gpointer item = g_list_model_get_item (G_LIST_MODEL (toplevel_list), i);
-      if (item == window)
-        {
-          g_list_store_remove (toplevel_list, i);
-          break;
-        }
-      else
-        g_object_unref (item);
-    }
-
   if (priv->transient_parent)
     gtk_window_set_transient_for (window, NULL);
-
-  if (priv->has_user_ref_count)
-    {
-      priv->has_user_ref_count = FALSE;
-      g_object_unref (window);
-    }
 
   if (priv->group)
     gtk_window_group_remove_window (priv->group, window);
@@ -7525,7 +7506,23 @@ gtk_window_get_child (GtkWindow *window)
 void
 gtk_window_destroy (GtkWindow *window)
 {
+  int i;
+
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  gtk_widget_destroy (GTK_WIDGET (window));
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (toplevel_list)); i++)
+    {
+      gpointer item = g_list_model_get_item (G_LIST_MODEL (toplevel_list), i);
+      if (item == window)
+        {
+          g_list_store_remove (toplevel_list, i);
+          break;
+        }
+      else
+        g_object_unref (item);
+    }
+
+  gtk_widget_unrealize (GTK_WIDGET (window));
+
+  g_object_unref (window);
 }
