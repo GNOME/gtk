@@ -271,10 +271,10 @@ do_constraints (GtkWidget *do_widget)
      grid = g_object_new (simple_grid_get_type (), NULL);
      gtk_widget_set_hexpand (grid, TRUE);
      gtk_widget_set_vexpand (grid, TRUE);
-     gtk_container_add (GTK_CONTAINER (box), grid);
+     gtk_box_append (GTK_BOX (box), grid);
 
      button = gtk_button_new_with_label ("Close");
-     gtk_container_add (GTK_CONTAINER (box), button);
+     gtk_box_append (GTK_BOX (box), button);
      gtk_widget_set_hexpand (grid, TRUE);
      g_signal_connect_swapped (button, "clicked",
                                G_CALLBACK (gtk_window_destroy), window);

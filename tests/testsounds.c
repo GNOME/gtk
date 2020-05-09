@@ -53,11 +53,11 @@ int main (int argc, char *argv[])
 
   button = gtk_button_new_with_label ("Α");
   g_signal_connect (button, "clicked", G_CALLBACK (enter), NULL);
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_box_append (GTK_BOX (box), button);
 
   button = gtk_button_new_with_label ("Ω");
   g_signal_connect (button, "clicked", G_CALLBACK (leave), NULL);
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_box_append (GTK_BOX (box), button);
 
   gtk_window_present (GTK_WINDOW (window));
 

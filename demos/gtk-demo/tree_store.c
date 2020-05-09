@@ -403,7 +403,7 @@ do_tree_store (GtkWidget *do_widget)
       gtk_widget_set_margin_bottom (vbox, 8);
       gtk_window_set_child (GTK_WINDOW (window), vbox);
 
-      gtk_container_add (GTK_CONTAINER (vbox),
+      gtk_box_append (GTK_BOX (vbox),
                           gtk_label_new ("Jonathan's Holiday Card Planning Sheet"));
 
       sw = gtk_scrolled_window_new (NULL, NULL);
@@ -411,7 +411,7 @@ do_tree_store (GtkWidget *do_widget)
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                       GTK_POLICY_AUTOMATIC,
                                       GTK_POLICY_AUTOMATIC);
-      gtk_container_add (GTK_CONTAINER (vbox), sw);
+      gtk_box_append (GTK_BOX (vbox), sw);
 
       /* create model */
       model = create_model ();

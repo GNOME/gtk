@@ -341,15 +341,15 @@ create_custom_widget (GtkPrintOperation *operation,
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
-  gtk_container_add (GTK_CONTAINER (vbox), hbox);
+  gtk_box_append (GTK_BOX (vbox), hbox);
   gtk_widget_show (hbox);
 
   label = gtk_label_new ("Font:");
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_box_append (GTK_BOX (hbox), label);
   gtk_widget_show (label);
 
   font = gtk_font_button_new_with_font  (data->font);
-  gtk_container_add (GTK_CONTAINER (hbox), font);
+  gtk_box_append (GTK_BOX (hbox), font);
   gtk_widget_show (font);
   data->font_button = font;
 
@@ -748,7 +748,7 @@ activate (GApplication *app)
   update_title (GTK_WINDOW (main_window));
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (main_window), box);
+  gtk_box_append (GTK_BOX (main_window), box);
 
   /* Create document  */
   sw = gtk_scrolled_window_new (NULL, NULL);
@@ -760,7 +760,7 @@ activate (GApplication *app)
   gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (sw), TRUE);
 
   gtk_widget_set_vexpand (sw, TRUE);
-  gtk_container_add (GTK_CONTAINER (box), sw);
+  gtk_box_append (GTK_BOX (box), sw);
 
   contents = gtk_text_view_new ();
   gtk_widget_grab_focus (contents);
@@ -770,7 +770,7 @@ activate (GApplication *app)
 
   /* Create statusbar */
   statusbar = gtk_statusbar_new ();
-  gtk_container_add (GTK_CONTAINER (box), statusbar);
+  gtk_box_append (GTK_BOX (box), statusbar);
 
   /* Show text widget info in the statusbar */
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (contents));

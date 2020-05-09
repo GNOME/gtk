@@ -5830,7 +5830,7 @@ gtk_window_do_popup_fallback (GtkWindow *window,
     gtk_widget_set_sensitive (menuitem, FALSE);
   g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (restore_window_clicked), window);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
+  gtk_box_append (GTK_BOX (box), menuitem);
 
   menuitem = gtk_model_button_new ();
   g_object_set (menuitem, "text", _("Move"), NULL);
@@ -5839,7 +5839,7 @@ gtk_window_do_popup_fallback (GtkWindow *window,
     gtk_widget_set_sensitive (menuitem, FALSE);
   g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (move_window_clicked), window);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
+  gtk_box_append (GTK_BOX (box), menuitem);
 
   menuitem = gtk_model_button_new ();
   g_object_set (menuitem, "text", _("Resize"), NULL);
@@ -5848,7 +5848,7 @@ gtk_window_do_popup_fallback (GtkWindow *window,
     gtk_widget_set_sensitive (menuitem, FALSE);
   g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (resize_window_clicked), window);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
+  gtk_box_append (GTK_BOX (box), menuitem);
 
   menuitem = gtk_model_button_new ();
   g_object_set (menuitem, "text", _("Minimize"), NULL);
@@ -5857,7 +5857,7 @@ gtk_window_do_popup_fallback (GtkWindow *window,
     gtk_widget_set_sensitive (menuitem, FALSE);
   g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (minimize_window_clicked), window);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
+  gtk_box_append (GTK_BOX (box), menuitem);
 
   menuitem = gtk_model_button_new ();
   g_object_set (menuitem, "text", _("Maximize"), NULL);
@@ -5866,10 +5866,10 @@ gtk_window_do_popup_fallback (GtkWindow *window,
     gtk_widget_set_sensitive (menuitem, FALSE);
   g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (maximize_window_clicked), window);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
+  gtk_box_append (GTK_BOX (box), menuitem);
 
   menuitem = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
+  gtk_box_append (GTK_BOX (box), menuitem);
 
   menuitem = gtk_model_button_new ();
   g_object_set (menuitem,
@@ -5881,10 +5881,10 @@ gtk_window_do_popup_fallback (GtkWindow *window,
     gtk_widget_set_sensitive (menuitem, FALSE);
   g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (ontop_window_clicked), window);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
+  gtk_box_append (GTK_BOX (box), menuitem);
 
   menuitem = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
+  gtk_box_append (GTK_BOX (box), menuitem);
 
   menuitem = gtk_model_button_new ();
   g_object_set (menuitem, "text", _("Close"), NULL);
@@ -5893,7 +5893,7 @@ gtk_window_do_popup_fallback (GtkWindow *window,
     gtk_widget_set_sensitive (menuitem, FALSE);
   g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (close_window_clicked), window);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
+  gtk_box_append (GTK_BOX (box), menuitem);
 
   g_signal_connect (priv->popup_menu, "closed",
                     G_CALLBACK (popup_menu_closed), window);
@@ -7459,7 +7459,7 @@ gtk_window_set_debugging (GdkDisplay *display,
           check = gtk_check_button_new_with_label (_("Don’t show this message again"));
           gtk_widget_set_margin_start (check, 10);
           gtk_widget_show (check);
-          gtk_container_add (GTK_CONTAINER (area), check);
+          gtk_box_append (GTK_BOX (area), check);
           g_object_set_data (G_OBJECT (dialog), "check", check);
           gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Cancel"), GTK_RESPONSE_NO);
           gtk_dialog_add_button (GTK_DIALOG (dialog), _("_OK"), GTK_RESPONSE_YES);

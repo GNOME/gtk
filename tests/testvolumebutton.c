@@ -96,12 +96,12 @@ main (int    argc,
                     NULL);
 
   gtk_window_set_child (GTK_WINDOW (window), vbox);
-  gtk_container_add (GTK_CONTAINER (vbox), box);
-  gtk_container_add (GTK_CONTAINER (box), button);
-  gtk_container_add (GTK_CONTAINER (box), button2);
+  gtk_box_append (GTK_BOX (vbox), box);
+  gtk_box_append (GTK_BOX (box), button);
+  gtk_box_append (GTK_BOX (box), button2);
 
   button3 = gtk_button_new_with_label ("Toggle orientation");
-  gtk_container_add (GTK_CONTAINER (box), button3);
+  gtk_box_append (GTK_BOX (box), button3);
 
   g_signal_connect (G_OBJECT (button3), "clicked",
                     G_CALLBACK (toggle_orientation),

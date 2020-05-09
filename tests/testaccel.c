@@ -75,7 +75,7 @@ key_test (void)
         box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
         gtk_widget_show (box);
         gtk_window_set_child (GTK_WINDOW (window), box);
-        gtk_container_add (GTK_CONTAINER (box), sw);
+        gtk_box_append (GTK_BOX (box), sw);
 
 	store = gtk_list_store_new (3, G_TYPE_INT, G_TYPE_UINT, G_TYPE_UINT);
 	tv = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
@@ -112,7 +112,7 @@ key_test (void)
 
         entry = gtk_entry_new ();
         gtk_widget_show (entry);
-        gtk_container_add (GTK_CONTAINER (box), entry);
+        gtk_box_append (GTK_BOX (box), entry);
  
 	return window;
 }

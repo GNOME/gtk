@@ -27,7 +27,7 @@ edit_widget (GtkWidget *button)
                     "row-spacing", 10,
                     "column-spacing", 10,
                     NULL);
-      gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), grid);
+      gtk_box_append (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), grid);
 
       label = gtk_label_new ("Label:");
       gtk_widget_set_halign (label, GTK_ALIGN_END);
@@ -92,14 +92,14 @@ main (int argc, char *argv[])
   gtk_window_set_child (GTK_WINDOW (window), vbox);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (box), test_widget ("1"));
-  gtk_container_add (GTK_CONTAINER (box), test_widget ("2"));
-  gtk_container_add (GTK_CONTAINER (box), test_widget ("3"));
-  gtk_container_add (GTK_CONTAINER (box), test_widget ("4"));
-  gtk_container_add (GTK_CONTAINER (box), test_widget ("5"));
-  gtk_container_add (GTK_CONTAINER (box), test_widget ("6"));
+  gtk_box_append (GTK_BOX (box), test_widget ("1"));
+  gtk_box_append (GTK_BOX (box), test_widget ("2"));
+  gtk_box_append (GTK_BOX (box), test_widget ("3"));
+  gtk_box_append (GTK_BOX (box), test_widget ("4"));
+  gtk_box_append (GTK_BOX (box), test_widget ("5"));
+  gtk_box_append (GTK_BOX (box), test_widget ("6"));
 
-  gtk_container_add (GTK_CONTAINER (vbox), box);
+  gtk_box_append (GTK_BOX (vbox), box);
 
   check = gtk_check_button_new_with_label ("Homogeneous");
   g_object_bind_property (box, "homogeneous",
@@ -111,7 +111,7 @@ main (int argc, char *argv[])
   gtk_widget_set_margin_bottom (check, 10);
   gtk_widget_set_halign (check, GTK_ALIGN_CENTER);
   gtk_widget_show (check);
-  gtk_container_add (GTK_CONTAINER (vbox), check);
+  gtk_box_append (GTK_BOX (vbox), check);
 
   b = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_widget_set_margin_start (b, 10);
@@ -121,15 +121,15 @@ main (int argc, char *argv[])
   gtk_widget_set_halign (b, GTK_ALIGN_CENTER);
   label = gtk_label_new ("Spacing:");
   gtk_widget_set_halign (label, GTK_ALIGN_END);
-  gtk_container_add (GTK_CONTAINER (b), label);
+  gtk_box_append (GTK_BOX (b), label);
 
   spin = gtk_spin_button_new_with_range (0, 10, 1);
   gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin), TRUE);
   gtk_widget_set_halign (spin, GTK_ALIGN_START);
   g_signal_connect (spin, "value-changed",
                     G_CALLBACK (spacing_changed), box);
-  gtk_container_add (GTK_CONTAINER (b), spin);
-  gtk_container_add (GTK_CONTAINER (vbox), b);
+  gtk_box_append (GTK_BOX (b), spin);
+  gtk_box_append (GTK_BOX (vbox), b);
 
   gtk_widget_show (window);
 

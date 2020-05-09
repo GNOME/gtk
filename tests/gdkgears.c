@@ -65,7 +65,7 @@ create_axis_slider (GtkGears *gears,
     }
 
   label = gtk_label_new (text);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_box_append (GTK_BOX (box), label);
   gtk_widget_show (label);
 
   adj = gtk_adjustment_new (gtk_gears_get_axis (gears, axis), 0.0, 360.0, 1.0, 12.0, 0.0);
@@ -75,7 +75,7 @@ create_axis_slider (GtkGears *gears,
                     gears);
   slider = gtk_scale_new (GTK_ORIENTATION_VERTICAL, adj);
   gtk_scale_set_draw_value (GTK_SCALE (slider), FALSE);
-  gtk_container_add (GTK_CONTAINER (box), slider);
+  gtk_box_append (GTK_BOX (box), slider);
   gtk_widget_set_vexpand (slider, TRUE);
   gtk_widget_show (slider);
 
@@ -87,24 +87,22 @@ create_axis_slider (GtkGears *gears,
 static void
 moar_gears (GtkButton *button, gpointer data)
 {
-  GtkContainer *container = GTK_CONTAINER (data);
   GtkWidget *gears;
 
   gears = gtk_gears_new ();
   gtk_widget_set_size_request (gears, 100, 100);
-  gtk_container_add (container, gears);
+  gtk_box_append (GTK_BOX (data), gears);
   gtk_widget_show (gears);
 }
 
 static void
 less_gears (GtkButton *button, gpointer data)
 {
-  GtkContainer *container = GTK_CONTAINER (data);
   GtkWidget *gears;
 
-  gears = gtk_widget_get_last_child (GTK_WIDGET (container));
+  gears = gtk_widget_get_last_child (GTK_WIDGET (data));
   if (gears)
-    gtk_container_remove (container, gears);
+    gtk_box_remove (GTK_BOX (data), gears);
 }
 
 static void
@@ -161,7 +159,7 @@ main (int argc, char *argv[])
   gtk_widget_show (hbox);
 
   label = gtk_label_new ("This is a transparent overlay widget!!!!\nAmazing, eh?");
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_box_append (GTK_BOX (hbox), label);
   gtk_widget_show (label);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE);
@@ -171,27 +169,27 @@ main (int argc, char *argv[])
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE);
   gtk_box_set_spacing (GTK_BOX (box), 6);
-  gtk_container_add (GTK_CONTAINER (box), hbox);
+  gtk_box_append (GTK_BOX (box), hbox);
   gtk_widget_show (hbox);
 
   gears = gtk_gears_new ();
   gtk_widget_set_hexpand (gears, TRUE);
   gtk_widget_set_vexpand (gears, TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox), gears);
+  gtk_box_append (GTK_BOX (hbox), gears);
   gtk_widget_show (gears);
 
   for (i = 0; i < GTK_GEARS_N_AXIS; i++)
-    gtk_container_add (GTK_CONTAINER (hbox), create_axis_slider (GTK_GEARS (gears), i));
+    gtk_box_append (GTK_BOX (hbox), create_axis_slider (GTK_GEARS (gears), i));
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE);
   gtk_box_set_spacing (GTK_BOX (hbox), 6);
-  gtk_container_add (GTK_CONTAINER (box), hbox);
+  gtk_box_append (GTK_BOX (box), hbox);
   gtk_widget_show (hbox);
 
   fps_label = gtk_label_new ("");
   gtk_widget_set_hexpand (fps_label, TRUE);
   gtk_widget_set_halign (fps_label, GTK_ALIGN_START);
-  gtk_container_add (GTK_CONTAINER (hbox), fps_label);
+  gtk_box_append (GTK_BOX (hbox), fps_label);
   gtk_gears_set_fps_label (GTK_GEARS (gears), GTK_LABEL (fps_label));
 
 
@@ -202,10 +200,10 @@ main (int argc, char *argv[])
   gtk_popover_set_child (GTK_POPOVER (popover), label);
 
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), popover);
-  gtk_container_add (GTK_CONTAINER (hbox), button);
+  gtk_box_append (GTK_BOX (hbox), button);
 
   check = gtk_check_button_new_with_label ("Overlay");
-  gtk_container_add (GTK_CONTAINER (hbox), check);
+  gtk_box_append (GTK_BOX (hbox), check);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), FALSE);
   g_signal_connect (check, "toggled",
                     G_CALLBACK (toggle_overlay), revealer);
@@ -213,12 +211,12 @@ main (int argc, char *argv[])
 
 
   check = gtk_check_button_new_with_label ("Animate spinner");
-  gtk_container_add (GTK_CONTAINER (hbox), check);
+  gtk_box_append (GTK_BOX (hbox), check);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
 
 
   spinner = gtk_spinner_new ();
-  gtk_container_add (GTK_CONTAINER (hbox), spinner);
+  gtk_box_append (GTK_BOX (hbox), spinner);
   gtk_spinner_start (GTK_SPINNER (spinner));
   g_signal_connect (check, "toggled",
                     G_CALLBACK (toggle_spin), spinner);
@@ -228,7 +226,7 @@ main (int argc, char *argv[])
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
                                   GTK_POLICY_AUTOMATIC,
                                   GTK_POLICY_NEVER);
-  gtk_container_add (GTK_CONTAINER (box), scrolled);
+  gtk_box_append (GTK_BOX (box), scrolled);
   gtk_widget_show (scrolled);
 
   extra_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE);
@@ -238,22 +236,22 @@ main (int argc, char *argv[])
 
   bbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_set_spacing (GTK_BOX (bbox), 6);
-  gtk_container_add (GTK_CONTAINER (box), bbox);
+  gtk_box_append (GTK_BOX (box), bbox);
   gtk_widget_show (bbox);
 
   button = gtk_button_new_with_label ("Moar gears!");
-  gtk_container_add (GTK_CONTAINER (bbox), button);
+  gtk_box_append (GTK_BOX (bbox), button);
   g_signal_connect (button, "clicked", G_CALLBACK (moar_gears), extra_hbox);
   gtk_widget_show (button);
 
   button = gtk_button_new_with_label ("Less gears!");
-  gtk_container_add (GTK_CONTAINER (bbox), button);
+  gtk_box_append (GTK_BOX (bbox), button);
   g_signal_connect (button, "clicked", G_CALLBACK (less_gears), extra_hbox);
   gtk_widget_show (button);
 
   button = gtk_button_new_with_label ("Quit");
   gtk_widget_set_hexpand (button, TRUE);
-  gtk_container_add (GTK_CONTAINER (bbox), button);
+  gtk_box_append (GTK_BOX (bbox), button);
   g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_window_destroy), window);
   gtk_widget_show (button);
 

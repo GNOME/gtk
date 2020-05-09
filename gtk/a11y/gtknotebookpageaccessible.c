@@ -36,31 +36,25 @@ G_DEFINE_TYPE_WITH_CODE (GtkNotebookPageAccessible, gtk_notebook_page_accessible
 
 
 static GtkWidget *
-find_label_child (GtkContainer *container)
+find_label_child (GtkWidget *widget)
 {
-  GList *children, *tmp_list;
   GtkWidget *child;
 
-  children = gtk_container_get_children (container);
-
-  child = NULL;
-  for (tmp_list = children; tmp_list != NULL; tmp_list = tmp_list->next)
+  for (child = gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
     {
-      if (GTK_IS_LABEL (tmp_list->data))
+      if (GTK_IS_LABEL (child))
+        return child;
+      else
         {
-          child = GTK_WIDGET (tmp_list->data);
-          break;
-        }
-      else if (GTK_IS_CONTAINER (tmp_list->data))
-        {
-          child = find_label_child (GTK_CONTAINER (tmp_list->data));
-          if (child)
-            break;
+          GtkWidget *w = find_label_child (child);
+          if (w)
+            return w;
         }
     }
-  g_list_free (children);
 
-  return child;
+  return NULL;
 }
 
 static GtkWidget *
@@ -81,10 +75,7 @@ get_label_from_notebook_page (GtkNotebookPageAccessible *page)
   if (GTK_IS_LABEL (child))
     return child;
 
-  if (GTK_IS_CONTAINER (child))
-    child = find_label_child (GTK_CONTAINER (child));
-
-  return child;
+  return find_label_child (child);
 }
 
 static const gchar *

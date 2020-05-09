@@ -98,7 +98,7 @@ remove_child (STATE *state,
         child = gtk_widget_get_parent (child);
     }
 
-  gtk_container_remove (GTK_CONTAINER (state->widget), child);
+  gtk_box_remove (GTK_BOX (state->widget), child);
 }
 
 static void
@@ -170,7 +170,7 @@ test_add_remove (GtkWidget *widget)
           child_accessible = gtk_widget_get_accessible (state.child[i]);
           g_signal_connect (child_accessible, "notify::accessible-parent",
                             G_CALLBACK (parent_notify), &(parent_data[i]));
-          gtk_container_add (GTK_CONTAINER (widget), state.child[i]);
+          gtk_box_append (GTK_BOX (widget), state.child[i]);
         }
       else
         child_accessible = atk_object_ref_accessible_child (accessible, i);

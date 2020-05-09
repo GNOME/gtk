@@ -275,10 +275,10 @@ int main (int argc, char *argv[])
   gtk_window_set_child (GTK_WINDOW (window), box);
 
   box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (box), box2);
+  gtk_box_append (GTK_BOX (box), box2);
 
   canvas = canvas_new ();
-  gtk_container_add (GTK_CONTAINER (box2), canvas);
+  gtk_box_append (GTK_BOX (box2), canvas);
 
   x = y = 40;
   for (i = 0; i < 4; i++)
@@ -286,7 +286,7 @@ int main (int argc, char *argv[])
       GtkWidget *item;
 
       item = canvas_item_new (i, x, y, 0);
-      gtk_container_add (GTK_CONTAINER (canvas), item);
+      gtk_box_append (GTK_BOX (canvas), item);
       apply_transform (item);
 
       x += 150;
@@ -297,7 +297,7 @@ int main (int argc, char *argv[])
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_AUTOMATIC,
                                   GTK_POLICY_NEVER);
-  gtk_container_add (GTK_CONTAINER (box), sw);
+  gtk_box_append (GTK_BOX (box), sw);
 
   box3 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_add_css_class (box3, "linked");
@@ -314,7 +314,7 @@ int main (int argc, char *argv[])
                              "rgba", &rgba,
                              "selectable", FALSE,
                              NULL);
-      gtk_container_add (GTK_CONTAINER (box3), swatch);
+      gtk_box_append (GTK_BOX (box3), swatch);
     }
 
   gtk_widget_show (window);

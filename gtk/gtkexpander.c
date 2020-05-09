@@ -27,10 +27,10 @@
  * A #GtkExpander allows the user to hide or show its child by clicking
  * on an expander triangle similar to the triangles used in a #GtkTreeView.
  *
- * Normally you use an expander as you would use a descendant
- * of #GtkBin; you create the child widget and use gtk_container_add()
- * to add it to the expander. When the expander is toggled, it will take
- * care of showing and hiding the child automatically.
+ * Normally you use an expander as you would use a frame; you create
+ * the child widget and use gtk_expander_set_child() to add it to the
+ * expander. When the expander is toggled, it will take care of showing
+ * and hiding the child automatically.
  *
  * # Special Usage
  *
@@ -400,13 +400,13 @@ gtk_expander_init (GtkExpander *expander)
   gtk_widget_set_parent (expander->box, GTK_WIDGET (expander));
 
   expander->title_widget = g_object_new (GTK_TYPE_BOX,
-                                     "css-name", "title",
-                                     NULL);
-  gtk_container_add (GTK_CONTAINER (expander->box), expander->title_widget);
+                                         "css-name", "title",
+                                         NULL);
+  gtk_box_append (GTK_BOX (expander->box), expander->title_widget);
 
   expander->arrow_widget = gtk_builtin_icon_new ("expander");
   gtk_widget_add_css_class (expander->arrow_widget, GTK_STYLE_CLASS_HORIZONTAL);
-  gtk_container_add (GTK_CONTAINER (expander->title_widget), expander->arrow_widget);
+  gtk_box_append (GTK_BOX (expander->title_widget), expander->arrow_widget);
 
   controller = gtk_drop_controller_motion_new ();
   g_signal_connect (controller, "enter", G_CALLBACK (gtk_expander_drag_enter), expander);
@@ -869,13 +869,13 @@ gtk_expander_set_expanded (GtkExpander *expander,
     {
       if (expander->expanded)
         {
-          gtk_container_add (GTK_CONTAINER (expander->box), child);
+          gtk_box_append (GTK_BOX (expander->box), child);
           g_object_unref (expander->child);
         }
       else
         {
           g_object_ref (expander->child);
-          gtk_container_remove (GTK_CONTAINER (expander->box), child);
+          gtk_box_remove (GTK_BOX (expander->box), child);
         }
       gtk_expander_resize_toplevel (expander);
     }
@@ -1079,9 +1079,7 @@ gtk_expander_set_label_widget (GtkExpander *expander,
     return;
 
   if (expander->label_widget)
-    {
-      gtk_container_remove (GTK_CONTAINER (expander->title_widget), expander->label_widget);
-    }
+    gtk_box_remove (GTK_BOX (expander->title_widget), expander->label_widget);
 
   expander->label_widget = label_widget;
   widget = GTK_WIDGET (expander);
@@ -1090,7 +1088,7 @@ gtk_expander_set_label_widget (GtkExpander *expander,
     {
       expander->label_widget = label_widget;
 
-      gtk_container_add (GTK_CONTAINER (expander->title_widget), label_widget);
+      gtk_box_append (GTK_BOX (expander->title_widget), label_widget);
     }
 
   if (gtk_widget_get_visible (widget))
@@ -1174,7 +1172,7 @@ gtk_expander_set_child (GtkExpander *expander,
 
   if (expander->child)
     {
-      gtk_container_remove (GTK_CONTAINER (expander->box), expander->child);
+      gtk_box_remove (GTK_BOX (expander->box), expander->child);
       if (!expander->expanded)
         g_object_unref (expander->child);
     }
@@ -1184,7 +1182,7 @@ gtk_expander_set_child (GtkExpander *expander,
   if (expander->child)
     {
       if (expander->expanded)
-        gtk_container_add (GTK_CONTAINER (expander->box), expander->child);
+        gtk_box_append (GTK_BOX (expander->box), expander->child);
       else
         {
           if (g_object_is_floating (expander->child))

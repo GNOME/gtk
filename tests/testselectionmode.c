@@ -30,15 +30,15 @@ selectable_row_init (SelectableRow *row)
   gtk_widget_show (row->box);
   gtk_widget_show (row->check);
 
-  gtk_container_add (GTK_CONTAINER (row), row->box);
-  gtk_container_add (GTK_CONTAINER (row->box), row->revealer);
-  gtk_container_add (GTK_CONTAINER (row->revealer), row->check);
+  gtk_box_append (GTK_BOX (row), row->box);
+  gtk_box_append (GTK_BOX (row->box), row->revealer);
+  gtk_box_append (GTK_BOX (row->revealer), row->check);
 }
 
 static void
 selectable_row_add (SelectableRow *row, GtkWidget *child)
 {
-  gtk_container_add (GTK_CONTAINER (row->box), child);
+  gtk_box_append (GTK_BOX (row->box), child);
 }
 
 static void
