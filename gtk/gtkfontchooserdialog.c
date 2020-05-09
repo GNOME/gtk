@@ -48,7 +48,6 @@ struct _GtkFontChooserDialog
   GtkDialog parent_instance;
 
   GtkWidget *fontchooser;
-
   GtkWidget *select_button;
   GtkWidget *cancel_button;
   GtkWidget *tweak_button;
@@ -201,11 +200,48 @@ gtk_font_chooser_dialog_map (GtkWidget *widget)
 }
 
 static void
+update_button (GtkFontChooserDialog *dialog)
+{
+  PangoFontDescription *desc;
+
+  desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (dialog->fontchooser));
+
+  gtk_widget_set_sensitive (dialog->select_button, desc != NULL);
+
+  if (desc)
+    pango_font_description_free (desc);
+}
+
+static void
+gtk_font_chooser_dialog_dispose (GObject *object)
+{
+  GtkFontChooserDialog *dialog = GTK_FONT_CHOOSER_DIALOG (object);
+
+  if (dialog->fontchooser)
+    {
+      g_signal_handlers_disconnect_by_func (dialog->fontchooser,
+                                            update_button,
+                                            dialog);
+      g_signal_handlers_disconnect_by_func (dialog->fontchooser,
+                                            update_tweak_button,
+                                            dialog);
+    }
+
+  g_clear_pointer (&dialog->select_button, gtk_widget_unparent);
+  g_clear_pointer (&dialog->cancel_button, gtk_widget_unparent);
+  g_clear_pointer (&dialog->tweak_button, gtk_widget_unparent);
+  g_clear_pointer (&dialog->fontchooser, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (gtk_font_chooser_dialog_parent_class)->dispose (object);
+}
+
+static void
 gtk_font_chooser_dialog_class_init (GtkFontChooserDialogClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  gobject_class->dispose = gtk_font_chooser_dialog_dispose;
   gobject_class->get_property = gtk_font_chooser_dialog_get_property;
   gobject_class->set_property = gtk_font_chooser_dialog_set_property;
 
@@ -224,20 +260,6 @@ gtk_font_chooser_dialog_class_init (GtkFontChooserDialogClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, font_activated_cb);
   gtk_widget_class_bind_template_callback (widget_class, dialog_forward_key);
 }
-
-static void
-update_button (GtkFontChooserDialog *dialog)
-{
-  PangoFontDescription *desc;
-
-  desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (dialog->fontchooser));
-
-  gtk_widget_set_sensitive (dialog->select_button, desc != NULL);
-
-  if (desc)
-    pango_font_description_free (desc);
-}
-
 
 static void
 gtk_font_chooser_dialog_init (GtkFontChooserDialog *dialog)
