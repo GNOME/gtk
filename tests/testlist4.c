@@ -79,7 +79,7 @@ create_row (const gchar *text)
   row_content = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
 
   label = gtk_label_new (text);
-  gtk_container_add (GTK_CONTAINER (row_content), label);
+  gtk_box_append (GTK_BOX (row_content), label);
 
   return row_content;
 }

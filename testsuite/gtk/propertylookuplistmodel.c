@@ -115,7 +115,7 @@ create_widget_tree (void)
   gtk_window_set_child (GTK_WINDOW (window), box);
 
   grid = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (box), grid);
+  gtk_box_append (GTK_BOX (box), grid);
 
   label = gtk_label_new ("Hello World");
   gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
@@ -218,7 +218,7 @@ test_change_property (void)
   assert_model (model, "GtkLabel");
   assert_changes (model, "1-3");
 
-  gtk_container_add (GTK_CONTAINER (grandparent), widget);
+  gtk_box_append (GTK_BOX (grandparent), widget);
   assert_model (model, "GtkLabel GtkBox GtkWindow");
   assert_changes (model, "1+2");
 

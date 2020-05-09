@@ -78,15 +78,15 @@ main (int argc, char *argv[])
 
   button = gtk_button_new_with_label ("Fullscreen on current monitor");
   g_signal_connect (button, "clicked", G_CALLBACK (set_fullscreen_monitor_cb), GINT_TO_POINTER (GDK_FULLSCREEN_ON_CURRENT_MONITOR));
-  gtk_container_add (GTK_CONTAINER (vbox), button);
+  gtk_box_append (GTK_BOX (vbox), button);
 
   button = gtk_button_new_with_label ("Fullscreen on all monitors");
   g_signal_connect (button, "clicked", G_CALLBACK (set_fullscreen_monitor_cb), GINT_TO_POINTER (GDK_FULLSCREEN_ON_ALL_MONITORS));
-  gtk_container_add (GTK_CONTAINER (vbox), button);
+  gtk_box_append (GTK_BOX (vbox), button);
 
   button = gtk_button_new_with_label ("Un-fullscreen");
   g_signal_connect (button, "clicked", G_CALLBACK (remove_fullscreen_cb), NULL);
-  gtk_container_add (GTK_CONTAINER (vbox), button);
+  gtk_box_append (GTK_BOX (vbox), button);
 
   gtk_widget_show (window);
 

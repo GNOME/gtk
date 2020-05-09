@@ -131,27 +131,27 @@ tests_button_clicked_cb (GtkButton *real_button,
 				    GTK_WINDOW (gtk_widget_get_root (user_data)));
 
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (tests), box);
+      gtk_box_append (GTK_BOX (tests), box);
 
       button = gtk_button_new_with_label ("Print Selected Path");
       g_signal_connect (button, "clicked",
 			G_CALLBACK (print_selected_path_clicked_cb), user_data);
-      gtk_container_add (GTK_CONTAINER (box), button);
+      gtk_box_append (GTK_BOX (box), button);
 
       button = gtk_button_new_with_label ("Add $PWD's Parent as Shortcut");
       g_signal_connect (button, "clicked",
 			G_CALLBACK (add_pwds_parent_as_shortcut_clicked_cb), user_data);
-      gtk_container_add (GTK_CONTAINER (box), button);
+      gtk_box_append (GTK_BOX (box), button);
 
       button = gtk_button_new_with_label ("Remove $PWD's Parent as Shortcut");
       g_signal_connect (button, "clicked",
 			G_CALLBACK (del_pwds_parent_as_shortcut_clicked_cb), user_data);
-      gtk_container_add (GTK_CONTAINER (box), button);
+      gtk_box_append (GTK_BOX (box), button);
 
       button = gtk_button_new_with_label ("Unselect all");
       g_signal_connect (button, "clicked",
 			G_CALLBACK (unselect_all_clicked_cb), user_data);
-      gtk_container_add (GTK_CONTAINER (box), button);
+      gtk_box_append (GTK_BOX (box), button);
 
       g_object_set_data (user_data, "tests-dialog", tests);
     }
@@ -229,12 +229,12 @@ add_new_filechooser_button (const gchar          *mnemonic,
   GFile *path;
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  gtk_container_add (GTK_CONTAINER (group_box), hbox);
+  gtk_box_append (GTK_BOX (group_box), hbox);
 
   label = gtk_label_new_with_mnemonic (mnemonic);
   gtk_size_group_add_widget (GTK_SIZE_GROUP (label_group), label);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_box_append (GTK_BOX (hbox), label);
 
   chooser = gtk_file_chooser_button_new (g_strconcat(chooser_title,
                                                      " - testfilechooserbutton", NULL),
@@ -251,11 +251,11 @@ add_new_filechooser_button (const gchar          *mnemonic,
 		    G_CALLBACK (chooser_current_folder_changed_cb), NULL);
   g_signal_connect (chooser, "selection-changed", G_CALLBACK (chooser_selection_changed_cb), NULL);
   g_signal_connect (chooser, "file-activated", G_CALLBACK (chooser_file_activated_cb), NULL);
-  gtk_container_add (GTK_CONTAINER (hbox), chooser);
+  gtk_box_append (GTK_BOX (hbox), chooser);
 
   button = gtk_button_new_with_label ("Tests");
   g_signal_connect (button, "clicked", G_CALLBACK (tests_button_clicked_cb), chooser);
-  gtk_container_add (GTK_CONTAINER (hbox), button);
+  gtk_box_append (GTK_BOX (hbox), button);
 }
 
 static void
@@ -303,11 +303,11 @@ main (int   argc,
   gtk_widget_set_margin_end (vbox, 6);
   gtk_widget_set_margin_top (vbox, 6);
   gtk_widget_set_margin_bottom (vbox, 6);
-  gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (win))), vbox);
+  gtk_box_append (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (win))), vbox);
 
   frame = gtk_frame_new ("<b>GtkFileChooserButton</b>");
   gtk_label_set_use_markup (GTK_LABEL (gtk_frame_get_label_widget (GTK_FRAME (frame))), TRUE);
-  gtk_container_add (GTK_CONTAINER (vbox), frame);
+  gtk_box_append (GTK_BOX (vbox), frame);
 
   gtk_widget_set_halign (frame, GTK_ALIGN_FILL);
   gtk_widget_set_valign (frame, GTK_ALIGN_FILL);

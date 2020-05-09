@@ -63,7 +63,6 @@ static void
 update_header_cb (Row *row, Row *before, gpointer data)
 {
   GtkWidget *hbox, *l, *b;
-  GList *children;
 
   if (before == NULL ||
       (row->label != NULL &&
@@ -74,17 +73,15 @@ update_header_cb (Row *row, Row *before, gpointer data)
         {
           hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
           l = gtk_label_new ("Header");
-          gtk_container_add (GTK_CONTAINER (hbox), l);
+          gtk_box_append (GTK_BOX (hbox), l);
           b = gtk_button_new_with_label ("button");
-          gtk_container_add (GTK_CONTAINER (hbox), b);
+          gtk_box_append (GTK_BOX (hbox), b);
           gtk_list_box_row_set_header (GTK_LIST_BOX_ROW (row), hbox);
       }
 
       hbox = gtk_list_box_row_get_header(GTK_LIST_BOX_ROW (row));
 
-      children = gtk_container_get_children (GTK_CONTAINER (hbox));
-      l = children->data;
-      g_list_free (children);
+      l = gtk_widget_get_first_child (hbox);
       gtk_label_set_text (GTK_LABEL (l), g_strdup_printf ("Header %d", row->sort_id));
     }
   else
@@ -268,7 +265,7 @@ main (int argc, char *argv[])
   list = gtk_list_box_new ();
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (hbox), vbox);
+  gtk_box_append (GTK_BOX (hbox), vbox);
 
   combo = gtk_combo_box_text_new ();
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo),
@@ -278,17 +275,17 @@ main (int argc, char *argv[])
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo),
                                   "GTK_SELECTION_BROWSE");
   g_signal_connect (combo, "changed", G_CALLBACK (selection_mode_changed), list);
-  gtk_container_add (GTK_CONTAINER (vbox), combo);
+  gtk_box_append (GTK_BOX (vbox), combo);
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), gtk_list_box_get_selection_mode (GTK_LIST_BOX (list)));
   check = gtk_check_button_new_with_label ("single click mode");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), gtk_list_box_get_activate_on_single_click (GTK_LIST_BOX (list)));
   g_signal_connect (check, "toggled", G_CALLBACK (single_click_clicked), list);
-  gtk_container_add (GTK_CONTAINER (vbox), check);
+  gtk_box_append (GTK_BOX (vbox), check);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled), list);
-  gtk_container_add (GTK_CONTAINER (hbox), scrolled);
+  gtk_box_append (GTK_BOX (hbox), scrolled);
 
   g_signal_connect (list, "row-activated", G_CALLBACK (row_activated_cb), NULL);
   g_signal_connect (list, "row-selected", G_CALLBACK (row_selected_cb), NULL);
@@ -306,14 +303,14 @@ main (int argc, char *argv[])
   row_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   row_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   l = gtk_label_new ("da box for da man");
-  gtk_container_add (GTK_CONTAINER (row_hbox), l);
+  gtk_box_append (GTK_BOX (row_hbox), l);
   check = gtk_check_button_new ();
-  gtk_container_add (GTK_CONTAINER (row_hbox), check);
+  gtk_box_append (GTK_BOX (row_hbox), check);
   button = gtk_button_new_with_label ("ya!");
-  gtk_container_add (GTK_CONTAINER (row_hbox), button);
-  gtk_container_add (GTK_CONTAINER (row_vbox), row_hbox);
+  gtk_box_append (GTK_BOX (row_hbox), button);
+  gtk_box_append (GTK_BOX (row_vbox), row_hbox);
   check = gtk_check_button_new ();
-  gtk_container_add (GTK_CONTAINER (row_vbox), check);
+  gtk_box_append (GTK_BOX (row_vbox), check);
   gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), row_vbox);
   gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
 
@@ -325,42 +322,42 @@ main (int argc, char *argv[])
   gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (hbox), vbox);
+  gtk_box_append (GTK_BOX (hbox), vbox);
 
   button = gtk_button_new_with_label ("sort");
-  gtk_container_add (GTK_CONTAINER (vbox), button);
+  gtk_box_append (GTK_BOX (vbox), button);
   g_signal_connect (button, "clicked", G_CALLBACK (sort_clicked_cb), list);
 
   button = gtk_button_new_with_label ("reverse");
-  gtk_container_add (GTK_CONTAINER (vbox), button);
+  gtk_box_append (GTK_BOX (vbox), button);
   g_signal_connect (button, "clicked", G_CALLBACK (reverse_sort_clicked_cb), list);
 
   button = gtk_button_new_with_label ("change");
-  gtk_container_add (GTK_CONTAINER (vbox), button);
+  gtk_box_append (GTK_BOX (vbox), button);
   g_signal_connect (button, "clicked", G_CALLBACK (change_clicked_cb), row3);
 
   button = gtk_button_new_with_label ("filter");
-  gtk_container_add (GTK_CONTAINER (vbox), button);
+  gtk_box_append (GTK_BOX (vbox), button);
   g_signal_connect (button, "clicked", G_CALLBACK (filter_clicked_cb), list);
 
   button = gtk_button_new_with_label ("unfilter");
-  gtk_container_add (GTK_CONTAINER (vbox), button);
+  gtk_box_append (GTK_BOX (vbox), button);
   g_signal_connect (button, "clicked", G_CALLBACK (unfilter_clicked_cb), list);
 
   button = gtk_button_new_with_label ("add");
-  gtk_container_add (GTK_CONTAINER (vbox), button);
+  gtk_box_append (GTK_BOX (vbox), button);
   g_signal_connect (button, "clicked", G_CALLBACK (add_clicked_cb), list);
 
   button = gtk_button_new_with_label ("separate");
-  gtk_container_add (GTK_CONTAINER (vbox), button);
+  gtk_box_append (GTK_BOX (vbox), button);
   g_signal_connect (button, "clicked", G_CALLBACK (separate_clicked_cb), list);
 
   button = gtk_button_new_with_label ("unseparate");
-  gtk_container_add (GTK_CONTAINER (vbox), button);
+  gtk_box_append (GTK_BOX (vbox), button);
   g_signal_connect (button, "clicked", G_CALLBACK (unseparate_clicked_cb), list);
 
   button = gtk_button_new_with_label ("visibility");
-  gtk_container_add (GTK_CONTAINER (vbox), button);
+  gtk_box_append (GTK_BOX (vbox), button);
   g_signal_connect (button, "clicked", G_CALLBACK (visibility_clicked_cb), row3);
 
   gtk_widget_show (window);

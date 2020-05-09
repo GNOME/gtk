@@ -39,7 +39,7 @@ on_activate (GApplication *app,
       revealer = gtk_revealer_new ();
       gtk_revealer_set_transition_type (GTK_REVEALER (revealer),
                                         GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT);
-      gtk_container_add (GTK_CONTAINER (hbox), revealer);
+      gtk_box_append (GTK_BOX (hbox), revealer);
 
       sidebar = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_widget_set_size_request (sidebar, 150, -1);
@@ -53,7 +53,7 @@ on_activate (GApplication *app,
                          "halign", GTK_ALIGN_CENTER,
                          "valign", GTK_ALIGN_CENTER,
                          NULL);
-      gtk_container_add (GTK_CONTAINER (hbox), img);
+      gtk_box_append (GTK_BOX (hbox), img);
 
       g_object_bind_property (sidebar_toggle, "active",
                               revealer, "reveal-child",

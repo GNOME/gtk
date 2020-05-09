@@ -153,14 +153,14 @@ open_control_window (void)
   g_signal_connect (G_OBJECT (toggle),
                     "toggled", G_CALLBACK (on_set_small_size_requests),
                     NULL);
-  gtk_container_add (GTK_CONTAINER (box), toggle);
+  gtk_box_append (GTK_BOX (box), toggle);
 
   toggle =
     gtk_toggle_button_new_with_label ("Set large size requests");
   g_signal_connect (G_OBJECT (toggle),
                     "toggled", G_CALLBACK (on_set_large_size_requests),
                     NULL);
-  gtk_container_add (GTK_CONTAINER (box), toggle);
+  gtk_box_append (GTK_BOX (box), toggle);
 
 
   gtk_widget_show (window);
@@ -182,16 +182,16 @@ create_widget_visible_border (const char *text)
   inner_box = gtk_overlay_new ();
   gtk_widget_add_css_class (inner_box, "blue-bg");
 
-  gtk_container_add (GTK_CONTAINER (outer_box), inner_box);
+  gtk_box_append (GTK_BOX (outer_box), inner_box);
 
 
   test_widget = gtk_overlay_new ();
   gtk_widget_add_css_class (test_widget, "red-bg");
 
-  gtk_container_add (GTK_CONTAINER (inner_box), test_widget);
+  gtk_box_append (GTK_BOX (inner_box), test_widget);
 
   label = gtk_label_new (text);
-  gtk_container_add (GTK_CONTAINER (test_widget), label);
+  gtk_box_append (GTK_BOX (test_widget), label);
 
   g_assert (TEST_WIDGET (outer_box) == test_widget);
 
@@ -315,7 +315,7 @@ open_margin_window (void)
       GtkWidget *child =
         create_margined(margins[i]);
 
-      gtk_container_add (GTK_CONTAINER (box), child);
+      gtk_box_append (GTK_BOX (box), child);
     }
 
   gtk_widget_show (test_window);
@@ -334,7 +334,7 @@ open_valigned_label_window (void)
   gtk_window_set_child (GTK_WINDOW (window), box);
 
   label = gtk_label_new ("Both labels expand");
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_box_append (GTK_BOX (box), label);
 
   label = gtk_label_new ("Some wrapping text with width-chars = 15 and max-width-chars = 35");
   gtk_label_set_wrap  (GTK_LABEL (label), TRUE);
@@ -347,7 +347,7 @@ open_valigned_label_window (void)
   gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
   gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
 
-  gtk_container_add (GTK_CONTAINER (box), frame);
+  gtk_box_append (GTK_BOX (box), frame);
 
   gtk_window_present (GTK_WINDOW (window));
 }

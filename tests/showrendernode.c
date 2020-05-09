@@ -216,8 +216,8 @@ main (int argc, char **argv)
                                    gdk_texture_get_width (texture),
                                    gdk_texture_get_height (texture));
 
-      gtk_container_add (GTK_CONTAINER (box), nodeview);
-      gtk_container_add (GTK_CONTAINER (box), image);
+      gtk_box_append (GTK_BOX (box), nodeview);
+      gtk_box_append (GTK_BOX (box), image);
       gtk_window_set_child (GTK_WINDOW (window), box);
 
       gsk_renderer_unrealize (renderer);

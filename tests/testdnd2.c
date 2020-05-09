@@ -180,13 +180,13 @@ ask_actions (GdkDrop *drop,
       gtk_popover_set_child (GTK_POPOVER (popover), box);
       button = gtk_button_new_with_label ("Copy");
       g_signal_connect (button, "clicked", G_CALLBACK (do_copy), NULL);
-      gtk_container_add (GTK_CONTAINER (box), button);
+      gtk_box_append (GTK_BOX (box), button);
       button = gtk_button_new_with_label ("Move");
       g_signal_connect (button, "clicked", G_CALLBACK (do_copy), NULL);
-      gtk_container_add (GTK_CONTAINER (box), button);
+      gtk_box_append (GTK_BOX (box), button);
       button = gtk_button_new_with_label ("Cancel");
       g_signal_connect (button, "clicked", G_CALLBACK (do_cancel), NULL);
-      gtk_container_add (GTK_CONTAINER (box), button);
+      gtk_box_append (GTK_BOX (box), button);
     }
   gtk_popover_popup (GTK_POPOVER (popover));
 }

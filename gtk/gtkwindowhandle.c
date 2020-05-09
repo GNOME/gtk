@@ -243,44 +243,44 @@ do_popup_fallback (GtkWindowHandle *self,
   gtk_widget_set_sensitive (menuitem, maximized && resizable);
   g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (restore_window_clicked), self);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
+  gtk_box_append (GTK_BOX (box), menuitem);
 
   menuitem = gtk_model_button_new ();
   g_object_set (menuitem, "text", _("Move"), NULL);
   gtk_widget_set_sensitive (menuitem, !maximized);
   g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (move_window_clicked), self);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
+  gtk_box_append (GTK_BOX (box), menuitem);
 
   menuitem = gtk_model_button_new ();
   g_object_set (menuitem, "text", _("Resize"), NULL);
   gtk_widget_set_sensitive (menuitem, resizable && !maximized);
   g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (resize_window_clicked), self);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
+  gtk_box_append (GTK_BOX (box), menuitem);
 
   menuitem = gtk_model_button_new ();
   g_object_set (menuitem, "text", _("Minimize"), NULL);
   g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (minimize_window_clicked), self);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
+  gtk_box_append (GTK_BOX (box), menuitem);
 
   menuitem = gtk_model_button_new ();
   g_object_set (menuitem, "text", _("Maximize"), NULL);
   gtk_widget_set_sensitive (menuitem, resizable && !maximized);
   g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (maximize_window_clicked), self);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
+  gtk_box_append (GTK_BOX (box), menuitem);
 
   menuitem = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
+  gtk_box_append (GTK_BOX (box), menuitem);
 
   menuitem = gtk_model_button_new ();
   g_object_set (menuitem, "text", _("Close"), NULL);
   gtk_widget_set_sensitive (menuitem, deletable);
   g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (close_window_clicked), self);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
+  gtk_box_append (GTK_BOX (box), menuitem);
 
   g_signal_connect (self->fallback_menu, "closed",
                     G_CALLBACK (popup_menu_closed), self);

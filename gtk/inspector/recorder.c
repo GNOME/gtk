@@ -316,7 +316,7 @@ create_widget_for_render_node (gpointer row_item,
     {
       child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_widget_set_size_request (child, 16 * depth, 0);
-      gtk_container_add (GTK_CONTAINER (box), child);
+      gtk_box_append (GTK_BOX (box), child);
     }
   if (gtk_tree_list_row_is_expandable (row_item))
     {
@@ -327,7 +327,7 @@ create_widget_for_render_node (gpointer row_item,
       title = g_object_new (GTK_TYPE_TOGGLE_BUTTON, "css-name", "title", NULL);
       gtk_button_set_has_frame (GTK_BUTTON (title), FALSE);
       g_object_bind_property (row_item, "expanded", title, "active", G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-      gtk_container_add (GTK_CONTAINER (child), title);
+      gtk_box_append (GTK_BOX (child), title);
       g_object_set_data_full (G_OBJECT (row), "make-sure-its-not-unreffed", g_object_ref (row_item), g_object_unref);
 
       arrow = gtk_builtin_icon_new ("expander");
@@ -337,17 +337,17 @@ create_widget_for_render_node (gpointer row_item,
     {
       child = gtk_image_new (); /* empty whatever */
     }
-  gtk_container_add (GTK_CONTAINER (box), child);
+  gtk_box_append (GTK_BOX (box), child);
 
   /* icon */
   child = gtk_image_new_from_paintable (paintable);
-  gtk_container_add (GTK_CONTAINER (box), child);
+  gtk_box_append (GTK_BOX (box), child);
 
   /* name */
   name = node_name (node);
   child = gtk_label_new (name);
   g_free (name);
-  gtk_container_add (GTK_CONTAINER (box), child);
+  gtk_box_append (GTK_BOX (box), child);
 
   g_object_unref (paintable);
 
@@ -1074,7 +1074,7 @@ gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
       widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-      gtk_container_add (GTK_CONTAINER (widget), hbox);
+      gtk_box_append (GTK_BOX (widget), hbox);
 
       for (i = 0; i < g_list_model_get_n_items (priv->recordings); i++)
         {
@@ -1115,17 +1115,17 @@ gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
       label = gtk_label_new (str);
       gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
       g_free (str);
-      gtk_container_add (GTK_CONTAINER (hbox), label);
+      gtk_box_append (GTK_BOX (hbox), label);
 
       button = gtk_toggle_button_new ();
       gtk_button_set_has_frame (GTK_BUTTON (button), FALSE);
       gtk_button_set_icon_name (GTK_BUTTON (button), "view-more-symbolic");
 
-      gtk_container_add (GTK_CONTAINER (hbox), button);
+      gtk_box_append (GTK_BOX (hbox), button);
 
       label = gtk_label_new (gtk_inspector_render_recording_get_profiler_info (GTK_INSPECTOR_RENDER_RECORDING (recording)));
       gtk_widget_hide (label);
-      gtk_container_add (GTK_CONTAINER (widget), label);
+      gtk_box_append (GTK_BOX (widget), label);
       g_object_bind_property (button, "active", label, "visible", 0);
     }
   else

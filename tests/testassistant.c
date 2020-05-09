@@ -61,8 +61,8 @@ add_completion_test_page (GtkWidget   *assistant,
   page = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   check = gtk_check_button_new_with_label ("Complete");
 
-  gtk_container_add (GTK_CONTAINER (page), gtk_label_new (text));
-  gtk_container_add (GTK_CONTAINER (page), check);
+  gtk_box_append (GTK_BOX (page), gtk_label_new (text));
+  gtk_box_append (GTK_BOX (page), check);
   
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), complete);
 
@@ -271,7 +271,7 @@ create_generous_assistant (GtkWidget *widget)
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
       g_signal_connect (G_OBJECT (check), "toggled", 
                         G_CALLBACK (visible_cb), next);
-      gtk_container_add (GTK_CONTAINER (page), check);
+      gtk_box_append (GTK_BOX (page), check);
       
       add_completion_test_page (assistant, "Even More Content", TRUE, TRUE);
 
@@ -369,13 +369,13 @@ create_nonlinear_assistant (GtkWidget *widget)
       page = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
 
       button = gtk_radio_button_new_with_label (NULL, "branch A");
-      gtk_container_add (GTK_CONTAINER (page), button);
+      gtk_box_append (GTK_BOX (page), button);
       g_signal_connect (G_OBJECT (button), "toggled", G_CALLBACK (select_branch), GINT_TO_POINTER ('A'));
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
 
       button = gtk_radio_button_new_with_label (gtk_radio_button_get_group (GTK_RADIO_BUTTON (button)),
 						"branch B");
-      gtk_container_add (GTK_CONTAINER (page), button);
+      gtk_box_append (GTK_BOX (page), button);
       g_signal_connect (G_OBJECT (button), "toggled", G_CALLBACK (select_branch), GINT_TO_POINTER ('B'));
 
       gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
@@ -624,7 +624,7 @@ create_page_flipping_assistant (GtkWidget *widget)
       gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
 
       page = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (page),
+      gtk_box_append (GTK_BOX (page),
                           get_test_page ("Page 2"));
       gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
       gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Page 2");
@@ -704,7 +704,7 @@ main (int argc, gchar *argv[])
 	g_signal_connect (G_OBJECT (button), "clicked",
 			  G_CALLBACK (buttons[i].func), NULL);
 
-      gtk_container_add (GTK_CONTAINER (box), button);
+      gtk_box_append (GTK_BOX (box), button);
     }
 
   gtk_widget_show (window);
