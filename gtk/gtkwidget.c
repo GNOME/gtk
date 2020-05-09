@@ -5824,7 +5824,8 @@ gtk_widget_reposition_after (GtkWidget *widget,
   /* keep this function in sync with gtk_menu_attach_to_widget()
    */
 
-  g_object_ref_sink (widget);
+  if (priv->parent == NULL)
+    g_object_ref_sink (widget);
 
   gtk_widget_push_verify_invariants (widget);
 
