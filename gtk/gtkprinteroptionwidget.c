@@ -512,7 +512,7 @@ dialog_response_callback (GtkDialog              *dialog,
       g_object_unref (new_location);
     }
 
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
 
   if (new_location)
     uri = g_file_get_uri (new_location);

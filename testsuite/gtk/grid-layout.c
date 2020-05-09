@@ -188,7 +188,7 @@ test_simple_row (void)
   gtk_widget_unparent (GTK_WIDGET (child2));
   gtk_widget_unparent (GTK_WIDGET (child3));
 
-  gtk_widget_destroy (parent);
+  gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /* same as the previous test, with a column
@@ -281,7 +281,7 @@ test_simple_column (void)
   gtk_widget_unparent (GTK_WIDGET (child2));
   gtk_widget_unparent (GTK_WIDGET (child3));
 
-  gtk_widget_destroy (parent);
+  gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /* Create a grid with spanning children
@@ -406,7 +406,7 @@ test_spans (void)
   gtk_widget_unparent (GTK_WIDGET (child3));
   gtk_widget_unparent (GTK_WIDGET (child4));
 
-  gtk_widget_destroy (parent);
+  gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /* Create a 2x2 homogeneous grid and verify
@@ -522,7 +522,7 @@ test_homogeneous (void)
   gtk_widget_unparent (GTK_WIDGET (child3));
   gtk_widget_unparent (GTK_WIDGET (child4));
 
-  gtk_widget_destroy (parent);
+  gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /* Create a layout with three children
@@ -634,7 +634,7 @@ test_simple_layout (void)
   gtk_widget_unparent (GTK_WIDGET (child2));
   gtk_widget_unparent (GTK_WIDGET (child3));
 
-  gtk_widget_destroy (parent);
+  gtk_window_destroy (GTK_WINDOW (window));
 }
 
 int

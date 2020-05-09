@@ -682,7 +682,7 @@ error_dialogs (GtkPrintUnixDialog *dialog,
 
                       response = gtk_dialog_run (GTK_DIALOG (message_dialog));
 
-                      gtk_widget_destroy (message_dialog);
+                      gtk_window_destroy (GTK_WINDOW (message_dialog));
 
                       g_free (dirname);
                       g_free (basename);
@@ -3206,7 +3206,7 @@ custom_paper_dialog_response_cb (GtkDialog *custom_paper_dialog,
         }
     }
 
-  gtk_widget_destroy (GTK_WIDGET (custom_paper_dialog));
+  gtk_window_destroy (GTK_WINDOW (custom_paper_dialog));
 }
 
 static void

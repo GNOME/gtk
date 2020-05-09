@@ -99,7 +99,7 @@ test_action (void)
   g_assert_cmpint (win_activated, ==, 2);
   g_assert_cmpint (box_activated, ==, 1);
 
-  gtk_widget_destroy (window);
+  gtk_window_destroy (GTK_WINDOW (window));
   g_object_unref (win_actions);
   g_object_unref (box_actions);
 }
@@ -240,7 +240,7 @@ test_overlap (void)
   g_assert_cmpint (win_activated, ==, 1);
   g_assert_cmpint (box_activated, ==, 1);
 
-  gtk_widget_destroy (window);
+  gtk_window_destroy (GTK_WINDOW (window));
   g_object_unref (win_actions);
   g_object_unref (box_actions);
 }

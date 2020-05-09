@@ -91,7 +91,7 @@ progressive_timeout (gpointer data)
           g_error_free (error);
 
           g_signal_connect (dialog, "response",
-                            G_CALLBACK (gtk_widget_destroy), NULL);
+                            G_CALLBACK (gtk_window_destroy), NULL);
 
           g_object_unref (image_stream);
           image_stream = NULL;
@@ -119,7 +119,7 @@ progressive_timeout (gpointer data)
           g_error_free (error);
 
           g_signal_connect (dialog, "response",
-                            G_CALLBACK (gtk_widget_destroy), NULL);
+                            G_CALLBACK (gtk_window_destroy), NULL);
 
           g_object_unref (image_stream);
           image_stream = NULL;
@@ -152,7 +152,7 @@ progressive_timeout (gpointer data)
               g_error_free (error);
 
               g_signal_connect (dialog, "response",
-                                G_CALLBACK (gtk_widget_destroy), NULL);
+                                G_CALLBACK (gtk_window_destroy), NULL);
 
               gtk_widget_show (dialog);
 
@@ -189,7 +189,7 @@ progressive_timeout (gpointer data)
               g_error_free (error);
 
               g_signal_connect (dialog, "response",
-                                G_CALLBACK (gtk_widget_destroy), NULL);
+                                G_CALLBACK (gtk_window_destroy), NULL);
 
               gtk_widget_show (dialog);
 
@@ -223,7 +223,7 @@ progressive_timeout (gpointer data)
           g_error_free (error);
 
           g_signal_connect (dialog, "response",
-                            G_CALLBACK (gtk_widget_destroy), NULL);
+                            G_CALLBACK (gtk_window_destroy), NULL);
 
           gtk_widget_show (dialog);
 
@@ -471,7 +471,7 @@ do_images (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

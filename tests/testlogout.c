@@ -137,7 +137,7 @@ quit (GtkApplication *app,
       gpointer        data)
 {
   g_print ("Received quit\n");
-  gtk_widget_destroy (win);
+  gtk_window_destroy (GTK_WINDOW (win));
 }
 
 int
