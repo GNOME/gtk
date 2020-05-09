@@ -2657,31 +2657,6 @@ gtk_widget_destroy (GtkWidget *widget)
     g_object_run_dispose (G_OBJECT (widget));
 }
 
-/**
- * gtk_widget_destroyed:
- * @widget: a #GtkWidget
- * @widget_pointer: (inout) (transfer none): address of a variable that contains @widget
- *
- * This function sets *@widget_pointer to %NULL if @widget_pointer !=
- * %NULL.  It’s intended to be used as a callback connected to the
- * “destroy” signal of a widget. You connect gtk_widget_destroyed()
- * as a signal handler, and pass the address of your widget variable
- * as user data. Then when the widget is destroyed, the variable will
- * be set to %NULL. Useful for example to avoid multiple copies
- * of the same dialog.
- **/
-void
-gtk_widget_destroyed (GtkWidget      *widget,
-		      GtkWidget      **widget_pointer)
-{
-  /* Don't make any assumptions about the
-   *  value of widget!
-   *  Even check widget_pointer.
-   */
-  if (widget_pointer)
-    *widget_pointer = NULL;
-}
-
 static void
 gtk_widget_update_paintables (GtkWidget *widget)
 {
