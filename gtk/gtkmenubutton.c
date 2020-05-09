@@ -381,7 +381,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
       g_param_spec_object ("align-widget",
                            P_("Align with"),
                            P_("The parent widget which the menu should align with."),
-                           GTK_TYPE_CONTAINER,
+                           GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE);
 
   /**
