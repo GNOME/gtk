@@ -98,7 +98,7 @@ do_tagged_entry (GtkWidget *do_widget)
       
       button = gtk_button_new_with_mnemonic ("_Done");
       gtk_widget_add_css_class (button, "suggested-action");
-      g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_widget_destroy), window);
+      g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_window_destroy), window);
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
 
       gtk_window_set_default_widget (GTK_WINDOW (window), button);
@@ -107,7 +107,7 @@ do_tagged_entry (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

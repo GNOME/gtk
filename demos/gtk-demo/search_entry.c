@@ -319,7 +319,7 @@ do_search_entry (GtkWidget *do_widget)
   else
     {
       g_clear_object (&actions);
-      gtk_widget_destroy (window);
+      gtk_window_destroy (GTK_WINDOW (window));
     }
 
   return window;

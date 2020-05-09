@@ -998,7 +998,7 @@ render_node_save_response (GtkWidget     *dialog,
                                                    _("Saving RenderNode failed"));
           gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (message_dialog),
                                                     "%s", error->message);
-          g_signal_connect (message_dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+          g_signal_connect (message_dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
           gtk_widget_show (message_dialog);
           g_error_free (error);
         }
@@ -1006,7 +1006,7 @@ render_node_save_response (GtkWidget     *dialog,
       g_bytes_unref (bytes);
     }
 
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void

@@ -157,7 +157,7 @@ set_current_folder (GtkFileChooser *chooser,
 				       "Could not set the folder to %s",
 				       name);
       gtk_dialog_run (GTK_DIALOG (dialog));
-      gtk_widget_destroy (dialog);
+      gtk_window_destroy (GTK_WINDOW (dialog));
     }
   g_object_unref (file);
 }
@@ -192,7 +192,7 @@ set_filename (GtkFileChooser *chooser,
 				       "Could not select %s",
 				       name);
       gtk_dialog_run (GTK_DIALOG (dialog));
-      gtk_widget_destroy (dialog);
+      gtk_window_destroy (GTK_WINDOW (dialog));
     }
   g_object_unref (file);
 }
@@ -266,8 +266,7 @@ unmap_and_remap_cb (GtkButton *button,
 static void
 kill_dependent (GtkWindow *win, GtkWidget *dep)
 {
-  gtk_widget_destroy (dep);
-  g_object_unref (dep);
+  gtk_window_destroy (GTK_WINDOW (dep));
 }
 
 static void
@@ -504,7 +503,6 @@ main (int argc, char **argv)
 
   gtk_widget_show (control_window);
 
-  g_object_ref (control_window);
   g_signal_connect (dialog, "destroy",
 		    G_CALLBACK (kill_dependent), control_window);
 
@@ -514,7 +512,7 @@ main (int argc, char **argv)
   g_object_ref (dialog);
   while (!done)
     g_main_context_iteration (NULL, TRUE);
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
   g_object_unref (dialog);
 
   return 0;

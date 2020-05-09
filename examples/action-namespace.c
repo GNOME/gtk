@@ -16,7 +16,7 @@ action_activated (GSimpleAction *action,
                                    g_action_get_name (G_ACTION (action)));
 
   g_signal_connect_swapped (dialog, "response",
-                            G_CALLBACK (gtk_widget_destroy), dialog);
+                            G_CALLBACK (gtk_window_destroy), dialog);
 
   gtk_widget_show (dialog);
 }

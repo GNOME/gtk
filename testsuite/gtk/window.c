@@ -144,7 +144,7 @@ test_default_size (void)
   g_assert_cmpint (w, ==, 300);
   g_assert_cmpint (h, ==, 300);
 
-  gtk_widget_destroy (window);
+  gtk_window_destroy (GTK_WINDOW (window));
 }
 
 static void
@@ -207,7 +207,7 @@ test_resize (void)
   g_assert_cmpint (w, ==, 200);
   g_assert_cmpint (h, ==, 400);
 
-  gtk_widget_destroy (window);
+  gtk_window_destroy (GTK_WINDOW (window));
 }
 
 static void
@@ -237,7 +237,7 @@ test_resize_popup (void)
   g_assert_cmpint (w, ==, 1);
   g_assert_cmpint (h, ==, 1);
 
-  gtk_widget_destroy (window);
+  gtk_window_destroy (GTK_WINDOW (window));
 }
 
 static void
@@ -287,7 +287,7 @@ test_show_hide (void)
   g_assert_cmpint (w, ==, w1);
   g_assert_cmpint (h, ==, h1);
 
-  gtk_widget_destroy (window);
+  gtk_window_destroy (GTK_WINDOW (window));
 }
 
 int

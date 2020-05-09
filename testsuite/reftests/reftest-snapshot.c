@@ -276,7 +276,7 @@ snapshot_widget (GtkWidget *widget)
 
   g_main_loop_unref (loop);
   g_object_unref (paintable);
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (widget));
 
   return surface;
 }

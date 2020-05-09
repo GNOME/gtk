@@ -260,7 +260,7 @@ main (gint argc,
   while (TRUE)
     g_main_context_iteration (NULL, TRUE);
 
-  gtk_widget_destroy (window);
+  gtk_window_destroy (GTK_WINDOW (window));
 
   return 0;
 }
