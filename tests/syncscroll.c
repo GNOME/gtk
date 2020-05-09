@@ -32,7 +32,7 @@ main (int argc, char *argv[])
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_NEVER,
                                   GTK_POLICY_EXTERNAL);
-  gtk_container_add (GTK_CONTAINER (box), sw);
+  gtk_box_append (GTK_BOX (box), sw);
   tv = gtk_text_view_new ();
   fill_text_view (tv, "Left");
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), tv);
@@ -43,7 +43,7 @@ main (int argc, char *argv[])
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_NEVER,
                                   GTK_POLICY_EXTERNAL);
-  gtk_container_add (GTK_CONTAINER (box), sw);
+  gtk_box_append (GTK_BOX (box), sw);
   tv = gtk_text_view_new ();
   fill_text_view (tv, "Middle");
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), tv);
@@ -52,14 +52,14 @@ main (int argc, char *argv[])
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_NEVER,
                                   GTK_POLICY_EXTERNAL);
-  gtk_container_add (GTK_CONTAINER (box), sw);
+  gtk_box_append (GTK_BOX (box), sw);
   tv = gtk_text_view_new ();
   fill_text_view (tv, "Right");
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), tv);
 
   sb = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, adj);
 
-  gtk_container_add (GTK_CONTAINER (box), sb);
+  gtk_box_append (GTK_BOX (box), sb);
 
   gtk_widget_show (win);
 

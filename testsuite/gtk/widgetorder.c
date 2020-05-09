@@ -6,7 +6,7 @@ simple (void)
   GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   GtkWidget *l = gtk_label_new ("");
 
-  gtk_container_add (GTK_CONTAINER (box), l);
+  gtk_box_append (GTK_BOX (box), l);
 
   g_assert (gtk_widget_get_parent (l) == box);
   g_assert (gtk_widget_get_prev_sibling (l) == NULL);
@@ -25,8 +25,8 @@ two (void)
   GtkWidget *l1 = gtk_label_new ("");
   GtkWidget *l2 = gtk_label_new ("");
 
-  gtk_container_add (GTK_CONTAINER (box), l1);
-  gtk_container_add (GTK_CONTAINER (box), l2);
+  gtk_box_append (GTK_BOX (box), l1);
+  gtk_box_append (GTK_BOX (box), l2);
 
   g_assert (gtk_widget_get_parent (l1) == box);
   g_assert (gtk_widget_get_prev_sibling (l1) == NULL);

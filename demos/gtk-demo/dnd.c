@@ -202,30 +202,30 @@ pressed_cb (GtkGesture *gesture,
       gtk_popover_set_has_arrow (GTK_POPOVER (menu), FALSE);
       gtk_popover_set_pointing_to (GTK_POPOVER (menu), &(GdkRectangle){ x, y, 1, 1});
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (menu), box);
+      gtk_box_append (GTK_BOX (menu), box);
 
       item = gtk_button_new_with_label ("New");
       gtk_button_set_has_frame (GTK_BUTTON (item), FALSE);
       g_signal_connect (item, "clicked", G_CALLBACK (new_item_cb), widget);
-      gtk_container_add (GTK_CONTAINER (box), item);
+      gtk_box_append (GTK_BOX (box), item);
 
       item = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_container_add (GTK_CONTAINER (box), item);
+      gtk_box_append (GTK_BOX (box), item);
 
       item = gtk_button_new_with_label ("Edit");
       gtk_button_set_has_frame (GTK_BUTTON (item), FALSE);
       gtk_widget_set_sensitive (item, child != NULL && child != widget);
       g_signal_connect (item, "clicked", G_CALLBACK (edit_cb), child);
-      gtk_container_add (GTK_CONTAINER (box), item);
+      gtk_box_append (GTK_BOX (box), item);
 
       item = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_container_add (GTK_CONTAINER (box), item);
+      gtk_box_append (GTK_BOX (box), item);
 
       item = gtk_button_new_with_label ("Delete");
       gtk_button_set_has_frame (GTK_BUTTON (item), FALSE);
       gtk_widget_set_sensitive (item, child != NULL && child != widget);
       g_signal_connect (item, "clicked", G_CALLBACK (delete_cb), child);
-      gtk_container_add (GTK_CONTAINER (box), item);
+      gtk_box_append (GTK_BOX (box), item);
 
       gtk_popover_popup (GTK_POPOVER (menu));
     }
@@ -446,10 +446,10 @@ do_dnd (GtkWidget *do_widget)
       gtk_window_set_child (GTK_WINDOW (window), box);
 
       box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_container_add (GTK_CONTAINER (box), box2);
+      gtk_box_append (GTK_BOX (box), box2);
 
       canvas = canvas_new ();
-      gtk_container_add (GTK_CONTAINER (box2), canvas);
+      gtk_box_append (GTK_BOX (box2), canvas);
 
       n_items = 0;
 
@@ -470,7 +470,7 @@ do_dnd (GtkWidget *do_widget)
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                       GTK_POLICY_AUTOMATIC,
                                       GTK_POLICY_NEVER);
-      gtk_container_add (GTK_CONTAINER (box), sw);
+      gtk_box_append (GTK_BOX (box), sw);
 
       box3 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_widget_add_css_class (box3, "linked");
@@ -487,7 +487,7 @@ do_dnd (GtkWidget *do_widget)
                                  "rgba", &rgba,
                                  "selectable", FALSE,
                                  NULL);
-          gtk_container_add (GTK_CONTAINER (box3), swatch);
+          gtk_box_append (GTK_BOX (box3), swatch);
         }
     }
 

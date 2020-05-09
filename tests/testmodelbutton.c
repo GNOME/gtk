@@ -52,7 +52,7 @@ on_application_activate (GApplication *gapplication,
                                "text", "It’s-a-me! ModelButton",
                                "icon", gicon,
                                NULL);
-  gtk_container_add (GTK_CONTAINER (box), model_button);
+  gtk_box_append (GTK_BOX (box), model_button);
 
   g_object_unref (gicon);
 
@@ -67,16 +67,16 @@ on_application_activate (GApplication *gapplication,
   g_object_bind_property (widget, "active",
                           model_button, "role",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  gtk_container_add (GTK_CONTAINER (box), widget);
+  gtk_box_append (GTK_BOX (box), widget);
 
   widget = gtk_toggle_button_new_with_label (":iconic");
   g_object_bind_property (widget, "active",
                           model_button, "iconic",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  gtk_container_add (GTK_CONTAINER (box), widget);
+  gtk_box_append (GTK_BOX (box), widget);
 
   widget = gtk_window_new ();
-  gtk_container_add (GTK_CONTAINER (widget), box);
+  gtk_box_append (GTK_BOX (widget), box);
   gtk_widget_show (widget);
   gtk_application_add_window (GTK_APPLICATION (application), GTK_WINDOW (widget));
 }

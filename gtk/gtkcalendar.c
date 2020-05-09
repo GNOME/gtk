@@ -596,12 +596,12 @@ gtk_calendar_init (GtkCalendar *calendar)
   calendar->arrow_widgets[3] = gtk_button_new_from_icon_name ("pan-end-symbolic");
   g_signal_connect_swapped (calendar->arrow_widgets[3], "clicked", G_CALLBACK (calendar_set_year_next), calendar);
 
-  gtk_container_add (GTK_CONTAINER (calendar->header_box), calendar->arrow_widgets[0]);
-  gtk_container_add (GTK_CONTAINER (calendar->header_box), calendar->month_name_stack);
-  gtk_container_add (GTK_CONTAINER (calendar->header_box), calendar->arrow_widgets[1]);
-  gtk_container_add (GTK_CONTAINER (calendar->header_box), calendar->arrow_widgets[2]);
-  gtk_container_add (GTK_CONTAINER (calendar->header_box), calendar->year_label);
-  gtk_container_add (GTK_CONTAINER (calendar->header_box), calendar->arrow_widgets[3]);
+  gtk_box_append (GTK_BOX (calendar->header_box), calendar->arrow_widgets[0]);
+  gtk_box_append (GTK_BOX (calendar->header_box), calendar->month_name_stack);
+  gtk_box_append (GTK_BOX (calendar->header_box), calendar->arrow_widgets[1]);
+  gtk_box_append (GTK_BOX (calendar->header_box), calendar->arrow_widgets[2]);
+  gtk_box_append (GTK_BOX (calendar->header_box), calendar->year_label);
+  gtk_box_append (GTK_BOX (calendar->header_box), calendar->arrow_widgets[3]);
 
   gtk_widget_set_parent (calendar->header_box, GTK_WIDGET (calendar));
 

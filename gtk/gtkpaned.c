@@ -2127,10 +2127,14 @@ get_child_panes (GtkWidget  *widget,
       *panes = g_list_prepend (*panes, widget);
       get_child_panes (priv->end_child, panes);
     }
-  else if (GTK_IS_CONTAINER (widget))
+  else
     {
-      gtk_container_forall (GTK_CONTAINER (widget),
-                            (GtkCallback)get_child_panes, panes);
+      GtkWidget *child;
+
+      for (child = gtk_widget_get_first_child (widget);
+           child != NULL;
+           child = gtk_widget_get_next_sibling (child))
+        get_child_panes (child, panes);
     }
 }
 

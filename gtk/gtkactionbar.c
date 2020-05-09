@@ -226,7 +226,7 @@ void
 gtk_action_bar_pack_start (GtkActionBar *action_bar,
                            GtkWidget    *child)
 {
-  gtk_container_add (GTK_CONTAINER (action_bar->start_box), child);
+  gtk_box_append (GTK_BOX (action_bar->start_box), child);
 }
 
 /**
@@ -256,9 +256,9 @@ gtk_action_bar_remove (GtkActionBar *action_bar,
                        GtkWidget    *child)
 {
   if (gtk_widget_get_parent (child) == action_bar->start_box)
-    gtk_container_remove (GTK_CONTAINER (action_bar->start_box), child);
+    gtk_box_remove (GTK_BOX (action_bar->start_box), child);
   else if (gtk_widget_get_parent (child) == action_bar->end_box)
-    gtk_container_remove (GTK_CONTAINER (action_bar->end_box), child);
+    gtk_box_remove (GTK_BOX (action_bar->end_box), child);
   else if (child == gtk_center_box_get_center_widget (GTK_CENTER_BOX (action_bar->center_box)))
     gtk_center_box_set_center_widget (GTK_CENTER_BOX (action_bar->center_box), NULL);
   else

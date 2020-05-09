@@ -499,7 +499,7 @@ gtk_tooltip_window_set_custom_widget (GtkTooltipWindow *window,
        * gtk_tooltip_set_custom()
        */
       window->custom_widget = NULL;
-      gtk_container_remove (GTK_CONTAINER (window->box), custom);
+      gtk_box_remove (GTK_BOX (window->box), custom);
       g_object_unref (custom);
     }
 
@@ -507,7 +507,7 @@ gtk_tooltip_window_set_custom_widget (GtkTooltipWindow *window,
     {
       window->custom_widget = g_object_ref (custom_widget);
 
-      gtk_container_add (GTK_CONTAINER (window->box), custom_widget);
+      gtk_box_append (GTK_BOX (window->box), custom_widget);
       gtk_widget_show (custom_widget);
       gtk_widget_hide (window->image);
       gtk_widget_hide (window->label);

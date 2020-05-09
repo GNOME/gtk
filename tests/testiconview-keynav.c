@@ -254,10 +254,10 @@ main (int argc, char *argv[])
   g_signal_connect (views.view1, "notify::has-focus", G_CALLBACK (focus_changed), &views);
   g_signal_connect (views.view2, "notify::has-focus", G_CALLBACK (focus_changed), &views);
 
-  gtk_container_add (GTK_CONTAINER (vbox), views.header1);
-  gtk_container_add (GTK_CONTAINER (vbox), views.view1);
-  gtk_container_add (GTK_CONTAINER (vbox), views.header2);
-  gtk_container_add (GTK_CONTAINER (vbox), views.view2);
+  gtk_box_append (GTK_BOX (vbox), views.header1);
+  gtk_box_append (GTK_BOX (vbox), views.view1);
+  gtk_box_append (GTK_BOX (vbox), views.header2);
+  gtk_box_append (GTK_BOX (vbox), views.view2);
 
   gtk_widget_show (window);
 

@@ -38,12 +38,12 @@ do_entry_undo (GtkWidget *do_widget)
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),
                             "Use Primary+z or Primary+Shift+z to undo or redo changes");
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_box_append (GTK_BOX (vbox), label);
 
       /* Create our entry */
       entry = gtk_entry_new ();
       gtk_editable_set_enable_undo (GTK_EDITABLE (entry), TRUE);
-      gtk_container_add (GTK_CONTAINER (vbox), entry);
+      gtk_box_append (GTK_BOX (vbox), entry);
     }
 
   if (!gtk_widget_get_visible (window))

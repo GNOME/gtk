@@ -53,21 +53,21 @@ create_box_window (void)
   box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   box3 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
-  gtk_container_add (GTK_CONTAINER (box1),
+  gtk_box_append (GTK_BOX (box1),
                       gtk_label_new ("VBox 1 Top"));
-  gtk_container_add (GTK_CONTAINER (box1),
+  gtk_box_append (GTK_BOX (box1),
                       box2);
-  gtk_container_add (GTK_CONTAINER(box1),
+  gtk_box_append (GTK_BOX(box1),
                      gtk_label_new ("VBox 1 Bottom"));
 
-  gtk_container_add (GTK_CONTAINER (box2),
+  gtk_box_append (GTK_BOX (box2),
                       gtk_label_new ("HBox 2 Left"));
-  gtk_container_add (GTK_CONTAINER (box2),
+  gtk_box_append (GTK_BOX (box2),
                       box3);
-  gtk_container_add (GTK_CONTAINER(box2),
+  gtk_box_append (GTK_BOX(box2),
                      gtk_label_new ("HBox 2 Right"));
 
-  gtk_container_add (GTK_CONTAINER (box3),
+  gtk_box_append (GTK_BOX (box3),
                       gtk_label_new ("VBox 3 Top"));
 
   colorbox = gtk_frame_new (NULL);
@@ -83,7 +83,7 @@ create_box_window (void)
                     G_CALLBACK (on_toggle_hexpand), NULL);
   gtk_frame_set_child (GTK_FRAME (colorbox), toggle);
 
-  gtk_container_add (GTK_CONTAINER (box3), colorbox);
+  gtk_box_append (GTK_BOX (box3), colorbox);
 
   colorbox = gtk_frame_new (NULL);
 
@@ -97,8 +97,8 @@ create_box_window (void)
   g_signal_connect (G_OBJECT (toggle), "toggled",
                     G_CALLBACK (on_toggle_vexpand), NULL);
   gtk_frame_set_child (GTK_FRAME (colorbox), toggle);
-  gtk_container_add (GTK_CONTAINER (box3), colorbox);
-  gtk_container_add (GTK_CONTAINER (box3),
+  gtk_box_append (GTK_BOX (box3), colorbox);
+  gtk_box_append (GTK_BOX (box3),
                      gtk_label_new ("VBox 3 Bottom"));
 
   gtk_window_set_child (GTK_WINDOW (window), box1);

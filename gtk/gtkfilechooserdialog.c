@@ -550,8 +550,8 @@ setup_save_entry (GtkFileChooserDialog *dialog)
       g_object_set (label, "margin-start", 6, "margin-end", 6, NULL);
       g_object_set (entry, "margin-start", 6, "margin-end", 6, NULL);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-      gtk_container_add (GTK_CONTAINER (box), label);
-      gtk_container_add (GTK_CONTAINER (box), entry);
+      gtk_box_append (GTK_BOX (box), label);
+      gtk_box_append (GTK_BOX (box), entry);
 
       gtk_header_bar_set_title_widget (GTK_HEADER_BAR (header), box);
       gtk_file_chooser_widget_set_save_entry (GTK_FILE_CHOOSER_WIDGET (priv->widget), entry);

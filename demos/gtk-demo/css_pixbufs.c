@@ -55,9 +55,13 @@ css_text_changed (GtkTextBuffer  *buffer,
 static void
 apply_css (GtkWidget *widget, GtkStyleProvider *provider)
 {
+  GtkWidget *child;
+
   gtk_style_context_add_provider (gtk_widget_get_style_context (widget), provider, G_MAXUINT);
-  if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget), (GtkCallback) apply_css, provider);
+  for (child = gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    apply_css (child, provider);
 }
 
 GtkWidget *

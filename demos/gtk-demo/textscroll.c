@@ -157,7 +157,7 @@ create_text_view (GtkWidget *hbox,
   guint timeout;
 
   swindow = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (hbox), swindow);
+  gtk_box_append (GTK_BOX (hbox), swindow);
   textview = gtk_text_view_new ();
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), textview);
 

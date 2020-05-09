@@ -85,14 +85,14 @@
  *
  * // GtkButton is not a GtkScrollable, so GtkScrolledWindow will automatically
  * // add a GtkViewport.
- * gtk_container_add (GTK_CONTAINER (scrolled_window),
+ * gtk_box_append (GTK_BOX (scrolled_window),
  *                    child_widget);
  *
  * // Either of these will result in child_widget being unparented:
- * gtk_container_remove (GTK_CONTAINER (scrolled_window),
+ * gtk_box_remove (GTK_BOX (scrolled_window),
  *                       child_widget);
  * // or
- * gtk_container_remove (GTK_CONTAINER (scrolled_window),
+ * gtk_box_remove (GTK_BOX (scrolled_window),
  *                       gtk_bin_get_child (GTK_BIN (scrolled_window)));
  * ]|
  *

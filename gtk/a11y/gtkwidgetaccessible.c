@@ -399,7 +399,7 @@ gtk_widget_accessible_get_index_in_parent (AtkObject *accessible)
   GtkWidget *widget;
   GtkWidget *parent_widget;
   gint index;
-  GList *children;
+  GtkWidget *ch;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
 
@@ -436,24 +436,13 @@ gtk_widget_accessible_get_index_in_parent (AtkObject *accessible)
     }
 
   parent_widget = gtk_widget_get_parent (widget);
-  if (GTK_IS_CONTAINER (parent_widget))
+  for (ch = gtk_widget_get_first_child (parent_widget), index = 0;
+       ch != NULL;
+       ch = gtk_widget_get_next_sibling (ch), index++)
     {
-      children = gtk_container_get_children (GTK_CONTAINER (parent_widget));
-      index = g_list_index (children, widget);
-      g_list_free (children);
+      if (ch == widget)
+        break;
     }
-  else if (GTK_IS_WIDGET (parent_widget))
-    {
-      GtkWidget *child;
-
-      for (child = gtk_widget_get_first_child (parent_widget), index = 0; child; child = gtk_widget_get_next_sibling (child), index++)
-        {
-          if (child == widget)
-            break;
-        }
-    }
-  else
-    index = -1;
 
   return index;
 }
