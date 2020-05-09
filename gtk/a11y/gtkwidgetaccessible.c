@@ -300,7 +300,6 @@ takes_focus (GtkWidget *widget)
     return TRUE;
 
   if (GTK_IS_ACCEL_LABEL (widget) ||
-      GTK_IS_CONTAINER(widget) ||
       GTK_IS_DRAG_ICON (widget) ||
       GTK_IS_DRAWING_AREA (widget) ||
       GTK_IS_GL_AREA (widget) ||
