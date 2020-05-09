@@ -141,7 +141,7 @@ load_file (GFile *open_filename)
 
   if (error_dialog)
     {
-      g_signal_connect (error_dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+      g_signal_connect (error_dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
       gtk_widget_show (error_dialog);
     }
 }
@@ -186,7 +186,7 @@ save_file (GFile *save_filename)
 					     display_name,
 					     error->message);
       
-      g_signal_connect (error_dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+      g_signal_connect (error_dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
       gtk_widget_show (error_dialog);
       
       g_error_free (error);
@@ -389,7 +389,7 @@ print_done (GtkPrintOperation *op,
 					     GTK_BUTTONS_CLOSE,
 					     "Error printing file:\n%s",
 					     error ? error->message : "no details");
-      g_signal_connect (error_dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+      g_signal_connect (error_dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
       gtk_widget_show (error_dialog);
     }
   else if (res == GTK_PRINT_OPERATION_RESULT_APPLY)
@@ -519,7 +519,7 @@ activate_save_as (GSimpleAction *action,
       g_object_unref (save_filename);
     }
 
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void
@@ -557,7 +557,7 @@ activate_open (GSimpleAction *action,
       g_object_unref (open_filename);
     }
 
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void
@@ -604,7 +604,7 @@ activate_quit (GSimpleAction *action,
       win = list->data;
       next = list->next;
 
-      gtk_widget_destroy (GTK_WIDGET (win));
+      gtk_window_destroy (GTK_WINDOW (win));
 
       list = next;
     }

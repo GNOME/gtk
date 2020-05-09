@@ -309,7 +309,7 @@ gtk_color_button_finalize (GObject *object)
   GtkColorButton *button = GTK_COLOR_BUTTON (object);
 
   if (button->cs_dialog != NULL)
-    gtk_widget_destroy (button->cs_dialog);
+    gtk_window_destroy (GTK_WINDOW (button->cs_dialog));
 
   g_free (button->title);
   gtk_widget_unparent (button->button);

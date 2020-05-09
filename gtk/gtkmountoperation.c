@@ -399,7 +399,7 @@ pw_dialog_got_response (GtkDialog         *dialog,
 
   priv->dialog = NULL;
   g_object_notify (G_OBJECT (op), "is-showing");
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
   g_object_unref (op);
 }
 
@@ -928,7 +928,7 @@ question_dialog_button_clicked (GtkDialog       *dialog,
 
   priv->dialog = NULL;
   g_object_notify (G_OBJECT (operation), "is-showing");
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
   g_object_unref (op);
 }
 
@@ -1083,7 +1083,7 @@ show_processes_button_clicked (GtkDialog       *dialog,
 
   priv->dialog = NULL;
   g_object_notify (G_OBJECT (operation), "is-showing");
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
   g_object_unref (op);
 }
 
@@ -1403,7 +1403,7 @@ on_end_process_activated (GtkModelButton *button,
        * destroy the dialog in that case
        */
       if (response != GTK_RESPONSE_NONE)
-        gtk_widget_destroy (dialog);
+        gtk_window_destroy (GTK_WINDOW (dialog));
 
       g_error_free (error);
     }
@@ -1766,7 +1766,7 @@ gtk_mount_operation_aborted (GMountOperation *op)
 
   if (priv->dialog != NULL)
     {
-      gtk_widget_destroy (GTK_WIDGET (priv->dialog));
+      gtk_window_destroy (GTK_WINDOW (priv->dialog));
       priv->dialog = NULL;
       g_object_notify (G_OBJECT (op), "is-showing");
       g_object_unref (op);

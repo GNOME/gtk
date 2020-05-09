@@ -1204,7 +1204,7 @@ gtk_window_close (GtkWindow *window)
   g_object_ref (window);
 
   if (!gtk_window_emit_close_request (window))
-    gtk_widget_destroy (GTK_WIDGET (window));
+    gtk_window_destroy (window);
 
   g_object_unref (window);
 }
@@ -1981,7 +1981,7 @@ gtk_window_native_interface_init (GtkNativeInterface *iface)
  * the window internally, gtk_window_new() does not return a reference
  * to the caller.
  *
- * To delete a #GtkWindow, call gtk_widget_destroy().
+ * To delete a #GtkWindow, call gtk_window_destroy().
  * 
  * Returns: a new #GtkWindow.
  **/
@@ -6954,7 +6954,7 @@ warn_response (GtkDialog *dialog,
   check = g_object_get_data (G_OBJECT (dialog), "check");
   remember = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check));
 
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
   g_object_set_data (G_OBJECT (inspector_window), "warning_dialog", NULL);
 
   if (response == GTK_RESPONSE_NO)

@@ -317,7 +317,7 @@ save_response_cb (GtkNativeDialog        *dialog,
                                                    "Saving failed");
           gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (message_dialog),
                                                     "%s", error->message);
-          g_signal_connect (message_dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+          g_signal_connect (message_dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
           gtk_widget_show (message_dialog);
           g_error_free (error);
         }
@@ -403,7 +403,7 @@ constraint_editor_done (ConstraintEditor *editor,
 
   g_clear_object (&old_constraint);
 
-  gtk_widget_destroy (gtk_widget_get_ancestor (GTK_WIDGET (editor), GTK_TYPE_WINDOW));
+  gtk_window_destroy (GTK_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (editor), GTK_TYPE_WINDOW)));
 }
 
 static void
@@ -444,7 +444,7 @@ guide_editor_done (GuideEditor            *editor,
                    GtkConstraintGuide     *guide,
                    ConstraintEditorWindow *win)
 {
-  gtk_widget_destroy (gtk_widget_get_ancestor (GTK_WIDGET (editor), GTK_TYPE_WINDOW));
+  gtk_window_destroy (GTK_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (editor), GTK_TYPE_WINDOW)));
 }
 
 static void

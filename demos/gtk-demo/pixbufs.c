@@ -196,7 +196,7 @@ do_pixbufs (GtkWidget *do_widget)
           g_error_free (error);
 
           g_signal_connect (dialog, "response",
-                            G_CALLBACK (gtk_widget_destroy), NULL);
+                            G_CALLBACK (gtk_window_destroy), NULL);
 
           gtk_widget_show (dialog);
         }
@@ -220,7 +220,7 @@ do_pixbufs (GtkWidget *do_widget)
     gtk_widget_show (window);
   else
     {
-      gtk_widget_destroy (window);
+      gtk_window_destroy (GTK_WINDOW (window));
       g_object_unref (frame);
     }
 

@@ -29,10 +29,8 @@ on_bar_response (GtkInfoBar *info_bar,
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                             "Your response has id %d", response_id);
 
-  g_signal_connect_swapped (dialog,
-                            "response",
-                            G_CALLBACK (gtk_widget_destroy),
-                            dialog);
+  g_signal_connect_swapped (dialog, "response",
+                            G_CALLBACK (gtk_window_destroy), dialog);
 
   gtk_widget_show (dialog);
 }
@@ -148,7 +146,7 @@ do_infobar (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }
