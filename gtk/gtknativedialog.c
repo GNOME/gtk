@@ -168,11 +168,20 @@ gtk_native_dialog_get_property (GObject    *object,
     }
 }
 
+static void parent_destroyed (GtkWidget       *parent,
+                              GtkNativeDialog *self);
+
 static void
 gtk_native_dialog_dispose (GObject *object)
 {
   GtkNativeDialog *self = GTK_NATIVE_DIALOG (object);
   GtkNativeDialogPrivate *priv = gtk_native_dialog_get_instance_private (self);
+
+  if (priv->transient_for)
+    {
+      g_signal_handlers_disconnect_by_func (priv->transient_for, parent_destroyed, self);
+      priv->transient_for = NULL;
+    }
 
   if (priv->visible)
     gtk_native_dialog_hide (self);
@@ -486,6 +495,15 @@ gtk_native_dialog_get_title (GtkNativeDialog *self)
   return priv->title;
 }
 
+static void
+parent_destroyed (GtkWidget       *parent,
+                  GtkNativeDialog *self)
+{
+  GtkNativeDialogPrivate *priv = gtk_native_dialog_get_instance_private (self);
+
+  priv->transient_for = NULL;
+}
+
 /**
  * gtk_native_dialog_set_transient_for:
  * @self: a #GtkNativeDialog
@@ -501,14 +519,24 @@ gtk_native_dialog_get_title (GtkNativeDialog *self)
  */
 void
 gtk_native_dialog_set_transient_for (GtkNativeDialog *self,
-                                     GtkWindow *parent)
+                                     GtkWindow       *parent)
 {
   GtkNativeDialogPrivate *priv = gtk_native_dialog_get_instance_private (self);
 
   g_return_if_fail (GTK_IS_NATIVE_DIALOG (self));
 
-  if (g_set_object (&priv->transient_for, parent))
-    g_object_notify_by_pspec (G_OBJECT (self), native_props[PROP_TRANSIENT_FOR]);
+  if (parent == priv->transient_for)
+    return;
+
+  if (priv->transient_for)
+    g_signal_handlers_disconnect_by_func (priv->transient_for, parent_destroyed, self);
+
+  priv->transient_for = parent;
+
+  if (parent)
+    g_signal_connect (parent, "destroy", G_CALLBACK (parent_destroyed), self);
+
+  g_object_notify_by_pspec (G_OBJECT (self), native_props[PROP_TRANSIENT_FOR]);
 }
 
 /**
