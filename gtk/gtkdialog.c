@@ -165,6 +165,8 @@
  * ]|
  */
 
+typedef struct _ResponseData ResponseData;
+
 typedef struct
 {
   GtkWidget *headerbar;
@@ -175,12 +177,14 @@ typedef struct
 
   gint use_header_bar;
   gboolean constructed;
+  ResponseData *action_widgets;
 } GtkDialogPrivate;
-
-typedef struct _ResponseData ResponseData;
 
 struct _ResponseData
 {
+  ResponseData *next;
+  GtkDialog *dialog;
+  GtkWidget *widget;
   gint response_id;
 };
 
@@ -193,7 +197,8 @@ static void      gtk_dialog_map                  (GtkWidget    *widget);
 
 static void      gtk_dialog_close                (GtkDialog    *dialog);
 
-static ResponseData * get_response_data          (GtkWidget    *widget,
+static ResponseData * get_response_data          (GtkDialog    *dialog,
+                                                  GtkWidget    *widget,
                                                   gboolean      create);
 
 static void     gtk_dialog_buildable_interface_init   (GtkBuildableIface  *iface);
@@ -316,7 +321,7 @@ add_response_data (GtkDialog *dialog,
   ResponseData *ad;
   guint signal_id;
 
-  ad = get_response_data (child, TRUE);
+  ad = get_response_data (dialog, child, TRUE);
   ad->response_id = response_id;
 
   if (GTK_IS_BUTTON (child))
@@ -379,23 +384,17 @@ add_to_action_area (GtkDialog *dialog,
 }
 
 static void
-update_suggested_action (GtkDialog *dialog)
+update_suggested_action (GtkDialog *dialog,
+                         GtkWidget *child)
 {
   GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
   if (priv->use_header_bar)
     {
-      GtkWidget *child;
-
-      for (child = gtk_widget_get_first_child (priv->headerbar);
-           child != NULL;
-           child = gtk_widget_get_next_sibling (child))
-        {
-          if (gtk_widget_has_css_class (child, GTK_STYLE_CLASS_DEFAULT))
-            gtk_widget_add_css_class (child, GTK_STYLE_CLASS_SUGGESTED_ACTION);
-          else
-            gtk_widget_remove_css_class (child, GTK_STYLE_CLASS_SUGGESTED_ACTION);
-        }
+      if (gtk_widget_has_css_class (child, GTK_STYLE_CLASS_DEFAULT))
+        gtk_widget_add_css_class (child, GTK_STYLE_CLASS_SUGGESTED_ACTION);
+      else
+        gtk_widget_remove_css_class (child, GTK_STYLE_CLASS_SUGGESTED_ACTION);
     }
 }
 
@@ -431,7 +430,7 @@ gtk_dialog_constructed (GObject *object)
           child = l->data;
 
           has_default = gtk_widget_has_default (child);
-          rd = get_response_data (child, FALSE);
+          rd = get_response_data (dialog, child, FALSE);
           response_id = rd ? rd->response_id : GTK_RESPONSE_NONE;
 
           g_object_ref (child);
@@ -440,11 +439,13 @@ gtk_dialog_constructed (GObject *object)
           g_object_unref (child);
 
           if (has_default)
-            gtk_window_set_default_widget (GTK_WINDOW (dialog), child);
+            {
+              gtk_window_set_default_widget (GTK_WINDOW (dialog), child);
+              update_suggested_action (dialog, child);
+            }
         }
       g_list_free (children);
 
-      update_suggested_action (dialog);
       _gtk_header_bar_track_default_decoration (GTK_HEADER_BAR (priv->headerbar));
     }
   else
@@ -593,28 +594,6 @@ gtk_dialog_close_request (GtkWindow *window)
   return GTK_WINDOW_CLASS (gtk_dialog_parent_class)->close_request (window);
 }
 
-static GList *
-get_action_children (GtkDialog *dialog)
-{
-  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
-  GtkWidget *parent;
-  GtkWidget *child;
-  GList *children;
-
-  if (priv->constructed && priv->use_header_bar)
-    parent = priv->headerbar;
-  else
-    parent = priv->action_area;
-
-  children = NULL;
-  for (child = gtk_widget_get_first_child (parent);
-       child != NULL;
-       child = gtk_widget_get_next_sibling (child))
-    children = g_list_prepend (children, child);
-
-  return g_list_reverse (children);
-}
-
 /* A far too tricky heuristic for getting the right initial
  * focus widget if none was set. What we do is we focus the first
  * widget in the tab chain, but if this results in the focus
@@ -630,6 +609,8 @@ gtk_dialog_map (GtkWidget *widget)
   GtkWidget *default_widget, *focus;
   GtkWindow *window = GTK_WINDOW (widget);
   GtkDialog *dialog = GTK_DIALOG (widget);
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
+  ResponseData *rd;
 
   if (gtk_window_get_transient_for (window) == NULL)
     g_message ("GtkDialog mapped without a transient parent. This is discouraged.");
@@ -639,7 +620,6 @@ gtk_dialog_map (GtkWidget *widget)
   focus = gtk_window_get_focus (window);
   if (!focus)
     {
-      GList *children, *tmp_list;
       GtkWidget *first_focus = NULL;
 
       do
@@ -661,25 +641,17 @@ gtk_dialog_map (GtkWidget *widget)
         }
       while (TRUE);
 
-      tmp_list = children = get_action_children (dialog);
-
-      while (tmp_list)
-	{
-	  GtkWidget *child = tmp_list->data;
-
-          default_widget = gtk_window_get_default_widget (window);
-	  if ((focus == NULL || child == focus) &&
-	      child != default_widget &&
-	      default_widget)
-	    {
-	      gtk_widget_grab_focus (default_widget);
-	      break;
-	    }
-
-	  tmp_list = tmp_list->next;
-	}
-
-      g_list_free (children);
+      default_widget = gtk_window_get_default_widget (window);
+      for (rd = priv->action_widgets; rd != NULL; rd = rd->next)
+        {
+          if ((focus == NULL || rd->widget == focus) &&
+               rd->widget != default_widget &&
+               default_widget)
+            {
+              gtk_widget_grab_focus (default_widget);
+              break;
+            }
+        }
     }
 }
 
@@ -800,24 +772,50 @@ gtk_dialog_new_with_buttons (const gchar    *title,
 static void
 response_data_free (gpointer data)
 {
+  ResponseData *ad = data;
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (ad->dialog);
+
+  if (priv->action_widgets == ad)
+    {
+      priv->action_widgets = ad->next;
+    }
+  else
+    {
+      ResponseData *prev = priv->action_widgets;
+      while (prev)
+        {
+          if (prev->next == ad)
+            {
+              prev->next = ad->next;
+              break;
+            }
+          prev = prev->next;
+        }
+    }
   g_slice_free (ResponseData, data);
 }
 
 static ResponseData *
-get_response_data (GtkWidget *widget,
-		   gboolean   create)
+get_response_data (GtkDialog *dialog,
+                   GtkWidget *widget,
+                   gboolean   create)
 {
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
+
   ResponseData *ad = g_object_get_data (G_OBJECT (widget),
                                         "gtk-dialog-response-data");
 
   if (ad == NULL && create)
     {
       ad = g_slice_new (ResponseData);
-
+      ad->dialog = dialog;
+      ad->widget = widget;
       g_object_set_data_full (G_OBJECT (widget),
                               I_("gtk-dialog-response-data"),
                               ad,
-			      response_data_free);
+                              response_data_free);
+      ad->next = priv->action_widgets;
+      priv->action_widgets = ad;
     }
 
   return ad;
@@ -855,7 +853,7 @@ gtk_dialog_add_action_widget (GtkDialog *dialog,
       if (gtk_widget_has_default (child))
         {
           gtk_window_set_default_widget (GTK_WINDOW (dialog), child);
-          update_suggested_action (dialog);
+          update_suggested_action (dialog, child);
         }
     }
   else
@@ -963,26 +961,16 @@ gtk_dialog_set_response_sensitive (GtkDialog *dialog,
                                    gint       response_id,
                                    gboolean   setting)
 {
-  GList *children;
-  GList *tmp_list;
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
+  ResponseData *rd;
 
   g_return_if_fail (GTK_IS_DIALOG (dialog));
 
-  children = get_action_children (dialog);
-
-  tmp_list = children;
-  while (tmp_list != NULL)
+  for (rd = priv->action_widgets; rd != NULL; rd = rd->next)
     {
-      GtkWidget *widget = tmp_list->data;
-      ResponseData *rd = get_response_data (widget, FALSE);
-
-      if (rd && rd->response_id == response_id)
-        gtk_widget_set_sensitive (widget, setting);
-
-      tmp_list = tmp_list->next;
+      if (rd->response_id == response_id)
+        gtk_widget_set_sensitive (rd->widget, setting);
     }
-
-  g_list_free (children);
 }
 
 /**
@@ -999,29 +987,18 @@ gtk_dialog_set_default_response (GtkDialog *dialog,
                                  gint       response_id)
 {
   GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
-  GList *children;
-  GList *tmp_list;
+  ResponseData *rd;
 
   g_return_if_fail (GTK_IS_DIALOG (dialog));
 
-  children = get_action_children (dialog);
-
-  tmp_list = children;
-  while (tmp_list != NULL)
+  for (rd = priv->action_widgets; rd != NULL; rd = rd->next)
     {
-      GtkWidget *widget = tmp_list->data;
-      ResponseData *rd = get_response_data (widget, FALSE);
-
-      if (rd && rd->response_id == response_id)
-        gtk_window_set_default_widget (GTK_WINDOW (dialog), widget);
-
-      tmp_list = tmp_list->next;
+      if (rd->response_id == response_id)
+        {
+          gtk_window_set_default_widget (GTK_WINDOW (dialog), rd->widget);
+          update_suggested_action (dialog, rd->widget);
+        }
     }
-
-  g_list_free (children);
-
-  if (priv->use_header_bar)
-    update_suggested_action (dialog);
 }
 
 /**
@@ -1219,31 +1196,18 @@ gtk_dialog_run (GtkDialog *dialog)
  */
 GtkWidget*
 gtk_dialog_get_widget_for_response (GtkDialog *dialog,
-				    gint       response_id)
+                                    gint       response_id)
 {
-  GList *children;
-  GList *tmp_list;
+  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
+  ResponseData *rd;
 
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), NULL);
 
-  children = get_action_children (dialog);
-
-  tmp_list = children;
-  while (tmp_list != NULL)
+  for (rd = priv->action_widgets; rd != NULL; rd = rd->next)
     {
-      GtkWidget *widget = tmp_list->data;
-      ResponseData *rd = get_response_data (widget, FALSE);
-
-      if (rd && rd->response_id == response_id)
-        {
-          g_list_free (children);
-          return widget;
-        }
-
-      tmp_list = tmp_list->next;
+      if (rd->response_id == response_id)
+        return rd->widget;
     }
-
-  g_list_free (children);
 
   return NULL;
 }
@@ -1265,7 +1229,7 @@ gtk_dialog_get_response_for_widget (GtkDialog *dialog,
 {
   ResponseData *rd;
 
-  rd = get_response_data (widget, FALSE);
+  rd = get_response_data (dialog, widget, FALSE);
   if (!rd)
     return GTK_RESPONSE_NONE;
   else
@@ -1478,9 +1442,9 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
        * to the header bar. In these cases, apply placement heuristics
        * based on the response id.
        */
-      is_action = get_response_data (GTK_WIDGET (object), FALSE) != NULL;
+      is_action = get_response_data (dialog, GTK_WIDGET (object), FALSE) != NULL;
 
-      ad = get_response_data (GTK_WIDGET (object), TRUE);
+      ad = get_response_data (dialog, GTK_WIDGET (object), TRUE);
       ad->response_id = item->response_id;
 
       if (GTK_IS_BUTTON (object))
@@ -1513,14 +1477,15 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
         }
 
       if (item->is_default)
-        gtk_window_set_default_widget (GTK_WINDOW (dialog), GTK_WIDGET (object));
+        {
+          gtk_window_set_default_widget (GTK_WINDOW (dialog), GTK_WIDGET (object));
+          update_suggested_action (dialog, GTK_WIDGET (object));
+        }
     }
 
   g_slist_free_full (data->items, free_action_widget_info);
   g_string_free (data->string, TRUE);
   g_slice_free (SubParserData, data);
-
-  update_suggested_action (dialog);
 }
 
 static void
