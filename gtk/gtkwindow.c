@@ -7985,6 +7985,8 @@ gtk_window_destroy (GtkWindow *window)
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
+  gtk_tooltip_unset_surface (GTK_NATIVE (window));
+
   for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (toplevel_list)); i++)
     {
       gpointer item = g_list_model_get_item (G_LIST_MODEL (toplevel_list), i);
