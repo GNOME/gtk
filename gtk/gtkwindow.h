@@ -255,6 +255,9 @@ GDK_AVAILABLE_IN_ALL
 gboolean gtk_window_is_maximized           (GtkWindow    *window);
 
 GDK_AVAILABLE_IN_ALL
+void     gtk_window_destroy                (GtkWindow    *window);
+
+GDK_AVAILABLE_IN_ALL
 void     gtk_window_set_interactive_debugging (gboolean enable);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWindow, g_object_unref)
