@@ -61,7 +61,7 @@ test_list_reference_during_creation (void)
 
   assert_root_level_referenced (ref_model, 1);
 
-  gtk_widget_destroy (tree_view);
+  g_object_unref (g_object_ref_sink (tree_view));
 
   assert_root_level_unreferenced (ref_model);
 
@@ -96,7 +96,7 @@ test_list_reference_after_creation (void)
 
   assert_root_level_referenced (ref_model, 1);
 
-  gtk_widget_destroy (tree_view);
+  g_object_unref (g_object_ref_sink (tree_view));
 
   assert_root_level_unreferenced (ref_model);
 
@@ -136,7 +136,7 @@ test_list_reference_reordered (void)
 
   assert_root_level_referenced (ref_model, 1);
 
-  gtk_widget_destroy (tree_view);
+  g_object_unref (g_object_ref_sink (tree_view));
 
   assert_root_level_unreferenced (ref_model);
 
@@ -199,7 +199,7 @@ test_tree_reference_during_creation (void)
   assert_not_entire_model_referenced (ref_model, 1);
   assert_level_unreferenced (ref_model, &child);
 
-  gtk_widget_destroy (tree_view);
+  g_object_unref (g_object_ref_sink (tree_view));
 
   assert_entire_model_unreferenced (ref_model);
 
@@ -237,7 +237,7 @@ test_tree_reference_after_creation (void)
   assert_not_entire_model_referenced (ref_model, 1);
   assert_level_unreferenced (ref_model, &child);
 
-  gtk_widget_destroy (tree_view);
+  g_object_unref (g_object_ref_sink (tree_view));
 
   assert_entire_model_unreferenced (ref_model);
 
@@ -280,7 +280,7 @@ test_tree_reference_reordered (void)
 
   assert_entire_model_referenced (ref_model, 1);
 
-  gtk_widget_destroy (tree_view);
+  g_object_unref (g_object_ref_sink (tree_view));
 
   assert_entire_model_unreferenced (ref_model);
 
@@ -330,7 +330,7 @@ test_tree_reference_expand_all (void)
   assert_not_entire_model_referenced (ref_model, 1);
   assert_level_unreferenced (ref_model, &child);
 
-  gtk_widget_destroy (tree_view);
+  g_object_unref (g_object_ref_sink (tree_view));
 
   assert_entire_model_unreferenced (ref_model);
 
@@ -373,7 +373,7 @@ test_tree_reference_collapse_all (void)
   assert_not_entire_model_referenced (ref_model, 1);
   assert_level_unreferenced (ref_model, &child);
 
-  gtk_widget_destroy (tree_view);
+  g_object_unref (g_object_ref_sink (tree_view));
 
   assert_entire_model_unreferenced (ref_model);
 
@@ -440,7 +440,7 @@ test_tree_reference_expand_collapse (void)
   gtk_tree_path_free (path1);
   gtk_tree_path_free (path2);
 
-  gtk_widget_destroy (tree_view);
+  g_object_unref (g_object_ref_sink (tree_view));
   g_object_unref (ref_model);
 }
 
@@ -486,7 +486,7 @@ test_row_reference_list (void)
   assert_node_ref_count (ref_model, &iter1, 2);
   assert_node_ref_count (ref_model, &iter2, 1);
 
-  gtk_widget_destroy (tree_view);
+  g_object_unref (g_object_ref_sink (tree_view));
 
   assert_node_ref_count (ref_model, &iter0, 0);
   assert_node_ref_count (ref_model, &iter1, 1);
@@ -670,7 +670,7 @@ test_row_reference_tree (void)
   assert_node_ref_count (ref_model, &child2, 0);
   assert_node_ref_count (ref_model, &grandchild2, 0);
 
-  gtk_widget_destroy (tree_view);
+  g_object_unref (g_object_ref_sink (tree_view));
 
   assert_node_ref_count (ref_model, &iter0, 0);
   assert_node_ref_count (ref_model, &child0, 0);
@@ -927,7 +927,7 @@ test_row_reference_tree_expand (void)
   gtk_tree_row_reference_free (row_ref1);
   gtk_tree_row_reference_free (row_ref2);
 
-  gtk_widget_destroy (tree_view);
+  g_object_unref (g_object_ref_sink (tree_view));
   g_object_unref (ref_model);
 }
 

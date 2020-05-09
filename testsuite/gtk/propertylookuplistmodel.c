@@ -126,7 +126,7 @@ create_widget_tree (void)
 static void
 destroy_widgets (void)
 {
-  g_slist_free_full (widgets, (GDestroyNotify) gtk_widget_destroy);
+  g_slist_free_full (widgets, (GDestroyNotify) gtk_window_destroy);
   widgets = NULL;
 }
 

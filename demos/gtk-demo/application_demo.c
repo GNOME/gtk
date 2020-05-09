@@ -31,12 +31,7 @@ on_name_vanished (GDBusConnection *connection,
   if (!name_seen)
     return;
 
-  if (placeholder)
-    {
-      gtk_widget_destroy (placeholder);
-      g_object_unref (placeholder);
-      placeholder = NULL;
-    }
+  g_clear_object (&placeholder);
 }
 
 #ifdef G_OS_WIN32

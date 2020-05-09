@@ -41,8 +41,8 @@ test_popover_parent (void)
 
   g_assert (atk_object_get_parent (a) != NULL);
 
-  gtk_widget_destroy (w);
-  gtk_widget_destroy (p);
+  gtk_widget_unparent (w);
+  g_object_unref (g_object_ref_sink (p));
 }
 
 int

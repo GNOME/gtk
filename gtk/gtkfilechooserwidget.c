@@ -2360,7 +2360,7 @@ save_widgets_destroy (GtkFileChooserWidget *impl)
   if (impl->save_widgets == NULL)
     return;
 
-  gtk_widget_destroy (impl->save_widgets);
+  gtk_container_remove (GTK_CONTAINER (impl->box), impl->save_widgets);
   impl->save_widgets = NULL;
   impl->save_widgets_table = NULL;
   impl->location_entry = NULL;
@@ -3091,7 +3091,7 @@ gtk_file_chooser_widget_dispose (GObject *object)
   cancel_all_operations (impl);
 
   g_clear_pointer (&impl->rename_file_popover, gtk_widget_unparent);
-  g_clear_pointer (&impl->browse_files_popover, gtk_widget_destroy);
+  g_clear_pointer (&impl->browse_files_popover, gtk_widget_unparent);
   g_clear_object (&impl->extra_widget);
   g_clear_pointer (&impl->bookmarks_manager, _gtk_bookmarks_manager_free);
 
