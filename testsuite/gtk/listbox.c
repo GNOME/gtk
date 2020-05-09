@@ -24,18 +24,22 @@ static void
 check_sorted (GtkListBox *list)
 {
   GtkWidget *row, *label;
-  gint n1, n2;
+  int res[100];
+  int index, value;
+  int i;
 
-  n2 = n1 = 0;
   for (row = gtk_widget_get_first_child (GTK_WIDGET (list));
        row != NULL;
        row = gtk_widget_get_next_sibling (row))
     {
-      n1 = n2;
+      index = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (row));
       label = gtk_list_box_row_get_child (GTK_LIST_BOX_ROW (row));
-      n2 = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (label), "data"));
-      g_assert_cmpint (n1, <=, n2);
+      value = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (label), "data"));
+      res[index] = value;
     }
+
+  for (i = 1; i < 100; i++)
+    g_assert (res[i - 1] <= res[i]);
 }
 
 static void
