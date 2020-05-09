@@ -1333,8 +1333,7 @@ do_font_features (GtkWidget *do_widget)
 
       font_features_font_changed ();
 
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       g_object_unref (builder);
 

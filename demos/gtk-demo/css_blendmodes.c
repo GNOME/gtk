@@ -125,7 +125,7 @@ do_css_blendmodes (GtkWidget *do_widget)
 
       window = WID ("window");
       gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (do_widget));
-      g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       /* Setup the CSS provider for window */
       provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());

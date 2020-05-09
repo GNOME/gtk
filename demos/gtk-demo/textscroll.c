@@ -182,8 +182,7 @@ do_textscroll (GtkWidget *do_widget)
 
       window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "Automatic Scrolling");
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
       gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);

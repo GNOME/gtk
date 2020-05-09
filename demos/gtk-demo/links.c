@@ -59,8 +59,7 @@ do_links (GtkWidget *do_widget)
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Links");
       gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       label = gtk_label_new ("Some <a href=\"http://en.wikipedia.org/wiki/Text\""
                              "title=\"plain text\">text</a> may be marked up "

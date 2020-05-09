@@ -335,9 +335,8 @@ do_images (GtkWidget *do_widget)
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Images");
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
       g_signal_connect (window, "destroy",
                         G_CALLBACK (cleanup_callback), NULL);
 

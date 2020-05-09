@@ -90,8 +90,7 @@ do_css_multiplebgs (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "Multiple Backgrounds");
       gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (do_widget));
       gtk_window_set_default_size (GTK_WINDOW (window), 400, 300);
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       container = gtk_overlay_new ();
       gtk_window_set_child (GTK_WINDOW (window), container);
