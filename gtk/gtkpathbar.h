@@ -18,7 +18,7 @@
 #ifndef __GTK_PATH_BAR_H__
 #define __GTK_PATH_BAR_H__
 
-#include "gtkcontainer.h"
+#include "gtkwidget.h"
 #include "gtkfilesystem.h"
 
 G_BEGIN_DECLS
