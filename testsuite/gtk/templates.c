@@ -111,7 +111,7 @@ test_info_bar_basic (void)
 
   infobar = gtk_info_bar_new ();
   g_assert (GTK_IS_INFO_BAR (infobar));
-  gtk_widget_destroy (infobar);
+  g_object_unref (g_object_ref_sink (infobar));
 }
 
 static void
@@ -123,7 +123,7 @@ test_lock_button_basic (void)
   permission = g_simple_permission_new (TRUE);
   button = gtk_lock_button_new (permission);
   g_assert (GTK_IS_LOCK_BUTTON (button));
-  gtk_widget_destroy (button);
+  g_object_unref (g_object_ref_sink (button));
   g_object_unref (permission);
 }
 
@@ -155,7 +155,7 @@ test_scale_button_basic (void)
 
   widget = gtk_scale_button_new (0, 100, 10, NULL);
   g_assert (GTK_IS_SCALE_BUTTON (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (g_object_ref_sink (widget));
 }
 
 static void
@@ -165,7 +165,7 @@ test_volume_button_basic (void)
 
   widget = gtk_volume_button_new ();
   g_assert (GTK_IS_VOLUME_BUTTON (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (g_object_ref_sink (widget));
 }
 
 static void
@@ -175,7 +175,7 @@ test_statusbar_basic (void)
 
   widget = gtk_statusbar_new ();
   g_assert (GTK_IS_STATUSBAR (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (g_object_ref_sink (widget));
 }
 
 static void
@@ -185,7 +185,7 @@ test_search_bar_basic (void)
 
   widget = gtk_search_bar_new ();
   g_assert (GTK_IS_SEARCH_BAR (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (g_object_ref_sink (widget));
 }
 
 static void
@@ -195,7 +195,7 @@ test_action_bar_basic (void)
 
   widget = gtk_action_bar_new ();
   g_assert (GTK_IS_ACTION_BAR (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (g_object_ref_sink (widget));
 }
 
 static void
@@ -205,7 +205,7 @@ test_app_chooser_widget_basic (void)
 
   widget = gtk_app_chooser_widget_new (NULL);
   g_assert (GTK_IS_APP_CHOOSER_WIDGET (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (g_object_ref_sink (widget));
 }
 
 static void
@@ -288,7 +288,7 @@ test_file_chooser_widget_basic (void)
   while (!done)
     g_main_context_iteration (NULL,  TRUE);
 
-  gtk_widget_destroy (widget);
+  g_object_unref (g_object_ref_sink (widget));
 }
 
 static void
@@ -344,7 +344,7 @@ test_file_chooser_button_basic (void)
   while (!done)
     g_main_context_iteration (NULL,  TRUE);
 
-  gtk_widget_destroy (widget);
+  g_object_unref (g_object_ref_sink (widget));
 }
 
 static void
@@ -354,7 +354,7 @@ test_font_button_basic (void)
 
   widget = gtk_font_button_new ();
   g_assert (GTK_IS_FONT_BUTTON (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (g_object_ref_sink (widget));
 }
 
 static void
@@ -364,7 +364,7 @@ test_font_chooser_widget_basic (void)
 
   widget = gtk_font_chooser_widget_new ();
   g_assert (GTK_IS_FONT_CHOOSER_WIDGET (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (g_object_ref_sink (widget));
 }
 
 static void

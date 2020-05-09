@@ -1179,7 +1179,7 @@ node_property_activated (GtkTreeView *tv,
   gtk_popover_set_child (GTK_POPOVER (popover), image);
   gtk_popover_popup (GTK_POPOVER (popover));
 
-  g_signal_connect (popover, "unmap", G_CALLBACK (gtk_widget_destroy), NULL);
+  g_signal_connect (popover, "unmap", G_CALLBACK (gtk_widget_unparent), NULL);
 
   g_object_unref (texture);
 }

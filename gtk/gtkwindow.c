@@ -197,7 +197,6 @@ typedef struct
   gint title_height;
   GtkWidget *title_box;
   GtkWidget *titlebar;
-  GtkWidget *popup_menu;
   GtkWidget *key_press_focus;
 
   GdkMonitor *initial_fullscreen_monitor;
@@ -2416,7 +2415,7 @@ gtk_window_transient_parent_destroyed (GtkWindow *parent,
   GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (window));
 
   if (priv->destroy_with_parent)
-    gtk_widget_destroy (GTK_WIDGET (window));
+    gtk_window_destroy (window);
   else
     priv->transient_parent = NULL;
 }

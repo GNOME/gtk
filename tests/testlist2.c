@@ -40,7 +40,7 @@ row_revealed (GObject *revealer, GParamSpec *pspec, gpointer data)
   child = gtk_revealer_get_child (GTK_REVEALER (revealer));
   g_object_ref (child);
   gtk_revealer_set_child (GTK_REVEALER (revealer), NULL);
-  gtk_widget_destroy (GTK_WIDGET (revealer));
+  gtk_widget_unparent (GTK_WIDGET (revealer));
   gtk_container_add (GTK_CONTAINER (row), child);
   g_object_unref (child);
 }

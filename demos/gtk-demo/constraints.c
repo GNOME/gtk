@@ -25,9 +25,9 @@ simple_grid_dispose (GObject *object)
 {
   SimpleGrid *self = SIMPLE_GRID (object);
 
-  g_clear_pointer (&self->button1, gtk_widget_destroy);
-  g_clear_pointer (&self->button2, gtk_widget_destroy);
-  g_clear_pointer (&self->button3, gtk_widget_destroy);
+  g_clear_pointer (&self->button1, gtk_widget_unparent);
+  g_clear_pointer (&self->button2, gtk_widget_unparent);
+  g_clear_pointer (&self->button3, gtk_widget_unparent);
 
   G_OBJECT_CLASS (simple_grid_parent_class)->dispose (object);
 }
