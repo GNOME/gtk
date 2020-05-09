@@ -74,7 +74,7 @@ do_password_entry (GtkWidget *do_widget)
 
       button = gtk_button_new_with_mnemonic ("_Done");
       gtk_widget_add_css_class (button, "suggested-action");
-      g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_widget_destroy), window);
+      g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_window_destroy), window);
       gtk_widget_set_sensitive (button, FALSE);
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
 
@@ -84,7 +84,7 @@ do_password_entry (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

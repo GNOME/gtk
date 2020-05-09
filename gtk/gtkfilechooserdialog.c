@@ -91,7 +91,7 @@
  *     open_file (file);
  *   }
  *
- * gtk_widget_destroy (dialog);
+ * gtk_window_destroy (dialog);
  * ]|
  *
  * To use a dialog for saving, you can use this:
@@ -124,7 +124,7 @@
  *     save_to_file (file);
  *   }
  *
- * gtk_widget_destroy (dialog);
+ * gtk_window_destroy (dialog);
  * ]|
  *
  * ## Setting up a file chooser dialog ## {#gtkfilechooserdialog-setting-up}

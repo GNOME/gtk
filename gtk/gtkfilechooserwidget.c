@@ -766,7 +766,7 @@ error_message (GtkFileChooserWidget *impl,
                                  GTK_WINDOW (dialog));
 
   gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 
 }
 
@@ -1261,7 +1261,7 @@ confirm_delete (GtkFileChooserWidget *impl,
 
   response = gtk_dialog_run (GTK_DIALOG (dialog));
 
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 
   return (response == GTK_RESPONSE_ACCEPT);
 }
@@ -5761,7 +5761,7 @@ confirm_dialog_should_accept_filename (GtkFileChooserWidget *impl,
      * file list (will be restablished on next map()). Fixes data loss bug #2288 */
     impl->browse_files_interaction_frozen = TRUE;
 
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 
   return (response == GTK_RESPONSE_ACCEPT);
 }

@@ -11,7 +11,7 @@
 static void
 done_cb (GtkDialog *dialog, gint response, gpointer data)
 {
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 GtkWidget *
@@ -29,7 +29,7 @@ do_pagesetup (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

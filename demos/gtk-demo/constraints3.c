@@ -153,13 +153,13 @@ do_constraints3 (GtkWidget *do_widget)
      gtk_container_add (GTK_CONTAINER (box), button);
      gtk_widget_set_hexpand (grid, TRUE);
      g_signal_connect_swapped (button, "clicked",
-                               G_CALLBACK (gtk_widget_destroy), window);
+                               G_CALLBACK (gtk_window_destroy), window);
    }
 
  if (!gtk_widget_get_visible (window))
    gtk_widget_show (window);
  else
-   gtk_widget_destroy (window);
+   gtk_window_destroy (GTK_WINDOW (window));
 
  return window;
 }

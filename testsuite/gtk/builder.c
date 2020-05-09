@@ -253,7 +253,7 @@ test_connect_signals (void)
   g_assert_cmpint (object, ==, 1);
   g_assert_cmpint (object_after, ==, 1);
 
-  gtk_widget_destroy (GTK_WIDGET (window));
+  gtk_window_destroy (GTK_WINDOW (window));
   g_object_unref (builder);
   
   builder = builder_new_from_string (buffer_order, -1, NULL);
@@ -262,7 +262,7 @@ test_connect_signals (void)
   gtk_window_set_title (GTK_WINDOW (window), "test");
   g_assert (normal == 20);
 
-  gtk_widget_destroy (GTK_WIDGET (window));
+  gtk_window_destroy (GTK_WINDOW (window));
 
   gtk_builder_add_from_string (builder, buffer_extra,
 			       strlen (buffer_extra), NULL);
@@ -272,11 +272,11 @@ test_connect_signals (void)
   gtk_window_set_title (GTK_WINDOW (window), "test");
   g_assert (normal == 30);
 
-  gtk_widget_destroy (GTK_WIDGET (window));
+  gtk_window_destroy (GTK_WINDOW (window));
   window = gtk_builder_get_object (builder, "window3");
   gtk_window_set_title (GTK_WINDOW (window), "test");
   g_assert (normal == 40);
-  gtk_widget_destroy (GTK_WIDGET (window));
+  gtk_window_destroy (GTK_WINDOW (window));
   
   g_object_unref (builder);
 
@@ -289,7 +289,7 @@ test_connect_signals (void)
   gtk_window_set_title (GTK_WINDOW (window), "test");
 
   g_assert (normal == 1);
-  gtk_widget_destroy (GTK_WIDGET (window));
+  gtk_window_destroy (GTK_WINDOW (window));
   g_object_unref (builder);
 }
 
@@ -344,7 +344,7 @@ test_translation (void)
   g_assert (strcmp (gtk_label_get_text (label), "Arkiv") == 0);
 
   window = gtk_builder_get_object (builder, "window1");
-  gtk_widget_destroy (GTK_WIDGET (window));
+  gtk_window_destroy (GTK_WINDOW (window));
   g_object_unref (builder);
 }
 #endif
@@ -445,7 +445,7 @@ test_sizegroup (void)
   {
     GObject *window;
     window = gtk_builder_get_object (builder, "window1");
-    gtk_widget_destroy (GTK_WIDGET (window));
+    gtk_window_destroy (GTK_WINDOW (window));
   }
 #endif  
   g_object_unref (builder);
@@ -684,20 +684,20 @@ test_types (void)
   GError *error;
 
   builder = builder_new_from_string (buffer, -1, NULL);
-  gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "dialog")));
-  gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "window")));
+  gtk_window_destroy (GTK_WINDOW (gtk_builder_get_object (builder, "dialog")));
+  gtk_window_destroy (GTK_WINDOW (gtk_builder_get_object (builder, "window")));
   g_object_unref (builder);
 
   builder = builder_new_from_string (buffer2, -1, NULL);
   window = gtk_builder_get_object (builder, "window");
   g_assert (GTK_IS_WINDOW (window));
-  gtk_widget_destroy (GTK_WIDGET (window));
+  gtk_window_destroy (GTK_WINDOW (window));
   g_object_unref (builder);
 
   builder = builder_new_from_string (buffer3, -1, NULL);
   window = gtk_builder_get_object (builder, "window");
   g_assert (GTK_IS_WINDOW (window));
-  gtk_widget_destroy (GTK_WIDGET (window));
+  gtk_window_destroy (GTK_WINDOW (window));
   g_object_unref (builder);
   
   error = NULL;
@@ -844,7 +844,7 @@ test_construct_only_property (void)
   widget = gtk_builder_get_object (builder, "window1");
   g_assert_cmpstr (gtk_widget_get_css_name (GTK_WIDGET (widget)), ==, "amazing");
 
-  gtk_widget_destroy (GTK_WIDGET (widget));
+  gtk_window_destroy (GTK_WINDOW (widget));
   g_object_unref (builder);
 
   builder = builder_new_from_string (buffer2, -1, NULL);
@@ -894,7 +894,7 @@ test_object_properties (void)
   gtk_builder_add_from_string (builder, buffer2, -1, NULL);
   window = gtk_builder_get_object (builder, "window2");
   g_assert (window != NULL);
-  gtk_widget_destroy (GTK_WIDGET (window));
+  gtk_window_destroy (GTK_WINDOW (window));
 
   g_object_unref (builder);
 }
@@ -947,7 +947,7 @@ test_children (void)
   g_assert (gtk_widget_get_parent (GTK_WIDGET(button)) != NULL);
   g_assert (strcmp (gtk_buildable_get_name (GTK_BUILDABLE (gtk_widget_get_parent (GTK_WIDGET (button)))), "window1") == 0);
 
-  gtk_widget_destroy (GTK_WIDGET (window));
+  gtk_window_destroy (GTK_WINDOW (window));
   g_object_unref (builder);
 
   builder = builder_new_from_string (buffer2, -1, NULL);
@@ -974,7 +974,7 @@ test_children (void)
   g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (action_area)) == GTK_ORIENTATION_HORIZONTAL);
   g_assert (gtk_widget_get_parent (GTK_WIDGET (action_area)) != NULL);
   g_assert (gtk_buildable_get_name (GTK_BUILDABLE (action_area)) != NULL);
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
   g_object_unref (builder);
 }
 
@@ -1087,7 +1087,7 @@ test_treeview_column (void)
   g_list_free (renderers);
 
   window = gtk_builder_get_object (builder, "window1");
-  gtk_widget_destroy (GTK_WIDGET (window));
+  gtk_window_destroy (GTK_WINDOW (window));
 
   g_object_unref (builder);
 }
@@ -1134,7 +1134,7 @@ test_icon_view (void)
   g_assert (GTK_IS_ICON_VIEW (iconview));
 
   window = gtk_builder_get_object (builder, "window1");
-  gtk_widget_destroy (GTK_WIDGET (window));
+  gtk_window_destroy (GTK_WINDOW (window));
   g_object_unref (builder);
 }
 
@@ -1188,7 +1188,7 @@ test_combo_box (void)
   g_assert (combobox);
 
   window = gtk_builder_get_object (builder, "window1");
-  gtk_widget_destroy (GTK_WIDGET (window));
+  gtk_window_destroy (GTK_WINDOW (window));
 
   g_object_unref (builder);
 }
@@ -1260,7 +1260,7 @@ test_combo_box_entry (void)
   g_free (text);
 
   window = gtk_builder_get_object (builder, "window1");
-  gtk_widget_destroy (GTK_WIDGET (window));
+  gtk_window_destroy (GTK_WINDOW (window));
 
   g_object_unref (builder);
 }
@@ -1320,7 +1320,7 @@ test_cell_view (void)
 
   window = gtk_builder_get_object (builder, "window1");
   g_assert (window);
-  gtk_widget_destroy (GTK_WIDGET (window));
+  gtk_window_destroy (GTK_WINDOW (window));
   
   g_object_unref (builder);
 }
@@ -1366,7 +1366,7 @@ test_dialog (void)
   button_cancel = gtk_builder_get_object (builder, "button_cancel");
   g_assert (gtk_dialog_get_response_for_widget (GTK_DIALOG (dialog1), GTK_WIDGET (button_cancel)) == -5);
   
-  gtk_widget_destroy (GTK_WIDGET (dialog1));
+  gtk_window_destroy (GTK_WINDOW (dialog1));
   g_object_unref (builder);
 }
 
@@ -1397,7 +1397,7 @@ test_message_dialog (void)
   g_assert (GTK_IS_EXPANDER (expander));
   g_assert (gtk_widget_get_parent (GTK_WIDGET (expander)) == gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG (dialog1)));
 
-  gtk_widget_destroy (GTK_WIDGET (dialog1));
+  gtk_window_destroy (GTK_WINDOW (dialog1));
   g_object_unref (builder);
 }
 
@@ -1479,7 +1479,7 @@ test_widget (void)
 
   g_assert (gtk_widget_has_focus (GTK_WIDGET (button1)));
   window1 = gtk_builder_get_object (builder, "window1");
-  gtk_widget_destroy (GTK_WIDGET (window1));
+  gtk_window_destroy (GTK_WINDOW (window1));
   
   g_object_unref (builder);
   
@@ -1508,7 +1508,7 @@ test_widget (void)
   g_assert_cmpstr (name, ==, "A Label");
   g_free (name);
   
-  gtk_widget_destroy (GTK_WIDGET (window1));
+  gtk_window_destroy (GTK_WINDOW (window1));
   g_object_unref (builder);
 
   builder = builder_new_from_string (buffer4, -1, NULL);
@@ -1543,12 +1543,12 @@ test_window (void)
   g_object_get (window1, "title", &title, NULL);
   g_assert (strcmp (title, "") == 0);
   g_free (title);
-  gtk_widget_destroy (GTK_WIDGET (window1));
+  gtk_window_destroy (GTK_WINDOW (window1));
   g_object_unref (builder);
 
   builder = builder_new_from_string (buffer2, -1, NULL);
   window1 = gtk_builder_get_object (builder, "window1");
-  gtk_widget_destroy (GTK_WIDGET (window1));
+  gtk_window_destroy (GTK_WINDOW (window1));
   g_object_unref (builder);
 }
 
@@ -1735,7 +1735,7 @@ test_reference_counting (void)
   gtk_tree_view_set_model (GTK_TREE_VIEW (treeview), NULL);
   g_assert (model_freed == TRUE);
   
-  gtk_widget_destroy (GTK_WIDGET (window));
+  gtk_window_destroy (GTK_WINDOW (window));
 
   builder = builder_new_from_string (buffer2, -1, NULL);
   g_object_unref (builder);
@@ -1936,7 +1936,7 @@ test_add_objects (void)
   g_assert (obj == NULL);
   obj = gtk_builder_get_object (builder, "window2");
   g_assert (GTK_IS_WINDOW (obj));
-  gtk_widget_destroy (GTK_WIDGET (obj));
+  gtk_window_destroy (GTK_WINDOW (obj));
   obj = gtk_builder_get_object (builder, "mainbox");  
   g_assert (GTK_IS_WIDGET (obj));
   g_object_unref (builder);
@@ -2255,7 +2255,7 @@ test_property_bindings (void)
   g_assert (gtk_widget_get_sensitive (GTK_WIDGET (button3)));
 
   window = gtk_builder_get_object (builder, "window");
-  gtk_widget_destroy (GTK_WIDGET (window));
+  gtk_window_destroy (GTK_WINDOW (window));
   g_object_unref (builder);
 }
 

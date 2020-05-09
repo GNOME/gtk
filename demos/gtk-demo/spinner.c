@@ -45,7 +45,7 @@ do_spinner (GtkWidget *do_widget)
     gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
     g_signal_connect (window, "response",
-                      G_CALLBACK (gtk_widget_destroy), NULL);
+                      G_CALLBACK (gtk_window_destroy), NULL);
     g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
     content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
@@ -92,7 +92,7 @@ do_spinner (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }
