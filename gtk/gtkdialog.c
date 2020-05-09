@@ -308,11 +308,6 @@ action_widget_activated (GtkWidget *widget, GtkDialog *dialog)
   gtk_dialog_response (dialog, response_id);
 }
 
-typedef struct {
-  GtkWidget *child;
-  gint       response_id;
-} ActionWidgetData;
-
 static void
 add_response_data (GtkDialog *dialog,
                    GtkWidget *child,
