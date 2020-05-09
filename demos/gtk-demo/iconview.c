@@ -266,14 +266,14 @@ do_iconview (GtkWidget *do_widget)
       gtk_window_set_child (GTK_WINDOW (window), vbox);
 
       tool_bar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_container_add (GTK_CONTAINER (vbox), tool_bar);
+      gtk_box_append (GTK_BOX (vbox), tool_bar);
 
       up_button = gtk_button_new_with_mnemonic ("_Up");
       gtk_widget_set_sensitive (GTK_WIDGET (up_button), FALSE);
-      gtk_container_add (GTK_CONTAINER (tool_bar), up_button);
+      gtk_box_append (GTK_BOX (tool_bar), up_button);
 
       home_button = gtk_button_new_with_mnemonic ("_Home");
-      gtk_container_add (GTK_CONTAINER (tool_bar), home_button);
+      gtk_box_append (GTK_BOX (tool_bar), home_button);
 
 
       sw = gtk_scrolled_window_new (NULL, NULL);
@@ -283,7 +283,7 @@ do_iconview (GtkWidget *do_widget)
                                       GTK_POLICY_AUTOMATIC);
       gtk_widget_set_vexpand (sw, TRUE);
 
-      gtk_container_add (GTK_CONTAINER (vbox), sw);
+      gtk_box_append (GTK_BOX (vbox), sw);
 
       /* Create the store and fill it with the contents of '/' */
       parent = g_strdup ("/");

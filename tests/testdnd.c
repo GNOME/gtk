@@ -463,7 +463,7 @@ popup_cb (gpointer data)
 		g_signal_connect (dest, "drop", G_CALLBACK (popup_drop), NULL);
                 gtk_widget_add_controller (button, GTK_EVENT_CONTROLLER (dest));
 	      }
-	  gtk_container_add (GTK_CONTAINER (popup_window), grid);
+	  gtk_box_append (GTK_BOX (popup_window), grid);
 	}
       gtk_widget_show (popup_window);
       popped_up = TRUE;

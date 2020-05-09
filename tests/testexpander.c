@@ -7,11 +7,6 @@ expander_cb (GtkExpander *expander, GParamSpec *pspec, GtkWindow *dialog)
 }
 
 static void
-do_not_expand (GtkWidget *child, gpointer data)
-{
-}
-
-static void
 response_cb (GtkDialog *dialog, gint response_id, gpointer data)
 {
   gboolean *done = data;
@@ -45,8 +40,6 @@ main (int argc, char *argv[])
                                             "but not the full story.");
 
   area = gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG (dialog));
-  /* make the labels not expand */
-  gtk_container_foreach (GTK_CONTAINER (area), do_not_expand, NULL);
 
   expander = gtk_expander_new ("Details:");
   sw = gtk_scrolled_window_new (NULL, NULL);
@@ -72,7 +65,7 @@ main (int argc, char *argv[])
   gtk_expander_set_child (GTK_EXPANDER (expander), sw);
   gtk_widget_set_hexpand (expander, TRUE);
   gtk_widget_set_vexpand (expander, TRUE);
-  gtk_container_add (GTK_CONTAINER (area), expander);
+  gtk_box_append (GTK_BOX (area), expander);
   g_signal_connect (expander, "notify::expanded",
                     G_CALLBACK (expander_cb), dialog);
 

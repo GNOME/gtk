@@ -53,9 +53,13 @@ css_text_changed (GtkTextBuffer  *buffer,
 static void
 apply_css (GtkWidget *widget, GtkStyleProvider *provider)
 {
+  GtkWidget *child;
+
   gtk_style_context_add_provider (gtk_widget_get_style_context (widget), provider, G_MAXUINT);
-  if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget), (GtkCallback) apply_css, provider);
+  for (child = gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    apply_css (child, provider);
 }
 
 static GtkWidget *
@@ -68,13 +72,13 @@ create_toolbar (void)
   gtk_widget_set_valign (toolbar, GTK_ALIGN_CENTER);
 
   item = gtk_button_new_from_icon_name ("go-next");
-  gtk_container_add (GTK_CONTAINER (toolbar), item);
+  gtk_box_append (GTK_BOX (toolbar), item);
 
   item = gtk_button_new_from_icon_name ("go-previous");
-  gtk_container_add (GTK_CONTAINER (toolbar), item);
+  gtk_box_append (GTK_BOX (toolbar), item);
 
   item = gtk_button_new_with_label ("Hello World");
-  gtk_container_add (GTK_CONTAINER (toolbar), item);
+  gtk_box_append (GTK_BOX (toolbar), item);
 
   return toolbar;
 }

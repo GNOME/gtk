@@ -228,27 +228,27 @@ new_window (GApplication *app,
   button = gtk_toggle_button_new ();
   gtk_button_set_icon_name (GTK_BUTTON (button), "format-justify-left");
   gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button), "win.justify::left");
-  gtk_container_add (GTK_CONTAINER (toolbar), button);
+  gtk_box_append (GTK_BOX (toolbar), button);
 
   button = gtk_toggle_button_new ();
   gtk_button_set_icon_name (GTK_BUTTON (button), "format-justify-center");
   gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button), "win.justify::center");
-  gtk_container_add (GTK_CONTAINER (toolbar), button);
+  gtk_box_append (GTK_BOX (toolbar), button);
 
   button = gtk_toggle_button_new ();
   gtk_button_set_icon_name (GTK_BUTTON (button), "format-justify-right");
   gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button), "win.justify::right");
-  gtk_container_add (GTK_CONTAINER (toolbar), button);
+  gtk_box_append (GTK_BOX (toolbar), button);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_widget_set_halign (box, GTK_ALIGN_END);
   label = gtk_label_new ("Fullscreen:");
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_box_append (GTK_BOX (box), label);
   sw = gtk_switch_new ();
   gtk_widget_set_valign (sw, GTK_ALIGN_CENTER);
   gtk_actionable_set_action_name (GTK_ACTIONABLE (sw), "win.fullscreen");
-  gtk_container_add (GTK_CONTAINER (box), sw);
-  gtk_container_add (GTK_CONTAINER (toolbar), box);
+  gtk_box_append (GTK_BOX (box), sw);
+  gtk_box_append (GTK_BOX (toolbar), box);
 
   gtk_grid_attach (GTK_GRID (grid), toolbar, 0, 0, 1, 1);
 
@@ -406,12 +406,12 @@ edit_accels (GSimpleAction *action,
   gtk_window_set_application (GTK_WINDOW (dialog), app);
   actions = gtk_application_list_action_descriptions (app);
   combo = gtk_combo_box_text_new ();
-  gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), combo);
+  gtk_box_append (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), combo);
   for (i = 0; actions[i]; i++)
     gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), actions[i], actions[i]);
   g_signal_connect (combo, "changed", G_CALLBACK (combo_changed), dialog);
   entry = gtk_entry_new ();
-  gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), entry);
+  gtk_box_append (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), entry);
   gtk_dialog_add_button (GTK_DIALOG (dialog), "Close", GTK_RESPONSE_CLOSE);
   gtk_dialog_add_button (GTK_DIALOG (dialog), "Set", GTK_RESPONSE_APPLY);
   g_signal_connect (dialog, "response", G_CALLBACK (response), dialog);

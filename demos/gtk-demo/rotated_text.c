@@ -189,7 +189,7 @@ do_rotated_text (GtkWidget *do_widget)
 
       /* Add a drawing area */
       drawing_area = gtk_drawing_area_new ();
-      gtk_container_add (GTK_CONTAINER (box), drawing_area);
+      gtk_box_append (GTK_BOX (box), drawing_area);
       gtk_widget_add_css_class (drawing_area, GTK_STYLE_CLASS_VIEW);
 
       gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (drawing_area),
@@ -198,7 +198,7 @@ do_rotated_text (GtkWidget *do_widget)
 
       /* And a label */
       label = gtk_label_new (text);
-      gtk_container_add (GTK_CONTAINER (box), label);
+      gtk_box_append (GTK_BOX (box), label);
 
       /* Set up fancy stuff on the label */
       layout = gtk_label_get_layout (GTK_LABEL (label));

@@ -729,11 +729,14 @@ select_maybe (GtkWidget   *widget,
 
 static void
 alternative_set (GtkWidget   *box,
-		 const gchar *value)
+                 const gchar *value)
 {
-  gtk_container_foreach (GTK_CONTAINER (box), 
-			 (GtkCallback) select_maybe,
-			 (gpointer) value);
+  GtkWidget *child;
+
+  for (child = gtk_widget_get_first_child (box);
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    select_maybe (child, value);
 }
 
 static GSList *
@@ -748,7 +751,7 @@ alternative_append (GtkWidget              *box,
   button = gtk_radio_button_new_with_label (group, label);
   gtk_widget_show (button);
   gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_box_append (GTK_BOX (box), button);
 
   g_object_set_data (G_OBJECT (button), "value", (gpointer)value);
   g_signal_connect (button, "toggled",
@@ -779,7 +782,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
       gtk_combo_box_set_active (GTK_COMBO_BOX (priv->combo), 0);
       gtk_widget_set_sensitive (GTK_WIDGET (widget), FALSE);
       gtk_widget_show (priv->combo);
-      gtk_container_add (GTK_CONTAINER (widget), priv->combo);
+      gtk_box_append (GTK_BOX (widget), priv->combo);
     }
   else switch (source->type)
     {
@@ -787,7 +790,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
       priv->check = gtk_check_button_new_with_mnemonic (source->display_text);
       g_signal_connect (priv->check, "toggled", G_CALLBACK (check_toggled_cb), widget);
       gtk_widget_show (priv->check);
-      gtk_container_add (GTK_CONTAINER (widget), priv->check);
+      gtk_box_append (GTK_BOX (widget), priv->check);
       break;
     case GTK_PRINTER_OPTION_TYPE_PICKONE:
     case GTK_PRINTER_OPTION_TYPE_PICKONE_PASSWORD:
@@ -819,7 +822,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
                           source->choices_display[i],
                           source->choices[i]);
       gtk_widget_show (priv->combo);
-      gtk_container_add (GTK_CONTAINER (widget), priv->combo);
+      gtk_box_append (GTK_BOX (widget), priv->combo);
       g_signal_connect (priv->combo, "changed", G_CALLBACK (combo_changed_cb), widget);
 
       text = g_strdup_printf ("%s:", source->display_text);
@@ -833,7 +836,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
       priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
       gtk_widget_set_valign (priv->box, GTK_ALIGN_BASELINE);
       gtk_widget_show (priv->box);
-      gtk_container_add (GTK_CONTAINER (widget), priv->box);
+      gtk_box_append (GTK_BOX (widget), priv->box);
       for (i = 0; i < source->num_choices; i++)
         {
 	  group = alternative_append (priv->box,
@@ -861,7 +864,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
       gtk_entry_set_activates_default (GTK_ENTRY (priv->entry),
                                        gtk_printer_option_get_activates_default (source));
       gtk_widget_show (priv->entry);
-      gtk_container_add (GTK_CONTAINER (widget), priv->entry);
+      gtk_box_append (GTK_BOX (widget), priv->entry);
       g_signal_connect (priv->entry, "changed", G_CALLBACK (entry_changed_cb), widget);
 
       text = g_strdup_printf ("%s:", source->display_text);
@@ -874,7 +877,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
     case GTK_PRINTER_OPTION_TYPE_FILESAVE:
       priv->button = gtk_button_new ();
       gtk_widget_show (priv->button);
-      gtk_container_add (GTK_CONTAINER (widget), priv->button);
+      gtk_box_append (GTK_BOX (widget), priv->button);
       g_signal_connect (priv->button, "clicked", G_CALLBACK (filesave_choose_cb), widget);
 
       text = g_strdup_printf ("%s:", source->display_text);
@@ -887,7 +890,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
     case GTK_PRINTER_OPTION_TYPE_INFO:
       priv->info_label = gtk_label_new (NULL);
       gtk_label_set_selectable (GTK_LABEL (priv->info_label), TRUE);
-      gtk_container_add (GTK_CONTAINER (widget), priv->info_label);
+      gtk_box_append (GTK_BOX (widget), priv->info_label);
 
       text = g_strdup_printf ("%s:", source->display_text);
       priv->label = gtk_label_new_with_mnemonic (text);
@@ -900,7 +903,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
     }
 
   priv->image = gtk_image_new_from_icon_name ("dialog-warning");
-  gtk_container_add (GTK_CONTAINER (widget), priv->image);
+  gtk_box_append (GTK_BOX (widget), priv->image);
 }
 
 /*

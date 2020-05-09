@@ -26,12 +26,12 @@ make_switch (gboolean is_on,
 
   sw = gtk_switch_new ();
   gtk_switch_set_active (GTK_SWITCH (sw), is_on);
-  gtk_container_add (GTK_CONTAINER (hbox), sw);
+  gtk_box_append (GTK_BOX (hbox), sw);
   gtk_widget_set_sensitive (sw, is_sensitive);
 
   label = gtk_label_new (is_on ? "Enabled" : "Disabled");
   gtk_widget_set_hexpand (label, TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_box_append (GTK_BOX (hbox), label);
 
   g_object_bind_property_full (sw, "active",
                                label, "label",
@@ -116,18 +116,18 @@ make_delayed_switch (gboolean is_on,
 
   sw = gtk_switch_new ();
   gtk_switch_set_active (GTK_SWITCH (sw), is_on);
-  gtk_container_add (GTK_CONTAINER (hbox), sw);
+  gtk_box_append (GTK_BOX (hbox), sw);
   gtk_widget_set_sensitive (sw, is_sensitive);
 
   g_signal_connect (sw, "state-set", G_CALLBACK (set_state), NULL);
 
   spinner = gtk_spinner_new ();
-  gtk_container_add (GTK_CONTAINER (hbox), spinner);
+  gtk_box_append (GTK_BOX (hbox), spinner);
   gtk_widget_set_opacity (spinner, 0.0);
 
   label = gtk_label_new (is_on ? "Enabled" : "Disabled");
   gtk_widget_set_hexpand (label, TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_box_append (GTK_BOX (hbox), label);
 
   g_object_bind_property_full (sw, "active",
                                label, "label",
@@ -137,7 +137,7 @@ make_delayed_switch (gboolean is_on,
                                NULL, NULL);
 
   check = gtk_check_button_new ();
-  gtk_container_add (GTK_CONTAINER (hbox), check);
+  gtk_box_append (GTK_BOX (hbox), check);
   g_object_bind_property (sw, "state",
                           check, "active",
                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
@@ -176,19 +176,19 @@ int main (int argc, char *argv[])
   gtk_window_set_child (GTK_WINDOW (window), vbox);
 
   hbox = make_switch (FALSE, TRUE);
-  gtk_container_add (GTK_CONTAINER (vbox), hbox);
+  gtk_box_append (GTK_BOX (vbox), hbox);
 
   hbox = make_switch (TRUE, TRUE);
-  gtk_container_add (GTK_CONTAINER (vbox), hbox);
+  gtk_box_append (GTK_BOX (vbox), hbox);
 
   hbox = make_switch (FALSE, FALSE);
-  gtk_container_add (GTK_CONTAINER (vbox), hbox);
+  gtk_box_append (GTK_BOX (vbox), hbox);
 
   hbox = make_switch (TRUE, FALSE);
-  gtk_container_add (GTK_CONTAINER (vbox), hbox);
+  gtk_box_append (GTK_BOX (vbox), hbox);
 
   hbox = make_delayed_switch (FALSE, TRUE);
-  gtk_container_add (GTK_CONTAINER (vbox), hbox);
+  gtk_box_append (GTK_BOX (vbox), hbox);
 
   while (!done)
     g_main_context_iteration (NULL, TRUE);

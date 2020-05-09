@@ -48,7 +48,7 @@ prepare_window_for_orientation (GtkOrientation orientation)
   gtk_window_set_child (GTK_WINDOW (window), mainbox);
 
   wrap_button = gtk_toggle_button_new_with_label ("Wrap");
-  gtk_container_add (GTK_CONTAINER (mainbox), wrap_button);
+  gtk_box_append (GTK_BOX (mainbox), wrap_button);
 
   for (max = 9; max <= 999999999; max = max * 10 + 9)
     {
@@ -65,8 +65,8 @@ prepare_window_for_orientation (GtkOrientation orientation)
       g_object_bind_property (wrap_button, "active", spin, "wrap", G_BINDING_SYNC_CREATE);
 
       GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-      gtk_container_add (GTK_CONTAINER (hbox), spin);
-      gtk_container_add (GTK_CONTAINER (mainbox), hbox);
+      gtk_box_append (GTK_BOX (hbox), spin);
+      gtk_box_append (GTK_BOX (mainbox), hbox);
     }
 
   gtk_widget_show (window);

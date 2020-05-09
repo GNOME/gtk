@@ -891,12 +891,12 @@ overshot (GtkScrolledWindow *sw, GtkPositionType pos, GtkWidget *widget)
     {
       if (silver)
         {
-          gtk_container_remove (GTK_CONTAINER (widget), silver);
+          gtk_list_box_remove (GTK_LIST_BOX (widget), silver);
           g_object_set_data (G_OBJECT (widget), "Silver", NULL);
         }
       if (gold)
         {
-          gtk_container_remove (GTK_CONTAINER (widget), gold);
+          gtk_list_box_remove (GTK_LIST_BOX (widget), gold);
           g_object_set_data (G_OBJECT (widget), "Gold", NULL);
         }
 
@@ -926,7 +926,7 @@ overshot (GtkScrolledWindow *sw, GtkPositionType pos, GtkWidget *widget)
                 "margin-bottom", 6,
                 "xalign", 0.0,
                 NULL);
-  gtk_container_add (GTK_CONTAINER (row), label);
+  gtk_box_append (GTK_BOX (row), label);
   gdk_rgba_parse (&rgba, color);
   swatch = g_object_new (g_type_from_name ("GtkColorSwatch"),
                          "rgba", &rgba,
@@ -941,8 +941,8 @@ overshot (GtkScrolledWindow *sw, GtkPositionType pos, GtkWidget *widget)
                          "height-request", 24,
                          NULL);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (box), swatch);
-  gtk_container_add (GTK_CONTAINER (row), box);
+  gtk_box_append (GTK_BOX (box), swatch);
+  gtk_box_append (GTK_BOX (row), box);
   gtk_list_box_insert (GTK_LIST_BOX (widget), row, -1);
   row = gtk_widget_get_parent (row);
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
@@ -1044,7 +1044,7 @@ populate_colors (GtkWidget *widget, GtkWidget *chooser)
                     "hexpand", TRUE,
                     "xalign", 0.0,
                     NULL);
-      gtk_container_add (GTK_CONTAINER (row), label);
+      gtk_box_append (GTK_BOX (row), label);
       gdk_rgba_parse (&rgba, colors[i].color);
       swatch = g_object_new (g_type_from_name ("GtkColorSwatch"),
                              "rgba", &rgba,
@@ -1059,8 +1059,8 @@ populate_colors (GtkWidget *widget, GtkWidget *chooser)
                              "height-request", 24,
                              NULL);
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_container_add (GTK_CONTAINER (box), swatch);
-      gtk_container_add (GTK_CONTAINER (row), box);
+      gtk_box_append (GTK_BOX (box), swatch);
+      gtk_box_append (GTK_BOX (row), box);
       gtk_list_box_insert (GTK_LIST_BOX (widget), row, -1);
       row = gtk_widget_get_parent (row);
       gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
@@ -1288,10 +1288,7 @@ close_selection_dialog (GtkWidget *dialog, gint response, GtkWidget *tv)
   if (response == GTK_RESPONSE_CANCEL)
     return;
 
-  box = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-  children = gtk_container_get_children (GTK_CONTAINER (box));
-  box = children->data;
-  g_list_free (children);
+  box = gtk_widget_get_first_child (gtk_dialog_get_content_area (GTK_DIALOG (dialog)));
   g_assert (GTK_IS_FLOW_BOX (box));
   children = gtk_flow_box_get_selected_children (GTK_FLOW_BOX (box));
 

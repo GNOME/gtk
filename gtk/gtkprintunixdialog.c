@@ -816,7 +816,7 @@ gtk_print_unix_dialog_constructed (GObject *object)
        button = gtk_dialog_get_widget_for_response (GTK_DIALOG (object), GTK_RESPONSE_APPLY);
        g_object_ref (button);
        parent = gtk_widget_get_ancestor (button, GTK_TYPE_HEADER_BAR);
-       gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (button)), button);
+       gtk_box_remove (GTK_BOX (gtk_widget_get_parent (button)), button);
        gtk_header_bar_pack_end (GTK_HEADER_BAR (parent), button);
        g_object_unref (button);
     }
@@ -1291,13 +1291,13 @@ wrap_in_frame (const gchar *label,
   g_free (bold_text);
 
   frame = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_container_add (GTK_CONTAINER (frame), label_widget);
+  gtk_box_append (GTK_BOX (frame), label_widget);
 
   gtk_widget_set_margin_start (child, 12);
   gtk_widget_set_halign (child, GTK_ALIGN_FILL);
   gtk_widget_set_valign (child, GTK_ALIGN_FILL);
 
-  gtk_container_add (GTK_CONTAINER (frame), child);
+  gtk_box_append (GTK_BOX (frame), child);
 
   gtk_widget_show (frame);
 
@@ -1341,14 +1341,14 @@ add_option_to_extension_point (GtkPrinterOption *option,
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
       gtk_widget_set_valign (hbox, GTK_ALIGN_BASELINE);
-      gtk_container_add (GTK_CONTAINER (hbox), label);
-      gtk_container_add (GTK_CONTAINER (hbox), widget);
+      gtk_box_append (GTK_BOX (hbox), label);
+      gtk_box_append (GTK_BOX (hbox), widget);
       gtk_widget_show (hbox);
 
-      gtk_container_add (GTK_CONTAINER (extension_point), hbox);
+      gtk_box_append (GTK_BOX (extension_point), hbox);
     }
   else
-    gtk_container_add (GTK_CONTAINER (extension_point), widget);
+    gtk_box_append (GTK_BOX (extension_point), widget);
 }
 
 static gint
@@ -1521,7 +1521,7 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
   GtkWidget *table, *frame;
   gboolean has_advanced, has_job;
   guint nrows;
-  GList *children;
+  GtkWidget *child;
 
   if (dialog->current_printer == NULL)
     {
@@ -1579,11 +1579,9 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
    * This keeps the file format radios from moving as the
    * filename changes.
    */
-  children = gtk_container_get_children (GTK_CONTAINER (dialog->extension_point));
-  l = g_list_last (children);
-  if (l && l != children)
-    gtk_widget_set_halign (GTK_WIDGET (l->data), GTK_ALIGN_END);
-  g_list_free (children);
+  child = gtk_widget_get_last_child (dialog->extension_point);
+  if (child && child != gtk_widget_get_first_child (dialog->extension_point))
+    gtk_widget_set_halign (child, GTK_ALIGN_END);
 
   /* Put the rest of the groups in the advanced page */
   groups = gtk_printer_option_set_get_groups (dialog->options);
@@ -1621,7 +1619,7 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
           gtk_widget_show (table);
           gtk_widget_show (frame);
 
-          gtk_container_add (GTK_CONTAINER (dialog->advanced_vbox),
+          gtk_box_append (GTK_BOX (dialog->advanced_vbox),
                               frame);
         }
     }
@@ -1930,21 +1928,6 @@ options_changed_cb (GtkPrintUnixDialog *dialog)
 }
 
 static void
-remove_custom_widget (GtkWidget    *widget,
-                      GtkContainer *container)
-{
-  gtk_container_remove (container, widget);
-}
-
-static void
-extension_point_clear_children (GtkContainer *container)
-{
-  gtk_container_foreach (container,
-                         (GtkCallback)remove_custom_widget,
-                         container);
-}
-
-static void
 clear_per_printer_ui (GtkPrintUnixDialog *dialog)
 {
   GtkWidget *child;
@@ -1959,8 +1942,9 @@ clear_per_printer_ui (GtkPrintUnixDialog *dialog)
   while ((child = gtk_widget_get_first_child (dialog->color_table)))
     gtk_grid_remove (GTK_GRID (dialog->color_table), child);
   while ((child = gtk_widget_get_first_child (dialog->advanced_vbox)))
-    gtk_container_remove (GTK_CONTAINER (dialog->advanced_vbox), child);
-  extension_point_clear_children (GTK_CONTAINER (dialog->extension_point));
+    gtk_box_remove (GTK_BOX (dialog->advanced_vbox), child);
+  while ((child = gtk_widget_get_first_child (dialog->extension_point)))
+    gtk_box_remove (GTK_BOX (dialog->extension_point), child);
 }
 
 static void
