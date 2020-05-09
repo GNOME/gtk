@@ -326,11 +326,14 @@ update_info (gpointer data)
 
   if (GTK_IS_WIDGET (sl->priv->object))
     {
+      GtkWidget *child;
       AtkObject *accessible;
       AtkRole role;
       GList *list, *l;
 
-      gtk_container_forall (GTK_CONTAINER (sl->priv->mnemonic_label), (GtkCallback)gtk_widget_destroy, NULL);
+      while ((child = gtk_widget_get_first_child (sl->priv->mnemonic_label)))
+        gtk_container_remove (GTK_CONTAINER (sl->priv->mnemonic_label), child);
+
       list = gtk_widget_list_mnemonic_labels (GTK_WIDGET (sl->priv->object));
       for (l = list; l; l = l->next)
         {

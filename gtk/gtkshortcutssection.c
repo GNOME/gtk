@@ -200,17 +200,8 @@ gtk_shortcuts_section_dispose (GObject *object)
 {
   GtkShortcutsSection *self = GTK_SHORTCUTS_SECTION (object);
 
-  if (self->stack)
-    {
-      gtk_widget_destroy (GTK_WIDGET (self->stack));
-      self->stack = NULL;
-    }
-
-  if (self->footer)
-    {
-      gtk_widget_destroy (GTK_WIDGET (self->footer));
-      self->footer = NULL;
-    }
+  g_clear_pointer ((GtkWidget **)&self->stack, gtk_widget_unparent);
+  g_clear_pointer (&self->footer, gtk_widget_unparent);
 
   g_list_free (self->groups);
   self->groups = NULL;
@@ -573,6 +564,7 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
   guint n_columns;
   guint n_pages;
   GtkWidget *current_page, *current_column;
+  GtkWidget *child;
 
   /* collect all groups from the current pages */
   groups = NULL;
@@ -712,8 +704,8 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
     }
 
   /* replace the current pages with the new pages */
-  children = gtk_container_get_children (GTK_CONTAINER (self->stack));
-  g_list_free_full (children, (GDestroyNotify)gtk_widget_destroy);
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (self->stack))))
+    gtk_container_remove (GTK_CONTAINER (self->stack), child);
 
   for (p = pages, n_pages = 0; p; p = p->next, n_pages++)
     {

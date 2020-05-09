@@ -600,8 +600,8 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
 
   pl->priv->object = object;
 
-  while ((w = gtk_widget_get_first_child (pl->priv->list2)) != NULL)
-    gtk_widget_destroy (w);
+  while ((w = gtk_widget_get_first_child (pl->priv->list2)))
+    gtk_container_remove (GTK_CONTAINER (pl->priv->list2), w);
 
   for (i = 0; i < num_properties; i++)
     {

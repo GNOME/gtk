@@ -167,7 +167,7 @@ action_removed_cb (GActionGroup        *group,
 
   row = find_row (sl, action_name);
   if (row)
-    gtk_widget_destroy (row);
+    gtk_container_remove (GTK_CONTAINER (sl->priv->list), row);
 }
 
 static void
@@ -312,7 +312,7 @@ gtk_inspector_actions_set_object (GtkInspectorActions *sl,
     remove_group (sl, page, sl->priv->group);
 
   while ((child = gtk_widget_get_first_child (sl->priv->list)))
-    gtk_widget_destroy (child);
+    gtk_container_remove (GTK_CONTAINER (sl->priv->list), child);
 
   if (GTK_IS_APPLICATION (object))
     add_group (sl, page, G_ACTION_GROUP (object));

@@ -185,7 +185,7 @@ test_text (void)
 
   g_assert_cmpint (visibility_changed, ==, 1);
 
-  gtk_widget_destroy (box);
+  g_object_unref (g_object_ref_sink (box));
   g_object_unref (clipboard_actions);
 }
 
@@ -425,7 +425,7 @@ test_enabled (void)
 
   g_assert_cmpint (toggled, ==, 1);
 
-  gtk_widget_destroy (text);
+  g_object_unref (g_object_ref_sink (text));
 }
 
 int

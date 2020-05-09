@@ -430,40 +430,12 @@ deconstruct_widgets (GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
 
-  if (priv->check)
-    {
-      gtk_widget_destroy (priv->check);
-      priv->check = NULL;
-    }
-  
-  if (priv->combo)
-    {
-      gtk_widget_destroy (priv->combo);
-      priv->combo = NULL;
-    }
-  
-  if (priv->entry)
-    {
-      gtk_widget_destroy (priv->entry);
-      priv->entry = NULL;
-    }
-
-  if (priv->image)
-    {
-      gtk_widget_destroy (priv->image);
-      priv->image = NULL;
-    }
-
-  if (priv->label)
-    {
-      gtk_widget_destroy (priv->label);
-      priv->label = NULL;
-    }
-  if (priv->info_label)
-    {
-      gtk_widget_destroy (priv->info_label);
-      priv->info_label = NULL;
-    }
+  g_clear_pointer (&priv->check, gtk_widget_unparent);
+  g_clear_pointer (&priv->combo, gtk_widget_unparent);
+  g_clear_pointer (&priv->entry, gtk_widget_unparent);
+  g_clear_pointer (&priv->image, gtk_widget_unparent);
+  g_clear_pointer (&priv->label, gtk_widget_unparent);
+  g_clear_pointer (&priv->info_label, gtk_widget_unparent);
 }
 
 static void

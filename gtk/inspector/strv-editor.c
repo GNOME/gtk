@@ -49,7 +49,10 @@ static void
 remove_string (GtkButton              *button,
                GtkInspectorStrvEditor *editor)
 {
-  gtk_widget_destroy (gtk_widget_get_parent (GTK_WIDGET (button)));
+  GtkWidget *row;
+
+  row = gtk_widget_get_parent (GTK_WIDGET (button));
+  gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (row)), row);
   emit_changed (editor);
 }
 
@@ -128,15 +131,13 @@ void
 gtk_inspector_strv_editor_set_strv (GtkInspectorStrvEditor  *editor,
                                     gchar                  **strv)
 {
-  GList *children, *l;
+  GtkWidget *child;
   gint i;
 
   editor->blocked = TRUE;
 
-  children = gtk_container_get_children (GTK_CONTAINER (editor->box));
-  for (l = children; l; l = l->next)
-    gtk_widget_destroy (GTK_WIDGET (l->data));
-  g_list_free (children);
+  while ((child = gtk_widget_get_first_child (editor->box)))
+    gtk_container_remove (GTK_CONTAINER (editor->box), child);
 
   if (strv)
     {

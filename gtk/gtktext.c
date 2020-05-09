@@ -1958,6 +1958,9 @@ gtk_text_dispose (GObject *object)
   g_clear_pointer ((GtkWidget **) &priv->text_handles[TEXT_HANDLE_SELECTION_BOUND], gtk_widget_unparent);
   g_clear_object (&priv->extra_menu);
 
+  g_clear_pointer (&priv->magnifier_popover, gtk_widget_unparent);
+  g_clear_pointer (&priv->placeholder, gtk_widget_unparent);
+
   G_OBJECT_CLASS (gtk_text_parent_class)->dispose (object);
 }
 
@@ -1972,10 +1975,7 @@ gtk_text_finalize (GObject *object)
   g_clear_object (&priv->history);
   g_clear_object (&priv->cached_layout);
   g_clear_object (&priv->im_context);
-  g_clear_pointer (&priv->magnifier_popover, gtk_widget_destroy);
   g_free (priv->im_module);
-
-  g_clear_pointer (&priv->placeholder, gtk_widget_unparent);
 
   if (priv->tabs)
     pango_tab_array_free (priv->tabs);
