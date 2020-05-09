@@ -67,6 +67,9 @@ void             _gdk_macos_display_synthesize_motion              (GdkMacosDisp
 NSWindow        *_gdk_macos_display_find_native_under_pointer      (GdkMacosDisplay *self,
                                                                     int             *x,
                                                                     int             *y);
+gboolean         _gdk_macos_display_get_setting                    (GdkMacosDisplay *self,
+                                                                    const gchar     *setting,
+                                                                    GValue          *value);
 
 G_END_DECLS
 

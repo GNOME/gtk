@@ -104,7 +104,7 @@ gdk_macos_display_get_setting (GdkDisplay  *display,
                                const gchar *setting,
                                GValue      *value)
 {
-  return FALSE;
+  return _gdk_macos_display_get_setting (GDK_MACOS_DISPLAY (display), setting, value);
 }
 
 static int
