@@ -799,3 +799,43 @@ _gdk_macos_display_remove_frame_callback (GdkMacosDisplay *self,
   if (self->awaiting_frames.length == 0)
     gdk_display_link_source_pause ((GdkDisplayLinkSource *)self->frame_source);
 }
+
+NSWindow *
+_gdk_macos_display_find_native_under_pointer (GdkMacosDisplay *self,
+                                              int             *x,
+                                              int             *y)
+{
+  NSPoint point;
+  int x_tmp;
+  int y_tmp;
+
+  g_assert (GDK_IS_MACOS_DISPLAY (self));
+
+  point = [NSEvent mouseLocation];
+
+  _gdk_macos_display_from_display_coords (self, point.x, point.y, &x_tmp, &y_tmp);
+
+  for (const GList *iter = self->surfaces.head; iter; iter = iter->next)
+    {
+      GdkSurface *surface = iter->data;
+
+      g_assert (GDK_IS_MACOS_SURFACE (surface));
+
+      if (x_tmp >= surface->x &&
+          x_tmp < surface->x + surface->width &&
+          y_tmp >= surface->y &&
+          y_tmp < surface->y + surface->height)
+        {
+          *x = x_tmp - surface->x;
+          *y = y_tmp - surface->y;
+
+          return _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (surface));
+        }
+    }
+
+  *x = 0;
+  *y = 0;
+
+  return NULL;
+}
+

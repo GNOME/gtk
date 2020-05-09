@@ -64,6 +64,9 @@ void             _gdk_macos_display_remove_frame_callback          (GdkMacosDisp
                                                                     GdkMacosSurface *surface);
 void             _gdk_macos_display_synthesize_motion              (GdkMacosDisplay *self,
                                                                     GdkMacosSurface *surface);
+NSWindow        *_gdk_macos_display_find_native_under_pointer      (GdkMacosDisplay *self,
+                                                                    int             *x,
+                                                                    int             *y);
 
 G_END_DECLS
 
