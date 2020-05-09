@@ -46,8 +46,7 @@ do_spinner (GtkWidget *do_widget)
 
     g_signal_connect (window, "response",
                       G_CALLBACK (gtk_widget_destroy), NULL);
-    g_signal_connect (window, "destroy",
-                      G_CALLBACK (gtk_widget_destroyed), &window);
+    g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
     content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
 

@@ -460,8 +460,7 @@ do_sliding_puzzle (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "Sliding Puzzle");
       gtk_window_set_titlebar (GTK_WINDOW (window), header);
       gtk_window_set_default_size (GTK_WINDOW (window), 400, 300);
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       frame = gtk_aspect_frame_new (0.5, 0.5, (float) gdk_paintable_get_intrinsic_aspect_ratio (puzzle), FALSE);
       gtk_window_set_child (GTK_WINDOW (window), frame);

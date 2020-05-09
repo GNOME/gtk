@@ -43,9 +43,7 @@ do_sidebar (GtkWidget *do_widget)
       gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR(header), TRUE);
       gtk_window_set_titlebar (GTK_WINDOW(window), header);
       gtk_window_set_title (GTK_WINDOW(window), "Stack Sidebar");
-
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       sidebar = gtk_stack_sidebar_new ();

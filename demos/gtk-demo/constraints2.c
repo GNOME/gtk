@@ -219,8 +219,7 @@ do_constraints2 (GtkWidget *do_widget)
      header = gtk_header_bar_new ();
      gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), FALSE);
      gtk_window_set_titlebar (GTK_WINDOW (window), header);
-     g_signal_connect (window, "destroy",
-                       G_CALLBACK (gtk_widget_destroyed), &window);
+     g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
      gtk_window_set_child (GTK_WINDOW (window), box);

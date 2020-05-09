@@ -315,9 +315,7 @@ do_combobox (GtkWidget *do_widget)
     gtk_window_set_display (GTK_WINDOW (window),
                             gtk_widget_get_display (do_widget));
     gtk_window_set_title (GTK_WINDOW (window), "Combo Boxes");
-
-    g_signal_connect (window, "destroy",
-                      G_CALLBACK (gtk_widget_destroyed), &window);
+    g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
     gtk_widget_set_margin_start (vbox, 10);
