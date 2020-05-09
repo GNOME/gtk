@@ -72,8 +72,7 @@ do_tagged_entry (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "A tagged entry");
       gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
       gtk_window_set_deletable (GTK_WINDOW (window), FALSE);
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
       gtk_widget_set_margin_start (box, 18);

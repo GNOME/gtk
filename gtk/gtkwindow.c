@@ -2410,41 +2410,20 @@ gtk_window_dispose (GObject *object)
 }
 
 static void
-parent_destroyed_callback (GtkWindow *parent, GtkWindow *child)
+gtk_window_transient_parent_destroyed (GtkWindow *parent,
+                                       GtkWindow *window)
 {
-  gtk_widget_destroy (GTK_WIDGET (child));
-}
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (window));
 
-static void
-connect_parent_destroyed (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  if (priv->transient_parent)
-    {
-      g_signal_connect (priv->transient_parent,
-                        "destroy",
-                        G_CALLBACK (parent_destroyed_callback),
-                        window);
-    }  
-}
-
-static void
-disconnect_parent_destroyed (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  if (priv->transient_parent)
-    {
-      g_signal_handlers_disconnect_by_func (priv->transient_parent,
-					    parent_destroyed_callback,
-					    window);
-    }
+  if (priv->destroy_with_parent)
+    gtk_widget_destroy (GTK_WIDGET (window));
+  else
+    priv->transient_parent = NULL;
 }
 
 static void
 gtk_window_transient_parent_realized (GtkWidget *parent,
-				      GtkWidget *window)
+                                      GtkWidget *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (window));
   GtkWindowPrivate *parent_priv = gtk_window_get_instance_private (GTK_WINDOW (parent));
@@ -2454,7 +2433,7 @@ gtk_window_transient_parent_realized (GtkWidget *parent,
 
 static void
 gtk_window_transient_parent_unrealized (GtkWidget *parent,
-					GtkWidget *window)
+                                        GtkWidget *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (window));
   if (_gtk_widget_get_realized (window))
@@ -2462,7 +2441,7 @@ gtk_window_transient_parent_unrealized (GtkWidget *parent,
 }
 
 static void
-gtk_window_transient_parent_display_changed (GtkWindow	*parent,
+gtk_window_transient_parent_display_changed (GtkWindow  *parent,
                                              GParamSpec *pspec,
                                              GtkWindow  *window)
 {
@@ -2471,7 +2450,7 @@ gtk_window_transient_parent_display_changed (GtkWindow	*parent,
   gtk_window_set_display (window, parent_priv->display);
 }
 
-static void       
+static void
 gtk_window_unset_transient_for (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
@@ -2479,29 +2458,25 @@ gtk_window_unset_transient_for (GtkWindow *window)
   if (priv->transient_parent)
     {
       g_signal_handlers_disconnect_by_func (priv->transient_parent,
-					    gtk_window_transient_parent_realized,
-					    window);
+                                            gtk_window_transient_parent_realized,
+                                            window);
       g_signal_handlers_disconnect_by_func (priv->transient_parent,
-					    gtk_window_transient_parent_unrealized,
-					    window);
+                                            gtk_window_transient_parent_unrealized,
+                                            window);
       g_signal_handlers_disconnect_by_func (priv->transient_parent,
-					    gtk_window_transient_parent_display_changed,
-					    window);
+                                            gtk_window_transient_parent_display_changed,
+                                            window);
       g_signal_handlers_disconnect_by_func (priv->transient_parent,
-					    gtk_widget_destroyed,
-					    &priv->transient_parent);
-
-      if (priv->destroy_with_parent)
-        disconnect_parent_destroyed (window);
+                                            gtk_window_transient_parent_destroyed,
+                                            window);
 
       priv->transient_parent = NULL;
 
       if (priv->transient_parent_group)
-	{
-	  priv->transient_parent_group = FALSE;
-	  gtk_window_group_remove_window (priv->group,
-					  window);
-	}
+        {
+          priv->transient_parent_group = FALSE;
+          gtk_window_group_remove_window (priv->group, window);
+        }
     }
 }
 
@@ -2524,8 +2499,8 @@ gtk_window_unset_transient_for (GtkWindow *window)
  * much as the window manager would have done on X.
  */
 void
-gtk_window_set_transient_for  (GtkWindow *window,
-			       GtkWindow *parent)
+gtk_window_set_transient_for (GtkWindow *window,
+                              GtkWindow *parent)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
@@ -2538,9 +2513,8 @@ gtk_window_set_transient_for  (GtkWindow *window,
       if (_gtk_widget_get_realized (GTK_WIDGET (window)) &&
           _gtk_widget_get_realized (GTK_WIDGET (priv->transient_parent)) &&
           (!parent || !_gtk_widget_get_realized (GTK_WIDGET (parent))))
-	gtk_window_transient_parent_unrealized (GTK_WIDGET (priv->transient_parent),
-						GTK_WIDGET (window));
-
+        gtk_window_transient_parent_unrealized (GTK_WIDGET (priv->transient_parent),
+                                                GTK_WIDGET (window));
       gtk_window_unset_transient_for (window);
     }
 
@@ -2549,34 +2523,27 @@ gtk_window_set_transient_for  (GtkWindow *window,
   if (parent)
     {
       GtkWindowPrivate *parent_priv = gtk_window_get_instance_private (parent);
-      g_signal_connect (parent, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&priv->transient_parent);
       g_signal_connect (parent, "realize",
-			G_CALLBACK (gtk_window_transient_parent_realized),
-			window);
+                        G_CALLBACK (gtk_window_transient_parent_realized), window);
       g_signal_connect (parent, "unrealize",
-			G_CALLBACK (gtk_window_transient_parent_unrealized),
-			window);
+                        G_CALLBACK (gtk_window_transient_parent_unrealized), window);
       g_signal_connect (parent, "notify::display",
-			G_CALLBACK (gtk_window_transient_parent_display_changed),
-			window);
+                        G_CALLBACK (gtk_window_transient_parent_display_changed), window);
+      g_signal_connect (parent, "destroy",
+                        G_CALLBACK (gtk_window_transient_parent_destroyed), window);
 
       gtk_window_set_display (window, parent_priv->display);
 
-      if (priv->destroy_with_parent)
-        connect_parent_destroyed (window);
-      
+
       if (_gtk_widget_get_realized (GTK_WIDGET (window)) &&
-	  _gtk_widget_get_realized (GTK_WIDGET (parent)))
-	gtk_window_transient_parent_realized (GTK_WIDGET (parent),
-					      GTK_WIDGET (window));
+          _gtk_widget_get_realized (GTK_WIDGET (parent)))
+        gtk_window_transient_parent_realized (GTK_WIDGET (parent), GTK_WIDGET (window));
 
       if (parent_priv->group)
-	{
-	  gtk_window_group_add_window (parent_priv->group, window);
-	  priv->transient_parent_group = TRUE;
-	}
+        {
+          gtk_window_group_add_window (parent_priv->group, window);
+          priv->transient_parent_group = TRUE;
+        }
     }
 
   update_window_actions (window);
@@ -2710,8 +2677,8 @@ gtk_window_set_application (GtkWindow      *window,
  * associated with, for example.
  **/
 void
-gtk_window_set_destroy_with_parent  (GtkWindow *window,
-                                     gboolean   setting)
+gtk_window_set_destroy_with_parent (GtkWindow *window,
+                                    gboolean   setting)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
@@ -2719,15 +2686,6 @@ gtk_window_set_destroy_with_parent  (GtkWindow *window,
 
   if (priv->destroy_with_parent == (setting != FALSE))
     return;
-
-  if (priv->destroy_with_parent)
-    {
-      disconnect_parent_destroyed (window);
-    }
-  else
-    {
-      connect_parent_destroyed (window);
-    }
 
   priv->destroy_with_parent = setting;
 

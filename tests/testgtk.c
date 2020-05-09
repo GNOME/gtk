@@ -227,10 +227,7 @@ create_alpha_window (GtkWidget *widget)
       g_signal_connect (display, "notify::composited", G_CALLBACK (on_composited_changed), label);
 
       gtk_container_add (GTK_CONTAINER (vbox), build_alpha_widgets ());
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       g_signal_connect (window, "response",
                         G_CALLBACK (gtk_widget_destroy),
@@ -274,11 +271,8 @@ create_buttons (GtkWidget *widget)
     {
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
-			      gtk_widget_get_display (widget));
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
+                              gtk_widget_get_display (widget));
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       gtk_window_set_title (GTK_WINDOW (window), "GtkButton");
 
@@ -357,11 +351,8 @@ create_toggle_buttons (GtkWidget *widget)
     {
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
-			      gtk_widget_get_display (widget));
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
+                              gtk_widget_get_display (widget));
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       gtk_window_set_title (GTK_WINDOW (window), "GtkToggleButton");
 
@@ -476,11 +467,8 @@ create_check_buttons (GtkWidget *widget)
                                             NULL);
 
       gtk_window_set_display (GTK_WINDOW (window), 
-			      gtk_widget_get_display (widget));
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
+                              gtk_widget_get_display (widget));
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
       g_signal_connect (window, "response",
                         G_CALLBACK (gtk_widget_destroy),
                         NULL);
@@ -545,11 +533,8 @@ create_radio_buttons (GtkWidget *widget)
                                             NULL);
 
       gtk_window_set_display (GTK_WINDOW (window),
-			      gtk_widget_get_display (widget));
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
+                              gtk_widget_get_display (widget));
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
       g_signal_connect (window, "response",
                         G_CALLBACK (gtk_widget_destroy),
                         NULL);
@@ -734,11 +719,8 @@ create_statusbar (GtkWidget *widget)
     {
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
-			      gtk_widget_get_display (widget));
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
+                              gtk_widget_get_display (widget));
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       gtk_window_set_title (GTK_WINDOW (window), "statusbar");
 
@@ -944,11 +926,8 @@ static void create_labels (GtkWidget *widget)
       window = gtk_window_new ();
 
       gtk_window_set_display (GTK_WINDOW (window),
-			      gtk_widget_get_display (widget));
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
+                              gtk_widget_get_display (widget));
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       gtk_window_set_title (GTK_WINDOW (window), "Label");
 
@@ -1187,8 +1166,7 @@ create_rotated_text (GtkWidget *widget)
 
       g_signal_connect (window, "response",
 			G_CALLBACK (gtk_widget_destroy), NULL);
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
 
@@ -1239,11 +1217,8 @@ create_pixbuf (GtkWidget *widget)
       window = gtk_window_new ();
 
       gtk_window_set_display (GTK_WINDOW (window),
-			      gtk_widget_get_display (widget));
-
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed),
-                        &window);
+                              gtk_widget_get_display (widget));
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       gtk_window_set_title (GTK_WINDOW (window), "GtkPixmap");
       gtk_widget_realize(window);
@@ -1426,9 +1401,7 @@ create_image (GtkWidget *widget)
        */
       gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
 
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
 
@@ -1549,7 +1522,7 @@ create_listbox (GtkWidget *widget)
       gtk_window_set_hide_on_close (GTK_WINDOW (window), TRUE);
       gtk_window_set_display (GTK_WINDOW (window), display);
 
-      g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       gtk_window_set_title (GTK_WINDOW (window), "listbox");
 
@@ -1649,7 +1622,6 @@ static void
 create_key_lookup (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
-  gpointer window_ptr;
 
   if (!window)
     {
@@ -1702,8 +1674,7 @@ create_key_lookup (GtkWidget *widget)
       button = accel_button_new ("Button 14", "<Meta>a");
       gtk_container_add (GTK_CONTAINER (box), button);
 
-      window_ptr = &window;
-      g_object_add_weak_pointer (G_OBJECT (window), window_ptr);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
       g_signal_connect (window, "response", G_CALLBACK (gtk_widget_destroy), NULL);
 
       gtk_widget_show (window);
@@ -1857,10 +1828,7 @@ make_message_dialog (GdkDisplay     *display,
 			    G_CALLBACK (gtk_widget_destroy),
 			    *dialog);
   
-  g_signal_connect (*dialog,
-                    "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
-                    dialog);
+  g_object_add_weak_pointer (G_OBJECT (*dialog), (gpointer)dialog);
 
   gtk_dialog_set_default_response (GTK_DIALOG (*dialog), default_response);
 
@@ -1982,11 +1950,8 @@ create_scrolled_windows (GtkWidget *widget)
       window = gtk_dialog_new ();
 
       gtk_window_set_display (GTK_WINDOW (window),
-			      gtk_widget_get_display (widget));
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
+                              gtk_widget_get_display (widget));
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
 
@@ -2132,11 +2097,8 @@ create_entry (GtkWidget *widget)
     {
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
-			      gtk_widget_get_display (widget));
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
+                              gtk_widget_get_display (widget));
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       gtk_window_set_title (GTK_WINDOW (window), "entry");
 
@@ -2238,11 +2200,8 @@ create_expander (GtkWidget *widget)
     {
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
-			      gtk_widget_get_display (widget));
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
+                              gtk_widget_get_display (widget));
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       gtk_window_set_title (GTK_WINDOW (window), "expander");
 
@@ -2419,21 +2378,15 @@ create_size_groups (GtkWidget *widget)
   if (!window1)
     {
       window1 = create_size_group_window (gtk_widget_get_display (widget),
-					  master_size_group);
-
-      g_signal_connect (window1, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window1);
+                                          master_size_group);
+      g_object_add_weak_pointer (G_OBJECT (window1), (gpointer *)&window1);
     }
 
   if (!window2)
     {
       window2 = create_size_group_window (gtk_widget_get_display (widget),
-					  master_size_group);
-
-      g_signal_connect (window2, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window2);
+                                          master_size_group);
+      g_object_add_weak_pointer (G_OBJECT (window2), (gpointer *)&window2);
     }
 
   if (gtk_widget_get_visible (window1) && gtk_widget_get_visible (window2))
@@ -2639,11 +2592,8 @@ create_spins (GtkWidget *widget)
     {
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
-			      gtk_widget_get_display (widget));
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
+                              gtk_widget_get_display (widget));
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       gtk_window_set_title (GTK_WINDOW (window), "GtkSpinButton");
 
@@ -3089,11 +3039,8 @@ create_cursors (GtkWidget *widget)
     {
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
-			      gtk_widget_get_display (widget));
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
+                              gtk_widget_get_display (widget));
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       gtk_window_set_title (GTK_WINDOW (window), "Cursors");
 
@@ -3227,14 +3174,11 @@ create_color_selection (GtkWidget *widget)
       GtkWidget *picker;
       GtkWidget *hbox;
       GtkWidget *label;
-      
+
       window = gtk_window_new ();
-      gtk_window_set_display (GTK_WINDOW (window), 
-			      gtk_widget_get_display (widget));
-			     
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-                        &window);
+      gtk_window_set_display (GTK_WINDOW (window),
+                              gtk_widget_get_display (widget));
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       gtk_window_set_title (GTK_WINDOW (window), "GtkColorButton");
 
@@ -3350,11 +3294,8 @@ create_flipping (GtkWidget *widget)
       window = gtk_dialog_new ();
 
       gtk_window_set_display (GTK_WINDOW (window),
-			      gtk_widget_get_display (widget));
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
+                              gtk_widget_get_display (widget));
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
 
@@ -3411,11 +3352,8 @@ create_font_selection (GtkWidget *widget)
       
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
-			      gtk_widget_get_display (widget));
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
+                              gtk_widget_get_display (widget));
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       gtk_window_set_title (GTK_WINDOW (window), "GtkFontButton");
 
@@ -3496,12 +3434,8 @@ create_dialog (GtkWidget *widget)
       
       dialog_window = gtk_dialog_new ();
       gtk_window_set_display (GTK_WINDOW (dialog_window),
-			      gtk_widget_get_display (widget));
-
-      g_signal_connect (dialog_window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&dialog_window);
-
+                              gtk_widget_get_display (widget));
+      g_object_add_weak_pointer (G_OBJECT (dialog_window), (gpointer *)&dialog_window);
 
       gtk_window_set_title (GTK_WINDOW (dialog_window), "GtkDialog");
 
@@ -3683,11 +3617,8 @@ create_range_controls (GtkWidget *widget)
       window = gtk_window_new ();
 
       gtk_window_set_display (GTK_WINDOW (window),
-			      gtk_widget_get_display (widget));
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
+                              gtk_widget_get_display (widget));
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       gtk_window_set_title (GTK_WINDOW (window), "range controls");
 
@@ -4046,11 +3977,8 @@ create_notebook (GtkWidget *widget)
     {
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
-			      gtk_widget_get_display (widget));
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
+                              gtk_widget_get_display (widget));
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       gtk_window_set_title (GTK_WINDOW (window), "notebook");
 
@@ -4246,11 +4174,8 @@ create_panes (GtkWidget *widget)
       window = gtk_window_new ();
 
       gtk_window_set_display (GTK_WINDOW (window),
-			      gtk_widget_get_display (widget));
-      
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
+                              gtk_widget_get_display (widget));
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       gtk_window_set_title (GTK_WINDOW (window), "Panes");
 
@@ -4614,33 +4539,25 @@ create_paned_keyboard_navigation (GtkWidget *widget)
   if (!window1)
     {
       window1 = paned_keyboard_window1 (widget);
-      g_signal_connect (window1, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window1);
+      g_object_add_weak_pointer (G_OBJECT (window1), (gpointer *)&window1);
     }
 
   if (!window2)
     {
       window2 = paned_keyboard_window2 (widget);
-      g_signal_connect (window2, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window2);
+      g_object_add_weak_pointer (G_OBJECT (window2), (gpointer *)&window2);
     }
 
   if (!window3)
     {
       window3 = paned_keyboard_window3 (widget);
-      g_signal_connect (window3, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window3);
+      g_object_add_weak_pointer (G_OBJECT (window3), (gpointer *)&window3);
     }
 
   if (!window4)
     {
       window4 = paned_keyboard_window4 (widget);
-      g_signal_connect (window4, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window4);
+      g_object_add_weak_pointer (G_OBJECT (window4), (gpointer *)&window4);
     }
 
   if (gtk_widget_get_visible (window1))
@@ -4686,11 +4603,8 @@ create_wmhints (GtkWidget *widget)
       window = gtk_window_new ();
 
       gtk_window_set_display (GTK_WINDOW (window),
-			      gtk_widget_get_display (widget));
-      
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
+                              gtk_widget_get_display (widget));
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       gtk_window_set_title (GTK_WINDOW (window), "WM Hints");
 
@@ -4921,11 +4835,8 @@ create_surface_states (GtkWidget *widget)
     {
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
-			      gtk_widget_get_display (widget));
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
+                              gtk_widget_get_display (widget));
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       gtk_window_set_title (GTK_WINDOW (window), "Surface states");
       
@@ -5193,17 +5104,12 @@ create_window_sizing (GtkWidget *widget)
       gtk_label_set_markup (GTK_LABEL (label), "<span foreground=\"purple\"><big>Window being resized</big></span>\nBlah blah blah blah\nblah blah blah\nblah blah blah blah blah");
       gtk_window_set_child (GTK_WINDOW (target_window), label);
       gtk_widget_show (target_window);
-      
-      g_signal_connect (target_window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&target_window);
+
+      g_object_add_weak_pointer (G_OBJECT (target_window), (gpointer *)&target_window);
 
       window = window_controls (target_window);
-      
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
-      
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
+
       gtk_window_set_title (GTK_WINDOW (target_window), "Window to size");
     }
 
@@ -5947,9 +5853,7 @@ create_native_dialogs (GtkWidget *widget)
       g_signal_connect (native, "notify::visible",
                         G_CALLBACK (native_visible_notify_hide), hide_button);
 
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed),
-                        &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
     }
 
   if (!gtk_widget_get_visible (window))
