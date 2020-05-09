@@ -178,8 +178,7 @@ do_assistant (GtkWidget *do_widget)
 
       gtk_window_set_display (GTK_WINDOW (assistant),
                               gtk_widget_get_display (do_widget));
-      g_signal_connect (assistant, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &assistant);
+      g_object_add_weak_pointer (G_OBJECT (assistant), (gpointer *)&assistant);
 
       create_page1 (assistant);
       create_page2 (assistant);

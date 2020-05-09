@@ -178,12 +178,10 @@ do_themes (GtkWidget *do_widget)
 
       builder = gtk_builder_new_from_resource ("/themes/themes.ui");
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+
       header = GTK_WIDGET (gtk_builder_get_object (builder, "header"));
       gesture = gtk_gesture_click_new ();
       g_signal_connect (gesture, "pressed", G_CALLBACK (clicked), builder);

@@ -196,8 +196,7 @@ do_spinbutton (GtkWidget *do_widget)
                             gtk_widget_get_display (do_widget));
     gtk_window_set_title (GTK_WINDOW (window), "Spin Buttons");
     gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
-    g_signal_connect (window, "destroy",
-                      G_CALLBACK (gtk_widget_destroyed), &window);
+    g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
     adj = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "basic_adjustment"));
     label = GTK_WIDGET (gtk_builder_get_object (builder, "basic_label"));

@@ -76,8 +76,7 @@ do_css_basics (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "CSS Basics");
       gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (do_widget));
       gtk_window_set_default_size (GTK_WINDOW (window), 400, 300);
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       text = gtk_text_buffer_new (NULL);
       gtk_text_buffer_create_tag (text,

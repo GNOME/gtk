@@ -43,8 +43,7 @@ do_modelbutton (GtkWidget *do_widget)
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window1"));
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       actions = (GActionGroup*)g_simple_action_group_new ();
       g_action_map_add_action_entries (G_ACTION_MAP (actions),

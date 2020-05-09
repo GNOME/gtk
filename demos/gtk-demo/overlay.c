@@ -79,9 +79,7 @@ do_overlay (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (vbox), entry);
 
       gtk_window_set_child (GTK_WINDOW (window), overlay);
-
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
     }
 
   if (!gtk_widget_get_visible (window))

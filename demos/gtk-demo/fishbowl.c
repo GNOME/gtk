@@ -273,15 +273,13 @@ do_fishbowl (GtkWidget *do_widget)
 
       builder = gtk_builder_new_from_resource ("/fishbowl/fishbowl.ui");
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
+
       bowl = GTK_WIDGET (gtk_builder_get_object (builder, "bowl"));
       selected_widget_type = -1;
       set_widget_type (GTK_FISHBOWL (bowl), 0);
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
 
       gtk_widget_realize (window);
       g_object_unref (builder);

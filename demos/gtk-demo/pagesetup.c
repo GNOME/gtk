@@ -22,7 +22,7 @@ do_pagesetup (GtkWidget *do_widget)
   if (!window)
     {
       window = gtk_page_setup_unix_dialog_new ("Page Setup", GTK_WINDOW (do_widget));
-      g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
       g_signal_connect (window, "response", G_CALLBACK (done_cb), NULL);
     }
 

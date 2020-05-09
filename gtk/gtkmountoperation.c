@@ -219,6 +219,13 @@ gtk_mount_operation_init (GtkMountOperation *operation)
 }
 
 static void
+parent_destroyed (GtkWidget  *parent,
+                  gpointer  **pointer)
+{
+  *pointer = NULL;
+}
+
+static void
 gtk_mount_operation_finalize (GObject *object)
 {
   GtkMountOperation *operation = GTK_MOUNT_OPERATION (object);
@@ -230,7 +237,7 @@ gtk_mount_operation_finalize (GObject *object)
   if (priv->parent_window)
     {
       g_signal_handlers_disconnect_by_func (priv->parent_window,
-                                            gtk_widget_destroyed,
+                                            parent_destroyed,
                                             &priv->parent_window);
       g_object_unref (priv->parent_window);
     }
@@ -1835,7 +1842,7 @@ gtk_mount_operation_set_parent (GtkMountOperation *op,
   if (priv->parent_window)
     {
       g_signal_handlers_disconnect_by_func (priv->parent_window,
-                                            gtk_widget_destroyed,
+                                            parent_destroyed,
                                             &priv->parent_window);
       g_object_unref (priv->parent_window);
     }
@@ -1844,8 +1851,7 @@ gtk_mount_operation_set_parent (GtkMountOperation *op,
     {
       g_object_ref (priv->parent_window);
       g_signal_connect (priv->parent_window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed),
-                        &priv->parent_window);
+                        G_CALLBACK (parent_destroyed), &priv->parent_window);
     }
 
   if (priv->dialog)
