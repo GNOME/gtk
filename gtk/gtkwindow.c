@@ -226,7 +226,6 @@ typedef struct
   guint    deletable                 : 1;
   guint    destroy_with_parent       : 1;
   guint    fullscreen_initially      : 1;
-  guint    has_user_ref_count        : 1;
   guint    minimize_initially        : 1;
   guint    is_active                 : 1;
   guint    maximize_initially        : 1;
@@ -1790,7 +1789,6 @@ gtk_window_init (GtkWindow *window)
   priv->initial_fullscreen_monitor = NULL;
 
   g_object_ref_sink (window);
-  priv->has_user_ref_count = TRUE;
 
 #ifdef GDK_WINDOWING_X11
   g_signal_connect (gtk_settings_get_for_display (priv->display),
@@ -7366,30 +7364,6 @@ gtk_window_set_focus_visible (GtkWindow *window,
         }
       g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_FOCUS_VISIBLE]);
     }
-}
-
-/**
- * gtk_window_set_has_user_ref_count:
- * @window: a #GtkWindow
- * @setting: the new value
- *
- * Tells GTK+ whether to drop its extra reference to the window
- * when gtk_widget_destroy() is called.
- *
- * This function is only exported for the benefit of language
- * bindings which may need to keep the window alive until their
- * wrapper object is garbage collected. There is no justification
- * for ever calling this function in an application.
- */
-void
-gtk_window_set_has_user_ref_count (GtkWindow *window,
-                                   gboolean   setting)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  priv->has_user_ref_count = setting;
 }
 
 static void
