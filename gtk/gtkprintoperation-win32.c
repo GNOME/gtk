@@ -1440,7 +1440,7 @@ pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
       op_win32 = op->priv->platform_data;
       
       g_signal_emit_by_name (op, "custom-widget-apply", op->priv->custom_widget);
-      gtk_widget_destroy (op_win32->embed_widget);
+      g_object_unref (g_object_ref_sink ((op_win32->embed_widget));
       op_win32->embed_widget = NULL;
       op->priv->custom_widget = NULL;
     }
