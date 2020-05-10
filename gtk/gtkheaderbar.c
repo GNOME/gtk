@@ -21,9 +21,10 @@
 
 #include "gtkheaderbarprivate.h"
 
+#include "gtkbinlayout.h"
 #include "gtkbox.h"
 #include "gtkbuildable.h"
-#include "gtkcenterlayout.h"
+#include "gtkcenterbox.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
@@ -33,6 +34,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowcontrols.h"
+#include "gtkwindowhandle.h"
 
 #include "a11y/gtkcontaineraccessible.h"
 
@@ -86,18 +88,21 @@
  *
  * |[<!-- language="plain" -->
  * headerbar
- * ├── box.start
- * │   ├── windowcontrols.start
- * │   ╰── [other children]
- * ├── [Title Widget]
- * ╰── box.end
- *     ├── [other children]
- *     ╰── windowcontrols.end
+ * ╰── windowhandle
+ *     ╰── box
+ *         ├── box.start
+ *         │   ├── windowcontrols.start
+ *         │   ╰── [other children]
+ *         ├── [Title Widget]
+ *         ╰── box.end
+ *             ├── [other children]
+ *             ╰── windowcontrols.end
  * ]|
  *
- * A #GtkHeaderBar's CSS node is called headerbar. It contains two box subnodes
- * at the start and end of the headerbar, as well as a center node that
- * represents the title.
+ * A #GtkHeaderBar's CSS node is called headerbar. It contains a windowhandle
+ * subnode, which contains a box subnode, which contains two box subnodes at
+ * the start and end of the headerbar, as well as a center node that represents
+ * the title.
  *
  * Each of the boxes contains a windowcontrols subnode, see #GtkWindowControls
  * for details, as well as other children.
@@ -120,6 +125,8 @@ struct _GtkHeaderBarClass
 
 struct _GtkHeaderBarPrivate
 {
+  GtkWidget *handle;
+  GtkWidget *center_box;
   GtkWidget *start_box;
   GtkWidget *end_box;
 
@@ -184,11 +191,10 @@ static void
 update_default_decoration (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
-  GtkLayoutManager *layout = gtk_widget_get_layout_manager (GTK_WIDGET (bar));
   gboolean have_children = FALSE;
 
   /* Check whether we have any child widgets that we didn't add ourselves */
-  if (gtk_center_layout_get_center_widget (GTK_CENTER_LAYOUT (layout)) != NULL)
+  if (gtk_center_box_get_center_widget (GTK_CENTER_BOX (priv->center_box)) != NULL)
     {
       have_children = TRUE;
     }
@@ -264,7 +270,6 @@ static void
 construct_title_label (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
-  GtkLayoutManager *layout = gtk_widget_get_layout_manager (GTK_WIDGET (bar));
   GtkWidget *label;
 
   g_assert (priv->title_label == NULL);
@@ -276,9 +281,7 @@ construct_title_label (GtkHeaderBar *bar)
   gtk_label_set_single_line_mode (GTK_LABEL (label), TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
   gtk_label_set_width_chars (GTK_LABEL (label), MIN_TITLE_CHARS);
-
-  gtk_widget_insert_after (label, GTK_WIDGET (bar), priv->start_box);
-  gtk_center_layout_set_center_widget (GTK_CENTER_LAYOUT (layout), label);
+  gtk_center_box_set_center_widget (GTK_CENTER_BOX (priv->center_box), label);
 
   priv->title_label = label;
 
@@ -319,13 +322,11 @@ gtk_header_bar_set_title_widget (GtkHeaderBar *bar,
 
   if (title_widget != NULL)
     {
-      GtkLayoutManager *layout = gtk_widget_get_layout_manager (GTK_WIDGET (bar));
       priv->title_widget = title_widget;
 
-      gtk_widget_insert_after (priv->title_widget, GTK_WIDGET (bar), priv->start_box);
-      gtk_center_layout_set_center_widget (GTK_CENTER_LAYOUT (layout), title_widget);
+      gtk_center_box_set_center_widget (GTK_CENTER_BOX (priv->center_box), title_widget);
 
-      g_clear_pointer (&priv->title_label, gtk_widget_unparent);
+      priv->title_label = NULL;
     }
   else
     {
@@ -386,13 +387,14 @@ gtk_header_bar_dispose (GObject *object)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (object));
 
-  g_clear_pointer (&priv->title_widget, gtk_widget_unparent);
-  g_clear_pointer (&priv->title_label, gtk_widget_unparent);
+  priv->title_widget = NULL;
+  priv->title_label = NULL;
+  priv->start_box = NULL;
+  priv->end_box = NULL;
+
+  g_clear_pointer (&priv->handle, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_header_bar_parent_class)->dispose (object);
-
-  g_clear_pointer (&priv->start_box, gtk_widget_unparent);
-  g_clear_pointer (&priv->end_box, gtk_widget_unparent);
 }
 
 static void
@@ -498,7 +500,6 @@ gtk_header_bar_remove (GtkContainer *container,
 {
   GtkHeaderBar *bar = GTK_HEADER_BAR (container);
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
-  GtkLayoutManager *layout = gtk_widget_get_layout_manager (GTK_WIDGET (bar));
   GtkWidget *parent;
   gboolean removed = FALSE;
 
@@ -515,7 +516,7 @@ gtk_header_bar_remove (GtkContainer *container,
       removed = TRUE;
     }
   else if (parent == GTK_WIDGET (container) &&
-           gtk_center_layout_get_center_widget (GTK_CENTER_LAYOUT (layout)) == widget)
+           gtk_center_box_get_center_widget (GTK_CENTER_BOX (priv->center_box)) == widget)
     {
       gtk_widget_unparent (widget);
       removed = TRUE;
@@ -636,7 +637,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   g_object_class_install_properties (object_class, LAST_PROP, header_bar_props);
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_PANEL);
-  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_CENTER_LAYOUT);
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("headerbar"));
 }
 
@@ -644,21 +645,24 @@ static void
 gtk_header_bar_init (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
-  GtkLayoutManager *layout;
 
   priv->title_widget = NULL;
   priv->decoration_layout = NULL;
   priv->state = GDK_SURFACE_STATE_WITHDRAWN;
 
-  layout = gtk_widget_get_layout_manager (GTK_WIDGET (bar));
+  priv->handle = gtk_window_handle_new ();
+  gtk_widget_set_parent (priv->handle, GTK_WIDGET (bar));
+
+  priv->center_box = gtk_center_box_new ();
+  gtk_window_handle_set_child (GTK_WINDOW_HANDLE (priv->handle), priv->center_box);
+
   priv->start_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_add_css_class (priv->start_box, "start");
-  gtk_widget_set_parent (priv->start_box, GTK_WIDGET (bar));
-  gtk_center_layout_set_start_widget (GTK_CENTER_LAYOUT (layout), priv->start_box);
+  gtk_center_box_set_start_widget (GTK_CENTER_BOX (priv->center_box), priv->start_box);
+
   priv->end_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_add_css_class (priv->end_box, "end");
-  gtk_widget_set_parent (priv->end_box, GTK_WIDGET (bar));
-  gtk_center_layout_set_end_widget (GTK_CENTER_LAYOUT (layout), priv->end_box);
+  gtk_center_box_set_end_widget (GTK_CENTER_BOX (priv->center_box), priv->end_box);
 
   construct_title_label (bar);
 }

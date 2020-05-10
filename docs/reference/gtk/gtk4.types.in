@@ -215,3 +215,4 @@ gtk_widget_get_type
 gtk_window_get_type
 gtk_window_controls_get_type
 gtk_window_group_get_type
+gtk_window_handle_get_type

@@ -4310,6 +4310,24 @@ gtk_window_controls_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkwindowhandle</FILE>
+<TITLE>GtkWindowHandle</TITLE>
+GtkWindowHandle
+gtk_window_handle_new
+gtk_window_handle_get_child
+gtk_window_handle_set_child
+<SUBSECTION Standard>
+GTK_WINDOW_HANDLE
+GTK_IS_WINDOW_HANDLE
+GTK_TYPE_WINDOW_HANDLE
+GTK_WINDOW_HANDLE_CLASS
+GTK_IS_WINDOW_HANDLE_CLASS
+GTK_WINDOW_HANDLE_GET_CLASS
+<SUBSECTION Private>
+gtk_window_handle_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkmain</FILE>
 <TITLE>General</TITLE>
 gtk_disable_setlocale
