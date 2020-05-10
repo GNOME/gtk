@@ -30,6 +30,9 @@ pacman --noconfirm -S --needed \
     mingw-w64-$MSYS2_ARCH-ninja \
     mingw-w64-$MSYS2_ARCH-gtk-doc
 
+# https://github.com/msys2/MINGW-packages/pull/6465
+pacman --noconfirm -S --needed mingw-w64-$MSYS2_ARCH-brotli
+
 mkdir -p _ccache
 export CCACHE_BASEDIR="$(pwd)"
 export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
