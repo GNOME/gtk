@@ -160,17 +160,21 @@ static GParamSpec *properties[LAST_PROP];
 static guint signals[LAST_SIGNAL];
 
 
-static gint
-number_of_children (GtkContainer *container)
+static gboolean
+more_than_three_children (GtkWidget *widget)
 {
-  GList *children;
-  gint n;
+  GtkWidget *child;
+  int i;
 
-  children = gtk_container_get_children (container);
-  n = g_list_length (children);
-  g_list_free (children);
+  for (child = gtk_widget_get_first_child (widget), i = 0;
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child), i++)
+    {
+      if (i == 3)
+        return TRUE;
+    }
 
-  return n;
+  return FALSE;
 }
 
 static void
@@ -183,9 +187,9 @@ update_title_stack (GtkShortcutsWindow *self)
 
   if (GTK_IS_SHORTCUTS_SECTION (visible_child))
     {
-      if (number_of_children (GTK_CONTAINER (priv->stack)) > 3)
+      if (more_than_three_children (GTK_WIDGET (priv->stack)))
         {
-          gchar *title;
+          char *title;
 
           gtk_stack_set_visible_child_name (priv->title_stack, "sections");
           g_object_get (visible_child, "title", &title, NULL);
@@ -402,20 +406,18 @@ gtk_shortcuts_window_set_view_name (GtkShortcutsWindow *self,
                                     const gchar        *view_name)
 {
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
-  GList *sections, *l;
+  GtkWidget *section;
 
   g_free (priv->view_name);
   priv->view_name = g_strdup (view_name);
 
-  sections = gtk_container_get_children (GTK_CONTAINER (priv->stack));
-  for (l = sections; l; l = l->next)
+  for (section = gtk_widget_get_first_child (GTK_WIDGET (priv->stack));
+       section != NULL;
+       section = gtk_widget_get_next_sibling (section))
     {
-      GtkShortcutsSection *section = l->data;
-
       if (GTK_IS_SHORTCUTS_SECTION (section))
         g_object_set (section, "view-name", priv->view_name, NULL);
     }
-  g_list_free (sections);
 }
 
 static void
