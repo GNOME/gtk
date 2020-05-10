@@ -20,6 +20,7 @@
   </object>
   <template class="GtkInspectorCssEditor" parent="GtkBox">
     <property name="orientation">vertical</property>
+    <property name="has-tooltip">1</property>
     <child>
       <object class="GtkBox">
         <property name="spacing">6</property>
@@ -57,8 +58,6 @@
             <property name="monospace">1</property>
             <property name="left-margin">6</property>
             <property name="right-margin">6</property>
-            <property name="has-tooltip">1</property>
-            <signal name="query-tooltip" handler="query_tooltip_cb"/>
           </object>
         </child>
       </object>

@@ -65,13 +65,13 @@ css_error_free (gpointer data)
 }
 
 static gboolean
-query_tooltip_cb (GtkWidget             *widget,
-                  gint                   x,
-                  gint                   y,
-                  gboolean               keyboard_tip,
-                  GtkTooltip            *tooltip,
-                  GtkInspectorCssEditor *ce)
+gtk_css_editor_query_tooltip (GtkWidget  *widget,
+                              int         x,
+                              int         y,
+                              gboolean    keyboard_tip,
+                              GtkTooltip *tooltip)
 {
+  GtkInspectorCssEditor *ce = GTK_INSPECTOR_CSS_EDITOR (widget);
   GtkTextIter iter;
   GList *l;
 
@@ -86,6 +86,7 @@ query_tooltip_cb (GtkWidget             *widget,
     {
       gint bx, by, trailing;
 
+      gtk_widget_translate_coordinates (widget, ce->priv->view, x, y, &x, &y);
       gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (ce->priv->view), GTK_TEXT_WINDOW_TEXT,
                                              x, y, &bx, &by);
       gtk_text_view_get_iter_at_position (GTK_TEXT_VIEW (ce->priv->view), &iter, &trailing, bx, by);
@@ -406,6 +407,8 @@ gtk_inspector_css_editor_class_init (GtkInspectorCssEditorClass *klass)
   object_class->constructed = constructed;
   object_class->finalize = finalize;
 
+  widget_class->query_tooltip = gtk_css_editor_query_tooltip;
+
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/css-editor.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, text);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, view);
@@ -413,7 +416,6 @@ gtk_inspector_css_editor_class_init (GtkInspectorCssEditorClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, disable_toggled);
   gtk_widget_class_bind_template_callback (widget_class, save_clicked);
   gtk_widget_class_bind_template_callback (widget_class, text_changed);
-  gtk_widget_class_bind_template_callback (widget_class, query_tooltip_cb);
 }
 
 void
