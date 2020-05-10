@@ -748,7 +748,7 @@ activate (GApplication *app)
   update_title (GTK_WINDOW (main_window));
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (main_window), box);
+  gtk_window_set_child (GTK_WINDOW (main_window), box);
 
   /* Create document  */
   sw = gtk_scrolled_window_new (NULL, NULL);
