@@ -225,7 +225,7 @@ test_row_separator_height (void)
   g_assert_cmpint (rect.height, ==, height);
   g_assert_cmpint (cell_rect.height, ==, height);
 
-  gtk_widget_destroy (tree_view);
+  gtk_widget_destroy (window);
 }
 
 static void
