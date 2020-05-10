@@ -3376,7 +3376,7 @@ gtk_list_box_row_dispose (GObject *object)
   GtkListBoxRowPrivate *priv = ROW_PRIV (row);
 
   g_clear_object (&priv->action_helper);
-  g_clear_pointer (&priv->child, gtk_widget_unparent);
+  g_clear_pointer (&priv->child, gtk_widget_destroy);
 
   G_OBJECT_CLASS (gtk_list_box_row_parent_class)->dispose (object);
 }

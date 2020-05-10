@@ -2617,7 +2617,7 @@ gtk_scrolled_window_dispose (GObject *object)
   GtkScrolledWindow *self = GTK_SCROLLED_WINDOW (object);
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (self);
 
-  g_clear_pointer (&priv->child, gtk_widget_unparent);
+  g_clear_pointer (&priv->child, gtk_widget_destroy);
 
   remove_indicator (self, &priv->hindicator);
   remove_indicator (self, &priv->vindicator);

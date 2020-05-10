@@ -1025,7 +1025,7 @@ gtk_popover_dispose (GObject *object)
   GtkPopover *popover = GTK_POPOVER (object);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
-  g_clear_pointer (&priv->contents_widget, gtk_widget_unparent);
+  g_clear_pointer (&priv->contents_widget, gtk_widget_destroy);
   g_clear_pointer (&priv->arrow_render_node, gsk_render_node_unref);
 
   G_OBJECT_CLASS (gtk_popover_parent_class)->dispose (object);
