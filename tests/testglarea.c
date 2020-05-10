@@ -421,6 +421,10 @@ main (int argc, char *argv[])
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE);
+  gtk_widget_set_margin_start (box, 12);
+  gtk_widget_set_margin_end (box, 12);
+  gtk_widget_set_margin_top (box, 12);
+  gtk_widget_set_margin_bottom (box, 12);
   gtk_box_set_spacing (GTK_BOX (box), 6);
   gtk_window_set_child (GTK_WINDOW (window), box);
   gtk_widget_show (box);
