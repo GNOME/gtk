@@ -70,6 +70,7 @@ NSWindow        *_gdk_macos_display_find_native_under_pointer      (GdkMacosDisp
 gboolean         _gdk_macos_display_get_setting                    (GdkMacosDisplay *self,
                                                                     const gchar     *setting,
                                                                     GValue          *value);
+void             _gdk_macos_display_reload_settings                (GdkMacosDisplay *self);
 
 G_END_DECLS
 

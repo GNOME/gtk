@@ -247,6 +247,20 @@ gdk_macos_display_monitors_changed_cb (CFNotificationCenterRef  center,
   _gdk_macos_display_reload_monitors (self);
 }
 
+static void
+gdk_macos_display_user_defaults_changed_cb (CFNotificationCenterRef  center,
+                                            void                    *observer,
+                                            CFStringRef              name,
+                                            const void              *object,
+                                            CFDictionaryRef          userInfo)
+{
+  GdkMacosDisplay *self = observer;
+
+  g_assert (GDK_IS_MACOS_DISPLAY (self));
+
+  _gdk_macos_display_reload_settings (self);
+}
+
 void
 _gdk_macos_display_reload_monitors (GdkMacosDisplay *self)
 {
@@ -539,6 +553,11 @@ gdk_macos_display_finalize (GObject *object)
                                       CFSTR ("NSApplicationDidChangeScreenParametersNotification"),
                                       NULL);
 
+  CFNotificationCenterRemoveObserver (CFNotificationCenterGetDistributedCenter (),
+                                      self,
+                                      CFSTR ("NSUserDefaultsDidChangeNotification"),
+                                      NULL);
+
   g_clear_pointer (&self->frame_source, g_source_unref);
   g_clear_pointer (&self->monitors, g_ptr_array_unref);
   g_clear_pointer (&self->name, g_free);
@@ -616,6 +635,13 @@ _gdk_macos_display_open (const gchar *display_name)
                                    self,
                                    gdk_macos_display_monitors_changed_cb,
                                    CFSTR ("NSApplicationDidChangeScreenParametersNotification"),
+                                   NULL,
+                                   CFNotificationSuspensionBehaviorDeliverImmediately);
+
+  CFNotificationCenterAddObserver (CFNotificationCenterGetDistributedCenter (),
+                                   self,
+                                   gdk_macos_display_user_defaults_changed_cb,
+                                   CFSTR ("NSUserDefaultsDidChangeNotification"),
                                    NULL,
                                    CFNotificationSuspensionBehaviorDeliverImmediately);
 
