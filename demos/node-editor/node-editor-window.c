@@ -273,13 +273,13 @@ text_changed (GtkTextBuffer    *buffer,
 }
 
 static gboolean
-text_view_query_tooltip_cb (GtkWidget        *widget,
-                            int               x,
-                            int               y,
-                            gboolean          keyboard_tip,
-                            GtkTooltip       *tooltip,
-                            NodeEditorWindow *self)
+node_editor_query_tooltip (GtkWidget        *widget,
+                           int               x,
+                           int               y,
+                           gboolean          keyboard_tip,
+                           GtkTooltip       *tooltip)
 {
+  NodeEditorWindow *self = NODE_EDITOR_WINDOW (widget);
   GtkTextIter iter;
   guint i;
   GString *text;
@@ -295,6 +295,7 @@ text_view_query_tooltip_cb (GtkWidget        *widget,
     {
       gint bx, by, trailing;
 
+      gtk_widget_translate_coordinates (widget, self->text_view, x, y, &x, &y);
       gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (self->text_view), GTK_TEXT_WINDOW_TEXT,
                                              x, y, &bx, &by);
       gtk_text_view_get_iter_at_position (GTK_TEXT_VIEW (self->text_view), &iter, &trailing, bx, by);
@@ -757,6 +758,7 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
 
   widget_class->realize = node_editor_window_realize;
   widget_class->unrealize = node_editor_window_unrealize;
+  widget_class->query_tooltip = node_editor_query_tooltip;
 
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, text_view);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, picture);
@@ -767,7 +769,6 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, testcase_name_entry);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, testcase_save_button);
 
-  gtk_widget_class_bind_template_callback (widget_class, text_view_query_tooltip_cb);
   gtk_widget_class_bind_template_callback (widget_class, open_cb);
   gtk_widget_class_bind_template_callback (widget_class, save_cb);
   gtk_widget_class_bind_template_callback (widget_class, export_image_cb);
