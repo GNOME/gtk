@@ -802,17 +802,17 @@ _gdk_win32_monitor_get_pixel_structure (GdkMonitor *monitor)
   GdkWin32Monitor *w32_m;
   BOOL enabled = TRUE;
   unsigned int smoothing_orientation = FE_FONTSMOOTHINGORIENTATIONRGB;
-  BOOL cleartype = TRUE;
+  UINT cleartype = FE_FONTSMOOTHINGCLEARTYPE;
 
   g_return_val_if_fail (monitor != NULL, NULL);
 
   w32_m = GDK_WIN32_MONITOR (monitor);
 
   SystemParametersInfoW (SPI_GETFONTSMOOTHING, 0, &enabled, 0);
-  SystemParametersInfoW (SPI_GETCLEARTYPE, 0, &cleartype, 0);
+  SystemParametersInfoW (SPI_GETFONTSMOOTHINGTYPE, 0, &cleartype, 0);
 
   if (!enabled ||
-      !cleartype ||
+      (cleartype == FE_FONTSMOOTHINGSTANDARD) ||
       !SystemParametersInfoW (SPI_GETFONTSMOOTHINGORIENTATION, 0, &smoothing_orientation, 0))
     return "none";
 
