@@ -13,7 +13,6 @@
   <object class="GtkDialog" id="dialog">
     <property name="modal">1</property>
     <property name="destroy_with_parent">1</property>
-    <property name="type_hint">dialog</property>
     <property name="default_width">500</property>
     <property name="use_header_bar">1</property>
     <property name="title" translatable="yes">Join Chat Room</property>
@@ -44,14 +43,13 @@
           <object class="GtkButton" id="confirm_button">
             <property name="label" translatable="yes">_Join</property>
             <property name="can_focus">1</property>
-            <property name="has_default">1</property>
             <property name="receives_default">1</property>
             <property name="use_underline">1</property>
           </object>
         </child>
       </object>
     </child>
-    <child internal-child="vbox">
+    <child internal-child="content_area">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
@@ -61,11 +59,10 @@
             <child>
               <object class="GtkStackPage">
                 <property name="name">main</property>
-                <property name="position">0</property>
                 <property name="child">
                   <object class="GtkGrid" id="grid1">
-                    <property name="margin_left">24</property>
-                    <property name="margin_right">24</property>
+                    <property name="margin_start">24</property>
+                    <property name="margin_end">24</property>
                     <property name="margin_top">24</property>
                     <property name="margin_bottom">24</property>
                     <property name="row_spacing">12</property>

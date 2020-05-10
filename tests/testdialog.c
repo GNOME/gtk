@@ -99,6 +99,8 @@ add_content (GtkWidget *dialog)
   gtk_widget_set_margin_end (label, 50);
   gtk_widget_set_margin_top (label, 50);
   gtk_widget_set_margin_bottom (label, 50);
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_widget_set_vexpand (label, TRUE);
   gtk_widget_show (label);
 
   gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), label);
@@ -183,8 +185,7 @@ show_dialog_with_header_buttons2 (GtkWindow *parent)
   GtkBuilder *builder;
   GtkWidget *dialog;
 
-  builder = gtk_builder_new ();
-  gtk_builder_add_from_file (builder, "dialog.ui", NULL);
+  builder = gtk_builder_new_from_file ("dialog.ui");
   dialog = (GtkWidget *)gtk_builder_get_object (builder, "dialog");
   g_object_unref (builder);
 
