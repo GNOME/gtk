@@ -200,6 +200,7 @@ create_calendar(void)
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
+  gtk_widget_set_vexpand (hpaned, TRUE);
 
   /* Calendar widget */
 
