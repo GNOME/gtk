@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-13 13:58+0000\n"
-"PO-Revision-Date: 2020-04-13 22:40+0300\n"
+"POT-Creation-Date: 2020-04-18 13:09+0000\n"
+"PO-Revision-Date: 2020-05-10 22:33+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
 "%100<10 || n%100>=20) ? 1 : 2)\n"
-"X-Generator: Gtranslator 3.34.0\n"
+"X-Generator: Gtranslator 3.36.0\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -1237,7 +1237,7 @@ msgstr ""
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
 #: gtk/gtkfilechoosernative.c:544 gtk/gtkfilechoosernative.c:636
-#: gtk/gtkfilechooserwidget.c:1493 gtk/gtkfilechooserwidget.c:6553
+#: gtk/gtkfilechooserwidget.c:1497 gtk/gtkfilechooserwidget.c:6562
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
 #: gtk/gtkmountoperation.c:594 gtk/gtkpagesetupunixdialog.c:197
 #: gtk/gtkprintbackend.c:779 gtk/gtkprinteroptionwidget.c:545
@@ -1515,53 +1515,67 @@ msgstr "GNU Affero Bendroji Vieša Licencija, versija 3 arba vėlesnė"
 msgid "GNU Affero General Public License, version 3 only"
 msgstr "GNU Affero Bendroji Vieša Licencija, tik versija 3"
 
-#: gtk/gtkaboutdialog.c:697
+#: gtk/gtkaboutdialog.c:129
+#| msgid "BSD 2-Clause License"
+msgid "BSD 3-Clause License"
+msgstr "BSD 3-teiginių licencija"
+
+#: gtk/gtkaboutdialog.c:130
+msgid "Apache License, Version 2.0"
+msgstr "Apache licencija, versija 2.0"
+
+#: gtk/gtkaboutdialog.c:131
+#| msgid "Artistic License 2.0"
+msgid "Mozilla Public License 2.0"
+msgstr "Mozilla viešoji licencija 2.0"
+
+#: gtk/gtkaboutdialog.c:700
 msgid "C_redits"
 msgstr "_Padėkos"
 
-#: gtk/gtkaboutdialog.c:705
+#: gtk/gtkaboutdialog.c:708
 msgid "_License"
 msgstr "_Licencija"
 
-#: gtk/gtkaboutdialog.c:714 gtk/gtkcustompaperunixdialog.c:329
+#: gtk/gtkaboutdialog.c:717 gtk/gtkcustompaperunixdialog.c:329
 #: gtk/gtkmessagedialog.c:948 gtk/ui/gtkassistant.ui:144
 msgid "_Close"
 msgstr "_Užverti"
 
-#: gtk/gtkaboutdialog.c:998
+#: gtk/gtkaboutdialog.c:1001
 msgid "Could not show link"
 msgstr "Nepavyko parodyti nuorodos"
 
-#: gtk/gtkaboutdialog.c:1037
+#: gtk/gtkaboutdialog.c:1040
 msgid "Website"
 msgstr "Tinklalapis"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
-#: gtk/gtkaboutdialog.c:1087 gtk/ui/gtkapplication-quartz.ui:7
+#: gtk/gtkaboutdialog.c:1090 gtk/ui/gtkapplication-quartz.ui:7
 #, c-format
 msgid "About %s"
 msgstr "Apie %s"
 
-#: gtk/gtkaboutdialog.c:2314
+#: gtk/gtkaboutdialog.c:2317
 msgid "Created by"
 msgstr "Autoriai"
 
-#: gtk/gtkaboutdialog.c:2317
+#: gtk/gtkaboutdialog.c:2320
 msgid "Documented by"
 msgstr "Dokumentavo"
 
-#: gtk/gtkaboutdialog.c:2327
+#: gtk/gtkaboutdialog.c:2330
 msgid "Translated by"
 msgstr "Išvertė"
 
-#: gtk/gtkaboutdialog.c:2332
+#: gtk/gtkaboutdialog.c:2335
 msgid "Artwork by"
 msgstr "Apipavidalino"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2494
+#: gtk/gtkaboutdialog.c:2497
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -2220,8 +2234,8 @@ msgstr "_Kopijuoti"
 msgid "_Paste"
 msgstr "Į_dėti"
 
-#: gtk/gtkentry.c:9601 gtk/gtkfilechooserwidget.c:1494
-#: gtk/gtkfilechooserwidget.c:2320 gtk/gtklabel.c:6684 gtk/gtktextview.c:9511
+#: gtk/gtkentry.c:9601 gtk/gtkfilechooserwidget.c:1498
+#: gtk/gtkfilechooserwidget.c:2324 gtk/gtklabel.c:6684 gtk/gtktextview.c:9511
 msgid "_Delete"
 msgstr "Iš_trinti"
 
@@ -2301,351 +2315,343 @@ msgstr "Pasirinkite kokių tipų failus rodyti"
 msgid "%1$s on %2$s"
 msgstr "%1$s kompiuteryje %2$s"
 
-#: gtk/gtkfilechooserwidget.c:383
+#: gtk/gtkfilechooserwidget.c:384
 msgid "Type name of new folder"
 msgstr "Įveskite naujo aplanko pavadinimą"
 
-#: gtk/gtkfilechooserwidget.c:807
+#: gtk/gtkfilechooserwidget.c:808
 msgid "The folder could not be created"
 msgstr "Nepavyko sukurti aplanko"
 
-#: gtk/gtkfilechooserwidget.c:819
-#| msgid ""
-#| "The folder could not be created, as a file with the same name already "
-#| "exists.  Try using a different name for the folder, or rename the file "
-#| "first."
+#: gtk/gtkfilechooserwidget.c:820
 msgid ""
 "The folder could not be created, as a file with the same name already exists."
 msgstr "Šio aplanko sukurti nepavyko, nes jau yra failas tokiu pat pavadinimu."
 
-#: gtk/gtkfilechooserwidget.c:821
-#| msgid ""
-#| "The folder could not be created, as a file with the same name already "
-#| "exists.  Try using a different name for the folder, or rename the file "
-#| "first."
+#: gtk/gtkfilechooserwidget.c:822
 msgid "Try using a different name for the folder, or rename the file first."
 msgstr ""
 "Pabandykite naudoti kitą aplanko pavadinimą, arba pirma pervadinkite failą."
 
-#: gtk/gtkfilechooserwidget.c:834
+#: gtk/gtkfilechooserwidget.c:835
 msgid "You need to choose a valid filename."
 msgstr "Reikia pasirinkti tinkamą failo pavadinimą."
 
-#: gtk/gtkfilechooserwidget.c:837
+#: gtk/gtkfilechooserwidget.c:838
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Nepavyko sukurti failo %s viduje, nes tai nėra aplankas"
 
-#: gtk/gtkfilechooserwidget.c:847
+#: gtk/gtkfilechooserwidget.c:848
 msgid "Cannot create file as the filename is too long"
 msgstr "Nepavyko sukurti failo, kadangi failo pavadinimas per ilgas"
 
-#: gtk/gtkfilechooserwidget.c:848
+#: gtk/gtkfilechooserwidget.c:849
 msgid "Try using a shorter name."
 msgstr "Mėginkite trumpesnį pavadinimą."
 
-#: gtk/gtkfilechooserwidget.c:858
+#: gtk/gtkfilechooserwidget.c:859
 msgid "You may only select folders"
 msgstr "Galima pasirinkti tik aplankus"
 
-#: gtk/gtkfilechooserwidget.c:859
+#: gtk/gtkfilechooserwidget.c:860
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "Jūsų pasirinktas elementas nėra aplankas, mėginkite kitą elementą."
 
-#: gtk/gtkfilechooserwidget.c:867
+#: gtk/gtkfilechooserwidget.c:868
 msgid "Invalid file name"
 msgstr "Netinkamas failo vardas"
 
-#: gtk/gtkfilechooserwidget.c:876
+#: gtk/gtkfilechooserwidget.c:877
 msgid "The folder contents could not be displayed"
 msgstr "Nepavyko parodyti aplanko turinio"
 
-#: gtk/gtkfilechooserwidget.c:884
+#: gtk/gtkfilechooserwidget.c:885
 msgid "The file could not be deleted"
 msgstr "Nepavyko ištrinti failo"
 
-#: gtk/gtkfilechooserwidget.c:892
+#: gtk/gtkfilechooserwidget.c:893
 msgid "The file could not be moved to the Trash"
 msgstr "Nepavyko perkelti failo į šiukšlinę"
 
-#: gtk/gtkfilechooserwidget.c:1037
+#: gtk/gtkfilechooserwidget.c:1038
 msgid "A folder with that name already exists"
 msgstr "Jau yra aplankas tokiu pavadinimu"
 
-#: gtk/gtkfilechooserwidget.c:1039
+#: gtk/gtkfilechooserwidget.c:1040
 msgid "A file with that name already exists"
 msgstr "Jau yra failas tokiu pavadinimu"
 
-#: gtk/gtkfilechooserwidget.c:1074
+#: gtk/gtkfilechooserwidget.c:1075
 msgid "A folder cannot be called “.”"
 msgstr "Aplanko negalima pavadinti „.“"
 
-#: gtk/gtkfilechooserwidget.c:1075
+#: gtk/gtkfilechooserwidget.c:1076
 msgid "A file cannot be called “.”"
 msgstr "Failo negalima pavadinti „.“"
 
-#: gtk/gtkfilechooserwidget.c:1078
+#: gtk/gtkfilechooserwidget.c:1079
 msgid "A folder cannot be called “..”"
 msgstr "Aplanko negalima pavadinti „..“"
 
-#: gtk/gtkfilechooserwidget.c:1079
+#: gtk/gtkfilechooserwidget.c:1080
 msgid "A file cannot be called “..”"
 msgstr "Failo negalima pavadinti „..“"
 
-#: gtk/gtkfilechooserwidget.c:1082
+#: gtk/gtkfilechooserwidget.c:1083
 msgid "Folder names cannot contain “/”"
 msgstr "Aplankų pavadinimuose negali būti „/“"
 
-#: gtk/gtkfilechooserwidget.c:1083
+#: gtk/gtkfilechooserwidget.c:1084
 msgid "File names cannot contain “/”"
 msgstr "Failų pavadinimuose negali būti „/“"
 
-#: gtk/gtkfilechooserwidget.c:1109
+#: gtk/gtkfilechooserwidget.c:1110
 msgid "Folder names should not begin with a space"
 msgstr "Aplankų pavadinimai neturėtų prasidėti tarpu"
 
-#: gtk/gtkfilechooserwidget.c:1110
+#: gtk/gtkfilechooserwidget.c:1111
 msgid "File names should not begin with a space"
 msgstr "Failų pavadinimai neturėtų prasidėti tarpu"
 
-#: gtk/gtkfilechooserwidget.c:1114
+#: gtk/gtkfilechooserwidget.c:1115
 msgid "Folder names should not end with a space"
 msgstr "Aplankų pavadinimai neturėtų baigtis tarpu"
 
-#: gtk/gtkfilechooserwidget.c:1115
+#: gtk/gtkfilechooserwidget.c:1116
 msgid "File names should not end with a space"
 msgstr "Failų pavadinimai neturėtų baigtis tarpu"
 
-#: gtk/gtkfilechooserwidget.c:1118
+#: gtk/gtkfilechooserwidget.c:1119
 msgid "Folder names starting with a “.” are hidden"
 msgstr "Aplankai, kurių pavadinimai prasideda „.“ yra nerodomi"
 
-#: gtk/gtkfilechooserwidget.c:1119
+#: gtk/gtkfilechooserwidget.c:1120
 msgid "File names starting with a “.” are hidden"
 msgstr "Failai, kurių pavadinimai prasideda tašku (.) yra nerodomi"
 
-#: gtk/gtkfilechooserwidget.c:1489
+#: gtk/gtkfilechooserwidget.c:1493
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "Ar tikrai norite negrįžtamai ištrinti „%s“?"
 
-#: gtk/gtkfilechooserwidget.c:1492
+#: gtk/gtkfilechooserwidget.c:1496
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
 msgstr "Jei ištrinsite elementą, jis bus negrįžtamai prarastas."
 
-#: gtk/gtkfilechooserwidget.c:1629
+#: gtk/gtkfilechooserwidget.c:1633
 msgid "The file could not be renamed"
 msgstr "Nepavyko pervadinti aplanko"
 
-#: gtk/gtkfilechooserwidget.c:1965
+#: gtk/gtkfilechooserwidget.c:1969
 msgid "Could not select file"
 msgstr "Failo pasirinkti nepavyko"
 
-#: gtk/gtkfilechooserwidget.c:2315
+#: gtk/gtkfilechooserwidget.c:2319
 msgid "_Visit File"
 msgstr "_Aplankyti šį failą"
 
-#: gtk/gtkfilechooserwidget.c:2316
+#: gtk/gtkfilechooserwidget.c:2320
 msgid "_Open With File Manager"
 msgstr "_Atverti failų tvarkyklėje"
 
-#: gtk/gtkfilechooserwidget.c:2317
+#: gtk/gtkfilechooserwidget.c:2321
 msgid "_Copy Location"
 msgstr "Kopijuoti _vietą"
 
-#: gtk/gtkfilechooserwidget.c:2318
+#: gtk/gtkfilechooserwidget.c:2322
 msgid "_Add to Bookmarks"
 msgstr "Į_dėti į žymeles"
 
-#: gtk/gtkfilechooserwidget.c:2319 gtk/gtkplacessidebar.c:2741
+#: gtk/gtkfilechooserwidget.c:2323 gtk/gtkplacessidebar.c:2741
 #: gtk/ui/gtkfilechooserwidget.ui:539
 msgid "_Rename"
 msgstr "Per_vadinti"
 
-#: gtk/gtkfilechooserwidget.c:2321
+#: gtk/gtkfilechooserwidget.c:2325
 msgid "_Move to Trash"
 msgstr "_Perkelti į šiukšlinę"
 
-#: gtk/gtkfilechooserwidget.c:2325
+#: gtk/gtkfilechooserwidget.c:2329
 msgid "Show _Hidden Files"
 msgstr "Rod_yti paslėptus failus"
 
-#: gtk/gtkfilechooserwidget.c:2326
+#: gtk/gtkfilechooserwidget.c:2330
 msgid "Show _Size Column"
 msgstr "Rodyti _dydžio stulpelį"
 
-#: gtk/gtkfilechooserwidget.c:2327
+#: gtk/gtkfilechooserwidget.c:2331
 msgid "Show T_ype Column"
 msgstr "Rodyti _tipo stulpelį"
 
-#: gtk/gtkfilechooserwidget.c:2328
+#: gtk/gtkfilechooserwidget.c:2332
 msgid "Show _Time"
 msgstr "Rodyti _laiką"
 
-#: gtk/gtkfilechooserwidget.c:2329
+#: gtk/gtkfilechooserwidget.c:2333
 msgid "Sort _Folders before Files"
 msgstr "Rikiuoti _aplankus prieš failus"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2608 gtk/inspector/css-node-tree.ui:141
+#: gtk/gtkfilechooserwidget.c:2615 gtk/inspector/css-node-tree.ui:141
 #: gtk/ui/gtkfilechooserwidget.ui:208 gtk/ui/gtkprintunixdialog.ui:123
 msgid "Location"
 msgstr "Vieta"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2701
+#: gtk/gtkfilechooserwidget.c:2708
 msgid "_Name:"
 msgstr "_Pavadinimas:"
 
-#: gtk/gtkfilechooserwidget.c:3326 gtk/gtkfilechooserwidget.c:3340
+#: gtk/gtkfilechooserwidget.c:3333 gtk/gtkfilechooserwidget.c:3347
 #, c-format
 msgid "Searching in %s"
 msgstr "Ieškoma %s"
 
-#: gtk/gtkfilechooserwidget.c:3346
+#: gtk/gtkfilechooserwidget.c:3353
 msgid "Searching"
 msgstr "Ieškoma"
 
-#: gtk/gtkfilechooserwidget.c:3353
+#: gtk/gtkfilechooserwidget.c:3360
 msgid "Enter location"
 msgstr "Įveskite vietą"
 
-#: gtk/gtkfilechooserwidget.c:3355
+#: gtk/gtkfilechooserwidget.c:3362
 msgid "Enter location or URL"
 msgstr "Įveskite vietą arba URL"
 
-#: gtk/gtkfilechooserwidget.c:4431 gtk/gtkfilechooserwidget.c:7467
+#: gtk/gtkfilechooserwidget.c:4440 gtk/gtkfilechooserwidget.c:7481
 #: gtk/ui/gtkfilechooserwidget.ui:248
 msgid "Modified"
 msgstr "Pakeista"
 
-#: gtk/gtkfilechooserwidget.c:4709
+#: gtk/gtkfilechooserwidget.c:4718
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Nepavyko perskaityti %s turinio"
 
-#: gtk/gtkfilechooserwidget.c:4713
+#: gtk/gtkfilechooserwidget.c:4722
 msgid "Could not read the contents of the folder"
 msgstr "Nepavyko perskaityti aplanko turinio"
 
-#: gtk/gtkfilechooserwidget.c:4873 gtk/gtkfilechooserwidget.c:4921
+#: gtk/gtkfilechooserwidget.c:4882 gtk/gtkfilechooserwidget.c:4930
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4875 gtk/gtkfilechooserwidget.c:4923
+#: gtk/gtkfilechooserwidget.c:4884 gtk/gtkfilechooserwidget.c:4932
 msgid "%l:%M %p"
 msgstr "%l:%M"
 
-#: gtk/gtkfilechooserwidget.c:4879
+#: gtk/gtkfilechooserwidget.c:4888
 msgid "Yesterday"
 msgstr "Vakar"
 
-#: gtk/gtkfilechooserwidget.c:4887
+#: gtk/gtkfilechooserwidget.c:4896
 msgid "%-e %b"
 msgstr "%b %-e"
 
-#: gtk/gtkfilechooserwidget.c:4891
+#: gtk/gtkfilechooserwidget.c:4900
 msgid "%-e %b %Y"
 msgstr "%Y-%b-%-e"
 
-#: gtk/gtkfilechooserwidget.c:4990 gtk/gtkfilechooserwidget.c:4998
+#: gtk/gtkfilechooserwidget.c:4999 gtk/gtkfilechooserwidget.c:5007
 msgid "Program"
 msgstr "Programa"
 
-#: gtk/gtkfilechooserwidget.c:4991
+#: gtk/gtkfilechooserwidget.c:5000
 msgid "Audio"
 msgstr "Garsas"
 
-#: gtk/gtkfilechooserwidget.c:4992 gtk/inspector/visual.ui:230
+#: gtk/gtkfilechooserwidget.c:5001 gtk/inspector/visual.ui:230
 #: gtk/ui/gtkfontbutton.ui:13
 msgid "Font"
 msgstr "Šriftas"
 
-#: gtk/gtkfilechooserwidget.c:4993 gtk/inspector/visual.ui:488
+#: gtk/gtkfilechooserwidget.c:5002 gtk/inspector/visual.ui:488
 msgid "Image"
 msgstr "Paveikslėlis"
 
-#: gtk/gtkfilechooserwidget.c:4994
+#: gtk/gtkfilechooserwidget.c:5003
 msgid "Archive"
 msgstr "Archyvas"
 
-#: gtk/gtkfilechooserwidget.c:4995
+#: gtk/gtkfilechooserwidget.c:5004
 msgid "Markup"
 msgstr "Ženklinimas"
 
-#: gtk/gtkfilechooserwidget.c:4996 gtk/gtkfilechooserwidget.c:4997
+#: gtk/gtkfilechooserwidget.c:5005 gtk/gtkfilechooserwidget.c:5006
 msgid "Text"
 msgstr "Tekstas"
 
-#: gtk/gtkfilechooserwidget.c:4999
+#: gtk/gtkfilechooserwidget.c:5008
 msgid "Video"
 msgstr "Vaizdo įrašas"
 
-#: gtk/gtkfilechooserwidget.c:5000
+#: gtk/gtkfilechooserwidget.c:5009
 msgid "Contacts"
 msgstr "Adresatai"
 
-#: gtk/gtkfilechooserwidget.c:5001
+#: gtk/gtkfilechooserwidget.c:5010
 msgid "Calendar"
 msgstr "Kalendorius"
 
-#: gtk/gtkfilechooserwidget.c:5002
+#: gtk/gtkfilechooserwidget.c:5011
 msgid "Document"
 msgstr "Dokumentas"
 
-#: gtk/gtkfilechooserwidget.c:5003
+#: gtk/gtkfilechooserwidget.c:5012
 msgid "Presentation"
 msgstr "Pateiktis"
 
-#: gtk/gtkfilechooserwidget.c:5004
+#: gtk/gtkfilechooserwidget.c:5013
 msgid "Spreadsheet"
 msgstr "Skaičiuoklė"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:5035 gtk/gtkfilechooserwidget.c:5224
+#: gtk/gtkfilechooserwidget.c:5044 gtk/gtkfilechooserwidget.c:5233
 #: gtk/inspector/prop-editor.c:1689
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Nežinomas"
 
-#: gtk/gtkfilechooserwidget.c:5263 gtk/gtkplacessidebar.c:1094
+#: gtk/gtkfilechooserwidget.c:5272 gtk/gtkplacessidebar.c:1094
 msgid "Home"
 msgstr "Asmeninis aplankas"
 
-#: gtk/gtkfilechooserwidget.c:5760
+#: gtk/gtkfilechooserwidget.c:5769
 msgid "Cannot change to folder because it is not local"
 msgstr "Negalima pakeisti į nurodytą aplanką, nes jis nėra vietinis"
 
-#: gtk/gtkfilechooserwidget.c:6546 gtk/gtkprintunixdialog.c:665
+#: gtk/gtkfilechooserwidget.c:6555 gtk/gtkprintunixdialog.c:665
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Failas pavadinimu „%s“ jau yra. Ar norite jį perrašyti?"
 
-#: gtk/gtkfilechooserwidget.c:6549 gtk/gtkprintunixdialog.c:669
+#: gtk/gtkfilechooserwidget.c:6558 gtk/gtkprintunixdialog.c:669
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "Failas vietoje „%s“ jau yra. Pakeitus jį, jo turinys bus perrašytas."
 
-#: gtk/gtkfilechooserwidget.c:6554 gtk/gtkprintunixdialog.c:677
+#: gtk/gtkfilechooserwidget.c:6563 gtk/gtkprintunixdialog.c:677
 msgid "_Replace"
 msgstr "_Pakeisti"
 
-#: gtk/gtkfilechooserwidget.c:6768
+#: gtk/gtkfilechooserwidget.c:6782
 msgid "You do not have access to the specified folder."
 msgstr "Neturite teisių prieiti nurodyto aplanko."
 
-#: gtk/gtkfilechooserwidget.c:7390
+#: gtk/gtkfilechooserwidget.c:7404
 msgid "Could not send the search request"
 msgstr "Nepavyko išsiųsti paieškos užklausos"
 
-#: gtk/gtkfilechooserwidget.c:7678
+#: gtk/gtkfilechooserwidget.c:7692
 msgid "Accessed"
 msgstr "Prieitas"
 
-#: gtk/gtkfilechooserwidget.c:8797 gtk/ui/gtkfilechooserwidget.ui:69
+#: gtk/gtkfilechooserwidget.c:8811 gtk/ui/gtkfilechooserwidget.ui:69
 msgid "Create Folder"
 msgstr "Sukurti aplanką"
 
