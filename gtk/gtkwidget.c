@@ -2631,6 +2631,8 @@ gtk_widget_destroy (GtkWidget *widget)
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  gtk_widget_unmap (widget);
+
   if (!priv->in_destruction)
     g_object_run_dispose (G_OBJECT (widget));
 }
