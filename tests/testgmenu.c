@@ -685,7 +685,7 @@ main (int argc, char *argv[])
   else
     {
       button = gtk_menu_button_new ();
-      gtk_button_set_label (GTK_BUTTON (button), "Click here");
+      gtk_menu_button_set_label (GTK_MENU_BUTTON (button), "Click here");
       gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button), model);
       gtk_widget_insert_action_group (button, "actions", group);
       gtk_container_add (GTK_CONTAINER (box), button);
