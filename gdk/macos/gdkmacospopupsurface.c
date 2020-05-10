@@ -287,6 +287,7 @@ _gdk_macos_popup_surface_new (GdkMacosDisplay *display,
 
   [window setOpaque:NO];
   [window setBackgroundColor:[NSColor clearColor]];
+  [window setLevel:NSPopUpMenuWindowLevel];
 
   self = g_object_new (GDK_TYPE_MACOS_POPUP_SURFACE,
                        "display", display,

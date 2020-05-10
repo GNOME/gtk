@@ -445,6 +445,9 @@ _gdk_macos_toplevel_surface_attach_to_parent (GdkMacosToplevelSurface *self)
       NSWindow *window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
 
       [parent addChildWindow:window ordered:NSWindowAbove];
+
+      if (_gdk_macos_surface_get_modal_hint (GDK_MACOS_SURFACE (self)))
+        [window setLevel:NSModalPanelWindowLevel];
     }
 }
 
@@ -465,5 +468,6 @@ _gdk_macos_toplevel_surface_detach_from_parent (GdkMacosToplevelSurface *self)
       NSWindow *window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
 
       [parent removeChildWindow:window];
+      [window setLevel:NSNormalWindowLevel];
     }
 }
