@@ -39,14 +39,14 @@
  * and drops these references when it is finalized. This finalization can
  * cause the destruction of non-widget objects or widgets which are not
  * contained in a toplevel window. For toplevel windows constructed by a
- * builder, it is the responsibility of the user to call gtk_widget_destroy()
+ * builder, it is the responsibility of the user to call gtk_window_destroy()
  * to get rid of them and all the widgets they contain.
  *
  * The functions gtk_builder_get_object() and gtk_builder_get_objects()
  * can be used to access the widgets in the interface by the names assigned
  * to them inside the UI description. Toplevel windows returned by these
  * functions will stay around until the user explicitly destroys them
- * with gtk_widget_destroy(). Other widgets will either be part of a
+ * with gtk_window_destroy(). Other widgets will either be part of a
  * larger hierarchy constructed by the builder (in which case you should
  * not have to worry about their lifecycle), or without a parent, in which
  * case they have to be added to some container to make use of them.
