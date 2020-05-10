@@ -25,13 +25,10 @@ _IN_ vec4 final_color;
 _IN_ _ROUNDED_RECT_UNIFORM_ transformed_outline;
 
 void main() {
-  vec4 f = gl_FragCoord;
-
-  f.x += u_viewport.x;
-  f.y = (u_viewport.y + u_viewport.w) - f.y;
+  vec2 frag = get_frag_coord();
 
   float alpha = Texture(u_source, vUv).a;
-  alpha *= (1.0 -  clamp(rounded_rect_coverage(decode_rect(transformed_outline), f.xy), 0.0, 1.0));
+  alpha *= (1.0 -  clamp(rounded_rect_coverage(decode_rect(transformed_outline), frag), 0.0, 1.0));
 
   vec4 color = final_color * alpha;
 
