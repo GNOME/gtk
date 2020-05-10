@@ -326,7 +326,7 @@ gtk_text_view_child_constructed (GObject *object)
       break;
 
     case GTK_TEXT_WINDOW_TEXT:
-      gtk_css_node_set_name (css_node, g_quark_from_static_string ("text"));
+      gtk_css_node_set_name (css_node, g_quark_from_static_string ("child"));
       break;
 
     case GTK_TEXT_WINDOW_WIDGET:
