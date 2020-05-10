@@ -187,7 +187,7 @@ gtk_aspect_frame_dispose (GObject *object)
 {
   GtkAspectFrame *self = GTK_ASPECT_FRAME (object);
 
-  g_clear_pointer (&self->child, gtk_widget_unparent);
+  g_clear_pointer (&self->child, gtk_widget_destroy);
 
   G_OBJECT_CLASS (gtk_aspect_frame_parent_class)->dispose (object);
 }

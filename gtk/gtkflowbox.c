@@ -424,7 +424,7 @@ gtk_flow_box_child_dispose (GObject *object)
   GtkFlowBoxChild *self = GTK_FLOW_BOX_CHILD (object);
   GtkFlowBoxChildPrivate *priv = CHILD_PRIV (self);
 
-  g_clear_pointer (&priv->child, gtk_widget_unparent);
+  g_clear_pointer (&priv->child, gtk_widget_destroy);
 
   G_OBJECT_CLASS (gtk_flow_box_child_parent_class)->dispose (object);
 }

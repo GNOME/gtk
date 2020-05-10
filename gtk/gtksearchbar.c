@@ -248,7 +248,7 @@ gtk_search_bar_dispose (GObject *object)
   gtk_search_bar_set_key_capture_widget (bar, NULL);
   gtk_search_bar_set_entry (bar, NULL);
 
-  g_clear_pointer (&bar->revealer, gtk_widget_unparent);
+  g_clear_pointer (&bar->revealer, gtk_widget_destroy);
 
   bar->child = NULL;
   bar->box_center = NULL;

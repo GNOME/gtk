@@ -2402,7 +2402,7 @@ gtk_combo_box_dispose (GObject* object)
       /* destroy things (unparent will kill the latest ref from us)
        * last unref on button will destroy the arrow
        */
-      gtk_widget_unparent (priv->box);
+      gtk_widget_destroy (priv->box);
       priv->box = NULL;
       priv->button = NULL;
       priv->arrow = NULL;

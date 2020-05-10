@@ -3101,7 +3101,7 @@ gtk_file_chooser_widget_dispose (GObject *object)
       impl->external_entry = NULL;
     }
 
-  g_clear_pointer (&impl->box, gtk_widget_unparent);
+  g_clear_pointer (&impl->box, gtk_widget_destroy);
 
   G_OBJECT_CLASS (gtk_file_chooser_widget_parent_class)->dispose (object);
 }
