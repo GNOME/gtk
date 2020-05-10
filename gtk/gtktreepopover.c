@@ -736,7 +736,7 @@ rebuild_menu (GtkTreePopover *popover)
 
   stack = gtk_popover_get_child (GTK_POPOVER (popover));
   while ((child = gtk_widget_get_first_child (stack)))
-    gtk_container_remove (GTK_CONTAINER (stack), child);
+    gtk_stack_remove (GTK_STACK (stack), child);
 
   if (popover->model)
     gtk_tree_popover_populate (popover);
