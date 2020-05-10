@@ -193,11 +193,12 @@
   a g_signal_connect() with the difference lying in how the callback function is
   treated. g_signal_connect_swapped() allow you to specify what the callback
   function should take as parameter by letting you pass it as data. In this case
-  the function being called back is gtk_widget_destroy() and the <varname>window</varname>
+  the function being called back is gtk_window_destroy() and the <varname>window</varname>
   pointer is passed to it. This has the effect that when the button is clicked,
   the whole GTK window is destroyed. In contrast if a normal g_signal_connect() were used
-  to connect the "clicked" signal with gtk_widget_destroy(), then the <varname>button</varname>
-  itself would have been destroyed, not the window.
+  to connect the "clicked" signal with gtk_window_destroy(), then the function
+  would be called on <varname>button</varname> (which would not go well, since
+  the function expects a GtkWindow as argument).
   More information about creating buttons can be found
   <ulink url="https://wiki.gnome.org/HowDoI/Buttons">here</ulink>.
   </para>

@@ -123,8 +123,8 @@ after creating it ?
 <para>
 If <structname>GtkFoo</structname> isn't a toplevel window, then
 <informalexample><programlisting>
- foo = gtk_foo_new (<!-- -->);
- gtk_widget_destroy (foo);
+ foo = gtk_foo_new ();
+ g_object_unref (foo);
 </programlisting></informalexample>
 is a memory leak, because no one assumed the initial floating
 reference. If you are using a widget and you aren't immediately
@@ -137,19 +137,12 @@ To get this, you must acquire a reference to the widget and drop the
 floating reference (<quote>ref and sink</quote> in GTK parlance) after
 creating it:
 <informalexample><programlisting>
- foo = gtk_foo_new (<!-- -->);
+ foo = gtk_foo_new ();
  g_object_ref_sink (foo);
-</programlisting></informalexample>
-When you want to get rid of the widget, you must call gtk_widget_destroy()
-to break any external connections to the widget before dropping your
-reference:
-<informalexample><programlisting>
- gtk_widget_destroy (foo);
- g_object_unref (foo);
 </programlisting></informalexample>
 When you immediately add a widget to a container, it takes care of
 assuming the initial floating reference and you don't have to worry
-about reference counting at all ... just call gtk_widget_destroy()
+about reference counting at all ... just call gtk_container_remove()
 to get rid of the widget.
 </para>
 </answer>
