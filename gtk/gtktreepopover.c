@@ -466,15 +466,14 @@ gtk_tree_popover_get_path_item (GtkTreePopover *popover,
 {
   GtkWidget *stack = gtk_popover_get_child (GTK_POPOVER (popover));
   GtkWidget *item = NULL;
-  GList *children, *l;
+  GtkWidget *stackchild;
+  GtkWidget *child;
 
-  children = gtk_container_get_children (GTK_CONTAINER (stack));
-
-  for (l = children; !item && l; l = l->next)
+  for (stackchild = gtk_widget_get_first_child (stack);
+       stackchild != NULL;
+       stackchild = gtk_widget_get_next_sibling (stackchild))
     {
-      GtkWidget *child;
-
-      for (child = gtk_widget_get_first_child (GTK_WIDGET (l->data));
+      for (child = gtk_widget_get_first_child (stackchild);
            !item && child;
            child = gtk_widget_get_next_sibling (child))
         {
@@ -509,8 +508,6 @@ gtk_tree_popover_get_path_item (GtkTreePopover *popover,
              }
         }
     }
-
-  g_list_free (children);
 
   return item;
 }
