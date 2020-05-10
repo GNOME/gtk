@@ -51,6 +51,10 @@ main (int argc, char *argv[])
 
   button = gtk_button_new ();
   gtk_button_set_label (GTK_BUTTON (button), "hello world");
+  gtk_widget_set_margin_top (button, 10);
+  gtk_widget_set_margin_bottom (button, 10);
+  gtk_widget_set_margin_start (button, 10);
+  gtk_widget_set_margin_end (button, 10);
   g_signal_connect (button, "clicked", G_CALLBACK (hello), NULL);
 
   gtk_window_set_child (GTK_WINDOW (window), button);
