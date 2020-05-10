@@ -2573,7 +2573,7 @@ gsk_gl_renderer_programs_unref (GskGLRendererPrograms *programs)
     {
       for (i = 0; i < GL_N_PROGRAMS; i ++)
         {
-          if (programs->programs[i].id != 0)
+          if (programs->programs[i].id > 0)
             glDeleteProgram (programs->programs[i].id);
           gsk_transform_unref (programs->state[i].modelview);
         }
