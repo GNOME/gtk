@@ -2404,8 +2404,9 @@ gtk_window_dispose (GObject *object)
   gtk_window_set_focus (window, NULL);
   gtk_window_set_default_widget (window, NULL);
 
-  g_clear_pointer (&priv->child, gtk_widget_unparent);
-  unset_titlebar (window);
+  g_clear_pointer (&priv->child, gtk_widget_destroy);
+  g_clear_pointer (&priv->title_box, gtk_widget_destroy);
+  priv->titlebar = NULL;
 
   G_OBJECT_CLASS (gtk_window_parent_class)->dispose (object);
 }

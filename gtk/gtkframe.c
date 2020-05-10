@@ -240,8 +240,8 @@ gtk_frame_dispose (GObject *object)
   GtkFrame *frame = GTK_FRAME (object);
   GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
 
-  g_clear_pointer (&priv->label_widget, gtk_widget_unparent);
-  g_clear_pointer (&priv->child, gtk_widget_unparent);
+  g_clear_pointer (&priv->label_widget, gtk_widget_destroy);
+  g_clear_pointer (&priv->child, gtk_widget_destroy);
 
   G_OBJECT_CLASS (gtk_frame_parent_class)->dispose (object);
 }

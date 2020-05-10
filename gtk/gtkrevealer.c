@@ -175,7 +175,7 @@ gtk_revealer_dispose (GObject *obj)
   GtkRevealer *revealer = GTK_REVEALER (obj);
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
 
-  g_clear_pointer (&priv->child, gtk_widget_unparent);
+  g_clear_pointer (&priv->child, gtk_widget_destroy);
 
   G_OBJECT_CLASS (gtk_revealer_parent_class)->dispose (obj);
 }

@@ -270,10 +270,10 @@ gtk_overlay_dispose (GObject *object)
   GtkOverlay *overlay = GTK_OVERLAY (object);
   GtkWidget *child;
 
-  g_clear_pointer (&overlay->child, gtk_widget_unparent);
+  g_clear_pointer (&overlay->child, gtk_widget_destroy);
 
   while ((child = gtk_widget_get_first_child (GTK_WIDGET (overlay))))
-    gtk_widget_unparent (child);
+    gtk_widget_destroy (child);
 
   G_OBJECT_CLASS (gtk_overlay_parent_class)->dispose (object);
 }

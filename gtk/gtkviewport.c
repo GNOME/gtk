@@ -319,7 +319,7 @@ gtk_viewport_dispose (GObject *object)
 
   clear_focus_change_handler (viewport);
 
-  g_clear_pointer (&viewport->child, gtk_widget_unparent);
+  g_clear_pointer (&viewport->child, gtk_widget_destroy);
 
   G_OBJECT_CLASS (gtk_viewport_parent_class)->dispose (object);
 

@@ -450,7 +450,7 @@ gtk_button_dispose (GObject *object)
   GtkButton *button = GTK_BUTTON (object);
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
-  g_clear_pointer (&priv->child, gtk_widget_unparent);
+  g_clear_pointer (&priv->child, gtk_widget_destroy);
   g_clear_object (&priv->action_helper);
 
   G_OBJECT_CLASS (gtk_button_parent_class)->dispose (object);
