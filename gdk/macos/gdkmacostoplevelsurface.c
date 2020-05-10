@@ -30,11 +30,8 @@
 
 struct _GdkMacosToplevelSurface
 {
-  GdkMacosSurface  parent_instance;
-
-  GdkMacosSurface *transient_for;
-
-  guint            decorated : 1;
+  GdkMacosSurface parent_instance;
+  guint           decorated : 1;
 };
 
 struct _GdkMacosToplevelSurfaceClass
@@ -202,9 +199,9 @@ _gdk_macos_toplevel_surface_set_transient_for (GdkMacosToplevelSurface *self,
   g_assert (!parent || GDK_IS_MACOS_SURFACE (parent));
 
   _gdk_macos_toplevel_surface_detach_from_parent (self);
-  g_clear_object (&self->transient_for);
+  g_clear_object (&GDK_SURFACE (self)->transient_for);
 
-  if (g_set_object (&self->transient_for, parent))
+  if (g_set_object (&GDK_SURFACE (self)->transient_for, GDK_SURFACE (parent)))
     _gdk_macos_toplevel_surface_attach_to_parent (self);
 }
 
@@ -240,7 +237,7 @@ _gdk_macos_toplevel_surface_destroy (GdkSurface *surface,
 {
   GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)surface;
 
-  g_clear_object (&self->transient_for);
+  g_clear_object (&GDK_SURFACE (self)->transient_for);
 
   GDK_SURFACE_CLASS (_gdk_macos_toplevel_surface_parent_class)->destroy (surface, foreign_destroy);
 }
@@ -270,7 +267,7 @@ _gdk_macos_toplevel_surface_get_property (GObject    *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_TRANSIENT_FOR:
-      g_value_set_object (value, toplevel->transient_for);
+      g_value_set_object (value, GDK_SURFACE (toplevel)->transient_for);
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_MODAL:
@@ -434,14 +431,17 @@ _gdk_macos_toplevel_surface_new (GdkMacosDisplay *display,
 void
 _gdk_macos_toplevel_surface_attach_to_parent (GdkMacosToplevelSurface *self)
 {
+  GdkSurface *surface = (GdkSurface *)self;
+
   g_return_if_fail (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
 
-  if (GDK_SURFACE_DESTROYED (self))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
-  if (self->transient_for != NULL && !GDK_SURFACE_DESTROYED (self->transient_for))
+  if (surface->transient_for != NULL &&
+      !GDK_SURFACE_DESTROYED (surface->transient_for))
     {
-      NSWindow *parent = _gdk_macos_surface_get_native (self->transient_for);
+      NSWindow *parent = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (surface->transient_for));
       NSWindow *window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
 
       [parent addChildWindow:window ordered:NSWindowAbove];
@@ -451,14 +451,17 @@ _gdk_macos_toplevel_surface_attach_to_parent (GdkMacosToplevelSurface *self)
 void
 _gdk_macos_toplevel_surface_detach_from_parent (GdkMacosToplevelSurface *self)
 {
+  GdkSurface *surface = (GdkSurface *)self;
+
   g_return_if_fail (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
 
-  if (GDK_SURFACE_DESTROYED (self))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
-  if (self->transient_for != NULL && !GDK_SURFACE_DESTROYED (self->transient_for))
+  if (surface->transient_for != NULL &&
+      !GDK_SURFACE_DESTROYED (surface->transient_for))
     {
-      NSWindow *parent = _gdk_macos_surface_get_native (self->transient_for);
+      NSWindow *parent = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (surface->transient_for));
       NSWindow *window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
 
       [parent removeChildWindow:window];
