@@ -452,7 +452,7 @@ main (int argc, char **argv)
   control_window = gtk_window_new ();
 
   vbbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (control_window), vbbox);
+  gtk_window_set_child (GTK_WINDOW (control_window), vbbox);
 
   button = gtk_button_new_with_mnemonic ("_Select all");
   gtk_widget_set_sensitive (button, multiple);
