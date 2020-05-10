@@ -51,20 +51,27 @@
 -(void)setCairoSurfaceWithRegion:(cairo_surface_t *)cairoSurface
                      cairoRegion:(cairo_region_t *)cairoRegion
 {
-  guint n_rects;
+  guint n_rects = cairo_region_num_rectangles (cairoRegion);
+
+  if (self->surface == NULL)
+    {
+      NSRect rect = [self bounds];
+      rect.origin.x = rect.origin.y = 0;
+      [self setNeedsDisplayInRect:rect];
+    }
+  else
+    {
+      for (guint i = 0; i < n_rects; i++)
+        {
+          cairo_rectangle_int_t rect;
+
+          cairo_region_get_rectangle (cairoRegion, i, &rect);
+          [self setNeedsDisplayInRect:NSMakeRect (rect.x, rect.y, rect.width, rect.height)];
+        }
+    }
 
   g_clear_pointer (&self->surface, cairo_surface_destroy);
   self->surface = cairo_surface_reference (cairoSurface);
-
-  n_rects = cairo_region_num_rectangles (cairoRegion);
-
-  for (guint i = 0; i < n_rects; i++)
-    {
-      cairo_rectangle_int_t rect;
-
-      cairo_region_get_rectangle (cairoRegion, i, &rect);
-      [self setNeedsDisplayInRect:NSMakeRect (rect.x, rect.y, rect.width, rect.height)];
-    }
 }
 
 -(void)drawRect:(NSRect)rect
