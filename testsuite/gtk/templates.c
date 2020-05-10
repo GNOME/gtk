@@ -468,8 +468,7 @@ main (int argc, char **argv)
   g_test_add_func ("/template/GtkColorChooserDialog/show", test_color_chooser_dialog_show);
   g_test_add_func ("/template/GtkFileChooserWidget/basic", test_file_chooser_widget_basic);
   g_test_add_func ("/template/GtkFileChooserDialog/basic", test_file_chooser_dialog_basic);
-  if (0)
-    g_test_add_func ("/template/GtkFileChooserDialog/show", test_file_chooser_dialog_show);
+  g_test_add_func ("/template/GtkFileChooserDialog/show", test_file_chooser_dialog_show);
   g_test_add_func ("/template/GtkFileChooserButton/basic", test_file_chooser_button_basic);
   g_test_add_func ("/template/GtkFontButton/basic", test_font_button_basic);
   g_test_add_func ("/template/GtkFontChooserWidget/basic", test_font_chooser_widget_basic);
@@ -480,8 +479,7 @@ main (int argc, char **argv)
   g_test_add_func ("/template/GtkPageSetupUnixDialog/basic", test_page_setup_unix_dialog_basic);
   g_test_add_func ("/template/GtkPageSetupUnixDialog/show", test_page_setup_unix_dialog_show);
   g_test_add_func ("/template/GtkPrintUnixDialog/basic", test_print_unix_dialog_basic);
-  if (0)
-    g_test_add_func ("/template/GtkPrintUnixDialog/show", test_print_unix_dialog_show);
+  g_test_add_func ("/template/GtkPrintUnixDialog/show", test_print_unix_dialog_show);
 #endif
 
   return g_test_run();
