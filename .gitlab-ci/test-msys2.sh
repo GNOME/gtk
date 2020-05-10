@@ -37,6 +37,9 @@ pacman --noconfirm -S --needed \
 wget "https://gitlab.gnome.org/creiter/gitlab-ci-win32-runner-v2/raw/master/pango/mingw-w64-$MSYS2_ARCH-pango-1.44.7-1-any.pkg.tar.xz"
 pacman --noconfirm -U "mingw-w64-$MSYS2_ARCH-pango-1.44.7-1-any.pkg.tar.xz"
 
+# https://github.com/msys2/MINGW-packages/pull/6465
+pacman --noconfirm -S --needed mingw-w64-$MSYS2_ARCH-brotli
+
 mkdir -p _ccache
 export CCACHE_BASEDIR="$(pwd)"
 export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
