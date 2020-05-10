@@ -7220,6 +7220,7 @@ typedef struct {
   GType                widget_type;
   GObject             *object;
   gboolean             did_finalize;
+  gboolean             too_late;
 } FinalizeAssertion;
 
 static void
@@ -7228,7 +7229,15 @@ finalize_assertion_weak_ref (gpointer data,
 {
   FinalizeAssertion *assertion = (FinalizeAssertion *)data;
   assertion->did_finalize = TRUE;
+  if (assertion->too_late)
+    {
+      g_critical ("Automated component '%s' of class '%s' finalized after gtk_widget_destroy().\n",
+                  assertion->child_class->name,
+                  g_type_name (assertion->widget_type));
+      g_slice_free (FinalizeAssertion, assertion);
+    }
 }
+
 #endif /* G_ENABLE_CONSISTENCY_CHECKS */
 
 static void
@@ -7304,18 +7313,21 @@ gtk_widget_real_destroy (GtkWidget *object)
 
 #ifdef G_ENABLE_CONSISTENCY_CHECKS
       for (l = assertions; l; l = l->next)
-	{
-	  FinalizeAssertion *assertion = l->data;
+        {
+          FinalizeAssertion *assertion = l->data;
 
-	  if (!assertion->did_finalize)
-	    g_critical ("Automated component '%s' of class '%s' did not finalize in gtk_widget_destroy(). "
-			"Current reference count is %d",
-			assertion->child_class->name,
-			g_type_name (assertion->widget_type),
-			assertion->object->ref_count);
-
-	  g_slice_free (FinalizeAssertion, assertion);
-	}
+          if (!assertion->did_finalize)
+            {
+              g_critical ("Automated component '%s' of class '%s' did not finalize in gtk_widget_destroy(). "
+                          "Current reference count is %d",
+                          assertion->child_class->name,
+                          g_type_name (assertion->widget_type),
+                          assertion->object->ref_count);
+              assertion->too_late = TRUE;
+            }
+          else
+            g_slice_free (FinalizeAssertion, assertion);
+        }
       g_slist_free (assertions);
 #endif /* G_ENABLE_CONSISTENCY_CHECKS */
 
