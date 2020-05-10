@@ -4002,7 +4002,7 @@ gtk_notebook_insert_notebook_page (GtkNotebook *notebook,
   if (notebook->menu)
     gtk_notebook_menu_item_create (notebook, page);
 
-  gtk_container_add (GTK_CONTAINER (notebook->stack_widget), page->child);
+  gtk_stack_add_named (GTK_STACK (notebook->stack_widget), page->child, NULL);
 
   if (page->tab_label)
     {
@@ -4219,7 +4219,7 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
       gtk_widget_get_visible (GTK_WIDGET (notebook)))
     need_resize = TRUE;
 
-  gtk_container_remove (GTK_CONTAINER (notebook->stack_widget), page->child);
+  gtk_stack_remove (GTK_STACK (notebook->stack_widget), page->child);
 
   tab_label = page->tab_label;
   if (tab_label)
