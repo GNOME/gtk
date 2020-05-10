@@ -67,7 +67,9 @@ typedef struct {
   guint timeout_id;
 
   cairo_surface_t *surface;
-  GtkWidget *embed_widget;
+  HANDLE custom_page_button;
+  GtkWidget *custom_page_window;
+  HFONT gui_font;
 } GtkPrintOperationWin32;
 
 static void win32_poll_status (GtkPrintOperation *op);
@@ -1382,45 +1384,59 @@ print_callback_new  (void)
   return &callback->iPrintDialogCallback;
 }
 
-static  void
-plug_grab_notify (GtkWidget        *widget,
-		  gboolean          was_grabbed,
-		  GtkPrintOperation *op)
+static gboolean
+custom_page_window_delete_event (GtkWidget *widget,
+                                 GdkEvent  *event,
+                                 gpointer   data)
 {
-  EnableWindow (GetAncestor (GDK_WINDOW_HWND (gtk_widget_get_window (widget)), GA_ROOT),
-		was_grabbed);
-}
+  gtk_widget_hide (widget);
 
+  return TRUE;
+}
 
 static INT_PTR CALLBACK
 pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
 {
   GtkPrintOperation *op;
   GtkPrintOperationWin32 *op_win32;
-  
+
   if (message == WM_INITDIALOG)
     {
       PROPSHEETPAGEW *page = (PROPSHEETPAGEW *)lparam;
-      GtkWidget *plug;
+      const char *button_label_utf8;
+      wchar_t *button_label;
+      NONCLIENTMETRICSW metrics;
 
       op = GTK_PRINT_OPERATION ((gpointer)page->lParam);
       op_win32 = op->priv->platform_data;
 
       SetWindowLongPtrW (wnd, GWLP_USERDATA, (LONG_PTR)op);
       
-      plug = _gtk_win32_embed_widget_new (wnd);
-      gtk_window_set_modal (GTK_WINDOW (plug), TRUE);
-      op_win32->embed_widget = plug;
-      gtk_container_add (GTK_CONTAINER (plug), op->priv->custom_widget);
-      gtk_widget_show (op->priv->custom_widget);
-      gtk_widget_show (plug);
-      gdk_window_focus (gtk_widget_get_window (plug), GDK_CURRENT_TIME);
+      button_label_utf8 = _("Show window");
+      button_label = g_utf8_to_utf16 (button_label_utf8, -1, NULL, NULL, NULL);
+      op_win32->custom_page_button = CreateWindowW (L"BUTTON", button_label,
+                                                    WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON | BS_MULTILINE,
+                                                    0,
+                                                    0,
+                                                    200,
+                                                    100,
+                                                    wnd,
+                                                    NULL,
+                                                    (HINSTANCE) GetWindowLongPtr (wnd, GWLP_HINSTANCE),
+                                                    NULL);
+      metrics.cbSize = sizeof (metrics);
+      SystemParametersInfoW (SPI_GETNONCLIENTMETRICS, metrics.cbSize, &metrics, 0);
+      op_win32->gui_font = CreateFontIndirectW (&metrics.lfMessageFont);
+      SendMessageW (op_win32->custom_page_button, WM_SETFONT, (WPARAM) op_win32->gui_font, MAKELPARAM (TRUE, 0));
+      g_free (button_label);
 
-      /* This dialog is modal, so we grab the embed widget */
-      gtk_grab_add (plug);
-
-      /* When we lose the grab we need to disable the print dialog */
-      g_signal_connect (plug, "grab-notify", G_CALLBACK (plug_grab_notify), op);
+      op_win32->custom_page_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_resizable (GTK_WINDOW (op_win32->custom_page_window), FALSE);
+      gtk_window_set_type_hint (GTK_WINDOW (op_win32->custom_page_window), GDK_WINDOW_TYPE_HINT_UTILITY);
+      /* Prevent the window from being destroyed when closed */
+      g_signal_connect (G_OBJECT (op_win32->custom_page_window),
+                       "delete-event", G_CALLBACK (custom_page_window_delete_event), NULL);
+      gtk_container_add (GTK_CONTAINER (op_win32->custom_page_window), op->priv->custom_widget);
       return FALSE;
     }
   else if (message == WM_DESTROY)
@@ -1429,19 +1445,44 @@ pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
       op_win32 = op->priv->platform_data;
       
       g_signal_emit_by_name (op, "custom-widget-apply", op->priv->custom_widget);
-      gtk_widget_destroy (op_win32->embed_widget);
-      op_win32->embed_widget = NULL;
+      gtk_widget_destroy (op_win32->custom_page_window);
+      DestroyWindow (op_win32->custom_page_button);
+      DeleteObject (op_win32->gui_font);
+      op_win32->gui_font = NULL;
+      op_win32->custom_page_button = NULL;
+      op_win32->custom_page_window = NULL;
       op->priv->custom_widget = NULL;
     }
-  else 
+  else if (message == WM_COMMAND)
     {
+      WORD command_code = HIWORD (wparam);
+      HANDLE control_handle = (HANDLE) lparam;
+
       op = GTK_PRINT_OPERATION (GetWindowLongPtrW (wnd, GWLP_USERDATA));
       op_win32 = op->priv->platform_data;
 
-      return _gtk_win32_embed_widget_dialog_procedure (GTK_WIN32_EMBED_WIDGET (op_win32->embed_widget),
-						       wnd, message, wparam, lparam);
+      if (control_handle == op_win32->custom_page_button &&
+          command_code == BN_CLICKED)
+        {
+          RECT button_rect;
+          size_t scale_factor;
+          GdkWindow *gdk_window;
+
+          GetWindowRect (op_win32->custom_page_button, &button_rect);
+          gtk_window_present_with_time (GTK_WINDOW (op_win32->custom_page_window), GetMessageTime ());
+          gdk_window = gtk_widget_get_window (op_win32->custom_page_window);
+          scale_factor = gdk_window_get_scale_factor (gdk_window);
+          gtk_window_move (GTK_WINDOW (op_win32->custom_page_window), button_rect.left / scale_factor, button_rect.top / scale_factor);
+          gdk_window_focus (gdk_window, GetMessageTime ());
+        }
     }
-  
+  else if (message == WM_ACTIVATE && wparam > 0)
+    {
+      op = GTK_PRINT_OPERATION (GetWindowLongPtrW (wnd, GWLP_USERDATA));
+      op_win32 = op->priv->platform_data;
+      gtk_widget_hide (op_win32->custom_page_window);
+    }
+
   return FALSE;
 }
 
@@ -1455,12 +1496,7 @@ create_application_page (GtkPrintOperation *op)
   LONG base_units;
   WORD baseunitX, baseunitY;
   WORD *array;
-  GtkRequisition requisition;
   const char *tab_label;
-
-  /* Make the template the size of the custom widget size request */
-  gtk_widget_get_preferred_size (op->priv->custom_widget,
-                                 &requisition, NULL);
 
   base_units = GetDialogBaseUnits ();
   baseunitX = LOWORD (base_units);
@@ -1474,8 +1510,8 @@ create_application_page (GtkPrintOperation *op)
   template->cdit = 0;
   template->x = MulDiv (0, 4, baseunitX);
   template->y = MulDiv (0, 8, baseunitY);
-  template->cx = MulDiv (requisition.width, 4, baseunitX);
-  template->cy = MulDiv (requisition.height, 8, baseunitY);
+  template->cx = MulDiv (200, 4, baseunitX);
+  template->cy = MulDiv (100, 8, baseunitY);
   
   array = (WORD *) (template+1);
   *array++ = 0; /* menu */
