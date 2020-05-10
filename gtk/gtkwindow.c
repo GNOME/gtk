@@ -178,7 +178,6 @@ typedef struct
 {
   GtkWidget             *child;
 
-  GtkWidget             *attach_widget;
   GtkWidget             *default_widget;
   GtkWidget             *focus_widget;
   GtkWindow             *transient_parent;
@@ -2623,15 +2622,6 @@ gtk_window_list_toplevels (void)
 }
 
 static void
-remove_attach_widget (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  if (priv->attach_widget)
-    priv->attach_widget = NULL;
-}
-
-static void
 gtk_window_dispose (GObject *object)
 {
   GtkWindow *window = GTK_WINDOW (object);
@@ -2655,8 +2645,6 @@ gtk_window_dispose (GObject *object)
   if (priv->transient_parent)
     gtk_window_set_transient_for (window, NULL);
 
-  remove_attach_widget (window);
-
   if (priv->has_user_ref_count)
     {
       priv->has_user_ref_count = FALSE;
@@ -2672,7 +2660,6 @@ gtk_window_dispose (GObject *object)
   g_clear_pointer (&priv->layout, gdk_toplevel_layout_unref);
   gtk_window_set_focus (window, NULL);
   gtk_window_set_default_widget (window, NULL);
-  remove_attach_widget (window);
 
   g_clear_pointer (&priv->child, gtk_widget_unparent);
   unset_titlebar (window);
