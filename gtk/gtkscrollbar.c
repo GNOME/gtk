@@ -196,9 +196,6 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
   object_class->set_property = gtk_scrollbar_set_property;
   object_class->dispose = gtk_scrollbar_dispose;
 
-  widget_class->focus = gtk_widget_focus_none;
-  widget_class->grab_focus = gtk_widget_grab_focus_none;
-
   props[PROP_ADJUSTMENT] =
       g_param_spec_object ("adjustment",
                            P_("Adjustment"),

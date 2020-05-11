@@ -894,8 +894,6 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   widget_class->measure = gtk_app_chooser_widget_measure;
   widget_class->size_allocate = gtk_app_chooser_widget_size_allocate;
   widget_class->snapshot = gtk_app_chooser_widget_snapshot;
-  widget_class->grab_focus = gtk_widget_grab_focus_child;
-  widget_class->focus = gtk_widget_focus_child;
 
   g_object_class_override_property (gobject_class, PROP_CONTENT_TYPE, "content-type");
 

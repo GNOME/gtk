@@ -548,9 +548,6 @@ gtk_switch_class_init (GtkSwitchClass *klass)
 
   g_object_class_install_properties (gobject_class, LAST_PROP, switch_props);
 
-  widget_class->grab_focus = gtk_widget_grab_focus_self;
-  widget_class->focus = gtk_widget_focus_self;
-
   klass->activate = gtk_switch_activate;
   klass->state_set = state_set;
 
@@ -622,7 +619,7 @@ gtk_switch_init (GtkSwitch *self)
   GtkLayoutManager *layout;
   GtkGesture *gesture;
 
-  gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
+  gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
 
   gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);

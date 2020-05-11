@@ -1380,7 +1380,7 @@ gtk_model_button_init (GtkModelButton *self)
   GtkEventController *controller;
   GtkGesture *gesture;
 
-  gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
+  gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
 
   self->role = GTK_BUTTON_ROLE_NORMAL;
   self->label = gtk_label_new ("");

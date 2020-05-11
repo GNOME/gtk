@@ -77,6 +77,7 @@ struct _GtkWidgetPrivate
   guint visible               : 1;
   guint sensitive             : 1;
   guint can_focus             : 1;
+  guint focusable             : 1;
   guint has_focus             : 1;
   guint focus_on_click        : 1;
   guint has_default           : 1;
@@ -356,10 +357,6 @@ guint             gtk_widget_add_surface_transform_changed_callback (GtkWidget  
 void              gtk_widget_remove_surface_transform_changed_callback (GtkWidget *widget,
                                                                         guint      id);
 
-/* focus vfuncs for non-focusable non-containers */
-gboolean gtk_widget_grab_focus_none  (GtkWidget        *widget);
-gboolean gtk_widget_focus_none       (GtkWidget        *widget,
-                                      GtkDirectionType  direction);
 /* focus vfuncs for non-focusable containers with focusable children */
 gboolean gtk_widget_grab_focus_child (GtkWidget        *widget);
 gboolean gtk_widget_focus_child      (GtkWidget        *widget,
@@ -367,9 +364,6 @@ gboolean gtk_widget_focus_child      (GtkWidget        *widget,
 /* focus vfuncs for focusable widgets with children that don't receive focus */
 gboolean gtk_widget_grab_focus_self  (GtkWidget        *widget);
 gboolean gtk_widget_focus_self       (GtkWidget        *widget,
-                                      GtkDirectionType  direction);
-/* focus vfuncs for focusable widgets with children that receive focus */
-gboolean gtk_widget_focus_all        (GtkWidget        *widget,
                                       GtkDirectionType  direction);
 
 /* inline getters */

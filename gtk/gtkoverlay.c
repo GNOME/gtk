@@ -310,8 +310,6 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
 
   widget_class->snapshot = gtk_overlay_snapshot;
   widget_class->compute_expand = gtk_overlay_compute_expand;
-  widget_class->grab_focus = gtk_widget_grab_focus_none;
-  widget_class->focus = gtk_widget_focus_child;
 
   klass->get_child_position = gtk_overlay_get_child_position;
 

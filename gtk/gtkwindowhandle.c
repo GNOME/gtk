@@ -572,8 +572,6 @@ gtk_window_handle_class_init (GtkWindowHandleClass *klass)
   object_class->set_property = gtk_window_handle_set_property;
 
   widget_class->unrealize = gtk_window_handle_unrealize;
-  widget_class->grab_focus = gtk_widget_grab_focus_none;
-  widget_class->focus = gtk_widget_focus_child;
 
   props[PROP_CHILD] =
       g_param_spec_object ("child",

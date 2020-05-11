@@ -4417,7 +4417,7 @@ gtk_label_ensure_select_info (GtkLabel *self)
     {
       self->select_info = g_new0 (GtkLabelSelectionInfo, 1);
 
-      gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
+      gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
 
       self->select_info->drag_gesture = gtk_gesture_drag_new ();
       g_signal_connect (self->select_info->drag_gesture, "drag-begin",
@@ -4469,7 +4469,7 @@ gtk_label_clear_select_info (GtkLabel *self)
 
       gtk_widget_set_cursor (GTK_WIDGET (self), NULL);
 
-      gtk_widget_set_can_focus (GTK_WIDGET (self), FALSE);
+      gtk_widget_set_focusable (GTK_WIDGET (self), FALSE);
     }
 }
 

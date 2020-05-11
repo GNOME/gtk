@@ -689,6 +689,8 @@ gtk_list_box_init (GtkListBox *box)
   GtkWidget *widget = GTK_WIDGET (box);
   GtkGesture *gesture;
 
+  gtk_widget_set_focusable (GTK_WIDGET (box), TRUE);
+
   box->selection_mode = GTK_SELECTION_SINGLE;
   box->activate_single_click = TRUE;
 
@@ -3482,6 +3484,7 @@ gtk_list_box_row_init (GtkListBoxRow *row)
   ROW_PRIV (row)->activatable = TRUE;
   ROW_PRIV (row)->selectable = TRUE;
 
+  gtk_widget_set_focusable (GTK_WIDGET (row), TRUE);
   gtk_widget_add_css_class (GTK_WIDGET (row), "activatable");
 }
 
