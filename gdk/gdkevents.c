@@ -1695,7 +1695,7 @@ gdk_key_event_matches (GdkEvent        *event,
  * @modifiers: (out): return location for modifiers
  *
  * Gets a keyval and modifier combination that will cause
- * gdk_event_match() to successfully match the given event.
+ * gdk_key_event_matches() to successfully match the given event.
  *
  * Returns: %TRUE on success
  */

@@ -44,7 +44,7 @@
  * emitted when they are selected.
  *
  * To track changes in the selected application, use the
- * #GtkAppChooserbutton::changed signal.
+ * #GtkAppChooserButton::changed signal.
  */
 #include "config.h"
 

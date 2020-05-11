@@ -198,7 +198,8 @@ gdk_draw_context_init (GdkDrawContext *self)
  * In this situation, drawing commands may be effecting the contents of a
  * @context's surface.
  *
- * Returns: %TRUE if the context is between begin_frame() and end_frame() calls.
+ * Returns: %TRUE if the context is between gdk_draw_context_begin_frame() 
+ *     and gdk_draw_context_end_frame() calls.
  */
 gboolean
 gdk_draw_context_is_in_frame (GdkDrawContext *context)

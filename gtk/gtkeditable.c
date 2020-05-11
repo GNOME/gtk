@@ -102,7 +102,8 @@
  * ]|
  *
  * You don't need to provide any other vfuncs. The default implementations
- * work by forwarding to the delegate that the get_delegate() vfunc returns.
+ * work by forwarding to the delegate that the #GtkEditableInterface.get_delegate()
+ * vfunc returns.
  *
  * In your instance_init function, create your text widget, and then call
  * gtk_editable_init_delegate():

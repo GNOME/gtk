@@ -115,7 +115,7 @@
  *
  * Menu items will also show accelerators, which are usually associated
  * with actions via gtk_application_set_accels_for_action(),
- * gtk_widget_add_binding_action() or gtk_shortcut_controller_add_shortcut().
+ * gtk_widget_class_add_binding_action() or gtk_shortcut_controller_add_shortcut().
  *
  * # CSS Nodes
  *
@@ -663,7 +663,7 @@ gtk_popover_menu_new_from_model_full (GMenuModel          *model,
 /**
  * gtk_popover_menu_set_menu_model:
  * @popover: a #GtkPopoverMenu
- * @model: (nullable): a #GtkMenuModel, or %NULL
+ * @model: (nullable): a #GMenuModel, or %NULL
  *
  * Sets a new menu model on @popover.
  *
