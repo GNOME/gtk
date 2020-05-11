@@ -46,9 +46,9 @@ show_error (gpointer data)
                                    GTK_MESSAGE_INFO,
                                    GTK_BUTTONS_CLOSE,
                                    "This should have unbroken the grab");
-  g_signal_connect (G_OBJECT (dialog),
-                    "response",
-                    G_CALLBACK (response_cb), NULL);
+  g_signal_connect_object (G_OBJECT (dialog),
+                           "response",
+                           G_CALLBACK (response_cb), NULL, 0);
   gtk_widget_show (dialog);
 
   return G_SOURCE_REMOVE;
