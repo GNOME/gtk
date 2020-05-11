@@ -24,7 +24,6 @@ static void
 show_message_dialog1a (GtkWindow *parent)
 {
   GtkWidget *dialog;
-  GtkWidget *image;
 
   dialog = GTK_WIDGET (gtk_message_dialog_new (parent,
                                                GTK_DIALOG_MODAL|
@@ -33,9 +32,6 @@ show_message_dialog1a (GtkWindow *parent)
                                                GTK_MESSAGE_INFO,
                                                GTK_BUTTONS_OK,
                                                "The system network services are not compatible with this version."));
-
-  image = gtk_image_new_from_icon_name ("computer-fail");
-  gtk_widget_show (image);
 
   gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy (dialog);
