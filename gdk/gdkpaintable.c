@@ -58,7 +58,7 @@ void            gtk_snapshot_pop                        (GdkSnapshot            
  * gdk_paintable_invalidate_contents() which will emit the
  * #GdkPaintable::invalidate-contents signal.  
  * If a paintable is known to never change its contents, it will set the
- * %GDK_PAINTABLE_STATIC_CONTENT flag. If a consumer cannot deal with changing
+ * %GDK_PAINTABLE_STATIC_CONTENTS flag. If a consumer cannot deal with changing
  * contents, it may call gdk_paintable_get_static_image() which will return a
  * static paintable and use that.
  *
@@ -370,7 +370,7 @@ gdk_paintable_get_intrinsic_aspect_ratio (GdkPaintable *paintable)
  * Unless the contents are invalidated, implementations must guarantee that
  * multiple calls to GdkPaintable::snapshot produce the same output.
  *
- * This function will emit the GdkPaintable::invalidate-contents signal.
+ * This function will emit the #GdkPaintable::invalidate-contents signal.
  *
  * If a @paintable reports the %GDK_PAINTABLE_STATIC_CONTENTS flag,
  * it must not call this function.
@@ -392,7 +392,7 @@ gdk_paintable_invalidate_contents (GdkPaintable *paintable)
  * As long as the size is not invalidated, @paintable must return the same values
  * for its width, height and intrinsic height.
  *
- * This function will emit the GdkPaintable::invalidate-size signal.
+ * This function will emit the #GdkPaintable::invalidate-size signal.
  *
  * If a @paintable reports the %GDK_PAINTABLE_STATIC_SIZE flag,
  * it must not call this function.
@@ -630,7 +630,7 @@ gdk_empty_paintable_init (GdkEmptyPaintable *self)
  * @intrinsic_height: The intrinsic height to report. Can be 0 for no height.
  *
  * Returns a paintable that has the given intrinsic size and draws nothing.
- * This is often useful for implementing the GdkPaintableClass:get_current_image()
+ * This is often useful for implementing the #GdkPaintableInterface.get_current_image()
  * virtual function when the paintable is in an incomplete state (like a
  * #GtkMediaStream before receiving the first frame).
  *

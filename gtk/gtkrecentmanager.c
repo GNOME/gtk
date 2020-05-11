@@ -73,7 +73,7 @@
  * ]|
  *
  * In order to retrieve the list of recently used files, you can use
- * gtk_recent_manager_get_items(), which returns a list of #GtkRecentInfo-structs.
+ * gtk_recent_manager_get_items(), which returns a list of #GtkRecentInfo.
  *
  * A #GtkRecentManager is the model used to populate the contents of
  * one, or more #GtkRecentChooser implementations.
@@ -131,10 +131,10 @@ typedef struct
 /**
  * GtkRecentInfo:
  *
- * #GtkRecentInfo-struct contains private data only, and should
- * be accessed using the provided API.
+ * #GtkRecentInfo contains private data only, and should be accessed using the
+ * provided API.
  *
- * #GtkRecentInfo constains all the meta-data
+ * #GtkRecentInfo contains all the meta-data
  * associated with an entry in the recently used files list.
  */
 struct _GtkRecentInfo
@@ -865,19 +865,19 @@ gtk_recent_manager_add_item (GtkRecentManager *manager,
  *
  * Adds a new resource, pointed by @uri, into the recently used
  * resources list, using the metadata specified inside the
- * #GtkRecentData-struct passed in @recent_data.
+ * #GtkRecentData passed in @recent_data.
  *
  * The passed URI will be used to identify this resource inside the
  * list.
  *
  * In order to register the new recently used resource, metadata about
  * the resource must be passed as well as the URI; the metadata is
- * stored in a #GtkRecentData-struct, which must contain the MIME
+ * stored in a #GtkRecentData, which must contain the MIME
  * type of the resource pointed by the URI; the name of the application
  * that is registering the item, and a command line to be used when
  * launching the item.
  *
- * Optionally, a #GtkRecentData-struct might contain a UTF-8 string
+ * Optionally, a #GtkRecentData might contain a UTF-8 string
  * to be used when viewing the item instead of the last component of
  * the URI; a short description of the item; whether the item should
  * be considered private - that is, should be displayed only by the
@@ -1152,10 +1152,10 @@ build_recent_info (GBookmarkFile *bookmarks,
  * @error: (allow-none): a return location for a #GError, or %NULL
  *
  * Searches for a URI inside the recently used resources list, and
- * returns a #GtkRecentInfo-struct containing informations about the resource
+ * returns a #GtkRecentInfo containing informations about the resource
  * like its MIME type, or its display name.
  *
- * Returns: (nullable): a #GtkRecentInfo-struct containing information
+ * Returns: (nullable): a #GtkRecentInfo containing information
  *   about the resource pointed by @uri, or %NULL if the URI was
  *   not registered in the recently used resources list. Free with
  *   gtk_recent_info_unref().
@@ -1962,10 +1962,9 @@ gtk_recent_info_exists (GtkRecentInfo *info)
  * @info_a: a #GtkRecentInfo
  * @info_b: a #GtkRecentInfo
  *
- * Checks whether two #GtkRecentInfo-struct point to the same
- * resource.
+ * Checks whether two #GtkRecentInfo point to the same resource.
  *
- * Returns: %TRUE if both #GtkRecentInfo-struct point to the same
+ * Returns: %TRUE if both #GtkRecentInfo point to the same
  *   resource, %FALSE otherwise
  */
 gboolean
