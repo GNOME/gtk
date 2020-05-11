@@ -38,7 +38,6 @@ int main (int argc, char **argv)
 	GtkWidget *grid;
 	GtkWidget *entry;
 	GtkWidget *label;
-	GtkWidget *check;
 	GtkWidget *combo;
 	guint i;
 	guint row = 0;
@@ -97,10 +96,6 @@ int main (int argc, char **argv)
 	gtk_grid_attach_next_to (GTK_GRID (grid), button, entry, GTK_POS_RIGHT, 1, 1);
 	menubuttons = g_list_prepend (menubuttons, button);
 
-        check = gtk_check_button_new_with_label ("Popover");
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
-	gtk_grid_attach (GTK_GRID (grid), check, 0, row, 1, 1);
-
 	/* Button with GMenuModel */
 	menu = g_menu_new ();
 	for (i = 5; i > 0; i--) {
@@ -116,7 +111,6 @@ int main (int argc, char **argv)
 	}
 
 	button = gtk_menu_button_new ();
-        g_object_bind_property (check, "active", button, "use-popover", G_BINDING_SYNC_CREATE);
 
 	gtk_widget_set_halign (button, GTK_ALIGN_START);
 	menubuttons = g_list_prepend (menubuttons, button);
