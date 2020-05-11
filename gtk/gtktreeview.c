@@ -2307,6 +2307,10 @@ gtk_tree_view_unrealize (GtkWidget *widget)
       tree_view->typeselect_flush_timeout = 0;
     }
 
+  g_clear_pointer (&tree_view->scroll_to_path, gtk_tree_row_reference_free);
+  g_clear_pointer (&tree_view->drag_dest_row, gtk_tree_row_reference_free);
+  g_clear_pointer (&tree_view->top_row, gtk_tree_row_reference_free);
+
   GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->unrealize (widget);
 }
 
