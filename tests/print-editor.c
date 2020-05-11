@@ -1,3 +1,4 @@
+#include <config.h>
 #include <math.h>
 #include <pango/pangocairo.h>
 #include <gtk/gtk.h>
@@ -580,10 +581,10 @@ activate_about (GSimpleAction *action,
   };
   gtk_show_about_dialog (GTK_WINDOW (main_window),
                          "name", "Print Test Editor",
-                         "logo-icon-name", "text-editor",
-                         "version", "0.1",
-                         "copyright", "(C) Red Hat, Inc",
-                         "comments", "Program to demonstrate GTK+ printing.",
+                         "logo-icon-name", "text-editor-symbolic",
+                         "version", PACKAGE_VERSION,
+                         "copyright", "© 2006-2020 Red Hat, Inc",
+                         "comments", "Program to demonstrate GTK printing.",
                          "authors", authors,
                          NULL);
 }
@@ -748,7 +749,7 @@ activate (GApplication *app)
   update_title (GTK_WINDOW (main_window));
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (main_window), box);
+  gtk_window_set_child (GTK_WINDOW (main_window), box);
 
   /* Create document  */
   sw = gtk_scrolled_window_new (NULL, NULL);

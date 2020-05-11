@@ -35,6 +35,17 @@ main_loop_quit_cb (gpointer data)
 }
 
 static void
+show_and_wait (GtkWidget *widget)
+{
+  gboolean done = FALSE;
+
+  g_timeout_add (500, main_loop_quit_cb, &done);
+  gtk_widget_show (widget);
+  while (!done)
+    g_main_context_iteration (NULL, FALSE);
+}
+
+static void
 test_dialog_basic (void)
 {
   GtkWidget *dialog;
@@ -83,6 +94,17 @@ test_about_dialog_basic (void)
 }
 
 static void
+test_about_dialog_show (void)
+{
+  GtkWidget *dialog;
+
+  dialog = gtk_about_dialog_new ();
+  g_assert (GTK_IS_ABOUT_DIALOG (dialog));
+  show_and_wait (dialog);
+  gtk_widget_destroy (dialog);
+}
+
+static void
 test_info_bar_basic (void)
 {
   GtkWidget *infobar;
@@ -112,6 +134,17 @@ test_assistant_basic (void)
 
   widget = gtk_assistant_new ();
   g_assert (GTK_IS_ASSISTANT (widget));
+  gtk_widget_destroy (widget);
+}
+
+static void
+test_assistant_show (void)
+{
+  GtkWidget *widget;
+
+  widget = gtk_assistant_new ();
+  g_assert (GTK_IS_ASSISTANT (widget));
+  show_and_wait (widget);
   gtk_widget_destroy (widget);
 }
 
@@ -205,6 +238,18 @@ test_color_chooser_dialog_basic (void)
   gtk_widget_destroy (widget);
 }
 
+static void
+test_color_chooser_dialog_show (void)
+{
+  GtkWidget *widget;
+
+  /* This test also tests the internal GtkColorEditor widget */
+  widget = gtk_color_chooser_dialog_new (NULL, NULL);
+  g_assert (GTK_IS_COLOR_CHOOSER_DIALOG (widget));
+  show_and_wait (widget);
+  gtk_widget_destroy (widget);
+}
+
 /* Avoid warnings from GVFS-RemoteVolumeMonitor */
 static gboolean
 ignore_gvfs_warning (const gchar *log_domain,
@@ -269,6 +314,23 @@ test_file_chooser_dialog_basic (void)
 }
 
 static void
+test_file_chooser_dialog_show (void)
+{
+  GtkWidget *widget;
+
+  g_test_log_set_fatal_handler (ignore_gvfs_warning, NULL);
+
+  widget = gtk_file_chooser_dialog_new ("The Dialog", NULL,
+                                        GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+                                        "_OK", GTK_RESPONSE_OK,
+                                        NULL);
+
+  g_assert (GTK_IS_FILE_CHOOSER_DIALOG (widget));
+  show_and_wait (widget);
+  gtk_widget_destroy (widget);
+}
+
+static void
 test_file_chooser_button_basic (void)
 {
   GtkWidget *widget;
@@ -315,6 +377,17 @@ test_font_chooser_dialog_basic (void)
   gtk_widget_destroy (widget);
 }
 
+static void
+test_font_chooser_dialog_show (void)
+{
+  GtkWidget *widget;
+
+  widget = gtk_font_chooser_dialog_new ("Choose a font !", NULL);
+  g_assert (GTK_IS_FONT_CHOOSER_DIALOG (widget));
+  show_and_wait (widget);
+  gtk_widget_destroy (widget);
+}
+
 #ifdef HAVE_UNIX_PRINT_WIDGETS
 static void
 test_page_setup_unix_dialog_basic (void)
@@ -327,12 +400,34 @@ test_page_setup_unix_dialog_basic (void)
 }
 
 static void
+test_page_setup_unix_dialog_show (void)
+{
+  GtkWidget *widget;
+
+  widget = gtk_page_setup_unix_dialog_new ("Setup your Page !", NULL);
+  g_assert (GTK_IS_PAGE_SETUP_UNIX_DIALOG (widget));
+  show_and_wait (widget);
+  gtk_widget_destroy (widget);
+}
+
+static void
 test_print_unix_dialog_basic (void)
 {
   GtkWidget *widget;
 
   widget = gtk_print_unix_dialog_new ("Go Print !", NULL);
   g_assert (GTK_IS_PRINT_UNIX_DIALOG (widget));
+  gtk_widget_destroy (widget);
+}
+
+static void
+test_print_unix_dialog_show (void)
+{
+  GtkWidget *widget;
+
+  widget = gtk_print_unix_dialog_new ("Go Print !", NULL);
+  g_assert (GTK_IS_PRINT_UNIX_DIALOG (widget));
+  show_and_wait (widget);
   gtk_widget_destroy (widget);
 }
 #endif
@@ -353,31 +448,40 @@ main (int argc, char **argv)
    */
   g_assert (g_setenv ("GTK_WIDGET_ASSERT_COMPONENTS", "1", TRUE));
 
-  g_test_add_func ("/Template/GtkDialog/Basic", test_dialog_basic);
-  g_test_add_func ("/Template/GtkDialog/OverrideProperty", test_dialog_override_property);
-  g_test_add_func ("/Template/GtkMessageDialog/Basic", test_message_dialog_basic);
-  g_test_add_func ("/Template/GtkAboutDialog/Basic", test_about_dialog_basic);
-  g_test_add_func ("/Template/GtkInfoBar/Basic", test_info_bar_basic);
-  g_test_add_func ("/Template/GtkLockButton/Basic", test_lock_button_basic);
-  g_test_add_func ("/Template/GtkAssistant/Basic", test_assistant_basic);
-  g_test_add_func ("/Template/GtkScaleButton/Basic", test_scale_button_basic);
-  g_test_add_func ("/Template/GtkVolumeButton/Basic", test_volume_button_basic);
-  g_test_add_func ("/Template/GtkStatusBar/Basic", test_statusbar_basic);
-  g_test_add_func ("/Template/GtkSearchBar/Basic", test_search_bar_basic);
-  g_test_add_func ("/Template/GtkActionBar/Basic", test_action_bar_basic);
-  g_test_add_func ("/Template/GtkAppChooserWidget/Basic", test_app_chooser_widget_basic);
-  g_test_add_func ("/Template/GtkAppChooserDialog/Basic", test_app_chooser_dialog_basic);
-  g_test_add_func ("/Template/GtkColorChooserDialog/Basic", test_color_chooser_dialog_basic);
-  g_test_add_func ("/Template/GtkFileChooserWidget/Basic", test_file_chooser_widget_basic);
-  g_test_add_func ("/Template/GtkFileChooserDialog/Basic", test_file_chooser_dialog_basic);
-  g_test_add_func ("/Template/GtkFileChooserButton/Basic", test_file_chooser_button_basic);
-  g_test_add_func ("/Template/GtkFontButton/Basic", test_font_button_basic);
-  g_test_add_func ("/Template/GtkFontChooserWidget/Basic", test_font_chooser_widget_basic);
-  g_test_add_func ("/Template/GtkFontChooserDialog/Basic", test_font_chooser_dialog_basic);
+  g_test_add_func ("/template/GtkDialog/basic", test_dialog_basic);
+  g_test_add_func ("/template/GtkDialog/OverrideProperty", test_dialog_override_property);
+  g_test_add_func ("/template/GtkMessageDialog/basic", test_message_dialog_basic);
+  g_test_add_func ("/template/GtkAboutDialog/basic", test_about_dialog_basic);
+  g_test_add_func ("/template/GtkAboutDialog/show", test_about_dialog_show);
+  g_test_add_func ("/template/GtkInfoBar/basic", test_info_bar_basic);
+  g_test_add_func ("/template/GtkLockButton/basic", test_lock_button_basic);
+  g_test_add_func ("/template/GtkAssistant/basic", test_assistant_basic);
+  g_test_add_func ("/template/GtkAssistant/show", test_assistant_show);
+  g_test_add_func ("/template/GtkScaleButton/basic", test_scale_button_basic);
+  g_test_add_func ("/template/GtkVolumeButton/basic", test_volume_button_basic);
+  g_test_add_func ("/template/GtkStatusBar/basic", test_statusbar_basic);
+  g_test_add_func ("/template/GtkSearchBar/basic", test_search_bar_basic);
+  g_test_add_func ("/template/GtkActionBar/basic", test_action_bar_basic);
+  g_test_add_func ("/template/GtkAppChooserWidget/basic", test_app_chooser_widget_basic);
+  g_test_add_func ("/template/GtkAppChooserDialog/basic", test_app_chooser_dialog_basic);
+  g_test_add_func ("/template/GtkColorChooserDialog/basic", test_color_chooser_dialog_basic);
+  g_test_add_func ("/template/GtkColorChooserDialog/show", test_color_chooser_dialog_show);
+  g_test_add_func ("/template/GtkFileChooserWidget/basic", test_file_chooser_widget_basic);
+  g_test_add_func ("/template/GtkFileChooserDialog/basic", test_file_chooser_dialog_basic);
+  if (0)
+    g_test_add_func ("/template/GtkFileChooserDialog/show", test_file_chooser_dialog_show);
+  g_test_add_func ("/template/GtkFileChooserButton/basic", test_file_chooser_button_basic);
+  g_test_add_func ("/template/GtkFontButton/basic", test_font_button_basic);
+  g_test_add_func ("/template/GtkFontChooserWidget/basic", test_font_chooser_widget_basic);
+  g_test_add_func ("/template/GtkFontChooserDialog/basic", test_font_chooser_dialog_basic);
+  g_test_add_func ("/template/GtkFontChooserDialog/show", test_font_chooser_dialog_show);
 
 #ifdef HAVE_UNIX_PRINT_WIDGETS
-  g_test_add_func ("/Template/UnixPrint/GtkPageSetupUnixDialog/Basic", test_page_setup_unix_dialog_basic);
-  g_test_add_func ("/Template/UnixPrint/GtkPrintUnixDialog/Basic", test_print_unix_dialog_basic);
+  g_test_add_func ("/template/GtkPageSetupUnixDialog/basic", test_page_setup_unix_dialog_basic);
+  g_test_add_func ("/template/GtkPageSetupUnixDialog/show", test_page_setup_unix_dialog_show);
+  g_test_add_func ("/template/GtkPrintUnixDialog/basic", test_print_unix_dialog_basic);
+  if (0)
+    g_test_add_func ("/template/GtkPrintUnixDialog/show", test_print_unix_dialog_show);
 #endif
 
   return g_test_run();
