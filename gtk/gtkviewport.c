@@ -366,9 +366,6 @@ gtk_viewport_class_init (GtkViewportClass *class)
   widget_class->unroot = gtk_viewport_unroot;
   widget_class->compute_expand = gtk_viewport_compute_expand;
   widget_class->get_request_mode = gtk_viewport_get_request_mode;
-  widget_class->grab_focus = gtk_widget_grab_focus_none;
-  widget_class->focus = gtk_widget_focus_child;
-
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_VIEWPORT);
 

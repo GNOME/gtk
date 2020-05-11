@@ -1680,8 +1680,6 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   widget_class->snapshot = gtk_popover_snapshot;
   widget_class->compute_expand = gtk_popover_compute_expand;
   widget_class->get_request_mode = gtk_popover_get_request_mode;
-  widget_class->grab_focus = gtk_widget_grab_focus_none;
-  widget_class->focus = gtk_widget_focus_child;
 
   klass->activate_default = gtk_popover_activate_default;
 

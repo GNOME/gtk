@@ -214,8 +214,6 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->state_flags_changed = gtk_button_state_flags_changed;
   widget_class->grab_notify = gtk_button_grab_notify;
   widget_class->unmap = gtk_button_unmap;
-  widget_class->grab_focus = gtk_widget_grab_focus_self;
-  widget_class->focus = gtk_widget_focus_self;
   widget_class->compute_expand = gtk_button_compute_expand;
   widget_class->get_request_mode = gtk_button_get_request_mode;
 

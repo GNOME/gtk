@@ -757,7 +757,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->compute_expand = gtk_window_compute_expand;
   widget_class->get_request_mode = gtk_window_get_request_mode;
   widget_class->focus = gtk_window_focus;
-  widget_class->grab_focus = gtk_widget_grab_focus_none;
   widget_class->move_focus = gtk_window_move_focus;
   widget_class->state_flags_changed = gtk_window_state_flags_changed;
   widget_class->css_changed = gtk_window_css_changed;

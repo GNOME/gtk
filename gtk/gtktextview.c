@@ -821,8 +821,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->measure = gtk_text_view_measure;
   widget_class->size_allocate = gtk_text_view_size_allocate;
   widget_class->snapshot = gtk_text_view_snapshot;
-  widget_class->grab_focus = gtk_widget_grab_focus_self;
-  widget_class->focus = gtk_widget_focus_all;
 
   container_class->add = gtk_text_view_add;
   container_class->remove = gtk_text_view_remove;

@@ -573,6 +573,8 @@ static void	gtk_widget_get_property		 (GObject           *object,
 static void	gtk_widget_dispose		 (GObject	    *object);
 static void	gtk_widget_finalize		 (GObject	    *object);
 static void     gtk_widget_real_destroy          (GtkWidget         *object);
+static gboolean gtk_widget_real_focus            (GtkWidget         *widget,
+                                                  GtkDirectionType   direction);
 static void	gtk_widget_real_show		 (GtkWidget	    *widget);
 static void	gtk_widget_real_hide		 (GtkWidget	    *widget);
 static void	gtk_widget_real_map		 (GtkWidget	    *widget);
@@ -934,7 +936,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->snapshot = gtk_widget_real_snapshot;
   klass->mnemonic_activate = gtk_widget_real_mnemonic_activate;
   klass->grab_focus = gtk_widget_grab_focus_self;
-  klass->focus = gtk_widget_focus_all;
+  klass->focus = gtk_widget_real_focus;
   klass->set_focus_child = gtk_widget_real_set_focus_child;
   klass->move_focus = gtk_widget_real_move_focus;
   klass->keynav_failed = gtk_widget_real_keynav_failed;
@@ -4778,12 +4780,6 @@ gtk_widget_grab_focus (GtkWidget *widget)
 }
 
 gboolean
-gtk_widget_grab_focus_none (GtkWidget *widget)
-{
-  return FALSE;
-}
-
-gboolean
 gtk_widget_grab_focus_self (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
@@ -4943,9 +4939,9 @@ direction_is_forward (GtkDirectionType direction)
     }
 }
 
-gboolean
-gtk_widget_focus_all (GtkWidget        *widget,
-                      GtkDirectionType  direction)
+static gboolean
+gtk_widget_real_focus (GtkWidget        *widget,
+                       GtkDirectionType  direction)
 {
   GtkWidget *focus;
 
@@ -5011,13 +5007,6 @@ gtk_widget_focus_child (GtkWidget         *widget,
                         GtkDirectionType   direction)
 {
   return gtk_widget_focus_move (widget, direction);
-}
-
-gboolean
-gtk_widget_focus_none (GtkWidget        *widget,
-                       GtkDirectionType  direction)
-{
-  return FALSE;
 }
 
 static void

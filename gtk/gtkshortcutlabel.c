@@ -475,9 +475,6 @@ gtk_shortcut_label_class_init (GtkShortcutLabelClass *klass)
   object_class->get_property = gtk_shortcut_label_get_property;
   object_class->set_property = gtk_shortcut_label_set_property;
 
-  widget_class->grab_focus = gtk_widget_grab_focus_none;
-  widget_class->focus = gtk_widget_focus_none;
-
   /**
    * GtkShortcutLabel:accelerator:
    *

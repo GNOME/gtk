@@ -130,8 +130,6 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
   widget_class->size_allocate = gtk_aspect_frame_size_allocate;
   widget_class->compute_expand = gtk_aspect_frame_compute_expand;
   widget_class->get_request_mode = gtk_aspect_frame_get_request_mode;
-  widget_class->grab_focus = gtk_widget_grab_focus_none;
-  widget_class->focus = gtk_widget_focus_child;
 
   g_object_class_install_property (gobject_class,
                                    PROP_XALIGN,

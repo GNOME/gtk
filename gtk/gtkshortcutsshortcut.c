@@ -548,8 +548,6 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
   widget_class->measure = gtk_shortcuts_shortcut_measure;
   widget_class->snapshot = gtk_shortcuts_shortcut_snapshot;
   widget_class->size_allocate = gtk_shortcuts_shortcut_size_allocate;
-  widget_class->grab_focus = gtk_widget_grab_focus_none;
-  widget_class->focus = gtk_widget_focus_none;
 
   /**
    * GtkShortcutsShortcut:accelerator:
