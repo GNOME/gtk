@@ -11,10 +11,9 @@
             <property name="child">
               <object class="GtkHeaderBar">
                 <child type="start">
-                  <object class="GtkButton">
+                  <object class="GtkButton" id="new_btn">
                     <property name="label">New</property>
                     <property name="valign">center</property>
-                    <signal name="clicked" handler="go_to_secondary"/>
                   </object>
                 </child>
                 <child type="title">
@@ -32,10 +31,9 @@
             <property name="child">
               <object class="GtkHeaderBar">
                 <child type="start">
-                  <object class="GtkButton">
+                  <object class="GtkButton" id="back_btn">
                     <property name="label">&lt;</property>
                     <property name="valign">center</property>
-                    <signal name="clicked" handler="back_to_main"/>
                   </object>
                 </child>
               </object>
