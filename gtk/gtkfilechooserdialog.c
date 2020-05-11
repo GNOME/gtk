@@ -488,38 +488,41 @@ setup_search (GtkFileChooserDialog *dialog)
                               priv->widget, "search-mode",
                               G_BINDING_BIDIRECTIONAL);
 
-      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_widget_set_valign (box, GTK_ALIGN_CENTER);
+      if (!priv->has_entry)
+        {
+          box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+          gtk_widget_set_valign (box, GTK_ALIGN_CENTER);
 
-      label = gtk_label_new (NULL);
-      gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
-      gtk_label_set_single_line_mode (GTK_LABEL (label), TRUE);
-      gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-      gtk_label_set_width_chars (GTK_LABEL (label), 5);
-      gtk_widget_add_css_class (label, GTK_STYLE_CLASS_TITLE);
-      gtk_widget_set_parent (label, box);
+          label = gtk_label_new (NULL);
+          gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
+          gtk_label_set_single_line_mode (GTK_LABEL (label), TRUE);
+          gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+          gtk_label_set_width_chars (GTK_LABEL (label), 5);
+          gtk_widget_add_css_class (label, GTK_STYLE_CLASS_TITLE);
+          gtk_widget_set_parent (label, box);
 
-      g_object_bind_property (dialog, "title",
-                              label, "label",
-                              G_BINDING_SYNC_CREATE);
+          g_object_bind_property (dialog, "title",
+                                  label, "label",
+                                  G_BINDING_SYNC_CREATE);
 
-      label = gtk_label_new (NULL);
-      gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
-      gtk_label_set_single_line_mode (GTK_LABEL (label), TRUE);
-      gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-      gtk_widget_add_css_class (label, GTK_STYLE_CLASS_SUBTITLE);
-      gtk_widget_set_parent (label, box);
+          label = gtk_label_new (NULL);
+          gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
+          gtk_label_set_single_line_mode (GTK_LABEL (label), TRUE);
+          gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+          gtk_widget_add_css_class (label, GTK_STYLE_CLASS_SUBTITLE);
+          gtk_widget_set_parent (label, box);
 
-      g_object_bind_property (priv->widget, "subtitle",
-                              label, "label",
-                              G_BINDING_SYNC_CREATE);
-      g_object_bind_property_full (priv->widget, "subtitle",
-                                   label, "visible",
-                                   G_BINDING_SYNC_CREATE,
-                                   translate_subtitle_to_visible,
-                                   NULL, NULL, NULL);
+          g_object_bind_property (priv->widget, "subtitle",
+                                  label, "label",
+                                  G_BINDING_SYNC_CREATE);
+          g_object_bind_property_full (priv->widget, "subtitle",
+                                       label, "visible",
+                                       G_BINDING_SYNC_CREATE,
+                                       translate_subtitle_to_visible,
+                                       NULL, NULL, NULL);
 
-      gtk_header_bar_set_title_widget (GTK_HEADER_BAR (header), box);
+          gtk_header_bar_set_title_widget (GTK_HEADER_BAR (header), box);
+        }
 
       gtk_container_forall (GTK_CONTAINER (header), add_button, dialog);
     }

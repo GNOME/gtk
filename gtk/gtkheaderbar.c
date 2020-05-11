@@ -318,7 +318,8 @@ gtk_header_bar_set_title_widget (GtkHeaderBar *bar,
   if (priv->title_widget == title_widget)
     return;
 
-  g_clear_pointer (&priv->title_widget, gtk_widget_unparent);
+  gtk_center_box_set_center_widget (GTK_CENTER_BOX (priv->center_box), NULL);
+  priv->title_widget = NULL;
 
   if (title_widget != NULL)
     {
