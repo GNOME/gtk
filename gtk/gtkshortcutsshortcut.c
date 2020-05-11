@@ -711,7 +711,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * of type %GTK_SHORTCUT_ACCELERATOR, then GTK+ will use
    * the accelerators that are associated with the action
    * via gtk_application_set_accels_for_action(), and setting
-   * #GtkShortcutsShortcut::accelerator is not necessary.
+   * #GtkShortcutsShortcut:accelerator is not necessary.
    */
   properties[PROP_ACTION_NAME] =
     g_param_spec_string ("action-name",

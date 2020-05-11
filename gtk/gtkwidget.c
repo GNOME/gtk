@@ -6195,7 +6195,7 @@ gtk_widget_peek_pango_context (GtkWidget *widget)
  * the widget (it can be used until the screen for the widget changes
  * or the widget is removed from its toplevel), and will be updated to
  * match any changes to the widget’s attributes. This can be tracked
- * by using the #GtkWidget::display-changed signal on the widget.
+ * by listening to changes of the #GtkWidget:root property on the widget.
  *
  * Returns: (transfer none): the #PangoContext for the widget.
  **/
@@ -6423,7 +6423,7 @@ gtk_widget_create_pango_context (GtkWidget *widget)
  *
  * If you keep a #PangoLayout created in this way around, you need
  * to re-create it when the widget #PangoContext is replaced.
- * This can be tracked by using the #GtkWidget::display-changed signal
+ * This can be tracked by listening to changes of the #GtkWidget:root property
  * on the widget.
  *
  * Returns: (transfer full): the new #PangoLayout
@@ -10150,7 +10150,7 @@ gtk_widget_get_allocated_height (GtkWidget *widget)
  *
  * Returns the baseline that has currently been allocated to @widget.
  * This function is intended to be used when implementing handlers
- * for the #GtkWidget::snapshot function, and when allocating child
+ * for the #GtkWidgetClass.snapshot() function, and when allocating child
  * widgets in #GtkWidget::size_allocate.
  *
  * Returns: the baseline of the @widget, or -1 if none
@@ -11977,9 +11977,9 @@ gtk_widget_forall (GtkWidget   *widget,
  *   have been made.
  *
  * When a widget receives a call to the snapshot function, it must send
- * synthetic #GtkWidget::snapshot calls to all children. This function
+ * synthetic #GtkWidgetClass.snapshot() calls to all children. This function
  * provides a convenient way of doing this. A widget, when it receives
- * a call to its #GtkWidget::snapshot function, calls
+ * a call to its #GtkWidgetClass.snapshot() function, calls
  * gtk_widget_snapshot_child() once for each child, passing in
  * the @snapshot the widget received.
  *

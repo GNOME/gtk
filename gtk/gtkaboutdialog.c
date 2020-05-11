@@ -1319,7 +1319,7 @@ gtk_about_dialog_get_system_information (GtkAboutDialog *about)
  * dialog. If @system_information is %NULL, the system information
  * tab is hidden.
  *
- * See #GtkAboutdialog:system-information.
+ * See #GtkAboutDialog:system-information.
  */
 void
 gtk_about_dialog_set_system_information (GtkAboutDialog *about,

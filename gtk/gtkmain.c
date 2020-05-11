@@ -822,7 +822,7 @@ gtk_init_check (void)
  * toolkit and parses some standard command line options.
  *
  * If you are using #GtkApplication, you don't have to call gtk_init()
- * or gtk_init_check(); the #GtkApplication::startup handler
+ * or gtk_init_check(); the #GApplication::startup handler
  * does it for you.
  *
  * This function will terminate your program if it was unable to

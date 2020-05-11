@@ -1833,7 +1833,7 @@ gtk_constraint_layout_add_guide (GtkConstraintLayout *layout,
 
 /**
  * gtk_constraint_layout_remove_guide:
- * @layout: a #GtkConstraintManager
+ * @layout: a #GtkConstraintLayout
  * @guide: a #GtkConstraintGuide object
  *
  * Removes @guide from the layout manager,
