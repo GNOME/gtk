@@ -357,6 +357,36 @@ perform_titlebar_action (GtkWindowHandle *self,
 }
 
 static void
+begin_move_drag (GtkGesture *gesture,
+                 double x,
+                 double y,
+                 GdkEventSequence *sequence,
+                 GtkWindowHandle *self)
+{
+  GtkNative *native;
+  gint window_x, window_y;
+  GdkSurface *surface;
+
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+
+  native = gtk_widget_get_native (GTK_WIDGET (self));
+  gtk_widget_translate_coordinates (GTK_WIDGET (self),
+                                    GTK_WIDGET (native),
+                                    x, y,
+                                    &window_x, &window_y);
+
+  surface = gtk_native_get_surface (native);
+  gdk_surface_begin_move_drag (surface,
+                               gtk_gesture_get_device (GTK_GESTURE (gesture)),
+                               gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)),
+                               window_x, window_y,
+                               gtk_event_controller_get_current_event_time (GTK_EVENT_CONTROLLER (gesture)));
+
+  gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
+  gtk_event_controller_reset (GTK_EVENT_CONTROLLER (self->click_gesture));
+}
+
+static void
 click_gesture_pressed_cb (GtkGestureClick *gesture,
                           int              n_press,
                           double           x,
@@ -391,7 +421,22 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
   switch (button)
     {
     case GDK_BUTTON_PRIMARY:
-      if (n_press == 2)
+      if (n_press == 1)
+        {
+          /* Immediately ask the window manager to handle a click when
+           * made directly on the titlebar unless on a child widget
+           * that needs to consume motion.
+           *
+           * This improves window moving consistency with titlebar
+           * clicks on non-decorated windows (handled immediately by
+           * the window manager) and also allows the window manager to
+           * handle raising the window automatically if necessary.
+           */
+          GtkWidget *event_widget = gtk_gesture_get_last_target (GTK_GESTURE (gesture), sequence);
+          if (!gtk_widget_consumes_motion (event_widget, GTK_WIDGET (self), sequence))
+            begin_move_drag(GTK_GESTURE (gesture), x, y, sequence, self);
+        }
+      else if (n_press == 2)
         perform_titlebar_action (self, event, button, n_press);
 
       if (gtk_widget_has_grab (GTK_WIDGET (root)))
@@ -438,9 +483,6 @@ drag_gesture_update_cb (GtkGestureDrag  *gesture,
     {
       GdkEventSequence *sequence;
       double start_x, start_y;
-      gint window_x, window_y;
-      GtkNative *native;
-      GdkSurface *surface;
 
       sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
@@ -466,25 +508,8 @@ drag_gesture_update_cb (GtkGestureDrag  *gesture,
             }
         }
 
-      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
-
       gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
-
-      native = gtk_widget_get_native (GTK_WIDGET (self));
-      gtk_widget_translate_coordinates (GTK_WIDGET (self),
-                                        GTK_WIDGET (native),
-                                        start_x, start_y,
-                                        &window_x, &window_y);
-
-      surface = gtk_native_get_surface (native);
-      gdk_surface_begin_move_drag (surface,
-                                   gtk_gesture_get_device (GTK_GESTURE (gesture)),
-                                   gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)),
-                                   window_x, window_y,
-                                   gtk_event_controller_get_current_event_time (GTK_EVENT_CONTROLLER (gesture)));
-
-      gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
-      gtk_event_controller_reset (GTK_EVENT_CONTROLLER (self->click_gesture));
+      begin_move_drag(GTK_GESTURE (gesture), start_x, start_y, sequence, self);
     }
 }
 
