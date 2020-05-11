@@ -70,7 +70,7 @@
  * can be used to obtain updates about the status of the operation,
  * but it is not normally necessary to connect to any signals,
  * except for one case: when the supported actions include
- * %GDK_DRAG_MOVE, you need to listen for the
+ * %GDK_ACTION_MOVE, you need to listen for the
  * #GtkDragSource::drag-end signal and delete the
  * data after it has been transferred.
  */
@@ -309,7 +309,7 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
    * The ::prepare signal is emitted when a drag is about to be initiated.
    * It returns the * #GdkContentProvider to use for the drag that is about
    * to start. The default handler for this signal returns the value of
-   * the #GtkDragSource::content property, so if you set up that property
+   * the #GtkDragSource:content property, so if you set up that property
    * ahead of time, you don't need to connect to this signal.
    *
    * Returns: (transfer full) (nullable): a #GdkContentProvider, or %NULL
@@ -327,7 +327,7 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
   /**
    * GtkDragSource::drag-begin:
    * @source: the #GtkDragSource
-   * @drag: the #GtkDrag object
+   * @drag: the #GdkDrag object
    *
    * The ::drag-begin signal is emitted on the drag source when a drag
    * is started. It can be used to e.g. set a custom drag icon with
@@ -346,7 +346,7 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
   /**
    * GtkDragSource::drag-end:
    * @source: the #GtkDragSource
-   * @drag: the #GtkDrag object
+   * @drag: the #GdkDrag object
    * @delete_data: %TRUE if the drag was performing %GDK_ACTION_MOVE,
    *    and the data should be deleted
    *
@@ -368,7 +368,7 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
   /**
    * GtkDragSource::drag-cancel:
    * @source: the #GtkDragSource
-   * @drag: the #GtkDrag object
+   * @drag: the #GdkDrag object
    * @reason: information on why the drag failed
    *
    * The ::drag-cancel signal is emitted on the drag source when a drag has
@@ -554,20 +554,20 @@ gtk_drag_source_new (void)
  *
  * Gets the current content provider of a #GtkDragSource.
  *
- * Returns: (transfer none): the #GtkContentProvider of @source
+ * Returns: (transfer none): the #GdkContentProvider of @source
  */
 GdkContentProvider *
 gtk_drag_source_get_content (GtkDragSource *source)
 {
   g_return_val_if_fail (GTK_IS_DRAG_SOURCE (source), NULL);
 
-  return source->content;  
+  return source->content;
 }
 
 /**
  * gtk_drag_source_set_content:
  * @source: a #GtkDragSource
- * @content: (nullable): a #GtkContentProvider, or %NULL
+ * @content: (nullable): a #GdkContentProvider, or %NULL
  *
  * Sets a content provider on a #GtkDragSource.
  *
@@ -579,7 +579,7 @@ gtk_drag_source_get_content (GtkDragSource *source)
  * or in a handler for the #GtkDragSource::prepare signal.
  *
  * You may consider setting the content provider back to
- * %NULL in a #GTkDragSource::drag-end signal handler.
+ * %NULL in a #GtkDragSource::drag-end signal handler.
  */
 void
 gtk_drag_source_set_content (GtkDragSource      *source,
@@ -619,7 +619,7 @@ gtk_drag_source_get_actions (GtkDragSource *source)
  * During a DND operation, the actions are offered
  * to potential drop targets. If @actions include
  * %GDK_ACTION_MOVE, you need to listen to the
- * #GtkDraGSource::drag-end signal and handle
+ * #GtkDragSource::drag-end signal and handle
  * @delete_data being %TRUE.
  *
  * This function can be called before a drag is started,
@@ -642,7 +642,7 @@ gtk_drag_source_set_actions (GtkDragSource *source,
 /**
  * gtk_drag_source_set_icon:
  * @source: a #GtkDragSource
- * @paintable: (nullable): the #GtkPaintable to use as icon, or %NULL
+ * @paintable: (nullable): the #GdkPaintable to use as icon, or %NULL
  * @hot_x: the hotspot X coordinate on the icon
  * @hot_y: the hotspot Y coordinate on the icon
  *
@@ -674,7 +674,7 @@ gtk_drag_source_set_icon (GtkDragSource *source,
  * gtk_drag_source_get_drag:
  * @source: a #GtkDragSource
  *
- * Returns the underlying #GtkDrag object for an ongoing drag.
+ * Returns the underlying #GdkDrag object for an ongoing drag.
  *
  * Returns: (nullable) (transfer none): the #GdkDrag of the current drag operation, or %NULL
  */

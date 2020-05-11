@@ -259,7 +259,7 @@ gdk_content_provider_ref_storable_formats (GdkContentProvider *provider)
  * gdk_content_provider_content_changed:
  * @provider: a #GdkContentProvider
  *
- * Emits the #GdkContentProvider::contents-changed signal.
+ * Emits the #GdkContentProvider::content-changed signal.
  */
 void
 gdk_content_provider_content_changed (GdkContentProvider *provider)

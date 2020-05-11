@@ -50,7 +50,7 @@ gtk_snapshot_append_texture (GdkSnapshot            *snapshot,
                              const graphene_rect_t  *bounds);
 
 /**
- * SECTION:gdktexture
+ * SECTION:textures
  * @Short_description: Image data for display
  * @Title: GdkTexture
  *

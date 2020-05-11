@@ -265,7 +265,7 @@ gtk_gesture_stylus_get_axes (GtkGestureStylus  *gesture,
  * By default, GTK+ will limit rate of input events. On stylus input where
  * accuracy of strokes is paramount, this function returns the accumulated
  * coordinate/timing state before the emission of the current
- * #GtkGestureStylus:motion signal.
+ * #GtkGestureStylus::motion signal.
  *
  * This function may only be called within a #GtkGestureStylus::motion
  * signal handler, the state given in this signal and obtainable through

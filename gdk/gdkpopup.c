@@ -102,9 +102,9 @@ gdk_popup_default_init (GdkPopupInterface *iface)
  * otherwise it will change position according to @layout.
  *
  * After calling this function, the result of the layout can be queried
- * using gdk_popup_get_position(), gdk_surface_get_width(),
- * gdk_surface_get_height(), gdk_popup_get_rect_anchor() and
- * gdk_popup_get_surface_anchor().
+ * using gdk_popup_get_position_x(), gdk_popup_get_position_y(),
+ * gdk_surface_get_width(), gdk_surface_get_height(),
+ * gdk_popup_get_rect_anchor() and gdk_popup_get_surface_anchor().
  *
  * Presenting may have fail, for example if it was immediately
  * hidden if the @popup was set to autohide.

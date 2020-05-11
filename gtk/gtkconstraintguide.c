@@ -488,7 +488,7 @@ gtk_constraint_guide_set_min_size (GtkConstraintGuide *guide,
 
 /**
  * gtk_constraint_guide_get_min_size:
- * @guide: a #GtkContraintGuide object
+ * @guide: a #GtkConstraintGuide object
  * @width: (allow-none): return location for the minimum width,
  *     or %NULL
  * @height: (allow-none): return location for the minimum height,
@@ -542,7 +542,7 @@ gtk_constraint_guide_set_nat_size (GtkConstraintGuide *guide,
 
 /**
  * gtk_constraint_guide_get_nat_size:
- * @guide: a #GtkContraintGuide object
+ * @guide: a #GtkConstraintGuide object
  * @width: (allow-none): return location for the natural width,
  *     or %NULL
  * @height: (allow-none): return location for the natural height,
@@ -596,7 +596,7 @@ gtk_constraint_guide_set_max_size (GtkConstraintGuide *guide,
 
 /**
  * gtk_constraint_guide_get_max_size:
- * @guide: a #GtkContraintGuide object
+ * @guide: a #GtkConstraintGuide object
  * @width: (allow-none): return location for the maximum width,
  *     or %NULL
  * @height: (allow-none): return location for the maximum height,

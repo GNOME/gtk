@@ -153,7 +153,7 @@
       <title>Stop using gdk_pixbuf_get_from_window() and gdk_cairo_set_source_surface()</title>
       <para>
         These functions are not supported in GTK 4. Instead, either use backend-specific
-        APIs, or render your widgets using gtk_widget_render().
+        APIs, or render your widgets using #GtkWidgetClass.snapshot().
       </para>
     </section>
 
@@ -331,12 +331,12 @@
       </para>
       <para>
         If you need to dismiss a popup when the user clicks outside (the most common
-        use for grabs), you can use the GdkSurface #GdkSurface:autohide property instead.
+        use for grabs), you can use the GdkPopup #GdkPopup:autohide property instead.
         GtkPopover also has a #GtkPopover:autohide property.
       </para>
       <para>
         If you need to prevent the user from interacting with a window
-        while a dialog is open, use #GtkDialog::modal.
+        while a dialog is open, use #GtkWindow:modal on the dialog.
       </para>
     </section>
 
@@ -355,13 +355,13 @@
         In GTK 4, the two roles of a standalone toplevel window
         and of a popup that is placed relative to a parent window
         have been separated out into two interfaces, #GdkToplevel
-        and #GtkPopup.
+        and #GdkPopup.
       </para>
       <para>
         Surfaces implementing these interfaces are created with
         gdk_surface_new_toplevel() and gdk_surface_new_popup(),
         respectively, and they are presented on screen using
-        gtk_toplevel_present() and gdk_popup_present(). The
+        gdk_toplevel_present() and gdk_popup_present(). The
         present() functions take parameters in the form of an
         auxiliary layout struct, #GdkPopupLayout or
         #GdkToplevelLayout.
@@ -709,7 +709,7 @@
     <section>
       <title>Widgets are now visible by default</title>
       <para>
-        The default value of #GtkWidget::visible in GTK 4 is %TRUE, so you no
+        The default value of #GtkWidget:visible in GTK 4 is %TRUE, so you no
         longer need to explicitly show all your widgets. On the flip side, you
         need to hide widgets that are not meant to be visible from the start.
       </para>
@@ -719,7 +719,7 @@
         on them.
       </para>
       <para>
-        The function gtk_widget_show_all(), the #GtkWidget::no-show-all property
+        The function gtk_widget_show_all(), the #GtkWidget:no-show-all property
         and its getter and setter have been removed in  GTK 4, so you should stop using them.
       </para>
     </section>
@@ -781,7 +781,7 @@
       <title>Stop using GtkWidget::draw</title>
       <para>
         The #GtkWidget::draw signal has been removed. Widgets need to implement the
-        #GtkWidget::snapshot function now. Connecting draw signal handlers is no longer possible.
+        #GtkWidgetClass.snapshot() function now. Connecting draw signal handlers is no longer possible.
       </para>
     </section>
 
@@ -1009,7 +1009,7 @@
       <para>
         The #GdkSurface functions <function>gdk_surface_iconify()</function>
         and <function>gdk_surface_deiconify()</function> have been renamed to
-        gdk_surface_minimize() and gdk_surface_unminimize(), respectively.
+        gdk_toplevel_minimize() and gdk_toplevel_present(), respectively.
       </para>
       <para>
         The corresponding #GtkWindow functions <function>gtk_window_iconify()</function>
@@ -1096,7 +1096,7 @@
       </para>
       <para>
         The destination-side DND apis in GTK 4 have also been changed to use and event controller,
-        #GTkDropTarget.
+        #GtkDropTarget.
       </para>
       <para>
         Instead of calling gtk_drag_dest_set() and connecting to #GtkWidget signals, you create
@@ -1104,9 +1104,9 @@
         connect to #GtkDropTarget signals.
       </para>
       <para>
-        The ::drag-motion signal has been renamed to #GtkDragSource::accept, and instead of
+        The ::drag-motion signal has been renamed to #GtkDropTarget::accept, and instead of
         ::drag-data-received, you need to use async read methods on the #GdkDrop object, such
-        as gdk_drop_read_value_async() or gdk_drop_read_text_async().
+        as gdk_drop_read_async() or gdk_drop_read_value_async().
       </para>
     </section>
 

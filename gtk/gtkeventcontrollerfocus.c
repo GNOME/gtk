@@ -190,8 +190,8 @@ gtk_event_controller_focus_class_init (GtkEventControllerFocusClass *klass)
    * #GtkEventControllerFocus:contains-focus.
    *
    * When handling focus events, this property is updated
-   * before #GtkEventControllerFocus::focus-in or
-   * #GtkEventControllerFocus::focus-out are emitted.
+   * before #GtkEventControllerKey::focus-in or
+   * #GtkEventControllerKey::focus-out are emitted.
    */
   props[PROP_IS_FOCUS] =
       g_param_spec_boolean ("is-focus",
@@ -208,8 +208,8 @@ gtk_event_controller_focus_class_init (GtkEventControllerFocusClass *klass)
    * or inside a descendent.
    *
    * When handling focus events, this property is updated
-   * before #GtkEventControllerFocus::focus-in or
-   * #GtkEventControllerFocus::focus-out are emitted.
+   * before #GtkEventControllerFocus::enter or
+   * #GtkEventControllerFocus::leave are emitted.
    */
   props[PROP_CONTAINS_FOCUS] =
       g_param_spec_boolean ("contains-focus",

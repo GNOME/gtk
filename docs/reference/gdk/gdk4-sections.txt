@@ -98,6 +98,8 @@ gdk_display_get_monitor_at_surface
 gdk_display_get_clipboard
 gdk_display_get_primary_clipboard
 gdk_display_get_setting
+gdk_display_get_startup_notification_id
+gdk_display_setup_window_visual
 
 <SUBSECTION>
 gdk_display_map_keyval
@@ -145,6 +147,7 @@ gdk_display_manager_get_type
 <TITLE>Pixbufs</TITLE>
 <FILE>pixbufs</FILE>
 gdk_pixbuf_get_from_surface
+gdk_pixbuf_get_from_texture
 </SECTION>
 
 <SECTION>
@@ -183,8 +186,6 @@ gdk_surface_get_display
 gdk_surface_hide
 gdk_surface_is_viewable
 gdk_surface_get_mapped
-gdk_surface_get_width
-gdk_surface_get_height
 gdk_surface_translate_coordinates
 gdk_surface_begin_resize_drag
 gdk_surface_begin_move_drag
@@ -204,8 +205,6 @@ gdk_surface_get_frame_clock
 <SUBSECTION>
 gdk_surface_set_cursor
 gdk_surface_get_cursor
-gdk_surface_set_device_cursor
-gdk_surface_get_device_cursor
 gdk_surface_set_input_region
 gdk_surface_get_width
 gdk_surface_get_height
@@ -356,9 +355,9 @@ GdkDevice
 GdkInputSource
 GdkAxisUse
 GdkAxisFlags
+GdkDeviceTool
 GdkDeviceToolType
 GdkDeviceType
-GdkGrabOwnership
 
 <SUBSECTION>
 gdk_device_get_name
@@ -380,6 +379,12 @@ gdk_device_get_axes
 gdk_device_get_seat
 gdk_device_get_num_touches
 gdk_device_get_device_tool
+gdk_device_get_caps_lock_state
+gdk_device_get_direction
+gdk_device_get_modifier_state
+gdk_device_get_num_lock_state
+gdk_device_get_scroll_lock_state
+gdk_device_has_bidi_layouts
 
 <SUBSECTION>
 gdk_device_get_state
@@ -469,8 +474,24 @@ gdk_seat_capabilities_get_type
 <TITLE>Events</TITLE>
 <FILE>events</FILE>
 GdkEvent
+GdkButtonEvent
+GdkConfigureEvent
+GdkCrossingEvent
+GdkDeleteEvent
+GdkDNDEvent
+GdkFocusEvent
+GdkGrabBrokenEvent
+GdkKeyEvent
+GdkMotionEvent
+GdkPadEvent
+GdkProximityEvent
+GdkScrollEvent
+GdkTouchEvent
+GdkTouchpadEvent
 GdkEventType
 GdkEventMask
+GdkKeyMatch
+GdkTouchpadGesturePhase
 GdkScrollDirection
 GdkCrossingMode
 GdkNotifyType
@@ -512,25 +533,25 @@ gdk_key_event_get_consumed_modifiers
 gdk_key_event_get_layout
 gdk_key_event_get_level
 gdk_key_event_is_modifier
-GdkEventMatch
 gdk_key_event_matches
 gdk_key_event_get_match
 gdk_focus_event_get_in
 gdk_touch_event_get_emulating_pointer
 gdk_crossing_event_get_mode
 gdk_crossing_event_get_detail
+gdk_crossing_event_get_focus
+gdk_grab_broken_event_get_grab_surface
+gdk_dnd_event_get_drop
 gdk_configure_event_get_size
 gdk_touchpad_event_get_gesture_phase
 gdk_touchpad_event_get_n_fingers
 gdk_touchpad_event_get_deltas
-gdk_touchpad_pinch_event_get_angle_delta
-gdk_touchpad_pinch_event_get_scale
-gdk_pad_button_event_get_button
-gdk_pad_axis_event_get_value
+gdk_touchpad_event_get_pinch_angle_delta
+gdk_touchpad_event_get_pinch_scale
+gdk_pad_event_get_axis_value
+gdk_pad_event_get_button
 gdk_pad_event_get_group_mode
-gdk_drag_event_get_drop
-gdk_grab_broken_event_get_grab_surface
-gdk_event_get_motion_history
+gdk_motion_event_get_history
 
 <SUBSECTION>
 gdk_events_get_angle
@@ -545,14 +566,44 @@ GDK_TYPE_CROSSING_MODE
 GDK_TYPE_SCROLL_DIRECTION
 GDK_TYPE_NOTIFY_TYPE
 GDK_IS_EVENT
+GDK_TYPE_EVENT_SEQUENCE
+GDK_TYPE_FOCUS_EVENT
+GDK_TYPE_BUTTON_EVENT
+GDK_TYPE_CONFIGURE_EVENT
+GDK_TYPE_CROSSING_EVENT
+GDK_TYPE_DELETE_EVENT
+GDK_TYPE_DND_EVENT
+GDK_TYPE_GRAB_BROKEN_EVENT
+GDK_TYPE_KEY_EVENT
+GDK_TYPE_MOTION_EVENT
+GDK_TYPE_PROXIMITY_EVENT
+GDK_TYPE_SCROLL_EVENT
+GDK_TYPE_TOUCHPAD_EVENT
+GDK_TYPE_TOUCH_EVENT
+GDK_TYPE_PAD_EVENT
 gdk_event_get_type
 gdk_event_sequence_get_type
+gdk_focus_event_get_type
+gdk_button_event_get_type
+gdk_configure_event_get_type
+gdk_crossing_event_get_type
+gdk_delete_event_get_type
+gdk_dnd_event_get_type
+gdk_grab_broken_event_get_type
+gdk_key_event_get_type
+gdk_motion_event_get_type
+gdk_proximity_event_get_type
+gdk_scroll_event_get_type
+gdk_touchpad_event_get_type
+gdk_touch_event_get_type
+gdk_pad_event_get_type
 </SECTION>
 
 <SECTION>
 <FILE>gdkpaintable</FILE>
 <TITLE>GdkPaintable</TITLE>
 GdkPaintable
+GdkPaintableInterface
 GdkPaintableFlags
 gdk_paintable_get_current_image
 gdk_paintable_snapshot
@@ -567,9 +618,19 @@ gdk_paintable_invalidate_contents
 gdk_paintable_invalidate_size
 gdk_paintable_new_empty
 
-<SUBSECTION Private>
+<SUBSECTION>
+GdkSnapshot
+
+<SUBSECTION Standard>
+GDK_SNAPSHOT
 GDK_TYPE_PAINTABLE
+GDK_TYPE_SNAPSHOT
+GDK_IS_SNAPSHOT
+
+<SUBSECTION Private>
+GdkSnapshotClass
 gdk_paintable_get_type
+gdk_snapshot_get_type
 </SECTION>
 
 
@@ -657,6 +718,7 @@ gdk_toplevel_set_deletable
 gdk_toplevel_supports_edge_constraints
 gdk_toplevel_inhibit_system_shortcuts
 gdk_toplevel_restore_system_shortcuts
+gdk_toplevel_install_properties
 <SUBSECTION Standard>
 GDK_TYPE_TOPLEVEL
 gdk_toplevel_get_type
@@ -744,6 +806,11 @@ gdk_drag_set_hotspot
 gdk_drag_action_is_unique
 
 <SUBSECTION>
+GdkDragSurface
+GdkDragSurfaceInterface
+gdk_drag_surface_present
+
+<SUBSECTION>
 gdk_drop_get_display
 gdk_drop_get_device
 gdk_drop_get_surface
@@ -769,6 +836,7 @@ GDK_TYPE_DRAG_PROTOCOL
 GDK_TYPE_DROP
 GDK_DROP
 GDK_IS_DROP
+GDK_TYPE_DRAG_SURFACE
 
 <SUBSECTION Private>
 GdkDragClass
@@ -1195,6 +1263,7 @@ GdkContentProviderClass
 gdk_content_provider_new_for_value
 gdk_content_provider_new_typed
 gdk_content_provider_new_for_bytes
+gdk_content_provider_new_union
 gdk_content_provider_ref_formats
 gdk_content_provider_ref_storable_formats
 gdk_content_provider_content_changed

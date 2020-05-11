@@ -2438,7 +2438,7 @@ load_icon_thread (GTask        *task,
  * @flags: flags modifying the behavior of the icon lookup
  *
  * Looks up a named icon for a desired size and window scale, returning a
- * #GtkIcon. The icon can then be rendered by using it as a #GdkPaintable,
+ * #GtkIconPaintable. The icon can then be rendered by using it as a #GdkPaintable,
  * or you can get information such as the filename and size.
  *
  * If the available @icon_name is not available and @fallbacks are provided,
@@ -2450,7 +2450,7 @@ load_icon_thread (GTask        *task,
  *
  * Note that you probably want to listen for icon theme changes and
  * update the icon. This is usually done by overriding the
- * #GtkWidget:css-changed function.
+ * #GtkWidgetClass.css-changed() function.
  *
  * Returns: (transfer full): a #GtkIconPaintable object
  *     containing the icon.
@@ -3422,7 +3422,7 @@ theme_subdir_load (GtkIconTheme *self,
 }
 
 /*
- * GtkIcon
+ * GtkIconPaintable
  */
 
 static void icon_paintable_init (GdkPaintableInterface *iface);
@@ -3617,7 +3617,7 @@ new_resource_file (const char *filename)
 
 /**
  * gtk_icon_paintable_get_file:
- * @self: a #GtkIcon
+ * @self: a #GtkIconPaintable
  *
  * Gets the #GFile that was used to load the icon, or %NULL if the icon was
  * not loaded from a file.
@@ -3641,13 +3641,13 @@ gtk_icon_paintable_get_file (GtkIconPaintable *icon)
 
 /**
  * gtk_icon_paintable_get_icon_name:
- * @self: a #GtkIcon
+ * @self: a #GtkIconPaintable
  *
  * Get the icon name being used for this icon.
  *
  * When an icon looked up in the icon theme was not available, the
  * icon theme may use fallback icons - either those specified to
- * gtk_icon_theme_lookup() or the always-available
+ * gtk_icon_theme_lookup_icon() or the always-available
  * "image-missing". The icon chosen is returned by this function.
  *
  * If the icon was created without an icon theme, this function returns %NULL.
@@ -3666,7 +3666,7 @@ gtk_icon_paintable_get_icon_name (GtkIconPaintable *icon)
 
 /**
  * gtk_icon_paintable_is_symbolic:
- * @self: a #GtkIcon
+ * @self: a #GtkIconPaintable
  *
  * Checks if the icon is symbolic or not. This currently uses only
  * the file name and not the file contents for determining this.
@@ -3898,7 +3898,7 @@ icon_paintable_snapshot (GdkPaintable *paintable,
 
 /**
  * gtk_icon_paintable_snapshot_with_colors:
- * @icon: a #GtkIcon
+ * @icon: a #GtkIconPaintable
  * @snapshot: a #GdkSnapshot to snapshot to
  * @width: width to snapshot in
  * @height: height to snapshot in
@@ -4011,7 +4011,7 @@ icon_paintable_init (GdkPaintableInterface *iface)
  * @scale: the desired scale
  *
  * Creates a #GtkIconPaintable for a file with a given size and scale
- * #GtkIcon. The icon can then be rendered by using it as a #GdkPaintable.
+ * #GtkIconPaintable. The icon can then be rendered by using it as a #GdkPaintable.
  *
  * Returns: (transfer full): a #GtkIconPaintable containing
  *     for the icon. Unref with g_object_unref()
@@ -4077,7 +4077,7 @@ gtk_icon_paintable_new_for_pixbuf (GtkIconTheme *icon_theme,
  * @flags: flags modifying the behavior of the icon lookup
  *
  * Looks up a icon for a desired size and window scale, returning a
- * #GtkIcon. The icon can then be rendered by using it as a #GdkPaintable,
+ * #GtkIconPaintable. The icon can then be rendered by using it as a #GdkPaintable,
  * or you can get information such as the filename and size.
  *
  * Returns: (transfer full): a #GtkIconPaintable containing
