@@ -49,6 +49,7 @@ gtk_tests = [
   ['testgrid'],
   ['testgtk'],
   ['testheaderbar'],
+  ['testheaderbar2'],
   ['testheightforwidth'],
   ['testhover'],
   ['testiconview'],
