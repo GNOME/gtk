@@ -4,16 +4,16 @@
     <property name="title" translatable="yes">Preferences</property>
     <property name="resizable">0</property>
     <property name="modal">1</property>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="vbox">
+    <child internal-child="content_area">
+      <object class="GtkBox" id="content_area">
         <child>
           <object class="GtkGrid" id="grid">
-            <property name="margin-start">6</property>
-            <property name="margin-end">6</property>
-            <property name="margin-top">6</property>
-            <property name="margin-bottom">6</property>
+            <property name="margin-start">12</property>
+            <property name="margin-end">12</property>
+            <property name="margin-top">12</property>
+            <property name="margin-bottom">12</property>
             <property name="row-spacing">12</property>
-            <property name="column-spacing">6</property>
+            <property name="column-spacing">12</property>
             <child>
               <object class="GtkLabel" id="fontlabel">
                 <property name="label">_Font:</property>
