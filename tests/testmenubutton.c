@@ -55,7 +55,6 @@ int main (int argc, char **argv)
 
 	/* horizontal alignment */
 	label = gtk_label_new ("Horizontal Alignment:");
-	gtk_widget_show (label);
 	gtk_grid_attach (GTK_GRID (grid), label, 0, row++, 1, 1);
 
 	combo = gtk_combo_box_text_new ();
@@ -65,14 +64,12 @@ int main (int argc, char **argv)
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Center");
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Baseline");
 	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), INITIAL_HALIGN);
-	gtk_widget_show (combo);
 	gtk_grid_attach_next_to (GTK_GRID (grid), combo, label, GTK_POS_RIGHT, 1, 1);
 	g_signal_connect (G_OBJECT (combo), "changed",
 			  G_CALLBACK (horizontal_alignment_changed), menubuttons);
 
 	/* vertical alignment */
 	label = gtk_label_new ("Vertical Alignment:");
-	gtk_widget_show (label);
 	gtk_grid_attach (GTK_GRID (grid), label, 0, row++, 1, 1);
 
 	combo = gtk_combo_box_text_new ();
@@ -82,7 +79,6 @@ int main (int argc, char **argv)
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Center");
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Baseline");
 	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), INITIAL_HALIGN);
-	gtk_widget_show (combo);
 	gtk_grid_attach_next_to (GTK_GRID (grid), combo, label, GTK_POS_RIGHT, 1, 1);
 	g_signal_connect (G_OBJECT (combo), "changed",
 			  G_CALLBACK (vertical_alignment_changed), menubuttons);

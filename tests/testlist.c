@@ -52,7 +52,6 @@ row_new (const gchar* text, gint sort_id) {
     {
       row->label = gtk_label_new (text);
       gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), row->label);
-      gtk_widget_show (row->label);
     }
   row->sort_id = sort_id;
 
@@ -78,8 +77,6 @@ update_header_cb (Row *row, Row *before, gpointer data)
           gtk_container_add (GTK_CONTAINER (hbox), l);
           b = gtk_button_new_with_label ("button");
           gtk_container_add (GTK_CONTAINER (hbox), b);
-          gtk_widget_show (l);
-          gtk_widget_show (b);
           gtk_list_box_row_set_header (GTK_LIST_BOX_ROW (row), hbox);
       }
 

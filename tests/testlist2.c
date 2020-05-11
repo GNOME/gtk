@@ -19,7 +19,6 @@ remove_this_row (GtkButton *button, GtkWidget *child)
   row = gtk_widget_get_parent (child);
   revealer = gtk_revealer_new ();
   gtk_revealer_set_reveal_child (GTK_REVEALER (revealer), TRUE);
-  gtk_widget_show (revealer);
   g_object_ref (child);
   gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (child)), child);
   gtk_revealer_set_child (GTK_REVEALER (revealer), child);

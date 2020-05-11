@@ -836,8 +836,6 @@ create_sensitivity_control (GtkWidget *widget)
                     "toggled",
                     G_CALLBACK (sensitivity_toggled),
                     widget);
-  
-  gtk_widget_show (button);
 
   return button;
 }
@@ -889,8 +887,6 @@ create_selectable_control (GtkWidget *widget)
                     "toggled",
                     G_CALLBACK (selectable_toggled),
                     widget);
-  
-  gtk_widget_show (button);
 
   return button;
 }
@@ -1525,7 +1521,6 @@ add_placeholder_clicked_cb (GtkButton *button,
   GtkWidget *label;
 
   label = gtk_label_new ("You filtered everything!!!");
-  gtk_widget_show (label);
   gtk_list_box_set_placeholder (GTK_LIST_BOX (list), label);
 }
 
@@ -1579,7 +1574,6 @@ create_listbox (GtkWidget *widget)
         {
           gint value = g_random_int_range (0, 10000);
           label = gtk_label_new (g_strdup_printf ("Value %u", value));
-          gtk_widget_show (label);
           gtk_container_add (GTK_CONTAINER (list), label);
           g_object_set_data (G_OBJECT (gtk_widget_get_parent (label)), "value", GINT_TO_POINTER (value));
         }
@@ -2005,14 +1999,12 @@ create_scrolled_windows (GtkWidget *widget)
 				      GTK_POLICY_AUTOMATIC,
 				      GTK_POLICY_AUTOMATIC);
       gtk_container_add (GTK_CONTAINER (content_area), scrolled_window);
-      gtk_widget_show (scrolled_window);
 
       grid = gtk_grid_new ();
       gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
       gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), grid);
       gtk_viewport_set_scroll_to_focus (GTK_VIEWPORT (gtk_widget_get_parent (grid)), TRUE);
-      gtk_widget_show (grid);
 
       for (i = 0; i < 20; i++)
 	for (j = 0; j < 20; j++)
@@ -2020,7 +2012,6 @@ create_scrolled_windows (GtkWidget *widget)
 	    sprintf (buffer, "button (%d,%d)\n", i, j);
 	    button = gtk_toggle_button_new_with_label (buffer);
 	    gtk_grid_attach (GTK_GRID (grid), button, i, j, 1, 1);
-	    gtk_widget_show (button);
 	  }
 
       gtk_dialog_add_button (GTK_DIALOG (window),
@@ -3192,7 +3183,6 @@ create_cursors (GtkWidget *widget)
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
       g_signal_connect (gesture, "pressed", G_CALLBACK (cursor_pressed_cb), entry);
       gtk_widget_add_controller (darea, GTK_EVENT_CONTROLLER (gesture));
-      gtk_widget_show (darea);
 
       g_signal_connect (entry, "changed",
                         G_CALLBACK (set_cursor_from_name), darea);
@@ -3488,7 +3478,6 @@ dialog_response_cb (GtkWidget *widget, gint response, gpointer unused)
           gtk_widget_set_margin_bottom (label, 10);
           gtk_container_add (GTK_CONTAINER (content_area),
                               label);
-          gtk_widget_show (label);
         }
 
       g_list_free (children);
@@ -3705,12 +3694,10 @@ create_range_controls (GtkWidget *widget)
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_window_set_child (GTK_WINDOW (window), box1);
-      gtk_widget_show (box1);
 
 
       box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_container_add (GTK_CONTAINER (box1), box2);
-      gtk_widget_show (box2);
 
 
       adjustment = gtk_adjustment_new (0.0, 0.0, 101.0, 0.1, 1.0, 1.0);
@@ -3720,11 +3707,9 @@ create_range_controls (GtkWidget *widget)
       gtk_scale_set_digits (GTK_SCALE (scale), 1);
       gtk_scale_set_draw_value (GTK_SCALE (scale), TRUE);
       gtk_container_add (GTK_CONTAINER (box2), scale);
-      gtk_widget_show (scale);
 
       scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_ADJUSTMENT (adjustment));
       gtk_container_add (GTK_CONTAINER (box2), scrollbar);
-      gtk_widget_show (scrollbar);
 
       scale = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, GTK_ADJUSTMENT (adjustment));
       gtk_scale_set_draw_value (GTK_SCALE (scale), TRUE);
@@ -3732,7 +3717,6 @@ create_range_controls (GtkWidget *widget)
                                        (GtkScaleFormatValueFunc) reformat_value,
                                        NULL, NULL);
       gtk_container_add (GTK_CONTAINER (box2), scale);
-      gtk_widget_show (scale);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
@@ -3741,7 +3725,6 @@ create_range_controls (GtkWidget *widget)
       gtk_scale_set_digits (GTK_SCALE (scale), 2);
       gtk_scale_set_draw_value (GTK_SCALE (scale), TRUE);
       gtk_container_add (GTK_CONTAINER (hbox), scale);
-      gtk_widget_show (scale);
 
       scale = gtk_scale_new (GTK_ORIENTATION_VERTICAL, GTK_ADJUSTMENT (adjustment));
       gtk_widget_set_size_request (scale, -1, 200);
@@ -3749,7 +3732,6 @@ create_range_controls (GtkWidget *widget)
       gtk_scale_set_draw_value (GTK_SCALE (scale), TRUE);
       gtk_range_set_inverted (GTK_RANGE (scale), TRUE);
       gtk_container_add (GTK_CONTAINER (hbox), scale);
-      gtk_widget_show (scale);
 
       scale = gtk_scale_new (GTK_ORIENTATION_VERTICAL, GTK_ADJUSTMENT (adjustment));
       gtk_scale_set_draw_value (GTK_SCALE (scale), TRUE);
@@ -3757,20 +3739,16 @@ create_range_controls (GtkWidget *widget)
                                        (GtkScaleFormatValueFunc) reformat_value,
                                        NULL, NULL);
       gtk_container_add (GTK_CONTAINER (hbox), scale);
-      gtk_widget_show (scale);
 
 
       gtk_container_add (GTK_CONTAINER (box2), hbox);
-      gtk_widget_show (hbox);
 
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_container_add (GTK_CONTAINER (box1), separator);
-      gtk_widget_show (separator);
 
 
       box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_container_add (GTK_CONTAINER (box1), box2);
-      gtk_widget_show (box2);
 
 
       button = gtk_button_new_with_label ("close");
@@ -3779,7 +3757,6 @@ create_range_controls (GtkWidget *widget)
 				window);
       gtk_container_add (GTK_CONTAINER (box2), button);
       gtk_window_set_default_widget (GTK_WINDOW (window), button);
-      gtk_widget_show (button);
     }
 
   if (!gtk_widget_get_visible (window))
@@ -3934,8 +3911,6 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
 				G_CALLBACK (gtk_widget_hide),
 				child);
 
-      gtk_widget_show (child);
-
       label_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       pixwid = gtk_image_new_from_pixbuf (book_closed);
       g_object_set_data (G_OBJECT (child), "tab_pixmap", pixwid);
@@ -3947,7 +3922,6 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
       gtk_widget_set_margin_top (pixwid, 1);
       label = gtk_label_new_with_mnemonic (accel_buffer);
       gtk_container_add (GTK_CONTAINER (label_box), label);
-      gtk_widget_show (label_box);
 
 
       menu_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -3961,7 +3935,6 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
       gtk_widget_set_margin_top (pixwid, 1);
       label = gtk_label_new (buffer);
       gtk_container_add (GTK_CONTAINER (menu_box), label);
-      gtk_widget_show (menu_box);
 
       gtk_notebook_append_page_menu (notebook, child, label_box, menu_box);
     }
@@ -4318,8 +4291,6 @@ create_panes (GtkWidget *widget)
 					       "Vertical",
 					       "Top",
 					       "Bottom"));
-
-      gtk_widget_show (vbox);
     }
 
   if (!gtk_widget_get_visible (window))
@@ -4736,22 +4707,18 @@ create_wmhints (GtkWidget *widget)
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_window_set_child (GTK_WINDOW (window), box1);
-      gtk_widget_show (box1);
 
       label = gtk_label_new ("Try iconizing me!");
       gtk_widget_set_size_request (label, 150, 50);
       gtk_container_add (GTK_CONTAINER (box1), label);
-      gtk_widget_show (label);
 
 
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_container_add (GTK_CONTAINER (box1), separator);
-      gtk_widget_show (separator);
 
 
       box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_container_add (GTK_CONTAINER (box1), box2);
-      gtk_widget_show (box2);
 
 
       button = gtk_button_new_with_label ("close");
@@ -4762,7 +4729,6 @@ create_wmhints (GtkWidget *widget)
 
       gtk_container_add (GTK_CONTAINER (box2), button);
       gtk_window_set_default_widget (GTK_WINDOW (window), button);
-      gtk_widget_show (button);
     }
 
   if (!gtk_widget_get_visible (window))
@@ -4879,8 +4845,6 @@ tracking_label (GtkWidget *window)
 			   G_CONNECT_SWAPPED);
   gtk_container_add (GTK_CONTAINER (hbox), button);
 
-  gtk_widget_show (hbox);
-
   return hbox;
 }
 
@@ -4939,8 +4903,6 @@ get_state_controls (GtkWidget *window)
 			   window,
 			   G_CONNECT_SWAPPED);
   gtk_container_add (GTK_CONTAINER (vbox), button);
-
-  gtk_widget_show (vbox);
 
   return vbox;
 }
@@ -5009,7 +4971,6 @@ create_surface_states (GtkWidget *widget)
 
       gtk_widget_show (iconified);
       gtk_widget_show (normal);
-      gtk_widget_show (box1);
     }
 
   if (!gtk_widget_get_visible (window))
@@ -5211,8 +5172,6 @@ window_controls (GtkWidget *window)
                            window,
 			   G_CONNECT_SWAPPED);
   gtk_container_add (GTK_CONTAINER (vbox), button);
-
-  gtk_widget_show (vbox);
 
   return control_window;
 }
@@ -5627,7 +5586,6 @@ create_timeout_test (GtkWidget *widget)
       gtk_widget_set_margin_top (label, 10);
       gtk_widget_set_margin_bottom (label, 10);
       gtk_container_add (GTK_CONTAINER (content_area), label);
-      gtk_widget_show (label);
 
       button = gtk_button_new_with_label ("close");
       g_signal_connect_swapped (button, "clicked",
@@ -5635,21 +5593,18 @@ create_timeout_test (GtkWidget *widget)
 				window);
       gtk_container_add (GTK_CONTAINER (action_area), button);
       gtk_window_set_default_widget (GTK_WINDOW (window), button);
-      gtk_widget_show (button);
 
       button = gtk_button_new_with_label ("start");
       g_signal_connect (button, "clicked",
 			G_CALLBACK(start_timeout_test),
 			label);
       gtk_container_add (GTK_CONTAINER (action_area), button);
-      gtk_widget_show (button);
 
       button = gtk_button_new_with_label ("stop");
       g_signal_connect (button, "clicked",
 			G_CALLBACK (stop_timeout_test),
 			NULL);
       gtk_container_add (GTK_CONTAINER (action_area), button);
-      gtk_widget_show (button);
     }
 
   if (!gtk_widget_get_visible (window))
@@ -6127,7 +6082,6 @@ create_main_window (void)
   gtk_widget_set_margin_end (box2, 10);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), box2);
   gtk_viewport_set_scroll_to_focus (GTK_VIEWPORT (gtk_widget_get_parent (box2)), TRUE);
-  gtk_widget_show (box2);
 
   for (i = 0; i < nbuttons; i++)
     {

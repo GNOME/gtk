@@ -73,7 +73,6 @@ key_test (void)
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_vexpand (sw, TRUE);
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
-  gtk_widget_show (box);
   gtk_window_set_child (GTK_WINDOW (window), box);
   gtk_container_add (GTK_CONTAINER (box), sw);
 
@@ -112,7 +111,6 @@ key_test (void)
     }
 
   entry = gtk_entry_new ();
-  gtk_widget_show (entry);
   gtk_container_add (GTK_CONTAINER (box), entry);
 
   return window;
