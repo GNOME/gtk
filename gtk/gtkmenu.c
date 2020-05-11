@@ -140,9 +140,6 @@
 
 #include "a11y/gtkmenuaccessible.h"
 #include "gdk/gdk-private.h"
-#ifdef GDK_WINDOWING_X11
-#include "gdk/x11/gdkx.h"
-#endif
 
 #define NAVIGATION_REGION_OVERSHOOT 50  /* How much the navigation region
                                          * extends below the submenu
@@ -1778,28 +1775,15 @@ popup_grab_on_window (GdkWindow *window,
 {
   GdkGrabStatus status;
   GdkSeat *seat;
-#ifdef GDK_WINDOWING_X11
-  GdkDisplay *display;
-#endif
 
   seat = gdk_device_get_seat (pointer);
-#ifdef GDK_WINDOWING_X11
-  display = gdk_window_get_display (window);
-#endif
 
-#ifdef GDK_WINDOWING_X11
 /* Let GtkMenu use pointer emulation instead of touch events under X11. */
 #define GDK_SEAT_CAPABILITY_NO_TOUCH (GDK_SEAT_CAPABILITY_POINTER | \
                                       GDK_SEAT_CAPABILITY_TABLET_STYLUS | \
                                       GDK_SEAT_CAPABILITY_KEYBOARD)
-  if (GDK_IS_X11_DISPLAY (display))
-    status = gdk_seat_grab (seat, window,
-                            GDK_SEAT_CAPABILITY_NO_TOUCH, TRUE,
-                            NULL, NULL, NULL, NULL);
-  else
-#endif
   status = gdk_seat_grab (seat, window,
-                          GDK_SEAT_CAPABILITY_ALL, TRUE,
+                          GDK_SEAT_CAPABILITY_NO_TOUCH, TRUE,
                           NULL, NULL, NULL, NULL);
 
   return status == GDK_GRAB_SUCCESS;
