@@ -1094,7 +1094,7 @@ gtk_file_chooser_button_dispose (GObject *object)
       g_clear_object (&button->model);
     }
 
-  g_clear_pointer (&button->dialog, gtk_widget_destroy);
+  g_clear_pointer ((GtkWindow **)&button->dialog, gtk_window_destroy);
 
   if (button->native)
     gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (button->native));

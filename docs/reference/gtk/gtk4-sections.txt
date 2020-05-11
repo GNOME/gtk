@@ -3955,9 +3955,7 @@ GtkCallback
 GtkRequisition
 GtkAllocation
 gtk_widget_new
-gtk_widget_destroy
 gtk_widget_in_destruction
-gtk_widget_destroyed
 gtk_widget_unparent
 gtk_widget_show
 gtk_widget_hide
@@ -4191,6 +4189,7 @@ gtk_requisition_get_type
 GtkWindow
 GtkWindowClass
 gtk_window_new
+gtk_window_destroy
 gtk_window_get_child
 gtk_window_set_child
 gtk_window_set_title
@@ -4246,7 +4245,6 @@ gtk_window_get_focus_visible
 gtk_window_set_focus_visible
 gtk_window_get_application
 gtk_window_set_application
-gtk_window_set_has_user_ref_count
 gtk_window_set_titlebar
 gtk_window_get_titlebar
 gtk_window_set_interactive_debugging

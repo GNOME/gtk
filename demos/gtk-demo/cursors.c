@@ -36,7 +36,7 @@ do_cursors (GtkWidget *do_widget)
     gtk_widget_show (window);
   else
     {
-      gtk_widget_destroy (window);
+      gtk_window_destroy (GTK_WINDOW (window));
     }
 
   return window;

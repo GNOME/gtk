@@ -26,7 +26,7 @@ apply_changes_gradually (gpointer data)
   else
     {
       /* Close automatically once changes are fully applied. */
-      gtk_widget_destroy (data);
+      gtk_window_destroy (GTK_WINDOW (data));
       return G_SOURCE_REMOVE;
     }
 }
@@ -41,7 +41,7 @@ on_assistant_apply (GtkWidget *widget, gpointer data)
 static void
 on_assistant_close_cancel (GtkWidget *widget, gpointer data)
 {
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (widget));
 }
 
 static void
@@ -178,8 +178,7 @@ do_assistant (GtkWidget *do_widget)
 
       gtk_window_set_display (GTK_WINDOW (assistant),
                               gtk_widget_get_display (do_widget));
-      g_signal_connect (assistant, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &assistant);
+      g_object_add_weak_pointer (G_OBJECT (assistant), (gpointer *)&assistant);
 
       create_page1 (assistant);
       create_page2 (assistant);
@@ -199,7 +198,7 @@ do_assistant (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (assistant))
     gtk_widget_show (assistant);
   else
-    gtk_widget_destroy (assistant);
+    gtk_window_destroy (GTK_WINDOW (assistant));
 
   return assistant;
 }

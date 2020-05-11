@@ -1716,9 +1716,9 @@ gtk_main_do_event (GdkEvent *event)
       if (!gtk_window_group_get_current_grab (window_group) ||
           GTK_WIDGET (gtk_widget_get_root (gtk_window_group_get_current_grab (window_group))) == target_widget)
         {
-          if (!GTK_IS_WINDOW (target_widget) ||
+          if (GTK_IS_WINDOW (target_widget) &&
               !gtk_window_emit_close_request (GTK_WINDOW (target_widget)))
-            gtk_widget_destroy (target_widget);
+            gtk_window_destroy (GTK_WINDOW (target_widget));
         }
       g_object_unref (target_widget);
       break;

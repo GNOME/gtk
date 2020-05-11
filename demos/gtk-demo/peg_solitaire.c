@@ -284,8 +284,7 @@ do_peg_solitaire (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "Peg Solitaire");
       gtk_window_set_titlebar (GTK_WINDOW (window), header);
       gtk_window_set_default_size (GTK_WINDOW (window), 400, 300);
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       grid = gtk_grid_new ();
       gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
@@ -349,7 +348,7 @@ do_peg_solitaire (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

@@ -2610,78 +2610,6 @@ gtk_widget_unparent (GtkWidget *widget)
   g_object_unref (widget);
 }
 
-/**
- * gtk_widget_destroy:
- * @widget: a #GtkWidget
- *
- * Destroys a widget.
- *
- * When a widget is destroyed all references it holds on other objects
- * will be released:
- *
- *  - if the widget is inside a container, it will be removed from its
- *  parent
- *  - if the widget is a container, all its children will be destroyed,
- *  recursively
- *  - if the widget is a top level, it will be removed from the list
- *  of top level widgets that GTK+ maintains internally
- *
- * It's expected that all references held on the widget will also
- * be released; you should connect to the #GtkWidget::destroy signal
- * if you hold a reference to @widget and you wish to remove it when
- * this function is called. It is not necessary to do so if you are
- * implementing a #GtkContainer, as you'll be able to use the
- * #GtkContainerClass.remove() virtual function for that.
- *
- * It's important to notice that gtk_widget_destroy() will only cause
- * the @widget to be finalized if no additional references, acquired
- * using g_object_ref(), are held on it. In case additional references
- * are in place, the @widget will be in an "inert" state after calling
- * this function; @widget will still point to valid memory, allowing you
- * to release the references you hold, but you may not query the widget's
- * own state.
- *
- * You should typically call this function on top level widgets, and
- * rarely on child widgets.
- *
- * See also: gtk_container_remove()
- */
-void
-gtk_widget_destroy (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  if (!priv->in_destruction)
-    g_object_run_dispose (G_OBJECT (widget));
-}
-
-/**
- * gtk_widget_destroyed:
- * @widget: a #GtkWidget
- * @widget_pointer: (inout) (transfer none): address of a variable that contains @widget
- *
- * This function sets *@widget_pointer to %NULL if @widget_pointer !=
- * %NULL.  It’s intended to be used as a callback connected to the
- * “destroy” signal of a widget. You connect gtk_widget_destroyed()
- * as a signal handler, and pass the address of your widget variable
- * as user data. Then when the widget is destroyed, the variable will
- * be set to %NULL. Useful for example to avoid multiple copies
- * of the same dialog.
- **/
-void
-gtk_widget_destroyed (GtkWidget      *widget,
-		      GtkWidget      **widget_pointer)
-{
-  /* Don't make any assumptions about the
-   *  value of widget!
-   *  Even check widget_pointer.
-   */
-  if (widget_pointer)
-    *widget_pointer = NULL;
-}
-
 static void
 gtk_widget_update_paintables (GtkWidget *widget)
 {
@@ -7349,7 +7277,7 @@ gtk_widget_real_destroy (GtkWidget *object)
 	  FinalizeAssertion *assertion = l->data;
 
 	  if (!assertion->did_finalize)
-	    g_critical ("Automated component '%s' of class '%s' did not finalize in gtk_widget_destroy(). "
+	    g_critical ("Automated component '%s' of class '%s' did not finalize in dispose()"
 			"Current reference count is %d",
 			assertion->child_class->name,
 			g_type_name (assertion->widget_type),

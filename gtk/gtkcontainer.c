@@ -221,11 +221,18 @@ gtk_container_init (GtkContainer *container)
 }
 
 static void
+gtk_container_remove_cb (GtkWidget    *child,
+                         GtkContainer *container)
+{
+  gtk_container_remove (container, child);
+}
+
+static void
 gtk_container_dispose (GObject *object)
 {
   GtkContainer *container = GTK_CONTAINER (object);
 
-  gtk_container_foreach (container, (GtkCallback) gtk_widget_destroy, NULL);
+  gtk_container_foreach (container, (GtkCallback) gtk_container_remove_cb, container);
 
   G_OBJECT_CLASS (gtk_container_parent_class)->dispose (object);
 }
@@ -281,14 +288,12 @@ gtk_container_add (GtkContainer *container,
  * @widget: a current child of @container
  *
  * Removes @widget from @container. @widget must be inside @container.
+ *
  * Note that @container will own a reference to @widget, and that this
  * may be the last reference held; so removing a widget from its
  * container can destroy that widget. If you want to use @widget
  * again, you need to add a reference to it before removing it from
- * a container, using g_object_ref(). If you don’t want to use @widget
- * again it’s usually more efficient to simply destroy it directly
- * using gtk_widget_destroy() since this will remove it from the
- * container and help break any circular reference count cycles.
+ * a container, using g_object_ref().
  **/
 void
 gtk_container_remove (GtkContainer *container,

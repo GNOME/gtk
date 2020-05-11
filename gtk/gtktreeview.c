@@ -2073,7 +2073,7 @@ gtk_tree_view_free_rbtree (GtkTreeView *tree_view)
 static void
 gtk_tree_view_destroy_search_popover (GtkTreeView *tree_view)
 {
-  gtk_widget_destroy (tree_view->search_popover);
+  gtk_widget_unparent (tree_view->search_popover);
 
   tree_view->search_popover = NULL;
   tree_view->search_entry = NULL;

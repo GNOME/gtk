@@ -149,8 +149,7 @@ do_gestures (GtkWidget *do_widget)
       window = gtk_window_new ();
       gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
       gtk_window_set_title (GTK_WINDOW (window), "Gestures");
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       drawing_area = gtk_drawing_area_new ();
       gtk_window_set_child (GTK_WINDOW (window), drawing_area);
@@ -210,7 +209,7 @@ do_gestures (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

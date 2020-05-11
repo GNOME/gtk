@@ -91,7 +91,7 @@
  *     open_file (file);
  *   }
  *
- * gtk_widget_destroy (dialog);
+ * gtk_window_destroy (dialog);
  * ]|
  *
  * To use a dialog for saving, you can use this:
@@ -124,7 +124,7 @@
  *     save_to_file (file);
  *   }
  *
- * gtk_widget_destroy (dialog);
+ * gtk_window_destroy (dialog);
  * ]|
  *
  * ## Setting up a file chooser dialog ## {#gtkfilechooserdialog-setting-up}
@@ -221,6 +221,7 @@ struct _GtkFileChooserDialogPrivate
   gboolean has_entry;
 };
 
+static void     gtk_file_chooser_dialog_dispose      (GObject               *object);
 static void     gtk_file_chooser_dialog_set_property (GObject               *object,
                                                       guint                  prop_id,
                                                       const GValue          *value,
@@ -262,6 +263,7 @@ gtk_file_chooser_dialog_class_init (GtkFileChooserDialogClass *class)
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
+  gobject_class->dispose = gtk_file_chooser_dialog_dispose;
   gobject_class->set_property = gtk_file_chooser_dialog_set_property;
   gobject_class->get_property = gtk_file_chooser_dialog_get_property;
   gobject_class->notify = gtk_file_chooser_dialog_notify;
@@ -385,6 +387,16 @@ file_chooser_widget_response_requested (GtkWidget            *widget,
     }
 
   priv->response_requested = FALSE;
+}
+
+static void
+gtk_file_chooser_dialog_dispose (GObject *object)
+{
+  GtkFileChooserDialogPrivate *priv = gtk_file_chooser_dialog_get_instance_private (GTK_FILE_CHOOSER_DIALOG (object));
+
+  g_clear_pointer ((GtkWidget **)&priv->widget, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (gtk_file_chooser_dialog_parent_class)->dispose (object);
 }
 
 static void

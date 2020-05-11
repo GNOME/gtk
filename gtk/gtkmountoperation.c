@@ -219,6 +219,13 @@ gtk_mount_operation_init (GtkMountOperation *operation)
 }
 
 static void
+parent_destroyed (GtkWidget  *parent,
+                  gpointer  **pointer)
+{
+  *pointer = NULL;
+}
+
+static void
 gtk_mount_operation_finalize (GObject *object)
 {
   GtkMountOperation *operation = GTK_MOUNT_OPERATION (object);
@@ -230,7 +237,7 @@ gtk_mount_operation_finalize (GObject *object)
   if (priv->parent_window)
     {
       g_signal_handlers_disconnect_by_func (priv->parent_window,
-                                            gtk_widget_destroyed,
+                                            parent_destroyed,
                                             &priv->parent_window);
       g_object_unref (priv->parent_window);
     }
@@ -392,7 +399,7 @@ pw_dialog_got_response (GtkDialog         *dialog,
 
   priv->dialog = NULL;
   g_object_notify (G_OBJECT (op), "is-showing");
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
   g_object_unref (op);
 }
 
@@ -921,7 +928,7 @@ question_dialog_button_clicked (GtkDialog       *dialog,
 
   priv->dialog = NULL;
   g_object_notify (G_OBJECT (operation), "is-showing");
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
   g_object_unref (op);
 }
 
@@ -1076,7 +1083,7 @@ show_processes_button_clicked (GtkDialog       *dialog,
 
   priv->dialog = NULL;
   g_object_notify (G_OBJECT (operation), "is-showing");
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
   g_object_unref (op);
 }
 
@@ -1396,7 +1403,7 @@ on_end_process_activated (GtkModelButton *button,
        * destroy the dialog in that case
        */
       if (response != GTK_RESPONSE_NONE)
-        gtk_widget_destroy (dialog);
+        gtk_window_destroy (GTK_WINDOW (dialog));
 
       g_error_free (error);
     }
@@ -1759,7 +1766,7 @@ gtk_mount_operation_aborted (GMountOperation *op)
 
   if (priv->dialog != NULL)
     {
-      gtk_widget_destroy (GTK_WIDGET (priv->dialog));
+      gtk_window_destroy (GTK_WINDOW (priv->dialog));
       priv->dialog = NULL;
       g_object_notify (G_OBJECT (op), "is-showing");
       g_object_unref (op);
@@ -1835,7 +1842,7 @@ gtk_mount_operation_set_parent (GtkMountOperation *op,
   if (priv->parent_window)
     {
       g_signal_handlers_disconnect_by_func (priv->parent_window,
-                                            gtk_widget_destroyed,
+                                            parent_destroyed,
                                             &priv->parent_window);
       g_object_unref (priv->parent_window);
     }
@@ -1844,8 +1851,7 @@ gtk_mount_operation_set_parent (GtkMountOperation *op,
     {
       g_object_ref (priv->parent_window);
       g_signal_connect (priv->parent_window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed),
-                        &priv->parent_window);
+                        G_CALLBACK (parent_destroyed), &priv->parent_window);
     }
 
   if (priv->dialog)

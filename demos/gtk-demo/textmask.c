@@ -63,9 +63,7 @@ do_textmask (GtkWidget *do_widget)
       gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
       gtk_widget_set_size_request (window, 400, 200);
       gtk_window_set_title (GTK_WINDOW (window), "Text Mask");
-
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       da = gtk_drawing_area_new ();
 
@@ -76,7 +74,7 @@ do_textmask (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

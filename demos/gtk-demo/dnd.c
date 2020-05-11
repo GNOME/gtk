@@ -138,7 +138,7 @@ edit_label_done (GtkWidget *entry, gpointer data)
   gtk_label_set_text (GTK_LABEL (label), gtk_editable_get_text (GTK_EDITABLE (entry)));
   gtk_widget_show (label);
 
-  gtk_widget_destroy (entry);
+  gtk_container_remove (GTK_CONTAINER (canvas), entry);
 }
 
 static void
@@ -170,7 +170,9 @@ edit_cb (GtkWidget *button, GtkWidget *child)
 static void
 delete_cb (GtkWidget *button, GtkWidget *child)
 {
-  gtk_widget_destroy (child);
+  GtkWidget *canvas = gtk_widget_get_parent (child);
+
+  gtk_container_remove (GTK_CONTAINER (canvas), child);
 
   gtk_popover_popdown (GTK_POPOVER (gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER)));
 }
@@ -419,7 +421,6 @@ do_dnd (GtkWidget *do_widget)
     {
       GtkWidget *sw;
       GtkWidget *canvas;
-      GtkWidget *widget;
       GtkWidget *box, *box2, *box3;
       const char *colors[] = {
         "red", "green", "blue", "magenta", "orange", "gray", "black", "yellow",
@@ -430,17 +431,14 @@ do_dnd (GtkWidget *do_widget)
       int i;
       int x, y;
 
-      widget = gtk_color_button_new ();
-      gtk_widget_destroy (widget);
-  
+      g_type_ensure (GTK_TYPE_COLOR_BUTTON);
+
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Drag-and-Drop");
       gtk_window_set_default_size (GTK_WINDOW (window), 640, 480);
-
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_window_set_child (GTK_WINDOW (window), box);
@@ -494,7 +492,7 @@ do_dnd (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

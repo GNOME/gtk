@@ -766,7 +766,7 @@ error_message (GtkFileChooserWidget *impl,
                                  GTK_WINDOW (dialog));
 
   gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 
 }
 
@@ -1261,7 +1261,7 @@ confirm_delete (GtkFileChooserWidget *impl,
 
   response = gtk_dialog_run (GTK_DIALOG (dialog));
 
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 
   return (response == GTK_RESPONSE_ACCEPT);
 }
@@ -2360,7 +2360,7 @@ save_widgets_destroy (GtkFileChooserWidget *impl)
   if (impl->save_widgets == NULL)
     return;
 
-  gtk_widget_destroy (impl->save_widgets);
+  gtk_container_remove (GTK_CONTAINER (impl->box), impl->save_widgets);
   impl->save_widgets = NULL;
   impl->save_widgets_table = NULL;
   impl->location_entry = NULL;
@@ -3091,7 +3091,7 @@ gtk_file_chooser_widget_dispose (GObject *object)
   cancel_all_operations (impl);
 
   g_clear_pointer (&impl->rename_file_popover, gtk_widget_unparent);
-  g_clear_pointer (&impl->browse_files_popover, gtk_widget_destroy);
+  g_clear_pointer (&impl->browse_files_popover, gtk_widget_unparent);
   g_clear_object (&impl->extra_widget);
   g_clear_pointer (&impl->bookmarks_manager, _gtk_bookmarks_manager_free);
 
@@ -5761,7 +5761,7 @@ confirm_dialog_should_accept_filename (GtkFileChooserWidget *impl,
      * file list (will be restablished on next map()). Fixes data loss bug #2288 */
     impl->browse_files_interaction_frozen = TRUE;
 
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 
   return (response == GTK_RESPONSE_ACCEPT);
 }

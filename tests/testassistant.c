@@ -179,7 +179,7 @@ create_simple_assistant (GtkWidget *widget)
     gtk_widget_show (assistant);
   else
     {
-      gtk_widget_destroy (assistant);
+      gtk_window_destroy (GTK_WINDOW (assistant));
       assistant = NULL;
     }
 }
@@ -219,7 +219,7 @@ create_anonymous_assistant (GtkWidget *widget)
     gtk_widget_show (assistant);
   else
     {
-      gtk_widget_destroy (assistant);
+      gtk_window_destroy (GTK_WINDOW (assistant));
       assistant = NULL;
     }
 }
@@ -310,7 +310,7 @@ create_generous_assistant (GtkWidget *widget)
     gtk_widget_show (assistant);
   else
     {
-      gtk_widget_destroy (assistant);
+      gtk_window_destroy (GTK_WINDOW (assistant));
       assistant = NULL;
     }
 }
@@ -403,7 +403,7 @@ create_nonlinear_assistant (GtkWidget *widget)
     gtk_widget_show (assistant);
   else
     {
-      gtk_widget_destroy (assistant);
+      gtk_window_destroy (GTK_WINDOW (assistant));
       assistant = NULL;
     }
 }
@@ -495,7 +495,7 @@ create_looping_assistant (GtkWidget *widget)
     gtk_widget_show (assistant);
   else
     {
-      gtk_widget_destroy (assistant);
+      gtk_window_destroy (GTK_WINDOW (assistant));
       assistant = NULL;
     }
 }
@@ -563,7 +563,7 @@ create_full_featured_assistant (GtkWidget *widget)
     gtk_widget_show (assistant);
   else
     {
-      gtk_widget_destroy (assistant);
+      gtk_window_destroy (GTK_WINDOW (assistant));
       assistant = NULL;
     }
 }
@@ -646,7 +646,7 @@ create_page_flipping_assistant (GtkWidget *widget)
     gtk_widget_show (assistant);
   else
     {
-      gtk_widget_destroy (assistant);
+      gtk_window_destroy (GTK_WINDOW (assistant));
       assistant = NULL;
     }
 }

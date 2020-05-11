@@ -27,7 +27,7 @@ main (int argc, char **argv)
 
   but = gtk_button_new_with_label ("Try to Exit");
   g_signal_connect_swapped (but, "clicked",
-			    G_CALLBACK (gtk_widget_destroy), win);
+			    G_CALLBACK (gtk_window_destroy), win);
   gtk_window_set_child (GTK_WINDOW (win), but);
 
   gtk_widget_show (win);

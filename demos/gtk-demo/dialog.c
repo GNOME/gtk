@@ -26,7 +26,7 @@ message_dialog_clicked (GtkButton *button,
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                             "%d", i);
   gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
   i++;
 }
 
@@ -89,7 +89,7 @@ interactive_dialog_clicked (GtkButton *button,
       gtk_editable_set_text (GTK_EDITABLE (entry2), gtk_editable_get_text (GTK_EDITABLE (local_entry2)));
     }
 
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 GtkWidget *
@@ -109,9 +109,7 @@ do_dialog (GtkWidget *do_widget)
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Dialogs and Message Boxes");
-
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       frame = gtk_frame_new ("Dialogs");
       gtk_widget_set_margin_start (frame, 8);
@@ -170,7 +168,7 @@ do_dialog (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

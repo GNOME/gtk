@@ -179,9 +179,7 @@ do_pixbufs (GtkWidget *do_widget)
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Pixbufs");
       gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
-
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       error = NULL;
       if (!load_pixbufs (&error))
@@ -198,7 +196,7 @@ do_pixbufs (GtkWidget *do_widget)
           g_error_free (error);
 
           g_signal_connect (dialog, "response",
-                            G_CALLBACK (gtk_widget_destroy), NULL);
+                            G_CALLBACK (gtk_window_destroy), NULL);
 
           gtk_widget_show (dialog);
         }
@@ -222,7 +220,7 @@ do_pixbufs (GtkWidget *do_widget)
     gtk_widget_show (window);
   else
     {
-      gtk_widget_destroy (window);
+      gtk_window_destroy (GTK_WINDOW (window));
       g_object_unref (frame);
     }
 

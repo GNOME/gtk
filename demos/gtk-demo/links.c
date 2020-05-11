@@ -12,7 +12,7 @@ response_cb (GtkWidget *dialog,
              gint       response_id,
              gpointer   data)
 {
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static gboolean
@@ -59,8 +59,7 @@ do_links (GtkWidget *do_widget)
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Links");
       gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       label = gtk_label_new ("Some <a href=\"http://en.wikipedia.org/wiki/Text\""
                              "title=\"plain text\">text</a> may be marked up "
@@ -88,7 +87,7 @@ do_links (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

@@ -30,7 +30,7 @@ response_cb (GtkDialog *dialog,
              gint       arg1,
              gpointer   user_data)
 {
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static gboolean
