@@ -4982,9 +4982,16 @@ gtk_widget_focus_all (GtkWidget        *widget,
     {
       if (gtk_widget_focus_move (widget, direction))
         return TRUE;
-    }
 
-  return gtk_widget_grab_focus (widget);
+      return gtk_widget_grab_focus (widget);
+    }
+  else
+    {
+      if (gtk_widget_grab_focus (widget))
+        return TRUE;
+
+      return gtk_widget_focus_move (widget, direction);
+    }
 }
 
 gboolean
