@@ -405,7 +405,7 @@ gtk_drop_target_async_class_init (GtkDropTargetAsyncClass *class)
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
  /**
-   * GtkWidget::accept:
+   * GtkDropTargetAsync::accept:
    * @self: the #GtkDropTargetAsync
    * @drop: the #GdkDrop
    *

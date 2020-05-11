@@ -100,7 +100,7 @@ window_handle_exported (GtkWindow  *window,
  * - `mailto:me@gnome.org`
  *
  * The @callback will be called when the launch is completed.
- * It should call gtk_show_uri_finish() to obtain the result.
+ * It should call gtk_show_uri_full_finish() to obtain the result.
  *
  * This is the recommended call to be used as it passes information
  * necessary for sandbox helpers to parent their dialogs properly.
@@ -144,7 +144,7 @@ gtk_show_uri_full (GtkWindow           *parent,
 /**
  * gtk_show_uri_full_finish:
  * @parent: the #GtkWindow passed to gtk_show_uri()
- * @result: #GASyncResult that was passed to @callback
+ * @result: #GAsyncResult that was passed to @callback
  * @error: return location for an error
  *
  * Finished the gtk_show_uri() call and returns the result

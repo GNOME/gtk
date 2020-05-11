@@ -841,7 +841,7 @@ gsk_broadway_renderer_init (GskBroadwayRenderer *self)
  *
  * The Broadway renderer is the default renderer for the broadway backend.
  * It will only work with broadway surfaces, otherwise it will fail the
- * call to gdk_renderer_realize().
+ * call to gsk_renderer_realize().
  *
  * This function is only available when GTK was compiled with Broadway
  * support.

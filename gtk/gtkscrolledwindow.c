@@ -96,7 +96,7 @@
  *                       gtk_bin_get_child (GTK_BIN (scrolled_window)));
  * ]|
  *
- * Unless #GtkScrolledWindow:hscrolbar-policy and #GtkScrolledWindow:vscrollbar-policy
+ * Unless #GtkScrolledWindow:hscrollbar-policy and #GtkScrolledWindow:vscrollbar-policy
  * are GTK_POLICY_NEVER or GTK_POLICY_EXTERNAL,
  * GtkScrolledWindow adds internal #GtkScrollbar widgets around its child. The
  * scroll position of the child, and if applicable the scrollbars, is controlled
@@ -689,7 +689,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * as narrow indicators.
    *
    * Note that overlay scrolling can also be globally disabled, with
-   * the #GtkSettings::gtk-overlay-scrolling setting.
+   * the #GtkSettings:gtk-overlay-scrolling setting.
    */
   properties[PROP_OVERLAY_SCROLLING] =
       g_param_spec_boolean ("overlay-scrolling",

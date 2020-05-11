@@ -82,7 +82,7 @@
  * ]|
  *
  * GtkListBox uses a single CSS node named list. It may carry the .separators style
- * class, when the #GtkListBox::show-separators property is set. Each GtkListBoxRow uses
+ * class, when the #GtkListBox:show-separators property is set. Each GtkListBoxRow uses
  * a single CSS node named row. The row nodes get the .activatable
  * style class added when appropriate.
  */

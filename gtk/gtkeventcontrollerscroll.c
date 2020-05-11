@@ -41,7 +41,7 @@
  *
  * The controller can be set up to emit motion for either/both vertical
  * and horizontal scroll events through #GTK_EVENT_CONTROLLER_SCROLL_VERTICAL,
- * #GTK_EVENT_CONTROLLER_SCROLL_HORIZONTAL and #GTK_EVENT_CONTROLLER_SCROLL_BOTH.
+ * #GTK_EVENT_CONTROLLER_SCROLL_HORIZONTAL and #GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES.
  * If any axis is disabled, the respective #GtkEventControllerScroll::scroll
  * delta will be 0. Vertical scroll events will be translated to horizontal
  * motion for the devices incapable of horizontal scrolling.

@@ -3661,7 +3661,7 @@ gtk_text_view_toggle_cursor_visible (GtkTextView *text_view)
  * want to turn the cursor off.
  *
  * Note that this property may be overridden by the
- * #GtkSettings:gtk-keynave-use-caret settings.
+ * #GtkSettings:gtk-keynav-use-caret settings.
  */
 void
 gtk_text_view_set_cursor_visible (GtkTextView *text_view,

@@ -479,7 +479,7 @@ gdk_drop_get_surface (GdkDrop *self)
  *
  * Returns the possible actions for this #GdkDrop. If this value
  * contains multiple actions - ie gdk_drag_action_is_unique()
- * returns %FALSE for the result - gdk_drag_finish() must choose
+ * returns %FALSE for the result - gdk_drop_finish() must choose
  * the action to use when accepting the drop. This will only
  * happen if you passed %GDK_ACTION_ASK as one of the possible
  * actions in gdk_drag_status(). %GDK_ACTION_ASK itself will not
@@ -487,7 +487,7 @@ gdk_drop_get_surface (GdkDrop *self)
  *
  * This value may change over the lifetime of the #GdkDrop both
  * as a response to source side actions as well as to calls to
- * gdk_drop_status() or gdk_drag_finish(). The source side will
+ * gdk_drop_status() or gdk_drop_finish(). The source side will
  * not change this value anymore once a drop has started.
  *
  * Returns: The possible #GdkDragActions

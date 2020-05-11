@@ -42,7 +42,7 @@ typedef struct _GtkMenuButton        GtkMenuButton;
  *
  * User-provided callback function to create a popup for @menu_button on demand.
  * This function is called when the popoup of @menu_button is shown, but none has
- * been provided via gtk_menu_buton_set_popup(), gtk_menu_button_set_popover()
+ * been provided via gtk_menu_button_set_popup(), gtk_menu_button_set_popover()
  * or gtk_menu_button_set_menu_model().
  */
 typedef void  (*GtkMenuButtonCreatePopupFunc) (GtkMenuButton *menu_button,

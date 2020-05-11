@@ -41,7 +41,7 @@
  * @Title: GtkSnapshot
  *
  * GtkSnapshot is an auxiliary object that assists in creating #GskRenderNodes
- * in the #GtkWidget::snapshot vfunc. It functions in a similar way to
+ * in the #GdkPaintableInterface.snapshot() vfunc. It functions in a similar way to
  * a cairo context, and maintains a stack of render nodes and their associated
  * transformations.
  *
@@ -50,7 +50,7 @@
  * to change the current node.
  *
  * The typical way to obtain a GtkSnapshot object is as an argument to
- * the #GtkWidget::snapshot vfunc. If you need to create your own GtkSnapshot,
+ * the #GtkWidgetClass.snapshot() vfunc. If you need to create your own GtkSnapshot,
  * use gtk_snapshot_new().
  */
 
@@ -1150,7 +1150,7 @@ gtk_snapshot_pop_collect (GtkSnapshot *snapshot)
  * by @snapshot. After calling this function, it
  * is no longer possible to add more nodes to
  * @snapshot. The only function that should be
- * called after this is gtk_snapshot_unref().
+ * called after this is g_object_unref().
  *
  * Returns: (transfer full): the constructed #GskRenderNode
  */
@@ -1186,7 +1186,7 @@ gtk_snapshot_to_node (GtkSnapshot *snapshot)
  * that was constructed by @snapshot. After calling
  * this function, it is no longer possible to add more
  * nodes to @snapshot. The only function that should be
- * called after this is gtk_snapshot_unref().
+ * called after this is g_object_unref().
  *
  * Returns: (transfer full): a new #GdkPaintable
  */

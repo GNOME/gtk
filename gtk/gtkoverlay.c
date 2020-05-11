@@ -516,8 +516,7 @@ gtk_overlay_get_measure_overlay (GtkOverlay *overlay,
  * @widget: an overlay child of #GtkOverlay
  * @clip_overlay: whether the child should be clipped
  *
- * Convenience function to set the value of the #GtkOverlay:clip-overlay
- * child property for @widget.
+ * Sets whether @widget should be clipped within the parent.
  */
 void
 gtk_overlay_set_clip_overlay (GtkOverlay *overlay,
@@ -540,8 +539,7 @@ gtk_overlay_set_clip_overlay (GtkOverlay *overlay,
  * @overlay: a #GtkOverlay
  * @widget: an overlay child of #GtkOverlay
  *
- * Convenience function to get the value of the #GtkOverlay:clip-overlay
- * child property for @widget.
+ * Gets whether @widget should be clipped within the parent.
  *
  * Returns: whether the widget is clipped within the parent.
  */

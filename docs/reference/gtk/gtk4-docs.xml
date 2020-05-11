@@ -361,6 +361,7 @@
       <xi:include href="xml/gtkdragicon.xml"/>
       <xi:include href="xml/gtkdroptarget.xml"/>
       <xi:include href="xml/gtkdroptargetasync.xml"/>
+      <xi:include href="xml/gtkdropcontrollermotion.xml"/>
     </chapter>
 
   </part>

@@ -759,7 +759,7 @@ gtk_application_class_init (GtkApplicationClass *class)
    * @application: the #GtkApplication which emitted the signal
    *
    * Emitted when the session manager is about to end the session, only
-   * if #GtkApplication::register-session is %TRUE. Applications can
+   * if #GtkApplication:register-session is %TRUE. Applications can
    * connect to this signal and call gtk_application_inhibit() with
    * %GTK_APPLICATION_INHIBIT_LOGOUT to delay the end of the session
    * until state has been saved.
@@ -775,7 +775,7 @@ gtk_application_class_init (GtkApplicationClass *class)
    *
    * Set this property to %TRUE to register with the session manager.
    * This will make GTK+ track the session state (such as the
-   * #GtkApplication::screensaver-active property).
+   * #GtkApplication:screensaver-active property).
    */
   gtk_application_props[PROP_REGISTER_SESSION] =
     g_param_spec_boolean ("register-session",
@@ -789,11 +789,9 @@ gtk_application_class_init (GtkApplicationClass *class)
    *
    * This property is %TRUE if GTK+ believes that the screensaver is
    * currently active. GTK+ only tracks session state (including this)
-   * when #GtkApplication::register-session is set to %TRUE.
+   * when #GtkApplication:register-session is set to %TRUE.
    *
    * Tracking the screensaver state is supported on Linux.
-   *
-   * Since: 3.24
    */
   gtk_application_props[PROP_SCREENSAVER_ACTIVE] =
     g_param_spec_boolean ("screensaver-active",
@@ -853,8 +851,7 @@ gtk_application_class_init (GtkApplicationClass *class)
  * g_application_id_is_valid().
  *
  * If no application ID is given then some features (most notably application 
- * uniqueness) will be disabled. A null application ID is only allowed with 
- * GTK+ 3.6 or later.
+ * uniqueness) will be disabled.
  *
  * Returns: a new #GtkApplication instance
  */

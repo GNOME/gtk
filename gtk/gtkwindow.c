@@ -6263,7 +6263,7 @@ gtk_window_present_with_time (GtkWindow *window,
  * in which case the window will be minimized before it ever appears
  * onscreen.
  *
- * You can track result of this operation via the #GdkSurface:state
+ * You can track result of this operation via the #GdkToplevel:state
  * property.
  */
 void
@@ -6291,7 +6291,7 @@ gtk_window_minimize (GtkWindow *window)
  * could minimize it again, or there may not be a window manager in
  * which case minimization isn’t possible, etc.
  *
- * You can track result of this operation via the #GdkSurface:state
+ * You can track result of this operation via the #GdkToplevel:state
  * property.
  */
 void
@@ -6322,7 +6322,7 @@ gtk_window_unminimize (GtkWindow *window)
  * in which case the window will be maximized when it appears onscreen
  * initially.
  *
- * You can track the result of this operation via the #GdkSurface:state
+ * You can track the result of this operation via the #GdkToplevel:state
  * property, or by listening to notifications on the #GtkWindow:is-maximized
  * property.
  */
@@ -6349,7 +6349,7 @@ gtk_window_maximize (GtkWindow *window)
  * managers honor requests to unmaximize. But normally the window will
  * end up unmaximized. Just don’t write code that crashes if not.
  *
- * You can track the result of this operation via the #GdkSurface:state
+ * You can track the result of this operation via the #GdkToplevel:state
  * property, or by listening to notifications on the #GtkWindow:is-maximized
  * property.
  */
@@ -6377,7 +6377,7 @@ gtk_window_unmaximize (GtkWindow *window)
  * windows. But normally the window will end up fullscreen. Just
  * don’t write code that crashes if not.
  *
- * You can track iconification via the #GdkSurface::state property
+ * You can track iconification via the #GdkToplevel:state property
  **/
 void
 gtk_window_fullscreen (GtkWindow *window)
@@ -6412,7 +6412,7 @@ unset_fullscreen_monitor (GtkWindow *window)
  * Asks to place @window in the fullscreen state. Note that you shouldn't assume
  * the window is definitely full screen afterward.
  *
- * You can track iconification via the #GdkSurface::state property
+ * You can track iconification via the #GdkToplevel:state property
  */
 void
 gtk_window_fullscreen_on_monitor (GtkWindow  *window,
@@ -6449,7 +6449,7 @@ gtk_window_fullscreen_on_monitor (GtkWindow  *window,
  * windows. But normally the window will end up restored to its normal
  * state. Just don’t write code that crashes if not.
  *
- * You can track iconification via the #GdkSurface::state property
+ * You can track iconification via the #GdkToplevel:state property
  **/
 void
 gtk_window_unfullscreen (GtkWindow *window)

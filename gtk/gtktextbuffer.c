@@ -482,7 +482,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   /**
    * GtkTextBuffer:can-undo:
    *
-   * The :can-undo property denotes that the buffer can undo the last
+   * The #GtkTextBuffer:can-undo property denotes that the buffer can undo the last
    * applied action.
    */
   text_buffer_props[PROP_CAN_UNDO] =
@@ -495,7 +495,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   /**
    * GtkTextBuffer:can-redo:
    *
-   * The :can-redo property denotes that the buffer can reapply the
+   * The #GtkTextBuffer:can-redo property denotes that the buffer can reapply the
    * last undone action.
    */
   text_buffer_props[PROP_CAN_REDO] =
@@ -508,8 +508,8 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   /**
    * GtkTextBuffer:enable-undo:
    *
-   * The :enable-undo property denotes if support for undoing and redoing
-   * changes to the buffer is allowed.
+   * The #GtkTextBuffer:enable-undo property denotes if support for undoing and
+   * redoing changes to the buffer is allowed.
    */
   text_buffer_props[PROP_ENABLE_UNDO] =
     g_param_spec_boolean ("enable-undo",
@@ -601,7 +601,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * @location: position to insert @paintable in @textbuffer
    * @paintable: the #GdkPaintable to be inserted
    *
-   * The ::insert-paintable signal is emitted to insert a #GdkPaintable
+   * The #GtkTextBuffer::insert-paintable signal is emitted to insert a #GdkPaintable
    * in a #GtkTextBuffer. Insertion actually occurs in the default handler.
    *
    * Note that if your handler runs before the default handler it must not
@@ -633,7 +633,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * @location: position to insert @anchor in @textbuffer
    * @anchor: the #GtkTextChildAnchor to be inserted
    * 
-   * The ::insert-child-anchor signal is emitted to insert a
+   * The #GtkTextBuffer::insert-child-anchor signal is emitted to insert a
    * #GtkTextChildAnchor in a #GtkTextBuffer.
    * Insertion actually occurs in the default handler.
    * 
@@ -665,7 +665,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * @start: the start of the range to be deleted
    * @end: the end of the range to be deleted
    * 
-   * The ::delete-range signal is emitted to delete a range 
+   * The #GtkTextBuffer::delete-range signal is emitted to delete a range 
    * from a #GtkTextBuffer. 
    * 
    * Note that if your handler runs before the default handler it must not 
@@ -696,7 +696,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * GtkTextBuffer::changed:
    * @textbuffer: the object which received the signal
    * 
-   * The ::changed signal is emitted when the content of a #GtkTextBuffer 
+   * The #GtkTextBuffer::changed signal is emitted when the content of a #GtkTextBuffer 
    * has changed.
    */
   signals[CHANGED] =
@@ -713,7 +713,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * GtkTextBuffer::modified-changed:
    * @textbuffer: the object which received the signal
    * 
-   * The ::modified-changed signal is emitted when the modified bit of a 
+   * The #GtkTextBuffer::modified-changed signal is emitted when the modified bit of a 
    * #GtkTextBuffer flips.
    * 
    * See also:
@@ -735,7 +735,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * @location: The location of @mark in @textbuffer
    * @mark: The mark that is set
    * 
-   * The ::mark-set signal is emitted as notification
+   * The #GtkTextBuffer::mark-set signal is emitted as notification
    * after a #GtkTextMark is set.
    * 
    * See also: 
@@ -762,7 +762,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * @textbuffer: the object which received the signal
    * @mark: The mark that was deleted
    * 
-   * The ::mark-deleted signal is emitted as notification
+   * The #GtkTextBuffer::mark-deleted signal is emitted as notification
    * after a #GtkTextMark is deleted. 
    * 
    * See also:
@@ -786,7 +786,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * @start: the start of the range the tag is applied to
    * @end: the end of the range the tag is applied to
    * 
-   * The ::apply-tag signal is emitted to apply a tag to a
+   * The #GtkTextBuffer::apply-tag signal is emitted to apply a tag to a
    * range of text in a #GtkTextBuffer. 
    * Applying actually occurs in the default handler.
    * 
@@ -822,8 +822,8 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * @start: the start of the range the tag is removed from
    * @end: the end of the range the tag is removed from
    * 
-   * The ::remove-tag signal is emitted to remove all occurrences of @tag from
-   * a range of text in a #GtkTextBuffer. 
+   * The #GtkTextBuffer::remove-tag signal is emitted to remove all occurrences
+   * of @tag from a range of text in a #GtkTextBuffer. 
    * Removal actually occurs in the default handler.
    * 
    * Note that if your handler runs before the default handler it must not 
@@ -852,7 +852,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * GtkTextBuffer::begin-user-action:
    * @textbuffer: the object which received the signal
    * 
-   * The ::begin-user-action signal is emitted at the beginning of a single
+   * The #GtkTextBuffer::begin-user-action signal is emitted at the beginning of a single
    * user-visible operation on a #GtkTextBuffer.
    * 
    * See also: 
@@ -877,7 +877,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * GtkTextBuffer::end-user-action:
    * @textbuffer: the object which received the signal
    * 
-   * The ::end-user-action signal is emitted at the end of a single
+   * The #GtkTextBuffer::end-user-action signal is emitted at the end of a single
    * user-visible operation on the #GtkTextBuffer.
    * 
    * See also: 
@@ -3764,7 +3764,7 @@ find_selection_clipboard (GtkTextBuffer *buffer,
  * 
  * Adds @clipboard to the list of clipboards in which the selection 
  * contents of @buffer are available. In most cases, @clipboard will be 
- * the #GdkClipboard returned by gdk_widget_get_primary_clipboard()
+ * the #GdkClipboard returned by gtk_widget_get_primary_clipboard()
  * for a view of @buffer.
  **/
 void
@@ -5122,7 +5122,7 @@ gtk_text_buffer_set_enable_undo (GtkTextBuffer *buffer,
 
 /**
  * gtk_text_buffer_begin_irreversible_action:
- * @buffer: a #Gtktextbuffer
+ * @buffer: a #GtkTextBuffer
  *
  * Denotes the beginning of an action that may not be undone. This will cause
  * any previous operations in the undo/redo queue to be cleared.
@@ -5144,7 +5144,7 @@ gtk_text_buffer_begin_irreversible_action (GtkTextBuffer *buffer)
 
 /**
  * gtk_text_buffer_end_irreversible_action:
- * @buffer: a #Gtktextbuffer
+ * @buffer: a #GtkTextBuffer
  *
  * Denotes the end of an action that may not be undone. This will cause
  * any previous operations in the undo/redo queue to be cleared.
