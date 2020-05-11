@@ -200,7 +200,7 @@ struct _GtkWidget
  *   redraws accordingly. The default implementation will take care of this for
  *   all the default CSS properties, so implementations must chain up.
  * @system_setting_changed: Emitted when a system setting was changed. Must chain up.
- * @snapshot: Vfunc for gtk_widget_snapshot().
+ * @snapshot: Vfunc called when a new snapshot of the widget has to be taken.
  * @contains: Vfunc for gtk_widget_contains().
  */
 struct _GtkWidgetClass

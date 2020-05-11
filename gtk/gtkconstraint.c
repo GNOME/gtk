@@ -560,7 +560,7 @@ gtk_constraint_is_attached (GtkConstraint *constraint)
  * @constraint: a #GtkConstraint
  *
  * Checks whether the @constraint describes a relation between an attribute
- * on the #GtkConstraint:target-widget and a constant value.
+ * on the #GtkConstraint:target and a constant value.
  *
  * Returns: %TRUE if the constraint is a constant relation
  */

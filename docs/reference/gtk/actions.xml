@@ -208,8 +208,8 @@
 
      <para>
        You can convert between detailed action names and split-out
-       action names and target values using g_action_parse_detailed_action_name()
-       and g_action_print_detailed_action_name() but usually you will
+       action names and target values using g_action_parse_detailed_name()
+       and g_action_print_detailed_name() but usually you will
        not need to. Most APIs will provide both ways of specifying
        actions with targets.
      </para>

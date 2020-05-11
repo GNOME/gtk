@@ -24,7 +24,7 @@
 #include "gdkintl.h"
 
 /**
- * SECTION:gdkdragsurface
+ * SECTION:dnd
  * @Short_description: Interface for drag surface surfaces
  * @Title: Drag surfaces
  *

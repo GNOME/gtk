@@ -1910,7 +1910,7 @@ gdk_surface_get_device_cursor (GdkSurface *surface,
  * @cursor: a #GdkCursor
  *
  * Sets a specific #GdkCursor for a given device when it gets inside @surface.
- * Use gdk_cursor_new_fromm_name() or gdk_cursor_new_from_texture() to create
+ * Use gdk_cursor_new_from_name() or gdk_cursor_new_from_texture() to create
  * the cursor. To make the cursor invisible, use %GDK_BLANK_CURSOR. Passing
  * %NULL for the @cursor argument to gdk_surface_set_cursor() means that
  * @surface will use the cursor of its parent surface. Most surfaces should
@@ -2674,7 +2674,7 @@ gdk_surface_get_unscaled_size (GdkSurface *surface,
  * GTK will update this property automatically if
  * the @surface background is opaque, as we know where the opaque regions
  * are. If your surface background is not opaque, please update this
- * property in your #GtkWidget:css-changed handler.
+ * property in your #GtkWidgetClass.css_changed() handler.
  */
 void
 gdk_surface_set_opaque_region (GdkSurface      *surface,

@@ -47,7 +47,7 @@
  * The #GtkEmojiChooser popover is used by text widgets such as #GtkEntry or
  * #GtkTextView to offer users a convenient way to insert Emoji characters.
  *
- * GtkEmojiChooser emits the #GtkEmojiChooser:emoji-picked signal when an
+ * GtkEmojiChooser emits the #GtkEmojiChooser::emoji-picked signal when an
  * Emoji is selected.
  *
  * # CSS nodes
@@ -1078,7 +1078,7 @@ gtk_emoji_chooser_class_init (GtkEmojiChooserClass *klass)
  *
  * Creates a new #GtkEmojiChooser.
  *
- * Returns: a new #GtkEmojiChoser
+ * Returns: a new #GtkEmojiChooser
  */
 GtkWidget *
 gtk_emoji_chooser_new (void)
