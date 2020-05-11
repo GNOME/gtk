@@ -79,7 +79,7 @@ create_tree_blaat (void)
 			    2, FALSE,
                             -1);
 
-        gtk_widget_destroy (cellview);
+        g_object_unref (g_object_ref_sink (cellview));
 
         return GTK_TREE_MODEL (store);
 }
@@ -101,7 +101,7 @@ create_empty_list_blaat (void)
                             1, "dialog-warning",
                             -1);
 
-        gtk_widget_destroy (cellview);
+        g_object_unref (g_object_ref_sink (cellview));
 
         return GTK_TREE_MODEL (store);
 }
@@ -153,7 +153,7 @@ populate_list_blaat (gpointer data)
 		      1, "document-open",
 		      -1);
   
-  gtk_widget_destroy (cellview);  
+  g_object_unref (g_object_ref_sink (cellview));
 }
 
 static GtkTreeModel *
@@ -203,7 +203,7 @@ create_list_blaat (void)
                             1, "document-open",
                             -1);
 
-        gtk_widget_destroy (cellview);
+        g_object_unref (g_object_ref_sink (cellview));
 
         return GTK_TREE_MODEL (store);
 }

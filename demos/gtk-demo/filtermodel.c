@@ -125,8 +125,7 @@ do_filtermodel (GtkWidget *do_widget)
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window1"));
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       store = (GtkListStore*)gtk_builder_get_object (builder, "liststore1");
 
@@ -199,7 +198,7 @@ do_filtermodel (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

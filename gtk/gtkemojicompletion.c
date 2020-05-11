@@ -548,7 +548,7 @@ populate_completion (GtkEmojiCompletion *completion,
                      const char         *text,
                      guint               offset)
 {
-  GList *children, *l;
+  GtkWidget *child;
   guint n_matches;
   guint n_added;
   GVariantIter iter;
@@ -562,10 +562,8 @@ populate_completion (GtkEmojiCompletion *completion,
     }
   completion->offset = offset;
 
-  children = gtk_container_get_children (GTK_CONTAINER (completion->list));
-  for (l = children; l; l = l->next)
-    gtk_widget_destroy (GTK_WIDGET (l->data));
-  g_list_free (children);
+  while ((child = gtk_widget_get_first_child (completion->list)))
+    gtk_container_remove (GTK_CONTAINER (completion->list), child);
 
   completion->active = NULL;
 

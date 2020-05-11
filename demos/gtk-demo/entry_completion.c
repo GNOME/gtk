@@ -50,9 +50,7 @@ do_entry_completion (GtkWidget *do_widget)
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Entry Completion");
       gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
-
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
       gtk_widget_set_margin_start (vbox, 5);
@@ -88,7 +86,7 @@ do_entry_completion (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

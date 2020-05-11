@@ -192,11 +192,22 @@ gtk_color_chooser_dialog_set_property (GObject      *object,
 }
 
 static void
+gtk_color_chooser_dialog_dispose (GObject *object)
+{
+  GtkColorChooserDialog *cc = GTK_COLOR_CHOOSER_DIALOG (object);
+
+  g_clear_pointer (&cc->chooser, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (gtk_color_chooser_dialog_parent_class)->dispose (object);
+}
+
+static void
 gtk_color_chooser_dialog_class_init (GtkColorChooserDialogClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
+  object_class->dispose = gtk_color_chooser_dialog_dispose;
   object_class->get_property = gtk_color_chooser_dialog_get_property;
   object_class->set_property = gtk_color_chooser_dialog_set_property;
 

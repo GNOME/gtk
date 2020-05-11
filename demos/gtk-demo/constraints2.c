@@ -26,9 +26,9 @@ interactive_grid_dispose (GObject *object)
 {
   InteractiveGrid *self = INTERACTIVE_GRID (object);
 
-  g_clear_pointer (&self->button1, gtk_widget_destroy);
-  g_clear_pointer (&self->button2, gtk_widget_destroy);
-  g_clear_pointer (&self->button3, gtk_widget_destroy);
+  g_clear_pointer (&self->button1, gtk_widget_unparent);
+  g_clear_pointer (&self->button2, gtk_widget_unparent);
+  g_clear_pointer (&self->button3, gtk_widget_unparent);
 
   G_OBJECT_CLASS (interactive_grid_parent_class)->dispose (object);
 }
@@ -219,8 +219,7 @@ do_constraints2 (GtkWidget *do_widget)
      header = gtk_header_bar_new ();
      gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), FALSE);
      gtk_window_set_titlebar (GTK_WINDOW (window), header);
-     g_signal_connect (window, "destroy",
-                       G_CALLBACK (gtk_widget_destroyed), &window);
+     g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
      gtk_window_set_child (GTK_WINDOW (window), box);
@@ -234,13 +233,13 @@ do_constraints2 (GtkWidget *do_widget)
      gtk_container_add (GTK_CONTAINER (box), button);
      gtk_widget_set_hexpand (grid, TRUE);
      g_signal_connect_swapped (button, "clicked",
-                               G_CALLBACK (gtk_widget_destroy), window);
+                               G_CALLBACK (gtk_window_destroy), window);
    }
 
  if (!gtk_widget_get_visible (window))
    gtk_widget_show (window);
  else
-   gtk_widget_destroy (window);
+   gtk_window_destroy (GTK_WINDOW (window));
 
  return window;
 }

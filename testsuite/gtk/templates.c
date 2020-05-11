@@ -50,11 +50,11 @@ test_dialog_basic (void)
 {
   GtkWidget *dialog;
 
-  dialog = gtk_dialog_new();
+  dialog = gtk_dialog_new ();
   g_assert (GTK_IS_DIALOG (dialog));
   g_assert (gtk_dialog_get_content_area (GTK_DIALOG (dialog)) != NULL);
 
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void
@@ -67,7 +67,7 @@ test_dialog_override_property (void)
                          NULL);
   g_assert (GTK_IS_DIALOG (dialog));
 
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void
@@ -76,11 +76,11 @@ test_message_dialog_basic (void)
   GtkWidget *dialog;
 
   dialog = gtk_message_dialog_new (NULL, 0,
-				   GTK_MESSAGE_INFO,
-				   GTK_BUTTONS_CLOSE,
-				   "Do it hard !");
+                                   GTK_MESSAGE_INFO,
+                                   GTK_BUTTONS_CLOSE,
+                                   "Do it hard !");
   g_assert (GTK_IS_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void
@@ -90,7 +90,7 @@ test_about_dialog_basic (void)
 
   dialog = gtk_about_dialog_new ();
   g_assert (GTK_IS_ABOUT_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void
@@ -101,7 +101,7 @@ test_about_dialog_show (void)
   dialog = gtk_about_dialog_new ();
   g_assert (GTK_IS_ABOUT_DIALOG (dialog));
   show_and_wait (dialog);
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void
@@ -111,7 +111,7 @@ test_info_bar_basic (void)
 
   infobar = gtk_info_bar_new ();
   g_assert (GTK_IS_INFO_BAR (infobar));
-  gtk_widget_destroy (infobar);
+  g_object_unref (g_object_ref_sink (infobar));
 }
 
 static void
@@ -123,7 +123,7 @@ test_lock_button_basic (void)
   permission = g_simple_permission_new (TRUE);
   button = gtk_lock_button_new (permission);
   g_assert (GTK_IS_LOCK_BUTTON (button));
-  gtk_widget_destroy (button);
+  g_object_unref (g_object_ref_sink (button));
   g_object_unref (permission);
 }
 
@@ -134,7 +134,7 @@ test_assistant_basic (void)
 
   widget = gtk_assistant_new ();
   g_assert (GTK_IS_ASSISTANT (widget));
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (widget));
 }
 
 static void
@@ -145,7 +145,7 @@ test_assistant_show (void)
   widget = gtk_assistant_new ();
   g_assert (GTK_IS_ASSISTANT (widget));
   show_and_wait (widget);
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (widget));
 }
 
 static void
@@ -155,7 +155,7 @@ test_scale_button_basic (void)
 
   widget = gtk_scale_button_new (0, 100, 10, NULL);
   g_assert (GTK_IS_SCALE_BUTTON (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (g_object_ref_sink (widget));
 }
 
 static void
@@ -165,7 +165,7 @@ test_volume_button_basic (void)
 
   widget = gtk_volume_button_new ();
   g_assert (GTK_IS_VOLUME_BUTTON (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (g_object_ref_sink (widget));
 }
 
 static void
@@ -175,7 +175,7 @@ test_statusbar_basic (void)
 
   widget = gtk_statusbar_new ();
   g_assert (GTK_IS_STATUSBAR (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (g_object_ref_sink (widget));
 }
 
 static void
@@ -185,7 +185,7 @@ test_search_bar_basic (void)
 
   widget = gtk_search_bar_new ();
   g_assert (GTK_IS_SEARCH_BAR (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (g_object_ref_sink (widget));
 }
 
 static void
@@ -195,7 +195,7 @@ test_action_bar_basic (void)
 
   widget = gtk_action_bar_new ();
   g_assert (GTK_IS_ACTION_BAR (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (g_object_ref_sink (widget));
 }
 
 static void
@@ -205,7 +205,7 @@ test_app_chooser_widget_basic (void)
 
   widget = gtk_app_chooser_widget_new (NULL);
   g_assert (GTK_IS_APP_CHOOSER_WIDGET (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (g_object_ref_sink (widget));
 }
 
 static void
@@ -224,7 +224,7 @@ test_app_chooser_dialog_basic (void)
   g_timeout_add (500, main_loop_quit_cb, &done);
   while (!done)
     g_main_context_iteration (NULL,  TRUE);
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (widget));
 }
 
 static void
@@ -235,7 +235,7 @@ test_color_chooser_dialog_basic (void)
   /* This test also tests the internal GtkColorEditor widget */
   widget = gtk_color_chooser_dialog_new (NULL, NULL);
   g_assert (GTK_IS_COLOR_CHOOSER_DIALOG (widget));
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (widget));
 }
 
 static void
@@ -247,15 +247,15 @@ test_color_chooser_dialog_show (void)
   widget = gtk_color_chooser_dialog_new (NULL, NULL);
   g_assert (GTK_IS_COLOR_CHOOSER_DIALOG (widget));
   show_and_wait (widget);
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (widget));
 }
 
 /* Avoid warnings from GVFS-RemoteVolumeMonitor */
 static gboolean
 ignore_gvfs_warning (const gchar *log_domain,
-		     GLogLevelFlags log_level,
-		     const gchar *message,
-		     gpointer user_data)
+                     GLogLevelFlags log_level,
+                     const gchar *message,
+                     gpointer user_data)
 {
   if (g_strcmp0 (log_domain, "GVFS-RemoteVolumeMonitor") == 0)
     return FALSE;
@@ -288,7 +288,7 @@ test_file_chooser_widget_basic (void)
   while (!done)
     g_main_context_iteration (NULL,  TRUE);
 
-  gtk_widget_destroy (widget);
+  g_object_unref (g_object_ref_sink (widget));
 }
 
 static void
@@ -300,9 +300,9 @@ test_file_chooser_dialog_basic (void)
   g_test_log_set_fatal_handler (ignore_gvfs_warning, NULL);
 
   widget = gtk_file_chooser_dialog_new ("The Dialog", NULL,
-					GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-					"_OK", GTK_RESPONSE_OK,
-					NULL);
+                                        GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+                                        "_OK", GTK_RESPONSE_OK,
+                                        NULL);
 
   g_assert (GTK_IS_FILE_CHOOSER_DIALOG (widget));
   done = FALSE;
@@ -310,7 +310,7 @@ test_file_chooser_dialog_basic (void)
   while (!done)
     g_main_context_iteration (NULL,  TRUE);
 
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (widget));
 }
 
 static void
@@ -327,7 +327,7 @@ test_file_chooser_dialog_show (void)
 
   g_assert (GTK_IS_FILE_CHOOSER_DIALOG (widget));
   show_and_wait (widget);
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (widget));
 }
 
 static void
@@ -344,7 +344,7 @@ test_file_chooser_button_basic (void)
   while (!done)
     g_main_context_iteration (NULL,  TRUE);
 
-  gtk_widget_destroy (widget);
+  g_object_unref (g_object_ref_sink (widget));
 }
 
 static void
@@ -354,7 +354,7 @@ test_font_button_basic (void)
 
   widget = gtk_font_button_new ();
   g_assert (GTK_IS_FONT_BUTTON (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (g_object_ref_sink (widget));
 }
 
 static void
@@ -364,7 +364,7 @@ test_font_chooser_widget_basic (void)
 
   widget = gtk_font_chooser_widget_new ();
   g_assert (GTK_IS_FONT_CHOOSER_WIDGET (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (g_object_ref_sink (widget));
 }
 
 static void
@@ -374,7 +374,7 @@ test_font_chooser_dialog_basic (void)
 
   widget = gtk_font_chooser_dialog_new ("Choose a font !", NULL);
   g_assert (GTK_IS_FONT_CHOOSER_DIALOG (widget));
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (widget));
 }
 
 static void
@@ -385,7 +385,7 @@ test_font_chooser_dialog_show (void)
   widget = gtk_font_chooser_dialog_new ("Choose a font !", NULL);
   g_assert (GTK_IS_FONT_CHOOSER_DIALOG (widget));
   show_and_wait (widget);
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (widget));
 }
 
 #ifdef HAVE_UNIX_PRINT_WIDGETS
@@ -396,7 +396,7 @@ test_page_setup_unix_dialog_basic (void)
 
   widget = gtk_page_setup_unix_dialog_new ("Setup your Page !", NULL);
   g_assert (GTK_IS_PAGE_SETUP_UNIX_DIALOG (widget));
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (widget));
 }
 
 static void
@@ -407,7 +407,7 @@ test_page_setup_unix_dialog_show (void)
   widget = gtk_page_setup_unix_dialog_new ("Setup your Page !", NULL);
   g_assert (GTK_IS_PAGE_SETUP_UNIX_DIALOG (widget));
   show_and_wait (widget);
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (widget));
 }
 
 static void
@@ -417,7 +417,7 @@ test_print_unix_dialog_basic (void)
 
   widget = gtk_print_unix_dialog_new ("Go Print !", NULL);
   g_assert (GTK_IS_PRINT_UNIX_DIALOG (widget));
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (widget));
 }
 
 static void
@@ -428,7 +428,7 @@ test_print_unix_dialog_show (void)
   widget = gtk_print_unix_dialog_new ("Go Print !", NULL);
   g_assert (GTK_IS_PRINT_UNIX_DIALOG (widget));
   show_and_wait (widget);
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (widget));
 }
 #endif
 
@@ -442,7 +442,7 @@ main (int argc, char **argv)
   /* initialize test program */
   gtk_test_init (&argc, &argv);
 
-  /* This environment variable cooperates with gtk_widget_destroy()
+  /* This environment variable cooperates with widget dispose()
    * to assert that all automated compoenents are properly finalized
    * when a given composite widget is destroyed.
    */

@@ -25,8 +25,8 @@ do_headerbar (GtkWidget *do_widget)
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),  gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Welcome to Facebook - Log in, sign up or learn more");
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
+
       gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
 
       header = gtk_header_bar_new ();
@@ -58,7 +58,7 @@ do_headerbar (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

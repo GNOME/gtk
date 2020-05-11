@@ -405,16 +405,13 @@ do_paint (GtkWidget *toplevel)
       gtk_header_bar_pack_end (GTK_HEADER_BAR (headerbar), colorbutton);
       gtk_window_set_titlebar (GTK_WINDOW (window), headerbar);
       gtk_window_set_title (GTK_WINDOW (window), "Paint");
-
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
-
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
     }
 
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

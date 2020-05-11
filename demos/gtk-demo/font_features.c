@@ -1025,7 +1025,7 @@ denorm_coord (hb_ot_var_axis_info_t *axis, int coord)
 static void
 update_font_variations (void)
 {
-  GtkWidget *child, *next;
+  GtkWidget *child;
   PangoFont *pango_font = NULL;
   hb_font_t *hb_font;
   hb_face_t *hb_face;
@@ -1037,12 +1037,8 @@ update_font_variations (void)
   int i;
 
   child = gtk_widget_get_first_child (variations_grid);
-  while (child != NULL)
-    {
-      next = gtk_widget_get_next_sibling (child);
-      gtk_widget_destroy (child);
-      child = next;
-    }
+  while ((child = gtk_widget_get_first_child (variations_grid)))
+    gtk_container_remove (GTK_CONTAINER (variations_grid), child);
 
   instance_combo = NULL;
 
@@ -1333,8 +1329,7 @@ do_font_features (GtkWidget *do_widget)
 
       font_features_font_changed ();
 
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       g_object_unref (builder);
 
@@ -1344,7 +1339,7 @@ do_font_features (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_window_present (GTK_WINDOW (window));
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

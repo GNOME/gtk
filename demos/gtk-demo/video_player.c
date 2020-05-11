@@ -23,7 +23,7 @@ open_dialog_response_cb (GtkWidget *dialog,
       g_object_unref (file);
     }
 
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void
@@ -67,8 +67,7 @@ do_video_player (GtkWidget *do_widget)
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Video Player");
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       video = gtk_video_new ();
       gtk_window_set_child (GTK_WINDOW (window), video);
@@ -89,7 +88,7 @@ do_video_player (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

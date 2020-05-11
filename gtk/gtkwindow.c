@@ -197,7 +197,6 @@ typedef struct
   gint title_height;
   GtkWidget *title_box;
   GtkWidget *titlebar;
-  GtkWidget *popup_menu;
   GtkWidget *key_press_focus;
 
   GdkMonitor *initial_fullscreen_monitor;
@@ -219,7 +218,6 @@ typedef struct
   guint    deletable                 : 1;
   guint    destroy_with_parent       : 1;
   guint    fullscreen_initially      : 1;
-  guint    has_user_ref_count        : 1;
   guint    minimize_initially        : 1;
   guint    is_active                 : 1;
   guint    maximize_initially        : 1;
@@ -1204,7 +1202,7 @@ gtk_window_close (GtkWindow *window)
   g_object_ref (window);
 
   if (!gtk_window_emit_close_request (window))
-    gtk_widget_destroy (GTK_WIDGET (window));
+    gtk_window_destroy (window);
 
   g_object_unref (window);
 }
@@ -1555,7 +1553,6 @@ gtk_window_init (GtkWindow *window)
   priv->initial_fullscreen_monitor = NULL;
 
   g_object_ref_sink (window);
-  priv->has_user_ref_count = TRUE;
 
 #ifdef GDK_WINDOWING_X11
   g_signal_connect (gtk_settings_get_for_display (priv->display),
@@ -1981,7 +1978,7 @@ gtk_window_native_interface_init (GtkNativeInterface *iface)
  * the window internally, gtk_window_new() does not return a reference
  * to the caller.
  *
- * To delete a #GtkWindow, call gtk_widget_destroy().
+ * To delete a #GtkWindow, call gtk_window_destroy().
  * 
  * Returns: a new #GtkWindow.
  **/
@@ -2368,30 +2365,11 @@ gtk_window_dispose (GObject *object)
 {
   GtkWindow *window = GTK_WINDOW (object);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  guint i;
 
   gtk_window_release_application (window);
 
-  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (toplevel_list)); i++)
-    {
-      gpointer item = g_list_model_get_item (G_LIST_MODEL (toplevel_list), i);
-      if (item == window)
-        {
-          g_list_store_remove (toplevel_list, i);
-          break;
-        }
-      else
-        g_object_unref (item);
-    }
-
   if (priv->transient_parent)
     gtk_window_set_transient_for (window, NULL);
-
-  if (priv->has_user_ref_count)
-    {
-      priv->has_user_ref_count = FALSE;
-      g_object_unref (window);
-    }
 
   if (priv->group)
     gtk_window_group_remove_window (priv->group, window);
@@ -2410,41 +2388,20 @@ gtk_window_dispose (GObject *object)
 }
 
 static void
-parent_destroyed_callback (GtkWindow *parent, GtkWindow *child)
+gtk_window_transient_parent_destroyed (GtkWindow *parent,
+                                       GtkWindow *window)
 {
-  gtk_widget_destroy (GTK_WIDGET (child));
-}
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (window));
 
-static void
-connect_parent_destroyed (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  if (priv->transient_parent)
-    {
-      g_signal_connect (priv->transient_parent,
-                        "destroy",
-                        G_CALLBACK (parent_destroyed_callback),
-                        window);
-    }  
-}
-
-static void
-disconnect_parent_destroyed (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  if (priv->transient_parent)
-    {
-      g_signal_handlers_disconnect_by_func (priv->transient_parent,
-					    parent_destroyed_callback,
-					    window);
-    }
+  if (priv->destroy_with_parent)
+    gtk_window_destroy (window);
+  else
+    priv->transient_parent = NULL;
 }
 
 static void
 gtk_window_transient_parent_realized (GtkWidget *parent,
-				      GtkWidget *window)
+                                      GtkWidget *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (window));
   GtkWindowPrivate *parent_priv = gtk_window_get_instance_private (GTK_WINDOW (parent));
@@ -2454,7 +2411,7 @@ gtk_window_transient_parent_realized (GtkWidget *parent,
 
 static void
 gtk_window_transient_parent_unrealized (GtkWidget *parent,
-					GtkWidget *window)
+                                        GtkWidget *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (window));
   if (_gtk_widget_get_realized (window))
@@ -2462,7 +2419,7 @@ gtk_window_transient_parent_unrealized (GtkWidget *parent,
 }
 
 static void
-gtk_window_transient_parent_display_changed (GtkWindow	*parent,
+gtk_window_transient_parent_display_changed (GtkWindow  *parent,
                                              GParamSpec *pspec,
                                              GtkWindow  *window)
 {
@@ -2471,7 +2428,7 @@ gtk_window_transient_parent_display_changed (GtkWindow	*parent,
   gtk_window_set_display (window, parent_priv->display);
 }
 
-static void       
+static void
 gtk_window_unset_transient_for (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
@@ -2479,29 +2436,25 @@ gtk_window_unset_transient_for (GtkWindow *window)
   if (priv->transient_parent)
     {
       g_signal_handlers_disconnect_by_func (priv->transient_parent,
-					    gtk_window_transient_parent_realized,
-					    window);
+                                            gtk_window_transient_parent_realized,
+                                            window);
       g_signal_handlers_disconnect_by_func (priv->transient_parent,
-					    gtk_window_transient_parent_unrealized,
-					    window);
+                                            gtk_window_transient_parent_unrealized,
+                                            window);
       g_signal_handlers_disconnect_by_func (priv->transient_parent,
-					    gtk_window_transient_parent_display_changed,
-					    window);
+                                            gtk_window_transient_parent_display_changed,
+                                            window);
       g_signal_handlers_disconnect_by_func (priv->transient_parent,
-					    gtk_widget_destroyed,
-					    &priv->transient_parent);
-
-      if (priv->destroy_with_parent)
-        disconnect_parent_destroyed (window);
+                                            gtk_window_transient_parent_destroyed,
+                                            window);
 
       priv->transient_parent = NULL;
 
       if (priv->transient_parent_group)
-	{
-	  priv->transient_parent_group = FALSE;
-	  gtk_window_group_remove_window (priv->group,
-					  window);
-	}
+        {
+          priv->transient_parent_group = FALSE;
+          gtk_window_group_remove_window (priv->group, window);
+        }
     }
 }
 
@@ -2524,8 +2477,8 @@ gtk_window_unset_transient_for (GtkWindow *window)
  * much as the window manager would have done on X.
  */
 void
-gtk_window_set_transient_for  (GtkWindow *window,
-			       GtkWindow *parent)
+gtk_window_set_transient_for (GtkWindow *window,
+                              GtkWindow *parent)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
@@ -2538,9 +2491,8 @@ gtk_window_set_transient_for  (GtkWindow *window,
       if (_gtk_widget_get_realized (GTK_WIDGET (window)) &&
           _gtk_widget_get_realized (GTK_WIDGET (priv->transient_parent)) &&
           (!parent || !_gtk_widget_get_realized (GTK_WIDGET (parent))))
-	gtk_window_transient_parent_unrealized (GTK_WIDGET (priv->transient_parent),
-						GTK_WIDGET (window));
-
+        gtk_window_transient_parent_unrealized (GTK_WIDGET (priv->transient_parent),
+                                                GTK_WIDGET (window));
       gtk_window_unset_transient_for (window);
     }
 
@@ -2549,34 +2501,27 @@ gtk_window_set_transient_for  (GtkWindow *window,
   if (parent)
     {
       GtkWindowPrivate *parent_priv = gtk_window_get_instance_private (parent);
-      g_signal_connect (parent, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&priv->transient_parent);
       g_signal_connect (parent, "realize",
-			G_CALLBACK (gtk_window_transient_parent_realized),
-			window);
+                        G_CALLBACK (gtk_window_transient_parent_realized), window);
       g_signal_connect (parent, "unrealize",
-			G_CALLBACK (gtk_window_transient_parent_unrealized),
-			window);
+                        G_CALLBACK (gtk_window_transient_parent_unrealized), window);
       g_signal_connect (parent, "notify::display",
-			G_CALLBACK (gtk_window_transient_parent_display_changed),
-			window);
+                        G_CALLBACK (gtk_window_transient_parent_display_changed), window);
+      g_signal_connect (parent, "destroy",
+                        G_CALLBACK (gtk_window_transient_parent_destroyed), window);
 
       gtk_window_set_display (window, parent_priv->display);
 
-      if (priv->destroy_with_parent)
-        connect_parent_destroyed (window);
-      
+
       if (_gtk_widget_get_realized (GTK_WIDGET (window)) &&
-	  _gtk_widget_get_realized (GTK_WIDGET (parent)))
-	gtk_window_transient_parent_realized (GTK_WIDGET (parent),
-					      GTK_WIDGET (window));
+          _gtk_widget_get_realized (GTK_WIDGET (parent)))
+        gtk_window_transient_parent_realized (GTK_WIDGET (parent), GTK_WIDGET (window));
 
       if (parent_priv->group)
-	{
-	  gtk_window_group_add_window (parent_priv->group, window);
-	  priv->transient_parent_group = TRUE;
-	}
+        {
+          gtk_window_group_add_window (parent_priv->group, window);
+          priv->transient_parent_group = TRUE;
+        }
     }
 
   update_window_actions (window);
@@ -2710,8 +2655,8 @@ gtk_window_set_application (GtkWindow      *window,
  * associated with, for example.
  **/
 void
-gtk_window_set_destroy_with_parent  (GtkWindow *window,
-                                     gboolean   setting)
+gtk_window_set_destroy_with_parent (GtkWindow *window,
+                                    gboolean   setting)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
@@ -2719,15 +2664,6 @@ gtk_window_set_destroy_with_parent  (GtkWindow *window,
 
   if (priv->destroy_with_parent == (setting != FALSE))
     return;
-
-  if (priv->destroy_with_parent)
-    {
-      disconnect_parent_destroyed (window);
-    }
-  else
-    {
-      connect_parent_destroyed (window);
-    }
 
   priv->destroy_with_parent = setting;
 
@@ -6929,30 +6865,6 @@ gtk_window_set_focus_visible (GtkWindow *window,
     }
 }
 
-/**
- * gtk_window_set_has_user_ref_count:
- * @window: a #GtkWindow
- * @setting: the new value
- *
- * Tells GTK+ whether to drop its extra reference to the window
- * when gtk_widget_destroy() is called.
- *
- * This function is only exported for the benefit of language
- * bindings which may need to keep the window alive until their
- * wrapper object is garbage collected. There is no justification
- * for ever calling this function in an application.
- */
-void
-gtk_window_set_has_user_ref_count (GtkWindow *window,
-                                   gboolean   setting)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  priv->has_user_ref_count = setting;
-}
-
 static void
 ensure_state_flag_backdrop (GtkWidget *widget)
 {
@@ -6996,7 +6908,7 @@ warn_response (GtkDialog *dialog,
   check = g_object_get_data (G_OBJECT (dialog), "check");
   remember = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check));
 
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
   g_object_set_data (G_OBJECT (inspector_window), "warning_dialog", NULL);
 
   if (response == GTK_RESPONSE_NO)
@@ -7557,4 +7469,36 @@ gtk_window_get_child (GtkWindow *window)
   g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
 
   return priv->child;
+}
+
+/**
+ * gtk_window_destroy:
+ * @window: The window to destroy
+ *
+ * Drop the internal reference GTK holds on toplevel windows.
+ */
+void
+gtk_window_destroy (GtkWindow *window)
+{
+  int i;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  gtk_tooltip_unset_surface (GTK_NATIVE (window));
+
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (toplevel_list)); i++)
+    {
+      gpointer item = g_list_model_get_item (G_LIST_MODEL (toplevel_list), i);
+      if (item == window)
+        {
+          g_list_store_remove (toplevel_list, i);
+          break;
+        }
+      else
+        g_object_unref (item);
+    }
+
+  gtk_widget_unrealize (GTK_WIDGET (window));
+
+  g_object_unref (window);
 }

@@ -51,7 +51,7 @@ dialog_response (GtkDialog *d,
         g_print ("No application selected\n");
     }
 
-  gtk_widget_destroy (GTK_WIDGET (d));
+  gtk_window_destroy (GTK_WINDOW (d));
   dialog = NULL;
 }
 
@@ -144,7 +144,7 @@ button_clicked (GtkButton *b,
   path = g_file_get_path (file);
   gtk_button_set_label (GTK_BUTTON (file_l), path);
 
-  gtk_widget_destroy (w);
+  gtk_window_destroy (GTK_WINDOW (w));
 
   gtk_widget_set_sensitive (open, TRUE);
 

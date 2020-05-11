@@ -586,8 +586,8 @@ gtk_font_button_finalize (GObject *object)
 {
   GtkFontButton *font_button = GTK_FONT_BUTTON (object);
 
-  if (font_button->font_dialog != NULL) 
-    gtk_widget_destroy (font_button->font_dialog);
+  if (font_button->font_dialog != NULL)
+    gtk_window_destroy (GTK_WINDOW (font_button->font_dialog));
 
   g_free (font_button->title);
 

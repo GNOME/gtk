@@ -394,8 +394,7 @@ do_tree_store (GtkWidget *do_widget)
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Tree Store");
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
       gtk_widget_set_margin_start (vbox, 8);
@@ -437,7 +436,7 @@ do_tree_store (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

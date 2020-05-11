@@ -91,7 +91,7 @@ progressive_timeout (gpointer data)
           g_error_free (error);
 
           g_signal_connect (dialog, "response",
-                            G_CALLBACK (gtk_widget_destroy), NULL);
+                            G_CALLBACK (gtk_window_destroy), NULL);
 
           g_object_unref (image_stream);
           image_stream = NULL;
@@ -119,7 +119,7 @@ progressive_timeout (gpointer data)
           g_error_free (error);
 
           g_signal_connect (dialog, "response",
-                            G_CALLBACK (gtk_widget_destroy), NULL);
+                            G_CALLBACK (gtk_window_destroy), NULL);
 
           g_object_unref (image_stream);
           image_stream = NULL;
@@ -152,7 +152,7 @@ progressive_timeout (gpointer data)
               g_error_free (error);
 
               g_signal_connect (dialog, "response",
-                                G_CALLBACK (gtk_widget_destroy), NULL);
+                                G_CALLBACK (gtk_window_destroy), NULL);
 
               gtk_widget_show (dialog);
 
@@ -189,7 +189,7 @@ progressive_timeout (gpointer data)
               g_error_free (error);
 
               g_signal_connect (dialog, "response",
-                                G_CALLBACK (gtk_widget_destroy), NULL);
+                                G_CALLBACK (gtk_window_destroy), NULL);
 
               gtk_widget_show (dialog);
 
@@ -223,7 +223,7 @@ progressive_timeout (gpointer data)
           g_error_free (error);
 
           g_signal_connect (dialog, "response",
-                            G_CALLBACK (gtk_widget_destroy), NULL);
+                            G_CALLBACK (gtk_window_destroy), NULL);
 
           gtk_widget_show (dialog);
 
@@ -335,9 +335,8 @@ do_images (GtkWidget *do_widget)
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Images");
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
       g_signal_connect (window, "destroy",
                         G_CALLBACK (cleanup_callback), NULL);
 
@@ -472,7 +471,7 @@ do_images (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

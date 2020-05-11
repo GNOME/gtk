@@ -526,7 +526,7 @@ static void
 populate_servers (GtkPlacesView *view)
 {
   GBookmarkFile *server_list;
-  GList *children;
+  GtkWidget *child;
   gchar **uris;
   gsize num_uris;
   gint i;
@@ -548,8 +548,8 @@ populate_servers (GtkPlacesView *view)
     }
 
   /* clear previous items */
-  children = gtk_container_get_children (GTK_CONTAINER (view->recent_servers_listbox));
-  g_list_free_full (children, (GDestroyNotify) gtk_widget_destroy);
+  while ((child = gtk_widget_get_first_child (view->recent_servers_listbox)))
+    gtk_container_remove (GTK_CONTAINER (view->recent_servers_listbox), child);
 
   gtk_list_store_clear (view->completion_store);
 
@@ -1084,17 +1084,18 @@ fetch_networks (GtkPlacesView *view)
 static void
 update_places (GtkPlacesView *view)
 {
-  GList *children;
   GList *mounts;
   GList *volumes;
   GList *drives;
   GList *l;
   GIcon *icon;
   GFile *file;
+  GtkWidget *child;
 
   /* Clear all previously added items */
-  children = gtk_container_get_children (GTK_CONTAINER (view->listbox));
-  g_list_free_full (children, (GDestroyNotify) gtk_widget_destroy);
+  while ((child = gtk_widget_get_first_child (view->listbox)))
+    gtk_container_remove (GTK_CONTAINER (view->listbox), child);
+
   view->network_placeholder = NULL;
   /* Inform clients that we started loading */
   gtk_places_view_set_loading (view, TRUE);

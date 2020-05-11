@@ -266,8 +266,8 @@ int main (int argc, char *argv[])
   gtk_init ();
 
   widget = gtk_color_button_new ();
-  gtk_widget_destroy (widget);
-  
+  g_object_unref (g_object_ref_sink (widget));
+
   window = gtk_window_new ();
   gtk_window_set_default_size (GTK_WINDOW (window), 640, 480);
 

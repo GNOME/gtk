@@ -180,8 +180,7 @@ do_rotated_text (GtkWidget *do_widget)
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Rotated Text");
       gtk_window_set_default_size (GTK_WINDOW (window), 4 * RADIUS, 2 * RADIUS);
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
@@ -213,7 +212,7 @@ do_rotated_text (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

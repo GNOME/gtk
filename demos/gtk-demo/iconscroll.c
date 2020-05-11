@@ -209,12 +209,10 @@ do_iconscroll (GtkWidget *do_widget)
 
       builder = gtk_builder_new_from_resource ("/iconscroll/iconscroll.ui");
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+
       scrolledwindow = GTK_WIDGET (gtk_builder_get_object (builder, "scrolledwindow"));
       gtk_widget_realize (window);
       hadjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "hadjustment"));
@@ -225,7 +223,7 @@ do_iconscroll (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

@@ -188,7 +188,7 @@ do_popup_fallback (GtkWindowHandle *self,
   GtkWindow *window;
   gboolean maximized, resizable, deletable;
 
-  g_clear_pointer (&self->fallback_menu, gtk_widget_destroy);
+  g_clear_pointer (&self->fallback_menu, gtk_widget_unparent);
 
   window = get_window (self);
 
@@ -506,7 +506,7 @@ gtk_window_handle_unrealize (GtkWidget *widget)
 {
   GtkWindowHandle *self = GTK_WINDOW_HANDLE (widget);
 
-  g_clear_pointer (&self->fallback_menu, gtk_widget_destroy);
+  g_clear_pointer (&self->fallback_menu, gtk_widget_unparent);
 
   GTK_WIDGET_CLASS (gtk_window_handle_parent_class)->unrealize (widget);
 }

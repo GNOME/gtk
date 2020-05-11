@@ -3911,7 +3911,7 @@ gtk_flow_box_bound_model_changed (GListModel *list,
       GtkFlowBoxChild *child;
 
       child = gtk_flow_box_get_child_at_index (box, position);
-      gtk_widget_destroy (GTK_WIDGET (child));
+      gtk_container_remove (GTK_CONTAINER (box), GTK_WIDGET (child));
     }
 
   for (i = 0; i < added; i++)
@@ -4196,6 +4196,7 @@ gtk_flow_box_bind_model (GtkFlowBox                 *box,
                          GDestroyNotify              user_data_free_func)
 {
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
+  GtkWidget *child;
 
   g_return_if_fail (GTK_IS_FLOW_BOX (box));
   g_return_if_fail (model == NULL || G_IS_LIST_MODEL (model));
@@ -4210,7 +4211,8 @@ gtk_flow_box_bind_model (GtkFlowBox                 *box,
       g_clear_object (&priv->bound_model);
     }
 
-  gtk_flow_box_forall (GTK_CONTAINER (box), (GtkCallback) gtk_widget_destroy, NULL);
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (box))))
+    gtk_container_remove (GTK_CONTAINER (box), child);
 
   if (model == NULL)
     return;

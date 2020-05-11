@@ -375,7 +375,7 @@ open_response_cb (GtkWidget        *dialog,
       g_object_unref (file);
     }
 
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void
@@ -441,7 +441,7 @@ save_response_cb (GtkWidget        *dialog,
                                                    "Saving failed");
           gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (message_dialog),
                                                     "%s", error->message);
-          g_signal_connect (message_dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+          g_signal_connect (message_dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
           gtk_widget_show (message_dialog);
           g_error_free (error);
         }
@@ -450,7 +450,7 @@ save_response_cb (GtkWidget        *dialog,
       g_object_unref (file);
     }
 
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void
@@ -558,14 +558,14 @@ export_image_response_cb (GtkWidget  *dialog,
                                                    GTK_MESSAGE_INFO,
                                                    GTK_BUTTONS_OK,
                                                    "Exporting to image failed");
-          g_signal_connect (message_dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+          g_signal_connect (message_dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
           gtk_widget_show (message_dialog);
         }
 
       g_object_unref (file);
     }
 
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
   g_object_unref (texture);
 }
 

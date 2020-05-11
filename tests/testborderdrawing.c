@@ -171,5 +171,5 @@ main (int argc, char **argv)
   while (!done)
     g_main_context_iteration (NULL, TRUE);
 
-  gtk_widget_destroy (window);
+  gtk_window_destroy (GTK_WINDOW (window));
 }
