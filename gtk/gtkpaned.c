@@ -77,6 +77,12 @@
  * Setting @shrink to %FALSE allows the application to set a minimum size.
  * If @resize is false for both children, then this is treated as if
  * @resize is true for both children.
+ * 
+ * If child is larger than pane size, the left edge of the child
+ * will be attached to the left edge of the pane. Setting
+ * reading direction of the child to GTK_TEXT_DIR_RTL, it will
+ * be attached to the right edge of the pane. See
+ * gtk_widget_set_direction() for details.
  *
  * The application can set the position of the slider as if it were set
  * by the user, by calling gtk_paned_set_position().
@@ -1219,14 +1225,14 @@ gtk_paned_size_allocate (GtkWidget *widget,
 
           if (child1_width > child1_allocation.width)
             {
-              if (gtk_widget_get_direction (GTK_WIDGET (widget)) == GTK_TEXT_DIR_LTR)
+              if (gtk_widget_get_direction (GTK_WIDGET (priv->child1)) == GTK_TEXT_DIR_RTL)
                 child1_allocation.x -= child1_width - child1_allocation.width;
               child1_allocation.width = child1_width;
             }
 
           if (child2_width > child2_allocation.width)
             {
-              if (gtk_widget_get_direction (GTK_WIDGET (widget)) == GTK_TEXT_DIR_RTL)
+              if (gtk_widget_get_direction (GTK_WIDGET (priv->child2)) == GTK_TEXT_DIR_RTL)
                 child2_allocation.x -= child2_width - child2_allocation.width;
               child2_allocation.width = child2_width;
             }
