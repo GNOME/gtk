@@ -335,8 +335,6 @@ insert_cb (GtkButton *button, GtkWidget *window)
       gtk_grid_insert_next_to (g4, child, GTK_POS_RIGHT);
       gtk_grid_attach (g4, test_widget ("(1, 0)", "red"), 1, 0, 1, 1);
       gtk_grid_attach (g4, test_widget ("(1, 2)", "red"), 1, 2, 1, 1);
-
-      gtk_widget_show (GTK_WIDGET (g));
     }
 
   gtk_button_set_label (button, inserted ? "Insert" : "Remove");

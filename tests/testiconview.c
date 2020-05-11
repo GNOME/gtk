@@ -349,7 +349,7 @@ do_popup_menu (GtkWidget   *icon_list,
   g_object_set_data_full (G_OBJECT (menu), "item-path", data, (GDestroyNotify)free_item_data);
 
   item = gtk_button_new_with_label ("Activate");
-  gtk_container_add (GTK_CONTAINER (menu), item);
+  gtk_popover_set_child (GTK_POPOVER (menu), item);
   g_signal_connect (item, "clicked", G_CALLBACK (item_cb), data);
 
   gtk_popover_popup (GTK_POPOVER (menu));

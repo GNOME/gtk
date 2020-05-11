@@ -26,23 +26,6 @@ value_changed (GtkWidget *button,
 }
 
 static void
-toggle_orientation (GtkWidget *button,
-                    GtkWidget *scalebutton)
-{
-  if (gtk_orientable_get_orientation (GTK_ORIENTABLE (scalebutton)) ==
-      GTK_ORIENTATION_HORIZONTAL)
-    {
-      gtk_orientable_set_orientation (GTK_ORIENTABLE (scalebutton),
-                                        GTK_ORIENTATION_VERTICAL);
-    }
-  else
-    {
-      gtk_orientable_set_orientation (GTK_ORIENTABLE (scalebutton),
-                                        GTK_ORIENTATION_HORIZONTAL);
-    }
-}
-
-static void
 response_cb (GtkDialog *dialog,
              gint       arg1,
              gpointer   user_data)
@@ -63,9 +46,9 @@ show_error (gpointer data)
                                    GTK_MESSAGE_INFO,
                                    GTK_BUTTONS_CLOSE,
                                    "This should have unbroken the grab");
-  g_signal_connect (G_OBJECT (dialog),
-                    "response",
-                    G_CALLBACK (response_cb), NULL);
+  g_signal_connect_object (G_OBJECT (dialog),
+                           "response",
+                           G_CALLBACK (response_cb), NULL, 0);
   gtk_widget_show (dialog);
 
   return G_SOURCE_REMOVE;
@@ -78,7 +61,6 @@ main (int    argc,
   GtkWidget *window;
   GtkWidget *button;
   GtkWidget *button2;
-  GtkWidget *button3;
   GtkWidget *box;
   GtkWidget *vbox;
 
@@ -100,18 +82,7 @@ main (int    argc,
   gtk_container_add (GTK_CONTAINER (box), button);
   gtk_container_add (GTK_CONTAINER (box), button2);
 
-  button3 = gtk_button_new_with_label ("Toggle orientation");
-  gtk_container_add (GTK_CONTAINER (box), button3);
-
-  g_signal_connect (G_OBJECT (button3), "clicked",
-                    G_CALLBACK (toggle_orientation),
-                    button);
-  g_signal_connect (G_OBJECT (button3), "clicked",
-                    G_CALLBACK (toggle_orientation),
-                    button2);
-
   gtk_widget_show (window);
-  g_signal_emit_by_name (button, "clicked");
   g_timeout_add (4000, (GSourceFunc) show_error, window);
 
   while (TRUE)

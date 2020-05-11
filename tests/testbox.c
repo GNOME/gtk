@@ -110,7 +110,6 @@ main (int argc, char *argv[])
   gtk_widget_set_margin_top (check, 10);
   gtk_widget_set_margin_bottom (check, 10);
   gtk_widget_set_halign (check, GTK_ALIGN_CENTER);
-  gtk_widget_show (check);
   gtk_container_add (GTK_CONTAINER (vbox), check);
 
   b = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);

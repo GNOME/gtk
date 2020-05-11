@@ -1,6 +1,6 @@
 <interface>
   <template class="MyDialog2" parent="GtkDialog">
-    <child internal-child="vbox">
+    <child internal-child="content_area">
       <object class="GtkBox">
         <child>
           <object class="GtkLabel" id="content">

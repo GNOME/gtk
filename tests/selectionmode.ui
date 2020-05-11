@@ -27,7 +27,6 @@
               </object>
             </child>
           </object>
-          <packing/>
         </child>
         <child type="title">
           <object class="GtkStack" id="titlestack">
@@ -80,14 +79,12 @@
               </object>
             </child>
           </object>
-          <packing/>
         </child>
         <child type="end">
           <object class="GtkButton" id="cancel-button">
             <property name="visible">0</property>
             <property name="label">Cancel</property>
           </object>
-          <packing/>
         </child>
       </object>
     </child>

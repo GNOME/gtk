@@ -87,8 +87,6 @@ scrollable_policy (void)
   hbox   = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
   vbox   = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
 
-  gtk_widget_show (vbox);
-  gtk_widget_show (hbox);
   gtk_window_set_child (GTK_WINDOW (window), hbox);
   gtk_container_add (GTK_CONTAINER (hbox), vbox);
 
@@ -100,7 +98,6 @@ scrollable_policy (void)
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swindow),
                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
-  gtk_widget_show (swindow);
   gtk_frame_set_child (GTK_FRAME (frame), swindow);
 
   viewport = gtk_viewport_new (NULL, NULL);
@@ -116,8 +113,6 @@ scrollable_policy (void)
   gtk_label_set_width_chars  (GTK_LABEL (label), 40);
   gtk_label_set_max_width_chars  (GTK_LABEL (label), 100);
 
-  gtk_widget_show (label);
-  gtk_widget_show (viewport);
   gtk_viewport_set_child (GTK_VIEWPORT (viewport), label);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), viewport);
 
@@ -125,14 +120,11 @@ scrollable_policy (void)
   expander = gtk_expander_new ("Controls");
   gtk_expander_set_expanded (GTK_EXPANDER (expander), TRUE);
   cntl = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
-  gtk_widget_show (cntl);
-  gtk_widget_show (expander);
   gtk_container_add (GTK_CONTAINER (expander), cntl);
   gtk_container_add (GTK_CONTAINER (vbox), expander);
 
   /* Add Horizontal policy control here */
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
-  gtk_widget_show (hbox);
 
   widget = gtk_label_new ("hscroll-policy");
   gtk_widget_set_hexpand (widget, TRUE);
@@ -152,7 +144,6 @@ scrollable_policy (void)
 
   /* Add Vertical policy control here */
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
-  gtk_widget_show (hbox);
 
   widget = gtk_label_new ("vscroll-policy");
   gtk_widget_set_hexpand (widget, TRUE);
@@ -181,8 +172,6 @@ scrollable_policy (void)
   gtk_widget_set_hexpand (widget, TRUE);
   gtk_container_add (GTK_CONTAINER (hbox), widget);
   gtk_container_add (GTK_CONTAINER (cntl), hbox);
-  gtk_widget_show (widget);
-  gtk_widget_show (hbox);
 
   g_signal_connect (G_OBJECT (widget), "value-changed",
                     G_CALLBACK (content_width_changed), swindow);
@@ -197,8 +186,6 @@ scrollable_policy (void)
   gtk_widget_set_hexpand (widget, TRUE);
   gtk_container_add (GTK_CONTAINER (hbox), widget);
   gtk_container_add (GTK_CONTAINER (cntl), hbox);
-  gtk_widget_show (widget);
-  gtk_widget_show (hbox);
 
   g_signal_connect (G_OBJECT (widget), "value-changed",
                     G_CALLBACK (content_height_changed), swindow);
@@ -233,7 +220,6 @@ scrollable_policy (void)
   /* Listbox */
   listbox = gtk_list_box_new ();
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), listbox);
-  gtk_widget_show (listbox);
 
   /* Min content */
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);

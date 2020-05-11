@@ -132,14 +132,6 @@ activate (GtkApplication *app,
   gtk_application_add_window (app, GTK_WINDOW (win));
 }
 
-static void
-quit (GtkApplication *app,
-      gpointer        data)
-{
-  g_print ("Received quit\n");
-  gtk_widget_destroy (win);
-}
-
 int
 main (int argc, char *argv[])
 {
@@ -150,8 +142,6 @@ main (int argc, char *argv[])
 
   g_signal_connect (app, "activate",
                     G_CALLBACK (activate), NULL);
-  g_signal_connect (app, "quit",
-                    G_CALLBACK (quit), NULL);
 
   g_application_run (G_APPLICATION (app), argc, argv);
 

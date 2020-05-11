@@ -362,9 +362,7 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
       image = gtk_image_new_from_pixbuf (pixbuf);
 
       g_object_unref (pixbuf);
-      
-      gtk_widget_show (image);
-      
+
       gtk_tree_view_column_set_widget (col, image);
       
       rend = gtk_cell_renderer_toggle_new ();

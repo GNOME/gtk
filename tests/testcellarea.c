@@ -86,7 +86,6 @@ simple_iconview (void)
   GtkCellRenderer *renderer;
 
   iconview = gtk_icon_view_new ();
-  gtk_widget_show (iconview);
 
   model = simple_list_model ();
 
@@ -205,7 +204,6 @@ simple_cell_area (void)
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Horizontal");
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Vertical");
   gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-  gtk_widget_show (widget);
   gtk_container_add (GTK_CONTAINER (vbox), widget);
 
   g_signal_connect (G_OBJECT (widget), "changed",
@@ -213,7 +211,6 @@ simple_cell_area (void)
 
   widget = gtk_check_button_new_with_label ("Align 2nd Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-  gtk_widget_show (widget);
   gtk_container_add (GTK_CONTAINER (vbox), widget);
 
   g_signal_connect (G_OBJECT (widget), "toggled",
@@ -221,7 +218,6 @@ simple_cell_area (void)
 
   widget = gtk_check_button_new_with_label ("Align 3rd Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-  gtk_widget_show (widget);
   gtk_container_add (GTK_CONTAINER (vbox), widget);
 
   g_signal_connect (G_OBJECT (widget), "toggled",
@@ -230,7 +226,6 @@ simple_cell_area (void)
 
   widget = gtk_check_button_new_with_label ("Expand 1st Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-  gtk_widget_show (widget);
   gtk_container_add (GTK_CONTAINER (vbox), widget);
 
   g_signal_connect (G_OBJECT (widget), "toggled",
@@ -238,7 +233,6 @@ simple_cell_area (void)
 
   widget = gtk_check_button_new_with_label ("Expand 2nd Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-  gtk_widget_show (widget);
   gtk_container_add (GTK_CONTAINER (vbox), widget);
 
   g_signal_connect (G_OBJECT (widget), "toggled",
@@ -246,7 +240,6 @@ simple_cell_area (void)
 
   widget = gtk_check_button_new_with_label ("Expand 3rd Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-  gtk_widget_show (widget);
   gtk_container_add (GTK_CONTAINER (vbox), widget);
 
   g_signal_connect (G_OBJECT (widget), "toggled",
@@ -347,7 +340,6 @@ focus_iconview (gboolean color_bg, GtkCellRenderer **focus, GtkCellRenderer **si
   GtkCellRenderer *renderer, *toggle;
 
   iconview = gtk_icon_view_new ();
-  gtk_widget_show (iconview);
 
   model = focus_list_model ();
 
@@ -425,7 +417,6 @@ focus_cell_area (void)
 
   window = gtk_window_new ();
   hbox  = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-  gtk_widget_show (hbox);
 
   gtk_window_set_title (GTK_WINDOW (window), "Focus and editable cells");
 
@@ -448,7 +439,6 @@ focus_cell_area (void)
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Horizontal");
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Vertical");
   gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-  gtk_widget_show (widget);
   gtk_container_add (GTK_CONTAINER (vbox), widget);
 
   g_signal_connect (G_OBJECT (widget), "changed",
@@ -456,7 +446,6 @@ focus_cell_area (void)
 
   widget = gtk_check_button_new_with_label ("Focus Sibling");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-  gtk_widget_show (widget);
   gtk_container_add (GTK_CONTAINER (vbox), widget);
 
   g_signal_connect (G_OBJECT (widget), "toggled",
@@ -515,8 +504,6 @@ background_area (void)
   window = gtk_window_new ();
   hbox  = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   main_vbox  = gtk_box_new (GTK_ORIENTATION_VERTICAL, 4);
-  gtk_widget_show (hbox);
-  gtk_widget_show (main_vbox);
   gtk_window_set_child (GTK_WINDOW (window), main_vbox);
 
   gtk_window_set_title (GTK_WINDOW (window), "Background Area");
@@ -549,7 +536,6 @@ background_area (void)
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Horizontal");
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Vertical");
   gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-  gtk_widget_show (widget);
   gtk_container_add (GTK_CONTAINER (vbox), widget);
 
   g_signal_connect (G_OBJECT (widget), "changed",
