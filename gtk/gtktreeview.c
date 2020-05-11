@@ -644,6 +644,7 @@ static void     gtk_tree_view_get_property         (GObject         *object,
 /* gtkwidget signals */
 static void     gtk_tree_view_realize              (GtkWidget        *widget);
 static void     gtk_tree_view_unrealize            (GtkWidget        *widget);
+static void     gtk_tree_view_unroot               (GtkWidget        *widget);
 static void     gtk_tree_view_map                  (GtkWidget        *widget);
 static void     gtk_tree_view_measure              (GtkWidget        *widget,
                                                     GtkOrientation  orientation,
@@ -1021,6 +1022,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->map = gtk_tree_view_map;
   widget_class->realize = gtk_tree_view_realize;
   widget_class->unrealize = gtk_tree_view_unrealize;
+  widget_class->unroot = gtk_tree_view_unroot;
   widget_class->measure = gtk_tree_view_measure;
   widget_class->size_allocate = gtk_tree_view_size_allocate;
   widget_class->snapshot = gtk_tree_view_snapshot;
@@ -2309,6 +2311,19 @@ gtk_tree_view_unrealize (GtkWidget *widget)
     }
 
   GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->unrealize (widget);
+}
+
+static void
+gtk_tree_view_unroot (GtkWidget *widget)
+{
+  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+
+  /* break ref cycles */
+  g_clear_pointer (&tree_view->scroll_to_path, gtk_tree_row_reference_free);
+  g_clear_pointer (&tree_view->drag_dest_row, gtk_tree_row_reference_free);
+  g_clear_pointer (&tree_view->top_row, gtk_tree_row_reference_free);
+
+  GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->unroot (widget);
 }
 
 /* GtkWidget::get_preferred_height helper */
