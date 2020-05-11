@@ -746,6 +746,7 @@ activate (GApplication *app)
   main_window = gtk_application_window_new (GTK_APPLICATION (app));
   gtk_window_set_icon_name (GTK_WINDOW (main_window), "text-editor");
   gtk_window_set_default_size (GTK_WINDOW (main_window), 400, 600);
+  gtk_application_window_set_show_menubar (GTK_APPLICATION_WINDOW (main_window), TRUE);
   update_title (GTK_WINDOW (main_window));
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
