@@ -1414,6 +1414,8 @@ gtk_notebook_init (GtkNotebook *notebook)
   notebook->detached_tab = NULL;
   notebook->has_scrolled = FALSE;
 
+  gtk_widget_set_focusable (GTK_WIDGET (notebook), TRUE);
+
   notebook->header_widget = g_object_new (GTK_TYPE_BOX,
                                           "css-name", "header",
                                           NULL);

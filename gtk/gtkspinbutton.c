@@ -348,9 +348,9 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   widget_class->realize = gtk_spin_button_realize;
   widget_class->grab_notify = gtk_spin_button_grab_notify;
   widget_class->state_flags_changed = gtk_spin_button_state_flags_changed;
+  widget_class->mnemonic_activate = gtk_spin_button_mnemonic_activate;
   widget_class->grab_focus = gtk_spin_button_grab_focus;
   widget_class->focus = gtk_widget_focus_child;
-  widget_class->mnemonic_activate = gtk_spin_button_mnemonic_activate;
 
   class->input = NULL;
   class->output = NULL;

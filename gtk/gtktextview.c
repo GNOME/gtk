@@ -821,8 +821,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->measure = gtk_text_view_measure;
   widget_class->size_allocate = gtk_text_view_size_allocate;
   widget_class->snapshot = gtk_text_view_snapshot;
-  widget_class->grab_focus = gtk_widget_grab_focus_self;
-  widget_class->focus = gtk_widget_focus_all;
 
   container_class->add = gtk_text_view_add;
   container_class->remove = gtk_text_view_remove;
@@ -1858,7 +1856,7 @@ gtk_text_view_init (GtkTextView *text_view)
   text_view->priv = gtk_text_view_get_instance_private (text_view);
   priv = text_view->priv;
 
-  gtk_widget_set_can_focus (widget, TRUE);
+  gtk_widget_set_focusable (widget, TRUE);
   gtk_widget_set_overflow (widget, GTK_OVERFLOW_HIDDEN);
 
   gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_VIEW);

@@ -278,10 +278,8 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
   gobject_class->dispose = gtk_drawing_area_dispose;
 
   widget_class->measure = gtk_drawing_area_measure;
-  widget_class->snapshot = gtk_drawing_area_snapshot;
-  widget_class->focus = gtk_widget_focus_none;
-  widget_class->grab_focus = gtk_widget_grab_focus_none;
   widget_class->size_allocate = gtk_drawing_area_size_allocate;
+  widget_class->snapshot = gtk_drawing_area_snapshot;
 
   /**
    * GtkDrawingArea:content-width
@@ -338,6 +336,7 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
 static void
 gtk_drawing_area_init (GtkDrawingArea *darea)
 {
+  gtk_widget_set_focusable (GTK_WIDGET (darea), FALSE);
 }
 
 /**

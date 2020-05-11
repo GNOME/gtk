@@ -950,6 +950,7 @@ gtk_icon_view_init (GtkIconView *icon_view)
   icon_view->priv->mouse_y = -1;
 
   gtk_widget_set_overflow (GTK_WIDGET (icon_view), GTK_OVERFLOW_HIDDEN);
+  gtk_widget_set_focusable (GTK_WIDGET (icon_view), TRUE);
 
   icon_view->priv->item_orientation = GTK_ORIENTATION_VERTICAL;
 

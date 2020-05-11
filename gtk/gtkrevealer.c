@@ -319,8 +319,6 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
   widget_class->measure = gtk_revealer_measure;
   widget_class->compute_expand = gtk_revealer_compute_expand;
   widget_class->get_request_mode = gtk_revealer_get_request_mode;
-  widget_class->grab_focus = gtk_widget_grab_focus_none;
-  widget_class->focus = gtk_widget_focus_child;
 
   props[PROP_TRANSITION_TYPE] =
     g_param_spec_enum ("transition-type",

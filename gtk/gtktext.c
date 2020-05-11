@@ -1822,7 +1822,7 @@ gtk_text_init (GtkText *self)
   int i;
   GtkDropTarget *target;
 
-  gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
+  gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
 
   priv->editable = TRUE;

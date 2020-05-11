@@ -697,7 +697,7 @@ gtk_cell_editable_widget_init (GtkCellEditableWidget *box)
   GtkWidget *widget = GTK_WIDGET (box);
   GtkEventController *controller;
 
-  gtk_widget_set_can_focus (widget, TRUE);
+  gtk_widget_set_focusable (widget, TRUE);
 
   controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "key-pressed",

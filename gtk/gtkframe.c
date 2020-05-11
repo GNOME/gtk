@@ -160,8 +160,6 @@ gtk_frame_class_init (GtkFrameClass *class)
   widget_class->measure = gtk_frame_measure;
   widget_class->compute_expand = gtk_frame_compute_expand;
   widget_class->get_request_mode = gtk_frame_get_request_mode;
-  widget_class->grab_focus = gtk_widget_grab_focus_none;
-  widget_class->focus = gtk_widget_focus_child;
 
   class->compute_child_allocation = gtk_frame_real_compute_child_allocation;
 

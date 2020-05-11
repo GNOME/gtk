@@ -585,9 +585,8 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 
   widget_class->snapshot = gtk_scrolled_window_snapshot;
   widget_class->size_allocate = gtk_scrolled_window_size_allocate;
-  widget_class->focus = gtk_scrolled_window_focus;
-  widget_class->grab_focus = gtk_widget_grab_focus_self;
   widget_class->measure = gtk_scrolled_window_measure;
+  widget_class->focus = gtk_scrolled_window_focus;
   widget_class->map = gtk_scrolled_window_map;
   widget_class->unmap = gtk_scrolled_window_unmap;
   widget_class->realize = gtk_scrolled_window_realize;
@@ -1963,7 +1962,7 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   };
   gint i;
 
-  gtk_widget_set_can_focus (widget, TRUE);
+  gtk_widget_set_focusable (widget, TRUE);
 
   /* Instantiated by gtk_scrolled_window_set_[hv]adjustment
    * which are both construct properties

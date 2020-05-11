@@ -504,7 +504,6 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
   widget_class->get_request_mode = gtk_flow_box_child_get_request_mode;
   widget_class->compute_expand = gtk_flow_box_child_compute_expand;
   widget_class->focus = gtk_flow_box_child_focus;
-  widget_class->grab_focus = gtk_widget_grab_focus_none;
 
   class->activate = gtk_flow_box_child_activate;
 

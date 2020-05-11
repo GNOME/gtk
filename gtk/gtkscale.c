@@ -806,8 +806,7 @@ gtk_scale_class_init (GtkScaleClass *class)
 
   add_slider_binding (binding_set, GDK_KEY_KP_Subtract, GDK_CONTROL_MASK,
                       GTK_SCROLL_PAGE_BACKWARD);
-  
-  
+
   add_slider_binding (binding_set, GDK_KEY_Home, 0,
                       GTK_SCROLL_START);
 
@@ -830,10 +829,10 @@ gtk_scale_init (GtkScale *scale)
   GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
   GtkRange *range = GTK_RANGE (scale);
 
+  gtk_widget_set_focusable (GTK_WIDGET (scale), TRUE);
+
   priv->value_pos = GTK_POS_TOP;
   priv->digits = 1;
-
-  gtk_widget_set_can_focus (GTK_WIDGET (scale), TRUE);
 
   gtk_range_set_slider_size_fixed (range, TRUE);
 

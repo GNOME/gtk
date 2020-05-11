@@ -268,8 +268,6 @@ gtk_video_class_init (GtkVideoClass *klass)
   widget_class->unrealize = gtk_video_unrealize;
   widget_class->map = gtk_video_map;
   widget_class->unmap = gtk_video_unmap;
-  widget_class->grab_focus = gtk_widget_grab_focus_none;
-  widget_class->focus = gtk_widget_focus_child;
   widget_class->grab_notify = gtk_video_grab_notify;
 
   gobject_class->dispose = gtk_video_dispose;
@@ -342,7 +340,6 @@ static void
 gtk_video_init (GtkVideo *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
-  
 }
 
 /**
