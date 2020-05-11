@@ -60,6 +60,9 @@ typedef struct _GtkAboutDialogPrivate GtkAboutDialogPrivate;
  * @GTK_LICENSE_LGPL_3_0_ONLY: The GNU Lesser General Public License, version 3.0 only. Since 3.12.
  * @GTK_LICENSE_AGPL_3_0: The GNU Affero General Public License, version 3.0 or later. Since: 3.22.
  * @GTK_LICENSE_AGPL_3_0_ONLY: The GNU Affero General Public License, version 3.0 only. Since: 3.22.27.
+ * @GTK_LICENSE_BSD_3: The 3-clause BSD licence. Since: 3.24.20.
+ * @GTK_LICENSE_APACHE_2_0: The Apache License, version 2.0. Since: 3.24.20.
+ * @GTK_LICENSE_MPL_2_0: The Mozilla Public License, version 2.0. Since: 3.24.20.
  *
  * The type of license for an application.
  *
