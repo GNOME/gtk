@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <menu id="appmenu">
+  <menu id="menu">
     <section>
       <item>
         <attribute name="label" translatable="yes">_Preferences</attribute>

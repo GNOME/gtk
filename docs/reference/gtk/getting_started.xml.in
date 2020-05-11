@@ -415,9 +415,8 @@
 
       <para>In this step, we use a GtkBuilder template to associate a
       GtkBuilder ui file with our application window class.</para>
-      <para>Our simple ui file puts a GtkHeaderBar on top of a GtkStack
-      widget. The header bar contains a GtkStackSwitcher, which is a
-      standalone widget to show a row of 'tabs' for the pages of a GtkStack.
+      <para>Our simple ui file gives the window a title, and puts a GtkStack
+      widget as the main content.
       </para>
 
       <informalexample>
@@ -572,11 +571,14 @@ example_app_window_open (ExampleAppWindow *win,
         <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/master/examples/application3/exampleappwin.c">full source</ulink>)</para>
       </informalexample>
 
-      <para>Note that we did not have to touch the stack switcher
-      at all. It gets all its information from the stack that it
-      belongs to. Here, we are passing the label to show for each
-      file as the last argument to the gtk_stack_add_titled()
-      function.</para>
+      <para>Lastly, we add a GtkStackSwitcher to the titlebar area
+      in the ui file, and we tell it to display information about our
+      stack.</para>
+
+      <para>The stack switcher gets all its information it needs to
+      display tabs from the stack that it belongs to. Here, we are
+      passing the label to show for each file as the last argument to
+      the gtk_stack_add_titled() function.</para>
 
       <para>Our application is beginning to take shape:</para>
 
@@ -590,25 +592,25 @@ example_app_window_open (ExampleAppWindow *win,
     </section>
 
     <section>
-      <title>An application menu</title>
+      <title>A menu</title>
 
-      <para>An application menu is shown by GNOME shell at the top of the
-      screen. It is meant to collect infrequently used actions that affect
+      <para>The menu is shown at the right side of the headerbar.
+      It is meant to collect infrequently used actions that affect
       the whole application.</para>
 
-      <para>Just like the window template, we specify our application menu
+      <para>Just like the window template, we specify our menu
       in a ui file, and add it as a resource to our binary.</para>
 
       <informalexample>
-        <programlisting><xi:include href="@SRC_DIR@/examples/application4/app-menu.ui" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+        <programlisting><xi:include href="@SRC_DIR@/examples/application4/gears-menu.ui" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       </informalexample>
 
-      <para>To associate the app menu with the application, we have to call
-      gtk_application_set_app_menu(). Since app menus work by activating
-      GActions, we also have to add a suitable set of actions to our
-      application.</para>
+      <para>To make the menu appear, we have to load the ui file and
+      associate the resulting menu model with the menu button that we've
+      added to the headerbar.  Since menus work by activating GActions,
+      we also have to add a suitable set of actions to our application.</para>
 
-      <para>Both of these tasks are best done in the startup() vfunc,
+      <para>Adding the actions is best done in the startup() vfunc,
       which is guaranteed to be called once for each primary application
       instance:</para>
       <informalexample>
@@ -651,11 +653,6 @@ example_app_startup (GApplication *app)
   gtk_application_set_accels_for_action (GTK_APPLICATION (app),
                                          "app.quit",
                                          quit_accels);
-
-  builder = gtk_builder_new_from_resource ("/org/gtk/exampleapp/app-menu.ui");
-  app_menu = G_MENU_MODEL (gtk_builder_get_object (builder, "appmenu"));
-  gtk_application_set_app_menu (GTK_APPLICATION (app), app_menu);
-  g_object_unref (builder);
 }
 
 static void
@@ -799,7 +796,7 @@ preferences_activated (GSimpleAction *action,
       <title>Adding a search bar</title>
 
       <para>We continue to flesh out the functionality of our application.
-      For now, we add search. GTK supports this with #GtkSearchEntry and
+      For now, we add search. GTK supports this with GtkSearchEntry and
       GtkSearchBar. The search bar is a widget that can slide in from the
       top to present a search entry.</para>
 
@@ -1004,35 +1001,6 @@ example_app_window_init (ExampleAppWindow *win)
           </imageobject>
         </mediaobject>
       </informalfigure>
-    </section>
-    <section>
-      <title>Header bar</title>
-
-      <para>Our application already uses a GtkHeaderBar, but so far it
-      still gets a 'normal' window titlebar on top of that. This is a
-      bit redundant, and we will now tell GTK to use the header bar
-      as replacement for the titlebar. To do so, we move it around to
-      be a direct child of the window, and set its type to be titlebar.</para>
-
-      <informalexample>
-        <programlisting><xi:include href="@SRC_DIR@/examples/application10/window.ui" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
-      </informalexample>
-
-      <para>A small extra bonus of using a header bar is that we get
-      a fallback application menu for free. Here is how the
-      application now looks, if this fallback is used.</para>
-
-      <informalfigure>
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="getting-started-app10.png" format="PNG"/>
-          </imageobject>
-        </mediaobject>
-      </informalfigure>
-
-      <para>If we set up the window icon for our window, the menu button
-      will use that instead of the generic placeholder icon you see
-      here.</para>
     </section>
   </section>
 
