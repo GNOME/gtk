@@ -1278,7 +1278,7 @@ static GtkWidget *
 wrap_in_frame (const gchar *label,
                GtkWidget   *child)
 {
-  GtkWidget *frame, *label_widget;
+  GtkWidget *box, *label_widget;
   gchar *bold_text;
 
   label_widget = gtk_label_new (NULL);
@@ -1290,18 +1290,16 @@ wrap_in_frame (const gchar *label,
   gtk_label_set_markup (GTK_LABEL (label_widget), bold_text);
   g_free (bold_text);
 
-  frame = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_frame_set_child (GTK_FRAME (frame), label_widget);
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+  gtk_container_add (GTK_CONTAINER (box), label_widget);
 
   gtk_widget_set_margin_start (child, 12);
   gtk_widget_set_halign (child, GTK_ALIGN_FILL);
   gtk_widget_set_valign (child, GTK_ALIGN_FILL);
 
-  gtk_frame_set_child (GTK_FRAME (frame), child);
+  gtk_container_add (GTK_CONTAINER (box), child);
 
-  gtk_widget_show (frame);
-
-  return frame;
+  return box;
 }
 
 static gboolean

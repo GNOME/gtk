@@ -797,7 +797,7 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
                           P_("Show a menubar"),
                           P_("TRUE if the window should show a "
                              "menubar at the top of the window"),
-                          TRUE, G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS | G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                          FALSE, G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS | G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_properties (object_class, N_PROPS, gtk_application_window_properties);
 }
 

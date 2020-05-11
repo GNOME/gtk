@@ -387,7 +387,7 @@ gtk_builder_cscope_finalize (GObject *object)
   g_clear_pointer (&priv->callbacks, g_hash_table_destroy);
   g_clear_pointer (&priv->module, g_module_close);
 
-  G_OBJECT_CLASS (gtk_builder_cscope_parent_class)->dispose (object);
+  G_OBJECT_CLASS (gtk_builder_cscope_parent_class)->finalize (object);
 }
   
 static void

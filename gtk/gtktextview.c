@@ -8636,6 +8636,9 @@ gtk_text_view_do_popup (GtkTextView *text_view,
 
       model = gtk_text_view_get_menu_model (text_view);
       priv->popup_menu = gtk_popover_menu_new_from_model (model);
+      gtk_css_node_insert_after (gtk_widget_get_css_node (GTK_WIDGET (text_view)),
+                                 gtk_widget_get_css_node (priv->popup_menu),
+                                 priv->text_window->css_node);
       gtk_widget_set_parent (priv->popup_menu, GTK_WIDGET (text_view));
       gtk_popover_set_position (GTK_POPOVER (priv->popup_menu), GTK_POS_BOTTOM);
 
