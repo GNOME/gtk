@@ -419,7 +419,7 @@ gtk_flatten_list_model_class_init (GtkFlattenListModelClass *class)
   /**
    * GtkFlattenListModel:item-type:
    *
-   * The #GTpe for elements of this object
+   * The #GType for elements of this object
    */
   properties[PROP_ITEM_TYPE] =
       g_param_spec_gtype ("item-type",
@@ -482,7 +482,7 @@ gtk_flatten_list_model_new (GType       item_type,
  * @model: (nullable) (transfer none): the new model or %NULL
  *
  * Sets a new model to be flattened. The model must contain items of
- * #GtkListModel that conform to the item type of @self.
+ * #GListModel that conform to the item type of @self.
  **/
 void
 gtk_flatten_list_model_set_model (GtkFlattenListModel *self,

@@ -912,8 +912,8 @@ How do I use cairo to draw in GTK applications ?
 </para></question>
 
 <answer><para>
-Use gtk_snapshot_append_cairo() in your #GtkWidget::snapshot signal handler
-to optain a cairo context and draw with that.
+Use gtk_snapshot_append_cairo() in your #GtkWidgetClass.snapshot() vfunc to optain
+a cairo context and draw with that.
 </para>
 </answer>
 </qandaentry>

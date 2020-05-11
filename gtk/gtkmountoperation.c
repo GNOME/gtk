@@ -1879,7 +1879,7 @@ gtk_mount_operation_get_parent (GtkMountOperation *op)
 /**
  * gtk_mount_operation_set_display:
  * @op: a #GtkMountOperation
- * @display: a #Gdk
+ * @display: a #GdkDisplay
  *
  * Sets the display to show windows of the #GtkMountOperation on.
  */

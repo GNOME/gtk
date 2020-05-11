@@ -449,7 +449,7 @@ gtk_image_new_from_resource (const gchar *resource_path)
  * pixbuf; you still need to unref it if you own references.
  * #GtkImage will add its own reference rather than adopting yours.
  *
- * This is a helper for gtk_image_new_from_texture(), and you can't
+ * This is a helper for gtk_image_new_from_paintable(), and you can't
  * get back the exact pixbuf once this is called, only a texture.
  *
  * Note that this function just creates an #GtkImage from the pixbuf. The

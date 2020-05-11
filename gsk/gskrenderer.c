@@ -315,7 +315,7 @@ gsk_renderer_unrealize (GskRenderer *renderer)
 
 /**
  * gsk_renderer_render_texture:
- * @renderer: a realized #GdkRenderer
+ * @renderer: a realized #GskRenderer
  * @root: a #GskRenderNode
  * @viewport: (allow-none): the section to draw or %NULL to use @root's bounds
  *
