@@ -53,7 +53,7 @@ gtk_css_animated_style_get_section (GtkCssStyle *style,
 static gboolean
 gtk_css_animated_style_is_static (GtkCssStyle *style)
 {
-  GtkCssAnimatedStyle *animated = GTK_CSS_ANIMATED_STYLE (style);
+  GtkCssAnimatedStyle *animated = (GtkCssAnimatedStyle *)style;
   guint i;
 
   for (i = 0; i < animated->n_animations; i ++)
@@ -81,7 +81,7 @@ gtk_css_animated_style_dispose (GObject *object)
   guint i;
 
   for (i = 0; i < style->n_animations; i ++)
-    g_object_unref (style->animations[i]);
+    gtk_style_animation_unref (style->animations[i]);
 
   style->n_animations = 0;
   g_free (style->animations);
@@ -646,7 +646,7 @@ gtk_css_animated_style_find_transition (GtkCssAnimatedStyle *style,
     {
       GtkStyleAnimation *animation = style->animations[i];
 
-      if (!GTK_IS_CSS_TRANSITION (animation))
+      if (!_gtk_css_transition_is_transition (animation))
         continue;
 
       if (_gtk_css_transition_get_property ((GtkCssTransition *)animation) == property_id)
@@ -745,7 +745,7 @@ gtk_css_animated_style_find_animation (GtkStyleAnimation **animations,
     {
       GtkStyleAnimation *animation = animations[i];
 
-      if (!GTK_IS_CSS_ANIMATION (animation))
+      if (!_gtk_css_animation_is_animation (animation))
         continue;
 
       if (g_str_equal (_gtk_css_animation_get_name ((GtkCssAnimation *)animation), name))
@@ -765,9 +765,19 @@ gtk_css_animated_style_create_css_animations (GPtrArray        *animations,
 {
   GtkCssValue *durations, *delays, *timing_functions, *animation_names;
   GtkCssValue *iteration_counts, *directions, *play_states, *fill_modes;
+  gboolean source_is_animated;
   guint i;
 
   animation_names = base_style->animation->animation_name;
+
+  if (_gtk_css_array_value_get_n_values (animation_names) == 1)
+    {
+      const char *name = _gtk_css_ident_value_get (_gtk_css_array_value_get_nth (animation_names, 0));
+
+      if (g_ascii_strcasecmp (name, "none") == 0)
+        return animations;
+    }
+
   durations = base_style->animation->animation_duration;
   delays = base_style->animation->animation_delay;
   timing_functions = base_style->animation->animation_timing_function;
@@ -775,6 +785,7 @@ gtk_css_animated_style_create_css_animations (GPtrArray        *animations,
   directions = base_style->animation->animation_direction;
   play_states = base_style->animation->animation_play_state;
   fill_modes = base_style->animation->animation_fill_mode;
+  source_is_animated = GTK_IS_CSS_ANIMATED_STYLE (source);
 
   for (i = 0; i < _gtk_css_array_value_get_n_values (animation_names); i++)
     {
@@ -792,14 +803,14 @@ gtk_css_animated_style_create_css_animations (GPtrArray        *animations,
       if (animation)
         continue;
 
-      if (GTK_IS_CSS_ANIMATED_STYLE (source))
+      if (source_is_animated)
         animation = gtk_css_animated_style_find_animation ((GtkStyleAnimation **)GTK_CSS_ANIMATED_STYLE (source)->animations,
                                                            GTK_CSS_ANIMATED_STYLE (source)->n_animations,
                                                            name);
 
       if (animation)
         {
-          animation = _gtk_css_animation_advance_with_play_state (GTK_CSS_ANIMATION (animation),
+          animation = _gtk_css_animation_advance_with_play_state ((GtkCssAnimation *)animation,
                                                                   timestamp,
                                                                   _gtk_css_play_state_value_get (_gtk_css_array_value_get_nth (play_states, i)));
         }
@@ -825,7 +836,7 @@ gtk_css_animated_style_create_css_animations (GPtrArray        *animations,
         }
 
       if (!animations)
-        animations = g_ptr_array_new ();
+        animations = g_ptr_array_sized_new (16);
 
       g_ptr_array_add (animations, animation);
     }
@@ -928,7 +939,7 @@ gtk_css_animated_style_new_advance (GtkCssAnimatedStyle *source,
         continue;
 
       if (!animations)
-        animations = g_ptr_array_new ();
+        animations = g_ptr_array_sized_new (16);
 
       animation = _gtk_style_animation_advance (animation, timestamp);
       g_ptr_array_add (animations, animation);

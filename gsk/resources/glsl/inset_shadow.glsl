@@ -33,13 +33,10 @@ _IN_ _ROUNDED_RECT_UNIFORM_ transformed_outside_outline;
 _IN_ _ROUNDED_RECT_UNIFORM_ transformed_inside_outline;
 
 void main() {
-  vec4 f = gl_FragCoord;
+  vec2 frag = get_frag_coord();
 
-  f.x += u_viewport.x;
-  f.y = (u_viewport.y + u_viewport.w) - f.y;
-
-  float alpha = clamp (rounded_rect_coverage(decode_rect(transformed_outside_outline), f.xy) -
-                       rounded_rect_coverage(decode_rect(transformed_inside_outline), f.xy),
+  float alpha = clamp (rounded_rect_coverage(decode_rect(transformed_outside_outline), frag) -
+                       rounded_rect_coverage(decode_rect(transformed_inside_outline), frag),
                        0.0, 1.0);
 
   setOutputColor(final_color * alpha);

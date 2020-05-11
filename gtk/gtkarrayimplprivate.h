@@ -4,7 +4,7 @@
 
 /* This is a dumbed-down GPtrArray, which takes some stack
  * space to use. When using this, the general case should always
- * be that the number of elements is lower than reversed_size.
+ * be that the number of elements is lower than reserved_size.
  * The GPtrArray should only be used in extreme cases.
  */
 
@@ -55,13 +55,9 @@ gtk_array_add (GtkArray *self,
   /* Need to fall back to the GPtrArray */
   if (G_UNLIKELY (!self->ptr_array))
     {
-      guint i;
-
-      self->ptr_array = g_ptr_array_new_full (self->reserved_size, NULL);
-
-      /* Copy elements from stack space to GPtrArray */
-      for (i = 0; i < self->len; i++)
-        g_ptr_array_add (self->ptr_array, self->stack_space[i]);
+      self->ptr_array = g_ptr_array_new_full (self->len + 1, NULL);
+      memcpy (self->ptr_array->pdata, self->stack_space, sizeof (void *) * self->len);
+      self->ptr_array->len = self->len;
     }
 
   g_ptr_array_add (self->ptr_array, element);
@@ -86,6 +82,13 @@ gtk_array_insert (GtkArray *self,
       self->stack_space[index] = element;
       self->len++;
       return;
+    }
+
+  if (G_UNLIKELY (!self->ptr_array))
+    {
+      self->ptr_array = g_ptr_array_new_full (self->len + 1, NULL);
+      memcpy (self->ptr_array->pdata, self->stack_space, sizeof (void *) * self->len);
+      self->ptr_array->len = self->len;
     }
 
   g_assert (self->ptr_array);

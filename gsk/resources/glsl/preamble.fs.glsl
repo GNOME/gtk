@@ -84,19 +84,32 @@ vec4 Texture(sampler2D sampler, vec2 texCoords) {
 #endif
 }
 
+#ifdef GSK_GL3
+layout(origin_upper_left) in vec4 gl_FragCoord;
+#endif
+
+vec2 get_frag_coord() {
+  vec2 fc = gl_FragCoord.xy;
+
+#ifdef GSK_GL3
+  fc += u_viewport.xy;
+#else
+  fc.x += u_viewport.x;
+  fc.y = (u_viewport.y + u_viewport.w) - fc.y;
+#endif
+
+  return fc;
+}
+
 void setOutputColor(vec4 color) {
-  vec4 f = gl_FragCoord;
-
-  f.x += u_viewport.x;
-  f.y = (u_viewport.y + u_viewport.w) - f.y;
-
+  vec2 f = get_frag_coord();
 
   // We do *NOT* transform the clip rect here since we already
   // need to do that on the CPU.
 #if defined(GSK_GLES) || defined(GSK_LEGACY)
-  gl_FragColor = color * rounded_rect_coverage(create_rect(u_clip_rect), f.xy);
+  gl_FragColor = color * rounded_rect_coverage(create_rect(u_clip_rect), f);
 #else
-  outputColor = color * rounded_rect_coverage(create_rect(u_clip_rect), f.xy);
+  outputColor = color * rounded_rect_coverage(create_rect(u_clip_rect), f);
 #endif
   /*outputColor = color;*/
 }

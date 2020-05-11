@@ -33,22 +33,15 @@ G_BEGIN_DECLS
 GtkStyleContext *gtk_style_context_new_for_node              (GtkCssNode      *node);
 
 GtkCssNode     *gtk_style_context_get_node                   (GtkStyleContext *context);
-void            gtk_style_context_set_id                     (GtkStyleContext *context,
-                                                              const char      *id);
-const char *    gtk_style_context_get_id                     (GtkStyleContext *context);
 GtkStyleProvider *
                 gtk_style_context_get_style_provider         (GtkStyleContext *context);
 
-void            gtk_style_context_save_named                 (GtkStyleContext *context,
-                                                              const char      *name);
 void            gtk_style_context_save_to_node               (GtkStyleContext *context,
                                                               GtkCssNode      *node);
 
 GtkCssStyle *   gtk_style_context_lookup_style               (GtkStyleContext *context);
 GtkCssValue   * _gtk_style_context_peek_property             (GtkStyleContext *context,
                                                               guint            property_id);
-gboolean       _gtk_style_context_check_region_name          (const gchar     *str);
-
 void           _gtk_style_context_get_cursor_color           (GtkStyleContext    *context,
                                                               GdkRGBA            *primary_color,
                                                               GdkRGBA            *secondary_color);

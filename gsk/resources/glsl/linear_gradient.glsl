@@ -47,17 +47,9 @@ _IN_ float gradientLength;
 _IN_ vec4 color_stops[8];
 _IN_ float color_offsets[8];
 
-
-vec4 fragCoord() {
-  vec4 f = gl_FragCoord;
-  f.x += u_viewport.x;
-  f.y = (u_viewport.y + u_viewport.w) - f.y;
-  return f;
-}
-
 void main() {
   // Position relative to startPoint
-  vec2 pos = fragCoord().xy - startPoint;
+  vec2 pos = get_frag_coord() - startPoint;
 
   // Current pixel, projected onto the line between the start point and the end point
   // The projection will be relative to the start point!

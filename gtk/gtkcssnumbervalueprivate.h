@@ -35,28 +35,11 @@ typedef enum /*< skip >*/ {
   GTK_CSS_PARSE_TIME = (1 << 5)
 } GtkCssNumberParseFlags;
 
-typedef struct _GtkCssNumberValueClass GtkCssNumberValueClass;
-
-struct _GtkCssNumberValueClass {
-  GtkCssValueClass      value_class;
-
-  double                (* get)                     (const GtkCssValue      *value,
-                                                     double                  one_hundred_percent);
-  GtkCssDimension       (* get_dimension)           (const GtkCssValue      *value);
-  gboolean              (* has_percent)             (const GtkCssValue      *value);
-  GtkCssValue *         (* multiply)                (GtkCssValue            *value,
-                                                     double                  factor);
-  GtkCssValue *         (* try_add)                 (GtkCssValue            *value1,
-                                                     GtkCssValue            *value2);
-  gint                  (* get_calc_term_order)     (const GtkCssValue      *value);
-};
+GtkCssValue *   gtk_css_dimension_value_new         (double                  value,
+                                                     GtkCssUnit              unit);
 
 GtkCssValue *   _gtk_css_number_value_new           (double                  value,
                                                      GtkCssUnit              unit);
-GtkCssValue *   gtk_css_number_value_transition     (GtkCssValue            *start,
-                                                     GtkCssValue            *end,
-                                                     guint                   property_id,
-                                                     double                  progress);
 gboolean        gtk_css_number_value_can_parse      (GtkCssParser           *parser);
 GtkCssValue *   _gtk_css_number_value_parse         (GtkCssParser           *parser,
                                                      GtkCssNumberParseFlags  flags);
@@ -69,11 +52,10 @@ GtkCssValue *   gtk_css_number_value_add            (GtkCssValue            *val
                                                      GtkCssValue            *value2);
 GtkCssValue *   gtk_css_number_value_try_add        (GtkCssValue            *value1,
                                                      GtkCssValue            *value2);
-gint            gtk_css_number_value_get_calc_term_order (const GtkCssValue *value);
-
 double          _gtk_css_number_value_get           (const GtkCssValue      *number,
                                                      double                  one_hundred_percent) G_GNUC_PURE;
 
+gboolean        gtk_css_dimension_value_is_zero     (const GtkCssValue      *value) G_GNUC_PURE;
 
 G_END_DECLS
 

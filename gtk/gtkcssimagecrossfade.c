@@ -294,7 +294,7 @@ parse_progress (GtkCssParser *parser,
 
   if (*progress > 1.0)
     {
-      gtk_css_parser_error_value (parser, "Percentages over 100%% are not allowed");
+      gtk_css_parser_error_value (parser, "Percentages over 100%% are not allowed. Given value: %f", *progress);
       return FALSE;
     }
 

@@ -293,8 +293,6 @@ gtk_css_style_get_section (GtkCssStyle *style,
 gboolean
 gtk_css_style_is_static (GtkCssStyle *style)
 {
-  gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE (style), TRUE);
-
   return GTK_CSS_STYLE_GET_CLASS (style)->is_static (style);
 }
 
