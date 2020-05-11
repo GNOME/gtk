@@ -223,7 +223,9 @@ gdk_vulkan_strerror (VkResult result)
     case VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT:
       return "A requested pipeline creation would have required compilation, but the application requested compilation to not be performed.";
 #endif
+#if VK_HEADER_VERSION < 140
     case VK_RESULT_RANGE_SIZE:
+#endif
     case VK_RESULT_MAX_ENUM:
     default:
       return "Unknown Vulkan error.";
