@@ -35,10 +35,10 @@ accel_edited_callback (GtkCellRendererText *cell,
   g_print ("%u %d %u\n", keyval, mask, hardware_keycode);
   
   gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-		      0, (gint)mask,
-		      1, keyval,
-		      2, hardware_keycode,
-		      -1);
+                      0, (gint)mask,
+                      1, keyval,
+                      2, hardware_keycode,
+                      -1);
   gtk_tree_path_free (path);
 }
 
@@ -59,62 +59,61 @@ accel_cleared_callback (GtkCellRendererText *cell,
 static GtkWidget *
 key_test (void)
 {
-	GtkWidget *window, *sw, *tv;
-	GtkListStore *store;
-	GtkTreeViewColumn *column;
-	GtkCellRenderer *rend;
-	gint i;
-        GtkWidget *box, *entry;
+  GtkWidget *window, *sw, *tv;
+  GtkListStore *store;
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *rend;
+  gint i;
+  GtkWidget *box, *entry;
 
-	/* create window */
-	window = gtk_window_new ();
-        gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
+  /* create window */
+  window = gtk_window_new ();
+  gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
 
-	sw = gtk_scrolled_window_new (NULL, NULL);
-        gtk_widget_set_hexpand (sw, TRUE);
-        box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
-        gtk_widget_show (box);
-        gtk_window_set_child (GTK_WINDOW (window), box);
-        gtk_container_add (GTK_CONTAINER (box), sw);
+  sw = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_set_vexpand (sw, TRUE);
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
+  gtk_window_set_child (GTK_WINDOW (window), box);
+  gtk_container_add (GTK_CONTAINER (box), sw);
 
-	store = gtk_list_store_new (3, G_TYPE_INT, G_TYPE_UINT, G_TYPE_UINT);
-	tv = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
-	gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), tv);
-	column = gtk_tree_view_column_new ();
-	rend = gtk_cell_renderer_accel_new ();
-	g_object_set (G_OBJECT (rend),
-		      "accel-mode", GTK_CELL_RENDERER_ACCEL_MODE_GTK,
-                      "editable", TRUE,
-		      NULL);
-	g_signal_connect (G_OBJECT (rend),
-			  "accel-edited",
-			  G_CALLBACK (accel_edited_callback),
-			  store);
-	g_signal_connect (G_OBJECT (rend),
-			  "accel-cleared",
-			  G_CALLBACK (accel_cleared_callback),
-			  store);
+  store = gtk_list_store_new (3, G_TYPE_INT, G_TYPE_UINT, G_TYPE_UINT);
+  tv = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), tv);
+  column = gtk_tree_view_column_new ();
+  rend = gtk_cell_renderer_accel_new ();
+  g_object_set (G_OBJECT (rend),
+                "accel-mode", GTK_CELL_RENDERER_ACCEL_MODE_GTK,
+                "editable", TRUE,
+                NULL);
+  g_signal_connect (G_OBJECT (rend),
+                    "accel-edited",
+                    G_CALLBACK (accel_edited_callback),
+                    store);
+  g_signal_connect (G_OBJECT (rend),
+                    "accel-cleared",
+                    G_CALLBACK (accel_cleared_callback),
+                    store);
 
-	gtk_tree_view_column_pack_start (column, rend,
-					 TRUE);
-	gtk_tree_view_column_set_attributes (column, rend,
-					     "accel-mods", 0,
-					     "accel-key", 1,
-					     "keycode", 2,
-					     NULL);
-	gtk_tree_view_append_column (GTK_TREE_VIEW (tv), column);
+  gtk_tree_view_column_pack_start (column, rend,
+                                   TRUE);
+  gtk_tree_view_column_set_attributes (column, rend,
+                                      "accel-mods", 0,
+                                      "accel-key", 1,
+                                      "keycode", 2,
+                                      NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (tv), column);
 
-	for (i = 0; i < 10; i++) {
-		GtkTreeIter iter;
+  for (i = 0; i < 10; i++)
+    {
+      GtkTreeIter iter;
 
-		gtk_list_store_append (store, &iter);
-	}
+      gtk_list_store_append (store, &iter);
+    }
 
-        entry = gtk_entry_new ();
-        gtk_widget_show (entry);
-        gtk_container_add (GTK_CONTAINER (box), entry);
- 
-	return window;
+  entry = gtk_entry_new ();
+  gtk_container_add (GTK_CONTAINER (box), entry);
+
+  return window;
 }
 
 gint

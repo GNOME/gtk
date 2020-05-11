@@ -175,7 +175,7 @@ create_widget_for_model (gpointer item,
   gtk_widget_set_vexpand (row, TRUE);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-  gtk_container_add (GTK_CONTAINER (row), box);
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), box);
 
   depth = gtk_tree_list_row_get_depth (item);
   if (depth > 0)
@@ -198,7 +198,7 @@ create_widget_for_model (gpointer item,
       gtk_container_add (GTK_CONTAINER (child), title);
 
       arrow = g_object_new (GTK_TYPE_SPINNER, "css-name", "arrow", NULL);
-      gtk_container_add (GTK_CONTAINER (title), arrow);
+      gtk_button_set_child (GTK_BUTTON (title), arrow);
     }
   else
     {

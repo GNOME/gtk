@@ -961,7 +961,7 @@ main (int argc, char **argv)
         gtk_container_add (GTK_CONTAINER (mainbox), tmp);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_add (GTK_CONTAINER (tmp), boom);
+        gtk_frame_set_child (GTK_FRAME (tmp), boom);
 
         cellview = gtk_cell_view_new ();
         renderer = gtk_cell_renderer_pixbuf_new ();
@@ -982,7 +982,7 @@ main (int argc, char **argv)
         gtk_container_add (GTK_CONTAINER (mainbox), tmp);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_add (GTK_CONTAINER (tmp), boom);
+        gtk_frame_set_child (GTK_FRAME (tmp), boom);
 
         model = create_list_blaat ();
         combobox = gtk_combo_box_new_with_model (model);
@@ -1022,7 +1022,7 @@ main (int argc, char **argv)
         gtk_container_add (GTK_CONTAINER (mainbox), tmp);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_add (GTK_CONTAINER (tmp), boom);
+        gtk_frame_set_child (GTK_FRAME (tmp), boom);
 
         model = create_empty_list_blaat ();
         combobox = gtk_combo_box_new_with_model (model);
@@ -1065,7 +1065,7 @@ main (int argc, char **argv)
         gtk_container_add (GTK_CONTAINER (mainbox), tmp);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_add (GTK_CONTAINER (tmp), boom);
+        gtk_frame_set_child (GTK_FRAME (tmp), boom);
 
         model = create_list_blaat ();
         combobox = gtk_combo_box_new_with_model (model);
@@ -1119,7 +1119,7 @@ main (int argc, char **argv)
         gtk_container_add (GTK_CONTAINER (mainbox), tmp);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_add (GTK_CONTAINER (tmp), boom);
+        gtk_frame_set_child (GTK_FRAME (tmp), boom);
 
         model = create_tree_blaat ();
         combobox = gtk_combo_box_new_with_model (model);
@@ -1162,7 +1162,7 @@ main (int argc, char **argv)
         gtk_container_add (GTK_CONTAINER (mainbox), tmp);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_add (GTK_CONTAINER (tmp), boom);
+        gtk_frame_set_child (GTK_FRAME (tmp), boom);
 
 
         /* GtkComboBoxEntry */
@@ -1170,7 +1170,7 @@ main (int argc, char **argv)
         gtk_container_add (GTK_CONTAINER (mainbox), tmp);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_add (GTK_CONTAINER (tmp), boom);
+        gtk_frame_set_child (GTK_FRAME (tmp), boom);
 
         comboboxtext = gtk_combo_box_text_new_with_entry ();
         setup_combo_entry (GTK_COMBO_BOX_TEXT (comboboxtext));
@@ -1182,7 +1182,7 @@ main (int argc, char **argv)
         gtk_container_add (GTK_CONTAINER (mainbox), tmp);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_add (GTK_CONTAINER (tmp), boom);
+        gtk_frame_set_child (GTK_FRAME (tmp), boom);
 
         model = create_phylogenetic_tree ();
         combobox = gtk_combo_box_new_with_model (model);
@@ -1204,7 +1204,7 @@ main (int argc, char **argv)
         gtk_container_add (GTK_CONTAINER (mainbox), tmp);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_add (GTK_CONTAINER (tmp), boom);
+        gtk_frame_set_child (GTK_FRAME (tmp), boom);
 
         model = create_capital_tree ();
 	combobox = gtk_combo_box_new_with_model (model);
@@ -1235,7 +1235,7 @@ main (int argc, char **argv)
         gtk_container_add (GTK_CONTAINER (mainbox), tmp);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_add (GTK_CONTAINER (tmp), boom);
+        gtk_frame_set_child (GTK_FRAME (tmp), boom);
 
         model = create_food_list ();
 	combobox = gtk_combo_box_new_with_model (model);
@@ -1269,7 +1269,7 @@ main (int argc, char **argv)
         gtk_container_add (GTK_CONTAINER (mainbox), tmp);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_add (GTK_CONTAINER (tmp), boom);
+        gtk_frame_set_child (GTK_FRAME (tmp), boom);
 
 	model = create_list_long ();
 	combobox = gtk_combo_box_new_with_model (model);
@@ -1294,7 +1294,7 @@ main (int argc, char **argv)
             g_free (text);
           }
         gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 53);
-        gtk_container_add (GTK_CONTAINER (tmp), combobox);
+        gtk_frame_set_child (GTK_FRAME (tmp), combobox);
 
         gtk_widget_show (window);
 

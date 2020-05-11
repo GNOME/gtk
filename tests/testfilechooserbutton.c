@@ -132,31 +132,26 @@ tests_button_clicked_cb (GtkButton *real_button,
 
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_container_add (GTK_CONTAINER (tests), box);
-      gtk_widget_show (box);
 
       button = gtk_button_new_with_label ("Print Selected Path");
       g_signal_connect (button, "clicked",
 			G_CALLBACK (print_selected_path_clicked_cb), user_data);
       gtk_container_add (GTK_CONTAINER (box), button);
-      gtk_widget_show (button);
 
       button = gtk_button_new_with_label ("Add $PWD's Parent as Shortcut");
       g_signal_connect (button, "clicked",
 			G_CALLBACK (add_pwds_parent_as_shortcut_clicked_cb), user_data);
       gtk_container_add (GTK_CONTAINER (box), button);
-      gtk_widget_show (button);
 
       button = gtk_button_new_with_label ("Remove $PWD's Parent as Shortcut");
       g_signal_connect (button, "clicked",
 			G_CALLBACK (del_pwds_parent_as_shortcut_clicked_cb), user_data);
       gtk_container_add (GTK_CONTAINER (box), button);
-      gtk_widget_show (button);
 
       button = gtk_button_new_with_label ("Unselect all");
       g_signal_connect (button, "clicked",
 			G_CALLBACK (unselect_all_clicked_cb), user_data);
       gtk_container_add (GTK_CONTAINER (box), button);
-      gtk_widget_show (button);
 
       g_object_set_data (user_data, "tests-dialog", tests);
     }

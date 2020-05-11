@@ -143,6 +143,7 @@ main (int argc, char *argv[])
 
   content = gtk_image_new_from_icon_name ("start-here-symbolic");
   gtk_image_set_pixel_size (GTK_IMAGE (content), 512);
+  gtk_widget_set_vexpand (content, TRUE);
 
   gtk_container_add (GTK_CONTAINER (box), content);
 

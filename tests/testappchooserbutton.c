@@ -83,9 +83,14 @@ main (int argc,
   toplevel = gtk_window_new ();
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_container_add (GTK_CONTAINER (toplevel), box);
+  gtk_widget_set_margin_top (box, 12);
+  gtk_widget_set_margin_bottom (box, 12);
+  gtk_widget_set_margin_start (box, 12);
+  gtk_widget_set_margin_end (box, 12);
+  gtk_window_set_child (GTK_WINDOW (toplevel), box);
 
   button = gtk_app_chooser_button_new ("image/jpeg");
+  gtk_widget_set_vexpand (button, TRUE);
   gtk_container_add (GTK_CONTAINER (box), button);
 
   g_signal_connect (button, "changed",
@@ -93,14 +98,18 @@ main (int argc,
 
   w = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (w), "<b>Selected app info</b>");
+  gtk_widget_set_vexpand (w, TRUE);
   gtk_container_add (GTK_CONTAINER (box), w);
 
   w = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  gtk_widget_set_vexpand (w, TRUE);
   gtk_container_add (GTK_CONTAINER (box), w);
 
   sel_image = gtk_image_new ();
+  gtk_widget_set_hexpand (sel_image, TRUE);
   gtk_container_add (GTK_CONTAINER (w), sel_image);
   sel_name = gtk_label_new (NULL);
+  gtk_widget_set_hexpand (sel_name, TRUE);
   gtk_container_add (GTK_CONTAINER (w), sel_name);
 
   gtk_app_chooser_button_set_heading (GTK_APP_CHOOSER_BUTTON (button), "Choose one, <i>not</i> two");

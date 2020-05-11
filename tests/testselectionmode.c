@@ -27,12 +27,9 @@ selectable_row_init (SelectableRow *row)
   gtk_widget_set_margin_top (row->check, 10);
   gtk_widget_set_margin_bottom (row->check, 10);
 
-  gtk_widget_show (row->box);
-  gtk_widget_show (row->check);
-
-  gtk_container_add (GTK_CONTAINER (row), row->box);
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), row->box);
   gtk_container_add (GTK_CONTAINER (row->box), row->revealer);
-  gtk_container_add (GTK_CONTAINER (row->revealer), row->check);
+  gtk_revealer_set_child (GTK_REVEALER (row->revealer), row->check);
 }
 
 static void

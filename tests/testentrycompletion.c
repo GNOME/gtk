@@ -314,6 +314,10 @@ main (int argc, char *argv[])
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
+  gtk_widget_set_margin_start (vbox, 5);
+  gtk_widget_set_margin_end (vbox, 5);
+  gtk_widget_set_margin_top (vbox, 5);
+  gtk_widget_set_margin_bottom (vbox, 5);
   gtk_window_set_child (GTK_WINDOW (window), vbox);
     
   label = gtk_label_new (NULL);

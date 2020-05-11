@@ -77,6 +77,7 @@ main (int argc, char *argv[])
                                   GTK_POLICY_NEVER,
                                   GTK_POLICY_AUTOMATIC);
 
+  gtk_widget_set_hexpand (sw, TRUE);
   gtk_container_add (GTK_CONTAINER (box), sw);
 
   content = get_content ();

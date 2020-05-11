@@ -4,7 +4,6 @@
 static GtkWidget *header_stack;
 static GtkWidget *page_stack;
 
-#if 0
 static void
 back_to_main (GtkButton *button)
 {
@@ -18,13 +17,14 @@ go_to_secondary (GtkButton *button)
   gtk_stack_set_visible_child_name (GTK_STACK (header_stack), "secondary");
   gtk_stack_set_visible_child_name (GTK_STACK (page_stack), "secondary");
 }
-#endif
 
 int
 main (int argc, char *argv[])
 {
   GtkBuilder *builder;
   GtkWidget *win;
+  GtkWidget *new_btn;
+  GtkWidget *back_btn;
 
 #ifdef GTK_SRCDIR
   g_chdir (GTK_SRCDIR);
@@ -38,6 +38,11 @@ main (int argc, char *argv[])
   win = (GtkWidget *)gtk_builder_get_object (builder, "window");
   header_stack = (GtkWidget *)gtk_builder_get_object (builder, "header_stack");
   page_stack = (GtkWidget *)gtk_builder_get_object (builder, "page_stack");
+  new_btn = (GtkWidget *)gtk_builder_get_object (builder, "new_btn");
+  back_btn = (GtkWidget *)gtk_builder_get_object (builder, "back_btn");
+
+  g_signal_connect (new_btn, "clicked", G_CALLBACK (go_to_secondary), NULL);
+  g_signal_connect (back_btn, "clicked", G_CALLBACK (back_to_main), NULL);
 
   g_assert (header_stack);
 

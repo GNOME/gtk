@@ -58,10 +58,8 @@ show_dialog (void)
 
   gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))),
                       label);
-  gtk_widget_show (label);
 
   label = gtk_label_new ("? x ?");
-  //gtk_widget_show (label);
 
   gtk_dialog_add_action_widget (GTK_DIALOG (dialog), label, GTK_RESPONSE_HELP);
   gtk_widget_realize (dialog);

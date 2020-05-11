@@ -37,7 +37,7 @@ toggle_icon_name (GtkWidget *button, gpointer data)
   gboolean active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
   GtkStackPage *page;
 
-  page = gtk_stack_get_page (GTK_STACK (gtk_widget_get_parent (button)), button);
+  page = gtk_stack_get_page (GTK_STACK (stack), w1);
   g_object_set (page, "icon-name", active ? "edit-find-symbolic" : NULL, NULL);
 }
 

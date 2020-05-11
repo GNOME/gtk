@@ -58,7 +58,7 @@ int
 main (int argc, char **argv)
 {
   GtkWidget *window;
-  GtkWidget *grid;
+  GtkWidget *vbox;
   GtkWidget *box, *button;
   GList *orientables = NULL;
   gboolean done = FALSE;
@@ -66,14 +66,15 @@ main (int argc, char **argv)
   gtk_init ();
 
   window = gtk_window_new ();
-  grid= gtk_grid_new ();
-  gtk_grid_set_row_spacing (GTK_GRID (grid), 12);
-  gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
+
+  button = gtk_toggle_button_new_with_label ("Horizontal");
+  gtk_container_add (GTK_CONTAINER (vbox), button);
 
   /* GtkBox */
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   orientables = g_list_prepend (orientables, box);
-  gtk_grid_attach (GTK_GRID (grid), box, 0, 1, 1, 1);
+  gtk_container_add (GTK_CONTAINER (vbox), box);
   gtk_container_add (GTK_CONTAINER (box),
                   gtk_button_new_with_label ("GtkBox 1"));
   gtk_container_add (GTK_CONTAINER (box),
@@ -81,17 +82,10 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (box),
                   gtk_button_new_with_label ("GtkBox 3"));
 
-  /* GtkSeparator */
-  box = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-  orientables = g_list_prepend (orientables, box);
-  gtk_grid_attach (GTK_GRID (grid), box, 2, 1, 1, 1);
-
-  button = gtk_toggle_button_new_with_label ("Horizontal");
-  gtk_grid_attach (GTK_GRID (grid), button, 0, 0, 1, 1);
   g_signal_connect (button, "toggled",
                   G_CALLBACK (orient_toggled), orientables);
 
-  gtk_window_set_child (GTK_WINDOW (window), grid);
+  gtk_window_set_child (GTK_WINDOW (window), vbox);
   gtk_widget_show (window);
 
   g_signal_connect (window, "destroy",
