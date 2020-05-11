@@ -526,7 +526,7 @@ dialog_response_callback (GtkDialog              *dialog,
       g_free (uri);
     }
 
-  g_object_unref (new_location);
+  g_clear_object (&new_location);
   g_clear_object (&priv->last_location);
 
   /* unblock the handler which was blocked in the filesave_choose_cb function */
