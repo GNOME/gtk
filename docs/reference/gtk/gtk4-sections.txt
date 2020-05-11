@@ -262,30 +262,6 @@ gtk_center_box_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkcenterlayout</FILE>
-<TITLE>GtkCenterLayout</TITLE>
-GtkCenterLayout
-gtk_center_layout_new
-gtk_center_layout_set_start_widget
-gtk_center_layout_set_center_widget
-gtk_center_layout_set_end_widget
-gtk_center_layout_get_start_widget
-gtk_center_layout_get_center_widget
-gtk_center_layout_get_end_widget
-gtk_center_layout_set_baseline_position
-gtk_center_layout_get_baseline_position
-<SUBSECTION Private>
-GTK_TYPE_CENTER_layout
-GTK_CENTER_LAYOUT
-GTK_CENTER_LAYOUT_CLASS
-GTK_IS_CENTER_LAYOUT
-GTK_IS_CENTER_LAYOUT_CLASS
-GTK_CENTER_LAYOUT_GET_CLASS
-<SUBSECTION Private>
-gtk_center_layout_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtklistbox</FILE>
 <TITLE>GtkListBox</TITLE>
 GtkListBox
@@ -464,6 +440,7 @@ gtk_builder_cscope_get_type
 <FILE>gtkbuilder</FILE>
 <TITLE>GtkBuilder</TITLE>
 GtkBuilder
+GtkBuilderClosureFlags
 GtkBuilderError
 gtk_builder_new
 gtk_builder_new_from_file
@@ -771,6 +748,8 @@ gtk_drawing_area_get_type
 <FILE>gtkeditable</FILE>
 <TITLE>GtkEditable</TITLE>
 GtkEditable
+GtkEditableInterface
+GtkEditableProperties
 gtk_editable_get_text
 gtk_editable_set_text
 gtk_editable_get_chars
@@ -1096,6 +1075,7 @@ gtk_file_chooser_get_type
 <SECTION>
 <FILE>gtkfilechoosernative</FILE>
 <TITLE>GtkFileChooserNative</TITLE>
+GtkFileChooserNative
 gtk_file_chooser_native_new
 gtk_file_chooser_native_get_accept_label
 gtk_file_chooser_native_set_accept_label
@@ -1203,6 +1183,7 @@ gtk_file_filter_get_type
 <FILE>gtkfilterlistmodel</FILE>
 <TITLE>GtkFilterListModel</TITLE>
 GtkFilterListModel
+GtkFilterListModelFilterFunc
 gtk_filter_list_model_new
 gtk_filter_list_model_new_for_type
 gtk_filter_list_model_set_model
@@ -1526,6 +1507,7 @@ gtk_im_context_filter_keypress
 gtk_im_context_focus_in
 gtk_im_context_focus_out
 gtk_im_context_reset
+gtk_im_context_set_client_widget
 gtk_im_context_set_cursor_location
 gtk_im_context_set_use_preedit
 gtk_im_context_set_surrounding
@@ -2090,8 +2072,10 @@ gtk_recent_manager_error_quark
 <FILE>gtkscale</FILE>
 <TITLE>GtkScale</TITLE>
 GtkScale
+GtkScaleFormatValueFunc
 gtk_scale_new
 gtk_scale_new_with_range
+gtk_scale_set_format_value_func
 gtk_scale_set_digits
 gtk_scale_set_draw_value
 gtk_scale_set_has_origin
@@ -2530,6 +2514,7 @@ gtk_text_buffer_insert_range_interactive
 gtk_text_buffer_insert_with_tags
 gtk_text_buffer_insert_with_tags_by_name
 gtk_text_buffer_insert_markup
+gtk_text_buffer_insert_paintable
 gtk_text_buffer_delete
 gtk_text_buffer_delete_interactive
 gtk_text_buffer_backspace
@@ -2572,6 +2557,7 @@ gtk_text_buffer_paste_clipboard
 gtk_text_buffer_copy_clipboard
 gtk_text_buffer_cut_clipboard
 gtk_text_buffer_get_selection_bounds
+gtk_text_buffer_get_selection_content
 gtk_text_buffer_begin_user_action
 gtk_text_buffer_end_user_action
 gtk_text_buffer_add_selection_clipboard
@@ -2586,8 +2572,6 @@ gtk_text_buffer_undo
 gtk_text_buffer_redo
 gtk_text_buffer_begin_irreversible_action
 gtk_text_buffer_end_irreversible_action
-gtk_text_buffer_begin_user_action
-gtk_text_buffer_end_user_action
 
 <SUBSECTION Standard>
 GTK_TEXT_BUFFER
@@ -3931,6 +3915,7 @@ gtk_snapshot_get_type
 <SECTION>
 <FILE>gtkwidgetpaintable</FILE>
 <TITLE>GtkWidgetPaintable</TITLE>
+GtkWidgetPaintable
 gtk_widget_paintable_new
 gtk_widget_paintable_get_widget
 gtk_widget_paintable_set_widget
@@ -4079,6 +4064,7 @@ gtk_widget_device_is_shadowed
 gtk_widget_get_opacity
 gtk_widget_set_opacity
 gtk_widget_get_overflow
+GtkOverflow
 gtk_widget_set_overflow
 gtk_widget_measure
 gtk_widget_snapshot_child
@@ -5822,7 +5808,9 @@ gtk_popover_get_type
 <FILE>gtkpopovermenu</FILE>
 <TITLE>GtkPopoverMenu</TITLE>
 GtkPopoverMenu
+GtkPopoverMenuFlags
 gtk_popover_menu_new_from_model
+gtk_popover_menu_new_from_model_full
 gtk_popover_menu_set_menu_model
 gtk_popover_menu_get_menu_model
 
@@ -5830,6 +5818,7 @@ gtk_popover_menu_get_menu_model
 GTK_TYPE_POPOVER_MENU
 GTK_IS_POPOVER_MENU
 GTK_POPOVER_MENU
+GTK_TYPE_POPOVER_MENU_FLAGS
 
 <SUBSECTION Private>
 gtk_popover_menu_get_type
@@ -6013,7 +6002,6 @@ gtk_event_controller_motion_get_type
 <FILE>gtkshortcuttrigger</FILE>
 <TITLE>GtkShortcutTrigger</TITLE>
 GtkShortcutTrigger
-GtkNeverTrigger
 
 gtk_shortcut_trigger_trigger
 gtk_shortcut_trigger_hash
@@ -6054,6 +6042,8 @@ gtk_shortcut_trigger_get_type
 <FILE>gtkshortcutaction</FILE>
 <TITLE>GtkShortcutAction</TITLE>
 GtkShortcutAction
+GtkShortcutActionFlags
+GtkShortcutFunc
 gtk_shortcut_action_to_string
 gtk_shortcut_action_print
 gtk_shortcut_action_parse_string
@@ -6634,6 +6624,7 @@ gtk_root_get_type
 <SECTION>
 <FILE>gtknative</FILE>
 GtkNative
+GtkNativeInterface
 gtk_native_get_for_surface
 gtk_native_get_surface
 gtk_native_get_renderer

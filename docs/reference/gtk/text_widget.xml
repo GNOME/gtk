@@ -113,7 +113,7 @@ considered a line separator.
 </para>
 
 <para>
-Text buffers support undo and redo if gtk_text_buffer_set_undo_enabled()
+Text buffers support undo and redo if gtk_text_buffer_set_enable_undo()
 has been set to %TRUE. Use gtk_text_buffer_undo() or gtk_text_buffer_redo()
 to perform the necessary action. Note that these operations are ignored if
 the buffer is not editable. Developers may want some operations to not be

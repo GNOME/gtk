@@ -407,7 +407,7 @@ gtk_event_controller_get_widget (GtkEventController *controller)
  * @controller: a #GtkEventController
  *
  * Resets the @controller to a clean state. Every interaction
- * the controller did through gtk_event_controll_handle_event()
+ * the controller did through gtk_event_controller_handle_event()
  * will be dropped at this point.
  **/
 void

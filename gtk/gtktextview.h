@@ -129,7 +129,7 @@ struct _GtkTextView
  *   keybinding signal.
  * @cut_clipboard: The class handler for the #GtkTextView::cut-clipboard
  *   keybinding signal
- * @copy_clipboard: The class handler for the #GtkTextview::copy-clipboard
+ * @copy_clipboard: The class handler for the #GtkTextView::copy-clipboard
  *   keybinding signal.
  * @paste_clipboard: The class handler for the #GtkTextView::paste-clipboard
  *   keybinding signal.

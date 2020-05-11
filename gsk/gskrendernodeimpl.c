@@ -3021,6 +3021,7 @@ gsk_shadow_node_get_child (GskRenderNode *node)
 /**
  * gsk_shadow_node_peek_shadow:
  * @node: (type GskShadowNode): a shadow #GskRenderNode
+ * @i: the given index
  *
  * Retrieves the shadow data at the given index @i.
  *

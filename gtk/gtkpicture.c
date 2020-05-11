@@ -452,7 +452,7 @@ gtk_picture_new_for_pixbuf (GdkPixbuf *pixbuf)
  * isn’t found or can’t be loaded, the resulting #GtkPicture be empty.
  *
  * If you need to detect failures to load the file, use
- * gdk_texture_new_for_file() to load the file yourself, then create
+ * gdk_texture_new_from_file() to load the file yourself, then create
  * the #GtkPicture from the texture.
  *
  * Returns: a new #GtkPicture
