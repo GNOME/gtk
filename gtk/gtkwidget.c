@@ -5047,15 +5047,19 @@ gtk_widget_real_keynav_failed (GtkWidget        *widget,
  * gtk_widget_set_can_focus:
  * @widget: a #GtkWidget
  * @can_focus: whether or not the input focus can enter
- *     the widget tree below @widget
+ *     the widget or any of its children
  *
  * Specifies whether the input focus can enter the widget
- * tree below @widget.
- * 
+ * or any of its children.
+ *
+ * Applications should set @can_focus to %FALSE to mark a
+ * widget as for pointer/touch use only.
+ *
  * Note that having @can_focus be %TRUE is only one of the
  * necessary conditions for being focusable. A widget must
- * also be sensitive and not have an ancestor that is marked
- * as not can-focus in order to receive input focus.
+ * also be sensitive and focusable and not have an ancestor
+ * that is marked as not can-focus in order to receive input
+ * focus.
  *
  * See gtk_widget_grab_focus() for actually setting the input
  * focus on a widget.
@@ -5081,7 +5085,9 @@ gtk_widget_set_can_focus (GtkWidget *widget,
  * gtk_widget_get_can_focus:
  * @widget: a #GtkWidget
  *
- * Determines whether the input focus can enter @widget.
+ * Determines whether the input focus can enter @widget or any
+ * of its children.
+ *
  * See gtk_widget_set_focusable().
  *
  * Returns: %TRUE if the input focus can enter @widget, %FALSE otherwise
@@ -5099,14 +5105,18 @@ gtk_widget_get_can_focus (GtkWidget *widget)
 /**
  * gtk_widget_set_focusable:
  * @widget: a #GtkWidget
- * @focusable: whether or not @widget can own the input focus.
+ * @focusable: whether or not @widget can own the input focus
  *
  * Specifies whether @widget can own the input focus.
- * 
+ *
+ * Widget implementations should set @focusable to %TRUE in
+ * their init() function if they want to receive keyboard input.
+ *
  * Note that having @focusable be %TRUE is only one of the
  * necessary conditions for being focusable. A widget must
- * also be sensitive and not have an ancestor that is marked
- * as not child-focusable in order to receive input focus.
+ * also be sensitive and can-focus and not have an ancestor
+ * that is marked as not can-focus in order to receive input
+ * focus.
  *
  * See gtk_widget_grab_focus() for actually setting the input
  * focus on a widget.
