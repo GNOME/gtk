@@ -3135,44 +3135,6 @@ gtk_widget_has_tick_callback (GtkWidget *widget)
   return priv->tick_callbacks != NULL;
 }
 
-static void
-gtk_widget_connect_frame_clock (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GdkFrameClock *frame_clock;
-
-  frame_clock = gtk_widget_get_frame_clock (widget);
-
-  if (priv->tick_callbacks != NULL && !priv->clock_tick_id)
-    {
-      priv->clock_tick_id = g_signal_connect (frame_clock, "update",
-                                              G_CALLBACK (gtk_widget_on_frame_clock_update),
-                                              widget);
-      gdk_frame_clock_begin_updating (frame_clock);
-    }
-
-  gtk_css_node_invalidate_frame_clock (priv->cssnode, FALSE);
-}
-
-static void
-gtk_widget_disconnect_frame_clock (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  gtk_css_node_invalidate_frame_clock (priv->cssnode, FALSE);
-
-  if (priv->clock_tick_id)
-    {
-      GdkFrameClock *frame_clock;
-
-      frame_clock = gtk_widget_get_frame_clock (widget);
-
-      g_signal_handler_disconnect (frame_clock, priv->clock_tick_id);
-      priv->clock_tick_id = 0;
-      gdk_frame_clock_end_updating (frame_clock);
-    }
-}
-
 typedef struct _GtkSurfaceTransformChangedCallbackInfo GtkSurfaceTransformChangedCallbackInfo;
 
 struct _GtkSurfaceTransformChangedCallbackInfo
@@ -7578,10 +7540,21 @@ static void
 gtk_widget_real_realize (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GdkFrameClock *frame_clock;
 
   priv->realized = TRUE;
 
-  gtk_widget_connect_frame_clock (widget);
+  /* Connect frame clock */
+  frame_clock = gtk_widget_get_frame_clock (widget);
+  if (priv->tick_callbacks != NULL && !priv->clock_tick_id)
+    {
+      priv->clock_tick_id = g_signal_connect (frame_clock, "update",
+                                              G_CALLBACK (gtk_widget_on_frame_clock_update),
+                                              widget);
+      gdk_frame_clock_begin_updating (frame_clock);
+    }
+
+  gtk_css_node_invalidate_frame_clock (priv->cssnode, FALSE);
 }
 
 /*****************************************
@@ -7607,7 +7580,17 @@ gtk_widget_real_unrealize (GtkWidget *widget)
 
   gtk_widget_forall (widget, (GtkCallback)gtk_widget_unrealize, NULL);
 
-  gtk_widget_disconnect_frame_clock (widget);
+  /* Disconnect frame clock */
+  gtk_css_node_invalidate_frame_clock (priv->cssnode, FALSE);
+
+  if (priv->clock_tick_id)
+    {
+      GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (widget);
+
+      g_signal_handler_disconnect (frame_clock, priv->clock_tick_id);
+      priv->clock_tick_id = 0;
+      gdk_frame_clock_end_updating (frame_clock);
+    }
 
   priv->realized = FALSE;
 }
