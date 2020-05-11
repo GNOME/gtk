@@ -35,7 +35,7 @@
  *
  * A #GdkContentFormats describes a set of possible formats content can be
  * exchanged in. It is assumed that this set is ordered. #GTypes are more
- * important than mime types. Order between different #Gtypes or mime types
+ * important than mime types. Order between different #GTypes or mime types
  * is the order they were added in, most important first. Functions that
  * care about order, such as gdk_content_formats_union() will describe in
  * their documentation how they interpret that order, though in general the

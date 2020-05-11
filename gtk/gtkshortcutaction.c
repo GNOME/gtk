@@ -42,7 +42,6 @@
 *  - #GtkSignalAction: a shortcut action that emits a given signal
 *  - #GtkActivateAction: a shortcut action that calls gtk_widget_activate()
 *  - #GtkNamedAction: a shortcut action that calls gtk_widget_activate_action()
-*  - #GtkGActionAction: a shortcut action that activates a given #GAction
 *  - #GtkNothingAction: a shortcut action that does nothing
 *
 * # GtkShortcutAction as GtkBuildable

@@ -406,7 +406,7 @@ gtk_builder_cscope_init (GtkBuilderCScope *self)
 /**
  * gtk_builder_cscope_new:
  *
- * Creates a new #GtkbuilderCScope object to use with future #GtkBuilder
+ * Creates a new #GtkBuilderCScope object to use with future #GtkBuilder
  * instances.
  *
  * Calling this function is only necessary if you want to add custom
