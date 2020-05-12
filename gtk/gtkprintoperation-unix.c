@@ -650,6 +650,9 @@ handle_print_response (GtkWidget *dialog,
       gtk_print_operation_set_print_settings (rdata->op, settings);
       g_signal_emit_by_name (rdata->op, "custom-widget-apply", rdata->op->priv->custom_widget);
     }
+ 
+  if (rdata->loop)
+    g_main_loop_quit (rdata->loop);
   
   finish_print (rdata, printer, page_setup, settings, page_setup_set);
 
@@ -657,9 +660,6 @@ handle_print_response (GtkWidget *dialog,
     g_object_unref (settings);
     
   gtk_window_destroy (GTK_WINDOW (pd));
- 
-  if (rdata->loop)
-    g_main_loop_quit (rdata->loop);
 }
 
 
