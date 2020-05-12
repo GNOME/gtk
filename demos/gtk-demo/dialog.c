@@ -25,9 +25,34 @@ message_dialog_clicked (GtkButton *button,
                                    "number of times:");
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                             "%d", i);
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_window_destroy (GTK_WINDOW (dialog));
+  g_signal_connect (dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
+  gtk_widget_show (dialog);
   i++;
+}
+
+typedef struct {
+  GtkWidget *local_entry1;
+  GtkWidget *local_entry2;
+  GtkWidget *global_entry1;
+  GtkWidget *global_entry2;
+} ResponseData;
+
+static void
+on_dialog_response (GtkDialog *dialog,
+                    int        response,
+                    gpointer   user_data)
+{
+  ResponseData *data = user_data;
+
+  if (response == GTK_RESPONSE_OK)
+    {
+      gtk_editable_set_text (GTK_EDITABLE (data->global_entry1),
+                             gtk_editable_get_text (GTK_EDITABLE (data->local_entry1)));
+      gtk_editable_set_text (GTK_EDITABLE (data->global_entry2),
+                             gtk_editable_get_text (GTK_EDITABLE (data->local_entry2)));
+    }
+
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void
@@ -42,7 +67,7 @@ interactive_dialog_clicked (GtkButton *button,
   GtkWidget *local_entry1;
   GtkWidget *local_entry2;
   GtkWidget *label;
-  gint response;
+  ResponseData *data;
 
   dialog = gtk_dialog_new_with_buttons ("Interactive Dialog",
                                         GTK_WINDOW (window),
@@ -81,15 +106,18 @@ interactive_dialog_clicked (GtkButton *button,
   gtk_grid_attach (GTK_GRID (table), local_entry2, 1, 1, 1, 1);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), local_entry2);
 
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
+  data = g_new (ResponseData, 1);
+  data->local_entry1 = local_entry1;
+  data->local_entry2 = local_entry2;
+  data->global_entry1 = entry1;
+  data->global_entry2 = entry2;
 
-  if (response == GTK_RESPONSE_OK)
-    {
-      gtk_editable_set_text (GTK_EDITABLE (entry1), gtk_editable_get_text (GTK_EDITABLE (local_entry1)));
-      gtk_editable_set_text (GTK_EDITABLE (entry2), gtk_editable_get_text (GTK_EDITABLE (local_entry2)));
-    }
+  g_signal_connect_data (dialog, "response",
+                         G_CALLBACK (on_dialog_response),
+                         data, (GClosureNotify) g_free,
+                         0);
 
-  gtk_window_destroy (GTK_WINDOW (dialog));
+  gtk_widget_show (dialog);
 }
 
 GtkWidget *

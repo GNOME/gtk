@@ -1254,5 +1254,24 @@
         emitted.
       </para>
     </section>
+
+    <section>
+      <title>Stop using blocking dialog functions</title>
+      <para>
+        GtkDialog, GtkNativeDialog, and GtkPrintOperation removed their
+        blocking API using nested main loops. Nested main loops present
+        re-entrancy issues and other hard to debug issues when coupled
+        with other event sources (IPC, accessibility, network operations)
+        that are not under the toolkit or the application developer's
+        control. Additionally, "stop-the-world" functions do not fit
+        the event-driven programming model of GTK.
+      </para>
+      <para>
+        You can replace calls to <function>gtk_dialog_run()</function>
+        by specifying that the #GtkDialog must be modal using
+        gtk_window_set_modal() or the %GTK_DIALOG_MODAL flag, and
+        connecting to the #GtkDialog::response signal.
+      </para>
+    </section>
   </section>
 </chapter>

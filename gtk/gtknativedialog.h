@@ -73,9 +73,6 @@ void                  gtk_native_dialog_set_transient_for (GtkNativeDialog *self
 GDK_AVAILABLE_IN_ALL
 GtkWindow *           gtk_native_dialog_get_transient_for (GtkNativeDialog *self);
 
-GDK_AVAILABLE_IN_ALL
-gint                  gtk_native_dialog_run (GtkNativeDialog *self);
-
 G_END_DECLS
 
 #endif /* __GTK_NATIVE_DIALOG_H__ */
