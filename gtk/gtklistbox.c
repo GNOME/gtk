@@ -96,6 +96,10 @@ struct _GtkListBox
   GSequence *children;
   GHashTable *header_hash;
 
+  gint last_position;
+  GSequenceIter *last_iter;
+  gboolean last_position_valid;
+
   GtkWidget *placeholder;
 
   GtkListBoxSortFunc sort_func;
@@ -327,6 +331,13 @@ static guint row_signals[ROW__LAST_SIGNAL] = { 0 };
 
 
 static GtkBuildableIface *parent_row_buildable_iface;
+
+static void
+invalidate_cached_iter (GtkListBox *box)
+{
+  box->last_position = 0;
+  box->last_position_valid = FALSE;
+}
 
 static void
 gtk_list_box_row_buildable_add_child (GtkBuildable *buildable,
@@ -690,6 +701,8 @@ gtk_list_box_init (GtkListBox *box)
 
   gtk_widget_set_focusable (GTK_WIDGET (box), TRUE);
 
+  invalidate_cached_iter (box);
+
   box->selection_mode = GTK_SELECTION_SINGLE;
   box->activate_single_click = TRUE;
 
@@ -751,11 +764,27 @@ GtkListBoxRow *
 gtk_list_box_get_row_at_index (GtkListBox *box,
                                gint        index_)
 {
-  GSequenceIter *iter;
+  GSequenceIter *iter = NULL;
 
   g_return_val_if_fail (GTK_IS_LIST_BOX (box), NULL);
 
-  iter = g_sequence_get_iter_at_pos (box->children, index_);
+  if (box->last_position_valid)
+    {
+      if (index_ < G_MAXINT && box->last_position == index_ + 1)
+        iter = g_sequence_iter_prev (box->last_iter);
+      else if (index_ > 0 && box->last_position == index_ - 1)
+        iter = g_sequence_iter_next (box->last_iter);
+      else if (box->last_position == index_)
+        iter = box->last_iter;
+    }
+
+  if (iter == NULL)
+    iter = g_sequence_get_iter_at_pos (box->children, index_);
+
+  box->last_iter = iter;
+  box->last_position = index_;
+  box->last_position_valid = TRUE;
+
   if (!g_sequence_iter_is_end (iter))
     return g_sequence_get (iter);
 
@@ -1243,6 +1272,7 @@ gtk_list_box_invalidate_filter (GtkListBox *box)
 {
   g_return_if_fail (GTK_IS_LIST_BOX (box));
 
+  invalidate_cached_iter (box);
   gtk_list_box_apply_filter_all (box);
   gtk_list_box_invalidate_headers (box);
   gtk_widget_queue_resize (GTK_WIDGET (box));
@@ -1294,6 +1324,8 @@ gtk_list_box_invalidate_sort (GtkListBox *box)
 
   if (box->sort_func == NULL)
     return;
+
+  invalidate_cached_iter (box);
 
   g_sequence_sort (box->children, (GCompareDataFunc)do_sort, box);
   g_sequence_foreach (box->children, gtk_list_box_css_node_foreach, &previous);
@@ -2310,6 +2342,8 @@ gtk_list_box_remove (GtkListBox   *box,
       return;
     }
 
+  invalidate_cached_iter (box);
+
   row = GTK_LIST_BOX_ROW (child);
   iter = ROW_PRIV (row)->iter;
   if (g_sequence_iter_get_sequence (iter) != box->children)
@@ -2632,6 +2666,8 @@ gtk_list_box_insert (GtkListBox *box,
       current_iter = g_sequence_get_iter_at_pos (box->children, position);
       iter = g_sequence_insert_before (current_iter, row);
     }
+
+  invalidate_cached_iter (box);
 
   ROW_PRIV (row)->iter = iter;
   prev = g_sequence_iter_prev (iter);
