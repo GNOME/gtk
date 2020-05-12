@@ -80,17 +80,33 @@
       <para>
         GTK 4 removes the GDK_WA_CURSOR flag. Instead, just use
         gdk_window_set_cursor() to set a cursor on the window after
-        creating it.
-      </para>
-      <para>
-        GTK 4 also removes the GDK_WA_VISUAL flag, and always uses
-        an RGBA visual for windows. To prepare your code for this, use
+        creating it. GTK 4 also removes the GDK_WA_VISUAL flag, and
+        always uses an RGBA visual for windows. To prepare your code
+         for this, use
         <literal>gdk_window_set_visual (gdk_screen_get_rgba_visual ())</literal>
         after creating your window.
-      </para>
-      <para>
         GTK 4 also removes the GDK_WA_WMCLASS flag. If you need this
         X11-specific functionality, use XSetClassHint() directly.
+      </para>
+    </section>
+
+    <section>
+      <title>Stop using direct access to GdkEvent structs</title>
+      <para>
+        In GTK 4, event structs are opaque and immutable. Many fields already
+        have accessors in GTK 3, and you should use those to reduce the amount
+        of porting work you have to do at the time of the switch.
+      </para>
+    </section>
+
+    <section>
+      <title>Stop using gdk_pointer_warp()</title>
+      <para>
+        Warping the pointer is disorienting and unfriendly to users.
+        GTK 4 does not support it. In special circumstances (such as when
+        implementing remote connection UIs) it can be necessary to
+        warp the pointer; in this case, use platform APIs such as
+        <function>XWarpPointer()</function> directly.
       </para>
     </section>
 
@@ -98,20 +114,18 @@
       <title>Stop using non-RGBA visuals</title>
       <para>
         GTK 4 always uses RGBA visuals for its windows; you should make
-        sure that your code works with that.
-      </para>
-      <para>
-        At the same time, you should stop using GdkVisual APIs, this object
-        not longer exist in GTK 4. Most of its APIs are deprecated already
-        and not useful when dealing with RGBA visuals.
+        sure that your code works with such visuals. At the same time,
+        you should stop using GdkVisual APIs, since this object not longer
+        exists in GTK 4. Most of its APIs are deprecated already and not
+        useful when dealing with RGBA visuals.
       </para>
     </section>
 
     <section>
-      <title>Stop using GtkBox:padding, GtkBox:fill and GtkBox:expand</title>
+      <title>Stop using GtkBox padding, fill and expand child properties</title>
       <para>
-        GTK 4 removes these #GtkBox child properties, so you should not use them.
-        You can replace GtkBox:padding using the #GtkWidget:margin properties
+        GTK 4 removes these #GtkBox child properties, so you should stop using
+        them. You can replace GtkBox:padding using the #GtkWidget:margin properties
         on your #GtkBox child widgets.
       </para>
      <para>
@@ -152,8 +166,9 @@
     <section>
       <title>Stop using gdk_pixbuf_get_from_window() and gdk_cairo_set_source_surface()</title>
       <para>
-        These functions are not supported in GTK 4. Instead, either use backend-specific
-        APIs, or render your widgets using #GtkWidgetClass.snapshot().
+        These functions are not supported in GTK 4. Instead, either use
+        backend-specific APIs, or render your widgets using
+        #GtkWidgetClass.snapshot() (once you are using GTK 4).
       </para>
     </section>
 
@@ -165,7 +180,7 @@
         not supported in GTK 4. Instead, you can just pack a GtkImage inside
         a GtkButton, and control its visibility like you would for any other
         widget. If you only want to add a named icon to a GtkButton, you can
-        use gtk_button_set_icon_name().
+        use gtk_button_new_from_icon_name().
       </para>
     </section>
 
@@ -180,12 +195,11 @@
     <section>
       <title>Set a proper application ID</title>
       <para>
-        In GTK 4 we want the application's #GApplication
-        'application-id' (and therefore the D-Bus name), the desktop
-        file basename and Wayland's xdg-shell app_id to match. In
-        order to achieve this with GTK 3.x call g_set_prgname() with the same
-        application ID you passed to #GtkApplication. Rename your
-        desktop files to match the application ID if needed.
+        In GTK 4 we want the application's #GApplication 'application-id'
+        (and therefore the D-Bus name), the desktop file basename and Wayland's
+        xdg-shell app_id to match. In order to achieve this with GTK 3.x call
+        g_set_prgname() with the same application ID you passed to #GtkApplication.
+        Rename your desktop files to match the application ID if needed.
       </para>
       <para>
         The call to g_set_prgname() can be removed once you fully migrated
@@ -203,21 +217,19 @@
       <title>Stop using gtk_main() and related APIs</title>
 
       <para>
-        GTK4 removes the gtk_main_ family of APIs. The recommended replacement
+        GTK 4 removes the gtk_main_ family of APIs. The recommended replacement
         is GtkApplication, but you can also iterate the GLib mainloop directly,
-        using GMainContext APIs.
-      </para>
-      <para>
-        The replacement for gtk_events_pending() is g_main_context_pending(),
-        the replacement for gtk_main_iteration() is g_main_context_iteration().
+        using GMainContext APIs. The replacement for gtk_events_pending() is
+        g_main_context_pending(), the replacement for gtk_main_iteration() is
+        g_main_context_iteration().
       </para>
     </section>
 
     <section>
       <title>Reduce the use of gtk_widget_destroy()</title>
       <para>
-        GTK4 introduces a gtk_window_destroy() api. While that is not available
-        in GTK3, you can prepare for the switch by using gtk_widget_destroy()
+        GTK 4 introduces a gtk_window_destroy() api. While that is not available
+        in GTK 3, you can prepare for the switch by using gtk_widget_destroy()
         only on toplevel windows, and replace all other uses with
         gtk_container_remove() or g_object_unref().
       </para>
@@ -226,8 +238,8 @@
     <section>
       <title>Reduce the use of generic container APIs</title>
       <para>
-        GTK4 removes gtk_container_add() and gtk_container_remove(). While there
-        is not always a replacement for gtk_container_remove() in GTK3, you can
+        GTK 4 removes gtk_container_add() and gtk_container_remove(). While there
+        is not always a replacement for gtk_container_remove() in GTK 3, you can
         replace many uses of gtk_container_add() with equivalent container-specific
         APIs such as gtk_box_pack_start() or gtk_grid_attach(), and thereby reduce
         the amount of work you have to do at the time of the switch.
@@ -246,17 +258,6 @@
     </para>
 
     <section>
-      <title>Convert your ui files</title>
-
-      <para>
-        A number of the changes outlined below affect .ui files. The
-        gtk4-builder-tool simplify command can perform many of the
-        necessary changes automatically, when called with the --3to4
-        option. You should always review the resulting changes.
-      </para>
-    </section>
-
-    <section>
       <title>Stop using GdkScreen</title>
       <para>
         The GdkScreen object has been removed in GTK 4. Most of its APIs already
@@ -269,9 +270,8 @@
       <title>Stop using the root window</title>
       <para>
         The root window is an X11-centric concept that is no longer exposed in the
-        backend-neutral GDK API. gdk_surface_get_parent() will return %NULL for toplevel
-        windows. If you need to interact with the X11 root window, you can use
-        gdk_x11_display_get_xrootwindow() to get its XID.
+        backend-neutral GDK API. If you need to interact with the X11 root window,
+        you can use gdk_x11_display_get_xrootwindow() to get its XID.
       </para>
     </section>
 
@@ -297,113 +297,80 @@
         GdkWindow has been renamed to GdkSurface.
       </para>
       <para>
-        The gdk_window_new() function has been replaced by a number of more
-        specialized constructors: gdk_surface_new_toplevel(), gdk_surface_new_popup(),
-        gdk_surface_new_temp(), gdk_wayland_surface_new_subsurface().
-        Use the appropriate ones to create your windows.
+        In GTK 4, the two roles of a standalone toplevel window and of a popup
+        that is placed relative to a parent window have been separated out into
+        two interfaces, #GdkToplevel and #GdkPopup. Surfaces implementing these
+        interfaces are created with gdk_surface_new_toplevel() and
+        gdk_surface_new_popup(), respectively, and they are presented on screen
+        using gdk_toplevel_present() and gdk_popup_present(). The present()
+        functions take parameters in the form of an auxiliary layout struct,
+        #GdkPopupLayout or #GdkToplevelLayout. If your code is dealing directly
+        with surfaces, you may have to change it to call the API in these
+        interfaces, depending on whether the surface you are dealing with
+        is a toplevel or a popup.
       </para>
       <para>
-        Native and foreign subwindows are no longer supported. These concepts were
-        complicating the code and could not be supported across backends.
+        As part of this reorganization, X11-only concepts such as sticky or
+        keep-below have been removed. If you need to use them on your X11 windows,
+        you will have to set the corresponding X11 properties (as specified in the
+        EWMH) yourself. Subsurfaces are only supported with the Wayland backend,
+        using gdk_wayland_surface_new_subsurface(). Native and foreign subwindows
+        are no longer supported. These concepts were complicating the code and
+        could not be supported across backends.
       </para>
       <para>
         gdk_window_reparent() is no longer available.
+      </para>
+      <para>
+        A number of minor API cleanups have happened in GdkSurface
+        as well. For example, gdk_surface_input_shape_combine_region()
+        has been renamed to gdk_surface_set_input_region().
+      </para>
+    </section>
+
+    <section>
+      <title>The "iconified" window state has been renamed to "minimized"</title>
+      <para>
+        The <literal>GDK_SURFACE_STATE_ICONIFIED</literal> value of the
+        #GdkSurfaceState enumeration is now %GDK_SURFACE_STATE_MINIMIZED.
+      </para>
+      <para>
+        The #GdkWindow functions <function>gdk_window_iconify()</function>
+        and <function>gdk_window_deiconify()</function> have been renamed to
+        gdk_toplevel_minimize() and gdk_toplevel_present(), respectively.
+      </para>
+      <para>
+        The behavior of the minimization and unminimization operations have
+        not been changed, and they still require support from the underlying
+        windowing system.
       </para>
     </section>
 
     <section>
       <title>Adapt to GdkEvent API changes</title>
       <para>
-        Direct access to GdkEvent structs is no longer possible in 
-        GTK 4. Some frequently-used fields already had accessors
-        in GTK 3, and the remaining fields have gained accessors
-        in GTK 4.
+        Direct access to GdkEvent structs is no longer possible in GTK 4.
+        GdkEvent is now a strictly read-only type, and you can no longer
+        change any of its fields, or construct new events. All event fields
+        have accessors that you will have to use.
       </para>
       <para>
-        GdkEvent is now a strictly read-only type, and you
-        can no longer change any of its fields, or construct new
-        events.
-      </para>
-    </section>
-
-    <section>
-      <title>Stop using gdk_surface_set_event_compression</title>
-      <para>
-        Event compression is now always enabled. If you need to see the uncoalesced
-        motion history, use gdk_motion_event_get_history() on the latest motion event.
-      </para>
-    </section>
-
-    <section>
-      <title>Stop using gdk_pointer_warp()</title>
-      <para>
-        Warping the pointer is disorienting and unfriendly to users.
-        GTK 4 does not support it. In special circumstances (such as when
-        implementing remote connection UIs) it can be necessary to
-        warp the pointer; in this case, use platform APIs such as
-        <function>XWarpPointer()</function> directly.
+        Event compression is always enabled in GTK 4. If you need to see
+        the uncoalesced motion history, use gdk_motion_event_get_history()
+        on the latest motion event.
       </para>
     </section>
 
     <section>
       <title>Stop using grabs</title>
       <para>
-        GTK 4 no longer provides the gdk_device_grab() or gdk_seat_grab() apis.
-      </para>
-      <para>
-        If you need to dismiss a popup when the user clicks outside (the most common
-        use for grabs), you can use the GdkPopup #GdkPopup:autohide property instead.
-        GtkPopover also has a #GtkPopover:autohide property.
-      </para>
-      <para>
-        If you need to prevent the user from interacting with a window
-        while a dialog is open, use #GtkWindow:modal on the dialog.
-      </para>
-    </section>
-
-    <section>
-      <title>Stop using gtk_get_current_... APIs</title>
-      <para>
-        The function gtk_get_current_event() and its variants have been
-        replaced by equivalent event controller APIs:
-        gtk_event_controller_get_current_event(), etc.
-      </para>
-    </section>
-
-    <section>
-      <title>Adapt to surface API changes</title>
-      <para>
-        In GTK 4, the two roles of a standalone toplevel window
-        and of a popup that is placed relative to a parent window
-        have been separated out into two interfaces, #GdkToplevel
-        and #GdkPopup.
-      </para>
-      <para>
-        Surfaces implementing these interfaces are created with
-        gdk_surface_new_toplevel() and gdk_surface_new_popup(),
-        respectively, and they are presented on screen using
-        gdk_toplevel_present() and gdk_popup_present(). The
-        present() functions take parameters in the form of an
-        auxiliary layout struct, #GdkPopupLayout or
-        #GdkToplevelLayout.
-      </para>
-      <para>
-        If your code is dealing directly with surfaces, you may
-        have to change it to call the API in these interfaces,
-        depending on whether the surface you are dealing with
-        is a toplevel or a popup.
-      </para>
-      <para>
-        As part of this reorganization, X11-only concepts such
-        as sticky or keep-below have been removed. If you need
-        to use them on your X11 windows, you will have to set
-        the corresponding X11 properties (as specified in the
-        EWMH) yourself.
-      </para>
-      <para>
-        A number of minor API cleanups have happened in GdkSurface
-        as well. For example, gdk_surface_input_shape_combine_region()
-        has been renamed to gdk_surface_set_input_region().
+        GTK 4 no longer provides the gdk_device_grab() or gdk_seat_grab()
+        apis. If you need to dismiss a popup when the user clicks outside
+        (the most common use for grabs), you can use the GdkPopup
+        #GdkPopup:autohide property instead. GtkPopover also has a
+        #GtkPopover:autohide property for this. If you need to prevent
+        the user from interacting with a window while a dialog is open,
+        use the #GtkWindow:modal property of the dialog.
       </para>
     </section>
 
@@ -418,13 +385,13 @@
       </para>
       <para>
         Any APIs that deal with global (or root) coordinates have been
-        removed in GTK4, since not all backends support them. You should
+        removed in GTK 4, since not all backends support them. You should
         replace your use of such APIs with surface-relative equivalents.
         Examples of this are gdk_surface_get_origin(), gdk_surface_move()
         or gdk_event_get_root_coords().
       </para>
     </section>
- 
+
     <section>
       <title>Adapt to GdkKeymap API changes</title>
       <para>
@@ -435,15 +402,14 @@
         on the #GdkDevice representing the keyboard: #GdkDevice:direction,
         #GdkDevice:has-bidi-layouts, #GdkDevice:caps-lock-state,
         #GdkDevice:num-lock-state, #GdkDevice:scroll-lock-state and
-        #GdkDevice:modifier-state.
-        To obtain the keyboard device, you can use
+        #GdkDevice:modifier-state. To obtain the keyboard device, you can use
         <literal>gdk_seat_get_keyboard (gdk_display_get_default_seat (display))</literal>.
       </para>
       <para>
         If you need access to translated keys for event handling, #GdkEvent
         now includes all of the translated key state, including consumed
         modifiers, group and shift level, so there should be no need to
-        do manually call gdk_keymap_translate_keyboard_state() (which has
+        manually call gdk_keymap_translate_keyboard_state() (which has
         been removed).
       </para>
       <para>
@@ -451,21 +417,6 @@
         and key values, use gdk_display_map_keycode() and gdk_display_map_keyval(),
         which are the replacements for gdk_keymap_get_entries_for_keycode()
         and gdk_keymap_get_entries_for_keyval().
-      </para>
-    </section>
-
-    <section>
-      <title>Adapt to event controller API changes</title>
-      <para>
-        A few changes to the event controller and #GtkGesture APIs
-        did not make it back to GTK3, and have to be taken into account
-        when moving to GTK4. One is that the
-        #GtkEventControllerMotion::enter,
-        #GtkEventControllerMotion::leave,
-        #GtkEventControllerKey::focus-in and
-        #GtkEventControllerKey::focus-out signals
-        have gained new arguments. Another is that #GtkGestureMultiPress
-        has been renamed to #GtkGestureClick.
       </para>
     </section>
 
@@ -502,6 +453,39 @@
     </section>
 
     <section>
+      <title>Stop using gtk_get_current_... APIs</title>
+      <para>
+        The function gtk_get_current_event() and its variants have been
+        replaced by equivalent event controller APIs:
+        gtk_event_controller_get_current_event(), etc.
+      </para>
+    </section>
+
+    <section>
+      <title>Convert your ui files</title>
+
+      <para>
+        A number of the changes outlined below affect .ui files. The
+        gtk4-builder-tool simplify command can perform many of the
+        necessary changes automatically, when called with the --3to4
+        option. You should always review the resulting changes.
+      </para>
+    </section>
+
+    <section>
+      <title>Adapt to event controller API changes</title>
+      <para>
+        A few changes to the event controller and #GtkGesture APIs
+        did not make it back to GTK 3, and have to be taken into account
+        when moving to GTK 4. One is that the #GtkEventControllerMotion::enter
+        and #GtkEventControllerMotion::leave signals have gained new arguments.
+        Another is that #GtkGestureMultiPress has been renamed to #GtkGestureClick,
+        and has lost its area property. A #GtkEventControllerFocus has been
+        split off from #GtkEventcontrollerKey.
+      </para>
+    </section>
+
+    <section>
       <title>Focus handling changes</title>
       <para>
         The semantics of the #GtkWidget:can-focus property have changed.
@@ -509,17 +493,15 @@
         accept keyboard input, but its children still might (in the case of
         containers). In GTK 4, if :can-focus is %FALSE, the focus cannot enter
         the widget or any of its descendents, and the default value has changed
-        from %FALSE to %TRUE.
-      </para>
-      <para>
-        The recommended way to influence focus behavior of custom widgets
-        in GTK 4 is to override the focus() and grab_focus() vfuncs.
+        from %FALSE to %TRUE. In addition, there is a #GtkWidget:focusable
+        property, which controls whether an individual widget can receive
+        the input focus.
       </para>
       <para>
         The feature to automatically keep the focus widget scrolled into view
-        with gtk_container_set_focus_vadjustment() has been removed from
-        GtkContainer, and is provided by scrollables instead. In the common case
-        that the scrollable is a #GtkViewport, use #GtkViewport:scroll-to-focus.
+        with gtk_container_set_focus_vadjustment() has been removed together with
+        GtkContainer, and is provided by scrollable widgets instead. In the common
+        case that the scrollable is a #GtkViewport, use #GtkViewport:scroll-to-focus.
       </para>
     </section>
 
@@ -541,8 +523,8 @@
     <section>
       <title>Adapt to GtkBox API changes</title>
       <para>
-        GtkBox no longer has pack-start and -end. Pack your widgets in the 
-        correct order, or reorder them as necessary.
+        The GtkBox pack-start and -end methods have been replaced by gtk_box_prepend()
+        and gtk_box_append(). You can also reorder box children as necessary.
       </para>
     </section>
 
@@ -550,8 +532,8 @@
       <title>Adapt to GtkHeaderBar and GtkActionBar API changes</title>
       <para>
         The gtk_header_bar_set_show_close_button() function has been renamed to
-        the more accurate name gtk_header_bar_set_show_title_buttons(). The corresponding
-        getter and the property itself have also been renamed.
+        the more accurate name gtk_header_bar_set_show_title_buttons(). The
+        corresponding getter and the property itself have also been renamed.
       </para>
       <para>
         The ::pack-type child properties of GtkHeaderBar and GtkActionBar have
@@ -586,8 +568,11 @@
       <para>
         The abstract base class GtkBin for single-child containers has been
         removed. The former subclasses are now derived directly from GtkWidget,
-        and have a "child" property for their child widget. The affected classes
-        are:
+        and have a "child" property for their child widget. To add a child, use
+        the setter for the "child" property (e.g. gtk_frame_set_child()) instead
+        of gtk_container_add(). Adding a child in a ui file with
+        <tag class="starttag">child</tag> still works.
+        The affected classes are:
       </para>
       <simplelist>
         <member>GtkAspectFrame</member>
@@ -605,19 +590,30 @@
         <member>GtkWindow (and subclasses)</member>
       </simplelist>
       <para>
-        To add a child, use the setter for the "child" property (e.g.
-        gtk_frame_set_child()) instead of gtk_container_add(). Adding a child
-        in a ui file with <tag class="starttag">child</tag> still works.
+        If you have custom widgets that were derived from GtkBin, you should
+        port them to derive from GtkWidget. Notable vfuncs that you will have
+        to implement include dispose() (to unparent your child), compute_expand()
+        (if you want your container to propagate expand flags) and
+        get_request_mode() (if you want your container to support height-for-width.
+      </para>
+      <para>
+        You may also want to implement the GtkBuildable interface, to support
+        adding children with <tag class="starttag">child</tag> in ui files.
       </para>
     </section>
 
     <section>
       <title>Adapt to GtkContainer removal</title>
       <para>
-        The abstract bas class GtkContainer for general containers has been
+        The abstract base class GtkContainer for general containers has been
         removed. The former subclasses are now derived directly from GtkWidget,
-        and have class-specific add and remove functions. The affected classes
-        are:
+        and have class-specific add() and remove() functions.
+        The most noticable change is the use of gtk_box_append() or gtk_box_prepend()
+        instead of gtk_container_add() for adding children to GtkBox, and the change
+        to use container-specific remove functions, such as gtk_stack_remove() instead
+        of gtk_container_remove(). Adding a child in a ui file with
+        <tag class="starttag">child</tag> still works.
+        The affected classes are:
       </para>
       <simplelist>
         <member>GtkActionBar</member>
@@ -637,11 +633,22 @@
         <member>GtkTreeView</member>
       </simplelist>
       <para>
-        The most noticable change will be to use gtk_box_append() or gtk_box_prepend()
-        instead of gtk_container_add() for adding children to GtkBox, and the change
-        to use container-specific remove functions, such as gtk_stack_remove() instead
-        of gtk_container_remove(). Adding a child in a ui file with
-        <tag class="starttag">child</tag> still works.
+        Without GtkContainer, there are no longer facilities for defining and
+        using child properties. If you have custom widgets using child properties,
+        they will have to be converted either to layout properties provided
+        by a layout manager (if they are layout-related), or handled in some
+        other way. One possibility is to use child meta objects, as seen with
+        GtkAssistantPage, GtkStackPage and the like.
+      </para>
+    </section>
+
+    <section>
+      <title>Stop using GtkContainer::border-width</title>
+      <para>
+        GTK 4 has removed the #GtkContainer::border-width property (together
+        with the rest of GtkContainer). Use other means to influence the spacing
+        of your containers, such as the CSS margin and padding properties on child
+        widgets.
       </para>
     </section>
 
@@ -677,22 +684,10 @@
     <section>
       <title>Adapt to GtkCssProvider API changes</title>
       <para>
-        In GTK 4, the various #GtkCssProvider load functions have lost
-        their #GError argument. If you want to handle CSS loading errors,
-        use the #GtkCssProvider::parsing-error signal instead.
-      </para>
-      <para>
-        gtk_css_provider_get_named() has been replaced by
-        gtk_css_provider_load_named().
-      </para>
-    </section>
-
-    <section>
-      <title>Stop using GtkContainer::border-width</title>
-      <para>
-        GTK 4 has removed the #GtkContainer::border-width property.
-        Use other means to influence the spacing of your containers,
-        such as the CSS margin and padding properties on child widgets.
+        In GTK 4, the various #GtkCssProvider load functions have lost their
+        #GError argument. If you want to handle CSS loading errors, use the
+        #GtkCssProvider::parsing-error signal instead. gtk_css_provider_get_named()
+        has been replaced by gtk_css_provider_load_named().
       </para>
     </section>
 
@@ -714,28 +709,33 @@
         implement size requisition, namely the gtk_widget_get_preferred_width()
         family of functions. To simplify widget implementations, GTK 4 uses
         only one virtual function, GtkWidgetClass::measure() that widgets
-        have to implement.
+        have to implement. gtk_widget_measure() replaces the various
+        gtk_widget_get_preferred_ functions for querying sizes.
       </para>
     </section>
 
     <section>
       <title>Adapt to GtkWidget's size allocation changes</title>
       <para>
-        The #GtkWidget::size-allocate signal now takes the baseline as an
-        argument, so you no longer need to call gtk_widget_get_allocated_baseline()
+        The #GtkWidget.size_allocate() vfunc takes the baseline as an argument
+        now, so you no longer need to call gtk_widget_get_allocated_baseline()
         to get it.
+      </para>
+      <para>
+        The ::size-allocate signal has been removed, since it is easy
+        to misuse. If you need to learn about sizing changes of custom
+        drawing widgets, use the #GtkDrawingArea::resize or #GtkGLArea::resize
+        signals.
       </para>
     </section>
 
     <section>
       <title>Switch to GtkWidget's children APIs</title>
       <para>
-        Instead of the GtkContainer subclass, in GTK 4, any widget can
-        have children, and there is new API to navigate the widget tree:
-        gtk_widget_get_first_child(), gtk_widget_get_last_child(),
+        In GTK 4, any widget can have children (and GtkContainer is gone).
+        There is new API to navigate the widget tree, for use in widget
+        implementations: gtk_widget_get_first_child(), gtk_widget_get_last_child(),
         gtk_widget_get_next_sibling(), gtk_widget_get_prev_sibling().
-        The GtkContainer API still works, but if you are implementing
-        your own widgets, you should consider using the new APIs.
       </para>
     </section>
 
@@ -757,18 +757,17 @@
     </section>
 
     <section>
-      <title>Don't use -gtk-outline-...-radius in your CSS</title>
+      <title>Don't use -gtk-icon-theme in your CSS</title>
       <para>
-        These non-standard properties have been removed from GTK
-        CSS. Just use regular border radius.
+        GTK now uses the current icon theme, without a way to change this.
       </para>
     </section>
 
     <section>
-      <title>Use gtk_widget_measure</title>
+      <title>Don't use -gtk-outline-...-radius in your CSS</title>
       <para>
-        gtk_widget_measure() replaces the various gtk_widget_get_preferred_ functions
-        for querying sizes.
+        These non-standard properties have been removed from GTK
+        CSS. Just use regular border radius.
       </para>
     </section>
 
@@ -809,6 +808,8 @@
         The default value of #GtkWidget:visible in GTK 4 is %TRUE, so you no
         longer need to explicitly show all your widgets. On the flip side, you
         need to hide widgets that are not meant to be visible from the start.
+        The only widgets that still need to be explicitly shown are toplevel
+        windows, dialogs and popovers.
       </para>
       <para>
         A convenient way to remove unnecessary property assignments like this
@@ -817,7 +818,8 @@
       </para>
       <para>
         The function gtk_widget_show_all(), the #GtkWidget:no-show-all property
-        and its getter and setter have been removed in  GTK 4, so you should stop using them.
+        and its getter and setter have been removed in  GTK 4, so you should stop
+        using them.
       </para>
     </section>
 
@@ -848,11 +850,8 @@
       <para>
         A number of #GdkPixbuf-based APIs have been removed. The available replacements
         are either using #GIcon, or the newly introduced #GdkTexture or #GdkPaintable
-        classes instead.
-      </para>
-      <para>
-        If you are dealing with pixbufs, you can use gdk_texture_new_for_pixbuf()
-        to convert them to texture objects where needed.
+        classes instead. If you are dealing with pixbufs, you can use
+        gdk_texture_new_for_pixbuf() to convert them to texture objects where needed.
       </para>
     </section>
 
@@ -878,7 +877,9 @@
       <title>Stop using GtkWidget::draw</title>
       <para>
         The #GtkWidget::draw signal has been removed. Widgets need to implement the
-        #GtkWidgetClass.snapshot() function now. Connecting draw signal handlers is no longer possible.
+        #GtkWidgetClass.snapshot() function now. Connecting draw signal handlers is
+        no longer possible. If you want to keep using cairo for drawing, use
+        gtk_snaphot_append_cairo().
       </para>
     </section>
 
@@ -926,24 +927,15 @@
         to override the icon size.
       </para>
       <para>
-        The ::stock-size property of GtkCellRendererPixbuf has been renamed to
+        The :stock-size property of GtkCellRendererPixbuf has been renamed to
         #GtkCellRendererPixbuf:icon-size.
-      </para>
-    </section>
-
-    <section>
-      <title>Convert .ui files</title>
-      <para>
-        The simplify command of gtk4-builder-tool has gained a --3to4 option, which
-        can help with some of the required changes in .ui files, such as converting
-        child properties to child meta objects.
       </para>
     </section>
 
     <section>
       <title>Adapt to changes in the GtkAssistant API</title>
       <para>
-        The ::has-padding property is gone, and GtkAssistant no longer adds padding
+        The :has-padding property is gone, and GtkAssistant no longer adds padding
         to pages. You can easily do that yourself.
       </para>
     </section>
@@ -969,8 +961,8 @@
     <section>
       <title>Adapt to changes in GtkOverlay API</title>
       <para>
-        The GtkOverlay::pass-through child property has been replaced by the
-        GtkWidget::can-target property. Note that they have the opposite sense:
+        The GtkOverlay :pass-through child property has been replaced by the
+        #GtkWidget:can-target property. Note that they have the opposite sense:
         pass-through == !can-target.
       </para>
     </section>
@@ -996,36 +988,14 @@
     </section>
 
     <section>
-      <title>Stop using child properties</title>
-      <para>
-        GtkContainer no longer provides facilities for defining and using
-        child properties. If you have custom widgets using child properties,
-        they will have to be converted either to layout properties provided
-        by a layout manager (if they are layout-related), or handled in
-        some other way. One possibility is to use child meta objects,
-        as seen with GtkAssistantPage, GtkStackPage and the like.
-      </para>
-    </section>
-
-    <section>
-      <title>Stop using gtk_menu_set_display()</title>
-      <para>
-        This function has been removed. Menus should always be
-        attached to a widget and get their display that way.
-      </para>
-    </section>
-
-    <section>
       <title>Stop using gtk_window_activate_default()</title>
       <para>
         The handling of default widgets has been changed, and activating
         the default now works by calling gtk_widget_activate_default()
-        on the widget that caused the activation.
-      </para>
-      <para>
-        If you have a custom widget that wants to override the default
-        handling, you can provide an implementation of the default.activate
-        action in your widgets' action groups.
+        on the widget that caused the activation. If you have a custom widget
+        that wants to override the default handling, you can provide an
+        implementation of the default.activate action in your widgets' action
+        groups.
       </para>
     </section>
 
@@ -1042,7 +1012,7 @@
     <section>
       <title>Stop using the GtkWidget::display-changed signal</title>
       <para>
-        To track the current display, use the GtkWidget::root property
+        To track the current display, use the #GtkWidget::root property
         instead.
       </para>
     </section>
@@ -1098,29 +1068,6 @@
     </section>
 
     <section>
-      <title>The "iconified" window state has been renamed to "minimized"</title>
-      <para>
-        The <literal>GDK_SURFACE_STATE_ICONIFIED</literal> value of the
-        #GdkSurfaceState enumeration is now %GDK_SURFACE_STATE_MINIMIZED.
-      </para>
-      <para>
-        The #GdkSurface functions <function>gdk_surface_iconify()</function>
-        and <function>gdk_surface_deiconify()</function> have been renamed to
-        gdk_toplevel_minimize() and gdk_toplevel_present(), respectively.
-      </para>
-      <para>
-        The corresponding #GtkWindow functions <function>gtk_window_iconify()</function>
-        and <function>gtk_window_deiconify()</function> have been renamed
-        to gtk_window_minimize() and gtk_window_unminimize(), respectively.
-      </para>
-      <para>
-        The behavior of the minimization and unminimization operations have
-        not been changed, and they still require support from the underlying
-        windowing system.
-      </para>
-    </section>
-
-    <section>
       <title>GtkMenu, GtkMenuBar and GtkMenuItem are gone</title>
       <para>
         These widgets were heavily relying on X11-centric concepts such as
@@ -1139,7 +1086,6 @@
         complex layout in menu-like popups, consider directly using a
         #GtkPopover instead.
       </para>
-
       <para>
         Since menus are gone, GtkMenuButton also lost its ability to show menus,
         and needs to be used with popovers in GTK 4.
@@ -1150,10 +1096,8 @@
       <title>GtkToolbar has been removed</title>
       <para>
         Toolbars were using outdated concepts such as requiring special toolitem
-        widgets.
-      </para>
-      <para>
-        Toolbars should be replaced by using a GtkBox with regular widgets instead.
+        widgets. Toolbars should be replaced by using a GtkBox with regular widgets
+        instead and the "toolbar" style class.
       </para>
     </section>
 
@@ -1177,46 +1121,36 @@
     </section>
 
     <section>
-      <title>Switch to the new DND api</title>
+      <title>Switch to the new Drag-and-Drop api</title>
       <para>
-        The source-side DND apis in GTK 4 have been changed to use an event controller, #GtkDragSource.
+        The source-side Drag-and-Drop apis in GTK 4 have been changed to use an event
+        controller, #GtkDragSource. Instead of calling gtk_drag_source_set()
+        and connecting to #GtkWidget signals, you create a #GtkDragSource object,
+        attach it to the widget with gtk_widget_add_controller(), and connect
+        to #GtkDragSource signals. Instead of calling gtk_drag_begin() on a widget
+        to start a drag manually, call gdk_drag_begin().
+        The ::drag-data-get signal has been replaced by the #GtkDragSource::prepare
+        signal, which returns a #GdkContentProvider for the drag operation.
       </para>
       <para>
-        Instead of calling gtk_drag_source_set() and connecting to #GtkWidget signals, you create
-        a #GtkDragSource object, attach it to the widget with gtk_widget_add_controller(), and connect
-        to #GtkDragSource signals. Instead of calling gtk_drag_begin() on a widget to start a drag
-        manually, call gdk_drag_begin().
-      </para>
-      <para>
-        The ::drag-data-get signal has been replaced by the #GtkDragSource::prepare signal, which
-        returns a #GdkContentProvider for the drag operation.
-      </para>
-      <para>
-        The destination-side DND apis in GTK 4 have also been changed to use and event controller,
-        #GtkDropTarget.
-      </para>
-      <para>
-        Instead of calling gtk_drag_dest_set() and connecting to #GtkWidget signals, you create
-        a #GtkDropTarget object, attach it to the widget with gtk_widget_add_controller(), and
-        connect to #GtkDropTarget signals.
-      </para>
-      <para>
-        The ::drag-motion signal has been renamed to #GtkDropTarget::accept, and instead of
-        ::drag-data-received, you need to use async read methods on the #GdkDrop object, such
-        as gdk_drop_read_async() or gdk_drop_read_value_async().
+        The destination-side Drag-and-Drop  apis in GTK 4 have also been changed
+        to use an event controller, #GtkDropTarget. Instead of calling
+        gtk_drag_dest_set() and connecting to #GtkWidget signals, you create
+        a #GtkDropTarget object, attach it to the widget with
+        gtk_widget_add_controller(), and connect to #GtkDropTarget signals.
+        The ::drag-motion signal has been renamed to #GtkDropTarget::accept, and
+        instead of ::drag-data-received, you need to use async read methods on the
+        #GdkDrop object, such as gdk_drop_read_async() or gdk_drop_read_value_async().
       </para>
     </section>
 
     <section>
       <title>Adapt to GtkIconTheme API changes</title>
       <para>
-        gtk_icon_theme_lookup_icon() returns a #GtkIconPaintable
-        object now, instead of a #GtkIconInfo. It always returns
-        a paintable in the requested size, and never fails.
-      </para>
-      <para>
-        A number of no-longer-relevant lookup flags and API
-        variants have been removed.
+        gtk_icon_theme_lookup_icon() returns a #GtkIconPaintable object now, instead
+        of a #GtkIconInfo. It always returns a paintable in the requested size, and
+        never fails. A number of no-longer-relevant lookup flags and API variants
+        have been removed.
       </para>
     </section>
 

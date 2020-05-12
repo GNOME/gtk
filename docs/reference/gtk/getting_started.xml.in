@@ -9,7 +9,7 @@
   widget toolkit</ulink>. Each user interface created by
   GTK consists of widgets. This is implemented in C using
   <link linkend="gobject">GObject</link>, an object-oriented framework for C.
-  Widgets are organized in a hierachy. The window widget is the main container.
+  Widgets are organized in a hierarchy. The window widget is the main container.
   The user interface is then built by adding buttons, drop-down menus, input
   fields, and other widgets to the window.
   If you are creating complex user interfaces it is recommended to
@@ -77,7 +77,7 @@
     For this example <varname>org.gtk.example</varname> is used. For
     choosing an identifier for your application, see
     <ulink url="https://wiki.gnome.org/HowDoI/ChooseApplicationID">this guide</ulink>.
-    Lastly gtk_application_new() takes #GApplicationFlags as input for your
+    Lastly gtk_application_new() takes GApplicationFlags as input for your
     application, if your application would have special needs.
     </para>
 
@@ -112,14 +112,14 @@
     <ulink url="https://developer.gnome.org/gobject/stable/gtype-conventions.html">
     here</ulink>.</para>
 
-    <para>Finally the window size is set using gtk_window_set_default_sizei()
+    <para>Finally the window size is set using gtk_window_set_default_size()
     and the window is then shown by GTK via gtk_widget_show().</para>
 
-    <para>When you exit the window, by for example pressing the X,
-    the g_application_run() in the main loop returns with a number
-    which is saved inside an integer named "status". Afterwards, the
+    <para>When you close the window, by for example pressing the X, the
+    g_application_run() call returns with a number which is saved inside
+    an integer variable named <varname>status</varname>. Afterwards, the
     GtkApplication object is freed from memory with g_object_unref().
-    Finally the status integer is returned and the GTK application exits.</para>
+    Finally the status integer is returned and the application exits.</para>
 
     <para>While the program is running, GTK is receiving
     <firstterm>events</firstterm>. These are typically input events caused by
@@ -204,7 +204,7 @@
   <ulink url="https://wiki.gnome.org/HowDoI/Buttons">here</ulink>.
   </para>
 
-  <para>The rest of the code in example-1.c is identical to example-0.c. Next
+  <para>The rest of the code in example-1.c is identical to example-0.c. The next
   section will elaborate further on how to add several GtkWidgets to your GTK
   application.</para>
   </section>
@@ -213,9 +213,8 @@
     <title>Packing</title>
 
     <para>When creating an application, you'll want to put more than one widget
-    inside a window. When you want to put more than one widget into a window,
-    it becomes important to control how each widget is positioned and sized.
-    This is where packing comes in.</para>
+    inside a window. When you do so, it becomes important to control how each widget
+    is positioned and sized. This is where packing comes in.</para>
 
     <para>GTK comes with a large variety of <firstterm>layout containers</firstterm>
     whose purpose it is to control the layout of the child widgets that are
@@ -246,15 +245,59 @@
   </section>
 
   <section>
+    <title>Custom Drawing</title>
+
+    <para>Many widgets, like buttons, do all their drawing themselves. You
+    just tell them the label you want to see, and they figure out what font
+    to use, draw the button outline and focus rectangle, etc. Sometimes, it
+    is necessary to do some custom drawing. In that case, a GtkDrawingArea
+    might be the right widget to use. It offers a canvas on which you can
+    draw by connecting to the ::draw signal.
+    </para>
+
+    <para>The contents of a widget often need to be partially or fully redrawn,
+    e.g. when another window is moved and uncovers part of the widget, or
+    when the window containing it is resized. It is also possible to explicitly
+    cause part or all of the widget to be redrawn, by calling
+    gtk_widget_queue_draw() or its variants. GTK takes care of most of the
+    details by providing a ready-to-use cairo context to the ::draw signal
+    handler.</para>
+
+    <para>The following example shows a ::draw signal handler. It is a bit
+    more complicated than the previous examples, since it also demonstrates
+    input event handling by means of event controllers.</para>
+
+    <informalfigure>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="drawing.png" format="PNG"/>
+        </imageobject>
+      </mediaobject>
+    </informalfigure>
+
+    <example id="gtk-getting-started-drawing">
+      <title>Drawing in response to input</title>
+      <para>Create a new file with the following content named example-4.c.</para>
+      <programlisting><xi:include href="@SRC_DIR@/examples/drawing.c" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+    </example>
+    <para>
+      You can compile the program above with GCC using:
+      <literallayout>
+        <literal>gcc `pkg-config --cflags gtk4` -o example-4 example-4.c `pkg-config --libs gtk4`</literal>
+      </literallayout>
+    </para>
+  </section>
+
+  <section>
     <title>Building user interfaces</title>
 
-    <para>When construcing a more complicated user interface, with dozens
+    <para>When constructing a more complicated user interface, with dozens
     or hundreds of widgets, doing all the setup work in C code is
     cumbersome, and making changes becomes next to impossible.</para>
 
     <para>Thankfully, GTK supports the separation of user interface
     layout from your business logic, by using UI descriptions in an
-    XML format that can be parsed by the #GtkBuilder class.</para>
+    XML format that can be parsed by the GtkBuilder class.</para>
 
     <example>
       <title>Packing buttons with GtkBuilder</title>
@@ -333,8 +376,8 @@
     application menus, settings, GtkHeaderBar, GtkStack, GtkSearchBar,
     GtkListBox, and more.</para>
 
-    <para>The full, buildable sources for these examples can be found
-    in the examples/ directory of the GTK source distribution, or
+    <para>The full, buildable sources for these examples can be found in the
+    <filename>examples/</filename> directory of the GTK source distribution, or
     <ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/master/examples">online</ulink> in the GTK git repository.
     You can build each example separately by using make with the <filename>Makefile.example</filename>
     file. For more information, see the <filename>README</filename> included in the
@@ -887,10 +930,7 @@ example_app_window_init (ExampleAppWindow *win)
 
       <para>The code to populate the sidebar with buttons for the words
       found in each file is a little too involved to go into here. But we'll
-      look at the code to add the gears menu.</para>
-
-      <para>As expected by now, the gears menu is specified in a GtkBuilder
-      ui file.</para>
+      look at the code to add a checkbutton for the new feature to the menu.</para>
 
       <informalexample>
         <programlisting><xi:include href="@SRC_DIR@/examples/application8/gears-menu.ui" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
@@ -1003,50 +1043,6 @@ example_app_window_init (ExampleAppWindow *win)
         </mediaobject>
       </informalfigure>
     </section>
-  </section>
-
-  <section>
-    <title>Custom Drawing</title>
-
-    <para>Many widgets, like buttons, do all their drawing themselves. You
-    just tell them the label you want to see, and they figure out what font
-    to use, draw the button outline and focus rectangle, etc. Sometimes, it
-    is necessary to do some custom drawing. In that case, a GtkDrawingArea
-    might be the right widget to use. It offers a canvas on which you can
-    draw by connecting to the ::draw signal.
-    </para>
-
-    <para>The contents of a widget often need to be partially or fully redrawn,
-    e.g. when another window is moved and uncovers part of the widget, or
-    when the window containing it is resized. It is also possible to explicitly
-    cause part or all of the widget to be redrawn, by calling
-    gtk_widget_queue_draw() or its variants. GTK takes care of most of the
-    details by providing a ready-to-use cairo context to the ::draw signal
-    handler.</para>
-
-    <para>The following example shows a ::draw signal handler. It is a bit
-    more complicated than the previous examples, since it also demonstrates
-    input event handling by means of event controllers.</para>
-
-    <informalfigure>
-      <mediaobject>
-        <imageobject>
-          <imagedata fileref="drawing.png" format="PNG"/>
-        </imageobject>
-      </mediaobject>
-    </informalfigure>
-
-    <example id="gtk-getting-started-drawing">
-      <title>Drawing in response to input</title>
-      <para>Create a new file with the following content named example-4.c.</para>
-      <programlisting><xi:include href="@SRC_DIR@/examples/drawing.c" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
-    </example>
-    <para>
-      You can compile the program above with GCC using:
-      <literallayout>
-        <literal>gcc `pkg-config --cflags gtk4` -o example-4 example-4.c `pkg-config --libs gtk4`</literal>
-      </literallayout>
-    </para>
   </section>
 
 </chapter>
