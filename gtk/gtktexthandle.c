@@ -348,6 +348,8 @@ gtk_text_handle_class_init (GtkTextHandleClass *klass)
 		  NULL, NULL,
                   NULL,
                   G_TYPE_NONE, 0, G_TYPE_NONE);
+
+  gtk_widget_class_set_css_name (widget_class, I_("cursor-handle"));
 }
 
 static void
@@ -461,9 +463,7 @@ gtk_text_handle_new (GtkWidget *parent)
 {
   GtkTextHandle *handle;
 
-  handle = g_object_new (GTK_TYPE_TEXT_HANDLE,
-                         "css-name", I_("cursor-handle"),
-                         NULL);
+  handle = g_object_new (GTK_TYPE_TEXT_HANDLE, NULL);
   gtk_widget_set_parent (GTK_WIDGET (handle), parent);
 
   return handle;
