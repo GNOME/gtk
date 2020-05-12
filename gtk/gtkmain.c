@@ -1621,6 +1621,7 @@ handle_pointing_event (GdkEvent *event)
       target = gtk_window_lookup_effective_pointer_focus_widget (toplevel,
                                                                  device,
                                                                  sequence);
+      set_widget_active_state (target, TRUE);
       break;
     default:
       g_assert_not_reached ();
