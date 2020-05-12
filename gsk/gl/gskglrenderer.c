@@ -1163,6 +1163,35 @@ render_clip_node (GskGLRenderer   *self,
   render_clipped_child (self, builder, clip, child);
 }
 
+static inline gboolean
+rounded_inner_rect_contains_rect (const GskRoundedRect  *rounded,
+                                  const graphene_rect_t *rect)
+{
+  const graphene_rect_t *rounded_bounds = &rounded->bounds;
+  graphene_rect_t inner;
+  float offset_x, offset_y;
+
+  /* TODO: This is pretty conservative and we could to further, more
+   *       fine-grained checks to avoid offscreen drawing. */
+
+  offset_x = MAX (rounded->corner[GSK_CORNER_TOP_LEFT].width,
+                  rounded->corner[GSK_CORNER_BOTTOM_LEFT].width);
+  offset_y = MAX (rounded->corner[GSK_CORNER_TOP_LEFT].height,
+                  rounded->corner[GSK_CORNER_TOP_RIGHT].height);
+
+
+  inner.origin.x = rounded_bounds->origin.x + offset_x;
+  inner.origin.y = rounded_bounds->origin.y + offset_y;
+  inner.size.width = rounded_bounds->size.width - offset_x -
+                     MAX (rounded->corner[GSK_CORNER_TOP_RIGHT].width,
+                          rounded->corner[GSK_CORNER_BOTTOM_RIGHT].width);
+  inner.size.height= rounded_bounds->size.height - offset_y -
+                     MAX (rounded->corner[GSK_CORNER_BOTTOM_LEFT].height,
+                          rounded->corner[GSK_CORNER_BOTTOM_RIGHT].height);
+
+  return graphene_rect_contains_rect (&inner, rect);
+}
+
 static inline void
 render_rounded_clip_node (GskGLRenderer       *self,
                           GskRenderNode       *node,
@@ -1182,8 +1211,8 @@ render_rounded_clip_node (GskGLRenderer       *self,
 
   if (!ops_has_clip (builder))
     need_offscreen = FALSE;
-  else if (graphene_rect_contains_rect (&builder->current_clip->bounds,
-                                        &transformed_clip.bounds))
+  else if (rounded_inner_rect_contains_rect (builder->current_clip,
+                                             &transformed_clip.bounds))
     need_offscreen = FALSE;
   else
     need_offscreen = TRUE;
