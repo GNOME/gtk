@@ -772,7 +772,7 @@ gtk_paned_buildable_add_child (GtkBuildable *buildable,
       gtk_paned_set_resize_end_child (self, TRUE);
       gtk_paned_set_shrink_end_child (self, TRUE);
     }
-  else if (GTK_IS_WIDGET (child))
+  else if (type == NULL && GTK_IS_WIDGET (child))
     {
       if (self->start_child == NULL)
         {
