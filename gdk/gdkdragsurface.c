@@ -24,12 +24,10 @@
 #include "gdkintl.h"
 
 /**
- * SECTION:dnd
- * @Short_description: Interface for drag surface surfaces
- * @Title: Drag surfaces
+ * GdkDragSurface:
  *
- * A #GdkDragSurface is a surface that is used during a
- * DND operation.
+ * A #GdkDragSurface is an interface implemented by #GdkSurfaces used
+ * during a DND operation.
  */
 
 G_DEFINE_INTERFACE (GdkDragSurface, gdk_drag_surface, GDK_TYPE_SURFACE)
