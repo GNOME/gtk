@@ -1,3 +1,83 @@
+Overview of Changes in GTK 3.98.4
+=================================
+
+* Themes
+ - Refine menu styling
+ - Add public colors to HighContrast
+ - Fix scale borders in HighContrast
+ - Tweak visible focus behavior
+
+* CSS:
+ - Drop the nonstandard -gtk-icon-theme property
+ - Add a system_setting_changed vfunc to propagate global changes
+
+* Untangle titlebars from windows:
+ - Add a GtkWindowControls widget
+ - Add a GtkWindowHandle widget
+ - Add actions for window menu items
+ - Remove app menu fallback from GtkHeaderBar
+ - Remove title and subtitle properties from GtkHeaderBar,
+   rename custom-title to title-widget
+
+* GtkWidget
+ - Add a focusable property
+
+* GtkPopover:
+ -  Fix (re-)positioning issues
+
+* GtkStack:
+ - Drop the homogeneous property
+ - Add a use-underline property to stack pages
+
+* GtkTreeView:
+ - Break reference cycles in unroot
+
+* Drop GtkBin and GtkContainer. All existing GtkBin subclasses
+  have grown a child property with setter and getter. All
+  existing GtkContainer subclasses have grown widget-specific
+  remove (and in some cases, add) functions. <child> in ui
+  files continues to work as before
+
+* Replace gtk_widget_destroy by gtk_window_destroy
+
+* Drop the ::size-allocate signal. Use a GtkWidgetPaintable
+  if you need to be informed about changes to a widgets
+  content or size
+
+* Remove gtk_dialog_run
+
+* Wayland:
+ - Provide a builtin cursor of last resort
+
+* GSK:
+ - Don't include renderer-specific headers automatically
+
+* Introspection:
+ - Assorted annotation fixes
+
+* Inspector:
+ - Preview media resources
+ - Show media backend information
+
+* gtk4-widget-factory:
+ - Add GtkVideo
+ - Add text styles
+ - Add a print dialog
+ - Add a password entry
+ - Improve toolbar styling
+ - Revamp transition effects
+
+* gtk4-demo:
+ - Replace some demos
+
+* Translation updates:
+ Chinese (Taiwan)
+ Esperanto
+ Romanian
+ Spanish
+ Ukrainian
+
+
 Overview of Changes in GTK 3.98.3
 =================================
 
