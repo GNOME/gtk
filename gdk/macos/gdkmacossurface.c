@@ -901,16 +901,16 @@ _gdk_macos_surface_move_resize (GdkMacosSurface *self,
 
   display = gdk_surface_get_display (surface);
 
-  _gdk_macos_display_to_display_coords (GDK_MACOS_DISPLAY (display),
-                                        x, y, &x, &y);
-
   if (width == -1)
     width = surface->width;
 
   if (height == -1)
     height = surface->height;
 
-  [priv->window setFrame:NSMakeRect(x, y, width, height)
+  _gdk_macos_display_to_display_coords (GDK_MACOS_DISPLAY (display),
+                                        x, y, &x, &y);
+
+  [priv->window setFrame:NSMakeRect(x, y - height, width, height)
                  display:YES];
 }
 
