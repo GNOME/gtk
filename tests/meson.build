@@ -10,7 +10,6 @@ gtk_tests = [
   ['scrolling-performance', ['frame-stats.c', 'variable.c']],
   ['blur-performance', ['../gsk/gskcairoblur.c']],
   ['simple'],
-  ['print-editor'],
   ['video-timer', ['variable.c']],
   ['testaccel'],
   ['testadjustsize'],
@@ -20,7 +19,6 @@ gtk_tests = [
   ['testbaseline'],
   ['testbox'],
   ['testbuttons'],
-  ['testcairo'],
   ['testcalendar'],
   ['testclipboard2'],
   ['testcolorchooser'],
@@ -114,7 +112,6 @@ gtk_tests = [
   ['teststackedheaders'],
   ['testwindowsize'],
   ['testpopover'],
-  ['gdkgears', ['gtkgears.c']],
   ['listmodel'],
   ['testgaction'],
   ['testwidgetfocus'],
@@ -156,5 +153,3 @@ if get_option('profiler')
   executable('testperf', 'testperf.c',
               dependencies: [profiler_dep, platform_gio_dep, libm])
 endif
-
-subdir('visuals')
