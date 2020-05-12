@@ -1244,9 +1244,15 @@ rewrite_event_for_toplevel (GdkEvent *event)
 {
   GdkSurface *surface;
   GdkKeyEvent *key_event;
+  GdkEventType event_type;
 
   surface = gdk_event_get_surface (event);
   if (!surface->parent)
+    return NULL;
+
+  event_type = gdk_event_get_event_type (event);
+  if (event_type != GDK_KEY_PRESS &&
+      event_type != GDK_KEY_RELEASE)
     return NULL;
 
   while (surface->parent)
@@ -1456,6 +1462,9 @@ is_pointing_event (GdkEvent *event)
     case GDK_DROP_START:
       return TRUE;
 
+    case GDK_GRAB_BROKEN:
+      return gdk_device_get_source (gdk_event_get_device (event)) != GDK_SOURCE_KEYBOARD;
+
     default:
       return FALSE;
     }
@@ -1470,6 +1479,8 @@ is_key_event (GdkEvent *event)
     case GDK_KEY_RELEASE:
       return TRUE;
       break;
+    case GDK_GRAB_BROKEN:
+      return gdk_device_get_source (gdk_event_get_device (event)) == GDK_SOURCE_KEYBOARD;
     default:
       return FALSE;
     }
@@ -1606,6 +1617,12 @@ handle_pointing_event (GdkEvent *event)
     case GDK_TOUCHPAD_PINCH:
     case GDK_TOUCHPAD_SWIPE:
       break;
+    case GDK_GRAB_BROKEN:
+      target = gtk_window_lookup_effective_pointer_focus_widget (toplevel,
+                                                                 device,
+                                                                 sequence);
+      set_widget_active_state (target, TRUE);
+      break;
     default:
       g_assert_not_reached ();
     }
@@ -1724,7 +1741,6 @@ gtk_main_do_event (GdkEvent *event)
       break;
 
     case GDK_FOCUS_CHANGE:
-    case GDK_GRAB_BROKEN:
       if (!_gtk_widget_captured_event (target_widget, event, target_widget))
         gtk_widget_event (target_widget, event, target_widget);
       break;
@@ -1748,6 +1764,7 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_PAD_RING:
     case GDK_PAD_STRIP:
     case GDK_PAD_GROUP_MODE:
+    case GDK_GRAB_BROKEN:
       gtk_propagate_event (grab_widget, event);
       break;
 

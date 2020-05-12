@@ -706,7 +706,6 @@ device_maybe_emit_ungrab_crossing (GdkDevice *device,
 
   if (grab)
     {
-      grab->serial_end = grab->serial_start;
       prev_focus = grab->surface;
       surface = grab->surface;
     }
@@ -1540,6 +1539,19 @@ pointer_handle_leave (void              *data,
     return;
 
   _gdk_wayland_display_update_serial (display_wayland, serial);
+
+  if (seat->pointer_info.button_modifiers != 0)
+    {
+      gulong display_serial;
+
+      display_serial = _gdk_display_get_next_serial (seat->display);
+      _gdk_display_end_device_grab (seat->display, seat->master_pointer,
+                                    display_serial, NULL, TRUE);
+      _gdk_display_device_grab_update (seat->display,
+                                       seat->master_pointer,
+                                       seat->pointer,
+                                       display_serial);
+    }
 
   event = gdk_crossing_event_new (GDK_LEAVE_NOTIFY,
                                   seat->pointer_info.focus,
