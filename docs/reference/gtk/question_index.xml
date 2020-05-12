@@ -37,8 +37,10 @@ How do I get started with GTK?
 <answer><para>
 The GTK <ulink url="https://www.gtk.org">website</ulink> offers some
 <ulink url="https://www.gtk.org/documentation.php">tutorials</ulink> and other
-documentation (most of it about GTK 2.x, but mostly still applicable).
-More documentation ranging from whitepapers to online books can be found at
+documentation (most of it about GTK 2.x, but still somewhat applicable). This
+reference manual also contains a introductory
+<link linkend="gtk-getting-started">Getting Started</link> part.</para>
+<para>More documentation ranging from whitepapers to online books can be found at
 the <ulink url="https://developer.gnome.org">GNOME developer's site</ulink>.
 After studying these materials you should be well prepared to come back to
 this reference manual for details.
@@ -70,13 +72,9 @@ How do I port from one GTK version to another?
 
 <para>
 See <xref linkend="migrating"/>.
-You may also find useful information in the documentation for
-specific widgets and functions.
-</para>
-
-<para>
-If you have a question not covered in the manual, feel free to
-ask on the mailing lists and please <ulink
+You may also find useful information in the documentation for specific widgets
+and functions. If you have a question not covered in the manual, feel free to
+ask, and please <ulink
 url="https://gitlab.gnome.org/GNOME/gtk/issues/new">file a bug report</ulink>
 against the documentation.
 </para>
@@ -108,6 +106,11 @@ undocumented exception to the rules, please
 <ulink url="https://gitlab.gnome.org/GNOME/gtk/issues/new">file a bug report</ulink>.
 </para>
 
+<para>
+The transfer annotations for gobject-introspection that are part of the
+documentation can provide useful hints for memory handling semantics as well.
+</para>
+
 </answer>
 </qandaentry>
 
@@ -126,24 +129,23 @@ If <structname>GtkFoo</structname> isn't a toplevel window, then
  foo = gtk_foo_new ();
  g_object_unref (foo);
 </programlisting></informalexample>
-is a memory leak, because no one assumed the initial floating
-reference. If you are using a widget and you aren't immediately
-packing it into a container, then you probably want standard
-reference counting, not floating reference counting.
+is a memory leak, because no one assumed the initial floating reference
+(you will get a warning about this too). If you are using a widget and
+you aren't immediately packing it into a container, then you probably
+want standard reference counting, not floating reference counting.
 </para>
 
 <para>
 To get this, you must acquire a reference to the widget and drop the
-floating reference (<quote>ref and sink</quote> in GTK parlance) after
+floating reference (<quote>ref and sink</quote> in GObject parlance) after
 creating it:
 <informalexample><programlisting>
  foo = gtk_foo_new ();
  g_object_ref_sink (foo);
 </programlisting></informalexample>
-When you immediately add a widget to a container, it takes care of
-assuming the initial floating reference and you don't have to worry
-about reference counting at all ... just call gtk_container_remove()
-to get rid of the widget.
+When you immediately add a widget to a container, it takes care of assuming
+the initial floating reference and you don't have to worry about reference
+counting at all ... just remove the widget from the container to get rid of it.
 </para>
 </answer>
 </qandaentry>
@@ -156,9 +158,13 @@ How do I use GTK with threads?
 <answer>
 
 <para>
-This is covered in the <link linkend="gdk-Threads">GDK threads
-documentation</link>. See also the <link linkend="glib-Threads">GThread</link>
-documentation for portable threading primitives.
+GTK requires that all GTK API calls are made from the same thread in which
+gtk_init() was called (the <quote>main thread</quote>).</para>
+
+<para>If you want to take advantage of multi-threading in a GTK application,
+it is usually best to send long-running tasks to worker threads, and feed
+the results back to the main thread using g_idle_add() or GAsyncQueue. GIO
+offers useful tools for such an approach such as GTask.
 </para>
 
 </answer>
@@ -178,9 +184,9 @@ or Linux system with gettext installed, type <literal>info gettext</literal>
 to read the documentation.
 </para>
 <para>
-The short checklist on how to use gettext is: call <literal>bindtextdomain(<!-- -->)</literal> so
+The short checklist on how to use gettext is: call bindtextdomain() so
 gettext can find the files containing your translations, call textdomain()
-to set the default translation domain, call <literal>bind_textdomain_codeset(<!-- -->)</literal> to
+to set the default translation domain, call bind_textdomain_codeset() to
 request that all translated strings are returned in UTF-8, then call
 gettext() to look up each string to be translated in the default domain.
 </para>
@@ -352,7 +358,7 @@ g_free (text);
 </para>
 <para>
 If you are using gettext() to localize your application, you need to
-call <literal>bind_textdomain_codeset(<!-- -->)</literal> to ensure that translated strings are
+call bind_textdomain_codeset() to ensure that translated strings are
 returned in UTF-8 encoding.
 </para>
 </answer>
@@ -425,19 +431,9 @@ How do I load an image or animation from a file?
 
 <para>
 To load an image file straight into a display widget, use
-gtk_image_new_from_file() <footnote><para> If the file load fails,
-gtk_image_new_from_file() will display no image graphic &mdash; to detect
-a failed load yourself, use gdk_pixbuf_new_from_file() directly, then
-gtk_image_new_from_pixbuf().</para></footnote>.
-To load an image for another purpose, use gdk_pixbuf_new_from_file(). To
-load an animation, use gdk_pixbuf_animation_new_from_file().
-gdk_pixbuf_animation_new_from_file() can also load non-animated images, so
-use it in combination with gdk_pixbuf_animation_is_static_image() to load a
-file of unknown type.
-</para>
-<para>
-To load an image or animation file asynchronously (without blocking), use
-#GdkPixbufLoader.
+gtk_image_new_from_file(). To load an image for another purpose, use
+gdk_texture_new_from_file(). To load a video from a file, use
+gtk_media_file_new_for_file().
 </para>
 </answer>
 
@@ -450,7 +446,8 @@ How do I draw text ?
 
 <answer>
 <para>
-To draw a piece of text, use a Pango layout and pango_cairo_show_layout().
+To draw a piece of text onto a cairo surface, use a Pango layout and
+pango_cairo_show_layout().
 <informalexample>
 <programlisting>
  layout = gtk_widget_create_pango_layout (widget, text);
@@ -467,6 +464,11 @@ To draw a piece of text, use a Pango layout and pango_cairo_show_layout().
 See also the
 <ulink url="https://developer.gnome.org/pango/stable/pango-Cairo-Rendering.html">Cairo Rendering</ulink>
 section of <ulink url="https://developer.gnome.org/pango/stable/">Pango manual</ulink>.
+</para>
+
+<para>
+To draw a piece of text in a widget snapshot() implementation, use
+gtk_snapshot_append_layout().
 </para>
 </answer>
 
@@ -513,10 +515,10 @@ macro ?
 
 <answer>
 <para>
-The <literal>GTK_TYPE_BLAH</literal> macros are defined as calls to
-<literal>gtk_blah_get_type(<!-- -->)</literal>, and the <literal>_get_type(<!-- -->)</literal>
-functions are declared as %G_GNUC_CONST which allows the compiler to optimize
-the call away if it appears that the value is not being used.
+The %GTK_TYPE_BLAH macros are defined as calls to gtk_blah_get_type(), and
+the _get_type(<!-- -->) functions are declared as %G_GNUC_CONST which allows
+the compiler to optimize the call away if it appears that the value is not
+being used.
 </para>
 
 <para>
@@ -606,6 +608,18 @@ Both can display images in just about any format GTK understands.
 You can also use #GtkDrawingArea if you need to do something more complex,
 such as draw text or graphics over the top of the image.
 </para>
+<para>
+Both GtkImage and GtkPicture can display animations and videos as well.
+To show an webm file, load it with the GtkMediaFile API and then use
+it as a paintable:
+<informalexample>
+<programlisting>
+mediafile = gtk_media_file_new_for_filename ("example.webm");
+picture = gtk_picture_new_for_paintable (GDK_PAINTABLE (mediafile));
+</programlisting>
+</informalexample>
+</para>
+
 </answer>
 </qandaentry>
 
@@ -618,9 +632,7 @@ would use a combo box?
 <answer>
 <para>
 With GTK, a #GtkComboBox is the recommended widget to use for this use case.
-This widget looks like either a combo box or the current option menu, depending
-on the current theme. If you need an editable text entry, use the
-#GtkComboBox:has-entry property.
+If you need an editable text entry, use the #GtkComboBox:has-entry property.
 </para>
 </answer>
 </qandaentry>
@@ -638,7 +650,8 @@ How do I change the color of a widget?
 The background color of a widget is determined by the CSS style that applies
 to it. To change that, you can set style classes on the widget, and provide
 custom CSS to change the appearance. Such CSS can be loaded with
-gtk_css_provider_load_from_file() and its variants. See gtk_style_context_add_provider().
+gtk_css_provider_load_from_file() and its variants.
+See gtk_style_context_add_provider().
 </para></answer>
 </qandaentry>
 
@@ -912,8 +925,8 @@ How do I use cairo to draw in GTK applications ?
 </para></question>
 
 <answer><para>
-Use gtk_snapshot_append_cairo() in your #GtkWidgetClass.snapshot() vfunc to optain
-a cairo context and draw with that.
+Use gtk_snapshot_append_cairo() in your #GtkWidgetClass.snapshot() vfunc
+to obtain a cairo context and draw with that.
 </para>
 </answer>
 </qandaentry>
