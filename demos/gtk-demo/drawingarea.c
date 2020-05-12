@@ -125,49 +125,164 @@ drag_end (GtkGestureDrag *gesture,
 }
 
 static void
-checkerboard_draw (GtkDrawingArea *da,
-                   cairo_t        *cr,
-                   int             width,
-                   int             height,
-                   gpointer        data)
+oval_path (cairo_t *cr,
+           double xc, double yc,
+           double xr, double yr)
 {
-  gint i, j, xcount, ycount;
+  cairo_save (cr);
 
-#define CHECK_SIZE 10
-#define SPACING 2
+  cairo_translate (cr, xc, yc);
+  cairo_scale (cr, 1.0, yr / xr);
+  cairo_move_to (cr, xr, 0.0);
+  cairo_arc (cr,
+             0, 0,
+             xr,
+             0, 2 * G_PI);
+  cairo_close_path (cr);
 
-  /* At the start of a draw handler, a clip region has been set on
-   * the Cairo context, and the contents have been cleared to the
-   * widget's background color. The docs for
-   * gdk_surface_begin_paint_region() give more details on how this
-   * works.
-   */
+  cairo_restore (cr);
+}
 
-  xcount = 0;
-  i = SPACING;
-  while (i < width)
+/* Fill the given area with checks in the standard style
+ * for showing compositing effects.
+ *
+ * It would make sense to do this as a repeating surface,
+ * but most implementations of RENDER currently have broken
+ * implementations of repeat + transform, even when the
+ * transform is a translation.
+ */
+static void
+fill_checks (cairo_t *cr,
+             int x,     int y,
+             int width, int height)
+{
+  int i, j;
+
+#define CHECK_SIZE 16
+
+  cairo_rectangle (cr, x, y, width, height);
+  cairo_set_source_rgb (cr, 0.4, 0.4, 0.4);
+  cairo_fill (cr);
+
+  /* Only works for CHECK_SIZE a power of 2 */
+  j = x & (-CHECK_SIZE);
+
+  for (; j < height; j += CHECK_SIZE)
     {
-      j = SPACING;
-      ycount = xcount % 2; /* start with even/odd depending on row */
-      while (j < height)
-        {
-          if (ycount % 2)
-            cairo_set_source_rgb (cr, 0.45777, 0, 0.45777);
-          else
-            cairo_set_source_rgb (cr, 1, 1, 1);
-
-          /* If we're outside the clip, this will do nothing.
-           */
+      i = y & (-CHECK_SIZE);
+      for (; i < width; i += CHECK_SIZE)
+        if ((i / CHECK_SIZE + j / CHECK_SIZE) % 2 == 0)
           cairo_rectangle (cr, i, j, CHECK_SIZE, CHECK_SIZE);
-          cairo_fill (cr);
-
-          j += CHECK_SIZE + SPACING;
-          ++ycount;
-        }
-
-      i += CHECK_SIZE + SPACING;
-      ++xcount;
     }
+
+  cairo_set_source_rgb (cr, 0.7, 0.7, 0.7);
+  cairo_fill (cr);
+
+#undef CHECK_SIZE
+}
+
+/* Draw a red, green, and blue circle equally spaced inside
+ * the larger circle of radius r at (xc, yc)
+ */
+static void
+draw_3circles (cairo_t *cr,
+               double xc, double yc,
+               double radius,
+               double alpha)
+{
+  double subradius = radius * (2 / 3. - 0.1);
+
+  cairo_set_source_rgba (cr, 1., 0., 0., alpha);
+  oval_path (cr,
+             xc + radius / 3. * cos (G_PI * (0.5)),
+             yc - radius / 3. * sin (G_PI * (0.5)),
+             subradius, subradius);
+  cairo_fill (cr);
+
+  cairo_set_source_rgba (cr, 0., 1., 0., alpha);
+  oval_path (cr,
+             xc + radius / 3. * cos (G_PI * (0.5 + 2/.3)),
+             yc - radius / 3. * sin (G_PI * (0.5 + 2/.3)),
+             subradius, subradius);
+  cairo_fill (cr);
+
+  cairo_set_source_rgba (cr, 0., 0., 1., alpha);
+  oval_path (cr,
+             xc + radius / 3. * cos (G_PI * (0.5 + 4/.3)),
+             yc - radius / 3. * sin (G_PI * (0.5 + 4/.3)),
+             subradius, subradius);
+  cairo_fill (cr);
+}
+
+static void
+groups_draw (GtkDrawingArea *darea,
+             cairo_t        *cr,
+             int             width,
+             int             height,
+             gpointer        data)
+{
+  cairo_surface_t *overlay, *punch, *circles;
+  cairo_t *overlay_cr, *punch_cr, *circles_cr;
+
+  /* Fill the background */
+  double radius = 0.5 * (width < height ? width : height) - 10;
+  double xc = width / 2.;
+  double yc = height / 2.;
+
+  overlay = cairo_surface_create_similar (cairo_get_target (cr),
+                                          CAIRO_CONTENT_COLOR_ALPHA,
+                                          width, height);
+
+  punch = cairo_surface_create_similar (cairo_get_target (cr),
+                                        CAIRO_CONTENT_ALPHA,
+                                        width, height);
+
+  circles = cairo_surface_create_similar (cairo_get_target (cr),
+                                          CAIRO_CONTENT_COLOR_ALPHA,
+                                          width, height);
+
+  fill_checks (cr, 0, 0, width, height);
+
+  /* Draw a black circle on the overlay
+   */
+  overlay_cr = cairo_create (overlay);
+  cairo_set_source_rgb (overlay_cr, 0., 0., 0.);
+  oval_path (overlay_cr, xc, yc, radius, radius);
+  cairo_fill (overlay_cr);
+
+  /* Draw 3 circles to the punch surface, then cut
+   * that out of the main circle in the overlay
+   */
+  punch_cr = cairo_create (punch);
+  draw_3circles (punch_cr, xc, yc, radius, 1.0);
+  cairo_destroy (punch_cr);
+
+  cairo_set_operator (overlay_cr, CAIRO_OPERATOR_DEST_OUT);
+  cairo_set_source_surface (overlay_cr, punch, 0, 0);
+  cairo_paint (overlay_cr);
+
+  /* Now draw the 3 circles in a subgroup again
+   * at half intensity, and use OperatorAdd to join up
+   * without seams.
+   */
+  circles_cr = cairo_create (circles);
+
+  cairo_set_operator (circles_cr, CAIRO_OPERATOR_OVER);
+  draw_3circles (circles_cr, xc, yc, radius, 0.5);
+  cairo_destroy (circles_cr);
+
+  cairo_set_operator (overlay_cr, CAIRO_OPERATOR_ADD);
+  cairo_set_source_surface (overlay_cr, circles, 0, 0);
+  cairo_paint (overlay_cr);
+
+  cairo_destroy (overlay_cr);
+
+  cairo_set_source_surface (cr, overlay, 0, 0);
+  cairo_paint (cr);
+
+  cairo_surface_destroy (overlay);
+  cairo_surface_destroy (punch);
+  cairo_surface_destroy (circles);
 }
 
 static void
@@ -207,12 +322,11 @@ do_drawingarea (GtkWidget *do_widget)
       gtk_window_set_child (GTK_WINDOW (window), vbox);
 
       /*
-       * Create the checkerboard area
+       * Create the groups area
        */
-
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),
-                            "<u>Checkerboard pattern</u>");
+                            "<u>Knockout groups</u>");
       gtk_box_append (GTK_BOX (vbox), label);
 
       frame = gtk_frame_new (NULL);
@@ -222,7 +336,7 @@ do_drawingarea (GtkWidget *do_widget)
       da = gtk_drawing_area_new ();
       gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (da), 100);
       gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (da), 100);
-      gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), checkerboard_draw, NULL, NULL);
+      gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), groups_draw, NULL, NULL);
       gtk_frame_set_child (GTK_FRAME (frame), da);
 
       /*
