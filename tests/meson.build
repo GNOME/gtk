@@ -153,5 +153,3 @@ if get_option('profiler')
   executable('testperf', 'testperf.c',
               dependencies: [profiler_dep, platform_gio_dep, libm])
 endif
-
-subdir('visuals')
