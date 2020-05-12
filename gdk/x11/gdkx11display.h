@@ -106,7 +106,7 @@ GDK_AVAILABLE_IN_ALL
 GdkX11Screen *gdk_x11_display_get_screen (GdkDisplay *display);
 
 GDK_AVAILABLE_IN_ALL
-GdkMonitor * gdk_x11_display_get_primary_monitor (GdkDisplay *display);
+GdkMonitor * gdk_x11_display_get_primary_monitor (GdkDisplay *self);
 
 GDK_AVAILABLE_IN_ALL
 void        gdk_x11_display_grab              (GdkDisplay *display);
