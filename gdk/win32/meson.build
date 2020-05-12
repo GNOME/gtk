@@ -9,7 +9,6 @@ gdk_win32_sources = files(
   'gdkdnd-win32.c',
   'gdkevents-win32.c',
   'gdkgeometry-win32.c',
-  'gdkglcontext-win32.c',
   'gdkglobals-win32.c',
   'gdkkeys-win32.c',
   'gdkmain-win32.c',
@@ -22,6 +21,12 @@ gdk_win32_sources = files(
   'gdkwin32langnotification.c',
   'gdkwindow-win32.c',
 )
+
+if epoxy_dep.found()
+  gdk_win32_sources += files(
+    'gdkglcontext-win32.c',
+  )
+endif
 
 gdk_win32_public_headers = files(
   'gdkwin32cursor.h',

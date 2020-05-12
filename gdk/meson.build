@@ -14,8 +14,6 @@ gdk_sources = files(
   'gdkdnd.c',
   'gdkevents.c',
   'gdkframetimings.c',
-  'gdkgl.c',
-  'gdkglcontext.c',
   'gdkglobals.c',
   'gdkkeys.c',
   'gdkkeyuni.c',
@@ -39,6 +37,13 @@ gdk_sources = files(
   'gdkdrawingcontext.c',
   'gdkmonitor.c'
 )
+
+if epoxy_dep.found()
+  gdk_sources += files(
+    'gdkgl.c',
+    'gdkglcontext.c',
+  )
+endif
 
 gdk_gir_public_headers = files(
   'gdk.h',
@@ -166,6 +171,7 @@ gdkconfig_cdata.set('GDK_WINDOWING_WAYLAND', wayland_enabled)
 gdkconfig_cdata.set('GDK_WINDOWING_WIN32', win32_enabled)
 gdkconfig_cdata.set('GDK_WINDOWING_BROADWAY', broadway_enabled)
 gdkconfig_cdata.set('GDK_WINDOWING_QUARTZ', quartz_enabled)
+gdkconfig_cdata.set('GDK_WINDOWING_EPOXY', epoxy_dep.found())
 
 gdkconfig = configure_file(
   input  : 'gdkconfig.h.meson',

@@ -10,8 +10,13 @@ gdk__private__ (void)
     gdk_display_open_default,
     gdk_add_option_entries,
     gdk_pre_parse,
+#ifdef GDK_WINDOWING_EPOXY
     gdk_gl_get_flags,
     gdk_gl_set_flags,
+#else
+    NULL,
+    NULL,
+#endif
     gdk_window_freeze_toplevel_updates,
     gdk_window_thaw_toplevel_updates,
     gdk_display_get_rendering_mode,

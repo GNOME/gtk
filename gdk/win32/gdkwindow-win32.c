@@ -39,7 +39,9 @@
 #include "gdkvisualprivate.h"
 #include "gdkmonitorprivate.h"
 #include "gdkwin32window.h"
+#ifdef GDK_WINDOWING_EPOXY
 #include "gdkglcontext-win32.h"
+#endif
 #include "gdkdisplay-win32.h"
 
 #include <cairo-win32.h>
@@ -1706,7 +1708,9 @@ gdk_win32_window_move_resize (GdkWindow *window,
     }
   else
     {
+#ifdef GDK_WINDOWING_EPOXY
       _gdk_win32_window_invalidate_egl_framebuffer (window);
+#endif
       if (with_move)
 	{
 	  gdk_win32_window_move_resize_internal (window, x, y, width, height);
@@ -4773,8 +4777,10 @@ gdk_win32_window_end_move_resize_drag (GdkWindow *window)
   GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
   GdkW32DragMoveResizeContext *context = &impl->drag_move_resize_context;
 
+#ifdef GDK_WINDOWING_EPOXY
   if (context->op == GDK_WIN32_DRAGOP_RESIZE)
     _gdk_win32_window_invalidate_egl_framebuffer (window);
+#endif
 
   context->op = GDK_WIN32_DRAGOP_NONE;
 
@@ -5295,7 +5301,9 @@ gdk_win32_window_unmaximize (GdkWindow *window)
 			   GDK_WINDOW_HWND (window),
 			   _gdk_win32_window_state_to_string (window->state)));
 
+#ifdef GDK_WINDOWING_EPOXY
   _gdk_win32_window_invalidate_egl_framebuffer (window);
+#endif
 
   if (GDK_WINDOW_IS_MAPPED (window))
     GtkShowWindow (window, SW_RESTORE);
@@ -6294,8 +6302,10 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
   impl_class->get_property = _gdk_win32_window_get_property;
   impl_class->change_property = _gdk_win32_window_change_property;
   impl_class->delete_property = _gdk_win32_window_delete_property;
+#ifdef GDK_WINDOWING_EPOXY
   impl_class->create_gl_context = _gdk_win32_window_create_gl_context;
   impl_class->invalidate_for_new_frame = _gdk_win32_window_invalidate_for_new_frame;
+#endif
   impl_class->get_scale_factor = _gdk_win32_window_get_scale_factor;
   impl_class->get_unscaled_size = _gdk_win32_window_get_unscaled_size;
 }

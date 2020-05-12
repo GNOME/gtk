@@ -28,7 +28,6 @@ demos = files([
   'fishbowl.c',
   'foreigndrawing.c',
   'gestures.c',
-  'glarea.c',
   'headerbar.c',
   'hypertext.c',
   'iconview.c',
@@ -73,6 +72,12 @@ demos = files([
   'tree_store.c',
 ])
 
+
+if epoxy_dep.found()
+  demos += files([
+    'glarea.c',
+  ])
+endif
 
 gtkdemo_deps = [libgtk_dep]
 
