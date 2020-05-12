@@ -6020,9 +6020,9 @@ gtk_window_snapshot (GtkWidget   *widget,
   GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (widget));
   GtkStyleContext *context;
   GtkBorder window_border;
-  gint title_height;
   int width, height;
   GtkWidget *child;
+  GskRoundedRect clip_rect;
 
   context = gtk_widget_get_style_context (widget);
 
@@ -6069,27 +6069,32 @@ gtk_window_snapshot (GtkWidget   *widget,
       gtk_style_context_restore (context);
     }
 
-  if (priv->title_box &&
-      gtk_widget_get_visible (priv->title_box) &&
-      gtk_widget_get_child_visible (priv->title_box))
-    title_height = priv->title_height;
-  else
-    title_height = 0;
-
   gtk_snapshot_render_background (snapshot, context,
                                   window_border.left,
-                                  window_border.top + title_height,
+                                  window_border.top,
                                   width -
                                     (window_border.left + window_border.right),
                                   height -
-                                    (window_border.top + window_border.bottom + title_height));
+                                    (window_border.top + window_border.bottom));
   gtk_snapshot_render_frame (snapshot, context,
                              window_border.left,
-                             window_border.top + title_height,
+                             window_border.top,
                              width -
                                (window_border.left + window_border.right),
                              height -
-                               (window_border.top + window_border.bottom + title_height));
+                               (window_border.top + window_border.bottom));
+
+  gtk_rounded_boxes_init_for_style (&clip_rect,
+                                    NULL, NULL,
+                                    gtk_css_node_get_style (gtk_widget_get_css_node (widget)),
+                                    window_border.left,
+                                    window_border.top,
+                                    width -
+                                      (window_border.left + window_border.right),
+                                    height -
+                                      (window_border.top + window_border.bottom));
+
+  gtk_snapshot_push_rounded_clip (snapshot, &clip_rect);
 
   for (child = _gtk_widget_get_first_child (widget);
        child != NULL;
@@ -6099,6 +6104,8 @@ gtk_window_snapshot (GtkWidget   *widget,
       if (!GTK_IS_POPOVER (child))
         gtk_widget_snapshot_child (widget, child, snapshot);
     }
+
+  gtk_snapshot_pop (snapshot);
 }
 
 /**

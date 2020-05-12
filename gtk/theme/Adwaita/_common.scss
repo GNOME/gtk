@@ -1378,7 +1378,6 @@ headerbar {
   border-width: 0 0 1px;
   border-style: solid;
   border-color: $alt_borders_color;
-  border-radius: 0;
 
   @include headerbar_fill(darken($bg_color, 10%));
 
@@ -1422,19 +1421,6 @@ headerbar {
     }
   }
 
-  // squared corners when the window is maximized, tiled, or fullscreen
-  .tiled &,
-  .tiled-top &,
-  .tiled-left &,
-  .tiled-right &,
-  .tiled-bottom &,
-  .maximized &,
-  .fullscreen & {
-    &:backdrop, & {
-      border-radius: 0;
-    }
-  }
-
   &.default-decoration {
     min-height: 28px;
     padding: 4px;
@@ -1463,7 +1449,6 @@ headerbar {
         margin-left: -1px;
         margin-right: -1px;
         margin-top: -1px;
-        border-radius: 0;
         box-shadow: none;
       }
     }
@@ -1502,31 +1487,6 @@ headerbar {
     // See https://gitlab.gnome.org/GNOME/gtk/issues/1264 for more information.
     background: none;
     box-shadow: none;
-  }
-}
-
-.background:not(.tiled):not(.maximized):not(.solid-csd) .titlebar,
-.background:not(.tiled-top):not(.maximized):not(.solid-csd) .titlebar,
-.background:not(.tiled-left):not(.maximized):not(.solid-csd) .titlebar,
-.background:not(.tiled-right):not(.maximized):not(.solid-csd) .titlebar,
-.background:not(.tiled-bottom):not(.maximized):not(.solid-csd) .titlebar {
-  &:backdrop, & {
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
-  }
-}
-
-headerbar { // headerbar border rounding
-  window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) separator:first-child + &, // tackles the paned container case
-  window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) &:first-child { &:backdrop, & { border-top-left-radius: 7px; }}
-  window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) &:last-child { &:backdrop, & { border-top-right-radius: 7px; }}
-  window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) stack & { // tackles the stacked headerbars case
-    &:first-child, &:last-child {
-      &:backdrop, & {
-        border-top-left-radius: 7px;
-        border-top-right-radius: 7px;
-      }
-    }
   }
 }
 
@@ -4052,8 +4012,13 @@ colorchooser .popover.osd { border-radius: 5px; }
 /**********************
  * Window Decorations *
  *********************/
+
+.csd {
+  border-radius: $window_radius;
+}
+
 decoration {
-  border-radius: $window_radius $window_radius 0 0;
+  border-radius: $window_radius;
   // lamefun trick to get rounded borders regardless of CSD use
   border-width: 0px;
 
