@@ -10,7 +10,6 @@ gtk_tests = [
   ['scrolling-performance', ['frame-stats.c', 'variable.c']],
   ['blur-performance', ['../gsk/gskcairoblur.c']],
   ['simple'],
-  ['print-editor'],
   ['video-timer', ['variable.c']],
   ['testaccel'],
   ['testadjustsize'],
