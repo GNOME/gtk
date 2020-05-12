@@ -2321,7 +2321,7 @@ save_widgets_create (GtkFileChooserWidget *impl)
   gtk_widget_add_css_class (vbox, "search-bar");
 
   impl->save_widgets_table = gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (vbox), impl->save_widgets_table);
+  gtk_box_append (GTK_BOX (vbox), impl->save_widgets_table);
   gtk_grid_set_row_spacing (GTK_GRID (impl->save_widgets_table), 12);
   gtk_grid_set_column_spacing (GTK_GRID (impl->save_widgets_table), 12);
 
@@ -2360,7 +2360,7 @@ save_widgets_destroy (GtkFileChooserWidget *impl)
   if (impl->save_widgets == NULL)
     return;
 
-  gtk_container_remove (GTK_CONTAINER (impl->box), impl->save_widgets);
+  gtk_box_remove (GTK_BOX (impl->box), impl->save_widgets);
   impl->save_widgets = NULL;
   impl->save_widgets_table = NULL;
   impl->location_entry = NULL;
@@ -2372,13 +2372,7 @@ save_widgets_destroy (GtkFileChooserWidget *impl)
 static void
 location_switch_to_path_bar (GtkFileChooserWidget *impl)
 {
-  if (impl->location_entry)
-    {
-      gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (impl->location_entry)),
-                            impl->location_entry);
-      impl->location_entry = NULL;
-    }
-
+  g_clear_pointer (&impl->location_entry, gtk_widget_unparent);
   gtk_stack_set_visible_child_name (GTK_STACK (impl->browse_header_stack), "pathbar");
 }
 
@@ -2400,7 +2394,7 @@ location_switch_to_filename_entry (GtkFileChooserWidget *impl)
   if (!impl->location_entry)
     {
       location_entry_create (impl);
-      gtk_container_add (GTK_CONTAINER (impl->location_entry_box), impl->location_entry);
+      gtk_box_append (GTK_BOX (impl->location_entry_box), impl->location_entry);
     }
 
   _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->current_folder);
@@ -2541,14 +2535,14 @@ set_extra_widget (GtkFileChooserWidget *impl,
 
   if (impl->extra_widget)
     {
-      gtk_container_remove (GTK_CONTAINER (impl->extra_align), impl->extra_widget);
+      gtk_box_remove (GTK_BOX (impl->extra_align), impl->extra_widget);
       g_object_unref (impl->extra_widget);
     }
 
   impl->extra_widget = extra_widget;
   if (impl->extra_widget)
     {
-      gtk_container_add (GTK_CONTAINER (impl->extra_align), impl->extra_widget);
+      gtk_box_append (GTK_BOX (impl->extra_align), impl->extra_widget);
       gtk_widget_show (impl->extra_align);
     }
   else
@@ -3300,7 +3294,7 @@ settings_load (GtkFileChooserWidget *impl)
   update_time_renderer_visible (impl);
   if (sidebar_width < 0)
     {
-      GtkWidget *sidebar = gtk_paned_get_child1 (GTK_PANED (impl->browse_widgets_hpaned));
+      GtkWidget *sidebar = gtk_paned_get_start_child (GTK_PANED (impl->browse_widgets_hpaned));
 
       gtk_widget_measure (sidebar, GTK_ORIENTATION_HORIZONTAL, -1,
                           NULL, &sidebar_width, NULL, NULL);
@@ -7947,11 +7941,11 @@ gtk_file_chooser_widget_add_choice (GtkFileChooser  *chooser,
       int i;
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-      gtk_container_add (GTK_CONTAINER (box), gtk_label_new (label));
+      gtk_box_append (GTK_BOX (box), gtk_label_new (label));
 
       combo = gtk_combo_box_text_new ();
       g_hash_table_insert (impl->choices, g_strdup (id), combo);
-      gtk_container_add (GTK_CONTAINER (box), combo);
+      gtk_box_append (GTK_BOX (box), combo);
 
       for (i = 0; options[i]; i++)
         gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo),
@@ -7969,7 +7963,7 @@ gtk_file_chooser_widget_add_choice (GtkFileChooser  *chooser,
       widget = check;
     }
 
-  gtk_container_add (GTK_CONTAINER (impl->choice_box), widget);
+  gtk_box_append (GTK_BOX (impl->choice_box), widget);
 }
 
 static void
@@ -7984,7 +7978,7 @@ gtk_file_chooser_widget_remove_choice (GtkFileChooser  *chooser,
 
   widget = (GtkWidget *)g_hash_table_lookup (impl->choices, id);
   g_hash_table_remove (impl->choices, id);
-  gtk_container_remove (GTK_CONTAINER (impl->choice_box), widget);
+  gtk_box_remove (GTK_BOX (impl->choice_box), widget);
 
   if (g_hash_table_size (impl->choices) == 0)
     {

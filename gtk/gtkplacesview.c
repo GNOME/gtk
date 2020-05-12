@@ -548,8 +548,8 @@ populate_servers (GtkPlacesView *view)
     }
 
   /* clear previous items */
-  while ((child = gtk_widget_get_first_child (view->recent_servers_listbox)))
-    gtk_container_remove (GTK_CONTAINER (view->recent_servers_listbox), child);
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (view->recent_servers_listbox))))
+    gtk_list_box_remove (GTK_LIST_BOX (view->listbox), child);
 
   gtk_list_store_clear (view->completion_store);
 
@@ -587,7 +587,7 @@ populate_servers (GtkPlacesView *view)
       gtk_widget_set_hexpand (label, TRUE);
       gtk_label_set_xalign (GTK_LABEL (label), 0.0);
       gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-      gtk_container_add (GTK_CONTAINER (grid), label);
+      gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
 
       /* the uri itself */
       label = gtk_label_new (uris[i]);
@@ -595,7 +595,7 @@ populate_servers (GtkPlacesView *view)
       gtk_label_set_xalign (GTK_LABEL (label), 0.0);
       gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
       gtk_widget_add_css_class (label, "dim-label");
-      gtk_container_add (GTK_CONTAINER (grid), label);
+      gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
 
       /* remove button */
       button = gtk_button_new_from_icon_name ("window-close-symbolic");
@@ -605,8 +605,8 @@ populate_servers (GtkPlacesView *view)
       gtk_widget_add_css_class (button, "sidebar-button");
       gtk_grid_attach (GTK_GRID (grid), button, 1, 0, 1, 2);
 
-      gtk_container_add (GTK_CONTAINER (row), grid);
-      gtk_container_add (GTK_CONTAINER (view->recent_servers_listbox), row);
+      gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), grid);
+      gtk_list_box_insert (GTK_LIST_BOX (view->recent_servers_listbox), row, -1);
 
       /* custom data */
       data = g_new0 (RemoveServerData, 1);
@@ -631,26 +631,23 @@ populate_servers (GtkPlacesView *view)
 static void
 update_view_mode (GtkPlacesView *view)
 {
-  GList *children;
-  GList *l;
+  GtkWidget *child;
   gboolean show_listbox;
 
   show_listbox = FALSE;
 
   /* drives */
-  children = gtk_container_get_children (GTK_CONTAINER (view->listbox));
-
-  for (l = children; l; l = l->next)
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (view->listbox));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
     {
       /* GtkListBox filter rows by changing their GtkWidget::child-visible property */
-      if (gtk_widget_get_child_visible (l->data))
+      if (gtk_widget_get_child_visible (child))
         {
           show_listbox = TRUE;
           break;
         }
     }
-
-  g_list_free (children);
 
   if (!show_listbox &&
       view->search_query &&
@@ -698,7 +695,7 @@ insert_row (GtkPlacesView *view,
   gtk_places_view_row_set_path_size_group (GTK_PLACES_VIEW_ROW (row), view->path_size_group);
   gtk_places_view_row_set_space_size_group (GTK_PLACES_VIEW_ROW (row), view->space_size_group);
 
-  gtk_container_add (GTK_CONTAINER (view->listbox), row);
+  gtk_list_box_insert (GTK_LIST_BOX (view->listbox), row, -1);
 }
 
 static void
@@ -838,22 +835,20 @@ add_file (GtkPlacesView *view,
 static gboolean
 has_networks (GtkPlacesView *view)
 {
-  GList *l;
-  GList *children;
+  GtkWidget *child;
   gboolean has_network = FALSE;
 
-  children = gtk_container_get_children (GTK_CONTAINER (view->listbox));
-  for (l = children; l != NULL; l = l->next)
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (view->listbox));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
     {
-      if (GPOINTER_TO_INT (g_object_get_data (l->data, "is-network")) == TRUE &&
-          g_object_get_data (l->data, "is-placeholder") == NULL)
+      if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (child), "is-network")) &&
+          g_object_get_data (G_OBJECT (child), "is-placeholder") == NULL)
       {
         has_network = TRUE;
         break;
       }
     }
-
-  g_list_free (children);
 
   return has_network;
 }
@@ -879,7 +874,7 @@ update_network_state (GtkPlacesView *view)
       /* mark the row as placeholder, so it always goes first */
       g_object_set_data (G_OBJECT (view->network_placeholder),
                          "is-placeholder", GINT_TO_POINTER (TRUE));
-      gtk_container_add (GTK_CONTAINER (view->listbox), view->network_placeholder);
+      gtk_list_box_insert (GTK_LIST_BOX (view->listbox), view->network_placeholder, -1);
     }
 
   if (gtk_places_view_get_fetching_networks (view))
@@ -1093,8 +1088,8 @@ update_places (GtkPlacesView *view)
   GtkWidget *child;
 
   /* Clear all previously added items */
-  while ((child = gtk_widget_get_first_child (view->listbox)))
-    gtk_container_remove (GTK_CONTAINER (view->listbox), child);
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (view->listbox))))
+    gtk_list_box_remove (GTK_LIST_BOX (view->listbox), child);
 
   view->network_placeholder = NULL;
   /* Inform clients that we started loading */
@@ -2046,18 +2041,18 @@ listbox_header_func (GtkListBoxRow *row,
                                   "spinning",
                                   G_BINDING_SYNC_CREATE);
 
-          gtk_container_add (GTK_CONTAINER (header_name), label);
-          gtk_container_add (GTK_CONTAINER (header_name), network_header_spinner);
-          gtk_container_add (GTK_CONTAINER (header), header_name);
+          gtk_box_append (GTK_BOX (header_name), label);
+          gtk_box_append (GTK_BOX (header_name), network_header_spinner);
+          gtk_box_append (GTK_BOX (header), header_name);
         }
       else
         {
           gtk_widget_set_hexpand (label, TRUE);
           gtk_widget_set_margin_end (label, 12);
-          gtk_container_add (GTK_CONTAINER (header), label);
+          gtk_box_append (GTK_BOX (header), label);
         }
 
-      gtk_container_add (GTK_CONTAINER (header), separator);
+      gtk_box_append (GTK_BOX (header), separator);
 
       gtk_list_box_row_set_header (row, header);
 

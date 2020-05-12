@@ -50,7 +50,7 @@ main (int argc, char *argv[])
   label = gtk_label_new ("Out of overlay");
   gtk_widget_set_hexpand (label, TRUE);
   gtk_widget_set_vexpand (label, TRUE);
-  gtk_container_add (GTK_CONTAINER (grid), label);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
 
   overlay = gtk_overlay_new ();
   sw = gtk_scrolled_window_new (NULL, NULL);
@@ -66,7 +66,7 @@ main (int argc, char *argv[])
   label = gtk_label_new ("Main child");
   gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (main_child), label);
+  gtk_box_append (GTK_BOX (main_child), label);
 
   child = gtk_label_new (NULL);
   str = g_strdup_printf ("%p", child);

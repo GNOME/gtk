@@ -318,8 +318,8 @@ ensure_submenu (GtkTreePopover *popover,
           GtkWidget *item;
           gtk_tree_model_get_iter (popover->model, &iter, path);
           item = gtk_tree_popover_create_item (popover, path, &iter, TRUE);
-          gtk_container_add (GTK_CONTAINER (box), item);
-          gtk_container_add (GTK_CONTAINER (box), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+          gtk_box_append (GTK_BOX (box), item);
+          gtk_box_append (GTK_BOX (box), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
         }
 
     }
@@ -407,7 +407,7 @@ row_changed_cb (GtkTreeModel   *model,
     {
       GtkWidget *box = gtk_widget_get_parent (item);
 
-      gtk_container_remove (GTK_CONTAINER (box), item);
+      gtk_box_remove (GTK_BOX (box), item);
 
       item = gtk_tree_popover_create_item (popover, path, iter, FALSE);
 
@@ -466,15 +466,14 @@ gtk_tree_popover_get_path_item (GtkTreePopover *popover,
 {
   GtkWidget *stack = gtk_popover_get_child (GTK_POPOVER (popover));
   GtkWidget *item = NULL;
-  GList *children, *l;
+  GtkWidget *stackchild;
+  GtkWidget *child;
 
-  children = gtk_container_get_children (GTK_CONTAINER (stack));
-
-  for (l = children; !item && l; l = l->next)
+  for (stackchild = gtk_widget_get_first_child (stack);
+       stackchild != NULL;
+       stackchild = gtk_widget_get_next_sibling (stackchild))
     {
-      GtkWidget *child;
-
-      for (child = gtk_widget_get_first_child (GTK_WIDGET (l->data));
+      for (child = gtk_widget_get_first_child (stackchild);
            !item && child;
            child = gtk_widget_get_next_sibling (child))
         {
@@ -509,8 +508,6 @@ gtk_tree_popover_get_path_item (GtkTreePopover *popover,
              }
         }
     }
-
-  g_list_free (children);
 
   return item;
 }
@@ -736,7 +733,7 @@ rebuild_menu (GtkTreePopover *popover)
 
   stack = gtk_popover_get_child (GTK_POPOVER (popover));
   while ((child = gtk_widget_get_first_child (stack)))
-    gtk_container_remove (GTK_CONTAINER (stack), child);
+    gtk_stack_remove (GTK_STACK (stack), child);
 
   if (popover->model)
     gtk_tree_popover_populate (popover);

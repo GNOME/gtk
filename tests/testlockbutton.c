@@ -230,15 +230,15 @@ main (int argc, char *argv[])
   gtk_window_set_child (GTK_WINDOW (window), box);
 
   allowed_button = gtk_check_button_new_with_label ("Allowed");
-  gtk_container_add (GTK_CONTAINER (box), allowed_button);
+  gtk_box_append (GTK_BOX (box), allowed_button);
   can_acquire_button = gtk_check_button_new_with_label ("Can acquire");
-  gtk_container_add (GTK_CONTAINER (box), can_acquire_button);
+  gtk_box_append (GTK_BOX (box), can_acquire_button);
   can_release_button = gtk_check_button_new_with_label ("Can release");
-  gtk_container_add (GTK_CONTAINER (box), can_release_button);
+  gtk_box_append (GTK_BOX (box), can_release_button);
   success_button = gtk_check_button_new_with_label ("Will succeed");
-  gtk_container_add (GTK_CONTAINER (box), success_button);
+  gtk_box_append (GTK_BOX (box), success_button);
   update = gtk_button_new_with_label ("Update");
-  gtk_container_add (GTK_CONTAINER (box), update);
+  gtk_box_append (GTK_BOX (box), update);
   g_signal_connect (permission, "notify",
                     G_CALLBACK (permission_changed), NULL);
 
@@ -254,12 +254,12 @@ main (int argc, char *argv[])
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 
   content = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-  gtk_container_add (GTK_CONTAINER (content), gtk_check_button_new_with_label ("Control 1"));
-  gtk_container_add (GTK_CONTAINER (content), gtk_check_button_new_with_label ("Control 2"));
+  gtk_box_append (GTK_BOX (content), gtk_check_button_new_with_label ("Control 1"));
+  gtk_box_append (GTK_BOX (content), gtk_check_button_new_with_label ("Control 2"));
   gtk_widget_set_sensitive (content, FALSE);
 
-  gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), content);
-  gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), button);
+  gtk_box_append (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), content);
+  gtk_box_append (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), button);
 
   gtk_widget_show (window);
   gtk_widget_show (dialog);

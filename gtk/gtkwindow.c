@@ -29,6 +29,7 @@
 #include "gtkaccelgroupprivate.h"
 #include "gtkactionable.h"
 #include "gtkapplicationprivate.h"
+#include "gtkbox.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtkcheckbutton.h"
@@ -66,7 +67,6 @@
 #include "gtktooltipprivate.h"
 
 #include "a11y/gtkwindowaccessibleprivate.h"
-#include "a11y/gtkcontaineraccessibleprivate.h"
 #include "inspector/window.h"
 
 #include "gdk/gdktextureprivate.h"
@@ -6959,7 +6959,7 @@ gtk_window_set_debugging (GdkDisplay *display,
           check = gtk_check_button_new_with_label (_("Don’t show this message again"));
           gtk_widget_set_margin_start (check, 10);
           gtk_widget_show (check);
-          gtk_container_add (GTK_CONTAINER (area), check);
+          gtk_box_append (GTK_BOX (area), check);
           g_object_set_data (G_OBJECT (dialog), "check", check);
           gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Cancel"), GTK_RESPONSE_NO);
           gtk_dialog_add_button (GTK_DIALOG (dialog), _("_OK"), GTK_RESPONSE_YES);

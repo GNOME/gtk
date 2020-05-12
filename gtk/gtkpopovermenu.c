@@ -685,7 +685,7 @@ gtk_popover_menu_set_menu_model (GtkPopoverMenu *popover,
 
       stack = gtk_popover_get_child (GTK_POPOVER (popover));
       while ((child = gtk_widget_get_first_child (stack)))
-        gtk_container_remove (GTK_CONTAINER (stack), child);
+        gtk_stack_remove (GTK_STACK (stack), child);
 
       if (model)
         gtk_menu_section_box_new_toplevel (popover, model, popover->flags);

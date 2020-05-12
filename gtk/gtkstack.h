@@ -26,7 +26,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkcontainer.h>
+#include <gtk/gtkwidget.h>
 #include <gtk/gtkselectionmodel.h>
 
 G_BEGIN_DECLS
@@ -94,6 +94,9 @@ GtkStackPage *         gtk_stack_add_titled              (GtkStack              
                                                           GtkWidget              *child,
                                                           const gchar            *name,
                                                           const gchar            *title);
+GDK_AVAILABLE_IN_ALL
+void                   gtk_stack_remove                  (GtkStack               *stack,
+                                                          GtkWidget              *child);
 
 GDK_AVAILABLE_IN_ALL
 GtkStackPage *         gtk_stack_get_page                (GtkStack               *stack,

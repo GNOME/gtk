@@ -30,7 +30,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkcontainer.h>
+#include <gtk/gtkwidget.h>
 
 
 G_BEGIN_DECLS
@@ -47,12 +47,12 @@ typedef struct _GtkFixedClass         GtkFixedClass;
 
 struct _GtkFixed
 {
-  GtkContainer parent_instance;
+  GtkWidget parent_instance;
 };
 
 struct _GtkFixedClass
 {
-  GtkContainerClass parent_class;
+  GtkWidgetClass parent_class;
 
   /*< private >*/
 
@@ -69,6 +69,9 @@ void            gtk_fixed_put                   (GtkFixed     *fixed,
                                                  GtkWidget    *widget,
                                                  gint          x,
                                                  gint          y);
+GDK_AVAILABLE_IN_ALL
+void            gtk_fixed_remove                (GtkFixed     *fixed,
+                                                 GtkWidget    *widget);
 GDK_AVAILABLE_IN_ALL
 void            gtk_fixed_move                  (GtkFixed     *fixed,
                                                  GtkWidget    *widget,

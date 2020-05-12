@@ -75,12 +75,12 @@ create_headerbar_inside_window (GtkApplication *app)
 
   header = gtk_header_bar_new ();
   gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), TRUE);
-  gtk_container_add (GTK_CONTAINER (box), header);
+  gtk_box_append (GTK_BOX (box), header);
 
   label = gtk_label_new ("This window has a headerbar inside the window and no titlebar");
   gtk_label_set_wrap (GTK_LABEL (label), TRUE);
   gtk_widget_set_vexpand (label, TRUE);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_box_append (GTK_BOX (box), label);
 
   gtk_widget_show (window);
 }
@@ -124,12 +124,12 @@ create_headerbar_overlay (GtkApplication *app)
                          "mi eu ipsum vestibulum in venenatis enim commodo. "
                          "Vivamus non malesuada ligula.");
   gtk_label_set_wrap (GTK_LABEL (label), TRUE);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_box_append (GTK_BOX (box), label);
 
   label = gtk_label_new ("This window has a headerbar inside an overlay, so the text is visible underneath it");
   gtk_label_set_wrap (GTK_LABEL (label), TRUE);
   gtk_widget_set_vexpand (label, TRUE);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_box_append (GTK_BOX (box), label);
 
   gtk_widget_show (window);
 }
@@ -147,7 +147,7 @@ create_hiding_headerbar (GtkApplication *app)
   gtk_window_set_child (GTK_WINDOW (window), box);
 
   revealer = gtk_revealer_new ();
-  gtk_container_add (GTK_CONTAINER (box), revealer);
+  gtk_box_append (GTK_BOX (box), revealer);
 
   header = gtk_header_bar_new ();
   gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), TRUE);
@@ -156,7 +156,7 @@ create_hiding_headerbar (GtkApplication *app)
   label = gtk_label_new ("This window's headerbar can be shown and hidden with animation");
   gtk_label_set_wrap (GTK_LABEL (label), TRUE);
   gtk_widget_set_vexpand (label, TRUE);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_box_append (GTK_BOX (box), label);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   gtk_widget_set_halign (hbox, GTK_ALIGN_CENTER);
@@ -164,17 +164,17 @@ create_hiding_headerbar (GtkApplication *app)
   gtk_widget_set_margin_bottom (hbox, 12);
   gtk_widget_set_margin_start (hbox, 12);
   gtk_widget_set_margin_end (hbox, 12);
-  gtk_container_add (GTK_CONTAINER (box), hbox);
+  gtk_box_append (GTK_BOX (box), hbox);
 
   toggle = gtk_switch_new ();
   gtk_switch_set_active (GTK_SWITCH (toggle), TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox), toggle);
+  gtk_box_append (GTK_BOX (hbox), toggle);
   g_object_bind_property (toggle, "active",
                           revealer, "reveal-child",
                           G_BINDING_SYNC_CREATE);
 
   label = gtk_label_new ("Show headerbar");
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_box_append (GTK_BOX (hbox), label);
 
   gtk_widget_show (window);
 }
@@ -195,7 +195,7 @@ create_fake_headerbar (GtkApplication *app)
   gtk_window_handle_set_child (GTK_WINDOW_HANDLE (handle), box);
 
   center_box = gtk_center_box_new ();
-  gtk_container_add (GTK_CONTAINER (box), center_box);
+  gtk_box_append (GTK_BOX (box), center_box);
 
   label = gtk_label_new ("Fake headerbar");
   gtk_center_box_set_center_widget (GTK_CENTER_BOX (center_box), label);
@@ -209,7 +209,7 @@ create_fake_headerbar (GtkApplication *app)
   label = gtk_label_new ("This window's titlebar is just a centerbox with a label and window controls.\nThe whole window is draggable.");
   gtk_label_set_wrap (GTK_LABEL (label), TRUE);
   gtk_widget_set_vexpand (label, TRUE);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_box_append (GTK_BOX (box), label);
 
   gtk_widget_show (window);
 }
@@ -253,7 +253,7 @@ app_activate_cb (GtkApplication *app)
                                G_CALLBACK (buttons[i].cb),
                                app,
                                G_CONNECT_SWAPPED);
-      gtk_container_add (GTK_CONTAINER (box), btn);
+      gtk_box_append (GTK_BOX (box), btn);
     }
 
   gtk_widget_show (window);

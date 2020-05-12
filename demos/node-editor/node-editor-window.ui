@@ -123,7 +123,7 @@
     </child>
     <child>
       <object class="GtkPaned">
-        <property name="shrink-child2">false</property>
+        <property name="shrink-end-child">false</property>
         <property name="position">400</property>
         <child>
           <object class="GtkScrolledWindow">

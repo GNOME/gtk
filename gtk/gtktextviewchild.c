@@ -37,7 +37,7 @@ typedef struct
 
 struct _GtkTextViewChild
 {
-  GtkContainer       parent_instance;
+  GtkWidget          parent_instance;
   GtkTextWindowType  window_type;
   GQueue             overlays;
   int                xoffset;
@@ -51,7 +51,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (GtkTextViewChild, gtk_text_view_child, GTK_TYPE_CONTAINER)
+G_DEFINE_TYPE (GtkTextViewChild, gtk_text_view_child, GTK_TYPE_WIDGET)
 
 static GParamSpec *properties[N_PROPS];
 
@@ -107,12 +107,10 @@ gtk_text_view_child_get_overlay (GtkTextViewChild *self,
   return NULL;
 }
 
-static void
-gtk_text_view_child_add (GtkContainer *container,
-                         GtkWidget    *widget)
+void
+gtk_text_view_child_add (GtkTextViewChild *self,
+                         GtkWidget        *widget)
 {
-  GtkTextViewChild *self = GTK_TEXT_VIEW_CHILD (container);
-
   if (self->child != NULL)
     {
       g_warning ("%s allows a single child and already contains a %s",
@@ -125,12 +123,10 @@ gtk_text_view_child_add (GtkContainer *container,
   gtk_widget_set_parent (widget, GTK_WIDGET (self));
 }
 
-static void
-gtk_text_view_child_remove (GtkContainer *container,
-                            GtkWidget    *widget)
+void
+gtk_text_view_child_remove (GtkTextViewChild *self,
+                            GtkWidget        *widget)
 {
-  GtkTextViewChild *self = GTK_TEXT_VIEW_CHILD (container);
-
   if (widget == self->child)
     {
       self->child = NULL;
@@ -143,26 +139,6 @@ gtk_text_view_child_remove (GtkContainer *container,
 
       if (overlay != NULL)
         gtk_text_view_child_remove_overlay (self, overlay);
-    }
-}
-
-static void
-gtk_text_view_child_forall (GtkContainer *container,
-                            GtkCallback   callback,
-                            gpointer      callback_data)
-{
-  GtkTextViewChild *self = GTK_TEXT_VIEW_CHILD (container);
-  const GList *iter;
-
-  if (self->child != NULL)
-    callback (self->child, callback_data);
-
-  iter = self->overlays.head;
-  while (iter != NULL)
-    {
-      Overlay *overlay = iter->data;
-      iter = iter->next;
-      callback (overlay->widget, callback_data);
     }
 }
 
@@ -374,12 +350,24 @@ gtk_text_view_child_set_property (GObject      *object,
 }
 
 static void
+gtk_text_view_child_dispose (GObject *object)
+{
+  GtkTextViewChild *self = GTK_TEXT_VIEW_CHILD (object);
+  GtkWidget *child;
+
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (self))))
+    gtk_text_view_child_remove (self, child);
+
+  G_OBJECT_CLASS (gtk_text_view_child_parent_class)->dispose (object);
+}
+
+static void
 gtk_text_view_child_class_init (GtkTextViewChildClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
+  object_class->dispose = gtk_text_view_child_dispose;
   object_class->constructed = gtk_text_view_child_constructed;
   object_class->get_property = gtk_text_view_child_get_property;
   object_class->set_property = gtk_text_view_child_set_property;
@@ -387,10 +375,6 @@ gtk_text_view_child_class_init (GtkTextViewChildClass *klass)
   widget_class->measure = gtk_text_view_child_measure;
   widget_class->size_allocate = gtk_text_view_child_size_allocate;
   widget_class->snapshot = gtk_text_view_child_snapshot;
-
-  container_class->add = gtk_text_view_child_add;
-  container_class->remove = gtk_text_view_child_remove;
-  container_class->forall = gtk_text_view_child_forall;
 
   /**
    * GtkTextViewChild:window-type:

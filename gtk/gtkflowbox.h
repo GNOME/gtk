@@ -29,7 +29,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkcontainer.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
@@ -146,6 +146,9 @@ GDK_AVAILABLE_IN_ALL
 void                  gtk_flow_box_insert                       (GtkFlowBox        *box,
                                                                  GtkWidget         *widget,
                                                                  gint               position);
+GDK_AVAILABLE_IN_ALL
+void                  gtk_flow_box_remove                       (GtkFlowBox        *box,
+                                                                 GtkWidget         *widget);
 GDK_AVAILABLE_IN_ALL
 GtkFlowBoxChild      *gtk_flow_box_get_child_at_index           (GtkFlowBox        *box,
                                                                  gint               idx);

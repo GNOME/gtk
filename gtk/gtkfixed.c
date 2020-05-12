@@ -75,40 +75,119 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
-
-static void gtk_fixed_add           (GtkContainer     *container,
-                                     GtkWidget        *widget);
-static void gtk_fixed_remove        (GtkContainer     *container,
-                                     GtkWidget        *widget);
-static void gtk_fixed_forall        (GtkContainer     *container,
-                                     GtkCallback       callback,
-                                     gpointer          callback_data);
-static GType gtk_fixed_child_type   (GtkContainer     *container);
+#include "gtkbuildable.h"
 
 typedef struct {
   GtkLayoutManager *layout;
 } GtkFixedPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkFixed, gtk_fixed, GTK_TYPE_CONTAINER)
+static void gtk_fixed_buildable_iface_init (GtkBuildableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GtkFixed, gtk_fixed, GTK_TYPE_WIDGET,
+                         G_ADD_PRIVATE (GtkFixed)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_fixed_buildable_iface_init))
+
+static void
+gtk_fixed_compute_expand (GtkWidget *widget,
+                          gboolean  *hexpand_p,
+                          gboolean  *vexpand_p)
+{
+  GtkWidget *w;
+  gboolean hexpand = FALSE;
+  gboolean vexpand = FALSE;
+
+  for (w = gtk_widget_get_first_child (widget);
+       w != NULL;
+       w = gtk_widget_get_next_sibling (w))
+    {
+      hexpand = hexpand || gtk_widget_compute_expand (w, GTK_ORIENTATION_HORIZONTAL);
+      vexpand = vexpand || gtk_widget_compute_expand (w, GTK_ORIENTATION_VERTICAL);
+    }
+
+  *hexpand_p = hexpand;
+  *vexpand_p = vexpand;
+}
+
+static GtkSizeRequestMode
+gtk_fixed_get_request_mode (GtkWidget *widget)
+{
+  GtkWidget *w;
+  int wfh = 0, hfw = 0;
+
+  for (w = gtk_widget_get_first_child (widget);
+       w != NULL;
+       w = gtk_widget_get_next_sibling (w))
+    {
+      GtkSizeRequestMode mode = gtk_widget_get_request_mode (w);
+
+      switch (mode)
+        {
+        case GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH:
+          hfw ++;
+          break;
+        case GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT:
+          wfh ++;
+          break;
+        case GTK_SIZE_REQUEST_CONSTANT_SIZE:
+        default:
+          break;
+        }
+    }
+
+  if (hfw == 0 && wfh == 0)
+    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+  else
+    return wfh > hfw ?
+        GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT :
+        GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+}
+
+static void
+gtk_fixed_dispose (GObject *object)
+{
+  GtkWidget *child;
+
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (object))))
+    gtk_fixed_remove (GTK_FIXED (object), child);
+
+  G_OBJECT_CLASS (gtk_fixed_parent_class)->dispose (object);
+}
 
 static void
 gtk_fixed_class_init (GtkFixedClass *klass)
 {
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  container_class->add = gtk_fixed_add;
-  container_class->remove = gtk_fixed_remove;
-  container_class->forall = gtk_fixed_forall;
-  container_class->child_type = gtk_fixed_child_type;
+  object_class->dispose = gtk_fixed_dispose;
+
+  widget_class->compute_expand = gtk_fixed_compute_expand;
+  widget_class->get_request_mode = gtk_fixed_get_request_mode;
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_FIXED_LAYOUT);
 }
 
-static GType
-gtk_fixed_child_type (GtkContainer *container)
+static GtkBuildableIface *parent_buildable_iface;
+
+static void
+gtk_fixed_buildable_add_child (GtkBuildable *buildable,
+                               GtkBuilder   *builder,
+                               GObject      *child,
+                               const gchar  *type)
 {
-  return GTK_TYPE_WIDGET;
+  if (GTK_IS_WIDGET (child))
+    gtk_fixed_put (GTK_FIXED (buildable), GTK_WIDGET (child), 0, 0);
+  else
+    parent_buildable_iface->add_child (buildable, builder, child, type);
+}
+
+static void
+gtk_fixed_buildable_iface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
+  iface->add_child = gtk_fixed_buildable_add_child;
 }
 
 static void
@@ -118,7 +197,7 @@ gtk_fixed_init (GtkFixed *self)
 
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
 
-  priv->layout = gtk_widget_get_layout_manager (GTK_WIDGET (self)); 
+  priv->layout = gtk_widget_get_layout_manager (GTK_WIDGET (self));
 }
 
 /**
@@ -289,35 +368,21 @@ gtk_fixed_move (GtkFixed  *fixed,
   gsk_transform_unref (transform);
 }
 
-static void
-gtk_fixed_add (GtkContainer *container,
-               GtkWidget    *widget)
+/**
+ * gtk_fixed_remove:
+ * @fixed: a #GtkFixed
+ * @widget: the child widget to remove
+ *
+ * Removes a child from @fixed, after it has been added
+ * with gtk_fixed_put().
+ */
+void
+gtk_fixed_remove (GtkFixed  *fixed,
+                  GtkWidget *widget)
 {
-  gtk_fixed_put (GTK_FIXED (container), widget, 0, 0);
-}
+  g_return_if_fail (GTK_IS_FIXED (fixed));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (gtk_widget_get_parent (widget) == GTK_WIDGET (fixed));
 
-static void
-gtk_fixed_remove (GtkContainer *container,
-                  GtkWidget    *widget)
-{
   gtk_widget_unparent (widget);
-}
-
-static void
-gtk_fixed_forall (GtkContainer *container,
-                  GtkCallback   callback,
-                  gpointer      callback_data)
-{
-  GtkWidget *widget = GTK_WIDGET (container);
-  GtkWidget *child;
-
-  child = gtk_widget_get_first_child (widget);
-  while (child)
-    {
-      GtkWidget *next = gtk_widget_get_next_sibling (child);
-
-      (* callback) (child, callback_data);
-
-      child = next;
-    }
 }

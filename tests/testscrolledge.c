@@ -27,11 +27,11 @@ populate_list (GtkListBox *list)
   gchar *text;
   GtkWidget *row, *label;
   gint n;
-  GList *l;
+  GtkWidget *child;
 
-  l = gtk_container_get_children (GTK_CONTAINER (list));
-  n = g_list_length (l);
-  g_list_free (l);
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (list)), n = 0;
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child), n++) ;
 
   for (i = 1; i <= 50; i++)
     {
@@ -46,7 +46,7 @@ populate_list (GtkListBox *list)
       gtk_widget_set_margin_bottom (label, 10);
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), label);
-      gtk_container_add (GTK_CONTAINER (list), row);
+      gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
     }
 }
 
@@ -114,8 +114,8 @@ main (int argc, char *argv[])
   gtk_widget_set_margin_bottom (popup, 40);
   label = gtk_label_new ("Getting more rows...");
   spinner = gtk_spinner_new ();
-  gtk_container_add (GTK_CONTAINER (popup), label);
-  gtk_container_add (GTK_CONTAINER (popup), spinner);
+  gtk_box_append (GTK_BOX (popup), label);
+  gtk_box_append (GTK_BOX (popup), spinner);
 
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), popup);
   gtk_widget_hide (popup);

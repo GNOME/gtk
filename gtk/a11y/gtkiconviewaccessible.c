@@ -852,7 +852,7 @@ _gtk_icon_view_item_accessible_class_init (GtkIconViewItemAccessibleClass *klass
 static void atk_component_interface_init (AtkComponentIface *iface);
 static void atk_selection_interface_init (AtkSelectionIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkIconViewAccessible, gtk_icon_view_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkIconViewAccessible, gtk_icon_view_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_ADD_PRIVATE (GtkIconViewAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init))

@@ -194,7 +194,7 @@ add_check_group (GtkWidget   *box,
   pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
   gtk_label_set_attributes (GTK_LABEL (label), attrs);
   pango_attr_list_unref (attrs);
-  gtk_container_add (GTK_CONTAINER (group), label);
+  gtk_box_append (GTK_BOX (group), label);
 
   for (i = 0; tags[i]; i++)
     {
@@ -211,7 +211,7 @@ add_check_group (GtkWidget   *box,
       g_signal_connect (feat, "notify::inconsistent", G_CALLBACK (update_display), NULL);
       g_signal_connect (feat, "clicked", G_CALLBACK (feat_clicked), NULL);
 
-      gtk_container_add (GTK_CONTAINER (group), feat);
+      gtk_box_append (GTK_BOX (group), feat);
 
       item = g_new (FeatureItem, 1);
       item->name = tags[i];
@@ -223,7 +223,7 @@ add_check_group (GtkWidget   *box,
       feature_items = g_list_prepend (feature_items, item);
     }
 
-  gtk_container_add (GTK_CONTAINER (box), group);
+  gtk_box_append (GTK_BOX (box), group);
 }
 
 static void
@@ -248,7 +248,7 @@ add_radio_group (GtkWidget *box,
   pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
   gtk_label_set_attributes (GTK_LABEL (label), attrs);
   pango_attr_list_unref (attrs);
-  gtk_container_add (GTK_CONTAINER (group), label);
+  gtk_box_append (GTK_BOX (group), label);
 
   for (i = 0; tags[i]; i++)
     {
@@ -268,7 +268,7 @@ add_radio_group (GtkWidget *box,
       g_signal_connect (feat, "notify::active", G_CALLBACK (update_display), NULL);
       g_object_set_data (G_OBJECT (feat), "default", group_button);
 
-      gtk_container_add (GTK_CONTAINER (group), feat);
+      gtk_box_append (GTK_BOX (group), feat);
 
       item = g_new (FeatureItem, 1);
       item->name = tags[i];
@@ -280,7 +280,7 @@ add_radio_group (GtkWidget *box,
       feature_items = g_list_prepend (feature_items, item);
     }
 
-  gtk_container_add (GTK_CONTAINER (box), group);
+  gtk_box_append (GTK_BOX (box), group);
 }
 
 static void
@@ -1038,7 +1038,7 @@ update_font_variations (void)
 
   child = gtk_widget_get_first_child (variations_grid);
   while ((child = gtk_widget_get_first_child (variations_grid)))
-    gtk_container_remove (GTK_CONTAINER (variations_grid), child);
+    gtk_grid_remove (GTK_GRID (variations_grid), child);
 
   instance_combo = NULL;
 

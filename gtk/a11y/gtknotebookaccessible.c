@@ -36,7 +36,7 @@ struct _GtkNotebookAccessiblePrivate
 
 static void atk_selection_interface_init (AtkSelectionIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkNotebookAccessible, gtk_notebook_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkNotebookAccessible, gtk_notebook_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_ADD_PRIVATE (GtkNotebookAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init))
 
@@ -231,7 +231,6 @@ gtk_notebook_accessible_class_init (GtkNotebookAccessibleClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
   GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
-  GtkContainerAccessibleClass *container_class = (GtkContainerAccessibleClass*)klass;
 
   gobject_class->finalize = gtk_notebook_accessible_finalize;
 
@@ -239,10 +238,6 @@ gtk_notebook_accessible_class_init (GtkNotebookAccessibleClass *klass)
   class->initialize = gtk_notebook_accessible_initialize;
 
   widget_class->notify_gtk = gtk_notebook_accessible_notify_gtk;
-
-  /* we listen to page-added/-removed, so we don't care about these */
-  container_class->add_gtk = NULL;
-  container_class->remove_gtk = NULL;
 }
 
 static void

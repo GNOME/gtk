@@ -9,10 +9,10 @@ struct _ExampleAppWindow
 
   GSettings *settings;
   GtkWidget *stack;
-  GtkWidget *gears;
   GtkWidget *search;
   GtkWidget *searchbar;
   GtkWidget *searchentry;
+  GtkWidget *gears;
   GtkWidget *sidebar;
   GtkWidget *words;
   GtkWidget *lines;
@@ -166,12 +166,6 @@ example_app_window_init (ExampleAppWindow *win)
   GAction *action;
 
   gtk_widget_init_template (GTK_WIDGET (win));
-
-  builder = gtk_builder_new_from_resource ("/org/gtk/exampleapp/gears-menu.ui");
-  menu = G_MENU_MODEL (gtk_builder_get_object (builder, "menu"));
-  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (win->gears), menu);
-  g_object_unref (builder);
-
   win->settings = g_settings_new ("org.gtk.exampleapp");
 
   g_settings_bind (win->settings, "transition",
@@ -189,6 +183,11 @@ example_app_window_init (ExampleAppWindow *win)
   g_signal_connect (win->sidebar, "notify::reveal-child",
                     G_CALLBACK (words_changed), win);
 
+  builder = gtk_builder_new_from_resource ("/org/gtk/exampleapp/gears-menu.ui");
+  menu = G_MENU_MODEL (gtk_builder_get_object (builder, "menu"));
+  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (win->gears), menu);
+  g_object_unref (builder);
+
   action = g_settings_create_action (win->settings, "show-words");
   g_action_map_add_action (G_ACTION_MAP (win), action);
   g_object_unref (action);
@@ -200,6 +199,9 @@ example_app_window_init (ExampleAppWindow *win)
   g_object_bind_property (win->lines, "visible",
                           win->lines_label, "visible",
                           G_BINDING_DEFAULT);
+
+  g_object_set (gtk_settings_get_default (), "gtk-shell-shows-app-menu", FALSE, NULL);
+  gtk_application_window_set_show_menubar (GTK_APPLICATION_WINDOW (win), TRUE);
 }
 
 static void
@@ -223,10 +225,10 @@ example_app_window_class_init (ExampleAppWindowClass *class)
                                                "/org/gtk/exampleapp/window.ui");
 
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, stack);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, gears);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, search);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, searchbar);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, searchentry);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, gears);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, words);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, sidebar);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, lines);

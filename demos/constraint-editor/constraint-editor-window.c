@@ -607,8 +607,8 @@ create_widget_func (gpointer item,
   gtk_widget_set_margin_bottom (label, 10);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_widget_set_hexpand (label, TRUE);
-  gtk_container_add (GTK_CONTAINER (row), box);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), box);
+  gtk_box_append (GTK_BOX (box), label);
 
   if (GTK_IS_CONSTRAINT (item) || GTK_IS_CONSTRAINT_GUIDE (item))
     {
@@ -616,18 +616,18 @@ create_widget_func (gpointer item,
       gtk_button_set_has_frame (GTK_BUTTON (button), FALSE);
       g_signal_connect (button, "clicked", G_CALLBACK (row_edit), win);
       g_object_set_data (G_OBJECT (row), "edit", button);
-      gtk_container_add (GTK_CONTAINER (box), button);
+      gtk_box_append (GTK_BOX (box), button);
       button = gtk_button_new_from_icon_name ("edit-delete-symbolic");
       gtk_button_set_has_frame (GTK_BUTTON (button), FALSE);
       g_signal_connect (button, "clicked", G_CALLBACK (row_delete), win);
-      gtk_container_add (GTK_CONTAINER (box), button);
+      gtk_box_append (GTK_BOX (box), button);
     }
   else if (GTK_IS_WIDGET (item))
     {
       button = gtk_button_new_from_icon_name ("edit-delete-symbolic");
       gtk_button_set_has_frame (GTK_BUTTON (button), FALSE);
       g_signal_connect (button, "clicked", G_CALLBACK (row_delete), win);
-      gtk_container_add (GTK_CONTAINER (box), button);
+      gtk_box_append (GTK_BOX (box), button);
     }
 
   g_free (freeme);

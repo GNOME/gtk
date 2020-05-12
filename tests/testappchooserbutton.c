@@ -91,7 +91,7 @@ main (int argc,
 
   button = gtk_app_chooser_button_new ("image/jpeg");
   gtk_widget_set_vexpand (button, TRUE);
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_box_append (GTK_BOX (box), button);
 
   g_signal_connect (button, "changed",
                     G_CALLBACK (combo_changed_cb), NULL);
@@ -99,18 +99,18 @@ main (int argc,
   w = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (w), "<b>Selected app info</b>");
   gtk_widget_set_vexpand (w, TRUE);
-  gtk_container_add (GTK_CONTAINER (box), w);
+  gtk_box_append (GTK_BOX (box), w);
 
   w = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_widget_set_vexpand (w, TRUE);
-  gtk_container_add (GTK_CONTAINER (box), w);
+  gtk_box_append (GTK_BOX (box), w);
 
   sel_image = gtk_image_new ();
   gtk_widget_set_hexpand (sel_image, TRUE);
-  gtk_container_add (GTK_CONTAINER (w), sel_image);
+  gtk_box_append (GTK_BOX (w), sel_image);
   sel_name = gtk_label_new (NULL);
   gtk_widget_set_hexpand (sel_name, TRUE);
-  gtk_container_add (GTK_CONTAINER (w), sel_name);
+  gtk_box_append (GTK_BOX (w), sel_name);
 
   gtk_app_chooser_button_set_heading (GTK_APP_CHOOSER_BUTTON (button), "Choose one, <i>not</i> two");
   gtk_app_chooser_button_append_separator (GTK_APP_CHOOSER_BUTTON (button));

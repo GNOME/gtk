@@ -839,9 +839,9 @@ axis_remove (gpointer key,
   GtkFontChooserWidget *fontchooser = data;
   Axis *a = value;
 
-  gtk_container_remove (GTK_CONTAINER (fontchooser->axis_grid), a->label);
-  gtk_container_remove (GTK_CONTAINER (fontchooser->axis_grid), a->scale);
-  gtk_container_remove (GTK_CONTAINER (fontchooser->axis_grid), a->spin);
+  gtk_grid_remove (GTK_GRID (fontchooser->axis_grid), a->label);
+  gtk_grid_remove (GTK_GRID (fontchooser->axis_grid), a->scale);
+  gtk_grid_remove (GTK_GRID (fontchooser->axis_grid), a->spin);
 }
 
 static void
@@ -1961,7 +1961,7 @@ add_check_group (GtkFontChooserWidget *fontchooser,
   pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
   gtk_label_set_attributes (GTK_LABEL (label), attrs);
   pango_attr_list_unref (attrs);
-  gtk_container_add (GTK_CONTAINER (group), label);
+  gtk_box_append (GTK_BOX (group), label);
 
   for (i = 0; tags[i]; i++)
     {
@@ -1991,9 +1991,9 @@ add_check_group (GtkFontChooserWidget *fontchooser,
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
-      gtk_container_add (GTK_CONTAINER (box), feat);
-      gtk_container_add (GTK_CONTAINER (box), example);
-      gtk_container_add (GTK_CONTAINER (group), box);
+      gtk_box_append (GTK_BOX (box), feat);
+      gtk_box_append (GTK_BOX (box), example);
+      gtk_box_append (GTK_BOX (group), box);
 
       item = g_new (FeatureItem, 1);
       item->name = tags[i];
@@ -2005,7 +2005,7 @@ add_check_group (GtkFontChooserWidget *fontchooser,
       fontchooser->feature_items = g_list_prepend (fontchooser->feature_items, item);
     }
 
-  gtk_container_add (GTK_CONTAINER (fontchooser->feature_box), group);
+  gtk_box_append (GTK_BOX (fontchooser->feature_box), group);
 }
 
 static void
@@ -2030,7 +2030,7 @@ add_radio_group (GtkFontChooserWidget *fontchooser,
   pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
   gtk_label_set_attributes (GTK_LABEL (label), attrs);
   pango_attr_list_unref (attrs);
-  gtk_container_add (GTK_CONTAINER (group), label);
+  gtk_box_append (GTK_BOX (group), label);
 
   for (i = 0; tags[i]; i++)
     {
@@ -2058,9 +2058,9 @@ add_radio_group (GtkFontChooserWidget *fontchooser,
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
-      gtk_container_add (GTK_CONTAINER (box), feat);
-      gtk_container_add (GTK_CONTAINER (box), example);
-      gtk_container_add (GTK_CONTAINER (group), box);
+      gtk_box_append (GTK_BOX (box), feat);
+      gtk_box_append (GTK_BOX (box), example);
+      gtk_box_append (GTK_BOX (group), box);
 
       item = g_new (FeatureItem, 1);
       item->name = tags[i];
@@ -2072,7 +2072,7 @@ add_radio_group (GtkFontChooserWidget *fontchooser,
       fontchooser->feature_items = g_list_prepend (fontchooser->feature_items, item);
     }
 
-  gtk_container_add (GTK_CONTAINER (fontchooser->feature_box), group);
+  gtk_box_append (GTK_BOX (fontchooser->feature_box), group);
 }
 
 static void

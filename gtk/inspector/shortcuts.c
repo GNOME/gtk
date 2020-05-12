@@ -67,14 +67,14 @@ create_row (gpointer item,
   label = gtk_label_new (s);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   g_free (s);
-  gtk_container_add (GTK_CONTAINER (row), label);
+  gtk_box_append (GTK_BOX (row), label);
   gtk_size_group_add_widget (sl->trigger, label);
 
   s = gtk_shortcut_action_to_string (action);
   label = gtk_label_new (s);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   g_free (s);
-  gtk_container_add (GTK_CONTAINER (row), label);
+  gtk_box_append (GTK_BOX (row), label);
   gtk_size_group_add_widget (sl->action, label);
 
   return row;

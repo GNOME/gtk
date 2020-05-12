@@ -223,6 +223,9 @@ gtk_box_get_spacing
 gtk_box_set_spacing
 gtk_box_get_baseline_position
 gtk_box_set_baseline_position
+gtk_box_append
+gtk_box_prepend
+gtk_box_remove
 gtk_box_insert_child_after
 gtk_box_reorder_child_after
 <SUBSECTION Standard>
@@ -274,6 +277,7 @@ GtkListBoxUpdateHeaderFunc
 gtk_list_box_new
 gtk_list_box_prepend
 gtk_list_box_insert
+gtk_list_box_remove
 gtk_list_box_select_row
 gtk_list_box_unselect_row
 gtk_list_box_select_all
@@ -666,30 +670,6 @@ gtk_combo_box_text_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkcontainer</FILE>
-<TITLE>GtkContainer</TITLE>
-GtkContainer
-GtkContainerClass
-gtk_container_add
-gtk_container_remove
-gtk_container_foreach
-gtk_container_get_children
-gtk_container_child_type
-gtk_container_forall
-
-<SUBSECTION Standard>
-GTK_CONTAINER
-GTK_IS_CONTAINER
-GTK_TYPE_CONTAINER
-GTK_CONTAINER_CLASS
-GTK_IS_CONTAINER_CLASS
-GTK_CONTAINER_GET_CLASS
-<SUBSECTION Private>
-GtkContainerPrivate
-gtk_container_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkdialog</FILE>
 <TITLE>GtkDialog</TITLE>
 GtkDialog
@@ -1011,6 +991,8 @@ gtk_expander_set_label_widget
 gtk_expander_get_label_widget
 gtk_expander_set_resize_toplevel
 gtk_expander_get_resize_toplevel
+gtk_expander_set_child
+gtk_expander_get_child
 <SUBSECTION Standard>
 GTK_TYPE_EXPANDER
 GTK_EXPANDER_CLASS
@@ -1208,6 +1190,7 @@ gtk_filter_list_model_get_type
 GtkFixed
 gtk_fixed_new
 gtk_fixed_put
+gtk_fixed_remove
 gtk_fixed_move
 <SUBSECTION Standard>
 GTK_FIXED
@@ -1741,6 +1724,7 @@ GtkInfoBar
 gtk_info_bar_new
 gtk_info_bar_new_with_buttons
 gtk_info_bar_add_action_widget
+gtk_info_bar_remove_action_widget
 gtk_info_bar_add_button
 gtk_info_bar_add_buttons
 gtk_info_bar_set_response_sensitive
@@ -1752,6 +1736,8 @@ gtk_info_bar_get_show_close_button
 gtk_info_bar_set_show_close_button
 gtk_info_bar_get_revealed
 gtk_info_bar_set_revealed
+gtk_info_bar_add_child
+gtk_info_bar_remove_child
 
 <SUBSECTION Standard>
 GTK_TYPE_INFO_BAR
@@ -2785,6 +2771,7 @@ gtk_text_view_backward_display_line_start
 gtk_text_view_starts_display_line
 gtk_text_view_move_visually
 gtk_text_view_add_child_at_anchor
+gtk_text_view_remove
 GtkTextChildAnchor
 gtk_text_child_anchor_new
 gtk_text_child_anchor_get_widgets
@@ -5278,6 +5265,7 @@ GtkGridClass
 gtk_grid_new
 gtk_grid_attach
 gtk_grid_attach_next_to
+gtk_grid_remove
 gtk_grid_get_child_at
 gtk_grid_insert_row
 gtk_grid_insert_column
@@ -5560,6 +5548,7 @@ GtkActionBar
 gtk_action_bar_new
 gtk_action_bar_pack_start
 gtk_action_bar_pack_end
+gtk_action_bar_remove
 gtk_action_bar_get_center_widget
 gtk_action_bar_set_center_widget
 gtk_action_bar_get_revealed
@@ -5587,6 +5576,7 @@ gtk_header_bar_set_title_widget
 gtk_header_bar_get_title_widget
 gtk_header_bar_pack_start
 gtk_header_bar_pack_end
+gtk_header_bar_remove
 gtk_header_bar_set_show_title_buttons
 gtk_header_bar_get_show_title_buttons
 gtk_header_bar_set_decoration_layout
@@ -5616,6 +5606,7 @@ GtkStack
 gtk_stack_new
 gtk_stack_add_named
 gtk_stack_add_titled
+gtk_stack_remove
 gtk_stack_get_child_by_name
 gtk_stack_get_page
 gtk_stack_get_pages
@@ -5702,6 +5693,7 @@ gtk_revealer_get_type
 GtkFlowBox
 gtk_flow_box_new
 gtk_flow_box_insert
+gtk_flow_box_remove
 gtk_flow_box_get_child_at_index
 gtk_flow_box_get_child_at_pos
 gtk_flow_box_set_hadjustment

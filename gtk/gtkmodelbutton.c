@@ -509,7 +509,7 @@ update_node_name (GtkModelButton *self)
       gtk_widget_set_valign (self->start_indicator, GTK_ALIGN_CENTER);
       update_start_indicator (self);
 
-      gtk_container_add (GTK_CONTAINER (self->start_box), self->start_indicator);
+      gtk_box_append (GTK_BOX (self->start_box), self->start_indicator);
     }
   else if (start_name)
     {
@@ -517,7 +517,7 @@ update_node_name (GtkModelButton *self)
     }
   else if (self->start_indicator)
     {
-      gtk_container_remove (GTK_CONTAINER (self->start_box), self->start_indicator);
+      gtk_box_remove (GTK_BOX (self->start_box), self->start_indicator);
       self->start_indicator = NULL;
     }
 
@@ -699,7 +699,7 @@ gtk_model_button_set_iconic (GtkModelButton *self,
     {
       if (self->start_indicator)
         {
-          gtk_container_remove (GTK_CONTAINER (self->start_box), self->start_indicator);
+          gtk_box_remove (GTK_BOX (self->start_box), self->start_indicator);
           self->start_indicator = NULL;
         }
       g_clear_pointer (&self->end_indicator, gtk_widget_unparent);

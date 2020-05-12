@@ -212,6 +212,27 @@
         the replacement for gtk_main_iteration() is g_main_context_iteration().
       </para>
     </section>
+
+    <section>
+      <title>Reduce the use of gtk_widget_destroy()</title>
+      <para>
+        GTK4 introduces a gtk_window_destroy() api. While that is not available
+        in GTK3, you can prepare for the switch by using gtk_widget_destroy()
+        only on toplevel windows, and replace all other uses with
+        gtk_container_remove() or g_object_unref().
+      </para>
+    </section>
+
+    <section>
+      <title>Reduce the use of generic container APIs</title>
+      <para>
+        GTK4 removes gtk_container_add() and gtk_container_remove(). While there
+        is not always a replacement for gtk_container_remove() in GTK3, you can
+        replace many uses of gtk_container_add() with equivalent container-specific
+        APIs such as gtk_box_pack_start() or gtk_grid_attach(), and thereby reduce
+        the amount of work you have to do at the time of the switch.
+      </para>
+    </section>
   </section>
 
   <section>
@@ -557,6 +578,82 @@
       <para>
         gtk4-builder-tool can help with this conversion, with the --3to4 option
         of the simplify command.
+      </para>
+    </section>
+
+    <section>
+      <title>Adapt to GtkBin removal</title>
+      <para>
+        The abstract base class GtkBin for single-child containers has been
+        removed. The former subclasses are now derived directly from GtkWidget,
+        and have a "child" property for their child widget. The affected classes
+        are:
+      </para>
+      <simplelist>
+        <member>GtkAspectFrame</member>
+        <member>GtkButton (and subclasses)</member>
+        <member>GtkComboBox</member>
+        <member>GtkFlowBoxChild</member>
+        <member>GtkFrame</member>
+        <member>GtkListBoxRow</member>
+        <member>GtkOverlay</member>
+        <member>GtkPopover</member>
+        <member>GtkRevealer</member>
+        <member>GtkScrolledWindow</member>
+        <member>GtkSearchBar</member>
+        <member>GtkViewport</member>
+        <member>GtkWindow (and subclasses)</member>
+      </simplelist>
+      <para>
+        To add a child, use the setter for the "child" property (e.g.
+        gtk_frame_set_child()) instead of gtk_container_add(). Adding a child
+        in a ui file with <tag class="starttag">child</tag> still works.
+      </para>
+    </section>
+
+    <section>
+      <title>Adapt to GtkContainer removal</title>
+      <para>
+        The abstract bas class GtkContainer for general containers has been
+        removed. The former subclasses are now derived directly from GtkWidget,
+        and have class-specific add and remove functions. The affected classes
+        are:
+      </para>
+      <simplelist>
+        <member>GtkActionBar</member>
+        <member>GtkBox (and subclasses)</member>
+        <member>GtkExpander</member>
+        <member>GtkFixed</member>
+        <member>GtkFlowBox</member>
+        <member>GtkGrid</member>
+        <member>GtkHeaderBar</member>
+        <member>GtkIconView</member>
+        <member>GtkInfoBar</member>
+        <member>GtkListBox</member>
+        <member>GtkNotebook</member>
+        <member>GtkPaned</member>
+        <member>GtkStack</member>
+        <member>GtkTextView</member>
+        <member>GtkTreeView</member>
+      </simplelist>
+      <para>
+        The most noticable change will be to use gtk_box_append() or gtk_box_prepend()
+        instead of gtk_container_add() for adding children to GtkBox, and the change
+        to use container-specific remove functions, such as gtk_stack_remove() instead
+        of gtk_container_remove(). Adding a child in a ui file with
+        <tag class="starttag">child</tag> still works.
+      </para>
+    </section>
+
+    <section>
+      <title>Adapt to gtk_widget_destroy() removal</title>
+      <para>
+        The function gtk_widget_destroy() has been removed. To explicitly destroy
+        a toplevel window, use gtk_window_destroy(). To destroy a widget that is
+        part of a hierarchy, remove it from its parent using a container-specific
+        remove api, such as gtk_box_remove() or gtk_stack_remove(). To destroy
+        a freestanding non-toplevel widget, use g_object_unref() to drop your
+        reference.
       </para>
     </section>
 

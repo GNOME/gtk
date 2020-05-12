@@ -461,6 +461,7 @@ setup_search (GtkFileChooserDialog *dialog)
 {
   GtkFileChooserDialogPrivate *priv = gtk_file_chooser_dialog_get_instance_private (dialog);
   gboolean use_header;
+  GtkWidget *child;
 
   if (priv->search_setup)
     return;
@@ -524,7 +525,10 @@ setup_search (GtkFileChooserDialog *dialog)
           gtk_header_bar_set_title_widget (GTK_HEADER_BAR (header), box);
         }
 
-      gtk_container_forall (GTK_CONTAINER (header), add_button, dialog);
+      for (child = gtk_widget_get_first_child (header);
+           child != NULL;
+           child = gtk_widget_get_next_sibling (child))
+        add_button (child, dialog);
     }
 }
 
@@ -561,8 +565,8 @@ setup_save_entry (GtkFileChooserDialog *dialog)
       g_object_set (label, "margin-start", 6, "margin-end", 6, NULL);
       g_object_set (entry, "margin-start", 6, "margin-end", 6, NULL);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-      gtk_container_add (GTK_CONTAINER (box), label);
-      gtk_container_add (GTK_CONTAINER (box), entry);
+      gtk_box_append (GTK_BOX (box), label);
+      gtk_box_append (GTK_BOX (box), entry);
 
       gtk_header_bar_set_title_widget (GTK_HEADER_BAR (header), box);
       gtk_file_chooser_widget_set_save_entry (GTK_FILE_CHOOSER_WIDGET (priv->widget), entry);

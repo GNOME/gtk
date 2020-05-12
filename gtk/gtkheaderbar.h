@@ -24,7 +24,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkcontainer.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
@@ -49,6 +49,9 @@ void         gtk_header_bar_pack_start        (GtkHeaderBar *bar,
                                                GtkWidget    *child);
 GDK_AVAILABLE_IN_ALL
 void         gtk_header_bar_pack_end          (GtkHeaderBar *bar,
+                                               GtkWidget    *child);
+GDK_AVAILABLE_IN_ALL
+void         gtk_header_bar_remove            (GtkHeaderBar *bar,
                                                GtkWidget    *child);
 
 GDK_AVAILABLE_IN_ALL
