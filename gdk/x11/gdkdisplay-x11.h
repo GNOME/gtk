@@ -114,7 +114,7 @@ struct _GdkX11Display
   /* GdkCursor => XCursor */
   GHashTable *cursors;
 
-  GPtrArray *monitors;
+  GListStore *monitors;
   int primary_monitor;
 
   /* Startup notification */

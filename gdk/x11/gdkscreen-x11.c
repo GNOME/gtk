@@ -135,12 +135,16 @@ gdk_x11_screen_get_monitor_output (GdkX11Screen *x11_screen,
 {
   GdkX11Display *x11_display = GDK_X11_DISPLAY (x11_screen->display);
   GdkX11Monitor *monitor;
+  XID output;
 
   g_return_val_if_fail (monitor_num >= 0, None);
-  g_return_val_if_fail (monitor_num < x11_display->monitors->len, None);
+  g_return_val_if_fail (monitor_num < g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)), None);
 
-  monitor = x11_display->monitors->pdata[monitor_num];
-  return monitor->output;
+  monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), monitor_num);
+  output = monitor->output;
+  g_object_unref (monitor);
+
+  return output;
 }
 
 static int
@@ -386,9 +390,10 @@ find_monitor_by_output (GdkX11Display *x11_display, XID output)
 {
   int i;
 
-  for (i = 0; i < x11_display->monitors->len; i++)
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)); i++)
     {
-      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
+      GdkX11Monitor *monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
+      g_object_unref (monitor);
       if (monitor->output == output)
         return monitor;
     }
@@ -439,11 +444,12 @@ init_randr15 (GdkX11Screen *x11_screen, gboolean *changed)
   if (!rr_monitors)
     return FALSE;
 
-  for (i = 0; i < x11_display->monitors->len; i++)
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)); i++)
     {
-      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
+      GdkX11Monitor *monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
       monitor->add = FALSE;
       monitor->remove = TRUE;
+      g_object_unref (monitor);
     }
 
   for (i = 0; i < num_rr_monitors; i++)
@@ -503,7 +509,7 @@ init_randr15 (GdkX11Screen *x11_screen, gboolean *changed)
                                   NULL);
           monitor->output = output;
           monitor->add = TRUE;
-          g_ptr_array_add (x11_display->monitors, monitor);
+          g_list_store_append (x11_display->monitors, monitor);
         }
 
       /* Fetch minimal manufacturer information (PNP ID) from EDID */
@@ -591,9 +597,9 @@ init_randr15 (GdkX11Screen *x11_screen, gboolean *changed)
   XRRFreeMonitors (rr_monitors);
   XRRFreeScreenResources (resources);
 
-  for (i = x11_display->monitors->len - 1; i >= 0; i--)
+  for (i = g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)) - 1; i >= 0; i--)
     {
-      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
+      GdkX11Monitor *monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
       if (monitor->add)
         {
           gdk_display_monitor_added (display, GDK_MONITOR (monitor));
@@ -602,18 +608,20 @@ init_randr15 (GdkX11Screen *x11_screen, gboolean *changed)
       else if (monitor->remove)
         {
           g_object_ref (monitor);
-          g_ptr_array_remove (x11_display->monitors, monitor);
+          g_list_store_remove (x11_display->monitors, i);
           gdk_display_monitor_removed (display, GDK_MONITOR (monitor));
           g_object_unref (monitor);
           *changed = TRUE;
         }
+      g_object_unref (monitor);
     }
 
   old_primary = x11_display->primary_monitor;
   x11_display->primary_monitor = 0;
-  for (i = 0; i < x11_display->monitors->len; ++i)
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)); i++)
     {
-      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
+      GdkX11Monitor *monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
+      g_object_unref (monitor);
       if (monitor->output == primary_output)
         {
           x11_display->primary_monitor = i;
@@ -636,7 +644,7 @@ init_randr15 (GdkX11Screen *x11_screen, gboolean *changed)
   if (x11_display->primary_monitor != old_primary)
     *changed = TRUE;
 
-  return x11_display->monitors->len > 0;
+  return g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)) > 0;
 #endif
 
   return FALSE;
@@ -662,12 +670,14 @@ init_randr13 (GdkX11Screen *x11_screen, gboolean *changed)
   if (!resources)
     return FALSE;
 
-  for (i = 0; i < x11_display->monitors->len; i++)
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)); i++)
     {
-      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
+      GdkX11Monitor *monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
       monitor->add = FALSE;
       monitor->remove = TRUE;
+      g_object_unref (monitor);
     }
+
 
   for (i = 0; i < resources->noutput; ++i)
     {
@@ -712,7 +722,7 @@ init_randr13 (GdkX11Screen *x11_screen, gboolean *changed)
                                       NULL);
               monitor->output = output;
               monitor->add = TRUE;
-              g_ptr_array_add (x11_display->monitors, monitor);
+              g_list_store_append (x11_display->monitors, monitor);
             }
 
           gdk_monitor_get_geometry (GDK_MONITOR (monitor), &geometry);
@@ -758,9 +768,9 @@ init_randr13 (GdkX11Screen *x11_screen, gboolean *changed)
 
   /* Which usable multihead data is not returned in non RandR 1.2+ X driver? */
 
-  for (i = x11_display->monitors->len - 1; i >= 0; i--)
+  for (i = g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)) - 1; i >= 0; i--)
     {
-      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
+      GdkX11Monitor *monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
       if (monitor->add)
         {
           gdk_display_monitor_added (display, GDK_MONITOR (monitor));
@@ -769,7 +779,7 @@ init_randr13 (GdkX11Screen *x11_screen, gboolean *changed)
       else if (monitor->remove)
         {
           g_object_ref (monitor);
-          g_ptr_array_remove (x11_display->monitors, monitor);
+          g_list_store_remove (x11_display->monitors, i);
           gdk_display_monitor_removed (display, GDK_MONITOR (monitor));
           g_object_unref (monitor);
           *changed = TRUE;
@@ -781,9 +791,10 @@ init_randr13 (GdkX11Screen *x11_screen, gboolean *changed)
   primary_output = XRRGetOutputPrimary (x11_screen->xdisplay,
                                         x11_screen->xroot_window);
 
-  for (i = 0; i < x11_display->monitors->len; ++i)
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)); i++)
     {
-      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
+      GdkX11Monitor *monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
+      g_object_unref (monitor);
       if (monitor->output == primary_output)
         {
           x11_display->primary_monitor = i;
@@ -806,7 +817,7 @@ init_randr13 (GdkX11Screen *x11_screen, gboolean *changed)
   if (x11_display->primary_monitor != old_primary)
     *changed = TRUE;
 
-  return x11_display->monitors->len > 0;
+  return g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)) > 0;
 #endif
 
   return FALSE;
@@ -822,12 +833,14 @@ init_no_multihead (GdkX11Screen *x11_screen, gboolean *changed)
   int width, height;
   int i;
 
-  for (i = 0; i < x11_display->monitors->len; i++)
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)); i++)
     {
-      monitor = x11_display->monitors->pdata[i];
+      monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
       monitor->add = FALSE;
       monitor->remove = TRUE;
+      g_object_unref (monitor);
     }
+
 
   monitor = find_monitor_by_output (x11_display, 0);
   if (monitor)
@@ -839,7 +852,7 @@ init_no_multihead (GdkX11Screen *x11_screen, gboolean *changed)
                               NULL);
       monitor->output = 0;
       monitor->add = TRUE;
-      g_ptr_array_add (x11_display->monitors, monitor);
+      g_list_store_append (x11_display->monitors, monitor);
     }
 
   width_mm = WidthMMOfScreen (x11_screen->xscreen);
@@ -866,9 +879,9 @@ init_no_multihead (GdkX11Screen *x11_screen, gboolean *changed)
     *changed = TRUE;
   x11_display->primary_monitor = 0;
 
-  for (i = x11_display->monitors->len - 1; i >= 0; i--)
+  for (i = g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)) - 1; i >= 0; i--)
     {
-      monitor = x11_display->monitors->pdata[i];
+      monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
       if (monitor->add)
         {
           gdk_display_monitor_added (GDK_DISPLAY (x11_display), GDK_MONITOR (monitor));
@@ -877,11 +890,12 @@ init_no_multihead (GdkX11Screen *x11_screen, gboolean *changed)
       else if (monitor->remove)
         {
           g_object_ref (monitor);
-          g_ptr_array_remove (x11_display->monitors, monitor);
+          g_list_store_remove (x11_display->monitors, i);
           gdk_display_monitor_removed (GDK_DISPLAY (x11_display), GDK_MONITOR (monitor));
           g_object_unref (monitor);
           *changed = TRUE;
         }
+      g_object_unref (monitor);
     }
 }
 
@@ -958,11 +972,13 @@ _gdk_x11_screen_set_surface_scale (GdkX11Screen *x11_screen,
       _gdk_x11_surface_set_surface_scale (surface, scale);
     }
 
-  for (i = 0; i < x11_display->monitors->len; i++)
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)); i++)
     {
-      GdkMonitor *monitor = GDK_MONITOR (x11_display->monitors->pdata[i]);
+      GdkMonitor *monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
 
       gdk_monitor_set_scale_factor (monitor, scale);
+
+      g_object_unref (monitor);
     }
 
   /* We re-read the monitor sizes so we can apply the new scale */
