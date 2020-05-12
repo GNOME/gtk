@@ -374,12 +374,25 @@ gtk_text_view_child_set_property (GObject      *object,
 }
 
 static void
+gtk_text_view_child_dispose (GObject *object)
+{
+  GtkTextViewChild *self = GTK_TEXT_VIEW_CHILD (object);
+  GtkWidget *child;
+
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (self))))
+    gtk_text_view_child_remove (self, child);
+
+  G_OBJECT_CLASS (gtk_text_view_child_parent_class)->dispose (object);
+}
+
+static void
 gtk_text_view_child_class_init (GtkTextViewChildClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
+  object_class->dispose = gtk_text_view_child_dispose;
   object_class->constructed = gtk_text_view_child_constructed;
   object_class->get_property = gtk_text_view_child_get_property;
   object_class->set_property = gtk_text_view_child_set_property;
