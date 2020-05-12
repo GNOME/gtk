@@ -113,7 +113,6 @@ gtk_tests = [
   ['teststackedheaders'],
   ['testwindowsize'],
   ['testpopover'],
-  ['gdkgears', ['gtkgears.c']],
   ['listmodel'],
   ['testgaction'],
   ['testwidgetfocus'],
