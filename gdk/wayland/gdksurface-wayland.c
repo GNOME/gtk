@@ -3695,11 +3695,6 @@ gdk_wayland_surface_begin_resize_drag (GdkSurface     *surface,
 
   if (sequence)
     gdk_wayland_device_unset_touch_grab (device, sequence);
-
-  /* This is needed since Wayland will absorb all the pointer events after the
-   * above function - FIXME: Is this always safe..?
-   */
-  gdk_seat_ungrab (gdk_device_get_seat (device));
 }
 
 static void
@@ -3745,11 +3740,6 @@ gdk_wayland_surface_begin_move_drag (GdkSurface *surface,
 
   if (sequence)
     gdk_wayland_device_unset_touch_grab (device, sequence);
-
-  /* This is needed since Wayland will absorb all the pointer events after the
-   * above function - FIXME: Is this always safe..?
-   */
-  gdk_seat_ungrab (gdk_device_get_seat (device));
 }
 
 static void
