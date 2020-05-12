@@ -176,10 +176,6 @@ GDK_AVAILABLE_IN_ALL
 void gtk_dialog_response           (GtkDialog *dialog,
                                     gint       response_id);
 
-/* Returns response_id */
-GDK_AVAILABLE_IN_ALL
-gint gtk_dialog_run                (GtkDialog *dialog);
-
 GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_dialog_get_content_area (GtkDialog *dialog);
 GDK_AVAILABLE_IN_ALL

@@ -658,6 +658,8 @@ handle_print_response (GtkWidget *dialog,
     
   gtk_window_destroy (GTK_WINDOW (pd));
  
+  if (rdata->loop)
+    g_main_loop_quit (rdata->loop);
 }
 
 
@@ -669,7 +671,7 @@ found_printer (GtkPrinter        *printer,
   GtkPrintOperationPrivate *priv = op->priv;
   GtkPrintSettings *settings = NULL;
   GtkPageSetup *page_setup = NULL;
-  
+
   if (rdata->loop)
     g_main_loop_quit (rdata->loop);
 
@@ -730,9 +732,7 @@ gtk_print_operation_unix_run_dialog_async (GtkPrintOperation          *op,
       g_signal_connect (pd, "response", 
 			G_CALLBACK (handle_print_response), rdata);
 
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_window_present (GTK_WINDOW (pd));
-      G_GNUC_END_IGNORE_DEPRECATIONS
     }
   else
     {
@@ -851,7 +851,6 @@ gtk_print_operation_unix_run_dialog (GtkPrintOperation *op,
  {
   GtkWidget *pd;
   PrintResponseData rdata;
-  gint response;  
   const gchar *printer_name;
    
   rdata.op = op;
@@ -866,9 +865,17 @@ gtk_print_operation_unix_run_dialog (GtkPrintOperation *op,
   if (show_dialog)
     {
       pd = get_print_dialog (op, parent);
+      gtk_window_set_modal (GTK_WINDOW (pd), TRUE);
 
-      response = gtk_dialog_run (GTK_DIALOG (pd));
-      handle_print_response (pd, response, &rdata);
+      g_signal_connect (pd, "response", 
+			G_CALLBACK (handle_print_response), &rdata);
+
+      gtk_window_present (GTK_WINDOW (pd));
+
+      rdata.loop = g_main_loop_new (NULL, FALSE);
+      g_main_loop_run (rdata.loop);
+      g_main_loop_unref (rdata.loop);
+      rdata.loop = NULL;
     }
   else
     {
@@ -897,6 +904,7 @@ typedef struct
   GtkPageSetupDoneFunc  done_cb;
   gpointer              data;
   GDestroyNotify        destroy;
+  GMainLoop            *loop;
 } PageSetupResponseData;
 
 static void
@@ -917,6 +925,9 @@ handle_page_setup_response (GtkWidget *dialog,
 {
   GtkPageSetupUnixDialog *psd;
   PageSetupResponseData *rdata = data;
+
+  if (rdata->loop)
+    g_main_loop_quit (rdata->loop);
 
   psd = GTK_PAGE_SETUP_UNIX_DIALOG (dialog);
   if (response == GTK_RESPONSE_OK)
@@ -971,18 +982,26 @@ gtk_print_run_page_setup_dialog (GtkWindow        *parent,
 				 GtkPrintSettings *settings)
 {
   GtkWidget *dialog;
-  gint response;
   PageSetupResponseData rdata;  
   
   rdata.page_setup = NULL;
   rdata.done_cb = NULL;
   rdata.data = NULL;
   rdata.destroy = NULL;
+  rdata.loop = g_main_loop_new (NULL, FALSE);
 
   dialog = get_page_setup_dialog (parent, page_setup, settings);
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-  handle_page_setup_response (dialog, response, &rdata);
+
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (handle_page_setup_response),
+                    &rdata);
+
+  gtk_window_present (GTK_WINDOW (dialog));
  
+  g_main_loop_run (rdata.loop);
+  g_main_loop_unref (rdata.loop);
+  rdata.loop = NULL;
+
   if (rdata.page_setup)
     return rdata.page_setup;
   else if (page_setup)
@@ -1024,13 +1043,12 @@ gtk_print_run_page_setup_dialog_async (GtkWindow            *parent,
   rdata->done_cb = done_cb;
   rdata->data = data;
   rdata->destroy = page_setup_data_free;
+  rdata->loop = NULL;
 
   g_signal_connect (dialog, "response",
 		    G_CALLBACK (handle_page_setup_response), rdata);
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_window_present (GTK_WINDOW (dialog));
-  G_GNUC_END_IGNORE_DEPRECATIONS
  }
 
 struct _PrinterFinder 
