@@ -7498,6 +7498,7 @@ gtk_window_destroy (GtkWindow *window)
         g_object_unref (item);
     }
 
+  gtk_window_hide (GTK_WIDGET (window));
   gtk_widget_unrealize (GTK_WIDGET (window));
 
   g_object_unref (window);
