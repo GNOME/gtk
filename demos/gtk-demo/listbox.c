@@ -357,11 +357,11 @@ do_listbox (GtkWidget *do_widget)
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
       gtk_window_set_child (GTK_WINDOW (window), vbox);
       label = gtk_label_new ("Messages from GTK and friends");
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_box_append (GTK_BOX (vbox), label);
       scrolled = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
       gtk_widget_set_vexpand (scrolled, TRUE);
-      gtk_container_add (GTK_CONTAINER (vbox), scrolled);
+      gtk_box_append (GTK_BOX (vbox), scrolled);
       listbox = gtk_list_box_new ();
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled), listbox);
 
@@ -377,7 +377,7 @@ do_listbox (GtkWidget *do_widget)
           message = gtk_message_new (lines[i]);
           row = gtk_message_row_new (message);
           gtk_widget_show (GTK_WIDGET (row));
-          gtk_container_add (GTK_CONTAINER (listbox), GTK_WIDGET (row));
+          gtk_list_box_insert (GTK_LIST_BOX (listbox), GTK_WIDGET (row), -1);
         }
 
       g_strfreev (lines);

@@ -24,7 +24,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkcontainer.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
@@ -49,6 +49,10 @@ void         gtk_action_bar_pack_start        (GtkActionBar *action_bar,
                                                GtkWidget    *child);
 GDK_AVAILABLE_IN_ALL
 void         gtk_action_bar_pack_end          (GtkActionBar *action_bar,
+                                               GtkWidget    *child);
+
+GDK_AVAILABLE_IN_ALL
+void         gtk_action_bar_remove            (GtkActionBar *action_bar,
                                                GtkWidget    *child);
 
 GDK_AVAILABLE_IN_ALL

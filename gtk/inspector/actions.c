@@ -94,14 +94,14 @@ add_action (GtkInspectorActions *sl,
   gtk_widget_add_css_class (label, "cell");
   gtk_label_set_xalign (GTK_LABEL (label), 0);
   gtk_size_group_add_widget (sl->priv->name, label);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_box_append (GTK_BOX (box), label);
 
   label = gtk_label_new (enabled ? "+" : "-");
   gtk_widget_add_css_class (label, "cell");
   gtk_label_set_xalign (GTK_LABEL (label), 0);
   gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
   gtk_size_group_add_widget (sl->priv->enabled, label);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_box_append (GTK_BOX (box), label);
 
   g_object_set_data (G_OBJECT (row), "enabled", label);
 
@@ -109,21 +109,21 @@ add_action (GtkInspectorActions *sl,
   gtk_widget_add_css_class (label, "cell");
   gtk_label_set_xalign (GTK_LABEL (label), 0);
   gtk_size_group_add_widget (sl->priv->parameter, label);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_box_append (GTK_BOX (box), label);
 
   label = gtk_label_new (state_string);
   gtk_label_set_xalign (GTK_LABEL (label), 0);
   gtk_widget_add_css_class (label, "cell");
   gtk_size_group_add_widget (sl->priv->state, label);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_box_append (GTK_BOX (box), label);
   g_object_set_data (G_OBJECT (row), "state", label);
 
   editor = gtk_inspector_action_editor_new (group, name, sl->priv->activate);
   gtk_widget_add_css_class (editor, "cell");
-  gtk_container_add (GTK_CONTAINER (box), editor);
+  gtk_box_append (GTK_BOX (box), editor);
   g_object_set_data (G_OBJECT (row), "editor", editor);
 
-  gtk_container_add (GTK_CONTAINER (sl->priv->list), row);
+  gtk_list_box_insert (GTK_LIST_BOX (sl->priv->list), row, -1);
 
   g_free (state_string);
 }
@@ -134,12 +134,16 @@ find_row (GtkInspectorActions *sl,
 {
   GtkWidget *row = NULL;
   GtkWidget *widget;
+  const char *key;
 
   for (widget = gtk_widget_get_first_child (sl->priv->list);
        widget;
        widget = gtk_widget_get_next_sibling (widget))
     {
-      const char *key = g_object_get_data (G_OBJECT (widget), "key");
+      if (!GTK_IS_LIST_BOX_ROW (widget))
+        continue;
+
+      key = g_object_get_data (G_OBJECT (widget), "key");
       if (g_str_equal (key, action_name))
         {
           row = widget;
@@ -167,7 +171,7 @@ action_removed_cb (GActionGroup        *group,
 
   row = find_row (sl, action_name);
   if (row)
-    gtk_container_remove (GTK_CONTAINER (sl->priv->list), row);
+    gtk_list_box_remove (GTK_LIST_BOX (sl->priv->list), row);
 }
 
 static void
@@ -312,7 +316,7 @@ gtk_inspector_actions_set_object (GtkInspectorActions *sl,
     remove_group (sl, page, sl->priv->group);
 
   while ((child = gtk_widget_get_first_child (sl->priv->list)))
-    gtk_container_remove (GTK_CONTAINER (sl->priv->list), child);
+    gtk_list_box_remove (GTK_LIST_BOX (sl->priv->list), child);
 
   if (GTK_IS_APPLICATION (object))
     add_group (sl, page, G_ACTION_GROUP (object));

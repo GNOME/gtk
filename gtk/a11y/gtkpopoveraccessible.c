@@ -25,7 +25,7 @@
 
 typedef struct _GtkPopoverAccessiblePrivate GtkPopoverAccessiblePrivate;
 
-G_DEFINE_TYPE (GtkPopoverAccessible, gtk_popover_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE)
+G_DEFINE_TYPE (GtkPopoverAccessible, gtk_popover_accessible, GTK_TYPE_WIDGET_ACCESSIBLE)
 
 static void
 popover_update_modality (AtkObject  *object,

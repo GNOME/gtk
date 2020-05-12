@@ -21,6 +21,7 @@
 #include "gtkshortcutsgroup.h"
 
 #include "gtkbox.h"
+#include "gtkbuildable.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkorientable.h"
@@ -58,7 +59,11 @@ struct _GtkShortcutsGroupClass
   GtkBoxClass parent_class;
 };
 
-G_DEFINE_TYPE (GtkShortcutsGroup, gtk_shortcuts_group, GTK_TYPE_BOX)
+static void gtk_shortcuts_group_buildable_iface_init (GtkBuildableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GtkShortcutsGroup, gtk_shortcuts_group, GTK_TYPE_BOX,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_shortcuts_group_buildable_iface_init))
 
 enum {
   PROP_0,
@@ -92,96 +97,75 @@ static void
 gtk_shortcuts_group_set_accel_size_group (GtkShortcutsGroup *group,
                                           GtkSizeGroup      *size_group)
 {
-  GList *children, *l;
+  GtkWidget *child;
 
   g_set_object (&group->accel_size_group, size_group);
 
-  children = gtk_container_get_children (GTK_CONTAINER (group));
-  for (l = children; l; l = l->next)
-    gtk_shortcuts_group_apply_accel_size_group (group, GTK_WIDGET (l->data));
-  g_list_free (children);
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (group));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    gtk_shortcuts_group_apply_accel_size_group (group, child);
 }
 
 static void
 gtk_shortcuts_group_set_title_size_group (GtkShortcutsGroup *group,
                                           GtkSizeGroup      *size_group)
 {
-  GList *children, *l;
+  GtkWidget *child;
 
   g_set_object (&group->title_size_group, size_group);
 
-  children = gtk_container_get_children (GTK_CONTAINER (group));
-  for (l = children; l; l = l->next)
-    gtk_shortcuts_group_apply_title_size_group (group, GTK_WIDGET (l->data));
-  g_list_free (children);
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (group));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    gtk_shortcuts_group_apply_title_size_group (group, child);
 }
 
 static guint
 gtk_shortcuts_group_get_height (GtkShortcutsGroup *group)
 {
-  GList *children, *l;
+  GtkWidget *child;
   guint height;
 
   height = 1;
 
-  children = gtk_container_get_children (GTK_CONTAINER (group));
-  for (l = children; l; l = l->next)
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (group));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
     {
-      GtkWidget *child = l->data;
-
       if (!gtk_widget_get_visible (child))
         continue;
       else if (GTK_IS_SHORTCUTS_SHORTCUT (child))
         height += 1;
     }
-  g_list_free (children);
 
   return height;
 }
 
+static GtkBuildableIface *parent_buildable_iface;
+
 static void
-gtk_shortcuts_group_add (GtkContainer *container,
-                         GtkWidget    *widget)
+gtk_shortcuts_group_buildable_add_child (GtkBuildable *buildable,
+                                         GtkBuilder   *builder,
+                                         GObject      *child,
+                                         const gchar  *type)
 {
-  if (GTK_IS_SHORTCUTS_SHORTCUT (widget))
+  if (GTK_IS_SHORTCUTS_SHORTCUT (child))
     {
-      GTK_CONTAINER_CLASS (gtk_shortcuts_group_parent_class)->add (container, widget);
-      gtk_shortcuts_group_apply_accel_size_group (GTK_SHORTCUTS_GROUP (container), widget);
-      gtk_shortcuts_group_apply_title_size_group (GTK_SHORTCUTS_GROUP (container), widget);
+      gtk_box_append (GTK_BOX (buildable), GTK_WIDGET (child));
+      gtk_shortcuts_group_apply_accel_size_group (GTK_SHORTCUTS_GROUP (buildable), GTK_WIDGET (child));
+      gtk_shortcuts_group_apply_title_size_group (GTK_SHORTCUTS_GROUP (buildable), GTK_WIDGET (child));
     }
   else
-    g_warning ("Can't add children of type %s to %s",
-               G_OBJECT_TYPE_NAME (widget),
-               G_OBJECT_TYPE_NAME (container));
-}
-
-typedef struct {
-  GtkCallback callback;
-  gpointer data;
-} CallbackData;
-
-static void
-forall_cb (GtkWidget *widget, gpointer data)
-{
-  GtkShortcutsGroup *self;
-  CallbackData *cbdata = data;
-
-  self = GTK_SHORTCUTS_GROUP (gtk_widget_get_parent (widget));
-  if (widget != (GtkWidget*)self->title)
-    cbdata->callback (widget, cbdata->data);
+    parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
-gtk_shortcuts_group_forall (GtkContainer *container,
-                            GtkCallback   callback,
-                            gpointer      callback_data)
+gtk_shortcuts_group_buildable_iface_init (GtkBuildableIface *iface)
 {
-  CallbackData cbdata;
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
 
-  cbdata.callback = callback;
-  cbdata.data = callback_data;
-
-  GTK_CONTAINER_CLASS (gtk_shortcuts_group_parent_class)->forall (container, forall_cb, &cbdata);
+  iface->add_child = gtk_shortcuts_group_buildable_add_child;
 }
 
 static void
@@ -278,7 +262,6 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->finalize = gtk_shortcuts_group_finalize;
   object_class->get_property = gtk_shortcuts_group_get_property;
@@ -286,8 +269,6 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
   object_class->dispose = gtk_shortcuts_group_dispose;
 
   widget_class->direction_changed = gtk_shortcuts_group_direction_changed;
-  container_class->add = gtk_shortcuts_group_add;
-  container_class->forall = gtk_shortcuts_group_forall;
 
   /**
    * GtkShortcutsGroup:title:
@@ -375,5 +356,5 @@ gtk_shortcuts_group_init (GtkShortcutsGroup *self)
                               NULL);
   pango_attr_list_unref (attrs);
 
-  GTK_CONTAINER_CLASS (gtk_shortcuts_group_parent_class)->add (GTK_CONTAINER (self), GTK_WIDGET (self->title));
+  gtk_box_append (GTK_BOX (self), GTK_WIDGET (self->title));
 }

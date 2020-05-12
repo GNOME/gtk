@@ -91,7 +91,7 @@ typedef struct _GtkListBoxClass   GtkListBoxClass;
 
 struct _GtkListBox
 {
-  GtkContainer parent_instance;
+  GtkWidget parent_instance;
 
   GSequence *children;
   GHashTable *header_hash;
@@ -137,7 +137,7 @@ struct _GtkListBox
 
 struct _GtkListBoxClass
 {
-  GtkContainerClass parent_class;
+  GtkWidgetClass parent_class;
 
   void (*row_selected)        (GtkListBox      *box,
                                GtkListBoxRow   *row);
@@ -217,7 +217,7 @@ static void     gtk_list_box_buildable_interface_init   (GtkBuildableIface *ifac
 static void     gtk_list_box_row_buildable_iface_init (GtkBuildableIface *iface);
 static void     gtk_list_box_row_actionable_iface_init  (GtkActionableInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkListBox, gtk_list_box, GTK_TYPE_CONTAINER,
+G_DEFINE_TYPE_WITH_CODE (GtkListBox, gtk_list_box, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_list_box_buildable_interface_init))
 G_DEFINE_TYPE_WITH_CODE (GtkListBoxRow, gtk_list_box_row, GTK_TYPE_WIDGET,
@@ -248,17 +248,9 @@ static GSequenceIter*       gtk_list_box_get_previous_visible         (GtkListBo
                                                                        GSequenceIter       *iter);
 static GtkListBoxRow       *gtk_list_box_get_first_focusable          (GtkListBox          *box);
 static GtkListBoxRow       *gtk_list_box_get_last_focusable           (GtkListBox          *box);
-static void                 gtk_list_box_add                          (GtkContainer        *container,
-                                                                       GtkWidget           *widget);
-static void                 gtk_list_box_remove                       (GtkContainer        *container,
-                                                                       GtkWidget           *widget);
-static void                 gtk_list_box_forall                       (GtkContainer        *container,
-                                                                       GtkCallback          callback,
-                                                                       gpointer             callback_target);
 static void                 gtk_list_box_compute_expand               (GtkWidget           *widget,
                                                                        gboolean            *hexpand,
                                                                        gboolean            *vexpand);
-static GType                gtk_list_box_child_type                   (GtkContainer        *container);
 static GtkSizeRequestMode   gtk_list_box_get_request_mode             (GtkWidget           *widget);
 static void                 gtk_list_box_size_allocate                (GtkWidget           *widget,
                                                                        int                  width,
@@ -271,7 +263,6 @@ static void                 gtk_list_box_move_cursor                  (GtkListBo
                                                                        gint                 count,
                                                                        gboolean             extend,
                                                                        gboolean             modify);
-static void                 gtk_list_box_finalize                     (GObject             *obj);
 static void                 gtk_list_box_parent_cb                    (GObject             *object,
                                                                        GParamSpec          *pspec,
                                                                        gpointer             user_data);
@@ -427,6 +418,17 @@ gtk_list_box_set_property (GObject      *obj,
 }
 
 static void
+gtk_list_box_dispose (GObject *object)
+{
+  GtkWidget *child;
+
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (object))))
+    gtk_list_box_remove (GTK_LIST_BOX (object), child);
+
+  G_OBJECT_CLASS (gtk_list_box_parent_class)->dispose (object);
+}
+
+static void
 gtk_list_box_finalize (GObject *obj)
 {
   GtkListBox *box = GTK_LIST_BOX (obj);
@@ -461,11 +463,12 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->get_property = gtk_list_box_get_property;
   object_class->set_property = gtk_list_box_set_property;
+  object_class->dispose = gtk_list_box_dispose;
   object_class->finalize = gtk_list_box_finalize;
+
   widget_class->show = gtk_list_box_show;
   widget_class->focus = gtk_list_box_focus;
   widget_class->grab_focus = gtk_widget_grab_focus_self;
@@ -473,10 +476,6 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   widget_class->get_request_mode = gtk_list_box_get_request_mode;
   widget_class->measure = gtk_list_box_measure;
   widget_class->size_allocate = gtk_list_box_size_allocate;
-  container_class->add = gtk_list_box_add;
-  container_class->remove = gtk_list_box_remove;
-  container_class->forall = gtk_list_box_forall;
-  container_class->child_type = gtk_list_box_child_type;
   klass->activate_cursor_row = gtk_list_box_activate_cursor_row;
   klass->toggle_cursor_row = gtk_list_box_toggle_cursor_row;
   klass->move_cursor = gtk_list_box_move_cursor;
@@ -2263,19 +2262,18 @@ gtk_list_box_row_visibility_changed (GtkListBox    *box,
     }
 }
 
-static void
-gtk_list_box_add (GtkContainer *container,
-                  GtkWidget    *child)
-{
-  gtk_list_box_insert (GTK_LIST_BOX (container), child, -1);
-}
-
-static void
-gtk_list_box_remove (GtkContainer *container,
+/**
+ * gtk_list_box_remove:
+ * @box: a #GtkListBox
+ * @child: the child to remove
+ *
+ * Removes a child from @box.
+ */
+void
+gtk_list_box_remove (GtkListBox   *box,
                      GtkWidget    *child)
 {
-  GtkWidget *widget = GTK_WIDGET (container);
-  GtkListBox *box = GTK_LIST_BOX (container);
+  GtkWidget *widget = GTK_WIDGET (box);
   gboolean was_visible;
   gboolean was_selected;
   GtkListBoxRow *row;
@@ -2365,47 +2363,28 @@ gtk_list_box_remove (GtkContainer *container,
 }
 
 static void
-gtk_list_box_forall (GtkContainer *container,
-                     GtkCallback   callback,
-                     gpointer      callback_target)
-{
-  GtkListBox *box = GTK_LIST_BOX (container);
-  GSequenceIter *iter;
-  GtkListBoxRow *row;
-
-  if (box->placeholder != NULL)
-    callback (box->placeholder, callback_target);
-
-  iter = g_sequence_get_begin_iter (box->children);
-  while (!g_sequence_iter_is_end (iter))
-    {
-      row = g_sequence_get (iter);
-      iter = g_sequence_iter_next (iter);
-      callback (GTK_WIDGET (row), callback_target);
-    }
-}
-
-static void
 gtk_list_box_compute_expand (GtkWidget *widget,
-                             gboolean  *hexpand,
-                             gboolean  *vexpand)
+                             gboolean  *hexpand_p,
+                             gboolean  *vexpand_p)
 {
-  GTK_WIDGET_CLASS (gtk_list_box_parent_class)->compute_expand (widget,
-                                                                hexpand, vexpand);
+  GtkWidget *w;
+  gboolean hexpand = FALSE;
+  gboolean vexpand = FALSE;
+
+  for (w = gtk_widget_get_first_child (widget);
+       w != NULL;
+       w = gtk_widget_get_next_sibling (w))
+    {
+      hexpand = hexpand || gtk_widget_compute_expand (w, GTK_ORIENTATION_HORIZONTAL);
+      vexpand = vexpand || gtk_widget_compute_expand (w, GTK_ORIENTATION_VERTICAL);
+    }
+
+  *hexpand_p = hexpand;
+  *vexpand_p = vexpand;
 
   /* We don't expand vertically beyound the minimum size */
-  if (vexpand)
-    *vexpand = FALSE;
-}
-
-static GType
-gtk_list_box_child_type (GtkContainer *container)
-{
-  /* We really support any type but we wrap it in a row. But that is
-   * more like a C helper function, in an abstract sense we only support
-   * row children, so that is what tools accessing this should use.
-   */
-  return GTK_TYPE_LIST_BOX_ROW;
+  if (*vexpand_p)
+    *vexpand_p = FALSE;
 }
 
 static GtkSizeRequestMode
@@ -3496,6 +3475,8 @@ gtk_list_box_buildable_add_child (GtkBuildable *buildable,
 {
   if (type && strcmp (type, "placeholder") == 0)
     gtk_list_box_set_placeholder (GTK_LIST_BOX (buildable), GTK_WIDGET (child));
+  else if (GTK_IS_WIDGET (child))
+    gtk_list_box_insert (GTK_LIST_BOX (buildable), GTK_WIDGET (child), -1);
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
@@ -3523,7 +3504,7 @@ gtk_list_box_bound_model_changed (GListModel *list,
       GtkListBoxRow *row;
 
       row = gtk_list_box_get_row_at_index (box, position);
-      gtk_container_remove (GTK_CONTAINER (box), GTK_WIDGET (row));
+      gtk_list_box_remove (box, GTK_WIDGET (row));
     }
 
   for (i = 0; i < added; i++)
@@ -3613,7 +3594,7 @@ gtk_list_box_bind_model (GtkListBox                 *box,
     {
       GtkWidget *row = g_sequence_get (iter);
       iter = g_sequence_iter_next (iter);
-      gtk_list_box_remove (GTK_CONTAINER (box), row);
+      gtk_list_box_remove (box, row);
     }
 
 

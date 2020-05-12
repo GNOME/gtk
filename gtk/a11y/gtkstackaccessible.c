@@ -23,7 +23,7 @@
 #include "gtkwidgetprivate.h"
 
 
-G_DEFINE_TYPE (GtkStackAccessible, gtk_stack_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE)
+G_DEFINE_TYPE (GtkStackAccessible, gtk_stack_accessible, GTK_TYPE_WIDGET_ACCESSIBLE)
 
 static AtkObject*
 gtk_stack_accessible_ref_child (AtkObject *obj,
@@ -64,16 +64,9 @@ static void
 gtk_stack_accessible_class_init (GtkStackAccessibleClass *klass)
 {
   AtkObjectClass *class                        = ATK_OBJECT_CLASS (klass);
-  GtkContainerAccessibleClass *container_class = (GtkContainerAccessibleClass*)klass;
 
   class->get_n_children = gtk_stack_accessible_get_n_children;
   class->ref_child      = gtk_stack_accessible_ref_child;
-  /*
-   * As we report the stack as having only the visible child,
-   * we are not interested in add and remove signals
-   */
-  container_class->add_gtk    = NULL;
-  container_class->remove_gtk = NULL;
 }
 
 static void

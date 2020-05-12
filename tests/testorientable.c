@@ -69,17 +69,17 @@ main (int argc, char **argv)
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
 
   button = gtk_toggle_button_new_with_label ("Horizontal");
-  gtk_container_add (GTK_CONTAINER (vbox), button);
+  gtk_box_append (GTK_BOX (vbox), button);
 
   /* GtkBox */
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   orientables = g_list_prepend (orientables, box);
-  gtk_container_add (GTK_CONTAINER (vbox), box);
-  gtk_container_add (GTK_CONTAINER (box),
+  gtk_box_append (GTK_BOX (vbox), box);
+  gtk_box_append (GTK_BOX (box),
                   gtk_button_new_with_label ("GtkBox 1"));
-  gtk_container_add (GTK_CONTAINER (box),
+  gtk_box_append (GTK_BOX (box),
                   gtk_button_new_with_label ("GtkBox 2"));
-  gtk_container_add (GTK_CONTAINER (box),
+  gtk_box_append (GTK_BOX (box),
                   gtk_button_new_with_label ("GtkBox 3"));
 
   g_signal_connect (button, "toggled",

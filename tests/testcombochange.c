@@ -215,10 +215,10 @@ main (int argc, char **argv)
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  gtk_container_add (GTK_CONTAINER (content_area), hbox);
+  gtk_box_append (GTK_BOX (content_area), hbox);
 
   combo_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
-  gtk_container_add (GTK_CONTAINER (hbox), combo_vbox);
+  gtk_box_append (GTK_BOX (hbox), combo_vbox);
 
   combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (model));
   cell_renderer = gtk_cell_renderer_text_new ();
@@ -226,11 +226,11 @@ main (int argc, char **argv)
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), cell_renderer,
                                   "text", 0, NULL);
   gtk_widget_set_margin_start (combo, 12);
-  gtk_container_add (GTK_CONTAINER (combo_vbox), combo);
+  gtk_box_append (GTK_BOX (combo_vbox), combo);
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_hexpand (scrolled_window, TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox), scrolled_window);
+  gtk_box_append (GTK_BOX (hbox), scrolled_window);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
@@ -241,24 +241,24 @@ main (int argc, char **argv)
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), text_view);
 
   button_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
-  gtk_container_add (GTK_CONTAINER (hbox), button_vbox);
+  gtk_box_append (GTK_BOX (hbox), button_vbox);
 
   gtk_window_set_default_size (GTK_WINDOW (dialog), 500, 300);
 
   button = gtk_button_new_with_label ("Insert");
-  gtk_container_add (GTK_CONTAINER (button_vbox), button);
+  gtk_box_append (GTK_BOX (button_vbox), button);
   g_signal_connect (button, "clicked", G_CALLBACK (on_insert), NULL);
 
   button = gtk_button_new_with_label ("Delete");
-  gtk_container_add (GTK_CONTAINER (button_vbox), button);
+  gtk_box_append (GTK_BOX (button_vbox), button);
   g_signal_connect (button, "clicked", G_CALLBACK (on_delete), NULL);
 
   button = gtk_button_new_with_label ("Reorder");
-  gtk_container_add (GTK_CONTAINER (button_vbox), button);
+  gtk_box_append (GTK_BOX (button_vbox), button);
   g_signal_connect (button, "clicked", G_CALLBACK (on_reorder), NULL);
 
   button = gtk_button_new_with_label ("Animate");
-  gtk_container_add (GTK_CONTAINER (button_vbox), button);
+  gtk_box_append (GTK_BOX (button_vbox), button);
   g_signal_connect (button, "clicked", G_CALLBACK (on_animate), NULL);
 
   gtk_widget_show (dialog);

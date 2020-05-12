@@ -18,7 +18,7 @@ oriented_test_widget (const gchar *label, const gchar *color)
                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   g_free (data);
   g_object_unref (provider);
-  gtk_container_add (GTK_CONTAINER (box), widget);
+  gtk_box_append (GTK_BOX (box), widget);
 
   return box;
 }
@@ -62,11 +62,11 @@ simple_grid (void)
   gtk_grid_set_column_spacing (GTK_GRID (grid), 5);
   gtk_grid_set_row_spacing (GTK_GRID (grid), 5);
   test1 = test_widget ("1", "red");
-  gtk_container_add (GTK_CONTAINER (grid), test1);
+  gtk_grid_attach (GTK_GRID (grid), test1, 0, 0, 1, 1);
   test2 = test_widget ("2", "green");
-  gtk_container_add (GTK_CONTAINER (grid), test2);
+  gtk_grid_attach (GTK_GRID (grid), test2, 1, 0, 1, 1);
   test3 = test_widget ("3", "blue");
-  gtk_container_add (GTK_CONTAINER (grid), test3);
+  gtk_grid_attach (GTK_GRID (grid), test3, 2, 0, 1, 1);
   test4 = test_widget ("4", "green");
   gtk_grid_attach (GTK_GRID (grid), test4, 0, 1, 1, 1);
   gtk_widget_set_vexpand (test4, TRUE);
@@ -101,16 +101,20 @@ text_grid (void)
   gtk_window_set_child (GTK_WINDOW (window), paned1);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_paned_pack1 (GTK_PANED (paned1), box, TRUE, FALSE);
-  gtk_paned_pack2 (GTK_PANED (paned1), gtk_label_new ("Space"), TRUE, FALSE);
+  gtk_paned_set_start_child (GTK_PANED (paned1), box);
+  gtk_paned_set_resize_start_child (GTK_PANED (paned1), TRUE);
+  gtk_paned_set_shrink_start_child (GTK_PANED (paned1), FALSE);
+  gtk_paned_set_end_child (GTK_PANED (paned1), gtk_label_new ("Space"));
+  gtk_paned_set_resize_end_child (GTK_PANED (paned1), TRUE);
+  gtk_paned_set_shrink_end_child (GTK_PANED (paned1), FALSE);
 
   grid = gtk_grid_new ();
   gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), GTK_ORIENTATION_VERTICAL);
-  gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("Above"));
-  gtk_container_add (GTK_CONTAINER (box), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
-  gtk_container_add (GTK_CONTAINER (box), grid);
-  gtk_container_add (GTK_CONTAINER (box), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
-  gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("Below"));
+  gtk_box_append (GTK_BOX (box), gtk_label_new ("Above"));
+  gtk_box_append (GTK_BOX (box), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+  gtk_box_append (GTK_BOX (box), grid);
+  gtk_box_append (GTK_BOX (box), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+  gtk_box_append (GTK_BOX (box), gtk_label_new ("Below"));
 
   label = gtk_label_new ("Some text that may wrap if it has to");
   gtk_label_set_width_chars (GTK_LABEL (label), 10);
@@ -142,32 +146,32 @@ box_comparison (void)
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   gtk_window_set_child (GTK_WINDOW (window), vbox);
 
-  gtk_container_add (GTK_CONTAINER (vbox), gtk_label_new ("Above"));
-  gtk_container_add (GTK_CONTAINER (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+  gtk_box_append (GTK_BOX (vbox), gtk_label_new ("Above"));
+  gtk_box_append (GTK_BOX (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (vbox), box);
+  gtk_box_append (GTK_BOX (vbox), box);
 
-  gtk_container_add (GTK_CONTAINER (box), test_widget ("1", "white"));
+  gtk_box_append (GTK_BOX (box), test_widget ("1", "white"));
 
   label = gtk_label_new ("Some ellipsizing text");
   gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
   gtk_label_set_width_chars (GTK_LABEL (label), 10);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_box_append (GTK_BOX (box), label);
 
-  gtk_container_add (GTK_CONTAINER (box), test_widget ("2", "green"));
+  gtk_box_append (GTK_BOX (box), test_widget ("2", "green"));
 
   label = gtk_label_new ("Some text that may wrap if needed");
   gtk_label_set_wrap (GTK_LABEL (label), TRUE);
   gtk_label_set_width_chars (GTK_LABEL (label), 10);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_box_append (GTK_BOX (box), label);
 
-  gtk_container_add (GTK_CONTAINER (box), test_widget ("3", "red"));
+  gtk_box_append (GTK_BOX (box), test_widget ("3", "red"));
 
   grid = gtk_grid_new ();
   gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), GTK_ORIENTATION_VERTICAL);
-  gtk_container_add (GTK_CONTAINER (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
-  gtk_container_add (GTK_CONTAINER (vbox), grid);
+  gtk_box_append (GTK_BOX (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+  gtk_box_append (GTK_BOX (vbox), grid);
 
   gtk_grid_attach (GTK_GRID (grid), test_widget ("1", "white"), 0, 0, 1, 1);
 
@@ -187,8 +191,8 @@ box_comparison (void)
 
   gtk_grid_attach (GTK_GRID (grid), test_widget ("3", "red"), 4, 0, 1, 1);
 
-  gtk_container_add (GTK_CONTAINER (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
-  gtk_container_add (GTK_CONTAINER (vbox), gtk_label_new ("Below"));
+  gtk_box_append (GTK_BOX (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+  gtk_box_append (GTK_BOX (vbox), gtk_label_new ("Below"));
 
   gtk_widget_show (window);
 }

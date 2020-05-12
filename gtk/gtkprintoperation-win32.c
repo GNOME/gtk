@@ -1423,7 +1423,7 @@ pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
 
       gtk_window_set_modal (GTK_WINDOW (plug), TRUE);
       op_win32->embed_widget = plug;
-      gtk_container_add (GTK_CONTAINER (plug), op->priv->custom_widget);
+      gtk_box_append (GTK_BOX (plug), op->priv->custom_widget);
       gtk_widget_show (op->priv->custom_widget);
       gtk_widget_show (plug);
 

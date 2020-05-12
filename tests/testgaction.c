@@ -126,7 +126,7 @@ int main (int argc, char **argv)
   label = gtk_label_new ("Initial Text");
   gtk_widget_set_margin_top (label, 12);
   gtk_widget_set_margin_bottom (label, 12);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_box_append (GTK_BOX (box), label);
   gtk_widget_set_halign (menubutton, GTK_ALIGN_CENTER);
   {
     GMenuModel *menu_model;
@@ -137,10 +137,10 @@ int main (int argc, char **argv)
 
   }
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (menubutton), menu);
-  gtk_container_add (GTK_CONTAINER (box), menubutton);
+  gtk_box_append (GTK_BOX (box), menubutton);
   gtk_widget_set_halign (button1, GTK_ALIGN_CENTER);
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button1), "win.change-label-button");
-  gtk_container_add (GTK_CONTAINER (box), button1);
+  gtk_box_append (GTK_BOX (box), button1);
 
   gtk_window_set_child (GTK_WINDOW (window), box);
 

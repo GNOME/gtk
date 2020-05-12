@@ -59,7 +59,7 @@ test_action (void)
   button = gtk_button_new ();
 
   gtk_window_set_child (GTK_WINDOW (window), box);
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_box_append (GTK_BOX (box), button);
 
   win_actions = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (win_actions),
@@ -160,7 +160,7 @@ test_text (void)
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   text = gtk_text_new ();
 
-  gtk_container_add (GTK_CONTAINER (box), text);
+  gtk_box_append (GTK_BOX (box), text);
 
   clipboard_actions = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (clipboard_actions),

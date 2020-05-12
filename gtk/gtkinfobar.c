@@ -50,8 +50,6 @@
 #include "gtkbinlayout.h"
 #include "gtkgestureclick.h"
 
-#include "a11y/gtkcontaineraccessibleprivate.h"
-
 /**
  * SECTION:gtkinfobar
  * @short_description: Report important messages to the user
@@ -68,8 +66,9 @@
  * to add buttons to the action area with gtk_info_bar_add_button() or
  * gtk_info_bar_new_with_buttons(). The sensitivity of action widgets
  * can be controlled with gtk_info_bar_set_response_sensitive().
+ *
  * To add widgets to the main content area of a #GtkInfoBar, use
- * gtk_info_bar_get_content_area() and add your widgets to the container.
+ * gtk_info_bar_add_child().
  *
  * Similar to #GtkMessageDialog, the contents of a #GtkInfoBar can by
  * classified as error message, warning, informational message, etc,
@@ -78,7 +77,8 @@
  *
  * A simple example for using a #GtkInfoBar:
  * |[<!-- language="C" -->
- * GtkWidget *widget, *message_label, *content_area;
+ * GtkWidget *message_label;
+ * GtkWidget *widget;
  * GtkWidget *grid;
  * GtkInfoBar *bar;
  *
@@ -88,9 +88,7 @@
  * grid = gtk_grid_new ();
  *
  * message_label = gtk_label_new ("");
- * content_area = gtk_info_bar_get_content_area (bar);
- * gtk_container_add (GTK_CONTAINER (content_area),
- *                    message_label);
+ * gtk_info_bar_add_child (bar, message_label);
  * gtk_info_bar_add_button (bar,
  *                          _("_OK"),
  *                          GTK_RESPONSE_OK);
@@ -106,8 +104,7 @@
  *
  * // show an error message
  * gtk_label_set_text (GTK_LABEL (message_label), "An error occurred!");
- * gtk_info_bar_set_message_type (bar,
- *                                GTK_MESSAGE_ERROR);
+ * gtk_info_bar_set_message_type (bar, GTK_MESSAGE_ERROR);
  * gtk_widget_show (bar);
  * ]|
  *
@@ -144,7 +141,7 @@ typedef struct _GtkInfoBarClass GtkInfoBarClass;
 
 struct _GtkInfoBar
 {
-  GtkContainer parent_instance;
+  GtkWidget parent_instance;
 
   GtkWidget *content_area;
   GtkWidget *action_area;
@@ -158,7 +155,7 @@ struct _GtkInfoBar
 
 struct _GtkInfoBarClass
 {
-  GtkContainerClass parent_class;
+  GtkWidgetClass parent_class;
 
   void (* response) (GtkInfoBar *info_bar, gint response_id);
   void (* close)    (GtkInfoBar *info_bar);
@@ -168,7 +165,8 @@ typedef struct _ResponseData ResponseData;
 
 struct _ResponseData
 {
-  gint response_id;
+  int response_id;
+  gulong handler_id;
 };
 
 enum
@@ -208,7 +206,7 @@ static void      gtk_info_bar_buildable_add_child       (GtkBuildable *buildable
 
 
 
-G_DEFINE_TYPE_WITH_CODE (GtkInfoBar, gtk_info_bar, GTK_TYPE_CONTAINER,
+G_DEFINE_TYPE_WITH_CODE (GtkInfoBar, gtk_info_bar, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_info_bar_buildable_interface_init))
 
@@ -288,29 +286,33 @@ get_response_data (GtkWidget *widget,
   return ad;
 }
 
+static void
+clear_response_data (GtkWidget *widget)
+{
+  ResponseData *data;
+
+  data = get_response_data (widget, FALSE);
+  g_signal_handler_disconnect (widget, data->handler_id);
+  g_object_set_data (G_OBJECT (widget), "gtk-info-bar-reponse-data", NULL);
+}
+
 static GtkWidget *
 find_button (GtkInfoBar *info_bar,
              gint        response_id)
 {
-  GList *children, *list;
-  GtkWidget *child = NULL;
+  GtkWidget *child;
 
-  children = gtk_container_get_children (GTK_CONTAINER (info_bar->action_area));
-
-  for (list = children; list; list = list->next)
+  for (child = gtk_widget_get_first_child (info_bar->action_area);
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
     {
-      ResponseData *rd = get_response_data (list->data, FALSE);
+      ResponseData *rd = get_response_data (child, FALSE);
 
       if (rd && rd->response_id == response_id)
-        {
-          child = list->data;
-          break;
-        }
+        return child;
     }
 
-  g_list_free (children);
-
-  return child;
+  return NULL;
 }
 
 static void
@@ -322,35 +324,6 @@ gtk_info_bar_close (GtkInfoBar *info_bar)
 
   gtk_info_bar_response (GTK_INFO_BAR (info_bar),
                          GTK_RESPONSE_CANCEL);
-}
-
-static void
-gtk_info_bar_add (GtkContainer *container,
-                  GtkWidget    *child)
-{
-  GtkInfoBar *self = GTK_INFO_BAR (container);
-
-  gtk_container_add (GTK_CONTAINER (self->content_area), child);
-}
-
-static void
-gtk_info_bar_remove (GtkContainer *container,
-                     GtkWidget    *child)
-{
-  GtkInfoBar *self = GTK_INFO_BAR (container);
-
-  gtk_container_remove (GTK_CONTAINER (self->content_area), child);
-}
-
-static void
-gtk_info_bar_forall (GtkContainer *container,
-                     GtkCallback   callback,
-                     gpointer      user_data)
-{
-  GtkInfoBar *self = GTK_INFO_BAR (container);
-
-  if (self->revealer)
-    (*callback) (self->revealer, user_data);
 }
 
 static void
@@ -368,15 +341,10 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->get_property = gtk_info_bar_get_property;
   object_class->set_property = gtk_info_bar_set_property;
   object_class->dispose = gtk_info_bar_dispose;
-
-  container_class->add = gtk_info_bar_add;
-  container_class->remove = gtk_info_bar_remove;
-  container_class->forall = gtk_info_bar_forall;
 
   klass->close = gtk_info_bar_close;
 
@@ -500,18 +468,18 @@ gtk_info_bar_init (GtkInfoBar *info_bar)
 
   info_bar->content_area = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_hexpand (info_bar->content_area, TRUE);
-  gtk_container_add (GTK_CONTAINER (main_box), info_bar->content_area);
+  gtk_box_append (GTK_BOX (main_box), info_bar->content_area);
 
   info_bar->action_area = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_halign (info_bar->action_area, GTK_ALIGN_END);
   gtk_widget_set_valign (info_bar->action_area, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (main_box), info_bar->action_area);
+  gtk_box_append (GTK_BOX (main_box), info_bar->action_area);
 
   info_bar->close_button = gtk_button_new_from_icon_name ("window-close-symbolic");
   gtk_widget_hide (info_bar->close_button);
   gtk_widget_set_valign (info_bar->close_button, GTK_ALIGN_CENTER);
   gtk_widget_add_css_class (info_bar->close_button, "close");
-  gtk_container_add (GTK_CONTAINER (main_box), info_bar->close_button);
+  gtk_box_append (GTK_BOX (main_box), info_bar->close_button);
   g_signal_connect (info_bar->close_button, "clicked",
                     G_CALLBACK (close_button_clicked_cb), info_bar);
 
@@ -594,12 +562,34 @@ gtk_info_bar_add_action_widget (GtkInfoBar *info_bar,
 
       closure = g_cclosure_new_object (G_CALLBACK (action_widget_activated),
                                        G_OBJECT (info_bar));
-      g_signal_connect_closure_by_id (child, signal_id, 0, closure, FALSE);
+      ad->handler_id = g_signal_connect_closure_by_id (child, signal_id, 0, closure, FALSE);
     }
   else
     g_warning ("Only 'activatable' widgets can be packed into the action area of a GtkInfoBar");
 
-  gtk_container_add (GTK_CONTAINER (info_bar->action_area), child);
+  gtk_box_append (GTK_BOX (info_bar->action_area), child);
+}
+
+/**
+ * gtk_info_bar_remove_action_widget:
+ * @info_bar: a #GtkInfoBar
+ * @widget: an action widget to remove
+ *
+ * Removes a widget from the action area of @info_bar, after
+ * it been put there by a call to gtk_info_bar_add_action_widget()
+ * or gtk_info_bar_add_button().
+ */
+void
+gtk_info_bar_remove_action_widget (GtkInfoBar *info_bar,
+                                   GtkWidget  *widget)
+{
+  g_return_if_fail (GTK_IS_INFO_BAR (info_bar));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (gtk_widget_get_parent (widget) == info_bar->action_area);
+
+  clear_response_data (widget);
+
+  gtk_box_remove (GTK_BOX (info_bar->action_area), widget);
 }
 
 /**
@@ -762,22 +752,19 @@ gtk_info_bar_set_response_sensitive (GtkInfoBar *info_bar,
                                      gint        response_id,
                                      gboolean    setting)
 {
-  GList *children, *list;
+  GtkWidget *child;
 
   g_return_if_fail (GTK_IS_INFO_BAR (info_bar));
 
-  children = gtk_container_get_children (GTK_CONTAINER (info_bar->action_area));
-
-  for (list = children; list; list = list->next)
+  for (child = gtk_widget_get_first_child (info_bar->action_area);
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
     {
-      GtkWidget *widget = list->data;
-      ResponseData *rd = get_response_data (widget, FALSE);
+      ResponseData *rd = get_response_data (child, FALSE);
 
       if (rd && rd->response_id == response_id)
-        gtk_widget_set_sensitive (widget, setting);
+        gtk_widget_set_sensitive (child, setting);
     }
-
-  g_list_free (children);
 
   if (response_id == info_bar->default_response)
     update_default_response (info_bar, response_id, setting);
@@ -799,29 +786,27 @@ void
 gtk_info_bar_set_default_response (GtkInfoBar *info_bar,
                                    gint        response_id)
 {
-  GList *children, *list;
+  GtkWidget *child;
+  GtkWidget *window;
   gboolean sensitive = TRUE;
 
   g_return_if_fail (GTK_IS_INFO_BAR (info_bar));
 
-  children = gtk_container_get_children (GTK_CONTAINER (info_bar->action_area));
+  window = gtk_widget_get_ancestor (GTK_WIDGET (info_bar), GTK_TYPE_WINDOW);
 
-  for (list = children; list; list = list->next)
+  for (child = gtk_widget_get_first_child (info_bar->action_area);
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
     {
-      GtkWidget *widget = list->data;
-      ResponseData *rd = get_response_data (widget, FALSE);
+      ResponseData *rd = get_response_data (child, FALSE);
 
       if (rd && rd->response_id == response_id)
         {
-          GtkWidget *window;
-
-          window = gtk_widget_get_ancestor (GTK_WIDGET (info_bar), GTK_TYPE_WINDOW);
-          gtk_window_set_default_widget (GTK_WINDOW (window), widget);
-          sensitive = gtk_widget_get_sensitive (widget);
+          gtk_window_set_default_widget (GTK_WINDOW (window), child);
+          sensitive = gtk_widget_get_sensitive (child);
+          break;
         }
     }
-
-  g_list_free (children);
 
   update_default_response (info_bar, response_id, sensitive);
 }
@@ -1062,10 +1047,10 @@ gtk_info_bar_buildable_add_child (GtkBuildable *buildable,
 {
   GtkInfoBar *info_bar = GTK_INFO_BAR (buildable);
 
-  if (!type)
-    gtk_container_add (GTK_CONTAINER (info_bar->content_area), GTK_WIDGET (child));
+  if (!type && GTK_IS_WIDGET (child))
+    gtk_info_bar_add_child (GTK_INFO_BAR (info_bar), GTK_WIDGET (child));
   else if (g_strcmp0 (type, "action") == 0)
-    gtk_container_add (GTK_CONTAINER (info_bar->action_area), GTK_WIDGET (child));
+    gtk_box_append (GTK_BOX (info_bar->action_area), GTK_WIDGET (child));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
@@ -1240,3 +1225,39 @@ gtk_info_bar_get_revealed (GtkInfoBar *info_bar)
 
   return gtk_revealer_get_reveal_child (GTK_REVEALER (info_bar->revealer));
 }
+
+/**
+ * gtk_info_bar_add_child:
+ * @info_bar: a #GtkInfoBar
+ * @widget: the child to be added
+ *
+ * Adds a widget to the content area of the info bar.
+ */
+void
+gtk_info_bar_add_child (GtkInfoBar *info_bar,
+                        GtkWidget  *widget)
+{
+  g_return_if_fail (GTK_IS_INFO_BAR (info_bar));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_box_append (GTK_BOX (info_bar->content_area), widget);
+}
+
+/**
+ * gtk_info_bar_remove_child:
+ * @info_bar: a #GtkInfoBar
+ * @widget: a child that has been added to the content area
+ *
+ * Removes a widget from the content area of the info bar,
+ * after it has been added with gtk_info_bar_add_child().
+ */
+void
+gtk_info_bar_remove_child (GtkInfoBar *info_bar,
+                           GtkWidget  *widget)
+{
+  g_return_if_fail (GTK_IS_INFO_BAR (info_bar));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_box_remove (GTK_BOX (info_bar->content_area), widget);
+}
+

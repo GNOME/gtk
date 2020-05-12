@@ -44,7 +44,7 @@ new_widget_info (const char *name,
       info->window = gtk_window_new ();
       info->include_decorations = FALSE;
       gtk_widget_show (widget);
-      gtk_container_add (GTK_CONTAINER (info->window), widget);
+      gtk_box_append (GTK_BOX (info->window), widget);
     }
   info->no_focus = TRUE;
 
@@ -92,9 +92,9 @@ create_switch (void)
   widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   sw = gtk_switch_new ();
   gtk_switch_set_active (GTK_SWITCH (sw), TRUE);
-  gtk_container_add (GTK_CONTAINER (widget), sw);
+  gtk_box_append (GTK_BOX (widget), sw);
   sw = gtk_switch_new ();
-  gtk_container_add (GTK_CONTAINER (widget), sw);
+  gtk_box_append (GTK_BOX (widget), sw);
 
   gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
@@ -151,16 +151,16 @@ create_menu_button (void)
   widget = gtk_menu_button_new ();
   image = gtk_image_new ();
   gtk_image_set_from_icon_name (GTK_IMAGE (image), "emblem-system-symbolic");
-  gtk_container_add (GTK_CONTAINER (widget), image);
+  gtk_box_append (GTK_BOX (widget), image);
   menu = gtk_popover_new ();
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (widget), menu);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox), widget);
   gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
 
-  gtk_container_add (GTK_CONTAINER (vbox), gtk_label_new ("Menu Button"));
+  gtk_box_append (GTK_BOX (vbox), gtk_label_new ("Menu Button"));
 
   return new_widget_info ("menu-button", vbox, SMALL);
 }
@@ -209,8 +209,8 @@ create_lockbutton (void)
   widget = gtk_lock_button_new (g_object_new (G_TYPE_TEST_PERMISSION, NULL));
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
-  gtk_container_add (GTK_CONTAINER (vbox),
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox),
 		      gtk_label_new ("Lock Button"));
   gtk_widget_set_halign (vbox, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (vbox, GTK_ALIGN_CENTER);
@@ -253,11 +253,11 @@ create_radio (void)
 
   widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   radio = gtk_radio_button_new_with_mnemonic (NULL, "Radio Button _One");
-  gtk_container_add (GTK_CONTAINER (widget), radio);
+  gtk_box_append (GTK_BOX (widget), radio);
   radio = gtk_radio_button_new_with_mnemonic_from_widget (GTK_RADIO_BUTTON (radio), "Radio Button _Two");
-  gtk_container_add (GTK_CONTAINER (widget), radio);
+  gtk_box_append (GTK_BOX (widget), radio);
   radio = gtk_radio_button_new_with_mnemonic_from_widget (GTK_RADIO_BUTTON (radio), "Radio Button T_hree");
-  gtk_container_add (GTK_CONTAINER (widget), radio);
+  gtk_box_append (GTK_BOX (widget), radio);
   gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
 
@@ -288,8 +288,8 @@ create_accel_label (void)
   gtk_widget_hide (button);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (box), widget);
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_box_append (GTK_BOX (box), widget);
+  gtk_box_append (GTK_BOX (box), button);
 
   gtk_accel_label_set_accel (GTK_ACCEL_LABEL (widget), GDK_KEY_Q, GDK_CONTROL_MASK);
 
@@ -369,7 +369,7 @@ create_info_bar (void)
   widget = gtk_info_bar_new ();
   gtk_info_bar_set_show_close_button (GTK_INFO_BAR (widget), TRUE);
   gtk_info_bar_set_message_type (GTK_INFO_BAR (widget), GTK_MESSAGE_INFO);
-  gtk_container_add (GTK_CONTAINER (widget),
+  gtk_box_append (GTK_BOX (widget),
                      gtk_label_new ("Info Bar"));
 
   gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
@@ -394,16 +394,16 @@ create_search_bar (void)
 
   entry = gtk_search_entry_new ();
   gtk_editable_set_text (GTK_EDITABLE (entry), "Search Bar");
-  gtk_container_add (GTK_CONTAINER (widget), entry);
+  gtk_box_append (GTK_BOX (widget), entry);
   gtk_widget_show (entry);
 
   gtk_search_bar_set_show_close_button (GTK_SEARCH_BAR (widget), TRUE);
   gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (widget), TRUE);
 
-  gtk_container_add (GTK_CONTAINER (box), widget);
+  gtk_box_append (GTK_BOX (box), widget);
 
   view = gtk_text_view_new ();
-  gtk_container_add (GTK_CONTAINER (box), view);
+  gtk_box_append (GTK_BOX (box), view);
 
   info = new_widget_info ("search-bar", box, SMALL);
 
@@ -421,16 +421,16 @@ create_action_bar (void)
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   view = gtk_text_view_new ();
-  gtk_container_add (GTK_CONTAINER (box), view);
+  gtk_box_append (GTK_BOX (box), view);
 
   widget = gtk_action_bar_new ();
 
   button = gtk_button_new_from_icon_name ("object-select-symbolic");
   gtk_widget_show (button);
-  gtk_container_add (GTK_CONTAINER (widget), button);
+  gtk_box_append (GTK_BOX (widget), button);
   button = gtk_button_new_from_icon_name ("call-start-symbolic");
   gtk_widget_show (button);
-  gtk_container_add (GTK_CONTAINER (widget), button);
+  gtk_box_append (GTK_BOX (widget), button);
   g_object_set (gtk_widget_get_parent (button),
                 "margin-start", 6,
                 "margin-end", 6,
@@ -441,7 +441,7 @@ create_action_bar (void)
 
   gtk_widget_show (widget);
 
-  gtk_container_add (GTK_CONTAINER (box), widget);
+  gtk_box_append (GTK_BOX (box), widget);
 
   info = new_widget_info ("action-bar", box, SMALL);
 
@@ -456,7 +456,7 @@ create_text_view (void)
 
   widget = gtk_frame_new (NULL);
   text_view = gtk_text_view_new ();
-  gtk_container_add (GTK_CONTAINER (widget), text_view);
+  gtk_box_append (GTK_BOX (widget), text_view);
   /* Bad hack to add some size to the widget */
   gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view)),
 			    "Multiline\nText\n\n", -1);
@@ -498,7 +498,7 @@ create_tree_view (void)
 					       g_object_new (GTK_TYPE_CELL_RENDERER_TEXT, "xalign", 0.5, NULL),
 					       "text", 2, NULL);
   gtk_tree_view_expand_all (GTK_TREE_VIEW (tree_view));
-  gtk_container_add (GTK_CONTAINER (widget), tree_view);
+  gtk_box_append (GTK_BOX (widget), tree_view);
 
   info = new_widget_info ("list-and-tree", widget, MEDIUM);
   info->no_focus = FALSE;
@@ -532,11 +532,11 @@ create_icon_view (void)
   gtk_icon_view_set_text_column (GTK_ICON_VIEW (icon_view), 0);
   gtk_icon_view_set_pixbuf_column (GTK_ICON_VIEW (icon_view), 1);
 
-  gtk_container_add (GTK_CONTAINER (widget), icon_view);
+  gtk_box_append (GTK_BOX (widget), icon_view);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
-  gtk_container_add (GTK_CONTAINER (vbox),
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox),
 		      gtk_label_new ("Icon View"));
 
   info = new_widget_info ("icon-view", vbox, MEDIUM);
@@ -559,8 +559,8 @@ create_color_button (void)
   picker = gtk_color_button_new_with_rgba (&color);
   gtk_widget_set_halign (picker, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (picker, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (vbox), picker);
-  gtk_container_add (GTK_CONTAINER (vbox),
+  gtk_box_append (GTK_BOX (vbox), picker);
+  gtk_box_append (GTK_BOX (vbox),
 		      gtk_label_new ("Color Button"));
 
   return new_widget_info ("color-button", vbox, SMALL);
@@ -576,8 +576,8 @@ create_font_button (void)
   picker = gtk_font_button_new_with_font ("Sans Serif 10");
   gtk_widget_set_halign (picker, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (picker, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (vbox), picker);
-  gtk_container_add (GTK_CONTAINER (vbox),
+  gtk_box_append (GTK_BOX (vbox), picker);
+  gtk_box_append (GTK_BOX (vbox),
 		      gtk_label_new ("Font Button"));
 
   return new_widget_info ("font-button", vbox, SMALL);
@@ -599,13 +599,13 @@ create_file_button (void)
   gtk_widget_set_size_request (picker, 150, -1);
   gtk_widget_set_halign (picker, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (picker, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (vbox2), picker);
-  gtk_container_add (GTK_CONTAINER (vbox2),
+  gtk_box_append (GTK_BOX (vbox2), picker);
+  gtk_box_append (GTK_BOX (vbox2),
 		      gtk_label_new ("File Button (Files)"));
 
-  gtk_container_add (GTK_CONTAINER (vbox),
+  gtk_box_append (GTK_BOX (vbox),
 		      vbox2);
-  gtk_container_add (GTK_CONTAINER (vbox),
+  gtk_box_append (GTK_BOX (vbox),
 		      gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
 
   vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
@@ -619,10 +619,10 @@ create_file_button (void)
   g_object_unref (file);
   gtk_widget_set_halign (picker, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (picker, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (vbox2), picker);
-  gtk_container_add (GTK_CONTAINER (vbox2),
+  gtk_box_append (GTK_BOX (vbox2), picker);
+  gtk_box_append (GTK_BOX (vbox2),
 		      gtk_label_new ("File Button (Select Folder)"));
-  gtk_container_add (GTK_CONTAINER (vbox),
+  gtk_box_append (GTK_BOX (vbox),
 		      vbox2);
 
   return new_widget_info ("file-button", vbox, MEDIUM);
@@ -637,12 +637,12 @@ create_separator (void)
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_set_homogeneous (GTK_BOX (hbox), TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox),
+  gtk_box_append (GTK_BOX (hbox),
 		      gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
-  gtk_container_add (GTK_CONTAINER (hbox),
+  gtk_box_append (GTK_BOX (hbox),
 		      gtk_separator_new (GTK_ORIENTATION_VERTICAL));
-  gtk_container_add (GTK_CONTAINER (vbox), hbox);
-  gtk_container_add (GTK_CONTAINER (vbox),
+  gtk_box_append (GTK_BOX (vbox), hbox);
+  gtk_box_append (GTK_BOX (vbox),
 		      g_object_new (GTK_TYPE_LABEL,
 				    "label", "Horizontal and Vertical\nSeparators",
 				    "justify", GTK_JUSTIFY_CENTER,
@@ -656,30 +656,40 @@ create_panes (void)
   GtkWidget *hbox;
   GtkWidget *vbox;
   GtkWidget *pane;
+  GtkWidget *frame;
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   gtk_box_set_homogeneous (GTK_BOX (hbox), TRUE);
   pane = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_paned_pack1 (GTK_PANED (pane),
-		   g_object_new (GTK_TYPE_FRAME, NULL),
-		   FALSE, FALSE);
-  gtk_paned_pack2 (GTK_PANED (pane),
-		   g_object_new (GTK_TYPE_FRAME, NULL),
-		   FALSE, FALSE);
-  gtk_container_add (GTK_CONTAINER (hbox),
-		      pane);
+
+  frame = gtk_frame_new ("");
+  gtk_paned_set_start_child (GTK_PANED (pane), frame);
+  gtk_paned_set_resize_start_child (GTK_PANED (pane), FALSE);
+  gtk_paned_set_shrink_start_child (GTK_PANED (pane), FALSE);
+
+  frame = gtk_frame_new ("");
+  gtk_paned_set_end_child (GTK_PANED (pane), frame);
+  gtk_paned_set_resize_end_child (GTK_PANED (pane), FALSE);
+  gtk_paned_set_shrink_end_child (GTK_PANED (pane), FALSE);
+
+  gtk_box_append (GTK_BOX (hbox), pane);
   pane = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
-  gtk_paned_pack1 (GTK_PANED (pane),
-		   g_object_new (GTK_TYPE_FRAME, NULL),
-		   FALSE, FALSE);
-  gtk_paned_pack2 (GTK_PANED (pane),
-		   g_object_new (GTK_TYPE_FRAME, NULL),
-		   FALSE, FALSE);
-  gtk_container_add (GTK_CONTAINER (hbox),
-		      pane);
-  gtk_container_add (GTK_CONTAINER (vbox), hbox);
-  gtk_container_add (GTK_CONTAINER (vbox),
+
+  frame = gtk_frame_new ("");
+  gtk_paned_set_start_child (GTK_PANED (pane), frame);
+  gtk_paned_set_resize_start_child (GTK_PANED (pane), FALSE);
+  gtk_paned_set_shrink_start_child (GTK_PANED (pane), FALSE);
+
+  frame = gtk_frame_new ("");
+  gtk_paned_set_end_child (GTK_PANED (pane), frame);
+  gtk_paned_set_resize_end_child (GTK_PANED (pane), FALSE);
+  gtk_paned_set_shrink_end_child (GTK_PANED (pane), FALSE);
+
+  gtk_box_append (GTK_BOX (hbox), pane);
+
+  gtk_box_append (GTK_BOX (vbox), hbox);
+  gtk_box_append (GTK_BOX (vbox),
 		      g_object_new (GTK_TYPE_LABEL,
 				    "label", "Horizontal and Vertical\nPanes",
 				    "justify", GTK_JUSTIFY_CENTER,
@@ -842,8 +852,8 @@ create_progressbar (void)
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
-  gtk_container_add (GTK_CONTAINER (vbox),
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox),
 		      gtk_label_new ("Progress Bar"));
 
   return new_widget_info ("progressbar", vbox, SMALL);
@@ -859,8 +869,8 @@ create_level_bar (void)
   gtk_level_bar_set_value (GTK_LEVEL_BAR (widget), 0.333);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
-  gtk_container_add (GTK_CONTAINER (vbox),
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox),
 		      gtk_label_new ("Level Bar"));
 
   return new_widget_info ("levelbar", vbox, SMALL);
@@ -893,8 +903,8 @@ create_scrollbar (void)
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
-  gtk_container_add (GTK_CONTAINER (vbox),
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox),
 		      gtk_label_new ("Scrollbar"));
 
   return new_widget_info ("scrollbar", vbox, SMALL);
@@ -911,8 +921,8 @@ create_spinbutton (void)
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
-  gtk_container_add (GTK_CONTAINER (vbox),
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox),
 		      gtk_label_new ("Spin Button"));
 
   return new_widget_info ("spinbutton", vbox, SMALL);
@@ -926,13 +936,13 @@ create_statusbar (void)
   GtkWidget *vbox;
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (vbox),
+  gtk_box_append (GTK_BOX (vbox),
                       gtk_label_new ("Status Bar"));
   widget = gtk_statusbar_new ();
   gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
   gtk_statusbar_push (GTK_STATUSBAR (widget), 0, "Hold on...");
 
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox), widget);
 
   info = new_widget_info ("statusbar", vbox, SMALL);
 
@@ -948,14 +958,14 @@ create_scales (void)
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_set_homogeneous (GTK_BOX (hbox), TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox),
+  gtk_box_append (GTK_BOX (hbox),
 		      gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,
                                                 0.0, 100.0, 1.0));
-  gtk_container_add (GTK_CONTAINER (hbox),
+  gtk_box_append (GTK_BOX (hbox),
 		      gtk_scale_new_with_range (GTK_ORIENTATION_VERTICAL,
                                                 0.0, 100.0, 1.0));
-  gtk_container_add (GTK_CONTAINER (vbox), hbox);
-  gtk_container_add (GTK_CONTAINER (vbox),
+  gtk_box_append (GTK_BOX (vbox), hbox);
+  gtk_box_append (GTK_BOX (vbox),
 		      g_object_new (GTK_TYPE_LABEL,
 				    "label", "Horizontal and Vertical\nScales",
 				    "justify", GTK_JUSTIFY_CENTER,
@@ -974,8 +984,8 @@ create_image (void)
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
-  gtk_container_add (GTK_CONTAINER (vbox),
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox),
 		      gtk_label_new ("Image"));
 
   return new_widget_info ("image", vbox, SMALL);
@@ -994,8 +1004,8 @@ create_spinner (void)
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
-  gtk_container_add (GTK_CONTAINER (vbox),
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox),
 		      gtk_label_new ("Spinner"));
 
   return new_widget_info ("spinner", vbox, SMALL);
@@ -1012,10 +1022,10 @@ create_volume_button (void)
   gtk_widget_set_size_request (widget, 100, 250);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (widget), box);
+  gtk_box_append (GTK_BOX (widget), box);
 
   button = gtk_volume_button_new ();
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_box_append (GTK_BOX (box), button);
 
   gtk_scale_button_set_value (GTK_SCALE_BUTTON (button), 33);
   popup = gtk_scale_button_get_popup (GTK_SCALE_BUTTON (button));
@@ -1064,8 +1074,8 @@ create_appchooserbutton (void)
   picker = gtk_app_chooser_button_new ("text/plain");
   gtk_widget_set_halign (picker, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (picker, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (vbox), picker);
-  gtk_container_add (GTK_CONTAINER (vbox),
+  gtk_box_append (GTK_BOX (vbox), picker);
+  gtk_box_append (GTK_BOX (vbox),
                       gtk_label_new ("Application Button"));
 
   return new_widget_info ("appchooserbutton", vbox, SMALL);
@@ -1161,9 +1171,9 @@ create_stack (void)
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
-  gtk_container_add (GTK_CONTAINER (vbox), switcher);
-  gtk_container_add (GTK_CONTAINER (vbox), stack);
-  gtk_container_add (GTK_CONTAINER (vbox),
+  gtk_box_append (GTK_BOX (vbox), switcher);
+  gtk_box_append (GTK_BOX (vbox), stack);
+  gtk_box_append (GTK_BOX (vbox),
                       gtk_label_new ("Stack"));
 
   return new_widget_info ("stack", vbox, ASIS);
@@ -1194,9 +1204,9 @@ create_stack_switcher (void)
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
-  gtk_container_add (GTK_CONTAINER (vbox), switcher);
-  gtk_container_add (GTK_CONTAINER (vbox), stack);
-  gtk_container_add (GTK_CONTAINER (vbox),
+  gtk_box_append (GTK_BOX (vbox), switcher);
+  gtk_box_append (GTK_BOX (vbox), stack);
+  gtk_box_append (GTK_BOX (vbox),
                       gtk_label_new ("Stack Switcher"));
 
   return new_widget_info ("stackswitcher", vbox, ASIS);
@@ -1229,9 +1239,9 @@ create_sidebar (void)
   frame = gtk_frame_new (NULL);
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
-  gtk_container_add (GTK_CONTAINER (hbox), sidebar);
-  gtk_container_add (GTK_CONTAINER (hbox), gtk_separator_new (GTK_ORIENTATION_VERTICAL));
-  gtk_container_add (GTK_CONTAINER (hbox), stack);
+  gtk_box_append (GTK_BOX (hbox), sidebar);
+  gtk_box_append (GTK_BOX (hbox), gtk_separator_new (GTK_ORIENTATION_VERTICAL));
+  gtk_box_append (GTK_BOX (hbox), stack);
   gtk_frame_set_child (GTK_FRAME (frame), hbox);
 
   return new_widget_info ("sidebar", frame, ASIS);
@@ -1254,33 +1264,33 @@ create_list_box (void)
   button = gtk_label_new ("List Box");
   gtk_widget_set_hexpand (button, TRUE);
   gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (row), button);
-  gtk_container_add (GTK_CONTAINER (list), row);
+  gtk_box_append (GTK_BOX (row), button);
+  gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
   row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-  gtk_container_add (GTK_CONTAINER (row), gtk_label_new ("Line One"));
+  gtk_box_append (GTK_BOX (row), gtk_label_new ("Line One"));
   button = gtk_check_button_new ();
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
   gtk_widget_set_hexpand (button, TRUE);
   gtk_widget_set_halign (button, GTK_ALIGN_END);
-  gtk_container_add (GTK_CONTAINER (row), button);
-  gtk_container_add (GTK_CONTAINER (list), row);
+  gtk_box_append (GTK_BOX (row), button);
+  gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
   gtk_list_box_select_row (GTK_LIST_BOX (list), GTK_LIST_BOX_ROW (gtk_widget_get_parent (row)));
   row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-  gtk_container_add (GTK_CONTAINER (row), gtk_label_new ("Line Two"));
+  gtk_box_append (GTK_BOX (row), gtk_label_new ("Line Two"));
   button = gtk_button_new_with_label ("2");
   gtk_widget_set_hexpand (button, TRUE);
   gtk_widget_set_halign (button, GTK_ALIGN_END);
-  gtk_container_add (GTK_CONTAINER (row), button);
-  gtk_container_add (GTK_CONTAINER (list), row);
+  gtk_box_append (GTK_BOX (row), button);
+  gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
   row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-  gtk_container_add (GTK_CONTAINER (row), gtk_label_new ("Line Three"));
+  gtk_box_append (GTK_BOX (row), gtk_label_new ("Line Three"));
   button = gtk_entry_new ();
   gtk_widget_set_hexpand (button, TRUE);
   gtk_widget_set_halign (button, GTK_ALIGN_END);
-  gtk_container_add (GTK_CONTAINER (row), button);
-  gtk_container_add (GTK_CONTAINER (list), row);
+  gtk_box_append (GTK_BOX (row), button);
+  gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
 
-  gtk_container_add (GTK_CONTAINER (widget), list);
+  gtk_box_append (GTK_BOX (widget), list);
 
   info = new_widget_info ("list-box", widget, MEDIUM);
   info->no_focus = FALSE;
@@ -1305,24 +1315,24 @@ create_flow_box (void)
   gtk_flow_box_set_max_children_per_line (GTK_FLOW_BOX (box), 2);
   gtk_flow_box_set_selection_mode (GTK_FLOW_BOX (box), GTK_SELECTION_BROWSE);
   button = gtk_label_new ("Child One");
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_box_append (GTK_BOX (box), button);
   button = gtk_button_new_with_label ("Child Two");
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_box_append (GTK_BOX (box), button);
   child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_container_add (GTK_CONTAINER (child), gtk_label_new ("Child Three"));
+  gtk_box_append (GTK_BOX (child), gtk_label_new ("Child Three"));
   button = gtk_check_button_new ();
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-  gtk_container_add (GTK_CONTAINER (child), button);
-  gtk_container_add (GTK_CONTAINER (box), child);
+  gtk_box_append (GTK_BOX (child), button);
+  gtk_box_append (GTK_BOX (box), child);
   gtk_flow_box_select_child (GTK_FLOW_BOX (box),
                              GTK_FLOW_BOX_CHILD (gtk_widget_get_parent (child)));
 
-  gtk_container_add (GTK_CONTAINER (widget), box);
+  gtk_box_append (GTK_BOX (widget), box);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
-  gtk_container_add (GTK_CONTAINER (vbox), gtk_label_new ("Flow Box"));
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox), gtk_label_new ("Flow Box"));
   info = new_widget_info ("flow-box", vbox, ASIS);
   info->no_focus = FALSE;
 
@@ -1339,7 +1349,7 @@ create_gl_area (void)
   widget = gtk_frame_new (NULL);
 
   gears = gtk_gears_new ();
-  gtk_container_add (GTK_CONTAINER (widget), gears);
+  gtk_box_append (GTK_BOX (widget), gears);
  
   info = new_widget_info ("glarea", widget, MEDIUM);
 

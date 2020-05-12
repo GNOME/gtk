@@ -200,7 +200,7 @@ main (int argc, char *argv[])
   gtk_widget_set_hexpand (sw, TRUE);
   gtk_widget_set_vexpand (sw, TRUE);
   gtk_window_set_child (GTK_WINDOW (window), box);
-  gtk_container_add (GTK_CONTAINER (box), sw);
+  gtk_box_append (GTK_BOX (box), sw);
 
   tv = gtk_text_view_new ();
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), tv);
@@ -214,33 +214,33 @@ main (int argc, char *argv[])
 
   box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   g_object_set (box, "margin-start", 10, "margin-end", 10, NULL);
-  gtk_container_add (GTK_CONTAINER (box), box2);
+  gtk_box_append (GTK_BOX (box), box2);
 
   the_mark = gtk_text_mark_new ("my mark", TRUE);
   box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-  gtk_container_add (GTK_CONTAINER (box), box2);
+  gtk_box_append (GTK_BOX (box), box2);
   mark_check = gtk_check_button_new_with_label ("Mark");
   g_signal_connect (mark_check, "notify::active", G_CALLBACK (update_mark_exists), NULL);
-  gtk_container_add (GTK_CONTAINER (box2), mark_check);
+  gtk_box_append (GTK_BOX (box2), mark_check);
   mark_visible = gtk_check_button_new_with_label ("Visible");
   g_signal_connect (mark_visible, "notify::active", G_CALLBACK (update_mark_visible), NULL);
-  gtk_container_add (GTK_CONTAINER (box2), mark_visible);
-  gtk_container_add (GTK_CONTAINER (box2), gtk_label_new ("Position:"));
+  gtk_box_append (GTK_BOX (box2), mark_visible);
+  gtk_box_append (GTK_BOX (box2), gtk_label_new ("Position:"));
   position_spin = gtk_spin_button_new_with_range (0, len, 1);  
   g_signal_connect (position_spin, "value-changed", G_CALLBACK (update_mark_position), NULL);
-  gtk_container_add (GTK_CONTAINER (box2), position_spin);
+  gtk_box_append (GTK_BOX (box2), position_spin);
 
   box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   g_object_set (box, "margin-start", 10, "margin-end", 10, NULL);
-  gtk_container_add (GTK_CONTAINER (box), box2);
+  gtk_box_append (GTK_BOX (box), box2);
 
   button = gtk_toggle_button_new_with_label ("Random marks");
   g_signal_connect (button, "notify::active", G_CALLBACK (toggle_marks), NULL);
-  gtk_container_add (GTK_CONTAINER (box2), button);
+  gtk_box_append (GTK_BOX (box2), button);
 
   button = gtk_toggle_button_new_with_label ("Wandering cursor");
   g_signal_connect (button, "notify::active", G_CALLBACK (toggle_cursor), NULL);
-  gtk_container_add (GTK_CONTAINER (box2), button);
+  gtk_box_append (GTK_BOX (box2), button);
 
   gtk_widget_show (window);
 

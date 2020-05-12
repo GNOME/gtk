@@ -45,7 +45,7 @@ create_widget_factory_content (void)
 
   result = GTK_WIDGET (gtk_builder_get_object (builder, "box1"));
   g_object_ref (result);
-  gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (result)),
+  gtk_box_remove (GTK_BOX (gtk_widget_get_parent (result)),
                         result);
   g_object_unref (builder);
 

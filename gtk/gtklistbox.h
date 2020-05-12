@@ -26,7 +26,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkcontainer.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
@@ -171,6 +171,9 @@ GDK_AVAILABLE_IN_ALL
 void           gtk_list_box_insert                       (GtkListBox                    *box,
                                                           GtkWidget                     *child,
                                                           gint                           position);
+GDK_AVAILABLE_IN_ALL
+void           gtk_list_box_remove                       (GtkListBox                    *box,
+                                                          GtkWidget                     *child);
 GDK_AVAILABLE_IN_ALL
 GtkListBoxRow* gtk_list_box_get_selected_row             (GtkListBox                    *box);
 GDK_AVAILABLE_IN_ALL

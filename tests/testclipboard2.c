@@ -204,10 +204,10 @@ format_list_add_row (GtkWidget         *list,
   GtkWidget *box;
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-  gtk_container_add (GTK_CONTAINER (box), gtk_label_new (format_name));
+  gtk_box_append (GTK_BOX (box), gtk_label_new (format_name));
 
   gdk_content_formats_unref (formats);
-  gtk_container_add (GTK_CONTAINER (list), box);
+  gtk_list_box_insert (GTK_LIST_BOX (list), box, -1);
 }
 
 static void
@@ -222,7 +222,7 @@ clipboard_formats_change_cb (GdkClipboard *clipboard,
   gsize i, n;
 
   while ((row = GTK_WIDGET (gtk_list_box_get_row_at_index (GTK_LIST_BOX (list), 0))))
-    gtk_container_remove (GTK_CONTAINER (list), row);
+    gtk_list_box_remove (GTK_LIST_BOX (list), row);
 
   formats = gdk_clipboard_get_formats (clipboard);
   
@@ -303,7 +303,7 @@ add_provider_button (GtkWidget          *box,
   if (provider)
     g_object_set_data_full (G_OBJECT (button), "provider", provider, g_object_unref);
 
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_box_append (GTK_BOX (box), button);
 }
 
 static GtkWidget *
@@ -320,7 +320,7 @@ get_button_list (GdkClipboard *clipboard,
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
-  gtk_container_add (GTK_CONTAINER (box), gtk_label_new (info));
+  gtk_box_append (GTK_BOX (box), gtk_label_new (info));
 
   add_provider_button (box,
                        NULL,
@@ -388,16 +388,16 @@ get_clipboard_widget (GdkClipboard *clipboard,
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (hbox), vbox);
-  gtk_container_add (GTK_CONTAINER (vbox), gtk_label_new (name));
+  gtk_box_append (GTK_BOX (hbox), vbox);
+  gtk_box_append (GTK_BOX (vbox), gtk_label_new (name));
   switcher = gtk_stack_switcher_new ();
-  gtk_container_add (GTK_CONTAINER (vbox), switcher);
+  gtk_box_append (GTK_BOX (vbox), switcher);
   stack = get_contents_widget (clipboard);
-  gtk_container_add (GTK_CONTAINER (vbox), stack);
+  gtk_box_append (GTK_BOX (vbox), stack);
   gtk_stack_switcher_set_stack (GTK_STACK_SWITCHER (switcher), GTK_STACK (stack));
-  gtk_container_add (GTK_CONTAINER (hbox), get_button_list (clipboard, "Set Locally:"));
+  gtk_box_append (GTK_BOX (hbox), get_button_list (clipboard, "Set Locally:"));
   if (clipboard != alt_clipboard)
-    gtk_container_add (GTK_CONTAINER (hbox), get_button_list (alt_clipboard, "Set Remotely:"));
+    gtk_box_append (GTK_BOX (hbox), get_button_list (alt_clipboard, "Set Remotely:"));
 
   return hbox;
 }
@@ -410,11 +410,11 @@ get_window_contents (GdkDisplay *display,
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
-  gtk_container_add (GTK_CONTAINER (box),
+  gtk_box_append (GTK_BOX (box),
                      get_clipboard_widget (gdk_display_get_clipboard (display),
                                            gdk_display_get_clipboard (alt_display),
                                            "Clipboard"));
-  gtk_container_add (GTK_CONTAINER (box),
+  gtk_box_append (GTK_BOX (box),
                      get_clipboard_widget (gdk_display_get_primary_clipboard (display),
                                            gdk_display_get_primary_clipboard (alt_display),
                                            "Primary Clipboard"));

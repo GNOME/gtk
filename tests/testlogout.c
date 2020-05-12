@@ -92,7 +92,7 @@ activate (GtkApplication *app,
   gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
 
-  gtk_container_add (GTK_CONTAINER (box), grid);
+  gtk_box_append (GTK_BOX (box), grid);
 
   label = gtk_label_new ("Inhibitor");
   gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
@@ -121,7 +121,7 @@ activate (GtkApplication *app,
   gtk_grid_attach (GTK_GRID (grid), button, 2, 6, 1, 1);
 
   separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_container_add (GTK_CONTAINER (box), separator);
+  gtk_box_append (GTK_BOX (box), separator);
 
   grid = gtk_grid_new ();
   gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
