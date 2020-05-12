@@ -25,7 +25,11 @@
  * It is primarily mean for pixel data that will not change over
  * multiple frames, and will be used for a long time.
  *
- * You cannot get your pixel data back once you've uploaded it.
+ * There are various ways to create #GdkTexture objects from a
+ * #GdkPixbuf, or a Cairo surface, or other pixel data.
+ *
+ * The ownership of the pixel data is transferred to the #GdkTexture
+ * instance; you can only make a copy of it, via gdk_texture_download().
  *
  * #GdkTexture is an immutable object: That means you cannot change
  * anything about it other than increasing the reference count via
@@ -48,22 +52,6 @@ void
 gtk_snapshot_append_texture (GdkSnapshot            *snapshot,
                              GdkTexture             *texture,
                              const graphene_rect_t  *bounds);
-
-/**
- * SECTION:textures
- * @Short_description: Image data for display
- * @Title: GdkTexture
- *
- * A GdkTexture represents image data that can be displayed on screen.
- *
- * There are various ways to create GdkTexture objects from a #GdkPixbuf
- * or a cairo surface, or other pixel data.
- *
- * An important aspect of GdkTextures is that they are immutable - once
- * the image data has been wrapped in a GdkTexture, it may be uploaded
- * to the GPU or used in other ways that make it impractical to allow
- * modification.
- */
 
 /**
  * GdkTexture:
