@@ -66,6 +66,7 @@ compare_render_tests = [
   'blend-invisible-child',
   'transform-in-transform',
   'transform-in-transform-in-transform',
+  'nested-rounded-clips',
 ]
 
 # these are too sensitive to differences in the renderers
