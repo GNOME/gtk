@@ -71,7 +71,6 @@ gdk_macos_popup_surface_layout (GdkMacosPopupSurface *self,
                                     final_rect.height);
   else
     _gdk_macos_surface_move (GDK_MACOS_SURFACE (self), x, y);
-
 }
 
 static void
@@ -79,7 +78,7 @@ show_popup (GdkMacosPopupSurface *self)
 {
   NSWindow *nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
 
-  [(GdkMacosWindow *)nswindow showAndMakeKey:NO];
+  [(GdkMacosWindow *)nswindow showAndMakeKey:YES];
 
   _gdk_macos_surface_show (GDK_MACOS_SURFACE (self));
 }
