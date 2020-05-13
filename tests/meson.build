@@ -114,7 +114,6 @@ gtk_tests = [
   ['testwidgettransforms'],
   ['testcenterbox'],
   ['testgridbaseline'],
-  ['showrendernode'],
   ['testborderdrawing'],
   ['testoutsetshadowdrawing'],
   ['testblur'],
