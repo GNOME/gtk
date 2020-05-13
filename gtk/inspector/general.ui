@@ -501,6 +501,16 @@
               </object>
             </child>
             <child>
+              <object class="GtkFrame" id="monitor_frame">
+                <property name="halign">center</property>
+                <child>
+                  <object class="GtkListBox" id="monitor_box">
+                    <property name="selection-mode">none</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
               <object class="GtkFrame" id="gl_frame">
                 <property name="halign">center</property>
                 <child>
