@@ -7483,23 +7483,19 @@ gtk_window_get_child (GtkWindow *window)
 void
 gtk_window_destroy (GtkWindow *window)
 {
-  int i;
+  guint i;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
+  /* If gtk_window_destroy() has been called before. Can happen
+   * when destroying a dialog manually in a ::close handler for example. */
+  if (!g_list_store_find (toplevel_list, window, &i))
+    return;
+
+  g_object_ref (window);
   gtk_tooltip_unset_surface (GTK_NATIVE (window));
 
-  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (toplevel_list)); i++)
-    {
-      gpointer item = g_list_model_get_item (G_LIST_MODEL (toplevel_list), i);
-      if (item == window)
-        {
-          g_list_store_remove (toplevel_list, i);
-          break;
-        }
-      else
-        g_object_unref (item);
-    }
+  g_list_store_remove (toplevel_list, i);
 
   gtk_window_hide (GTK_WIDGET (window));
   gtk_widget_unrealize (GTK_WIDGET (window));
