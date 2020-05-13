@@ -62,6 +62,8 @@ struct _NodeEditorWindow
   GListStore *renderers;
   GdkPaintable *paintable;
 
+  GFileMonitor *file_monitor;
+
   GArray *errors;
 };
 
@@ -331,11 +333,10 @@ text_view_query_tooltip_cb (GtkWidget        *widget,
     }
 }
 
-gboolean
-node_editor_window_load (NodeEditorWindow *self,
-                         GFile            *file)
+static gboolean
+load_file_contents (NodeEditorWindow *self,
+                    GFile            *file)
 {
-  GtkTextIter end;
   GBytes *bytes;
 
   bytes = g_file_load_bytes (file, NULL, NULL, NULL);
@@ -348,13 +349,50 @@ node_editor_window_load (NodeEditorWindow *self,
       return FALSE;
     }
 
-  gtk_text_buffer_get_end_iter (self->text_buffer, &end);
-  gtk_text_buffer_insert (self->text_buffer,
-                          &end,
-                          g_bytes_get_data (bytes, NULL),
-                          g_bytes_get_size (bytes));
+  gtk_text_buffer_set_text (self->text_buffer,
+                            g_bytes_get_data (bytes, NULL),
+                            g_bytes_get_size (bytes));
 
   g_bytes_unref (bytes);
+
+  return TRUE;
+}
+
+static void
+file_changed_cb (GFileMonitor      *monitor,
+                 GFile             *file,
+                 GFile             *other_file,
+                 GFileMonitorEvent  event_type,
+                 gpointer           user_data)
+{
+  NodeEditorWindow *self = user_data;
+
+  if (event_type == G_FILE_MONITOR_EVENT_CHANGED)
+    load_file_contents (self, file);
+}
+
+gboolean
+node_editor_window_load (NodeEditorWindow *self,
+                         GFile            *file)
+{
+  GError *error = NULL;
+
+  if (!load_file_contents (self, file))
+    return FALSE;
+
+  g_clear_object (&self->file_monitor);
+  self->file_monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &error);
+
+
+  if (error)
+    {
+      g_warning ("couldn't monitor file: %s", error->message);
+      g_error_free (error);
+    }
+  else
+    {
+      g_signal_connect (self->file_monitor, "changed", G_CALLBACK (file_changed_cb), self);
+    }
 
   return TRUE;
 }

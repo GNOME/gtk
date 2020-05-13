@@ -1574,9 +1574,9 @@ gtk_paned_set_start_child (GtkPaned *paned,
  * gtk_paned_get_start_child:
  * @paned: a #GtkPaned
  *
- * Retrieves the start child of the given #GdkPaned.
+ * Retrieves the start child of the given #GtkPaned.
  *
- * See also: #GtkPaned::start-child
+ * See also: #GtkPaned:start-child
  *
  * Returns: (transfer none) (nullable): the start child widget
  */
@@ -1636,9 +1636,9 @@ gtk_paned_get_shrink_start_child (GtkPaned *paned)
  * gtk_paned_get_end_child:
  * @paned: a #GtkPaned
  *
- * Retrieves the end child of the given #GdkPaned.
+ * Retrieves the end child of the given #GtkPaned.
  *
- * See also: #GtkPaned::end-child
+ * See also: #GtkPaned:end-child
  *
  * Returns: (transfer none) (nullable): the end child widget
  */

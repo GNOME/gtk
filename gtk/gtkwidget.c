@@ -494,7 +494,6 @@ enum {
   UNMAP,
   REALIZE,
   UNREALIZE,
-  SIZE_ALLOCATE,
   STATE_FLAGS_CHANGED,
   DIRECTION_CHANGED,
   GRAB_NOTIFY,
@@ -3952,12 +3951,6 @@ gtk_widget_allocate (GtkWidget    *widget,
   adjusted.x += border.left + padding.left;
   adjusted.y += border.top + padding.top;
 
-  /* Since gtk_widget_measure does it for us, we can be sure here that
-   * the given alloaction is large enough for the css margin/bordder/padding */
-  adjusted.width -= border.left + padding.left +
-                    border.right + padding.right;
-  adjusted.height -= border.top + padding.top +
-                     border.bottom + padding.bottom;
   if (baseline >= 0)
     baseline -= margin.top + border.top + padding.top;
   if (adjusted.x || adjusted.y)
@@ -3971,6 +3964,13 @@ gtk_widget_allocate (GtkWidget    *widget,
 
   if (!alloc_needed && !size_changed && !baseline_changed)
     goto skip_allocate;
+
+  /* Since gtk_widget_measure does it for us, we can be sure here that
+   * the given alloaction is large enough for the css margin/bordder/padding */
+  adjusted.width -= border.left + padding.left +
+                    border.right + padding.right;
+  adjusted.height -= border.top + padding.top +
+                     border.bottom + padding.bottom;
 
   priv->width = adjusted.width;
   priv->height = adjusted.height;
@@ -11570,12 +11570,15 @@ gtk_widget_create_render_node (GtkWidget   *widget,
     }
 
   if (priv->overflow == GTK_OVERFLOW_HIDDEN)
-    gtk_snapshot_push_rounded_clip (snapshot, gtk_css_boxes_get_padding_box (&boxes));
-
-  klass->snapshot (widget, snapshot);
-
-  if (priv->overflow == GTK_OVERFLOW_HIDDEN)
-    gtk_snapshot_pop (snapshot);
+    {
+      gtk_snapshot_push_rounded_clip (snapshot, gtk_css_boxes_get_padding_box (&boxes));
+      klass->snapshot (widget, snapshot);
+      gtk_snapshot_pop (snapshot);
+    }
+  else
+    {
+      klass->snapshot (widget, snapshot);
+    }
 
   gtk_css_style_snapshot_outline (&boxes, snapshot);
 
