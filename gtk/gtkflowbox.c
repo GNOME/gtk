@@ -545,8 +545,9 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
 static void
 gtk_flow_box_child_init (GtkFlowBoxChild *child)
 {
+  gtk_widget_set_focusable (GTK_WIDGET (child), TRUE);
 }
- 
+
 /* Public API {{{2 */
 
 /**
