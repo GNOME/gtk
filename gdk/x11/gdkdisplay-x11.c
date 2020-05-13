@@ -2923,6 +2923,14 @@ gdk_x11_display_get_monitor (GdkDisplay *display,
   return NULL;
 }
 
+static GListModel *
+gdk_x11_display_get_monitors (GdkDisplay *display)
+{
+  GdkX11Display *self = GDK_X11_DISPLAY (display);
+
+  return G_LIST_MODEL (self->monitors);
+}
+
 /**
  * gdk_x11_display_get_primary_monitor:
  * @self: a #GdkDisplay
@@ -3045,6 +3053,7 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
 
   display_class->get_n_monitors = gdk_x11_display_get_n_monitors;
   display_class->get_monitor = gdk_x11_display_get_monitor;
+  display_class->get_monitors = gdk_x11_display_get_monitors;
   display_class->get_setting = gdk_x11_display_get_setting;
   display_class->set_cursor_theme = gdk_x11_display_set_cursor_theme;
 

@@ -990,6 +990,14 @@ gdk_win32_display_get_primary_monitor (GdkDisplay *display)
   return gdk_win32_display_get_monitor (display, 0);
 }
 
+static GListModel *
+gdk_win32_display_get_monitors (GdkDisplay *display)
+{
+  GdkWin32Display *self = GDK_WIN32_DISPLAY (display);
+
+  return self->monitors;
+}
+
 guint
 _gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *win32_display,
                                              HMONITOR         hmonitor,
@@ -1114,6 +1122,7 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
 
   display_class->get_n_monitors = gdk_win32_display_get_n_monitors;
   display_class->get_monitor = gdk_win32_display_get_monitor;
+  display_class->get_monitors = gdk_win32_display_get_monitors;
 
 #ifdef GDK_RENDERING_VULKAN
   display_class->vk_context_type = GDK_TYPE_WIN32_VULKAN_CONTEXT;

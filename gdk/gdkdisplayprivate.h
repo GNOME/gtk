@@ -158,7 +158,8 @@ struct _GdkDisplayClass
   int                    (*get_n_monitors)             (GdkDisplay     *display);
   GdkMonitor *           (*get_monitor)                (GdkDisplay     *display,
                                                         int             index);
-  GdkMonitor *           (*get_monitor_at_surface)      (GdkDisplay     *display,
+  GListModel *           (*get_monitors)               (GdkDisplay     *self);
+  GdkMonitor *           (*get_monitor_at_surface)     (GdkDisplay     *display,
                                                         GdkSurface      *surface);
   gboolean               (*get_setting)                (GdkDisplay     *display,
                                                         const char     *name,

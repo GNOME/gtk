@@ -1570,6 +1570,28 @@ gdk_display_get_monitor (GdkDisplay *display,
 }
 
 /**
+ * gdk_display_get_monitors:
+ * @display: a #GdkDisplay
+ *
+ * Gets the list of monitors associated with this display.
+ *
+ * Subsequent calls to this function will always return the same list for the
+ * same display.
+ *
+ * You can listen to the GListModel::items-changed signal on this list
+ * to monitor changes to the monitor of this display.
+ *
+ * Returns: (transfer none): a #GListModel of #GdkMonitor
+ */
+GListModel *
+gdk_display_get_monitors (GdkDisplay *self)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (self), NULL);
+
+  return GDK_DISPLAY_GET_CLASS (self)->get_monitors (self);
+}
+
+/**
  * gdk_display_get_monitor_at_surface:
  * @display: a #GdkDisplay
  * @surface: a #GdkSurface

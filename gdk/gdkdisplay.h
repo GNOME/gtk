@@ -112,6 +112,8 @@ GDK_AVAILABLE_IN_ALL
 GdkMonitor * gdk_display_get_monitor           (GdkDisplay *display,
                                                 int         monitor_num);
 GDK_AVAILABLE_IN_ALL
+GListModel * gdk_display_get_monitors          (GdkDisplay *self) G_GNUC_PURE;
+GDK_AVAILABLE_IN_ALL
 GdkMonitor * gdk_display_get_monitor_at_surface (GdkDisplay *display,
                                                 GdkSurface  *surface);
 

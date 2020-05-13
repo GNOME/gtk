@@ -243,13 +243,18 @@ gdk_broadway_display_get_default_group (GdkDisplay *display)
 static void
 gdk_broadway_display_dispose (GObject *object)
 {
-  GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (object);
+  GdkBroadwayDisplay *self = GDK_BROADWAY_DISPLAY (object);
 
-  if (broadway_display->event_source)
+  if (self->event_source)
     {
-      g_source_destroy (broadway_display->event_source);
-      g_source_unref (broadway_display->event_source);
-      broadway_display->event_source = NULL;
+      g_source_destroy (self->event_source);
+      g_source_unref (self->event_source);
+      self->event_source = NULL;
+    }
+  if (self->monitors)
+    {
+      g_list_store_remove_all (self->monitors);
+      g_clear_object (&self->monitors);
     }
 
   G_OBJECT_CLASS (gdk_broadway_display_parent_class)->dispose (object);
@@ -330,6 +335,20 @@ gdk_broadway_display_get_monitor (GdkDisplay *display,
     return broadway_display->monitor;
 
   return NULL;
+}
+
+static GListModel *
+gdk_broadway_display_get_monitors (GdkDisplay *display)
+{
+  GdkBroadwayDisplay *self = GDK_BROADWAY_DISPLAY (display);
+
+  if (self->monitors == NULL)
+    {
+      self->monitors = g_list_store_new (GDK_TYPE_MONITOR);
+      g_list_store_append (self->monitors, self->monitor);
+    }
+
+  return G_LIST_MODEL (self->monitors);
 }
 
 static gboolean
@@ -430,5 +449,6 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
 
   display_class->get_n_monitors = gdk_broadway_display_get_n_monitors;
   display_class->get_monitor = gdk_broadway_display_get_monitor;
+  display_class->get_monitors = gdk_broadway_display_get_monitors;
   display_class->get_setting = gdk_broadway_display_get_setting;
 }

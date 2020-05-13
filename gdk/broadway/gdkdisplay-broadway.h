@@ -52,6 +52,7 @@ struct _GdkBroadwayDisplay
   GdkBroadwayServer *server;
   gpointer move_resize_data;
 
+  GListStore *monitors;
   GdkMonitor *monitor;
   int scale_factor;
 

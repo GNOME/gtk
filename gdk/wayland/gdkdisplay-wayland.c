@@ -977,6 +977,14 @@ gdk_wayland_display_get_monitor (GdkDisplay *display,
   return monitor;
 }
 
+static GListModel *
+gdk_wayland_display_get_monitors (GdkDisplay *display)
+{
+  GdkWaylandDisplay *self = GDK_WAYLAND_DISPLAY (display);
+
+  return G_LIST_MODEL (self->monitors);
+}
+
 static GdkMonitor *
 gdk_wayland_display_get_monitor_at_surface (GdkDisplay *display,
                                            GdkSurface  *window)
@@ -1046,6 +1054,7 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
 
   display_class->get_n_monitors = gdk_wayland_display_get_n_monitors;
   display_class->get_monitor = gdk_wayland_display_get_monitor;
+  display_class->get_monitors = gdk_wayland_display_get_monitors;
   display_class->get_monitor_at_surface = gdk_wayland_display_get_monitor_at_surface;
   display_class->get_setting = gdk_wayland_display_get_setting;
   display_class->set_cursor_theme = gdk_wayland_display_set_cursor_theme;
