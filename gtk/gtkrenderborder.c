@@ -742,11 +742,16 @@ gtk_css_style_snapshot_outline (GtkCssBoxes *boxes,
   border_style[0] = _gtk_css_border_style_value_get (outline->outline_style);
   if (border_style[0] != GTK_BORDER_STYLE_NONE)
     {
+      const GdkRGBA *color = gtk_css_color_value_get_rgba (outline->outline_color ?
+                                                           outline->outline_color :
+                                                           boxes->style->core->color);
+      if (gdk_rgba_is_clear (color))
+        return;
+
       border_style[1] = border_style[2] = border_style[3] = border_style[0];
       border_width[0] = _gtk_css_number_value_get (outline->outline_width, 100);
       border_width[3] = border_width[2] = border_width[1] = border_width[0];
-      colors[0] = *gtk_css_color_value_get_rgba (outline->outline_color ? outline->outline_color : boxes->style->core->color);
-      colors[3] = colors[2] = colors[1] = colors[0];
+      colors[0] = colors[1] = colors[2] = colors[3] = *color;
 
       snapshot_border (snapshot,
                        gtk_css_boxes_get_outline_box (boxes),
