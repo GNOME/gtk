@@ -946,6 +946,7 @@ _gdk_macos_display_find_native_under_pointer (GdkMacosDisplay *self,
   g_assert (GDK_IS_MACOS_DISPLAY (self));
 
   point = [NSEvent mouseLocation];
+
   surface = _gdk_macos_display_get_surface_at_display_coords (self, point.x, point.y, x, y);
   if (surface != NULL)
     return _gdk_macos_surface_get_native (surface);
@@ -953,3 +954,15 @@ _gdk_macos_display_find_native_under_pointer (GdkMacosDisplay *self,
   return NULL;
 }
 
+void
+_gdk_macos_display_surface_raised (GdkMacosDisplay *self,
+                                   GdkMacosSurface *surface)
+{
+  g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (surface));
+
+  if (queue_contains (&self->sorted_surfaces, &surface->sorted))
+    g_queue_unlink (&self->sorted_surfaces, &surface->sorted);
+
+  g_queue_push_head_link (&self->sorted_surfaces, &surface->sorted);
+}
