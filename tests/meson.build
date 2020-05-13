@@ -52,7 +52,6 @@ gtk_tests = [
   ['testhover'],
   ['testiconview'],
   ['testiconview-keynav'],
-  ['testicontheme'],
   ['testinfobar'],
   ['testkineticscrolling'],
   ['testlist'],
