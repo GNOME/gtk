@@ -82,7 +82,7 @@ struct _GdkWin32Display
   guint gl_version;
   HWND gl_hwnd;
 
-  GPtrArray *monitors;
+  GListModel *monitors;
 
   guint hasWglARBCreateContext : 1;
   guint hasWglEXTSwapControl : 1;
@@ -120,7 +120,7 @@ struct _GdkWin32DisplayClass
   GdkDisplayClass display_class;
 };
 
-gboolean   _gdk_win32_display_init_monitors    (GdkWin32Display *display);
+void       _gdk_win32_display_init_monitors    (GdkWin32Display *display);
 
 GPtrArray *_gdk_win32_display_get_monitor_list (GdkWin32Display *display);
 
