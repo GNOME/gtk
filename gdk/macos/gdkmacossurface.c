@@ -814,6 +814,9 @@ _gdk_macos_surface_move_resize (GdkMacosSurface *self,
   if (height == -1)
     height = surface->height;
 
+  surface->x = x;
+  surface->y = y;
+
   _gdk_macos_display_to_display_coords (GDK_MACOS_DISPLAY (display),
                                         x, y, &x, &y);
 
