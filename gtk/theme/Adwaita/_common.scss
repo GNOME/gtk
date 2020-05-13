@@ -2624,6 +2624,15 @@ scale {
     }
   }
 
+  // trough has clickable margins
+  &.vertical > trough {
+    margin: 0 10px;
+  }
+
+  &.horizontal > trough {
+    margin: 10px 0;
+  }
+
   // click-and-hold the slider to activate
   &.fine-tune {
     &.horizontal {
