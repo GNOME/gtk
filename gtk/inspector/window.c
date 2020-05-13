@@ -62,6 +62,7 @@
 #include "gtklayoutmanager.h"
 #include "gtkcssprovider.h"
 #include "gtkstylecontext.h"
+#include "gtkwidgetprivate.h"
 
 
 enum {
@@ -608,10 +609,15 @@ gtk_inspector_prepare_render (GtkWidget            *widget,
       snapshot = gtk_snapshot_new ();
       gtk_snapshot_append_node (snapshot, node);
 
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_transform (snapshot, gtk_widget_get_transform (widget));
+
       for (l = iw->overlays; l; l = l->next)
         {
           gtk_inspector_overlay_snapshot (l->data, snapshot, node, widget);
         }
+
+      gtk_snapshot_restore (snapshot);
 
       gsk_render_node_unref (node);
       node = gtk_snapshot_free_to_node (snapshot);
