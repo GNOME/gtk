@@ -888,7 +888,7 @@ _gdk_macos_display_get_surface_at_display_coords (GdkMacosDisplay *self,
       if (x_gdk >= surface->x &&
           y_gdk >= surface->y &&
           x_gdk <= (surface->x + surface->width) &&
-          y_gdk >= (surface->y + surface->height))
+          y_gdk <= (surface->y + surface->height))
         {
           *surface_x = x_gdk - surface->x;
           *surface_y = y_gdk - surface->y;
