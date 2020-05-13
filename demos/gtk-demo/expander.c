@@ -79,7 +79,7 @@ do_expander (GtkWidget *do_widget)
                                 "innuendo, just to make you scroll down or "
                                 "resize the window. Do it already !", -1);
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), tv);
-      gtk_box_append (GTK_BOX (expander), sw);
+      gtk_expander_set_child (GTK_EXPANDER (expander), sw);
       gtk_box_append (GTK_BOX (area), expander);
       g_signal_connect (expander, "notify::expanded",
                         G_CALLBACK (expander_cb), window);
