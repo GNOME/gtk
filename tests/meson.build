@@ -89,7 +89,6 @@ gtk_tests = [
   ['testscrolltofocus'],
   ['testcellarea'],
   ['testswitch'],
-  ['testnoscreen'],
   ['testtreepos'],
   ['testsensitive'],
   ['testtextview'],
