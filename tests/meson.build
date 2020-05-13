@@ -83,7 +83,6 @@ gtk_tests = [
   ['testgrouping'],
   ['testtooltips'],
   ['testexpand'],
-  ['testexpander'],
   ['testvolumebutton'],
   ['testscrolledwindow'],
   ['testscrolledge'],
