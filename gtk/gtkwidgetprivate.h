@@ -476,6 +476,12 @@ _gtk_widget_is_sensitive (GtkWidget *widget)
   return !(widget->priv->state_flags & GTK_STATE_FLAG_INSENSITIVE);
 }
 
+static inline GskTransform *
+gtk_widget_get_transform (GtkWidget *widget)
+{
+  return widget->priv->transform;
+}
+
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_PRIVATE_H__ */
