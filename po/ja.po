@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-11 18:28+0000\n"
-"PO-Revision-Date: 2020-03-09 21:20+0900\n"
+"PO-Revision-Date: 2020-05-13 22:00+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: gdk/gdkdrop.c:118
 msgid "Drag’n’drop from other applications is not supported."
-msgstr "他のアプリケーションからのドラッグ＆ドロップはサポートしていません。"
+msgstr "他のアプリケーションからのドラッグ & ドロップはサポートしていません。"
 
 #: gdk/gdkdrop.c:151
 msgid "No compatible formats to transfer contents."
@@ -475,7 +475,7 @@ msgstr "GL コンテキストを生成できません"
 #: gdk/wayland/gdkglcontext-wayland.c:422 gdk/win32/gdkglcontext-win32.c:679
 #: gdk/x11/gdkglcontext-x11.c:920
 msgid "No available configurations for the given pixel format"
-msgstr ""
+msgstr "指定したピクセルフォーマットの利用可能な設定はありません"
 
 #: gdk/wayland/gdkglcontext-wayland.c:451 gdk/win32/gdkglcontext-win32.c:791
 #: gdk/x11/gdkglcontext-x11.c:1223
@@ -489,99 +489,100 @@ msgstr ""
 #: gdk/win32/gdkclipdrop-win32.c:717
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
-msgstr ""
+msgstr "クリップボードの所有権を取得できません。OpenClipboard() がタイムアウトしました。"
 
 #: gdk/win32/gdkclipdrop-win32.c:727
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
-msgstr ""
+msgstr "クリップボードの所有権を取得できません。他のプロセスが取得済みです。"
 
 #: gdk/win32/gdkclipdrop-win32.c:741
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
-msgstr ""
+msgstr "クリップボードの所有権を取得できません。OpenClipboard() に失敗しました: 0x%lx。"
 
 #: gdk/win32/gdkclipdrop-win32.c:753
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
-msgstr ""
+msgstr "クリップボードの所有権を取得できません。EmptyClipboard() に失敗しました: 0x%lx。"
 
 #: gdk/win32/gdkclipdrop-win32.c:796
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
-msgstr ""
+msgstr "クリップボードにデータを設定できません。OpenClipboard() がタイムアウトしました。"
 
 #: gdk/win32/gdkclipdrop-win32.c:806 gdk/win32/gdkclipdrop-win32.c:837
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
-msgstr ""
+msgstr "クリップボードにデータを設定できません。他のプロセスがクリップボードの所有権を取得済みです。"
 
 #: gdk/win32/gdkclipdrop-win32.c:820
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
-msgstr ""
+msgstr "クリップボードにデータを設定できません。OpenClipboard() に失敗しました: 0x%lx。"
 
 #: gdk/win32/gdkclipdrop-win32.c:872
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
-msgstr ""
+msgstr "クリップボードのデータを取得できません。GlobalLock(0x%p) に失敗しました: 0x%lx。"
 
 #: gdk/win32/gdkclipdrop-win32.c:883
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
-msgstr ""
+msgstr "クリップボードのデータを取得できません。GlobalSize(0x%p) に失敗しました: 0x%lx。"
 
 #: gdk/win32/gdkclipdrop-win32.c:895
 #, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %lu bytes to store the data."
 msgstr ""
+"クリップボードのデータを取得できません。データを格納するための %lu バイトの確保に失敗しました。"
 
 #: gdk/win32/gdkclipdrop-win32.c:926
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
-msgstr ""
+msgstr "クリップボードのデータを取得できません。OpenClipboard() がタイムアウトしました。"
 
 #: gdk/win32/gdkclipdrop-win32.c:936
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
-msgstr ""
+msgstr "クリップボードのデータを取得できません。クリップボードの所有権が変更されました。"
 
 #: gdk/win32/gdkclipdrop-win32.c:946
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
-msgstr ""
+msgstr "クリップボードのデータを取得できません。取得する前にクリップボードのデータが変更されました。"
 
 #: gdk/win32/gdkclipdrop-win32.c:963
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
-msgstr ""
+msgstr "クリップボードのデータを取得できません。OpenClipboard() に失敗しました: 0x%lx。"
 
 #: gdk/win32/gdkclipdrop-win32.c:988
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
-msgstr ""
+msgstr "クリップボードのデータを取得できません。互換性のある転送フォーマットが見つかりませんでした。"
 
 #: gdk/win32/gdkclipdrop-win32.c:998
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
-msgstr ""
+msgstr "クリップボードのデータを取得できません。GetClipboardData() に失敗しました: 0x%lx。"
 
 #: gdk/win32/gdkdrop-win32.c:1210
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
-msgstr ""
+msgstr "DnD データを取得できません。GlobalLock(0x%p) に失敗しました。: 0x%lx。"
 
 #: gdk/win32/gdkdrop-win32.c:1219
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
-msgstr ""
+msgstr "DnD データを取得できません。GlobalSize(0x%p) に失敗しました。: 0x%lx。"
 
 #: gdk/win32/gdkdrop-win32.c:1229
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %lu bytes to store the data."
-msgstr ""
+msgstr "DnD データを取得できません。データを格納するための %lu バイトの確保に失敗しました。"
 
 #: gdk/win32/gdkdrop-win32.c:1296
 #, c-format
@@ -596,7 +597,7 @@ msgstr ""
 #: gdk/win32/gdkdrop-win32.c:1341
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
-msgstr ""
+msgstr "IDataObject_GetData (0x%x) に失敗して 0x%lx が返されました"
 
 #: gdk/win32/gdkdrop-win32.c:1373
 #, c-format
@@ -670,7 +671,7 @@ msgstr "COLORS"
 #: gdk/x11/gdkapplaunchcontext-x11.c:292
 #, c-format
 msgid "Starting “%s”"
-msgstr "“%s”の起動中です"
+msgstr "“%s”を起動中です"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:305
 #, c-format
@@ -1020,7 +1021,7 @@ msgstr "右寄せ(_R)"
 #: gtk/a11y/gtkimageaccessible.c:93
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
-msgstr "フルスクリーンの解除(_L)"
+msgstr "フルスクリーンを解除(_L)"
 
 #: gtk/a11y/gtkimageaccessible.c:94
 msgctxt "Stock label, media"
@@ -1311,20 +1312,16 @@ msgid "GNU Affero General Public License, version 3 only"
 msgstr "GNU Affero General Public License, version 3 only"
 
 #: gtk/gtkaboutdialog.c:134
-#, fuzzy
-#| msgid "BSD 2-Clause License"
 msgid "BSD 3-Clause License"
-msgstr "BSD 2-Clause License"
+msgstr "BSD 3-Clause License"
 
 #: gtk/gtkaboutdialog.c:135
 msgid "Apache License, Version 2.0"
-msgstr ""
+msgstr "Apache License, Version 2.0"
 
 #: gtk/gtkaboutdialog.c:136
-#, fuzzy
-#| msgid "Artistic License 2.0"
 msgid "Mozilla Public License 2.0"
-msgstr "Artistic License 2.0"
+msgstr "Mozilla Public License 2.0"
 
 #: gtk/gtkaboutdialog.c:731
 msgid "C_redits"
@@ -1470,7 +1467,7 @@ msgstr "“%s”を開いています"
 #: gtk/gtkappchooserdialog.c:213
 #, c-format
 msgid "No applications found for “%s”"
-msgstr "“%s”を開くアプリケーションが見つかりません"
+msgstr "“%s”を開くアプリケーションが見つかりませんでした"
 
 #. Translators: %s is a file type description
 #: gtk/gtkappchooserdialog.c:218
@@ -1481,7 +1478,7 @@ msgstr "“%s”のファイルを開いています"
 #: gtk/gtkappchooserdialog.c:220
 #, c-format
 msgid "No applications found for “%s” files"
-msgstr "“%s”のファイルを開くアプリケーションが見つかりません"
+msgstr "“%s”のファイルを開くアプリケーションが見つかりませんでした"
 
 #: gtk/gtkappchooserdialog.c:422
 msgid "Failed to start GNOME Software"
@@ -1494,7 +1491,7 @@ msgstr "既定のアプリケーション"
 #: gtk/gtkappchooserwidget.c:569
 #, c-format
 msgid "No applications found for “%s”."
-msgstr "“%s”を開くアプリケーションが見つかりません"
+msgstr "“%s”を開くアプリケーションが見つかりませんでした"
 
 #: gtk/gtkappchooserwidget.c:652
 msgid "Recommended Applications"
@@ -1623,7 +1620,7 @@ msgstr "不正"
 #.
 #: gtk/gtkcellrendereraccel.c:439 gtk/gtkcellrendereraccel.c:732
 msgid "New accelerator…"
-msgstr "新しいアクセラレータ…"
+msgstr "新しいアクセラレーター…"
 
 #: gtk/gtkcellrendererprogress.c:376 gtk/gtkcellrendererprogress.c:472
 #, c-format
@@ -1972,11 +1969,11 @@ msgstr "“..”という名前のファイルは作成できません"
 
 #: gtk/gtkfilechoosererrorstack.c:81
 msgid "Folder names cannot contain “/”"
-msgstr "フォルダー名に“/”は含められません"
+msgstr "“/”はフォルダー名に含められません"
 
 #: gtk/gtkfilechoosererrorstack.c:85
 msgid "File names cannot contain “/”"
-msgstr "ファイル名に“/”は含められません"
+msgstr "“/”はファイル名に含められません"
 
 #: gtk/gtkfilechoosererrorstack.c:89
 msgid "Folder names should not begin with a space"
@@ -2131,16 +2128,16 @@ msgstr "ファイルマネージャーで開く(_O)"
 
 #: gtk/gtkfilechooserwidget.c:1856
 msgid "_Copy Location"
-msgstr "場所のコピー(_C)"
+msgstr "場所をコピー(_C)"
 
 #: gtk/gtkfilechooserwidget.c:1860
 msgid "_Add to Bookmarks"
-msgstr "ブックマークへ追加(_A)"
+msgstr "ブックマークに追加(_A)"
 
 #: gtk/gtkfilechooserwidget.c:1864 gtk/gtkplacessidebar.c:2316
 #: gtk/gtkplacessidebar.c:3255 gtk/ui/gtkfilechooserwidget.ui:471
 msgid "_Rename"
-msgstr "名前の変更(_R)"
+msgstr "名前を変更(_R)"
 
 #: gtk/gtkfilechooserwidget.c:1872
 msgid "_Move to Trash"
@@ -2198,11 +2195,11 @@ msgstr "更新日時"
 #: gtk/gtkfilechooserwidget.c:4069
 #, c-format
 msgid "Could not read the contents of %s"
-msgstr "%s の内容を読み込めませんでした"
+msgstr "%s の内容を読み取れませんでした"
 
 #: gtk/gtkfilechooserwidget.c:4073
 msgid "Could not read the contents of the folder"
-msgstr "フォルダーの内容を読み込めませんでした"
+msgstr "フォルダーの内容を読み取れませんでした"
 
 #. Translators: see g_date_time_format() for details on the format
 #: gtk/gtkfilechooserwidget.c:4221 gtk/gtkfilechooserwidget.c:4264
@@ -2453,7 +2450,7 @@ msgid ""
 "Click to prevent further changes"
 msgstr ""
 "ダイアログのロックは解除されています。\n"
-"これ以上変更を加えない場合クリックしてください"
+"これ以上変更を加えない場合はクリックしてください"
 
 #: gtk/gtklockbutton.c:306
 msgid ""
@@ -2461,7 +2458,7 @@ msgid ""
 "Click to make changes"
 msgstr ""
 "ダイアログはロックされています。\n"
-"変更を加える場合クリックしてください"
+"変更を加える場合はクリックしてください"
 
 #: gtk/gtklockbutton.c:315
 msgid ""
@@ -2655,7 +2652,7 @@ msgstr "%u ページ"
 
 #: gtk/gtkpagesetup.c:608 gtk/gtkpapersize.c:946 gtk/gtkpapersize.c:986
 msgid "Not a valid page setup file"
-msgstr "妥当なページ設定のファイルではありません"
+msgstr "正しいページ設定ファイルではありません"
 
 #: gtk/gtkpagesetupunixdialog.c:211 gtk/ui/gtkassistant.ui:96
 msgid "_Apply"
@@ -3119,7 +3116,7 @@ msgstr "%d の印刷中です"
 #: gtk/gtkprintoperation.c:2892
 #, c-format
 msgid "Error creating print preview"
-msgstr "プレビューを生成する際にエラー"
+msgstr "プレビューを生成するときにエラー"
 
 #: gtk/gtkprintoperation.c:2895
 #, c-format
@@ -3156,7 +3153,7 @@ msgstr "その他のサイズ"
 
 #: gtk/gtkprintoperation-win32.c:1607
 msgid "No printer found"
-msgstr "プリンターが見つかりません"
+msgstr "プリンターが見つかりませんでした"
 
 #: gtk/gtkprintoperation-win32.c:1634
 msgid "Invalid argument to CreateDC"
@@ -3352,11 +3349,11 @@ msgstr "二本の指で右にスワイプする"
 
 #: gtk/gtkshortcutsshortcut.c:168
 msgid "Swipe left"
-msgstr ""
+msgstr "左にスワイプする"
 
 #: gtk/gtkshortcutsshortcut.c:172
 msgid "Swipe right"
-msgstr ""
+msgstr "右にスワイプする"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
 #: gtk/gtkshortcutswindow.c:882 gtk/inspector/window.ui:457
@@ -3567,17 +3564,15 @@ msgstr "GDK バックエンド"
 
 #: gtk/inspector/general.ui:93
 msgid "GSK Renderer"
-msgstr ""
+msgstr "GSK レンダラー"
 
 #: gtk/inspector/general.ui:123
 msgid "Pango Fontmap"
-msgstr ""
+msgstr "Pango フォントマップ"
 
 #: gtk/inspector/general.ui:153
-#, fuzzy
-#| msgid "GDK Backend"
 msgid "Media Backend"
-msgstr "GDK バックエンド"
+msgstr "メディアバックエンド"
 
 #: gtk/inspector/general.ui:193 gtk/ui/gtkplacesview.ui:80
 msgid "Prefix"
@@ -6643,7 +6638,7 @@ msgstr "キャッシュに画像データを含める"
 
 #: gtk/tools/updateiconcache.c:1662
 msgid "Output a C header file"
-msgstr "C言語のヘッダーファイルを出力する"
+msgstr "C 言語のヘッダーファイルを出力する"
 
 #: gtk/tools/updateiconcache.c:1663
 msgid "Turn off verbose output"
@@ -6879,7 +6874,7 @@ msgstr ""
 
 #: gtk/ui/gtkfontchooserwidget.ui:187
 msgid "No Fonts Found"
-msgstr "フォントが見つかりません"
+msgstr "フォントが見つかりませんでした"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:44
 msgid "_Format for:"
@@ -6899,7 +6894,7 @@ msgstr "縦方向"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:163 gtk/ui/gtkprintunixdialog.ui:660
 msgid "Reverse portrait"
-msgstr "縦方向(逆向き)"
+msgstr "縦方向 (逆向き)"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:189 gtk/ui/gtkprintunixdialog.ui:659
 msgid "Landscape"
@@ -6907,7 +6902,7 @@ msgstr "横方向"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:214 gtk/ui/gtkprintunixdialog.ui:661
 msgid "Reverse landscape"
-msgstr "横方向(逆向き)"
+msgstr "横方向 (逆向き)"
 
 #: gtk/ui/gtkplacesview.ui:29
 msgid "Server Addresses"
@@ -6978,7 +6973,7 @@ msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1–3, 7, 11"
 msgstr ""
-"1ページ以上の範囲を指定してください;\n"
+"1 ページ以上の範囲を指定してください;\n"
 "例: 1–3, 7, 11"
 
 #: gtk/ui/gtkprintunixdialog.ui:226
@@ -7227,50 +7222,50 @@ msgstr "パスワード:"
 #: modules/printbackends/gtkprintbackendcups.c:1451
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
-msgstr "文書“%s”をプリンター %s で印刷するには認証が必要"
+msgstr "文書“%s”をプリンター %s で印刷するには認証が必要です"
 
 #: modules/printbackends/gtkprintbackendcups.c:1162
 #, c-format
 msgid "Authentication is required to print a document on %s"
-msgstr "文書を %s で印刷するには認証が必要"
+msgstr "文書を %s で印刷するには認証が必要です"
 
 #: modules/printbackends/gtkprintbackendcups.c:1166
 #, c-format
 msgid "Authentication is required to get attributes of job “%s”"
-msgstr "ジョブ“%s”の属性を取得するには認証が必要"
+msgstr "ジョブ“%s”の属性を取得するには認証が必要です"
 
 #: modules/printbackends/gtkprintbackendcups.c:1168
 msgid "Authentication is required to get attributes of a job"
-msgstr "ジョブの属性を取得するには認証が必要"
+msgstr "ジョブの属性を取得するには認証が必要です"
 
 #: modules/printbackends/gtkprintbackendcups.c:1172
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
-msgstr "プリンター %s の属性を取得するには認証が必要"
+msgstr "プリンター %s の属性を取得するには認証が必要です"
 
 #: modules/printbackends/gtkprintbackendcups.c:1174
 msgid "Authentication is required to get attributes of a printer"
-msgstr "プリンターの属性を取得するには認証が必要"
+msgstr "プリンターの属性を取得するには認証が必要です"
 
 #: modules/printbackends/gtkprintbackendcups.c:1177
 #, c-format
 msgid "Authentication is required to get default printer of %s"
-msgstr "%s のデフォルトのプリンターを取得するには認証が必要"
+msgstr "%s のデフォルトのプリンターを取得するには認証が必要です"
 
 #: modules/printbackends/gtkprintbackendcups.c:1180
 #, c-format
 msgid "Authentication is required to get printers from %s"
-msgstr "%s からプリンターを取得するには認証が必要"
+msgstr "%s からプリンターを取得するには認証が必要です"
 
 #: modules/printbackends/gtkprintbackendcups.c:1185
 #, c-format
 msgid "Authentication is required to get a file from %s"
-msgstr "%s からファイルを取得するには認証が必要"
+msgstr "%s からファイルを取得するには認証が必要です"
 
 #: modules/printbackends/gtkprintbackendcups.c:1187
 #, c-format
 msgid "Authentication is required on %s"
-msgstr "%s には認証が必要"
+msgstr "%s には認証が必要です"
 
 #: modules/printbackends/gtkprintbackendcups.c:1423
 msgid "Domain:"
@@ -7279,16 +7274,16 @@ msgstr "ドメイン:"
 #: modules/printbackends/gtkprintbackendcups.c:1453
 #, c-format
 msgid "Authentication is required to print document “%s”"
-msgstr "文書“%s”を印刷するには認証が必要"
+msgstr "文書“%s”を印刷するには認証が必要です"
 
 #: modules/printbackends/gtkprintbackendcups.c:1458
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
-msgstr "この文書をプリンター '%s' で印刷するには認証が必要"
+msgstr "この文書をプリンター '%s' で印刷するには認証が必要です"
 
 #: modules/printbackends/gtkprintbackendcups.c:1460
 msgid "Authentication is required to print this document"
-msgstr "この文書を印刷するには認証が必要"
+msgstr "この文書を印刷するには認証が必要です"
 
 #: modules/printbackends/gtkprintbackendcups.c:2539
 #, c-format
@@ -7317,7 +7312,7 @@ msgstr "プリンター“%s”の現像液がなくなりました。"
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr ""
-"プリンター“%s”にセットされているカートリッジのうち少なくとも1本のインクが少な"
+"プリンター“%s”にセットされているカートリッジのうち少なくとも 1 本のインクが少な"
 "くなっています。"
 
 #. Translators: "marker" is one color bin of the printer
@@ -7325,7 +7320,7 @@ msgstr ""
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr ""
-"プリンター“%s”にセットされているカートリッジのうち少なくとも1本のインクがなく"
+"プリンター“%s”にセットされているカートリッジのうち少なくとも 1 本のインクがなく"
 "なりました。"
 
 #: modules/printbackends/gtkprintbackendcups.c:2567
@@ -7450,13 +7445,13 @@ msgstr "埋め込みの GhostScript のフォントだけ"
 #: modules/printbackends/gtkprintbackendcups.c:4438
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
-msgstr "PS のレベル1に変換する"
+msgstr "PS のレベル 1 に変換する"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/gtkprintbackendcups.c:4440
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
-msgstr "PS のレベル2に変換する"
+msgstr "PS のレベル 2 に変換する"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/gtkprintbackendcups.c:4442
@@ -7783,21 +7778,8 @@ msgstr "利用可能なプロファイルがありません"
 msgid "Unspecified profile"
 msgstr "不明なプロファイル"
 
-#~ msgid "Application menu"
-#~ msgstr "アプリケーションメニュー"
-
-#~ msgid "Move"
-#~ msgstr "移動"
-
-#~ msgid "Resize"
-#~ msgstr "サイズの変更"
-
 #~ msgid "Always on Top"
 #~ msgstr "常に最前面に配置する"
-
-#~ msgctxt "year measurement template"
-#~ msgid "2000"
-#~ msgstr "2000"
 
 #~ msgid "Enter location"
 #~ msgstr "場所を指定する"
@@ -7806,23 +7788,13 @@ msgstr "不明なプロファイル"
 #~ msgstr "ローカルではないので、フォルダーを変更できません"
 
 #~ msgid "Icon “%s” not present in theme %s"
-#~ msgstr "アイコン “%s” はテーマ %s の中にありません"
-
-#~ msgid "Failed to load icon"
-#~ msgstr "アイコンの読み込みに失敗しました"
-
-#~ msgid "Rename…"
-#~ msgstr "名前の変更…"
+#~ msgstr "アイコン“%s”はテーマ %s の中にありません"
 
 #~ msgid "Down Path"
 #~ msgstr "下のパス"
 
 #~ msgid "Up Path"
 #~ msgstr "上のパス"
-
-#~ msgctxt "Action description"
-#~ msgid "Clicks the menuitem"
-#~ msgstr "メニューアイテムをクリックします"
 
 #~ msgid "Forget association"
 #~ msgstr "関連づけを取り消す"
@@ -7860,44 +7832,14 @@ msgstr "不明なプロファイル"
 #~ msgid "Opening %s"
 #~ msgstr "%s を開いています"
 
-#~ msgid "C_ustomize"
-#~ msgstr "カスタマイズ(_U)"
-
-#~ msgid "Select all"
-#~ msgstr "すべて選択"
-
-#~ msgid "Cut"
-#~ msgstr "切り取り"
-
-#~ msgid "Copy"
-#~ msgstr "コピー"
-
-#~ msgid "Paste"
-#~ msgstr "貼り付け"
-
-#~ msgctxt "switch"
-#~ msgid "ON"
-#~ msgstr "オン"
-
-#~ msgctxt "switch"
-#~ msgid "OFF"
-#~ msgstr "オフ"
-
 #~ msgid "Default Widget"
 #~ msgstr "デフォルトウィジェット"
 
 #~ msgid "Focus Widget"
 #~ msgstr "フォーカスウィジェット"
 
-#~ msgctxt "type name"
-#~ msgid "Unknown"
-#~ msgstr "不明"
-
 #~ msgid "Attribute mapping"
 #~ msgstr "属性マッピング"
-
-#~ msgid "%p (%s)"
-#~ msgstr "%p (%s)"
 
 #~ msgid "Defined at: %p (%s)"
 #~ msgstr "定義場所: %p (%s)"
@@ -7908,23 +7850,11 @@ msgstr "不明なプロファイル"
 #~ msgid "bidirectional, inverted"
 #~ msgstr "双方向, 反転"
 
-#~ msgid "Binding:"
-#~ msgstr "バインディング:"
-
 #~ msgid "Defined At"
 #~ msgstr "定義場所"
 
 #~ msgid "Selector"
 #~ msgstr "セレクター"
-
-#~ msgid "Yes"
-#~ msgstr "Yes"
-
-#~ msgid "Signal"
-#~ msgstr "シグナル"
-
-#~ msgid "Connected"
-#~ msgstr "接続済み"
 
 #~ msgid ""
 #~ "Not settable at runtime.\n"
@@ -7933,23 +7863,11 @@ msgstr "不明なプロファイル"
 #~ "実行時に設定できません。\n"
 #~ "代わりに GDK_DEBUG=gl-disable を使用してください"
 
-#~ msgid "GL Rendering"
-#~ msgstr "GL レンダリング"
-
 #~ msgid "When Needed"
 #~ msgstr "必要時"
 
-#~ msgid "Disabled"
-#~ msgstr "無効"
-
 #~ msgid "Texture Rectangle Extension"
 #~ msgstr "テキスチャーの矩形の拡張"
-
-#~ msgid "Clear log"
-#~ msgstr "ログをクリアします"
-
-#~ msgid "Signals"
-#~ msgstr "シグナル"
 
 #~ msgid "Child Properties"
 #~ msgstr "子オブジェクトのプロパティ"
@@ -7957,17 +7875,11 @@ msgstr "不明なプロファイル"
 #~ msgid "Class Hierarchy"
 #~ msgstr "クラス階層"
 
-#~ msgid "CSS Selector"
-#~ msgstr "CSS セレクター"
-
 #~ msgid "Visual"
 #~ msgstr "表示"
 
 #~ msgid "Packing property %s::%s not found\n"
-#~ msgstr "パッキングプロパティ %s::%s が見つかりません\n"
-
-#~ msgid "Cell property %s::%s not found\n"
-#~ msgstr "セルプロパティ %s::%s が見つかりません\n"
+#~ msgstr "パッキングプロパティ %s::%s が見つかりませんでした\n"
 
 #~ msgid "Error parsing option --gdk-debug"
 #~ msgstr "--gdk-debug オプションの解析エラーです"
@@ -7978,27 +7890,12 @@ msgstr "不明なプロファイル"
 #~ msgid "Program class as used by the window manager"
 #~ msgstr "ウィンドウマネージャーで利用するプログラムのクラスを指定する"
 
-#~ msgid "CLASS"
-#~ msgstr "CLASS"
-
 #~ msgid "Program name as used by the window manager"
 #~ msgstr "ウィンドウマネージャーで利用するプログラムの名前を指定する"
 
-#~ msgid "NAME"
-#~ msgstr "NAME"
-
 # 'X' という1文字は X-Window で固有名詞のため大文字のXで表示する
 #~ msgid "X display to use"
-#~ msgstr "使用するXのディスプレイを指定する"
-
-#~ msgid "DISPLAY"
-#~ msgstr "DISPLAY"
-
-#~ msgid "GDK debugging flags to set"
-#~ msgstr "有効にする GDK のデバッグフラグを指定する"
-
-#~ msgid "FLAGS"
-#~ msgstr "FLAGS"
+#~ msgstr "使用する X のディスプレイを指定する"
 
 #~ msgid "GDK debugging flags to unset"
 #~ msgstr "無効にする GDK のデバッグフラグを指定する"
@@ -8035,20 +7932,8 @@ msgstr "不明なプロファイル"
 #~ msgid "Brightness of the color."
 #~ msgstr "色の明るさです"
 
-#~ msgid "_Red:"
-#~ msgstr "赤(_R):"
-
 #~ msgid "Amount of red light in the color."
 #~ msgstr "選択した色の赤成分の量です"
-
-#~ msgid "Amount of green light in the color."
-#~ msgstr "選択した色の緑成分の量です"
-
-#~ msgid "_Blue:"
-#~ msgstr "青(_B):"
-
-#~ msgid "Amount of blue light in the color."
-#~ msgstr "選択した色の青成分の量です"
 
 #~ msgid "Op_acity:"
 #~ msgstr "不透明度(_A):"
@@ -8056,14 +7941,11 @@ msgstr "不明なプロファイル"
 #~ msgid "Transparency of the color."
 #~ msgstr "色の透明度です"
 
-#~ msgid "Color _name:"
-#~ msgstr "色の名称(_N):"
-
 #~ msgid ""
 #~ "You can enter an HTML-style hexadecimal color value, or simply a color "
 #~ "name such as “orange” in this entry."
 #~ msgstr ""
-#~ "このエントリに HTML 形式で 16進数の値、または色の名前 (例:“orange”) を入力"
+#~ "このエントリーに HTML 形式で 16 進数の値、または色の名前 (例:“orange”) を入力"
 #~ "できます"
 
 #~ msgid "_Palette:"
@@ -8076,7 +7958,7 @@ msgstr "不明なプロファイル"
 #~ "The color you’ve chosen. You can drag this color to a palette entry to "
 #~ "save it for use in the future."
 #~ msgstr ""
-#~ "選択した色で、この色を将来使用する色として保存するためパレットのエントリに"
+#~ "選択した色で、この色を将来使用する色として保存するためパレットのエントリーに"
 #~ "ドラッグできます"
 
 #~ msgid ""
@@ -8095,86 +7977,16 @@ msgstr "不明なプロファイル"
 #~ "entry, drag a color swatch here or right-click it and select “Save color "
 #~ "here.”"
 #~ msgstr ""
-#~ "現在の色に指定する場合はこのパレットのエントリをクリックしてください。この"
-#~ "エントリを変更する場合は、色の見本をここにドラッグするか、右クリックし"
+#~ "現在の色に指定する場合はこのパレットのエントリーをクリックしてください。この"
+#~ "エントリーを変更する場合は、色の見本をここにドラッグするか、右クリックし"
 #~ "て“色をここに保存する”を選択してください"
-
-#~ msgid "_Help"
-#~ msgstr "ヘルプ(_H)"
-
-#~ msgid "Color Selection"
-#~ msgstr "色の選択"
 
 #~ msgid "abcdefghijk ABCDEFGHIJK"
 #~ msgstr "abcdefghijk ABCDEFGHIJK これはテストです"
 
-#~ msgid "_Style:"
-#~ msgstr "スタイル(_S):"
-
-#~ msgid "Si_ze:"
-#~ msgstr "サイズ(_Z):"
-
-#~ msgid "_Preview:"
-#~ msgstr "プレビュー(_P):"
-
-#~ msgid "Font Selection"
-#~ msgstr "フォントの選択"
-
-#~ msgctxt "Number format"
-#~ msgid "%d"
-#~ msgstr "%d"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Apply"
-#~ msgstr "適用(_A)"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Cancel"
-#~ msgstr "キャンセル(_C)"
-
-#~ msgctxt "Stock label"
-#~ msgid "C_onnect"
-#~ msgstr "接続(_O)"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Convert"
-#~ msgstr "変換(_C)"
-
 #~ msgctxt "Stock label"
 #~ msgid "_Discard"
 #~ msgstr "無効(_D)"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Disconnect"
-#~ msgstr "切断(_D)"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Edit"
-#~ msgstr "編集(_E)"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Index"
-#~ msgstr "インデックス(_I)"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Information"
-#~ msgstr "情報(_I)"
-
-#~ msgctxt "Stock label"
-#~ msgid "_No"
-#~ msgstr "いいえ(_N)"
-
-#~ msgctxt "Stock label"
-#~ msgid "_OK"
-#~ msgstr "OK(_O)"
-
-#~ msgctxt "Stock label"
-#~ msgid "Landscape"
-#~ msgstr "横置き"
-
-#~ msgctxt "Stock label"
-#~ msgid "Portrait"
-#~ msgstr "縦置き"
 
 #~ msgctxt "Stock label"
 #~ msgid "Reverse landscape"
@@ -8189,24 +8001,8 @@ msgstr "不明なプロファイル"
 #~ msgstr "ページの設定(_U)"
 
 #~ msgctxt "Stock label"
-#~ msgid "_Preferences"
-#~ msgstr "設定(_P)"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Color"
-#~ msgstr "色(_C)"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Font"
-#~ msgstr "フォント(_F)"
-
-#~ msgctxt "Stock label"
 #~ msgid "_Undelete"
 #~ msgstr "削除の取り消し(_U)"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Yes"
-#~ msgstr "はい(_Y)"
 
 #~ msgid "Unexpected start tag '%s' on line %d char %d"
 #~ msgstr "%2$d 行目 %3$d 文字目の予想外の開始タグ '%1$s'"
@@ -8214,35 +8010,14 @@ msgstr "不明なプロファイル"
 #~ msgid "Unexpected character data on line %d char %d"
 #~ msgstr "%d 行の %d 文字目の文字データは予想外です"
 
-#~ msgid "Empty"
-#~ msgstr "空"
-
 #~ msgid "Artwork by"
 #~ msgstr "アートワーク担当"
-
-#~ msgctxt "input method menu"
-#~ msgid "Simple"
-#~ msgstr "シンプル"
-
-#~ msgctxt "input method menu"
-#~ msgid "None"
-#~ msgstr "なし"
-
-#~ msgctxt "input method menu"
-#~ msgid "System (%s)"
-#~ msgstr "システム (%s)"
 
 #~ msgid "Load additional GTK+ modules"
 #~ msgstr "追加で読み込む GTK+ モジュールを指定する"
 
-#~ msgid "MODULES"
-#~ msgstr "MODULES"
-
 #~ msgid "Make all warnings fatal"
 #~ msgstr "警告をすべて致命的と見なす"
-
-#~ msgid "GTK+ debugging flags to set"
-#~ msgstr "有効にする GTK+ のデバッグフラグを指定する"
 
 #~ msgid "GTK+ debugging flags to unset"
 #~ msgstr "無効にする GTK+ のデバッグフラグを指定する"
@@ -8250,35 +8025,8 @@ msgstr "不明なプロファイル"
 #~ msgid "Cannot open display: %s"
 #~ msgstr "ディスプレイをオープンできません: %s"
 
-#~ msgid "GTK+ Options"
-#~ msgstr "GTK+ のオプション"
-
-#~ msgid "Show GTK+ Options"
-#~ msgstr "GTK+ のオプションを表示する"
-
-#, fuzzy
-#~| msgctxt "printer option"
-#~| msgid "Printer Profile"
-#~ msgid "Favorite files"
-#~ msgstr "プリンタープロファイル"
-
-#~ msgid "Connect to Server"
-#~ msgstr "サーバーへ接続"
-
-#~ msgid "Connect to a network server address"
-#~ msgstr "アドレスを指定してサーバーへ接続します"
-
-#~ msgid "No item for URI '%s' found"
-#~ msgstr "URI '%s' のアイテムはありません"
-
 #~ msgid "Untitled filter"
 #~ msgstr "タイトルなしのフィルター"
-
-#~ msgid "Could not remove item"
-#~ msgstr "アイテムを削除できませんでした"
-
-#~ msgid "Copy _Location"
-#~ msgstr "場所のコピー(_L)"
 
 #~ msgid "_Remove From List"
 #~ msgstr "一覧から削除する(_R)"
@@ -8292,22 +8040,8 @@ msgstr "不明なプロファイル"
 #~ msgid "No recently used resource found with URI '%s'"
 #~ msgstr "URI '%s' に関連する最近使用したリソースはありません"
 
-#~ msgid "Open '%s'"
-#~ msgstr "'%s' を開きます"
-
-#~ msgid "Unknown item"
-#~ msgstr "不明なアイテム"
-
-#~ msgctxt "recent menu label"
-#~ msgid "_%d. %s"
-#~ msgstr "_%d: %s"
-
-#~ msgctxt "recent menu label"
-#~ msgid "%d. %s"
-#~ msgstr "%d: %s"
-
 #~ msgid "Unknown error when trying to deserialize %s"
-#~ msgstr "%s をデシリアライズする際に原因不明のエラー"
+#~ msgstr "%s をデシリアライズするときに原因不明のエラー"
 
 #~ msgid "No deserialize function found for format %s"
 #~ msgstr "%s 形式をデシリアライズする関数がありません"
@@ -8330,9 +8064,6 @@ msgstr "不明なプロファイル"
 #~ msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 #~ msgstr ""
 #~ "このコンテキストの中にある要素 <%2$s> の属性 \"%1$s\" が間違っています"
-
-#~ msgid "Tag \"%s\" has not been defined."
-#~ msgstr "タグ \"%s\" が定義されていません"
 
 #~ msgid "Anonymous tag found and tags can not be created."
 #~ msgstr "匿名のタグがあるので、タグを生成できません"
@@ -8377,35 +8108,19 @@ msgstr "不明なプロファイル"
 #~ "GTKTEXTBUFFERCONTENTS-0001"
 #~ msgstr ""
 #~ "シリアライズしたデータが壊れています (セクションの先頭が "
-#~ "GTKTEXTBUFFERCONTENTS-0001 でない)"
+#~ "GTKTEXTBUFFERCONTENTS-0001 ではありません)"
 
 #~ msgid "Clip area"
 #~ msgstr "クリップの領域"
 
-#~ msgid "Object"
-#~ msgstr "オブジェクト"
-
 #~ msgid "Ignore hidden"
 #~ msgstr "隠したウィジェットは無視"
-
-#~ msgid "Rendering Mode"
-#~ msgstr "レンダリングモード"
-
-#, fuzzy
-#~ msgid "Recording"
-#~ msgstr "録画"
-
-#~ msgid "Show Pixel Cache"
-#~ msgstr "ピクセルキャッシュを表示する"
 
 #~ msgid "Always"
 #~ msgstr "常に"
 
 #~ msgid "Software Surfaces"
 #~ msgstr "ソフトウェアサーフェス"
-
-#~ msgid "Gestures"
-#~ msgstr "ジェスチャー"
 
 #~ msgid "Select which type of documents are shown"
 #~ msgstr "表示するファイルの種類を選択してください"
@@ -8440,10 +8155,6 @@ msgstr "不明なプロファイル"
 #~ msgstr "マルチプレス"
 
 #~ msgctxt "input method menu"
-#~ msgid "Mac OS X Quartz"
-#~ msgstr "Mac OS X Quartz"
-
-#~ msgctxt "input method menu"
 #~ msgid "Tigrigna-Eritrean (EZ+)"
 #~ msgstr "ティグリグナエリトリア語 (EZ+)"
 
@@ -8457,7 +8168,7 @@ msgstr "不明なプロファイル"
 
 #~ msgctxt "input method menu"
 #~ msgid "X Input Method"
-#~ msgstr "Xの入力メソッド"
+#~ msgstr "X の入力メソッド"
 
 #~ msgid "printer offline"
 #~ msgstr "プリンターはオフライン"
@@ -8499,11 +8210,8 @@ msgstr "不明なプロファイル"
 #~ msgid "Change classes"
 #~ msgstr "クラスを変更する"
 
-#~ msgid "CSS properties"
-#~ msgstr "CSS プロパティ"
-
 #~ msgid "Show all CSS nodes"
-#~ msgstr "すべてのCSSノードを表示する"
+#~ msgstr "すべての CSS ノードを表示する"
 
 #~ msgid "Show CSS properties"
 #~ msgstr "CSS プロパティを表示する"
@@ -8511,20 +8219,14 @@ msgstr "不明なプロファイル"
 #~ msgid "Classes"
 #~ msgstr "クラス"
 
-#~ msgid "Node:"
-#~ msgstr "ノード:"
-
 #~ msgid "Error launching preview"
-#~ msgstr "プレビューを起動する際にエラー"
+#~ msgstr "プレビューを起動するときにエラー"
 
 #~ msgid "Allocated size"
 #~ msgstr "確保したサイズ"
 
 #~ msgid "New class"
 #~ msgstr "新しいクラス"
-
-#~ msgid "Cancel"
-#~ msgstr "キャンセル"
 
 #~ msgid "Add a class"
 #~ msgstr "クラスの追加"
@@ -8539,16 +8241,16 @@ msgstr "不明なプロファイル"
 #~ msgstr "スタイルのプロパティ"
 
 #~ msgid "Invalid object type '%s' on line %d"
-#~ msgstr "%2$d行目に無効なオブジェクト型 '%1$s'"
+#~ msgstr "%2$d 行目に無効なオブジェクト型 '%1$s'"
 
 #~ msgid "Invalid type function on line %d: '%s'"
-#~ msgstr "%d行目に無効な型関数: '%s'"
+#~ msgstr "%d 行目に無効な型関数: '%s'"
 
 #~ msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
-#~ msgstr "オブジェクト ID '%s' が %d行目で重複しています (前は%d行目)"
+#~ msgstr "オブジェクト ID '%s' が %d 行目で重複しています (前は %d 行目)"
 
 #~ msgid "Invalid signal '%s' for type '%s' on line %d"
-#~ msgstr "%3$d行目に型 '%2$s' に対する無効なシグナル '%1$s'"
+#~ msgstr "%3$d 行目に型 '%2$s' に対する無効なシグナル '%1$s'"
 
 #~ msgid "Invalid root element: <%s>"
 #~ msgstr "root 要素が間違っています: <%s>"
@@ -8562,26 +8264,11 @@ msgstr "不明なプロファイル"
 #~ msgid "Yesterday at %-I:%M %P"
 #~ msgstr "昨日 %p%I:%M"
 
-#~ msgid "Devices"
-#~ msgstr "デバイス"
-
-#~ msgid "Bookmarks"
-#~ msgstr "ブックマーク"
-
 #~ msgid "Browse Network"
 #~ msgstr "ネットワークを表示"
 
 #~ msgid "Browse the contents of the network"
 #~ msgstr "ネットワークの内容を表示します"
-
-#~ msgid "Remove"
-#~ msgstr "削除"
-
-#~ msgid "X display"
-#~ msgstr "X ディスプレイ"
-
-#~ msgid "All Files"
-#~ msgstr "すべてのファイル"
 
 #~ msgid ""
 #~ "No fonts matched your search. You can revise your search and try again."
