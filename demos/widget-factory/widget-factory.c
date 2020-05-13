@@ -1936,8 +1936,10 @@ activate (GApplication *app)
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "listboxrow3image");
   g_object_set_data (G_OBJECT (widget), "image", widget2);
 
-  widget = (GtkWidget *)gtk_builder_get_object (builder, "listboxrow4");
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "info_dialog");
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "listboxrow7");
+  g_object_set_data (G_OBJECT (widget), "dialog", widget2);
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "listboxrow8");
   g_object_set_data (G_OBJECT (widget), "dialog", widget2);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "listboxrow5button");

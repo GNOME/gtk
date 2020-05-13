@@ -1759,6 +1759,7 @@ microphone-sensitivity-medium-symbolic</property>
                                     </child>
                                     <child>
                                       <object class="GtkListBoxRow" id="listboxrow4">
+                                        <property name="activatable">0</property>
                                         <child>
                                           <object class="GtkBox">
                                             <child>
