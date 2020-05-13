@@ -687,6 +687,8 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
   NSWindow *nswindow;
   GdkEvent *ret = NULL;
   NSPoint point;
+  int x_tmp;
+  int y_tmp;
 
   g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (self), NULL);
   g_return_val_if_fail (nsevent != NULL, NULL);
@@ -709,22 +711,11 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
       return NULL;
     }
 
-  /* Make sure the event has a window */
-  if (!(nswindow = [nsevent window]))
-    {
-      int x_tmp;
-      int y_tmp;
+  if (!(nswindow = _gdk_macos_display_find_native_under_pointer (self, &x_tmp, &y_tmp)))
+    return NULL;
 
-      if (!(nswindow = _gdk_macos_display_find_native_under_pointer (self, &x_tmp, &y_tmp)))
-        return NULL;
-
-      point.x = x_tmp;
-      point.y = y_tmp;
-    }
-  else
-    {
-      point = [[nswindow contentView] convertPoint:[nsevent locationInWindow] fromView:nil];
-    }
+  point.x = x_tmp;
+  point.y = y_tmp;
 
   /* Ignore unless it is for a GdkMacosWindow */
   if (!GDK_IS_MACOS_WINDOW (nswindow))
