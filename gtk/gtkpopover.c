@@ -1900,7 +1900,7 @@ gtk_popover_buildable_add_child (GtkBuildable *buildable,
                                  const gchar  *type)
 {
   if (GTK_IS_WIDGET (child))
-    gtk_popover_set_child (GTK_POPOVER(buildable), GTK_WIDGET (child));
+    gtk_popover_set_child (GTK_POPOVER (buildable), GTK_WIDGET (child));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
