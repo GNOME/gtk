@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-11 18:07+0000\n"
-"PO-Revision-Date: 2020-03-09 21:20+0900\n"
+"PO-Revision-Date: 2020-05-13 22:00+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
@@ -1514,20 +1514,16 @@ msgid "GNU Affero General Public License, version 3 only"
 msgstr "GNU Affero General Public License, version 3 only"
 
 #: gtk/gtkaboutdialog.c:129
-#, fuzzy
-#| msgid "BSD 2-Clause License"
 msgid "BSD 3-Clause License"
-msgstr "BSD 2-Clause License"
+msgstr "BSD 3-Clause License"
 
 #: gtk/gtkaboutdialog.c:130
 msgid "Apache License, Version 2.0"
-msgstr ""
+msgstr "Apache License, Version 2.0"
 
 #: gtk/gtkaboutdialog.c:131
-#, fuzzy
-#| msgid "Artistic License 2.0"
 msgid "Mozilla Public License 2.0"
-msgstr "Artistic License 2.0"
+msgstr "Mozilla Public License 2.0"
 
 #: gtk/gtkaboutdialog.c:703
 msgid "C_redits"
@@ -2324,28 +2320,16 @@ msgid "The folder could not be created"
 msgstr "フォルダーを作成できませんでした"
 
 #: gtk/gtkfilechooserwidget.c:820
-#, fuzzy
-#| msgid ""
-#| "The folder could not be created, as a file with the same name already "
-#| "exists.  Try using a different name for the folder, or rename the file "
-#| "first."
 msgid ""
 "The folder could not be created, as a file with the same name already exists."
 msgstr ""
 "同名のファイルがすでに存在しているため、そのフォルダーを作成できませんでし"
-"た。別のフォルダー名を使用するか、ファイルの名前を変更するなどして、もう一度"
-"実行してください。"
+"た。"
 
 #: gtk/gtkfilechooserwidget.c:822
-#, fuzzy
-#| msgid ""
-#| "The folder could not be created, as a file with the same name already "
-#| "exists.  Try using a different name for the folder, or rename the file "
-#| "first."
 msgid "Try using a different name for the folder, or rename the file first."
 msgstr ""
-"同名のファイルがすでに存在しているため、そのフォルダーを作成できませんでし"
-"た。別のフォルダー名を使用するか、ファイルの名前を変更するなどして、もう一度"
+"別のフォルダー名を使用するか、ファイルの名前を変更するなどして、もう一度"
 "実行してください。"
 
 #: gtk/gtkfilechooserwidget.c:835
