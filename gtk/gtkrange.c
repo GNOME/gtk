@@ -1878,10 +1878,10 @@ gtk_range_click_gesture_pressed (GtkGestureClick *gesture,
 
   mouse_location = gtk_widget_pick (widget, x, y, 0);
 
-  /* For the purposes of this function, we ignore fill and highlight and
-   * handle them like the trough */
-  if (mouse_location == priv->fill_widget ||
-      mouse_location == priv->highlight_widget)
+  /* For the purposes of this function, we treat anything outside
+   * the slider like a click on the trough
+   */
+  if (mouse_location != priv->slider_widget)
     mouse_location = priv->trough_widget;
 
   if (mouse_location == priv->slider_widget)
