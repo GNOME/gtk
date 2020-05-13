@@ -41,6 +41,7 @@
 #include "gtkscale.h"
 #include "gtktypebuiltins.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtkcssboxesprivate.h"
 
 #include "a11y/gtkrangeaccessible.h"
 
@@ -235,6 +236,9 @@ static void          gtk_range_allocate_trough          (GtkGizmo            *gi
                                                          int                  baseline);
 static void          gtk_range_render_trough            (GtkGizmo     *gizmo,
                                                          GtkSnapshot  *snapshot);
+static gboolean      gtk_range_trough_contains          (GtkGizmo     *gizmo,
+                                                         double        x,
+                                                         double        y);
 
 static gboolean      gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                                          gdouble                   dx,
@@ -548,7 +552,7 @@ gtk_range_init (GtkRange *range)
                                        gtk_range_measure_trough,
                                        gtk_range_allocate_trough,
                                        gtk_range_render_trough,
-                                       NULL,
+                                       gtk_range_trough_contains,
                                        NULL, NULL);
 
   gtk_widget_set_parent (priv->trough_widget, GTK_WIDGET (range));
@@ -1647,6 +1651,21 @@ gtk_range_render_trough (GtkGizmo    *gizmo,
     gtk_widget_snapshot_child (GTK_WIDGET (gizmo), priv->highlight_widget, snapshot);
 
   gtk_widget_snapshot_child (GTK_WIDGET (gizmo), priv->slider_widget, snapshot);
+}
+
+static gboolean
+gtk_range_trough_contains (GtkGizmo *trough,
+                           double    x,
+                           double    y)
+{
+  GtkCssBoxes boxes;
+  const graphene_rect_t *area;
+
+  gtk_css_boxes_init (&boxes, GTK_WIDGET (trough));
+
+  area = gtk_css_boxes_get_margin_rect (&boxes);
+
+  return graphene_rect_contains_point (area, &GRAPHENE_POINT_INIT (x, y));
 }
 
 static void
