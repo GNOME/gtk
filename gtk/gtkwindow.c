@@ -1602,9 +1602,6 @@ gtk_window_init (GtkWindow *window)
                             G_CALLBACK (gtk_window_handle_focus), window);
   gtk_widget_add_controller (widget, controller);
 
-  /* Shared constraint solver */
-  priv->constraint_solver = gtk_constraint_solver_new ();
-
   controller = gtk_shortcut_controller_new ();
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
 
@@ -1874,6 +1871,12 @@ gtk_window_root_get_constraint_solver (GtkRoot *root)
 {
   GtkWindow *self = GTK_WINDOW (root);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (self);
+
+  if (!priv->constraint_solver)
+    {
+      /* Shared constraint solver */
+      priv->constraint_solver = gtk_constraint_solver_new ();
+    }
 
   return priv->constraint_solver;
 }
