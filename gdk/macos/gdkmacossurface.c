@@ -694,7 +694,7 @@ _gdk_macos_surface_show (GdkMacosSurface *self)
 
   _gdk_surface_update_viewable (GDK_SURFACE (self));
 
-  [self->window showAndMakeKey:GDK_IS_TOPLEVEL (self)];
+  [self->window showAndMakeKey:YES];
 
   if (!was_mapped)
     {
