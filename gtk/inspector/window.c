@@ -383,17 +383,28 @@ gtk_inspector_window_get_property (GObject    *object,
     }
 }
 
+static gboolean
+gtk_inspector_window_enable_debugging (GtkWindow *window,
+                                       gboolean   toggle)
+{
+  return FALSE;
+}
+
 static void
 gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkWindowClass *window_class = GTK_WINDOW_CLASS (klass);
 
   object_class->constructed = gtk_inspector_window_constructed;
   object_class->dispose = gtk_inspector_window_dispose;
   object_class->set_property = gtk_inspector_window_set_property;
   object_class->get_property = gtk_inspector_window_get_property;
+
   widget_class->realize = gtk_inspector_window_realize;
+
+  window_class->enable_debugging = gtk_inspector_window_enable_debugging;
 
   properties[PROP_INSPECTED_DISPLAY] =
       g_param_spec_object ("inspected-display", "Inspected display", "Inspected display",
