@@ -218,6 +218,8 @@ do_iconscroll (GtkWidget *do_widget)
       hadjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "hadjustment"));
       vadjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "vadjustment"));
       set_widget_type (0);
+
+      g_object_unref (builder);
     }
 
   if (!gtk_widget_get_visible (window))

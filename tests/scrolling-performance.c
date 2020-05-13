@@ -37,16 +37,13 @@ create_widget_factory_content (void)
 
   g_type_ensure (my_text_view_get_type ());
   builder = gtk_builder_new ();
-  gtk_builder_add_from_file (builder,
-                             "../demos/widget-factory/widget-factory.ui",
-                             &error);
+  gtk_builder_add_from_file (builder, "./testsuite/gtk/focus-chain/widget-factory.ui", &error);
   if (error != NULL)
     g_error ("Failed to create widgets: %s", error->message);
 
   result = GTK_WIDGET (gtk_builder_get_object (builder, "box1"));
   g_object_ref (result);
-  gtk_box_remove (GTK_BOX (gtk_widget_get_parent (result)),
-                        result);
+  gtk_window_set_child (GTK_WINDOW (gtk_widget_get_parent (result)), NULL);
   g_object_unref (builder);
 
   return result;
