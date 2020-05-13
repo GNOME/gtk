@@ -294,6 +294,8 @@
   inShowOrHide = NO;
 
   [self checkSendEnterNotify];
+
+  _gdk_macos_display_surface_raised ([self gdkDisplay], gdk_surface);
 }
 
 -(void)hide
