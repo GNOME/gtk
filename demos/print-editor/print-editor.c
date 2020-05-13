@@ -583,8 +583,7 @@ activate_new (GSimpleAction *action,
               GVariant      *parameter,
               gpointer       user_data)
 {
-  g_free (filename);
-  filename = NULL;
+  g_clear_object (&filename);
   set_text ("", 0);
 }
 
