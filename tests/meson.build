@@ -73,7 +73,6 @@ gtk_tests = [
   ['testselectionmode'],
   ['testsounds'],
   ['testspinbutton'],
-  ['testtoolbar2'],
   ['testtreechanging'],
   ['testtreednd'],
   ['testtreeedit'],
