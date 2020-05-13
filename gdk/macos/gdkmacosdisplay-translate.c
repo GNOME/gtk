@@ -773,6 +773,7 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
       else if (![nswindow isKeyWindow])
         {
           [nswindow makeKeyWindow];
+          _gdk_macos_display_surface_raised (self, surface);
         }
     }
 
