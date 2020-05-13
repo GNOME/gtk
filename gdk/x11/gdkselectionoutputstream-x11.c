@@ -892,7 +892,7 @@ gdk_x11_selection_output_streams_request (GdkDisplay                   *display,
                                                         target,
                                                         8,
                                                         timestamp);
-          handler (stream, target, user_data);
+          handler (stream, mime_type, user_data);
           return TRUE;
         }
     }
