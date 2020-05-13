@@ -4340,7 +4340,12 @@ menubar {
     margin-top: -1px; //nudge it into the menubar
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-    padding: 0 0 $button_radius 0;
+    padding: 0 0 $menu_radius 0;
+  }
+  //nested submenus
+  & > item popover.menu.background popover.menu.background > contents {
+    margin: 0;
+    border-radius: 0;
   }
 }
 
@@ -4426,7 +4431,7 @@ popover.menu {
   modelbutton {
     min-height: 30px;
     min-width: 40px;
-    padding: 0 $_menu-padding;
+    padding: $_menu-padding/6 $_menu-padding;
     border-radius: 0;
 
     &:selected {
