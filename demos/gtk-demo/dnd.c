@@ -53,12 +53,12 @@ drag_end (GtkDragSource *source,
   gtk_widget_set_opacity (item, 1.0);
 }
 
-static void
+static gboolean
 drag_cancel (GtkDragSource       *source,
              GdkDrag             *drag,
              GdkDragCancelReason  reason)
 {
-  drag_end (source, drag);
+  return FALSE;
 }
 
 typedef struct {
