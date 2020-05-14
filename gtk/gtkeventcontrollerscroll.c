@@ -326,12 +326,11 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
     }
 
   if (dx != 0 || dy != 0)
-    {
-      g_signal_emit (controller, signals[SCROLL], 0, dx, dy);
+    g_signal_emit (controller, signals[SCROLL], 0, dx, dy);
 
-      if (scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_KINETIC)
-        scroll_history_push (scroll, dx, dy, gdk_event_get_time (event));
-    }
+  if (direction == GDK_SCROLL_SMOOTH &&
+      scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_KINETIC)
+    scroll_history_push (scroll, dx, dy, gdk_event_get_time (event));
 
   if (scroll->active && gdk_event_is_scroll_stop_event (event))
     {
