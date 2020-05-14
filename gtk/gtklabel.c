@@ -291,6 +291,10 @@ struct _GtkLabel
   gint     width_chars;
   gint     max_width_chars;
   gint     lines;
+
+  int min_width, min_height;
+  int nat_width, nat_height;
+  int min_baseline, nat_baseline;
 };
 
 struct _GtkLabelClass
@@ -1778,7 +1782,42 @@ gtk_label_recalculate (GtkLabel *self)
       g_object_notify_by_pspec (G_OBJECT (self), label_props[PROP_MNEMONIC_KEYVAL]);
     }
 
-  gtk_widget_queue_resize (GTK_WIDGET (self));
+  if (self->wrap)
+    gtk_widget_queue_resize (GTK_WIDGET (self));
+  else
+    {
+      int min_width = self->min_width;
+      int min_height = self->min_height;
+      int nat_width = self->nat_width;
+      int nat_height = self->nat_height;
+      int min_baseline = self->min_baseline;
+      int nat_baseline = self->nat_baseline;
+
+      gtk_label_measure (GTK_WIDGET (self),
+                         GTK_ORIENTATION_HORIZONTAL,
+                         -1,
+                         &min_width, &nat_width,
+                         NULL, NULL);
+      gtk_label_measure (GTK_WIDGET (self),
+                         GTK_ORIENTATION_VERTICAL,
+                         -1,
+                         &min_height, &nat_height,
+                         &min_baseline, &nat_baseline);
+
+      if (min_width != self->min_width ||
+          min_height != self->min_height ||
+          nat_width != self->nat_width ||
+          nat_height != self->nat_height ||
+          min_baseline != self->min_baseline ||
+          nat_baseline != self->nat_baseline)
+        {
+          gtk_widget_queue_resize (GTK_WIDGET (self));
+        }
+      else
+        {
+          gtk_widget_queue_draw (GTK_WIDGET (self));
+        }
+    }
 }
 
 /**
@@ -3176,6 +3215,19 @@ gtk_label_measure (GtkWidget      *widget,
     }
   else
     gtk_label_get_preferred_size (widget, orientation, minimum, natural, minimum_baseline, natural_baseline);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      self->min_width = *minimum;
+      self->nat_width = *natural;
+    }
+  else
+    {
+      self->min_height = *minimum;
+      self->nat_height = *natural;
+      self->min_baseline = *minimum_baseline;
+      self->nat_baseline = *natural_baseline;
+    }
 }
 
 static void
