@@ -53,12 +53,12 @@ drag_end (GtkDragSource *source,
   gtk_widget_set_opacity (item, 1.0);
 }
 
-static void
+static gboolean
 drag_cancel (GtkDragSource       *source,
              GdkDrag             *drag,
              GdkDragCancelReason  reason)
 {
-  drag_end (source, drag);
+  return FALSE;
 }
 
 typedef struct {
@@ -204,7 +204,7 @@ pressed_cb (GtkGesture *gesture,
       gtk_popover_set_has_arrow (GTK_POPOVER (menu), FALSE);
       gtk_popover_set_pointing_to (GTK_POPOVER (menu), &(GdkRectangle){ x, y, 1, 1});
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_box_append (GTK_BOX (menu), box);
+      gtk_popover_set_child (GTK_POPOVER (menu), box);
 
       item = gtk_button_new_with_label ("New");
       gtk_button_set_has_frame (GTK_BUTTON (item), FALSE);
