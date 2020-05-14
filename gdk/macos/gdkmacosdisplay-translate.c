@@ -684,7 +684,7 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
   GdkMacosSurface *surface;
   GdkMacosWindow *window;
   NSEventType event_type;
-  NSWindow *nswindow;
+  NSWindow *nswindow = NULL;
   GdkEvent *ret = NULL;
   NSPoint point;
   int x_tmp;
@@ -711,11 +711,24 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
       return NULL;
     }
 
-  if (!(nswindow = _gdk_macos_display_find_native_under_pointer (self, &x_tmp, &y_tmp)))
-    return NULL;
+  /* Prefer the NSEvent window for certain event types. Other events
+   * we will ignore it and resolve the destination directly.
+   */
+  if (event_type == NSEventTypeMouseEntered ||
+      event_type == NSEventTypeMouseExited)
+    {
+      nswindow = [nsevent window];
+      point = [nsevent locationInWindow];
+    }
 
-  point.x = x_tmp;
-  point.y = y_tmp;
+  if (nswindow == NULL)
+    {
+      if (!(nswindow = _gdk_macos_display_find_native_under_pointer (self, &x_tmp, &y_tmp)))
+        return NULL;
+
+      point.x = x_tmp;
+      point.y = y_tmp;
+    }
 
   /* Ignore unless it is for a GdkMacosWindow */
   if (!GDK_IS_MACOS_WINDOW (nswindow))
