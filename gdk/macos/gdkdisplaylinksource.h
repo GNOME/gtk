@@ -34,6 +34,7 @@ typedef struct
 
   CVDisplayLinkRef display_link;
   gint64           refresh_interval;
+  guint            refresh_rate;
 
   volatile gint64  presentation_time;
   volatile guint   needs_dispatch;
