@@ -2075,6 +2075,8 @@ gtk_flow_box_measure (GtkWidget      *widget,
                 goto out_width;
 
               get_max_item_size (box, GTK_ORIENTATION_VERTICAL, &min_item_height, &nat_item_height);
+              if (nat_item_height <= 0)
+                goto out_width;
 
               /* By default flow at the natural item width */
               line_length = avail_size / (nat_item_height + priv->row_spacing);
