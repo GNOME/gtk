@@ -5128,7 +5128,10 @@ gdk_x11_drag_surface_present (GdkDragSurface *drag_surface,
   GdkSurface *surface = GDK_SURFACE (drag_surface);
 
   gdk_x11_surface_toplevel_resize (surface, width, height);
+  gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
+  _gdk_surface_update_viewable (surface);
   gdk_x11_surface_show (surface, FALSE);
+  gdk_surface_invalidate_rect (surface, NULL);
 
   return TRUE;
 }
