@@ -19,6 +19,8 @@
 
 #include "config.h"
 
+#include <string.h>
+
 #include "gdkmacoscursor-private.h"
 
 /* OS X only exports a number of cursor types in its public NSCursor interface.
@@ -110,10 +112,13 @@ static const struct CursorsByName cursors_by_name[] = {
   { "all-scroll", @"gdkAllScrollCursor" },
   { "col-resize", @"resizeLeftRightCursor" },
   { "row-resize", @"resizeUpDownCursor" },
-  { "n-resize", @"resizeUpCursor" },
-  { "e-resize", @"resizeRightCursor" },
-  { "s-resize", @"resizeDownCursor" },
-  { "w-resize", @"resizeLeftCursor" },
+
+  /* Undocumented cursors to match native resizing */
+  { "e-resize", @"_windowResizeEastWestCursor" },
+  { "w-resize", @"_windowResizeEastWestCursor" },
+  { "n-resize", @"_windowResizeNorthSouthCursor" },
+  { "s-resize", @"_windowResizeNorthSouthCursor" },
+
   { "ne-resize", @"gdkNEResizeCursor" },
   { "nw-resize", @"gdkNWResizeCursor" },
   { "se-resize", @"gdkSEResizeCursor" },
@@ -125,11 +130,52 @@ static const struct CursorsByName cursors_by_name[] = {
   /* Zoom */
   { "zoom-in", @"gdkZoomInCursor" },
   { "zoom-out", @"gdkZoomOutCursor" },
-  { NULL, NULL },
 };
+
+static NSCursor *
+create_blank_cursor (void)
+{
+  NSCursor *nscursor;
+  NSImage *nsimage;
+  NSSize size = { 1.0, 1.0 };
+
+  nsimage = [[NSImage alloc] initWithSize:size];
+  nscursor = [[NSCursor alloc] initWithImage:nsimage
+                               hotSpot:NSMakePoint(0.0, 0.0)];
+  [nsimage release];
+
+  return nscursor;
+}
 
 NSCursor *
 _gdk_macos_cursor_get_ns_cursor (GdkCursor *cursor)
 {
-  return NULL;
+  const char *name = NULL;
+  NSCursor *nscursor;
+  SEL selector = @selector(arrowCursor);
+
+  g_return_val_if_fail (!cursor || GDK_IS_CURSOR (cursor), NULL);
+
+  if (cursor != NULL)
+    name = gdk_cursor_get_name (cursor);
+
+  if (name == NULL)
+    goto load_cursor;
+
+  if (strcmp (name, "none") == 0)
+    return create_blank_cursor ();
+
+  for (guint i = 0; i < G_N_ELEMENTS (cursors_by_name); i++)
+    {
+      if (strcmp (cursors_by_name[i].name, name) == 0)
+        {
+          selector = NSSelectorFromString (cursors_by_name[i].selector);
+          break;
+        }
+    }
+
+load_cursor:
+  nscursor = [[gdkCoreCursor class] performSelector:selector];
+  [nscursor retain];
+  return nscursor;
 }
