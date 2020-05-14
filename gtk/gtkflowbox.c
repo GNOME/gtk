@@ -1561,7 +1561,28 @@ gtk_flow_box_size_allocate (GtkWidget *widget,
    */
   get_max_item_size (box, priv->orientation, &min_item_size, &nat_item_size);
   if (nat_item_size <= 0)
-    return;
+    {
+      child_allocation.x = 0;
+      child_allocation.y = 0;
+      child_allocation.width = 0;
+      child_allocation.height = 0;
+
+      for (iter = g_sequence_get_begin_iter (priv->children);
+           !g_sequence_iter_is_end (iter);
+           iter = g_sequence_iter_next (iter))
+        {
+          GtkWidget *child;
+
+          child = g_sequence_get (iter);
+
+          if (!child_is_visible (child))
+            continue;
+
+          gtk_widget_size_allocate (child, &child_allocation, -1);
+        }
+
+      return;
+    }
 
   /* By default flow at the natural item width */
   line_length = avail_size / (nat_item_size + item_spacing);
