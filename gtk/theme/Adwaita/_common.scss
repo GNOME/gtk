@@ -292,7 +292,7 @@ entry {
 
     @include entry(normal);
 
-    @include focus-ring($within: true);
+    @include focus-ring($focus-state: 'focus-within');
 
     > image { // icons inside the entry
       &.left { margin-right: 6px; }
@@ -342,7 +342,7 @@ entry {
       &.#{$e_type} {
         color: $e_color;
 
-        @include focus-ring($within: true, $fc: transparentize($e_color, 0.5));
+        @include focus-ring($focus-state: 'focus-within', $fc: transparentize($e_color, 0.5));
 
         &:focus-within { @include entry(focus, $e_color); }
 
@@ -1881,7 +1881,7 @@ popover.background {
  * Notebooks *
  *************/
 notebook {
-  @include focus-ring("> header > tabs > tab", $offset: -2px, $within: true);
+  @include focus-ring("> header > tabs > tab:checked", $offset: -2px, $focus-state: 'focus-within:focus-visible');
 
   > header {
     padding: 1px;
