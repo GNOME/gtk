@@ -27,7 +27,6 @@ gtk_tests = [
   ['testdnd2'],
   ['testdnd3'],
   ['testellipsise'],
-  ['testemblems'],
   ['testentrycompletion'],
   ['testentryicons'],
   ['testfilechooser'],
