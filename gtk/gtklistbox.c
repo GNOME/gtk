@@ -2944,6 +2944,10 @@ gtk_list_box_row_focus (GtkWidget        *widget,
       /* If exiting child container to the left, select row  */
       if (direction == GTK_DIR_LEFT || direction == GTK_DIR_TAB_BACKWARD)
         {
+          /* grab focus explicitly, since gtk_list_box_row_set_focus()
+           * refuses to steal it from a child
+           */
+          gtk_widget_grab_focus (GTK_WIDGET (row));
           gtk_list_box_row_set_focus (row);
           return TRUE;
         }
