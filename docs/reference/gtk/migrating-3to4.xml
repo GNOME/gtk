@@ -536,6 +536,35 @@
         corresponding getter and the property itself have also been renamed.
       </para>
       <para>
+        The gtk_header_bar_set_custom_title() function has been renamed to
+        the more accurate name gtk_header_bar_set_title_widget(). The
+        corresponding getter and the property itself have also been renamed.
+      </para>
+      <para>
+        The gtk_header_bar_set_title() function has been removed along with its
+        corresponding getter and the property. By default GtkHeaderBar shows the
+        title of the window, so if you were setting the title of the header bar,
+        consider setting the window title instead. If you need to show a title
+        that's different from the window title, use the #GtkHeaderBar:title-widget
+        property to add a #GtkLabel as shown in the example in #GtkHeaderBar
+        documentation.
+      </para>
+      <para>
+        The gtk_header_bar_set_subtitle() function has been removed along with
+        its corresponding getter and the property. The old "subtitle" behavior
+        can be replicated by setting the #GtkHeaderBar:title-widget property to
+        a #GtkBox with two labels inside, with the title label matching the
+        example in #GtkHeaderBar documentation, and the subtitle label being
+        similar, but with "subtitle" style class instead of "title".
+      </para>
+      <para>
+        The gtk_header_bar_set_has_subtitle() function has been removed along
+        with its corresponding getter and the property. Its behavior can be
+        replicated by setting the #GtkHeaderBar:title-widget property to a
+        #GtkStack with #GtkStack:vhomogeneous property set to %TRUE and two
+        pages, each with a #GtkBox with title and subtitle as described above.
+      </para>
+      <para>
         The ::pack-type child properties of GtkHeaderBar and GtkActionBar have
         been removed. If you need to programmatically place children, use the
         pack_start() and pack_end() APIs. In ui files, use the type attribute
