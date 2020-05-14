@@ -725,8 +725,9 @@ _gdk_macos_display_open (const gchar *display_name)
   self->keymap = _gdk_macos_keymap_new (self);
 
   gdk_macos_display_load_seat (self);
-  _gdk_macos_display_reload_monitors (self);
+  /* Load CVDisplayLink before monitors to access refresh rates */
   gdk_macos_display_load_display_link (self);
+  _gdk_macos_display_reload_monitors (self);
 
   CFNotificationCenterAddObserver (CFNotificationCenterGetDistributedCenter (),
                                    self,
@@ -965,4 +966,15 @@ _gdk_macos_display_surface_raised (GdkMacosDisplay *self,
     g_queue_unlink (&self->sorted_surfaces, &surface->sorted);
 
   g_queue_push_head_link (&self->sorted_surfaces, &surface->sorted);
+}
+
+int
+_gdk_macos_display_get_nominal_refresh_rate (GdkMacosDisplay *self)
+{
+  g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (self), 60 * 1000);
+
+  if (self->frame_source == NULL)
+    return 60 * 1000;
+
+  return ((GdkDisplayLinkSource *)self->frame_source)->refresh_rate;
 }

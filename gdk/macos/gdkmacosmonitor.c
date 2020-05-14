@@ -208,7 +208,6 @@ _gdk_macos_monitor_reconfigure (GdkMacosMonitor *self)
   main_bounds = CGDisplayBounds (CGMainDisplayID ());
   width = CGDisplayModeGetWidth (mode);
   pixel_width = CGDisplayModeGetPixelWidth (mode);
-  refresh_rate = CGDisplayModeGetRefreshRate (mode);
   has_opengl = CGDisplayUsesOpenGLAcceleration (self->screen_id);
   subpixel_layout = GetSubpixelLayout (self->screen_id);
   name = GetLocalizedName (self->screen_id);
@@ -220,8 +219,6 @@ _gdk_macos_monitor_reconfigure (GdkMacosMonitor *self)
   width_mm = size.width;
   height_mm = size.height;
 
-  CGDisplayModeRelease (mode);
-
   /* This requires that the display bounds have been
    * updated before the monitor is reconfigured.
    */
@@ -232,6 +229,13 @@ _gdk_macos_monitor_reconfigure (GdkMacosMonitor *self)
                                           &geom.x, &geom.y);
   geom.width = bounds.size.width;
   geom.height = bounds.size.height;
+
+  /* We will often get 0 back from CGDisplayModeGetRefreshRate().  We
+   * can fallback by getting it from CoreVideo based on a CVDisplayLink
+   * setting (which is also used by the frame clock).
+   */
+  if (!(refresh_rate = CGDisplayModeGetRefreshRate (mode)))
+    refresh_rate = _gdk_macos_display_get_nominal_refresh_rate (display);
 
   gdk_monitor_set_connector (GDK_MONITOR (self), connector);
   gdk_monitor_set_model (GDK_MONITOR (self), name);
@@ -250,6 +254,7 @@ _gdk_macos_monitor_reconfigure (GdkMacosMonitor *self)
    */
   self->has_opengl = !!has_opengl;
 
+  CGDisplayModeRelease (mode);
   g_free (name);
   g_free (connector);
 

@@ -133,6 +133,7 @@ void             _gdk_macos_display_surface_became_key             (GdkMacosDisp
                                                                     GdkMacosSurface *surface);
 void             _gdk_macos_display_surface_raised                 (GdkMacosDisplay *self,
                                                                     GdkMacosSurface *surface);
+int              _gdk_macos_display_get_nominal_refresh_rate       (GdkMacosDisplay *self);
 
 G_END_DECLS
 
