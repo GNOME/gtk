@@ -36,7 +36,6 @@ gtk_tests = [
   ['testfontoptions'],
   ['testframe'],
   ['testfullscreen'],
-  ['testgiconpixbuf'],
   ['testglarea'],
   ['testglblending', ['gtkgears.c']],
   ['testgrid'],
