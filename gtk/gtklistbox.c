@@ -1516,7 +1516,13 @@ gtk_list_box_update_cursor (GtkListBox    *box,
   box->cursor_row = row;
   ensure_row_visible (box, row);
   if (grab_focus)
-    gtk_widget_grab_focus (GTK_WIDGET (row));
+    {
+      GtkWidget *focus;
+
+      focus = gtk_root_get_focus (gtk_widget_get_root (GTK_WIDGET (box)));
+      if (!focus || !gtk_widget_is_ancestor (focus, GTK_WIDGET (row)))
+        gtk_widget_grab_focus (GTK_WIDGET (row));
+    }
   gtk_widget_queue_draw (GTK_WIDGET (row));
   _gtk_list_box_accessible_update_cursor (box, row);
 }
@@ -2938,6 +2944,10 @@ gtk_list_box_row_focus (GtkWidget        *widget,
       /* If exiting child container to the left, select row  */
       if (direction == GTK_DIR_LEFT || direction == GTK_DIR_TAB_BACKWARD)
         {
+          /* grab focus explicitly, since gtk_list_box_row_set_focus()
+           * refuses to steal it from a child
+           */
+          gtk_widget_grab_focus (GTK_WIDGET (row));
           gtk_list_box_row_set_focus (row);
           return TRUE;
         }

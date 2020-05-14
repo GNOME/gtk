@@ -545,8 +545,9 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
 static void
 gtk_flow_box_child_init (GtkFlowBoxChild *child)
 {
+  gtk_widget_set_focusable (GTK_WIDGET (child), TRUE);
 }
- 
+
 /* Public API {{{2 */
 
 /**
@@ -1560,7 +1561,28 @@ gtk_flow_box_size_allocate (GtkWidget *widget,
    */
   get_max_item_size (box, priv->orientation, &min_item_size, &nat_item_size);
   if (nat_item_size <= 0)
-    return;
+    {
+      child_allocation.x = 0;
+      child_allocation.y = 0;
+      child_allocation.width = 0;
+      child_allocation.height = 0;
+
+      for (iter = g_sequence_get_begin_iter (priv->children);
+           !g_sequence_iter_is_end (iter);
+           iter = g_sequence_iter_next (iter))
+        {
+          GtkWidget *child;
+
+          child = g_sequence_get (iter);
+
+          if (!child_is_visible (child))
+            continue;
+
+          gtk_widget_size_allocate (child, &child_allocation, -1);
+        }
+
+      return;
+    }
 
   /* By default flow at the natural item width */
   line_length = avail_size / (nat_item_size + item_spacing);
@@ -2074,6 +2096,8 @@ gtk_flow_box_measure (GtkWidget      *widget,
                 goto out_width;
 
               get_max_item_size (box, GTK_ORIENTATION_VERTICAL, &min_item_height, &nat_item_height);
+              if (nat_item_height <= 0)
+                goto out_width;
 
               /* By default flow at the natural item width */
               line_length = avail_size / (nat_item_height + priv->row_spacing);

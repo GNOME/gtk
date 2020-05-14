@@ -58,6 +58,7 @@
     <child>
       <object class="GtkFishbowl" id="bowl">
         <property name="visible">True</property>
+        <property name="overflow">hidden</property>
         <property name="animating">True</property>
         <property name="benchmark" bind-source="changes_allow" bind-property="active" bind-flags="invert-boolean | sync-create"/>
       </object>
