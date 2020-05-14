@@ -57,7 +57,6 @@ gtk_tests = [
   ['testmountoperation'],
   ['testnotebookdnd'],
   ['testnouiprint'],
-  ['testorientable'],
   ['testoverlay'],
   ['testoverlaystyleclass'],
   ['testprint', ['testprintfileoperation.c']],
