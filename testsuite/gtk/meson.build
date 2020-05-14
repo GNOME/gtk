@@ -29,6 +29,7 @@ tests = [
   ['filterlistmodel'],
   ['flattenlistmodel'],
   ['floating'],
+  ['flowbox'],
   #['gestures'],
   ['grid'],
   ['grid-layout'],
