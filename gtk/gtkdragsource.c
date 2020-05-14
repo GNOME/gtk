@@ -436,7 +436,7 @@ gtk_drag_source_cancel_cb (GdkDrag             *drag,
   gboolean success = FALSE;
 
   g_signal_emit (source, signals[DRAG_CANCEL], 0, source->drag, reason, &success);
-  drag_end (source, FALSE);
+  drag_end (source, success);
 }
 
 static void
