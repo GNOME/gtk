@@ -419,6 +419,7 @@ do_dnd (GtkWidget *do_widget)
 {
   if (!window)
     {
+      GtkWidget *button;
       GtkWidget *sw;
       GtkWidget *canvas;
       GtkWidget *box, *box2, *box3;
@@ -431,7 +432,8 @@ do_dnd (GtkWidget *do_widget)
       int i;
       int x, y;
 
-      g_type_ensure (GTK_TYPE_COLOR_BUTTON);
+      button = gtk_color_button_new ();
+      g_object_unref (g_object_ref_sink (button));
 
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
