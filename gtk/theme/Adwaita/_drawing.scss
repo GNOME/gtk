@@ -9,13 +9,11 @@
 // If $outer is true, the focus ring extends outward. Otherwise, it extends inward.
 // If $within is true, use focus-within instead of focus:focus-visible
 //
-@mixin focus-ring($target: null, $width: 2px, $offset: -$width, $outer: false, $within: false, $fc: $focus_border_color) {
+@mixin focus-ring($target: null, $width: 2px, $offset: -$width, $outer: false, $focus-state: 'focus:focus-visible', $fc: $focus_border_color) {
   & #{$target} {
     outline: 0 solid transparent;
     outline-offset: if($outer, $offset + 4px, $offset + $width + 4px);
   }
-
-  $focus-state: if($within, "focus-within", "focus:focus-visible");
 
   &:#{$focus-state} #{$target} {
     outline-color: $fc;
