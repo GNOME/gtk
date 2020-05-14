@@ -129,7 +129,7 @@
   </menu>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">100</property>
-    <property name="lower">1</property>
+    <property name="lower">0</property>
     <property name="value">50</property>
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
@@ -1709,7 +1709,7 @@ microphone-sensitivity-medium-symbolic</property>
                                               </object>
                                             </child>
                                             <child>
-                                              <object class="GtkScale">
+                                              <object class="GtkScale" id="opacity">
                                                 <property name="halign">end</property>
                                                 <property name="valign">center</property>
                                                 <property name="margin-top">6</property>

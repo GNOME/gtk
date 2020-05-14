@@ -1083,12 +1083,28 @@ typedef struct {
 } BackgroundData;
 
 static void
+add_background (GtkWidget  *flowbox,
+                const char *filename,
+                GdkPixbuf  *pixbuf,
+                gboolean    is_resource)
+{
+  GtkWidget *child;
+
+  child = gtk_picture_new_for_pixbuf (pixbuf);
+  gtk_widget_set_size_request (child, 110, 70);
+  gtk_flow_box_insert (GTK_FLOW_BOX (flowbox), child, -1);
+  child = gtk_widget_get_parent (child);
+  g_object_set_data_full (G_OBJECT (child), "filename", g_strdup (filename), g_free);
+  if (is_resource)
+    g_object_set_data (G_OBJECT (child), "is-resource", GINT_TO_POINTER (1));
+}
+
+static void
 background_loaded_cb (GObject      *source,
                       GAsyncResult *res,
                       gpointer      data)
 {
   BackgroundData *bd = data;
-  GtkWidget *child;
   GdkPixbuf *pixbuf;
   GError *error = NULL;
 
@@ -1100,11 +1116,9 @@ background_loaded_cb (GObject      *source,
       return;
     }
 
-  child = gtk_picture_new_for_pixbuf (pixbuf);
-  gtk_widget_set_size_request (child, 110, 70);
-  gtk_flow_box_insert (GTK_FLOW_BOX (bd->flowbox), child, -1);
-  child = gtk_widget_get_parent (child);
-  g_object_set_data_full (G_OBJECT (child), "filename", bd->filename, g_free);
+  add_background (bd->flowbox, bd->filename, pixbuf, FALSE);
+
+  g_free (bd->filename);
   g_free (bd);
 }
 
@@ -1121,6 +1135,10 @@ populate_flowbox (GtkWidget *flowbox)
   BackgroundData *bd;
   GdkPixbuf *pixbuf;
   GtkWidget *child;
+  int i;
+  const char *resources[] = {
+    "sunset.jpg", "snowy.jpg", "portland-rose.jpg"
+  };
 
   if (GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (flowbox), "populated")))
     return;
@@ -1131,6 +1149,13 @@ populate_flowbox (GtkWidget *flowbox)
   gdk_pixbuf_fill (pixbuf, 0xffffffff);
   child = gtk_picture_new_for_pixbuf (pixbuf);
   gtk_flow_box_insert (GTK_FLOW_BOX (flowbox), child, -1);
+
+  for (i = 0; i < G_N_ELEMENTS (resources); i++)
+    {
+      filename = g_strconcat ("/org/gtk/WidgetFactory4/", resources[i], NULL);
+      pixbuf = gdk_pixbuf_new_from_resource_at_scale (filename, 110, 110, TRUE, NULL);
+      add_background (flowbox, filename, pixbuf, TRUE);
+    }
 
   location = "/usr/share/backgrounds/gnome";
   dir = g_dir_open (location, 0, &error);
@@ -1153,7 +1178,7 @@ populate_flowbox (GtkWidget *flowbox)
         {
           g_warning ("%s", error->message);
           g_clear_error (&error);
-          g_free (filename); 
+          g_free (filename);
         }
       else
         {
@@ -1169,6 +1194,7 @@ populate_flowbox (GtkWidget *flowbox)
     }
 
   g_dir_close (dir);
+
 }
 
 static void
@@ -1197,6 +1223,7 @@ typedef struct
 {
   GtkTextView tv;
   GdkTexture *texture;
+  GtkAdjustment *adjustment;
 } MyTextView;
 
 typedef GtkTextViewClass MyTextViewClass;
@@ -1215,10 +1242,13 @@ my_tv_snapshot_layer (GtkTextView      *widget,
                       GtkSnapshot      *snapshot)
 {
   MyTextView *tv = (MyTextView *)widget;
+  double opacity;
+
+  opacity = gtk_adjustment_get_value (tv->adjustment) / 100.0;
 
   if (layer == GTK_TEXT_VIEW_LAYER_BELOW_TEXT && tv->texture)
     {
-      gtk_snapshot_push_opacity (snapshot, 0.333);
+      gtk_snapshot_push_opacity (snapshot, opacity);
       gtk_snapshot_append_texture (snapshot,
                                    tv->texture,
                                    &GRAPHENE_RECT_INIT(
@@ -1251,7 +1281,7 @@ my_text_view_class_init (MyTextViewClass *class)
 }
 
 static void
-my_text_view_set_background (MyTextView *tv, const gchar *filename)
+my_text_view_set_background (MyTextView *tv, const gchar *filename, gboolean is_resource)
 {
   GError *error = NULL;
   GFile *file;
@@ -1261,9 +1291,14 @@ my_text_view_set_background (MyTextView *tv, const gchar *filename)
   if (filename == NULL)
     return;
 
-  file = g_file_new_for_path (filename);
-  tv->texture = gdk_texture_new_from_file (file, &error);
-  g_object_unref (file);
+  if (is_resource)
+    tv->texture = gdk_texture_new_from_resource (filename);
+  else
+    {
+      file = g_file_new_for_path (filename);
+      tv->texture = gdk_texture_new_from_file (file, &error);
+      g_object_unref (file);
+    }
 
   if (error)
     {
@@ -1276,12 +1311,26 @@ my_text_view_set_background (MyTextView *tv, const gchar *filename)
 }
 
 static void
+value_changed (GtkAdjustment *adjustment, MyTextView *tv)
+{
+  gtk_widget_queue_draw (GTK_WIDGET (tv));
+}
+
+static void
+my_text_view_set_adjustment (MyTextView *tv, GtkAdjustment *adjustment)
+{
+  g_set_object (&tv->adjustment, adjustment);
+  g_signal_connect (tv->adjustment, "value-changed", G_CALLBACK (value_changed), tv);
+}
+
+static void
 close_selection_dialog (GtkWidget *dialog, gint response, GtkWidget *tv)
 {
   GtkWidget *box;
   GtkWidget *child;
   GList *children;
   const gchar *filename;
+  gboolean is_resource;
 
   gtk_widget_hide (dialog);
 
@@ -1297,10 +1346,11 @@ close_selection_dialog (GtkWidget *dialog, gint response, GtkWidget *tv)
 
   child = children->data;
   filename = (const gchar *)g_object_get_data (G_OBJECT (child), "filename");
+  is_resource = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (child), "is-resource"));
 
   g_list_free (children);
 
-  my_text_view_set_background ((MyTextView *)tv, filename);
+  my_text_view_set_background ((MyTextView *)tv, filename, is_resource);
 }
 
 static void
@@ -1985,6 +2035,8 @@ activate (GApplication *app)
   g_object_set_data (G_OBJECT (window), "selection_dialog", dialog);
   widget = (GtkWidget *)gtk_builder_get_object (builder, "text3");
   g_signal_connect (dialog, "response", G_CALLBACK (close_selection_dialog), widget);
+  widget2 = (GtkWidget *)gtk_builder_get_object (builder, "opacity");
+  my_text_view_set_adjustment ((MyTextView *)widget, gtk_range_get_adjustment (GTK_RANGE (widget2)));
   widget = (GtkWidget *)gtk_builder_get_object (builder, "selection_dialog_button");
   g_signal_connect (widget, "clicked", G_CALLBACK (show_dialog), dialog);
 
