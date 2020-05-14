@@ -188,6 +188,7 @@ gdk_display_link_source_new (void)
   if (period == 0.0)
     period = 1.0 / 60.0;
   impl->refresh_interval = period * 1000000L;
+  impl->refresh_rate = 1.0 / period * 1000L;
 
   /*
    * Wire up our callback to be executed within the high-priority thread.
