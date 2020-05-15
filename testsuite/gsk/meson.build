@@ -90,14 +90,10 @@ foreach renderer : renderers
            args: ['--output', join_paths(meson.current_build_dir(), 'compare', renderer[0]),
                   join_paths(meson.current_source_dir(), 'compare', test + '.node'),
                   join_paths(meson.current_source_dir(), 'compare', test + '.png')],
-           env: [ 'GIO_USE_VOLUME_MONITOR=unix',
-                  'GSETTINGS_BACKEND=memory',
-                  'GDK_DEBUG=default-settings',
-                  'GTK_CSD=1',
-                  'G_ENABLE_DIAGNOSTIC=0',
+           env: [
+                  'GSK_RENDERER=' + renderer[0],
                   'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-                  'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
-                  'GSK_RENDERER=' + renderer[0]
+                  'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
                 ],
          suite: [ 'gsk', 'gsk-compare', 'gsk-' + renderer[0], 'gsk-compare-' + renderer[0] ])
     endif
@@ -171,14 +167,10 @@ foreach test : node_parser_tests
     test('parser ' + test, node_parser,
          args: [ join_paths(meson.current_source_dir(), 'nodeparser', test)
                ],
-         env: [ 'GIO_USE_VOLUME_MONITOR=unix',
-                'GSETTINGS_BACKEND=memory',
-                'GDK_DEBUG=default-settings',
-                'GTK_CSD=1',
-                'G_ENABLE_DIAGNOSTIC=0',
+         env: [
+                'GSK_RENDERER=opengl',
                 'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-                'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
-                'GSK_RENDERER=opengl'
+                'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
               ],
          suite: 'gsk')
   endif
@@ -207,15 +199,10 @@ foreach t : tests
   test(test_name, test_exe,
        args: [ '--tap', '-k' ],
        protocol: 'tap',
-       env: [ 'GIO_USE_VOLUME_MONITOR=unix',
-              'GSETTINGS_BACKEND=memory',
-              'GDK_DEBUG=default-settings',
-              'GTK_CSD=1',
-              'G_ENABLE_DIAGNOSTIC=0',
+       env: [
               'GSK_RENDERER=cairo',
               'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
-              'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
+              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
             ],
        suite: 'gsk')
 endforeach
