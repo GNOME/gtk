@@ -19,6 +19,16 @@ get_output_dir (void)
   if (arg_output_dir)
     {
       GFile *file = g_file_new_for_commandline_arg (arg_output_dir);
+      const char *subdir;
+
+      subdir = g_getenv ("TEST_OUTPUT_SUBDIR");
+      if (subdir)
+        {
+          GFile *child = g_file_get_child (file, subdir);
+          g_object_unref (file);
+          file = child;
+        }
+
       output_dir = g_file_get_path (file);
       g_object_unref (file);
     }

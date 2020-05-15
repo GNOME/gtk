@@ -109,8 +109,18 @@ get_output_dir (GError **error)
     {
       GError *err = NULL;
       GFile *file;
+      const char *subdir;
 
       file = g_file_new_for_commandline_arg (arg_output_dir);
+
+      subdir = g_getenv ("TEST_OUTPUT_SUBDIR");
+      if (subdir)
+        {
+          GFile *child = g_file_get_child (file, subdir);
+          g_object_unref (file);
+          file = child;
+        }
+
       if (!g_file_make_directory_with_parents (file, NULL, &err))
         {
           if (!g_error_matches (err, G_IO_ERROR, G_IO_ERROR_EXISTS))
