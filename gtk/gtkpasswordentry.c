@@ -167,12 +167,20 @@ gtk_password_entry_realize (GtkWidget *widget)
 {
   GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (widget);
   GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+  GdkSeat *seat;
 
   GTK_WIDGET_CLASS (gtk_password_entry_parent_class)->realize (widget);
 
-  priv->keyboard = gdk_seat_get_keyboard (gdk_display_get_default_seat (gtk_widget_get_display (widget)));
-  g_signal_connect (priv->keyboard, "notify::caps-lock-state", G_CALLBACK (caps_lock_state_changed), entry);
-  caps_lock_state_changed (priv->keyboard, NULL, widget);
+  seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
+  if (seat)
+    priv->keyboard = gdk_seat_get_keyboard (seat);
+
+  if (priv->keyboard)
+    {
+      g_signal_connect (priv->keyboard, "notify::caps-lock-state",
+                        G_CALLBACK (caps_lock_state_changed), entry);
+      caps_lock_state_changed (priv->keyboard, NULL, widget);
+    }
 }
 
 static void
@@ -496,7 +504,8 @@ gtk_password_entry_set_show_peek_icon (GtkPasswordEntry *entry,
                                             entry);
     }
 
-  caps_lock_state_changed (priv->keyboard, NULL, GTK_WIDGET (entry));
+  if (priv->keyboard)
+    caps_lock_state_changed (priv->keyboard, NULL, GTK_WIDGET (entry));
 
   g_object_notify_by_pspec (G_OBJECT (entry), props[PROP_SHOW_PEEK_ICON]);
 }
