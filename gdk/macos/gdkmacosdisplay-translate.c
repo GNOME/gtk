@@ -1127,16 +1127,10 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
       break;
 
     case NSEventTypeMouseExited:
-      if (_gdk_macos_surface_is_tracking (surface, [nsevent trackingArea]))
-        {
-          [[NSCursor arrowCursor] set];
-          ret = synthesize_crossing_event (self, surface, nsevent, x, y);
-        }
-      break;
-
+      [[NSCursor arrowCursor] set];
+      /* fallthrough */
     case NSEventTypeMouseEntered:
-      if (_gdk_macos_surface_is_tracking (surface, [nsevent trackingArea]))
-        ret = synthesize_crossing_event (self, surface, nsevent, x, y);
+      ret = synthesize_crossing_event (self, surface, nsevent, x, y);
       break;
 
     case NSEventTypeKeyDown:
