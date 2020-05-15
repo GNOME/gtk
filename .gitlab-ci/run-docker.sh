@@ -95,7 +95,7 @@ if [ ! -x "$(command -v docker)" ] || [ docker --help |& grep -q podman ]; then
 else
         echo "Using: Docker"
         format=""
-        CMD="sudo socker"
+        CMD="sudo docker"
 fi
 
 REGISTRY="registry.gitlab.gnome.org"
