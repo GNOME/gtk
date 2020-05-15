@@ -858,6 +858,46 @@ _gdk_macos_display_queue_events (GdkMacosDisplay *self)
   gdk_macos_display_queue_events (GDK_DISPLAY (self));
 }
 
+static GdkMacosSurface *
+_gdk_macos_display_get_surface_at_coords (GdkMacosDisplay *self,
+                                          int              x,
+                                          int              y,
+                                          int             *surface_x,
+                                          int             *surface_y)
+{
+  g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (self), NULL);
+  g_return_val_if_fail (surface_x != NULL, NULL);
+  g_return_val_if_fail (surface_y != NULL, NULL);
+
+  for (const GList *iter = self->sorted_surfaces.head; iter; iter = iter->next)
+    {
+      GdkSurface *surface = iter->data;
+      NSWindow *nswindow;
+
+      g_assert (GDK_IS_MACOS_SURFACE (surface));
+
+      nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (surface));
+      if (![nswindow isVisible])
+        continue;
+
+      if (x >= surface->x &&
+          y >= surface->y &&
+          x <= (surface->x + surface->width) &&
+          y <= (surface->y + surface->height))
+        {
+          *surface_x = x - surface->x;
+          *surface_y = y - surface->y;
+
+          return GDK_MACOS_SURFACE (surface);
+        }
+    }
+
+  *surface_x = 0;
+  *surface_y = 0;
+
+  return NULL;
+}
+
 GdkMacosSurface *
 _gdk_macos_display_get_surface_at_display_coords (GdkMacosDisplay *self,
                                                   double           x,
@@ -874,34 +914,7 @@ _gdk_macos_display_get_surface_at_display_coords (GdkMacosDisplay *self,
 
   _gdk_macos_display_from_display_coords (self, x, y, &x_gdk, &y_gdk);
 
-  for (const GList *iter = self->sorted_surfaces.head; iter; iter = iter->next)
-    {
-      GdkSurface *surface = iter->data;
-      NSWindow *nswindow;
-
-      g_assert (GDK_IS_MACOS_SURFACE (surface));
-
-      nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (surface));
-
-      if (![nswindow isVisible])
-        continue;
-
-      if (x_gdk >= surface->x &&
-          y_gdk >= surface->y &&
-          x_gdk <= (surface->x + surface->width) &&
-          y_gdk <= (surface->y + surface->height))
-        {
-          *surface_x = x_gdk - surface->x;
-          *surface_y = y_gdk - surface->y;
-
-          return GDK_MACOS_SURFACE (surface);
-        }
-    }
-
-  *surface_x = 0;
-  *surface_y = 0;
-
-  return NULL;
+  return _gdk_macos_display_get_surface_at_coords (self, x_gdk, y_gdk, surface_x, surface_y);
 }
 
 void
