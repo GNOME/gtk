@@ -333,8 +333,8 @@
   return YES;
 }
 
-/* Used by gdkevents-quartz.c to decide if our sendEvent() handler above
- * will see the event or if it will be subjected to standard processing
+/* Used by gdkmacosdisplay-translate.c to decide if our sendEvent() handler
+ * above will see the event or if it will be subjected to standard processing
  * by GDK.
 */
 -(BOOL)isInManualResizeOrMove

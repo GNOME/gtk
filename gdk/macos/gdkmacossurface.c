@@ -135,6 +135,10 @@ gdk_macos_surface_begin_resize_drag (GdkSurface     *surface,
   if (GDK_SURFACE_DESTROYED (surface))
     return;
 
+  /* Release passive grab */
+  if (button != 0)
+    gdk_seat_ungrab (gdk_device_get_seat (device));
+
   [self->window beginManualResize:edge];
 }
 
@@ -152,6 +156,11 @@ gdk_macos_surface_begin_move_drag (GdkSurface     *surface,
 
   if (GDK_SURFACE_DESTROYED (surface))
     return;
+
+
+  /* Release passive grab */
+  if (button != 0)
+    gdk_seat_ungrab (gdk_device_get_seat (device));
 
   [self->window beginManualMove];
 }
