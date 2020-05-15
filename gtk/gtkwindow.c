@@ -1578,8 +1578,9 @@ gtk_window_init (GtkWindow *window)
   gtk_widget_add_controller (GTK_WIDGET (window), GTK_EVENT_CONTROLLER (target));
 
   seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
-  g_signal_connect (seat, "device-removed",
-                    G_CALLBACK (device_removed_cb), window);
+  if (seat)
+    g_signal_connect (seat, "device-removed",
+                      G_CALLBACK (device_removed_cb), window);
 
   controller = gtk_event_controller_motion_new ();
   gtk_event_controller_set_propagation_phase (controller,
@@ -3726,6 +3727,7 @@ gtk_window_finalize (GObject *object)
 {
   GtkWindow *window = GTK_WINDOW (object);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  GdkSeat *seat;
 
   g_clear_pointer (&priv->extra_input_region, cairo_region_destroy);
   g_free (priv->title);
@@ -3742,9 +3744,9 @@ gtk_window_finalize (GObject *object)
       priv->keys_changed_handler = 0;
     }
 
-  g_signal_handlers_disconnect_by_func (gdk_display_get_default_seat (priv->display),
-                                        device_removed_cb,
-                                        window);
+  seat = gdk_display_get_default_seat (priv->display);
+  if (seat)
+    g_signal_handlers_disconnect_by_func (seat, device_removed_cb, window);
 
 #ifdef GDK_WINDOWING_X11
   g_signal_handlers_disconnect_by_func (gtk_settings_get_for_display (priv->display),
