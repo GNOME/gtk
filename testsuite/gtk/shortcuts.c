@@ -289,6 +289,7 @@ test_trigger_trigger (void)
 {
   GtkShortcutTrigger *trigger[4];
   GdkDisplay *display;
+  GdkSeat *seat;
   GdkSurface *surface;
   GdkDevice *device;
   GdkEvent *event;
@@ -307,14 +308,21 @@ test_trigger_trigger (void)
   };
   int i, j;
 
+  display = gdk_display_get_default ();
+  seat = gdk_display_get_default_seat (display);
+  if (!seat)
+    {
+      g_test_skip ("Display has no seat");
+      return;
+    }
+
   trigger[0] = g_object_ref (gtk_never_trigger_get ());
   trigger[1] = gtk_keyval_trigger_new (GDK_KEY_a, GDK_CONTROL_MASK);
   trigger[2] = gtk_mnemonic_trigger_new (GDK_KEY_u);
   trigger[3] = gtk_alternative_trigger_new (g_object_ref (trigger[1]),
                                             g_object_ref (trigger[2]));
 
-  display = gdk_display_get_default ();
-  device = gdk_seat_get_keyboard (gdk_display_get_default_seat (display));
+  device = gdk_seat_get_keyboard (seat);
   surface = gdk_surface_new_toplevel (display, 100, 100);
 
   for (i = 0; i < G_N_ELEMENTS (tests); i++)

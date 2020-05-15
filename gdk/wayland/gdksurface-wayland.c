@@ -2686,11 +2686,13 @@ gdk_wayland_surface_hide (GdkSurface *surface)
   GdkSeat *seat;
 
   seat = gdk_display_get_default_seat (surface->display);
+  if (seat)
+    {
+      if (surface->autohide)
+        gdk_seat_ungrab (seat);
 
-  if (surface->autohide)
-    gdk_seat_ungrab (seat);
-
-  gdk_wayland_seat_clear_touchpoints (GDK_WAYLAND_SEAT (seat), surface);
+      gdk_wayland_seat_clear_touchpoints (GDK_WAYLAND_SEAT (seat), surface);
+    }
   gdk_wayland_surface_hide_surface (surface);
   _gdk_surface_clear_update_area (surface);
 }
@@ -2923,28 +2925,34 @@ gdk_wayland_surface_present_popup (GdkSurface     *surface,
     {
       if (surface->autohide)
         {
-          GrabPrepareData data;
-          GdkGrabStatus result;
+          GdkSeat *seat;
 
-          data = (GrabPrepareData) {
-            .width = width,
-            .height = height,
-            .layout = layout,
-          };
-
-          result = gdk_seat_grab (gdk_display_get_default_seat (surface->display),
-                                  surface,
-                                  GDK_SEAT_CAPABILITY_ALL,
-                                  TRUE,
-                                  NULL, NULL,
-                                  show_grabbing_popup, &data);
-          if (result != GDK_GRAB_SUCCESS)
+          seat = gdk_display_get_default_seat (surface->display);
+          if (seat)
             {
-              const char *grab_status[] = {
-                "success", "already grabbed", "invalid time",
-                "not viewable", "frozen", "failed"
+              GrabPrepareData data;
+              GdkGrabStatus result;
+
+              data = (GrabPrepareData) {
+                .width = width,
+                .height = height,
+                .layout = layout,
               };
-              g_warning ("Grab failed: %s", grab_status[result]);
+
+              result = gdk_seat_grab (seat,
+                                      surface,
+                                      GDK_SEAT_CAPABILITY_ALL,
+                                      TRUE,
+                                      NULL, NULL,
+                                      show_grabbing_popup, &data);
+              if (result != GDK_GRAB_SUCCESS)
+                {
+                  const char *grab_status[] = {
+                    "success", "already grabbed", "invalid time",
+                    "not viewable", "frozen", "failed"
+                  };
+                  g_warning ("Grab failed: %s", grab_status[result]);
+                }
             }
         }
       else

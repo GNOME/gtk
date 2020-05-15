@@ -931,10 +931,13 @@ gdk_wayland_display_notify_startup_complete (GdkDisplay  *display,
 static GdkKeymap *
 _gdk_wayland_display_get_keymap (GdkDisplay *display)
 {
+  GdkSeat *seat;
   GdkDevice *core_keyboard = NULL;
   static GdkKeymap *tmp_keymap = NULL;
 
-  core_keyboard = gdk_seat_get_keyboard (gdk_display_get_default_seat (display));
+  seat = gdk_display_get_default_seat (display);
+  if (seat)
+    core_keyboard = gdk_seat_get_keyboard (seat);
 
   if (core_keyboard && tmp_keymap)
     {

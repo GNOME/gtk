@@ -34,7 +34,7 @@ style-check-diff:
     - .gitlab-ci/run-style-check-diff.sh
 
 fedora-x86_64:
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v16
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v17
   stage: build
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
@@ -47,20 +47,24 @@ fedora-x86_64:
             -Dprofiler=true
             _build
     - ninja -C _build
-    - .gitlab-ci/run-tests.sh _build
+    - .gitlab-ci/run-tests.sh _build x11
+    - .gitlab-ci/run-tests.sh _build wayland
+    - .gitlab-ci/run-tests.sh _build broadway
   artifacts:
     when: always
     reports:
       junit:
-        - "${CI_PROJECT_DIR}/_build/report.xml"
+        - "${CI_PROJECT_DIR}/_build/report-x11.xml"
+        - "${CI_PROJECT_DIR}/_build/report-wayland.xml"
+        - "${CI_PROJECT_DIR}/_build/report-broadway.xml"
     name: "gtk-${CI_COMMIT_REF_NAME}"
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
-      - "${CI_PROJECT_DIR}/_build/report.xml"
-      - "${CI_PROJECT_DIR}/_build/report.html"
-      - "${CI_PROJECT_DIR}/_build/testsuite/reftests/output/*.png"
-      - "${CI_PROJECT_DIR}/_build/testsuite/gsk/compare/*/*.png"
-      - "${CI_PROJECT_DIR}/_build/testsuite/css/output/*.syscap"
+      - "${CI_PROJECT_DIR}/_build/report*.xml"
+      - "${CI_PROJECT_DIR}/_build/report*.html"
+      - "${CI_PROJECT_DIR}/_build/testsuite/reftests/output/*/*.png"
+      - "${CI_PROJECT_DIR}/_build/testsuite/gsk/compare/*/*/*.png"
+      - "${CI_PROJECT_DIR}/_build/testsuite/css/output/*/*.syscap"
   cache:
     key: "$CI_JOB_NAME"
     <<: *cache-paths
@@ -78,20 +82,20 @@ release-build:
             -Dvulkan=yes
             _build
     - ninja -C _build
-    - .gitlab-ci/run-tests.sh _build
+    - .gitlab-ci/run-tests.sh _build x11
   artifacts:
     when: always
     reports:
       junit:
-        - "${CI_PROJECT_DIR}/_build/report.xml"
+        - "${CI_PROJECT_DIR}/_build/report-x11.xml"
     name: "gtk-${CI_COMMIT_REF_NAME}"
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
-      - "${CI_PROJECT_DIR}/_build/report.xml"
-      - "${CI_PROJECT_DIR}/_build/report.html"
-      - "${CI_PROJECT_DIR}/_build/testsuite/reftests/output/*.png"
-      - "${CI_PROJECT_DIR}/_build/testsuite/gsk/compare/*/*.png"
-      - "${CI_PROJECT_DIR}/_build/testsuite/css/output/*.syscap"
+      - "${CI_PROJECT_DIR}/_build/report*.xml"
+      - "${CI_PROJECT_DIR}/_build/report*.html"
+      - "${CI_PROJECT_DIR}/_build/testsuite/reftests/output/*/*.png"
+      - "${CI_PROJECT_DIR}/_build/testsuite/gsk/compare/*/*/*.png"
+      - "${CI_PROJECT_DIR}/_build/testsuite/css/output/*/*.syscap"
   cache:
     key: "$CI_JOB_NAME"
     <<: *cache-paths
