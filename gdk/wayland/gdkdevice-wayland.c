@@ -2788,6 +2788,14 @@ _gdk_wayland_seat_remove_tablet (GdkWaylandSeat       *seat,
   gdk_seat_device_removed (GDK_SEAT (seat), tablet->eraser_device);
   gdk_seat_device_removed (GDK_SEAT (seat), tablet->master);
 
+  while (tablet->pads)
+    {
+      GdkWaylandTabletPadData *pad = tablet->pads->data;
+
+      pad->current_tablet = NULL;
+      tablet->pads = g_list_remove (tablet->pads, pad);
+    }
+
   zwp_tablet_v2_destroy (tablet->wp_tablet);
 
   _gdk_device_set_associated_device (tablet->master, NULL);
