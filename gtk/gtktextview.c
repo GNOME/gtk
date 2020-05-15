@@ -5524,9 +5524,14 @@ gtk_text_view_focus_in (GtkWidget *widget)
     }
 
   seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
-  keyboard = gdk_seat_get_keyboard (seat);
-  g_signal_connect (keyboard, "notify::direction",
-                    G_CALLBACK (direction_changed), text_view);
+  if (seat)
+    keyboard = gdk_seat_get_keyboard (seat);
+  else
+    keyboard = NULL;
+
+  if (keyboard)
+    g_signal_connect (keyboard, "notify::direction",
+                      G_CALLBACK (direction_changed), text_view);
   gtk_text_view_check_keymap_direction (text_view);
 
   if (priv->editable)
@@ -5557,8 +5562,12 @@ gtk_text_view_focus_out (GtkWidget *widget)
     }
 
   seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
-  keyboard = gdk_seat_get_keyboard (seat);
-  g_signal_handlers_disconnect_by_func (keyboard, direction_changed, text_view);
+  if (seat)
+    keyboard = gdk_seat_get_keyboard (seat);
+  else
+    keyboard = NULL;
+  if (keyboard)
+    g_signal_handlers_disconnect_by_func (keyboard, direction_changed, text_view);
   gtk_text_view_selection_bubble_popup_unset (text_view);
 
   text_view->priv->text_handles_enabled = FALSE;
@@ -7492,33 +7501,44 @@ static void
 gtk_text_view_check_keymap_direction (GtkTextView *text_view)
 {
   GtkTextViewPrivate *priv = text_view->priv;
+  GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (text_view));
+  GdkSeat *seat;
+  GdkDevice *keyboard;
+  PangoDirection direction;
+  GtkTextDirection new_cursor_dir;
+  GtkTextDirection new_keyboard_dir;
+  gboolean split_cursor;
 
-  if (priv->layout)
-    {
-      GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (text_view));
-      GdkSeat *seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (text_view)));
-      GdkDevice *keyboard = gdk_seat_get_keyboard (seat);
-      GtkTextDirection new_cursor_dir;
-      GtkTextDirection new_keyboard_dir;
-      gboolean split_cursor;
+  if (!priv->layout)
+    return;
 
-      g_object_get (settings,
-		    "gtk-split-cursor", &split_cursor,
-		    NULL);
-      
-      if (gdk_device_get_direction (keyboard) == PANGO_DIRECTION_RTL)
-	new_keyboard_dir = GTK_TEXT_DIR_RTL;
-      else
-	new_keyboard_dir  = GTK_TEXT_DIR_LTR;
-  
-      if (split_cursor)
-	new_cursor_dir = GTK_TEXT_DIR_NONE;
-      else
-	new_cursor_dir = new_keyboard_dir;
-      
-      gtk_text_layout_set_cursor_direction (priv->layout, new_cursor_dir);
-      gtk_text_layout_set_keyboard_direction (priv->layout, new_keyboard_dir);
-    }
+  seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (text_view)));
+  if (seat)
+    keyboard = gdk_seat_get_keyboard (seat);
+  else
+    keyboard = NULL;
+
+  if (keyboard)
+    direction = gdk_device_get_direction (keyboard);
+  else
+    direction = PANGO_DIRECTION_LTR;
+
+  g_object_get (settings,
+                "gtk-split-cursor", &split_cursor,
+                NULL);
+
+  if (direction == PANGO_DIRECTION_RTL)
+    new_keyboard_dir = GTK_TEXT_DIR_RTL;
+  else
+    new_keyboard_dir  = GTK_TEXT_DIR_LTR;
+
+  if (split_cursor)
+    new_cursor_dir = GTK_TEXT_DIR_NONE;
+  else
+    new_cursor_dir = new_keyboard_dir;
+
+  gtk_text_layout_set_cursor_direction (priv->layout, new_cursor_dir);
+  gtk_text_layout_set_keyboard_direction (priv->layout, new_keyboard_dir);
 }
 
 static void

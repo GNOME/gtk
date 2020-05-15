@@ -7636,13 +7636,17 @@ _gtk_widget_list_devices (GtkWidget *widget,
       return NULL;
     }
 
-  result = g_ptr_array_new ();
   seat = gdk_display_get_default_seat (_gtk_widget_get_display (widget));
-  device = gdk_seat_get_pointer (seat);
-  if (is_my_surface (widget, gdk_device_get_last_event_surface (device)))
+  if (!seat)
     {
-      g_ptr_array_add (result, device);
+      *out_n_devices = 0;
+      return NULL;
     }
+  device = gdk_seat_get_pointer (seat);
+
+  result = g_ptr_array_new ();
+  if (is_my_surface (widget, gdk_device_get_last_event_surface (device)))
+    g_ptr_array_add (result, device);
 
   devices = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_ALL_POINTING);
   for (l = devices; l; l = l->next)

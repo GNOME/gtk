@@ -371,9 +371,10 @@ void
 gtk_tooltip_trigger_tooltip_query (GtkWidget *widget)
 {
   GdkDisplay *display;
-  double x, y;
-  GdkSurface *surface;
+  GdkSeat *seat;
   GdkDevice *device;
+  GdkSurface *surface;
+  double x, y;
   GtkWidget *toplevel;
   int dx, dy;
 
@@ -382,8 +383,15 @@ gtk_tooltip_trigger_tooltip_query (GtkWidget *widget)
   display = gtk_widget_get_display (widget);
 
   /* Trigger logic as if the mouse moved */
-  device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
-  surface = gdk_device_get_surface_at_position (device, &x, &y);
+  seat = gdk_display_get_default_seat (display);
+  if (seat)
+    device = gdk_seat_get_pointer (seat);
+  else
+    device = NULL;
+  if (device)
+    surface = gdk_device_get_surface_at_position (device, &x, &y);
+  else
+    surface = NULL;
   if (!surface)
     return;
 
@@ -673,6 +681,7 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
   gint x, y;
   GdkSurface *surface;
   GtkWidget *tooltip_widget;
+  GdkSeat *seat;
   GdkDevice *device;
   GtkTooltip *tooltip;
   gboolean return_value = FALSE;
@@ -684,9 +693,17 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
 
   surface = gtk_native_get_surface (GTK_NATIVE (tooltip->native));
 
-  device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
+  seat = gdk_display_get_default_seat (display);
+  if (seat)
+    device = gdk_seat_get_pointer (seat);
+  else
+    device = NULL;
 
-  gdk_surface_get_device_position (surface, device, &px, &py, NULL);
+  if (device)
+    gdk_surface_get_device_position (surface, device, &px, &py, NULL);
+  else
+    px = py = 0;
+
   x = round (px);
   y = round (py);
 
