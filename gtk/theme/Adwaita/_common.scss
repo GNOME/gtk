@@ -1881,7 +1881,7 @@ popover.background {
  * Notebooks *
  *************/
 notebook {
-  @include focus-ring("> header > tabs > tab:checked", $offset: -2px, $focus-state: 'focus-within:focus-visible');
+  @include focus-ring("> header > tabs > tab:checked", $offset: -2px, $focus-state: 'focus:focus-visible');
 
   > header {
     padding: 1px;
