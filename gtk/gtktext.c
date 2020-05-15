@@ -1920,7 +1920,7 @@ gtk_text_dispose (GObject *object)
   GtkText *self = GTK_TEXT (object);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   GdkSeat *seat;
-  GdkDevice *keyboard;
+  GdkDevice *keyboard = NULL;
   GtkWidget *chooser;
 
   priv->current_pos = priv->selection_bound = 0;
@@ -1949,8 +1949,10 @@ gtk_text_dispose (GObject *object)
     gtk_widget_unparent (chooser);
 
   seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (object)));
-  keyboard = gdk_seat_get_keyboard (seat);
-  g_signal_handlers_disconnect_by_func (keyboard, direction_changed, self);
+  if (seat)
+    keyboard = gdk_seat_get_keyboard (seat);
+  if (keyboard)
+    g_signal_handlers_disconnect_by_func (keyboard, direction_changed, self);
 
   g_clear_pointer (&priv->selection_bubble, gtk_widget_unparent);
   g_clear_pointer (&priv->popup_menu, gtk_widget_unparent);
@@ -3129,22 +3131,24 @@ gtk_text_focus_in (GtkWidget *widget)
 {
   GtkText *self = GTK_TEXT (widget);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GdkSeat *seat;
-  GdkDevice *keyboard;
+  GdkSeat *seat = NULL;
+  GdkDevice *keyboard = NULL;
 
   gtk_widget_queue_draw (widget);
 
   seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
-  keyboard = gdk_seat_get_keyboard (seat);
+  if (seat)
+    keyboard = gdk_seat_get_keyboard (seat);
+  if (keyboard)
+    g_signal_connect (keyboard, "notify::direction",
+                      G_CALLBACK (direction_changed), self);
+
 
   if (priv->editable)
     {
       gtk_text_schedule_im_reset (self);
       gtk_im_context_focus_in (priv->im_context);
     }
-
-  g_signal_connect (keyboard, "notify::direction",
-                    G_CALLBACK (direction_changed), self);
 
   gtk_text_reset_blink_time (self);
   gtk_text_check_cursor_blink (self);
@@ -3155,8 +3159,8 @@ gtk_text_focus_out (GtkWidget *widget)
 {
   GtkText *self = GTK_TEXT (widget);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GdkSeat *seat;
-  GdkDevice *keyboard;
+  GdkSeat *seat = NULL;
+  GdkDevice *keyboard = NULL;
 
   gtk_text_selection_bubble_popup_unset (self);
 
@@ -3166,7 +3170,10 @@ gtk_text_focus_out (GtkWidget *widget)
   gtk_widget_queue_draw (widget);
 
   seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
-  keyboard = gdk_seat_get_keyboard (seat);
+  if (seat)
+    keyboard = gdk_seat_get_keyboard (seat);
+  if (keyboard)
+    g_signal_handlers_disconnect_by_func (keyboard, direction_changed, self);
 
   if (priv->editable)
     {
@@ -3175,8 +3182,6 @@ gtk_text_focus_out (GtkWidget *widget)
     }
 
   gtk_text_check_cursor_blink (self);
-
-  g_signal_handlers_disconnect_by_func (keyboard, direction_changed, self);
 }
 
 static gboolean
@@ -3656,15 +3661,21 @@ get_better_cursor_x (GtkText *self,
                      int      offset)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GdkSeat *seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (self)));
-  GdkDevice *keyboard = gdk_seat_get_keyboard (seat);
-  PangoDirection direction = gdk_device_get_direction (keyboard);
+  GdkSeat *seat;
+  GdkDevice *keyboard = NULL;
+  PangoDirection direction = PANGO_DIRECTION_LTR;
   gboolean split_cursor;
   PangoLayout *layout = gtk_text_ensure_layout (self, TRUE);
   const char *text = pango_layout_get_text (layout);
   int index = g_utf8_offset_to_pointer (text, offset) - text;
   PangoRectangle strong_pos, weak_pos;
-  
+
+  seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (self)));
+  if (seat)
+    keyboard = gdk_seat_get_keyboard (seat);
+  if (keyboard)
+    direction = gdk_device_get_direction (keyboard);
+
   g_object_get (gtk_widget_get_settings (GTK_WIDGET (self)),
                 "gtk-split-cursor", &split_cursor,
                 NULL);
@@ -4377,11 +4388,19 @@ gtk_text_create_layout (GtkText  *self,
         {
           if (gtk_widget_has_focus (widget))
             {
-              GdkDisplay *display = gtk_widget_get_display (widget);
-              GdkSeat *seat = gdk_display_get_default_seat (display);
-              GdkDevice *keyboard = gdk_seat_get_keyboard (seat);
+              GdkDisplay *display;
+              GdkSeat *seat;
+              GdkDevice *keyboard = NULL;
+              PangoDirection direction = PANGO_DIRECTION_LTR;
 
-              if (gdk_device_get_direction (keyboard) == PANGO_DIRECTION_RTL)
+              display = gtk_widget_get_display (widget);
+              seat = gdk_display_get_default_seat (display);
+              if (seat)
+                keyboard = gdk_seat_get_keyboard (seat);
+              if (keyboard)
+                direction = gdk_device_get_direction (keyboard);
+
+              if (direction == PANGO_DIRECTION_RTL)
                 pango_dir = PANGO_DIRECTION_RTL;
               else
                 pango_dir = PANGO_DIRECTION_LTR;
@@ -4941,14 +4960,21 @@ gtk_text_move_visually (GtkText *self,
         strong = TRUE;
       else
         {
-          GdkDisplay *display = gtk_widget_get_display (GTK_WIDGET (self));
-          GdkSeat *seat = gdk_display_get_default_seat (display);
-          GdkDevice *keyboard = gdk_seat_get_keyboard (seat);
-          PangoDirection direction = gdk_device_get_direction (keyboard);
+          GdkDisplay *display;
+          GdkSeat *seat;
+          GdkDevice *keyboard = NULL;
+          PangoDirection direction = PANGO_DIRECTION_LTR;
+
+          display = gtk_widget_get_display (GTK_WIDGET (self));
+          seat = gdk_display_get_default_seat (display);
+          if (seat)
+            keyboard = gdk_seat_get_keyboard (seat);
+          if (keyboard)
+            direction = gdk_device_get_direction (keyboard);
 
           strong = direction == priv->resolved_dir;
         }
-      
+
       if (count > 0)
         {
           pango_layout_move_cursor_visually (layout, strong, index, 0, 1, &new_index, &new_trailing);
