@@ -889,11 +889,44 @@ _gdk_macos_surface_monitor_changed (GdkMacosSurface *self)
 
       if (g_ptr_array_find (self->monitors, monitor, NULL))
         continue;
+    }
+}
+
+GdkMonitor *
+_gdk_macos_surface_get_best_monitor (GdkMacosSurface *self)
+{
+  GdkMonitor *best = NULL;
+  GdkDisplay *display;
+  GdkRectangle rect;
+  guint n_monitors;
+  int best_area = 0;
+
+  g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), NULL);
+
+  display = gdk_surface_get_display (GDK_SURFACE (self));
+  n_monitors = gdk_display_get_n_monitors (display);
+
+  rect.x = GDK_SURFACE (self)->x;
+  rect.y = GDK_SURFACE (self)->y;
+  rect.width = GDK_SURFACE (self)->width;
+  rect.height = GDK_SURFACE (self)->height;
+
+  for (guint i = 0; i < n_monitors; i++)
+    {
+      GdkMonitor *monitor = gdk_display_get_monitor (display, i);
+      GdkRectangle intersect;
 
       if (gdk_rectangle_intersect (&monitor->geometry, &rect, &intersect))
         {
-          g_ptr_array_add (self->monitors, g_object_ref (monitor));
-          gdk_surface_enter_monitor (GDK_SURFACE (self), monitor);
+          int area = intersect.width * intersect.height;
+
+          if (best == NULL || area > best_area)
+            {
+              best = monitor;
+              best_area = area;
+            }
         }
     }
+
+  return best;
 }

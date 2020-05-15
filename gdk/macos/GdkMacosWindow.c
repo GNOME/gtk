@@ -32,6 +32,7 @@
 #include "gdkmacospopupsurface-private.h"
 #include "gdkmacostoplevelsurface-private.h"
 
+#include "gdkmonitorprivate.h"
 #include "gdksurfaceprivate.h"
 
 @implementation GdkMacosWindow
@@ -313,7 +314,10 @@
   NSRect windowFrame = [self frame];
   NSPoint currentLocation;
   NSPoint newOrigin;
+  GdkMonitor *monitor;
   int shadow_top = 0;
+  int shadow_left = 0;
+  int shadow_right = 0;
 
   if (!inManualMove)
     return NO;
@@ -322,11 +326,39 @@
   newOrigin.x = currentLocation.x - initialMoveLocation.x;
   newOrigin.y = currentLocation.y - initialMoveLocation.y;
 
-  _gdk_macos_surface_get_shadow (gdk_surface, &shadow_top, NULL, NULL, NULL);
+  _gdk_macos_surface_get_shadow (gdk_surface,
+                                 &shadow_top,
+                                 &shadow_right,
+                                 NULL,
+                                 &shadow_left);
 
   /* Clamp vertical position to below the menu bar. */
   if (newOrigin.y + windowFrame.size.height - shadow_top > screenFrame.origin.y + screenFrame.size.height)
     newOrigin.y = screenFrame.origin.y + screenFrame.size.height - windowFrame.size.height + shadow_top;
+
+#define SNAP_THRESHOLD 20
+
+  /* Try to snap to monitor edges taking shadow into account */
+  if ((monitor = _gdk_macos_surface_get_best_monitor (gdk_surface)))
+    {
+      if (shadow_left)
+        {
+          int minx = monitor->geometry.x - shadow_left;
+
+          if (newOrigin.x < minx && newOrigin.x > (minx - SNAP_THRESHOLD))
+            newOrigin.x = minx;
+        }
+
+      if (shadow_right)
+        {
+          int maxx = monitor->geometry.x + monitor->geometry.width + shadow_right - windowFrame.size.width;
+
+          if (newOrigin.x > maxx && newOrigin.x < (maxx + SNAP_THRESHOLD))
+            newOrigin.x = maxx;
+        }
+    }
+
+#undef SNAP_THRESHOLD
 
   [self setFrameOrigin:newOrigin];
 

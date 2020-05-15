@@ -115,6 +115,7 @@ void               _gdk_macos_surface_move_resize             (GdkMacosSurface  
 gboolean           _gdk_macos_surface_is_tracking             (GdkMacosSurface    *self,
                                                                NSTrackingArea     *area);
 void               _gdk_macos_surface_monitor_changed         (GdkMacosSurface    *self);
+GdkMonitor        *_gdk_macos_surface_get_best_monitor        (GdkMacosSurface    *self);
 
 G_END_DECLS
 

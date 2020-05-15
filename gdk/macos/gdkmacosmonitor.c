@@ -225,7 +225,7 @@ _gdk_macos_monitor_reconfigure (GdkMacosMonitor *self)
   display = GDK_MACOS_DISPLAY (GDK_MONITOR (self)->display);
   _gdk_macos_display_from_display_coords (display,
                                           bounds.origin.x,
-                                          bounds.origin.y,
+                                          bounds.origin.y + bounds.size.height,
                                           &geom.x, &geom.y);
   geom.width = bounds.size.width;
   geom.height = bounds.size.height;
