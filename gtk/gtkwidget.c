@@ -12720,7 +12720,7 @@ gtk_widget_get_css_classes (GtkWidget *widget)
 /**
  * gtk_widget_set_css_classes:
  * @widget: a #GtkWidget
- * @classes: (transfer none): %NULL-terminated list
+ * @classes: (transfer none) (array zero-terminated=1): %NULL-terminated list
  *   of css classes to apply to @widget.
  *
  * Will clear all css classes applied to @widget
