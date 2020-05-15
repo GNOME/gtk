@@ -1746,10 +1746,14 @@ gdk_surface_hide (GdkSurface *surface)
       /* May need to break grabs on children */
       display = surface->display;
       seat = gdk_display_get_default_seat (display);
-
-      devices = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_ALL);
-      devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
-      devices = g_list_prepend (devices, gdk_seat_get_pointer (seat));
+      if (seat)
+        {
+          devices = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_ALL);
+          devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
+          devices = g_list_prepend (devices, gdk_seat_get_pointer (seat));
+        }
+      else
+        devices = NULL;
 
       for (d = devices; d; d = d->next)
         {

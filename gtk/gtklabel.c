@@ -4937,25 +4937,37 @@ gtk_label_get_single_line_mode  (GtkLabel *self)
  */
 static void
 get_better_cursor (GtkLabel *self,
-		   gint      index,
-		   gint      *x,
-		   gint      *y)
+                   int      index,
+                   int      *x,
+                   int      *y)
 {
-  GdkSeat *seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (self)));
-  GdkDevice *device = gdk_seat_get_keyboard (seat);
-  PangoDirection keymap_direction = gdk_device_get_direction (device);
-  PangoDirection cursor_direction = get_cursor_direction (self);
+  GdkSeat *seat;
+  GdkDevice *keyboard;
+  PangoDirection keymap_direction;
+  PangoDirection cursor_direction;
   gboolean split_cursor;
   PangoRectangle strong_pos, weak_pos;
-  
+
+  seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (self)));
+  if (seat)
+    keyboard = gdk_seat_get_keyboard (seat);
+  else
+    keyboard = NULL;
+  if (keyboard)
+    keymap_direction = gdk_device_get_direction (keyboard);
+  else
+    keymap_direction = PANGO_DIRECTION_LTR;
+
+  cursor_direction = get_cursor_direction (self);
+
   g_object_get (gtk_widget_get_settings (GTK_WIDGET (self)),
-		"gtk-split-cursor", &split_cursor,
-		NULL);
+                "gtk-split-cursor", &split_cursor,
+                NULL);
 
   gtk_label_ensure_layout (self);
-  
+
   pango_layout_get_cursor_pos (self->layout, index,
-			       &strong_pos, &weak_pos);
+                               &strong_pos, &weak_pos);
 
   if (split_cursor)
     {
@@ -4965,15 +4977,15 @@ get_better_cursor (GtkLabel *self,
   else
     {
       if (keymap_direction == cursor_direction)
-	{
-	  *x = strong_pos.x / PANGO_SCALE;
-	  *y = strong_pos.y / PANGO_SCALE;
-	}
+        {
+          *x = strong_pos.x / PANGO_SCALE;
+          *y = strong_pos.y / PANGO_SCALE;
+        }
       else
-	{
-	  *x = weak_pos.x / PANGO_SCALE;
-	  *y = weak_pos.y / PANGO_SCALE;
-	}
+        {
+          *x = weak_pos.x / PANGO_SCALE;
+          *y = weak_pos.y / PANGO_SCALE;
+        }
     }
 }
 
@@ -5041,16 +5053,26 @@ gtk_label_move_visually (GtkLabel *self,
 		    NULL);
 
       if (split_cursor)
-	strong = TRUE;
+        strong = TRUE;
       else
-	{
-	  GdkSeat *seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (self)));
-          GdkDevice *device = gdk_seat_get_keyboard (seat);
-	  PangoDirection keymap_direction = gdk_device_get_direction (device);
+        {
+          GdkSeat *seat;
+          GdkDevice *keyboard;
+          PangoDirection keymap_direction;
 
-	  strong = keymap_direction == get_cursor_direction (self);
-	}
-      
+          seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (self)));
+          if (seat)
+            keyboard = gdk_seat_get_keyboard (seat);
+          else
+            keyboard = NULL;
+          if (keyboard)
+            keymap_direction = gdk_device_get_direction (keyboard);
+          else
+            keymap_direction = PANGO_DIRECTION_LTR;
+
+          strong = keymap_direction == get_cursor_direction (self);
+        }
+
       if (count > 0)
 	{
 	  pango_layout_move_cursor_visually (self->layout, strong, index, 0, 1, &new_index, &new_trailing);

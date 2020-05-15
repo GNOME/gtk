@@ -1151,6 +1151,7 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
   float aspect_ratio;
   PangoRectangle strong_pos, weak_pos;
   PangoRectangle *cursor1, *cursor2;
+  GdkSeat *seat;
   GdkDevice *keyboard;
   PangoDirection keyboard_direction;
   PangoDirection direction2;
@@ -1165,8 +1166,15 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
                 "gtk-cursor-aspect-ratio", &aspect_ratio,
                 NULL);
 
-  keyboard = gdk_seat_get_keyboard (gdk_display_get_default_seat (priv->display));
-  keyboard_direction = gdk_device_get_direction (keyboard);
+  seat = gdk_display_get_default_seat (priv->display);
+  if (seat)
+    keyboard = gdk_seat_get_keyboard (seat);
+  else
+    keyboard = NULL;
+  if (keyboard)
+    keyboard_direction = gdk_device_get_direction (keyboard);
+  else
+    keyboard_direction = PANGO_DIRECTION_LTR;
 
   pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
 
@@ -1240,6 +1248,7 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
   float aspect_ratio;
   PangoRectangle strong_pos, weak_pos;
   PangoRectangle *cursor1, *cursor2;
+  GdkSeat *seat;
   GdkDevice *keyboard;
   PangoDirection keyboard_direction;
   PangoDirection direction2;
@@ -1254,8 +1263,15 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
                 "gtk-cursor-aspect-ratio", &aspect_ratio,
                 NULL);
 
-  keyboard = gdk_seat_get_keyboard (gdk_display_get_default_seat (priv->display));
-  keyboard_direction = gdk_device_get_direction (keyboard);
+  seat = gdk_display_get_default_seat (priv->display);
+  if (seat)
+    keyboard = gdk_seat_get_keyboard (seat);
+  else
+    keyboard = NULL;
+  if (keyboard)
+    keyboard_direction = gdk_device_get_direction (keyboard);
+  else
+    keyboard_direction = PANGO_DIRECTION_LTR;
 
   pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
 
