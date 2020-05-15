@@ -214,6 +214,300 @@ create_fake_headerbar (GtkApplication *app)
   gtk_widget_show (window);
 }
 
+/* split headerbar  */
+
+static void
+split_decorations (GtkSettings *settings,
+                   GParamSpec  *pspec,
+                   GtkBuilder  *builder)
+{
+  GtkWidget *sheader, *mheader;
+  gchar *layout, *p1, *p2;
+  gchar **p;
+
+  sheader = (GtkWidget *)gtk_builder_get_object (builder, "sidebar-header");
+  mheader = (GtkWidget *)gtk_builder_get_object (builder, "main-header");
+
+  g_object_get (settings, "gtk-decoration-layout", &layout, NULL);
+
+  p = g_strsplit (layout, ":", -1);
+
+  p1 = g_strconcat ("", p[0], ":", NULL);
+
+  if (g_strv_length (p) >= 2)
+    p2 = g_strconcat (":", p[1], NULL);
+  else
+    p2 = g_strdup ("");
+
+  gtk_header_bar_set_decoration_layout (GTK_HEADER_BAR (sheader), p1);
+  gtk_header_bar_set_decoration_layout (GTK_HEADER_BAR (mheader), p2);
+ 
+  g_free (p1);
+  g_free (p2);
+  g_strfreev (p);
+  g_free (layout);
+}
+
+
+static void
+create_split_headerbar (GtkApplication *app)
+{
+  GtkBuilder *builder;
+  GtkSettings *settings;
+  GtkWidget *win;
+  GtkWidget *entry;
+  GtkWidget *check;
+  GtkWidget *header;
+  const char *ui = "tests/testsplitheaders.ui";
+
+  if (!g_file_test (ui, G_FILE_TEST_EXISTS))
+    {
+      g_warning ("Can't find %s", ui);
+      return;
+    }
+
+  builder = gtk_builder_new_from_file (ui);
+
+  win = (GtkWidget *)gtk_builder_get_object (builder, "window");
+  gtk_window_set_application (GTK_WINDOW (win), app);
+
+  settings = gtk_widget_get_settings (win);
+
+  g_signal_connect (settings, "notify::gtk-decoration-layout",
+                    G_CALLBACK (split_decorations), builder);
+  split_decorations (settings, NULL, builder);
+
+  entry = (GtkWidget *)gtk_builder_get_object (builder, "layout-entry");
+  g_object_bind_property (settings, "gtk-decoration-layout",
+                          entry, "text",
+                          G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
+  check = (GtkWidget *)gtk_builder_get_object (builder, "decorations");
+  header = (GtkWidget *)gtk_builder_get_object (builder, "sidebar-header");
+  g_object_bind_property (check, "active",
+                          header, "show-title-buttons",
+                          G_BINDING_DEFAULT);
+  header = (GtkWidget *)gtk_builder_get_object (builder, "main-header");
+  g_object_bind_property (check, "active",
+                          header, "show-title-buttons",
+			  G_BINDING_DEFAULT);
+  gtk_window_present (GTK_WINDOW (win));
+}
+
+/* stacked headers */
+
+static void
+back_to_main (GtkButton *button,
+              GtkWidget *win)
+{
+  GtkWidget *header_stack;
+  GtkWidget *page_stack;
+
+  header_stack = GTK_WIDGET (g_object_get_data (G_OBJECT (win), "header-stack"));
+  page_stack = GTK_WIDGET (g_object_get_data (G_OBJECT (win), "page-stack"));
+
+  gtk_stack_set_visible_child_name (GTK_STACK (header_stack), "main");
+  gtk_stack_set_visible_child_name (GTK_STACK (page_stack), "page1");
+}
+
+static void
+go_to_secondary (GtkButton *button,
+                 GtkWidget *win)
+{
+  GtkWidget *header_stack;
+  GtkWidget *page_stack;
+
+  header_stack = GTK_WIDGET (g_object_get_data (G_OBJECT (win), "header-stack"));
+  page_stack = GTK_WIDGET (g_object_get_data (G_OBJECT (win), "page-stack"));
+
+  gtk_stack_set_visible_child_name (GTK_STACK (header_stack), "secondary");
+  gtk_stack_set_visible_child_name (GTK_STACK (page_stack), "secondary");
+}
+
+static void
+create_stacked_headerbar (GtkApplication *app)
+{
+  GtkBuilder *builder;
+  GtkWidget *win;
+  GtkWidget *new_btn;
+  GtkWidget *back_btn;
+  GtkWidget *header_stack;
+  GtkWidget *page_stack;
+  const char *ui = "tests/teststackedheaders.ui";
+
+  if (!g_file_test (ui, G_FILE_TEST_EXISTS))
+    {
+      g_warning ("Can't find %s", ui);
+      return;
+    }
+
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_file (builder, ui, NULL);
+
+  win = (GtkWidget *)gtk_builder_get_object (builder, "window");
+  gtk_window_set_application (GTK_WINDOW (win), app);
+
+  header_stack = (GtkWidget *)gtk_builder_get_object (builder, "header_stack");
+  page_stack = (GtkWidget *)gtk_builder_get_object (builder, "page_stack");
+
+  g_object_set_data (G_OBJECT (win), "header-stack", header_stack);
+  g_object_set_data (G_OBJECT (win), "page-stack", page_stack);
+
+  new_btn = (GtkWidget *)gtk_builder_get_object (builder, "new_btn");
+  back_btn = (GtkWidget *)gtk_builder_get_object (builder, "back_btn");
+
+  g_signal_connect (new_btn, "clicked", G_CALLBACK (go_to_secondary), win);
+  g_signal_connect (back_btn, "clicked", G_CALLBACK (back_to_main), win);
+
+  gtk_window_present (GTK_WINDOW (win));
+}
+
+/* technorama */
+
+static const gchar css[] =
+ ".main.background { "
+ " background-image: linear-gradient(to bottom, red, blue);"
+ " border-width: 0px; "
+ "}"
+ ".titlebar.backdrop { "
+ " background-image: none; "
+ " background-color: @bg_color; "
+ " border-radius: 10px 10px 0px 0px; "
+ "}"
+ ".titlebar { "
+ " background-image: linear-gradient(to bottom, white, @bg_color);"
+ " border-radius: 10px 10px 0px 0px; "
+ "}";
+
+static void
+on_bookmark_clicked (GtkButton *button, gpointer data)
+{
+  GtkWindow *window = GTK_WINDOW (data);
+  GtkWidget *chooser;
+
+  chooser = gtk_file_chooser_dialog_new ("File Chooser Test",
+                                         window,
+                                         GTK_FILE_CHOOSER_ACTION_OPEN,
+                                         "_Close",
+                                         GTK_RESPONSE_CLOSE,
+                                         NULL);
+
+  g_signal_connect (chooser, "response",
+                    G_CALLBACK (gtk_window_destroy), NULL);
+
+  gtk_widget_show (chooser);
+}
+
+static void
+toggle_fullscreen (GtkButton *button, gpointer data)
+{
+  GtkWidget *window = GTK_WIDGET (data);
+  static gboolean fullscreen = FALSE;
+
+  if (fullscreen)
+    {
+      gtk_window_unfullscreen (GTK_WINDOW (window));
+      fullscreen = FALSE;
+    }
+  else
+    {
+      gtk_window_fullscreen (GTK_WINDOW (window));
+      fullscreen = TRUE;
+    }
+}
+
+static void
+change_header (GtkButton *button, gpointer data)
+{
+  GtkWidget *window = GTK_WIDGET (data);
+  GtkWidget *label;
+  GtkWidget *widget;
+  GtkWidget *image;
+  GtkWidget *header;
+
+  if (button && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
+    {
+      header = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+      gtk_widget_add_css_class (header, "titlebar");
+      gtk_widget_add_css_class (header, "header-bar");
+      gtk_widget_set_margin_start (header, 10);
+      gtk_widget_set_margin_end (header, 10);
+      gtk_widget_set_margin_top (header, 10);
+      gtk_widget_set_margin_bottom (header, 10);
+      label = gtk_label_new ("Label");
+      gtk_box_append (GTK_BOX (header), label);
+      widget = gtk_level_bar_new ();
+      gtk_level_bar_set_value (GTK_LEVEL_BAR (widget), 0.4);
+      gtk_widget_set_hexpand (widget, TRUE);
+      gtk_box_append (GTK_BOX (header), widget);
+    }
+  else
+    {
+      header = gtk_header_bar_new ();
+      gtk_widget_add_css_class (header, "titlebar");
+
+      widget = gtk_button_new_with_label ("_Close");
+      gtk_button_set_use_underline (GTK_BUTTON (widget), TRUE);
+      gtk_widget_add_css_class (widget, "suggested-action");
+      g_signal_connect_swapped (widget, "clicked", G_CALLBACK (gtk_window_destroy), window);
+
+      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), widget);
+
+      widget= gtk_button_new ();
+      image = gtk_image_new_from_icon_name ("bookmark-new-symbolic");
+      g_signal_connect (widget, "clicked", G_CALLBACK (on_bookmark_clicked), window);
+      gtk_button_set_child (GTK_BUTTON (widget), image);
+
+      gtk_header_bar_pack_start (GTK_HEADER_BAR (header), widget);
+    }
+
+  gtk_window_set_titlebar (GTK_WINDOW (window), header);
+}
+
+static void
+create_technorama (GtkApplication *app)
+{
+  GtkWidget *window;
+  GtkWidget *box;
+  GtkWidget *footer;
+  GtkWidget *button;
+  GtkWidget *content;
+  GtkCssProvider *provider;
+
+  window = gtk_window_new ();
+  gtk_window_set_application (GTK_WINDOW (window), app);
+
+  gtk_widget_add_css_class (window, "main");
+
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (provider, css, -1);
+  gtk_style_context_add_provider_for_display (gtk_widget_get_display (window),
+                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+
+  change_header (NULL, window);
+
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_window_set_child (GTK_WINDOW (window), box);
+
+  content = gtk_image_new_from_icon_name ("start-here-symbolic");
+  gtk_image_set_pixel_size (GTK_IMAGE (content), 512);
+  gtk_widget_set_vexpand (content, TRUE);
+
+  gtk_box_append (GTK_BOX (box), content);
+
+  footer = gtk_action_bar_new ();
+  gtk_action_bar_set_center_widget (GTK_ACTION_BAR (footer), gtk_check_button_new_with_label ("Middle"));
+  button = gtk_toggle_button_new_with_label ("Custom");
+  g_signal_connect (button, "clicked", G_CALLBACK (change_header), window);
+  gtk_action_bar_pack_start (GTK_ACTION_BAR (footer), button);
+  button = gtk_button_new_with_label ("Fullscreen");
+  gtk_action_bar_pack_end (GTK_ACTION_BAR (footer), button);
+  g_signal_connect (button, "clicked", G_CALLBACK (toggle_fullscreen), window);
+  gtk_box_append (GTK_BOX (box), footer);
+  gtk_widget_show (window);
+}
+
 struct {
   const gchar *name;
   void (*cb) (GtkApplication *app);
@@ -225,6 +519,9 @@ struct {
     { "Headerbar overlaying content", create_headerbar_overlay },
     { "Hiding headerbar", create_hiding_headerbar },
     { "Fake headerbar", create_fake_headerbar },
+    { "Split headerbar", create_split_headerbar },
+    { "Stacked headerbar", create_stacked_headerbar },
+    { "Technorama", create_technorama },
 };
 int n_buttons = sizeof (buttons) / sizeof (buttons[0]);
 
