@@ -78,6 +78,8 @@ RUN dnf -y install \
     vulkan-devel \
     wayland-devel \
     wayland-protocols-devel \
+    weston \
+    weston-libs \
     which \
     xorg-x11-server-Xvfb \
  && dnf clean all

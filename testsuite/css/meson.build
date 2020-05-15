@@ -14,11 +14,7 @@ test_api = executable('api', 'api.c',
 test('api', test_api,
      args: ['--tap', '-k' ],
      protocol: 'tap',
-     env: [ 'GIO_USE_VOLUME_MONITOR=unix',
-            'GSETTINGS_BACKEND=memory',
-            'GDK_DEBUG=default-settings',
-            'GTK_CSD=1',
-            'G_ENABLE_DIAGNOSTIC=0',
+     env: [
             'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
             'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
           ],
@@ -33,11 +29,7 @@ test_data = executable('data', ['data.c', '../../gtk/css/gtkcssdataurl.c'],
 test('data', test_data,
      args: ['--tap', '-k' ],
      protocol: 'tap',
-     env: [ 'GIO_USE_VOLUME_MONITOR=unix',
-            'GSETTINGS_BACKEND=memory',
-            'GDK_DEBUG=default-settings',
-            'GTK_CSD=1',
-            'G_ENABLE_DIAGNOSTIC=0',
+     env: [
             'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
             'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
           ],
@@ -59,8 +51,7 @@ if false and get_option ('profiler')
                '--name',  'performance-adwaita',
                '--output', join_paths(meson.current_build_dir(), 'output'),
                join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory') ],
-       env: [ 'GTK_THEME=Adwaita',
-              'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir) ],
+       env: [ 'GTK_THEME=Adwaita' ],
        suite: [ 'css' ])
 
   test('performance-empty', test_performance,
@@ -68,8 +59,7 @@ if false and get_option ('profiler')
                '--name',  'performance-empty',
                '--output', join_paths(meson.current_build_dir(), 'output'),
                join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory') ],
-       env: [ 'GTK_THEME=Empty',
-              'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir) ],
+       env: [ 'GTK_THEME=Empty' ],
        suite: [ 'css' ])
 
 endif

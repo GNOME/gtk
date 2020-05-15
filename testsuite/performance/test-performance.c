@@ -89,8 +89,18 @@ main (int argc, char *argv[])
     {
       GError *err = NULL;
       GFile *file;
+      const char *subdir;
 
       file = g_file_new_for_commandline_arg (opt_output);
+
+      subdir = g_getenv ("TEST_OUTPUT_SUBDIR");
+      if (subdir)
+        {
+          GFile *child = g_file_get_child (file, subdir);
+          g_object_unref (file);
+          file = child;
+        }
+
       if (!g_file_make_directory_with_parents (file, NULL, &err))
         {
           if (!g_error_matches (err, G_IO_ERROR, G_IO_ERROR_EXISTS))
@@ -134,7 +144,7 @@ main (int argc, char *argv[])
 
       if (!g_subprocess_get_successful (subprocess))
         g_error ("Child process failed");
-        
+
       g_object_unref (subprocess);
       g_object_unref (launcher);
 

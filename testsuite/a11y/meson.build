@@ -54,14 +54,8 @@ foreach t: a11y_state_tests
     args: [ '--tap', '-k', ui_path ],
     protocol: 'tap',
     env: [
-      'GIO_USE_VOLUME_MONITOR=unix',
-      'GSETTINGS_BACKEND=memory',
-      'GDK_DEBUG=default-settings',
-      'GTK_CSD=1',
-      'G_ENABLE_DIAGNOSTIC=0',
       'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
       'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
-      'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
     ],
     suite: 'a11y',
   )
@@ -89,13 +83,9 @@ foreach t: a11y_tests
         args: [ '--tap', '-k', ],
         protocol: 'tap',
         timeout: 120,
-        env: [ 'GIO_USE_VOLUME_MONITOR=unix',
-               'GSETTINGS_BACKEND=memory',
-               'GTK_CSD=1',
-               'G_ENABLE_DIAGNOSTIC=0',
+        env: [
                'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
                'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
-               'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
              ],
         suite: 'a11y')
 endforeach

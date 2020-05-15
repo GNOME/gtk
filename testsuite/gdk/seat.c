@@ -10,11 +10,12 @@ test_list_seats (void)
 
   display = gdk_display_get_default ();
   seat0 = gdk_display_get_default_seat (display);
-
-  g_assert_true (GDK_IS_SEAT (seat0));
+  if (seat0 != NULL)
+    g_assert_true (GDK_IS_SEAT (seat0));
 
   found_default = FALSE;
   list = gdk_display_list_seats (display);
+
   for (l = list; l; l = l->next)
     {
       seat = l->data;
@@ -25,9 +26,13 @@ test_list_seats (void)
       if (seat == seat0)
         found_default = TRUE;
     }
-  g_list_free (list);
 
-  g_assert_true (found_default);
+  if (seat0 != NULL)
+    g_assert_true (found_default);
+  else
+    g_assert_true (list == NULL);
+
+  g_list_free (list);
 }
 
 static void
@@ -41,6 +46,12 @@ test_default_seat (void)
 
   display = gdk_display_get_default ();
   seat0 = gdk_display_get_default_seat (display);
+
+  if (seat0 == NULL)
+    {
+      g_test_skip ("Display has no seats");
+      return;
+    }
 
   g_assert_true (GDK_IS_SEAT (seat0));
 
