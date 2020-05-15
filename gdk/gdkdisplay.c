@@ -1497,7 +1497,10 @@ gdk_display_remove_seat (GdkDisplay *display,
  *
  * Returns the default #GdkSeat for this display.
  *
- * Returns: (transfer none): the default seat.
+ * Note that a display may not have a seat. In this case,
+ * this function will return %NULL.
+ *
+ * Returns: (transfer none) (nullable): the default seat.
  **/
 GdkSeat *
 gdk_display_get_default_seat (GdkDisplay *display)
