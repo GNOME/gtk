@@ -96,6 +96,7 @@
 #include "gsk/gskprivate.h"
 #include "gsk/gskrendernodeprivate.h"
 #include "gtkarrayimplprivate.h"
+#include "gtknativeprivate.h"
 
 #include <locale.h>
 
@@ -1505,6 +1506,18 @@ set_widget_active_state (GtkWidget       *target,
 }
 
 static GtkWidget *
+native_pick (GtkNative *native,
+             double     x,
+             double     y)
+{
+  int transform_x, transform_y;
+
+  gtk_native_get_surface_transform (native, &transform_x, &transform_y);
+
+  return gtk_widget_pick (GTK_WIDGET (native), x - transform_x, y - transform_y, GTK_PICK_DEFAULT);
+}
+
+static GtkWidget *
 handle_pointing_event (GdkEvent *event)
 {
   GtkWidget *target = NULL, *old_target = NULL, *event_widget;
@@ -1555,7 +1568,7 @@ handle_pointing_event (GdkEvent *event)
       target = gtk_window_lookup_pointer_focus_implicit_grab (toplevel, device, sequence);
 
       if (!target)
-       target = gtk_widget_pick (native, x, y, GTK_PICK_DEFAULT);
+       target = native_pick (GTK_NATIVE (native), x, y);
 
       if (!target)
         target = GTK_WIDGET (native);
@@ -1602,7 +1615,7 @@ handle_pointing_event (GdkEvent *event)
       if (type == GDK_BUTTON_RELEASE)
         {
           GtkWidget *new_target;
-          new_target = gtk_widget_pick (GTK_WIDGET (native), x, y, GTK_PICK_DEFAULT);
+          new_target = native_pick (GTK_NATIVE (native), x, y);
           if (new_target == NULL)
             new_target = GTK_WIDGET (toplevel);
           gtk_synthesize_crossing_events (GTK_ROOT (toplevel), GTK_CROSSING_POINTER, target, new_target,
