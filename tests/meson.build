@@ -39,7 +39,7 @@ gtk_tests = [
   ['testglblending', ['gtkgears.c']],
   ['testgrid'],
   ['testgtk'],
-  ['testheaderbar2'],
+  ['testheaderbar'],
   ['testheightforwidth'],
   ['testhover'],
   ['testiconview'],
