@@ -111,16 +111,11 @@ foreach t : tests
   test(test_name, test_exe,
        args: [ '--tap', '-k' ],
        protocol: 'tap',
-       env: [ 'GIO_USE_VOLUME_MONITOR=unix',
-              'GSETTINGS_BACKEND=memory',
-              'GDK_DEBUG=default-settings',
-              'GTK_CSD=1',
-              'G_ENABLE_DIAGNOSTIC=0',
+       env: [
               'NO_AT_BRIDGE=1',
               'GSK_RENDERER=cairo',
               'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
               'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
-              'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
             ],
        suite: 'gtk',
        should_fail: expect_fail,
@@ -138,14 +133,9 @@ if add_languages('cpp', required: false)
   test('c++ keywords', test_exe,
        args: [ '--tap', '-k' ],
        #protocol: 'tap',
-       env: [ 'GIO_USE_VOLUME_MONITOR=unix',
-              'GSETTINGS_BACKEND=memory',
-              'GDK_DEBUG=default-settings',
-              'GTK_CSD=1',
-              'G_ENABLE_DIAGNOSTIC=0',
+       env: [
               'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
               'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
-              'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
             ],
        suite: 'gtk')
   if get_option('install-tests')
@@ -192,12 +182,7 @@ foreach test : focus_chain_tests
   test(test[0] + ' ' + test[1], focus_chain,
        args: [ join_paths(meson.current_source_dir(), 'focus-chain', test[0] + '.ui'),
                join_paths(meson.current_source_dir(), 'focus-chain', test[0] + '.' + test[1]) ],
-       env: [ 'GIO_USE_VOLUME_MONITOR=unix',
-              'GSETTINGS_BACKEND=memory',
-              'GDK_DEBUG=default-settings',
-              'GTK_CSD=1',
-              'G_ENABLE_DIAGNOSTIC=0',
-              'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
+       env: [
               'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
               'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
              ],
@@ -226,14 +211,12 @@ if false and get_option ('profiler')
 
   test('performance-layout', test_performance,
        args: [ '--mark', 'size allocation', join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory') ],
-       env: [ 'GTK_THEME=Empty',
-              'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir) ],
+       env: [ 'GTK_THEME=Empty' ],
        suite: [ 'gtk' ])
 
   test('performance-snapshot', test_performance,
        args: [ '--mark', 'widget snapshot', join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory') ],
-       env: [ 'GTK_THEME=Empty',
-              'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir) ],
+       env: [ 'GTK_THEME=Empty' ],
        suite: [ 'gtk' ])
 
 endif

@@ -6,18 +6,33 @@ installed_test_datadir = join_paths(gtk_datadir, 'installed-tests', 'gtk-4.0')
 # otherwise we're going to have failures down the line
 diff = find_program('diff', required: true)
 
+common_env = [
+  'GIO_USE_VOLUME_MONITOR=unix',
+  'GSETTINGS_BACKEND=memory',
+  'GDK_DEBUG=default-settings:misc',
+  'GTK_CSD=1',
+  'G_ENABLE_DIAGNOSTIC=0',
+  'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
+]
+
 add_test_setup ('x11',
                 is_default: true,
-                env: ['GDK_BACKEND=x11',
-                      'TEST_OUTPUT_SUBDIR=x11' ])
+                env: common_env + [
+                     'GDK_BACKEND=x11',
+                     'TEST_OUTPUT_SUBDIR=x11',
+                     ])
 
 add_test_setup ('wayland',
-                env: ['GDK_BACKEND=wayland',
-                      'TEST_OUTPUT_SUBDIR=wayland' ])
+                env: common_env + [
+                      'GDK_BACKEND=wayland',
+                      'TEST_OUTPUT_SUBDIR=wayland',
+                      ])
 
 add_test_setup ('broadway',
-                env: ['GDK_BACKEND=broadway',
-                      'TEST_OUTPUT_SUBDIR=broadway' ])
+                env: common_env + [
+                      'GDK_BACKEND=broadway',
+                      'TEST_OUTPUT_SUBDIR=broadway',
+                      ])
 
 subdir('performance')
 subdir('gdk')
