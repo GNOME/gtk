@@ -2816,6 +2816,14 @@ _gdk_wayland_seat_remove_tablet (GdkWaylandSeat       *seat,
 
   zwp_tablet_v2_destroy (tablet->wp_tablet);
 
+  while (tablet->pads)
+    {
+      GdkWaylandTabletPadData *pad = tablet->pads->data;
+
+      pad->current_tablet = NULL;
+      tablet->pads = g_list_remove (tablet->pads, pad);
+    }
+
   device_manager->devices =
     g_list_remove (device_manager->devices, tablet->master);
   device_manager->devices =
