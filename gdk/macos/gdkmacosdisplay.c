@@ -829,7 +829,6 @@ _gdk_macos_display_break_all_grabs (GdkMacosDisplay *self,
   g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
 
   seat = gdk_display_get_default_seat (GDK_DISPLAY (self));
-
   devices[0] = gdk_seat_get_keyboard (seat);
   devices[1] = gdk_seat_get_pointer (seat);
 
@@ -846,6 +845,7 @@ _gdk_macos_display_break_all_grabs (GdkMacosDisplay *self,
           grab->implicit_ungrab = TRUE;
         }
 
+      _gdk_display_end_device_grab (GDK_DISPLAY (self), device, 0, NULL, TRUE);
       _gdk_display_device_grab_update (GDK_DISPLAY (self), device, NULL, 0);
     }
 }

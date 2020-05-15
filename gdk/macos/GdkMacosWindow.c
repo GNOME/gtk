@@ -625,4 +625,9 @@
   return GDK_MACOS_DISPLAY (GDK_SURFACE (self->gdk_surface)->display);
 }
 
+-(BOOL)movableByWindowBackground
+{
+  return NO;
+}
+
 @end

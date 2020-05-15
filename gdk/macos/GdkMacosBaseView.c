@@ -75,6 +75,11 @@
   return YES;
 }
 
+-(BOOL)mouseDownCanMoveWindow
+{
+  return NO;
+}
+
 -(BOOL)acceptsFirstResponder
 {
   GDK_NOTE (EVENTS, g_message ("acceptsFirstResponder"));

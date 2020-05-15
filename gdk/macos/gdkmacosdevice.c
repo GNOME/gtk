@@ -124,7 +124,7 @@ gdk_macos_device_ungrab (GdkDevice *device,
   if (grab != NULL)
     grab->serial_end = 0;
 
-  _gdk_display_device_grab_update (display, device, NULL, 0);
+  _gdk_display_device_grab_update (display, device, device, 0);
 }
 
 static gboolean
