@@ -99,7 +99,8 @@ gdk_broadway_surface_finalize (GObject *object)
 static gboolean
 thaw_updates_cb (GdkSurface *surface)
 {
-  gdk_surface_thaw_updates (surface);
+  if (!GDK_SURFACE_DESTROYED (surface))
+    gdk_surface_thaw_updates (surface);
   g_object_unref (surface);
   return G_SOURCE_REMOVE;
 }
