@@ -1568,7 +1568,7 @@ handle_pointing_event (GdkEvent *event)
       target = gtk_window_lookup_pointer_focus_implicit_grab (toplevel, device, sequence);
 
       if (!target)
-       target = native_pick (GTK_NATIVE (native), x, y);
+        target = native_pick (GTK_NATIVE (native), x, y);
 
       if (!target)
         target = GTK_WIDGET (native);
