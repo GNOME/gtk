@@ -1180,6 +1180,8 @@ render_clipped_child (GskGLRenderer         *self,
           gboolean is_offscreen;
           TextureRegion region;
 
+          gsk_rounded_rect_init_from_rect (&child_clip, &transformed_clip, 0.0f);
+
           ops_push_clip (builder, &child_clip);
           if (!add_offscreen_ops (self, builder, &child->bounds,
                                   child,
