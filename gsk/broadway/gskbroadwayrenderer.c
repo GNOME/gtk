@@ -756,7 +756,14 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
       int height = ceil (node->bounds.origin.y + node->bounds.size.height) - y;
       int scale = broadway_display->scale_factor;
 
-      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width * scale, height * scale);
+#define MAX_IMAGE_SIZE 32767
+
+      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                            MIN (width * scale, MAX_IMAGE_SIZE),
+                                            MIN (height * scale, MAX_IMAGE_SIZE));
+
+#undef MAX_IMAGE_SIZE
+
       cr = cairo_create (surface);
       cairo_scale (cr, scale, scale);
       cairo_translate (cr, -x, -y);

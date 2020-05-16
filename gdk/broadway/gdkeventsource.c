@@ -18,7 +18,6 @@
 #include "config.h"
 
 #include "gdkeventsource.h"
-#include "gdkseat.h"
 
 #include "gdksurfaceprivate.h"
 #include "gdkframeclockprivate.h"
@@ -87,13 +86,11 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
                                 BroadwayInputMsg *message)
 {
   GdkBroadwayDisplay *display_broadway;
-  GdkSeat *seat;
   GdkSurface *surface;
   GdkEvent *event = NULL;
   GList *node;
 
   display_broadway = GDK_BROADWAY_DISPLAY (display);
-  seat = gdk_display_get_default_seat (display);
 
   switch (message->base.type) {
   case BROADWAY_EVENT_ENTER:
@@ -102,8 +99,8 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
       {
         event = gdk_crossing_event_new (GDK_ENTER_NOTIFY,
                                         surface,
-                                        gdk_seat_get_pointer (seat),
-                                        gdk_seat_get_pointer (seat),
+                                        display_broadway->core_pointer,
+                                        display_broadway->pointer,
                                         message->base.time,
                                         message->pointer.state,
                                         message->pointer.win_x,
@@ -121,8 +118,8 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
       {
         event = gdk_crossing_event_new (GDK_LEAVE_NOTIFY,
                                         surface,
-                                        gdk_seat_get_pointer (seat),
-                                        gdk_seat_get_pointer (seat),
+                                        display_broadway->core_pointer,
+                                        display_broadway->pointer,
                                         message->base.time,
                                         message->pointer.state,
                                         message->pointer.win_x,
@@ -142,8 +139,8 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
     if (surface)
       {
         event = gdk_motion_event_new (surface,
-                                      gdk_seat_get_pointer (seat),
-                                      gdk_seat_get_pointer (seat),
+                                      display_broadway->core_pointer,
+                                      display_broadway->pointer,
                                       NULL,
                                       message->base.time,
                                       message->pointer.state,
@@ -169,8 +166,8 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
                                         ? GDK_BUTTON_PRESS
                                         : GDK_BUTTON_RELEASE,
                                       surface,
-                                      gdk_seat_get_pointer (seat),
-                                      gdk_seat_get_pointer (seat),
+                                      display_broadway->core_pointer,
+                                      display_broadway->pointer,
                                       NULL,
                                       message->base.time,
                                       message->pointer.state,
@@ -189,8 +186,8 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
     if (surface)
       {
         event = gdk_scroll_event_new_discrete (surface,
-                                               gdk_seat_get_pointer (seat),
-                                               gdk_seat_get_pointer (seat),
+                                               display_broadway->core_pointer,
+                                               display_broadway->pointer,
                                                NULL,
                                                message->base.time,
                                                0,
@@ -198,7 +195,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
                                                  ? GDK_SCROLL_UP
                                                  : GDK_SCROLL_DOWN,
                                                FALSE);
-                                               
+
         node = _gdk_event_queue_append (display, event);
         _gdk_windowing_got_event (display, node, event, message->base.serial);
       }
@@ -210,7 +207,6 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
       {
         GdkEventType event_type = 0;
         GdkModifierType state;
-        GdkDevice *source_device;
 
         switch (message->touch.touch_type) {
         case 0:
@@ -230,15 +226,6 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
             message->touch.is_emulated && _gdk_broadway_moveresize_handle_event (display, message))
           break;
 
-        source_device = gdk_seat_get_pointer (seat);
-        {
-          GList *devices;
-          devices = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_TOUCH);
-          if (devices)
-            source_device = GDK_DEVICE (devices->data);
-          g_list_free (devices);
-        }
-
         state = message->touch.state;
         if (event_type == GDK_TOUCH_BEGIN || event_type == GDK_TOUCH_UPDATE)
           state |= GDK_BUTTON1_MASK;
@@ -246,8 +233,8 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
         event = gdk_touch_event_new (event_type,
                                      GUINT_TO_POINTER (message->touch.sequence_id),
                                      surface,
-                                     gdk_seat_get_pointer (seat),
-                                     source_device,
+                                     display_broadway->core_pointer,
+                                     display_broadway->touchscreen,
                                      message->base.time,
                                      state,
                                      message->touch.win_x,
@@ -275,8 +262,8 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
                                      ? GDK_KEY_PRESS
                                      : GDK_KEY_RELEASE,
                                    surface,
-                                   gdk_seat_get_keyboard (seat),
-                                   gdk_seat_get_keyboard (seat),
+                                   display_broadway->core_keyboard,
+                                   display_broadway->keyboard,
                                    message->base.time,
                                    message->key.key,
                                    message->key.state,
@@ -291,7 +278,10 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
     break;
   case BROADWAY_EVENT_GRAB_NOTIFY:
   case BROADWAY_EVENT_UNGRAB_NOTIFY:
-    _gdk_display_device_grab_update (display, gdk_seat_get_pointer (seat), gdk_seat_get_pointer (seat), message->base.serial);
+    _gdk_display_device_grab_update (display,
+                                     display_broadway->core_pointer,
+                                     display_broadway->pointer,
+                                     message->base.serial);
     break;
 
   case BROADWAY_EVENT_CONFIGURE_NOTIFY:
@@ -330,8 +320,8 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
     if (surface)
       {
         event = gdk_focus_event_new (surface,
-                                     gdk_seat_get_keyboard (seat),
-                                     gdk_seat_get_keyboard (seat),
+                                     display_broadway->core_keyboard,
+                                     display_broadway->keyboard,
                                      FALSE);
 
         node = _gdk_event_queue_append (display, event);
@@ -341,8 +331,8 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
     if (surface)
       {
         event = gdk_focus_event_new (surface,
-                                     gdk_seat_get_keyboard (seat),
-                                     gdk_seat_get_keyboard (seat),
+                                     display_broadway->core_keyboard,
+                                     display_broadway->keyboard,
                                      TRUE);
 
         node = _gdk_event_queue_append (display, event);

@@ -113,7 +113,7 @@ _gdk_broadway_display_size_changed (GdkDisplay                      *display,
     }}
 
 static GdkDevice *
-create_core_pointer (GdkDisplay       *display)
+create_core_pointer (GdkDisplay *display)
 {
   return g_object_new (GDK_TYPE_BROADWAY_DEVICE,
                        "name", "Core Pointer",
@@ -125,7 +125,7 @@ create_core_pointer (GdkDisplay       *display)
 }
 
 static GdkDevice *
-create_core_keyboard (GdkDisplay       *display)
+create_core_keyboard (GdkDisplay *display)
 {
   return g_object_new (GDK_TYPE_BROADWAY_DEVICE,
                        "name", "Core Keyboard",
@@ -137,7 +137,31 @@ create_core_keyboard (GdkDisplay       *display)
 }
 
 static GdkDevice *
-create_touchscreen (GdkDisplay       *display)
+create_pointer (GdkDisplay *display)
+{
+  return g_object_new (GDK_TYPE_BROADWAY_DEVICE,
+                       "name", "Pointer",
+                       "type", GDK_DEVICE_TYPE_SLAVE,
+                       "source", GDK_SOURCE_MOUSE,
+                       "has-cursor", TRUE,
+                       "display", display,
+                       NULL);
+}
+
+static GdkDevice *
+create_keyboard (GdkDisplay *display)
+{
+  return g_object_new (GDK_TYPE_BROADWAY_DEVICE,
+                       "name", "Keyboard",
+                       "type", GDK_DEVICE_TYPE_SLAVE,
+                       "source", GDK_SOURCE_KEYBOARD,
+                       "has-cursor", FALSE,
+                       "display", display,
+                       NULL);
+}
+
+static GdkDevice *
+create_touchscreen (GdkDisplay *display)
 {
   return g_object_new (GDK_TYPE_BROADWAY_DEVICE,
                        "name", "Touchscreen",
@@ -161,16 +185,23 @@ _gdk_broadway_display_open (const gchar *display_name)
 
   broadway_display->core_pointer = create_core_pointer (display);
   broadway_display->core_keyboard = create_core_keyboard (display);
+  broadway_display->pointer = create_pointer (display);
+  broadway_display->keyboard = create_keyboard (display);
   broadway_display->touchscreen = create_touchscreen (display);
 
   _gdk_device_set_associated_device (broadway_display->core_pointer, broadway_display->core_keyboard);
   _gdk_device_set_associated_device (broadway_display->core_keyboard, broadway_display->core_pointer);
+  _gdk_device_set_associated_device (broadway_display->pointer, broadway_display->core_pointer);
+  _gdk_device_set_associated_device (broadway_display->keyboard, broadway_display->core_keyboard);
   _gdk_device_set_associated_device (broadway_display->touchscreen, broadway_display->core_pointer);
   _gdk_device_add_slave (broadway_display->core_pointer, broadway_display->touchscreen);
 
   seat = gdk_seat_default_new_for_master_pair (broadway_display->core_pointer,
                                                broadway_display->core_keyboard);
+
   gdk_display_add_seat (display, seat);
+  gdk_seat_default_add_slave (GDK_SEAT_DEFAULT (seat), broadway_display->pointer);
+  gdk_seat_default_add_slave (GDK_SEAT_DEFAULT (seat), broadway_display->keyboard);
   gdk_seat_default_add_slave (GDK_SEAT_DEFAULT (seat), broadway_display->touchscreen);
   g_object_unref (seat);
 
