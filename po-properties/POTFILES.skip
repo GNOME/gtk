@@ -58,13 +58,17 @@ examples/application10/window.ui
 examples/application2/window.ui
 examples/application3/window.ui
 examples/application4/app-menu.ui
+examples/application4/gears-menu.ui
 examples/application4/window.ui
 examples/application5/app-menu.ui
+examples/application5/gears-menu.ui
 examples/application5/window.ui
 examples/application6/app-menu.ui
+examples/application6/gears-menu.ui
 examples/application6/prefs.ui
 examples/application6/window.ui
 examples/application7/app-menu.ui
+examples/application7/gears-menu.ui
 examples/application7/prefs.ui
 examples/application7/window.ui
 examples/application8/app-menu.ui

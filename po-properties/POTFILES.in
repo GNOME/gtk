@@ -112,7 +112,6 @@ gtk/gtkcolorscale.c
 gtk/gtkcolorswatch.c
 gtk/gtkcombobox.c
 gtk/gtkconstraint.c
-gtk/gtkcontainer.c
 gtk/gtkcssnode.c
 gtk/gtkcssprovider.c
 gtk/gtkcssshorthandproperty.c
@@ -310,6 +309,7 @@ gtk/gtkwidget.c
 gtk/gtkwidgetpaintable.c
 gtk/gtkwindow.c
 gtk/gtkwindowcontrols.c
+gtk/gtkwindowhandle.c
 gtk/inspector/action-editor.c
 gtk/inspector/controllers.c
 gtk/inspector/css-editor.c
