@@ -23,9 +23,10 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkwindowprivate.h"
-#include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkrendericonprivate.h"
+#include "gtkcssboxesimplprivate.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkintl.h"
 
@@ -82,31 +83,14 @@ gtk_text_handle_native_get_surface_transform (GtkNative *native,
                                               int       *x,
                                               int       *y)
 {
-  GtkCssStyle *style;
+  GtkCssBoxes css_boxes;
+  const graphene_rect_t *margin_rect;
 
-  style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (native)));
-  *x  = _gtk_css_number_value_get (style->size->margin_left, 100) +
-        _gtk_css_number_value_get (style->border->border_left_width, 100) +
-        _gtk_css_number_value_get (style->size->padding_left, 100);
-  *y  = _gtk_css_number_value_get (style->size->margin_top, 100) +
-        _gtk_css_number_value_get (style->border->border_top_width, 100) +
-        _gtk_css_number_value_get (style->size->padding_top, 100);
-}
+  gtk_css_boxes_init (&css_boxes, GTK_WIDGET (native));
+  margin_rect = gtk_css_boxes_get_margin_rect (&css_boxes);
 
-static void
-gtk_text_handle_get_size (GtkTextHandle *handle,
-                          gint          *width,
-                          gint          *height)
-{
-  GtkWidget *widget = GTK_WIDGET (handle);
-  GtkStyleContext *context;
-
-  context = gtk_widget_get_style_context (widget);
-
-  if (width)
-    *width = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_MIN_WIDTH), 100);
-  if (height)
-    *height = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_MIN_HEIGHT), 100);
+  *x = - margin_rect->origin.x;
+  *y = - margin_rect->origin.y;
 }
 
 static void
@@ -300,15 +284,8 @@ gtk_text_handle_measure (GtkWidget      *widget,
                          int            *minimum_baseline,
                          int            *natural_baseline)
 {
-  gint size;
-
-  if (orientation == GTK_ORIENTATION_VERTICAL)
-    gtk_text_handle_get_size (GTK_TEXT_HANDLE (widget), NULL, &size);
-  else
-    gtk_text_handle_get_size (GTK_TEXT_HANDLE (widget), &size, NULL);
-
-  *natural = size;
-  *minimum = size;
+  *natural = 0;
+  *minimum = 0;
   *minimum_baseline = -1;
   *natural_baseline = -1;
 }
