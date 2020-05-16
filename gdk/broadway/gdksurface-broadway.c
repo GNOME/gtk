@@ -86,7 +86,7 @@ gdk_broadway_surface_finalize (GObject *object)
 
   broadway_display = GDK_BROADWAY_DISPLAY (gdk_surface_get_display (GDK_SURFACE (impl)));
 
-  g_hash_table_remove (broadway_display->id_ht, GINT_TO_POINTER(impl->id));
+  g_hash_table_remove (broadway_display->id_ht, GINT_TO_POINTER (impl->id));
 
   if (impl->cursor)
     g_object_unref (impl->cursor);
@@ -271,6 +271,8 @@ _gdk_broadway_display_create_surface (GdkDisplay     *display,
                                                surface->height);
   g_hash_table_insert (broadway_display->id_ht, GINT_TO_POINTER(impl->id), surface);
 
+  g_object_ref (surface);
+
   if (!surface->parent)
     broadway_display->toplevels = g_list_prepend (broadway_display->toplevels, impl);
 
@@ -320,7 +322,6 @@ _gdk_broadway_surface_destroy (GdkSurface *surface,
   g_hash_table_remove (broadway_display->id_ht, GINT_TO_POINTER (impl->id));
 
   _gdk_broadway_server_destroy_surface (broadway_display->server, impl->id);
-
 }
 
 void
