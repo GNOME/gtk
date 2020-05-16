@@ -61,11 +61,13 @@ cd ${builddir}
 
 $srcdir/.gitlab-ci/meson-junit-report.py \
         --project-name=gtk \
+        --backend=${backend} \
         --job-id="${CI_JOB_NAME}" \
         --output=report-${backend}.xml \
         meson-logs/testlog-${backend}.json
 $srcdir/.gitlab-ci/meson-html-report.py \
         --project-name=gtk \
+        --backend=${backend} \
         --job-id="${CI_JOB_NAME}" \
         --reftest-output-dir="testsuite/reftests/output/${backend}" \
         --output=report-${backend}.html \
