@@ -310,57 +310,92 @@
 
 -(BOOL)trackManualMove
 {
-  NSRect screenFrame = [[NSScreen mainScreen] visibleFrame];
-  NSRect windowFrame = [self frame];
+  NSRect workarea;
+  NSRect geometry;
+  NSRect windowFrame;
+  NSRect withoutShadow;
+  NSRect newFrame;
   NSPoint currentLocation;
-  NSPoint newOrigin;
-  GdkMonitor *monitor;
   int shadow_top = 0;
   int shadow_left = 0;
   int shadow_right = 0;
+  int shadow_bottom = 0;
+  int thresh_top;
+  int thresh_left;
+  int thresh_right;
+  int thresh_bottom;
 
   if (!inManualMove)
     return NO;
 
+  workarea = [[self screen] visibleFrame];
+  geometry = [[self screen] frame];
+  windowFrame = [self frame];
+
+  _gdk_macos_surface_get_shadow (gdk_surface, &shadow_top, &shadow_right, &shadow_bottom, &shadow_left);
+
   currentLocation = [self convertPointToScreen:[self mouseLocationOutsideOfEventStream]];
-  newOrigin.x = currentLocation.x - initialMoveLocation.x;
-  newOrigin.y = currentLocation.y - initialMoveLocation.y;
+  windowFrame.origin.x = currentLocation.x - initialMoveLocation.x;
+  windowFrame.origin.y = currentLocation.y - initialMoveLocation.y;
 
-  _gdk_macos_surface_get_shadow (gdk_surface,
-                                 &shadow_top,
-                                 &shadow_right,
-                                 NULL,
-                                 &shadow_left);
-
-  /* Clamp vertical position to below the menu bar. */
-  if (newOrigin.y + windowFrame.size.height - shadow_top > screenFrame.origin.y + screenFrame.size.height)
-    newOrigin.y = screenFrame.origin.y + screenFrame.size.height - windowFrame.size.height + shadow_top;
-
-#define SNAP_THRESHOLD 20
-
-  /* Try to snap to monitor edges taking shadow into account */
-  if ((monitor = _gdk_macos_surface_get_best_monitor (gdk_surface)))
+  if (currentLocation.y > lastMoveLocation.y)
     {
-      if (shadow_left)
-        {
-          int minx = monitor->geometry.x - shadow_left;
-
-          if (newOrigin.x < minx && newOrigin.x > (minx - SNAP_THRESHOLD))
-            newOrigin.x = minx;
-        }
-
-      if (shadow_right)
-        {
-          int maxx = monitor->geometry.x + monitor->geometry.width + shadow_right - windowFrame.size.width;
-
-          if (newOrigin.x > maxx && newOrigin.x < (maxx + SNAP_THRESHOLD))
-            newOrigin.x = maxx;
-        }
+      thresh_bottom = 5;
+      thresh_top = 10;
+    }
+  else
+    {
+      thresh_bottom = 10;
+      thresh_top = 10;
     }
 
-#undef SNAP_THRESHOLD
+  if (currentLocation.x > lastMoveLocation.x)
+    {
+      thresh_right = 20;
+      thresh_left = 10;
+    }
+  else
+    {
+      thresh_right = 10;
+      thresh_left = 20;
+    }
 
-  [self setFrameOrigin:newOrigin];
+  withoutShadow = NSMakeRect (windowFrame.origin.x + shadow_left,
+                              windowFrame.origin.y + shadow_bottom,
+                              windowFrame.size.width - shadow_left - shadow_right,
+                              windowFrame.size.height - shadow_top - shadow_bottom);
+
+  newFrame = [self constrainFrameRect:withoutShadow
+                             toScreen:[self screen]];
+
+  if (newFrame.origin.x < workarea.origin.x &&
+      newFrame.origin.x > (workarea.origin.x - thresh_left))
+    newFrame.origin.x = workarea.origin.x;
+
+  if (newFrame.origin.x + newFrame.size.width > workarea.origin.x + workarea.size.width &&
+      newFrame.origin.x + newFrame.size.width < workarea.origin.x + workarea.size.width + thresh_right)
+    newFrame.origin.x = workarea.origin.x + workarea.size.width - newFrame.size.width;
+
+  if (newFrame.origin.y < workarea.origin.y &&
+      newFrame.origin.y > workarea.origin.y - thresh_bottom)
+    newFrame.origin.y = workarea.origin.y;
+
+  if (newFrame.origin.y < geometry.origin.y &&
+      newFrame.origin.y > geometry.origin.y - thresh_bottom)
+    newFrame.origin.y = geometry.origin.y;
+
+  if (newFrame.origin.y + newFrame.size.height > workarea.origin.y + workarea.size.height &&
+      newFrame.origin.y + newFrame.size.height < workarea.origin.y + workarea.size.height + thresh_top)
+    newFrame.origin.y = workarea.origin.y + workarea.size.height - newFrame.size.height;
+
+  newFrame.origin.x -= shadow_left;
+  newFrame.origin.y -= shadow_bottom;
+  newFrame.size.width += shadow_left + shadow_right;
+  newFrame.size.height += shadow_bottom + shadow_top;
+
+  lastMoveLocation = currentLocation;
+
+  [self setFrameOrigin:newFrame.origin];
 
   return YES;
 }
@@ -386,6 +421,8 @@
   initialMoveLocation = [self convertPointToScreen:[self mouseLocationOutsideOfEventStream]];
   initialMoveLocation.x -= frame.origin.x;
   initialMoveLocation.y -= frame.origin.y;
+
+  lastMoveLocation = initialMoveLocation;
 }
 
 -(BOOL)trackManualResize

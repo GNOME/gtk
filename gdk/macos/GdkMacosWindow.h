@@ -41,6 +41,7 @@
   BOOL             inManualResize;
   BOOL             inTrackManualResize;
   NSPoint          initialMoveLocation;
+  NSPoint          lastMoveLocation;
   NSPoint          initialResizeLocation;
   NSRect           initialResizeFrame;
   GdkSurfaceEdge   resizeEdge;
