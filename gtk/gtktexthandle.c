@@ -94,22 +94,6 @@ gtk_text_handle_native_get_surface_transform (GtkNative *native,
 }
 
 static void
-gtk_text_handle_get_size (GtkTextHandle *handle,
-                          gint          *width,
-                          gint          *height)
-{
-  GtkWidget *widget = GTK_WIDGET (handle);
-  GtkStyleContext *context;
-
-  context = gtk_widget_get_style_context (widget);
-
-  if (width)
-    *width = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_MIN_WIDTH), 100);
-  if (height)
-    *height = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_MIN_HEIGHT), 100);
-}
-
-static void
 gtk_text_handle_get_padding (GtkTextHandle *handle,
                              GtkBorder     *border)
 {
@@ -300,15 +284,8 @@ gtk_text_handle_measure (GtkWidget      *widget,
                          int            *minimum_baseline,
                          int            *natural_baseline)
 {
-  gint size;
-
-  if (orientation == GTK_ORIENTATION_VERTICAL)
-    gtk_text_handle_get_size (GTK_TEXT_HANDLE (widget), NULL, &size);
-  else
-    gtk_text_handle_get_size (GTK_TEXT_HANDLE (widget), &size, NULL);
-
-  *natural = size;
-  *minimum = size;
+  *natural = 0;
+  *minimum = 0;
   *minimum_baseline = -1;
   *natural_baseline = -1;
 }
