@@ -4603,15 +4603,10 @@ show_surface (GdkSurface *surface)
   if (!was_mapped)
     gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
 
-  _gdk_surface_update_viewable (surface);
-
   gdk_wayland_surface_show (surface, FALSE);
 
   if (!was_mapped)
-    {
-      if (gdk_surface_is_viewable (surface))
-        gdk_surface_invalidate_rect (surface, NULL);
-    }
+    gdk_surface_invalidate_rect (surface, NULL);
 }
 
 static gboolean

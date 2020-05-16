@@ -185,7 +185,6 @@ gdk_surface_destroy
 gdk_surface_is_destroyed
 gdk_surface_get_display
 gdk_surface_hide
-gdk_surface_is_viewable
 gdk_surface_get_mapped
 gdk_surface_translate_coordinates
 gdk_surface_begin_resize_drag

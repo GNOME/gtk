@@ -4519,7 +4519,7 @@ event_surface_is_still_viewable (GdkEvent *event)
     case GDK_ENTER_NOTIFY:
     case GDK_PROXIMITY_IN:
     case GDK_SCROLL:
-      return gdk_surface_is_viewable (gdk_event_get_surface (event));
+      return gdk_surface_get_mapped (gdk_event_get_surface (event));
 
 #if 0
     /* The following events are the second half of paired events;
@@ -4578,7 +4578,7 @@ gtk_widget_event (GtkWidget *widget,
   double x, y;
 
   /* We check only once for is-still-visible; if someone
-   * hides the window in on of the signals on the widget,
+   * hides the window in one of the signals on the widget,
    * they are responsible for returning TRUE to terminate
    * handling.
    */

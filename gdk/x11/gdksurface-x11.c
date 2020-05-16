@@ -1515,7 +1515,6 @@ show_popup (GdkSurface *surface)
 {
   gdk_x11_surface_raise (surface);
   gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
-  _gdk_surface_update_viewable (surface);
   gdk_x11_surface_show (surface, FALSE);
   gdk_surface_invalidate_rect (surface, NULL);
 }
@@ -4929,6 +4928,7 @@ gdk_x11_toplevel_present (GdkToplevel       *toplevel,
   GdkSurface *surface = GDK_SURFACE (toplevel);
   GdkGeometry geometry;
   GdkSurfaceHints mask;
+  gboolean was_mapped;
 
   gdk_x11_surface_unminimize (surface);
 
@@ -4964,10 +4964,6 @@ gdk_x11_toplevel_present (GdkToplevel       *toplevel,
   else
     gdk_x11_surface_unfullscreen (surface);
 
-  {
-  gboolean was_mapped;
-  gboolean did_show;
-
   if (surface->destroyed)
     return TRUE;
 
@@ -4976,16 +4972,10 @@ gdk_x11_toplevel_present (GdkToplevel       *toplevel,
   if (!was_mapped)
     gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
 
-  did_show = _gdk_surface_update_viewable (surface);
-
-  gdk_x11_surface_show (surface, !did_show ? was_mapped : TRUE);
+  gdk_x11_surface_show (surface, was_mapped);
 
   if (!was_mapped)
-    {
-      if (gdk_surface_is_viewable (surface))
-        gdk_surface_invalidate_rect (surface, NULL);
-    }
-  }
+    gdk_surface_invalidate_rect (surface, NULL);
 
   return TRUE;
 }
