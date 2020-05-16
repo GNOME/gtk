@@ -1430,8 +1430,6 @@ gdk_x11_display_open (const gchar *display_name)
 	      display_x11->have_randr15 = TRUE;
 #endif
       }
-
-       gdk_x11_register_standard_event_type (display, display_x11->xrandr_event_base, RRNumberEvents);
   }
 #endif
 
@@ -1464,10 +1462,6 @@ gdk_x11_display_open (const gchar *display_name)
 			    &ignore))
     {
       display_x11->have_xfixes = TRUE;
-
-      gdk_x11_register_standard_event_type (display,
-					    display_x11->xfixes_event_base, 
-					    XFixesNumberEvents);
     }
   else
 #endif
@@ -1497,10 +1491,6 @@ gdk_x11_display_open (const gchar *display_name)
 			     &ignore))
     {
       display_x11->have_xdamage = TRUE;
-
-      gdk_x11_register_standard_event_type (display,
-					    display_x11->xdamage_event_base,
-					    XDamageNumberEvents);
     }
   else
 #endif
@@ -1939,12 +1929,6 @@ gdk_x11_display_finalize (GObject *object)
 
   /* Leader Window */
   XDestroyWindow (display_x11->xdisplay, display_x11->leader_window);
-
-  /* List of event window extraction functions */
-  g_slist_free_full (display_x11->event_types, g_free);
-
-  /* input GdkSurface list */
-  g_list_free_full (display_x11->input_surfaces, g_free);
 
   /* Free all GdkX11Screens */
   g_object_unref (display_x11->screen);
@@ -2437,39 +2421,6 @@ gdk_x11_display_set_startup_notification_id (GdkDisplay  *display,
                        gdk_x11_get_xatom_by_name_for_display (display, "_NET_STARTUP_ID"));
       display_x11->user_time = 0;
     }
-}
-
-/**
- * gdk_x11_register_standard_event_type:
- * @display: (type GdkX11Display): a #GdkDisplay
- * @event_base: first event type code to register
- * @n_events: number of event type codes to register
- *
- * Registers interest in receiving extension events with type codes
- * between @event_base and `event_base + n_events - 1`.
- * The registered events must have the window field in the same place
- * as core X events (this is not the case for e.g. XKB extension events).
- *
- * GDK may register the events of some X extensions on its own.
- *
- * This function should only be needed in unusual circumstances, e.g.
- * when filtering XInput extension events on the root window.
- **/
-void
-gdk_x11_register_standard_event_type (GdkDisplay *display,
-				      gint        event_base,
-				      gint        n_events)
-{
-  GdkEventTypeX11 *event_type;
-  GdkX11Display *display_x11;
-
-  display_x11 = GDK_X11_DISPLAY (display);
-  event_type = g_new (GdkEventTypeX11, 1);
-
-  event_type->base = event_base;
-  event_type->n_events = n_events;
-
-  display_x11->event_types = g_slist_prepend (display_x11->event_types, event_type);
 }
 
 /* look up the extension name for a given major opcode.  grubs around in

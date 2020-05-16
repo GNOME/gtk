@@ -99,17 +99,11 @@ struct _GdkX11Display
   GdkSurface *leader_gdk_surface;
   gboolean leader_window_title_set;
 
-  /* List of functions to go from extension event => X window */
-  GSList *event_types;
-
   /* X ID hashtable */
   GHashTable *xid_ht;
 
   /* streams reading selections */
   GSList *streams;
-
-  /* input GdkSurface list */
-  GList *input_surfaces;
 
   /* GdkCursor => XCursor */
   GHashTable *cursors;

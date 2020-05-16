@@ -126,11 +126,6 @@ GDK_AVAILABLE_IN_ALL
 void                           gdk_x11_display_error_trap_pop_ignored (GdkDisplay *display);
 
 GDK_AVAILABLE_IN_ALL
-void        gdk_x11_register_standard_event_type (GdkDisplay *display,
-                                                  gint        event_base,
-                                                  gint        n_events);
-
-GDK_AVAILABLE_IN_ALL
 void        gdk_x11_set_sm_client_id (const gchar *sm_client_id);
 
 G_END_DECLS
