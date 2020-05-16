@@ -40,6 +40,8 @@ typedef struct _GtkSearchEngineClass GtkSearchEngineClass;
 typedef struct _GtkSearchEnginePrivate GtkSearchEnginePrivate;
 typedef struct _GtkSearchHit GtkSearchHit;
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GtkSearchEngine, g_object_unref)
+
 struct _GtkSearchHit
 {
   GFile *file;
