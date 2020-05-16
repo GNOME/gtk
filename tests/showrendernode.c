@@ -69,14 +69,7 @@ gtk_node_view_snapshot (GtkWidget   *widget,
   GtkNodeView *self = GTK_NODE_VIEW (widget);
 
   if (self->node != NULL)
-    {
-      gtk_snapshot_push_clip (snapshot,
-                              &GRAPHENE_RECT_INIT (
-                                0, 0,
-                                gtk_widget_get_width (widget), gtk_widget_get_height (widget)));
-      gtk_snapshot_append_node (snapshot, self->node);
-      gtk_snapshot_pop (snapshot);
-    }
+    gtk_snapshot_append_node (snapshot, self->node);
 }
 
 static void
@@ -93,6 +86,7 @@ gtk_node_view_finalize (GObject *object)
 static void
 gtk_node_view_init (GtkNodeView *self)
 {
+  gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
 }
 
 static void
