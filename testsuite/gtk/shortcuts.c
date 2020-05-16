@@ -356,6 +356,7 @@ test_trigger_trigger (void)
       gdk_event_unref (event);
     }
 
+  gdk_surface_destroy (surface);
   g_object_unref (surface);
 
   g_object_unref (trigger[0]);
