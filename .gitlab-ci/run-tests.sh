@@ -14,7 +14,8 @@ case "${backend}" in
                 --print-errorlogs \
                 --setup=${backend} \
                 --suite=gtk \
-                --no-suite=gtk:a11y
+                --no-suite=gtk:a11y \
+                --no-suite=gsk-compare-broadway
 
     # Store the exit code for the CI run, but always
     # generate the reports
@@ -32,7 +33,8 @@ case "${backend}" in
                 --print-errorlogs \
                 --setup=${backend} \
                 --suite=gtk \
-                --no-suite=gtk:a11y
+                --no-suite=gtk:a11y \
+                --no-suite=gsk-compare-broadway
 
     exit_code=$?
     kill ${compositor}
@@ -49,7 +51,8 @@ case "${backend}" in
                 --print-errorlogs \
                 --setup=${backend} \
                 --suite=gtk \
-                --no-suite=gtk:a11y
+                --no-suite=gtk:a11y \
+                --no-suite=gsk-compare-opengl
 
     # don't let Broadway failures fail the run, for now
     exit_code=0
