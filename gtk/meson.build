@@ -671,6 +671,10 @@ foreach p: proto_sources
   endif
 endforeach
 
+if os_unix and tracker3_enabled
+  gtk_sources += 'gtksearchenginetracker3.c'
+endif
+
 if os_unix
   gtk_unix_print_headers = [
     'gtkpagesetupunixdialog.h',
@@ -956,6 +960,10 @@ endif
 
 if cloudproviders_enabled
   gtk_deps += cloudproviders_dep
+endif
+
+if os_unix and tracker3_enabled
+  gtk_deps += tracker3_dep
 endif
 
 # Unconditional. If libintl isn't found,
