@@ -122,6 +122,7 @@
 #include "gtkbuildable.h"
 #include "gtktooltipprivate.h"
 #include "gtkcssboxesimplprivate.h"
+#include "gtknativeprivate.h"
 
 #include "gtkrender.h"
 #include "gtkstylecontextprivate.h"
@@ -1157,68 +1158,6 @@ gtk_popover_get_gap_coords (GtkPopover *popover,
 }
 
 static void
-get_margin (GtkWidget *widget,
-            GtkBorder *border)
-{
-  GtkCssStyle *style;
-
-  style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
-
-  border->top = _gtk_css_number_value_get (style->size->margin_top, 100);
-  border->right = _gtk_css_number_value_get (style->size->margin_right, 100);
-  border->bottom = _gtk_css_number_value_get (style->size->margin_bottom, 100);
-  border->left = _gtk_css_number_value_get (style->size->margin_left, 100);
-}
-
-static void
-gtk_popover_get_rect_for_size (GtkPopover   *popover,
-                               int           popover_width,
-                               int           popover_height,
-                               GdkRectangle *rect)
-{
-  GtkWidget *widget = GTK_WIDGET (popover);
-  int x, y, w, h;
-  GtkBorder margin;
-
-  get_margin (widget, &margin);
-
-  x = 0;
-  y = 0;
-  w = popover_width;
-  h = popover_height;
-
-  x += MAX (TAIL_HEIGHT, margin.left);
-  y += MAX (TAIL_HEIGHT, margin.top);
-  w -= x + MAX (TAIL_HEIGHT, margin.right);
-  h -= y + MAX (TAIL_HEIGHT, margin.bottom);
-
-  rect->x = x;
-  rect->y = y;
-  rect->width = w;
-  rect->height = h;
-}
-
-static void
-gtk_popover_get_rect_coords (GtkPopover *popover,
-                             int        *x_out,
-                             int        *y_out,
-                             int        *w_out,
-                             int        *h_out)
-{
-  GtkWidget *widget = GTK_WIDGET (popover);
-  GdkRectangle rect;
-  GtkAllocation allocation;
-
-  gtk_widget_get_allocation (widget, &allocation);
-  gtk_popover_get_rect_for_size (popover, allocation.width, allocation.height, &rect);
-
-  *x_out = rect.x;
-  *y_out = rect.y;
-  *w_out = rect.width;
-  *h_out = rect.height;
-}
-
-static void
 get_border (GtkCssNode *node,
             GtkBorder *border)
 {
@@ -1262,39 +1201,22 @@ gtk_popover_apply_tail_path (GtkPopover *popover,
 }
 
 static void
-gtk_popover_fill_border_path (GtkPopover *popover,
-                              cairo_t    *cr)
-{
-  GtkWidget *widget = GTK_WIDGET (popover);
-  int x, y, w, h;
-  GskRoundedRect box;
-
-  cairo_set_source_rgba (cr, 0, 0, 0, 1);
-
-  gtk_popover_apply_tail_path (popover, cr);
-  cairo_close_path (cr);
-  cairo_fill (cr);
-
-  gtk_popover_get_rect_coords (popover, &x, &y, &w, &h);
-
-  gtk_rounded_boxes_init_for_style (&box,
-                                    NULL, NULL,
-                                    gtk_css_node_get_style (gtk_widget_get_css_node (widget)),
-                                    x, y, w, h);
-  gsk_rounded_rect_path (&box, cr);
-  cairo_fill (cr);
-}
-
-static void
 gtk_popover_update_shape (GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   if (priv->has_arrow)
     {
+      GtkCssBoxes content_css_boxes;
+      const GskRoundedRect *box;
       cairo_surface_t *cairo_surface;
       cairo_region_t *region;
       cairo_t *cr;
+      int x, y;
+      int native_x, native_y;
+
+      gtk_native_get_surface_transform (GTK_NATIVE (popover), &native_x, &native_y);
+      gtk_css_boxes_init (&content_css_boxes, priv->contents_widget);
 
       cairo_surface =
         gdk_surface_create_similar_surface (priv->surface,
@@ -1303,7 +1225,21 @@ gtk_popover_update_shape (GtkPopover *popover)
                                            gdk_surface_get_height (priv->surface));
 
       cr = cairo_create (cairo_surface);
-      gtk_popover_fill_border_path (popover, cr);
+
+      cairo_translate (cr, native_x, native_y);
+
+      cairo_set_source_rgba (cr, 0, 0, 0, 1);
+      gtk_popover_apply_tail_path (popover, cr);
+      cairo_close_path (cr);
+      cairo_fill (cr);
+
+      box = gtk_css_boxes_get_border_box (&content_css_boxes);
+      gtk_widget_translate_coordinates (priv->contents_widget, GTK_WIDGET (popover),
+                                        0, 0,
+                                        &x, &y);
+      cairo_translate (cr, x, y);
+      gsk_rounded_rect_path (box, cr);
+      cairo_fill (cr);
       cairo_destroy (cr);
 
       region = gdk_cairo_region_create_from_surface (cairo_surface);
