@@ -42,6 +42,8 @@ struct _GdkBroadwayDisplay
 
   GdkDevice *core_pointer;
   GdkDevice *core_keyboard;
+  GdkDevice *pointer;
+  GdkDevice *keyboard;
   GdkDevice *touchscreen;
 
   GSource *event_source;
