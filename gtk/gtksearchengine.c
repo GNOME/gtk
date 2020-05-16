@@ -40,6 +40,7 @@ struct _GtkSearchEnginePrivate {
 
   GtkSearchEngine *simple;
   gboolean simple_running;
+  gboolean got_results;
   gchar *simple_error;
 
   GtkSearchEngine *model;
@@ -185,7 +186,7 @@ _gtk_search_engine_class_init (GtkSearchEngineClass *class)
                   G_STRUCT_OFFSET (GtkSearchEngineClass, finished),
                   NULL, NULL,
                   NULL,
-                  G_TYPE_NONE, 0);
+                  G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 
   signals[ERROR] =
     g_signal_new (I_("error"),
@@ -256,13 +257,16 @@ update_status (GtkSearchEngine *engine)
           else if (engine->priv->model_error)
             _gtk_search_engine_error (engine, engine->priv->model_error);
           else
-            _gtk_search_engine_finished (engine);
+            _gtk_search_engine_finished (engine, engine->priv->got_results);
+
+          engine->priv->got_results = FALSE;
         }
     }
 }
 
 static void
 finished (GtkSearchEngine *engine,
+          gboolean         got_results,
           gpointer         data)
 {
   GtkSearchEngine *composite = GTK_SEARCH_ENGINE (data);
@@ -274,6 +278,7 @@ finished (GtkSearchEngine *engine,
   else if (engine == composite->priv->model)
     composite->priv->model_running = FALSE;
 
+  composite->priv->got_results |= got_results;
   update_status (composite);
 }
 
@@ -433,11 +438,12 @@ _gtk_search_engine_hits_added (GtkSearchEngine *engine,
 }
 
 void
-_gtk_search_engine_finished (GtkSearchEngine *engine)
+_gtk_search_engine_finished (GtkSearchEngine *engine,
+                             gboolean         got_results)
 {
   g_return_if_fail (GTK_IS_SEARCH_ENGINE (engine));
 
-  g_signal_emit (engine, signals[FINISHED], 0);
+  g_signal_emit (engine, signals[FINISHED], 0, got_results);
 }
 
 void
