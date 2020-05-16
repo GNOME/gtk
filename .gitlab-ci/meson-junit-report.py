@@ -19,6 +19,9 @@ aparser = argparse.ArgumentParser(description='Turns a Meson test log into a JUn
 aparser.add_argument('--project-name', metavar='NAME',
                      help='The project name',
                      default='unknown')
+aparser.add_argument('--backend', metavar='NAME',
+                     help='The used backend',
+                     default='unknown')
 aparser.add_argument('--job-id', metavar='ID',
                      help='The job ID for the report',
                      default='Unknown')
@@ -92,18 +95,18 @@ for name, units in suites.items():
     for unit in successes:
         testcase = ET.SubElement(testsuite, 'testcase')
         testcase.set('classname', '{}/{}'.format(args.project_name, unit['suite']))
-        testcase.set('name', unit['name'])
+        testcase.set('name', '{}/{}'.format(args.backend, unit['name']))
         testcase.set('time', str(unit['duration']))
 
     for unit in failures:
         testcase = ET.SubElement(testsuite, 'testcase')
         testcase.set('classname', '{}/{}'.format(args.project_name, unit['suite']))
-        testcase.set('name', unit['name'])
+        testcase.set('name', '{}/{}'.format(args.backend, unit['name']))
         testcase.set('time', str(unit['duration']))
 
         failure = ET.SubElement(testcase, 'failure')
         failure.set('classname', '{}/{}'.format(args.project_name, unit['suite']))
-        failure.set('name', unit['name'])
+        testcase.set('name', '{}/{}'.format(args.backend, unit['name']))
         failure.set('type', 'error')
         failure.text = unit['stdout']
 

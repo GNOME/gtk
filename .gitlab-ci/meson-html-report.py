@@ -138,12 +138,13 @@ ul.images li {
 </head>
 <body>
   <header>
-    <h1>{{ report.project_name }}/{{ report.branch_name }} :: Test Reports</h1>
+    <h1>{{ report.project_name }}/{{ report.backend }}/{{ report.branch_name }} :: Test Reports</h1>
   </header>
 
   <article>
     <section>
       <div class="report-meta">
+        <p><strong>Backend:</strong> {{ report.backend }}</p>
         <p><strong>Branch:</strong> {{ report.branch_name }}</p>
         <p><strong>Date:</strong> <time datetime="{{ report.date.isoformat() }}">{{ report.locale_date }}</time></p>
         {% if report.job_id %}<p><strong>Job ID:</strong> {{ report.job_id }}</p>{% endif %}
@@ -259,6 +260,9 @@ aparser = argparse.ArgumentParser(description='Turns a Meson test log into an HT
 aparser.add_argument('--project-name', metavar='NAME',
                      help='The project name',
                      default='Unknown')
+aparser.add_argument('--backend', metavar='NAME',
+                     help='The used backend',
+                     default='unknown')
 aparser.add_argument('--job-id', metavar='ID',
                      help='The job ID for the report',
                      default=None)
@@ -319,6 +323,7 @@ report = {}
 report['date'] = datetime.datetime.utcnow()
 report['locale_date'] = report['date'].strftime("%c")
 report['project_name'] = args.project_name
+report['backend'] = args.backend
 report['job_id'] = args.job_id
 report['branch_name'] = args.branch
 report['total_successes'] = 0
