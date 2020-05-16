@@ -27,6 +27,7 @@
 #include "gtkcsstypesprivate.h"
 #include "gtknativeprivate.h"
 #include "gtkpicture.h"
+#include "gtkcssboxesimplprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 
 /* for the drag icons */
@@ -122,15 +123,14 @@ gtk_drag_icon_native_get_surface_transform (GtkNative *native,
                                             int       *x,
                                             int       *y)
 {
-  GtkCssStyle *style;
+  GtkCssBoxes css_boxes;
+  const graphene_rect_t *margin_rect;
 
-  style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (native)));
-  *x  = _gtk_css_number_value_get (style->size->margin_left, 100) +
-        _gtk_css_number_value_get (style->border->border_left_width, 100) +
-        _gtk_css_number_value_get (style->size->padding_left, 100);
-  *y  = _gtk_css_number_value_get (style->size->margin_top, 100) +
-        _gtk_css_number_value_get (style->border->border_top_width, 100) +
-        _gtk_css_number_value_get (style->size->padding_top, 100);
+  gtk_css_boxes_init (&css_boxes, GTK_WIDGET (native));
+  margin_rect = gtk_css_boxes_get_margin_rect (&css_boxes);
+
+  *x = - margin_rect->origin.x;
+  *y = - margin_rect->origin.y;
 }
 
 static void
