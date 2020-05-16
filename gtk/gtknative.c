@@ -48,8 +48,8 @@ gtk_native_default_get_renderer (GtkNative *self)
 
 static void
 gtk_native_default_get_surface_transform (GtkNative *self,
-                                       int    *x,
-                                       int    *y)
+                                          int       *x,
+                                          int       *y)
 {
   *x = 0;
   *y = 0;
@@ -100,6 +100,15 @@ gtk_native_get_renderer (GtkNative *self)
   return GTK_NATIVE_GET_IFACE (self)->get_renderer (self);
 }
 
+/**
+ * gtk_native_get_surface_transform:
+ * @self: a @GtkNative
+ * @x: return location for the x coordinate
+ * @y: return location for the y coordinate
+ *
+ * Retrieves the surface transform of @self. This is the translation
+ * from @self's surface coordinates into @self's widget coordinates.
+ */
 void
 gtk_native_get_surface_transform (GtkNative *self,
                                   int       *x,
