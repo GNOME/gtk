@@ -51,7 +51,7 @@ find_widget_at_pointer (GdkDevice *device)
   if (widget)
     {
       double x, y;
-      int nx, ny;
+      double nx, ny;
 
       gdk_surface_get_device_position (gtk_native_get_surface (GTK_NATIVE (widget)),
                                        device, &x, &y, NULL);

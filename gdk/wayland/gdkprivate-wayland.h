@@ -103,8 +103,8 @@ GdkDrag        *_gdk_wayland_surface_drag_begin            (GdkSurface *surface,
                                                             GdkDevice *device,
                                                             GdkContentProvider *content,
                                                             GdkDragAction actions,
-                                                            gint       dx,
-                                                            gint       dy);
+                                                            double     dx,
+                                                            double     dy);
 void            _gdk_wayland_surface_offset_next_wl_buffer (GdkSurface *surface,
                                                             int        x,
                                                             int        y);

@@ -1898,14 +1898,17 @@ on_address_entry_show_help_pressed (GtkPlacesView        *view,
                                     GtkEntry             *entry)
 {
   GdkRectangle rect;
+  double x, y;
 
   /* Setup the auxiliary popover's rectangle */
   gtk_entry_get_icon_area (GTK_ENTRY (view->address_entry),
                            GTK_ENTRY_ICON_SECONDARY,
                            &rect);
   gtk_widget_translate_coordinates (view->address_entry, GTK_WIDGET (view),
-                                    rect.x, rect.y, &rect.x, &rect.y);
+                                    rect.x, rect.y, &x, &y);
 
+  rect.x = x;
+  rect.y = y;
   gtk_popover_set_pointing_to (GTK_POPOVER (view->server_adresses_popover), &rect);
   gtk_widget_set_visible (view->server_adresses_popover, TRUE);
 }

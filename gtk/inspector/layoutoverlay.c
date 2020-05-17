@@ -157,7 +157,7 @@ gtk_layout_overlay_snapshot (GtkInspectorOverlay *overlay,
                              GskRenderNode       *node,
                              GtkWidget           *widget)
 {
-  int nx, ny;
+  double nx, ny;
 
   gtk_native_get_surface_transform (GTK_NATIVE (widget), &nx, &ny);
   gtk_snapshot_save (snapshot);

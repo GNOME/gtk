@@ -376,7 +376,6 @@ gtk_tooltip_trigger_tooltip_query (GtkWidget *widget)
   GdkSurface *surface;
   double x, y;
   GtkWidget *toplevel;
-  int dx, dy;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
@@ -403,9 +402,9 @@ gtk_tooltip_trigger_tooltip_query (GtkWidget *widget)
   if (gtk_native_get_surface (GTK_NATIVE (toplevel)) != surface)
     return;
 
-  gtk_widget_translate_coordinates (toplevel, widget, round (x), round (y), &dx, &dy);
+  gtk_widget_translate_coordinates (toplevel, widget, x, y, &x, &y);
 
-  gtk_tooltip_handle_event_internal (GDK_MOTION_NOTIFY, surface, widget, dx, dy);
+  gtk_tooltip_handle_event_internal (GDK_MOTION_NOTIFY, surface, widget, x, y);
 }
 
 static void
@@ -426,7 +425,8 @@ _gtk_widget_find_at_coords (GdkSurface *surface,
 {
   GtkWidget *event_widget;
   GtkWidget *picked_widget;
-  int native_x, native_y;
+  double x, y;
+  double native_x, native_y;
 
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
 
@@ -436,13 +436,16 @@ _gtk_widget_find_at_coords (GdkSurface *surface,
     return NULL;
 
   gtk_native_get_surface_transform (GTK_NATIVE (event_widget), &native_x, &native_y);
-  surface_x -= native_x;
-  surface_y -= native_y;
+  x = surface_x - native_x;
+  y = surface_y - native_y;
 
-  picked_widget = gtk_widget_pick (event_widget, surface_x, surface_y, GTK_PICK_INSENSITIVE);
+  picked_widget = gtk_widget_pick (event_widget, x, y, GTK_PICK_INSENSITIVE);
 
   if (picked_widget != NULL)
-    gtk_widget_translate_coordinates (event_widget, picked_widget, surface_x, surface_y, widget_x, widget_y);
+    gtk_widget_translate_coordinates (event_widget, picked_widget, x, y, &x, &y);
+
+  *widget_x = x;
+  *widget_y = y;
 
   return picked_widget;
 }
@@ -553,15 +556,23 @@ gtk_tooltip_run_requery (GtkWidget  **widget,
 
       if (!return_value)
         {
-	  GtkWidget *parent = gtk_widget_get_parent (*widget);
+          GtkWidget *parent = gtk_widget_get_parent (*widget);
 
-	  if (parent)
-	    gtk_widget_translate_coordinates (*widget, parent, *x, *y, x, y);
+          if (parent)
+            {
+              double xx = *x;
+              double yy = *y;
 
-	  *widget = parent;
-	}
+              gtk_widget_translate_coordinates (*widget, parent, xx, yy, &xx, &yy);
+
+              *x = xx;
+              *y = yy;
+            }
+
+          *widget = parent;
+        }
       else
-	break;
+        break;
     }
   while (*widget);
 
@@ -588,7 +599,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
   int rect_anchor_dx = 0;
   int cursor_size;
   int anchor_rect_padding;
-  int native_x, native_y;
+  double native_x, native_y;
 
   gtk_widget_realize (GTK_WIDGET (tooltip->window));
 
@@ -907,8 +918,7 @@ _gtk_tooltip_handle_event (GtkWidget *target,
   GdkEventType event_type;
   GdkSurface *surface;
   double x, y;
-  int native_x, native_y;
-  int tx, ty;
+  double nx, ny;
   GtkWidget *native;
 
   if (!tooltips_enabled (event))
@@ -919,13 +929,9 @@ _gtk_tooltip_handle_event (GtkWidget *target,
   gdk_event_get_position (event, &x, &y);
   native = GTK_WIDGET (gtk_widget_get_native (target));
 
-  gtk_native_get_surface_transform (GTK_NATIVE (native), &native_x, &native_y);
-  gtk_widget_translate_coordinates (native, target,
-                                    x - native_x,
-                                    y - native_y,
-                                    &tx, &ty);
-
-  gtk_tooltip_handle_event_internal (event_type, surface, target, tx, ty);
+  gtk_native_get_surface_transform (GTK_NATIVE (native), &nx, &ny);
+  gtk_widget_translate_coordinates (native, target, x - nx, y - ny, &x, &y);
+  gtk_tooltip_handle_event_internal (event_type, surface, target, x, y);
 }
 
 /* dx/dy must be in @target_widget's coordinates */
@@ -933,8 +939,8 @@ static void
 gtk_tooltip_handle_event_internal (GdkEventType   event_type,
                                    GdkSurface    *surface,
                                    GtkWidget     *target_widget,
-                                   gdouble        dx,
-                                   gdouble        dy)
+                                   double         dx,
+                                   double         dy)
 {
   int x = dx, y = dy;
   GdkDisplay *display;

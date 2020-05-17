@@ -149,12 +149,12 @@ struct _GdkSurfaceClass
   gboolean     (* beep)                 (GdkSurface       *surface);
 
   void         (* destroy_notify)       (GdkSurface *surface);
-  GdkDrag *    (* drag_begin)           (GdkSurface        *surface,
-                                         GdkDevice        *device,
-                                         GdkContentProvider*content,
-                                         GdkDragAction     actions,
-                                         gint              dx,
-                                         gint              dy);
+  GdkDrag *    (* drag_begin)           (GdkSurface         *surface,
+                                         GdkDevice          *device,
+                                         GdkContentProvider *content,
+                                         GdkDragAction       actions,
+                                         double              dx,
+                                         double              dy);
 
   gint         (* get_scale_factor)       (GdkSurface      *surface);
   void         (* get_unscaled_size)      (GdkSurface      *surface,

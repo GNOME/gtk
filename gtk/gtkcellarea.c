@@ -1043,7 +1043,7 @@ gtk_cell_area_real_event (GtkCellArea          *area,
           GtkCellRenderer *focus_renderer;
           GdkRectangle     alloc_area;
           double event_x, event_y;
-          int x, y;
+          double x, y;
           GtkNative *native;
 
           /* We may need some semantics to tell us the offset of the event

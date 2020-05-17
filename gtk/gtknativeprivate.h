@@ -5,10 +5,6 @@
 
 G_BEGIN_DECLS
 
-void          gtk_native_get_surface_transform (GtkNative *self,
-                                                int       *x,
-                                                int       *y);
-
 G_END_DECLS
 
 #endif /* __GTK_NATIVE_PRIVATE_H__ */

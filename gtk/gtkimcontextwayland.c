@@ -354,6 +354,7 @@ notify_cursor_location (GtkIMContextWayland *context)
 {
   GtkIMContextWaylandGlobal *global;
   cairo_rectangle_int_t rect;
+  double x, y;
 
   global = gtk_im_context_wayland_get_global (context);
   if (global == NULL)
@@ -363,8 +364,10 @@ notify_cursor_location (GtkIMContextWayland *context)
   gtk_widget_translate_coordinates (context->widget,
                                     GTK_WIDGET (gtk_widget_get_root (context->widget)),
                                     rect.x, rect.y,
-                                    &rect.x, &rect.y);
+                                    &x, &y);
 
+  rect.x = x;
+  rect.y = y;
   zwp_text_input_v3_set_cursor_rectangle (global->text_input,
                                           rect.x, rect.y,
                                           rect.width, rect.height);

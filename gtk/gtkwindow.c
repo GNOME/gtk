@@ -1931,8 +1931,8 @@ gtk_window_root_set_focus (GtkRoot   *root,
 
 static void
 gtk_window_native_get_surface_transform (GtkNative *native,
-                                         int       *x,
-                                         int       *y)
+                                         double    *x,
+                                         double    *y)
 {
   const graphene_rect_t *margin_rect;
   GtkCssBoxes boxes;

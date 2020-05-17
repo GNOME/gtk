@@ -1686,8 +1686,6 @@ drag_motion_callback (GtkDropTarget    *target,
 
       if (row != NULL)
         {
-          gint dest_y, dest_x;
-
           g_object_get (row, "order-index", &row_index, NULL);
           g_object_get (sidebar->row_placeholder, "order-index", &row_placeholder_index, NULL);
           /* We order the bookmarks sections based on the bookmark index that we
@@ -1703,9 +1701,9 @@ drag_motion_callback (GtkDropTarget    *target,
           row_placeholder_index = row_index;
           gtk_widget_translate_coordinates (GTK_WIDGET (sidebar), GTK_WIDGET (row),
 		                            x, y,
-		                            &dest_x, &dest_y);
+		                            &x, &y);
 
-          if (dest_y > sidebar->drag_row_height / 2 && row_index > 0)
+          if (y > sidebar->drag_row_height / 2 && row_index > 0)
             row_placeholder_index++;
         }
       else
@@ -3459,8 +3457,8 @@ on_row_dragged (GtkGestureDrag *gesture,
 
   if (gtk_drag_check_threshold (GTK_WIDGET (row), 0, 0, x, y))
     {
-      gdouble start_x, start_y;
-      gint drag_x, drag_y;
+      double start_x, start_y;
+      double drag_x, drag_y;
       GdkContentProvider *content;
       GdkSurface *surface;
       GdkDevice *device;

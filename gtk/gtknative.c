@@ -48,8 +48,8 @@ gtk_native_default_get_renderer (GtkNative *self)
 
 static void
 gtk_native_default_get_surface_transform (GtkNative *self,
-                                          int       *x,
-                                          int       *y)
+                                          double    *x,
+                                          double    *y)
 {
   *x = 0;
   *y = 0;
@@ -111,8 +111,8 @@ gtk_native_get_renderer (GtkNative *self)
  */
 void
 gtk_native_get_surface_transform (GtkNative *self,
-                                  int       *x,
-                                  int       *y)
+                                  double    *x,
+                                  double    *y)
 {
   g_return_if_fail (GTK_IS_NATIVE (self));
   g_return_if_fail (x != NULL);

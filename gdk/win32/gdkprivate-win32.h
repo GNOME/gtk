@@ -395,8 +395,8 @@ GdkDrag *_gdk_win32_surface_drag_begin (GdkSurface         *window,
                                         GdkDevice          *device,
                                         GdkContentProvider *content,
                                         GdkDragAction       actions,
-                                        gint                x_root,
-                                        gint                y_root);
+                                        double              x_root,
+                                        double              y_root);
 
 /* Stray GdkWin32Screen members */
 gboolean _gdk_win32_get_setting (const gchar *name, GValue *value);

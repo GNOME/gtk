@@ -1284,7 +1284,7 @@ translate_event_coordinates (GdkEvent  *event,
   GtkNative *native;
   graphene_point_t p;
   double event_x, event_y;
-  int native_x, native_y;
+  double native_x, native_y;
 
   *x = *y = 0;
 
@@ -1432,8 +1432,8 @@ update_pointer_focus_state (GtkWindow *toplevel,
   GtkWidget *old_target = NULL;
   GdkEventSequence *sequence;
   GdkDevice *device;
-  gdouble x, y;
-  int nx, ny;
+  double x, y;
+  double nx, ny;
 
   device = gdk_event_get_device (event);
   sequence = gdk_event_get_event_sequence (event);
@@ -1525,7 +1525,7 @@ handle_pointing_event (GdkEvent *event)
   GdkEventSequence *sequence;
   GdkDevice *device;
   double x, y;
-  int native_x, native_y;
+  double native_x, native_y;
   GtkWidget *native;
   GdkEventType type;
 
