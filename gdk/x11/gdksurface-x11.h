@@ -182,6 +182,8 @@ void            gdk_x11_surface_pre_damage           (GdkSurface *surface);
 void            gdk_x11_surface_move                 (GdkSurface *surface,
                                                       gint        x,
                                                       gint        y);
+void            gdk_x11_surface_check_monitor        (GdkSurface *surface,
+                                                      GdkMonitor *monitor);
 
 G_END_DECLS
 
