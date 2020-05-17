@@ -4101,11 +4101,24 @@ gtk_window_guess_default_size (GtkWindow *window,
   surface = priv->surface;
 
   if (surface)
-    monitor = gdk_display_get_monitor_at_surface (display, surface);
+    {
+      monitor = gdk_display_get_monitor_at_surface (display, surface);
+      gdk_monitor_get_workarea (monitor, &workarea);
+    }
   else
-    monitor = gdk_display_get_monitor (display, 0);
-
-  gdk_monitor_get_workarea (monitor, &workarea);
+    {
+      monitor = g_list_model_get_item (gdk_display_get_monitors (display), 0);
+      if (monitor)
+        {
+          gdk_monitor_get_workarea (monitor, &workarea);
+          g_object_unref (monitor);
+        }
+      else
+        {
+          workarea.width = G_MAXINT;
+          workarea.height = G_MAXINT;
+        }
+    }
 
   *width = workarea.width;
   *height = workarea.height;

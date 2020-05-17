@@ -1495,47 +1495,6 @@ gdk_display_list_seats (GdkDisplay *display)
 }
 
 /**
- * gdk_display_get_n_monitors:
- * @display: a #GdkDisplay
- *
- * Gets the number of monitors that belong to @display.
- *
- * The returned number is valid until the next emission of the
- * #GdkDisplay::monitor-added or #GdkDisplay::monitor-removed signal.
- *
- * Returns: the number of monitors
- */
-int
-gdk_display_get_n_monitors (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
-
-  if (GDK_DISPLAY_GET_CLASS (display)->get_n_monitors == NULL)
-    return 1;
-
-  return GDK_DISPLAY_GET_CLASS (display)->get_n_monitors (display);
-}
-
-/**
- * gdk_display_get_monitor:
- * @display: a #GdkDisplay
- * @monitor_num: number of the monitor
- *
- * Gets a monitor associated with this display.
- *
- * Returns: (nullable) (transfer none): the #GdkMonitor, or %NULL if
- *    @monitor_num is not a valid monitor number
- */
-GdkMonitor *
-gdk_display_get_monitor (GdkDisplay *display,
-                         gint        monitor_num)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  return GDK_DISPLAY_GET_CLASS (display)->get_monitor (display, monitor_num);
-}
-
-/**
  * gdk_display_get_monitors:
  * @display: a #GdkDisplay
  *
@@ -1573,7 +1532,8 @@ gdk_display_get_monitor_at_surface (GdkDisplay *display,
                                    GdkSurface  *surface)
 {
   GdkRectangle win;
-  int n_monitors, i;
+  GListModel *monitors;
+  guint i;
   int area = 0;
   GdkMonitor *best = NULL;
   GdkDisplayClass *class;
@@ -1593,14 +1553,14 @@ gdk_display_get_monitor_at_surface (GdkDisplay *display,
   gdk_surface_get_geometry (surface, &win.x, &win.y, &win.width, &win.height);
   gdk_surface_get_origin (surface, &win.x, &win.y);
 
-  n_monitors = gdk_display_get_n_monitors (display);
-  for (i = 0; i < n_monitors; i++)
+  monitors = gdk_display_get_monitors (display);
+  for (i = 0; i < g_list_model_get_n_items (monitors); i++)
     {
       GdkMonitor *monitor;
       GdkRectangle mon, intersect;
       int overlap;
 
-      monitor = gdk_display_get_monitor (display, i);
+      monitor = g_list_model_get_item (monitors, i);
       gdk_monitor_get_geometry (monitor, &mon);
       gdk_rectangle_intersect (&win, &mon, &intersect);
       overlap = intersect.width *intersect.height;
@@ -1609,6 +1569,7 @@ gdk_display_get_monitor_at_surface (GdkDisplay *display,
           area = overlap;
           best = monitor;
         }
+      g_object_unref (monitor);
     }
 
   return best;

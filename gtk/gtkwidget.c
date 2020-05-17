@@ -6592,9 +6592,13 @@ gtk_widget_get_scale_factor (GtkWidget *widget)
   display = _gtk_widget_get_display (widget);
   if (display)
     {
-      monitor = gdk_display_get_monitor (display, 0);
+      monitor = g_list_model_get_item (gdk_display_get_monitors (display), 0);
       if (monitor)
-        return gdk_monitor_get_scale_factor (monitor);
+        {
+          int result = gdk_monitor_get_scale_factor (monitor);
+          g_object_unref (monitor);
+          return result;
+        }
     }
 
   return 1;

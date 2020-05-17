@@ -1605,13 +1605,15 @@ void
 gdk_x11_surface_enter_leave_monitors (GdkSurface *surface)
 {
   GdkDisplay *display = gdk_surface_get_display (surface);
-  int n_monitors, i;
+  GListModel *monitors;
+  guint i;
 
-  n_monitors = gdk_display_get_n_monitors (display);
-  for (i = 0; i < n_monitors; i++)
+  monitors = gdk_display_get_monitors (display);
+  for (i = 0; i < g_list_model_get_n_items (monitors); i++)
     {
-      GdkMonitor *monitor = gdk_display_get_monitor (display, i);
+      GdkMonitor *monitor = g_list_model_get_item (monitors, i);
       gdk_x11_surface_check_monitor (surface, monitor);
+      g_object_unref (monitor);
     }
 }
 
