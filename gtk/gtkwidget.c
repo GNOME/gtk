@@ -11651,10 +11651,10 @@ gtk_widget_render (GtkWidget            *widget,
                    GdkSurface           *surface,
                    const cairo_region_t *region)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkSnapshot *snapshot;
   GskRenderer *renderer;
   GskRenderNode *root;
+  int native_x, native_y;
   gint64 before_snapshot = g_get_monotonic_time ();
   gint64 before_render = 0;
 
@@ -11665,10 +11665,12 @@ gtk_widget_render (GtkWidget            *widget,
   if (renderer == NULL)
     return;
 
+  gtk_native_get_surface_transform (GTK_NATIVE (widget), &native_x, &native_y);
+
   snapshot = gtk_snapshot_new ();
 
   gtk_snapshot_save (snapshot);
-  gtk_snapshot_transform (snapshot, priv->transform);
+  gtk_snapshot_translate (snapshot, &(graphene_point_t) { native_x, native_y});
   gtk_widget_snapshot (widget, snapshot);
   gtk_snapshot_restore (snapshot);
 
