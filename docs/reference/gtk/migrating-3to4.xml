@@ -324,7 +324,9 @@
       <para>
         A number of minor API cleanups have happened in GdkSurface
         as well. For example, gdk_surface_input_shape_combine_region()
-        has been renamed to gdk_surface_set_input_region().
+        has been renamed to gdk_surface_set_input_region(), and
+        gdk_surface_begin_resize_drag() has been renamed to
+        gdk_toplevel_begin_resize().
       </para>
     </section>
 
