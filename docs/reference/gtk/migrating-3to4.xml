@@ -892,10 +892,11 @@
     </section>
 
     <section>
-      <title>The gtk_window_fullscreen_on_monitor API has changed</title>
+      <title>Monitor handling has changed</title>
       <para>
-        Instead of a monitor number, gtk_window_fullscreen_on_monitor() now takes a
-        #GdkMonitor argument.
+        Instead of a monitor number, #GdkMonitor is now used throughout. 
+        gdk_display_get_monitors() returns the list of monitors that can be queried
+        or observed for monitors to pass to APIs like gtk_window_fullscreen_on_monitor().
       </para>
     </section>
 
