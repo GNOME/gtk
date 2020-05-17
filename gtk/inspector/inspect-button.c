@@ -34,7 +34,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerkey.h"
-#include "gtknative.h"
+#include "gtknativeprivate.h"
 #include "gtkwindowprivate.h"
 
 static GtkWidget *
@@ -51,9 +51,13 @@ find_widget_at_pointer (GdkDevice *device)
   if (widget)
     {
       double x, y;
+      int nx, ny;
 
       gdk_surface_get_device_position (gtk_native_get_surface (GTK_NATIVE (widget)),
                                        device, &x, &y, NULL);
+      gtk_native_get_surface_transform (GTK_NATIVE (widget), &nx, &ny);
+      x -= nx;
+      y -= ny;
 
       widget = gtk_widget_pick (widget, x, y, GTK_PICK_INSENSITIVE|GTK_PICK_NON_TARGETABLE);
     }

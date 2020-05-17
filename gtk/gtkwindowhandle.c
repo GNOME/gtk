@@ -28,7 +28,7 @@
 #include "gtkgestureprivate.h"
 #include "gtkintl.h"
 #include "gtkmodelbuttonprivate.h"
-#include "gtknative.h"
+#include "gtknativeprivate.h"
 #include "gtkpopovermenuprivate.h"
 #include "gtkprivate.h"
 #include "gtkseparator.h"
@@ -219,13 +219,17 @@ do_popup_fallback (GtkWindowHandle *self,
 
   if (device)
     {
+      GtkNative *native;
       GdkSurface *surface;
       double px, py;
+      int nx, ny;
 
-      surface = gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (self)));
+      native = gtk_widget_get_native (GTK_WIDGET (self));
+      surface = gtk_native_get_surface (native);
       gdk_surface_get_device_position (surface, device, &px, &py, NULL);
-      rect.x = round (px);
-      rect.y = round (py);
+      gtk_native_get_surface_transform (native, &nx, &ny);
+      rect.x = round (px) - nx;
+      rect.y = round (py) - ny;
 
       gtk_widget_translate_coordinates (GTK_WIDGET (gtk_widget_get_native (GTK_WIDGET (self))),
                                        GTK_WIDGET (self),
