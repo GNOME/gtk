@@ -710,8 +710,7 @@ enum_monitor (HMONITOR hmonitor,
           rect.y = monitor_info.rcMonitor.top / scale;
           rect.width = (monitor_info.rcMonitor.right - monitor_info.rcMonitor.left) / scale;
           rect.height = (monitor_info.rcMonitor.bottom - monitor_info.rcMonitor.top) / scale;
-          gdk_monitor_set_position (mon, rect.x, rect.y);
-          gdk_monitor_set_size (mon, rect.width, rect.height);
+          gdk_monitor_set_geometry (mon, &rect);
 
           if (monitor_info.dwFlags & MONITORINFOF_PRIMARY && i != 0)
             {
