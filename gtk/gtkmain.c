@@ -1433,7 +1433,7 @@ update_pointer_focus_state (GtkWindow *toplevel,
   GdkEventSequence *sequence;
   GdkDevice *device;
   gdouble x, y;
-  int nx, ny;
+  int wx, wy;
 
   device = gdk_event_get_device (event);
   sequence = gdk_event_get_event_sequence (event);
@@ -1442,12 +1442,8 @@ update_pointer_focus_state (GtkWindow *toplevel,
     return old_target;
 
   gdk_event_get_position (event, &x, &y);
-  gtk_native_get_surface_transform (GTK_NATIVE (toplevel), &nx, &ny);
-  x -= nx;
-  y -= ny;
-
-  gtk_window_update_pointer_focus (toplevel, device, sequence,
-                                   new_target, x, y);
+  gtk_widget_translate_from_surface (GTK_WIDGET (toplevel), x, y, &wx, &wy);
+  gtk_window_update_pointer_focus (toplevel, device, sequence, new_target, wx, wy);
 
   return old_target;
 }
@@ -1525,7 +1521,7 @@ handle_pointing_event (GdkEvent *event)
   GdkEventSequence *sequence;
   GdkDevice *device;
   double x, y;
-  int native_x, native_y;
+  int wx, wy;
   GtkWidget *native;
   GdkEventType type;
 
@@ -1536,9 +1532,7 @@ handle_pointing_event (GdkEvent *event)
   toplevel = GTK_WINDOW (gtk_widget_get_root (event_widget));
   native = GTK_WIDGET (gtk_widget_get_native (event_widget));
 
-  gtk_native_get_surface_transform (GTK_NATIVE (native), &native_x, &native_y);
-  x -= native_x;
-  y -= native_y;
+  gtk_widget_translate_from_surface (native, x, y, &wx, &wy);
 
   type = gdk_event_get_event_type (event);
   sequence = gdk_event_get_event_sequence (event);
@@ -1573,7 +1567,7 @@ handle_pointing_event (GdkEvent *event)
       target = gtk_window_lookup_pointer_focus_implicit_grab (toplevel, device, sequence);
 
       if (!target)
-        target = gtk_widget_pick (native, x, y, GTK_PICK_DEFAULT);
+        target = gtk_widget_pick (native, wx, wy, GTK_PICK_DEFAULT);
 
       if (!target)
         target = GTK_WIDGET (native);
@@ -1619,7 +1613,7 @@ handle_pointing_event (GdkEvent *event)
 
       if (type == GDK_BUTTON_RELEASE)
         {
-          GtkWidget *new_target = gtk_widget_pick (native, x, y, GTK_PICK_DEFAULT);
+          GtkWidget *new_target = gtk_widget_pick (native, wx, wy, GTK_PICK_DEFAULT);
           if (new_target == NULL)
             new_target = GTK_WIDGET (toplevel);
           gtk_synthesize_crossing_events (GTK_ROOT (toplevel), GTK_CROSSING_POINTER, target, new_target,
