@@ -1218,12 +1218,14 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
   GdkEventSequence *sequence;
   GtkWindowRegion region;
   GdkEvent *event;
+  GdkDevice *device;
   guint button;
   double tx, ty;
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+  device = gtk_gesture_get_device (GTK_GESTURE (gesture));
 
   if (!event)
     return;
@@ -1234,8 +1236,7 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
   if (priv->maximized)
     return;
 
-  if (gdk_display_device_is_grabbed (gtk_widget_get_display (GTK_WIDGET (window)),
-                                     gtk_gesture_get_device (GTK_GESTURE (gesture))))
+  if (gdk_display_device_is_grabbed (gtk_widget_get_display (GTK_WIDGET (window)), device))
     return;
 
   region = get_active_region_type (window, x, y);
@@ -1246,12 +1247,12 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
   gdk_event_get_position (event, &tx, &ty);
-  gdk_surface_begin_resize_drag (priv->surface,
-                                 (GdkSurfaceEdge) region,
-                                 gdk_event_get_device ((GdkEvent *) event),
-                                 GDK_BUTTON_PRIMARY,
-                                 tx, ty,
-                                 gdk_event_get_time (event));
+  gdk_toplevel_begin_resize (GDK_TOPLEVEL (priv->surface),
+                             (GdkSurfaceEdge) region,
+                             device,
+                             GDK_BUTTON_PRIMARY,
+                             tx, ty,
+                             gdk_event_get_time (event));
 
   gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
 }
