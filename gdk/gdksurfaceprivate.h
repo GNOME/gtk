@@ -148,19 +148,6 @@ struct _GdkSurfaceClass
   /* optional */
   gboolean     (* beep)                 (GdkSurface       *surface);
 
-  void         (* begin_resize_drag)    (GdkSurface     *surface,
-                                         GdkSurfaceEdge  edge,
-                                         GdkDevice     *device,
-                                         gint           button,
-                                         gint           root_x,
-                                         gint           root_y,
-                                         guint32        timestamp);
-  void         (* begin_move_drag)      (GdkSurface *surface,
-                                         GdkDevice     *device,
-                                         gint       button,
-                                         gint       root_x,
-                                         gint       root_y,
-                                         guint32    timestamp);
   void         (* destroy_notify)       (GdkSurface *surface);
   GdkDrag *    (* drag_begin)           (GdkSurface        *surface,
                                          GdkDevice        *device,

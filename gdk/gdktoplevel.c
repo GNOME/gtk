@@ -23,6 +23,8 @@
 #include "gdk-private.h"
 #include "gdktoplevelprivate.h"
 
+#include <math.h>
+
 /**
  * SECTION:gdktoplevel
  * @Short_description: Interface for toplevel surfaces
@@ -511,4 +513,83 @@ gdk_toplevel_restore_system_shortcuts (GdkToplevel *toplevel)
   g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
 
   GDK_TOPLEVEL_GET_IFACE (toplevel)->restore_system_shortcuts (toplevel);
+}
+
+/**
+ * gdk_toplevel_begin_resize:
+ * @toplevel: a #GdkToplevel
+ * @edge: the edge or corner from which the drag is started
+ * @device: (nullable): the device used for the operation
+ * @button: the button being used to drag, or 0 for a keyboard-initiated drag
+ * @x: surface X coordinate of mouse click that began the drag
+ * @y: surface Y coordinate of mouse click that began the drag
+ * @timestamp: timestamp of mouse click that began the drag (use gdk_event_get_time())
+ *
+ * Begins an interactive resize operation (for a toplevel surface).
+ * You might use this function to implement a “window resize grip.”
+ */
+void
+gdk_toplevel_begin_resize (GdkToplevel    *toplevel,
+                           GdkSurfaceEdge  edge,
+                           GdkDevice      *device,
+                           int             button,
+                           double          x,
+                           double          y,
+                           guint32         timestamp)
+{
+  g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
+
+  if (device == NULL)
+    {
+      GdkSeat *seat = gdk_display_get_default_seat (GDK_SURFACE (toplevel)->display);
+      if (button == 0)
+        device = gdk_seat_get_keyboard (seat);
+      else
+        device = gdk_seat_get_pointer (seat);
+    }
+
+  GDK_TOPLEVEL_GET_IFACE (toplevel)->begin_resize (toplevel,
+                                                   edge,
+                                                   device,
+                                                   button,
+                                                   x, y,
+                                                   timestamp);
+}
+
+/**
+ * gdk_toplevel_begin_move:
+ * @toplevel: a #GdkToplevel
+ * @device: the device used for the operation
+ * @button: the button being used to drag, or 0 for a keyboard-initiated drag
+ * @x: surface X coordinate of mouse click that began the drag
+ * @y: surface Y coordinate of mouse click that began the drag
+ * @timestamp: timestamp of mouse click that began the drag
+ *
+ * Begins an interactive move operation (for a toplevel surface).
+ * You might use this function to implement draggable titlebars.
+ */
+void
+gdk_toplevel_begin_move (GdkToplevel *toplevel,
+                         GdkDevice   *device,
+                         int          button,
+                         double       x,
+                         double       y,
+                         guint32      timestamp)
+{
+  g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
+
+  if (device == NULL)
+    {
+      GdkSeat *seat = gdk_display_get_default_seat (GDK_SURFACE (toplevel)->display);
+      if (button == 0)
+        device = gdk_seat_get_keyboard (seat);
+      else
+        device = gdk_seat_get_pointer (seat);
+    }
+
+  GDK_TOPLEVEL_GET_IFACE (toplevel)->begin_move (toplevel,
+                                                 device,
+                                                 button,
+                                                 x, y,
+                                                 timestamp);
 }

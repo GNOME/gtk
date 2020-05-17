@@ -365,6 +365,21 @@ GdkSurface *   gdk_surface_new_temp             (GdkDisplay    *display,
 
 GdkKeymap *  gdk_display_get_keymap  (GdkDisplay *display);
 
+void gdk_surface_begin_resize_drag            (GdkSurface     *surface,
+                                               GdkSurfaceEdge  edge,
+                                               GdkDevice      *device,
+                                               gint            button,
+                                               gint            x,
+                                               gint            y,
+                                               guint32         timestamp);
+
+void gdk_surface_begin_move_drag              (GdkSurface     *surface,
+                                               GdkDevice      *device,
+                                               gint            button,
+                                               gint            x,
+                                               gint            y,
+                                               guint32         timestamp);
+
 G_END_DECLS
 
 #endif /* __GDK_INTERNALS_H__ */

@@ -113,11 +113,12 @@ move_window_clicked (GtkModelButton  *button,
   GtkNative *native = gtk_widget_get_native (GTK_WIDGET (self));
   GdkSurface *surface = gtk_native_get_surface (native);
 
-  gdk_surface_begin_move_drag (surface,
-                               NULL,
-                               0, /* 0 means "use keyboard" */
-                               0, 0,
-                               GDK_CURRENT_TIME);
+  if (GDK_IS_TOPLEVEL (surface))
+    gdk_toplevel_begin_move (GDK_TOPLEVEL (surface),
+                             NULL,
+                             0, /* 0 means "use keyboard" */
+                             0, 0,
+                             GDK_CURRENT_TIME);
 }
 
 static void
@@ -127,12 +128,13 @@ resize_window_clicked (GtkModelButton  *button,
   GtkNative *native = gtk_widget_get_native (GTK_WIDGET (self));
   GdkSurface *surface = gtk_native_get_surface (native);
 
-  gdk_surface_begin_resize_drag (surface,
-                                 0,
-                                 NULL,
-                                 0, /* 0 means "use keyboard" */
-                                 0, 0,
-                                 GDK_CURRENT_TIME);
+  if (GDK_IS_TOPLEVEL (surface))
+    gdk_toplevel_begin_resize (GDK_TOPLEVEL (surface),
+                               0,
+                               NULL,
+                               0, /* 0 means "use keyboard" */
+                               0, 0,
+                               GDK_CURRENT_TIME);
 }
 
 static void
@@ -476,6 +478,7 @@ drag_gesture_update_cb (GtkGestureDrag  *gesture,
       gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
 
       native = gtk_widget_get_native (GTK_WIDGET (self));
+
       gtk_widget_translate_coordinates (GTK_WIDGET (self),
                                         GTK_WIDGET (native),
                                         start_x, start_y,
@@ -486,11 +489,12 @@ drag_gesture_update_cb (GtkGestureDrag  *gesture,
       window_y += native_y;
 
       surface = gtk_native_get_surface (native);
-      gdk_surface_begin_move_drag (surface,
-                                   gtk_gesture_get_device (GTK_GESTURE (gesture)),
-                                   gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)),
-                                   window_x, window_y,
-                                   gtk_event_controller_get_current_event_time (GTK_EVENT_CONTROLLER (gesture)));
+      if (GDK_IS_TOPLEVEL (surface))
+        gdk_toplevel_begin_move (GDK_TOPLEVEL (surface),
+                                 gtk_gesture_get_device (GTK_GESTURE (gesture)),
+                                 gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)),
+                                 window_x, window_y,
+                                 gtk_event_controller_get_current_event_time (GTK_EVENT_CONTROLLER (gesture)));
 
       gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
       gtk_event_controller_reset (GTK_EVENT_CONTROLLER (self->click_gesture));
