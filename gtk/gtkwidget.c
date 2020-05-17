@@ -4551,6 +4551,8 @@ translate_event_coordinates (GdkEvent  *event,
   GtkWidget *event_widget;
   graphene_point_t p;
   double event_x, event_y;
+  GtkNative *native;
+  int nx, ny;
 
   *x = *y = 0;
 
@@ -4558,6 +4560,10 @@ translate_event_coordinates (GdkEvent  *event,
     return FALSE;
 
   event_widget = gtk_get_event_widget (event);
+  native = gtk_widget_get_native (event_widget);
+  gtk_native_get_surface_transform (native, &nx, &ny);
+  event_x -= nx;
+  event_y -= ny;
 
   if (!gtk_widget_compute_point (event_widget,
                                  widget,
