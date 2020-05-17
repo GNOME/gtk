@@ -241,10 +241,6 @@ void                gdk_display_add_seat              (GdkDisplay       *display
                                                        GdkSeat          *seat);
 void                gdk_display_remove_seat           (GdkDisplay       *display,
                                                        GdkSeat          *seat);
-void                gdk_display_monitor_added         (GdkDisplay       *display,
-                                                       GdkMonitor       *monitor);
-void                gdk_display_monitor_removed       (GdkDisplay       *display,
-                                                       GdkMonitor       *monitor);
 void                gdk_display_emit_opened           (GdkDisplay       *display);
 
 void                gdk_display_setting_changed       (GdkDisplay       *display,

@@ -186,7 +186,6 @@ _gdk_win32_display_find_matching_monitor (GdkWin32Display *win32_display,
 void
 _gdk_win32_display_init_monitors (GdkWin32Display *win32_display)
 {
-  GdkDisplay *display = GDK_DISPLAY (win32_display);
   GPtrArray *new_monitors;
   gint i;
   GdkWin32Monitor *primary_to_move = NULL;
@@ -286,22 +285,18 @@ _gdk_win32_display_init_monitors (GdkWin32Display *win32_display)
       if (!w32_ex_monitor->remove)
         continue;
 
-      gdk_display_monitor_removed (display, ex_monitor);
       g_list_store_remove (G_LIST_STORE (win32_display->monitors), i);
+      gdk_monitor_invalidate (ex_monitor);
     }
 
   for (i = 0; i < new_monitors->len; i++)
     {
       GdkWin32Monitor *w32_m;
-      GdkMonitor *m;
 
       w32_m = GDK_WIN32_MONITOR (g_ptr_array_index (new_monitors, i));
-      m = GDK_MONITOR (w32_m);
 
       if (!w32_m->add)
         continue;
-
-      gdk_display_monitor_added (display, m);
 
       if (i == 0)
         g_list_store_insert (G_LIST_STORE (win32_display->monitors), 0, w32_m);
