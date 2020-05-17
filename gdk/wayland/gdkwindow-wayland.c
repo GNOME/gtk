@@ -202,6 +202,7 @@ struct _GdkWindowImplWayland
 
   int saved_width;
   int saved_height;
+  gboolean resize_requested;
 
   int unconfigured_width;
   int unconfigured_height;
@@ -1642,6 +1643,13 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
     {
       width = impl->saved_width;
       height = impl->saved_height;
+    }
+
+  if (impl->resize_requested)
+    {
+      width = impl->saved_width;
+      height = impl->saved_height;
+      impl->resize_requested = false;
     }
 
   if (width > 0 && height > 0)
@@ -3470,6 +3478,8 @@ gdk_window_wayland_move_resize (GdkWindow *window,
            height == impl->fixed_size_height))
         gdk_wayland_window_maybe_configure (window, width, height, impl->scale);
     }
+
+  impl->resize_requested = (width > 0 && height > 0);
 }
 
 /* Avoid zero width/height as this is a protocol error */
