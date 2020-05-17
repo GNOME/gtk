@@ -866,7 +866,7 @@ gtk_shortcut_controller_set_mnemonics_modifiers (GtkShortcutController *self,
 GdkModifierType
 gtk_shortcut_controller_get_mnemonics_modifiers (GtkShortcutController *self)
 {
-  g_return_val_if_fail (GTK_IS_SHORTCUT_CONTROLLER (self), GTK_SHORTCUT_SCOPE_LOCAL);
+  g_return_val_if_fail (GTK_IS_SHORTCUT_CONTROLLER (self), 0);
 
   return self->mnemonics_modifiers;
 }
