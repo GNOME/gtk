@@ -4125,6 +4125,49 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
   return TRUE;
 }
 
+gboolean
+gtk_widget_translate_to_surface (GtkWidget  *widget,
+                                 int         src_x,
+                                 int         src_y,
+                                 int        *dest_x,
+                                 int        *dest_y)
+{
+  GtkNative *native;
+  int nx, ny;
+  gboolean ret;
+
+  native = gtk_widget_get_native (widget);
+  gtk_native_get_surface_transform (native, &nx, &ny);
+
+  ret = gtk_widget_translate_coordinates (widget,
+                                          GTK_WIDGET (native),
+                                          src_x, src_y,
+                                          dest_x, dest_y);
+  *dest_x += nx;
+  *dest_y += ny;
+
+  return ret;
+}
+
+gboolean
+gtk_widget_translate_from_surface (GtkWidget  *widget,
+                                   int         src_x,
+                                   int         src_y,
+                                   int        *dest_x,
+                                   int        *dest_y)
+{
+  GtkNative *native;
+  int nx, ny;
+
+  native = gtk_widget_get_native (widget);
+  gtk_native_get_surface_transform (native, &nx, &ny);
+
+  return gtk_widget_translate_coordinates (GTK_WIDGET (native),
+                                           widget,
+                                           src_x - nx, src_y - ny,
+                                           dest_x, dest_y);
+}
+
 /**
  * gtk_widget_compute_point:
  * @widget: the #GtkWidget to query
