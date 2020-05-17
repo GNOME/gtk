@@ -223,8 +223,8 @@ GdkDrag        * _gdk_x11_surface_drag_begin (GdkSurface          *window,
                                               GdkDevice          *device,
                                               GdkContentProvider *content,
                                               GdkDragAction       actions,
-                                              gint                dx,
-                                              gint                dy);
+                                              double              dx,
+                                              double              dy);
 
 void gdk_x11_surface_get_root_coords (GdkSurface *surface,
                                       gint        x,

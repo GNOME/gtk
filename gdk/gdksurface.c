@@ -2398,8 +2398,8 @@ gdk_drag_begin (GdkSurface          *surface,
                 GdkDevice          *device,
                 GdkContentProvider *content,
                 GdkDragAction       actions,
-                gint                dx,
-                gint                dy)
+                double              dx,
+                double              dy)
 {
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);

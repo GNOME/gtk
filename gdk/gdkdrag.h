@@ -76,8 +76,8 @@ GdkDrag *        gdk_drag_begin                (GdkSurface         *surface,
                                                 GdkDevice          *device,
                                                 GdkContentProvider *content,
                                                 GdkDragAction       actions,
-                                                gint                dx,
-                                                gint                dy);
+                                                double              dx,
+                                                double              dy);
 
 GDK_AVAILABLE_IN_ALL
 void            gdk_drag_drop_done   (GdkDrag  *drag,

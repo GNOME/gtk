@@ -87,8 +87,8 @@ _gdk_broadway_surface_drag_begin (GdkSurface         *surface,
                                   GdkDevice          *device,
                                   GdkContentProvider *content,
                                   GdkDragAction       actions,
-                                  gint                dx,
-                                  gint                dy)
+                                  double              dx,
+                                  double              dy)
 {
   GdkDrag *new_context;
 
