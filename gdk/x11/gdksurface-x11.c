@@ -71,10 +71,6 @@
 #include <X11/extensions/Xfixes.h>
 #endif
 
-#ifdef HAVE_XDAMAGE
-#include <X11/extensions/Xdamage.h>
-#endif
-
 const int _gdk_x11_event_mask_table[21] =
 {
   ExposureMask,

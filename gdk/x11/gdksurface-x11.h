@@ -31,10 +31,6 @@
 
 #include <X11/Xlib.h>
 
-#ifdef HAVE_XDAMAGE
-#include <X11/extensions/Xdamage.h>
-#endif
-
 #ifdef HAVE_XSYNC
 #include <X11/Xlib.h>
 #include <X11/extensions/sync.h>
@@ -72,10 +68,6 @@ struct _GdkX11Surface
   gint unscaled_height;
 
   cairo_surface_t *cairo_surface;
-
-#if defined (HAVE_XCOMPOSITE) && defined(HAVE_XDAMAGE) && defined (HAVE_XFIXES)
-  Damage damage;
-#endif
 
   int abs_x;
   int abs_y;

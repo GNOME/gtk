@@ -73,10 +73,6 @@
 #include <X11/extensions/Xcomposite.h>
 #endif
 
-#ifdef HAVE_XDAMAGE
-#include <X11/extensions/Xdamage.h>
-#endif
-
 #ifdef HAVE_RANDR
 #include <X11/extensions/Xrandr.h>
 #endif
@@ -1484,17 +1480,6 @@ gdk_x11_display_open (const gchar *display_name)
   else
 #endif
     display_x11->have_xcomposite = FALSE;
-
-#ifdef HAVE_XDAMAGE
-  if (XDamageQueryExtension (display_x11->xdisplay,
-			     &display_x11->xdamage_event_base,
-			     &ignore))
-    {
-      display_x11->have_xdamage = TRUE;
-    }
-  else
-#endif
-    display_x11->have_xdamage = FALSE;
 
   display_x11->have_shapes = FALSE;
   display_x11->have_input_shapes = FALSE;
