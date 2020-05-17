@@ -81,8 +81,6 @@ enum {
   CLOSED,
   SEAT_ADDED,
   SEAT_REMOVED,
-  MONITOR_ADDED,
-  MONITOR_REMOVED,
   SETTING_CHANGED,
   LAST_SIGNAL
 };
@@ -263,38 +261,6 @@ gdk_display_class_init (GdkDisplayClass *class)
 		  0, NULL, NULL,
                   NULL,
 		  G_TYPE_NONE, 1, GDK_TYPE_SEAT);
-
-  /**
-   * GdkDisplay::monitor-added:
-   * @display: the objedct on which the signal is emitted
-   * @monitor: the monitor that was just added
-   *
-   * The ::monitor-added signal is emitted whenever a monitor is
-   * added.
-   */
-  signals[MONITOR_ADDED] =
-    g_signal_new (g_intern_static_string ("monitor-added"),
-		  G_OBJECT_CLASS_TYPE (object_class),
-		  G_SIGNAL_RUN_LAST,
-		  0, NULL, NULL,
-                  NULL,
-		  G_TYPE_NONE, 1, GDK_TYPE_MONITOR);
-
-  /**
-   * GdkDisplay::monitor-removed:
-   * @display: the object on which the signal is emitted
-   * @monitor: the monitor that was just removed
-   *
-   * The ::monitor-removed signal is emitted whenever a monitor is
-   * removed.
-   */
-  signals[MONITOR_REMOVED] =
-    g_signal_new (g_intern_static_string ("monitor-removed"),
-		  G_OBJECT_CLASS_TYPE (object_class),
-		  G_SIGNAL_RUN_LAST,
-		  0, NULL, NULL,
-                  NULL,
-		  G_TYPE_NONE, 1, GDK_TYPE_MONITOR);
 
   /**
    * GdkDisplay::setting-changed:
@@ -1646,21 +1612,6 @@ gdk_display_get_monitor_at_surface (GdkDisplay *display,
     }
 
   return best;
-}
-
-void
-gdk_display_monitor_added (GdkDisplay *display,
-                           GdkMonitor *monitor)
-{
-  g_signal_emit (display, signals[MONITOR_ADDED], 0, monitor);
-}
-
-void
-gdk_display_monitor_removed (GdkDisplay *display,
-                             GdkMonitor *monitor)
-{
-  g_signal_emit (display, signals[MONITOR_REMOVED], 0, monitor);
-  gdk_monitor_invalidate (monitor);
 }
 
 void
