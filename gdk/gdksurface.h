@@ -206,23 +206,6 @@ GDK_AVAILABLE_IN_ALL
 void          gdk_surface_beep            (GdkSurface       *surface);
 
 GDK_AVAILABLE_IN_ALL
-void gdk_surface_begin_resize_drag            (GdkSurface     *surface,
-                                               GdkSurfaceEdge  edge,
-                                               GdkDevice      *device,
-                                               gint            button,
-                                               gint            x,
-                                               gint            y,
-                                               guint32         timestamp);
-
-GDK_AVAILABLE_IN_ALL
-void gdk_surface_begin_move_drag              (GdkSurface     *surface,
-                                               GdkDevice      *device,
-                                               gint            button,
-                                               gint            x,
-                                               gint            y,
-                                               guint32         timestamp);
-
-GDK_AVAILABLE_IN_ALL
 void       gdk_surface_queue_expose              (GdkSurface          *surface);
 
 GDK_AVAILABLE_IN_ALL
