@@ -1644,6 +1644,19 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
       height = impl->saved_height;
     }
 
+  /**
+   * If we receive a manual resize request while we are in a 'fixed' size mode
+   * (fullscreen, maximised, tiled), we must prefer this new size instead of
+   * the compositor's size hints.
+   * In such a scenario, and without letting the compositor know about the new
+   * size, the client has to manage all dimensions and ignore any server hints.
+   */
+  if (!fixed_size && impl->saved_width > 0 && impl->saved_height > 0)
+    {
+      width = impl->saved_width;
+      height = impl->saved_height;
+    }
+
   if (width > 0 && height > 0)
     {
       GdkWindowHints geometry_mask = impl->geometry_mask;
