@@ -46,23 +46,22 @@ G_DEFINE_TYPE (GdkWin32Screen, gdk_win32_screen, G_TYPE_OBJECT)
 static void
 init_root_window_size (GdkWin32Screen *screen)
 {
-  GdkRectangle result;
+  GdkRectangle result = { 0, };
   int i;
   GdkDisplay *display = _gdk_display;
-  int monitor_count;
+  GListModel *monitors;
   GdkMonitor *monitor;
 
-  monitor_count = gdk_display_get_n_monitors (display);
-  monitor = gdk_display_get_monitor (display, 0);
-  gdk_monitor_get_geometry (monitor, &result);
+  monitors = gdk_display_get_monitors (display);
 
-  for (i = 1; i < monitor_count; i++)
+  for (i = 1; i < g_list_model_get_n_items (monitors); i++)
   {
     GdkRectangle rect;
 
-    monitor = gdk_display_get_monitor (display, i);
+    monitor = g_list_model_get_item (monitors, i);
     gdk_monitor_get_geometry (monitor, &rect);
     gdk_rectangle_union (&result, &rect, &result);
+    g_object_unref (monitor);
   }
 
   screen->width = result.width;

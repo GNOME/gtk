@@ -949,35 +949,17 @@ gdk_win32_display_notify_startup_complete (GdkDisplay  *display,
   /* nothing */
 }
 
-static int
-gdk_win32_display_get_n_monitors (GdkDisplay *display)
-{
-  GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
-
-  return g_list_model_get_n_items (win32_display->monitors);
-}
-
-
-static GdkMonitor *
-gdk_win32_display_get_monitor (GdkDisplay *display,
-                               int         monitor_num)
-{
-  GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
-  GdkMonitor *monitor;
-
-  monitor = g_list_model_get_item (win32_display->monitors, monitor_num);
-  if (monitor == NULL)
-    return NULL;
-
-  g_object_unref (monitor);
-  return monitor;
-}
-
 GdkMonitor *
 gdk_win32_display_get_primary_monitor (GdkDisplay *display)
 {
-  /* We arrange for the first monitor in the array to also be the primiary monitor */
-  return gdk_win32_display_get_monitor (display, 0);
+  GdkWin32Display *self = GDK_WIN32_DISPLAY (display);
+  GdkMonitor *result;
+
+  /* We arrange for the first monitor in the array to also be the primary monitor */
+  result = g_list_model_get_item (self->monitors, 0);
+  g_object_unref (result);
+
+  return result;
 }
 
 static GListModel *
@@ -1110,8 +1092,6 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->get_keymap = _gdk_win32_display_get_keymap;
   display_class->make_gl_context_current = _gdk_win32_display_make_gl_context_current;
 
-  display_class->get_n_monitors = gdk_win32_display_get_n_monitors;
-  display_class->get_monitor = gdk_win32_display_get_monitor;
   display_class->get_monitors = gdk_win32_display_get_monitors;
 
 #ifdef GDK_RENDERING_VULKAN
