@@ -67,6 +67,11 @@ GdkSurface *gtk_native_get_surface     (GtkNative *self);
 GDK_AVAILABLE_IN_ALL
 GskRenderer *gtk_native_get_renderer   (GtkNative *self);
 
+GDK_AVAILABLE_IN_ALL
+void         gtk_native_get_surface_transform (GtkNative *self,
+                                               int       *x,
+                                               int       *y);
+
 G_END_DECLS
 
 #endif /* __GTK_NATIVE_H__ */
