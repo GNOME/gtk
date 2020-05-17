@@ -176,9 +176,6 @@ main(int argc, char **argv)
 {
   GError *error = NULL;
   GtkWidget *da;
-  GdkDisplay *display;
-  GdkMonitor *monitor;
-  GdkRectangle monitor_bounds;
   gboolean done = FALSE;
 
   GOptionContext *context = g_option_context_new (NULL);
@@ -211,10 +208,6 @@ main(int argc, char **argv)
   g_signal_connect (window, "map",
                     G_CALLBACK (on_map), NULL);
   on_frame (0.);
-
-  display = gtk_widget_get_display (window);
-  monitor = gdk_display_get_monitor (display, 0);
-  gdk_monitor_get_geometry (monitor, &monitor_bounds);
 
   gtk_widget_show (window);
 

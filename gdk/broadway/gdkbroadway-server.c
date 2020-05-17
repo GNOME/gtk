@@ -160,12 +160,6 @@ _gdk_broadway_server_new (GdkDisplay *display,
   return server;
 }
 
-guint32
-_gdk_broadway_server_get_last_seen_time (GdkBroadwayServer *server)
-{
-  return 0;
-}
-
 static guint32
 gdk_broadway_server_send_message_with_size (GdkBroadwayServer *server, BroadwayRequestBase *base,
                                             gsize size, guint32 type, int fd)

@@ -161,9 +161,6 @@ void          gdk_surface_set_input_region      (GdkSurface     *surface,
                                                  cairo_region_t *region);
 
 GDK_AVAILABLE_IN_ALL
-gboolean gdk_surface_is_viewable    (GdkSurface *surface);
-
-GDK_AVAILABLE_IN_ALL
 gboolean      gdk_surface_get_mapped   (GdkSurface *surface);
 
 GDK_AVAILABLE_IN_ALL

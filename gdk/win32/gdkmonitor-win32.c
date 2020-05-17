@@ -710,8 +710,7 @@ enum_monitor (HMONITOR hmonitor,
           rect.y = monitor_info.rcMonitor.top / scale;
           rect.width = (monitor_info.rcMonitor.right - monitor_info.rcMonitor.left) / scale;
           rect.height = (monitor_info.rcMonitor.bottom - monitor_info.rcMonitor.top) / scale;
-          gdk_monitor_set_position (mon, rect.x, rect.y);
-          gdk_monitor_set_size (mon, rect.width, rect.height);
+          gdk_monitor_set_geometry (mon, &rect);
 
           if (monitor_info.dwFlags & MONITORINFOF_PRIMARY && i != 0)
             {
@@ -819,7 +818,7 @@ _gdk_win32_display_get_monitor_list (GdkWin32Display *win32_display)
       gdk_monitor_get_geometry (GDK_MONITOR (m), &rect);
       rect.x += _gdk_offset_x;
       rect.y += _gdk_offset_y;
-      gdk_monitor_set_position (GDK_MONITOR (m), rect.x, rect.y);
+      gdk_monitor_set_geometry (GDK_MONITOR (m), &rect);
 
       m->work_rect.x += _gdk_offset_x;
       m->work_rect.y += _gdk_offset_y;

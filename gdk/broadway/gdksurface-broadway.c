@@ -587,7 +587,6 @@ static void
 show_popup (GdkSurface *surface)
 {
   gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
-  _gdk_surface_update_viewable (surface);
   gdk_broadway_surface_show (surface, FALSE);
   gdk_surface_invalidate_rect (surface, NULL);
 }
@@ -779,7 +778,6 @@ gdk_broadway_surface_maximize (GdkSurface *surface)
 {
   GdkBroadwaySurface *impl;
   GdkDisplay *display;
-  GdkMonitor *monitor;
   GdkRectangle geom;
 
   if (GDK_SURFACE_DESTROYED (surface))
@@ -800,8 +798,7 @@ gdk_broadway_surface_maximize (GdkSurface *surface)
   impl->pre_maximize_height = surface->height;
 
   display = gdk_surface_get_display (surface);
-  monitor = gdk_display_get_monitor (display, 0);
-  gdk_monitor_get_geometry (monitor, &geom);
+  gdk_monitor_get_geometry (GDK_BROADWAY_DISPLAY (display)->monitor, &geom);
 
   gdk_broadway_surface_move_resize (surface,
                                     geom.x, geom.y,
@@ -1284,15 +1281,6 @@ gdk_broadway_surface_beep (GdkSurface *surface)
   return FALSE;
 }
 
-guint32
-gdk_broadway_get_last_seen_time (GdkSurface  *surface)
-{
-  GdkDisplay *display;
-
-  display = gdk_surface_get_display (surface);
-  return _gdk_broadway_server_get_last_seen_time (GDK_BROADWAY_DISPLAY (display)->server);
-}
-
 static void
 gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
 {
@@ -1580,15 +1568,10 @@ show_surface (GdkSurface *surface)
   if (!was_mapped)
     gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
 
-  _gdk_surface_update_viewable (surface);
-
   gdk_broadway_surface_show (surface, FALSE);
 
   if (!was_mapped)
-    {
-      if (gdk_surface_is_viewable (surface))
-        gdk_surface_invalidate_rect (surface, NULL);
-    }
+    gdk_surface_invalidate_rect (surface, NULL);
 }
 
 static gboolean

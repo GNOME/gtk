@@ -106,7 +106,7 @@ GDK_AVAILABLE_IN_ALL
 GdkX11Screen *gdk_x11_display_get_screen (GdkDisplay *display);
 
 GDK_AVAILABLE_IN_ALL
-GdkMonitor * gdk_x11_display_get_primary_monitor (GdkDisplay *display);
+GdkMonitor * gdk_x11_display_get_primary_monitor (GdkDisplay *self);
 
 GDK_AVAILABLE_IN_ALL
 void        gdk_x11_display_grab              (GdkDisplay *display);
@@ -124,11 +124,6 @@ GDK_AVAILABLE_IN_ALL
 G_GNUC_WARN_UNUSED_RESULT gint gdk_x11_display_error_trap_pop         (GdkDisplay *display);
 GDK_AVAILABLE_IN_ALL
 void                           gdk_x11_display_error_trap_pop_ignored (GdkDisplay *display);
-
-GDK_AVAILABLE_IN_ALL
-void        gdk_x11_register_standard_event_type (GdkDisplay *display,
-                                                  gint        event_base,
-                                                  gint        n_events);
 
 GDK_AVAILABLE_IN_ALL
 void        gdk_x11_set_sm_client_id (const gchar *sm_client_id);

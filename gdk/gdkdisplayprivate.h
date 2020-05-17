@@ -155,16 +155,12 @@ struct _GdkDisplayClass
 
   GdkSeat *              (*get_default_seat)           (GdkDisplay     *display);
 
-  int                    (*get_n_monitors)             (GdkDisplay     *display);
-  GdkMonitor *           (*get_monitor)                (GdkDisplay     *display,
-                                                        int             index);
-  GdkMonitor *           (*get_primary_monitor)        (GdkDisplay     *display);
-  GdkMonitor *           (*get_monitor_at_surface)      (GdkDisplay     *display,
+  GListModel *           (*get_monitors)               (GdkDisplay     *self);
+  GdkMonitor *           (*get_monitor_at_surface)     (GdkDisplay     *display,
                                                         GdkSurface      *surface);
   gboolean               (*get_setting)                (GdkDisplay     *display,
                                                         const char     *name,
                                                         GValue         *value);
-  guint32                (*get_last_seen_time)         (GdkDisplay     *display);
   void                   (*set_cursor_theme)           (GdkDisplay     *display,
                                                         const char     *name,
                                                         int             size);
@@ -242,10 +238,6 @@ void                gdk_display_add_seat              (GdkDisplay       *display
                                                        GdkSeat          *seat);
 void                gdk_display_remove_seat           (GdkDisplay       *display,
                                                        GdkSeat          *seat);
-void                gdk_display_monitor_added         (GdkDisplay       *display,
-                                                       GdkMonitor       *monitor);
-void                gdk_display_monitor_removed       (GdkDisplay       *display,
-                                                       GdkMonitor       *monitor);
 void                gdk_display_emit_opened           (GdkDisplay       *display);
 
 void                gdk_display_setting_changed       (GdkDisplay       *display,

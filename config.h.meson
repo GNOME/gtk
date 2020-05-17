@@ -146,9 +146,6 @@
 /* Have the Xcursor library */
 #mesondefine HAVE_XCURSOR
 
-/* Have the XDAMAGE X extension */
-#mesondefine HAVE_XDAMAGE
-
 /* Have the XFIXES X extension */
 #mesondefine HAVE_XFIXES
 

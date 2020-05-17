@@ -148,11 +148,13 @@ get_monitor_for_rect (GdkDisplay         *display,
   GdkMonitor *monitor;
   GdkRectangle workarea;
   GdkRectangle intersection;
-  gint i;
+  GListModel *monitors;
+  guint i;
 
-  for (i = 0; i < gdk_display_get_n_monitors (display); i++)
+  monitors = gdk_display_get_monitors (display);
+  for (i = 0; i < g_list_model_get_n_items (monitors); i++)
     {
-      monitor = gdk_display_get_monitor (display, i);
+      monitor = g_list_model_get_item (monitors, i);
       gdk_monitor_get_workarea (monitor, &workarea);
 
       if (gdk_rectangle_intersect (&workarea, rect, &intersection))
@@ -163,6 +165,7 @@ get_monitor_for_rect (GdkDisplay         *display,
               best_monitor = monitor;
             }
         }
+      g_object_unref (monitor);
     }
 
   return best_monitor;
@@ -960,28 +963,6 @@ gdk_surface_get_mapped (GdkSurface *surface)
   return GDK_SURFACE_IS_MAPPED (surface);
 }
 
-/**
- * gdk_surface_is_viewable:
- * @surface: a #GdkSurface
- *
- * Check if the surface and all ancestors of the surface are
- * mapped. (This is not necessarily "viewable" in the X sense, since
- * we only check as far as we have GDK surface parents, not to the root
- * surface.)
- *
- * Returns: %TRUE if the surface is viewable
- **/
-gboolean
-gdk_surface_is_viewable (GdkSurface *surface)
-{
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
-
-  if (surface->destroyed)
-    return FALSE;
-
-  return surface->viewable;
-}
-
 GdkGLContext *
 gdk_surface_get_shared_data_gl_context (GdkSurface *surface)
 {
@@ -1253,7 +1234,7 @@ gdk_surface_process_updates_internal (GdkSurface *surface)
       surface->active_update_area = surface->update_area;
       surface->update_area = NULL;
 
-      if (gdk_surface_is_viewable (surface))
+      if (GDK_SURFACE_IS_MAPPED (surface))
         {
           cairo_region_t *expose_region;
           gboolean handled;
@@ -1321,10 +1302,7 @@ gdk_surface_invalidate_rect (GdkSurface        *surface,
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
-  if (!surface->viewable)
+  if (!GDK_SURFACE_IS_MAPPED (surface))
     return;
 
   if (!rect)
@@ -1400,10 +1378,10 @@ gdk_surface_invalidate_region (GdkSurface          *surface,
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  if (GDK_SURFACE_DESTROYED (surface))
+  if (!GDK_SURFACE_IS_MAPPED (surface))
     return;
 
-  if (!surface->viewable || cairo_region_is_empty (region))
+  if (cairo_region_is_empty (region))
     return;
 
   r.x = 0;
@@ -1692,25 +1670,6 @@ gdk_surface_get_device_position (GdkSurface       *surface,
     *y = tmp_y;
   if (mask)
     *mask = tmp_mask;
-}
-
-/* Returns TRUE If the native surface was mapped or unmapped */
-static gboolean
-set_viewable (GdkSurface *w,
-              gboolean val)
-{
-  if (w->viewable == val)
-    return FALSE;
-
-  w->viewable = val;
-
-  return FALSE;
-}
-
-gboolean
-_gdk_surface_update_viewable (GdkSurface *surface)
-{
-  return set_viewable (surface, GDK_SURFACE_IS_MAPPED (surface));
 }
 
 /**
@@ -2786,8 +2745,6 @@ gdk_surface_set_state (GdkSurface      *surface,
 
   mapped = GDK_SURFACE_IS_MAPPED (surface);
   sticky = GDK_SURFACE_IS_STICKY (surface);
-
-  _gdk_surface_update_viewable (surface);
 
   if (GDK_IS_TOPLEVEL (surface))
     g_object_notify (G_OBJECT (surface), "state");

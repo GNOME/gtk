@@ -92,8 +92,7 @@ gdk_display_get_app_launch_context
 gdk_display_notify_startup_complete
 gdk_display_get_default_seat
 gdk_display_list_seats
-gdk_display_get_n_monitors
-gdk_display_get_monitor
+gdk_display_get_monitors
 gdk_display_get_monitor_at_surface
 gdk_display_get_clipboard
 gdk_display_get_primary_clipboard
@@ -184,7 +183,6 @@ gdk_surface_destroy
 gdk_surface_is_destroyed
 gdk_surface_get_display
 gdk_surface_hide
-gdk_surface_is_viewable
 gdk_surface_get_mapped
 gdk_surface_translate_coordinates
 gdk_surface_begin_resize_drag
@@ -829,7 +827,6 @@ gdk_x11_display_error_trap_pop_ignored
 gdk_x11_display_set_cursor_theme
 gdk_x11_display_set_surface_scale
 gdk_x11_display_get_glx_version
-gdk_x11_register_standard_event_type
 gdk_x11_screen_get_screen_number
 gdk_x11_screen_get_xscreen
 gdk_x11_screen_get_window_manager_name
