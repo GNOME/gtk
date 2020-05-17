@@ -4126,6 +4126,91 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
 }
 
 /**
+ * gtk_widget_translate_to_surface:
+ * @widget:  a #GtkWidget
+ * @src_x: X position relative to @widget
+ * @src_y: Y position relative to @widget
+ * @dest_x: (out): location to store surface X position
+ * @dest_y: (out): location to store surface Y position
+ *
+ * Translate coordinates relative to @widget’s allocation to
+ * surface coordinates for the surface that @widget is on.
+ *
+ * Normally when working with GTK, positions are in widget
+ * coordinates. But GDK apis such as gdk_surface_begin_resize_drag()
+ * or gdk_popup_layout_set_anchor_rect() expect positions
+ * in surface coordinates.
+ *
+ * Returns: %FALSE if the coordinates could not be translated.
+ *   This happens if @widget is unrooted. Otherwise %TRUE.
+ **/
+gboolean
+gtk_widget_translate_to_surface (GtkWidget  *widget,
+                                 int         src_x,
+                                 int         src_y,
+                                 int        *dest_x,
+                                 int        *dest_y)
+{
+  GtkNative *native;
+  int nx, ny;
+  gboolean ret;
+
+  native = gtk_widget_get_native (widget);
+  if (!native)
+    return FALSE;
+
+  gtk_native_get_surface_transform (native, &nx, &ny);
+
+  ret = gtk_widget_translate_coordinates (widget,
+                                          GTK_WIDGET (native),
+                                          src_x, src_y,
+                                          dest_x, dest_y);
+  *dest_x += nx;
+  *dest_y += ny;
+
+  return ret;
+}
+
+/**
+ * gtk_widget_translate_from_surface:
+ * @widget:  a #GtkWidget
+ * @src_x: X position relative to the @widgets surface
+ * @src_y: Y position relative to the @widgets surface
+ * @dest_x: (out): location to store X position in surface coordinates
+ * @dest_y: (out): location to store Y position in surface coordinates
+ *
+ * Translate coordinates relative to the surface that @widget
+ * is on to coordinates relative to @widget's allocation.
+ *
+ * Normally when working with GTK, positions are in widget
+ * coordinates. But GDK apis such as gdk_surface_get_device_position()
+ * or gdk_event_get_position() return surface coordinates.
+ *
+ * Returns: %FALSE if the coordinates could not be translated.
+ *   This happens if @widget is unrooted. Otherwise %TRUE.
+ **/
+gboolean
+gtk_widget_translate_from_surface (GtkWidget  *widget,
+                                   int         src_x,
+                                   int         src_y,
+                                   int        *dest_x,
+                                   int        *dest_y)
+{
+  GtkNative *native;
+  int nx, ny;
+
+  native = gtk_widget_get_native (widget);
+  if (!native)
+    return FALSE;
+  gtk_native_get_surface_transform (native, &nx, &ny);
+
+  return gtk_widget_translate_coordinates (GTK_WIDGET (native),
+                                           widget,
+                                           src_x - nx, src_y - ny,
+                                           dest_x, dest_y);
+}
+
+/**
  * gtk_widget_compute_point:
  * @widget: the #GtkWidget to query
  * @target: the #GtkWidget to transform into
