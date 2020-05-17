@@ -442,7 +442,8 @@ drag_gesture_update_cb (GtkGestureDrag  *gesture,
     {
       GdkEventSequence *sequence;
       double start_x, start_y;
-      gint window_x, window_y;
+      int native_x, native_y;
+      int window_x, window_y;
       GtkNative *native;
       GdkSurface *surface;
 
@@ -479,6 +480,10 @@ drag_gesture_update_cb (GtkGestureDrag  *gesture,
                                         GTK_WIDGET (native),
                                         start_x, start_y,
                                         &window_x, &window_y);
+
+      gtk_native_get_surface_transform (native, &native_x, &native_y);
+      window_x += native_x;
+      window_y += native_y;
 
       surface = gtk_native_get_surface (native);
       gdk_surface_begin_move_drag (surface,
