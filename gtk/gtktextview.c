@@ -8618,19 +8618,13 @@ gtk_text_view_do_popup (GtkTextView *text_view,
           GtkNative *native;
           GdkSurface *surface;
           double px, py;
-          int nx, ny;
 
           native = gtk_widget_get_native (GTK_WIDGET (text_view));
           surface = gtk_native_get_surface (native);
           gdk_surface_get_device_position (surface, device, &px, &py, NULL);
-          gtk_native_get_surface_transform (native, &nx, &ny);
-          rect.x = round (px) - nx;
-          rect.y = round (py) - ny;
-
-          gtk_widget_translate_coordinates (GTK_WIDGET (gtk_widget_get_native (GTK_WIDGET (text_view))),
-                                           GTK_WIDGET (text_view),
-                                           rect.x, rect.y,
-                                           &rect.x, &rect.y);
+          gtk_widget_translate_from_surface (GTK_WIDGET (text_view),
+                                             round (px), round (py),
+                                             &rect.x, &rect.y);
         }
 
       gtk_popover_set_pointing_to (GTK_POPOVER (priv->popup_menu), &rect);
