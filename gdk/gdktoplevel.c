@@ -23,6 +23,8 @@
 #include "gdk-private.h"
 #include "gdktoplevelprivate.h"
 
+#include <math.h>
+
 /**
  * SECTION:gdktoplevel
  * @Short_description: Interface for toplevel surfaces
