@@ -81,7 +81,7 @@ fi
 
 if [ -z $base_version ]; then
         base_version="latest"
-else
+elif [ $base_version != "latest" ]; then
         base_version="v$base_version"
 fi
 
