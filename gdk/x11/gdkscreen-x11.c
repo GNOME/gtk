@@ -385,6 +385,26 @@ gdk_x11_screen_get_screen_number (GdkX11Screen *screen)
   return screen->screen_num;
 }
 
+static void
+notify_surface_monitor_change (GdkX11Display *display,
+                               GdkMonitor    *monitor)
+{
+  GHashTableIter iter;
+  GdkSurface *surface;
+
+  /* We iterate the surfaces via the hash table here because it's the only
+   * thing that contains all the surfaces.
+   */
+  if (display->xid_ht == NULL)
+    return;
+
+  g_hash_table_iter_init (&iter, display->xid_ht);
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&surface))
+    {
+      gdk_x11_surface_check_monitor (surface, monitor);
+    }
+}
+
 static GdkX11Monitor *
 find_monitor_by_output (GdkX11Display *x11_display, XID output)
 {
@@ -590,6 +610,7 @@ init_randr15 (GdkX11Screen *x11_screen)
   for (i = g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)) - 1; i >= 0; i--)
     {
       GdkX11Monitor *monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
+      notify_surface_monitor_change (x11_display, GDK_MONITOR (monitor));
       if (monitor->add)
         {
           gdk_display_monitor_added (display, GDK_MONITOR (monitor));
@@ -744,6 +765,7 @@ init_randr13 (GdkX11Screen *x11_screen)
   for (i = g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)) - 1; i >= 0; i--)
     {
       GdkX11Monitor *monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
+      notify_surface_monitor_change (x11_display, GDK_MONITOR (monitor));
       if (monitor->add)
         {
           gdk_display_monitor_added (display, GDK_MONITOR (monitor));
@@ -835,6 +857,7 @@ init_no_multihead (GdkX11Screen *x11_screen)
   for (i = g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)) - 1; i >= 0; i--)
     {
       monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
+      notify_surface_monitor_change (x11_display, GDK_MONITOR (monitor));
       if (monitor->add)
         {
           gdk_display_monitor_added (GDK_DISPLAY (x11_display), GDK_MONITOR (monitor));
