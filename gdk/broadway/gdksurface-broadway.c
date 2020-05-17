@@ -1195,18 +1195,17 @@ calculate_unmoving_origin (MoveResizeData *mv_resize)
 }
 
 static void
-gdk_broadway_surface_begin_resize_drag (GdkSurface     *surface,
-                                        GdkSurfaceEdge  edge,
-                                        GdkDevice     *device,
-                                        gint           button,
-                                        gint           x,
-                                        gint           y,
-                                        guint32        timestamp)
+gdk_broadway_toplevel_begin_resize (GdkToplevel    *toplevel,
+                                    GdkSurfaceEdge  edge,
+                                    GdkDevice      *device,
+                                    int             button,
+                                    double          x,
+                                    double          y,
+                                    guint32         timestamp)
 {
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+  GdkBroadwaySurface *impl = GDK_BROADWAY_SURFACE (surface);
   MoveResizeData *mv_resize;
-  GdkBroadwaySurface *impl;
-
-  impl = GDK_BROADWAY_SURFACE (surface);
 
   if (GDK_SURFACE_DESTROYED (surface))
     return;
@@ -1238,17 +1237,16 @@ gdk_broadway_surface_begin_resize_drag (GdkSurface     *surface,
 }
 
 static void
-gdk_broadway_surface_begin_move_drag (GdkSurface *surface,
-                                      GdkDevice *device,
-                                      gint       button,
-                                      gint       x,
-                                      gint       y,
-                                      guint32    timestamp)
+gdk_broadway_toplevel_begin_move (GdkToplevel *toplevel,
+                                  GdkDevice   *device,
+                                  int          button,
+                                  double       x,
+                                  double       y,
+                                  guint32      timestamp)
 {
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+  GdkBroadwaySurface *impl = GDK_BROADWAY_SURFACE (surface);
   MoveResizeData *mv_resize;
-  GdkBroadwaySurface *impl;
-
-  impl = GDK_BROADWAY_SURFACE (surface);
 
   if (GDK_SURFACE_DESTROYED (surface))
     return;
@@ -1309,8 +1307,6 @@ gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
   impl_class->set_input_region = gdk_broadway_surface_set_input_region;
   impl_class->destroy = _gdk_broadway_surface_destroy;
   impl_class->beep = gdk_broadway_surface_beep;
-  impl_class->begin_resize_drag = gdk_broadway_surface_begin_resize_drag;
-  impl_class->begin_move_drag = gdk_broadway_surface_begin_move_drag;
   impl_class->destroy_notify = gdk_broadway_surface_destroy_notify;
   impl_class->drag_begin = _gdk_broadway_surface_drag_begin;
   impl_class->get_scale_factor = gdk_broadway_surface_get_scale_factor;
@@ -1665,6 +1661,8 @@ gdk_broadway_toplevel_iface_init (GdkToplevelInterface *iface)
   iface->lower = gdk_broadway_toplevel_lower;
   iface->focus = gdk_broadway_toplevel_focus;
   iface->show_window_menu = gdk_broadway_toplevel_show_window_menu;
+  iface->begin_resize = gdk_broadway_toplevel_begin_resize;
+  iface->begin_move = gdk_broadway_toplevel_begin_move;
 }
 
 typedef struct
