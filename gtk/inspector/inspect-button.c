@@ -51,15 +51,12 @@ find_widget_at_pointer (GdkDevice *device)
   if (widget)
     {
       double x, y;
-      int nx, ny;
+      int tx, ty;
 
       gdk_surface_get_device_position (gtk_native_get_surface (GTK_NATIVE (widget)),
                                        device, &x, &y, NULL);
-      gtk_native_get_surface_transform (GTK_NATIVE (widget), &nx, &ny);
-      x -= nx;
-      y -= ny;
-
-      widget = gtk_widget_pick (widget, x, y, GTK_PICK_INSENSITIVE|GTK_PICK_NON_TARGETABLE);
+      gtk_widget_translate_from_surface (widget, round (x), round (y), &tx, &ty);
+      widget = gtk_widget_pick (widget, tx, ty, GTK_PICK_INSENSITIVE|GTK_PICK_NON_TARGETABLE);
     }
 
   return widget;

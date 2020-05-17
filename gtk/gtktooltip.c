@@ -583,7 +583,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
   GtkSettings *settings;
   graphene_rect_t anchor_bounds;
   GdkRectangle anchor_rect;
-  GdkSurface *effective_toplevel;
+  GdkSurface *surface;
   GtkWidget *toplevel;
   int rect_anchor_dx = 0;
   int cursor_size;
@@ -600,11 +600,14 @@ gtk_tooltip_position (GtkTooltip *tooltip,
   if (gtk_widget_compute_bounds (new_tooltip_widget, toplevel, &anchor_bounds))
     {
       anchor_rect = (GdkRectangle) {
-        floorf (anchor_bounds.origin.x + native_x),
-        floorf (anchor_bounds.origin.y + native_y),
+        floorf (anchor_bounds.origin.x),
+        floorf (anchor_bounds.origin.y),
         ceilf (anchor_bounds.size.width),
         ceilf (anchor_bounds.size.height)
       };
+      gtk_widget_translate_to_surface (toplevel,
+                                       anchor_rect.x, anchor_rect.y,
+                                       &anchor_rect.x, &anchor_rect.y);
     }
   else
     {
@@ -649,10 +652,11 @@ gtk_tooltip_position (GtkTooltip *tooltip,
        * If the anchor rectangle isn't to tall, make sure the tooltip isn't too
        * far away from the pointer position.
        */
-      effective_toplevel = gtk_native_get_surface (GTK_NATIVE (toplevel));
-      gdk_surface_get_device_position (effective_toplevel, device, &px, &py, NULL);
-      pointer_x = round (px);
-      pointer_y = round (py);
+      surface = gtk_native_get_surface (GTK_NATIVE (toplevel));
+      gdk_surface_get_device_position (surface, device, &px, &py, NULL);
+      gtk_widget_translate_from_surface (toplevel,
+                                         round (px), round (py),
+                                         &pointer_x, &pointer_y);
 
       if (anchor_rect.height > max_anchor_rect_height)
         {
@@ -907,9 +911,7 @@ _gtk_tooltip_handle_event (GtkWidget *target,
   GdkEventType event_type;
   GdkSurface *surface;
   double x, y;
-  int native_x, native_y;
   int tx, ty;
-  GtkWidget *native;
 
   if (!tooltips_enabled (event))
     return;
@@ -917,13 +919,7 @@ _gtk_tooltip_handle_event (GtkWidget *target,
   event_type = gdk_event_get_event_type (event);
   surface = gdk_event_get_surface (event);
   gdk_event_get_position (event, &x, &y);
-  native = GTK_WIDGET (gtk_widget_get_native (target));
-
-  gtk_native_get_surface_transform (GTK_NATIVE (native), &native_x, &native_y);
-  gtk_widget_translate_coordinates (native, target,
-                                    x - native_x,
-                                    y - native_y,
-                                    &tx, &ty);
+  gtk_widget_translate_from_surface (target, x, y, &tx, &ty);
 
   gtk_tooltip_handle_event_internal (event_type, surface, target, tx, ty);
 }
