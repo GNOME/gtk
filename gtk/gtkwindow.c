@@ -4847,15 +4847,11 @@ surface_state_changed (GtkWidget *widget)
     }
 
   if (changed_mask & GDK_SURFACE_STATE_FULLSCREEN)
-    {
-      priv->fullscreen =
-        (new_surface_state & GDK_SURFACE_STATE_FULLSCREEN) ? 1 : 0;
-    }
+    priv->fullscreen = (new_surface_state & GDK_SURFACE_STATE_FULLSCREEN) ? TRUE : FALSE;
 
   if (changed_mask & GDK_SURFACE_STATE_MAXIMIZED)
     {
-      priv->maximized =
-        (new_surface_state & GDK_SURFACE_STATE_MAXIMIZED) ? 1 : 0;
+      priv->maximized = (new_surface_state & GDK_SURFACE_STATE_MAXIMIZED) ? TRUE : FALSE;
       g_object_notify_by_pspec (G_OBJECT (widget), window_props[PROP_IS_MAXIMIZED]);
     }
 
