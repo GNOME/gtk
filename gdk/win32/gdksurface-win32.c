@@ -4135,14 +4135,15 @@ gdk_win32_surface_do_move_resize_drag (GdkSurface *window,
 }
 
 static void
-gdk_win32_surface_begin_resize_drag (GdkSurface     *window,
-                                    GdkSurfaceEdge  edge,
-                                    GdkDevice     *device,
-                                    gint           button,
-                                    gint           x,
-                                    gint           y,
-                                    guint32        timestamp)
+gdk_win32_toplevel_begin_resize (GdkToplevel    *toplevel,
+                                 GdkSurfaceEdge  edge,
+                                 GdkDevice      *device,
+                                 int             button,
+                                 double          x,
+                                 double          y,
+                                 guint32         timestamp)
 {
+  GdkSurface *surface = GDK_SURFACE (toplevel);
   GdkWin32Surface *impl;
 
   g_return_if_fail (GDK_IS_SURFACE (window));
@@ -4172,13 +4173,14 @@ gdk_win32_surface_begin_resize_drag (GdkSurface     *window,
 }
 
 static void
-gdk_win32_surface_begin_move_drag (GdkSurface *window,
-                                  GdkDevice *device,
-                                  gint       button,
-                                  gint       x,
-                                  gint       y,
-                                  guint32    timestamp)
+gdk_win32_toplevel_begin_move (GdkToplevel *toplevel,
+                               GdkDevice   *device,
+                               int          button,
+                               double       x,
+                               double       y,
+                               guint32      timestamp)
 {
+  GdkSurface *surface = GDK_SURFACE (toplevel);
   GdkWin32Surface *impl;
 
   g_return_if_fail (GDK_IS_SURFACE (window));
@@ -4700,8 +4702,6 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
 
 
   impl_class->set_shadow_width = gdk_win32_surface_set_shadow_width;
-  impl_class->begin_resize_drag = gdk_win32_surface_begin_resize_drag;
-  impl_class->begin_move_drag = gdk_win32_surface_begin_move_drag;
   impl_class->destroy_notify = gdk_win32_surface_destroy_notify;
   impl_class->drag_begin = _gdk_win32_surface_drag_begin;
   impl_class->create_gl_context = _gdk_win32_surface_create_gl_context;
@@ -5085,6 +5085,8 @@ gdk_win32_toplevel_iface_init (GdkToplevelInterface *iface)
   iface->focus = gdk_win32_toplevel_focus;
   iface->show_window_menu = gdk_win32_toplevel_show_window_menu;
   iface->supports_edge_constraints = gdk_win32_toplevel_supports_edge_constraints;
+  iface->begin_resize = gdk_win32_toplevel_begin_resize;
+  iface->begin_move = gdk_win32_toplevel_begin_move;
 }
 
 typedef struct

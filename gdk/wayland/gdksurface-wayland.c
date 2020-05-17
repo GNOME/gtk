@@ -3620,14 +3620,15 @@ gdk_wayland_surface_unfullscreen (GdkSurface *surface)
 }
 
 static void
-gdk_wayland_surface_begin_resize_drag (GdkSurface     *surface,
-                                       GdkSurfaceEdge  edge,
-                                       GdkDevice      *device,
-                                       gint            button,
-                                       gint            x,
-                                       gint            y,
-                                       guint32         timestamp)
+gdk_wayland_toplevel_begin_resize (GdkToplevel    *toplevel,
+                                   GdkSurfaceEdge  edge,
+                                   GdkDevice      *device,
+                                   int             button,
+                                   double          x,
+                                   double          y,
+                                   guint32         timestamp)
 {
+  GdkSurface *surface = GDK_SURFACE (toplevel);
   GdkWaylandSurface *impl;
   GdkWaylandDisplay *display_wayland;
   GdkEventSequence *sequence;
@@ -3672,7 +3673,7 @@ gdk_wayland_surface_begin_resize_drag (GdkSurface     *surface,
       break;
 
     default:
-      g_warning ("gdk_surface_begin_resize_drag: bad resize edge %d!", edge);
+      g_warning ("gdk_toplevel_begin_resize: bad resize edge %d!", edge);
       return;
     }
 
@@ -3706,13 +3707,14 @@ gdk_wayland_surface_begin_resize_drag (GdkSurface     *surface,
 }
 
 static void
-gdk_wayland_surface_begin_move_drag (GdkSurface *surface,
-                                     GdkDevice  *device,
-                                     gint        button,
-                                     gint        x,
-                                     gint        y,
-                                     guint32     timestamp)
+gdk_wayland_toplevel_begin_move (GdkToplevel *toplevel,
+                                 GdkDevice   *device,
+                                 int          button,
+                                 double       x,
+                                 double       y,
+                                 guint32      timestamp)
 {
+  GdkSurface *surface = GDK_SURFACE (toplevel);
   GdkWaylandSurface *impl;
   GdkWaylandDisplay *display_wayland;
   GdkEventSequence *sequence;
@@ -3895,8 +3897,6 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   impl_class->destroy = gdk_wayland_surface_destroy;
   impl_class->beep = gdk_wayland_surface_beep;
 
-  impl_class->begin_resize_drag = gdk_wayland_surface_begin_resize_drag;
-  impl_class->begin_move_drag = gdk_wayland_surface_begin_move_drag;
   impl_class->destroy_notify = gdk_wayland_surface_destroy_notify;
   impl_class->drag_begin = _gdk_wayland_surface_drag_begin;
   impl_class->get_scale_factor = gdk_wayland_surface_get_scale_factor;
@@ -4779,6 +4779,8 @@ gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface)
   iface->supports_edge_constraints = gdk_wayland_toplevel_supports_edge_constraints;
   iface->inhibit_system_shortcuts = gdk_wayland_toplevel_inhibit_system_shortcuts;
   iface->restore_system_shortcuts = gdk_wayland_toplevel_restore_system_shortcuts;
+  iface->begin_resize = gdk_wayland_toplevel_begin_resize;
+  iface->begin_move = gdk_wayland_toplevel_begin_move;
 }
 
 static void

@@ -519,7 +519,7 @@ gdk_toplevel_restore_system_shortcuts (GdkToplevel *toplevel)
  * gdk_toplevel_begin_resize:
  * @toplevel: a #GdkToplevel
  * @edge: the edge or corner from which the drag is started
- * @device: the device used for the operation
+ * @device: (nullable): the device used for the operation
  * @button: the button being used to drag, or 0 for a keyboard-initiated drag
  * @x: surface X coordinate of mouse click that began the drag
  * @y: surface Y coordinate of mouse click that began the drag
@@ -537,7 +537,23 @@ gdk_toplevel_begin_resize (GdkToplevel    *toplevel,
                            double          y,
                            guint32         timestamp)
 {
-  gdk_surface_begin_resize_drag (GDK_SURFACE (toplevel), edge, device, button, round (x), round (y), timestamp);
+  g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
+
+  if (device == NULL)
+    {
+      GdkSeat *seat = gdk_display_get_default_seat (GDK_SURFACE (toplevel)->display);
+      if (button == 0)
+        device = gdk_seat_get_keyboard (seat);
+      else
+        device = gdk_seat_get_pointer (seat);
+    }
+
+  GDK_TOPLEVEL_GET_IFACE (toplevel)->begin_resize (toplevel,
+                                                   edge,
+                                                   device,
+                                                   button,
+                                                   x, y,
+                                                   timestamp);
 }
 
 /**
@@ -560,5 +576,20 @@ gdk_toplevel_begin_move (GdkToplevel *toplevel,
                          double       y,
                          guint32      timestamp)
 {
-  gdk_surface_begin_move_drag (GDK_SURFACE (toplevel), device, button, round (x), round (y), timestamp);
+  g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
+
+  if (device == NULL)
+    {
+      GdkSeat *seat = gdk_display_get_default_seat (GDK_SURFACE (toplevel)->display);
+      if (button == 0)
+        device = gdk_seat_get_keyboard (seat);
+      else
+        device = gdk_seat_get_pointer (seat);
+    }
+
+  GDK_TOPLEVEL_GET_IFACE (toplevel)->begin_move (toplevel,
+                                                 device,
+                                                 button,
+                                                 x, y,
+                                                 timestamp);
 }
