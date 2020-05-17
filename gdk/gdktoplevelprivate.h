@@ -24,6 +24,19 @@ struct _GdkToplevelInterface
   void          (* inhibit_system_shortcuts)  (GdkToplevel *toplevel,
                                                GdkEvent    *event);
   void          (* restore_system_shortcuts)  (GdkToplevel *toplevel);
+  void          (* begin_resize_drag)   (GdkToplevel       *toplevel,
+                                         GdkSurfaceEdge     edge,
+                                         GdkDevice         *device,
+                                         int                button,
+                                         double             x,
+                                         double             y,
+                                         guint32            timestamp);
+  void          (* begin_move_drag)     (GdkToplevel       *toplevel,
+                                         GdkDevice         *device,
+                                         int                button,
+                                         double             x,
+                                         double             y,
+                                         guint32            timestamp);
 };
 
 typedef enum

@@ -4310,14 +4310,15 @@ _should_perform_ewmh_drag (GdkSurface *surface,
 }
 
 static void
-gdk_x11_surface_begin_resize_drag (GdkSurface     *surface,
-                                   GdkSurfaceEdge  edge,
-                                   GdkDevice      *device,
-                                   gint            button,
-                                   gint            x,
-                                   gint            y,
-                                   guint32         timestamp)
+gdk_x11_toplevel_begin_resize_drag (GdkToplevel    *toplevel,
+                                    GdkSurfaceEdge  edge,
+                                    GdkDevice      *device,
+                                    int             button,
+                                    double          x,
+                                    double          y,
+                                    guint32         timestamp)
 {
+  GdkSurface *surface = GDK_SURFACE (toplevel);
   int root_x, root_y;
 
   if (GDK_SURFACE_DESTROYED (surface))
@@ -4333,13 +4334,14 @@ gdk_x11_surface_begin_resize_drag (GdkSurface     *surface,
 }
 
 static void
-gdk_x11_surface_begin_move_drag (GdkSurface *surface,
-                                 GdkDevice  *device,
-                                 gint        button,
-                                 gint        x,
-                                 gint        y,
-                                 guint32     timestamp)
+gdk_x11_toplevel_begin_move_drag (GdkToplevel *toplevel,
+                                  GdkDevice   *device,
+                                  int          button,
+                                  double       x,
+                                  double       y,
+                                  guint32      timestamp)
 {
+  GdkSurface *surface = GDK_SURFACE (toplevel);
   int root_x, root_y;
   gint direction;
 
@@ -4630,8 +4632,6 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->destroy = gdk_x11_surface_destroy;
   impl_class->beep = gdk_x11_surface_beep;
 
-  impl_class->begin_resize_drag = gdk_x11_surface_begin_resize_drag;
-  impl_class->begin_move_drag = gdk_x11_surface_begin_move_drag;
   impl_class->destroy_notify = gdk_x11_surface_destroy_notify;
   impl_class->drag_begin = _gdk_x11_surface_drag_begin;
   impl_class->get_scale_factor = gdk_x11_surface_get_scale_factor;
@@ -5094,6 +5094,8 @@ gdk_x11_toplevel_iface_init (GdkToplevelInterface *iface)
   iface->supports_edge_constraints = gdk_x11_toplevel_supports_edge_constraints;
   iface->inhibit_system_shortcuts = gdk_x11_toplevel_inhibit_system_shortcuts;
   iface->restore_system_shortcuts = gdk_x11_toplevel_restore_system_shortcuts;
+  iface->begin_resize_drag = gdk_x11_toplevel_begin_resize_drag;
+  iface->begin_move_drag = gdk_x11_toplevel_begin_move_drag;
 }
 
 typedef struct {
