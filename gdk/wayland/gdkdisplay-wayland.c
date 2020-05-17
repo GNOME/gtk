@@ -2521,7 +2521,6 @@ gdk_wayland_display_add_output (GdkWaylandDisplay *display_wayland,
     gdk_wayland_display_get_xdg_output (monitor);
 
   g_list_store_append (display_wayland->monitors, monitor);
-  gdk_display_monitor_added (GDK_DISPLAY (display_wayland), GDK_MONITOR (monitor));
 
   g_object_unref (monitor);
 }
@@ -2567,7 +2566,7 @@ gdk_wayland_display_remove_output (GdkWaylandDisplay *self,
       if (monitor->id == id)
         {
           g_list_store_remove (self->monitors, i);
-          gdk_display_monitor_removed (GDK_DISPLAY (self), GDK_MONITOR (monitor));
+          gdk_monitor_invalidate (GDK_MONITOR (monitor));
           update_scale (GDK_DISPLAY (self));
         }
 

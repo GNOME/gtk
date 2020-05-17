@@ -607,16 +607,13 @@ init_randr15 (GdkX11Screen *x11_screen)
   for (i = g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)) - 1; i >= 0; i--)
     {
       GdkX11Monitor *monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
+
       notify_surface_monitor_change (x11_display, GDK_MONITOR (monitor));
-      if (monitor->add)
-        {
-          gdk_display_monitor_added (display, GDK_MONITOR (monitor));
-        }
-      else if (monitor->remove)
+      if (monitor->remove)
         {
           g_object_ref (monitor);
           g_list_store_remove (x11_display->monitors, i);
-          gdk_display_monitor_removed (display, GDK_MONITOR (monitor));
+          gdk_monitor_invalidate (GDK_MONITOR (monitor));
           g_object_unref (monitor);
         }
       g_object_unref (monitor);
@@ -762,16 +759,13 @@ init_randr13 (GdkX11Screen *x11_screen)
   for (i = g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)) - 1; i >= 0; i--)
     {
       GdkX11Monitor *monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
+
       notify_surface_monitor_change (x11_display, GDK_MONITOR (monitor));
-      if (monitor->add)
-        {
-          gdk_display_monitor_added (display, GDK_MONITOR (monitor));
-        }
-      else if (monitor->remove)
+      if (monitor->remove)
         {
           g_object_ref (monitor);
           g_list_store_remove (x11_display->monitors, i);
-          gdk_display_monitor_removed (display, GDK_MONITOR (monitor));
+          gdk_monitor_invalidate (GDK_MONITOR (monitor));
           g_object_unref (monitor);
         }
     }
@@ -854,16 +848,13 @@ init_no_multihead (GdkX11Screen *x11_screen)
   for (i = g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)) - 1; i >= 0; i--)
     {
       monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
+
       notify_surface_monitor_change (x11_display, GDK_MONITOR (monitor));
-      if (monitor->add)
-        {
-          gdk_display_monitor_added (GDK_DISPLAY (x11_display), GDK_MONITOR (monitor));
-        }
-      else if (monitor->remove)
+      if (monitor->remove)
         {
           g_object_ref (monitor);
           g_list_store_remove (x11_display->monitors, i);
-          gdk_display_monitor_removed (GDK_DISPLAY (x11_display), GDK_MONITOR (monitor));
+          gdk_monitor_invalidate (GDK_MONITOR (monitor));
           g_object_unref (monitor);
         }
       g_object_unref (monitor);
