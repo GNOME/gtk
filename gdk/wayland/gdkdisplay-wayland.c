@@ -952,31 +952,6 @@ _gdk_wayland_display_get_keymap (GdkDisplay *display)
   return tmp_keymap;
 }
 
-static int
-gdk_wayland_display_get_n_monitors (GdkDisplay *display)
-{
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-
-  return g_list_model_get_n_items (G_LIST_MODEL (display_wayland->monitors));
-}
-
-static GdkMonitor *
-gdk_wayland_display_get_monitor (GdkDisplay *display,
-                                 int         monitor_num)
-{
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-  gpointer monitor;
-
-  if (monitor_num < 0)
-    return NULL;
-
-  monitor = g_list_model_get_item (G_LIST_MODEL (display_wayland->monitors), monitor_num);
-  if (monitor)
-    g_object_unref (monitor);
-  
-  return monitor;
-}
-
 static GListModel *
 gdk_wayland_display_get_monitors (GdkDisplay *display)
 {
@@ -1052,8 +1027,6 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
 
   display_class->make_gl_context_current = gdk_wayland_display_make_gl_context_current;
 
-  display_class->get_n_monitors = gdk_wayland_display_get_n_monitors;
-  display_class->get_monitor = gdk_wayland_display_get_monitor;
   display_class->get_monitors = gdk_wayland_display_get_monitors;
   display_class->get_monitor_at_surface = gdk_wayland_display_get_monitor_at_surface;
   display_class->get_setting = gdk_wayland_display_get_setting;

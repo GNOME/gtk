@@ -2831,34 +2831,6 @@ gdk_x11_display_get_default_seat (GdkDisplay *display)
   return NULL;
 }
 
-static int
-gdk_x11_display_get_n_monitors (GdkDisplay *display)
-{
-  GdkX11Display *x11_display = GDK_X11_DISPLAY (display);
-
-  return g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors));
-}
-
-
-static GdkMonitor *
-gdk_x11_display_get_monitor (GdkDisplay *display,
-                             int         monitor_num)
-{
-  GdkX11Display *x11_display = GDK_X11_DISPLAY (display);
-  GdkMonitor *monitor;
-
-  if (monitor_num < 0)
-    return NULL;
-
-  monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), monitor_num);
-  if (monitor)
-    g_object_unref (monitor);
-
-  return monitor;
-
-  return NULL;
-}
-
 static GListModel *
 gdk_x11_display_get_monitors (GdkDisplay *display)
 {
@@ -2987,8 +2959,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
 
   display_class->get_default_seat = gdk_x11_display_get_default_seat;
 
-  display_class->get_n_monitors = gdk_x11_display_get_n_monitors;
-  display_class->get_monitor = gdk_x11_display_get_monitor;
   display_class->get_monitors = gdk_x11_display_get_monitors;
   display_class->get_setting = gdk_x11_display_get_setting;
   display_class->set_cursor_theme = gdk_x11_display_set_cursor_theme;

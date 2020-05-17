@@ -92,8 +92,6 @@ gdk_display_get_app_launch_context
 gdk_display_notify_startup_complete
 gdk_display_get_default_seat
 gdk_display_list_seats
-gdk_display_get_n_monitors
-gdk_display_get_monitor
 gdk_display_get_monitors
 gdk_display_get_monitor_at_surface
 gdk_display_get_clipboard

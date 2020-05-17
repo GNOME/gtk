@@ -319,24 +319,6 @@ gdk_broadway_display_hide_keyboard (GdkBroadwayDisplay *display)
   _gdk_broadway_server_set_show_keyboard (display->server, FALSE);
 }
 
-static int
-gdk_broadway_display_get_n_monitors (GdkDisplay *display)
-{
-  return 1;
-}
-
-static GdkMonitor *
-gdk_broadway_display_get_monitor (GdkDisplay *display,
-                                  int         monitor_num)
-{
-  GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
-
-  if (monitor_num == 0)
-    return broadway_display->monitor;
-
-  return NULL;
-}
-
 static GListModel *
 gdk_broadway_display_get_monitors (GdkDisplay *display)
 {
@@ -447,8 +429,6 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   display_class->create_surface = _gdk_broadway_display_create_surface;
   display_class->get_keymap = _gdk_broadway_display_get_keymap;
 
-  display_class->get_n_monitors = gdk_broadway_display_get_n_monitors;
-  display_class->get_monitor = gdk_broadway_display_get_monitor;
   display_class->get_monitors = gdk_broadway_display_get_monitors;
   display_class->get_setting = gdk_broadway_display_get_setting;
 }

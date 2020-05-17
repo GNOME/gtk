@@ -155,9 +155,6 @@ struct _GdkDisplayClass
 
   GdkSeat *              (*get_default_seat)           (GdkDisplay     *display);
 
-  int                    (*get_n_monitors)             (GdkDisplay     *display);
-  GdkMonitor *           (*get_monitor)                (GdkDisplay     *display,
-                                                        int             index);
   GListModel *           (*get_monitors)               (GdkDisplay     *self);
   GdkMonitor *           (*get_monitor_at_surface)     (GdkDisplay     *display,
                                                         GdkSurface      *surface);
