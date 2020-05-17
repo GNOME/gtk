@@ -202,6 +202,7 @@ struct _GdkWindowImplWayland
 
   int saved_width;
   int saved_height;
+  gboolean saved_size_changed;
 
   int unconfigured_width;
   int unconfigured_height;
@@ -1637,11 +1638,16 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
    * When transitioning from maximize or fullscreen state, this means
    * the client should configure its size back to what it was before
    * being maximize or fullscreen.
+   * Additionally, if we receive a manual resize request, we must prefer this
+   * new size instead of the compositor's size hints.
+   * In such a scenario, and without letting the compositor know about the new
+   * size, the client has to manage all dimensions and ignore any server hints.
    */
-  if (saved_size && !fixed_size)
+  if (!fixed_size && (saved_size || impl->saved_size_changed))
     {
       width = impl->saved_width;
       height = impl->saved_height;
+      impl->saved_size_changed = FALSE;
     }
 
   if (width > 0 && height > 0)
@@ -3478,6 +3484,7 @@ gdk_window_wayland_move_resize (GdkWindow *window,
     {
       impl->saved_width = width;
       impl->saved_height = height;
+      impl->saved_size_changed = (width > 0 && height > 0);
     }
 
   /* If this function is called with width and height = -1 then that means
