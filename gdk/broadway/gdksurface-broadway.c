@@ -776,7 +776,6 @@ gdk_broadway_surface_maximize (GdkSurface *surface)
 {
   GdkBroadwaySurface *impl;
   GdkDisplay *display;
-  GdkMonitor *monitor;
   GdkRectangle geom;
 
   if (GDK_SURFACE_DESTROYED (surface))
@@ -797,8 +796,7 @@ gdk_broadway_surface_maximize (GdkSurface *surface)
   impl->pre_maximize_height = surface->height;
 
   display = gdk_surface_get_display (surface);
-  monitor = gdk_display_get_monitor (display, 0);
-  gdk_monitor_get_geometry (monitor, &geom);
+  gdk_monitor_get_geometry (GDK_BROADWAY_DISPLAY (display)->monitor, &geom);
 
   gdk_broadway_surface_move_resize (surface,
                                     geom.x, geom.y,

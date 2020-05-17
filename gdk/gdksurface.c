@@ -148,11 +148,13 @@ get_monitor_for_rect (GdkDisplay         *display,
   GdkMonitor *monitor;
   GdkRectangle workarea;
   GdkRectangle intersection;
-  gint i;
+  GListModel *monitors;
+  guint i;
 
-  for (i = 0; i < gdk_display_get_n_monitors (display); i++)
+  monitors = gdk_display_get_monitors (display);
+  for (i = 0; i < g_list_model_get_n_items (monitors); i++)
     {
-      monitor = gdk_display_get_monitor (display, i);
+      monitor = g_list_model_get_item (monitors, i);
       gdk_monitor_get_workarea (monitor, &workarea);
 
       if (gdk_rectangle_intersect (&workarea, rect, &intersection))
@@ -163,6 +165,7 @@ get_monitor_for_rect (GdkDisplay         *display,
               best_monitor = monitor;
             }
         }
+      g_object_unref (monitor);
     }
 
   return best_monitor;
