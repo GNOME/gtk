@@ -187,8 +187,6 @@ gdk_surface_hide
 gdk_surface_is_viewable
 gdk_surface_get_mapped
 gdk_surface_translate_coordinates
-gdk_surface_begin_resize_drag
-gdk_surface_begin_move_drag
 gdk_surface_beep
 gdk_surface_get_scale_factor
 gdk_surface_set_opaque_region
