@@ -563,8 +563,7 @@ init_randr15 (GdkX11Screen *x11_screen)
       newgeo.width = rr_monitors[i].width / x11_screen->surface_scale;
       newgeo.height = rr_monitors[i].height / x11_screen->surface_scale;
 
-      gdk_monitor_set_position (GDK_MONITOR (monitor), newgeo.x, newgeo.y);
-      gdk_monitor_set_size (GDK_MONITOR (monitor), newgeo.width, newgeo.height);
+      gdk_monitor_set_geometry (GDK_MONITOR (monitor), &newgeo);
       g_object_notify (G_OBJECT (monitor), "workarea");
       gdk_monitor_set_physical_size (GDK_MONITOR (monitor),
                                      rr_monitors[i].mwidth,
@@ -716,8 +715,7 @@ init_randr13 (GdkX11Screen *x11_screen)
           newgeo.width = crtc->width / x11_screen->surface_scale;
           newgeo.height = crtc->height / x11_screen->surface_scale;
 
-          gdk_monitor_set_position (GDK_MONITOR (monitor), newgeo.x, newgeo.y);
-          gdk_monitor_set_size (GDK_MONITOR (monitor), newgeo.width, newgeo.height);
+          gdk_monitor_set_geometry (GDK_MONITOR (monitor), &newgeo);
           g_object_notify (G_OBJECT (monitor), "workarea");
           gdk_monitor_set_physical_size (GDK_MONITOR (monitor),
                                          output_info->mm_width,
@@ -827,8 +825,7 @@ init_no_multihead (GdkX11Screen *x11_screen)
   width = WidthOfScreen (x11_screen->xscreen);
   height = HeightOfScreen (x11_screen->xscreen);
 
-  gdk_monitor_set_position (GDK_MONITOR (monitor), 0, 0);
-  gdk_monitor_set_size (GDK_MONITOR (monitor), width, height);
+  gdk_monitor_set_geometry (GDK_MONITOR (monitor), &(GdkRectangle) { 0, 0, width, height });
   g_object_notify (G_OBJECT (monitor), "workarea");
   gdk_monitor_set_physical_size (GDK_MONITOR (monitor), width_mm, height_mm);
   gdk_monitor_set_scale_factor (GDK_MONITOR (monitor), x11_screen->surface_scale);

@@ -64,7 +64,7 @@ gdk_broadway_display_init (GdkBroadwayDisplay *display)
   gdk_monitor_set_manufacturer (display->monitor, "browser");
   gdk_monitor_set_model (display->monitor, "0");
   display->scale_factor = 1;
-  gdk_monitor_set_size (display->monitor, 1024, 768);
+  gdk_monitor_set_geometry (display->monitor, &(GdkRectangle) { 0, 0, 1024, 768 });
   gdk_monitor_set_physical_size (display->monitor, 1024 * 25.4 / 96, 768 * 25.4 / 96);
   gdk_monitor_set_scale_factor (display->monitor, 1);
 }
@@ -97,7 +97,7 @@ _gdk_broadway_display_size_changed (GdkDisplay                      *display,
 
   broadway_display->scale_factor = msg->scale;
 
-  gdk_monitor_set_size (monitor, msg->width, msg->height);
+  gdk_monitor_set_geometry (monitor, &(GdkRectangle) { 0, 0, msg->width, msg->height });
   gdk_monitor_set_scale_factor (monitor, msg->scale);
   gdk_monitor_set_physical_size (monitor, msg->width * 25.4 / 96, msg->height * 25.4 / 96);
 

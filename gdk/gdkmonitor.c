@@ -531,47 +531,14 @@ gdk_monitor_set_connector (GdkMonitor *monitor,
 }
 
 void
-gdk_monitor_set_position (GdkMonitor *monitor,
-                          int         x,
-                          int         y)
+gdk_monitor_set_geometry (GdkMonitor *monitor,
+                          const GdkRectangle *geometry)
 {
-  g_object_freeze_notify (G_OBJECT (monitor));
+  if (gdk_rectangle_equal (&monitor->geometry, geometry))
+    return;
 
-  if (monitor->geometry.x != x)
-    {
-      monitor->geometry.x = x;
-      g_object_notify (G_OBJECT (monitor), "geometry");
-    }
-
-  if (monitor->geometry.y != y)
-    {
-      monitor->geometry.y = y;
-      g_object_notify (G_OBJECT (monitor), "geometry");
-    }
-
-  g_object_thaw_notify (G_OBJECT (monitor));
-}
-
-void
-gdk_monitor_set_size (GdkMonitor *monitor,
-                      int         width,
-                      int         height)
-{
-  g_object_freeze_notify (G_OBJECT (monitor));
-
-  if (monitor->geometry.width != width)
-    {
-      monitor->geometry.width = width;
-      g_object_notify (G_OBJECT (monitor), "geometry");
-    }
-
-  if (monitor->geometry.height != height)
-    {
-      monitor->geometry.height = height;
-      g_object_notify (G_OBJECT (monitor), "geometry");
-    }
-
-  g_object_thaw_notify (G_OBJECT (monitor));
+  monitor->geometry = *geometry;
+  g_object_notify (G_OBJECT (monitor), "geometry");
 }
 
 void

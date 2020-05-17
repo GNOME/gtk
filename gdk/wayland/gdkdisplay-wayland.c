@@ -2274,8 +2274,10 @@ apply_monitor_change (GdkWaylandMonitor *monitor)
                        monitor->x, monitor->y,
                        monitor->width, monitor->height));
 
-  gdk_monitor_set_position (GDK_MONITOR (monitor), monitor->x, monitor->y);
-  gdk_monitor_set_size (GDK_MONITOR (monitor), monitor->width, monitor->height);
+  gdk_monitor_set_geometry (GDK_MONITOR (monitor),
+                            &(GdkRectangle) {
+                              monitor->x, monitor->y,
+                              monitor->width, monitor->height });
   gdk_monitor_set_connector (GDK_MONITOR (monitor), monitor->name);
   monitor->wl_output_done = FALSE;
   monitor->xdg_output_done = FALSE;
