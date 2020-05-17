@@ -512,3 +512,51 @@ gdk_toplevel_restore_system_shortcuts (GdkToplevel *toplevel)
 
   GDK_TOPLEVEL_GET_IFACE (toplevel)->restore_system_shortcuts (toplevel);
 }
+
+/**
+ * gdk_toplevel_begin_resize_drag:
+ * @toplevel: a #GdkToplevel
+ * @edge: the edge or corner from which the drag is started
+ * @device: the device used for the operation
+ * @button: the button being used to drag, or 0 for a keyboard-initiated drag
+ * @x: surface X coordinate of mouse click that began the drag
+ * @y: surface Y coordinate of mouse click that began the drag
+ * @timestamp: timestamp of mouse click that began the drag (use gdk_event_get_time())
+ *
+ * Begins an interactive resize operation (for a toplevel surface).
+ * You might use this function to implement a “window resize grip.”
+ */
+void
+gdk_toplevel_begin_resize_drag (GdkToplevel    *toplevel,
+                                GdkSurfaceEdge  edge,
+                                GdkDevice      *device,
+                                int             button,
+                                double          x,
+                                double          y,
+                                guint32         timestamp)
+{
+  gdk_surface_begin_resize_drag (GDK_SURFACE (toplevel), edge, device, button, round (x), round (y), timestamp);
+}
+
+/**
+ * gdk_toplevel_begin_move_drag:
+ * @toplevel: a #GdkToplevel
+ * @device: the device used for the operation
+ * @button: the button being used to drag, or 0 for a keyboard-initiated drag
+ * @x: surface X coordinate of mouse click that began the drag
+ * @y: surface Y coordinate of mouse click that began the drag
+ * @timestamp: timestamp of mouse click that began the drag
+ *
+ * Begins an interactive move operation (for a toplevel surface).
+ * You might use this function to implement draggable titlebars.
+ */
+void
+gdk_toplevel_begin_move_drag (GdkToplevel *toplevel,
+                              GdkDevice   *device,
+                              int          button,
+                              double       x,
+                              double       y,
+                              guint32      timestamp)
+{
+  gdk_surface_begin_move_drag (GDK_SURFACE (toplevel), device, button, round (x), round (y), timestamp);
+}

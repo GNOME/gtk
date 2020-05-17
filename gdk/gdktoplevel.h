@@ -95,6 +95,23 @@ void          gdk_toplevel_inhibit_system_shortcuts  (GdkToplevel *toplevel,
 GDK_AVAILABLE_IN_ALL
 void          gdk_toplevel_restore_system_shortcuts  (GdkToplevel *toplevel);
 
+GDK_AVAILABLE_IN_ALL
+void          gdk_toplevel_begin_resize_drag         (GdkToplevel    *toplevel,
+                                                      GdkSurfaceEdge  edge,
+                                                      GdkDevice      *device,
+                                                      int             button,
+                                                      double          x,
+                                                      double          y,
+                                                      guint32         timestamp);
+
+GDK_AVAILABLE_IN_ALL
+void          gdk_toplevel_begin_move_drag           (GdkToplevel    *toplevel,
+                                                      GdkDevice      *device,
+                                                      int             button,
+                                                      double          x,
+                                                      double          y,
+                                                      guint32         timestamp);
+
 
 G_END_DECLS
 
