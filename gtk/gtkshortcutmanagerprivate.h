@@ -1,5 +1,5 @@
 #ifndef __GTK_SHORTCUT_MANAGER_PRIVATE_H__
-#define __GTK_SHORTCUT_MANAGER__PRIVATE_H__
+#define __GTK_SHORTCUT_MANAGER_PRIVATE_H__
 
 #include "gtkshortcutmanager.h"
 
