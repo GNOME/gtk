@@ -544,7 +544,7 @@ gdk_x11_clipboard_claim (GdkClipboard       *clipboard,
       Window xwindow = GDK_X11_DISPLAY (display)->leader_window;
       guint32 time;
 
-      time = gdk_display_get_last_seen_time (display);
+      time = gdk_x11_get_server_time (GDK_X11_DISPLAY (display)->leader_gdk_surface);
 
       if (content)
         {

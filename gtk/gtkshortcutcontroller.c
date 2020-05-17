@@ -351,7 +351,7 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
 
       native = gtk_widget_get_native (widget);
       if (!native ||
-          !gdk_surface_is_viewable(gtk_native_get_surface (native)))
+          !gdk_surface_get_mapped (gtk_native_get_surface (native)))
         {
           g_object_unref (shortcut);
           continue;

@@ -744,9 +744,15 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
   g_object_ref (surface);
 
   /* More likely to be right than just assuming 1 */
-  if (display_wayland->compositor_version >= WL_SURFACE_HAS_BUFFER_SCALE &&
-      gdk_display_get_n_monitors (display) > 0)
-    impl->scale = gdk_monitor_get_scale_factor (gdk_display_get_monitor (display, 0));
+  if (display_wayland->compositor_version >= WL_SURFACE_HAS_BUFFER_SCALE)
+    {
+      GdkMonitor *monitor = g_list_model_get_item (gdk_display_get_monitors (display), 0);
+      if (monitor)
+        {
+          impl->scale = gdk_monitor_get_scale_factor (monitor);
+          g_object_unref (monitor);
+        }
+    }
 
   gdk_wayland_surface_set_title (surface, get_default_title ());
 
@@ -4611,15 +4617,10 @@ show_surface (GdkSurface *surface)
   if (!was_mapped)
     gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
 
-  _gdk_surface_update_viewable (surface);
-
   gdk_wayland_surface_show (surface, FALSE);
 
   if (!was_mapped)
-    {
-      if (gdk_surface_is_viewable (surface))
-        gdk_surface_invalidate_rect (surface, NULL);
-    }
+    gdk_surface_invalidate_rect (surface, NULL);
 }
 
 static gboolean

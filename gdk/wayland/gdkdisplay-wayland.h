@@ -141,7 +141,7 @@ struct _GdkWaylandDisplay
 
   struct xkb_context *xkb_context;
 
-  GPtrArray *monitors;
+  GListStore *monitors;
 
   gint64 last_bell_time_ms;
 

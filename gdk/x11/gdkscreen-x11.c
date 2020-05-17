@@ -135,12 +135,16 @@ gdk_x11_screen_get_monitor_output (GdkX11Screen *x11_screen,
 {
   GdkX11Display *x11_display = GDK_X11_DISPLAY (x11_screen->display);
   GdkX11Monitor *monitor;
+  XID output;
 
   g_return_val_if_fail (monitor_num >= 0, None);
-  g_return_val_if_fail (monitor_num < x11_display->monitors->len, None);
+  g_return_val_if_fail (monitor_num < g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)), None);
 
-  monitor = x11_display->monitors->pdata[monitor_num];
-  return monitor->output;
+  monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), monitor_num);
+  output = monitor->output;
+  g_object_unref (monitor);
+
+  return output;
 }
 
 static int
@@ -381,14 +385,35 @@ gdk_x11_screen_get_screen_number (GdkX11Screen *screen)
   return screen->screen_num;
 }
 
+static void
+notify_surface_monitor_change (GdkX11Display *display,
+                               GdkMonitor    *monitor)
+{
+  GHashTableIter iter;
+  GdkSurface *surface;
+
+  /* We iterate the surfaces via the hash table here because it's the only
+   * thing that contains all the surfaces.
+   */
+  if (display->xid_ht == NULL)
+    return;
+
+  g_hash_table_iter_init (&iter, display->xid_ht);
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&surface))
+    {
+      gdk_x11_surface_check_monitor (surface, monitor);
+    }
+}
+
 static GdkX11Monitor *
 find_monitor_by_output (GdkX11Display *x11_display, XID output)
 {
   int i;
 
-  for (i = 0; i < x11_display->monitors->len; i++)
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)); i++)
     {
-      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
+      GdkX11Monitor *monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
+      g_object_unref (monitor);
       if (monitor->output == output)
         return monitor;
     }
@@ -411,7 +436,7 @@ translate_subpixel_order (int subpixel)
 }
 
 static gboolean
-init_randr15 (GdkX11Screen *x11_screen, gboolean *changed)
+init_randr15 (GdkX11Screen *x11_screen)
 {
 #ifdef HAVE_RANDR15
   GdkDisplay *display = GDK_SCREEN_DISPLAY (x11_screen);
@@ -422,7 +447,6 @@ init_randr15 (GdkX11Screen *x11_screen, gboolean *changed)
   int i;
   XRRMonitorInfo *rr_monitors;
   int num_rr_monitors;
-  int old_primary;
 
   if (!x11_display->have_randr15)
     return FALSE;
@@ -439,11 +463,12 @@ init_randr15 (GdkX11Screen *x11_screen, gboolean *changed)
   if (!rr_monitors)
     return FALSE;
 
-  for (i = 0; i < x11_display->monitors->len; i++)
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)); i++)
     {
-      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
+      GdkX11Monitor *monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
       monitor->add = FALSE;
       monitor->remove = TRUE;
+      g_object_unref (monitor);
     }
 
   for (i = 0; i < num_rr_monitors; i++)
@@ -503,7 +528,7 @@ init_randr15 (GdkX11Screen *x11_screen, gboolean *changed)
                                   NULL);
           monitor->output = output;
           monitor->add = TRUE;
-          g_ptr_array_add (x11_display->monitors, monitor);
+          g_list_store_append (x11_display->monitors, monitor);
         }
 
       /* Fetch minimal manufacturer information (PNP ID) from EDID */
@@ -557,17 +582,8 @@ init_randr15 (GdkX11Screen *x11_screen, gboolean *changed)
       newgeo.y = rr_monitors[i].y / x11_screen->surface_scale;
       newgeo.width = rr_monitors[i].width / x11_screen->surface_scale;
       newgeo.height = rr_monitors[i].height / x11_screen->surface_scale;
-      if (newgeo.x != geometry.x ||
-          newgeo.y != geometry.y ||
-          newgeo.width != geometry.width ||
-          newgeo.height != geometry.height ||
-          rr_monitors[i].mwidth != gdk_monitor_get_width_mm (GDK_MONITOR (monitor)) ||
-          rr_monitors[i].mheight != gdk_monitor_get_height_mm (GDK_MONITOR (monitor)) ||
-          g_strcmp0 (name, gdk_monitor_get_model (GDK_MONITOR (monitor))))
-        *changed = TRUE;
 
-      gdk_monitor_set_position (GDK_MONITOR (monitor), newgeo.x, newgeo.y);
-      gdk_monitor_set_size (GDK_MONITOR (monitor), newgeo.width, newgeo.height);
+      gdk_monitor_set_geometry (GDK_MONITOR (monitor), &newgeo);
       g_object_notify (G_OBJECT (monitor), "workarea");
       gdk_monitor_set_physical_size (GDK_MONITOR (monitor),
                                      rr_monitors[i].mwidth,
@@ -591,29 +607,26 @@ init_randr15 (GdkX11Screen *x11_screen, gboolean *changed)
   XRRFreeMonitors (rr_monitors);
   XRRFreeScreenResources (resources);
 
-  for (i = x11_display->monitors->len - 1; i >= 0; i--)
+  for (i = g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)) - 1; i >= 0; i--)
     {
-      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
-      if (monitor->add)
-        {
-          gdk_display_monitor_added (display, GDK_MONITOR (monitor));
-          *changed = TRUE;
-        }
-      else if (monitor->remove)
+      GdkX11Monitor *monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
+
+      notify_surface_monitor_change (x11_display, GDK_MONITOR (monitor));
+      if (monitor->remove)
         {
           g_object_ref (monitor);
-          g_ptr_array_remove (x11_display->monitors, monitor);
-          gdk_display_monitor_removed (display, GDK_MONITOR (monitor));
+          g_list_store_remove (x11_display->monitors, i);
+          gdk_monitor_invalidate (GDK_MONITOR (monitor));
           g_object_unref (monitor);
-          *changed = TRUE;
         }
+      g_object_unref (monitor);
     }
 
-  old_primary = x11_display->primary_monitor;
   x11_display->primary_monitor = 0;
-  for (i = 0; i < x11_display->monitors->len; ++i)
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)); i++)
     {
-      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
+      GdkX11Monitor *monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
+      g_object_unref (monitor);
       if (monitor->output == primary_output)
         {
           x11_display->primary_monitor = i;
@@ -633,17 +646,14 @@ init_randr15 (GdkX11Screen *x11_screen, gboolean *changed)
         x11_display->primary_monitor = i;
     }
 
-  if (x11_display->primary_monitor != old_primary)
-    *changed = TRUE;
-
-  return x11_display->monitors->len > 0;
+  return g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)) > 0;
 #endif
 
   return FALSE;
 }
 
 static gboolean
-init_randr13 (GdkX11Screen *x11_screen, gboolean *changed)
+init_randr13 (GdkX11Screen *x11_screen)
 {
 #ifdef HAVE_RANDR
   GdkDisplay *display = GDK_SCREEN_DISPLAY (x11_screen);
@@ -652,7 +662,6 @@ init_randr13 (GdkX11Screen *x11_screen, gboolean *changed)
   RROutput primary_output = None;
   RROutput first_output = None;
   int i;
-  int old_primary;
 
   if (!x11_display->have_randr13)
       return FALSE;
@@ -662,11 +671,12 @@ init_randr13 (GdkX11Screen *x11_screen, gboolean *changed)
   if (!resources)
     return FALSE;
 
-  for (i = 0; i < x11_display->monitors->len; i++)
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)); i++)
     {
-      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
+      GdkX11Monitor *monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
       monitor->add = FALSE;
       monitor->remove = TRUE;
+      g_object_unref (monitor);
     }
 
   for (i = 0; i < resources->noutput; ++i)
@@ -712,7 +722,7 @@ init_randr13 (GdkX11Screen *x11_screen, gboolean *changed)
                                       NULL);
               monitor->output = output;
               monitor->add = TRUE;
-              g_ptr_array_add (x11_display->monitors, monitor);
+              g_list_store_append (x11_display->monitors, monitor);
             }
 
           gdk_monitor_get_geometry (GDK_MONITOR (monitor), &geometry);
@@ -722,17 +732,8 @@ init_randr13 (GdkX11Screen *x11_screen, gboolean *changed)
           newgeo.y = crtc->y / x11_screen->surface_scale;
           newgeo.width = crtc->width / x11_screen->surface_scale;
           newgeo.height = crtc->height / x11_screen->surface_scale;
-          if (newgeo.x != geometry.x ||
-              newgeo.y != geometry.y ||
-              newgeo.width != geometry.width ||
-              newgeo.height != geometry.height ||
-              output_info->mm_width != gdk_monitor_get_width_mm (GDK_MONITOR (monitor)) ||
-              output_info->mm_height != gdk_monitor_get_height_mm (GDK_MONITOR (monitor)) ||
-              g_strcmp0 (name, gdk_monitor_get_model (GDK_MONITOR (monitor))) != 0)
-            *changed = TRUE;
 
-          gdk_monitor_set_position (GDK_MONITOR (monitor), newgeo.x, newgeo.y);
-          gdk_monitor_set_size (GDK_MONITOR (monitor), newgeo.width, newgeo.height);
+          gdk_monitor_set_geometry (GDK_MONITOR (monitor), &newgeo);
           g_object_notify (G_OBJECT (monitor), "workarea");
           gdk_monitor_set_physical_size (GDK_MONITOR (monitor),
                                          output_info->mm_width,
@@ -758,32 +759,28 @@ init_randr13 (GdkX11Screen *x11_screen, gboolean *changed)
 
   /* Which usable multihead data is not returned in non RandR 1.2+ X driver? */
 
-  for (i = x11_display->monitors->len - 1; i >= 0; i--)
+  for (i = g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)) - 1; i >= 0; i--)
     {
-      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
-      if (monitor->add)
-        {
-          gdk_display_monitor_added (display, GDK_MONITOR (monitor));
-          *changed = TRUE;
-        }
-      else if (monitor->remove)
+      GdkX11Monitor *monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
+
+      notify_surface_monitor_change (x11_display, GDK_MONITOR (monitor));
+      if (monitor->remove)
         {
           g_object_ref (monitor);
-          g_ptr_array_remove (x11_display->monitors, monitor);
-          gdk_display_monitor_removed (display, GDK_MONITOR (monitor));
+          g_list_store_remove (x11_display->monitors, i);
+          gdk_monitor_invalidate (GDK_MONITOR (monitor));
           g_object_unref (monitor);
-          *changed = TRUE;
         }
     }
 
-  old_primary = x11_display->primary_monitor;
   x11_display->primary_monitor = 0;
   primary_output = XRRGetOutputPrimary (x11_screen->xdisplay,
                                         x11_screen->xroot_window);
 
-  for (i = 0; i < x11_display->monitors->len; ++i)
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)); i++)
     {
-      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
+      GdkX11Monitor *monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
+      g_object_unref (monitor);
       if (monitor->output == primary_output)
         {
           x11_display->primary_monitor = i;
@@ -803,30 +800,27 @@ init_randr13 (GdkX11Screen *x11_screen, gboolean *changed)
         x11_display->primary_monitor = i;
     }
 
-  if (x11_display->primary_monitor != old_primary)
-    *changed = TRUE;
-
-  return x11_display->monitors->len > 0;
+  return g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)) > 0;
 #endif
 
   return FALSE;
 }
 
 static void
-init_no_multihead (GdkX11Screen *x11_screen, gboolean *changed)
+init_no_multihead (GdkX11Screen *x11_screen)
 {
   GdkX11Display *x11_display = GDK_X11_DISPLAY (x11_screen->display);
   GdkX11Monitor *monitor;
-  GdkRectangle geometry;
   int width_mm, height_mm;
   int width, height;
   int i;
 
-  for (i = 0; i < x11_display->monitors->len; i++)
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)); i++)
     {
-      monitor = x11_display->monitors->pdata[i];
+      monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
       monitor->add = FALSE;
       monitor->remove = TRUE;
+      g_object_unref (monitor);
     }
 
   monitor = find_monitor_by_output (x11_display, 0);
@@ -839,7 +833,7 @@ init_no_multihead (GdkX11Screen *x11_screen, gboolean *changed)
                               NULL);
       monitor->output = 0;
       monitor->add = TRUE;
-      g_ptr_array_add (x11_display->monitors, monitor);
+      g_list_store_append (x11_display->monitors, monitor);
     }
 
   width_mm = WidthMMOfScreen (x11_screen->xscreen);
@@ -847,54 +841,35 @@ init_no_multihead (GdkX11Screen *x11_screen, gboolean *changed)
   width = WidthOfScreen (x11_screen->xscreen);
   height = HeightOfScreen (x11_screen->xscreen);
 
-  gdk_monitor_get_geometry (GDK_MONITOR (monitor), &geometry);
-  if (0 != geometry.x ||
-      0 != geometry.y ||
-      width != geometry.width ||
-      height != geometry.height ||
-      width_mm != gdk_monitor_get_width_mm (GDK_MONITOR (monitor)) ||
-      height_mm != gdk_monitor_get_height_mm (GDK_MONITOR (monitor)))
-    *changed = TRUE;
-
-  gdk_monitor_set_position (GDK_MONITOR (monitor), 0, 0);
-  gdk_monitor_set_size (GDK_MONITOR (monitor), width, height);
+  gdk_monitor_set_geometry (GDK_MONITOR (monitor), &(GdkRectangle) { 0, 0, width, height });
   g_object_notify (G_OBJECT (monitor), "workarea");
   gdk_monitor_set_physical_size (GDK_MONITOR (monitor), width_mm, height_mm);
   gdk_monitor_set_scale_factor (GDK_MONITOR (monitor), x11_screen->surface_scale);
 
-  if (x11_display->primary_monitor != 0)
-    *changed = TRUE;
   x11_display->primary_monitor = 0;
 
-  for (i = x11_display->monitors->len - 1; i >= 0; i--)
+  for (i = g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)) - 1; i >= 0; i--)
     {
-      monitor = x11_display->monitors->pdata[i];
-      if (monitor->add)
-        {
-          gdk_display_monitor_added (GDK_DISPLAY (x11_display), GDK_MONITOR (monitor));
-          *changed = TRUE;
-        }
-      else if (monitor->remove)
+      monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
+
+      notify_surface_monitor_change (x11_display, GDK_MONITOR (monitor));
+      if (monitor->remove)
         {
           g_object_ref (monitor);
-          g_ptr_array_remove (x11_display->monitors, monitor);
-          gdk_display_monitor_removed (GDK_DISPLAY (x11_display), GDK_MONITOR (monitor));
+          g_list_store_remove (x11_display->monitors, i);
+          gdk_monitor_invalidate (GDK_MONITOR (monitor));
           g_object_unref (monitor);
-          *changed = TRUE;
         }
+      g_object_unref (monitor);
     }
 }
 
-static gboolean
+static void
 init_multihead (GdkX11Screen *screen)
 {
-  gboolean any_changed = FALSE;
-
-  if (!init_randr15 (screen, &any_changed) &&
-      !init_randr13 (screen, &any_changed))
-    init_no_multihead (screen, &any_changed);
-
-  return any_changed;
+  if (!init_randr15 (screen) &&
+      !init_randr13 (screen))
+    init_no_multihead (screen);
 }
 
 GdkX11Screen *
@@ -958,11 +933,13 @@ _gdk_x11_screen_set_surface_scale (GdkX11Screen *x11_screen,
       _gdk_x11_surface_set_surface_scale (surface, scale);
     }
 
-  for (i = 0; i < x11_display->monitors->len; i++)
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (x11_display->monitors)); i++)
     {
-      GdkMonitor *monitor = GDK_MONITOR (x11_display->monitors->pdata[i]);
+      GdkMonitor *monitor = g_list_model_get_item (G_LIST_MODEL (x11_display->monitors), i);
 
       gdk_monitor_set_scale_factor (monitor, scale);
+
+      g_object_unref (monitor);
     }
 
   /* We re-read the monitor sizes so we can apply the new scale */

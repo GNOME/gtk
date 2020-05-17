@@ -72,8 +72,6 @@ struct _GdkX11Display
   gint xfixes_event_base;
 
   gboolean have_xcomposite;
-  gboolean have_xdamage;
-  gint xdamage_event_base;
 
   gboolean have_randr12;
   gboolean have_randr13;
@@ -99,22 +97,16 @@ struct _GdkX11Display
   GdkSurface *leader_gdk_surface;
   gboolean leader_window_title_set;
 
-  /* List of functions to go from extension event => X window */
-  GSList *event_types;
-
   /* X ID hashtable */
   GHashTable *xid_ht;
 
   /* streams reading selections */
   GSList *streams;
 
-  /* input GdkSurface list */
-  GList *input_surfaces;
-
   /* GdkCursor => XCursor */
   GHashTable *cursors;
 
-  GPtrArray *monitors;
+  GListStore *monitors;
   int primary_monitor;
 
   /* Startup notification */

@@ -175,7 +175,6 @@ void       gdk_surface_invalidate_region  (GdkSurface           *surface,
                                            const cairo_region_t *region);
 void       _gdk_surface_clear_update_area (GdkSurface      *surface);
 void       _gdk_surface_update_size       (GdkSurface      *surface);
-gboolean   _gdk_surface_update_viewable   (GdkSurface      *surface);
 GdkGLContext * gdk_surface_get_paint_gl_context (GdkSurface *surface,
                                                  GError   **error);
 void gdk_surface_get_unscaled_size (GdkSurface *surface,

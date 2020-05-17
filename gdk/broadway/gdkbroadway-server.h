@@ -24,7 +24,6 @@ void               _gdk_broadway_server_roundtrip                (GdkBroadwaySer
                                                                   gint32            id,
                                                                   guint32           tag);
 gulong             _gdk_broadway_server_get_next_serial          (GdkBroadwayServer  *server);
-guint32            _gdk_broadway_server_get_last_seen_time       (GdkBroadwayServer  *server);
 gboolean           _gdk_broadway_server_lookahead_event          (GdkBroadwayServer  *server,
 								  const char         *types);
 void               _gdk_broadway_server_query_mouse              (GdkBroadwayServer  *server,

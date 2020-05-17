@@ -4521,7 +4521,7 @@ event_surface_is_still_viewable (GdkEvent *event)
     case GDK_ENTER_NOTIFY:
     case GDK_PROXIMITY_IN:
     case GDK_SCROLL:
-      return gdk_surface_is_viewable (gdk_event_get_surface (event));
+      return gdk_surface_get_mapped (gdk_event_get_surface (event));
 
 #if 0
     /* The following events are the second half of paired events;
@@ -4586,7 +4586,7 @@ gtk_widget_event (GtkWidget *widget,
   double x, y;
 
   /* We check only once for is-still-visible; if someone
-   * hides the window in on of the signals on the widget,
+   * hides the window in one of the signals on the widget,
    * they are responsible for returning TRUE to terminate
    * handling.
    */
@@ -6600,9 +6600,13 @@ gtk_widget_get_scale_factor (GtkWidget *widget)
   display = _gtk_widget_get_display (widget);
   if (display)
     {
-      monitor = gdk_display_get_monitor (display, 0);
+      monitor = g_list_model_get_item (gdk_display_get_monitors (display), 0);
       if (monitor)
-        return gdk_monitor_get_scale_factor (monitor);
+        {
+          int result = gdk_monitor_get_scale_factor (monitor);
+          g_object_unref (monitor);
+          return result;
+        }
     }
 
   return 1;

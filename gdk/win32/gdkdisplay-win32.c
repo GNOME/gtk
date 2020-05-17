@@ -169,11 +169,12 @@ _gdk_win32_display_find_matching_monitor (GdkWin32Display *win32_display,
 {
   int i;
 
-  for (i = 0; i < win32_display->monitors->len; i++)
+  for (i = 0; i < g_list_model_get_n_items (win32_display->monitors); i++)
     {
       GdkWin32Monitor *m;
 
-      m = GDK_WIN32_MONITOR (g_ptr_array_index (win32_display->monitors, i));
+      m = g_list_model_get_item (win32_display->monitors, i);
+      g_object_unref (m);
 
       if (_gdk_win32_monitor_compare (m, GDK_WIN32_MONITOR (needle)) == 0)
         return GDK_MONITOR (m);
@@ -182,17 +183,21 @@ _gdk_win32_display_find_matching_monitor (GdkWin32Display *win32_display,
   return NULL;
 }
 
-gboolean
+void
 _gdk_win32_display_init_monitors (GdkWin32Display *win32_display)
 {
-  GdkDisplay *display = GDK_DISPLAY (win32_display);
   GPtrArray *new_monitors;
   gint i;
-  gboolean changed = FALSE;
   GdkWin32Monitor *primary_to_move = NULL;
 
-  for (i = 0; i < win32_display->monitors->len; i++)
-    GDK_WIN32_MONITOR (g_ptr_array_index (win32_display->monitors, i))->remove = TRUE;
+  for (i = 0; i < g_list_model_get_n_items (win32_display->monitors); i++)
+    {
+      GdkWin32Monitor *m;
+
+      m = g_list_model_get_item (win32_display->monitors, i);
+      m->remove = TRUE;
+      g_object_unref (m);
+    }
 
   new_monitors = _gdk_win32_display_get_monitor_list (win32_display);
 
@@ -202,7 +207,7 @@ _gdk_win32_display_init_monitors (GdkWin32Display *win32_display)
       GdkMonitor *m;
       GdkWin32Monitor *w32_ex_monitor;
       GdkMonitor *ex_monitor;
-      GdkRectangle geometry, ex_geometry;
+      GdkRectangle geometry;
       GdkRectangle workarea, ex_workarea;
 
       w32_m = GDK_WIN32_MONITOR (g_ptr_array_index (new_monitors, i));
@@ -213,7 +218,6 @@ _gdk_win32_display_init_monitors (GdkWin32Display *win32_display)
       if (ex_monitor == NULL)
         {
           w32_m->add = TRUE;
-          changed = TRUE;
           continue;
         }
 
@@ -223,22 +227,15 @@ _gdk_win32_display_init_monitors (GdkWin32Display *win32_display)
         primary_to_move = w32_ex_monitor;
 
       gdk_monitor_get_geometry (m, &geometry);
-      gdk_monitor_get_geometry (ex_monitor, &ex_geometry);
       gdk_monitor_get_workarea (m, &workarea);
       gdk_monitor_get_workarea (ex_monitor, &ex_workarea);
 
       if (memcmp (&workarea, &ex_workarea, sizeof (GdkRectangle)) != 0)
         {
           w32_ex_monitor->work_rect = workarea;
-          changed = TRUE;
         }
 
-      if (memcmp (&geometry, &ex_geometry, sizeof (GdkRectangle)) != 0)
-        {
-          gdk_monitor_set_size (ex_monitor, geometry.width, geometry.height);
-          gdk_monitor_set_position (ex_monitor, geometry.x, geometry.y);
-          changed = TRUE;
-        }
+      gdk_monitor_set_geometry (ex_monitor, &geometry);
 
       if (gdk_monitor_get_width_mm (m) != gdk_monitor_get_width_mm (ex_monitor) ||
           gdk_monitor_get_height_mm (m) != gdk_monitor_get_height_mm (ex_monitor))
@@ -246,86 +243,78 @@ _gdk_win32_display_init_monitors (GdkWin32Display *win32_display)
           gdk_monitor_set_physical_size (ex_monitor,
                                          gdk_monitor_get_width_mm (m),
                                          gdk_monitor_get_height_mm (m));
-          changed = TRUE;
         }
 
       if (g_strcmp0 (gdk_monitor_get_model (m), gdk_monitor_get_model (ex_monitor)) != 0)
         {
           gdk_monitor_set_model (ex_monitor,
                                  gdk_monitor_get_model (m));
-          changed = TRUE;
         }
 
       if (g_strcmp0 (gdk_monitor_get_manufacturer (m), gdk_monitor_get_manufacturer (ex_monitor)) != 0)
         {
           gdk_monitor_set_manufacturer (ex_monitor,
                                         gdk_monitor_get_manufacturer (m));
-          changed = TRUE;
         }
 
       if (gdk_monitor_get_refresh_rate (m) != gdk_monitor_get_refresh_rate (ex_monitor))
         {
           gdk_monitor_set_refresh_rate (ex_monitor, gdk_monitor_get_refresh_rate (m));
-          changed = TRUE;
         }
 
       if (gdk_monitor_get_scale_factor (m) != gdk_monitor_get_scale_factor (ex_monitor))
         {
           gdk_monitor_set_scale_factor (ex_monitor, gdk_monitor_get_scale_factor (m));
-          changed = TRUE;
         }
 
       if (gdk_monitor_get_subpixel_layout (m) != gdk_monitor_get_subpixel_layout (ex_monitor))
         {
           gdk_monitor_set_subpixel_layout (ex_monitor, gdk_monitor_get_subpixel_layout (m));
-          changed = TRUE;
         }
     }
 
-  for (i = win32_display->monitors->len - 1; i >= 0; i--)
+  for (i = g_list_model_get_n_items (win32_display->monitors) - 1; i >= 0; i--)
     {
       GdkWin32Monitor *w32_ex_monitor;
       GdkMonitor *ex_monitor;
 
-      w32_ex_monitor = GDK_WIN32_MONITOR (g_ptr_array_index (win32_display->monitors, i));
+      w32_ex_monitor = GDK_WIN32_MONITOR (g_list_model_get_item (win32_display->monitors, i));
+      g_object_unref (w32_ex_monitor);
       ex_monitor = GDK_MONITOR (w32_ex_monitor);
 
       if (!w32_ex_monitor->remove)
         continue;
 
-      changed = TRUE;
-      gdk_display_monitor_removed (display, ex_monitor);
-      g_ptr_array_remove_index (win32_display->monitors, i);
+      g_list_store_remove (G_LIST_STORE (win32_display->monitors), i);
+      gdk_monitor_invalidate (ex_monitor);
     }
 
   for (i = 0; i < new_monitors->len; i++)
     {
       GdkWin32Monitor *w32_m;
-      GdkMonitor *m;
 
       w32_m = GDK_WIN32_MONITOR (g_ptr_array_index (new_monitors, i));
-      m = GDK_MONITOR (w32_m);
 
       if (!w32_m->add)
         continue;
 
-      gdk_display_monitor_added (display, m);
-
       if (i == 0)
-        g_ptr_array_insert (win32_display->monitors, 0, g_object_ref (w32_m));
+        g_list_store_insert (G_LIST_STORE (win32_display->monitors), 0, w32_m);
       else
-        g_ptr_array_add (win32_display->monitors, g_object_ref (w32_m));
+        g_list_store_append (G_LIST_STORE (win32_display->monitors), w32_m);
     }
 
   g_ptr_array_free (new_monitors, TRUE);
 
   if (primary_to_move)
     {
-      g_ptr_array_remove (win32_display->monitors, g_object_ref (primary_to_move));
-      g_ptr_array_insert (win32_display->monitors, 0, primary_to_move);
-      changed = TRUE;
+      guint pos;
+      g_object_ref (primary_to_move);
+      if (g_list_store_find (G_LIST_STORE (win32_display->monitors), primary_to_move, &pos))
+        g_list_store_remove (G_LIST_STORE (win32_display->monitors), pos);
+      g_list_store_insert (G_LIST_STORE (win32_display->monitors), 0, primary_to_move);
+      g_object_unref (primary_to_move);
     }
-  return changed;
 }
 
 
@@ -706,7 +695,8 @@ gdk_win32_display_finalize (GObject *object)
   _gdk_win32_dnd_exit ();
   _gdk_win32_lang_notification_exit ();
 
-  g_ptr_array_free (display_win32->monitors, TRUE);
+  g_list_store_remove_all (G_LIST_STORE (display_win32->monitors));
+  g_object_unref (display_win32->monitors);
 
   while (display_win32->filters)
     _gdk_win32_message_filter_unref (display_win32, display_win32->filters->data);
@@ -911,7 +901,7 @@ gdk_win32_display_init (GdkWin32Display *display)
 {
   const gchar *scale_str = g_getenv ("GDK_SCALE");
 
-  display->monitors = g_ptr_array_new_with_free_func (g_object_unref);
+  display->monitors = G_LIST_MODEL (g_list_store_new (GDK_TYPE_MONITOR));
 
   _gdk_win32_enable_hidpi (display);
 
@@ -959,37 +949,25 @@ gdk_win32_display_notify_startup_complete (GdkDisplay  *display,
   /* nothing */
 }
 
-static int
-gdk_win32_display_get_n_monitors (GdkDisplay *display)
-{
-  GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
-
-  return win32_display->monitors->len;
-}
-
-
-static GdkMonitor *
-gdk_win32_display_get_monitor (GdkDisplay *display,
-                               int         monitor_num)
-{
-  GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
-
-  if (monitor_num < 0 || monitor_num >= win32_display->monitors->len)
-    return NULL;
-
-  return (GdkMonitor *) g_ptr_array_index (win32_display->monitors, monitor_num);
-}
-
 GdkMonitor *
 gdk_win32_display_get_primary_monitor (GdkDisplay *display)
 {
-  GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
+  GdkWin32Display *self = GDK_WIN32_DISPLAY (display);
+  GdkMonitor *result;
 
-  /* We arrange for the first monitor in the array to also be the primiary monitor */
-  if (win32_display->monitors->len > 0)
-    return (GdkMonitor *) g_ptr_array_index (win32_display->monitors, 0);
+  /* We arrange for the first monitor in the array to also be the primary monitor */
+  result = g_list_model_get_item (self->monitors, 0);
+  g_object_unref (result);
 
-  return NULL;
+  return result;
+}
+
+static GListModel *
+gdk_win32_display_get_monitors (GdkDisplay *display)
+{
+  GdkWin32Display *self = GDK_WIN32_DISPLAY (display);
+
+  return self->monitors;
 }
 
 guint
@@ -1083,12 +1061,6 @@ gdk_win32_display_get_setting (GdkDisplay  *display,
   return _gdk_win32_get_setting (name, value);
 }
 
-static guint32
-gdk_win32_display_get_last_seen_time (GdkDisplay *display)
-{
-  return GetMessageTime ();
-}
-
 static void
 gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
 {
@@ -1120,8 +1092,7 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->get_keymap = _gdk_win32_display_get_keymap;
   display_class->make_gl_context_current = _gdk_win32_display_make_gl_context_current;
 
-  display_class->get_n_monitors = gdk_win32_display_get_n_monitors;
-  display_class->get_monitor = gdk_win32_display_get_monitor;
+  display_class->get_monitors = gdk_win32_display_get_monitors;
 
 #ifdef GDK_RENDERING_VULKAN
   display_class->vk_context_type = GDK_TYPE_WIN32_VULKAN_CONTEXT;
@@ -1129,7 +1100,6 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
 #endif
 
   display_class->get_setting = gdk_win32_display_get_setting;
-  display_class->get_last_seen_time = gdk_win32_display_get_last_seen_time;
   display_class->set_cursor_theme = gdk_win32_display_set_cursor_theme;
 
   _gdk_win32_surfaceing_init ();

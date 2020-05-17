@@ -2042,7 +2042,7 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
  
   move_drag_surface (drag, x_root, y_root);
 
-  x11_drag->timestamp = gdk_display_get_last_seen_time (display);
+  x11_drag->timestamp = gdk_x11_get_server_time (GDK_X11_DISPLAY (display)->leader_gdk_surface);
   xselection = gdk_x11_get_xatom_by_name_for_display (display, "XdndSelection");
   XSetSelectionOwner (GDK_DISPLAY_XDISPLAY (display),
                       xselection,

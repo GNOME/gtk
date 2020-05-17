@@ -73,10 +73,6 @@
 #include <X11/extensions/Xcomposite.h>
 #endif
 
-#ifdef HAVE_XDAMAGE
-#include <X11/extensions/Xdamage.h>
-#endif
-
 #ifdef HAVE_RANDR
 #include <X11/extensions/Xrandr.h>
 #endif
@@ -209,9 +205,9 @@ G_DEFINE_TYPE_WITH_CODE (GdkX11Display, gdk_x11_display, GDK_TYPE_DISPLAY,
                                                 gdk_x11_display_event_translator_init))
 
 static void
-gdk_x11_display_init (GdkX11Display *display)
+gdk_x11_display_init (GdkX11Display *self)
 {
-  display->monitors = g_ptr_array_new_with_free_func (g_object_unref);
+  self->monitors = g_list_store_new (GDK_TYPE_MONITOR);
 }
 
 static void
@@ -1430,8 +1426,6 @@ gdk_x11_display_open (const gchar *display_name)
 	      display_x11->have_randr15 = TRUE;
 #endif
       }
-
-       gdk_x11_register_standard_event_type (display, display_x11->xrandr_event_base, RRNumberEvents);
   }
 #endif
 
@@ -1464,10 +1458,6 @@ gdk_x11_display_open (const gchar *display_name)
 			    &ignore))
     {
       display_x11->have_xfixes = TRUE;
-
-      gdk_x11_register_standard_event_type (display,
-					    display_x11->xfixes_event_base, 
-					    XFixesNumberEvents);
     }
   else
 #endif
@@ -1490,21 +1480,6 @@ gdk_x11_display_open (const gchar *display_name)
   else
 #endif
     display_x11->have_xcomposite = FALSE;
-
-#ifdef HAVE_XDAMAGE
-  if (XDamageQueryExtension (display_x11->xdisplay,
-			     &display_x11->xdamage_event_base,
-			     &ignore))
-    {
-      display_x11->have_xdamage = TRUE;
-
-      gdk_x11_register_standard_event_type (display,
-					    display_x11->xdamage_event_base,
-					    XDamageNumberEvents);
-    }
-  else
-#endif
-    display_x11->have_xdamage = FALSE;
 
   display_x11->have_shapes = FALSE;
   display_x11->have_input_shapes = FALSE;
@@ -1940,17 +1915,12 @@ gdk_x11_display_finalize (GObject *object)
   /* Leader Window */
   XDestroyWindow (display_x11->xdisplay, display_x11->leader_window);
 
-  /* List of event window extraction functions */
-  g_slist_free_full (display_x11->event_types, g_free);
-
-  /* input GdkSurface list */
-  g_list_free_full (display_x11->input_surfaces, g_free);
-
   /* Free all GdkX11Screens */
   g_object_unref (display_x11->screen);
   g_list_free_full (display_x11->screens, g_object_unref);
 
-  g_ptr_array_free (display_x11->monitors, TRUE);
+  g_list_store_remove_all (display_x11->monitors);
+  g_object_unref (display_x11->monitors);
 
   g_free (display_x11->startup_notification_id);
 
@@ -2438,39 +2408,6 @@ gdk_x11_display_set_startup_notification_id (GdkDisplay  *display,
     }
 }
 
-/**
- * gdk_x11_register_standard_event_type:
- * @display: (type GdkX11Display): a #GdkDisplay
- * @event_base: first event type code to register
- * @n_events: number of event type codes to register
- *
- * Registers interest in receiving extension events with type codes
- * between @event_base and `event_base + n_events - 1`.
- * The registered events must have the window field in the same place
- * as core X events (this is not the case for e.g. XKB extension events).
- *
- * GDK may register the events of some X extensions on its own.
- *
- * This function should only be needed in unusual circumstances, e.g.
- * when filtering XInput extension events on the root window.
- **/
-void
-gdk_x11_register_standard_event_type (GdkDisplay *display,
-				      gint        event_base,
-				      gint        n_events)
-{
-  GdkEventTypeX11 *event_type;
-  GdkX11Display *display_x11;
-
-  display_x11 = GDK_X11_DISPLAY (display);
-  event_type = g_new (GdkEventTypeX11, 1);
-
-  event_type->base = event_base;
-  event_type->n_events = n_events;
-
-  display_x11->event_types = g_slist_prepend (display_x11->event_types, event_type);
-}
-
 /* look up the extension name for a given major opcode.  grubs around in
  * xlib to do it since a) it’s already cached there b) XQueryExtension
  * emits protocol so we can’t use it in an error handler.
@@ -2894,30 +2831,17 @@ gdk_x11_display_get_default_seat (GdkDisplay *display)
   return NULL;
 }
 
-static int
-gdk_x11_display_get_n_monitors (GdkDisplay *display)
+static GListModel *
+gdk_x11_display_get_monitors (GdkDisplay *display)
 {
-  GdkX11Display *x11_display = GDK_X11_DISPLAY (display);
+  GdkX11Display *self = GDK_X11_DISPLAY (display);
 
-  return x11_display->monitors->len;
-}
-
-
-static GdkMonitor *
-gdk_x11_display_get_monitor (GdkDisplay *display,
-                             int         monitor_num)
-{
-  GdkX11Display *x11_display = GDK_X11_DISPLAY (display);
-
-  if (0 <= monitor_num && monitor_num < x11_display->monitors->len)
-    return (GdkMonitor *)x11_display->monitors->pdata[monitor_num];
-
-  return NULL;
+  return G_LIST_MODEL (self->monitors);
 }
 
 /**
  * gdk_x11_display_get_primary_monitor:
- * @display: a #GdkDisplay
+ * @self: a #GdkDisplay
  *
  * Gets the primary monitor for the display.
  *
@@ -2935,12 +2859,19 @@ gdk_x11_display_get_monitor (GdkDisplay *display,
 GdkMonitor *
 gdk_x11_display_get_primary_monitor (GdkDisplay *display)
 {
-  GdkX11Display *x11_display = GDK_X11_DISPLAY (display);
+  GdkX11Display *self = GDK_X11_DISPLAY (display);
+  GdkMonitor *monitor;
 
-  if (0 <= x11_display->primary_monitor && x11_display->primary_monitor < x11_display->monitors->len)
-    return x11_display->monitors->pdata[x11_display->primary_monitor];
+  if (0 <= self->primary_monitor)
+    return NULL;
 
-  return NULL;
+  monitor = g_list_model_get_item (G_LIST_MODEL (self->monitors), self->primary_monitor);
+  if (monitor == NULL)
+    return NULL;
+
+  /* because g_list_model_get_item() returns a ref */
+  g_object_unref (monitor);
+  return monitor;
 }
 
 int
@@ -2973,12 +2904,6 @@ GList *
 gdk_x11_display_get_toplevel_windows (GdkDisplay *display)
 {
   return GDK_X11_DISPLAY (display)->toplevels;
-}
-
-static guint32
-gdk_x11_display_get_last_seen_time (GdkDisplay *display)
-{
-  return gdk_x11_get_server_time (GDK_X11_DISPLAY (display)->leader_gdk_surface);
 }
 
 static gboolean
@@ -3034,10 +2959,8 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
 
   display_class->get_default_seat = gdk_x11_display_get_default_seat;
 
-  display_class->get_n_monitors = gdk_x11_display_get_n_monitors;
-  display_class->get_monitor = gdk_x11_display_get_monitor;
+  display_class->get_monitors = gdk_x11_display_get_monitors;
   display_class->get_setting = gdk_x11_display_get_setting;
-  display_class->get_last_seen_time = gdk_x11_display_get_last_seen_time;
   display_class->set_cursor_theme = gdk_x11_display_set_cursor_theme;
 
   class->xevent = gdk_event_source_xevent;
