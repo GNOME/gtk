@@ -48,7 +48,7 @@ overlay_draw (GtkDrawingArea *da,
   GtkAllocation label_allocation;
   GtkRequisition minimum_size, natural_size;
   GtkWidget *label = data;
-  gint x, y;
+  double x, y;
 
   cairo_translate (cr, -0.5, -0.5);
   cairo_set_line_width (cr, 1);

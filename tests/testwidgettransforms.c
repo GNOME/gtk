@@ -162,7 +162,7 @@ gtk_transform_tester_snapshot (GtkWidget   *widget,
 
     for (x = 0; x < G_N_ELEMENTS (points); x ++)
       {
-        int px, py;
+        double px, py;
 
         gtk_widget_translate_coordinates (self->test_widget, widget,
                                           points[x].coords.x, points[x].coords.y,

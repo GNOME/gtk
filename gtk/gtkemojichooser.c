@@ -253,7 +253,7 @@ scroll_to_child (GtkWidget *child)
   GtkEmojiChooser *chooser;
   GtkAdjustment *adj;
   GtkAllocation alloc;
-  int pos;
+  double pos;
   double value;
   double page_size;
 

@@ -653,10 +653,10 @@ gboolean     gtk_widget_is_ancestor     (GtkWidget      *widget,
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_widget_translate_coordinates (GtkWidget  *src_widget,
                                                GtkWidget  *dest_widget,
-                                               gint        src_x,
-                                               gint        src_y,
-                                               gint       *dest_x,
-                                               gint       *dest_y);
+                                               double      src_x,
+                                               double      src_y,
+                                               double     *dest_x,
+                                               double     *dest_y);
 
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_widget_contains              (GtkWidget  *widget,

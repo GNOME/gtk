@@ -274,6 +274,7 @@ get_child_position (GtkOverlay     *overlay,
   GtkRequisition req;
   GtkAllocation alloc;
   gint s, e;
+  double x, y;
 
   gtk_widget_get_preferred_size (widget, &req, NULL);
 
@@ -287,11 +288,11 @@ get_child_position (GtkOverlay     *overlay,
       gtk_widget_translate_coordinates (editor->sv_plane,
                                         gtk_widget_get_parent (editor->grid),
                                         0, -6,
-                                        &allocation->x, &allocation->y);
+                                        &x, &y);
       if (gtk_widget_get_direction (GTK_WIDGET (overlay)) == GTK_TEXT_DIR_RTL)
-        allocation->x = 0;
+        x = 0;
       else
-        allocation->x = gtk_widget_get_width (GTK_WIDGET (overlay)) - req.width;
+        x = gtk_widget_get_width (GTK_WIDGET (overlay)) - req.width;
     }
   else if (widget == editor->h_popup)
     {
@@ -302,12 +303,12 @@ get_child_position (GtkOverlay     *overlay,
         gtk_widget_translate_coordinates (editor->h_slider,
                                           gtk_widget_get_parent (editor->grid),
                                           - req.width - 6, editor->popup_position - req.height / 2,
-                                          &allocation->x, &allocation->y);
+                                          &x, &y);
       else
         gtk_widget_translate_coordinates (editor->h_slider,
                                           gtk_widget_get_parent (editor->grid),
                                           alloc.width + 6, editor->popup_position - req.height / 2,
-                                          &allocation->x, &allocation->y);
+                                          &x, &y);
     }
   else if (widget == editor->a_popup)
     {
@@ -317,13 +318,13 @@ get_child_position (GtkOverlay     *overlay,
       gtk_widget_translate_coordinates (editor->a_slider,
                                         gtk_widget_get_parent (editor->grid),
                                         editor->popup_position - req.width / 2, - req.height - 6,
-                                        &allocation->x, &allocation->y);
+                                        &x, &y);
     }
   else
     return FALSE;
 
-  allocation->x = CLAMP (allocation->x, 0, gtk_widget_get_width (GTK_WIDGET (overlay)) - req.width);
-  allocation->y = CLAMP (allocation->y, 0, gtk_widget_get_height (GTK_WIDGET (overlay)) - req.height);
+  allocation->x = CLAMP (x, 0, gtk_widget_get_width (GTK_WIDGET (overlay)) - req.width);
+  allocation->y = CLAMP (y, 0, gtk_widget_get_height (GTK_WIDGET (overlay)) - req.height);
 
   return TRUE;
 }

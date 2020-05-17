@@ -648,7 +648,7 @@ focus_change_handler (GtkWidget *widget)
   GtkRoot *root;
   GtkWidget *focus_widget;
   graphene_rect_t rect;
-  int x, y;
+  double x, y;
 
   if ((gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_FOCUS_WITHIN) == 0)
     return;
@@ -666,8 +666,8 @@ focus_change_handler (GtkWidget *widget)
     return;
 
   gtk_widget_translate_coordinates (viewport->child, widget,
-                                    (int)rect.origin.x,
-                                    (int)rect.origin.y,
+                                    rect.origin.x,
+                                    rect.origin.y,
                                      &x, &y);
 
   scroll_to_view (viewport->hadjustment, x, rect.size.width);

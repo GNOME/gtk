@@ -94,8 +94,8 @@ gtk_tooltip_window_native_get_renderer (GtkNative *native)
 
 static void
 gtk_tooltip_window_native_get_surface_transform (GtkNative *native,
-                                                 int       *x,
-                                                 int       *y)
+                                                 double    *x,
+                                                 double    *y)
 {
   GtkCssBoxes css_boxes;
   const graphene_rect_t *margin_rect;
