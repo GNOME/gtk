@@ -1281,8 +1281,10 @@ translate_event_coordinates (GdkEvent  *event,
                              GtkWidget *widget)
 {
   GtkWidget *event_widget;
+  GtkNative *native;
   graphene_point_t p;
   double event_x, event_y;
+  int native_x, native_y;
 
   *x = *y = 0;
 
@@ -1290,6 +1292,11 @@ translate_event_coordinates (GdkEvent  *event,
     return FALSE;
 
   event_widget = gtk_get_event_widget (event);
+  native = gtk_widget_get_native (event_widget);
+
+  gtk_native_get_surface_transform (GTK_NATIVE (native), &native_x, &native_y);
+  event_x -= native_x;
+  event_y -= native_y;
 
   if (!gtk_widget_compute_point (event_widget,
                                  widget,
@@ -1426,6 +1433,7 @@ update_pointer_focus_state (GtkWindow *toplevel,
   GdkEventSequence *sequence;
   GdkDevice *device;
   gdouble x, y;
+  int nx, ny;
 
   device = gdk_event_get_device (event);
   sequence = gdk_event_get_event_sequence (event);
@@ -1434,6 +1442,10 @@ update_pointer_focus_state (GtkWindow *toplevel,
     return old_target;
 
   gdk_event_get_position (event, &x, &y);
+  gtk_native_get_surface_transform (GTK_NATIVE (toplevel), &nx, &ny);
+  x -= nx;
+  y -= ny;
+
   gtk_window_update_pointer_focus (toplevel, device, sequence,
                                    new_target, x, y);
 

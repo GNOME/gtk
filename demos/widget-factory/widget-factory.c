@@ -1148,6 +1148,7 @@ populate_flowbox (GtkWidget *flowbox)
   pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, 110, 70);
   gdk_pixbuf_fill (pixbuf, 0xffffffff);
   child = gtk_picture_new_for_pixbuf (pixbuf);
+  gtk_widget_add_css_class (child, "frame");
   gtk_flow_box_insert (GTK_FLOW_BOX (flowbox), child, -1);
 
   for (i = 0; i < G_N_ELEMENTS (resources); i++)

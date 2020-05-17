@@ -3447,6 +3447,7 @@ gtk_widget_get_surface_allocation (GtkWidget     *widget,
 {
   GtkWidget *parent;
   graphene_rect_t bounds;
+  int nx, ny;
 
   /* Don't consider the parent == widget case here. */
   parent = _gtk_widget_get_parent (widget);
@@ -3454,12 +3455,13 @@ gtk_widget_get_surface_allocation (GtkWidget     *widget,
     parent = _gtk_widget_get_parent (parent);
 
   g_assert (GTK_IS_WINDOW (parent) || GTK_IS_POPOVER (parent));
+  gtk_native_get_surface_transform (GTK_NATIVE (parent), &nx, &ny);
 
   if (gtk_widget_compute_bounds (widget, parent, &bounds))
     {
       *allocation = (GtkAllocation){
-        floorf (bounds.origin.x),
-        floorf (bounds.origin.y),
+        floorf (bounds.origin.x) + nx,
+        floorf (bounds.origin.y) + ny,
         ceilf (bounds.size.width),
         ceilf (bounds.size.height)
       };
@@ -4549,6 +4551,8 @@ translate_event_coordinates (GdkEvent  *event,
   GtkWidget *event_widget;
   graphene_point_t p;
   double event_x, event_y;
+  GtkNative *native;
+  int nx, ny;
 
   *x = *y = 0;
 
@@ -4556,6 +4560,10 @@ translate_event_coordinates (GdkEvent  *event,
     return FALSE;
 
   event_widget = gtk_get_event_widget (event);
+  native = gtk_widget_get_native (event_widget);
+  gtk_native_get_surface_transform (native, &nx, &ny);
+  event_x -= nx;
+  event_y -= ny;
 
   if (!gtk_widget_compute_point (event_widget,
                                  widget,
