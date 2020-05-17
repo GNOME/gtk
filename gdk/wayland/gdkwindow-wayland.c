@@ -1644,6 +1644,12 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
       height = impl->saved_height;
     }
 
+  if (!fixed_size && impl->saved_width > 0 && impl->saved_height > 0)
+    {
+      width = impl->saved_width;
+      height = impl->saved_height;
+    }
+
   if (width > 0 && height > 0)
     {
       GdkWindowHints geometry_mask = impl->geometry_mask;
