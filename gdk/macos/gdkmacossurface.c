@@ -895,7 +895,7 @@ _gdk_macos_surface_monitor_changed (GdkMacosSurface *self)
 GdkMonitor *
 _gdk_macos_surface_get_best_monitor (GdkMacosSurface *self)
 {
-  GdkMonitor *best = NULL;
+  GdkMonitor *best;
   GdkDisplay *display;
   GdkRectangle rect;
   guint n_monitors;
@@ -911,6 +911,8 @@ _gdk_macos_surface_get_best_monitor (GdkMacosSurface *self)
   rect.width = GDK_SURFACE (self)->width;
   rect.height = GDK_SURFACE (self)->height;
 
+  best = gdk_display_get_monitor (display, 0);
+
   for (guint i = 0; i < n_monitors; i++)
     {
       GdkMonitor *monitor = gdk_display_get_monitor (display, i);
@@ -920,7 +922,7 @@ _gdk_macos_surface_get_best_monitor (GdkMacosSurface *self)
         {
           int area = intersect.width * intersect.height;
 
-          if (best == NULL || area > best_area)
+          if (area > best_area)
             {
               best = monitor;
               best_area = area;
