@@ -266,7 +266,7 @@ struct _GtkNothingActionClass
 
 G_DEFINE_TYPE (GtkNothingAction, gtk_nothing_action, GTK_TYPE_SHORTCUT_ACTION)
 
-static void
+static void G_GNUC_NORETURN
 gtk_nothing_action_finalize (GObject *gobject)
 {
   g_assert_not_reached ();
@@ -438,7 +438,7 @@ struct _GtkActivateActionClass
 
 G_DEFINE_TYPE (GtkActivateAction, gtk_activate_action, GTK_TYPE_SHORTCUT_ACTION)
 
-static void
+static void G_GNUC_NORETURN
 gtk_activate_action_finalize (GObject *gobject)
 {
   g_assert_not_reached ();
@@ -513,7 +513,7 @@ struct _GtkMnemonicActionClass
 
 G_DEFINE_TYPE (GtkMnemonicAction, gtk_mnemonic_action, GTK_TYPE_SHORTCUT_ACTION)
 
-static void
+static void G_GNUC_NORETURN
 gtk_mnemonic_action_finalize (GObject *gobject)
 {
   g_assert_not_reached ();

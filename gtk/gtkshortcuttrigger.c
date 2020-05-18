@@ -401,7 +401,7 @@ struct _GtkNeverTriggerClass
 
 G_DEFINE_TYPE (GtkNeverTrigger, gtk_never_trigger, GTK_TYPE_SHORTCUT_TRIGGER)
 
-static void
+static void G_GNUC_NORETURN
 gtk_never_trigger_finalize (GObject *gobject)
 {
   g_assert_not_reached ();
