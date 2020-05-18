@@ -184,17 +184,21 @@ gdk_macos_display_update_bounds (GdkMacosDisplay *self)
 {
   GDK_BEGIN_MACOS_ALLOC_POOL;
 
-  int max_x = 0;
-  int max_y = 0;
+  int max_x = G_MININT;
+  int max_y = G_MININT;
 
   g_assert (GDK_IS_MACOS_DISPLAY (self));
 
-  self->min_x = 0;
-  self->min_y = 0;
+  self->min_x = G_MAXINT;
+  self->min_y = G_MAXINT;
 
   for (id obj in [NSScreen screens])
     {
-      NSRect geom = [(NSScreen *)obj frame];
+      CGDirectDisplayID screen_id;
+      CGRect geom;
+
+      screen_id = [[[obj deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue];
+      geom = CGDisplayBounds (screen_id);
 
       self->min_x = MIN (self->min_x, geom.origin.x);
       self->min_y = MIN (self->min_y, geom.origin.y);

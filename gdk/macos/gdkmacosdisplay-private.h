@@ -67,10 +67,11 @@ struct _GdkMacosDisplay
   /* The surface that is receiving keyboard events */
   GdkMacosSurface *keyboard_surface;
 
-  int             width;
-  int             height;
-  int             min_x;
-  int             min_y;
+  /* Used to translate from quartz coordinate space to GDK */
+  int width;
+  int height;
+  int min_x;
+  int min_y;
 };
 
 struct _GdkMacosDisplayClass
