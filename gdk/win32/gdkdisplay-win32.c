@@ -622,23 +622,6 @@ gdk_win32_display_get_default_group (GdkDisplay *display)
   return NULL;
 }
 
-static gboolean
-gdk_win32_display_supports_shapes (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
-  return TRUE;
-}
-
-static gboolean
-gdk_win32_display_supports_input_shapes (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
-  /* Partially supported, see WM_NCHITTEST handler. */
-  return TRUE;
-}
-
 static void
 gdk_win32_display_beep (GdkDisplay *display)
 {
@@ -1079,9 +1062,6 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->has_pending = _gdk_win32_display_has_pending;
   display_class->queue_events = _gdk_win32_display_queue_events;
   display_class->get_default_group = gdk_win32_display_get_default_group;
-
-  display_class->supports_shapes = gdk_win32_display_supports_shapes;
-  display_class->supports_input_shapes = gdk_win32_display_supports_input_shapes;
 
   //? display_class->get_app_launch_context = _gdk_win32_display_get_app_launch_context;
 

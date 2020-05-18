@@ -2042,17 +2042,14 @@ gdk_surface_get_root_coords (GdkSurface *surface,
  * corresponds to an unset bit in the mask will be passed on the
  * surface below @surface.
  *
- * An input shape is typically used with RGBA surfaces.
+ * An input region is typically used with RGBA surfaces.
  * The alpha channel of the surface defines which pixels are
  * invisible and allows for nicely antialiased borders,
- * and the input shape controls where the surface is
+ * and the input region controls where the surface is
  * “clickable”.
  *
- * On the X11 platform, this requires version 1.1 of the
- * shape extension.
- *
- * On the Win32 platform, this functionality is not present and the
- * function does nothing.
+ * Use gdk_display_support_input_shapes() to find out if
+ * a particular backend supports input regions.
  */
 void
 gdk_surface_set_input_region (GdkSurface     *surface,

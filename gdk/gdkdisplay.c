@@ -71,6 +71,7 @@ enum
   PROP_0,
   PROP_COMPOSITED,
   PROP_RGBA,
+  PROP_INPUT_SHAPES,
   LAST_PROP
 };
 
@@ -111,6 +112,10 @@ gdk_display_get_property (GObject    *object,
 
     case PROP_RGBA:
       g_value_set_boolean (value, gdk_display_is_rgba (display));
+      break;
+
+    case PROP_INPUT_SHAPES:
+      g_value_set_boolean (value, gdk_display_supports_input_shapes (display));
       break;
 
     default:
@@ -190,6 +195,19 @@ gdk_display_class_init (GdkDisplayClass *class)
     g_param_spec_boolean ("rgba",
                           P_("RGBA"),
                           P_("RGBA"),
+                          TRUE,
+                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkDisplay:input-shapes:
+   *
+   * %TRUE if the display supports input shapes. See
+   * gdk_display_supports_input_shapes() for details.
+   */
+  props[PROP_INPUT_SHAPES] =
+    g_param_spec_boolean ("input-shapes",
+                          P_("Input shapes"),
+                          P_("Input shapes"),
                           TRUE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -322,6 +340,7 @@ gdk_display_init (GdkDisplay *display)
 
   display->composited = TRUE;
   display->rgba = TRUE;
+  display->input_shapes = TRUE;
 }
 
 static void
@@ -1095,23 +1114,6 @@ gdk_display_get_primary_clipboard (GdkDisplay *display)
 }
 
 /**
- * gdk_display_supports_shapes:
- * @display: a #GdkDisplay
- *
- * Returns %TRUE if gdk_surface_shape_combine_mask() can
- * be used to create shaped windows on @display.
- *
- * Returns: %TRUE if shaped windows are supported
- */
-gboolean
-gdk_display_supports_shapes (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
-  return GDK_DISPLAY_GET_CLASS (display)->supports_shapes (display);
-}
-
-/**
  * gdk_display_supports_input_shapes:
  * @display: a #GdkDisplay
  *
@@ -1125,7 +1127,21 @@ gdk_display_supports_input_shapes (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
 
-  return GDK_DISPLAY_GET_CLASS (display)->supports_input_shapes (display);
+  return display->input_shapes;
+}
+
+void
+gdk_display_set_input_shapes (GdkDisplay *display,
+                              gboolean    input_shapes)
+{
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+
+  if (display->input_shapes == input_shapes)
+    return;
+
+  display->input_shapes = input_shapes;
+
+  g_object_notify_by_pspec (G_OBJECT (display), props[PROP_INPUT_SHAPES]);
 }
 
 static GdkAppLaunchContext *

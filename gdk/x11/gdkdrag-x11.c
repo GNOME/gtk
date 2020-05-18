@@ -665,12 +665,12 @@ is_pointer_within_shape (GdkDisplay    *display,
       cairo_region_t *input_shape;
 
       child->shape = NULL;
-      if (gdk_display_supports_shapes (display))
+      if (display_x11->have_shapes)
         child->shape = _gdk_x11_xwindow_get_shape (display_x11->xdisplay,
                                                    child->xid, 1,  ShapeBounding);
 #ifdef ShapeInput
       input_shape = NULL;
-      if (gdk_display_supports_input_shapes (display))
+      if (display_x11->have_input_shapes)
         input_shape = _gdk_x11_xwindow_get_shape (display_x11->xdisplay,
                                                   child->xid, 1, ShapeInput);
 
