@@ -1515,7 +1515,7 @@ gdk_display_list_seats (GdkDisplay *display)
 
 /**
  * gdk_display_get_monitors:
- * @display: a #GdkDisplay
+ * @self: a #GdkDisplay
  *
  * Gets the list of monitors associated with this display.
  *
