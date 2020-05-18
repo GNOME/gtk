@@ -259,10 +259,10 @@
   GdkMacosCairoView *view;
 
   self = [super initWithContentRect:contentRect
-	                  styleMask:styleMask
-	                    backing:backingType
-	                      defer:flag
-                       screen:screen];
+	                        styleMask:styleMask
+	                          backing:backingType
+	                            defer:flag
+                             screen:screen];
 
   [self setAcceptsMouseMovedEvents:YES];
   [self setDelegate:(id<NSWindowDelegate>)self];
