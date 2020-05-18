@@ -50,11 +50,13 @@
 {
   GdkDisplay *display;
   GdkEvent *event;
+  GList *node;
 
   display = gdk_surface_get_display (GDK_SURFACE (gdk_surface));
   event = gdk_delete_event_new (GDK_SURFACE (gdk_surface));
-
-  _gdk_event_queue_append (display, event);
+  node = _gdk_event_queue_append (display, event);
+  _gdk_windowing_got_event (display, node, event,
+                            _gdk_display_get_next_serial (display));
 
   return NO;
 }
