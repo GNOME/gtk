@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-16 10:39+0000\n"
-"PO-Revision-Date: 2020-05-16 17:51+0300\n"
+"POT-Creation-Date: 2020-05-18 13:12+0000\n"
+"PO-Revision-Date: 2020-05-18 17:02+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -22,7 +22,7 @@ msgstr ""
 "X-Generator: Lokalize 20.07.70\n"
 
 #: gdk/gdkapplaunchcontext.c:133 gdk/gdkdrawcontext.c:155 gdk/gdkseat.c:200
-#: gdk/gdkseat.c:201 gdk/gdksurface.c:428 gdk/gdksurface.c:429
+#: gdk/gdkseat.c:201 gdk/gdksurface.c:431 gdk/gdksurface.c:432
 #: gdk/win32/gdkcursor-win32.c:234 gtk/gtkicontheme.c:990
 #: gtk/gtkicontheme.c:991 gtk/gtkmountoperation.c:190 gtk/gtkstylecontext.c:145
 #: gtk/gtkwindow.c:878
@@ -195,13 +195,18 @@ msgstr "Стан модифікатора"
 msgid "The modifier state of the keyboard"
 msgstr "Стан модифікатора клавіатури"
 
-#: gdk/gdkdisplay.c:180 gdk/gdkdisplay.c:181
+#: gdk/gdkdisplay.c:183 gdk/gdkdisplay.c:184
 msgid "Composited"
 msgstr "Складений"
 
-#: gdk/gdkdisplay.c:193 gdk/gdkdisplay.c:194
+#: gdk/gdkdisplay.c:196 gdk/gdkdisplay.c:197
 msgid "RGBA"
 msgstr "RGBA"
+
+#: gdk/gdkdisplay.c:209 gdk/gdkdisplay.c:210
+#| msgid "Input source"
+msgid "Input shapes"
+msgstr "Вхідні форми"
 
 #: gdk/gdkdisplaymanager.c:167
 msgid "Default Display"
@@ -239,23 +244,23 @@ msgstr "Батьківське"
 msgid "The parent surface"
 msgstr "Батьківська поверхня"
 
-#: gdk/gdkpopup.c:87 gtk/gtkpopover.c:1703
+#: gdk/gdkpopup.c:87 gtk/gtkpopover.c:1637
 msgid "Autohide"
 msgstr "Автоприховування"
 
-#: gdk/gdksurface.c:415 gdk/gdksurface.c:416 gtk/gtkwidget.c:1084
+#: gdk/gdksurface.c:418 gdk/gdksurface.c:419 gtk/gtkwidget.c:1084
 msgid "Cursor"
 msgstr "Курсор"
 
-#: gdk/gdksurface.c:435 gdk/gdksurface.c:436
+#: gdk/gdksurface.c:438 gdk/gdksurface.c:439
 msgid "Frame Clock"
 msgstr "Годинник кадрів"
 
-#: gdk/gdksurface.c:442 gdk/gdksurface.c:443
+#: gdk/gdksurface.c:445 gdk/gdksurface.c:446
 msgid "Mapped"
 msgstr "Відображення"
 
-#: gdk/gdktoplevel.c:101 gdk/gdktoplevel.c:102 gtk/gtkcssnode.c:617
+#: gdk/gdktoplevel.c:103 gdk/gdktoplevel.c:104 gtk/gtkcssnode.c:617
 #: gtk/gtkswitch.c:539
 msgid "State"
 msgstr "Стан"
@@ -747,17 +752,17 @@ msgstr ""
 #: gtk/gtkaspectframe.c:166 gtk/gtkbutton.c:253 gtk/gtkcombobox.c:784
 #: gtk/gtkdragicon.c:372 gtk/gtkexpander.c:366 gtk/gtkflowbox.c:513
 #: gtk/gtkframe.c:190 gtk/gtklistbox.c:3455 gtk/gtknotebook.c:570
-#: gtk/gtkoverlay.c:319 gtk/gtkpopover.c:1731 gtk/gtkrevealer.c:354
+#: gtk/gtkoverlay.c:319 gtk/gtkpopover.c:1665 gtk/gtkrevealer.c:354
 #: gtk/gtkscrolledwindow.c:759 gtk/gtksearchbar.c:316 gtk/gtkstack.c:381
-#: gtk/gtkviewport.c:390 gtk/gtkwindow.c:970 gtk/gtkwindowhandle.c:578
+#: gtk/gtkviewport.c:390 gtk/gtkwindow.c:970 gtk/gtkwindowhandle.c:591
 msgid "Child"
 msgstr "Вкладений елемент"
 
 #: gtk/gtkaspectframe.c:167 gtk/gtkbutton.c:254 gtk/gtkexpander.c:367
 #: gtk/gtkflowbox.c:514 gtk/gtkframe.c:191 gtk/gtklistbox.c:3456
-#: gtk/gtkoverlay.c:320 gtk/gtkpopover.c:1732 gtk/gtkrevealer.c:355
+#: gtk/gtkoverlay.c:320 gtk/gtkpopover.c:1666 gtk/gtkrevealer.c:355
 #: gtk/gtkscrolledwindow.c:760 gtk/gtksearchbar.c:317 gtk/gtkviewport.c:391
-#: gtk/gtkwindow.c:971 gtk/gtkwindowhandle.c:579
+#: gtk/gtkwindow.c:971 gtk/gtkwindowhandle.c:592
 msgid "The child widget"
 msgstr "Дочірній віджет"
 
@@ -2845,11 +2850,11 @@ msgstr "Мітка скасування"
 msgid "The label on the cancel button"
 msgstr "Мітка на кнопці скасування"
 
-#: gtk/gtkfilechooserwidget.c:7639 gtk/gtkfilechooserwidget.c:7640
+#: gtk/gtkfilechooserwidget.c:7642 gtk/gtkfilechooserwidget.c:7643
 msgid "Search mode"
 msgstr "Режим пошуку"
 
-#: gtk/gtkfilechooserwidget.c:7646 gtk/gtkfilechooserwidget.c:7647
+#: gtk/gtkfilechooserwidget.c:7649 gtk/gtkfilechooserwidget.c:7650
 #: gtk/gtkshortcutsshortcut.c:634
 msgid "Subtitle"
 msgstr "Підзаголовок"
@@ -4047,7 +4052,7 @@ msgstr "Позначка меню"
 msgid "The text of the menu widget"
 msgstr "Текст віджета меню"
 
-#: gtk/gtknotebook.c:605 gtk/gtkpaned.c:420 gtk/gtkpopover.c:1696
+#: gtk/gtknotebook.c:605 gtk/gtkpaned.c:420 gtk/gtkpopover.c:1630
 msgid "Position"
 msgstr "Позиція"
 
@@ -4272,22 +4277,18 @@ msgstr ""
 "розмір, який він вимагає"
 
 #: gtk/gtkpaned.c:528
-#| msgid "Resize first child"
 msgid "First child"
 msgstr "Перший дочірній"
 
 #: gtk/gtkpaned.c:529
-#| msgid "Resize first child"
 msgid "The first child"
 msgstr "Перший дочірній"
 
 #: gtk/gtkpaned.c:535
-#| msgid "Shrink second child"
 msgid "Second child"
 msgstr "Другий дочірній"
 
 #: gtk/gtkpaned.c:536
-#| msgid "Resize second child"
 msgid "The second child"
 msgstr "Другий дочірній"
 
@@ -4331,19 +4332,19 @@ msgstr "Може стискатися"
 msgid "Allow self to be smaller than contents"
 msgstr "Дозволити віджету бути меншим за вміст"
 
-#: gtk/gtkplacessidebar.c:4336
+#: gtk/gtkplacessidebar.c:4334
 msgid "Location to Select"
 msgstr "Місце для позначення"
 
-#: gtk/gtkplacessidebar.c:4337
+#: gtk/gtkplacessidebar.c:4335
 msgid "The location to highlight in the sidebar"
 msgstr "Місце підсвічування на бічній панелі"
 
-#: gtk/gtkplacessidebar.c:4342 gtk/gtkplacesview.c:2247
+#: gtk/gtkplacessidebar.c:4340 gtk/gtkplacesview.c:2250
 msgid "Open Flags"
 msgstr "Прапорці відкривання"
 
-#: gtk/gtkplacessidebar.c:4343 gtk/gtkplacesview.c:2248
+#: gtk/gtkplacessidebar.c:4341 gtk/gtkplacesview.c:2251
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -4351,70 +4352,70 @@ msgstr ""
 "Режими, у яких програма виклику може відкривати адреси, які позначено на "
 "бічній панелі"
 
-#: gtk/gtkplacessidebar.c:4349
+#: gtk/gtkplacessidebar.c:4347
 msgid "Show recent files"
 msgstr "Показувати нещодавні файли"
 
-#: gtk/gtkplacessidebar.c:4350
+#: gtk/gtkplacessidebar.c:4348
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr ""
 "Визначає, чи містить бічна панель вбудований пункт для нещодавно "
 "використаних файлів"
 
-#: gtk/gtkplacessidebar.c:4355
+#: gtk/gtkplacessidebar.c:4353
 msgid "Show “Desktop”"
 msgstr "Показувати «Стільниця»"
 
-#: gtk/gtkplacessidebar.c:4356
+#: gtk/gtkplacessidebar.c:4354
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr "Чи повинна бічна панель містити вбудований пункт теки стільниці"
 
-#: gtk/gtkplacessidebar.c:4361
+#: gtk/gtkplacessidebar.c:4359
 msgid "Show “Enter Location”"
 msgstr "Показувати «Введіть адресу»"
 
-#: gtk/gtkplacessidebar.c:4362
+#: gtk/gtkplacessidebar.c:4360
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr "Чи містить бічна панель вбудований пункт введення адреси вручну"
 
-#: gtk/gtkplacessidebar.c:4367
+#: gtk/gtkplacessidebar.c:4365
 msgid "Show “Trash”"
 msgstr "Показувати «Смітник»"
 
-#: gtk/gtkplacessidebar.c:4368
+#: gtk/gtkplacessidebar.c:4366
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
 msgstr "Чи містить бічна панель вбудований пункт теки «Смітник»"
 
-#: gtk/gtkplacessidebar.c:4373
+#: gtk/gtkplacessidebar.c:4371
 msgid "Show “Other locations”"
 msgstr "Показувати «Інші місця»"
 
-#: gtk/gtkplacessidebar.c:4374
+#: gtk/gtkplacessidebar.c:4372
 msgid "Whether the sidebar includes an item to show external locations"
 msgstr "Чи містить бічна панель вбудований пункт зовнішніх місць"
 
-#: gtk/gtkplacessidebar.c:4379
+#: gtk/gtkplacessidebar.c:4377
 msgid "Show “Starred Location”"
 msgstr "Показувати «Позначене місце»"
 
-#: gtk/gtkplacessidebar.c:4380
+#: gtk/gtkplacessidebar.c:4378
 msgid "Whether the sidebar includes an item to show starred files"
 msgstr "Чи включає бічна панель елемент для показу позначених зірками файлів"
 
-#: gtk/gtkplacesview.c:2233
+#: gtk/gtkplacesview.c:2236
 msgid "Loading"
 msgstr "Завантаження"
 
-#: gtk/gtkplacesview.c:2234
+#: gtk/gtkplacesview.c:2237
 msgid "Whether the view is loading locations"
 msgstr "Чи показувати завантажувані місця"
 
-#: gtk/gtkplacesview.c:2240
+#: gtk/gtkplacesview.c:2243
 msgid "Fetching networks"
 msgstr "Отримання даних мереж"
 
-#: gtk/gtkplacesview.c:2241
+#: gtk/gtkplacesview.c:2244
 msgid "Whether the view is fetching networks"
 msgstr "Чи показувати отримання даних мереж"
 
@@ -4470,43 +4471,43 @@ msgstr "Файл, який представлено рядком, якщо та�
 msgid "Whether the row represents a network location"
 msgstr "Чи показує рядок місце у мережі"
 
-#: gtk/gtkpopover.c:1689
+#: gtk/gtkpopover.c:1623
 msgid "Pointing to"
 msgstr "Вказує"
 
-#: gtk/gtkpopover.c:1690
+#: gtk/gtkpopover.c:1624
 msgid "Rectangle the bubble window points to"
 msgstr "Прямокутник, куди вказує вікно-бульбашка"
 
-#: gtk/gtkpopover.c:1697
+#: gtk/gtkpopover.c:1631
 msgid "Position to place the bubble window"
 msgstr "Позиція для розміщення вікна-бульбашки"
 
-#: gtk/gtkpopover.c:1704
+#: gtk/gtkpopover.c:1638
 msgid "Whether to dismiss the popover on outside clicks"
 msgstr "Чи слід закривати накладне меню при клацанні ззовні"
 
-#: gtk/gtkpopover.c:1710 gtk/gtkwindow.c:956
+#: gtk/gtkpopover.c:1644 gtk/gtkwindow.c:956
 msgid "Default widget"
 msgstr "Типовий віджет"
 
-#: gtk/gtkpopover.c:1711 gtk/gtkwindow.c:957
+#: gtk/gtkpopover.c:1645 gtk/gtkwindow.c:957
 msgid "The default widget"
 msgstr "Типовий віджет"
 
-#: gtk/gtkpopover.c:1717
+#: gtk/gtkpopover.c:1651
 msgid "Has Arrow"
 msgstr "Містить стрілку"
 
-#: gtk/gtkpopover.c:1718
+#: gtk/gtkpopover.c:1652
 msgid "Whether to draw an arrow"
 msgstr "Визначає, чи слід малювати стрілку"
 
-#: gtk/gtkpopover.c:1724
+#: gtk/gtkpopover.c:1658
 msgid "Mnemonics visible"
 msgstr "Мнемоніка видима"
 
-#: gtk/gtkpopover.c:1725
+#: gtk/gtkpopover.c:1659
 msgid "Whether mnemonics are currently visible in this popover"
 msgstr "Чи показано мнемоніку у цьому накладному меню"
 
