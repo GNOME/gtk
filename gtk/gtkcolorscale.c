@@ -21,6 +21,7 @@
 
 #include "gtkcolorchooserprivate.h"
 #include "gtkgesturelongpress.h"
+#include "gtkgestureclick.h"
 #include "gtkcolorutils.h"
 #include "gtkorientable.h"
 #include "gtkrangeprivate.h"
@@ -52,6 +53,12 @@ static void hold_action (GtkGestureLongPress *gesture,
                          gdouble              x,
                          gdouble              y,
                          GtkWidget           *scale);
+
+static void click_action (GtkGestureClick *gesture,
+                          guint            n_presses,
+                          double           x,
+                          double           y,
+                          GtkWidget       *scale);
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkColorScale, gtk_color_scale, GTK_TYPE_SCALE)
 
@@ -160,6 +167,12 @@ gtk_color_scale_init (GtkColorScale *scale)
                                               GTK_PHASE_TARGET);
   gtk_widget_add_controller (GTK_WIDGET (scale), GTK_EVENT_CONTROLLER (gesture));
 
+  gesture = gtk_gesture_click_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
+  g_signal_connect (gesture, "pressed",
+                    G_CALLBACK (click_action), scale);
+  gtk_widget_add_controller (GTK_WIDGET (scale), GTK_EVENT_CONTROLLER (gesture));
+
   gtk_widget_add_css_class (GTK_WIDGET (scale), "color");
 }
 
@@ -250,6 +263,18 @@ hold_action (GtkGestureLongPress *gesture,
              gdouble              x,
              gdouble              y,
              GtkWidget           *scale)
+{
+  gtk_widget_activate_action (scale,
+                              "color.edit",
+                              "s", gtk_widget_get_name (scale));
+}
+
+static void
+click_action (GtkGestureClick *gesture,
+              guint            n_presses,
+              double           x,
+              double           y,
+              GtkWidget       *scale)
 {
   gtk_widget_activate_action (scale,
                               "color.edit",
