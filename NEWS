@@ -3,9 +3,9 @@ Overview of Changes in GTK 3.98.4
 
 * Themes
  - Refine menu styling
- - Add public colors to HighContrast
- - Fix scale borders in HighContrast
  - Tweak visible focus behavior
+ - HighConstrast: Add public colors
+ - HighContrast: Fix scale borders
 
 * CSS:
  - Drop the nonstandard -gtk-icon-theme property
@@ -29,6 +29,12 @@ Overview of Changes in GTK 3.98.4
  - Drop the homogeneous property
  - Add a use-underline property to stack pages
 
+* GtkScale:
+ - Make area around the trough clickable
+
+* GtkScrolledWindow:
+ - Fix kinetic scrolling
+
 * GtkTreeView:
  - Break reference cycles in unroot
 
@@ -46,11 +52,13 @@ Overview of Changes in GTK 3.98.4
 
 * Remove gtk_dialog_run
 
-* Wayland:
- - Provide a builtin cursor of last resort
+* GDK:
+ - Wayland: Provide a builtin cursor of last resort
+ - Change the monitor api to use a GListModel
 
 * GSK:
  - Don't include renderer-specific headers automatically
+ - GL: Fix nested rounded clips
 
 * Introspection:
  - Assorted annotation fixes
@@ -73,6 +81,7 @@ Overview of Changes in GTK 3.98.4
 * Translation updates:
  Chinese (Taiwan)
  Esperanto
+ Japanese
  Romanian
  Spanish
  Ukrainian
