@@ -96,6 +96,12 @@ void             _gdk_macos_display_from_display_coords            (GdkMacosDisp
 NSScreen        *_gdk_macos_display_get_screen_at_display_coords   (GdkMacosDisplay *self,
                                                                     int              x,
                                                                     int              y);
+GdkMonitor      *_gdk_macos_display_get_monitor_at_coords          (GdkMacosDisplay *self,
+                                                                    int              x,
+                                                                    int              y);
+GdkMonitor      *_gdk_macos_display_get_monitor_at_display_coords  (GdkMacosDisplay *self,
+                                                                    int              x,
+                                                                    int              y);
 GdkEvent        *_gdk_macos_display_translate                      (GdkMacosDisplay *self,
                                                                     NSEvent         *event);
 void             _gdk_macos_display_break_all_grabs                (GdkMacosDisplay *self,

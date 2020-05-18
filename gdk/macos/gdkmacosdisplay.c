@@ -792,6 +792,36 @@ _gdk_macos_display_from_display_coords (GdkMacosDisplay *self,
     *out_x = x - self->min_x;
 }
 
+GdkMonitor *
+_gdk_macos_display_get_monitor_at_coords (GdkMacosDisplay *self,
+                                          int              x,
+                                          int              y)
+{
+  g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (self), NULL);
+
+  for (guint i = 0; i < self->monitors->len; i++)
+    {
+      GdkMonitor *monitor = g_ptr_array_index (self->monitors, i);
+
+      if (gdk_rectangle_contains_point (&monitor->geometry, x, y))
+        return monitor;
+    }
+
+  return gdk_macos_display_get_primary_monitor (GDK_DISPLAY (self));
+}
+
+
+GdkMonitor *
+_gdk_macos_display_get_monitor_at_display_coords (GdkMacosDisplay *self,
+                                                  int              x,
+                                                  int              y)
+{
+  g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (self), NULL);
+
+  _gdk_macos_display_from_display_coords (self, x, y, &x, &y);
+  return _gdk_macos_display_get_monitor_at_coords (self, x, y);
+}
+
 NSScreen *
 _gdk_macos_display_get_screen_at_display_coords (GdkMacosDisplay *self,
                                                  int              x,
