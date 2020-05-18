@@ -102,6 +102,7 @@ struct _GdkDisplay
 #endif /* GDK_RENDERING_VULKAN */
   guint rgba : 1;
   guint composited : 1;
+  guint input_shapes : 1;
 
   GdkDebugFlags debug_flags;
 
@@ -124,7 +125,6 @@ struct _GdkDisplayClass
   void                       (*queue_events)       (GdkDisplay *display);
   void                       (*make_default)       (GdkDisplay *display);
   GdkSurface *               (*get_default_group)  (GdkDisplay *display);
-  gboolean                   (*supports_input_shapes) (GdkDisplay *display);
 
   GdkAppLaunchContext *      (*get_app_launch_context) (GdkDisplay *display);
 
@@ -232,6 +232,8 @@ void                gdk_display_set_rgba              (GdkDisplay       *display
                                                        gboolean          rgba);
 void                gdk_display_set_composited        (GdkDisplay       *display,
                                                        gboolean          composited);
+void                gdk_display_set_input_shapes      (GdkDisplay       *display,
+                                                       gboolean          input_shapes);
 
 void                gdk_display_add_seat              (GdkDisplay       *display,
                                                        GdkSeat          *seat);

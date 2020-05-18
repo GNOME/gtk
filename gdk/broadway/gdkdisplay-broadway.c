@@ -56,6 +56,8 @@ G_DEFINE_TYPE (GdkBroadwayDisplay, gdk_broadway_display, GDK_TYPE_DISPLAY)
 static void
 gdk_broadway_display_init (GdkBroadwayDisplay *display)
 {
+  gdk_display_set_input_shapes (GDK_DISPLAY (display), FALSE);
+
   display->id_ht = g_hash_table_new (NULL, NULL);
 
   display->monitor = g_object_new (GDK_TYPE_BROADWAY_MONITOR,
@@ -313,12 +315,6 @@ gdk_broadway_display_notify_startup_complete (GdkDisplay  *display,
 {
 }
 
-static gboolean
-gdk_broadway_display_supports_input_shapes (GdkDisplay *display)
-{
-  return FALSE;
-}
-
 static gulong
 gdk_broadway_display_get_next_serial (GdkDisplay *display)
 {
@@ -446,7 +442,6 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   display_class->has_pending = gdk_broadway_display_has_pending;
   display_class->queue_events = _gdk_broadway_display_queue_events;
   display_class->get_default_group = gdk_broadway_display_get_default_group;
-  display_class->supports_input_shapes = gdk_broadway_display_supports_input_shapes;
 
   display_class->get_next_serial = gdk_broadway_display_get_next_serial;
   display_class->notify_startup_complete = gdk_broadway_display_notify_startup_complete;
