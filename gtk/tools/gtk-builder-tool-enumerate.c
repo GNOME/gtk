@@ -26,6 +26,7 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include "gtkbuilderprivate.h"
+#include "gtk-builder-tool.h"
 
 static const gchar *
 object_get_name (GObject *object)
@@ -37,7 +38,7 @@ object_get_name (GObject *object)
 }
 
 void
-do_enumerate (int *argc, char ***argv)
+do_enumerate (int *argc, const char ***argv)
 {
   GtkBuilder *builder;
   GError *error = NULL;

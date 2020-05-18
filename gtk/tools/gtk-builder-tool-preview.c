@@ -26,6 +26,8 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include "gtkbuilderprivate.h"
+#include "gtk-builder-tool.h"
+
 
 static void
 set_window_title (GtkWindow  *window,
