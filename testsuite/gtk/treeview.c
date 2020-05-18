@@ -280,7 +280,7 @@ test_selection_count (void)
   g_object_unref (g_object_ref_sink (view));
 }
 
-static void
+static void G_GNUC_NORETURN
 abort_cb (GtkTreeModel *model,
           GtkTreePath  *path,
           GtkTreeIter  *iter,
