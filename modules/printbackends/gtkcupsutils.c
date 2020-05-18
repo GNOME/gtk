@@ -81,13 +81,13 @@ static GtkCupsRequestStateFunc get_states[] = {
   _get_read_data
 };
 
-static void
+static void G_GNUC_PRINTF (5, 6)
 gtk_cups_result_set_error (GtkCupsResult    *result,
                            GtkCupsErrorType  error_type,
                            int               error_status,
-                           int               error_code, 
+                           int               error_code,
                            const char       *error_msg,
-			   ...)
+                           ...)
 {
   va_list args;
 
@@ -476,7 +476,7 @@ gtk_cups_request_encode_option (GtkCupsRequest *request,
         }
     }
         
-  switch (option_tag)
+  switch ((guint)option_tag)
     {
       case IPP_TAG_INTEGER:
       case IPP_TAG_ENUM:
@@ -1430,11 +1430,12 @@ _get_read_data (GtkCupsRequest *request)
     {
       request->state = GTK_CUPS_GET_DONE;
       request->poll_state = GTK_CUPS_HTTP_IDLE;
-    
+
       gtk_cups_result_set_error (request->result,
                                  GTK_CUPS_ERROR_IO,
                                  io_status,
-                                 error->code, 
+                                 error->code,
+                                 "%s",
                                  error->message);
       g_error_free (error);
     }

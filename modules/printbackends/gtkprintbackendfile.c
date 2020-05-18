@@ -74,8 +74,6 @@ static const gchar* formats[N_FORMATS] =
 
 static GObjectClass *backend_parent_class;
 
-static void                 gtk_print_backend_file_class_init      (GtkPrintBackendFileClass *class);
-static void                 gtk_print_backend_file_init            (GtkPrintBackendFile      *impl);
 static void                 file_printer_get_settings_from_options (GtkPrinter              *printer,
 								    GtkPrinterOptionSet     *options,
 								    GtkPrintSettings        *settings);
@@ -126,7 +124,7 @@ char **
 g_io_module_query (void)
 {
   char *eps[] = {
-    GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
+    (char *)GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
     NULL
   };
 
@@ -217,6 +215,7 @@ output_file_from_settings (GtkPrintSettings *settings,
           switch (format)
             {
               default:
+              case N_FORMATS:
               case FORMAT_PDF:
                 extension = "pdf";
                 break;
@@ -333,6 +332,7 @@ file_printer_create_cairo_surface (GtkPrinter       *printer,
   switch (format)
     {
       default:
+      case N_FORMATS:
       case FORMAT_PDF:
         surface = cairo_pdf_surface_create_for_stream (_cairo_write, cache_io, width, height);
         break;
@@ -632,14 +632,14 @@ file_printer_get_options (GtkPrinter           *printer,
 {
   GtkPrinterOptionSet *set;
   GtkPrinterOption *option;
-  const gchar *n_up[] = {"1", "2", "4", "6", "9", "16" };
-  const gchar *pages_per_sheet = NULL;
-  const gchar *format_names[N_FORMATS] = { N_("PDF"), N_("PostScript"), N_("SVG") };
-  const gchar *supported_formats[N_FORMATS];
-  gchar *display_format_names[N_FORMATS];
+  const char *n_up[] = {"1", "2", "4", "6", "9", "16" };
+  const char *pages_per_sheet = NULL;
+  const char *format_names[N_FORMATS] = { N_("PDF"), N_("PostScript"), N_("SVG") };
+  const char *supported_formats[N_FORMATS];
+  const char *display_format_names[N_FORMATS];
   gint n_formats = 0;
   OutputFormat format;
-  gchar *uri;
+  char *uri;
   gint current_format = 0;
   _OutputFormatChangedData *format_changed_data;
 
@@ -649,7 +649,7 @@ file_printer_get_options (GtkPrinter           *printer,
 
   option = gtk_printer_option_new ("gtk-n-up", _("Pages per _sheet:"), GTK_PRINTER_OPTION_TYPE_PICKONE);
   gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (n_up),
-					 (char **) n_up, (char **) n_up /* FIXME i18n (localised digits)! */);
+                                         n_up, n_up /* FIXME i18n (localised digits)! */);
   if (settings)
     pages_per_sheet = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_NUMBER_UP);
   if (pages_per_sheet)
@@ -686,6 +686,7 @@ file_printer_get_options (GtkPrinter           *printer,
       switch (format)
         {
           default:
+          case N_FORMATS:
           case FORMAT_PDF:
             current_format = FORMAT_PDF;
             break;
@@ -721,8 +722,8 @@ file_printer_get_options (GtkPrinter           *printer,
       option->group = g_strdup ("GtkPrintDialogExtension");
 
       gtk_printer_option_choices_from_array (option, n_formats,
-					     (char **) supported_formats,
-					     display_format_names);
+                                             supported_formats,
+                                             display_format_names);
       gtk_printer_option_set (option, supported_formats[current_format]);
       gtk_printer_option_set_add (set, option);
 
@@ -803,6 +804,7 @@ file_printer_prepare_for_print (GtkPrinter       *printer,
   switch (format)
     {
       case FORMAT_PDF:
+      case N_FORMATS:
 	gtk_print_job_set_rotate (print_job, FALSE);
         break;
       default:

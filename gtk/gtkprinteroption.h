@@ -20,7 +20,7 @@
 #define __GTK_PRINTER_OPTION_H__
 
 /* This is a "semi-private" header; it is meant only for
- * alternate GtkPrintDialog backend modules; no stability guarantees 
+ * alternate GtkPrintDialog backend modules; no stability guarantees
  * are made at this point
  */
 #ifndef GTK_PRINT_BACKEND_ENABLE_UNSUPPORTED
@@ -64,11 +64,11 @@ struct _GtkPrinterOption
   GtkPrinterOptionType type;
 
   char *value;
-  
+
   int num_choices;
   char **choices;
   char **choices_display;
-  
+
   gboolean activates_default;
 
   gboolean has_conflict;
@@ -111,9 +111,9 @@ void              gtk_printer_option_allocate_choices       (GtkPrinterOption   
 							     int                   num);
 GDK_AVAILABLE_IN_ALL
 void              gtk_printer_option_choices_from_array     (GtkPrinterOption     *option,
-							     int                   num_choices,
-							     char                 *choices[],
-							     char                 *choices_display[]);
+                                                             int                   num_choices,
+                                                             const char           **choices,
+                                                             const char           **choices_display);
 GDK_AVAILABLE_IN_ALL
 gboolean          gtk_printer_option_has_choice             (GtkPrinterOption     *option,
 							    const char           *choice);

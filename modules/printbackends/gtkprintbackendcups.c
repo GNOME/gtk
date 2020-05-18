@@ -156,8 +156,6 @@ struct _GtkPrintBackendCups
 
 static GObjectClass *backend_parent_class;
 
-static void                 gtk_print_backend_cups_class_init      (GtkPrintBackendCupsClass          *class);
-static void                 gtk_print_backend_cups_init            (GtkPrintBackendCups               *impl);
 static void                 gtk_print_backend_cups_finalize        (GObject                           *object);
 static void                 gtk_print_backend_cups_dispose         (GObject                           *object);
 static void                 cups_get_printer_list                  (GtkPrintBackend                   *print_backend);
@@ -261,7 +259,7 @@ char **
 g_io_module_query (void)
 {
   char *eps[] = {
-    GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
+    (char *)GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
     NULL
   };
 
@@ -5363,8 +5361,8 @@ format_ipp_choice (const gchar *ipp_choice)
  * if available.
  */
 static GtkPrinterOption *
-setup_ipp_option (gchar               *ipp_option_name,
-                  gchar               *ipp_choice_default,
+setup_ipp_option (const char          *ipp_option_name,
+                  const char          *ipp_choice_default,
                   GList               *ipp_choices,
                   GtkPrinterOptionSet *set)
 {
@@ -5422,16 +5420,16 @@ setup_ipp_option (gchar               *ipp_option_name,
         {
           gtk_printer_option_choices_from_array (option,
                                                  length,
-                                                 choices,
-                                                 choices_display);
+                                                 (const char **)choices,
+                                                 (const char **)choices_display);
         }
 
       option_set_is_ipp_option (option, TRUE);
 
       gtk_printer_option_set_add (set, option);
 
-      g_free (choices);
-      g_free (choices_display);
+      g_strfreev (choices);
+      g_strfreev (choices_display);
     }
 
   /* The option exists. Set its default value if available. */
@@ -5454,21 +5452,21 @@ cups_printer_get_options (GtkPrinter           *printer,
   GtkPrinterOption *option;
   ppd_file_t *ppd_file;
   int i;
-  char *print_at[] = { "now", "at", "on-hold" };
-  char *n_up[] = {"1", "2", "4", "6", "9", "16" };
-  char *prio[] = {"100", "80", "50", "30" };
+  const char *print_at[] = { "now", "at", "on-hold" };
+  const char *n_up[] = {"1", "2", "4", "6", "9", "16" };
+  const char *prio[] = {"100", "80", "50", "30" };
   /* Translators: These strings name the possible values of the
    * job priority option in the print dialog
    */
-  char *prio_display[] = {N_("Urgent"), N_("High"), N_("Medium"), N_("Low") };
-  char *n_up_layout[] = { "lrtb", "lrbt", "rltb", "rlbt", "tblr", "tbrl", "btlr", "btrl" };
+  const char *prio_display[] = {N_("Urgent"), N_("High"), N_("Medium"), N_("Low") };
+  const char *n_up_layout[] = { "lrtb", "lrbt", "rltb", "rlbt", "tblr", "tbrl", "btlr", "btrl" };
   /* Translators: These strings name the possible arrangements of
    * multiple pages on a sheet when printing
    */
-  char *n_up_layout_display[] = { N_("Left to right, top to bottom"), N_("Left to right, bottom to top"),
-                                  N_("Right to left, top to bottom"), N_("Right to left, bottom to top"),
-                                  N_("Top to bottom, left to right"), N_("Top to bottom, right to left"),
-                                  N_("Bottom to top, left to right"), N_("Bottom to top, right to left") };
+  const char *n_up_layout_display[] = { N_("Left to right, top to bottom"), N_("Left to right, bottom to top"),
+                                        N_("Right to left, top to bottom"), N_("Right to left, bottom to top"),
+                                        N_("Top to bottom, left to right"), N_("Top to bottom, right to left"),
+                                        N_("Bottom to top, left to right"), N_("Bottom to top, right to left") };
   char *name;
   int num_opts;
   cups_option_t *opts = NULL;
@@ -5512,7 +5510,7 @@ cups_printer_get_options (GtkPrinter           *printer,
 
   if (backend != NULL && printer != NULL)
     {
-      char *cover_default[] = {
+      const char *cover_default[] = {
         "none",
         "classified",
         "confidential",
@@ -5521,7 +5519,7 @@ cups_printer_get_options (GtkPrinter           *printer,
         "topsecret",
         "unclassified"
       };
-      char *cover_display_default[] = {
+      const char *cover_display_default[] = {
         /* Translators, these strings are names for various 'standard' cover
          * pages that the printing system may support.
          */
@@ -5537,7 +5535,7 @@ cups_printer_get_options (GtkPrinter           *printer,
       char **cover_display = NULL;
       char **cover_display_translated = NULL;
       gint num_of_covers = 0;
-      gpointer value;
+      gconstpointer value;
       gint j;
 
        /* Translators, this string is used to label the pages-per-sheet option
@@ -5604,7 +5602,7 @@ cups_printer_get_options (GtkPrinter           *printer,
        */
       option = gtk_printer_option_new ("gtk-cover-before", C_("printer option", "Before"), GTK_PRINTER_OPTION_TYPE_PICKONE);
       gtk_printer_option_choices_from_array (option, num_of_covers,
-					 cover, cover_display_translated);
+                                             (const char **)cover, (const char **)cover_display_translated);
 
       if (cups_printer->default_cover_before != NULL)
         gtk_printer_option_set (option, cups_printer->default_cover_before);
@@ -5619,7 +5617,7 @@ cups_printer_get_options (GtkPrinter           *printer,
        */
       option = gtk_printer_option_new ("gtk-cover-after", C_("printer option", "After"), GTK_PRINTER_OPTION_TYPE_PICKONE);
       gtk_printer_option_choices_from_array (option, num_of_covers,
-					 cover, cover_display_translated);
+                                             (const char **)cover, (const char **)cover_display_translated);
       if (cups_printer->default_cover_after != NULL)
         gtk_printer_option_set (option, cups_printer->default_cover_after);
       else
@@ -6538,8 +6536,6 @@ cups_printer_prepare_for_print (GtkPrinter       *printer,
 
       switch (gtk_page_setup_get_orientation (page_setup))
         {
-          case GTK_PAGE_ORIENTATION_PORTRAIT:
-            break;
           case GTK_PAGE_ORIENTATION_LANDSCAPE:
             if (layout < 4)
               layout = layout + 2 + 4 * (1 - layout / 2);
@@ -6554,6 +6550,10 @@ cups_printer_prepare_for_print (GtkPrinter       *printer,
               layout = layout + 5 - 2 * (layout % 2);
             else
               layout = layout - 6 + 4 * (1 - (layout - 4) / 2);
+            break;
+
+          case GTK_PAGE_ORIENTATION_PORTRAIT:
+          default:
             break;
         }
 
