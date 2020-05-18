@@ -200,6 +200,8 @@ _gdk_macos_monitor_reconfigure (GdkMacosMonitor *self)
 
   g_return_val_if_fail (GDK_IS_MACOS_MONITOR (self), FALSE);
 
+  display = GDK_MACOS_DISPLAY (GDK_MONITOR (self)->display);
+
   if (!(mode = CGDisplayCopyDisplayMode (self->screen_id)))
     return FALSE;
 
@@ -219,14 +221,19 @@ _gdk_macos_monitor_reconfigure (GdkMacosMonitor *self)
   width_mm = size.width;
   height_mm = size.height;
 
-  /* This requires that the display bounds have been
-   * updated before the monitor is reconfigured.
+  /* This requires that the display bounds have been updated before the monitor
+   * is reconfigured. Note that the result from CGDisplayBounds() is not exactly
+   * the same as display coordinates.
+   *
+   * As the docs say:
+   *
+   *  Returns the bounds of a display in the global display coordinate space.
+   *
+   *  The bounds of the display, expressed as a rectangle in the global display
+   *  coordinate space (relative to the upper-left corner of the main display).
    */
-  display = GDK_MACOS_DISPLAY (GDK_MONITOR (self)->display);
-  _gdk_macos_display_from_display_coords (display,
-                                          bounds.origin.x,
-                                          bounds.origin.y + bounds.size.height,
-                                          &geom.x, &geom.y);
+  geom.x = bounds.origin.x - display->min_x;
+  geom.y = bounds.origin.y - display->min_y;
   geom.width = bounds.size.width;
   geom.height = bounds.size.height;
 
