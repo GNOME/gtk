@@ -11,4 +11,5 @@ executable('exampleapp9',
   'exampleappprefs.c',
   app9_resources,
   app9_schemas,
-  dependencies: libgtk_dep)
+  dependencies: libgtk_dep,
+  c_args: common_cflags)
