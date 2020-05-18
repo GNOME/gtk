@@ -2389,15 +2389,14 @@ switch {
 
 checkbutton,
 radiobutton {
-  border-spacing: 4px;
+  border-spacing: 4px; /* between checkmark and label */
   border-radius: $button_radius;
   transition: $focus_transition;
 
   @include focus-ring();
 
   &.text-button {
-    // this is for a nice focus on check and radios text
-    padding: 4px 2px;
+    padding: 4px 8px 4px 2px; // for a nicely spaced focus ring
   }
 }
 
