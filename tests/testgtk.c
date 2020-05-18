@@ -6154,7 +6154,7 @@ do_bench (char* what, int num)
     }
 }
 
-static void 
+static void G_GNUC_NORETURN
 usage (void)
 {
   fprintf (stderr, "Usage: testgtk [--bench ALL|<bench>[:<count>]]\n");
