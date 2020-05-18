@@ -1237,6 +1237,12 @@ combobox {
     min-width: 16px;
   }
 
+  // align menu labels with the button label
+  > popover.menu > contents modelbutton {
+    padding-left: 9px;
+    padding-right: 9px;
+  }
+
   &.linked {
     button:nth-child(2) {
       &:dir(ltr) { @extend %linked_not_left; }
