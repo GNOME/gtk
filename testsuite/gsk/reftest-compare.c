@@ -120,15 +120,15 @@ buffer_diff_core (const guchar *buf_a,
             {
               int value_a = (row_a[x] >> (channel*8)) & 0xff;
               int value_b = (row_b[x] >> (channel*8)) & 0xff;
-              guint diff;
+              guint channel_diff;
 
-              diff = ABS (value_a - value_b);
-              diff *= 4;  /* emphasize */
-              if (diff)
-                diff += 128; /* make sure it's visible */
-              if (diff > 255)
-                diff = 255;
-              diff_pixel |= diff << (channel*8);
+              channel_diff = ABS (value_a - value_b);
+              channel_diff *= 4;  /* emphasize */
+              if (channel_diff)
+                channel_diff += 128; /* make sure it's visible */
+              if (channel_diff > 255)
+                channel_diff = 255;
+              diff_pixel |= channel_diff << (channel*8);
             }
 
           if ((diff_pixel & 0x00ffffff) == 0)
