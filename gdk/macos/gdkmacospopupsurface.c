@@ -31,6 +31,7 @@
 struct _GdkMacosPopupSurface
 {
   GdkMacosSurface parent_instance;
+  guint did_initial_present : 1;
 };
 
 struct _GdkMacosPopupSurfaceClass
@@ -69,8 +70,16 @@ gdk_macos_popup_surface_layout (GdkMacosPopupSurface *self,
                                     y,
                                     final_rect.width,
                                     final_rect.height);
-  else
+  else if (x != GDK_SURFACE (self)->x ||
+           y != GDK_SURFACE (self)->y)
     _gdk_macos_surface_move (GDK_MACOS_SURFACE (self), x, y);
+  else
+    return;
+
+  if (self->did_initial_present)
+    g_signal_emit_by_name (self, "popup-layout-changed");
+
+  gdk_surface_invalidate_rect (GDK_SURFACE (self), NULL);
 }
 
 static void
@@ -102,6 +111,8 @@ gdk_macos_popup_surface_present (GdkPopup       *popup,
   g_assert (GDK_IS_MACOS_POPUP_SURFACE (self));
 
   gdk_macos_popup_surface_layout (self, width, height, layout);
+
+  self->did_initial_present = TRUE;
 
   if (GDK_SURFACE_IS_MAPPED (GDK_SURFACE (self)))
     return TRUE;
