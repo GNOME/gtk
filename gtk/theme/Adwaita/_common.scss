@@ -2397,16 +2397,12 @@ radiobutton {
 
   &.text-button {
     // this is for a nice focus on check and radios text
-    padding: 4px 2px;
+    padding: 4px;
   }
 }
 
 check,
 radio {
-  margin: 0 4px;
-
-  &:only-child { margin: 0; }
-
   min-height: 14px;
   min-width: 14px;
   border: 1px solid;
