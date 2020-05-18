@@ -20,7 +20,7 @@ foreach tool: gtk_tools
 
   exe = executable(tool_name, tool_srcs,
                    include_directories: [confinc],
-                   c_args: gtk_cargs,
+                   c_args: common_cflags,
                    dependencies: libgtk_dep,
                    install: true)
 

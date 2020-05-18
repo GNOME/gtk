@@ -26,6 +26,7 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include "gtkbuilderprivate.h"
+#include "gtk-builder-tool.h"
 
 typedef struct Element Element;
 struct Element {
@@ -1816,7 +1817,7 @@ dump_tree (MyParserData *data)
   dump_element (data->root, data->output, 0);
 }
 
-gboolean
+static gboolean
 simplify_file (const char *filename,
                gboolean    replace,
                gboolean    convert3to4)
