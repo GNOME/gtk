@@ -54,7 +54,7 @@ reftest_module_new_take (GModule *module,
   if (all_modules == NULL)
     all_modules = g_hash_table_new (g_str_hash, g_str_equal);
 
-  g_hash_table_insert (all_modules, filename ? filename : "", result);
+  g_hash_table_insert (all_modules, filename ? filename : g_strdup (""), result);
 
   return result;
 }
