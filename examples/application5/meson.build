@@ -6,4 +6,5 @@ app5_schemas = gnome.compile_schemas()
 
 executable('exampleapp5',
   'exampleapp.c', 'exampleappwin.c', 'main.c', app5_resources, app5_schemas,
-  dependencies: libgtk_dep)
+  dependencies: libgtk_dep,
+  c_args: common_cflags)
