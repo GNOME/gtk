@@ -134,9 +134,6 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
   else
     _gdk_macos_toplevel_surface_unfullscreen (self);
 
-  /* Now present the window */
-  [(GdkMacosWindow *)window showAndMakeKey:YES];
-
   _gdk_macos_surface_show (GDK_MACOS_SURFACE (self));
 
   return TRUE;
