@@ -4,4 +4,5 @@ app4_resources = gnome.compile_resources('exampleapp4_resources',
 
 executable('exampleapp4',
   'exampleapp.c', 'exampleappwin.c', 'main.c', app4_resources,
-  dependencies: libgtk_dep)
+  dependencies: libgtk_dep,
+  c_args: common_cflags)
