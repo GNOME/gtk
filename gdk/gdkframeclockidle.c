@@ -39,8 +39,10 @@
 
 struct _GdkFrameClockIdlePrivate
 {
-  gint64 frame_time;
-  gint64 min_next_frame_time;
+  gint64 frame_time;                 /* The exact time we last ran the clock cycle, or 0 if never */
+  gint64 smoothed_frame_time_base;   /* A grid-aligned version of frame_time (grid size == refresh period), never more than half a grid from frame_time */
+  gint64 smoothed_frame_time_period; /* The grid size that smoothed_frame_time_base is aligned to */
+  gint64 min_next_frame_time;        /* We're not synced to vblank, so wait at least until this before next cycle to avoid busy looping */
   gint64 sleep_serial;
   gint64 freeze_time;
 
@@ -123,7 +125,6 @@ gdk_frame_clock_idle_init (GdkFrameClockIdle *frame_clock_idle)
   frame_clock_idle->priv = priv =
     gdk_frame_clock_idle_get_instance_private (frame_clock_idle);
 
-  priv->frame_time = g_get_monotonic_time (); /* more sane than zero */
   priv->freeze_count = 0;
 }
 
@@ -155,44 +156,99 @@ gdk_frame_clock_idle_dispose (GObject *object)
   G_OBJECT_CLASS (gdk_frame_clock_idle_parent_class)->dispose (object);
 }
 
+/* Note: This is never called on first frame, so
+ * smoothed_frame_time_base != 0 and we have a valid frame_interval. */
 static gint64
-compute_frame_time (GdkFrameClockIdle *idle)
+compute_smooth_frame_time (GdkFrameClock *clock,
+                           gint64 new_frame_time,
+                           gboolean new_frame_time_is_regular,
+                           gint64 smoothed_frame_time_base,
+                           gint64 frame_interval)
 {
-  GdkFrameClockIdlePrivate *priv = idle->priv;
-  gint64 computed_frame_time;
+  GdkFrameClockIdlePrivate *priv = GDK_FRAME_CLOCK_IDLE (clock)->priv;
+  int frames_passed;
+  gint64 new_smoothed_time;
+  gint64 current_error;
+  gint64 correction_magnitude;
 
-  computed_frame_time = g_get_monotonic_time ();
+  /* Consecutive frame, assume it is an integer number of frames later, so round to nearest such */
+  /* NOTE:  This is >= 0, because smoothed_frame_time_base is < frame_interval/2 from old_frame_time
+   *        and new_frame_time >= old_frame_time. */
+  frames_passed = (new_frame_time - smoothed_frame_time_base + frame_interval / 2) / frame_interval;
 
-  /* ensure monotonicity of frame time */
-  if (computed_frame_time <= priv->frame_time)
-      computed_frame_time = priv->frame_time + 1;
+  /* We use an approximately whole number of frames in the future from
+   * last smoothed frame time. This way we avoid minor jitter in the
+   * frame times making the animation speed uneven, but still animate
+   * evenly in case of whole frame skips. */
+  new_smoothed_time = smoothed_frame_time_base + frames_passed * frame_interval;
 
-  return computed_frame_time;
+  /* However, sometimes the smoothed time is too much off from the
+   * real time. For example, if the first frame clock cycle happened
+   * not due to a frame rendering but an input event, then
+   * new_frame_time could happen to be near the middle between two
+   * frames. If that happens and we then start regularly animating at
+   * the refresh_rate, then the jitter in the real time may cause us
+   * to randomly sometimes round up, and sometimes down.
+   *
+   * To combat this we converge the smooth time towards the real time
+   * in a way that is slow when they are near and fast when they are
+   * far from each other.
+   *
+   * This is done by using the square of the error as the correction
+   * magnitude. I.e. if the error is 0.5 frame, we correct by
+   * 0.5*0.5=0.25 frame, if the error is 0.25 we correct by 0.125, if
+   * the error is 0.1, frame we correct by 0.01 frame, etc.
+   *
+   * The actual computation is:
+   *   (current_error/frame_interval)*(current_error/frame_interval)*frame_interval
+   * But this can be simplified as below.
+   *
+   * Note: We only do this correction if we're regularly animating (no
+   * or low frame skip). If the last frame was a long time ago, or if
+   * we're not doing this in the frame cycle this call was likely
+   * triggered by an input event and new_frame_time is essentially
+   * random and not tied to the presentation time.
+   */
+  if (new_frame_time_is_regular)
+    {
+      current_error = new_smoothed_time - new_frame_time;
+      correction_magnitude = current_error * current_error / frame_interval; /* Note, this is always > 0 due to the square */
+      if (current_error > 0)
+        new_smoothed_time -= correction_magnitude;
+      else
+        new_smoothed_time += correction_magnitude;
+    }
+
+  /* Ensure we're always strictly increasing (avoid division by zero when using time deltas) */
+  if (new_smoothed_time <= priv->smoothed_frame_time_base)
+    new_smoothed_time = priv->smoothed_frame_time_base + 1;
+
+  return new_smoothed_time;
 }
 
 static gint64
 gdk_frame_clock_idle_get_frame_time (GdkFrameClock *clock)
 {
   GdkFrameClockIdlePrivate *priv = GDK_FRAME_CLOCK_IDLE (clock)->priv;
-  gint64 computed_frame_time;
+  gint64 now;
 
   /* can't change frame time during a paint */
   if (priv->phase != GDK_FRAME_CLOCK_PHASE_NONE &&
       priv->phase != GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS)
-    return priv->frame_time;
+    return priv->smoothed_frame_time_base;
 
-  /* Outside a paint, pick something close to "now" */
-  computed_frame_time = compute_frame_time (GDK_FRAME_CLOCK_IDLE (clock));
+  /* Outside a paint, pick something smoothed close to now */
+  now = g_get_monotonic_time ();
 
-  /* 16ms is 60fps. We only update frame time that often because we'd
-   * like to try to keep animations on the same start times.
-   * get_frame_time() would normally be used outside of a paint to
-   * record an animation start time for example.
-   */
-  if ((computed_frame_time - priv->frame_time) > FRAME_INTERVAL)
-    priv->frame_time = computed_frame_time;
+  /* First time frame, just return something */
+  if (priv->smoothed_frame_time_base == 0)
+    return now;
 
-  return priv->frame_time;
+  /* Since time is monotonic this is <= what we will pick for the next cycle, but
+     more likely than not it will be equal if we're doing a constant animation. */
+  return compute_smooth_frame_time (clock, now, FALSE,
+                                    priv->smoothed_frame_time_base,
+                                    priv->smoothed_frame_time_period);
 }
 
 #define RUN_FLUSH_IDLE(priv)                                            \
@@ -220,7 +276,7 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle)
 
       if (priv->min_next_frame_time != 0)
         {
-          gint64 now = compute_frame_time (clock_idle);
+          gint64 now = g_get_monotonic_time ();
           gint64 min_interval_us = MAX (priv->min_next_frame_time, now) - now;
           min_interval = (min_interval_us + 500) / 1000;
         }
@@ -343,39 +399,38 @@ gdk_frame_clock_paint_idle (void *data)
           if (priv->freeze_count == 0)
             {
               gint64 frame_interval = FRAME_INTERVAL;
-              gint64 reset_frame_time;
-              gint64 smoothest_frame_time;
-              gint64 frame_time_error;
-              GdkFrameTimings *prev_timings =
-                gdk_frame_clock_get_current_timings (clock);
+              GdkFrameTimings *prev_timings = gdk_frame_clock_get_current_timings (clock);
+              guint old_frame_time = priv->frame_time;
 
               if (prev_timings && prev_timings->refresh_interval)
                 frame_interval = prev_timings->refresh_interval;
 
-              /* We are likely not getting precisely even callbacks in real
-               * time, particularly if the event loop is busy.
-               * This is a documented limitation in the precision of
-               * g_timeout_add_full().
-               *
-               * In order to avoid this imprecision from compounding between
-               * frames and affecting visual smoothness, we correct frame_time
-               * to more precisely match the even refresh interval of the
-               * physical display. This also means we proactively avoid (most)
-               * missed frames before they occur.
-               */
-              smoothest_frame_time = priv->frame_time + frame_interval;
-              reset_frame_time = compute_frame_time (clock_idle);
-              frame_time_error = ABS (reset_frame_time - smoothest_frame_time);
-              if (frame_time_error >= frame_interval)
-                priv->frame_time = reset_frame_time;
+              priv->frame_time = g_get_monotonic_time ();
+
+              if (priv->smoothed_frame_time_base == 0)
+                {
+                  /* First frame */
+                  priv->smoothed_frame_time_base = priv->frame_time;
+                  priv->smoothed_frame_time_period = frame_interval;
+                }
               else
-                priv->frame_time = smoothest_frame_time;
+                {
+                  /* For long delays, cycle was probably caused by input event rather than animation */
+                  gboolean is_regular = priv->frame_time - old_frame_time < 4 * FRAME_INTERVAL;
+                  priv->smoothed_frame_time_base =
+                      compute_smooth_frame_time (clock, priv->frame_time,
+                                                 is_regular,
+                                                 priv->smoothed_frame_time_base,
+                                                 priv->smoothed_frame_time_period);
+                  priv->smoothed_frame_time_period = frame_interval;
+                }
 
               _gdk_frame_clock_begin_frame (clock);
               /* Note "current" is different now so timings != prev_timings */
               timings = gdk_frame_clock_get_current_timings (clock);
 
               timings->frame_time = priv->frame_time;
+              timings->smoothed_frame_time = priv->smoothed_frame_time_base;
               timings->slept_before = priv->sleep_serial != get_sleep_serial ();
 
               priv->phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
