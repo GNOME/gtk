@@ -39,8 +39,10 @@
 
 struct _GdkFrameClockIdlePrivate
 {
-  gint64 frame_time;
-  gint64 min_next_frame_time;
+  gint64 frame_time;            /* The exact time we last ran the clock cycle, or 0 if never */
+  gint64 smoothed_frame_time_base; /* A grid-aligned version of frame_time (grid size == refresh period), never more than half a grid from frame_time */
+  gint64 smoothed_frame_time_period; /* The grid size that smoothed_frame_time_base is aligned to */
+  gint64 min_next_frame_time;   /* We're not synced to vblank, so wait at least until this before next cycle to avoid busy looping */
   gint64 sleep_serial;
   gint64 freeze_time;
 
@@ -123,7 +125,6 @@ gdk_frame_clock_idle_init (GdkFrameClockIdle *frame_clock_idle)
   frame_clock_idle->priv = priv =
     gdk_frame_clock_idle_get_instance_private (frame_clock_idle);
 
-  priv->frame_time = g_get_monotonic_time (); /* more sane than zero */
   priv->freeze_count = 0;
 }
 
@@ -156,43 +157,59 @@ gdk_frame_clock_idle_dispose (GObject *object)
 }
 
 static gint64
-compute_frame_time (GdkFrameClockIdle *idle)
+compute_smooth_frame_time (GdkFrameClock *clock,
+                           gint64 new_frame_time,
+                           gint64 smoothed_frame_time_base,
+                           gint64 frame_interval)
 {
-  GdkFrameClockIdlePrivate *priv = idle->priv;
-  gint64 computed_frame_time;
+  GdkFrameClockIdlePrivate *priv = GDK_FRAME_CLOCK_IDLE (clock)->priv;
+  int frames_passed;
 
-  computed_frame_time = g_get_monotonic_time ();
+  /* Consecutive frame, assume it is an integer number of frames later, so round to nearest such */
+  /* NOTE:  This is >= 0, because smoothed_frame_time_base is < frame_interval/2 from old_frame_time
+   *        and new_frame_time >= old_frame_time. */
+  frames_passed = (new_frame_time - smoothed_frame_time_base  + frame_interval/2) / frame_interval;
 
-  /* ensure monotonicity of frame time */
-  if (computed_frame_time <= priv->frame_time)
-      computed_frame_time = priv->frame_time + 1;
+  if (frames_passed <= 0) /* The < check is not really necessary per above, but lets be safe */
+    {
+      /* Same frame, but add 1 usec to ensure strictly increasing times (avoiding division by zero) */
+      return priv->smoothed_frame_time_base + 1;
+    }
 
-  return computed_frame_time;
+  if (frames_passed > 4)
+    {
+      /* Huge jank anyway, lets resynchronize */
+      return priv->frame_time;
+    }
+
+  /* Regularize to constant frame interval */
+  return smoothed_frame_time_base + frames_passed * frame_interval;
 }
+
 
 static gint64
 gdk_frame_clock_idle_get_frame_time (GdkFrameClock *clock)
 {
   GdkFrameClockIdlePrivate *priv = GDK_FRAME_CLOCK_IDLE (clock)->priv;
-  gint64 computed_frame_time;
+  gint64 now;
 
   /* can't change frame time during a paint */
   if (priv->phase != GDK_FRAME_CLOCK_PHASE_NONE &&
       priv->phase != GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS)
-    return priv->frame_time;
+    return priv->smoothed_frame_time_base;
 
-  /* Outside a paint, pick something close to "now" */
-  computed_frame_time = compute_frame_time (GDK_FRAME_CLOCK_IDLE (clock));
+  /* Outside a paint, pick something smoothed close to now */
+  now = g_get_monotonic_time ();
 
-  /* 16ms is 60fps. We only update frame time that often because we'd
-   * like to try to keep animations on the same start times.
-   * get_frame_time() would normally be used outside of a paint to
-   * record an animation start time for example.
-   */
-  if ((computed_frame_time - priv->frame_time) > FRAME_INTERVAL)
-    priv->frame_time = computed_frame_time;
+  /* First time frame, just return something */
+  if (priv->smoothed_frame_time_base == 0)
+    return now;
 
-  return priv->frame_time;
+  /* Since time is monotonic this is <= what we will pick for the next cycle, but
+     more likely than not it will be equal if we're doing a constant animation. */
+  return compute_smooth_frame_time (clock, now,
+                                    priv->smoothed_frame_time_base,
+                                    priv->smoothed_frame_time_period);
 }
 
 #define RUN_FLUSH_IDLE(priv)                                            \
@@ -220,7 +237,7 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle)
 
       if (priv->min_next_frame_time != 0)
         {
-          gint64 now = compute_frame_time (clock_idle);
+          gint64 now = g_get_monotonic_time ();
           gint64 min_interval_us = MAX (priv->min_next_frame_time, now) - now;
           min_interval = (min_interval_us + 500) / 1000;
         }
@@ -343,39 +360,34 @@ gdk_frame_clock_paint_idle (void *data)
           if (priv->freeze_count == 0)
             {
               gint64 frame_interval = FRAME_INTERVAL;
-              gint64 reset_frame_time;
-              gint64 smoothest_frame_time;
-              gint64 frame_time_error;
-              GdkFrameTimings *prev_timings =
-                gdk_frame_clock_get_current_timings (clock);
+              GdkFrameTimings *prev_timings = gdk_frame_clock_get_current_timings (clock);
 
               if (prev_timings && prev_timings->refresh_interval)
                 frame_interval = prev_timings->refresh_interval;
 
-              /* We are likely not getting precisely even callbacks in real
-               * time, particularly if the event loop is busy.
-               * This is a documented limitation in the precision of
-               * g_timeout_add_full().
-               *
-               * In order to avoid this imprecision from compounding between
-               * frames and affecting visual smoothness, we correct frame_time
-               * to more precisely match the even refresh interval of the
-               * physical display. This also means we proactively avoid (most)
-               * missed frames before they occur.
-               */
-              smoothest_frame_time = priv->frame_time + frame_interval;
-              reset_frame_time = compute_frame_time (clock_idle);
-              frame_time_error = ABS (reset_frame_time - smoothest_frame_time);
-              if (frame_time_error >= frame_interval)
-                priv->frame_time = reset_frame_time;
+              priv->frame_time = g_get_monotonic_time ();
+
+              if (priv->smoothed_frame_time_base == 0)
+                {
+                  /* First frame */
+                  priv->smoothed_frame_time_base = priv->frame_time;
+                  priv->smoothed_frame_time_period = frame_interval;
+                }
               else
-                priv->frame_time = smoothest_frame_time;
+                {
+                  priv->smoothed_frame_time_base =
+                    compute_smooth_frame_time (clock, priv->frame_time,
+                                               priv->smoothed_frame_time_base,
+                                               priv->smoothed_frame_time_period);
+                  priv->smoothed_frame_time_period = frame_interval;
+                }
 
               _gdk_frame_clock_begin_frame (clock);
               /* Note "current" is different now so timings != prev_timings */
               timings = gdk_frame_clock_get_current_timings (clock);
 
               timings->frame_time = priv->frame_time;
+              timings->smoothed_frame_time = priv->smoothed_frame_time_base;
               timings->slept_before = priv->sleep_serial != get_sleep_serial ();
 
               priv->phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
