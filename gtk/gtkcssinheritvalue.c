@@ -26,7 +26,7 @@ struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
 };
 
-static void
+static void G_GNUC_NORETURN
 gtk_css_value_inherit_free (GtkCssValue *value)
 {
   /* Can only happen if the unique value gets unreffed too often */
