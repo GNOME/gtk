@@ -79,10 +79,6 @@ gdk_display_sync
 gdk_display_flush
 gdk_display_close
 gdk_display_is_closed
-gdk_display_get_event
-gdk_display_peek_event
-gdk_display_put_event
-gdk_display_has_pending
 gdk_display_is_rgba
 gdk_display_is_composited
 gdk_display_get_default_group
