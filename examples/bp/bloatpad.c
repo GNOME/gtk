@@ -188,12 +188,11 @@ text_buffer_changed_cb (GtkTextBuffer *buffer,
 
   if (old_n < 3 && n == 3)
     {
-      GNotification *n;
-      n = g_notification_new ("Three lines of text");
-      g_notification_set_body (n, "Keep up the good work!");
-      g_notification_add_button (n, "Start over", "app.clear-all");
-      g_application_send_notification (G_APPLICATION (app), "three-lines", n);
-      g_object_unref (n);
+      GNotification *notification = g_notification_new ("Three lines of text");
+      g_notification_set_body (notification, "Keep up the good work!");
+      g_notification_add_button (notification, "Start over", "app.clear-all");
+      g_application_send_notification (G_APPLICATION (app), "three-lines", notification);
+      g_object_unref (notification);
     }
 }
 
@@ -635,7 +634,7 @@ bloat_pad_class_init (BloatPadClass *class)
 
 }
 
-BloatPad *
+static BloatPad *
 bloat_pad_new (void)
 {
   BloatPad *bloat_pad;
