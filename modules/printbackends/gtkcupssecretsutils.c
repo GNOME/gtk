@@ -888,7 +888,7 @@ gtk_cups_secrets_service_watch (GBusNameAppearedCallback appeared,
                            NULL);
 }
 
-void
+static void
 cleanup_task_data (gpointer data)
 {
   gint                i;

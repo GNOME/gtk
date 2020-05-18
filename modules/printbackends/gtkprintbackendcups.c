@@ -649,6 +649,7 @@ add_cups_options (const gchar *key,
                           custom_value = TRUE;
                           break;
 
+                        case PPD_CUSTOM_UNKNOWN:
                         default :
                           custom_value = FALSE;
                         }
@@ -1153,7 +1154,7 @@ request_password (gpointer data)
 
       dispatch->backend->authentication_lock = TRUE;
 
-      switch (ippGetOperation (dispatch->request->ipp_request))
+      switch ((guint)ippGetOperation (dispatch->request->ipp_request))
         {
           case IPP_PRINT_JOB:
             if (job_title != NULL && printer_name != NULL)
@@ -2286,7 +2287,7 @@ cups_printer_handle_attribute (GtkPrintBackendCups *cups_backend,
           col = ippGetCollection (attr, i);
           for (iter = ippFirstAttribute (col); iter != NULL; iter = ippNextAttribute (col))
             {
-              switch (ippGetValueTag (iter))
+              switch ((guint)ippGetValueTag (iter))
                 {
                   case IPP_TAG_INTEGER:
                     if (g_strcmp0 (ippGetName (iter), "media-bottom-margin") == 0)
@@ -3038,7 +3039,7 @@ avahi_connection_test_cb (GObject      *source_object,
   g_free (data);
 }
 
-gboolean
+static gboolean
 avahi_txt_get_key_value_pair (const gchar  *entry,
                               gchar       **key,
                               gchar       **value)
@@ -3705,6 +3706,8 @@ update_backend_status (GtkPrintBackendCups    *cups_backend,
     case GTK_CUPS_CONNECTION_AVAILABLE:
       g_object_set (cups_backend, "status", GTK_PRINT_BACKEND_STATUS_OK, NULL);
       break;
+
+    case GTK_CUPS_CONNECTION_IN_PROGRESS:
     default: ;
     }
 }
@@ -4958,7 +4961,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
           if (ppdNextCustomParam (coption) == NULL)
 	    {
-              switch (cparam->type)
+              switch ((guint)cparam->type)
 	        {
                 case PPD_CUSTOM_INT:
 		  option = gtk_printer_option_new (gtk_name, label,
@@ -6320,7 +6323,7 @@ supports_am_pm (void)
  * Returns a newly allocated string holding UTC time in HH:MM:SS format
  * or NULL.
  */
-gchar *
+static gchar *
 localtime_to_utctime (const char *local_time)
 {
   const char *formats_0[] = {" %I : %M : %S %p ", " %p %I : %M : %S ",
