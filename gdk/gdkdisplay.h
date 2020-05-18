@@ -88,8 +88,6 @@ GDK_AVAILABLE_IN_ALL
 GdkClipboard *          gdk_display_get_primary_clipboard       (GdkDisplay     *display);
 
 GDK_AVAILABLE_IN_ALL
-gboolean gdk_display_supports_shapes           (GdkDisplay    *display);
-GDK_AVAILABLE_IN_ALL
 gboolean gdk_display_supports_input_shapes     (GdkDisplay    *display);
 GDK_AVAILABLE_IN_ALL
 void     gdk_display_notify_startup_complete   (GdkDisplay    *display,

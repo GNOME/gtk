@@ -2310,12 +2310,6 @@ gdk_x11_display_get_user_time (GdkDisplay *display)
 }
 
 static gboolean
-gdk_x11_display_supports_shapes (GdkDisplay *display)
-{
-  return GDK_X11_DISPLAY (display)->have_shapes;
-}
-
-static gboolean
 gdk_x11_display_supports_input_shapes (GdkDisplay *display)
 {
   return GDK_X11_DISPLAY (display)->have_input_shapes;
@@ -2945,7 +2939,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->has_pending = gdk_x11_display_has_pending;
   display_class->queue_events = _gdk_x11_display_queue_events;
   display_class->get_default_group = gdk_x11_display_get_default_group;
-  display_class->supports_shapes = gdk_x11_display_supports_shapes;
   display_class->supports_input_shapes = gdk_x11_display_supports_input_shapes;
   display_class->get_app_launch_context = _gdk_x11_display_get_app_launch_context;
 

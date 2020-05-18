@@ -1095,23 +1095,6 @@ gdk_display_get_primary_clipboard (GdkDisplay *display)
 }
 
 /**
- * gdk_display_supports_shapes:
- * @display: a #GdkDisplay
- *
- * Returns %TRUE if gdk_surface_shape_combine_mask() can
- * be used to create shaped windows on @display.
- *
- * Returns: %TRUE if shaped windows are supported
- */
-gboolean
-gdk_display_supports_shapes (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
-  return GDK_DISPLAY_GET_CLASS (display)->supports_shapes (display);
-}
-
-/**
  * gdk_display_supports_input_shapes:
  * @display: a #GdkDisplay
  *
