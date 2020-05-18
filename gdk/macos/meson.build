@@ -1,4 +1,6 @@
 gdk_macos_sources = files([
+  'edgesnapping.c',
+
   'gdkdisplaylinksource.c',
   'GdkMacosWindow.c',
   'gdkmacoscairocontext.c',

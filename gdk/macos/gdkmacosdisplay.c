@@ -184,30 +184,26 @@ gdk_macos_display_update_bounds (GdkMacosDisplay *self)
 {
   GDK_BEGIN_MACOS_ALLOC_POOL;
 
-  int max_x = G_MININT;
-  int max_y = G_MININT;
-
   g_assert (GDK_IS_MACOS_DISPLAY (self));
 
   self->min_x = G_MAXINT;
   self->min_y = G_MAXINT;
 
+  self->max_x = G_MININT;
+  self->max_y = G_MININT;
+
   for (id obj in [NSScreen screens])
     {
-      CGDirectDisplayID screen_id;
-      CGRect geom;
-
-      screen_id = [[[obj deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue];
-      geom = CGDisplayBounds (screen_id);
+      NSRect geom = [(NSScreen *)obj frame];
 
       self->min_x = MIN (self->min_x, geom.origin.x);
       self->min_y = MIN (self->min_y, geom.origin.y);
-      max_x = MAX (max_x, geom.origin.x + geom.size.width);
-      max_y = MAX (max_y, geom.origin.y + geom.size.height);
+      self->max_x = MAX (self->max_x, geom.origin.x + geom.size.width);
+      self->max_y = MAX (self->max_y, geom.origin.y + geom.size.height);
     }
 
-  self->width = max_x - self->min_x;
-  self->height = max_y - self->min_y;
+  self->width = self->max_x - self->min_x;
+  self->height = self->max_y - self->min_y;
 
   GDK_END_MACOS_ALLOC_POOL;
 }
@@ -819,6 +815,7 @@ _gdk_macos_display_get_monitor_at_display_coords (GdkMacosDisplay *self,
   g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (self), NULL);
 
   _gdk_macos_display_from_display_coords (self, x, y, &x, &y);
+
   return _gdk_macos_display_get_monitor_at_coords (self, x, y);
 }
 

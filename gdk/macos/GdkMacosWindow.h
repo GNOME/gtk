@@ -26,6 +26,7 @@
 
 #include "gdkmacosdisplay.h"
 #include "gdkmacossurface.h"
+#include "edgesnapping.h"
 
 #define GDK_IS_MACOS_WINDOW(obj) ([obj isKindOfClass:[GdkMacosWindow class]])
 
@@ -40,11 +41,11 @@
   BOOL             inManualMove;
   BOOL             inManualResize;
   BOOL             inTrackManualResize;
-  NSPoint          initialMoveLocation;
-  NSPoint          lastMoveLocation;
   NSPoint          initialResizeLocation;
   NSRect           initialResizeFrame;
   GdkSurfaceEdge   resizeEdge;
+
+  EdgeSnapping     snapping;
 
   NSRect           lastUnmaximizedFrame;
   NSRect           lastMaximizedFrame;

@@ -310,92 +310,79 @@
 
 -(BOOL)trackManualMove
 {
-  NSRect workarea;
-  NSRect geometry;
   NSRect windowFrame;
-  NSRect withoutShadow;
-  NSRect newFrame;
   NSPoint currentLocation;
+  GdkMonitor *monitor;
+  GdkRectangle geometry;
+  GdkRectangle workarea;
   int shadow_top = 0;
   int shadow_left = 0;
   int shadow_right = 0;
   int shadow_bottom = 0;
-  int thresh_top;
-  int thresh_left;
-  int thresh_right;
-  int thresh_bottom;
+  GdkRectangle window_gdk;
+  GdkPoint pointer_position;
+  GdkPoint new_origin;
 
   if (!inManualMove)
     return NO;
 
-  workarea = [[self screen] visibleFrame];
-  geometry = [[self screen] frame];
+  /* Get our shadow so we can adjust the window position sans-shadow */
+  _gdk_macos_surface_get_shadow (gdk_surface,
+                                 &shadow_top,
+                                 &shadow_right,
+                                 &shadow_bottom,
+                                 &shadow_left);
+
   windowFrame = [self frame];
+  currentLocation = [NSEvent mouseLocation];
 
-  _gdk_macos_surface_get_shadow (gdk_surface, &shadow_top, &shadow_right, &shadow_bottom, &shadow_left);
+  /* Update the snapping geometry to match the current monitor */
+  monitor = _gdk_macos_display_get_monitor_at_display_coords ([self gdkDisplay],
+                                                              currentLocation.x,
+                                                              currentLocation.y);
+  gdk_monitor_get_geometry (monitor, &geometry);
+  gdk_monitor_get_workarea (monitor, &workarea);
+  _edge_snapping_set_monitor (&self->snapping, &geometry, &workarea);
 
-  currentLocation = [self convertPointToScreen:[self mouseLocationOutsideOfEventStream]];
-  windowFrame.origin.x = currentLocation.x - initialMoveLocation.x;
-  windowFrame.origin.y = currentLocation.y - initialMoveLocation.y;
+  /* Convert origins to GDK coordinates */
+  _gdk_macos_display_from_display_coords ([self gdkDisplay],
+                                          currentLocation.x,
+                                          currentLocation.y,
+                                          &pointer_position.x,
+                                          &pointer_position.y);
+  _gdk_macos_display_from_display_coords ([self gdkDisplay],
+                                          windowFrame.origin.x,
+                                          windowFrame.origin.y + windowFrame.size.height,
+                                          &window_gdk.x,
+                                          &window_gdk.y);
+  window_gdk.width = windowFrame.size.width;
+  window_gdk.height = windowFrame.size.height;
 
-  if (currentLocation.y > lastMoveLocation.y)
-    {
-      thresh_bottom = 5;
-      thresh_top = 10;
-    }
-  else
-    {
-      thresh_bottom = 10;
-      thresh_top = 10;
-    }
+  /* Subtract our shadowin from the window */
+  window_gdk.x += shadow_left;
+  window_gdk.y += shadow_top;
+  window_gdk.width = window_gdk.width - shadow_left - shadow_right;
+  window_gdk.height = window_gdk.height - shadow_top - shadow_bottom;
 
-  if (currentLocation.x > lastMoveLocation.x)
-    {
-      thresh_right = 20;
-      thresh_left = 10;
-    }
-  else
-    {
-      thresh_right = 10;
-      thresh_left = 20;
-    }
+  /* Now place things on the monitor */
+  _edge_snapping_motion (&self->snapping, &pointer_position, &window_gdk);
 
-  withoutShadow = NSMakeRect (windowFrame.origin.x + shadow_left,
-                              windowFrame.origin.y + shadow_bottom,
-                              windowFrame.size.width - shadow_left - shadow_right,
-                              windowFrame.size.height - shadow_top - shadow_bottom);
+  /* And add our shadow back to the frame */
+  window_gdk.x -= shadow_left;
+  window_gdk.y -= shadow_top;
+  window_gdk.width += shadow_left + shadow_right;
+  window_gdk.height += shadow_top + shadow_bottom;
 
-  newFrame = [self constrainFrameRect:withoutShadow
-                             toScreen:[self screen]];
+  /* Convert to quartz coordiantes */
+  _gdk_macos_display_to_display_coords ([self gdkDisplay],
+                                        window_gdk.x,
+                                        window_gdk.y + window_gdk.height,
+                                        &new_origin.x, &new_origin.y);
+  windowFrame.origin.x = new_origin.x;
+  windowFrame.origin.y = new_origin.y;
 
-  if (newFrame.origin.x < workarea.origin.x &&
-      newFrame.origin.x > (workarea.origin.x - thresh_left))
-    newFrame.origin.x = workarea.origin.x;
-
-  if (newFrame.origin.x + newFrame.size.width > workarea.origin.x + workarea.size.width &&
-      newFrame.origin.x + newFrame.size.width < workarea.origin.x + workarea.size.width + thresh_right)
-    newFrame.origin.x = workarea.origin.x + workarea.size.width - newFrame.size.width;
-
-  if (newFrame.origin.y < workarea.origin.y &&
-      newFrame.origin.y > workarea.origin.y - thresh_bottom)
-    newFrame.origin.y = workarea.origin.y;
-
-  if (newFrame.origin.y < geometry.origin.y &&
-      newFrame.origin.y > geometry.origin.y - thresh_bottom)
-    newFrame.origin.y = geometry.origin.y;
-
-  if (newFrame.origin.y + newFrame.size.height > workarea.origin.y + workarea.size.height &&
-      newFrame.origin.y + newFrame.size.height < workarea.origin.y + workarea.size.height + thresh_top)
-    newFrame.origin.y = workarea.origin.y + workarea.size.height - newFrame.size.height;
-
-  newFrame.origin.x -= shadow_left;
-  newFrame.origin.y -= shadow_bottom;
-  newFrame.size.width += shadow_left + shadow_right;
-  newFrame.size.height += shadow_bottom + shadow_top;
-
-  lastMoveLocation = currentLocation;
-
-  [self setFrameOrigin:newFrame.origin];
+  /* And now apply the frame to the window */
+  [self setFrameOrigin:NSMakePoint(new_origin.x, new_origin.y)];
 
   return YES;
 }
@@ -411,18 +398,40 @@
 
 -(void)beginManualMove
 {
-  NSRect frame = [self frame];
+  NSPoint initialMoveLocation;
+  GdkPoint point;
+  GdkMonitor *monitor;
+  GdkRectangle geometry;
+  GdkRectangle area;
+  GdkRectangle workarea;
 
   if (inMove || inManualMove || inManualResize)
     return;
 
   inManualMove = YES;
 
-  initialMoveLocation = [self convertPointToScreen:[self mouseLocationOutsideOfEventStream]];
-  initialMoveLocation.x -= frame.origin.x;
-  initialMoveLocation.y -= frame.origin.y;
+  monitor = _gdk_macos_surface_get_best_monitor ([self gdkSurface]);
+  gdk_monitor_get_geometry (monitor, &geometry);
+  gdk_monitor_get_workarea (monitor, &workarea);
 
-  lastMoveLocation = initialMoveLocation;
+  initialMoveLocation = [NSEvent mouseLocation];
+
+  _gdk_macos_display_from_display_coords ([self gdkDisplay],
+                                          initialMoveLocation.x,
+                                          initialMoveLocation.y,
+                                          &point.x,
+                                          &point.y);
+
+  area.x = GDK_SURFACE (gdk_surface)->x;
+  area.y = GDK_SURFACE (gdk_surface)->y;
+  area.width = GDK_SURFACE (gdk_surface)->width;
+  area.height = GDK_SURFACE (gdk_surface)->height;
+
+  _edge_snapping_init (&self->snapping,
+                       &geometry,
+                       &workarea,
+                       &point,
+                       &area);
 }
 
 -(BOOL)trackManualResize

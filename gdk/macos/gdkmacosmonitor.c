@@ -30,6 +30,7 @@ struct _GdkMacosMonitor
 {
   GdkMonitor        parent_instance;
   CGDirectDisplayID screen_id;
+  NSRect            workarea;
   guint             has_opengl : 1;
 };
 
@@ -47,36 +48,22 @@ gdk_macos_monitor_get_workarea (GdkMonitor   *monitor,
   GDK_BEGIN_MACOS_ALLOC_POOL;
 
   GdkMacosMonitor *self = (GdkMacosMonitor *)monitor;
+  int x,  y;
 
   g_assert (GDK_IS_MACOS_MONITOR (self));
   g_assert (geometry != NULL);
 
-  *geometry = monitor->geometry;
+  x = self->workarea.origin.x;
+  y = self->workarea.origin.y + self->workarea.size.height;
 
-  for (id obj in [NSScreen screens])
-    {
-      CGDirectDisplayID screen_id;
+  _gdk_macos_display_from_display_coords (GDK_MACOS_DISPLAY (monitor->display),
+                                          x, y,
+                                          &x, &y);
 
-      screen_id = [[[obj deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue];
-
-      if (screen_id == self->screen_id)
-        {
-          NSScreen *screen = (NSScreen *)obj;
-          NSRect visibleFrame = [screen visibleFrame];
-          int x = visibleFrame.origin.x;
-          int y = visibleFrame.origin.y + visibleFrame.size.height;
-
-          _gdk_macos_display_from_display_coords (GDK_MACOS_DISPLAY (monitor->display),
-                                                  x, y, &x, &y);
-
-          geometry->x = x;
-          geometry->y = y;
-          geometry->width = visibleFrame.size.width;
-          geometry->height = visibleFrame.size.height;
-
-          break;
-        }
-    }
+  geometry->x = x;
+  geometry->y = y;
+  geometry->width = self->workarea.size.width;
+  geometry->height = self->workarea.size.height;
 
   GDK_END_MACOS_ALLOC_POOL;
 }
@@ -148,23 +135,17 @@ GetSubpixelLayout (CGDirectDisplayID screen_id)
 }
 
 static char *
-GetLocalizedName (CGDirectDisplayID screen_id)
+GetLocalizedName (NSScreen *screen)
 {
   GDK_BEGIN_MACOS_ALLOC_POOL;
 
-  char *name = NULL;
+  NSString *str;
+  char *name;
 
-  for (id obj in [NSScreen screens])
-    {
-      CGDirectDisplayID this_id = [[[obj deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue];
+  g_assert (screen);
 
-      if (screen_id == this_id)
-        {
-          NSString *str = [(NSScreen *)obj localizedName];
-          name = g_strdup ([str UTF8String]);
-          break;
-        }
-    }
+  str = [screen localizedName];
+  name = g_strdup ([str UTF8String]);
 
   GDK_END_MACOS_ALLOC_POOL;
 
@@ -178,17 +159,38 @@ GetConnectorName (CGDirectDisplayID screen_id)
   return g_strdup_printf ("unit-%u", unit);
 }
 
+static NSScreen *
+find_screen (CGDirectDisplayID screen_id)
+{
+  GDK_BEGIN_MACOS_ALLOC_POOL;
+
+  NSScreen *screen = NULL;
+
+  for (id obj in [NSScreen screens])
+    {
+      if (screen_id == [[[obj deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue])
+        {
+          screen = (NSScreen *)obj;
+          break;
+        }
+    }
+
+  GDK_END_MACOS_ALLOC_POOL;
+
+  return screen;
+}
+
 gboolean
 _gdk_macos_monitor_reconfigure (GdkMacosMonitor *self)
 {
   GdkSubpixelLayout subpixel_layout;
   CGDisplayModeRef mode;
   GdkMacosDisplay *display;
+  NSScreen *screen;
   GdkRectangle geom;
   gboolean has_opengl;
   CGSize size;
   CGRect bounds;
-  CGRect main_bounds;
   size_t width;
   size_t pixel_width;
   gchar *connector;
@@ -202,17 +204,17 @@ _gdk_macos_monitor_reconfigure (GdkMacosMonitor *self)
 
   display = GDK_MACOS_DISPLAY (GDK_MONITOR (self)->display);
 
-  if (!(mode = CGDisplayCopyDisplayMode (self->screen_id)))
+  if (!(screen = find_screen (self->screen_id)) ||
+      !(mode = CGDisplayCopyDisplayMode (self->screen_id)))
     return FALSE;
 
   size = CGDisplayScreenSize (self->screen_id);
-  bounds = CGDisplayBounds (self->screen_id);
-  main_bounds = CGDisplayBounds (CGMainDisplayID ());
+  bounds = [screen frame];
   width = CGDisplayModeGetWidth (mode);
   pixel_width = CGDisplayModeGetPixelWidth (mode);
   has_opengl = CGDisplayUsesOpenGLAcceleration (self->screen_id);
   subpixel_layout = GetSubpixelLayout (self->screen_id);
-  name = GetLocalizedName (self->screen_id);
+  name = GetLocalizedName (screen);
   connector = GetConnectorName (self->screen_id);
 
   if (width != 0 && pixel_width != 0)
@@ -221,19 +223,8 @@ _gdk_macos_monitor_reconfigure (GdkMacosMonitor *self)
   width_mm = size.width;
   height_mm = size.height;
 
-  /* This requires that the display bounds have been updated before the monitor
-   * is reconfigured. Note that the result from CGDisplayBounds() is not exactly
-   * the same as display coordinates.
-   *
-   * As the docs say:
-   *
-   *  Returns the bounds of a display in the global display coordinate space.
-   *
-   *  The bounds of the display, expressed as a rectangle in the global display
-   *  coordinate space (relative to the upper-left corner of the main display).
-   */
   geom.x = bounds.origin.x - display->min_x;
-  geom.y = bounds.origin.y - display->min_y;
+  geom.y = display->height - bounds.origin.y - bounds.size.height + display->min_y;
   geom.width = bounds.size.width;
   geom.height = bounds.size.height;
 
@@ -252,6 +243,8 @@ _gdk_macos_monitor_reconfigure (GdkMacosMonitor *self)
   gdk_monitor_set_scale_factor (GDK_MONITOR (self), scale_factor);
   gdk_monitor_set_refresh_rate (GDK_MONITOR (self), refresh_rate);
   gdk_monitor_set_subpixel_layout (GDK_MONITOR (self), GDK_SUBPIXEL_LAYOUT_UNKNOWN);
+
+  self->workarea = [screen visibleFrame];
 
   /* We might be able to use this at some point to change which GSK renderer
    * we use for surfaces on this monitor.  For example, it might be better

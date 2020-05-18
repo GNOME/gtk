@@ -25,6 +25,7 @@
 
 #import "GdkMacosCairoView.h"
 
+#include "gdkdisplay.h"
 #include "gdkframeclockidleprivate.h"
 #include "gdkinternals.h"
 #include "gdksurfaceprivate.h"
@@ -895,7 +896,7 @@ _gdk_macos_surface_monitor_changed (GdkMacosSurface *self)
 GdkMonitor *
 _gdk_macos_surface_get_best_monitor (GdkMacosSurface *self)
 {
-  GdkMonitor *best;
+  GdkMonitor *best = NULL;
   GdkDisplay *display;
   GdkRectangle rect;
   guint n_monitors;
@@ -911,7 +912,6 @@ _gdk_macos_surface_get_best_monitor (GdkMacosSurface *self)
   rect.width = GDK_SURFACE (self)->width;
   rect.height = GDK_SURFACE (self)->height;
 
-  best = gdk_display_get_monitor (display, 0);
 
   for (guint i = 0; i < n_monitors; i++)
     {
