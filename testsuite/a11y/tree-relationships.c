@@ -216,7 +216,7 @@ quit_loop (gpointer data)
 }
 
 static void
-process_pending_idles ()
+process_pending_idles (void)
 {
   GMainLoop *loop = g_main_loop_new (NULL, FALSE);
   g_idle_add (quit_loop, loop);
