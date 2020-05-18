@@ -86,7 +86,6 @@ gdk_display_has_pending
 gdk_display_is_rgba
 gdk_display_is_composited
 gdk_display_get_default_group
-gdk_display_supports_shapes
 gdk_display_supports_input_shapes
 gdk_display_get_app_launch_context
 gdk_display_notify_startup_complete
