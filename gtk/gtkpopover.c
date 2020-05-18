@@ -218,8 +218,8 @@ gtk_popover_native_get_renderer (GtkNative *native)
 
 static void
 gtk_popover_native_get_surface_transform (GtkNative *native,
-                                          int       *x,
-                                          int       *y)
+                                          double    *x,
+                                          double    *y)
 {
   GtkCssBoxes css_boxes;
   const graphene_rect_t *margin_rect;
@@ -1212,8 +1212,8 @@ gtk_popover_update_shape (GtkPopover *popover)
       cairo_surface_t *cairo_surface;
       cairo_region_t *region;
       cairo_t *cr;
-      int x, y;
-      int native_x, native_y;
+      double x, y;
+      double native_x, native_y;
 
       gtk_native_get_surface_transform (GTK_NATIVE (popover), &native_x, &native_y);
       gtk_css_boxes_init (&content_css_boxes, priv->contents_widget);

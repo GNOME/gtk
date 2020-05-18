@@ -17,7 +17,7 @@ drag_begin (GtkDragSource *source,
   GtkWidget *row;
   GtkAllocation alloc;
   GdkPaintable *paintable;
-  int x, y;
+  double x, y;
 
   row = gtk_widget_get_ancestor (widget, GTK_TYPE_LIST_BOX_ROW);
   gtk_widget_get_allocation (row, &alloc);

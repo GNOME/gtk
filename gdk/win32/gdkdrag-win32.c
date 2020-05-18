@@ -1709,8 +1709,8 @@ _gdk_win32_surface_drag_begin (GdkSurface         *surface,
                                GdkDevice          *device,
                                GdkContentProvider *content,
                                GdkDragAction       actions,
-                               gint                dx,
-                               gint                dy)
+                               double              dx,
+                               double              dy)
 {
   GdkDrag *drag;
   GdkWin32Drag *drag_win32;
@@ -1731,8 +1731,8 @@ _gdk_win32_surface_drag_begin (GdkSurface         *surface,
   GDK_NOTE (DND, g_print ("_gdk_win32_surface_drag_begin\n"));
 
   gdk_device_get_position (device, &px, &py);
-  x_root = round (px) + dx;
-  y_root = round (py) + dy;
+  x_root = round (px + dx);
+  y_root = round (py + dy);
 
   drag_win32->start_x = x_root;
   drag_win32->start_y = y_root;

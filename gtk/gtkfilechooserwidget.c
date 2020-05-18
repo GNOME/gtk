@@ -1428,6 +1428,7 @@ rename_selected_cb (GtkTreeModel *model,
   GtkFileChooserWidget *impl = data;
   GdkRectangle rect;
   gchar *filename;
+  double x, y;
 
   gtk_tree_model_get (model, iter,
                       MODEL_COL_FILE, &impl->rename_file_source_file,
@@ -1442,7 +1443,9 @@ rename_selected_cb (GtkTreeModel *model,
   gtk_widget_translate_coordinates (impl->browse_files_tree_view,
                                     GTK_WIDGET (impl),
                                     rect.x, rect.y,
-                                    &rect.x, &rect.y);
+                                    &x, &y);
+  rect.x = x;
+  rect.y = y;
 
   filename = g_file_get_basename (impl->rename_file_source_file);
   gtk_editable_set_text (GTK_EDITABLE (impl->rename_file_name_entry), filename);
@@ -2009,9 +2012,10 @@ file_list_show_popover (GtkFileChooserWidget *impl,
       gtk_widget_translate_coordinates (impl->browse_files_tree_view,
                                         GTK_WIDGET (impl),
                                         rect.x, rect.y,
-                                        &rect.x, &rect.y);
+                                        &x, &y);
 
       rect.x = CLAMP (x - 20, 0, bounds.size.width - 40);
+      rect.y = y;
       rect.width = 40;
 
       g_list_free_full (list, (GDestroyNotify) gtk_tree_path_free);
@@ -2113,15 +2117,14 @@ click_cb (GtkGesture           *gesture,
           GtkFileChooserWidget *impl)
 {
   PopoverData *pd;
-  int xx, yy;
 
   pd = g_new (PopoverData, 1);
   pd->impl = impl;
   gtk_widget_translate_coordinates (impl->browse_files_tree_view,
                                     GTK_WIDGET (impl),
-                                    x, y, &xx, &yy);
-  pd->x = xx;
-  pd->y = yy;
+                                    x, y, &x, &y);
+  pd->x = x;
+  pd->y = y;
 
   g_idle_add (file_list_show_popover_in_idle, pd);
 }

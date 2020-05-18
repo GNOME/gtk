@@ -3447,7 +3447,7 @@ gtk_widget_get_surface_allocation (GtkWidget     *widget,
 {
   GtkWidget *parent;
   graphene_rect_t bounds;
-  int nx, ny;
+  double nx, ny;
 
   /* Don't consider the parent == widget case here. */
   parent = _gtk_widget_get_parent (widget);
@@ -4104,10 +4104,10 @@ gtk_widget_common_ancestor (GtkWidget *widget_a,
 gboolean
 gtk_widget_translate_coordinates (GtkWidget  *src_widget,
                                   GtkWidget  *dest_widget,
-                                  gint        src_x,
-                                  gint        src_y,
-                                  gint       *dest_x,
-                                  gint       *dest_y)
+                                  double      src_x,
+                                  double      src_y,
+                                  double     *dest_x,
+                                  double     *dest_y)
 {
   graphene_point_t p;
 
@@ -4552,7 +4552,7 @@ translate_event_coordinates (GdkEvent  *event,
   graphene_point_t p;
   double event_x, event_y;
   GtkNative *native;
-  int nx, ny;
+  double nx, ny;
 
   *x = *y = 0;
 
@@ -11657,7 +11657,7 @@ gtk_widget_render (GtkWidget            *widget,
   GtkSnapshot *snapshot;
   GskRenderer *renderer;
   GskRenderNode *root;
-  int x, y;
+  double x, y;
   gint64 before_snapshot = g_get_monotonic_time ();
   gint64 before_render = 0;
 

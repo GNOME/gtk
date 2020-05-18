@@ -2799,7 +2799,7 @@ gtk_entry_get_icon_at_pos (GtkEntry *entry,
   for (i = 0; i < MAX_ICONS; i++)
     {
       EntryIconInfo *icon_info = priv->icons[i];
-      int icon_x, icon_y;
+      double icon_x, icon_y;
 
       if (icon_info == NULL)
         continue;

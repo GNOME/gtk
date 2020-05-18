@@ -1985,8 +1985,8 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
                              GdkDevice          *device,
                              GdkContentProvider *content,
                              GdkDragAction       actions,
-                             gint                dx,
-                             gint                dy)
+                             double              dx,
+                             double              dy)
 {
   GdkX11Drag *x11_drag;
   GdkDrag *drag;
@@ -2013,8 +2013,8 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
   _gdk_device_query_state (device, surface, NULL, &px, &py, NULL);
 
   gdk_x11_surface_get_root_coords (surface,
-                                   round (px) + dx,
-                                   round (py) + dy,
+                                   round (px + dx),
+                                   round (py + dy),
                                    &x_root,
                                    &y_root);
 

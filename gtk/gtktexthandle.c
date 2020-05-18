@@ -80,8 +80,8 @@ gtk_text_handle_native_get_renderer (GtkNative *native)
 
 static void
 gtk_text_handle_native_get_surface_transform (GtkNative *native,
-                                              int       *x,
-                                              int       *y)
+                                              double    *x,
+                                              double    *y)
 {
   GtkCssBoxes css_boxes;
   const graphene_rect_t *margin_rect;
@@ -115,6 +115,7 @@ gtk_text_handle_present_surface (GtkTextHandle *handle)
   GdkPopupLayout *layout;
   GdkRectangle rect;
   GtkRequisition req;
+  double x, y;
 
   gtk_widget_get_preferred_size (widget, NULL, &req);
   gtk_text_handle_get_padding (handle, &handle->border);
@@ -126,7 +127,9 @@ gtk_text_handle_present_surface (GtkTextHandle *handle)
 
   gtk_widget_translate_coordinates (gtk_widget_get_parent (widget),
                                     gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW),
-                                    rect.x, rect.y, &rect.x, &rect.y);
+                                    rect.x, rect.y, &x, &y);
+  rect.x = x;
+  rect.y = y;
 
   if (handle->role == GTK_TEXT_HANDLE_ROLE_CURSOR)
     rect.x -= rect.width / 2;

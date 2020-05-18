@@ -224,19 +224,19 @@ do_popup_fallback (GtkWindowHandle *self,
       GtkNative *native;
       GdkSurface *surface;
       double px, py;
-      int nx, ny;
+      double nx, ny;
 
       native = gtk_widget_get_native (GTK_WIDGET (self));
       surface = gtk_native_get_surface (native);
       gdk_surface_get_device_position (surface, device, &px, &py, NULL);
       gtk_native_get_surface_transform (native, &nx, &ny);
-      rect.x = round (px) - nx;
-      rect.y = round (py) - ny;
 
       gtk_widget_translate_coordinates (GTK_WIDGET (gtk_widget_get_native (GTK_WIDGET (self))),
                                        GTK_WIDGET (self),
-                                       rect.x, rect.y,
-                                       &rect.x, &rect.y);
+                                       px - nx, py - ny,
+                                       &px, &py);
+      rect.x = px;
+      rect.y = py;
     }
 
   gtk_popover_set_pointing_to (GTK_POPOVER (self->fallback_menu), &rect);
@@ -444,8 +444,8 @@ drag_gesture_update_cb (GtkGestureDrag  *gesture,
     {
       GdkEventSequence *sequence;
       double start_x, start_y;
-      int native_x, native_y;
-      int window_x, window_y;
+      double native_x, native_y;
+      double window_x, window_y;
       GtkNative *native;
       GdkSurface *surface;
 

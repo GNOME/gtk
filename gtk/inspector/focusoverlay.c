@@ -49,7 +49,7 @@ gtk_focus_overlay_snapshot (GtkInspectorOverlay *overlay,
   GtkFocusOverlay *self = GTK_FOCUS_OVERLAY (overlay);
   GtkWidget *focus;
   graphene_rect_t bounds;
-  int nx, ny;
+  double nx, ny;
 
   if (!GTK_IS_NATIVE (widget))
     return;

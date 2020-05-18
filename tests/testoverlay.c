@@ -96,7 +96,7 @@ get_child_position (GtkOverlay    *overlay,
   GtkRequisition req;
   GtkWidget *child;
   GtkAllocation main_alloc;
-  gint x, y;
+  double x, y;
 
   child = gtk_overlay_get_child (GTK_OVERLAY (overlay));
 
