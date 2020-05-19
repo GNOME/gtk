@@ -218,6 +218,7 @@
   GdkDisplay *display;
   GdkEvent *event;
   gboolean maximized;
+  GList *node;
 
   surface = GDK_SURFACE (gdk_surface);
   display = gdk_surface_get_display (surface);
@@ -245,7 +246,9 @@
   event = gdk_configure_event_new (surface,
                                    content_rect.size.width,
                                    content_rect.size.height);
-  _gdk_event_queue_append (display, event);
+  node = _gdk_event_queue_append (display, event);
+  _gdk_windowing_got_event (display, node, event,
+                            _gdk_display_get_next_serial (display));
 
   [self checkSendEnterNotify];
 }
