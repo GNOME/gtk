@@ -334,6 +334,8 @@ _gdk_macos_popup_surface_attach_to_parent (GdkMacosPopupSurface *self)
       NSWindow *window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
 
       [parent addChildWindow:window ordered:NSWindowAbove];
+
+      _gdk_macos_display_clear_sorting (GDK_MACOS_DISPLAY (surface->display));
     }
 }
 
@@ -353,5 +355,7 @@ _gdk_macos_popup_surface_detach_from_parent (GdkMacosPopupSurface *self)
       NSWindow *window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
 
       [parent removeChildWindow:window];
+
+      _gdk_macos_display_clear_sorting (GDK_MACOS_DISPLAY (surface->display));
     }
 }

@@ -1097,10 +1097,7 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
         [NSApp activateIgnoringOtherApps:YES];
 
       if (![window isKeyWindow])
-        {
-          [window makeKeyWindow];
-          _gdk_macos_display_surface_raised (self, surface);
-        }
+        [window makeKeyWindow];
     }
 
   switch ((int)event_type)

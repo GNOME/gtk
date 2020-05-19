@@ -445,10 +445,10 @@ _gdk_macos_display_surface_added (GdkMacosDisplay *self,
   g_assert (surface->main.data == surface);
   g_assert (surface->frame.data == surface);
 
-  g_queue_push_tail_link (&self->sorted_surfaces, &surface->sorted);
-
   if (GDK_IS_TOPLEVEL (surface))
     g_queue_push_tail_link (&self->main_surfaces, &surface->main);
+
+  _gdk_macos_display_clear_sorting (self);
 }
 
 void
@@ -490,8 +490,6 @@ _gdk_macos_display_surface_became_key (GdkMacosDisplay *self,
   keyboard = gdk_seat_get_keyboard (seat);
   event = gdk_focus_event_new (GDK_SURFACE (surface), keyboard, NULL, TRUE);
   _gdk_event_queue_append (GDK_DISPLAY (self), event);
-
-  _gdk_macos_display_stacking_changed (self);
 
   /* We just became the active window.  Unlike X11, Mac OS X does
    * not send us motion events while the window does not have focus
@@ -536,7 +534,7 @@ _gdk_macos_display_surface_became_main (GdkMacosDisplay *self,
 
   g_queue_push_head_link (&self->main_surfaces, &surface->main);
 
-  _gdk_macos_display_stacking_changed (self);
+  _gdk_macos_display_clear_sorting (self);
 }
 
 void
@@ -566,45 +564,8 @@ _gdk_macos_display_surface_resigned_main (GdkMacosDisplay *self,
     }
 
   g_queue_push_tail_link (&self->main_surfaces, &surface->main);
-}
 
-void
-_gdk_macos_display_stacking_changed (GdkMacosDisplay *self)
-{
-  GDK_BEGIN_MACOS_ALLOC_POOL;
-
-  NSArray *ordered;
-  GQueue sorted = G_QUEUE_INIT;
-
-  g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
-
-  /* "orderedWindows" gives us the stacking order starting from front-to-back.
-   * We maintain this so that we can resolve X,Y coordinates in the topmost
-   * surfaces while processing GDK operations from devices, etc.
-   */
-
-  ordered = [NSApp orderedWindows];
-
-  for (id nswindow in ordered)
-    {
-      GdkMacosSurface *surface;
-      GList *link;
-
-      if (!GDK_IS_MACOS_WINDOW (nswindow))
-        continue;
-
-      surface = [(GdkMacosWindow *)nswindow gdkSurface];
-
-      link = &surface->sorted;
-      link->prev = NULL;
-      link->next = NULL;
-
-      g_queue_push_tail_link (&sorted, link);
-    }
-
-  self->sorted_surfaces = sorted;
-
-  GDK_END_MACOS_ALLOC_POOL;
+  _gdk_macos_display_clear_sorting (self);
 }
 
 static GdkSurface *
@@ -896,11 +857,15 @@ _gdk_macos_display_get_surface_at_coords (GdkMacosDisplay *self,
                                           int             *surface_x,
                                           int             *surface_y)
 {
+  const GList *surfaces;
+
   g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (self), NULL);
   g_return_val_if_fail (surface_x != NULL, NULL);
   g_return_val_if_fail (surface_y != NULL, NULL);
 
-  for (const GList *iter = self->sorted_surfaces.head; iter; iter = iter->next)
+  surfaces = _gdk_macos_display_get_surfaces (self);
+
+  for (const GList *iter = surfaces; iter; iter = iter->next)
     {
       GdkSurface *surface = iter->data;
       NSWindow *nswindow;
@@ -999,19 +964,6 @@ _gdk_macos_display_find_native_under_pointer (GdkMacosDisplay *self,
   return NULL;
 }
 
-void
-_gdk_macos_display_surface_raised (GdkMacosDisplay *self,
-                                   GdkMacosSurface *surface)
-{
-  g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
-  g_return_if_fail (GDK_IS_MACOS_SURFACE (surface));
-
-  if (queue_contains (&self->sorted_surfaces, &surface->sorted))
-    g_queue_unlink (&self->sorted_surfaces, &surface->sorted);
-
-  g_queue_push_head_link (&self->sorted_surfaces, &surface->sorted);
-}
-
 int
 _gdk_macos_display_get_nominal_refresh_rate (GdkMacosDisplay *self)
 {
@@ -1021,4 +973,50 @@ _gdk_macos_display_get_nominal_refresh_rate (GdkMacosDisplay *self)
     return 60 * 1000;
 
   return ((GdkDisplayLinkSource *)self->frame_source)->refresh_rate;
+}
+
+void
+_gdk_macos_display_clear_sorting (GdkMacosDisplay *self)
+{
+  g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
+
+  self->sorted_surfaces.head = NULL;
+  self->sorted_surfaces.tail = NULL;
+  self->sorted_surfaces.length = 0;
+}
+
+const GList *
+_gdk_macos_display_get_surfaces (GdkMacosDisplay *self)
+{
+  g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (self), NULL);
+
+  if (self->sorted_surfaces.length == 0)
+    {
+      GDK_BEGIN_MACOS_ALLOC_POOL;
+
+      NSArray *array = [NSApp orderedWindows];
+      GQueue sorted = G_QUEUE_INIT;
+
+      for (id obj in array)
+        {
+          NSWindow *nswindow = (NSWindow *)obj;
+          GdkMacosSurface *surface;
+
+          if (!GDK_IS_MACOS_WINDOW (nswindow))
+            continue;
+
+          surface = [(GdkMacosWindow *)nswindow gdkSurface];
+
+          surface->sorted.prev = NULL;
+          surface->sorted.next = NULL;
+
+          g_queue_push_tail_link (&sorted, &surface->sorted);
+        }
+
+      self->sorted_surfaces = sorted;
+
+      GDK_END_MACOS_ALLOC_POOL;
+    }
+
+  return self->sorted_surfaces.head;
 }

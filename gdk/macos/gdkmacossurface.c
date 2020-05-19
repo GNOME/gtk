@@ -86,8 +86,6 @@ gdk_macos_surface_hide (GdkSurface *surface)
   [self->window hide];
 
   _gdk_surface_clear_update_area (surface);
-
-  _gdk_macos_display_stacking_changed (GDK_MACOS_DISPLAY (surface->display));
 }
 
 static gint
@@ -719,7 +717,6 @@ _gdk_macos_surface_thaw (GdkMacosSurface *self,
 void
 _gdk_macos_surface_show (GdkMacosSurface *self)
 {
-  GdkMacosDisplay *display;
   gboolean was_mapped;
 
   g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
@@ -734,6 +731,8 @@ _gdk_macos_surface_show (GdkMacosSurface *self)
 
   _gdk_surface_update_viewable (GDK_SURFACE (self));
 
+  _gdk_macos_display_clear_sorting (GDK_MACOS_DISPLAY (GDK_SURFACE (self)->display));
+
   [self->window showAndMakeKey:YES];
   [[self->window contentView] setNeedsDisplay:YES];
 
@@ -742,9 +741,6 @@ _gdk_macos_surface_show (GdkMacosSurface *self)
       if (gdk_surface_is_viewable (GDK_SURFACE (self)))
         gdk_surface_invalidate_rect (GDK_SURFACE (self), NULL);
     }
-
-  display = GDK_MACOS_DISPLAY (GDK_SURFACE (self)->display);
-  _gdk_macos_display_stacking_changed (display);
 }
 
 CGContextRef

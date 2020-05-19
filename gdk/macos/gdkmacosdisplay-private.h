@@ -115,7 +115,6 @@ GdkMacosSurface *_gdk_macos_display_get_surface_at_display_coords  (GdkMacosDisp
                                                                     double           y,
                                                                     int             *surface_x,
                                                                     int             *surface_y);
-void             _gdk_macos_display_stacking_changed               (GdkMacosDisplay *self);
 void             _gdk_macos_display_reload_monitors                (GdkMacosDisplay *self);
 void             _gdk_macos_display_surface_removed                (GdkMacosDisplay *self,
                                                                     GdkMacosSurface *surface);
@@ -140,9 +139,9 @@ void             _gdk_macos_display_surface_resigned_key           (GdkMacosDisp
                                                                     GdkMacosSurface *surface);
 void             _gdk_macos_display_surface_became_key             (GdkMacosDisplay *self,
                                                                     GdkMacosSurface *surface);
-void             _gdk_macos_display_surface_raised                 (GdkMacosDisplay *self,
-                                                                    GdkMacosSurface *surface);
 int              _gdk_macos_display_get_nominal_refresh_rate       (GdkMacosDisplay *self);
+void             _gdk_macos_display_clear_sorting                  (GdkMacosDisplay *self);
+const GList     *_gdk_macos_display_get_surfaces                   (GdkMacosDisplay *self);
 
 G_END_DECLS
 

@@ -455,6 +455,8 @@ _gdk_macos_toplevel_surface_attach_to_parent (GdkMacosToplevelSurface *self)
 
       if (GDK_SURFACE (self)->modal_hint)
         [window setLevel:NSModalPanelWindowLevel];
+
+      _gdk_macos_display_clear_sorting (GDK_MACOS_DISPLAY (surface->display));
     }
 }
 
@@ -476,5 +478,7 @@ _gdk_macos_toplevel_surface_detach_from_parent (GdkMacosToplevelSurface *self)
 
       [parent removeChildWindow:window];
       [window setLevel:NSNormalWindowLevel];
+
+      _gdk_macos_display_clear_sorting (GDK_MACOS_DISPLAY (surface->display));
     }
 }
