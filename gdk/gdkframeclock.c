@@ -789,11 +789,15 @@ void
 _gdk_frame_clock_add_timings_to_profiler (GdkFrameClock   *clock,
                                           GdkFrameTimings *timings)
 {
+  if (timings->drawn_time != 0)
+    gdk_profiler_add_mark (timings->drawn_time, 0, "drawn window", NULL);
+
   if (timings->presentation_time != 0)
+    gdk_profiler_add_mark (timings->presentation_time, 0, "presented window", NULL);
+
+  if (timings->presentation_time != 0 || timings->drawn_time != 0)
     {
-      gdk_profiler_add_mark (timings->presentation_time, 0, "presented window", NULL);
-      gdk_profiler_set_counter (fps_counter,
-                                timings->presentation_time,
-                                frame_clock_get_fps (clock)); 
+      gint64 time = timings->presentation_time != 0 ? timings->presentation_time : timings->drawn_time;
+      gdk_profiler_set_counter (fps_counter, time, frame_clock_get_fps (clock));
     }
 }
