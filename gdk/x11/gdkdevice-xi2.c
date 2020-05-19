@@ -95,10 +95,9 @@ static void          gdk_x11_device_xi2_ungrab (GdkDevice     *device,
                                                 guint32        time_);
 
 static GdkSurface * gdk_x11_device_xi2_surface_at_position (GdkDevice       *device,
-                                                          gdouble         *win_x,
-                                                          gdouble         *win_y,
-                                                          GdkModifierType *mask,
-                                                          gboolean         get_toplevel);
+                                                            gdouble         *win_x,
+                                                            gdouble         *win_y,
+                                                            GdkModifierType *mask);
 
 
 enum {
@@ -448,10 +447,9 @@ gdk_x11_device_xi2_ungrab (GdkDevice *device,
 
 static GdkSurface *
 gdk_x11_device_xi2_surface_at_position (GdkDevice       *device,
-                                       gdouble         *win_x,
-                                       gdouble         *win_y,
-                                       GdkModifierType *mask,
-                                       gboolean         get_toplevel)
+                                        gdouble         *win_x,
+                                        gdouble         *win_y,
+                                        GdkModifierType *mask)
 {
   GdkX11Surface *impl;
   GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
@@ -587,7 +585,7 @@ gdk_x11_device_xi2_surface_at_position (GdkDevice       *device,
       if (!retval)
         break;
 
-      if (get_toplevel && last != root &&
+      if (last != root &&
           (surface = gdk_x11_surface_lookup_for_display (display, last)) != NULL)
         {
           xwindow = last;

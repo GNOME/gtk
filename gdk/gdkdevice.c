@@ -628,7 +628,7 @@ gdk_device_get_surface_at_position (GdkDevice *device,
   g_return_val_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
                         gdk_display_device_is_grabbed (gdk_device_get_display (device), device), NULL);
 
-  surface = _gdk_device_surface_at_position (device, &tmp_x, &tmp_y, NULL, FALSE);
+  surface = _gdk_device_surface_at_position (device, &tmp_x, &tmp_y, NULL);
 
   if (win_x)
     *win_x = tmp_x;
@@ -1588,17 +1588,15 @@ _gdk_device_query_state (GdkDevice        *device,
 }
 
 GdkSurface *
-_gdk_device_surface_at_position (GdkDevice        *device,
-                                gdouble          *win_x,
-                                gdouble          *win_y,
-                                GdkModifierType  *mask,
-                                gboolean          get_toplevel)
+_gdk_device_surface_at_position (GdkDevice       *device,
+                                 gdouble         *win_x,
+                                 gdouble         *win_y,
+                                 GdkModifierType *mask)
 {
   return GDK_DEVICE_GET_CLASS (device)->surface_at_position (device,
-                                                            win_x,
-                                                            win_y,
-                                                            mask,
-                                                            get_toplevel);
+                                                             win_x,
+                                                             win_y,
+                                                             mask);
 }
 
 /**

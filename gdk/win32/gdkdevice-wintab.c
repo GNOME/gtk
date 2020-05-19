@@ -188,10 +188,9 @@ gdk_device_wintab_ungrab (GdkDevice *device,
 
 static GdkSurface *
 gdk_device_wintab_surface_at_position (GdkDevice       *device,
-                                      gdouble         *win_x,
-                                      gdouble         *win_y,
-                                      GdkModifierType *mask,
-                                      gboolean         get_toplevel)
+                                       gdouble         *win_x,
+                                       gdouble         *win_y,
+                                       GdkModifierType *mask)
 {
   return NULL;
 }

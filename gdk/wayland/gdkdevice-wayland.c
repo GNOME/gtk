@@ -802,10 +802,9 @@ gdk_wayland_device_ungrab (GdkDevice *device,
 
 static GdkSurface *
 gdk_wayland_device_surface_at_position (GdkDevice       *device,
-                                       gdouble         *win_x,
-                                       gdouble         *win_y,
-                                       GdkModifierType *mask,
-                                       gboolean         get_toplevel)
+                                        gdouble         *win_x,
+                                        gdouble         *win_y,
+                                        GdkModifierType *mask)
 {
   GdkWaylandPointerData *pointer;
 
