@@ -841,9 +841,10 @@ _gdk_macos_display_get_surface_at_coords (GdkMacosDisplay *self,
 
       g_assert (GDK_IS_MACOS_SURFACE (surface));
 
-      nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (surface));
-      if (![nswindow isVisible])
+      if (!gdk_surface_get_mapped (surface))
         continue;
+
+      nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (surface));
 
       if (x >= surface->x &&
           y >= surface->y &&
