@@ -98,25 +98,35 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
                                      GdkToplevelLayout *layout)
 {
   GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)toplevel;
-  NSWindow *window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
+  NSWindow *nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
   GdkGeometry geometry;
   GdkSurfaceHints mask;
+  NSWindowStyleMask style_mask;
 
   g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
-  g_assert (window != NULL);
+  g_assert (GDK_IS_MACOS_WINDOW (nswindow));
+
+  style_mask = [nswindow styleMask];
 
   if (gdk_toplevel_layout_get_resizable (layout))
     {
       geometry.min_width = gdk_toplevel_layout_get_min_width (layout);
       geometry.min_height = gdk_toplevel_layout_get_min_height (layout);
       mask = GDK_HINT_MIN_SIZE;
+
+      style_mask |= NSWindowStyleMaskResizable;
     }
   else
     {
       geometry.max_width = geometry.min_width = width;
       geometry.max_height = geometry.min_height = height;
       mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE;
+
+      style_mask &= ~NSWindowStyleMaskResizable;
     }
+
+  if (style_mask != [nswindow styleMask])
+    [nswindow setStyleMask:style_mask];
 
   _gdk_macos_surface_set_geometry_hints (GDK_MACOS_SURFACE (self), &geometry, mask);
   gdk_surface_constrain_size (&geometry, mask, width, height, &width, &height);
