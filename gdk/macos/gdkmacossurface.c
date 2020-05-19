@@ -735,6 +735,7 @@ _gdk_macos_surface_show (GdkMacosSurface *self)
   _gdk_surface_update_viewable (GDK_SURFACE (self));
 
   [self->window showAndMakeKey:YES];
+  [[self->window contentView] setNeedsDisplay:YES];
 
   if (!was_mapped)
     {
