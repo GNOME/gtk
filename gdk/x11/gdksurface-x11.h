@@ -74,6 +74,9 @@ struct _GdkX11Surface
 
   guint64 map_time;
 
+  cairo_region_t *input_region;
+  gulong shadow_width[4];
+
   GList *surface_is_on_monitor;
 };
  
