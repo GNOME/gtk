@@ -698,7 +698,6 @@ if os_unix
     'gtkprintoperation-unix.c',
     'gtkprintoperation-portal.c',
     'gtkprintunixdialog.c',
-    'gtksearchenginetracker.c',
   ])
 
   gtk_sources += gtk_unix_print_sources

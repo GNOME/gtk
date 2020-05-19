@@ -29,9 +29,6 @@
 
 #if defined(HAVE_TRACKER3)
 #include "gtksearchenginetracker3.h"
-#elif !defined G_OS_WIN32 /* No tracker on windows */
-#include "gtksearchenginetracker.h"
-#define HAVE_TRACKER 1
 #endif
 
 struct _GtkSearchEnginePrivate {
@@ -341,13 +338,6 @@ _gtk_search_engine_new (void)
   if (engine->priv->native)
     {
       g_debug ("Using Tracker3 search engine");
-      connect_engine_signals (engine->priv->native, engine);
-    }
-#elif defined(HAVE_TRACKER)
-  engine->priv->native = _gtk_search_engine_tracker_new ();
-  if (engine->priv->native)
-    {
-      g_debug ("Using Tracker search engine");
       connect_engine_signals (engine->priv->native, engine);
     }
 #endif
