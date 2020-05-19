@@ -416,6 +416,11 @@ gdk_event_alloc (GdkEventType event_type,
   g_assert (event_type >= GDK_DELETE && event_type < GDK_EVENT_LAST);
   g_assert (gdk_event_types[event_type] != G_TYPE_INVALID);
 
+  g_assert (device == NULL ||
+            gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_MASTER);
+  g_assert (source_device == NULL ||
+            gdk_device_get_device_type (source_device) == GDK_DEVICE_TYPE_SLAVE);
+
   GdkEvent *event = (GdkEvent *) g_type_create_instance (gdk_event_types[event_type]);
 
   GDK_NOTE (EVENTS, {
