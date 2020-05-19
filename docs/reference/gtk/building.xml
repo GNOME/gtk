@@ -47,7 +47,7 @@ How to compile GTK itself
     </para>
     <informalexample>
       <programlisting>
-        meson --prefix /opt/gtk builddir
+        meson setup --prefix /opt/gtk builddir
       </programlisting>
     </informalexample>
     <para>

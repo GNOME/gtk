@@ -21,18 +21,17 @@ Wayland-specific aspects of using GTK
 
 <para>
 The GDK Wayland backend provides support for running GTK applications
-under the Wayland display server. To run your application in this way,
-select the Wayland backend by setting <literal>GDK_BACKEND=wayland</literal>.
+under a Wayland compositor. To run your application in this way, select
+the Wayland backend by setting <literal>GDK_BACKEND=wayland</literal>.
 </para>
 
 <para>
-Currently, the Wayland backend does not use any additional commandline
-options or environment variables.
+On UNIX, the Wayland backend is enabled by default, so you don't need to
+do anything special when compiling it, and everything should "just work."
 </para>
 
 <para>
-For up-to-date information about the current status of this backend, see
-the <ulink url="https://wiki.gnome.org/Initiatives/Wayland/GTK%2B">project page</ulink>.
+Currently, the Wayland backend does not use any additional environment variables.
 </para>
 
 </refsect1>
