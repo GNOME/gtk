@@ -539,6 +539,7 @@ _gdk_frame_clock_debug_print_timings (GdkFrameClock   *clock,
 
   gint64 previous_frame_time = 0;
   gint64 previous_smoothed_frame_time = 0;
+  gboolean missed_frame = FALSE;
   GdkFrameTimings *previous_timings = gdk_frame_clock_get_timings (clock,
                                                                    timings->frame_counter - 1);
 
@@ -548,13 +549,17 @@ _gdk_frame_clock_debug_print_timings (GdkFrameClock   *clock,
       previous_smoothed_frame_time = previous_timings->smoothed_frame_time;
     }
 
+  missed_frame =
+    previous_frame_time == 0 ||
+    (timings->smoothed_frame_time - previous_smoothed_frame_time) > (timings->refresh_interval + 1000);
+
   str = g_string_new ("");
 
   g_string_append_printf (str, "%5" G_GINT64_FORMAT ":", timings->frame_counter);
   if (previous_frame_time != 0)
     {
       g_string_append_printf (str, " interval=%-4.1f", (timings->frame_time - previous_frame_time) / 1000.);
-      g_string_append_printf (str, timings->slept_before ?  " (sleep)" : "        ");
+      g_string_append_printf (str, timings->slept_before ?  " (sleep)" : (missed_frame ?  "  (miss)" : "        "));
       g_string_append_printf (str, " smoothed=%4.1f / %-4.1f",
                               (timings->smoothed_frame_time - timings->frame_time) / 1000.,
                               (timings->smoothed_frame_time - previous_smoothed_frame_time) / 1000.);
