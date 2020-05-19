@@ -37,15 +37,6 @@
 
 @implementation GdkMacosWindow
 
--(void)windowWillClose:(NSNotification*)notification
-{
-  /* Clears the delegate when window is going to be closed; since EL
-   * Capitan it is possible that the methods of delegate would get called
-   * after the window has been closed.
-   */
-  [self setDelegate:nil];
-}
-
 -(BOOL)windowShouldClose:(id)sender
 {
   GdkDisplay *display;
