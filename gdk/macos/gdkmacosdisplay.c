@@ -464,7 +464,7 @@ _gdk_macos_display_surface_removed (GdkMacosDisplay *self,
   g_queue_unlink (&self->sorted_surfaces, &surface->sorted);
 
   if (queue_contains (&self->main_surfaces, &surface->main))
-    g_queue_unlink (&self->main_surfaces, &surface->main);
+    _gdk_macos_display_surface_resigned_main (self, surface);
 
   if (queue_contains (&self->awaiting_frames, &surface->frame))
     g_queue_unlink (&self->awaiting_frames, &surface->frame);
@@ -506,7 +506,6 @@ _gdk_macos_display_surface_resigned_key (GdkMacosDisplay *self,
   g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
   g_return_if_fail (GDK_IS_MACOS_SURFACE (surface));
 
-
   if (self->keyboard_surface == surface)
     {
       GdkDevice *keyboard;
@@ -520,6 +519,8 @@ _gdk_macos_display_surface_resigned_key (GdkMacosDisplay *self,
     }
 
   self->keyboard_surface = NULL;
+
+  _gdk_macos_display_clear_sorting (self);
 }
 
 void
@@ -541,29 +542,33 @@ void
 _gdk_macos_display_surface_resigned_main (GdkMacosDisplay *self,
                                           GdkMacosSurface *surface)
 {
+  const GList *surfaces;
+
   g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
   g_return_if_fail (GDK_IS_MACOS_SURFACE (surface));
 
   if (queue_contains (&self->main_surfaces, &surface->main))
     g_queue_unlink (&self->main_surfaces, &surface->main);
 
-  for (const GList *iter = self->main_surfaces.head; iter; iter = iter->next)
+  _gdk_macos_display_clear_sorting (self);
+  surfaces = _gdk_macos_display_get_surfaces (self);
+
+  for (const GList *iter = surfaces; iter; iter = iter->next)
     {
       GdkMacosSurface *new_surface = iter->data;
 
       g_assert (GDK_IS_MACOS_SURFACE (new_surface));
-      g_assert (new_surface != surface);
 
-      if (GDK_SURFACE_IS_MAPPED (GDK_SURFACE (new_surface)) &&
-          GDK_IS_TOPLEVEL (new_surface))
+      if (new_surface == surface)
+        continue;
+
+      if (GDK_SURFACE_IS_MAPPED (GDK_SURFACE (new_surface)))
         {
           NSWindow *nswindow = _gdk_macos_surface_get_native (new_surface);
           [nswindow makeKeyAndOrderFront:nswindow];
           break;
         }
     }
-
-  g_queue_push_tail_link (&self->main_surfaces, &surface->main);
 
   _gdk_macos_display_clear_sorting (self);
 }
