@@ -38,6 +38,10 @@
 
 #define SEARCH_QUERY_BASE(__PATTERN__)                                 \
   "SELECT ?url "                                                       \
+  "       nfo:fileName(?urn) "					       \
+  "       nie:mimeType(?urn)"					       \
+  "       nfo:fileSize(?urn)"					       \
+  "       nfo:fileLastModified(?urn)"				       \
   "FROM tracker:FileSystem "                                           \
   "WHERE {"                                                            \
   "  ?urn a nfo:FileDataObject ;"                                      \
@@ -109,6 +113,36 @@ free_hit (gpointer data)
   g_slice_free (GtkSearchHit, hit);
 }
 
+static GFileInfo *
+create_file_info (TrackerSparqlCursor *cursor)
+{
+  GFileInfo *info;
+  const gchar *str;
+  GDateTime *creation;
+
+  info = g_file_info_new ();
+  str = tracker_sparql_cursor_get_string (cursor, 1, NULL);
+  if (str)
+    g_file_info_set_display_name (info, str);
+
+  str = tracker_sparql_cursor_get_string (cursor, 2, NULL);
+  if (str)
+    g_file_info_set_content_type (info, str);
+
+  g_file_info_set_size (info,
+                        tracker_sparql_cursor_get_integer (cursor, 3));
+
+  str = tracker_sparql_cursor_get_string (cursor, 4, NULL);
+  if (str)
+    {
+      creation = g_date_time_new_from_iso8601 (str, NULL);
+      g_file_info_set_modification_date_time (info, creation);
+      g_date_time_unref (creation);
+    }
+
+  return info;
+}
+
 static void
 query_callback (TrackerSparqlStatement *statement,
                 GAsyncResult           *res,
@@ -141,6 +175,7 @@ query_callback (TrackerSparqlStatement *statement,
       url = tracker_sparql_cursor_get_string (cursor, 0, NULL);
       hit = g_slice_new0 (GtkSearchHit);
       hit->file = g_file_new_for_uri (url);
+      hit->info = create_file_info (cursor);
       hits = g_list_prepend (hits, hit);
     }
 
