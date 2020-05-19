@@ -131,6 +131,14 @@
       inManualResize = NO;
       inMove = NO;
 
+      /* We need to deliver the event to the proper drag gestures or we
+       * will leave the window in inconsistent state that requires clicking
+       * in the window to cancel the gesture.
+       *
+       * TODO: Can we improve grab breaking to fix this?
+       */
+      _gdk_macos_display_send_button_event ([self gdkDisplay], event);
+
       break;
     }
 
