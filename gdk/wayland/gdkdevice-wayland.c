@@ -592,7 +592,7 @@ emulate_crossing (GdkSurface       *surface,
   event = gdk_crossing_event_new (type,
                                   surface,
                                   device,
-                                  device,
+                                  NULL,
                                   time_,
                                   state,
                                   x, y,
@@ -633,7 +633,7 @@ emulate_focus (GdkSurface *surface,
                gboolean   focus_in,
                guint32    time_)
 {
-  GdkEvent *event = gdk_focus_event_new (surface, device, device, focus_in);
+  GdkEvent *event = gdk_focus_event_new (surface, device, NULL, focus_in);
 
   _gdk_wayland_display_deliver_event (gdk_surface_get_display (surface), event);
 }
