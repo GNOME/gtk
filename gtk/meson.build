@@ -655,6 +655,10 @@ gtk_unix_sources = files(
   'gtksearchenginetracker.c',
 )
 
+if os_unix and tracker3_enabled
+  gtk_unix_sources += 'gtksearchenginetracker3.c'
+endif
+
 if os_unix
   gtk_sources += gtk_unix_sources
 endif
@@ -914,6 +918,10 @@ endif
 
 if cloudproviders_enabled
   gtk_deps += cloudproviders_dep
+endif
+
+if os_unix and tracker3_enabled
+  gtk_deps += tracker3_dep
 endif
 
 # Unconditional. If libintl isn't found,

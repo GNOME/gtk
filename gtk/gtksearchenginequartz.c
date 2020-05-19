@@ -130,7 +130,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkSearchEngineQuartz, _gtk_search_engine_quartz, GT
 
   [self submitHits:ns_query];
 
-  _gtk_search_engine_finished (engine);
+  _gtk_search_engine_finished (engine, submitted_hits > 0);
   submitted_hits = 0;
 }
 

@@ -40,6 +40,8 @@ typedef struct _GtkSearchEngineClass GtkSearchEngineClass;
 typedef struct _GtkSearchEnginePrivate GtkSearchEnginePrivate;
 typedef struct _GtkSearchHit GtkSearchHit;
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GtkSearchEngine, g_object_unref)
+
 struct _GtkSearchHit
 {
   GFile *file;
@@ -82,7 +84,8 @@ void	         _gtk_search_engine_stop            (GtkSearchEngine *engine);
 
 void	         _gtk_search_engine_hits_added      (GtkSearchEngine *engine, 
 						     GList           *hits);
-void	         _gtk_search_engine_finished        (GtkSearchEngine *engine);
+void             _gtk_search_engine_finished        (GtkSearchEngine *engine,
+                                                     gboolean         got_results);
 void	         _gtk_search_engine_error           (GtkSearchEngine *engine, 
 						     const gchar     *error_message);
 void             _gtk_search_engine_set_recursive   (GtkSearchEngine *engine,

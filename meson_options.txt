@@ -17,6 +17,8 @@ option('cloudproviders', type: 'boolean', value: false,
   description : 'Enable the cloudproviders support')
 option('profiler', type: 'boolean', value: false,
   description : 'Enable profiler support')
+option('tracker3', type: 'boolean', value: false,
+  description : 'Enable Tracker3 filechooser search')
 
 # Print backends
 option('print_backends', type : 'string', value : 'auto',

@@ -7372,6 +7372,7 @@ search_engine_hits_added_cb (GtkSearchEngine      *engine,
 /* Callback used from GtkSearchEngine when the query is done running */
 static void
 search_engine_finished_cb (GtkSearchEngine *engine,
+                           gboolean         got_results,
                            gpointer         data)
 {
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (data);
@@ -7386,7 +7387,7 @@ search_engine_finished_cb (GtkSearchEngine *engine,
       priv->show_progress_timeout = 0;
     }
 
-  if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (priv->search_model), NULL) == 0)
+  if (!got_results)
     {
       gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "empty");
       gtk_entry_grab_focus_without_selecting (GTK_ENTRY (priv->search_entry));

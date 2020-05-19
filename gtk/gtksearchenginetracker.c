@@ -291,7 +291,7 @@ query_callback (GObject      *object,
 
   if (!reply)
     {
-      _gtk_search_engine_finished (GTK_SEARCH_ENGINE (tracker));
+      _gtk_search_engine_finished (GTK_SEARCH_ENGINE (tracker), FALSE);
       g_object_unref (tracker);
       return;
     }
@@ -315,7 +315,7 @@ query_callback (GObject      *object,
     }
 
   _gtk_search_engine_hits_added (GTK_SEARCH_ENGINE (tracker), hits);
-  _gtk_search_engine_finished (GTK_SEARCH_ENGINE (tracker));
+  _gtk_search_engine_finished (GTK_SEARCH_ENGINE (tracker), i > 0);
 
   g_list_free (hits);
   for (i = 0; i < n; i++)
