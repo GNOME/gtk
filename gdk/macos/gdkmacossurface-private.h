@@ -56,6 +56,8 @@ struct _GdkMacosSurface
   int shadow_left;
 
   gint64 pending_frame_counter;
+
+  guint did_initial_present : 1;
 };
 
 struct _GdkMacosSurfaceClass
