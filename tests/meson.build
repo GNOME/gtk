@@ -82,6 +82,7 @@ gtk_tests = [
   ['testscrolledge'],
   ['testscrolltofocus'],
   ['testcellarea'],
+  ['testslack'],
   ['testswitch'],
   ['testtreepos'],
   ['testsensitive'],
