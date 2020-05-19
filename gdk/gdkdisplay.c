@@ -479,7 +479,7 @@ gdk_display_put_event (GdkDisplay     *display,
 
 static void
 generate_grab_broken_event (GdkDisplay *display,
-                            GdkSurface  *surface,
+                            GdkSurface *surface,
                             GdkDevice  *device,
 			    gboolean    implicit,
 			    GdkSurface  *grab_surface)
@@ -492,7 +492,7 @@ generate_grab_broken_event (GdkDisplay *display,
 
       event = gdk_grab_broken_event_new (surface,
                                          device,
-                                         device,
+                                         NULL,
                                          grab_surface,
                                          implicit);
 
