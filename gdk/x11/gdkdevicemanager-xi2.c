@@ -1936,8 +1936,11 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             device = g_hash_table_lookup (device_manager->id_table,
                                           GINT_TO_POINTER (xev->deviceid));
 
-            source_device = g_hash_table_lookup (device_manager->id_table,
-                                                 GUINT_TO_POINTER (xev->sourceid));
+            if (xev->sourceid != xev->deviceid)
+              source_device = g_hash_table_lookup (device_manager->id_table,
+                                                   GUINT_TO_POINTER (xev->sourceid));
+            else
+              source_device = NULL;
 
             _gdk_device_manager_xi2_handle_focus (surface,
                                                   xev->event,
