@@ -2944,6 +2944,8 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
           text = _gtk_text_get_selected_text (self);
           gtk_text_get_pixel_ranges (self, &ranges, &n_ranges);
 
+          g_assert (n_ranges > 0);
+
           if (priv->editable)
             actions = GDK_ACTION_COPY|GDK_ACTION_MOVE;
           else
@@ -2968,7 +2970,7 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
           priv->drag = drag;
 
           g_object_unref (drag);
-          
+
           g_free (ranges);
           g_free (text);
 

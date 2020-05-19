@@ -12,6 +12,7 @@ typedef struct
 
 typedef GtkApplicationClass BloatPadClass;
 
+GType bloat_pad_get_type (void);
 G_DEFINE_TYPE (BloatPad, bloat_pad, GTK_TYPE_APPLICATION)
 
 static void

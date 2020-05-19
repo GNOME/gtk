@@ -26,6 +26,8 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include "gtkbuilderprivate.h"
+#include "gtk-builder-tool.h"
+
 
 static void
 set_window_title (GtkWindow  *window,
@@ -49,6 +51,17 @@ set_window_title (GtkWindow  *window,
 }
 
 static void
+quit_cb (GtkWidget *widget,
+         gpointer   user_data)
+{
+  gboolean *is_done = user_data;
+
+  *is_done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
+static void
 preview_file (const char *filename,
               const char *id,
               const char *cssfile)
@@ -57,6 +70,7 @@ preview_file (const char *filename,
   GError *error = NULL;
   GObject *object;
   GtkWidget *window;
+  gboolean done = FALSE;
 
   if (cssfile)
     {
@@ -142,8 +156,9 @@ preview_file (const char *filename,
     }
 
   gtk_window_present (GTK_WINDOW (window));
+  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
-  while (TRUE)
+  while (!done)
     g_main_context_iteration (NULL, TRUE);
 
   g_object_unref (builder);

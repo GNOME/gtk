@@ -78,6 +78,7 @@ foreach t: a11y_tests
   test (t,
         executable (t, '@0@.c'.format(t),
                     install: get_option('install-tests'),
+                    c_args: common_cflags,
                     install_dir: testexecdir,
                     dependencies: libgtk_dep),
         args: [ '--tap', '-k', ],

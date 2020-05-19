@@ -1,7 +1,17 @@
 # FIXME: $(no_undefined) ?
+
+reftest_cflags = []
+foreach flag: common_cflags
+  if flag not in ['-Werror=missing-prototypes', '-Werror=missing-declarations', '-fvisibility=hidden']
+    reftest_cflags += flag
+  endif
+endforeach
+
+
 libgtkreftestprivate = library('gtkreftestprivate',
   'reftest-compare.c', 'reftest-module.c', 'reftest-snapshot.c',
-  dependencies : libgtk_dep)
+  dependencies : libgtk_dep,
+  c_args: reftest_cflags)
 
 libreftest = library('reftest',
   [ 'expand-expander.c',
@@ -14,6 +24,7 @@ libreftest = library('reftest',
     'animation-direction.c',
   ],
   link_with: libgtkreftestprivate,
+  c_args: reftest_cflags,
   dependencies : libgtk_dep)
 
 tcdata = configuration_data()

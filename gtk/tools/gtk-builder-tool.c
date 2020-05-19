@@ -26,13 +26,9 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include "gtkbuilderprivate.h"
+#include "gtk-builder-tool.h"
 
-extern void do_simplify  (int *argc, const char ***argv);
-extern void do_validate  (int *argc, const char ***argv);
-extern void do_enumerate (int *argc, const char ***argv);
-extern void do_preview   (int *argc, const char ***argv);
-
-static void
+static void G_GNUC_NORETURN
 usage (void)
 {
   g_print (_("Usage:\n"

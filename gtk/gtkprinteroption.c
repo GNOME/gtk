@@ -248,8 +248,8 @@ gtk_printer_option_allocate_choices (GtkPrinterOption     *option,
 void
 gtk_printer_option_choices_from_array (GtkPrinterOption   *option,
 				       int                 num_choices,
-				       char               *choices[],
-				       char              *choices_display[])
+				       const char        **choices,
+				       const char        **choices_display)
 {
   int i;
   
