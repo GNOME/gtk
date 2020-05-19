@@ -61,8 +61,8 @@ typedef struct
  */
 static GVariant *
 create_attributes (const gchar  *printer_uri,
-                   gchar       **additional_attrs,
-                   gchar       **additional_labels)
+                   const char  **additional_attrs,
+                   const char  **additional_labels)
 {
   GVariantBuilder *attr_builder = NULL;
   GVariant        *ret = NULL;
@@ -276,7 +276,7 @@ do_store_auth_info (GTask *task)
   GVariant            *attributes = NULL,
                       *properties = NULL,
                       *secret = NULL;
-  gchar              **additional_attrs = NULL,
+  const char         **additional_attrs = NULL,
                      **additional_labels = NULL,
                       *password = NULL;
   SecretsServiceData  *task_data = g_task_get_task_data (task);
@@ -287,8 +287,8 @@ do_store_auth_info (GTask *task)
 
   length = g_strv_length (task_data->auth_info_labels);
 
-  additional_attrs = g_new0 (gchar *, length + 1);
-  additional_labels = g_new0 (gchar *, length + 1);
+  additional_attrs = g_new0 (const char *, length + 1);
+  additional_labels = g_new0 (const char *, length + 1);
   /* The labels user and server are chosen to be compatible with
      the attributes used by system-config-printer */
   for (i = 0; task_data->auth_info_labels[i] != NULL; i++)
@@ -420,6 +420,8 @@ prompt_completed_cb (GDBusConnection *connection,
                            get_secret_cb,
                            task);
         break;
+      default:
+        ;
     }
 }
 
@@ -521,6 +523,8 @@ unlock_collection_cb (GObject      *source_object,
                                get_secret_cb,
                                task);
             break;
+          default:
+            ;
         }
     }
   g_variant_unref (output);
@@ -656,6 +660,8 @@ item_proxy_cb (GObject      *source_object,
                            get_secret_cb,
                            task);
         break;
+      default:
+        ;
     }
 }
 
@@ -826,6 +832,8 @@ open_session_cb (GObject      *source_object,
                                   task);
           break;
         }
+      default:
+        ;
     }
 }
 
@@ -888,7 +896,7 @@ gtk_cups_secrets_service_watch (GBusNameAppearedCallback appeared,
                            NULL);
 }
 
-void
+static void
 cleanup_task_data (gpointer data)
 {
   gint                i;

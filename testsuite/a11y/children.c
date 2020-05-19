@@ -108,7 +108,7 @@ parent_notify (AtkObject *obj, GParamSpec *pspec, SignalData *data)
   data->parent = atk_object_get_parent (obj);
 }
 
-gboolean
+static gboolean
 do_create_child (STATE *state, gint i)
 {
   if (GTK_IS_ENTRY (state->widget))

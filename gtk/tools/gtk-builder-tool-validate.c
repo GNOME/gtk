@@ -26,6 +26,7 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include "gtkbuilderprivate.h"
+#include "gtk-builder-tool.h"
 
 static GType
 make_fake_type (const gchar *type_name,
@@ -147,7 +148,7 @@ validate_file (const char *filename)
 }
 
 void
-do_validate (int *argc, char ***argv)
+do_validate (int *argc, const char ***argv)
 {
   int i;
 
@@ -156,6 +157,4 @@ do_validate (int *argc, char ***argv)
       if (!validate_file ((*argv)[i]))
         exit (1);
     }
-
-  return;
 }

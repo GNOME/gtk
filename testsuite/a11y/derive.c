@@ -28,6 +28,8 @@
 typedef GtkButtonAccessible MyButtonAccessible;
 typedef GtkButtonAccessibleClass MyButtonAccessibleClass;
 
+
+GType my_button_accessible_get_type (void);
 G_DEFINE_TYPE (MyButtonAccessible, my_button_accessible, GTK_TYPE_BUTTON_ACCESSIBLE)
 
 static void
@@ -43,6 +45,7 @@ my_button_accessible_class_init (MyButtonAccessibleClass *class)
 typedef GtkButton MyButton;
 typedef GtkButtonClass MyButtonClass;
 
+GType my_button_get_type (void);
 G_DEFINE_TYPE (MyButton, my_button, GTK_TYPE_BUTTON)
 
 static void

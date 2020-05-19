@@ -5,6 +5,7 @@ compare_render = executable(
   'compare-render',
   ['compare-render.c', 'reftest-compare.c'],
   dependencies: libgtk_dep,
+  c_args: common_cflags,
   install: get_option('install-tests'),
   install_dir: testexecdir
 )
@@ -13,6 +14,7 @@ node_parser = executable(
   'node-parser',
   ['node-parser.c'],
   dependencies: libgtk_dep,
+  c_args: common_cflags,
   install: get_option('install-tests'),
   install_dir: testexecdir
 )
