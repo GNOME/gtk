@@ -386,6 +386,16 @@ if os_unix
   platform_gio_dep = giounix_dep
 endif
 
+tracker3_enabled = get_option('tracker3')
+if tracker3_enabled
+  tracker3_dep = dependency('tracker-sparql-3.0', required: false)
+  if tracker3_dep.found()
+    cdata.set('HAVE_TRACKER3', tracker3_dep.found())
+  else
+    error('Tracker3 not found, but was explicitly requested.')
+  endif
+endif
+
 if iso_codes_dep.found()
   cdata.set_quoted('ISO_CODES_PREFIX', iso_codes_dep.get_pkgconfig_variable('prefix'))
 else
