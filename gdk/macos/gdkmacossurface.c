@@ -614,8 +614,6 @@ _gdk_macos_surface_update_fullscreen_state (GdkMacosSurface *self)
 void
 _gdk_macos_surface_update_position (GdkMacosSurface *self)
 {
-  GDK_BEGIN_MACOS_ALLOC_POOL;
-
   GdkSurface *surface = GDK_SURFACE (self);
   GdkDisplay *display = gdk_surface_get_display (surface);
   NSRect frame_rect = [self->window frame];
@@ -626,7 +624,8 @@ _gdk_macos_surface_update_position (GdkMacosSurface *self)
                                           content_rect.origin.y + content_rect.size.height,
                                           &surface->x, &surface->y);
 
-  GDK_END_MACOS_ALLOC_POOL;
+  if (GDK_IS_POPUP (self) && self->did_initial_present)
+    g_signal_emit_by_name (self, "popup-layout-changed");
 }
 
 void
@@ -797,6 +796,9 @@ _gdk_macos_surface_move_resize (GdkMacosSurface *self,
 {
   GdkSurface *surface = (GdkSurface *)self;
   GdkDisplay *display;
+  GdkEvent *event;
+  GList *node;
+  gboolean size_changed;
 
   g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
 
@@ -814,6 +816,8 @@ _gdk_macos_surface_move_resize (GdkMacosSurface *self,
   if (height == -1)
     height = surface->height;
 
+  size_changed = height != surface->height || width != surface->width;
+
   surface->x = x;
   surface->y = y;
 
@@ -823,11 +827,8 @@ _gdk_macos_surface_move_resize (GdkMacosSurface *self,
   [self->window setFrame:NSMakeRect(x, y - height, width, height)
                  display:YES];
 
-  if (surface->width != width || surface->height != height)
+  if (size_changed)
     {
-      GdkEvent *event;
-      GList *node;
-
       gdk_surface_invalidate_rect (surface, NULL);
 
       event = gdk_configure_event_new (surface, width, height);
