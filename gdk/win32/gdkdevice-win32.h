@@ -45,10 +45,9 @@ struct _GdkDeviceWin32Class
 GType gdk_device_win32_get_type (void) G_GNUC_CONST;
 
 GdkSurface *_gdk_device_win32_surface_at_position (GdkDevice       *device,
-                                                 gdouble         *win_x,
-                                                 gdouble         *win_y,
-                                                 GdkModifierType *mask,
-                                                 gboolean         get_toplevel);
+                                                   gdouble         *win_x,
+                                                   gdouble         *win_y,
+                                                   GdkModifierType *mask);
 
 G_END_DECLS
 

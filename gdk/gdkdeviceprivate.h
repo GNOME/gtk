@@ -105,8 +105,7 @@ struct _GdkDeviceClass
   GdkSurface * (* surface_at_position) (GdkDevice       *device,
                                         double          *win_x,
                                         double          *win_y,
-                                        GdkModifierType *mask,
-                                        gboolean         get_toplevel);
+                                        GdkModifierType *mask);
 };
 
 void  _gdk_device_set_associated_device (GdkDevice *device,
@@ -167,8 +166,7 @@ void _gdk_device_query_state                  (GdkDevice        *device,
 GdkSurface * _gdk_device_surface_at_position  (GdkDevice        *device,
                                                gdouble          *win_x,
                                                gdouble          *win_y,
-                                               GdkModifierType  *mask,
-                                               gboolean          get_toplevel);
+                                               GdkModifierType  *mask);
 
 void  gdk_device_set_seat  (GdkDevice *device,
                             GdkSeat   *seat);
