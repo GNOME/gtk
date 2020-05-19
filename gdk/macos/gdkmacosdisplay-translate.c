@@ -1199,3 +1199,25 @@ _gdk_macos_display_synthesize_motion (GdkMacosDisplay *self,
   node = _gdk_event_queue_append (GDK_DISPLAY (self), event);
   _gdk_windowing_got_event (GDK_DISPLAY (self), node, event, 0);
 }
+
+void
+_gdk_macos_display_send_button_event (GdkMacosDisplay *self,
+                                      NSEvent         *nsevent)
+{
+  GdkMacosSurface *surface;
+  GdkEvent *event;
+  int x;
+  int y;
+
+  g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
+  g_return_if_fail (nsevent != NULL);
+
+  if (!(surface = find_surface_for_ns_event (self, nsevent, &x, &y)))
+    return;
+
+  event = fill_button_event (self, surface, nsevent, x, y);
+  _gdk_windowing_got_event (GDK_DISPLAY (self),
+                            _gdk_event_queue_append (GDK_DISPLAY (self), event),
+                            event,
+                            0);
+}

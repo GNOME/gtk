@@ -143,6 +143,8 @@ void             _gdk_macos_display_surface_became_key             (GdkMacosDisp
 int              _gdk_macos_display_get_nominal_refresh_rate       (GdkMacosDisplay *self);
 void             _gdk_macos_display_clear_sorting                  (GdkMacosDisplay *self);
 const GList     *_gdk_macos_display_get_surfaces                   (GdkMacosDisplay *self);
+void             _gdk_macos_display_send_button_event              (GdkMacosDisplay *self,
+                                                                    NSEvent         *nsevent);
 
 G_END_DECLS
 
