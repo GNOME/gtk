@@ -25,65 +25,19 @@ on top of the Win32 API. When compiling GTK on Windows, this backend is
 the default.
 </para>
 
-<refsect2 id="win32-cmdline">
-<title>Windows-specific commandline options</title>
-
-<para>
-The Windows GDK backend can be influenced with some
-additional command line arguments.
-</para>
-
-<formalpara>
-<title><systemitem>--sync</systemitem></title>
-
-<para>
-Don't batch GDI requests. This might be a marginally useful option for 
-debugging.
-</para>
-</formalpara>
-
-<formalpara>
-<title><systemitem>--no-wintab</systemitem>, 
-       <systemitem>--ignore-wintab</systemitem></title>
-
-<para>
-Don't use the Wintab API for tablet support.
-</para>
-</formalpara>
-
-<formalpara>
-<title><systemitem>--use-wintab</systemitem></title>
-
-<para>
-Use the Wintab API for tablet support.  This is the default.
-</para>
-</formalpara>
-
-<formalpara>
-<title><systemitem>--max-colors <replaceable>number</replaceable></systemitem></title>
-
-<para>
-In 256 color mode, restrict the size of the color palette to 
-the specified number of colors. This option is obsolete.
-</para>
-</formalpara>
-
-</refsect2>
-
 <refsect2 id="win32-envar">
 <title>Windows-specific environment variables</title>
 
 <para>
-The Win32 GDK backend can be influenced with some
-additional environment variables.
+The Win32 GDK backend can be influenced with some additional environment
+variables.
 </para>
 
 <formalpara>
 <title><envar>GDK_IGNORE_WINTAB</envar></title>
 
 <para>
-If this variable is set, GTK doesn't use 
-the Wintab API for tablet support.
+If this variable is set, GTK doesn't use the Wintab API for tablet support.
 </para>
 </formalpara>
 
@@ -91,17 +45,8 @@ the Wintab API for tablet support.
 <title><envar>GDK_USE_WINTAB</envar></title>
 
 <para>
-If this variable is set, GTK uses the Wintab API for 
-tablet support.  This is the default.
-</para>
-</formalpara>
-
-<formalpara>
-<title><envar>GDK_WIN32_MAX_COLORS</envar></title>
-
-<para>
-Specifies the size of the color palette used
-in 256 color mode.
+If this variable is set, GTK uses the Wintab API for tablet support.
+This is the default.
 </para>
 </formalpara>
 
@@ -120,7 +65,9 @@ When any other cursor theme is used, GTK will prefer cursors from that theme,
 falling back to Windows cursors and built-in X cursors.
 </para>
 <para>
-Theme can be changed by setting <literal>gtk-cursor-theme-name</literal> GTK setting. Users can override GTK settings in the <filename>settings.ini</filename> file or at runtime in the GTK Inspector.
+Theme can be changed by setting <literal>gtk-cursor-theme-name</literal> GTK
+setting. Users can override GTK settings in the <filename>settings.ini</filename>
+file or at runtime in the GTK Inspector.
 </para>
 <para>
 Themes are loaded from normal Windows variants of the XDG locations:
@@ -129,7 +76,8 @@ Themes are loaded from normal Windows variants of the XDG locations:
 <filename>RUNTIME_PREFIX/share/icons/THEME/cursors</filename>.
 </para>
 <para>
-The <literal>gtk-cursor-theme-size</literal> setting is ignored, GTK will use the cursor size that Windows tells it to use.
+The <literal>gtk-cursor-theme-size</literal> setting is ignored, GTK will use
+the cursor size that Windows tells it to use.
 </para>
 
 </refsect2>
