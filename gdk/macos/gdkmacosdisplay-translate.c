@@ -781,15 +781,15 @@ get_surface_from_ns_event (GdkMacosDisplay *self,
                            int             *y)
 {
   GdkSurface *surface = NULL;
+  NSWindow *nswindow = [nsevent window];
 
-  if ([nsevent window])
+  if (nswindow)
     {
       GdkMacosBaseView *view;
       NSPoint point, view_point;
       NSRect view_frame;
 
-      view = (GdkMacosBaseView *)[[nsevent window] contentView];
-
+      view = (GdkMacosBaseView *)[nswindow contentView];
       surface = GDK_SURFACE ([view gdkSurface]);
 
       point = [nsevent locationInWindow];
@@ -814,6 +814,8 @@ get_surface_from_ns_event (GdkMacosDisplay *self,
            view_point.y < view_frame.origin.y ||
            view_point.y >= view_frame.origin.y + view_frame.size.height))
         {
+          NSRect windowRect = [nswindow frame];
+
           surface = NULL;
 
           /* This is a hack for button presses to break all grabs. E.g. if
@@ -826,6 +828,17 @@ get_surface_from_ns_event (GdkMacosDisplay *self,
            * here, not very nice.
            */
           _gdk_macos_display_break_all_grabs (self, get_time_from_ns_event (nsevent));
+
+          /* If the X,Y is on the frame itself, then we don't want to discover
+           * the surface under the pointer at all so that we let OS X handle
+           * it instead. We add padding to include resize operations too.
+           */
+          windowRect.origin.x = -GDK_LION_RESIZE;
+          windowRect.origin.y = -GDK_LION_RESIZE;
+          windowRect.size.width += (2 * GDK_LION_RESIZE);
+          windowRect.size.height += (2 * GDK_LION_RESIZE);
+          if (NSPointInRect (point, windowRect))
+            return NULL;
         }
       else
         {
