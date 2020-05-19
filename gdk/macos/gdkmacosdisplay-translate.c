@@ -1212,12 +1212,10 @@ _gdk_macos_display_send_button_event (GdkMacosDisplay *self,
   g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
   g_return_if_fail (nsevent != NULL);
 
-  if (!(surface = find_surface_for_ns_event (self, nsevent, &x, &y)))
-    return;
-
-  event = fill_button_event (self, surface, nsevent, x, y);
-  _gdk_windowing_got_event (GDK_DISPLAY (self),
-                            _gdk_event_queue_append (GDK_DISPLAY (self), event),
-                            event,
-                            0);
+  if ((surface = find_surface_for_ns_event (self, nsevent, &x, &y)) &&
+      (event = fill_button_event (self, surface, nsevent, x, y)))
+    _gdk_windowing_got_event (GDK_DISPLAY (self),
+                              _gdk_event_queue_append (GDK_DISPLAY (self), event),
+                              event,
+                              _gdk_display_get_next_serial (GDK_DISPLAY (self)));
 }
