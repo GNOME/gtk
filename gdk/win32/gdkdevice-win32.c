@@ -177,10 +177,9 @@ screen_to_client (HWND hwnd, POINT screen_pt, POINT *client_pt)
 
 GdkSurface *
 _gdk_device_win32_surface_at_position (GdkDevice       *device,
-                                      gdouble         *win_x,
-                                      gdouble         *win_y,
-                                      GdkModifierType *mask,
-                                      gboolean         get_toplevel)
+                                       gdouble         *win_x,
+                                       gdouble         *win_y,
+                                       GdkModifierType *mask)
 {
   GdkSurface *window = NULL;
   GdkWin32Surface *impl = NULL;

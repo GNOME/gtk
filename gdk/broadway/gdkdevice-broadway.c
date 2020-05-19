@@ -54,8 +54,7 @@ static void          gdk_broadway_device_ungrab (GdkDevice     *device,
 static GdkSurface * gdk_broadway_device_surface_at_position (GdkDevice       *device,
                                                              gdouble         *win_x,
                                                              gdouble         *win_y,
-                                                             GdkModifierType *mask,
-                                                             gboolean         get_toplevel);
+                                                             GdkModifierType *mask);
 
 
 G_DEFINE_TYPE (GdkBroadwayDevice, gdk_broadway_device, GDK_TYPE_DEVICE)
@@ -292,8 +291,7 @@ static GdkSurface *
 gdk_broadway_device_surface_at_position (GdkDevice       *device,
                                          gdouble         *win_x,
                                          gdouble         *win_y,
-                                         GdkModifierType *mask,
-                                         gboolean         get_toplevel)
+                                         GdkModifierType *mask)
 {
   GdkSurface *surface = NULL;
 
