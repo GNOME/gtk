@@ -36,7 +36,7 @@ additional environment variables.
   <title><envar>GTK_DEBUG</envar></title>
 
   <para>
-  Unless GTK has been configured with <option>--enable-debug=no</option>,
+  Unless GTK has been configured with <option>-Ddebug=false</option>,
   this variable can be set to a list of debug options, which cause GTK
   to print out different types of debugging information.
   <variablelist>
@@ -237,7 +237,7 @@ nevertheless.
   <title><envar>GDK_DEBUG</envar></title>
 
   <para>
-  If GTK has been configured with <option>--enable-debug=yes</option>,
+  Unless GTK has been configured with <option>-Ddebug=false</option>,
   this variable can be set to a list of debug options, which cause GDK
   to print out different types of debugging information.
   <variablelist>
@@ -327,7 +327,7 @@ nevertheless.
   <title><envar>GSK_DEBUG</envar></title>
 
   <para>
-  If GTK has been configured with <option>--enable-debug=yes</option>,
+  Unless GTK has been configured with <option>-Ddebug=false</option>,
   this variable can be set to a list of debug options, which cause GSK
   to print out different types of debugging information.
   <variablelist>
@@ -432,11 +432,11 @@ nevertheless.
       </varlistentry>
 
     </variablelist>
-    Since 3.10, this environment variable can contain a comma-separated list
-    of backend names, which are tried in order. The list may also contain
-    a *, which means: try all remaining backends. The special value "help" can
-    be used to make GDK print out a list of all available backends.
-    For more information about selecting backends, see the gdk_display_manager_get() function.
+    This environment variable can contain a comma-separated list of backend names,
+    which are tried in order. The list may also contain a *, which means: try all
+    remaining backends. The special value "help" can be used to make GDK print out
+    a list of all available backends. For more information about selecting backends,
+    see the gdk_display_manager_get() function.
   </para>
 </formalpara>
 
