@@ -246,8 +246,6 @@ typedef struct
   GdkSurface  *surface;
   GskRenderer *renderer;
 
-  cairo_region_t *extra_input_region;
-
   GList *foci;
 
   GtkConstraintSolver *constraint_solver;
@@ -3689,7 +3687,6 @@ gtk_window_finalize (GObject *object)
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GdkSeat *seat;
 
-  g_clear_pointer (&priv->extra_input_region, cairo_region_destroy);
   g_free (priv->title);
   gtk_window_release_application (window);
 
