@@ -4700,67 +4700,6 @@ gtk_window_size_allocate (GtkWidget *widget,
   gtk_tooltip_maybe_allocate (GTK_NATIVE (widget));
 }
 
-gboolean
-gtk_window_configure (GtkWindow *window,
-                      guint      width,
-                      guint      height)
-{
-  GtkAllocation allocation;
-  GtkWidget *widget = GTK_WIDGET (window);
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  check_scale_changed (window);
-
-  /* If this is a gratuitous ConfigureNotify that's already
-   * the same as our allocation, then we can fizzle it out.
-   * This is the case for dragging windows around.
-   *
-   * We can't do this for a ConfigureRequest, since it might
-   * have been a queued resize from child widgets, and so we
-   * need to reallocate our children in case *they* changed.
-   */
-  gtk_widget_get_allocation (widget, &allocation);
-  if (priv->configure_request_count == 0 &&
-      (allocation.width == width && allocation.height == height))
-    {
-      return TRUE;
-    }
-
-  /* priv->configure_request_count incremented for each
-   * configure request, and decremented to a min of 0 for
-   * each configure notify.
-   *
-   * All it means is that we know we will get at least
-   * priv->configure_request_count more configure notifies.
-   * We could get more configure notifies than that; some
-   * of the configure notifies we get may be unrelated to
-   * the configure requests. But we will get at least
-   * priv->configure_request_count notifies.
-   */
-
-  if (priv->configure_request_count > 0)
-    {
-      priv->configure_request_count -= 1;
-
-      gdk_surface_thaw_toplevel_updates (priv->surface);
-    }
-
-  /*
-   * If we do need to resize, we do that by:
-   *   - setting configure_notify_received to TRUE
-   *     for use in gtk_window_move_resize()
-   *   - queueing a resize, leading to invocation of
-   *     gtk_window_move_resize() in an idle handler
-   *
-   */
-  
-  priv->configure_notify_received = TRUE;
-
-  gtk_widget_queue_allocate (widget);
-  
-  return TRUE;
-}
-
 static void
 update_edge_constraints (GtkWindow      *window,
                          GdkSurfaceState  state)
@@ -4832,7 +4771,40 @@ surface_size_changed (GtkWidget *widget,
                       int        width,
                       int        height)
 {
-  gtk_window_configure (GTK_WINDOW (widget), width, height);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (widget));
+
+  check_scale_changed (GTK_WINDOW (widget));
+
+  /* priv->configure_request_count incremented for each
+   * configure request, and decremented to a min of 0 for
+   * each configure notify.
+   *
+   * All it means is that we know we will get at least
+   * priv->configure_request_count more configure notifies.
+   * We could get more configure notifies than that; some
+   * of the configure notifies we get may be unrelated to
+   * the configure requests. But we will get at least
+   * priv->configure_request_count notifies.
+   */
+
+  if (priv->configure_request_count > 0)
+    {
+      priv->configure_request_count -= 1;
+
+      gdk_surface_thaw_toplevel_updates (priv->surface);
+    }
+
+  /*
+   * If we do need to resize, we do that by:
+   *   - setting configure_notify_received to TRUE
+   *     for use in gtk_window_move_resize()
+   *   - queueing a resize, leading to invocation of
+   *     gtk_window_move_resize() in an idle handler
+   *
+   */
+  priv->configure_notify_received = TRUE;
+
+  gtk_widget_queue_allocate (widget);
 }
 
 static gboolean
