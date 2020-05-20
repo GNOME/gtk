@@ -144,6 +144,25 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
   else
     _gdk_macos_toplevel_surface_unfullscreen (self);
 
+  if (GDK_SURFACE (self)->transient_for != NULL)
+    {
+    }
+  else
+    {
+      if (!self->decorated &&
+          !GDK_MACOS_SURFACE (self)->did_initial_present &&
+          GDK_SURFACE (self)->x == 0 &&
+          GDK_SURFACE (self)->y == 0 &&
+          (GDK_MACOS_SURFACE (self)->shadow_left ||
+           GDK_MACOS_SURFACE (self)->shadow_top))
+        {
+          int x = GDK_SURFACE (self)->x - GDK_MACOS_SURFACE (self)->shadow_left;
+          int y = GDK_SURFACE (self)->y - GDK_MACOS_SURFACE (self)->shadow_top;
+
+          _gdk_macos_surface_move (GDK_MACOS_SURFACE (self), x, y);
+        }
+    }
+
   _gdk_macos_surface_show (GDK_MACOS_SURFACE (self));
 
   GDK_MACOS_SURFACE (self)->did_initial_present = TRUE;
