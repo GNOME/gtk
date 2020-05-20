@@ -846,13 +846,13 @@ _gdk_macos_display_get_surface_at_coords (GdkMacosDisplay *self,
 
       nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (surface));
 
-      if (x >= surface->x &&
-          y >= surface->y &&
+      if (x >= GDK_MACOS_SURFACE (surface)->root_x &&
+          y >= GDK_MACOS_SURFACE (surface)->root_y &&
           x <= (surface->x + surface->width) &&
           y <= (surface->y + surface->height))
         {
-          *surface_x = x - surface->x;
-          *surface_y = y - surface->y;
+          *surface_x = x - GDK_MACOS_SURFACE (surface)->root_x;
+          *surface_y = y - GDK_MACOS_SURFACE (surface)->root_y;
 
           return GDK_MACOS_SURFACE (surface);
         }
