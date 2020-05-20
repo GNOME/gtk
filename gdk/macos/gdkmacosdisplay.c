@@ -802,12 +802,17 @@ _gdk_macos_display_break_all_grabs (GdkMacosDisplay *self,
 
       if (grab != NULL)
         {
-          grab->serial_end = 0;
-          grab->implicit_ungrab = TRUE;
-        }
+          GdkEvent *event;
+          GList *node;
 
-      _gdk_display_end_device_grab (GDK_DISPLAY (self), device, 0, NULL, TRUE);
-      _gdk_display_device_grab_update (GDK_DISPLAY (self), device, NULL, 0);
+          event = gdk_grab_broken_event_new (grab->surface,
+                                             device,
+                                             NULL,
+                                             grab->surface,
+                                             TRUE);
+          node = _gdk_event_queue_append (GDK_DISPLAY (self), event);
+          _gdk_windowing_got_event (GDK_DISPLAY (self), node, event, 0);
+        }
     }
 }
 
