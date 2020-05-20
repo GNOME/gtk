@@ -39,7 +39,7 @@
 #include "gdkmacostoplevelsurface-private.h"
 #include "gdkmacosutils-private.h"
 
-G_DEFINE_TYPE (GdkMacosSurface, gdk_macos_surface, GDK_TYPE_SURFACE)
+G_DEFINE_ABSTRACT_TYPE (GdkMacosSurface, gdk_macos_surface, GDK_TYPE_SURFACE)
 
 enum {
   PROP_0,
