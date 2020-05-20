@@ -31,6 +31,10 @@
 struct _GdkQuartzDeviceCore
 {
   GdkDevice parent_instance;
+
+  gboolean active;
+  NSUInteger device_id;
+  unsigned long long unique_id;
 };
 
 struct _GdkQuartzDeviceCoreClass
@@ -363,4 +367,38 @@ gdk_quartz_device_core_select_window_events (GdkDevice    *device,
                                              GdkEventMask  event_mask)
 {
   /* The mask is set in the common code. */
+}
+
+void
+gdk_quartz_device_core_set_active(GdkDevice *device,
+                                  gboolean   active,
+                                  NSUInteger device_id)
+{
+  GDK_QUARTZ_DEVICE_CORE(device)->active = active;
+  GDK_QUARTZ_DEVICE_CORE(device)->device_id = device_id;
+}
+
+gboolean
+gdk_quartz_device_core_is_active(GdkDevice *device,
+                                 NSUInteger device_id)
+{
+  if (GDK_QUARTZ_DEVICE_CORE(device)->active &&
+      GDK_QUARTZ_DEVICE_CORE(device)->device_id == device_id)
+    {
+      return TRUE;
+    }
+  return FALSE;
+}
+
+void
+gdk_quartz_device_core_set_unique(GdkDevice *device,
+                                  unsigned long long unique_id)
+{
+  GDK_QUARTZ_DEVICE_CORE(device)->unique_id = unique_id;
+}
+
+unsigned long long
+gdk_quartz_device_core_get_unique(GdkDevice *device)
+{
+  return GDK_QUARTZ_DEVICE_CORE(device)->unique_id;
 }
