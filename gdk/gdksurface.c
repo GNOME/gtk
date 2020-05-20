@@ -578,7 +578,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   /**
    * GdkSurface::event:
    * @surface: the #GdkSurface
-   * @event: an input event
+   * @event: (type Gdk.Event): an input event
    *
    * Emitted when GDK receives an input event for @surface.
    *
