@@ -69,8 +69,8 @@ gdk_macos_popup_surface_layout (GdkMacosPopupSurface *self,
                                     y,
                                     final_rect.width,
                                     final_rect.height);
-  else if (x != GDK_SURFACE (self)->x ||
-           y != GDK_SURFACE (self)->y)
+  else if (x != GDK_MACOS_SURFACE (self)->root_x ||
+           y != GDK_MACOS_SURFACE (self)->root_y)
     _gdk_macos_surface_move (GDK_MACOS_SURFACE (self), x, y);
   else
     return;
