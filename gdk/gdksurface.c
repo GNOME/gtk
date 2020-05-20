@@ -2118,6 +2118,9 @@ gdk_surface_set_input_region (GdkSurface     *surface,
   if (GDK_SURFACE_DESTROYED (surface))
     return;
 
+  if (cairo_region_equal (surface->input_region, region))
+    return;
+
   if (surface->input_region)
     cairo_region_destroy (surface->input_region);
 
@@ -2701,6 +2704,12 @@ gdk_surface_set_shadow_width (GdkSurface *surface,
   g_return_if_fail (GDK_IS_SURFACE (surface));
   g_return_if_fail (!GDK_SURFACE_DESTROYED (surface));
   g_return_if_fail (left >= 0 && right >= 0 && top >= 0 && bottom >= 0);
+
+  if (surface->shadow_left == left &&
+      surface->shadow_right == right &&
+      surface->shadow_top == top &&
+      surface->shadow_bottom == bottom)
+    return;
 
   surface->shadow_top = top;
   surface->shadow_left = left;
