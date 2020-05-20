@@ -192,21 +192,13 @@
 -(void)windowDidMove:(NSNotification *)aNotification
 {
   GdkSurface *surface = GDK_SURFACE (gdk_surface);
-  GdkDisplay *display = gdk_surface_get_display (surface);
   gboolean maximized = (surface->state & GDK_SURFACE_STATE_MAXIMIZED) != 0;
-  GdkEvent *event;
-  GList *node;
 
   /* In case the window is changed when maximized remove the maximized state */
   if (maximized && !inMaximizeTransition && !NSEqualRects (lastMaximizedFrame, [self frame]))
     gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_MAXIMIZED, 0);
 
   _gdk_macos_surface_update_position (gdk_surface);
-
-  event = gdk_configure_event_new (surface, surface->width, surface->height);
-  node = _gdk_event_queue_append (GDK_DISPLAY (display), event);
-  _gdk_windowing_got_event (display, node, event,
-                            _gdk_display_get_next_serial (display));
 
   [self checkSendEnterNotify];
 }
