@@ -51,14 +51,13 @@
 #include "gtkpointerfocusprivate.h"
 #include "gtkprivate.h"
 #include "gtkroot.h"
-#include "gtknative.h"
+#include "gtknativeprivate.h"
 #include "gtksettings.h"
 #include "gtkshortcut.h"
 #include "gtkshortcutcontroller.h"
 #include "gtkshortcutmanager.h"
 #include "gtkshortcuttrigger.h"
 #include "gtksnapshot.h"
-#include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowgroup.h"
@@ -516,9 +515,6 @@ static void             gtk_window_native_interface_init  (GtkNativeInterface  *
 
 static void ensure_state_flag_backdrop (GtkWidget *widget);
 static void unset_titlebar (GtkWindow *window);
-static GtkWindowRegion get_active_region_type (GtkWindow   *window,
-                                               gint         x,
-                                               gint         y);
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_WIDGET,
@@ -1184,6 +1180,142 @@ gtk_window_close (GtkWindow *window)
   g_object_unref (window);
 }
 
+static guint
+constraints_for_edge (GdkSurfaceEdge edge)
+{
+  switch (edge)
+    {
+    case GDK_SURFACE_EDGE_NORTH_WEST:
+      return GDK_SURFACE_STATE_LEFT_RESIZABLE | GDK_SURFACE_STATE_TOP_RESIZABLE;
+    case GDK_SURFACE_EDGE_NORTH:
+      return GDK_SURFACE_STATE_TOP_RESIZABLE;
+    case GDK_SURFACE_EDGE_NORTH_EAST:
+      return GDK_SURFACE_STATE_RIGHT_RESIZABLE | GDK_SURFACE_STATE_TOP_RESIZABLE;
+    case GDK_SURFACE_EDGE_WEST:
+      return GDK_SURFACE_STATE_LEFT_RESIZABLE;
+    case GDK_SURFACE_EDGE_EAST:
+      return GDK_SURFACE_STATE_RIGHT_RESIZABLE;
+    case GDK_SURFACE_EDGE_SOUTH_WEST:
+      return GDK_SURFACE_STATE_LEFT_RESIZABLE | GDK_SURFACE_STATE_BOTTOM_RESIZABLE;
+    case GDK_SURFACE_EDGE_SOUTH:
+      return GDK_SURFACE_STATE_BOTTOM_RESIZABLE;
+    case GDK_SURFACE_EDGE_SOUTH_EAST:
+      return GDK_SURFACE_STATE_RIGHT_RESIZABLE | GDK_SURFACE_STATE_BOTTOM_RESIZABLE;
+    default:
+      g_warn_if_reached ();
+      return 0;
+    }
+}
+
+static gint
+get_number (GtkCssValue *value)
+{
+  double d = _gtk_css_number_value_get (value, 100);
+
+  if (d < 1)
+    return ceil (d);
+  else
+    return floor (d);
+}
+
+static void
+get_box_border (GtkCssStyle *style,
+                GtkBorder   *border)
+{
+  border->top = get_number (style->border->border_top_width);
+  border->left = get_number (style->border->border_left_width);
+  border->bottom = get_number (style->border->border_bottom_width);
+  border->right = get_number (style->border->border_right_width);
+}
+
+static int
+get_edge_for_coordinates (GtkWindow *window,
+                          double     x,
+                          double     y)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  gboolean supports_edge_constraints;
+  GtkBorder handle_size;
+  GtkCssBoxes css_boxes;
+  const graphene_rect_t *border_rect;
+  float left, top;
+
+#define edge_or_minus_one(edge) ((supports_edge_constraints && (priv->edge_constraints & constraints_for_edge (edge)) != constraints_for_edge (edge)) ? -1 : edge)
+
+  if (!priv->client_decorated ||
+      !priv->resizable ||
+      priv->fullscreen ||
+      priv->maximized)
+    return -1;
+
+  supports_edge_constraints = gdk_toplevel_supports_edge_constraints (GDK_TOPLEVEL (priv->surface));
+
+  if (!supports_edge_constraints && priv->tiled)
+    return -1;
+
+  gtk_css_boxes_init (&css_boxes, GTK_WIDGET (window));
+  border_rect = gtk_css_boxes_get_padding_rect (&css_boxes);
+
+  if (priv->use_client_shadow)
+    {
+      /* We use a maximum of RESIZE_HANDLE_SIZE pixels for the handle size */
+      GtkBorder shadow;
+
+      get_shadow_width (window, &shadow);
+      /* This logic is duplicated in update_realized_window_properties() */
+      handle_size.left = MIN (RESIZE_HANDLE_SIZE, shadow.left);
+      handle_size.top = MIN (RESIZE_HANDLE_SIZE, shadow.top);
+      handle_size.right = MIN (RESIZE_HANDLE_SIZE, shadow.right);
+      handle_size.bottom = MIN (RESIZE_HANDLE_SIZE, shadow.bottom);
+    }
+  else
+    {
+      /* Use border */
+      get_box_border (gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (window))),
+                      &handle_size);
+    }
+
+  left = border_rect->origin.x;
+  top = border_rect->origin.y;
+
+  if (x < left && x >= left - handle_size.left)
+    {
+      if (y < top && y >= top - handle_size.top)
+        return edge_or_minus_one (GDK_SURFACE_EDGE_NORTH_WEST);
+
+      if (y > top + border_rect->size.height &&
+          y <= top + border_rect->size.height + handle_size.bottom)
+        return edge_or_minus_one (GDK_SURFACE_EDGE_SOUTH_WEST);
+
+      return edge_or_minus_one (GDK_SURFACE_EDGE_WEST);
+    }
+  else if (x > left + border_rect->size.width &&
+           x <= left + border_rect->size.width + handle_size.right)
+    {
+      if (y < top && y >= top - handle_size.top)
+        return edge_or_minus_one (GDK_SURFACE_EDGE_NORTH_EAST);
+
+      if (y > top + border_rect->size.height &&
+          y <= top + border_rect->size.height + handle_size.bottom)
+        return edge_or_minus_one (GDK_SURFACE_EDGE_SOUTH_EAST);
+
+      return edge_or_minus_one (GDK_SURFACE_EDGE_EAST);
+    }
+
+  if (y < top && y >= top - handle_size.top)
+    {
+      /* NORTH_EAST is handled elsewhere */
+      return edge_or_minus_one (GDK_SURFACE_EDGE_NORTH);
+    }
+  else if (y > top + border_rect->size.height &&
+           y <= top + border_rect->size.height + handle_size.bottom)
+    {
+      return edge_or_minus_one (GDK_SURFACE_EDGE_SOUTH);
+    }
+
+  return -1;
+}
+
 static void
 click_gesture_pressed_cb (GtkGestureClick *gesture,
                           gint             n_press,
@@ -1198,6 +1330,7 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
   GdkDevice *device;
   guint button;
   double tx, ty;
+  int edge;
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
@@ -1216,10 +1349,15 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
   if (gdk_display_device_is_grabbed (gtk_widget_get_display (GTK_WIDGET (window)), device))
     return;
 
-  region = get_active_region_type (window, x, y);
-
-  if (region == GTK_WINDOW_REGION_CONTENT)
+  if (!priv->client_decorated)
     return;
+
+  edge = get_edge_for_coordinates (window, x, y);
+
+  if (edge == -1)
+    return;
+
+  region = (GtkWindowRegion)edge;
 
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
@@ -1260,182 +1398,30 @@ device_removed_cb (GdkSeat   *seat,
     }
 }
 
-static guint
-constraints_for_edge (GdkSurfaceEdge edge)
-{
-  switch (edge)
-    {
-    case GDK_SURFACE_EDGE_NORTH_WEST:
-      return GDK_SURFACE_STATE_LEFT_RESIZABLE | GDK_SURFACE_STATE_TOP_RESIZABLE;
-    case GDK_SURFACE_EDGE_NORTH:
-      return GDK_SURFACE_STATE_TOP_RESIZABLE;
-    case GDK_SURFACE_EDGE_NORTH_EAST:
-      return GDK_SURFACE_STATE_RIGHT_RESIZABLE | GDK_SURFACE_STATE_TOP_RESIZABLE;
-    case GDK_SURFACE_EDGE_WEST:
-      return GDK_SURFACE_STATE_LEFT_RESIZABLE;
-    case GDK_SURFACE_EDGE_EAST:
-      return GDK_SURFACE_STATE_RIGHT_RESIZABLE;
-    case GDK_SURFACE_EDGE_SOUTH_WEST:
-      return GDK_SURFACE_STATE_LEFT_RESIZABLE | GDK_SURFACE_STATE_BOTTOM_RESIZABLE;
-    case GDK_SURFACE_EDGE_SOUTH:
-      return GDK_SURFACE_STATE_BOTTOM_RESIZABLE;
-    case GDK_SURFACE_EDGE_SOUTH_EAST:
-      return GDK_SURFACE_STATE_RIGHT_RESIZABLE | GDK_SURFACE_STATE_BOTTOM_RESIZABLE;
-    default:
-      g_warn_if_reached ();
-      return 0;
-    }
-}
-
-static gboolean
-edge_under_coordinates (GtkWindow     *window,
-                        gint           x,
-                        gint           y,
-                        GdkSurfaceEdge  edge)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkAllocation allocation;
-  GtkStyleContext *context;
-  gint handle_v, handle_h;
-  GtkBorder border;
-  gboolean supports_edge_constraints;
-  guint constraints;
-
-  if (!priv->client_decorated ||
-      !priv->resizable ||
-      priv->fullscreen ||
-      priv->maximized)
-    return FALSE;
-
-  supports_edge_constraints = gdk_toplevel_supports_edge_constraints (GDK_TOPLEVEL (priv->surface));
-  constraints = constraints_for_edge (edge);
-
-  if (!supports_edge_constraints && priv->tiled)
-    return FALSE;
-
-  if (supports_edge_constraints &&
-      (priv->edge_constraints & constraints) != constraints)
-    return FALSE;
-
-  gtk_widget_get_allocation (GTK_WIDGET (window), &allocation);
-  context = _gtk_widget_get_style_context (GTK_WIDGET (window));
-  /*gtk_style_context_save_to_node (context, priv->decoration_node);*/
-
-  if (priv->use_client_shadow)
-    {
-      handle_h = MIN (RESIZE_HANDLE_SIZE, allocation.width / 2);
-      handle_v = MIN (RESIZE_HANDLE_SIZE, allocation.height / 2);
-      get_shadow_width (window, &border);
-    }
-  else
-    {
-      handle_h = 0;
-      handle_v = 0;
-      gtk_style_context_get_padding (context, &border);
-    }
-
-  /*gtk_style_context_restore (context);*/
-
-  /* Check whether the click falls outside the handle area */
-  if (x >= allocation.x + border.left &&
-      x < allocation.x + allocation.width - border.right &&
-      y >= allocation.y + border.top &&
-      y < allocation.y + allocation.height - border.bottom)
-    return FALSE;
-
-  /* Check X axis */
-  if (x < allocation.x + border.left + handle_h)
-    {
-      if (edge != GDK_SURFACE_EDGE_NORTH_WEST &&
-          edge != GDK_SURFACE_EDGE_WEST &&
-          edge != GDK_SURFACE_EDGE_SOUTH_WEST &&
-          edge != GDK_SURFACE_EDGE_NORTH &&
-          edge != GDK_SURFACE_EDGE_SOUTH)
-        return FALSE;
-
-      if ((edge == GDK_SURFACE_EDGE_NORTH ||
-           edge == GDK_SURFACE_EDGE_SOUTH) &&
-          (priv->edge_constraints & constraints_for_edge (GDK_SURFACE_EDGE_WEST)))
-        return FALSE;
-    }
-  else if (x >= allocation.x + allocation.width - border.right - handle_h)
-    {
-      if (edge != GDK_SURFACE_EDGE_NORTH_EAST &&
-          edge != GDK_SURFACE_EDGE_EAST &&
-          edge != GDK_SURFACE_EDGE_SOUTH_EAST &&
-          edge != GDK_SURFACE_EDGE_NORTH &&
-          edge != GDK_SURFACE_EDGE_SOUTH)
-        return FALSE;
-
-      if ((edge == GDK_SURFACE_EDGE_NORTH ||
-           edge == GDK_SURFACE_EDGE_SOUTH) &&
-          (priv->edge_constraints & constraints_for_edge (GDK_SURFACE_EDGE_EAST)))
-        return FALSE;
-    }
-  else if (edge != GDK_SURFACE_EDGE_NORTH &&
-           edge != GDK_SURFACE_EDGE_SOUTH)
-    return FALSE;
-
-  /* Check Y axis */
-  if (y < allocation.y + border.top + handle_v)
-    {
-      if (edge != GDK_SURFACE_EDGE_NORTH_WEST &&
-          edge != GDK_SURFACE_EDGE_NORTH &&
-          edge != GDK_SURFACE_EDGE_NORTH_EAST &&
-          edge != GDK_SURFACE_EDGE_EAST &&
-          edge != GDK_SURFACE_EDGE_WEST)
-        return FALSE;
-
-      if ((edge == GDK_SURFACE_EDGE_EAST ||
-           edge == GDK_SURFACE_EDGE_WEST) &&
-          (priv->edge_constraints & constraints_for_edge (GDK_SURFACE_EDGE_NORTH)))
-        return FALSE;
-    }
-  else if (y > allocation.y + allocation.height - border.bottom - handle_v)
-    {
-      if (edge != GDK_SURFACE_EDGE_SOUTH_WEST &&
-          edge != GDK_SURFACE_EDGE_SOUTH &&
-          edge != GDK_SURFACE_EDGE_SOUTH_EAST &&
-          edge != GDK_SURFACE_EDGE_EAST &&
-          edge != GDK_SURFACE_EDGE_WEST)
-        return FALSE;
-
-      if ((edge == GDK_SURFACE_EDGE_EAST ||
-           edge == GDK_SURFACE_EDGE_WEST) &&
-          (priv->edge_constraints & constraints_for_edge (GDK_SURFACE_EDGE_SOUTH)))
-        return FALSE;
-    }
-  else if (edge != GDK_SURFACE_EDGE_WEST &&
-           edge != GDK_SURFACE_EDGE_EAST)
-    return FALSE;
-
-  return TRUE;
-}
-
 static void
 gtk_window_capture_motion (GtkWidget *widget,
-                           gdouble    x,
-                           gdouble    y)
+                           double     x,
+                           double     y)
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  gint i;
-  const gchar *cursor_names[8] = {
+  const char *cursor_names[8] = {
     "nw-resize", "n-resize", "ne-resize",
     "w-resize",               "e-resize",
     "sw-resize", "s-resize", "se-resize"
   };
+  int edge;
+
+  edge = get_edge_for_coordinates (window, x, y);
+  if (edge != -1 &&
+      priv->resize_cursor &&
+      strcmp (gdk_cursor_get_name (priv->resize_cursor), cursor_names[edge]) == 0)
+    return;
 
   g_clear_object (&priv->resize_cursor);
 
-  for (i = 0; i < 8; i++)
-    {
-      if (edge_under_coordinates (GTK_WINDOW (widget), x, y, i))
-        {
-          priv->resize_cursor = gdk_cursor_new_from_name (cursor_names[i], NULL);
-          break;
-        }
-    }
+  if (edge != -1)
+    priv->resize_cursor = gdk_cursor_new_from_name (cursor_names[edge], NULL);
 
   gtk_window_maybe_update_cursor (window, widget, NULL);
 }
@@ -4866,24 +4852,6 @@ surface_event (GdkSurface *surface,
 {
   gtk_main_do_event (event);
   return TRUE;
-}
-
-static GtkWindowRegion
-get_active_region_type (GtkWindow *window, gint x, gint y)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  gint i;
-
-  if (priv->client_decorated)
-    {
-      for (i = 0; i < 8; i++)
-        {
-          if (edge_under_coordinates (window, x, y, i))
-            return i;
-        }
-    }
-
-  return GTK_WINDOW_REGION_CONTENT;
 }
 
 static void
