@@ -50,6 +50,9 @@ struct _GdkMacosSurface
   cairo_region_t *input_region;
   char *title;
 
+  int root_x;
+  int root_y;
+
   int shadow_top;
   int shadow_right;
   int shadow_bottom;
