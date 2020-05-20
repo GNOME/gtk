@@ -165,17 +165,14 @@ compute_smooth_frame_time (GdkFrameClock *clock,
 {
   GdkFrameClockIdlePrivate *priv = GDK_FRAME_CLOCK_IDLE (clock)->priv;
   int frames_passed;
+  gint64 new_smoothed_time;
+  gint64 current_error;
+  gint64 correction_magnitude;
 
   /* Consecutive frame, assume it is an integer number of frames later, so round to nearest such */
   /* NOTE:  This is >= 0, because smoothed_frame_time_base is < frame_interval/2 from old_frame_time
    *        and new_frame_time >= old_frame_time. */
   frames_passed = (new_frame_time - smoothed_frame_time_base  + frame_interval/2) / frame_interval;
-
-  if (frames_passed <= 0) /* The < check is not really necessary per above, but lets be safe */
-    {
-      /* Same frame, but add 1 usec to ensure strictly increasing times (avoiding division by zero) */
-      return priv->smoothed_frame_time_base + 1;
-    }
 
   if (frames_passed > 4)
     {
@@ -183,8 +180,45 @@ compute_smooth_frame_time (GdkFrameClock *clock,
       return new_frame_time;
     }
 
-  /* Regularize to constant frame interval */
-  return smoothed_frame_time_base + frames_passed * frame_interval;
+  /* We use an approximately whole number of frames in the future from
+   * last smoothed frame time. This way we avoid minor jitter in the
+   * frame times making the animation speed uneven, but still animate
+   * evenly in case of whole frame skips. */
+  new_smoothed_time = smoothed_frame_time_base + frames_passed * frame_interval;
+
+  /* However, sometimes the smoothed time is too much off from the
+   * real time. For example, if the first frame clock cycle happened
+   * not due to a frame rendering but an input event, then
+   * new_frame_time could happen to be near the middle between two
+   * frames. If that happens and we then start regularly animating at
+   * the refresh_rate, then the jitter in the real time may cause us
+   * to randomly sometimes round up, and sometimes down.
+   *
+   * To combat this we converge the smooth time towards the real time
+   * in a way that is slow when they are near and fast when they are
+   * far from each other.
+   *
+   * This is done by using the square of the error as the correction
+   * magnitude. I.e. if the error is 0.5 frame, we correct by
+   * 0.5*0.5=0.25 frame, if the error is 0.25 we correct by 0.125, if
+   * the error is 0.1, frame we correct by 0.01 frame, etc.
+   *
+   * The actual computation is:
+   *   (current_error/frame_interval)*(current_error/frame_interval)*frame_interval
+   * But this can be simplified as below.
+   */
+  current_error = new_smoothed_time - new_frame_time;
+  correction_magnitude = current_error * current_error / frame_interval; /* Note, this is always > 0 due to the square */
+  if (current_error > 0)
+    new_smoothed_time -= correction_magnitude;
+  else
+    new_smoothed_time += correction_magnitude;
+
+  /* Ensure we're always strictly increasing (avoid division by zero when using time deltas) */
+  if (new_smoothed_time <= priv->smoothed_frame_time_base)
+    new_smoothed_time = priv->smoothed_frame_time_base + 1;
+
+  return new_smoothed_time;
 }
 
 
