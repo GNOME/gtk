@@ -23,6 +23,8 @@
 #include <gdkdevicemanagerprivate.h>
 #include "gdkquartzdevicemanager-core.h"
 
+#import <Cocoa/Cocoa.h>
+
 G_BEGIN_DECLS
 
 struct _GdkQuartzDeviceManagerCore
@@ -30,12 +32,20 @@ struct _GdkQuartzDeviceManagerCore
   GdkDeviceManager parent_object;
   GdkDevice *core_pointer;
   GdkDevice *core_keyboard;
+  GList *known_tablet_devices;
+  guint num_active_devices;
 };
 
 struct _GdkQuartzDeviceManagerCoreClass
 {
   GdkDeviceManagerClass parent_class;
 };
+
+void       _gdk_quartz_device_manager_register_device_for_ns_event (GdkDeviceManager *device_manager,
+                                                                    NSEvent          *nsevent);
+
+GdkDevice *_gdk_quartz_device_manager_core_device_for_ns_event (GdkDeviceManager *device_manager,
+                                                                NSEvent          *ns_event);
 
 G_END_DECLS
 
