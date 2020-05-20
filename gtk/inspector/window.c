@@ -605,12 +605,15 @@ gtk_inspector_prepare_render (GtkWidget            *widget,
     {
       GtkSnapshot *snapshot;
       GList *l;
+      double native_x, native_y;
 
       snapshot = gtk_snapshot_new ();
       gtk_snapshot_append_node (snapshot, node);
 
+      gtk_native_get_surface_transform (GTK_NATIVE (widget), &native_x, &native_y);
+
       gtk_snapshot_save (snapshot);
-      gtk_snapshot_transform (snapshot, gtk_widget_get_transform (widget));
+      gtk_snapshot_translate (snapshot, &(graphene_point_t) { native_x, native_y });
 
       for (l = iw->overlays; l; l = l->next)
         {
