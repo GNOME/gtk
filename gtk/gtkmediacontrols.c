@@ -51,6 +51,7 @@ struct _GtkMediaControls
   GtkWidget *time_label;
   GtkWidget *seek_scale;
   GtkWidget *duration_label;
+  GtkWidget *volume_button;
 };
 
 enum
@@ -288,6 +289,7 @@ gtk_media_controls_class_init (GtkMediaControlsClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkMediaControls, time_label);
   gtk_widget_class_bind_template_child (widget_class, GtkMediaControls, seek_scale);
   gtk_widget_class_bind_template_child (widget_class, GtkMediaControls, duration_label);
+  gtk_widget_class_bind_template_child (widget_class, GtkMediaControls, volume_button);
 
   gtk_widget_class_bind_template_callback (widget_class, play_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, time_adjustment_changed);
@@ -439,6 +441,10 @@ update_volume (GtkMediaControls *controls)
     volume = gtk_media_stream_get_volume (controls->stream);
 
   gtk_adjustment_set_value (controls->volume_adjustment, volume);
+
+  gtk_widget_set_sensitive (controls->volume_button,
+                            controls->stream == NULL ||
+                            gtk_media_stream_has_audio (controls->stream));
 }
 
 static void
@@ -467,6 +473,8 @@ gtk_media_controls_notify_cb (GtkMediaStream   *stream,
   else if (g_str_equal (pspec->name, "muted"))
     update_volume (controls);
   else if (g_str_equal (pspec->name, "volume"))
+    update_volume (controls);
+  else if (g_str_equal (pspec->name, "has-audio"))
     update_volume (controls);
 }
 
