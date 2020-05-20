@@ -4302,7 +4302,7 @@ corner_rect (cairo_rectangle_int_t *rect,
 static void
 subtract_decoration_corners_from_region (cairo_region_t        *region,
                                          cairo_rectangle_int_t *extents,
-                                         GtkStyleContext       *context,
+                                         GtkCssStyle           *style,
                                          GtkWindow             *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
@@ -4314,29 +4314,25 @@ subtract_decoration_corners_from_region (cairo_region_t        *region,
       priv->maximized)
     return;
 
-  /*gtk_style_context_save_to_node (context, priv->decoration_node);*/
-
-  corner_rect (&rect, _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS));
+  corner_rect (&rect, style->border->border_top_left_radius);
   rect.x = extents->x;
   rect.y = extents->y;
   cairo_region_subtract_rectangle (region, &rect);
 
-  corner_rect (&rect, _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS));
+  corner_rect (&rect, style->border->border_top_right_radius);
   rect.x = extents->x + extents->width - rect.width;
   rect.y = extents->y;
   cairo_region_subtract_rectangle (region, &rect);
 
-  corner_rect (&rect, _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS));
+  corner_rect (&rect, style->border->border_bottom_left_radius);
   rect.x = extents->x;
   rect.y = extents->y + extents->height - rect.height;
   cairo_region_subtract_rectangle (region, &rect);
 
-  corner_rect (&rect, _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS));
+  corner_rect (&rect, style->border->border_bottom_right_radius);
   rect.x = extents->x + extents->width - rect.width;
   rect.y = extents->y + extents->height - rect.height;
   cairo_region_subtract_rectangle (region, &rect);
-
-  /*gtk_style_context_restore (context);*/
 }
 
 static void
