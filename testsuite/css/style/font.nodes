@@ -1,5 +1,4 @@
 window.background:dir(ltr)
-  decoration:dir(ltr)
   box.horizontal:dir(ltr)
     font-size: 10px; /* font.css:2:3-27 */
     font-family: "Comic Sans"; /* font.css:2:3-27 */
