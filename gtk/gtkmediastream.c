@@ -313,7 +313,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
                         P_("Error"),
                         P_("Error the stream is in"),
                         G_TYPE_ERROR,
-                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkMediaStream:has-audio:
@@ -325,7 +325,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
                           P_("Has audio"),
                           P_("Whether the stream contains audio"),
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkMediaStream:has-video:
@@ -337,7 +337,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
                           P_("Has video"),
                           P_("Whether the stream contains video"),
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkMediaStream:playing:
