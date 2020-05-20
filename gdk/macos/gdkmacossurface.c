@@ -193,39 +193,14 @@ gdk_macos_surface_get_root_coords (GdkSurface *surface,
                                    int        *root_y)
 {
   GdkMacosSurface *self = (GdkMacosSurface *)surface;
-  GdkDisplay *display;
-  NSRect content_rect;
-  int tmp_x = 0;
-  int tmp_y = 0;
 
   g_assert (GDK_IS_MACOS_SURFACE (self));
 
-  if (GDK_SURFACE_DESTROYED (surface))
-    {
-      if (root_x)
-        *root_x = 0;
-      if (root_y)
-        *root_y = 0;
-
-      return;
-    }
-
-  content_rect = [self->window contentRectForFrameRect:[self->window frame]];
-
-  display = gdk_surface_get_display (surface);
-  _gdk_macos_display_from_display_coords (GDK_MACOS_DISPLAY (display),
-                                          content_rect.origin.x,
-                                          content_rect.origin.y + content_rect.size.height,
-                                          &tmp_x, &tmp_y);
-
-  tmp_x += x;
-  tmp_y += y;
-
   if (root_x)
-    *root_x = tmp_x;
+    *root_x = surface->x + x;
 
   if (root_y)
-    *root_y = tmp_y;
+    *root_y = surface->y + y;
 }
 
 static gboolean
