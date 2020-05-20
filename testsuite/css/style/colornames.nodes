@@ -1,5 +1,4 @@
 window.background:dir(ltr)
-  decoration:dir(ltr)
   box.horizontal:dir(ltr)
     label#aliceblue:dir(ltr)
       color: rgb(240,248,255); /* colornames.css:1:19-36 */

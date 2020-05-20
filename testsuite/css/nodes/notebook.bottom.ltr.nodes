@@ -1,5 +1,4 @@
 window.background:dir(ltr)
-  decoration:dir(ltr)
   notebook.frame:dir(ltr)
     stack:dir(ltr)
       button#page1.text-button:dir(ltr)

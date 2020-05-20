@@ -1,5 +1,4 @@
 window.background:dir(rtl)
-  decoration:dir(rtl)
   box.horizontal:dir(rtl)
     label#label1:dir(rtl)
     label#label2:dir(rtl)

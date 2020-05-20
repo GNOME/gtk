@@ -1,5 +1,4 @@
 window.background:dir(ltr)
-  decoration:dir(ltr)
   box#scales.vertical:dir(ltr)
     scale.horizontal:dir(ltr)
       value.top:dir(ltr)
