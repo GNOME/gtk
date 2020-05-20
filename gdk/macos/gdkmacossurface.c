@@ -95,8 +95,6 @@ gdk_macos_surface_hide (GdkSurface *surface)
 
   [self->window hide];
 
-  self->did_initial_present = FALSE;
-
   _gdk_surface_clear_update_area (surface);
 }
 
