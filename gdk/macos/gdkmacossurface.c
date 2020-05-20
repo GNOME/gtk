@@ -881,8 +881,8 @@ _gdk_macos_surface_monitor_changed (GdkMacosSurface *self)
 
   g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
 
-  rect.x = GDK_SURFACE (self)->x;
-  rect.y = GDK_SURFACE (self)->y;
+  rect.x = self->root_x;
+  rect.y = self->root_y;
   rect.width = GDK_SURFACE (self)->width;
   rect.height = GDK_SURFACE (self)->height;
 
@@ -926,8 +926,8 @@ _gdk_macos_surface_get_best_monitor (GdkMacosSurface *self)
 
   g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), NULL);
 
-  rect.x = GDK_SURFACE (self)->x;
-  rect.y = GDK_SURFACE (self)->y;
+  rect.x = self->root_x;
+  rect.y = self->root_y;
   rect.width = GDK_SURFACE (self)->width;
   rect.height = GDK_SURFACE (self)->height;
 
