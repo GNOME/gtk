@@ -180,7 +180,7 @@ label {
   text-shadow: none;
 }
 
-assistant {
+window.assistant {
   .sidebar {
     background-color: $base_color;
     border-top: 1px solid $borders_color;
@@ -3474,7 +3474,7 @@ calendar {
 /***********
  * Dialogs *
  ***********/
-messagedialog { // Message Dialog styling
+window.dialog.message { // Message Dialog styling
   .titlebar {
     min-height: 20px;
     background-image: none;
@@ -4030,7 +4030,6 @@ colorchooser .popover.osd { border-radius: 5px; }
 /**********************
  * Window Decorations *
  *********************/
-decoration,
 window {
   border-radius: $window_radius $window_radius 0 0;
   // lamefun trick to get rounded borders regardless of CSD use
