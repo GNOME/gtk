@@ -237,6 +237,28 @@ gdk_macos_surface_get_device_state (GdkSurface      *surface,
 }
 
 static void
+gdk_macos_surface_get_geometry (GdkSurface *surface,
+                                int        *x,
+                                int        *y,
+                                int        *width,
+                                int        *height)
+{
+  g_assert (GDK_IS_MACOS_SURFACE (surface));
+
+  if (x != NULL)
+    *x = surface->x;
+
+  if (y != NULL)
+    *y = surface->y;
+
+  if (width != NULL)
+    *width = surface->width;
+
+  if (height != NULL)
+    *height = surface->height;
+}
+
+static void
 gdk_macos_surface_destroy (GdkSurface *surface,
                            gboolean    foreign_destroy)
 {
@@ -340,6 +362,7 @@ gdk_macos_surface_class_init (GdkMacosSurfaceClass *klass)
 
   surface_class->destroy = gdk_macos_surface_destroy;
   surface_class->get_device_state = gdk_macos_surface_get_device_state;
+  surface_class->get_geometry = gdk_macos_surface_get_geometry;
   surface_class->get_root_coords = gdk_macos_surface_get_root_coords;
   surface_class->get_scale_factor = gdk_macos_surface_get_scale_factor;
   surface_class->hide = gdk_macos_surface_hide;
