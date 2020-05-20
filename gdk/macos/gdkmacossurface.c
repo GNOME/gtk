@@ -798,9 +798,7 @@ _gdk_macos_surface_move_resize (GdkMacosSurface *self,
   GdkDisplay *display;
   NSRect content_rect;
   NSRect frame_rect;
-  GdkEvent *event;
   gboolean size_changed;
-  GList *node;
 
   g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
 
@@ -845,14 +843,8 @@ _gdk_macos_surface_move_resize (GdkMacosSurface *self,
   [self->window setFrame:frame_rect display:YES];
 
   if (size_changed)
-    {
-      gdk_surface_invalidate_rect (surface, NULL);
+    gdk_surface_invalidate_rect (surface, NULL);
 
-      event = gdk_configure_event_new (surface, width, height);
-      node = _gdk_event_queue_append (display, event);
-      _gdk_windowing_got_event (display, node, event,
-                                _gdk_display_get_next_serial (display));
-    }
 }
 
 gboolean
