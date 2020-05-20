@@ -51,7 +51,6 @@ void            _gtk_window_set_allocation         (GtkWindow     *window,
                                                     int            width,
                                                     int            height,
                                                     GtkAllocation *allocation_out);
-void            gtk_window_check_resize            (GtkWindow     *self);
 
 typedef void (*GtkWindowKeysForeachFunc) (GtkWindow      *window,
                                           guint           keyval,
