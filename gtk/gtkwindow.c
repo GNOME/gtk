@@ -1497,6 +1497,8 @@ gtk_window_init (GtkWindow *window)
 
   widget = GTK_WIDGET (window);
 
+  gtk_widget_set_overflow (widget, GTK_OVERFLOW_HIDDEN);
+
   priv->title = NULL;
   priv->geometry_info = NULL;
   priv->focus_widget = NULL;
