@@ -3762,17 +3762,6 @@ update_window_actions (GtkWindow *window)
   update_csd_visibility (window);
 }
 
-static GtkWidget *
-create_titlebar (GtkWindow *window)
-{
-  GtkWidget *titlebar = gtk_header_bar_new ();
-  gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (titlebar), TRUE);
-  gtk_widget_add_css_class (titlebar, GTK_STYLE_CLASS_TITLEBAR);
-  gtk_widget_add_css_class (titlebar, "default-decoration");
-
-  return titlebar;
-}
-
 void
 _gtk_window_request_csd (GtkWindow *window)
 {
@@ -3815,28 +3804,6 @@ gtk_window_should_use_csd (GtkWindow *window)
 #endif
 
   return (g_strcmp0 (csd_env, "1") == 0);
-}
-
-static void
-create_decoration (GtkWidget *widget)
-{
-  GtkWindow *window = GTK_WINDOW (widget);
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  priv->use_client_shadow = gtk_window_supports_client_shadow (window);
-  if (!priv->use_client_shadow)
-    return;
-
-  gtk_window_enable_csd (window);
-
-  if (priv->title_box == NULL)
-    {
-      priv->titlebar = create_titlebar (window);
-      gtk_widget_set_parent (priv->titlebar, widget);
-      priv->title_box = priv->titlebar;
-    }
-
-  update_window_actions (window);
 }
 
 static void
@@ -4331,8 +4298,28 @@ gtk_window_realize (GtkWidget *widget)
   GdkSurface *surface;
   GtkBorder shadow;
 
+  /* Create default title bar */
   if (!priv->client_decorated && gtk_window_should_use_csd (window))
-    create_decoration (widget);
+    {
+      priv->use_client_shadow = gtk_window_supports_client_shadow (window);
+      if (priv->use_client_shadow)
+        {
+          gtk_window_enable_csd (window);
+
+            if (priv->title_box == NULL)
+              {
+                priv->titlebar = gtk_header_bar_new ();
+                gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (priv->titlebar), TRUE);
+                gtk_widget_add_css_class (priv->titlebar, GTK_STYLE_CLASS_TITLEBAR);
+                gtk_widget_add_css_class (priv->titlebar, "default-decoration");
+
+                gtk_widget_set_parent (priv->titlebar, widget);
+                priv->title_box = priv->titlebar;
+              }
+
+            update_window_actions (window);
+        }
+    }
 
   get_shadow_width (window, &shadow);
 
