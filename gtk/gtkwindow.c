@@ -1900,7 +1900,16 @@ gtk_window_native_get_surface_transform (GtkNative *native,
 static void
 gtk_window_native_check_resize (GtkNative *native)
 {
-  gtk_window_check_resize (GTK_WINDOW (native));
+  GtkWidget *widget = GTK_WIDGET (native);
+  gint64 before = g_get_monotonic_time ();
+
+  if (!_gtk_widget_get_alloc_needed (widget))
+    gtk_widget_ensure_allocate (widget);
+  else if (gtk_widget_get_visible (widget))
+    gtk_window_move_resize (GTK_WINDOW (native));
+
+  if (GDK_PROFILER_IS_RUNNING)
+    gdk_profiler_end_mark (before, "size allocation", "");
 }
 
 static void
@@ -3817,7 +3826,7 @@ gtk_window_show (GtkWidget *widget)
 
   gtk_widget_realize (widget);
 
-  gtk_window_check_resize (window);
+  gtk_native_check_resize (GTK_NATIVE (window));
 
   gtk_widget_map (widget);
 
@@ -4879,21 +4888,6 @@ gtk_window_key_released (GtkWidget       *widget,
   update_mnemonics_visible (window, keyval, state, FALSE);
 
   return FALSE;
-}
-
-void
-gtk_window_check_resize (GtkWindow *self)
-{
-  GtkWidget *widget = GTK_WIDGET (self);
-  gint64 before = g_get_monotonic_time ();
-
-  if (!_gtk_widget_get_alloc_needed (widget))
-    gtk_widget_ensure_allocate (widget);
-  else if (gtk_widget_get_visible (widget))
-    gtk_window_move_resize (self);
-
-  if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_end_mark (before, "size allocation", "");
 }
 
 static gboolean
