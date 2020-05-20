@@ -1896,11 +1896,15 @@ gtk_window_native_get_surface_transform (GtkNative *native,
                                          double    *y)
 {
   GtkBorder shadow;
+  GtkCssBoxes css_boxes;
+  const graphene_rect_t *margin_rect;
 
   get_shadow_width (GTK_WINDOW (native), &shadow);
+  gtk_css_boxes_init (&css_boxes, GTK_WIDGET (native));
+  margin_rect = gtk_css_boxes_get_margin_rect (&css_boxes);
 
-  *x = shadow.left;
-  *y = shadow.right;
+  *x = shadow.left - margin_rect->origin.x;
+  *y = shadow.top  - margin_rect->origin.y;
 }
 
 static void
