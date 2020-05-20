@@ -253,8 +253,6 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkMessageDialog, label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkMessageDialog, secondary_label);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkMessageDialog, message_area);
-
-  gtk_widget_class_set_css_name (widget_class, I_("messagedialog"));
 }
 
 static void
@@ -270,6 +268,8 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
   priv->has_primary_markup = FALSE;
   priv->has_secondary_text = FALSE;
   priv->message_type = GTK_MESSAGE_OTHER;
+
+  gtk_widget_add_css_class (GTK_WIDGET (dialog), "message");
 
   gtk_widget_init_template (GTK_WIDGET (dialog));
   action_area = gtk_dialog_get_action_area (GTK_DIALOG (dialog));
