@@ -58,7 +58,8 @@
  *
  * # CSS nodes
  *
- * GtkAssistant has a single CSS node with the name assistant.
+ * GtkAssistant has a single CSS node with the name window and style
+ * class .assistant.
  */
 
 #include "config.h"
