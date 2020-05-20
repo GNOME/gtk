@@ -758,8 +758,8 @@ find_surface_under_pointer (GdkMacosDisplay *self,
                                               screen_point.x,
                                               screen_point.y,
                                               &x_tmp, &y_tmp);
-      *x = x_tmp - surface->x;
-      *y = y_tmp - surface->y;
+      *x = x_tmp - GDK_MACOS_SURFACE (surface)->root_x;
+      *y = y_tmp - GDK_MACOS_SURFACE (surface)->root_y;
       /* If the coordinates are out of window bounds, this surface is not
        * under the pointer and we thus return NULL. This can occur when
        * surface under pointer has not yet been updated due to a very recent

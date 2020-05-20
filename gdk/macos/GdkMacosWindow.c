@@ -425,8 +425,8 @@
                                           &point.x,
                                           &point.y);
 
-  area.x = GDK_SURFACE (gdk_surface)->x;
-  area.y = GDK_SURFACE (gdk_surface)->y;
+  area.x = gdk_surface->root_x;
+  area.y = gdk_surface->root_y;
   area.width = GDK_SURFACE (gdk_surface)->width;
   area.height = GDK_SURFACE (gdk_surface)->height;
 
