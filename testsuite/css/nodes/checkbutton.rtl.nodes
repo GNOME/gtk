@@ -1,5 +1,4 @@
 window.background:dir(rtl)
-  decoration:dir(rtl)
   box.vertical:dir(rtl)
     checkbutton:dir(rtl)
       check:dir(rtl)
