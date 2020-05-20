@@ -133,13 +133,11 @@
  *
  * |[<!-- language="plain" -->
  * window.background
- * ├── decoration
  * ├── <titlebar child>.titlebar [.default-decoration]
  * ╰── <child>
  * ]|
  *
- * GtkWindow has a main CSS node with name window and style class .background,
- * and a subnode with name decoration.
+ * GtkWindow has a main CSS node with name window and style class .background.
  *
  * Style classes that are typically used with the main CSS node are .csd (when
  * client-side decorations are in use), .solid-csd (for client-side decorations
@@ -148,6 +146,13 @@
  * style classes on the main node: .tiled, .maximized, .fullscreen. Specialized
  * types of window often add their own discriminating style classes, such as
  * .popup or .tooltip.
+ *
+ * Generally, some CSS properties don't make sense on the toplevel window node,
+ * such as margins or padding. When client-side decorations without invisible
+ * borders are in use (i.e. the .solid-csd style class is added to the
+ * main window node), the CSS border of the toplevel window is used for
+ * resize drags. In the .csd case, the shadow area outside of the window
+ * can be used to resize it.
  *
  * GtkWindow adds the .titlebar and .default-decoration style classes to the
  * widget that is added as a titlebar child.
