@@ -296,6 +296,15 @@ gdk_macos_surface_constructed (GObject *object)
 
   G_OBJECT_CLASS (gdk_macos_surface_parent_class)->constructed (object);
 
+  if (self->window != NULL)
+    {
+      NSRect bounds = [[self->window contentView] bounds];
+
+      GDK_SURFACE (self)->width = bounds.size.width;
+      GDK_SURFACE (self)->height = bounds.size.height;
+      _gdk_macos_surface_update_position (self);
+    }
+
   if ((frame_clock = gdk_surface_get_frame_clock (GDK_SURFACE (self))))
     {
       g_signal_connect_object (frame_clock,
