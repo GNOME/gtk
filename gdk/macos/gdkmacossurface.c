@@ -197,10 +197,10 @@ gdk_macos_surface_get_root_coords (GdkSurface *surface,
   g_assert (GDK_IS_MACOS_SURFACE (self));
 
   if (root_x)
-    *root_x = surface->x + x;
+    *root_x = self->root_x + x;
 
   if (root_y)
-    *root_y = surface->y + y;
+    *root_y = self->root_y + y;
 }
 
 static gboolean
@@ -567,24 +567,9 @@ _gdk_macos_surface_resize (GdkMacosSurface *self,
                            int              width,
                            int              height)
 {
-  GdkSurface *surface = (GdkSurface *)self;
-  GdkDisplay *display;
-  NSRect content_rect;
-  NSRect frame_rect;
-  int gx;
-  int gy;
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
 
-  g_return_if_fail (GDK_IS_MACOS_SURFACE (surface));
-
-  display = gdk_surface_get_display (surface);
-  _gdk_macos_display_to_display_coords (GDK_MACOS_DISPLAY (display),
-                                        surface->x,
-                                        surface->y + surface->height,
-                                        &gx,
-                                        &gy);
-  content_rect = NSMakeRect (gx, gy, width, height);
-  frame_rect = [self->window frameRectForContentRect:content_rect];
-  [self->window setFrame:frame_rect display:YES];
+  _gdk_macos_surface_move_resize (self, -1, -1, width, height);
 }
 
 void
@@ -620,7 +605,18 @@ _gdk_macos_surface_update_position (GdkMacosSurface *self)
   _gdk_macos_display_from_display_coords (GDK_MACOS_DISPLAY (display),
                                           content_rect.origin.x,
                                           content_rect.origin.y + content_rect.size.height,
-                                          &surface->x, &surface->y);
+                                          &self->root_x, &self->root_y);
+
+  if (surface->parent != NULL)
+    {
+      surface->x = self->root_x - GDK_MACOS_SURFACE (surface->parent)->root_x;
+      surface->y = self->root_y - GDK_MACOS_SURFACE (surface->parent)->root_y;
+    }
+  else
+    {
+      surface->x = self->root_x;
+      surface->y = self->root_y;
+    }
 
   if (GDK_IS_POPUP (self) && self->did_initial_present)
     g_signal_emit_by_name (self, "popup-layout-changed");
@@ -794,14 +790,16 @@ _gdk_macos_surface_move_resize (GdkMacosSurface *self,
 {
   GdkSurface *surface = (GdkSurface *)self;
   GdkDisplay *display;
+  NSRect content_rect;
+  NSRect frame_rect;
   GdkEvent *event;
-  GList *node;
   gboolean size_changed;
+  GList *node;
 
   g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
 
-  if ((x == -1 || (x == surface->x)) &&
-      (y == -1 || (y == surface->y)) &&
+  if ((x == -1 || (x == self->root_x)) &&
+      (y == -1 || (y == self->root_y)) &&
       (width == -1 || (width == surface->width)) &&
       (height == -1 || (height == surface->height)))
     return;
@@ -814,16 +812,31 @@ _gdk_macos_surface_move_resize (GdkMacosSurface *self,
   if (height == -1)
     height = surface->height;
 
+  if (x == -1)
+    x = self->root_x;
+
+  if (y == -1)
+    y = self->root_y;
+
   size_changed = height != surface->height || width != surface->width;
 
-  surface->x = x;
-  surface->y = y;
+  if (GDK_IS_MACOS_SURFACE (surface->parent))
+    {
+      surface->x = self->root_x - GDK_MACOS_SURFACE (surface->parent)->root_x;
+      surface->y = self->root_y - GDK_MACOS_SURFACE (surface->parent)->root_y;
+    }
+  else
+    {
+      surface->x = self->root_x;
+      surface->y = self->root_y;
+    }
 
   _gdk_macos_display_to_display_coords (GDK_MACOS_DISPLAY (display),
-                                        x, y, &x, &y);
+                                        x, y + height, &x, &y);
 
-  [self->window setFrame:NSMakeRect(x, y - height, width, height)
-                 display:YES];
+  content_rect = NSMakeRect (x, y, width, height);
+  frame_rect = [self->window frameRectForContentRect:content_rect];
+  [self->window setFrame:frame_rect display:YES];
 
   if (size_changed)
     {
