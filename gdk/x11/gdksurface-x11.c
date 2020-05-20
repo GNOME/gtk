@@ -1041,6 +1041,9 @@ gdk_x11_surface_destroy (GdkSurface *surface,
       impl->cairo_surface = NULL;
     }
 
+  cairo_region_destroy (impl->input_region);
+  impl->input_region = NULL;
+
   if (!foreign_destroy)
     XDestroyWindow (GDK_SURFACE_XDISPLAY (surface), GDK_SURFACE_XID (surface));
 }
@@ -2673,6 +2676,12 @@ gdk_x11_surface_set_input_region (GdkSurface     *surface,
   if (!gdk_display_supports_input_shapes (GDK_SURFACE_DISPLAY (surface)))
     return;
 
+  /* Note: cairo regions code handles the NULL cases */
+  if (cairo_region_equal (impl->input_region, input_region))
+      return;
+  cairo_region_destroy (impl->input_region);
+  impl->input_region = cairo_region_reference (input_region);
+
   if (input_region == NULL)
     {
       XShapeCombineMask (GDK_SURFACE_XDISPLAY (surface),
@@ -2817,6 +2826,18 @@ gdk_x11_surface_set_shadow_width (GdkSurface *surface,
     top * impl->surface_scale,
     bottom * impl->surface_scale
   };
+  int i;
+
+  for (i = 0; i < 4; i++)
+    {
+      if (impl->shadow_width[i] != data[i])
+        break;
+    }
+  if (i == 4)
+    return; /* No change */
+
+  for (i = 0; i < 4; i++)
+    impl->shadow_width[i] = data[i];
 
   frame_extents = gdk_x11_get_xatom_by_name_for_display (gdk_surface_get_display (surface),
                                                          "_GTK_FRAME_EXTENTS");
