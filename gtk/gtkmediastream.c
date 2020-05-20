@@ -441,11 +441,11 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
    * Volume of the audio stream.
    */
   properties[PROP_VOLUME] =
-    g_param_spec_boolean ("volume",
-                          P_("Volume"),
-                          P_("Volume of the audio stream."),
-                          1.0,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+    g_param_spec_double ("volume",
+                         P_("Volume"),
+                         P_("Volume of the audio stream."),
+                         0.0, 1.0, 1.0,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
