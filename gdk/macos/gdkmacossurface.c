@@ -690,13 +690,14 @@ _gdk_macos_surface_show (GdkMacosSurface *self)
   _gdk_macos_display_clear_sorting (GDK_MACOS_DISPLAY (GDK_SURFACE (self)->display));
 
   [self->window showAndMakeKey:YES];
-  [[self->window contentView] setNeedsDisplay:YES];
 
   if (!was_mapped)
     {
       if (gdk_surface_get_mapped (GDK_SURFACE (self)))
         gdk_surface_invalidate_rect (GDK_SURFACE (self), NULL);
     }
+
+  [[self->window contentView] setNeedsDisplay:YES];
 }
 
 CGContextRef
