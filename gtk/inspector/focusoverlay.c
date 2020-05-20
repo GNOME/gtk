@@ -49,7 +49,6 @@ gtk_focus_overlay_snapshot (GtkInspectorOverlay *overlay,
   GtkFocusOverlay *self = GTK_FOCUS_OVERLAY (overlay);
   GtkWidget *focus;
   graphene_rect_t bounds;
-  double nx, ny;
 
   if (!GTK_IS_NATIVE (widget))
     return;
@@ -66,10 +65,6 @@ gtk_focus_overlay_snapshot (GtkInspectorOverlay *overlay,
 
   if (!gtk_widget_compute_bounds (focus, widget, &bounds))
     return;
-
-  gtk_native_get_surface_transform (GTK_NATIVE (widget), &nx, &ny);
-  bounds.origin.x += nx;
-  bounds.origin.y += ny;
 
   gtk_snapshot_append_color (snapshot, &self->color, &bounds);
 }
