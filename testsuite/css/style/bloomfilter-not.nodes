@@ -1,5 +1,4 @@
 window.background.csd:dir(ltr)
-  decoration:dir(ltr)
   headerbar.titlebar:dir(ltr)
     windowhandle:dir(ltr)
       box:dir(ltr)

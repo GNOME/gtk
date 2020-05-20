@@ -58,7 +58,8 @@
  *
  * # CSS nodes
  *
- * GtkAssistant has a single CSS node with the name assistant.
+ * GtkAssistant has a single CSS node with the name window and style
+ * class .assistant.
  */
 
 #include "config.h"
@@ -630,8 +631,6 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   gtk_widget_class_bind_template_callback (widget_class, on_assistant_back);
   gtk_widget_class_bind_template_callback (widget_class, on_assistant_cancel);
   gtk_widget_class_bind_template_callback (widget_class, on_assistant_last);
-
-  gtk_widget_class_set_css_name (widget_class, I_("assistant"));
 }
 
 static gint
@@ -1140,6 +1139,8 @@ assistant_remove_page (GtkAssistant *assistant,
 static void
 gtk_assistant_init (GtkAssistant *assistant)
 {
+  gtk_widget_add_css_class (GTK_WIDGET (assistant), "assistant");
+
   assistant->pages = NULL;
   assistant->current_page = NULL;
   assistant->visited_pages = NULL;
