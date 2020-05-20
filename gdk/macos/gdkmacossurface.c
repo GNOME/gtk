@@ -531,18 +531,14 @@ _gdk_macos_surface_set_geometry_hints (GdkMacosSurface   *self,
   if (geom_mask & GDK_HINT_MIN_SIZE)
     min_size = NSMakeSize (geometry->min_width, geometry->min_height);
   else
-    min_size = NSMakeSize (0, 0);
+    min_size = NSMakeSize (1, 1);
   [self->window setContentMinSize:min_size];
 
   if (geom_mask & GDK_HINT_BASE_SIZE) { /* TODO */ }
 
   if (geom_mask & GDK_HINT_RESIZE_INC)
     {
-      NSSize size;
-
-      size.width = geometry->width_inc;
-      size.height = geometry->height_inc;
-
+      NSSize size = NSMakeSize (geometry->width_inc, geometry->height_inc);
       [self->window setContentResizeIncrements:size];
     }
 
