@@ -2530,6 +2530,8 @@ gdk_wayland_display_remove_output (GdkWaylandDisplay *self,
           g_list_store_remove (self->monitors, i);
           gdk_monitor_invalidate (GDK_MONITOR (monitor));
           update_scale (GDK_DISPLAY (self));
+          g_object_unref (monitor);
+          break;
         }
 
       g_object_unref (monitor);
