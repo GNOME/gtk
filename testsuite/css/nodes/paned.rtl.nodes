@@ -1,5 +1,4 @@
 window.background:dir(rtl)
-  decoration:dir(rtl)
   paned.horizontal:dir(rtl)
     label#label1:dir(rtl)
     separator:dir(rtl)

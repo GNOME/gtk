@@ -555,8 +555,6 @@ gtk_dialog_class_init (GtkDialogClass *class)
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, action_area);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, content_area);
   gtk_widget_class_bind_template_child_private (widget_class, GtkDialog, action_box);
-
-  gtk_widget_class_set_css_name (widget_class, I_("dialog"));
 }
 
 static void
@@ -564,7 +562,7 @@ gtk_dialog_init (GtkDialog *dialog)
 {
   GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
-  priv = gtk_dialog_get_instance_private (dialog);
+  gtk_widget_add_css_class (GTK_WIDGET (dialog), "dialog");
 
   priv->use_header_bar = -1;
   priv->size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);

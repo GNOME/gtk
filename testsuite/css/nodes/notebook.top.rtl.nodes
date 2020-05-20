@@ -1,5 +1,4 @@
 window.background:dir(rtl)
-  decoration:dir(rtl)
   notebook.frame:dir(rtl)
     header.horizontal.top:dir(rtl)
       button#start.text-button:dir(rtl)
