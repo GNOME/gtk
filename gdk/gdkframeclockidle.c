@@ -179,7 +179,7 @@ compute_smooth_frame_time (GdkFrameClock *clock,
   if (frames_passed > 4)
     {
       /* Huge jank anyway, lets resynchronize */
-      return priv->frame_time;
+      return new_frame_time;
     }
 
   /* Regularize to constant frame interval */
