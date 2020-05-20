@@ -97,7 +97,7 @@ do_css_basics (GtkWidget *do_widget)
       container = gtk_scrolled_window_new (NULL, NULL);
       gtk_window_set_child (GTK_WINDOW (window), container);
       child = gtk_text_view_new_with_buffer (text);
-      gtk_box_append (GTK_BOX (container), child);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (container), child);
       g_signal_connect (text, "changed",
                         G_CALLBACK (css_text_changed), provider);
 
