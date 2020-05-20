@@ -55,9 +55,7 @@
 
   if (self->surface == NULL)
     {
-      NSRect rect = [self bounds];
-      rect.origin.x = rect.origin.y = 0;
-      [self setNeedsDisplayInRect:rect];
+      [self setNeedsDisplay:YES];
     }
   else
     {
@@ -70,8 +68,11 @@
         }
     }
 
-  g_clear_pointer (&self->surface, cairo_surface_destroy);
-  self->surface = cairo_surface_reference (cairoSurface);
+  if (self->surface != cairoSurface)
+    {
+      g_clear_pointer (&self->surface, cairo_surface_destroy);
+      self->surface = cairo_surface_reference (cairoSurface);
+    }
 }
 
 -(void)drawRect:(NSRect)rect
