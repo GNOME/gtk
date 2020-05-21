@@ -25,13 +25,12 @@ static gboolean
 reveal_one (gpointer data)
 {
   GtkWidget *window = data;
-  GtkBuilder *builder;
   gchar *name;
   GtkRevealer *revealer;
 
-  builder = GTK_BUILDER (g_object_get_data (G_OBJECT (window), "builder"));
   name = g_strdup_printf ("revealer%d", count);
-  revealer = (GtkRevealer *)gtk_builder_get_object (builder, name);
+  revealer = GTK_REVEALER (g_object_get_data (G_OBJECT (window), name));
+  g_free (name);
 
   gtk_revealer_set_reveal_child (revealer, TRUE);
 
@@ -59,6 +58,7 @@ on_destroy (gpointer data)
       g_source_remove (timeout);
       timeout = 0;
     }
+
 }
 
 GtkWidget *
@@ -67,14 +67,23 @@ do_revealer (GtkWidget *do_widget)
   if (!window)
     {
       GtkBuilder *builder;
+      int i;
 
       builder = gtk_builder_new_from_resource ("/revealer/revealer.ui");
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
+      for (i = 0; i < 10; i++)
+        {
+          char *name = g_strdup_printf ("revealer%d", i);
+          GtkWidget *revealer = GTK_WIDGET (gtk_builder_get_object (builder, name));
+          g_object_set_data (G_OBJECT (window), name, revealer);
+          g_free (name);
+        }
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       g_signal_connect (window, "destroy",
                         G_CALLBACK (on_destroy), NULL);
-      g_object_set_data_full (G_OBJECT (window), "builder", builder, g_object_unref);
+
+      g_object_unref (builder);
     }
 
   if (!gtk_widget_get_visible (window))
