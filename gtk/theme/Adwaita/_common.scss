@@ -4049,11 +4049,11 @@ window {
   &.solid-csd {
     margin: 0;
     padding: 0;
-    border: solid 14px $borders_color;
+    border: solid 1px $borders_color;
     border-radius: 0;
-    box-shadow: inset 0 0 0 3px $headerbar_color, inset 0 1px $top_hilight;
+    box-shadow: 0 0 0 5px $borders_color, 0 0 0 4px $headerbar_color, inset 0 1px $top_hilight;
 
-    &:backdrop { box-shadow: inset 0 0 0 3px $backdrop_bg_color, inset 0 1px $top_hilight; }
+    &:backdrop { box-shadow: 0 0 0 5px $borders_color, 0 0 0 4px $backdrop_bg_color, inset 0 1px $top_hilight; }
   }
 
   // FIXME rationalize shadows
