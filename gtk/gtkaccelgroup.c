@@ -220,14 +220,14 @@ static inline gboolean
 is_primary (const gchar *string)
 {
   return ((string[0] == '<') &&
-	  (string[1] == 'p' || string[1] == 'P') &&
-	  (string[2] == 'r' || string[2] == 'R') &&
-	  (string[3] == 'i' || string[3] == 'I') &&
-	  (string[4] == 'm' || string[4] == 'M') &&
-	  (string[5] == 'a' || string[5] == 'A') &&
-	  (string[6] == 'r' || string[6] == 'R') &&
-	  (string[7] == 'y' || string[7] == 'Y') &&
-	  (string[8] == '>'));
+          (string[1] == 'p' || string[1] == 'P') &&
+          (string[2] == 'r' || string[2] == 'R') &&
+          (string[3] == 'i' || string[3] == 'I') &&
+          (string[4] == 'm' || string[4] == 'M') &&
+          (string[5] == 'a' || string[5] == 'A') &&
+          (string[6] == 'r' || string[6] == 'R') &&
+          (string[7] == 'y' || string[7] == 'Y') &&
+          (string[8] == '>'));
 }
 
 static inline gboolean
@@ -411,15 +411,15 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
                    goto out;
                  }
             }
-	  else
-	    {
-	      keyval = gdk_keyval_from_name (accelerator);
-	      if (keyval == GDK_KEY_VoidSymbol)
-	        {
-	          error = TRUE;
-	          goto out;
-		}
-	    }
+          else
+            {
+              keyval = gdk_keyval_from_name (accelerator);
+              if (keyval == GDK_KEY_VoidSymbol)
+                {
+                  error = TRUE;
+                  goto out;
+                }
+            }
 
           if (keyval && accelerator_codes != NULL)
             {
@@ -937,18 +937,25 @@ gtk_accelerator_print_label (GString        *gstring,
       if (seen_mod)
         append_separator (gstring);
 
+      if (accelerator_key >= GDK_KEY_KP_Space &&
+          accelerator_key <= GDK_KEY_KP_Equal)
+        {
+          g_string_append (gstring, C_("keyboard label", "KP"));
+          g_string_append (gstring, " ");
+        }
+
       switch (ch)
-	{
-	case ' ':
-	  g_string_append (gstring, C_("keyboard label", "Space"));
-	  break;
-	case '\\':
-	  g_string_append (gstring, C_("keyboard label", "Backslash"));
-	  break;
-	default:
-	  g_string_append_unichar (gstring, g_unichar_toupper (ch));
-	  break;
-	}
+        {
+        case ' ':
+          g_string_append (gstring, C_("keyboard label", "Space"));
+          break;
+        case '\\':
+          g_string_append (gstring, C_("keyboard label", "Backslash"));
+          break;
+        default:
+          g_string_append_unichar (gstring, g_unichar_toupper (ch));
+          break;
+        }
     }
   else if (!append_keyval_symbol (accelerator_key, gstring))
     {
@@ -956,22 +963,22 @@ gtk_accelerator_print_label (GString        *gstring,
 
       tmp = gdk_keyval_name (gdk_keyval_to_lower (accelerator_key));
       if (tmp != NULL)
-	{
+        {
           if (seen_mod)
             append_separator (gstring);
 
-	  if (tmp[0] != 0 && tmp[1] == 0)
-	    g_string_append_c (gstring, g_ascii_toupper (tmp[0]));
-	  else
-	    {
-	      const char *str;
+          if (tmp[0] != 0 && tmp[1] == 0)
+            g_string_append_c (gstring, g_ascii_toupper (tmp[0]));
+          else
+            {
+              const char *str;
               str = g_dpgettext2 (GETTEXT_PACKAGE, "keyboard label", tmp);
-	      if (str == tmp)
+              if (str == tmp)
                 append_without_underscores (gstring, tmp);
-	      else
-		g_string_append (gstring, str);
-	    }
-	}
+              else
+                g_string_append (gstring, str);
+            }
+        }
     }
 }
 
