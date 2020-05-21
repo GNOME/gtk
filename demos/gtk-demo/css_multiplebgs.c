@@ -85,7 +85,7 @@ do_css_multiplebgs (GtkWidget *do_widget)
 
   if (!window)
     {
-      GtkWidget *paned, *container, *child;
+      GtkWidget *paned, *overlay, *child, *sw;
       GtkStyleProvider *provider;
       GtkTextBuffer *text;
       GBytes *bytes;
@@ -96,25 +96,25 @@ do_css_multiplebgs (GtkWidget *do_widget)
       gtk_window_set_default_size (GTK_WINDOW (window), 400, 300);
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
-      container = gtk_overlay_new ();
-      gtk_window_set_child (GTK_WINDOW (window), container);
+      overlay = gtk_overlay_new ();
+      gtk_window_set_child (GTK_WINDOW (window), overlay);
 
       child = gtk_drawing_area_new ();
       gtk_widget_set_name (child, "canvas");
       gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (child),
                                       drawing_area_draw,
                                       NULL, NULL);
-      gtk_box_append (GTK_BOX (container), child);
+      gtk_overlay_set_child (GTK_OVERLAY (overlay), child);
 
       child = gtk_button_new ();
-      gtk_overlay_add_overlay (GTK_OVERLAY (container), child);
+      gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
       gtk_widget_set_name (child, "bricks-button");
       gtk_widget_set_halign (child, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (child, GTK_ALIGN_CENTER);
       gtk_widget_set_size_request (child, 250, 84);
 
       paned = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
-      gtk_overlay_add_overlay (GTK_OVERLAY (container), paned);
+      gtk_overlay_add_overlay (GTK_OVERLAY (overlay), paned);
 
       /* Need a filler so we get a handle */
       child = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
@@ -132,10 +132,10 @@ do_css_multiplebgs (GtkWidget *do_widget)
 
       provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
 
-      container = gtk_scrolled_window_new (NULL, NULL);
-      gtk_paned_set_end_child (GTK_PANED (paned), container);
+      sw = gtk_scrolled_window_new (NULL, NULL);
+      gtk_paned_set_end_child (GTK_PANED (paned), sw);
       child = gtk_text_view_new_with_buffer (text);
-      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (container), child);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), child);
       g_signal_connect (text,
                         "changed",
                         G_CALLBACK (css_text_changed),
