@@ -85,18 +85,6 @@ void             gtk_application_remove_window (GtkApplication    *application,
 GDK_AVAILABLE_IN_ALL
 GList *          gtk_application_get_windows   (GtkApplication    *application);
 
-GDK_AVAILABLE_IN_ALL
-GMenuModel *     gtk_application_get_app_menu  (GtkApplication    *application);
-GDK_AVAILABLE_IN_ALL
-void             gtk_application_set_app_menu  (GtkApplication    *application,
-                                                GMenuModel        *app_menu);
-
-GDK_AVAILABLE_IN_ALL
-GMenuModel *     gtk_application_get_menubar   (GtkApplication    *application);
-GDK_AVAILABLE_IN_ALL
-void             gtk_application_set_menubar   (GtkApplication    *application,
-                                                GMenuModel        *menubar);
-
 typedef enum
 {
   GTK_APPLICATION_INHIBIT_LOGOUT  = (1 << 0),
@@ -136,13 +124,6 @@ GDK_AVAILABLE_IN_ALL
 void             gtk_application_set_accels_for_action           (GtkApplication       *application,
                                                                   const gchar          *detailed_action_name,
                                                                   const gchar * const  *accels);
-
-GDK_AVAILABLE_IN_ALL
-gboolean         gtk_application_prefers_app_menu                (GtkApplication       *application);
-
-GDK_AVAILABLE_IN_ALL
-GMenu *          gtk_application_get_menu_by_id                  (GtkApplication       *application,
-                                                                  const gchar          *id);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkApplication, g_object_unref)
 

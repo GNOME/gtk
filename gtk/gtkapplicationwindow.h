@@ -67,12 +67,6 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_application_window_new               (GtkApplication      *application);
 
 GDK_AVAILABLE_IN_ALL
-void        gtk_application_window_set_show_menubar (GtkApplicationWindow *window,
-                                                     gboolean              show_menubar);
-GDK_AVAILABLE_IN_ALL
-gboolean    gtk_application_window_get_show_menubar (GtkApplicationWindow *window);
-
-GDK_AVAILABLE_IN_ALL
 guint       gtk_application_window_get_id           (GtkApplicationWindow *window);
 
 GDK_AVAILABLE_IN_ALL

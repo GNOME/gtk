@@ -143,8 +143,6 @@ enum {
   PROP_ZERO,
   PROP_REGISTER_SESSION,
   PROP_SCREENSAVER_ACTIVE,
-  PROP_APP_MENU,
-  PROP_MENUBAR,
   PROP_ACTIVE_WINDOW,
   NUM_PROPERTIES
 };
@@ -158,14 +156,11 @@ typedef struct
 
   GList *windows;
 
-  GMenuModel      *app_menu;
-  GMenuModel      *menubar;
   guint            last_window_id;
 
   gboolean         register_session;
   gboolean         screensaver_active;
   GtkActionMuxer  *muxer;
-  GtkBuilder      *menus_builder;
   gchar           *help_overlay_path;
   guint            profiler_id;
 } GtkApplicationPrivate;
@@ -217,58 +212,6 @@ gtk_application_load_resources (GtkApplication *application)
     iconspath = g_strconcat (base_path, "/icons/", NULL);
     gtk_icon_theme_add_resource_path (default_theme, iconspath);
     g_free (iconspath);
-  }
-
-  /* Load the menus */
-  {
-    gchar *menuspath;
-
-    /* If the user has given a specific file for the variant of menu
-     * that we are looking for, use it with preference.
-     */
-    if (gtk_application_prefers_app_menu (application))
-      menuspath = g_strconcat (base_path, "/gtk/menus-appmenu.ui", NULL);
-    else
-      menuspath = g_strconcat (base_path, "/gtk/menus-traditional.ui", NULL);
-
-    if (g_resources_get_info (menuspath, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL, NULL, NULL))
-      priv->menus_builder = gtk_builder_new_from_resource (menuspath);
-    g_free (menuspath);
-
-    /* If we didn't get the specific file, fall back. */
-    if (priv->menus_builder == NULL)
-      {
-        menuspath = g_strconcat (base_path, "/gtk/menus.ui", NULL);
-        if (g_resources_get_info (menuspath, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL, NULL, NULL))
-          priv->menus_builder = gtk_builder_new_from_resource (menuspath);
-        g_free (menuspath);
-      }
-
-    /* Always load from -common as well, if we have it */
-    menuspath = g_strconcat (base_path, "/gtk/menus-common.ui", NULL);
-    if (g_resources_get_info (menuspath, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL, NULL, NULL))
-      {
-        GError *error = NULL;
-
-        if (priv->menus_builder == NULL)
-          priv->menus_builder = gtk_builder_new ();
-
-        if (!gtk_builder_add_from_resource (priv->menus_builder, menuspath, &error))
-          g_error ("failed to load menus-common.ui: %s", error->message);
-      }
-    g_free (menuspath);
-
-    if (priv->menus_builder)
-      {
-        GObject *menu;
-
-        menu = gtk_builder_get_object (priv->menus_builder, "app-menu");
-        if (menu != NULL && G_IS_MENU_MODEL (menu))
-          gtk_application_set_app_menu (application, G_MENU_MODEL (menu));
-        menu = gtk_builder_get_object (priv->menus_builder, "menubar");
-        if (menu != NULL && G_IS_MENU_MODEL (menu))
-          gtk_application_set_menubar (application, G_MENU_MODEL (menu));
-      }
   }
 
   /* Help overlay */
@@ -490,14 +433,6 @@ gtk_application_get_property (GObject    *object,
       g_value_set_boolean (value, priv->screensaver_active);
       break;
 
-    case PROP_APP_MENU:
-      g_value_set_object (value, gtk_application_get_app_menu (application));
-      break;
-
-    case PROP_MENUBAR:
-      g_value_set_object (value, gtk_application_get_menubar (application));
-      break;
-
     case PROP_ACTIVE_WINDOW:
       g_value_set_object (value, gtk_application_get_active_window (application));
       break;
@@ -523,14 +458,6 @@ gtk_application_set_property (GObject      *object,
       priv->register_session = g_value_get_boolean (value);
       break;
 
-    case PROP_APP_MENU:
-      gtk_application_set_app_menu (application, g_value_get_object (value));
-      break;
-
-    case PROP_MENUBAR:
-      gtk_application_set_menubar (application, g_value_get_object (value));
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -543,9 +470,6 @@ gtk_application_finalize (GObject *object)
   GtkApplication *application = GTK_APPLICATION (object);
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
-  g_clear_object (&priv->menus_builder);
-  g_clear_object (&priv->app_menu);
-  g_clear_object (&priv->menubar);
   g_clear_object (&priv->muxer);
   g_clear_object (&priv->accels);
 
@@ -800,20 +724,6 @@ gtk_application_class_init (GtkApplicationClass *class)
                           FALSE,
                           G_PARAM_READABLE|G_PARAM_STATIC_STRINGS);
 
-  gtk_application_props[PROP_APP_MENU] =
-    g_param_spec_object ("app-menu",
-                         P_("Application menu"),
-                         P_("The GMenuModel for the application menu"),
-                         G_TYPE_MENU_MODEL,
-                         G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
-
-  gtk_application_props[PROP_MENUBAR] =
-    g_param_spec_object ("menubar",
-                         P_("Menubar"),
-                         P_("The GMenuModel for the menubar"),
-                         G_TYPE_MENU_MODEL,
-                         G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
-
   gtk_application_props[PROP_ACTIVE_WINDOW] =
     g_param_spec_object ("active-window",
                          P_("Active window"),
@@ -1027,182 +937,6 @@ gtk_application_update_accels (GtkApplication *application)
 
   for (l = priv->windows; l != NULL; l = l->next)
     _gtk_window_notify_keys_changed (l->data);
-}
-
-/**
- * gtk_application_prefers_app_menu:
- * @application: a #GtkApplication
- *
- * Determines if the desktop environment in which the application is
- * running would prefer an application menu be shown.
- *
- * If this function returns %TRUE then the application should call
- * gtk_application_set_app_menu() with the contents of an application
- * menu, which will be shown by the desktop environment.  If it returns
- * %FALSE then you should consider using an alternate approach, such as
- * a menubar.
- *
- * The value returned by this function is purely advisory and you are
- * free to ignore it.  If you call gtk_application_set_app_menu() even
- * if the desktop environment doesn't support app menus, then a fallback
- * will be provided.
- *
- * Applications are similarly free not to set an app menu even if the
- * desktop environment wants to show one.  In that case, a fallback will
- * also be created by the desktop environment (GNOME, for example, uses
- * a menu with only a "Quit" item in it).
- *
- * The value returned by this function never changes.  Once it returns a
- * particular value, it is guaranteed to always return the same value.
- *
- * You may only call this function after the application has been
- * registered and after the base startup handler has run.  You're most
- * likely to want to use this from your own startup handler.  It may
- * also make sense to consult this function while constructing UI (in
- * activate, open or an action activation handler) in order to determine
- * if you should show a gear menu or not.
- *
- * This function will return %FALSE on Mac OS and a default app menu
- * will be created automatically with the "usual" contents of that menu
- * typical to most Mac OS applications.  If you call
- * gtk_application_set_app_menu() anyway, then this menu will be
- * replaced with your own.
- *
- * Returns: %TRUE if you should set an app menu
- **/
-gboolean
-gtk_application_prefers_app_menu (GtkApplication *application)
-{
-  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
-
-  g_return_val_if_fail (GTK_IS_APPLICATION (application), FALSE);
-  g_return_val_if_fail (priv->impl != NULL, FALSE);
-
-  return gtk_application_impl_prefers_app_menu (priv->impl);
-}
-
-/**
- * gtk_application_set_app_menu:
- * @application: a #GtkApplication
- * @app_menu: (allow-none): a #GMenuModel, or %NULL
- *
- * Sets or unsets the application menu for @application.
- *
- * This can only be done in the primary instance of the application,
- * after it has been registered.  #GApplication::startup is a good place
- * to call this.
- *
- * The application menu is a single menu containing items that typically
- * impact the application as a whole, rather than acting on a specific
- * window or document.  For example, you would expect to see
- * “Preferences” or “Quit” in an application menu, but not “Save” or
- * “Print”.
- *
- * If supported, the application menu will be rendered by the desktop
- * environment.
- *
- * Use the base #GActionMap interface to add actions, to respond to the user
- * selecting these menu items.
- */
-void
-gtk_application_set_app_menu (GtkApplication *application,
-                              GMenuModel     *app_menu)
-{
-  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
-
-  g_return_if_fail (GTK_IS_APPLICATION (application));
-  g_return_if_fail (g_application_get_is_registered (G_APPLICATION (application)));
-  g_return_if_fail (!g_application_get_is_remote (G_APPLICATION (application)));
-  g_return_if_fail (app_menu == NULL || G_IS_MENU_MODEL (app_menu));
-
-  if (g_set_object (&priv->app_menu, app_menu))
-    {
-      gtk_application_impl_set_app_menu (priv->impl, app_menu);
-
-      g_object_notify_by_pspec (G_OBJECT (application), gtk_application_props[PROP_APP_MENU]);
-    }
-}
-
-/**
- * gtk_application_get_app_menu:
- * @application: a #GtkApplication
- *
- * Returns the menu model that has been set with
- * gtk_application_set_app_menu().
- *
- * Returns: (transfer none) (nullable): the application menu of @application
- *   or %NULL if no application menu has been set.
- */
-GMenuModel *
-gtk_application_get_app_menu (GtkApplication *application)
-{
-  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
-
-  g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
-
-  return priv->app_menu;
-}
-
-/**
- * gtk_application_set_menubar:
- * @application: a #GtkApplication
- * @menubar: (allow-none): a #GMenuModel, or %NULL
- *
- * Sets or unsets the menubar for windows of @application.
- *
- * This is a menubar in the traditional sense.
- *
- * This can only be done in the primary instance of the application,
- * after it has been registered.  #GApplication::startup is a good place
- * to call this.
- *
- * Depending on the desktop environment, this may appear at the top of
- * each window, or at the top of the screen.  In some environments, if
- * both the application menu and the menubar are set, the application
- * menu will be presented as if it were the first item of the menubar.
- * Other environments treat the two as completely separate — for example,
- * the application menu may be rendered by the desktop shell while the
- * menubar (if set) remains in each individual window.
- *
- * Use the base #GActionMap interface to add actions, to respond to the
- * user selecting these menu items.
- */
-void
-gtk_application_set_menubar (GtkApplication *application,
-                             GMenuModel     *menubar)
-{
-  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
-
-  g_return_if_fail (GTK_IS_APPLICATION (application));
-  g_return_if_fail (g_application_get_is_registered (G_APPLICATION (application)));
-  g_return_if_fail (!g_application_get_is_remote (G_APPLICATION (application)));
-  g_return_if_fail (menubar == NULL || G_IS_MENU_MODEL (menubar));
-
-  if (g_set_object (&priv->menubar, menubar))
-    {
-      gtk_application_impl_set_menubar (priv->impl, menubar);
-
-      g_object_notify_by_pspec (G_OBJECT (application), gtk_application_props[PROP_MENUBAR]);
-    }
-}
-
-/**
- * gtk_application_get_menubar:
- * @application: a #GtkApplication
- *
- * Returns the menu model that has been set with
- * gtk_application_set_menubar().
- *
- * Returns: (transfer none): the menubar for windows of @application
- */
-GMenuModel *
-gtk_application_get_menubar (GtkApplication *application)
-{
-  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
-
-  g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
-
-  return priv->menubar;
 }
 
 /**
@@ -1468,39 +1202,6 @@ gtk_application_handle_window_map (GtkApplication *application,
 
   if (priv->impl)
     gtk_application_impl_handle_window_map (priv->impl, window);
-}
-
-/**
- * gtk_application_get_menu_by_id:
- * @application: a #GtkApplication
- * @id: the id of the menu to look up
- *
- * Gets a menu from automatically loaded resources.
- * See [Automatic resources][automatic-resources]
- * for more information.
- *
- * Returns: (transfer none): Gets the menu with the
- *     given id from the automatically loaded resources
- */
-GMenu *
-gtk_application_get_menu_by_id (GtkApplication *application,
-                                const gchar    *id)
-{
-  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
-  GObject *object;
-
-  g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
-  g_return_val_if_fail (id != NULL, NULL);
-
-  if (!priv->menus_builder)
-    return NULL;
-
-  object = gtk_builder_get_object (priv->menus_builder, id);
-
-  if (!object || !G_IS_MENU (object))
-    return NULL;
-
-  return G_MENU (object);
 }
 
 void
