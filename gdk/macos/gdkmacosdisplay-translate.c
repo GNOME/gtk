@@ -640,7 +640,6 @@ fill_scroll_event (GdkMacosDisplay *self,
       else
         direction = GDK_SCROLL_UP;
 
-      dy = fabs (dy);
       dx = 0.0;
     }
   else if (dx != 0.0)
@@ -650,7 +649,6 @@ fill_scroll_event (GdkMacosDisplay *self,
       else
         direction = GDK_SCROLL_LEFT;
 
-      dx = fabs (dx);
       dy = 0.0;
     }
 
