@@ -841,7 +841,7 @@ gtk_accelerator_print_label (GString        *gstring,
       g_string_append (gstring, C_("keyboard label", "Shift"));
 #else
       /* U+21E7 UPWARDS WHITE ARROW */
-      g_string_append (gstring, "\xe2\x87\xa7");
+      g_string_append (gstring, "⇧");
 #endif
       seen_mod = TRUE;
     }
@@ -860,7 +860,7 @@ gtk_accelerator_print_label (GString        *gstring,
       g_string_append (gstring, C_("keyboard label", "Ctrl"));
 #else
       /* U+2303 UP ARROWHEAD */
-      g_string_append (gstring, "\xe2\x8c\x83");
+      g_string_append (gstring, "⌃");
 #endif
       seen_mod = TRUE;
     }
@@ -879,7 +879,7 @@ gtk_accelerator_print_label (GString        *gstring,
       g_string_append (gstring, C_("keyboard label", "Alt"));
 #else
       /* U+2325 OPTION KEY */
-      g_string_append (gstring, "\xe2\x8c\xa5");
+      g_string_append (gstring, "⌥");
 #endif
       seen_mod = TRUE;
     }
@@ -925,8 +925,7 @@ gtk_accelerator_print_label (GString        *gstring,
        */
       g_string_append (gstring, C_("keyboard label", "Meta"));
 #else
-      /* Command key symbol U+2318 PLACE OF INTEREST SIGN */
-      g_string_append (gstring, "\xe2\x8c\x98");
+      g_string_append (gstring, "⌘");
 #endif
       seen_mod = TRUE;
     }
