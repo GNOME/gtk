@@ -121,6 +121,7 @@ gboolean           _gdk_macos_surface_is_tracking             (GdkMacosSurface  
                                                                NSTrackingArea     *area);
 void               _gdk_macos_surface_monitor_changed         (GdkMacosSurface    *self);
 GdkMonitor        *_gdk_macos_surface_get_best_monitor        (GdkMacosSurface    *self);
+void               _gdk_macos_surface_reposition_children     (GdkMacosSurface    *self);
 
 G_END_DECLS
 
