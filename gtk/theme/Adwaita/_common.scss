@@ -4046,7 +4046,7 @@ window {
     // FIXME rationalize shadows
 
     margin: 0px;
-    border-radius: $window_radius $window_radius 0 0;
+    border-radius: $window_radius;
 
     &:backdrop {
       // the transparent shadow here is to enforce that the shadow extents don't
@@ -4066,7 +4066,6 @@ window {
     }
 
     &.dialog.message {
-      border-radius: $window_radius;
       box-shadow: 0 1px 2px transparentize(black, 0.8),
                   0 0 0 1px transparentize($_wm_border, 0.1);
     }
