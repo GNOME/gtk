@@ -325,27 +325,6 @@ clicked_cb (GtkWidget *widget, DemoApplicationWindow *window)
 }
 
 static void
-startup (GApplication *app)
-{
-  GtkBuilder *builder;
-  GMenuModel *appmenu;
-  GMenuModel *menubar;
-
-  G_APPLICATION_CLASS (demo_application_parent_class)->startup (app);
-
-  builder = gtk_builder_new ();
-  gtk_builder_add_from_resource (builder, "/application_demo/menus.ui", NULL);
-
-  appmenu = (GMenuModel *)gtk_builder_get_object (builder, "appmenu");
-  menubar = (GMenuModel *)gtk_builder_get_object (builder, "menubar");
-
-  gtk_application_set_app_menu (GTK_APPLICATION (app), appmenu);
-  gtk_application_set_menubar (GTK_APPLICATION (app), menubar);
-
-  g_object_unref (builder);
-}
-
-static void
 create_window (GApplication *app,
                const char   *content)
 {
@@ -390,7 +369,6 @@ demo_application_class_init (DemoApplicationClass *class)
 {
   GApplicationClass *app_class = G_APPLICATION_CLASS (class);
 
-  app_class->startup = startup;
   app_class->activate = activate;
 }
 
