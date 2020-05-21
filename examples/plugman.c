@@ -76,6 +76,8 @@ new_window (GApplication *app,
             GFile        *file)
 {
   GtkWidget *window, *grid, *scrolled, *view;
+  GtkWidget *menubar;
+  GMenuModel *model;
 
   window = gtk_application_window_new (GTK_APPLICATION (app));
   gtk_window_set_default_size ((GtkWindow*)window, 640, 480);
@@ -84,6 +86,10 @@ new_window (GApplication *app,
 
   grid = gtk_grid_new ();
   gtk_window_set_child (GTK_WINDOW (window), grid);
+
+  model = G_MENU_MODEL (g_object_get_data (G_OBJECT (app), "menubar"));
+  menubar = gtk_popover_menu_bar_new_from_model (model);
+  gtk_grid_attach (GTK_GRID (grid), menubar, 0, -1, 1, 1);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_hexpand (scrolled, TRUE);
@@ -401,30 +407,30 @@ plug_man_startup (GApplication *application)
 {
   GtkBuilder *builder;
 
-  G_APPLICATION_CLASS (plug_man_parent_class)
-    ->startup (application);
+  G_APPLICATION_CLASS (plug_man_parent_class)->startup (application);
 
   g_action_map_add_action_entries (G_ACTION_MAP (application), app_entries, G_N_ELEMENTS (app_entries), application);
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder,
                                "<interface>"
-                               "  <menu id='app-menu'>"
-                               "    <section>"
-                               "      <item>"
-                               "        <attribute name='label' translatable='yes'>_About Plugman</attribute>"
-                               "        <attribute name='action'>app.about</attribute>"
-                               "      </item>"
-                               "    </section>"
-                               "    <section>"
-                               "      <item>"
-                               "        <attribute name='label' translatable='yes'>_Quit</attribute>"
-                               "        <attribute name='action'>app.quit</attribute>"
-                               "        <attribute name='accel'>&lt;Primary&gt;q</attribute>"
-                               "      </item>"
-                               "    </section>"
-                               "  </menu>"
                                "  <menu id='menubar'>"
+                               "    <submenu>"
+                               "      <attribute name='label' translatable='yes'>Plugman</attribute>"
+                               "      <section>"
+                               "        <item>"
+                               "          <attribute name='label' translatable='yes'>_About Plugman</attribute>"
+                               "          <attribute name='action'>app.about</attribute>"
+                               "        </item>"
+                               "      </section>"
+                               "      <section>"
+                               "        <item>"
+                               "          <attribute name='label' translatable='yes'>_Quit</attribute>"
+                               "          <attribute name='action'>app.quit</attribute>"
+                               "          <attribute name='accel'>&lt;Primary&gt;q</attribute>"
+                               "        </item>"
+                               "      </section>"
+                               "    </submenu>"
                                "    <submenu>"
                                "      <attribute name='label' translatable='yes'>_Edit</attribute>"
                                "      <section>"
@@ -457,9 +463,8 @@ plug_man_startup (GApplication *application)
                                "    </submenu>"
                                "  </menu>"
                                "</interface>", -1, NULL);
-  gtk_application_set_app_menu (GTK_APPLICATION (application), G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
-  gtk_application_set_menubar (GTK_APPLICATION (application), G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
-  g_object_set_data_full (G_OBJECT (application), "plugin-menu", gtk_builder_get_object (builder, "plugins"), g_object_unref);
+  g_object_set_data_full (G_OBJECT (application), "menubar", g_object_ref (gtk_builder_get_object (builder, "menubar")), g_object_unref);
+  g_object_set_data_full (G_OBJECT (application), "plugin-menu", g_object_ref (gtk_builder_get_object (builder, "plugins")), g_object_unref);
   g_object_unref (builder);
 }
 

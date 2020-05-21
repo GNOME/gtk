@@ -6,6 +6,7 @@ typedef struct
   GtkApplication parent_instance;
 
   guint quit_inhibit;
+  GMenu *menu;
   GMenu *time;
   guint timeout;
 } BloatPad;
@@ -212,6 +213,7 @@ new_window (GApplication *app,
             GFile        *file)
 {
   GtkWidget *window, *grid, *scrolled, *view;
+  GtkWidget *menubar;
   GtkWidget *toolbar;
   GtkWidget *button;
   GtkWidget *sw, *box, *label;
@@ -223,6 +225,9 @@ new_window (GApplication *app,
 
   grid = gtk_grid_new ();
   gtk_window_set_child (GTK_WINDOW (window), grid);
+
+  menubar = gtk_popover_menu_bar_new_from_model (G_MENU_MODEL (((BloatPad *)app)->menu));
+  gtk_grid_attach (GTK_GRID (grid), menubar, 0, -1, 1, 1);
 
   toolbar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   button = gtk_toggle_button_new ();
@@ -525,18 +530,20 @@ bloat_pad_startup (GApplication *application)
     { "win.justify::center", { "<Control>m", NULL } },
     { "win.justify::right", { "<Control>r", NULL } }
   };
+  GtkBuilder *builder;
 
-  G_APPLICATION_CLASS (bloat_pad_parent_class)
-    ->startup (application);
+  G_APPLICATION_CLASS (bloat_pad_parent_class)->startup (application);
 
   g_action_map_add_action_entries (G_ACTION_MAP (application), app_entries, G_N_ELEMENTS (app_entries), application);
 
   for (i = 0; i < G_N_ELEMENTS (accels); i++)
     gtk_application_set_accels_for_action (app, accels[i].action_and_target, accels[i].accelerators);
 
-  menu = gtk_application_get_menu_by_id (GTK_APPLICATION (application), "icon-menu");
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_resource (builder, "/org/gtk/bloatpad/gtk/menus.ui", NULL);
+  menu = G_MENU (gtk_builder_get_object (builder, "icon-menu"));
 
-  file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/16x16/actions/gtk-select-color.png");
+  file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/16x16/actions/media-record.png");
   icon = g_file_icon_new (file);
   item = g_menu_item_new ("File Icon", NULL);
   g_menu_item_set_icon (item, icon);
@@ -552,7 +559,7 @@ bloat_pad_startup (GApplication *application)
   g_object_unref (item);
   g_object_unref (icon);
 
-  bytes = g_resources_lookup_data ("/org/gtk/libgtk/icons/16x16/actions/gtk-select-font.png", 0, NULL);
+  bytes = g_resources_lookup_data ("/org/gtk/libgtk/icons/16x16/actions/bookmark-new.png", 0, NULL);
   icon = g_bytes_icon_new (bytes);
   item = g_menu_item_new ("Bytes Icon", NULL);
   g_menu_item_set_icon (item, icon);
@@ -561,19 +568,19 @@ bloat_pad_startup (GApplication *application)
   g_object_unref (icon);
   g_bytes_unref (bytes);
 
-  icon = G_ICON (gdk_pixbuf_new_from_resource ("/org/gtk/libgtk/icons/16x16/actions/gtk-preferences.png", NULL));
+  icon = G_ICON (gdk_pixbuf_new_from_resource ("/org/gtk/libgtk/icons/16x16/actions/media-eject.png", NULL));
   item = g_menu_item_new ("Pixbuf", NULL);
   g_menu_item_set_icon (item, icon);
   g_menu_append_item (menu, item);
   g_object_unref (item);
   g_object_unref (icon);
 
-  file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/16x16/actions/gtk-page-setup.png");
+  file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/16x16/actions/insert-image.png");
   icon = g_file_icon_new (file);
   emblem = g_emblem_new (icon);
   g_object_unref (icon);
   g_object_unref (file);
-  file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/16x16/actions/gtk-orientation-reverse-portrait.png");
+  file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/16x16/actions/list-add.png");
   icon2 = g_file_icon_new (file);
   icon = g_emblemed_icon_new (icon2, emblem);
   item = g_menu_item_new ("Emblemed Icon", NULL);
@@ -596,8 +603,11 @@ bloat_pad_startup (GApplication *application)
   gtk_application_set_accels_for_action (GTK_APPLICATION (application), "app.new", new_accels);
 
   dump_accels (GTK_APPLICATION (application));
-  //gtk_application_set_menubar (GTK_APPLICATION (application), G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
-  bloatpad->time = gtk_application_get_menu_by_id (GTK_APPLICATION (application), "time-menu");
+
+  bloatpad->menu = g_object_ref (G_MENU (gtk_builder_get_object (builder, "menubar")));
+  bloatpad->time = g_object_ref (G_MENU (gtk_builder_get_object (builder, "time-menu")));
+
+  g_object_unref (builder);
 }
 
 static void
@@ -611,8 +621,7 @@ bloat_pad_shutdown (GApplication *application)
       bloatpad->timeout = 0;
     }
 
-  G_APPLICATION_CLASS (bloat_pad_parent_class)
-    ->shutdown (application);
+  G_APPLICATION_CLASS (bloat_pad_parent_class)->shutdown (application);
 }
 
 static void
@@ -632,7 +641,6 @@ bloat_pad_class_init (BloatPadClass *class)
   application_class->open = bloat_pad_open;
 
   object_class->finalize = bloat_pad_finalize;
-
 }
 
 static BloatPad *

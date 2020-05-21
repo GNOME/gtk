@@ -7,9 +7,10 @@ new_window (GApplication *app,
 {
   GtkWidget *window, *scrolled, *view, *overlay;
   GtkWidget *header;
+  GMenuModel *model;
+  GtkWidget *menu;
 
   window = gtk_application_window_new (GTK_APPLICATION (app));
-  gtk_application_window_set_show_menubar (GTK_APPLICATION_WINDOW (window), FALSE);
   gtk_window_set_default_size ((GtkWindow*)window, 640, 480);
   gtk_window_set_title (GTK_WINDOW (window), "Sunny");
   gtk_window_set_icon_name (GTK_WINDOW (window), "sunny");
@@ -17,6 +18,11 @@ new_window (GApplication *app,
   header = gtk_header_bar_new ();
   gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), TRUE);
   gtk_window_set_titlebar (GTK_WINDOW (window), header);
+
+  model = G_MENU_MODEL (g_object_get_data (G_OBJECT (app), "menu"));
+  menu = gtk_menu_button_new ();
+  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (menu), model);
+  gtk_header_bar_pack_start (GTK_HEADER_BAR (header), menu);
 
   overlay = gtk_overlay_new ();
   gtk_window_set_child (GTK_WINDOW (window), overlay);
@@ -131,10 +137,6 @@ startup (GApplication *application)
   G_APPLICATION_CLASS (menu_button_parent_class)->startup (application);
 
   g_action_map_add_action_entries (G_ACTION_MAP (application), app_entries, G_N_ELEMENTS (app_entries), application);
-
-  if (g_getenv ("APP_MENU_FALLBACK"))
-    g_object_set (gtk_settings_get_default (), "gtk-shell-shows-app-menu", FALSE, NULL);
- 
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder,
                                "<interface>"
@@ -156,7 +158,9 @@ startup (GApplication *application)
                                "    </section>"
                                "  </menu>"
                                "</interface>", -1, NULL);
-  gtk_application_set_app_menu (GTK_APPLICATION (application), G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
+  g_object_set_data_full (G_OBJECT (application), "menu",
+                          g_object_ref (gtk_builder_get_object (builder, "app-menu")),
+                          g_object_unref);
   g_object_unref (builder);
 }
 
