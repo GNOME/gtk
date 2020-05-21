@@ -62,6 +62,9 @@ _gdk_macos_surface_reposition_children (GdkMacosSurface *self)
 {
   g_assert (GDK_IS_MACOS_SURFACE (self));
 
+  if (!gdk_surface_get_mapped (GDK_SURFACE (self)))
+    return;
+
   for (const GList *iter = GDK_SURFACE (self)->children;
        iter != NULL;
        iter = iter->next)
@@ -73,6 +76,9 @@ _gdk_macos_surface_reposition_children (GdkMacosSurface *self)
       if (GDK_IS_MACOS_POPUP_SURFACE (child))
         _gdk_macos_popup_surface_reposition (GDK_MACOS_POPUP_SURFACE (child));
     }
+
+  if (GDK_IS_POPUP (self) || self->did_initial_present)
+    g_signal_emit_by_name (self, "popup-layout-changed");
 }
 
 static void
@@ -640,8 +646,6 @@ _gdk_macos_surface_update_position (GdkMacosSurface *self)
       surface->x = self->root_x;
       surface->y = self->root_y;
     }
-
-  _gdk_macos_surface_reposition_children (self);
 }
 
 void
