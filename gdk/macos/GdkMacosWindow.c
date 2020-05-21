@@ -199,6 +199,7 @@
     gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_MAXIMIZED, 0);
 
   _gdk_macos_surface_update_position (gdk_surface);
+  _gdk_macos_surface_reposition_children (gdk_surface);
 
   [self checkSendEnterNotify];
 }
@@ -241,6 +242,8 @@
   node = _gdk_event_queue_append (display, event);
   _gdk_windowing_got_event (display, node, event,
                             _gdk_display_get_next_serial (display));
+
+  _gdk_macos_surface_reposition_children (gdk_surface);
 
   [self checkSendEnterNotify];
 }
