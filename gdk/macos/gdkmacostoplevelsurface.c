@@ -484,7 +484,7 @@ _gdk_macos_toplevel_surface_new (GdkMacosDisplay *display,
   _gdk_macos_display_to_display_coords (display, x, y, &nx, &ny);
 
   screen = _gdk_macos_display_get_screen_at_display_coords (display, nx, ny);
-  screen_rect = [screen frame];
+  screen_rect = [screen visibleFrame];
   nx -= screen_rect.origin.x;
   ny -= screen_rect.origin.y;
   content_rect = NSMakeRect (nx, ny - height, width, height);
