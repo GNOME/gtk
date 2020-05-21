@@ -83,7 +83,7 @@ do_builder (GtkWidget *do_widget)
                                        window);
       gtk_widget_insert_action_group (window, "win", actions);
 
-      g_object_set_data_full (G_OBJECT(window), "builder", builder, g_object_unref);
+      g_object_unref (builder);
     }
 
   if (!gtk_widget_get_visible (window))
