@@ -41,6 +41,7 @@ GdkMacosSurface *_gdk_macos_popup_surface_new                (GdkMacosDisplay   
                                                               int                   height);
 void             _gdk_macos_popup_surface_attach_to_parent   (GdkMacosPopupSurface *self);
 void             _gdk_macos_popup_surface_detach_from_parent (GdkMacosPopupSurface *self);
+void             _gdk_macos_popup_surface_reposition         (GdkMacosPopupSurface *self);
 
 G_END_DECLS
 
