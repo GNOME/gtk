@@ -206,6 +206,12 @@ _edge_snapping_motion (EdgeSnapping   *self,
       new_window.y = pointer_position->y - self->pointer_offset_in_window.y;
     }
 
+  /* And finally make sure we aren't underneath the top bar of the
+   * particular monitor.
+   */
+  if (Y1 (&new_window) < Y1 (&self->workarea))
+    new_window.y = self->workarea.y;
+
   *window = new_window;
 }
 
