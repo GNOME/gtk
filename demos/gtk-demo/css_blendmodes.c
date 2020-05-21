@@ -134,6 +134,8 @@ do_css_blendmodes (GtkWidget *do_widget)
                                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
       setup_listbox (builder, provider);
+
+      g_object_unref (builder);
     }
 
   if (!gtk_widget_get_visible (window))

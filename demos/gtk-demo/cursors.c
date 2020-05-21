@@ -29,7 +29,7 @@ do_cursors (GtkWidget *do_widget)
                               gtk_widget_get_display (do_widget));
       g_signal_connect (window, "destroy",
                         G_CALLBACK (on_destroy), NULL);
-      g_object_set_data_full (G_OBJECT (window), "builder", builder, g_object_unref);
+      g_object_unref (builder);
     }
 
   if (!gtk_widget_get_visible (window))
