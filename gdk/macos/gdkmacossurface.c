@@ -62,6 +62,9 @@ _gdk_macos_surface_reposition_children (GdkMacosSurface *self)
 {
   g_assert (GDK_IS_MACOS_SURFACE (self));
 
+  if (GDK_SURFACE_DESTROYED (self))
+    return;
+
   if (!gdk_surface_get_mapped (GDK_SURFACE (self)))
     return;
 
