@@ -191,6 +191,22 @@ gdk_macos_display_monitors_changed_cb (CFNotificationCenterRef  center,
   g_assert (GDK_IS_MACOS_DISPLAY (self));
 
   _gdk_macos_display_reload_monitors (self);
+
+  /* Now we need to update all our surface positions since they
+   * probably just changed origins. We ignore the popup surfaces
+   * since we can rely on the toplevel surfaces to handle that.
+   */
+  for (const GList *iter = _gdk_macos_display_get_surfaces (self);
+       iter != NULL;
+       iter = iter->next)
+    {
+      GdkMacosSurface *surface = iter->data;
+
+      g_assert (GDK_IS_MACOS_SURFACE (surface));
+
+      if (GDK_IS_TOPLEVEL (surface))
+        _gdk_macos_surface_update_position (surface);
+    }
 }
 
 static void
@@ -670,7 +686,7 @@ _gdk_macos_display_open (const gchar *display_name)
   gdk_macos_display_load_display_link (self);
   _gdk_macos_display_reload_monitors (self);
 
-  CFNotificationCenterAddObserver (CFNotificationCenterGetDistributedCenter (),
+  CFNotificationCenterAddObserver (CFNotificationCenterGetLocalCenter (),
                                    self,
                                    gdk_macos_display_monitors_changed_cb,
                                    CFSTR ("NSApplicationDidChangeScreenParametersNotification"),
