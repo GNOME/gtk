@@ -156,8 +156,25 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
           (GDK_MACOS_SURFACE (self)->shadow_left ||
            GDK_MACOS_SURFACE (self)->shadow_top))
         {
-          int x = GDK_SURFACE (self)->x - GDK_MACOS_SURFACE (self)->shadow_left;
-          int y = GDK_SURFACE (self)->y - GDK_MACOS_SURFACE (self)->shadow_top;
+          GdkMonitor *monitor = _gdk_macos_surface_get_best_monitor (GDK_MACOS_SURFACE (self));
+          int x = GDK_SURFACE (self)->x;
+          int y = GDK_SURFACE (self)->y;
+
+          if (monitor != NULL)
+            {
+              GdkRectangle visible;
+
+              gdk_monitor_get_workarea (monitor, &visible);
+
+              if (x < visible.x)
+                x = visible.x;
+
+              if (y < visible.y)
+                y = visible.y;
+            }
+
+          x -= GDK_MACOS_SURFACE (self)->shadow_left;
+          y -= GDK_MACOS_SURFACE (self)->shadow_top;
 
           _gdk_macos_surface_move (GDK_MACOS_SURFACE (self), x, y);
         }
