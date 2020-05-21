@@ -449,12 +449,6 @@ object_tree_text_tag_table_get_children (GObject *object)
   return NULL;
 }
 
-static GListModel *
-object_tree_application_get_children (GObject *object)
-{
-  return list_model_for_properties (object, (const char *[3]) { "app-menu", "menubar", NULL });
-}
-
 static GObject *
 object_tree_event_controller_get_parent (GObject *object)
 {
@@ -467,11 +461,6 @@ object_tree_event_controller_get_parent (GObject *object)
  * using g_type_is_a ()
  */
 static const ObjectTreeClassFuncs object_tree_class_funcs[] = {
-  {
-    gtk_application_get_type,
-    object_tree_get_parent_default,
-    object_tree_application_get_children
-  },
   {
     gtk_text_tag_table_get_type,
     object_tree_get_parent_default,
