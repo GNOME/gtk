@@ -826,13 +826,13 @@ _gdk_macos_surface_move_resize (GdkMacosSurface *self,
 
   if (GDK_IS_MACOS_SURFACE (surface->parent))
     {
-      surface->x = self->root_x - GDK_MACOS_SURFACE (surface->parent)->root_x;
-      surface->y = self->root_y - GDK_MACOS_SURFACE (surface->parent)->root_y;
+      surface->x = x - GDK_MACOS_SURFACE (surface->parent)->root_x;
+      surface->y = y - GDK_MACOS_SURFACE (surface->parent)->root_y;
     }
   else
     {
-      surface->x = self->root_x;
-      surface->y = self->root_y;
+      surface->x = x;
+      surface->y = y;
     }
 
   _gdk_macos_display_to_display_coords (GDK_MACOS_DISPLAY (display),
@@ -844,7 +844,6 @@ _gdk_macos_surface_move_resize (GdkMacosSurface *self,
 
   if (size_changed)
     gdk_surface_invalidate_rect (surface, NULL);
-
 }
 
 gboolean
