@@ -39,7 +39,7 @@ update_statusbar (void)
   const char *print_str;
 
   gtk_statusbar_pop (GTK_STATUSBAR (statusbar), 0);
-  
+
   gtk_text_buffer_get_iter_at_mark (buffer,
                                     &iter,
                                     gtk_text_buffer_get_insert (buffer));
@@ -53,11 +53,11 @@ update_statusbar (void)
       GtkPrintOperation *op = active_prints->data;
       print_str = gtk_print_operation_get_status_string (op);
     }
-  
+
   msg = g_strdup_printf ("%d, %d%s %s",
                          row, col,
-			 file_changed?" - Modified":"",
-			 print_str);
+                         file_changed?" - Modified":"",
+                         print_str);
 
   gtk_statusbar_push (GTK_STATUSBAR (statusbar), 0, msg);
 
@@ -104,37 +104,37 @@ load_file (GFile *open_filename)
   if (error == NULL)
     {
       if (g_utf8_validate (contents, len, NULL))
-	{
+        {
           g_clear_object (&filename);
-	  filename = g_object_ref (open_filename);
-	  set_text (contents, len);
-	  g_free (contents);
-	}
+          filename = g_object_ref (open_filename);
+          set_text (contents, len);
+          g_free (contents);
+        }
       else
-	{
+        {
           GFileInfo *info = g_file_query_info (open_filename, "standard::display-name", 0, NULL, &error);
           const char *display_name = g_file_info_get_display_name (info);
-	  error_dialog = gtk_message_dialog_new (GTK_WINDOW (main_window),
-						 GTK_DIALOG_DESTROY_WITH_PARENT,
-						 GTK_MESSAGE_ERROR,
-						 GTK_BUTTONS_CLOSE,
-						 "Error loading file %s:\n%s",
-						 display_name,
-						 "Not valid utf8");
+          error_dialog = gtk_message_dialog_new (GTK_WINDOW (main_window),
+                                                 GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                 GTK_MESSAGE_ERROR,
+                                                 GTK_BUTTONS_CLOSE,
+                                                 "Error loading file %s:\n%s",
+                                                 display_name,
+                                                 "Not valid utf8");
          g_object_unref (info);
-	}
+        }
     }
   else
     {
       GFileInfo *info = g_file_query_info (open_filename, "standard::display-name", 0, NULL, &error);
       const char *display_name = g_file_info_get_display_name (info);
       error_dialog = gtk_message_dialog_new (GTK_WINDOW (main_window),
-					     GTK_DIALOG_DESTROY_WITH_PARENT,
-					     GTK_MESSAGE_ERROR,
-					     GTK_BUTTONS_CLOSE,
-					     "Error loading file %s:\n%s",
-					     display_name,
-					     error->message);
+                                             GTK_DIALOG_DESTROY_WITH_PARENT,
+                                             GTK_MESSAGE_ERROR,
+                                             GTK_BUTTONS_CLOSE,
+                                             "Error loading file %s:\n%s",
+                                             display_name,
+                                             error->message);
       g_object_unref (info);
       g_error_free (error);
     }
@@ -166,10 +166,10 @@ save_file (GFile *save_filename)
   if (error != NULL)
     {
       if (save_filename != filename)
-	{
+        {
           g_clear_object (&filename);
           filename = g_object_ref (save_filename);
-	}
+        }
       file_changed = FALSE;
       update_ui ();
     }
@@ -179,16 +179,16 @@ save_file (GFile *save_filename)
       const char *display_name = g_file_info_get_display_name (info);
 
       error_dialog = gtk_message_dialog_new (GTK_WINDOW (main_window),
-					     GTK_DIALOG_DESTROY_WITH_PARENT,
-					     GTK_MESSAGE_ERROR,
-					     GTK_BUTTONS_CLOSE,
-					     "Error saving to file %s:\n%s",
-					     display_name,
-					     error->message);
-      
+                                             GTK_DIALOG_DESTROY_WITH_PARENT,
+                                             GTK_MESSAGE_ERROR,
+                                             GTK_BUTTONS_CLOSE,
+                                             "Error saving to file %s:\n%s",
+                                             display_name,
+                                             error->message);
+
       g_signal_connect (error_dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
       gtk_widget_show (error_dialog);
-      
+
       g_error_free (error);
       g_object_unref (info);
     }
@@ -205,8 +205,8 @@ typedef struct {
 
 static void
 begin_print (GtkPrintOperation *operation,
-	     GtkPrintContext *context,
-	     PrintData *print_data)
+             GtkPrintContext *context,
+             PrintData *print_data)
 {
   PangoFontDescription *desc;
   PangoLayoutLine *layout_line;
@@ -226,7 +226,7 @@ begin_print (GtkPrintOperation *operation,
   pango_font_description_free (desc);
 
   pango_layout_set_width (print_data->layout, width * PANGO_SCALE);
-  
+
   pango_layout_set_text (print_data->layout, print_data->text, -1);
 
   num_lines = pango_layout_get_line_count (print_data->layout);
@@ -238,32 +238,32 @@ begin_print (GtkPrintOperation *operation,
     {
       PangoRectangle ink_rect, logical_rect;
       double line_height;
-      
+
       layout_line = pango_layout_get_line (print_data->layout, line);
       pango_layout_line_get_extents (layout_line, &ink_rect, &logical_rect);
 
       line_height = logical_rect.height / 1024.0;
 
       if (page_height + line_height > height)
-	{
-	  page_breaks = g_list_prepend (page_breaks, GINT_TO_POINTER (line));
-	  page_height = 0;
-	}
+        {
+          page_breaks = g_list_prepend (page_breaks, GINT_TO_POINTER (line));
+          page_height = 0;
+        }
 
       page_height += line_height;
     }
 
   page_breaks = g_list_reverse (page_breaks);
   gtk_print_operation_set_n_pages (operation, g_list_length (page_breaks) + 1);
-  
+
   print_data->page_breaks = page_breaks;
 }
 
 static void
 draw_page (GtkPrintOperation *operation,
-	   GtkPrintContext *context,
-	   int page_nr,
-	   PrintData *print_data)
+           GtkPrintContext *context,
+           int page_nr,
+           PrintData *print_data)
 {
   cairo_t *cr;
   GList *pagebreak;
@@ -284,11 +284,11 @@ draw_page (GtkPrintOperation *operation,
     end = pango_layout_get_line_count (print_data->layout);
   else
     end = GPOINTER_TO_INT (pagebreak->data);
-    
+
   cr = gtk_print_context_get_cairo_context (context);
 
   cairo_set_source_rgb (cr, 0, 0, 0);
-  
+
   i = 0;
   start_pos = 0;
   iter = pango_layout_get_iter (print_data->layout);
@@ -299,30 +299,30 @@ draw_page (GtkPrintOperation *operation,
       int              baseline;
 
       if (i >= start)
-	{
-	  line = pango_layout_iter_get_line (iter);
+        {
+          line = pango_layout_iter_get_line (iter);
 
-	  pango_layout_iter_get_line_extents (iter, NULL, &logical_rect);
-	  baseline = pango_layout_iter_get_baseline (iter);
-	  
-	  if (i == start)
-	    start_pos = logical_rect.y / 1024.0;
-	  
-	  cairo_move_to (cr, logical_rect.x / 1024.0, baseline / 1024.0 - start_pos);
-	  
-	  pango_cairo_show_layout_line  (cr, line);
-	}
+          pango_layout_iter_get_line_extents (iter, NULL, &logical_rect);
+          baseline = pango_layout_iter_get_baseline (iter);
+
+          if (i == start)
+            start_pos = logical_rect.y / 1024.0;
+
+          cairo_move_to (cr, logical_rect.x / 1024.0, baseline / 1024.0 - start_pos);
+
+          pango_cairo_show_layout_line  (cr, line);
+        }
       i++;
     }
   while (i < end &&
-	 pango_layout_iter_next_line (iter));
+         pango_layout_iter_next_line (iter));
 
   pango_layout_iter_free (iter);
 }
 
 static void
 status_changed_cb (GtkPrintOperation *op,
-		   gpointer user_data)
+                   gpointer user_data)
 {
   if (gtk_print_operation_is_finished (op))
     {
@@ -334,7 +334,7 @@ status_changed_cb (GtkPrintOperation *op,
 
 static GtkWidget *
 create_custom_widget (GtkPrintOperation *operation,
-		      PrintData *data)
+                      PrintData *data)
 {
   GtkWidget *vbox, *hbox, *font, *label;
 
@@ -359,8 +359,8 @@ create_custom_widget (GtkPrintOperation *operation,
 
 static void
 custom_widget_apply (GtkPrintOperation *operation,
-		     GtkWidget *widget,
-		     PrintData *data)
+                     GtkWidget *widget,
+                     PrintData *data)
 {
   const char *selected_font;
   selected_font = gtk_font_chooser_get_font (GTK_FONT_CHOOSER (data->font_button));
@@ -371,8 +371,8 @@ custom_widget_apply (GtkPrintOperation *operation,
 
 static void
 print_done (GtkPrintOperation *op,
-	    GtkPrintOperationResult res,
-	    PrintData *print_data)
+            GtkPrintOperationResult res,
+            PrintData *print_data)
 {
   GError *error = NULL;
 
@@ -380,38 +380,38 @@ print_done (GtkPrintOperation *op,
     {
 
       GtkWidget *error_dialog;
-      
+
       gtk_print_operation_get_error (op, &error);
-      
+
       error_dialog = gtk_message_dialog_new (GTK_WINDOW (main_window),
-					     GTK_DIALOG_DESTROY_WITH_PARENT,
-					     GTK_MESSAGE_ERROR,
-					     GTK_BUTTONS_CLOSE,
-					     "Error printing file:\n%s",
-					     error ? error->message : "no details");
+                                             GTK_DIALOG_DESTROY_WITH_PARENT,
+                                             GTK_MESSAGE_ERROR,
+                                             GTK_BUTTONS_CLOSE,
+                                             "Error printing file:\n%s",
+                                             error ? error->message : "no details");
       g_signal_connect (error_dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
       gtk_widget_show (error_dialog);
     }
   else if (res == GTK_PRINT_OPERATION_RESULT_APPLY)
     {
       if (settings != NULL)
-	g_object_unref (settings);
+        g_object_unref (settings);
       settings = g_object_ref (gtk_print_operation_get_print_settings (op));
     }
 
   g_free (print_data->text);
   g_free (print_data->font);
   g_free (print_data);
-  
+
   if (!gtk_print_operation_is_finished (op))
     {
       g_object_ref (op);
       active_prints = g_list_append (active_prints, op);
       update_statusbar ();
-      
+
       /* This ref is unref:ed when we get the final state change */
       g_signal_connect (op, "status_changed",
-			G_CALLBACK (status_changed_cb), NULL);
+                        G_CALLBACK (status_changed_cb), NULL);
     }
 }
 
@@ -641,23 +641,24 @@ static GActionEntry app_entries[] = {
 
 static const gchar ui_info[] =
   "<interface>"
-  "  <menu id='appmenu'>"
-  "    <section>"
-  "      <item>"
-  "        <attribute name='label'>_About</attribute>"
-  "        <attribute name='action'>app.about</attribute>"
-  "        <attribute name='accel'>&lt;Primary&gt;a</attribute>"
-  "      </item>"
-  "    </section>"
-  "    <section>"
-  "      <item>"
-  "        <attribute name='label'>_Quit</attribute>"
-  "        <attribute name='action'>app.quit</attribute>"
-  "        <attribute name='accel'>&lt;Primary&gt;q</attribute>"
-  "      </item>"
-  "    </section>"
-  "  </menu>"
   "  <menu id='menubar'>"
+  "    <submenu>"
+  "      <attribute name='label'>_Print</attribute>"
+  "      <section>"
+  "        <item>"
+  "          <attribute name='label'>_About</attribute>"
+  "          <attribute name='action'>app.about</attribute>"
+  "          <attribute name='accel'>&lt;Primary&gt;a</attribute>"
+  "        </item>"
+  "      </section>"
+  "      <section>"
+  "        <item>"
+  "          <attribute name='label'>_Quit</attribute>"
+  "          <attribute name='action'>app.quit</attribute>"
+  "          <attribute name='accel'>&lt;Primary&gt;q</attribute>"
+  "        </item>"
+  "      </section>"
+  "    </submenu>"
   "    <submenu>"
   "      <attribute name='label'>_File</attribute>"
   "      <section>"
@@ -735,39 +736,29 @@ command_line (GApplication            *application,
 }
 
 static void
-startup (GApplication *app)
-{
-  GtkBuilder *builder;
-  GMenuModel *appmenu;
-  GMenuModel *menubar;
-
-  builder = gtk_builder_new ();
-  gtk_builder_add_from_string (builder, ui_info, -1, NULL);
-
-  appmenu = (GMenuModel *)gtk_builder_get_object (builder, "appmenu");
-  menubar = (GMenuModel *)gtk_builder_get_object (builder, "menubar");
-
-  gtk_application_set_app_menu (GTK_APPLICATION (app), appmenu);
-  gtk_application_set_menubar (GTK_APPLICATION (app), menubar);
-
-  g_object_unref (builder);
-}
-
-static void
 activate (GApplication *app)
 {
   GtkWidget *box;
   GtkWidget *sw;
   GtkWidget *contents;
+  GtkWidget *menubar;
+  GtkBuilder *builder;
+  GMenuModel *model;
 
   main_window = gtk_application_window_new (GTK_APPLICATION (app));
   gtk_window_set_icon_name (GTK_WINDOW (main_window), "text-editor");
   gtk_window_set_default_size (GTK_WINDOW (main_window), 400, 600);
-  gtk_application_window_set_show_menubar (GTK_APPLICATION_WINDOW (main_window), TRUE);
   update_title (GTK_WINDOW (main_window));
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_window_set_child (GTK_WINDOW (main_window), box);
+
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_string (builder, ui_info, -1, NULL);
+  model = G_MENU_MODEL (gtk_builder_get_object (builder, "menubar"));
+  menubar = gtk_popover_menu_bar_new_from_model (model);
+  gtk_box_append (GTK_BOX (box), menubar);
+  g_object_unref (builder);
 
   /* Create document  */
   sw = gtk_scrolled_window_new (NULL, NULL);
@@ -840,7 +831,6 @@ main (int argc, char **argv)
                                    app_entries, G_N_ELEMENTS (app_entries),
                                    app);
 
-  g_signal_connect (app, "startup", G_CALLBACK (startup), NULL);
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
   g_signal_connect (app, "command-line", G_CALLBACK (command_line), NULL);
 
