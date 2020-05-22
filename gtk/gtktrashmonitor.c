@@ -24,13 +24,18 @@
 #include "gtkmarshalers.h"
 #include "gtktrashmonitor.h"
 
+#define UPDATE_RATE_SECONDS 1
+
 struct _GtkTrashMonitor
 {
   GObject parent;
 
   GFileMonitor *file_monitor;
   gulong file_monitor_changed_id;
-  
+
+  gboolean pending;
+  gint timeout_id;
+
   guint has_trash : 1;
 };
 
@@ -70,6 +75,10 @@ gtk_trash_monitor_dispose (GObject *object)
       g_clear_object (&monitor->file_monitor);
     }
 
+  if (monitor->timeout_id > 0)
+    g_source_remove (monitor->timeout_id);
+  monitor->timeout_id = 0;
+
   G_OBJECT_CLASS (_gtk_trash_monitor_parent_class)->dispose (object);
 }
 
@@ -84,18 +93,18 @@ _gtk_trash_monitor_class_init (GtkTrashMonitorClass *class)
 
   signals[TRASH_STATE_CHANGED] =
     g_signal_new (I_("trash-state-changed"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (GtkTrashMonitorClass, trash_state_changed),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 0);
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (GtkTrashMonitorClass, trash_state_changed),
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
 }
 
 /* Updates the internal has_trash flag and emits the "trash-state-changed" signal */
 static void
 update_has_trash_and_notify (GtkTrashMonitor *monitor,
-			     gboolean has_trash)
+                             gboolean has_trash)
 {
   if (monitor->has_trash == !!has_trash)
     return;
@@ -136,11 +145,37 @@ trash_query_info_cb (GObject *source,
   g_object_unref (monitor); /* was reffed in recompute_trash_state() */
 }
 
+static void recompute_trash_state (GtkTrashMonitor *monitor);
+
+static gboolean
+recompute_trash_state_cb (gpointer data)
+{
+  GtkTrashMonitor *monitor = data;
+
+  monitor->timeout_id = 0;
+  if (monitor->pending)
+    {
+      monitor->pending = FALSE;
+      recompute_trash_state (monitor);
+    }
+
+  return G_SOURCE_REMOVE;
+}
+
 /* Asynchronously recomputes whether there is trash or not */
 static void
 recompute_trash_state (GtkTrashMonitor *monitor)
 {
   GFile *file;
+
+  /* Rate limit the updates to not flood the gvfsd-trash when too many changes
+   * happended in a short time.
+  */
+  if (monitor->timeout_id > 0)
+    {
+      monitor->pending = TRUE;
+      return;
+    }
 
   file = g_file_new_for_uri ("trash:///");
   g_file_query_info_async (file,
@@ -149,6 +184,10 @@ recompute_trash_state (GtkTrashMonitor *monitor)
                            G_PRIORITY_DEFAULT, NULL,
                            trash_query_info_cb, g_object_ref (monitor));
 
+  monitor->timeout_id = g_timeout_add_seconds (UPDATE_RATE_SECONDS,
+                                               recompute_trash_state_cb,
+                                               monitor);
+
   g_object_unref (file);
 }
 
@@ -156,11 +195,11 @@ recompute_trash_state (GtkTrashMonitor *monitor)
  * whenever something happens.
  */
 static void
-file_monitor_changed_cb (GFileMonitor	   *file_monitor,
-			 GFile		   *child,
-			 GFile		   *other_file,
-			 GFileMonitorEvent  event_type,
-			 GtkTrashMonitor   *monitor)
+file_monitor_changed_cb (GFileMonitor      *file_monitor,
+                         GFile             *child,
+                         GFile             *other_file,
+                         GFileMonitorEvent  event_type,
+                         GtkTrashMonitor   *monitor)
 {
   recompute_trash_state (monitor);
 }
@@ -173,12 +212,14 @@ _gtk_trash_monitor_init (GtkTrashMonitor *monitor)
   file = g_file_new_for_uri ("trash:///");
 
   monitor->file_monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, NULL);
+  monitor->pending = FALSE;
+  monitor->timeout_id = 0;
 
   g_object_unref (file);
 
   if (monitor->file_monitor)
     monitor->file_monitor_changed_id = g_signal_connect (monitor->file_monitor, "changed",
-							 G_CALLBACK (file_monitor_changed_cb), monitor);
+                                                         G_CALLBACK (file_monitor_changed_cb), monitor);
 
   recompute_trash_state (monitor);
 }
