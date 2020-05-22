@@ -5180,9 +5180,6 @@ gtk_application_inhibit
 gtk_application_uninhibit
 
 <SUBSECTION>
-gtk_application_prefers_app_menu
-gtk_application_get_app_menu
-gtk_application_set_app_menu
 gtk_application_get_menubar
 gtk_application_set_menubar
 gtk_application_get_menu_by_id

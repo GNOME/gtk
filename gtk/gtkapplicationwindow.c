@@ -41,9 +41,8 @@
  *
  * #GtkApplicationWindow is a #GtkWindow subclass that offers some
  * extra functionality for better integration with #GtkApplication
- * features.  Notably, it can handle both the application menu as well
- * as the menubar. See gtk_application_set_app_menu() and
- * gtk_application_set_menubar().
+ * features.  Notably, it can handle an application menubar.
+ * See gtk_application_set_menubar().
  *
  * This class implements the #GActionGroup and #GActionMap interfaces,
  * to let you add window-specific actions that will be exported by the
@@ -191,7 +190,6 @@ struct _GtkApplicationWindowPrivate
   GtkWidget *menubar;
 
   gboolean show_menubar;
-  GMenu *app_menu_section;
   GMenu *menubar_section;
 
   guint            id;
@@ -217,8 +215,7 @@ gtk_application_window_update_menubar (GtkApplicationWindow *window)
   have_menubar = priv->menubar != NULL;
 
   should_have_menubar = priv->show_menubar &&
-                        (g_menu_model_get_n_items (G_MENU_MODEL (priv->app_menu_section)) ||
-                         g_menu_model_get_n_items (G_MENU_MODEL (priv->menubar_section)));
+                        g_menu_model_get_n_items (G_MENU_MODEL (priv->menubar_section));
 
   if (have_menubar && !should_have_menubar)
     {
@@ -231,7 +228,6 @@ gtk_application_window_update_menubar (GtkApplicationWindow *window)
       GMenu *combined;
 
       combined = g_menu_new ();
-      g_menu_append_section (combined, NULL, G_MENU_MODEL (priv->app_menu_section));
       g_menu_append_section (combined, NULL, G_MENU_MODEL (priv->menubar_section));
 
       priv->menubar = gtk_popover_menu_bar_new_from_model (G_MENU_MODEL (combined));
@@ -267,57 +263,6 @@ gtk_application_window_get_app_desktop_name (void)
 }
 
 static void
-gtk_application_window_update_shell_shows_app_menu (GtkApplicationWindow *window,
-                                                    GtkSettings          *settings)
-{
-  GtkApplicationWindowPrivate *priv = gtk_application_window_get_instance_private (window);
-  gboolean shown_by_shell;
-
-  g_object_get (settings, "gtk-shell-shows-app-menu", &shown_by_shell, NULL);
-
-  if (shown_by_shell)
-    {
-      /* the shell shows it, so don't show it locally */
-      if (g_menu_model_get_n_items (G_MENU_MODEL (priv->app_menu_section)) != 0)
-        g_menu_remove (priv->app_menu_section, 0);
-    }
-  else
-    {
-      /* the shell does not show it, so make sure we show it */
-      if (g_menu_model_get_n_items (G_MENU_MODEL (priv->app_menu_section)) == 0)
-        {
-          GMenuModel *app_menu = NULL;
-
-          if (gtk_window_get_application (GTK_WINDOW (window)) != NULL)
-            app_menu = gtk_application_get_app_menu (gtk_window_get_application (GTK_WINDOW (window)));
-
-          if (app_menu != NULL)
-            {
-              const gchar *app_name;
-              gchar *name;
-
-              app_name = g_get_application_name ();
-              if (app_name != g_get_prgname ())
-                {
-                  /* the app has set its application name, use it */
-                  name = g_strdup (app_name);
-                }
-              else
-                {
-                  /* get the name from .desktop file */
-                  name = gtk_application_window_get_app_desktop_name ();
-                  if (name == NULL)
-                    name = g_strdup (_("Application"));
-                }
-
-              g_menu_append_submenu (priv->app_menu_section, name, app_menu);
-              g_free (name);
-            }
-        }
-    }
-}
-
-static void
 gtk_application_window_update_shell_shows_menubar (GtkApplicationWindow *window,
                                                    GtkSettings          *settings)
 {
@@ -346,17 +291,6 @@ gtk_application_window_update_shell_shows_menubar (GtkApplicationWindow *window,
             g_menu_append_section (priv->menubar_section, NULL, menubar);
         }
     }
-}
-
-static void
-gtk_application_window_shell_shows_app_menu_changed (GObject    *object,
-                                                     GParamSpec *pspec,
-                                                     gpointer    user_data)
-{
-  GtkApplicationWindow *window = user_data;
-
-  gtk_application_window_update_shell_shows_app_menu (window, GTK_SETTINGS (object));
-  gtk_application_window_update_menubar (window);
 }
 
 static void
@@ -610,14 +544,11 @@ gtk_application_window_real_realize (GtkWidget *widget)
 
   settings = gtk_widget_get_settings (widget);
 
-  g_signal_connect (settings, "notify::gtk-shell-shows-app-menu",
-                    G_CALLBACK (gtk_application_window_shell_shows_app_menu_changed), window);
   g_signal_connect (settings, "notify::gtk-shell-shows-menubar",
                     G_CALLBACK (gtk_application_window_shell_shows_menubar_changed), window);
 
   GTK_WIDGET_CLASS (gtk_application_window_parent_class)->realize (widget);
 
-  gtk_application_window_update_shell_shows_app_menu (window, settings);
   gtk_application_window_update_shell_shows_menubar (window, settings);
   gtk_application_window_update_menubar (window);
 }
@@ -629,7 +560,6 @@ gtk_application_window_real_unrealize (GtkWidget *widget)
 
   settings = gtk_widget_get_settings (widget);
 
-  g_signal_handlers_disconnect_by_func (settings, gtk_application_window_shell_shows_app_menu_changed, widget);
   g_signal_handlers_disconnect_by_func (settings, gtk_application_window_shell_shows_menubar_changed, widget);
 
   GTK_WIDGET_CLASS (gtk_application_window_parent_class)->unrealize (widget);
@@ -719,7 +649,6 @@ gtk_application_window_dispose (GObject *object)
       priv->menubar = NULL;
     }
 
-  g_clear_object (&priv->app_menu_section);
   g_clear_object (&priv->menubar_section);
 
   if (priv->help_overlay)
@@ -746,7 +675,6 @@ gtk_application_window_init (GtkApplicationWindow *window)
   GtkApplicationWindowPrivate *priv = gtk_application_window_get_instance_private (window);
 
   priv->actions = gtk_application_window_actions_new (window);
-  priv->app_menu_section = g_menu_new ();
   priv->menubar_section = g_menu_new ();
 
   gtk_widget_insert_action_group (GTK_WIDGET (window), "win", G_ACTION_GROUP (priv->actions));
@@ -785,12 +713,10 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
    * GtkApplicationWindow:show-menubar:
    *
    * If this property is %TRUE, the window will display a menubar
-   * that includes the app menu and menubar, unless these are
-   * shown by the desktop shell. See gtk_application_set_app_menu()
-   * and gtk_application_set_menubar().
+   * unless it is shown by the desktop shell. See gtk_application_set_menubar().
    *
    * If %FALSE, the window will not display a menubar, regardless
-   * of whether the desktop shell is showing the menus or not.
+   * of whether the desktop shell is showing it or not.
    */
   gtk_application_window_properties[PROP_SHOW_MENUBAR] =
     g_param_spec_boolean ("show-menubar",
