@@ -32,9 +32,14 @@ drag_begin (GtkDragSource *source,
 {
   GtkWidget *canvas;
   GtkWidget *item;
+  GdkPaintable *paintable;
 
   canvas = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
   item = g_object_get_data (G_OBJECT (canvas), "dragged-item");
+
+  paintable = gtk_widget_paintable_new (item);
+  gtk_drag_source_set_icon (source, paintable, 0, 0);
+  g_object_unref (paintable);
 
   gtk_widget_set_opacity (item, 0.5);
 }
