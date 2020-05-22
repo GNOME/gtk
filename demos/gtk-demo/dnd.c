@@ -17,6 +17,8 @@ struct _CanvasItem {
   double x, y;
   double angle;
   double delta;
+
+  GtkWidget *editor;
 };
 
 struct _CanvasItemClass {
@@ -161,6 +163,7 @@ canvas_item_dispose (GObject *object)
   CanvasItem *item = CANVAS_ITEM (object);
 
   g_clear_pointer (&item->label, gtk_widget_unparent);
+  g_clear_pointer (&item->editor, gtk_widget_unparent);
 
   G_OBJECT_CLASS (canvas_item_parent_class)->dispose (object);
 }
@@ -191,6 +194,79 @@ static GdkPaintable *
 canvas_item_get_drag_icon (CanvasItem *item)
 {
   return gtk_widget_paintable_new (item->label);
+}
+
+static gboolean
+canvas_item_is_editing (CanvasItem *item)
+{
+  return item->editor != NULL;
+}
+
+static void
+scale_changed (GtkRange   *range,
+               CanvasItem *item)
+{
+  item->angle = gtk_range_get_value (range);
+  apply_transform (item);
+}
+
+static void
+text_changed (GtkEditable *editable,
+              GParamSpec  *pspec,
+              CanvasItem  *item)
+{
+  gtk_label_set_text (GTK_LABEL (item->label), gtk_editable_get_text (editable));
+}
+
+static void
+canvas_item_stop_editing (CanvasItem *item)
+{
+  GtkWidget *scale;
+
+  if (!item->editor)
+    return;
+
+  scale = gtk_widget_get_last_child (item->editor);
+  g_signal_handlers_disconnect_by_func (scale, scale_changed, item);
+
+  gtk_fixed_remove (GTK_FIXED (gtk_widget_get_parent (item->editor)), item->editor);
+  item->editor = NULL;
+}
+
+static void
+canvas_item_start_editing (CanvasItem *item)
+{
+  GtkWidget *canvas = gtk_widget_get_parent (GTK_WIDGET (item));
+  GtkWidget *entry;
+  GtkWidget *scale;
+
+  if (item->editor)
+    return;
+
+  item->editor = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
+
+  entry = gtk_entry_new ();
+
+  gtk_editable_set_text (GTK_EDITABLE (entry),
+                         gtk_label_get_text (GTK_LABEL (item->label)));
+
+  gtk_editable_set_width_chars (GTK_EDITABLE (entry), 12);
+  g_signal_connect (entry, "notify::text", G_CALLBACK (text_changed), item);
+  g_signal_connect_swapped (entry, "activate", G_CALLBACK (canvas_item_stop_editing), item);
+
+  gtk_box_append (GTK_BOX (item->editor), entry);
+
+  scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0, 360, 1);
+  gtk_scale_set_draw_value (GTK_SCALE (scale), FALSE);
+  gtk_range_set_value (GTK_RANGE (scale), fmod (item->angle, 360));
+
+  g_signal_connect (scale, "value-changed", G_CALLBACK (scale_changed), item);
+
+  gtk_box_append (GTK_BOX (item->editor), scale);
+
+  gtk_fixed_put (GTK_FIXED (canvas), item->editor, item->x, item->y + 50);
+  gtk_widget_grab_focus (entry);
+
 }
 
 static GdkContentProvider *
@@ -294,46 +370,15 @@ new_item_cb (GtkWidget *button, gpointer data)
 }
 
 static void
-edit_label_done (GtkWidget *entry, gpointer data)
-{
-  GtkWidget *canvas = gtk_widget_get_parent (entry);
-  CanvasItem *item;
-  int x, y;
-
-  gtk_fixed_get_child_position (GTK_FIXED (canvas), entry, &x, &y);
-
-  item = CANVAS_ITEM (g_object_get_data (G_OBJECT (entry), "item"));
-  gtk_label_set_text (GTK_LABEL (item->label), gtk_editable_get_text (GTK_EDITABLE (entry)));
-  gtk_widget_show (GTK_WIDGET (item));
-
-  gtk_fixed_remove (GTK_FIXED (canvas), entry);
-}
-
-static void
 edit_cb (GtkWidget *button, GtkWidget *child)
 {
-  GtkWidget *canvas = gtk_widget_get_parent (child);
   CanvasItem *item = CANVAS_ITEM (child);
-  GtkWidget *entry;
-  double x, y;
-
-  gtk_widget_translate_coordinates (child, canvas, 0, 0, &x, &y);
-
-  entry = gtk_entry_new ();
-
-  g_object_set_data (G_OBJECT (entry), "item", item);
-
-  gtk_editable_set_text (GTK_EDITABLE (entry),
-                         gtk_label_get_text (GTK_LABEL (item->label)));
-
-  gtk_editable_set_width_chars (GTK_EDITABLE (entry), 12);
-  g_signal_connect (entry, "activate", G_CALLBACK (edit_label_done), NULL);
-  gtk_fixed_put (GTK_FIXED (canvas), entry, x, y);
-  gtk_widget_grab_focus (entry);
-  gtk_widget_hide (child);
 
   if (button)
     gtk_popover_popdown (GTK_POPOVER (gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER)));
+
+  if (!canvas_item_is_editing (item))
+    canvas_item_start_editing (item);
 }
 
 static void
@@ -412,15 +457,20 @@ released_cb (GtkGesture *gesture,
 {
   GtkWidget *widget;
   GtkWidget *child;
+  CanvasItem *item;
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
   child = gtk_widget_pick (widget, x, y, 0);
-  child = gtk_widget_get_ancestor (child, canvas_item_get_type ());
+  item = (CanvasItem *)gtk_widget_get_ancestor (child, canvas_item_get_type ());
+  if (!item)
+    return;
 
   if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) == GDK_BUTTON_PRIMARY)
     {
-      if (child != NULL && child != widget)
-        edit_cb (NULL, child);
+      if (canvas_item_is_editing (item))
+        canvas_item_stop_editing (item);
+      else
+        canvas_item_start_editing (item);
     }
 }
 
