@@ -452,7 +452,7 @@ object_tree_text_tag_table_get_children (GObject *object)
 static GListModel *
 object_tree_application_get_children (GObject *object)
 {
-  return list_model_for_properties (object, (const char *[3]) { "app-menu", "menubar", NULL });
+  return list_model_for_properties (object, (const char *[2]) { "menubar", NULL });
 }
 
 static GObject *
