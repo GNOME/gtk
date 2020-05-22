@@ -157,6 +157,8 @@ gdk_frame_clock_idle_dispose (GObject *object)
   G_OBJECT_CLASS (gdk_frame_clock_idle_parent_class)->dispose (object);
 }
 
+/* Note: This is never called on first frame, so
+ * smoothed_frame_time_base != 0 and we have a valid frame_interval. */
 static gint64
 compute_smooth_frame_time (GdkFrameClock *clock,
                            gint64 new_frame_time,
@@ -173,12 +175,6 @@ compute_smooth_frame_time (GdkFrameClock *clock,
   /* NOTE:  This is >= 0, because smoothed_frame_time_base is < frame_interval/2 from old_frame_time
    *        and new_frame_time >= old_frame_time. */
   frames_passed = (new_frame_time - smoothed_frame_time_base  + frame_interval/2) / frame_interval;
-
-  if (frames_passed > 4)
-    {
-      /* Huge jank anyway, lets resynchronize */
-      return new_frame_time;
-    }
 
   /* We use an approximately whole number of frames in the future from
    * last smoothed frame time. This way we avoid minor jitter in the
@@ -206,13 +202,21 @@ compute_smooth_frame_time (GdkFrameClock *clock,
    * The actual computation is:
    *   (current_error/frame_interval)*(current_error/frame_interval)*frame_interval
    * But this can be simplified as below.
+   *
+   * Note: We only do this correction if we're regularly animating (no
+   * or low frame skip). If the last frame was a long time ago, this
+   * cycle was likely triggered by an input event and new_frame_time
+   * is essentially random and not tied to the presentation time.
    */
-  current_error = new_smoothed_time - new_frame_time;
-  correction_magnitude = current_error * current_error / frame_interval; /* Note, this is always > 0 due to the square */
-  if (current_error > 0)
-    new_smoothed_time -= correction_magnitude;
-  else
-    new_smoothed_time += correction_magnitude;
+  if (frames_passed < 4)
+    {
+      current_error = new_smoothed_time - new_frame_time;
+      correction_magnitude = current_error * current_error / frame_interval; /* Note, this is always > 0 due to the square */
+      if (current_error > 0)
+        new_smoothed_time -= correction_magnitude;
+      else
+        new_smoothed_time += correction_magnitude;
+    }
 
   /* Ensure we're always strictly increasing (avoid division by zero when using time deltas) */
   if (new_smoothed_time <= priv->smoothed_frame_time_base)
