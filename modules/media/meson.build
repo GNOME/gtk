@@ -24,11 +24,7 @@ media_subdir = 'gtk-4.0/@0@/media'.format(gtk_binary_version)
 media_install_dir = join_paths(get_option('libdir'), media_subdir)
 
 extra_c_args = ['-DGTK_COMPILATION']
-
-# Detect and set symbol visibility
-if cc.get_id() == 'msvc'
-  extra_c_args += ['-D_GLIB_EXTERN=__declspec (dllexport) extern']
-endif
+extra_c_args += common_cflags
 
 if media_backends.contains('ffmpeg')
   libavfilter_dep = dependency('libavfilter', version: '>= 6.47.100', required: true)
