@@ -1244,8 +1244,8 @@ static GdkEvent *
 rewrite_event_for_toplevel (GdkEvent *event)
 {
   GdkSurface *surface;
-  GdkKeyEvent *key_event;
   GdkEventType event_type;
+  GdkTranslatedKey *key, *key_no_lock;
 
   surface = gdk_event_get_surface (event);
   if (!surface->parent)
@@ -1259,9 +1259,9 @@ rewrite_event_for_toplevel (GdkEvent *event)
   while (surface->parent)
     surface = surface->parent;
 
-  key_event = (GdkKeyEvent *) event;
+  key = gdk_key_event_get_translated_key (event, FALSE);
+  key_no_lock = gdk_key_event_get_translated_key (event, TRUE);
 
-  /* FIXME: Avoid direct access to the translated[] field */
   return gdk_key_event_new (gdk_event_get_event_type (event),
                             surface,
                             gdk_event_get_device (event),
@@ -1270,8 +1270,7 @@ rewrite_event_for_toplevel (GdkEvent *event)
                             gdk_key_event_get_keycode (event),
                             gdk_event_get_modifier_state (event),
                             gdk_key_event_is_modifier (event),
-                            &key_event->translated[0],
-                            &key_event->translated[1]);
+                            key, key_no_lock);
 }
 
 static gboolean
