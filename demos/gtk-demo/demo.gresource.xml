@@ -2,7 +2,6 @@
 <gresources>
   <gresource prefix="/ui">
     <file preprocess="xml-stripblanks">main.ui</file>
-    <file preprocess="xml-stripblanks">appmenu.ui</file>
   </gresource>
   <gresource prefix="/application_demo">
     <file>application.c</file>

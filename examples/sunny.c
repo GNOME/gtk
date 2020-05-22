@@ -9,7 +9,7 @@ new_window (GApplication *app,
   GtkWidget *header;
 
   window = gtk_application_window_new (GTK_APPLICATION (app));
-  gtk_application_window_set_show_menubar (GTK_APPLICATION_WINDOW (window), FALSE);
+  gtk_application_window_set_show_menubar (GTK_APPLICATION_WINDOW (window), TRUE);
   gtk_window_set_default_size ((GtkWindow*)window, 640, 480);
   gtk_window_set_title (GTK_WINDOW (window), "Sunny");
   gtk_window_set_icon_name (GTK_WINDOW (window), "sunny");
@@ -138,25 +138,28 @@ startup (GApplication *application)
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder,
                                "<interface>"
-                               "  <menu id='app-menu'>"
-                               "    <section>"
-                               "      <item>"
-                               "        <attribute name='label' translatable='yes'>_New Window</attribute>"
-                               "        <attribute name='action'>app.new</attribute>"
-                               "      </item>"
-                               "      <item>"
-                               "        <attribute name='label' translatable='yes'>_About Sunny</attribute>"
-                               "        <attribute name='action'>app.about</attribute>"
-                               "      </item>"
-                               "      <item>"
-                               "        <attribute name='label' translatable='yes'>_Quit</attribute>"
-                               "        <attribute name='action'>app.quit</attribute>"
-                               "        <attribute name='accel'>&lt;Primary&gt;q</attribute>"
-                               "      </item>"
-                               "    </section>"
+                               "  <menu id='menubar'>"
+                               "    <submenu>"
+                               "      <attribute name='label' translatable='yes'>Sunny</attribute>"
+                               "      <section>"
+                               "        <item>"
+                               "          <attribute name='label' translatable='yes'>_New Window</attribute>"
+                               "          <attribute name='action'>app.new</attribute>"
+                               "        </item>"
+                               "        <item>"
+                               "          <attribute name='label' translatable='yes'>_About Sunny</attribute>"
+                               "          <attribute name='action'>app.about</attribute>"
+                               "        </item>"
+                               "        <item>"
+                               "          <attribute name='label' translatable='yes'>_Quit</attribute>"
+                               "          <attribute name='action'>app.quit</attribute>"
+                               "          <attribute name='accel'>&lt;Primary&gt;q</attribute>"
+                               "        </item>"
+                               "      </section>"
+                               "    </submenu>"
                                "  </menu>"
                                "</interface>", -1, NULL);
-  gtk_application_set_app_menu (GTK_APPLICATION (application), G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
+  gtk_application_set_menubar (GTK_APPLICATION (application), G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
   g_object_unref (builder);
 }
 

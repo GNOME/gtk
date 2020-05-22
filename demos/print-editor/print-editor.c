@@ -641,23 +641,24 @@ static GActionEntry app_entries[] = {
 
 static const gchar ui_info[] =
   "<interface>"
-  "  <menu id='appmenu'>"
-  "    <section>"
-  "      <item>"
-  "        <attribute name='label'>_About</attribute>"
-  "        <attribute name='action'>app.about</attribute>"
-  "        <attribute name='accel'>&lt;Primary&gt;a</attribute>"
-  "      </item>"
-  "    </section>"
-  "    <section>"
-  "      <item>"
-  "        <attribute name='label'>_Quit</attribute>"
-  "        <attribute name='action'>app.quit</attribute>"
-  "        <attribute name='accel'>&lt;Primary&gt;q</attribute>"
-  "      </item>"
-  "    </section>"
-  "  </menu>"
   "  <menu id='menubar'>"
+  "    <submenu>"
+  "      <attribute name='label'>_Application</attribute>"
+  "      <section>"
+  "        <item>"
+  "          <attribute name='label'>_About</attribute>"
+  "          <attribute name='action'>app.about</attribute>"
+  "          <attribute name='accel'>&lt;Primary&gt;a</attribute>"
+  "        </item>"
+  "      </section>"
+  "      <section>"
+  "        <item>"
+  "          <attribute name='label'>_Quit</attribute>"
+  "          <attribute name='action'>app.quit</attribute>"
+  "          <attribute name='accel'>&lt;Primary&gt;q</attribute>"
+  "        </item>"
+  "      </section>"
+  "    </submenu>"
   "    <submenu>"
   "      <attribute name='label'>_File</attribute>"
   "      <section>"
@@ -738,16 +739,13 @@ static void
 startup (GApplication *app)
 {
   GtkBuilder *builder;
-  GMenuModel *appmenu;
   GMenuModel *menubar;
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder, ui_info, -1, NULL);
 
-  appmenu = (GMenuModel *)gtk_builder_get_object (builder, "appmenu");
   menubar = (GMenuModel *)gtk_builder_get_object (builder, "menubar");
 
-  gtk_application_set_app_menu (GTK_APPLICATION (app), appmenu);
   gtk_application_set_menubar (GTK_APPLICATION (app), menubar);
 
   g_object_unref (builder);
