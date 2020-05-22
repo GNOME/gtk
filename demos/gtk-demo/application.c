@@ -328,19 +328,14 @@ static void
 startup (GApplication *app)
 {
   GtkBuilder *builder;
-  GMenuModel *appmenu;
-  GMenuModel *menubar;
 
   G_APPLICATION_CLASS (demo_application_parent_class)->startup (app);
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_resource (builder, "/application_demo/menus.ui", NULL);
 
-  appmenu = (GMenuModel *)gtk_builder_get_object (builder, "appmenu");
-  menubar = (GMenuModel *)gtk_builder_get_object (builder, "menubar");
-
-  gtk_application_set_app_menu (GTK_APPLICATION (app), appmenu);
-  gtk_application_set_menubar (GTK_APPLICATION (app), menubar);
+  gtk_application_set_menubar (GTK_APPLICATION (app),
+                               G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
 
   g_object_unref (builder);
 }
@@ -353,6 +348,7 @@ create_window (GApplication *app,
 
   window = (DemoApplicationWindow *)g_object_new (demo_application_window_get_type (),
                                                   "application", app,
+                                                  "show-menubar", TRUE,
                                                   NULL);
   if (content)
     gtk_text_buffer_set_text (window->buffer, content, -1);

@@ -973,23 +973,6 @@ populate_model (GtkTreeModel *model)
 }
 
 static void
-startup (GApplication *app)
-{
-  GtkBuilder *builder;
-  GMenuModel *appmenu;
-  const char *ids[] = { "appmenu", NULL };
-
-  builder = gtk_builder_new ();
-  gtk_builder_add_objects_from_resource (builder, "/ui/appmenu.ui", ids, NULL);
-
-  appmenu = (GMenuModel *)gtk_builder_get_object (builder, "appmenu");
-
-  gtk_application_set_app_menu (GTK_APPLICATION (app), appmenu);
-
-  g_object_unref (builder);
-}
-
-static void
 row_activated_cb (GtkWidget         *tree_view,
                   GtkTreePath       *path,
                   GtkTreeViewColumn *column)
@@ -1219,7 +1202,6 @@ main (int argc, char **argv)
   g_application_add_main_option (G_APPLICATION (app), "list", 0, 0, G_OPTION_ARG_NONE, "List examples", NULL);
   g_application_add_main_option (G_APPLICATION (app), "autoquit", 0, 0, G_OPTION_ARG_NONE, "Quit after a delay", NULL);
 
-  g_signal_connect (app, "startup", G_CALLBACK (startup), NULL);
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
   g_signal_connect (app, "command-line", G_CALLBACK (command_line), NULL);
   g_signal_connect (app, "handle-local-options", G_CALLBACK (local_options), NULL);
