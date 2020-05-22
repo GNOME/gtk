@@ -87,13 +87,13 @@ accel2 (void)
 static void
 accel3 (void)
 {
-  test_one_accel ("KP_7", 0, GDK_KEY_KP_7, "7", TRUE);
+  test_one_accel ("KP_7", 0, GDK_KEY_KP_7, "KP 7", TRUE);
 }
 
 static void
 accel4 (void)
 {
-  test_one_accel ("<Control>KP_7", GDK_CONTROL_MASK, GDK_KEY_KP_7, "Ctrl+7", TRUE);
+  test_one_accel ("<Control>KP_7", GDK_CONTROL_MASK, GDK_KEY_KP_7, "Ctrl+KP 7", TRUE);
 }
 
 static void

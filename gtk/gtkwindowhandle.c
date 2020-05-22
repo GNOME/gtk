@@ -107,37 +107,6 @@ restore_window_clicked (GtkModelButton  *button,
 }
 
 static void
-move_window_clicked (GtkModelButton  *button,
-                     GtkWindowHandle *self)
-{
-  GtkNative *native = gtk_widget_get_native (GTK_WIDGET (self));
-  GdkSurface *surface = gtk_native_get_surface (native);
-
-  if (GDK_IS_TOPLEVEL (surface))
-    gdk_toplevel_begin_move (GDK_TOPLEVEL (surface),
-                             NULL,
-                             0, /* 0 means "use keyboard" */
-                             0, 0,
-                             GDK_CURRENT_TIME);
-}
-
-static void
-resize_window_clicked (GtkModelButton  *button,
-                       GtkWindowHandle *self)
-{
-  GtkNative *native = gtk_widget_get_native (GTK_WIDGET (self));
-  GdkSurface *surface = gtk_native_get_surface (native);
-
-  if (GDK_IS_TOPLEVEL (surface))
-    gdk_toplevel_begin_resize (GDK_TOPLEVEL (surface),
-                               0,
-                               NULL,
-                               0, /* 0 means "use keyboard" */
-                               0, 0,
-                               GDK_CURRENT_TIME);
-}
-
-static void
 minimize_window_clicked (GtkModelButton  *button,
                          GtkWindowHandle *self)
 {
@@ -249,20 +218,6 @@ do_popup_fallback (GtkWindowHandle *self,
   gtk_widget_set_sensitive (menuitem, maximized && resizable);
   g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (restore_window_clicked), self);
-  gtk_box_append (GTK_BOX (box), menuitem);
-
-  menuitem = gtk_model_button_new ();
-  g_object_set (menuitem, "text", _("Move"), NULL);
-  gtk_widget_set_sensitive (menuitem, !maximized);
-  g_signal_connect (G_OBJECT (menuitem), "clicked",
-                    G_CALLBACK (move_window_clicked), self);
-  gtk_box_append (GTK_BOX (box), menuitem);
-
-  menuitem = gtk_model_button_new ();
-  g_object_set (menuitem, "text", _("Resize"), NULL);
-  gtk_widget_set_sensitive (menuitem, resizable && !maximized);
-  g_signal_connect (G_OBJECT (menuitem), "clicked",
-                    G_CALLBACK (resize_window_clicked), self);
   gtk_box_append (GTK_BOX (box), menuitem);
 
   menuitem = gtk_model_button_new ();
