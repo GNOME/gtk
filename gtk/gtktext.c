@@ -3488,6 +3488,7 @@ update_placeholder_visibility (GtkText *self)
 
   if (priv->placeholder)
     gtk_widget_set_child_visible (priv->placeholder,
+                                  priv->preedit_length == 0 &&
                                   gtk_entry_buffer_get_length (priv->buffer) == 0);
 }
 
@@ -4150,7 +4151,7 @@ gtk_text_commit_cb (GtkIMContext *context,
     }
 }
 
-static void 
+static void
 gtk_text_preedit_changed_cb (GtkIMContext *context,
                              GtkText      *self)
 {
@@ -4171,8 +4172,9 @@ gtk_text_preedit_changed_cb (GtkIMContext *context,
       cursor_pos = CLAMP (cursor_pos, 0, g_utf8_strlen (preedit_string, -1));
       priv->preedit_cursor = cursor_pos;
       g_free (preedit_string);
-    
+
       gtk_text_recompute (self);
+      update_placeholder_visibility (self);
     }
 }
 
