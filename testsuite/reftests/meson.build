@@ -387,9 +387,8 @@ testdata = [
   'sizegroups-basics.css',
   'sizegroups-basics.ui',
   'sizegroups-basics.ref.ui',
-  # this one triggers pango assertion in ci
-  #'sizegroups-evolution-identity-page.ui',
-  #'sizegroups-evolution-identity-page.ref.ui',
+  'sizegroups-evolution-identity-page.ui',
+  'sizegroups-evolution-identity-page.ref.ui',
   'sizegroups-get-preferred-null.ui',
   'sizegroups-get-preferred-null.ref.ui',
   'statusbar-remove-all.ref.ui',
@@ -434,8 +433,7 @@ testdata = [
 # These need to be fixed but the issue hasn't been tracked down.
 xfails = [
   'background-origin.ui',
-  # see above
-  #'sizegroups-evolution-identity-page.ui',
+  'sizegroups-evolution-identity-page.ui',
   # these depend on details of text layout
   'label-sizing.ui',
 ]
