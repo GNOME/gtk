@@ -273,12 +273,14 @@ node_supports_transform (GskRenderNode *node)
       case GSK_OPACITY_NODE:
       case GSK_COLOR_MATRIX_NODE:
       case GSK_TEXTURE_NODE:
-      case GSK_TRANSFORM_NODE:
       case GSK_CROSS_FADE_NODE:
       case GSK_LINEAR_GRADIENT_NODE:
       case GSK_DEBUG_NODE:
       case GSK_TEXT_NODE:
         return TRUE;
+
+      case GSK_TRANSFORM_NODE:
+        return node_supports_transform (gsk_transform_node_get_child (node));
 
       default:
         return FALSE;
