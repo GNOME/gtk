@@ -886,25 +886,13 @@ button {
   &.font { > box > box > label { font-weight: bold; }}
 
   // inline-toolbar buttons
-  .inline-toolbar &, .inline-toolbar &:backdrop {
-    border-radius: 2px;
-    border-width: 1px;
-    @extend %linked;
-  }
+  .inline-toolbar & { @extend %linked; }
 
   .primary-toolbar & { -gtk-icon-shadow: none; } // tango icons don't need shadows
 
-  .linked > &,
-  .linked > &:hover,
-  .linked > &:active,
-  .linked > &:checked,
-  .linked > &:backdrop { @extend %linked; }
+  .linked > & { @extend %linked; }
 
-  .linked.vertical > &,
-  .linked.vertical > &:hover,
-  .linked.vertical > &:active,
-  .linked.vertical > &:checked,
-  .linked.vertical > &:backdrop { @extend %linked_vertical; }
+  .linked.vertical > & { @extend %linked_vertical; }
 
   &.circular { // The Bloody Circul Button
     border-radius: 9999px;
@@ -1004,8 +992,7 @@ button {
 }
 
 // More inline toolbar buttons
-toolbar.inline-toolbar toolbutton,
-toolbar.inline-toolbar toolbutton:backdrop {
+toolbar.inline-toolbar toolbutton {
   > button.flat { @extend %linked_middle; }
 
   &:first-child > button.flat { @extend %linked_left; }
@@ -1016,38 +1003,29 @@ toolbar.inline-toolbar toolbutton:backdrop {
 }
 
 %linked_middle {
-  border-radius: 0;
   border-right-style: none;
+  border-radius: 0;
   -gtk-outline-radius: 0;
 }
 
 %linked_left {
     border-top-left-radius: $button_radius;
     border-bottom-left-radius: $button_radius;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-right-style: none;
-    -gtk-outline-bottom-left-radius: $button_radius;
     -gtk-outline-top-left-radius: $button_radius;
-    -gtk-outline-top-right-radius: 0;
-    -gtk-outline-bottom-right-radius: 0;
+    -gtk-outline-bottom-left-radius: $button_radius;
 }
 
 %linked_right {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+    border-right-style: solid;
     border-top-right-radius: $button_radius;
     border-bottom-right-radius: $button_radius;
-    border-right-style: solid;
-    -gtk-outline-bottom-right-radius: $button_radius;
     -gtk-outline-top-right-radius: $button_radius;
-    -gtk-outline-bottom-left-radius: 0;
-    -gtk-outline-top-left-radius: 0;
+    -gtk-outline-bottom-right-radius: $button_radius;
 }
 
 %linked_only_child {
-    border-radius: $button_radius;
     border-style: solid;
+    border-radius: $button_radius;
     -gtk-outline-radius: $button_radius;
 }
 
@@ -1081,25 +1059,31 @@ toolbar.inline-toolbar toolbutton:backdrop {
 %linked_vertical_middle {
   border-style: solid solid none solid;
   border-radius: 0;
+  -gtk-outline-radius: 0;
 }
 
 %linked_vertical_top {
   border-top-left-radius: $button_radius;
   border-top-right-radius: $button_radius;
+  -gtk-outline-top-left-radius: $button_radius;
+  -gtk-outline-top-right-radius: $button_radius;
 }
 
 %linked_vertical_bottom {
+  border-bottom-style: solid;
   border-bottom-left-radius: $button_radius;
   border-bottom-right-radius: $button_radius;
-  border-style: solid;
+  -gtk-outline-bottom-left-radius: $button_radius;
+  -gtk-outline-bottom-right-radius: $button_radius;
 }
 
 %linked_vertical_only_child {
-  border-radius: $button_radius;
   border-style: solid;
+  border-radius: $button_radius;
+  -gtk-outline-radius: $button_radius;
 }
 
-%linked_vertical{
+%linked_vertical {
   @extend %linked_vertical_middle;
 
   &:first-child { @extend %linked_vertical_top; }
@@ -1471,21 +1455,17 @@ combobox {
   }
 }
 
-.linked > combobox > box > button.combo {
-  // the combo is a composite widget so the way we do button linking doesn't
-  // work, special case needed. See
-  // https://bugzilla.gnome.org/show_bug.cgi?id=733979
+// the combo is a composite widget so the way we do button linking doesn't
+// work, special case needed. See
+// https://bugzilla.gnome.org/show_bug.cgi?id=733979
 
-  &:dir(ltr),
-  &:dir(rtl) { @extend %linked_middle; } // specificity bump
-}
-
+.linked:not(.vertical) > combobox > box > button.combo { @extend %linked_middle; }
 .linked:not(.vertical) > combobox:first-child > box > button.combo { @extend %linked_left; }
 .linked:not(.vertical) > combobox:last-child > box > button.combo { @extend %linked_right; }
 .linked:not(.vertical) > combobox:only-child > box > button.combo { @extend %linked_only_child; }
 
 .linked.vertical > combobox > box > button.combo { @extend %linked_vertical_middle; }
-.linked.vertical > combobox:first-child > box > button.combo { @extend %linked_vertical_top;}
+.linked.vertical > combobox:first-child > box > button.combo { @extend %linked_vertical_top; }
 .linked.vertical > combobox:last-child > box > button.combo { @extend %linked_vertical_bottom; }
 .linked.vertical > combobox:only-child > box > button.combo { @extend %linked_vertical_only_child; }
 
@@ -3993,35 +3973,19 @@ messagedialog { // Message Dialog styling
 
     .dialog-action-area button {
       padding: 10px 14px; // labels are not vertically centered on message dialog, this is a workaround
-      border-radius: 0;
-      border-left-style: solid;
       border-right-style: none;
       border-bottom-style: none;
+      border-radius: 0;
+      -gtk-outline-radius: 0;
 
-      &:first-child:not(:only-child) {
+      &:first-child {
         border-left-style: none;
         border-bottom-left-radius: $button_radius + 2;
         -gtk-outline-bottom-left-radius: $button_radius + 2;
-        -gtk-outline-top-left-radius: 0px;
-        -gtk-outline-top-right-radius: 0px;
-        -gtk-outline-bottom-right-radius: 0px;
       }
-  
-      &:last-child:not(:only-child) {
+
+      &:last-child {
         border-bottom-right-radius: $button_radius + 2;
-        -gtk-outline-bottom-right-radius: $button_radius + 2;
-        -gtk-outline-top-right-radius: 0px;
-        -gtk-outline-bottom-left-radius: 0px;
-        -gtk-outline-top-left-radius: 0px;
-      }
-      &:only-child {
-        border-top-right-radius: 0;
-        border-top-left-radius: 0;
-        border-bottom-left-radius: $button_radius + 2;
-        border-bottom-right-radius: $button_radius + 2;
-        -gtk-outline-top-right-radius: 0px;
-        -gtk-outline-top-left-radius: 0px;
-        -gtk-outline-bottom-left-radius: $button_radius + 2;
         -gtk-outline-bottom-right-radius: $button_radius + 2;
       }
     }
