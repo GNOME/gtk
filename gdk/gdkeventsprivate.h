@@ -612,6 +612,9 @@ GdkEvent * gdk_grab_broken_event_new    (GdkSurface      *surface,
                                          GdkSurface      *grab_surface,
                                          gboolean         implicit);
 
+GdkTranslatedKey *      gdk_key_event_get_translated_key        (GdkEvent *event,
+                                                                 gboolean  no_lock);
+
 G_END_DECLS
 
 #endif /* __GDK_EVENTS_PRIVATE_H__ */
