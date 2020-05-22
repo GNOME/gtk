@@ -919,18 +919,21 @@ _gtk_tooltip_handle_event (GtkWidget *target,
   GdkSurface *surface;
   double x, y;
   double nx, ny;
-  GtkWidget *native;
+  GtkNative *native;
 
   if (!tooltips_enabled (event))
+    return;
+
+  native = gtk_widget_get_native (target);
+  if (!native)
     return;
 
   event_type = gdk_event_get_event_type (event);
   surface = gdk_event_get_surface (event);
   gdk_event_get_position (event, &x, &y);
-  native = GTK_WIDGET (gtk_widget_get_native (target));
 
-  gtk_native_get_surface_transform (GTK_NATIVE (native), &nx, &ny);
-  gtk_widget_translate_coordinates (native, target, x - nx, y - ny, &x, &y);
+  gtk_native_get_surface_transform (native, &nx, &ny);
+  gtk_widget_translate_coordinates (GTK_WIDGET (native), target, x - nx, y - ny, &x, &y);
   gtk_tooltip_handle_event_internal (event_type, surface, target, x, y);
 }
 
