@@ -1746,9 +1746,9 @@ coord_to_value (GtkRange *range,
   else
     {
       if (priv->slider_size_fixed)
-        frac = MAX (0, coord) / (double) (trough_length);
+        frac = CLAMP (coord / (double) trough_length, 0, 1);
       else
-        frac = MAX (0, coord) / (double) (trough_length - slider_length);
+        frac = CLAMP (coord / (double) (trough_length - slider_length), 0, 1);
     }
 
   if (should_invert (range))
