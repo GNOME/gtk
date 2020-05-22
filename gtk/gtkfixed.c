@@ -226,8 +226,8 @@ gtk_fixed_new (void)
 void
 gtk_fixed_put (GtkFixed  *fixed,
                GtkWidget *widget,
-               gint       x,
-               gint       y)
+               double     x,
+               double     y)
 {
   GtkFixedPrivate *priv = gtk_fixed_get_instance_private (fixed);
   GtkFixedLayoutChild *child_info;
@@ -261,26 +261,16 @@ gtk_fixed_put (GtkFixed  *fixed,
 void
 gtk_fixed_get_child_position (GtkFixed  *fixed,
                               GtkWidget *widget,
-                              int       *x,
-                              int       *y)
+                              double    *x,
+                              double    *y)
 {
-  GtkFixedPrivate *priv = gtk_fixed_get_instance_private (fixed);
-  GtkFixedLayoutChild *child_info;
-  float pos_x = 0.f, pos_y = 0.f;
-  GskTransform *transform;
-
   g_return_if_fail (GTK_IS_FIXED (fixed));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (x != NULL);
   g_return_if_fail (y != NULL);
   g_return_if_fail (gtk_widget_get_parent (widget) == GTK_WIDGET (fixed));
 
-  child_info = GTK_FIXED_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (priv->layout, widget));
-  transform = gtk_fixed_layout_child_get_transform (child_info);
-  gsk_transform_to_translate (transform, &pos_x, &pos_y);
-
-  *x = floorf (pos_x);
-  *y = floorf (pos_y);
+  gtk_widget_translate_coordinates (widget, GTK_WIDGET (fixed), 0, 0, x, y);
 }
 
 /**
@@ -350,8 +340,8 @@ gtk_fixed_get_child_transform (GtkFixed  *fixed,
 void
 gtk_fixed_move (GtkFixed  *fixed,
                 GtkWidget *widget,
-                gint       x,
-                gint       y)
+                double     x,
+                double     y)
 {
   GtkFixedPrivate *priv = gtk_fixed_get_instance_private (fixed);
   GtkFixedLayoutChild *child_info;

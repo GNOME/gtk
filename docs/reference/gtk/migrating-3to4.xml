@@ -696,6 +696,17 @@
     </section>
 
     <section>
+      <title>Adapt to coordinate API changes</title>
+      <para>
+        A number of APIs that are accepting or returning coordinates have
+        been changed from ints to doubles: gtk_widget_translate_coordinates(),
+        gtk_fixed_put(), gtk_fixed_move(). This change is mostly transparent,
+        except for cases where out parameters are involved: you need to
+        pass double* now, instead of int*.
+      </para>
+    </section>
+
+    <section>
       <title>Adapt to GtkStyleContext API changes</title>
       <para>
         The getters in the GtkStyleContext API, such as

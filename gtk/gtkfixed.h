@@ -67,21 +67,21 @@ GtkWidget *     gtk_fixed_new                (void);
 GDK_AVAILABLE_IN_ALL
 void            gtk_fixed_put                   (GtkFixed     *fixed,
                                                  GtkWidget    *widget,
-                                                 gint          x,
-                                                 gint          y);
+                                                 double        x,
+                                                 double        y);
 GDK_AVAILABLE_IN_ALL
 void            gtk_fixed_remove                (GtkFixed     *fixed,
                                                  GtkWidget    *widget);
 GDK_AVAILABLE_IN_ALL
 void            gtk_fixed_move                  (GtkFixed     *fixed,
                                                  GtkWidget    *widget,
-                                                 gint          x,
-                                                 gint          y);
+                                                 double        x,
+                                                 double        y);
 GDK_AVAILABLE_IN_ALL
 void            gtk_fixed_get_child_position    (GtkFixed     *fixed,
                                                  GtkWidget    *widget,
-                                                 gint         *x,
-                                                 gint         *y);
+                                                 double       *x,
+                                                 double       *y);
 
 GDK_AVAILABLE_IN_ALL
 void            gtk_fixed_set_child_transform   (GtkFixed     *fixed,
