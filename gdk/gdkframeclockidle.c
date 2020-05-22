@@ -551,8 +551,7 @@ gdk_frame_clock_paint_idle (void *data)
       maybe_start_idle (clock_idle);
     }
 
-  if (priv->freeze_count == 0)
-    priv->sleep_serial = get_sleep_serial ();
+  priv->sleep_serial = get_sleep_serial ();
 
   return FALSE;
 }
@@ -643,8 +642,6 @@ gdk_frame_clock_idle_thaw (GdkFrameClock *clock)
        */
       if (priv->paint_idle_id == 0)
         priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
-
-      priv->sleep_serial = get_sleep_serial ();
 
 #ifdef G_ENABLE_DEBUG
       if (gdk_profiler_is_running ())
