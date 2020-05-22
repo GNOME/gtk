@@ -433,7 +433,6 @@ testdata = [
 
 # These need to be fixed but the issue hasn't been tracked down.
 xfails = [
-  'background-origin.ui',
   # see above
   #'sizegroups-evolution-identity-page.ui',
   # these depend on details of text layout
