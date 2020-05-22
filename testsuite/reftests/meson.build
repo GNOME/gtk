@@ -431,7 +431,6 @@ test_data = [
 somehow_broken = [
   'button-wrapping.ui',
   'cellrenderer-pixbuf-stock-rtl.ui',
-  'flipping-icons.ui',
   'label-sizing.ui',
   'label-wrap-justify.ui',
   'quit-mnemonic.ui',
