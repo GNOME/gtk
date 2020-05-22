@@ -580,15 +580,11 @@ gdk_frame_clock_get_refresh_info (GdkFrameClock *frame_clock,
                                   gint64        *presentation_time_return)
 {
   gint64 frame_counter;
+  gint64 default_refresh_interval = DEFAULT_REFRESH_INTERVAL;
 
   g_return_if_fail (GDK_IS_FRAME_CLOCK (frame_clock));
 
   frame_counter = gdk_frame_clock_get_frame_counter (frame_clock);
-
-  if (presentation_time_return)
-    *presentation_time_return = 0;
-  if (refresh_interval_return)
-    *refresh_interval_return = DEFAULT_REFRESH_INTERVAL;
 
   while (TRUE)
     {
@@ -597,19 +593,21 @@ gdk_frame_clock_get_refresh_info (GdkFrameClock *frame_clock,
       gint64 refresh_interval;
 
       if (timings == NULL)
-        return;
+        break;
 
       refresh_interval = timings->refresh_interval;
       presentation_time = timings->presentation_time;
+
+      if (refresh_interval == 0)
+        refresh_interval = default_refresh_interval;
+      else
+        default_refresh_interval = refresh_interval;
 
       if (presentation_time != 0)
         {
           if (presentation_time > base_time - MAX_HISTORY_AGE &&
               presentation_time_return)
             {
-              if (refresh_interval == 0)
-                refresh_interval = DEFAULT_REFRESH_INTERVAL;
-
               if (refresh_interval_return)
                 *refresh_interval_return = refresh_interval;
 
@@ -625,6 +623,11 @@ gdk_frame_clock_get_refresh_info (GdkFrameClock *frame_clock,
 
       frame_counter--;
     }
+
+  if (presentation_time_return)
+    *presentation_time_return = 0;
+  if (refresh_interval_return)
+    *refresh_interval_return = default_refresh_interval;
 }
 
 void
