@@ -4,12 +4,12 @@
 
 
 static const char *red_css =
-"textview>text {"
+"textview {"
 "  color: red;"
 "}";
 
 static const char *black_css =
-"textview>text {"
+"textview {"
 "  color: black;"
 "}";
 
@@ -81,6 +81,7 @@ new_window (GApplication *app,
   gtk_window_set_default_size ((GtkWindow*)window, 640, 480);
   g_action_map_add_action_entries (G_ACTION_MAP (window), win_entries, G_N_ELEMENTS (win_entries), window);
   gtk_window_set_title (GTK_WINDOW (window), "Plugman");
+  gtk_application_window_set_show_menubar (GTK_APPLICATION_WINDOW (window), TRUE);
 
   grid = gtk_grid_new ();
   gtk_window_set_child (GTK_WINDOW (window), grid);
@@ -334,9 +335,10 @@ configure_plugins (GSimpleAction *action,
                                "<interface>"
                                "  <object class='GtkDialog' id='plugin-dialog'>"
                                "    <property name='title'>Plugins</property>"
-                               "    <child internal-child='vbox'>"
+                               "    <child internal-child='content_area'>"
                                "      <object class='GtkBox' id='content-area'>"
                                "        <property name='visible'>True</property>"
+                               "        <property name='orientation'>vertical</property>"
                                "        <child>"
                                "          <object class='GtkCheckButton' id='red-plugin'>"
                                "            <property name='label' translatable='yes'>Red Plugin - turn your text red</property>"
@@ -352,7 +354,7 @@ configure_plugins (GSimpleAction *action,
                                "      </object>"
                                "    </child>"
                                "    <child internal-child='action_area'>"
-                               "      <object class='GtkButtonBox' id='action-area'>"
+                               "      <object class='GtkBox' id='action-area'>"
                                "        <property name='visible'>True</property>"
                                "        <child>"
                                "          <object class='GtkButton' id='close-button'>"
@@ -409,22 +411,23 @@ plug_man_startup (GApplication *application)
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder,
                                "<interface>"
-                               "  <menu id='app-menu'>"
-                               "    <section>"
-                               "      <item>"
-                               "        <attribute name='label' translatable='yes'>_About Plugman</attribute>"
-                               "        <attribute name='action'>app.about</attribute>"
-                               "      </item>"
-                               "    </section>"
-                               "    <section>"
-                               "      <item>"
-                               "        <attribute name='label' translatable='yes'>_Quit</attribute>"
-                               "        <attribute name='action'>app.quit</attribute>"
-                               "        <attribute name='accel'>&lt;Primary&gt;q</attribute>"
-                               "      </item>"
-                               "    </section>"
-                               "  </menu>"
                                "  <menu id='menubar'>"
+                               "    <submenu>"
+                               "      <attribute name='label' translatable='yes'>_Plugman</attribute>"
+                               "      <section>"
+                               "        <item>"
+                               "          <attribute name='label' translatable='yes'>_About Plugman</attribute>"
+                               "          <attribute name='action'>app.about</attribute>"
+                               "        </item>"
+                               "      </section>"
+                               "      <section>"
+                               "        <item>"
+                               "          <attribute name='label' translatable='yes'>_Quit</attribute>"
+                               "          <attribute name='action'>app.quit</attribute>"
+                               "          <attribute name='accel'>&lt;Primary&gt;q</attribute>"
+                               "        </item>"
+                               "      </section>"
+                               "    </submenu>"
                                "    <submenu>"
                                "      <attribute name='label' translatable='yes'>_Edit</attribute>"
                                "      <section>"
@@ -457,7 +460,6 @@ plug_man_startup (GApplication *application)
                                "    </submenu>"
                                "  </menu>"
                                "</interface>", -1, NULL);
-  gtk_application_set_app_menu (GTK_APPLICATION (application), G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
   gtk_application_set_menubar (GTK_APPLICATION (application), G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
   g_object_set_data_full (G_OBJECT (application), "plugin-menu", gtk_builder_get_object (builder, "plugins"), g_object_unref);
   g_object_unref (builder);
