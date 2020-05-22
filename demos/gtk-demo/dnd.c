@@ -309,9 +309,9 @@ edit_cb (GtkWidget *button, GtkWidget *child)
   GtkWidget *canvas = gtk_widget_get_parent (child);
   CanvasItem *item = CANVAS_ITEM (child);
   GtkWidget *entry;
-  int x, y;
+  double x, y;
 
-  gtk_fixed_get_child_position (GTK_FIXED (canvas), child, &x, &y);
+  gtk_widget_translate_coordinates (child, canvas, 0, 0, &x, &y);
 
   entry = gtk_entry_new ();
 
