@@ -55,7 +55,7 @@ nine_slice_rounded_rect (const GskRoundedRect  *rect,
 
   /* Top center */
   out_rects[1] = (cairo_rectangle_int_t) {
-                   origin->x + size->width / 2.0 - 1, origin->y,
+                   origin->x + size->width / 2.0 - 0.5, origin->y,
                    1, top_height,
                  };
 
@@ -73,15 +73,15 @@ nine_slice_rounded_rect (const GskRoundedRect  *rect,
 
   /* center */
   out_rects[4] = (cairo_rectangle_int_t) {
-                   origin->x + size->width / 2.0,
-                   origin->y + size->height / 2.0,
+                   origin->x + size->width / 2.0 - 0.5,
+                   origin->y + size->height / 2.0 - 0.5,
                    1, 1
                  };
 
   /* Right center */
   out_rects[5] = (cairo_rectangle_int_t) {
                    origin->x + size->width - right_width,
-                   origin->y + (size->height / 2.0),
+                   origin->y + (size->height / 2.0) - 0.5,
                    right_width,
                    1,
                  };
@@ -94,7 +94,8 @@ nine_slice_rounded_rect (const GskRoundedRect  *rect,
 
   /* Bottom center */
   out_rects[7] = (cairo_rectangle_int_t) {
-                   origin->x + (size->width / 2.0), origin->y + size->height - bottom_height,
+                   origin->x + (size->width / 2.0) - 0.5,
+                     origin->y + size->height - bottom_height,
                    1, bottom_height,
                  };
 
@@ -135,7 +136,6 @@ nine_slice_grow (cairo_rectangle_int_t *slices,
     slices[1].height += amount * 2;
   else
     slices[1].height += amount;
-
 
   /* top right */
   slices[2].y -= amount;

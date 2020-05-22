@@ -1717,6 +1717,7 @@ render_outset_shadow_node (GskGLRenderer   *self,
   const GdkRGBA *color = gsk_outset_shadow_node_peek_color (node);
   const float blur_radius = gsk_outset_shadow_node_get_blur_radius (node);
   const float blur_extra = blur_radius * 3; /* 3 Because we use that in the shader as well */
+  const int extra_blur_pixels = (int) ceilf(blur_extra / 2.0 * scale);
   const float spread = gsk_outset_shadow_node_get_spread (node);
   const float dx = gsk_outset_shadow_node_get_dx (node);
   const float dy = gsk_outset_shadow_node_get_dy (node);
@@ -1734,7 +1735,7 @@ render_outset_shadow_node (GskGLRenderer   *self,
   /* Increase by the spread */
   gsk_rounded_rect_shrink (&scaled_outline, -spread, -spread, -spread, -spread);
   /* Grow bounds but don't grow corners */
-  graphene_rect_inset (&scaled_outline.bounds, - blur_extra / 2.0 * scale, - blur_extra / 2.0 * scale);
+  graphene_rect_inset (&scaled_outline.bounds, - extra_blur_pixels, - extra_blur_pixels);
   /* For the center part, we add a few pixels */
   scaled_outline.bounds.size.width += SHADOW_EXTRA_SIZE;
   scaled_outline.bounds.size.height += SHADOW_EXTRA_SIZE;
@@ -1742,11 +1743,10 @@ render_outset_shadow_node (GskGLRenderer   *self,
   texture_width  = (int)ceil ((scaled_outline.bounds.size.width  + blur_extra) * scale);
   texture_height = (int)ceil ((scaled_outline.bounds.size.height + blur_extra) * scale);
 
-  scaled_outline.bounds.origin.x = blur_extra / 2.0 * scale;
-  scaled_outline.bounds.origin.y = blur_extra / 2.0 * scale;
-  scaled_outline.bounds.size.width = texture_width - (blur_extra * scale);
-  scaled_outline.bounds.size.height = texture_height - (blur_extra * scale);
-
+  scaled_outline.bounds.origin.x = extra_blur_pixels;
+  scaled_outline.bounds.origin.y = extra_blur_pixels;
+  scaled_outline.bounds.size.width = texture_width - (extra_blur_pixels * 2);
+  scaled_outline.bounds.size.height = texture_height - (extra_blur_pixels * 2);
 
   for (int i = 0; i < 4; i ++)
     {
@@ -1831,17 +1831,19 @@ render_outset_shadow_node (GskGLRenderer   *self,
   shadow->outline = transform_rect (self, builder, outline);
 
   {
-    const float min_x = builder->dx + outline->bounds.origin.x - spread - (blur_extra / 2.0) + dx;
-    const float min_y = builder->dy + outline->bounds.origin.y - spread - (blur_extra / 2.0) + dy;
-    const float max_x = min_x + outline->bounds.size.width  + (spread + (blur_extra / 2.0)) * 2;
-    const float max_y = min_y + outline->bounds.size.height + (spread + (blur_extra / 2.0)) * 2;
+    const float min_x = floorf (builder->dx + outline->bounds.origin.x - spread - (blur_extra / 2.0) + dx);
+    const float min_y = floorf (builder->dy + outline->bounds.origin.y - spread - (blur_extra / 2.0) + dy);
+    const float max_x = ceilf (builder->dx + outline->bounds.origin.x + outline->bounds.size.width +
+                               (blur_extra / 2.0) + dx + spread);
+    const float max_y = ceilf (builder->dy + outline->bounds.origin.y + outline->bounds.size.height +
+                               (blur_extra / 2.0) + dy + spread);
     float x1, x2, y1, y2, tx1, tx2, ty1, ty2;
     cairo_rectangle_int_t slices[9];
     TextureRegion tregs[9];
 
     /* TODO: The slicing never changes and could just go into the cache */
     nine_slice_rounded_rect (&scaled_outline, slices);
-    nine_slice_grow (slices, blur_extra / 2.0 * scale);
+    nine_slice_grow (slices, extra_blur_pixels);
     nine_slice_to_texture_coords (slices, texture_width, texture_height, tregs);
 
     /* Our texture coordinates MUST be scaled, while the actual vertex coords
