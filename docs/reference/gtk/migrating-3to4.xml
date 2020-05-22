@@ -245,6 +245,17 @@
         the amount of work you have to do at the time of the switch.
       </para>
     </section>
+
+    <section>
+      <title>Stop using app menus</title>
+      <para>
+        GNOME has stopped using exported app menus some time ago, and GTK 4 is
+        dropping the GtkApplication APIs that are related to app menus. If you
+        want to transparently support menubars on OS X, you can integrate the
+        items from your app menu into your menubar, and keep using
+        gtk_application_set_menubar().
+      </para>
+    </section>
   </section>
 
   <section>
