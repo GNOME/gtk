@@ -187,6 +187,12 @@ canvas_item_new (double x,
   return GTK_WIDGET (item);
 }
 
+static GdkPaintable *
+canvas_item_get_drag_icon (CanvasItem *item)
+{
+  return gtk_widget_paintable_new (item->label);
+}
+
 static GdkContentProvider *
 prepare (GtkDragSource *source,
          double         x,
@@ -218,11 +224,11 @@ drag_begin (GtkDragSource *source,
   canvas = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
   item = g_object_get_data (G_OBJECT (canvas), "dragged-item");
 
-  paintable = gtk_widget_paintable_new (item);
+  paintable = canvas_item_get_drag_icon (CANVAS_ITEM (item));
   gtk_drag_source_set_icon (source, paintable, 0, 0);
   g_object_unref (paintable);
 
-  gtk_widget_set_opacity (item, 0.5);
+  gtk_widget_set_opacity (item, 0.3);
 }
 
 static void
