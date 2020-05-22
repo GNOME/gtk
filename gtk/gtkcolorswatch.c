@@ -39,7 +39,6 @@
 #include "gtkwidgetprivate.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtknative.h"
-#include "gtkdragsource.h"
 
 #include "a11y/gtkcolorswatchaccessibleprivate.h"
 

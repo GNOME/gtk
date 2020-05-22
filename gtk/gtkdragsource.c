@@ -454,6 +454,15 @@ gtk_drag_source_ensure_icon (GtkDragSource *self,
   if (gtk_drag_icon_get_child (GTK_DRAG_ICON (icon)))
     return;
 
+  if (self->paintable)
+    {
+      gtk_drag_icon_set_from_paintable (drag,
+                                        self->paintable,
+                                        self->hot_x,
+                                        self->hot_y);
+      return;
+    }
+
   gdk_drag_set_hotspot (drag, -2, -2);
 
   provider = gdk_drag_get_content (drag);

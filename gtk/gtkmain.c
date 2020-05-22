@@ -1733,6 +1733,8 @@ gtk_main_do_event (GdkEvent *event)
        gtk_widget_is_ancestor (target_widget, grab_widget)))
     grab_widget = target_widget;
 
+  g_object_ref (target_widget);
+
   /* Not all events get sent to the grabbing widget.
    * The delete, destroy, expose, focus change and resize
    * events still get sent to the event widget because
@@ -1746,7 +1748,6 @@ gtk_main_do_event (GdkEvent *event)
   switch ((guint)gdk_event_get_event_type (event))
     {
     case GDK_DELETE:
-      g_object_ref (target_widget);
       if (!gtk_window_group_get_current_grab (window_group) ||
           GTK_WIDGET (gtk_widget_get_root (gtk_window_group_get_current_grab (window_group))) == target_widget)
         {
@@ -1754,7 +1755,6 @@ gtk_main_do_event (GdkEvent *event)
               !gtk_window_emit_close_request (GTK_WINDOW (target_widget)))
             gtk_window_destroy (GTK_WINDOW (target_widget));
         }
-      g_object_unref (target_widget);
       break;
 
     case GDK_FOCUS_CHANGE:
@@ -1809,6 +1809,8 @@ gtk_main_do_event (GdkEvent *event)
     }
 
   _gtk_tooltip_handle_event (target_widget, event);
+
+  g_object_unref (target_widget);
 
  cleanup:
   tmp_list = current_events;
