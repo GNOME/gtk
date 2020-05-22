@@ -62,7 +62,8 @@ item_drag_drop (GtkDropTarget *dest,
                 double         x,
                 double         y)
 {
-  CanvasItem *item = CANVAS_ITEM (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest)));
+  GtkWidget *label = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
+  CanvasItem *item = CANVAS_ITEM (gtk_widget_get_parent (gtk_widget_get_parent (label)));
 
   set_color (item, g_value_get_boxed (value));
 
@@ -155,7 +156,7 @@ canvas_item_init (CanvasItem *item)
 
   dest = gtk_drop_target_new (GDK_TYPE_RGBA, GDK_ACTION_COPY);
   g_signal_connect (dest, "drop", G_CALLBACK (item_drag_drop), NULL);
-  gtk_widget_add_controller (GTK_WIDGET (item), GTK_EVENT_CONTROLLER (dest));
+  gtk_widget_add_controller (GTK_WIDGET (item->label), GTK_EVENT_CONTROLLER (dest));
 
   gesture = gtk_gesture_rotate_new ();
   g_signal_connect (gesture, "angle-changed", G_CALLBACK (angle_changed), NULL);
