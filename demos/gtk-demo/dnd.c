@@ -12,9 +12,10 @@ G_DECLARE_FINAL_TYPE (CanvasItem, canvas_item, CANVAS, ITEM, GtkWidget)
 struct _CanvasItem {
   GtkWidget parent;
 
+  GtkWidget *fixed;
   GtkWidget *label;
 
-  double x, y;
+  double r;
   double angle;
   double delta;
 
@@ -39,7 +40,7 @@ set_color (CanvasItem *item,
   GtkCssProvider *provider;
 
   str = gdk_rgba_to_string (color);
-  css = g_strdup_printf ("* { background: %s; padding: 10px; }", str);
+  css = g_strdup_printf ("* { background: %s; padding: 10px; margin: 1px; }", str);
 
   context = gtk_widget_get_style_context (item->label);
   provider = g_object_get_data (G_OBJECT (context), "style-provider");
@@ -71,12 +72,21 @@ item_drag_drop (GtkDropTarget *dest,
 static void
 apply_transform (CanvasItem *item)
 {
-  GtkWidget *canvas = gtk_widget_get_parent (GTK_WIDGET (item));
   GskTransform *transform;
+  double x, y;
 
-  transform = gsk_transform_rotate (gsk_transform_translate (NULL, &(graphene_point_t){item->x, item->y}),
-                                    item->angle + item->delta);
-  gtk_fixed_set_child_transform (GTK_FIXED (canvas), GTK_WIDGET (item), transform);
+  x = gtk_widget_get_allocated_width (item->label) / 2.0;
+  y = gtk_widget_get_allocated_height (item->label) / 2.0;
+  item->r = sqrt (x*x + y*y);
+
+  transform = gsk_transform_translate (
+                 gsk_transform_rotate (
+                   gsk_transform_translate (NULL,
+                                            &(graphene_point_t) { item->r, item->r }),
+                   item->angle + item->delta),
+                 &(graphene_point_t) { - x, - y });
+
+  gtk_fixed_set_child_transform (GTK_FIXED (item->fixed), item->label, transform);
   gsk_transform_unref (transform);
 }
 
@@ -128,7 +138,9 @@ canvas_item_init (CanvasItem *item)
   item->label = gtk_label_new (text);
   g_free (text);
 
-  gtk_widget_set_parent (item->label, GTK_WIDGET (item));
+  item->fixed = gtk_fixed_new ();
+  gtk_widget_set_parent (item->fixed, GTK_WIDGET (item));
+  gtk_fixed_put (GTK_FIXED (item->fixed), item->label, 0, 0);
 
   gtk_widget_add_css_class (item->label, "frame");
 
@@ -139,8 +151,6 @@ canvas_item_init (CanvasItem *item)
   gdk_rgba_parse (&rgba, "yellow");
   set_color (item, &rgba);
 
-  item->x = 0;
-  item->y = 0;
   item->angle = 0;
 
   dest = gtk_drop_target_new (GDK_TYPE_RGBA, GDK_ACTION_COPY);
@@ -162,10 +172,20 @@ canvas_item_dispose (GObject *object)
 {
   CanvasItem *item = CANVAS_ITEM (object);
 
-  g_clear_pointer (&item->label, gtk_widget_unparent);
+  g_clear_pointer (&item->fixed, gtk_widget_unparent);
   g_clear_pointer (&item->editor, gtk_widget_unparent);
 
   G_OBJECT_CLASS (canvas_item_parent_class)->dispose (object);
+}
+
+static void
+canvas_item_map (GtkWidget *widget)
+{
+  CanvasItem *item = CANVAS_ITEM (widget);
+
+  GTK_WIDGET_CLASS (canvas_item_parent_class)->map (widget);
+
+  apply_transform (item);
 }
 
 static void
@@ -176,16 +196,16 @@ canvas_item_class_init (CanvasItemClass *class)
 
   object_class->dispose = canvas_item_dispose;
 
+  widget_class->map = canvas_item_map;
+
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
+  gtk_widget_class_set_css_name (widget_class, "item");
 }
 
 static GtkWidget *
-canvas_item_new (double x,
-                 double y)
+canvas_item_new (void)
 {
   CanvasItem *item = g_object_new (canvas_item_get_type (), NULL);
-  item->x = x;
-  item->y = y;
 
   return GTK_WIDGET (item);
 }
@@ -193,7 +213,7 @@ canvas_item_new (double x,
 static GdkPaintable *
 canvas_item_get_drag_icon (CanvasItem *item)
 {
-  return gtk_widget_paintable_new (item->label);
+  return gtk_widget_paintable_new (item->fixed);
 }
 
 static gboolean
@@ -216,6 +236,7 @@ text_changed (GtkEditable *editable,
               CanvasItem  *item)
 {
   gtk_label_set_text (GTK_LABEL (item->label), gtk_editable_get_text (editable));
+  apply_transform (item);
 }
 
 static void
@@ -239,6 +260,7 @@ canvas_item_start_editing (CanvasItem *item)
   GtkWidget *canvas = gtk_widget_get_parent (GTK_WIDGET (item));
   GtkWidget *entry;
   GtkWidget *scale;
+  double x, y;
 
   if (item->editor)
     return;
@@ -264,7 +286,8 @@ canvas_item_start_editing (CanvasItem *item)
 
   gtk_box_append (GTK_BOX (item->editor), scale);
 
-  gtk_fixed_put (GTK_FIXED (canvas), item->editor, item->x, item->y + 50);
+  gtk_widget_translate_coordinates (GTK_WIDGET (item), canvas, 0, 0, &x, &y);
+  gtk_fixed_put (GTK_FIXED (canvas), item->editor, x, y + 2 * item->r);
   gtk_widget_grab_focus (entry);
 
 }
@@ -294,17 +317,17 @@ drag_begin (GtkDragSource *source,
             GdkDrag       *drag)
 {
   GtkWidget *canvas;
-  GtkWidget *item;
+  CanvasItem *item;
   GdkPaintable *paintable;
 
   canvas = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
-  item = g_object_get_data (G_OBJECT (canvas), "dragged-item");
+  item = CANVAS_ITEM (g_object_get_data (G_OBJECT (canvas), "dragged-item"));
 
-  paintable = canvas_item_get_drag_icon (CANVAS_ITEM (item));
-  gtk_drag_source_set_icon (source, paintable, 0, 0);
+  paintable = canvas_item_get_drag_icon (item);
+  gtk_drag_source_set_icon (source, paintable, item->r, item->r);
   g_object_unref (paintable);
 
-  gtk_widget_set_opacity (item, 0.3);
+  gtk_widget_set_opacity (GTK_WIDGET (item), 0.3);
 }
 
 static void
@@ -341,29 +364,29 @@ drag_drop (GtkDropTarget *target,
 
   item = g_value_get_object (value);
 
-  item->x = x;
-  item->y = y;
-
   canvas = gtk_widget_get_parent (GTK_WIDGET (item));
   last_child = gtk_widget_get_last_child (canvas);
   if (GTK_WIDGET (item) != last_child)
     gtk_widget_insert_after (GTK_WIDGET (item), canvas, last_child);
 
-  apply_transform (item);
+  gtk_fixed_move (GTK_FIXED (canvas), GTK_WIDGET (item), x - item->r, y - item->r);
 
   return TRUE;
 }
-
-static double pos_x, pos_y;
 
 static void
 new_item_cb (GtkWidget *button, gpointer data)
 {
   GtkWidget *canvas = data;
+  GtkWidget *popover;
   GtkWidget *item;
+  GdkRectangle rect;
 
-  item = canvas_item_new (pos_x, pos_y);
-  gtk_fixed_put (GTK_FIXED (canvas), item, 0, 0);
+  popover = gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER);
+  gtk_popover_get_pointing_to (GTK_POPOVER (popover), &rect);
+
+  item = canvas_item_new ();
+  gtk_fixed_put (GTK_FIXED (canvas), item, rect.x, rect.y);
   apply_transform (CANVAS_ITEM (item));
 
   gtk_popover_popdown (GTK_POPOVER (gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER)));
@@ -410,9 +433,6 @@ pressed_cb (GtkGesture *gesture,
       GtkWidget *menu;
       GtkWidget *box;
       GtkWidget *item;
-
-      pos_x = x;
-      pos_y = y;
 
       menu = gtk_popover_new ();
       gtk_widget_set_parent (menu, widget);
@@ -554,8 +574,8 @@ do_dnd (GtkWidget *do_widget)
         {
           GtkWidget *item;
 
-          item = canvas_item_new (x, y);
-          gtk_fixed_put (GTK_FIXED (canvas), item, 0, 0);
+          item = canvas_item_new ();
+          gtk_fixed_put (GTK_FIXED (canvas), item, x, y);
           apply_transform (CANVAS_ITEM (item));
 
           x += 150;
