@@ -402,6 +402,13 @@ if get_option('gtk_doc')
   configure_file(input: 'version.xml.in', output: 'version.xml', configuration: version_conf)
   configure_file(input: 'getting_started.xml.in', output: 'getting_started.xml', configuration: src_dir_conf)
 
+  expand_markdown_sources = find_program('expand-markdown.sh')
+  expand_markdown = custom_target('expand-markdown',
+                                  input: [ 'lists-overview.md' ],
+                                  output: [ 'lists-overview.xml' ],
+                                  command: [ expand_markdown_sources,
+                                             '@INPUT@', '@OUTPUT@' ])
+
   gnome.gtkdoc('gtk4',
                mode: 'none',
                main_xml: 'gtk4-docs.xml',
@@ -431,7 +438,7 @@ if get_option('gtk_doc')
                  '--extra-dir=../gdk',
                  '--extra-dir=../gsk',
                ],
-               content_files: content_files,
+               content_files: content_files + [ expand_markdown ],
                expand_content_files: expand_content_files,
                html_assets: images,
                install: true)
