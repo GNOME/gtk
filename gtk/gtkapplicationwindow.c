@@ -425,7 +425,6 @@ gtk_application_window_measure (GtkWidget      *widget,
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          GtkBorder border = {0};
           int menubar_height = 0;
 
           gtk_widget_measure (priv->menubar, GTK_ORIENTATION_VERTICAL,
@@ -439,10 +438,6 @@ gtk_application_window_measure (GtkWidget      *widget,
 
 
           gtk_widget_measure (priv->menubar, orientation, menubar_height, &menubar_min, &menubar_nat, NULL, NULL);
-
-          _gtk_window_get_shadow_width (GTK_WINDOW (widget), &border);
-          menubar_min += border.left + border.right;
-          menubar_nat += border.left + border.right;
 
           *minimum = MAX (*minimum, menubar_min);
           *natural = MAX (*natural, menubar_nat);
