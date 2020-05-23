@@ -6,7 +6,7 @@
 <!ENTITY pi "&#960;">
 <!ENTITY solidus "&#8260;">
 ]>
-<book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
+<book xmlns="http://docbook.org/ns/docbook" id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
   <bookinfo>
     <title>GTK 4 Reference Manual</title>
     <releaseinfo>
@@ -28,9 +28,9 @@
 
   <part id="concepts">
     <title>GTK Concepts</title>
-    <xi:include href="xml/drawing-model.xml" />
-    <xi:include href="xml/input-handling.xml" />
-    <xi:include href="xml/actions.xml" />
+    <xi:include href="drawing-model.xml" />
+    <xi:include href="input-handling.xml" />
+    <xi:include href="actions.xml" />
   </part>
 
   <part id="gtkobjects">
@@ -397,8 +397,8 @@
       </para>
     </partintro>
 
-    <xi:include href="xml/migrating-2to4.xml" />
-    <xi:include href="xml/migrating-3to4.xml" />
+    <xi:include href="migrating-2to4.xml" />
+    <xi:include href="migrating-3to4.xml" />
   </part>
 
   <part>
