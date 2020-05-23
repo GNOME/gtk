@@ -445,24 +445,10 @@ gtk_application_window_measure (GtkWidget      *widget,
         }
       else /* VERTICAL */
         {
-          GTK_WIDGET_CLASS (gtk_application_window_parent_class)->measure (widget,
-                                                                           orientation,
-                                                                           for_size,
-                                                                           minimum, natural,
-                                                                           minimum_baseline, natural_baseline);
-
           gtk_widget_measure (priv->menubar, orientation, for_size, &menubar_min, &menubar_nat, NULL, NULL);
           *minimum += menubar_min;
           *natural += menubar_nat;
         }
-    }
-  else
-    {
-      GTK_WIDGET_CLASS (gtk_application_window_parent_class)->measure (widget,
-                                                                       orientation,
-                                                                       for_size,
-                                                                       minimum, natural,
-                                                                       minimum_baseline, natural_baseline);
     }
 }
 
