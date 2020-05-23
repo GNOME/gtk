@@ -6598,13 +6598,6 @@ ensure_state_flag_backdrop (GtkWidget *widget)
     gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_BACKDROP);
 }
 
-void
-_gtk_window_get_shadow_width (GtkWindow *window,
-                              GtkBorder *border)
-{
-  get_shadow_width (window, border);
-}
-
 static void set_warn_again (gboolean warn);
 static void gtk_window_set_debugging (GdkDisplay *display,
                                       gboolean    enable,
