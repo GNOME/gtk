@@ -5821,14 +5821,18 @@ gtk_window_compute_hints (GtkWindow   *window,
  * gtk_window_present:
  * @window: a #GtkWindow
  *
- * Presents a window to the user. This function should not be used
- * as when it is called, it is too late to gather a valid timestamp
- * to allow focus stealing prevention to work correctly.
+ * Presents a window to the user. When presenting a window in response
+ * to an GDK windowing event, call gtk_window_present_with_time() with
+ * the timestamp from the event instead, since this call may not be
+ * able to gather a valid timestamp to allow focus stealing prevention
+ * to work correctly.
+ *
+ * See gtk_window_present_with_time() for more details.
  **/
 void
 gtk_window_present (GtkWindow *window)
 {
-  gtk_window_present_with_time (window, GDK_CURRENT_TIME);
+  gtk_window_present_with_time (window, gtk_get_current_event_time ());
 }
 
 /**
