@@ -34,7 +34,6 @@
 #include "gtkeventcontrollerprivate.h"
 #include "gtkgesturedrag.h"
 #include "gtkgesturelongpress.h"
-#include "gtkgesturepan.h"
 #include "gtkgesturesingle.h"
 #include "gtkgestureswipe.h"
 #include "gtkgestureprivate.h"
@@ -276,9 +275,7 @@ typedef struct
   GtkGesture *long_press_gesture;
   GtkGesture *swipe_gesture;
 
-  /* These two gestures are mutually exclusive */
   GtkGesture *drag_gesture;
-  GtkGesture *pan_gesture;
 
   gdouble drag_start_x;
   gdouble drag_start_y;
@@ -1067,31 +1064,6 @@ scrolled_window_long_press_cancelled_cb (GtkScrolledWindow *scrolled_window,
 }
 
 static void
-gtk_scrolled_window_check_attach_pan_gesture (GtkScrolledWindow *sw)
-{
-  GtkPropagationPhase phase = GTK_PHASE_NONE;
-  GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (sw);
-
-  if (priv->kinetic_scrolling &&
-      ((may_hscroll (sw) && !may_vscroll (sw)) ||
-       (!may_hscroll (sw) && may_vscroll (sw))))
-    {
-      GtkOrientation orientation;
-
-      if (may_hscroll (sw))
-        orientation = GTK_ORIENTATION_HORIZONTAL;
-      else
-        orientation = GTK_ORIENTATION_VERTICAL;
-
-      gtk_gesture_pan_set_orientation (GTK_GESTURE_PAN (priv->pan_gesture),
-                                       orientation);
-      phase = GTK_PHASE_CAPTURE;
-    }
-
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->pan_gesture), phase);
-}
-
-static void
 indicator_set_over (Indicator *indicator,
                     gboolean   over)
 {
@@ -1690,8 +1662,6 @@ gtk_scrolled_window_size_allocate (GtkWidget *widget,
                                               &child_allocation);
       gtk_widget_size_allocate (priv->vscrollbar, &child_allocation, -1);
     }
-
-  gtk_scrolled_window_check_attach_pan_gesture (scrolled_window);
 }
 
 static void
@@ -1996,11 +1966,6 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
                             G_CALLBACK (scrolled_window_drag_end_cb),
                             scrolled_window);
   gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (priv->drag_gesture));
-
-  priv->pan_gesture = gtk_gesture_pan_new (GTK_ORIENTATION_VERTICAL);
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->pan_gesture), TRUE);
-  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (priv->pan_gesture));
-  gtk_gesture_group (priv->pan_gesture, priv->drag_gesture);
 
   priv->swipe_gesture = gtk_gesture_swipe_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->swipe_gesture), TRUE);
@@ -2537,7 +2502,6 @@ gtk_scrolled_window_set_kinetic_scrolling (GtkScrolledWindow *scrolled_window,
     return;
 
   priv->kinetic_scrolling = kinetic_scrolling;
-  gtk_scrolled_window_check_attach_pan_gesture (scrolled_window);
 
   if (priv->kinetic_scrolling)
     phase = GTK_PHASE_CAPTURE;
@@ -2547,7 +2511,6 @@ gtk_scrolled_window_set_kinetic_scrolling (GtkScrolledWindow *scrolled_window,
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture), phase);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->swipe_gesture), phase);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->long_press_gesture), phase);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->pan_gesture), phase);
 
   g_object_notify_by_pspec (G_OBJECT (scrolled_window), properties[PROP_KINETIC_SCROLLING]);
 }
