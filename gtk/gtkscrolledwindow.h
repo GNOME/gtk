@@ -147,12 +147,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean       gtk_scrolled_window_get_kinetic_scrolling  (GtkScrolledWindow *scrolled_window);
 
 GDK_AVAILABLE_IN_ALL
-void           gtk_scrolled_window_set_capture_button_press (GtkScrolledWindow *scrolled_window,
-                                                             gboolean           capture_button_press);
-GDK_AVAILABLE_IN_ALL
-gboolean       gtk_scrolled_window_get_capture_button_press (GtkScrolledWindow *scrolled_window);
-
-GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_overlay_scrolling  (GtkScrolledWindow *scrolled_window,
                                                            gboolean           overlay_scrolling);
 GDK_AVAILABLE_IN_ALL
