@@ -21,7 +21,7 @@
   <part id="gtk">
     <title>Introduction</title>
     <xi:include href="overview.xml"/>
-    <xi:include href="xml/getting_started.xml"/>
+    <xi:include href="getting_started.xml"/>
     <xi:include href="resources.xml" />
     <xi:include href="xml/question_index.xml" />
   </part>
