@@ -242,14 +242,13 @@ focus_out (GtkEventController   *controller,
 
 static void
 leave_cb (GtkEventController   *controller,
-          GdkCrossingMode       mode,
           gpointer              data)
 {
   GtkWidget *target;
 
   target = gtk_event_controller_get_widget (controller);
 
-  if (mode == GDK_CROSSING_NORMAL)
+  if (!gtk_event_controller_motion_contains_pointer (GTK_EVENT_CONTROLLER_MOTION (controller)))
     gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (target), NULL);
 }
 
