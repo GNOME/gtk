@@ -167,12 +167,16 @@ MarkdownExtensions = {
 
 def ConvertToDocbook(infile, outfile):
     basename = os.path.basename(infile)
+    if basename.startswith('section'):
+        division='section'
+    else:
+        division='chapter'
     input_format = "markdown" + "".join(MarkdownExtensions)
     output_format = "docbook"
     subprocess.check_call(["pandoc", infile, "-o", outfile,
                            "--from=" + input_format,
                            "--to=" + output_format,
-                           "--top-level-division=chapter"])
+                           "--top-level-division=" + division])
 
 def ExpandGtkDocAbbreviations(infile, outfile):
     contents = open(infile, 'r', encoding='utf-8').read()
