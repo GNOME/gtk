@@ -178,7 +178,7 @@
 
     <chapter id="TextWidgetObjects">
       <title>Multiline Text Editor</title>
-      <xi:include href="xml/text_widget.xml" />
+      <xi:include href="section-text-widget.xml" />
       <xi:include href="xml/gtktextiter.xml" />
       <xi:include href="xml/gtktextmark.xml" />
       <xi:include href="xml/gtktextbuffer.xml" />
@@ -189,7 +189,7 @@
 
     <chapter id="TreeWidgetObjects">
       <title>Tree, List and Icon Grid Widgets</title>
-      <xi:include href="xml/tree_widget.xml" />
+      <xi:include href="section-tree-widget.xml" />
       <xi:include href="xml/gtktreemodel.xml" />
       <xi:include href="xml/gtktreeselection.xml" />
       <xi:include href="xml/gtktreeviewcolumn.xml" />

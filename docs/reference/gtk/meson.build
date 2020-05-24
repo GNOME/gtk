@@ -353,15 +353,11 @@ content_files = [
   'other_software.xml',
   'overview.xml',
   'question_index.xml',
-  'text_widget.xml',
-  'tree_widget.xml',
   'visual_index.xml',
 ]
 
 expand_content_files = [
   'question_index.xml',
-  'text_widget.xml',
-  'tree_widget.xml',
 ]
 
 expand_content_md_files = [
@@ -369,7 +365,7 @@ expand_content_md_files = [
   'osx.md',
   'wayland.md',
   'windows.md',
-: 'x11.md',
+  'x11.md',
   'getting_started.md',
   'resources.md',
   'building.md',
@@ -381,7 +377,9 @@ expand_content_md_files = [
   'input-handling.md',
   'drawing-model.md',
   'css-overview.md',
-  'css-properties.md'
+  'css-properties.md',
+  'section-text-widget.md',
+  'section-tree-widget.md',
 ]
 
 types_conf = configuration_data()
