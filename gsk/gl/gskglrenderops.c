@@ -74,6 +74,7 @@ ops_finish (RenderOpBuilder *builder)
   builder->scale_y = 1;
   builder->current_modelview = NULL;
   builder->current_clip = NULL;
+  builder->clip_is_rectilinear = TRUE;
   builder->current_render_target = 0;
   builder->current_texture = 0;
   builder->current_program = NULL;
@@ -316,6 +317,7 @@ ops_push_clip (RenderOpBuilder      *self,
 
   g_array_append_val (self->clip_stack, *clip);
   self->current_clip = &g_array_index (self->clip_stack, GskRoundedRect, self->clip_stack->len - 1);
+  self->clip_is_rectilinear = gsk_rounded_rect_is_rectilinear (self->current_clip);
   ops_set_clip (self, clip);
 }
 
@@ -333,11 +335,13 @@ ops_pop_clip (RenderOpBuilder *self)
   if (self->clip_stack->len >= 1)
     {
       self->current_clip = head;
+      self->clip_is_rectilinear = gsk_rounded_rect_is_rectilinear (self->current_clip);
       ops_set_clip (self, head);
     }
   else
     {
       self->current_clip = NULL;
+      self->clip_is_rectilinear = TRUE;
     }
 }
 
