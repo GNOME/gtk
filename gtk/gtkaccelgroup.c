@@ -939,6 +939,7 @@ gtk_accelerator_print_label (GString        *gstring,
       if (accelerator_key >= GDK_KEY_KP_Space &&
           accelerator_key <= GDK_KEY_KP_Equal)
         {
+          /* Translators: "KP" means "numeric key pad" */
           g_string_append (gstring, C_("keyboard label", "KP"));
           g_string_append (gstring, " ");
         }
