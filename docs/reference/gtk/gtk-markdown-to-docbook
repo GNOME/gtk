@@ -163,6 +163,7 @@ MarkdownExtensions = {
   '+backtick_code_blocks', # to replace |[ ]|
   '+fenced_code_attributes', # to add language annotations
   '-raw_html', # to escape literal tags like <child> in input
+  '+startnum', # to have interrupted lists in the q&a part
 }
 
 def ConvertToDocbook(infile, outfile):
