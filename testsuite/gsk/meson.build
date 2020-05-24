@@ -69,6 +69,9 @@ compare_render_tests = [
   'transform-in-transform',
   'transform-in-transform-in-transform',
   'nested-rounded-clips',
+  'clip-in-rounded-clip1',
+  'clip-in-rounded-clip2',
+  'clip-in-rounded-clip3',
 ]
 
 # these are too sensitive to differences in the renderers
