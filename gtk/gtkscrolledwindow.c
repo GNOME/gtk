@@ -942,15 +942,6 @@ scrolled_window_drag_update_cb (GtkScrolledWindow *scrolled_window,
 
   gtk_scrolled_window_invalidate_overshoot (scrolled_window);
 
-  if (!priv->propagation_phase)
-    {
-      GdkEventSequence *sequence;
-
-      sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-      gtk_gesture_set_sequence_state (gesture, sequence,
-                                      GTK_EVENT_SEQUENCE_CLAIMED);
-    }
-
   hadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar));
   if (hadjustment && may_hscroll (scrolled_window))
     {
