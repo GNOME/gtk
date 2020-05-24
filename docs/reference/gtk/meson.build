@@ -352,12 +352,7 @@ content_files = [
   'gtk4-widget-factory.xml',
   'other_software.xml',
   'overview.xml',
-  'question_index.xml',
   'visual_index.xml',
-]
-
-expand_content_files = [
-  'question_index.xml',
 ]
 
 expand_content_md_files = [
@@ -380,6 +375,7 @@ expand_content_md_files = [
   'css-properties.md',
   'section-text-widget.md',
   'section-tree-widget.md',
+  'question_index.md',
 ]
 
 types_conf = configuration_data()
@@ -439,7 +435,6 @@ if get_option('gtk_doc')
                  '--extra-dir=../gsk',
                ],
                content_files: content_files + expand_md_targets,
-               expand_content_files: expand_content_files,
                html_assets: images,
                install: true)
 endif
