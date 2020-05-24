@@ -373,6 +373,7 @@ expand_content_files = [
 ]
 
 expand_content_md_files = [
+  'getting_started.md',
   'building.md',
   'compiling.md',
   'running.md',
@@ -400,7 +401,6 @@ endif
 
 if get_option('gtk_doc')
   configure_file(input: 'version.xml.in', output: 'version.xml', configuration: version_conf)
-  configure_file(input: 'getting_started.xml.in', output: 'getting_started.xml', configuration: src_dir_conf)
 
   # gtk-markdown-to-docbook uses pandoc
   pandoc = find_program('pandoc', required: true)
