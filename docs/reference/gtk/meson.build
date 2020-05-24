@@ -341,8 +341,6 @@ images = [
 
 content_files = [
   'broadway.xml',
-  'building.xml',
-  'compiling.xml',
   'glossary.xml',
   'gtk4-broadwayd.xml',
   'gtk4-builder-tool.xml',
@@ -359,7 +357,6 @@ content_files = [
   'overview.xml',
   'question_index.xml',
   'resources.xml',
-  'running.xml',
   'text_widget.xml',
   'tree_widget.xml',
   'visual_index.xml',
@@ -369,7 +366,6 @@ content_files = [
 ]
 
 expand_content_files = [
-  'compiling.xml',
   'glossary.xml',
   'question_index.xml',
   'text_widget.xml',
@@ -377,6 +373,9 @@ expand_content_files = [
 ]
 
 expand_content_md_files = [
+  'building.md',
+  'compiling.md',
+  'running.md',
   'migrating-2to4.md',
   'migrating-3to4.md',
   'actions.md',

@@ -419,7 +419,7 @@
   <part id="platform-support">
     <title>GTK Platform Support</title>
     <xi:include href="building.xml" />
-    <xi:include href="xml/compiling.xml" />
+    <xi:include href="compiling.xml" />
     <xi:include href="running.xml" />
     <xi:include href="x11.xml" />
     <xi:include href="windows.xml" />
