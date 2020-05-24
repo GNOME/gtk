@@ -477,7 +477,6 @@ add_tab_bindings (GtkWidgetClass   *widget_class,
 
 static void
 motion_controller_leave (GtkEventController   *controller,
-                         GdkCrossingMode       mode,
                          GtkScrolledWindow    *scrolled_window)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);

@@ -169,7 +169,6 @@ static void
 item_enter_cb (GtkEventController   *controller,
                double                x,
                double                y,
-               GdkCrossingMode       mode,
                gpointer              data)
 {
   GtkWidget *target;
@@ -183,7 +182,6 @@ item_enter_cb (GtkEventController   *controller,
 
 static void
 bar_leave_cb (GtkEventController   *controller,
-              GdkCrossingMode       mode,
               gpointer              data)
 {
   GtkWidget *target;
