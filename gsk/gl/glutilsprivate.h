@@ -4,6 +4,36 @@
 #define SANITY_CHECKS 0
 
 
+
+#define rounded_rect_top_left(r) (GRAPHENE_RECT_INIT(r->bounds.origin.x, \
+                                                     r->bounds.origin.y, \
+                                                     r->corner[0].width, r->corner[0].height))
+
+#define rounded_rect_top_right(r) (GRAPHENE_RECT_INIT(r->bounds.origin.x + r->bounds.size.width - r->corner[1].width, \
+                                                      r->bounds.origin.y, \
+                                                      r->corner[1].width, r->corner[1].height))
+
+#define rounded_rect_bottom_right(r) (GRAPHENE_RECT_INIT(r->bounds.origin.x + r->bounds.size.width - r->corner[2].width, \
+                                                         r->bounds.origin.y + r->bounds.size.height - r->corner[2].height, \
+                                                         r->corner[2].width, r->corner[2].height))
+
+#define rounded_rect_bottom_left(r) (GRAPHENE_RECT_INIT(r->bounds.origin.x, \
+                                                         r->bounds.origin.y + r->bounds.size.height - r->corner[2].height, \
+                                                         r->corner[3].width, r->corner[3].height))
+
+
+#define rounded_rect_corner0(r) rounded_rect_top_left(r)
+#define rounded_rect_corner1(r) rounded_rect_top_right(r)
+#define rounded_rect_corner2(r) rounded_rect_bottom_right(r)
+#define rounded_rect_corner3(r) rounded_rect_bottom_left(r)
+
+#define rounded_rect_corner(r, i) (rounded_rect_corner ##i(r))
+#define graphene_size_non_zero(s) (s->width > 0 && s->height > 0)
+#define rounded_rect_has_corner(r, i) (r->corner[i].width > 0 && r->corner[i].height > 0)
+
+#define rect_contains_point(r, _x, _y) (_x >= (r)->origin.x && _x <= (r)->origin.x + (r)->size.width && \
+                                        _y >= (r)->origin.y && _y <= (r)->origin.y + (r)->size.height)
+
 enum {
   NINE_SLICE_TOP_LEFT      = 0,
   NINE_SLICE_TOP_CENTER    = 1,
