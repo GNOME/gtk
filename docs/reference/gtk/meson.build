@@ -340,7 +340,6 @@ images = [
 ]
 
 content_files = [
-  'glossary.xml',
   'gtk4-broadwayd.xml',
   'gtk4-builder-tool.xml',
   'gtk4-demo-application.xml',
@@ -360,7 +359,6 @@ content_files = [
 ]
 
 expand_content_files = [
-  'glossary.xml',
   'question_index.xml',
   'text_widget.xml',
   'tree_widget.xml',
