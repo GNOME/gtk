@@ -37,10 +37,13 @@ def ExpandAbbreviations(symbol, text):
     text = re.sub(r'\\\%', r'\%', text)
 
     # Convert '#symbol', but not '\#symbol'.
+
+    # Only convert #foo after a space to avoid interfering with
+    # fragment identifiers in urls
     def f3(m):
         return m.group(1) + MakeHashXRef(m.group(2), "type")
 
-    text = re.sub(r'(\A|[^\\])#([\w\-:\.]+[\w]+)', f3, text)
+    text = re.sub(r'(\A|[ ])#([\w\-:\.]+[\w]+)', f3, text)
     text = re.sub(r'\\#', '#', text)
 
     return text
