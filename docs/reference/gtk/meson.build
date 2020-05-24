@@ -351,7 +351,6 @@ content_files = [
   'gtk4-query-settings.xml',
   'gtk4-update-icon-cache.xml',
   'gtk4-widget-factory.xml',
-  'other_software.xml',
   'overview.xml',
   'question_index.xml',
   'resources.xml',
