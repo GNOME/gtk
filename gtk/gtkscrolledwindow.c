@@ -901,25 +901,14 @@ scrolled_window_drag_begin_cb (GtkScrolledWindow *scrolled_window,
                                GtkGesture        *gesture)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
-  GtkEventSequenceState state;
   GdkEventSequence *sequence;
-  GtkWidget *event_widget;
 
   priv->drag_start_x = priv->unclamped_hadj_value;
   priv->drag_start_y = priv->unclamped_vadj_value;
   gtk_scrolled_window_cancel_deceleration (scrolled_window);
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-  event_widget = gtk_gesture_get_last_target (gesture, sequence);
 
-  if (event_widget == priv->vscrollbar || event_widget == priv->hscrollbar ||
-      (!may_hscroll (scrolled_window) && !may_vscroll (scrolled_window)))
-    state = GTK_EVENT_SEQUENCE_DENIED;
-  else if (priv->propagation_phase)
-    state = GTK_EVENT_SEQUENCE_CLAIMED;
-  else
-    return;
-
-  gtk_gesture_set_sequence_state (gesture, sequence, state);
+  gtk_gesture_set_sequence_state (gesture, sequence, GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
 static void
