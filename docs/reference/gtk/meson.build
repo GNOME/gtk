@@ -343,7 +343,6 @@ content_files = [
   'broadway.xml',
   'building.xml',
   'compiling.xml',
-  'css-overview.xml',
   'glossary.xml',
   'gtk4-broadwayd.xml',
   'gtk4-builder-tool.xml',
@@ -382,7 +381,9 @@ expand_content_md_files = [
   'migrating-3to4.md',
   'actions.md',
   'input-handling.md',
-  'drawing-model.md'
+  'drawing-model.md',
+  'css-overview.md',
+  'css-properties.md'
 ]
 
 types_conf = configuration_data()
