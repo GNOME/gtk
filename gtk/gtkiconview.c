@@ -163,7 +163,6 @@ static void             gtk_icon_view_motion                    (GtkEventControl
                                                                  double              y,
                                                                  gpointer            user_data);
 static void             gtk_icon_view_leave                     (GtkEventController   *controller,
-                                                                 GdkCrossingMode       mode,
                                                                  gpointer              user_data);
 static void             gtk_icon_view_button_press              (GtkGestureClick *gesture,
                                                                  int                   n_press,
@@ -1878,9 +1877,8 @@ gtk_icon_view_motion (GtkEventController *controller,
 }
 
 static void
-gtk_icon_view_leave(GtkEventController   *controller,
-                    GdkCrossingMode       mode,
-                    gpointer              user_data)
+gtk_icon_view_leave (GtkEventController *controller,
+                     gpointer            user_data)
 {
   GtkIconView *icon_view;
   GtkIconViewPrivate *priv;

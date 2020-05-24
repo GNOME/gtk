@@ -439,7 +439,6 @@ static void gtk_label_motion            (GtkEventControllerMotion *controller,
                                          double                    y,
                                          gpointer                  data);
 static void gtk_label_leave             (GtkEventControllerMotion *controller,
-                                         GdkCrossingMode           mode,
                                          gpointer                  data);
 
 static gboolean gtk_label_grab_focus        (GtkWidget        *widget);
@@ -4287,7 +4286,6 @@ gtk_label_motion (GtkEventControllerMotion *controller,
 
 static void
 gtk_label_leave (GtkEventControllerMotion *controller,
-                 GdkCrossingMode           mode,
                  gpointer                  data)
 {
   GtkLabel *self = GTK_LABEL (data);
