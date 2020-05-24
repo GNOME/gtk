@@ -1164,52 +1164,54 @@ render_clipped_child (GskGLRenderer         *self,
 
   ops_transform_bounds_modelview (builder, clip, &transformed_clip);
 
-  /* Intersection might end up having rounded corners again */
-  if (!gsk_rounded_rect_is_rectilinear (builder->current_clip))
+  if (builder->clip_is_rectilinear)
     {
-      if (!rounded_inner_rect_contains_rect (builder->current_clip,
-                                             &transformed_clip))
-        {
-          /* well fuck */
-          const float scale = ops_get_scale (builder);
-          gboolean is_offscreen;
-          TextureRegion region;
-          GskRoundedRect scaled_clip;
+      /* Simple case: */
+      graphene_rect_intersection (&transformed_clip,
+                                  &builder->current_clip->bounds,
+                                  &intersection);
 
-          memset (&scaled_clip, 0, sizeof (GskRoundedRect));
+      gsk_rounded_rect_init_from_rect (&child_clip, &intersection, 0.0f);
 
-          scaled_clip.bounds.origin.x = clip->origin.x * scale;
-          scaled_clip.bounds.origin.y = clip->origin.y * scale;
-          scaled_clip.bounds.size.width = clip->size.width * scale;
-          scaled_clip.bounds.size.height = clip->size.height * scale;
-
-          ops_push_clip (builder, &scaled_clip);
-          if (!add_offscreen_ops (self, builder, &child->bounds,
-                                  child,
-                                  &region, &is_offscreen,
-                                  RESET_OPACITY | FORCE_OFFSCREEN))
-            g_assert_not_reached ();
-          ops_pop_clip (builder);
-
-
-          ops_set_program (builder, &self->programs->blit_program);
-          ops_set_texture (builder, region.texture_id);
-
-          load_offscreen_vertex_data (ops_draw (builder, NULL), child, builder);
-          return;
-        }
+      ops_push_clip (builder, &child_clip);
+      gsk_gl_renderer_add_render_ops (self, child, builder);
+      ops_pop_clip (builder);
+      return;
     }
 
-  /* Simple case: */
-  graphene_rect_intersection (&transformed_clip,
-                              &builder->current_clip->bounds,
-                              &intersection);
+  /* Intersection might end up having rounded corners again */
+  if (!rounded_inner_rect_contains_rect (builder->current_clip,
+                                         &transformed_clip))
+    {
+      /* well fuck */
+      const float scale = ops_get_scale (builder);
+      gboolean is_offscreen;
+      TextureRegion region;
+      GskRoundedRect scaled_clip;
 
-  gsk_rounded_rect_init_from_rect (&child_clip, &intersection, 0.0f);
+      memset (&scaled_clip, 0, sizeof (GskRoundedRect));
 
-  ops_push_clip (builder, &child_clip);
-  gsk_gl_renderer_add_render_ops (self, child, builder);
-  ops_pop_clip (builder);
+      scaled_clip.bounds.origin.x = clip->origin.x * scale;
+      scaled_clip.bounds.origin.y = clip->origin.y * scale;
+      scaled_clip.bounds.size.width = clip->size.width * scale;
+      scaled_clip.bounds.size.height = clip->size.height * scale;
+
+      ops_push_clip (builder, &scaled_clip);
+      if (!add_offscreen_ops (self, builder, &child->bounds,
+                              child,
+                              &region, &is_offscreen,
+                              RESET_OPACITY | FORCE_OFFSCREEN))
+        g_assert_not_reached ();
+      ops_pop_clip (builder);
+
+
+      ops_set_program (builder, &self->programs->blit_program);
+      ops_set_texture (builder, region.texture_id);
+
+      load_offscreen_vertex_data (ops_draw (builder, NULL), child, builder);
+      return;
+    }
+
 }
 
 static inline void
