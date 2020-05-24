@@ -340,7 +340,6 @@ images = [
 ]
 
 content_files = [
-  'broadway.xml',
   'glossary.xml',
   'gtk4-broadwayd.xml',
   'gtk4-builder-tool.xml',
@@ -352,7 +351,6 @@ content_files = [
   'gtk4-query-settings.xml',
   'gtk4-update-icon-cache.xml',
   'gtk4-widget-factory.xml',
-  'osx.xml',
   'other_software.xml',
   'overview.xml',
   'question_index.xml',
@@ -360,9 +358,6 @@ content_files = [
   'text_widget.xml',
   'tree_widget.xml',
   'visual_index.xml',
-  'wayland.xml',
-  'windows.xml',
-  'x11.xml',
 ]
 
 expand_content_files = [
@@ -373,6 +368,11 @@ expand_content_files = [
 ]
 
 expand_content_md_files = [
+  'broadway.md',
+  'osx.md',
+  'wayland.md',
+  'windows.md',
+  'x11.md',
   'getting_started.md',
   'building.md',
   'compiling.md',
