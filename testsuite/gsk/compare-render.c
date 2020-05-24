@@ -166,6 +166,8 @@ main (int argc, char **argv)
       return 1;
     }
 
+  g_option_context_free (context);
+
   gtk_init ();
 
   node_file = argv[1];
@@ -236,6 +238,8 @@ main (int argc, char **argv)
   cairo_surface_destroy (reference_surface);
   cairo_surface_destroy (rendered_surface);
   g_object_unref (texture);
+
+  gsk_render_node_unref (node);
 
   return success ? 0 : 1;
 }
