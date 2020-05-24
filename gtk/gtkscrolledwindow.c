@@ -33,6 +33,7 @@
 #include "gtkeventcontrollerscroll.h"
 #include "gtkeventcontrollerprivate.h"
 #include "gtkgesturedrag.h"
+#include "gtkgesturelongpress.h"
 #include "gtkgesturesingle.h"
 #include "gtkgestureswipe.h"
 #include "gtkgestureprivate.h"
