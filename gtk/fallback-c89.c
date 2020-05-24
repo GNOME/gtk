@@ -97,11 +97,19 @@ isnan (double x)
  * MSVC does not have isnanf(), but it does
  * have _isnanf() which does the same as isnanf()
  */
+#ifdef _MSC_VER
 static inline gboolean
 isnanf (float x)
 {
   return _isnanf (x);
 }
+#elif defined (__GNUC__)
+/* gcc has an intern function that it warns about when
+ * using -Wshadow but no header properly declares it,
+ * so we do it instead.
+ */
+extern int isnanf (x);
+#endif
 #endif
 
 #ifndef INFINITY
