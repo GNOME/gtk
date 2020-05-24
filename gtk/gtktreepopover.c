@@ -617,7 +617,6 @@ static void
 enter_cb (GtkEventController   *controller,
           double                x,
           double                y,
-          GdkCrossingMode       mode,
           GtkTreePopover       *popover)
 {
   GtkWidget *item;
