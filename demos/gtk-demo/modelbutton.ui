@@ -4,9 +4,7 @@
     <property name="title" translatable="yes">Model Button</property>
     <property name="resizable">0</property>
     <child type="titlebar">
-      <object class="GtkHeaderBar">
-        <property name="show-title-buttons">1</property>
-      </object>
+      <object class="GtkHeaderBar"/>
     </child>
     <child>
       <object class="GtkBox">

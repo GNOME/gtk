@@ -33,7 +33,6 @@
     <property name="default-height">600</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="headerbar">
-        <property name="show-title-buttons">1</property>
         <child>
           <object class="GtkButton">
             <property name="valign">center</property>

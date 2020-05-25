@@ -315,7 +315,6 @@ main (int argc, char **argv)
   titlebar = gtk_header_bar_new ();
 
   gtk_window_set_titlebar (GTK_WINDOW (window), titlebar);
-  gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (titlebar), TRUE);
 
   toggle_button = gtk_toggle_button_new ();
   gtk_button_set_label (GTK_BUTTON (toggle_button), "Picking");

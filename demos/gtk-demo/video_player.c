@@ -73,7 +73,6 @@ do_video_player (GtkWidget *do_widget)
       gtk_window_set_child (GTK_WINDOW (window), video);
 
       title = gtk_header_bar_new ();
-      gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (title), TRUE);
       gtk_window_set_titlebar (GTK_WINDOW (window), title);
 
       open_button = gtk_button_new_with_mnemonic ("_Open");

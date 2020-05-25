@@ -4,7 +4,6 @@
     <property name="resizable">0</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header">
-        <property name="show-title-buttons">1</property>
         <child type="end">
           <object class="GtkLabel" id="fps"/>
         </child>

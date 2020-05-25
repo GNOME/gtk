@@ -2,9 +2,7 @@
 <interface domain="gtk40">
   <template class="GtkDialog" parent="GtkWindow">
     <child type="titlebar">
-      <object class="GtkHeaderBar" id="headerbar">
-        <property name="show-title-buttons">1</property>
-      </object>
+      <object class="GtkHeaderBar" id="headerbar"/>
     </child>
     <child>
       <object class="GtkBox">

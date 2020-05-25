@@ -276,7 +276,6 @@ do_peg_solitaire (GtkWidget *do_widget)
       g_signal_connect (restart, "clicked", G_CALLBACK (restart), NULL);
 
       header = gtk_header_bar_new ();
-      gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), TRUE);
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), restart);
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),

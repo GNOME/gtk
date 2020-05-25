@@ -12,7 +12,6 @@
     <property name="default-width">800</property>
     <child type="titlebar">
       <object class="GtkHeaderBar">
-        <property name="show-title-buttons">1</property>
         <child>
           <object class="GtkStack" id="button_stack">
             <property name="visible-child-name" bind-source="top_stack" bind-property="visible-child-name"/>

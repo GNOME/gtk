@@ -3,6 +3,7 @@
   <object class="GtkApplicationWindow" id="window1">
     <child type="titlebar">
       <object class="GtkHeaderBar">
+        <property name="show-title-buttons">0</porperty>
         <child type="title">
           <object class="GtkStackSwitcher" id="stack_switcher">
             <property name="stack">toplevel_stack</property>

@@ -4318,7 +4318,6 @@ gtk_window_realize (GtkWidget *widget)
             if (priv->title_box == NULL)
               {
                 priv->titlebar = gtk_header_bar_new ();
-                gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (priv->titlebar), TRUE);
                 gtk_widget_add_css_class (priv->titlebar, GTK_STYLE_CLASS_TITLEBAR);
                 gtk_widget_add_css_class (priv->titlebar, "default-decoration");
 

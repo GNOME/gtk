@@ -30,7 +30,6 @@ do_headerbar (GtkWidget *do_widget)
       gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
 
       header = gtk_header_bar_new ();
-      gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), TRUE);
 
       button = gtk_button_new ();
       icon = g_themed_icon_new ("mail-send-receive-symbolic");

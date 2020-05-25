@@ -595,7 +595,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
       g_param_spec_boolean ("show-title-buttons",
                             P_("Show title buttons"),
                             P_("Whether to show title buttons"),
-                            FALSE,
+                            TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -629,6 +629,7 @@ gtk_header_bar_init (GtkHeaderBar *bar)
 
   priv->title_widget = NULL;
   priv->decoration_layout = NULL;
+  priv->show_title_buttons = TRUE;
   priv->state = GDK_SURFACE_STATE_WITHDRAWN;
 
   priv->handle = gtk_window_handle_new ();
@@ -646,6 +647,7 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   gtk_center_box_set_end_widget (GTK_CENTER_BOX (priv->center_box), priv->end_box);
 
   construct_title_label (bar);
+  create_window_controls (bar);
 }
 
 static GtkBuildableIface *parent_buildable_iface;

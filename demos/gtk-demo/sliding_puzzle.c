@@ -451,7 +451,6 @@ do_sliding_puzzle (GtkWidget *do_widget)
       g_signal_connect (restart, "clicked", G_CALLBACK (reshuffle), NULL);
 
       header = gtk_header_bar_new ();
-      gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), TRUE);
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), restart);
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), tweak);
       window = gtk_window_new ();

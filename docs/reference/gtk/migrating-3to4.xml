@@ -547,6 +547,7 @@
         The gtk_header_bar_set_show_close_button() function has been renamed to
         the more accurate name gtk_header_bar_set_show_title_buttons(). The
         corresponding getter and the property itself have also been renamed.
+        The default value of the property is now %TRUE instead of %FALSE.
       </para>
       <para>
         The gtk_header_bar_set_custom_title() function has been renamed to
