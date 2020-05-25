@@ -6983,3 +6983,25 @@ GTK_EMOJI_CHOOSER_GET_CLASS
 <SUBSECTION Private>
 gtk_emoji_chooser_get_type
 </SECTION>
+
+<SECTION>
+<FILE>gtkoverlaylayout</FILE>
+GtkOverlayLayout
+
+gtk_overlay_layout_new
+
+<SUBSECTION>
+GtkOverlayLayoutChild
+
+gtk_overlay_layout_child_set_measure
+gtk_overlay_layout_child_get_measure
+gtk_overlay_layout_child_set_clip_overlay
+gtk_overlay_layout_child_get_clip_overlay
+
+<SUBSECTION Private>
+GTK_TYPE_OVERLAY_LAYOUT
+gtk_overlay_layout_get_type
+GTK_TYPE_OVERLAY_LAYOUT_CHLD
+gtk_overlay_layout_child_
+get_type
+</SECTION>

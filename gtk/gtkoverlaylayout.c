@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include "gtkoverlaylayoutprivate.h"
+#include "gtkoverlaylayout.h"
 
 #include "gtkintl.h"
 #include "gtklayoutchild.h"

@@ -22,7 +22,7 @@
 
 #include "gtkoverlay.h"
 
-#include "gtkoverlaylayoutprivate.h"
+#include "gtkoverlaylayout.h"
 #include "gtkbuildable.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
