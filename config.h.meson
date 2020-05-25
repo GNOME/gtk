@@ -149,6 +149,9 @@
 /* Have the XFIXES X extension */
 #mesondefine HAVE_XFIXES
 
+/* Have the XDAMAGE X extension */
+#mesondefine HAVE_XDAMAGE
+
 /* Define to 1 if XFree Xinerama is available */
 #mesondefine HAVE_XFREE_XINERAMA
 
