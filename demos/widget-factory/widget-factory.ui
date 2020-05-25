@@ -1981,9 +1981,6 @@ microphone-sensitivity-medium-symbolic</property>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkSeparator"/>
-                                    </child>
-                                    <child>
                                       <object class="GtkScrolledWindow">
                                         <property name="vexpand">1</property>
                                         <child>
@@ -1996,9 +1993,6 @@ microphone-sensitivity-medium-symbolic</property>
                                           </object>
                                         </child>
                                       </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkSeparator"/>
                                     </child>
                                     <child>
                                       <object class="GtkStatusbar" id="statusbar"/>
