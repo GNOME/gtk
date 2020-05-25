@@ -2478,6 +2478,7 @@ gtk_widget_unroot (GtkWidget *widget)
     remove_parent_surface_transform_changed_listener (widget);
 
   _gtk_widget_update_parent_muxer (widget);
+  gtk_root_unqueue_resize (priv->root, widget);
 
   GTK_WIDGET_GET_CLASS (widget)->unroot (widget);
 
@@ -3523,10 +3524,12 @@ gtk_widget_queue_allocate (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (_gtk_widget_get_realized (widget))
-    gtk_widget_queue_draw (widget);
+  gtk_widget_queue_resize (widget);
 
-  gtk_widget_set_alloc_needed (widget);
+  /*if (_gtk_widget_get_realized (widget))*/
+    /*gtk_widget_queue_draw (widget);*/
+
+  /*gtk_widget_set_alloc_needed (widget);*/
 }
 
 static inline gboolean
@@ -3537,33 +3540,18 @@ gtk_widget_get_resize_needed (GtkWidget *widget)
   return priv->resize_needed;
 }
 
-/*
- * gtk_widget_queue_resize_internal:
- * @widget: a #GtkWidget
- * 
- * Queue a resize on a widget, and on all other widgets grouped with this widget.
- */
-static void
-gtk_widget_queue_resize_internal (GtkWidget *widget)
+static void gtk_widget_queue_resize_internal (GtkWidget *widget);
+
+void
+gtk_widget_apply_resize_stuff (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GSList *groups, *l, *widgets;
 
-  if (gtk_widget_get_resize_needed (widget))
+  if (priv->resize_needed)
     return;
 
   priv->resize_needed = TRUE;
   gtk_widget_set_alloc_needed (widget);
-
-  groups = _gtk_widget_get_sizegroups (widget);
-
-  for (l = groups; l; l = l->next)
-  {
-    for (widgets = gtk_size_group_get_widgets (l->data); widgets; widgets = widgets->next)
-      {
-        gtk_widget_queue_resize_internal (widgets->data);
-      }
-  }
 
   if (_gtk_widget_get_visible (widget))
     {
@@ -3573,8 +3561,44 @@ gtk_widget_queue_resize_internal (GtkWidget *widget)
           if (GTK_IS_NATIVE (widget))
             gtk_widget_queue_allocate (parent);
           else
-            gtk_widget_queue_resize_internal (parent);
+            gtk_widget_apply_resize_stuff (parent);
         }
+    }
+}
+
+/*
+ * gtk_widget_queue_resize_internal:
+ * @widget: a #GtkWidget
+ *
+ * Queue a resize on a widget, and on all other widgets grouped with this widget.
+ */
+static void
+gtk_widget_queue_resize_internal (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  /*if (!_gtk_widget_get_mapped (widget))*/
+    /*return;*/
+
+  if (priv->root)
+    {
+      GSList *l;
+      gtk_root_start_layout (priv->root);
+      gtk_root_queue_resize (priv->root, widget);
+
+#if 1
+      l = _gtk_widget_get_sizegroups (widget);
+      for (; l; l = l->next)
+        {
+          GSList *widgets;
+          for (widgets = gtk_size_group_get_widgets (l->data); widgets; widgets = widgets->next)
+            {
+              gtk_root_queue_resize (priv->root, widgets->data);
+            }
+        }
+#endif
+
+      return;
     }
 }
 
@@ -4021,6 +4045,8 @@ skip_allocate:
 out:
   if (priv->alloc_needed_on_child)
     gtk_widget_ensure_allocate (widget);
+
+  gtk_root_unqueue_resize (priv->root, widget);
 
   gtk_widget_pop_verify_invariants (widget);
 }
@@ -10448,12 +10474,6 @@ gtk_widget_set_alloc_needed (GtkWidget *widget)
 
       if (!priv->visible)
         break;
-
-      if (!priv->parent && GTK_IS_ROOT (widget))
-        {
-          gtk_root_start_layout (GTK_ROOT (widget));
-          break;
-        }
 
       widget = priv->parent;
       if (widget == NULL)
