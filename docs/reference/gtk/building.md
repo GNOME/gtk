@@ -231,8 +231,8 @@ whether Xinerama should be used.
 The *gtk-doc* package is used to generate the reference documentation
 included with GTK. By default support for *gtk-doc* is disabled
 because it requires various extra dependencies to be installed.
-If you have *gtk-doc* installed and are modifying GTK, you may want
-to enable *gtk-doc* support by passing in `-Dgtk_doc=true`.
+If you have *gtk-doc* and *pandoc* installed and are modifying GTK,
+you may want to enable *gtk-doc* support by passing in `-Dgtk_doc=true`.
 
 Additionally, some tools provided by GTK have their own
 manual pages generated using a similar set of dependencies;
