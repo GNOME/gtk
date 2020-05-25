@@ -1,5 +1,7 @@
 FROM registry.gitlab.gnome.org/gnome/gtk/fedora-base:v19
 
+RUN dnf -y install pandoc
+
 ARG HOST_USER_ID=5555
 ENV HOST_USER_ID ${HOST_USER_ID}
 RUN useradd -u $HOST_USER_ID -ms /bin/bash user
