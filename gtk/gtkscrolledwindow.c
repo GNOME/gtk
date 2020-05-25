@@ -280,7 +280,7 @@ typedef struct
   gdouble drag_start_y;
 
   guint                  kinetic_scrolling         : 1;
-  guint                  propagation_phase         : 1;
+  guint propagation_phase : 1;
 
   guint                  deceleration_id;
 
@@ -992,7 +992,7 @@ scrolled_window_swipe_cb (GtkScrolledWindow *scrolled_window,
                           gdouble            y_velocity)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
-  
+
   if (priv->kinetic_scrolling)
     gtk_scrolled_window_decelerate (scrolled_window, -x_velocity, -y_velocity);
 }
@@ -2456,13 +2456,13 @@ gtk_scrolled_window_set_capture_button_press (GtkScrolledWindow *scrolled_window
   priv->propagation_phase = capture_button_press ? GTK_PHASE_CAPTURE : GTK_PHASE_BUBBLE;
 
   if (priv->drag_gesture)
-  {
-    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture), priv->propagation_phase);
-  }
+    {
+      gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture), priv->propagation_phase);
+    }
   if (priv->swipe_gesture)
-  {
-    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->swipe_gesture), priv->propagation_phase);
-  }
+    {
+      gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->swipe_gesture), priv->propagation_phase);
+    }
 }
 
 /**
