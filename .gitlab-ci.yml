@@ -184,7 +184,7 @@ static-scan:
   allow_failure: true
 
 reference:
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v16
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora-docs:v19
   stage: docs
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release"
