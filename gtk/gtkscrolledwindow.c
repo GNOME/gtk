@@ -279,7 +279,7 @@ typedef struct
   gdouble drag_start_y;
 
   guint                  kinetic_scrolling         : 1;
-  guint propagation_phase : 1;
+  GtkPropagationPhase propagation_phase;
 
   guint                  deceleration_id;
 
@@ -1886,6 +1886,7 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   priv->max_content_height = -1;
 
   priv->overlay_scrolling = TRUE;
+  priv->propagation_phase = GTK_PHASE_CAPTURE;
 
   gtk_scrolled_window_set_kinetic_scrolling (scrolled_window, TRUE);
   gtk_scrolled_window_set_capture_button_press (scrolled_window, TRUE);
@@ -4044,6 +4045,8 @@ gtk_scrolled_window_set_child (GtkScrolledWindow *scrolled_window,
 
       gtk_widget_remove_controller (priv->child, GTK_EVENT_CONTROLLER (priv->drag_gesture));
       gtk_widget_remove_controller (priv->child, GTK_EVENT_CONTROLLER (priv->swipe_gesture));
+      priv->drag_gesture = NULL;
+      priv->swipe_gesture = NULL;
 
       g_clear_pointer (&priv->child, gtk_widget_unparent);
     }
