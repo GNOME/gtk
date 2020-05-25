@@ -124,6 +124,8 @@ _gtk_bitmask_invert_range (GtkBitmask *mask,
                            guint       start,
                            guint       end)
 {
+  g_assert (start <= end);
+
   if (_gtk_bitmask_is_allocated (mask) ||
       (end > GTK_BITMASK_N_DIRECT_BITS))
     return _gtk_allocated_bitmask_invert_range (mask, start, end);
