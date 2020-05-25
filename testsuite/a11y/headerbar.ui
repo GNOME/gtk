@@ -2,6 +2,7 @@
   <object class="GtkWindow" id="window1">
     <child>
       <object class="GtkHeaderBar" id="headerbar1">
+        <property name="show-title-buttons">0</property>
         <child type="start">
           <object class="GtkButton" id="button1">
             <property name="label" translatable="yes">Yes</property>

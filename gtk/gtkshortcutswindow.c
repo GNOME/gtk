@@ -860,9 +860,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   priv->search_text_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
   priv->search_image_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
-  priv->header_bar = g_object_new (GTK_TYPE_HEADER_BAR,
-                                   "show-title-buttons", TRUE,
-                                   NULL);
+  priv->header_bar = GTK_HEADER_BAR (gtk_header_bar_new ());
   gtk_window_set_titlebar (GTK_WINDOW (self), GTK_WIDGET (priv->header_bar));
 
   search_button = g_object_new (GTK_TYPE_TOGGLE_BUTTON,

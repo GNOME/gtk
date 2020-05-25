@@ -392,7 +392,6 @@ do_paint (GtkWidget *toplevel)
       gtk_window_set_child (GTK_WINDOW (window), draw_area);
 
       headerbar = gtk_header_bar_new ();
-      gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (headerbar), TRUE);
 
       colorbutton = gtk_color_button_new ();
       g_signal_connect (colorbutton, "color-set",

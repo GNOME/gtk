@@ -4,7 +4,9 @@
     <property name="title"></property>
     <property name="resizable">0</property>
     <child internal-child="headerbar">
-      <object class="GtkHeaderBar" id="headerbar1"/>
+      <object class="GtkHeaderBar" id="headerbar1">
+        <property name="show-title-buttons">0</property>
+      </object>
     </child>
     <child internal-child="content_area">
       <object class="GtkBox" id="dialog-vbox1">

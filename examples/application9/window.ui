@@ -6,7 +6,6 @@
     <property name="default-height">400</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header">
-        <property name="show-title-buttons">1</property>
         <child>
           <object class="GtkLabel" id="lines_label">
             <property name="visible">0</property>
