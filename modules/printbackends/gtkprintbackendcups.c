@@ -1716,8 +1716,8 @@ cups_job_poll_data_free (CupsJobPollData *data)
 
 static void
 cups_request_job_info_cb (GtkPrintBackendCups *print_backend,
-			  GtkCupsResult       *result,
-			  gpointer             user_data)
+                          GtkCupsResult       *result,
+                          gpointer             user_data)
 {
   CupsJobPollData *data = user_data;
   ipp_attribute_t *attr;
@@ -1735,8 +1735,6 @@ cups_request_job_info_cb (GtkPrintBackendCups *print_backend,
 
   response = gtk_cups_result_get_response (result);
 
-  state = 0;
-
   attr = ippFindAttribute (response, "job-state", IPP_TAG_ENUM);
   state = ippGetInteger (attr, 0);
 
@@ -1746,24 +1744,20 @@ cups_request_job_info_cb (GtkPrintBackendCups *print_backend,
     case IPP_JOB_PENDING:
     case IPP_JOB_HELD:
     case IPP_JOB_STOPPED:
-      gtk_print_job_set_status (data->job,
-				GTK_PRINT_STATUS_PENDING);
+      gtk_print_job_set_status (data->job, GTK_PRINT_STATUS_PENDING);
       break;
     case IPP_JOB_PROCESSING:
-      gtk_print_job_set_status (data->job,
-				GTK_PRINT_STATUS_PRINTING);
+      gtk_print_job_set_status (data->job, GTK_PRINT_STATUS_PRINTING);
       break;
     default:
     case IPP_JOB_CANCELLED:
     case IPP_JOB_ABORTED:
-      gtk_print_job_set_status (data->job,
-				GTK_PRINT_STATUS_FINISHED_ABORTED);
+      gtk_print_job_set_status (data->job, GTK_PRINT_STATUS_FINISHED_ABORTED);
       done = TRUE;
       break;
     case 0:
     case IPP_JOB_COMPLETED:
-      gtk_print_job_set_status (data->job,
-				GTK_PRINT_STATUS_FINISHED);
+      gtk_print_job_set_status (data->job, GTK_PRINT_STATUS_FINISHED);
       done = TRUE;
       break;
     }
@@ -1774,11 +1768,11 @@ cups_request_job_info_cb (GtkPrintBackendCups *print_backend,
       guint id;
 
       if (data->counter < 5)
-	timeout = 100;
+        timeout = 100;
       else if (data->counter < 10)
-	timeout = 500;
+        timeout = 500;
       else
-	timeout = 1000;
+        timeout = 1000;
 
       id = g_timeout_add (timeout, cups_job_info_poll_timeout, data);
       g_source_set_name_by_id (id, "[gtk] cups_job_info_poll_timeout");
