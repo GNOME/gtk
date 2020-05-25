@@ -43,6 +43,9 @@
 
 static GQuark quark_restyle_pending;
 static GQuark quark_resize_handler;
+static GQuark quark_resize_widgets;
+
+#define MAX_RESIZE_ITERATIONS 2
 
 G_DEFINE_INTERFACE_WITH_CODE (GtkRoot, gtk_root, GTK_TYPE_WIDGET,
                               g_type_interface_add_prerequisite (g_define_type_id, GTK_TYPE_NATIVE))
@@ -82,6 +85,7 @@ gtk_root_default_init (GtkRootInterface *iface)
 
   quark_restyle_pending = g_quark_from_static_string ("gtk-root-restyle-pending");
   quark_resize_handler = g_quark_from_static_string ("gtk-root-resize-handler");
+  quark_resize_widgets = g_quark_from_static_string ("gtk-root-resize-widgets");
 }
 
 /**
@@ -173,6 +177,7 @@ gtk_root_layout_cb (GdkFrameClock *clock,
                     GtkRoot       *self)
 {
   GtkWidget *widget = GTK_WIDGET (self);
+  GPtrArray *resize_widgets;
 
   /* We validate the style contexts in a single loop before even trying
    * to handle resizes instead of doing validations inline.
@@ -190,19 +195,40 @@ gtk_root_layout_cb (GdkFrameClock *clock,
       gtk_css_node_validate (gtk_widget_get_css_node (widget));
     }
 
-  /* we may be invoked with a container_resize_queue of NULL, because
-   * queue_resize could have been adding an extra idle function while
-   * the queue still got processed. we better just ignore such case
-   * than trying to explicitly work around them with some extra flags,
-   * since it doesn't cause any actual harm.
-   */
-  if (gtk_widget_needs_allocate (widget))
-    gtk_native_check_resize (GTK_NATIVE (self));
 
-  if (!gtk_root_needs_layout (self))
-    gtk_root_stop_layout (self);
-  else
-    gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_LAYOUT);
+  resize_widgets = g_object_get_qdata (G_OBJECT (self), quark_resize_widgets);
+
+  if (!resize_widgets)
+    {
+      gtk_root_stop_layout (self);
+      return;
+    }
+
+  for (int i = 0; i < MAX_RESIZE_ITERATIONS; i++)
+    {
+      /* we may be invoked with a container_resize_queue of NULL, because
+       * queue_resize could have been adding an extra idle function while
+       * the queue still got processed. we better just ignore such case
+       * than trying to explicitly work around them with some extra flags,
+       * since it doesn't cause any actual harm.
+       */
+      for (guint p = 0; p < resize_widgets->len; p++)
+        {
+          GtkWidget *w = g_ptr_array_index (resize_widgets, p);
+          g_message ("%u: %s %p", p, G_OBJECT_TYPE_NAME (w), w);
+
+          gtk_widget_apply_resize_stuff (w);
+        }
+
+      if (gtk_widget_needs_allocate (widget))
+        gtk_native_check_resize (GTK_NATIVE (self));
+
+      if (!gtk_root_needs_layout (self))
+        {
+          gtk_root_stop_layout (self);
+          break;
+        }
+    }
 }
 
 void
@@ -212,6 +238,9 @@ gtk_root_start_layout (GtkRoot *self)
   guint resize_handler;
 
   if (g_object_get_qdata (G_OBJECT (self), quark_resize_handler))
+    return;
+
+  if (!g_object_get_qdata (G_OBJECT (self), quark_resize_widgets))
     return;
 
   if (!gtk_root_needs_layout (self))
@@ -229,10 +258,32 @@ gtk_root_start_layout (GtkRoot *self)
 }
 
 void
+gtk_root_add_resize_widget (GtkRoot   *self,
+                            GtkWidget *widget)
+{
+  GPtrArray *resize_widgets = g_object_get_qdata (G_OBJECT (self), quark_resize_widgets);
+
+  if (!resize_widgets)
+    {
+      resize_widgets = g_ptr_array_sized_new (16);
+      g_object_set_qdata (G_OBJECT (self), quark_resize_widgets, resize_widgets); // TODO: Use _full
+    }
+
+  if (!g_ptr_array_find (resize_widgets, widget, NULL))
+    g_ptr_array_add (resize_widgets, widget);
+}
+
+void
 gtk_root_stop_layout (GtkRoot *self)
 {
   GdkFrameClock *clock;
+  GPtrArray *resize_widgets;
   guint resize_handler;
+
+  resize_widgets = g_object_get_qdata (G_OBJECT (self), quark_resize_widgets);
+
+  if (resize_widgets)
+    g_ptr_array_set_size (resize_widgets, 0);
 
   resize_handler = GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (self), quark_resize_handler));
 

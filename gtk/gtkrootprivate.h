@@ -34,6 +34,9 @@ void             gtk_root_start_layout  (GtkRoot *self);
 void             gtk_root_stop_layout   (GtkRoot *self);
 void             gtk_root_queue_restyle (GtkRoot *self);
 
+void             gtk_root_add_resize_widget (GtkRoot   *self,
+                                             GtkWidget *widget);
+
 G_END_DECLS
 
 #endif /* __GTK_ROOT_PRIVATE_H__ */
