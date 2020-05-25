@@ -266,6 +266,8 @@ do_iconview (GtkWidget *do_widget)
       gtk_window_set_child (GTK_WINDOW (window), vbox);
 
       tool_bar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+      gtk_widget_add_css_class (tool_bar, "toolbar");
+      gtk_widget_add_css_class (tool_bar, "top");
       gtk_box_append (GTK_BOX (vbox), tool_bar);
 
       up_button = gtk_button_new_with_mnemonic ("_Up");
@@ -277,7 +279,6 @@ do_iconview (GtkWidget *do_widget)
 
 
       sw = gtk_scrolled_window_new (NULL, NULL);
-      gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (sw), TRUE);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                       GTK_POLICY_AUTOMATIC,
                                       GTK_POLICY_AUTOMATIC);
