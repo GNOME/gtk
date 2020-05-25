@@ -482,6 +482,10 @@ gtk_widget_get_transform (GtkWidget *widget)
   return widget->priv->transform;
 }
 
+void
+gtk_widget_apply_resize_stuff (GtkWidget *widget);
+
+
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_PRIVATE_H__ */
