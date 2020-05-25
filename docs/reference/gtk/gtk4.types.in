@@ -131,6 +131,8 @@ gtk_notebook_get_type
 gtk_notebook_page_get_type
 gtk_orientable_get_type
 gtk_overlay_get_type
+gtk_overlay_layout_get_type
+gtk_overlay_layout_child_get_type
 gtk_pad_controller_get_type
 gtk_page_setup_get_type
 @DISABLE_ON_W32@gtk_page_setup_unix_dialog_get_type

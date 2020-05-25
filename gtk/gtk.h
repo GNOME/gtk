@@ -164,6 +164,7 @@
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkorientable.h>
 #include <gtk/gtkoverlay.h>
+#include <gtk/gtkoverlaylayout.h>
 #include <gtk/gtkpadcontroller.h>
 #include <gtk/gtkpagesetup.h>
 #include <gtk/gtkpaned.h>
