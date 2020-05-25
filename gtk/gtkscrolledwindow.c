@@ -991,7 +991,10 @@ scrolled_window_swipe_cb (GtkScrolledWindow *scrolled_window,
                           gdouble            x_velocity,
                           gdouble            y_velocity)
 {
-  gtk_scrolled_window_decelerate (scrolled_window, -x_velocity, -y_velocity);
+  GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
+  
+  if (priv->kinetic_scrolling)
+    gtk_scrolled_window_decelerate (scrolled_window, -x_velocity, -y_velocity);
 }
 
 static void
