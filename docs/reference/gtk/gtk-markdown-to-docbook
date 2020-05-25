@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #
 # Call pandoc to convert markdown to docbook, then expand gtk-doc
 # abbreviations (|[ ]|, function(), #object, %constant, etc)
