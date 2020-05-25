@@ -23,6 +23,7 @@
 
 #define CONSTRAINT_VIEW_TYPE (constraint_view_get_type ())
 
+G_MODULE_EXPORT
 G_DECLARE_FINAL_TYPE (ConstraintView, constraint_view, CONSTRAINT, VIEW, GtkWidget)
 
 ConstraintView * constraint_view_new (void);
