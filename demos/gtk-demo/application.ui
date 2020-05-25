@@ -10,6 +10,10 @@
         <child>
           <object class="GtkBox">
             <property name="hexpand">1</property>
+            <style>
+              <class name="toolbar"/>
+              <class name="top"/>
+            </style>
             <child>
               <object class="GtkMenuButton" id="menubutton">
                 <property name="icon-name">document-open</property>
@@ -61,7 +65,6 @@
         </child>
         <child>
           <object class="GtkScrolledWindow">
-            <property name="has-frame">1</property>
             <child>
               <object class="GtkTextView">
                 <property name="hexpand">1</property>
