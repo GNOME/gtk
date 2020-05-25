@@ -3,7 +3,6 @@
   <object class="GtkWindow" id="window1">
     <child type="titlebar">
       <object class="GtkHeaderBar" id="headerbar1">
-        <property name="show-title-buttons">1</property>
         <property name="title-widget">box1</property>
       </object>
     </child>

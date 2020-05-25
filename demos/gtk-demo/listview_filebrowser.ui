@@ -174,7 +174,6 @@
     <property name="default-height">400</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="">
-        <property name="show-title-buttons">1</property>
         <child>
           <object class="GtkButton">
             <property name="icon-name">go-up-symbolic</property>

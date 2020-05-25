@@ -411,6 +411,7 @@ and gtk_box_append(). You can also reorder box children as necessary.
 The gtk_header_bar_set_show_close_button() function has been renamed to
 the more accurate name gtk_header_bar_set_show_title_buttons(). The
 corresponding getter and the property itself have also been renamed.
+ The default value of the property is now %TRUE instead of %FALSE.
 
 The gtk_header_bar_set_custom_title() function has been renamed to
 the more accurate name gtk_header_bar_set_title_widget(). The

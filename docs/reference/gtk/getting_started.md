@@ -1423,7 +1423,6 @@ the search bar below the header bar.
     <property name="default-height">400</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header">
-        <property name="show-title-buttons">1</property>
         <child type="title">
           <object class="GtkStackSwitcher" id="tabs">
             <property name="stack">stack</property>
@@ -1537,7 +1536,6 @@ GtkMenuButton, GtkRevealer and GtkListBox.
     <property name="default-height">400</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header">
-        <property name="show-title-buttons">1</property>
         <child type="title">
           <object class="GtkStackSwitcher" id="tabs">
             <property name="stack">stack</property>

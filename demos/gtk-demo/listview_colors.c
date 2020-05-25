@@ -801,7 +801,6 @@ do_listview_colors (GtkWidget *do_widget)
       window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "Colors");
       header = gtk_header_bar_new ();
-      gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), TRUE);
       gtk_window_set_titlebar (GTK_WINDOW (window), header);
 
       gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
