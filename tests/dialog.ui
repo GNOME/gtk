@@ -18,6 +18,7 @@
     <property name="title" translatable="yes">Join Chat Room</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="titlebar">
+        <property name="show-title-buttons">0</property>
         <child>
           <object class="GtkButton" id="back_button">
             <property name="visible">0</property>
