@@ -378,6 +378,20 @@ with gtk_container_set_focus_vadjustment() has been removed together with
 GtkContainer, and is provided by scrollable widgets instead. In the common
 case that the scrollable is a #GtkViewport, use #GtkViewport:scroll-to-focus.
 
+### Use the new apis for keyboard shortcuts
+
+The APIs for keyboard shortcuts and accelerators have changed in GTK 4.
+
+Instead of GtkAccelGroup, you now use a #GtkShortcutController with global
+scope, and instead of GtkBindingSet, you now use gtk_widget_class_add_shortcut(),
+gtk_widget_class_add_binding() and its variants. In both cases, you probably
+want to add actions that can be triggered by your shortcuts.
+
+There is no direct replacement for loading and saving accelerators with
+GtkAccelMap. But since #GtkShortcutController implements #GListModel and
+both #GtkShortcutTrigger and #GtkShortcutAction can be serialized to
+strings, it is relatively easy to implement saving and loading yourself. 
+
 ### Stop using GtkEventBox
 
 GtkEventBox is no longer needed and has been removed.

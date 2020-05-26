@@ -540,9 +540,6 @@ gtk_accelerator_name_with_keycode (GdkDisplay      *display,
 {
   gchar *gtk_name;
 
-  if (display == NULL)
-    display = gdk_display_manager_get_default_display (gdk_display_manager_get ());
-
   gtk_name = gtk_accelerator_name (accelerator_key, accelerator_mods);
 
   if (!accelerator_key)
@@ -657,9 +654,6 @@ gtk_accelerator_get_label_with_keycode (GdkDisplay      *display,
                                         GdkModifierType  accelerator_mods)
 {
   gchar *gtk_label;
-
-  if (display == NULL)
-    display = gdk_display_manager_get_default_display (gdk_display_manager_get ());
 
   gtk_label = gtk_accelerator_get_label (accelerator_key, accelerator_mods);
 
