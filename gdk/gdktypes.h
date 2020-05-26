@@ -44,7 +44,7 @@
  */
 #include <gdk/gdkconfig.h>
 
-/* some common magic values */
+G_BEGIN_DECLS
 
 /**
  * GDK_CURRENT_TIME:
@@ -52,19 +52,6 @@
  * Represents the current time, and can be used anywhere a time is expected.
  */
 #define GDK_CURRENT_TIME     0L
-
-/**
- * GDK_PARENT_RELATIVE:
- *
- * A special value, indicating that the background
- * for a surface should be inherited from the parent surface.
- */
-#define GDK_PARENT_RELATIVE  1L
-
-
-
-G_BEGIN_DECLS
-
 
 /**
  * GdkPoint:
