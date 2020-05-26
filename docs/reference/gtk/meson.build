@@ -1,3 +1,5 @@
+fs = import('fs')
+
 private_headers = [
   'imm-extra.h',
   'gtkbitmaskprivateimpl.h',
@@ -338,13 +340,6 @@ images = [
 ]
 
 content_files = [
-  'actions.xml',
-  'broadway.xml',
-  'building.xml',
-  'compiling.xml',
-  'css-overview.xml',
-  'drawing-model.xml',
-  'glossary.xml',
   'gtk4-broadwayd.xml',
   'gtk4-builder-tool.xml',
   'gtk4-demo-application.xml',
@@ -355,34 +350,31 @@ content_files = [
   'gtk4-query-settings.xml',
   'gtk4-update-icon-cache.xml',
   'gtk4-widget-factory.xml',
-  'input-handling.xml',
-  'migrating-2to4.xml',
-  'migrating-3to4.xml',
-  'osx.xml',
-  'other_software.xml',
   'overview.xml',
-  'question_index.xml',
-  'resources.xml',
-  'running.xml',
-  'text_widget.xml',
-  'tree_widget.xml',
   'visual_index.xml',
-  'wayland.xml',
-  'windows.xml',
-  'x11.xml',
 ]
 
-expand_content_files = [
-  'actions.xml',
-  'compiling.xml',
-  'drawing-model.xml',
-  'glossary.xml',
-  'input-handling.xml',
-  'migrating-2to4.xml',
-  'migrating-3to4.xml',
-  'question_index.xml',
-  'text_widget.xml',
-  'tree_widget.xml',
+expand_content_md_files = [
+  'broadway.md',
+  'osx.md',
+  'wayland.md',
+  'windows.md',
+  'x11.md',
+  'getting_started.md',
+  'resources.md',
+  'building.md',
+  'compiling.md',
+  'running.md',
+  'migrating-2to4.md',
+  'migrating-3to4.md',
+  'actions.md',
+  'input-handling.md',
+  'drawing-model.md',
+  'css-overview.md',
+  'css-properties.md',
+  'section-text-widget.md',
+  'section-tree-widget.md',
+  'question_index.md',
 ]
 
 types_conf = configuration_data()
@@ -400,7 +392,17 @@ endif
 
 if get_option('gtk_doc')
   configure_file(input: 'version.xml.in', output: 'version.xml', configuration: version_conf)
-  configure_file(input: 'getting_started.xml.in', output: 'getting_started.xml', configuration: src_dir_conf)
+
+  # gtk-markdown-to-docbook uses pandoc
+  pandoc = find_program('pandoc', required: true)
+  expand_md = find_program('gtk-markdown-to-docbook')
+  expand_md_targets = []
+  foreach t : expand_content_md_files
+    expand_md_targets += custom_target(t,
+                                       input: [ t ],
+                                       output: [ fs.replace_suffix(t, '.xml') ],
+                                       command: [ expand_md, '@INPUT@', '@OUTPUT@'])
+  endforeach
 
   gnome.gtkdoc('gtk4',
                mode: 'none',
@@ -431,8 +433,7 @@ if get_option('gtk_doc')
                  '--extra-dir=../gdk',
                  '--extra-dir=../gsk',
                ],
-               content_files: content_files,
-               expand_content_files: expand_content_files,
+               content_files: content_files + expand_md_targets,
                html_assets: images,
                install: true)
 endif
