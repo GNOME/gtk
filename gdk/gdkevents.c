@@ -1466,6 +1466,32 @@ gdk_key_event_new (GdkEventType      type,
   return event;
 }
 
+/*< private >
+ * gdk_key_event_get_translated_key:
+ * @event: (type GdkKeyEvent): a key event
+ * @no_lock: whether the translated key should take the event
+ *   state into account
+ *
+ * Extracts the translated key from a key event.
+ *
+ * Returns: (transfer none): the translated key
+ */
+GdkTranslatedKey *
+gdk_key_event_get_translated_key (GdkEvent *event,
+                                  gboolean  no_lock)
+{
+  GdkKeyEvent *self = (GdkKeyEvent *) event;
+
+  g_return_val_if_fail (GDK_IS_EVENT (event), NULL);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_KEY_PRESS) ||
+                        GDK_IS_EVENT_TYPE (event, GDK_KEY_RELEASE), NULL);
+
+  if (no_lock)
+    return &(self->translated[1]);
+
+  return &(self->translated[0]);
+}
+
 /**
  * gdk_key_event_get_keyval:
  * @event: (type GdkKeyEvent): a key event
