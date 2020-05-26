@@ -268,6 +268,34 @@ typedef enum
   GDK_OWNERSHIP_APPLICATION
 } GdkGrabOwnership;
 
+typedef enum
+{
+  GDK_EXPOSURE_MASK             = 1 << 1,
+  GDK_POINTER_MOTION_MASK       = 1 << 2,
+  GDK_BUTTON_MOTION_MASK        = 1 << 4,
+  GDK_BUTTON1_MOTION_MASK       = 1 << 5,
+  GDK_BUTTON2_MOTION_MASK       = 1 << 6,
+  GDK_BUTTON3_MOTION_MASK       = 1 << 7,
+  GDK_BUTTON_PRESS_MASK         = 1 << 8,
+  GDK_BUTTON_RELEASE_MASK       = 1 << 9,
+  GDK_KEY_PRESS_MASK            = 1 << 10,
+  GDK_KEY_RELEASE_MASK          = 1 << 11,
+  GDK_ENTER_NOTIFY_MASK         = 1 << 12,
+  GDK_LEAVE_NOTIFY_MASK         = 1 << 13,
+  GDK_FOCUS_CHANGE_MASK         = 1 << 14,
+  GDK_STRUCTURE_MASK            = 1 << 15,
+  GDK_PROPERTY_CHANGE_MASK      = 1 << 16,
+  GDK_PROXIMITY_IN_MASK         = 1 << 18,
+  GDK_PROXIMITY_OUT_MASK        = 1 << 19,
+  GDK_SUBSTRUCTURE_MASK         = 1 << 20,
+  GDK_SCROLL_MASK               = 1 << 21,
+  GDK_TOUCH_MASK                = 1 << 22,
+  GDK_SMOOTH_SCROLL_MASK        = 1 << 23,
+  GDK_TOUCHPAD_GESTURE_MASK     = 1 << 24,
+  GDK_TABLET_PAD_MASK           = 1 << 25,
+  GDK_ALL_EVENTS_MASK           = 0x3FFFFFE
+} GdkEventMask;
+
 GdkGrabStatus gdk_device_grab (GdkDevice        *device,
                                GdkSurface        *surface,
                                GdkGrabOwnership  grab_ownership,

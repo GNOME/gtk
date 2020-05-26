@@ -469,7 +469,6 @@ gdk_seat_capabilities_get_type
 <FILE>events</FILE>
 GdkEvent
 GdkEventType
-GdkEventMask
 GdkKeyMatch
 GdkTouchpadGesturePhase
 GdkScrollDirection
