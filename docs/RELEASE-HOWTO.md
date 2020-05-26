@@ -118,9 +118,3 @@ $ ssh matthiasc@master.gnome.org ftpadmin install gtk-4.2.0.tar.xz
     create a new message in the same form, replacing version numbers,
     commentary at the top about "what this release is about" and the
     summary of changes.
-
-  17. Send it to gnome-announce-list, gtk-list, gtk-app-devel-list and
-    gtk-devel-list. Set reply-to to desktop-devel-list.
-
-  18. Add a link to the release announcement to www.gtk.org which lives
-    in the gtk-web git module.
