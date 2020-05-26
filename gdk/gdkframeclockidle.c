@@ -162,6 +162,7 @@ gdk_frame_clock_idle_dispose (GObject *object)
 static gint64
 compute_smooth_frame_time (GdkFrameClock *clock,
                            gint64 new_frame_time,
+                           gboolean new_frame_time_is_regular,
                            gint64 smoothed_frame_time_base,
                            gint64 frame_interval)
 {
@@ -204,11 +205,12 @@ compute_smooth_frame_time (GdkFrameClock *clock,
    * But this can be simplified as below.
    *
    * Note: We only do this correction if we're regularly animating (no
-   * or low frame skip). If the last frame was a long time ago, this
-   * cycle was likely triggered by an input event and new_frame_time
-   * is essentially random and not tied to the presentation time.
+   * or low frame skip). If the last frame was a long time ago, or if
+   * we're not doing this in the frame cycle this call was likely
+   * triggered by an input event and new_frame_time is essentially
+   * random and not tied to the presentation time.
    */
-  if (frames_passed < 4)
+  if (new_frame_time_is_regular)
     {
       current_error = new_smoothed_time - new_frame_time;
       correction_magnitude = current_error * current_error / frame_interval; /* Note, this is always > 0 due to the square */
@@ -246,7 +248,7 @@ gdk_frame_clock_idle_get_frame_time (GdkFrameClock *clock)
 
   /* Since time is monotonic this is <= what we will pick for the next cycle, but
      more likely than not it will be equal if we're doing a constant animation. */
-  return compute_smooth_frame_time (clock, now,
+  return compute_smooth_frame_time (clock, now, FALSE,
                                     priv->smoothed_frame_time_base,
                                     priv->smoothed_frame_time_period);
 }
@@ -399,6 +401,7 @@ gdk_frame_clock_paint_idle (void *data)
             {
               gint64 frame_interval = FRAME_INTERVAL;
               GdkFrameTimings *prev_timings = gdk_frame_clock_get_current_timings (clock);
+              guint old_frame_time = priv->frame_time;
 
               if (prev_timings && prev_timings->refresh_interval)
                 frame_interval = prev_timings->refresh_interval;
@@ -415,6 +418,8 @@ gdk_frame_clock_paint_idle (void *data)
                 {
                   priv->smoothed_frame_time_base =
                     compute_smooth_frame_time (clock, priv->frame_time,
+                                               /* For long delays, this was probably caused by some input event rather than a regular animation */
+                                               priv->frame_time - old_frame_time < 4 * FRAME_INTERVAL,
                                                priv->smoothed_frame_time_base,
                                                priv->smoothed_frame_time_period);
                   priv->smoothed_frame_time_period = frame_interval;
