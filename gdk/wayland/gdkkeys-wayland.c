@@ -412,6 +412,7 @@ update_direction (GdkWaylandKeymap *keymap)
        gint layouts, layout;
 
        layouts = xkb_keymap_num_layouts_for_key (keymap->xkb_keymap, key);
+       g_assert (layouts <= num_layouts);
        for (layout = 0; layout < layouts; layout++)
          {
            const xkb_keysym_t *syms;
