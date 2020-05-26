@@ -159,24 +159,6 @@ typedef enum
   GDK_GRAVITY_STATIC
 } GdkGravity;
 
-/**
- * GdkByteOrder:
- * @GDK_LSB_FIRST: The values are stored with the least-significant byte
- *   first. For instance, the 32-bit value 0xffeecc would be stored
- *   in memory as 0xcc, 0xee, 0xff, 0x00.
- * @GDK_MSB_FIRST: The values are stored with the most-significant byte
- *   first. For instance, the 32-bit value 0xffeecc would be stored
- *   in memory as 0x00, 0xff, 0xee, 0xcc.
- *
- * A set of values describing the possible byte-orders
- * for storing pixel values in memory.
- */
-typedef enum
-{
-  GDK_LSB_FIRST,
-  GDK_MSB_FIRST
-} GdkByteOrder;
-
 /* Types of modifiers.
  */
 /**
