@@ -647,9 +647,11 @@ gdk_frame_clock_get_refresh_info (GdkFrameClock *frame_clock,
 
               if (presentation_time_return)
                 *presentation_time_return = presentation_time;
+
+              return;
             }
 
-          return;
+          break;
         }
 
       frame_counter--;
