@@ -197,8 +197,6 @@ void       gdk_surface_leave_monitor (GdkSurface *surface,
 
 void _gdk_cursor_destroy (GdkCursor *cursor);
 
-extern const GOptionEntry _gdk_windowing_args[];
-
 void _gdk_windowing_got_event                (GdkDisplay       *display,
                                               GList            *event_link,
                                               GdkEvent         *event,
