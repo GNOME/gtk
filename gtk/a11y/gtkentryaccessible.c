@@ -425,7 +425,10 @@ gtk_entry_accessible_get_attributes (AtkObject *accessible)
   if (widget == NULL)
     return attributes;
 
-  if (GTK_IS_ENTRY (widget) || GTK_IS_SEARCH_ENTRY (widget))
+  /* Subclasses of GtkEntryAccessible will chain up, so we need to protect
+   * the placeholder-text property access
+   */
+  if (GTK_IS_ENTRY (widget))
     g_object_get (widget, "placeholder-text", &text, NULL);
 
   if (text == NULL)
@@ -738,7 +741,7 @@ gtk_entry_accessible_finalize (GObject *object)
 static void
 gtk_entry_accessible_class_init (GtkEntryAccessibleClass *klass)
 {
-  AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
+  AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
   GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
