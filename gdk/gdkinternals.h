@@ -359,6 +359,8 @@ typedef enum
   GDK_SURFACE_TYPE_HINT_DND
 } GdkSurfaceTypeHint;
 
+typedef struct _GdkGeometry GdkGeometry;
+
 struct _GdkGeometry
 {
   gint min_width;
