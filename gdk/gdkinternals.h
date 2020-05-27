@@ -94,8 +94,6 @@ void             gdk_display_set_debug_flags    (GdkDisplay       *display,
 
 /* Event handling */
 
-typedef struct _GdkEventPrivate GdkEventPrivate;
-
 typedef enum
 {
   /* Following flag is set for events on the event queue during
@@ -115,8 +113,6 @@ typedef struct _GdkSurfacePaint GdkSurfacePaint;
 #define GDK_SURFACE_TYPE(d) ((((GdkSurface *)(d)))->surface_type)
 #define GDK_SURFACE_DESTROYED(d) (((GdkSurface *)(d))->destroyed)
 
-extern gint       _gdk_screen_number;
-
 GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
 
 void   _gdk_event_emit               (GdkEvent   *event);
@@ -134,13 +130,6 @@ void   _gdk_event_queue_insert_before(GdkDisplay *display,
 
 void    _gdk_event_queue_handle_motion_compression (GdkDisplay *display);
 void    _gdk_event_queue_flush                     (GdkDisplay       *display);
-
-void   _gdk_event_button_generate    (GdkDisplay *display,
-                                      GdkEvent   *event);
-
-void _gdk_windowing_event_data_copy (GdkEvent       *src,
-                                     GdkEvent       *dst);
-void _gdk_windowing_event_data_free (GdkEvent       *event);
 
 gboolean        _gdk_cairo_surface_extents       (cairo_surface_t *surface,
                                                   GdkRectangle    *extents);
@@ -192,10 +181,6 @@ void       gdk_surface_leave_monitor (GdkSurface *surface,
 /*****************************************
  * Interfaces provided by windowing code *
  *****************************************/
-
-/* Font/string functions implemented in module-specific code */
-
-void _gdk_cursor_destroy (GdkCursor *cursor);
 
 void _gdk_windowing_got_event                (GdkDisplay       *display,
                                               GList            *event_link,
