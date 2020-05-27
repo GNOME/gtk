@@ -49,8 +49,6 @@
 
 static gboolean gdk_synchronize = FALSE;
 
-static gboolean dummy;
-
 void
 _gdk_win32_surfaceing_init (void)
 {
