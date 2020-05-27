@@ -35,7 +35,7 @@
 #include "gtkstylecontext.h"
 #include "gtkeventcontrollerkey.h"
 
-#include "a11y/gtkentryaccessible.h"
+#include "a11y/gtkpasswordentryaccessible.h"
 
 /**
  * SECTION:gtkpasswordentry
@@ -346,17 +346,6 @@ gtk_password_entry_size_allocate (GtkWidget *widget,
                               baseline);
 }
 
-static AtkObject *
-gtk_password_entry_get_accessible (GtkWidget *widget)
-{
-  AtkObject *atk_obj;
-
-  atk_obj = GTK_WIDGET_CLASS (gtk_password_entry_parent_class)->get_accessible (widget);
-  atk_object_set_name (atk_obj, _("Password"));
-
-  return atk_obj;
-}
-
 static gboolean
 gtk_password_entry_mnemonic_activate (GtkWidget *widget,
                                       gboolean   group_cycling)
@@ -382,7 +371,6 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
   widget_class->realize = gtk_password_entry_realize;
   widget_class->measure = gtk_password_entry_measure;
   widget_class->size_allocate = gtk_password_entry_size_allocate;
-  widget_class->get_accessible = gtk_password_entry_get_accessible;
   widget_class->mnemonic_activate = gtk_password_entry_mnemonic_activate;
   widget_class->grab_focus = gtk_widget_grab_focus_child;
 
@@ -423,7 +411,7 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
   gtk_editable_install_properties (object_class, NUM_PROPERTIES);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_PASSWORD_ENTRY_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("entry"));
 }
 
