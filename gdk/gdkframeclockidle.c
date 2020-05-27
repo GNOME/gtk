@@ -207,6 +207,7 @@ gdk_frame_clock_idle_get_frame_time (GdkFrameClock *clock)
 #define RUN_PAINT_IDLE(priv)                                            \
   ((priv)->freeze_count == 0 &&                                         \
    (((priv)->requested & ~GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS) != 0 ||   \
+    (priv)->phase > GDK_FRAME_CLOCK_PHASE_PAINT ||                      \
     (priv)->updating_count > 0))
 
 static void
@@ -234,6 +235,12 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle)
                                                     (GDestroyNotify) g_object_unref);
           g_source_set_name_by_id (priv->flush_idle_id, "[gtk] gdk_frame_clock_flush_idle");
         }
+
+      /* If we've already painted the frame, then we should finish up this tick as quickly
+       * as possible
+       */
+      if (priv->phase > GDK_FRAME_CLOCK_PHASE_PAINT)
+        min_interval = 0;
 
       if (!priv->in_paint_idle &&
 	  priv->paint_idle_id == 0 && RUN_PAINT_IDLE (priv))
@@ -452,6 +459,7 @@ gdk_frame_clock_paint_idle (void *data)
                   priv->requested &= ~GDK_FRAME_CLOCK_PHASE_PAINT;
                   _gdk_frame_clock_emit_paint (clock);
                 }
+              priv->phase = GDK_FRAME_CLOCK_PHASE_AFTER_PAINT;
             }
           G_GNUC_FALLTHROUGH;
 
@@ -463,11 +471,11 @@ gdk_frame_clock_paint_idle (void *data)
               /* the ::after-paint phase doesn't get repeated on freeze/thaw,
                */
               priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
-            }
 #ifdef G_ENABLE_DEBUG
-            if (GDK_DEBUG_CHECK (FRAMES))
-              timings->frame_end_time = g_get_monotonic_time ();
+              if (GDK_DEBUG_CHECK (FRAMES))
+                timings->frame_end_time = g_get_monotonic_time ();
 #endif /* G_ENABLE_DEBUG */
+            }
           G_GNUC_FALLTHROUGH;
 
         case GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS:
