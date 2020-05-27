@@ -124,6 +124,9 @@ struct _GdkToplevelX11
 
   guint in_frame : 1;
 
+  /* If we're waiting for damage from the X server after painting a frame */
+  guint frame_still_painting : 1;
+
   /* If we're expecting a response from the compositor after painting a frame */
   guint frame_pending : 1;
 
