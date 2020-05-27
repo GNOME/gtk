@@ -94,8 +94,6 @@ void             gdk_display_set_debug_flags    (GdkDisplay       *display,
 
 /* Event handling */
 
-typedef struct _GdkEventPrivate GdkEventPrivate;
-
 typedef enum
 {
   /* Following flag is set for events on the event queue during
