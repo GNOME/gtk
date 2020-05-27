@@ -127,8 +127,6 @@ void    _gdk_event_queue_flush                     (GdkDisplay       *display);
 
 gboolean        _gdk_cairo_surface_extents       (cairo_surface_t *surface,
                                                   GdkRectangle    *extents);
-void            gdk_gl_texture_from_surface      (cairo_surface_t *surface,
-                                                  cairo_region_t  *region);
 
 typedef struct {
   float x1, y1, x2, y2;
