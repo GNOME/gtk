@@ -452,6 +452,7 @@ gdk_frame_clock_paint_idle (void *data)
                   priv->requested &= ~GDK_FRAME_CLOCK_PHASE_PAINT;
                   _gdk_frame_clock_emit_paint (clock);
                 }
+              priv->phase = GDK_FRAME_CLOCK_PHASE_AFTER_PAINT;
             }
           G_GNUC_FALLTHROUGH;
 
