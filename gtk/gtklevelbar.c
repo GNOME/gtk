@@ -133,10 +133,10 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
+#include "a11y/gtklevelbaraccessible.h"
+
 #include <math.h>
 #include <stdlib.h>
-
-#include "a11y/gtklevelbaraccessible.h"
 
 enum {
   PROP_VALUE = 1,
@@ -1122,7 +1122,9 @@ gtk_level_bar_set_value_internal (GtkLevelBar *self,
                                   gdouble      value)
 {
   self->cur_value = value;
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_VALUE]);
+
   gtk_widget_queue_allocate (GTK_WIDGET (self->trough_widget));
 }
 
