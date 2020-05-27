@@ -183,6 +183,23 @@ gdk_x11_gl_context_end_frame (GdkDrawContext *draw_context,
 
   gdk_x11_surface_pre_damage (surface);
 
+#ifdef HAVE_XDAMAGE
+  if (context_x11->xdamage != 0)
+    {
+      g_assert (context_x11->frame_fence == 0);
+
+      /* We consider the frame still getting painted until the GL operation is
+       * finished, and a suitably large enough damage area is reported from
+       * the X server.
+       */
+      context_x11->frame_fence = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+      g_clear_pointer (&context_x11->pending_damage_region,
+                       cairo_region_destroy);
+      context_x11->pending_damage_region = cairo_region_reference (painted);
+      _gdk_x11_surface_set_still_painting_frame (surface, TRUE);
+    }
+#endif
+
   glXSwapBuffers (dpy, drawable);
 
   if (context_x11->do_frame_sync && info != NULL && display_x11->has_glx_video_sync)
@@ -565,6 +582,86 @@ create_legacy_context (GdkDisplay   *display,
   return res;
 }
 
+#ifdef HAVE_XDAMAGE
+static gboolean
+on_gl_surface_xevent (GdkGLContext   *context,
+                      XEvent         *xevent,
+                      GdkX11Display  *display_x11)
+{
+  GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (context);
+  GdkSurface *surface = gdk_gl_context_get_surface (context);
+  XDamageNotifyEvent *damage_xevent;
+  GLenum wait_result;
+
+  if (!context_x11->is_attached)
+    return FALSE;
+
+  if (xevent->type != (display_x11->damage_event_base + XDamageNotify))
+    return FALSE;
+
+  damage_xevent = (XDamageNotifyEvent *) xevent;
+
+  if (damage_xevent->damage != context_x11->xdamage)
+    return FALSE;
+
+  if (!context_x11->frame_fence)
+    return FALSE;
+
+  /* It's conceivable that this damage event is unrelated to the drawing
+   * of the current frame (say it was X server generated from the window
+   * resizing or something).  There's no way to exactly finger any given
+   * damage event as "the one caused by the frame getting drawn", but we
+   * don't really need to know that anyway.  All we need to know is two
+   * things:
+   *
+   * 1. the damaged area the compositor sees is big enough to accomodate
+   * the frame update
+   *
+   * 2. the frame update is available for the compostor to use.
+   *
+   * We check both below.
+   */
+  cairo_region_subtract_rectangle (context_x11->pending_damage_region,
+                                   &(cairo_rectangle_int_t)
+                                     { damage_xevent->area.x,
+                                       damage_xevent->area.y,
+                                       damage_xevent->area.width,
+                                       damage_xevent->area.height });
+
+  if (!cairo_region_is_empty (context_x11->pending_damage_region))
+    return FALSE;
+
+  wait_result = glClientWaitSync (context_x11->frame_fence, 0, 0);
+
+  switch (wait_result)
+    {
+      case GL_ALREADY_SIGNALED:
+      case GL_CONDITION_SATISFIED:
+      case GL_WAIT_FAILED:
+          if (wait_result == GL_WAIT_FAILED)
+              g_warning ("failed to wait on GL fence associated with last swap buffers call");
+          glDeleteSync (context_x11->frame_fence);
+          context_x11->frame_fence = 0;
+          _gdk_x11_surface_set_still_painting_frame (surface, FALSE);
+          break;
+
+          /* We assume that if the fence hasn't been signaled, that this
+           * damage event is not the damage event that was triggered by the
+           * GL drawing associated with the fence, and another damage event
+           * will come along.  That's only true for the Nvidia vendor driver.
+           * When using open source drivers, damage is emitted immediately
+           * on swap buffers, before the fence ever has a chance to signal.
+           */
+      case GL_TIMEOUT_EXPIRED:
+          break;
+      default:
+          g_assert_not_reached ();
+    }
+
+  return FALSE;
+}
+#endif
+
 static gboolean
 gdk_x11_gl_context_realize (GdkGLContext  *context,
                             GError       **error)
@@ -737,6 +834,24 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
   context_x11->attached_drawable = info->glx_drawable ? info->glx_drawable : gdk_x11_surface_get_xid (surface);
   context_x11->unattached_drawable = info->dummy_glx ? info->dummy_glx : info->dummy_xwin;
 
+#ifdef HAVE_XDAMAGE
+  if (display_x11->have_damage && display_x11->has_async_glx_swap_buffers)
+    {
+      gdk_x11_display_error_trap_push (display);
+      context_x11->xdamage = XDamageCreate (dpy,
+                                            gdk_x11_surface_get_xid (surface),
+                                            XDamageReportRawRectangles);
+      if (gdk_x11_display_error_trap_pop (display))
+        context_x11->xdamage = 0;
+      else
+        g_signal_connect_object (G_OBJECT (display),
+                                 "xevent",
+                                 G_CALLBACK (on_gl_surface_xevent),
+                                 context,
+                                 G_CONNECT_SWAPPED);
+    }
+#endif
+
   context_x11->is_direct = glXIsDirect (dpy, context_x11->glx_context);
 
   GDK_DISPLAY_NOTE (display, OPENGL,
@@ -765,6 +880,12 @@ gdk_x11_gl_context_dispose (GObject *gobject)
       glXDestroyContext (dpy, context_x11->glx_context);
       context_x11->glx_context = NULL;
     }
+
+#ifdef HAVE_XDAMAGE
+  context_x11->xdamage = 0;
+  g_clear_pointer (&context_x11->pending_damage_region,
+                   cairo_region_destroy);
+#endif
 
   G_OBJECT_CLASS (gdk_x11_gl_context_parent_class)->dispose (gobject);
 }
@@ -840,6 +961,16 @@ gdk_x11_screen_init_gl (GdkX11Screen *screen)
     epoxy_has_glx_extension (dpy, screen_num, "GLX_ARB_multisample");
   display_x11->has_glx_visual_rating =
     epoxy_has_glx_extension (dpy, screen_num, "GLX_EXT_visual_rating");
+
+  if (g_strcmp0 (glXGetClientString (dpy, GLX_VENDOR), "NVIDIA Corporation") == 0)
+    {
+      /* There is a window of time after glXSwapBuffers before other processes can
+       * see the updated drawing with the Nvidia vendor driver.  We need to take
+       * special care, in this case, to defer telling the compositor our latest
+       * frame is ready until after the X server says the frame has been drawn.
+       */
+      display_x11->has_async_glx_swap_buffers = TRUE;
+    }
 
   GDK_DISPLAY_NOTE (display, OPENGL,
             g_message ("GLX version %d.%d found\n"
