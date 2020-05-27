@@ -94,8 +94,6 @@ void             gdk_display_set_debug_flags    (GdkDisplay       *display,
 
 /* Event handling */
 
-typedef struct _GdkEventPrivate GdkEventPrivate;
-
 typedef enum
 {
   /* Following flag is set for events on the event queue during
@@ -115,8 +113,6 @@ typedef struct _GdkSurfacePaint GdkSurfacePaint;
 #define GDK_SURFACE_TYPE(d) ((((GdkSurface *)(d)))->surface_type)
 #define GDK_SURFACE_DESTROYED(d) (((GdkSurface *)(d))->destroyed)
 
-extern gint       _gdk_screen_number;
-
 GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
 
 void   _gdk_event_emit               (GdkEvent   *event);
@@ -125,27 +121,12 @@ void   _gdk_event_queue_remove_link  (GdkDisplay *display,
                                       GList      *node);
 GList* _gdk_event_queue_append       (GdkDisplay *display,
                                       GdkEvent   *event);
-void   _gdk_event_queue_insert_after (GdkDisplay *display,
-                                      GdkEvent   *after_event,
-                                      GdkEvent   *event);
-void   _gdk_event_queue_insert_before(GdkDisplay *display,
-                                      GdkEvent   *after_event,
-                                      GdkEvent   *event);
 
 void    _gdk_event_queue_handle_motion_compression (GdkDisplay *display);
 void    _gdk_event_queue_flush                     (GdkDisplay       *display);
 
-void   _gdk_event_button_generate    (GdkDisplay *display,
-                                      GdkEvent   *event);
-
-void _gdk_windowing_event_data_copy (GdkEvent       *src,
-                                     GdkEvent       *dst);
-void _gdk_windowing_event_data_free (GdkEvent       *event);
-
 gboolean        _gdk_cairo_surface_extents       (cairo_surface_t *surface,
                                                   GdkRectangle    *extents);
-void            gdk_gl_texture_from_surface      (cairo_surface_t *surface,
-                                                  cairo_region_t  *region);
 
 typedef struct {
   float x1, y1, x2, y2;
@@ -192,12 +173,6 @@ void       gdk_surface_leave_monitor (GdkSurface *surface,
 /*****************************************
  * Interfaces provided by windowing code *
  *****************************************/
-
-/* Font/string functions implemented in module-specific code */
-
-void _gdk_cursor_destroy (GdkCursor *cursor);
-
-extern const GOptionEntry _gdk_windowing_args[];
 
 void _gdk_windowing_got_event                (GdkDisplay       *display,
                                               GList            *event_link,
@@ -268,6 +243,34 @@ typedef enum
   GDK_OWNERSHIP_APPLICATION
 } GdkGrabOwnership;
 
+typedef enum
+{
+  GDK_EXPOSURE_MASK             = 1 << 1,
+  GDK_POINTER_MOTION_MASK       = 1 << 2,
+  GDK_BUTTON_MOTION_MASK        = 1 << 4,
+  GDK_BUTTON1_MOTION_MASK       = 1 << 5,
+  GDK_BUTTON2_MOTION_MASK       = 1 << 6,
+  GDK_BUTTON3_MOTION_MASK       = 1 << 7,
+  GDK_BUTTON_PRESS_MASK         = 1 << 8,
+  GDK_BUTTON_RELEASE_MASK       = 1 << 9,
+  GDK_KEY_PRESS_MASK            = 1 << 10,
+  GDK_KEY_RELEASE_MASK          = 1 << 11,
+  GDK_ENTER_NOTIFY_MASK         = 1 << 12,
+  GDK_LEAVE_NOTIFY_MASK         = 1 << 13,
+  GDK_FOCUS_CHANGE_MASK         = 1 << 14,
+  GDK_STRUCTURE_MASK            = 1 << 15,
+  GDK_PROPERTY_CHANGE_MASK      = 1 << 16,
+  GDK_PROXIMITY_IN_MASK         = 1 << 18,
+  GDK_PROXIMITY_OUT_MASK        = 1 << 19,
+  GDK_SUBSTRUCTURE_MASK         = 1 << 20,
+  GDK_SCROLL_MASK               = 1 << 21,
+  GDK_TOUCH_MASK                = 1 << 22,
+  GDK_SMOOTH_SCROLL_MASK        = 1 << 23,
+  GDK_TOUCHPAD_GESTURE_MASK     = 1 << 24,
+  GDK_TABLET_PAD_MASK           = 1 << 25,
+  GDK_ALL_EVENTS_MASK           = 0x3FFFFFE
+} GdkEventMask;
+
 GdkGrabStatus gdk_device_grab (GdkDevice        *device,
                                GdkSurface        *surface,
                                GdkGrabOwnership  grab_ownership,
@@ -312,6 +315,26 @@ typedef enum
   GDK_HINT_USER_POS    = 1 << 7,
   GDK_HINT_USER_SIZE   = 1 << 8
 } GdkSurfaceHints;
+
+typedef enum
+{
+  GDK_SURFACE_TYPE_HINT_NORMAL,
+  GDK_SURFACE_TYPE_HINT_DIALOG,
+  GDK_SURFACE_TYPE_HINT_MENU,           /* Torn off menu */
+  GDK_SURFACE_TYPE_HINT_TOOLBAR,
+  GDK_SURFACE_TYPE_HINT_SPLASHSCREEN,
+  GDK_SURFACE_TYPE_HINT_UTILITY,
+  GDK_SURFACE_TYPE_HINT_DOCK,
+  GDK_SURFACE_TYPE_HINT_DESKTOP,
+  GDK_SURFACE_TYPE_HINT_DROPDOWN_MENU,  /* A drop down menu (from a menubar) */
+  GDK_SURFACE_TYPE_HINT_POPUP_MENU,     /* A popup menu (from right-click) */
+  GDK_SURFACE_TYPE_HINT_TOOLTIP,
+  GDK_SURFACE_TYPE_HINT_NOTIFICATION,
+  GDK_SURFACE_TYPE_HINT_COMBO,
+  GDK_SURFACE_TYPE_HINT_DND
+} GdkSurfaceTypeHint;
+
+typedef struct _GdkGeometry GdkGeometry;
 
 struct _GdkGeometry
 {

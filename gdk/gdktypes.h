@@ -44,7 +44,7 @@
  */
 #include <gdk/gdkconfig.h>
 
-/* some common magic values */
+G_BEGIN_DECLS
 
 /**
  * GDK_CURRENT_TIME:
@@ -52,19 +52,6 @@
  * Represents the current time, and can be used anywhere a time is expected.
  */
 #define GDK_CURRENT_TIME     0L
-
-/**
- * GDK_PARENT_RELATIVE:
- *
- * A special value, indicating that the background
- * for a surface should be inherited from the parent surface.
- */
-#define GDK_PARENT_RELATIVE  1L
-
-
-
-G_BEGIN_DECLS
-
 
 /**
  * GdkPoint:
@@ -126,8 +113,6 @@ typedef struct _GdkAppLaunchContext   GdkAppLaunchContext;
 typedef struct _GdkSeat               GdkSeat;
 typedef struct _GdkSnapshot           GdkSnapshot;
 
-typedef struct _GdkGeometry           GdkGeometry;
-
 typedef struct _GdkDrawingContext     GdkDrawingContext;
 typedef struct _GdkDrawContext        GdkDrawContext;
 typedef struct _GdkCairoContext       GdkCairoContext;
@@ -152,11 +137,7 @@ typedef struct _GdkVulkanContext      GdkVulkanContext;
  * @GDK_GRAVITY_STATIC: the reference point is at the top left corner of the
  *  surface itself, ignoring window manager decorations.
  *
- * Defines the reference point of a surface and the meaning of coordinates
- * passed to gtk_window_move(). See gtk_window_move() and the "implementation
- * notes" section of the
- * [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec)
- * specification for more details.
+ * Defines the reference point of a surface and is used in #GdkPopupLayout.
  */
 typedef enum
 {
@@ -171,24 +152,6 @@ typedef enum
   GDK_GRAVITY_SOUTH_EAST,
   GDK_GRAVITY_STATIC
 } GdkGravity;
-
-/**
- * GdkByteOrder:
- * @GDK_LSB_FIRST: The values are stored with the least-significant byte
- *   first. For instance, the 32-bit value 0xffeecc would be stored
- *   in memory as 0xcc, 0xee, 0xff, 0x00.
- * @GDK_MSB_FIRST: The values are stored with the most-significant byte
- *   first. For instance, the 32-bit value 0xffeecc would be stored
- *   in memory as 0x00, 0xff, 0xee, 0xcc.
- *
- * A set of values describing the possible byte-orders
- * for storing pixel values in memory.
- */
-typedef enum
-{
-  GDK_LSB_FIRST,
-  GDK_MSB_FIRST
-} GdkByteOrder;
 
 /* Types of modifiers.
  */
@@ -247,74 +210,6 @@ typedef enum
                            GDK_BUTTON1_MASK|GDK_BUTTON2_MASK|GDK_BUTTON3_MASK| \
                            GDK_BUTTON4_MASK|GDK_BUTTON5_MASK)
 
-/**
- * GdkEventMask:
- * @GDK_EXPOSURE_MASK: receive expose events
- * @GDK_POINTER_MOTION_MASK: receive all pointer motion events
- * @GDK_BUTTON_MOTION_MASK: receive pointer motion events while any button is pressed
- * @GDK_BUTTON1_MOTION_MASK: receive pointer motion events while 1 button is pressed
- * @GDK_BUTTON2_MOTION_MASK: receive pointer motion events while 2 button is pressed
- * @GDK_BUTTON3_MOTION_MASK: receive pointer motion events while 3 button is pressed
- * @GDK_BUTTON_PRESS_MASK: receive button press events
- * @GDK_BUTTON_RELEASE_MASK: receive button release events
- * @GDK_KEY_PRESS_MASK: receive key press events
- * @GDK_KEY_RELEASE_MASK: receive key release events
- * @GDK_ENTER_NOTIFY_MASK: receive surface enter events
- * @GDK_LEAVE_NOTIFY_MASK: receive surface leave events
- * @GDK_FOCUS_CHANGE_MASK: receive focus change events
- * @GDK_STRUCTURE_MASK: receive events about surface configuration change
- * @GDK_PROPERTY_CHANGE_MASK: receive property change events
- * @GDK_PROXIMITY_IN_MASK: receive proximity in events
- * @GDK_PROXIMITY_OUT_MASK: receive proximity out events
- * @GDK_SUBSTRUCTURE_MASK: receive events about surface configuration changes of child surfaces
- * @GDK_SCROLL_MASK: receive scroll events
- * @GDK_TOUCH_MASK: receive touch events
- * @GDK_SMOOTH_SCROLL_MASK: receive smooth scrolling events
-   @GDK_TOUCHPAD_GESTURE_MASK: receive touchpad gesture events
- * @GDK_TABLET_PAD_MASK: receive tablet pad events
- * @GDK_ALL_EVENTS_MASK: the combination of all the above event masks.
- *
- * A set of bit-flags to indicate which events a surface is to receive.
- * Most of these masks map onto one or more of the #GdkEventType event types
- * above.
- *
- * See the [input handling overview][chap-input-handling] for details of
- * [event masks][event-masks] and [event propagation][event-propagation].
- *
- * If %GDK_TOUCH_MASK is enabled, the surface will receive touch events
- * from touch-enabled devices. Those will come as sequences of #GdkEventTouch
- * with type %GDK_TOUCH_UPDATE, enclosed by two events with
- * type %GDK_TOUCH_BEGIN and %GDK_TOUCH_END (or %GDK_TOUCH_CANCEL).
- * gdk_event_get_event_sequence() returns the event sequence for these
- * events, so different sequences may be distinguished.
- */
-typedef enum
-{
-  GDK_EXPOSURE_MASK             = 1 << 1,
-  GDK_POINTER_MOTION_MASK       = 1 << 2,
-  GDK_BUTTON_MOTION_MASK        = 1 << 4,
-  GDK_BUTTON1_MOTION_MASK       = 1 << 5,
-  GDK_BUTTON2_MOTION_MASK       = 1 << 6,
-  GDK_BUTTON3_MOTION_MASK       = 1 << 7,
-  GDK_BUTTON_PRESS_MASK         = 1 << 8,
-  GDK_BUTTON_RELEASE_MASK       = 1 << 9,
-  GDK_KEY_PRESS_MASK            = 1 << 10,
-  GDK_KEY_RELEASE_MASK          = 1 << 11,
-  GDK_ENTER_NOTIFY_MASK         = 1 << 12,
-  GDK_LEAVE_NOTIFY_MASK         = 1 << 13,
-  GDK_FOCUS_CHANGE_MASK         = 1 << 14,
-  GDK_STRUCTURE_MASK            = 1 << 15,
-  GDK_PROPERTY_CHANGE_MASK      = 1 << 16,
-  GDK_PROXIMITY_IN_MASK         = 1 << 18,
-  GDK_PROXIMITY_OUT_MASK        = 1 << 19,
-  GDK_SUBSTRUCTURE_MASK         = 1 << 20,
-  GDK_SCROLL_MASK               = 1 << 21,
-  GDK_TOUCH_MASK                = 1 << 22,
-  GDK_SMOOTH_SCROLL_MASK        = 1 << 23,
-  GDK_TOUCHPAD_GESTURE_MASK     = 1 << 24,
-  GDK_TABLET_PAD_MASK           = 1 << 25,
-  GDK_ALL_EVENTS_MASK           = 0x3FFFFFE
-} GdkEventMask;
 
 /**
  * GdkGLError:
@@ -346,54 +241,6 @@ typedef enum {
   GDK_VULKAN_ERROR_UNSUPPORTED,
   GDK_VULKAN_ERROR_NOT_AVAILABLE,
 } GdkVulkanError;
-
-/**
- * GdkSurfaceTypeHint:
- * @GDK_SURFACE_TYPE_HINT_NORMAL: Normal toplevel window.
- * @GDK_SURFACE_TYPE_HINT_DIALOG: Dialog window.
- * @GDK_SURFACE_TYPE_HINT_MENU: Window used to implement a menu; GTK uses
- *  this hint only for torn-off menus, see #GtkTearoffMenuItem.
- * @GDK_SURFACE_TYPE_HINT_TOOLBAR: Window used to implement toolbars.
- * @GDK_SURFACE_TYPE_HINT_SPLASHSCREEN: Window used to display a splash
- *  screen during application startup.
- * @GDK_SURFACE_TYPE_HINT_UTILITY: Utility windows which are not detached
- *  toolbars or dialogs.
- * @GDK_SURFACE_TYPE_HINT_DOCK: Used for creating dock or panel windows.
- * @GDK_SURFACE_TYPE_HINT_DESKTOP: Used for creating the desktop background
- *  window.
- * @GDK_SURFACE_TYPE_HINT_DROPDOWN_MENU: A menu that belongs to a menubar.
- * @GDK_SURFACE_TYPE_HINT_POPUP_MENU: A menu that does not belong to a menubar,
- *  e.g. a context menu.
- * @GDK_SURFACE_TYPE_HINT_TOOLTIP: A tooltip.
- * @GDK_SURFACE_TYPE_HINT_NOTIFICATION: A notification - typically a “bubble”
- *  that belongs to a status icon.
- * @GDK_SURFACE_TYPE_HINT_COMBO: A popup from a combo box.
- * @GDK_SURFACE_TYPE_HINT_DND: A window that is used to implement a DND cursor.
- *
- * These are hints for the window manager that indicate what type of function
- * the window has. The window manager can use this when determining decoration
- * and behaviour of the window. The hint must be set before mapping the window.
- *
- * See the [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec)
- * specification for more details about window types.
- */
-typedef enum
-{
-  GDK_SURFACE_TYPE_HINT_NORMAL,
-  GDK_SURFACE_TYPE_HINT_DIALOG,
-  GDK_SURFACE_TYPE_HINT_MENU,		/* Torn off menu */
-  GDK_SURFACE_TYPE_HINT_TOOLBAR,
-  GDK_SURFACE_TYPE_HINT_SPLASHSCREEN,
-  GDK_SURFACE_TYPE_HINT_UTILITY,
-  GDK_SURFACE_TYPE_HINT_DOCK,
-  GDK_SURFACE_TYPE_HINT_DESKTOP,
-  GDK_SURFACE_TYPE_HINT_DROPDOWN_MENU,	/* A drop down menu (from a menubar) */
-  GDK_SURFACE_TYPE_HINT_POPUP_MENU,	/* A popup menu (from right-click) */
-  GDK_SURFACE_TYPE_HINT_TOOLTIP,
-  GDK_SURFACE_TYPE_HINT_NOTIFICATION,
-  GDK_SURFACE_TYPE_HINT_COMBO,
-  GDK_SURFACE_TYPE_HINT_DND
-} GdkSurfaceTypeHint;
 
 /**
  * GdkAxisUse:

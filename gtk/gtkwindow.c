@@ -241,8 +241,6 @@ typedef struct
   guint    hide_on_close             : 1;
   guint    in_emit_close_request     : 1;
 
-  GdkSurfaceTypeHint type_hint;
-
   GtkGesture *click_gesture;
   GtkEventController *key_controller;
   GtkEventController *application_shortcut_controller;
@@ -3602,9 +3600,8 @@ gtk_window_resize (GtkWindow *window,
  * ]|
  *
  * If you are getting a window size in order to position the window
- * on the screen, you should, instead, simply set the window’s semantic
- * type with gtk_window_set_type_hint(), which allows the window manager
- * to e.g. center dialogs. Also, if you set the transient parent of
+ * on the screen, don't. You should, instead, simply let the window
+ * manager place windows. Also, if you set the transient parent of
  * dialogs with gtk_window_set_transient_for() window managers will
  * often center the dialog over its parent window. It's much preferred
  * to let the window manager handle these cases rather than doing it

@@ -56,7 +56,6 @@ list_ignore_properties (gboolean buglist)
     { "GtkWidget",              "parent",               NULL, },                        /* needs working parent widget */
     { "GtkWidget",              "has-default",          (void*) TRUE, },                /* conflicts with toplevel-less widgets */
     { "GtkWidget",              "display",              (void*) MATCH_ANY_VALUE },
-    { "GtkWindow",              "type-hint",            (void*) GDK_SURFACE_TYPE_HINT_DND, }, /* conflicts with ::visible=TRUE */
     { "GtkCellView",            "background",           (void*) "", },                  /* "" is not a valid background color */
     { "GtkFileChooserButton",   "select-multiple",      (void*) MATCH_ANY_VALUE },      /* property disabled */
     { "GtkFileChooserButton",   "action",               (void*) GTK_FILE_CHOOSER_ACTION_SAVE },

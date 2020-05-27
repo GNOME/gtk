@@ -296,57 +296,6 @@ gdk_should_use_portal (void)
   return use_portal[0] == '1';
 }
 
-/**
- * SECTION:threads
- * @Short_description: Functions for using GDK in multi-threaded programs
- * @Title: Threads
- *
- * For thread safety, GDK relies on the thread primitives in GLib,
- * and on the thread-safe GLib main loop.
- *
- * GLib is completely thread safe (all global data is automatically
- * locked), but individual data structure instances are not automatically
- * locked for performance reasons. So e.g. you must coordinate
- * accesses to the same #GHashTable from multiple threads.
- *
- * GTK, however, is not thread safe. You should only use GTK and GDK
- * from the thread gtk_init() and gtk_main() were called on.
- * This is usually referred to as the “main thread”.
- *
- * Signals on GTK and GDK types, as well as non-signal callbacks, are
- * emitted in the main thread.
- *
- * You can schedule work in the main thread safely from other threads
- * by using g_main_context_invoke(), g_idle_add(), and g_timeout_add():
- *
- * |[<!-- language="C" -->
- * static void
- * worker_thread (void)
- * {
- *   ExpensiveData *expensive_data = do_expensive_computation ();
- *
- *   g_main_context_invoke (NULL, got_value, expensive_data);
- * }
- *
- * static gboolean
- * got_value (gpointer user_data)
- * {
- *   ExpensiveData *expensive_data = user_data;
- *
- *   my_app->expensive_data = expensive_data;
- *   gtk_button_set_sensitive (my_app->button, TRUE);
- *   gtk_button_set_label (my_app->button, expensive_data->result_label);
- *
- *   return G_SOURCE_REMOVE;
- * }
- * ]|
- *
- * For more information on this "worker thread" pattern, you should
- * also look at #GTask, which gives you high-level tools to perform
- * expensive tasks from worker threads, and will handle thread
- * management for you.
- */
-
 PangoDirection
 gdk_unichar_direction (gunichar ch)
 {
