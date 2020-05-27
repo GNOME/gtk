@@ -392,6 +392,46 @@ sync_counter_for_end_frame (GdkSurface *surface)
 }
 
 static void
+maybe_sync_counter_for_end_frame (GdkSurface *surface)
+{
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
+  gboolean frame_sync_negotiated = should_sync_frame_drawing (surface);
+  gboolean frame_done_painting = !impl->toplevel->frame_pending;
+
+#ifdef HAVE_XDAMAGE
+  frame_done_painting = !impl->toplevel->frame_still_painting && frame_sync_negotiated;
+#endif
+
+  if (!impl->toplevel->frame_pending)
+    {
+      if (!frame_sync_negotiated || frame_done_painting)
+        sync_counter_for_end_frame (surface);
+    }
+  else
+    {
+      if (frame_done_painting)
+        sync_counter_for_end_frame (surface);
+    }
+}
+
+#ifdef HAVE_XDAMAGE
+void
+_gdk_x11_surface_set_frame_still_painting (GdkSurface *surface,
+                                           gboolean    painting)
+{
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
+
+  if (impl->toplevel->frame_still_painting == painting)
+    return;
+
+  impl->toplevel->frame_still_painting = painting;
+
+  if (!impl->toplevel->frame_still_painting)
+    maybe_sync_counter_for_end_frame (surface);
+}
+#endif
+
+static void
 gdk_x11_surface_end_frame (GdkSurface *surface)
 {
   GdkFrameClock *clock;
@@ -436,7 +476,7 @@ gdk_x11_surface_end_frame (GdkSurface *surface)
       else
         impl->toplevel->current_counter_value += 1;
 
-      sync_counter_for_end_frame (surface);
+      maybe_sync_counter_for_end_frame (surface);
 
       if (should_sync_frame_drawing (surface))
         {
