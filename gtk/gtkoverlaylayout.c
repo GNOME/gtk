@@ -121,12 +121,23 @@ gtk_overlay_layout_child_class_init (GtkOverlayLayoutChildClass *klass)
   gobject_class->get_property = gtk_overlay_layout_child_get_property;
   gobject_class->finalize = gtk_overlay_layout_child_finalize;
 
+  /**
+   * GtkOverlayLayoutChild:measure:
+   *
+   * Whether the child size should contribute to the #GtkOverlayLayout's
+   * measurement.
+   */
   child_props[PROP_MEASURE] =
     g_param_spec_boolean ("measure",
                           P_("Measure"),
                           P_("Include in size measurement"),
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+  /**
+   * GtkOverlayLayoutChild:clip-overlay:
+   *
+   * Whether the child should be clipped to fit the parent's size.
+   */
   child_props[PROP_CLIP_OVERLAY] =
     g_param_spec_boolean ("clip-overlay",
                           P_("Clip Overlay"),
@@ -443,6 +454,13 @@ gtk_overlay_layout_init (GtkOverlayLayout *self)
 {
 }
 
+/**
+ * gtk_overlay_layout_new:
+ *
+ * Creates a new #GtkOverlayLayout instance.
+ *
+ * Returns: the newly create instance
+ */
 GtkLayoutManager *
 gtk_overlay_layout_new (void)
 {
