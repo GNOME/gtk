@@ -759,6 +759,9 @@ To properly document a new class, it needs to be given its own section
 in the sections.txt, needs to be included in the `docs.xml` file, and the
 `get_type` function needs to listed in the `.types` file.
 
+For more information on the documentation style and contribution guidelines,
+please [follow the corresponding contribution guide](./reference/README.md).
+
 ### Old code
 
 New code that is being added to GTK should adhere to the style
