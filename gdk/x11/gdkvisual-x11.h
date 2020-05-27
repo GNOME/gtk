@@ -46,6 +46,12 @@ typedef enum
   GDK_VISUAL_DIRECT_COLOR
 } GdkVisualType;
 
+typedef enum
+{
+  GDK_LSB_FIRST,
+  GDK_MSB_FIRST
+} GdkByteOrder;
+
 struct _GdkX11Visual
 {
   GObject parent_instance;

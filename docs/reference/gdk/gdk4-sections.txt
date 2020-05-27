@@ -174,7 +174,6 @@ gdk_rgba_get_type
 GdkSurface
 GdkGravity
 GdkSurfaceEdge
-GdkSurfaceTypeHint
 GdkSurfaceState
 gdk_surface_new_toplevel
 gdk_surface_new_popup
@@ -470,7 +469,6 @@ gdk_seat_capabilities_get_type
 <FILE>events</FILE>
 GdkEvent
 GdkEventType
-GdkEventMask
 GdkKeyMatch
 GdkTouchpadGesturePhase
 GdkScrollDirection

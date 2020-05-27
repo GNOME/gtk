@@ -578,53 +578,6 @@ _gdk_event_queue_append (GdkDisplay *display,
 }
 
 /**
- * _gdk_event_queue_insert_after:
- * @display: a #GdkDisplay
- * @sibling: Append after this event.
- * @event: Event to append.
- *
- * Appends an event after the specified event, or if it isn’t in
- * the queue, onto the tail of the event queue.
- */
-void
-_gdk_event_queue_insert_after (GdkDisplay *display,
-                               GdkEvent   *sibling,
-                               GdkEvent   *event)
-{
-  GList *prev = g_queue_find (&display->queued_events, sibling);
-
-  if (prev)
-    g_queue_insert_after (&display->queued_events, prev, event);
-  else
-    g_queue_push_tail (&display->queued_events, event);
-}
-
-/**
- * _gdk_event_queue_insert_before:
- * @display: a #GdkDisplay
- * @sibling: Append before this event
- * @event: Event to prepend
- *
- * Prepends an event before the specified event, or if it isn’t in
- * the queue, onto the head of the event queue.
- *
- * Returns: the newly prepended list node.
- */
-void
-_gdk_event_queue_insert_before (GdkDisplay *display,
-				GdkEvent   *sibling,
-				GdkEvent   *event)
-{
-  GList *next = g_queue_find (&display->queued_events, sibling);
-
-  if (next)
-    g_queue_insert_before (&display->queued_events, next, event);
-  else
-    g_queue_push_head (&display->queued_events, event);
-}
-
-
-/**
  * _gdk_event_queue_remove_link:
  * @display: a #GdkDisplay
  * @node: node to remove
