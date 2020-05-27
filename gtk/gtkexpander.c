@@ -126,7 +126,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 
-#include "a11y/gtkexpanderaccessible.h"
+#include "a11y/gtkexpanderaccessibleprivate.h"
 
 #include <string.h>
 
@@ -882,6 +882,14 @@ gtk_expander_set_expanded (GtkExpander *expander,
       gtk_expander_resize_toplevel (expander);
     }
 
+  {
+    AtkObject *accessible = _gtk_widget_peek_accessible (GTK_WIDGET (expander));
+
+    if (accessible != NULL)
+      gtk_expander_accessible_update_state (GTK_EXPANDER_ACCESSIBLE (accessible),
+                                            expander->expanded);
+  }
+
   g_object_notify (G_OBJECT (expander), "expanded");
 }
 
@@ -934,6 +942,13 @@ gtk_expander_set_label (GtkExpander *expander,
 
       gtk_expander_set_label_widget (expander, child);
     }
+
+  {
+    AtkObject *accessible = _gtk_widget_peek_accessible (GTK_WIDGET (expander));
+
+    if (accessible != NULL)
+      gtk_expander_accessible_update_label (GTK_EXPANDER_ACCESSIBLE (accessible));
+  }
 
   g_object_notify (G_OBJECT (expander), "label");
 }
