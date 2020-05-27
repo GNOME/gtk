@@ -9,7 +9,7 @@ The GTK documentation is divided in two major components:
 In both cases, the contents are parsed, converted into DocBook format, and
 cross-linked in order to match types, functions, signals, and properties.
 From the DocBook output, we generate HTML, which can be used to read the
-documentation both off line and online.
+documentation both offline and online.
 
 In both cases, contributing to the GTK documentation requires modifying
 files tracked in the source control repository, and follows the same steps
@@ -76,6 +76,9 @@ New classes require:
  1. the `get_type` function added to the `.types` file
  1. an `xinclude` element in the `docs.xml` file
 
+The GTK documentation also contains a number of 'freestanding' chapters
+for which the source is in .md files in docs/reference/gtk.
+
 ## Style guide
 
 Like the [coding style][coding], these rules try to formalize the existing
@@ -84,6 +87,27 @@ that does not match the rules if you're already changing that code for
 unrelated reasons.
 
 [coding]: ../CODING-STYLE.md
+
+### Syntax
+
+The input syntax for GTK documentation is markdown, in a flavor that is
+similar to what you see on gitlab or github. The markdown support for
+fragments that are extracted from sources is more limited than for
+freestanding chapters. As an exception, man pages for tools are currently
+maintained in docbook, since the conversion from markdown to docbook is
+losing too much of the expected formatting.
+
+In addition to typical markdown formatting such as \*emphasis\* or \_italics\_,
+gtk-doc supports a few abbreviations for cross-references and formatting:
+
+`#ClassName`
+ : Creates a link to the docs for a class
+
+`function()`
+ : Creates a link to the docs for a function
+
+`%constant`
+ : Generates suitable markup for enum values or constants
 
 ### Sections
 
@@ -138,6 +162,21 @@ Checks whether the widget is set to be visible or not.
  - If a method is a signal emitter, link the signal in the method's
    description.
 
+### Signals
+
+ - While GObject can introspect argument and return types for signals,
+   you should *always* document them with an explicit gtk-doc stanza.
+ - The syntax for signal stanzas is similar to functions:
+
+```c
+/**
+ * GtkFoo::signal-name:
+ * @arg1: ...
+ * @arg2: ...
+ *
+ * ...
+```
+
 ### Properties
 
  - While GObject properties contain text that can be extracted
@@ -148,3 +187,25 @@ Checks whether the widget is set to be visible or not.
    purposes.
  - Always note if setting a property has side effects, like causing another
    property to change state.
+ - The syntax for property documentation is:
+
+```c
+/**
+ * GtkFoo:property-name:
+ *
+ * ...
+```
+
+### Actions
+
+ - Actions are new in GTK 4, and gtk-doc had to learn a a new syntax
+   to document them:
+
+```
+/**c
+ * GtkFoo|action-name:
+ * @arg1: ...
+ * @arg2: ...
+ *
+ * ...
+```
