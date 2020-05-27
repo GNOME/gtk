@@ -39,7 +39,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 
-#include "a11y/gtkprogressbaraccessible.h"
+#include "a11y/gtkprogressbaraccessibleprivate.h"
 
 #include <string.h>
 
@@ -733,6 +733,14 @@ gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
   gtk_progress_bar_set_activity_mode (pbar, FALSE);
   gtk_widget_queue_allocate (pbar->trough_widget);
   update_fraction_classes (pbar);
+
+  {
+    AtkObject *accessible =
+      _gtk_widget_peek_accessible (GTK_WIDGET (pbar));
+
+    if (accessible != NULL)
+      gtk_progress_bar_accessible_update_value (GTK_PROGRESS_BAR_ACCESSIBLE (accessible));
+  }
 
   g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_FRACTION]);
 }

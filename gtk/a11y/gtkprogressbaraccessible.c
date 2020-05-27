@@ -21,52 +21,28 @@
 
 #include <gtk/gtk.h>
 
-#include "gtkprogressbaraccessible.h"
-
+#include "gtkprogressbaraccessibleprivate.h"
 
 static void atk_value_interface_init (AtkValueIface  *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkProgressBarAccessible, gtk_progress_bar_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
-static void
-gtk_progress_bar_accessible_initialize (AtkObject *obj,
-                                        gpointer   data)
+void
+gtk_progress_bar_accessible_update_value (GtkProgressBarAccessible *self)
 {
-  ATK_OBJECT_CLASS (gtk_progress_bar_accessible_parent_class)->initialize (obj, data);
-
-  obj->role = ATK_ROLE_PROGRESS_BAR;
-}
-
-static void
-gtk_progress_bar_accessible_notify_gtk (GObject    *obj,
-                                        GParamSpec *pspec)
-{
-  GtkWidget *widget = GTK_WIDGET (obj);
-  AtkObject *accessible;
-
-  accessible = gtk_widget_get_accessible (widget);
-
-  if (strcmp (pspec->name, "fraction") == 0)
-    g_object_notify (G_OBJECT (accessible), "accessible-value");
-  else
-    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_progress_bar_accessible_parent_class)->notify_gtk (obj, pspec);
+  g_object_notify (G_OBJECT (self), "accessible-value");
 }
 
 static void
 gtk_progress_bar_accessible_class_init (GtkProgressBarAccessibleClass *klass)
 {
-  AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
-
-  widget_class->notify_gtk = gtk_progress_bar_accessible_notify_gtk;
-
-  class->initialize = gtk_progress_bar_accessible_initialize;
 }
 
 static void
-gtk_progress_bar_accessible_init (GtkProgressBarAccessible *bar)
+gtk_progress_bar_accessible_init (GtkProgressBarAccessible *self)
 {
+  ATK_OBJECT (self)->role = ATK_ROLE_PROGRESS_BAR;
 }
 
 static void
