@@ -404,6 +404,28 @@ gtk_tooltip_window_new (void)
   return g_object_new (GTK_TYPE_TOOLTIP_WINDOW, NULL);
 }
 
+static void
+update_label_width (GtkLabel *label)
+{
+  const char *text;
+
+  text = gtk_label_get_text (label);
+  if (strchr (text, '\n'))
+    {
+      gtk_label_set_wrap (label, FALSE);
+    }
+  else
+    {
+      int len;
+
+      len = g_utf8_strlen (text, -1);
+
+      gtk_label_set_width_chars (label, MIN (len, 50));
+      gtk_label_set_max_width_chars (label, MIN (len, 50));
+      gtk_label_set_wrap (label, TRUE);
+    }
+}
+
 void
 gtk_tooltip_window_set_label_markup (GtkTooltipWindow *window,
                                      const char       *markup)
@@ -411,6 +433,7 @@ gtk_tooltip_window_set_label_markup (GtkTooltipWindow *window,
   if (markup != NULL)
     {
       gtk_label_set_markup (GTK_LABEL (window->label), markup);
+      update_label_width (GTK_LABEL (window->label));
       gtk_widget_show (window->label);
     }
   else
@@ -426,6 +449,7 @@ gtk_tooltip_window_set_label_text (GtkTooltipWindow *window,
   if (text != NULL)
     {
       gtk_label_set_text (GTK_LABEL (window->label), text);
+      update_label_width (GTK_LABEL (window->label));
       gtk_widget_show (window->label);
     }
   else
