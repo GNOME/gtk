@@ -121,12 +121,6 @@ void   _gdk_event_queue_remove_link  (GdkDisplay *display,
                                       GList      *node);
 GList* _gdk_event_queue_append       (GdkDisplay *display,
                                       GdkEvent   *event);
-void   _gdk_event_queue_insert_after (GdkDisplay *display,
-                                      GdkEvent   *after_event,
-                                      GdkEvent   *event);
-void   _gdk_event_queue_insert_before(GdkDisplay *display,
-                                      GdkEvent   *after_event,
-                                      GdkEvent   *event);
 
 void    _gdk_event_queue_handle_motion_compression (GdkDisplay *display);
 void    _gdk_event_queue_flush                     (GdkDisplay       *display);
