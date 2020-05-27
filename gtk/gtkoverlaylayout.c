@@ -185,7 +185,7 @@ gtk_overlay_layout_child_set_measure (GtkOverlayLayoutChild *child,
  *
  * Retrieves whether the child is measured.
  *
- * Returns: (transfer none) (nullable): whether the child is measured
+ * Returns: whether the child is measured
  */
 gboolean
 gtk_overlay_layout_child_get_measure (GtkOverlayLayoutChild *child)
@@ -227,7 +227,7 @@ gtk_overlay_layout_child_set_clip_overlay (GtkOverlayLayoutChild *child,
  *
  * Retrieves whether the child is clipped.
  *
- * Returns: (transfer none) (nullable): whether the child is clipped
+ * Returns: whether the child is clipped
  */
 gboolean
 gtk_overlay_layout_child_get_clip_overlay (GtkOverlayLayoutChild *child)
