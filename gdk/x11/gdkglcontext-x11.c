@@ -841,6 +841,16 @@ gdk_x11_screen_init_gl (GdkX11Screen *screen)
   display_x11->has_glx_visual_rating =
     epoxy_has_glx_extension (dpy, screen_num, "GLX_EXT_visual_rating");
 
+  if (g_strcmp0 (glXGetClientString (dpy, GLX_VENDOR), "NVIDIA Corporation") == 0)
+    {
+      /* NVidia doesn't send damage from the client library during buffer swap.
+       * Instead, damage only gets sent by the Xserver later, and we can't
+       * continue the frame paint cycle until we know the compositor has seen
+       * the damage.
+       */
+      display_x11->has_glx_implicit_damage = TRUE;
+    }
+
   GDK_DISPLAY_NOTE (display, OPENGL,
             g_message ("GLX version %d.%d found\n"
                        " - Vendor: %s\n"
