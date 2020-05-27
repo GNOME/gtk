@@ -360,6 +360,23 @@ gdk_x11_surface_begin_frame (GdkSurface *surface,
     }
 }
 
+void
+_gdk_x11_surface_set_still_painting_frame (GdkSurface *surface,
+                                           gboolean    painting)
+{
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
+
+  if (impl->toplevel->frame_still_painting == painting)
+    return;
+
+  impl->toplevel->frame_still_painting = painting;
+
+  if (!impl->toplevel->frame_still_painting && impl->toplevel->frame_pending)
+    set_sync_counter (GDK_SURFACE_XDISPLAY (surface),
+                      impl->toplevel->extended_update_counter,
+                      impl->toplevel->current_counter_value);
+}
+
 static void
 gdk_x11_surface_end_frame (GdkSurface *surface)
 {
@@ -405,9 +422,10 @@ gdk_x11_surface_end_frame (GdkSurface *surface)
       else
         impl->toplevel->current_counter_value += 1;
 
-      set_sync_counter(GDK_SURFACE_XDISPLAY (surface),
-		       impl->toplevel->extended_update_counter,
-		       impl->toplevel->current_counter_value);
+      if (!impl->toplevel->frame_still_painting)
+        set_sync_counter (GDK_SURFACE_XDISPLAY (surface),
+                          impl->toplevel->extended_update_counter,
+                          impl->toplevel->current_counter_value);
 
       if (impl->frame_sync_enabled &&
           gdk_x11_screen_supports_net_wm_hint (GDK_SURFACE_SCREEN (surface),
