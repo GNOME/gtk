@@ -183,6 +183,14 @@ gdk_x11_gl_context_end_frame (GdkDrawContext *draw_context,
 
   gdk_x11_surface_pre_damage (surface);
 
+  if (display_x11->has_glx_implicit_damage)
+    {
+      g_assert (context_x11->frame_fence == 0);
+
+      context_x11->frame_fence = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+      gdk_surface_freeze_updates (surface);
+    }
+
   glXSwapBuffers (dpy, drawable);
 
   if (context_x11->do_frame_sync && info != NULL && display_x11->has_glx_video_sync)
@@ -737,6 +745,21 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
   context_x11->attached_drawable = info->glx_drawable ? info->glx_drawable : gdk_x11_surface_get_xid (surface);
   context_x11->unattached_drawable = info->dummy_glx ? info->dummy_glx : info->dummy_xwin;
 
+#ifdef HAVE_XDAMAGE
+  if (display_x11->have_damage)
+    {
+      gdk_x11_display_error_trap_push (display);
+      context_x11->xdamage = XDamageCreate (dpy,
+                                            gdk_x11_surface_get_xid (surface),
+                                            XDamageReportRawRectangles);
+      if (gdk_x11_display_error_trap_pop (display))
+        {
+          XDamageDestroy (dpy, context_x11->xdamage);
+          context_x11->xdamage = 0;
+        }
+    }
+#endif
+
   context_x11->is_direct = glXIsDirect (dpy, context_x11->glx_context);
 
   GDK_DISPLAY_NOTE (display, OPENGL,
@@ -1214,6 +1237,54 @@ _gdk_x11_screen_update_visuals_for_gl (GdkX11Screen *x11_screen)
                           x11_screen->rgba_visual ? gdk_x11_visual_get_xvisual (x11_screen->rgba_visual)->visualid : 0);
 }
 
+#ifdef HAVE_XDAMAGE
+static gboolean
+on_gl_surface_xevent (GdkGLContext   *context,
+                      XEvent         *xevent,
+                      GdkX11Display  *display_x11)
+{
+  GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (context);
+  GdkSurface *surface = gdk_gl_context_get_surface (context);
+  XDamageNotifyEvent *damage_xevent;
+
+  if (!context_x11->is_attached)
+    return FALSE;
+
+  if (xevent->type != (display_x11->damage_event_base + XDamageNotify))
+    return FALSE;
+
+  damage_xevent = (XDamageNotifyEvent *) xevent;
+
+  if (damage_xevent->damage != context_x11->xdamage)
+    return FALSE;
+
+  if (context_x11->frame_fence)
+    {
+      GLenum wait_result;
+
+      /* This should only block if damage is delivered first, but we should
+       * only be running this code on drivers where damage is delivered last
+       */
+      wait_result = glClientWaitSync (context_x11->frame_fence, 0, 16000000);
+
+      switch (wait_result)
+      {
+        case GL_ALREADY_SIGNALED:
+        case GL_CONDITION_SATISFIED:
+          if (wait_result == GL_CONDITION_SATISFIED)
+              g_warning ("Got damage before fence");
+          glDeleteSync (context_x11->frame_fence);
+          context_x11->frame_fence = 0;
+          gdk_surface_thaw_updates (surface);
+        default:
+            break;
+      }
+    }
+
+  return FALSE;
+}
+#endif
+
 GdkGLContext *
 gdk_x11_surface_create_gl_context (GdkSurface    *surface,
                                   gboolean      attached,
@@ -1221,10 +1292,12 @@ gdk_x11_surface_create_gl_context (GdkSurface    *surface,
                                   GError      **error)
 {
   GdkDisplay *display;
+  GdkX11Display *display_x11;
   GdkX11GLContext *context;
   GLXFBConfig config;
 
   display = gdk_surface_get_display (surface);
+  display_x11 = GDK_X11_DISPLAY (display);
 
   if (!gdk_x11_screen_init_gl (GDK_SURFACE_SCREEN (surface)))
     {
@@ -1244,6 +1317,15 @@ gdk_x11_surface_create_gl_context (GdkSurface    *surface,
 
   context->glx_config = config;
   context->is_attached = attached;
+
+#ifdef HAVE_XDAMAGE
+  if (display_x11->have_damage && display_x11->has_glx_implicit_damage)
+    g_signal_connect_object (G_OBJECT (display),
+                             "xevent",
+                             G_CALLBACK (on_gl_surface_xevent),
+                             context,
+                             G_CONNECT_SWAPPED);
+#endif
 
   return GDK_GL_CONTEXT (context);
 }

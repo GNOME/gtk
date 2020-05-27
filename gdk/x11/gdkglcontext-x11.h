@@ -24,6 +24,10 @@
 #include <X11/X.h>
 #include <X11/Xlib.h>
 
+#ifdef HAVE_XDAMAGE
+#include <X11/extensions/Xdamage.h>
+#endif
+
 #include <epoxy/gl.h>
 #include <epoxy/glx.h>
 
@@ -43,6 +47,11 @@ struct _GdkX11GLContext
   GLXFBConfig glx_config;
   GLXDrawable attached_drawable;
   GLXDrawable unattached_drawable;
+  GLsync frame_fence;
+
+#ifdef HAVE_XDAMAGE
+  Damage xdamage;
+#endif
 
   guint is_attached : 1;
   guint is_direct : 1;
