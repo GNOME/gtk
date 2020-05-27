@@ -3,7 +3,7 @@ GTK Coding Style
 
 This document is intended to be a short description of the preferred
 coding style to be used for the GTK source code. It was strongly
-inspired by Clutter's CODING_STYLE.
+inspired by Clutter's `CODING_STYLE`.
 
 Coding style is a matter of consistency, readability and maintainance;
 coding style is also completely arbitrary and a matter of taste. This
@@ -16,22 +16,24 @@ will be clearly identified. Please, don't submit code to GTK that
 looks like any of these.
 
 Part of the rationales for these coding style rules are available either
-in the kernel CodingStyle document or in Cairo's CODING_STYLE one.
+in the kernel CodingStyle document or in Cairo's `CODING_STYLE` one.
 
 When in doubt, check the surrounding code and try to imitate it.
 
-+ Line width
+### Line width
 
 The maximum line width for source files is 80 characters, whenever possible.
 Longer lines are usually an indication that you either need a function
 or a pre-processor macro.
 
-+ Indentation
+### Indentation
 
 Each new level is indented 2 or more spaces than the previous level:
 
+```c
   if (condition)
     single_statement ();
+```
 
 This can only be achieved using space characters. It may not be achieved
 using tab characters alone, or using a combination of spaces and tabs.
@@ -44,39 +46,46 @@ Even if two spaces for each indentation level allows deeper nesting than
 8 spaces, GTK favours self-documenting function names that can take
 quite some space. For this reason you should avoid deeply nested code.
 
-+ Tab characters
+### Tab characters
 
 The tab character must always be expanded to spaces. If a literal
 tab must be used inside the source, the tab must always be interpreted
 according to its traditional meaning:
 
+```
 	Advance to the next column which is a multiple of 8.
         [ these two lines should be aligned ]
+```
 
-+ Braces
+### Braces
 
 Curly braces should not be used for single statement blocks:
 
+```c
   if (condition)
     single_statement ();
   else
     another_single_statement (arg1);
+```
 
 In case of multiple statements, curly braces should be put on another
 indentation level:
 
+```c
   if (condition)
     {
       statement_1 ();
       statement_2 ();
       statement_3 ();
     }
+```
 
 The "no block for single statements" rule has only four exceptions:
 
-  ①  if the single statement covers multiple lines, e.g. for functions with
+  1. if the single statement covers multiple lines, e.g. for functions with
      many arguments, and it is followed by else or else if:
 
+```c
   /* valid */
   if (condition)
     {
@@ -87,9 +96,11 @@ The "no block for single statements" rule has only four exceptions:
     }
   else
     another_single_statement (arg1, arg2);
+```
 
-  ②  if the condition is composed of many lines:
+  2. if the condition is composed of many lines:
 
+```c
   /* valid */
   if (condition1 ||
       (condition2 && condition3) ||
@@ -98,10 +109,12 @@ The "no block for single statements" rule has only four exceptions:
     {
       a_single_statement ();
     }
+```
 
-  ③  Nested if's, in which case the block should be placed on the
+  3. Nested if's, in which case the block should be placed on the
      outermost if:
 
+```c
   /* valid */
   if (condition)
     {
@@ -117,10 +130,12 @@ The "no block for single statements" rule has only four exceptions:
       single_statement ();
     else if (yet_another_condition)
       another_single_statement ();
+```
 
-  ④  If either side of an if-else statement has braces, both sides
+  4.  If either side of an if-else statement has braces, both sides
      should, to match up indentation:
 
+```c
   /* valid */
   if (condition)
     {
@@ -140,10 +155,12 @@ The "no block for single statements" rule has only four exceptions:
     }
   else
     baz ();
+```
 
 In general, new blocks should be placed on a new indentation level,
 like:
 
+```c
   int retval = 0;
 
   statement_1 ();
@@ -157,10 +174,12 @@ like:
 
     retval = res ? -1 : 1;
   }
+```
 
 While curly braces for function definitions should rest on a new line
 they should not add an indentation level:
 
+```c
   /* valid */
   static void
   my_function (int argument)
@@ -180,18 +199,23 @@ they should not add an indentation level:
     {
       do_my_things ();
     }
+```
 
 Curly braces must not be placed on the same line as a condition:
 
+```c
   /* invalid */
   if (condition) {
     statement_1 ();
     statement_2 ();
   }
-+ Conditions
+```
+
+### Conditions
 
 Do not check boolean values for equality:
 
+```c
   /* invalid */
   if (condition == TRUE)
     do_foo ();
@@ -199,9 +223,11 @@ Do not check boolean values for equality:
   /* valid */
   if (another_condition)
     do_bar ();
+```
 
 Even if C handles NULL equality like a boolean, be explicit:
 
+```c
   /* valid */
   if (some_pointer == NULL)
     do_blah ();
@@ -209,10 +235,12 @@ Even if C handles NULL equality like a boolean, be explicit:
   /* invalid */
   if (some_other_pointer)
     do_blurp ();
+```
 
 In case of conditions split over multiple lines, the logical operators should
 always go at the end of the line:
 
+```c
   /* invalid */
   if (condition1
       || condition2
@@ -228,37 +256,45 @@ always go at the end of the line:
     {
       do_blah ();
     }
+```
 
-+ Functions
+### Functions
 
 Functions should be declared by placing the returned value on a separate
 line from the function name:
 
+```c
   void
   my_function (void)
   {
   }
+```
 
 The arguments list must be broken into a new line for each argument,
 with the argument names right aligned, taking into account pointers:
 
+```c
   void
   my_function (some_type_t     type,
                another_type_t *a_pointer,
                final_type_t    another_type)
   {
   }
+```
 
 The alignment also holds when invoking a function without breaking the
 80 characters limit:
 
+```c
   align_function_arguments (first_argument,
                             second_argument,
                             third_argument);
+```
 
 To respect the 80 characters limit do not break the function name from
 the arguments:
 
+```c
   /* invalid */
   a_very_long_function_name_with_long_parameters
     (argument_the_first, argument_the_second);
@@ -267,11 +303,13 @@ the arguments:
   first_a = argument_the_first;
   second_a = argument_the_second;
   a_very_long_function_name_with_long_parameters (first_a, second_a);
+```
 
-+ Whitespace
+### Whitespace
 
 Always put a space before a parenthesis but never after:
 
+```c
   /* valid */
   if (condition)
     do_my_things ();
@@ -288,11 +326,13 @@ Always put a space before a parenthesis but never after:
   /* invalid */
   if ( condition )
     do_my_things ( );
+```
 
-A switch() should open a block on a new indentation level, and each case
+A `switch()` should open a block on a new indentation level, and each case
 should start on the same indentation level as the curly braces, with the
 case block on a new indentation level:
 
+```c
   /* valid */
   switch (condition)
     {
@@ -330,10 +370,12 @@ case block on a new indentation level:
       do_bar ();
       break;
     }
+```
 
 It is preferable, though not mandatory, to separate the various cases with
 a newline:
 
+```c
   switch (condition)
     {
     case FOO:
@@ -347,13 +389,15 @@ a newline:
     default:
       do_default ();
     }
+```
 
-The 'break' statement for the default: case is not mandatory.
+The `break` statement for the `default:` case is not mandatory.
 
 If a case block needs to declare new variables, the same rules as the
 inner blocks (see above) apply; the break statement should be placed
 outside of the inner block:
 
+```c
   switch (condition)
     {
     case FOO:
@@ -366,10 +410,12 @@ outside of the inner block:
 
     ...
     }
+```
 
 When declaring a structure type use newlines to separate logical sections
 of the structure:
 
+```c
   struct _GtkWrapBoxPrivate
   {
     GtkOrientation        orientation;
@@ -386,13 +432,15 @@ of the structure:
 
     GList                *children;
   };
-
+```
 
 Do not eliminate whitespace and newlines just because something would
 fit on 80 characters:
 
+```c
   /* invalid */
   if (condition) foo (); else bar ();
+```
 
 Do eliminate trailing whitespace on any line, preferably as a separate
 patch or commit. Never use empty lines at the beginning or at the end of
@@ -402,45 +450,56 @@ Do enable the default git pre-commit hook that detect trailing
 whitespace for you and help you to avoid corrupting GTK's tree with
 it. Do that as follows:
 
+```
   chmod a+x .git/hooks/pre-commit
+```
 
 You might also find the git-stripspace utility helpful which acts as a
 filter to remove trailing whitespace as well as initial, final, and
 duplicate blank lines.
 
-+ Headers
+### Headers
 
 Headers are special, for GTK, in that they don't have to obey the
 80 characters limit. The only major rule for headers is that the function
 definitions should be vertically aligned in three columns:
 
+```c
   return value          function_name           (type   argument,
                                                  type   argument,
                                                  type   argument);
+```
 
 The maximum width of each column is given by the longest element in the
 column:
 
+```c
   void         gtk_type_set_property (GtkType      *type,
                                       const gchar  *value,
                                       GError      **error);
   const gchar *gtk_type_get_property (GtkType      *type);
+```
 
 It is also possible to align the columns to the next tab:
 
+```c
   void          gtk_type_set_prop           (GtkType *type,
                                              gfloat   value);
   gfloat        gtk_type_get_prop           (GtkType *type);
   gint          gtk_type_update_foobar      (GtkType *type);
+```
 
 Public headers should never be included directly:
 
+```c
   #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
   #error "Only <gtk/gtk.h> can be included directly."
   #endif
+```
 
 Private headers should include the public header first, if one exists:
 
+```c
   #ifndef __GTK_FOO_PRIVATE_H__
   #define __GTK_FOO_PRIVATE_H__
 
@@ -449,22 +508,28 @@ Private headers should include the public header first, if one exists:
   ...
 
   #endif /* __GTK_FOO_PRIVATE_H__ */
+```
 
 All headers should have inclusion guards:
 
+```c
   #ifndef __GTK_FOO_H__
   #define __GTK_FOO_H__
 
   ...
 
   #endif /* __GTK_FOO_H__ */
+```
 
-You can also use the "once" pragma instead of the classic pre-processor guard:
+You can also use the `once` pragma instead of the classic pre-processor guard:
 
+```c
   #pragma once
+```
 
 Additionally, public headers should use C++ guards around their declarations:
 
+```c
   G_BEGIN_DECLS
 
   GDK_AVAILABLE_IN_ALL
@@ -476,8 +541,9 @@ Additionally, public headers should use C++ guards around their declarations:
   ...
 
   G_END_DECLS
+```
 
-+ Includes
+### Includes
 
 GTK source files must never include the global gtk.h header; instead, it
 should include the individual headers that are needed.
@@ -486,15 +552,18 @@ Every source file must include config.h first, followed by the header matching
 the source file, either the public installed header, or the private header, if
 it exists.
 
+```c
   #include "config.h"
 
   #include "gtkfoo.h"
+```
 
 Source files should then include project headers, in alphabetical order,
 starting from headers in the current directory; then headers in
 sub-directories; and, finally, in paths relative to the top-level
 directory:
 
+```c
   #include "config.h"
 
   #include "gtkfooprivate.h"
@@ -505,9 +574,11 @@ directory:
   #include "a11y/gtkwidgetaccessible.h"
 
   #include "gdk/gdkwindowprivate.h"
+```
 
 Finally, source files should include the system headers last:
 
+```c
   #include "config.h"
 
   #include "gtkbarprivate.h"
@@ -521,47 +592,56 @@ Finally, source files should include the system headers last:
 
   #include <graphene.h>
   #include <string.h>
+```
 
 Cyclic dependencies should be avoided if at all possible; for instance, you
 could use additional headers to break cycles.
 
-+ GObject
+### GObject
 
 GObject classes definition and implementation require some additional
 coding style notices.
 
 Typedef declarations should be placed at the beginning of the file:
 
+```c
   typedef struct _GtkFoo          GtkFoo;
   typedef struct _GtkFooClass     GtkFooClass;
+```
 
 This includes enumeration types:
 
+```c
   typedef enum
   {
     GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT,
     GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH
   } GtkSizeRequestMode;
+```
 
 And callback types:
 
+```c
   typedef void (* GtkCallback) (GtkWidget *widget,
                                 gpointer   user_data);
+```
 
 Instance structures should only contain the parent type:
 
+```c
   struct _GtkFoo
   {
     GtkWidget parent_instance;
   };
+```
 
-You should use the G_DECLARE_DERIVABLE_TYPE() and G_DECLARE_FINAL_TYPE()
+You should use the `G_DECLARE_DERIVABLE_TYPE()` and `G_DECLARE_FINAL_TYPE()`
 macros in newly written headers.
 
-Inside your source file, always use the G_DEFINE_TYPE(),
-G_DEFINE_TYPE_WITH_PRIVATE(), and G_DEFINE_TYPE_WITH_CODE() macros, or their
-abstract variants G_DEFINE_ABSTRACT_TYPE(),
-G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE(), and G_DEFINE_ABSTRACT_TYPE_WITH_CODE();
+Inside your source file, always use the `G_DEFINE_TYPE()`,
+`G_DEFINE_TYPE_WITH_PRIVATE()`, and `G_DEFINE_TYPE_WITH_CODE()` macros, or their
+`abstract variants G_DEFINE_ABSTRACT_TYPE()`,
+`G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE()`, and `G_DEFINE_ABSTRACT_TYPE_WITH_CODE()`;
 also, use the similar macros for defining interfaces, quarks, and boxed types.
 
 All the properties should be stored inside the private data structure, which
@@ -572,34 +652,39 @@ installed.
 The private data structure should only be accessed internally either using the
 pointer inside the instance structure, for legacy code, or the generated
 instance private data getter function for your type. You should never use the
-G_TYPE_INSTANCE_GET_PRIVATE() macro or the g_type_instance_get_private()
+`G_TYPE_INSTANCE_GET_PRIVATE()` macro or the `g_type_instance_get_private()`
 function.
 
 Interface types should always have the dummy typedef for cast purposes:
 
+```c
         typedef struct _GtkFoo                  GtkFoo;
+```
 
 The interface structure should have "Interface" postfixed to the dummy typedef:
 
+```c
         typedef struct _GtkFooInterface         GtkFooInterface;
+```
 
 Interfaces must have the following macros:
 
-        - Macro:                                - Expands to:
-        • GTK_TYPE_<iface_name>             <iface_name>_get_type
-        • GTK_<iface_name>                  G_TYPE_CHECK_INSTANCE_CAST
-        • GTK_IS_<iface_name>               G_TYPE_CHECK_INSTANCE_TYPE
-        • GTK_<iface_name>_GET_IFACE        G_TYPE_INSTANCE_GET_INTERFACE
+| Macro                        | Expands to                      |
+|------------------------------|---------------------------------|
+| `GTK_TYPE_<iface_name>`      | `<iface_name>_get_type`         |
+| `GTK_<iface_name>`           | `G_TYPE_CHECK_INSTANCE_CAST`    |
+| `GTK_IS_<iface_name>`        | `G_TYPE_CHECK_INSTANCE_TYPE`    |
+| `GTK_<iface_name>_GET_IFACE` | `G_TYPE_INSTANCE_GET_INTERFACE` |
 
-+ Memory allocation
+### Memory allocation
 
-When dynamically allocating data on the heap either use g_new() or,
-if allocating multiple small data structures, g_slice_new().
+When dynamically allocating data on the heap either use `g_new()` or,
+if allocating multiple small data structures, `g_slice_new()`.
 
 Public structure types should always be returned after being zero-ed,
-either explicitly for each member, or by using g_new0() or g_slice_new0().
+either explicitly for each member, or by using `g_new0()` or `g_slice_new0()`.
 
-+ Macros
+### Macros
 
 Try to avoid private macros unless strictly necessary. Remember to #undef
 them at the end of a block or a series of functions needing them.
@@ -608,9 +693,9 @@ Inline functions are usually preferable to private macros.
 
 Public macros should not be used unless they evaluate to a constant.
 
-+ Symbol visibility
+### Symbol visibility
 
-Any symbol that is not explicitly annotated using a GDK_AVAILABLE_IN_*
+Any symbol that is not explicitly annotated using a `GDK_AVAILABLE_IN_*`
 macro is considered internal, and not exported in the shared library.
 
 Never export variables as public API, since this is cumbersome on some
@@ -622,11 +707,12 @@ should be declared in a private header file.
 Non-exported functions that are only needed in one source file
 should be declared static.
 
-+ Documentation
+### Documentation
 
 All public APIs must have gtk-doc comments. For functions, these should
 be placed in the source file, directly above the function.
 
+```c
   /* valid */
   /**
    * gtk_get_flow:
@@ -645,6 +731,7 @@ be placed in the source file, directly above the function.
     ...
 
   }
+```
 
 Doc comments for macros, function types, class structs, etc should be
 placed next to the definitions, typically in headers.
@@ -652,6 +739,7 @@ placed next to the definitions, typically in headers.
 Section introductions should be placed in the source file they describe,
 after the license header:
 
+```c
   /* valid */
   /**
    * SECTION:gtksizerequest
@@ -662,15 +750,19 @@ after the license header:
    * width-for-height) geometry management system.
    * ...
    */
+```
 
 To properly document a new function, macro, function type or struct,
-it needs to be listed in the gtk3-sections.txt file.
+it needs to be listed in the `sections.txt` file.
 
 To properly document a new class, it needs to be given its own section
-in gtk3-sections.txt, needs to be included in gtk-docs.sgml, and the
-get_type function needs to listed in gtk3.types.
+in the sections.txt, needs to be included in the `docs.xml` file, and the
+`get_type` function needs to listed in the `.types` file.
 
-+ Old code
+For more information on the documentation style and contribution guidelines,
+please [follow the corresponding contribution guide](./reference/README.md).
+
+### Old code
 
 New code that is being added to GTK should adhere to the style
 explained above. Existing GTK code does largely follow these

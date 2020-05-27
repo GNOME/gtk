@@ -30,9 +30,9 @@ gtk/gtkeventcontroller* @carlosg
 gtk/gtkgesture*.[ch]    @carlosg
 
 # GtkFileChooser
-gtk/gtkfilechooser*     @federico
-gtk/gtkfilesystem*      @federico
-gtk/gtkfilefilter*      @federico
+gtk/gtkfilechooser*     @federico @ebassi
+gtk/gtkfilesystem*      @federico @ebassi
+gtk/gtkfilefilter*      @federico @ebassi
 
 # GtkFontChooser
 gtk/gtkfontchooser*     @matthiasc
@@ -66,3 +66,7 @@ gtk/themes              @lapoc @jimmac
 
 # Inspector
 gtk/inspector           @otte @matthiasc
+
+# Layout managers
+gtk/gtklayout*          @ebassi
+gtk/gtkconstraint*      @ebassi
