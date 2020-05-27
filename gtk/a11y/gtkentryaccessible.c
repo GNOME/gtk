@@ -17,20 +17,22 @@
 
 #include "config.h"
 
+#include "gtkentryaccessible.h"
+
+#include "gtkcomboboxaccessible.h"
+
+#include "gtkentryprivate.h"
+#include "gtklabel.h"
+#include "gtkpango.h"
+#include "gtksearchentryprivate.h"
+#include "gtkstylecontextprivate.h"
+#include "gtktextprivate.h"
+#include "gtkwidgetprivate.h"
+
 #include "gdk/gdkeventsprivate.h"
 
 #include <glib/gi18n-lib.h>
 #include <string.h>
-#include <gtk/gtk.h>
-#include "gtkpango.h"
-#include "gtkentryaccessible.h"
-#include "gtkentryprivate.h"
-#include "gtksearchentryprivate.h"
-#include "gtkpasswordentry.h"
-#include "gtktextprivate.h"
-#include "gtkcomboboxaccessible.h"
-#include "gtkstylecontextprivate.h"
-#include "gtkwidgetprivate.h"
 
 #define GTK_TYPE_ENTRY_ICON_ACCESSIBLE      (gtk_entry_icon_accessible_get_type ())
 #define GTK_ENTRY_ICON_ACCESSIBLE(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ENTRY_ICON_ACCESSIBLE, GtkEntryIconAccessible))
@@ -458,11 +460,6 @@ gtk_entry_accessible_initialize (AtkObject *obj,
   /* Set up signal callbacks */
   g_signal_connect_after (widget, "insert-text", G_CALLBACK (insert_text_cb), NULL);
   g_signal_connect (widget, "delete-text", G_CALLBACK (delete_text_cb), NULL);
-
-  if (GTK_IS_PASSWORD_ENTRY (widget))
-    obj->role = ATK_ROLE_PASSWORD_TEXT;
-  else
-    obj->role = ATK_ROLE_TEXT;
 }
 
 static void
@@ -763,6 +760,8 @@ gtk_entry_accessible_init (GtkEntryAccessible *entry)
   entry->priv = gtk_entry_accessible_get_instance_private (entry);
   entry->priv->cursor_position = 0;
   entry->priv->selection_bound = 0;
+
+  ATK_OBJECT (entry)->role = ATK_ROLE_TEXT;
 }
 
 static GtkText *
