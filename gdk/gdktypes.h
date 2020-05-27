@@ -137,11 +137,7 @@ typedef struct _GdkVulkanContext      GdkVulkanContext;
  * @GDK_GRAVITY_STATIC: the reference point is at the top left corner of the
  *  surface itself, ignoring window manager decorations.
  *
- * Defines the reference point of a surface and the meaning of coordinates
- * passed to gtk_window_move(). See gtk_window_move() and the "implementation
- * notes" section of the
- * [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec)
- * specification for more details.
+ * Defines the reference point of a surface and is used in #GdkPopupLayout.
  */
 typedef enum
 {
