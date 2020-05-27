@@ -149,6 +149,7 @@ struct _GdkX11Display
   guint has_glx_multisample : 1;
   guint has_glx_visual_rating : 1;
   guint has_glx_create_es2_context : 1;
+  guint has_async_glx_swap_buffers : 1;
 
 #ifdef HAVE_XDAMAGE
   gint damage_event_base;
