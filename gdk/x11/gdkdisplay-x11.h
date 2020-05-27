@@ -149,6 +149,10 @@ struct _GdkX11Display
   guint has_glx_multisample : 1;
   guint has_glx_visual_rating : 1;
   guint has_glx_create_es2_context : 1;
+
+  gint damage_event_base;
+  gint damage_error_base;
+  guint have_damage;
 };
 
 struct _GdkX11DisplayClass
