@@ -1603,6 +1603,14 @@ gdk_x11_display_open (const gchar *display_name)
   }
 #endif
 
+#ifdef HAVE_XDAMAGE
+  display_x11->have_damage = FALSE;
+  if (XDamageQueryExtension (display_x11->xdisplay,
+                             &display_x11->damage_event_base,
+                             &display_x11->damage_error_base))
+    display_x11->have_damage = TRUE;
+#endif
+
   display->clipboard = gdk_x11_clipboard_new (display, "CLIPBOARD");
   display->primary_clipboard = gdk_x11_clipboard_new (display, "PRIMARY");
 
