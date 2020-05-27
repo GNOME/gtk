@@ -534,6 +534,7 @@ gtk_public_headers = files([
   'gtknotebook.h',
   'gtkorientable.h',
   'gtkoverlay.h',
+  'gtkoverlaylayout.h',
   'gtkpadcontroller.h',
   'gtkpagesetup.h',
   'gtkpaned.h',
