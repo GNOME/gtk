@@ -25,7 +25,7 @@ case "${backend}" in
   wayland)
     export XDG_RUNTIME_DIR="$(mktemp -p $(pwd) -d xdg-runtime-XXXXXX)"
 
-    weston --backend=headless-backend.so --socket=wayland-5 &
+    weston --backend=headless-backend.so --socket=wayland-5 --idle-time=0 &
     compositor=$!
     export WAYLAND_DISPLAY=wayland-5
 
