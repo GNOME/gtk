@@ -243,7 +243,6 @@ static void                 gtk_about_dialog_set_property   (GObject            
                                                              guint               prop_id,
                                                              const GValue       *value,
                                                              GParamSpec         *pspec);
-static void                 gtk_about_dialog_show           (GtkWidget          *widget);
 static void                 update_name_version             (GtkAboutDialog     *about);
 static void                 follow_if_link                  (GtkAboutDialog     *about,
                                                              GtkTextView        *text_view,
@@ -337,8 +336,6 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   object_class->get_property = gtk_about_dialog_get_property;
 
   object_class->finalize = gtk_about_dialog_finalize;
-
-  widget_class->show = gtk_about_dialog_show;
 
   klass->activate_link = gtk_about_dialog_activate_link;
 
@@ -1021,14 +1018,6 @@ update_website (GtkAboutDialog *about)
       else
         gtk_widget_hide (about->website_label);
     }
-}
-
-static void
-gtk_about_dialog_show (GtkWidget *widget)
-{
-  update_website (GTK_ABOUT_DIALOG (widget));
-
-  GTK_WIDGET_CLASS (gtk_about_dialog_parent_class)->show (widget);
 }
 
 /**
