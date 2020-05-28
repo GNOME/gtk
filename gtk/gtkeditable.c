@@ -31,7 +31,7 @@
  * text editing widgets, such as #GtkEntry and #GtkSpinButton. It contains functions
  * for generically manipulating an editable widget, a large number of action
  * signals used for key bindings, and several signals that an application can
- * connect to to modify the behavior of a widget.
+ * connect to modify the behavior of a widget.
  *
  * As an example of the latter usage, by connecting
  * the following handler to #GtkEditable::insert-text, an application

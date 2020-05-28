@@ -130,7 +130,7 @@ main (int argc, char **argv)
   gint result;
   const char *display, *x_r_d;
 
-  /* These must be set before before gtk_test_init */
+  /* These must be set before gtk_test_init */
   g_setenv ("GIO_USE_VFS", "local", TRUE);
   g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
 

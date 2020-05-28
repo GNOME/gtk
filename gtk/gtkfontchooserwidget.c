@@ -879,7 +879,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
   gtk_adjustment_set_upper (gtk_range_get_adjustment (GTK_RANGE (fontchooser->size_slider)),
 			    (gdouble)(G_MAXINT / PANGO_SCALE));
 
-  /* Setup treeview/model auxilary functions */
+  /* Setup treeview/model auxiliary functions */
   gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (fontchooser->filter_model),
                                           visible_func, (gpointer)fontchooser, NULL);
 

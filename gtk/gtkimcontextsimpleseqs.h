@@ -45,8 +45,8 @@
  * XFree86 4.0 using a set of Perl scripts. Contact Owen Taylor <otaylor@redhat.com>
  * to obtain the relevant perl scripts.
  *
- * The following compose letter letter sequences confliced
- *   Dstroke/dstroke and ETH/eth; resolved to Dstroke (Croation, Vietnamese, Lappish), over
+ * The following compose letter letter sequences conflicted
+ *   Dstroke/dstroke and ETH/eth; resolved to Dstroke (Croatian, Vietnamese, Lappish), over
  *                                ETH (Icelandic, Faroese, old English, IPA)  [ D- -D d- -d ]
  *   Amacron/amacron and ordfeminine; resolved to ordfeminine                 [ _A A_ a_ _a ]
  *   Amacron/amacron and Atilde/atilde; resolved to atilde                    [ -A A- a- -a ]

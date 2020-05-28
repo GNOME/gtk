@@ -36,7 +36,7 @@
  * derive from #GtkAccessible and implement the suitable interfaces
  * from ATK, such as #AtkText or #AtkSelection. To establish
  * the connection between the widget class and its corresponding
- * acccessible implementation, override the get_accessible vfunc
+ * accessible implementation, override the get_accessible vfunc
  * in #GtkWidgetClass.
  */
 

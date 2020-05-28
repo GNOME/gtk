@@ -112,7 +112,7 @@
  * The model implements the GtkTreeSortable interface.  To avoid re-sorting
  * every time a node gets added (which would lead to O(n^2) performance during
  * the initial population of the model), the model can freeze itself (with
- * freeze_updates()) during the intial population process.  When the model is
+ * freeze_updates()) during the initial population process.  When the model is
  * frozen, sorting will not happen.  The model will sort itself when the freeze
  * count goes back to zero, via corresponding calls to thaw_updates().
  */
@@ -220,7 +220,7 @@ static void remove_file (GtkFileSystemModel *model,
  * @user_data: the model
  * @user_data2: GUINT_TO_POINTER of array index of current entry
  *
- * All other fields are unused. Note that the array index does not corrspond
+ * All other fields are unused. Note that the array index does not correspond
  * 1:1 with the path index as entries might not be visible.
  */
 #define ITER_INDEX(iter) GPOINTER_TO_UINT((iter)->user_data2)
@@ -2129,7 +2129,7 @@ _gtk_file_system_model_clear_cache (GtkFileSystemModel *model,
  * @file: the file to add
  * @attributes: attributes to query before adding the file
  *
- * This is a conenience function that calls g_file_query_info_async() on 
+ * This is a convenience function that calls g_file_query_info_async() on 
  * the given file, and when successful, adds it to the model.
  * Upon failure, the @file is discarded.
  **/

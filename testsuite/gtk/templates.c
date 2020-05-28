@@ -435,7 +435,7 @@ test_print_unix_dialog_show (void)
 int
 main (int argc, char **argv)
 {
-  /* These must be set before before gtk_test_init */
+  /* These must be set before gtk_test_init */
   g_setenv ("GIO_USE_VFS", "local", TRUE);
   g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
 

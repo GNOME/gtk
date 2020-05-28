@@ -152,28 +152,28 @@
  *   a widget upon size-request reports the width and height that it finds
  *   to be best suited to display its contents, including children.
  *   the width and/or height reported from a widget upon size requisition
- *   may be overidden by the user by specifying a width and/or height
+ *   may be overridden by the user by specifying a width and/or height
  *   other than 0 through gtk_widget_set_size_request().
  *
  * a scrolled window needs (for implementing all three policy types) to
  * request its width and height based on two different rationales.
  * 1)   the user wants the scrolled window to just fit into the space
- *      that it gets allocated for a specifc dimension.
+ *      that it gets allocated for a specific dimension.
  * 1.1) this does not apply if the user specified a concrete value
  *      value for that specific dimension by either specifying usize for the
  *      scrolled window or for its child.
  * 2)   the user wants the scrolled window to take as much space up as
- *      is desired by the child for a specifc dimension (i.e. POLICY_NEVER).
+ *      is desired by the child for a specific dimension (i.e. POLICY_NEVER).
  *
  * also, kinda obvious:
- * 3)   a user would certainly not have choosen a scrolled window as a container
+ * 3)   a user would certainly not have chosen a scrolled window as a container
  *      for the child, if the resulting allocation takes up more space than the
  *      child would have allocated without the scrolled window.
  *
  * conclusions:
  * A) from 1) follows: the scrolled window shouldn’t request more space for a
- *    specifc dimension than is required at minimum.
- * B) from 1.1) follows: the requisition may be overidden by usize of the scrolled
+ *    specific dimension than is required at minimum.
+ * B) from 1.1) follows: the requisition may be overridden by usize of the scrolled
  *    window (done automatically) or by usize of the child (needs to be checked).
  * C) from 2) follows: for POLICY_NEVER, the scrolled window simply reports the
  *    child’s dimension.
@@ -1646,8 +1646,8 @@ gtk_scrolled_window_size_allocate (GtkWidget *widget,
                                                                  priv->vscrollbar);
 
           /* If, after the first iteration, the hscrollbar and the
-           * vscrollbar flip visiblity... or if one of the scrollbars flip
-           * on each itteration indefinitly/infinitely, then we just need both
+           * vscrollbar flip visibility... or if one of the scrollbars flip
+           * on each iteration indefinitely/infinitely, then we just need both
            * at this size.
            */
           if ((count &&

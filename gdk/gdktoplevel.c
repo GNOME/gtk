@@ -475,7 +475,7 @@ gdk_toplevel_supports_edge_constraints (GdkToplevel *toplevel)
  *
  * If granted, the rerouting remains active until the default shortcuts
  * processing is restored with gdk_toplevel_restore_system_shortcuts(),
- * or the request is revoked by the desktop enviroment, windowing system
+ * or the request is revoked by the desktop environment, windowing system
  * or the user.
  *
  * A typical use case for this API is remote desktop or virtual machine

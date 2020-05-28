@@ -60,7 +60,7 @@
  * # GtkStack as GtkBuildable
  *
  * To set child-specific properties in a .ui file, create GtkStackPage
- * objects explictly, and set the child widget as a property on it:
+ * objects explicitly, and set the child widget as a property on it:
  * |[
  *   <object class="GtkStack" id="stack">
  *     <child>

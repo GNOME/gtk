@@ -1987,7 +1987,7 @@ gdk_x11_lookup_xdisplay (Display *xdisplay)
 /**
  * _gdk_x11_display_screen_for_xrootwin:
  * @display: a #GdkDisplay
- * @xrootwin: window ID for one of of the screen’s of the display.
+ * @xrootwin: window ID for one of the screen’s of the display.
  * 
  * Given the root window ID of one of the screen’s of a #GdkDisplay,
  * finds the screen.

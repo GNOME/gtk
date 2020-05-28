@@ -202,7 +202,7 @@ static const PaperInfo standard_names[] = {
 };
 
 /* Some page sizes have multiple PPD names in use.
- * The array above only contails the prefered one,
+ * The array above only contains the preferred one,
  * and this array fills out with the duplicates.
  */
 const struct {

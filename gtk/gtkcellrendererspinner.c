@@ -374,7 +374,7 @@ gtk_paint_spinner (GtkStyleContext *context,
     {
       gint inset = 0.7 * radius;
 
-      /* transparency is a function of time and intial value */
+      /* transparency is a function of time and initial value */
       gdouble t = (gdouble) ((i + num_steps - real_step)
                              % num_steps) / num_steps;
 

@@ -84,7 +84,7 @@
  *   GDK will also offer "PNG" and CF_DIB W32 formats.
  * * If GTK+ application provides text/plain;charset=utf8, GDK will also offer
  *   CF_UNICODETEXT (UTF-16-encoded) and CF_TEXT (encoded with thread-
- *   and locale-depenant codepage), and will do the conversion when such
+ *   and locale-dependent codepage), and will do the conversion when such
  *   data is requested.
  * * If GTK+ application accepts image/png, image/gif or image/jpeg,
  *   GDK will claim to also accept "PNG", "GIF" or "JFIF" respectively,

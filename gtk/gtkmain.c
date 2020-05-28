@@ -941,7 +941,7 @@ gtk_is_initialized (void)
  * GTK sets the default text direction according to the locale
  * during gtk_init(), and you should normally use
  * gtk_widget_get_direction() or gtk_widget_get_default_direction()
- * to obtain the current direcion.
+ * to obtain the current direction.
  *
  * This function is only needed rare cases when the locale is
  * changed after GTK has already been initialized. In this case,

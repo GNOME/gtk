@@ -456,7 +456,7 @@ gsk_border_node_draw (GskRenderNode *node,
        * |                         |
        * |                         |
        * +-------------------------+
-       * That line is equidistant from all sides. It's either horiontal
+       * That line is equidistant from all sides. It's either horizontal
        * or vertical, depending on if the rect is wider or taller.
        * We use the 4 sides spanned up by connecting the line to the corner
        * points to color the regions of the rectangle differently.
@@ -908,7 +908,7 @@ draw_shadow_corner (cairo_t               *cr,
    *
    * The blur radius (which also defines the clip_radius)
    *
-   * The the horizontal and vertical corner radius
+   * The horizontal and vertical corner radius
    *
    * We apply the first position and orientation when drawing the
    * mask, so we cache rendered masks based on the blur radius and the

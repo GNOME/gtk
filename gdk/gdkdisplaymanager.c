@@ -219,7 +219,7 @@ static const gchar *allowed_backends;
  *
  * Sets a list of backends that GDK should try to use.
  *
- * This can be be useful if your application does not
+ * This can be useful if your application does not
  * work with certain GDK backends.
  *
  * By default, GDK tries all included backends.

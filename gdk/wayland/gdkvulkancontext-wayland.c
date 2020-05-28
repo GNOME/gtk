@@ -42,7 +42,7 @@ gdk_wayland_vulkan_context_create_surface (GdkVulkanContext *context,
 
   /* This is necessary so that Vulkan sees the Surface.
    * Usually, vkCreateXlibSurfaceKHR() will not cause a problem to happen as
-   * it just creates resources, but futher calls with the resulting surface
+   * it just creates resources, but further calls with the resulting surface
    * do cause issues.
    */
   gdk_display_sync (display);

@@ -107,10 +107,10 @@ typedef enum
  *
  * Whenever a container has some form of natural row it may align
  * children in that row along a common typographical baseline. If
- * the amount of verical space in the row is taller than the total
+ * the amount of vertical space in the row is taller than the total
  * requested height of the baseline-aligned children then it can use a
  * #GtkBaselinePosition to select where to put the baseline inside the
- * extra availible space.
+ * extra available space.
  */
 typedef enum
 {
@@ -126,7 +126,7 @@ typedef enum
  *   left/right of cursor if we’re in the middle of a word.
  * @GTK_DELETE_WORDS: Delete words.
  * @GTK_DELETE_DISPLAY_LINES: Delete display-lines. Display-lines
- *   refers to the visible lines, with respect to to the current line
+ *   refers to the visible lines, with respect to the current line
  *   breaks. As opposed to paragraphs, which are defined by line
  *   breaks in the input.
  * @GTK_DELETE_DISPLAY_LINE_ENDS: Delete only the portion of the

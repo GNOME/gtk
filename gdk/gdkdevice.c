@@ -641,7 +641,7 @@ gdk_device_get_surface_at_position (GdkDevice *device,
 /**
  * gdk_device_get_history: (skip)
  * @device: a #GdkDevice
- * @surface: the surface with respect to which which the event coordinates will be reported
+ * @surface: the surface with respect to which the event coordinates will be reported
  * @start: starting timestamp for range of events to return
  * @stop: ending timestamp for the range of events to return
  * @events: (array length=n_events) (out) (transfer full) (optional):

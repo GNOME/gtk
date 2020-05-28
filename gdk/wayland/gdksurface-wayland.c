@@ -1308,7 +1308,7 @@ gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
         geometry_mask &= ~GDK_HINT_RESIZE_INC;
       if (!saved_size)
         {
-          /* Do not reapply contrains if we are restoring original size */
+          /* Do not reapply constrains if we are restoring original size */
           gdk_surface_constrain_size (&impl->geometry_hints,
                                      geometry_mask,
                                      width + impl->margin_left + impl->margin_right,

@@ -1920,7 +1920,7 @@ gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
   pango_layout_get_extents (layout, NULL, &rect);
   text_width = rect.width;
 
-  /* Fetch the average size of a charachter */
+  /* Fetch the average size of a character */
   context = pango_layout_get_context (layout);
   metrics = pango_context_get_metrics (context,
                                        pango_context_get_font_description (context),

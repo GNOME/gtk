@@ -5708,7 +5708,7 @@ gtk_window_constrain_size (GtkWindow   *window,
 }
 
 /* For non-resizable windows, make sure the given width/height fits
- * in the geometry contrains and update the geometry hints to match
+ * in the geometry constrains and update the geometry hints to match
  * the given width/height if not.
  * This is to make sure that non-resizable windows get the default
  * width/height if set, but can still grow if their content requires.

@@ -97,7 +97,7 @@ may_be_stored_in_cache (GtkCssStyle *style)
   change = gtk_css_static_style_get_change (GTK_CSS_STATIC_STYLE (style));
 
   /* The cache is shared between all children of the parent, so if a
-   * style depends on a sibling it is not independant of the child.
+   * style depends on a sibling it is not independent of the child.
    */
   if (change & GTK_CSS_CHANGE_ANY_SIBLING)
     return FALSE;

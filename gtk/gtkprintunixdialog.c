@@ -803,7 +803,7 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 					   set_cell_sensitivity_func, NULL, NULL);
 
 
-  /* Paper size combo auxilary funcs */
+  /* Paper size combo auxiliary funcs */
   gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (dialog->paper_size_combo),
                                         paper_size_row_is_separator, NULL, NULL);
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (dialog->paper_size_combo),
