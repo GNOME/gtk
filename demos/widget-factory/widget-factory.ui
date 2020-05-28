@@ -2169,7 +2169,7 @@ microphone-sensitivity-medium-symbolic</property>
                             </child>
                             <child>
                               <object class="GtkButton" id="selection_dialog_button">
-                                <property name="label" translatable="yes">_Select</property>
+                                <property name="label" translatable="yes">S_elect</property>
                                 <property name="use-underline">1</property>
                               </object>
                             </child>
