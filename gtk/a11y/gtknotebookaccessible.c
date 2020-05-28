@@ -17,10 +17,12 @@
 
 #include "config.h"
 
-#include <string.h>
-#include <gtk/gtk.h>
-#include "gtknotebookaccessible.h"
+#include "gtknotebookaccessibleprivate.h"
+
 #include "gtknotebookpageaccessible.h"
+#include "gtknotebook.h"
+
+#include <string.h>
 
 struct _GtkNotebookAccessiblePrivate
 {
@@ -153,55 +155,41 @@ gtk_notebook_accessible_ref_child (AtkObject *obj,
   return child;
 }
 
-static void
-gtk_notebook_accessible_notify_gtk (GObject    *obj,
-                                    GParamSpec *pspec)
+void
+gtk_notebook_accessible_update_page (GtkNotebookAccessible *self,
+                                     int                    page_num)
 {
-  GtkWidget *widget;
-  AtkObject* atk_obj;
+  GtkNotebookAccessiblePrivate *priv = gtk_notebook_accessible_get_instance_private (self);
+  AtkObject *atk_obj = ATK_OBJECT (self);
+  int old_page_num = priv->selected_page;
 
-  widget = GTK_WIDGET (obj);
-  atk_obj = gtk_widget_get_accessible (widget);
+  priv->selected_page = page_num;
 
-  if (strcmp (pspec->name, "page") == 0)
+  /* Notify SELECTED state change for old and new page */
+  if (page_num != old_page_num)
     {
-      gint page_num, old_page_num;
-      GtkNotebookAccessible *accessible;
-      GtkNotebook *notebook;
+      AtkObject *child;
 
-      accessible = GTK_NOTEBOOK_ACCESSIBLE (atk_obj);
-      notebook = GTK_NOTEBOOK (widget);
-
-      /* Notify SELECTED state change for old and new page */
-      old_page_num = accessible->priv->selected_page;
-      page_num = gtk_notebook_get_current_page (notebook);
-      accessible->priv->selected_page = page_num;
-
-      if (page_num != old_page_num)
+      if (old_page_num != -1)
         {
-          AtkObject *child;
-
-          if (old_page_num != -1)
+          child = gtk_notebook_accessible_ref_child (atk_obj, old_page_num);
+          if (child != NULL)
             {
-              child = gtk_notebook_accessible_ref_child (atk_obj, old_page_num);
-              if (child)
-                {
-                  atk_object_notify_state_change (child, ATK_STATE_SELECTED, FALSE);
-                  g_object_unref (child);
-                }
-            }
-          child = gtk_notebook_accessible_ref_child (atk_obj, page_num);
-          if (child)
-            {
-              atk_object_notify_state_change (child, ATK_STATE_SELECTED, TRUE);
+              atk_object_notify_state_change (child, ATK_STATE_SELECTED, FALSE);
               g_object_unref (child);
             }
-          g_signal_emit_by_name (atk_obj, "selection-changed");
-          g_signal_emit_by_name (atk_obj, "visible-data-changed");
         }
+
+      child = gtk_notebook_accessible_ref_child (atk_obj, page_num);
+      if (child != NULL)
+        {
+          atk_object_notify_state_change (child, ATK_STATE_SELECTED, TRUE);
+          g_object_unref (child);
+        }
+
+      g_signal_emit_by_name (atk_obj, "selection-changed");
+      g_signal_emit_by_name (atk_obj, "visible-data-changed");
     }
-  else
-    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_notebook_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 /*
@@ -230,14 +218,11 @@ gtk_notebook_accessible_class_init (GtkNotebookAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
-  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
 
   gobject_class->finalize = gtk_notebook_accessible_finalize;
 
   class->ref_child = gtk_notebook_accessible_ref_child;
   class->initialize = gtk_notebook_accessible_initialize;
-
-  widget_class->notify_gtk = gtk_notebook_accessible_notify_gtk;
 }
 
 static void

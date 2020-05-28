@@ -55,7 +55,7 @@
 #include "gtkwidgetpaintable.h"
 #include "gtknative.h"
 
-#include "a11y/gtknotebookaccessible.h"
+#include "a11y/gtknotebookaccessibleprivate.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -5298,6 +5298,7 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
 {
   GList *list = gtk_notebook_find_child (notebook, GTK_WIDGET (child));
   GtkNotebookPage *page = GTK_NOTEBOOK_PAGE_FROM_LIST (list);
+  AtkObject *accessible;
   gboolean child_has_focus;
 
   if (notebook->cur_page == page || !gtk_widget_get_visible (GTK_WIDGET (child)))
@@ -5342,6 +5343,11 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
     }
 
   update_arrow_state (notebook);
+
+  accessible = _gtk_widget_peek_accessible (GTK_WIDGET (notebook));
+  if (accessible != NULL)
+    gtk_notebook_accessible_update_page (GTK_NOTEBOOK_ACCESSIBLE (accessible),
+                                         gtk_notebook_get_current_page (notebook));
 
   gtk_widget_queue_resize (GTK_WIDGET (notebook));
   gtk_widget_queue_resize (notebook->tabs_widget);
@@ -5904,8 +5910,6 @@ gtk_notebook_set_current_page (GtkNotebook *notebook,
   list = g_list_nth (notebook->children, page_num);
   if (list)
     gtk_notebook_switch_page (notebook, GTK_NOTEBOOK_PAGE_FROM_LIST (list));
-
-  g_object_notify_by_pspec (G_OBJECT (notebook), properties[PROP_PAGE]);
 }
 
 /**
