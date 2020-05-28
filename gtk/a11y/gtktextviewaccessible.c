@@ -68,31 +68,28 @@ G_DEFINE_TYPE_WITH_CODE (GtkTextViewAccessible, gtk_text_view_accessible, GTK_TY
 
 
 static void
+on_editable_changed (GObject    *gobject,
+                     GParamSpec *pspec,
+                     AtkObject  *accessible)
+{
+  GtkTextView *text_view = GTK_TEXT_VIEW (gobject);
+
+  atk_object_notify_state_change (accessible,
+                                  ATK_STATE_EDITABLE,
+                                  gtk_text_view_get_editable (text_view));
+}
+
+static void
 gtk_text_view_accessible_initialize (AtkObject *obj,
                                      gpointer   data)
 {
   ATK_OBJECT_CLASS (gtk_text_view_accessible_parent_class)->initialize (obj, data);
 
   obj->role = ATK_ROLE_TEXT;
-}
 
-static void
-gtk_text_view_accessible_notify_gtk (GObject    *obj,
-                                     GParamSpec *pspec)
-{
-  AtkObject *atk_obj;
-
-  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (obj));
-
-  if (!strcmp (pspec->name, "editable"))
-    {
-      gboolean editable;
-
-      editable = gtk_text_view_get_editable (GTK_TEXT_VIEW (obj));
-      atk_object_notify_state_change (atk_obj, ATK_STATE_EDITABLE, editable);
-    }
-  else
-    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_text_view_accessible_parent_class)->notify_gtk (obj, pspec);
+  g_signal_connect (data, "notify::editable",
+                    G_CALLBACK (on_editable_changed),
+                    obj);
 }
 
 static AtkStateSet*
@@ -167,15 +164,12 @@ gtk_text_view_accessible_class_init (GtkTextViewAccessibleClass *klass)
 {
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
   GtkAccessibleClass *accessible_class = GTK_ACCESSIBLE_CLASS (klass);
-  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
 
   accessible_class->widget_set = gtk_text_view_accessible_widget_set;
   accessible_class->widget_unset = gtk_text_view_accessible_widget_unset;
 
   class->ref_state_set = gtk_text_view_accessible_ref_state_set;
   class->initialize = gtk_text_view_accessible_initialize;
-
-  widget_class->notify_gtk = gtk_text_view_accessible_notify_gtk;
 }
 
 static void
