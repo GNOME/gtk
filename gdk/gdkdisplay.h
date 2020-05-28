@@ -124,6 +124,16 @@ gboolean       gdk_display_map_keycode (GdkDisplay    *display,
                                         int           *n_entries);
 
 GDK_AVAILABLE_IN_ALL
+gboolean       gdk_display_translate_key (GdkDisplay      *display,
+                                          guint            keycode,
+                                          GdkModifierType  state,
+                                          int              group,
+                                          guint           *keyval,
+                                          int             *effective_group,
+                                          int             *level,
+                                          GdkModifierType *consumed);
+
+GDK_AVAILABLE_IN_ALL
 gboolean     gdk_display_get_setting (GdkDisplay *display,
                                       const char *name,
                                       GValue     *value);
