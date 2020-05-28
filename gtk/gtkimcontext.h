@@ -106,7 +106,18 @@ void     gtk_im_context_get_preedit_string  (GtkIMContext       *context,
 					     gint               *cursor_pos);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_im_context_filter_keypress     (GtkIMContext       *context,
-					     GdkEvent           *event);
+                                             GdkEvent           *event);
+
+GDK_AVAILABLE_IN_ALL
+gboolean gtk_im_context_filter_key          (GtkIMContext       *context,
+                                             gboolean            press,
+                                             GdkSurface         *surface,
+                                             GdkDevice          *device,
+                                             guint32             time,
+                                             guint               keycode,
+                                             GdkModifierType     state,
+                                             int                 group);
+
 GDK_AVAILABLE_IN_ALL
 void     gtk_im_context_focus_in            (GtkIMContext       *context);
 GDK_AVAILABLE_IN_ALL

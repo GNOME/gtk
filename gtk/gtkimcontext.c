@@ -523,6 +523,102 @@ gtk_im_context_filter_keypress (GtkIMContext *context,
 }
 
 /**
+ * gtk_im_context_filter_key:
+ * @context: a #GtkIMContext
+ * @press: whether to forward a key press or release event
+ * @surface: the surface the event is for
+ * @device: the device that the event is for
+ * @time: the timestamp for the event
+ * @keycode: the keycode for the event
+ * @state: modifier state for the event
+ * @group: the active keyboard group for the event
+ *
+ * Allow an input method to forward key press and release events
+ * to another input method, without necessarily having a GdkEvent
+ * available.
+ *
+ * Returns: %TRUE if the input method handled the key event.
+ */
+gboolean
+gtk_im_context_filter_key (GtkIMContext    *context,
+                           gboolean         press,
+                           GdkSurface      *surface,
+                           GdkDevice       *device,
+                           guint32          time,
+                           guint            keycode,
+                           GdkModifierType  state,
+                           int              group)
+{
+  GdkDevice *source_device;
+  GdkTranslatedKey translated, no_lock;
+  GdkEvent *key;
+  gboolean ret;
+  guint keyval;
+  int layout;
+  int level;
+  GdkModifierType consumed;
+
+  g_return_val_if_fail (GTK_IS_IM_CONTEXT (context), FALSE);
+
+  if (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_MASTER)
+    {
+      source_device = NULL;
+    }
+  else
+    {
+      source_device = device;
+      device = gdk_device_get_associated_device (source_device);
+    }
+
+  if (!gdk_display_translate_key (gdk_surface_get_display (surface),
+                                  keycode,
+                                  state,
+                                  group,
+                                  &keyval,
+                                  &layout,
+                                  &level,
+                                  &consumed))
+    return FALSE;
+
+  translated.keyval = keyval;
+  translated.layout = layout;
+  translated.level = level;
+  translated.consumed = consumed;
+
+  if (!gdk_display_translate_key (gdk_surface_get_display (surface),
+                                  keycode,
+                                  state & ~GDK_LOCK_MASK,
+                                  group,
+                                  &keyval,
+                                  &layout,
+                                  &level,
+                                  &consumed))
+    return FALSE;
+
+  no_lock.keyval = keyval;
+  no_lock.layout = layout;
+  no_lock.level = level;
+  no_lock.consumed = consumed;
+
+  key = gdk_key_event_new (press ? GDK_KEY_PRESS : GDK_KEY_RELEASE,
+                           surface,
+                           device,
+                           source_device,
+                           time,
+                           keycode,
+                           state,
+                           FALSE, /* FIXME */
+                           &translated,
+                           &no_lock);
+
+  ret = GTK_IM_CONTEXT_GET_CLASS (context)->filter_keypress (context, key);
+
+  gdk_event_unref (key);
+
+  return ret;
+}
+
+/**
  * gtk_im_context_focus_in:
  * @context: a #GtkIMContext
  *
