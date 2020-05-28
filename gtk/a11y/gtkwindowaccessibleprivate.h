@@ -24,6 +24,7 @@ G_BEGIN_DECLS
 
 void            _gtk_window_accessible_set_is_active    (GtkWindow              *window,
                                                          gboolean                is_active);
+void            gtk_window_accessible_update_title      (GtkWindowAccessible    *self);
 
 G_END_DECLS
 

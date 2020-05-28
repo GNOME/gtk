@@ -60,20 +60,13 @@ gtk_window_accessible_focus_event (AtkObject *obj,
   atk_object_notify_state_change (obj, ATK_STATE_ACTIVE, focus_in);
 }
 
-static void
-gtk_window_accessible_notify_gtk (GObject    *obj,
-                                  GParamSpec *pspec)
+void
+gtk_window_accessible_update_title (GtkWindowAccessible *self)
 {
-  GtkWidget *widget = GTK_WIDGET (obj);
-  AtkObject* atk_obj = gtk_widget_get_accessible (widget);
+  AtkObject *atk_obj = ATK_OBJECT (self);
 
-  if (g_strcmp0 (pspec->name, "title") == 0)
-    {
-      g_object_notify (G_OBJECT (atk_obj), "accessible-name");
-      g_signal_emit_by_name (atk_obj, "visible-data-changed");
-    }
-  else
-    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_window_accessible_parent_class)->notify_gtk (obj, pspec);
+  g_object_notify (G_OBJECT (atk_obj), "accessible-name");
+  g_signal_emit_by_name (atk_obj, "visible-data-changed");
 }
 
 static const gchar *
@@ -247,10 +240,7 @@ gtk_window_accessible_ref_child (AtkObject *object,
 static void
 gtk_window_accessible_class_init (GtkWindowAccessibleClass *klass)
 {
-  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-
-  widget_class->notify_gtk = gtk_window_accessible_notify_gtk;
 
   class->get_name = gtk_window_accessible_get_name;
   class->get_index_in_parent = gtk_window_accessible_get_index_in_parent;

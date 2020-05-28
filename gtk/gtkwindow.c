@@ -1985,6 +1985,13 @@ gtk_window_set_title (GtkWindow   *window,
   if (_gtk_widget_get_realized (GTK_WIDGET (window)))
     gdk_toplevel_set_title (GDK_TOPLEVEL (priv->surface), new_title != NULL ? new_title : "");
 
+  {
+    AtkObject *accessible = _gtk_widget_peek_accessible (GTK_WIDGET (window));
+
+    if (accessible != NULL)
+      gtk_window_accessible_update_title (GTK_WINDOW_ACCESSIBLE (accessible));
+  }
+
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_TITLE]);
 }
 
