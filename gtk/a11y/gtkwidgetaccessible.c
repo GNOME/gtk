@@ -527,6 +527,41 @@ gtk_widget_accessible_get_attributes (AtkObject *obj)
   return attributes;
 }
 
+static int
+gtk_widget_accessible_get_n_children (AtkObject *object)
+{
+  GtkWidget *window;
+  GtkWidget *child;
+  int count = 0;
+
+  window = gtk_accessible_get_widget (GTK_ACCESSIBLE (object));
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (window));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    count++;
+
+  return count;
+}
+
+static AtkObject *
+gtk_widget_accessible_ref_child (AtkObject *object,
+                                 int        i)
+{
+  GtkWidget *window, *child;
+  int pos;
+
+  window = gtk_accessible_get_widget (GTK_ACCESSIBLE (object));
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (window)), pos = 0;
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child), pos++)
+    {
+      if (pos == i)
+        return g_object_ref (gtk_widget_get_accessible (child));
+    }
+
+  return NULL;
+}
+
 static void
 gtk_widget_accessible_class_init (GtkWidgetAccessibleClass *klass)
 {
@@ -541,6 +576,8 @@ gtk_widget_accessible_class_init (GtkWidgetAccessibleClass *klass)
   class->get_index_in_parent = gtk_widget_accessible_get_index_in_parent;
   class->initialize = gtk_widget_accessible_initialize;
   class->get_attributes = gtk_widget_accessible_get_attributes;
+  class->get_n_children = gtk_widget_accessible_get_n_children;
+  class->ref_child = gtk_widget_accessible_ref_child;
 }
 
 static void
