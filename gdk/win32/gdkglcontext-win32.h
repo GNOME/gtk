@@ -21,6 +21,10 @@
 #ifndef __GDK_WIN32_GL_CONTEXT__
 #define __GDK_WIN32_GL_CONTEXT__
 
+#include <gdk/gdkconfig.h>
+
+#ifdef GDK_WINDOWING_EPOXY
+
 #include <epoxy/gl.h>
 #include <epoxy/wgl.h>
 
@@ -90,5 +94,7 @@ void
 _gdk_win32_window_invalidate_egl_framebuffer (GdkWindow *window);
 
 G_END_DECLS
+
+#endif
 
 #endif /* __GDK_WIN32_GL_CONTEXT__ */

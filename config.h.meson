@@ -38,6 +38,9 @@
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #mesondefine HAVE_DLFCN_H
 
+/* defines whether we have epoxy */
+#mesondefine HAVE_EPOXY
+
 /* Define to 1 if you have the `exp2' function. */
 #mesondefine HAVE_EXP2
 

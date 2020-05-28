@@ -443,7 +443,8 @@ pangocairo_dep = dependency('pangocairo', version: cairo_req,
 pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
                             fallback : ['gdk-pixbuf', 'gdkpixbuf_dep'])
 epoxy_dep      = dependency('epoxy', version: epoxy_req,
-                            fallback: ['libepoxy', 'libepoxy_dep'])
+                            fallback: ['libepoxy', 'libepoxy_dep'],
+                            required: false)
 atk_dep        = dependency('atk', version: atk_req,
                             fallback : ['atk', 'libatk_dep'])
 
@@ -538,6 +539,7 @@ endif
 
 cairo_libs = []
 
+cdata.set('HAVE_EPOXY', epoxy_dep.found() ? 1 : false)
 cdata.set('HAVE_HARFBUZZ', harfbuzz_dep.found() ? 1 : false)
 cdata.set('HAVE_PANGOFT', pangoft_dep.found() ? 1 : false)
 
@@ -902,7 +904,7 @@ endif
 
 pkgconf.set('GDK_PRIVATE_PACKAGES',
             ' '.join(gio_packages + x11_pkgs + wayland_pkgs + cairo_backends +
-                     ['epoxy', epoxy_req] + cloudproviders_packages +
+                     (epoxy_dep.found() ? ['epoxy', epoxy_req] : []) + cloudproviders_packages +
                      ['fribidi', fribidi_req]))
 
 gtk_packages = ' '.join([
@@ -916,7 +918,10 @@ pkgconf.set('GTK_PACKAGES', gtk_packages)
 # Requires.private
 pc_gdk_extra_libs += cairo_libs
 
-gtk_private_packages = atk_pkgs + wayland_pkgs + ['epoxy', epoxy_req, 'fribidi', fribidi_req]
+gtk_private_packages = atk_pkgs + wayland_pkgs + ['fribidi', fribidi_req]
+if epoxy_dep.found()
+  gtk_private_packages += ['epoxy', epoxy_req]
+endif
 if wayland_enabled or x11_enabled
   gtk_private_packages += ['pangoft2']
 endif

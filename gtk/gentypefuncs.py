@@ -45,6 +45,10 @@ for f in funcs:
     file_output += '#ifdef GDK_WINDOWING_X11\n'
     file_output += '*tp++ = {0}();\n'.format(f)
     file_output += '#endif\n'
+  elif f.startswith('gdk_gl') or f.startswith('gtk_gl'):
+    file_output += '#ifdef GDK_WINDOWING_EPOXY\n'
+    file_output += '*tp++ = {0}();\n'.format(f)
+    file_output += '#endif\n'
   else:
     file_output += '*tp++ = {0}();\n'.format(f)
 

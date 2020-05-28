@@ -5,7 +5,6 @@ gtk_tests = [
   ['scrolling-performance', ['frame-stats.c', 'variable.c']],
   ['blur-performance', ['../gtk/gtkcairoblur.c']],
   ['flicker'],
-  ['gdkgears', ['gtkgears.c']],
   ['listmodel'],
   ['motion-compression'],
   ['styleexamples'],
@@ -54,7 +53,6 @@ gtk_tests = [
   ['testfullscreen'],
   ['testgeometry'],
   ['testgiconpixbuf'],
-  ['testglblending', ['gtkgears.c']],
   ['testgmenu'],
   ['testgrid'],
   ['testgrouping'],
@@ -139,6 +137,13 @@ endif
 
 if os_linux
   gtk_tests += [['testfontchooserdialog']]
+endif
+
+if epoxy_dep.found()
+  gtk_tests += [
+    ['gdkgears', ['gtkgears.c']],
+    ['testglblending', ['gtkgears.c']],
+  ]
 endif
 
 # Pass the source dir here so programs can change into the source directory

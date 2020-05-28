@@ -211,7 +211,6 @@ gtk_sources = files(
   'gtkgesturestylus.c',
   'gtkgestureswipe.c',
   'gtkgesturezoom.c',
-  'gtkglarea.c',
   'gtkgrid.c',
   'gtkheaderbar.c',
   'gtkhsla.c',
@@ -386,6 +385,12 @@ gtk_sources = files(
   'language-names.c',
   'script-names.c',
 )
+
+if epoxy_dep.found()
+  gtk_sources += files(
+    'gtkglarea.c',
+  )
+endif
 
 gtk_private_type_headers = files(
   'gtkcsstypesprivate.h',

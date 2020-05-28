@@ -45,7 +45,9 @@
 
 #include <math.h>
 
+#ifdef GDK_WINDOWING_EPOXY
 #include <epoxy/gl.h>
+#endif
 
 /* for the use of round() */
 #include "fallback-c89.c"
@@ -2842,6 +2844,7 @@ GdkGLContext *
 gdk_window_get_paint_gl_context (GdkWindow  *window,
                                  GError    **error)
 {
+#ifdef GDK_WINDOWING_EPOXY
   GError *internal_error = NULL;
 
   if (_gdk_gl_flags & GDK_GL_DISABLE)
@@ -2884,6 +2887,7 @@ gdk_window_get_paint_gl_context (GdkWindow  *window,
       g_clear_object (&(window->impl_window->gl_paint_context));
       return NULL;
     }
+#endif
 
   return window->impl_window->gl_paint_context;
 }
@@ -2964,6 +2968,7 @@ gdk_window_begin_paint_internal (GdkWindow            *window,
 
   window->current_paint.use_gl = window->impl_window->gl_paint_context != NULL;
 
+#ifdef GDK_WINDOWING_EPOXY
   if (window->current_paint.use_gl)
     {
       GdkGLContext *context;
@@ -2995,6 +3000,7 @@ gdk_window_begin_paint_internal (GdkWindow            *window,
           glViewport (0, 0, ww, wh);
         }
     }
+#endif
 
   if (needs_surface)
     {
@@ -3005,7 +3011,9 @@ gdk_window_begin_paint_internal (GdkWindow            *window,
       sx = sy = 1;
       cairo_surface_get_device_scale (window->current_paint.surface, &sx, &sy);
       cairo_surface_set_device_offset (window->current_paint.surface, -clip_box.x*sx, -clip_box.y*sy);
+#ifdef GDK_WINDOWING_EPOXY
       gdk_cairo_surface_mark_as_direct (window->current_paint.surface, window);
+#endif
 
       window->current_paint.surface_needs_composite = TRUE;
     }
@@ -3048,6 +3056,7 @@ gdk_window_end_paint_internal (GdkWindow *window)
 
       cairo_region_get_extents (window->current_paint.region, &clip_box);
 
+#ifdef GDK_WINDOWING_EPOXY
       if (window->current_paint.use_gl)
         {
           cairo_region_t *opaque_region = cairo_region_copy (window->current_paint.region);
@@ -3074,6 +3083,7 @@ gdk_window_end_paint_internal (GdkWindow *window)
                                     window->active_update_area);
         }
       else
+#endif
         {
           surface = gdk_window_ref_impl_surface (window);
           cr = cairo_create (surface);
@@ -5792,9 +5802,11 @@ gdk_window_withdraw (GdkWindow *window)
 	  _gdk_synthesize_crossing_events_for_geometry_change (window->parent);
 	}
 
+#ifdef GDK_WINDOWING_EPOXY
       current_context = gdk_gl_context_get_current ();
       if (current_context != NULL && gdk_gl_context_get_window (current_context) == window)
         gdk_gl_context_clear_current ();
+#endif
 
       recompute_visible_regions (window, FALSE);
       gdk_window_clear_old_updated_area (window);
