@@ -2388,7 +2388,7 @@ gtk_list_box_compute_expand (GtkWidget *widget,
   *hexpand_p = hexpand;
   *vexpand_p = vexpand;
 
-  /* We don't expand vertically beyound the minimum size */
+  /* We don't expand vertically beyond the minimum size */
   if (*vexpand_p)
     *vexpand_p = FALSE;
 }

@@ -105,7 +105,7 @@ On GDK-Win32:
 
 Any operations that require OpenClipboard()/CloseClipboard() combo (i.e.
 almost everything, except for WM_RENDERFORMAT handling) is offloaded into
-separate thread, which tries to to complete any operations in the queue.
+separate thread, which tries to complete any operations in the queue.
 Each operation routine usually starts with a timeout check (all operations
 time out after 30 seconds), then a check for clipboard status (to abort
 any operations that became obsolete due to clipboard status being changed - 

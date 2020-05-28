@@ -5800,7 +5800,7 @@ cups_printer_get_options (GtkPrinter           *printer,
 
 #ifdef HAVE_COLORD
   option = gtk_printer_option_new ("colord-profile",
-                                   /* TRANSLATORS: this this the ICC color profile to use for this job */
+                                   /* TRANSLATORS: this is the ICC color profile to use for this job */
                                    C_("printer option", "Printer Profile"),
                                    GTK_PRINTER_OPTION_TYPE_INFO);
 

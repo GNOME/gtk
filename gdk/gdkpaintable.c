@@ -465,7 +465,7 @@ gdk_paintable_compute_concrete_size (GdkPaintable *paintable,
   image_aspect = gdk_paintable_get_intrinsic_aspect_ratio (paintable);
 
   /* If the specified size has neither a definite width nor height,
-   * and has no additional contraints, the dimensions of the concrete
+   * and has no additional constraints, the dimensions of the concrete
    * object size are calculated as follows:
    */
   if (specified_width == 0.0 && specified_height == 0.0)

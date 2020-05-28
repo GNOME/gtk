@@ -86,7 +86,7 @@
  * been loaded yet, GTK+ tries to find the get_type() function from the
  * class name by applying heuristics. This works in most cases, but if
  * necessary, it is possible to specify the name of the get_type() function
- * explictly with the "type-func" attribute. As a special case, GtkBuilder
+ * explicitly with the "type-func" attribute. As a special case, GtkBuilder
  * allows to use an object that has been constructed by a #GtkUIManager in
  * another part of the UI definition by specifying the id of the #GtkUIManager
  * in the “constructor” attribute and the name of the object in the “id”

@@ -2710,8 +2710,8 @@ gtk_tree_view_column_get_sort_order      (GtkTreeViewColumn     *tree_column)
 /**
  * gtk_tree_view_column_cell_set_cell_data:
  * @tree_column: A #GtkTreeViewColumn.
- * @tree_model: The #GtkTreeModel to to get the cell renderers attributes from.
- * @iter: The #GtkTreeIter to to get the cell renderer’s attributes from.
+ * @tree_model: The #GtkTreeModel to get the cell renderers attributes from.
+ * @iter: The #GtkTreeIter to get the cell renderer’s attributes from.
  * @is_expander: %TRUE, if the row has children
  * @is_expanded: %TRUE, if the row has visible children
  * 

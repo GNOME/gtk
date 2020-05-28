@@ -36,7 +36,7 @@
  * displaying the list of fonts. In GTK+, the main objects
  * that implement this interface are #GtkFontChooserWidget,
  * #GtkFontChooserDialog and #GtkFontButton. The GtkFontChooser interface
- * has been introducted in GTK+ 3.2.
+ * has been introduced in GTK+ 3.2.
  */
 
 enum

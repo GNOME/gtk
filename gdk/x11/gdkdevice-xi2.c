@@ -230,7 +230,7 @@ gdk_x11_device_xi2_get_state (GdkDevice       *device,
                 {
                   gint root_x, root_y;
 
-                  /* FIXME: Maybe root coords chaching should happen here */
+                  /* FIXME: Maybe root coords caching should happen here */
                   gdk_surface_get_origin (surface, &root_x, &root_y);
                   _gdk_device_translate_screen_coord (device, surface,
                                                       root_x, root_y,

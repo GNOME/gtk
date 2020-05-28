@@ -150,7 +150,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton" id="favorite-buttton">
+                  <object class="GtkButton" id="favorite-button">
                     <property name="label" translatable="yes">Favorite</property>
                     <property name="receives-default">1</property>
                     <property name="has-frame">0</property>

@@ -622,7 +622,7 @@ gtk_map_list_model_set_model (GtkMapListModel *self,
  * gtk_map_list_model_get_model:
  * @self: a #GtkMapListModel
  *
- * Gets the model that is curently being mapped or %NULL if none.
+ * Gets the model that is currently being mapped or %NULL if none.
  *
  * Returns: (nullable) (transfer none): The model that gets mapped
  **/

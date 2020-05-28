@@ -600,7 +600,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                               gdk_surface_event_marshallerv);
 
   /**
-   * GdkSurface::enter-montor:
+   * GdkSurface::enter-monitor:
    * @surface: the #GdkSurface
    * @monitor: the monitor
    *
@@ -619,7 +619,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                   GDK_TYPE_MONITOR);
 
   /**
-   * GdkSurface::leave-montor:
+   * GdkSurface::leave-monitor:
    * @surface: the #GdkSurface
    * @monitor: the monitor
    *
@@ -2570,7 +2570,7 @@ gdk_surface_get_frame_clock (GdkSurface *surface)
  * gdk_surface_get_scale_factor:
  * @surface: surface to get scale factor for
  *
- * Returns the internal scale factor that maps from surface coordiantes
+ * Returns the internal scale factor that maps from surface coordinates
  * to the actual device pixels. On traditional systems this is 1, but
  * on very high density outputs this can be a higher value (often 2).
  *

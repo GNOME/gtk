@@ -169,7 +169,7 @@ GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_set_activate_on_single_click  (GtkTreeView               *tree_view,
 								    gboolean                   single);
 
-/* Column funtions */
+/* Column functions */
 GDK_AVAILABLE_IN_ALL
 gint                   gtk_tree_view_append_column                 (GtkTreeView               *tree_view,
 								    GtkTreeViewColumn         *column);

@@ -175,7 +175,7 @@ gdk_display_class_init (GdkDisplayClass *class)
   /**
    * GdkDisplay:composited:
    *
-   * %TRUE if the display properly composits the alpha channel.
+   * %TRUE if the display properly composites the alpha channel.
    * See gdk_display_is_composited() for details.
    */
   props[PROP_COMPOSITED] =

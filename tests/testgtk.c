@@ -4321,7 +4321,7 @@ paned_keyboard_window2 (GtkWidget *widget)
   GtkWidget *button10;
 
   window2 = gtk_window_new ();
-  gtk_window_set_title (GTK_WINDOW (window2), "\"button 10\" is not inside the horisontal pane");
+  gtk_window_set_title (GTK_WINDOW (window2), "\"button 10\" is not inside the horizontal pane");
 
   gtk_window_set_display (GTK_WINDOW (window2), 
 			  gtk_widget_get_display (widget));

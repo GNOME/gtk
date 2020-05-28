@@ -839,7 +839,7 @@ gtk_file_chooser_set_choice (GtkFileChooser  *chooser,
  *
  * Gets the currently selected option in the 'choice' with the given ID.
  *
- * Returns: the ID of the currenly selected option
+ * Returns: the ID of the currently selected option
  */
 const char *
 gtk_file_chooser_get_choice (GtkFileChooser  *chooser,

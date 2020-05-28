@@ -1644,7 +1644,7 @@ gtk_cell_renderer_get_preferred_size (GtkCellRenderer *cell,
  * @flags: render flags
  * @cell_area: cell area which would be passed to gtk_cell_renderer_render()
  * @aligned_area: (out): the return location for the space inside @cell_area
- *                that would acually be used to render.
+ *                that would actually be used to render.
  *
  * Gets the aligned area used by @cell inside @cell_area. Used for finding
  * the appropriate edit and focus rectangle.

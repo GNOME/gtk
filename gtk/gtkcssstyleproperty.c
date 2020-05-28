@@ -343,7 +343,7 @@ _gtk_css_style_property_get_id (GtkCssStyleProperty *property)
  * @property: the property
  *
  * Queries the initial value of the given @property. See the
- * [CSS Documentation](http://www.w3.org/TR/css3-cascade/#intial)
+ * [CSS Documentation](http://www.w3.org/TR/css3-cascade/#initial)
  * for an explanation of this concept.
  *
  * Returns: (transfer none): the initial value. The value will never change.

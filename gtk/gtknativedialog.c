@@ -234,7 +234,7 @@ gtk_native_dialog_class_init (GtkNativeDialogClass *class)
   /**
    * GtkNativeDialog:visible:
    *
-   * Whether the window is currenlty visible.
+   * Whether the window is currently visible.
    */
   native_props[PROP_VISIBLE] =
     g_param_spec_boolean ("visible",
