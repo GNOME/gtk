@@ -1725,3 +1725,54 @@ gdk_display_map_keycode (GdkDisplay    *display,
                                              keyvals,
                                              n_entries);
 }
+
+/**
+ * gdk_display_translate_key:
+ * @display: a #GdkDisplay
+ * @keycode: a keycode
+ * @state: a modifier state
+ * @group: active keyboard group
+ * @keyval: (out) (allow-none): return location for keyval, or %NULL
+ * @effective_group: (out) (allow-none): return location for effective
+ *     group, or %NULL
+ * @level: (out) (allow-none): return location for level, or %NULL
+ * @consumed_modifiers: (out) (allow-none): return location for modifiers
+ *     that were used to determine the group or level, or %NULL
+ *
+ * Translates the contents of a #GdkEventKey (ie @keycode, @state, and @group)
+ * into a keyval, effective group, and level. Modifiers that affected the
+ * translation and are thus unavailable for application use are returned in
+ * @consumed_modifiers.
+ *
+ * The @effective_group is the group that was actually used for the translation;
+ * some keys such as Enter are not affected by the active keyboard group.
+ * The @level is derived from @state.
+ *
+ * @consumed_modifiers gives modifiers that should be masked outfrom @state
+ * when comparing this key press to a keyboard shortcut. For instance, on a US
+ * keyboard, the `plus` symbol is shifted, so when comparing a key press to a
+ * `<Control>plus` accelerator `<Shift>` should be masked out.
+ *
+ * This function should rarely be needed, since #GdkEventKey already contains
+ * the translated keyval. It is exported for the benefit of virtualized test
+ * environments.
+ *
+ * Returns: %TRUE if there was a keyval bound to keycode/state/group.
+ */
+gboolean
+gdk_display_translate_key (GdkDisplay      *display,
+                           guint            keycode,
+                           GdkModifierType  state,
+                           int              group,
+                           guint           *keyval,
+                           int             *effective_group,
+                           int             *level,
+                           GdkModifierType *consumed)
+{
+  return gdk_keymap_translate_keyboard_state (gdk_display_get_keymap (display),
+                                              keycode, state, group,
+                                              keyval,
+                                              effective_group,
+                                              level,
+                                              consumed);
+}
