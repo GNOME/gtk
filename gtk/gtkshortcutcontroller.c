@@ -373,7 +373,8 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
   if (!shortcuts)
     return retval;
 
-  for (i = shortcuts->len - 1, p = shortcuts->len; i >= 0; i--)
+  p = shortcuts->len;
+  for (i = 0; i < shortcuts->len; i++)
     {
       const ShortcutData *data = &g_array_index (shortcuts, ShortcutData, i);
 
