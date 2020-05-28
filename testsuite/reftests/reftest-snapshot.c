@@ -206,14 +206,19 @@ reftest_inhibit_snapshot (void)
   inhibit_count++;
 }
 
-G_MODULE_EXPORT void
+G_MODULE_EXPORT gboolean
 reftest_uninhibit_snapshot (void)
 {
   g_assert (inhibit_count > 0);
   inhibit_count--;
 
   if (inhibit_count == 0)
-    g_idle_add (quit_when_idle, loop);
+    {
+      g_idle_add (quit_when_idle, loop);
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static void
@@ -225,6 +230,8 @@ draw_paintable (GdkPaintable *paintable,
   cairo_surface_t *surface;
   cairo_t *cr;
 
+  if (!reftest_uninhibit_snapshot ())
+    return;
 
   snapshot = gtk_snapshot_new ();
   gdk_paintable_snapshot (paintable,
@@ -248,7 +255,6 @@ draw_paintable (GdkPaintable *paintable,
   cairo_destroy (cr);
   gsk_render_node_unref (node);
 
-  reftest_uninhibit_snapshot ();
   g_signal_handlers_disconnect_by_func (paintable, draw_paintable, out_surface);
 
   *(cairo_surface_t **) out_surface = surface;
