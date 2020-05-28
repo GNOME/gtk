@@ -17,10 +17,10 @@
 
 #include "config.h"
 
-#include <glib/gi18n-lib.h>
-#include <gtk/gtk.h>
-#include "gtkcolorswatchprivate.h"
 #include "gtkcolorswatchaccessibleprivate.h"
+#include "gtkcolorswatchprivate.h"
+
+#include <glib/gi18n-lib.h>
 
 static void atk_action_interface_init (AtkActionIface *iface);
 
@@ -29,9 +29,9 @@ G_DEFINE_TYPE_WITH_CODE (GtkColorSwatchAccessible, _gtk_color_swatch_accessible,
 
 static void
 state_changed_cb (GtkWidget     *widget,
-                  GtkStateFlags  previous_flags)
+                  GtkStateFlags  previous_flags,
+                  AtkObject     *accessible)
 {
-  AtkObject *accessible;
   GtkStateFlags flags;
   gboolean was_selected;
   gboolean selected;
@@ -41,7 +41,6 @@ state_changed_cb (GtkWidget     *widget,
   was_selected = (previous_flags & GTK_STATE_FLAG_SELECTED) != 0;
   selected = (flags & GTK_STATE_FLAG_SELECTED) != 0;
 
-  accessible = gtk_widget_get_accessible (widget);
   if (selected && !was_selected)
     atk_object_notify_state_change (accessible, ATK_STATE_CHECKED, TRUE);
   else if (!selected && was_selected)
@@ -49,15 +48,39 @@ state_changed_cb (GtkWidget     *widget,
 }
 
 static void
+on_selectable_changed_cb (GObject    *gobject,
+                          GParamSpec *pspec,
+                          AtkObject  *accessible)
+{
+  GtkColorSwatch *swatch = GTK_COLOR_SWATCH (gobject);
+  AtkRole role;
+
+  if (gtk_color_swatch_get_selectable (swatch))
+    role = ATK_ROLE_RADIO_BUTTON;
+  else
+    role = ATK_ROLE_PUSH_BUTTON;
+
+  atk_object_set_role (accessible, role);
+}
+
+static void
 gtk_color_swatch_accessible_initialize (AtkObject *obj,
                                         gpointer   data)
 {
+  GtkColorSwatch *swatch = data;
+
   ATK_OBJECT_CLASS (_gtk_color_swatch_accessible_parent_class)->initialize (obj, data);
 
   g_signal_connect (data, "state-flags-changed",
-                    G_CALLBACK (state_changed_cb), NULL);
+                    G_CALLBACK (state_changed_cb),
+                    obj);
+  g_signal_connect (data, "notify::selectable",
+                    G_CALLBACK (on_selectable_changed_cb),
+                    obj);
 
-  atk_object_set_role (obj, ATK_ROLE_RADIO_BUTTON);
+  obj->role = gtk_color_swatch_get_selectable (swatch)
+            ? ATK_ROLE_RADIO_BUTTON
+            : ATK_ROLE_PUSH_BUTTON;
 }
 
 static AtkStateSet *
@@ -79,38 +102,18 @@ gtk_color_swatch_accessible_ref_state_set (AtkObject *accessible)
 }
 
 static void
-gtk_color_swatch_accessible_notify_gtk (GObject    *obj,
-                                        GParamSpec *pspec)
-{
-  GtkWidget *widget = GTK_WIDGET (obj);
-  AtkObject *atk_obj = gtk_widget_get_accessible (widget);
-
-  if (strcmp (pspec->name, "selectable") == 0)
-    {
-      if (gtk_color_swatch_get_selectable (GTK_COLOR_SWATCH (widget)))
-        atk_object_set_role (atk_obj, ATK_ROLE_RADIO_BUTTON);
-      else
-        atk_object_set_role (atk_obj, ATK_ROLE_PUSH_BUTTON);
-    }
-  else
-    GTK_WIDGET_ACCESSIBLE_CLASS (_gtk_color_swatch_accessible_parent_class)->notify_gtk (obj, pspec);
-}
-
-static void
 _gtk_color_swatch_accessible_class_init (GtkColorSwatchAccessibleClass *klass)
 {
   AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
-  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass *)klass;
 
   atk_class->initialize = gtk_color_swatch_accessible_initialize;
   atk_class->ref_state_set = gtk_color_swatch_accessible_ref_state_set;
-
-  widget_class->notify_gtk = gtk_color_swatch_accessible_notify_gtk;
 }
 
 static void
-_gtk_color_swatch_accessible_init (GtkColorSwatchAccessible *scale)
+_gtk_color_swatch_accessible_init (GtkColorSwatchAccessible *self)
 {
+  ATK_OBJECT (self)->role = ATK_ROLE_RADIO_BUTTON;
 }
 
 static gint
