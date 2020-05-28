@@ -235,6 +235,12 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle)
           g_source_set_name_by_id (priv->flush_idle_id, "[gtk] gdk_frame_clock_flush_idle");
         }
 
+      /* If we've already painted the frame, then we should finish up this tick as quickly
+       * as possible
+       */
+      if (priv->phase > GDK_FRAME_CLOCK_PHASE_PAINT)
+        min_interval = 0;
+
       if (!priv->in_paint_idle &&
 	  priv->paint_idle_id == 0 && RUN_PAINT_IDLE (priv))
         {
