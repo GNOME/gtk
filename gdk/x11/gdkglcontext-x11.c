@@ -825,7 +825,10 @@ gdk_x11_gl_context_dispose (GObject *gobject)
   GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (gobject);
   GdkGLContext *context = GDK_GL_CONTEXT (gobject);
   GdkDisplay *display = gdk_gl_context_get_display (context);
-  Display *dpy = gdk_x11_display_get_xdisplay (display);
+  Display *dpy = NULL;
+
+  if (display != NULL)
+    dpy = gdk_x11_display_get_xdisplay (display);
 
   if (context_x11->glx_context != NULL)
     {
