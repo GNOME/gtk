@@ -155,7 +155,7 @@ struct _GtkCellArea
  *     cell to cell inside the #GtkCellArea. The #GtkCellArea should move
  *     focus from cell to cell inside the area and return %FALSE if focus
  *     logically leaves the area with the following exceptions: When the
- *     area contains no activatable cells, the entire area recieves focus.
+ *     area contains no activatable cells, the entire area receives focus.
  *     Focus should not be given to cells that are actually “focus siblings”
  *     of other sibling cells (see gtk_cell_area_get_focus_from_sibling()).
  *     Focus is set by calling gtk_cell_area_set_focus_cell().
@@ -509,7 +509,7 @@ void                  gtk_cell_area_request_renderer               (GtkCellArea 
  * object is passed to the user function in gtk_cell_layout_set_cell_data_func.
  *
  * This private api takes gpointer & GFunc arguments to circumvent circular header file
- * dependancies.
+ * dependencies.
  */
 void                 _gtk_cell_area_set_cell_data_func_with_proxy  (GtkCellArea           *area,
 								    GtkCellRenderer       *cell,

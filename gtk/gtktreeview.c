@@ -7429,7 +7429,7 @@ gtk_tree_view_drag_data_received (GObject      *source,
       gtk_tree_path_get_indices (dest_row)[0] == 0 &&
       gtk_tree_model_iter_n_children (tree_view->model, NULL) != 0)
     {
-      /* special special case drag to "0", scroll to first item */
+      /* special case drag to "0", scroll to first item */
       if (!tree_view->scroll_to_path)
         gtk_tree_view_scroll_to_cell (tree_view, dest_row, NULL, FALSE, 0.0, 0.0);
     }
@@ -11328,7 +11328,7 @@ gtk_tree_view_expand_to_path (GtkTreeView *tree_view,
 }
 
 /* FIXME the bool return values for expand_row and collapse_row are
- * not analagous; they should be TRUE if the row had children and
+ * not analogous; they should be TRUE if the row had children and
  * was not already in the requested state.
  */
 
@@ -12271,7 +12271,7 @@ gtk_tree_view_get_row_y_offset (GtkTreeView   *tree_view,
  * gtk_tree_view_get_background_area:
  * @tree_view: a #GtkTreeView
  * @path: (allow-none): a #GtkTreePath for the row, or %NULL to get only horizontal coordinates
- * @column: (allow-none): a #GtkTreeViewColumn for the column, or %NULL to get only vertical coordiantes
+ * @column: (allow-none): a #GtkTreeViewColumn for the column, or %NULL to get only vertical coordinates
  * @rect: (out): rectangle to fill with cell background rect
  *
  * Fills the bounding rectangle in bin_window coordinates for the cell at the
@@ -14440,7 +14440,7 @@ gtk_tree_view_set_tooltip_cell (GtkTreeView       *tree_view,
        * we can correctly account for the indentation.  This also means
        * that the tooltip is constrained vertically by the "Determine y
        * values" code below; this is not a real problem since cells actually
-       * don't stretch vertically in constrast to columns.
+       * don't stretch vertically in contrast to columns.
        */
       gtk_tree_view_get_cell_area (tree_view, path, column, &tmp);
       gtk_tree_view_column_cell_get_position (column, cell, &start, &width);

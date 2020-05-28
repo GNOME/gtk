@@ -1109,7 +1109,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    *
    * The default bindings for this signal come in two variants,
    * the variant with the Shift modifier extends the selection,
-   * the variant without the Shift modifer does not.
+   * the variant without the Shift modifier does not.
    * There are too many key combinations to list them all here.
    * - Arrow keys move by individual characters/lines
    * - Ctrl-arrow key combinations move by words/paragraphs
@@ -1220,7 +1220,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * The default bindings for this signal are
    * Delete for deleting a character, Ctrl-Delete for 
    * deleting a word and Ctrl-Backspace for deleting a word 
-   * backwords.
+   * backwards.
    */
   signals[DELETE_FROM_CURSOR] =
     g_signal_new (I_("delete-from-cursor"),

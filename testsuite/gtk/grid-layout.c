@@ -534,7 +534,7 @@ test_homogeneous (void)
  * +-----------------+
  *
  * This is a layout that we also reproduce with
- * constraints, for comparison. Among the contraints:
+ * constraints, for comparison. Among the constraints:
  * - child1.width == child2.width
  * - child1.height == child2.height == child3.height
  */

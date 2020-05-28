@@ -4134,7 +4134,7 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
  *     @target's coordinate system
  *
  * Translates the given @point in @widget's coordinates to coordinates
- * relative to @target’s coodinate system. In order to perform this
+ * relative to @target’s coordinate system. In order to perform this
  * operation, both widgets must share a common root.
  *
  * Returns: %TRUE if the point could be determined, %FALSE on failure.

@@ -555,11 +555,11 @@ gtk_icon_theme_ref_release (GtkIconThemeRef *ref)
 {
   GtkIconTheme *theme;
 
-  /* Get a pointer to the theme, becuse when we unlock it could become NULLed by dispose, this pointer still owns a ref */
+  /* Get a pointer to the theme, because when we unlock it could become NULLed by dispose, this pointer still owns a ref */
   theme = ref->theme;
   g_mutex_unlock (&ref->lock);
 
-  /* Then unref outside the lock, because otherwis if this is the last ref the dispose handler would deadlock trying to NULL ref->theme */
+  /* Then unref outside the lock, because otherwise if this is the last ref the dispose handler would deadlock trying to NULL ref->theme */
   if (theme)
     g_object_unref (theme);
 
@@ -3585,7 +3585,7 @@ gtk_icon_paintable_class_init (GtkIconPaintableClass *klass)
   g_object_class_install_property (gobject_class, PROP_ICON_NAME,
                                    g_param_spec_string ("icon-name",
                                                         P_("Icon name"),
-                                                        P_("The icon name choosen during lookup"),
+                                                        P_("The icon name chosen during lookup"),
                                                         NULL,
                                                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_BLURB | G_PARAM_STATIC_NICK));
   /**

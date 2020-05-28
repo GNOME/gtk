@@ -585,7 +585,7 @@ gdk_x11_clipboard_store_async (GdkClipboard        *clipboard,
   gsize n_atoms;
   int error;
 
-  /* clipboard managers don't work on anythig but the clipbpoard selection */
+  /* clipboard managers don't work on anything but the clipbpoard selection */
   if (!g_str_equal (cb->selection, "CLIPBOARD"))
     {
       GDK_DISPLAY_NOTE (display, CLIPBOARD, g_printerr ("%s: can only store on CLIPBOARD\n", cb->selection));

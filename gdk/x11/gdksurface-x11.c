@@ -2257,7 +2257,7 @@ utf8_is_latin1 (const gchar *str)
 }
 
 /* Set the property to @utf8_str as STRING if the @utf8_str is fully
- * convertable to STRING, otherwise, set it as compound text
+ * convertible to STRING, otherwise, set it as compound text
  */
 static void
 set_text_property (GdkDisplay  *display,
@@ -3155,7 +3155,7 @@ gdk_x11_surface_apply_fullscreen_mode (GdkSurface *surface)
 	  /* FIXME: This is not part of the EWMH spec!
 	   *
 	   * There is no documented mechanism to remove the property
-	   * _NET_WM_FULLSCREEN_MONITORS once set, so we use use a set of
+	   * _NET_WM_FULLSCREEN_MONITORS once set, so we use a set of
 	   * invalid, largest possible value.
 	   *
 	   * When given values larger than actual possible monitor values, most

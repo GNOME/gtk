@@ -197,7 +197,7 @@ gtk_gears_class_init (GtkGearsClass *klass)
  * @param v the vertex to fill
  * @param x the x coordinate
  * @param y the y coordinate
- * @param z the z coortinate
+ * @param z the z coordinate
  * @param n pointer to the normal table
  *
  * @return the operation error code

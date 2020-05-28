@@ -218,7 +218,7 @@ gtk_nuclear_media_stream_seek (GtkMediaStream *stream,
   gtk_media_stream_seek_success (stream);
 
   /* We also have to update our timestamp and tell the
-   * paintable interface abbout the seek
+   * paintable interface about the seek
    */
   gtk_media_stream_update (stream, nuclear->progress);
   gdk_paintable_invalidate_contents (GDK_PAINTABLE (nuclear));
@@ -263,7 +263,7 @@ gtk_nuclear_media_stream_init (GtkNuclearMediaStream *nuclear)
   /* This time, we don't have to add a timer here, because media
    * streams start paused.
    *
-   * However, media streams need to tell GTK once they are intialized,
+   * However, media streams need to tell GTK once they are initialized,
    * so we do that here.
    */
   gtk_media_stream_prepared (GTK_MEDIA_STREAM (nuclear),

@@ -198,7 +198,7 @@ Checks whether the widget is set to be visible or not.
 
 ### Actions
 
- - Actions are new in GTK 4, and gtk-doc had to learn a a new syntax
+ - Actions are new in GTK 4, and gtk-doc had to learn a new syntax
    to document them:
 
 ```

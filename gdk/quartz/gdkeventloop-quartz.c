@@ -59,7 +59,7 @@ static int current_loop_level = 0;
 static int acquired_loop_level = -1;
 
 /* Between run_loop_before_waiting() and run_loop_after_waiting();
- * whether we we need to call select_thread_collect_poll()
+ * whether we need to call select_thread_collect_poll()
  */
 static gboolean run_loop_polling_async = FALSE;
 
@@ -95,7 +95,7 @@ static GPollFD event_poll_fd;
 
 /* Current NSEvents that we've gotten from Cocoa but haven't yet converted
  * to GdkEvents. We wait until our dispatch() function to do the conversion
- * since the conversion can conceivably cause signals to be emmitted
+ * since the conversion can conceivably cause signals to be emitted
  * or other things that shouldn’t happen inside a poll function.
  */
 static GQueue *current_events;
@@ -132,7 +132,7 @@ static gint getting_events = 0;
  ************************************************************/
 
 /* The states in our state machine, see comments in select_thread_func()
- * for descriptiions of each state
+ * for descriptions of each state
  */
 typedef enum {
   BEFORE_START,
@@ -235,7 +235,7 @@ select_thread_func (void *arg)
 	case WAITING:
 	  /* Waiting for a set of file descriptors to be submitted by the main thread
 	   *
-	   *  => POLLING_QUEUED: main thread thread submits a set of file descriptors
+	   *  => POLLING_QUEUED: main thread submits a set of file descriptors
 	   */ 
 	  SELECT_THREAD_WAIT ();
 	  break;

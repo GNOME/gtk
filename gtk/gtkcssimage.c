@@ -388,7 +388,7 @@ _gtk_css_image_get_concrete_size (GtkCssImage *image,
   image_aspect = _gtk_css_image_get_aspect_ratio (image);
 
   /* If the specified size has neither a definite width nor height,
-   * and has no additional contraints, the dimensions of the concrete
+   * and has no additional constraints, the dimensions of the concrete
    * object size are calculated as follows:
    */
   if (specified_width == 0.0 && specified_height == 0.0)

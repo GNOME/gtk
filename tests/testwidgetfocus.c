@@ -168,7 +168,7 @@ gtk_focus_widget_snapshot (GtkWidget *widget, GtkSnapshot *snapshot)
       gtk_widget_get_allocation (widget, &alloc);
 
       /* Since event coordinates and drawing is supposed to happen in the
-       * same coodinates space, this should all work out just fine. */
+       * same coordinates space, this should all work out just fine. */
       bounds.origin.x = self->mouse_x;
       bounds.origin.y = -30;
       bounds.size.width = 1;

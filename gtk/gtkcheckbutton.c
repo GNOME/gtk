@@ -322,7 +322,7 @@ gtk_check_button_get_indicator_node (GtkCheckButton *check_button)
  * @draw_indicator: Whether or not to draw the indicator part of the button
  *
  * Sets whether the indicator part of the button is drawn. This is important for
- * cases where the check button should have the functinality of a check button,
+ * cases where the check button should have the functionality of a check button,
  * but the visuals of a regular button, like in a #GtkStackSwitcher.
  */
 void

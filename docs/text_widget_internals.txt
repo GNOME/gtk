@@ -120,7 +120,7 @@ The segment class also contains two data fields:
    has right gravity, because as you type new text is inserted, 
    and the cursor ends up on the right.
 
-The segment itself contains contains a header, plus some
+The segment itself contains a header, plus some
 variable-length data that depends on the type of the segment. 
 The header contains the length of the segment in characters and in
 bytes. Some segments have a length of zero. Segments with nonzero

@@ -4886,7 +4886,7 @@ gtk_places_sidebar_list_shortcuts (GtkPlacesSidebar *sidebar)
  *
  * This function queries the bookmarks added by the user to the places sidebar,
  * and returns one of them.  This function is used by #GtkFileChooser to implement
- * the “Alt-1”, “Alt-2”, etc. shortcuts, which activate the cooresponding bookmark.
+ * the “Alt-1”, “Alt-2”, etc. shortcuts, which activate the corresponding bookmark.
  *
  * Returns: (nullable) (transfer full): The bookmark specified by the index @n, or
  * %NULL if no such index exist.  Note that the indices start at 0, even though

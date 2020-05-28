@@ -271,7 +271,7 @@ activate_about (GSimpleAction *action,
                           gtk_get_major_version (),
                           gtk_get_minor_version (),
                           gtk_get_micro_version ());
-  g_string_append_printf (s, "\nA link can apppear here: <http://www.gtk.org>");
+  g_string_append_printf (s, "\nA link can appear here: <http://www.gtk.org>");
 
   version = g_strdup_printf ("%s\nRunning against GTK %d.%d.%d",
                              PACKAGE_VERSION,
