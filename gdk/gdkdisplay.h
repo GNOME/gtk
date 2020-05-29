@@ -101,6 +101,10 @@ GdkMonitor * gdk_display_get_monitor_at_surface (GdkDisplay *display,
                                                 GdkSurface  *surface);
 
 GDK_AVAILABLE_IN_ALL
+void      gdk_display_put_event  (GdkDisplay     *display,
+                                  GdkEvent       *event);
+
+GDK_AVAILABLE_IN_ALL
 gboolean       gdk_display_map_keyval  (GdkDisplay    *display,
                                         guint          keyval,
                                         GdkKeymapKey **keys,

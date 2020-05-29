@@ -246,8 +246,6 @@ void                gdk_display_setting_changed       (GdkDisplay       *display
 
 GdkEvent *          gdk_display_get_event             (GdkDisplay       *display);
 GdkEvent *          gdk_display_peek_event            (GdkDisplay       *display);
-void                gdk_display_put_event             (GdkDisplay       *display,
-                                                       GdkEvent         *event);
 gboolean            gdk_display_has_pending           (GdkDisplay       *display);
 
 
