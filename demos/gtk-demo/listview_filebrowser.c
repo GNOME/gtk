@@ -1,7 +1,8 @@
 /* Lists/File browser
  *
  * This demo shows off the different layouts that are quickly achievable
- * with GtkGridView by implementing a file browser with different views.
+ * with GtkListview and GtkGridView by implementing a file browser with
+ * different views.
  */
 
 #include <glib/gi18n.h>

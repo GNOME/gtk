@@ -450,6 +450,8 @@ do_listview_clocks (GtkWidget *do_widget)
 
       /* This is the normal window setup code every demo does */
       window = gtk_window_new ();
+      gtk_window_set_title (GTK_WINDOW (window), "Clocks");
+      gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *) &window);
