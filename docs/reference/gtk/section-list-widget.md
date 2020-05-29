@@ -1,8 +1,8 @@
-# List widgets
+# List Widget Overview {#ListWidget}
 
 GTK provides powerful widgets to display and edit lists of data. This document gives an overview over the concepts and how they work together to allow developers to implement lists.
 
-Lists are intended to be used whenever developers want to display lists of objects in roughly the same way.  
+Lists are intended to be used whenever developers want to display lists of objects in roughly the same way.
 
 Lists are perfectly fine to be used for very short list of only 2 or 3 elements, but generally scale fine to millions of items. Of course, the larger the list grows, the more care needs to be taken to choose the right data structures to keep things running well.
 
@@ -26,7 +26,7 @@ The same model can be used in multiple different views and wrapped with multiple
 
 The elements in a model are called **_items_**. All items are #GObjects.
 
-Every item in a model has a **_position_** which is the unsigned integer that describes where in the model the item is located. This position can of course change as items are added or removed from the model.  
+Every item in a model has a **_position_** which is the unsigned integer that describes where in the model the item is located. This position can of course change as items are added or removed from the model.
 
 It is important to be aware of the difference between items and positions because the mapping from position to item is not permanent, so developers should think about whether they want to track items or positions when working with models. Oftentimes some things are really hard to do one way but very easy the other way.
 
@@ -36,7 +36,9 @@ The way factories do this is by creating a **_listitem_** for each item that is 
 
 Different factory implementations use various different methods to allow developers to add the right widgets to listitems and to link those widgets with the item managed by the listitem. Finding a suitable factory implementation for the data displayed, the programming language and development environment is an important task that can simplify setting up the view tremendously.
 
-Views support selections via a **_selection model_**. A selection model is an implementation of the #GtkSelectionModel interface on top of the #GListModel interface that allows marking each item in a model as either selected or not selected. Just like regular models, this can be implemented either by implementing #GtkSelectionModel directly or by wrapping a model with one of the GTK models provided for this purposes, such as #GtkNoSelection or #GtkSingleSelection. The behavior of selection models - ie which items they allow selecting and what effect this has on other items - is completely up to the selection model. As such, single-selections, multi-selections or sharing selection state between different selection models and/or views is possible. The selection state of an item is exposed in the listitem via the GtkListItem:selected property.
+Views support selections via a **_selection model_**. A selection model is an implementation of the #GtkSelectionModel interface on top of the #GListModel interface that allows marking each item in a model as either selected or not selected. Just like regular models, this can be implemented either by implementing #GtkSelectionModel directly or by wrapping a model with one of the GTK models provided for this purposes, such as #GtkNoSelection or #GtkSingleSelection.
+The behavior of selection models - ie which items they allow selecting and what effect this has on other items - is completely up to the selection model. As such, single-selections, multi-selections or sharing selection state between different selection models and/or views is possible.
+The selection state of an item is exposed in the listitem via the GtkListItem:selected property.
 
 Views and listitems also support activation. Activation means that double clicking or pressing enter while inside a focused row will cause the view to emit and activation signal such as GtkListView::activate. This provides an easy way to set up lists, but can also be turned off on listitems if undesired.
 
@@ -64,13 +66,14 @@ Developers should refer to those objects' API reference for more discussion on t
 
 ## comparison to GtkTreeView
 
-Developers familiar with #GtkTreeView may wonder how this way of doing lists compares to the way they know. This section will try to outline the similarities and differences between the two.  
+Developers familiar with #GtkTreeView may wonder how this way of doing lists compares to the way they know. This section will try to outline the similarities and differences between the two.
 
 This new approach tries to provide roughly the same functionality as the old approach but often uses a very different approach to achieve these goals.
 
 The main difference and one of the primary reasons for this new development is that items can be displayed using regular widgets and #GtkCellRenderer is no longer necessary. This allows all benefits that widgets provide, such as complex layout and animating widgets and not only makes cell renderers obsolete, but also #GtkCellArea.
 
-The other big difference is the massive change to the data model. #GtkTreeModel was a rather complex interface for a tree data structure and #GListModel was deliberately designed to be a simple data structure for lists only. (See above (FIXME: link) for how to still do trees with this new model.) Another big change is that the new model allows for bulk changes via the #GListModel:items-changed signal while #GtkTreeModel only allows a single item to change at once.  The goal here is of course to encourage implementation of custom list models.
+The other big difference is the massive change to the data model. #GtkTreeModel was a rather complex interface for a tree data structure and #GListModel was deliberately designed to be a simple data structure for lists only. (See above (FIXME: link) for how to still do trees with this new model.) Another big change is that the new model allows for bulk changes via the #GListModel:items-changed signal while #GtkTreeModel only allows a single item to change at once.
+The goal here is of course to encourage implementation of custom list models.
 
 Another consequence of the new model is that it is now easily possible to refer to the contents of a row in the model directly by keeping the item, while #GtkTreeRowReference was a very slow mechanism to achieve the same. And because the items are real objects, developers can make them emit change signals causing listitems and their children to update, which wasn't possible with #GtkTreeModel.
 
@@ -92,7 +95,7 @@ Finally here's a quick list of equivalent functionality to look for when transit
 | #GtkCellView        |                                     |
 | #GtkComboBox        |                                     |
 | #GtkIconView        | #GtkGridView                        |
-| #GtkTreeSortable    |                                     |
+| #GtkTreeSortable    | #GtkColumnView                      |
 | #GtkTreeModelSort   | #GtkSortListModel                   |
 | #GtkTreeModelFilter | #GtkFilterListModel                 |
 | #GtkCellLayout      | #GtkListItemFactory                 |
