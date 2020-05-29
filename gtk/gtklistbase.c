@@ -1209,6 +1209,7 @@ gtk_list_base_init_real (GtkListBase      *self,
   priv->orientation = GTK_ORIENTATION_VERTICAL;
 
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
+  gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
 }
 
 static int
