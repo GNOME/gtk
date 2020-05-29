@@ -1489,6 +1489,8 @@ gtk_list_base_grab_focus_on_item (GtkListBase *self,
           return FALSE;
     }
 
+  gtk_list_base_update_focus_tracker (self);
+
   if (select)
     gtk_list_base_select_item (self, pos, modify, extend);
 
