@@ -1031,8 +1031,6 @@ activate (GApplication *app)
 
   gtk_tree_view_collapse_all (GTK_TREE_VIEW (treeview));
 
-  gtk_widget_show (GTK_WIDGET (window));
-
   g_object_unref (builder);
 }
 
@@ -1091,10 +1089,10 @@ command_line (GApplication            *app,
       return 0;
     }
 
+  window = gtk_application_get_windows (GTK_APPLICATION (app))->data;
+
   if (name == NULL)
     goto out;
-
-  window = gtk_application_get_windows (GTK_APPLICATION (app))->data;
 
   d = gtk_demos;
 
@@ -1125,7 +1123,11 @@ out:
 
       gtk_window_set_transient_for (GTK_WINDOW (demo), GTK_WINDOW (window));
       gtk_window_set_modal (GTK_WINDOW (demo), TRUE);
+
+      g_signal_connect_swapped (G_OBJECT (demo), "destroy", G_CALLBACK (g_application_quit), app);
     }
+  else
+    gtk_widget_show (GTK_WIDGET (window));
 
   if (autoquit)
     g_timeout_add_seconds (1, auto_quit, app);
