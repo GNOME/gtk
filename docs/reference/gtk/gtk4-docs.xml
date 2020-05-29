@@ -75,6 +75,7 @@
 
     <chapter id="ListContainers">
       <title>List-based Widgets</title>
+      <xi:include href="section-list-widget.xml"/>
       <xi:include href="xml/gtklistitem.xml" />
       <xi:include href="xml/gtklistitemfactory.xml" />
       <section>
