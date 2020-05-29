@@ -386,6 +386,7 @@ expand_content_md_files = [
   'css-properties.md',
   'section-text-widget.md',
   'section-tree-widget.md',
+  'section-list-widget.md',
   'question_index.md',
 ]
 
