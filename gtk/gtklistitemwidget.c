@@ -408,7 +408,7 @@ gtk_list_item_widget_init (GtkListItemWidget *self)
   GtkEventController *controller;
   GtkGesture *gesture;
 
-  gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
+  gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
 
   gesture = gtk_gesture_click_new ();
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
