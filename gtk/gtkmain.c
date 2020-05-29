@@ -170,6 +170,7 @@ static const GDebugKey gtk_debug_keys[] = {
   { "builder", GTK_DEBUG_BUILDER },
   { "size-request", GTK_DEBUG_SIZE_REQUEST },
   { "no-css-cache", GTK_DEBUG_NO_CSS_CACHE },
+  { "shortcuts", GTK_DEBUG_SHORTCUTS },
   { "interactive", GTK_DEBUG_INTERACTIVE },
   { "touchscreen", GTK_DEBUG_TOUCHSCREEN },
   { "actions", GTK_DEBUG_ACTIONS },
