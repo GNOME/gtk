@@ -27,7 +27,7 @@ else
 endif
 
 glib_req           = '>= @0@.@1@.@2@'.format(glib_major_req, glib_minor_req, glib_micro_req)
-pango_req          = '>= 1.44.4'
+pango_req          = '>= 1.45.0'
 fribidi_req        = '>= 0.19.7'
 atk_req            = '>= 2.15.1'
 cairo_req          = '>= 1.14.0'
@@ -353,10 +353,11 @@ fribidi_dep    = dependency('fribidi', version: fribidi_req,
 
 # Require PangoFT2 if on X11 or wayland
 require_pangoft2 = wayland_enabled or x11_enabled
-pangoft_dep    = dependency('pangoft2', required: false)
 
 if require_pangoft2
   pangoft_dep    = dependency('pangoft2', fallback : ['pango', 'libpangoft2_dep'])
+else
+  pangoft_dep    = dependency('pangoft2', required: false)
 endif
 
 if win32_enabled
