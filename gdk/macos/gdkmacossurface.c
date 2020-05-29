@@ -664,8 +664,8 @@ _gdk_macos_surface_damage_cairo (GdkMacosSurface *self,
   view = [self->window contentView];
 
   if (GDK_IS_MACOS_CAIRO_VIEW (view))
-    [(GdkMacosCairoView *)view setCairoSurfaceWithRegion:surface
-                                             cairoRegion:painted];
+    [(GdkMacosCairoView *)view setCairoSurface:surface
+                                    withDamage:painted];
 }
 
 void
