@@ -508,6 +508,7 @@ if x11_enabled
   xext_dep       = dependency('xext')
   xcursor_dep    = dependency('xcursor', required: false)
   xfixes_dep     = dependency('xfixes', required: false)
+  xdamage_dep    = dependency('xdamage', required: false)
   xcomposite_dep = dependency('xcomposite', required: false)
   fontconfig_dep = dependency('fontconfig')
   atkbridge_dep  = dependency('atk-bridge-2.0', version: atk_req)
@@ -522,6 +523,9 @@ if x11_enabled
   if xfixes_dep.found()
     x11_pkgs += ['xfixes']
   endif
+  if xdamage_dep.found()
+    x11_pkgs += ['xdamage']
+  endif
   if xcomposite_dep.found()
     x11_pkgs += ['xcomposite']
   endif
@@ -531,6 +535,7 @@ if x11_enabled
   cdata.set('HAVE_XCURSOR', xcursor_dep.found())
   cdata.set('HAVE_XCOMPOSITE', xcomposite_dep.found())
   cdata.set('HAVE_XFIXES', xfixes_dep.found())
+  cdata.set('HAVE_XDAMAGE', xdamage_dep.found())
 
   if cc.has_function('XkbQueryExtension', dependencies: x11_dep,
                      prefix : '#include <X11/XKBlib.h>')

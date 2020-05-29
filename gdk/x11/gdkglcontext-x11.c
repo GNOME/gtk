@@ -39,6 +39,14 @@
 
 #include <cairo/cairo-xlib.h>
 
+#ifdef HAVE_XFIXES
+#include <X11/extensions/Xfixes.h>
+#endif
+
+#ifdef HAVE_XDAMAGE
+#include <X11/extensions/Xdamage.h>
+#endif
+
 #include <epoxy/glx.h>
 
 G_DEFINE_TYPE (GdkX11GLContext, gdk_x11_gl_context, GDK_TYPE_GL_CONTEXT)
@@ -184,6 +192,23 @@ gdk_x11_gl_context_end_frame (GdkDrawContext *draw_context,
   gdk_x11_surface_pre_damage (surface);
 
   glXSwapBuffers (dpy, drawable);
+
+  /* Some DRI implementation needs manual damage event in order to guarantee that damage events
+   * gets delivered to the compositor before the events from the XSyncCounter changes for the
+   * synchronized XWindow */
+  if (display_x11->needs_glx_damage)
+    {
+      int n_rects = 0;
+      XRectangle *xrects = NULL;
+      XserverRegion region;
+
+      _gdk_x11_region_get_xrectangles (painted, 0, 0, gdk_surface_get_scale_factor (surface),
+                                       &xrects, &n_rects);
+      region = XFixesCreateRegion (dpy, xrects, n_rects);
+      XDamageAdd (display_x11->xdisplay, gdk_x11_surface_get_xid (surface), region);
+      XFixesDestroyRegion (dpy, region);
+      g_free (xrects);
+    }
 
   if (context_x11->do_frame_sync && info != NULL && display_x11->has_glx_video_sync)
     glXGetVideoSyncSGI (&info->last_frame_counter);
@@ -840,6 +865,15 @@ gdk_x11_screen_init_gl (GdkX11Screen *screen)
     epoxy_has_glx_extension (dpy, screen_num, "GLX_ARB_multisample");
   display_x11->has_glx_visual_rating =
     epoxy_has_glx_extension (dpy, screen_num, "GLX_EXT_visual_rating");
+
+  if (g_strcmp0 (glXGetClientString (dpy, GLX_VENDOR), "NVIDIA Corporation") == 0)
+    {
+      /* NVidia doesn't send damage from the client library, so we need to do it outself. If
+       * we don't do this, the damage will be send by the Xserver and may be delivered in the
+       * wrong order wrt the XSyncCounters events for the window updates.
+       */
+      display_x11->needs_glx_damage = TRUE;
+    }
 
   GDK_DISPLAY_NOTE (display, OPENGL,
             g_message ("GLX version %d.%d found\n"
