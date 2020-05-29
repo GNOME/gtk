@@ -160,7 +160,7 @@ static double
 new_speed (void)
 {
   /* 5s to 50s to cross screen seems fair */
-  return g_random_double_range (0.02, 0.2);
+  return 0.4;//g_random_double_range (0.02, 0.2);
 }
 
 static void
@@ -574,23 +574,23 @@ gtk_fishbowl_tick (GtkWidget     *widget,
 
       if (child->x <= 0)
         {
-          child->x = 0;
+          child->x = -child->x;
           child->dx = new_speed ();
         }
       else if (child->x >= 1)
         {
-          child->x = 1;
+          child->x = 2 - child->x;
           child->dx =  - new_speed ();
         }
 
       if (child->y <= 0)
         {
-          child->y = 0;
+          child->y = -child->y;
           child->dy = new_speed ();
         }
       else if (child->y >= 1)
         {
-          child->y = 1;
+          child->y = 2 - child->y;
           child->dy =  - new_speed ();
         }
     }

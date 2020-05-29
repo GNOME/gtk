@@ -10,6 +10,7 @@
 
 #include "demos.h"
 
+static gboolean is_run;
 static GtkWidget *info_view;
 static GtkWidget *source_view;
 
@@ -1031,7 +1032,8 @@ activate (GApplication *app)
 
   gtk_tree_view_collapse_all (GTK_TREE_VIEW (treeview));
 
-  gtk_widget_show (GTK_WIDGET (window));
+  if (!is_run)
+    gtk_widget_show (GTK_WIDGET (window));
 
   g_object_unref (builder);
 }
@@ -1077,12 +1079,16 @@ command_line (GApplication            *app,
   GDoDemoFunc func = 0;
   GtkWidget *window, *demo;
 
-  activate (app);
 
   options = g_application_command_line_get_options_dict (cmdline);
   g_variant_dict_lookup (options, "run", "&s", &name);
   g_variant_dict_lookup (options, "autoquit", "b", &autoquit);
   g_variant_dict_lookup (options, "list", "b", &list);
+
+  is_run = name != NULL;
+
+  activate (app);
+
 
   if (list)
     {
