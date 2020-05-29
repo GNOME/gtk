@@ -6,6 +6,7 @@
         <signal name="toggled" handler="button_toggled"/>
         <child>
           <object class="GtkBox">
+            <property name="can-focus">0</property>
             <child>
               <object class="GtkStack" id="button_stack">
                 <property name="halign">fill</property>
