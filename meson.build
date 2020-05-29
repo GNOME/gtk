@@ -781,10 +781,12 @@ pkg_install_dir = join_paths(get_option('libdir'), 'pkgconfig')
 pkgs = [ 'gtk4.pc' ]
 
 pkg_targets = ''
+display_backends = []
 foreach backend: [ 'broadway', 'quartz', 'wayland', 'win32', 'x11', ]
   if get_variable('@0@_enabled'.format(backend))
     pkgs += ['gtk4-@0@.pc'.format(backend)]
     pkg_targets += ' ' + backend
+    display_backends += [ backend ]
   endif
 endforeach
 pkgconf.set('GDK_BACKENDS', pkg_targets.strip())
@@ -830,7 +832,7 @@ endif
 
 #### Summary ####
 
-summary('Display backends', pkg_targets.strip())
+summary('Display backends', display_backends)
 summary('Print backends', print_backends)
 summary('Media backends', media_backends)
 summary('Vulkan support', have_vulkan)
