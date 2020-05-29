@@ -283,6 +283,7 @@ do_listview_weather (GtkWidget *do_widget)
       GListModel *model, *selection;
 
       window = gtk_window_new ();
+      gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Weather");
@@ -290,7 +291,7 @@ do_listview_weather (GtkWidget *do_widget)
 
       sw = gtk_scrolled_window_new (NULL, NULL);
       gtk_window_set_child (GTK_WINDOW (window), sw);
-    
+
       listview = gtk_list_view_new_with_factory (
         gtk_functions_list_item_factory_new (setup_widget,
                                              bind_widget,
