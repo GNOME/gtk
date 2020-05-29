@@ -48,8 +48,8 @@
   return YES;
 }
 
--(void)setCairoSurfaceWithRegion:(cairo_surface_t *)cairoSurface
-                     cairoRegion:(cairo_region_t *)cairoRegion
+-(void)setCairoSurface:(cairo_surface_t *)cairoSurface
+            withDamage:(cairo_region_t *)cairoRegion
 {
   guint n_rects = cairo_region_num_rectangles (cairoRegion);
 

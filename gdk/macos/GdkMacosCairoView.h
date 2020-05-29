@@ -30,7 +30,7 @@
   cairo_surface_t *surface;
 }
 
--(void)setCairoSurfaceWithRegion:(cairo_surface_t *)cairoSurface
-                     cairoRegion:(cairo_region_t *)region;
+-(void)setCairoSurface:(cairo_surface_t *)cairoSurface
+            withDamage:(cairo_region_t *)region;
 
 @end
