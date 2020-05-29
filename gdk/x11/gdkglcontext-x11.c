@@ -575,6 +575,29 @@ create_legacy_context (GdkDisplay   *display,
   return res;
 }
 
+static gboolean
+on_timeout_for_testing (GdkGLContext *context)
+{
+  GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (context);
+  GdkSurface *surface = gdk_gl_context_get_surface (context);
+
+  if (context_x11->frame_fence)
+    {
+      GLenum wait_result;
+
+      wait_result = glClientWaitSync (context_x11->frame_fence, 0, 16000000);
+
+      if (wait_result == GL_ALREADY_SIGNALED || TRUE)
+        {
+          glDeleteSync (context_x11->frame_fence);
+          context_x11->frame_fence = 0;
+          _gdk_x11_surface_set_still_painting_frame (surface, FALSE);
+        }
+    }
+
+  return G_SOURCE_REMOVE;
+}
+
 #ifdef HAVE_XDAMAGE
 static gboolean
 on_gl_surface_xevent (GdkGLContext   *context,
@@ -596,19 +619,7 @@ on_gl_surface_xevent (GdkGLContext   *context,
   if (damage_xevent->damage != context_x11->xdamage)
     return FALSE;
 
-  if (context_x11->frame_fence)
-    {
-      GLenum wait_result;
-
-      wait_result = glClientWaitSync (context_x11->frame_fence, 0, 0);
-
-      if (wait_result == GL_ALREADY_SIGNALED)
-        {
-          glDeleteSync (context_x11->frame_fence);
-          context_x11->frame_fence = 0;
-          _gdk_x11_surface_set_still_painting_frame (surface, FALSE);
-        }
-    }
+  g_timeout_add (4, on_timeout_for_testing, context);
 
   return FALSE;
 }
@@ -921,6 +932,7 @@ gdk_x11_screen_init_gl (GdkX11Screen *screen)
        */
       display_x11->has_async_glx_swap_buffers = TRUE;
     }
+  display_x11->has_async_glx_swap_buffers = TRUE;
 
   GDK_DISPLAY_NOTE (display, OPENGL,
             g_message ("GLX version %d.%d found\n"
