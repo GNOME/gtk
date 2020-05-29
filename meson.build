@@ -27,7 +27,7 @@ else
 endif
 
 glib_req           = '>= @0@.@1@.@2@'.format(glib_major_req, glib_minor_req, glib_micro_req)
-pango_req          = '>= 1.44.4'
+pango_req          = '>= 1.45.0'
 fribidi_req        = '>= 0.19.7'
 atk_req            = '>= 2.15.1'
 cairo_req          = '>= 1.14.0'
@@ -352,10 +352,11 @@ fribidi_dep    = dependency('fribidi', version: fribidi_req,
 
 # Require PangoFT2 if on X11 or wayland
 require_pangoft2 = wayland_enabled or x11_enabled
-pangoft_dep    = dependency('pangoft2', required: false)
 
 if require_pangoft2
   pangoft_dep    = dependency('pangoft2', fallback : ['pango', 'libpangoft2_dep'])
+else
+  pangoft_dep    = dependency('pangoft2', required: false)
 endif
 
 if win32_enabled
@@ -780,10 +781,12 @@ pkg_install_dir = join_paths(get_option('libdir'), 'pkgconfig')
 pkgs = [ 'gtk4.pc' ]
 
 pkg_targets = ''
+display_backends = []
 foreach backend: [ 'broadway', 'quartz', 'wayland', 'win32', 'x11', ]
   if get_variable('@0@_enabled'.format(backend))
     pkgs += ['gtk4-@0@.pc'.format(backend)]
     pkg_targets += ' ' + backend
+    display_backends += [ backend ]
   endif
 endforeach
 pkgconf.set('GDK_BACKENDS', pkg_targets.strip())
@@ -829,7 +832,7 @@ endif
 
 #### Summary ####
 
-summary('Display backends', pkg_targets.strip())
+summary('Display backends', display_backends)
 summary('Print backends', print_backends)
 summary('Media backends', media_backends)
 summary('Vulkan support', have_vulkan)
