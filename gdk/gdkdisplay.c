@@ -466,10 +466,13 @@ gdk_display_peek_event (GdkDisplay *display)
  *
  * Appends the given event onto the front of the event
  * queue for @display.
+ *
+ * This function is only useful in very special situations
+ * and should not be used by applications.
  **/
 void
-gdk_display_put_event (GdkDisplay     *display,
-		       GdkEvent       *event)
+gdk_display_put_event (GdkDisplay *display,
+                       GdkEvent   *event)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
   g_return_if_fail (event != NULL);
