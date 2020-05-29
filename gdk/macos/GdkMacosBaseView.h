@@ -27,6 +27,8 @@
 #include "gdkmacosdisplay.h"
 #include "gdkmacossurface.h"
 
+#define GDK_IS_MACOS_BASE_VIEW(obj) ((obj) && [obj isKindOfClass:[GdkMacosBaseView class]])
+
 @interface GdkMacosBaseView : NSView
 {
   NSTrackingArea *trackingArea;
