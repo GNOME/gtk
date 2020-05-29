@@ -23,7 +23,7 @@
 
 #import "GdkMacosBaseView.h"
 
-#define GDK_IS_MACOS_CAIRO_VIEW(obj) ([obj isKindOfClass:[GdkMacosCairoView class]])
+#define GDK_IS_MACOS_CAIRO_VIEW(obj) ((obj) && [obj isKindOfClass:[GdkMacosCairoView class]])
 
 @interface GdkMacosCairoView : GdkMacosBaseView
 {
