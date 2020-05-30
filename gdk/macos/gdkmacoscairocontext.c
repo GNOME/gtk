@@ -25,15 +25,16 @@
 #include <CoreGraphics/CoreGraphics.h>
 #include <cairo-quartz.h>
 
+#import "GdkMacosCairoView.h"
+
 #include "gdkmacoscairocontext-private.h"
 #include "gdkmacossurface-private.h"
 
 struct _GdkMacosCairoContext
 {
-  GdkCairoContext parent_instance;
+  GdkCairoContext  parent_instance;
 
   cairo_surface_t *window_surface;
-  cairo_surface_t *paint_surface;
 };
 
 struct _GdkMacosCairoContextClass
@@ -47,14 +48,12 @@ static cairo_surface_t *
 create_cairo_surface_for_surface (GdkSurface *surface)
 {
   cairo_surface_t *cairo_surface;
-  GdkDisplay *display;
   int scale;
   int width;
   int height;
 
   g_assert (GDK_IS_MACOS_SURFACE (surface));
 
-  display = gdk_surface_get_display (surface);
   scale = gdk_surface_get_scale_factor (surface);
   width = scale * gdk_surface_get_width (surface);
   height = scale * gdk_surface_get_height (surface);
@@ -74,7 +73,7 @@ _gdk_macos_cairo_context_cairo_create (GdkCairoContext *cairo_context)
 
   g_assert (GDK_IS_MACOS_CAIRO_CONTEXT (self));
 
-  return cairo_create (self->paint_surface);
+  return cairo_create (self->window_surface);
 }
 
 static void
@@ -82,27 +81,30 @@ _gdk_macos_cairo_context_begin_frame (GdkDrawContext *draw_context,
                                       cairo_region_t *region)
 {
   GdkMacosCairoContext *self = (GdkMacosCairoContext *)draw_context;
-  GdkRectangle clip_box;
   GdkSurface *surface;
-  double sx = 1.0;
-  double sy = 1.0;
+  NSWindow *nswindow;
 
   g_assert (GDK_IS_MACOS_CAIRO_CONTEXT (self));
-  g_assert (self->paint_surface == NULL);
 
   surface = gdk_draw_context_get_surface (draw_context);
+  nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (surface));
 
   if (self->window_surface == NULL)
-    self->window_surface = create_cairo_surface_for_surface (surface);
-
-  cairo_region_get_extents (region, &clip_box);
-  self->paint_surface = gdk_surface_create_similar_surface (surface,
-                                                            cairo_surface_get_content (self->window_surface),
-                                                            MAX (clip_box.width, 1),
-                                                            MAX (clip_box.height, 1));
-  sx = sy = 1;
-  cairo_surface_get_device_scale (self->paint_surface, &sx, &sy);
-  cairo_surface_set_device_offset (self->paint_surface, -clip_box.x*sx, -clip_box.y*sy);
+    {
+      self->window_surface = create_cairo_surface_for_surface (surface);
+    }
+  else
+    {
+      if (![nswindow isOpaque])
+        {
+          cairo_t *cr = cairo_create (self->window_surface);
+          gdk_cairo_region (cr, region);
+          cairo_set_source_rgba (cr, 0, 0, 0, 0);
+          cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+          cairo_fill (cr);
+          cairo_destroy (cr);
+        }
+    }
 }
 
 static void
@@ -111,29 +113,17 @@ _gdk_macos_cairo_context_end_frame (GdkDrawContext *draw_context,
 {
   GdkMacosCairoContext *self = (GdkMacosCairoContext *)draw_context;
   GdkSurface *surface;
-  cairo_t *cr;
+  NSView *nsview;
 
   g_assert (GDK_IS_MACOS_CAIRO_CONTEXT (self));
-  g_assert (self->paint_surface != NULL);
   g_assert (self->window_surface != NULL);
 
-  cr = cairo_create (self->window_surface);
-
-  cairo_set_source_surface (cr, self->paint_surface, 0, 0);
-  gdk_cairo_region (cr, painted);
-  cairo_clip (cr);
-
-  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-  cairo_paint (cr);
-
-  cairo_destroy (cr);
-  cairo_surface_flush (self->window_surface);
-
   surface = gdk_draw_context_get_surface (draw_context);
-  _gdk_macos_surface_damage_cairo (GDK_MACOS_SURFACE (surface),
-                                   self->window_surface,
-                                   painted);
-  g_clear_pointer (&self->paint_surface, cairo_surface_destroy);
+  nsview = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (surface));
+
+  if (GDK_IS_MACOS_CAIRO_VIEW (nsview))
+    [(GdkMacosCairoView *)nsview setCairoSurface:self->window_surface
+                                      withDamage:painted];
 }
 
 static void
@@ -144,7 +134,6 @@ _gdk_macos_cairo_context_surface_resized (GdkDrawContext *draw_context)
   g_assert (GDK_IS_MACOS_CAIRO_CONTEXT (self));
 
   g_clear_pointer (&self->window_surface, cairo_surface_destroy);
-  g_clear_pointer (&self->paint_surface, cairo_surface_destroy);
 }
 
 static void
