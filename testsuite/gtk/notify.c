@@ -647,6 +647,11 @@ test_type (gconstpointer data)
             g_str_equal (pspec->name, "selected-item")))
          continue;
 
+       /* can't select items without an underlying, populated model */
+       if (g_type_is_a (type, GTK_TYPE_DROP_DOWN) &&
+           g_str_equal (pspec->name, "selected"))
+         continue;
+
        /* can't set position without a notebook */
        if (g_type_is_a (type, GTK_TYPE_NOTEBOOK_PAGE) &&
            g_str_equal (pspec->name, "position"))
