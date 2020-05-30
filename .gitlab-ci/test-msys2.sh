@@ -34,8 +34,8 @@ pacman --noconfirm -S --needed \
     mingw-w64-$MSYS2_ARCH-shared-mime-info
 
 # https://gitlab.gnome.org/GNOME/gtk/issues/2243
-wget "https://gitlab.gnome.org/creiter/gitlab-ci-win32-runner-v2/raw/master/pango/mingw-w64-$MSYS2_ARCH-pango-1.44.7-1-any.pkg.tar.xz"
-pacman --noconfirm -U "mingw-w64-$MSYS2_ARCH-pango-1.44.7-1-any.pkg.tar.xz"
+wget "https://gitlab.gnome.org/creiter/gitlab-ci-win32-runner-v2/raw/master/pango/mingw-w64-$MSYS2_ARCH-pango-git-1.44.7.90.ge48ae523-1-any.pkg.tar.zst"
+pacman --noconfirm -U "mingw-w64-$MSYS2_ARCH-pango-git-1.44.7.90.ge48ae523-1-any.pkg.tar.zst"
 
 # https://github.com/msys2/MINGW-packages/pull/6465
 pacman --noconfirm -S --needed mingw-w64-$MSYS2_ARCH-brotli
