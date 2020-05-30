@@ -289,15 +289,28 @@ gtk_event_controller_filter_crossing (GtkEventController    *controller,
                                       const GtkCrossingData *data)
 {
   GtkEventControllerPrivate *priv;
+  GtkWidget *old_target, *new_target;
 
   priv = gtk_event_controller_get_instance_private (controller);
 
   if (priv->widget && !gtk_widget_is_sensitive (priv->widget))
     return TRUE;
 
-  if (priv->limit == GTK_LIMIT_SAME_NATIVE &&
-      (!same_native (priv->widget, data->old_target) ||
-       !same_native (priv->widget, data->new_target)))
+  old_target = data->old_target;
+  new_target = data->new_target;
+
+  if (priv->limit == GTK_LIMIT_SAME_NATIVE)
+    {
+      /* treat out-of-scope targets like NULL */
+
+      if (!same_native (priv->widget, old_target))
+        old_target = NULL;
+
+      if (!same_native (priv->widget, new_target))
+        new_target = NULL;
+    }
+
+  if (old_target == NULL && new_target == NULL)
     return TRUE;
 
   return FALSE;
