@@ -97,9 +97,6 @@ void               _gdk_macos_surface_resize                  (GdkMacosSurface  
                                                                int                 height);
 void               _gdk_macos_surface_update_fullscreen_state (GdkMacosSurface    *self);
 void               _gdk_macos_surface_update_position         (GdkMacosSurface    *self);
-void               _gdk_macos_surface_damage_cairo            (GdkMacosSurface    *self,
-                                                               cairo_surface_t    *surface,
-                                                               cairo_region_t     *painted);
 void               _gdk_macos_surface_show                    (GdkMacosSurface    *self);
 void               _gdk_macos_surface_thaw                    (GdkMacosSurface    *self,
                                                                gint64              predicted_presentation_time,
