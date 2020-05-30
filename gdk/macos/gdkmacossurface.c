@@ -652,23 +652,6 @@ _gdk_macos_surface_update_position (GdkMacosSurface *self)
 }
 
 void
-_gdk_macos_surface_damage_cairo (GdkMacosSurface *self,
-                                 cairo_surface_t *surface,
-                                 cairo_region_t  *painted)
-{
-  NSView *view;
-
-  g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
-  g_return_if_fail (surface != NULL);
-
-  view = [self->window contentView];
-
-  if (GDK_IS_MACOS_CAIRO_VIEW (view))
-    [(GdkMacosCairoView *)view setCairoSurface:surface
-                                    withDamage:painted];
-}
-
-void
 _gdk_macos_surface_thaw (GdkMacosSurface *self,
                          gint64           presentation_time,
                          gint64           refresh_interval)
