@@ -1,6 +1,7 @@
 Overview of Changes in GTK 3.98.4
 =================================
 
+
 * Themes
  - Refine menu styling
  - Tweak visible focus behavior
