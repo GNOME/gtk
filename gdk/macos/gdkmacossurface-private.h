@@ -85,6 +85,7 @@ void               _gdk_macos_surface_get_shadow              (GdkMacosSurface  
                                                                gint               *right,
                                                                gint               *bottom,
                                                                gint               *left);
+NSView            *_gdk_macos_surface_get_view                (GdkMacosSurface    *self);
 gboolean           _gdk_macos_surface_get_modal_hint          (GdkMacosSurface    *self);
 void               _gdk_macos_surface_set_modal_hint          (GdkMacosSurface    *self,
                                                                gboolean            modal_hint);
