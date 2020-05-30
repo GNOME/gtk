@@ -969,3 +969,14 @@ _gdk_macos_surface_get_best_monitor (GdkMacosSurface *self)
 
   return best;
 }
+
+NSView *
+_gdk_macos_surface_get_view (GdkMacosSurface *self)
+{
+  g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), NULL);
+
+  if (self->window == NULL)
+    return NULL;
+
+  return [self->window contentView];
+}
