@@ -496,9 +496,11 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
       group_state = gtk_gesture_get_group_state (gesture, sequence);
       gtk_gesture_set_sequence_state (gesture, sequence, group_state);
     }
-
-  if (data->event)
-    gdk_event_unref (data->event);
+  else
+    {
+      g_clear_pointer (&data->event, gdk_event_unref);
+      g_clear_object (&data->target);
+    }
 
   data->event = gdk_event_ref ((GdkEvent *)event);
   data->target = g_object_ref (target);
