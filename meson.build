@@ -354,7 +354,8 @@ fribidi_dep    = dependency('fribidi', version: fribidi_req,
 require_pangoft2 = wayland_enabled or x11_enabled
 
 if require_pangoft2
-  pangoft_dep    = dependency('pangoft2', fallback : ['pango', 'libpangoft2_dep'])
+  pangoft_dep    = dependency('pangoft2', version: pango_req,
+                              fallback : ['pango', 'libpangoft2_dep'])
 else
   pangoft_dep    = dependency('pangoft2', required: false)
 endif
@@ -364,7 +365,7 @@ if win32_enabled
   pangowin32_dep  = dependency('pangowin32')
 endif
 
-pangocairo_dep = dependency('pangocairo', version: cairo_req,
+pangocairo_dep = dependency('pangocairo', version: pango_req,
                             fallback : ['pango', 'libpangocairo_dep'])
 pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
                             fallback : ['gdk-pixbuf', 'gdkpixbuf_dep'])
