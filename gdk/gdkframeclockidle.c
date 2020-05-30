@@ -562,7 +562,7 @@ gdk_frame_clock_paint_idle (void *data)
   if (priv->freeze_count == 0)
     {
       priv->min_next_frame_time = compute_min_next_frame_time (clock_idle,
-                                                               priv->frame_time);
+                                                               priv->smoothed_frame_time_base);
       maybe_start_idle (clock_idle, FALSE);
     }
 
