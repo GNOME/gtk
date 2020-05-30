@@ -30,6 +30,7 @@
             <property name="model">game</property>
           </object>
         </property>
+        <property name="single-click-activate">1</property>
         <binding name="max-columns">
           <lookup name="width">game</lookup>
         </binding>
