@@ -47,9 +47,6 @@
 
 #include <epoxy/gl.h>
 
-/* for the use of round() */
-#include "fallback-c89.c"
-
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
 #endif

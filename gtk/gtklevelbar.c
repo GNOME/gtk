@@ -140,8 +140,6 @@
 
 #include "a11y/gtklevelbaraccessible.h"
 
-#include "fallback-c89.c"
-
 enum {
   PROP_VALUE = 1,
   PROP_MIN_VALUE,

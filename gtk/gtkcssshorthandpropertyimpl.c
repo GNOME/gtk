@@ -40,11 +40,6 @@
 #include "gtkcssvalueprivate.h"
 #include "gtktypebuiltins.h"
 
-/* this is in case round() is not provided by the compiler, 
- * such as in the case of C89 compilers, like MSVC
- */
-#include "fallback-c89.c"
-
 /*** PARSING ***/
 
 static gboolean
