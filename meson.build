@@ -191,16 +191,11 @@ check_functions = [
   'getresuid',
   'lstat',
   'mmap',
-  'nearbyint',
   'posix_fallocate',
   '_lock_file',
   'flockfile',
   'mkstemp',
   'mallinfo',
-  'round',
-  'rint',
-  'log2',
-  'exp2',
   'sincos',
   'sincosf',
 ]
@@ -210,10 +205,6 @@ foreach func : check_functions
     cdata.set('HAVE_' + func.underscorify().to_upper(), 1)
   endif
 endforeach
-
-cdata.set('HAVE_DECL_ISINF', cc.has_header_symbol('math.h', 'isinf'))
-cdata.set('HAVE_DECL_ISNAN', cc.has_header_symbol('math.h', 'isnan'))
-cdata.set('HAVE_DECL_ISNANF', cc.has_header_symbol('math.h', 'isnanf'))
 
 # Disable deprecation checks for all libraries we depend on on stable branches.
 # This is so newer versions of those libraries don't cause more warnings with

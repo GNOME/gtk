@@ -30,11 +30,6 @@
 #include "gtkprivatetypebuiltins.h"
 #include "gtkprivate.h"
 
-/* this is in case round() is not provided by the compiler, 
- * such as in the case of C89 compilers, like MSVC
- */
-#include "fallback-c89.c"
-
 enum {
   PROP_0,
   PROP_ANIMATED,

@@ -71,8 +71,6 @@
 
 #include "a11y/gtkswitchaccessible.h"
 
-#include "fallback-c89.c"
-
 typedef struct _GtkSwitchClass   GtkSwitchClass;
 
 /**

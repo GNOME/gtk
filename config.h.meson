@@ -27,18 +27,6 @@
 /* Define to 1 if you have the `dcgettext' function. */
 #mesondefine HAVE_DCGETTEXT
 
-/* Define to 1 if you have the declaration of `isinf', and to 0 if you don't.
-   */
-#mesondefine HAVE_DECL_ISINF
-
-/* Define to 1 if you have the declaration of `isnan', and to 0 if you don't.
-   */
-#mesondefine HAVE_DECL_ISNAN
-
-/* Define to 1 if you have the declaration of `isnanf', and to 0 if you don't.
-   */
-#mesondefine HAVE_DECL_ISNANF
-
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #mesondefine HAVE_DLFCN_H
 
@@ -84,9 +72,6 @@
 /* Define to 1 if you have a working `mmap' system call. */
 #mesondefine HAVE_MMAP
 
-/* Define to 1 if you have the `nearbyint' function. */
-#mesondefine HAVE_NEARBYINT
-
 /* Define to 1 if you have the `posix_fallocate' function. */
 #mesondefine HAVE_POSIX_FALLOCATE
 
@@ -96,20 +81,8 @@
 /* Have the Xrandr 1.5 extension library */
 #mesondefine HAVE_RANDR15
 
-/* Define to 1 if you have the `rint' function. */
-#mesondefine HAVE_RINT
-
-/* Define to 1 if you have the `round' function. */
-#mesondefine HAVE_ROUND
-
 /* Define to 1 if you have the `sincos' function. */
 #mesondefine HAVE_SINCOS
-
-/* Define to 1 if you have the `log2` function */
-#mesondefine HAVE_LOG2
-
-/* Define to 1 if you ahve the `exp2` function */
-#mesondefine HAVE_EXP2
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #mesondefine HAVE_STDINT_H

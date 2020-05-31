@@ -75,8 +75,6 @@
 #include <cairo-gobject.h>
 #include <string.h>
 
-#include "fallback-c89.c"
-
 /**
  * SECTION:gtkentry
  * @Short_description: A single line text entry field
