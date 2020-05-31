@@ -40,7 +40,7 @@ box_activate (GSimpleAction *action,
  * the effect of activating them.
  */
 static void
-test_action (void)
+test_inheritance (void)
 {
   GtkWidget *window;
   GtkWidget *box;
@@ -53,7 +53,16 @@ test_action (void)
   GActionEntry box_entries[] = {
     { "action", box_activate, NULL, NULL, NULL },
   };
+  gboolean found;
 
+  /* Our hierarchy looks like this:
+   *
+   * window    win.action
+   *   |
+   *  box      box.action
+   *   |
+   * button
+   */
   window = gtk_window_new ();
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   button = gtk_button_new ();
@@ -79,23 +88,27 @@ test_action (void)
   g_assert_cmpint (win_activated, ==, 0);
   g_assert_cmpint (box_activated, ==, 0);
 
-  gtk_widget_activate_action (button, "win.action", NULL);
+  found = gtk_widget_activate_action (button, "win.action", NULL);
 
+  g_assert_true (found);
   g_assert_cmpint (win_activated, ==, 1);
   g_assert_cmpint (box_activated, ==, 0);
 
-  gtk_widget_activate_action (box, "win.action", NULL);
+  found = gtk_widget_activate_action (box, "win.action", NULL);
 
+  g_assert_true (found);
   g_assert_cmpint (win_activated, ==, 2);
   g_assert_cmpint (box_activated, ==, 0);
 
-  gtk_widget_activate_action (button, "box.action", NULL);
+  found = gtk_widget_activate_action (button, "box.action", NULL);
 
+  g_assert_true (found);
   g_assert_cmpint (win_activated, ==, 2);
   g_assert_cmpint (box_activated, ==, 1);
 
-  gtk_widget_activate_action (window, "box.action", NULL);
+  found = gtk_widget_activate_action (window, "box.action", NULL);
 
+  g_assert_false (found);
   g_assert_cmpint (win_activated, ==, 2);
   g_assert_cmpint (box_activated, ==, 1);
 
@@ -434,7 +447,7 @@ main (int   argc,
 {
   gtk_test_init (&argc, &argv);
 
-  g_test_add_func ("/action/inheritance", test_action);
+  g_test_add_func ("/action/inheritance", test_inheritance);
   g_test_add_func ("/action/text", test_text);
   g_test_add_func ("/action/overlap", test_overlap);
   g_test_add_func ("/action/overlap2", test_overlap2);
