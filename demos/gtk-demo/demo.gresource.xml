@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
+  <gresource prefix="/">
+    <file>awards.ui</file>
+  </gresource>
   <gresource prefix="/ui">
     <file preprocess="xml-stripblanks">main.ui</file>
+    <file preprocess="xml-stripblanks">main-listitem.ui</file>
   </gresource>
   <gresource prefix="/application_demo">
     <file>application.c</file>
     <file>application.ui</file>
     <file>menus.ui</file>
+  </gresource>
+  <gresource prefix="/awardview">
+    <file>awardlistitem.ui</file>
   </gresource>
   <gresource prefix="/builder">
     <file>demo.ui</file>
@@ -118,6 +125,19 @@
     <file>gnome-fs-directory.png</file>
     <file>gnome-fs-regular.png</file>
   </gresource>
+  <gresource prefix="/listview_filebrowser">
+    <file>listview_filebrowser.ui</file>
+  </gresource>
+  <gresource prefix="/listview_minesweeper">
+    <file>listview_minesweeper.ui</file>
+    <file>listview_minesweeper_cell.ui</file>
+  </gresource>
+  <gresource prefix="/listview_settings">
+    <file>listview_settings.ui</file>
+  </gresource>
+  <gresource prefix="/listview_weather">
+    <file compressed="true">listview_weather.txt</file>
+  </gresource>
   <gresource prefix="/shortcuts">
     <file>shortcuts.ui</file>
     <file>shortcuts-builder.ui</file>
@@ -154,6 +174,7 @@
   </gresource>
   <gresource prefix="/sources">
     <file>application_demo.c</file>
+    <file>awardview.c</file>
     <file>assistant.c</file>
     <file>builder.c</file>
     <file>clipboard.c</file>
@@ -194,6 +215,12 @@
     <file>infobar.c</file>
     <file>links.c</file>
     <file>listbox.c</file>
+    <file>listview_applauncher.c</file>
+    <file>listview_clocks.c</file>
+    <file>listview_filebrowser.c</file>
+    <file>listview_minesweeper.c</file>
+    <file>listview_settings.c</file>
+    <file>listview_weather.c</file>
     <file>list_store.c</file>
     <file>markup.c</file>
     <file>modelbutton.c</file>

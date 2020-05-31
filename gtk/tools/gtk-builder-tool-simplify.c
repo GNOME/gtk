@@ -265,6 +265,36 @@ keep_for_rewrite (const char *class_name,
 }
 
 static gboolean
+has_attribute (Element    *elt,
+               const char *name,
+               const char *value)
+{
+  int i;
+
+  for (i = 0; elt->attribute_names[i]; i++)
+    {
+      if (strcmp (elt->attribute_names[i], name) == 0 &&
+          (value == NULL || strcmp (elt->attribute_values[i], value) == 0))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+is_cdata_property (Element *element)
+{
+  if (g_str_equal (element->element_name, "property") &&
+      has_attribute (element, "name", "bytes") &&
+      element->parent != NULL &&
+      g_str_equal (element->parent->element_name, "object") &&
+      has_attribute (element->parent, "class", "GtkBuilderListItemFactory"))
+    return TRUE;
+
+  return FALSE;
+}
+
+static gboolean
 is_pcdata_element (Element *element)
 {
   /* elements that can contain text */
@@ -486,23 +516,6 @@ value_is_default (Element      *element,
   return ret;
 }
 
-static gboolean
-has_attribute (Element    *elt,
-               const char *name,
-               const char *value)
-{
-  int i;
-
-  for (i = 0; elt->attribute_names[i]; i++)
-    {
-      if (strcmp (elt->attribute_names[i], name) == 0 &&
-          (value == NULL || strcmp (elt->attribute_values[i], value) == 0))
-        return TRUE;
-    }
-
-  return FALSE;
-}
-
 static const char *
 get_attribute_value (Element *element,
                      const char *name)
@@ -563,7 +576,10 @@ get_class_name (Element *element)
     }
   else if (g_str_equal (parent->element_name, "template"))
     {
-      return get_attribute_value (parent, "parent");
+      if (get_attribute_value (parent, "parent"))
+        return get_attribute_value (parent, "parent");
+      else
+        return get_attribute_value (parent, "class");
     }
 
   return NULL;
@@ -596,6 +612,19 @@ property_is_boolean (Element      *element,
   return FALSE;
 }
 
+static void
+warn_missing_property (Element      *element,
+                       MyParserData *data,
+                       const char   *class_name,
+                       const char   *property_name,
+                       PropKind      kind)
+{
+  const char *kind_str[] = { "", "Packing ", "Cell ", "Layout " };
+
+  g_printerr (_("%s:%d: %sproperty %s::%s not found\n"),
+              data->input_filename, element->line_number, kind_str[kind], class_name, property_name);
+}
+                       
 static gboolean
 property_can_be_omitted (Element      *element,
                          MyParserData *data)
@@ -638,18 +667,9 @@ property_can_be_omitted (Element      *element,
     return FALSE;
 
   pspec = get_property_pspec (data, class_name, property_name, kind);
-
   if (pspec == NULL)
     {
-      const char *kind_str[] = {
-        "",
-        "Packing ",
-        "Cell ",
-        "Layout "
-      };
-
-      g_printerr (_("%s:%d: %sproperty %s::%s not found\n"),
-                  data->input_filename, element->line_number, kind_str[kind], class_name, property_name);
+      warn_missing_property (element, data, class_name, property_name, kind);
       return FALSE;
     }
 
@@ -1579,6 +1599,14 @@ simplify_element (Element      *element,
       property_can_be_omitted (element, data))
     return TRUE;
 
+  if (g_str_equal (element->element_name, "binding"))
+    {
+      const char *property_name = get_attribute_value (element, "name");
+      const char *class_name = get_class_name (element);
+      if (!get_property_pspec (data, class_name, property_name, PROP_KIND_OBJECT))
+        warn_missing_property (element, data, class_name, property_name, PROP_KIND_OBJECT);
+    }
+
   return FALSE;
 }
 
@@ -1794,9 +1822,18 @@ dump_element (Element *element,
         }
       else
         {
-          char *escaped = g_markup_escape_text (element->data, -1);
-          g_fprintf (output, "%s", escaped);
-          g_free (escaped);
+          if (is_cdata_property (element))
+            {
+              g_fprintf (output, "<![CDATA[");
+              g_fprintf (output, "%s", element->data);
+              g_fprintf (output, "]]>");
+            }
+          else
+            {          
+              char *escaped = g_markup_escape_text (element->data, -1);
+              g_fprintf (output, "%s", escaped);
+              g_free (escaped);
+            }
         }
       g_fprintf (output, "</%s>\n", element->element_name);
     }

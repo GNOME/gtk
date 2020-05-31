@@ -217,8 +217,10 @@
 
 #include "gdkpixbufutilsprivate.h"
 #include "gtkbuildable.h"
+#include "gtkbuilderlistitemfactory.h"
 #include "gtkbuilderscopeprivate.h"
 #include "gtkdebug.h"
+#include "gtkexpression.h"
 #include "gtkmain.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
@@ -527,7 +529,18 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
       const char *property_name = g_intern_string (prop->pspec->name);
       GValue property_value = G_VALUE_INIT;
 
-      if (prop->bound && (!prop->text || prop->text->len == 0))
+      if (prop->value)
+        {
+          g_value_init (&property_value, G_PARAM_SPEC_VALUE_TYPE (prop->pspec));
+
+          if (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) == GTK_TYPE_EXPRESSION)
+            g_value_set_boxed (&property_value, prop->value);
+          else
+            {
+              g_assert_not_reached();
+            }
+        }
+      else if (prop->bound && (!prop->text || prop->text->len == 0))
         {
           /* Ignore properties with a binding and no value since they are
            * only there for to express the binding.
@@ -674,11 +687,41 @@ gtk_builder_take_bindings (GtkBuilder *builder,
 
   for (l = bindings; l; l = l->next)
     {
-      BindingInfo *info = l->data;
-      info->target = target;
+      CommonInfo *common_info = l->data;
+
+      if (common_info->tag_type == TAG_BINDING)
+        {
+          BindingInfo *info = l->data;
+          info->target = target;
+        }
+      else if (common_info->tag_type == TAG_BINDING_EXPRESSION)
+        {
+          BindingExpressionInfo *info = l->data;
+          info->target = target;
+        }
+      else
+        {
+          g_assert_not_reached ();
+        }
     }
 
   priv->bindings = g_slist_concat (priv->bindings, bindings);
+}
+
+static void
+ensure_special_construct_parameters (GtkBuilder       *builder,
+                                     GType             object_type,
+                                     ObjectProperties *construct_parameters)
+{
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
+  GValue value = G_VALUE_INIT;
+
+  if (g_type_is_a (object_type, GTK_TYPE_BUILDER_LIST_ITEM_FACTORY))
+    {
+      g_value_init (&value, GTK_TYPE_BUILDER_SCOPE);
+      g_value_set_object (&value, priv->scope);
+      object_properties_add (construct_parameters, "scope", &value);
+    }
 }
 
 GObject *
@@ -778,6 +821,8 @@ _gtk_builder_construct (GtkBuilder  *builder,
     }
   else
     {
+      ensure_special_construct_parameters (builder, info->type, construct_parameters);
+
       obj = g_object_new_with_properties (info->type,
                                           construct_parameters->len,
                                           (const char **) construct_parameters->names->pdata,
@@ -1002,17 +1047,6 @@ gtk_builder_apply_delayed_properties (GtkBuilder  *builder,
   return result;
 }
 
-static inline void
-free_binding_info (gpointer data,
-                   gpointer user)
-{
-  BindingInfo *info = data;
-
-  g_free (info->source);
-  g_free (info->source_property);
-  g_slice_free (BindingInfo, data);
-}
-
 static inline gboolean
 gtk_builder_create_bindings (GtkBuilder  *builder,
                              GError     **error)
@@ -1023,26 +1057,68 @@ gtk_builder_create_bindings (GtkBuilder  *builder,
 
   for (l = priv->bindings; l; l = l->next)
     {
-      BindingInfo *info = l->data;
-      GObject *source;
+      CommonInfo *common_info = l->data;
 
-      if (result)
+      if (common_info->tag_type == TAG_BINDING)
         {
+          BindingInfo *info = l->data;
+          GObject *source;
+
           source = gtk_builder_lookup_object (builder, info->source, info->line, info->col, error);
           if (source)
             g_object_bind_property (source, info->source_property,
                                     info->target, info->target_pspec->name,
                                     info->flags);
           else
-            result = FALSE;
-        }
+            error = NULL;
 
-      free_binding_info (info, NULL);
+          _free_binding_info (info, NULL);
+        }
+      else if (common_info->tag_type == TAG_BINDING_EXPRESSION)
+        {
+          BindingExpressionInfo *info = l->data;
+          GtkExpression *expression;
+          GObject *object;
+
+          if (info->object_name)
+            {
+              object = gtk_builder_lookup_object (builder, info->object_name, info->line, info->col, error);
+              if (object == NULL)
+                {
+                  error = NULL;
+                  result = FALSE;
+                }
+            }
+          else if (priv->current_object)
+            {
+              object = priv->current_object;
+            }
+          else
+            {
+              object = info->target;
+            }
+
+          if (object)
+            {
+              expression = expression_info_construct (builder, info->expr, error);
+              if (expression == NULL)
+                {
+                  g_prefix_error (error, "%s:%d:%d: ", priv->filename, info->line, info->col);
+                  error = NULL;
+                  result = FALSE;
+                }
+              else
+                {
+                  gtk_expression_bind (expression, info->target, info->target_pspec->name, object);
+                }
+            }
+
+          free_binding_expression_info (info);
+        }
     }
 
   g_slist_free (priv->bindings);
   priv->bindings = NULL;
-
   return result;
 }
 
@@ -1204,7 +1280,7 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
 /**
  * gtk_builder_extend_with_template:
  * @builder: a #GtkBuilder
- * @widget: the widget that is being extended
+ * @object: the object that is being extended
  * @template_type: the type that the template is for
  * @buffer: the string to parse
  * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
@@ -1220,7 +1296,7 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
  */
 gboolean
 gtk_builder_extend_with_template (GtkBuilder   *builder,
-                                  GtkWidget    *widget,
+                                  GObject      *object,
                                   GType         template_type,
                                   const gchar  *buffer,
                                   gssize        length,
@@ -1231,9 +1307,9 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
   char *filename;
 
   g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
+  g_return_val_if_fail (G_IS_OBJECT (object), 0);
   g_return_val_if_fail (g_type_name (template_type) != NULL, 0);
-  g_return_val_if_fail (g_type_is_a (G_OBJECT_TYPE (widget), template_type), 0);
+  g_return_val_if_fail (g_type_is_a (G_OBJECT_TYPE (object), template_type), 0);
   g_return_val_if_fail (buffer && buffer[0], 0);
 
   tmp_error = NULL;
@@ -1245,7 +1321,7 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
   priv->template_type = template_type;
 
   filename = g_strconcat ("<", g_type_name (template_type), " template>", NULL);
-  gtk_builder_expose_object (builder, g_type_name (template_type), G_OBJECT (widget));
+  gtk_builder_expose_object (builder, g_type_name (template_type), object);
   _gtk_builder_parser_parse_buffer (builder, filename,
                                     buffer, length,
                                     NULL,
