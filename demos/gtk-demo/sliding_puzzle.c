@@ -251,6 +251,8 @@ puzzle_button_pressed (GtkGestureClick *gesture,
     {
       gtk_widget_error_bell (grid);
     }
+
+  check_solved (grid);
 }
 
 static void
