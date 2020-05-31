@@ -267,6 +267,16 @@ stop_search (GtkSearchEntry *entry,
 
 static GtkWidget *window = NULL;
 
+static void
+toggle_ellipsize_name (GSimpleAction *action,
+                       GVariant      *value,
+                       gpointer       user_data)
+{
+  GtkColumnView *cv = user_data;
+
+  g_simple_action_set_state (action, value);
+}
+
 GtkWidget *
 do_listview_settings (GtkWidget *do_widget)
 {
@@ -280,6 +290,10 @@ do_listview_settings (GtkWidget *do_widget)
       GtkBuilder *builder;
       GtkColumnViewColumn *name_column;
       GtkSorter *sorter;
+      GActionGroup *actions;
+      const GActionEntry entries[] = {
+        { "ellipsize-name", NULL, NULL, "false", toggle_ellipsize_name }
+      };
 
       g_type_ensure (SETTINGS_TYPE_KEY);
 
@@ -299,6 +313,13 @@ do_listview_settings (GtkWidget *do_widget)
 
       listview = GTK_WIDGET (gtk_builder_get_object (builder, "listview"));
       columnview = GTK_WIDGET (gtk_builder_get_object (builder, "columnview"));
+
+      actions = G_ACTION_GROUP (g_simple_action_group_new ());
+      g_action_map_add_action_entries (G_ACTION_MAP (actions),
+                                       entries, G_N_ELEMENTS (entries), columnview);
+      gtk_widget_insert_action_group (columnview, "columnview", actions);
+      g_object_unref (actions);
+
       model = create_settings_model (NULL, NULL);
       treemodel = gtk_tree_list_model_new (FALSE,
                                            model,
