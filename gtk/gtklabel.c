@@ -2238,7 +2238,7 @@ extract_mnemonic_keyval (const char      *text,
       p = g_utf8_next_char (p);
       c = g_utf8_get_char (p);
 
-      if (c != '_' && c != '0')
+      if (c != '_' && c != '\0')
         {
           const gsize byte_index = p - text - 1; /* Of the _ */
 
