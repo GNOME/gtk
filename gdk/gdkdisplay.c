@@ -1735,11 +1735,11 @@ gdk_display_map_keycode (GdkDisplay    *display,
  * @keycode: a keycode
  * @state: a modifier state
  * @group: active keyboard group
- * @keyval: (out) (allow-none): return location for keyval, or %NULL
- * @effective_group: (out) (allow-none): return location for effective
+ * @keyval: (out) (optional): return location for keyval, or %NULL
+ * @effective_group: (out) (optional): return location for effective
  *     group, or %NULL
- * @level: (out) (allow-none): return location for level, or %NULL
- * @consumed_modifiers: (out) (allow-none): return location for modifiers
+ * @level: (out) (optional): return location for level, or %NULL
+ * @consumed: (out) (optional): return location for modifiers
  *     that were used to determine the group or level, or %NULL
  *
  * Translates the contents of a #GdkEventKey (ie @keycode, @state, and @group)
