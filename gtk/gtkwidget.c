@@ -3555,6 +3555,9 @@ gtk_widget_queue_resize_internal (GtkWidget *widget)
   priv->resize_needed = TRUE;
   gtk_widget_set_alloc_needed (widget);
 
+  if (priv->resize_func)
+    priv->resize_func (widget);
+
   groups = _gtk_widget_get_sizegroups (widget);
 
   for (l = groups; l; l = l->next)
@@ -5881,7 +5884,7 @@ gtk_widget_reposition_after (GtkWidget *widget,
   if (parent->priv->children_observer)
     {
       if (prev_previous)
-        g_warning ("oops");
+        gtk_list_list_model_item_moved (parent->priv->children_observer, widget, prev_previous);
       else
         gtk_list_list_model_item_added (parent->priv->children_observer, widget);
     }
@@ -10959,7 +10962,7 @@ gtk_widget_init_template (GtkWidget *widget)
    * will validate that the template is created for the correct GType and assert that
    * there is no infinite recursion.
    */
-  if (!gtk_builder_extend_with_template  (builder, widget, class_type,
+  if (!gtk_builder_extend_with_template  (builder, G_OBJECT (widget), class_type,
 					  (const gchar *)g_bytes_get_data (template->data, NULL),
 					  g_bytes_get_size (template->data),
 					  &error))

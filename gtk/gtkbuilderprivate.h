@@ -21,16 +21,19 @@
 
 #include "gtkbuilder.h"
 #include "gtkbuildable.h"
+#include "gtkexpression.h"
 
 enum {
   TAG_PROPERTY,
-  TAG_MENU,
+  TAG_BINDING,
+  TAG_BINDING_EXPRESSION,
   TAG_REQUIRES,
   TAG_OBJECT,
   TAG_CHILD,
   TAG_SIGNAL,
   TAG_INTERFACE,
   TAG_TEMPLATE,
+  TAG_EXPRESSION,
 };
 
 typedef struct {
@@ -64,6 +67,7 @@ typedef struct {
 typedef struct {
   guint tag_type;
   GParamSpec *pspec;
+  gpointer value;
   GString *text;
   gboolean translatable:1;
   gboolean bound:1;
@@ -71,6 +75,36 @@ typedef struct {
   gint line;
   gint col;
 } PropertyInfo;
+
+typedef struct _ExpressionInfo ExpressionInfo;
+struct _ExpressionInfo {
+  guint tag_type;
+  enum {
+    EXPRESSION_EXPRESSION,
+    EXPRESSION_CONSTANT,
+    EXPRESSION_CLOSURE,
+    EXPRESSION_PROPERTY
+  } expression_type;
+  union {
+    GtkExpression *expression;
+    struct {
+      GType type;
+      GString *text;
+    } constant;
+    struct {
+      GType type;
+      char *function_name;
+      char *object_name;
+      gboolean swapped;
+      GSList *params;
+    } closure;
+    struct {
+      GType this_type;
+      char *property_name;
+      ExpressionInfo *expression;
+    } property;
+  };
+};
 
 typedef struct {
   guint tag_type;
@@ -84,6 +118,7 @@ typedef struct {
 
 typedef struct
 {
+  guint tag_type;
   GObject *target;
   GParamSpec *target_pspec;
   gchar *source;
@@ -92,6 +127,17 @@ typedef struct
   gint line;
   gint col;
 } BindingInfo;
+
+typedef struct
+{
+  guint tag_type;
+  GObject *target;
+  GParamSpec *target_pspec;
+  char *object_name;
+  ExpressionInfo *expr;
+  gint line;
+  gint col;
+} BindingExpressionInfo;
 
 typedef struct {
   guint    tag_type;
@@ -179,6 +225,12 @@ gboolean  _gtk_builder_finish (GtkBuilder  *builder,
                                GError     **error);
 void _free_signal_info (SignalInfo *info,
                         gpointer user_data);
+void _free_binding_info (BindingInfo *info,
+                         gpointer user_data);
+void free_binding_expression_info (BindingExpressionInfo *info);
+GtkExpression * expression_info_construct (GtkBuilder      *builder,
+                                           ExpressionInfo  *info,
+                                           GError         **error);
 
 /* Internal API which might be made public at some point */
 gboolean _gtk_builder_boolean_from_string (const gchar  *string,

@@ -127,7 +127,7 @@ update_pointer_focus (GtkEventController    *controller,
     }
 
   if (leave)
-    g_signal_emit (controller, signals[LEAVE], 0, crossing->mode);
+    g_signal_emit (controller, signals[LEAVE], 0);
 
   g_object_freeze_notify (G_OBJECT (motion));
   if (motion->is_pointer != is_pointer)
@@ -143,7 +143,7 @@ update_pointer_focus (GtkEventController    *controller,
   g_object_thaw_notify (G_OBJECT (motion));
 
   if (enter)
-    g_signal_emit (controller, signals[ENTER], 0, x, y, crossing->mode);
+    g_signal_emit (controller, signals[ENTER], 0, x, y);
 }
 
 static void
@@ -232,7 +232,6 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
    * @controller: the object which received the signal
    * @x: coordinates of pointer location
    * @y: coordinates of pointer location
-   * @mode: crossing mode
    *
    * Signals that the pointer has entered the widget.
    */
@@ -242,15 +241,13 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
                   NULL,
-                  G_TYPE_NONE, 3,
+                  G_TYPE_NONE, 2,
                   G_TYPE_DOUBLE,
-                  G_TYPE_DOUBLE,
-                  GDK_TYPE_CROSSING_MODE);
+                  G_TYPE_DOUBLE);
 
   /**
    * GtkEventControllerMotion::leave:
    * @controller: the object which received the signal
-   * @mode: crossing mode
    *
    * Signals that the pointer has left the widget.
    */
@@ -260,8 +257,7 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
                   NULL,
-                  G_TYPE_NONE, 1,
-                  GDK_TYPE_CROSSING_MODE);
+                  G_TYPE_NONE, 0);
 
   /**
    * GtkEventControllerMotion::motion:

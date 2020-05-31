@@ -87,12 +87,12 @@ Finally here's a quick list of equivalent functionality to look for when transit
 | #GtkListStore       | #GListStore                         |
 | #GtkTreeStore       | #GtkTreeListModel, #GtkTreeExpander |
 | #GtkTreeSelection   | #GtkSelectionModel                  |
-| #GtkTreeViewColumn  | FIXME: ColumnView                   |
-| #GtkTreeView        | #GtkListView, FIXME: ColumnView     |
-| #GtkCellView        | ?                                   |
-| #GtkComboBox        | FIXME                               |
+| #GtkTreeViewColumn  | #GtkColumnView                      |
+| #GtkTreeView        | #GtkListView, #GtkColumnView        |
+| #GtkCellView        |                                     |
+| #GtkComboBox        |                                     |
 | #GtkIconView        | #GtkGridView                        |
-| #GtkTreeSortable    | FIXME: ColumnView?                  |
+| #GtkTreeSortable    |                                     |
 | #GtkTreeModelSort   | #GtkSortListModel                   |
 | #GtkTreeModelFilter | #GtkFilterListModel                 |
 | #GtkCellLayout      | #GtkListItemFactory                 |

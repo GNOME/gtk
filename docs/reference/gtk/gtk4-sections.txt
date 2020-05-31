@@ -393,6 +393,179 @@ gtk_single_selection_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtklistitem</FILE>
+<TITLE>GtkListItem</TITLE>
+GtkListItem
+gtk_list_item_get_item
+gtk_list_item_get_position
+gtk_list_item_get_child
+gtk_list_item_set_child
+gtk_list_item_get_selected
+gtk_list_item_get_selectable
+gtk_list_item_set_selectable
+<SUBSECTION Standard>
+GTK_LIST_ITEM
+GTK_LIST_ITEM_CLASS
+GTK_LIST_ITEM_GET_CLASS
+GTK_IS_LIST_ITEM
+GTK_IS_LIST_ITEM_CLASS
+GTK_TYPE_LIST_ITEM
+<SUBSECTION Private>
+gtk_list_item_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtklistitemfactory</FILE>
+<TITLE>GtkListItemFactory</TITLE>
+GtkListItemFactory
+<SUBSECTION Standard>
+GTK_LIST_ITEM_FACTORY
+GTK_LIST_ITEM_FACTORY_CLASS
+GTK_LIST_ITEM_FACTORY_GET_CLASS
+GTK_IS_LIST_ITEM_FACTORY
+GTK_IS_LIST_ITEM_FACTORY_CLASS
+GTK_TYPE_LIST_ITEM_FACTORY
+<SUBSECTION Private>
+gtk_list_item_factory_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkbuilderlistitemfactory</FILE>
+<TITLE>GtkBuilderListItemFactory</TITLE>
+GtkBuilderListItemFactory
+gtk_builder_list_item_factory_new_from_bytes
+gtk_builder_list_item_factory_new_from_resource
+gtk_builder_list_item_factory_get_bytes
+gtk_builder_list_item_factory_get_resource
+gtk_builder_list_item_factory_get_scope
+<SUBSECTION Standard>
+GTK_BUILDER_LIST_ITEM_FACTORY
+GTK_BUILDER_LIST_ITEM_FACTORY_CLASS
+GTK_BUILDER_LIST_ITEM_FACTORY_GET_CLASS
+GTK_IS_BUILDER_LIST_ITEM_FACTORY
+GTK_IS_BUILDER_LIST_ITEM_FACTORY_CLASS
+GTK_TYPE_BUILDER_LIST_ITEM_FACTORY
+<SUBSECTION Private>
+gtk_builder_list_item_factory_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtksignallistitemfactory</FILE>
+<TITLE>GtkSignalListItemFactory</TITLE>
+GtkSignalListItemFactory
+gtk_signal_list_item_factory_new
+<SUBSECTION Standard>
+GTK_SIGNAL_LIST_ITEM_FACTORY
+GTK_SIGNAL_LIST_ITEM_FACTORY_CLASS
+GTK_SIGNAL_LIST_ITEM_FACTORY_GET_CLASS
+GTK_IS_SIGNAL_LIST_ITEM_FACTORY
+GTK_IS_SIGNAL_LIST_ITEM_FACTORY_CLASS
+GTK_TYPE_SIGNAL_LIST_ITEM_FACTORY
+<SUBSECTION Private>
+gtk_signal_list_item_factory_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtklistview</FILE>
+<TITLE>GtkListView</TITLE>
+GtkListView
+gtk_list_view_new
+gtk_list_view_new_with_factory
+gtk_list_view_set_factory
+gtk_list_view_get_factory
+gtk_list_view_set_model
+gtk_list_view_get_model
+gtk_list_view_set_show_separators
+gtk_list_view_get_show_separators
+gtk_list_view_set_single_click_activate
+gtk_list_view_get_single_click_activate
+<SUBSECTION Standard>
+GTK_LIST_VIEW
+GTK_LIST_VIEW_CLASS
+GTK_LIST_VIEW_GET_CLASS
+GTK_IS_LIST_VIEW
+GTK_IS_LIST_VIEW_CLASS
+GTK_TYPE_LIST_VIEW
+<SUBSECTION Private>
+gtk_list_view_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkcolumnview</FILE>
+<TITLE>GtkColumnView</TITLE>
+GtkColumnView
+gtk_column_view_new
+gtk_column_view_append_column
+gtk_column_view_remove_column
+gtk_column_view_get_columns
+gtk_column_view_get_model
+gtk_column_view_set_model
+gtk_column_view_get_sorter
+gtk_column_view_get_show_separators
+gtk_column_view_set_show_separators
+gtk_column_view_sort_by_column
+gtk_column_view_set_single_click_activate
+gtk_column_view_get_single_click_activate
+<SUBSECTION Standard>
+GTK_COLUMN_VIEW
+GTK_COLUMN_VIEW_CLASS
+GTK_COLUMN_VIEW_GET_CLASS
+GTK_IS_COLUMN_VIEW
+GTK_IS_COLUMN_VIEW_CLASS
+GTK_TYPE_COLUMN_VIEW
+<SUBSECTION Private>
+gtk_column_view_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkcolumnviewcolumn</FILE>
+<TITLE>GtkColumnViewColumn</TITLE>
+GtkColumnViewColumn
+gtk_column_view_column_new
+gtk_column_view_column_new_with_factory
+gtk_column_view_column_get_column_view
+gtk_column_view_column_set_factory
+gtk_column_view_column_get_factory
+gtk_column_view_column_set_title
+gtk_column_view_column_get_title
+gtk_column_view_column_set_sorter
+gtk_column_view_column_get_sorter
+<SUBSECTION Standard>
+GTK_COLUMN_VIEW_COLUMN
+GTK_COLUMN_VIEW_COLUMN_CLASS
+GTK_COLUMN_VIEW_COLUMN_GET_CLASS
+GTK_IS_COLUMN_VIEW_COLUMN
+GTK_IS_COLUMN_VIEW_COLUMN_CLASS
+GTK_TYPE_COLUMN_VIEW_COLUMN
+<SUBSECTION Private>
+gtk_column_view_column_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkgridview</FILE>
+<TITLE>GtkGridView</TITLE>
+GtkGridView
+gtk_grid_view_new
+gtk_grid_view_set_model
+gtk_grid_view_get_model
+gtk_grid_view_set_max_columns
+gtk_grid_view_get_max_columns
+gtk_grid_view_set_min_columns
+gtk_grid_view_get_min_columns
+gtk_grid_view_set_single_click_activate
+gtk_grid_view_get_single_click_activate
+<SUBSECTION Standard>
+GTK_GRID_VIEW
+GTK_GRID_VIEW_CLASS
+GTK_GRID_VIEW_GET_CLASS
+GTK_IS_GRID_VIEW
+GTK_IS_GRID_VIEW_CLASS
+GTK_TYPE_GRID_VIEW
+<SUBSECTION Private>
+gtk_grid_view_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkbuildable</FILE>
 GtkBuildable
 GtkBuildableIface
@@ -1161,6 +1334,92 @@ gtk_file_filter_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkdirectorylist</FILE>
+<TITLE>GtkDirectoryList</TITLE>
+GtkDirectoryList
+gtk_directory_list_new
+gtk_directory_list_get_attributes
+gtk_directory_list_set_attributes
+gtk_directory_list_get_file
+gtk_directory_list_set_file
+gtk_directory_list_get_io_priority
+gtk_directory_list_set_io_priority
+gtk_directory_list_is_loading
+gtk_directory_list_get_error
+<SUBSECTION Standard>
+GTK_DIRECTORY_LIST
+GTK_IS_DIRECTORY_LIST
+GTK_TYPE_DIRECTORY_LIST
+GTK_DIRECTORY_LIST_CLASS
+GTK_IS_DIRECTORY_LIST_CLASS
+GTK_DIRECTORY_LIST_GET_CLASS
+<SUBSECTION Private>
+gtk_directory_list_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkfilter</FILE>
+<TITLE>GtkFilter</TITLE>
+GtkFilter
+gtk_filter_match
+gtk_filter_get_strictness
+<SUBSECTION>
+GtkFilterChange
+gtk_filter_changed
+<SUBSECTION>
+gtk_custom_filter_new
+<SUBSECTION Standard>
+GTK_FILTER
+GTK_IS_FILTER
+GTK_TYPE_FILTER
+GTK_FILTER_CLASS
+GTK_IS_FILTER_CLASS
+GTK_FILTER_GET_CLASS
+<SUBSECTION Private>
+gtk_filter_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkcustomfilter</FILE>
+<TITLE>GtkCustomFilter</TITLE>
+GtkCustomFilter
+GtkCustomFilterFunc
+gtk_custom_filter_new
+<SUBSECTION Standard>
+GTK_CUSTOM_FILTER
+GTK_IS_CUSTOM_FILTER
+GTK_TYPE_CUSTOM_FILTER
+GTK_CUSTOM_FILTER_CLASS
+GTK_IS_CUSTOM_FILTER_CLASS
+GTK_CUSTOM_FILTER_GET_CLASS
+<SUBSECTION Private>
+gtk_custom_filter_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkmultifilter</FILE>
+<TITLE>GtkMultiFilter</TITLE>
+GtkMultiFilter
+gtk_multi_filter_append
+gtk_multi_filter_remove
+<SUBSECTION>
+GtkAnyFilter
+gtk_any_filter_new
+<SUBSECTION>
+GtkEveryFilter
+gtk_every_filter_new
+<SUBSECTION Standard>
+GTK_CUSTOM_FILTER
+GTK_IS_CUSTOM_FILTER
+GTK_TYPE_CUSTOM_FILTER
+GTK_CUSTOM_FILTER_CLASS
+GTK_IS_CUSTOM_FILTER_CLASS
+GTK_CUSTOM_FILTER_GET_CLASS
+<SUBSECTION Private>
+gtk_custom_filter_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkfilterlistmodel</FILE>
 <TITLE>GtkFilterListModel</TITLE>
 GtkFilterListModel
@@ -1169,9 +1428,8 @@ gtk_filter_list_model_new
 gtk_filter_list_model_new_for_type
 gtk_filter_list_model_set_model
 gtk_filter_list_model_get_model
-gtk_filter_list_model_set_filter_func
-gtk_filter_list_model_has_filter
-gtk_filter_list_model_refilter
+gtk_filter_list_model_set_filter
+gtk_filter_list_model_get_filter
 <SUBSECTION Standard>
 GTK_FILTER_LIST_MODEL
 GTK_IS_FILTER_LIST_MODEL
@@ -2337,16 +2595,122 @@ gtk_slice_list_model_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtksorter</FILE>
+<TITLE>GtkSorter</TITLE>
+GtkSorter
+GtkSorterOrder
+GtkSorterChange
+gtk_sorter_compare
+gtk_sorter_get_order
+gtk_sorter_changed
+<SUBSECTION Standard>
+GTK_SORTER
+GTK_IS_SORTER
+GTK_TYPE_SORTER
+GTK_SORTER_CLASS
+GTK_IS_SORTER_CLASS
+GTK_SORTER_GET_CLASS
+<SUBSECTION Private>
+gtk_sorter_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkstringsorter</FILE>
+<TITLE>GtkStringSorter</TITLE>
+GtkStringSorter
+gtk_string_sorter_new
+gtk_string_sorter_get_expression
+gtk_string_sorter_set_expression
+gtk_string_sorter_get_ignore_case
+gtk_string_sorter_set_ignore_case
+<SUBSECTION Standard>
+GTK_STRING_SORTER
+GTK_IS_STRING_SORTER
+GTK_TYPE_STRING_SORTER
+GTK_IS_STRING_SORTER_CLASS
+GTK_STRING_SORTER_GET_CLASS
+<SUBSECTION Private>
+gtk_string_sorter_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtknumericsorter</FILE>
+<TITLE>GtkNumericSorter</TITLE>
+GtkNumericSorter
+gtk_numeric_sorter_new
+gtk_numeric_sorter_get_expression
+gtk_numeric_sorter_set_expression
+gtk_numeric_sorter_get_sort_order
+gtk_numeric_sorter_set_sort_order
+<SUBSECTION Standard>
+GTK_NUMERIC_SORTER
+GTK_IS_NUMERIC_SORTER
+GTK_TYPE_NUMERIC_SORTER
+GTK_IS_NUMERIC_SORTER_CLASS
+GTK_NUMERIC_SORTER_GET_CLASS
+<SUBSECTION Private>
+gtk_numeric_sorter_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkcustomsorter</FILE>
+<TITLE>GtkCustomSorter</TITLE>
+GtkCustomSorter
+gtk_custom_sorter_new
+<SUBSECTION Standard>
+GTK_CUSTOM_SORTER
+GTK_IS_CUSTOM_SORTER
+GTK_TYPE_CUSTOM_SORTER
+GTK_IS_CUSTOM_SORTER_CLASS
+GTK_CUSTOM_SORTER_GET_CLASS
+<SUBSECTION Private>
+gtk_custom_sorter_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkmultisorter</FILE>
+<TITLE>GtkMultiSorter</TITLE>
+GtkMultiSorter
+gtk_multi_sorter_new
+gtk_multi_sorter_append
+gtk_multi_sorter_remove
+<SUBSECTION Standard>
+GTK_MULTI_SORTER
+GTK_IS_MULTI_SORTER
+GTK_TYPE_MULTI_SORTER
+GTK_IS_MULTI_SORTER_CLASS
+GTK_MULTI_SORTER_GET_CLASS
+<SUBSECTION Private>
+gtk_multi_sorter_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtktreelistrowsorter</FILE>
+<TITLE>GtkTreeListRowSorter</TITLE>
+GtkTreeListRowSorter
+gtk_tree_list_row_sorter_new
+gtk_tree_list_row_sorter_get_sorter
+gtk_tree_list_row_sorter_set_sorter
+<SUBSECTION Standard>
+GTK_TREE_LIST_ROW_SORTER
+GTK_IS_TREE_LIST_ROW_SORTER
+GTK_TYPE_TREE_LIST_ROW_SORTER
+GTK_IS_TREE_LIST_ROW_SORTER_CLASS
+GTK_TREE_LIST_ROW_SORTER_GET_CLASS
+<SUBSECTION Private>
+gtk_tree_list_row_sorter_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtksortlistmodel</FILE>
 <TITLE>GtkSortListModel</TITLE>
 GtkSortListModel
 gtk_sort_list_model_new
 gtk_sort_list_model_new_for_type
-gtk_sort_list_model_set_sort_func
-gtk_sort_list_model_has_sort
+gtk_sort_list_model_set_sorter
+gtk_sort_list_model_get_sorter
 gtk_sort_list_model_set_model
 gtk_sort_list_model_get_model
-gtk_sort_list_model_resort
 <SUBSECTION Standard>
 GTK_SORT_LIST_MODEL
 GTK_IS_SORT_LIST_MODEL
@@ -2930,6 +3294,26 @@ GTK_IS_TREE_LIST_MODEL_CLASS
 GTK_TREE_LIST_MODEL_GET_CLASS
 <SUBSECTION Private>
 gtk_tree_list_row_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtktreeexpander</FILE>
+<TITLE>GtkTreeExpander</TITLE>
+gtk_tree_expander_new
+gtk_tree_expander_get_child
+gtk_tree_expander_set_child
+gtk_tree_expander_get_item
+gtk_tree_expander_get_list_row
+gtk_tree_expander_set_list_row
+<SUBSECTION Standard>
+GTK_TREE_EXPANDER
+GTK_IS_TREE_EXPANDER
+GTK_TYPE_TREE_EXPANDER
+GTK_TREE_EXPANDER_CLASS
+GTK_IS_TREE_EXPANDER_CLASS
+GTK_TREE_EXPANDER_GET_CLASS
+<SUBSECTION Private>
+gtk_tree_expander_get_type
 </SECTION>
 
 <SECTION>
@@ -4553,6 +4937,8 @@ GtkDeleteType
 GtkDirectionType
 GtkJustification
 GtkMovementStep
+GtkOrdering
+gtk_ordering_from_cmpfunc
 GtkOrientation
 GtkPackType
 GtkPositionType
@@ -7004,6 +7390,56 @@ gtk_overlay_layout_child_get_clip_overlay
 GTK_TYPE_OVERLAY_LAYOUT
 gtk_overlay_layout_get_type
 GTK_TYPE_OVERLAY_LAYOUT_CHLD
-gtk_overlay_layout_child_
-get_type
+gtk_overlay_layout_child_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkexpression</FILE>
+GtkExpression
+GtkExpressionWatch
+GtkExpressionNotify
+gtk_expression_ref
+gtk_expression_unref
+gtk_expression_get_value_type
+gtk_expression_is_static
+gtk_expression_evaluate
+gtk_expression_watch
+gtk_expression_bind
+gtk_expression_watch_ref
+gtk_expression_watch_unref
+gtk_expression_watch_evaluate
+gtk_expression_watch_unwatch
+
+<SUBSECTION>
+gtk_property_expression_new
+gtk_property_expression_new_for_pspec
+gtk_constant_expression_new
+gtk_constant_expression_new_for_value
+gtk_object_expression_new
+gtk_closure_expression_new
+gtk_cclosure_expression_new
+
+<SUBSECTION Standard>
+GTK_IS_EXPRESSION
+GTK_TYPE_EXPRESSION
+<SUBSECTION Private>
+gtk_expression_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkstringfilter</FILE>
+GtkStringFilter
+GtkStringFilterMatchMode
+gtk_string_filter_new
+gtk_string_filter_get_search
+gtk_string_filter_set_search
+gtk_string_filter_get_expression
+gtk_string_filter_set_expression
+gtk_string_filter_get_ignore_case
+gtk_string_filter_set_ignore_case
+gtk_string_filter_get_match_mode
+gtk_string_filter_set_match_mode
+
+<SUBSECTION Private>
+gtk_string_filter_get_type
 </SECTION>
