@@ -77,6 +77,7 @@
                     <child>
                       <object class="GtkColumnViewColumn" id="name_column">
                         <property name="title">Name</property>
+                        <property name="header-menu">name_menu</property>
                         <property name="factory">
                           <object class="GtkBuilderListItemFactory">
                             <property name="bytes"><![CDATA[
@@ -135,4 +136,16 @@
       </object>
     </child>
   </object>
+  <menu id="name_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Ellipsize</attribute>
+        <attribute name="action">columnview.ellipsize-name</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Close</attribute>
+        <attribute name="action">window.close</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>
