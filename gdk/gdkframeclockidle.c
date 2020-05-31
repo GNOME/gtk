@@ -281,7 +281,7 @@ compute_min_next_frame_time (GdkFrameClockIdle *clock_idle,
   if (presentation_time == 0)
     return last_frame_time + refresh_interval;
   else
-    return presentation_time + refresh_interval / 2;
+    return presentation_time + refresh_interval;
 }
 
 static gboolean
