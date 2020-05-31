@@ -15,23 +15,13 @@
  */
 #include <gtk/gtk.h>
 
-static int win_activated;
-static int box_activated;
-
 static void
-win_activate (GSimpleAction *action,
-              GVariant      *parameter,
-              gpointer       user_data)
+activate (GSimpleAction *action,
+          GVariant      *parameter,
+          gpointer       user_data)
 {
-  win_activated++;
-}
-
-static void
-box_activate (GSimpleAction *action,
-              GVariant      *parameter,
-              gpointer       user_data)
-{
-  box_activated++;
+  int *activated = user_data;
+  (*activated)++;
 }
 
 /* Test that inheriting actions along the widget
@@ -47,13 +37,15 @@ test_inheritance (void)
   GtkWidget *button;
   GSimpleActionGroup *win_actions;
   GSimpleActionGroup *box_actions;
-  GActionEntry win_entries[] = {
-    { "action", win_activate, NULL, NULL, NULL },
-  };
-  GActionEntry box_entries[] = {
-    { "action", box_activate, NULL, NULL, NULL },
+  GActionEntry entries[] = {
+    { "action", activate, NULL, NULL, NULL },
   };
   gboolean found;
+  int win_activated;
+  int box_activated;
+
+  win_activated = 0;
+  box_activated = 0;
 
   /* Our hierarchy looks like this:
    *
@@ -72,15 +64,13 @@ test_inheritance (void)
 
   win_actions = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (win_actions),
-                                   win_entries,
-                                   G_N_ELEMENTS (win_entries),
-                                   NULL);
+                                   entries, G_N_ELEMENTS (entries),
+                                   &win_activated);
 
   box_actions = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (box_actions),
-                                   box_entries,
-                                   G_N_ELEMENTS (box_entries),
-                                   NULL);
+                                   entries, G_N_ELEMENTS (entries),
+                                   &box_activated);
 
   gtk_widget_insert_action_group (window, "win", G_ACTION_GROUP (win_actions));
   gtk_widget_insert_action_group (box, "box", G_ACTION_GROUP (box_actions));
@@ -115,6 +105,225 @@ test_inheritance (void)
   gtk_window_destroy (GTK_WINDOW (window));
   g_object_unref (win_actions);
   g_object_unref (box_actions);
+}
+
+/* Test action inheritance with hierarchy changes */
+static void
+test_inheritance2 (void)
+{
+  GtkWidget *window;
+  GtkWidget *box;
+  GtkWidget *box1;
+  GtkWidget *box2;
+  GtkWidget *button;
+  GSimpleActionGroup *win_actions;
+  GSimpleActionGroup *box1_actions;
+  GSimpleActionGroup *box2_actions;
+  GActionEntry entries[] = {
+    { "action", activate, NULL, NULL, NULL },
+  };
+  gboolean found;
+  int win_activated;
+  int box1_activated;
+  int box2_activated;
+
+  win_activated = 0;
+  box1_activated = 0;
+  box2_activated = 0;
+
+  /* Our hierarchy looks like this:
+   *
+   * window win.action
+   *   |
+   *  box--------------------+
+   *   |                     |
+   *  box1   box1.action    box2   box2.action;
+   *   |
+   * button
+   */
+  window = gtk_window_new ();
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  box1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  button = gtk_button_new ();
+
+  gtk_window_set_child (GTK_WINDOW (window), box);
+  gtk_box_append (GTK_BOX (box), box1);
+  gtk_box_append (GTK_BOX (box), box2);
+  gtk_box_append (GTK_BOX (box1), button);
+
+  win_actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (win_actions),
+                                   entries, G_N_ELEMENTS (entries),
+                                   &win_activated);
+
+  box1_actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (box1_actions),
+                                   entries, G_N_ELEMENTS (entries),
+                                   &box1_activated);
+
+  box2_actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (box2_actions),
+                                   entries, G_N_ELEMENTS (entries),
+                                   &box2_activated);
+
+  gtk_widget_insert_action_group (window, "win", G_ACTION_GROUP (win_actions));
+  gtk_widget_insert_action_group (box1, "box1", G_ACTION_GROUP (box1_actions));
+  gtk_widget_insert_action_group (box2, "box2", G_ACTION_GROUP (box2_actions));
+
+  g_assert_cmpint (win_activated, ==, 0);
+  g_assert_cmpint (box1_activated, ==, 0);
+  g_assert_cmpint (box2_activated, ==, 0);
+
+  found = gtk_widget_activate_action (button, "win.action", NULL);
+
+  g_assert_true (found);
+  g_assert_cmpint (win_activated, ==, 1);
+  g_assert_cmpint (box1_activated, ==, 0);
+  g_assert_cmpint (box2_activated, ==, 0);
+
+  found = gtk_widget_activate_action (button, "box1.action", NULL);
+
+  g_assert_true (found);
+  g_assert_cmpint (win_activated, ==, 1);
+  g_assert_cmpint (box1_activated, ==, 1);
+  g_assert_cmpint (box2_activated, ==, 0);
+
+  found = gtk_widget_activate_action (button, "box2.action", NULL);
+
+  g_assert_false (found);
+  g_assert_cmpint (win_activated, ==, 1);
+  g_assert_cmpint (box1_activated, ==, 1);
+  g_assert_cmpint (box2_activated, ==, 0);
+
+  g_object_ref (button);
+  gtk_box_remove (GTK_BOX (box1), button);
+  gtk_box_append (GTK_BOX (box2), button);
+  g_object_unref (button);
+
+  found = gtk_widget_activate_action (button, "win.action", NULL);
+
+  g_assert_true (found);
+  g_assert_cmpint (win_activated, ==, 2);
+  g_assert_cmpint (box1_activated, ==, 1);
+  g_assert_cmpint (box2_activated, ==, 0);
+
+  found = gtk_widget_activate_action (button, "box1.action", NULL);
+
+  g_assert_false (found);
+  g_assert_cmpint (win_activated, ==, 2);
+  g_assert_cmpint (box1_activated, ==, 1);
+  g_assert_cmpint (box2_activated, ==, 0);
+
+  found = gtk_widget_activate_action (button, "box2.action", NULL);
+
+  g_assert_true (found);
+  g_assert_cmpint (win_activated, ==, 2);
+  g_assert_cmpint (box1_activated, ==, 1);
+  g_assert_cmpint (box2_activated, ==, 1);
+
+  gtk_window_destroy (GTK_WINDOW (window));
+
+  g_object_unref (win_actions);
+  g_object_unref (box1_actions);
+  g_object_unref (box2_actions);
+}
+
+/* Similar to test_inheritance2, but using the actionable machinery
+ */
+static void
+test_inheritance3 (void)
+{
+  GtkWidget *window;
+  GtkWidget *box;
+  GtkWidget *box1;
+  GtkWidget *box2;
+  GtkWidget *button;
+  GSimpleActionGroup *win_actions;
+  GSimpleActionGroup *box1_actions;
+  GActionEntry entries[] = {
+    { "action", activate, NULL, NULL, NULL },
+  };
+  int activated;
+
+  /* Our hierarchy looks like this:
+   *
+   * window win.action
+   *   |
+   *  box--------------------+
+   *   |                     |
+   *  box1   box1.action    box2
+   *   |
+   * button
+   */
+  window = gtk_window_new ();
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  box1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  button = gtk_button_new ();
+
+  gtk_window_set_child (GTK_WINDOW (window), box);
+  gtk_box_append (GTK_BOX (box), box1);
+  gtk_box_append (GTK_BOX (box), box2);
+  gtk_box_append (GTK_BOX (box1), button);
+
+  win_actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (win_actions),
+                                   entries, G_N_ELEMENTS (entries),
+                                   &activated);
+
+  box1_actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (box1_actions),
+                                   entries, G_N_ELEMENTS (entries),
+                                   &activated);
+
+  gtk_widget_insert_action_group (window, "win", G_ACTION_GROUP (win_actions));
+  gtk_widget_insert_action_group (box1, "box1", G_ACTION_GROUP (box1_actions));
+
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "box1.action");
+
+  g_assert_true (gtk_widget_get_sensitive (button));
+
+  g_object_ref (button);
+  gtk_box_remove (GTK_BOX (box1), button);
+  gtk_box_append (GTK_BOX (box2), button);
+  g_object_unref (button);
+
+  g_assert_false (gtk_widget_get_sensitive (button));
+
+  g_object_ref (button);
+  gtk_box_remove (GTK_BOX (box2), button);
+  gtk_box_append (GTK_BOX (box1), button);
+  g_object_unref (button);
+
+  g_assert_true (gtk_widget_get_sensitive (button));
+
+  g_object_ref (button);
+  gtk_box_remove (GTK_BOX (box1), button);
+  gtk_box_append (GTK_BOX (box2), button);
+  g_object_unref (button);
+
+  g_assert_false (gtk_widget_get_sensitive (button));
+
+  g_object_ref (box2);
+  gtk_box_remove (GTK_BOX (box), box2);
+  gtk_box_append (GTK_BOX (box1), box2);
+  g_object_unref (box2);
+
+  g_assert_true (gtk_widget_get_sensitive (button));
+
+  gtk_widget_insert_action_group (box1, "box1", NULL);
+
+  g_assert_false (gtk_widget_get_sensitive (button));
+
+  gtk_widget_insert_action_group (box1, "box1", G_ACTION_GROUP (box1_actions));
+
+  g_assert_true (gtk_widget_get_sensitive (button));
+
+  gtk_window_destroy (GTK_WINDOW (window));
+
+  g_object_unref (win_actions);
+  g_object_unref (box1_actions);
 }
 
 static int cut_activated;
@@ -212,13 +421,15 @@ test_overlap (void)
   GtkWidget *window;
   GtkWidget *box;
   GActionEntry win_entries[] = {
-    { "win", win_activate, NULL, NULL, NULL },
+    { "win", activate, NULL, NULL, NULL },
   };
   GActionEntry box_entries[] = {
-    { "box", box_activate, NULL, NULL, NULL },
+    { "box", activate, NULL, NULL, NULL },
   };
   GSimpleActionGroup *win_actions;
   GSimpleActionGroup *box_actions;
+  int win_activated;
+  int box_activated;
 
   window = gtk_window_new ();
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -229,13 +440,13 @@ test_overlap (void)
   g_action_map_add_action_entries (G_ACTION_MAP (win_actions),
                                    win_entries,
                                    G_N_ELEMENTS (win_entries),
-                                   NULL);
+                                   &win_activated);
 
   box_actions = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (box_actions),
                                    box_entries,
                                    G_N_ELEMENTS (box_entries),
-                                   NULL);
+                                   &box_activated);
 
   gtk_widget_insert_action_group (window, "actions", G_ACTION_GROUP (win_actions));
   gtk_widget_insert_action_group (box, "actions", G_ACTION_GROUP (box_actions));
@@ -448,6 +659,8 @@ main (int   argc,
   gtk_test_init (&argc, &argv);
 
   g_test_add_func ("/action/inheritance", test_inheritance);
+  g_test_add_func ("/action/inheritance2", test_inheritance2);
+  g_test_add_func ("/action/inheritance3", test_inheritance3);
   g_test_add_func ("/action/text", test_text);
   g_test_add_func ("/action/overlap", test_overlap);
   g_test_add_func ("/action/overlap2", test_overlap2);
