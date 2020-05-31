@@ -218,7 +218,6 @@
     <file>infobar.c</file>
     <file>links.c</file>
     <file>listbox.c</file>
-    <file>listview_applauncher.c</file>
     <file>listview_colors.c</file>
     <file>listview_clocks.c</file>
     <file>listview_filebrowser.c</file>
