@@ -567,7 +567,7 @@ gtk_column_view_column_set_title (GtkColumnViewColumn *self,
  *
  * Returns the title set with gtk_column_view_column_set_title().
  *
- * Returns: (nullable) The column's title
+ * Returns: (nullable): The column's title
  */
 const char *
 gtk_column_view_column_get_title (GtkColumnViewColumn *self)

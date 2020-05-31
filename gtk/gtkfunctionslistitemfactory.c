@@ -101,6 +101,17 @@ gtk_functions_list_item_factory_init (GtkFunctionsListItemFactory *self)
 {
 }
 
+/**
+ * gtk_functions_list_item_factory_new: (skip)
+ * @setup_func: (scope call) (destroy user_destroy): the setup function for the list item factory
+ * @bind_func: (scope call) (destroy user_destroy): the bind function for the list item factory
+ * @user_data: user data for the @setup_func and @bind_func functions
+ * @user_destroy: a function called to destroy @user_data
+ *
+ * Creates a new #GtkListItemFactory with the given functions.
+ *
+ * Returns: (transfer full): the newly created list item factory object
+ */
 GtkListItemFactory *
 gtk_functions_list_item_factory_new (GtkListItemSetupFunc setup_func,
                                      GtkListItemBindFunc  bind_func,

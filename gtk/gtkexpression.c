@@ -980,10 +980,10 @@ gtk_closure_expression_new (GType                value_type,
 /**
  * gtk_cclosure_expression_new:
  * @value_type: the type of the value that this expression evaluates to
- * @marshal: marshaller used for creating a closure
+ * @marshal: (scope call): marshaller used for creating a closure
  * @n_params: the number of params needed for evaluating @closure
  * @params: (array length=n_params) (transfer full): expressions for each parameter
- * @callback_func: callback used for creating a closure
+ * @callback_func: (scope notified) (closure user_data) (destroy user_destroy): callback used for creating a closure
  * @user_data: user data used for creating a closure
  * @user_destroy: destroy notify for @user_data
  *
