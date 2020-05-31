@@ -32,8 +32,6 @@
 #include "gtkwidgetprivate.h"
 #include "gtkbuildable.h"
 
-#include "fallback-c89.c"
-
 /**
  * SECTION:gtkrevealer
  * @Short_description: Hide and show with animation

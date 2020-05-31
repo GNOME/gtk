@@ -20,8 +20,6 @@
 
 #include <stdio.h>
 
-#include "fallback-c89.c"
-
 /*
  * All our curves are second degree linear differential equations, and
  * so they can always be written as linear combinations of 2 base

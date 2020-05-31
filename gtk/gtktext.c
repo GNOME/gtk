@@ -73,8 +73,6 @@
 #include <cairo-gobject.h>
 #include <string.h>
 
-#include "fallback-c89.c"
-
 /**
  * SECTION:gtktext
  * @Short_description: A simple single-line text entry field
