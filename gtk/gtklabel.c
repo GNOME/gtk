@@ -63,11 +63,6 @@
 #include <math.h>
 #include <string.h>
 
-/* this is in case rint() is not provided by the compiler, 
- * such as in the case of C89 compilers, like MSVC
- */
-#include "fallback-c89.c"
-
 /**
  * SECTION:gtklabel
  * @Short_description: A widget that displays a small to medium amount of text

@@ -26,9 +26,6 @@
 #include "gdkintl.h"
 #include "gdkkeysprivate.h"
 
-/* for the use of round() */
-#include "fallback-c89.c"
-
 /**
  * SECTION:gdkdevice
  * @Short_description: Object representing an input device

@@ -19,8 +19,7 @@
 #include "gtkkineticscrollingprivate.h"
 
 #include <stdio.h>
-
-#include "fallback-c89.c"
+#include <math.h>
 
 /*
  * All our curves are second degree linear differential equations, and

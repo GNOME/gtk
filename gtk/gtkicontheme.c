@@ -55,11 +55,6 @@
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdkprofilerprivate.h"
 
-/* this is in case round() is not provided by the compiler,
- * such as in the case of C89 compilers, like MSVC
- */
-#include "fallback-c89.c"
-
 /**
  * SECTION:gtkicontheme
  * @Short_description: Looking up icons by name

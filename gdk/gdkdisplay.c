@@ -38,9 +38,6 @@
 #include <math.h>
 #include <glib.h>
 
-/* for the use of round() */
-#include "fallback-c89.c"
-
 /**
  * SECTION:gdkdisplay
  * @Short_description: Controls a set of monitors and their associated input devices
