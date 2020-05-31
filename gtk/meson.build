@@ -14,7 +14,6 @@ gtk_cargs = [
 # List of sources that do not contain public API, and should not be
 # introspected
 gtk_private_sources = files([
-  'fallback-c89.c',
   'fnmatch.c',
   'tools/gdkpixbufutils.c',
   'gsettings-mapping.c',

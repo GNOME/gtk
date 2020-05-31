@@ -34,8 +34,6 @@
 #include "gsk/gskroundedrectprivate.h"
 #include <gdk/gdktextureprivate.h>
 
-#include "fallback-c89.c"
-
 static void
 gtk_do_render_icon (GtkStyleContext        *context,
                     cairo_t                *cr,

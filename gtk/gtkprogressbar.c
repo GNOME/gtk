@@ -43,8 +43,6 @@
 
 #include <string.h>
 
-#include "fallback-c89.c"
-
 /**
  * SECTION:gtkprogressbar
  * @Short_description: A widget which indicates progress visually

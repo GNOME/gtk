@@ -49,7 +49,6 @@
 #include <cairo-win32.h>
 #include <dwmapi.h>
 #include <math.h>
-#include "fallback-c89.c"
 
 static void gdk_surface_win32_finalize (GObject *object);
 

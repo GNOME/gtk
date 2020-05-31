@@ -25,7 +25,6 @@
 #include "gtktypebuiltins.h"
 
 #include <math.h>
-#include "fallback-c89.c"
 
 /**
  * SECTION:gtknumericsorter
@@ -127,11 +126,11 @@ gtk_numeric_sorter_compare (GtkSorter *sorter,
         float num1 = g_value_get_float (&value1);
         float num2 = g_value_get_float (&value2);
 
-        if (isnanf (num1) && isnanf (num2))
+        if (isnan (num1) && isnan (num2))
           result = GTK_ORDERING_EQUAL;
-        else if (isnanf (num1))
+        else if (isnan (num1))
           result = self->sort_order == GTK_SORT_ASCENDING ? GTK_ORDERING_LARGER : GTK_ORDERING_SMALLER;
-        else if (isnanf (num2))
+        else if (isnan (num2))
           result = self->sort_order == GTK_SORT_ASCENDING ? GTK_ORDERING_SMALLER : GTK_ORDERING_LARGER;
         else if (num1 < num2)
           result = self->sort_order == GTK_SORT_ASCENDING ? GTK_ORDERING_SMALLER : GTK_ORDERING_LARGER;

@@ -29,11 +29,6 @@
 #include "gtkintl.h"
 #include "gtkprivatetypebuiltins.h"
 
-/* this is in case round() is not provided by the compiler, 
- * such as in the case of C89 compilers, like MSVC
- */
-#include "fallback-c89.c"
-
 /* the actual parsers we have */
 #include "gtkcssarrayvalueprivate.h"
 #include "gtkcssbgsizevalueprivate.h"

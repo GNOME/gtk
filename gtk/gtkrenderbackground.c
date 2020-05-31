@@ -43,11 +43,6 @@
 
 #include "gsk/gskroundedrectprivate.h"
 
-/* this is in case round() is not provided by the compiler, 
- * such as in the case of C89 compilers, like MSVC
- */
-#include "fallback-c89.c"
-
 static void
 gtk_theming_background_snapshot_color (GtkCssBoxes       *boxes,
                                        GtkSnapshot       *snapshot,

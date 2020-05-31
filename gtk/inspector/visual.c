@@ -45,8 +45,6 @@
 #include "gtkeditable.h"
 #include "gtkentry.h"
 
-#include "fallback-c89.c"
-
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
 #endif
