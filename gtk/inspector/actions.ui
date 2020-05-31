@@ -1,98 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <object class="GtkListStore" id="model">
-    <columns>
-      <column type="gchararray"/>
-      <column type="gchararray"/>
-      <column type="gboolean"/>
-      <column type="gchararray"/>
-      <column type="gchararray"/>
-      <column type="gpointer"/>
-    </columns>
-  </object>
   <template class="GtkInspectorActions" parent="GtkBox">
     <property name="orientation">vertical</property>
     <style>
       <class name="view"/>
     </style>
     <child>
-      <object class="GtkBox">
-        <style>
-          <class name="header"/>
-        </style>
-        <child>
-          <object class="GtkLabel" id="name_heading">
-            <property name="label" translatable="yes">Name</property>
-            <property name="xalign">0</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkLabel" id="enabled_heading">
-            <property name="label" translatable="yes">Enabled</property>
-            <property name="xalign">0</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkLabel" id="parameter_heading">
-            <property name="label" translatable="yes">Parameter Type</property>
-            <property name="xalign">0</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkLabel" id="state_heading">
-            <property name="label" translatable="yes">State</property>
-            <property name="xalign">0</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkLabel" id="changes_heading">
-            <property name="label" translatable="yes"></property>
-            <property name="xalign">0</property>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
       <object class="GtkScrolledWindow">
         <property name="hexpand">1</property>
         <property name="vexpand">1</property>
         <property name="hscrollbar-policy">never</property>
         <child>
-          <object class="GtkListBox" id="list">
+          <object class="GtkColumnView" id="list">
             <style>
               <class name="list"/>
             </style>
-            <property name="selection-mode">none</property>
+            <child>
+              <object class="GtkColumnViewColumn" id="name">
+                <property name="title" translatable="yes">Name</property>
+                <property name="factory">
+                  <object class="GtkSignalListItemFactory">
+                    <signal name="setup" handler="setup_name_cb"/>
+                    <signal name="bind" handler="bind_name_cb"/>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkColumnViewColumn" id="enabled">
+                <property name="title" translatable="yes">Enabled</property>
+                <property name="factory">
+                  <object class="GtkSignalListItemFactory">
+                    <signal name="setup" handler="setup_enabled_cb"/>
+                    <signal name="bind" handler="bind_enabled_cb"/>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkColumnViewColumn" id="parameter">
+                <property name="title" translatable="yes">Parameter Type</property>
+                <property name="factory">
+                  <object class="GtkSignalListItemFactory">
+                    <signal name="setup" handler="setup_parameter_cb"/>
+                    <signal name="bind" handler="bind_parameter_cb"/>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkColumnViewColumn" id="state">
+                <property name="title" translatable="yes">State</property>
+                <property name="factory">
+                  <object class="GtkSignalListItemFactory">
+                    <signal name="setup" handler="setup_state_cb"/>
+                    <signal name="bind" handler="bind_state_cb"/>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkColumnViewColumn" id="changes">
+                <property name="title"></property>
+                <property name="factory">
+                  <object class="GtkSignalListItemFactory">
+                    <signal name="bind" handler="bind_changes_cb"/>
+                    <signal name="unbind" handler="unbind_changes_cb"/>
+                  </object>
+                </property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
     </child>
   </template>
-  <object class="GtkSizeGroup" id="name">
-    <property name="mode">horizontal</property>
-    <widgets>
-      <widget name="name_heading"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="enabled">
-    <property name="mode">horizontal</property>
-    <widgets>
-      <widget name="enabled_heading"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="parameter">
-    <property name="mode">horizontal</property>
-    <widgets>
-      <widget name="parameter_heading"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="state">
-    <property name="mode">horizontal</property>
-    <widgets>
-      <widget name="state_heading"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="activate">
-    <property name="mode">horizontal</property>
-  </object>
 </interface>

@@ -337,6 +337,29 @@ object_tree_tree_view_get_children (GObject *object)
 }
 
 static GListModel *
+object_tree_column_view_get_children (GObject *object)
+{
+  GtkColumnView *view = GTK_COLUMN_VIEW (object);
+  GListStore *result_list;
+  GtkFlattenListModel *result;
+  GListModel *columns, *sublist;
+
+  result_list = g_list_store_new (G_TYPE_LIST_MODEL);
+
+  columns = gtk_column_view_get_columns (view);
+  g_list_store_append (result_list, columns);
+
+  sublist = object_tree_widget_get_children (object);
+  g_list_store_append (result_list, sublist);
+  g_object_unref (sublist);
+
+  result = gtk_flatten_list_model_new (G_TYPE_OBJECT, G_LIST_MODEL (result_list));
+  g_object_unref (result_list);
+
+  return G_LIST_MODEL (result);
+}
+
+static GListModel *
 object_tree_icon_view_get_children (GObject *object)
 {
   return list_model_for_properties (object, (const char *[2]) { "model", NULL });
@@ -498,6 +521,11 @@ static const ObjectTreeClassFuncs object_tree_class_funcs[] = {
     gtk_tree_view_get_type,
     object_tree_widget_get_parent,
     object_tree_tree_view_get_children
+  },
+  {
+    gtk_column_view_get_type,
+    object_tree_widget_get_parent,
+    object_tree_column_view_get_children
   },
   {
     gtk_combo_box_get_type,

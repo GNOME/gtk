@@ -19,8 +19,6 @@
 
 #include "resource-list.h"
 
-#include "treewalk.h"
-
 #include "gtkbutton.h"
 #include "gtklabel.h"
 #include "gtksearchbar.h"
@@ -32,6 +30,7 @@
 #include "gtkeventcontrollerkey.h"
 #include "gtkpicture.h"
 #include "gtkmediafile.h"
+#include "resource-holder.h"
 
 #include <glib/gi18n-lib.h>
 
@@ -39,14 +38,6 @@ enum
 {
   PROP_0,
   PROP_BUTTONS
-};
-
-enum
-{
-  COLUMN_NAME,
-  COLUMN_PATH,
-  COLUMN_COUNT,
-  COLUMN_SIZE
 };
 
 struct _GtkInspectorResourceListPrivate
@@ -62,35 +53,34 @@ struct _GtkInspectorResourceListPrivate
   GtkWidget *size_label;
   GtkWidget *info_grid;
   GtkWidget *stack;
-  GtkWidget *tree;
   GtkWidget *buttons;
   GtkWidget *open_details_button;
   GtkWidget *close_details_button;
-  GtkTreeViewColumn *path_column;
-  GtkTreeViewColumn *count_column;
-  GtkCellRenderer *count_renderer;
-  GtkTreeViewColumn *size_column;
-  GtkCellRenderer *size_renderer;
   GtkWidget *search_bar;
   GtkWidget *search_entry;
-  GtkTreeWalk *walk;
-  gint search_length;
+
+  GtkWidget *list;
+  GtkColumnViewColumn *path;
+  GtkColumnViewColumn *count;
+  GtkColumnViewColumn *size;
+
+  GtkTreeListModel *tree_model;
+  GtkSingleSelection *selection;
 };
 
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorResourceList, gtk_inspector_resource_list, GTK_TYPE_BOX)
 
-static void
-load_resources_recurse (GtkInspectorResourceList *sl,
-                        GtkTreeIter              *parent,
-                        const gchar              *path,
-                        gint                     *count_out,
-                        gsize                    *size_out)
+static GListModel *
+load_resources_recurse (const char *path,
+                        int        *count_out,
+                        gsize      *size_out)
 {
   gchar **names;
   gint i;
-  GtkTreeIter iter;
-  guint64 stored_size;
+  GListStore *result;
+
+  result = g_list_store_new (RESOURCE_TYPE_HOLDER);
 
   names = g_resources_enumerate_children (path, 0, NULL);
   for (i = 0; names[i]; i++)
@@ -100,6 +90,8 @@ load_resources_recurse (GtkInspectorResourceList *sl,
       gboolean has_slash;
       gint count;
       gsize size;
+      GListModel *children;
+      ResourceHolder *holder;
 
       p = g_strconcat (path, names[i], NULL);
 
@@ -109,18 +101,13 @@ load_resources_recurse (GtkInspectorResourceList *sl,
       if (has_slash)
         names[i][len - 1] = '\0';
 
-      gtk_tree_store_append (sl->priv->model, &iter, parent);
-      gtk_tree_store_set (sl->priv->model, &iter,
-                          COLUMN_NAME, names[i],
-                          COLUMN_PATH, p,
-                          -1);
-
       count = 0;
       size = 0;
 
       if (has_slash)
         {
-          load_resources_recurse (sl, &iter, p, &count, &size);
+          children = load_resources_recurse (p, &count, &size);
+
           *count_out += count;
           *size_out += size;
         }
@@ -132,53 +119,41 @@ load_resources_recurse (GtkInspectorResourceList *sl,
               *count_out += 1;
               *size_out += size;
             }
+          children = NULL;
         }
 
-      stored_size = size;
-      gtk_tree_store_set (sl->priv->model, &iter,
-                          COLUMN_COUNT, count,
-                          COLUMN_SIZE, stored_size,
-                          -1);
+      holder = resource_holder_new (names[i], p, count, size, children);
+      g_clear_object (&children);
+      g_list_store_append (result, holder);
+      g_object_unref (holder);
 
       g_free (p);
     }
+
   g_strfreev (names);
 
+  return G_LIST_MODEL (result);
 }
 
 static gboolean
 populate_details (GtkInspectorResourceList *rl,
-                  GtkTreePath              *tree_path)
+                  ResourceHolder           *holder)
 {
-  GtkTreeIter iter;
-  gchar *path;
-  gchar *name;
+  const char *path;
+  const char *name;
   GBytes *bytes;
   gchar *type;
   gconstpointer data;
-  gint count;
   gsize size;
-  guint64 stored_size;
   GError *error = NULL;
   gchar *markup;
 
-
-  gtk_tree_model_get_iter (GTK_TREE_MODEL (rl->priv->model), &iter, tree_path);
- 
-  gtk_tree_model_get (GTK_TREE_MODEL (rl->priv->model), &iter,
-                      COLUMN_PATH, &path,
-                      COLUMN_NAME, &name,
-                      COLUMN_COUNT, &count,
-                      COLUMN_SIZE, &stored_size,
-                      -1);
-  size = stored_size;
+  path = resource_holder_get_path (holder);
+  name = resource_holder_get_name (holder);
+  size = resource_holder_get_size (holder);
 
    if (g_str_has_suffix (path, "/"))
-     {
-       g_free (path);
-       g_free (name);
-       return FALSE;
-     }
+     return FALSE;
 
   markup = g_strconcat ("<span face='Monospace' size='small'>", path, "</span>", NULL);
   gtk_label_set_markup (GTK_LABEL (rl->priv->name_label), markup);
@@ -247,182 +222,115 @@ populate_details (GtkInspectorResourceList *rl,
       g_free (content_text);
     }
 
-  g_free (path);
-  g_free (name);
-
   return TRUE;
 }
 
 static void
-row_activated (GtkTreeView              *treeview,
-               GtkTreePath              *path,
-               GtkTreeViewColumn        *column,
-               GtkInspectorResourceList *sl)
+on_row_activated (GtkColumnView            *view,
+                  guint                     position,
+                  GtkInspectorResourceList *rl)
 {
-  if (!populate_details (sl, path))
-    return;
+  gpointer item;
+  ResourceHolder *holder;
 
-  gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->stack), "details");
-  gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->buttons), "details");
+  item = g_list_model_get_item (G_LIST_MODEL (rl->priv->selection), position);
+  holder = gtk_tree_list_row_get_item (item);
+  g_object_unref (item);
+  if (populate_details (rl, holder))
+    {
+      gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->stack), "details");
+      gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->buttons), "details");
+    }
+  g_object_unref (holder);
 }
 
 static gboolean
 can_show_details (GtkInspectorResourceList *rl)
 {
-  GtkTreeSelection *selection;
-  GtkTreeModel *model;
-  GtkTreeIter iter;
-  gchar *path;
+  gpointer item;
+  ResourceHolder *holder;
+  const char *path;
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (rl->priv->tree));
-  if (!gtk_tree_selection_get_selected (selection, &model, &iter))
+  item = gtk_single_selection_get_selected_item (rl->priv->selection);
+  holder = gtk_tree_list_row_get_item (item);
+  if (holder == NULL)
     return FALSE;
-
-  gtk_tree_model_get (GTK_TREE_MODEL (rl->priv->model), &iter,
-                      COLUMN_PATH, &path,
-                      -1);
-
-   if (g_str_has_suffix (path, "/"))
-     {
-       g_free (path);
-       return FALSE;
-     }
-
-  g_free (path);
-  return TRUE;
+  path = resource_holder_get_path (holder);
+  g_object_unref (holder);
+  return !g_str_has_suffix (path, "/");
 }
 
 static void
-on_selection_changed (GtkTreeSelection         *selection,
+on_selection_changed (GtkSelectionModel        *selection,
+                      guint                     position,
+                      guint                     n_items,
                       GtkInspectorResourceList *rl)
 {
-  GtkTreeIter iter;
-
-  if (gtk_tree_selection_get_selected (selection, NULL, &iter))
-    gtk_tree_walk_reset (rl->priv->walk, &iter);
-  else
-    gtk_tree_walk_reset (rl->priv->walk, NULL);
-
   gtk_widget_set_sensitive (rl->priv->open_details_button, can_show_details (rl));
 }
 
 static void
 open_details (GtkWidget                *button,
-              GtkInspectorResourceList *sl)
+              GtkInspectorResourceList *rl)
 {
-  GtkTreeSelection *selection;
-  GtkTreeModel *model;
-  GtkTreeIter iter;
-  GtkTreePath *path;
+  gpointer item;
+  ResourceHolder *holder;
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (sl->priv->tree));
-  if (!gtk_tree_selection_get_selected (selection, &model, &iter))
+  item = gtk_single_selection_get_selected_item (rl->priv->selection);
+  holder = gtk_tree_list_row_get_item (item);
+  if (holder == NULL)
     return;
-  
-  path = gtk_tree_model_get_path (model, &iter);
-  if (populate_details (sl, path))
+  if (populate_details (rl, holder))
     {
-      gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->stack), "details");
-      gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->buttons), "details");
+      gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->stack), "details");
+      gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->buttons), "details");
     }
-
-  gtk_tree_path_free (path);
+  g_object_unref (holder);
 }
 
 static void
 close_details (GtkWidget                *button,
-               GtkInspectorResourceList *sl)
+               GtkInspectorResourceList *rl)
 {
-  gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->stack), "list");
-  gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->buttons), "list");
+  gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->stack), "list");
+  gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->buttons), "list");
 }
 
-static void
-load_resources (GtkInspectorResourceList *sl)
+static GListModel *
+load_resources (void)
 {
   gint count = 0;
   gsize size = 0;
 
-  load_resources_recurse (sl, NULL, "/", &count, &size);
-}
-
-static void
-count_data_func (GtkTreeViewColumn *col,
-                 GtkCellRenderer   *cell,
-                 GtkTreeModel      *model,
-                 GtkTreeIter       *iter,
-                 gpointer           data)
-{
-  gint count;
-  gchar *text;
-
-  gtk_tree_model_get (model, iter, COLUMN_COUNT, &count, -1);
-  if (count > 0)
-    {
-      text = g_strdup_printf ("%d", count);
-      g_object_set (cell, "text", text, NULL);
-      g_free (text);
-    }
-  else
-    g_object_set (cell, "text", "", NULL);
-}
-
-static void
-size_data_func (GtkTreeViewColumn *col,
-                GtkCellRenderer   *cell,
-                GtkTreeModel      *model,
-                GtkTreeIter       *iter,
-                gpointer           data)
-{
-  gsize size;
-  guint64 stored_size;
-  gchar *text;
-
-  gtk_tree_model_get (model, iter, COLUMN_SIZE, &stored_size, -1);
-  size = stored_size;
-  text = g_format_size (size);
-  g_object_set (cell, "text", text, NULL);
-  g_free (text);
+  return load_resources_recurse ("/", &count, &size);
 }
 
 static void
 on_map (GtkWidget *widget)
 {
-  GtkInspectorResourceList *sl = GTK_INSPECTOR_RESOURCE_LIST (widget);
+  GtkInspectorResourceList *rl = GTK_INSPECTOR_RESOURCE_LIST (widget);
 
-  gtk_tree_view_expand_all (GTK_TREE_VIEW (sl->priv->tree));
-  gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->stack), "list");
-  gtk_widget_set_sensitive (sl->priv->open_details_button, can_show_details (sl));
+  gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->stack), "list");
+  gtk_widget_set_sensitive (rl->priv->open_details_button, can_show_details (rl));
 }
 
-static void
-move_search_to_row (GtkInspectorResourceList *sl,
-                    GtkTreeIter              *iter)
-{
-  GtkTreeSelection *selection;
-  GtkTreePath *path;
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (sl->priv->tree));
-  path = gtk_tree_model_get_path (GTK_TREE_MODEL (sl->priv->model), iter);
-  gtk_tree_view_expand_to_path (GTK_TREE_VIEW (sl->priv->tree), path);
-  gtk_tree_selection_select_path (selection, path);
-  gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (sl->priv->tree), path, NULL, TRUE, 0.5, 0.0);
-  gtk_tree_path_free (path);
-}
+static gboolean search (GtkInspectorResourceList *rl,
+                        gboolean                  forward,
+                        gboolean                  force_progress);
 
 static gboolean
 key_pressed (GtkEventController       *controller,
              guint                     keyval,
              guint                     keycode,
              GdkModifierType           state,
-             GtkInspectorResourceList *sl)
+             GtkInspectorResourceList *rl)
 {
-  if (gtk_widget_get_mapped (GTK_WIDGET (sl)))
+  if (gtk_widget_get_mapped (GTK_WIDGET (rl)))
     {
       GdkModifierType default_accel;
       gboolean search_started;
 
-      search_started = gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (sl->priv->search_bar));
+      search_started = gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (rl->priv->search_bar));
       default_accel = GDK_CONTROL_MASK;
 
       if (search_started &&
@@ -430,54 +338,29 @@ key_pressed (GtkEventController       *controller,
            keyval == GDK_KEY_ISO_Enter ||
            keyval == GDK_KEY_KP_Enter))
         {
-          GtkTreeSelection *selection;
-          GtkTreeModel *model;
-          GtkTreeIter iter;
-          GtkTreePath *path;
-
-          selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (sl->priv->tree));
-          if (gtk_tree_selection_get_selected (selection, &model, &iter))
-            {
-              path = gtk_tree_model_get_path (model, &iter);
-              gtk_tree_view_row_activated (GTK_TREE_VIEW (sl->priv->tree),
-                                           path,
-                                           sl->priv->path_column);
-              gtk_tree_path_free (path);
-
-              return GDK_EVENT_STOP;
-            }
-          else
-            return GDK_EVENT_PROPAGATE;
+          gtk_widget_activate (GTK_WIDGET (rl->priv->list));
+          return GDK_EVENT_PROPAGATE;
         }
       else if (search_started &&
                (keyval == GDK_KEY_Escape))
         {
-          gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (sl->priv->search_bar), FALSE);
+          gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (rl->priv->search_bar), FALSE);
           return GDK_EVENT_STOP;
         }
       else if (search_started &&
                ((state & (default_accel | GDK_SHIFT_MASK)) == (default_accel | GDK_SHIFT_MASK)) &&
                (keyval == GDK_KEY_g || keyval == GDK_KEY_G))
         {
-          GtkTreeIter iter;
-          if (gtk_tree_walk_next_match (sl->priv->walk, TRUE, TRUE, &iter))
-            move_search_to_row (sl, &iter);
-          else
-            gtk_widget_error_bell (GTK_WIDGET (sl));
-
+          if (!search (rl, FALSE, TRUE))
+            gtk_widget_error_bell (GTK_WIDGET (rl));
           return GDK_EVENT_STOP;
         }
       else if (search_started &&
                ((state & (default_accel | GDK_SHIFT_MASK)) == default_accel) &&
                (keyval == GDK_KEY_g || keyval == GDK_KEY_G))
         {
-          GtkTreeIter iter;
-
-          if (gtk_tree_walk_next_match (sl->priv->walk, TRUE, FALSE, &iter))
-            move_search_to_row (sl, &iter);
-          else
-            gtk_widget_error_bell (GTK_WIDGET (sl));
-
+          if (!search (rl, TRUE, TRUE))
+            gtk_widget_error_bell (GTK_WIDGET (rl));
           return GDK_EVENT_STOP;
         }
     }
@@ -494,7 +377,7 @@ destroy_controller (GtkEventController *controller)
 static void
 root (GtkWidget *widget)
 {
-  GtkInspectorResourceList *sl = GTK_INSPECTOR_RESOURCE_LIST (widget);
+  GtkInspectorResourceList *rl = GTK_INSPECTOR_RESOURCE_LIST (widget);
   GtkEventController *controller;
   GtkWidget *toplevel;
 
@@ -507,7 +390,7 @@ root (GtkWidget *widget)
   g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), widget);
   gtk_widget_add_controller (toplevel, controller);
 
-  gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (sl->priv->search_bar), toplevel);
+  gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (rl->priv->search_bar), toplevel);
 }
 
 static void
@@ -519,27 +402,6 @@ unroot (GtkWidget *widget)
   g_object_set_data (G_OBJECT (toplevel), "resource-controller", NULL);
 
   GTK_WIDGET_CLASS (gtk_inspector_resource_list_parent_class)->unroot (widget);
-}
-
-static void
-on_search_changed (GtkSearchEntry           *entry,
-                   GtkInspectorResourceList *sl)
-{
-  GtkTreeIter iter;
-  gint length;
-  gboolean backwards;
-
-  length = strlen (gtk_editable_get_text (GTK_EDITABLE (entry)));
-  backwards = length < sl->priv->search_length;
-  sl->priv->search_length = length;
-
-  if (length == 0)
-    return;
-
-  if (gtk_tree_walk_next_match (sl->priv->walk, backwards, backwards, &iter))
-    move_search_to_row (sl, &iter);
-  else if (!backwards)
-    gtk_widget_error_bell (GTK_WIDGET (sl));
 }
 
 static gboolean
@@ -560,107 +422,298 @@ match_string (const gchar *string,
 }
 
 static gboolean
-match_row (GtkTreeModel *model,
-           GtkTreeIter  *iter,
-           gpointer      data)
+match_object (GObject    *object,
+              const char *text)
 {
-  GtkInspectorResourceList *sl = data;
-  gchar *name, *path;
-  const gchar *text;
-  gboolean match;
+  const char *name = resource_holder_get_name (RESOURCE_HOLDER (object));
 
-  text = gtk_editable_get_text (GTK_EDITABLE (sl->priv->search_entry));
-  gtk_tree_model_get (model, iter,
-                      COLUMN_NAME, &name,
-                      COLUMN_PATH, &path,
-                      -1);
+  if (match_string (name, text))
+    return TRUE;
 
-  match = (match_string (name, text) ||
-           match_string (path, text));
+  return FALSE;
+}
 
-  g_free (name);
-  g_free (path);
+static GObject *
+search_children (GObject    *object,
+                 const char *text,
+                 gboolean    forward)
+{
+  GListModel *children;
+  GObject *child, *result;
+  guint i, n;
 
-  return match;
+  children = resource_holder_get_children (RESOURCE_HOLDER (object));
+  if (children == NULL)
+    return NULL;
+
+  n = g_list_model_get_n_items (children);
+  for (i = 0; i < n; i++)
+    {
+      child = g_list_model_get_item (children, forward ? i : n - i - 1);
+      if (match_object (child, text))
+        return child;
+
+      result = search_children (child, text, forward);
+      g_object_unref (child);
+      if (result)
+        return result;
+    }
+
+  return NULL;
+}
+
+static guint
+model_get_item_index (GListModel *model,
+                      gpointer    item)
+{
+  gpointer cmp;
+  guint i;
+
+  for (i = 0; (cmp = g_list_model_get_item (model, i)); i++)
+    {
+      if (cmp == item)
+        {
+          g_object_unref (cmp);
+          return i;
+        }
+      g_object_unref (cmp);
+    }
+
+  return G_MAXUINT;
+}
+
+static GtkTreeListRow *
+find_and_expand_object (GtkTreeListModel *model,
+                        GObject          *object)
+{
+  GtkTreeListRow *result;
+  GObject *parent;
+  guint pos;
+
+  parent = G_OBJECT (resource_holder_get_parent (RESOURCE_HOLDER (object)));
+  if (parent)
+    {
+      GtkTreeListRow *parent_row = find_and_expand_object (model, parent);
+      if (parent_row == NULL)
+        return NULL;
+
+      gtk_tree_list_row_set_expanded (parent_row, TRUE);
+      pos = model_get_item_index (gtk_tree_list_row_get_children (parent_row), object);
+      result = gtk_tree_list_row_get_child_row (parent_row, pos);
+      g_object_unref (parent_row);
+    }
+  else
+    {
+      pos = model_get_item_index (gtk_tree_list_model_get_model (model), object);
+      result = gtk_tree_list_model_get_child_row (model, pos);
+    }
+
+  return result;
 }
 
 static void
-search_mode_changed (GObject                  *search_bar,
-                     GParamSpec               *pspec,
-                     GtkInspectorResourceList *sl)
+select_object (GtkInspectorResourceList *rl,
+               GObject *object)
 {
-  if (!gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (search_bar)))
+  GtkTreeListRow *row_item;
+
+  row_item = find_and_expand_object (rl->priv->tree_model, object);
+  if (row_item == NULL)
+    return;
+
+  gtk_single_selection_set_selected (rl->priv->selection,
+                                     gtk_tree_list_row_get_position (row_item));
+}
+
+static gboolean
+search (GtkInspectorResourceList *rl,
+        gboolean                  forward,
+        gboolean                  force_progress)
+{
+  GListModel *model = G_LIST_MODEL (rl->priv->tree_model);
+  GtkTreeListRow *row_item;
+  GObject *child, *result;
+  guint i, selected, n, row;
+  const char *text;
+
+  text = gtk_editable_get_text (GTK_EDITABLE (rl->priv->search_entry));
+  selected = gtk_single_selection_get_selected (rl->priv->selection);
+  n = g_list_model_get_n_items (model);
+  if (selected >= n)
+    selected = 0;
+
+  for (i = 0; i < n; i++)
     {
-      gtk_tree_walk_reset (sl->priv->walk, NULL);
-      sl->priv->search_length = 0;
+      row = (selected + (forward ? i : n - i - 1)) % n;
+      row_item = g_list_model_get_item (model, row);
+      child = gtk_tree_list_row_get_item (row_item);
+      if (i > 0 || !force_progress)
+        {
+          if (match_object (child, text))
+            {
+              gtk_single_selection_set_selected (rl->priv->selection, row);
+              g_object_unref (child);
+              g_object_unref (row_item);
+              return TRUE;
+            }
+        }
+
+      if (!gtk_tree_list_row_get_expanded (row_item))
+        {
+          result = search_children (child, text, forward);
+          if (result)
+            {
+              select_object (rl, result);
+              g_object_unref (result);
+              g_object_unref (child);
+              g_object_unref (row_item);
+              return TRUE;
+            }
+        }
+      g_object_unref (child);
+      g_object_unref (row_item);
     }
+
+  return FALSE;
+}
+
+static void
+on_search_changed (GtkSearchEntry           *entry,
+                   GtkInspectorResourceList *rl)
+{
+  if (!search (rl, TRUE, FALSE))
+    gtk_widget_error_bell (GTK_WIDGET (rl));
 }
 
 static void
 next_match (GtkButton                *button,
-            GtkInspectorResourceList *sl)
+            GtkInspectorResourceList *rl)
 {
-  if (gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (sl->priv->search_bar)))
+  if (gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (rl->priv->search_bar)))
     {
-      GtkTreeIter iter;
-
-      if (gtk_tree_walk_next_match (sl->priv->walk, TRUE, FALSE, &iter))
-        move_search_to_row (sl, &iter);
-      else
-        gtk_widget_error_bell (GTK_WIDGET (sl));
+      if (!search (rl, TRUE, TRUE))
+        gtk_widget_error_bell (GTK_WIDGET (rl));
     }
 }
 
 static void
 previous_match (GtkButton                *button,
-                GtkInspectorResourceList *sl)
+                GtkInspectorResourceList *rl)
 {
-  if (gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (sl->priv->search_bar)))
+  if (gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (rl->priv->search_bar)))
     {
-      GtkTreeIter iter;
-
-      if (gtk_tree_walk_next_match (sl->priv->walk, TRUE, TRUE, &iter))
-        move_search_to_row (sl, &iter);
-      else
-        gtk_widget_error_bell (GTK_WIDGET (sl));
+      if (!search (rl, FALSE, TRUE))
+        gtk_widget_error_bell (GTK_WIDGET (rl));
     }
 }
 
 static void
-gtk_inspector_resource_list_init (GtkInspectorResourceList *sl)
+stop_search (GtkWidget                *entry,
+             GtkInspectorResourceList *rl)
 {
-  sl->priv = gtk_inspector_resource_list_get_instance_private (sl);
+  gtk_editable_set_text (GTK_EDITABLE (rl->priv->search_entry), "");
+  gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (rl->priv->search_bar), FALSE);
+}
 
-  gtk_widget_init_template (GTK_WIDGET (sl));
+static char *
+holder_name (gpointer item)
+{
+  return g_strdup (resource_holder_get_name (RESOURCE_HOLDER (item)));
+}
 
-  gtk_tree_view_column_set_cell_data_func (sl->priv->count_column,
-                                           sl->priv->count_renderer,
-                                           count_data_func, sl, NULL);
-  gtk_tree_view_column_set_cell_data_func (sl->priv->size_column,
-                                           sl->priv->size_renderer,
-                                           size_data_func, sl, NULL);
+static int
+holder_count (gpointer item)
+{
+  return resource_holder_get_count (RESOURCE_HOLDER (item));
+}
 
-  g_signal_connect (sl, "map", G_CALLBACK (on_map), NULL);
+static gsize
+holder_size (gpointer item)
+{
+  return resource_holder_get_size (RESOURCE_HOLDER (item));
+}
 
-  gtk_search_bar_connect_entry (GTK_SEARCH_BAR (sl->priv->search_bar),
-                                GTK_EDITABLE (sl->priv->search_entry));
+static void
+gtk_inspector_resource_list_init (GtkInspectorResourceList *rl)
+{
+  GtkSorter *sorter;
 
-  g_signal_connect (sl->priv->search_bar, "notify::search-mode-enabled",
-                    G_CALLBACK (search_mode_changed), sl);
-  sl->priv->walk = gtk_tree_walk_new (GTK_TREE_MODEL (sl->priv->model), match_row, sl, NULL);
+  rl->priv = gtk_inspector_resource_list_get_instance_private (rl);
+
+  gtk_widget_init_template (GTK_WIDGET (rl));
+
+  g_signal_connect (rl, "map", G_CALLBACK (on_map), NULL);
+
+  gtk_search_bar_connect_entry (GTK_SEARCH_BAR (rl->priv->search_bar),
+                                GTK_EDITABLE (rl->priv->search_entry));
+
+  sorter = gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
+                                                               0, NULL,
+                                                               (GCallback)holder_name,
+                                                               NULL, NULL));
+
+  gtk_column_view_column_set_sorter (rl->priv->path, sorter);
+  g_object_unref (sorter);
+
+  sorter = gtk_numeric_sorter_new (gtk_cclosure_expression_new (G_TYPE_INT, NULL,
+                                                                0, NULL,
+                                                                (GCallback)holder_count,
+                                                                NULL, NULL));
+
+  gtk_column_view_column_set_sorter (rl->priv->count, sorter);
+  g_object_unref (sorter);
+
+  sorter = gtk_numeric_sorter_new (gtk_cclosure_expression_new (G_TYPE_UINT64, NULL,
+                                                                0, NULL,
+                                                                (GCallback)holder_size,
+                                                                NULL, NULL));
+
+  gtk_column_view_column_set_sorter (rl->priv->size, sorter);
+  g_object_unref (sorter);
+}
+
+static GListModel *
+create_model_for_object (gpointer item, gpointer data)
+{
+  GListModel *model = resource_holder_get_children (RESOURCE_HOLDER (item));
+
+  if (model)
+    return g_object_ref (model);
+
+  return NULL;
 }
 
 static void
 constructed (GObject *object)
 {
   GtkInspectorResourceList *rl = GTK_INSPECTOR_RESOURCE_LIST (object);
-
+  GListModel *root_model;
+  GListModel *sort_model;
+  GtkSorter *sorter;
+ 
   g_signal_connect (rl->priv->open_details_button, "clicked",
                     G_CALLBACK (open_details), rl);
   g_signal_connect (rl->priv->close_details_button, "clicked",
                     G_CALLBACK (close_details), rl);
-  
-  load_resources (rl);
+ 
+  root_model = load_resources ();
+  rl->priv->tree_model = gtk_tree_list_model_new (FALSE,
+                                                  root_model,
+                                                  FALSE,
+                                                  create_model_for_object,
+                                                  NULL,
+                                                  NULL);
+
+  sorter = gtk_tree_list_row_sorter_new (gtk_column_view_get_sorter (GTK_COLUMN_VIEW (rl->priv->list)));
+  sort_model = G_LIST_MODEL (gtk_sort_list_model_new (G_LIST_MODEL (rl->priv->tree_model), sorter));
+  rl->priv->selection = gtk_single_selection_new (sort_model);
+  g_object_unref (root_model);
+  g_object_unref (sort_model);
+  g_object_unref (sorter);
+
+  gtk_column_view_set_model (GTK_COLUMN_VIEW (rl->priv->list), G_LIST_MODEL (rl->priv->selection));
+
+  g_signal_connect (rl->priv->selection, "selection-changed", G_CALLBACK (on_selection_changed), rl);
 }
 
 static void
@@ -708,11 +761,118 @@ set_property (GObject      *object,
 static void
 finalize (GObject *object)
 {
-  GtkInspectorResourceList *sl = GTK_INSPECTOR_RESOURCE_LIST (object);
+  GtkInspectorResourceList *rl = GTK_INSPECTOR_RESOURCE_LIST (object);
 
-  gtk_tree_walk_free (sl->priv->walk);
+  g_object_unref (rl->priv->selection);
+  g_object_unref (rl->priv->tree_model);
 
   G_OBJECT_CLASS (gtk_inspector_resource_list_parent_class)->finalize (object);
+}
+
+static void
+setup_name_cb (GtkSignalListItemFactory *factory,
+               GtkListItem              *list_item)
+{
+  GtkWidget *expander;
+  GtkWidget *label;
+
+  expander = gtk_tree_expander_new ();
+  gtk_list_item_set_child (list_item, expander);
+
+  label = gtk_label_new (NULL);
+  gtk_widget_set_margin_start (label, 5);
+  gtk_widget_set_margin_end (label, 5);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+  gtk_tree_expander_set_child (GTK_TREE_EXPANDER (expander), label);
+}
+
+static void
+bind_name_cb (GtkSignalListItemFactory *factory,
+              GtkListItem              *list_item)
+{
+  GtkTreeListRow *list_row;
+  GtkWidget *expander;
+  GtkWidget *label;
+  gpointer item;
+
+  list_row = gtk_list_item_get_item (list_item);
+  expander = gtk_list_item_get_child (list_item);
+  gtk_tree_expander_set_list_row (GTK_TREE_EXPANDER (expander), list_row);
+  item = gtk_tree_list_row_get_item (list_row);
+  label = gtk_tree_expander_get_child (GTK_TREE_EXPANDER (expander));
+
+  gtk_label_set_label (GTK_LABEL (label), resource_holder_get_name (RESOURCE_HOLDER (item)));
+  g_object_unref (item);
+}
+
+static void
+setup_size_cb (GtkSignalListItemFactory *factory,
+               GtkListItem              *list_item)
+{
+  GtkWidget *label;
+
+  label = gtk_label_new (NULL);
+  gtk_widget_set_margin_start (label, 5);
+  gtk_widget_set_margin_end (label, 5);
+  gtk_label_set_xalign (GTK_LABEL (label), 1.0);
+  gtk_list_item_set_child (list_item, label);
+}
+
+static void
+bind_size_cb (GtkSignalListItemFactory *factory,
+              GtkListItem              *list_item)
+{
+  GObject *item;
+  GtkWidget *label;
+  gsize size;
+  char *text;
+
+  item = gtk_tree_list_row_get_item (gtk_list_item_get_item (list_item));
+  label = gtk_list_item_get_child (list_item);
+
+  size = resource_holder_get_size (RESOURCE_HOLDER (item));
+  text = g_format_size (size);
+  gtk_label_set_label (GTK_LABEL (label), text);
+  g_free (text);
+
+  g_object_unref (item);
+}
+
+static void
+setup_count_cb (GtkSignalListItemFactory *factory,
+                GtkListItem              *list_item)
+{
+  GtkWidget *label;
+
+  label = gtk_label_new (NULL);
+  gtk_widget_set_margin_start (label, 5);
+  gtk_widget_set_margin_end (label, 5);
+  gtk_label_set_xalign (GTK_LABEL (label), 1.0);
+  gtk_list_item_set_child (list_item, label);
+}
+
+static void
+bind_count_cb (GtkSignalListItemFactory *factory,
+               GtkListItem              *list_item)
+{
+  GObject *item;
+  GtkWidget *label;
+  int count;
+  char *text;
+
+  item = gtk_tree_list_row_get_item (gtk_list_item_get_item (list_item));
+  label = gtk_list_item_get_child (list_item);
+
+  count = resource_holder_get_count (RESOURCE_HOLDER (item));
+  if (count > 0)
+    {
+      text = g_strdup_printf ("%d", count);
+      gtk_label_set_label (GTK_LABEL (label), text);
+      g_free (text);
+    }
+  else
+    gtk_label_set_label (GTK_LABEL (label), "");
+  g_object_unref (item);
 }
 
 static void
@@ -743,21 +903,25 @@ gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, type);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, size_label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, info_grid);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, count_column);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, count_renderer);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, size_column);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, size_renderer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, stack);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, tree);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, search_bar);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, search_entry);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, path_column);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, list);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, path);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, count);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, size);
 
-  gtk_widget_class_bind_template_callback (widget_class, row_activated);
-  gtk_widget_class_bind_template_callback (widget_class, on_selection_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_search_changed);
+  gtk_widget_class_bind_template_callback (widget_class, on_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, next_match);
   gtk_widget_class_bind_template_callback (widget_class, previous_match);
+  gtk_widget_class_bind_template_callback (widget_class, stop_search);
+  gtk_widget_class_bind_template_callback (widget_class, setup_name_cb);
+  gtk_widget_class_bind_template_callback (widget_class, bind_name_cb);
+  gtk_widget_class_bind_template_callback (widget_class, setup_count_cb);
+  gtk_widget_class_bind_template_callback (widget_class, bind_count_cb);
+  gtk_widget_class_bind_template_callback (widget_class, setup_size_cb);
+  gtk_widget_class_bind_template_callback (widget_class, bind_size_cb);
 }
 
 // vim: set et sw=2 ts=2:
