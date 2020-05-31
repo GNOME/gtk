@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-31 05:37+0000\n"
-"PO-Revision-Date: 2020-05-31 09:07+0300\n"
+"POT-Creation-Date: 2020-05-31 14:06+0000\n"
+"PO-Revision-Date: 2020-05-31 22:04+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -2814,9 +2814,9 @@ msgstr "Не вдалось доступитись до «%s»"
 msgid "This name is already taken"
 msgstr "Цю назву вже вжито"
 
-#: gtk/gtkplacessidebar.c:2306 gtk/inspector/actions.ui:25
-#: gtk/inspector/css-node-tree.ui:35 gtk/ui/gtkfilechooserwidget.ui:172
-#: gtk/ui/gtkfilechooserwidget.ui:444
+#: gtk/gtkplacessidebar.c:2306 gtk/inspector/actions.ui:20
+#: gtk/inspector/css-node-tree.ui:35 gtk/inspector/prop-list.ui:23
+#: gtk/ui/gtkfilechooserwidget.ui:172 gtk/ui/gtkfilechooserwidget.ui:444
 msgid "Name"
 msgstr "Назва"
 
@@ -3455,11 +3455,11 @@ msgstr "Не показувати це повідомлення надалі"
 msgid "Close"
 msgstr "Закрити"
 
-#: gtk/inspector/action-editor.c:289
+#: gtk/inspector/action-editor.c:292
 msgid "Activate"
 msgstr "Задіяти"
 
-#: gtk/inspector/action-editor.c:309
+#: gtk/inspector/action-editor.c:312
 msgid "Set State"
 msgstr "Встановити стан"
 
@@ -3467,11 +3467,11 @@ msgstr "Встановити стан"
 msgid "Enabled"
 msgstr "Увімкнено"
 
-#: gtk/inspector/actions.ui:37
+#: gtk/inspector/actions.ui:42
 msgid "Parameter Type"
 msgstr "Тип параметра"
 
-#: gtk/inspector/actions.ui:43 gtk/inspector/css-node-tree.ui:74
+#: gtk/inspector/actions.ui:53 gtk/inspector/css-node-tree.ui:74
 #: gtk/inspector/misc-info.ui:121
 msgid "State"
 msgstr "Стан"
@@ -3536,8 +3536,8 @@ msgstr "Класи стилів"
 msgid "CSS Property"
 msgstr "Властивість CSS"
 
-#: gtk/inspector/css-node-tree.ui:119 gtk/inspector/recorder.ui:115
-#: gtk/ui/gtkcoloreditor.ui:270
+#: gtk/inspector/css-node-tree.ui:119 gtk/inspector/prop-list.ui:56
+#: gtk/inspector/recorder.ui:115 gtk/ui/gtkcoloreditor.ui:270
 msgid "Value"
 msgstr "Значення"
 
@@ -3645,8 +3645,8 @@ msgstr "Піктограма"
 msgid "Address"
 msgstr "Адреса"
 
-#: gtk/inspector/misc-info.ui:62 gtk/inspector/statistics.ui:46
-#: gtk/ui/gtkfilechooserwidget.ui:218
+#: gtk/inspector/misc-info.ui:62 gtk/inspector/prop-list.ui:34
+#: gtk/inspector/statistics.ui:46 gtk/ui/gtkfilechooserwidget.ui:218
 msgid "Type"
 msgstr "Тип"
 
@@ -3744,8 +3744,6 @@ msgid "Uneditable property type: %s"
 msgstr "Неможливо редагувати цей тип властивості: %s"
 
 #: gtk/inspector/prop-editor.c:1247
-#| msgctxt "font"
-#| msgid "None"
 msgid "None"
 msgstr "Немає"
 
@@ -3790,6 +3788,10 @@ msgstr "XSettings"
 msgid "Source:"
 msgstr "Джерело:"
 
+#: gtk/inspector/prop-list.ui:45
+msgid "Defined At"
+msgstr "Визначено в"
+
 #: gtk/inspector/recorder.c:977
 #, c-format
 msgid "Saving RenderNode failed"
@@ -3815,28 +3817,28 @@ msgstr "Зберегти позначений вузол"
 msgid "Property"
 msgstr "Властивість"
 
-#: gtk/inspector/resource-list.ui:69
+#: gtk/inspector/resource-list.ui:64
 msgid "Path"
 msgstr "Шлях"
 
-#: gtk/inspector/resource-list.ui:87
+#: gtk/inspector/resource-list.ui:75
 msgid "Count"
 msgstr "Підрахунок"
 
-#: gtk/inspector/resource-list.ui:99 gtk/ui/gtkfilechooserwidget.ui:206
+#: gtk/inspector/resource-list.ui:86 gtk/ui/gtkfilechooserwidget.ui:206
 #: gtk/ui/gtkfontchooserwidget.ui:142 gtk/ui/gtkfontchooserwidget.ui:290
 msgid "Size"
 msgstr "Розмір"
 
-#: gtk/inspector/resource-list.ui:134
+#: gtk/inspector/resource-list.ui:120
 msgid "Name:"
 msgstr "Назва:"
 
-#: gtk/inspector/resource-list.ui:156
+#: gtk/inspector/resource-list.ui:142
 msgid "Type:"
 msgstr "Тип:"
 
-#: gtk/inspector/resource-list.ui:177
+#: gtk/inspector/resource-list.ui:163
 msgid "Size:"
 msgstr "Розмір:"
 
