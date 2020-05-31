@@ -9,86 +9,59 @@
           <class name="view"/>
         </style>
         <child>
-          <object class="GtkBox">
-            <style>
-              <class name="header"/>
-            </style>
-            <child>
-              <object class="GtkBox" id="name_heading">
-                <property name="hexpand">0</property>
-                <child>
-                  <object class="GtkGestureClick">
-                    <signal name="pressed" handler="sort_changed" swapped="no"/>
-
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label">Name</property>
-                    <property name="xalign">0</property>
-                    <property name="hexpand">1</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkImage" id="name_sort_indicator">
-                    <style>
-                      <class name="sort_indicator"/>
-                    </style>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel" id="type_heading">
-                <property name="label">Type</property>
-                <property name="xalign">0</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkBox" id="origin_heading">
-                <property name="hexpand">0</property>
-                <child>
-                  <object class="GtkGestureClick">
-                    <signal name="pressed" handler="sort_changed" swapped="no"/>
-
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label">Defined at</property>
-                    <property name="xalign">0</property>
-                    <property name="hexpand">1</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkImage" id="origin_sort_indicator">
-                    <style>
-                      <class name="sort_indicator"/>
-                    </style>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel" id="value_heading">
-                <property name="label">Value</property>
-                <property name="xalign">0</property>
-                <property name="hexpand">0</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
           <object class="GtkScrolledWindow">
             <property name="hexpand">1</property>
             <property name="vexpand">1</property>
             <property name="hscrollbar-policy">never</property>
             <child>
-              <object class="GtkListBox" id="list2">
+              <object class="GtkColumnView" id="list">
                 <style>
                   <class name="list"/>
                 </style>
-                <property name="selection-mode">none</property>
+                <child>
+                  <object class="GtkColumnViewColumn" id="name">
+                    <property name="title" translatable="yes">Name</property>
+                    <property name="factory">
+                      <object class="GtkSignalListItemFactory">
+                        <signal name="setup" handler="setup_name_cb"/>
+                        <signal name="bind" handler="bind_name_cb"/>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkColumnViewColumn" id="type">
+                    <property name="title" translatable="yes">Type</property>
+                    <property name="factory">
+                      <object class="GtkSignalListItemFactory">
+                        <signal name="setup" handler="setup_type_cb"/>
+                        <signal name="bind" handler="bind_type_cb"/>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkColumnViewColumn" id="origin">
+                    <property name="title" translatable="yes">Defined At</property>
+                    <property name="factory">
+                      <object class="GtkSignalListItemFactory">
+                        <signal name="setup" handler="setup_origin_cb"/>
+                        <signal name="bind" handler="bind_origin_cb"/>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkColumnViewColumn">
+                    <property name="title" translatable="yes">Value</property>
+                    <property name="factory">
+                      <object class="GtkSignalListItemFactory">
+                        <signal name="bind" handler="bind_value_cb"/>
+                        <signal name="unbind" handler="unbind_value_cb"/>
+                      </object>
+                    </property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
@@ -96,28 +69,4 @@
       </object>
     </child>
   </template>
-  <object class="GtkSizeGroup" id="names">
-    <property name="mode">horizontal</property>
-    <widgets>
-      <widget name="name_heading"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="types">
-    <property name="mode">horizontal</property>
-    <widgets>
-      <widget name="type_heading"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="origins">
-    <property name="mode">horizontal</property>
-    <widgets>
-      <widget name="origin_heading"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="values">
-    <property name="mode">horizontal</property>
-    <widgets>
-      <widget name="value_heading"/>
-    </widgets>
-  </object>
 </interface>
