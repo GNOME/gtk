@@ -67,7 +67,7 @@
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBoxText" id="theme_combo">
+                                  <object class="GtkDropDown" id="theme_combo">
                                     <property name="halign">end</property>
                                     <property name="valign">baseline</property>
                                     <property name="hexpand">1</property>
@@ -124,7 +124,7 @@
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBoxText" id="cursor_combo">
+                                  <object class="GtkDropDown" id="cursor_combo">
                                     <property name="halign">end</property>
                                     <property name="valign">baseline</property>
                                     <property name="hexpand">1</property>
@@ -186,7 +186,7 @@
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBoxText" id="icon_combo">
+                                  <object class="GtkDropDown" id="icon_combo">
                                     <property name="halign">end</property>
                                     <property name="valign">baseline</property>
                                     <property name="hexpand">1</property>
@@ -285,14 +285,14 @@
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBoxText" id="direction_combo">
+                                  <object class="GtkDropDown" id="direction_combo">
                                     <property name="halign">end</property>
                                     <property name="valign">baseline</property>
                                     <property name="hexpand">1</property>
-                                    <signal name="changed" handler="direction_changed"/>
+                                    <signal name="notify::selected" handler="direction_changed"/>
                                     <items>
-                                      <item translatable="yes" id="ltr">Left-to-Right</item>
-                                      <item translatable="yes" id="rtl">Right-to-Left</item>
+                                      <item translatable="yes">Left-to-Right</item>
+                                      <item translatable="yes">Right-to-Left</item>
                                     </items>
                                   </object>
                                 </child>

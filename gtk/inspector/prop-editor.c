@@ -46,7 +46,6 @@
 #include "gtkwidgetprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtklistbox.h"
-#include "gtkcomboboxtext.h"
 #include "gtkmenubutton.h"
 
 struct _GtkInspectorPropEditor
@@ -451,13 +450,11 @@ bool_changed (GObject *object, GParamSpec *pspec, gpointer data)
 }
 
 static void
-enum_modified (GtkComboBox *combo, ObjectProperty *p)
+enum_modified (GtkDropDown *dropdown, GParamSpec *pspec, ObjectProperty *p)
 {
-  gint i;
+  int i = gtk_drop_down_get_selected (dropdown);
   GEnumClass *eclass;
   GValue val = G_VALUE_INIT;
-
-  i = gtk_combo_box_get_active (combo);
 
   eclass = G_ENUM_CLASS (g_type_class_peek (p->spec->value_type));
 
@@ -470,7 +467,6 @@ enum_modified (GtkComboBox *combo, ObjectProperty *p)
 static void
 enum_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
-  GtkComboBox *combo = GTK_COMBO_BOX (data);
   GValue val = G_VALUE_INIT;
   GEnumClass *eclass;
   gint i;
@@ -489,9 +485,9 @@ enum_changed (GObject *object, GParamSpec *pspec, gpointer data)
     }
   g_value_unset (&val);
 
-  block_controller (G_OBJECT (combo));
-  gtk_combo_box_set_active (combo, i);
-  unblock_controller (G_OBJECT (combo));
+  block_controller (G_OBJECT (data));
+  gtk_drop_down_set_selected (GTK_DROP_DOWN (data), i);
+  unblock_controller (G_OBJECT (data));
 }
 
 static void
@@ -913,23 +909,23 @@ property_editor (GObject                *object,
     {
       {
         GEnumClass *eclass;
+        char **names;
         gint j;
-
-        prop_edit = gtk_combo_box_text_new ();
 
         eclass = G_ENUM_CLASS (g_type_class_ref (spec->value_type));
 
-        j = 0;
-        while (j < eclass->n_values)
-          {
-            gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (prop_edit),
-                                       eclass->values[j].value_name,
-                                       eclass->values[j].value_nick);
-            ++j;
-          }
+        names = g_new (char *, eclass->n_values + 1);
+        for (j = 0; j < eclass->n_values; j++)
+          names[j] = (char *)eclass->values[j].value_name;
+        names[eclass->n_values] = NULL;
 
-            connect_controller (G_OBJECT (prop_edit), "changed",
-                                object, spec, G_CALLBACK (enum_modified));
+        prop_edit = gtk_drop_down_new ();
+        gtk_drop_down_set_from_strings (GTK_DROP_DOWN (prop_edit), (const char **)names);
+
+        g_free (names);
+
+        connect_controller (G_OBJECT (prop_edit), "notify::selected",
+                            object, spec, G_CALLBACK (enum_modified));
 
         g_type_class_unref (eclass);
 
@@ -1164,7 +1160,8 @@ model_properties (GtkButton              *button,
 }
 
 static void
-attribute_mapping_changed (GtkComboBox            *combo,
+attribute_mapping_changed (GtkDropDown            *dropdown,
+                           GParamSpec             *pspec,
                            GtkInspectorPropEditor *self)
 {
   gint col;
@@ -1172,7 +1169,7 @@ attribute_mapping_changed (GtkComboBox            *combo,
   GtkCellRenderer *cell;
   GtkCellArea *area;
 
-  col = gtk_combo_box_get_active (combo) - 1;
+  col = gtk_drop_down_get_selected (dropdown) - 1;
   layout = g_object_get_data (self->object, "gtk-inspector-cell-layout");
   if (GTK_IS_CELL_LAYOUT (layout))
     {
@@ -1187,6 +1184,72 @@ attribute_mapping_changed (GtkComboBox            *combo,
     }
 }
 
+#define ATTRIBUTE_TYPE_HOLDER (attribute_holder_get_type ())
+G_DECLARE_FINAL_TYPE (AttributeHolder, attribute_holder, ATTRIBUTE, HOLDER, GObject)
+
+struct _AttributeHolder {
+  GObject parent_instance;
+  int column;
+  gboolean sensitive;
+};
+
+G_DEFINE_TYPE (AttributeHolder, attribute_holder, G_TYPE_OBJECT);
+
+static void
+attribute_holder_init (AttributeHolder *holder)
+{
+}
+
+static void
+attribute_holder_class_init (AttributeHolderClass *class)
+{
+}
+
+static AttributeHolder *
+attribute_holder_new (int      column,
+                      gboolean sensitive)
+{
+  AttributeHolder *holder = g_object_new (ATTRIBUTE_TYPE_HOLDER, NULL);
+  holder->column = column;
+  holder->sensitive = sensitive;
+  return holder;
+}
+
+static void
+attribute_setup_item (GtkSignalListItemFactory *factory,
+                      GtkListItem              *item)
+{
+  GtkWidget *label;
+
+  label = gtk_label_new ("");
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+
+  gtk_list_item_set_child (item, label);
+}
+
+static void
+attribute_bind_item (GtkSignalListItemFactory *factory,
+                     GtkListItem              *item)
+{
+  GtkWidget *label;
+  AttributeHolder *holder;
+
+  holder = gtk_list_item_get_item (item);
+  label = gtk_list_item_get_child (item);
+
+  if (holder->column >= 0)
+    {
+      char *text = g_strdup_printf ("%d", holder->column);
+      gtk_label_set_label (GTK_LABEL (label), text);
+      g_free (text);
+    }
+  else
+    gtk_label_set_label (GTK_LABEL (label), _("None"));
+
+  gtk_list_item_set_selectable (item, holder->sensitive);
+  gtk_widget_set_sensitive (label, holder->sensitive);
+}
+
 static GtkWidget *
 attribute_editor (GObject                *object,
                   GParamSpec             *spec,
@@ -1199,13 +1262,12 @@ attribute_editor (GObject                *object,
   GtkWidget *label;
   GtkWidget *button;
   GtkWidget *box;
-  GtkWidget *combo;
-  gchar *text;
+  GtkWidget *dropdown;
+  GListStore *store;
+  GtkListItemFactory *factory;
   gint i;
+  AttributeHolder *holder;
   gboolean sensitive;
-  GtkCellRenderer *renderer;
-  GtkListStore *store;
-  GtkTreeIter iter;
 
   layout = g_object_get_data (object, "gtk-inspector-cell-layout");
   if (GTK_IS_CELL_LAYOUT (layout))
@@ -1228,30 +1290,36 @@ attribute_editor (GObject                *object,
   gtk_box_append (GTK_BOX (box), button);
 
   gtk_box_append (GTK_BOX (box), gtk_label_new (_("Column:")));
-  store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_BOOLEAN);
-  combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (store));
-  renderer = gtk_cell_renderer_text_new ();
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, FALSE);
-  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), renderer,
-                                  "text", 0,
-                                  "sensitive", 1,
-                                  NULL);
-  gtk_list_store_append (store, &iter);
-  gtk_list_store_set (store, &iter, 0, C_("property name", "None"), 1, TRUE, -1);
+  dropdown = gtk_drop_down_new ();
+
+  store = g_list_store_new (ATTRIBUTE_TYPE_HOLDER);
+  holder = attribute_holder_new (-1, TRUE);
+  g_list_store_append (store, holder);
+  g_object_unref (holder);
+
   for (i = 0; i < gtk_tree_model_get_n_columns (model); i++)
     {
-      text = g_strdup_printf ("%d", i);
       sensitive = g_value_type_transformable (gtk_tree_model_get_column_type (model, i),
                                               spec->value_type);
-      gtk_list_store_append (store, &iter);
-      gtk_list_store_set (store, &iter, 0, text, 1, sensitive, -1);
-      g_free (text);
+      holder = attribute_holder_new (i, sensitive);
+      g_list_store_append (store, holder);
+      g_object_unref (holder);
     }
-  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), col + 1);
-  attribute_mapping_changed (GTK_COMBO_BOX (combo), self);
-  g_signal_connect (combo, "changed",
+  gtk_drop_down_set_model (GTK_DROP_DOWN (dropdown), G_LIST_MODEL (store));
+  g_object_unref (store);
+
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (attribute_setup_item), NULL);
+  g_signal_connect (factory, "bind", G_CALLBACK (attribute_bind_item), NULL);
+  gtk_drop_down_set_factory (GTK_DROP_DOWN (dropdown), factory);
+  g_object_unref (factory);
+
+  gtk_drop_down_set_selected (GTK_DROP_DOWN (dropdown), col + 1);
+  attribute_mapping_changed (GTK_DROP_DOWN (dropdown), NULL, self);
+  g_signal_connect (dropdown, "notify::selected",
                     G_CALLBACK (attribute_mapping_changed), self);
-  gtk_box_append (GTK_BOX (box), combo);
+
+  gtk_box_append (GTK_BOX (box), dropdown);
 
   return box;
 }

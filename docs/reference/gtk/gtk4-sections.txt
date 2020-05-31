@@ -7443,3 +7443,27 @@ gtk_string_filter_set_match_mode
 <SUBSECTION Private>
 gtk_string_filter_get_type
 </SECTION>
+
+<SECTION>
+<FILE>gtkdropdown</FILE>
+<TITLE>GtkDropDown</TITLE>
+GtkDropDown
+gtk_drop_down_new
+gtk_drop_down_set_from_strings
+gtk_drop_down_set_model
+gtk_drop_down_get_model
+gtk_drop_down_set_selected
+gtk_drop_down_get_selected
+gtk_drop_down_set_factory
+gtk_drop_down_get_factory
+gtk_drop_down_set_list_factory
+gtk_drop_down_get_list_factory
+gtk_drop_down_set_expression
+gtk_drop_down_get_expression
+gtk_drop_down_set_enable_search
+gtk_drop_down_get_enable_search
+<SUBSECTION Standard>
+GTK_TYPE_DROP_DOWN
+<SUBSECTION Private>
+gtk_drop_down_get_type
+</SECTION>
