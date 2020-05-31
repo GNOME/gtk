@@ -149,6 +149,8 @@ GType   gtk_print_backend_get_type       (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GList      *gtk_print_backend_get_printer_list     (GtkPrintBackend         *print_backend);
 GDK_AVAILABLE_IN_ALL
+GListModel *gtk_print_backend_get_printers         (GtkPrintBackend         *print_backend);
+GDK_AVAILABLE_IN_ALL
 gboolean    gtk_print_backend_printer_list_is_done (GtkPrintBackend         *print_backend);
 GDK_AVAILABLE_IN_ALL
 GtkPrinter *gtk_print_backend_find_printer         (GtkPrintBackend         *print_backend,
