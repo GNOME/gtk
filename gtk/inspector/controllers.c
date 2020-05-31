@@ -22,7 +22,7 @@
 #include "object-tree.h"
 
 #include "gtkbinlayout.h"
-#include "gtkcomboboxtext.h"
+#include "gtkdropdown.h"
 #include "gtkcustomsorter.h"
 #include "gtkflattenlistmodel.h"
 #include "gtkframe.h"
@@ -103,15 +103,16 @@ gtk_inspector_controllers_init (GtkInspectorControllers *self)
 }
 
 static void
-phase_changed_cb (GtkComboBox             *combo,
+phase_changed_cb (GtkDropDown             *dropdown,
+                  GParamSpec              *pspec,
                   GtkInspectorControllers *self)
 {
   GtkWidget *row;
   GtkPropagationPhase phase;
   GtkEventController *controller;
 
-  phase = gtk_combo_box_get_active (combo);
-  row = gtk_widget_get_ancestor (GTK_WIDGET (combo), GTK_TYPE_LIST_BOX_ROW);
+  phase = gtk_drop_down_get_selected (dropdown);
+  row = gtk_widget_get_ancestor (GTK_WIDGET (dropdown), GTK_TYPE_LIST_BOX_ROW);
   controller = GTK_EVENT_CONTROLLER (g_object_get_data (G_OBJECT (row), "controller"));
   gtk_event_controller_set_propagation_phase (controller, phase);
 }
@@ -125,7 +126,8 @@ create_controller_widget (gpointer item,
   GtkWidget *row;
   GtkWidget *box;
   GtkWidget *label;
-  GtkWidget *combo;
+  GtkWidget *dropdown;
+  const char *phases[5];
 
   row = gtk_list_box_row_new ();
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
@@ -142,18 +144,21 @@ create_controller_widget (gpointer item,
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
 
-  combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_insert_text (GTK_COMBO_BOX_TEXT (combo), GTK_PHASE_NONE, C_("event phase", "None"));
-  gtk_combo_box_text_insert_text (GTK_COMBO_BOX_TEXT (combo), GTK_PHASE_CAPTURE, C_("event phase", "Capture"));
-  gtk_combo_box_text_insert_text (GTK_COMBO_BOX_TEXT (combo), GTK_PHASE_BUBBLE, C_("event phase", "Bubble"));
-  gtk_combo_box_text_insert_text (GTK_COMBO_BOX_TEXT (combo), GTK_PHASE_TARGET, C_("event phase", "Target"));
-  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), gtk_event_controller_get_propagation_phase (controller));
-  gtk_box_append (GTK_BOX (box), combo);
+  phases[0] = C_("event phase", "None");
+  phases[1] = C_("event phase", "Capture");
+  phases[2] = C_("event phase", "Bubble");
+  phases[3] = C_("event phase", "Target");
+  phases[4] = NULL;
+
+  dropdown = gtk_drop_down_new ();
+  gtk_drop_down_set_from_strings (GTK_DROP_DOWN (dropdown), phases);
+  gtk_drop_down_set_selected (GTK_DROP_DOWN (dropdown), gtk_event_controller_get_propagation_phase (controller));
+  gtk_box_append (GTK_BOX (box), dropdown);
   gtk_widget_set_halign (label, GTK_ALIGN_END);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
 
   g_object_set_data (G_OBJECT (row), "controller", controller);
-  g_signal_connect (combo, "changed", G_CALLBACK (phase_changed_cb), self);
+  g_signal_connect (dropdown, "notify::selected", G_CALLBACK (phase_changed_cb), self);
 
   return row;
 }

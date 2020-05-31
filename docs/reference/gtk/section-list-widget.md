@@ -81,7 +81,7 @@ The selection handling is also different. While selections used to be managed vi
 
 Finally here's a quick list of equivalent functionality to look for when transitioning code for easy lookup:
 
-| old                 | new                                 |
+| Old                 | New                                 |
 | ------------------- | ----------------------------------- |
 | #GtkTreeModel       | #GListModel                         |
 | #GtkTreePath        | #guint position, #GtkTreeListRow    |
@@ -92,8 +92,8 @@ Finally here's a quick list of equivalent functionality to look for when transit
 | #GtkTreeSelection   | #GtkSelectionModel                  |
 | #GtkTreeViewColumn  | #GtkColumnView                      |
 | #GtkTreeView        | #GtkListView, #GtkColumnView        |
-| #GtkCellView        |                                     |
-| #GtkComboBox        |                                     |
+| #GtkCellView        | #GtkListItemWidget                  |
+| #GtkComboBox        | #GtkDropDown                        |
 | #GtkIconView        | #GtkGridView                        |
 | #GtkTreeSortable    | #GtkColumnView                      |
 | #GtkTreeModelSort   | #GtkSortListModel                   |
