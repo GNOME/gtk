@@ -343,6 +343,8 @@ do_listview_settings (GtkWidget *do_widget)
       sorter = gtk_string_sorter_new (gtk_property_expression_new (SETTINGS_TYPE_KEY, NULL, "name"));
       gtk_column_view_column_set_sorter (name_column, sorter);
       g_object_unref (sorter);
+
+      g_object_unref (builder);
     }
 
   if (!gtk_widget_get_visible (window))
