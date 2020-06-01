@@ -114,7 +114,16 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
       geometry.min_height = gdk_toplevel_layout_get_min_height (layout);
       mask = GDK_HINT_MIN_SIZE;
 
-      style_mask |= NSWindowStyleMaskResizable;
+      /* Only set 'Resizable' mask to get native resize zones if the window is
+       * titled, otherwise we do this internally for CSD and do not need
+       * NSWindow to do it for us. Additionally, it can mess things up when
+       * doing a window resize since it can cause mouseDown to get passed
+       * through to the next window.
+       */
+      if ((style_mask & NSWindowStyleMaskTitled) != 0)
+        style_mask |= NSWindowStyleMaskResizable;
+      else
+        style_mask &= ~NSWindowStyleMaskResizable;
     }
   else
     {
