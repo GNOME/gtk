@@ -225,8 +225,6 @@ struct _GdkScrollEvent
 {
   GdkEvent parent_instance;
 
-  double x;
-  double y;
   GdkModifierType state;
   GdkScrollDirection direction;
   double delta_x;
