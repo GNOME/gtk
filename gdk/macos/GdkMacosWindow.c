@@ -189,6 +189,20 @@
     }
 }
 
+-(void)windowDidUnmaximize
+{
+  NSWindowStyleMask style_mask = [self styleMask];
+
+  gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), GDK_SURFACE_STATE_MAXIMIZED, 0);
+
+  /* If we are using CSD, then we transitioned to an opaque
+   * window while we were maximized. Now we need to drop that
+   * as we are leaving maximized state.
+   */
+  if ((style_mask & NSWindowStyleMaskTitled) == 0 && [self isOpaque])
+    [self setOpaque:NO];
+}
+
 -(void)windowDidMove:(NSNotification *)aNotification
 {
   GdkSurface *surface = GDK_SURFACE (gdk_surface);
@@ -196,7 +210,7 @@
 
   /* In case the window is changed when maximized remove the maximized state */
   if (maximized && !inMaximizeTransition && !NSEqualRects (lastMaximizedFrame, [self frame]))
-    gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_MAXIMIZED, 0);
+    [self windowDidUnmaximize];
 
   _gdk_macos_surface_update_position (gdk_surface);
   _gdk_macos_surface_reposition_children (gdk_surface);
@@ -221,7 +235,7 @@
 
   /* see same in windowDidMove */
   if (maximized && !inMaximizeTransition && !NSEqualRects (lastMaximizedFrame, [self frame]))
-    gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_MAXIMIZED, 0);
+    [self windowDidUnmaximize];
 
   surface->width = content_rect.size.width;
   surface->height = content_rect.size.height;
@@ -630,7 +644,7 @@
   if (state & GDK_SURFACE_STATE_MAXIMIZED)
     {
       lastMaximizedFrame = newFrame;
-      gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), GDK_SURFACE_STATE_MAXIMIZED, 0);
+      [self windowDidUnmaximize];
     }
   else
     {
@@ -645,7 +659,16 @@
 
 -(void)windowDidEndLiveResize:(NSNotification *)aNotification
 {
+  gboolean maximized = GDK_SURFACE (gdk_surface)->state & GDK_SURFACE_STATE_MAXIMIZED;
+
   inMaximizeTransition = NO;
+
+  /* Even if this is CSD, we want to be opaque while maximized
+   * to speed up compositing by allowing the display server to
+   * avoid costly blends.
+   */
+  if (maximized)
+    [self setOpaque:YES];
 }
 
 -(NSSize)window:(NSWindow *)window willUseFullScreenContentSize:(NSSize)proposedSize
