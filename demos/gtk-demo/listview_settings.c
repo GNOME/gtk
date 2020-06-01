@@ -25,6 +25,8 @@ enum {
   PROP_SUMMARY,
   PROP_DESCRIPTION,
   PROP_VALUE,
+  PROP_TYPE,
+  PROP_DEFAULT_VALUE,
 
   N_PROPS
 };
@@ -65,6 +67,21 @@ settings_key_get_property (GObject    *object,
       }
       break;
 
+    case PROP_TYPE:
+      {
+        const GVariantType *type = g_settings_schema_key_get_value_type (self->key);
+        g_value_set_string (value, g_variant_type_peek_string (type));
+      }
+      break;
+
+    case PROP_DEFAULT_VALUE:
+      {
+        GVariant *variant = g_settings_schema_key_get_default_value (self->key);
+        g_value_take_string (value, g_variant_print (variant, FALSE));
+        g_variant_unref (variant);
+      }
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -98,6 +115,10 @@ settings_key_class_init (SettingsKeyClass *klass)
     g_param_spec_string ("summary", NULL, NULL, NULL, G_PARAM_READABLE);
   properties[PROP_VALUE] =
     g_param_spec_string ("value", NULL, NULL, NULL, G_PARAM_READABLE);
+  properties[PROP_TYPE] =
+    g_param_spec_string ("type", NULL, NULL, NULL, G_PARAM_READABLE);
+  properties[PROP_DEFAULT_VALUE] =
+    g_param_spec_string ("default-value", NULL, NULL, NULL, G_PARAM_READABLE);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
