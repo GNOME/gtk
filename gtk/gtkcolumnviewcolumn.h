@@ -79,10 +79,16 @@ GDK_AVAILABLE_IN_ALL
 gboolean                gtk_column_view_column_get_visible              (GtkColumnViewColumn    *self);
 
 GDK_AVAILABLE_IN_ALL
+
 void                    gtk_column_view_column_set_header_menu          (GtkColumnViewColumn    *self,
                                                                          GMenuModel             *menu);
 GDK_AVAILABLE_IN_ALL
 GMenuModel *            gtk_column_view_column_get_header_menu          (GtkColumnViewColumn    *self);
+
+void                    gtk_column_view_column_set_fixed_width          (GtkColumnViewColumn    *self,
+                                                                         int                     fixed_width);
+GDK_AVAILABLE_IN_ALL
+int                     gtk_column_view_column_get_fixed_width          (GtkColumnViewColumn    *self);
 
 G_END_DECLS
 
