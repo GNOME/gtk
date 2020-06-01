@@ -182,6 +182,68 @@
                         </property>
                       </object>
                     </child>
+                    <child>
+                      <object class="GtkColumnViewColumn" id="summary_column">
+                        <property name="title">Summary</property>
+                        <property name="visible">0</property>
+                        <property name="header-menu">header_menu</property>
+                        <property name="factory">
+                          <object class="GtkBuilderListItemFactory">
+                            <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkLabel">
+        <property name="xalign">0</property>
+        <property name="wrap">1</property>
+        <property name="width-chars">50</property>
+        <property name="max-width-chars">50</property>
+        <binding name="label">
+          <lookup name="summary" type="SettingsKey">
+            <lookup name="item">GtkListItem</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                        ]]></property>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkColumnViewColumn" id="description_column">
+                        <property name="title">Description</property>
+                        <property name="visible">0</property>
+                        <property name="header-menu">header_menu</property>
+                        <property name="factory">
+                          <object class="GtkBuilderListItemFactory">
+                            <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkLabel">
+        <property name="xalign">0</property>
+        <property name="wrap">1</property>
+        <property name="width-chars">50</property>
+        <property name="max-width-chars">50</property>
+        <binding name="label">
+          <lookup name="description" type="SettingsKey">
+            <lookup name="item">GtkListItem</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                        ]]></property>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -200,6 +262,14 @@
       <item>
         <attribute name="label" translatable="yes">Default value</attribute>
         <attribute name="action">columnview.show-default</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Summary</attribute>
+        <attribute name="action">columnview.show-summary</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Description</attribute>
+        <attribute name="action">columnview.show-description</attribute>
       </item>
     </section>
   </menu>
