@@ -48,7 +48,7 @@
  *
  * A #GtkToolPalette is created with a call to gtk_tool_palette_new().
  *
- * #GtkToolItems cannot be added directly to a #GtkToolPalette - 
+ * #GtkToolItems cannot be added directly to a #GtkToolPalette -
  * instead they are added to a #GtkToolItemGroup which can than be added
  * to a #GtkToolPalette. To add a #GtkToolItemGroup to a #GtkToolPalette,
  * use gtk_container_add().
@@ -859,12 +859,12 @@ gtk_tool_palette_set_child_property (GtkContainer *container,
   switch (prop_id)
     {
       case CHILD_PROP_EXCLUSIVE:
-        gtk_tool_palette_set_exclusive (palette, GTK_TOOL_ITEM_GROUP (child), 
+        gtk_tool_palette_set_exclusive (palette, GTK_TOOL_ITEM_GROUP (child),
           g_value_get_boolean (value));
         break;
 
       case CHILD_PROP_EXPAND:
-        gtk_tool_palette_set_expand (palette, GTK_TOOL_ITEM_GROUP (child), 
+        gtk_tool_palette_set_expand (palette, GTK_TOOL_ITEM_GROUP (child),
           g_value_get_boolean (value));
         break;
 
@@ -886,12 +886,12 @@ gtk_tool_palette_get_child_property (GtkContainer *container,
   switch (prop_id)
     {
       case CHILD_PROP_EXCLUSIVE:
-        g_value_set_boolean (value, 
+        g_value_set_boolean (value,
           gtk_tool_palette_get_exclusive (palette, GTK_TOOL_ITEM_GROUP (child)));
         break;
 
       case CHILD_PROP_EXPAND:
-        g_value_set_boolean (value, 
+        g_value_set_boolean (value,
           gtk_tool_palette_get_expand (palette, GTK_TOOL_ITEM_GROUP (child)));
         break;
 
@@ -1228,8 +1228,8 @@ static gint
 gtk_tool_palette_compare_groups (gconstpointer a,
                                  gconstpointer b)
 {
-  const GtkToolItemGroupInfo *group_a = a;
-  const GtkToolItemGroupInfo *group_b = b;
+  const GtkToolItemGroupInfo *group_a = *((GtkToolItemGroupInfo **) a);
+  const GtkToolItemGroupInfo *group_b = *((GtkToolItemGroupInfo **) b);
 
   return group_a->pos - group_b->pos;
 }
