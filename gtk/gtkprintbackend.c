@@ -29,6 +29,7 @@
 #include "gtkprintbackendprivate.h"
 
 
+static void gtk_print_backend_finalize     (GObject      *object);
 static void gtk_print_backend_dispose      (GObject      *object);
 static void gtk_print_backend_set_property (GObject      *object,
                                             guint         prop_id,
@@ -251,6 +252,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
 
   backend_parent_class = g_type_class_peek_parent (class);
   
+  object_class->finalize = gtk_print_backend_finalize;
   object_class->dispose = gtk_print_backend_dispose;
   object_class->set_property = gtk_print_backend_set_property;
   object_class->get_property = gtk_print_backend_get_property;
@@ -348,11 +350,21 @@ gtk_print_backend_dispose (GObject *object)
   /* We unref the printers in dispose, not in finalize so that
    * we can break refcount cycles with gtk_print_backend_destroy 
    */
-  g_clear_object (&priv->printers);
+  g_list_store_remove_all (priv->printers);
 
   backend_parent_class->dispose (object);
 }
 
+static void
+gtk_print_backend_finalize (GObject *object)
+{
+  GtkPrintBackend *backend = GTK_PRINT_BACKEND (object);
+  GtkPrintBackendPrivate *priv = backend->priv;
+
+  g_clear_object (&priv->printers);
+
+  backend_parent_class->finalize (object);
+}
 
 static void
 fallback_printer_request_details (GtkPrinter *printer)
@@ -361,7 +373,7 @@ fallback_printer_request_details (GtkPrinter *printer)
 
 static gboolean
 fallback_printer_mark_conflicts (GtkPrinter          *printer,
-				 GtkPrinterOptionSet *options)
+                                 GtkPrinterOptionSet *options)
 {
   return FALSE;
 }
