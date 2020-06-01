@@ -64,9 +64,9 @@ reference:
       - gdk3-docs.tar.xz
       - gtk3-docs.tar.xz
 
-msys2-mingw32-meson:
+msys2-mingw64-meson:
   variables:
-    MSYSTEM: "MINGW32"
+    MSYSTEM: "MINGW64"
     CHERE_INVOKING: "yes"
   stage: build
   tags:
@@ -80,10 +80,10 @@ msys2-mingw32-meson:
     paths:
       - "_build/meson-logs"
 
-msys2-mingw32-autotools:
+msys2-mingw64-autotools:
   when: manual
   variables:
-    MSYSTEM: "MINGW32"
+    MSYSTEM: "MINGW64"
     CHERE_INVOKING: "yes"
   stage: build
   tags:
