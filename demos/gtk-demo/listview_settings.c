@@ -302,6 +302,8 @@ do_listview_settings (GtkWidget *do_widget)
       GtkColumnViewColumn *name_column;
       GtkColumnViewColumn *type_column;
       GtkColumnViewColumn *default_column;
+      GtkColumnViewColumn *summary_column;
+      GtkColumnViewColumn *description_column;
       GtkSorter *sorter;
       GActionGroup *actions;
       GAction *action;
@@ -326,6 +328,8 @@ do_listview_settings (GtkWidget *do_widget)
       columnview = GTK_WIDGET (gtk_builder_get_object (builder, "columnview"));
       type_column = GTK_COLUMN_VIEW_COLUMN (gtk_builder_get_object (builder, "type_column"));
       default_column = GTK_COLUMN_VIEW_COLUMN (gtk_builder_get_object (builder, "default_column"));
+      summary_column = GTK_COLUMN_VIEW_COLUMN (gtk_builder_get_object (builder, "summary_column"));
+      description_column = GTK_COLUMN_VIEW_COLUMN (gtk_builder_get_object (builder, "description_column"));
 
       actions = G_ACTION_GROUP (g_simple_action_group_new ());
 
@@ -334,6 +338,14 @@ do_listview_settings (GtkWidget *do_widget)
       g_object_unref (action);
 
       action = G_ACTION (g_property_action_new ("show-default", default_column, "visible"));
+      g_action_map_add_action (G_ACTION_MAP (actions), action);
+      g_object_unref (action);
+
+      action = G_ACTION (g_property_action_new ("show-summary", summary_column, "visible"));
+      g_action_map_add_action (G_ACTION_MAP (actions), action);
+      g_object_unref (action);
+
+      action = G_ACTION (g_property_action_new ("show-description", description_column, "visible"));
       g_action_map_add_action (G_ACTION_MAP (actions), action);
       g_object_unref (action);
 
