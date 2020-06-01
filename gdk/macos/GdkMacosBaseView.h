@@ -29,7 +29,7 @@
 
 #define GDK_IS_MACOS_BASE_VIEW(obj) ((obj) && [obj isKindOfClass:[GdkMacosBaseView class]])
 
-@interface GdkMacosBaseView : NSView
+@interface GdkMacosBaseView : NSView <NSTextInputClient>
 {
   NSTrackingArea *trackingArea;
   BOOL needsInvalidateShadow;
