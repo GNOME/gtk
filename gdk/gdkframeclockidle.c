@@ -237,7 +237,8 @@ gdk_frame_clock_idle_get_frame_time (GdkFrameClock *clock)
 
   /* can't change frame time during a paint */
   if (priv->phase != GDK_FRAME_CLOCK_PHASE_NONE &&
-      priv->phase != GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS)
+      priv->phase != GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS &&
+      (priv->phase != GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT || priv->in_paint_idle))
     return priv->smoothed_frame_time_base;
 
   /* Outside a paint, pick something smoothed close to now */
