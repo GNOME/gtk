@@ -293,6 +293,8 @@ start_puzzle (GdkPaintable *paintable)
   /* Add shortcuts so people can use the arrow
    * keys to move the puzzle */
   controller = gtk_shortcut_controller_new ();
+  gtk_shortcut_controller_set_scope (GTK_SHORTCUT_CONTROLLER (controller),
+                                     GTK_SHORTCUT_SCOPE_GLOBAL);
   add_move_binding (GTK_SHORTCUT_CONTROLLER (controller),
                     GDK_KEY_Left, GDK_KEY_KP_Left,
                     -1, 0);
