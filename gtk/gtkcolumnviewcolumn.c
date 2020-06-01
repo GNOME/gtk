@@ -63,6 +63,8 @@ struct _GtkColumnViewColumn
 
   gboolean visible;
 
+  int fixed_width;
+
   /* This list isn't sorted - this is just caching for performance */
   GtkColumnViewCell *first_cell; /* no reference, just caching */
 };
@@ -80,6 +82,7 @@ enum
   PROP_TITLE,
   PROP_SORTER,
   PROP_VISIBLE,
+  PROP_FIXED_WIDTH,
 
   N_PROPS
 };
@@ -133,6 +136,10 @@ gtk_column_view_column_get_property (GObject    *object,
       g_value_set_boolean (value, self->visible);
       break;
 
+    case PROP_FIXED_WIDTH:
+      g_value_set_int (value, self->fixed_width);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -163,6 +170,10 @@ gtk_column_view_column_set_property (GObject      *object,
 
     case PROP_VISIBLE:
       gtk_column_view_column_set_visible (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_FIXED_WIDTH:
+      gtk_column_view_column_set_fixed_width (self, g_value_get_int (value));
       break;
 
     default:
@@ -240,6 +251,19 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
+  /**
+   * GtkColumnViewColumn:fixed-width:
+   *
+   * If not -1, this is the width that the column is allocated,
+   * regardless of the size of its content.
+   */
+  properties[PROP_FIXED_WIDTH] =
+    g_param_spec_int ("fixed-width",
+                      P_("Fixed width"),
+                      P_("Fixed width of this column"),
+                      -1, G_MAXINT, -1,
+                      G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
 
@@ -249,6 +273,7 @@ gtk_column_view_column_init (GtkColumnViewColumn *self)
   self->minimum_size_request = -1;
   self->natural_size_request = -1;
   self->visible = TRUE;
+  self->fixed_width = -1;
 }
 
 /**
@@ -357,6 +382,12 @@ gtk_column_view_column_measure (GtkColumnViewColumn *self,
                                 int                 *minimum,
                                 int                 *natural)
 {
+  if (self->fixed_width > -1)
+    {
+      self->minimum_size_request  = self->fixed_width;
+      self->natural_size_request  = self->fixed_width;
+    }
+
   if (self->minimum_size_request < 0)
     {
       GtkColumnViewCell *cell;
@@ -720,4 +751,66 @@ gtk_column_view_column_get_visible (GtkColumnViewColumn *self)
   g_return_val_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self), TRUE);
 
   return self->visible;
+}
+
+/**
+ * gtk_column_view_column_set_fixed_width:
+ * @self: a #GtkColumnViewColumn
+ * @fixed_width: the new fixed width, or -1
+ *
+ * If @fixed_width is not -1, sets the fixed width of @column;
+ * otherwise unsets it.
+ *
+ * Setting a fixed width overrides the automatically calculated
+ * width. Interactive resizing also sets the “fixed-width” property.
+ */
+void
+gtk_column_view_column_set_fixed_width (GtkColumnViewColumn *self,
+                                        int                  fixed_width)
+{
+  GtkOverflow overflow;
+
+  g_return_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self));
+  g_return_if_fail (fixed_width >= -1);
+
+  if (self->fixed_width == fixed_width)
+    return;
+
+  self->fixed_width = fixed_width;
+
+  if (fixed_width > -1)
+    overflow = GTK_OVERFLOW_HIDDEN;
+  else
+    overflow = GTK_OVERFLOW_VISIBLE;
+
+  if (self->header &&
+      overflow != gtk_widget_get_overflow (GTK_WIDGET (self->header)))
+    {
+      GtkColumnViewCell *cell;
+
+      gtk_widget_set_overflow (GTK_WIDGET (self->header), overflow);
+
+      for (cell = self->first_cell; cell; cell = gtk_column_view_cell_get_next (cell))
+        gtk_widget_set_overflow (GTK_WIDGET (cell), overflow);
+    }
+
+  gtk_column_view_column_queue_resize (self);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FIXED_WIDTH]);
+}
+
+/**
+ * gtk_column_view_column_get_fixed_width:
+ * @self: a #GtkColumnViewColumn
+ *
+ * Gets the fixed width of the column.
+ *
+ * Returns: the fixed with of the column
+ */
+int
+gtk_column_view_column_get_fixed_width (GtkColumnViewColumn *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self), -1);
+
+  return self->fixed_width;
 }
