@@ -293,6 +293,8 @@ start_puzzle (GdkPaintable *paintable)
   /* Add shortcuts so people can use the arrow
    * keys to move the puzzle */
   controller = gtk_shortcut_controller_new ();
+  gtk_shortcut_controller_set_scope (GTK_SHORTCUT_CONTROLLER (controller),
+                                     GTK_SHORTCUT_SCOPE_GLOBAL);
   add_move_binding (GTK_SHORTCUT_CONTROLLER (controller),
                     GDK_KEY_Left, GDK_KEY_KP_Left,
                     -1, 0);
@@ -353,11 +355,16 @@ reshuffle (void)
 {
   GtkWidget *grid;
 
-  grid = gtk_aspect_frame_get_child (GTK_ASPECT_FRAME (frame));
   if (solved)
-    start_puzzle (puzzle);
+    {
+      start_puzzle (puzzle);
+      grid = gtk_aspect_frame_get_child (GTK_ASPECT_FRAME (frame));
+    }
   else
-    shuffle_puzzle (grid);
+    {
+      grid = gtk_aspect_frame_get_child (GTK_ASPECT_FRAME (frame));
+      shuffle_puzzle (grid);
+    }
   gtk_widget_grab_focus (grid);
 }
 
