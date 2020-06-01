@@ -84,6 +84,7 @@ test_parse (gconstpointer d)
   GError *error = NULL;
   GString *string;
 
+  g_test_message ("filename: %s", filename);
   expected_file = get_expected_filename (filename);
 
   string = g_string_sized_new (0);

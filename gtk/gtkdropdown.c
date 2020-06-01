@@ -315,7 +315,7 @@ gtk_drop_down_get_property (GObject    *object,
       break;
 
     case PROP_EXPRESSION:
-      g_value_set_boxed (value, self->expression);
+      gtk_value_set_expression (value, self->expression);
       break;
 
     default:
@@ -355,7 +355,7 @@ gtk_drop_down_set_property (GObject      *object,
       break;
 
     case PROP_EXPRESSION:
-      gtk_drop_down_set_expression (self, g_value_get_boxed (value));
+      gtk_drop_down_set_expression (self, gtk_value_get_expression (value));
       break;
 
     default:
@@ -497,7 +497,7 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkDropDown:expression:
+   * GtkDropDown:expression: (type GtkExpression)
    *
    * An expression to evaluate to obtain strings to match against the search
    * term (see #GtkDropDown:enable-search). If #GtkDropDown:factory is not set,
@@ -505,11 +505,10 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
    * default factory.
    */
   properties[PROP_EXPRESSION] =
-    g_param_spec_boxed ("expression",
-                        P_("Expression"),
-                        P_("Expression to determine strings to search for"),
-                        GTK_TYPE_EXPRESSION,
-                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+    gtk_param_spec_expression ("expression",
+                               P_("Expression"),
+                               P_("Expression to determine strings to search for"),
+                               G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 

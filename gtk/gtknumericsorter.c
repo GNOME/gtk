@@ -212,7 +212,7 @@ gtk_numeric_sorter_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_EXPRESSION:
-      gtk_numeric_sorter_set_expression (self, g_value_get_boxed (value));
+      gtk_numeric_sorter_set_expression (self, gtk_value_get_expression (value));
       break;
 
     case PROP_SORT_ORDER:
@@ -236,7 +236,7 @@ gtk_numeric_sorter_get_property (GObject     *object,
   switch (prop_id)
     {
     case PROP_EXPRESSION:
-      g_value_set_boxed (value, self->expression);
+      gtk_value_set_expression (value, self->expression);
       break;
 
     case PROP_SORT_ORDER:
@@ -273,16 +273,15 @@ gtk_numeric_sorter_class_init (GtkNumericSorterClass *class)
   object_class->dispose = gtk_numeric_sorter_dispose;
 
   /**
-   * GtkNumericSorter:expression:
+   * GtkNumericSorter:expression: (type GtkExpression)
    *
    * The expression to evalute on items to get a number to compare with
    */
   properties[PROP_EXPRESSION] =
-      g_param_spec_boxed ("expression",
-                          P_("Expression"),
-                          P_("Expression to compare with"),
-                          GTK_TYPE_EXPRESSION,
-                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+    gtk_param_spec_expression ("expression",
+                               P_("Expression"),
+                               P_("Expression to compare with"),
+                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkNumericSorter:sort-order:
@@ -290,12 +289,12 @@ gtk_numeric_sorter_class_init (GtkNumericSorterClass *class)
    * Whether the sorter will sort smaller numbers first
    */
   properties[PROP_SORT_ORDER] =
-      g_param_spec_enum ("sort-order",
-                         P_("Sort order"),
-                         P_("Whether to sort smaller numbers first"),
-                         GTK_TYPE_SORT_TYPE,
-                         GTK_SORT_ASCENDING,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+    g_param_spec_enum ("sort-order",
+                       P_("Sort order"),
+                       P_("Whether to sort smaller numbers first"),
+                       GTK_TYPE_SORT_TYPE,
+                       GTK_SORT_ASCENDING,
+                       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
@@ -338,7 +337,7 @@ gtk_numeric_sorter_new (GtkExpression *expression)
  *
  * Gets the expression that is evaluated to obtain numbers from items.
  *
- * Returns: (nullable): a #GtkExpression, or %NULL
+ * Returns: (transfer none) (nullable): a #GtkExpression, or %NULL
  */
 GtkExpression *
 gtk_numeric_sorter_get_expression (GtkNumericSorter *self)
