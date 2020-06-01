@@ -534,11 +534,9 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
           g_value_init (&property_value, G_PARAM_SPEC_VALUE_TYPE (prop->pspec));
 
           if (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) == GTK_TYPE_EXPRESSION)
-            g_value_set_boxed (&property_value, prop->value);
+            gtk_value_set_expression (&property_value, prop->value);
           else
-            {
-              g_assert_not_reached();
-            }
+            g_assert_not_reached ();
         }
       else if (prop->bound && (!prop->text || prop->text->len == 0))
         {

@@ -148,7 +148,7 @@ gtk_string_sorter_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_EXPRESSION:
-      gtk_string_sorter_set_expression (self, g_value_get_boxed (value));
+      gtk_string_sorter_set_expression (self, gtk_value_get_expression (value));
       break;
 
     case PROP_IGNORE_CASE:
@@ -172,7 +172,7 @@ gtk_string_sorter_get_property (GObject     *object,
   switch (prop_id)
     {
     case PROP_EXPRESSION:
-      g_value_set_boxed (value, self->expression);
+      gtk_value_set_expression (value, self->expression);
       break;
 
     case PROP_IGNORE_CASE:
@@ -209,16 +209,15 @@ gtk_string_sorter_class_init (GtkStringSorterClass *class)
   object_class->dispose = gtk_string_sorter_dispose;
 
   /**
-   * GtkStringSorter:expression:
+   * GtkStringSorter:expression: (type GtkExpression)
    *
    * The expression to evalute on item to get a string to compare with
    */
   properties[PROP_EXPRESSION] =
-      g_param_spec_boxed ("expression",
-                          P_("Expression"),
-                          P_("Expression to compare with"),
-                          GTK_TYPE_EXPRESSION,
-                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+    gtk_param_spec_expression ("expression",
+                               P_("Expression"),
+                               P_("Expression to compare with"),
+                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkStringSorter:ignore-case:
@@ -274,7 +273,7 @@ gtk_string_sorter_new (GtkExpression *expression)
  *
  * Gets the expression that is evaluated to obtain strings from items.
  *
- * Returns: (nullable): a #GtkExpression, or %NULL
+ * Returns: (transfer none) (nullable): a #GtkExpression, or %NULL
  */
 GtkExpression *
 gtk_string_sorter_get_expression (GtkStringSorter *self)
