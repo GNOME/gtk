@@ -355,11 +355,16 @@ reshuffle (void)
 {
   GtkWidget *grid;
 
-  grid = gtk_aspect_frame_get_child (GTK_ASPECT_FRAME (frame));
   if (solved)
-    start_puzzle (puzzle);
+    {
+      start_puzzle (puzzle);
+      grid = gtk_aspect_frame_get_child (GTK_ASPECT_FRAME (frame));
+    }
   else
-    shuffle_puzzle (grid);
+    {
+      grid = gtk_aspect_frame_get_child (GTK_ASPECT_FRAME (frame));
+      shuffle_puzzle (grid);
+    }
   gtk_widget_grab_focus (grid);
 }
 
