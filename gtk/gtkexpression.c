@@ -51,6 +51,39 @@
  * Watches can be created for automatically updating the propery of an object,
  * similar to GObject's #GBinding mechanism, by using gtk_expression_bind().
  *
+ * # GtkExpression in GObject properties
+ *
+ * In order to use a #GtkExpression as a #GObject property, you must use the
+ * gtk_param_spec_expression() when creating a #GParamSpec to install in the
+ * #GObject class being defined; for instance:
+ *
+ * |[
+ *   obj_props[PROP_EXPRESSION] =
+ *     gtk_param_spec_expression ("expression",
+ *                                "Expression",
+ *                                "The expression used by the widget",
+ *                                G_PARAM_READWRITE |
+ *                                G_PARAM_STATIC_STRINGS |
+ *                                G_PARAM_EXPLICIT_NOTIFY);
+ * ]|
+ *
+ * When implementing the #GObjectClass.set_property() and #GObjectClass.get_property()
+ * virtual functions, you must use gtk_value_get_expression(), to retrieve the
+ * stored #GtkExpression from the #GValue container, and gtk_value_set_expression(),
+ * to store the #GtkExpression into the #GValue; for instance:
+ *
+ * |[
+ *   // in set_property()...
+ *   case PROP_EXPRESSION:
+ *     foo_widget_set_expression (foo, gtk_value_get_expression (value));
+ *     break;
+ *
+ *   // in get_property()...
+ *   case PROP_EXPRESSION:
+ *     gtk_value_set_expression (value, foo->expression);
+ *     break;
+ * ]|
+ *
  * # GtkExpression in .ui files
  *
  * GtkBuilder has support for creating expressions. The syntax here can be used where
