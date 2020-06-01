@@ -2130,7 +2130,7 @@ gdk_focus_event_new (GdkSurface *surface,
 
 /**
  * gdk_focus_event_get_in:
- * @event: (type GdkScrollEvent): a focus change event
+ * @event: (type GdkFocusEvent): a focus change event
  *
  * Extracts whether this event is about focus entering or
  * leaving the surface.
@@ -2153,15 +2153,6 @@ gdk_focus_event_get_in (GdkEvent *event)
 /* {{{ GdkScrollEvent */
 
 static void
-gdk_scroll_event_init (GdkEvent *event)
-{
-  GdkScrollEvent *self = (GdkScrollEvent *) event;
-
-  self->x = NAN;
-  self->y = NAN;
-}
-
-static void
 gdk_scroll_event_finalize (GdkEvent *event)
 {
   GdkScrollEvent *self = (GdkScrollEvent *) event;
@@ -2179,19 +2170,6 @@ gdk_scroll_event_get_state (GdkEvent *event)
   return self->state;
 }
 
-static gboolean
-gdk_scroll_event_get_position (GdkEvent *event,
-                               double   *x,
-                               double   *y)
-{
-  GdkScrollEvent *self = (GdkScrollEvent *) event;
-
-  *x = self->x;
-  *y = self->y;
-
-  return TRUE;
-}
-
 static GdkDeviceTool *
 gdk_scroll_event_get_tool (GdkEvent *event)
 {
@@ -2202,10 +2180,10 @@ gdk_scroll_event_get_tool (GdkEvent *event)
 
 static const GdkEventTypeInfo gdk_scroll_event_info = {
   sizeof (GdkScrollEvent),
-  gdk_scroll_event_init,
+  NULL,
   gdk_scroll_event_finalize,
   gdk_scroll_event_get_state,
-  gdk_scroll_event_get_position,
+  NULL,
   NULL,
   gdk_scroll_event_get_tool,
   NULL,
