@@ -326,6 +326,71 @@ test_inheritance3 (void)
   g_object_unref (box1_actions);
 }
 
+/* this checks a particular bug I've seen: when the action muxer
+ * hierarchy is already set up, adding action groups 'in the middle'
+ * does not properly update the muxer hierarchy, causing actions
+ * to be missed.
+ */
+static void
+test_inheritance4 (void)
+{
+  GtkWidget *window;
+  GtkWidget *box;
+  GtkWidget *button;
+  GSimpleActionGroup *win_actions;
+  GSimpleActionGroup *box_actions;
+  GActionEntry entries[] = {
+    { "action", activate, NULL, NULL, NULL },
+  };
+  int activated;
+
+  /* Our hierarchy looks like this:
+   *
+   * window win.action
+   *   |
+   *  box
+   *   |
+   * button
+   */
+  window = gtk_window_new ();
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  button = gtk_button_new ();
+
+  gtk_window_set_child (GTK_WINDOW (window), box);
+  gtk_box_append (GTK_BOX (box), button);
+
+  win_actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (win_actions),
+                                   entries, G_N_ELEMENTS (entries),
+                                   &activated);
+
+  gtk_widget_insert_action_group (window, "win", G_ACTION_GROUP (win_actions));
+
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "box.action");
+
+  /* no box1.action yet, but the action muxers are set up, with windows' muxer
+   * being the parent of button's, since box has no muxer yet.
+   */
+  g_assert_false (gtk_widget_get_sensitive (button));
+
+  box_actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (box_actions),
+                                   entries, G_N_ELEMENTS (entries),
+                                   &activated);
+
+  gtk_widget_insert_action_group (box, "box", G_ACTION_GROUP (box_actions));
+
+  /* now box has a muxer, and buttons muxer should be updated to inherit
+   * from it
+   */
+  g_assert_true (gtk_widget_get_sensitive (button));
+
+  gtk_window_destroy (GTK_WINDOW (window));
+
+  g_object_unref (win_actions);
+  g_object_unref (box_actions);
+}
+
 static int cut_activated;
 static int copy_activated;
 static int paste_activated;
@@ -661,6 +726,7 @@ main (int   argc,
   g_test_add_func ("/action/inheritance", test_inheritance);
   g_test_add_func ("/action/inheritance2", test_inheritance2);
   g_test_add_func ("/action/inheritance3", test_inheritance3);
+  g_test_add_func ("/action/inheritance4", test_inheritance4);
   g_test_add_func ("/action/text", test_text);
   g_test_add_func ("/action/overlap", test_overlap);
   g_test_add_func ("/action/overlap2", test_overlap2);
