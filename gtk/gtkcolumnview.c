@@ -36,6 +36,8 @@
 #include "gtkwidgetprivate.h"
 #include "gtksizerequest.h"
 #include "gtkadjustment.h"
+#include "gtkgesturedrag.h"
+#include "gtkeventcontrollermotion.h"
 
 /**
  * SECTION:gtkcolumnview
@@ -67,6 +69,10 @@ struct _GtkColumnView
   GtkSorter *sorter;
 
   GtkAdjustment *hadjustment;
+
+  gboolean in_column_resize;
+  int drag_pos;
+  int drag_x;
 };
 
 struct _GtkColumnViewClass
@@ -551,15 +557,161 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
   gtk_widget_class_set_css_name (widget_class, I_("treeview"));
 }
 
+#define DRAG_WIDTH 6
+
+static gboolean
+gtk_column_view_in_resize_rect (GtkColumnView       *self,
+                                GtkColumnViewColumn *column,
+                                double               x,
+                                double               y)
+{
+  GtkWidget *header;
+  graphene_rect_t rect;
+
+  header = gtk_column_view_column_get_header (column);
+
+  if (!gtk_widget_compute_bounds (header, self->header, &rect))
+    return FALSE;
+
+  rect.origin.x += rect.size.width - DRAG_WIDTH / 2;
+  rect.size.width = DRAG_WIDTH;
+
+  return graphene_rect_contains_point (&rect, &(graphene_point_t) { x, y});
+}
+
+static void
+header_drag_begin (GtkGestureDrag *gesture,
+                   double          start_x,
+                   double          start_y,
+                   GtkColumnView  *self)
+{
+  int i, n;
+
+  n = g_list_model_get_n_items (G_LIST_MODEL (self->columns));
+  for (i = 0; !self->in_column_resize && i < n; i++)
+    {
+      GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+
+      if (!gtk_column_view_column_get_visible (column))
+        {
+          g_object_unref (column);
+          continue;
+        }
+
+      if (i + 1 < n &&
+          gtk_column_view_column_get_resizable (column) &&
+          gtk_column_view_in_resize_rect (self, column, start_x, start_y))
+        {
+          int size;
+
+          gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+
+          gtk_column_view_column_get_allocation (column, NULL, &size);
+          gtk_column_view_column_set_fixed_width (column, size);
+          self->drag_pos = i;
+          self->drag_x = start_x - size;
+          self->in_column_resize = TRUE;
+
+          g_object_unref (column);
+          break;
+        }
+
+      g_object_unref (column);
+    }
+}
+
+static void
+header_drag_end (GtkGestureDrag *gesture,
+                 double          offset_x,
+                 double          offset_y,
+                 GtkColumnView  *self)
+{
+  self->in_column_resize = FALSE;
+}
+
+static void
+update_column_resize (GtkColumnView *self,
+                      double         x)
+{
+  GtkColumnViewColumn *column;
+
+  column = g_list_model_get_item (G_LIST_MODEL (self->columns), self->drag_pos);
+  gtk_column_view_column_set_fixed_width (column, MAX (x - self->drag_x, 0));
+  g_object_unref (column);
+}
+
+static void
+header_drag_update (GtkGestureDrag *gesture,
+                    double          offset_x,
+                    double          offset_y,
+                    GtkColumnView  *self)
+{
+  double start_x, x;
+
+  gtk_gesture_drag_get_start_point (gesture, &start_x, NULL);
+  x = start_x + offset_x;
+
+  if (self->in_column_resize)
+    update_column_resize (self, x);
+}
+
+static void
+header_motion (GtkEventControllerMotion *controller,
+               double                    x,
+               double                    y,
+               GtkColumnView            *self)
+{
+  gboolean cursor_set = FALSE;
+  int i, n;
+
+  n = g_list_model_get_n_items (G_LIST_MODEL (self->columns));
+  for (i = 0; i < n; i++)
+    {
+      GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+
+      if (!gtk_column_view_column_get_visible (column))
+        {
+          g_object_unref (column);
+          continue;
+        }
+
+      if (i + 1 < n &&
+          gtk_column_view_column_get_resizable (column) &&
+          gtk_column_view_in_resize_rect (self, column, x, y))
+        {
+          gtk_widget_set_cursor_from_name (self->header, "col-resize");
+          cursor_set = TRUE;
+        }
+
+      g_object_unref (column);
+    }
+
+  if (!cursor_set)
+    gtk_widget_set_cursor (self->header, NULL);
+}
+
 static void
 gtk_column_view_init (GtkColumnView *self)
 {
+  GtkEventController *controller;
+
   self->columns = g_list_store_new (GTK_TYPE_COLUMN_VIEW_COLUMN);
 
   self->header = gtk_list_item_widget_new (NULL, "header");
   gtk_widget_set_can_focus (self->header, FALSE);
   gtk_widget_set_layout_manager (self->header, gtk_column_view_layout_new (self));
   gtk_widget_set_parent (self->header, GTK_WIDGET (self));
+
+  controller = GTK_EVENT_CONTROLLER (gtk_gesture_drag_new ());
+  g_signal_connect (controller, "drag-begin", G_CALLBACK (header_drag_begin), self);
+  g_signal_connect (controller, "drag-update", G_CALLBACK (header_drag_update), self);
+  g_signal_connect (controller, "drag-end", G_CALLBACK (header_drag_end), self);
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+  gtk_widget_add_controller (self->header, controller);
+
+  controller = gtk_event_controller_motion_new ();
+  g_signal_connect (controller, "motion", G_CALLBACK (header_motion), self);
+  gtk_widget_add_controller (self->header, controller);
 
   self->sorter = gtk_column_view_sorter_new ();
   self->factory = gtk_column_list_item_factory_new (self);
