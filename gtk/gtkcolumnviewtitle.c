@@ -58,10 +58,18 @@ gtk_column_view_title_measure (GtkWidget      *widget,
                                int            *minimum_baseline,
                                int            *natural_baseline)
 {
+  GtkColumnViewTitle *self = GTK_COLUMN_VIEW_TITLE (widget);
   GtkWidget *child = gtk_widget_get_first_child (widget);
 
   if (child)
     gtk_widget_measure (child, orientation, for_size, minimum, natural, minimum_baseline, natural_baseline);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      int fixed_width = gtk_column_view_column_get_fixed_width (self->column);
+      if (fixed_width > -1)
+        *minimum = *natural = fixed_width;
+    }
 }
 
 static void
@@ -112,11 +120,11 @@ gtk_column_view_title_resize_func (GtkWidget *widget)
 }
 
 static void
-click_pressed_cb (GtkGestureClick *gesture,
-                  guint            n_press,
-                  gdouble          x,
-                  gdouble          y,
-                  GtkWidget       *widget)
+click_released_cb (GtkGestureClick *gesture,
+                   guint            n_press,
+                   gdouble          x,
+                   gdouble          y,
+                   GtkWidget       *widget)
 {
   GtkColumnViewTitle *self = GTK_COLUMN_VIEW_TITLE (widget);
   GtkSorter *sorter;
@@ -150,7 +158,7 @@ gtk_column_view_title_init (GtkColumnViewTitle *self)
   gtk_box_append (GTK_BOX (self->box), self->sort);
 
   gesture = gtk_gesture_click_new ();
-  g_signal_connect (gesture, "pressed", G_CALLBACK (click_pressed_cb), self);
+  g_signal_connect (gesture, "released", G_CALLBACK (click_released_cb), self);
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
 }
 

@@ -25,6 +25,7 @@
 #endif
 
 #include <gtk/gtklistbase.h>
+#include <gtk/gtkfilter.h>
 
 G_BEGIN_DECLS
 
@@ -74,6 +75,22 @@ void            gtk_list_view_set_single_click_activate         (GtkListView    
                                                                  gboolean                single_click_activate);
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_list_view_get_single_click_activate         (GtkListView            *self);
+
+GDK_AVAILABLE_IN_ALL
+void            gtk_list_view_set_enable_rubberband             (GtkListView            *self,
+                                                                 gboolean                enable_rubberband);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_list_view_get_enable_rubberband             (GtkListView            *self);
+
+GDK_AVAILABLE_IN_ALL
+void            gtk_list_view_set_search_filter                 (GtkListView            *self,
+                                                                 GtkFilter              *filter);
+GDK_AVAILABLE_IN_ALL
+GtkFilter *     gtk_list_view_get_search_filter                 (GtkListView            *self);
+
+GDK_AVAILABLE_IN_ALL
+void            gtk_list_view_select_next_match                 (GtkListView            *self,
+                                                                 gboolean                forward);
 
 G_END_DECLS
 

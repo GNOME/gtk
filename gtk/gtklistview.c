@@ -85,6 +85,8 @@ enum
   PROP_MODEL,
   PROP_SHOW_SEPARATORS,
   PROP_SINGLE_CLICK_ACTIVATE,
+  PROP_ENABLE_RUBBERBAND,
+  PROP_SEARCH_FILTER,
 
   N_PROPS
 };
@@ -643,6 +645,14 @@ gtk_list_view_get_property (GObject    *object,
       g_value_set_boolean (value, gtk_list_item_manager_get_single_click_activate (self->item_manager));
       break;
 
+    case PROP_ENABLE_RUBBERBAND:
+      g_value_set_boolean (value, gtk_list_base_get_enable_rubberband (GTK_LIST_BASE (self)));
+      break;
+
+    case PROP_SEARCH_FILTER:
+      g_value_set_object (value, gtk_list_view_get_search_filter (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -673,6 +683,14 @@ gtk_list_view_set_property (GObject      *object,
 
     case PROP_SINGLE_CLICK_ACTIVATE:
       gtk_list_view_set_single_click_activate (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_ENABLE_RUBBERBAND:
+      gtk_list_view_set_enable_rubberband (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_SEARCH_FILTER:
+      gtk_list_view_set_search_filter (self, g_value_get_object (value));
       break;
 
     default:
@@ -770,6 +788,30 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                           P_("Activate rows on single click"),
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkListView:enable-rubberband:
+   *
+   * Allow rubberband selection
+   */
+  properties[PROP_ENABLE_RUBBERBAND] =
+    g_param_spec_boolean ("enable-rubberband",
+                          P_("Enable rubberband selection"),
+                          P_("Allow selecting items by dragging with the mouse"),
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkListView:search-filter:
+   *
+   * Filter used for search
+   */
+  properties[PROP_SEARCH_FILTER] =
+    g_param_spec_object ("search-filter",
+                         P_("Search filter"),
+                         P_("Filter used for searching"),
+                         GTK_TYPE_FILTER,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
@@ -1033,3 +1075,103 @@ gtk_list_view_get_single_click_activate (GtkListView *self)
 
   return gtk_list_item_manager_get_single_click_activate (self->item_manager);
 }
+
+/**
+ * gtk_list_view_set_enable_rubberband:
+ * @self: a #GtkListView
+ * @enable_rubberband: %TRUE to enable rubberband selection
+ *
+ * Sets whether selections can be changed by dragging with the mouse.
+ */
+void
+gtk_list_view_set_enable_rubberband (GtkListView *self,
+                                     gboolean     enable_rubberband)
+{
+  g_return_if_fail (GTK_IS_LIST_VIEW (self));
+
+  if (enable_rubberband == gtk_list_base_get_enable_rubberband (GTK_LIST_BASE (self)))
+    return;
+
+  gtk_list_base_set_enable_rubberband (GTK_LIST_BASE (self), enable_rubberband);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ENABLE_RUBBERBAND]);
+}
+
+/**
+ * gtk_list_view_get_enable_rubberband:
+ * @self: a #GtkListView
+ *
+ * Returns whether rows can be selected by dragging with the mouse.
+ *
+ * Returns: %TRUE if rubberband selection is enabled
+ */
+gboolean
+gtk_list_view_get_enable_rubberband (GtkListView *self)
+{
+  g_return_val_if_fail (GTK_IS_LIST_VIEW (self), FALSE);
+
+  return gtk_list_base_get_enable_rubberband (GTK_LIST_BASE (self));
+}
+
+/**
+ * gtk_list_view_set_search_filter:
+ * @self: a #GtkListView
+ * @filter: (nullable): the filter ot use for search, or %NULL
+ *
+ * Sets a search filter.
+ *
+ * The selection will be moved to first item matching the
+ * filter whenever the filter changes.
+ *
+ * This can be used with single selection and a string
+ * filter that is connected to a search entry.
+ */
+void
+gtk_list_view_set_search_filter (GtkListView *self,
+                                 GtkFilter   *filter)
+{
+  g_return_if_fail (GTK_IS_LIST_VIEW (self));
+  g_return_if_fail (filter == NULL || GTK_IS_FILTER (filter));
+
+  if (filter == gtk_list_base_get_search_filter (GTK_LIST_BASE (self)))
+    return;
+
+  gtk_list_base_set_search_filter (GTK_LIST_BASE (self), filter);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SEARCH_FILTER]);
+}
+
+/**
+ * gtk_list_view_get_search_filter:
+ * @self: a #GtkListView
+ *
+ * Gets the search filter that was set with
+ * gtk_list_view_set_search_filter().
+ *
+ * Returns: (transfer none): The search filter of @self
+ */
+GtkFilter *
+gtk_list_view_get_search_filter (GtkListView *self)
+{
+  g_return_val_if_fail (GTK_IS_LIST_VIEW (self), NULL);
+
+  return gtk_list_base_get_search_filter (GTK_LIST_BASE (self));
+}
+
+/**
+ * gtk_list_view_select_next_match:
+ * @self: a #GtkListView
+ * @forward: whether to move forward or back
+ *
+ * Moves the selection to the next item matching the
+ * search filter set with gtk_list_view_set_search_filter().
+ */
+void
+gtk_list_view_select_next_match (GtkListView *self,
+                                 gboolean     forward)
+{
+  g_return_if_fail (GTK_IS_LIST_VIEW (self));
+
+  gtk_list_base_select_next_match (GTK_LIST_BASE (self), forward);
+}
+

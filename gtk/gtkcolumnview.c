@@ -34,6 +34,13 @@
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
 #include "gtkwidgetprivate.h"
+#include "gtksizerequest.h"
+#include "gtkadjustment.h"
+#include "gtkgesturedrag.h"
+#include "gtkeventcontrollermotion.h"
+#include "gtkdragsource.h"
+#include "gtkeventcontrollerkey.h"
+#include "gtklistbaseprivate.h"
 
 /**
  * SECTION:gtkcolumnview
@@ -63,6 +70,21 @@ struct _GtkColumnView
   GtkColumnListItemFactory *factory;
 
   GtkSorter *sorter;
+
+  GtkAdjustment *hadjustment;
+
+  gboolean in_column_resize;
+  gboolean in_column_reorder;
+  int drag_pos;
+  int drag_x;
+  int drag_offset;
+  int drag_column_x;
+
+  GtkGesture *drag_gesture;
+
+  guint autoscroll_id;
+  double autoscroll_x;
+  double autoscroll_delta;
 };
 
 struct _GtkColumnViewClass
@@ -82,6 +104,8 @@ enum
   PROP_VADJUSTMENT,
   PROP_VSCROLL_POLICY,
   PROP_SINGLE_CLICK_ACTIVATE,
+  PROP_ENABLE_RUBBERBAND,
+  PROP_SEARCH_FILTER,
 
   N_PROPS
 };
@@ -169,48 +193,77 @@ gtk_column_view_allocate_columns (GtkColumnView *self,
                                   int            width)
 {
   GtkScrollablePolicy scroll_policy;
-  int col_min, col_nat, widget_min, widget_nat, extra, col_size, x;
+  int col_min, col_nat, extra, col_size, x;
+  int n, n_expand, expand_size, n_extra;
   guint i;
+  GtkRequestedSize *sizes;
 
-  gtk_column_view_measure_across (self, &col_min, &col_nat);
-  gtk_widget_measure (GTK_WIDGET (self),
-                      GTK_ORIENTATION_HORIZONTAL, -1,
-                      &widget_min, &widget_nat,
-                      NULL, NULL);
-
-  scroll_policy = gtk_scrollable_get_hscroll_policy (GTK_SCROLLABLE (self->listview));
-  if (scroll_policy == GTK_SCROLL_MINIMUM)
-    {
-      extra = widget_min - col_min;
-      col_size = col_min;
-    }
-  else
-    {
-      extra = widget_nat - col_nat;
-      col_size = col_nat;
-    }
-  width -= extra;
-  width = MAX (width, col_size);
-
-  x = 0;
-  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->columns)); i++)
+  n = g_list_model_get_n_items (G_LIST_MODEL (self->columns));
+  n_expand = 0;
+  sizes = g_newa (GtkRequestedSize, n);
+  for (i = 0; i < n; i++)
     {
       GtkColumnViewColumn *column;
 
       column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
-      gtk_column_view_column_measure (column, &col_min, &col_nat);
-      if (scroll_policy == GTK_SCROLL_MINIMUM)
-        col_size = col_min;
+      if (gtk_column_view_column_get_visible (column))
+        {
+          gtk_column_view_column_measure (column, &sizes[i].minimum_size, &sizes[i].natural_size);
+          if (gtk_column_view_column_get_expand (column))
+            n_expand++;
+        }
       else
-        col_size = col_nat;
+        sizes[i].minimum_size = sizes[i].natural_size = 0;
+      g_object_unref (column);
+    }
 
-      gtk_column_view_column_allocate (column, x, col_size);
-      x += col_size;
+  gtk_column_view_measure_across (self, &col_min, &col_nat);
+
+  scroll_policy = gtk_scrollable_get_hscroll_policy (GTK_SCROLLABLE (self->listview));
+  if (scroll_policy == GTK_SCROLL_MINIMUM)
+    extra = MAX (width - col_min, 0);
+  else
+    extra = MAX (width - col_min, col_nat - col_min);
+
+  extra = gtk_distribute_natural_allocation (extra, n, sizes);
+  if (n_expand > 0)
+    {
+      expand_size = extra / n_expand;
+      n_extra = extra % n_expand;
+    }
+  else
+    expand_size = n_extra = 0;
+
+  x = 0;
+  for (i = 0; i < n; i++)
+    {
+      GtkColumnViewColumn *column;
+
+      column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+      if (gtk_column_view_column_get_visible (column))
+        {
+          col_size = sizes[i].minimum_size;
+          if (gtk_column_view_column_get_expand (column))
+            {
+              col_size += expand_size;
+              if (n_extra > 0)
+                {
+                  col_size++;
+                  n_extra--;
+                }
+            }
+
+          gtk_column_view_column_allocate (column, x, col_size);
+          if (self->in_column_reorder && i == self->drag_pos)
+            gtk_column_view_column_set_header_position (column, self->drag_x);
+
+          x += col_size;
+        }
 
       g_object_unref (column);
     }
 
-  return width + extra;
+  return x;
 }
 
 static void
@@ -220,8 +273,9 @@ gtk_column_view_allocate (GtkWidget *widget,
                           int        baseline)
 {
   GtkColumnView *self = GTK_COLUMN_VIEW (widget);
-  int full_width, header_height, min, nat;
+  int full_width, header_height, min, nat, x;
 
+  x = gtk_adjustment_get_value (self->hadjustment);
   full_width = gtk_column_view_allocate_columns (self, width);
 
   gtk_widget_measure (self->header, GTK_ORIENTATION_VERTICAL, full_width, &min, &nat, NULL, NULL);
@@ -229,11 +283,14 @@ gtk_column_view_allocate (GtkWidget *widget,
     header_height = min;
   else
     header_height = nat;
-  gtk_widget_allocate (self->header, full_width, header_height, -1, NULL);
+  gtk_widget_allocate (self->header, full_width, header_height, -1,
+                       gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (-x, 0)));
 
   gtk_widget_allocate (GTK_WIDGET (self->listview),
                        full_width, height - header_height, -1,
-                       gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (0, header_height)));
+                       gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (-x, header_height)));
+
+  gtk_adjustment_configure (self->hadjustment,  x, 0, full_width, width * 0.1, width * 0.9, width);
 }
 
 static void
@@ -242,6 +299,23 @@ gtk_column_view_activate_cb (GtkListView   *listview,
                              GtkColumnView *self)
 {
   g_signal_emit (self, signals[ACTIVATE], 0, pos);
+}
+
+static void
+adjustment_value_changed_cb (GtkAdjustment *adjustment,
+                             GtkColumnView *self)
+{
+  gtk_widget_queue_allocate (GTK_WIDGET (self));
+}
+
+static void
+clear_adjustment (GtkColumnView *self)
+{
+  if (self->hadjustment == NULL)
+    return;
+
+  g_signal_handlers_disconnect_by_func (self->hadjustment, adjustment_value_changed_cb, self);
+  g_clear_object (&self->hadjustment);
 }
 
 static void
@@ -262,6 +336,7 @@ gtk_column_view_dispose (GObject *object)
   g_clear_object (&self->factory);
 
   g_clear_object (&self->sorter);
+  clear_adjustment (self);
 
   G_OBJECT_CLASS (gtk_column_view_parent_class)->dispose (object);
 }
@@ -291,7 +366,7 @@ gtk_column_view_get_property (GObject    *object,
       break;
 
     case PROP_HADJUSTMENT:
-      g_value_set_object (value, gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (self->listview)));
+      g_value_set_object (value, self->hadjustment);
       break;
 
     case PROP_HSCROLL_POLICY:
@@ -322,6 +397,14 @@ gtk_column_view_get_property (GObject    *object,
       g_value_set_boolean (value, gtk_column_view_get_single_click_activate (self));
       break;
 
+    case PROP_ENABLE_RUBBERBAND:
+      g_value_set_boolean (value, gtk_column_view_get_enable_rubberband (self));
+      break;
+
+    case PROP_SEARCH_FILTER:
+      g_value_set_object (value, gtk_column_view_get_search_filter (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -335,13 +418,24 @@ gtk_column_view_set_property (GObject      *object,
                               GParamSpec   *pspec)
 {
   GtkColumnView *self = GTK_COLUMN_VIEW (object);
+  GtkAdjustment *adjustment;
 
   switch (property_id)
     {
     case PROP_HADJUSTMENT:
-      if (gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (self->listview)) != g_value_get_object (value))
+      adjustment = g_value_get_object (value);
+      if (adjustment == NULL)
+        adjustment = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+      g_object_ref_sink (adjustment);
+
+      if (self->hadjustment != adjustment)
         {
-          gtk_scrollable_set_hadjustment (GTK_SCROLLABLE (self->listview), g_value_get_object (value));
+          clear_adjustment (self);
+
+          self->hadjustment = adjustment;
+
+          g_signal_connect (adjustment, "value-changed", G_CALLBACK (adjustment_value_changed_cb), self);
+
           g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HADJUSTMENT]);
         }
       break;
@@ -380,6 +474,14 @@ gtk_column_view_set_property (GObject      *object,
 
     case PROP_SINGLE_CLICK_ACTIVATE:
       gtk_column_view_set_single_click_activate (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_ENABLE_RUBBERBAND:
+      gtk_column_view_set_enable_rubberband (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_SEARCH_FILTER:
+      gtk_column_view_set_search_filter (self, g_value_get_object (value));
       break;
 
     default:
@@ -478,6 +580,30 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkColumnView:enable-rubberband:
+   *
+   * Allow rubberband selection
+   */
+  properties[PROP_ENABLE_RUBBERBAND] =
+    g_param_spec_boolean ("enable-rubberband",
+                          P_("Enable rubberband selection"),
+                          P_("Allow selecting items by dragging with the mouse"),
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkColumnView:search-filter:
+   *
+   * Filter used for search
+   */
+  properties[PROP_SEARCH_FILTER] =
+    g_param_spec_object ("search-filter",
+                         P_("Search filter"),
+                         P_("Filter used for searching"),
+                         GTK_TYPE_FILTER,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
   /**
@@ -507,15 +633,388 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
   gtk_widget_class_set_css_name (widget_class, I_("treeview"));
 }
 
+static void update_column_resize  (GtkColumnView *self,
+                                   double         x);
+static void update_column_reorder (GtkColumnView *self,
+                                   double         x);
+
+static gboolean
+autoscroll_cb (GtkWidget     *widget,
+               GdkFrameClock *frame_clock,
+               gpointer       data)
+{
+  GtkColumnView *self = data;
+
+  gtk_adjustment_set_value (self->hadjustment,
+                            gtk_adjustment_get_value (self->hadjustment) + self->autoscroll_delta);
+
+  self->autoscroll_x += self->autoscroll_delta;
+
+  if (self->in_column_resize)
+    update_column_resize (self, self->autoscroll_x);
+  else if (self->in_column_reorder)
+    update_column_reorder (self, self->autoscroll_x);
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+add_autoscroll (GtkColumnView *self,
+                double         x,
+                double         delta)
+{
+  self->autoscroll_x = x;
+  self->autoscroll_delta = delta;
+
+  if (self->autoscroll_id == 0)
+    self->autoscroll_id = gtk_widget_add_tick_callback (GTK_WIDGET (self), autoscroll_cb, self, NULL);
+}
+
+static void
+remove_autoscroll (GtkColumnView *self)
+{
+  if (self->autoscroll_id != 0)
+    {
+      gtk_widget_remove_tick_callback (GTK_WIDGET (self), self->autoscroll_id);
+      self->autoscroll_id = 0;
+    }
+}
+
+#define DRAG_WIDTH 6
+
+static gboolean
+gtk_column_view_in_resize_rect (GtkColumnView       *self,
+                                GtkColumnViewColumn *column,
+                                double               x,
+                                double               y)
+{
+  GtkWidget *header;
+  graphene_rect_t rect;
+
+  header = gtk_column_view_column_get_header (column);
+
+  if (!gtk_widget_compute_bounds (header, self->header, &rect))
+    return FALSE;
+
+  rect.origin.x += rect.size.width - DRAG_WIDTH / 2;
+  rect.size.width = DRAG_WIDTH;
+
+  return graphene_rect_contains_point (&rect, &(graphene_point_t) { x, y});
+}
+
+static gboolean
+gtk_column_view_in_header (GtkColumnView       *self,
+                           GtkColumnViewColumn *column,
+                           double               x,
+                           double               y)
+{
+  GtkWidget *header;
+  graphene_rect_t rect;
+
+  header = gtk_column_view_column_get_header (column);
+
+  if (!gtk_widget_compute_bounds (header, self->header, &rect))
+    return FALSE;
+
+  return graphene_rect_contains_point (&rect, &(graphene_point_t) { x, y});
+}
+
+static void
+header_drag_begin (GtkGestureDrag *gesture,
+                   double          start_x,
+                   double          start_y,
+                   GtkColumnView  *self)
+{
+  int i, n;
+
+  self->drag_pos = -1;
+
+  n = g_list_model_get_n_items (G_LIST_MODEL (self->columns));
+  for (i = 0; !self->in_column_resize && i < n; i++)
+    {
+      GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+
+      if (!gtk_column_view_column_get_visible (column))
+        {
+          g_object_unref (column);
+          continue;
+        }
+
+      if (i + 1 < n &&
+          gtk_column_view_column_get_resizable (column) &&
+          gtk_column_view_in_resize_rect (self, column, start_x, start_y))
+        {
+          int size;
+
+          gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+          if (!gtk_widget_has_focus (GTK_WIDGET (self)))
+            gtk_widget_grab_focus (GTK_WIDGET (self));
+
+          gtk_column_view_column_get_allocation (column, NULL, &size);
+          gtk_column_view_column_set_fixed_width (column, size);
+
+          self->drag_pos = i;
+          self->drag_x = start_x - size;
+          self->in_column_resize = TRUE;
+
+          g_object_unref (column);
+          break;
+        }
+
+      if (gtk_column_view_column_get_reorderable (column) &&
+          gtk_column_view_in_header (self, column, start_x, start_y))
+        {
+          int pos;
+
+          gtk_column_view_column_get_allocation (column, &pos, NULL);
+
+          self->drag_pos = i;
+          self->drag_offset = start_x - pos;
+
+          g_object_unref (column);
+          break;
+        }
+
+      g_object_unref (column);
+    }
+}
+
+static void
+header_drag_end (GtkGestureDrag *gesture,
+                 double          offset_x,
+                 double          offset_y,
+                 GtkColumnView  *self)
+{
+  double start_x, x;
+
+  gtk_gesture_drag_get_start_point (gesture, &start_x, NULL);
+  x = start_x + offset_x;
+
+  remove_autoscroll (self);
+
+  if (self->in_column_resize)
+    {
+      self->in_column_resize = FALSE;
+    }
+  else if (self->in_column_reorder)
+    {
+      GdkEventSequence *sequence;
+      GtkColumnViewColumn *column;
+      GtkWidget *header;
+      int i;
+
+      self->in_column_reorder = FALSE;
+
+      if (self->drag_pos == -1)
+        return;
+
+      column = g_list_model_get_item (G_LIST_MODEL (self->columns), self->drag_pos);
+      header = gtk_column_view_column_get_header (column);
+      gtk_style_context_remove_class (gtk_widget_get_style_context (header), "dnd");
+
+      sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+      if (!gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
+        return;
+
+      for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->columns)); i++)
+        {
+          GtkColumnViewColumn *col = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+
+          if (gtk_column_view_column_get_visible (col))
+            {
+              int pos, size;
+
+              gtk_column_view_column_get_allocation (col, &pos, &size);
+              if (pos <= x && x <= pos + size)
+                {
+                  gtk_column_view_insert_column (self, i, column);
+                  g_object_unref (col);
+                  break;
+                }
+            }
+
+          g_object_unref (col);
+        }
+
+      g_object_unref (column);
+    }
+}
+
+static void
+update_column_resize (GtkColumnView *self,
+                      double         x)
+{
+  GtkColumnViewColumn *column;
+
+  column = g_list_model_get_item (G_LIST_MODEL (self->columns), self->drag_pos);
+  gtk_column_view_column_set_fixed_width (column, MAX (x - self->drag_x, 0));
+  g_object_unref (column);
+}
+
+static void
+update_column_reorder (GtkColumnView *self,
+                       double         x)
+{
+  GtkColumnViewColumn *column;
+  int width;
+  int size;
+
+  column = g_list_model_get_item (G_LIST_MODEL (self->columns), self->drag_pos);
+  width = gtk_widget_get_allocated_width (GTK_WIDGET (self->header));
+  gtk_column_view_column_get_allocation (column, NULL, &size);
+
+  self->drag_x = CLAMP (x - self->drag_offset, 0, width - size);
+
+  gtk_widget_queue_allocate (GTK_WIDGET (self));
+  gtk_column_view_column_queue_resize (column);
+  g_object_unref (column);
+}
+
+#define SCROLL_EDGE_SIZE 15
+
+static void
+header_drag_update (GtkGestureDrag *gesture,
+                    double          offset_x,
+                    double          offset_y,
+                    GtkColumnView  *self)
+{
+  GdkEventSequence *sequence;
+  double start_x, x;
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  if (!gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
+    return;
+
+  if (self->drag_pos == -1)
+    return;
+
+  if (!self->in_column_resize && !self->in_column_reorder)
+    {
+      if (gtk_drag_check_threshold (GTK_WIDGET (self), 0, 0, offset_x, 0))
+        {
+          GtkColumnViewColumn *column;
+          GtkWidget *header;
+
+          column = g_list_model_get_item (G_LIST_MODEL (self->columns), self->drag_pos);
+          header = gtk_column_view_column_get_header (column);
+
+          gtk_widget_insert_after (header, self->header, gtk_widget_get_last_child (self->header));
+          gtk_style_context_add_class (gtk_widget_get_style_context (header), "dnd");
+
+          gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+          if (!gtk_widget_has_focus (GTK_WIDGET (self)))
+            gtk_widget_grab_focus (GTK_WIDGET (self));
+
+          self->in_column_reorder = TRUE;
+
+          g_object_unref (column);
+        }
+    }
+
+  gtk_gesture_drag_get_start_point (gesture, &start_x, NULL);
+  x = start_x + offset_x;
+
+  if (self->in_column_resize)
+    update_column_resize (self, x);
+  else if (self->in_column_reorder)
+    update_column_reorder (self, x);
+
+  if (self->in_column_resize || self->in_column_reorder)
+    {
+      double value, page_size, upper;
+
+      value = gtk_adjustment_get_value (self->hadjustment);
+      page_size = gtk_adjustment_get_page_size (self->hadjustment);
+      upper = gtk_adjustment_get_upper (self->hadjustment);
+
+      if (x - value < SCROLL_EDGE_SIZE && value > 0)
+        add_autoscroll (self, x, - (SCROLL_EDGE_SIZE - (x - value))/3.0);
+      else if (value + page_size - x < SCROLL_EDGE_SIZE && value + page_size < upper)
+        add_autoscroll (self, x, (SCROLL_EDGE_SIZE - (value + page_size - x))/3.0);
+      else
+        remove_autoscroll (self);
+    }
+}
+
+static void
+header_motion (GtkEventControllerMotion *controller,
+               double                    x,
+               double                    y,
+               GtkColumnView            *self)
+{
+  gboolean cursor_set = FALSE;
+  int i, n;
+
+  n = g_list_model_get_n_items (G_LIST_MODEL (self->columns));
+  for (i = 0; i < n; i++)
+    {
+      GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+
+      if (!gtk_column_view_column_get_visible (column))
+        {
+          g_object_unref (column);
+          continue;
+        }
+
+      if (i + 1 < n &&
+          gtk_column_view_column_get_resizable (column) &&
+          gtk_column_view_in_resize_rect (self, column, x, y))
+        {
+          gtk_widget_set_cursor_from_name (self->header, "col-resize");
+          cursor_set = TRUE;
+        }
+
+      g_object_unref (column);
+    }
+
+  if (!cursor_set)
+    gtk_widget_set_cursor (self->header, NULL);
+}
+
+static gboolean
+header_key_pressed (GtkEventControllerKey *controller,
+                    guint                  keyval,
+                    guint                  keycode,
+                    GdkModifierType        modifiers,
+                    GtkColumnView         *self)
+{
+  if (self->in_column_reorder)
+    {
+      if (keyval == GDK_KEY_Escape)
+        gtk_gesture_set_state (self->drag_gesture, GTK_EVENT_SEQUENCE_DENIED);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 gtk_column_view_init (GtkColumnView *self)
 {
+  GtkEventController *controller;
+
   self->columns = g_list_store_new (GTK_TYPE_COLUMN_VIEW_COLUMN);
 
   self->header = gtk_list_item_widget_new (NULL, "header");
   gtk_widget_set_can_focus (self->header, FALSE);
   gtk_widget_set_layout_manager (self->header, gtk_column_view_layout_new (self));
   gtk_widget_set_parent (self->header, GTK_WIDGET (self));
+
+  controller = GTK_EVENT_CONTROLLER (gtk_gesture_drag_new ());
+  g_signal_connect (controller, "drag-begin", G_CALLBACK (header_drag_begin), self);
+  g_signal_connect (controller, "drag-update", G_CALLBACK (header_drag_update), self);
+  g_signal_connect (controller, "drag-end", G_CALLBACK (header_drag_end), self);
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+  gtk_widget_add_controller (self->header, controller);
+  self->drag_gesture = GTK_GESTURE (controller);
+
+  controller = gtk_event_controller_motion_new ();
+  g_signal_connect (controller, "motion", G_CALLBACK (header_motion), self);
+  gtk_widget_add_controller (self->header, controller);
+
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed", G_CALLBACK (header_key_pressed), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   self->sorter = gtk_column_view_sorter_new ();
   self->factory = gtk_column_list_item_factory_new (self);
@@ -530,6 +1029,7 @@ gtk_column_view_init (GtkColumnView *self)
                           g_quark_from_static_string (I_("view")));
 
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
+  gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
 }
 
 /**
@@ -782,6 +1282,12 @@ gtk_column_view_get_header_widget (GtkColumnView *self)
   return GTK_LIST_ITEM_WIDGET (self->header);
 }
 
+GtkListView *
+gtk_column_view_get_list_view (GtkColumnView *self)
+{
+  return GTK_LIST_VIEW (self->listview);
+}
+
 /**
  * gtk_column_view_get_sorter:
  * @self: a #GtkColumnView
@@ -878,4 +1384,103 @@ gtk_column_view_get_single_click_activate (GtkColumnView *self)
   g_return_val_if_fail (GTK_IS_COLUMN_VIEW (self), FALSE);
 
   return gtk_list_view_get_single_click_activate (self->listview);
+}
+
+/**
+ * gtk_column_view_set_enable_rubberband:
+ * @self: a #GtkColumnView
+ * @enable_rubberband: %TRUE to enable rubberband selection
+ *
+ * Sets whether selections can be changed by dragging with the mouse.
+ */
+void
+gtk_column_view_set_enable_rubberband (GtkColumnView *self,
+                                       gboolean       enable_rubberband)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
+
+  if (enable_rubberband == gtk_list_view_get_enable_rubberband (self->listview))
+    return;
+
+  gtk_list_view_set_enable_rubberband (self->listview, enable_rubberband);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ENABLE_RUBBERBAND]);
+}
+
+/**
+ * gtk_column_view_get_enable_rubberband:
+ * @self: a #GtkColumnView
+ *
+ * Returns whether rows can be selected by dragging with the mouse.
+ *
+ * Returns: %TRUE if rubberband selection is enabled
+ */
+gboolean
+gtk_column_view_get_enable_rubberband (GtkColumnView *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW (self), FALSE);
+
+  return gtk_list_view_get_enable_rubberband (self->listview);
+}
+
+/**
+ * gtk_column_view_set_search_filter:
+ * @self: a #GtkColumnView
+ * @filter: (nullable): the filter to use for search, or %NULL
+ *
+ * Sets a search filter.
+ *
+ * The selection will be moved to first item matching the
+ * filter whenever the filter changes.
+ *
+ * This can be used with single selection and a string
+ * filter that is connected to a search entry.
+ */
+void
+gtk_column_view_set_search_filter (GtkColumnView *self,
+                                   GtkFilter     *filter)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
+  g_return_if_fail (filter == NULL || GTK_IS_FILTER (filter));
+
+  if (filter == gtk_list_view_get_search_filter (GTK_LIST_VIEW (self->listview)))
+    return;
+
+  gtk_list_view_set_search_filter (GTK_LIST_VIEW (self->listview), filter);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SEARCH_FILTER]);
+}
+
+/**
+ * gtk_column_view_get_search_filter:
+ * @self: a #GtkColumnView
+ *
+ * Gets the search filter that was set with
+ * gtk_column_view_set_search_filter().
+ *
+ * Returns: (transfer none): The search filter of @self
+ */
+GtkFilter *
+gtk_column_view_get_search_filter (GtkColumnView *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW (self), NULL);
+
+  return gtk_list_view_get_search_filter (GTK_LIST_VIEW (self->listview));
+}
+
+/**
+ * gtk_column_view_select_next_match:
+ * @self: a #GtkColumnView
+ * @forward: whether to move forward or back
+ *
+ * Moves the selection to the next item matching the
+ * search filter set with gtk_column_view_set_search_filter().
+ */
+void
+gtk_column_view_select_next_match (GtkColumnView *self,
+                                   gboolean       forward)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
+
+  gtk_list_view_select_next_match (GTK_LIST_VIEW (self->listview), forward);
 }
