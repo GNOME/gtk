@@ -93,6 +93,16 @@ gtk_emoji_chooser_child_init (GtkEmojiChooserChild *child)
 }
 
 static void
+gtk_emoji_chooser_child_dispose (GObject *object)
+{
+  GtkEmojiChooserChild *child = (GtkEmojiChooserChild *)object;
+
+  g_clear_pointer (&child->variations, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (gtk_emoji_chooser_child_parent_class)->dispose (object);
+}
+
+static void
 gtk_emoji_chooser_child_size_allocate (GtkWidget *widget,
                                        int        width,
                                        int        height,
@@ -148,7 +158,10 @@ gtk_emoji_chooser_child_popup_menu (GtkWidget  *widget,
 static void
 gtk_emoji_chooser_child_class_init (GtkEmojiChooserChildClass *class)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+
+  object_class->dispose = gtk_emoji_chooser_child_dispose;
   widget_class->size_allocate = gtk_emoji_chooser_child_size_allocate;
   widget_class->focus = gtk_emoji_chooser_child_focus;
   widget_class->grab_focus = gtk_emoji_chooser_child_grab_focus;
@@ -436,6 +449,7 @@ show_variations (GtkEmojiChooser *chooser,
     return;
 
   parent_popover = gtk_widget_get_ancestor (child, GTK_TYPE_POPOVER);
+  g_clear_pointer (&ch->variations, gtk_widget_unparent);
   popover = ch->variations = gtk_popover_new ();
   gtk_popover_set_autohide (GTK_POPOVER (popover), TRUE);
   gtk_widget_set_parent (popover, child);
