@@ -39,12 +39,14 @@
           </object>
         </property>
         <property name="icon-name">view-list-symbolic</property>
+        <property name="title" translatable="yes">List</property>
         <property name="orientation">horizontal</property>
       </object>
     </child>
     <child>
       <object class="FileBrowserView">
         <property name="icon-name">view-grid-symbolic</property>
+        <property name="title" translatable="yes">Grid</property>
         <property name="factory">
           <object class="GtkBuilderListItemFactory">
             <property name="bytes"><![CDATA[
@@ -92,6 +94,7 @@
     <child>
       <object class="FileBrowserView">
         <property name="icon-name">view-paged-symbolic</property>
+        <property name="title" translatable="yes">Paged</property>
         <property name="factory">
           <object class="GtkBuilderListItemFactory">
             <property name="bytes"><![CDATA[
@@ -174,7 +177,7 @@
         <property name="show-title-buttons">1</property>
         <child>
           <object class="GtkButton">
-            <property name="icon-name">go-up</property>
+            <property name="icon-name">go-up-symbolic</property>
             <signal name="clicked" handler="filebrowser_up_clicked_cb" object="dirlist" swapped="no"/>
           </object>
         </child>
@@ -184,6 +187,7 @@
             <property name="orientation">horizontal</property>
             <style>
               <class name="linked"/>
+              <class name="viewswitcher"/>
             </style>
             <property name="model">
               <object class="GtkSingleSelection" id="selected-view">
@@ -200,6 +204,11 @@
       <object class="GtkImage">
         <binding name="icon-name">
           <lookup type="FileBrowserView" name="icon-name">
+            <lookup name="item">GtkListItem</lookup>
+          </lookup>
+        </binding>
+        <binding name="tooltip-text">
+          <lookup type="FileBrowserView" name="title">
             <lookup name="item">GtkListItem</lookup>
           </lookup>
         </binding>
