@@ -1902,10 +1902,13 @@ gtk_window_native_check_resize (GtkNative *native)
   GtkWidget *widget = GTK_WIDGET (native);
   gint64 before = g_get_monotonic_time ();
 
-  if (!_gtk_widget_get_alloc_needed (widget))
+  if (!_gtk_widget_get_alloc_needed (widget)) {
+    g_message ("%s: 1", __FUNCTION__);
     gtk_widget_ensure_allocate (widget);
-  else if (gtk_widget_get_visible (widget))
+  }  else if (gtk_widget_get_visible (widget)) {
+    g_message ("%s: 2", __FUNCTION__);
     gtk_window_move_resize (GTK_WINDOW (native));
+  }
 
   if (GDK_PROFILER_IS_RUNNING)
     gdk_profiler_end_mark (before, "size allocation", "");
@@ -5513,6 +5516,7 @@ gtk_window_move_resize (GtkWindow *window)
                           &min, NULL, NULL, NULL);
       allocation.height = MAX (min, current_height - shadow.top - shadow.bottom);
 
+      g_message ("%s: 1", __FUNCTION__);
       gtk_widget_size_allocate (widget, &allocation, -1);
 
       /* If the configure request changed, it means that
@@ -5551,7 +5555,7 @@ gtk_window_move_resize (GtkWindow *window)
            */
           info->last = saved_last_info;
           g_clear_pointer (&priv->layout, gdk_toplevel_layout_unref);
-          gtk_widget_queue_resize (widget);
+          /*gtk_widget_queue_resize (widget);*/
         }
 
       return; /* Bail out, we didn't really process the move/resize */
@@ -5635,6 +5639,7 @@ gtk_window_move_resize (GtkWindow *window)
       gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, allocation.width,
                           &min_height, NULL, NULL, NULL);
       allocation.height = MAX (current_height - shadow.top - shadow.bottom, min_height);
+      g_message ("%s: 2", __FUNCTION__);
       gtk_widget_size_allocate (widget, &allocation, -1);
     }
 

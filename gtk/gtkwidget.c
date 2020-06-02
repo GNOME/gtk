@@ -2721,7 +2721,6 @@ gtk_widget_hide (GtkWidget *widget)
 
   if (_gtk_widget_get_visible (widget))
     {
-      GtkWidget *parent;
       GtkRoot *root;
 
       g_object_ref (widget);
@@ -2744,11 +2743,17 @@ gtk_widget_hide (GtkWidget *widget)
       g_signal_emit (widget, widget_signals[HIDE], 0);
       g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_VISIBLE]);
 
-      parent = gtk_widget_get_parent (widget);
-      if (parent)
-	gtk_widget_queue_resize (parent);
 
-      gtk_widget_queue_allocate (widget);
+      if (root)
+        {
+          GtkWidget *parent;
+
+          /* Unqueue resize on this widget and queue one on the parent */
+          gtk_root_unqueue_resize (root, widget);
+          parent = gtk_widget_get_parent (widget);
+          if (parent)
+            gtk_widget_queue_resize (parent);
+        }
 
       gtk_widget_pop_verify_invariants (widget);
       g_object_unref (widget);
@@ -3547,6 +3552,8 @@ gtk_widget_apply_resize_stuff (GtkWidget *widget)
   if (priv->resize_needed)
     return;
 
+  g_message ("%s: %s %p", __FUNCTION__, G_OBJECT_TYPE_NAME (widget), widget);
+
   priv->resize_needed = TRUE;
   gtk_widget_set_alloc_needed (widget);
 
@@ -3622,6 +3629,9 @@ void
 gtk_widget_queue_resize (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (!gtk_widget_get_mapped (widget))
+    return;
 
   if (_gtk_widget_get_realized (widget))
     gtk_widget_queue_draw (widget);
@@ -3902,6 +3912,8 @@ gtk_widget_allocate (GtkWidget    *widget,
       gsk_transform_unref (transform);
       goto out;
     }
+
+  g_message ("%s: %s %p", __FUNCTION__, G_OBJECT_TYPE_NAME (widget), widget);
 
 #ifdef G_ENABLE_DEBUG
   if (GTK_DISPLAY_DEBUG_CHECK (_gtk_widget_get_display (widget), RESIZE))
@@ -10547,6 +10559,7 @@ gtk_widget_ensure_resize (GtkWidget *widget)
 
   priv->resize_needed = FALSE;
   _gtk_size_request_cache_clear (&priv->requests);
+  gtk_root_unqueue_resize (priv->root, widget);
 }
 
 void

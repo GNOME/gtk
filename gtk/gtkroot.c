@@ -177,7 +177,7 @@ gtk_root_needs_layout (GtkRoot *self)
   if (resize_widgets && resize_widgets->len > 0)
     return TRUE;
 
-  return gtk_widget_needs_allocate (GTK_WIDGET (self));
+  return FALSE;
 }
 
 static void
@@ -205,19 +205,19 @@ gtk_root_layout_cb (GdkFrameClock *clock,
 
   resize_widgets = g_object_get_qdata (G_OBJECT (self), quark_resize_widgets);
 
-  /*g_print ("===================\n");*/
+  g_print ("===================\n");
 
-  if (!resize_widgets)
+  if (!resize_widgets || resize_widgets->len == 0)
     {
       gtk_root_stop_layout (self);
       return;
     }
 
-  /*g_message ("Resize widgets: ");*/
+  g_message ("Resize widgets: ");
   for (guint p = 0; p < resize_widgets->len; p++)
     {
       GtkWidget *w = g_ptr_array_index (resize_widgets, p);
-      /*g_message ("%u: %s %p", p, G_OBJECT_TYPE_NAME (w), w);*/
+      g_message ("%u: %s %p", p, G_OBJECT_TYPE_NAME (w), w);
     }
 
   for (int i = 0; i < MAX_RESIZE_ITERATIONS; i++)
@@ -238,17 +238,41 @@ gtk_root_layout_cb (GdkFrameClock *clock,
         }
 
       gtk_root_unqueue_resize (self, GTK_WIDGET (self));
-
       gtk_native_check_resize (GTK_NATIVE (self));
+
+      g_message ("After Iteration %d:", i);
+      for (guint p = 0; p < resize_widgets->len; p++)
+        {
+          GtkWidget *w = g_ptr_array_index (resize_widgets, p);
+          g_message ("%p: %u: %s %p", self, p, G_OBJECT_TYPE_NAME (w), w);
+        }
+
+      if (resize_widgets->len > 0)
+        {
+          g_warning ("Resize widgets added during size-allocate:");
+          for (guint p = 0; p < resize_widgets->len; p++)
+            {
+              GtkWidget *w = g_ptr_array_index (resize_widgets, p);
+              g_message ("\t %s %p", G_OBJECT_TYPE_NAME (w), w);
+            }
+        }
+
+
+
 
       if (!gtk_root_needs_layout (self))
         {
           gtk_root_stop_layout (self);
           break;
         }
+      else {
+        g_message ("Need another layout iteration..");
+      }
     }
 
   g_object_set_qdata (G_OBJECT (self), quark_resize_iteration, NULL);
+
+  g_message ("#############################################");
 
   if (resize_widgets->len > 0)
     {
@@ -256,7 +280,7 @@ gtk_root_layout_cb (GdkFrameClock *clock,
       for (guint p = 0; p < resize_widgets->len; p++)
         {
           GtkWidget *w = g_ptr_array_index (resize_widgets, p);
-          g_message ("%p: %u: %s %p", self, p, G_OBJECT_TYPE_NAME (w), w);
+          g_warning ("%p: %u: %s %p", self, p, G_OBJECT_TYPE_NAME (w), w);
         }
 
       g_ptr_array_set_size (resize_widgets, 0);
@@ -309,15 +333,24 @@ gtk_root_queue_resize (GtkRoot   *self,
 
   if (iteration != 0)
     {
-      g_warning ("Adding widget %s %p to be resized while root %s %p is in resize iteration %d",
-                 G_OBJECT_TYPE_NAME (widget), widget,
-                 G_OBJECT_TYPE_NAME (self), self,
-                 iteration);
+      /*g_warning ("Adding widget %s %p to be resized while root %s %p is in resize iteration %d",*/
+                 /*G_OBJECT_TYPE_NAME (widget), widget,*/
+                 /*G_OBJECT_TYPE_NAME (self), self,*/
+                 /*iteration);*/
     }
 
+    g_message (">> Adding %s %p to resize widgets", G_OBJECT_TYPE_NAME (widget), widget);
   if (!g_ptr_array_find (resize_widgets, widget, NULL)) {
     g_ptr_array_add (resize_widgets, widget);
-    /*g_message ("Adding %s %p to resize widgets", G_OBJECT_TYPE_NAME (widget), widget);*/
+    /*g_message (">> Adding %s %p to resize widgets", G_OBJECT_TYPE_NAME (widget), widget);*/
+
+    /*if (strcmp (G_OBJECT_TYPE_NAME (widget), "GtkBox") == 0)*/
+      /*g_message ("BOX IN %s", G_OBJECT_TYPE_NAME (self));*/
+
+    /*if (strcmp (G_OBJECT_TYPE_NAME (widget), "GtkBox") == 0 &&*/
+        /*strcmp (G_OBJECT_TYPE_NAME (self), "GtkTooltipWindow") != 0)*/
+      /*g_warning ("HUH!");*/
+
   }
 }
 
@@ -331,11 +364,12 @@ gtk_root_unqueue_resize (GtkRoot   *self,
   if (!resize_widgets)
     return;
 
+  g_message (">> Removing %s %p from resize widgets", G_OBJECT_TYPE_NAME (widget), widget);
   if (g_ptr_array_find (resize_widgets, widget, &index)) {
-    /*g_message ("Removing %s %p from resize widgets", G_OBJECT_TYPE_NAME (widget), widget);*/
+    /*g_message (">> Removing %s %p from resize widgets", G_OBJECT_TYPE_NAME (widget), widget);*/
     g_ptr_array_remove_index_fast (resize_widgets, index);
   } else {
-    /*g_critical ("Removing %s %p not possible!", G_OBJECT_TYPE_NAME (widget), widget);*/
+    /*g_message ("Removing %s %p not possible!", G_OBJECT_TYPE_NAME (widget), widget);*/
   }
 }
 

@@ -232,13 +232,24 @@ gtk_focus_widget_init (GtkFocusWidget *self)
 {
   GtkEventController *controller;
 
-  self->child1 = gtk_button_new_with_label ("1");
+  /*self->child1 = gtk_button_new_with_label ("1");*/
+  self->child1 = gtk_spinner_new ();
+  gtk_spinner_set_spinning (GTK_SPINNER (self->child1), TRUE);
   gtk_widget_set_parent (self->child1, GTK_WIDGET (self));
-  self->child2 = gtk_button_new_with_label ("2");
+  /*self->child2 = gtk_button_new_with_label ("2");*/
+  self->child2 = gtk_spinner_new ();
+  gtk_spinner_set_spinning (GTK_SPINNER (self->child2), TRUE);
+
   gtk_widget_set_parent (self->child2, GTK_WIDGET (self));
-  self->child3 = gtk_button_new_with_label ("3");
+  /*self->child3 = gtk_button_new_with_label ("3");*/
+  self->child3 = gtk_spinner_new ();
+  gtk_spinner_set_spinning (GTK_SPINNER (self->child3), TRUE);
+
   gtk_widget_set_parent (self->child3, GTK_WIDGET (self));
-  self->child4 = gtk_button_new_with_label ("4");
+  /*self->child4 = gtk_button_new_with_label ("4");*/
+  self->child4 = gtk_spinner_new ();
+  gtk_spinner_set_spinning (GTK_SPINNER (self->child4), TRUE);
+
   gtk_widget_set_parent (self->child4, GTK_WIDGET (self));
 
   self->mouse_x = G_MININT;
