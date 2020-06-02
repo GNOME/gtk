@@ -10718,6 +10718,7 @@ void
 _gtk_widget_update_parent_muxer (GtkWidget *widget)
 {
   GtkActionMuxer *muxer;
+  GtkWidget *child;
 
   muxer = (GtkActionMuxer*)g_object_get_qdata (G_OBJECT (widget), quark_action_muxer);
   if (muxer == NULL)
@@ -10725,6 +10726,10 @@ _gtk_widget_update_parent_muxer (GtkWidget *widget)
 
   gtk_action_muxer_set_parent (muxer,
                                gtk_widget_get_parent_muxer (widget, FALSE));
+  for (child = gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    _gtk_widget_update_parent_muxer (child);
 }
 
 GtkActionMuxer *

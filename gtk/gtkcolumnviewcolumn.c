@@ -313,11 +313,12 @@ gtk_column_view_column_get_first_cell (GtkColumnViewColumn *self)
 }
 
 void
-gtk_column_view_column_add_cell (GtkColumnViewColumn *self,      
+gtk_column_view_column_add_cell (GtkColumnViewColumn *self,
                                  GtkColumnViewCell   *cell)
 {
   self->first_cell = cell;
 
+  gtk_widget_set_visible (GTK_WIDGET (cell), self->visible);
   gtk_column_view_column_queue_resize (self);
 }
 
@@ -454,6 +455,7 @@ gtk_column_view_column_create_header (GtkColumnViewColumn *self)
     return;
 
   self->header = gtk_column_view_title_new (self);
+  gtk_widget_set_visible (self->header, self->visible);
   gtk_list_item_widget_add_child (gtk_column_view_get_header_widget (self->view),
                                   self->header);
   gtk_column_view_column_queue_resize (self);
