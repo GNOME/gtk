@@ -35,6 +35,28 @@
 #include "gtkmultiselection.h"
 #include "gtkgizmoprivate.h"
 
+typedef struct _RubberbandData RubberbandData;
+
+struct _RubberbandData
+{
+  GtkWidget *widget;
+  double x1, y1;
+  double x2, y2;
+  GtkSelectionModel *selection;
+  gboolean modify;
+  gboolean extend;
+};
+
+static void
+rubberband_data_free (gpointer data)
+{
+  RubberbandData *rdata = data;
+
+  g_clear_pointer (&rdata->widget, gtk_widget_unparent);
+  g_clear_object (&rdata->selection);
+  g_free (rdata);
+}
+
 typedef struct _GtkListBasePrivate GtkListBasePrivate;
 
 struct _GtkListBasePrivate
@@ -58,15 +80,8 @@ struct _GtkListBasePrivate
   GtkListItemTracker *focus;
 
   gboolean enable_rubberband;
-  double rb_x1;
-  double rb_y1;
-  double rb_x2;
-  double rb_y2;
   GtkGesture *drag_gesture;
-  GtkWidget *rubberband;
-  GtkSelectionModel *old_selection;
-  gboolean modify;
-  gboolean extend;
+  RubberbandData *rubberband;
 
   guint autoscroll_id;
   double autoscroll_delta_x;
@@ -1220,13 +1235,14 @@ autoscroll_cb (GtkWidget     *widget,
 
   value = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
   gtk_adjustment_set_value (priv->adjustment[GTK_ORIENTATION_HORIZONTAL], value + priv->autoscroll_delta_x);
+
   value = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
   gtk_adjustment_set_value (priv->adjustment[GTK_ORIENTATION_VERTICAL], value + priv->autoscroll_delta_y);
 
   if (priv->rubberband)
     {
-      priv->rb_x2 += priv->autoscroll_delta_x;
-      priv->rb_y2 += priv->autoscroll_delta_y;
+      priv->rubberband->x2 += priv->autoscroll_delta_x;
+      priv->rubberband->y2 += priv->autoscroll_delta_y;
       gtk_list_base_update_rubberband_selection (self);
     }
 
@@ -1272,19 +1288,19 @@ gtk_list_base_allocate_rubberband (GtkListBase *self)
   if (!priv->rubberband)
     return;
 
-  gtk_widget_measure (priv->rubberband,
+  gtk_widget_measure (priv->rubberband->widget,
                       GTK_ORIENTATION_HORIZONTAL, -1,
                       &min, &nat, NULL, NULL);
 
   x = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
   y = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
 
-  rect.x = MIN (priv->rb_x1, priv->rb_x2) - x;
-  rect.y = MIN (priv->rb_y1, priv->rb_y2) - y;
-  rect.width = ABS (priv->rb_x1 - priv->rb_x2) + 1;
-  rect.height = ABS (priv->rb_y1 - priv->rb_y2) + 1;
+  rect.x = MIN (priv->rubberband->x1, priv->rubberband->x2) - x;
+  rect.y = MIN (priv->rubberband->y1, priv->rubberband->y2) - y;
+  rect.width = ABS (priv->rubberband->x1 - priv->rubberband->x2) + 1;
+  rect.height = ABS (priv->rubberband->y1 - priv->rubberband->y2) + 1;
 
-  gtk_widget_size_allocate (priv->rubberband, &rect, -1);
+  gtk_widget_size_allocate (priv->rubberband->widget, &rect, -1);
 }
 
 static void
@@ -1296,7 +1312,6 @@ gtk_list_base_start_rubberband (GtkListBase *self,
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   double value_x, value_y;
-  GtkSelectionModel *selection;
 
   if (priv->rubberband)
     return;
@@ -1304,20 +1319,25 @@ gtk_list_base_start_rubberband (GtkListBase *self,
   value_x = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
   value_y = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
 
-  priv->rb_x1 = priv->rb_x2 = x + value_x;
-  priv->rb_y1 = priv->rb_y2 = y + value_y;
+  priv->rubberband = g_new0 (RubberbandData, 1);
 
-  priv->modify = modify;
-  priv->extend = extend;
+  priv->rubberband->x1 = priv->rubberband->x2 = x + value_x;
+  priv->rubberband->y1 = priv->rubberband->y2 = y + value_y;
 
-  priv->rubberband = gtk_gizmo_new ("rubberband",
-                                    NULL, NULL, NULL, NULL, NULL, NULL);
-  gtk_widget_set_parent (priv->rubberband, GTK_WIDGET (self));
+  priv->rubberband->modify = modify;
+  priv->rubberband->extend = extend;
 
-  selection = gtk_list_item_manager_get_model (priv->item_manager);
+  priv->rubberband->widget = gtk_gizmo_new ("rubberband",
+                                            NULL, NULL, NULL, NULL, NULL, NULL);
+  gtk_widget_set_parent (priv->rubberband->widget, GTK_WIDGET (self));
 
   if (modify)
-    priv->old_selection = GTK_SELECTION_MODEL (gtk_multi_selection_copy (selection));
+    {
+      GtkSelectionModel *selection;
+
+      selection = gtk_list_item_manager_get_model (priv->item_manager);
+      priv->rubberband->selection = GTK_SELECTION_MODEL (gtk_multi_selection_copy (selection));
+    }
 }
 
 static void
@@ -1328,9 +1348,7 @@ gtk_list_base_stop_rubberband (GtkListBase *self)
   if (!priv->rubberband)
     return;
 
-  g_clear_pointer (&priv->rubberband, gtk_widget_unparent);
-  g_clear_object (&priv->old_selection);
-
+  g_clear_pointer (&priv->rubberband, rubberband_data_free);
   remove_autoscroll (self);
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
@@ -1353,8 +1371,8 @@ gtk_list_base_update_rubberband (GtkListBase *self,
   value_x = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
   value_y = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
 
-  priv->rb_x2 = x + value_x;
-  priv->rb_y2 = y + value_y;
+  priv->rubberband->x2 = x + value_x;
+  priv->rubberband->y2 = y + value_y;
 
   gtk_list_base_update_rubberband_selection (self);
 
@@ -1396,7 +1414,7 @@ gtk_list_base_update_rubberband_selection (GtkListBase *self)
   GtkListItemManagerItem *item;
 
   gtk_list_base_allocate_rubberband (self);
-  gtk_widget_get_allocation (priv->rubberband, &rect);
+  gtk_widget_get_allocation (priv->rubberband->widget, &rect);
 
   model = gtk_list_item_manager_get_model (priv->item_manager);
 
@@ -1416,15 +1434,15 @@ gtk_list_base_update_rubberband_selection (GtkListBase *self)
 
       selected = gdk_rectangle_intersect (&rect, &alloc, &alloc);
 
-      if (priv->modify)
+      if (priv->rubberband->modify)
         {
-          was_selected = gtk_selection_model_is_selected (priv->old_selection, pos);
+          was_selected = gtk_selection_model_is_selected (priv->rubberband->selection, pos);
           selected = selected ^ was_selected;
         }
 
       if (selected)
         gtk_selection_model_select_item (model, pos, FALSE);
-      else if (!priv->extend)
+      else if (!priv->rubberband->extend)
         gtk_selection_model_unselect_item (model, pos);
     }
 }
