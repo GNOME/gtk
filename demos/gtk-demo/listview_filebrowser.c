@@ -18,6 +18,7 @@ struct _FileBrowserView
 
   GtkListItemFactory *factory;
   char *icon_name;
+  char *title;
   GtkOrientation orientation;
 };
 
@@ -25,6 +26,7 @@ enum {
   PROP_0,
   PROP_FACTORY,
   PROP_ICON_NAME,
+  PROP_TITLE,
   PROP_ORIENTATION,
 
   N_PROPS
@@ -52,6 +54,10 @@ file_browser_view_get_property (GObject    *object,
 
     case PROP_ICON_NAME:
       g_value_set_string (value, self->icon_name);
+      break;
+
+    case PROP_TITLE:
+      g_value_set_string (value, self->title);
       break;
 
     case PROP_ORIENTATION:
@@ -83,6 +89,11 @@ file_browser_view_set_property (GObject      *object,
       self->icon_name = g_value_dup_string (value);
       break;
 
+    case PROP_TITLE:
+      g_free (self->title);
+      self->title = g_value_dup_string (value);
+      break;
+
     case PROP_ORIENTATION:
       self->orientation = g_value_get_enum (value);
       break;
@@ -100,6 +111,7 @@ file_browser_view_finalize (GObject *object)
 
   g_object_unref (self->factory);
   g_free (self->icon_name);
+  g_free (self->title);
 
   G_OBJECT_CLASS (file_browser_view_parent_class)->dispose (object);
 }
@@ -123,6 +135,12 @@ file_browser_view_class_init (FileBrowserViewClass *klass)
     g_param_spec_string ("icon-name",
                          "icon name",
                          "icon to display for selecting this view",
+                         NULL,
+                         G_PARAM_READWRITE);
+  properties[PROP_TITLE] =
+    g_param_spec_string ("title",
+                         "title",
+                         "title to display for selecting this view",
                          NULL,
                          G_PARAM_READWRITE);
   properties[PROP_ORIENTATION] =
@@ -224,6 +242,14 @@ do_listview_filebrowser (GtkWidget *do_widget)
       GtkDirectoryList *dirlist;
       GFile *file;
       char *cwd;
+      GtkCssProvider *provider;
+
+      provider = gtk_css_provider_new ();
+      gtk_css_provider_load_from_resource (provider, "/listview_filebrowser/listview_filebrowser.css");
+      gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                                  GTK_STYLE_PROVIDER (provider),
+                                                  800);
+      g_object_unref (provider);
 
       builder = gtk_builder_new_from_resource ("/listview_filebrowser/listview_filebrowser.ui");
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));

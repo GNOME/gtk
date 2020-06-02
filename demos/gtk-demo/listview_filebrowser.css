@@ -1,0 +1,11 @@
+list.viewswitcher {
+  border: 1px solid gray;
+}
+
+list.viewswitcher > row {
+  padding: 5px;
+}
+
+list.viewswitcher row:selected {
+  background: gray;
+}

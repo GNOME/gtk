@@ -127,6 +127,7 @@
   </gresource>
   <gresource prefix="/listview_filebrowser">
     <file>listview_filebrowser.ui</file>
+    <file>listview_filebrowser.css</file>
   </gresource>
   <gresource prefix="/listview_minesweeper">
     <file>listview_minesweeper.ui</file>
