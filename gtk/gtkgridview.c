@@ -713,6 +713,8 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
   int x, y;
   guint i;
 
+  gtk_list_base_allocate_rubberband (GTK_LIST_BASE (widget));
+
   orientation = gtk_list_base_get_orientation (GTK_LIST_BASE (self));
   scroll_policy = gtk_list_base_get_scroll_policy (GTK_LIST_BASE (self), orientation);
   opposite_orientation = OPPOSITE_ORIENTATION (orientation);
