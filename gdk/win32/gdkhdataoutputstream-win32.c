@@ -129,7 +129,7 @@ gdk_win32_hdata_output_stream_write (GOutputStream  *output_stream,
   gssize result = write_stream (stream, priv, buffer, count, error);
 
   if (result != -1)
-    GDK_NOTE(SELECTION, g_printerr ("CLIPBOARD: wrote %zd bytes, %u total now\n",
+    GDK_NOTE(SELECTION, g_printerr ("CLIPBOARD: wrote %zd bytes, %" G_GSIZE_FORMAT " total now\n",
                                     result, priv->data_length));
 
   return result;
@@ -158,7 +158,7 @@ gdk_win32_hdata_output_stream_write_async (GOutputStream        *output_stream,
 
   if (result != -1)
     {
-      GDK_NOTE (SELECTION, g_printerr ("CLIPBOARD async wrote %zd bytes, %u total now\n",
+      GDK_NOTE (SELECTION, g_printerr ("CLIPBOARD async wrote %zd bytes, %" G_GSIZE_FORMAT " total now\n",
                                        result, priv->data_length));
       g_task_return_int (task, result);
     }

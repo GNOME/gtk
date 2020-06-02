@@ -1560,7 +1560,7 @@ gtk_icon_view_measure (GtkWidget *widget,
   GtkIconViewPrivate *priv = icon_view->priv;
   GtkOrientation other_orientation = orientation == GTK_ORIENTATION_HORIZONTAL ?
                                      GTK_ORIENTATION_VERTICAL : GTK_ORIENTATION_HORIZONTAL;
-  int item_min, item_nat, items, item_size, n_items;
+  int item_min, item_nat, items = 0, item_size = 0, n_items;
 
   if (gtk_icon_view_is_empty (icon_view))
     {
@@ -2709,7 +2709,7 @@ gtk_icon_view_layout (GtkIconView *icon_view)
   GtkIconViewPrivate *priv = icon_view->priv;
   GtkWidget *widget = GTK_WIDGET (icon_view);
   GList *items;
-  gint item_width; /* this doesn't include item_padding */
+  gint item_width = 0; /* this doesn't include item_padding */
   gint n_columns, n_rows, n_items;
   gint col, row;
   GtkRequestedSize *sizes;
