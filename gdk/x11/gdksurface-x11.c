@@ -360,6 +360,37 @@ gdk_x11_surface_begin_frame (GdkSurface *surface,
     }
 }
 
+static gboolean
+should_sync_frame_drawing (GdkSurface *surface)
+{
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
+
+  /* disabled client side */
+  if (!impl->frame_sync_enabled)
+    return FALSE;
+
+  /* disabled compositor side */
+  if (!gdk_x11_screen_supports_net_wm_hint (GDK_SURFACE_SCREEN (surface),
+                                            g_intern_static_string ("_NET_WM_FRAME_DRAWN")))
+    return FALSE;
+
+  return TRUE;
+}
+
+static void
+sync_counter_for_end_frame (GdkSurface *surface)
+{
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
+
+  g_assert (!impl->toplevel->in_frame);
+  g_assert (impl->toplevel->extended_update_counter != None);
+  g_assert ((impl->toplevel->current_counter_value % 2) == 0);
+
+  set_sync_counter (GDK_SURFACE_XDISPLAY (surface),
+                    impl->toplevel->extended_update_counter,
+                    impl->toplevel->current_counter_value);
+}
+
 static void
 gdk_x11_surface_end_frame (GdkSurface *surface)
 {
@@ -405,13 +436,9 @@ gdk_x11_surface_end_frame (GdkSurface *surface)
       else
         impl->toplevel->current_counter_value += 1;
 
-      set_sync_counter(GDK_SURFACE_XDISPLAY (surface),
-		       impl->toplevel->extended_update_counter,
-		       impl->toplevel->current_counter_value);
+      sync_counter_for_end_frame (surface);
 
-      if (impl->frame_sync_enabled &&
-          gdk_x11_screen_supports_net_wm_hint (GDK_SURFACE_SCREEN (surface),
-					       g_intern_static_string ("_NET_WM_FRAME_DRAWN")))
+      if (should_sync_frame_drawing (surface))
         {
           impl->toplevel->frame_pending = TRUE;
           gdk_surface_freeze_updates (surface);
