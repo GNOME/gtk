@@ -3766,6 +3766,13 @@ gtk_text_view_dispose (GObject *object)
   GtkTextViewPrivate *priv = text_view->priv;
   GtkWidget *child;
 
+  child = g_object_get_data (object, "gtk-emoji-chooser");
+  if (child)
+    {
+      gtk_widget_unparent (child);
+      g_object_set_data (object, "gtk-emoji-chooser", NULL);
+    }
+
   while ((child = gtk_widget_get_first_child (GTK_WIDGET (text_view))))
     gtk_text_view_remove (text_view, child);
 
