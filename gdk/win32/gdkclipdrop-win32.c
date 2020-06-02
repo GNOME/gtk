@@ -892,7 +892,7 @@ grab_data_from_hdata (GdkWin32ClipboardThreadRetrieve *retr,
       send_response (retr->parent.item_type,
                      retr->parent.opaque_task,
                      g_error_new (G_IO_ERROR, G_IO_ERROR_FAILED,
-                                  _("Cannot get clipboard data. Failed to allocate %lu bytes to store the data."), length));
+                                  _("Cannot get clipboard data. Failed to allocate %" G_GSIZE_FORMAT " bytes to store the data."), length));
       GlobalUnlock (hdata);
       return NULL;
     }
@@ -1536,7 +1536,7 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   thread_wakeup_message = RegisterWindowMessage ("GDK_WORKER_THREAD_WEAKEUP");
 
   user32 = LoadLibrary ("user32.dll");
-  win32_clipdrop->GetUpdatedClipboardFormats = GetProcAddress (user32, "GetUpdatedClipboardFormats");
+  win32_clipdrop->GetUpdatedClipboardFormats = (GetUpdatedClipboardFormatsFunc) GetProcAddress (user32, "GetUpdatedClipboardFormats");
   FreeLibrary (user32);
 
   atoms = g_array_sized_new (FALSE, TRUE, sizeof (const char *), GDK_WIN32_ATOM_INDEX_LAST);
@@ -2193,7 +2193,7 @@ transmute_utf8_string_to_cf_text (const guchar    *data,
 {
   glong rlen;
   GError *err = NULL;
-  glong size;
+  gsize size;
   gint i;
   char *strptr, *p;
   wchar_t *wcptr;

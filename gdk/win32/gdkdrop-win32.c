@@ -1226,7 +1226,7 @@ grab_data_from_hdata (GTask  *task,
   if (data == NULL)
     {
       g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_FAILED,
-                               _("Cannot get DnD data. Failed to allocate %lu bytes to store the data."), length);
+                               _("Cannot get DnD data. Failed to allocate %" G_GSIZE_FORMAT " bytes to store the data."), length);
       GlobalUnlock (hdata);
       return NULL;
     }
