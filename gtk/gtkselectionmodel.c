@@ -38,14 +38,19 @@
  * #GtkSingleSelection, so you will only need to implement this interface if you want
  * detailed control about how selections should be handled.
  *
- * A #GtkSelectionModel supports a single boolean per row indicating if a row is selected
+ * A #GtkSelectionModel supports a single boolean per item indicating if an item is selected
  * or not. This can be queried via gtk_selection_model_is_selected(). When the selected
- * state of one or more rows changes, the model will emit the
+ * state of one or more items changes, the model will emit the
  * #GtkSelectionModel::selection-changed signal by calling the
  * gtk_selection_model_selection_changed() function. The positions given in that signal
- * may have their selection state changed, though that is not a requirement.  
+ * may have their selection state changed, though that is not a requirement.
  * If new items added to the model via the #GListModel::items-changed signal are selected
  * or not is up to the implementation.
+ *
+ * Note that you need to listen to both #GListModel::items-changed and to
+ * #GtkSelectionModel::selection-changed to keep track of which items are selected.
+ * #GtkSelectionModel will generally only emit the one or the other signal, not
+ * both, to avoid ordering and reentrancy issues.
  *
  * Additionally, the interface can expose functionality to select and unselect items.
  * If these functions are implemented, GTK's list widgets will allow users to select and
