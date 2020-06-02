@@ -516,6 +516,8 @@ gtk_list_view_size_allocate (GtkWidget *widget,
   GtkOrientation orientation, opposite_orientation;
   GtkScrollablePolicy scroll_policy;
 
+  gtk_list_base_allocate_rubberband (GTK_LIST_BASE (self));
+
   orientation = gtk_list_base_get_orientation (GTK_LIST_BASE (self));
   opposite_orientation = OPPOSITE_ORIENTATION (orientation);
   scroll_policy = gtk_list_base_get_scroll_policy (GTK_LIST_BASE (self), orientation);

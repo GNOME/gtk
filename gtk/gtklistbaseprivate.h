@@ -103,4 +103,6 @@ void                   gtk_list_base_set_enable_rubberband      (GtkListBase    
                                                                  gboolean                enable);
 gboolean               gtk_list_base_get_enable_rubberband      (GtkListBase            *self);
 
+void                   gtk_list_base_allocate_rubberband        (GtkListBase            *self);
+
 #endif /* __GTK_LIST_BASE_PRIVATE_H__ */
