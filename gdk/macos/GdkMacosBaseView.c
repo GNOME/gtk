@@ -70,6 +70,17 @@
   return self;
 }
 
+-(void)setNeedsDisplay:(BOOL)needsDisplay
+{
+  for (id child in [self subviews])
+    [child setNeedsDisplay:needsDisplay];
+}
+
+-(void)setOpaqueRegion:(cairo_region_t *)region
+{
+  /* Do nothing */
+}
+
 -(BOOL)acceptsFirstMouse
 {
   return YES;
