@@ -27,16 +27,11 @@
 #include "gdkinternals.h"
 
 #import "GdkMacosCairoView.h"
+#import "GdkMacosCairoSubview.h"
 
 #include "gdkmacossurface-private.h"
 
 @implementation GdkMacosCairoView
-
--(void)dealloc
-{
-  g_clear_pointer (&self->surface, cairo_surface_destroy);
-  [super dealloc];
-}
 
 -(BOOL)isOpaque
 {
@@ -53,76 +48,78 @@
 -(void)setCairoSurface:(cairo_surface_t *)cairoSurface
             withDamage:(cairo_region_t *)cairoRegion
 {
-  guint n_rects = cairo_region_num_rectangles (cairoRegion);
+  for (id view in [self subviews])
+    [(GdkMacosCairoSubview *)view setCairoSurface:cairoSurface
+                                       withDamage:cairoRegion];
+}
 
-  if (self->surface == NULL)
-    {
-      [self setNeedsDisplay:YES];
-    }
-  else
-    {
-      for (guint i = 0; i < n_rects; i++)
-        {
-          cairo_rectangle_int_t rect;
+-(void)removeOpaqueChildren
+{
+  [[self->transparent subviews]
+    makeObjectsPerformSelector:@selector(removeFromSuperview)];
+}
 
-          cairo_region_get_rectangle (cairoRegion, i, &rect);
-          [self setNeedsDisplayInRect:NSMakeRect (rect.x, rect.y, rect.width, rect.height)];
-        }
-    }
+-(void)setOpaqueRegion:(cairo_region_t *)region
+{
+  NSRect abs_bounds;
+  guint n_rects;
 
-  if (self->surface != cairoSurface)
+  [self removeOpaqueChildren];
+
+  if (region == NULL)
+    return;
+
+  abs_bounds = [self convertRect:[self bounds] toView:nil];
+  n_rects = cairo_region_num_rectangles (region);
+  for (guint i = 0; i < n_rects; i++)
     {
-      g_clear_pointer (&self->surface, cairo_surface_destroy);
-      self->surface = cairo_surface_reference (cairoSurface);
+      GdkMacosCairoSubview *child;
+      cairo_rectangle_int_t rect;
+      NSRect nsrect;
+
+      cairo_region_get_rectangle (region, i, &rect);
+      nsrect = NSMakeRect (rect.x - abs_bounds.origin.x,
+                           rect.y - abs_bounds.origin.y,
+                           rect.width,
+                           rect.height);
+
+      child = [[GdkMacosCairoSubview alloc] initWithFrame:nsrect];
+      [child setOpaque:YES];
+      [child setWantsLayer:YES];
+      [self->transparent addSubview:child];
     }
 }
 
--(void)drawRect:(NSRect)rect
+-(NSView *)initWithFrame:(NSRect)frame
 {
-  GdkMacosSurface *gdkSurface;
-  CGContextRef cg_context;
-  cairo_surface_t *dest;
-  const NSRect *rects = NULL;
-  NSInteger n_rects = 0;
-  cairo_t *cr;
-  int scale_factor;
-
-  if (self->surface == NULL)
-    return;
-
-  gdkSurface = [self gdkSurface];
-  cg_context = _gdk_macos_surface_acquire_context (gdkSurface, TRUE, TRUE);
-  scale_factor = gdk_surface_get_scale_factor (GDK_SURFACE (gdkSurface));
-
-  dest = cairo_quartz_surface_create_for_cg_context (cg_context,
-                                                     self.bounds.size.width * scale_factor,
-                                                     self.bounds.size.height * scale_factor);
-  cairo_surface_set_device_scale (dest, scale_factor, scale_factor);
-
-  cr = cairo_create (dest);
-
-  cairo_set_source_surface (cr, self->surface, 0, 0);
-
-  [self getRectsBeingDrawn:&rects count:&n_rects];
-  for (NSInteger i = 0; i < n_rects; i++)
+  if ((self = [super initWithFrame:frame]))
     {
-      const NSRect *r = &rects[i];
-      cairo_rectangle (cr,
-                       r->origin.x,
-                       r->origin.y,
-                       r->size.width,
-                       r->size.height);
+      /* Setup our primary subview which will render all content that is not
+       * within an opaque region (such as shadows for CSD windows). For opaque
+       * windows, this will all be obscurred by other views, so it doesn't
+       * matter much to have it here.
+       */
+      self->transparent = [[GdkMacosCairoSubview alloc] initWithFrame:frame];
+      [self addSubview:self->transparent];
     }
-  cairo_clip (cr);
 
-  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-  cairo_paint (cr);
+  return self;
+}
 
-  cairo_destroy (cr);
-  cairo_surface_flush (dest);
-  cairo_surface_destroy (dest);
+-(void)setFrame:(NSRect)rect
+{
+  [super setFrame:rect];
+  [self->transparent setFrame:NSMakeRect (0, 0, rect.size.width, rect.size.height)];
+}
 
-  _gdk_macos_surface_release_context (gdkSurface, cg_context);
+-(BOOL)acceptsFirstMouse
+{
+  return YES;
+}
+
+-(BOOL)mouseDownCanMoveWindow
+{
+  return NO;
 }
 
 @end
