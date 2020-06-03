@@ -971,9 +971,9 @@ gtk_list_view_set_show_separators (GtkListView *self,
   self->show_separators = show_separators;
 
   if (show_separators)
-    gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (self)), "separators");
+    gtk_widget_add_css_class (GTK_WIDGET (self), "separators");
   else
-    gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (self)), "separators");
+    gtk_widget_remove_css_class (GTK_WIDGET (self), "separators");
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SHOW_SEPARATORS]);
 }
