@@ -1,7 +1,6 @@
-/* GdkMacosBaseView.h
+/* GdkMacosCairoSubview.h
  *
  * Copyright © 2020 Red Hat, Inc.
- * Copyright © 2005-2007 Imendio AB
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,28 +18,18 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#import <AppKit/AppKit.h>
-#import <Foundation/Foundation.h>
+#include <AppKit/AppKit.h>
 
-#include <gdk/gdk.h>
+#define GDK_IS_MACOS_CAIRO_SUBVIEW(obj) ((obj) && [obj isKindOfClass:[GdkMacosCairoSubview class]])
 
-#include "gdkmacosdisplay.h"
-#include "gdkmacossurface.h"
-
-#define GDK_IS_MACOS_BASE_VIEW(obj) ((obj) && [obj isKindOfClass:[GdkMacosBaseView class]])
-
-@interface GdkMacosBaseView : NSView <NSTextInputClient>
+@interface GdkMacosCairoSubview : NSView
 {
-  NSTrackingArea *trackingArea;
-  BOOL needsInvalidateShadow;
-  NSRange markedRange;
-  NSRange selectedRange;
+  BOOL             _isOpaque;
+  cairo_surface_t *cairoSurface;
 }
 
--(GdkMacosSurface *)gdkSurface;
--(GdkMacosDisplay *)gdkDisplay;
--(void)setNeedsInvalidateShadow: (BOOL)invalidate;
--(NSTrackingArea *)trackingArea;
--(void)setOpaqueRegion:(cairo_region_t *)region;
+-(void)setOpaque:(BOOL)opaque;
+-(void)setCairoSurface:(cairo_surface_t *)cairoSurface
+            withDamage:(cairo_region_t *)region;
 
 @end
