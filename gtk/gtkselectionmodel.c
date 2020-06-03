@@ -47,10 +47,9 @@
  * If new items added to the model via the #GListModel::items-changed signal are selected
  * or not is up to the implementation.
  *
- * Note that you need to listen to both #GListModel::items-changed and to
- * #GtkSelectionModel::selection-changed to keep track of which items are selected.
- * #GtkSelectionModel will generally only emit the one or the other signal, not
- * both, to avoid ordering and reentrancy issues.
+ * Note that items added via #GListModel::items-changed may already be selected
+ * and no #GtkSelectionModel::selection-changed will be emitted for them. So to
+ * track which items are selected, it is necessary to listen to both signals.
  *
  * Additionally, the interface can expose functionality to select and unselect items.
  * If these functions are implemented, GTK's list widgets will allow users to select and
