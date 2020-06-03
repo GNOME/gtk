@@ -24,6 +24,7 @@
 struct _GtkWidgetAccessiblePrivate
 {
   AtkLayer layer;
+  gboolean showing;
 };
 
 #define TOOLTIP_KEY "tooltip"
@@ -78,15 +79,41 @@ gtk_widget_accessible_update_bounds (GtkWidgetAccessible *self)
   g_signal_emit_by_name (self, "bounds-changed", &rect);
 }
 
-/* Translate GtkWidget mapped state into AtkObject showing */
-static gint
-map_cb (GtkWidget *widget)
+/* Determine if SHOWING should be true */
+static gboolean
+is_showing (GtkWidget *widget)
 {
+  return (gtk_widget_get_visible (widget) &&
+          gtk_widget_accessible_on_screen (widget) &&
+          gtk_widget_get_mapped (widget) &&
+          gtk_widget_accessible_all_parents_visible (widget));
+}
+
+/* send signal if SHOWING actually changed since last run */
+static void
+notify_showing_if_changed (GtkWidget *widget)
+{
+  GtkWidgetAccessiblePrivate *priv;
   AtkObject *accessible;
 
   accessible = gtk_widget_get_accessible (widget);
-  atk_object_notify_state_change (accessible, ATK_STATE_SHOWING,
-                                  gtk_widget_get_mapped (widget));
+  priv = GTK_WIDGET_ACCESSIBLE (accessible)->priv;
+
+  if (is_showing (widget) != priv->showing)
+    {
+      priv->showing = !priv->showing;
+
+      atk_object_notify_state_change (accessible, ATK_STATE_SHOWING,
+                                      priv->showing);
+    }
+}
+
+/* recheck SHOWING when map state changed */
+static gint
+map_cb (GtkWidget *widget)
+{
+  notify_showing_if_changed (widget);
+
   return 1;
 }
 
@@ -113,6 +140,7 @@ gtk_widget_accessible_initialize (AtkObject *obj,
   g_signal_connect (widget, "unmap", G_CALLBACK (map_cb), NULL);
 
   GTK_WIDGET_ACCESSIBLE (obj)->priv->layer = ATK_LAYER_WIDGET;
+  GTK_WIDGET_ACCESSIBLE (obj)->priv->showing = FALSE;
   obj->role = ATK_ROLE_UNKNOWN;
 
   gtk_widget_accessible_update_tooltip (GTK_WIDGET_ACCESSIBLE (obj), widget);
@@ -366,9 +394,7 @@ gtk_widget_accessible_ref_state_set (AtkObject *accessible)
       if (gtk_widget_get_visible (widget))
         {
           atk_state_set_add_state (state_set, ATK_STATE_VISIBLE);
-          if (gtk_widget_accessible_on_screen (widget) &&
-              gtk_widget_get_mapped (widget) &&
-              gtk_widget_accessible_all_parents_visible (widget))
+          if (is_showing (widget))
             atk_state_set_add_state (state_set, ATK_STATE_SHOWING);
         }
 
@@ -510,6 +536,10 @@ gtk_widget_accessible_notify_gtk (GObject    *obj,
 
   if (state == ATK_STATE_HORIZONTAL)
     atk_object_notify_state_change (atk_obj, ATK_STATE_VERTICAL, !value);
+
+  /* send SHOWING after VISIBLE */
+  if (state == ATK_STATE_VISIBLE)
+    notify_showing_if_changed (widget);
 }
 
 static AtkAttributeSet *
