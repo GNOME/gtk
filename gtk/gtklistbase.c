@@ -1460,6 +1460,7 @@ gtk_list_base_grab_focus_on_item (GtkListBase *self,
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   GtkListItemManagerItem *item;
+  gboolean success;
 
   item = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
   if (item == NULL)
@@ -1478,16 +1479,17 @@ gtk_list_base_grab_focus_on_item (GtkListBase *self,
       item = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
       g_assert (item->widget);
 
-      if (!gtk_widget_grab_focus (item->widget))
-          return FALSE;
+      success = gtk_widget_grab_focus (item->widget);
 
       gtk_list_item_tracker_free (priv->item_manager, tracker);
     }
   else
     {
-      if (!gtk_widget_grab_focus (item->widget))
-          return FALSE;
+      success = gtk_widget_grab_focus (item->widget);
     }
+
+  if (!success)
+    return FALSE;
 
   if (select)
     gtk_list_base_select_item (self, pos, modify, extend);
