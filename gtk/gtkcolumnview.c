@@ -70,6 +70,8 @@ struct _GtkColumnView
 
   GtkAdjustment *hadjustment;
 
+  gboolean reorderable;
+
   gboolean in_column_resize;
   int drag_pos;
   int drag_x;
@@ -92,6 +94,7 @@ enum
   PROP_VADJUSTMENT,
   PROP_VSCROLL_POLICY,
   PROP_SINGLE_CLICK_ACTIVATE,
+  PROP_REORDERABLE,
 
   N_PROPS
 };
@@ -361,6 +364,10 @@ gtk_column_view_get_property (GObject    *object,
       g_value_set_boolean (value, gtk_column_view_get_single_click_activate (self));
       break;
 
+    case PROP_REORDERABLE:
+      g_value_set_boolean (value, gtk_column_view_get_reorderable (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -430,6 +437,10 @@ gtk_column_view_set_property (GObject      *object,
 
     case PROP_SINGLE_CLICK_ACTIVATE:
       gtk_column_view_set_single_click_activate (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_REORDERABLE:
+      gtk_column_view_set_reorderable (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -527,6 +538,18 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                           P_("Activate rows on single click"),
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkColumnView:reorderable:
+   *
+   * Whether columns are reorderable
+   */
+  properties[PROP_REORDERABLE] =
+    g_param_spec_boolean ("reorderable",
+                          P_("Reorderable"),
+                          P_("Whether columns are reorderable"),
+                          TRUE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
@@ -726,6 +749,8 @@ gtk_column_view_init (GtkColumnView *self)
                           g_quark_from_static_string (I_("view")));
 
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
+
+  self->reorderable = TRUE;
 }
 
 /**
@@ -1080,4 +1105,41 @@ gtk_column_view_get_single_click_activate (GtkColumnView *self)
   g_return_val_if_fail (GTK_IS_COLUMN_VIEW (self), FALSE);
 
   return gtk_list_view_get_single_click_activate (self->listview);
+}
+
+/**
+ * gtk_column_view_set_reorderable:
+ * @self: a #GtkColumnView
+ * @reorderable: whether columns should be reorderable
+ *
+ * Sets whether columns should be reorderable by dragging.
+ */
+void
+gtk_column_view_set_reorderable (GtkColumnView *self,
+                                 gboolean       reorderable)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
+
+  if (self->reorderable == reorderable)
+    return;
+
+  self->reorderable = reorderable;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_REORDERABLE]);
+}
+
+/**
+ * gtk_column_view_get_reorderable:
+ * @self: a #GtkColumnView
+ *
+ * Returns whether columns are reorderable.
+ *
+ * Returns: %TRUE if columns are reorderable
+ */
+gboolean
+gtk_column_view_get_reorderable (GtkColumnView *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW (self), TRUE);
+
+  return self->reorderable;
 }
