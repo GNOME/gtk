@@ -83,8 +83,7 @@ static gboolean
 gtk_list_item_widget_focus (GtkWidget        *widget,
                             GtkDirectionType  direction)
 {
-  GtkListItemWidget *self = GTK_LIST_ITEM_WIDGET (widget);
-  GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
+  GtkWidget *child, *focus_child;
 
   /* The idea of this function is the following:
    * 1. If any child can take focus, do not ever attempt
@@ -96,19 +95,24 @@ gtk_list_item_widget_focus (GtkWidget        *widget,
    * activation and selection handling, but no useless widgets
    * get focused and moving focus is as fast as possible.
    */
-  if (priv->list_item && priv->list_item->child)
+
+  focus_child = gtk_widget_get_focus_child (widget);
+  if (focus_child && gtk_widget_child_focus (focus_child, direction))
+    return TRUE;
+
+  for (child = focus_child ? gtk_widget_get_next_sibling (focus_child)
+                           : gtk_widget_get_first_child (widget);
+       child;
+       child = gtk_widget_get_next_sibling (child))
     {
-      if (gtk_widget_get_focus_child (widget))
-        return FALSE;
-      if (gtk_widget_child_focus (priv->list_item->child, direction))
+      if (gtk_widget_child_focus (child, direction))
         return TRUE;
     }
 
-  if (gtk_widget_is_focus (widget))
+  if (focus_child)
     return FALSE;
 
-  if (!gtk_widget_get_can_focus (widget) ||
-      !priv->list_item->selectable)
+  if (gtk_widget_is_focus (widget))
     return FALSE;
 
   return gtk_widget_grab_focus (widget);
@@ -119,9 +123,19 @@ gtk_list_item_widget_grab_focus (GtkWidget *widget)
 {
   GtkListItemWidget *self = GTK_LIST_ITEM_WIDGET (widget);
   GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
+  GtkWidget *child;
 
-  if (priv->list_item && priv->list_item->child && gtk_widget_grab_focus (priv->list_item->child))
-    return TRUE;
+  for (child = gtk_widget_get_first_child (widget);
+       child;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      if (gtk_widget_grab_focus (child))
+        return TRUE;
+    }
+
+  if (priv->list_item == NULL ||
+      !priv->list_item->selectable)
+    return FALSE;
 
   return GTK_WIDGET_CLASS (gtk_list_item_widget_parent_class)->grab_focus (widget);
 }
