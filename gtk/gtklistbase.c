@@ -42,7 +42,6 @@ struct _RubberbandData
   GtkWidget *widget;
   double x1, y1;
   double x2, y2;
-  GtkSelectionModel *selection;
   gboolean modify;
   gboolean extend;
 };
@@ -53,7 +52,6 @@ rubberband_data_free (gpointer data)
   RubberbandData *rdata = data;
 
   g_clear_pointer (&rdata->widget, gtk_widget_unparent);
-  g_clear_object (&rdata->selection);
   g_free (rdata);
 }
 
@@ -1331,13 +1329,8 @@ gtk_list_base_start_rubberband (GtkListBase *self,
                                             NULL, NULL, NULL, NULL, NULL, NULL);
   gtk_widget_set_parent (priv->rubberband->widget, GTK_WIDGET (self));
 
-  if (modify)
-    {
-      GtkSelectionModel *selection;
-
-      selection = gtk_list_item_manager_get_model (priv->item_manager);
-      priv->rubberband->selection = GTK_SELECTION_MODEL (gtk_multi_selection_copy (selection));
-    }
+  if (!extend && !modify)
+    gtk_selection_model_unselect_all (gtk_list_item_manager_get_model (priv->item_manager));
 }
 
 static void
@@ -1423,7 +1416,7 @@ gtk_list_base_update_rubberband_selection (GtkListBase *self)
        item = gtk_rb_tree_node_get_next (item))
     {
       guint pos;
-      gboolean was_selected, selected;
+      gboolean selected;
 
       if (!item->widget)
         continue;
@@ -1434,15 +1427,14 @@ gtk_list_base_update_rubberband_selection (GtkListBase *self)
 
       selected = gdk_rectangle_intersect (&rect, &alloc, &alloc);
 
-      if (priv->rubberband->modify)
-        {
-          was_selected = gtk_selection_model_is_selected (priv->rubberband->selection, pos);
-          selected = selected ^ was_selected;
-        }
-
       if (selected)
-        gtk_selection_model_select_item (model, pos, FALSE);
-      else if (!priv->rubberband->extend)
+        {
+          if (priv->rubberband->modify)
+            gtk_selection_model_unselect_item (model, pos);
+          else
+            gtk_selection_model_select_item (model, pos, FALSE);
+        }
+      else if (!priv->rubberband->extend && !priv->rubberband->modify)
         gtk_selection_model_unselect_item (model, pos);
     }
 }
