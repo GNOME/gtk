@@ -455,7 +455,15 @@ gtk_list_base_focus (GtkWidget        *widget,
                      GtkDirectionType  direction)
 {
   GtkListBase *self = GTK_LIST_BASE (widget);
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   guint old, pos, n_items;
+  GtkWidget *focus_child;
+  GtkListItemManagerItem *item;
+
+  focus_child = gtk_widget_get_focus_child (widget);
+  /* focus is moving around fine inside the focus child, don't disturb it */
+  if (focus_child && gtk_widget_child_focus (focus_child, direction))
+    return TRUE;
 
   pos = gtk_list_base_get_focus_position (self);
   n_items = gtk_list_base_get_n_items (self);
@@ -468,12 +476,12 @@ gtk_list_base_focus (GtkWidget        *widget,
 
       pos = 0;
     }
-  else if (gtk_widget_get_focus_child (widget) == NULL)
+  else if (focus_child == NULL)
     {
       /* Focus was outside the list, just grab the old focus item
        * while keeping the selection intact.
        */
-      return gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), pos, FALSE, FALSE, FALSE);
+      old = GTK_INVALID_LIST_POSITION;
     }
   else
     {
@@ -513,14 +521,18 @@ gtk_list_base_focus (GtkWidget        *widget,
         }
     }
 
-  if (old != pos)
-    {
-      return gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), pos, TRUE, FALSE, FALSE);
-    }
-  else
-    {
-      return TRUE;
-    }
+  if (old == pos)
+    return TRUE;
+
+  item = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
+  if (item == NULL)
+    return FALSE;
+
+  /* This shouldn't really happen, but if it does, oh well */
+  if (item->widget == NULL)
+    return gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), pos, TRUE, FALSE, FALSE);
+
+  return gtk_widget_child_focus (item->widget, direction);
 }
 
 static void
