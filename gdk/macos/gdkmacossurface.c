@@ -94,19 +94,15 @@ static void
 gdk_macos_surface_set_opaque_region (GdkSurface     *surface,
                                      cairo_region_t *region)
 {
-  /* TODO:
-   *
-   * For CSD, we have a NSWindow with isOpaque:NO. There is some performance
-   * penalty for this because the compositor will have to composite every pixel
-   * intead of simply taking the source pixel.
-   *
-   * To improve this when using Cairo, we could have a number of child NSView
-   * which are opaque, and simply draw from the underlying Cairo surface for
-   * each view. Then only the corners and shadow would have non-opaque regions.
-   *
-   * However, as we intend to move to a OpenGL (or Metal) renderer, the effort
-   * here may not be worth the time.
-   */
+  NSView *nsview;
+
+  g_assert (GDK_IS_MACOS_SURFACE (surface));
+
+  if (!(nsview = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (surface))) ||
+      !GDK_IS_MACOS_CAIRO_VIEW (nsview))
+    return;
+
+  [(GdkMacosCairoView *)nsview setOpaqueRegion:region];
 }
 
 static void
