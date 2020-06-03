@@ -165,6 +165,7 @@ transform_settings_to_keys (GBinding     *binding,
   GtkSortListModel *sort_model;
   GtkFilterListModel *filter_model;
   GtkFilter *filter;
+  GtkNoSelection *selection_model;
   GtkExpression *expression;
   char **keys;
   guint i;
@@ -207,7 +208,10 @@ transform_settings_to_keys (GBinding     *binding,
 
   g_object_unref (filter);
 
-  g_value_take_object (to_value, filter_model);
+  selection_model = gtk_no_selection_new (G_LIST_MODEL (filter_model));
+  g_object_unref (filter_model);
+
+  g_value_take_object (to_value, selection_model);
 
   return TRUE;
 }
