@@ -195,6 +195,7 @@
     <file>cursors.c</file>
     <file>dialog.c</file>
     <file>drawingarea.c</file>
+    <file>dropdown.c</file>
     <file>dnd.c</file>
     <file>editable_cells.c</file>
     <file>entry_completion.c</file>

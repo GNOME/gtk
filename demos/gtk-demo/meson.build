@@ -19,6 +19,7 @@ demos = files([
   'cursors.c',
   'dialog.c',
   'drawingarea.c',
+  'dropdown.c',
   'dnd.c',
   'editable_cells.c',
   'entry_completion.c',
