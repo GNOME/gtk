@@ -27,7 +27,7 @@
 
 @interface GdkMacosCairoView : GdkMacosBaseView
 {
-  cairo_surface_t *surface;
+  NSView *transparent;
 }
 
 -(void)setCairoSurface:(cairo_surface_t *)cairoSurface
