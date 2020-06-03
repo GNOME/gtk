@@ -73,10 +73,16 @@ void            gtk_column_view_set_model                       (GtkColumnView  
                                                                  GListModel             *model);
 
 GDK_AVAILABLE_IN_ALL
-gboolean        gtk_column_view_get_show_separators             (GtkColumnView          *self);
+gboolean        gtk_column_view_get_show_row_separators         (GtkColumnView          *self);
 GDK_AVAILABLE_IN_ALL
-void            gtk_column_view_set_show_separators             (GtkColumnView          *self,
-                                                                 gboolean                show_separators);
+void            gtk_column_view_set_show_row_separators         (GtkColumnView          *self,
+                                                                 gboolean                show_row_separators);
+
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_column_view_get_show_column_separators      (GtkColumnView          *self);
+GDK_AVAILABLE_IN_ALL
+void            gtk_column_view_set_show_column_separators      (GtkColumnView          *self,
+                                                                 gboolean                show_column_separators);
 
 GDK_AVAILABLE_IN_ALL
 GtkSorter *     gtk_column_view_get_sorter                      (GtkColumnView          *self);
