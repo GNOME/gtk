@@ -161,6 +161,7 @@
                       <object class="GtkColumnViewColumn" id="default_column">
                         <property name="title">Default</property>
                         <property name="resizable">1</property>
+                        <property name="expand">1</property>
                         <property name="header-menu">header_menu</property>
                         <property name="factory">
                           <object class="GtkBuilderListItemFactory">
@@ -190,6 +191,7 @@
                         <property name="title">Summary</property>
                         <property name="resizable">1</property>
                         <property name="visible">0</property>
+                        <property name="expand">1</property>
                         <property name="header-menu">header_menu</property>
                         <property name="factory">
                           <object class="GtkBuilderListItemFactory">
@@ -222,6 +224,7 @@
                         <property name="title">Description</property>
                         <property name="resizable">1</property>
                         <property name="visible">0</property>
+                        <property name="expand">1</property>
                         <property name="header-menu">header_menu</property>
                         <property name="factory">
                           <object class="GtkBuilderListItemFactory">
