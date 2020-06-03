@@ -300,7 +300,13 @@ do_listview_settings (GtkWidget *do_widget)
       GtkBuilderScope *scope;
       GtkBuilder *builder;
       GtkColumnViewColumn *name_column;
+      GtkColumnViewColumn *type_column;
+      GtkColumnViewColumn *default_column;
+      GtkColumnViewColumn *summary_column;
+      GtkColumnViewColumn *description_column;
       GtkSorter *sorter;
+      GActionGroup *actions;
+      GAction *action;
 
       g_type_ensure (SETTINGS_TYPE_KEY);
 
@@ -320,6 +326,32 @@ do_listview_settings (GtkWidget *do_widget)
 
       listview = GTK_WIDGET (gtk_builder_get_object (builder, "listview"));
       columnview = GTK_WIDGET (gtk_builder_get_object (builder, "columnview"));
+      type_column = GTK_COLUMN_VIEW_COLUMN (gtk_builder_get_object (builder, "type_column"));
+      default_column = GTK_COLUMN_VIEW_COLUMN (gtk_builder_get_object (builder, "default_column"));
+      summary_column = GTK_COLUMN_VIEW_COLUMN (gtk_builder_get_object (builder, "summary_column"));
+      description_column = GTK_COLUMN_VIEW_COLUMN (gtk_builder_get_object (builder, "description_column"));
+
+      actions = G_ACTION_GROUP (g_simple_action_group_new ());
+
+      action = G_ACTION (g_property_action_new ("show-type", type_column, "visible"));
+      g_action_map_add_action (G_ACTION_MAP (actions), action);
+      g_object_unref (action);
+
+      action = G_ACTION (g_property_action_new ("show-default", default_column, "visible"));
+      g_action_map_add_action (G_ACTION_MAP (actions), action);
+      g_object_unref (action);
+
+      action = G_ACTION (g_property_action_new ("show-summary", summary_column, "visible"));
+      g_action_map_add_action (G_ACTION_MAP (actions), action);
+      g_object_unref (action);
+
+      action = G_ACTION (g_property_action_new ("show-description", description_column, "visible"));
+      g_action_map_add_action (G_ACTION_MAP (actions), action);
+      g_object_unref (action);
+
+      gtk_widget_insert_action_group (columnview, "columnview", actions);
+      g_object_unref (actions);
+
       model = create_settings_model (NULL, NULL);
       treemodel = gtk_tree_list_model_new (FALSE,
                                            model,
