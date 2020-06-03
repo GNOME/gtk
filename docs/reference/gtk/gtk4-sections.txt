@@ -507,6 +507,8 @@ gtk_column_view_set_show_separators
 gtk_column_view_sort_by_column
 gtk_column_view_set_single_click_activate
 gtk_column_view_get_single_click_activate
+gtk_column_view_set_reorderable
+gtk_column_view_get_reorderable
 <SUBSECTION Standard>
 GTK_COLUMN_VIEW
 GTK_COLUMN_VIEW_CLASS

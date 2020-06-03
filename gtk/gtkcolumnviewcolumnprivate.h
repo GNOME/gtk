@@ -48,4 +48,10 @@ void                    gtk_column_view_column_get_allocation           (GtkColu
 
 void                    gtk_column_view_column_notify_sort              (GtkColumnViewColumn    *self);
 
+void                    gtk_column_view_column_set_header_position      (GtkColumnViewColumn    *self,
+                                                                         int                     offset);
+void                    gtk_column_view_column_get_header_allocation    (GtkColumnViewColumn    *self,
+                                                                         int                    *offset,
+                                                                         int                    *size);
+
 #endif  /* __GTK_COLUMN_VIEW_COLUMN_PRIVATE_H__ */
