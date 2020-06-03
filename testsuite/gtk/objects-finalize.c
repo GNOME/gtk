@@ -71,7 +71,8 @@ test_finalize_object (gconstpointer data)
     }
   else if (g_type_is_a (test_type, GTK_TYPE_FILTER_LIST_MODEL) ||
            g_type_is_a (test_type, GTK_TYPE_NO_SELECTION) ||
-           g_type_is_a (test_type, GTK_TYPE_SINGLE_SELECTION))
+           g_type_is_a (test_type, GTK_TYPE_SINGLE_SELECTION) ||
+           g_type_is_a (test_type, GTK_TYPE_MULTI_SELECTION))
     {
       GListStore *list_store = g_list_store_new (G_TYPE_OBJECT);
       object = g_object_new (test_type,

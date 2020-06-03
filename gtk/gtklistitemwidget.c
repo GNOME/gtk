@@ -29,6 +29,7 @@
 #include "gtkintl.h"
 #include "gtklistitemfactoryprivate.h"
 #include "gtklistitemprivate.h"
+#include "gtklistbaseprivate.h"
 #include "gtkmain.h"
 #include "gtkselectionmodel.h"
 #include "gtkwidget.h"
@@ -323,6 +324,8 @@ gtk_list_item_widget_click_gesture_pressed (GtkGestureClick   *gesture,
 {
   GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
   GtkWidget *widget = GTK_WIDGET (self);
+  GtkWidget * parent = gtk_widget_get_parent (widget);
+  gboolean rubberband;
 
   if (priv->list_item && !priv->list_item->selectable && !priv->list_item->activatable)
     {
@@ -330,7 +333,12 @@ gtk_list_item_widget_click_gesture_pressed (GtkGestureClick   *gesture,
       return;
     }
 
-  if (!priv->list_item || priv->list_item->selectable)
+  if (GTK_IS_LIST_BASE (parent))
+    rubberband = gtk_list_base_get_enable_rubberband (GTK_LIST_BASE (parent));
+  else
+    rubberband = FALSE;
+
+  if (!rubberband && (!priv->list_item || priv->list_item->selectable))
     {
       GdkModifierType state;
       GdkEvent *event;

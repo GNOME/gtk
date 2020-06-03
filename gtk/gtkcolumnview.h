@@ -93,11 +93,16 @@ GDK_AVAILABLE_IN_ALL
 gboolean        gtk_column_view_get_single_click_activate       (GtkColumnView          *self);
 
 GDK_AVAILABLE_IN_ALL
+
 void            gtk_column_view_set_reorderable                 (GtkColumnView          *self,
                                                                  gboolean                reorderable);
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_column_view_get_reorderable                 (GtkColumnView          *self);
 
+void            gtk_column_view_set_enable_rubberband           (GtkColumnView          *self,
+                                                                 gboolean                enable_rubberband);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_column_view_get_enable_rubberband           (GtkColumnView          *self);
 
 G_END_DECLS
 
