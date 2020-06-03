@@ -104,6 +104,7 @@
                     <child>
                       <object class="GtkColumnViewColumn">
                         <property name="title">Value</property>
+                        <property name="resizable">1</property>
                         <property name="header-menu">header_menu</property>
                         <property name="factory">
                           <object class="GtkBuilderListItemFactory">
@@ -131,6 +132,7 @@
                     <child>
                       <object class="GtkColumnViewColumn" id="type_column">
                         <property name="title">Type</property>
+                        <property name="resizable">1</property>
                         <property name="header-menu">header_menu</property>
                         <property name="factory">
                           <object class="GtkBuilderListItemFactory">
@@ -158,6 +160,7 @@
                     <child>
                       <object class="GtkColumnViewColumn" id="default_column">
                         <property name="title">Default</property>
+                        <property name="resizable">1</property>
                         <property name="header-menu">header_menu</property>
                         <property name="factory">
                           <object class="GtkBuilderListItemFactory">
@@ -185,6 +188,7 @@
                     <child>
                       <object class="GtkColumnViewColumn" id="summary_column">
                         <property name="title">Summary</property>
+                        <property name="resizable">1</property>
                         <property name="visible">0</property>
                         <property name="header-menu">header_menu</property>
                         <property name="factory">
@@ -216,6 +220,7 @@
                     <child>
                       <object class="GtkColumnViewColumn" id="description_column">
                         <property name="title">Description</property>
+                        <property name="resizable">1</property>
                         <property name="visible">0</property>
                         <property name="header-menu">header_menu</property>
                         <property name="factory">
