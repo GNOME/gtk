@@ -73,6 +73,7 @@ struct _GtkColumnView
   GtkAdjustment *hadjustment;
 
   gboolean reorderable;
+  gboolean show_column_separators;
 
   gboolean in_column_resize;
   gboolean in_column_reorder;
@@ -100,7 +101,8 @@ enum
   PROP_HADJUSTMENT,
   PROP_HSCROLL_POLICY,
   PROP_MODEL,
-  PROP_SHOW_SEPARATORS,
+  PROP_SHOW_ROW_SEPARATORS,
+  PROP_SHOW_COLUMN_SEPARATORS,
   PROP_SORTER,
   PROP_VADJUSTMENT,
   PROP_VSCROLL_POLICY,
@@ -378,8 +380,12 @@ gtk_column_view_get_property (GObject    *object,
       g_value_set_object (value, gtk_list_view_get_model (self->listview));
       break;
 
-    case PROP_SHOW_SEPARATORS:
+    case PROP_SHOW_ROW_SEPARATORS:
       g_value_set_boolean (value, gtk_list_view_get_show_separators (self->listview));
+      break;
+
+    case PROP_SHOW_COLUMN_SEPARATORS:
+      g_value_set_boolean (value, self->show_column_separators);
       break;
 
     case PROP_VADJUSTMENT:
@@ -453,8 +459,12 @@ gtk_column_view_set_property (GObject      *object,
       gtk_column_view_set_model (self, g_value_get_object (value));
       break;
 
-    case PROP_SHOW_SEPARATORS:
-      gtk_column_view_set_show_separators (self, g_value_get_boolean (value));
+    case PROP_SHOW_ROW_SEPARATORS:
+      gtk_column_view_set_show_row_separators (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_SHOW_COLUMN_SEPARATORS:
+      gtk_column_view_set_show_column_separators (self, g_value_get_boolean (value));
       break;
 
     case PROP_VADJUSTMENT:
@@ -546,14 +556,26 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnView:show-separators:
+   * GtkColumnView:show-row-separators:
    *
    * Show separators between rows
    */
-  properties[PROP_SHOW_SEPARATORS] =
-    g_param_spec_boolean ("show-separators",
-                          P_("Show separators"),
+  properties[PROP_SHOW_ROW_SEPARATORS] =
+    g_param_spec_boolean ("show-row-separators",
+                          P_("Show row separators"),
                           P_("Show separators between rows"),
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkColumnView:show-column-separators:
+   *
+   * Show separators between columns
+   */
+  properties[PROP_SHOW_COLUMN_SEPARATORS] =
+    g_param_spec_boolean ("show-column-separators",
+                          P_("Show column separators"),
+                          P_("Show separators between columns"),
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -712,7 +734,7 @@ gtk_column_view_in_header (GtkColumnView       *self,
   GtkWidget *header;
   graphene_rect_t rect;
 
-  header = gtk_column_view_column_get_header (column);
+header = gtk_column_view_column_get_header (column);
 
   if (!gtk_widget_compute_bounds (header, self->header, &rect))
     return FALSE;
@@ -1112,42 +1134,86 @@ gtk_column_view_get_columns (GtkColumnView *self)
 }
 
 /**
- * gtk_column_view_set_show_separators:
+ * gtk_column_view_set_show_row_separators:
  * @self: a #GtkColumnView
- * @show_separators: %TRUE to show separators
+ * @show_separators: %TRUE to show row separators
  *
  * Sets whether the list should show separators
  * between rows.
  */
 void
-gtk_column_view_set_show_separators (GtkColumnView *self,
-                                     gboolean     show_separators)
+gtk_column_view_set_show_row_separators (GtkColumnView *self,
+                                         gboolean     show_row_separators)
 {
   g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
 
-  if (gtk_list_view_get_show_separators (self->listview) == show_separators)
+  if (gtk_list_view_get_show_separators (self->listview) == show_row_separators)
     return;
 
-  gtk_list_view_set_show_separators (self->listview, show_separators);
+  gtk_list_view_set_show_separators (self->listview, show_row_separators);
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SHOW_SEPARATORS]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SHOW_ROW_SEPARATORS]);
 }
 
 /**
- * gtk_column_view_get_show_separators:
+ * gtk_column_view_get_show_row_separators:
  * @self: a #GtkColumnView
  *
- * Returns whether the list box should show separators
+ * Returns whether the list should show separators
  * between rows.
  *
- * Returns: %TRUE if the list box shows separators
+ * Returns: %TRUE if the list shows separators
  */
 gboolean
-gtk_column_view_get_show_separators (GtkColumnView *self)
+gtk_column_view_get_show_row_separators (GtkColumnView *self)
 {
   g_return_val_if_fail (GTK_IS_COLUMN_VIEW (self), FALSE);
 
   return gtk_list_view_get_show_separators (self->listview);
+}
+
+/**
+ * gtk_column_view_set_show_column_separators:
+ * @self: a #GtkColumnView
+ * @show_column_separators: %TRUE to show column separators
+ *
+ * Sets whether the list should show separators
+ * between columns.
+ */
+void
+gtk_column_view_set_show_column_separators (GtkColumnView *self,
+                                            gboolean     show_column_separators)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
+
+  if (self->show_column_separators == show_column_separators)
+    return;
+
+  self->show_column_separators = show_column_separators;
+
+  if (show_column_separators)
+    gtk_widget_add_css_class (GTK_WIDGET (self), "column-separators");
+  else
+    gtk_widget_remove_css_class (GTK_WIDGET (self), "column-separators");
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SHOW_COLUMN_SEPARATORS]);
+}
+
+/**
+ * gtk_column_view_get_show_column_separators:
+ * @self: a #GtkColumnView
+ *
+ * Returns whether the list should show separators
+ * between columns.
+ *
+ * Returns: %TRUE if the list shows column separators
+ */
+gboolean
+gtk_column_view_get_show_column_separators (GtkColumnView *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW (self), FALSE);
+
+  return self->show_column_separators;
 }
 
 /**
