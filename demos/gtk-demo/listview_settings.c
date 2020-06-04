@@ -9,6 +9,8 @@
 
 #include <gtk/gtk.h>
 
+#include <stdlib.h>
+
 /* Create an object that wraps GSettingsSchemaKey because that's a boxed type */
 typedef struct _SettingsKey SettingsKey;
 struct _SettingsKey
