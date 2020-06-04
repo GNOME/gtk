@@ -31,7 +31,6 @@
 #include <limits.h>
 #include <errno.h>
 #include <sys/mman.h>
-#include <fribidi.h>
 
 #include "gdk.h"
 #include "gdkwayland.h"
