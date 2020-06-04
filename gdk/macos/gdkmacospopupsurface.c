@@ -299,6 +299,7 @@ _gdk_macos_popup_surface_new (GdkMacosDisplay *display,
 
   [window setOpaque:NO];
   [window setBackgroundColor:[NSColor clearColor]];
+  [window setDecorated:NO];
 
 #if 0
   /* NOTE: We could set these to be popup level, but then
