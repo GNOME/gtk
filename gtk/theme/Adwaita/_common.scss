@@ -123,6 +123,23 @@ flowbox {
   }
 }
 
+gridview {
+  > rubberband { @extend rubberband; }
+
+  > child {
+    padding: 3px;
+    transition: $focus_transition;
+
+    @include focus-ring();
+
+    &:selected {
+      outline-color: $alt_focus_border_color;
+
+      @extend %selected_items;
+    }
+  }
+}
+
 coverflow cover {
   color: $text_color;
   background-color: $base_color;
@@ -1512,6 +1529,7 @@ pathbar > button {
 
 $_treeview_borders_color: if($variant=='light',mix($borders_color, $base_color,80%),mix($fg_color, $base_color, 20%));
 $_treeview_backdrop_borders_color: if($variant=='light',mix($backdrop_borders_color, $base_color, 80%),mix($backdrop_fg_color, $base_color, 20%));
+columnview.view,
 treeview.view {
   border-left-color:  $_treeview_borders_color; // this is actually the tree lines color,
   border-top-color: $_treeview_borders_color;                         // while this is the grid lines color, better then nothing
@@ -2977,6 +2995,7 @@ separator {
 /*********
  * Lists *
  *********/
+listview,
 list {
   color: $text_color;
   background-color: $base_color;
