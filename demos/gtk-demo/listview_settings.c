@@ -140,6 +140,43 @@ settings_key_new (GSettings          *settings,
   return result;
 }
 
+static void
+item_value_changed (GtkListItem *item,
+                    GtkEntry    *entry)
+{
+  SettingsKey *self;
+  const char *text;
+  const GVariantType *type;
+  GVariant *variant;
+  GError *error = NULL;
+  const char *name;
+
+  text = gtk_editable_get_text (GTK_EDITABLE (entry));
+
+  g_object_get (item, "item", &self, NULL);
+  g_object_unref (self);
+
+  type = g_settings_schema_key_get_value_type (self->key);
+  name = g_settings_schema_key_get_name (self->key);
+
+  variant = g_variant_parse (type, text, NULL, NULL, &error);
+  if (!variant)
+    {
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+      return;
+    }
+
+  if (!g_settings_schema_key_range_check (self->key, variant))
+    {
+      g_warning ("Not a valid value for %s", name);
+      return;
+    }
+
+  g_settings_set_value (self->settings, name, variant);
+  g_variant_unref (variant);
+}
+
 static int
 strvcmp (gconstpointer p1,
          gconstpointer p2)
@@ -318,6 +355,7 @@ do_listview_settings (GtkWidget *do_widget)
       gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), "search_enabled", (GCallback)search_enabled);
       gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), "search_changed", (GCallback)search_changed);
       gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), "stop_search", (GCallback)stop_search);
+      gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), "item_value_changed", (GCallback)item_value_changed);
 
       builder = gtk_builder_new ();
       gtk_builder_set_scope (builder, scope);
