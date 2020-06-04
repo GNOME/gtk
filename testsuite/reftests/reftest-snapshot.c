@@ -214,7 +214,7 @@ reftest_uninhibit_snapshot (void)
 
   if (inhibit_count == 0)
     {
-      g_idle_add (quit_when_idle, loop);
+      g_idle_add_full (G_PRIORITY_HIGH, quit_when_idle, loop, NULL);
       return TRUE;
     }
 
