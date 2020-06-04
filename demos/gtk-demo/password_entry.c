@@ -11,7 +11,6 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-#include "award.h"
 
 static GtkWidget *entry;
 static GtkWidget *entry2;
@@ -27,17 +26,12 @@ update_button (GObject    *object,
 
   gtk_widget_set_sensitive (button,
                             text[0] != '\0' && g_str_equal (text, text2));
-
-  if (g_str_equal (text, text2) &&
-      g_ascii_strcasecmp (text, "12345") == 0)
-    award ("password-best");
 }
 
 static void
 button_pressed (GtkButton *widget,
                 GtkWidget *window)
 {
-  award ("password-correct");
   gtk_window_destroy (GTK_WINDOW (window));
 }
 

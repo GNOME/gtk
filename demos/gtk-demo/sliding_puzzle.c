@@ -11,8 +11,6 @@
 #include "puzzlepiece.h"
 #include "paintable.h"
 
-/* Give out awards */
-#include "award.h"
 
 static GtkWidget *window = NULL;
 static GtkWidget *frame = NULL;
@@ -158,14 +156,6 @@ check_solved (GtkWidget *grid)
                                 width, height);
   picture = gtk_grid_get_child_at (GTK_GRID (grid), pos_x, pos_y);
   gtk_picture_set_paintable (GTK_PICTURE (picture), piece);
-
-  /* Hand out a bunch of awards
-   */
-  award ("puzzle-solve");
-  if ((gdk_paintable_get_flags (piece) & GDK_PAINTABLE_STATIC_CONTENTS) == 0)
-    award ("puzzle-solve-animated");
-  if (height * width > 20)
-    award ("puzzle-solve-large");
 
   return TRUE;
 }
@@ -416,9 +406,6 @@ widget_destroyed (gpointer data,
 {
   if (data)
     *(gpointer *) data = NULL;
-
-  if (!solved)
-    award ("puzzle-give-up");
 }
 
 

@@ -8,7 +8,6 @@
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
 
-#include "award.h"
 #include "demos.h"
 
 static GtkWidget *info_view;
@@ -213,7 +212,6 @@ activate_inspector (GSimpleAction *action,
                     gpointer       user_data)
 {
   gtk_window_set_interactive_debugging (TRUE);
-  award ("demo-inspector");
 }
 
 static void
@@ -1050,8 +1048,6 @@ activate (GApplication *app)
   g_signal_connect (selection, "notify::selected-item", G_CALLBACK (selection_cb), NULL);
   gtk_list_view_set_model (GTK_LIST_VIEW (listview),
                            G_LIST_MODEL (selection));
-
-  award ("demo-start");
 
   g_object_unref (builder);
 }
