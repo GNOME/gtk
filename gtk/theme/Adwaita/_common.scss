@@ -123,6 +123,23 @@ flowbox {
   }
 }
 
+gridview {
+  > rubberband { @extend rubberband; }
+
+  > child {
+    padding: 3px;
+    transition: $focus_transition;
+
+    @include focus-ring();
+
+    &:selected {
+      outline-color: $alt_focus_border_color;
+
+      @extend %selected_items;
+    }
+  }
+}
+
 coverflow cover {
   color: $text_color;
   background-color: $base_color;
