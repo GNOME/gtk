@@ -301,7 +301,7 @@ do_listview_weather (GtkWidget *do_widget)
 {
   if (window == NULL)
     {
-      GtkWidget *listview, *sw;;
+      GtkWidget *listview, *sw;
 
       window = gtk_window_new ();
       gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
