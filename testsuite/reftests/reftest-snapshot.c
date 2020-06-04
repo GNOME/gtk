@@ -231,7 +231,10 @@ draw_paintable (GdkPaintable *paintable,
   cairo_t *cr;
 
   if (!reftest_uninhibit_snapshot ())
-    return;
+    {
+      reftest_inhibit_snapshot();
+      return;
+    }
 
   snapshot = gtk_snapshot_new ();
   gdk_paintable_snapshot (paintable,
@@ -244,7 +247,10 @@ draw_paintable (GdkPaintable *paintable,
    * the invalidations were only side effects of resizes.
    */
   if (node == NULL)
-    return;
+    {
+      reftest_inhibit_snapshot();
+      return;
+    }
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                         gdk_paintable_get_intrinsic_width (paintable),
