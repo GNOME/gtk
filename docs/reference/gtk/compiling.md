@@ -37,7 +37,7 @@ this range will trigger compiler warnings.
 Here is how you would compile hello.c if you want to allow it
 to use symbols that were not deprecated in 4.2:
 ```
-$ cc `pkg-config --cflags gtk4` -DGDK_VERSION_MIN_REQIRED=GDK_VERSION_4_2 hello.c -o hello `pkg-config --libs gtk4`
+$ cc `pkg-config --cflags gtk4` -DGDK_VERSION_MIN_REQUIRED=GDK_VERSION_4_2 hello.c -o hello `pkg-config --libs gtk4`
 ```
 
 And here is how you would compile hello.c if you don't want
