@@ -1136,7 +1136,7 @@ gtk_column_view_get_columns (GtkColumnView *self)
 /**
  * gtk_column_view_set_show_row_separators:
  * @self: a #GtkColumnView
- * @show_separators: %TRUE to show row separators
+ * @show_row_separators: %TRUE to show row separators
  *
  * Sets whether the list should show separators
  * between rows.
