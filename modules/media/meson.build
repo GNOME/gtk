@@ -23,7 +23,7 @@ endif
 media_subdir = 'gtk-4.0/@0@/media'.format(gtk_binary_version)
 media_install_dir = join_paths(get_option('libdir'), media_subdir)
 
-extra_c_args = ['-DGTK_COMPILATION']
+extra_c_args = ['-DGTK_COMPILATION', '-D_GLIB_EXTERN=_GDK_EXTERN']
 extra_c_args += common_cflags
 
 if media_backends.contains('ffmpeg')

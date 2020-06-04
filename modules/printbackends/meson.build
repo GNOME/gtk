@@ -68,6 +68,7 @@ printbackends_args = [
   '-DGTK_COMPILATION',
   '-DGTK_DISABLE_DEPRECATION_WARNINGS',
   '-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED',
+  '-D_GLIB_EXTERN=_GDK_EXTERN',
 ] + common_cflags
 
 if print_backends.contains('cups')

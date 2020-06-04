@@ -97,7 +97,6 @@ G_DEFINE_TYPE_EXTENDED (GtkGstMediaFile, gtk_gst_media_file, GTK_TYPE_MEDIA_FILE
                         G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
                                                gtk_gst_media_file_paintable_init))
 
-G_MODULE_EXPORT
 void
 g_io_module_load (GIOModule *module)
 {
@@ -109,7 +108,6 @@ g_io_module_load (GIOModule *module)
                                   10);
 }
 
-G_MODULE_EXPORT
 G_GNUC_NORETURN
 void
 g_io_module_unload (GIOModule *module)
@@ -117,7 +115,6 @@ g_io_module_unload (GIOModule *module)
   g_assert_not_reached ();
 }
 
-G_MODULE_EXPORT
 char **
 g_io_module_query (void)
 {

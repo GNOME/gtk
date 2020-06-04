@@ -83,7 +83,6 @@ static void                 gtk_print_backend_lpr_print_stream    (GtkPrintBacke
 
 G_DEFINE_DYNAMIC_TYPE (GtkPrintBackendLpr, gtk_print_backend_lpr, GTK_TYPE_PRINT_BACKEND)
 
-G_MODULE_EXPORT
 void
 g_io_module_load (GIOModule *module)
 {
@@ -97,13 +96,11 @@ g_io_module_load (GIOModule *module)
                                   10);
 }
 
-G_MODULE_EXPORT
 void
 g_io_module_unload (GIOModule *module)
 {
 }
 
-G_MODULE_EXPORT
 char **
 g_io_module_query (void)
 {
