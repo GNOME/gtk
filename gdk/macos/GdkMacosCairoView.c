@@ -33,6 +33,14 @@
 
 @implementation GdkMacosCairoView
 
+-(void)dealloc
+{
+  g_clear_pointer (&self->opaque, g_ptr_array_unref);
+  self->transparent = NULL;
+
+  [super dealloc];
+}
+
 -(BOOL)isOpaque
 {
   if ([self window])
@@ -57,6 +65,9 @@
 {
   [[self->transparent subviews]
     makeObjectsPerformSelector:@selector(removeFromSuperview)];
+
+  if (self->opaque->len)
+    g_ptr_array_remove_range (self->opaque, 0, self->opaque->len);
 }
 
 -(void)setOpaqueRegion:(cairo_region_t *)region
@@ -64,13 +75,38 @@
   NSRect abs_bounds;
   guint n_rects;
 
-  [self removeOpaqueChildren];
-
   if (region == NULL)
     return;
 
   abs_bounds = [self convertRect:[self bounds] toView:nil];
   n_rects = cairo_region_num_rectangles (region);
+
+  /* The common case (at least for opaque windows and CSD) is that we will
+   * have either one or two opaque rectangles. If we detect that the same
+   * number of them are available as the previous, we can just resize the
+   * previous ones to avoid adding/removing views at a fast rate while
+   * resizing.
+   */
+  if (n_rects == self->opaque->len)
+    {
+      for (guint i = 0; i < n_rects; i++)
+        {
+          GdkMacosCairoSubview *child;
+          cairo_rectangle_int_t rect;
+
+          child = g_ptr_array_index (self->opaque, i);
+          cairo_region_get_rectangle (region, i, &rect);
+
+          [child setFrame:NSMakeRect (rect.x - abs_bounds.origin.x,
+                                      rect.y - abs_bounds.origin.y,
+                                      rect.width,
+                                      rect.height)];
+        }
+
+      return;
+    }
+
+  [self removeOpaqueChildren];
   for (guint i = 0; i < n_rects; i++)
     {
       GdkMacosCairoSubview *child;
@@ -87,6 +123,7 @@
       [child setOpaque:YES];
       [child setWantsLayer:YES];
       [self->transparent addSubview:child];
+      g_ptr_array_add (self->opaque, child);
     }
 }
 
@@ -94,6 +131,13 @@
 {
   if ((self = [super initWithFrame:frame]))
     {
+      /* An array to track all the opaque children placed into
+       * the child self->transparent. This allows us to reuse them
+       * when we receive a new opaque area instead of discarding
+       * them on each draw.
+       */
+      self->opaque = g_ptr_array_new ();
+
       /* Setup our primary subview which will render all content that is not
        * within an opaque region (such as shadows for CSD windows). For opaque
        * windows, this will all be obscurred by other views, so it doesn't
@@ -101,6 +145,7 @@
        */
       self->transparent = [[GdkMacosCairoSubview alloc] initWithFrame:frame];
       [self addSubview:self->transparent];
+
     }
 
   return self;
