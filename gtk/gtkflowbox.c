@@ -3270,8 +3270,8 @@ gtk_flow_box_remove (GtkContainer *container,
   if (child == priv->selected_child)
     priv->selected_child = NULL;
 
-  gtk_widget_unparent (GTK_WIDGET (child));
   g_sequence_remove (CHILD_PRIV (child)->iter);
+  gtk_widget_unparent (GTK_WIDGET (child));
 
   if (was_visible && gtk_widget_get_visible (GTK_WIDGET (box)))
     gtk_widget_queue_resize (GTK_WIDGET (box));
