@@ -98,11 +98,9 @@ gdk_macos_surface_set_opaque_region (GdkSurface     *surface,
 
   g_assert (GDK_IS_MACOS_SURFACE (surface));
 
-  if (!(nsview = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (surface))) ||
-      !GDK_IS_MACOS_CAIRO_VIEW (nsview))
-    return;
-
-  [(GdkMacosCairoView *)nsview setOpaqueRegion:region];
+  if ((nsview = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (surface))) &&
+      GDK_IS_MACOS_CAIRO_VIEW (nsview))
+    [(GdkMacosCairoView *)nsview setOpaqueRegion:region];
 }
 
 static void
