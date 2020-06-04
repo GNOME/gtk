@@ -90,8 +90,6 @@ show_popup (GdkMacosPopupSurface *self)
 {
   NSWindow *nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
 
-  [(GdkMacosWindow *)nswindow showAndMakeKey:YES];
-
   _gdk_macos_surface_show (GDK_MACOS_SURFACE (self));
 }
 
