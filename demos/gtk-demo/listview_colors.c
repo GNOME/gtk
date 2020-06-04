@@ -320,7 +320,7 @@ static void
 setup_listitem_cb (GtkListItemFactory *factory,
                    GtkListItem        *list_item)
 {
-  GtkWidget *box, *picture, *name_label, *rgb_label, *hsv_label;;
+  GtkWidget *box, *picture, *name_label, *rgb_label, *hsv_label;
   GtkExpression *color_expression, *expression;
   GtkExpression *params[1];
 
