@@ -114,6 +114,7 @@ struct _GtkWidgetPrivate
   GtkOverflow overflow;
   guint8 alpha;
   guint8 user_alpha;
+  guint8 css_alpha;     /* Alpha from last valid css */
 
 #ifdef G_ENABLE_CONSISTENCY_CHECKS
   /* Number of gtk_widget_push_verify_invariants () */
