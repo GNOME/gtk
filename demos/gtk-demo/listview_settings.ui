@@ -113,9 +113,10 @@
 <interface>
   <template class="GtkListItem">
     <property name="child">
-      <object class="GtkLabel">
+      <object class="GtkEntry">
+        <signal name="activate" handler="item_value_changed" object="GtkListItem" swapped="yes"/>
         <property name="xalign">0</property>
-        <binding name="label">
+        <binding name="text">
           <lookup name="value" type="SettingsKey">
             <lookup name="item">GtkListItem</lookup>
           </lookup>
