@@ -613,8 +613,6 @@ static PangoContext*	gtk_widget_peek_pango_context		(GtkWidget	  *widget);
 static void     	gtk_widget_update_pango_context		(GtkWidget	  *widget);
 static void             gtk_widget_propagate_state              (GtkWidget          *widget,
                                                                  const GtkStateData *data);
-static void             gtk_widget_update_alpha                 (GtkWidget        *widget);
-
 static gboolean		gtk_widget_real_mnemonic_activate	(GtkWidget	  *widget,
 								 gboolean	   group_cycling);
 static void             gtk_widget_real_measure                 (GtkWidget        *widget,
@@ -2315,7 +2313,6 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->child_visible = TRUE;
   priv->name = NULL;
   priv->user_alpha = 255;
-  priv->alpha = 255;
   priv->parent = NULL;
   priv->first_child = NULL;
   priv->last_child = NULL;
@@ -3395,8 +3392,6 @@ gtk_widget_realize (GtkWidget *widget)
 
       gdk_surface_set_support_multidevice (surface, TRUE);
     }
-
-  gtk_widget_update_alpha (widget);
 
   if (priv->context)
     gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
@@ -4759,8 +4754,6 @@ gtk_widget_real_css_changed (GtkWidget         *widget,
                              GtkCssStyleChange *change)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  gtk_widget_update_alpha (widget);
 
   if (change)
     {
@@ -10237,35 +10230,6 @@ gtk_widget_set_support_multidevice (GtkWidget *widget,
     }
 }
 
-/* There are multiple alpha related sources. First of all the user can specify alpha
- * in gtk_widget_set_opacity, secondly we can get it from the CSS opacity. These two
- * are multiplied together to form the total alpha. Secondly, the user can specify
- * an opacity group for a widget, which means we must essentially handle it as having alpha.
- */
-
-static void
-gtk_widget_update_alpha (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GtkCssStyle *style;
-  gdouble opacity;
-  guint8 alpha;
-
-  style = gtk_css_node_get_style (priv->cssnode);
-
-  opacity = _gtk_css_number_value_get (style->other->opacity, 100);
-  opacity = CLAMP (opacity, 0.0, 1.0);
-
-  alpha = round (priv->user_alpha * opacity);
-
-  if (alpha == priv->alpha)
-    return;
-
-  priv->alpha = alpha;
-
-  gtk_widget_queue_draw (widget);
-}
-
 /**
  * gtk_widget_set_opacity:
  * @widget: a #GtkWidget
@@ -10303,7 +10267,7 @@ gtk_widget_set_opacity (GtkWidget *widget,
 
   priv->user_alpha = alpha;
 
-  gtk_widget_update_alpha (widget);
+  gtk_widget_queue_draw (widget);
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_OPACITY]);
 }
@@ -11564,9 +11528,14 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkCssBoxes boxes;
   GtkCssValue *filter_value;
-  double opacity;
+  double css_opacity, opacity;
+  GtkCssStyle *style;
 
-  opacity = priv->alpha / 255.0;
+  style = gtk_css_node_get_style (priv->cssnode);
+
+  css_opacity = _gtk_css_number_value_get (style->other->opacity, 100);
+  opacity = CLAMP (css_opacity, 0.0, 1.0) * priv->user_alpha / 255.0;
+
   if (opacity <= 0.0)
     return NULL;
 
