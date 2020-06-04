@@ -2315,6 +2315,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->child_visible = TRUE;
   priv->name = NULL;
   priv->user_alpha = 255;
+  priv->css_alpha = 255;
   priv->alpha = 255;
   priv->parent = NULL;
   priv->first_child = NULL;
@@ -10251,12 +10252,24 @@ gtk_widget_update_alpha (GtkWidget *widget)
   gdouble opacity;
   guint8 alpha;
 
-  style = gtk_css_node_get_style (priv->cssnode);
+  /* Adding a widget invalidates sibling css, and then calls realize -> update_alpha.
+   * If that update_alpha call validated css, you'd get a entire invalidate + validate
+   * cycle each add, which we want to avoid, because you often add many widgets in each
+   * frame.
+   *
+   * To avoid this we always use the last valid alpha we saw. This is ok because if the
+   * css actually changes this will be called again via gtk_widget_real_css_changed
+   * (with a valid css node).
+   */
+  if (!priv->cssnode->invalid)
+    {
+      style = gtk_css_node_get_style (priv->cssnode);
 
-  opacity = _gtk_css_number_value_get (style->other->opacity, 100);
-  opacity = CLAMP (opacity, 0.0, 1.0);
+      opacity = _gtk_css_number_value_get (style->other->opacity, 100);
+      priv->css_alpha = (guint8) (CLAMP (opacity, 0.0, 1.0) * 255.0);
+    }
 
-  alpha = round (priv->user_alpha * opacity);
+  alpha = (guint)priv->user_alpha * (guint)priv->css_alpha / 255;
 
   if (alpha == priv->alpha)
     return;
