@@ -55,6 +55,31 @@
  * must be attached to a sort model for the data that the view is showing, and the
  * columns must have sorters attached to them by calling gtk_column_view_column_set_sorter().
  * The initial sort order can be set with gtk_column_view_sort_by_column().
+ *
+ * # CSS nodes
+ *
+ * |[<!-- language="plain" -->
+ * columnview[.column-separators]
+ * ├── header
+ * │   ├── <column header>
+ * ┊   ┊
+ * │   ╰── <column header>
+ * │
+ * ├── listview
+ * │
+ * ┊
+ * ╰── [rubberband]
+
+ * ]|
+ *
+ * GtkColumnView uses a single CSS node named columnview. It may carry the
+ * .column-separators style class, when #GtkColumnView:show-column-separators
+ * property is set. Header widets appear below a node with name header.
+ * The rows are contained in a GtkListView widget, so there is a listview
+ * node with the same structure as for a standalone GtkListView widget. If
+ * #GtkColumnView:show-row-separators is set, it will be passed on to the
+ * list view, causing its CSS node to carry the .separators style class.
+ * For rubberband selection, a node with name rubberband is used.
  */
 
 struct _GtkColumnView
@@ -653,7 +678,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                               G_TYPE_FROM_CLASS (gobject_class),
                               g_cclosure_marshal_VOID__UINTv);
 
-  gtk_widget_class_set_css_name (widget_class, I_("treeview"));
+  gtk_widget_class_set_css_name (widget_class, I_("columnview"));
 }
 
 static void update_column_resize  (GtkColumnView *self,
@@ -1136,7 +1161,7 @@ gtk_column_view_get_columns (GtkColumnView *self)
 /**
  * gtk_column_view_set_show_row_separators:
  * @self: a #GtkColumnView
- * @show_separators: %TRUE to show row separators
+ * @show_row_separators: %TRUE to show row separators
  *
  * Sets whether the list should show separators
  * between rows.
