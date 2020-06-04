@@ -8,7 +8,6 @@
 #include <gtk/gtk.h>
 #include <stdlib.h>
 #include <string.h>
-#include "award.h"
 
 static GdkPixbuf *avatar_pixbuf_other;
 static GtkWidget *window = NULL;
@@ -235,7 +234,6 @@ reshare_clicked (GtkMessageRow *row,
 {
   GtkMessageRowPrivate *priv = row->priv;
 
-  award ("listbox-reshare");
   priv->message->n_reshares++;
   gtk_message_row_update (row);
 }
@@ -262,8 +260,6 @@ gtk_message_row_state_flags_changed (GtkWidget    *widget,
 
   visible = flags & (GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_SELECTED) ? TRUE : FALSE;
   gtk_widget_set_visible (priv->extra_buttons_box, visible);
-  if (visible && gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (widget)) % 100 == 99)
-    award ("listbox-100th-row");
 
   GTK_WIDGET_CLASS (gtk_message_row_parent_class)->state_flags_changed (widget, previous_state_flags);
 }
