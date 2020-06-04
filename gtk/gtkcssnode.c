@@ -949,24 +949,15 @@ gtk_css_node_needs_new_style (GtkCssNode *cssnode)
 }
 
 static void
-gtk_css_node_ensure_style (GtkCssNode                   *cssnode,
-                           const GtkCountingBloomFilter *filter,
-                           gint64                        current_time)
+gtk_css_node_do_ensure_style (GtkCssNode                   *cssnode,
+                              const GtkCountingBloomFilter *filter,
+                              gint64                        current_time)
 {
   gboolean style_changed;
-
-  if (!gtk_css_node_needs_new_style (cssnode))
-    return;
-
-  if (cssnode->parent)
-    gtk_css_node_ensure_style (cssnode->parent, filter, current_time);
 
   if (cssnode->style_is_invalid)
     {
       GtkCssStyle *new_style;
-
-      if (cssnode->previous_sibling)
-        gtk_css_node_ensure_style (cssnode->previous_sibling, filter, current_time);
 
       g_clear_pointer (&cssnode->cache, gtk_css_node_style_cache_unref);
 
@@ -988,6 +979,36 @@ gtk_css_node_ensure_style (GtkCssNode                   *cssnode,
 
   cssnode->pending_changes = 0;
   cssnode->style_is_invalid = FALSE;
+}
+
+static void
+gtk_css_node_ensure_style (GtkCssNode                   *cssnode,
+                           const GtkCountingBloomFilter *filter,
+                           gint64                        current_time)
+{
+  GtkCssNode *sibling;
+
+  if (!gtk_css_node_needs_new_style (cssnode))
+    return;
+
+  if (cssnode->parent)
+    gtk_css_node_ensure_style (cssnode->parent, filter, current_time);
+
+  /* Ensure all siblings before this have a valid style, in order
+   * starting at the first that needs it. */
+  sibling = cssnode;
+  while (sibling->style_is_invalid &&
+         sibling->previous_sibling != NULL &&
+         gtk_css_node_needs_new_style (sibling->previous_sibling))
+    sibling = sibling->previous_sibling;
+
+  while (sibling != cssnode)
+    {
+      gtk_css_node_do_ensure_style (sibling, filter, current_time);
+      sibling = sibling->next_sibling;
+    }
+
+  gtk_css_node_do_ensure_style (cssnode, filter, current_time);
 }
 
 GtkCssStyle *
