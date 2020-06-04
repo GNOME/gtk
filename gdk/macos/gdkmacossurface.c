@@ -700,7 +700,10 @@ _gdk_macos_surface_show (GdkMacosSurface *self)
   if (!was_mapped)
     {
       if (gdk_surface_get_mapped (GDK_SURFACE (self)))
-        gdk_surface_invalidate_rect (GDK_SURFACE (self), NULL);
+        {
+          _gdk_macos_surface_update_position (self);
+          gdk_surface_invalidate_rect (GDK_SURFACE (self), NULL);
+        }
     }
 
   [[self->window contentView] setNeedsDisplay:YES];
