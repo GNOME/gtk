@@ -992,7 +992,7 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  list_base_class->list_item_name = "flowboxchild";
+  list_base_class->list_item_name = "child";
   list_base_class->list_item_size = sizeof (Cell);
   list_base_class->list_item_augment_size = sizeof (CellAugment);
   list_base_class->list_item_augment_func = cell_augment;
@@ -1123,7 +1123,7 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
                                    "u",
                                    gtk_grid_view_activate_item);
 
-  gtk_widget_class_set_css_name (widget_class, I_("flowbox"));
+  gtk_widget_class_set_css_name (widget_class, I_("gridview"));
 }
 
 static void

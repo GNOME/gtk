@@ -653,7 +653,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                               G_TYPE_FROM_CLASS (gobject_class),
                               g_cclosure_marshal_VOID__UINTv);
 
-  gtk_widget_class_set_css_name (widget_class, I_("treeview"));
+  gtk_widget_class_set_css_name (widget_class, I_("columnview"));
 }
 
 static void update_column_resize  (GtkColumnView *self,

@@ -832,7 +832,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                                    "u",
                                    gtk_list_view_activate_item);
 
-  gtk_widget_class_set_css_name (widget_class, I_("list"));
+  gtk_widget_class_set_css_name (widget_class, I_("listview"));
 }
 
 static void
