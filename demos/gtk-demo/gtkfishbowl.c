@@ -25,7 +25,7 @@ typedef struct _GtkFishbowlChild         GtkFishbowlChild;
 struct _GtkFishbowlPrivate
 {
   GtkFishCreationFunc creation_func;
-  GList *children;
+  GHashTable *children;
   guint count;
 
   gint64 last_frame_time;
@@ -67,6 +67,8 @@ gtk_fishbowl_init (GtkFishbowl *fishbowl)
   GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
 
   priv->update_delay = G_USEC_PER_SEC;
+  priv->children = g_hash_table_new_full (NULL, NULL,
+                                          NULL, (GDestroyNotify) g_free);
 }
 
 /**
@@ -93,16 +95,18 @@ gtk_fishbowl_measure (GtkWidget      *widget,
 {
   GtkFishbowl *fishbowl = GTK_FISHBOWL (widget);
   GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
+  GHashTableIter iter;
+  gpointer key, value;
   GtkFishbowlChild *child;
-  GList *children;
   gint child_min, child_nat;
 
   *minimum = 0;
   *natural = 0;
 
-  for (children = priv->children; children; children = children->next)
+  g_hash_table_iter_init (&iter, priv->children);
+  while (g_hash_table_iter_next (&iter, &key, &value))
     {
-      child = children->data;
+      child = value;
 
       if (!gtk_widget_get_visible (child->widget))
         continue;
@@ -136,11 +140,13 @@ gtk_fishbowl_size_allocate (GtkWidget *widget,
   GtkFishbowlChild *child;
   GtkAllocation child_allocation;
   GtkRequisition child_requisition;
-  GList *children;
+  GHashTableIter iter;
+  gpointer key, value;
 
-  for (children = priv->children; children; children = children->next)
+  g_hash_table_iter_init (&iter, priv->children);
+  while (g_hash_table_iter_next (&iter, &key, &value))
     {
-      child = children->data;
+      child = value;
 
       if (!gtk_widget_get_visible (child->widget))
         continue;
@@ -181,7 +187,7 @@ gtk_fishbowl_add (GtkFishbowl *fishbowl,
 
   gtk_widget_set_parent (widget, GTK_WIDGET (fishbowl));
 
-  priv->children = g_list_prepend (priv->children, child_info);
+  g_hash_table_insert (priv->children, widget, child_info);
   priv->count++;
   g_object_notify_by_pspec (G_OBJECT (fishbowl), props[PROP_COUNT]);
 }
@@ -191,32 +197,30 @@ gtk_fishbowl_remove (GtkFishbowl *fishbowl,
                      GtkWidget   *widget)
 {
   GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
-  GtkFishbowlChild *child;
   GtkWidget *widget_bowl = GTK_WIDGET (fishbowl);
-  GList *children;
 
-  for (children = priv->children; children; children = children->next)
+  if (g_hash_table_remove (priv->children, widget))
     {
-      child = children->data;
+      gboolean was_visible = gtk_widget_get_visible (widget);
 
-      if (child->widget == widget)
-        {
-          gboolean was_visible = gtk_widget_get_visible (widget);
+      gtk_widget_unparent (widget);
 
-          gtk_widget_unparent (widget);
+      if (was_visible && gtk_widget_get_visible (widget_bowl))
+        gtk_widget_queue_resize (widget_bowl);
 
-          priv->children = g_list_remove_link (priv->children, children);
-          g_list_free (children);
-          g_free (child);
-
-          if (was_visible && gtk_widget_get_visible (widget_bowl))
-            gtk_widget_queue_resize (widget_bowl);
-
-          priv->count--;
-          g_object_notify_by_pspec (G_OBJECT (fishbowl), props[PROP_COUNT]);
-          break;
-        }
+      priv->count--;
+      g_object_notify_by_pspec (G_OBJECT (fishbowl), props[PROP_COUNT]);
     }
+}
+
+static void
+gtk_fishbowl_finalize (GObject *object)
+{
+  GtkFishbowl *fishbowl = GTK_FISHBOWL (object);
+  GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
+
+  g_hash_table_destroy (priv->children);
+  priv->children = NULL;
 }
 
 static void
@@ -304,6 +308,7 @@ gtk_fishbowl_class_init (GtkFishbowlClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->finalize = gtk_fishbowl_finalize;
   object_class->dispose = gtk_fishbowl_dispose;
   object_class->set_property = gtk_fishbowl_set_property;
   object_class->get_property = gtk_fishbowl_get_property;
@@ -535,8 +540,9 @@ gtk_fishbowl_tick (GtkWidget     *widget,
   GtkFishbowl *fishbowl = GTK_FISHBOWL (widget);
   GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
   GtkFishbowlChild *child;
-  GList *l;
   gint64 frame_time, elapsed;
+  GHashTableIter iter;
+  gpointer key, value;
   gboolean do_update;
 
   frame_time = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (widget));
@@ -548,9 +554,10 @@ gtk_fishbowl_tick (GtkWidget     *widget,
   if (elapsed == frame_time)
     return G_SOURCE_CONTINUE;
 
-  for (l = priv->children; l; l = l->next)
+  g_hash_table_iter_init (&iter, priv->children);
+  while (g_hash_table_iter_next (&iter, &key, &value))
     {
-      child = l->data;
+      child = value;
 
       child->x += child->dx * ((double) elapsed / G_USEC_PER_SEC);
       child->y += child->dy * ((double) elapsed / G_USEC_PER_SEC);
