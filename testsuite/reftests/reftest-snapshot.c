@@ -206,19 +206,11 @@ reftest_inhibit_snapshot (void)
   inhibit_count++;
 }
 
-G_MODULE_EXPORT gboolean
+G_MODULE_EXPORT void
 reftest_uninhibit_snapshot (void)
 {
   g_assert (inhibit_count > 0);
   inhibit_count--;
-
-  if (inhibit_count == 0)
-    {
-      g_idle_add (quit_when_idle, loop);
-      return TRUE;
-    }
-
-  return FALSE;
 }
 
 static void
@@ -230,11 +222,8 @@ draw_paintable (GdkPaintable *paintable,
   cairo_surface_t *surface;
   cairo_t *cr;
 
-  if (!reftest_uninhibit_snapshot ())
-    {
-      reftest_inhibit_snapshot();
-      return;
-    }
+  if (inhibit_count > 0)
+    return;
 
   snapshot = gtk_snapshot_new ();
   gdk_paintable_snapshot (paintable,
@@ -247,10 +236,7 @@ draw_paintable (GdkPaintable *paintable,
    * the invalidations were only side effects of resizes.
    */
   if (node == NULL)
-    {
-      reftest_inhibit_snapshot();
-      return;
-    }
+    return;
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                         gdk_paintable_get_intrinsic_width (paintable),
@@ -264,6 +250,8 @@ draw_paintable (GdkPaintable *paintable,
   g_signal_handlers_disconnect_by_func (paintable, draw_paintable, out_surface);
 
   *(cairo_surface_t **) out_surface = surface;
+
+  g_idle_add (quit_when_idle, loop);
 }
 
 static cairo_surface_t *
@@ -281,7 +269,6 @@ snapshot_widget (GtkWidget *widget)
    * We also use an inhibit mechanism, to give module functions a chance
    * to delay the snapshot.
    */
-  reftest_inhibit_snapshot ();
   paintable = gtk_widget_paintable_new (widget);
   g_signal_connect (paintable, "invalidate-contents", G_CALLBACK (draw_paintable), &surface);
   g_main_loop_run (loop);
