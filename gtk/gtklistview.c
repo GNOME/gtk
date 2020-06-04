@@ -46,6 +46,24 @@
  * @see_also: #GListModel
  *
  * GtkListView is a widget to present a view into a large dynamic list of items.
+ *
+ * # CSS nodes
+ *
+ * |[<!-- language="plain" -->
+ * listview[.separators]
+ * ├── row
+ * │
+ * ├── row
+ * │
+ * ┊
+ * ╰── [rubberband]
+
+ * ]|
+ *
+ * GtkListView uses a single CSS node named listview. It may carry the
+ * .separators style class, when #GtkListView:show-separators property
+ * is set. Each child widget uses a single CSS node named row. For
+ * rubberband selection, a node with name rubberband is used.
  */
 
 typedef struct _ListRow ListRow;

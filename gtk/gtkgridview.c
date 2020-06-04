@@ -48,6 +48,22 @@
  * @see_also: #GListModel
  *
  * GtkGridView is a widget to present a view into a large dynamic grid of items.
+ *
+ * # CSS nodes
+ *
+ * |[<!-- language="plain" -->
+ * gridview
+ * ├── child
+ * │
+ * ├── child
+ * │
+ * ┊
+ * ╰── [rubberband]
+ * ]|
+ *
+ * GtkGridView uses a single CSS node with name gridview. Each child
+ * uses a single CSS node with name child. For rubberband selection,
+ * a subnode with name rubberband is used.
  */
 
 typedef struct _Cell Cell;
