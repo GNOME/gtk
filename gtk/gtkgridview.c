@@ -45,9 +45,21 @@
  * SECTION:gtkgridview
  * @title: GtkGridView
  * @short_description: A widget for displaying lists in a grid
- * @see_also: #GListModel
+ * @see_also: #GListModel, #GtkListView, #GtkColumnView
  *
  * GtkGridView is a widget to present a view into a large dynamic grid of items.
+ *
+ * GtkGridView uses its factory to generate one child widget for each visible item
+ * and shows them in a grid. The orientation of the grid view determines if the
+ * grid reflows vertically or horizontally.
+ *
+ * GtkGridView allows the user to select items according to the selection
+ * characteristics of the model. If the provided model is not a #GtkSelectionModel,
+ * GtkGridView will wrap it in a #GtkSingleSelection. For models that allow
+ * multiple selected items, it is possible to turn on _rubberband selection_,
+ * using #GtkGridView:enable-rubberband.
+ *
+ * To learn more about the list widget framework, see the [overview](#ListWidget).
  *
  * # CSS nodes
  *

@@ -48,13 +48,33 @@
  * @see_also: #GtkColumnViewColumn, #GtkTreeView
  *
  * GtkColumnView is a widget to present a view into a large dynamic list of items
- * using multiple columns.
+ * using multiple columns with headers.
  *
- * It supports sorting that can be customized by the user by clicking on column
- * view headers. To set this up, the #GtkSorter returned by gtk_column_view_get_sorter()
- * must be attached to a sort model for the data that the view is showing, and the
- * columns must have sorters attached to them by calling gtk_column_view_column_set_sorter().
- * The initial sort order can be set with gtk_column_view_sort_by_column().
+ * GtkColumnView uses the factories of its columns to generate a cell widget for
+ * each column, for each visible item and displays them together as the row for
+ * this item. The #GtkColumnView:show-row-separators and
+ * #GtkColumnView:show-column-separators properties offer a simple way to display
+ * separators between the rows or columns.
+ *
+ * GtkColumnView allows the user to select items according to the selection
+ * characteristics of the model. If the provided model is not a #GtkSelectionModel,
+ * GtkColumnView will wrap it in a #GtkSingleSelection. For models that allow
+ * multiple selected items, it is possible to turn on _rubberband selection_,
+ * using #GtkColumnView:enable-rubberband.
+ *
+ * The column view supports sorting that can be customized by the user by
+ * clicking on column headers. To set this up, the #GtkSorter returned by
+ * gtk_column_view_get_sorter() must be attached to a sort model for the data
+ * that the view is showing, and the columns must have sorters attached to them
+ * by calling gtk_column_view_column_set_sorter(). The initial sort order can be
+ * set with gtk_column_view_sort_by_column().
+ *
+ * The column view also supports interactive resizing and reordering of
+ * columns, via Drag-and-Drop of the column headers. This can be enabled or
+ * disabled with the #GtkColumnView:reorderable and #GtkColumnViewColumn:resizable
+ * properties.
+ *
+ * To learn more about the list widget framework, see the [overview](#ListWidget).
  *
  * # CSS nodes
  *

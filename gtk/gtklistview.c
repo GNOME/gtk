@@ -43,9 +43,24 @@
  * SECTION:gtklistview
  * @title: GtkListView
  * @short_description: A widget for displaying lists
- * @see_also: #GListModel
+ * @see_also: #GListModel, #GtkColumnView, #GtkGridView
  *
  * GtkListView is a widget to present a view into a large dynamic list of items.
+ *
+ * GtkListView uses its factory to generate one row widget for each visible item
+ * and shows them in a linear display, either vertically or horizontally. The
+ * #GtkListView:show-separators property offers a simple way to display separators
+ * between the rows.
+ *
+ * GtkListView allows the user to select items according to the selection
+ * characteristics of the model. If the provided model is not a #GtkSelectionModel,
+ * GtkListView will wrap it in a #GtkSingleSelection. For models that allow
+ * multiple selected items, it is possible to turn on _rubberband selection_,
+ * using #GtkListView:enable-rubberband.
+ *
+ * If you need multiple columns with headers, see #GtkColumnView.
+ *
+ * To learn more about the list widget framework, see the [overview](#ListWidget).
  *
  * # CSS nodes
  *
