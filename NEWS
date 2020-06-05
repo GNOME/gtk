@@ -1,3 +1,88 @@
+Overview of Changes in GTK 3.98.5
+=================================
+
+* Introduce new list widgets and supporting infrastructure.
+  The main APIs are:
+ - GtkListView
+ - GtkGridView
+ - GtkColumnView and GtkColumnViewColumn
+ - GtkDropDown
+ - GtkListItemFactory and implementations
+ - GtkExpression
+ - GtkFilter and subclasses, and GtkFilterListModel
+ - GtkSorter and subclasses, and GtkSortListModel
+ - GtkSelectionModel and subclasses
+ - GtkTreeListModel, GtkTreeExpander and GtkTreeListRowSorter
+
+* GtkFileChooser:
+ - Add a tracker3-based search engine implementation
+ - Rate-limite updates from the trash monitor
+
+* GtkWindow:
+ - Redo the css node setup. There is now a single 'window' node
+ - Fix rounded corners on tiled windows
+
+* GtkApplication:
+ - Drop app menu support. Menubar support is still there
+
+* GtkFixed:
+ - Change coordinate APIs to take doubles
+
+* GtkOverlay:
+ - Make GtkOverlayLayout public
+
+* GtkTooltips:
+ - Fix line wrapping of tooltips
+
+* Shortcuts:
+ - Fix mnemonic cycling
+ - Fix using '0' as a mnemonic
+
+* Menus:
+ - Differentiate keypad keys in accelerators
+
+* GtkIMContext:
+ - Add gtk_im_context_filter_key to allow event reinjection
+
+* Themes:
+ - Adwaita: Limit the scope of backdrop
+
+* GDK:
+ - Drop unused enum and struct definitions from headers
+ - Make keymap translation API public again. Still needed
+ - Frameclock: Always use compositor refresh rate info
+ - Frameclock: Use quadratic correction for frame time jitter
+ - Frameclock: Ensure monotonicity
+ - Frameclock: Track resason for paint
+ - X11: Improve sync when the Nvidia driver is used
+
+* GSK:
+ - GL renderer: Fix blurred outsed shadows
+ - GL renderer: handle nested transform nodes properly
+ - GL renderer: Optimize clip handling
+
+* gtk-demo:
+ - Improve the Drag-and-Drop demo with proper drag icons
+ - Don't show the main window if --run is given
+ - Add demos for list widgets and GtkDropDrown
+
+* Documentation:
+ - Convert freestanding sections to markdown
+ - Drop the glossary
+ - Expand and improve the migration guide
+
+* Build:
+ - We require pandoc now, for building the documentation
+ - Require Pango 1.45
+
+* Translation updates:
+ Polish
+ Romanian
+ Slovenian
+ Turkish
+ Ukrainian
+
+
 Overview of Changes in GTK 3.98.4
 =================================
 
