@@ -109,11 +109,22 @@ gtk_multi_selection_select_range (GtkSelectionModel *model,
                                   gboolean           exclusive)
 {
   GtkMultiSelection *self = GTK_MULTI_SELECTION (model);
+  guint min = G_MAXUINT;
+  guint max = 0;
 
   if (exclusive)
-    gtk_set_remove_all (self->selected);
+    {
+      min = gtk_set_get_min (self->selected);
+      max = gtk_set_get_max (self->selected);
+      gtk_set_remove_all (self->selected);
+    }
+
   gtk_set_add_range (self->selected, position, n_items);
-  gtk_selection_model_selection_changed (model, position, n_items);
+
+  min = MIN (position, min);
+  max = MAX (max, position + n_items - 1);
+
+  gtk_selection_model_selection_changed (model, min, max - min + 1);
 
   return TRUE;
 }
