@@ -5,6 +5,11 @@
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header">
         <property name="show-title-buttons">1</property>
+        <child type="start">
+          <object class="GtkToggleButton" id="toggle">
+            <property name="label">Cycle</property>
+          </object>
+        </child>
         <child type="end">
           <object class="GtkLabel" id="fps"/>
         </child>
