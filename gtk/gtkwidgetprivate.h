@@ -112,7 +112,6 @@ struct _GtkWidgetPrivate
   guint   valign              : 4;
 
   GtkOverflow overflow;
-  guint8 alpha;
   guint8 user_alpha;
 
 #ifdef G_ENABLE_CONSISTENCY_CHECKS
