@@ -335,6 +335,38 @@ next_range:
   return TRUE;
 }
 
+gboolean
+gtk_set_is_empty (GtkSet *set)
+{
+  return set->ranges->len == 0;
+}
+
+guint
+gtk_set_get_min (GtkSet *set)
+{
+  Range *r;
+
+  if (gtk_set_is_empty (set))
+    return 0;
+
+  r = &g_array_index (set->ranges, Range, 0);
+
+  return r->first;
+}
+
+guint
+gtk_set_get_max (GtkSet *set)
+{
+  Range *r;
+
+  if (gtk_set_is_empty (set))
+    return 0;
+
+  r = &g_array_index (set->ranges, Range, set->ranges->len - 1);
+
+  return r->first + r->n_items - 1;
+}
+
 #if 0
 void
 gtk_set_dump (GtkSet *set)

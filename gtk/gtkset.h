@@ -67,4 +67,8 @@ void      gtk_set_iter_init    (GtkSetIter *iter,
 gboolean  gtk_set_iter_next    (GtkSetIter *iter,
                                 guint      *item);
 
+gboolean  gtk_set_is_empty     (GtkSet *set);
+guint     gtk_set_get_min      (GtkSet *set);
+guint     gtk_set_get_max      (GtkSet *set);
+
 #endif  /* __GTK_SET_H__ */
