@@ -56,11 +56,24 @@ gtk_column_view_layout_measure_along (GtkColumnViewLayout *self,
       int child_nat = 0;
       int child_min_baseline = -1;
       int child_nat_baseline = -1;
+      GtkColumnViewColumn *column;
+      int col_x, col_width;
 
       if (!gtk_widget_should_layout (child))
         continue;
 
-      gtk_widget_measure (child, orientation, for_size,
+      if (GTK_IS_COLUMN_VIEW_CELL (child))
+        {
+          column = gtk_column_view_cell_get_column (GTK_COLUMN_VIEW_CELL (child));
+          gtk_column_view_column_get_allocation (column, &col_x, &col_width);
+        }
+      else
+        {
+          column = gtk_column_view_title_get_column (GTK_COLUMN_VIEW_TITLE (child));
+          gtk_column_view_column_get_header_allocation (column, &col_x, &col_width);
+        }
+
+      gtk_widget_measure (child, orientation, col_width,
                           &child_min, &child_nat,
                           &child_min_baseline, &child_nat_baseline);
 
