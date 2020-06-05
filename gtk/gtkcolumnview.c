@@ -1363,6 +1363,7 @@ gtk_column_view_insert_column (GtkColumnView       *self,
   g_return_if_fail (gtk_column_view_column_get_column_view (column) == NULL ||
                     gtk_column_view_column_get_column_view (column) == self);
   g_return_if_fail (position <= g_list_model_get_n_items (G_LIST_MODEL (self->columns)));
+  int old_position = -1;
 
   g_object_ref (column);
 
@@ -1377,15 +1378,19 @@ gtk_column_view_insert_column (GtkColumnView       *self,
           g_object_unref (item);
           if (item == column)
             {
+              old_position = i;
               g_list_store_remove (self->columns, i);
               break;
             }
         }
     }
-  else
-    gtk_column_view_column_set_column_view (column, self);
 
   g_list_store_insert (self->columns, position, column);
+
+  gtk_column_view_column_set_column_view (column, self);
+
+  if (old_position != -1 && position != old_position)
+    gtk_column_view_column_set_position (column, position);
 
   gtk_column_view_column_queue_resize (column);
 
