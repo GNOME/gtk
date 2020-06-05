@@ -76,7 +76,7 @@ gtk_spin_button_accessible_initialize (AtkObject *obj,
 {
   ATK_OBJECT_CLASS (gtk_spin_button_accessible_parent_class)->initialize (obj, data);
 
-  g_signal_connect (data, "notify::adjustment", G_CALLBACK (on_adjustment_changed), NULL);
+  g_signal_connect (data, "notify::adjustment", G_CALLBACK (on_adjustment_changed), obj);
 }
 
 static void
