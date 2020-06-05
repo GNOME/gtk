@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include "gtkpasswordentry.h"
+#include "gtkpasswordentryprivate.h"
 
 #include "gtkaccessible.h"
 #include "gtktextprivate.h"
@@ -35,7 +35,7 @@
 #include "gtkstylecontext.h"
 #include "gtkeventcontrollerkey.h"
 
-#include "a11y/gtkpasswordentryaccessible.h"
+#include "a11y/gtkpasswordentryaccessibleprivate.h"
 
 /**
  * SECTION:gtkpasswordentry
@@ -116,6 +116,11 @@ gtk_password_entry_toggle_peek (GtkPasswordEntry *entry)
 
   visibility = gtk_text_get_visibility (GTK_TEXT (priv->entry));
   gtk_text_set_visibility (GTK_TEXT (priv->entry), !visibility);
+
+  /* Update the accessible object to reflect the change of visibility */
+  GtkAccessible *accessible = GTK_ACCESSIBLE (_gtk_widget_peek_accessible (GTK_WIDGET (entry)));
+  if (accessible != NULL)
+    gtk_password_entry_accessible_update_visibility (GTK_PASSWORD_ENTRY_ACCESSIBLE (accessible));
 }
 
 static void
@@ -428,6 +433,16 @@ static void
 gtk_password_entry_editable_init (GtkEditableInterface *iface)
 {
   iface->get_delegate = gtk_password_entry_get_delegate;
+}
+
+GtkText *
+gtk_password_entry_get_text_widget (GtkPasswordEntry *entry)
+{
+  GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+
+  g_return_val_if_fail (GTK_IS_PASSWORD_ENTRY (entry), NULL);
+
+  return GTK_TEXT (priv->entry);
 }
 
 /**
