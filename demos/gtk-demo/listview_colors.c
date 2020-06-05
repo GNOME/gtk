@@ -11,6 +11,8 @@
 
 #include <gtk/gtk.h>
 
+#include <stdlib.h>
+
 #define GTK_TYPE_COLOR (gtk_color_get_type ())
 G_DECLARE_FINAL_TYPE (GtkColor, gtk_color, GTK, COLOR, GObject)
 

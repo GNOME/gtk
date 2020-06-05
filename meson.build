@@ -286,15 +286,19 @@ endif
 common_cflags = cc.get_supported_arguments(test_cflags)
 
 # Symbol visibility
+
+if os_win32
+  visibility_define = '__declspec(dllexport) extern'
+else
+  visibility_define = '__attribute__((visibility("default"))) extern'
+endif
+
 if get_option('default_library') != 'static'
+  cdata.set('_GDK_EXTERN', visibility_define)
   if os_win32
     cdata.set('DLL_EXPORT', true)
-    cdata.set('_GDK_EXTERN', '__declspec(dllexport) extern')
-    if cc.get_id() != 'msvc'
-      common_cflags += ['-fvisibility=hidden']
-    endif
-  else
-    cdata.set('_GDK_EXTERN', '__attribute__((visibility("default"))) extern')
+  endif
+  if cc.get_id() != 'msvc'
     common_cflags += ['-fvisibility=hidden']
   endif
 endif
