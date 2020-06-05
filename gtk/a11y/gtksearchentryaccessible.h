@@ -37,7 +37,7 @@ typedef struct _GtkSearchEntryAccessibleClass   GtkSearchEntryAccessibleClass;
 
 struct _GtkSearchEntryAccessibleClass
 {
-  GtkEntryAccessibleClass parent_class;
+  GtkWidgetAccessibleClass parent_class;
 };
 
 GDK_AVAILABLE_IN_ALL
