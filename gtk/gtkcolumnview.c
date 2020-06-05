@@ -236,19 +236,19 @@ gtk_column_view_measure (GtkWidget      *widget,
     }
 }
 
-static int
-gtk_column_view_allocate_columns (GtkColumnView *self,
-                                  int            width)
+void
+gtk_column_view_distribute_width (GtkColumnView    *self,
+                                  int               width,
+                                  GtkRequestedSize *sizes)
 {
   GtkScrollablePolicy scroll_policy;
-  int col_min, col_nat, extra, col_size, x;
+  int col_min, col_nat, extra, col_size;
   int n, n_expand, expand_size, n_extra;
   guint i;
-  GtkRequestedSize *sizes;
 
   n = g_list_model_get_n_items (G_LIST_MODEL (self->columns));
   n_expand = 0;
-  sizes = g_newa (GtkRequestedSize, n);
+
   for (i = 0; i < n; i++)
     {
       GtkColumnViewColumn *column;
@@ -282,7 +282,6 @@ gtk_column_view_allocate_columns (GtkColumnView *self,
   else
     expand_size = n_extra = 0;
 
-  x = 0;
   for (i = 0; i < n; i++)
     {
       GtkColumnViewColumn *column;
@@ -300,6 +299,37 @@ gtk_column_view_allocate_columns (GtkColumnView *self,
                   n_extra--;
                 }
             }
+          sizes[i].minimum_size = col_size;
+        }
+
+      g_object_unref (column);
+    }
+}
+
+static int
+gtk_column_view_allocate_columns (GtkColumnView *self,
+                                  int            width)
+{
+  guint i, n;
+  int x;
+  GtkRequestedSize *sizes;
+
+  n = g_list_model_get_n_items (G_LIST_MODEL (self->columns));
+
+  sizes = g_newa (GtkRequestedSize, n);
+
+  gtk_column_view_distribute_width (self, width, sizes);
+
+  x = 0;
+  for (i = 0; i < n; i++)
+    {
+      GtkColumnViewColumn *column;
+      int col_size;
+
+      column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+      if (gtk_column_view_column_get_visible (column))
+        {
+          col_size = sizes[i].minimum_size;
 
           gtk_column_view_column_allocate (column, x, col_size);
           if (self->in_column_reorder && i == self->drag_pos)
@@ -1333,6 +1363,7 @@ gtk_column_view_insert_column (GtkColumnView       *self,
   g_return_if_fail (gtk_column_view_column_get_column_view (column) == NULL ||
                     gtk_column_view_column_get_column_view (column) == self);
   g_return_if_fail (position <= g_list_model_get_n_items (G_LIST_MODEL (self->columns)));
+  int old_position = -1;
 
   g_object_ref (column);
 
@@ -1347,15 +1378,19 @@ gtk_column_view_insert_column (GtkColumnView       *self,
           g_object_unref (item);
           if (item == column)
             {
+              old_position = i;
               g_list_store_remove (self->columns, i);
               break;
             }
         }
     }
-  else
-    gtk_column_view_column_set_column_view (column, self);
 
   g_list_store_insert (self->columns, position, column);
+
+  gtk_column_view_column_set_column_view (column, self);
+
+  if (old_position != -1 && position != old_position)
+    gtk_column_view_column_set_position (column, position);
 
   gtk_column_view_column_queue_resize (column);
 

@@ -610,6 +610,37 @@ gtk_list_item_widget_add_child (GtkListItemWidget *self,
 }
 
 void
+gtk_list_item_widget_reorder_child (GtkListItemWidget *self,
+                                    GtkWidget         *child,
+                                    guint              position)
+{
+  GtkWidget *widget = GTK_WIDGET (self);
+  GtkWidget *sibling = NULL;
+
+  if (position > 0)
+    {
+      GtkWidget *c;
+      guint i;
+
+      for (c = gtk_widget_get_first_child (widget), i = 0;
+           c;
+           c = gtk_widget_get_next_sibling (c), i++)
+        {
+          if (i + 1 == position)
+            {
+              sibling = c;
+              break;
+            }
+        }
+    }
+
+  gtk_widget_insert_after (child, widget, sibling);
+  gtk_css_node_insert_after (gtk_widget_get_css_node (widget),
+                             gtk_widget_get_css_node (child),
+                             sibling ? gtk_widget_get_css_node (sibling) : NULL);
+}
+
+void
 gtk_list_item_widget_remove_child (GtkListItemWidget *self,
                                    GtkWidget         *child)
 {

@@ -47,17 +47,30 @@ gtk_column_view_layout_measure_along (GtkColumnViewLayout *self,
 {
   GtkOrientation orientation = GTK_ORIENTATION_VERTICAL;
   GtkWidget *child;
+  guint i, n;
+  GtkRequestedSize *sizes = NULL;
 
-  for (child = _gtk_widget_get_first_child (widget);
+  if (for_size > -1)
+    {
+      n = g_list_model_get_n_items (gtk_column_view_get_columns (self->view));
+      sizes = g_newa (GtkRequestedSize, n);
+      gtk_column_view_distribute_width (self->view, for_size, sizes);
+    }
+
+  for (child = _gtk_widget_get_first_child (widget), i = 0;
        child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
+       child = _gtk_widget_get_next_sibling (child), i++)
     {
       int child_min = 0;
       int child_nat = 0;
       int child_min_baseline = -1;
       int child_nat_baseline = -1;
 
-      gtk_widget_measure (child, orientation, for_size,
+      if (!gtk_widget_should_layout (child))
+        continue;
+
+      gtk_widget_measure (child, orientation,
+                          for_size > -1 ? sizes[i].minimum_size : -1,
                           &child_min, &child_nat,
                           &child_min_baseline, &child_nat_baseline);
 
@@ -116,6 +129,9 @@ gtk_column_view_layout_allocate (GtkLayoutManager *layout_manager,
     {
       GtkColumnViewColumn *column;
       int col_x, col_width;
+
+      if (!gtk_widget_should_layout (child))
+        continue;
 
       if (GTK_IS_COLUMN_VIEW_CELL (child))
         {
