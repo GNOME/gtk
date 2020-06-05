@@ -180,32 +180,15 @@ gtk_widget_accessible_notify_orientation (GtkWidgetAccessible *self)
 }
 
 static void
-notify_cb (GObject    *gobject,
-           GParamSpec *pspec,
-           gpointer    user_data)
-{
-  GtkWidget *widget = GTK_WIDGET (gobject);
-  GtkWidgetAccessible *self = user_data;
-
-  GTK_WIDGET_ACCESSIBLE_GET_CLASS (self)->notify_gtk (G_OBJECT (widget), pspec);
-}
-
-static void
 gtk_widget_accessible_initialize (AtkObject *object,
                                   gpointer   data)
 {
   GtkWidgetAccessible *self = GTK_WIDGET_ACCESSIBLE (object);
   GtkWidgetAccessiblePrivate *priv = gtk_widget_accessible_get_instance_private (self);
-  GtkWidget *widget = data;
 
   priv->layer = ATK_LAYER_WIDGET;
 
   atk_object_set_role (object, ATK_ROLE_UNKNOWN);
-
-  /* XXX: This will go away once we move all GtkWidgetAccessibleClass.notify_gtk()
-   * implementations to explicit API on their respective classes
-   */
-  g_signal_connect (widget, "notify", G_CALLBACK (notify_cb), self);
 }
 
 static const char *
@@ -587,18 +570,9 @@ gtk_widget_accessible_ref_child (AtkObject *object,
 }
 
 static void
-gtk_widget_accessible_notify_gtk (GObject    *gobject,
-                                  GParamSpec *pspec)
-{
-  /* Empty, used to chain up safely */
-}
-
-static void
 gtk_widget_accessible_class_init (GtkWidgetAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-
-  klass->notify_gtk = gtk_widget_accessible_notify_gtk;
 
   class->get_description = gtk_widget_accessible_get_description;
   class->get_parent = gtk_widget_accessible_get_parent;

@@ -34,13 +34,6 @@ G_DECLARE_DERIVABLE_TYPE (GtkWidgetAccessible, gtk_widget_accessible, GTK, WIDGE
 struct _GtkWidgetAccessibleClass
 {
   GtkAccessibleClass parent_class;
-
-  /*
-   * Signal handler for notify signal on GTK widget
-   */
-  void (*notify_gtk)                   (GObject             *object,
-                                        GParamSpec          *pspec);
-
 };
 
 G_END_DECLS
