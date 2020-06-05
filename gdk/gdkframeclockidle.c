@@ -164,7 +164,7 @@ gdk_frame_clock_idle_dispose (GObject *object)
 static gint64
 compute_smooth_frame_time (GdkFrameClock *clock,
                            gint64 new_frame_time,
-                           gboolean new_frame_time_is_regular,
+                           gboolean new_frame_time_is_vsync_related,
                            gint64 smoothed_frame_time_base,
                            gint64 frame_interval)
 {
@@ -206,13 +206,13 @@ compute_smooth_frame_time (GdkFrameClock *clock,
    *   (current_error/frame_interval)*(current_error/frame_interval)*frame_interval
    * But this can be simplified as below.
    *
-   * Note: We only do this correction if we're regularly animating (no
-   * or low frame skip). If the last frame was a long time ago, or if
-   * we're not doing this in the frame cycle this call was likely
-   * triggered by an input event and new_frame_time is essentially
-   * random and not tied to the presentation time.
+   * Note: We only do this correction if the new frame is caused by a
+   * thaw of the frame clock, so that we know the time is actually
+   * related to the physical vblank. For frameclock cycles triggered
+   * by other events we always step up in whole frames from the last
+   * reported time.
    */
-  if (new_frame_time_is_regular)
+  if (new_frame_time_is_vsync_related)
     {
       current_error = new_smoothed_time - new_frame_time;
       correction_magnitude = current_error * current_error / frame_interval; /* Note, this is always > 0 due to the square */
@@ -412,7 +412,6 @@ gdk_frame_clock_paint_idle (void *data)
             {
               gint64 frame_interval = FRAME_INTERVAL;
               GdkFrameTimings *prev_timings = gdk_frame_clock_get_current_timings (clock);
-              gint64 old_frame_time = priv->frame_time;
 
               if (prev_timings && prev_timings->refresh_interval)
                 frame_interval = prev_timings->refresh_interval;
@@ -427,11 +426,9 @@ gdk_frame_clock_paint_idle (void *data)
                 }
               else
                 {
-                  /* For long delays, cycle was probably caused by input event rather than animation */
-                  gboolean is_regular = priv->frame_time - old_frame_time < 4 * FRAME_INTERVAL;
                   priv->smoothed_frame_time_base =
                       compute_smooth_frame_time (clock, priv->frame_time,
-                                                 is_regular,
+                                                 priv->paint_is_thaw,
                                                  priv->smoothed_frame_time_base,
                                                  priv->smoothed_frame_time_period);
                   priv->smoothed_frame_time_period = frame_interval;
