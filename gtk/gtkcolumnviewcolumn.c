@@ -625,6 +625,25 @@ gtk_column_view_column_set_column_view (GtkColumnViewColumn *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLUMN_VIEW]);
 }
 
+void
+gtk_column_view_column_set_position (GtkColumnViewColumn *self,
+                                     guint                position)
+{
+  GtkColumnViewCell *cell;
+
+  gtk_list_item_widget_reorder_child (gtk_column_view_get_header_widget (self->view),
+                                      self->header,
+                                      position);
+
+  for (cell = self->first_cell; cell; cell = gtk_column_view_cell_get_next (cell))
+    {
+      GtkListItemWidget *list_item;
+
+      list_item = GTK_LIST_ITEM_WIDGET (gtk_widget_get_parent (GTK_WIDGET (cell)));
+      gtk_list_item_widget_reorder_child (list_item, GTK_WIDGET (cell), position);
+    }
+}
+
 /**
  * gtk_column_view_column_get_factory:
  * @self: a #GtkColumnViewColumn
