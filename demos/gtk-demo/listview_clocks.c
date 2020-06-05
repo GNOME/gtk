@@ -309,16 +309,16 @@ gtk_clock_init (GtkClock *self)
 
 static GtkClock *
 gtk_clock_new (const char *location,
-               GTimeZone  *timezone)
+               GTimeZone  *_timezone)
 {
   GtkClock *result;
 
   result = g_object_new (GTK_TYPE_CLOCK,
                          "location", location,
-                         "timezone", timezone,
+                         "timezone", _timezone,
                          NULL);
 
-  g_clear_pointer (&timezone, g_time_zone_unref);
+  g_clear_pointer (&_timezone, g_time_zone_unref);
 
   return result;
 }

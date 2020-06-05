@@ -78,13 +78,13 @@ gtk_weather_info_new (GDateTime      *timestamp,
 
 static GDateTime *
 parse_timestamp (const char *string,
-                 GTimeZone  *timezone)
+                 GTimeZone  *_timezone)
 {
   char *with_seconds;
   GDateTime *result;
 
   with_seconds = g_strconcat (string, ":00", NULL);
-  result = g_date_time_new_from_iso8601 (with_seconds, timezone);
+  result = g_date_time_new_from_iso8601 (with_seconds, _timezone);
   g_free (with_seconds);
 
   return result;
