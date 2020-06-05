@@ -55,13 +55,24 @@ gtk_column_view_cell_measure (GtkWidget      *widget,
 {
   GtkColumnViewCell *cell = GTK_COLUMN_VIEW_CELL (widget);
   GtkWidget *child = gtk_widget_get_first_child (widget);
+  int fixed_width = gtk_column_view_column_get_fixed_width (cell->column);
+
+  if (orientation == GTK_ORIENTATION_VERTICAL)
+    {
+      if (fixed_width > -1)
+        {
+          if (for_size == -1)
+            for_size = fixed_width;
+          else
+            for_size = MIN (for_size, fixed_width);
+        }
+    }
 
   if (child)
     gtk_widget_measure (child, orientation, for_size, minimum, natural, minimum_baseline, natural_baseline);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      int fixed_width = gtk_column_view_column_get_fixed_width (cell->column);
       if (fixed_width > -1)
         *minimum = *natural = fixed_width;
     }
