@@ -67,7 +67,7 @@
  * It is common to use `.ui` as the filename extension for files containing
  * GtkBuilder UI definitions.
  *
- * [RELAX NG Compact Syntax](https://git.gnome.org/browse/gtk+/tree/gtk/gtkbuilder.rnc)
+ * [RELAX NG Compact Syntax](https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-3-24/gtk/gtkbuilder.rnc)
  *
  * The toplevel element is <interface>. It optionally takes a “domain”
  * attribute, which will make the builder look for translated strings
