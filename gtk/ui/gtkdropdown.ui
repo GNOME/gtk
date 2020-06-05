@@ -52,6 +52,7 @@
         <child>
           <object class="GtkSearchEntry" id="search_entry">
             <signal name="search-changed" handler="search_changed"/>
+            <signal name="stop-search" handler="search_stop"/>
             <property name="visible">0</property>
             <property name="placeholder-text" translatable="yes">Search…</property>
           </object>
