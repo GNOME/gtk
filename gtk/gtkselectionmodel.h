@@ -29,9 +29,16 @@
 G_BEGIN_DECLS
 
 #define GTK_TYPE_SELECTION_MODEL       (gtk_selection_model_get_type ())
-                                                      
+
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (GtkSelectionModel, gtk_selection_model, GTK, SELECTION_MODEL, GListModel)
+
+typedef void     (* GtkSelectionCallback) (guint     position,
+                                           guint    *start_range,
+                                           guint    *n_items,
+                                           gboolean *selected,
+                                           gpointer  data);
+
 
 /**
  * GtkSelectionModelInterface:
@@ -79,6 +86,12 @@ struct _GtkSelectionModelInterface
                                                                  guint                   n_items);
   gboolean              (* select_all)                          (GtkSelectionModel      *model);
   gboolean              (* unselect_all)                        (GtkSelectionModel      *model);
+  gboolean              (* select_callback)                     (GtkSelectionModel      *model,
+                                                                 GtkSelectionCallback    callback,
+                                                                 gpointer                data);
+  gboolean              (* unselect_callback)                   (GtkSelectionModel      *model,
+                                                                 GtkSelectionCallback    callback,
+                                                                 gpointer                data);
   void                  (* query_range)                         (GtkSelectionModel      *model,
                                                                  guint                   position,
                                                                  guint                  *start_range,
@@ -110,6 +123,14 @@ GDK_AVAILABLE_IN_ALL
 gboolean                gtk_selection_model_select_all          (GtkSelectionModel      *model);
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_selection_model_unselect_all        (GtkSelectionModel      *model);
+
+GDK_AVAILABLE_IN_ALL
+gboolean                gtk_selection_model_select_callback     (GtkSelectionModel      *model,
+                                                                 GtkSelectionCallback    callback,
+                                                                 gpointer                data);
+gboolean                gtk_selection_model_unselect_callback   (GtkSelectionModel      *model,
+                                                                 GtkSelectionCallback    callback,
+                                                                 gpointer                data);
 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_selection_model_query_range         (GtkSelectionModel      *model,

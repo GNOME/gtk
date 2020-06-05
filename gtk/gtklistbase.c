@@ -34,13 +34,13 @@
 #include "gtksnapshot.h"
 #include "gtkmultiselection.h"
 #include "gtkgizmoprivate.h"
+#include "gtkset.h"
 
 typedef struct _RubberbandData RubberbandData;
 
 struct _RubberbandData
 {
   GtkWidget *widget;
-  GtkSelectionModel *selection;
   double x1, y1;
   double x2, y2;
   gboolean modify;
@@ -53,7 +53,6 @@ rubberband_data_free (gpointer data)
   RubberbandData *rdata = data;
 
   g_clear_pointer (&rdata->widget, gtk_widget_unparent);
-  g_clear_object (&rdata->selection);
   g_free (rdata);
 }
 
@@ -1324,7 +1323,6 @@ gtk_list_base_start_rubberband (GtkListBase *self,
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   double value_x, value_y;
-  GtkSelectionModel *selection;
 
   if (priv->rubberband)
     return;
@@ -1343,23 +1341,65 @@ gtk_list_base_start_rubberband (GtkListBase *self,
   priv->rubberband->widget = gtk_gizmo_new ("rubberband",
                                             NULL, NULL, NULL, NULL, NULL, NULL);
   gtk_widget_set_parent (priv->rubberband->widget, GTK_WIDGET (self));
+}
 
-  selection = gtk_list_item_manager_get_model (priv->item_manager);
-  if ((modify || extend) &&
-      GTK_IS_MULTI_SELECTION (selection))
-    priv->rubberband->selection = GTK_SELECTION_MODEL (gtk_multi_selection_copy (selection));
+static void
+range_cb (guint     position,
+          guint    *start,
+          guint    *n_items,
+          gboolean *selected,
+          gpointer  data)
+{
+  GtkSet *set = data;
 
-  if (!modify && !extend)
-    gtk_selection_model_unselect_all (selection);
+  gtk_set_find_range (set, position, gtk_set_get_max (set), start, n_items, selected);
 }
 
 static void
 gtk_list_base_stop_rubberband (GtkListBase *self)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkListItemManagerItem *item;
+  GtkSelectionModel *model;
+  GtkSet *active;
 
   if (!priv->rubberband)
     return;
+
+  active = gtk_set_new ();
+
+  for (item = gtk_list_item_manager_get_first (priv->item_manager);
+       item != NULL;
+       item = gtk_rb_tree_node_get_next (item))
+    {
+      if (!item->widget)
+        continue;
+
+      if (gtk_widget_get_state_flags (item->widget) & GTK_STATE_FLAG_ACTIVE)
+        {
+          guint pos;
+
+          pos = gtk_list_item_manager_get_item_position (priv->item_manager, item);
+          gtk_set_add_item (active, pos);
+          gtk_widget_unset_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE);
+        }
+    }
+
+  model = gtk_list_item_manager_get_model (priv->item_manager);
+
+  if (priv->rubberband->modify)
+    {
+      gtk_selection_model_unselect_callback (model, range_cb, active);
+    }
+  else
+    {
+      if (!priv->rubberband->extend)
+        gtk_selection_model_unselect_all (model);
+
+      gtk_selection_model_select_callback (model, range_cb, active);
+    }
+
+  gtk_set_free (active);
 
   g_clear_pointer (&priv->rubberband, rubberband_data_free);
   remove_autoscroll (self);
@@ -1423,55 +1463,24 @@ gtk_list_base_update_rubberband_selection (GtkListBase *self)
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   GdkRectangle rect;
   GdkRectangle alloc;
-  GtkSelectionModel *model;
   GtkListItemManagerItem *item;
 
   gtk_list_base_allocate_rubberband (self);
   gtk_widget_get_allocation (priv->rubberband->widget, &rect);
 
-  model = gtk_list_item_manager_get_model (priv->item_manager);
-
   for (item = gtk_list_item_manager_get_first (priv->item_manager);
        item != NULL;
        item = gtk_rb_tree_node_get_next (item))
     {
-      guint pos;
-      gboolean selected;
-      gboolean was_selected;
-
       if (!item->widget)
         continue;
 
-      pos = gtk_list_item_manager_get_item_position (priv->item_manager, item);
-
       gtk_widget_get_allocation (item->widget, &alloc);
 
-      if (priv->rubberband->selection)
-        was_selected = gtk_selection_model_is_selected (priv->rubberband->selection, pos);
+      if (gdk_rectangle_intersect (&rect, &alloc, &alloc))
+        gtk_widget_set_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE, FALSE);
       else
-        was_selected = FALSE;
-
-      selected = gdk_rectangle_intersect (&rect, &alloc, &alloc);
-
-      if (priv->rubberband->modify)
-        {
-          if (was_selected)
-            {
-              if (selected)
-                gtk_selection_model_unselect_item (model, pos);
-              else
-                gtk_selection_model_select_item (model, pos, FALSE);
-            }
-          else
-            gtk_selection_model_unselect_item (model, pos);
-        }
-      else
-        {
-          if (selected || was_selected)
-            gtk_selection_model_select_item (model, pos, FALSE);
-          else
-            gtk_selection_model_unselect_item (model, pos);
-        }
+        gtk_widget_unset_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE);
     }
 }
 
