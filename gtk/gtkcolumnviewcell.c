@@ -121,6 +121,17 @@ gtk_column_view_cell_dispose (GObject *object)
   G_OBJECT_CLASS (gtk_column_view_cell_parent_class)->dispose (object);
 }
 
+static GtkSizeRequestMode
+gtk_column_view_cell_get_request_mode (GtkWidget *widget)
+{
+  GtkWidget *child = gtk_widget_get_first_child (widget);
+
+  if (child)
+    return gtk_widget_get_request_mode (child);
+  else
+    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+}
+
 static void
 gtk_column_view_cell_class_init (GtkColumnViewCellClass *klass)
 {
@@ -131,6 +142,7 @@ gtk_column_view_cell_class_init (GtkColumnViewCellClass *klass)
   widget_class->unroot = gtk_column_view_cell_unroot;
   widget_class->measure = gtk_column_view_cell_measure;
   widget_class->size_allocate = gtk_column_view_cell_size_allocate;
+  widget_class->get_request_mode = gtk_column_view_cell_get_request_mode;
 
   gobject_class->dispose = gtk_column_view_cell_dispose;
 
