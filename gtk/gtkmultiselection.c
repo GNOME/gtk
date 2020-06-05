@@ -167,6 +167,61 @@ gtk_multi_selection_unselect_all (GtkSelectionModel *model)
   return gtk_multi_selection_unselect_range (model, 0, g_list_model_get_n_items (G_LIST_MODEL (model)));
 }
 
+static gboolean
+gtk_multi_selection_add_or_remove (GtkSelectionModel    *model,
+                                   gboolean              add,
+                                   GtkSelectionCallback  callback,
+                                   gpointer              data)
+{
+  GtkMultiSelection *self = GTK_MULTI_SELECTION (model);
+  guint pos, start, n;
+  gboolean in;
+  guint min, max;
+
+  min = G_MAXUINT;
+  max = 0;
+
+  pos = 0;
+  do
+    {
+      callback (pos, &start, &n, &in, data);
+      if (in)
+        {
+          if (start < min)
+            min = start;
+          if (start + n - 1 > max)
+            max = start + n - 1;
+
+          if (add)
+            gtk_set_add_range (self->selected, start, n);
+          else
+            gtk_set_remove_range (self->selected, start, n);
+        }
+      pos = start + n;
+    }
+  while (n > 0);
+
+  gtk_selection_model_selection_changed (model, min, max - min + 1);
+
+  return TRUE;
+}
+
+static gboolean
+gtk_multi_selection_select_callback (GtkSelectionModel    *model,
+                                     GtkSelectionCallback  callback,
+                                     gpointer              data)
+{
+  return gtk_multi_selection_add_or_remove (model, TRUE, callback, data);
+}
+
+static gboolean
+gtk_multi_selection_unselect_callback (GtkSelectionModel    *model,
+                                       GtkSelectionCallback  callback,
+                                       gpointer              data)
+{
+  return gtk_multi_selection_add_or_remove (model, FALSE, callback, data);
+}
+
 static void
 gtk_multi_selection_query_range (GtkSelectionModel *model,
                                  guint              position,
@@ -190,6 +245,8 @@ gtk_multi_selection_selection_model_init (GtkSelectionModelInterface *iface)
   iface->unselect_range = gtk_multi_selection_unselect_range;
   iface->select_all = gtk_multi_selection_select_all;
   iface->unselect_all = gtk_multi_selection_unselect_all;
+  iface->select_callback = gtk_multi_selection_select_callback;
+  iface->unselect_callback = gtk_multi_selection_unselect_callback;
   iface->query_range = gtk_multi_selection_query_range;
 }
 
