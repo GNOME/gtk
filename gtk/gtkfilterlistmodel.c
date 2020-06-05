@@ -214,11 +214,11 @@ gtk_filter_list_model_get_n_items (GListModel *list)
     case GTK_FILTER_MATCH_ALL:
       return g_list_model_get_n_items (self->model);
 
-    default:
-      g_assert_not_reached ();
-      G_GNUC_FALLTHROUGH;
     case GTK_FILTER_MATCH_SOME:
       break;
+
+    default:
+      g_assert_not_reached ();
     }
 
   node = gtk_rb_tree_get_root (self->items);
@@ -245,12 +245,12 @@ gtk_filter_list_model_get_item (GListModel *list,
       unfiltered = position;
       break;
 
-    default:
-      g_assert_not_reached ();
-      G_GNUC_FALLTHROUGH;
     case GTK_FILTER_MATCH_SOME:
       gtk_filter_list_model_get_nth_filtered (self->items, position, &unfiltered);
       break;
+
+    default:
+      g_assert_not_reached ();
     }
 
   return g_list_model_get_item (self->model, unfiltered);
@@ -325,11 +325,11 @@ gtk_filter_list_model_items_changed_cb (GListModel         *model,
       g_list_model_items_changed (G_LIST_MODEL (self), position, removed, added);
       return;
 
-    default:
-      g_assert_not_reached ();
-      G_GNUC_FALLTHROUGH;
     case GTK_FILTER_MATCH_SOME:
       break;
+
+    default:
+      g_assert_not_reached ();
     }
 
   node = gtk_filter_list_model_get_nth (self->items, position, &filter_position);
@@ -568,10 +568,11 @@ gtk_filter_list_model_update_strictness_and_refilter (GtkFilterListModel *self)
           break;
         }
       break;
-    
+
     default:
       g_assert_not_reached ();
-      G_GNUC_FALLTHROUGH;
+      break;
+
     case GTK_FILTER_MATCH_SOME:
       switch (self->strictness)
         {
