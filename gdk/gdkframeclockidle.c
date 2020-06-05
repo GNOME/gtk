@@ -56,6 +56,7 @@ struct _GdkFrameClockIdlePrivate
   GdkFrameClockPhase phase;
 
   guint in_paint_idle : 1;
+  guint paint_is_thaw : 1;
 #ifdef G_OS_WIN32
   guint begin_period : 1;
 #endif
@@ -275,7 +276,8 @@ gdk_frame_clock_idle_get_frame_time (GdkFrameClock *clock)
     (priv)->updating_count > 0))
 
 static void
-maybe_start_idle (GdkFrameClockIdle *clock_idle)
+maybe_start_idle (GdkFrameClockIdle *clock_idle,
+                  gboolean caused_by_thaw)
 {
   GdkFrameClockIdlePrivate *priv = clock_idle->priv;
 
@@ -303,6 +305,7 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle)
       if (!priv->in_paint_idle &&
 	  priv->paint_idle_id == 0 && RUN_PAINT_IDLE (priv))
         {
+          priv->paint_is_thaw = caused_by_thaw;
           priv->paint_idle_id = g_timeout_add_full (GDK_PRIORITY_REDRAW,
                                                     min_interval,
                                                     gdk_frame_clock_paint_idle,
@@ -560,7 +563,7 @@ gdk_frame_clock_paint_idle (void *data)
     {
       priv->min_next_frame_time = compute_min_next_frame_time (clock_idle,
                                                                priv->frame_time);
-      maybe_start_idle (clock_idle);
+      maybe_start_idle (clock_idle, FALSE);
     }
 
   if (priv->freeze_count == 0)
@@ -580,7 +583,7 @@ gdk_frame_clock_idle_request_phase (GdkFrameClock      *clock,
   GdkFrameClockIdlePrivate *priv = clock_idle->priv;
 
   priv->requested |= phase;
-  maybe_start_idle (clock_idle);
+  maybe_start_idle (clock_idle, FALSE);
 }
 
 static void
@@ -599,7 +602,7 @@ gdk_frame_clock_idle_begin_updating (GdkFrameClock *clock)
 #endif
 
   priv->updating_count++;
-  maybe_start_idle (clock_idle);
+  maybe_start_idle (clock_idle, FALSE);
 }
 
 static void
@@ -649,7 +652,7 @@ gdk_frame_clock_idle_thaw (GdkFrameClock *clock)
   priv->freeze_count--;
   if (priv->freeze_count == 0)
     {
-      maybe_start_idle (clock_idle);
+      maybe_start_idle (clock_idle, TRUE);
       /* If nothing is requested so we didn't start an idle, we need
        * to skip to the end of the state chain, since the idle won't
        * run and do it for us.
