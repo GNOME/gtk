@@ -501,6 +501,7 @@ if x11_enabled
   xi_dep         = dependency('xi')
   xext_dep       = dependency('xext')
   xcursor_dep    = dependency('xcursor', required: false)
+  xdamage_dep    = dependency('xdamage', required: false)
   xfixes_dep     = dependency('xfixes', required: false)
   xcomposite_dep = dependency('xcomposite', required: false)
   fontconfig_dep = dependency('fontconfig')
@@ -513,6 +514,9 @@ if x11_enabled
   if xcursor_dep.found()
     x11_pkgs += ['xcursor']
   endif
+  if xdamage_dep.found()
+    x11_pkgs += ['xdamage']
+  endif
   if xfixes_dep.found()
     x11_pkgs += ['xfixes']
   endif
@@ -523,6 +527,7 @@ if x11_enabled
   atk_pkgs += ['atk-bridge-2.0']
 
   cdata.set('HAVE_XCURSOR', xcursor_dep.found())
+  cdata.set('HAVE_XDAMAGE', xdamage_dep.found())
   cdata.set('HAVE_XCOMPOSITE', xcomposite_dep.found())
   cdata.set('HAVE_XFIXES', xfixes_dep.found())
 

@@ -104,6 +104,11 @@ void _gdk_x11_surface_grab_check_unmap   (GdkSurface *window,
                                           gulong     serial);
 void _gdk_x11_surface_grab_check_destroy (GdkSurface *window);
 
+#ifdef HAVE_XDAMAGE
+void _gdk_x11_surface_set_frame_still_painting (GdkSurface *surface,
+                                                gboolean    painting);
+#endif
+
 gboolean _gdk_x11_display_is_root_window (GdkDisplay *display,
                                           Window      xroot_window);
 
