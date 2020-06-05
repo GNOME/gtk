@@ -28,6 +28,9 @@
 void                    gtk_column_view_column_set_column_view          (GtkColumnViewColumn    *self,
                                                                          GtkColumnView          *view);
 
+void                    gtk_column_view_column_set_position             (GtkColumnViewColumn    *self,
+                                                                         guint                   position);
+
 void                    gtk_column_view_column_add_cell                 (GtkColumnViewColumn    *self,
                                                                          GtkColumnViewCell      *cell);
 void                    gtk_column_view_column_remove_cell              (GtkColumnViewColumn    *self,

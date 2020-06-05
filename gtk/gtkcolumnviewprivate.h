@@ -22,6 +22,7 @@
 
 #include "gtk/gtkcolumnview.h"
 #include "gtk/gtklistview.h"
+#include "gtk/gtksizerequest.h"
 
 #include "gtk/gtkcolumnviewsorterprivate.h"
 #include "gtk/gtklistitemwidgetprivate.h"
@@ -32,5 +33,9 @@ GtkListView *           gtk_column_view_get_list_view           (GtkColumnView  
 void                    gtk_column_view_measure_across          (GtkColumnView          *self,
                                                                  int                    *minimum,
                                                                  int                    *natural);
+
+void                    gtk_column_view_distribute_width        (GtkColumnView    *self,
+                                                                 int               width,
+                                                                 GtkRequestedSize *sizes);
 
 #endif  /* __GTK_COLUMN_VIEW_PRIVATE_H__ */

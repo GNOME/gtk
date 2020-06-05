@@ -55,13 +55,24 @@ gtk_column_view_cell_measure (GtkWidget      *widget,
 {
   GtkColumnViewCell *cell = GTK_COLUMN_VIEW_CELL (widget);
   GtkWidget *child = gtk_widget_get_first_child (widget);
+  int fixed_width = gtk_column_view_column_get_fixed_width (cell->column);
+
+  if (orientation == GTK_ORIENTATION_VERTICAL)
+    {
+      if (fixed_width > -1)
+        {
+          if (for_size == -1)
+            for_size = fixed_width;
+          else
+            for_size = MIN (for_size, fixed_width);
+        }
+    }
 
   if (child)
     gtk_widget_measure (child, orientation, for_size, minimum, natural, minimum_baseline, natural_baseline);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      int fixed_width = gtk_column_view_column_get_fixed_width (cell->column);
       if (fixed_width > -1)
         *minimum = *natural = fixed_width;
     }
@@ -121,6 +132,17 @@ gtk_column_view_cell_dispose (GObject *object)
   G_OBJECT_CLASS (gtk_column_view_cell_parent_class)->dispose (object);
 }
 
+static GtkSizeRequestMode
+gtk_column_view_cell_get_request_mode (GtkWidget *widget)
+{
+  GtkWidget *child = gtk_widget_get_first_child (widget);
+
+  if (child)
+    return gtk_widget_get_request_mode (child);
+  else
+    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+}
+
 static void
 gtk_column_view_cell_class_init (GtkColumnViewCellClass *klass)
 {
@@ -131,6 +153,7 @@ gtk_column_view_cell_class_init (GtkColumnViewCellClass *klass)
   widget_class->unroot = gtk_column_view_cell_unroot;
   widget_class->measure = gtk_column_view_cell_measure;
   widget_class->size_allocate = gtk_column_view_cell_size_allocate;
+  widget_class->get_request_mode = gtk_column_view_cell_get_request_mode;
 
   gobject_class->dispose = gtk_column_view_cell_dispose;
 
