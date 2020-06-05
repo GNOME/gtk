@@ -33,8 +33,6 @@ G_DECLARE_FINAL_TYPE (GtkMultiSelection, gtk_multi_selection, GTK, MULTI_SELECTI
 GDK_AVAILABLE_IN_ALL
 GListModel *    gtk_multi_selection_new                (GListModel           *model);
 
-GDK_AVAILABLE_IN_ALL
-GtkMultiSelection * gtk_multi_selection_copy           (GtkSelectionModel    *selection);
 
 G_END_DECLS
 

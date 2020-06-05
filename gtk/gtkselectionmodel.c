@@ -114,6 +114,22 @@ gtk_selection_model_default_unselect_range (GtkSelectionModel *model,
 }
 
 static gboolean
+gtk_selection_model_default_select_callback (GtkSelectionModel    *model,
+                                             GtkSelectionCallback  callback,
+                                             gpointer              data)
+{
+  return FALSE;
+}
+
+static gboolean
+gtk_selection_model_default_unselect_callback (GtkSelectionModel    *model,
+                                               GtkSelectionCallback  callback,
+                                               gpointer              data)
+{
+  return FALSE;
+}
+
+static gboolean
 gtk_selection_model_default_select_all (GtkSelectionModel *model)
 {
   return gtk_selection_model_select_range (model, 0, g_list_model_get_n_items (G_LIST_MODEL (model)), FALSE);
@@ -142,20 +158,22 @@ gtk_selection_model_default_query_range (GtkSelectionModel *model,
   else
     {
       *n_items = 1;
-      *selected = gtk_selection_model_is_selected (model, position);  
+      *selected = gtk_selection_model_is_selected (model, position);
     }
 }
 
 static void
 gtk_selection_model_default_init (GtkSelectionModelInterface *iface)
 {
-  iface->is_selected = gtk_selection_model_default_is_selected; 
-  iface->select_item = gtk_selection_model_default_select_item; 
-  iface->unselect_item = gtk_selection_model_default_unselect_item; 
-  iface->select_range = gtk_selection_model_default_select_range; 
-  iface->unselect_range = gtk_selection_model_default_unselect_range; 
-  iface->select_all = gtk_selection_model_default_select_all; 
-  iface->unselect_all = gtk_selection_model_default_unselect_all; 
+  iface->is_selected = gtk_selection_model_default_is_selected;
+  iface->select_item = gtk_selection_model_default_select_item;
+  iface->unselect_item = gtk_selection_model_default_unselect_item;
+  iface->select_range = gtk_selection_model_default_select_range;
+  iface->unselect_range = gtk_selection_model_default_unselect_range;
+  iface->select_all = gtk_selection_model_default_select_all;
+  iface->unselect_all = gtk_selection_model_default_unselect_all;
+  iface->select_callback = gtk_selection_model_default_select_callback;
+  iface->unselect_callback = gtk_selection_model_default_unselect_callback;
   iface->query_range = gtk_selection_model_default_query_range;
 
   /**
@@ -322,6 +340,26 @@ gtk_selection_model_unselect_all (GtkSelectionModel *model)
 
   iface = GTK_SELECTION_MODEL_GET_IFACE (model);
   return iface->unselect_all (model);
+}
+
+gboolean
+gtk_selection_model_select_callback (GtkSelectionModel    *model,
+                                     GtkSelectionCallback  callback,
+                                     gpointer              data)
+{
+  g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), FALSE);
+
+  return GTK_SELECTION_MODEL_GET_IFACE (model)->select_callback (model, callback, data);
+}
+
+gboolean
+gtk_selection_model_unselect_callback (GtkSelectionModel    *model,
+                                       GtkSelectionCallback  callback,
+                                       gpointer              data)
+{
+  g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), FALSE);
+
+  return GTK_SELECTION_MODEL_GET_IFACE (model)->unselect_callback (model, callback, data);
 }
 
 /**
