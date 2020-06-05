@@ -57,6 +57,9 @@ gtk_column_view_layout_measure_along (GtkColumnViewLayout *self,
       int child_min_baseline = -1;
       int child_nat_baseline = -1;
 
+      if (!gtk_widget_should_layout (child))
+        continue;
+
       gtk_widget_measure (child, orientation, for_size,
                           &child_min, &child_nat,
                           &child_min_baseline, &child_nat_baseline);
@@ -116,6 +119,9 @@ gtk_column_view_layout_allocate (GtkLayoutManager *layout_manager,
     {
       GtkColumnViewColumn *column;
       int col_x, col_width;
+
+      if (!gtk_widget_should_layout (child))
+        continue;
 
       if (GTK_IS_COLUMN_VIEW_CELL (child))
         {
