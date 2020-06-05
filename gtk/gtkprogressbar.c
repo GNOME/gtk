@@ -26,20 +26,20 @@
 
 #include "gtkprogressbar.h"
 
+#include "gtkboxlayout.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkgizmoprivate.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
-#include "gtkorientableprivate.h"
+#include "gtkorientable.h"
 #include "gtkprogresstrackerprivate.h"
 #include "gtkprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
-#include "gtkboxlayout.h"
 
-#include "a11y/gtkprogressbaraccessible.h"
+#include "a11y/gtkprogressbaraccessibleprivate.h"
 
 #include <string.h>
 
@@ -457,7 +457,7 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
   /* horizontal is default */
   pbar->orientation = GTK_ORIENTATION_VERTICAL; /* Just to force an update... */
   gtk_progress_bar_set_orientation (pbar, GTK_ORIENTATION_HORIZONTAL);
-  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (pbar));
+  gtk_widget_update_orientation (GTK_WIDGET (pbar), pbar->orientation);
 }
 
 static void
@@ -732,6 +732,14 @@ gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
   gtk_widget_queue_allocate (pbar->trough_widget);
   update_fraction_classes (pbar);
 
+  {
+    AtkObject *accessible =
+      _gtk_widget_peek_accessible (GTK_WIDGET (pbar));
+
+    if (accessible != NULL)
+      gtk_progress_bar_accessible_update_value (GTK_PROGRESS_BAR_ACCESSIBLE (accessible));
+  }
+
   g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_FRACTION]);
 }
 
@@ -922,7 +930,7 @@ gtk_progress_bar_set_orientation (GtkProgressBar *pbar,
       gtk_widget_set_valign (pbar->trough_widget, GTK_ALIGN_FILL);
     }
 
-  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (pbar));
+  gtk_widget_update_orientation (GTK_WIDGET (pbar), pbar->orientation);
   update_node_classes (pbar);
 
   layout = GTK_BOX_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (pbar)));

@@ -29,6 +29,7 @@
 
 #include "gtkadjustmentprivate.h"
 #include "gtkcolorscaleprivate.h"
+#include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollerscroll.h"
 #include "gtkgesturedrag.h"
 #include "gtkgesturelongpressprivate.h"
@@ -36,11 +37,11 @@
 #include "gtkgizmoprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
-#include "gtkorientableprivate.h"
+#include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkscale.h"
 #include "gtktypebuiltins.h"
-#include "gtkeventcontrollerkey.h"
+#include "gtkwidgetprivate.h"
 
 #include "a11y/gtkrangeaccessible.h"
 
@@ -458,7 +459,7 @@ gtk_range_set_property (GObject      *object,
       if (priv->orientation != g_value_get_enum (value))
         {
           priv->orientation = g_value_get_enum (value);
-          _gtk_orientable_set_style_classes (GTK_ORIENTABLE (range));
+          gtk_widget_update_orientation (GTK_WIDGET (range), priv->orientation);
           gtk_widget_queue_resize (GTK_WIDGET (range));
           g_object_notify_by_pspec (object, pspec);
         }
@@ -542,7 +543,7 @@ gtk_range_init (GtkRange *range)
   priv->fill_level = G_MAXDOUBLE;
   priv->timer = NULL;
 
-  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (range));
+  gtk_widget_update_orientation (GTK_WIDGET (range), priv->orientation);
 
   priv->trough_widget = gtk_gizmo_new ("trough",
                                        gtk_range_measure_trough,
@@ -672,6 +673,15 @@ gtk_range_set_adjustment (GtkRange      *range,
 
       gtk_range_adjustment_changed (adjustment, range);
       gtk_range_adjustment_value_changed (adjustment, range);
+
+      {
+        GtkRangeAccessible *accessible =
+          GTK_RANGE_ACCESSIBLE (_gtk_widget_peek_accessible (GTK_WIDGET (range)));
+
+        if (accessible != NULL)
+          gtk_range_accessible_update_adjustment (accessible);
+      }
+
       g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_ADJUSTMENT]);
     }
 }

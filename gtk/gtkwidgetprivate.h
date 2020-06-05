@@ -193,6 +193,10 @@ struct _GtkWidgetPrivate
 
   /* Pointer cursor */
   GdkCursor *cursor;
+
+  /* Tooltip */
+  char *tooltip_markup;
+  char *tooltip_text;
 };
 
 typedef struct
@@ -364,6 +368,9 @@ gboolean gtk_widget_focus_child      (GtkWidget        *widget,
 gboolean gtk_widget_grab_focus_self  (GtkWidget        *widget);
 gboolean gtk_widget_focus_self       (GtkWidget        *widget,
                                       GtkDirectionType  direction);
+
+void    gtk_widget_update_orientation   (GtkWidget      *widget,
+                                         GtkOrientation  orientation);
 
 /* inline getters */
 

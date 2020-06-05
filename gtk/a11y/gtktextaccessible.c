@@ -110,8 +110,64 @@ gtk_text_accessible_get_attributes (AtkObject *accessible)
 }
 
 static void
+on_cursor_position_changed (GObject    *gobject,
+                            GParamSpec *pspec,
+                            AtkObject  *accessible)
+{
+  GtkTextAccessible *self = GTK_TEXT_ACCESSIBLE (accessible);
+  GtkTextAccessiblePrivate *priv = gtk_text_accessible_get_instance_private (self);
+  GtkText *text = GTK_TEXT (gobject);
+
+  if (check_for_selection_change (self, text))
+    g_signal_emit_by_name (accessible, "text-selection-changed");
+
+  /* The entry cursor position has moved so generate the signal */
+  g_signal_emit_by_name (accessible,
+                         "text-caret-moved",
+                         priv->cursor_position);
+}
+
+static void
+on_selection_bound_changed (GObject    *gobject,
+                            GParamSpec *pspec,
+                            AtkObject  *accessible)
+{
+  GtkTextAccessible *self = GTK_TEXT_ACCESSIBLE (accessible);
+  GtkText *text = GTK_TEXT (gobject);
+
+  if (check_for_selection_change (self, text))
+    g_signal_emit_by_name (accessible, "text-selection-changed");
+}
+
+static void
+on_editable_changed (GObject    *gobject,
+                     GParamSpec *pspec,
+                     AtkObject  *accessible)
+{
+  GtkEditable *editable = GTK_EDITABLE (gobject);
+  gboolean value = gtk_editable_get_editable (editable);
+
+  atk_object_notify_state_change (accessible, ATK_STATE_EDITABLE, value);
+}
+
+static void
+on_visibility_changed (GObject    *gobject,
+                       GParamSpec *pspec,
+                       AtkObject  *accessible)
+{
+  GtkText *text = GTK_TEXT (gobject);
+  AtkRole new_role;
+
+  new_role = gtk_text_get_visibility (text)
+           ? ATK_ROLE_TEXT
+           : ATK_ROLE_PASSWORD_TEXT;
+
+  atk_object_set_role (accessible, new_role);
+}
+
+static void
 gtk_text_accessible_initialize (AtkObject *obj,
-                                 gpointer   data)
+                                gpointer   data)
 {
   GtkText *entry;
   GtkTextAccessible *gtk_text_accessible;
@@ -130,66 +186,21 @@ gtk_text_accessible_initialize (AtkObject *obj,
   g_signal_connect_after (entry, "insert-text", G_CALLBACK (insert_text_cb), NULL);
   g_signal_connect (entry, "delete-text", G_CALLBACK (delete_text_cb), NULL);
 
+  g_signal_connect (entry, "notify::cursor-position", G_CALLBACK (on_cursor_position_changed), obj);
+  g_signal_connect (entry, "notify::selection-bound", G_CALLBACK (on_selection_bound_changed), obj);
+  g_signal_connect (entry, "notify::editable", G_CALLBACK (on_editable_changed), obj);
+  g_signal_connect (entry, "notify::visibility", G_CALLBACK (on_visibility_changed), obj);
+
   if (gtk_text_get_visibility (entry))
     obj->role = ATK_ROLE_TEXT;
   else
     obj->role = ATK_ROLE_PASSWORD_TEXT;
 }
 
-static void
-gtk_text_accessible_notify_gtk (GObject    *obj,
-                                 GParamSpec *pspec)
-{
-  GtkWidget *widget;
-  AtkObject* atk_obj;
-  GtkText* gtk_text;
-  GtkTextAccessible* entry;
-
-  widget = GTK_WIDGET (obj);
-  atk_obj = gtk_widget_get_accessible (widget);
-  gtk_text = GTK_TEXT (widget);
-  entry = GTK_TEXT_ACCESSIBLE (atk_obj);
-
-  if (g_strcmp0 (pspec->name, "cursor-position") == 0)
-    {
-      if (check_for_selection_change (entry, gtk_text))
-        g_signal_emit_by_name (atk_obj, "text-selection-changed");
-      /*
-       * The entry cursor position has moved so generate the signal.
-       */
-      g_signal_emit_by_name (atk_obj, "text-caret-moved",
-                             entry->priv->cursor_position);
-    }
-  else if (g_strcmp0 (pspec->name, "selection-bound") == 0)
-    {
-      if (check_for_selection_change (entry, gtk_text))
-        g_signal_emit_by_name (atk_obj, "text-selection-changed");
-    }
-  else if (g_strcmp0 (pspec->name, "editable") == 0)
-    {
-      gboolean value;
-
-      g_object_get (obj, "editable", &value, NULL);
-      atk_object_notify_state_change (atk_obj, ATK_STATE_EDITABLE, value);
-    }
-  else if (g_strcmp0 (pspec->name, "visibility") == 0)
-    {
-      gboolean visibility;
-      AtkRole new_role;
-
-      visibility = gtk_text_get_visibility (gtk_text);
-      new_role = visibility ? ATK_ROLE_TEXT : ATK_ROLE_PASSWORD_TEXT;
-      atk_object_set_role (atk_obj, new_role);
-    }
-  else
-    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_text_accessible_parent_class)->notify_gtk (obj, pspec);
-}
-
 static gint
 gtk_text_accessible_get_index_in_parent (AtkObject *accessible)
 {
-  /*
-   * If the parent widget is a combo box then the index is 1
+  /* If the parent widget is a combo box then the index is 1
    * otherwise do the normal thing.
    */
   if (accessible->accessible_parent)
@@ -202,15 +213,12 @@ gtk_text_accessible_get_index_in_parent (AtkObject *accessible)
 static void
 gtk_text_accessible_class_init (GtkTextAccessibleClass *klass)
 {
-  AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
-  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
+  AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
   class->ref_state_set = gtk_text_accessible_ref_state_set;
   class->get_index_in_parent = gtk_text_accessible_get_index_in_parent;
   class->initialize = gtk_text_accessible_initialize;
   class->get_attributes = gtk_text_accessible_get_attributes;
-
-  widget_class->notify_gtk = gtk_text_accessible_notify_gtk;
 }
 
 static void

@@ -35,13 +35,10 @@ G_BEGIN_DECLS
 
 typedef struct _GtkScaleButtonAccessible        GtkScaleButtonAccessible;
 typedef struct _GtkScaleButtonAccessibleClass   GtkScaleButtonAccessibleClass;
-typedef struct _GtkScaleButtonAccessiblePrivate GtkScaleButtonAccessiblePrivate;
 
 struct _GtkScaleButtonAccessible
 {
   GtkWidgetAccessible parent;
-
-  GtkScaleButtonAccessiblePrivate *priv;
 };
 
 struct _GtkScaleButtonAccessibleClass

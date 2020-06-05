@@ -40,7 +40,7 @@
 #include "gtkmarshalers.h"
 #include "gtkstylecontext.h"
 #include "gtkeventcontrollerkey.h"
-#include "a11y/gtkentryaccessible.h"
+#include "a11y/gtksearchentryaccessible.h"
 
 
 /**
@@ -219,17 +219,6 @@ gtk_search_entry_get_property (GObject    *object,
     }
 }
 
-static AtkObject *
-gtk_search_entry_get_accessible (GtkWidget *widget)
-{
-  AtkObject *atk_obj;
-
-  atk_obj = GTK_WIDGET_CLASS (gtk_search_entry_parent_class)->get_accessible (widget);
-  atk_object_set_name (atk_obj, _("Search"));
-
-  return atk_obj;
-}
-
 static gboolean
 gtk_search_entry_grab_focus (GtkWidget *widget)
 {
@@ -259,7 +248,6 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
   object_class->get_property = gtk_search_entry_get_property;
   object_class->set_property = gtk_search_entry_set_property;
 
-  widget_class->get_accessible = gtk_search_entry_get_accessible;
   widget_class->grab_focus = gtk_search_entry_grab_focus;
   widget_class->mnemonic_activate = gtk_search_entry_mnemonic_activate;
 
@@ -400,7 +388,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
                                        "stop-search",
                                        NULL);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SEARCH_ENTRY_ACCESSIBLE);
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("entry"));
 }

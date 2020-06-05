@@ -122,23 +122,21 @@
 #include "gtkbinlayout.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
-#include "gtkintl.h"
-#include "gtkorientableprivate.h"
-#include "gtklevelbar.h"
-#include "gtkmarshalers.h"
-#include "gtkstylecontext.h"
-#include "gtktypebuiltins.h"
-#include "gtkwidget.h"
-#include "gtkwidgetprivate.h"
-#include "gtkstylecontextprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkgizmoprivate.h"
+#include "gtkintl.h"
+#include "gtklevelbar.h"
+#include "gtkmarshalers.h"
+#include "gtkorientable.h"
+#include "gtkstylecontextprivate.h"
+#include "gtktypebuiltins.h"
+#include "gtkwidgetprivate.h"
+
+#include "a11y/gtklevelbaraccessible.h"
 
 #include <math.h>
 #include <stdlib.h>
-
-#include "a11y/gtklevelbaraccessible.h"
 
 enum {
   PROP_VALUE = 1,
@@ -796,7 +794,7 @@ gtk_level_bar_set_orientation (GtkLevelBar    *self,
   if (self->orientation != orientation)
     {
       self->orientation = orientation;
-      _gtk_orientable_set_style_classes (GTK_ORIENTABLE (self));
+      gtk_widget_update_orientation (GTK_WIDGET (self), self->orientation);
       gtk_widget_queue_resize (GTK_WIDGET (self));
       g_object_notify (G_OBJECT (self), "orientation");
     }
@@ -1012,7 +1010,7 @@ gtk_level_bar_init (GtkLevelBar *self)
 
   /* set initial orientation and style classes */
   self->orientation = GTK_ORIENTATION_HORIZONTAL;
-  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (self));
+  gtk_widget_update_orientation (GTK_WIDGET (self), self->orientation);
 
   self->inverted = FALSE;
 
@@ -1124,7 +1122,9 @@ gtk_level_bar_set_value_internal (GtkLevelBar *self,
                                   gdouble      value)
 {
   self->cur_value = value;
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_VALUE]);
+
   gtk_widget_queue_allocate (GTK_WIDGET (self->trough_widget));
 }
 

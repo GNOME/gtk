@@ -23,79 +23,107 @@
 
 #include <string.h>
 
+typedef struct {
+  GtkAdjustment *adjustment;
+  gulong value_changed_id;
+} GtkScaleButtonAccessiblePrivate;
 
 static void atk_action_interface_init (AtkActionIface *iface);
 static void atk_value_interface_init  (AtkValueIface  *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkScaleButtonAccessible, gtk_scale_button_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
+                         G_ADD_PRIVATE (GtkScaleButtonAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init));
 
 static void
-gtk_scale_button_accessible_value_changed (GtkAdjustment *adjustment,
-                                           gpointer       data)
+on_value_changed (GtkAdjustment *adjustment,
+                  gpointer       data)
 {
-  g_object_notify (G_OBJECT (data), "accessible-value");
+  GtkScaleButtonAccessible *self = data;
+
+  g_object_notify (G_OBJECT (self), "accessible-value");
+}
+
+static void
+on_adjustment_changed (GObject    *gobject,
+                       GParamSpec *pspec,
+                       gpointer    data)
+{
+  GtkScaleButton *scale_button = GTK_SCALE_BUTTON (gobject);
+  GtkScaleButtonAccessible *self = data;
+  GtkScaleButtonAccessiblePrivate *priv =
+    gtk_scale_button_accessible_get_instance_private (self);
+  GtkAdjustment *adjustment =
+    gtk_scale_button_get_adjustment (scale_button);
+
+  if (priv->adjustment == adjustment)
+    return;
+
+  if (priv->adjustment != NULL && priv->value_changed_id != 0)
+    {
+      g_signal_handler_disconnect (priv->adjustment, priv->value_changed_id);
+      priv->value_changed_id = 0;
+    }
+
+  g_clear_object (&priv->adjustment);
+
+  if (adjustment != NULL)
+    {
+      priv->adjustment = g_object_ref (adjustment);
+      priv->value_changed_id =
+        g_signal_connect (priv->adjustment, "notify::value-changed",
+                          G_CALLBACK (on_value_changed),
+                          self);
+    }
 }
 
 static void
 gtk_scale_button_accessible_initialize (AtkObject *obj,
                                         gpointer   data)
 {
-  GtkAdjustment *adjustment;
+  GtkScaleButton *scale_button = data;
 
   ATK_OBJECT_CLASS (gtk_scale_button_accessible_parent_class)->initialize (obj, data);
 
-  adjustment = gtk_scale_button_get_adjustment (GTK_SCALE_BUTTON (data));
-  if (adjustment)
-    g_signal_connect (adjustment,
-                      "value-changed",
-                      G_CALLBACK (gtk_scale_button_accessible_value_changed),
-                      obj);
-
-  obj->role = ATK_ROLE_SLIDER;
+  g_signal_connect (scale_button, "notify::adjustment",
+                    G_CALLBACK (on_adjustment_changed),
+                    obj);
 }
 
 static void
-gtk_scale_button_accessible_notify_gtk (GObject    *obj,
-                                        GParamSpec *pspec)
+gtk_scale_button_accessible_dispose (GObject *gobject)
 {
-  GtkScaleButton *scale_button;
-  GtkScaleButtonAccessible *accessible;
+  GtkScaleButtonAccessible *self = GTK_SCALE_BUTTON_ACCESSIBLE (gobject);
+  GtkScaleButtonAccessiblePrivate *priv =
+    gtk_scale_button_accessible_get_instance_private (self);
 
-  scale_button = GTK_SCALE_BUTTON (obj);
-  accessible = GTK_SCALE_BUTTON_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (scale_button)));
-
-  if (strcmp (pspec->name, "adjustment") == 0)
+  if (priv->adjustment != NULL && priv->value_changed_id != 0)
     {
-      GtkAdjustment* adjustment;
+      g_signal_handler_disconnect (priv->adjustment, priv->value_changed_id);
+      priv->value_changed_id = 0;
+    }
 
-      adjustment = gtk_scale_button_get_adjustment (scale_button);
-      g_signal_connect (adjustment,
-                        "value-changed",
-                        G_CALLBACK (gtk_scale_button_accessible_value_changed),
-                        accessible);
-    }
-  else
-    {
-      GTK_WIDGET_ACCESSIBLE_CLASS (gtk_scale_button_accessible_parent_class)->notify_gtk (obj, pspec);
-    }
+  g_clear_object (&priv->adjustment);
+
+  G_OBJECT_CLASS (gtk_scale_button_accessible_parent_class)->dispose (gobject);
 }
 
 static void
 gtk_scale_button_accessible_class_init (GtkScaleButtonAccessibleClass *klass)
 {
   AtkObjectClass *atk_object_class = ATK_OBJECT_CLASS (klass);
-  GtkWidgetAccessibleClass *widget_class = GTK_WIDGET_ACCESSIBLE_CLASS (klass);
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->dispose = gtk_scale_button_accessible_dispose;
 
   atk_object_class->initialize = gtk_scale_button_accessible_initialize;
-
-  widget_class->notify_gtk = gtk_scale_button_accessible_notify_gtk;
 }
 
 static void
-gtk_scale_button_accessible_init (GtkScaleButtonAccessible *button)
+gtk_scale_button_accessible_init (GtkScaleButtonAccessible *self)
 {
+  ATK_OBJECT (self)->role = ATK_ROLE_SLIDER;
 }
 
 static gboolean

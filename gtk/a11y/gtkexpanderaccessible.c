@@ -17,9 +17,10 @@
 
 #include "config.h"
 
+#include "gtkexpanderaccessibleprivate.h"
+
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
-#include "gtkexpanderaccessible.h"
 
 static void atk_action_interface_init (AtkActionIface *iface);
 
@@ -91,41 +92,27 @@ gtk_expander_accessible_ref_child (AtkObject *obj,
   return accessible;
 }
 
-static void
-gtk_expander_accessible_initialize (AtkObject *obj,
-                                    gpointer   data)
+void
+gtk_expander_accessible_update_label (GtkExpanderAccessible *self)
 {
-  ATK_OBJECT_CLASS (gtk_expander_accessible_parent_class)->initialize (obj, data);
+  AtkObject *atk_obj = ATK_OBJECT (self);
 
-  obj->role = ATK_ROLE_TOGGLE_BUTTON;
+  if (atk_obj->name == NULL)
+    g_object_notify (G_OBJECT (atk_obj), "accessible-name");
+
+  g_signal_emit_by_name (atk_obj, "visible-data-changed");
 }
 
-static void
-gtk_expander_accessible_notify_gtk (GObject    *obj,
-                                    GParamSpec *pspec)
+void
+gtk_expander_accessible_update_state (GtkExpanderAccessible *self,
+                                      gboolean               expanded)
 {
-  AtkObject* atk_obj;
-  GtkExpander *expander;
+  AtkObject *atk_obj = ATK_OBJECT (self);
 
-  expander = GTK_EXPANDER (obj);
-  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (expander));
-;
-  if (g_strcmp0 (pspec->name, "label") == 0)
-    {
-      if (atk_obj->name == NULL)
-        g_object_notify (G_OBJECT (atk_obj), "accessible-name");
-      g_signal_emit_by_name (atk_obj, "visible-data-changed");
-    }
-  else if (g_strcmp0 (pspec->name, "expanded") == 0)
-    {
-      atk_object_notify_state_change (atk_obj, ATK_STATE_CHECKED,
-                                      gtk_expander_get_expanded (expander));
-      atk_object_notify_state_change (atk_obj, ATK_STATE_EXPANDED,
-                                      gtk_expander_get_expanded (expander));
-      g_signal_emit_by_name (atk_obj, "visible-data-changed");
-    }
-  else
-    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_expander_accessible_parent_class)->notify_gtk (obj, pspec);
+  atk_object_notify_state_change (atk_obj, ATK_STATE_CHECKED, expanded);
+  atk_object_notify_state_change (atk_obj, ATK_STATE_EXPANDED, expanded);
+
+  g_signal_emit_by_name (atk_obj, "visible-data-changed");
 }
 
 static AtkStateSet *
@@ -158,21 +145,17 @@ static void
 gtk_expander_accessible_class_init (GtkExpanderAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
-
-  widget_class->notify_gtk = gtk_expander_accessible_notify_gtk;
 
   class->get_name = gtk_expander_accessible_get_name;
   class->get_n_children = gtk_expander_accessible_get_n_children;
   class->ref_child = gtk_expander_accessible_ref_child;
   class->ref_state_set = gtk_expander_accessible_ref_state_set;
-
-  class->initialize = gtk_expander_accessible_initialize;
 }
 
 static void
-gtk_expander_accessible_init (GtkExpanderAccessible *expander)
+gtk_expander_accessible_init (GtkExpanderAccessible *self)
 {
+  ATK_OBJECT (self)->role = ATK_ROLE_TOGGLE_BUTTON;
 }
 
 static gboolean
