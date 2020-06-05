@@ -364,7 +364,7 @@ gtk_set_get_max (GtkSet *set)
 
   r = &g_array_index (set->ranges, Range, set->ranges->len - 1);
 
-  return r->first + r->n_items;
+  return r->first + r->n_items - 1;
 }
 
 #if 0
