@@ -62,6 +62,60 @@
  *
  * To learn more about the list widget framework, see the [overview](#ListWidget).
  *
+ * An example of using GtkListView:
+ * |[
+ * static void
+ * setup_listitem_cb (GtkListItemFactory *factory,
+ *                    GtkListItem        *list_item)
+ * {
+ *   GtkWidget *image;
+ *
+ *   image = gtk_image_new ();
+ *   gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
+ *   gtk_list_item_set_child (list_item, image);
+ * }
+ *
+ * static void
+ * bind_listitem_cb (GtkListItemFactory *factory,
+ *                   GtkListItem        *list_item)
+ * {
+ *   GtkWidget *image;
+ *   GAppInfo *app_info;
+ *
+ *   image = gtk_list_item_get_child (list_item);
+ *   app_info = gtk_list_item_get_item (list_item);
+ *   gtk_image_set_from_gicon (GTK_IMAGE (image), g_app_info_get_icon (app_info));
+ * }
+ *
+ * static void
+ * activate_cb (GtkListView  *list,
+ *              guint         position,
+ *              gpointer      unused)
+ * {
+ *   GAppInfo *app_info;
+ *
+ *   app_info = g_list_model_get_item (gtk_list_view_get_model (list), position);
+ *   g_app_info_launch (app_info, NULL, NULL, NULL);
+ *   g_object_unref (app_info);
+ * }
+ *
+ * ...
+ *
+ *   factory = gtk_signal_list_item_factory_new ();
+ *   g_signal_connect (factory, "setup", G_CALLBACK (setup_listitem_cb), NULL);
+ *   g_signal_connect (factory, "bind", G_CALLBACK (bind_listitem_cb), NULL);
+ *
+ *   list = gtk_list_view_new_with_factory (factory);
+ *
+ *   g_signal_connect (list, "activate", G_CALLBACK (activate_cb), NULL);
+ *
+ *   model = create_application_list ();
+ *   gtk_list_view_set_model (GTK_LIST_VIEW (list), model);
+ *   g_object_unref (model);
+ *
+ *   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), list);
+ * ]|
+ *
  * # CSS nodes
  *
  * |[<!-- language="plain" -->
