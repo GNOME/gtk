@@ -35,13 +35,10 @@ G_BEGIN_DECLS
 
 typedef struct _GtkScrollbarAccessible        GtkScrollbarAccessible;
 typedef struct _GtkScrollbarAccessibleClass   GtkScrollbarAccessibleClass;
-typedef struct _GtkScrollbarAccessiblePrivate GtkScrollbarAccessiblePrivate;
 
 struct _GtkScrollbarAccessible
 {
   GtkWidgetAccessible parent;
-
-  GtkScrollbarAccessiblePrivate *priv;
 };
 
 struct _GtkScrollbarAccessibleClass

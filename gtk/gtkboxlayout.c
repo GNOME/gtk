@@ -22,7 +22,7 @@
 
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkintl.h"
-#include "gtkorientableprivate.h"
+#include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtksizerequest.h"
 #include "gtkstylecontextprivate.h"
@@ -89,7 +89,7 @@ gtk_box_layout_set_orientation (GtkBoxLayout   *self,
 
   widget = gtk_layout_manager_get_widget (layout_manager);
   if (widget != NULL && GTK_IS_ORIENTABLE (widget))
-    _gtk_orientable_set_style_classes (GTK_ORIENTABLE (widget));
+    gtk_widget_update_orientation (widget, self->orientation);
 
   gtk_layout_manager_layout_changed (layout_manager);
 

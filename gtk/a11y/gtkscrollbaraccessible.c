@@ -21,10 +21,11 @@
 #include <gtk/gtk.h>
 #include "gtkscrollbaraccessible.h"
 
-struct _GtkScrollbarAccessiblePrivate
+typedef struct
 {
   GtkAdjustment *adjustment;
-};
+  gulong value_changed_id;
+} GtkScrollbarAccessiblePrivate;
 
 static void atk_value_interface_init  (AtkValueIface  *iface);
 
@@ -33,91 +34,93 @@ G_DEFINE_TYPE_WITH_CODE (GtkScrollbarAccessible, gtk_scrollbar_accessible, GTK_T
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
 static void
-gtk_scrollbar_accessible_value_changed (GtkAdjustment *adjustment,
-                                        gpointer       data)
+on_value_changed (GtkAdjustment *adjustment,
+                  gpointer       data)
 {
-  g_object_notify (G_OBJECT (data), "accessible-value");
+  GtkScrollbarAccessible *self = data;
+
+  g_object_notify (G_OBJECT (self), "accessible-value");
 }
 
 static void
-gtk_scrollbar_accessible_widget_set (GtkAccessible *accessible)
+on_adjustment_changed (GObject    *gobject,
+                       GParamSpec *pspec,
+                       gpointer    data)
 {
-  GtkScrollbarAccessiblePrivate *priv = GTK_SCROLLBAR_ACCESSIBLE (accessible)->priv;
-  GtkWidget *scrollbar;
-  GtkAdjustment *adj;
+  GtkScrollbar *scrollbar = GTK_SCROLLBAR (gobject);
+  GtkScrollbarAccessible *self = data;
+  GtkScrollbarAccessiblePrivate *priv =
+    gtk_scrollbar_accessible_get_instance_private (self);
+  GtkAdjustment *adjustment =
+    gtk_scrollbar_get_adjustment (scrollbar);
 
-  scrollbar = gtk_accessible_get_widget (accessible);
-  adj = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (scrollbar));
-  if (adj)
+  if (priv->adjustment == adjustment)
+    return;
+
+  if (priv->adjustment != NULL && priv->value_changed_id != 0)
     {
-      priv->adjustment = adj;
-      g_object_ref (priv->adjustment);
-      g_signal_connect (priv->adjustment, "value-changed",
-                        G_CALLBACK (gtk_scrollbar_accessible_value_changed),
-                        accessible);
+      g_signal_handler_disconnect (priv->adjustment, priv->value_changed_id);
+      priv->value_changed_id = 0;
+    }
+
+  g_clear_object (&priv->adjustment);
+
+  if (adjustment != NULL)
+    {
+      priv->adjustment = g_object_ref (adjustment);
+      priv->value_changed_id =
+        g_signal_connect (priv->adjustment, "value-changed",
+                          G_CALLBACK (on_value_changed),
+                          self);
     }
 }
 
 static void
-gtk_scrollbar_accessible_widget_unset (GtkAccessible *accessible)
+gtk_scrollbar_accessible_dispose (GObject *gobject)
 {
-  GtkScrollbarAccessiblePrivate *priv = GTK_SCROLLBAR_ACCESSIBLE (accessible)->priv;
+  GtkScrollbarAccessible *self = GTK_SCROLLBAR_ACCESSIBLE (gobject);
+  GtkScrollbarAccessiblePrivate *priv =
+    gtk_scrollbar_accessible_get_instance_private (self);
 
-  if (priv->adjustment)
+  if (priv->adjustment != NULL && priv->value_changed_id != 0)
     {
-      g_signal_handlers_disconnect_by_func (priv->adjustment,
-                                            G_CALLBACK (gtk_scrollbar_accessible_value_changed),
-                                            accessible);
-      g_object_unref (priv->adjustment);
-      priv->adjustment = NULL;
+      g_signal_handler_disconnect (priv->adjustment, priv->value_changed_id);
+      priv->value_changed_id = 0;
     }
+
+  g_clear_object (&priv->adjustment);
+
+  G_OBJECT_CLASS (gtk_scrollbar_accessible_parent_class)->dispose (gobject);
 }
 
 static void
 gtk_scrollbar_accessible_initialize (AtkObject *obj,
                                      gpointer   data)
 {
+  GtkScrollbar *scrollbar = data;
+
   ATK_OBJECT_CLASS (gtk_scrollbar_accessible_parent_class)->initialize (obj, data);
-  obj->role = ATK_ROLE_SCROLL_BAR;
+
+  g_signal_connect (scrollbar, "notify::adjustment",
+                    G_CALLBACK (on_adjustment_changed),
+                    obj);
 }
-
-static void
-gtk_scrollbar_accessible_notify_gtk (GObject    *obj,
-                                     GParamSpec *pspec)
-{
-  GtkWidget *widget = GTK_WIDGET (obj);
-  AtkObject *scrollbar;
-
-  if (strcmp (pspec->name, "adjustment") == 0)
-    {
-      scrollbar = gtk_widget_get_accessible (widget);
-      gtk_scrollbar_accessible_widget_unset (GTK_ACCESSIBLE (scrollbar));
-      gtk_scrollbar_accessible_widget_set (GTK_ACCESSIBLE (scrollbar));
-    }
-  else
-    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_scrollbar_accessible_parent_class)->notify_gtk (obj, pspec);
-}
-
 
 static void
 gtk_scrollbar_accessible_class_init (GtkScrollbarAccessibleClass *klass)
 {
-  AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-  GtkAccessibleClass *accessible_class = (GtkAccessibleClass*)klass;
-  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
+  AtkObjectClass *atk_object_class = ATK_OBJECT_CLASS (klass);
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  class->initialize = gtk_scrollbar_accessible_initialize;
+  atk_object_class->initialize = gtk_scrollbar_accessible_initialize;
 
-  accessible_class->widget_set = gtk_scrollbar_accessible_widget_set;
-  accessible_class->widget_unset = gtk_scrollbar_accessible_widget_unset;
-
-  widget_class->notify_gtk = gtk_scrollbar_accessible_notify_gtk;
+  gobject_class->dispose = gtk_scrollbar_accessible_dispose;
 }
 
 static void
-gtk_scrollbar_accessible_init (GtkScrollbarAccessible *scrollbar)
+gtk_scrollbar_accessible_init (GtkScrollbarAccessible *self)
 {
-  scrollbar->priv = gtk_scrollbar_accessible_get_instance_private (scrollbar);
+  ATK_OBJECT (self)->role = ATK_ROLE_SCROLL_BAR;
 }
 
 static void

@@ -17,19 +17,42 @@
 
 #include "config.h"
 
-#include <gtk/gtk.h>
 #include "gtkwidgetaccessibleprivate.h"
-#include "gtknotebookpageaccessible.h"
 
-struct _GtkWidgetAccessiblePrivate
+#include "gtkaccellabel.h"
+#include "gtkadjustment.h"
+#include "gtkbox.h"
+#include "gtkbutton.h"
+#include "gtkcombobox.h"
+#include "gtkdragicon.h"
+#include "gtkdrawingarea.h"
+#include "gtkglarea.h"
+#include "gtkimage.h"
+#include "gtklevelbar.h"
+#include "gtkmediacontrols.h"
+#include "gtknotebookpageaccessible.h"
+#include "gtknotebook.h"
+#include "gtkorientable.h"
+#include "gtkpicture.h"
+#include "gtkprogressbar.h"
+#include "gtkscrollable.h"
+#include "gtkscrollbar.h"
+#include "gtkseparator.h"
+#include "gtkshortcutlabel.h"
+#include "gtkshortcutsshortcut.h"
+#include "gtkspinner.h"
+#include "gtkstacksidebar.h"
+#include "gtkstatusbar.h"
+#include "gtkvideo.h"
+#include "gtkviewport.h"
+#include "gtkwidgetprivate.h"
+
+typedef struct
 {
   AtkLayer layer;
-};
-
-#define TOOLTIP_KEY "tooltip"
+} GtkWidgetAccessiblePrivate;
 
 extern GtkWidget *_focus_widget;
-
 
 static gboolean gtk_widget_accessible_on_screen           (GtkWidget *widget);
 static gboolean gtk_widget_accessible_all_parents_visible (GtkWidget *widget);
@@ -39,20 +62,6 @@ static void atk_component_interface_init (AtkComponentIface *iface);
 G_DEFINE_TYPE_WITH_CODE (GtkWidgetAccessible, gtk_widget_accessible, GTK_TYPE_ACCESSIBLE,
                          G_ADD_PRIVATE (GtkWidgetAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init))
-
-/* Translate GtkWidget property change notification to the notify_gtk vfunc */
-static void
-notify_cb (GObject    *obj,
-           GParamSpec *pspec)
-{
-  GtkWidgetAccessible *widget;
-  GtkWidgetAccessibleClass *klass;
-
-  widget = GTK_WIDGET_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (obj)));
-  klass = GTK_WIDGET_ACCESSIBLE_GET_CLASS (widget);
-  if (klass->notify_gtk)
-    klass->notify_gtk (obj, pspec);
-}
 
 /*< private >
  * gtk_widget_accessible_update_bounds:
@@ -78,47 +87,111 @@ gtk_widget_accessible_update_bounds (GtkWidgetAccessible *self)
   g_signal_emit_by_name (self, "bounds-changed", &rect);
 }
 
-/* Translate GtkWidget mapped state into AtkObject showing */
-static gint
-map_cb (GtkWidget *widget)
+/*< private >
+ * gtk_widget_accessible_notify_showing:
+ * @self: a #GtkWidgetAccessible
+ *
+ * Translates the #GtkWidget mapped state into the #AtkObject
+ * showing state.
+ */
+void
+gtk_widget_accessible_notify_showing (GtkWidgetAccessible *self)
 {
-  AtkObject *accessible;
+  g_return_if_fail (GTK_IS_WIDGET_ACCESSIBLE (self));
 
-  accessible = gtk_widget_get_accessible (widget);
-  atk_object_notify_state_change (accessible, ATK_STATE_SHOWING,
+  GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (self));
+
+  atk_object_notify_state_change (ATK_OBJECT (self),
+                                  ATK_STATE_SHOWING,
                                   gtk_widget_get_mapped (widget));
-  return 1;
 }
 
-static void
-gtk_widget_accessible_update_tooltip (GtkWidgetAccessible *accessible,
-                                      GtkWidget *widget)
+void
+gtk_widget_accessible_notify_tooltip (GtkWidgetAccessible *self)
 {
-  g_object_set_data_full (G_OBJECT (accessible),
-                          TOOLTIP_KEY,
-                          gtk_widget_get_tooltip_text (widget),
-                          g_free);
+  g_return_if_fail (GTK_IS_WIDGET_ACCESSIBLE (self));
+
+  GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (self));
+
+  atk_object_notify_state_change (ATK_OBJECT (self),
+                                  ATK_STATE_HAS_TOOLTIP,
+                                  gtk_widget_get_has_tooltip (widget));
+}
+
+void
+gtk_widget_accessible_notify_visible (GtkWidgetAccessible *self)
+{
+  g_return_if_fail (GTK_IS_WIDGET_ACCESSIBLE (self));
+
+  GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (self));
+
+  atk_object_notify_state_change (ATK_OBJECT (self),
+                                  ATK_STATE_VISIBLE,
+                                  gtk_widget_get_visible (widget));
+}
+
+void
+gtk_widget_accessible_notify_sensitive (GtkWidgetAccessible *self)
+{
+  g_return_if_fail (GTK_IS_WIDGET_ACCESSIBLE (self));
+
+  GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (self));
+  gboolean is_sensitive = gtk_widget_get_sensitive (widget);
+
+  atk_object_notify_state_change (ATK_OBJECT (self),
+                                  ATK_STATE_SENSITIVE,
+                                  is_sensitive);
+  atk_object_notify_state_change (ATK_OBJECT (self),
+                                  ATK_STATE_ENABLED,
+                                  is_sensitive);
+}
+
+void
+gtk_widget_accessible_notify_focus (GtkWidgetAccessible *self)
+{
+  g_return_if_fail (GTK_IS_WIDGET_ACCESSIBLE (self));
+
+  GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (self));
+
+  atk_object_notify_state_change (ATK_OBJECT (self),
+                                  ATK_STATE_FOCUSED,
+                                  gtk_widget_has_focus (widget));
+}
+
+void
+gtk_widget_accessible_notify_orientation (GtkWidgetAccessible *self)
+{
+  g_return_if_fail (GTK_IS_WIDGET_ACCESSIBLE (self));
+
+  GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (self));
+
+  if (GTK_IS_ORIENTABLE (widget))
+    {
+      GtkOrientable *orientable = GTK_ORIENTABLE (widget);
+      GtkOrientation orientation = gtk_orientable_get_orientation (orientable);
+
+      atk_object_notify_state_change (ATK_OBJECT (self),
+                                      ATK_STATE_HORIZONTAL,
+                                      orientation == GTK_ORIENTATION_HORIZONTAL);
+      atk_object_notify_state_change (ATK_OBJECT (self),
+                                      ATK_STATE_VERTICAL,
+                                      orientation == GTK_ORIENTATION_VERTICAL);
+    }
 }
 
 static void
-gtk_widget_accessible_initialize (AtkObject *obj,
+gtk_widget_accessible_initialize (AtkObject *object,
                                   gpointer   data)
 {
-  GtkWidget *widget;
+  GtkWidgetAccessible *self = GTK_WIDGET_ACCESSIBLE (object);
+  GtkWidgetAccessiblePrivate *priv = gtk_widget_accessible_get_instance_private (self);
 
-  widget = GTK_WIDGET (data);
+  priv->layer = ATK_LAYER_WIDGET;
 
-  g_signal_connect (widget, "notify", G_CALLBACK (notify_cb), NULL);
-  g_signal_connect (widget, "map", G_CALLBACK (map_cb), NULL);
-  g_signal_connect (widget, "unmap", G_CALLBACK (map_cb), NULL);
-
-  GTK_WIDGET_ACCESSIBLE (obj)->priv->layer = ATK_LAYER_WIDGET;
-  obj->role = ATK_ROLE_UNKNOWN;
-
-  gtk_widget_accessible_update_tooltip (GTK_WIDGET_ACCESSIBLE (obj), widget);
+  atk_object_set_role (object, ATK_ROLE_UNKNOWN);
 }
 
-static const gchar *
+static const char *
 gtk_widget_accessible_get_description (AtkObject *accessible)
 {
   GtkWidget *widget;
@@ -127,10 +200,10 @@ gtk_widget_accessible_get_description (AtkObject *accessible)
   if (widget == NULL)
     return NULL;
 
-  if (accessible->description)
+  if (accessible->description != NULL)
     return accessible->description;
 
-  return g_object_get_data (G_OBJECT (accessible), TOOLTIP_KEY);
+  return gtk_widget_get_tooltip_text (widget);
 }
 
 static AtkObject *
@@ -446,72 +519,6 @@ gtk_widget_accessible_get_index_in_parent (AtkObject *accessible)
   return index;
 }
 
-/* This function is the default implementation for the notify_gtk
- * vfunc which gets called when a property changes value on the
- * GtkWidget associated with a GtkWidgetAccessible. It constructs
- * an AtkPropertyValues structure and emits a “property_changed”
- * signal which causes the user specified AtkPropertyChangeHandler
- * to be called.
- */
-static void
-gtk_widget_accessible_notify_gtk (GObject    *obj,
-                                  GParamSpec *pspec)
-{
-  GtkWidget* widget = GTK_WIDGET (obj);
-  AtkObject* atk_obj = gtk_widget_get_accessible (widget);
-  AtkState state;
-  gboolean value;
-
-  if (g_strcmp0 (pspec->name, "has-focus") == 0)
-    {
-      state = ATK_STATE_FOCUSED;
-      value = gtk_widget_has_focus (widget);
-    }
-  else if (g_strcmp0 (pspec->name, "tooltip-text") == 0)
-    {
-      gtk_widget_accessible_update_tooltip (GTK_WIDGET_ACCESSIBLE (atk_obj),
-                                            widget);
-
-      if (atk_obj->description == NULL)
-        g_object_notify (G_OBJECT (atk_obj), "accessible-description");
-      return;
-    }
-  else if (g_strcmp0 (pspec->name, "visible") == 0)
-    {
-      state = ATK_STATE_VISIBLE;
-      value = gtk_widget_get_visible (widget);
-    }
-  else if (g_strcmp0 (pspec->name, "sensitive") == 0)
-    {
-      state = ATK_STATE_SENSITIVE;
-      value = gtk_widget_get_sensitive (widget);
-    }
-  else if (g_strcmp0 (pspec->name, "orientation") == 0 &&
-           GTK_IS_ORIENTABLE (widget))
-    {
-      GtkOrientable *orientable;
-
-      orientable = GTK_ORIENTABLE (widget);
-
-      state = ATK_STATE_HORIZONTAL;
-      value = (gtk_orientable_get_orientation (orientable) == GTK_ORIENTATION_HORIZONTAL);
-    }
-  else if (g_strcmp0 (pspec->name, "has-tooltip") == 0)
-    {
-      state = ATK_STATE_HAS_TOOLTIP;
-      value = gtk_widget_get_has_tooltip (widget);
-    }
-  else
-    return;
-
-  atk_object_notify_state_change (atk_obj, state, value);
-  if (state == ATK_STATE_SENSITIVE)
-    atk_object_notify_state_change (atk_obj, ATK_STATE_ENABLED, value);
-
-  if (state == ATK_STATE_HORIZONTAL)
-    atk_object_notify_state_change (atk_obj, ATK_STATE_VERTICAL, !value);
-}
-
 static AtkAttributeSet *
 gtk_widget_accessible_get_attributes (AtkObject *obj)
 {
@@ -567,8 +574,6 @@ gtk_widget_accessible_class_init (GtkWidgetAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
-  klass->notify_gtk = gtk_widget_accessible_notify_gtk;
-
   class->get_description = gtk_widget_accessible_get_description;
   class->get_parent = gtk_widget_accessible_get_parent;
   class->ref_relation_set = gtk_widget_accessible_ref_relation_set;
@@ -583,7 +588,6 @@ gtk_widget_accessible_class_init (GtkWidgetAccessibleClass *klass)
 static void
 gtk_widget_accessible_init (GtkWidgetAccessible *accessible)
 {
-  accessible->priv = gtk_widget_accessible_get_instance_private (accessible);
 }
 
 static void
@@ -626,9 +630,10 @@ gtk_widget_accessible_get_extents (AtkComponent   *component,
 static AtkLayer
 gtk_widget_accessible_get_layer (AtkComponent *component)
 {
-  GtkWidgetAccessible *accessible = GTK_WIDGET_ACCESSIBLE (component);
+  GtkWidgetAccessible *self = GTK_WIDGET_ACCESSIBLE (component);
+  GtkWidgetAccessiblePrivate *priv = gtk_widget_accessible_get_instance_private (self);
 
-  return accessible->priv->layer;
+  return priv->layer;
 }
 
 static gboolean
@@ -760,10 +765,11 @@ gtk_widget_accessible_all_parents_visible (GtkWidget *widget)
   GtkWidget *iter_parent = NULL;
   gboolean result = TRUE;
 
-  for (iter_parent = gtk_widget_get_parent (widget); iter_parent;
-       iter_parent = gtk_widget_get_parent (iter_parent))
+  for (iter_parent = _gtk_widget_get_parent (widget);
+       iter_parent != NULL;
+       iter_parent = _gtk_widget_get_parent (iter_parent))
     {
-      if (!gtk_widget_get_visible (iter_parent))
+      if (!_gtk_widget_get_visible (iter_parent))
         {
           result = FALSE;
           break;
@@ -774,8 +780,10 @@ gtk_widget_accessible_all_parents_visible (GtkWidget *widget)
 }
 
 void
-_gtk_widget_accessible_set_layer (GtkWidgetAccessible *accessible,
+_gtk_widget_accessible_set_layer (GtkWidgetAccessible *self,
                                   AtkLayer             layer)
 {
-  accessible->priv->layer = layer;
+  GtkWidgetAccessiblePrivate *priv = gtk_widget_accessible_get_instance_private (self);
+
+  priv->layer = layer;
 }

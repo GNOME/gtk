@@ -17,20 +17,21 @@
 
 #include "config.h"
 
+#include "gtkentryaccessible.h"
+
+#include "gtkcomboboxaccessible.h"
+
+#include "gtkentryprivate.h"
+#include "gtklabel.h"
+#include "gtkpango.h"
+#include "gtkstylecontextprivate.h"
+#include "gtktextprivate.h"
+#include "gtkwidgetprivate.h"
+
 #include "gdk/gdkeventsprivate.h"
 
 #include <glib/gi18n-lib.h>
 #include <string.h>
-#include <gtk/gtk.h>
-#include "gtkpango.h"
-#include "gtkentryaccessible.h"
-#include "gtkentryprivate.h"
-#include "gtksearchentryprivate.h"
-#include "gtkpasswordentry.h"
-#include "gtktextprivate.h"
-#include "gtkcomboboxaccessible.h"
-#include "gtkstylecontextprivate.h"
-#include "gtkwidgetprivate.h"
 
 #define GTK_TYPE_ENTRY_ICON_ACCESSIBLE      (gtk_entry_icon_accessible_get_type ())
 #define GTK_ENTRY_ICON_ACCESSIBLE(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ENTRY_ICON_ACCESSIBLE, GtkEntryIconAccessible))
@@ -157,7 +158,7 @@ gtk_entry_icon_accessible_ref_state_set (AtkObject *accessible)
   if (!entry_set || atk_state_set_contains_state (entry_set, ATK_STATE_DEFUNCT))
     {
       atk_state_set_add_state (set, ATK_STATE_DEFUNCT);
-    g_clear_object (&entry_set);
+      g_clear_object (&entry_set);
       return set;
     }
 
@@ -356,15 +357,6 @@ icon_atk_component_interface_init (AtkComponentIface *iface)
 }
 
 /* Callbacks */
-
-static void     insert_text_cb             (GtkEditable        *editable,
-                                            gchar              *new_text,
-                                            gint                new_text_length,
-                                            gint               *position);
-static void     delete_text_cb             (GtkEditable        *editable,
-                                            gint                start,
-                                            gint                end);
-
 static gboolean check_for_selection_change (GtkEntryAccessible *entry,
                                             GtkEditable        *editable);
 
@@ -380,6 +372,277 @@ G_DEFINE_TYPE_WITH_CODE (GtkEntryAccessible, gtk_entry_accessible, GTK_TYPE_WIDG
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
 
+static GtkText *
+get_text (AtkText *atk_text)
+{
+  GtkWidget *widget;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_text));
+  if (widget == NULL)
+    return NULL;
+
+  return gtk_entry_get_text_widget (GTK_ENTRY (widget));
+}
+
+static gboolean
+check_for_selection_change (GtkEntryAccessible *accessible,
+                            GtkEditable        *editable)
+{
+  gboolean ret_val = FALSE;
+  gint start, end;
+
+  if (gtk_editable_get_selection_bounds (editable, &start, &end))
+    {
+      if (end != accessible->priv->cursor_position ||
+          start != accessible->priv->selection_bound)
+        /*
+         * This check is here as this function can be called
+         * for notification of selection_bound and current_pos.
+         * The values of current_pos and selection_bound may be the same
+         * for both notifications and we only want to generate one
+         * text_selection_changed signal.
+         */
+        ret_val = TRUE;
+    }
+  else
+    {
+      /* We had a selection */
+      ret_val = (accessible->priv->cursor_position != accessible->priv->selection_bound);
+    }
+
+  accessible->priv->cursor_position = end;
+  accessible->priv->selection_bound = start;
+
+  return ret_val;
+}
+
+static void
+insert_text_cb (GtkEditable        *editable,
+                gchar              *new_text,
+                gint                new_text_length,
+                gint               *position,
+                GtkEntryAccessible *self)
+{
+  int length;
+
+  if (new_text_length == 0)
+    return;
+
+  length = g_utf8_strlen (new_text, new_text_length);
+
+  g_signal_emit_by_name (self,
+                         "text-changed::insert",
+                         *position - length,
+                          length);
+}
+
+/* We connect to GtkEditable::delete-text, since it carries
+ * the information we need. But we delay emitting our own
+ * text_changed::delete signal until the entry has update
+ * all its internal state and emits GtkEntry::changed.
+ */
+static void
+delete_text_cb (GtkEditable        *editable,
+                gint                start,
+                gint                end,
+                GtkEntryAccessible *self)
+{
+  GtkText *textw;
+
+  textw = get_text (ATK_TEXT (self));
+  if (textw == NULL)
+    return;
+
+  if (end < 0)
+    {
+      gchar *text;
+
+      text = gtk_text_get_display_text (textw, 0, -1);
+      end = g_utf8_strlen (text, -1);
+      g_free (text);
+    }
+
+  if (end == start)
+    return;
+
+  g_signal_emit_by_name (self,
+                         "text-changed::delete",
+                         start,
+                         end - start);
+}
+
+static void
+on_notify (GObject            *gobject,
+           GParamSpec         *pspec,
+           GtkEntryAccessible *self)
+{
+  GtkWidget *widget;
+  AtkObject* atk_obj;
+  GtkEntryAccessiblePrivate *priv;
+
+  widget = GTK_WIDGET (gobject);
+  atk_obj = gtk_widget_get_accessible (widget);
+  priv = gtk_entry_accessible_get_instance_private (self);
+
+  if (g_strcmp0 (pspec->name, "cursor-position") == 0)
+    {
+      if (check_for_selection_change (self, GTK_EDITABLE (widget)))
+        g_signal_emit_by_name (atk_obj, "text-selection-changed");
+      /*
+       * The entry cursor position has moved so generate the signal.
+       */
+      g_signal_emit_by_name (atk_obj, "text-caret-moved",
+                             gtk_editable_get_position (GTK_EDITABLE (widget)));
+    }
+  else if (g_strcmp0 (pspec->name, "selection-bound") == 0)
+    {
+      if (check_for_selection_change (self, GTK_EDITABLE (widget)))
+        g_signal_emit_by_name (atk_obj, "text-selection-changed");
+    }
+  else if (g_strcmp0 (pspec->name, "editable") == 0)
+    {
+      gboolean value;
+
+      g_object_get (gobject, "editable", &value, NULL);
+      atk_object_notify_state_change (atk_obj, ATK_STATE_EDITABLE, value);
+    }
+  else if (g_strcmp0 (pspec->name, "visibility") == 0)
+    {
+      gboolean visibility;
+      AtkRole new_role;
+
+      visibility = gtk_entry_get_visibility (GTK_ENTRY (widget));
+      new_role = visibility ? ATK_ROLE_TEXT : ATK_ROLE_PASSWORD_TEXT;
+      atk_object_set_role (atk_obj, new_role);
+    }
+  else if (g_strcmp0 (pspec->name, "primary-icon-storage-type") == 0)
+    {
+      if (gtk_entry_get_icon_storage_type (GTK_ENTRY (widget), GTK_ENTRY_ICON_PRIMARY) != GTK_IMAGE_EMPTY &&
+          !priv->icons[GTK_ENTRY_ICON_PRIMARY])
+        {
+          priv->icons[GTK_ENTRY_ICON_PRIMARY] = gtk_entry_icon_accessible_new (self, GTK_ENTRY_ICON_PRIMARY);
+          g_signal_emit_by_name (self, "children-changed::add", 0,
+                                 priv->icons[GTK_ENTRY_ICON_PRIMARY], NULL);
+        }
+      else if (gtk_entry_get_icon_storage_type (GTK_ENTRY (widget), GTK_ENTRY_ICON_PRIMARY) == GTK_IMAGE_EMPTY &&
+               priv->icons[GTK_ENTRY_ICON_PRIMARY])
+        {
+          gtk_entry_icon_accessible_invalidate (GTK_ENTRY_ICON_ACCESSIBLE (priv->icons[GTK_ENTRY_ICON_PRIMARY]));
+          g_signal_emit_by_name (self, "children-changed::remove", 0,
+                                 priv->icons[GTK_ENTRY_ICON_PRIMARY], NULL);
+          g_clear_object (&priv->icons[GTK_ENTRY_ICON_PRIMARY]);
+        }
+    }
+  else if (g_strcmp0 (pspec->name, "secondary-icon-storage-type") == 0)
+    {
+      gint index = (priv->icons[GTK_ENTRY_ICON_PRIMARY] ? 1 : 0);
+      if (gtk_entry_get_icon_storage_type (GTK_ENTRY (widget), GTK_ENTRY_ICON_SECONDARY) != GTK_IMAGE_EMPTY &&
+          !priv->icons[GTK_ENTRY_ICON_SECONDARY])
+        {
+          priv->icons[GTK_ENTRY_ICON_SECONDARY] = gtk_entry_icon_accessible_new (self, GTK_ENTRY_ICON_SECONDARY);
+          g_signal_emit_by_name (self, "children-changed::add", index,
+                                 priv->icons[GTK_ENTRY_ICON_SECONDARY], NULL);
+        }
+      else if (gtk_entry_get_icon_storage_type (GTK_ENTRY (widget), GTK_ENTRY_ICON_SECONDARY) == GTK_IMAGE_EMPTY &&
+               priv->icons[GTK_ENTRY_ICON_SECONDARY])
+        {
+          gtk_entry_icon_accessible_invalidate (GTK_ENTRY_ICON_ACCESSIBLE (priv->icons[GTK_ENTRY_ICON_SECONDARY]));
+          g_signal_emit_by_name (self, "children-changed::remove", index,
+                                 priv->icons[GTK_ENTRY_ICON_SECONDARY], NULL);
+          g_clear_object (&priv->icons[GTK_ENTRY_ICON_SECONDARY]);
+        }
+    }
+  else if (g_strcmp0 (pspec->name, "primary-icon-name") == 0)
+    {
+      if (priv->icons[GTK_ENTRY_ICON_PRIMARY])
+        {
+          const gchar *name;
+          name = gtk_entry_get_icon_name (GTK_ENTRY (widget), GTK_ENTRY_ICON_PRIMARY);
+          if (name)
+            atk_object_set_name (priv->icons[GTK_ENTRY_ICON_PRIMARY], name);
+        }
+    }
+  else if (g_strcmp0 (pspec->name, "secondary-icon-name") == 0)
+    {
+      if (priv->icons[GTK_ENTRY_ICON_SECONDARY])
+        {
+          const gchar *name;
+          name = gtk_entry_get_icon_name (GTK_ENTRY (widget), GTK_ENTRY_ICON_SECONDARY);
+          if (name)
+            atk_object_set_name (priv->icons[GTK_ENTRY_ICON_SECONDARY], name);
+        }
+    }
+  else if (g_strcmp0 (pspec->name, "primary-icon-tooltip-text") == 0)
+    {
+      if (priv->icons[GTK_ENTRY_ICON_PRIMARY])
+        {
+          gchar *text;
+          text = gtk_entry_get_icon_tooltip_text (GTK_ENTRY (widget), GTK_ENTRY_ICON_PRIMARY);
+          if (text)
+            {
+              atk_object_set_description (priv->icons[GTK_ENTRY_ICON_PRIMARY], text);
+              g_free (text);
+            }
+          else
+            {
+              atk_object_set_description (priv->icons[GTK_ENTRY_ICON_PRIMARY], "");
+            }
+        }
+    }
+  else if (g_strcmp0 (pspec->name, "secondary-icon-tooltip-text") == 0)
+    {
+      if (priv->icons[GTK_ENTRY_ICON_SECONDARY])
+        {
+          gchar *text;
+          text = gtk_entry_get_icon_tooltip_text (GTK_ENTRY (widget), GTK_ENTRY_ICON_SECONDARY);
+          if (text)
+            {
+              atk_object_set_description (priv->icons[GTK_ENTRY_ICON_SECONDARY], text);
+              g_free (text);
+            }
+          else
+            {
+              atk_object_set_description (priv->icons[GTK_ENTRY_ICON_SECONDARY], "");
+            }
+        }
+    }
+  else if (g_strcmp0 (pspec->name, "primary-icon-activatable") == 0)
+    {
+      if (priv->icons[GTK_ENTRY_ICON_PRIMARY])
+        {
+          gboolean on = gtk_entry_get_icon_activatable (GTK_ENTRY (widget), GTK_ENTRY_ICON_PRIMARY);
+          atk_object_notify_state_change (priv->icons[GTK_ENTRY_ICON_PRIMARY],
+                                          ATK_STATE_ENABLED, on);
+        }
+    }
+  else if (g_strcmp0 (pspec->name, "secondary-icon-activatable") == 0)
+    {
+      if (priv->icons[GTK_ENTRY_ICON_SECONDARY])
+        {
+          gboolean on = gtk_entry_get_icon_activatable (GTK_ENTRY (widget), GTK_ENTRY_ICON_SECONDARY);
+          atk_object_notify_state_change (priv->icons[GTK_ENTRY_ICON_SECONDARY],
+                                          ATK_STATE_ENABLED, on);
+        }
+    }
+  else if (g_strcmp0 (pspec->name, "primary-icon-sensitive") == 0)
+    {
+      if (priv->icons[GTK_ENTRY_ICON_PRIMARY])
+        {
+          gboolean on = gtk_entry_get_icon_sensitive (GTK_ENTRY (widget), GTK_ENTRY_ICON_PRIMARY);
+          atk_object_notify_state_change (priv->icons[GTK_ENTRY_ICON_PRIMARY],
+                                          ATK_STATE_SENSITIVE, on);
+        }
+    }
+  else if (g_strcmp0 (pspec->name, "secondary-icon-sensitive") == 0)
+    {
+      if (priv->icons[GTK_ENTRY_ICON_SECONDARY])
+        {
+          gboolean on = gtk_entry_get_icon_sensitive (GTK_ENTRY (widget), GTK_ENTRY_ICON_SECONDARY);
+          atk_object_notify_state_change (priv->icons[GTK_ENTRY_ICON_SECONDARY],
+                                          ATK_STATE_SENSITIVE, on);
+        }
+    }
+}
 
 static AtkStateSet *
 gtk_entry_accessible_ref_state_set (AtkObject *accessible)
@@ -423,9 +686,7 @@ gtk_entry_accessible_get_attributes (AtkObject *accessible)
   if (widget == NULL)
     return attributes;
 
-  if (GTK_IS_ENTRY (widget) || GTK_IS_SEARCH_ENTRY (widget))
-    g_object_get (widget, "placeholder-text", &text, NULL);
-
+  g_object_get (widget, "placeholder-text", &text, NULL);
   if (text == NULL)
     return attributes;
 
@@ -456,197 +717,9 @@ gtk_entry_accessible_initialize (AtkObject *obj,
   gtk_entry_accessible->priv->selection_bound = start_pos;
 
   /* Set up signal callbacks */
-  g_signal_connect_after (widget, "insert-text", G_CALLBACK (insert_text_cb), NULL);
-  g_signal_connect (widget, "delete-text", G_CALLBACK (delete_text_cb), NULL);
-
-  if (GTK_IS_PASSWORD_ENTRY (widget))
-    obj->role = ATK_ROLE_PASSWORD_TEXT;
-  else
-    obj->role = ATK_ROLE_TEXT;
-}
-
-static void
-gtk_entry_accessible_notify_gtk (GObject    *obj,
-                                 GParamSpec *pspec)
-{
-  GtkWidget *widget;
-  AtkObject* atk_obj;
-  GtkEntryAccessible* entry;
-  GtkEntryAccessiblePrivate *priv;
-
-  widget = GTK_WIDGET (obj);
-  atk_obj = gtk_widget_get_accessible (widget);
-  entry = GTK_ENTRY_ACCESSIBLE (atk_obj);
-  priv = entry->priv;
-
-  if (g_strcmp0 (pspec->name, "cursor-position") == 0)
-    {
-      if (check_for_selection_change (entry, GTK_EDITABLE (widget)))
-        g_signal_emit_by_name (atk_obj, "text-selection-changed");
-      /*
-       * The entry cursor position has moved so generate the signal.
-       */
-      g_signal_emit_by_name (atk_obj, "text-caret-moved",
-                             gtk_editable_get_position (GTK_EDITABLE (widget)));
-    }
-  else if (g_strcmp0 (pspec->name, "selection-bound") == 0)
-    {
-      if (check_for_selection_change (entry, GTK_EDITABLE (widget)))
-        g_signal_emit_by_name (atk_obj, "text-selection-changed");
-    }
-  else if (GTK_IS_ENTRY (widget) &&
-           g_strcmp0 (pspec->name, "editable") == 0)
-    {
-      gboolean value;
-
-      g_object_get (obj, "editable", &value, NULL);
-      atk_object_notify_state_change (atk_obj, ATK_STATE_EDITABLE, value);
-    }
-  else if (GTK_IS_ENTRY (widget) &&
-           g_strcmp0 (pspec->name, "visibility") == 0)
-    {
-      gboolean visibility;
-      AtkRole new_role;
-
-      visibility = gtk_entry_get_visibility (GTK_ENTRY (widget));
-      new_role = visibility ? ATK_ROLE_TEXT : ATK_ROLE_PASSWORD_TEXT;
-      atk_object_set_role (atk_obj, new_role);
-    }
-  else if (GTK_IS_ENTRY (widget) &&
-           g_strcmp0 (pspec->name, "primary-icon-storage-type") == 0)
-    {
-      if (gtk_entry_get_icon_storage_type (GTK_ENTRY (widget), GTK_ENTRY_ICON_PRIMARY) != GTK_IMAGE_EMPTY && !priv->icons[GTK_ENTRY_ICON_PRIMARY])
-        {
-          priv->icons[GTK_ENTRY_ICON_PRIMARY] = gtk_entry_icon_accessible_new (entry, GTK_ENTRY_ICON_PRIMARY);
-          g_signal_emit_by_name (entry, "children-changed::add", 0,
-                                 priv->icons[GTK_ENTRY_ICON_PRIMARY], NULL);
-        }
-      else if (gtk_entry_get_icon_storage_type (GTK_ENTRY (widget), GTK_ENTRY_ICON_PRIMARY) == GTK_IMAGE_EMPTY && priv->icons[GTK_ENTRY_ICON_PRIMARY])
-        {
-          gtk_entry_icon_accessible_invalidate (GTK_ENTRY_ICON_ACCESSIBLE (priv->icons[GTK_ENTRY_ICON_PRIMARY]));
-          g_signal_emit_by_name (entry, "children-changed::remove", 0,
-                                 priv->icons[GTK_ENTRY_ICON_PRIMARY], NULL);
-          g_clear_object (&priv->icons[GTK_ENTRY_ICON_PRIMARY]);
-        }
-    }
-  else if (GTK_IS_ENTRY (widget) &&
-           g_strcmp0 (pspec->name, "secondary-icon-storage-type") == 0)
-    {
-      gint index = (priv->icons[GTK_ENTRY_ICON_PRIMARY] ? 1 : 0);
-      if (gtk_entry_get_icon_storage_type (GTK_ENTRY (widget), GTK_ENTRY_ICON_SECONDARY) != GTK_IMAGE_EMPTY && !priv->icons[GTK_ENTRY_ICON_SECONDARY])
-        {
-          priv->icons[GTK_ENTRY_ICON_SECONDARY] = gtk_entry_icon_accessible_new (entry, GTK_ENTRY_ICON_SECONDARY);
-          g_signal_emit_by_name (entry, "children-changed::add", index,
-                                 priv->icons[GTK_ENTRY_ICON_SECONDARY], NULL);
-        }
-      else if (gtk_entry_get_icon_storage_type (GTK_ENTRY (widget), GTK_ENTRY_ICON_SECONDARY) == GTK_IMAGE_EMPTY && priv->icons[GTK_ENTRY_ICON_SECONDARY])
-        {
-          gtk_entry_icon_accessible_invalidate (GTK_ENTRY_ICON_ACCESSIBLE (priv->icons[GTK_ENTRY_ICON_SECONDARY]));
-          g_signal_emit_by_name (entry, "children-changed::remove", index,
-                                 priv->icons[GTK_ENTRY_ICON_SECONDARY], NULL);
-          g_clear_object (&priv->icons[GTK_ENTRY_ICON_SECONDARY]);
-        }
-    }
-  else if (GTK_IS_ENTRY (widget) &&
-           g_strcmp0 (pspec->name, "primary-icon-name") == 0)
-    {
-      if (priv->icons[GTK_ENTRY_ICON_PRIMARY])
-        {
-          const gchar *name;
-          name = gtk_entry_get_icon_name (GTK_ENTRY (widget), GTK_ENTRY_ICON_PRIMARY);
-          if (name)
-            atk_object_set_name (priv->icons[GTK_ENTRY_ICON_PRIMARY], name);
-        }
-    }
-  else if (GTK_IS_ENTRY (widget) &&
-           g_strcmp0 (pspec->name, "secondary-icon-name") == 0)
-    {
-      if (priv->icons[GTK_ENTRY_ICON_SECONDARY])
-        {
-          const gchar *name;
-          name = gtk_entry_get_icon_name (GTK_ENTRY (widget), GTK_ENTRY_ICON_SECONDARY);
-          if (name)
-            atk_object_set_name (priv->icons[GTK_ENTRY_ICON_SECONDARY], name);
-        }
-    }
-  else if (GTK_IS_ENTRY (widget) &&
-           g_strcmp0 (pspec->name, "primary-icon-tooltip-text") == 0)
-    {
-      if (priv->icons[GTK_ENTRY_ICON_PRIMARY])
-        {
-          gchar *text;
-          text = gtk_entry_get_icon_tooltip_text (GTK_ENTRY (widget), GTK_ENTRY_ICON_PRIMARY);
-          if (text)
-            {
-              atk_object_set_description (priv->icons[GTK_ENTRY_ICON_PRIMARY], text);
-              g_free (text);
-            }
-          else
-            {
-              atk_object_set_description (priv->icons[GTK_ENTRY_ICON_PRIMARY], "");
-            }
-        }
-    }
-  else if (GTK_IS_ENTRY (widget) &&
-           g_strcmp0 (pspec->name, "secondary-icon-tooltip-text") == 0)
-    {
-      if (priv->icons[GTK_ENTRY_ICON_SECONDARY])
-        {
-          gchar *text;
-          text = gtk_entry_get_icon_tooltip_text (GTK_ENTRY (widget), GTK_ENTRY_ICON_SECONDARY);
-          if (text)
-            {
-              atk_object_set_description (priv->icons[GTK_ENTRY_ICON_SECONDARY], text);
-              g_free (text);
-            }
-          else
-            {
-              atk_object_set_description (priv->icons[GTK_ENTRY_ICON_SECONDARY], "");
-            }
-        }
-    }
-  else if (GTK_IS_ENTRY (widget) &&
-           g_strcmp0 (pspec->name, "primary-icon-activatable") == 0)
-    {
-      if (priv->icons[GTK_ENTRY_ICON_PRIMARY])
-        {
-          gboolean on = gtk_entry_get_icon_activatable (GTK_ENTRY (widget), GTK_ENTRY_ICON_PRIMARY);
-          atk_object_notify_state_change (priv->icons[GTK_ENTRY_ICON_PRIMARY],
-                                          ATK_STATE_ENABLED, on);
-        }
-    }
-  else if (GTK_IS_ENTRY (widget) &&
-           g_strcmp0 (pspec->name, "secondary-icon-activatable") == 0)
-    {
-      if (priv->icons[GTK_ENTRY_ICON_SECONDARY])
-        {
-          gboolean on = gtk_entry_get_icon_activatable (GTK_ENTRY (widget), GTK_ENTRY_ICON_SECONDARY);
-          atk_object_notify_state_change (priv->icons[GTK_ENTRY_ICON_SECONDARY],
-                                          ATK_STATE_ENABLED, on);
-        }
-    }
-  else if (GTK_IS_ENTRY (widget) &&
-           g_strcmp0 (pspec->name, "primary-icon-sensitive") == 0)
-    {
-      if (priv->icons[GTK_ENTRY_ICON_PRIMARY])
-        {
-          gboolean on = gtk_entry_get_icon_sensitive (GTK_ENTRY (widget), GTK_ENTRY_ICON_PRIMARY);
-          atk_object_notify_state_change (priv->icons[GTK_ENTRY_ICON_PRIMARY],
-                                          ATK_STATE_SENSITIVE, on);
-        }
-    }
-  else if (GTK_IS_ENTRY (widget) &&
-           g_strcmp0 (pspec->name, "secondary-icon-sensitive") == 0)
-    {
-      if (priv->icons[GTK_ENTRY_ICON_SECONDARY])
-        {
-          gboolean on = gtk_entry_get_icon_sensitive (GTK_ENTRY (widget), GTK_ENTRY_ICON_SECONDARY);
-          atk_object_notify_state_change (priv->icons[GTK_ENTRY_ICON_SECONDARY],
-                                          ATK_STATE_SENSITIVE, on);
-        }
-    }
-  else
-    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_entry_accessible_parent_class)->notify_gtk (obj, pspec);
+  g_signal_connect_after (widget, "insert-text", G_CALLBACK (insert_text_cb), obj);
+  g_signal_connect (widget, "delete-text", G_CALLBACK (delete_text_cb), obj);
+  g_signal_connect (widget, "notify", G_CALLBACK (on_notify), obj);
 }
 
 static gint
@@ -673,13 +746,10 @@ gtk_entry_accessible_get_n_children (AtkObject* obj)
   if (widget == NULL)
     return 0;
 
-  if (GTK_IS_ENTRY (widget))
-    {
-      if (gtk_entry_get_icon_storage_type (GTK_ENTRY (widget), GTK_ENTRY_ICON_PRIMARY) != GTK_IMAGE_EMPTY)
-        count++;
-      if (gtk_entry_get_icon_storage_type (GTK_ENTRY (widget), GTK_ENTRY_ICON_SECONDARY) != GTK_IMAGE_EMPTY)
-        count++;
-    }
+  if (gtk_entry_get_icon_storage_type (GTK_ENTRY (widget), GTK_ENTRY_ICON_PRIMARY) != GTK_IMAGE_EMPTY)
+    count++;
+  if (gtk_entry_get_icon_storage_type (GTK_ENTRY (widget), GTK_ENTRY_ICON_SECONDARY) != GTK_IMAGE_EMPTY)
+    count++;
 
   return count;
 }
@@ -695,9 +765,6 @@ gtk_entry_accessible_ref_child (AtkObject *obj,
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
-    return NULL;
-
-  if (!GTK_IS_ENTRY (widget))
     return NULL;
 
   switch (i)
@@ -741,8 +808,7 @@ gtk_entry_accessible_finalize (GObject *object)
 static void
 gtk_entry_accessible_class_init (GtkEntryAccessibleClass *klass)
 {
-  AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
-  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
+  AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   class->ref_state_set = gtk_entry_accessible_ref_state_set;
@@ -751,8 +817,6 @@ gtk_entry_accessible_class_init (GtkEntryAccessibleClass *klass)
   class->get_attributes = gtk_entry_accessible_get_attributes;
   class->get_n_children = gtk_entry_accessible_get_n_children;
   class->ref_child = gtk_entry_accessible_ref_child;
-
-  widget_class->notify_gtk = gtk_entry_accessible_notify_gtk;
 
   gobject_class->finalize = gtk_entry_accessible_finalize;
 }
@@ -763,23 +827,8 @@ gtk_entry_accessible_init (GtkEntryAccessible *entry)
   entry->priv = gtk_entry_accessible_get_instance_private (entry);
   entry->priv->cursor_position = 0;
   entry->priv->selection_bound = 0;
-}
 
-static GtkText *
-get_text (AtkText *atk_text)
-{
-  GtkWidget *widget;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_text));
-  if (widget == NULL)
-    return NULL;
-
-  if (GTK_IS_ENTRY (widget))
-    return gtk_entry_get_text_widget (GTK_ENTRY (widget));
-  else if (GTK_IS_SEARCH_ENTRY (widget))
-    return gtk_search_entry_get_text_widget (GTK_SEARCH_ENTRY (widget));
-  else
-    return NULL; // FIXME;
+  ATK_OBJECT (entry)->role = ATK_ROLE_TEXT;
 }
 
 static gchar *
@@ -1375,96 +1424,6 @@ atk_editable_text_interface_init (AtkEditableTextIface *iface)
   iface->delete_text = gtk_entry_accessible_delete_text;
   iface->paste_text = gtk_entry_accessible_paste_text;
   iface->set_run_attributes = NULL;
-}
-
-static void
-insert_text_cb (GtkEditable *editable,
-                gchar       *new_text,
-                gint         new_text_length,
-                gint        *position)
-{
-  GtkEntryAccessible *accessible;
-  gint length;
-
-  if (new_text_length == 0)
-    return;
-
-  accessible = GTK_ENTRY_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (editable)));
-  length = g_utf8_strlen (new_text, new_text_length);
-
-  g_signal_emit_by_name (accessible,
-                         "text-changed::insert",
-                         *position - length,
-                          length);
-}
-
-/* We connect to GtkEditable::delete-text, since it carries
- * the information we need. But we delay emitting our own
- * text_changed::delete signal until the entry has update
- * all its internal state and emits GtkEntry::changed.
- */
-static void
-delete_text_cb (GtkEditable *editable,
-                gint         start,
-                gint         end)
-{
-  GtkEntryAccessible *accessible;
-  GtkText *textw;
-
-  accessible = GTK_ENTRY_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (editable)));
-
-  textw = get_text (ATK_TEXT (accessible));
-  if (textw == NULL)
-    return;
-
-  if (end < 0)
-    {
-      gchar *text;
-
-      text = gtk_text_get_display_text (textw, 0, -1);
-      end = g_utf8_strlen (text, -1);
-      g_free (text);
-    }
-
-  if (end == start)
-    return;
-
-  g_signal_emit_by_name (accessible,
-                         "text-changed::delete",
-                         start,
-                         end - start);
-}
-
-static gboolean
-check_for_selection_change (GtkEntryAccessible *accessible,
-                            GtkEditable        *editable)
-{
-  gboolean ret_val = FALSE;
-  gint start, end;
-
-  if (gtk_editable_get_selection_bounds (editable, &start, &end))
-    {
-      if (end != accessible->priv->cursor_position ||
-          start != accessible->priv->selection_bound)
-        /*
-         * This check is here as this function can be called
-         * for notification of selection_bound and current_pos.
-         * The values of current_pos and selection_bound may be the same
-         * for both notifications and we only want to generate one
-         * text_selection_changed signal.
-         */
-        ret_val = TRUE;
-    }
-  else
-    {
-      /* We had a selection */
-      ret_val = (accessible->priv->cursor_position != accessible->priv->selection_bound);
-    }
-
-  accessible->priv->cursor_position = end;
-  accessible->priv->selection_bound = start;
-
-  return ret_val;
 }
 
 static gboolean
