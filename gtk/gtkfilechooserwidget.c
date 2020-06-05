@@ -6900,8 +6900,15 @@ set_current_filter (GtkFileChooserWidget *impl,
       guint filter_index;
 
       /* NULL filters are allowed to reset to non-filtered status */
-      if (filter && !g_list_store_find (impl->filters, filter, &filter_index))
-        return;
+      if (filter)
+        {
+          if (!g_list_store_find (impl->filters, filter, &filter_index))
+            return;
+        }
+      else
+        {
+          filter_index = -1;
+        }
 
       if (impl->current_filter)
         g_object_unref (impl->current_filter);
@@ -6911,7 +6918,6 @@ set_current_filter (GtkFileChooserWidget *impl,
 
       gtk_drop_down_set_selected (GTK_DROP_DOWN (impl->filter_combo), filter_index);
 
-g_print ("set current filter %u\n", filter_index);
       clear_model_cache (impl, MODEL_COL_IS_SENSITIVE);
       set_model_filter (impl, impl->current_filter);
       g_object_notify (G_OBJECT (impl), "filter");
