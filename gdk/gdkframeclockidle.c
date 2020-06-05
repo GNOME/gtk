@@ -56,6 +56,7 @@ struct _GdkFrameClockIdlePrivate
   GdkFrameClockPhase phase;
 
   guint in_paint_idle : 1;
+  guint paint_is_thaw : 1;
 #ifdef G_OS_WIN32
   guint begin_period : 1;
 #endif
@@ -162,7 +163,7 @@ gdk_frame_clock_idle_dispose (GObject *object)
 static gint64
 compute_smooth_frame_time (GdkFrameClock *clock,
                            gint64 new_frame_time,
-                           gboolean new_frame_time_is_regular,
+                           gboolean new_frame_time_is_vsync_related,
                            gint64 smoothed_frame_time_base,
                            gint64 frame_interval)
 {
@@ -204,13 +205,13 @@ compute_smooth_frame_time (GdkFrameClock *clock,
    *   (current_error/frame_interval)*(current_error/frame_interval)*frame_interval
    * But this can be simplified as below.
    *
-   * Note: We only do this correction if we're regularly animating (no
-   * or low frame skip). If the last frame was a long time ago, or if
-   * we're not doing this in the frame cycle this call was likely
-   * triggered by an input event and new_frame_time is essentially
-   * random and not tied to the presentation time.
+   * Note: We only do this correction if the new frame is caused by a
+   * thaw of the frame clock, so that we know the time is actually
+   * related to the physical vblank. For frameclock cycles triggered
+   * by other events we always step up in whole frames from the last
+   * reported time.
    */
-  if (new_frame_time_is_regular)
+  if (new_frame_time_is_vsync_related)
     {
       current_error = new_smoothed_time - new_frame_time;
       correction_magnitude = current_error * current_error / frame_interval; /* Note, this is always > 0 due to the square */
@@ -275,7 +276,8 @@ gdk_frame_clock_idle_get_frame_time (GdkFrameClock *clock)
     (priv)->updating_count > 0))
 
 static void
-maybe_start_idle (GdkFrameClockIdle *clock_idle)
+maybe_start_idle (GdkFrameClockIdle *clock_idle,
+                  gboolean caused_by_thaw)
 {
   GdkFrameClockIdlePrivate *priv = clock_idle->priv;
 
@@ -303,6 +305,7 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle)
       if (!priv->in_paint_idle &&
 	  priv->paint_idle_id == 0 && RUN_PAINT_IDLE (priv))
         {
+          priv->paint_is_thaw = caused_by_thaw;
           priv->paint_idle_id = g_timeout_add_full (GDK_PRIORITY_REDRAW,
                                                     min_interval,
                                                     gdk_frame_clock_paint_idle,
@@ -409,7 +412,6 @@ gdk_frame_clock_paint_idle (void *data)
             {
               gint64 frame_interval = FRAME_INTERVAL;
               GdkFrameTimings *prev_timings = gdk_frame_clock_get_current_timings (clock);
-              gint64 old_frame_time = priv->frame_time;
 
               if (prev_timings && prev_timings->refresh_interval)
                 frame_interval = prev_timings->refresh_interval;
@@ -424,11 +426,9 @@ gdk_frame_clock_paint_idle (void *data)
                 }
               else
                 {
-                  /* For long delays, cycle was probably caused by input event rather than animation */
-                  gboolean is_regular = priv->frame_time - old_frame_time < 4 * FRAME_INTERVAL;
                   priv->smoothed_frame_time_base =
                       compute_smooth_frame_time (clock, priv->frame_time,
-                                                 is_regular,
+                                                 priv->paint_is_thaw,
                                                  priv->smoothed_frame_time_base,
                                                  priv->smoothed_frame_time_period);
                   priv->smoothed_frame_time_period = frame_interval;
@@ -559,8 +559,8 @@ gdk_frame_clock_paint_idle (void *data)
   if (priv->freeze_count == 0)
     {
       priv->min_next_frame_time = compute_min_next_frame_time (clock_idle,
-                                                               priv->frame_time);
-      maybe_start_idle (clock_idle);
+                                                               priv->smoothed_frame_time_base);
+      maybe_start_idle (clock_idle, FALSE);
     }
 
   if (priv->freeze_count == 0)
@@ -580,7 +580,7 @@ gdk_frame_clock_idle_request_phase (GdkFrameClock      *clock,
   GdkFrameClockIdlePrivate *priv = clock_idle->priv;
 
   priv->requested |= phase;
-  maybe_start_idle (clock_idle);
+  maybe_start_idle (clock_idle, FALSE);
 }
 
 static void
@@ -599,7 +599,7 @@ gdk_frame_clock_idle_begin_updating (GdkFrameClock *clock)
 #endif
 
   priv->updating_count++;
-  maybe_start_idle (clock_idle);
+  maybe_start_idle (clock_idle, FALSE);
 }
 
 static void
@@ -649,7 +649,7 @@ gdk_frame_clock_idle_thaw (GdkFrameClock *clock)
   priv->freeze_count--;
   if (priv->freeze_count == 0)
     {
-      maybe_start_idle (clock_idle);
+      maybe_start_idle (clock_idle, TRUE);
       /* If nothing is requested so we didn't start an idle, we need
        * to skip to the end of the state chain, since the idle won't
        * run and do it for us.
