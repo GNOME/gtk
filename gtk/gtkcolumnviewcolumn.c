@@ -858,7 +858,7 @@ gtk_column_view_column_set_header_menu (GtkColumnViewColumn *self,
  * Gets the menu model that is used to create the context menu
  * for the column header.
  *
- * Returns: the #GMenuModel, or %NULL
+ * Returns: (transfer none) (nullable): the #GMenuModel, or %NULL
  */
 GMenuModel *
 gtk_column_view_column_get_header_menu (GtkColumnViewColumn *self)
