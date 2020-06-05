@@ -165,6 +165,29 @@ clicked (GtkGestureClick *gesture,
     }
 }
 
+static void
+toggle_cycle (GObject    *button,
+              GParamSpec *pspec,
+              gpointer    data)
+{
+  gboolean active;
+  GtkWidget *window;
+
+  g_object_get (button, "active", &active, NULL);
+
+  window = gtk_widget_get_ancestor (GTK_WIDGET (button), GTK_TYPE_WINDOW);
+
+  if (active && !tick_cb)
+    {
+      tick_cb = gtk_widget_add_tick_callback (window, change_theme, data, NULL);
+    }
+  else if (!active && tick_cb)
+    {
+      gtk_widget_remove_tick_callback (window, tick_cb);
+      tick_cb = 0;
+    }
+}
+
 GtkWidget *
 do_themes (GtkWidget *do_widget)
 {
@@ -174,6 +197,7 @@ do_themes (GtkWidget *do_widget)
     {
       GtkBuilder *builder;
       GtkWidget *header;
+      GtkWidget *button;
       GtkGesture *gesture;
 
       builder = gtk_builder_new_from_resource ("/themes/themes.ui");
@@ -187,6 +211,8 @@ do_themes (GtkWidget *do_widget)
       g_signal_connect (gesture, "pressed", G_CALLBACK (clicked), builder);
       gtk_widget_add_controller (header, GTK_EVENT_CONTROLLER (gesture));
 
+      button = GTK_WIDGET (gtk_builder_get_object (builder, "toggle"));
+      g_signal_connect (button, "notify::active", G_CALLBACK (toggle_cycle), builder);
       gtk_widget_realize (window);
     }
 
