@@ -372,6 +372,38 @@ test_selection (void)
   g_object_unref (selection);
 }
 
+static void
+test_select_range (void)
+{
+  GtkSelectionModel *selection;
+  GListStore *store;
+  gboolean ret;
+
+  store = new_store (1, 5, 1);
+  selection = new_model (store);
+  assert_selection (selection, "");
+  assert_selection_changes (selection, "");
+
+  ret = gtk_selection_model_select_range (selection, 2, 2, FALSE);
+  g_assert_true (ret);
+  assert_selection (selection, "3 4");
+  assert_selection_changes (selection, "2:2");
+
+  ret = gtk_selection_model_select_range (selection, 3, 2, FALSE);
+  g_assert_true (ret);
+  assert_selection (selection, "3 4 5");
+  assert_selection_changes (selection, "3:2");
+
+  ret = gtk_selection_model_select_range (selection, 0, 1, TRUE);
+  g_assert_true (ret);
+  assert_selection (selection, "1");
+  assert_selection_changes (selection, "0:5");
+
+  g_object_unref (store);
+  g_object_unref (selection);
+}
+
+
 int
 main (int argc, char *argv[])
 {
@@ -388,6 +420,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/multiselection/changes", test_changes);
 #endif
   g_test_add_func ("/multiselection/selection", test_selection);
+  g_test_add_func ("/multiselection/select-range", test_select_range);
 
   return g_test_run ();
 }
