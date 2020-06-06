@@ -112,7 +112,8 @@
  *
  * # CSS nodes
  *
- * GtkPrintUnixDialog has a single CSS node with name printdialog.
+ * GtkPrintUnixDialog has a single CSS node with name window. The style classes
+ * dialog and print are added.
  */
 
 
@@ -529,8 +530,6 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
   gtk_widget_class_bind_template_callback (widget_class, redraw_page_layout_preview);
   gtk_widget_class_bind_template_callback (widget_class, update_number_up_layout);
   gtk_widget_class_bind_template_callback (widget_class, redraw_page_layout_preview);
-
-  gtk_widget_class_set_css_name (widget_class, I_("printdialog"));
 }
 
 /* Returns a toplevel GtkWindow, or NULL if none */
@@ -728,6 +727,8 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   g_type_ensure (GTK_TYPE_PRINTER_OPTION_WIDGET);
 
   gtk_widget_init_template (GTK_WIDGET (dialog));
+  gtk_widget_add_css_class (GTK_WIDGET (dialog), "print");
+
   gtk_dialog_set_use_header_bar_from_setting (GTK_DIALOG (dialog));
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
                           _("Pre_view"), GTK_RESPONSE_APPLY,
