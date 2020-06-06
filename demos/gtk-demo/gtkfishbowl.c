@@ -108,10 +108,6 @@ gtk_fishbowl_measure (GtkWidget      *widget,
     {
       child = value;
 
-      if (!gtk_widget_get_visible (child->widget))
-        continue;
-
-
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
           gtk_widget_measure (child->widget, orientation, -1, &child_min, &child_nat, NULL, NULL);
@@ -147,9 +143,6 @@ gtk_fishbowl_size_allocate (GtkWidget *widget,
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
       child = value;
-
-      if (!gtk_widget_get_visible (child->widget))
-        continue;
 
       gtk_widget_get_preferred_size (child->widget, &child_requisition, NULL);
       child_allocation.x = round (child->x * (width - child_requisition.width));
@@ -197,16 +190,10 @@ gtk_fishbowl_remove (GtkFishbowl *fishbowl,
                      GtkWidget   *widget)
 {
   GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
-  GtkWidget *widget_bowl = GTK_WIDGET (fishbowl);
 
   if (g_hash_table_remove (priv->children, widget))
     {
-      gboolean was_visible = gtk_widget_get_visible (widget);
-
       gtk_widget_unparent (widget);
-
-      if (was_visible && gtk_widget_get_visible (widget_bowl))
-        gtk_widget_queue_resize (widget_bowl);
 
       priv->count--;
       g_object_notify_by_pspec (G_OBJECT (fishbowl), props[PROP_COUNT]);
