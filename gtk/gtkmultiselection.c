@@ -23,7 +23,6 @@
 
 #include "gtkintl.h"
 #include "gtkselectionmodel.h"
-#include "gtksingleselection.h"
 #include "gtkset.h"
 
 /**
