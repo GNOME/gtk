@@ -1068,6 +1068,11 @@ gtk_list_base_add_move_binding (GtkWidgetClass *widget_class,
 {
   gtk_widget_class_add_binding (widget_class,
                                 keyval,
+                                0,
+                                gtk_list_base_move_cursor,
+                                "(ubbbi)", orientation, TRUE, FALSE, FALSE, amount);
+  gtk_widget_class_add_binding (widget_class,
+                                keyval,
                                 GDK_CONTROL_MASK,
                                 gtk_list_base_move_cursor,
                                 "(ubbbi)", orientation, FALSE, FALSE, FALSE, amount);
