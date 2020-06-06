@@ -2055,7 +2055,7 @@ gtk_info_bar_get_type
 <SECTION>
 <FILE>gtknativedialog</FILE>
 <TITLE>GtkNativeDialog</TITLE>
-GTK_TYPE_NATIVE_DIALOG
+GtkNativeDialog
 GtkNativeDialogClass
 gtk_native_dialog_show
 gtk_native_dialog_hide
@@ -2067,9 +2067,8 @@ gtk_native_dialog_set_title
 gtk_native_dialog_get_title
 gtk_native_dialog_set_transient_for
 gtk_native_dialog_get_transient_for
-<SUBSECTION Standard>
-GtkNativeDialog
 <SUBSECTION Private>
+GTK_TYPE_NATIVE_DIALOG
 gtk_native_dialog_get_type
 </SECTION>
 
