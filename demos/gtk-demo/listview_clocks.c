@@ -41,7 +41,8 @@ enum {
 
 /* This function returns the current time in the clock's timezone.
  * Note that this returns a new object every time, so we need to
- * remember to unref it after use. */
+ * remember to unref it after use.
+ */
 static GDateTime *
 gtk_clock_get_time (GtkClock *clock)
 {
@@ -51,10 +52,11 @@ gtk_clock_get_time (GtkClock *clock)
     return g_date_time_new_now_local ();
 }
 
-/* Here, we implement the functionality required by the GdkPaintable interface.
- * This way we have a trivial way to display an analog clock.
- * It also allows demonstrating how to directly use objects in the listview
- * later by making this object do something interesting. */
+/* Here, we implement the functionality required by the GdkPaintable
+ * interface. This way we have a trivial way to display an analog clock.
+ * It also allows demonstrating how to directly use objects in the
+ * listview later by making this object do something interesting.
+ */
 static void
 gtk_clock_snapshot (GdkPaintable *paintable,
                     GdkSnapshot  *snapshot,
@@ -68,26 +70,31 @@ gtk_clock_snapshot (GdkPaintable *paintable,
 #define BLACK ((GdkRGBA) { 0, 0, 0, 1 })
 
   /* save/restore() is necessary so we can undo the transforms we start
-   * out with. */
+   * out with.
+   */
   gtk_snapshot_save (snapshot);
 
   /* First, we move the (0, 0) point to the center of the area so
-   * we can draw everything relative to it. */
+   * we can draw everything relative to it.
+   */
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (width / 2, height / 2));
+
   /* Next we scale it, so that we can pretend that the clock is
    * 100px in size. That way, we don't need to do any complicated
-   * math later.
-   * We use MIN() here so that we use the smaller dimension for sizing.
-   * That way we don't overdraw but keep the aspect ratio. */
+   * math later. We use MIN() here so that we use the smaller
+   * dimension for sizing. That way we don't overdraw but keep
+   * the aspect ratio.
+   */
   gtk_snapshot_scale (snapshot, MIN (width, height) / 100.0, MIN (width, height) / 100.0);
-  /* Now we have a circle with diameter 100px (and radius 50px) that
-   * has its (0, 0) point at the center.
-   * Let's draw a simple clock into it. */
 
+  /* Now we have a circle with diameter 100px (and radius 50px) that
+   * has its (0, 0) point at the center. Let's draw a simple clock into it.
+   */
   time = gtk_clock_get_time (self);
 
   /* First, draw a circle. This is a neat little trick to draw a circle
-   * without requiring Cairo. */
+   * without requiring Cairo.
+   */
   gsk_rounded_rect_init_from_rect (&outline, &GRAPHENE_RECT_INIT(-50, -50, 100, 100), 50);
   gtk_snapshot_append_border (snapshot,
                               &outline,
@@ -95,9 +102,11 @@ gtk_clock_snapshot (GdkPaintable *paintable,
                               (GdkRGBA [4]) { BLACK, BLACK, BLACK, BLACK });
 
   /* Next, draw the hour hand.
-   * We do this using tranforms again: Instead of computing where the angle points
-   * to, we just rotate everything and then draw the hand as if if was :00.
-   * We don't even need to care about am/pm here because rotations just work. */
+   * We do this using tranforms again: Instead of computing where the angle
+   * points to, we just rotate everything and then draw the hand as if it
+   * was :00. We don't even need to care about am/pm here because rotations
+   * just work.
+   */
   gtk_snapshot_save (snapshot);
   gtk_snapshot_rotate (snapshot, 30 * g_date_time_get_hour (time) + 0.5 * g_date_time_get_minute (time));
   gsk_rounded_rect_init_from_rect (&outline, &GRAPHENE_RECT_INIT(-2, -23, 4, 25), 2);
@@ -107,7 +116,8 @@ gtk_clock_snapshot (GdkPaintable *paintable,
   gtk_snapshot_restore (snapshot);
 
   /* And the same as above for the minute hand. Just make this one longer
-   * so people can tell the hands apart. */
+   * so people can tell the hands apart.
+   */
   gtk_snapshot_save (snapshot);
   gtk_snapshot_rotate (snapshot, 6 * g_date_time_get_minute (time));
   gsk_rounded_rect_init_from_rect (&outline, &GRAPHENE_RECT_INIT(-2, -43, 4, 45), 2);
@@ -125,8 +135,9 @@ gtk_clock_snapshot (GdkPaintable *paintable,
   gtk_snapshot_pop (snapshot);
   gtk_snapshot_restore (snapshot);
 
-  /* And finally, don't forget to restore the initial save() that we did for
-   * the initial transformations. */
+  /* And finally, don't forget to restore the initial save() that
+   * we did for the initial transformations.
+   */
   gtk_snapshot_restore (snapshot);
 
   g_date_time_unref (time);
@@ -145,10 +156,9 @@ gtk_clock_get_intrinsic_height (GdkPaintable *paintable)
   return 100;
 }
 
-/* Initialize the paintable interface. This way we turn our clock objects
- * into objects that can be drawn.
- * There are more functions to this interface to define desired size,
- * but this is enough.
+/* Initialize the paintable interface. This way we turn our clocks
+ * into objects that can be drawn. There are more functions to this
+ * interface to define desired size, but this is enough.
  */
 static void
 gtk_clock_paintable_init (GdkPaintableInterface *iface)
@@ -158,8 +168,9 @@ gtk_clock_paintable_init (GdkPaintableInterface *iface)
   iface->get_intrinsic_height = gtk_clock_get_intrinsic_height;
 }
 
-/* Finally, we define the type. The important part is adding the paintable
- * interface, so GTK knows that this object can indeed be drawm.
+/* Finally, we define the type. The important part is adding the
+ * paintable interface, so GTK knows that this object can indeed
+ * be drawn.
  */
 G_DEFINE_TYPE_WITH_CODE (GtkClock, gtk_clock, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
@@ -221,11 +232,14 @@ gtk_clock_set_property (GObject      *object,
 
 /* This is the list of all the ticking clocks */
 static GSList *ticking_clocks = NULL;
-/* This is the id of the timeout source that is updating all ticking clocks */
+
+/* This is the ID of the timeout source that is updating all
+ * ticking clocks.
+ */
 static guint ticking_clock_id = 0;
 
-/* Every second, this function is called to tell everybody that the
- * clocks are ticking.
+/* Every second, this function is called to tell everybody that
+ * the clocks are ticking.
  */
 static gboolean
 gtk_clock_tick (gpointer unused)
@@ -240,6 +254,7 @@ gtk_clock_tick (gpointer unused)
        * so notify about that.
        */
       g_object_notify_by_pspec (G_OBJECT (clock), properties[PROP_TIME]);
+
       /* We will also draw the hands of the clock differently.
        * So notify about that, too.
        */
@@ -341,6 +356,9 @@ create_clocks_model (void)
   g_object_unref (clock);
   /* A bunch of timezones with GTK hackers */
   clock = gtk_clock_new ("San Francisco", g_time_zone_new ("America/Los_Angeles"));
+  g_list_store_append (result, clock);
+  g_object_unref (clock);
+  clock = gtk_clock_new ("Xalapa", g_time_zone_new ("America/Mexico_City"));
   g_list_store_append (result, clock);
   g_object_unref (clock);
   clock = gtk_clock_new ("Boston", g_time_zone_new ("America/New_York"));
