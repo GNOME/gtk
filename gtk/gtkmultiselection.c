@@ -33,6 +33,12 @@
  *
  * GtkMultiSelection is an implementation of the #GtkSelectionModel interface
  * that allows selecting multiple elements.
+ *
+ * Note that due to the way the selection is stored, newly added items are
+ * always unselected, even if they were just removed from the model, and were
+ * selected before. In particular this means that changing the sort order of
+ * an underlying sort model will clear the selection. In other words, the
+ * selection is *not persistent*.
  */
 
 struct _GtkMultiSelection
