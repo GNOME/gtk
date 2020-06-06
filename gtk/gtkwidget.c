@@ -4743,7 +4743,7 @@ gtk_widget_real_css_changed (GtkWidget         *widget,
             }
           else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TRANSFORM))
             {
-                gtk_widget_queue_allocate (widget);
+              gtk_widget_queue_allocate (priv->parent);
             }
           else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_REDRAW) ||
                    (has_text && gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_CONTENT)))
