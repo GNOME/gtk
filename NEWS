@@ -16,7 +16,7 @@ Overview of Changes in GTK 3.98.5
 
 * GtkFileChooser:
  - Add a tracker3-based search engine implementation
- - Rate-limite updates from the trash monitor
+ - Rate-limit updates from the trash monitor
 
 * GtkWindow:
  - Redo the css node setup. There is now a single 'window' node
@@ -47,6 +47,10 @@ Overview of Changes in GTK 3.98.5
 * Themes:
  - Adwaita: Limit the scope of backdrop
 
+* Accessibility:
+ - Clean up and reorganize the code to prepare for the
+   dropping of ATK
+
 * GDK:
  - Drop unused enum and struct definitions from headers
  - Make keymap translation API public again. Still needed
@@ -57,7 +61,7 @@ Overview of Changes in GTK 3.98.5
  - X11: Improve sync when the Nvidia driver is used
 
 * GSK:
- - GL renderer: Fix blurred outsed shadows
+ - GL renderer: Fix blurred outset shadows
  - GL renderer: handle nested transform nodes properly
  - GL renderer: Optimize clip handling
 

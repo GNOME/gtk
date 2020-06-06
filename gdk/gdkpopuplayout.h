@@ -71,6 +71,8 @@ typedef enum
 
 /**
  * GdkPopupLayout:
+ *
+ * Struct containing information for gdk_popup_present()
  */
 typedef struct _GdkPopupLayout GdkPopupLayout;
 

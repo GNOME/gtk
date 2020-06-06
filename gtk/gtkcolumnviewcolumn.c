@@ -831,7 +831,7 @@ gtk_column_view_column_set_visible (GtkColumnViewColumn *self,
 }
 
 /**
- * gtk_column_view_get_visible:
+ * gtk_column_view_column_get_visible:
  * @self: a #GtkColumnViewColumn
  *
  * Returns whether this column is visible.
@@ -915,7 +915,7 @@ gtk_column_view_column_set_expand (GtkColumnViewColumn *self,
 }
 
 /**
- * gtk_column_view_get_expand:
+ * gtk_column_view_column_get_expand:
  * @self: a #GtkColumnViewColumn
  *
  * Returns whether this column should expand.
@@ -933,7 +933,7 @@ gtk_column_view_column_get_expand (GtkColumnViewColumn *self)
 /**
  * gtk_column_view_column_set_resizable:
  * @self: a #GtkColumnViewColumn
- * @resizable: whether this column should be resizable 
+ * @resizable: whether this column should be resizable
  *
  * Sets whether this column should be resizable by dragging.
  */
@@ -952,7 +952,7 @@ gtk_column_view_column_set_resizable (GtkColumnViewColumn *self,
 }
 
 /**
- * gtk_column_view_get_resizable:
+ * gtk_column_view_column_get_resizable:
  * @self: a #GtkColumnView
  *
  * Returns whether this column is resizable.

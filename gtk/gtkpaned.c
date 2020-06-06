@@ -109,10 +109,14 @@
  *
  * gtk_widget_set_size_request (hpaned, 200, -1);
  *
- * gtk_paned_pack1 (GTK_PANED (hpaned), frame1, TRUE, FALSE);
+ * gtk_paned_set_start_child (GTK_PANED (hpaned), frame1);
+ * gtk_paned_set_start_child_resize (GTK_PANED (hpaned), TRUE);
+ * gtk_paned_set_start_child_shrink (GTK_PANED (hpaned), FALSE);
  * gtk_widget_set_size_request (frame1, 50, -1);
  *
- * gtk_paned_pack2 (GTK_PANED (hpaned), frame2, FALSE, FALSE);
+ * gtk_paned_set_end_child (GTK_PANED (hpaned), frame2);
+ * gtk_paned_set_end_child_resize (GTK_PANED (hpaned), FALSE);
+ * gtk_paned_set_end_child_shrink (GTK_PANED (hpaned), FALSE);
  * gtk_widget_set_size_request (frame2, 50, -1);
  * ]|
  */
@@ -1555,6 +1559,13 @@ gtk_paned_new (GtkOrientation orientation)
                        NULL);
 }
 
+/**
+ * gtk_paned_set_start_child:
+ * @paned: a #GtkPaned
+ * @child: the widget to add
+ *
+ * Sets the start child of @paned to @child.
+ */
 void
 gtk_paned_set_start_child (GtkPaned *paned,
                            GtkWidget *child)
@@ -1591,6 +1602,13 @@ gtk_paned_get_start_child (GtkPaned *paned)
   return paned->start_child;
 }
 
+/**
+ * gtk_paned_set_resize_start_child:
+ * @paned: a #GtkPaned
+ * @resize: %TRUE to let the start child be resized
+ *
+ * Sets the #GtkPaned:resize-start-child property
+ */
 void
 gtk_paned_set_resize_start_child (GtkPaned *paned,
                                   gboolean  resize)
@@ -1605,6 +1623,14 @@ gtk_paned_set_resize_start_child (GtkPaned *paned,
   g_object_notify (G_OBJECT (paned), "resize-start-child");
 }
 
+/**
+ * gtk_paned_get_resize_start_child:
+ * @paned: a #GtkPaned
+ *
+ * Returns whether the start child can be resized.
+ *
+ * Returns: %TRUE if the start child is resizable
+ */
 gboolean
 gtk_paned_get_resize_start_child (GtkPaned *paned)
 {
@@ -1613,6 +1639,13 @@ gtk_paned_get_resize_start_child (GtkPaned *paned)
   return paned->resize_start_child;
 }
 
+/**
+ * gtk_paned_set_shrink_start_child:
+ * @paned: a #GtkPaned
+ * @resize: %TRUE to let the start child be shrunk
+ *
+ * Sets the #GtkPaned:shrink-start-child property
+ */
 void
 gtk_paned_set_shrink_start_child (GtkPaned *paned,
                                   gboolean  shrink)
@@ -1627,6 +1660,14 @@ gtk_paned_set_shrink_start_child (GtkPaned *paned,
   g_object_notify (G_OBJECT (paned), "shrink-start-child");
 }
 
+/**
+ * gtk_paned_get_shrink_start_child:
+ * @paned: a #GtkPaned
+ *
+ * Returns whether the start child can be shrunk.
+ *
+ * Returns: %TRUE if the start child is shrinkable
+ */
 gboolean
 gtk_paned_get_shrink_start_child (GtkPaned *paned)
 {
@@ -1636,14 +1677,11 @@ gtk_paned_get_shrink_start_child (GtkPaned *paned)
 }
 
 /**
- * gtk_paned_get_end_child:
+ * gtk_paned_set_end_child:
  * @paned: a #GtkPaned
+ * @child: the widget to add
  *
- * Retrieves the end child of the given #GtkPaned.
- *
- * See also: #GtkPaned:end-child
- *
- * Returns: (transfer none) (nullable): the end child widget
+ * Sets the end child of @paned to @child.
  */
 void
 gtk_paned_set_end_child (GtkPaned *paned,
@@ -1663,6 +1701,16 @@ gtk_paned_set_end_child (GtkPaned *paned,
   g_object_notify (G_OBJECT (paned), "end-child");
 }
 
+/**
+ * gtk_paned_get_end_child:
+ * @paned: a #GtkPaned
+ *
+ * Retrieves the end child of the given #GtkPaned.
+ *
+ * See also: #GtkPaned:end-child
+ *
+ * Returns: (transfer none) (nullable): the end child widget
+ */
 GtkWidget *
 gtk_paned_get_end_child (GtkPaned *paned)
 {
@@ -1671,6 +1719,13 @@ gtk_paned_get_end_child (GtkPaned *paned)
   return paned->end_child;
 }
 
+/**
+ * gtk_paned_set_resize_end_child:
+ * @paned: a #GtkPaned
+ * @resize: %TRUE to let the end child be resized
+ *
+ * Sets the #GtkPaned:resize-end-child property
+ */
 void
 gtk_paned_set_resize_end_child (GtkPaned *paned,
                                 gboolean  resize)
@@ -1685,6 +1740,14 @@ gtk_paned_set_resize_end_child (GtkPaned *paned,
   g_object_notify (G_OBJECT (paned), "resize-end-child");
 }
 
+/**
+ * gtk_paned_get_resize_end_child:
+ * @paned: a #GtkPaned
+ *
+ * Returns whether the end child can be resized.
+ *
+ * Returns: %TRUE if the end child is resizable
+ */
 gboolean
 gtk_paned_get_resize_end_child (GtkPaned *paned)
 {
@@ -1693,6 +1756,13 @@ gtk_paned_get_resize_end_child (GtkPaned *paned)
   return paned->resize_end_child;
 }
 
+/**
+ * gtk_paned_set_shrink_end_child:
+ * @paned: a #GtkPaned
+ * @resize: %TRUE to let the end child be shrunk
+ *
+ * Sets the #GtkPaned:shrink-end-child property
+ */
 void
 gtk_paned_set_shrink_end_child (GtkPaned *paned,
                                 gboolean  shrink)
@@ -1707,6 +1777,14 @@ gtk_paned_set_shrink_end_child (GtkPaned *paned,
   g_object_notify (G_OBJECT (paned), "shrink-end-child");
 }
 
+/**
+ * gtk_paned_get_shrink_end_child:
+ * @paned: a #GtkPaned
+ *
+ * Returns whether the end child can be shrunk.
+ *
+ * Returns: %TRUE if the end child is shrinkable
+ */
 gboolean
 gtk_paned_get_shrink_end_child (GtkPaned *paned)
 {

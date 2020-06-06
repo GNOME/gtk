@@ -330,6 +330,7 @@ gtk_string_sorter_get_ignore_case (GtkStringSorter *self)
 /**
  * gtk_string_sorter_set_ignore_case:
  * @self: a #GtkStringSorter
+ * @ignore_case: %TRUE to ignore case differences
  *
  * Sets whether the sorter will ignore case differences.
  */

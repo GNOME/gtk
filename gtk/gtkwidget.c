@@ -11846,6 +11846,8 @@ gtk_widget_observe_controllers (GtkWidget *widget)
  * gtk_widget_get_first_child:
  * @widget: a #GtkWidget
  *
+ * Returns the widgets first child.
+ *
  * Returns: (transfer none) (nullable): The widget's first child
  */
 GtkWidget *
@@ -11861,6 +11863,8 @@ gtk_widget_get_first_child (GtkWidget *widget)
 /**
  * gtk_widget_get_last_child:
  * @widget: a #GtkWidget
+ *
+ * Returns the widgets last child.
  *
  * Returns: (transfer none) (nullable): The widget's last child
  */
@@ -11878,6 +11882,8 @@ gtk_widget_get_last_child (GtkWidget *widget)
  * gtk_widget_get_next_sibling:
  * @widget: a #GtkWidget
  *
+ * Returns the widgets next sibling.
+ *
  * Returns: (transfer none) (nullable): The widget's next sibling
  */
 GtkWidget *
@@ -11893,6 +11899,8 @@ gtk_widget_get_next_sibling (GtkWidget *widget)
 /**
  * gtk_widget_get_prev_sibling:
  * @widget: a #GtkWidget
+ *
+ * Returns the widgets previous sibling.
  *
  * Returns: (transfer none) (nullable): The widget's previous sibling
  */

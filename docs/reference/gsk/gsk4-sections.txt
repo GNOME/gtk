@@ -236,7 +236,6 @@ gsk_transform_to_translate
 gsk_transform_transform
 gsk_transform_invert
 gsk_transform_matrix
-gsk_transform_matrix_with_category
 gsk_transform_translate
 gsk_transform_translate_3d
 gsk_transform_rotate

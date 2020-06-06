@@ -430,6 +430,7 @@ gtk_text_child_anchor_finalize (GObject *obj)
 /**
  * gtk_text_child_anchor_get_widgets:
  * @anchor: a #GtkTextChildAnchor
+ * @out_len: (out): return location for the length of the array
  * 
  * Gets a list of all widgets anchored at this child anchor.
  *

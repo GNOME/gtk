@@ -202,7 +202,8 @@ gtk_multi_selection_add_or_remove (GtkSelectionModel    *model,
     }
   while (n > 0);
 
-  gtk_selection_model_selection_changed (model, min, max - min + 1);
+  if (min <= max)
+    gtk_selection_model_selection_changed (model, min, max - min + 1);
 
   return TRUE;
 }

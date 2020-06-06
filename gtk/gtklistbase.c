@@ -41,6 +41,7 @@ typedef struct _RubberbandData RubberbandData;
 struct _RubberbandData
 {
   GtkWidget *widget;
+  GtkSet *active;
   double x1, y1;
   double x2, y2;
   gboolean modify;
@@ -53,6 +54,7 @@ rubberband_data_free (gpointer data)
   RubberbandData *rdata = data;
 
   g_clear_pointer (&rdata->widget, gtk_widget_unparent);
+  g_clear_pointer (&rdata->active, gtk_set_free);
   g_free (rdata);
 }
 
@@ -1341,6 +1343,7 @@ gtk_list_base_start_rubberband (GtkListBase *self,
   priv->rubberband->widget = gtk_gizmo_new ("rubberband",
                                             NULL, NULL, NULL, NULL, NULL, NULL);
   gtk_widget_set_parent (priv->rubberband->widget, GTK_WIDGET (self));
+  priv->rubberband->active = gtk_set_new ();
 }
 
 static void
@@ -1352,7 +1355,7 @@ range_cb (guint     position,
 {
   GtkSet *set = data;
 
-  gtk_set_find_range (set, position, gtk_set_get_max (set), start, n_items, selected);
+  gtk_set_find_range (set, position, gtk_set_get_max (set) + 1, start, n_items, selected);
 }
 
 static void
@@ -1361,45 +1364,31 @@ gtk_list_base_stop_rubberband (GtkListBase *self)
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   GtkListItemManagerItem *item;
   GtkSelectionModel *model;
-  GtkSet *active;
 
   if (!priv->rubberband)
     return;
-
-  active = gtk_set_new ();
 
   for (item = gtk_list_item_manager_get_first (priv->item_manager);
        item != NULL;
        item = gtk_rb_tree_node_get_next (item))
     {
-      if (!item->widget)
-        continue;
-
-      if (gtk_widget_get_state_flags (item->widget) & GTK_STATE_FLAG_ACTIVE)
-        {
-          guint pos;
-
-          pos = gtk_list_item_manager_get_item_position (priv->item_manager, item);
-          gtk_set_add_item (active, pos);
-          gtk_widget_unset_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE);
-        }
+      if (item->widget)
+        gtk_widget_unset_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE);
     }
 
   model = gtk_list_item_manager_get_model (priv->item_manager);
 
   if (priv->rubberband->modify)
     {
-      gtk_selection_model_unselect_callback (model, range_cb, active);
+      gtk_selection_model_unselect_callback (model, range_cb, priv->rubberband->active);
     }
   else
     {
       if (!priv->rubberband->extend)
         gtk_selection_model_unselect_all (model);
 
-      gtk_selection_model_select_callback (model, range_cb, active);
+      gtk_selection_model_select_callback (model, range_cb, priv->rubberband->active);
     }
-
-  gtk_set_free (active);
 
   g_clear_pointer (&priv->rubberband, rubberband_data_free);
   remove_autoscroll (self);
@@ -1472,15 +1461,25 @@ gtk_list_base_update_rubberband_selection (GtkListBase *self)
        item != NULL;
        item = gtk_rb_tree_node_get_next (item))
     {
+      guint pos;
+
       if (!item->widget)
         continue;
+
+      pos = gtk_list_item_manager_get_item_position (priv->item_manager, item);
 
       gtk_widget_get_allocation (item->widget, &alloc);
 
       if (gdk_rectangle_intersect (&rect, &alloc, &alloc))
-        gtk_widget_set_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE, FALSE);
+        {
+          gtk_set_add_item (priv->rubberband->active, pos);
+          gtk_widget_set_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE, FALSE);
+        }
       else
-        gtk_widget_unset_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE);
+        {
+          gtk_set_remove_item (priv->rubberband->active, pos);
+          gtk_widget_unset_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE);
+        }
     }
 }
 

@@ -397,7 +397,6 @@ gtk_single_selection_get_type
 <TITLE>GtkMultiSeledction</TITLE>
 GtkMultiSelection
 gtk_multi_selection_new
-gtk_multi_selection_copy
 <SUBSECTION Private>
 gtk_multi_selection_get_type
 </SECTION>
@@ -1455,7 +1454,6 @@ gtk_custom_filter_get_type
 <FILE>gtkfilterlistmodel</FILE>
 <TITLE>GtkFilterListModel</TITLE>
 GtkFilterListModel
-GtkFilterListModelFilterFunc
 gtk_filter_list_model_new
 gtk_filter_list_model_new_for_type
 gtk_filter_list_model_set_model
@@ -2133,12 +2131,18 @@ GtkNotebookPrivate
 <TITLE>GtkPaned</TITLE>
 GtkPaned
 gtk_paned_new
-gtk_paned_add1
-gtk_paned_add2
-gtk_paned_pack1
-gtk_paned_pack2
-gtk_paned_get_child1
-gtk_paned_get_child2
+gtk_paned_set_start_child
+gtk_paned_get_start_child
+gtk_paned_set_end_child
+gtk_paned_get_end_child
+gtk_paned_set_resize_start_child
+gtk_paned_get_resize_start_child
+gtk_paned_set_resize_end_child
+gtk_paned_get_resize_end_child
+gtk_paned_set_shrink_start_child
+gtk_paned_get_shrink_start_child
+gtk_paned_set_shrink_end_child
+gtk_paned_get_shrink_end_child
 gtk_paned_set_position
 gtk_paned_get_position
 gtk_paned_set_wide_handle

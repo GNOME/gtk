@@ -324,36 +324,11 @@ gtk_list_item_widget_click_gesture_pressed (GtkGestureClick   *gesture,
 {
   GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
   GtkWidget *widget = GTK_WIDGET (self);
-  GtkWidget * parent = gtk_widget_get_parent (widget);
-  gboolean rubberband;
 
   if (priv->list_item && !priv->list_item->selectable && !priv->list_item->activatable)
     {
       gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
       return;
-    }
-
-  if (GTK_IS_LIST_BASE (parent))
-    rubberband = gtk_list_base_get_enable_rubberband (GTK_LIST_BASE (parent));
-  else
-    rubberband = FALSE;
-
-  if (!rubberband && (!priv->list_item || priv->list_item->selectable))
-    {
-      GdkModifierType state;
-      GdkEvent *event;
-      gboolean extend, modify;
-
-      event = gtk_gesture_get_last_event (GTK_GESTURE (gesture),
-                                          gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture)));
-      state = gdk_event_get_modifier_state (event);
-      extend = (state & GDK_SHIFT_MASK) != 0;
-      modify = (state & GDK_CONTROL_MASK) != 0;
-
-      gtk_widget_activate_action (GTK_WIDGET (self),
-                                  "list.select-item",
-                                  "(ubb)",
-                                  priv->position, modify, extend);
     }
 
   if (!priv->list_item || priv->list_item->activatable)
@@ -371,6 +346,36 @@ gtk_list_item_widget_click_gesture_pressed (GtkGestureClick   *gesture,
 
   if (gtk_widget_get_focus_on_click (widget))
     gtk_widget_grab_focus (widget);
+}
+
+static void
+gtk_list_item_widget_click_gesture_released (GtkGestureClick   *gesture,
+                                             int                n_press,
+                                             double             x,
+                                             double             y,
+                                             GtkListItemWidget *self)
+{
+  GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
+
+  if (!priv->list_item || priv->list_item->selectable)
+    {
+      GdkModifierType state;
+      GdkEvent *event;
+      gboolean extend, modify;
+
+      event = gtk_gesture_get_last_event (GTK_GESTURE (gesture),
+                                          gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture)));
+      state = gdk_event_get_modifier_state (event);
+      extend = (state & GDK_SHIFT_MASK) != 0;
+      modify = (state & GDK_CONTROL_MASK) != 0;
+
+      gtk_widget_activate_action (GTK_WIDGET (self),
+                                  "list.select-item",
+                                  "(ubb)",
+                                  priv->position, modify, extend);
+    }
+
+  gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_ACTIVE);
 }
 
 static void
@@ -404,16 +409,6 @@ gtk_list_item_widget_hover_cb (GtkEventControllerMotion *controller,
                                   "(ubb)",
                                   priv->position, FALSE, FALSE);
     }
-}
-
-static void
-gtk_list_item_widget_click_gesture_released (GtkGestureClick   *gesture,
-                                             int                n_press,
-                                             double             x,
-                                             double             y,
-                                             GtkListItemWidget *self)
-{
-  gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_ACTIVE);
 }
 
 static void
