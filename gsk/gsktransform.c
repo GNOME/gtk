@@ -1622,6 +1622,9 @@ gsk_transform_transform (GskTransform *next,
   if (other == NULL)
     return next;
 
+  if (next == NULL)
+    return gsk_transform_ref (other);
+
   if (gsk_transform_is_identity (next))
     {
       /* ref before unref to avoid catastrophe when other == next */
