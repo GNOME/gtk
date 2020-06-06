@@ -94,8 +94,11 @@
     </chapter>
 
     <chapter id="Trees">
-      <xi:include href="xml/gtktreelistrow.xml" />
+      <title>Tree support</title>
       <xi:include href="xml/gtktreelistmodel.xml" />
+      <section>
+        <xi:include href="xml/gtktreelistrow.xml" />
+      </section>
       <xi:include href="xml/gtktreelistrowsorter.xml" />
       <xi:include href="xml/gtktreeexpander.xml" />
     </chapter>
