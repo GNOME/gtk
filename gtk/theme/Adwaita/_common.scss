@@ -215,7 +215,7 @@ window.assistant {
  * Spinner Animation *
  *********************/
 @keyframes spin {
-  to { -gtk-icon-transform: rotate(1turn); }
+  to { transform: rotate(1turn); }
 }
 
 spinner {
