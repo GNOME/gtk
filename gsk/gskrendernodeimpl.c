@@ -370,7 +370,7 @@ gsk_linear_gradient_node_get_n_color_stops (GskRenderNode *node)
  * @node: (type GskLinearGradientNode): a #GskRenderNode for a linear gradient
  * @n_stops: (out) (optional): the number of color stops in the returned array
  *
- * Retrievs the color stops in the gradient.
+ * Retrieves the color stops in the gradient.
  *
  * Returns: (array length=n_stops): the color stops in the gradient
  */
@@ -555,6 +555,14 @@ gsk_border_node_diff (GskRenderNode  *node1,
   gsk_render_node_diff_impossible (node1, node2, region);
 }
 
+/**
+ * gsk_border_node_peek_outline:
+ * @node: (type GskBorderNode): a #GskRenderNode for a border
+ *
+ * Retrieves the outline of the border.
+ *
+ * Returns: the outline of the border
+ */
 const GskRoundedRect *
 gsk_border_node_peek_outline (GskRenderNode *node)
 {
@@ -563,6 +571,15 @@ gsk_border_node_peek_outline (GskRenderNode *node)
   return &self->outline;
 }
 
+/**
+ * gsk_border_node_peek_widths:
+ * @node: (type GskBorderNode): a #GskRenderNode for a border
+ *
+ * Retrieves the stroke widths of the border.
+ *
+ * Returns: (transfer none): an array of 4 floats for the top,
+ *     right, bottom and left stroke width of the border
+ */
 const float *
 gsk_border_node_peek_widths (GskRenderNode *node)
 {
@@ -571,6 +588,15 @@ gsk_border_node_peek_widths (GskRenderNode *node)
   return self->border_width;
 }
 
+/**
+ * gsk_border_node_peek_colors:
+ * @node: (type GskBorderNode): a #GskRenderNode for a border
+ *
+ * Retrieves the colors of the border.
+ *
+ * Returns: (transfer none): an array of 4 #GdkRGBA structs
+ *     for the top, right, bottom and left color of the border
+ */
 const GdkRGBA *
 gsk_border_node_peek_colors (GskRenderNode *node)
 {
@@ -3626,6 +3652,14 @@ gsk_text_node_has_color_glyphs (GskRenderNode *node)
   return self->has_color_glyphs;
 }
 
+/**
+ * gsk_text_node_get_num_glyphs:
+ * @node: (type GskTextNode): a text #GskRenderNode
+ *
+ * Retrieves the number of glyphs in the text node.
+ *
+ * Returns: the number of glyphs
+ */
 guint
 gsk_text_node_get_num_glyphs (GskRenderNode *node)
 {
