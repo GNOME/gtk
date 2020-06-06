@@ -56,6 +56,7 @@ gtk/a11y/gtkmenubuttonaccessible.c
 gtk/a11y/gtkpasswordentryaccessible.c
 gtk/a11y/gtkrenderercellaccessible.c
 gtk/a11y/gtkscalebuttonaccessible.c
+gtk/a11y/gtksearchentryaccessible.c
 gtk/a11y/gtkspinneraccessible.c
 gtk/a11y/gtkswitchaccessible.c
 gtk/a11y/gtktextaccessible.c
@@ -82,6 +83,7 @@ gtk/gtkbox.c
 gtk/gtkboxlayout.c
 gtk/gtkbuildable.c
 gtk/gtkbuilder.c
+gtk/gtkbuilderlistitemfactory.c
 gtk/gtkbuilder-menus.c
 gtk/gtkbuilderparser.c
 gtk/gtkbutton.c
@@ -111,6 +113,10 @@ gtk/gtkcoloreditor.c
 gtk/gtkcolorplane.c
 gtk/gtkcolorscale.c
 gtk/gtkcolorswatch.c
+gtk/gtkcolumnview.c
+gtk/gtkcolumnviewcell.c
+gtk/gtkcolumnviewcolumn.c
+gtk/gtkcolumnviewtitle.c
 gtk/gtkcombobox.c
 gtk/gtkconstraint.c
 gtk/gtkcssnode.c
@@ -120,10 +126,12 @@ gtk/gtkcssstaticstyle.c
 gtk/gtkcssstyleproperty.c
 gtk/gtkcustompaperunixdialog.c
 gtk/gtkdialog.c
+gtk/gtkdirectorylist.c
 gtk/gtkdragicon.c
 gtk/gtkdragsource.c
 gtk/gtkdrawingarea.c
 gtk/gtkdropcontrollermotion.c
+gtk/gtkdropdown.c
 gtk/gtkdroptargetasync.c
 gtk/gtkdroptarget.c
 gtk/gtkeditable.c
@@ -152,6 +160,7 @@ gtk/gtkfilechooserwidget.c
 gtk/gtkfilefilter.c
 gtk/gtkfilesystem.c
 gtk/gtkfilesystemmodel.c
+gtk/gtkfilter.c
 gtk/gtkfilterlistmodel.c
 gtk/gtkfixed.c
 gtk/gtkfixedlayout.c
@@ -175,6 +184,7 @@ gtk/gtkgesturezoom.c
 gtk/gtkglarea.c
 gtk/gtkgrid.c
 gtk/gtkgridlayout.c
+gtk/gtkgridview.c
 gtk/gtkheaderbar.c
 gtk/gtkicontheme.c
 gtk/gtkiconview.c
@@ -187,8 +197,12 @@ gtk/gtkinfobar.c
 gtk/gtklabel.c
 gtk/gtklevelbar.c
 gtk/gtklinkbutton.c
+gtk/gtklistbase.c
 gtk/gtklistbox.c
+gtk/gtklistitem.c
+gtk/gtklistitemwidget.c
 gtk/gtkliststore.c
+gtk/gtklistview.c
 gtk/gtklockbutton.c
 gtk/gtkmagnifier.c
 gtk/gtkmain.c
@@ -204,10 +218,12 @@ gtk/gtkmodules.c
 gtk/gtkmountoperation.c
 gtk/gtkmountoperation-stub.c
 gtk/gtkmountoperation-x11.c
+gtk/gtkmultiselection.c
 gtk/gtknativedialog.c
 gtk/gtknomediafile.c
 gtk/gtknoselection.c
 gtk/gtknotebook.c
+gtk/gtknumericsorter.c
 gtk/gtkorientable.c
 gtk/gtkoverlay.c
 gtk/gtkoverlaylayout.c
@@ -265,10 +281,12 @@ gtk/gtkshortcutswindow.c
 gtk/gtkshortcuttrigger.c
 gtk/gtkshow.c
 gtk/gtksidebarrow.c
+gtk/gtksignallistitemfactory.c
 gtk/gtksingleselection.c
 gtk/gtksizegroup.c
 gtk/gtksizerequest.c
 gtk/gtkslicelistmodel.c
+gtk/gtksorter.c
 gtk/gtksortlistmodel.c
 gtk/gtkspinbutton.c
 gtk/gtkspinner.c
@@ -276,6 +294,8 @@ gtk/gtkstack.c
 gtk/gtkstacksidebar.c
 gtk/gtkstackswitcher.c
 gtk/gtkstatusbar.c
+gtk/gtkstringfilter.c
+gtk/gtkstringsorter.c
 gtk/gtkstylecontext.c
 gtk/gtkstyleproperty.c
 gtk/gtkstyleprovider.c
@@ -296,7 +316,9 @@ gtk/gtktogglebutton.c
 gtk/gtktooltipwindow.c
 gtk/gtktrashmonitor.c
 gtk/gtktreednd.c
+gtk/gtktreeexpander.c
 gtk/gtktreelistmodel.c
+gtk/gtktreelistrowsorter.c
 gtk/gtktreemodel.c
 gtk/gtktreemodelfilter.c
 gtk/gtktreemodelsort.c
@@ -361,6 +383,7 @@ gtk/ui/gtkassistant.ui
 gtk/ui/gtkcolorchooserdialog.ui
 gtk/ui/gtkcoloreditor.ui
 gtk/ui/gtkdialog.ui
+gtk/ui/gtkdropdown.ui
 gtk/ui/gtkemojichooser.ui
 gtk/ui/gtkemojicompletion.ui
 gtk/ui/gtkfilechooserdialog.ui
