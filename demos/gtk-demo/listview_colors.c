@@ -25,6 +25,7 @@ struct _GtkColor
   char *name;
   GdkRGBA *color;
   int h, s, v;
+  gboolean selected;
 };
 
 enum {
@@ -37,6 +38,7 @@ enum {
   PROP_HUE,
   PROP_SATURATION,
   PROP_VALUE,
+  PROP_SELECTED,
 
   N_PROPS
 };
@@ -124,6 +126,10 @@ gtk_color_get_property (GObject    *object,
       g_value_set_int (value, self->v);
       break;
 
+    case PROP_SELECTED:
+      g_value_set_boolean (value, self->selected);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -158,6 +164,10 @@ gtk_color_set_property (GObject      *object,
 
     case PROP_VALUE:
       self->v = g_value_get_int (value);
+      break;
+
+    case PROP_SELECTED:
+      self->selected = g_value_get_boolean (value);
       break;
 
     default:
@@ -202,6 +212,8 @@ gtk_color_class_init (GtkColorClass *klass)
     g_param_spec_int ("saturation", NULL, NULL, 0, 100, 0, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
   properties[PROP_VALUE] =
     g_param_spec_int ("value", NULL, NULL, 0, 100, 0, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+  properties[PROP_SELECTED] =
+    g_param_spec_boolean ("selected", NULL, NULL, FALSE, G_PARAM_READWRITE);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
@@ -261,7 +273,7 @@ create_colors_model (void)
       h = atoi (fields[9]);
       s = atoi (fields[10]);
       v = atoi (fields[11]);
- 
+
       color = gtk_color_new (name, red / 255., green / 255., blue / 255., h, s, v);
       g_list_store_append (result, color);
       g_object_unref (color);
@@ -427,7 +439,7 @@ create_color_grid (void)
   gtk_grid_view_set_enable_rubberband (GTK_GRID_VIEW (gridview), TRUE);
 
   model = G_LIST_MODEL (gtk_sort_list_model_new (create_colors_model (), NULL));
-  selection = G_LIST_MODEL (gtk_multi_selection_new (model));
+  selection = G_LIST_MODEL (gtk_property_selection_new (model, "selected"));
   gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), selection);
   g_object_unref (selection);
   g_object_unref (model);
