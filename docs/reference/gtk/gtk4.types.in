@@ -169,6 +169,7 @@ gtk_print_operation_preview_get_type
 gtk_print_settings_get_type
 @DISABLE_ON_W32@gtk_print_unix_dialog_get_type
 gtk_progress_bar_get_type
+gtk_property_selection_get_type
 gtk_radio_button_get_type
 gtk_range_get_type
 gtk_recent_manager_get_type
