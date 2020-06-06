@@ -51,6 +51,10 @@ G_DECLARE_INTERFACE (GtkSelectionModel, gtk_selection_model, GTK, SELECTION_MODE
  * be changed, in which case @selected is set to %FALSE.
  *
  * @start_range and @n_items are set to return the range.
+ *
+ * The callback will be called repeatedly to find all ranges
+ * to operate on until it has exhausted the items of the model,
+ * or until it returns an empty range (ie @n_items == 0).
  */
 typedef void     (* GtkSelectionCallback) (guint     position,
                                            guint    *start_range,
@@ -147,6 +151,7 @@ GDK_AVAILABLE_IN_ALL
 gboolean                gtk_selection_model_select_callback     (GtkSelectionModel      *model,
                                                                  GtkSelectionCallback    callback,
                                                                  gpointer                data);
+GDK_AVAILABLE_IN_ALL
 gboolean                gtk_selection_model_unselect_callback   (GtkSelectionModel      *model,
                                                                  GtkSelectionCallback    callback,
                                                                  gpointer                data);
