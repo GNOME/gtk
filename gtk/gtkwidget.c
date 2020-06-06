@@ -12045,10 +12045,10 @@ gtk_widget_snapshot_child (GtkWidget   *widget,
   g_return_if_fail (_gtk_widget_get_parent (child) == widget);
   g_return_if_fail (snapshot != NULL);
 
-  if (GTK_IS_NATIVE (child))
+  if (!_gtk_widget_get_mapped (child))
     return;
 
-  if (!_gtk_widget_get_mapped (child))
+  if (GTK_IS_NATIVE (child))
     return;
 
   gtk_widget_do_snapshot (child, snapshot);
