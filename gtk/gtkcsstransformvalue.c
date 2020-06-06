@@ -1231,7 +1231,10 @@ GskTransform *
 gtk_css_transform_value_get_transform (const GtkCssValue *transform)
 {
   g_return_val_if_fail (transform->class == &GTK_CSS_VALUE_TRANSFORM, FALSE);
-  
+
+  if (transform->n_transforms == 0)
+    return NULL;
+
   return gtk_css_transform_value_compute_transform (transform);
 }
 
