@@ -4632,7 +4632,7 @@ msgstr "Mostra les vores de la disposició"
 
 #: gtk/inspector/visual.ui:615
 msgid "Show Pixel Cache"
-msgstr "Mostra la cau de píxels"
+msgstr "Mostra la memòria cau de píxels"
 
 #: gtk/inspector/visual.ui:649
 msgid "Show Widget Resizes"
@@ -6856,7 +6856,7 @@ msgstr "Chakma"
 #: gtk/script-names.c:113
 msgctxt "Script"
 msgid "Meroitic Cursive"
-msgstr "Meroític cursiva"
+msgstr "Cursiva meroítica"
 
 #: gtk/script-names.c:114
 msgctxt "Script"

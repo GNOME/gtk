@@ -8772,7 +8772,7 @@ msgstr "El model del fill"
 
 #: gtk/gtktreemodelfilter.c:533
 msgid "The model for the filtermodel to filter"
-msgstr "El model per al model de filtre que filtrar"
+msgstr "El model per al model de filtre a filtrar"
 
 #: gtk/gtktreemodelfilter.c:540
 msgid "The virtual root"
