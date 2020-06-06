@@ -345,7 +345,7 @@ gtk_selection_model_unselect_all (GtkSelectionModel *model)
 /**
  * gtk_selection_model_select_callback:
  * @model: a #GtkSelectionModel
- * @callback: a #GtkSelectionCallback to determine items to select
+ * @callback: (scope call): a #GtkSelectionCallback to determine items to select
  * @data: data to pass to @callback
  *
  * Requests to select all items for which @callback returns
@@ -364,7 +364,7 @@ gtk_selection_model_select_callback (GtkSelectionModel    *model,
 /**
  * gtk_selection_model_unselect_callback:
  * @model: a #GtkSelectionModel
- * @callback: a #GtkSelectionCallback to determine items to select
+ * @callback: (scope call): a #GtkSelectionCallback to determine items to select
  * @data: data to pass to @callback
  *
  * Requests to unselect all items for which @callback returns
