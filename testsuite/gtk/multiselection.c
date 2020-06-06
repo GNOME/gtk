@@ -372,6 +372,10 @@ test_selection (void)
   g_object_unref (selection);
 }
 
+/* Verify that select_range with exclusive = TRUE
+ * sends a selection-changed signal that covers
+ * preexisting items that got unselected
+ */
 static void
 test_select_range (void)
 {
@@ -403,6 +407,108 @@ test_select_range (void)
   g_object_unref (selection);
 }
 
+/* Test that removing and readding items
+ * clears the selected state.
+ */
+static void
+test_readd (void)
+{
+  GtkSelectionModel *selection;
+  GListStore *store;
+  gboolean ret;
+
+  store = new_store (1, 5, 1);
+
+  selection = new_model (store);
+  assert_model (selection, "1 2 3 4 5");
+  assert_selection (selection, "");
+  assert_selection_changes (selection, "");
+
+  ret = gtk_selection_model_select_range (selection, 2, 2, FALSE);
+  g_assert_true (ret);
+  assert_model (selection, "1 2 3 4 5");
+  assert_selection (selection, "3 4");
+  assert_selection_changes (selection, "2:2");
+
+  g_list_model_items_changed (G_LIST_MODEL (store), 1, 3, 3);
+  assert_changes (selection, "1-3+3");
+  assert_selection (selection, "");
+
+  g_object_unref (store);
+  g_object_unref (selection);
+}
+
+typedef struct {
+  guint start;
+  guint n;
+  gboolean in;
+} SelectionData;
+
+static void
+select_some (guint position,
+             guint *start,
+             guint *n,
+             gboolean *selected,
+             gpointer data)
+{
+  SelectionData *sdata = data;
+  guint i;
+
+  for (i = 0; sdata[i].n != 0; i++)
+    {
+      if (sdata[i].start <= position &&
+          position < sdata[i].start + sdata[i].n)
+        break;
+    }
+
+  *start = sdata[i].start;
+  *n = sdata[i].n;
+  *selected = sdata[i].in;
+}
+
+static void
+test_callback (void)
+{
+  GtkSelectionModel *selection;
+  gboolean ret;
+  GListStore *store;
+  SelectionData data[] = {
+    { 0, 2, FALSE },
+    { 2, 3, TRUE },
+    { 5, 2, FALSE },
+    { 6, 3, TRUE },
+    { 9, 1, FALSE },
+    { 0, 0, FALSE }
+  };
+
+  SelectionData more_data[] = {
+    { 0, 3, FALSE },
+    { 3, 1, TRUE },
+    { 4, 3, FALSE },
+    { 7, 1, TRUE },
+    { 0, 0, FALSE }
+  };
+
+  store = new_store (1, 10, 1);
+
+  selection = new_model (store);
+  assert_model (selection, "1 2 3 4 5 6 7 8 9 10");
+  assert_selection (selection, "");
+  assert_selection_changes (selection, "");
+
+  ret = gtk_selection_model_select_callback (selection, select_some, data);
+  g_assert_true (ret);
+  assert_selection (selection, "3 4 5 7 8 9");
+  assert_selection_changes (selection, "2:7");
+
+  ret = gtk_selection_model_unselect_callback (selection, select_some, more_data);
+  g_assert_true (ret);
+  assert_selection (selection, "3 5 7 9");
+  assert_selection_changes (selection, "3:5");
+
+  g_object_unref (store);
+  g_object_unref (selection);
+}
 
 int
 main (int argc, char *argv[])
@@ -421,6 +527,8 @@ main (int argc, char *argv[])
 #endif
   g_test_add_func ("/multiselection/selection", test_selection);
   g_test_add_func ("/multiselection/select-range", test_select_range);
+  g_test_add_func ("/multiselection/readd", test_readd);
+  g_test_add_func ("/multiselection/callback", test_callback);
 
   return g_test_run ();
 }

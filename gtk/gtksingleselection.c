@@ -30,9 +30,14 @@
  * @Title: GtkSingleSelection
  * @see_also: #GtkSelectionModel
  *
- * GtkSingleSelection is an implementation of the #GtkSelectionModel interface 
+ * GtkSingleSelection is an implementation of the #GtkSelectionModel interface
  * that allows selecting a single element. It is the default selection method
  * used by list widgets in GTK.
+ *
+ * Note that the selection is *persistent* -- if the selected item is removed
+ * and re-added in the same ::items-changed emission, it stays selected. In
+ * particular, this means that changing the sort order of an underlying sort
+ * model will preserve the selection.
  */
 struct _GtkSingleSelection
 {

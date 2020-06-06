@@ -23,7 +23,6 @@
 
 #include "gtkintl.h"
 #include "gtkselectionmodel.h"
-#include "gtksingleselection.h"
 #include "gtkset.h"
 
 /**
@@ -34,6 +33,12 @@
  *
  * GtkMultiSelection is an implementation of the #GtkSelectionModel interface
  * that allows selecting multiple elements.
+ *
+ * Note that due to the way the selection is stored, newly added items are
+ * always unselected, even if they were just removed from the model, and were
+ * selected before. In particular this means that changing the sort order of
+ * an underlying sort model will clear the selection. In other words, the
+ * selection is *not persistent*.
  */
 
 struct _GtkMultiSelection
@@ -175,32 +180,40 @@ gtk_multi_selection_add_or_remove (GtkSelectionModel    *model,
                                    gpointer              data)
 {
   GtkMultiSelection *self = GTK_MULTI_SELECTION (model);
-  guint pos, start, n;
+  guint pos, start, n_items;
   gboolean in;
   guint min, max;
+  guint n;
+
+  n = g_list_model_get_n_items (G_LIST_MODEL (self));
 
   min = G_MAXUINT;
   max = 0;
 
-  pos = 0;
-  do
+  for (pos = 0; pos < n; pos = start + n_items)
     {
-      callback (pos, &start, &n, &in, data);
+      callback (pos, &start, &n_items, &in, data);
+
+      if (n_items == 0)
+        break;
+
+      g_assert (start <= pos && pos < start + n_items);
+
       if (in)
         {
           if (start < min)
             min = start;
-          if (start + n - 1 > max)
-            max = start + n - 1;
+          if (start + n_items - 1 > max)
+            max = start + n_items - 1;
 
           if (add)
-            gtk_set_add_range (self->selected, start, n);
+            gtk_set_add_range (self->selected, start, n_items);
           else
-            gtk_set_remove_range (self->selected, start, n);
+            gtk_set_remove_range (self->selected, start, n_items);
         }
-      pos = start + n;
+
+      pos = start + n_items;
     }
-  while (n > 0);
 
   if (min <= max)
     gtk_selection_model_selection_changed (model, min, max - min + 1);
