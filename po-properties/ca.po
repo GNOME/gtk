@@ -2216,7 +2216,7 @@ msgstr "Valor inicial"
 
 #: gtk/gtkcssstyleproperty.c:201
 msgid "The initial specified value used for this property"
-msgstr "El valor inicial especificat que s'utilitza per aquesta propietat"
+msgstr "El valor inicial especificat que s'utilitza per a aquesta propietat"
 
 #: gtk/gtkdragicon.c:373
 #, fuzzy
@@ -7013,7 +7013,7 @@ msgstr "El model del fill"
 
 #: gtk/gtktreemodelfilter.c:533
 msgid "The model for the filtermodel to filter"
-msgstr "El model per al model de filtre que filtrar"
+msgstr "El model per al model de filtre a filtrar"
 
 #: gtk/gtktreemodelfilter.c:540
 msgid "The virtual root"
