@@ -43,7 +43,6 @@ struct _GtkMultiSelection
   GListModel *model;
 
   GtkSet *selected;
-  guint last_selected;
 };
 
 struct _GtkMultiSelectionClass
@@ -147,14 +146,7 @@ gtk_multi_selection_select_item (GtkSelectionModel *model,
                                  guint              position,
                                  gboolean           exclusive)
 {
-  GtkMultiSelection *self = GTK_MULTI_SELECTION (model);
-  guint pos, n_items;
-
-  pos = position;
-  n_items = 1;
-
-  self->last_selected = position;
-  return gtk_multi_selection_select_range (model, pos, n_items, exclusive);
+  return gtk_multi_selection_select_range (model, position, 1, exclusive);
 }
 
 static gboolean
@@ -173,8 +165,6 @@ gtk_multi_selection_select_all (GtkSelectionModel *model)
 static gboolean
 gtk_multi_selection_unselect_all (GtkSelectionModel *model)
 {
-  GtkMultiSelection *self = GTK_MULTI_SELECTION (model);
-  self->last_selected = GTK_INVALID_LIST_POSITION;
   return gtk_multi_selection_unselect_range (model, 0, g_list_model_get_n_items (G_LIST_MODEL (model)));
 }
 
@@ -345,7 +335,6 @@ gtk_multi_selection_dispose (GObject *object)
   gtk_multi_selection_clear_model (self);
 
   g_clear_pointer (&self->selected, gtk_set_free);
-  self->last_selected = GTK_INVALID_LIST_POSITION;
 
   G_OBJECT_CLASS (gtk_multi_selection_parent_class)->dispose (object);
 }
@@ -378,7 +367,6 @@ static void
 gtk_multi_selection_init (GtkMultiSelection *self)
 {
   self->selected = gtk_set_new ();
-  self->last_selected = GTK_INVALID_LIST_POSITION;
 }
 
 /**
