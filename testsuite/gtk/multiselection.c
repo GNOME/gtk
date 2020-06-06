@@ -372,6 +372,10 @@ test_selection (void)
   g_object_unref (selection);
 }
 
+/* Verify that select_range with exclusive = TRUE
+ * sends a selection-changed signal that covers
+ * preexisting items that got unselected
+ */
 static void
 test_select_range (void)
 {
@@ -403,6 +407,36 @@ test_select_range (void)
   g_object_unref (selection);
 }
 
+/* Test that removing and readding items
+ * clears the selected state.
+ */
+static void
+test_readd (void)
+{
+  GtkSelectionModel *selection;
+  GListStore *store;
+  gboolean ret;
+
+  store = new_store (1, 5, 1);
+
+  selection = new_model (store);
+  assert_model (selection, "1 2 3 4 5");
+  assert_selection (selection, "");
+  assert_selection_changes (selection, "");
+
+  ret = gtk_selection_model_select_range (selection, 2, 2, FALSE);
+  g_assert_true (ret);
+  assert_model (selection, "1 2 3 4 5");
+  assert_selection (selection, "3 4");
+  assert_selection_changes (selection, "2:2");
+
+  g_list_model_items_changed (G_LIST_MODEL (store), 1, 3, 3);
+  assert_changes (selection, "1-3+3");
+  assert_selection (selection, "");
+
+  g_object_unref (store);
+  g_object_unref (selection);
+}
 
 int
 main (int argc, char *argv[])
@@ -421,6 +455,7 @@ main (int argc, char *argv[])
 #endif
   g_test_add_func ("/multiselection/selection", test_selection);
   g_test_add_func ("/multiselection/select-range", test_select_range);
+  g_test_add_func ("/multiselection/readd", test_readd);
 
   return g_test_run ();
 }
