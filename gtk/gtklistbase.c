@@ -1355,7 +1355,7 @@ range_cb (guint     position,
 {
   GtkSet *set = data;
 
-  gtk_set_find_range (set, position, gtk_set_get_max (set), start, n_items, selected);
+  gtk_set_find_range (set, position, gtk_set_get_max (set) + 1, start, n_items, selected);
 }
 
 static void
