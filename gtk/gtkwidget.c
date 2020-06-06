@@ -11624,6 +11624,38 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   return gtk_snapshot_pop_collect (snapshot);
 }
 
+static void
+gtk_widget_do_snapshot (GtkWidget *widget,
+                        GtkSnapshot *snapshot)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GskRenderNode *render_node;
+
+  if (!priv->draw_needed)
+    return;
+
+  g_assert (priv->mapped);
+
+  if (_gtk_widget_get_alloc_needed (widget))
+    {
+      g_warning ("Trying to snapshot %s %p without a current allocation", gtk_widget_get_name (widget), widget);
+      return;
+    }
+
+  gtk_widget_push_paintables (widget);
+
+  render_node = gtk_widget_create_render_node (widget, snapshot);
+  /* This can happen when nested drawing happens and a widget contains itself
+   * or when we replace a clipped area */
+  g_clear_pointer (&priv->render_node, gsk_render_node_unref);
+  priv->render_node = render_node;
+
+  priv->draw_needed = FALSE;
+
+  gtk_widget_pop_paintables (widget);
+  gtk_widget_update_paintables (widget);
+}
+
 void
 gtk_widget_snapshot (GtkWidget   *widget,
                      GtkSnapshot *snapshot)
@@ -11633,29 +11665,7 @@ gtk_widget_snapshot (GtkWidget   *widget,
   if (!_gtk_widget_get_mapped (widget))
     return;
 
-  if (_gtk_widget_get_alloc_needed (widget))
-    {
-      g_warning ("Trying to snapshot %s %p without a current allocation", gtk_widget_get_name (widget), widget);
-      return;
-    }
-
-  if (priv->draw_needed)
-    {
-      GskRenderNode *render_node;
-
-      gtk_widget_push_paintables (widget);
-
-      render_node = gtk_widget_create_render_node (widget, snapshot);
-      /* This can happen when nested drawing happens and a widget contains itself
-       * or when we replace a clipped area */
-      g_clear_pointer (&priv->render_node, gsk_render_node_unref);
-      priv->render_node = render_node;
-
-      priv->draw_needed = FALSE;
-
-      gtk_widget_pop_paintables (widget);
-      gtk_widget_update_paintables (widget);
-    }
+  gtk_widget_do_snapshot (widget, snapshot);
 
   if (priv->render_node)
     gtk_snapshot_append_node (snapshot, priv->render_node);
@@ -12041,18 +12051,22 @@ gtk_widget_snapshot_child (GtkWidget   *widget,
   if (!_gtk_widget_get_mapped (child))
     return;
 
+  gtk_widget_do_snapshot (child, snapshot);
+
+  if (!priv->render_node)
+    return;
+
   if (priv->transform)
     {
-      gtk_snapshot_save (snapshot);
-      gtk_snapshot_transform (snapshot, priv->transform);
+      GskRenderNode *transform_node = gsk_transform_node_new (priv->render_node,
+                                                              priv->transform);
 
-      gtk_widget_snapshot (child, snapshot);
-
-      gtk_snapshot_restore (snapshot);
+      gtk_snapshot_append_node (snapshot, transform_node);
+      gsk_render_node_unref (transform_node);
     }
   else
     {
-      gtk_widget_snapshot (child, snapshot);
+      gtk_snapshot_append_node (snapshot, priv->render_node);
     }
 }
 
