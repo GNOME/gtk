@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-31 14:06+0000\n"
-"PO-Revision-Date: 2020-05-31 22:04+0300\n"
+"POT-Creation-Date: 2020-06-06 12:01+0000\n"
+"PO-Revision-Date: 2020-06-06 16:45+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -59,15 +59,15 @@ msgstr ""
 msgid "No compatible formats to transfer contents."
 msgstr "Немає сумісних форматів для передавання даних."
 
-#: gdk/gdksurface.c:1074
+#: gdk/gdksurface.c:1071
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Вимкнено підтримування GL через GDK_DEBUG"
 
-#: gdk/gdksurface.c:1085
+#: gdk/gdksurface.c:1082
 msgid "The current backend does not support OpenGL"
 msgstr "Цей модуль не підтримує OpenGL"
 
-#: gdk/gdksurface.c:1193
+#: gdk/gdksurface.c:1190
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Вимкнено підтримування Vulkan через GDK_DEBUG"
 
@@ -460,18 +460,18 @@ msgid "No compatible transfer format found"
 msgstr "Не знайдено сумісного формату передавання даних"
 
 #: gdk/wayland/gdkglcontext-wayland.c:151 gdk/win32/gdkglcontext-win32.c:725
-#: gdk/x11/gdkglcontext-x11.c:672 gdk/x11/gdkglcontext-x11.c:722
+#: gdk/x11/gdkglcontext-x11.c:763 gdk/x11/gdkglcontext-x11.c:813
 msgid "Unable to create a GL context"
 msgstr "Неможливо створити вміст GL"
 
 #: gdk/wayland/gdkglcontext-wayland.c:412
 #: gdk/wayland/gdkglcontext-wayland.c:422 gdk/win32/gdkglcontext-win32.c:679
-#: gdk/x11/gdkglcontext-x11.c:920
+#: gdk/x11/gdkglcontext-x11.c:1048
 msgid "No available configurations for the given pixel format"
 msgstr "Немає доступних налаштувань для заданого формату точок"
 
 #: gdk/wayland/gdkglcontext-wayland.c:451 gdk/win32/gdkglcontext-win32.c:791
-#: gdk/x11/gdkglcontext-x11.c:1223
+#: gdk/x11/gdkglcontext-x11.c:1351
 msgid "No GL implementation is available"
 msgstr "Немає жодної реалізації GL"
 
@@ -691,7 +691,7 @@ msgstr ""
 "Не вдалося зберегти буфер обміну. Немає активної програми для керування "
 "буфером обміну."
 
-#: gdk/x11/gdkglcontext-x11.c:948
+#: gdk/x11/gdkglcontext-x11.c:1076
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr "Немає доступних налаштувань для заданого формату точок RGBA"
@@ -733,12 +733,12 @@ msgctxt "Action name"
 msgid "Toggle"
 msgstr "Перемкнути"
 
-#: gtk/a11y/gtkbuttonaccessible.c:306
+#: gtk/a11y/gtkbuttonaccessible.c:299
 msgctxt "Action name"
 msgid "Click"
 msgstr "Натиснути"
 
-#: gtk/a11y/gtkbuttonaccessible.c:315
+#: gtk/a11y/gtkbuttonaccessible.c:308
 msgctxt "Action description"
 msgid "Clicks the button"
 msgstr "Натиснути на кнопку"
@@ -753,9 +753,10 @@ msgctxt "Action name"
 msgid "Edit"
 msgstr "Редагувати"
 
-#: gtk/a11y/gtkcellaccessible.c:261 gtk/a11y/gtkcolorswatchaccessible.c:149
-#: gtk/a11y/gtkentryaccessible.c:1556 gtk/a11y/gtkexpanderaccessible.c:246
-#: gtk/a11y/gtktextaccessible.c:986
+#: gtk/a11y/gtkcellaccessible.c:261 gtk/a11y/gtkcolorswatchaccessible.c:152
+#: gtk/a11y/gtkentryaccessible.c:1515 gtk/a11y/gtkexpanderaccessible.c:229
+#: gtk/a11y/gtkpasswordentryaccessible.c:434
+#: gtk/a11y/gtksearchentryaccessible.c:981 gtk/a11y/gtktextaccessible.c:994
 msgctxt "Action name"
 msgid "Activate"
 msgstr "Задіяти"
@@ -775,27 +776,27 @@ msgctxt "Action description"
 msgid "Activates the cell"
 msgstr "Задіяти комірку"
 
-#: gtk/a11y/gtkcolorswatchaccessible.c:148
+#: gtk/a11y/gtkcolorswatchaccessible.c:151
 msgctxt "Action name"
 msgid "Select"
 msgstr "Вибрати"
 
-#: gtk/a11y/gtkcolorswatchaccessible.c:150
+#: gtk/a11y/gtkcolorswatchaccessible.c:153
 msgctxt "Action name"
 msgid "Customize"
 msgstr "Налаштувати"
 
-#: gtk/a11y/gtkcolorswatchaccessible.c:161
+#: gtk/a11y/gtkcolorswatchaccessible.c:164
 msgctxt "Action description"
 msgid "Selects the color"
 msgstr "Вибирає колір"
 
-#: gtk/a11y/gtkcolorswatchaccessible.c:162
+#: gtk/a11y/gtkcolorswatchaccessible.c:165
 msgctxt "Action description"
 msgid "Activates the color"
 msgstr "Задіює колір"
 
-#: gtk/a11y/gtkcolorswatchaccessible.c:163
+#: gtk/a11y/gtkcolorswatchaccessible.c:166
 msgctxt "Action description"
 msgid "Customizes the color"
 msgstr "Налаштовує колір"
@@ -810,12 +811,13 @@ msgctxt "Action description"
 msgid "Presses the combobox"
 msgstr "Притискає спадний список"
 
-#: gtk/a11y/gtkentryaccessible.c:1565 gtk/a11y/gtktextaccessible.c:995
+#: gtk/a11y/gtkentryaccessible.c:1524 gtk/a11y/gtkpasswordentryaccessible.c:446
+#: gtk/a11y/gtksearchentryaccessible.c:993 gtk/a11y/gtktextaccessible.c:1003
 msgctxt "Action description"
 msgid "Activates the entry"
 msgstr "Задіює запис"
 
-#: gtk/a11y/gtkexpanderaccessible.c:255
+#: gtk/a11y/gtkexpanderaccessible.c:238
 msgctxt "Action description"
 msgid "Activates the expander"
 msgstr "Задіює розширювач"
@@ -1204,25 +1206,57 @@ msgstr "З_меншити"
 msgid "Menu"
 msgstr "Меню"
 
-#: gtk/a11y/gtkscalebuttonaccessible.c:140
+#: gtk/a11y/gtkpasswordentryaccessible.c:436
+msgctxt "Action name"
+msgid "Peek"
+msgstr "Вибрати"
+
+#: gtk/a11y/gtkpasswordentryaccessible.c:449
+#| msgid "Open the contents of the file system"
+msgctxt "Action description"
+msgid "Reveals the contents the entry"
+msgstr "Показує вміст запису"
+
+#: gtk/a11y/gtkpasswordentryaccessible.c:640
+msgid "Password"
+msgstr "Пароль"
+
+#: gtk/a11y/gtkscalebuttonaccessible.c:168
 msgctxt "Action description"
 msgid "Pops up the slider"
 msgstr "Виринає повзунок"
 
-#: gtk/a11y/gtkscalebuttonaccessible.c:142
+#: gtk/a11y/gtkscalebuttonaccessible.c:170
 msgctxt "Action description"
 msgid "Dismisses the slider"
 msgstr "Відкидає повзунок"
 
-#: gtk/a11y/gtkscalebuttonaccessible.c:170
+#: gtk/a11y/gtkscalebuttonaccessible.c:198
 msgctxt "Action name"
 msgid "Popup"
 msgstr "Виринання"
 
-#: gtk/a11y/gtkscalebuttonaccessible.c:172
+#: gtk/a11y/gtkscalebuttonaccessible.c:200
 msgctxt "Action name"
 msgid "Dismiss"
 msgstr "Відкинути"
+
+#: gtk/a11y/gtksearchentryaccessible.c:278
+msgid "Search"
+msgstr "Пошук"
+
+#: gtk/a11y/gtksearchentryaccessible.c:983
+#| msgctxt "Stock label"
+#| msgid "_Clear"
+msgctxt "Action name"
+msgid "Clear"
+msgstr "Очистити"
+
+#: gtk/a11y/gtksearchentryaccessible.c:996
+#| msgid "Clear entry"
+msgctxt "Action description"
+msgid "Clears the entry"
+msgstr "Спорожняє запис"
 
 #: gtk/a11y/gtkspinneraccessible.c:39
 msgctxt "throbbing progress animation widget"
@@ -1882,7 +1916,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:403 gtk/gtkprintunixdialog.c:3291
+#: gtk/gtkcustompaperunixdialog.c:403 gtk/gtkprintunixdialog.c:3009
 msgid "Manage Custom Sizes"
 msgstr "Керування власними розмірами"
 
@@ -1935,7 +1969,7 @@ msgstr "_Праве:"
 msgid "Paper Margins"
 msgstr "Поля сторінки"
 
-#: gtk/gtkentry.c:3609
+#: gtk/gtkentry.c:3603
 msgid "Insert Emoji"
 msgstr "Вставити емодзі"
 
@@ -1947,7 +1981,7 @@ msgstr "Виберіть файл"
 msgid "Desktop"
 msgstr "Стільниця"
 
-#: gtk/gtkfilechooserbutton.c:115
+#: gtk/gtkfilechooserbutton.c:115 gtk/ui/gtkdropdown.ui:19
 msgid "(None)"
 msgstr "(Немає)"
 
@@ -2019,8 +2053,8 @@ msgstr "Файл з такою назвою вже існує"
 #: gtk/gtkfilechooserwidget.c:1284 gtk/gtkfilechooserwidget.c:5800
 #: gtk/gtkmessagedialog.c:781 gtk/gtkmessagedialog.c:790
 #: gtk/gtkmountoperation.c:607 gtk/gtkpagesetupunixdialog.c:210
-#: gtk/gtkprintbackend.c:657 gtk/gtkprinteroptionwidget.c:521
-#: gtk/gtkprintunixdialog.c:688 gtk/gtkprintunixdialog.c:760
+#: gtk/gtkprintbackend.c:643 gtk/gtkprinteroptionwidget.c:521
+#: gtk/gtkprintunixdialog.c:651 gtk/gtkprintunixdialog.c:736
 #: gtk/gtkwindow.c:6673 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1006 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:50 gtk/ui/gtkcolorchooserdialog.ui:33
@@ -2112,7 +2146,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Якщо вилучити об'єкт, його буде втрачено назавжди."
 
 #: gtk/gtkfilechooserwidget.c:1285 gtk/gtkfilechooserwidget.c:1899
-#: gtk/gtklabel.c:5417 gtk/gtktext.c:5934 gtk/gtktextview.c:8537
+#: gtk/gtklabel.c:5412 gtk/gtktext.c:5932 gtk/gtktextview.c:8552
 msgid "_Delete"
 msgstr "В_илучити"
 
@@ -2171,7 +2205,7 @@ msgstr "Впорядковувати _теки перед файлами"
 
 #. this is the header for the location column in the print dialog
 #: gtk/gtkfilechooserwidget.c:2274 gtk/inspector/css-node-tree.ui:135
-#: gtk/ui/gtkfilechooserwidget.ui:190 gtk/ui/gtkprintunixdialog.ui:107
+#: gtk/ui/gtkfilechooserwidget.ui:190 gtk/ui/gtkprintunixdialog.ui:127
 msgid "Location"
 msgstr "Адреса"
 
@@ -2285,7 +2319,7 @@ msgstr "Електронна таблиця"
 #. * available to print to.
 #: gtk/gtkfilechooserwidget.c:4398 gtk/gtkfilechooserwidget.c:4585
 #: gtk/inspector/prop-editor.c:1571
-#: modules/printbackends/gtkprintbackendcloudprint.c:734
+#: modules/printbackends/gtkprintbackendcloudprint.c:731
 msgid "Unknown"
 msgstr "Невідомо"
 
@@ -2293,18 +2327,18 @@ msgstr "Невідомо"
 msgid "Home"
 msgstr "Домівка"
 
-#: gtk/gtkfilechooserwidget.c:5793 gtk/gtkprintunixdialog.c:679
+#: gtk/gtkfilechooserwidget.c:5793 gtk/gtkprintunixdialog.c:642
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Файл з назвою «%s» вже існує. Замінити його?"
 
-#: gtk/gtkfilechooserwidget.c:5796 gtk/gtkprintunixdialog.c:683
+#: gtk/gtkfilechooserwidget.c:5796 gtk/gtkprintunixdialog.c:646
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "Файл у «%s» вже існує. Перезапис призведе до втрати вмісту."
 
-#: gtk/gtkfilechooserwidget.c:5801 gtk/gtkprintunixdialog.c:691
+#: gtk/gtkfilechooserwidget.c:5801 gtk/gtkprintunixdialog.c:654
 msgid "_Replace"
 msgstr "_Замінити"
 
@@ -2410,27 +2444,27 @@ msgstr "Увага"
 msgid "Error"
 msgstr "Помилка"
 
-#: gtk/gtklabel.c:5414 gtk/gtktext.c:5922 gtk/gtktextview.c:8525
+#: gtk/gtklabel.c:5409 gtk/gtktext.c:5920 gtk/gtktextview.c:8540
 msgid "Cu_t"
 msgstr "Ви_різати"
 
-#: gtk/gtklabel.c:5415 gtk/gtktext.c:5926 gtk/gtktextview.c:8529
+#: gtk/gtklabel.c:5410 gtk/gtktext.c:5924 gtk/gtktextview.c:8544
 msgid "_Copy"
 msgstr "_Копіювати"
 
-#: gtk/gtklabel.c:5416 gtk/gtktext.c:5930 gtk/gtktextview.c:8533
+#: gtk/gtklabel.c:5411 gtk/gtktext.c:5928 gtk/gtktextview.c:8548
 msgid "_Paste"
 msgstr "Вст_авити"
 
-#: gtk/gtklabel.c:5422 gtk/gtktext.c:5943 gtk/gtktextview.c:8558
+#: gtk/gtklabel.c:5417 gtk/gtktext.c:5941 gtk/gtktextview.c:8573
 msgid "Select _All"
 msgstr "Виді_лити все"
 
-#: gtk/gtklabel.c:5427
+#: gtk/gtklabel.c:5422
 msgid "_Open Link"
 msgstr "_Відкрити посилання"
 
-#: gtk/gtklabel.c:5431
+#: gtk/gtklabel.c:5426
 msgid "Copy _Link Address"
 msgstr "Копіювати _адресу посилання"
 
@@ -2532,7 +2566,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:773 gtk/gtkmessagedialog.c:791
-#: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:6674
+#: gtk/gtkprintbackend.c:644 gtk/gtkwindow.c:6674
 msgid "_OK"
 msgstr "_Гаразд"
 
@@ -2651,7 +2685,7 @@ msgstr ""
 "GTK не вдалося знайти мультимедійний модуль. Перевірте, чи належним чином "
 "встановлено програми."
 
-#: gtk/gtknotebook.c:4233 gtk/gtknotebook.c:6446
+#: gtk/gtknotebook.c:4233 gtk/gtknotebook.c:6450
 #, c-format
 msgid "Page %u"
 msgstr "Сторінка %u"
@@ -2687,32 +2721,28 @@ msgstr ""
 " Верхнє: %s %s\n"
 " Нижнє: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:887 gtk/gtkprintunixdialog.c:3347
+#: gtk/gtkpagesetupunixdialog.c:887 gtk/gtkprintunixdialog.c:3065
 msgid "Manage Custom Sizes…"
 msgstr "Організувати власні розміри…"
 
 #: gtk/gtkpagesetupunixdialog.c:907 gtk/ui/gtkpagesetupunixdialog.ui:22
-#: gtk/ui/gtkprintunixdialog.ui:693
+#: gtk/ui/gtkprintunixdialog.ui:753
 msgid "Page Setup"
 msgstr "Параметри сторінки"
 
-#: gtk/gtkpasswordentry.c:131
+#: gtk/gtkpasswordentry.c:136
 msgid "Hide text"
 msgstr "Сховати текст"
 
-#: gtk/gtkpasswordentry.c:136 gtk/gtkpasswordentry.c:486
+#: gtk/gtkpasswordentry.c:141 gtk/gtkpasswordentry.c:489
 msgid "Show text"
 msgstr "Показати текст"
 
-#: gtk/gtkpasswordentry.c:155
+#: gtk/gtkpasswordentry.c:160
 msgid "Caps Lock is on"
 msgstr "Caps Lock увімкнено"
 
-#: gtk/gtkpasswordentry.c:355
-msgid "Password"
-msgstr "Пароль"
-
-#: gtk/gtkpasswordentry.c:561
+#: gtk/gtkpasswordentry.c:564
 msgid "_Show Text"
 msgstr "По_казати текст"
 
@@ -2817,6 +2847,7 @@ msgstr "Цю назву вже вжито"
 #: gtk/gtkplacessidebar.c:2306 gtk/inspector/actions.ui:20
 #: gtk/inspector/css-node-tree.ui:35 gtk/inspector/prop-list.ui:23
 #: gtk/ui/gtkfilechooserwidget.ui:172 gtk/ui/gtkfilechooserwidget.ui:444
+#: gtk/ui/gtkprintunixdialog.ui:96
 msgid "Name"
 msgstr "Назва"
 
@@ -3031,11 +3062,11 @@ msgstr "Від'єднати"
 msgid "Unmount"
 msgstr "Демонтувати"
 
-#: gtk/gtkprintbackend.c:656
+#: gtk/gtkprintbackend.c:642
 msgid "Authentication"
 msgstr "Автентифікація"
 
-#: gtk/gtkprintbackend.c:733
+#: gtk/gtkprintbackend.c:719
 msgid "_Remember password"
 msgstr "_Запам'ятати пароль"
 
@@ -3133,7 +3164,7 @@ msgstr "Найімовірніша причина: не вдалось ство�
 
 #. window
 #: gtk/gtkprintoperation-portal.c:236 gtk/gtkprintoperation-portal.c:546
-#: gtk/gtkprintoperation-portal.c:615 gtk/gtkprintunixdialog.c:3367
+#: gtk/gtkprintoperation-portal.c:615 gtk/gtkprintunixdialog.c:3085
 msgid "Print"
 msgstr "Друкувати"
 
@@ -3152,7 +3183,7 @@ msgstr "Немає паперу"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:638
-#: modules/printbackends/gtkprintbackendcups.c:2606
+#: modules/printbackends/gtkprintbackendcups.c:2603
 msgid "Paused"
 msgstr "Призупинено"
 
@@ -3197,19 +3228,19 @@ msgstr "Неправильний обробник для PrintDlgEx"
 msgid "Unspecified error"
 msgstr "Невизначена помилка"
 
-#: gtk/gtkprintunixdialog.c:759
+#: gtk/gtkprintunixdialog.c:735
 msgid "Pre_view"
 msgstr "_Перегляд"
 
-#: gtk/gtkprintunixdialog.c:761
+#: gtk/gtkprintunixdialog.c:737
 msgid "_Print"
 msgstr "_Надрукувати"
 
-#: gtk/gtkprintunixdialog.c:891
+#: gtk/gtkprintunixdialog.c:859
 msgid "Getting printer information failed"
 msgstr "Не вдалось отримати інформації про принтер"
 
-#: gtk/gtkprintunixdialog.c:2054
+#: gtk/gtkprintunixdialog.c:1856
 msgid "Getting printer information…"
 msgstr "Одержання інформації про принтер…"
 
@@ -3219,67 +3250,67 @@ msgstr "Одержання інформації про принтер…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:3077
-#: modules/printbackends/gtkprintbackendcups.c:5463
+#: gtk/gtkprintunixdialog.c:2795
+#: modules/printbackends/gtkprintbackendcups.c:5460
 msgid "Left to right, top to bottom"
 msgstr "Зліва направо, згори вниз"
 
-#: gtk/gtkprintunixdialog.c:3077
-#: modules/printbackends/gtkprintbackendcups.c:5463
+#: gtk/gtkprintunixdialog.c:2795
+#: modules/printbackends/gtkprintbackendcups.c:5460
 msgid "Left to right, bottom to top"
 msgstr "Зліва направо, знизу вгору"
 
-#: gtk/gtkprintunixdialog.c:3078
-#: modules/printbackends/gtkprintbackendcups.c:5464
+#: gtk/gtkprintunixdialog.c:2796
+#: modules/printbackends/gtkprintbackendcups.c:5461
 msgid "Right to left, top to bottom"
 msgstr "Справа наліво, згори вниз"
 
-#: gtk/gtkprintunixdialog.c:3078
-#: modules/printbackends/gtkprintbackendcups.c:5464
+#: gtk/gtkprintunixdialog.c:2796
+#: modules/printbackends/gtkprintbackendcups.c:5461
 msgid "Right to left, bottom to top"
 msgstr "Справа наліво, знизу вгору"
 
-#: gtk/gtkprintunixdialog.c:3079
-#: modules/printbackends/gtkprintbackendcups.c:5465
+#: gtk/gtkprintunixdialog.c:2797
+#: modules/printbackends/gtkprintbackendcups.c:5462
 msgid "Top to bottom, left to right"
 msgstr "Згори вниз, зліва направо"
 
-#: gtk/gtkprintunixdialog.c:3079
-#: modules/printbackends/gtkprintbackendcups.c:5465
+#: gtk/gtkprintunixdialog.c:2797
+#: modules/printbackends/gtkprintbackendcups.c:5462
 msgid "Top to bottom, right to left"
 msgstr "Згори вниз, справа наліво"
 
-#: gtk/gtkprintunixdialog.c:3080
-#: modules/printbackends/gtkprintbackendcups.c:5466
+#: gtk/gtkprintunixdialog.c:2798
+#: modules/printbackends/gtkprintbackendcups.c:5463
 msgid "Bottom to top, left to right"
 msgstr "Знизу вгору, зліва направо"
 
-#: gtk/gtkprintunixdialog.c:3080
-#: modules/printbackends/gtkprintbackendcups.c:5466
+#: gtk/gtkprintunixdialog.c:2798
+#: modules/printbackends/gtkprintbackendcups.c:5463
 msgid "Bottom to top, right to left"
 msgstr "Знизу вгору, справа наліво"
 
-#: gtk/gtkprintunixdialog.c:3084 gtk/gtkprintunixdialog.c:3097
+#: gtk/gtkprintunixdialog.c:2802 gtk/gtkprintunixdialog.c:2815
 msgid "Page Ordering"
 msgstr "Порядок сторінок"
 
-#: gtk/gtkprintunixdialog.c:3113
+#: gtk/gtkprintunixdialog.c:2831
 msgid "Left to right"
 msgstr "Зліва направо"
 
-#: gtk/gtkprintunixdialog.c:3114
+#: gtk/gtkprintunixdialog.c:2832
 msgid "Right to left"
 msgstr "Справа наліво"
 
-#: gtk/gtkprintunixdialog.c:3126
+#: gtk/gtkprintunixdialog.c:2844
 msgid "Top to bottom"
 msgstr "Згори донизу"
 
-#: gtk/gtkprintunixdialog.c:3127
+#: gtk/gtkprintunixdialog.c:2845
 msgid "Bottom to top"
 msgstr "Знизу догори"
 
-#: gtk/gtkprogressbar.c:582
+#: gtk/gtkprogressbar.c:580
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
@@ -3303,11 +3334,7 @@ msgid "No registered application with name “%s” for item with URI “%s” f
 msgstr ""
 "Не знайдено зареєстрованої програми з назвою «%s» для пункту з URI «%s»"
 
-#: gtk/gtksearchentry.c:228
-msgid "Search"
-msgstr "Пошук"
-
-#: gtk/gtksearchentry.c:515
+#: gtk/gtksearchentry.c:503
 msgid "Clear entry"
 msgstr "Спорожнити запис"
 
@@ -3396,15 +3423,15 @@ msgstr "Спробуйте пошукати по-інакшому"
 msgid "Could not show link"
 msgstr "Не вдалось показати посилання"
 
-#: gtk/gtktext.c:5948 gtk/gtktextview.c:8563
+#: gtk/gtktext.c:5946 gtk/gtktextview.c:8578
 msgid "Insert _Emoji"
 msgstr "Вставити _емодзі"
 
-#: gtk/gtktextview.c:8545
+#: gtk/gtktextview.c:8560
 msgid "_Undo"
 msgstr "_Скасувати"
 
-#: gtk/gtktextview.c:8549
+#: gtk/gtktextview.c:8564
 msgid "_Redo"
 msgstr "Пов_торити"
 
@@ -3821,24 +3848,24 @@ msgstr "Властивість"
 msgid "Path"
 msgstr "Шлях"
 
-#: gtk/inspector/resource-list.ui:75
+#: gtk/inspector/resource-list.ui:76
 msgid "Count"
 msgstr "Підрахунок"
 
-#: gtk/inspector/resource-list.ui:86 gtk/ui/gtkfilechooserwidget.ui:206
+#: gtk/inspector/resource-list.ui:87 gtk/ui/gtkfilechooserwidget.ui:206
 #: gtk/ui/gtkfontchooserwidget.ui:142 gtk/ui/gtkfontchooserwidget.ui:290
 msgid "Size"
 msgstr "Розмір"
 
-#: gtk/inspector/resource-list.ui:120
+#: gtk/inspector/resource-list.ui:126
 msgid "Name:"
 msgstr "Назва:"
 
-#: gtk/inspector/resource-list.ui:142
+#: gtk/inspector/resource-list.ui:148
 msgid "Type:"
 msgstr "Тип:"
 
-#: gtk/inspector/resource-list.ui:163
+#: gtk/inspector/resource-list.ui:169
 msgid "Size:"
 msgstr "Розмір:"
 
@@ -3910,19 +3937,19 @@ msgstr "Ієрархія"
 msgid "Implements"
 msgstr "Реалізує"
 
-#: gtk/inspector/visual.c:615 gtk/inspector/visual.c:634
+#: gtk/inspector/visual.c:613 gtk/inspector/visual.c:632
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Тему пришито через GTK_THEME"
 
-#: gtk/inspector/visual.c:848
+#: gtk/inspector/visual.c:846
 msgid "Backend does not support window scaling"
 msgstr "Модуль не підтримує масштабування вікна"
 
-#: gtk/inspector/visual.c:946
+#: gtk/inspector/visual.c:944
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "Параметр пришито через GTK_TEST_TOUCHSCREEN"
 
-#: gtk/inspector/visual.c:1054
+#: gtk/inspector/visual.c:1052
 msgid "GL rendering is disabled"
 msgstr "Відтворення GL вимкнено"
 
@@ -4046,7 +4073,7 @@ msgstr "Оновити стан дії"
 msgid "Miscellaneous"
 msgstr "Додатково"
 
-#: gtk/inspector/window.ui:374 gtk/ui/gtkprintunixdialog.ui:365
+#: gtk/inspector/window.ui:374 gtk/ui/gtkprintunixdialog.ui:425
 msgid "Layout"
 msgstr "Компонування"
 
@@ -6789,6 +6816,11 @@ msgstr "V"
 msgid "Saturation"
 msgstr "Насиченість"
 
+#: gtk/ui/gtkdropdown.ui:57
+#| msgid "Search"
+msgid "Search…"
+msgstr "Пошук…"
+
 #: gtk/ui/gtkemojichooser.ui:61 gtk/ui/gtkemojichooser.ui:228
 msgctxt "emoji category"
 msgid "Smileys & People"
@@ -6883,7 +6915,7 @@ msgstr "Не знайдено жодного шрифту"
 msgid "_Format for:"
 msgstr "_Формат для:"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:75 gtk/ui/gtkprintunixdialog.ui:614
+#: gtk/ui/gtkpagesetupunixdialog.ui:75 gtk/ui/gtkprintunixdialog.ui:674
 msgid "_Paper size:"
 msgstr "Розмір _паперу:"
 
@@ -6891,19 +6923,19 @@ msgstr "Розмір _паперу:"
 msgid "_Orientation:"
 msgstr "_Розташування:"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:137 gtk/ui/gtkprintunixdialog.ui:658
+#: gtk/ui/gtkpagesetupunixdialog.ui:137 gtk/ui/gtkprintunixdialog.ui:718
 msgid "Portrait"
 msgstr "Книжкова"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:163 gtk/ui/gtkprintunixdialog.ui:660
+#: gtk/ui/gtkpagesetupunixdialog.ui:163 gtk/ui/gtkprintunixdialog.ui:720
 msgid "Reverse portrait"
 msgstr "Обернена книжкова"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:189 gtk/ui/gtkprintunixdialog.ui:659
+#: gtk/ui/gtkpagesetupunixdialog.ui:189 gtk/ui/gtkprintunixdialog.ui:719
 msgid "Landscape"
 msgstr "Альбомна"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:214 gtk/ui/gtkprintunixdialog.ui:661
+#: gtk/ui/gtkpagesetupunixdialog.ui:214 gtk/ui/gtkprintunixdialog.ui:721
 msgid "Reverse landscape"
 msgstr "Обернена альбомна"
 
@@ -6941,37 +6973,33 @@ msgstr "З'єднатись із _сервером"
 msgid "Enter server address…"
 msgstr "Увести адресу сервера…"
 
-#: gtk/ui/gtkprintunixdialog.ui:96
-msgid "Printer"
-msgstr "Принтер"
-
 #. this is the header for the printer status column in the print dialog
-#: gtk/ui/gtkprintunixdialog.ui:118
+#: gtk/ui/gtkprintunixdialog.ui:158
 msgid "Status"
 msgstr "Стан"
 
-#: gtk/ui/gtkprintunixdialog.ui:152
+#: gtk/ui/gtkprintunixdialog.ui:212
 msgid "Range"
 msgstr "Діапазон"
 
-#: gtk/ui/gtkprintunixdialog.ui:168
+#: gtk/ui/gtkprintunixdialog.ui:228
 msgid "_All Pages"
 msgstr "_Усі сторінки"
 
-#: gtk/ui/gtkprintunixdialog.ui:180
+#: gtk/ui/gtkprintunixdialog.ui:240
 msgid "C_urrent Page"
 msgstr "_Теперішню сторінку"
 
-#: gtk/ui/gtkprintunixdialog.ui:193
+#: gtk/ui/gtkprintunixdialog.ui:253
 msgid "Se_lection"
 msgstr "_Вибір"
 
-#: gtk/ui/gtkprintunixdialog.ui:206
+#: gtk/ui/gtkprintunixdialog.ui:266
 msgid "Pag_es:"
 msgstr "_Сторінки:"
 
-#: gtk/ui/gtkprintunixdialog.ui:207 gtk/ui/gtkprintunixdialog.ui:220
-#: gtk/ui/gtkprintunixdialog.ui:227
+#: gtk/ui/gtkprintunixdialog.ui:267 gtk/ui/gtkprintunixdialog.ui:280
+#: gtk/ui/gtkprintunixdialog.ui:287
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1–3, 7, 11"
@@ -6979,112 +7007,112 @@ msgstr ""
 "Вкажіть один або більше діапазонів,\n"
 " наприклад, 1–3,7,11"
 
-#: gtk/ui/gtkprintunixdialog.ui:226
+#: gtk/ui/gtkprintunixdialog.ui:286
 msgid "Pages"
 msgstr "Сторінки"
 
-#: gtk/ui/gtkprintunixdialog.ui:253
+#: gtk/ui/gtkprintunixdialog.ui:313
 msgid "Copies"
 msgstr "Копії"
 
-#: gtk/ui/gtkprintunixdialog.ui:271
+#: gtk/ui/gtkprintunixdialog.ui:331
 msgid "Copie_s:"
 msgstr "Ко_пій:"
 
-#: gtk/ui/gtkprintunixdialog.ui:294
+#: gtk/ui/gtkprintunixdialog.ui:354
 msgid "C_ollate"
 msgstr "_Впорядкувати"
 
-#: gtk/ui/gtkprintunixdialog.ui:305
+#: gtk/ui/gtkprintunixdialog.ui:365
 msgid "_Reverse"
 msgstr "_Обернено"
 
-#: gtk/ui/gtkprintunixdialog.ui:338
+#: gtk/ui/gtkprintunixdialog.ui:398
 msgid "General"
 msgstr "Загальне"
 
-#: gtk/ui/gtkprintunixdialog.ui:383
+#: gtk/ui/gtkprintunixdialog.ui:443
 msgid "T_wo-sided:"
 msgstr "З _двох сторін:"
 
-#: gtk/ui/gtkprintunixdialog.ui:405
+#: gtk/ui/gtkprintunixdialog.ui:465
 msgid "Pages per _side:"
 msgstr "Сторінок на с_торону:"
 
-#: gtk/ui/gtkprintunixdialog.ui:429
+#: gtk/ui/gtkprintunixdialog.ui:489
 msgid "Page or_dering:"
 msgstr "_Порядок сторінок:"
 
-#: gtk/ui/gtkprintunixdialog.ui:452
+#: gtk/ui/gtkprintunixdialog.ui:512
 msgid "_Only print:"
 msgstr "Друкувати _лише:"
 
-#: gtk/ui/gtkprintunixdialog.ui:468
+#: gtk/ui/gtkprintunixdialog.ui:528
 msgid "All sheets"
 msgstr "Усі сторінки"
 
-#: gtk/ui/gtkprintunixdialog.ui:469
+#: gtk/ui/gtkprintunixdialog.ui:529
 msgid "Even sheets"
 msgstr "Парні сторінки"
 
-#: gtk/ui/gtkprintunixdialog.ui:470
+#: gtk/ui/gtkprintunixdialog.ui:530
 msgid "Odd sheets"
 msgstr "Непарні сторінки"
 
-#: gtk/ui/gtkprintunixdialog.ui:482
+#: gtk/ui/gtkprintunixdialog.ui:542
 msgid "Sc_ale:"
 msgstr "_Масштаб:"
 
-#: gtk/ui/gtkprintunixdialog.ui:530
+#: gtk/ui/gtkprintunixdialog.ui:590
 msgid "Paper"
 msgstr "Папір"
 
-#: gtk/ui/gtkprintunixdialog.ui:548
+#: gtk/ui/gtkprintunixdialog.ui:608
 msgid "Paper _type:"
 msgstr "_Тип паперу:"
 
-#: gtk/ui/gtkprintunixdialog.ui:570
+#: gtk/ui/gtkprintunixdialog.ui:630
 msgid "Paper _source:"
 msgstr "Д_жерело паперу:"
 
-#: gtk/ui/gtkprintunixdialog.ui:592
+#: gtk/ui/gtkprintunixdialog.ui:652
 msgid "Output t_ray:"
 msgstr "_Лоток виводу:"
 
-#: gtk/ui/gtkprintunixdialog.ui:641
+#: gtk/ui/gtkprintunixdialog.ui:701
 msgid "Or_ientation:"
 msgstr "_Орієнтація:"
 
-#: gtk/ui/gtkprintunixdialog.ui:716
+#: gtk/ui/gtkprintunixdialog.ui:776
 msgid "Job Details"
 msgstr "Подробиці про завдання"
 
-#: gtk/ui/gtkprintunixdialog.ui:734
+#: gtk/ui/gtkprintunixdialog.ui:794
 msgid "Pri_ority:"
 msgstr "_Пріоритет:"
 
-#: gtk/ui/gtkprintunixdialog.ui:755
+#: gtk/ui/gtkprintunixdialog.ui:815
 msgid "_Billing info:"
 msgstr "_Підсумкові дані:"
 
-#: gtk/ui/gtkprintunixdialog.ui:791
+#: gtk/ui/gtkprintunixdialog.ui:851
 msgid "Print Document"
 msgstr "Друкувати документ"
 
 #. this is one of the choices for the print at option in the print dialog
-#: gtk/ui/gtkprintunixdialog.ui:807
+#: gtk/ui/gtkprintunixdialog.ui:867
 msgid "_Now"
 msgstr "_Зараз"
 
 #. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
-#: gtk/ui/gtkprintunixdialog.ui:821
+#: gtk/ui/gtkprintunixdialog.ui:881
 msgid "A_t:"
 msgstr "_о:"
 
 #. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
-#: gtk/ui/gtkprintunixdialog.ui:823 gtk/ui/gtkprintunixdialog.ui:825
-#: gtk/ui/gtkprintunixdialog.ui:841 gtk/ui/gtkprintunixdialog.ui:843
-#: gtk/ui/gtkprintunixdialog.ui:848
+#: gtk/ui/gtkprintunixdialog.ui:883 gtk/ui/gtkprintunixdialog.ui:885
+#: gtk/ui/gtkprintunixdialog.ui:901 gtk/ui/gtkprintunixdialog.ui:903
+#: gtk/ui/gtkprintunixdialog.ui:908
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
@@ -7092,57 +7120,57 @@ msgstr ""
 "Вкажіть час друку,\n"
 "наприклад, 15∶30, 14∶15∶20, 7∶20"
 
-#: gtk/ui/gtkprintunixdialog.ui:847
+#: gtk/ui/gtkprintunixdialog.ui:907
 msgid "Time of print"
 msgstr "Час друку"
 
 #. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
-#: gtk/ui/gtkprintunixdialog.ui:862
+#: gtk/ui/gtkprintunixdialog.ui:922
 msgid "On _hold"
 msgstr "О_чікування"
 
-#: gtk/ui/gtkprintunixdialog.ui:864 gtk/ui/gtkprintunixdialog.ui:865
+#: gtk/ui/gtkprintunixdialog.ui:924 gtk/ui/gtkprintunixdialog.ui:925
 msgid "Hold the job until it is explicitly released"
 msgstr "Затримати завдання до додаткової команди"
 
-#: gtk/ui/gtkprintunixdialog.ui:895
+#: gtk/ui/gtkprintunixdialog.ui:955
 msgid "Add Cover Page"
 msgstr "Додати титульну сторінку"
 
 #. this is the label used for the option in the print dialog that controls the front cover page.
-#: gtk/ui/gtkprintunixdialog.ui:913
+#: gtk/ui/gtkprintunixdialog.ui:973
 msgid "Be_fore:"
 msgstr "_До:"
 
 #. this is the label used for the option in the print dialog that controls the back cover page.
-#: gtk/ui/gtkprintunixdialog.ui:934
+#: gtk/ui/gtkprintunixdialog.ui:994
 msgid "_After:"
 msgstr "_Після:"
 
-#: gtk/ui/gtkprintunixdialog.ui:966
+#: gtk/ui/gtkprintunixdialog.ui:1026
 msgid "Job"
 msgstr "Завдання"
 
 #. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:996
+#: gtk/ui/gtkprintunixdialog.ui:1056
 msgid "Image Quality"
 msgstr "Якість зображення"
 
 #. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:1025
+#: gtk/ui/gtkprintunixdialog.ui:1085
 msgid "Color"
 msgstr "Колір"
 
 #. This will appear as a tab label in the print dialog. It's a typographical term, as in "Binding and finishing"
-#: gtk/ui/gtkprintunixdialog.ui:1054
+#: gtk/ui/gtkprintunixdialog.ui:1114
 msgid "Finishing"
 msgstr "Завершення"
 
-#: gtk/ui/gtkprintunixdialog.ui:1083
+#: gtk/ui/gtkprintunixdialog.ui:1143
 msgid "Advanced"
 msgstr "Додатково"
 
-#: gtk/ui/gtkprintunixdialog.ui:1099
+#: gtk/ui/gtkprintunixdialog.ui:1159
 msgid "Some of the settings in the dialog conflict"
 msgstr "Деякі параметри у діалоговому вікні конфліктують"
 
@@ -7170,484 +7198,484 @@ msgstr "Тихіше"
 msgid "Decreases the volume"
 msgstr "Зменшує гучність"
 
-#: modules/media/gtkffmediafile.c:216
+#: modules/media/gtkffmediafile.c:220
 #, c-format
 msgid "Unspecified error decoding video"
 msgstr "Невизначена помилка під час декодування відео"
 
-#: modules/media/gtkffmediafile.c:318 modules/media/gtkffmediafile.c:492
+#: modules/media/gtkffmediafile.c:322 modules/media/gtkffmediafile.c:496
 msgid "Not enough memory"
 msgstr "Бракує пам'яті"
 
-#: modules/media/gtkffmediafile.c:515
+#: modules/media/gtkffmediafile.c:519
 msgid "Not a video file"
 msgstr "Не є файлом відео"
 
-#: modules/media/gtkffmediafile.c:534
+#: modules/media/gtkffmediafile.c:538
 msgid "Unsupported video codec"
 msgstr "Непідтримуваний відеокодек"
 
 #. Translators: The printer status is online, i.e. it is
 #. * ready to print.
-#: modules/printbackends/gtkprintbackendcloudprint.c:730
+#: modules/printbackends/gtkprintbackendcloudprint.c:727
 msgid "Online"
 msgstr "У мережі"
 
 #. Translators: The printer is offline.
-#: modules/printbackends/gtkprintbackendcloudprint.c:737
+#: modules/printbackends/gtkprintbackendcloudprint.c:734
 msgid "Offline"
 msgstr "Поза мережею"
 
 #. We shouldn't get here because the query omits dormant
 #. * printers by default.
 #. Translators: Printer has been offline for a long time.
-#: modules/printbackends/gtkprintbackendcloudprint.c:743
+#: modules/printbackends/gtkprintbackendcloudprint.c:740
 msgid "Dormant"
 msgstr "Бездіяльний"
 
 #. How many document pages to go onto one side of paper.
-#: modules/printbackends/gtkprintbackendcloudprint.c:925
-#: modules/printbackends/gtkprintbackendfile.c:653
+#: modules/printbackends/gtkprintbackendcloudprint.c:922
+#: modules/printbackends/gtkprintbackendfile.c:650
 msgid "Pages per _sheet:"
 msgstr "Сторінок на _аркуш:"
 
-#: modules/printbackends/gtkprintbackendcups.c:1122
-#: modules/printbackends/gtkprintbackendcups.c:1431
+#: modules/printbackends/gtkprintbackendcups.c:1119
+#: modules/printbackends/gtkprintbackendcups.c:1428
 msgid "Username:"
 msgstr "Користувач:"
 
-#: modules/printbackends/gtkprintbackendcups.c:1123
-#: modules/printbackends/gtkprintbackendcups.c:1440
+#: modules/printbackends/gtkprintbackendcups.c:1120
+#: modules/printbackends/gtkprintbackendcups.c:1437
 msgid "Password:"
 msgstr "Пароль:"
 
-#: modules/printbackends/gtkprintbackendcups.c:1162
-#: modules/printbackends/gtkprintbackendcups.c:1453
+#: modules/printbackends/gtkprintbackendcups.c:1159
+#: modules/printbackends/gtkprintbackendcups.c:1450
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
 msgstr ""
 "Щоб надрукувати документ «%s» на принтері %s, потрібно пройти автентифікацію"
 
-#: modules/printbackends/gtkprintbackendcups.c:1164
+#: modules/printbackends/gtkprintbackendcups.c:1161
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "Для друкування документ %s на принтері потрібно пройти автентифікацію"
 
-#: modules/printbackends/gtkprintbackendcups.c:1168
+#: modules/printbackends/gtkprintbackendcups.c:1165
 #, c-format
 msgid "Authentication is required to get attributes of job “%s”"
 msgstr "Щоб одержати атрибути завдання «%s», потрібно пройти автентифікацію"
 
-#: modules/printbackends/gtkprintbackendcups.c:1170
+#: modules/printbackends/gtkprintbackendcups.c:1167
 msgid "Authentication is required to get attributes of a job"
 msgstr "Для отримання атрибутів завдання потрібно пройти автентифікацію"
 
-#: modules/printbackends/gtkprintbackendcups.c:1174
+#: modules/printbackends/gtkprintbackendcups.c:1171
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "Для отримання атрибутів принтера %s потрібно пройти автентифікацію"
 
-#: modules/printbackends/gtkprintbackendcups.c:1176
+#: modules/printbackends/gtkprintbackendcups.c:1173
 msgid "Authentication is required to get attributes of a printer"
 msgstr "Для отримання атрибутів принтера потрібно пройти автентифікацію"
 
-#: modules/printbackends/gtkprintbackendcups.c:1179
+#: modules/printbackends/gtkprintbackendcups.c:1176
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr ""
 "Для отримання типового принтера вузла %s потрібно пройти автентифікацію"
 
-#: modules/printbackends/gtkprintbackendcups.c:1182
+#: modules/printbackends/gtkprintbackendcups.c:1179
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "Для отримання принтерів вузла %s потрібно пройти автентифікацію"
 
-#: modules/printbackends/gtkprintbackendcups.c:1187
+#: modules/printbackends/gtkprintbackendcups.c:1184
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "Для отримання файла з %s потрібно пройти автентифікацію"
 
-#: modules/printbackends/gtkprintbackendcups.c:1189
+#: modules/printbackends/gtkprintbackendcups.c:1186
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "Потрібно пройти автентифікацію на %s"
 
-#: modules/printbackends/gtkprintbackendcups.c:1425
+#: modules/printbackends/gtkprintbackendcups.c:1422
 msgid "Domain:"
 msgstr "Домен:"
 
-#: modules/printbackends/gtkprintbackendcups.c:1455
+#: modules/printbackends/gtkprintbackendcups.c:1452
 #, c-format
 msgid "Authentication is required to print document “%s”"
 msgstr "Щоб надрукувати документ «%s», потрібно пройти автентифікацію"
 
-#: modules/printbackends/gtkprintbackendcups.c:1460
+#: modules/printbackends/gtkprintbackendcups.c:1457
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "Для друкування документа на принтері %s потрібно пройти автентифікацію"
 
-#: modules/printbackends/gtkprintbackendcups.c:1462
+#: modules/printbackends/gtkprintbackendcups.c:1459
 msgid "Authentication is required to print this document"
 msgstr "Для друкування документа потрібно пройти автентифікацію"
 
-#: modules/printbackends/gtkprintbackendcups.c:2535
+#: modules/printbackends/gtkprintbackendcups.c:2532
 #, c-format
 msgid "Printer “%s” is low on toner."
 msgstr "У принтері «%s» закінчується тонер."
 
-#: modules/printbackends/gtkprintbackendcups.c:2539
+#: modules/printbackends/gtkprintbackendcups.c:2536
 #, c-format
 msgid "Printer “%s” has no toner left."
 msgstr "У принтері «%s» закінчився тонер."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/gtkprintbackendcups.c:2544
+#: modules/printbackends/gtkprintbackendcups.c:2541
 #, c-format
 msgid "Printer “%s” is low on developer."
 msgstr "У принтері «%s» закінчується проявник."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/gtkprintbackendcups.c:2549
+#: modules/printbackends/gtkprintbackendcups.c:2546
 #, c-format
 msgid "Printer “%s” is out of developer."
 msgstr "У принтері «%s» закінчився проявник."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/gtkprintbackendcups.c:2554
+#: modules/printbackends/gtkprintbackendcups.c:2551
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr "У принтері «%s» закінчується одна із фарб."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/gtkprintbackendcups.c:2559
+#: modules/printbackends/gtkprintbackendcups.c:2556
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr "У принтері «%s» закінчилась одна із фарб."
 
-#: modules/printbackends/gtkprintbackendcups.c:2563
+#: modules/printbackends/gtkprintbackendcups.c:2560
 #, c-format
 msgid "The cover is open on printer “%s”."
 msgstr "У принтері «%s» відкрито кришку."
 
-#: modules/printbackends/gtkprintbackendcups.c:2567
+#: modules/printbackends/gtkprintbackendcups.c:2564
 #, c-format
 msgid "The door is open on printer “%s”."
 msgstr "У принтері «%s» відкрито дверці."
 
-#: modules/printbackends/gtkprintbackendcups.c:2571
+#: modules/printbackends/gtkprintbackendcups.c:2568
 #, c-format
 msgid "Printer “%s” is low on paper."
 msgstr "У принтері «%s» закінчується папір."
 
-#: modules/printbackends/gtkprintbackendcups.c:2575
+#: modules/printbackends/gtkprintbackendcups.c:2572
 #, c-format
 msgid "Printer “%s” is out of paper."
 msgstr "У принтері «%s» закінчився папір."
 
-#: modules/printbackends/gtkprintbackendcups.c:2579
+#: modules/printbackends/gtkprintbackendcups.c:2576
 #, c-format
 msgid "Printer “%s” is currently offline."
 msgstr "Принтер «%s» наразі недоступний."
 
-#: modules/printbackends/gtkprintbackendcups.c:2583
+#: modules/printbackends/gtkprintbackendcups.c:2580
 #, c-format
 msgid "There is a problem on printer “%s”."
 msgstr "Проблема з принтером «%s»."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcups.c:2603
+#: modules/printbackends/gtkprintbackendcups.c:2600
 msgid "Paused; Rejecting Jobs"
 msgstr "Призупинено ; скасування завдань"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcups.c:2609
+#: modules/printbackends/gtkprintbackendcups.c:2606
 msgid "Rejecting Jobs"
 msgstr "Скасування завдань"
 
 #. Translators: this string connects multiple printer states together.
-#: modules/printbackends/gtkprintbackendcups.c:2650
+#: modules/printbackends/gtkprintbackendcups.c:2647
 msgid "; "
 msgstr "; "
 
-#: modules/printbackends/gtkprintbackendcups.c:4400
-#: modules/printbackends/gtkprintbackendcups.c:4467
+#: modules/printbackends/gtkprintbackendcups.c:4397
+#: modules/printbackends/gtkprintbackendcups.c:4464
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "З двох сторін"
 
-#: modules/printbackends/gtkprintbackendcups.c:4401
+#: modules/printbackends/gtkprintbackendcups.c:4398
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "Тип паперу"
 
-#: modules/printbackends/gtkprintbackendcups.c:4402
+#: modules/printbackends/gtkprintbackendcups.c:4399
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "Джерело паперу"
 
-#: modules/printbackends/gtkprintbackendcups.c:4403
-#: modules/printbackends/gtkprintbackendcups.c:4468
+#: modules/printbackends/gtkprintbackendcups.c:4400
+#: modules/printbackends/gtkprintbackendcups.c:4465
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "Лоток виводу"
 
-#: modules/printbackends/gtkprintbackendcups.c:4404
+#: modules/printbackends/gtkprintbackendcups.c:4401
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "Роздільність"
 
-#: modules/printbackends/gtkprintbackendcups.c:4405
+#: modules/printbackends/gtkprintbackendcups.c:4402
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "Відсіювання GhostScript"
 
-#: modules/printbackends/gtkprintbackendcups.c:4414
+#: modules/printbackends/gtkprintbackendcups.c:4411
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "З однієї сторони"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4416
+#: modules/printbackends/gtkprintbackendcups.c:4413
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "За довгою стороною"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4418
+#: modules/printbackends/gtkprintbackendcups.c:4415
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "За короткою стороною"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/gtkprintbackendcups.c:4420
-#: modules/printbackends/gtkprintbackendcups.c:4422
-#: modules/printbackends/gtkprintbackendcups.c:4430
+#: modules/printbackends/gtkprintbackendcups.c:4417
+#: modules/printbackends/gtkprintbackendcups.c:4419
+#: modules/printbackends/gtkprintbackendcups.c:4427
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "Автоматичний вибір"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/gtkprintbackendcups.c:4424
-#: modules/printbackends/gtkprintbackendcups.c:4426
-#: modules/printbackends/gtkprintbackendcups.c:4428
-#: modules/printbackends/gtkprintbackendcups.c:4432
+#: modules/printbackends/gtkprintbackendcups.c:4421
+#: modules/printbackends/gtkprintbackendcups.c:4423
+#: modules/printbackends/gtkprintbackendcups.c:4425
+#: modules/printbackends/gtkprintbackendcups.c:4429
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "Типовий принтер"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4434
+#: modules/printbackends/gtkprintbackendcups.c:4431
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "Вбудовувати лише шрифти GhostScript"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4436
+#: modules/printbackends/gtkprintbackendcups.c:4433
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "Перетворювати на формат PS рівень 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4438
+#: modules/printbackends/gtkprintbackendcups.c:4435
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "Перетворити на формат PS рівень 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4440
+#: modules/printbackends/gtkprintbackendcups.c:4437
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "Не відсіювати нічого"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/gtkprintbackendcups.c:4449
+#: modules/printbackends/gtkprintbackendcups.c:4446
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "Інше"
 
-#: modules/printbackends/gtkprintbackendcups.c:4476
+#: modules/printbackends/gtkprintbackendcups.c:4473
 msgctxt "sides"
 msgid "One Sided"
 msgstr "З однієї сторони"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4478
+#: modules/printbackends/gtkprintbackendcups.c:4475
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "За довгою стороною"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4480
+#: modules/printbackends/gtkprintbackendcups.c:4477
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "За короткою стороною"
 
 #. Translators: Top output bin
-#: modules/printbackends/gtkprintbackendcups.c:4483
+#: modules/printbackends/gtkprintbackendcups.c:4480
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr "Верхня скринька"
 
 #. Translators: Middle output bin
-#: modules/printbackends/gtkprintbackendcups.c:4485
+#: modules/printbackends/gtkprintbackendcups.c:4482
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr "Середня скринька"
 
 #. Translators: Bottom output bin
-#: modules/printbackends/gtkprintbackendcups.c:4487
+#: modules/printbackends/gtkprintbackendcups.c:4484
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "Нижня скринька"
 
 #. Translators: Side output bin
-#: modules/printbackends/gtkprintbackendcups.c:4489
+#: modules/printbackends/gtkprintbackendcups.c:4486
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr "Бічна скринька"
 
 #. Translators: Left output bin
-#: modules/printbackends/gtkprintbackendcups.c:4491
+#: modules/printbackends/gtkprintbackendcups.c:4488
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "Ліва скринька"
 
 #. Translators: Right output bin
-#: modules/printbackends/gtkprintbackendcups.c:4493
+#: modules/printbackends/gtkprintbackendcups.c:4490
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "Права скринька"
 
 #. Translators: Center output bin
-#: modules/printbackends/gtkprintbackendcups.c:4495
+#: modules/printbackends/gtkprintbackendcups.c:4492
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "Центральна скринька"
 
 #. Translators: Rear output bin
-#: modules/printbackends/gtkprintbackendcups.c:4497
+#: modules/printbackends/gtkprintbackendcups.c:4494
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "Задня скринька"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
-#: modules/printbackends/gtkprintbackendcups.c:4499
+#: modules/printbackends/gtkprintbackendcups.c:4496
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "Розвернута скринька"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
-#: modules/printbackends/gtkprintbackendcups.c:4501
+#: modules/printbackends/gtkprintbackendcups.c:4498
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr "Перевернута скринька"
 
 #. Translators: Large capacity output bin
-#: modules/printbackends/gtkprintbackendcups.c:4503
+#: modules/printbackends/gtkprintbackendcups.c:4500
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr "Скринька великої ємності"
 
 #. Translators: Output stacker number %d
-#: modules/printbackends/gtkprintbackendcups.c:4525
+#: modules/printbackends/gtkprintbackendcups.c:4522
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr "Укладальник %d"
 
 #. Translators: Output mailbox number %d
-#: modules/printbackends/gtkprintbackendcups.c:4529
+#: modules/printbackends/gtkprintbackendcups.c:4526
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr "Поштова скринька %d"
 
 #. Translators: Private mailbox
-#: modules/printbackends/gtkprintbackendcups.c:4533
+#: modules/printbackends/gtkprintbackendcups.c:4530
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr "Моя поштова скринька"
 
 #. Translators: Output tray number %d
-#: modules/printbackends/gtkprintbackendcups.c:4537
+#: modules/printbackends/gtkprintbackendcups.c:4534
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
 msgstr "Лоток %d"
 
-#: modules/printbackends/gtkprintbackendcups.c:5014
+#: modules/printbackends/gtkprintbackendcups.c:5011
 msgid "Printer Default"
 msgstr "Типовий принтер"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5458
+#: modules/printbackends/gtkprintbackendcups.c:5455
 msgid "Urgent"
 msgstr "Терміново"
 
-#: modules/printbackends/gtkprintbackendcups.c:5458
+#: modules/printbackends/gtkprintbackendcups.c:5455
 msgid "High"
 msgstr "Високий"
 
-#: modules/printbackends/gtkprintbackendcups.c:5458
+#: modules/printbackends/gtkprintbackendcups.c:5455
 msgid "Medium"
 msgstr "Середній"
 
-#: modules/printbackends/gtkprintbackendcups.c:5458
+#: modules/printbackends/gtkprintbackendcups.c:5455
 msgid "Low"
 msgstr "Низький"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5488
+#: modules/printbackends/gtkprintbackendcups.c:5485
 msgid "Job Priority"
 msgstr "Пріоритет завдання"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5499
+#: modules/printbackends/gtkprintbackendcups.c:5496
 msgid "Billing Info"
 msgstr "Інформація про облік"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5523
+#: modules/printbackends/gtkprintbackendcups.c:5520
 msgctxt "cover page"
 msgid "None"
 msgstr "Немає"
 
-#: modules/printbackends/gtkprintbackendcups.c:5524
+#: modules/printbackends/gtkprintbackendcups.c:5521
 msgctxt "cover page"
 msgid "Classified"
 msgstr "Класифіковано"
 
-#: modules/printbackends/gtkprintbackendcups.c:5525
+#: modules/printbackends/gtkprintbackendcups.c:5522
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "Конфіденційно"
 
-#: modules/printbackends/gtkprintbackendcups.c:5526
+#: modules/printbackends/gtkprintbackendcups.c:5523
 msgctxt "cover page"
 msgid "Secret"
 msgstr "Таємно"
 
-#: modules/printbackends/gtkprintbackendcups.c:5527
+#: modules/printbackends/gtkprintbackendcups.c:5524
 msgctxt "cover page"
 msgid "Standard"
 msgstr "Стандартно"
 
-#: modules/printbackends/gtkprintbackendcups.c:5528
+#: modules/printbackends/gtkprintbackendcups.c:5525
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "Цілковито таємно"
 
-#: modules/printbackends/gtkprintbackendcups.c:5529
+#: modules/printbackends/gtkprintbackendcups.c:5526
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "Не класифіковано"
@@ -7655,7 +7683,7 @@ msgstr "Не класифіковано"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5541
+#: modules/printbackends/gtkprintbackendcups.c:5538
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "Сторінок на аркуш"
@@ -7663,7 +7691,7 @@ msgstr "Сторінок на аркуш"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5558
+#: modules/printbackends/gtkprintbackendcups.c:5555
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Порядок сторінок"
@@ -7671,7 +7699,7 @@ msgstr "Порядок сторінок"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5600
+#: modules/printbackends/gtkprintbackendcups.c:5597
 msgctxt "printer option"
 msgid "Before"
 msgstr "Перед"
@@ -7679,7 +7707,7 @@ msgstr "Перед"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5615
+#: modules/printbackends/gtkprintbackendcups.c:5612
 msgctxt "printer option"
 msgid "After"
 msgstr "Після"
@@ -7688,7 +7716,7 @@ msgstr "Після"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5635
+#: modules/printbackends/gtkprintbackendcups.c:5632
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Надрукувати"
@@ -7696,7 +7724,7 @@ msgstr "Надрукувати"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5646
+#: modules/printbackends/gtkprintbackendcups.c:5643
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "Надрукувати о"
@@ -7706,60 +7734,60 @@ msgstr "Надрукувати о"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5693
+#: modules/printbackends/gtkprintbackendcups.c:5690
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Інший %s×%s"
 
 #. TRANSLATORS: this is the ICC color profile to use for this job
-#: modules/printbackends/gtkprintbackendcups.c:5804
+#: modules/printbackends/gtkprintbackendcups.c:5801
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "Профіль принтера"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/gtkprintbackendcups.c:5811
+#: modules/printbackends/gtkprintbackendcups.c:5808
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "Недоступно"
 
-#: modules/printbackends/gtkprintbackendfile.c:237
+#: modules/printbackends/gtkprintbackendfile.c:234
 msgid "output"
 msgstr "вивід"
 
-#: modules/printbackends/gtkprintbackendfile.c:514
+#: modules/printbackends/gtkprintbackendfile.c:511
 msgid "Print to File"
 msgstr "Друкувати у файл"
 
-#: modules/printbackends/gtkprintbackendfile.c:640
+#: modules/printbackends/gtkprintbackendfile.c:637
 msgid "PDF"
 msgstr "PDF"
 
-#: modules/printbackends/gtkprintbackendfile.c:640
+#: modules/printbackends/gtkprintbackendfile.c:637
 msgid "PostScript"
 msgstr "PostScript"
 
-#: modules/printbackends/gtkprintbackendfile.c:640
+#: modules/printbackends/gtkprintbackendfile.c:637
 msgid "SVG"
 msgstr "SVG"
 
-#: modules/printbackends/gtkprintbackendfile.c:713
+#: modules/printbackends/gtkprintbackendfile.c:710
 msgid "File"
 msgstr "Файл"
 
-#: modules/printbackends/gtkprintbackendfile.c:723
+#: modules/printbackends/gtkprintbackendfile.c:720
 msgid "_Output format"
 msgstr "Формат _виводу"
 
-#: modules/printbackends/gtkprintbackendlpr.c:381
+#: modules/printbackends/gtkprintbackendlpr.c:378
 msgid "Print to LPR"
 msgstr "Друкувати в LPR"
 
-#: modules/printbackends/gtkprintbackendlpr.c:407
+#: modules/printbackends/gtkprintbackendlpr.c:404
 msgid "Pages Per Sheet"
 msgstr "Сторінок на аркуш"
 
-#: modules/printbackends/gtkprintbackendlpr.c:414
+#: modules/printbackends/gtkprintbackendlpr.c:411
 msgid "Command Line"
 msgstr "Командний рядок"
 
@@ -7778,6 +7806,9 @@ msgstr "Не знайдено профілю"
 #: modules/printbackends/gtkprintercups.c:298
 msgid "Unspecified profile"
 msgstr "Невизначений профіль"
+
+#~ msgid "Printer"
+#~ msgstr "Принтер"
 
 #~ msgid "Don’t batch GDI requests"
 #~ msgstr "Не об'єднувати запити GDI"
