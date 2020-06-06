@@ -68,10 +68,12 @@
         <xi:include href="xml/gtkmultisorter.xml" />
       </section>
       <xi:include href="xml/gtkselectionmodel.xml" />
-      <xi:include href="xml/gtknoselection.xml" />
-      <xi:include href="xml/gtksingleselection.xml" />
-      <xi:include href="xml/gtkmultiselection.xml" />
+      <section>
+        <xi:include href="xml/gtknoselection.xml" />
+        <xi:include href="xml/gtksingleselection.xml" />
+        <xi:include href="xml/gtkmultiselection.xml" />
       <xi:include href="xml/gtkpropertyselection.xml" />
+      </section>
       <xi:include href="xml/gtkdirectorylist.xml" />
     </chapter>
 
