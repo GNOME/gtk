@@ -31,6 +31,8 @@ G_BEGIN_DECLS
 
 /**
  * GdkTopLevelLayout:
+ *
+ * Struct containing information for gdk_toplevel_present()
  */
 typedef struct _GdkToplevelLayout GdkToplevelLayout;
 

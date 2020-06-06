@@ -1775,6 +1775,15 @@ gdk_device_get_device_tool (GdkDevice *device)
   return device->last_tool;
 }
 
+/**
+ * gdk_device_get_caps_lock_state:
+ * @device: a #GdkDevice
+ *
+ * Retrieves whether the Caps Lock modifier of the
+ * keyboard is locked, if @device is a keyboard device.
+ *
+ * Returns: %TRUE if Caps Lock is on for @device
+ */
 gboolean
 gdk_device_get_caps_lock_state (GdkDevice *device)
 {
@@ -1786,6 +1795,15 @@ gdk_device_get_caps_lock_state (GdkDevice *device)
   return FALSE;
 }
 
+/**
+ * gdk_device_get_num_lock_state:
+ * @device: a #GdkDevice
+ *
+ * Retrieves whether the Num Lock modifier of the
+ * keyboard is locked, if @device is a keyboard device.
+ *
+ * Returns: %TRUE if Num Lock is on for @device
+ */
 gboolean
 gdk_device_get_num_lock_state (GdkDevice *device)
 {
@@ -1797,6 +1815,15 @@ gdk_device_get_num_lock_state (GdkDevice *device)
   return FALSE;
 }
 
+/**
+ * gdk_device_get_scroll_lock_state:
+ * @device: a #GdkDevice
+ *
+ * Retrieves whether the Scroll Lock modifier of the
+ * keyboard is locked, if @device is a keyboard device.
+ *
+ * Returns: %TRUE if Scroll Lock is on for @device
+ */
 gboolean
 gdk_device_get_scroll_lock_state (GdkDevice *device)
 {
@@ -1808,6 +1835,15 @@ gdk_device_get_scroll_lock_state (GdkDevice *device)
   return FALSE;
 }
 
+/**
+ * gdk_device_get_modifier_state:
+ * @device: a #GdkDevice
+ *
+ * Retrieves the current modifier state of the keyboard,
+ * if @device is a keyboard device.
+ *
+ * Returns: the current modifier state
+ */
 GdkModifierType
 gdk_device_get_modifier_state (GdkDevice *device)
 {
@@ -1819,6 +1855,20 @@ gdk_device_get_modifier_state (GdkDevice *device)
   return 0;
 }
 
+/**
+ * gdk_device_get_direction:
+ * @device: a #GdkDevice
+ *
+ * Returns the direction of effective layout of the keyboard,
+ * if @device is a keyboard device.
+ *
+ * The direction of a layout is the direction of the majority
+ * of its symbols. See pango_unichar_direction().
+ *
+ * Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL
+ *   if it can determine the direction. %PANGO_DIRECTION_NEUTRAL
+ *   otherwise
+ */
 PangoDirection
 gdk_device_get_direction (GdkDevice *device)
 {
@@ -1830,6 +1880,17 @@ gdk_device_get_direction (GdkDevice *device)
   return PANGO_DIRECTION_NEUTRAL;
 }
 
+/**
+ * gdk_device_has_bidi_layouts:
+ * @device: a #GdkDevice
+ *
+ * Determines if keyboard layouts for both right-to-left and
+ * left-to-right languages are in use on the keyboard, if
+ * @device is a keyboard device.
+ *
+ * Returns: %TRUE if there are layouts with both directions,
+ *     %FALSE otherwise
+ */
 gboolean
 gdk_device_has_bidi_layouts (GdkDevice *device)
 {

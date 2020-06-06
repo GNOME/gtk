@@ -93,7 +93,6 @@ gdk_display_get_clipboard
 gdk_display_get_primary_clipboard
 gdk_display_get_setting
 gdk_display_get_startup_notification_id
-gdk_display_setup_window_visual
 
 <SUBSECTION>
 gdk_display_put_event
@@ -502,6 +501,7 @@ gdk_event_get_position
 gdk_event_get_axes
 gdk_event_get_axis
 gdk_event_get_pointer_emulated
+gdk_event_triggers_context_menu
 gdk_button_event_get_button
 gdk_scroll_event_get_direction
 gdk_scroll_event_get_deltas
@@ -520,6 +520,7 @@ gdk_crossing_event_get_mode
 gdk_crossing_event_get_detail
 gdk_crossing_event_get_focus
 gdk_grab_broken_event_get_grab_surface
+gdk_grab_broken_event_get_implicit
 gdk_dnd_event_get_drop
 gdk_configure_event_get_size
 gdk_touchpad_event_get_gesture_phase
@@ -545,8 +546,23 @@ GDK_TYPE_CROSSING_MODE
 GDK_TYPE_SCROLL_DIRECTION
 GDK_TYPE_NOTIFY_TYPE
 GDK_IS_EVENT
+
 gdk_event_get_type
 gdk_event_sequence_get_type
+gdk_button_event_get_type
+gdk_configure_event_get_type
+gdk_crossing_event_get_type
+gdk_delete_event_get_type
+gdk_dnd_event_get_type
+gdk_focus_event_get_type
+gdk_grab_broken_event_get_type
+gdk_key_event_get_type
+gdk_motion_event_get_type
+gdk_pad_event_get_type
+gdk_proximity_event_get_type
+gdk_scroll_event_get_type
+gdk_touch_event_get_type
+gdk_touchpad_event_get_type
 </SECTION>
 
 <SECTION>
