@@ -342,6 +342,15 @@ gtk_selection_model_unselect_all (GtkSelectionModel *model)
   return iface->unselect_all (model);
 }
 
+/**
+ * gtk_selection_model_select_callback:
+ * @model: a #GtkSelectionModel
+ * @callback: a #GtkSelectionCallback to determine items to select
+ * @data: data to pass to @callback
+ *
+ * Requests to select all items for which @callback returns
+ * @selected as TRUE.
+ */
 gboolean
 gtk_selection_model_select_callback (GtkSelectionModel    *model,
                                      GtkSelectionCallback  callback,
@@ -352,6 +361,15 @@ gtk_selection_model_select_callback (GtkSelectionModel    *model,
   return GTK_SELECTION_MODEL_GET_IFACE (model)->select_callback (model, callback, data);
 }
 
+/**
+ * gtk_selection_model_unselect_callback:
+ * @model: a #GtkSelectionModel
+ * @callback: a #GtkSelectionCallback to determine items to select
+ * @data: data to pass to @callback
+ *
+ * Requests to unselect all items for which @callback returns
+ * @selected as TRUE.
+ */
 gboolean
 gtk_selection_model_unselect_callback (GtkSelectionModel    *model,
                                        GtkSelectionCallback  callback,
