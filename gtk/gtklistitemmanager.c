@@ -395,6 +395,7 @@ gtk_list_item_manager_add_items (GtkListItemManager *self,
 
   if (item == NULL || item->widget)
     item = gtk_rb_tree_insert_before (self->items, item);
+
   item->n_items += n_items;
   gtk_rb_tree_node_mark_dirty (item);
 
@@ -570,6 +571,12 @@ gtk_list_item_manager_ensure_items (GtkListItemManager *self,
 }
 
 static void
+gtk_list_item_manager_model_selection_changed_cb (GListModel         *model,
+                                                  guint               position,
+                                                  guint               n_items,
+                                                  GtkListItemManager *self);
+
+static void
 gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
                                               guint               position,
                                               guint               removed,
@@ -734,6 +741,8 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
     }
 
   g_hash_table_unref (change);
+
+  gtk_list_item_manager_model_selection_changed_cb (model, position, added, self);
 
   gtk_widget_queue_resize (self->widget);
 }
