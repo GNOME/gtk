@@ -839,6 +839,7 @@ gtk_drop_down_set_enable_search (GtkDropDown *self,
 
 /**
  * gtk_drop_down_get_enable_search:
+ * @self: a #GtkDropDown
  *
  * Returns whether search is enabled.
  *
@@ -1014,20 +1015,20 @@ gtk_drop_down_strings_model_new (const char *const *text)
 /**
  * gtk_drop_down_set_from_strings:
  * @self: a #GtkDropDown
- * text: a %NULL-terminated string array
+ * @texts: a %NULL-terminated string array
  *
  * Populates @self with the strings in @text,
  * by creating a suitable model and factory.
  */
 void
 gtk_drop_down_set_from_strings (GtkDropDown       *self,
-                                const char *const *text)
+                                const char *const *texts)
 {
   GtkExpression *expression;
   GListModel *model;
 
   g_return_if_fail (GTK_IS_DROP_DOWN (self));
-  g_return_if_fail (text != NULL);
+  g_return_if_fail (texts != NULL);
 
   set_default_factory (self);
 
@@ -1035,7 +1036,7 @@ gtk_drop_down_set_from_strings (GtkDropDown       *self,
   gtk_drop_down_set_expression (self, expression);
   gtk_expression_unref (expression);
 
-  model = gtk_drop_down_strings_model_new (text);
+  model = gtk_drop_down_strings_model_new (texts);
   gtk_drop_down_set_model (self, model);
   g_object_unref (model);
 }

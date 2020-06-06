@@ -963,7 +963,7 @@ gtk_menu_tracker_item_request_submenu_shown (GtkMenuTrackerItem *self,
     gtk_menu_tracker_item_set_submenu_shown (self, shown);
 }
 
-/**
+/*
  * gtk_menu_tracker_item_get_is_visible:
  * @self: A #GtkMenuTrackerItem instance
  *
@@ -978,7 +978,7 @@ gtk_menu_tracker_item_get_is_visible (GtkMenuTrackerItem *self)
   return self->is_visible;
 }
 
-/**
+/*
  * gtk_menu_tracker_item_may_disappear:
  * @self: A #GtkMenuTrackerItem instance
  *

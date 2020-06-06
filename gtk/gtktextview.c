@@ -5737,6 +5737,14 @@ gtk_text_view_snapshot (GtkWidget   *widget,
     }
 }
 
+/**
+ * gtk_text_view_remove:
+ * @text_view: a #GtkTextView
+ * @child: the child to remove
+ *
+ * Removes a child widget from @text_view.
+ */
+
 void
 gtk_text_view_remove (GtkTextView *text_view,
                       GtkWidget   *child)
