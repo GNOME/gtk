@@ -92,12 +92,11 @@ static Theme themes[] = {
 static int theme;
 
 static gboolean
-change_theme (GtkWidget *widget,
+change_theme (GtkWidget     *widget,
               GdkFrameClock *frame_clock,
-              gpointer data)
+              gpointer       data)
 {
-  GtkBuilder *builder = data;
-  GtkWidget *label;
+  GtkWidget *label = data;
   Theme next = themes[theme++ % G_N_ELEMENTS (themes)];
   char *name;
 
@@ -110,7 +109,6 @@ change_theme (GtkWidget *widget,
   gtk_window_set_title (GTK_WINDOW (widget), name);
   g_free (name);
 
-  label = GTK_WIDGET (gtk_builder_get_object (builder, "fps"));
   if (frame_clock)
     {
       char *fps;
@@ -127,10 +125,10 @@ change_theme (GtkWidget *widget,
 
 static void
 clicked (GtkGestureClick *gesture,
-         int n_press,
-         double x,
-         double y,
-         gpointer data)
+         int              n_press,
+         double           x,
+         double           y,
+         gpointer         data)
 {
   GtkWidget *window;
   GdkEvent *event;
@@ -198,6 +196,7 @@ do_themes (GtkWidget *do_widget)
       GtkBuilder *builder;
       GtkWidget *header;
       GtkWidget *button;
+      GtkWidget *label;
       GtkGesture *gesture;
 
       builder = gtk_builder_new_from_resource ("/themes/themes.ui");
@@ -207,13 +206,17 @@ do_themes (GtkWidget *do_widget)
                               gtk_widget_get_display (do_widget));
 
       header = GTK_WIDGET (gtk_builder_get_object (builder, "header"));
+      label = GTK_WIDGET (gtk_builder_get_object (builder, "fps"));
+
       gesture = gtk_gesture_click_new ();
-      g_signal_connect (gesture, "pressed", G_CALLBACK (clicked), builder);
+      g_signal_connect (gesture, "pressed", G_CALLBACK (clicked), label);
       gtk_widget_add_controller (header, GTK_EVENT_CONTROLLER (gesture));
 
       button = GTK_WIDGET (gtk_builder_get_object (builder, "toggle"));
-      g_signal_connect (button, "notify::active", G_CALLBACK (toggle_cycle), builder);
+      g_signal_connect (button, "notify::active", G_CALLBACK (toggle_cycle), label);
       gtk_widget_realize (window);
+
+      g_object_unref (builder);
     }
 
   if (!gtk_widget_get_visible (window))

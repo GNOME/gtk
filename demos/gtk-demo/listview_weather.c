@@ -11,7 +11,7 @@
  * A GtkNoSelectionModel is used to make sure no item in the list can be
  * selected. All other interactions with the items is still possible.
  *
- * The dataset used here has 70000 items.
+ * The dataset used here has 70 000 items.
  */
 
 #include <gtk/gtk.h>
