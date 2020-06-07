@@ -24,7 +24,7 @@
 #include "gtkintl.h"
 #include "gtkwidget.h"
 #include "gtkroot.h"
-#include "gtknativeprivate.h"
+#include "gtknative.h"
 
 struct _GtkFocusOverlay
 {

@@ -353,6 +353,7 @@
 #include "gtkprivate.h"
 #include "gtksnapshot.h"
 #include "gtkstylecontext.h"
+#include "gtknative.h"
 
 #include <gobject/gvaluecollector.h>
 
@@ -1043,6 +1044,7 @@ gtk_cell_area_real_event (GtkCellArea          *area,
           GtkCellRenderer *focus_renderer;
           GdkRectangle     alloc_area;
           double event_x, event_y;
+          double nx, ny;
           double x, y;
           GtkNative *native;
 
@@ -1051,7 +1053,8 @@ gtk_cell_area_real_event (GtkCellArea          *area,
           gdk_event_get_position (event, &event_x, &event_y);
 
           native = gtk_widget_get_native (widget);
-          gtk_widget_translate_coordinates (GTK_WIDGET (native), widget, event_x, event_y, &x, &y);
+          gtk_native_get_surface_transform (native, &nx, &ny);
+          gtk_widget_translate_coordinates (GTK_WIDGET (native), widget, event_x - nx, event_y - ny, &x, &y);
           event_x = x;
           event_y = y;
 
