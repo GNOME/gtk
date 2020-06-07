@@ -1478,7 +1478,6 @@ gtk_window_init (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *widget;
-  GtkCssNode *widget_node;
   GdkSeat *seat;
   GtkEventController *controller;
   GtkDropTargetAsync *target;
@@ -1518,8 +1517,7 @@ gtk_window_init (GtkWindow *window)
                     G_CALLBACK (gtk_window_on_theme_variant_changed), window);
 #endif
 
-  widget_node = gtk_widget_get_css_node (GTK_WIDGET (window));
-  gtk_css_node_add_class (widget_node, g_quark_from_static_string (GTK_STYLE_CLASS_BACKGROUND));
+  gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_BACKGROUND);
 
   priv->scale = gtk_widget_get_scale_factor (widget);
 
