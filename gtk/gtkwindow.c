@@ -7149,12 +7149,6 @@ gtk_window_set_child (GtkWindow *window,
 
   if (child)
     {
-      /* Insert the child's css node now at the end so the order wrt.
-       * decoration_node is correct
-       */
-      gtk_css_node_insert_before (gtk_widget_get_css_node (GTK_WIDGET (window)),
-                                  gtk_widget_get_css_node (child),
-                                  NULL);
       priv->child = child;
       gtk_widget_set_parent (child, GTK_WIDGET (window));
     }
