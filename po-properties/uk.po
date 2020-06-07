@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-06 12:03+0000\n"
-"PO-Revision-Date: 2020-06-06 16:43+0300\n"
+"POT-Creation-Date: 2020-06-07 07:28+0000\n"
+"PO-Revision-Date: 2020-06-07 11:50+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -871,7 +871,6 @@ msgid "Bytes"
 msgstr "Байти"
 
 #: gtk/gtkbuilderlistitemfactory.c:270
-#| msgid "Merged UI definition"
 msgid "bytes containing the UI definition"
 msgstr "байти, які містять визначення інтерфейсу користувача"
 
@@ -880,7 +879,6 @@ msgid "Resource"
 msgstr "Ресурс"
 
 #: gtk/gtkbuilderlistitemfactory.c:282
-#| msgid "Merged UI definition"
 msgid "resource containing the UI definition"
 msgstr "ресурс, який містить визначення інтерфейсу користувача"
 
@@ -1215,9 +1213,9 @@ msgstr "Чи встановлено колір тла комірки"
 #: gtk/gtkcellrenderercombo.c:136 gtk/gtkcolumnview.c:628 gtk/gtkdropdown.c:467
 #: gtk/gtkfilterlistmodel.c:684 gtk/gtkflattenlistmodel.c:438
 #: gtk/gtkgridview.c:1087 gtk/gtklistview.c:843 gtk/gtkmaplistmodel.c:404
-#: gtk/gtkmultiselection.c:359 gtk/gtkshortcutcontroller.c:539
-#: gtk/gtkslicelistmodel.c:287 gtk/gtksortlistmodel.c:394
-#: gtk/gtktreelistmodel.c:716
+#: gtk/gtkmultiselection.c:372 gtk/gtkpropertyselection.c:441
+#: gtk/gtkshortcutcontroller.c:539 gtk/gtkslicelistmodel.c:287
+#: gtk/gtksortlistmodel.c:394 gtk/gtktreelistmodel.c:716
 msgid "Model"
 msgstr "Модель"
 
@@ -1945,22 +1943,18 @@ msgid "Whether the swatch should accept drops"
 msgstr "Чи прийматиме пробник події скидання"
 
 #: gtk/gtkcolumnview.c:616
-#| msgid "Column span"
 msgid "Columns"
 msgstr "Стовпчики"
 
 #: gtk/gtkcolumnview.c:617
-#| msgid "List of classes"
 msgid "List of columns"
 msgstr "Список стовпчиків"
 
 #: gtk/gtkcolumnview.c:629 gtk/gtkgridview.c:1088 gtk/gtklistview.c:844
-#| msgid "The sorting order of the items displayed"
 msgid "Model for the items displayed"
 msgstr "Модель для показаних пунктів"
 
 #: gtk/gtkcolumnview.c:640
-#| msgid "Show separators"
 msgid "Show row separators"
 msgstr "Показувати роздільники рядків"
 
@@ -1969,12 +1963,10 @@ msgid "Show separators between rows"
 msgstr "Показувати роздільники між рядками"
 
 #: gtk/gtkcolumnview.c:652
-#| msgid "Show separators"
 msgid "Show column separators"
 msgstr "Показувати роздільники стовпчиків"
 
 #: gtk/gtkcolumnview.c:653
-#| msgid "Show separators between rows"
 msgid "Show separators between columns"
 msgstr "Показувати роздільники між стовпчиками"
 
@@ -1992,7 +1984,6 @@ msgid "Single click activate"
 msgstr "Активація одним клацанням"
 
 #: gtk/gtkcolumnview.c:677 gtk/gtkgridview.c:1100 gtk/gtklistview.c:868
-#| msgid "Activate row on a single click"
 msgid "Activate rows on single click"
 msgstr "Активувати рядки одинарним клацанням"
 
@@ -2002,24 +1993,18 @@ msgid "Reorderable"
 msgstr "Дозволено перестановку"
 
 #: gtk/gtkcolumnview.c:689
-#| msgid "Whether the column can be reordered around the headers"
 msgid "Whether columns are reorderable"
 msgstr "Чи можна змінювати порядок стовпчиків"
 
 #: gtk/gtkcolumnview.c:700 gtk/gtkgridview.c:1111 gtk/gtklistview.c:879
-#| msgid "Inline selection"
 msgid "Enable rubberband selection"
 msgstr "Увімкнути еластичне позначення"
 
 #: gtk/gtkcolumnview.c:701 gtk/gtkgridview.c:1112 gtk/gtklistview.c:880
-#| msgid ""
-#| "Whether to enable selection of multiple items by dragging the mouse "
-#| "pointer"
 msgid "Allow selecting items by dragging with the mouse"
 msgstr "Дозволити позначення пунктів перетягуванням вказівника миші"
 
 #: gtk/gtkcolumnviewcolumn.c:234
-#| msgid "Column spacing"
 msgid "Column view"
 msgstr "Перегляд стовпцями"
 
@@ -2038,7 +2023,6 @@ msgid "Factory for populating list items"
 msgstr "Фабрика для заповнення пунктів списку"
 
 #: gtk/gtkcolumnviewcolumn.c:259
-#| msgid "Text to be displayed in the progress bar"
 msgid "Title displayed in the header"
 msgstr "Назва, яку показано у заголовку"
 
@@ -2052,17 +2036,14 @@ msgid "Visible"
 msgstr "Видима"
 
 #: gtk/gtkcolumnviewcolumn.c:283
-#| msgid "Whether the action is visible."
 msgid "Whether this column is visible"
 msgstr "Чи буде цей стовпчик видимим"
 
 #: gtk/gtkcolumnviewcolumn.c:294
-#| msgid "Header image"
 msgid "Header menu"
 msgstr "Меню заголовка"
 
 #: gtk/gtkcolumnviewcolumn.c:295
-#| msgid "The title of this tray icon"
 msgid "Menu to use on the title of this column"
 msgstr "Меню, яким слід скористатися для заголовка цього стовпчика"
 
@@ -2072,22 +2053,18 @@ msgid "Resizable"
 msgstr "Розмір можна змінювати"
 
 #: gtk/gtkcolumnviewcolumn.c:307
-#| msgid "Whether the action is enabled."
 msgid "Whether this column is resizable"
 msgstr "Чи можна змінювати розміри цього стовпчика"
 
 #: gtk/gtkcolumnviewcolumn.c:319
-#| msgid "Column gets share of extra width allocated to the widget"
 msgid "column gets share of extra width"
 msgstr "стовпчик отримує частину додаткової ширини"
 
 #: gtk/gtkcolumnviewcolumn.c:331
-#| msgid "Fixed Width"
 msgid "Fixed width"
 msgstr "Фіксована ширина"
 
 #: gtk/gtkcolumnviewcolumn.c:332
-#| msgid "Current fixed width of the column"
 msgid "Fixed width of this column"
 msgstr "Фіксована ширина цього стовпчика"
 
@@ -2315,17 +2292,14 @@ msgid "The initial specified value used for this property"
 msgstr "Початкове вказане значення потрібне для властивості"
 
 #: gtk/gtkdirectorylist.c:239
-#| msgid "Attributes"
 msgid "attributes"
 msgstr "атрибути"
 
 #: gtk/gtkdirectorylist.c:240
-#| msgid "Attributes"
 msgid "Attributes to query"
 msgstr "Атрибути для запиту"
 
 #: gtk/gtkdirectorylist.c:251
-#| msgid "Error"
 msgid "error"
 msgstr "помилка"
 
@@ -2339,7 +2313,6 @@ msgid "File"
 msgstr "Файл"
 
 #: gtk/gtkdirectorylist.c:264
-#| msgid "The title to display"
 msgid "The file to query"
 msgstr "Файл для запиту"
 
@@ -2365,12 +2338,10 @@ msgid "The type of elements of this object"
 msgstr "Тип елементів цього об'єкта"
 
 #: gtk/gtkdirectorylist.c:299
-#| msgid "Loading"
 msgid "loading"
 msgstr "завантаження"
 
 #: gtk/gtkdirectorylist.c:300
-#| msgid "TRUE if this printer is paused"
 msgid "TRUE if files are being loaded"
 msgstr "TRUE, якщо файли завантажуються"
 
@@ -2439,31 +2410,27 @@ msgid "List Factory"
 msgstr "Фабрика списку"
 
 #: gtk/gtkdropdown.c:468
-#| msgid "The model for the filtermodel to filter"
 msgid "Model for the displayed items"
 msgstr "Модель для показаних пунктів"
 
-#: gtk/gtkdropdown.c:480 gtk/gtklistitem.c:233 gtk/gtksingleselection.c:439
+#: gtk/gtkdropdown.c:480 gtk/gtklistitem.c:233 gtk/gtksingleselection.c:444
 msgid "Selected"
 msgstr "Позначений"
 
-#: gtk/gtkdropdown.c:481 gtk/gtksingleselection.c:440
+#: gtk/gtkdropdown.c:481 gtk/gtksingleselection.c:445
 msgid "Position of the selected item"
 msgstr "Розташування позначеного пункту"
 
 #: gtk/gtkdropdown.c:494
-#| msgid "Enable Search"
 msgid "Enable search"
 msgstr "Дозволено пошук"
 
 #: gtk/gtkdropdown.c:495
-#| msgid "Whether to show a sort indicator"
 msgid "Whether to show a search entry in the popup"
 msgstr "Чи слід показувати запис пошуку у контекстній підказці"
 
 #: gtk/gtkdropdown.c:509 gtk/gtknumericsorter.c:282 gtk/gtkstringfilter.c:252
 #: gtk/gtkstringsorter.c:218
-#| msgid "Permission"
 msgid "Expression"
 msgstr "Вираз"
 
@@ -3309,7 +3276,7 @@ msgstr "Коефіцієнт затримки"
 msgid "Factor by which to modify the default timeout"
 msgstr "Коефіцієнт, за допомогою якого змінюється типовий час очікування"
 
-#: gtk/gtkgesturepan.c:236 gtk/gtklistbase.c:1149 gtk/gtkorientable.c:60
+#: gtk/gtkgesturepan.c:236 gtk/gtklistbase.c:1154 gtk/gtkorientable.c:60
 msgid "Orientation"
 msgstr "Орієнтація"
 
@@ -3452,22 +3419,18 @@ msgid "The number of rows that a child spans"
 msgstr "Кількість рядків, які займає дочірній об'єкт"
 
 #: gtk/gtkgridview.c:1063
-#| msgid "Markup column"
 msgid "Max columns"
 msgstr "Макс. кількість стовпчиків"
 
 #: gtk/gtkgridview.c:1064
-#| msgid "Number of columns"
 msgid "Maximum number of columns per row"
 msgstr "Максимальна кількість стовпчиків на рядок"
 
 #: gtk/gtkgridview.c:1075
-#| msgid "Pixbuf column"
 msgid "Min columns"
 msgstr "Мін. кількість стовпчиків"
 
 #: gtk/gtkgridview.c:1076
-#| msgid "Number of columns"
 msgid "Minimum number of columns per row"
 msgstr "Мінімальна кількість стовпчиків на рядок"
 
@@ -3863,7 +3826,7 @@ msgstr "Відвіданий"
 msgid "Whether this link has been visited."
 msgstr "Чи це посилання було відвідано."
 
-#: gtk/gtklistbase.c:1150 gtk/gtkorientable.c:61
+#: gtk/gtklistbase.c:1155 gtk/gtkorientable.c:61
 msgid "The orientation of the orientable"
 msgstr "Орієнтація елемента"
 
@@ -3880,12 +3843,10 @@ msgid "Whether this row can be selected"
 msgstr "Чи можна позначати цей рядок"
 
 #: gtk/gtklistitem.c:174
-#| msgid "Whether the text can be modified by the user"
 msgid "If the item can be activated by the user"
 msgstr "Чи може користувач активувати пункт"
 
 #: gtk/gtklistitem.c:186
-#| msgid "Title widget to display"
 msgid "Widget used for display"
 msgstr "Віджет, який використано для показу"
 
@@ -3894,7 +3855,6 @@ msgid "Item"
 msgstr "Пункт"
 
 #: gtk/gtklistitem.c:198
-#| msgid "Display"
 msgid "Displayed item"
 msgstr "Показаний пункт"
 
@@ -3904,17 +3864,14 @@ msgid "Position"
 msgstr "Позиція"
 
 #: gtk/gtklistitem.c:210
-#| msgid "Position of the selected item"
 msgid "Position of the item"
 msgstr "Розташування пункту"
 
 #: gtk/gtklistitem.c:222
-#| msgid "Whether the text can be modified by the user"
 msgid "If the item can be selected by the user"
 msgstr "Чи може користувач позначати пункт"
 
 #: gtk/gtklistitem.c:234
-#| msgid "The item which is currently active"
 msgid "If the item is currently selected"
 msgstr "Чи позначено зараз якийсь пункт"
 
@@ -4270,7 +4227,7 @@ msgstr "Чи виводити діалог"
 msgid "The display where this window will be displayed."
 msgstr "Дисплей, на якому буде показано це вікно."
 
-#: gtk/gtkmultiselection.c:360
+#: gtk/gtkmultiselection.c:373 gtk/gtkpropertyselection.c:442
 msgid "List managed by this selection"
 msgstr "Список, який керується цим вибором"
 
@@ -4302,11 +4259,11 @@ msgstr "Прозорий для вікна"
 msgid "The transient parent of the dialog"
 msgstr "Прозорий батьківський віджет діалогу"
 
-#: gtk/gtknoselection.c:208 gtk/gtksingleselection.c:463
+#: gtk/gtknoselection.c:208 gtk/gtksingleselection.c:468
 msgid "The model"
 msgstr "Модель"
 
-#: gtk/gtknoselection.c:209 gtk/gtksingleselection.c:464
+#: gtk/gtknoselection.c:209 gtk/gtksingleselection.c:469
 msgid "The model being managed"
 msgstr "Модель, яка керується"
 
@@ -4458,7 +4415,6 @@ msgid "Sort order"
 msgstr "Порядок сортування"
 
 #: gtk/gtknumericsorter.c:294
-#| msgid "Whether to reserve space for a subtitle"
 msgid "Whether to sort smaller numbers first"
 msgstr "Чи слід упорядковувати із розташуванням малих чисел першими"
 
@@ -5184,6 +5140,15 @@ msgstr "Об'єкт"
 #: gtk/gtkpropertylookuplistmodel.c:401
 msgid "The root object"
 msgstr "Кореневий об'єкт"
+
+#: gtk/gtkpropertyselection.c:448
+#| msgid "Property name"
+msgid "Property"
+msgstr "Властивість"
+
+#: gtk/gtkpropertyselection.c:449
+msgid "Item property to store selection state in"
+msgstr "Властивість пункту, до якої слід записати стан позначення"
 
 #: gtk/gtkradiobutton.c:200
 msgid "Group"
@@ -6071,27 +6036,27 @@ msgstr "Другий"
 msgid "The second trigger to check"
 msgstr "Другий перемикач для перевірки"
 
-#: gtk/gtksingleselection.c:415
+#: gtk/gtksingleselection.c:420
 msgid "Autoselect"
 msgstr "Автовибір"
 
-#: gtk/gtksingleselection.c:416
+#: gtk/gtksingleselection.c:421
 msgid "If the selection will always select an item"
 msgstr "Чи позначення завжди позначає пункт"
 
-#: gtk/gtksingleselection.c:427
+#: gtk/gtksingleselection.c:432
 msgid "Can unselect"
 msgstr "Можна знімати позначення"
 
-#: gtk/gtksingleselection.c:428
+#: gtk/gtksingleselection.c:433
 msgid "If unselecting the selected item is allowed"
 msgstr "Чи зняття позначення з позначеного пункту дозволене"
 
-#: gtk/gtksingleselection.c:451
+#: gtk/gtksingleselection.c:456
 msgid "Selected Item"
 msgstr "Вибраний елемент"
 
-#: gtk/gtksingleselection.c:452
+#: gtk/gtksingleselection.c:457
 msgid "The selected item"
 msgstr "Позначений пункт"
 
@@ -6297,7 +6262,6 @@ msgid "Associated stack for this GtkStackSidebar"
 msgstr "Пов'язаний стос для цього GtkStackSidebar"
 
 #: gtk/gtkstringfilter.c:263 gtk/gtkstringsorter.c:229
-#| msgid "Ignore hidden"
 msgid "Ignore case"
 msgstr "Без врахування регістру"
 
@@ -6306,7 +6270,6 @@ msgid "If matching is case sensitive"
 msgstr "Чи слід враховувати регістр символів при встановленні відповідності"
 
 #: gtk/gtkstringfilter.c:275
-#| msgid "Search mode"
 msgid "Match mode"
 msgstr "Режим відповідності"
 
@@ -6315,12 +6278,10 @@ msgid "If exact matches are necessary or if substrings are allowed"
 msgstr "Має бути відповідність точною чи достатньо збігу частини рядка"
 
 #: gtk/gtkstringfilter.c:288
-#| msgid "Search mode"
 msgid "Search"
 msgstr "Пошук"
 
 #: gtk/gtkstringfilter.c:289
-#| msgid "The selected item"
 msgid "The search term"
 msgstr "Критерій пошуку"
 
@@ -6990,7 +6951,6 @@ msgid "The child widget with the actual contents"
 msgstr "Дочірній віджет, який містить самі дані"
 
 #: gtk/gtktreeexpander.c:462
-#| msgid "The item held in this row"
 msgid "The item held by this expander's row"
 msgstr "Запис, який зберігається у цьому рядку розгортання"
 
@@ -7055,7 +7015,6 @@ msgid "The item held in this row"
 msgstr "Запис, який зберігається у цьому рядку"
 
 #: gtk/gtktreelistrowsorter.c:244
-#| msgid "The model being sorted"
 msgid "The underlying sorter"
 msgstr "Базовий сортувальник"
 
