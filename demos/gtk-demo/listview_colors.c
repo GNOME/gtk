@@ -6,7 +6,7 @@
  * and sort the data in various ways. The controls for
  * this are implemented using GtkDropDown.
  *
- * The dataset used here has 9283 items.
+ * The dataset used here has 9 283 items.
  */
 
 #include <gtk/gtk.h>

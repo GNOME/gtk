@@ -1,7 +1,7 @@
 /* Constraints/Interactive
  *
- * Demonstrate how constraints can be updates during
- * user interaction.
+ * Demonstrate how constraints can be updates during user interaction.
+ * The vertical edge between the buttons can be dragged with the mouse.
  */
 
 #include <glib/gi18n.h>
