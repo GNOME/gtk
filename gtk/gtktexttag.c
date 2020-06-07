@@ -117,10 +117,8 @@ enum {
   PROP_RIGHT_MARGIN,
   PROP_UNDERLINE,
   PROP_UNDERLINE_RGBA,
-#if PANGO_VERSION_CHECK(1,45,0)
   PROP_OVERLINE,
   PROP_OVERLINE_RGBA,
-#endif
   PROP_RISE,
   PROP_BACKGROUND_FULL_HEIGHT,
   PROP_LANGUAGE,
@@ -161,10 +159,8 @@ enum {
   PROP_RIGHT_MARGIN_SET,
   PROP_UNDERLINE_SET,
   PROP_UNDERLINE_RGBA_SET,
-#if PANGO_VERSION_CHECK(1,45,0)
   PROP_OVERLINE_SET,
   PROP_OVERLINE_RGBA_SET,
-#endif
   PROP_RISE_SET,
   PROP_BACKGROUND_FULL_HEIGHT_SET,
   PROP_LANGUAGE_SET,
@@ -514,7 +510,6 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                        GDK_TYPE_RGBA,
                                                        GTK_PARAM_READWRITE));
 
-#if PANGO_VERSION_CHECK(1,45,0)
   g_object_class_install_property (object_class,
                                    PROP_OVERLINE,
                                    g_param_spec_enum ("overline",
@@ -531,7 +526,6 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                        P_("Color of overline for this text"),
                                                        GDK_TYPE_RGBA,
                                                        GTK_PARAM_READWRITE));
-#endif
 
   /**
    * GtkTextTag:strikethrough-rgba:
@@ -793,7 +787,6 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                 P_("Underline RGBA set"),
                 P_("Whether this tag affects underlining color"));
 
-#if PANGO_VERSION_CHECK(1,45,0)
   ADD_SET_PROP ("overline-set", PROP_OVERLINE_SET,
                 P_("Overline set"),
                 P_("Whether this tag affects overlining"));
@@ -801,7 +794,6 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   ADD_SET_PROP ("overline-rgba-set", PROP_OVERLINE_RGBA_SET,
                 P_("Overline RGBA set"),
                 P_("Whether this tag affects overlining color"));
-#endif
 
   /**
    * GtkTextTag:strikethrough-rgba-set:
@@ -929,7 +921,6 @@ set_underline_rgba (GtkTextTag    *tag,
     }
 }
 
-#if PANGO_VERSION_CHECK(1,45,0)
 static void
 set_overline_rgba (GtkTextTag    *tag,
                    const GdkRGBA *rgba)
@@ -959,7 +950,6 @@ set_overline_rgba (GtkTextTag    *tag,
         }
     }
 }
-#endif
 
 static void
 set_strikethrough_rgba (GtkTextTag    *tag,
@@ -1485,7 +1475,6 @@ gtk_text_tag_set_property (GObject      *object,
       }
       break;
 
-#if PANGO_VERSION_CHECK(1,45,0)
     case PROP_OVERLINE:
       priv->overline_set = TRUE;
       priv->values->appearance.overline = g_value_get_enum (value);
@@ -1498,7 +1487,6 @@ gtk_text_tag_set_property (GObject      *object,
         set_overline_rgba (text_tag, color);
       }
       break;
-#endif
 
     case PROP_RISE:
       priv->rise_set = TRUE;
@@ -1702,7 +1690,6 @@ gtk_text_tag_set_property (GObject      *object,
       priv->underline_rgba_set = g_value_get_boolean (value);
       break;
 
-#if PANGO_VERSION_CHECK(1,45,0)
     case PROP_OVERLINE_SET:
       priv->overline_set = g_value_get_boolean (value);
       break;
@@ -1710,7 +1697,6 @@ gtk_text_tag_set_property (GObject      *object,
     case PROP_OVERLINE_RGBA_SET:
       priv->overline_rgba_set = g_value_get_boolean (value);
       break;
-#endif
 
     case PROP_RISE_SET:
       priv->rise_set = g_value_get_boolean (value);
@@ -1913,7 +1899,6 @@ gtk_text_tag_get_property (GObject      *object,
         g_value_set_boxed (value, priv->values->appearance.underline_rgba);
       break;
 
-#if PANGO_VERSION_CHECK(1,45,0)
     case PROP_OVERLINE:
       g_value_set_enum (value, priv->values->appearance.overline);
       break;
@@ -1922,7 +1907,6 @@ gtk_text_tag_get_property (GObject      *object,
       if (priv->overline_rgba_set)
         g_value_set_boxed (value, priv->values->appearance.overline_rgba);
       break;
-#endif
 
     case PROP_RISE:
       g_value_set_int (value, priv->values->appearance.rise);
@@ -2056,7 +2040,6 @@ gtk_text_tag_get_property (GObject      *object,
       g_value_set_boolean (value, priv->underline_rgba_set);
       break;
 
-#if PANGO_VERSION_CHECK(1,45,0)
     case PROP_OVERLINE_SET:
       g_value_set_boolean (value, priv->overline_set);
       break;
@@ -2064,7 +2047,6 @@ gtk_text_tag_get_property (GObject      *object,
     case PROP_OVERLINE_RGBA_SET:
       g_value_set_boolean (value, priv->overline_rgba_set);
       break;
-#endif
 
     case PROP_RISE_SET:
       g_value_set_boolean (value, priv->rise_set);
