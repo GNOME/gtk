@@ -2829,12 +2829,7 @@ gtk_window_set_titlebar (GtkWindow *window,
 
   gtk_window_enable_csd (window);
   priv->title_box = titlebar;
-  /* Same reason as in gtk_window_set_child */
-  gtk_css_node_insert_before (gtk_widget_get_css_node (GTK_WIDGET (window)),
-                              gtk_widget_get_css_node (titlebar),
-                              NULL);
-
-  gtk_widget_set_parent (priv->title_box, widget);
+  gtk_widget_insert_after (priv->title_box, widget, NULL);
 
   gtk_widget_add_css_class (titlebar, GTK_STYLE_CLASS_TITLEBAR);
 
