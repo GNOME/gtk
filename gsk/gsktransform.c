@@ -1674,14 +1674,12 @@ gsk_transform_invert (GskTransform *self)
 
 /**
  * gsk_transform_equal:
- * @first: the first matrix
- * @second: the second matrix
+ * @first: the first transform
+ * @second: the second transform
  *
- * Checks two matrices for equality. Note that matrices need to be literally
- * identical in their operations, it is not enough that they return the
- * same result in gsk_transform_to_matrix().
+ * Checks two transforms for equality.
  *
- * Returns: %TRUE if the two matrices can be proven to be equal
+ * Returns: %TRUE if the two transforms peform the same operation.
  **/
 gboolean
 gsk_transform_equal (GskTransform *first,
