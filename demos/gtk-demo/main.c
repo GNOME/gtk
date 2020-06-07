@@ -599,7 +599,7 @@ display_image (const char *resource)
 {
   GtkWidget *sw, *image;
 
-  image = gtk_image_new_from_resource (resource);
+  image = gtk_picture_new_for_resource (resource);
   gtk_widget_set_halign (image, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (image, GTK_ALIGN_CENTER);
   sw = gtk_scrolled_window_new (NULL, NULL);
