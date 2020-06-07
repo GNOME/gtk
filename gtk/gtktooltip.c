@@ -35,7 +35,7 @@
 #include "gtkwindowprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkaccessible.h"
-#include "gtknativeprivate.h"
+#include "gtknative.h"
 
 /**
  * SECTION:gtktooltip

@@ -34,7 +34,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerkey.h"
-#include "gtknativeprivate.h"
+#include "gtknative.h"
 #include "gtkwindowprivate.h"
 
 static GtkWidget *

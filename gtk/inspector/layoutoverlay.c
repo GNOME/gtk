@@ -5,7 +5,7 @@
 #include "gtkcssstyleprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcssnumbervalueprivate.h"
-#include "gtknativeprivate.h"
+#include "gtknative.h"
 
 struct _GtkLayoutOverlay
 {

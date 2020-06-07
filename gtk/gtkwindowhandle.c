@@ -28,7 +28,7 @@
 #include "gtkgestureprivate.h"
 #include "gtkintl.h"
 #include "gtkmodelbuttonprivate.h"
-#include "gtknativeprivate.h"
+#include "gtknative.h"
 #include "gtkpopovermenuprivate.h"
 #include "gtkprivate.h"
 #include "gtkseparator.h"

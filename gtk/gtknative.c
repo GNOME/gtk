@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtknativeprivate.h"
+#include "gtknative.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gdk/gdk-private.h"

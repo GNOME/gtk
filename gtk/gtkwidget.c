@@ -49,7 +49,7 @@
 #include "gtklayoutmanagerprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtknativeprivate.h"
+#include "gtknative.h"
 #include "gtkpopover.h"
 #include "gtkprivate.h"
 #include "gtkrenderbackgroundprivate.h"
