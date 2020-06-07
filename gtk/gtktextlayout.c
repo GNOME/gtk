@@ -1597,7 +1597,6 @@ add_generic_attrs (GtkTextLayout      *layout,
       pango_attr_list_insert (attrs, attr);
     }
 
-#if PANGO_VERSION_CHECK(1,45,0)
   if (appearance->overline != PANGO_OVERLINE_NONE)
     {
       attr = pango_attr_overline_new (appearance->overline);
@@ -1619,7 +1618,6 @@ add_generic_attrs (GtkTextLayout      *layout,
 
       pango_attr_list_insert (attrs, attr);
     }
-#endif
 
   if (appearance->strikethrough)
     {
@@ -2140,7 +2138,6 @@ add_preedit_attrs (GtkTextLayout     *layout,
 		gdk_rgba_free (appearance.underline_rgba);
 	      appearance.underline_rgba = gdk_rgba_copy (&rgba);
 	      break;
-#if PANGO_VERSION_CHECK(1,45,0)
 	    case PANGO_ATTR_OVERLINE:
 	      appearance.overline = ((PangoAttrInt *)attr)->value;
 	      break;
@@ -2150,7 +2147,6 @@ add_preedit_attrs (GtkTextLayout     *layout,
 		gdk_rgba_free (appearance.overline_rgba);
 	      appearance.overline_rgba = gdk_rgba_copy (&rgba);
 	      break;
-#endif
 	    case PANGO_ATTR_STRIKETHROUGH:
 	      appearance.strikethrough = ((PangoAttrInt *)attr)->value;
 	      break;

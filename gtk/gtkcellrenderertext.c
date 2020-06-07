@@ -1527,7 +1527,6 @@ get_layout (GtkCellRendererText *celltext,
           uline = PANGO_UNDERLINE_DOUBLE;
           break;
 
-#if PANGO_VERSION_CHECK(1,45,0)
         case PANGO_UNDERLINE_SINGLE_LINE:
           uline = PANGO_UNDERLINE_DOUBLE_LINE;
           break;
@@ -1535,7 +1534,6 @@ get_layout (GtkCellRendererText *celltext,
         case PANGO_UNDERLINE_DOUBLE_LINE:
         case PANGO_UNDERLINE_ERROR_LINE:
           break;
-#endif
 
         case PANGO_UNDERLINE_DOUBLE:
         case PANGO_UNDERLINE_LOW:
