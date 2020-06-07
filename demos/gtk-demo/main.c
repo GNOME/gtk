@@ -1040,7 +1040,7 @@ activate (GApplication *app)
   listmodel = create_demo_model ();
   treemodel = gtk_tree_list_model_new (FALSE,
                                        G_LIST_MODEL (listmodel),
-                                       FALSE,
+                                       TRUE,
                                        get_child_model,
                                        NULL,
                                        NULL);
