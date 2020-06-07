@@ -4312,7 +4312,7 @@ gtk_window_realize (GtkWidget *widget)
                 gtk_widget_add_css_class (priv->titlebar, GTK_STYLE_CLASS_TITLEBAR);
                 gtk_widget_add_css_class (priv->titlebar, "default-decoration");
 
-                gtk_widget_set_parent (priv->titlebar, widget);
+                gtk_widget_insert_after (priv->titlebar, widget, NULL);
                 priv->title_box = priv->titlebar;
               }
 
