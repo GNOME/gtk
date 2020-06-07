@@ -771,10 +771,10 @@ gtk_widget_base_class_init (gpointer g_class)
   else
     {
       GListModel *parent_shortcuts = G_LIST_MODEL (priv->shortcuts);
-      guint i;
+      guint i, p;
 
       priv->shortcuts = g_list_store_new (GTK_TYPE_SHORTCUT);
-      for (i = 0; i < g_list_model_get_n_items (parent_shortcuts); i++)
+      for (i = 0, p = g_list_model_get_n_items (parent_shortcuts); i < p; i++)
         {
           GtkShortcut *shortcut = g_list_model_get_item (parent_shortcuts, i);
           g_list_store_append (priv->shortcuts, shortcut);
