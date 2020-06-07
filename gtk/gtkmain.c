@@ -96,7 +96,7 @@
 #include "gsk/gskprivate.h"
 #include "gsk/gskrendernodeprivate.h"
 #include "gtkarrayimplprivate.h"
-#include "gtknativeprivate.h"
+#include "gtknative.h"
 
 #include <locale.h>
 

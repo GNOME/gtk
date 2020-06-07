@@ -53,7 +53,7 @@
 #include "gtkmagnifierprivate.h"
 #include "gtkemojichooser.h"
 #include "gtkpango.h"
-#include "gtknativeprivate.h"
+#include "gtknative.h"
 #include "gtkwidgetprivate.h"
 
 #include "a11y/gtktextviewaccessibleprivate.h"
