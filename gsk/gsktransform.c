@@ -570,7 +570,9 @@ gsk_translate_transform_equal (GskTransform *first_transform,
   GskTranslateTransform *first = (GskTranslateTransform *) first_transform;
   GskTranslateTransform *second = (GskTranslateTransform *) second_transform;
 
-  return graphene_point3d_equal (&first->point, &second->point);
+  return G_APPROX_VALUE (first->point.x, second->point.x, FLT_EPSILON) &&
+         G_APPROX_VALUE (first->point.y, second->point.y, FLT_EPSILON) &&
+         G_APPROX_VALUE (first->point.z, second->point.z, FLT_EPSILON);
 }
 
 static void
