@@ -70,13 +70,6 @@ struct _GdkDeviceClass
 {
   GObjectClass parent_class;
 
-  gboolean (* get_history)   (GdkDevice      *device,
-                              GdkSurface      *surface,
-                              guint32         start,
-                              guint32         stop,
-                              GdkTimeCoord ***events,
-                              gint           *n_events);
-
   void (* get_state)         (GdkDevice       *device,
                               GdkSurface       *surface,
                               gdouble         *axes,

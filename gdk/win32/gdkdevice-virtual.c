@@ -63,18 +63,6 @@ _gdk_device_virtual_set_active (GdkDevice *device,
   g_signal_emit_by_name (G_OBJECT (device), "changed");
 }
 
-static gboolean
-gdk_device_virtual_get_history (GdkDevice      *device,
-				GdkSurface      *window,
-				guint32         start,
-				guint32         stop,
-				GdkTimeCoord ***events,
-				gint           *n_events)
-{
-  /* History is only per slave device */
-  return FALSE;
-}
-
 static void
 gdk_device_virtual_get_state (GdkDevice       *device,
 			      GdkSurface       *window,
@@ -188,7 +176,6 @@ gdk_device_virtual_class_init (GdkDeviceVirtualClass *klass)
 {
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
-  device_class->get_history = gdk_device_virtual_get_history;
   device_class->get_state = gdk_device_virtual_get_state;
   device_class->set_surface_cursor = gdk_device_virtual_set_surface_cursor;
   device_class->query_state = gdk_device_virtual_query_state;

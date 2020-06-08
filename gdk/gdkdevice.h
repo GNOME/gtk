@@ -146,16 +146,6 @@ GDK_AVAILABLE_IN_ALL
 GdkSurface * gdk_device_get_surface_at_position (GdkDevice *device,
                                                  double    *win_x,
                                                  double    *win_y);
-GDK_AVAILABLE_IN_ALL
-gboolean gdk_device_get_history  (GdkDevice         *device,
-                                  GdkSurface         *surface,
-                                  guint32            start,
-                                  guint32            stop,
-                                  GdkTimeCoord    ***events,
-                                  gint              *n_events);
-GDK_AVAILABLE_IN_ALL
-void     gdk_device_free_history (GdkTimeCoord     **events,
-                                  gint               n_events);
 
 GDK_AVAILABLE_IN_ALL
 gint     gdk_device_get_n_axes     (GdkDevice       *device);
