@@ -2366,6 +2366,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
    * candidate it queues up flushing the event queue.
    */
   _gdk_event_queue_handle_motion_compression (display);
+  gdk_event_queue_handle_scroll_compression (display);
 }
 
 /**

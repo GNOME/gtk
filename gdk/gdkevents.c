@@ -619,6 +619,96 @@ _gdk_event_unqueue (GdkDisplay *display)
   return event;
 }
 
+/*
+ * If the last N events in the event queue are smooth scroll events
+ * for the same surface and device, combine them into one.
+ */
+void
+gdk_event_queue_handle_scroll_compression (GdkDisplay *display)
+{
+  GList *l;
+  GdkSurface *surface = NULL;
+  GdkDevice *device = NULL;
+  GdkEvent *last_event = NULL;
+  GList *scrolls = NULL;
+  double delta_x, delta_y;
+  double dx, dy;
+
+  delta_x = delta_y = 0;
+
+  l = g_queue_peek_tail_link (&display->queued_events);
+
+  while (l)
+    {
+      GdkEvent *event = l->data;
+
+      if (event->flags & GDK_EVENT_PENDING)
+        break;
+
+      if (event->event_type != GDK_SCROLL ||
+          gdk_scroll_event_get_direction (event) != GDK_SCROLL_SMOOTH)
+        break;
+
+      if (surface != NULL &&
+          surface != event->surface)
+        break;
+
+      if (device != NULL &&
+          device != event->device)
+        break;
+
+      if (!last_event)
+        last_event = event;
+
+      surface = event->surface;
+      device = event->device;
+      scrolls = l;
+
+      gdk_scroll_event_get_deltas (event, &dx, &dy);
+      delta_x += dx;
+      delta_y += dy;
+
+      l = l->prev;
+    }
+
+  while (scrolls && scrolls->next != NULL)
+    {
+      GList *next = scrolls->next;
+
+      gdk_event_unref (scrolls->data);
+      g_queue_delete_link (&display->queued_events, scrolls);
+      scrolls = next;
+    }
+
+  if (scrolls)
+    {
+      GdkEvent *old_event, *event;
+
+      old_event = scrolls->data;
+
+      event = gdk_scroll_event_new (surface,
+                                    device,
+                                    gdk_event_get_source_device (old_event),
+                                    gdk_event_get_device_tool (old_event),
+                                    gdk_event_get_time (old_event),
+                                    gdk_event_get_modifier_state (old_event),
+                                    delta_x,
+                                    delta_y,
+                                    gdk_scroll_event_is_stop (old_event));
+
+      g_queue_delete_link (&display->queued_events, scrolls);
+      g_queue_push_tail (&display->queued_events, event);
+    }
+
+  if (g_queue_get_length (&display->queued_events) == 1 &&
+      g_queue_peek_head_link (&display->queued_events) == scrolls)
+    {
+      GdkFrameClock *clock = gdk_surface_get_frame_clock (surface);
+      if (clock) /* might be NULL if surface was destroyed */
+        gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS);
+    }
+}
+
 static void
 gdk_motion_event_push_history (GdkEvent *event,
                                GdkEvent *history_event)
@@ -641,7 +731,6 @@ gdk_motion_event_push_history (GdkEvent *event,
     self->history = g_array_new (FALSE, TRUE, sizeof (GdkTimeCoord));
 
   g_array_append_val (self->history, hist);
-
 }
 
 void
@@ -710,7 +799,7 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
     {
       GdkFrameClock *clock = gdk_surface_get_frame_clock (pending_motion_surface);
       if (clock) /* might be NULL if surface was destroyed */
-	gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS);
+        gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS);
     }
 }
 
