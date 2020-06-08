@@ -23,12 +23,6 @@
 #include "gdksurfaceprivate.h"
 #include "gdkprivate-broadway.h"
 
-static gboolean gdk_broadway_device_get_history (GdkDevice      *device,
-                                                 GdkSurface      *surface,
-                                                 guint32         start,
-                                                 guint32         stop,
-                                                 GdkTimeCoord ***events,
-                                                 gint           *n_events);
 static void gdk_broadway_device_get_state (GdkDevice       *device,
                                            GdkSurface       *surface,
                                            gdouble         *axes,
@@ -64,7 +58,6 @@ gdk_broadway_device_class_init (GdkBroadwayDeviceClass *klass)
 {
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
-  device_class->get_history = gdk_broadway_device_get_history;
   device_class->get_state = gdk_broadway_device_get_state;
   device_class->set_surface_cursor = gdk_broadway_device_set_surface_cursor;
   device_class->query_state = gdk_broadway_device_query_state;
@@ -82,17 +75,6 @@ gdk_broadway_device_init (GdkBroadwayDevice *device_core)
 
   _gdk_device_add_axis (device, NULL, GDK_AXIS_X, 0, 0, 1);
   _gdk_device_add_axis (device, NULL, GDK_AXIS_Y, 0, 0, 1);
-}
-
-static gboolean
-gdk_broadway_device_get_history (GdkDevice      *device,
-                                 GdkSurface      *surface,
-                                 guint32         start,
-                                 guint32         stop,
-                                 GdkTimeCoord ***events,
-                                 gint           *n_events)
-{
-  return FALSE;
 }
 
 static void
