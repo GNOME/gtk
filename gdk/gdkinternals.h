@@ -123,6 +123,7 @@ GList* _gdk_event_queue_append       (GdkDisplay *display,
                                       GdkEvent   *event);
 
 void    _gdk_event_queue_handle_motion_compression (GdkDisplay *display);
+void    gdk_event_queue_handle_scroll_compression  (GdkDisplay *display);
 void    _gdk_event_queue_flush                     (GdkDisplay       *display);
 
 gboolean        _gdk_cairo_surface_extents       (cairo_surface_t *surface,
