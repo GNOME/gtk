@@ -17,6 +17,7 @@ stages:
 # Common variables
 variables:
   COMMON_MESON_FLAGS: "--fatal-meson-warnings --werror"
+  BACKEND_FLAGS: "-Dx11-backend=true -Dwayland-backend=true -Dbroadway-backend=true -Dvulkan=yes"
   MESON_TEST_TIMEOUT_MULTIPLIER: 2
   FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v18"
   FLATPAK_IMAGE: "registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master"
@@ -69,11 +70,7 @@ fedora-x86_64:
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
   script:
-    - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS}
-            -Dx11-backend=true
-            -Dwayland-backend=true
-            -Dbroadway-backend=true
-            -Dvulkan=yes
+    - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS}
             -Dprofiler=true
             _build
     - ninja -C _build
@@ -87,11 +84,7 @@ release-build:
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release"
   script:
-    - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS}
-            -Dx11-backend=true
-            -Dwayland-backend=true
-            -Dbroadway-backend=true
-            -Dvulkan=yes
+    - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS}
             _build
     - ninja -C _build
     - .gitlab-ci/run-tests.sh _build x11
