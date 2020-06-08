@@ -42,6 +42,7 @@ RUN dnf -y install \
     json-glib-devel \
     lcov \
     libattr-devel \
+    libcloudproviders-devel \
     libepoxy-devel \
     libffi-devel \
     libmount-devel \
