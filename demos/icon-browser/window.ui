@@ -12,10 +12,6 @@
       </item>
     </section>
   </menu>
-  <object class="IconStore" id="store"/>
-  <object class="GtkTreeModelFilter" id="filter_model">
-    <property name="child-model">store</property>
-  </object>
   <template class="IconBrowserWindow" parent="GtkApplicationWindow">
     <style>
       <class name="devel"/>
@@ -42,7 +38,7 @@
                 <property name="draw-indicator">0</property>
                 <property name="label" translatable="yes">Symbolic</property>
                 <property name="group">normal_radio</property>
-                <signal name="toggled" handler="symbolic_toggled"/>
+                <signal name="notify::active" handler="symbolic_toggled" swapped="yes" after="yes"/>
               </object>
             </child>
           </object>
@@ -71,8 +67,44 @@
     <child>
       <object class="GtkBox">
         <child>
-          <object class="GtkListBox" id="context_list">
-            <signal name="selected-rows-changed" handler="selected_context_changed"/>
+          <object class="GtkScrolledWindow">
+            <property name="hscrollbar-policy">never</property>
+            <child>
+              <object class="GtkListView">
+                <property name="model">
+                  <object class="GtkSingleSelection" id="context_model">
+                    <property name="model">
+                      <object class="GListStore" id="context_store">
+                        <property name="item-type">IbContext</property>
+                      </object>
+                    </property>
+                  </object>
+                </property>
+                <property name="factory">
+                  <object class="GtkBuilderListItemFactory">
+                    <property name="bytes">
+<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkLabel">
+        <property name="xalign">0</property>
+        <binding name="label">
+          <lookup name="name" type="IbContext">
+            <lookup name="item">GtkListItem</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+]]>
+                    </property>
+                  </object>
+                </property>
+              </object>
+            </child>
           </object>
         </child>
         <child>
@@ -88,7 +120,6 @@
                 <property name="search-mode-enabled" bind-source="search" bind-property="active" bind-flags="bidirectional"/>
                 <child>
                   <object class="GtkSearchEntry" id="searchentry">
-                    <signal name="search-changed" handler="search_text_changed"/>
                   </object>
                 </child>
               </object>
@@ -99,23 +130,91 @@
                 <property name="vexpand">1</property>
                 <property name="hscrollbar-policy">never</property>
                 <child>
-                  <object class="GtkIconView" id="list">
-                    <property name="model">filter_model</property>
-                    <property name="selection-mode">none</property>
-                    <property name="activate-on-single-click">1</property>
-                    <signal name="item_activated" handler="item_activated"/>
-                    <child>
-                      <object class="GtkCellRendererPixbuf" id="cell">
-                        <property name="xpad">10</property>
-                        <property name="ypad">10</property>
+                  <object class="GtkGridView" id="list">
+                    <signal name="activate" handler="item_activated"/>
+                    <property name="single-click-activate">1</property>
+                    <property name="model">
+                      <object class="GtkNoSelection">
+                        <property name="model">
+                          <object class="GtkFilterListModel" id="icon_filter_model">
+                            <property name="filter">
+                              <object class="GtkEveryFilter">
+                                <child>
+                                  <object class="GtkStringFilter">
+                                    <property name="expression">
+                                      <lookup name="name" type="IbIcon"/>
+                                    </property>
+                                    <binding name="search">
+                                      <lookup name="text" type="GtkSearchEntry">
+                                        searchentry
+                                      </lookup>
+                                    </binding>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkStringFilter">
+                                    <property name="ignore-case">0</property>
+                                    <property name="match-mode">exact</property>
+                                    <property name="expression">
+                                      <lookup name="context" type="IbIcon"/>
+                                    </property>
+                                    <binding name="search">
+                                      <lookup name="id" type="IbContext">
+                                        <lookup name="selected-item" type="GtkSingleSelection">
+                                          context_model
+                                        </lookup>
+                                      </lookup>
+                                    </binding>
+                                  </object>
+                                </child>
+                              </object>
+                            </property>
+                            <property name="model">
+                              <object class="GListStore" id="icon_store">
+                                <property name="item-type">IbIcon</property>
+                              </object>
+                            </property>
+                          </object>
+                        </property>
                       </object>
-                    </child>
-                    <child>
-                      <object class="GtkCellRendererText" id="text_cell">
-                        <property name="xpad">10</property>
-                        <property name="ypad">10</property>
+                    </property>
+                    <property name="factory">
+                      <object class="GtkBuilderListItemFactory">
+                        <property name="bytes">
+<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkImage">
+            <property name="pixel-size">48</property>
+            <binding name="icon-name">
+              <lookup name="name" type="IbIcon">
+                <lookup name="item">GtkListItem</lookup>
+              </lookup>
+            </binding>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <binding name="label">
+              <lookup name="name" type="IbIcon">
+                <lookup name="item">GtkListItem</lookup>
+              </lookup>
+            </binding>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+</interface>
+]]>
+                        </property>
                       </object>
-                    </child>
+                    </property>
                   </object>
                 </child>
               </object>
@@ -125,14 +224,7 @@
       </object>
     </child>
   </template>
-  <object class="GtkSizeGroup">
-    <property name="mode">vertical</property>
-    <widgets>
-      <widget name="normal_radio"/>
-      <widget name="symbolic_radio"/>
-      <widget name="search"/>
-    </widgets>
-  </object>
+
   <object class="GtkDialog" id="details">
     <property name="modal">1</property>
     <property name="use-header-bar">1</property>
@@ -164,7 +256,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkImage" id="image2">
+             <object class="GtkImage" id="image2">
                 <property name="halign">center</property>
                 <property name="valign">end</property>
                 <accessibility>
@@ -373,7 +465,7 @@
                 </layout>
               </object>
             </child>
-            <child>
+           <child>
               <object class="GtkLabel" id="label8">
                 <property name="halign">center</property>
                 <property name="valign">baseline</property>
@@ -404,7 +496,7 @@
             <signal name="clicked" handler="copy_to_clipboard"/>
           </object>
         </child>
-        <child>
+       <child>
           <object class="GtkLabel" id="description">
             <property name="margin-start">10</property>
             <property name="margin-end">10</property>
@@ -419,3 +511,4 @@
     </child>
   </object>
 </interface>
+
