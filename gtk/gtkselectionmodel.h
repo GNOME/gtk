@@ -97,19 +97,20 @@ struct _GtkSelectionModelInterface
 
   gboolean              (* select_item)                         (GtkSelectionModel      *model,
                                                                  guint                   position,
-                                                                 gboolean                exclusive);
+                                                                 gboolean                unselect_rest);
   gboolean              (* unselect_item)                       (GtkSelectionModel      *model,
                                                                  guint                   position);
   gboolean              (* select_range)                        (GtkSelectionModel      *model,
                                                                  guint                   position,
                                                                  guint                   n_items,
-                                                                 gboolean                exclusive);
+                                                                 gboolean                unselect_rest);
   gboolean              (* unselect_range)                      (GtkSelectionModel      *model,
                                                                  guint                   position,
                                                                  guint                   n_items);
   gboolean              (* select_all)                          (GtkSelectionModel      *model);
   gboolean              (* unselect_all)                        (GtkSelectionModel      *model);
   gboolean              (* select_callback)                     (GtkSelectionModel      *model,
+                                                                 gboolean                unselect_rest,
                                                                  GtkSelectionCallback    callback,
                                                                  gpointer                data);
   gboolean              (* unselect_callback)                   (GtkSelectionModel      *model,
@@ -129,7 +130,7 @@ gboolean                gtk_selection_model_is_selected         (GtkSelectionMod
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_selection_model_select_item         (GtkSelectionModel      *model,
                                                                  guint                   position,
-                                                                 gboolean                exclusive);
+                                                                 gboolean                unselect_rest);
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_selection_model_unselect_item       (GtkSelectionModel      *model,
                                                                  guint                   position);
@@ -137,7 +138,7 @@ GDK_AVAILABLE_IN_ALL
 gboolean                gtk_selection_model_select_range        (GtkSelectionModel      *model,
                                                                  guint                   position,
                                                                  guint                   n_items,
-                                                                 gboolean                exclusive);
+                                                                 gboolean                unselect_rest);
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_selection_model_unselect_range      (GtkSelectionModel      *model,
                                                                  guint                   position,
@@ -149,6 +150,7 @@ gboolean                gtk_selection_model_unselect_all        (GtkSelectionMod
 
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_selection_model_select_callback     (GtkSelectionModel      *model,
+                                                                 gboolean                unselect_rest,
                                                                  GtkSelectionCallback    callback,
                                                                  gpointer                data);
 GDK_AVAILABLE_IN_ALL

@@ -210,15 +210,23 @@ gtk_property_selection_unselect_all (GtkSelectionModel *model)
 
 static gboolean
 gtk_property_selection_add_or_remove (GtkSelectionModel    *model,
+                                      gboolean              unselect_rest,
                                       gboolean              add,
                                       GtkSelectionCallback  callback,
                                       gpointer              data)
 {
   GtkPropertySelection *self = GTK_PROPERTY_SELECTION (model);
-  guint pos, start, n;
+  guint pos, start, n, n_items;
   gboolean in;
   guint min, max;
   guint i;
+
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (self));
+  if (unselect_rest)
+    {
+      for (i = 0; i < n_items; i++)
+        set_selected (self, i, FALSE);
+    }
 
   min = G_MAXUINT;
   max = 0;
@@ -241,7 +249,10 @@ gtk_property_selection_add_or_remove (GtkSelectionModel    *model,
     }
   while (n > 0);
 
-  if (min <= max)
+  /* FIXME: do better here */
+  if (unselect_rest)
+    gtk_selection_model_selection_changed (model, 0, n_items);
+  else if (min <= max)
     gtk_selection_model_selection_changed (model, min, max - min + 1);
 
   return TRUE;
@@ -249,10 +260,11 @@ gtk_property_selection_add_or_remove (GtkSelectionModel    *model,
 
 static gboolean
 gtk_property_selection_select_callback (GtkSelectionModel    *model,
+                                        gboolean              unselect_rest,
                                         GtkSelectionCallback  callback,
                                         gpointer              data)
 {
-  return gtk_property_selection_add_or_remove (model, TRUE, callback, data);
+  return gtk_property_selection_add_or_remove (model, unselect_rest, TRUE, callback, data);
 }
 
 static gboolean
@@ -260,7 +272,7 @@ gtk_property_selection_unselect_callback (GtkSelectionModel    *model,
                                           GtkSelectionCallback  callback,
                                           gpointer              data)
 {
-  return gtk_property_selection_add_or_remove (model, FALSE, callback, data);
+  return gtk_property_selection_add_or_remove (model, FALSE, FALSE, callback, data);
 }
 
 static void
