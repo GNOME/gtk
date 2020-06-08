@@ -97,13 +97,13 @@ struct _GtkSelectionModelInterface
 
   gboolean              (* select_item)                         (GtkSelectionModel      *model,
                                                                  guint                   position,
-                                                                 gboolean                exclusive);
+                                                                 gboolean                unselect_rest);
   gboolean              (* unselect_item)                       (GtkSelectionModel      *model,
                                                                  guint                   position);
   gboolean              (* select_range)                        (GtkSelectionModel      *model,
                                                                  guint                   position,
                                                                  guint                   n_items,
-                                                                 gboolean                exclusive);
+                                                                 gboolean                unselect_rest);
   gboolean              (* unselect_range)                      (GtkSelectionModel      *model,
                                                                  guint                   position,
                                                                  guint                   n_items);
@@ -129,7 +129,7 @@ gboolean                gtk_selection_model_is_selected         (GtkSelectionMod
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_selection_model_select_item         (GtkSelectionModel      *model,
                                                                  guint                   position,
-                                                                 gboolean                exclusive);
+                                                                 gboolean                unselect_rest);
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_selection_model_unselect_item       (GtkSelectionModel      *model,
                                                                  guint                   position);
@@ -137,7 +137,7 @@ GDK_AVAILABLE_IN_ALL
 gboolean                gtk_selection_model_select_range        (GtkSelectionModel      *model,
                                                                  guint                   position,
                                                                  guint                   n_items,
-                                                                 gboolean                exclusive);
+                                                                 gboolean                unselect_rest);
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_selection_model_unselect_range      (GtkSelectionModel      *model,
                                                                  guint                   position,

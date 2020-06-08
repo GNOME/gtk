@@ -85,7 +85,7 @@ gtk_selection_model_default_is_selected (GtkSelectionModel *model,
 static gboolean
 gtk_selection_model_default_select_item (GtkSelectionModel *model,
                                          guint              position,
-                                         gboolean           exclusive)
+                                         gboolean           unselect_rest)
 {
   return FALSE;
 }
@@ -100,7 +100,7 @@ static gboolean
 gtk_selection_model_default_select_range (GtkSelectionModel *model,
                                           guint              position,
                                           guint              n_items,
-                                          gboolean           exclusive)
+                                          gboolean           unselect_rest)
 {
   return FALSE;
 }
@@ -228,21 +228,21 @@ gtk_selection_model_is_selected (GtkSelectionModel *model,
  * gtk_selection_model_select_item:
  * @model: a #GtkSelectionModel
  * @position: the position of the item to select
- * @exclusive: whether previously selected items should be unselected
+ * @unselect_rest: whether previously selected items should be unselected
  *
  * Requests to select an item in the model.
  */
 gboolean
 gtk_selection_model_select_item (GtkSelectionModel *model,
                                  guint              position,
-                                 gboolean           exclusive)
+                                 gboolean           unselect_rest)
 {
   GtkSelectionModelInterface *iface;
 
   g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), 0);
 
   iface = GTK_SELECTION_MODEL_GET_IFACE (model);
-  return iface->select_item (model, position, exclusive);
+  return iface->select_item (model, position, unselect_rest);
 }
 
 /**
@@ -269,7 +269,7 @@ gtk_selection_model_unselect_item (GtkSelectionModel *model,
  * @model: a #GtkSelectionModel
  * @position: the first item to select
  * @n_items: the number of items to select
- * @exclusive: whether previously selected items should be unselected
+ * @unselect_rest: whether previously selected items should be unselected
  *
  * Requests to select a range of items in the model.
  */
@@ -277,14 +277,14 @@ gboolean
 gtk_selection_model_select_range (GtkSelectionModel *model,
                                   guint              position,
                                   guint              n_items,
-                                  gboolean           exclusive)
+                                  gboolean           unselect_rest)
 {
   GtkSelectionModelInterface *iface;
 
   g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), 0);
 
   iface = GTK_SELECTION_MODEL_GET_IFACE (model);
-  return iface->select_range (model, position, n_items, exclusive);
+  return iface->select_range (model, position, n_items, unselect_rest);
 }
 
 /**
