@@ -110,6 +110,7 @@ struct _GtkSelectionModelInterface
   gboolean              (* select_all)                          (GtkSelectionModel      *model);
   gboolean              (* unselect_all)                        (GtkSelectionModel      *model);
   gboolean              (* select_callback)                     (GtkSelectionModel      *model,
+                                                                 gboolean                unselect_rest,
                                                                  GtkSelectionCallback    callback,
                                                                  gpointer                data);
   gboolean              (* unselect_callback)                   (GtkSelectionModel      *model,
@@ -149,6 +150,7 @@ gboolean                gtk_selection_model_unselect_all        (GtkSelectionMod
 
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_selection_model_select_callback     (GtkSelectionModel      *model,
+                                                                 gboolean                unselect_rest,
                                                                  GtkSelectionCallback    callback,
                                                                  gpointer                data);
 GDK_AVAILABLE_IN_ALL

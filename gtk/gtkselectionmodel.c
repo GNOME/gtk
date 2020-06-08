@@ -115,6 +115,7 @@ gtk_selection_model_default_unselect_range (GtkSelectionModel *model,
 
 static gboolean
 gtk_selection_model_default_select_callback (GtkSelectionModel    *model,
+                                             gboolean              unselect_rest,
                                              GtkSelectionCallback  callback,
                                              gpointer              data)
 {
@@ -345,6 +346,7 @@ gtk_selection_model_unselect_all (GtkSelectionModel *model)
 /**
  * gtk_selection_model_select_callback:
  * @model: a #GtkSelectionModel
+ * @unselect_rest: whether previously selected items should be unselected
  * @callback: (scope call): a #GtkSelectionCallback to determine items to select
  * @data: data to pass to @callback
  *
@@ -353,12 +355,13 @@ gtk_selection_model_unselect_all (GtkSelectionModel *model)
  */
 gboolean
 gtk_selection_model_select_callback (GtkSelectionModel    *model,
+                                     gboolean              unselect_rest,
                                      GtkSelectionCallback  callback,
                                      gpointer              data)
 {
   g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), FALSE);
 
-  return GTK_SELECTION_MODEL_GET_IFACE (model)->select_callback (model, callback, data);
+  return GTK_SELECTION_MODEL_GET_IFACE (model)->select_callback (model, unselect_rest, callback, data);
 }
 
 /**

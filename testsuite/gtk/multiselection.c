@@ -496,7 +496,7 @@ test_callback (void)
   assert_selection (selection, "");
   assert_selection_changes (selection, "");
 
-  ret = gtk_selection_model_select_callback (selection, select_some, data);
+  ret = gtk_selection_model_select_callback (selection, FALSE, select_some, data);
   g_assert_true (ret);
   assert_selection (selection, "3 4 5 7 8 9");
   assert_selection_changes (selection, "2:7");
