@@ -175,6 +175,7 @@ gtk_multi_selection_unselect_all (GtkSelectionModel *model)
 
 static gboolean
 gtk_multi_selection_add_or_remove (GtkSelectionModel    *model,
+                                   gboolean              unselect_rest,
                                    gboolean              add,
                                    GtkSelectionCallback  callback,
                                    gpointer              data)
@@ -189,6 +190,13 @@ gtk_multi_selection_add_or_remove (GtkSelectionModel    *model,
 
   min = G_MAXUINT;
   max = 0;
+
+  if (unselect_rest)
+    {
+      min = gtk_set_get_min (self->selected);
+      max = gtk_set_get_max (self->selected);
+      gtk_set_remove_all (self->selected);
+    }
 
   for (pos = 0; pos < n; pos = start + n_items)
     {
@@ -223,10 +231,11 @@ gtk_multi_selection_add_or_remove (GtkSelectionModel    *model,
 
 static gboolean
 gtk_multi_selection_select_callback (GtkSelectionModel    *model,
+                                     gboolean              unselect_rest,
                                      GtkSelectionCallback  callback,
                                      gpointer              data)
 {
-  return gtk_multi_selection_add_or_remove (model, TRUE, callback, data);
+  return gtk_multi_selection_add_or_remove (model, unselect_rest, TRUE, callback, data);
 }
 
 static gboolean
@@ -234,7 +243,7 @@ gtk_multi_selection_unselect_callback (GtkSelectionModel    *model,
                                        GtkSelectionCallback  callback,
                                        gpointer              data)
 {
-  return gtk_multi_selection_add_or_remove (model, FALSE, callback, data);
+  return gtk_multi_selection_add_or_remove (model, FALSE, FALSE, callback, data);
 }
 
 static void

@@ -1389,10 +1389,9 @@ gtk_list_base_stop_rubberband (GtkListBase *self)
     }
   else
     {
-      if (!priv->rubberband->extend)
-        gtk_selection_model_unselect_all (model);
-
-      gtk_selection_model_select_callback (model, range_cb, priv->rubberband->active);
+      gtk_selection_model_select_callback (model,
+                                           !priv->rubberband->extend,
+                                           range_cb, priv->rubberband->active);
     }
 
   g_clear_pointer (&priv->rubberband, rubberband_data_free);
