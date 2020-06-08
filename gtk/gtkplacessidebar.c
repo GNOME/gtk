@@ -890,19 +890,20 @@ create_cloud_provider_account_row (GtkPlacesSidebar      *sidebar,
 {
   GIcon *end_icon;
   GIcon *start_icon;
+  const gchar *mount_path;
+  const gchar *name;
   gchar *mount_uri;
-  gchar *name;
   gchar *tooltip;
   guint provider_account_status;
 
   start_icon = cloud_providers_account_get_icon (account);
   name = cloud_providers_account_get_name (account);
   provider_account_status = cloud_providers_account_get_status (account);
-  mount_uri = cloud_providers_account_get_path (account);
+  mount_path = cloud_providers_account_get_path (account);
   if (start_icon != NULL
       && name != NULL
       && provider_account_status != CLOUD_PROVIDERS_ACCOUNT_STATUS_INVALID
-      && mount_uri != NULL)
+      && mount_path != NULL)
     {
       switch (provider_account_status)
         {
@@ -922,7 +923,7 @@ create_cloud_provider_account_row (GtkPlacesSidebar      *sidebar,
             return FALSE;
         }
 
-      mount_uri = g_strconcat ("file://", mount_uri, NULL);
+      mount_uri = g_strconcat ("file://", mount_path, NULL);
 
       /* translators: %s is the name of a cloud provider for files */
       tooltip = g_strdup_printf (_("Open %s"), name);
@@ -933,6 +934,9 @@ create_cloud_provider_account_row (GtkPlacesSidebar      *sidebar,
                  NULL, NULL, NULL, account, 0,
                  tooltip);
 
+      g_free (tooltip);
+      g_free (mount_uri);
+      g_object_unref (end_icon);
       return TRUE;
     }
   else
@@ -3155,8 +3159,8 @@ build_popup_menu_using_gmenu (GtkSidebarRow *row)
       if (sidebar->popover)
         gtk_widget_unparent (sidebar->popover);
 
-      sidebar->popover = gtk_popover_new_from_model (GTK_WIDGET (sidebar),
-                                                     G_MENU_MODEL (menu));
+      sidebar->popover = gtk_popover_menu_new_from_model (G_MENU_MODEL (menu));
+      gtk_widget_set_parent (sidebar->popover, GTK_WIDGET (sidebar));
       g_signal_connect (sidebar->popover, "destroy",
                         G_CALLBACK (on_row_popover_destroy), sidebar);
       g_object_unref (sidebar);
