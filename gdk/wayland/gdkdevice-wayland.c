@@ -309,17 +309,6 @@ static void deliver_key_event (GdkWaylandSeat       *seat,
                                uint32_t              state,
                                gboolean              from_key_repeat);
 
-static gboolean
-gdk_wayland_device_get_history (GdkDevice      *device,
-                                GdkSurface      *surface,
-                                guint32         start,
-                                guint32         stop,
-                                GdkTimeCoord ***events,
-                                gint           *n_events)
-{
-  return FALSE;
-}
-
 static void
 gdk_wayland_device_get_state (GdkDevice       *device,
                               GdkSurface       *surface,
@@ -828,7 +817,6 @@ gdk_wayland_device_class_init (GdkWaylandDeviceClass *klass)
 {
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
-  device_class->get_history = gdk_wayland_device_get_history;
   device_class->get_state = gdk_wayland_device_get_state;
   device_class->set_surface_cursor = gdk_wayland_device_set_surface_cursor;
   device_class->query_state = gdk_wayland_device_query_state;

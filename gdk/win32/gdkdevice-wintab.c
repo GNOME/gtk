@@ -28,17 +28,6 @@
 
 G_DEFINE_TYPE (GdkDeviceWintab, gdk_device_wintab, GDK_TYPE_DEVICE)
 
-static gboolean
-gdk_device_wintab_get_history (GdkDevice      *device,
-                               GdkSurface      *window,
-                               guint32         start,
-                               guint32         stop,
-                               GdkTimeCoord ***events,
-                               gint           *n_events)
-{
-  return FALSE;
-}
-
 static GdkModifierType
 get_current_mask (void)
 {
@@ -267,7 +256,6 @@ gdk_device_wintab_class_init (GdkDeviceWintabClass *klass)
 {
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
-  device_class->get_history = gdk_device_wintab_get_history;
   device_class->get_state = gdk_device_wintab_get_state;
   device_class->set_surface_cursor = gdk_device_wintab_set_surface_cursor;
   device_class->query_state = gdk_device_wintab_query_state;
