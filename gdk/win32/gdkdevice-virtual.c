@@ -32,11 +32,10 @@ G_DEFINE_TYPE (GdkDeviceVirtual, gdk_device_virtual, GDK_TYPE_DEVICE)
 
 void
 _gdk_device_virtual_set_active (GdkDevice *device,
-				GdkDevice *new_active)
+                                GdkDevice *new_active)
 {
   GdkDeviceVirtual *virtual = GDK_DEVICE_VIRTUAL (device);
   int n_axes, i;
-  const char *label_atom;
   GdkAxisUse use;
   gdouble min_value, max_value, resolution;
 
@@ -50,14 +49,11 @@ _gdk_device_virtual_set_active (GdkDevice *device,
       _gdk_device_reset_axes (device);
       n_axes = gdk_device_get_n_axes (new_active);
       for (i = 0; i < n_axes; i++)
-	{
-	  _gdk_device_get_axis_info (new_active, i,
-				     &label_atom, &use,
-				     &min_value, &max_value, &resolution);
-	  _gdk_device_add_axis (device,
-				label_atom, use,
-				min_value, max_value, resolution);
-	}
+        {
+          _gdk_device_get_axis_info (new_active, i, &use,
+                                     &min_value, &max_value, &resolution);
+          _gdk_device_add_axis (device, use, min_value, max_value, resolution);
+        }
     }
 
   g_signal_emit_by_name (G_OBJECT (device), "changed");

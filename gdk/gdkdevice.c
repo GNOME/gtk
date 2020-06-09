@@ -51,9 +51,7 @@ typedef struct _GdkAxisInfo GdkAxisInfo;
 
 struct _GdkAxisInfo
 {
-  char *label;
   GdkAxisUse use;
-
   gdouble min_axis;
   gdouble max_axis;
   gdouble min_value;
@@ -367,18 +365,9 @@ gdk_device_class_init (GdkDeviceClass *klass)
 }
 
 static void
-gdk_device_axis_info_clear (gpointer data)
-{
-  GdkAxisInfo *info = data;
-
-  g_free (info->label);
-}
-
-static void
 gdk_device_init (GdkDevice *device)
 {
   device->axes = g_array_new (FALSE, TRUE, sizeof (GdkAxisInfo));
-  g_array_set_clear_func (device->axes, gdk_device_axis_info_clear);
 }
 
 static void
@@ -873,89 +862,6 @@ gdk_device_get_n_axes (GdkDevice *device)
 }
 
 /**
- * gdk_device_get_axis_names:
- * @device: a #GdkDevice
- *
- * Returns a null-terminated array of strings, containing the labels for
- * the axes that @device currently has.
- * If the device has no axes, %NULL is returned.
- *
- * Returns: (nullable) (transfer full): A null-terminated string array,
- *     free with g_strfreev().
- **/
-char **
-gdk_device_get_axis_names (GdkDevice *device)
-{
-  GPtrArray *axes;
-  gint i;
-
-  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
-  g_return_val_if_fail (device->source != GDK_SOURCE_KEYBOARD, NULL);
-
-  if (device->axes->len == 0)
-    return NULL;
-
-  axes = g_ptr_array_new ();
-
-  for (i = 0; i < device->axes->len; i++)
-    {
-      GdkAxisInfo axis_info;
-
-      axis_info = g_array_index (device->axes, GdkAxisInfo, i);
-      g_ptr_array_add (axes, g_strdup (axis_info.label));
-    }
-
-  g_ptr_array_add (axes, NULL);
-
-  return (char **) g_ptr_array_free (axes, FALSE);
-}
-
-/**
- * gdk_device_get_axis_value: (skip)
- * @device: a pointer #GdkDevice.
- * @axes: (array): pointer to an array of axes
- * @axis_label: name of the label
- * @value: (out): location to store the found value.
- *
- * Interprets an array of double as axis values for a given device,
- * and locates the value in the array for a given axis label, as returned
- * by gdk_device_get_axes()
- *
- * Returns: %TRUE if the given axis use was found, otherwise %FALSE.
- **/
-gboolean
-gdk_device_get_axis_value (GdkDevice  *device,
-                           gdouble    *axes,
-                           const char *axis_label,
-                           gdouble    *value)
-{
-  gint i;
-
-  g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
-  g_return_val_if_fail (device->source != GDK_SOURCE_KEYBOARD, FALSE);
-
-  if (axes == NULL)
-    return FALSE;
-
-  for (i = 0; i < device->axes->len; i++)
-    {
-      GdkAxisInfo axis_info;
-
-      axis_info = g_array_index (device->axes, GdkAxisInfo, i);
-
-      if (!g_str_equal (axis_info.label, axis_label))
-        continue;
-
-      if (value)
-        *value = axes[i];
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-/**
  * gdk_device_get_axis: (skip)
  * @device: a #GdkDevice
  * @axes: (array): pointer to an array of axes
@@ -1091,7 +997,6 @@ _gdk_device_reset_axes (GdkDevice *device)
 
 guint
 _gdk_device_add_axis (GdkDevice   *device,
-                      const char  *label_name,
                       GdkAxisUse   use,
                       gdouble      min_value,
                       gdouble      max_value,
@@ -1101,7 +1006,6 @@ _gdk_device_add_axis (GdkDevice   *device,
   guint pos;
 
   axis_info.use = use;
-  axis_info.label = g_strdup (label_name);
   axis_info.min_value = min_value;
   axis_info.max_value = max_value;
   axis_info.resolution = resolution;
@@ -1137,12 +1041,11 @@ _gdk_device_add_axis (GdkDevice   *device,
 
 void
 _gdk_device_get_axis_info (GdkDevice   *device,
-			   guint        index_,
-			   const char **label_name,
-			   GdkAxisUse   *use,
-			   gdouble      *min_value,
-			   gdouble      *max_value,
-			   gdouble      *resolution)
+                           guint        index_,
+                           GdkAxisUse   *use,
+                           gdouble      *min_value,
+                           gdouble      *max_value,
+                           gdouble      *resolution)
 {
   GdkAxisInfo *info;
 
@@ -1151,7 +1054,6 @@ _gdk_device_get_axis_info (GdkDevice   *device,
 
   info = &g_array_index (device->axes, GdkAxisInfo, index_);
 
-  *label_name = info->label;
   *use = info->use;
   *min_value = info->min_value;
   *max_value = info->max_value;
@@ -1178,10 +1080,10 @@ find_axis_info (GArray     *array,
 
 gboolean
 _gdk_device_translate_surface_coord (GdkDevice *device,
-                                    GdkSurface *surface,
-                                    guint      index_,
-                                    gdouble    value,
-                                    gdouble   *axis_value)
+                                     GdkSurface *surface,
+                                     guint      index_,
+                                     gdouble    value,
+                                     gdouble   *axis_value)
 {
   GdkAxisInfo axis_info;
   GdkAxisInfo *axis_info_x, *axis_info_y;
