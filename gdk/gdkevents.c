@@ -2899,6 +2899,12 @@ gdk_motion_event_new (GdkSurface      *surface,
  *
  * Retrieves the history of the @event, as a list of time and coordinates.
  *
+ * The history includes events that are not delivered to the application
+ * because they occurred in the same frame as @event.
+ *
+ * Note that only motion and scroll events record history, and motion
+ * events only if one of the mouse buttons is down.
+ *
  * Returns: (transfer container) (array length=out_n_coords) (nullable): an
  *   array of time and coordinates
  */
