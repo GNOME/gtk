@@ -498,6 +498,7 @@ gdk_event_get_modifier_state
 gdk_event_get_position
 gdk_event_get_axes
 gdk_event_get_axis
+gdk_event_get_history
 gdk_event_get_pointer_emulated
 gdk_event_triggers_context_menu
 gdk_button_event_get_button
@@ -529,7 +530,6 @@ gdk_touchpad_event_get_pinch_scale
 gdk_pad_event_get_axis_value
 gdk_pad_event_get_button
 gdk_pad_event_get_group_mode
-gdk_motion_event_get_history
 
 <SUBSECTION>
 gdk_events_get_angle
