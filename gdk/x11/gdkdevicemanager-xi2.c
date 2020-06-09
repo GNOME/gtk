@@ -239,7 +239,7 @@ translate_valuator_class (GdkDisplay          *display,
   else
     label = NULL;
 
-  _gdk_device_add_axis (device, label, use, min, max, resolution);
+  _gdk_device_add_axis (device, use, min, max, resolution);
   GDK_DISPLAY_NOTE (display, INPUT, g_message ("\n\taxis: %s %s", label, use == GDK_AXIS_IGNORE ? "(ignored)" : "(used)"));
 }
 
