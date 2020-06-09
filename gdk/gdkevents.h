@@ -392,6 +392,17 @@ GDK_AVAILABLE_IN_ALL
 void                    gdk_scroll_event_get_deltas     (GdkEvent *event,
                                                          double   *delta_x,
                                                          double   *delta_y);
+
+typedef struct {
+  guint32 time;
+  double delta_x;
+  double delta_y;
+} GdkScrollHistory;
+
+GDK_AVAILABLE_IN_ALL
+GdkScrollHistory *      gdk_scroll_event_get_history    (GdkEvent *event,
+                                                         guint    *out_n);
+
 GDK_AVAILABLE_IN_ALL
 gboolean                gdk_scroll_event_is_stop        (GdkEvent *event);
 GDK_AVAILABLE_IN_ALL

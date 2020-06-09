@@ -211,6 +211,9 @@ struct _GdkTouchEvent
  * @pointer_emulated: whether the scroll event was the result of
  *   a pointer emulation
  * @tool: a #GdkDeviceTool
+ * @history: (element-type GdkScrollHistory): array of times and deltas
+ *   for other scroll events that were compressed before delivering the
+ *   current event
  *
  * Generated from button presses for the buttons 4 to 7. Wheel mice are
  * usually configured to generate button press events for buttons 4 and 5
@@ -232,6 +235,7 @@ struct _GdkScrollEvent
   gboolean pointer_emulated;
   gboolean is_stop;
   GdkDeviceTool *tool;
+  GArray *history; /* <GdkScrollHistory> */
 };
 
 /*
