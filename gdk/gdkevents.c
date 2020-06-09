@@ -632,9 +632,7 @@ gdk_event_queue_handle_scroll_compression (GdkDisplay *display)
   GdkEvent *last_event = NULL;
   GList *scrolls = NULL;
   double delta_x, delta_y;
-  double dx, dy;
-
-  delta_x = delta_y = 0;
+  GArray *history = NULL;
 
   l = g_queue_peek_tail_link (&display->queued_events);
 
@@ -664,18 +662,31 @@ gdk_event_queue_handle_scroll_compression (GdkDisplay *display)
       device = event->device;
       scrolls = l;
 
+      l = l->prev;
+    }
+
+  delta_x = delta_y = 0;
+
+  while (scrolls && scrolls->next != NULL)
+    {
+      GdkEvent *event = scrolls->data;
+      GList *next = scrolls->next;
+      GdkScrollHistory h;
+      double dx, dy;
+
+      if (!history)
+        history = g_array_new (FALSE, TRUE, sizeof (GdkScrollHistory));
+
       gdk_scroll_event_get_deltas (event, &dx, &dy);
       delta_x += dx;
       delta_y += dy;
 
-      l = l->prev;
-    }
+      h.time = gdk_event_get_time (event);
+      h.delta_x = dx;
+      h.delta_y = dy;
+      g_array_append_val (history, h);
 
-  while (scrolls && scrolls->next != NULL)
-    {
-      GList *next = scrolls->next;
-
-      gdk_event_unref (scrolls->data);
+      gdk_event_unref (event);
       g_queue_delete_link (&display->queued_events, scrolls);
       scrolls = next;
     }
@@ -683,18 +694,22 @@ gdk_event_queue_handle_scroll_compression (GdkDisplay *display)
   if (scrolls)
     {
       GdkEvent *old_event, *event;
+      double dx, dy;
 
       old_event = scrolls->data;
 
+      gdk_scroll_event_get_deltas (old_event, &dx, &dy);
       event = gdk_scroll_event_new (surface,
                                     device,
                                     gdk_event_get_source_device (old_event),
                                     gdk_event_get_device_tool (old_event),
                                     gdk_event_get_time (old_event),
                                     gdk_event_get_modifier_state (old_event),
-                                    delta_x,
-                                    delta_y,
+                                    delta_x + dx,
+                                    delta_y + dy,
                                     gdk_scroll_event_is_stop (old_event));
+
+      ((GdkScrollEvent *)event)->history = history;
 
       g_queue_delete_link (&display->queued_events, scrolls);
       g_queue_push_tail (&display->queued_events, event);
@@ -2247,6 +2262,8 @@ gdk_scroll_event_finalize (GdkEvent *event)
   GdkScrollEvent *self = (GdkScrollEvent *) event;
 
   g_clear_object (&self->tool);
+  if (self->history)
+    g_array_free (self->history, TRUE);
 
   GDK_EVENT_SUPER (self)->finalize (event);
 }
@@ -2392,6 +2409,44 @@ gdk_scroll_event_is_stop (GdkEvent *event)
   g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_SCROLL), FALSE);
 
   return self->is_stop;
+}
+
+/**
+ * gdk_scroll_event_get_history:
+ * @event: (type GdkScrollEvent): a scroll #GdkEvent
+ * @out_n: (out): Return location for the length of the returned array
+ *
+ * Retrieves the history of the @event, as a list of times and deltas.
+ *
+ * Returns: (transfer container) (array length=out_n) (nullable): an
+ *   array of #GdkScrollHistory
+ */
+GdkScrollHistory *
+gdk_scroll_event_get_history (GdkEvent *event,
+                              guint    *out_n)
+{
+  GdkScrollEvent *self = (GdkScrollEvent *) event;
+
+  g_return_val_if_fail (GDK_IS_EVENT (event), NULL);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_SCROLL), NULL);
+  g_return_val_if_fail (out_n != NULL, NULL);
+
+  if (self->history &&
+      self->history->len > 0)
+    {
+      GdkScrollHistory *result;
+
+      *out_n = self->history->len;
+
+      result = g_new (GdkScrollHistory, self->history->len);
+      memcpy (result, self->history->data, sizeof (GdkScrollHistory) * self->history->len);
+
+      return result;
+    }
+
+  *out_n = 0;
+
+  return NULL;
 }
 
 /* }}} */
