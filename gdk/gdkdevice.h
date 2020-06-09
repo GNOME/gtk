@@ -118,10 +118,6 @@ GdkInputSource gdk_device_get_source (GdkDevice    *device);
 GDK_AVAILABLE_IN_ALL
 GdkAxisUse     gdk_device_get_axis_use  (GdkDevice         *device,
                                          guint              index_);
-GDK_AVAILABLE_IN_ALL
-void           gdk_device_set_axis_use  (GdkDevice         *device,
-                                         guint              index_,
-                                         GdkAxisUse         use);
 
 
 GDK_AVAILABLE_IN_ALL

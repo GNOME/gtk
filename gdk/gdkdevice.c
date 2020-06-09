@@ -708,47 +708,6 @@ gdk_device_get_axis_use (GdkDevice *device,
 }
 
 /**
- * gdk_device_set_axis_use:
- * @device: a pointer #GdkDevice
- * @index_: the index of the axis
- * @use: specifies how the axis is used
- *
- * Specifies how an axis of a device is used.
- **/
-void
-gdk_device_set_axis_use (GdkDevice   *device,
-                         guint        index_,
-                         GdkAxisUse   use)
-{
-  GdkAxisInfo *info;
-
-  g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (device->source != GDK_SOURCE_KEYBOARD);
-  g_return_if_fail (index_ < device->axes->len);
-
-  info = &g_array_index (device->axes, GdkAxisInfo, index_);
-  info->use = use;
-
-  switch ((guint) use)
-    {
-    case GDK_AXIS_X:
-    case GDK_AXIS_Y:
-      info->min_axis = 0;
-      info->max_axis = 0;
-      break;
-    case GDK_AXIS_XTILT:
-    case GDK_AXIS_YTILT:
-      info->min_axis = -1;
-      info->max_axis = 1;
-      break;
-    default:
-      info->min_axis = 0;
-      info->max_axis = 1;
-      break;
-    }
-}
-
-/**
  * gdk_device_get_display:
  * @device: a #GdkDevice
  *
