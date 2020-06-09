@@ -2912,21 +2912,32 @@ GdkTimeCoord *
 gdk_event_get_history (GdkEvent *event,
                        guint    *out_n_coords)
 {
-  GdkMotionEvent *self = (GdkMotionEvent *) event;
+  GArray *history;
 
   g_return_val_if_fail (GDK_IS_EVENT (event), NULL);
   g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_MOTION_NOTIFY) ||
                         GDK_IS_EVENT_TYPE (event, GDK_SCROLL), NULL);
   g_return_val_if_fail (out_n_coords != NULL, NULL);
 
-  if (self->history && self->history->len > 0)
+  if (GDK_IS_EVENT_TYPE (event, GDK_MOTION_NOTIFY))
+    {
+      GdkMotionEvent *self = (GdkMotionEvent *) event;
+      history = self->history;
+    }
+  else
+    {
+      GdkScrollEvent *self = (GdkScrollEvent *) event;
+      history = self->history;
+    }
+
+  if (history && history->len > 0)
     {
       GdkTimeCoord *result;
 
-      *out_n_coords = self->history->len;
+      *out_n_coords = history->len;
 
-      result = g_malloc (sizeof (GdkTimeCoord) * self->history->len);
-      memcpy (result, self->history->data, sizeof (GdkTimeCoord) * self->history->len);
+      result = g_malloc (sizeof (GdkTimeCoord) * history->len);
+      memcpy (result, history->data, sizeof (GdkTimeCoord) * history->len);
 
       return result;
     }
