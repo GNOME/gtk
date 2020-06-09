@@ -31,13 +31,6 @@ G_BEGIN_DECLS
 #define GDK_DEVICE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GDK_TYPE_DEVICE, GdkDeviceClass))
 
 typedef struct _GdkDeviceClass GdkDeviceClass;
-typedef struct _GdkDeviceKey GdkDeviceKey;
-
-struct _GdkDeviceKey
-{
-  guint keyval;
-  GdkModifierType modifiers;
-};
 
 struct _GdkDevice
 {
@@ -46,9 +39,7 @@ struct _GdkDevice
   gchar *name;
   GdkInputSource source;
   gboolean has_cursor;
-  gint num_keys;
   GdkAxisFlags axis_flags;
-  GdkDeviceKey *keys;
   GdkDisplay *display;
   /* Paired master for master,
    * associated master for slaves
@@ -118,9 +109,6 @@ void _gdk_device_get_axis_info (GdkDevice  *device,
 				gdouble    *min_value,
 				gdouble    *max_value,
 				gdouble    *resolution);
-
-void _gdk_device_set_keys    (GdkDevice   *device,
-                              guint        num_keys);
 
 gboolean   _gdk_device_translate_surface_coord (GdkDevice *device,
                                                 GdkSurface *surface,

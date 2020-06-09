@@ -116,19 +116,6 @@ GDK_AVAILABLE_IN_ALL
 GdkInputSource gdk_device_get_source (GdkDevice    *device);
 
 GDK_AVAILABLE_IN_ALL
-gint           gdk_device_get_n_keys    (GdkDevice       *device);
-GDK_AVAILABLE_IN_ALL
-gboolean       gdk_device_get_key       (GdkDevice       *device,
-                                         guint            index_,
-                                         guint           *keyval,
-                                         GdkModifierType *modifiers);
-GDK_AVAILABLE_IN_ALL
-void           gdk_device_set_key       (GdkDevice      *device,
-                                         guint           index_,
-                                         guint           keyval,
-                                         GdkModifierType modifiers);
-
-GDK_AVAILABLE_IN_ALL
 GdkAxisUse     gdk_device_get_axis_use  (GdkDevice         *device,
                                          guint              index_);
 GDK_AVAILABLE_IN_ALL

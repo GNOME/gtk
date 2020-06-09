@@ -393,7 +393,6 @@ gdk_device_finalize (GObject *object)
     }
 
   g_clear_pointer (&device->name, g_free);
-  g_clear_pointer (&device->keys, g_free);
   g_clear_pointer (&device->vendor_id, g_free);
   g_clear_pointer (&device->product_id, g_free);
 
@@ -682,79 +681,6 @@ gdk_device_get_source (GdkDevice *device)
   g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
 
   return device->source;
-}
-
-/**
- * gdk_device_get_n_keys:
- * @device: a #GdkDevice
- *
- * Returns the number of keys the device currently has.
- *
- * Returns: the number of keys.
- **/
-gint
-gdk_device_get_n_keys (GdkDevice *device)
-{
-  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
-
-  return device->num_keys;
-}
-
-/**
- * gdk_device_get_key:
- * @device: a #GdkDevice.
- * @index_: the index of the macro button to get.
- * @keyval: (out): return value for the keyval.
- * @modifiers: (out): return value for modifiers.
- *
- * If @index_ has a valid keyval, this function will return %TRUE
- * and fill in @keyval and @modifiers with the keyval settings.
- *
- * Returns: %TRUE if keyval is set for @index.
- **/
-gboolean
-gdk_device_get_key (GdkDevice       *device,
-                    guint            index_,
-                    guint           *keyval,
-                    GdkModifierType *modifiers)
-{
-  g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
-  g_return_val_if_fail (index_ < device->num_keys, FALSE);
-
-  if (!device->keys[index_].keyval &&
-      !device->keys[index_].modifiers)
-    return FALSE;
-
-  if (keyval)
-    *keyval = device->keys[index_].keyval;
-
-  if (modifiers)
-    *modifiers = device->keys[index_].modifiers;
-
-  return TRUE;
-}
-
-/**
- * gdk_device_set_key:
- * @device: a #GdkDevice
- * @index_: the index of the macro button to set
- * @keyval: the keyval to generate
- * @modifiers: the modifiers to set
- *
- * Specifies the X key event to generate when a macro button of a device
- * is pressed.
- **/
-void
-gdk_device_set_key (GdkDevice      *device,
-                    guint           index_,
-                    guint           keyval,
-                    GdkModifierType modifiers)
-{
-  g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (index_ < device->num_keys);
-
-  device->keys[index_].keyval = keyval;
-  device->keys[index_].modifiers = modifiers;
 }
 
 /**
@@ -1271,16 +1197,6 @@ _gdk_device_get_axis_info (GdkDevice   *device,
   *min_value = info->min_value;
   *max_value = info->max_value;
   *resolution = info->resolution;
-}
-
-void
-_gdk_device_set_keys (GdkDevice *device,
-                      guint      num_keys)
-{
-  g_free (device->keys);
-
-  device->num_keys = num_keys;
-  device->keys = g_new0 (GdkDeviceKey, num_keys);
 }
 
 static GdkAxisInfo *
