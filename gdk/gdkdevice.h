@@ -85,22 +85,20 @@ typedef enum {
   GDK_DEVICE_TYPE_FLOATING
 } GdkDeviceType;
 
-/* We don't allocate each coordinate this big, but we use it to
- * be ANSI compliant and avoid accessing past the defined limits.
- */
-#define GDK_MAX_TIMECOORD_AXES 128
 
 /**
  * GdkTimeCoord:
  * @time: The timestamp for this event.
- * @axes: the values of the device’s axes.
+ * @flags: Flags indicating what axes are present
+ * @axes: axis values
  *
  * A #GdkTimeCoord stores a single event in a motion history.
  */
 struct _GdkTimeCoord
 {
   guint32 time;
-  gdouble axes[GDK_MAX_TIMECOORD_AXES];
+  GdkAxisFlags flags;
+  double axes[GDK_AXIS_LAST];
 };
 
 GDK_AVAILABLE_IN_ALL
