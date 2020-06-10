@@ -47,6 +47,7 @@
 #include <gtk/gtkaspectframe.h>
 #include <gtk/gtkassistant.h>
 #include <gtk/gtkbinlayout.h>
+#include <gtk/gtkbookmarklist.h>
 #include <gtk/gtkborder.h>
 #include <gtk/gtkboxlayout.h>
 #include <gtk/gtkbox.h>
