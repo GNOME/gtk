@@ -37,13 +37,25 @@
 
 #define FRAME_INTERVAL 16667 /* microseconds */
 
+typedef enum {
+  SMOOTH_PHASE_STATE_VALID = 0,    /* explicit, since we count on zero-init */
+  SMOOTH_PHASE_STATE_AWAIT_FIRST,
+  SMOOTH_PHASE_STATE_AWAIT_DRAWN,
+} SmoothDeltaState;
+
 struct _GdkFrameClockIdlePrivate
 {
   gint64 frame_time;                   /* The exact time we last ran the clock cycle, or 0 if never */
   gint64 smoothed_frame_time_base;     /* A grid-aligned version of frame_time (grid size == refresh period), never more than half a grid from frame_time */
   gint64 smoothed_frame_time_period;   /* The grid size that smoothed_frame_time_base is aligned to */
   gint64 smoothed_frame_time_reported; /* Ensures we are always monotonic */
+  gint64 smoothed_frame_time_phase;    /* The offset of the first reported frame time, in the current animation sequence, from the preceding vsync */
   gint64 min_next_frame_time;          /* We're not synced to vblank, so wait at least until this before next cycle to avoid busy looping */
+  SmoothDeltaState smooth_phase_state; /* The state of smoothed_frame_time_phase - is it valid, awaiting vsync etc. Thanks to zero-init, the initial value
+                                          of smoothed_frame_time_phase is `0`. This is valid, since we didn't get a "frame drawn" event yet. Accordingly,
+                                          the initial value of smooth_phase_state is SMOOTH_PHASE_STATE_VALID. See the comment in gdk_frame_clock_paint_idle()
+                                          for details. */
+
   gint64 sleep_serial;
   gint64 freeze_time;
 
@@ -377,6 +389,25 @@ gdk_frame_clock_flush_idle (void *data)
   return FALSE;
 }
 
+/*
+ * Returns the positive remainder.
+ *
+ * As an example, lets consider (-5) % 16:
+ *
+ *   (-5) % 16 = (0 * 16) + (-5) = -5
+ *
+ * If we only want positive remainders, we can instead calculate
+ *
+ *   (-5) % 16 = (1 * 16) + (-5) = 11
+ *
+ * The built-in `%` operator returns the former, positive_modulo() returns the latter.
+ */
+static int
+positive_modulo (int i, int n)
+{
+  return (i % n + n) % n;
+}
+
 static gboolean
 gdk_frame_clock_paint_idle (void *data)
 {
@@ -418,21 +449,88 @@ gdk_frame_clock_paint_idle (void *data)
 
               priv->frame_time = g_get_monotonic_time ();
 
+              /*
+               * The first clock cycle of an animation might have been triggered by some external event. An external
+               * event can be an input event, an expired timer, data arriving over the network etc. This can happen at
+               * any time, so the cycle could have been scheduled at some random time rather then immediately after a
+               * frame completion. The offset between the start of the first animation cycle and the preceding vsync is
+               * called the "phase" of the clock cycle start time (not to be confused with the phase of the frame
+               * clock).
+               *
+               * In this first clock cycle, the "smooth" frame time is simply the time when the cycle was started. This
+               * could be followed by several cycles which are not vsync-related. As long as we don't get a "frame
+               * drawn" signal from the compositor, the clock cycles will occur every about frame_interval. Once we do
+               * get a "frame drawn" signal, from this point on the frame clock cycles will start shortly after the
+               * corresponding vsync signals, again every about frame_interval. The first vsync-related clock cycle
+               * might occur less than a refresh interval away from the last non-vsync-related cycle. See the diagram
+               * below for details. So while the cadence stays the same - a frame clock cycle every about frame_interval
+               * - the phase of the cycles start time has changed.
+               *
+               * Since we might have already reported the frame time to the application in the previous clock cycles, we
+               * have to adjust future reported frame times. We want the first vsync-related smooth time to be separated
+               * by exactly 1 frame_interval from the previous one, in order to maintain the regularity of the reported
+               * frame times. To achieve that, from this point on we add the phase of the first clock cycle start time to
+               * the smooth time. In order to compute that phase, accounting for possible skipped frames (e.g. due to
+               * compositor stalls), we want the following to be true:
+               *
+               *   first_vsync_smooth_time = last_non_vsync_smooth_time + frame_interval * (1 + frames_skipped)
+               *
+               * We can assign the following known/desired values to the above equation:
+               *
+               *   last_non_vsync_smooth_time = smoothed_frame_time_base
+               *   first_vsync_smooth_time = frame_time + smoothed_frame_time_phase
+               *
+               * That leads us to the following, from which we can extract smoothed_frame_time_phase:
+               *
+               *   frame_time + smoothed_frame_time_phase = smoothed_frame_time_base +
+               *                                            frame_interval * (1 + frames_skipped)
+               *
+               * In the following diagram, '|' mark a vsync, '*' mark the start of a clock cycle, '+' is the adjusted
+               * frame time, '!' marks the reception of "frame drawn" events from the compositor. Note that the clock
+               * cycle cadence changed after the first vsync-related cycle. This cadence is kept even if we don't
+               * receive a 'frame drawn' signal in a subsequent frame, since then we schedule the clock at intervals of
+               * refresh_interval.
+               *
+               * vsync             |           |           |           |           |           |...
+               * frame drawn       |           |           |!          |!          |           |...
+               * cycle start       |       *   |       *   |*          |*          |*          |...
+               * adjusted times    |       *   |       *   |       +   |       +   |       +   |...
+               * phase                                      ^------^
+               */
+              if (priv->smooth_phase_state == SMOOTH_PHASE_STATE_AWAIT_FIRST)
+                {
+                  /* First animation cycle - usually unrelated to vsync */
+                  priv->smoothed_frame_time_base = 0;
+                  priv->smoothed_frame_time_phase = 0;
+                  priv->smooth_phase_state = SMOOTH_PHASE_STATE_AWAIT_DRAWN;
+                }
+              else if (priv->smooth_phase_state == SMOOTH_PHASE_STATE_AWAIT_DRAWN &&
+                       priv->paint_is_thaw)
+                {
+                  /* First vsync-related animation cycle, we can now compute the phase. We want the phase to satisfy
+                     0 <= phase < frame_interval */
+                  priv->smoothed_frame_time_phase =
+                      positive_modulo (priv->smoothed_frame_time_base - priv->frame_time,
+                                       frame_interval);
+                  priv->smooth_phase_state = SMOOTH_PHASE_STATE_VALID;
+                }
+
               if (priv->smoothed_frame_time_base == 0)
                 {
-                  /* First frame */
-                  priv->smoothed_frame_time_base = priv->frame_time;
-                  priv->smoothed_frame_time_period = frame_interval;
+                  /* First frame ever, or first cycle in a new animation sequence. Ensure monotonicity */
+                  priv->smoothed_frame_time_base = MAX (priv->frame_time, priv->smoothed_frame_time_reported);
                 }
               else
                 {
+                  /* compute_smooth_frame_time() ensures monotonicity */
                   priv->smoothed_frame_time_base =
-                      compute_smooth_frame_time (clock, priv->frame_time,
+                      compute_smooth_frame_time (clock, priv->frame_time + priv->smoothed_frame_time_phase,
                                                  priv->paint_is_thaw,
                                                  priv->smoothed_frame_time_base,
                                                  priv->smoothed_frame_time_period);
-                  priv->smoothed_frame_time_period = frame_interval;
                 }
+
+              priv->smoothed_frame_time_period = frame_interval;
               priv->smoothed_frame_time_reported = priv->smoothed_frame_time_base;
 
               _gdk_frame_clock_begin_frame (clock);
@@ -559,7 +657,8 @@ gdk_frame_clock_paint_idle (void *data)
   if (priv->freeze_count == 0)
     {
       priv->min_next_frame_time = compute_min_next_frame_time (clock_idle,
-                                                               priv->smoothed_frame_time_base);
+                                                               priv->smoothed_frame_time_base -
+                                                               priv->smoothed_frame_time_phase);
       maybe_start_idle (clock_idle, FALSE);
     }
 
@@ -598,6 +697,11 @@ gdk_frame_clock_idle_begin_updating (GdkFrameClock *clock)
     }
 #endif
 
+  if (priv->updating_count == 0)
+    {
+      priv->smooth_phase_state = SMOOTH_PHASE_STATE_AWAIT_FIRST;
+    }
+
   priv->updating_count++;
   maybe_start_idle (clock_idle, FALSE);
 }
@@ -612,6 +716,11 @@ gdk_frame_clock_idle_end_updating (GdkFrameClock *clock)
 
   priv->updating_count--;
   maybe_stop_idle (clock_idle);
+
+  if (priv->updating_count == 0)
+    {
+      priv->smooth_phase_state = SMOOTH_PHASE_STATE_VALID;
+    }
 
 #ifdef G_OS_WIN32
   if (priv->updating_count == 0 && priv->begin_period)
