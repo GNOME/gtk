@@ -51,9 +51,7 @@ typedef struct _GdkAxisInfo GdkAxisInfo;
 
 struct _GdkAxisInfo
 {
-  char *label;
   GdkAxisUse use;
-
   gdouble min_axis;
   gdouble max_axis;
   gdouble min_value;
@@ -367,18 +365,9 @@ gdk_device_class_init (GdkDeviceClass *klass)
 }
 
 static void
-gdk_device_axis_info_clear (gpointer data)
-{
-  GdkAxisInfo *info = data;
-
-  g_free (info->label);
-}
-
-static void
 gdk_device_init (GdkDevice *device)
 {
   device->axes = g_array_new (FALSE, TRUE, sizeof (GdkAxisInfo));
-  g_array_set_clear_func (device->axes, gdk_device_axis_info_clear);
 }
 
 static void
@@ -393,7 +382,6 @@ gdk_device_finalize (GObject *object)
     }
 
   g_clear_pointer (&device->name, g_free);
-  g_clear_pointer (&device->keys, g_free);
   g_clear_pointer (&device->vendor_id, g_free);
   g_clear_pointer (&device->product_id, g_free);
 
@@ -685,79 +673,6 @@ gdk_device_get_source (GdkDevice *device)
 }
 
 /**
- * gdk_device_get_n_keys:
- * @device: a #GdkDevice
- *
- * Returns the number of keys the device currently has.
- *
- * Returns: the number of keys.
- **/
-gint
-gdk_device_get_n_keys (GdkDevice *device)
-{
-  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
-
-  return device->num_keys;
-}
-
-/**
- * gdk_device_get_key:
- * @device: a #GdkDevice.
- * @index_: the index of the macro button to get.
- * @keyval: (out): return value for the keyval.
- * @modifiers: (out): return value for modifiers.
- *
- * If @index_ has a valid keyval, this function will return %TRUE
- * and fill in @keyval and @modifiers with the keyval settings.
- *
- * Returns: %TRUE if keyval is set for @index.
- **/
-gboolean
-gdk_device_get_key (GdkDevice       *device,
-                    guint            index_,
-                    guint           *keyval,
-                    GdkModifierType *modifiers)
-{
-  g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
-  g_return_val_if_fail (index_ < device->num_keys, FALSE);
-
-  if (!device->keys[index_].keyval &&
-      !device->keys[index_].modifiers)
-    return FALSE;
-
-  if (keyval)
-    *keyval = device->keys[index_].keyval;
-
-  if (modifiers)
-    *modifiers = device->keys[index_].modifiers;
-
-  return TRUE;
-}
-
-/**
- * gdk_device_set_key:
- * @device: a #GdkDevice
- * @index_: the index of the macro button to set
- * @keyval: the keyval to generate
- * @modifiers: the modifiers to set
- *
- * Specifies the X key event to generate when a macro button of a device
- * is pressed.
- **/
-void
-gdk_device_set_key (GdkDevice      *device,
-                    guint           index_,
-                    guint           keyval,
-                    GdkModifierType modifiers)
-{
-  g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (index_ < device->num_keys);
-
-  device->keys[index_].keyval = keyval;
-  device->keys[index_].modifiers = modifiers;
-}
-
-/**
  * gdk_device_get_axis_use:
  * @device: a pointer #GdkDevice.
  * @index_: the index of the axis.
@@ -779,47 +694,6 @@ gdk_device_get_axis_use (GdkDevice *device,
   info = &g_array_index (device->axes, GdkAxisInfo, index_);
 
   return info->use;
-}
-
-/**
- * gdk_device_set_axis_use:
- * @device: a pointer #GdkDevice
- * @index_: the index of the axis
- * @use: specifies how the axis is used
- *
- * Specifies how an axis of a device is used.
- **/
-void
-gdk_device_set_axis_use (GdkDevice   *device,
-                         guint        index_,
-                         GdkAxisUse   use)
-{
-  GdkAxisInfo *info;
-
-  g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (device->source != GDK_SOURCE_KEYBOARD);
-  g_return_if_fail (index_ < device->axes->len);
-
-  info = &g_array_index (device->axes, GdkAxisInfo, index_);
-  info->use = use;
-
-  switch ((guint) use)
-    {
-    case GDK_AXIS_X:
-    case GDK_AXIS_Y:
-      info->min_axis = 0;
-      info->max_axis = 0;
-      break;
-    case GDK_AXIS_XTILT:
-    case GDK_AXIS_YTILT:
-      info->min_axis = -1;
-      info->max_axis = 1;
-      break;
-    default:
-      info->min_axis = 0;
-      info->max_axis = 1;
-      break;
-    }
 }
 
 /**
@@ -988,89 +862,6 @@ gdk_device_get_n_axes (GdkDevice *device)
 }
 
 /**
- * gdk_device_get_axis_names:
- * @device: a #GdkDevice
- *
- * Returns a null-terminated array of strings, containing the labels for
- * the axes that @device currently has.
- * If the device has no axes, %NULL is returned.
- *
- * Returns: (nullable) (transfer full): A null-terminated string array,
- *     free with g_strfreev().
- **/
-char **
-gdk_device_get_axis_names (GdkDevice *device)
-{
-  GPtrArray *axes;
-  gint i;
-
-  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
-  g_return_val_if_fail (device->source != GDK_SOURCE_KEYBOARD, NULL);
-
-  if (device->axes->len == 0)
-    return NULL;
-
-  axes = g_ptr_array_new ();
-
-  for (i = 0; i < device->axes->len; i++)
-    {
-      GdkAxisInfo axis_info;
-
-      axis_info = g_array_index (device->axes, GdkAxisInfo, i);
-      g_ptr_array_add (axes, g_strdup (axis_info.label));
-    }
-
-  g_ptr_array_add (axes, NULL);
-
-  return (char **) g_ptr_array_free (axes, FALSE);
-}
-
-/**
- * gdk_device_get_axis_value: (skip)
- * @device: a pointer #GdkDevice.
- * @axes: (array): pointer to an array of axes
- * @axis_label: name of the label
- * @value: (out): location to store the found value.
- *
- * Interprets an array of double as axis values for a given device,
- * and locates the value in the array for a given axis label, as returned
- * by gdk_device_get_axes()
- *
- * Returns: %TRUE if the given axis use was found, otherwise %FALSE.
- **/
-gboolean
-gdk_device_get_axis_value (GdkDevice  *device,
-                           gdouble    *axes,
-                           const char *axis_label,
-                           gdouble    *value)
-{
-  gint i;
-
-  g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
-  g_return_val_if_fail (device->source != GDK_SOURCE_KEYBOARD, FALSE);
-
-  if (axes == NULL)
-    return FALSE;
-
-  for (i = 0; i < device->axes->len; i++)
-    {
-      GdkAxisInfo axis_info;
-
-      axis_info = g_array_index (device->axes, GdkAxisInfo, i);
-
-      if (!g_str_equal (axis_info.label, axis_label))
-        continue;
-
-      if (value)
-        *value = axes[i];
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-/**
  * gdk_device_get_axis: (skip)
  * @device: a #GdkDevice
  * @axes: (array): pointer to an array of axes
@@ -1206,7 +997,6 @@ _gdk_device_reset_axes (GdkDevice *device)
 
 guint
 _gdk_device_add_axis (GdkDevice   *device,
-                      const char  *label_name,
                       GdkAxisUse   use,
                       gdouble      min_value,
                       gdouble      max_value,
@@ -1216,7 +1006,6 @@ _gdk_device_add_axis (GdkDevice   *device,
   guint pos;
 
   axis_info.use = use;
-  axis_info.label = g_strdup (label_name);
   axis_info.min_value = min_value;
   axis_info.max_value = max_value;
   axis_info.resolution = resolution;
@@ -1252,12 +1041,11 @@ _gdk_device_add_axis (GdkDevice   *device,
 
 void
 _gdk_device_get_axis_info (GdkDevice   *device,
-			   guint        index_,
-			   const char **label_name,
-			   GdkAxisUse   *use,
-			   gdouble      *min_value,
-			   gdouble      *max_value,
-			   gdouble      *resolution)
+                           guint        index_,
+                           GdkAxisUse   *use,
+                           gdouble      *min_value,
+                           gdouble      *max_value,
+                           gdouble      *resolution)
 {
   GdkAxisInfo *info;
 
@@ -1266,21 +1054,10 @@ _gdk_device_get_axis_info (GdkDevice   *device,
 
   info = &g_array_index (device->axes, GdkAxisInfo, index_);
 
-  *label_name = info->label;
   *use = info->use;
   *min_value = info->min_value;
   *max_value = info->max_value;
   *resolution = info->resolution;
-}
-
-void
-_gdk_device_set_keys (GdkDevice *device,
-                      guint      num_keys)
-{
-  g_free (device->keys);
-
-  device->num_keys = num_keys;
-  device->keys = g_new0 (GdkDeviceKey, num_keys);
 }
 
 static GdkAxisInfo *
@@ -1303,10 +1080,10 @@ find_axis_info (GArray     *array,
 
 gboolean
 _gdk_device_translate_surface_coord (GdkDevice *device,
-                                    GdkSurface *surface,
-                                    guint      index_,
-                                    gdouble    value,
-                                    gdouble   *axis_value)
+                                     GdkSurface *surface,
+                                     guint      index_,
+                                     gdouble    value,
+                                     gdouble   *axis_value)
 {
   GdkAxisInfo axis_info;
   GdkAxisInfo *axis_info_x, *axis_info_y;
