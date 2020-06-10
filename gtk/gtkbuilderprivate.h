@@ -36,6 +36,7 @@ typedef struct {
   gchar *id;
   gchar *constructor;
   GSList *properties;
+  gsize n_properties;
   GSList *signals;
   GSList *bindings;
   GObject *object;
