@@ -1,5 +1,5 @@
 # gtk+ ja.po.
-# Copyright (C) 1998-2020 Free Software Foundation, Inc.
+# Copyright (C) 1998, 2000-2016, 2018-2020 Free Software Foundation, Inc.
 # Yasuhiro SHIRASAKI <yasuhiro@awa.tohoku.ac.jp>, 1998.
 # Yukihiro Nakai <nakai@gnome.gr.jp>, 2000-2001.
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2002, 2009-2010.
@@ -10,7 +10,7 @@
 # Nishibori Kiyotaka <ml.nishibori.kiyotaka@gmail.com>, 2009-2010, 2018.
 # Masato Hashimoto <cabezon.hashimoto@gmail.com>, 2010.
 # IWAI, Masaharu <iwaim.sub@gmail.com>, 2010.
-# Jiro Matsuzawa <jmatsuzawa@gnome.org>, 2011, 2012, 2013, 2014, 2015, 2016.
+# Jiro Matsuzawa <jmatsuzawa@gnome.org>, 2011-2016.
 # Shushi KUROSE <md81bird@hitaki.net>, 2013.
 # Hajime Taira <htaira@redhat.com>, 2015.
 # sicklylife <translation@sicklylife.jp>, 2019-2020.
@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-08 20:51+0000\n"
-"PO-Revision-Date: 2020-05-13 22:00+0900\n"
+"PO-Revision-Date: 2020-06-10 18:45+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
@@ -1214,11 +1214,9 @@ msgid "Peek"
 msgstr ""
 
 #: gtk/a11y/gtkpasswordentryaccessible.c:449
-#, fuzzy
-#| msgid "Browse the contents of the network"
 msgctxt "Action description"
 msgid "Reveals the contents the entry"
-msgstr "ネットワークの内容を表示します"
+msgstr ""
 
 #: gtk/a11y/gtkpasswordentryaccessible.c:640
 msgid "Password"
@@ -1249,19 +1247,14 @@ msgid "Search"
 msgstr "検索"
 
 #: gtk/a11y/gtksearchentryaccessible.c:983
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Clear"
 msgctxt "Action name"
 msgid "Clear"
-msgstr "クリア(_C)"
+msgstr "クリア"
 
 #: gtk/a11y/gtksearchentryaccessible.c:996
-#, fuzzy
-#| msgid "Clear entry"
 msgctxt "Action description"
 msgid "Clears the entry"
-msgstr "エントリーを消去する"
+msgstr "エントリーを消去します"
 
 #: gtk/a11y/gtkspinneraccessible.c:39
 msgctxt "throbbing progress animation widget"
@@ -3777,9 +3770,6 @@ msgid "Uneditable property type: %s"
 msgstr "編集不可能なプロパティ型: %s"
 
 #: gtk/inspector/prop-editor.c:1247
-#, fuzzy
-#| msgctxt "font"
-#| msgid "None"
 msgid "None"
 msgstr "なし"
 
@@ -6832,10 +6822,8 @@ msgid "Saturation"
 msgstr "彩度"
 
 #: gtk/ui/gtkdropdown.ui:57
-#, fuzzy
-#| msgid "Search"
 msgid "Search…"
-msgstr "検索"
+msgstr "検索…"
 
 #: gtk/ui/gtkemojichooser.ui:61 gtk/ui/gtkemojichooser.ui:228
 msgctxt "emoji category"
