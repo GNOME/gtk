@@ -34,6 +34,9 @@
  * #GtkBookmarkList is a list model that wraps GBookmarkFile.
  * It presents a #GListModel and fills it asynchronously with the #GFileInfos
  * returned from that function.
+ *
+ * The #GFileInfos in the list have some attributes in the recent namespace
+ * added: recent::private (boolean) and recent:applications (stringv).
  */
 
 enum {

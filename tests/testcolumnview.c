@@ -62,6 +62,16 @@ create_list_model_for_directory (gpointer file)
   return G_LIST_MODEL (create_directory_list (file));
 }
 
+static GListModel *
+create_recent_files_list (void)
+{
+  GtkBookmarkList *dir;
+
+  dir = gtk_bookmark_list_new (NULL, "*");
+
+  return G_LIST_MODEL (dir);
+}
+
 #if 0
 typedef struct _RowData RowData;
 struct _RowData
@@ -557,6 +567,7 @@ struct {
   { "owner (real)",      G_FILE_ATTRIBUTE_OWNER_USER_REAL, SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_OWNER_USER_REAL, "string") },
   { "group",             G_FILE_ATTRIBUTE_OWNER_GROUP, SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_OWNER_GROUP, "string") },
   { "Preview icon",      G_FILE_ATTRIBUTE_PREVIEW_ICON, ICON_FACTORY (G_FILE_ATTRIBUTE_PREVIEW_ICON) },
+  { "Private",           "recent::private", BOOLEAN_FACTORY ("recent::private") },
 };
 
 #if 0
@@ -717,17 +728,30 @@ main (int argc, char *argv[])
   g_object_unref (builder);
 
   if (argc > 1)
-    root = g_file_new_for_commandline_arg (argv[1]);
+    {
+      if (g_strcmp0 (argv[1], "--recent") == 0)
+        {
+          dirmodel = create_recent_files_list ();
+        }
+      else
+        {
+          root = g_file_new_for_commandline_arg (argv[1]);
+          dirmodel = create_list_model_for_directory (root);
+          g_object_unref (root);
+        }
+    }
   else
-    root = g_file_new_for_path (g_get_current_dir ());
-  dirmodel = create_list_model_for_directory (root);
+    {
+      root = g_file_new_for_path (g_get_current_dir ());
+      dirmodel = create_list_model_for_directory (root);
+      g_object_unref (root);
+    }
   tree = gtk_tree_list_model_new (FALSE,
                                   dirmodel,
                                   TRUE,
                                   create_list_model_for_file_info,
                                   NULL, NULL);
   g_object_unref (dirmodel);
-  g_object_unref (root);
 
   sorter = gtk_tree_list_row_sorter_new (g_object_ref (gtk_column_view_get_sorter (GTK_COLUMN_VIEW (view))));
   sort = gtk_sort_list_model_new (G_LIST_MODEL (tree), sorter);
