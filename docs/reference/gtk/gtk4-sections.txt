@@ -1401,6 +1401,21 @@ gtk_directory_list_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkbookmarklist</FILE>
+<TITLE>GtkBookmarkList</TITLE>
+GtkBookmarkList
+gtk_bookmark_list_new
+gtk_bookmark_list_get_filename
+gtk_bookmark_list_set_attributes
+gtk_bookmark_list_get_attributes
+gtk_bookmark_list_set_io_priority
+gtk_bookmark_list_get_io_priority
+gtk_bookmark_list_is_loading
+<SUBSECTION Standard>
+GTK_TYPE_BOOKMARK_LIST
+</SECTION>
+
+<SECTION>
 <FILE>gtkfilter</FILE>
 <TITLE>GtkFilter</TITLE>
 GtkFilter
