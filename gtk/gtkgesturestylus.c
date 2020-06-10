@@ -278,8 +278,8 @@ gtk_gesture_stylus_get_axes (GtkGestureStylus  *gesture,
  **/
 gboolean
 gtk_gesture_stylus_get_backlog (GtkGestureStylus  *gesture,
-				GdkTimeCoord     **backlog,
-				guint             *n_elems)
+                                GdkTimeCoord     **backlog,
+                                guint             *n_elems)
 {
   GdkEvent *event;
   GArray *backlog_array;
@@ -292,7 +292,7 @@ gtk_gesture_stylus_get_backlog (GtkGestureStylus  *gesture,
   event = gesture_get_current_event (gesture);
 
   if (event && GDK_IS_EVENT_TYPE (event, GDK_MOTION_NOTIFY))
-    history = gdk_motion_event_get_history (event, &n_coords);
+    history = gdk_event_get_history (event, &n_coords);
 
   if (!history)
     return FALSE;
