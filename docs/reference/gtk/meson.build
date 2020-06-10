@@ -216,6 +216,7 @@ private_headers = [
   'gtkwin32themeprivate.h',
   'gtkwindowprivate.h',
   'gtk-text-input-client-protocol.h',
+  'roaring.h',
 ]
 
 images = [
