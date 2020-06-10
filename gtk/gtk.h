@@ -201,6 +201,7 @@
 #include <gtk/gtkpropertyselection.h>
 #include <gtk/gtkradiobutton.h>
 #include <gtk/gtkrange.h>
+#include <gtk/gtkrecentfileslist.h>
 #include <gtk/gtkrecentmanager.h>
 #include <gtk/gtkrender.h>
 #include <gtk/gtkrevealer.h>
