@@ -141,6 +141,7 @@ gdk_frame_clock_idle_init (GdkFrameClockIdle *frame_clock_idle)
     gdk_frame_clock_idle_get_instance_private (frame_clock_idle);
 
   priv->freeze_count = 0;
+  priv->smoothed_frame_time_period = FRAME_INTERVAL;
 }
 
 static void
@@ -345,23 +346,6 @@ maybe_stop_idle (GdkFrameClockIdle *clock_idle)
       g_source_remove (priv->paint_idle_id);
       priv->paint_idle_id = 0;
     }
-}
-
-static gint64
-compute_min_next_frame_time (GdkFrameClockIdle *clock_idle,
-                             gint64             last_frame_time)
-{
-  gint64 presentation_time;
-  gint64 refresh_interval;
-
-  gdk_frame_clock_get_refresh_info (GDK_FRAME_CLOCK (clock_idle),
-                                    last_frame_time,
-                                    &refresh_interval, &presentation_time);
-
-  if (presentation_time == 0)
-    return last_frame_time + refresh_interval;
-  else
-    return presentation_time + refresh_interval / 2;
 }
 
 static gboolean
@@ -657,9 +641,19 @@ gdk_frame_clock_paint_idle (void *data)
    */
   if (priv->freeze_count == 0)
     {
-      priv->min_next_frame_time = compute_min_next_frame_time (clock_idle,
-                                                               priv->smoothed_frame_time_base -
-                                                               priv->smoothed_frame_time_phase);
+      /*
+       * If we don't receive "frame drawn" events, smooth_cycle_start will simply be advanced in constant increments of
+       * the refresh interval. That way we get absolute target times for the next cycles, which should prevent skewing
+       * in the scheduling of the frame clock.
+       *
+       * Once we do receive "frame drawn" events, smooth_cycle_start will track the vsync, and do so in a more stable
+       * way compared to frame_time. If we then no longer receive "frame drawn" events, smooth_cycle_start will again be
+       * simply advanced in increments of the refresh interval, but this time we are in sync with the vsync. If we start
+       * receiving "frame drawn" events shortly after loosing them, then we should still be in sync.
+       */
+      gint64 smooth_cycle_start = priv->smoothed_frame_time_base - priv->smoothed_frame_time_phase;
+      priv->min_next_frame_time = smooth_cycle_start + priv->smoothed_frame_time_period;
+
       maybe_start_idle (clock_idle, FALSE);
     }
 
